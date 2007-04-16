@@ -1009,7 +1009,7 @@ dataVersion ENCODE June & Oct 2005 Freezes
 track encodeUcDavisChipHits
 compositeTrack on
 shortLabel UCD Ng ChIP Hits
-longLabel UC Davis ChIP/Chip NimbleGen (E2F1, Myc ab, HeLa Cells)
+longLabel UC Davis ChIP/Chip Hits NimbleGen (E2F1, Myc ab, HeLa Cells)
 group encodeChip
 priority 56.0
 chromosomes chr1,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr5,chr6,chr7,chr8,chr9,chrX
@@ -1018,16 +1018,16 @@ dataVersion ENCODE June & Oct 2005 Freezes
 
     track encodeUcDavisChipHitsE2F1
     subTrack encodeUcDavisChipHits
-    shortLabel UCD E2F1
-    longLabel UC Davis ChIP/Chip NimbleGen (E2F1 ab, HeLa Cells)
+    shortLabel UCD E2F1 Hits
+    longLabel UC Davis ChIP/Chip Hits NimbleGen (E2F1 ab, HeLa Cells)
     priority 1
     color 180,128,32
     dataVersion Oct 2006
 
     track encodeUcDavisChipHitsMyc
     subTrack encodeUcDavisChipHits
-    shortLabel UCD c-Myc
-    longLabel UC Davis ChIP/Chip NimbleGen (C-Myc ab, HeLa Cells)
+    shortLabel UCD c-Myc Hits
+    longLabel UC Davis ChIP/Chip Hits NimbleGen (C-Myc ab, HeLa Cells)
     priority 2
     color 32,128,180
     dataVersion Oct 2006
