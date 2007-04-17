@@ -104,19 +104,11 @@ for (snpRef = snpList; snpRef != NULL; snpRef = snpRef->next)
 return FALSE;
 }
 
-void possiblyOutputATag(struct dnaSeq *seq, int pos, int start, struct snp **snpsUsedArray, 
+void possiblyOutputATag(struct dnaSeq *seq, int pos, int start, char strand, struct snp **snpsUsedArray, 
         int numSnps, struct hash *freqHash, struct hash *libTotHash, FILE *output)
 /* If this sequence permutation appears in the frequency hash, output it. */
 {
 struct slPair *list;
-char strand = '+';
-if (endsWith(seq->dna, "CATG"))
-    {
-    strand = '-';
-    reverseComplement(seq->dna, seq->size);
-    }
-else if (!startsWith("CATG", seq->dna))
-    return;
 list = hashFindVal(freqHash, seq->dna + 4); 
 if (list)
     /* Output in cgapSage bed format. */
@@ -167,19 +159,23 @@ if (list)
     }
 }
 
-
 void findTagsRecursingPosition(struct dnaSeq *seq, struct dnaSeq *refCopy, 
-        int pos, int start, struct snp **snpArray,
+        int pos, int start, char strand, struct snp **snpArray,
         struct snp **snpsUsedArray, int numSnps, struct hash *freqHash, 
         struct hash *libTotHash, FILE *output, int ix, int snpIx)
 /* Recursively permute all possible 21-mers containing SNPs. Takes into account */
 /* that there can be more than one SNP per tag and even more than one SNP per */
 /* base. */
 {
+/* Check to see if the first four bases are CATG */
 /* If we're at a SNP, go through the versions of it. */
-if (ix < TAG_SIZE)
+if ((ix < TAG_SIZE) &&
+	 !((ix == 1) && (seq->dna[0] != 'C')) && 
+	 !((ix == 2) && (seq->dna[1] != 'A')) && 
+	 !((ix == 3) && (seq->dna[2] != 'T')) && 
+	 !((ix == 4) && (seq->dna[3] != 'G')))	 
     {
-    int chromIx = start + pos + ix;
+    int chromIx = start + pos + (strand == '+' ? ix : (TAG_SIZE - ix));
     /* Deal with the possibility the current base is a SNP. */
     /* If the current SNP chromStart is < the base we're on, move */
     /* the snpIx. */
@@ -197,7 +193,8 @@ if (ix < TAG_SIZE)
 		{
 		char snpBase = snpArray[snpIx]->class[i];
 		/* Stupid minus-strand SNPs.  How does that make sense?!?!? */
-		if (snpArray[snpIx]->strand[0] == '-')
+		if (((snpArray[snpIx]->strand[0] == '-') && (strand == '+')) || 
+		    ((snpArray[snpIx]->strand[0] == '+') && (strand == '-')))
 		    snpBase = otherStrand(snpBase);
 		seq->dna[ix] = snpBase;		    
 		/* Test the SNP base against the original base. */
@@ -206,7 +203,7 @@ if (ix < TAG_SIZE)
 		    snpsUsedArray[snpIx] = snpArray[snpIx];
 		else 
 		    snpsUsedArray[snpIx] = NULL;
-		findTagsRecursingPosition(seq, refCopy, pos, start, snpArray, snpsUsedArray, numSnps,
+		findTagsRecursingPosition(seq, refCopy, pos, start, strand, snpArray, snpsUsedArray, numSnps,
 					  freqHash, libTotHash, output, ix+1, snpIx);
 		}
 	    /* Check to see if the next SNP is on this base.  If so, clear */
@@ -220,13 +217,13 @@ if (ix < TAG_SIZE)
 	}
     else 
 	/* (if this base didn't have a SNP, just move on). */
-	findTagsRecursingPosition(seq, refCopy, pos, start, snpArray, snpsUsedArray, numSnps,
+	findTagsRecursingPosition(seq, refCopy, pos, start, strand, snpArray, snpsUsedArray, numSnps,
 				  freqHash, libTotHash, output, ix+1, snpIx);
     }
-else
+else if (ix == TAG_SIZE)
     /* Finally, at the 21st level of recursion, output stuff. */
     {
-    possiblyOutputATag(seq, pos, start, snpsUsedArray, numSnps, freqHash, libTotHash, output);
+    possiblyOutputATag(seq, pos, start, strand, snpsUsedArray, numSnps, freqHash, libTotHash, output);
     }
 }
 
@@ -235,6 +232,7 @@ void findTagsAtPos(struct dnaSeq *chrom, int pos, int start,
 			       struct hash *libTotHash, FILE *output)
 /* Find the tags at the specific position. */
 {
+char *dna;
 struct slRef *snpList = snpsInTag(pChromSnps, pos, start);
 struct slRef *snpRef;
 struct dnaSeq *seq;
@@ -243,21 +241,33 @@ struct snp **snpArray = NULL;
 struct snp **snpsUsedArray = NULL;
 int i = 0;
 int numSnps = slCount(snpList);
-if (!checkSeqCATG(chrom, pos, start, snpList))
-    return;
 if (numSnps > 0)
     {
     AllocArray(snpArray, numSnps);
     AllocArray(snpsUsedArray, numSnps);
     }
+//if ((pos > 4316050) && ((pos < 4316075)))
 for (snpRef = snpList; snpRef != NULL; snpRef = snpRef->next)
     snpArray[i++] = (struct snp *)snpRef->val;
 /* Start by making the most basic one. */
-char *dna = cloneStringZ(chrom->dna + pos, TAG_SIZE);
+dna = cloneStringZ(chrom->dna + pos, TAG_SIZE);
 seq = newDnaSeq(dna, TAG_SIZE, chrom->name);
 /* Keep a copy so it's easy to tell which bases are introduced by SNPs. */
 refCopy = cloneDnaSeq(seq);
-findTagsRecursingPosition(seq, refCopy, pos, start, snpArray, snpsUsedArray, numSnps, 
+findTagsRecursingPosition(seq, refCopy, pos, start, '+', snpArray, snpsUsedArray, numSnps, 
+        freqHash, libTotHash, output, 0, 0);
+/* Now do the minus strand. */
+freeDnaSeq(&seq);
+reverseComplement(refCopy->dna, refCopy->size);
+seq = cloneDnaSeq(refCopy);
+slReverse(&snpList);
+i = 0;
+for (snpRef = snpList; snpRef != NULL; snpRef = snpRef->next)
+    {
+    snpsUsedArray[i] = NULL;
+    snpArray[i++] = (struct snp *)snpRef->val;
+    }
+findTagsRecursingPosition(seq, refCopy, pos, start, '-', snpArray, snpsUsedArray, numSnps, 
         freqHash, libTotHash, output, 0, 0);
 freez(&snpArray);
 freez(&snpsUsedArray);
@@ -284,7 +294,9 @@ while (i > pos)
     i--;
     }
 if (furthestN > pos)
+    {
     pos = skipPosPastNs(chrom, furthestN + 1);
+    }
 return pos;
 }
 
