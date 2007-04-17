@@ -30,7 +30,7 @@
 
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.361 2007/04/14 00:29:02 kent Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.362 2007/04/17 23:56:08 kate Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2524,9 +2524,9 @@ if (isCustomTrack(tdb->tableName))
     }
 else
     {
-    /* Make link to TB schema -- unless this is an on-the-fly (tableless) track. */
     if (hTableOrSplitExists(tdb->tableName))
 	{
+        /* Make link to TB schema */
 	char *tableName = tdb->tableName;
 	if (sameString(tableName, "mrna"))
 	    tableName = "all_mrna";
@@ -2535,6 +2535,14 @@ else
 	       "TARGET=_BLANK>"
 	       "View table schema</A></P>\n",
 	       database, tdb->grp, tableName, tableName);
+
+        /* Print update time of the table (or one of the components if split) */
+        tableName = hTableForTrack(hGetDb(), tdb->tableName);
+	struct sqlConnection *conn = hAllocConn();
+	char *date = firstWordInLine(sqlTableUpdate(conn, tableName));
+	if (date != NULL)
+	    printf("<B>Data last updated:</B> %s<BR>\n", date);
+	hFreeConn(&conn);
 	}
     else if (tdb->subtracks != NULL)
 	{
