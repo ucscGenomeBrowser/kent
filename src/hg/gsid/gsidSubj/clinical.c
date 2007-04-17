@@ -10,13 +10,13 @@
 #include "hdb.h"
 #include "net.h"
 
-static char const rcsid[] = "$Id: clinical.c,v 1.2 2006/12/06 18:38:51 fanhsu Exp $";
+static char const rcsid[] = "$Id: clinical.c,v 1.3 2007/04/17 16:41:21 fanhsu Exp $";
 
 static boolean clinicalExists(struct section *section, 
 	struct sqlConnection *conn, char *subjId)
 /* Return TRUE if clinicalAll table exists and it has an entry with the gene symbol */
 {
-if (sqlTableExists(conn, "gsClinicRec") == TRUE)
+if (sqlTableExists(conn, "gsidClinicRec") == TRUE)
     {
     return(TRUE);
     }
