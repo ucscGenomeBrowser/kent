@@ -616,23 +616,27 @@
 			</UL>
 			The graphical display goes with the orientation of the gene in that location."
 			<P>
-			<B><FONT COLOR="#006666">Response:</FONT></B><BR> 
-			When UCSC downloads mRNAs and ESTs from GenBank and aligns them to a genome 
-			assembly, each alignment has a direction (forward or reverse), which we 
-			record as + or - in the strand field of the corresponding database table, e.g. 
-			all_ests or chrN_est in the case of ESTs.
-             		The read direction is recorded in the gbCdnaInfo table, and the estOrientation table is 
-                        also used to figure out the direction of transcription, which is not always an easy task for 
- 			ESTs.
+			<B><FONT COLOR="#006666">Response:</FONT></B><BR>
+			From the examples above, it can be seen that the strand to which an EST aligns is not 
+                        necessarily reflected in the direction of transcription shown by the arrows in the 
+                        display. When UCSC downloads mRNAs and ESTs from GenBank and aligns them to a genome 
+			assembly using Blat, each EST aligns to the + or - strand (forward or reverse direction)
+			of the genome, which we record as + or - in the strand field of the corresponding database 
+			table, e.g. all_ests or chrN_est. The strand information (+/-) therefore 
+                        indicates the direction of the match between the EST and the matching genomic 
+                        sequence. It bears no relationship to the direction of transcription of the RNA with 
+                        which it might be associated. Determining the direction of transcription for ESTs is 
+                        not an easy task so we do some calculations to make the best guess for the 
+                        transcription direction. 
 			<P>
 			ESTs are sequenced from either the 5' or the 3' end. When sequenced from the 5' end, the resulting
 			sequence is the same as that of the mRNA which it represents. With a 3' end read, the resulting 
 		 	sequence matches the opposite strand of the cDNA clone. Therefore, it is the reverse complement of 
 			the actual mRNA sequence.  A problem occurs if the EST contributor reverse-complements
-		        the 3'-read sequence before depositing it into GenBank, with the idea
- 			that people will want the mRNA (transcription-direction) sequence. It is not always 
-			possible to determine if this has been done. Therefore, we do some calculations to try to determine 
-			the correct direction of transcription for the EST sequence. 
+		        the 3'-read sequence before depositing it into GenBank, with the idea that people will want 
+			the mRNA (transcription-direction) sequence. It is not always possible to determine if this has 
+			been done. Therefore, we do some calculations to try to determine the correct direction of 
+			transcription for the EST sequence. 
  			<P>
 			If an EST alignment produces canonical introns (with gt-ag splice-site pairs), this is used 
 			to determine the transcription direction. For example when an EST is aligned to the genome, a 
@@ -649,26 +653,24 @@
 			</BLOCKQUOTE>
  			<P>	
 			The sign of this calculated intronOrientation field (stored in the estOrientInfo table) shows the 
-			orientation of	the transcript relative to the EST. Therefore, if intronOrientation is positive, 
+			orientation of the transcript relative to the EST. Therefore, if intronOrientation is positive, 
 			then the EST appears in the display with the arrows pointing in the same direction as the EST 
 			alignment. If intronOrientation is negative, then the arrows point in the opposite direction. If 
 			no introns exist or all of the introns are non-canonical, then introOrientation is set to zero.  
-			In the example above (BQ016549 and AA928010), the intronOrientation is negative; therefore, the 
-			arrows on the Genome Browser display point in the opposite direction to that indicated by the 
-			alignment on the EST details page. <B>Note:</B> A low intronOrientation number can be wrong when 
-			calculated in this way.
+			In both BQ016549 and AA928010 (in the example above), the intronOrientation is negative; therefore, 
+			the arrows on the Genome Browser display point in the opposite direction to that indicated by the 
+			alignment on the EST details page. <B>Note:</B> A low intronOrientation number cause an incorrect
+			assignment of transcription direction when calculated in this way.
          		<P>
- 			If the intronOrientation is zero, then the read direction is used to determine transcription 
-			direction. Some GenBank EST 
-			records specify a 3' or 5' read direction; some don't. If no direction is 
-			specified, or if the direction is 5', the Genome Browser's graphical 
+ 			If the intronOrientation is zero, then the read direction from the EST's Genbank record is used 
+			to determine transcription direction. Some GenBank EST records specify a 3' or 5' read direction; 
+			some don't. If no direction is specified, or if the direction is 5', the Genome Browser's graphical 
 			display uses the strand field of the database table (the alignment direction) 
-			to determine whether to draw the arrows pointing forward (+) or 
-			reverse (-).  However, when the direction is 3' in the GenBank record, 
-			the arrows are drawn opposite of the strand (alignment direction). Due to the reasons stated above, 
-			you should be suspicious of alignments in which the direction is determined this way -- the read
-			direction in Genbank may not reflect the trasncription direction if the sequence has been 
-			reverse-complemented prior to GenBank submission.
+			to determine whether to draw the arrows pointing forward (+) or reverse (-).  However, when the 
+			direction is 3' in the GenBank record, the arrows are drawn opposite of the strand (alignment 
+			direction). Due to the reasons stated above, you should be suspicious of alignments in which the 
+			direction is determined this way -- the read direction in Genbank may not reflect the trasncription 
+			direction if the sequence has been reverse-complemented prior to GenBank submission.
 			<P>
 			The alignment details pages and the Table Browser do not take the GenBank 
 			record's read direction into account. They show only the alignment of the 
