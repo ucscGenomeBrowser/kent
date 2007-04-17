@@ -433,10 +433,18 @@ char *setting;
 checkSelected = FALSE;
 if (hIsGsidServer())
     {
+    /* check subject only if the selectSubject is set to on in trackDb for this track */
     setting = trackDbSetting(tg->tdb, SELECT_SUBJ);
     if (isNotEmpty(setting))
     	{
-    	if (sameString(setting, "on")) checkSelected = TRUE;
+    	if (sameString(setting, "on")) 
+	    {
+	    /* turn on the flag only if the user has selected the subjects */
+	    if (cartOptionalString(cart, gsidSubjList))
+		{
+	    	checkSelected = TRUE;
+		}
+	    }
         }
     }
 
