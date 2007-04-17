@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "net.h"
 
-static char const rcsid[] = "$Id: vaccine.c,v 1.7 2007/01/14 17:04:23 fanhsu Exp $";
+static char const rcsid[] = "$Id: vaccine.c,v 1.8 2007/04/17 16:25:39 fanhsu Exp $";
 
 static boolean vaccineExists(struct section *section, 
 	struct sqlConnection *conn, char *subjId)
@@ -77,7 +77,7 @@ if (row != NULL)
     
     printf("<TR>");
     printf("<TD>");
-    printf("<B>Injections:</B> &nbsp%s%s", injections, GSBLANKS);
+    printf("<B>Injections:</B> &nbsp;%s%s", injections, GSBLANKS);
     printf("</TD>");
     printf("</TR>");
     }
