@@ -820,7 +820,7 @@ shortLabel InterPro
 longLabel InterPro Domains
 group genes
 priority 34.6
-visibility pack
+visibility hide
 color 12,12,120
 type psl
 
