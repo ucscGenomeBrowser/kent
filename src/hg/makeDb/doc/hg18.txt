@@ -14808,7 +14808,7 @@ ssh hgwdev
 mkdir /cluster/data/hg18/bed/switchDbTss
 cd /cluster/data/hg18/bed/switchDbTss
 ln -s /cluster/data/hg17/bed/switchDbTss/switchDbTss.bed hg17.bed
-liftOver hg17.bed /gbdb/hg17/liftOver/hg17ToHg18.over.chain.gz hg18.bed unMapped
+liftOver -bedPlus=5 hg17.bed /gbdb/hg17/liftOver/hg17ToHg18.over.chain.gz hg18.bed unMapped
 wc -l unMapped 
 #12 unMapped    (12 are "deleted in new")
 ln -s ~/kent/src/hg/lib/switchDbTss.sql
