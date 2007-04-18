@@ -30,7 +30,7 @@
 
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.362 2007/04/17 23:56:08 kate Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.363 2007/04/18 09:42:41 aamp Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1005,6 +1005,30 @@ cgiMakeRadioButton("exprssn.color", "rg", sameString(col, "rg"));
 printf(" red/green ");
 cgiMakeRadioButton("exprssn.color", "rb", sameString(col, "rb"));
 printf(" red/blue ");
+}
+
+void switchDbScoreUi(struct trackDb *tdb)
+/* Put up UI for filtering switchDb track based on a score */
+/* The scores use a drop-box to set scoreFilter at several */
+/* thresholds. */
+{
+char *option = "switchDbTss.scoreFilter";
+char *pseudo = "switchDbTss.pseudo";
+char *menu[3] = {"All TSSs (no filter)", "Lower stringency (score >= 10)", "Higher stringency (score >= 20)"};
+char *values[3] = {"0", "10", "20"};
+char *scoreValString = trackDbSetting(tdb, "scoreFilter");
+int scoreSetting;
+int scoreVal = 0;
+char tempScore[256];
+if (scoreValString != NULL)
+    scoreVal = atoi(scoreValString);
+printf("<p><b>Filter TSSs by score:</b> ");
+scoreSetting = cartUsualInt(cart,  option,  scoreVal);
+safef(tempScore, sizeof(tempScore), "%d",scoreSetting);
+cgiMakeDropListWithVals(option, menu, values, 
+			ArraySize(menu), tempScore);
+printf("<p><b>Include TSSs for predicted pseudogenes</b> ");
+cartMakeCheckBox(cart, pseudo, FALSE);
 }
 
 void nmdFilterOptions(struct trackDb *tdb)
@@ -2429,7 +2453,7 @@ else if (sameString(track, "tfbsConsSites"))
 else if (sameString(track, "hapmapSnps"))
     hapmapSnpsUi(tdb);
 else if (sameString(track, "switchDbTss"))
-    scoreUi(tdb, 10000);
+    switchDbScoreUi(tdb);
 else if (tdb->type != NULL)
     {
     /* handle all tracks with type genePred or bed or "psl xeno <otherDb>" */

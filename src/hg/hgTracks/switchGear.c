@@ -1,3 +1,5 @@
+/* Module for SwitchGear Genomics tracks. */
+
 #include "common.h"
 #include "hgTracks.h"
 #include "switchGear.h"
@@ -11,6 +13,17 @@ void switchDbTssFreeConduit(struct slList **pItem)
 {
 struct switchDbTss **pTss = (struct switchDbTss **)pItem;
 switchDbTssFree(pTss);
+}
+
+boolean switchDbTssFilterPseudo(struct slList *slItem)
+{
+struct switchDbTss *item = (struct switchDbTss *)slItem;
+boolean includePseudo = cartUsualBoolean(cart, "switchDbTss.pseudo", FALSE);
+if (item == NULL)
+    return FALSE;
+if (!includePseudo && (item->pseudoType != NULL) && !sameString(item->pseudoType, "none"))
+    return FALSE;
+return TRUE;
 }
 
 struct linkedFeatures *lfFromSwitchDbTss(struct slList *item)
@@ -41,7 +54,7 @@ void loadItemsSwitchDbTss(struct track *tg)
 /* Load switchDbTss items into a linkedFeatures list. */
 {
 loadLinkedFeaturesWithLoaders(tg, switchDbTssLoadConduit, lfFromSwitchDbTss, 
-			      switchDbTssFreeConduit, "confScore");
+			      switchDbTssFreeConduit, "confScore", NULL, switchDbTssFilterPseudo);
 }
 
 Color switchDbTssItemColor(struct track *tg, void *item, struct vGfx *vg)

@@ -11,4 +11,5 @@ table switchDbTss
 	string  gmName;         "Gene model UID/name"
     	uint	gmChromStart;   "Gene model chromStart"
 	uint    gmChromEnd;     "Gene model chromEnd"
+	string  pseudoType;     "Type of pseudogene or n/a"
 )

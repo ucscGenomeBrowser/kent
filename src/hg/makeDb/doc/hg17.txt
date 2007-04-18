@@ -23626,15 +23626,25 @@ ssh hgwdev
 mkdir /cluster/data/hg17/bed/switchDbTss
 cd /cluster/data/hg17/bed/switchDbTss
 # (obtained from Nathan Trinklein <nathant@switchgeargenomics.com>)
-cp ~/all_tss_switchdb.txt . 
+cp ~/all_tss_switchdb_psgene.gz .
+gunzip all_tss_switchdb_psgene.gz
 cat << "EOF" > reformat.awk
+BEGIN{FS="\t"}
 {
 if (NR > 1)
    {
-   printf("%s\t%d\t%d\t%s\t1000\t%s\t%s\t%s\t%s\t%s\n", $2, $8, $8+1, $6, $5, $7, $1, $3, $4);
+   if ($9 !~ "^PSEUDO.*")
+       {
+       pseudo = "none";
+       }
+   else
+       {
+       pseudo = $9;
+       }
+   printf("%s\t%d\t%d\t%s\t1000\t%s\t%s\t%s\t%s\t%s\t%s\n", $2, $8, $8+1, $6, $5, $7, $1, $3, $4, pseudo); 
    }
 }
 EOF
-awk -f reformat.awk all_tss_switchdb.txt > switchDbTss.bed
+awk -f reformat.awk all_tss_switchdb_psgene > switchDbTss.bed
 ln -s ~/kent/src/hg/lib/switchDbTss.sql
 hgLoadBed -sqlTable=switchDbTss.sql hg17 switchDbTss switchDbTss.bed

@@ -108,7 +108,7 @@
 #include "hapmapTrack.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1318 2007/04/17 00:07:08 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1319 2007/04/18 09:42:18 aamp Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -1128,7 +1128,8 @@ enum {blackShadeIx=9,whiteShadeIx=0};
 
 void loadLinkedFeaturesWithLoaders(struct track *tg, struct slList *(*itemLoader)(char **row), 
 				   struct linkedFeatures *(*lfFromWhatever)(struct slList *item),
-				   void (*freeWhatever)(struct slList **pItem), char *scoreColumn)
+				   void (*freeWhatever)(struct slList **pItem), char *scoreColumn, 
+				   char *moreWhere, boolean (*itemFilter)(struct slList *item))
 /* Make a linkedFeatures loader by providing three functions: (1) a regular */
 /* item loader found in all autoSql modules, (2) a custom myStruct->linkedFeatures */
 /* translating function, and (3) a function to free the the thing loaded in (1). */
@@ -1154,17 +1155,23 @@ if ((scoreColumn != NULL) && (cartVarExists(cart, optionScoreStr)))
 	cartRemove(cart, optionScoreStr);
 	optionScore = 0;
 	}
-    safef(extraWhere, sizeof(extraWhere), "%s >= %d", scoreColumn, optionScore);
+    if (moreWhere)
+	safef(extraWhere, sizeof(extraWhere), "%s >= %d and %s", scoreColumn, optionScore, moreWhere);
+    else
+	safef(extraWhere, sizeof(extraWhere), "%s >= %d", scoreColumn, optionScore);
     sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, extraWhere, &rowOffset);
     }
 else
-    sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
+    sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, moreWhere, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct slList *item = itemLoader(row + rowOffset);
-    struct linkedFeatures *lf = lfFromWhatever(item);
-    slAddHead(&lfList, lf);
-    freeWhatever(&item);
+    if ((itemFilter == NULL) || (itemFilter(item) == TRUE))
+	{
+	struct linkedFeatures *lf = lfFromWhatever(item);
+	slAddHead(&lfList, lf);
+	freeWhatever(&item);
+	}
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);

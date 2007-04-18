@@ -359,8 +359,8 @@ visibility hide
 type psl .
 
 track switchDbTss
-shortLabel Switchgear TSS
-longLabel Switchgear Genomics Transcription Start Sites
+shortLabel SwitchGear TSS
+longLabel SwitchGear Genomics Transcription Start Sites
 group regulation
 priority 91.1
 visibility hide
@@ -1894,4 +1894,3 @@ xrefQuery select id, attrVal from %s where attrType = 'commonName' and attrVal l
 searchMethod fuzzy
 padding 1000
 searchPriority 51
-

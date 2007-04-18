@@ -5,7 +5,7 @@
 #ifndef SWITCHDBTSS_H
 #define SWITCHDBTSS_H
 
-#define SWITCHDBTSS_NUM_COLS 10
+#define SWITCHDBTSS_NUM_COLS 11
 
 struct switchDbTss
 /* Switchgear Genomics TSS DB table */
@@ -21,6 +21,7 @@ struct switchDbTss
     char *gmName;	/* Gene model UID/name */
     unsigned gmChromStart;	/* Gene model chromStart */
     unsigned gmChromEnd;	/* Gene model chromEnd */
+    char *pseudoType;	/* Type of pseudogene or n/a */
     };
 
 void switchDbTssStaticLoad(char **row, struct switchDbTss *ret);

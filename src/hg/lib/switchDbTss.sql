@@ -16,6 +16,8 @@ CREATE TABLE switchDbTss (
     gmName varchar(255) not null,	# Gene model UID/name
     gmChromStart int unsigned not null,	# Gene model chromStart
     gmChromEnd int unsigned not null,	# Gene model chromEnd
+    pseudoType varchar(255) not null,	# Type of pseudogene or n/a
+              #Indices
               #Indices
     INDEX chrom (chrom(8), bin),
     INDEX chromStart (chrom(8), chromStart),

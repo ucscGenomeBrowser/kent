@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "switchDbTss.h"
 
-static char const rcsid[] = "$Id: switchDbTss.c,v 1.1 2007/04/12 09:52:29 aamp Exp $";
+static char const rcsid[] = "$Id: switchDbTss.c,v 1.2 2007/04/18 09:42:26 aamp Exp $";
 
 void switchDbTssStaticLoad(char **row, struct switchDbTss *ret)
 /* Load a row from switchDbTss table into ret.  The contents of ret will
@@ -25,6 +25,7 @@ ret->confScore = sqlDouble(row[6]);
 ret->gmName = row[7];
 ret->gmChromStart = sqlUnsigned(row[8]);
 ret->gmChromEnd = sqlUnsigned(row[9]);
+ret->pseudoType = row[10];
 }
 
 struct switchDbTss *switchDbTssLoad(char **row)
@@ -44,6 +45,7 @@ ret->confScore = sqlDouble(row[6]);
 ret->gmName = cloneString(row[7]);
 ret->gmChromStart = sqlUnsigned(row[8]);
 ret->gmChromEnd = sqlUnsigned(row[9]);
+ret->pseudoType = cloneString(row[10]);
 return ret;
 }
 
@@ -53,7 +55,7 @@ struct switchDbTss *switchDbTssLoadAll(char *fileName)
 {
 struct switchDbTss *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[10];
+char *row[11];
 
 while (lineFileRow(lf, row))
     {
@@ -71,7 +73,7 @@ struct switchDbTss *switchDbTssLoadAllByChar(char *fileName, char chopper)
 {
 struct switchDbTss *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[10];
+char *row[11];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -102,6 +104,7 @@ ret->confScore = sqlDoubleComma(&s);
 ret->gmName = sqlStringComma(&s);
 ret->gmChromStart = sqlUnsignedComma(&s);
 ret->gmChromEnd = sqlUnsignedComma(&s);
+ret->pseudoType = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -116,6 +119,7 @@ if ((el = *pEl) == NULL) return;
 freeMem(el->chrom);
 freeMem(el->name);
 freeMem(el->gmName);
+freeMem(el->pseudoType);
 freez(pEl);
 }
 
@@ -162,6 +166,10 @@ fputc(sep,f);
 fprintf(f, "%u", el->gmChromStart);
 fputc(sep,f);
 fprintf(f, "%u", el->gmChromEnd);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->pseudoType);
+if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
 
