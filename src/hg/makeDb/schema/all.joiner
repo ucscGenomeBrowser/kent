@@ -483,6 +483,27 @@ identifier gencodeGeneNamePseudoOct05 dependency
     $hg.encodeGencodeGenePseudoOct05.name
     $hg.gencodeGeneClassOct05.name minCheck=0.06 unique
 
+identifier gencodeGeneNameKnownMar07 dependency
+"Link together Gencode gene model (Known) and class for Mar 07 Data Version"
+    $hg.encodeGencodeGeneKnownMar07.name
+    $hg.gencodeGeneClassMar07.name minCheck=0.83 unique
+
+identifier gencodeGeneNamePutativeOct05 dependency
+"Link together Gencode gene model (Putative) and class for Mar 07 Data Version"
+    $hg.encodeGencodeGenePutativeMar07.name
+    $hg.gencodeGeneClassMar07.name minCheck=0.10 unique
+
+identifier gencodeGeneNamePolymorphicMar07 dependency
+"Link together Gencode gene model (Polymorphic) and class for Mar 07 Data Version"
+    $hg.encodeGencodeGenePolymorphicMar07.name
+    $hg.gencodeGeneClassMar07.name minCheck=0.006 unique
+
+identifier gencodeGeneNamePseudoMar07 dependency
+"Link together Gencode gene model (Pseudo) and class for Mar 07 Data Version"
+    $hg.encodeGencodeGenePseudoMar07.name
+    $hg.gencodeGeneClassMar07.name minCheck=0.05 unique
+
+identifier encodePseudogeneConsensus dependency
 identifier encodePseudogeneConsensus dependency
 "Link together Consensus Pseudogenes and class"
     $hg.encodePseudogeneConsensus.name
@@ -2607,6 +2628,7 @@ tablesIgnored $hg
     encodeAffyRnaHl60SitesHr32
     encodeEvoFold
     encodeGisChip%
+    encodeGencodeGenePolyA%
     encodeNhgriDnaseHs%
     encodeRegulomeDnaseGM06990%
     encodeSangerChip%
