@@ -121,7 +121,7 @@ origAssembly hg17
 
     track encodeGencodeGenePolymorphicMar07
     subTrack encodeGencodeGeneMar07
-    shortLabel Gencode PolyM
+    shortLabel Gencode Polymorph
     longLabel Gencode Polymorphic
     color 160,32,240
     priority 3
@@ -3719,6 +3719,50 @@ termRegex (AC|AF|AL|AP|CT|GS|LA|LL|RP|SC|U|X|Z)[_A-Z0-9\-]+\.[0-9]+-[0-9][0-9][0
 searchPriority 50
 
 searchTable encodeGencodeGenePutativeOct05
+searchName gencodePutative2
+searchMethod prefix
+query select chrom, txStart,txEnd, name from %s where name like '%s%%'
+searchPriority 50
+
+searchTable encodeGencodeGeneKnownMar07
+searchType genePred
+termRegex (AC|AF|AL|AP|CT|GS|LA|LL|RP|SC|U|X|Z)[_A-Z0-9\-]+\.[0-9]+-[0-9][0-9][0-9]
+searchPriority 1.5
+
+searchTable encodeGencodeGeneKnownMar07
+searchName gencodeKnown2
+searchMethod prefix
+query select chrom, txStart,txEnd, name from %s where name like '%s%%'
+searchPriority 1.5
+
+searchTable encodeGencodeGenePseudoMar07
+searchType genePred
+termRegex (AC|AF|AL|AP|CT|GS|LA|LL|RP|SC|U|X|Z)[_A-Z0-9\-]+\.[0-9]+-[0-9][0-9][0-9]
+searchPriority 50
+
+searchTable encodeGencodeGenePseudoMar07
+searchName gencodePseudo2
+searchMethod prefix
+query select chrom, txStart,txEnd, name from %s where name like '%s%%'
+searchPriority 50
+
+searchTable encodeGencodeGenePutativeMar07
+searchType genePred
+termRegex (AC|AF|AL|AP|CT|GS|LA|LL|RP|SC|U|X|Z)[_A-Z0-9\-]+\.[0-9]+-[0-9][0-9][0-9]
+searchPriority 50
+
+searchTable encodeGencodeGenePutativeMar07
+searchName gencodePutative2
+searchMethod prefix
+query select chrom, txStart,txEnd, name from %s where name like '%s%%'
+searchPriority 50
+
+searchTable encodeGencodeGenePolymorphicMar07
+searchType genePred
+termRegex (AC|AF|AL|AP|CT|GS|LA|LL|RP|SC|U|X|Z)[_A-Z0-9\-]+\.[0-9]+-[0-9][0-9][0-9]
+searchPriority 50
+
+searchTable encodeGencodeGenePolymorphicMar07
 searchName gencodePutative2
 searchMethod prefix
 query select chrom, txStart,txEnd, name from %s where name like '%s%%'
