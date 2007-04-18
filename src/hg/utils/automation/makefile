@@ -26,6 +26,7 @@ SCRIPT_FILES = \
 	HgAutomate.pm \
 	HgRemoteScript.pm \
 	HgStepManager.pm \
+	liftRMAlign.pl \
 	makeDownloads.pl \
 	makeGenomeDb.pl \
 	makePushQSql.pl \
