@@ -9,7 +9,7 @@
 #include "txInfo.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: info.c,v 1.1 2007/04/13 03:19:30 kent Exp $";
+static char const rcsid[] = "$Id: info.c,v 1.2 2007/04/18 22:25:11 kent Exp $";
 
 void doTxInfoDescription(struct sqlConnection *conn)
 /* Put up info on fields in txInfo table. */
@@ -64,7 +64,7 @@ printf("%s",
 "<LI><B>frame shift in genome</B> - This only occurs for RefSeq transcripts. Here\n"
 "a frame shift is detected in the coding region when aligning the transcript against\n"
 "the genome. Since RefSeq does examine these cases carefully, it is strong evidence\n"
-"that the genome sequence is in error, or that the anonymous DNA doner carried\n"
+"that the genome sequence is in error, or that the anonymous DNA donor carried\n"
 "a frame-shift mutation in this gene.  In general there will be multiple independent\n"
 "cDNA clones supporting the RefSeq over the genome.  In the gene display on the\n"
 "browser, one or two bases will be removed from the gene to keep frame intact.</LI>\n"
