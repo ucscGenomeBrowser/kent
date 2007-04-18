@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/liftRMAlign.pl instead.
 
-# $Id: liftRMAlign.pl,v 1.1 2007/04/18 18:49:35 angie Exp $
+# $Id: liftRMAlign.pl,v 1.2 2007/04/18 18:54:46 angie Exp $
 
 use warnings;
 use strict;
@@ -93,28 +93,27 @@ foreach my $chunk (@orderedChunks) {
   my $offset  = $liftSpec{$chunk}->{offset};
   my $newSize = $liftSpec{$chunk}->{newSize};
   my $oldName = $chunk;
+  my $oldNameSuffix = "";
+  if ($oldName =~ s/(-\d+)$//) {
+    $oldNameSuffix = $1;
+  }
   $oldName =~ s@.*/@@;
   if (! open (CHUNK, "$chunkFile")) {
     print STDERR "FYI Couldn't open $chunkFile: $!\n";
     next;
   }
   while (<CHUNK>) {
-    if (/\s+$oldName\s+(\d+)\s+(\d+)\s+\((\d+)\)/) {
+    if (/\s+$oldName($oldNameSuffix)?\s+(\d+)\s+(\d+)\s+\((\d+)\)/) {
       # .out-like header line
-      my $oldStart = $1;
-      my $oldEnd   = $2;
-      my $oldLeft  = $3;
+      my ($oldStart, $oldEnd, $oldLeft) = ($2, $3, $4);
       my $newStart = $oldStart + $offset;
       my $newEnd   = $oldEnd   + $offset;
       my $newLeft  = $newSize  - $newEnd;
-      s/(\s+)$oldName(\s+)\d+(\s+)\d+(\s+)\(\d+\)/$1$newName$2$newStart$3$newEnd$4($newLeft)/;
-    } elsif (/^(\s+)$oldName(\s+)(\d+)(\s+\S+\s+)(\d+)\s*$/) {
+      s/(\s+)$oldName($oldNameSuffix)?(\s+)\d+(\s+)\d+(\s+)\(\d+\)/$1$newName$3$newStart$4$newEnd$5($newLeft)/;
+    } elsif (/^(\s+)$oldName($oldNameSuffix)?(\s+)(\d+)(\s+\S+\s+)(\d+)\s*$/) {
       # chunk sequence line
-      my $initSpace= $1;
-      my $leftSpace= $2;
-      my $oldStart = $3;
-      my $seqStuff = $4;
-      my $oldEnd   = $5;
+      my ($initSpace, $leftSpace, $oldStart, $seqStuff, $oldEnd) =
+	($1, $3, $4, $5, $6);
       my $newStart = $oldStart + $offset;
       my $newEnd   = $oldEnd   + $offset;
       &updateSpacing("$oldName$leftSpace$oldStart");
@@ -122,19 +121,15 @@ foreach my $chunk (@orderedChunks) {
 		   $newName, $newStart, $seqStuff, $newEnd);
     } elsif (/^(C\s+|\s+)(\S+)(\s+)(\d+)(\s+\S+\s+)(\d+)\s*$/) {
       # repeat sequence line -- reformat to use larger coords like chunk.
-      my $initSpace= $1;
-      my $repName  = $2;
-      my $leftSpace= $3;
-      my $repStart = $4;
-      my $seqStuff = $5;
-      my $repEnd   = $6;
+      my ($initSpace, $repName, $leftSpace, $repStart, $seqStuff, $repEnd) =
+	($1, $2, $3, $4, $5, $6);
       &updateSpacing("$repName$leftSpace$repStart");
       $_ = sprintf("$initSpace%-15s %9d%s%-9d\n",
 		   $repName, $repStart, $seqStuff, $repEnd);
     } elsif (/^([ iv\-\?]+)$/) {
       # alignment line -- reformat to allow for larger coords
       $_ = "$extraSpaces$1\n";
-    } elsif (/^Transitions/ || /^Gap_init/ || /^Assumed/) {
+    } elsif (/^(Transitions|Gap_init|Assumed|Matrix|#|RepeatMasker|run with|RepBase)/) {
       # info lines, do nothing
     } elsif (/\S/) {
       # non-blank line with something we haven't recognized already
