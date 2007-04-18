@@ -122,7 +122,7 @@ origAssembly hg17
     track encodeGencodeGenePolymorphicMar07
     subTrack encodeGencodeGeneMar07
     shortLabel Gencode PolyM
-    longLabel Gencode PolyMorphic
+    longLabel Gencode Polymorphic
     color 160,32,240
     priority 3
 
