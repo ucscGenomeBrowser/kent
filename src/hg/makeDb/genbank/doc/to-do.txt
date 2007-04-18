@@ -1112,4 +1112,5 @@ Warning: NR_001874: malformed RefSeq CDS:
 
 - change mgc/orefome tracks to only update if there is new data.
 
-- 
+- don't process STS files.
+

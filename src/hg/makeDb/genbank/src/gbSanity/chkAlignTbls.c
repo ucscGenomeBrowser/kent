@@ -11,9 +11,10 @@
 #include "hash.h"
 #include "genePred.h"
 #include "gbGenome.h"
+#include "../dbload/dbLoadOptions.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: chkAlignTbls.c,v 1.9 2006/01/22 08:09:59 markd Exp $";
+static char const rcsid[] = "$Id: chkAlignTbls.c,v 1.10 2007/04/18 05:54:50 markd Exp $";
 
 /* FIXME: check native vs xeno, flag in metaData. */
 /* FIXME: check OI tables */
@@ -23,7 +24,6 @@ static char const rcsid[] = "$Id: chkAlignTbls.c,v 1.9 2006/01/22 08:09:59 markd
 
 static struct slName* gChroms = NULL;
 static struct hash* gChromSizes = NULL; /* table of chromsome sizes */
-static boolean gCheckPerChrom = FALSE;   /* build per-chrom tables */
 
 static void buildChromSizes()
 /* build table of chromosome sizes and list of chromosomes */
@@ -282,38 +282,43 @@ while ((md = metaDataTblsNext(metaDataTbls)) != NULL)
 gbVerbLeave(3, "chkAlignCounts %s", dbTableDesc);
 }
 
-static void chkGenBankAlignTables(struct gbSelect* select,
-                                  struct sqlConnection* conn,
-                                  struct metaDataTbls* metaDataTbls)
-/* Verify all of the PSL tables, including checking the count of
- * alignments for either mRNA or ESTs. */
+static void chkNativeGenBankAlignTables(struct gbSelect* select,
+                                        struct sqlConnection* conn,
+                                        struct metaDataTbls* metaDataTbls,
+                                        struct dbLoadOptions *options)
+/* Verify native genbank PSL tables. */
 {
 char dbTableDesc[256];
-struct slName* chrom;
 char *chromTable = ((select->type == GB_MRNA) ? "mrna" : "est");
 char *allTable = ((select->type == GB_MRNA) ? "all_mrna" : "all_est");
-char *xenoTable = ((select->type == GB_MRNA) ? "xenoMrna" : "xenoEst");
 
-/* all native */
 safef(dbTableDesc, sizeof(dbTableDesc), "%s:%s",
       select->release->genome->database, allTable);
 chkPslTable(select, conn, allTable, NULL, metaDataTbls,
             (GB_GENBANK|GB_NATIVE|select->type));
 chkAlignCounts(metaDataTbls, dbTableDesc, (GB_GENBANK|GB_NATIVE|select->type));
 
-/* native by chrom */
-safef(dbTableDesc, sizeof(dbTableDesc), "%s:chr*_%s",
-      select->release->genome->database, chromTable);
-if (gCheckPerChrom)
+if (options->flags & DBLOAD_PER_CHROM_ALIGN)
     {
+    struct slName* chrom;
+    safef(dbTableDesc, sizeof(dbTableDesc), "%s:chr*_%s",
+          select->release->genome->database, chromTable);
     for (chrom = gChroms; chrom != NULL; chrom = chrom->next)
         chkPslTable(select, conn, chromTable, chrom->name, metaDataTbls,
                     (GB_GENBANK|GB_NATIVE|select->type));
     chkAlignCounts(metaDataTbls, dbTableDesc,
                    (GB_GENBANK|GB_NATIVE|select->type));
     }
+}
 
-/* all xeno */
+static void chkXenoGenBankAlignTables(struct gbSelect* select,
+                                      struct sqlConnection* conn,
+                                      struct metaDataTbls* metaDataTbls,
+                                      struct dbLoadOptions *options)
+/* Verify xeno genbank PSL tables. */
+{
+char dbTableDesc[256];
+char *xenoTable = ((select->type == GB_MRNA) ? "xenoMrna" : "xenoEst");
 safef(dbTableDesc, sizeof(dbTableDesc), "%s:%s",
       select->release->genome->database, xenoTable);
 chkPslTable(select, conn, xenoTable, NULL, metaDataTbls,
@@ -321,59 +326,99 @@ chkPslTable(select, conn, xenoTable, NULL, metaDataTbls,
 chkAlignCounts(metaDataTbls, dbTableDesc, (GB_GENBANK|GB_XENO|select->type));
 }
 
-static void chkRefSeqAlignTables(struct gbSelect* select,
-                                 struct sqlConnection* conn,
-                                 struct metaDataTbls* metaDataTbls)
-/* Verify all of the refsseq alignment tables, including checking the count of
- * genePred. */
+static void chkGenBankAlignTables(struct gbSelect* select,
+                                  struct sqlConnection* conn,
+                                  struct metaDataTbls* metaDataTbls,
+                                  struct dbLoadOptions *options)
+/* Verify all of the PSL tables, including checking the count of
+ * alignments for either mRNA or ESTs. */
+{
+if ((select->orgCats & GB_NATIVE)
+    && dbLoadOptionsGetAttr(options, GB_GENBANK, select->type, GB_NATIVE)->load)
+    {
+    chkNativeGenBankAlignTables(select, conn, metaDataTbls, options);
+    }
+if ((select->orgCats & GB_XENO)
+    && dbLoadOptionsGetAttr(options, GB_GENBANK, select->type, GB_XENO)->load)
+    {
+    chkXenoGenBankAlignTables(select, conn, metaDataTbls, options);
+    }
+}
+
+static void chkNativeRefSeqAlignTables(struct gbSelect* select,
+                                       struct sqlConnection* conn,
+                                       struct metaDataTbls* metaDataTbls,
+                                       struct dbLoadOptions *options)
+/* Verify native refseq alignment tables */
 {
 char* database = select->release->genome->database;
 char dbTableDesc[256];
+unsigned typeFlags = GB_REFSEQ|GB_MRNA|GB_NATIVE;
+safef(dbTableDesc, sizeof(dbTableDesc), "%s:%s", database, "refSeqAli");
+chkPslTable(select, conn, "refSeqAli", NULL, metaDataTbls, typeFlags);
+chkAlignCounts(metaDataTbls, dbTableDesc, typeFlags);
 
-if (select->orgCats & GB_NATIVE)
+safef(dbTableDesc, sizeof(dbTableDesc), "%s:%s", database, "refGene");
+chkGenePredTable(select, conn, "refGene", FALSE, metaDataTbls, typeFlags);
+chkAlignCounts(metaDataTbls, dbTableDesc, typeFlags);
+
+safef(dbTableDesc, sizeof(dbTableDesc), "%s:%s", database, "refFlat");
+chkGenePredTable(select, conn, "refFlat", TRUE, metaDataTbls, typeFlags);
+chkAlignCounts(metaDataTbls, dbTableDesc, typeFlags);
+}
+
+static void chkXenoRefSeqAlignTables(struct gbSelect* select,
+                                     struct sqlConnection* conn,
+                                     struct metaDataTbls* metaDataTbls,
+                                     struct dbLoadOptions *options)
+/* Verify native refseq alignment tables */
+{
+char* database = select->release->genome->database;
+char dbTableDesc[256];
+unsigned typeFlags = GB_REFSEQ|GB_MRNA|GB_XENO;
+safef(dbTableDesc, sizeof(dbTableDesc), "%s:%s", database, "xenoRefSeqAli");
+chkPslTable(select, conn, "xenoRefSeqAli", NULL, metaDataTbls, typeFlags);
+chkAlignCounts(metaDataTbls, dbTableDesc, typeFlags);
+
+safef(dbTableDesc, sizeof(dbTableDesc), "%s:%s", database, "xenoRefGene");
+chkGenePredTable(select, conn, "xenoRefGene", FALSE, metaDataTbls, typeFlags);
+chkAlignCounts(metaDataTbls, dbTableDesc, typeFlags);
+
+safef(dbTableDesc, sizeof(dbTableDesc), "%s:%s", database, "xenoRefFlat");
+chkGenePredTable(select, conn, "xenoRefFlat", TRUE, metaDataTbls, typeFlags);
+chkAlignCounts(metaDataTbls, dbTableDesc, typeFlags);
+}
+
+static void chkRefSeqAlignTables(struct gbSelect* select,
+                                 struct sqlConnection* conn,
+                                 struct metaDataTbls* metaDataTbls,
+                                 struct dbLoadOptions *options)
+/* Verify all of the refseq alignment tables, including checking the count of
+ * genePred. */
+{
+if ((select->orgCats & GB_NATIVE)
+    && dbLoadOptionsGetAttr(options, GB_REFSEQ, select->type, GB_NATIVE)->load)
     {
-    unsigned typeFlags = GB_REFSEQ|GB_MRNA|GB_NATIVE;
-    safef(dbTableDesc, sizeof(dbTableDesc), "%s:%s", database, "refSeqAli");
-    chkPslTable(select, conn, "refSeqAli", NULL, metaDataTbls, typeFlags);
-    chkAlignCounts(metaDataTbls, dbTableDesc, typeFlags);
-
-    safef(dbTableDesc, sizeof(dbTableDesc), "%s:%s", database, "refGene");
-    chkGenePredTable(select, conn, "refGene", FALSE, metaDataTbls, typeFlags);
-    chkAlignCounts(metaDataTbls, dbTableDesc, typeFlags);
-    
-    safef(dbTableDesc, sizeof(dbTableDesc), "%s:%s", database, "refFlat");
-    chkGenePredTable(select, conn, "refFlat", TRUE, metaDataTbls, typeFlags);
-    chkAlignCounts(metaDataTbls, dbTableDesc, typeFlags);
+    chkNativeRefSeqAlignTables(select, conn, metaDataTbls, options);
     }
-if (select->orgCats & GB_XENO)
+if ((select->orgCats & GB_XENO)
+    && dbLoadOptionsGetAttr(options, GB_REFSEQ, select->type, GB_XENO)->load)
     {
-    unsigned typeFlags = GB_REFSEQ|GB_MRNA|GB_XENO;
-    safef(dbTableDesc, sizeof(dbTableDesc), "%s:%s", database, "xenoRefSeqAli");
-    chkPslTable(select, conn, "xenoRefSeqAli", NULL, metaDataTbls, typeFlags);
-    chkAlignCounts(metaDataTbls, dbTableDesc, typeFlags);
-
-    safef(dbTableDesc, sizeof(dbTableDesc), "%s:%s", database, "xenoRefGene");
-    chkGenePredTable(select, conn, "xenoRefGene", FALSE, metaDataTbls, typeFlags);
-    chkAlignCounts(metaDataTbls, dbTableDesc, typeFlags);
-    
-    safef(dbTableDesc, sizeof(dbTableDesc), "%s:%s", database, "xenoRefFlat");
-    chkGenePredTable(select, conn, "xenoRefFlat", TRUE, metaDataTbls, typeFlags);
-    chkAlignCounts(metaDataTbls, dbTableDesc, typeFlags);
+    chkXenoRefSeqAlignTables(select, conn, metaDataTbls, options);
     }
 }
 
 void chkAlignTables(struct gbSelect* select, struct sqlConnection* conn,
-                    struct metaDataTbls* metaDataTbls, boolean checkPerChrom)
+                    struct metaDataTbls* metaDataTbls, struct dbLoadOptions *options)
 /* Verify all of the alignment-related. */
 {
-gCheckPerChrom = checkPerChrom;
 if (gChromSizes == NULL)
     buildChromSizes();
 gbVerbEnter(1, "validating alignment tables: %s", gbSelectDesc(select));
-if (select->release->srcDb == GB_GENBANK)
-    chkGenBankAlignTables(select, conn, metaDataTbls);
-else
-    chkRefSeqAlignTables(select, conn, metaDataTbls);
+if (select->release->srcDb & GB_GENBANK)
+    chkGenBankAlignTables(select, conn, metaDataTbls, options);
+if (select->release->srcDb & GB_REFSEQ)
+    chkRefSeqAlignTables(select, conn, metaDataTbls, options);
 gbVerbLeave(1, "validated alignment tables: %s", gbSelectDesc(select));
 }
 

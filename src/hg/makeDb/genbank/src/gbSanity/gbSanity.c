@@ -39,7 +39,7 @@
 #include "../dbload/dbLoadOptions.h"
 #include <stdarg.h>
 
-static char const rcsid[] = "$Id: gbSanity.c,v 1.12 2006/01/22 08:10:00 markd Exp $";
+static char const rcsid[] = "$Id: gbSanity.c,v 1.13 2007/04/18 05:54:50 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -151,9 +151,7 @@ chkGbRelease(select, metaDataTbls);
 chkMetaDataXRef(metaDataTbls);
 
 /* check the alignment tables */
-chkAlignTables(select, conn, metaDataTbls,
-               ((gOptions.flags & DBLOAD_PER_CHROM_ALIGN) != 0));
-
+chkAlignTables(select, conn, metaDataTbls, &gOptions);
 metaDataTblsFree(&metaDataTbls);
 }
 
@@ -322,5 +320,3 @@ return ((errorCnt == 0) ? 0 : 1);
  * c-file-style: "jkent-c"
  * End:
  */
-
-
