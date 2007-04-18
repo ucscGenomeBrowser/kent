@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/liftRMAlign.pl instead.
 
-# $Id: liftRMAlign.pl,v 1.2 2007/04/18 18:54:46 angie Exp $
+# $Id: liftRMAlign.pl,v 1.3 2007/04/18 20:50:25 angie Exp $
 
 use warnings;
 use strict;
@@ -112,11 +112,11 @@ foreach my $chunk (@orderedChunks) {
       s/(\s+)$oldName($oldNameSuffix)?(\s+)\d+(\s+)\d+(\s+)\(\d+\)/$1$newName$3$newStart$4$newEnd$5($newLeft)/;
     } elsif (/^(\s+)$oldName($oldNameSuffix)?(\s+)(\d+)(\s+\S+\s+)(\d+)\s*$/) {
       # chunk sequence line
-      my ($initSpace, $leftSpace, $oldStart, $seqStuff, $oldEnd) =
-	($1, $3, $4, $5, $6);
+      my ($initSpace, $maybeSuffix, $leftSpace, $oldStart, $seqStuff, $oldEnd) =
+	($1, $2, $3, $4, $5, $6);
       my $newStart = $oldStart + $offset;
       my $newEnd   = $oldEnd   + $offset;
-      &updateSpacing("$oldName$leftSpace$oldStart");
+      &updateSpacing("$oldName$maybeSuffix$leftSpace$oldStart");
       $_ = sprintf("$initSpace%-15s %9d%s%-9d\n",
 		   $newName, $newStart, $seqStuff, $newEnd);
     } elsif (/^(C\s+|\s+)(\S+)(\s+)(\d+)(\s+\S+\s+)(\d+)\s*$/) {
