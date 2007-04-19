@@ -504,7 +504,6 @@ identifier gencodeGeneNamePseudoMar07 dependency
     $hg.gencodeGeneClassMar07.name minCheck=0.05 unique
 
 identifier encodePseudogeneConsensus dependency
-identifier encodePseudogeneConsensus dependency
 "Link together Consensus Pseudogenes and class"
     $hg.encodePseudogeneConsensus.name
     $hg.encodePseudogeneClass.name minCheck=0.16 unique
