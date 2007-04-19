@@ -10,7 +10,7 @@
 #include "axt.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: otherOrgs.c,v 1.19 2007/04/09 02:10:58 kent Exp $";
+static char const rcsid[] = "$Id: otherOrgs.c,v 1.20 2007/04/19 23:08:07 angie Exp $";
 
 struct otherOrg
 /* Links involving another organism. */
@@ -30,6 +30,7 @@ struct otherOrg
     char *otherName;	/* Name of other link. */
     char *db;		/* Other organism specific database. */
     char *pepTable;	/* Table in db peptides live in. */
+    char *geneTable;	/* Table in db genes live in. */
     };
 
 static int otherOrgCmpPriority(const void *va, const void *vb)
@@ -91,6 +92,7 @@ for (ra = raList; ra != NULL; ra = ra->next)
 	    otherOrg->otherName = otherOrgOptionalField(ra, "otherName");
 	    otherOrg->db = otherOrgRequiredField(ra, "db");
 	    otherOrg->pepTable = otherOrgOptionalField(ra, "pepTable");
+	    otherOrg->geneTable = otherOrgOptionalField(ra, "geneTable");
 	    slAddHead(&otherOrgList, otherOrg);
 	    }
 	}
@@ -122,6 +124,46 @@ if (geneId != NULL)
     }
 else
     return NULL;
+}
+
+static char *otherOrgPosition(struct otherOrg *otherOrg,
+			      struct sqlConnection *conn, char *geneId)
+/* Return position of gene ID in other organism or NULL if it doesn't exist;
+ * also make sure that the gene track is visible, and id highlighted, in 
+ * hgTracks (the destination when this is used). */
+{
+char *id = otherOrgId(otherOrg, conn, geneId);
+if (id != NULL)
+    {
+    if (otherOrg->db == NULL || otherOrg->geneTable == NULL)
+	return id;
+    else
+	{
+	struct hTableInfo *hti = hFindTableInfoDb(otherOrg->db, NULL,
+						  otherOrg->geneTable);
+	if (hti != NULL)
+	    {
+	    char *pos = NULL;
+	    char query[512];
+	    safef(query, sizeof(query),
+		  "select concat(%s, ':', %s+1, '-', %s) from %s.%s "
+		  "where %s = '%s'",
+		  hti->chromField, hti->startField, hti->endField,
+		  otherOrg->db, otherOrg->geneTable, hti->nameField, id);
+	    pos = sqlQuickString(conn, query);
+	    if (pos != NULL)
+		{
+		char posPlus[2048];
+		safef(posPlus, sizeof(posPlus), "%s&%s=%s&hgFind.matches=%s",
+		      pos,
+		      otherOrg->geneTable, hTrackOpenVis(otherOrg->geneTable),
+		      id);
+		return cloneString(posPlus);
+		}
+	    }
+	}
+    }
+return NULL;
 }
 
 static char *otherOrgProteinId(struct otherOrg *otherOrg, struct sqlConnection *conn,
@@ -264,10 +306,10 @@ for (otherOrg = otherOrgList; otherOrg != NULL; otherOrg = otherOrg->next)
 hPrintf("</TR>\n<TR>");
 for (otherOrg = otherOrgList; otherOrg != NULL; otherOrg = otherOrg->next)
     {
-    char *id = otherOrgId(otherOrg, conn, geneId);
+    char *pos = otherOrgPosition(otherOrg, conn, geneId);
     otherOrgPrintLink(otherOrg, "Genome Browser", "No ortholog", TRUE, 
-    	id, otherOrg->genomeUrl);
-    freeMem(id);
+    	pos, otherOrg->genomeUrl);
+    freeMem(pos);
     }
 hPrintf("</TR>\n<TR>");
 for (otherOrg = otherOrgList; otherOrg != NULL; otherOrg = otherOrg->next)
