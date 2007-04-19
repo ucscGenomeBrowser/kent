@@ -6,6 +6,7 @@ shortLabel Human
 tables hgBlastTab 
 idSql select target from hgBlastTab where query = '%s'
 pepTable knownGenePep
+geneTable knownGene
 genomeUrl ../cgi-bin/hgTracks?org=Human&position=%s
 sorterUrl ../cgi-bin/hgNear?org=Human&near.oldDb=&near_search=%s
 geneUrl ../cgi-bin/hgGene?org=Human&hgg_gene=%s&hgg_chrom=none
@@ -19,6 +20,7 @@ shortLabel Mouse
 tables mmBlastTab 
 idSql select target from mmBlastTab where query = '%s'
 pepTable knownGenePep
+geneTable knownGene
 genomeUrl ../cgi-bin/hgTracks?org=Mouse&position=%s
 sorterUrl ../cgi-bin/hgNear?org=Mouse&near.oldDb=&near_search=%s
 geneUrl ../cgi-bin/hgGene?org=Mouse&hgg_gene=%s&hgg_chrom=none
@@ -33,6 +35,7 @@ shortLabel Rat
 tables rnBlastTab 
 idSql select target from rnBlastTab where query = '%s'
 pepTable knownGenePep
+geneTable knownGene
 genomeUrl ../cgi-bin/hgTracks?org=Rat&position=%s
 sorterUrl ../cgi-bin/hgNear?org=Rat&near.oldDb=&near_search=%s
 geneUrl ../cgi-bin/hgGene?org=Rat&hgg_gene=%s&hgg_chrom=none
@@ -46,6 +49,7 @@ shortLabel Zebrafish
 tables drBlastTab
 idSql select target from drBlastTab where query = '%s'
 pepTable ensPep
+geneTable ensGene
 genomeUrl ../cgi-bin/hgTracks?org=Zebrafish&position=%s
 otherName Ensembl
 otherUrl http://www.ensembl.org/Danio_rerio/transview?transcript=%s
@@ -56,6 +60,7 @@ shortLabel D. melanogaster
 tables dmBlastTab
 idSql select target from dmBlastTab where query = '%s'
 pepTable flyBasePep
+geneTable flyBaseGene
 genomeUrl ../cgi-bin/hgTracks?org=D.+melanogaster&position=%s
 sorterUrl ../cgi-bin/hgNear?org=D.+melanogaster&near.oldDb=&near_search=%s
 geneUrl ../cgi-bin/hgGene?org=D.+melanogaster&hgg_gene=%s&hgg_chrom=none
@@ -69,6 +74,7 @@ shortLabel C. elegans
 tables ceBlastTab
 idSql select target from ceBlastTab where query = '%s'
 pepTable sangerPep
+geneTable sangerGene
 genomeUrl ../cgi-bin/hgTracks?org=C.+elegans&position=%s
 sorterUrl ../cgi-bin/hgNear?org=C.+elegans&near.oldDb=&near_search=%s
 geneUrl ../cgi-bin/hgGene?org=C.+elegans&hgg_gene=%s&hgg_chrom=none
@@ -81,6 +87,7 @@ shortLabel S. cerevisiae
 tables scBlastTab
 idSql select target from scBlastTab where query = '%s'
 pepTable sgdPep
+geneTable sgdGene
 genomeUrl ../cgi-bin/hgTracks?org=S.+cerevisiae&position=%s
 sorterUrl ../cgi-bin/hgNear?org=S.+cerevisiae&near.oldDb=&near_search=%s
 geneUrl ../cgi-bin/hgGene?org=S.+cerevisiae&hgg_gene=%s&hgg_chrom=none

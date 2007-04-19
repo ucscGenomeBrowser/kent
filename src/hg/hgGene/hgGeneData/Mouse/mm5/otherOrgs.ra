@@ -8,6 +8,7 @@ otherUrl http://apr2006.archive.ensembl.org/Danio_rerio/transview?transcript=%s
 name drosophila
 db dm1
 pepTable bdgpGenePep
+geneTable bdgpGene
 idSql select target from dmBlastTab where query='%s';
 otherIdSql select bdgpGeneInfo.flyBaseId from bdgpGeneInfo,bdgpToCanonical where bdgpToCanonical.name='%s' and bdgpToCanonical.value = dm1.bdgpGeneInfo.bdgpName
 
