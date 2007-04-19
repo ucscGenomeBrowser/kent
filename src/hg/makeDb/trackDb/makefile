@@ -77,7 +77,6 @@ DBS = 	hg13 hg15 hg16 hg17 hg18\
 	falciparum \
 	sacCer1 \
 	sc1 \
-	hiv1 \
 	gliRes13 homIni13 priMat13 canHg12 borEut13 \
 	rodEnt13 euaGli13 catArr1
 
@@ -108,6 +107,9 @@ BACT_DBS = \
 	heliHepa1 heliPylo_26695_1 heliPylo_J99_1 \
 	vibrChol1 vibrChol_MO10_1 vibrChol_O395_1 vibrFisc_ES114_1 \
 	vibrPara1 vibrVuln_CMCP6_1 vibrVuln_YJ016_1
+
+GSID_DBS = \
+	hiv1
 
 ARCHIVED_DBS = \
 	rheMac1 \
