@@ -488,7 +488,7 @@ identifier gencodeGeneNameKnownMar07 dependency
     $hg.encodeGencodeGeneKnownMar07.name
     $hg.gencodeGeneClassMar07.name minCheck=0.83 unique
 
-identifier gencodeGeneNamePutativeOct05 dependency
+identifier gencodeGeneNamePutativeOct07 dependency
 "Link together Gencode gene model (Putative) and class for Mar 07 Data Version"
     $hg.encodeGencodeGenePutativeMar07.name
     $hg.gencodeGeneClassMar07.name minCheck=0.10 unique
