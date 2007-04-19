@@ -18,7 +18,7 @@
 #include "trashDir.h"
 #include "psGfx.h"
 
-static char const rcsid[] = "$Id: pbGlobal.c,v 1.36 2007/04/03 18:59:17 fanhsu Exp $";
+static char const rcsid[] = "$Id: pbGlobal.c,v 1.37 2007/04/19 16:37:20 fanhsu Exp $";
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
@@ -485,6 +485,7 @@ else
     if ((protCntInSupportedGenomeDb > 1) || protCntInSwissByGene >= 1)
     	{
 	/* more than 1 proteins match the query ID, present selection web page */
+	proteinInSupportedGenome = 1;
 	presentProteinSelections(queryID, protCntInSwissByGene, protCntInSupportedGenomeDb);
 	return;
 	}
@@ -601,8 +602,8 @@ if (proteinInSupportedGenome)
     {
     if (kgVersion == KG_III)
     	{
-    	safef(cond_str, sizeof(cond_str), "proteinID='%s'", proteinID);
-    	mrnaID = sqlGetField(conn, database, "knownGene", "name", cond_str);
+    	safef(cond_str, sizeof(cond_str), "spId='%s'", proteinID);
+    	mrnaID = sqlGetField(conn, database, "kgXref", "kgId", cond_str);
 	}
     else
     	{
@@ -615,7 +616,7 @@ else
     mrnaID = NULL;
     positionStr = NULL;
     }
-    
+
 safef(cond_str, sizeof(cond_str), "accession='%s'", proteinID);
 description = sqlGetField(NULL, protDbName, "spXref3", "description", cond_str);
 
