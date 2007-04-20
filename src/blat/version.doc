@@ -11,6 +11,10 @@
        stop codon in rna's that just contain coding region.
      o (in 33x6) Improving usage message on repMatch.
      o (in 33x7) Making blat not abort with error on empty target database.
+     o (in 33x8) Fixing bug in translated DNA/protein case where a missing x3
+       in the ffAli to chain caused a disagreement between the chainer
+       and the rest of the program on gap scores, sometimes causing 
+       good alignments to be thrown out.
 
 33:
      o Fixed problem with out=blast8 and out=blast9 output using
