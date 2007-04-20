@@ -3,7 +3,7 @@
 # Caenorhabditis elegans
 #	Washington University School of Medicine GSC and Sanger Institute WS170
 
-#  $Id: ce4.txt,v 1.8 2007/04/14 00:10:41 hiram Exp $
+#  $Id: ce4.txt,v 1.9 2007/04/20 05:43:55 hiram Exp $
 
 
 #########################################################################
@@ -618,3 +618,57 @@ TMPDIR=/scratch/tmp
     hgsql -e 'update dbDb set defaultPos="chrII:14645680-14667144"
 	where name="ce4";' hgcentraltest
 
+############################################################################
+## BLASTZ caePb1 (DONE - 2007-03-04 - Hiram)
+    ssh kkstore01
+    mkdir /cluster/data/ce4/bed/blastz.caePb1.um.2007-03-04
+    cd /cluster/data/ce4/bed/blastz.caePb1.um.2007-03-04
+
+    cat << '_EOF_' > DEF
+# ce4 vs caePb1
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET: elegans Ce4
+SEQ1_DIR=/san/sanvol1/scratch/worms/ce4/ce4.unmasked.2bit
+SEQ1_LEN=/san/sanvol1/scratch/worms/ce4/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: C. PB2801 caePb1
+SEQ2_DIR=/san/sanvol1/scratch/worms/caePb1/caePb1.unmasked.2bit
+SEQ2_LEN=/san/sanvol1/scratch/worms/caePb1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LAP=10000
+SEQ2_LIMIT=50
+
+BASE=/cluster/data/ce4/bed/blastz.caePb1.um.2007-03-04
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl \
+	DEF -verbose=2 -qRepeats=windowmaskerSdust \
+	-bigClusterHub=pk \
+	-blastzOutRoot /cluster/bluearc/ce4CaePb1 > do.log 2>&1 &
+    ## it is having trouble with the chaining
+    #	real    69m6.967s
+    #	recovering from Baskin power failure, continuing
+    time nice -n +19 doBlastzChainNet.pl \
+	DEF -verbose=2 -qRepeats=windowmaskerSdust -continue=chainMerge \
+	-bigClusterHub=pk -blastzOutRoot /cluster/bluearc/ce4CaePb1 \
+	    > chainMerge.log 2>&1 &
+
+    cat fb.ce4.chainCaePb1Link.txt
+    #	52594760 bases of 100281244 (52.447%) in intersection
+
+    #	swap, this is also in caePb1.txt
+    mkdir /cluster/data/caePb1/bed/blastz.ce4.swap
+    cd /cluster/data/caePb1/bed/blastz.ce4.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	-qRepeats=windowmaskerSdust \
+	/cluster/data/ce4/bed/blastz.caePb1.um.2007-03-04/DEF \
+	-bigClusterHub=pk -swap > swap.log 2>&1 &
+    #	real    22m40.205s
+    cat fb.caePb1.chainCe4Link.txt
+    #	74758640 bases of 175247318 (42.659%) in intersection

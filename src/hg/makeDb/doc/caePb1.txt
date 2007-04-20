@@ -418,3 +418,101 @@ close (FH);
     ssh hgwdev
     hgsql -e 'update dbDb set defaultPos="chrUn:123456-234567"
 	where name="caePb1";' hgcentraltest
+
+############################################################################
+##  SWAP cb3 alignments (DONE - 2007-04-18 - Hiram)
+    ssh kkstore01
+    cd /cluster/data/cb3/bed/blastz.caePb1.2007-04-18
+    cat fb.cb3.chainCaePb1Link.txt
+    #	42772225 bases of 108433446 (39.446%) in intersection
+
+    mkdir /cluster/data/caePb1/bed/blastz.cb3.swap
+    cd /cluster/data/caePb1/bed/blastz.cb3.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/cb3/bed/blastz.caePb1.2007-04-18/DEF \
+	-qRepeats=windowmaskerSdust -bigClusterHub=kk \
+	-swap > swap.log 2>&1 &
+    #	real    3m57.854s
+    cat fb.caeRem2.chainCb3Link.txt
+    #	59366018 bases of 175247318 (33.876%) in intersection
+
+##############################################################################
+## Repeat masker with -species "caenorhabditis sp. 4 (ce-ii)"
+##	(DONE - 2007-04-19 - Hiram)
+
+    ssh kkstore01
+    mkdir /cluster/data/caePb1/bed/RepeatMasker
+    cd /cluster/data/caePb1/bed/RepeatMasker
+    time nice -n +19 doRepeatMasker.pl -species "caenorhabditis sp. 4 (ce-ii)"
+
+    time nice -n +19 doRepeatMasker.pl -species "caenorhabditis" \
+	-bigClusterHub=kk \
+	-buildDir=/cluster/data/caePb1/bed/RepeatMasker caePb1 > do.log 2>&1 &
+    #	real    118m40.879s
+
+    cd /cluster/data/caePb1
+    twoBitToFa caePb1.rmsk.2bit stdout | faSize stdin
+    #	207333000 bases (32085682 N's 175247318 real
+    #	169630672 upper 5616646 lower) in 1 sequences in 1 files
+    #	%2.71 masked total, %3.20 masked real
+
+    ssh hgwdev
+    featureBits caePb1 rmsk
+    #	5618476 bases of 175247318 (3.206%) in intersection
+
+##############################################################################
+## BLASTZ swap ce4 (DONE - 2007-03-04 -- Hiram
+    ssh kkstore01
+    cd  /cluster/data/ce4/bed/blastz.caePb1.um.2007-03-04
+    cat fb.ce4.chainCaePb1Link.txt
+    #	52594760 bases of 100281244 (52.447%) in intersection
+
+    mkdir /cluster/data/caePb1/bed/blastz.ce4.swap
+    cd /cluster/data/caePb1/bed/blastz.ce4.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	-qRepeats=windowmaskerSdust \
+	/cluster/data/ce4/bed/blastz.caePb1.um.2007-03-04/DEF \
+	-bigClusterHub=pk -swap > swap.log 2>&1 &
+    #	real    22m40.205s
+    cat fb.caePb1.chainCe4Link.txt
+    #	74758640 bases of 175247318 (42.659%) in intersection
+
+##############################################################################
+## BLASTZ caeRem2 (WORKING - 2007-04-19 - Hiram)
+    ssh kkstore01
+    mkdir /cluster/data/caePb1/bed/blastz.caeRem2.2007-04-19
+    cd /cluster/data/caePb1/bed/blastz.caeRem2.2007-04-19
+
+    cat << '_EOF_' > DEF
+# caePb1 vs caeRem2
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET: C. PB2801 caePb1 unmasked sequence
+SEQ1_DIR=/san/sanvol1/scratch/worms/caePb1/caePb1.unmasked.2bit
+SEQ1_LEN=/san/sanvol1/scratch/worms/caePb1/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=50
+
+# QUERY: briggsae caeRem2, 9,660 contigs, longest 5,925,111
+SEQ2_DIR=/san/sanvol1/scratch/worms/caeRem2/caeRem2.2bit
+SEQ2_LEN=/san/sanvol1/scratch/worms/caeRem2/chrom.sizes
+SEQ2_CTGDIR=/san/sanvol1/scratch/worms/caeRem2/caeRem2.contigs.2bit
+SEQ2_CTGLEN=/san/sanvol1/scratch/worms/caeRem2/caeRem2.contigs.sizes
+SEQ2_LIFT=/san/sanvol1/scratch/worms/caeRem2/caeRem2.chrUn.lift
+SEQ2_CHUNK=1000000
+SEQ2_LAP=10000
+SEQ2_LIMIT=50
+
+BASE=/cluster/data/caePb1/bed/blastz.caeRem2.2007-04-19
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl DEF -verbose=2 -bigClusterHub=kk \
+	-blastzOutRoot /cluster/bluearc/caePb1CaeRem2 > do.log 2>&1 &
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/caePb1/bed/blastz.caeRem2.2007-04-19/DEF \
+	-bigClusterHub=kk -swap > swap.log 2>&1 &

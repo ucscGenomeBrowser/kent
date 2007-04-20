@@ -3,7 +3,7 @@
 # Caenorhabditis briggsae
 #	Washington University School of Medicine GSC and Sanger Institute
 #
-#  $Id: cb3.txt,v 1.4 2007/04/14 00:15:26 hiram Exp $
+#  $Id: cb3.txt,v 1.5 2007/04/20 05:43:55 hiram Exp $
 
 ###########################################################################
 ## Download sequence (DONE - 2007-01-22 - Hiram)
@@ -201,7 +201,7 @@ cb3.downloadDir = cb3
     cp -p Caenorhabditis_briggsae.jpg /usr/local/apache/htdocs/images
 
 ############################################################################
-## BlastZ caeRem2 - (WORKING - 2007-04-13 - Hiram)
+## BlastZ caeRem2 - (DONE - 2007-04-13 - Hiram)
     ssh kkstore02
     mkdir /cluster/data/cb3/bed/blastz.caeRem2.2007-04-13
     cd /cluster/data/cb3/bed/blastz.caeRem2.2007-04-13
@@ -351,3 +351,53 @@ done
     # edit that to add the bin column, then
     #	bin smallint(6) NOT NULL default '0',
     hgLoadSqlTab cb3 chrM_gold chrM_gold.sql chrM_gold.tab
+
+############################################################################
+## BlastZ caePb1 - (DONE - 2007-04-18 - Hiram)
+    ssh kkstore01
+    mkdir /cluster/data/cb3/bed/blastz.caePb1.2007-04-18
+    cd /cluster/data/cb3/bed/blastz.caePb1.2007-04-18
+
+    cat << '_EOF_' > DEF
+# cb3 vs caePb1
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET: briggsae Cb3
+SEQ1_DIR=/san/sanvol1/scratch/worms/cb3/cb3.rmskTrf.2bit
+SEQ1_LEN=/san/sanvol1/scratch/worms/cb3/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: C. PB2801 caePb1
+SEQ2_DIR=/san/sanvol1/scratch/worms/caePb1/caePb1.2bit
+SEQ2_LEN=/san/sanvol1/scratch/worms/caePb1/chrom.sizes
+SEQ2_CTGDIR=/san/sanvol1/scratch/worms/caePb1/caePb1.contigs.sdTrf.2bit
+SEQ2_CTGLEN=/san/sanvol1/scratch/worms/caePb1/caePb1.contigs.sizes
+SEQ2_LIFT=/san/sanvol1/scratch/worms/caePb1/caePb1.contigs.lift
+SEQ2_CHUNK=1000000
+SEQ2_LAP=10000
+SEQ2_LIMIT=50
+
+BASE=/cluster/data/cb3/bed/blastz.caePb1.2007-04-18
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl DEF -verbose=2 \
+	-qRepeats=windowmaskerSdust -bigClusterHub=kk \
+	-blastzOutRoot /cluster/bluearc/cb3CaePb1 > do.log 2>&1 &
+    #	real    68m42.057s
+    cat fb.cb3.chainCaePb1Link.txt
+    #	42772225 bases of 108433446 (39.446%) in intersection
+
+    #	The following is also in caePb1.txt
+    mkdir /cluster/data/caePb1/bed/blastz.cb3.swap
+    cd /cluster/data/caePb1/bed/blastz.cb3.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/cb3/bed/blastz.caePb1.2007-04-18/DEF \
+	-qRepeats=windowmaskerSdust -bigClusterHub=kk \
+	-swap > swap.log 2>&1 &
+    #	real    3m57.854s
+    cat fb.caeRem2.chainCb3Link.txt
+    #	59366018 bases of 175247318 (33.876%) in intersection
