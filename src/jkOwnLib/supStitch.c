@@ -15,7 +15,7 @@
 #include "supStitch.h"
 #include "chainBlock.h"
 
-static char const rcsid[] = "$Id: supStitch.c,v 1.37 2006/03/16 15:18:24 angie Exp $";
+static char const rcsid[] = "$Id: supStitch.c,v 1.38 2007/04/20 22:43:37 kent Exp $";
 
 static void ssFindBestBig(struct ffAli *ffList, bioSeq *qSeq, bioSeq *tSeq,
 	enum ffStringency stringency, boolean isProt, struct trans3 *t3List,
@@ -177,8 +177,8 @@ for (t3 = t3List; t3 != NULL; t3 = t3->next)
 	seq = t3->trans[frame];
 	if (seq->dna <= startP && startP < seq->dna + seq->size)
 	    {
-	    *retStart = startP - seq->dna + t3->start;
-	    *retEnd = endP - seq->dna + t3->start;
+	    *retStart = 3*(startP - seq->dna)+frame + t3->start;
+	    *retEnd = 3*(endP - seq->dna)+frame + t3->start;
 	    return;
 	    }
 	}
