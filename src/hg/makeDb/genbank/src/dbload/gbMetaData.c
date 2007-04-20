@@ -33,7 +33,7 @@
 #include "gbSql.h"
 #include "gbMiscDiff.h"
 
-static char const rcsid[] = "$Id: gbMetaData.c,v 1.39 2007/04/14 02:42:59 markd Exp $";
+static char const rcsid[] = "$Id: gbMetaData.c,v 1.40 2007/04/20 22:54:58 markd Exp $";
 
 // FIXME: move mrna, otherse to objects.
 
@@ -62,7 +62,8 @@ static char* gbCdnaInfoCreate =
   "author int unsigned not null,"                 /* Ref in author table. */
   "gi int unsigned not null,"                     /* NCBI GI number. */
   "mol enum('DNA', 'RNA', 'ds-RNA', 'ds-mRNA', 'ds-rRNA', 'mRNA', 'ms-DNA', 'ms-RNA',"
-  "         'rRNA', 'scRNA', 'snRNA', 'snoRNA', 'ss-DNA', 'ss-RNA', 'ss-snoRNA', 'tRNA') not null,\n"
+  "         'rRNA', 'scRNA', 'snRNA', 'snoRNA', 'ss-DNA', 'ss-RNA', 'ss-snoRNA', 'tRNA',"
+  "         'cRNA', 'ss-cRNA') not null,\n"
   /* Extra indices. */
   "unique(acc),"
   "index(type),"
