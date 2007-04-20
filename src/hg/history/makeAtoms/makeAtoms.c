@@ -10,7 +10,7 @@
 #include "element.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: makeAtoms.c,v 1.2 2007/04/09 16:52:59 braney Exp $";
+static char const rcsid[] = "$Id: makeAtoms.c,v 1.3 2007/04/20 14:35:14 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -147,7 +147,7 @@ diff = base - *tStart;
 if (*strand == '+')
     offset = *qStart + diff;
 else
-    offset = psl->qSize - (*qStart + *block) + diff;
+    offset = psl->qSize - (*qStart + diff) - 1;
 
 return offset;
 }
@@ -202,17 +202,24 @@ struct aBase *prev = atom->run->bases;
 
 for(; one && prev ; one = one->next, prev = prev->next)
     {
+    if (one->species->name != prev->species->name)
+	return FALSE;
     if (one->strand != prev->strand)
 	return FALSE;
-    if (1) // one->strand == '+')
+
+    if (one->strand == '+')
 	{
 	if (one->offset != prev->offset + atom->run->length )
 	    return FALSE;
 	}
     else
 	{
+	    //printf("one %d prev %d length %d\n",one->offset,prev->offset, atom->run->length);
 	if (one->offset != prev->offset - 1)
+	    {
+
 	    return FALSE;
+	    }
 	}
     }
 return (one == NULL ) && (prev == NULL);
@@ -234,6 +241,12 @@ if (atom->run == NULL)
 else 
     {
     atom->run->length++;
+
+    struct aBase *aBase;
+
+    for(aBase = atom->run->bases; aBase; aBase = aBase->next)
+	if (aBase->strand == '-')
+	    aBase->offset--;
     }
 }
 
@@ -530,7 +543,7 @@ for(atom = atoms; atom < &atoms[numAtoms] ; atom++)
     for(; abr; abr = abr->next)
 	{
 	fprintf(outAtoms, "%s.%s:%d-%d %c\n",abr->species->name, abr->species->chrom, 
-		abr->offset, abr->offset + atom->run->length, abr->strand);
+		abr->offset + 1, abr->offset + atom->run->length, abr->strand);
 	}
     }
 
@@ -540,37 +553,37 @@ for(species = speciesList; species; species = species->next)
     {
     int offset;
     int count = 0;
-    int prev = 0;
     int thisNum = 0;
     int width = species->chromEnd - species->chromStart;
 
-    for(offset = 0; offset < width; offset++)
+    for(offset = 0; offset < width; )
 	{
 	thisNum = species->atomSequence[offset];
-	if (prev !=  thisNum)
-	    count++;
-	prev = thisNum;
+	int length = atoms[thisNum - 1].run->length;
+
+	count++;
+	offset += length;
 	}
 
-    fprintf(outSeq,">%s %d\n",species->name,count);
+    fprintf(outSeq,">%s.%s:%d-%d %d\n",species->name,
+	species->chrom, species->chromStart+1, species->chromEnd, count);
 
-    count = prev = 0;
-    for(offset = 0; offset < width; offset++)
+    count = 0;
+    for(offset = 0; offset < width; )
 	{
 	thisNum = species->atomSequence[offset];
-	if (prev !=  thisNum)
-	    {
-	    struct aBase *base = findBase(thisNum, offset, species);
+	int length = atoms[thisNum - 1].run->length;
 
-	    if  (base->strand == '-')
-		fprintf(outSeq,"%d.%d ",-thisNum,base->order);
-	    else
-		fprintf(outSeq,"%d.%d ",thisNum,base->order);
-	    count++;
-	    if ((count & 0x7) == 0x7)
-		fprintf(outSeq,"\n");
-	    }
-	prev = species->atomSequence[offset];
+	struct aBase *base = findBase(thisNum, offset, species);
+
+	if  (base->strand == '-')
+	    fprintf(outSeq,"%d.%d ",-thisNum,base->order);
+	else
+	    fprintf(outSeq,"%d.%d ",thisNum,base->order);
+	count++;
+	if ((count & 0x7) == 0x7)
+	    fprintf(outSeq,"\n");
+	offset += length;
 	}
     if (!((count & 0x7) == 0x7))
 	fprintf(outSeq,"\n");
