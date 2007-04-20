@@ -1231,3 +1231,85 @@ make alpha
 #gene has 20413 rows
 #imageProbe has 125765 rows
 
+################### (galt 2007-04-20 done)
+# FIXED TWO ADDITIONAL ZOOM-OUT LEVELS 5 AND 6:
+# Ran /san/sanvol1/offline/level56RunJax/ cluster job on a list of all files needed.
+# Somehow 13000 pix were missing from the list when we made zoom out levels 5 and 6
+# originally
+
+cd /san/sanvol1/visiGene/gbdb/full/inSitu/Mouse/jax/
+
+find . -type d > dlist
+
+vi dlist
+
+#remove anything starting with "foo" or "ztest" or "goo" plus "."
+#That should leave just valid directories.
+
+cat dlist | sed -e 's/\.\///' > dlist2
+
+[hgwdev:jax> cat level6missing.csh
+#!/bin/tcsh
+set nonomatch
+while (1)
+    set i=$<
+    if ("$i" == "") then
+        break
+    endif
+    if ( -e $i/*_6_000.jpg) then
+    else
+        echo "$i"
+    endif
+end
+
+cat dlist2 | level6missing.csh > dlist3
+
+cd /san/sanvol1/visiGene/offline
+mkdir level56RunJax
+cd level56RunJax
+cp ../level56Run/level56.csh .
+cp ../level56Run/gsub .
+cat gsub
+[hgwdev:level56RunJax> cat gsub
+#LOOP
+./level56.csh $(path1)
+#ENDLOOP
+
+cat /san/sanvol1/visiGene/gbdb/full/inSitu/Mouse/jax/dlist3 | gawk '{print
+"/san/sanvol1/visiGene/gbdb/full/inSitu/Mouse/jax/" $1 ".jpg"}' > jpg.lst
+
+pk
+cd /san/sanvol1/visiGene/offline/level56RunJax
+gensub2 jpg.lst single gsub spec
+para create spec
+para try
+para push
+para time
+
+#Completed: 13235 of 13235 jobs
+#CPU time in finished jobs:       3819s      63.65m     1.06h    0.04d  0.000 y
+#IO & Wait Time:                 45674s     761.23m    12.69h    0.53d  0.001 y
+#Average job time:                   4s       0.06m     0.00h    0.00d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:              21s       0.35m     0.01h    0.00d
+#Submission to last job:           560s       9.33m     0.16h    0.01d
+
+# Followup to show that it worked:
+#[hgwdev:jax> cat dlist2 | level6missing.csh > dlist3X
+#[hgwdev:jax> ll dlist*
+#-rw-rw-r--  1 galt protein 117205 Apr 20 13:13 dlist
+#-rw-rw-r--  1 galt protein  85191 Apr 20 13:15 dlist2
+#-rw-rw-r--  1 galt protein  71495 Apr 20 13:33 dlist3
+#-rw-rw-r--  1 galt protein      0 Apr 20 14:25 dlist3X
+#
+#This shows that all completed (because dlist3X is empty)
+
+-----------------------------------------------
+
+# Rsync request
+#please rsync from /san to hgnfs1:
+
+rsync hgwdev:/san/sanvol1/visiGene/gbdb/full/inSitu/Mouse/jax/
+hgnfs1:/hgnfs1:/export/gbdb2/full/inSitu/Mouse/jax/
+
+
