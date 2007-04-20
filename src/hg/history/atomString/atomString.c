@@ -9,8 +9,9 @@
 #include "phyloTree.h"
 #include "element.h"
 #include "dystring.h"
+#include "values.h"
 
-static char const rcsid[] = "$Id: atomString.c,v 1.2 2007/04/09 16:45:02 braney Exp $";
+static char const rcsid[] = "$Id: atomString.c,v 1.3 2007/04/20 14:36:33 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -34,7 +35,6 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-int maxGap = 100000;
 int minLen = 1;
 boolean noOverlap = FALSE;
 char *stringsFile = NULL;
@@ -73,6 +73,9 @@ struct sequence *next;
 char *name;
 int length;
 struct instance **data;
+char *chrom;
+int chromStart;
+int chromEnd;
 };
 
 
@@ -116,6 +119,7 @@ for(; data < last; )
 
     AllocVar(string);
     string->num = stringNum++;
+    string->length = MAXINT;
     slAddHead(strings, string);
     atom->stringNum = string->num;
 
@@ -137,6 +141,9 @@ for(; data < last; )
 	    {
 	    struct instance *nextInSeq ;
 	    
+	    if (instance->atom == NULL)
+		break;
+
 	    if (instance->strand == '+')
 		nextInSeq = *(instance->seqPos + 1);
 	    else
@@ -151,18 +158,25 @@ for(; data < last; )
 		break;
 
 	    if (firstNextAtom == NULL)
+		{
 		firstNextAtom = nextAtom;
+		if (firstNextAtom->numInstances != atom->numInstances)
+		    break;
+		}
 	    else if (nextAtom != firstNextAtom)
 		break;
 	    }
 	if (instance != NULL)
 	    break;
 
-	struct atom *firstPrevAtom = NULL;
 
+	struct atom *firstPrevAtom = NULL;
 	for( instance = firstNextAtom->instances; instance;  instance = instance->next)
 	    {
 	    struct instance *prevInSeq;
+
+	    if (instance->atom == NULL)
+		break;
 
 	    if (instance->strand == '+')
 		prevInSeq = *(instance->seqPos - 1);
@@ -204,7 +218,7 @@ for(; data < last; )
 	count++;
 	length = newInt->end - newInt->start;
 
-	if (length > string->length)
+	if (length < string->length)
 	    string->length = length;
 	}
 
@@ -241,8 +255,9 @@ while( (wordsRead = lineFileChopNext(lf, bigWords, sizeof(bigWords)/sizeof(char 
 	    {
 	    AllocVar(anAtom);
 	    slAddHead(&atoms, anAtom);
-	    anAtom->name = cloneString(&bigWords[0][1]);
-	    hashAdd(atomHash, anAtom->name, anAtom);
+	    //anAtom->name = cloneString(&bigWords[0][1]);
+	    struct hashEl *hel = hashAdd(atomHash, &bigWords[0][1], anAtom);
+	    anAtom->name = hel->name;
 	    anAtom->length = num;
 	    anAtom->numInstances = intCount;
 	    if (anAtom->numInstances >= NUMSTARTS)
@@ -281,7 +296,7 @@ while( (wordsRead = lineFileChopNext(lf, bigWords, sizeof(bigWords)/sizeof(char 
 
 	ptr = strchr(start, '-');
 	*ptr++ = 0;
-	instance->start = atoi(start);
+	instance->start = atoi(start) - 1;
 	instance->end = atoi(ptr);
 	instance->strand = *bigWords[1];
 	
@@ -306,11 +321,23 @@ while( (wordsRead = lineFileChopNext(lf, bigWords,
     {
     if (*bigWords[0] == '>')
 	{
+	char *name = &bigWords[0][1];
+	char *chrom = strchr(name, '.');
+
+	*chrom++ = 0;
+	char *start = strchr(chrom, ':');
+	*start++ = 0;
+	char *end = strchr(start, '-');
+	*end++ = 0;
+
 	AllocVar(sequence);
 	slAddHead(&seqHead, sequence);
-	sequence->name = getShareString(&bigWords[0][1]);
+	sequence->name = getShareString(name);
 	sequence->length = atoi(bigWords[1]);
 	sequence->data = needLargeMem((sequence->length + 2) * sizeof(struct instance *));
+	sequence->chrom = getShareString(chrom);
+	sequence->chromStart = atoi(start) - 1;
+	sequence->chromEnd = atoi(end);
 	count = 0;
 	sequence->data[count++] = NULL;
 	}
@@ -371,7 +398,7 @@ for(; strings; strings = strings->next)
     for( instance = strings->instances;  instance; instance = instance->next)
 	{
 	fprintf(outF,"%s.%s:%d-%d %c\n",instance->species,instance->chrom,
-	    instance->start, instance->end, instance->strand);
+	    instance->start+1, instance->end, instance->strand);
 	}
     }
 fclose(outF);
@@ -389,7 +416,6 @@ for(; sequences; sequences = sequences->next)
     int lastNum = 0;
     int count = 0;
 
-
     for(; data < lastData; data++)
 	{
 	struct instance *thisInstance = *data;
@@ -406,7 +432,8 @@ for(; sequences; sequences = sequences->next)
 	    }
 	}
 
-    fprintf(outF, ">%s %d\n",sequences->name,count);
+    fprintf(outF, ">%s.%s:%d-%d %d\n",sequences->name,sequences->chrom,
+	sequences->chromStart+1, sequences->chromEnd, count);
 
     data = &sequences->data[1];
     lastNum = 0;
@@ -449,14 +476,19 @@ struct hash *atomHash = newHash(20);
 struct atom *atoms = getAtoms(inAtomName, atomHash);
 struct sequence *sequences = getSequences(inSeqName, atomHash);
 
+atoms = NULL;
+/*
 for(;atoms; atoms = atoms->next)
     {
     struct instance *instance = atoms->instances;
+    int count = 0;
 
-    for(; instance; instance = instance->next)
+    for(; instance; count++, instance = instance->next)
 	if (instance->atom == NULL) 
-	    errAbort("atom NULL for instance in species %s, atom %s\n",instance->species, atoms->name);
+	    errAbort("atom NULL for instance %d in species %s, atom %s\n",
+		count,instance->species, atoms->name);
     }
+*/
 
 for(seq = sequences ; seq ; seq = seq->next)
     {
