@@ -285,4 +285,7 @@ find /gbdb/visiGene/full/inSitu/Mouse/jax/ -name '*.jpg' -mtime -1 -maxdepth 1 |
      62
      
 
-
+#################################################
+# 13000 pix were missing levels 5 and 6 for jax.  
+# Please see visiGene.txt make doc (2007-04-20)
+#################################################
