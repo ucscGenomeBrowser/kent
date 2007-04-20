@@ -10,7 +10,7 @@
 #include "portable.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: gsidMsa.c,v 1.1 2007/04/19 23:00:13 fanhsu Exp $";
+static char const rcsid[] = "$Id: gsidMsa.c,v 1.2 2007/04/20 21:52:42 fanhsu Exp $";
 
 #define MAXSEQ 5000
 #define MAXSEQLEN 15000
@@ -20,11 +20,13 @@ char seq[MAXSEQ][MAXSEQLEN];
 char seqId[MAXSEQ][40];
 int  cnt[MAXSEQLEN][MAXBASE];
 char consensusSeq[MAXSEQLEN];
+char consensusSeq2[MAXSEQLEN];
 
 char *baseGenomeSeq;
 int  baseSeqLen;
 
-char refBase[MAXBASE] = {"ACTG-"};
+char refBase[MAXBASE]  = {"ACTG-"};
+char refBase2[MAXBASE] = {"actg-"};
 char aliSeq[MAXSEQLEN];
 float identity[MAXSEQLEN]; 
 
@@ -56,7 +58,7 @@ int ii;
 int i = 0;
 int j,jj,k;
 int seqCnt = 0;
-int max, kmax;
+int max, kmax, kmax2;
 
 conn2= hAllocConn();
 
@@ -111,15 +113,28 @@ for (j=0; j<baseSeqLen; j++)
 	} 
     max  = 0;
     kmax = 0;
+    kmax2= 0;
     for (k=0; k<MAXBASE; k++)
 	{
 	if (cnt[j][k] > max) 
 	    {
 	    max = cnt[j][k];
+	    
+	    /* keep track of the 2nd hightest */
+	    kmax2 = kmax;
 	    kmax = k;
 	    }
 	}
     consensusSeq[j] = refBase[kmax];
+    if (refBase[kmax] == '-')
+	{
+        consensusSeq2[j] = refBase2[kmax2];
+	}
+    else
+	{
+        consensusSeq2[j] = refBase[kmax];
+	}
+
     aliSeq[j] = refBase[kmax];
     identity[j] = (float)max/(float)seqCnt;
     if (baseGenomeSeq[j] != '-')
@@ -131,9 +146,11 @@ for (j=0; j<baseSeqLen; j++)
 
 fclose(outf);
 
-consensusSeq[baseSeqLen] = '\0';
+consensusSeq[baseSeqLen]  = '\0';
+consensusSeq2[baseSeqLen] = '\0';
 outf2 = mustOpen(outConsFn, "w");
-fprintf(outf2, "%s", consensusSeq);
+fprintf(outf2, ">%s MSA Consensus Sequence\n", table);
+fprintf(outf2, "%s\n", consensusSeq2);
 fclose(outf2);
 }
 
