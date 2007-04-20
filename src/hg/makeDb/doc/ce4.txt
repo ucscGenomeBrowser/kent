@@ -3,7 +3,7 @@
 # Caenorhabditis elegans
 #	Washington University School of Medicine GSC and Sanger Institute WS170
 
-#  $Id: ce4.txt,v 1.9 2007/04/20 05:43:55 hiram Exp $
+#  $Id: ce4.txt,v 1.10 2007/04/20 17:15:03 braney Exp $
 
 
 #########################################################################
@@ -672,3 +672,171 @@ TMPDIR=/scratch/tmp
     #	real    22m40.205s
     cat fb.caePb1.chainCe4Link.txt
     #	74758640 bases of 175247318 (42.659%) in intersection
+
+###########################################################################
+# HUMAN (hg18) PROTEINS TRACK (DONE braney 2007-04-20)
+    ssh kkstore02
+    # bash  if not using bash shell already
+
+    mkdir /cluster/data/ce4/blastDb
+    cd /cluster/data/ce4
+    twoBitToFa ce4.unmasked.2bit temp.fa
+    faSplit gap temp.fa 1000000 blastDb/x -lift=blastDb.lft
+    rm temp.fa
+    cd blastDb
+    for i in *.fa
+    do
+	/cluster/bluearc/blast229/formatdb -i $i -p F
+    done
+    rm *.fa
+
+    mkdir -p /san/sanvol1/scratch/ce4/blastDb
+    cd /cluster/data/ce4/blastDb
+    for i in nhr nin nsq; 
+    do 
+	echo $i
+	cp *.$i /san/sanvol1/scratch/ce4/blastDb
+    done
+
+    mkdir -p /cluster/data/ce4/bed/tblastn.hg18KG
+    cd /cluster/data/ce4/bed/tblastn.hg18KG
+    echo  /san/sanvol1/scratch/ce4/blastDb/*.nsq | xargs ls -S | sed "s/\.nsq//"  > query.lst
+    wc -l query.lst
+# 104 query.lst
+
+   # we want around 50000 jobs
+   calc `wc /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl | awk "{print \\\$1}"`/\(50000/`wc query.lst | awk "{print \\\$1}"`\)
+
+# 36727/(50000/104) = 76.392160
+
+   mkdir -p /cluster/bluearc/ce4/bed/tblastn.hg18KG/kgfa
+   split -l 76 /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl  /cluster/bluearc/ce4/bed/tblastn.hg18KG/kgfa/kg
+   ln -s /cluster/bluearc/ce4/bed/tblastn.hg18KG/kgfa kgfa
+   cd kgfa
+   for i in *; do 
+     nice pslxToFa $i $i.fa; 
+     rm $i; 
+     done
+   cd ..
+   ls -1S kgfa/*.fa > kg.lst
+   mkdir -p /cluster/bluearc/ce4/bed/tblastn.hg18KG/blastOut
+   ln -s /cluster/bluearc/ce4/bed/tblastn.hg18KG/blastOut
+   for i in `cat kg.lst`; do  mkdir blastOut/`basename $i .fa`; done
+   tcsh
+   cd /cluster/data/ce4/bed/tblastn.hg18KG
+   cat << '_EOF_' > blastGsub
+#LOOP
+blastSome $(path1) {check in line $(path2)} {check out exists blastOut/$(root2)/q.$(root1).psl }
+#ENDLOOP
+'_EOF_'
+
+   cat << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/cluster/bluearc/blast229/data
+export BLASTMAT
+g=`basename $2`
+f=/tmp/`basename $3`.$g
+for eVal in 0.01 0.001 0.0001 0.00001 0.000001 1E-09 1E-11
+do
+if /cluster/bluearc/blast229/blastall -M BLOSUM80 -m 0 -F no -e $eVal -p tblastn -d $1 -i $2 -o $f.8
+then
+        mv $f.8 $f.1
+        break;
+fi
+done
+if test -f  $f.1
+then
+    if /cluster/bin/i386/blastToPsl $f.1 $f.2
+    then
+	liftUp -nosort -type=".psl" -nohead $f.3 /cluster/data/ce4/blastDb.lft carry $f.2
+        liftUp -nosort -type=".psl" -pslQ -nohead $3.tmp /cluster/data/hg18/bed/blat.hg18KG/protein.lft warn $f.3
+
+        if pslCheck -prot $3.tmp                                                  
+        then                                                                      
+            mv $3.tmp $3                                                          
+            rm -f $f.1 $f.2 $f.3 $f.4
+        fi
+        exit 0                                                                    
+    fi                                                                            
+fi                                                                                
+rm -f $f.1 $f.2 $3.tmp $f.8 $f.3 $f.4
+exit 1
+'_EOF_'
+    # << happy emacs
+    chmod +x blastSome
+    gensub2 query.lst kg.lst blastGsub blastSpec
+    exit 
+    
+    ssh pk
+    cd /cluster/data/ce4/bed/tblastn.hg18KG
+    para create blastSpec
+#    para try, check, push, check etc.
+
+# Completed: 50336 of 50336 jobs
+# CPU time in finished jobs:     955647s   15927.45m   265.46h   11.06d  0.030 y
+# IO & Wait Time:                199548s    3325.80m    55.43h    2.31d  0.006 y
+# Average job time:                  23s       0.38m     0.01h    0.00d
+# Longest finished job:              59s       0.98m     0.02h    0.00d
+# Submission to last job:          3074s      51.23m     0.85h    0.04d
+
+    ssh kkstore02
+    cd /cluster/data/ce4/bed/tblastn.hg18KG
+    mkdir chainRun
+    cd chainRun
+    tcsh
+    cat << '_EOF_' > chainGsub
+#LOOP
+chainOne $(path1)
+#ENDLOOP
+'_EOF_'
+
+    cat << '_EOF_' > chainOne
+(cd $1; cat q.*.psl | simpleChain -prot -outPsl -maxGap=50000 stdin /cluster/bluearc/ce4/bed/tblastn.hg18KG/blastOut/c.`basename $1`.psl)
+'_EOF_'
+    chmod +x chainOne
+    ls -1dS /cluster/bluearc/ce4/bed/tblastn.hg18KG/blastOut/kg?? > chain.lst
+    gensub2 chain.lst single chainGsub chainSpec
+    # do the cluster run for chaining
+    ssh kk
+    cd /cluster/data/ce4/bed/tblastn.hg18KG/chainRun
+    para create chainSpec
+    para maxNode 30
+    para try, check, push, check etc.
+
+# Completed: 484 of 484 jobs
+# CPU time in finished jobs:        485s       8.08m     0.13h    0.01d  0.000 y
+# IO & Wait Time:                  1739s      28.99m     0.48h    0.02d  0.000 y
+# Average job time:                   5s       0.08m     0.00h    0.00d
+# Longest finished job:              16s       0.27m     0.00h    0.00d
+# Submission to last job:           102s       1.70m     0.03h    0.00d
+
+    ssh kkstore02
+    cd /cluster/data/ce4/bed/tblastn.hg18KG/blastOut
+    for i in kg??
+    do
+       cat c.$i.psl | awk "(\$13 - \$12)/\$11 > 0.6 {print}" > c60.$i.psl
+       sort -rn c60.$i.psl | pslUniq stdin u.$i.psl
+       awk "((\$1 / \$11) ) > 0.60 { print   }" c60.$i.psl > m60.$i.psl
+       echo $i
+    done
+    sort -T /tmp -k 14,14 -k 16,16n -k 17,17n u.*.psl m60* | uniq > /cluster/data/ce4/bed/tblastn.hg18KG/blastHg18KG.psl
+    cd ..
+    pslCheck blastHg18KG.psl
+
+    # load table 
+    ssh hgwdev
+    cd /cluster/data/ce4/bed/tblastn.hg18KG
+    hgLoadPsl ce4 blastHg18KG.psl
+
+    # check coverage
+    featureBits ce4 blastHg18KG 
+# 3424422 bases of 100281244 (3.415%) in intersection
+
+    featureBits ce4 sangerGene:cds blastHg18KG  -enrichment
+# sangerGene:cds 27.876%, blastHg18KG 3.415%, both 3.231%, cover 11.59%, enrich 3.39x
+
+    ssh kkstore02
+    rm -rf /cluster/data/ce4/bed/tblastn.hg18KG/blastOut
+    rm -rf /cluster/bluearc/ce4/bed/tblastn.hg18KG/blastOut
+#end tblastn
+##########################################################################
