@@ -10,7 +10,7 @@
 #include "portable.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: gsidAaMsa.c,v 1.1 2007/04/20 18:34:01 fanhsu Exp $";
+static char const rcsid[] = "$Id: gsidAaMsa.c,v 1.2 2007/04/20 22:03:26 fanhsu Exp $";
 
 #define MAXSEQ 5000
 #define MAXSEQLEN 5000
@@ -20,6 +20,7 @@ char seq[MAXSEQ][MAXSEQLEN];
 char seqId[MAXSEQ][40];
 int  cnt[MAXSEQLEN][MAXBASE];
 char consensusSeq[MAXSEQLEN];
+char consensusSeq2[MAXSEQLEN];
 
 char *baseGenomeSeq;
 int  baseSeqLen;
@@ -48,7 +49,32 @@ char aaCode1[MAXBASE][2] = {
 "-"
 };
 
+char aaCode2[MAXBASE][2] = {
+"a",
+"v",
+"l",
+"i",
+"p",
+"f",
+"w",
+"m",
+"g",
+"s",
+"t",
+"c",
+"y",
+"n",
+"q",
+"d",
+"e",
+"k",
+"r",
+"h",
+"-"
+};
+
 char refBase[MAXBASE];
+char refBase2[MAXBASE];
 char aliSeq[MAXSEQLEN];
 float identity[MAXSEQLEN]; 
 
@@ -79,11 +105,12 @@ char base;
 int ii;
 int i, j, jj, k;
 int seqCnt = 0;
-int max, kmax;
+int max, kmax, kmax2;
 
 for (i=0; i < MAXBASE; i++)
     {
     refBase[i]  = *aaCode1[i];
+    refBase2[i] = *aaCode2[i];
     }
 
 conn2= hAllocConn();
@@ -118,7 +145,6 @@ hFreeConn(&conn2);
 /* print header */
 fprintf(outf, "browser position chr1:1-9000\n");
 fprintf(outf, "track type=wiggle_0\n");
-//fprintf(outf, "variableStep chrom=chr1\n");
 
 jj=0;
 for (j=0; j<baseSeqLen; j++)
@@ -139,15 +165,28 @@ for (j=0; j<baseSeqLen; j++)
 	} 
     max  = 0;
     kmax = 0;
+    kmax2= 0;
     for (k=0; k<MAXBASE; k++)
 	{
 	if (cnt[j][k] > max) 
 	    {
 	    max = cnt[j][k];
+
+	    /* keep track of the 2nd hightest */
+            kmax2 = kmax;
 	    kmax = k;
 	    }
 	}
     consensusSeq[j] = refBase[kmax];
+    if (refBase[kmax] == '-')
+        {
+        consensusSeq2[j] = refBase2[kmax2];
+        }
+    else
+        {
+        consensusSeq2[j] = refBase[kmax];
+        }
+
     aliSeq[j] = refBase[kmax];
     identity[j] = (float)max/(float)seqCnt;
     if (baseGenomeSeq[j] != '-')
@@ -161,8 +200,10 @@ for (j=0; j<baseSeqLen; j++)
 fclose(outf);
 
 consensusSeq[baseSeqLen] = '\0';
+consensusSeq2[baseSeqLen] = '\0';
 outf2 = mustOpen(outConsFn, "w");
-fprintf(outf2, "%s", consensusSeq);
+fprintf(outf2, ">%s Protein MSA Consensus Sequence\n", table);
+fprintf(outf2, "%s\n", consensusSeq2);
 fclose(outf2);
 }
 
