@@ -18,10 +18,11 @@
 #include "trans3.h"
 
 
-static char const rcsid[] = "$Id: gfBlatLib.c,v 1.24 2007/04/20 22:43:37 kent Exp $";
+static char const rcsid[] = "$Id: gfBlatLib.c,v 1.25 2007/04/20 22:44:11 kent Exp $";
 
 static int ssAliCount = 16;	/* Number of alignments returned by ssStitch. */
 
+#ifdef DEBUG
 void dumpRange(struct gfRange *r, FILE *f)
 /* Dump range to file. */
 {
@@ -35,7 +36,6 @@ struct gfRange *range;
 for (range = rangeList; range != NULL; range = range->next)
     dumpRange(range, f);
 }
-#ifdef DEBUG
 #endif /* DEBUG */
 
 void gfRangeFree(struct gfRange **pEl)
