@@ -42,7 +42,7 @@
 #include "gbFileOps.h"
 #include "gbProcessed.h"
 
-static char const rcsid[] = "$Id: gbProcess.c,v 1.19 2007/03/08 07:24:20 markd Exp $";
+static char const rcsid[] = "$Id: gbProcess.c,v 1.20 2007/04/20 04:37:44 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -436,9 +436,8 @@ return (gbKeywordsField->val != NULL) && containsStringNoCase(gbKeywordsField->v
 }
 
 static void hackOrfeomeClone()
-/* Make edits to ORFEome clone entries due to problematic submissions to
- * genbank.  Change ORFeome clones that were entered as molecule type DNA
- * to mRNA. */
+/* Make edits to ORFEome syntenthic clone entries are added as molType of DNA, 
+ * change these to mRNA */
 {
 struct keyVal *kv = kvtGet(kvt, "mol");
 if (kv != NULL)
@@ -495,30 +494,25 @@ if ((gPepFa != NULL) && (gbProteinIdField->val->stringSize > 0)
 static boolean keepGbEntry(boolean isEst)
 /* should the current entry in the kvt be kept? */
 {
-static boolean inclNonCoding = FALSE;  // compile-time tunable
-char *accession = gbAccessionField->val->string;
-if (gbGuessSrcDb(accession) == GB_REFSEQ)
+char *acc = gbAccessionField->val->string;
+char *cat = kvtGet(kvt, "cat")->val;
+if (gbGuessSrcDb(acc) == GB_REFSEQ)
     {
-    if (inclNonCoding)
-        return (startsWith("NM_", accession) || startsWith("NR_", accession)
-                || ((startsWith("XM_", accession) && inclXMs)));
-    else
-        return (startsWith("NM_", accession)
-                || ((startsWith("XM_", accession) && inclXMs)));
+    return (startsWith("NM_", acc) || startsWith("NR_", acc)
+            || ((startsWith("XM_", acc) && inclXMs)));
     }
+else if (invitrogenEvilEntry)
+    return FALSE;
+else if (sameString(cat, "GSS") || sameString(cat, "HTG") || sameString(cat, "STS") || sameString(cat, "CON"))
+    return FALSE;   // division to ignore
 else
     {
-    char *cat = kvtGet(kvt, "cat")->val;
     if (sameString(cat, "EST"))
         return (gbType & GB_EST) != 0;
     else if (gbType & GB_MRNA)
         {
         // not an EST, keep any type of RNA
-        char *mol = kvtGet(kvt, "mol")->val;
-        if (inclNonCoding)
-            return containsStringNoCase(mol, "RNA") != NULL;
-        else
-            return sameString(mol, "mRNA");
+        return containsStringNoCase(kvtGet(kvt, "mol")->val, "RNA") != NULL;
         }
     else
         return FALSE;
@@ -707,9 +701,12 @@ if (dna != NULL)
     if (gbIdxFile != NULL)
         {
         /* use synthetic target if it was determined */
+        struct keyVal *molkv = kvtGet(kvt, "mol");
+        enum molType molType = (molkv->val != NULL) ? gbParseMolType(molkv->val) : mol_mRNA;
         gbProcessedWriteIdxRec(gbIdxFile, accession, version,
                                kvtLookup(kvt, "dat"),
-                               ((synOrg != NULL) ? synOrg : org));
+                               ((synOrg != NULL) ? synOrg : org),
+                               molType);
         }
     }
 else

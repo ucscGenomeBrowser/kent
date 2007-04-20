@@ -10,7 +10,7 @@
 #include "gbFileOps.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: gbParse.c,v 1.18 2007/03/08 07:24:20 markd Exp $";
+static char const rcsid[] = "$Id: gbParse.c,v 1.19 2007/04/20 04:37:44 markd Exp $";
 
 
 /* Some fields we'll want to use directly. */
@@ -37,6 +37,7 @@ struct gbField *gbCdsDbxField;
 struct gbField *gbProteinIdField;
 struct gbField *gbTranslationField;
 struct gbField *gbMiscDiffField;
+boolean invitrogenEvilEntry;
 
 /* RefSeq specific data */
 struct gbField *gbRefSeqRoot = NULL;
@@ -400,6 +401,18 @@ slAddHead(&gbMiscDiffVals, gmd);
 gbfClearVals(gbMiscDiffField);
 }
 
+static void checkForInvitrogenEvil(char *line)
+/* check if clone is from the invitrogen `fulllength' libraries, some of which
+ * have apparently been aligned to pseudogenes and then modified to match the
+ * genome.  These have wasted a lot of time, so we toss all of them.  This is determined
+ * by the URL for the (now dead) library in the entry.  Since it can occur in either a
+ * COMMENT or a REMARK, remarks are not parsed, we just check each line.
+ */
+{
+if (containsStringNoCase(line, "http://fulllength.invitrogen.com/") != NULL)
+    invitrogenEvilEntry = TRUE;
+}
+
 
 static void readOneField(char *line, struct lineFile *lf, struct gbField *gbf, int subIndent)
 /* Read in a single field. */
@@ -490,6 +503,7 @@ for (;;)
         lineFileReuse(lf);
         break;
         }
+    checkForInvitrogenEvil(line);
     if ((gbf->flags & GBF_CONCAT_VAL) == 0)
         dyStringAppendC(gbf->val, ' ');
     }
@@ -534,6 +548,7 @@ struct gbField *gbf;
 
 while (lineFileNext(lf, &line, &lineSize))
     {
+    checkForInvitrogenEvil(line);
     for (indent = 0; ; ++indent)
         {
         if (line[indent] != ' ')
@@ -858,6 +873,7 @@ gbfClearVals(gbStruct);
 gbfClearVals(gbRefSeqRoot);
 gbMiscDiffFreeList(&gbMiscDiffVals);
 gReachedEOR = FALSE;
+invitrogenEvilEntry = FALSE;
 gotRecord = recurseReadFields(lf, gbStruct, -1);
 if (gotRecord && (gbGuessSrcDb(getCurAcc()) == GB_REFSEQ))
     refSeqParse();

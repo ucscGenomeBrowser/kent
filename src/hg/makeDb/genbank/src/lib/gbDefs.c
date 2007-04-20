@@ -5,8 +5,9 @@
 #include "gbRelease.h"
 #include "gbUpdate.h"
 #include "gbGenome.h"
+#include "hash.h"
 
-static char const rcsid[] = "$Id: gbDefs.c,v 1.4 2007/03/11 16:05:17 markd Exp $";
+static char const rcsid[] = "$Id: gbDefs.c,v 1.5 2007/04/20 04:37:44 markd Exp $";
 
 /* Directories */
 char* GB_PROCESSED_DIR = "data/processed";
@@ -16,6 +17,31 @@ char* GB_ALIGNED_DIR = "data/aligned";
 char* GB_FULL_UPDATE = "full";
 char* GB_DAILY_UPDATE_PREFIX = "daily.";
 char* GB_DAILY_UPDATE_GLOB = "daily.*";
+
+/* molType enum/sym mappings  */
+static struct {
+    enum molType type;
+    char *sym;
+} molTypeMappings[] = {
+    {mol_DNA,       "DNA"},
+    {mol_RNA,       "RNA"},
+    {mol_ds_RNA,    "ds-RNA"},
+    {mol_ds_mRNA,   "ds-mRNA"},
+    {mol_ds_rRNA,   "ds-rRNA"},
+    {mol_mRNA,      "mRNA"},
+    {mol_ms_DNA,    "ms-DNA"},
+    {mol_ms_RNA,    "ms-RNA",},
+    {mol_rRNA,      "rRNA"},
+    {mol_scRNA,     "scRNA"},
+    {mol_snRNA,     "snRNA"},
+    {mol_snoRNA,    "snoRNA"},
+    {mol_ss_DNA,    "ss-DNA"},
+    {mol_ss_RNA,    "ss-RNA"},
+    {mol_ss_snoRNA, "ss-snoRNA"},
+    {mol_tRNA,      "tRNA"},
+    {-1,            NULL}
+};
+static struct hash *molSymToType = NULL;
 
 short gbSplitAccVer(char* accVer, char* acc)
 /* Split an GenBank version into accession and version number. acc maybe
@@ -283,6 +309,34 @@ if (type & GB_EST)
     return "EST";
 internalErr();
 return NULL;
+}
+
+static void buildMolTypeHash()
+/* build molSymToType hash */
+{
+int i;
+molSymToType = hashNew(8);
+for (i = 0; molTypeMappings[i].sym != NULL; i++)
+    hashAddInt(molSymToType, molTypeMappings[i].sym, molTypeMappings[i].type);
+}
+
+enum molType gbParseMolType(char* molTypeStr)
+/* Parse molecule type string. */
+{
+if (molSymToType == NULL)
+    buildMolTypeHash();
+struct hashEl *hel = hashLookup(molSymToType, molTypeStr);
+if (hel == NULL)
+    errAbort("unknown molecule type: %s", molTypeStr);
+return ptrToLL(hel->val);;
+}
+
+char* gbMolTypeSym(enum molType molType)
+/* return symbolic molecule type */
+{
+if ((molType < 0) || (molType >= ArraySize(molTypeMappings)))
+    errAbort("invalid molecule type number: %d", molType);
+return  molTypeMappings[molType].sym;
 }
 
 /*

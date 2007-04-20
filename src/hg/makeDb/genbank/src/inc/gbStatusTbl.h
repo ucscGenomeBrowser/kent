@@ -7,7 +7,7 @@
 #include "hgRelate.h"
 #include "genbank.h"
 
-/* Flags indicating used indiucate state changes */
+/* Flags indicating used indicate state changes */
 #define GB_NOCHG     0x00    /* no change */
 #define GB_NEW       0x01    /* new entry */
 #define GB_DELETED   0x02    /* deleted entry */
@@ -15,6 +15,7 @@
 #define GB_META_CHG  0x08    /* metadata has changed */
 #define GB_EXT_CHG   0x10    /* extFile has changed */
 #define GB_ORPHAN    0x20    /* orphaned (normally GB_NEW as well) */
+#define GB_IGNORE    0x40    /* ignore this entry */
 
 
 struct gbStatus

@@ -11,14 +11,16 @@
 #include "errabort.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: gbProcessed.c,v 1.7 2006/12/24 20:48:42 markd Exp $";
+static char const rcsid[] = "$Id: gbProcessed.c,v 1.8 2007/04/20 04:37:44 markd Exp $";
 
 /* column indices in gbidx files */
 #define GBIDX_ACC_COL       0
 #define GBIDX_VERSION_COL   1
 #define GBIDX_MODDATE_COL   2
 #define GBIDX_ORGANISM_COL  3
-#define GBIDX_NUM_COLS      4
+#define GBIDX_MOL_COL       4  // not in older gbidx files.
+#define GBIDX_MIN_NUM_COLS  4
+#define GBIDX_MAX_NUM_COLS  5
 
 /* extension for processed index */
 char* GBIDX_EXT = "gbidx";
@@ -66,7 +68,7 @@ return TRUE;
 struct gbProcessed* gbProcessedNew(struct gbEntry* entry,
                                    struct gbUpdate* update,
                                    int version, time_t modDate,
-                                   char* organism)
+                                   char* organism, enum molType molType)
 /* Create a new gbProcessed object */
 {
 struct gbProcessed* processed;
@@ -77,6 +79,7 @@ processed->version = version;
 processed->modDate = modDate;
 processed->organism = gbReleaseAllocEntryStr(update->release, organism);
 processed->orgCat = gbGenomeOrgCat(update->release->genome, organism);
+processed->molType = molType;
 return processed;
 }
 
@@ -91,12 +94,12 @@ return gbIsReadable(idxPath);
 }
 
 void gbProcessedWriteIdxRec(FILE* fh, char* acc, int version,
-                            char* modDate, char* organism)
+                            char* modDate, char* organism, enum molType molType)
 /* Write a record to the processed index */
 {
 if (ftell(fh) == 0)
     fprintf(fh, "#acc\tversion\tmoddate\torganism\n");
-fprintf(fh, "%s\t%d\t%s\t%s\n", acc, version, modDate, organism);
+fprintf(fh, "%s\t%d\t%s\t%s\t%s\n", acc, version, modDate, organism, gbMolTypeSym(molType));
 if (ferror(fh))
     errnoAbort("writing genbank processed index file");
 }
@@ -128,7 +131,7 @@ if (select->release->genome != NULL)
     }
 }
 
-static void parseRow(struct gbSelect* select, char **row, struct lineFile* lf)
+static void parseRow(struct gbSelect* select, char **row, int numCols, struct lineFile* lf)
 /* read and parse a gbidx file record */
 {
 char *acc = row[GBIDX_ACC_COL];
@@ -143,7 +146,9 @@ if (gbIgnoreGet(select->release->ignore, acc, modDate) == NULL)
         checkRowEntry(select, lf, entry, organism, modDate);
     gbEntryAddProcessed(entry, select->update,
                         gbParseInt(lf, row[GBIDX_VERSION_COL]), modDate,
-                        organism);
+                        organism,
+                        ((numCols <= GBIDX_MOL_COL) ? mol_mRNA
+                         : gbParseMolType(row[GBIDX_MOL_COL])));
     }
 }
 
@@ -156,9 +161,14 @@ gbProcessedGetPath(select, GBIDX_EXT, idxPath);
 if (gbIsReadable(idxPath))
     {
     struct lineFile* lf = lineFileOpen(idxPath, TRUE);
-    char* row[GBIDX_NUM_COLS];
-    while (lineFileNextRowTab(lf, row, ArraySize(row)))
-        parseRow(select, row, lf);
+    char* row[GBIDX_MAX_NUM_COLS];
+    int numCols;
+    while ((numCols = lineFileChopNextTab(lf, row, GBIDX_MAX_NUM_COLS)) > 0)
+        {
+        if (numCols < GBIDX_MIN_NUM_COLS) 
+            lineFileAbort(lf, "expect at least %d columns", GBIDX_MIN_NUM_COLS);
+        parseRow(select, row, numCols, lf);
+        }
     lineFileClose(&lf);
     }
 }

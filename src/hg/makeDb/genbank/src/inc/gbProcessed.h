@@ -5,6 +5,7 @@
 #define GBPROCESSED_H
 
 #include "common.h"
+#include "gbDefs.h"
 #include <unistd.h>
 struct gbRelease;
 struct gbSelect;
@@ -22,6 +23,7 @@ struct gbProcessed
     short orgCat;                   /* organism category */
     time_t modDate;                 /* GenBank modification date */
     char* organism;                 /* organism name */
+    enum molType molType;           /* molecule type */
 };
 
 /* extension for processed index */
@@ -30,11 +32,11 @@ extern char* GBIDX_EXT;
 struct gbProcessed* gbProcessedNew(struct gbEntry* entry,
                                    struct gbUpdate* update,
                                    int version, time_t modDate,
-                                   char* organism);
+                                   char* organism, enum molType molType);
 /* Create a new gbProcessed object */
 
 void gbProcessedWriteIdxRec(FILE* fh, char* acc, int version,
-                            char* modDate, char* organism);
+                            char* modDate, char* organism, enum molType molType);
 /* Write a record to the processed index */
 
 void gbProcessedGetDir(struct gbSelect* select, char* dir);

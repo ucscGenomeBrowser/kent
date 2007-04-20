@@ -85,6 +85,9 @@ struct gbMiscDiff
 /* list of misc diffs in current record */
 extern struct gbMiscDiff *gbMiscDiffVals;
 
+/* appears to be an invirtorgen evil clone (modified to match genome) */
+boolean invitrogenEvilEntry;
+
 char *skipLeadingNonSpaces(char *s);
 /* Return first non-white space or NULL. */
 

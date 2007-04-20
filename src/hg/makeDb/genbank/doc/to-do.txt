@@ -901,21 +901,6 @@ Error: danRer1: gene danRer1.refFlat:1854 NM_131267 chr7: NM_131267 geneName "ir
 - update ussage message in polyInfo pslIntronsOnly
 - min cover too high ***, max repeats too low.
 
-
-- local best in genome (don't drop exons!!!)
-  1) score that is weight heavily by percent id (local score)
-     - was ration with weak gap epnality
-     - added intron bonus
-  2) foreach base of mRNA, store: base score at that base
-  3) for each alignment, count the # of bases within nearTop
-     of best score for base
-  4) if alignment has >= minCoiver of bases over near top, keep alignment.
-
-
-gbLoadRna: selected refseq.12 droMoj2 xeno mrna: delete=0 seqChg=0 metaChg=0 extChg=0 new=167629 orphan=0 noChg=0
-Warning: NR_001829: malformed RefSeq CDS: 
-Warning: NR_001874: malformed RefSeq CDS: 
-
 - should be able to detect initial load, rather than require argument.
 
 - got this error during load
@@ -928,8 +913,6 @@ Warning: NR_001874: malformed RefSeq CDS:
 
 -  xeno refseq NM_167334 on droAna2 had 41 poor alignments, some with huge
    introns.  Might need to add maxIntro.
-
-- NR_s are ending up in refLink??
 
 - mm7 NM_207243 has a bunch of repetitive alignments to the same location with  3968, plus
   one longer one.  Should prqobably have ability to toss weird overlaps where thee is one 
@@ -1088,8 +1071,6 @@ Warning: NR_001874: malformed RefSeq CDS:
 
 - BC050659 misc_diff was not in ra file, thus not loaded.
 
-- switch human and mouse to using global near best.
-
 - can we use less conservative *SizeLoose() function for polyA determination
   in pslCDNAFilter??? (need both sequence and alignment).
 
@@ -1105,12 +1086,8 @@ Warning: NR_001874: malformed RefSeq CDS:
 
 - gbSanity does nothing if there are no alignment files, it should complain.
 
-- fix gbSanity: Error: fr2: no psl table fr2.xenoEst
-
 - remove default alignment categories from genbank.conf
 - force occ to be in same directory as cluster genome.
-
 - change mgc/orefome tracks to only update if there is new data.
 
-- don't process STS files.
 

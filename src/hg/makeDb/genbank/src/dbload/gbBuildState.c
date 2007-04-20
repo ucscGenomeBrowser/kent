@@ -19,10 +19,12 @@
 #include "gbProcessed.h"
 #include "gbStatusTbl.h"
 
-static char const rcsid[] = "$Id: gbBuildState.c,v 1.21 2007/03/08 22:47:39 markd Exp $";
+static char const rcsid[] = "$Id: gbBuildState.c,v 1.22 2007/04/20 04:37:43 markd Exp $";
 
 static struct dbLoadOptions* gOptions; /* options from cmdline and conf */
 static int gErrorCnt = 0;  /* count of errors during build */
+
+static boolean loadNonCoding = FALSE;  /* FIXME tmp compile time flag */
 
 struct selectStatusData
 /* client data for select status */
@@ -192,6 +194,16 @@ if (gbVerbose >= 5)
     traceSelect("noChg", tmpStatus);
 }
 
+static void markIgnore(struct gbStatusTbl* statusTbl,
+                       struct gbStatus* tmpStatus,
+                       struct gbEntry* entry)
+/* mark an entry as ignored; this will not be added to the status table */
+{
+entry->selectVer = GB_UNCHG_SELECT_VER;
+if (gbVerbose >= 5)
+    traceSelect("ignore", tmpStatus);
+}
+
 static void markNew(struct gbStatusTbl* statusTbl,
                     struct gbStatus* status,
                     struct gbProcessed* processed,
@@ -252,6 +264,8 @@ if (entry != NULL)
 /* if no entry or not aligned, or if it shouldn't be included, delete */
 if ((entry == NULL) || (aligned == NULL))
     markDeleted(statusTbl, tmpStatus, ssData);
+else if (!loadNonCoding && (processed->molType != mol_mRNA))
+    markIgnore(statusTbl, tmpStatus, entry);
 else
     {
     /* validate entries are not going backwards */
@@ -292,7 +306,9 @@ if (entry->selectVer == NULL_VERSION)
      * ignored.*/
     struct gbAligned* aligned = NULL;
     struct gbProcessed* processed = getProcAligned(entry, &aligned);
-    if (aligned != NULL)
+    if (!loadNonCoding && (processed != NULL) && (processed->molType != mol_mRNA))
+        gbVerbPr(5, "nonCoding: %s.%d %s", entry->acc, entry->processed->version, gbMolTypeSym(processed->molType));
+    else if (aligned != NULL)
         {
         struct gbStatus* status
             = gbStatusTblAdd(statusTbl, entry->acc,

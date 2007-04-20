@@ -55,6 +55,27 @@ enum refSeqStatus {
 #define NULL_OFFSET   -1
 #define NULL_DATE      0
 
+/* molecule type */
+enum molType {
+    mol_DNA,
+    mol_RNA,
+    mol_ds_RNA,
+    mol_ds_mRNA,
+    mol_ds_rRNA,
+    mol_mRNA,
+    mol_ms_DNA,
+    mol_ms_RNA,
+    mol_rRNA,
+    mol_scRNA,
+    mol_snRNA,
+    mol_snoRNA,
+    mol_ss_DNA,
+    mol_ss_RNA,
+    mol_ss_snoRNA,
+    mol_tRNA
+};
+
+
 /* Directories */
 extern char* GB_PROCESSED_DIR;
 extern char* GB_ALIGNED_DIR;
@@ -130,6 +151,13 @@ char* gbFmtSelect(unsigned select);
 
 char* gbSelectDesc(struct gbSelect* select);
 /* Get selection description for messages.  Warning, static return buffer */
+
+enum molType gbParseMolType(char* molTypeStr);
+/* Parse molecule type string. */
+
+char* gbMolTypeSym(enum molType molType);
+/* return symbolic molecule type */
+
 #endif
 /*
  * Local Variables:

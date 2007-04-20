@@ -8,7 +8,7 @@
 #include "localmem.h"
 #include "hash.h"
 
-static char const rcsid[] = "$Id: gbEntry.c,v 1.3 2003/07/12 23:32:24 markd Exp $";
+static char const rcsid[] = "$Id: gbEntry.c,v 1.4 2007/04/20 04:37:44 markd Exp $";
 
 struct gbEntry* gbEntryNew(struct gbRelease* release, char* acc, unsigned type)
 /* allocate a new gbEntry object and add it to the release*/
@@ -85,7 +85,7 @@ return cmp;
 struct gbProcessed* gbEntryAddProcessed(struct gbEntry* entry,
                                         struct gbUpdate* update,
                                         int version, time_t modDate,
-                                        char* organism)
+                                        char* organism, enum molType molType)
 /* Create a new processed object in the entry and link with it's update */
 {
 struct gbProcessed* cur = entry->processed;
@@ -108,7 +108,7 @@ else
     {
     struct gbProcessed* processed = gbProcessedNew(entry, update,
                                                    version, modDate,
-                                                   organism);
+                                                   organism, molType);
     if (prev == NULL)
         {
         /* add to head */

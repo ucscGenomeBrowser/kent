@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include "gbDefs.h"
 struct gbRelease;
 struct gbUpdate;
 
@@ -49,7 +50,7 @@ struct gbProcessed* gbEntryFindUpdateProcessed(struct gbEntry* entry,
 struct gbProcessed* gbEntryAddProcessed(struct gbEntry* entry,
                                         struct gbUpdate* update,
                                         int version, time_t modDate,
-                                        char* organism);
+                                        char* organism, enum molType molType);
 /* Create a new processed object in the entry and link with it's update */
 
 struct gbAligned* gbEntryFindAligned(struct gbEntry* entry,
