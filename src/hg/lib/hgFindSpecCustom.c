@@ -14,7 +14,7 @@
 #include <regex.h>
 #include "trackDb.h"
 
-static char const rcsid[] = "$Id: hgFindSpecCustom.c,v 1.13 2006/08/03 23:21:51 aamp Exp $";
+static char const rcsid[] = "$Id: hgFindSpecCustom.c,v 1.14 2007/04/21 00:00:48 angie Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -348,6 +348,7 @@ else	/* Add to settings. */
 struct hgFindSpec *hgFindSpecFromRa(char *raFile)
 /* Load track info from ra file into list. */
 {
+static boolean reEntered = FALSE;
 struct lineFile *lf = lineFileOpen(raFile, TRUE);
 char *line, *word;
 struct hgFindSpec *hfsList = NULL, *hfs;
@@ -371,7 +372,12 @@ for (;;)
 	   }
         else if ((incFile = trackDbInclude(raFile, line)) != NULL)
             {
+	    /* Set reEntered=TRUE whenever we recurse, so we don't polish
+	     * multiple times and get too many backslash-escapes. */
+	    boolean reBak = reEntered;
+	    reEntered = TRUE;
             struct hgFindSpec *incHfs = hgFindSpecFromRa(incFile);
+	    reEntered = reBak;
             hfsList = slCat(hfsList, incHfs);
             }
 	}
@@ -404,9 +410,12 @@ for (;;)
 	}
     }
 lineFileClose(&lf);
-for (hfs = hfsList; hfs != NULL; hfs = hfs->next)
+if (! reEntered)
     {
-    hgFindSpecPolish(hfs);
+    for (hfs = hfsList; hfs != NULL; hfs = hfs->next)
+	{
+	hgFindSpecPolish(hfs);
+	}
     }
 slReverse(&hfsList);
 return hfsList;
