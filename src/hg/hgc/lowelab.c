@@ -54,6 +54,7 @@
 #include "chainToAxt.h"
 #include "netAlign.h"
 #include "tigrCmrGene.h"
+#include "jgiGene.h"
 #include "sargassoSeaXra.h"
 #include "codeBlastScore.h"
 #include "codeBlast.h"
@@ -81,6 +82,8 @@
 #include "transMapClick.h"
 #include "ccdsClick.h"
 #include "memalloc.h"
+
+static char const rcsid[] = "$Id: lowelab.c,v 1.3 2007/04/21 04:49:38 pchan Exp $";
 
 extern char *uniprotFormat;
 
@@ -774,6 +777,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     
     printf("<B>sRNA name: </B> %s<BR>\n",snorna->name);
     printf("<B>Snoscan score: </B> %.2f<BR>\n",snorna->snoScore);    
+    printf("<B>HMM snoRNA score: </B> %.2f<BR>\n",snorna->hmmScore);    
     printf("<B>Predicted targets: </B> %s<BR>\n",snorna->targetList);
     printf("<B>Predicted guide interactions:</B><pre>%s</pre>\n",snorna->guideStr);
     printf("<B>Possible sRNA homolog(s): </B> %s<BR>\n",snorna->orthologs);
@@ -1437,6 +1441,73 @@ void doTigrCmrGene(struct trackDb *tdb, char *tigrName)
   tigrCmrGeneFree(&tigr);
 }
 
+void doJgiGene(struct trackDb *tdb, char *jgiName)
+/* Handle the JGI gene track. */
+{
+  char *track = tdb->tableName;
+  struct jgiGene *jgi;
+  char query[512];
+  struct sqlConnection *conn = hAllocConn();
+  struct sqlResult *sr;
+  char *dupe, *words[16];
+  char **row;
+  int wordCount;
+  int rowOffset;
+
+  genericHeader(tdb,jgiName);
+  dupe = cloneString(tdb->type);
+  wordCount = chopLine(dupe, words);
+
+  rowOffset = hOffsetPastBin(seqName, track);
+  sprintf(query, "select * from %s where name = '%s'", track, jgiName);
+  sr = sqlGetResult(conn, query);
+  while ((row = sqlNextRow(sr)) != NULL)
+    {
+      jgi = jgiGeneLoad(row+rowOffset);
+      printf("<B>JGI locus name: </B> %s<BR>\n",jgiName);
+      printf("<B>JGI gene symbol: </B> %s<BR>\n",jgi->jgiSymbol);
+      printf("<B>JGI gene description: </B> %s<BR>\n",jgi->jgiDescription);
+      printf("<B>JGI gene id:</B> "
+             "<A HREF=\"http://img.jgi.doe.gov/cgi-bin/pub/main.cgi?section=GeneDetail&page=geneDetail&gene_oid=%s\" TARGET=_blank>",
+             jgi->jgiGeneId);
+      printf("%s</A><BR>\n", jgi->jgiGeneId);
+      printf("<B>GC content: </B> %.0f %%<BR>\n",jgi->jgiGc);
+      
+      printf("<BR><B>Position:</B> "
+             "<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
+             hgTracksPathAndSettings(), database, jgi->chrom, jgi->chromStart + 1, jgi->chromEnd);
+      printf("%s:%d-%d</A><BR>\n", jgi->chrom, jgi->chromStart + 1, jgi->chromEnd);
+      printf("<B>Strand:</B> %s<BR>\n", jgi->strand);
+      printf("<B>Genomic size: </B> %d nt<BR>\n", (jgi->chromEnd - jgi->chromStart));
+      if (jgi->next != NULL)
+        printf("<hr>\n");
+    }
+  sqlFreeResult(&sr);
+  hFreeConn(&conn);
+  printTrackHtml(tdb);
+  jgiGeneFree(&jgi);
+}
+
+void doWiki(struct trackDb *tdb, char *itemName)
+{
+  char strand[2]; 
+
+  printf("<HEAD>");
+
+  if(startsWith("Make", itemName))
+  {
+    strand[0] = itemName[strlen(itemName)-1];
+    strand[1] = 0;
+    printf("<META HTTP-EQUIV=\"REFRESH\" content=\"0; URL=http://cali.cse.ucsc.edu/wikiea/index.php/BED:%s:%s:%d-%d:%s\"</META>", database, seqName, winStart, winEnd, strand);
+  }
+  else
+  {   
+    printf("<META HTTP-EQUIV=\"REFRESH\" content=\"0; URL=http://cali.cse.ucsc.edu/wikiea/index.php/BED:%s:%s:%s\"</META>", database, seqName, itemName);
+  }
+
+  printf("</HEAD>");
+}
+
 bool loweLabClick(char *track, char *item, struct trackDb *tdb)
 /* check if we have one of the lowelab tracks */
 {
@@ -1455,6 +1526,10 @@ else if (sameWord(track, "sargassoSea"))
 else if (sameWord(track, "tigrCmrORFs"))
     {
     doTigrCmrGene(tdb,item);
+    }
+else if (sameWord(track, "jgiGene"))
+    {
+    doJgiGene(tdb,item);
     }
 else if (sameWord(track, "tigrOperons"))
     {
@@ -1480,6 +1555,10 @@ else if (sameWord(track,"easyGene"))
     {
     doEasyGenes(tdb, item);
     }
+else if (sameWord(track,"wiki"))
+   {
+   doWiki(tdb,item);
+   }  
 else 
     return FALSE;
 return TRUE;
