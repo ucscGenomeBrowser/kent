@@ -3,7 +3,7 @@
 # Caenorhabditis elegans
 #	Washington University School of Medicine GSC and Sanger Institute WS170
 
-#  $Id: ce4.txt,v 1.12 2007/04/22 03:41:07 hiram Exp $
+#  $Id: ce4.txt,v 1.13 2007/04/22 05:09:37 hiram Exp $
 
 
 #########################################################################
@@ -559,6 +559,7 @@ TMPDIR=/scratch/tmp
     #	real     44m41.608s
     cat fb.ce4.chainCaeRem2Link.txt
     #	45160539 bases of 100281244 (45.034%) in intersection
+    ln -s blastz.caeRem2.2007-03-29 blastz.caeRem2
 
     ## swap to caeRem2 - also in caeRem2.txt
     mkdir /cluster/data/caeRem2/bed/blastz.ce4.swap
@@ -602,6 +603,7 @@ TMPDIR=/scratch/tmp
     #  real    16m5.178s
     cat fb.ce4.chainCb3Link.txt
     #	42491022 bases of 100281244 (42.372%) in intersection
+    ln -s blastz.cb3.2007-02-25 blastz.cb3
 
     ## swap to cb3 - also in cb3.txt
     mkdir /cluster/data/cb3/bed/blastz.ce4.swap
@@ -687,7 +689,7 @@ TMPDIR=/scratch/tmp
     #	74758640 bases of 175247318 (42.659%) in intersection
 
 ############################################################################
-## BLASTZ priPac` (DONE - 2007-03-04 - Hiram)
+## BLASTZ priPac1 (DONE - 2007-03-04 - Hiram)
     ssh kkstore01
     mkdir /cluster/data/ce4/bed/blastz.priPac1.um.2007-04-04
     cd /cluster/data/ce4/bed/blastz.priPac1.um.2007-04-04
@@ -721,6 +723,7 @@ TMPDIR=/scratch/tmp
     #	real    110m47.620s
     cat fb.ce4.chainPriPac1Link.txt
     #	8671813 bases of 100281244 (8.647%) in intersection
+    ln -s blastz.priPac1.um.2007-04-04 blastz.priPac1
 
     #	swap, this is also in priPac1.txt
     ssh kkstore02
@@ -734,16 +737,167 @@ TMPDIR=/scratch/tmp
 
 ##########################################################################
 ## 5-Way multiple alignment (WORKING - 2007-04-20 - Hiram)
+http://nematol.unh.edu/tree/tree_des.php
+
     #	Constructing a tree from the document:
     #	http://www.wormbook.org/chapters/www_phylogrhabditids/phylorhab.html
     #	purely artifical for the last one: :0.2,pristiochus_priPac1:0.8
     #	since it is not on the graph
 
+    cat << '_EOF_' > nematodes.nh
     ((((((((((briggsae_cb3:0.005,remanei_caeRem2:0.003):0.004,
 	cb5161:0.013):0.002,elegans_ce4:0.003):0.001,
 	    japonica:0.023):0.024,ps1010:0.027):0.014,df5070:0.056):0.009,
 		plicata:0.102):0.099,sb341:0.060):0.038,
 		(df5074:0.351,df5055:0.090):0.221):0.2,pristiochus_priPac1:0.8)
+'_EOF_'
+    #	<< happy emacs
+
+    #	I don't know if this is anywhere near accurate, but I'm going
+    #	to call cb5161 our PB2801_caePb1
+    #	Given what comes out of the chainLink measurments, this is not
+    #	correct, but it is close ...
+    /cluster/bin/phast/x86_64/tree_doctor \
+--prune-all-but briggsae_cb3,remanei_caeRem2,cb5161,elegans_ce4,pristiochus_priPac1 \
+	--rename "cb5161 -> PB2801_caePb1" nematodes.nh > 5way.nh
+
+    /cluster/bin/phast/x86_64/all_dists 5way.nh > 5way.distances.txt
+    grep -i ce4 5way.distances.txt | sort -k3,3n
+    #	Use this output for reference, and use the calculated
+    #	distances in the table below to order the organisms and check
+    #	the button order on the browser.
+    #	And if you can fill in the table below entirely, you have
+    #	succeeded in finishing all the alignments required.
+    #
+#                         featureBits chainLink measures
+#                                           chainCe4Link   chain   linearGap
+#    distance                       on Ce4      on other   minScore
+#  1 0.0120  - remanei_caeRem2     (% 45.034)  (% 35.572)  1000     loose
+#  2 0.0140  - briggsae_cb3        (% 42.372)  (% 39.823)  1000     loose
+#  3 0.0180  - PB2801_caePb1       (% 52.447)  (% 42.659)  1000     loose
+#  4 1.1880  - pristiochus_priPac1 (%  8.647)  (%  6.667)  1000     loose
+
+    cd /cluster/data/ce4/bed/multiz5way
+    #	bash shell syntax here ...
+    export H=/cluster/data/ce4/bed
+    mkdir mafLinks
+    for G in caeRem2 cb3 caePb1 priPac1
+    do
+	mkdir mafLinks/$G
+	if [ ! -d ${H}/blastz.${G}/mafNet ]; then
+	echo "missing directory blastz.${G}/mafNet"
+		exit 255
+	fi
+	ln -s ${H}/blastz.$G/mafNet/*.maf.gz ./mafLinks/$G
+    done
+
+    #	Copy MAFs to some appropriate NFS server for kluster run
+    ssh kkstore02
+    mkdir /san/sanvol1/scratch/worms/ce4/multiz5way
+    cd /san/sanvol1/scratch/worms/ce4/multiz5way
+    time rsync -a --copy-links --progress --stats \
+	/cluster/data/ce4/bed/multiz5way/mafLinks/ .
+    #	a few seconds to copy 109 Mb
+
+    #	these are x86_64 binaries
+    mkdir penn
+    cp -p /cluster/bin/penn/multiz.v11.2007-03-19/multiz-tba/multiz penn
+    cp -p /cluster/bin/penn/multiz.v11.2007-03-19/multiz-tba/maf_project penn
+    cp -p /cluster/bin/penn/multiz.v11.2007-03-19/multiz-tba/autoMZ penn
+
+    # the autoMultiz cluster run
+    ssh pk
+    cd /cluster/data/ce4/bed/multiz5way/
+
+    # create species list and stripped down tree for autoMZ
+    sed 's/[a-z][a-z0-9]*_//ig; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+	5way.nh > tmp.nh
+    echo `cat tmp.nh` > tree-commas.nh
+    echo `cat tree-commas.nh` | sed 's/ //g; s/,/ /g' > tree.nh
+    sed 's/[()]//g; s/,/ /g' tree.nh > species.lst
+
+    mkdir maf run
+    cd run
+
+    #	NOTE: you need to set the db properly in this script
+
+    cat > autoMultiz << '_EOF_'
+#!/bin/csh -ef
+set db = ce4
+set c = $1
+set maf = $2
+set binDir = /san/sanvol1/scratch/worms/$db/multiz5way/penn
+set tmp = /scratch/tmp/$db/multiz.$c
+set pairs = /san/sanvol1/scratch/worms/$db/multiz5way
+rm -fr $tmp
+mkdir -p $tmp
+cp ../{tree.nh,species.lst} $tmp
+pushd $tmp
+foreach s (`cat species.lst`)
+    set in = $pairs/$s/$c.maf
+    set out = $db.$s.sing.maf
+    if ($s == $db) then
+	continue
+    endif
+    if (-e $in.gz) then
+	zcat $in.gz > $out
+    else if (-e $in) then
+	cp $in $out
+    else
+	echo "##maf version=1 scoring=autoMZ" > $out
+    endif
+end
+set path = ($binDir $path); rehash
+$binDir/autoMZ + T=$tmp E=$db "`cat tree.nh`" $db.*.sing.maf $c.maf
+popd
+cp $tmp/$c.maf $maf
+rm -fr $tmp
+'_EOF_'
+# << happy emacs
+    chmod +x autoMultiz
+
+cat  << '_EOF_' > template
+#LOOP
+autoMultiz $(root1) {check out line+ /cluster/data/ce4/bed/multiz5way/maf/$(root1).maf}
+#ENDLOOP
+'_EOF_'
+# << happy emacs
+
+    awk '{print $1}' /cluster/data/ce4/chrom.sizes > chrom.lst
+    gensub2 chrom.lst single template jobList
+    para try
+    #	7 jobs in batch
+# Completed: 7 of 7 jobs
+# CPU time in finished jobs:       1916s      31.93m     0.53h    0.02d  0.000 y
+# IO & Wait Time:                    31s       0.52m     0.01h    0.00d  0.000 y
+# Average job time:                 278s       4.64m     0.08h    0.00d
+# Longest finished job:             400s       6.67m     0.11h    0.00d
+# Submission to last job:           404s       6.73m     0.11h    0.00d
+
+    ssh kkstore02
+    cd /cluster/data/ce4/bed/multiz5way
+    time nice -n +19 catDir maf > multiz5way.maf
+    # a few seconds to produce:
+    #	-rw-rw-r--  1 312800151 Apr 21 21:53 multiz5way.maf
+
+    #	before getting to the annotation, load this up so we can get
+    #	a first view of the track.  This will be replaced with the annotated
+    #	mafs
+    ssh hgwdev
+    cd /cluster/data/ce4/bed/multiz5way
+    mkdir /gbdb/ce4/multiz5way
+    ln -s /cluster/data/ce4/bed/multiz5way/multiz5way.maf /gbdb/ce4/multiz5way
+
+    time nice -n +19 hgLoadMaf ce4 multiz5way
+    #	a few seconds to load:
+    #	Loaded 375859 mafs in 1 files from /gbdb/ce4/multiz5way
+
+    time nice -n +19 hgLoadMafSummary -minSize=10000 -mergeGap=500 \
+	-maxSize=50000 ce4 multiz5waySummary multiz5way.maf
+    #	a few seconds to load:
+    #	Created 108194 summary blocks from 855104 components and 375859 mafs
+    #	from multiz5way.maf
+
 ###########################################################################
 # HUMAN (hg18) PROTEINS TRACK (DONE braney 2007-04-20)
     ssh kkstore02
