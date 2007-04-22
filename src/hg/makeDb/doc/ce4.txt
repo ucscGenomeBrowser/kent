@@ -3,7 +3,7 @@
 # Caenorhabditis elegans
 #	Washington University School of Medicine GSC and Sanger Institute WS170
 
-#  $Id: ce4.txt,v 1.10 2007/04/20 17:15:03 braney Exp $
+#  $Id: ce4.txt,v 1.11 2007/04/22 03:40:22 hiram Exp $
 
 
 #########################################################################
@@ -560,6 +560,7 @@ TMPDIR=/scratch/tmp
     cat fb.ce4.chainCaeRem2Link.txt
     #	45160539 bases of 100281244 (45.034%) in intersection
 
+    ## swap to caeRem2 - also in caeRem2.txt
     mkdir /cluster/data/caeRem2/bed/blastz.ce4.swap
     cd /cluster/data/caeRem2/bed/blastz.ce4.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 -bigClusterHub=pk \
@@ -599,6 +600,18 @@ TMPDIR=/scratch/tmp
     time doBlastzChainNet.pl DEF -verbose=2 -bigClusterHub=pk \
 	-blastzOutRoot /cluster/bluearc/ce4Ce3 > do.log 2>&1 &
     #  real    16m5.178s
+    cat fb.ce4.chainCb3Link.txt
+    #	42491022 bases of 100281244 (42.372%) in intersection
+
+    ## swap to cb3 - also in cb3.txt
+    mkdir /cluster/data/cb3/bed/blastz.ce4.swap
+    cd /cluster/data/cb3/bed/blastz.ce4.swap
+    time ~/kent/src/hg/utils/automation/doBlastzChainNet.pl \
+	/cluster/data/ce4/bed/blastz.cb3.2007-02-25/DEF \
+	-verbose=2 -bigClusterHub=pk -swap > swap.log 2>&1 &
+    #	real    3m18.164s
+    cat fb.cb3.chainCe4Link.txt
+    #	43181535 bases of 108433446 (39.823%) in intersection
 
 ############################################################################
 #  BLATSERVERS ENTRY (DONE - 2007-04-04 - Hiram)
@@ -672,7 +685,66 @@ TMPDIR=/scratch/tmp
     #	real    22m40.205s
     cat fb.caePb1.chainCe4Link.txt
     #	74758640 bases of 175247318 (42.659%) in intersection
+<<<<<<< ce4.txt
 
+############################################################################
+## BLASTZ priPac` (DONE - 2007-03-04 - Hiram)
+    ssh kkstore01
+    mkdir /cluster/data/ce4/bed/blastz.priPac1.um.2007-04-04
+    cd /cluster/data/ce4/bed/blastz.priPac1.um.2007-04-04
+
+    cat << '_EOF_' > DEF
+# ce4 vs priPac1
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET: elegans Ce4
+SEQ1_DIR=/san/sanvol1/scratch/worms/ce4/ce4.unmasked.2bit
+SEQ1_LEN=/san/sanvol1/scratch/worms/ce4/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Pristionchus pacificus priPac1
+SEQ2_DIR=/san/sanvol1/scratch/worms/priPac1/priPac1.unmasked.2bit
+SEQ2_LEN=/san/sanvol1/scratch/worms/priPac1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LAP=10000
+SEQ2_LIMIT=50
+
+BASE=/cluster/data/ce4/bed/blastz.priPac1.um.2007-04-04
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 DEF \
+	-bigClusterHub=pk -blastzOutRoot /cluster/bluearc/ce4PriPac1 \
+	    > do.log 2>&1 &
+    #	real    110m47.620s
+    cat fb.ce4.chainPriPac1Link.txt
+    #	8671813 bases of 100281244 (8.647%) in intersection
+
+    #	swap, this is also in priPac1.txt
+    ssh kkstore02
+    mkdir /cluster/data/priPac1/bed/blastz.ce4.swap
+    cd /cluster/data/priPac1/bed/blastz.ce4.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/ce4/bed/blastz.priPac1.um.2007-04-04/DEF \
+	-bigClusterHub=pk -swap > swap.log 2>&1 &
+    cat fb.priPac1.chainCe4Link.txt
+    #	9730314 bases of 145948246 (6.667%) in intersection
+
+##########################################################################
+## 5-Way multiple alignment (WORKING - 2007-04-20 - Hiram)
+    #	Constructing a tree from the document:
+    #	http://www.wormbook.org/chapters/www_phylogrhabditids/phylorhab.html
+    #	purely artifical for the last one: :0.2,pristiochus_priPac1:0.8
+    #	since it is not on the graph
+
+    ((((((((((briggsae_cb3:0.005,remanei_caeRem2:0.003):0.004,
+	cb5161:0.013):0.002,elegans_ce4:0.003):0.001,
+	    japonica:0.023):0.024,ps1010:0.027):0.014,df5070:0.056):0.009,
+		plicata:0.102):0.099,sb341:0.060):0.038,
+		(df5074:0.351,df5055:0.090):0.221):0.2,pristiochus_priPac1:0.8)
 ###########################################################################
 # HUMAN (hg18) PROTEINS TRACK (DONE braney 2007-04-20)
     ssh kkstore02

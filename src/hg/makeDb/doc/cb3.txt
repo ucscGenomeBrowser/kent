@@ -3,7 +3,7 @@
 # Caenorhabditis briggsae
 #	Washington University School of Medicine GSC and Sanger Institute
 #
-#  $Id: cb3.txt,v 1.5 2007/04/20 05:43:55 hiram Exp $
+#  $Id: cb3.txt,v 1.6 2007/04/22 03:40:21 hiram Exp $
 
 ###########################################################################
 ## Download sequence (DONE - 2007-01-22 - Hiram)
@@ -401,3 +401,101 @@ TMPDIR=/scratch/tmp
     #	real    3m57.854s
     cat fb.caeRem2.chainCb3Link.txt
     #	59366018 bases of 175247318 (33.876%) in intersection
+
+##########################################################################
+## BLASTZ priPac1 (DONE - 2007-02-25 - Hiram)
+##  early experiment, re-done 2007-04-21
+    ssh kkstore02
+
+    mkdir /cluster/data/cb3/bed/blastz.priPac1.2007-02-25
+    cd /cluster/data/cb3/bed/blastz.priPac1.2007-02-25
+
+    cat << '_EOF_' > DEF
+# cb3 vs priPac1
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET: briggsae Cb3
+SEQ1_DIR=/san/sanvol1/scratch/worms/cb3/cb3.rmskTrf.2bit
+SEQ1_LEN=/san/sanvol1/scratch/worms/cb3/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Pristionchus pacificus priPac1
+SEQ2_DIR=/san/sanvol1/scratch/worms/priPac1/priPac1.rmskTrf.2bit
+SEQ2_LEN=/san/sanvol1/scratch/worms/priPac1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LAP=10000
+SEQ2_LIMIT=50
+
+BASE=/cluster/data/cb3/bed/blastz.priPac1.2007-02-25
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time doBlastzChainNet.pl DEF -verbose=2 -bigClusterHub=pk \
+	-blastzOutRoot /cluster/bluearc/cb3PriPac1 > do.log 2>&1 &
+    cat fb.cb3.chainPriPac1Link.txt
+    #	6925266 bases of 108433446 (6.387%) in intersection
+
+##########################################################################
+## BLASTZ priPac1 (DONE - 2007-04-21 - Hiram)
+    ssh kkstore02
+
+    mkdir /cluster/data/cb3/bed/blastz.priPac1.um.2007-04-21
+    cd /cluster/data/cb3/bed/blastz.priPac1.um.2007-04-21
+
+    cat << '_EOF_' > DEF
+# cb3 vs priPac1
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET: briggsae Cb3
+SEQ1_DIR=/san/sanvol1/scratch/worms/cb3/cb3.rmskTrf.2bit
+SEQ1_LEN=/san/sanvol1/scratch/worms/cb3/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Pristionchus pacificus priPac1
+SEQ2_DIR=/san/sanvol1/scratch/worms/priPac1/priPac1.unmasked.2bit
+SEQ2_LEN=/san/sanvol1/scratch/worms/priPac1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LAP=10000
+SEQ2_LIMIT=50
+
+BASE=/cluster/data/cb3/bed/blastz.priPac1.um.2007-04-21
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl DEF -verbose=2 -bigClusterHub=pk \
+	-blastzOutRoot /cluster/bluearc/cb3PriPac1 > do.log 2>&1 &
+    #	real    40m45.455s
+    cat fb.cb3.chainPriPac1Link.txt
+    #	7075879 bases of 108433446 (6.526%) in intersection
+
+    ## swap to priPac1 - also in priPac1.txt
+    mkdir /cluster/data/priPac1/bed/blastz.cb3.swap
+    cd /cluster/data/priPac1/bed/blastz.cb3.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 -bigClusterHub=pk \
+	/cluster/data/cb3/bed/blastz.priPac1.um.2007-04-21/DEF \
+	-swap > swap.log 2>&1 &
+    #	real    0m48.872s
+    cat fb.priPac1.chainCb3Link.txt
+    #	7800313 bases of 145948246 (5.345%) in intersection
+
+##########################################################################
+## SWAP BLASTZ ce4 (DONE - 2007-02-25 - Hiram)
+    ssh kkstore02
+    cd /cluster/data/ce4/bed/blastz.cb3.2007-02-25
+    cat fb.ce4.chainCb3Link.txt
+    #	42491022 bases of 100281244 (42.372%) in intersection
+
+    mkdir /cluster/data/cb3/bed/blastz.ce4.swap
+    cd /cluster/data/cb3/bed/blastz.ce4.swap
+    time ~/kent/src/hg/utils/automation/doBlastzChainNet.pl \
+	/cluster/data/ce4/bed/blastz.cb3.2007-02-25/DEF \
+	-verbose=2 -bigClusterHub=pk -swap > swap.log 2>&1 &
+    #	real    3m18.164s
+    cat fb.cb3.chainCe4Link.txt
+    #	43181535 bases of 108433446 (39.823%) in intersection

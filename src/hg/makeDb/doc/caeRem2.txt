@@ -4,7 +4,7 @@
 #	From Wash U GSC
 #	http://genome.wustl.edu/genome.cgi?GENOME=Caenorhabditis+remanei
 
-#  $Id: caeRem2.txt,v 1.4 2007/04/14 00:09:02 hiram Exp $
+#  $Id: caeRem2.txt,v 1.5 2007/04/22 03:40:22 hiram Exp $
 
 #########################################################################
 # DOWNLOAD SEQUENCE (DONE - 2007-03-16 - Hiram)
@@ -287,3 +287,55 @@ dbDbSpeciesDir worm
     #	real    9m6.800s
     cat fb.caeRem2.chainCb3Link.txt
     #	63292118 bases of 146898439 (43.086%) in intersection
+
+############################################################################
+## SWAP caePb1 chain/net - (DONE - 2007-04-20 - Hiram)
+    ssh kkstore02
+    cd /cluster/data/caePb1/bed/blastz.caeRem2.2007-04-19
+    cat fb.caePb1.chainCaeRem2Link.txt
+    #	93139445 bases of 175247318 (53.147%) in intersection
+
+    #	swap to caeRem2
+    mkdir /cluster/data/caeRem2/bed/blastz.caePb1.swap
+    cd /cluster/data/caeRem2/bed/blastz.caePb1.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/caePb1/bed/blastz.caeRem2.2007-04-19/DEF \
+	-bigClusterHub=kk -swap > swap.log 2>&1 &
+    cat fb.caeRem2.chainCaePb1Link.txt
+    #	78402339 bases of 146898439 (53.372%) in intersection
+
+############################################################################
+## reset defaultDb to caeRem2 (DONE - 2007-04-21 - Hiram)
+    ssh hgwdev
+    hgsql -e 'update defaultDb set name="caeRem2" where genome="C. remanei";' \
+	hgcentraltest
+
+############################################################################
+## SWAP ce4 chain/net - (DONE - 2007-04-02 - Hiram)
+    cd /cluster/data/ce4/bed/blastz.caeRem2.2007-03-29
+    cat fb.ce4.chainCaeRem2Link.txt
+    #	45160539 bases of 100281244 (45.034%) in intersection
+
+    mkdir /cluster/data/caeRem2/bed/blastz.ce4.swap
+    cd /cluster/data/caeRem2/bed/blastz.ce4.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 -bigClusterHub=pk \
+	/cluster/data/ce4/bed/blastz.caeRem2.2007-03-29/DEF \
+	-swap > swap.log 2>&1 &
+    #	real    3m52.831s
+    cat fb.caeRem2.chainCe4Link.txt
+    #	52254587 bases of 146898439 (35.572%) in intersection
+
+############################################################################
+## SWAP priPac1 chain/net - (DONE - 2007-04-21 - Hiram)
+    cd /cluster/data/priPac1/bed/blastz.caeRem2.2007-04-20
+    cat fb.priPac1.chainCaeRem2Link.txt
+    #	9047547 bases of 145948246 (6.199%) in intersection
+
+    mkdir /cluster/data/caeRem2/bed/blastz.priPac1.swap
+    cd /cluster/data/caeRem2/bed/blastz.priPac1.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 -bigClusterHub=kk \
+	/cluster/data/priPac1/bed/blastz.caeRem2.2007-04-20/DEF \
+	-swap > swap.log 2>&1 &
+    #	less than 2 minutes
+    cat fb.caeRem2.chainPriPac1Link.txt
+    #	8971992 bases of 146898439 (6.108%) in intersection
