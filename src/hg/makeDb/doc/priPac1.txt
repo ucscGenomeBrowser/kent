@@ -3,7 +3,7 @@
 # Pristionchus pacificus
 #	Washington University School of Medicine GSC and Sanger Institute
 #
-#  $Id: priPac1.txt,v 1.1 2007/04/22 03:22:25 hiram Exp $
+#  $Id: priPac1.txt,v 1.2 2007/04/22 03:41:24 hiram Exp $
 ###########################################################################
 ## Download sequence - (DONE - 2007-02-25 - Hiram)
     ssh kkstore02
@@ -222,6 +222,7 @@ TMPDIR=/scratch/tmp
     cat fb.priPac1.chainCaeRem2Link.txt
     #	9047547 bases of 145948246 (6.199%) in intersection
 
+    ## swap to caeRem2 - also in caeRem2.txt
     mkdir /cluster/data/caeRem2/bed/blastz.priPac1.swap
     cd /cluster/data/caeRem2/bed/blastz.priPac1.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 -bigClusterHub=kk \
