@@ -1,0 +1,265 @@
+# for emacs: -*- mode: sh; -*-
+
+# Pristionchus pacificus
+#	Washington University School of Medicine GSC and Sanger Institute
+#
+#  $Id: priPac1.txt,v 1.1 2007/04/22 03:22:25 hiram Exp $
+###########################################################################
+## Download sequence - (DONE - 2007-02-25 - Hiram)
+    ssh kkstore02
+    mkdir /cluster/store5/priPac1
+    ln -s /cluster/store5/priPac1 /cluster/data/priPac1
+    mkdir /cluster/data/priPac1/downloads
+    cd /cluster/data/priPac1/downloads
+    wget --timestamping -np -nd \
+"ftp://genome.wustl.edu/pub/organism/Invertebrates/Pristionchus_pacificus/assembly/draft/Pristionchus_pacificus-5.0/ASSEMBLY"
+    wget --timestamping -np -nd \
+"ftp://genome.wustl.edu/pub/organism/Invertebrates/Pristionchus_pacificus/assembly/draft/Pristionchus_pacificus-5.0/README"
+    rm -f README.priPac1
+    mv README README.priPac1
+    wget --timestamping -m -np -nd \
+"ftp://genome.wustl.edu/pub/organism/Invertebrates/Pristionchus_pacificus/assembly/draft/Pristionchus_pacificus-5.0/output/"
+
+############################################################################
+## Create chrUn agp and lift files - (DONE - 2007-03-04 - Hiram
+    ssh kkstore02
+    cd /cluster/data/priPac1/downloads
+    cat << '_EOF_' > mkSuperLift.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my $start = 1;
+my $end = 1;
+my $itemCount = 1;
+my $agpItemCount = 1;
+my $curContig = "";
+my $firstTime = 1;
+my $scaffoldGapSize = 1000;
+my $scafEnd = 1;
+my $superStart = 0;
+my $superEnd = 1;
+my $superLength = 0;
+my $chrUnSize = 174852139;
+my $chrUnName = "chrUn";
+
+open (CT,">ctgPos2.tab") or die "Can not write to ctgPos2.tab";
+
+open (AG,">priPac1.chrUn.agp") or die "Can not write to priPac1.chrUn.agp";
+
+open (GL,">priPac1.gold.tab") or die "Can not write to gold.tab";
+
+open (FH,'zcat supercontigs.agp.gz|') or
+	die "can not open zcat supercontigs.agp.gz";
+while (my $line=<FH>) {
+    chomp $line;
+    if ($line =~ m/fragment/) {
+	my ($name, $gStart, $gEnd, $gapCounter, $gapWN, $gapLen, $frag, $yesNo) =
+	    split('\s+',$line);
+	$end = $start + $gapLen - 1;
+	$scafEnd += $gapLen;
+	printf AG "chrUn\t%d\t%d\t%d\t%s\t%d\t%s\t%s\n",
+		    $start, $end, $agpItemCount++, $gapWN, $gapLen, $frag, $yesNo;
+	$start = $end + 1;
+    } else {
+    my ($ctgName, $ctgStart, $ctgEnd, $ctgCounter, $ctgWN, $name, $cStart, $cEnd, $strand) =
+	split('\s+',$line);
+	my $ctgLen = $ctgEnd - $ctgStart + 1;
+	my $cLen = $cEnd - $cStart + 1;
+	die "not matching start, end:\n$line" if ($ctgLen != $cLen);
+	if (!$firstTime) {
+	    if ($ctgName ne $curContig) {
+		$superLength = $superEnd - $superStart;
+		$end = $start + $scaffoldGapSize - 1;
+		printf AG "chrUn\t%d\t%d\t%d\tN\t%d\tscaffold\tno\n",
+		    $start, $end, $agpItemCount++, $scaffoldGapSize;
+		printf "%d\t%s\t%d\t%s\t%d\n",
+			$superStart, $curContig, $superLength, $chrUnName,
+				$chrUnSize;
+		printf GL "%s\t%d\t%d\t%d\tW\t%s\t0\t%d\t+\n",
+			$chrUnName, $superStart, $superEnd, $itemCount++,
+			$curContig, $superLength;
+		$start = $end + 1;
+		$scafEnd = $cStart - 1;
+		$superStart = $start - 1;
+	    }
+	} else {
+	    $firstTime = 0;
+	    $scafEnd = 0;
+	}
+	$scafEnd += $ctgLen;
+	my $fragStart = $scafEnd - $ctgLen + 1;
+	$end = $start + $ctgLen - 1;
+	$superEnd = $end;
+	printf AG "chrUn\t%d\t%d\t%d\t%s\t%s\t%d\t%d\t%s\n",
+		$start, $end, $agpItemCount++, $ctgWN, $ctgName,
+		$fragStart, $scafEnd, $strand;
+	printf CT "%s\t%d\tchrUn\t%d\t%d\tW\n",
+                $name, $ctgLen, $start-1, $end;
+
+	$start = $end + 1;
+	$curContig = $ctgName;
+    }
+}
+close (FH);
+close (AG);
+$superLength = $superEnd - $superStart;
+printf "%d\t%s\t%d\t%s\t%d\n",
+    $superStart, $curContig, $superLength, $chrUnName, $chrUnSize;
+printf GL "%s\t%d\t%d\t%d\tW\t%s\t0\t%d\t+\n",
+	$chrUnName, $superStart, $superEnd, $itemCount++,
+	$curContig, $superLength;
+close (GL);
+'_EOF_'
+    # << happy emacs
+    chmod +x ./mkSuperLift.pl
+    ./mkSuperLift.pl > super.lift
+    qaToQac contigs.fa.qual.gz stdout \
+        | qacAgpLift chrUn.agp.gz stdin chrUn.qac
+
+##########################################################################
+## Initial browser build (DONE - 2007-03-04 - Hiram)
+    ssh kkstore02
+    cd /cluster/data/priPac1
+    cat << '_EOF_' > priPac1.config.ra
+# Config parameters for makeGenomeDb.pl:
+db priPac1
+clade worm
+genomeCladePriority 76
+scientificName Pristionchus pacificus
+commonName P. pacificus
+assemblyDate Feb. 2007
+assemblyLabel Washington University School of Medicine GSC Pristionchus pacificus 5.0
+orderKey 885
+mitoAcc none
+fastaFiles /cluster/data/priPac1/downloads/supercontigs.fa.gz
+agpFiles /cluster/data/priPac1/downloads/priPac1.chrUn.agp
+qualFiles /cluster/data/priPac1/downloads/chrUn.qac
+dbDbSpeciesDir worm
+'_EOF_'
+    # << happy emacs
+
+    makeGenomeDb.pl priPac1.config.ra > makeGenomeDb.out 2>&1
+    ssh hgwdev
+    cd /cluster/data/priPac1/downloads
+    hgLoadBed -sqlTable=chrUn_gold.sql priPac1 chrUn_gold priPac1.gold.tab
+    hgLoadSqlTab priPac1 ctgPos2 ~/kent/src/hg/lib/ctgPos2.sql ctgPos2.tab
+
+###########################################################################
+## Photograph added (DONE - 2007-04-03 - Hiram)
+    #	Obtained via email from metta.riebesell@tuebingen.mpg.de Metta Riebesell
+    #	from the lab of: Ralf J. Sommer
+    #	http://www.eb.tuebingen.mpg.de/departments/4-evolutionary-biology/department-4-evolutionary-biology
+    #	http://www.eb.tuebingen.mpg.de/core-facilities/microscopy-unit/sem_pictures/scanning-electron-microscopic-pictures
+    #	Credits to Juergen Berger and Ralf J. Sommer
+    mkdir /cluster/data/priPac1/photograph/
+    #	copy the file from email to this directory
+    convert -quality 100 -crop "1920x2080+320+160" \
+	Pristionchus_pacificus_RS312_red.jpg priPac1_crop.jpg
+    convert -quality 80 -geometry "14%" priPac1_crop.jpg priPac1_3x3.jpg
+    identify priPac1_3x3.jpg 
+    #	priPac1_3x3.jpg JPEG 269x291 269x291+0+0 DirectClass 6e+01kb 
+    #	add priPac1_3x3.jpg to the browser doc source tree, calling the
+    #	file: Pristionchus_pacificus.jpg
+
+############################################################################
+## Default position (DONE - 2007-04-09 - Hiram)
+    ssh hgwdev
+    hgsql -e 'update dbDb set defaultPos="chrUn:66109664-66116326"
+	where name="priPac1";' hgcentraltest
+
+############################################################################
+## BLASTZ swap ce4 (DONE - 2007-04-06 - Hiram)
+    ssh kkstore02
+    cd /cluster/data/ce4/bed/blastz.priPac1.um.2007-04-04
+    cat fb.ce4.chainPriPac1Link.txt
+    #	8671813 bases of 100281244 (8.647%) in intersection
+
+    mkdir /cluster/data/priPac1/bed/blastz.ce4.swap
+    cd /cluster/data/priPac1/bed/blastz.ce4.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/ce4/bed/blastz.priPac1.um.2007-04-04/DEF \
+	-bigClusterHub=pk -swap > swap.log 2>&1 &
+    cat fb.priPac1.chainCe4Link.txt
+    #	9730314 bases of 145948246 (6.667%) in intersection
+
+##############################################################################
+## BLASTZ caeRem2 (WORKING - 2007-04-20 - Hiram)
+    mkdir /cluster/data/priPac1/bed/blastz.caeRem2.2007-04-20
+    cd /cluster/data/priPac1/bed/blastz.caeRem2.2007-04-20
+
+    cat << '_EOF_' > DEF
+# priPac1 vs caeRem2
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET: Pristionchus pacificus priPac1, unmasked sequence
+SEQ1_DIR=/san/sanvol1/scratch/worms/priPac1/priPac1.unmasked.2bit
+SEQ1_LEN=/san/sanvol1/scratch/worms/priPac1/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=50
+
+# QUERY: briggsae caeRem2, 9,660 contigs, longest 5,925,111
+SEQ2_DIR=/san/sanvol1/scratch/worms/caeRem2/caeRem2.2bit
+SEQ2_LEN=/san/sanvol1/scratch/worms/caeRem2/chrom.sizes
+SEQ2_CTGDIR=/san/sanvol1/scratch/worms/caeRem2/caeRem2.contigs.2bit
+SEQ2_CTGLEN=/san/sanvol1/scratch/worms/caeRem2/caeRem2.contigs.sizes
+SEQ2_LIFT=/san/sanvol1/scratch/worms/caeRem2/caeRem2.chrUn.lift
+SEQ2_CHUNK=1000000
+SEQ2_LAP=10000
+SEQ2_LIMIT=50
+
+BASE=/cluster/data/priPac1/bed/blastz.caeRem2.2007-04-20
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl DEF -verbose=2 -bigClusterHub=kk \
+	-blastzOutRoot /cluster/bluearc/priPac1CaeRem2 > do.log 2>&1 &
+    #	real    111m22.132s
+    cat fb.priPac1.chainCaeRem2Link.txt
+    #	9047547 bases of 145948246 (6.199%) in intersection
+
+    mkdir /cluster/data/caeRem2/bed/blastz.priPac1.swap
+    cd /cluster/data/caeRem2/bed/blastz.priPac1.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 -bigClusterHub=kk \
+	/cluster/data/priPac1/bed/blastz.caeRem2.2007-04-20/DEF \
+	-swap > swap.log 2>&1 &
+    #	less than 2 minutes
+    cat fb.caeRem2.chainPriPac1Link.txt
+    #	8971992 bases of 146898439 (6.108%) in intersection
+
+##########################################################################
+## SWAP BLASTZ caePb1 (DONE - 2007-04-21 - Hiram)
+    ssh kkstore02
+
+    cd /cluster/data/caePb1/bed/blastz.priPac1.2007-04-20
+    cat fb.caePb1.chainPriPac1Link.txt
+    #	13589188 bases of 175247318 (7.754%) in intersection
+
+    mkdir /cluster/data/priPac1/bed/blastz.caePb1.swap
+    cd /cluster/data/priPac1/bed/blastz.caePb1.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 -bigClusterHub=pk \
+	/cluster/data/caePb1/bed/blastz.priPac1.2007-04-20/DEF \
+	-swap > swap.log 2>&1 &
+    #	real    9m18.554s
+    cat fb.priPac1.chainCaePb1Link.txt
+    #	11713567 bases of 145948246 (8.026%) in intersection
+
+##########################################################################
+## SWAP BLASTZ cb3 (DONE - 2007-04-21 - Hiram)
+    ssh kkstore02
+    cd /cluster/data/cb3/bed/blastz.priPac1.um.2007-04-21
+    cat fb.cb3.chainPriPac1Link.txt
+    #	7075879 bases of 108433446 (6.526%) in intersection
+
+    mkdir /cluster/data/priPac1/bed/blastz.cb3.swap
+    cd /cluster/data/priPac1/bed/blastz.cb3.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 -bigClusterHub=pk \
+	/cluster/data/cb3/bed/blastz.priPac1.um.2007-04-21/DEF \
+	-swap > swap.log 2>&1 &
+    #	real    0m48.872s
+    cat fb.priPac1.chainCb3Link.txt
+    #	7800313 bases of 145948246 (5.345%) in intersection
