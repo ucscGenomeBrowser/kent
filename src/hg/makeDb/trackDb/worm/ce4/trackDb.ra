@@ -134,3 +134,27 @@ altColor 255,240,200
 spectrum on
 type chain ce4
 otherDb ce4
+
+track multiz5way
+shortLabel Conservation
+longLabel Multiz Alignment & Conservation (5 nematodes)
+group compGeno
+priority 104.2
+visibility pack
+color 0, 10, 100
+altColor 0,90,10
+type wigMaf 0.0 1.0
+# maxHeightPixels 100:40:11
+# wiggle phastCons5way
+# spanList 1
+pairwiseHeight 12
+# yLineOnOff Off
+# frames multiz5wayFrames
+# irows on
+# autoScaleDefault Off
+# windowingFunction mean
+summary multiz5waySummary
+speciesOrder caePb1 caeRem2 cb3 priPac1
+treeImage phylo/ce4_5way.gif
+speciesCodonDefault ce4
+
