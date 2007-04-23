@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/updateIgtc instead.
 
-# $Id: updateIgtc.pl,v 1.1 2007/02/28 23:41:17 angie Exp $
+# $Id: updateIgtc.pl,v 1.2 2007/04/23 22:09:55 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -77,7 +77,7 @@ Assumptions:
 # Command line args: db
 my ($db);
 # Other:
-my ($buildDir);
+my ($buildDir, $date);
 
 sub checkOptions {
   # Make sure command line options are valid/supported.
@@ -104,10 +104,9 @@ sub doFetch {
   my $fileServer = &HgAutomate::chooseFileServer($runDir);
   my $bossScript = new HgRemoteScript("$runDir/doFetch.csh", $fileServer,
 				      $runDir, $whatItDoes);
-
   $bossScript->add(<<_EOF_
 wget -q -N http://www.genetrap.org/blattrack/genetrap_$db.psl
-wget -q -N http://www.genetrap.org/blattrack/genetrap.fasta
+wget -q -N -O genetrap.$date.fasta http://www.genetrap.org/blattrack/genetrap.fasta
 _EOF_
   );
   $bossScript->execute();
@@ -125,14 +124,14 @@ sub doLoad {
 				      $runDir, $whatItDoes);
 
   &HgAutomate::checkExistsUnlessDebug('fetch', 'load',
-				      "$buildDir/genetrap.fasta",
+				      "$buildDir/genetrap.$date.fasta",
 				      "$buildDir/genetrap_$db.psl");
 
   $bossScript->add(<<_EOF_
 mkdir -p $HgAutomate::gbdb/$db/igtc
-rm -f $HgAutomate::gbdb/$db/igtc/genetrap.fasta
-ln -s $buildDir/genetrap.fasta $HgAutomate::gbdb/$db/igtc/
-hgLoadSeq -replace $db $HgAutomate::gbdb/$db/igtc/genetrap.fasta
+rm -f $HgAutomate::gbdb/$db/igtc/genetrap.$date.fasta
+ln -s $buildDir/genetrap.$date.fasta $HgAutomate::gbdb/$db/igtc/
+hgLoadSeq -replace $db $HgAutomate::gbdb/$db/igtc/genetrap.$date.fasta
 grep -v ^track genetrap_$db.psl \\
 | hgLoadPsl $db -table=igtc stdin
 rm -f seq.tab
@@ -154,7 +153,7 @@ _EOF_
 ($db) = @ARGV;
 
 # Establish what directory we will work in.
-my $date = `date +%Y-%m-%d`;
+$date = `date +%Y-%m-%d`;
 chomp $date;
 $buildDir = $opt_buildDir ? $opt_buildDir :
   "$HgAutomate::clusterData/$db/$HgAutomate::trackBuild/igtc.$date";
@@ -171,5 +170,15 @@ my $upThrough = ($stopStep eq 'load') ? "" :
 	"\n *** All done!$upThrough\n");
 &HgAutomate::verbose(1,
 	" *** Steps were performed in $buildDir\n");
+
+my $oldFiles = `ls -1 $HgAutomate::gbdb/$db/igtc/genetrap*.fasta 2>/dev/null | grep -v genetrap.$date.fasta`;
+if ($oldFiles && $stopStep eq 'load') {
+  chomp($oldFiles);
+  &HgAutomate::verbose(1,
+	" *** In the pushQ entry, ask for removal of old file(s) $oldFiles\n" .
+	" *** from /gbdb and from extFile *after* the rest of the push\n" .
+	" *** is completed.");
+}
+
 &HgAutomate::verbose(1, "\n");
 
