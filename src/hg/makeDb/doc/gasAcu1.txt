@@ -2556,3 +2556,44 @@ TMPDIR=/scratch/tmp
 	> fb.anoCar1.chainGasAcu1Link.txt 2>&1  
     #	real    1m14.245s
     #	54464074 bases of 1741478929 (3.127%) in intersection
+
+
+#######################################################################
+# SELF CHAINS (DONE 3/14/07 angie)
+# Requested by Gill.
+    ssh kkstore05
+    mkdir /cluster/data/gasAcu1/bed/blastz.gasAcu1.2007-03-13
+    cd /cluster/data/gasAcu1/bed/blastz.gasAcu1.2007-03-13
+    cat << '_EOF_' > DEF
+# stickleback vs. self
+
+BLASTZ_H=2000
+BLASTZ_M=200
+
+# TARGET
+# Stickleback
+SEQ1_DIR=/iscratch/i/gasAcu1/gasAcu1.noUn.sdTrf.2bit
+SEQ1_LEN=/iscratch/i/gasAcu1/gasAcu1.noUn.sdTrf.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY
+# Stickleback
+SEQ2_DIR=/iscratch/i/gasAcu1/gasAcu1.noUn.sdTrf.2bit
+SEQ2_LEN=/iscratch/i/gasAcu1/gasAcu1.noUn.sdTrf.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=10000
+
+BASE=/cluster/data/gasAcu1/bed/blastz.gasAcu1.2007-03-13
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << emacs
+    doBlastzChainNet.pl DEF \
+      -tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+      -chainMinScore=5000 -chainLinearGap=medium \
+      -blastzOutRoot=/cluster/bluearc/gasAcu1Self >& do.log &
+    tail -f do.log
+    # hgwdev can't see /iscratch, so the loadUp.csh script failed looking
+    # for SEQ1_LEN.  So I edited DEF to use /cluster/data location and 
+    # continued -load.
+
