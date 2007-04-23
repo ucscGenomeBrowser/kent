@@ -4,8 +4,9 @@ all:
 
 test:	protMrnaTest protDnaTest mrnaDnaTest mrnaDnaxTest \
 	blockBugTest identityBugTest protMrnaEval1Test protMrnaEval2Test \
-	longDbNameTest multiLineDescTest
+	longDbNameTest multiLineDescTest 
 
+#tblastnDbFirstTest megaBlastTest
 
 protMrnaTest: mkdirs
 	../blastToPsl -scores=output/$@.bscores input/kgProtMRna1.blast output/$@.psl
@@ -65,12 +66,19 @@ multiLineDescTest: mkdirs
 	pslCheck -verbose=0 output/$@.psl
 	diff -u expected/$@.psl output/$@.psl
 
+# this test is currently disabled.  This file has Database: before Query= and
+# there are multiple queries for each Database:
+tblastnDbFirstTest: mkdirs
+	../blastToPsl input/tblastnDbFirst.blast output/$@.psl
+	pslCheck -verbose=0 output/$@.psl
+	diff -u expected/$@.psl output/$@.psl
+
+
 # this test is currently disabled, mega-blast is painful because
 # Database: comes before Query= and there are multiple queries for each
 # Database:.
-$@: mkdirs
-	awk -f ../mega.awk input/970.txt > output/$@.blast
-	../blastToPsl output/$@.blast output/$@.psl
+megaBlastTest: mkdirs
+	../blastToPsl input/970.blast output/$@.psl
 	pslCheck -verbose=0 output/$@.psl
 	diff -u expected/$@.psl output/$@.psl
 
