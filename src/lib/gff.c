@@ -10,7 +10,7 @@
 #include "gff.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: gff.c,v 1.21 2007/02/01 00:43:16 kate Exp $";
+static char const rcsid[] = "$Id: gff.c,v 1.22 2007/04/23 23:09:55 markd Exp $";
 
 void gffGroupFree(struct gffGroup **pGroup)
 /* Free up a gffGroup including lineList. */
@@ -94,6 +94,7 @@ if (startsWith("gene-", groupName))
 if (startsWith("cc_", groupName))
     groupName += 3;
 strcpy(nameBuf, groupName);
+
 return nameBuf;
 }
 
@@ -303,7 +304,7 @@ if (wordCount >= 9)
 	}
     else
 	{
-	char *tnName = gffTnName(gl->seq, words[8]);
+	char *tnName = gffTnName(gl->seq, trimSpaces(words[8]));
 	if ((hel = hashLookup(gff->groupHash, tnName)) == NULL)
 	    {
 	    struct gffGroup *group;

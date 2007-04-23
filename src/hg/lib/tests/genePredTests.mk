@@ -29,6 +29,8 @@ TEST_TBL=gpTest_${USER}
 #   - frameBug.gff - VEGA gtf that broke frame assignment
 #   - nscan.gtf - N-SCAN GTF with non-standard 5UTR features and bogus
 #     frame on them.
+#   - spaceInName.gff - exon lines ended with extra space, which CDS lines didn't, resulting in two
+#     genePred records per gene.
 test: fileTests tableTests fromPslTests compatTblTests fromGxfTests
 
 ###
@@ -159,7 +161,8 @@ fromGxfTests: fromGxfMinTest fromGxfFrameTest \
 	fromGxfAcemblyTest fromGxfAcemblyFrameTest \
 	fromGxfNcbiTest fromGtfRegressTest fromGffRegressTest \
 	fromGffCeSangerTest fromGffCeSangerTypeTest \
-	fromGtfImpliedStopTest fromGffFrameTest fromGtfNscanTest
+	fromGtfImpliedStopTest fromGffFrameTest fromGtfNscanTest \
+	fromGffSpaceInNameTest
 
 doFromGxfTest = ${MAKE} -f genePredTests.mk doFromGxfTest
 
@@ -229,6 +232,10 @@ fromGffFrameTest:
 
 fromGtfNscanTest:
 	${doFromGxfTest} id=$@ what=fromGtf inBase=nscan.gtf opts="-genePredExt"
+
+# space at end of some lines caused two genePreds per gene
+fromGffSpaceInNameTest:
+	${doFromGxfTest} id=$@ what=fromGff inBase=spaceInName.gff
 
 # recursive target for GFF/GTF tests
 #  id - test id
