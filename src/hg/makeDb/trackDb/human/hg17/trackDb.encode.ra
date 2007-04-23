@@ -2483,8 +2483,8 @@ chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr2
 visibility hide
 type bedGraph 4
 maxHeightPixels 128:16:16
-minLimit -2.259
-maxLimit 4.243
+minLimit -2.592
+maxLimit 5.001
 viewLimits 0:1
 windowingFunction mean
 autoScale Off
