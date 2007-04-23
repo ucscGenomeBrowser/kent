@@ -8,9 +8,7 @@ CREATE TABLE cnpSebat (
     chrom varchar(255) not null,	# Chromosome
     chromStart int unsigned not null,	# Start position in chrom
     chromEnd int unsigned not null,	# End position in chrom
-    name varchar(255) not null,	# BAC Name
+    name varchar(255) not null,		# Gain or Loss
     probes int unsigned not null,	# Number of probes
-    individuals int unsigned not null,	# Number of individuals
-              #Indices
-    PRIMARY KEY(chrom)
+    individuals int unsigned not null	# Number of individuals
 );

@@ -18,7 +18,7 @@ struct cnpSebat
     char *chrom;	/* Chromosome */
     unsigned chromStart;	/* Start position in chrom */
     unsigned chromEnd;	/* End position in chrom */
-    char *name;	/* BAC Name */
+    char *name;	/* Gain or Loss */
     unsigned probes;	/* Number of probes */
     unsigned individuals;	/* Number of individuals */
     };
