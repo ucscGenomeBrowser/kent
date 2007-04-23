@@ -75,6 +75,7 @@
 #include "snp125Exceptions.h"
 #include "cnpIafrate.h"
 #include "cnpIafrate2.h"
+#include "cnpLocke.h"
 #include "cnpSebat.h"
 #include "cnpSebat2.h"
 #include "cnpSharp.h"
@@ -204,7 +205,7 @@
 #include "geneCheckDetails.h"
 #include "kg1ToKg2.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1275 2007/04/18 09:42:37 aamp Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1276 2007/04/23 22:58:47 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -12452,11 +12453,34 @@ affy120KDetailsFree(&snp);
 sqlDisconnect(&conn);
 }
 
-void checkAndPrintCloneRegUrl(FILE *f, char *clone)
+void doCnpLocke(struct trackDb *tdb, char *itemName)
 {
-      printf("<B>NCBI Clone Registry: </B><A href=");
-      printCloneRegUrl(stdout, clone);
-      printf(" target=_blank>%s</A><BR>\n",clone);
+char *table = tdb->tableName;
+struct cnpLocke thisItem;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char query[256];
+int rowOffset = hOffsetPastBin(seqName, table);
+int start = cartInt(cart, "o");
+
+genericHeader(tdb, itemName);
+printf("<B>NCBI Clone Registry: </B><A href=");
+printCloneRegUrl(stdout, itemName);
+printf(" target=_blank>%s</A><BR>\n", itemName);
+safef(query, sizeof(query),
+      "select * from %s where chrom = '%s' and "
+      "chromStart=%d and name = '%s'", table, seqName, start, itemName);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    cnpLockeStaticLoad(row+rowOffset, &thisItem);
+    bedPrintPos((struct bed *)&thisItem, 3);
+    printf("<BR><B>Variation Type</B>: %s\n",thisItem.variationType);
+    }
+printTrackHtml(tdb);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
 }
 
 void doCnpIafrate(struct trackDb *tdb, char *itemName)
@@ -12471,7 +12495,9 @@ int rowOffset = hOffsetPastBin(seqName, table);
 int start = cartInt(cart, "o");
 
 genericHeader(tdb, itemName);
-checkAndPrintCloneRegUrl(stdout,itemName);
+printf("<B>NCBI Clone Registry: </B><A href=");
+printCloneRegUrl(stdout, itemName);
+printf(" target=_blank>%s</A><BR>\n", itemName);
 safef(query, sizeof(query),
       "select * from %s where chrom = '%s' and "
       "chromStart=%d and name = '%s'", table, seqName, start, itemName);
@@ -12500,7 +12526,9 @@ int rowOffset = hOffsetPastBin(seqName, table);
 int start = cartInt(cart, "o");
 
 genericHeader(tdb, itemName);
-checkAndPrintCloneRegUrl(stdout,itemName);
+printf("<B>NCBI Clone Registry: </B><A href=");
+printCloneRegUrl(stdout, itemName);
+printf(" target=_blank>%s</A><BR>\n", itemName);
 safef(query, sizeof(query),
       "select * from %s where chrom = '%s' and "
       "chromStart=%d and name = '%s'", table, seqName, start, itemName);
@@ -12749,7 +12777,9 @@ if (variantSignal == '?')
 if (variantSignal == '#')
    stripChar(itemCopy, '#');
 genericHeader(tdb, itemCopy);
-checkAndPrintCloneRegUrl(stdout,itemCopy);
+printf("<B>NCBI Clone Registry: </B><A href=");
+printCloneRegUrl(stdout, itemCopy);
+printf(" target=_blank>%s</A><BR>\n", itemCopy);
 if (variantSignal == '*' || variantSignal == '?' || variantSignal == '#')
     printf("<B>Note this BAC was found to be variant.   See references.</B><BR>\n");
 safef(query, sizeof(query),
@@ -12781,7 +12811,9 @@ int rowOffset = hOffsetPastBin(seqName, table);
 int start = cartInt(cart, "o");
 
 genericHeader(tdb, itemName);
-checkAndPrintCloneRegUrl(stdout, itemName);
+printf("<B>NCBI Clone Registry: </B><A href=");
+printCloneRegUrl(stdout, itemName);
+printf(" target=_blank>%s</A><BR>\n", itemName);
 safef(query, sizeof(query),
       "select * from %s where chrom = '%s' and "
       "chromStart=%d and name = '%s'", table, seqName, start, itemName);
@@ -18618,6 +18650,10 @@ else if (sameWord(track, "snp127"))
 else if (sameWord(track, "cnpIafrate"))
     {
     doCnpIafrate(tdb, item);
+    }
+else if (sameWord(track, "cnpLocke"))
+    {
+    doCnpLocke(tdb, item);
     }
 else if (sameWord(track, "cnpIafrate2"))
     {
