@@ -1,21 +1,25 @@
 <H2>Description</H2>
 <P>
 This track displays DNaseI-hypersensitive sites identified using two methods
-(DNase-chip and MPSS sequencing) in seven human cell types: 1) primary
-unactivated and activated CD4+ T cells, 
-2) <A HREF="http://ccr.coriell.org/nigms/nigms_cgi/display.cgi?GM06990" 
-TARGET=_blank>GM06990</A> lymphoblastoid, 
-3) <A HREF="http://www.atcc.org/common/catalog/numSearch/numResults.cfm?atccNum=CCL-2.2" 
-TARGET=_BLANK>HeLa S3</A> cervical carcinoma (Puck et al., 1956), 
-4) <A HREF="http://www.atcc.org/common/catalog/numSearch/numResults.cfm?atccNum=HB-8065" 
-TARGET=_blank>HepG2</A> liver carcinoma, 
-5) <A HREF="http://www.nationalstemcellbank.org/" TARGET=_blank>H9</A> human 
-undifferentiated embryonic stem (ES) (Thomson et al., 1998), 
-6) <A HREF="http://www.atcc.org/common/catalog/numSearch/numResults.cfm?atccNum=CCL-186" 
-TARGET=_blank>IMR90</A> human fibroblast and 
-7) <A HREF="http://www.atcc.org/common/catalog/numSearch/numResults.cfm?atccNum=CCL-243"
-TARGET=_blank>K562</A> myeloid leukemia-derived (Klein et al., 1976) cell 
-lines.</P>
+(DNase-chip and MPSS sequencing) in seven human cell types:
+<UL>
+ <LI>primary unactivated and activated CD4+ T cells</LI>
+ <LI><A HREF="http://ccr.coriell.org/nigms/nigms_cgi/display.cgi?GM06990" 
+TARGET=_blank>GM06990</A> lymphoblastoid</LI>
+ <LI><A HREF="http://www.atcc.org/common/catalog/numSearch/numResults.cfm?atccNum=CCL-2.2" 
+TARGET=_BLANK>HeLa S3</A>  
+cervical carcinoma (Puck <EM>et al.</EM>, 1956)</LI>
+ <LI><A HREF="http://www.atcc.org/common/catalog/numSearch/numResults.cfm?atccNum=HB-8065" 
+TARGET=_blank>HepG2</A> liver carcinoma</LI>
+ <LI><A HREF="http://www.nationalstemcellbank.org/" TARGET=_blank>H9</A>
+human undifferentiated embryonic stem (ES) (Thomson <EM>et al.</EM>, 1998)</LI>
+ <LI><A HREF="http://www.atcc.org/common/catalog/numSearch/numResults.cfm?atccNum=CCL-186" 
+TARGET=_blank>IMR90</A> human fibroblast</LI>
+ <LI><A HREF="http://www.atcc.org/common/catalog/numSearch/numResults.cfm?atccNum=CCL-243"
+TARGET=_blank>K562</A> myeloid leukemia-derived (Klein <EM>et al.</EM>, 1976)</LI>
+</UL>
+</P>
+
 <P>
 DNaseI-hypersensitive sites are associated with all types of gene 
 regulatory regions, including promoters, enhancers, silencers, insulators, and 
@@ -23,7 +27,7 @@ locus control regions.</P>
 
 <H2>Display Conventions and Configuration</H2>
 <P>
-The subtracks within this track are grouped into four sections:
+The subtracks within this track are grouped into three sections:
 <UL>
 <LI>
 <B>Raw</B> subtracks display log2 ratio data averaged from
@@ -40,8 +44,8 @@ to integer scores in the range 0-1000.
 Regions are displayed in a range of light
 gray to black, based on score.
 <LI>
-<B>MPSS</B> subtracks show hypersensitive sites determined by MPSS 
-sequencing.  
+<B>MPSS</B> subtracks show hypersensitive sites determined by 
+massively parallel signature sequencing (MPSS). 
 Each cluster has a unique identifier.
 The last digit of each identifier represents the 
 number of sequences that map within that particular cluster. The sequence number
@@ -58,13 +62,13 @@ the subtracks displayed.
 <H3> DNase-Chip</H3>
 <P>
 DNaseI hypersensitive sites were isolated using a method called 
-DNase-chip (Crawford et al., 2006). 
+DNase-chip (Crawford <EM>et al.</EM>, 2006). 
 Briefly, DNaseI digested ends from intact chromatin were captured using
 three different DNase concentrations as well as three biological replicates. 
 This material was amplified, labeled, and hybridized to NimbleGen 
 ENCODE tiled microarrays.
 <P>
-H9 human ES cells (Thomson et al., 1998) were cultured on a feeder layer of 
+H9 human ES cells (Thomson <EM>et al.</EM>, 1998) were cultured on a feeder layer of 
 mitotically inactivated mouse embryo fibroblasts. For analysis, human ES cell 
 colonies were separated away from the feeder layer and processed for 
 DNaseI hypersensitive site mapping. Cultures were routinely inspected by
@@ -74,7 +78,7 @@ human ES cells were in the undifferentiated state.</P>
 For the DNase-chip experiments, the raw data were averaged from nine
 hybridizations per cell type. The Pval scores represent -log10 p values as
 determined by the ACME (Algorithm for Capturing Microarray Enrichment) program
-(Scacheri, Crawford, and Davis, 2006). Only regions that had p value &lt;
+(Scacheri <EM>et al.</EM>, 2006). Only regions that had p value &lt;
 0.001 were included. For display in the Genome Browser, the p value scores were
 mapped to integer scores in the range 0-1000 using the following formula: score
 = (pVal * 35) + 100. The -log10 p values can be viewed using the Table Browser.
@@ -93,11 +97,11 @@ bases of each other are displayed.
 <H2>Verification</H2>
 <H3> DNase-Chip </H3>
 <P>
-A real-time PCR assay (McArthur et al., 2001, Crawford et al., 2004) 
-was used to validate a randomly selected subset
+A real-time PCR assay (McArthur <EM>et al.</EM>, 2001; Crawford <EM>et al.</EM>
+, 2004) was used to validate a randomly selected subset
 of DNase-chip regions.  
-For the New DNase-chip, we determined the 
-Sensitivity of DNase-chip to be  &gt; 86% and 
+For the New DNase-chip, the 
+Sensitivity of DNase-chip was determined to be &gt; 86% and 
 Specificity to be &gt; 97%.
 Approximately 20-30% of regions detected 
 in only a single DNase concentration are valid. 
@@ -135,7 +139,8 @@ at Duke University, and at the
 at NHGRI.  Thanks to Gregory E. Crawford and Francis S. Collins for supplying 
 the information for this track. H9 cells were grown in collaboration with Ron 
 McKay and Paul Tesar at the National Institute of Neurological Disorders and
-Stroke (NINDS), NIH.</P>
+Stroke (NINDS)&mdash;an institute of the National Institutes of Health (NIH).
+</P>
 
 <H2> References </H2>
 <P>
@@ -150,23 +155,8 @@ Crawford GE, Davis S, Scacheri PC, Renaud G, Halawi MJ, Erdos MR, Green R,
 Meltzer PS, Wolfsberg TG, Collins FS.
 <A HREF="http://www.nature.com/nmeth/journal/v3/n7/abs/nmeth888.html" 
 TARGET=_BLANK>
-DNase-chip: A High Resolution Method to Identify DNaseI Hypersensitive Sites 
-using Tiled Microarrays</A>. <em>Nature Methods</em>. 2006 Jul;3(7):503-9.
-<P>
-Crawford GE, Holt IE, Whittle J, Webb BD, Tai D, Davis S, Margulies EH, Chen Y,
-Bernat JA, Ginsburg D <em>et al</em>. 
-<A HREF="http://www.genome.org/cgi/content/abstract/16/1/123?etoc" 
-TARGET=_BLANK>Genome-wide mapping of DNase hypersensitive sites using 
-massively parallel signature sequencing (MPSS)</A>. <em>Genome Res</em>.
-2000 Jun;18(6):630-4.
-(See also NHGRI's
-<A HREF="http://research.nhgri.nih.gov/DNaseHS/May2005/"
-TARGET=_blank>data site</A> for the project.)</P>
-<P>
-Scacheri PC, Crawford GE, Davis S.
-<A HREF="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=pubmed&cmd=Retrieve&dopt=AbstractPlus&list_uids=16939795&query_hl=3&itool=pubmed_docsum" 
-TARGET=_BLANK>Statistics for ChIP-chip and DNase hypersensitivity experiments 
-on NimbleGen arrays</A>.  <em>Methods Enzymol</em>. 2006;411:270-82.
+DNase-chip: A high resolution method to identify DNase I hypersensitive sites 
+using tiled microarrays</A>. <em>Nature Methods</em>. 2006 Jul;3(7):503-9.
 <P>
 Crawford GE, Holt IE, Mullikin JC, Tai D, Blakesley R, Bouffard G, Young A, 
 Masiello C, Green ED, Wolfsberg TG <em>et al</em>.
@@ -174,6 +164,16 @@ Masiello C, Green ED, Wolfsberg TG <em>et al</em>.
 TARGET=_blank>Identifying gene regulatory elements by genome-wide recovery of 
 DNase hypersensitive sites</A>. <em>Proc Natl Acad Sci USA</em>.
 2004 Jan 27;101(4):992-7. 
+<P>
+Crawford GE, Holt IE, Whittle J, Webb BD, Tai D, Davis S, Margulies EH, Chen Y,
+Bernat JA, Ginsburg D <em>et al</em>. 
+<A HREF="http://www.genome.org/cgi/content/abstract/16/1/123?etoc" 
+TARGET=_BLANK>Genome-wide mapping of DNase hypersensitive sites using 
+massively parallel signature sequencing (MPSS)</A>. <em>Genome Res</em>.
+2006 Jan;16(1):123-31.
+(See also NHGRI's
+<A HREF="http://research.nhgri.nih.gov/DNaseHS/May2005/"
+TARGET=_blank>data site</A> for the project.)</P>
 <P>
 Klein E, Ben-Bassat H, Neumann H, Ralph P, Zeuthen J, Polliack A, Vanky F.
 <A HREF="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&list_uids=789258&dopt=Abstract"
@@ -190,11 +190,16 @@ quantitative analysis of DNaseI-hypersensitivity of the mouse beta-globin LCR
 Puck TT, Marcus PI, Cieciura SJ. 
 <A HREF="http://www.jem.org/cgi/content/abstract/103/2/273" TARGET=_blank>
 Clonal growth of mammalian cells in vitro: growth characteristics of 
-colonies from single HeLa cells with and without a feeder layer</A>. 
+colonies from single HeLa cells with and without a &quot;feeder&quot; layer</A>. 
 <em>J Exp Med</em>. 1956 Feb 1;103(2):273-83.
+<P>
+Scacheri PC, Crawford GE, Davis S.
+<A HREF="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=pubmed&cmd=Retrieve&dopt=AbstractPlus&list_uids=16939795&query_hl=3&itool=pubmed_docsum" 
+TARGET=_BLANK>Statistics for ChIP-chip and DNase hypersensitivity experiments 
+on NimbleGen arrays</A>.  <em>Methods Enzymol</em>. 2006;411:270-82.
 <P>
 Thomson JA, Itskovitz-Eldor J, Shapirom SS, Waknitz MA, Swiergiel JJ, 
 Marshall VS, Jones JM. 
-<A HREF="http://www.sciencemag.org/cgi/content/full/282/5391/1145" 
+<A HREF="http://www.sciencemag.org/cgi/content/abstract/282/5391/1145" 
 TARGET=_blank>Embryonic stem cell lines derived from human 
 blastocysts</A>. <em>Science</em>. 1998 Nov 6;282(5391):1145-7.
