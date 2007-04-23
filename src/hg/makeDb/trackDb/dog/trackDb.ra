@@ -153,3 +153,52 @@ visibility dense
 spectrum on
 type netAlign mm5 chainMm5
 otherDb mm5
+
+track chainEquCab1
+shortLabel $o_Organism Chain
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+group compGeno
+priority 255
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+matrixHeader A, C, G, T
+type chain equCab1
+otherDb equCab1
+
+track netEquCab1
+shortLabel $o_Organism Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
+group compGeno
+priority 255.1
+visibility hide
+spectrum on
+type netAlign equCab1 chainEquCab1
+otherDb equCab1
+
+track chainFelCat3
+shortLabel $o_Organism Chain
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+group compGeno
+priority 265 
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+matrixHeader A, C, G, T
+type chain felCat3
+otherDb felCat3
+
+track netFelCat3
+shortLabel $o_Organism Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
+group compGeno
+priority 265.1
+visibility hide
+spectrum on
+type netAlign felCat3 chainFelCat3
+otherDb felCat3
+
