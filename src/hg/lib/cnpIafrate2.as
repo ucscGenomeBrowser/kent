@@ -4,7 +4,7 @@ table cnpIafrate2
     string  chrom;      "Reference sequence chromosome or scaffold"
     uint    chromStart; "Start position in chrom"
     uint    chromEnd;   "End position in chrom"
-    string  name;       "Reference SNP identifier or Affy SNP name"
+    string  name;       "BAC name"
     uint    normalGain; "Number of normal individuals with gain"
     uint    normalLoss; "Number of normal individuals with loss"
     uint    patientGain; "Number of patients with gain"

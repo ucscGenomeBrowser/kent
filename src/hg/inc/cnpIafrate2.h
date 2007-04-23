@@ -14,7 +14,7 @@ struct cnpIafrate2
     char *chrom;	/* Reference sequence chromosome or scaffold */
     unsigned chromStart;	/* Start position in chrom */
     unsigned chromEnd;	/* End position in chrom */
-    char *name;	/* Reference SNP identifier or Affy SNP name */
+    char *name;	/* BAC name */
     unsigned normalGain;	/* Number of normal individuals with gain */
     unsigned normalLoss;	/* Number of normal individuals with loss */
     unsigned patientGain;	/* Number of patients with gain */

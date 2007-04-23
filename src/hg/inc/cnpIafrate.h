@@ -14,7 +14,7 @@ struct cnpIafrate
     char *chrom;	/* Chromosome */
     unsigned chromStart;	/* Start position in chrom */
     unsigned chromEnd;	/* End position in chrom */
-    char *name;	/* Reference SNP identifier or Affy SNP name */
+    char *name;	/* BAC name */
     char *variationType;	/* {Gain},{Loss},{Gain and Loss} */
     float score;	/* Score */
     };

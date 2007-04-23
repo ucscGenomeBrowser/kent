@@ -9,10 +9,7 @@ CREATE TABLE cnpIafrate (
     chrom varchar(255) not null,	# Chromosome
     chromStart int unsigned not null,	# Start position in chrom
     chromEnd int unsigned not null,	# End position in chrom
-    name varchar(255) not null,	# Reference SNP identifier or Affy SNP name
-    variationType enum('Gain', 'Loss', 'Gain and Loss' not null,	# {Gain},{Loss},{Gain and Loss}
-    score float not null,	# Score
-    #Indices
-    INDEX chrom (chrom(12),chromStart),
-    INDEX name (name)
+    name varchar(255) not null,		# BAC name
+    variationType enum('Gain', 'Loss', 'Gain and Loss',	# {Gain},{Loss},{Gain and Loss}
+    score float not null		# Score
 );

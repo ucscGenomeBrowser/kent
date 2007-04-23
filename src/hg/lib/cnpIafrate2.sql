@@ -9,7 +9,7 @@ CREATE TABLE cnpIafrate2 (
     chrom varchar(255) not null,	# Reference sequence chromosome or scaffold
     chromStart int unsigned not null,	# Start position in chrom
     chromEnd int unsigned not null,	# End position in chrom
-    name varchar(255) not null,	# Reference SNP identifier or Affy SNP name
+    name varchar(255) not null,		# BAC name
     normalGain int unsigned not null,	# Number of normal individuals with gain
     normalLoss int unsigned not null,	# Number of normal individuals with loss
     patientGain int unsigned not null,	# Number of patients with gain
