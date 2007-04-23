@@ -9,7 +9,7 @@
 #include "customTrack.h"
 #include "customFactory.h"
 
-static char const rcsid[] = "$Id: refreshNamedSessionCustomTracks.c,v 1.1 2007/02/28 00:28:15 angie Exp $";
+static char const rcsid[] = "$Id: refreshNamedSessionCustomTracks.c,v 1.2 2007/04/23 22:06:48 angie Exp $";
 
 #define savedSessionTable "namedSessionDb"
 
@@ -33,12 +33,13 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-void scanSettingsForCT(char *contents)
+void scanSettingsForCT(char *userName, char *sessionName, char *contents)
 /* Parse the CGI-encoded session contents into {var,val} pairs and search
  * for custom tracks.  If found, refresh the custom track.  Parsing code 
  * taken from cartParseOverHash. */
 {
 char *namePt = contents;
+verbose(3, "Scanning %s %s\n", userName, sessionName);
 while (isNotEmpty(namePt))
     {
     char *dataPt = strchr(namePt, '=');
@@ -53,9 +54,16 @@ while (isNotEmpty(namePt))
     if (startsWith(CT_FILE_VAR_PREFIX, namePt))
 	{
 	boolean thisGotLiveCT = FALSE, thisGotExpiredCT = FALSE;
+	verbose(3, "Found variable %s = %s\n", namePt, dataPt);
 	customFactoryTestExistence(dataPt, &thisGotLiveCT, &thisGotExpiredCT);
 	if (thisGotExpiredCT)
-	    warn("Found expired custom track: %s", dataPt);
+	    {
+	    if (verboseLevel() >= 3)
+		warn("Found expired custom track in %s %s: %s",
+		     userName, sessionName, dataPt);
+	    else
+		warn("Found expired custom track: %s", dataPt);
+	    }
 	}
     namePt = nextNamePt;
     }
@@ -66,17 +74,19 @@ void refreshNamedSessionCustomTracks(char *centralDbName)
  * tracks that are referenced by saved sessions. */
 {
 struct sqlConnection *conn = sqlConnect(centralDbName);
+verbose(2, "Got connection to %s\n", centralDbName);
 
 if (sqlTableExists(conn, savedSessionTable))
     {
     struct sqlResult *sr = NULL;
     char **row = NULL;
     char query[512];
-    safef(query, sizeof(query), "select contents from %s", savedSessionTable);
+    safef(query, sizeof(query),
+	  "select userName,sessionName,contents from %s", savedSessionTable);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
 	{
-	scanSettingsForCT(row[0]);
+	scanSettingsForCT(row[0], row[1], row[2]);
 	}
     sqlFreeResult(&sr);
     }
