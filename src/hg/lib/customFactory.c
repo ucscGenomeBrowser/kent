@@ -23,7 +23,7 @@
 #include "customFactory.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.62 2007/04/04 22:31:39 angie Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.63 2007/04/23 20:58:15 galt Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -828,6 +828,11 @@ if (psl->qStart >= psl->qEnd || psl->qEnd > psl->qSize
     lineFileAbort(lf, "mangled psl format");
     }
 customFactoryCheckChromNameDb(db, psl->tName, lf);
+
+if (!isProt)
+    {
+    isProt = pslIsProtein(psl);
+    }
 
 /* Allocate bed and fill in from psl. */
 AllocVar(bed);
