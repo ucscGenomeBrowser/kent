@@ -4,7 +4,7 @@
 #	From Wash U GSC
 #	http://genome.wustl.edu/genome.cgi?GENOME=Caenorhabditis+remanei
 
-#  $Id: caeRem2.txt,v 1.5 2007/04/22 03:40:22 hiram Exp $
+#  $Id: caeRem2.txt,v 1.6 2007/04/23 18:18:22 hiram Exp $
 
 #########################################################################
 # DOWNLOAD SEQUENCE (DONE - 2007-03-16 - Hiram)
@@ -339,3 +339,69 @@ dbDbSpeciesDir worm
     #	less than 2 minutes
     cat fb.caeRem2.chainPriPac1Link.txt
     #	8971992 bases of 146898439 (6.108%) in intersection
+
+#########################################################################
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2007-04-23 - Hiram)
+    # Use -repMatch=50 (based on size -- for human we use 1024, and 
+    # C. remanei size is ~5.1% of human judging by gapless caeRem2 vs. hg18 
+    # genome sizes from featureBits.
+    ssh kolossus
+    cd /cluster/data/caeRem2
+    blat caeRem2.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/11.ooc -repMatch=50
+    #	Wrote 46981 overused 11-mers to jkStuff/11.ooc
+    cp -p jkStuff/11.ooc /san/sanvol1/scratch/worms/caeRem2
+
+#########################################################################
+# GENBANK AUTO UPDATE (DONE - 2007-04-23 - Hiram)
+    # align with latest genbank process.
+    ssh hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+    # edit etc/genbank.conf to add caeRem2 just before caeRem1
+
+# caeRem2 (C. remanei)
+caeRem2.serverGenome = /cluster/data/caeRem2/caeRem2.2bit
+caeRem2.clusterGenome = /iscratch/i/worms/caeRem2/caeRem2.2bit
+caeRem2.ooc = /iscratch/i/worms/caeRem2/11.ooc
+caeRem2.lift = /iscratch/i/worms/caeRem2/caeRem2.chrUn.lift
+caeRem2.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+caeRem2.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+caeRem2.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+caeRem2.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+caeRem2.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+caeRem2.refseq.mrna.native.load = yes
+caeRem2.refseq.mrna.xeno.load  = yes
+caeRem2.refseq.mrna.xeno.loadDesc = yes
+caeRem2.genbank.mrna.xeno.load = yes
+caeRem2.genbank.est.native.load = yes
+caeRem2.genbank.est.native.loadDesc = no
+caeRem2.downloadDir = caeRem2
+caeRem2.perChromTables = no
+
+    cvs ci -m "Added caeRem2." etc/genbank.conf
+    # update /cluster/data/genbank/:
+    make etc-update
+
+    ssh kkstore01
+    cd /cluster/data/genbank
+    time nice -n +19 bin/gbAlignStep -initial caeRem2 &
+    #	logFile: var/build/logs/2007.04.23-10:12:10.caeRem2.initalign.log
+XXX - running 2007-04-23 10:12
+    #	real    230m8.123s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad caeRem2
+    #	logFile: var/
+    #	real    6m57.557s
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+    # add caeRem2 to:
+        etc/align.dbs
+        etc/hgwdev.dbs
+    cvs ci -m "Added caeRem2 - C. remanei" etc/align.dbs etc/hgwdev.dbs
+    make etc-update

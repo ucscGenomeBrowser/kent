@@ -3,7 +3,7 @@
 # Pristionchus pacificus
 #	Washington University School of Medicine GSC and Sanger Institute
 #
-#  $Id: priPac1.txt,v 1.2 2007/04/22 03:41:24 hiram Exp $
+#  $Id: priPac1.txt,v 1.3 2007/04/23 18:18:23 hiram Exp $
 ###########################################################################
 ## Download sequence - (DONE - 2007-02-25 - Hiram)
     ssh kkstore02
@@ -218,7 +218,7 @@ TMPDIR=/scratch/tmp
 
     time nice -n +19 doBlastzChainNet.pl DEF -verbose=2 -bigClusterHub=kk \
 	-blastzOutRoot /cluster/bluearc/priPac1CaeRem2 > do.log 2>&1 &
-    #	real    111m22.132s
+    #	real    238m33.642s
     cat fb.priPac1.chainCaeRem2Link.txt
     #	9047547 bases of 145948246 (6.199%) in intersection
 
@@ -264,3 +264,76 @@ TMPDIR=/scratch/tmp
     #	real    0m48.872s
     cat fb.priPac1.chainCb3Link.txt
     #	7800313 bases of 145948246 (5.345%) in intersection
+
+#########################################################################
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2007-04-23 - Hiram)
+    # Use -repMatch=42 (based on size -- for human we use 1024, and 
+    # P. pacificus size is ~4.1% of human judging by gapless priPac1 vs. hg18 
+    # genome sizes from featureBits.
+    ssh kolossus
+    cd /cluster/data/priPac1
+    blat priPac1.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/11.ooc -repMatch=42
+    #	Wrote 32320 overused 11-mers to jkStuff/11.ooc
+    cp -p jkStuff/11.ooc /san/sanvol1/scratch/worms/priPac1
+
+#########################################################################
+# GENBANK AUTO UPDATE (DONE - 2007-04-23 - Hiram)
+    # align with latest genbank process.
+    ssh hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+    # edit etc/genbank.conf to add priPac1 just before caePb1
+
+# priPac1 (P. pacificus)
+priPac1.serverGenome = /cluster/data/priPac1/priPac1.2bit
+priPac1.clusterGenome = /iscratch/i/worms/priPac1/priPac1.2bit
+priPac1.ooc = /iscratch/i/worms/priPac1/11.ooc
+priPac1.lift = /iscratch/i/worms/priPac1/priPac1.supercontigs.lift
+priPac1.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+priPac1.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+priPac1.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+priPac1.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+priPac1.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+priPac1.refseq.mrna.native.load = no
+priPac1.refseq.mrna.xeno.load  = yes
+priPac1.refseq.mrna.xeno.loadDesc = yes
+priPac1.genbank.mrna.xeno.load = yes
+priPac1.genbank.est.native.load = yes
+priPac1.genbank.est.native.loadDesc = no
+priPac1.downloadDir = priPac1
+priPac1.perChromTables = no
+
+    cvs ci -m "Added priPac1." etc/genbank.conf
+    # update /cluster/data/genbank/:
+    make etc-update
+
+    # Edit src/lib/gbGenome.c to add new species.
+    cvs ci -m "Added P. pacificus." src/lib/gbGenome.c
+    make install-server
+
+    ssh kkstore01
+    cd /cluster/data/genbank
+    time nice -n +19 bin/gbAlignStep -initial priPac1 &
+    #	logFile: var/build/logs/2007.04.23-10:35:55.priPac1.initalign.log
+XXXX - running - 2007-04-23 10:36
+    #	real    230m8.123s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad priPac1
+    #	logFile: var/dbload/hgwdev/logs/2007.03.27-07:52:23.dbload.log
+    #	real    6m57.557s
+    ## re-load to get the est track after adding that to the .conf file
+    #	var/dbload/hgwdev/logs/2007.03.29-17:09:35.dbload.log
+    #	real    19m2.168s
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+    # add priPac1 to:
+        etc/align.dbs
+        etc/hgwdev.dbs
+    cvs ci -m "Added priPac1 - P. pacificus" etc/align.dbs etc/hgwdev.dbs
+    make etc-update

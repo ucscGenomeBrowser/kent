@@ -512,6 +512,7 @@ TMPDIR=/scratch/tmp
 
     time nice -n +19 doBlastzChainNet.pl DEF -verbose=2 -bigClusterHub=kk \
 	-blastzOutRoot /cluster/bluearc/caePb1CaeRem2 > do.log 2>&1 &
+    #	real    569m7.643s
     cat fb.caePb1.chainCaeRem2Link.txt
     #	93139445 bases of 175247318 (53.147%) in intersection
 
@@ -554,6 +555,7 @@ TMPDIR=/scratch/tmp
 
     time nice -n +19 doBlastzChainNet.pl DEF -verbose=2 -bigClusterHub=pk \
 	-blastzOutRoot /cluster/bluearc/caePb1PriPac1 > do.log 2>&1 &
+    #	real    406m52.445s
     cat fb.caePb1.chainPriPac1Link.txt
     #	13589188 bases of 175247318 (7.754%) in intersection
 
@@ -566,3 +568,76 @@ TMPDIR=/scratch/tmp
     #	real    9m18.554s
     cat fb.priPac1.chainCaePb1Link.txt
     #	11713567 bases of 145948246 (8.026%) in intersection
+
+#########################################################################
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2007-04-23 - Hiram)
+    # Use -repMatch=62 (based on size -- for human we use 1024, and 
+    # C. PB2801 size is ~6.1% of human judging by gapless caePb1 vs. hg18 
+    # genome sizes from featureBits.
+    ssh kolossus
+    cd /cluster/data/caePb1
+    blat caePb1.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/11.ooc -repMatch=62
+    #	Wrote 37423 overused 11-mers to jkStuff/11.ooc
+    cp -p jkStuff/11.ooc /san/sanvol1/scratch/worms/caePb1
+
+#########################################################################
+# GENBANK AUTO UPDATE (DONE - 2007-04-23 - Hiram)
+    # align with latest genbank process.
+    ssh hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+    # edit etc/genbank.conf to add caePb1 just before caeRem2
+
+# caePb1 (C. PB2801)
+caePb1.serverGenome = /cluster/data/caePb1/caePb1.2bit
+caePb1.clusterGenome = /iscratch/i/worms/caePb1/caePb1.2bit
+caePb1.ooc = /iscratch/i/worms/caePb1/11.ooc
+caePb1.lift = /iscratch/i/worms/caePb1/caePb1.supercontigs.lift
+caePb1.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+caePb1.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+caePb1.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+caePb1.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+caePb1.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+caePb1.refseq.mrna.native.load = no
+caePb1.refseq.mrna.xeno.load  = yes
+caePb1.refseq.mrna.xeno.loadDesc = yes
+caePb1.genbank.mrna.xeno.load = yes
+caePb1.genbank.est.native.load = yes
+caePb1.genbank.est.native.loadDesc = no
+caePb1.downloadDir = caePb1
+caePb1.perChromTables = no
+
+    cvs ci -m "Added caePb1." etc/genbank.conf
+    # update /cluster/data/genbank/:
+    make etc-update
+
+    # Edit src/lib/gbGenome.c to add new species.
+    cvs ci -m "Added C. PB2801." src/lib/gbGenome.c
+    make install-server
+
+    ssh kkstore01
+    cd /cluster/data/genbank
+    time nice -n +19 bin/gbAlignStep -initial caePb1 &
+    #	logFile: var/build/logs/2007.04.23-10:18:05.caePb1.initalign.log
+XXXX - running - 2007-04-23 10:18
+    #	real    230m8.123s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad caePb1
+    #	logFile: var/dbload/hgwdev/logs/2007.03.27-07:52:23.dbload.log
+    #	real    6m57.557s
+    ## re-load to get the est track after adding that to the .conf file
+    #	var/dbload/hgwdev/logs/2007.03.29-17:09:35.dbload.log
+    #	real    19m2.168s
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+    # add caePb1 to:
+        etc/align.dbs
+        etc/hgwdev.dbs
+    cvs ci -m "Added caePb1 - C. PB2801" etc/align.dbs etc/hgwdev.dbs
+    make etc-update
