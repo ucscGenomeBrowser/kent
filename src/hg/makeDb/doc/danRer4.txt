@@ -10017,7 +10017,7 @@ string rightPrimer;     "Reverse primer sequence"
    ./bin/gbDbLoadStep -reload -srcDb=genbank -type=mrna danRer4
 
 #########################################################################
-# BLASTZ/CHAIN/NET oryLat1 (WORKING - 2007-01-19 - Hiram)
+# BLASTZ/CHAIN/NET oryLat1 (DONE - 2007-01-19,20 - Hiram)
     ssh kkstore04
     mkdir /cluster/data/danRer4/bed/blastz.oryLat1.2007-01-19
     cd /cluster/data/danRer4/bed/blastz.oryLat1.2007-01-19
@@ -10062,14 +10062,24 @@ TMPDIR=/scratch/tmp
 	-bigClusterHub=pk \
 	-blastzOutRoot /cluster/bluearc/danRer4OryLat1 > do.log 2>&1 &
     #	real    556m6.806s
+    cat fb.danRer4.chainOryLat1Link.txt
+    #	209746583 bases of 1626093931 (12.899%) in intersection
+    cd /cluster/data/danRer4/bed
+    ln -s blastz.oryLat1.2007-01-19 blastz.oryLat1
 
-
+    ## swap to oryLat1 - also in oryLat1.txt
+    mkdir /cluster/data/oryLat1/bed/blastz.swap.danRer4
+    cd /cluster/data/oryLat1/bed/blastz.swap.danRer4
     time doBlastzChainNet.pl -verbose=2 \
 	/cluster/data/danRer4/bed/blastz.oryLat1.2007-01-19/DEF \
 	-chainMinScore=2000 -chainLinearGap=loose \
 	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
 	-swap -bigClusterHub=pk  > swap.log 2>&1 &
-XXX - running 2007-01-20 09:21
+
+    cat fb.oryLat1.chainDanRer4Link.txt
+    #	156014546 bases of 700386597 (22.275%) in intersection
+    cd /cluster/data/oryLat1/bed
+    ln -s blastz.swap.danRer4 blastz.danRer4
 
 #########################################################################
 # BLASTZ/CHAIN/NET fr2 (DONE - 2007-01-29 - Hiram)

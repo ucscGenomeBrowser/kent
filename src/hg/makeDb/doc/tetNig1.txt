@@ -2809,3 +2809,33 @@ TMPDIR=/scratch/tmp
     time nice -n +19 featureBits fr2 chainTetNig1Link \
 	> fb.fr2.chainTetNig1.txt 2>&1
     #	247086553 bases of 393312790 (62.822%) in intersection
+
+#########################################################################
+## SWAP oryLat1 to tetNig1 (DONE - 2007-01-18 - Hiram)
+    ssh kkstore04
+    cd /cluster/data/oryLat1/bed/blastz.tetNig1.2006-12-13
+    cat fb.oryLat1.chainTetNig1Link.txt
+    #	160388236 bases of 700386597 (22.900%) in intersection
+
+    # And the swap
+    ssh kkstore04
+    cd /cluster/data/tetNig1/bed
+    mv blastz.oryLat1.swap blastz.oryLat1.swap.2006-12-08
+    mkdir blastz.oryLat1.swap
+    cd /cluster/data/tetNig1/bed/blastz.oryLat1.swap
+    time doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/oryLat1/bed/blastz.tetNig1.2006-12-13/DEF \
+	-chainMinScore=2000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-swap -bigClusterHub=kk > swap.log 2>&1 &
+    time doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/oryLat1/bed/blastz.tetNig1.2006-12-13/DEF \
+	-chainMinScore=2000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-continue=net -swap -bigClusterHub=kk > net-swap.log 2>&1 &
+
+    ssh hgwdev
+    cd /cluster/data/tetNig1/bed/blastz.oryLat1.swap
+    nice -n 19 featureBits -noRandom tetNig1 chainOryLat1Link \
+	>fb.tetNig1.oryLat1.txt 2>&1
+    #	130327582 bases of 342403326 (38.063%) in intersection

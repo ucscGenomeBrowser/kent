@@ -9,7 +9,7 @@
 #	Data release policy: http://medaka.utgenome.org/#policy
 #	Ensembl: http://www.ensembl.org/Oryzias_latipes/index.html
 #
-#	"$Id: oryLat1.txt,v 1.27 2007/04/14 04:22:55 hiram Exp $"
+#	"$Id: oryLat1.txt,v 1.28 2007/04/23 23:09:29 hiram Exp $"
 #
 
 ##########################################################################
@@ -1418,6 +1418,7 @@ XXX - Running 2006-12-13 14:08
 #########################################################################
 # BLASTZ/CHAIN/NET danRer4 (DONE - 2006-12-13 - Hiram)
 ## Third time - randoms and Un in scaffolds, both sequences
+##  The actual run that was used was done on danRer4 and swapped to here
     ssh kkstore04
     mkdir /cluster/data/oryLat1/bed/blastz.danRer4.2006-12-13
     cd /cluster/data/oryLat1/bed/blastz.danRer4.2006-12-13
@@ -1500,6 +1501,27 @@ XXX - Running 2007-01-19 11:24
     time nice -n 19 featureBits -noRandom danRer4 chainOryLat1Link \
 	> fb.danRer4.chainOryLat1Link.txt 2>&1
     #	188598788 bases of 1546950119 (12.192%) in intersection
+
+#########################################################################
+## SWAP danRer4 to oryLat1 (DONE - 2007-01-20 - Hiram)
+##  This is the one that ended up being used
+    ssh kkstore04
+    cd /cluster/data/danRer4/bed/blastz.oryLat1.2007-01-19
+    cat fb.danRer4.chainOryLat1Link.txt
+    #	209746583 bases of 1626093931 (12.899%) in intersection
+
+    mkdir /cluster/data/oryLat1/bed/blastz.swap.danRer4
+    cd /cluster/data/oryLat1/bed/blastz.swap.danRer4
+    time doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/danRer4/bed/blastz.oryLat1.2007-01-19/DEF \
+	-chainMinScore=2000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-swap -bigClusterHub=pk  > swap.log 2>&1 &
+
+    cat fb.oryLat1.chainDanRer4Link.txt
+    #	156014546 bases of 700386597 (22.275%) in intersection
+    cd /cluster/data/oryLat1/bed
+    ln -s blastz.swap.danRer4 blastz.danRer4
 
 #########################################################################
 # BLASTZ/CHAIN/NET tetNig1 (DONE - 2006-12-13 - Hiram)
