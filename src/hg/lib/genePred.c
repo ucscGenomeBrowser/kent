@@ -12,7 +12,7 @@
 #include "rangeTree.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.93 2007/04/13 05:58:24 markd Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.94 2007/04/23 22:45:42 markd Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -649,7 +649,7 @@ unsigned *eStarts, *eEnds;
 int i;
 
 /* should we count on start/stop codon annotation in GFFs? */
-boolean useStartStops = isGtf || haveStartStopCodons(gff);// || gffFile->hasStartStopCodons;
+boolean useStartStops = isGtf || haveStartStopCodons(gff);
 
 /* Count up exons and figure out cdsStart and cdsEnd. */
 for (gl = group->lineList; gl != NULL; gl = gl->next)
