@@ -3,7 +3,7 @@
 #include "gbDefs.h"
 #include "localmem.h"
 
-static char const rcsid[] = "$Id: gbGenome.c,v 1.55 2007/03/27 04:32:33 hiram Exp $";
+static char const rcsid[] = "$Id: gbGenome.c,v 1.56 2007/04/23 16:17:22 hiram Exp $";
 
 struct dbToSpecies
 /* structure mapping database prefix to species (e.g. hg -> "Homo sapiens").
@@ -34,6 +34,7 @@ static char *galGalNames[] = {"Gallus gallus", "Gallus sp.", NULL};
 static char *ceNames[] = {"Caenorhabditis elegans", NULL};
 static char *cbNames[] = {"Caenorhabditis briggsae", NULL};
 static char *caeRemNames[] = {"Caenorhabditis remanei", NULL};
+static char *caePbNames[] = {"Caenorhabditis sp. 4 (CE-II)", "Caenorhabditis elegans", "Caenorhabditis remanei", NULL};
 static char *danRerNames[] = {"Danio rerio", NULL};
 static char *echTelNames[] = {"Echinops telfairi", NULL};
 static char *oryCunNames[] = {"Oryctolagus cuniculus", NULL};
@@ -63,6 +64,7 @@ static char *oryLatNames[] = {"Oryzias latipes", NULL};
 static char *equCabNames[] = {"Equus caballus", NULL};
 static char *ornAnaNames[] = {"Ornithorhynchus anatinus", NULL};
 static char *braFloNames[] = {"Branchiostoma floridae", NULL};
+static char *priPacNames[] = {"Pristionchus pacificus", NULL};
 /* hypothetical ancestor, will never match native */
 static char *canHgNames[] = {"Boreoeutheria ancestor", NULL};
 
@@ -85,6 +87,7 @@ static struct dbToSpecies dbToSpeciesMap[] = {
     {"ce", ceNames, NULL},
     {"cb", cbNames, NULL},
     {"caeRem", caeRemNames, NULL},
+    {"caePb", caePbNames, NULL},
     {"caeRei", caeRemNames, NULL}, /* db spelling mistake, should be Rem */
     {"danRer", danRerNames, NULL},
     {"canFam", canFamNames, NULL},
@@ -115,6 +118,7 @@ static struct dbToSpecies dbToSpeciesMap[] = {
     {"oryLat", oryLatNames, NULL},
     {"ornAna", ornAnaNames, NULL},
     {"braFlo", braFloNames, NULL},
+    {"priPac", priPacNames, NULL},
     {"canHg", canHgNames, "Boreoeutheria ancestor"},
     {"strPur", strPurNames, NULL},
     {NULL, endNames, NULL}
