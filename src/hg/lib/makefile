@@ -19,7 +19,7 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     chromGraph.o chromGraphFactory.o chromInfo.o chromInserts.o chromKeeper.o \
     clonePos.o codeBlast.o codeBlastScore.o cogs.o cogsxra.o columnInfo.o \
     contigAcc.o coordConv.o \
-    cnpIafrate.o cnpIafrate2.o cnpRedon.o cnpSebat.o cnpSebat2.o \
+    cnpIafrate.o cnpIafrate2.o cnpLocke.o cnpRedon.o cnpSebat.o cnpSebat2.o \
     cnpSharp2.o cnpSharpCutoff.o cnpSharpSample.o cnpSharp.o \
     cpgIsland.o cpgIslandExt.o ctgPos.o ctgPos2.o \
     customFactory.o customPp.o customTrack.o cutter.o cytoBand.o \
