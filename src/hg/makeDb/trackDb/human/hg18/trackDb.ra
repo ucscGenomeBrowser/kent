@@ -1058,13 +1058,21 @@ priority 146
 visibility hide
 type bed 4 +
 
-    track cnpSharp2
+    track delConrad2
     subTrack cnp
-    shortLabel Sharp CNPs  
-    longLabel Copy Number Polymorphisms from BAC Microarray Analysis (Sharp)
+    shortLabel Conrad Dels
+    longLabel Deletions from Genotype Analysis (Conrad)
+    noInherit on
+    type bed 8 .
+    priority 1
+
+    track delHinds2
+    subTrack cnp
+    shortLabel Hinds Dels
+    longLabel Deletions from Haploid Hybridization Analysis (Hinds)
     noInherit on
     type bed 4 +
-    priority 1
+    priority 2
 
     track cnpIafrate2
     subTrack cnp
@@ -1072,16 +1080,8 @@ type bed 4 +
     longLabel Copy Number Polymorphisms from BAC Microarray Analysis (Iafrate)
     noInherit on
     type bed 4 +
-    priority 2
-
-    track cnpSebat2
-    subTrack cnp
-    shortLabel Sebat CNPs
-    longLabel Copy Number Polymorphisms from ROMA (Sebat)
-    noInherit on
-    type bed 4 +
     priority 3
-    
+
     track cnpLocke
     subTrack cnp
     shortLabel Locke CNPs
@@ -1090,13 +1090,37 @@ type bed 4 +
     type bed 4 +
     priority 4
 
+    track delMccarroll
+    subTrack cnp
+    shortLabel McCarroll Dels
+    longLabel Deletions from Genotype Analysis (McCarroll)
+    noInherit on
+    type bed 4 .
+    priority 5
+
     track cnpRedon
     subTrack cnp
     shortLabel Redon CNPs
     longLabel Copy Number Polymorphisms from SNP and BAC microarrays (Redon)
     noInherit on
     type bed 6 .
-    priority 5
+    priority 6
+
+    track cnpSebat2
+    subTrack cnp
+    shortLabel Sebat CNPs
+    longLabel Copy Number Polymorphisms from ROMA (Sebat)
+    noInherit on
+    type bed 4 +
+    priority 7
+    
+    track cnpSharp2
+    subTrack cnp
+    shortLabel Sharp CNPs  
+    longLabel Copy Number Polymorphisms from BAC Microarray Analysis (Sharp)
+    noInherit on
+    type bed 4 +
+    priority 8
 
     track cnpTuzun
     subTrack cnp
@@ -1104,30 +1128,6 @@ type bed 4 +
     longLabel Structural Variation identified by Fosmids (Tuzun)
     noInherit on
     type bed 4 .
-    priority 6
-
-    track delMccarroll
-    subTrack cnp
-    shortLabel McCarroll Dels
-    longLabel Deletions from Genotype Analysis (McCarroll)
-    noInherit on
-    type bed 4 .
-    priority 7
-
-    track delConrad2
-    subTrack cnp
-    shortLabel Conrad Dels
-    longLabel Deletions from Genotype Analysis (Conrad)
-    noInherit on
-    type bed 8 .
-    priority 8
-
-    track delHinds2
-    subTrack cnp
-    shortLabel Hinds Dels
-    longLabel Deletions from Haploid Hybridization Analysis (Hinds)
-    noInherit on
-    type bed 4 +
     priority 9
 
 track chainSelf
