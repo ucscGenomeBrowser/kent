@@ -8,7 +8,7 @@
 #include "fa.h"
 #include "twoBit.h"
 
-static char const rcsid[] = "$Id: faToTwoBit.c,v 1.8 2006/03/18 02:01:56 angie Exp $";
+static char const rcsid[] = "$Id: faToTwoBit.c,v 1.9 2007/04/24 18:37:46 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -20,7 +20,7 @@ errAbort(
   "options:\n"
   "   -noMask       - Ignore lower-case masking in fa file.\n"
   "   -stripVersion - Strip off version number after . for genbank accessions.\n"
-  "   -ignoreDups   - only convert first sequence if there are duplicats\n"
+  "   -ignoreDups   - only convert first sequence if there are duplicates\n"
   );
 }
 
