@@ -10,7 +10,7 @@
 #include "hui.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wiggleCart.c,v 1.13 2005/02/09 19:49:39 hiram Exp $";
+static char const rcsid[] = "$Id: wiggleCart.c,v 1.14 2007/04/24 19:37:45 hiram Exp $";
 
 extern struct cart *cart;      /* defined in hgTracks.c or hgTrackUi */
 
@@ -373,7 +373,7 @@ char *ret;
 ret = Default;	/* the answer, unless found to be otherwise	*/
 
 if (sameWord("NONE",tdbDefault) && (secondTdbString != (char *)NULL))
-	tdbDefault = trackDbSettingOrDefault(tdb, secondTdbString, "NONE");
+    tdbDefault = trackDbSettingOrDefault(tdb, secondTdbString, "NONE");
 
 if (differentWord("NONE",tdbDefault))
     {
@@ -386,6 +386,7 @@ else
     /*	no setting from trackDb, maybe it is in tdb->settings
      *	(custom tracks keep settings here)
      */
+
     if ((tdb->settings != (char *)NULL) &&
 	(tdb->settingsHash != (struct hash *)NULL))
 	{
@@ -441,12 +442,22 @@ char option[MAX_OPT_STRLEN]; /* .autoScale  */
 char *autoScale = NULL;
 enum wiggleScaleOptEnum ret;
 
+
 snprintf( option, sizeof(option), "%s.%s", tdb->tableName, AUTOSCALE );
 autoScale = cloneString(cartOptionalString(cart, option));
 
 if (!autoScale)	/*	if nothing from the Cart, check trackDb/settings */
-    autoScale = wigCheckBinaryOption(tdb,Default,notDefault,AUTOSCALEDEFAULT,
-	AUTOSCALE);
+    {
+    /*	It may be the autoScale=on/off situation from custom tracks */
+    char * tdbDefault = trackDbSettingOrDefault(tdb, AUTOSCALE, "NONE");
+    if (sameWord(tdbDefault,"on"))
+	autoScale = cloneString(Default);
+    else if (sameWord(tdbDefault,"off"))
+	autoScale = cloneString(notDefault);
+    else
+	autoScale = wigCheckBinaryOption(tdb,Default,notDefault,
+	    AUTOSCALEDEFAULT, AUTOSCALE);
+    }
 
 if (optString)
     *optString = cloneString(autoScale);
