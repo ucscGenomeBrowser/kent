@@ -103,5 +103,8 @@ void psDrawEllipse(struct psGfx *ps, double x, double y, double xrad, double yra
 char * convertEpsToPdf(char *epsFile);
 /* Convert EPS to PDF and return filename, or NULL if failure. */
 
+void psLineTo(struct psGfx *ps, double x, double y);
+/* Draw line from current point to given point,
+ * and make given point new current point. */
 #endif /* PSGFX_H */
 
