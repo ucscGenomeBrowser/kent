@@ -6,27 +6,6 @@ The CNPs and ISVs were determined by various methods, displayed in
 individual subtracks within the annotation:</P>
 <UL>
 <LI>
-<B>BAC microarray analysis (Sharp):</B> 154 putative CNP regions detected by BAC
-microarray analysis in a population of 47 individuals comprised of 8 
-Chinese, 4 Japanese, 10 Czech, 2 Druze, 7 Biaka, 9 Mbuti, and 7 Amerindians. 
-<LI>
-<B>BAC microarray analysis (Iafrate):</B> 249 putative CNP regions detected by
-BAC microarray analysis in a population of 55 individuals, 16 of which had
-previously-characterized chromosomal abnormalities. The group consisted of 10
-Caucasians, 4 Amerindians, 2 Chinese, 2 Indo-Pakistani, 2 Sub-Saharan
-African, and 35 of unknown ethnic origin.
-<LI>
-<B>Representational oligonucleotide microarray analysis (ROMA) (Sebat):</B> 72 putative
-CNP regions detected by ROMA in a population of 20 normal individuals comprised
-of 1 Biaka, 1 Mbuti, 1 Druze, 1 Melanesian, 4 French, 1 Venezualan, 1 Cambodian,
-1 Mayan and 9 of unknown ethnicity.
-<LI>
-<B>Fosmid mapping (Tuzun):</B> 297 ISV sites detected by mapping paired-end sequences 
-from a human fosmid DNA library.
-<LI>
-<B>Deletions from genotype analysis (McCarroll):</B> 538 deletions detected
-by analysis of SNP genotypes, using the HapMap Phase I data, release 16a.
-<LI>
 <B>Deletions from genotype analysis (Conrad):</B> 954 deletions detected
 by analysis of SNP genotypes, using the HapMap Phase I data, release 16c.1, 
 CEU and YRI samples.
@@ -35,8 +14,29 @@ CEU and YRI samples.
 from haploid hybridization analysis in 24 unrelated individuals from the 
 Polymorphism Discovery Resource, selected for SNP LD study.
 <LI>
+<B>BAC microarray analysis (Iafrate):</B> 249 putative CNP regions detected by
+BAC microarray analysis in a population of 55 individuals, 16 of which had
+previously-characterized chromosomal abnormalities. The group consisted of 10
+Caucasians, 4 Amerindians, 2 Chinese, 2 Indo-Pakistani, 2 Sub-Saharan
+African, and 35 of unknown ethnic origin.
+<LI>
+<B>Deletions from genotype analysis (McCarroll):</B> 538 deletions detected
+by analysis of SNP genotypes, using the HapMap Phase I data, release 16a.
+<LI>
 <B>SNP and BAC microarray analysis of HapMap data (Redon):</B> 1447 copy number 
 variable regions found in the HapMap Phase II data.
+<LI>
+<B>Representational oligonucleotide microarray analysis (ROMA) (Sebat):</B> 72 putative
+CNP regions detected by ROMA in a population of 20 normal individuals comprised
+of 1 Biaka, 1 Mbuti, 1 Druze, 1 Melanesian, 4 French, 1 Venezualan, 1 Cambodian,
+1 Mayan and 9 of unknown ethnicity.
+<LI>
+<B>BAC microarray analysis (Sharp):</B> 154 putative CNP regions detected by BAC
+microarray analysis in a population of 47 individuals comprised of 8 
+Chinese, 4 Japanese, 10 Czech, 2 Druze, 7 Biaka, 9 Mbuti, and 7 Amerindians. 
+<LI>
+<B>Fosmid mapping (Tuzun):</B> 297 ISV sites detected by mapping paired-end sequences 
+from a human fosmid DNA library.
 </UL></P>
 
 <H2>Display Conventions and Configuration</H2>
@@ -55,6 +55,13 @@ indicated the type of variation detected:
 <LI>
 <B><FONT COLOR="gray">Gray</FONT>:</B> gain or loss (unknown direction)
 </UL></P>
+
+<H3>Conrad subtrack</H3>
+<P>
+The method used to identify these deletions approximates the breakpoints of each
+event; therefore, a set of minimal and maximal endpoints is associated with each
+deletion. Thick lines delineate
+the minimally deleted region; thin lines delineate the maximally deleted region.
 
 <H3>Sharp subtrack </H3>
 <P>
@@ -85,26 +92,24 @@ support from the human genome reference, <B>S</B>=variant site with support
 from the human genome reference). 
 </UL></P>
 
-<H3>Conrad subtrack</H3>
-<P>
-The method used to identify these deletions approximates the breakpoints of each
-event; therefore, a set of minimal and maximal endpoints is associated with each
-deletion. Thick lines delineate
-the minimally deleted region; thin lines delineate the maximally deleted region.
-
 <H2>Methods</H2>
 
-<H3>Sharp BAC microarray analysis</H3>
+<H3>Conrad genotype analysis</H3>
 <P>
-All hybridizations were performed in duplicate incorporating a dye-reversal 
-using a custom array consisting of 2,194 end-sequence or FISH-confirmed BACs, 
-targeted to regions of the genome flanked by segmental duplications. 
-The false positive rate was estimated at ~3 clones per 4,000 tested.</P>
+SNPs in regions that are hemizygous for a deletion are generally miscalled as homozygous 
+for the allele that is present.  Hence, when a deletion is transmitted from parent to child, 
+the genotypes at SNPs within the deletion region will often appear to violate the rules of Mendelian 
+transmission.  The authors developed a simple algorithm for scanning trio data for unusual runs of 
+consecutive SNPs that, in a single family, have genotype configurations consistent with the presence of a deletion. 
+
+<H3>Hinds haploid hybridization analysis</H3>
 <P>
-Note that CNP intervals, as detailed by Sharp <em>et al</em>., were 
-converted from the July 2003 human genome assembly (NCBI Build 34) to the 
-May 2004 assembly (NCBI Build 35) using BLAT alignments of BAC End
-pairs and the UCSC liftOver tool.</P>
+Approximately 600 Mb of genomic DNA from 24 unrelated individuals
+was obtained from the Polymorphism Discovery Resource.
+Haploid hybridization was used to identify genomic intervals
+showing a reduced hybridization signal in comparison to the reference
+assembly.   PCR amplification was performed on 215 candidate deletions.
+100 deletions were selected that were unambiguously confirmed.
 
 <H3>Iafrate BAC microarray analysis</H3>
 <P>
@@ -116,34 +121,6 @@ at ~1 clone per 5,264 tested. </P>
 Further information is available from the 
 <A HREF="http://projects.tcag.ca/variation/" TARGET=_blank>Database of Genome 
 Variants</A> website.</P>
-<P>
-Note that CNP intervals, as detailed by Iafrate <em>et al</em>., were 
-converted from the July 2003 human genome assembly (NCBI Build 34) to the 
-May 2004 assembly (NCBI Build 35) using the UCSC liftOver tool.</P>
-
-<H3>Sebat ROMA</H3>
-<P>
-Following digestion with BglII or HindIII, genomic DNA was hybridized to a 
-custom array consisting of 85,000 oligonucleotide probes. The probes were 
-selected to be free of common repeats and have unique homology within the human 
-genome. The average resolution of the array was ~35kb; however, only intervals 
-in which three consecutive probes showed concordant signals were scored as 
-CNPs. All hybridizations were performed in duplicate incorporating a 
-dye-reversal, with the false positive rate estimated to be ~6%.</P>
-<P>
-Note that CNP intervals, as detailed by Sebat <em>et al</em>., were 
-converted from the April 2003 human genome assembly (NCBI Build 33) to the 
-July 2003 assembly (NCBI Build 34) and the May 2004 assembly
-(NCBI Build 35) using the UCSC liftOver tool.</P>
-
-<H3>Tuzun fosmid mapping</H3>
-<P>
-Paired-end sequences from a human fosmid DNA library were mapped to the assembly. 
-The average resolution of this 
-technique was ~8kb, and included 56 sites of inversion not detectable by 
-the array-based approaches.  However, because of the physical constraints of 
-fosmid insert size, this technique was unable to detect insertions greater than 
-40 kb in size.</P>
 
 <H3>McCarroll genotype analysis</H3>
 <P>
@@ -168,33 +145,7 @@ was statistically unexpected based on chance.  A set of statistical thresholds w
 tailored to each mode of failure, genotyping center and genotyping platform used in the
 project.  The same procedure could readily apply to dense SNP data from any
 platform or study.</P>
-<P>
-Note that deletions as detailed by McCarroll <em>et al</em>. were 
-converted from the July 2003 human genome assembly (NCBI Build 34) to the 
-May 2004 assembly (NCBI Build 35) using the UCSC liftOver tool.</P>
 
-
-<H3>Conrad genotype analysis</H3>
-<P>
-SNPs in regions that are hemizygous for a deletion are generally miscalled as homozygous 
-for the allele that is present.  Hence, when a deletion is transmitted from parent to child, 
-the genotypes at SNPs within the deletion region will often appear to violate the rules of Mendelian 
-transmission.  The authors developed a simple algorithm for scanning trio data for unusual runs of 
-consecutive SNPs that, in a single family, have genotype configurations consistent with the presence of a deletion. 
-
-<P>
-Note that deletions as detailed by Conrad <em>et al</em>. were 
-converted from the July 2003 human genome assembly (NCBI Build 34) to the 
-May 2004 assembly (NCBI Build 35) using the UCSC liftOver tool.</P>
-
-<H3>Hinds haploid hybridization analysis</H3>
-<P>
-Approximately 600 Mb of genomic DNA from 24 unrelated individuals
-was obtained from the Polymorphism Discovery Resource.
-Haploid hybridization was used to identify genomic intervals
-showing a reduced hybridization signal in comparison to the reference
-assembly.   PCR amplification was performed on 215 candidate deletions.
-100 deletions were selected that were unambiguously confirmed.
 <H3>Redon analysis of HapMap data</H3>
 <P>Experiments were performed with the International HapMap DNA and cell-line collection
 using two technologies: comparative analysis of hybridization intensities on
@@ -202,7 +153,45 @@ Affymetric GeneChip Human Mapping 500K early access arrays (500K EA)
 and comparative genomic hybridization with a Whole Genome TilePath (WGTP)
 array.
 
+<H3>Sebat ROMA</H3>
+<P>
+Following digestion with BglII or HindIII, genomic DNA was hybridized to a 
+custom array consisting of 85,000 oligonucleotide probes. The probes were 
+selected to be free of common repeats and have unique homology within the human 
+genome. The average resolution of the array was ~35kb; however, only intervals 
+in which three consecutive probes showed concordant signals were scored as 
+CNPs. All hybridizations were performed in duplicate incorporating a 
+dye-reversal, with the false positive rate estimated to be ~6%.</P>
+
+<H3>Sharp BAC microarray analysis</H3>
+<P>
+All hybridizations were performed in duplicate incorporating a dye-reversal 
+using a custom array consisting of 2,194 end-sequence or FISH-confirmed BACs, 
+targeted to regions of the genome flanked by segmental duplications. 
+The false positive rate was estimated at ~3 clones per 4,000 tested.</P>
+
+<H3>Tuzun fosmid mapping</H3>
+<P>
+Paired-end sequences from a human fosmid DNA library were mapped to the assembly. 
+The average resolution of this 
+technique was ~8kb, and included 56 sites of inversion not detectable by 
+the array-based approaches.  However, because of the physical constraints of 
+fosmid insert size, this technique was unable to detect insertions greater than 
+40 kb in size.</P>
+
+
 <H2>Validation</H2>
+<H3>Conrad genotype analysis</H3>
+<P>
+The authors first tested 12 predicted deletions using quantitative PCR. 
+For all 12 deletions they observed DNA concentrations consistent with transmission of a deletion 
+from parent to child. 
+<P>To provide more extensive validation by comparative genome hybridization (CGH), the authors designed a 
+custom oligonucleotide microarray comprised of 380,000 probes that tile across all 134 candidate deletions 
+identified in nine HapMap offspring (8 YRI and 1 CEU). 
+The results of this CGH analysis indicate that the majority (about 85%) of candidate deletions detected 
+by the method are real.
+
 <H3>McCarroll genotype analysis</H3>
 <P>
 Four methods of validation were used: 
@@ -242,17 +231,6 @@ Hardy-Weinberg equilibrium in all four populations surveyed, and transmission ra
 close to 50%.   This suggests that the deletions behave as a stable, heritable
 genetic polymorphism.
 </P>
-
-<H3>Conrad genotype analysis</H3>
-<P>
-The authors first tested 12 predicted deletions using quantitative PCR. 
-For all 12 deletions they observed DNA concentrations consistent with transmission of a deletion 
-from parent to child. 
-<P>To provide more extensive validation by comparative genome hybridization (CGH), the authors designed a 
-custom oligonucleotide microarray comprised of 380,000 probes that tile across all 134 candidate deletions 
-identified in nine HapMap offspring (8 YRI and 1 CEU). 
-The results of this CGH analysis indicate that the majority (about 85%) of candidate deletions detected 
-by the method are real.
 
 <H3>Redon analysis of HapMap data</H3>
 The authors utilized numerous quality meaures, including
