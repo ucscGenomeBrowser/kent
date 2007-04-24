@@ -13,7 +13,7 @@
 #include "memalloc.h"
 #include "dlist.h"
 
-static char const rcsid[] = "$Id: memalloc.c,v 1.30 2007/03/07 01:46:43 angie Exp $";
+static char const rcsid[] = "$Id: memalloc.c,v 1.31 2007/04/24 18:35:43 hiram Exp $";
 
 static void *defaultAlloc(size_t size)
 /* Default allocator. */
@@ -90,8 +90,8 @@ if (size == 0 || size >= maxAlloc)
     errAbort("needLargeMem: trying to allocate %llu bytes (limit: %llu)",
          (unsigned long long)size, (unsigned long long)maxAlloc);
 if ((pt = mhStack->alloc(size)) == NULL)
-    errAbort("needLargeMem: Out of memory - request size %llu bytes\n",
-             (unsigned long long)size);
+    errAbort("needLargeMem: Out of memory - request size %llu bytes, errno: %d\n",
+             (unsigned long long)size, errno);
 return pt;
 }
 
@@ -113,8 +113,8 @@ if (size == 0 || size >= maxAlloc)
     errAbort("needLargeMemResize: trying to allocate %llu bytes (limit: %llu)",
          (unsigned long long)size, (unsigned long long)maxAlloc);
 if ((pt = mhStack->realloc(vp, size)) == NULL)
-    errAbort("needLargeMemResize: Out of memory - request size %llu bytes\n",
-             (unsigned long long)size);
+    errAbort("needLargeMemResize: Out of memory - request size %llu bytes, errno: %d\n",
+             (unsigned long long)size, errno);
 return pt;
 }
 
@@ -135,8 +135,8 @@ void *pt;
 if (size == 0)
     errAbort("needHugeMem: trying to allocate 0 bytes");
 if ((pt = mhStack->alloc(size)) == NULL)
-    errAbort("needHugeMen: Out of huge memory - request size %llu bytes\n",
-             (unsigned long long)size);
+    errAbort("needHugeMem: Out of huge memory - request size %llu bytes, errno: %d\n",
+             (unsigned long long)size, errno);
 return pt;
 }
 
@@ -157,8 +157,8 @@ void *needHugeMemResize(void* vp, size_t size)
 {
 void *pt;
 if ((pt = mhStack->realloc(vp, size)) == NULL)
-    errAbort("needHugeMemResize: Out of memory - request resize %llu bytes\n",
-	(unsigned long long)size);
+    errAbort("needHugeMemResize: Out of memory - request resize %llu bytes, errno: %d\n",
+	(unsigned long long)size, errno);
 return pt;
 }
 
@@ -186,8 +186,8 @@ if (size == 0 || size > NEEDMEM_LIMIT)
     errAbort("needMem: trying to allocate %llu bytes (limit: %llu)",
          (unsigned long long)size, (unsigned long long)NEEDMEM_LIMIT);
 if ((pt = mhStack->alloc(size)) == NULL)
-    errAbort("needMem: Out of memory - request size %llu bytes\n",
-             (unsigned long long)size);
+    errAbort("needMem: Out of memory - request size %llu bytes, errno: %d\n",
+             (unsigned long long)size, errno);
 memset(pt, 0, size);
 return pt;
 }
