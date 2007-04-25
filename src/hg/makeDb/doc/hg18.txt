@@ -14852,3 +14852,53 @@ hgLoadBed -sqlTable=switchDbTss.sql hg18 switchDbTss hg18.bed
     priority 10
 
 ###########################################################################
+# BLASTZ/CHAIN/NET HORSE (equCab1) (STARTED 2/16/07, DONE 2/21/07, Fan)
+    ssh kkstore05
+    mkdir /cluster/data/equCab1/bed/blastz.hg18.2007-02-15
+    cd /cluster/data/equCab1/bed/blastz.hg18.2007-02-15
+# NOTE: THE TARGET WAS ORIGINALLY INTENDED TO BE HORSE, BUT I DID NOT
+# DISCOVER THIS UNTIL THE TASK IS DONE.
+    cat << '_EOF_' > DEF
+# Horse vs. Human
+
+BLASTZ_M=50
+
+# TARGET: Human Hg18
+SEQ1_DIR=/scratch/hg/hg18/nib
+SEQ1_LEN=/cluster/data/hg18/chrom.sizes 
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Horse equCab1
+SEQ2_DIR=/san/sanvol1/scratch/equCab1/equCab1.2bit
+SEQ2_LEN=/san/sanvol1/scratch/equCab1/chrom.sizes       
+# Maximum number of scaffolds that can be lumped together
+SEQ2_LIMIT=500     
+SEQ2_CHUNK=30000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/equCab1/bed/blastz.hg18.2007-02-15
+TMPDIR=/scratch/tmp
+'_EOF_'
+
+    # << this line keeps emacs coloring happy
+    doBlastzChainNet.pl DEF \
+      -bigClusterHub pk \
+      -chainMinScore=3000 -chainLinearGap=medium \
+      -blastzOutRoot /cluster/bluearc/equCab1/blastz.hg18 >& do.log &
+    tail -f do.log
+
+    ln -s blastz.hg18.2007-02-15 /cluster/data/hg18/bed/blastz.equCab1
+
+    nice featureBits hg18 -chrom=chr1 chainEquCab1Link
+    # 132947074 bases of 224999719 (59.088%) in intersection
+
+    ssh hgwdev
+    cd /cluster/data/equCab1/bed/blastz.hg18.2007-02-15
+
+    bash
+    time nice -n 19 featureBits hg18 chainEquCab1Link \
+	> fb.hg18.chainEquCab1Link.txt 2>&1 &
+    # 1643928877 bases of 2881515245 (57.051%) in intersection
+#########################################################################
+
