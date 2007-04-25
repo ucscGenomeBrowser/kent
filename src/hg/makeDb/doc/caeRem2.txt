@@ -4,7 +4,7 @@
 #	From Wash U GSC
 #	http://genome.wustl.edu/genome.cgi?GENOME=Caenorhabditis+remanei
 
-#  $Id: caeRem2.txt,v 1.6 2007/04/23 18:18:22 hiram Exp $
+#  $Id: caeRem2.txt,v 1.7 2007/04/25 17:09:08 hiram Exp $
 
 #########################################################################
 # DOWNLOAD SEQUENCE (DONE - 2007-03-16 - Hiram)
@@ -353,7 +353,7 @@ dbDbSpeciesDir worm
     cp -p jkStuff/11.ooc /san/sanvol1/scratch/worms/caeRem2
 
 #########################################################################
-# GENBANK AUTO UPDATE (DONE - 2007-04-23 - Hiram)
+# GENBANK AUTO UPDATE (DONE - 2007-04-23,25 - Hiram)
     # align with latest genbank process.
     ssh hgwdev
     cd ~/kent/src/hg/makeDb/genbank
@@ -387,14 +387,13 @@ caeRem2.perChromTables = no
     cd /cluster/data/genbank
     time nice -n +19 bin/gbAlignStep -initial caeRem2 &
     #	logFile: var/build/logs/2007.04.23-10:12:10.caeRem2.initalign.log
-XXX - running 2007-04-23 10:12
-    #	real    230m8.123s
+    #	real    192m41.703s
 
     # load database when finished
     ssh hgwdev
     cd /cluster/data/genbank
     time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad caeRem2
-    #	logFile: var/
+    #	logFile: var/dbload/hgwdev/logs/2007.04.23-14:31:51.dbload.log
     #	real    6m57.557s
 
     # enable daily alignment and update of hgwdev
@@ -405,3 +404,15 @@ XXX - running 2007-04-23 10:12
         etc/hgwdev.dbs
     cvs ci -m "Added caeRem2 - C. remanei" etc/align.dbs etc/hgwdev.dbs
     make etc-update
+
+############################################################################
+#  BLATSERVERS ENTRY (DONE - 2007-04-23 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("caeRem2", "blat10", "17788", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("caeRem2", "blat10", "17789", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
