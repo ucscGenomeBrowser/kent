@@ -62,7 +62,6 @@ struct coloredExon *list = NULL;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 int numFields = 0, nf = 0;
 char *words[13];
-char *line = NULL;
 boolean byTab = FALSE;
 /* If there is something in the file then read it. If file
    is empty return NULL. */
