@@ -168,104 +168,104 @@ origAssembly hg17
     subTrack encodeGencodeRaceFrags
     shortLabel RACEfrags Brain
     longLabel Gencode RACEfrags from Brain
-    color 250,5,255
+    color 248,0,8
     priority 2
 
     track encodeGencodeRaceFragsColon
     subTrack encodeGencodeRaceFrags
     shortLabel RACEfrags Colon
     longLabel Gencode RACEfrags from Colon
-    color 248,0,8
+    color 250,5,255
     priority 3
     
-    track encodeGencodeRaceFragsGM06990
-    subTrack encodeGencodeRaceFrags
-    shortLabel RACEfrags GM06990
-    longLabel Gencode RACEfrags from GM06990 cells
-    color 225,30,255
-    priority 4
-
-    track encodeGencodeRaceFragsHL60
-    subTrack encodeGencodeRaceFrags
-    shortLabel RACEfrags HL60
-    longLabel Gencode RACEfrags from HL60 cells
-    color 212,0,44
-    priority 5
-    
-    track encodeGencodeRaceFragsHela
-    subTrack encodeGencodeRaceFrags
-    shortLabel RACEfrags HeLa
-    longLabel Gencode RACEfrags from HeLa cells
-    color 236,0,20
-    priority 6
-
     track encodeGencodeRaceFragsHeart
     subTrack encodeGencodeRaceFrags
     shortLabel RACEfrags Heart
     longLabel Gencode RACEfrags from Heart
-    color 200,0,56
-    priority 7
+    color 225,30,255
+    priority 4
 
     track encodeGencodeRaceFragsKidney
     subTrack encodeGencodeRaceFrags
     shortLabel RACEfrags Kidney
     longLabel Gencode RACEfrags from Kidney
-    color 188,0,68
-    priority 8
+    color 212,0,44
+    priority 5
 
     track encodeGencodeRaceFragsLiver
     subTrack encodeGencodeRaceFrags
     shortLabel RACEfrags Liver
     longLabel Gencode RACEfrags from Liver
-    color 176,0,80
-    priority 9
+    color 236,0,20
+    priority 6
 
     track encodeGencodeRaceFragsLung
     subTrack encodeGencodeRaceFrags
     shortLabel RACEfrags Lung
     longLabel Gencode RACEfrags from Lung
-    color 164,0,92
-    priority 10
+    color 200,0,56
+    priority 7
 
     track encodeGencodeRaceFragsMuscle
     subTrack encodeGencodeRaceFrags
     shortLabel RACEfrags Muscle
     longLabel Gencode RACEfrags from Muscle
-    color 152,0,104
-    priority 11
+    color 188,0,68
+    priority 8
 
     track encodeGencodeRaceFragsPlacenta
     subTrack encodeGencodeRaceFrags
     shortLabel RACEfrags Placenta
     longLabel Gencode RACEfrags from Placenta
-    color 140,0,116
-    priority 12
+    color 176,0,80
+    priority 9
 
     track encodeGencodeRaceFragsSmallIntest
     subTrack encodeGencodeRaceFrags
     shortLabel RACEfrags Sm Int
     longLabel Gencode RACEfrags from Small Intestine
-    color 128,0,128
-    priority 13
+    color 164,0,92
+    priority 10
 
     track encodeGencodeRaceFragsSpleen
     subTrack encodeGencodeRaceFrags
     shortLabel RACEfrags Spleen
     longLabel Gencode RACEfrags from Spleen
-    color 125,130,255
-    priority 14
+    color 152,0,104
+    priority 11
 
     track encodeGencodeRaceFragsStomach
     subTrack encodeGencodeRaceFrags
     shortLabel RACEfrags Stomach
     longLabel Gencode RACEfrags from Stomach
-    color 100,155,255
-    priority 15
+    color 140,0,116
+    priority 12
 
     track encodeGencodeRaceFragsTestis
     subTrack encodeGencodeRaceFrags
     shortLabel RACEfrags Testis
     longLabel Gencode RACEfrags from Testis
+    color 128,0,128
+    priority 13
+
+    track encodeGencodeRaceFragsGM06990
+    subTrack encodeGencodeRaceFrags
+    shortLabel RACEfrags GM06990
+    longLabel Gencode RACEfrags from GM06990 cells
+    color 125,130,255
+    priority 14
+
+    track encodeGencodeRaceFragsHL60
+    subTrack encodeGencodeRaceFrags
+    shortLabel RACEfrags HL60
+    longLabel Gencode RACEfrags from HL60 cells
+    color 100,155,255
+    priority 15
+
+    track encodeGencodeRaceFragsHela
+    subTrack encodeGencodeRaceFrags
+    shortLabel RACEfrags HeLaS3
+    longLabel Gencode RACEfrags from HeLaS3 cells
     color 75,180,255
     priority 16
 
