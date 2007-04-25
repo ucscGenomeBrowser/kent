@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.123 2007/04/25 17:43:59 heather Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.124 2007/04/25 22:21:07 heather Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -1885,6 +1885,11 @@ if (cnpFo->name[0] == 'D')
 return MG_BLACK;
 }
 
+Color cnpTuzunItemColor (struct track *tg, void *item, struct vGfx *vg)
+{
+return MG_GRAY;
+}
+
 Color cnpRedonItemColor (struct track *tg, void *item, struct vGfx *vg)
 {
 return MG_GRAY;
@@ -1994,6 +1999,12 @@ tg->loadItems = cnpLockeLoadItems;
 tg->freeItems = cnpLockeFreeItems;
 tg->itemColor = cnpLockeItemColor;
 tg->itemNameColor = cnpLockeItemColor;
+}
+
+void cnpTuzunMethods(struct track *tg)
+{
+tg->itemColor = cnpTuzunItemColor;
+tg->itemNameColor = cnpTuzunItemColor;
 }
 
 void delConradMethods(struct track *tg)

@@ -288,6 +288,12 @@ Color cnpLockeColor(struct track *tg, void *item, struct vGfx *vg);
 void cnpLockeMethods(struct track *tg);
 /* methods for cnpLocke */
 
+Color cnpTuzunColor(struct track *tg, void *item, struct vGfx *vg);
+/* always gray */
+
+void cnpTuzunMethods(struct track *tg);
+/* methods for cnpTuzun */
+
 Color delConradColor(struct track *tg, void *item, struct vGfx *vg);
 /* always red */
 
