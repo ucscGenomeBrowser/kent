@@ -2445,3 +2445,69 @@ TMPDIR=/scratch/tmp
 
     nice featureBits -chrom=chr1 canFam2 chainFelCat3Link
     # 65223887 bases of 121613690 (53.632%) in intersection
+
+#########################################################################
+# BLASTZ/CHAIN/NET DOG AND HORSE (DONE 2/19/07 Fan)
+    ssh kkstore05
+    mkdir /cluster/data/equCab1/bed/blastz.canFam2.2007-02-18
+    cd /cluster/data/equCab1/bed/blastz.canFam2.2007-02-18
+    cat << '_EOF_' > DEF
+# Horse vs. Dog
+
+BLASTZ_M=50
+
+# TARGET: Horse equCab1
+SEQ1_DIR=/san/sanvol1/scratch/equCab1/equCab1.2bit
+SEQ1_LEN=/san/sanvol1/scratch/equCab1/chrom.sizes       
+# Maximum number of scaffolds that can be lumped together
+SEQ1_LIMIT=500     
+SEQ1_CHUNK=30000000
+SEQ1_LAP=10000
+
+# QUERY: Dog canFam2
+SEQ2_DIR=/scratch/hg/canFam2/nib
+SEQ2_LEN=/cluster/data/canFam2/chrom.sizes 
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/equCab1/bed/blastz.canFam2.2007-02-18
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+doBlastzChainNet.pl DEF -chainMinScore=3000 -chainLinearGap=medium \
+      -bigClusterHub pk \
+      -blastzOutRoot /cluster/bluearc/equCab1CanFam2 >& do.log &
+    tail -f do.log
+
+# 6 jobs failed.
+# Robert re-ran those 6 jobs. (2/22/07)
+
+doBlastzChainNet.pl DEF -chainMinScore=3000 -chainLinearGap=medium \
+-continue cat -bigClusterHub pk \
+-blastzOutRoot /cluster/bluearc/equCab1CanFam2 >& do2.log &
+tail -f do2.log
+    ln -s blastz.canFam2.2007-02-18 /cluster/data/equCab1/bed/blastz.canFam2
+    
+    ssh hgwdev
+    nice featureBits equCab1 -chrom=chrI chainCanFam2Link
+    # 128747357 bases of 177498097 (72.534%) in intersection
+
+    bash
+    time nice -n 19 featureBits equCab1 chainCanFam2Link \
+	> fb.equCab1.chainCanFam2Link.txt 2>&1
+    # 1717664968 bases of 2421923695 (70.922%) in intersection
+
+    ssh kkstore04
+    mkdir /cluster/data/canFam2/bed/blastz.equCab1.swap
+    cd /cluster/data/canFam2/bed/blastz.equCab1.swap
+    bash
+    time doBlastzChainNet.pl \
+	/cluster/data/equCab1/bed/blastz.canFam2.2007-02-18/DEF \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	-verbose=2 -swap -bigClusterHub=pk > swap.log 2>&1 &
+    # real    115m55.880s
+
+    cat *.txt
+    # 1673177547 bases of 2384996543 (70.154%) in intersection
+
+#########################################################################
