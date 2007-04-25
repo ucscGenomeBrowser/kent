@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: mm8.txt,v 1.43 2007/04/08 14:29:03 acs Exp $"
+#	"$Id: mm8.txt,v 1.44 2007/04/25 22:14:36 fanhsu Exp $"
 #
 
 #  NOTE:  this doc may have genePred loads that fail to include
@@ -8147,3 +8147,68 @@ chainOne $(path1)
     liftOver -genePred exoniphyHg18.gp /usr/data/hg18/dbDerived/netSynteny/hg18.mm8.syn.chain exoniphyMm8.gp unmapped
     (where hg18.mm8.syn.chain representes the human/mouse syntenic net)
 
+#########################################################################
+# BLASTZ/CHAIN/NET HORSE (DONE 2/21/07 Fan)
+    ssh kkstore05
+    mkdir /cluster/data/equCab1/bed/blastz.mm8.2007-02-17
+    cd /cluster/data/equCab1/bed/blastz.mm8.2007-02-17
+    cat << '_EOF_' > DEF
+# Horse vs. Mouse
+
+BLASTZ_M=50
+
+# TARGET: Horse equCab1
+SEQ1_DIR=/san/sanvol1/scratch/equCab1/equCab1.2bit
+SEQ1_LEN=/san/sanvol1/scratch/equCab1/chrom.sizes       
+# Maximum number of scaffolds that can be lumped together
+SEQ1_LIMIT=500     
+SEQ1_CHUNK=30000000
+SEQ1_LAP=10000
+
+# QUERY: Mouse mm8
+SEQ2_DIR=/scratch/hg/mm8/mm8.2bit
+SEQ2_LEN=/cluster/data/mm8/chrom.sizes 
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/equCab1/bed/blastz.mm8.2007-02-17
+TMPDIR=/scratch/tmp
+'_EOF_'
+
+    # << this line keeps emacs coloring happy
+    doBlastzChainNet.pl DEF \
+      -bigClusterHub pk \
+      -chainMinScore=3000 -chainLinearGap=medium \
+      -blastzOutRoot /cluster/bluearc/equCab1/blastz.mm8 >& do.log &
+    tail -f do.log
+
+    ssh hgwdev
+    cd /cluster/data/equCab1/bed/blastz.mm8.2007-02-17
+    ln -s blastz.mm8.2007-02-17 /cluster/data/equCab1/bed/blastz.mm8
+    nice featureBits equCab1 -chrom=chr1 chainMm8Link
+# 70800969 bases of 177498097 (39.888%) in intersection
+
+    bash
+    time nice -n 19 featureBits equCab1 chainMm8Link \
+	> fb.equCab1.chainMm8Link.txt 2>&1
+# 903993981 bases of 2421923695 (37.325%) in intersection
+
+    ssh kkstore05
+    mkdir /cluster/data/mm8/bed/blastz.equCab1.swap
+    cd /cluster/data/mm8/bed/blastz.equCab1.swap
+    bash
+    time doBlastzChainNet.pl \
+	/cluster/data/equCab1/bed/blastz.mm8.2007-02-17/DEF \
+	-chainMinScore=3000 -chainLinearGap=medium \
+	-verbose=2 -swap -bigClusterHub=pk > swap.log 2>&1 &
+    tail -f swap.log
+# real    76m34.873s
+
+    ssh hgwdev
+    cd /cluster/data/mm8/bed/blastz.equCab1.swap
+    bash
+    time nice -n 19 featureBits mm8 chainEquCab1Link \
+	> fb.mm8.chainEquCab1Link.txt 2>&1
+    # 906568751 bases of 2567283971 (35.312%) in intersection
+
+#########################################################################
