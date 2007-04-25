@@ -1085,7 +1085,7 @@ type bed 4 +
     track cnpLocke
     subTrack cnp
     shortLabel Locke CNPs
-    longLabel Copy Number Polymorphisms from BAC microarrays (Locke)
+    longLabel Copy Number Polymorphisms from BAC Microarray Analysis (Locke)
     noInherit on
     type bed 4 +
     priority 4
