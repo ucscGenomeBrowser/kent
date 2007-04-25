@@ -3,7 +3,7 @@
 # Pristionchus pacificus
 #	Washington University School of Medicine GSC and Sanger Institute
 #
-#  $Id: priPac1.txt,v 1.3 2007/04/23 18:18:23 hiram Exp $
+#  $Id: priPac1.txt,v 1.4 2007/04/25 17:02:55 hiram Exp $
 ###########################################################################
 ## Download sequence - (DONE - 2007-02-25 - Hiram)
     ssh kkstore02
@@ -278,7 +278,7 @@ TMPDIR=/scratch/tmp
     cp -p jkStuff/11.ooc /san/sanvol1/scratch/worms/priPac1
 
 #########################################################################
-# GENBANK AUTO UPDATE (DONE - 2007-04-23 - Hiram)
+# GENBANK AUTO UPDATE (DONE - 2007-04-23,25 - Hiram)
     # align with latest genbank process.
     ssh hgwdev
     cd ~/kent/src/hg/makeDb/genbank
@@ -316,18 +316,14 @@ priPac1.perChromTables = no
     cd /cluster/data/genbank
     time nice -n +19 bin/gbAlignStep -initial priPac1 &
     #	logFile: var/build/logs/2007.04.23-10:35:55.priPac1.initalign.log
-XXXX - running - 2007-04-23 10:36
-    #	real    230m8.123s
+    #	real    199m22.907s
 
     # load database when finished
     ssh hgwdev
     cd /cluster/data/genbank
     time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad priPac1
-    #	logFile: var/dbload/hgwdev/logs/2007.03.27-07:52:23.dbload.log
-    #	real    6m57.557s
-    ## re-load to get the est track after adding that to the .conf file
-    #	var/dbload/hgwdev/logs/2007.03.29-17:09:35.dbload.log
-    #	real    19m2.168s
+    #	logFile: var/dbload/hgwdev/logs/2007.04.25-09:26:37.dbload.log
+    #	real    20m2.686s
 
     # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank
@@ -337,3 +333,15 @@ XXXX - running - 2007-04-23 10:36
         etc/hgwdev.dbs
     cvs ci -m "Added priPac1 - P. pacificus" etc/align.dbs etc/hgwdev.dbs
     make etc-update
+
+############################################################################
+#  BLATSERVERS ENTRY (DONE - 2007-04-23 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("priPac1", "blat11", "17786", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("priPac1", "blat11", "17787", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
