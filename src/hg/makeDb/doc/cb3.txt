@@ -3,7 +3,7 @@
 # Caenorhabditis briggsae
 #	Washington University School of Medicine GSC and Sanger Institute
 #
-#  $Id: cb3.txt,v 1.6 2007/04/22 03:40:21 hiram Exp $
+#  $Id: cb3.txt,v 1.7 2007/04/25 17:08:33 hiram Exp $
 
 ###########################################################################
 ## Download sequence (DONE - 2007-01-22 - Hiram)
@@ -167,6 +167,15 @@ cb3.downloadDir = cb3
     #	real    19m32.844s - second time
     #	logFile:  var/dbload/hgwdev/logs/2007.04.05-11:06:36.dbload.log
     #	real    9m34.634s - first time
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+    # add cb3 to:
+        etc/align.dbs
+        etc/hgwdev.dbs
+    cvs ci -m "Added cb3 - C. briggsae" etc/align.dbs etc/hgwdev.dbs
+    make etc-update
 
 ############################################################################
 #  BLATSERVERS ENTRY (DONE - 2007-04-05 - Hiram)
