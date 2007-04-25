@@ -9,7 +9,7 @@
 #include "customTrack.h"
 #include "customFactory.h"
 
-static char const rcsid[] = "$Id: refreshNamedSessionCustomTracks.c,v 1.3 2007/04/25 05:24:49 angie Exp $";
+static char const rcsid[] = "$Id: refreshNamedSessionCustomTracks.c,v 1.4 2007/04/25 17:30:37 angie Exp $";
 
 #define savedSessionTable "namedSessionDb"
 
@@ -19,10 +19,13 @@ void usage()
 errAbort(
   "refreshNamedSessionCustomTracks -- scan central database's %s\n"
   "    contents for custom tracks and touch any that are found, to prevent\n"
-  "    them from being removed by the custom track cleanup process.  This is\n"
-  "    intended to be run as a nightly cron job on each central db host.\n"
+  "    them from being removed by the custom track cleanup process.\n"
   "usage:\n"
   "    refreshNamedSessionCustomTracks hgcentral[test,beta]\n"
+  "This is intended to be run as a nightly cron job for each central db.\n"
+  "The ~/.hg.conf file (or $HGDB_CONF) must specify the same central db\n"
+  "as the command line.  [The command line arg exists only to suppress this\n"
+  "message].\n"
   "\n",
   savedSessionTable
   );
@@ -78,9 +81,16 @@ void refreshNamedSessionCustomTracks(char *centralDbName)
 /* refreshNamedSessionCustomTracks -- cron robot for keeping alive custom 
  * tracks that are referenced by saved sessions. */
 {
-struct sqlConnection *conn = sqlConnect(centralDbName);
+struct sqlConnection *conn = hConnectCentral();
+char *actualDbName = sqlGetDatabase(conn);
 int liveCount=0, expiredCount=0;
-verbose(2, "Got connection to %s\n", centralDbName);
+
+if (!sameString(centralDbName, actualDbName))
+    errAbort("Central database specified in hg.conf file is %s but %s "
+	     "was specified on the command line.",
+	     actualDbName, centralDbName);
+else
+    verbose(2, "Got connection to %s\n", centralDbName);
 
 if (sqlTableExists(conn, savedSessionTable))
     {
@@ -97,7 +107,7 @@ if (sqlTableExists(conn, savedSessionTable))
     sqlFreeResult(&sr);
     }
 
-sqlDisconnect(&conn);
+hDisconnectCentral(&conn);
 verbose(1, "Found %d live and %d expired custom tracks in %s.\n",
 	liveCount, expiredCount, centralDbName);
 }
