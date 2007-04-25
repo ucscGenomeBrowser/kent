@@ -4509,4 +4509,65 @@ synBlastp.csh rn4 mm8
     ln -s /cluster/data/rn4/bed/qual/qual.wib /gbdb/rn4/wib/
     hgLoadWiggle -pathPrefix=/gbdb/rn4/wib rn4 quality qual.wig
 
+##########################################################################
+# BLASTZ/CHAIN/NET HORSE AND RAT (DONE 2/18/07 Fan)
+    ssh kkstore05
+    mkdir /cluster/data/equCab1/bed/blastz.rn4.2007-02-18
+    cd /cluster/data/equCab1/bed/blastz.rn4.2007-02-18
+    cat << '_EOF_' > DEF
+# Horse vs. Rat
 
+BLASTZ_M=50
+
+# TARGET: Horse equCab1
+SEQ1_DIR=/san/sanvol1/scratch/equCab1/equCab1.2bit
+SEQ1_LEN=/san/sanvol1/scratch/equCab1/chrom.sizes       
+# Maximum number of scaffolds that can be lumped together
+SEQ1_LIMIT=500     
+SEQ1_CHUNK=30000000
+SEQ1_LAP=10000
+
+# QUERY: Mouse rn4
+SEQ2_DIR=/scratch/hg/rn4/nib
+SEQ2_LEN=/cluster/data/rn4/chrom.sizes 
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/equCab1/bed/blastz.rn4.2007-02-18
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+doBlastzChainNet.pl DEF -chainMinScore=3000 -chainLinearGap=medium \
+      -bigClusterHub pk \
+      -blastzOutRoot /cluster/bluearc/equCab1Rn4 >& do.log &
+    tail -f do.log
+
+    ssh hgwdev
+    cd /cluster/data/equCab1/bed
+    ln -s blastz.rn4.2007-02-18 /cluster/data/equCab1/bed/blastz.rn4
+    nice featureBits equCab1 -chrom=chr1 chainRn4Link
+# 67408374 bases of 177498097 (37.977%) in intersection
+
+    bash
+    time nice -n 19 featureBits equCab1 chainRn4Link \
+	> fb.equCab1.chainRn4Link.txt 2>&1
+    #	859116859 bases of 2421923695 (35.472%) in intersection
+
+    ssh kkstore05
+    mkdir /cluster/data/rn4/bed/blastz.equCab1.swap
+    cd /cluster/data/rn4/bed/blastz.equCab1.swap
+    bash
+    time doBlastzChainNet.pl \
+	/cluster/data/equCab1/bed/blastz.rn4.2007-02-18/DEF \
+	-chainMinScore=3000 -chainLinearGap=medium \
+	-verbose=2 -swap -bigClusterHub=pk \
+	-blastzOutRoot /cluster/bluearc/equCab1Rn4 > swap.log 2>&1 &
+
+    ssh hgwdev
+    cd /cluster/data/rn4/bed/blastz.equCab1.swap
+    bash
+    time nice -n 19 featureBits rn4 chainEquCab1Link \
+	> fb.rn4.chainEquCab1Link.txt 2>&1
+    # 867029914 bases of 2571531505 (33.716%) in intersection
+
+#########################################################################
