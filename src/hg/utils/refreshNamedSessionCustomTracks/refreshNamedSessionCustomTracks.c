@@ -9,7 +9,7 @@
 #include "customTrack.h"
 #include "customFactory.h"
 
-static char const rcsid[] = "$Id: refreshNamedSessionCustomTracks.c,v 1.2 2007/04/23 22:06:48 angie Exp $";
+static char const rcsid[] = "$Id: refreshNamedSessionCustomTracks.c,v 1.3 2007/04/25 05:24:49 angie Exp $";
 
 #define savedSessionTable "namedSessionDb"
 
@@ -33,7 +33,8 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-void scanSettingsForCT(char *userName, char *sessionName, char *contents)
+void scanSettingsForCT(char *userName, char *sessionName, char *contents,
+		       int *pLiveCount, int *pExpiredCount)
 /* Parse the CGI-encoded session contents into {var,val} pairs and search
  * for custom tracks.  If found, refresh the custom track.  Parsing code 
  * taken from cartParseOverHash. */
@@ -56,13 +57,17 @@ while (isNotEmpty(namePt))
 	boolean thisGotLiveCT = FALSE, thisGotExpiredCT = FALSE;
 	verbose(3, "Found variable %s = %s\n", namePt, dataPt);
 	customFactoryTestExistence(dataPt, &thisGotLiveCT, &thisGotExpiredCT);
+	if (thisGotLiveCT && pLiveCount != NULL)
+	    (*pLiveCount)++;
+	if (thisGotExpiredCT && pExpiredCount != NULL)
+	    (*pExpiredCount)++;
 	if (thisGotExpiredCT)
 	    {
 	    if (verboseLevel() >= 3)
-		warn("Found expired custom track in %s %s: %s",
-		     userName, sessionName, dataPt);
+		verbose(3, "Found expired custom track in %s %s: %s\n",
+			userName, sessionName, dataPt);
 	    else
-		warn("Found expired custom track: %s", dataPt);
+		verbose(2, "Found expired custom track: %s\n", dataPt);
 	    }
 	}
     namePt = nextNamePt;
@@ -74,6 +79,7 @@ void refreshNamedSessionCustomTracks(char *centralDbName)
  * tracks that are referenced by saved sessions. */
 {
 struct sqlConnection *conn = sqlConnect(centralDbName);
+int liveCount=0, expiredCount=0;
 verbose(2, "Got connection to %s\n", centralDbName);
 
 if (sqlTableExists(conn, savedSessionTable))
@@ -86,12 +92,14 @@ if (sqlTableExists(conn, savedSessionTable))
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
 	{
-	scanSettingsForCT(row[0], row[1], row[2]);
+	scanSettingsForCT(row[0], row[1], row[2], &liveCount, &expiredCount);
 	}
     sqlFreeResult(&sr);
     }
 
 sqlDisconnect(&conn);
+verbose(1, "Found %d live and %d expired custom tracks in %s.\n",
+	liveCount, expiredCount, centralDbName);
 }
 
 
