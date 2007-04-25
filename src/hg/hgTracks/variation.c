@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.122 2007/04/05 05:34:25 heather Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.123 2007/04/25 17:43:59 heather Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -1746,6 +1746,11 @@ void cnpRedonLoadItems(struct track *tg)
 bedLoadItem(tg, "cnpRedon", (ItemLoader)bedLoad);
 }
 
+void cnpLockeLoadItems(struct track *tg)
+{
+bedLoadItem(tg, "cnpLocke", (ItemLoader)cnpLockeLoad);
+}
+
 void cnpSharpFreeItems(struct track *tg)
 {
 cnpSharpFreeList((struct cnpSharp**)&tg->items);
@@ -1782,6 +1787,11 @@ bedFreeList((struct bed**)&tg->items);
 }
 
 void cnpRedonFreeItems(struct track *tg)
+{
+bedFreeList((struct bed**)&tg->items);
+}
+
+void cnpLockeFreeItems(struct track *tg)
 {
 bedFreeList((struct bed**)&tg->items);
 }
@@ -1880,6 +1890,19 @@ Color cnpRedonItemColor (struct track *tg, void *item, struct vGfx *vg)
 return MG_GRAY;
 }
 
+Color cnpLockeItemColor(struct track *tg, void *item, struct vGfx *vg)
+{
+struct cnpLocke *thisItem = item;
+
+if (sameString(thisItem->variationType, "Gain"))
+    return MG_GREEN;
+if (sameString(thisItem->variationType, "Loss"))
+    return MG_RED;
+if (sameString(thisItem->variationType, "Gain and Loss"))
+    return MG_BLUE;
+return MG_BLACK;
+}
+
 Color delConradItemColor (struct track *tg, void *item, struct vGfx *vg)
 {
 return MG_RED;
@@ -1889,7 +1912,6 @@ Color delConrad2ItemColor (struct track *tg, void *item, struct vGfx *vg)
 {
 return MG_RED;
 }
-
 
 Color delMccarrollItemColor (struct track *tg, void *item, struct vGfx *vg)
 {
@@ -1964,6 +1986,14 @@ tg->loadItems = cnpRedonLoadItems;
 tg->freeItems = cnpRedonFreeItems;
 tg->itemColor = cnpRedonItemColor;
 tg->itemNameColor = cnpRedonItemColor;
+}
+
+void cnpLockeMethods(struct track *tg)
+{
+tg->loadItems = cnpLockeLoadItems;
+tg->freeItems = cnpLockeFreeItems;
+tg->itemColor = cnpLockeItemColor;
+tg->itemNameColor = cnpLockeItemColor;
 }
 
 void delConradMethods(struct track *tg)

@@ -108,7 +108,7 @@
 #include "hapmapTrack.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1321 2007/04/19 23:22:11 hartera Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1322 2007/04/25 17:43:58 heather Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -12909,6 +12909,7 @@ registerTrackHandler("cnpSebat", cnpSebatMethods);
 registerTrackHandler("cnpSebat2", cnpSebat2Methods);
 registerTrackHandler("cnpFosmid", cnpFosmidMethods);
 registerTrackHandler("cnpRedon", cnpRedonMethods);
+registerTrackHandler("cnpLocke", cnpLockeMethods);
 registerTrackHandler("delConrad", delConradMethods);
 registerTrackHandler("delConrad2", delConrad2Methods);
 registerTrackHandler("delMccarroll", delMccarrollMethods);

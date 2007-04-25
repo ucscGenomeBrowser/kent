@@ -26,6 +26,7 @@
 #include "cnpSharp.h"
 #include "cnpSharp2.h"
 #include "cnpRedon.h"
+#include "cnpLocke.h"
 #include "cnpSharpSample.h"
 #include "cnpSharpCutoff.h"
 #include "hgTracks.h"
@@ -276,6 +277,16 @@ Color cnpRedonColor(struct track *tg, void *item, struct vGfx *vg);
 
 void cnpRedonMethods(struct track *tg);
 /* methods for cnpRedon */
+
+void cnpLockeLoadItems(struct track *tg);
+/* loader for cnpLocke table */
+
+void cnpLockeFreeItems(struct track *tg);
+
+Color cnpLockeColor(struct track *tg, void *item, struct vGfx *vg);
+
+void cnpLockeMethods(struct track *tg);
+/* methods for cnpLocke */
 
 Color delConradColor(struct track *tg, void *item, struct vGfx *vg);
 /* always red */
