@@ -144,17 +144,16 @@ visibility pack
 color 0, 10, 100
 altColor 0,90,10
 type wigMaf 0.0 1.0
-# maxHeightPixels 100:40:11
-# wiggle phastCons5way
-# spanList 1
+maxHeightPixels 100:40:11
+wiggle phastCons5way
+spanList 1
 pairwiseHeight 12
-# yLineOnOff Off
+yLineOnOff Off
 # frames multiz5wayFrames
 # irows on
-# autoScaleDefault Off
-# windowingFunction mean
+autoScaleDefault Off
+windowingFunction mean
 summary multiz5waySummary
 speciesOrder caePb1 caeRem2 cb3 priPac1
 treeImage phylo/ce4_5way.gif
 speciesCodonDefault ce4
-
