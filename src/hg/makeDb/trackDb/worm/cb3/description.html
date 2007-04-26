@@ -34,81 +34,58 @@ C. briggsae genome.  See the
 <A HREF="../goldenPath/help/hgTracksHelp.html"
     TARGET=_blank>User's Guide</A> for more information.
 <P>
-<TABLE border=0 CELLPADDING=0 CELLSPACING=0>
-    <TR><TH ALIGN=LEFT>Request:</TH>
-        <TH WIDTH=14>&nbsp;</TH>
-       	<TH ALIGN=LEFT>Genome Browser Response:</TH></TR>
-    <TR><TD VALIGN=Top COLSPAN=3>&nbsp;</TD></TR>
-    <TR><TD VALIGN=Top>chrUn:1-1000000</TD>
-        <TD WIDTH=14>&nbsp;</TD>
-       	<TD VALIGN=Top>Displays first million bases of chrUn</TD>
+<TABLE  border=0 CELLPADDING=0 CELLSPACING=0>
+    <TR><TD VALIGN=Top NOWRAP><B>Request:</B><BR></TD>
+       	<TD VALIGN=Top COLSPAN=2><B>&nbsp;&nbsp; Genome Browser Response:</B><BR></TD>
     </TR>
-    <TR><TD VALIGN=Top NOWRAP>chrUn:1000000+2000</TD>
+
+    <TR><TD VALIGN=Top><BR></TD></TR>
+    <TR><TD VALIGN=Top NOWRAP>chrI</TD>
        	<TD WIDTH=14></TD>
-       	<TD VALIGN=Top>Displays a region of chrUn that spans 2000 bases, starting with position 1000000 </TD>
+       	<TD VALIGN=Top>Displays all of chromosome I</TD>
     </TR>
-    <TR><TD VALIGN=Top COLSPAN=3>&nbsp;<br></TD></TR>
-    <TR><TD VALIGN=Top>BX950328</TD>
-        <TD WIDTH=14>&nbsp;</TD>
-       	<TD VALIGN=Top>Displays region of mRNA with GenBank accession
-		number BX950328</TD>
+
+    <TR><TD VALIGN=Top NOWRAP>chrI:1-1000000</TD>
+       	<TD WIDTH=14></TD>
+       	<TD VALIGN=Top>Displays the first million bases of chrI</TD>
     </TR>
-    <TR><TD VALIGN=Top>BU335953</TD>
-        <TD WIDTH=14>&nbsp;</TD>
-      	<TD VALIGN=Top>Displays region of EST with GenBank accession
-		BU335953 on chr Z</TD>
+    <TR><TD VALIGN=Top NOWRAP>chrV:1000000+2000</TD>
+       	<TD WIDTH=14></TD>
+       	<TD VALIGN=Top>Displays a region of chrVn that spans 2000 bases, starting at position 1000000 </TD>
     </TR>
-    <TR><TD VALIGN=Top COLSPAN=3>&nbsp;<br></TD></TR>
-    <TR><TD VALIGN=Top>pseudogene mRNA</TD>
-        <TD WIDTH=14>&nbsp;</TD>
-       	<TD VALIGN=Top>Lists transcribed pseudogenes, but not cDNAs</TD>
+    <TR><TD VALIGN=Top NOWRAP>R02870</TD>
+       	<TD WIDTH=14></TD>
+       	<TD VALIGN=Top>Displays region of EST associated with GenBank accession R02870</TD>
     </TR>
-    <TR><TD VALIGN=Top>homeobox caudal</TD>
-        <TD WIDTH=14>&nbsp;</TD>
-       	<TD VALIGN=Top>Lists mRNAs for caudal homeobox genes</TD>
+
+    <TR><TD VALIGN=Top NOWRAP>U48289</TD>
+       	<TD WIDTH=14></TD>
+       	<TD VALIGN=Top>Displays the region associated with the mRNA accession U48289</TD>
     </TR>
-    <TR><TD VALIGN=Top>zinc finger</TD>
-        <TD WIDTH=14>&nbsp;</TD>
-       	<TD VALIGN=Top>Lists many zinc finger mRNAs</TD>
+
+    <TR><TD VALIGN=Top NOWRAP>protein phosphatase PP2C </TD>
+       	<TD WIDTH=14></TD>
+       	<TD VALIGN=Top>Lists only records pertaining to protein phophatase PP2C</TD>
     </TR>
-    <TR><TD VALIGN=Top>kruppel zinc finger</TD>
-        <TD WIDTH=14>&nbsp;</TD>
-       	<TD VALIGN=Top>Lists only kruppel-like zinc fingers</TD>
+
+    <TR><TD VALIGN=Top NOWRAP>Kimble,J.</TD>
+       	<TD WIDTH=14></TD>
+       	<TD VALIGN=Top>Lists mRNAs deposited by co-author J. Kimble</TD>
     </TR>
-    <TR><TD VALIGN=Top>zhang</TD>
-        <TD WIDTH=14>&nbsp;</TD>
-	<TD VALIGN=Top>Lists mRNAs deposited by scientist named Zhang</TD>
-    </TR>
-    <TR><TD VALIGN=Top>Taguchi,T.</TD>
-        <TD WIDTH=14>&nbsp;</TD>
-       	<TD VALIGN=Top>Lists mRNAs deposited by co-author T. Taguchi</TD>
-    </TR>
-    <TR><TD VALIGN=Top COLSPAN=3>&nbsp;</TD></TR>
-    <TR><TD COLSPAN="3"> Use this last format for author queries. Although
-	GenBank requires the search format <em>Taguchi T</em>, internally it
-	uses the format <em>Taguchi,T.</em>.</TD>
+    <TR><TD VALIGN=Top><BR></TD></TR>
+    <TR><TD COLSPAN="3"> Use this last format for author queries.
+	Although GenBank requires the search format <em>Kimble J</em>,
+	internally it uses the format <em>Kimble,J.</em>.</TD>
     </TR>
 </TABLE>
+<TABLE border=0 CELLPADDING=0 CELLSPACING=0>
 
 <HR>
 <H3>Assembly details</H3>
 <P>
-This version was assembled from 2.05 million whole genome shotgun
-(WGS) reads, of which 88.2% were in read pairs. The sequence reads
-were generated at Washington University School of Medicine's Genome
-Sequencing Center and the Sanger Centre (Hinxton, UK).  The Phusion
-(Mullikin, J) assembler was used to assemble the WGS reads into
-contigs based on overlap information, and then into supercontigs using
-read pair information to cross gaps. These supercontigs were assembled
-into mapped ultracontigs based on FPC fingerprint mapping (generated
-at Washington University School of Medicine's Genome Sequencing
-Center), with material from previously finished clones used to bridge
-gaps. Using the sequence data to choose primers along major
-ultracontigs, a genetic map (Ray Miller, Washington University School
-of Medicine) was constructed which yielded 6 chromosomes.  The genetic
-mapping data along with data from 1:1 elegans:briggsae orthologs were
-used to refine ultracontigs and to order and orient the sequences
-along the C. briggsae chromosomes.
+See also:
+<A HREF="ftp://genome.wustl.edu/pub/organism/Invertebrates/Caenorhabditis_briggsae/assembly/Caenorhabditis_briggsae-1.0/ASSEMBLY"
+	TARGET=_blank>genome.wustl.edu</A> assembly description.
 </P>
 <P>
 The six chromosomes are named: chrI, chrII, chrIII, chrIV, chrV and chrX,
@@ -124,21 +101,19 @@ estimate that this whole genome shotgun assembly achieved 98% coverage
 of the genome.
 </P>
 <P>
-The briggsae 
-mitochondrial sequence is also available as the virtual chromosome 
-&quot;chrM&quot;. 
+The briggsae mitochondrial sequence, length 14,420 bp, is also available
+as the virtual chromosome &quot;chrM&quot;.  Genbank accession:
+<A HREF="http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?db=nucleotide&val=95102164"
+	TARGET=_blank>AC186293.1</A>
 </P>
-
 
 <P>
 Bulk downloads of the sequence and annotation data are available via 
 the Genome Browser <A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/cb3/">FTP
 server</A> or the <A HREF="http://hgdownload.cse.ucsc.edu/downloads.html#c_briggsae">Downloads</A> page. 
 
-  *** Developer -- remove this if no conditions for use:
 These data have
-<A HREF="../goldenPath/credits.html#c_briggsae_use">specific 
-conditions for use</A>. 
+<A HREF="http://genome.wustl.edu/data.cgi" TARGET=_blank>specific conditions for use</A>. 
 
 The C. briggsae browser annotation tracks were generated by UCSC and 
 collaborators worldwide. See the 
