@@ -3896,6 +3896,17 @@ searchMethod prefix
 query select chrom, txStart,txEnd, name from %s where name like '%s%%'
 searchPriority 50
 
+searchTable encodeGencodeRaceFragsPrimer
+searchType genePred
+termRegex 5RACE[0-9]+_primer 
+searchPriority 51
+
+searchTable encodeGencodeRaceFragsPrimer
+searchType genePred
+searchMethod prefix
+termRegex 5RACE[0-9]+ 
+searchPriority 52
+
 searchTable encodePseudogeneConsensus
 searchType genePred
 searchPriority 50
