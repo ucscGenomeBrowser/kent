@@ -2628,6 +2628,7 @@ tablesIgnored $hg
     encodeEvoFold
     encodeGisChip%
     encodeGencodeGenePolyA%
+    enocdeGencodeRaceFrags%
     encodeNhgriDnaseHs%
     encodeRegulomeDnaseGM06990%
     encodeSangerChip%
