@@ -6526,6 +6526,8 @@ cat > loadMaf.csh << 'EOF'
 
     cat << 'EOF' > doSplit.csh
 #!/bin/csh -ef
+# unfortunately this exhausts 2G mem limit currently on pk
+# next time, run on mini-cluster
     set MAFS = /cluster/data/hg18/bed/multiz17way.2006-02-18/maf
     set WINDOWS = /san/sanvol1/scratch/hg18/multiz17way.2006-02-18/cons/ss
     cd $WINDOWS
@@ -8459,6 +8461,11 @@ time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
     ssh kkstore02
     cd /cluster/data/hg18/bed/blastz.echTel1
     ~/kent/src/hg/utils/automation/doRecipBest.pl hg18 echTel1 >&! rbest.log &
+    # reloading chains which disappeared (2007-04-17 kate)
+    cd /cluster/data/hg18/bed/blastz.echTel1/axtChain
+    # edit loadUp.csh --> create loadUp2.csh and loadUp3.csh
+    # run loadUp2.csh (does chainSplit) on kkstore02
+    # run loadUp3.csh (does hgLoadChain) on hgwdev
 
 #########################################################################
 # BLASTZ CHICKEN GalGal2 second time (DONE - 2005-12-28 Fan)
@@ -13831,7 +13838,7 @@ TMPDIR=/scratch/tmp
       >& do.log & tail -f do.log
 
 ########################################################################
-# 28-Way Multiple Alignment
+# 28-WAY VERTEBRATE MULTIZ (2007-03-20 kate)
 
     ssh kkstore02
     cd /cluster/data/hg18/bed
@@ -13883,9 +13890,11 @@ U frog (xenTro2) (needs chain/net update on hg18)
 U fugu (fr2) (needs chain/net update on hg18)
 S tetraodon (tetNig1)
 N stickleback (gasAcu1) "Gasterosteus aculeatus"
-N medaka (oryLat1) "Oryzias latipees"
+N medaka (oryLat1) "Oryzias latipes"
 U zebrafish (danRer4) (needs chain/net update on hg18)
 
+    ssh kkstore02
+    cd /cluster/data/hg18/bed/multiz28way
     # verify all blastz's exists
 cat > listMafs.csh << 'EOF'
     foreach db (`cat species.lst`)
@@ -13901,6 +13910,24 @@ cat > listMafs.csh << 'EOF'
         endif
     end
 'EOF'
+
+    # gather chain stats
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/multiz28way
+cat > getChainStats.csh << 'EOF'
+    set species = $1
+    foreach db (`cat $species`)
+        echo -n "${db}	"
+        set Db = `echo $db | perl -wpe 's/(.*)/\u$1/'`
+        set fb = /cluster/data/hg18/bed/blastz.$db/fb.hg18.chain${Db}Link.txt
+        if (! -e $fb || -z $fb ) then
+            nice featureBits hg18 chain${Db}Link >& $fb
+        endif
+        sed 's/.*(\(.*\)).*/\1/' $fb
+        end
+'EOF'
+    # << happy emacs
+    csh getChainStats.csh species.lst >&! species.chainStats
 
     # Maf types:
     # 2X mammals -> reciprocal best net
@@ -14116,6 +14143,8 @@ cat > loadMaf.csh << 'EOF'
     nice featureBits hg18 -chrom=chr7 ../../multiz25way/mafCov/chr7.tetNig1.bed
         # 2901708 bases of 154952424 (1.873%) in intersection
 
+    # NOTE: Next time concatenate split mafs before proceeding further
+
     # Gap Annotation
     # prepare bed files with gap info
     ssh kkstore02
@@ -14324,21 +14353,21 @@ cat > getGenes.csh << 'EOF'
     fr1 = ensGene
     danRer3 = mrna
 
-    ##########################
-    # PHASTCONS
+############################################################################
+# PHASTCONS FOR 28WAY (2007-04-04 kate)
 
-    # generate tree model with branch lengths using phyloFit from Adam 
-    # Siepel's # phastCons package.  Input is 28way alignments of 
-    # 4-fold degenerate sites (4d sites) determined from a 
-    # nonredundant (non-overlapping) gene set.  Elliott Margulies
-    # has a perl script (extract_coding_alignments.pl) that he used 
-    # with the ENCODE alignments.  
-    # Adam uses his msa_view tool with the --4d option.
+# generate tree model with branch lengths using phyloFit from Adam 
+# Siepel's # phastCons package.  Input is 28way alignments of 
+# 4-fold degenerate sites (4d sites) determined from a 
+# nonredundant (non-overlapping) gene set.  Elliott Margulies
+# has a perl script (extract_coding_alignments.pl) that he used 
+# with the ENCODE alignments.  
+# Adam uses his msa_view tool with the --4d option.
 
-    # For first try, use Gencode Oct '05 reference set filtered 
-    # to longest transcript, then lifted to hg18
-    # Compare results with hgClusterGenes and /cluster/bin/phast/refeature,
-    # and genePredSingleCover
+# For first try, use Gencode Oct '05 reference set filtered 
+# to longest transcript, then lifted to hg18
+# Compare results with hgClusterGenes and /cluster/bin/phast/refeature,
+# and genePredSingleCover
 
     hgsql hg17 -N -e 'select * from encodeGencodeGeneKnownOct05' > gencodeKnown.gp
     wc -l gencodeKnown.gp
@@ -14424,24 +14453,27 @@ cat > encodeMafs.csh << 'EOF'
     set r = "ENm001"
     set r = "ENr231"
     perl -wpe 's/^s ([^.]+)\.\S+/s $1/' encodeMafs/$r.maf > $r.clean.maf
-    # see what mfa file looks like
-    /cluster/bin/phast/msa_view --4d --features gencodeKnown.hg18.gp \
-                -i MAF $r.clean.maf > $r.mfa
     # generate ss file
     /cluster/bin/phast/msa_view --4d --features gencodeKnown.hg18.gp \
-                -i MAF $r.clean.maf -o SS | \
-        /cluster/bin/phast/msa_view -i SS --tuple-size 1 - > $r.4d.ss
+                -i MAF $r.clean.maf -o SS > $r.4d.3.ss
+    /cluster/bin/phast/msa_view -i SS -o FASTA $r.4d.3.ss > $r.4d.3.mfa
+    /cluster/bin/phast/msa_view -i SS --tuple-size 1 $r.4d.3.ss -o SS > $r.4d.1.ss
+    /cluster/bin/phast/msa_view -i SS -o FASTA $r.4d.1.ss > $r.4d.1.mfa
 
     # now on all regions
 cat > encode4d.csh << 'EOF'
-    mkdir ss
+    mkdir mfa4d
     foreach f (encodeMafs/*.maf)
         set r = $f:t:r
         echo $r
         perl -wpe 's/^s ([^.]+)\.\S+/s $1/' $f > clean.maf
     /cluster/bin/phast/msa_view --4d --features gencodeKnown.hg18.gp \
                 -i MAF clean.maf -o SS | \
-        /cluster/bin/phast/msa_view -i SS --tuple-size 1 - > ss/$r.4d.ss
+        /cluster/bin/phast/msa_view -i SS --tuple-size 1 - > mfa4d/$r.4d.mfa
+        # remove empties to satisfy msa_view --aggregate
+        if (-z mfa4d/$r.4d.mfa) then
+            rm mfa4d/$r.4d.mfa
+        endif
     end
 'EOF'
     csh encode4d.csh >&! encode4d.log &
@@ -14450,7 +14482,10 @@ cat > encode4d.csh << 'EOF'
     set species = `echo $species1 | sed -e 's/ //g' -e 's/,$//'`
 
     # From Elliott's script:
-    /cluster/bin/phast/msa_view --aggregate $species EN*.ss | \
+    #/cluster/bin/phast/msa_view --aggregate $species EN*.mfa | \
+        #sed s/"> "/">"/ > some-4d_align.mfa
+
+    /cluster/bin/phast/msa_view --aggregate $species mfa4d/EN*.4d.mfa | \
         sed s/"> "/">"/ > all-4d_align.mfa
 
     # tweak input tree -- remove common names, include commas
@@ -14461,16 +14496,24 @@ cat > encode4d.csh << 'EOF'
         --msa-format FASTA --subst-mod REV \
         --tree tree.commas.nh all-4d_align.mfa
     grep TREE phyloFit.mod | sed 's/TREE\:\ //' > tree_4d.28way.nh
+    /cluster/bin/phast/tree_doctor --dissect tree_4d.28way.nh | \
+        awk '$1 == "dparent" {x += $3} END {print x}'
+            # 9.0516
+
+    # extract species distances
+    /cluster/bin/phast/all_dists tree_4d.28way.nh > 28way.distances.txt
+    grep hg18 28way.distances.txt | sort -k3,3n | \
+        awk '{printf ("%.4f\t%s\n", $3, $2)}' > distances.txt
+    # get chain stats ordered by distance
+    awk '{print $2}' distances.txt > species.byDistance
+    csh ../getChainStats.csh species.byDistance >&! species.chainStats
 
     # spruce up names for tree drawing
     /cluster/bin/phast/tree_doctor \
       --rename="hg18 -> human ; panTro2 -> chimp ; rheMac2 -> macaque ; otoGar1 -> bushbaby ; tupBel1 -> tree_shrew ; rn4 -> rat ; mm8 -> mouse ; cavPor2 -> guinea_pig ; oryCun1 -> rabbit ; sorAra1 -> shrew ; eriEur1 -> hedgehog ; canFam2 -> dog ; felCat3 -> cat ; equCab1 -> horse ; bosTau3 -> cow ; dasNov1 -> armadillo ; loxAfr1 -> elephant ; echTel1 -> tenrec ; monDom4 -> opossum ; ornAna1 -> platypus ; galGal3 -> chicken ; anoCar1 -> lizard ; xenTro2 -> frog ; tetNig1 -> tetraodon ; fr2 -> fugu ; gasAcu1 -> stickleback ; oryLat1 -> medaka ; danRer4 -> zebrafish" \
       tree_4d.28way.nh > tree_4d.28way.common.nh
 
-    # hand-craft an alternate version using Elliott's latest ENCODE tree
-    # (now has shrew, hedgehog, cat, horse, guinea pig), and interpolating
-    # missing species using Hiram's methods (preserve total branch
-    # length when inserting sisters)
+    # compare to Elliott's latest ENCODE tree, pruned to match
     /cluster/bin/phast/tree_doctor \
         --prune-all-but=human,chimp,macaque,galago,rat,mouse,guinea_pig,rabbit,cow,cat,dog,hedgehog,shrew,armadillo,elephant,tenrec,monodelphis,platypus,chicken,xenopus \
         --rename="xenopus -> frog ; galago -> bushbaby; monodelphis -> opossum"\
@@ -14481,6 +14524,335 @@ cat > encode4d.csh << 'EOF'
         --prune-all-but=human,chimp,macaque,bushbaby,rat,mouse,guinea_pig,rabbit,cow,cat,dog,hedgehog,shrew,armadillo,elephant,tenrec,opossum,platypus,chicken,frog \
           tree_4d.28way.common.nh > tree_4d.20way.common.nh
 
+    # Create chrom mafs from split mafs (do this earlier next time)
+    ssh kki
+    cd /cluster/data/hg18/bed/multiz28way
+    mkdir chromMaf
+    mkdir run.merge
+    cd run.merge
+cat > doMerge.csh << 'EOF'
+#!/bin/csh -ef
+    set c = $1
+    set cmaf = ../chromMaf/${c}.maf
+    # NOTE: need to change mafFilter to retain (and uniquify) comments
+    # begin with ##maf header
+    head -1 ../maf/${c}__0.maf > $cmaf
+    grep -h '# ' ../maf/${c}__?.maf | sed 's/\/scratch\/tmp.* //' | sort | uniq \
+        >> $cmaf
+    # don't filter out blocks with alignment this time -- might be needed
+    # for symmetry with irows version, or for analysis.  Check on this.
+    mafFilter -minRow=1 ../maf/${c}__?.maf >> $cmaf
+'EOF'
+    # << happy emacs
+    chmod a+x doMerge.csh
+
+cat > spec << 'EOF'
+#LOOP
+./doMerge.csh $(root1) {check out line+ ../chromMaf/$(root1).maf}
+#ENDLOOP
+'EOF'
+    # << happy emacs
+
+    awk '{print $1}' /cluster/data/hg18/chrom.sizes > chrom.lst
+    gensub2 chrom.lst single spec jobList
+    para create jobList
+        # 49 jobs
+    para try
+    para check
+    para push
+
+    # Split chromosome MAF's into windows and use to generate
+    # "sufficient statistics" (ss) files for phastCons input
+    # large mem jobs so use mini-cluster
+    ssh kki
+    cd /cluster/data/hg18/bed/multiz28way
+    mkdir cons
+    cd cons
+
+    # use background and rate matrix from 17way run (same as ENCODE run),
+    # merged together with the 28way 4d tree as the model file
+    grep -v TREE /cluster/data/hg18/bed/multiz17way/cons/elliotsEncode.mod > 28way.mod
+    echo -n 'TREE: ' >> 28way.mod
+    cat ../4d/tree_4d.28way.nh >> 28way.mod
+
+    # split 28way mafs into 10M chunks and generate sufficient statistics 
+    # files for # phastCons
+    mkdir run.split
+    cd run.split
+    set WINDOWS = /san/sanvol1/scratch/hg18/multiz28way/cons/ss
+    rm -fr $WINDOWS
+    mkdir -p $WINDOWS
+
+    cat << 'EOF' > doSplit.csh
+#!/bin/csh -ef
+    set MAFS = /cluster/data/hg18/bed/multiz28way/chromMaf
+    set WINDOWS = /san/sanvol1/scratch/hg18/multiz28way/cons/ss
+    cd $WINDOWS
+    set c = $1
+    echo $c
+    rm -fr $c
+    mkdir $c
+    # need to truncate odd-ball scaffold/chrom names that include dots
+    # as phastCons utils can't handle them
+    set TMP = /scratch/tmp/$c.clean.maf.$$
+    #perl -wpe 's/^s ([^.]+)\.\S+/s $1/' $MAFS/$c.maf > $TMP
+    perl -wpe 's/^s ([^.]+\.[^. ]+)\.\S+/s $1/' $MAFS/$c.maf > $TMP
+    /cluster/bin/phast/$MACHTYPE/msa_split $TMP -i MAF \
+        -M /cluster/bluearc/hg18/chrom/$c.fa \
+        -o SS -r $c/$c -w 10000000,0 -I 1000 -B 5000
+    rm -f $TMP
+    echo "Done" >> $c.done
+'EOF'
+# << happy emacs
+    chmod +x doSplit.csh
+
+rm -f jobList
+foreach f (../../chromMaf/*.maf) 
+    set c = $f:t:r
+    echo "doSplit.csh $c {check out line+ $WINDOWS/$c.done}" >> jobList
+end
+    
+    para create jobList
+        # 49 jobs
+    para try
+    para check
+    para push
+    # completed shorter jobs in a few hours, but others failed on memory.
+    # redo on kolossus -- 14 hours!
+    # NOTE: next time try harder working with split mafs!
+
+    # Run phastCons
+    #	This job is I/O intensive in its output files, thus it is all
+    #	working over in /scratch/tmp/
+    ssh pk
+    cd /cluster/data/hg18/bed/multiz28way/cons
+    mkdir run.cons
+    cd run.cons
+    cat > doPhast.csh << 'EOF'
+#!/bin/csh -fe
+set c = $1
+set f = $2
+set len = $3
+set cov = $4
+set rho = $5
+set grp = $cwd:t
+set tmp = /scratch/tmp/$f
+mkdir -p $tmp
+set san = /san/sanvol1/scratch/hg18/multiz28way/cons
+cp -p $san/ss/$c/$f.ss tree.mod $tmp
+pushd $tmp > /dev/null
+/cluster/bin/phast/$MACHTYPE/phastCons $f.ss tree.mod \
+--rho $rho --expected-length $len --target-coverage $cov --quiet \
+--not-informative "panTro2,rheMac2" \
+--seqname $c --idpref $c --viterbi $f.bed --score > $f.pp
+popd > /dev/null
+mkdir -p $san/$grp/pp/$c $san/$grp/bed/$c
+sleep 1
+mv $tmp/$f.pp $san/$grp/pp/$c
+mv $tmp/$f.bed $san/$grp/bed/$c
+rm -fr $tmp
+'EOF'
+    # << happy emacs
+    chmod a+x doPhast.csh
+
+    # Create template file
+    #	root1 == chrom name, file1 == ss file name without .ss suffix
+    cat > template << 'EOF'
+#LOOP
+../doPhast.csh $(root1) $(file1) 14 .008 .28
+#ENDLOOP
+'EOF'
+    # << happy emacs
+
+    # Create parasol batch and run it
+    pushd /san/sanvol1/scratch/hg18/multiz28way/cons
+    ls -1 ss/chr*/chr*.ss | sed 's/.ss$//' > \
+        /cluster/data/hg18/bed/multiz28way/cons/run.cons/in.list
+    popd
+
+    # run for all species (except closest)
+    mkdir all ../all
+    cd all
+    cp ../../28way.mod tree.mod
+    gensub2 ../in.list single ../template jobList
+    para create jobList
+        # 337 jobs
+    para try
+    para check
+    para push
+# CPU time in finished jobs:      34737s     578.96m     9.65h    0.40d  0.001 y
+# IO & Wait Time:                 12044s     200.73m     3.35h    0.14d  0.000 y
+# Average job time:                 139s       2.31m     0.04h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:             297s       4.95m     0.08h    0.00d
+# Submission to last job:          1151s      19.18m     0.32h    0.01d
+
+    # create Most Conserved track
+    ssh kolossus
+    cd /san/sanvol1/scratch/hg18/multiz28way/cons/all
+    cat bed/*/chr*.bed | ~/bin/${MACHTYPE}/bedSort stdin stdout | \
+        awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' | \
+            /cluster/bin/scripts/lodToBedScore /dev/stdin > mostConserved.bed
+    #	~ 1 minute
+    mkdir 
+    cp -p mostConserved.bed /cluster/data/hg18/bed/multiz28way/cons/all
+
+    # load into database
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/multiz28way/cons/all
+    hgLoadBed hg18 phastConsElements28way mostConserved.bed
+        # Loaded 2968542 elements of size 5
+    # compare with previous tracks
+    hgsql hg18 -s -N -e "select count(*) from phastConsElements17way"
+        # 2229902
+    # ~30% more elements
+    # Try for 5% overall cov, and 70% CDS cov (used elen=13, tcov=.007, rho=.27)
+    featureBits hg18 -enrichment refGene:cds phastConsElements28way
+# refGene:cds 1.094%, phastConsElements28way 5.021%, both 0.782%, cover 71.48%, enrich 14.24x
+    # compare with previous tracks
+    featureBits hg18 -enrichment refGene:cds phastConsElements17way
+# refGene:cds 1.072%, phastConsElements17way 5.510%, both 0.759%, cover 70.83%, enrich 12.86x
+
+    # Create merged posterier probability file and wiggle track data files
+    #	pk is currently closer to the san than any other machine
+    ssh pk
+    cd /san/sanvol1/scratch/hg18/multiz28way/cons/all
+    # sort by chromName, chromStart so that items are in numerical order 
+    #  for wigEncode
+    find ./pp -name "chr*.pp" | \
+        sed -e "s/\// x /g" -e "s/\./ y /g" -e "s/-/ z /g" | \
+	sort -k7,7 -k9,9n | \
+	sed -e "s/ x /\//g" -e "s/ y /\./g" -e "s/ z /-/g" | \
+	xargs cat | \
+        nice wigEncode stdin phastCons28way.wig phastCons28way.wib
+    # about 23 minutes for above
+    cp -p phastCons28way.wi? /cluster/data/hg18/bed/multiz28way/cons/all
+
+    # Load gbdb and database with wiggle.
+    ssh hgwdev
+    ln -s /cluster/data/hg18/bed/multiz28way/cons/all/phastCons28way.wib \
+        /gbdb/hg18/multiz28way/phastCons28way.wib
+    hgLoadWiggle -pathPrefix=/gbdb/hg18/multiz28way hg18 \
+        phastCons28way phastCons28way.wig
+    #  ~ 3 minute load
+
+    ## Run phastCons on subgroup (placentals)
+    ssh pk
+    cd /cluster/data/hg18/bed/multiz28way/cons/run.cons
+    mkdir placental ../placental
+    cd placental
+
+    # create pruned tree
+    set species = `cat ../../species.lst`
+    echo $species | sed 's/ /,/g' 
+    #anoCar1,bosTau3,canFam2,cavPor2,danRer4,dasNov1,echTel1,equCab1,eriEur1,felCat3,fr2,galGal3,gasAcu1,hg18,loxAfr1,mm8,monDom4,ornAna1,oryCun1,oryLat1,otoGar1,panTro2,rheMac2,rn4,sorAra1,tetNig1,tupBel1,xenTro2
+
+    /cluster/bin/phast/tree_doctor ../../28way.mod \
+        --prune-all-but=bosTau3,canFam2,cavPor2,dasNov1,echTel1,equCab1,eriEur1,felCat3,,hg18,loxAfr1,mm8,oryCun1,otoGar1,panTro2,rheMac2,rn4,sorAra1,tupBel1 \
+                > tree.mod
+
+    # Create template file
+    #	root1 == chrom name, file1 == ss file name without .ss suffix
+    # Use template for 5% cov from hg17 17way experiments
+    cat > template << 'EOF'
+#LOOP
+../doPhast.csh $(root1) $(file1) 14 .008 .28
+#ENDLOOP
+'EOF'
+    # << happy emacs
+    gensub2 ../in.list single template jobList
+    para create jobList
+    para try
+    para check
+    para push
+    # ~30 minutes on pk
+    # NOTE: sometimes jobs crash or hang due to access problems on SAN
+    # para stop then push to recover
+    
+#CPU time in finished jobs:      28418s     473.64m     7.89h    0.33d  0.001 y
+#IO & Wait Time:                 25276s     421.26m     7.02h    0.29d  0.001 y
+#Average job time:                 159s       2.66m     0.04h    0.00d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:             514s       8.57m     0.14h    0.01d
+#Submission to last job:         87807s    1463.45m    24.39h    1.02d
+
+    # Link to the one we will use (from experiments below)
+    cd ..
+    ln -s placental.14.008.28 placental
+    set san = /san/sanvol1/scratch/hg18/multiz28way/cons/placental
+    ln -s $san.14.008.28 $san
+
+    # add placental elements to Most Conserved track
+    ssh kolossus
+    cd /san/sanvol1/scratch/hg18/multiz28way/cons/placental
+    cat bed/*/chr*.bed | ~/bin/${MACHTYPE}/bedSort stdin stdout | \
+        awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' | \
+            /cluster/bin/scripts/lodToBedScore /dev/stdin > mostConserved.bed
+    #	~ 1 minute
+    cp -p mostConserved.bed /cluster/data/hg18/bed/multiz28way/cons/placental
+
+    # load into database
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/multiz28way/cons/placental
+    hgLoadBed hg18 phastConsElements28wayPlacMammal mostConserved.bed
+    featureBits hg18 -enrichment refGene:cds phastConsElements28wayPlacMammal >&! ../run.cons/placental/fb.out
+    # 14 .008 .28 -- USING THIS ONE
+    # experiments
+        # Loaded 1753513 elements
+    # 14 .2 .28
+        # Loaded 4778609 elements
+    # 14 .1 .28
+        # Loaded 3490833 elements
+    # 13 .1 .3
+        # Loaded 3445154 elements
+    # 14 .2 .3
+        # Loaded 4566312 elements
+    # 13 .2 .28
+        # Loaded 4992426 elements 
+    # 14 .2 .33 -- USING THIS ONE
+        # Loaded 4244212 elements
+    # 15 .2 .3
+        # Loaded 4390848 elements
+    # 15 .18 .33
+        # Loaded 3869393 elements
+# USING THIS ONE
+# refGene:cds 1.094%, phastConsElements28wayPlacental 3.518%, both 0.742%, cover 67.86%, enrich 19.29x
+# refGene:cds 1.094%, phastConsElements28wayPlacental 4.544%, both 0.752%, cover 68.79%, enrich 15.14x
+# refGene:cds 1.094%, phastConsElements28wayPlacental 4.101%, both 0.748%, cover 68.34%, enrich 16.66x
+# refGene:cds 1.094%, phastConsElements28wayPlacental 4.228%, both 0.758%, cover 69.33%, enrich 16.40x
+# refGene:cds 1.094%, phastConsElements28wayPlacental 4.691%, both 0.766%, cover 69.98%, enrich 14.92x
+# refGene:cds 1.094%, phastConsElements28wayPlacental 4.559%, both 0.750%, cover 68.60%, enrich 15.05x
+#  USING THE NEXT ONE (14.2.33)
+# refGene:cds 1.094%, phastConsElements28wayPlacental 4.907%, both 0.784%, cover 71.65%, enrich 14.60x
+# refGene:cds 1.094%, phastConsElements28wayPlacental 4.681%, both 0.767%, cover 70.15%, enrich 14.99x
+# refGene:cds 1.094%, phastConsElements28wayPlacental 4.813%, both 0.785%, cover 71.76%, enrich 14.91x
+
+    # Create merged posterier probability file and wiggle track data files
+    #	pk is currently closer to the san than any other machine
+    ssh pk
+    cd /san/sanvol1/scratch/hg18/multiz28way/cons/placental
+    # sort by chromName, chromStart so that items are in numerical order 
+    #  for wigEncode
+    find ./pp -name "chr*.pp" | \
+        sed -e "s/\// x /g" -e "s/\./ y /g" -e "s/-/ z /g" | \
+	sort -k7,7 -k9,9n | \
+	sed -e "s/ x /\//g" -e "s/ y /\./g" -e "s/ z /-/g" | \
+	xargs cat | \
+        nice wigEncode stdin phastCons28wayPlacMammal.wig phastCons28wayPlacMammal.wib >&! wigEncode.log &
+    # about 23 minutes for above
+    cp -p phastCons28wayPlacMammal.wi? /cluster/data/hg18/bed/multiz28way/cons/placental
+
+    # Load gbdb and database with wiggle.
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/multiz28way/cons/placental
+    ln -s  \
+        /cluster/data/hg18/bed/multiz28way/cons/placental/phastCons28wayPlacMammal.wib \
+        /gbdb/hg18/multiz28way/phastCons28wayPlacMammal.wib
+    hgLoadWiggle -pathPrefix=/gbdb/hg18/multiz28way hg18 \
+        phastCons28wayPlacMammal phastCons28wayPlacMammal.wig
+        # WARNING: Exceeded chr4_random size 842649 > 842648. dropping 2 data point(s)
+        # NOTE: weird msa_split on this chrom -- sent inquiry to Adam about this
+    #  ~ 3 minute load
 
 ############################################################################
 # Reload CCDS (ccdsInfo, ccdsGene, ccdsKgMap) (2007-03-02 markd)
