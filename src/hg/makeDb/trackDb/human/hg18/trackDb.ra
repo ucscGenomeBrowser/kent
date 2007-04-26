@@ -582,6 +582,15 @@ spectrum on
 type netAlign fr1 chainFr1
 otherDb fr1
 
+track exaptedRepeats
+shortLabel Exapted Repeats
+longLabel Repeats Exapted as Conserved Nonexonic Elements
+priority 149.09
+group varRep
+visibility hide
+color 255, 127, 0
+type bed 4 +
+
 track chainTetNig1
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
