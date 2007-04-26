@@ -1,6 +1,7 @@
 /* gsidTable - GSID Table View */
 
 #include "common.h"
+#include "dystring.h"
 #include "hash.h"
 #include "obscure.h"
 #include "cheapcgi.h"
@@ -19,9 +20,9 @@
 #include "gsidTable.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidTable.c,v 1.11 2007/03/23 20:36:25 galt Exp $";
+static char const rcsid[] = "$Id: gsidTable.c,v 1.12 2007/04/26 22:23:26 galt Exp $";
 
-char *excludeVars[] = { "submit", "Submit", NULL }; 
+char *excludeVars[] = { "submit", "Submit", "submit_filter", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
  * any variables that start "near.do.") */
 
@@ -1277,15 +1278,17 @@ else if (cartVarExists(cart, getSeqVarName))
     subjList = getOrderedList(ord, colList, conn, BIGNUM);
     doGetSeq(conn, subjList, cartString(cart, getSeqHowVarName));
     }
+else if (cartVarExists(cart, redirectName))
+    {
+    subjList = getOrderedList(ord, colList, conn, BIGNUM);
+    cartRemove(cart, redirectName);
+    }
 else
     {
     subjList = getOrderedList(ord, colList, conn, displayCount);
     doMainDisplay(conn, colList, subjList);
     }
 }
-
-
-
 
 
 void doMiddle(struct cart *theCart)
@@ -1339,7 +1342,6 @@ else if ((col = advFilterKeyUploadPressed(colList)) != NULL)
 else if ((col = advFilterKeyClearPressed(colList)) != NULL)
     doAdvFilterKeyClear(conn, colList, col);
 
-
 else 
     displayData(conn, colList);
 
@@ -1367,6 +1369,19 @@ cgiSpoof(&argc, argv);
 htmlSetStyle(htmlStyleUndecoratedLink);
 htmlSetBgColor(HG_CL_OUTSIDE);
 oldCart = hashNew(10);
-cartHtmlShell("GSID Table View v"CGI_VERSION, doMiddle, hUserCookie(), excludeVars, oldCart);
+struct dyString *head = dyStringNew(1024);
+
+if (cgiVarExists("submit_filter") && cgiVarExists(redirectName))  
+    {  
+    dyStringPrintf(head,	
+    	"<META HTTP-EQUIV=\"REFRESH\" CONTENT=\"0;URL=/cgi-bin/%s\">"
+	"<META HTTP-EQUIV=\"Pragma\" CONTENT=\"no-cache\">"
+    	"<META HTTP-EQUIV=\"Expires\" CONTENT=\"-1\">"
+	, cgiString(redirectName));
+    }
+
+cartHtmlShellWithHead(head->string,"GSID Table View v"CGI_VERSION, 
+    doMiddle, hUserCookie(), excludeVars, oldCart);
+
 return 0;
 }

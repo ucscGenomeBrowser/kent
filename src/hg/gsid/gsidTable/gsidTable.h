@@ -123,6 +123,8 @@ extern struct hash *columnHash;		  /* Hash of active columns keyed by name. */
 #define hideAllConfName "gsidTable.do.colHideAll"  /* Hide all columns. */
 #define showAllConfName "gsidTable.do.colShowAll"  /* Show all columns. */
 
+#define redirectName "fromProg"  /* cgi to redirect back to. */
+
 
 /* ---- General purpose helper routines. ---- */
 

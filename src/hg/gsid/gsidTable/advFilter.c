@@ -13,7 +13,7 @@
 #include "hPrint.h"
 #include "gsidTable.h"
 
-static char const rcsid[] = "$Id: advFilter.c,v 1.1 2006/11/17 23:13:22 galt Exp $";
+static char const rcsid[] = "$Id: advFilter.c,v 1.2 2007/04/26 22:23:26 galt Exp $";
 
 struct subjInfo *advFilterResults(struct column *colList, 
 	struct sqlConnection *conn)
@@ -242,7 +242,7 @@ static void bigButtons()
 /* Put up the big clear/submit buttons. */
 {
 hPrintf("<TABLE><TR><TD>");
-cgiMakeButton("submit", "submit");
+cgiMakeButton("submit_filter", "submit");
 hPrintf("</TD><TD>");
 cgiMakeButton(advFilterClearVarName, "clear filter");
 //hPrintf("</TD><TD>");
@@ -266,6 +266,12 @@ makeTitle("Table View Filter", "gsidTableHelp.html#Filter");
 hPrintf("<FORM ACTION=\"../cgi-bin/gsidTable\" METHOD=POST>\n");
 cartSaveSession(cart);
 
+if (cartVarExists(cart, redirectName))
+    {
+    /* preserve in cgiVars */
+    cgiMakeHiddenVar(redirectName,cartString(cart,redirectName));
+    }
+
 controlPanelStart();
 hPrintf("On this page you can restrict which subjects appear in the main table<BR>");
 hPrintf("based on the values in any column. Click the <em>submit</em> button to return<BR>");
@@ -275,6 +281,8 @@ bigButtons();
 // "names that pass the filter: ");
 //cgiMakeButton(advFilterListVarName, "list names");
 controlPanelEnd();
+
+
 
 /* See if have any to do in either first (displayed columns)
  * or second (hidden columns) pass. */
@@ -314,7 +322,7 @@ for (onOff = 1; onOff >= 0; --onOff)
             }
         hPrintf("</TABLE>\n");
         hPrintf("<BR>");
-        cgiMakeButton("submit", "submit");
+        cgiMakeButton("submit_filter", "submit");
         }
     }
 hPrintf("</TD></TR></TABLE></CENTER>");
