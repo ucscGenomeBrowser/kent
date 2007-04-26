@@ -1026,3 +1026,7 @@ textHistogram -real -binSize=0.2 -maxBinCount=1100 -minVal=-200 \
      # This file contains Genbank accessions and the expression values
      # which are log2 based. 
 
+##########################################################################
+# Belinda Giardine April 2007
+# gv* tables: 
+#	reload tables, additions and corrections, details in hg18 doc
