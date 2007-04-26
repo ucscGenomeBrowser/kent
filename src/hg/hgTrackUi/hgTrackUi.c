@@ -30,7 +30,7 @@
 
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.363 2007/04/18 09:42:41 aamp Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.364 2007/04/26 16:04:29 giardine Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -555,6 +555,30 @@ int i = 0; /* variable to walk through arrays */
 char *def;
 
 gvIdControls(tdb);
+
+printf("<BR><B>Exclude data source</B><BR>");
+for (i = 0; i < gvSrcSize; i++)
+    {
+    if (differentString(gvSrcDbValue[i], "LSDB"))
+        {
+        if (sameString(gvSrcDbValue[i], "UniProt (Swiss-Prot/TrEMBL)"))
+            {
+            /* exclude Swiss-Prot data by default, can be misleading */
+            cartMakeCheckBox(cart, gvSrcString[i], TRUE);
+            }
+        else
+            {
+            cartMakeCheckBox(cart, gvSrcString[i], FALSE);
+            }
+        printf (" %s<BR>", gvSrcDbValue[i]); /* label with db value */
+        }
+    else
+        {
+        cartMakeCheckBox(cart, gvSrcString[i], FALSE);
+        printf (" Locus Specific Databases<BR>");
+        }
+    }
+
 printf("<BR><B>Exclude</B><BR>");
 for (i = 0; i < gvAccuracySize; i++)
     {
@@ -581,29 +605,6 @@ for (i = 0; i < gvFilterDASize; i++)
     {
     cartMakeCheckBox(cart, gvFilterDAString[i], FALSE);
     printf (" %s<BR>", gvFilterDALabel[i]);
-    }
-
-printf("<BR><B>Exclude data source</B><BR>");
-for (i = 0; i < gvSrcSize; i++)
-    {
-    if (differentString(gvSrcDbValue[i], "LSDB"))
-        {
-        if (sameString(gvSrcDbValue[i], "UniProt (Swiss-Prot/TrEMBL)"))
-            {
-            /* exclude Swiss-Prot data by default, can be misleading */
-            cartMakeCheckBox(cart, gvSrcString[i], TRUE);
-            }
-        else 
-            {
-            cartMakeCheckBox(cart, gvSrcString[i], FALSE);
-            }
-        printf (" %s<BR>", gvSrcDbValue[i]); /* label with db value */
-        }
-    else 
-        {
-        cartMakeCheckBox(cart, gvSrcString[i], FALSE);
-        printf (" Locus Specific Databases<BR>");
-        }
     }
 
 printf("<BR>");
