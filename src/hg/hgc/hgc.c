@@ -205,7 +205,7 @@
 #include "geneCheckDetails.h"
 #include "kg1ToKg2.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1276 2007/04/23 22:58:47 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1277 2007/04/26 22:14:34 lowec Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -18074,6 +18074,37 @@ printTrackHtml(tdb);
 hFreeConn(&conn);
 }
 
+void doExaptedRepeats(struct trackDb *tdb, char *itemName)
+/* Respond to click on the exaptedRepeats track. */
+{
+char *track = tdb->tableName;
+struct sqlConnection *conn = hAllocConn();
+char query[256];
+struct sqlResult *sr;
+char **row;
+char *chr, *name;
+unsigned int chromStart, chromEnd;
+boolean blastzAln;
+
+cartWebStart(cart, itemName);
+sprintf(query, "select * from %s where name = '%s'", track, itemName);
+selectOneRow(conn, track, query, &sr, &row);
+chr = cloneString(row[0]);
+chromStart = sqlUnsigned(row[1]);
+chromEnd = sqlUnsigned(row[2]);
+name = cloneString(row[3]);
+blastzAln = (sqlUnsigned(row[4])==1);
+
+printPos(chr, chromStart, chromEnd, NULL, TRUE, name);
+printf("<B>Item:</B> %s<BR>\n", name);
+if(blastzAln){printf("<B>Alignment to the repeat consensus verified with blastz:</B> YES<BR>\n");}
+else{printf("<B>Alignment to repeat consensus verified with blastz:</B> NO<BR>\n");}
+
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+printTrackHtml(tdb);
+}
+
 void doIgtc(struct trackDb *tdb, char *itemName) 
 /* Details for International Gene Trap Consortium. */
 {
@@ -18447,6 +18478,10 @@ else if (sameWord(track, "blatMouse") || sameWord(track, "bestMouse")
 else if (startsWith("multAlignWebb", track))
     {
     doMultAlignZoo(tdb, item, &track[13] );
+    }
+else if (sameWord(track, "exaptedRepeats"))
+    {
+    doExaptedRepeats(tdb, item);
     }
 /*
   Generalized code to show strict chain blastz alignments in the zoo browsers
