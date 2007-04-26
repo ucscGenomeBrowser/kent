@@ -17,7 +17,7 @@
 #include "errabort.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: htmshell.c,v 1.32 2006/12/13 18:17:55 angie Exp $";
+static char const rcsid[] = "$Id: htmshell.c,v 1.33 2007/04/26 22:21:32 galt Exp $";
 
 jmp_buf htmlRecover;
 
@@ -328,12 +328,13 @@ if(isSecure == TRUE)
 printf("\n");
 }
 
-void _htmStart(FILE *f, char *title)
+
+void _htmStartWithHead(FILE *f, char *head, char *title)
 /* Write out bits of header that both stand-alone .htmls
- * and CGI returned .htmls need. */
+ * and CGI returned .htmls need, including optional head info */
 {
 fputs("<HTML>", f);
-fprintf(f,"<HEAD>\n<TITLE>%s</TITLE>\n", title);
+fprintf(f,"<HEAD>\n%s<TITLE>%s</TITLE>\n", head, title);
 fprintf(f, "\t<META http-equiv=\"Content-Script-Type\" content=\"text/javascript\">\n");
 if (htmlStyle != NULL)
     fputs(htmlStyle, f);
@@ -346,6 +347,15 @@ if (gotBgColor)
 fputs(">\n",f);
 }
 
+void _htmStart(FILE *f, char *title)
+/* Write out bits of header that both stand-alone .htmls
+ * and CGI returned .htmls need. */
+{
+_htmStartWithHead(f, "", title);
+}
+
+
+
 void htmlStart(char *title)
 /* Write the start of an html from CGI */
 {
@@ -356,11 +366,17 @@ puts("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2//EN\">");
 _htmStart(stdout, title);
 }
 
+void htmStartWithHead(FILE *f, char *head, char *title)
+/* Write the start of a stand alone .html file, plus head info */
+{
+fputs("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2//EN\">\n", f);
+_htmStartWithHead(f, head, title);
+}
+
 void htmStart(FILE *f, char *title)
 /* Write the start of a stand alone .html file. */
 {
-fputs("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2//EN\">\n", f);
-_htmStart(f, title);
+htmStartWithHead(f, "", title);
 }
 
 /* Write the end of an html file */

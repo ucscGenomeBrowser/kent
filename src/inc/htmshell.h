@@ -53,6 +53,10 @@ void htmlStart(char *title);
 void htmStart(FILE *f, char *title);
 /* Write the start of a stand alone .html file. */
 
+void htmStartWithHead(FILE *f, char *head, char *title);
+/* Write the start of a stand alone .html file, plus head info */
+
+
 void htmlEnd();
 /* Write the end of a cgi-generated html file */
 

@@ -16,7 +16,7 @@
 #include "trashDir.h"
 #include "customFactory.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.67 2007/03/19 22:50:56 angie Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.68 2007/04/26 22:22:04 galt Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -1097,10 +1097,10 @@ cartCheckout(&cart);
 htmlEnd();
 }
 
-void cartHtmlShell(char *title, void (*doMiddle)(struct cart *cart), 
+void cartHtmlShellWithHead(char *head, char *title, void (*doMiddle)(struct cart *cart), 
 	char *cookieName, char **exclude, struct hash *oldVars)
 /* Load cart from cookie and session cgi variable.  Write web-page 
- * preamble, call doMiddle with cart, and write end of web-page.   
+ * preamble including head and title, call doMiddle with cart, and write end of web-page.   
  * Exclude may be NULL.  If it exists it's a comma-separated list of 
  * variables that you don't want to save in the cart between
  * invocations of the cgi-script. */
@@ -1125,10 +1125,21 @@ else if (pos == NULL && org == NULL)
 else
     safef(titlePlus,sizeof(titlePlus), "%s%s %s - %s",org, extra,pos, title );
 popWarnHandler();
-htmStart(stdout, titlePlus);
+htmStartWithHead(stdout, head, titlePlus);
 cartWarnCatcher(doMiddle, cart, htmlVaWarn);
 cartCheckout(&cart);
 htmlEnd();
+}
+
+void cartHtmlShell(char *title, void (*doMiddle)(struct cart *cart), 
+	char *cookieName, char **exclude, struct hash *oldVars)
+/* Load cart from cookie and session cgi variable.  Write web-page 
+ * preamble, call doMiddle with cart, and write end of web-page.   
+ * Exclude may be NULL.  If it exists it's a comma-separated list of 
+ * variables that you don't want to save in the cart between
+ * invocations of the cgi-script. */
+{
+cartHtmlShellWithHead("", title, doMiddle, cookieName, exclude, oldVars);
 }
 
 void cartSetDbConnector(DbConnector connector) 
