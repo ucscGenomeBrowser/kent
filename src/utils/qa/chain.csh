@@ -23,10 +23,12 @@ if ( $#argv == 0 || $#argv > 2) then
   echo
   echo "  runs test suite on chain track (on both regular and Link tables)"
   echo "  expects trackname in chrN_chainOrg format"
+  echo "  though it now works for chainOrg format assemblies"
   echo "  slow processes are in chain2.csh"
   echo
   echo "    usage:  database, trackname"
-  echo "    e.g. chain.csh mm7 chrN_chainXenTro1 > & mm7.chain.xenTro1 &"
+  echo "    e.g. chain.csh mm7     chrN_chainXenTro1 > & mm7.chain.xenTro1 &"
+  echo "      or chain.csh anoCar1 chainXenTro1      > & anoCar1.chain.xenTro1 &"
   echo
   exit
 else
@@ -76,33 +78,45 @@ endif
 # ------------------------------------------------
 # make sure that the tName column matches the table name:
 #
-# actually, all this does is check to see if there is only
-# one type of tName; it doesn't actually check to see if
-# that tName value matches the table name!
 
 echo
 echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
 echo "checking to see if tName matches table name:"
-echo "if there is no output here, then it passes."
-echo
 
 if ( $split == "unsplit" ) then
   echo "can't actually do this comparison if table is not split."
   echo
 else
+  echo "if there is no output here, then it passes."
   foreach chrom (`cat $db.chromlist`)
-    set numTNames=`hgsql -N -e "SELECT COUNT(DISTINCT(tName)) FROM ${chrom}_chain$Org" $db`
+    set numTNames=`hgsql -N -e "SELECT COUNT(DISTINCT(tName)) \
+     FROM ${chrom}_chain$Org" $db`
     if ($numTNames != 1) then
       echo num = $numTNames    
       echo "Not all of the tNames in ${chrom}_chain$Org match the table name "
       echo "(you should check this table by hand)."
+    else
+      set tName=`hgsql -N -e "SELECT tName FROM ${chrom}_chain$Org\
+        LIMIT 1" $db`
+      if ( $tName != $chrom ) then
+        echo "tName does not match in $chrom_chain${Org}!"
+        echo
+      endif
     endif
     set numTNames=`hgsql -N -e "SELECT COUNT(DISTINCT(tName)) \
       FROM ${chrom}_chain${Org}Link" $db`
     if ($numTNames != 1) then
       echo num = $numTNames    
-    echo "Not all of the tNames in ${chrom}_chain${Org}Link match the table name "
+      echo "Not all of the tNames in ${chrom}_chain${Org}Link match \
+       the table name "
       echo "(you should check this table by hand)."
+    else
+      set tName=`hgsql -N -e "SELECT tName FROM ${chrom}_chain${Org} \
+        LIMIT 1" $db`
+      if ( $tName != $chrom ) then
+        echo "tName does not match in $chrom_chain${Org}Link!"
+        echo
+      endif
     endif
   end
 endif
@@ -148,7 +162,6 @@ if ( $split != "unsplit" ) then
     if ( $len > $length ) then
       set length=$len
     endif
-    echo $chrom $length
   end
   set length=`echo $length | awk '{print $1+1}'`
   set longlength=`echo $length | awk '{print $1+12}'`
@@ -185,12 +198,15 @@ echo
 
 echo
 echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
+echo "rowcounts"
+echo
 
 if ( $split == "unsplit" ) then
-  echo $trackname
-  hgsql -e "SELECT COUNT(*) AS rows FROM chain${Org}" $db
-  echo ${trackname}Link
-  hgsql -e "SELECT COUNT(*) AS rows FROM chain${Org}Link" $db
+  echo chain$trackname
+  hgsql -t -e "SELECT COUNT(*) AS rows FROM chain${Org}" $db
+  echo chain${trackname}Link
+  hgsql -t -e "SELECT COUNT(*) AS rows FROM chain${Org}Link" $db
+  echo "too many chroms to do a count per chrom"
 else
   echo "check for rowcounts in each table:"
   echo "rowcounts are listed - pay attention to counts of 0"
