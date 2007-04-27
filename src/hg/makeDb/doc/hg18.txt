@@ -11343,6 +11343,14 @@ gzip illumina.bed
     hgLoadBed hg18 snpArrayIllumina550 550.bed.M -tab -oldTable
     hgLoadBed hg18 snpArrayIllumina650 650.bed.M -tab -oldTable
 
+    # add indices
+    mysql> alter table snpArrayIllumina300 add index name (name);
+    mysql> alter table snpArrayIllumina300 add index chrom (chrom, bin);
+    mysql> alter table snpArrayIllumina550 add index name (name);
+    mysql> alter table snpArrayIllumina550 add index chrom (chrom, bin);
+    mysql> alter table snpArrayIllumina650 add index name (name);
+    mysql> alter table snpArrayIllumina650 add index chrom (chrom, bin);
+
     #  fix strand convention
     mysql> update snpArrayIllumina300 set strand = "+" where strand = "F";
     mysql> update snpArrayIllumina300 set strand = "-" where strand = "R";
