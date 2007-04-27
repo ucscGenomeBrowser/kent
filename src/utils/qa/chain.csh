@@ -136,7 +136,6 @@ else
   end
 endif
 
-
 # ----------------------------------------------
 # check the min and max score values
 #  (later: get the size of the largest chrom and set the column width to that)
@@ -154,7 +153,6 @@ if ( $split != "unsplit" ) then
   set length=`echo $length | awk '{print $1+1}'`
   set longlength=`echo $length | awk '{print $1+12}'`
 endif
-
 
 echo
 echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
@@ -218,14 +216,12 @@ echo
 # -------------------------------------------------
 # check that qStrand has a valid value
 
-
 echo
 echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
 echo "count + and - strand alignments"
 echo "watch for zeroes"
 
 echo
-
 
 if ( $split == "unsplit" ) then
   set badStrands=`hgsql -N -e 'SELECT COUNT(*) FROM chain'$Org' \
@@ -281,19 +277,24 @@ echo
 # -------------------------------------------------
 # check that qStrand is displayed properly:
 
-
 echo
 echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
 echo "use these three rows to check (manually) that qStrand is \
    displayed properly in the browser:"
 echo
 
-set last=''
-set last=`hgsql -N -e "SELECT MAX(chrom) FROM chromInfo" $db`
-
-hgsql -t -e "SELECT tName, tStart, tEnd, qName, qStrand \
-    FROM ${last}_$track WHERE tStart > 10000000 LIMIT 3" $db
-echo
+if ( $split == "unsplit" ) then
+  hgsql -t -e "SELECT tName, tStart, tEnd, qName, qStrand \
+      FROM $track WHERE tStart > 10000000 LIMIT 3" $db
+  echo
+else
+  set last=''
+  set last=`hgsql -N -e "SELECT MAX(chrom) FROM chromInfo" $db`
+  
+  hgsql -t -e "SELECT tName, tStart, tEnd, qName, qStrand \
+      FROM ${last}_$track WHERE tStart > 10000000 LIMIT 3" $db
+  echo
+endif
 
 # -------------------------------------------------
 # check that tables are sorted by tStart:
