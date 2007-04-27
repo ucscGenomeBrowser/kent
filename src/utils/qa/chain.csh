@@ -15,8 +15,6 @@ set db=""
 set split=""
 set chrom=""
 set trackname=""
-set currDir=$cwd
-
 
 if ( $#argv == 0 || $#argv > 2) then
   # no command line args
