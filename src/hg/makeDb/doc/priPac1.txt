@@ -3,7 +3,7 @@
 # Pristionchus pacificus
 #	Washington University School of Medicine GSC and Sanger Institute
 #
-#  $Id: priPac1.txt,v 1.4 2007/04/25 17:02:55 hiram Exp $
+#  $Id: priPac1.txt,v 1.5 2007/04/27 23:57:43 hiram Exp $
 ###########################################################################
 ## Download sequence - (DONE - 2007-02-25 - Hiram)
     ssh kkstore02
@@ -345,3 +345,19 @@ priPac1.perChromTables = no
 	VALUES ("priPac1", "blat11", "17787", "0", "1");' \
 	    hgcentraltest
     #	test it with some sequence
+
+##########################################################################
+## summarize chainLink measurements (2007-04-25 - Hiram)
+# org       on priPac1 on other
+# caePb1     8.026      7.754
+# ce4        6.667      8.647
+# caeRem2    6.199      6.108
+# cb3        5.345      6.526
+
+##########################################################################
+#  Set default position to cover the 16S ribosomal RNA area
+##	(DONE - 2007-04-26 - Hiram)
+    ssh hgwdev
+    hgsql -e 'update dbDb set defaultPos="chrUn:64713500-64721000"
+	where name="priPac1"' hgcentraltest
+
