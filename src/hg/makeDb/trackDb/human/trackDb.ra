@@ -1586,7 +1586,7 @@ type netAlign
     shortLabel Chimp Syntenic Net
     longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
     group compGeno
-    priority 300.5
+    priority 1
     visibility hide
     spectrum on
     type netAlign panTro2 chainPanTro2
@@ -1597,7 +1597,7 @@ type netAlign
     shortLabel Rhesus Net
     longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
     group compGeno
-    priority 300.4
+    priority 2
     visibility hide
     spectrum on
     type netAlign rheMac2 chainRheMac2
@@ -1608,7 +1608,7 @@ type netAlign
     shortLabel Mouse Syntenic Net
     longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
     group compGeno
-    priority 300.3
+    priority 3
     visibility hide
     spectrum on
     type netAlign mm8 chainMm8
@@ -1619,7 +1619,7 @@ type netAlign
     shortLabel Rat Syntenic Net
     longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
     group compGeno
-    priority 300.2
+    priority 5
     visibility hide
     spectrum on
     type netAlign rn4 chainRn4
@@ -1630,11 +1630,44 @@ type netAlign
     shortLabel Dog Syntenic Net
     longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
     group compGeno
-    priority 300.1
+    priority 6
     visibility hide
     spectrum on
     type netAlign canFam2 chainCanFam2
     otherDb canFam2
+
+    track netSyntenyEquCab1
+    subTrack syntenicNet
+    shortLabel Horse Syntenic Net
+    longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
+    group compGeno
+    priority 7
+    visibility hide
+    spectrum on
+    type netAlign equCab1 chainEquCab1
+    otherDb equCab1
+
+    track netSyntenyMonDom4
+    subTrack syntenicNet
+    shortLabel Opossum Syntenic Net
+    longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
+    group compGeno
+    priority 9
+    visibility hide
+    spectrum on
+    type netAlign monDom4 chainMonDom4
+    otherDb monDom4
+
+    track netSyntenyBosTau2
+    subTrack syntenicNet
+    shortLabel Cow Syntenic Net
+    longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
+    group compGeno
+    priority 8
+    visibility hide
+    spectrum on
+    type netAlign bosTau3 chainBosTau2
+    otherDb bosTau3
 
 track rBestNet
 shortLabel Reciprocal Best Nets
