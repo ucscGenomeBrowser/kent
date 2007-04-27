@@ -433,7 +433,7 @@ close (FH);
 	-qRepeats=windowmaskerSdust -bigClusterHub=kk \
 	-swap > swap.log 2>&1 &
     #	real    3m57.854s
-    cat fb.caeRem2.chainCb3Link.txt
+    cat fb.caePb1.chainCb3Link.txt
     #	59366018 bases of 175247318 (33.876%) in intersection
 
 ##############################################################################
@@ -523,7 +523,8 @@ TMPDIR=/scratch/tmp
 	/cluster/data/caePb1/bed/blastz.caeRem2.2007-04-19/DEF \
 	-bigClusterHub=kk -swap > swap.log 2>&1 &
     #	real    32m51.630s
-    cat 
+    cat fb.caeRem2.chainCaePb1Link.txt
+    #	78402339 bases of 146898439 (53.372%) in intersection
 
 ##############################################################################
 ## BLASTZ priPac1 (WORKING - 2007-04-20 - Hiram)
@@ -649,3 +650,32 @@ caePb1.perChromTables = no
 	VALUES ("caePb1", "blat10", "17787", "0", "1");' \
 	    hgcentraltest
     #	test it with some sequence
+
+##########################################################################
+## summarize chainLink measurements (2007-04-25 - Hiram)
+# org       on caePb1  on other
+# caeRem2   53.147     53.372
+# ce4       42.659     52.447
+# cb3       33.876     39.446
+# priPac1    7.754      8.026
+
+##########################################################################
+#  Set default position to cover the 16S ribosomal RNA area
+##	(DONE - 2007-04-26 - Hiram)
+    ssh hgwdev
+    hgsql -e 'update dbDb set defaultPos="chrUn:97956213-97960870"
+	where name="caePb1"' hgcentraltest
+
+##########################################################################
+## This nematode now has an official name (DONE - 2007-04-27 - Hiram)
+    ssh hgwdev
+    hgsql -e 'update dbDb set organism="C. brenneri"
+	where name="caePb1"' hgcentraltest
+    hgsql -e 'update dbDb set genome="C. brenneri"
+	where name="caePb1"' hgcentraltest
+    hgsql -e 'update dbDb set scientificName="Caenorhabditis brenneri"
+	where name="caePb1"' hgcentraltest
+    hgsql -e 'update defaultDb set genome="C. brenneri"
+	where name="caePb1"' hgcentraltest
+    hgsql -e 'update genomeClade set genome="C. brenneri"
+	where genome="C. PB2801"' hgcentraltest
