@@ -66,7 +66,7 @@
 #include "errabort.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: phyloGif.c,v 1.15 2007/04/06 19:20:14 baertsch Exp $";
+static char const rcsid[] = "$Id: phyloGif.c,v 1.16 2007/04/27 20:28:36 angie Exp $";
 
 struct cart *cart=NULL;      /* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -383,7 +383,7 @@ else
     lengthLegend = cgiVarExists("phyloGif_lengthLegend");
     branchLabels = cgiVarExists("phyloGif_branchLabels");
     branchDecimals = cgiUsualInt("phyloGif_branchDecimals", branchDecimals);
-    branchMultiplier = cartUsualInt(cart,"phyloGif_branchMultiplier", branchMultiplier);
+    branchMultiplier = cgiUsualInt("phyloGif_branchMultiplier", branchMultiplier);
     preserveUnderscores = cgiVarExists("phyloGif_underscores");
     }
     
