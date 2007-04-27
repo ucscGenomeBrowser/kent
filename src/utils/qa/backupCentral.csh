@@ -17,7 +17,6 @@ set hgwdevString=""
 set hgwbetaString=""
 set rrString=""
  
-set hgwdevString='hgcentraltest'
 if ($#argv == 0 || $#argv > 1) then
   # no command line args
   echo
