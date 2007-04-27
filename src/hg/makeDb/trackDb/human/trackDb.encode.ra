@@ -2120,7 +2120,7 @@ visibility hide
 type bed 3 .
 origAssembly hg17
 dataVersion ENCODE Oct 2005 Freeze
-html encode AffyChipSitesStrict
+html encodeAffyChipSitesStrict
 
 track encodeAffyChIpHl60SitesStrict
 release beta
