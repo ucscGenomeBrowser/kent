@@ -1782,8 +1782,8 @@ origAssembly hg17
 dataVersion ENCODE Oct 2005 Freeze
 html encodeAffyChipPvalStrict
 
-release beta
 track encodeAffyChIpHl60PvalStrict
+release beta
 shortLabel Affy Strict pVal
 longLabel Affymetrix ChIP/Chip (retinoic acid-treated HL-60 cells) Strict P-Value
 compositeTrack on
