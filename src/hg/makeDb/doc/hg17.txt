@@ -22499,6 +22499,11 @@ awk '{print $2, $3, $4, $1, 0, $5, $6}' 650.join > 650.bed
 # load
 hgLoadBed hg17 snpArrayIllumina550 550.bed -sqlTable=snpArrayIllumina550.sql
 hgLoadBed hg17 snpArrayIllumina650 650.bed -sqlTable=snpArrayIllumina650.sql
+# indices
+mysql> alter table snpArrayIllumina550 add index name (name);
+mysql> alter table snpArrayIllumina550 add index chrom (chrom, bin);
+mysql> alter table snpArrayIllumina650 add index name (name);
+mysql> alter table snpArrayIllumina650 add index chrom (chrom, bin);
 
 #############################################################
 # Affy 500K (Heather, September 2006)
