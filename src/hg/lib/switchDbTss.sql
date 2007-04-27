@@ -5,7 +5,7 @@
 
 #Switchgear Genomics TSS DB table
 CREATE TABLE switchDbTss (
-    bin smallint unsigned not null,
+    bin smallint unsigned not null,  # bin for speed
     chrom varchar(255) not null,	# Reference sequence chromosome or scaffold
     chromStart int unsigned not null,	# Start in Chromosome
     chromEnd int unsigned not null,	# End in Chromosome
@@ -16,10 +16,9 @@ CREATE TABLE switchDbTss (
     gmName varchar(255) not null,	# Gene model UID/name
     gmChromStart int unsigned not null,	# Gene model chromStart
     gmChromEnd int unsigned not null,	# Gene model chromEnd
-    pseudoType varchar(255) not null,	# Type of pseudogene or n/a
-              #Indices
+    isPseudo tinyint unsigned not null,	# 0 if not a pseudogene TSS, 1 if it is
               #Indices
     INDEX chrom (chrom(8), bin),
     INDEX chromStart (chrom(8), chromStart),
-    INDEX name (name)
+    INDEX name (name)    
 );

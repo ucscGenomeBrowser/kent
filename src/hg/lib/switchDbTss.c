@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "switchDbTss.h"
 
-static char const rcsid[] = "$Id: switchDbTss.c,v 1.2 2007/04/18 09:42:26 aamp Exp $";
+static char const rcsid[] = "$Id: switchDbTss.c,v 1.3 2007/04/27 18:30:22 aamp Exp $";
 
 void switchDbTssStaticLoad(char **row, struct switchDbTss *ret)
 /* Load a row from switchDbTss table into ret.  The contents of ret will
@@ -25,7 +25,7 @@ ret->confScore = sqlDouble(row[6]);
 ret->gmName = row[7];
 ret->gmChromStart = sqlUnsigned(row[8]);
 ret->gmChromEnd = sqlUnsigned(row[9]);
-ret->pseudoType = row[10];
+ret->isPseudo = sqlUnsigned(row[10]);
 }
 
 struct switchDbTss *switchDbTssLoad(char **row)
@@ -45,7 +45,7 @@ ret->confScore = sqlDouble(row[6]);
 ret->gmName = cloneString(row[7]);
 ret->gmChromStart = sqlUnsigned(row[8]);
 ret->gmChromEnd = sqlUnsigned(row[9]);
-ret->pseudoType = cloneString(row[10]);
+ret->isPseudo = sqlUnsigned(row[10]);
 return ret;
 }
 
@@ -104,7 +104,7 @@ ret->confScore = sqlDoubleComma(&s);
 ret->gmName = sqlStringComma(&s);
 ret->gmChromStart = sqlUnsignedComma(&s);
 ret->gmChromEnd = sqlUnsignedComma(&s);
-ret->pseudoType = sqlStringComma(&s);
+ret->isPseudo = sqlUnsignedComma(&s);
 *pS = s;
 return ret;
 }
@@ -119,7 +119,6 @@ if ((el = *pEl) == NULL) return;
 freeMem(el->chrom);
 freeMem(el->name);
 freeMem(el->gmName);
-freeMem(el->pseudoType);
 freez(pEl);
 }
 
@@ -167,9 +166,7 @@ fprintf(f, "%u", el->gmChromStart);
 fputc(sep,f);
 fprintf(f, "%u", el->gmChromEnd);
 fputc(sep,f);
-if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->pseudoType);
-if (sep == ',') fputc('"',f);
+fprintf(f, "%u", el->isPseudo);
 fputc(lastSep,f);
 }
 

@@ -16,12 +16,13 @@ switchDbTssFree(pTss);
 }
 
 boolean switchDbTssFilterPseudo(struct slList *slItem)
+/* "Include pseudogenes" checkbox filter. */
 {
 struct switchDbTss *item = (struct switchDbTss *)slItem;
 boolean includePseudo = cartUsualBoolean(cart, "switchDbTss.pseudo", FALSE);
 if (item == NULL)
     return FALSE;
-if (!includePseudo && (item->pseudoType != NULL) && !sameString(item->pseudoType, "none"))
+if (!includePseudo && (item->isPseudo == 1))
     return FALSE;
 return TRUE;
 }
@@ -53,6 +54,11 @@ return lf;
 void loadItemsSwitchDbTss(struct track *tg)
 /* Load switchDbTss items into a linkedFeatures list. */
 {
+char optionScoreStr[128]; /* Option -  score filter */
+safef(optionScoreStr, sizeof(optionScoreStr), "%s.scoreFilter",
+      tg->tdb->tableName);
+if (!cartVarExists(cart, optionScoreStr))
+    cartSetInt(cart, optionScoreStr, SWITCHDBTSS_FILTER); 
 loadLinkedFeaturesWithLoaders(tg, switchDbTssLoadConduit, lfFromSwitchDbTss, 
 			      switchDbTssFreeConduit, "confScore", NULL, switchDbTssFilterPseudo);
 }

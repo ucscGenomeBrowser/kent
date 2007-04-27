@@ -86,6 +86,9 @@ char *hBackgroundImage();
 /* Microarray default setting. */
 #define MICROARRAY_CLICK_LIMIT 200
 
+/* SwitchGear TSS default filter. */
+#define SWITCHDBTSS_FILTER 10
+
 void netUi(struct trackDb *tdb);
 
 struct controlGrid

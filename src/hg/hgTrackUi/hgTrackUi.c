@@ -30,7 +30,7 @@
 
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.364 2007/04/26 16:04:29 giardine Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.365 2007/04/27 18:30:16 aamp Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1019,7 +1019,7 @@ char *menu[3] = {"All TSSs (no filter)", "Lower stringency (score >= 10)", "High
 char *values[3] = {"0", "10", "20"};
 char *scoreValString = trackDbSetting(tdb, "scoreFilter");
 int scoreSetting;
-int scoreVal = 0;
+int scoreVal = SWITCHDBTSS_FILTER;
 char tempScore[256];
 if (scoreValString != NULL)
     scoreVal = atoi(scoreValString);

@@ -205,7 +205,7 @@
 #include "geneCheckDetails.h"
 #include "kg1ToKg2.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1278 2007/04/27 12:02:17 giardine Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1279 2007/04/27 18:30:12 aamp Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -6319,8 +6319,7 @@ if ((row = sqlNextRow(sr)) != NULL)
        hgTracksPathAndSettings(), database, tss.chrom, tss.gmChromStart+1, tss.gmChromEnd);
     printf("%s:%d-%d</A><BR>\n", tss.chrom, tss.gmChromStart+1, tss.gmChromEnd);
     printf("<B>TSS Confidence Score:</B> %.1f<BR>\n", tss.confScore);
-    if (tss.pseudoType && !sameString(tss.pseudoType, "none"))
-	printf("<B>Pseudogene classification: </B> %s<BR>\n", tss.pseudoType);
+    printf("<B>Pseudogene TSS: </B>%s<BR>\n", (tss.isPseudo == 1) ? "Yes" : "No");
     }
 else
     {

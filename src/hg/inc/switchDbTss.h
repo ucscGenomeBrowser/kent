@@ -21,7 +21,7 @@ struct switchDbTss
     char *gmName;	/* Gene model UID/name */
     unsigned gmChromStart;	/* Gene model chromStart */
     unsigned gmChromEnd;	/* Gene model chromEnd */
-    char *pseudoType;	/* Type of pseudogene or n/a */
+    unsigned char isPseudo;	/* 0 if not a pseudogene TSS, 1 if it is */
     };
 
 void switchDbTssStaticLoad(char **row, struct switchDbTss *ret);
