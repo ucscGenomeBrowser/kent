@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/makePushQSql.pl instead.
 
-# $Id: makePushQSql.pl,v 1.2 2006/12/07 21:35:20 angie Exp $
+# $Id: makePushQSql.pl,v 1.3 2007/04/27 23:31:48 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -292,7 +292,7 @@ sub getTrackEntries {
   # remove it from $allTables.
   foreach my $table (keys %{$allTables}) {
     my $track = $table;
-    $track =~ s/^$prefixPattern//;
+    $track =~ s/^$prefixPattern// if ($prefixPattern);
     my $tdb = $trackDb->{$track};
     if (defined $tdb) {
       # This table is a track table -- add an entry.
@@ -338,7 +338,7 @@ sub getTrackEntries {
   # correct but QA and the developer can sort it out.
   foreach my $table (keys %{$allTables}) {
     my $tbase = $table;
-    $tbase =~ s/^$prefixPattern//;
+    $tbase =~ s/^$prefixPattern// if ($prefixPattern);
     my $allDotJoiner = "$ENV{HOME}/kent/src/hg/makeDb/schema/all.joiner";
     my $pipe = "joinableFields $allDotJoiner $db $tbase |";
     open(P, $pipe)
