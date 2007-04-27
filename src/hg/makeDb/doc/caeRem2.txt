@@ -4,7 +4,7 @@
 #	From Wash U GSC
 #	http://genome.wustl.edu/genome.cgi?GENOME=Caenorhabditis+remanei
 
-#  $Id: caeRem2.txt,v 1.7 2007/04/25 17:09:08 hiram Exp $
+#  $Id: caeRem2.txt,v 1.8 2007/04/27 23:58:49 hiram Exp $
 
 #########################################################################
 # DOWNLOAD SEQUENCE (DONE - 2007-03-16 - Hiram)
@@ -416,3 +416,33 @@ caeRem2.perChromTables = no
 	VALUES ("caeRem2", "blat10", "17789", "0", "1");' \
 	    hgcentraltest
     #	test it with some sequence
+
+##########################################################################
+## summarize chainLink measurements (2007-04-25 - Hiram)
+# org       on caeRem2 on other
+# caePb1    53.372     53.147
+# cb3       43.086     49.062
+# ce4       35.572     45.034
+# priPac1    6.108      6.199
+
+##########################################################################
+#  Set default position to cover the 16S ribosomal RNA area
+##	(DONE - 2007-04-26 - Hiram)
+    ssh hgwdev
+    hgsql -e 'update dbDb set defaultPos="chrUn:103531185-103538203"
+	where name="caeRem2"' hgcentraltest
+
+############################################################################
+## Adding a Photograph, from Eric Hagg in email 2007-04-07 12:04
+    #	-rw-r--r--  1 369754 Jan  1  2000 remanei_midsection.jpg
+    #	remanei_midsection.jpg JPEG 716x972 DirectClass 361kb 0.000u 0:01
+    mkdir /cluster/data/caeRem2/photograph
+    cd /cluster/data/caeRem2/photograph
+    convert -sharpen 0 -normalize \
+	-geometry "400x400" "remanei_midsection.jpg" \
+	Caenorhabditis_remanei.jpg
+    #	check this .jpg file into the browser doc source tree images directory
+    cvs add -kb Caenorhabditis_remanei.jpg
+    cvs commit Caenorhabditis_remanei.jpg
+    cp -p Caenorhabditis_remanei.jpg /usr/local/apache/htdocs/images
+
