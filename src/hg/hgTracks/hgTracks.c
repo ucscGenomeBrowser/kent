@@ -108,7 +108,7 @@
 #include "hapmapTrack.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1323 2007/04/25 22:21:06 heather Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1324 2007/04/27 23:09:29 hartera Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -1684,6 +1684,11 @@ enum baseColorDrawOpt drawOpt = baseColorDrawOff;
 Color saveColor = color;
 boolean indelShowDoubleInsert, indelShowQueryInsert, indelShowPolyA;
 
+if (((vis == tvFull) || (vis == tvPack)) && (tg->subType == lfNoIntronLines))
+    {
+    hideLine = TRUE;
+    hideArrows = FALSE;
+    }
 indelEnabled(cart, tg->tdb, &indelShowDoubleInsert, &indelShowQueryInsert,
 	     &indelShowPolyA);
 if (indelShowDoubleInsert && !hideLine)
@@ -10778,6 +10783,13 @@ tg->loadItems = loadGenePredWithConfiguredName;
 tg->itemName = gencodeGeneName;
 }
 
+static void gencodeRaceFragsMethods(struct track *tg)
+/* Load up custom methods for ENCODE Gencode RACEfrags track */
+{
+tg->loadItems = loadGenePred;
+tg->subType = lfNoIntronLines;
+}
+
 void loadDless(struct track *tg) 
 /* Load dless items */
 {
@@ -13133,6 +13145,7 @@ registerTrackHandler("encodeGencodeGeneMar07", gencodeGeneMethods);
 registerTrackHandler("encodeGencodeIntron", gencodeIntronMethods);
 registerTrackHandler("encodeGencodeIntronJun05", gencodeIntronMethods);
 registerTrackHandler("encodeGencodeIntronOct05", gencodeIntronMethods);
+registerTrackHandler("encodeGencodeRaceFrags", gencodeRaceFragsMethods);
 registerTrackHandler("affyTxnPhase2", affyTxnPhase2Methods);
 registerTrackHandler("gvPos", gvMethods);
 registerTrackHandler("oreganno", oregannoMethods);
