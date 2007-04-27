@@ -205,7 +205,7 @@
 #include "geneCheckDetails.h"
 #include "kg1ToKg2.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1277 2007/04/26 22:14:34 lowec Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1278 2007/04/27 12:02:17 giardine Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -17975,7 +17975,7 @@ if ((row = sqlNextRow(sr)) != NULL)
     printPos(mut->chrom, mut->chromStart, mut->chromEnd, strand, TRUE, mut->name);
     }
 sqlFreeResult(&sr);
-printf("*Note the DNA retrieved by the above link is the chromosome sequence.<br>");
+printf("*Note the DNA retrieved by the above link is the genomic sequence.<br>");
 
 /* fetch and print the source */
 safef(query, sizeof(query),
