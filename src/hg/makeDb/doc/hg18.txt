@@ -11322,6 +11322,53 @@ gzip illumina.bed
     # 69 more unknown)
     hgLoadBed hg18 snpArrayAffyGenomeWide affyLookup.out -tab -sqlTable=snpArrayAffyGenomeWide.sql
 
+
+##########################################################################
+# New Illumina Array data (Heather April 2006)
+# HumanHap300v3, HumanHap550v3, HumanHap650v3
+# Data from Luana Galver (lgalver@illumina.com)  
+# Based on dbSNP build 126
+
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/snp/illumina
+    # split off chrM from zips
+    bed.pl < 300.in > 300.bed
+    bed.pl < 550.in > 550.bed
+    bed.pl < 650.in > 650.bed
+    chrM.pl < 550.in.M > 550.bed.M
+    chrM.pl < 650.in.M > 650.bed.M
+    hgLoadBed hg18 snpArrayIllumina300 300.bed -sqlTable=snpArrayIllumina300.sql -tab
+    hgLoadBed hg18 snpArrayIllumina550 550.bed -sqlTable=snpArrayIllumina550.sql -tab
+    hgLoadBed hg18 snpArrayIllumina650 650.bed -sqlTable=snpArrayIllumina650.sql -tab
+    hgLoadBed hg18 snpArrayIllumina550 550.bed.M -tab -oldTable
+    hgLoadBed hg18 snpArrayIllumina650 650.bed.M -tab -oldTable
+
+    #  fix strand convention
+    mysql> update snpArrayIllumina300 set strand = "+" where strand = "F";
+    mysql> update snpArrayIllumina300 set strand = "-" where strand = "R";
+    mysql> update snpArrayIllumina550 set strand = "+" where strand = "F";
+    mysql> update snpArrayIllumina550 set strand = "-" where strand = "R";
+    mysql> update snpArrayIllumina650 set strand = "+" where strand = "F";
+    mysql> update snpArrayIllumina650 set strand = "-" where strand = "R";
+
+    # Note no A/T or C/G!!
+    mysql> select distinct(observed) from snpArrayIllumina300;
+    # +----------+
+    # | observed |
+    # +----------+
+    # | [A/G]    |
+    # | [T/C]    |
+    # | [A/C]    |
+    # | [T/G]    |
+    # +----------+
+
+    # Note 2 rows in 300 and 15 rows in 550 and 650 where chrom = "chrXY"
+
+    # validation
+    /cluster/home/heather/kent/src/hg/snp/snpLoad/illuminaLookup hg18 snpArrayIllumina300 snp126 snp126Exceptions illuminaLookup.hg18.300
+    /cluster/home/heather/kent/src/hg/snp/snpLoad/illuminaLookup hg18 snpArrayIllumina550 snp126 snp126Exceptions illuminaLookup.hg18.550
+    /cluster/home/heather/kent/src/hg/snp/snpLoad/illuminaLookup hg18 snpArrayIllumina650 snp126 snp126Exceptions illuminaLookup.hg18.650
+
 ##########################################################################
 # Added gvPos table for Locus Variants (Belinda Giardine Sept 2006)
 # This uses the gv* tables in hgFixed for the related data.  The track has
