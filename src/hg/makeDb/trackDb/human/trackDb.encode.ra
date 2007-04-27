@@ -1762,6 +1762,27 @@ dataVersion ENCODE June 2005 Freeze
 # ENCODE Affy ChIP/chip
 
 #October freeze (strict) data
+release alpha
+track encodeAffyChIpHl60PvalStrict
+shortLabel Affy Strict pVal
+longLabel Affymetrix ChIP/Chip (HL-60 and ME-180 cells) Strict P-Value
+compositeTrack on
+subGroup1 factor Factor H3K9K14ac2=H3K9K14ac2 H4Kac4=H4Kac4 Pol2=Pol2 actd=p63_ActD mactd=p63_mActD
+subGroup2 time Timepoint 0h=0hrs 2h=2hrs 8h=8hrs 32h=32hrs
+group encodeChip
+priority 43.7
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type wig 0 696.62
+spanList 1
+viewLimits 0:250
+maxHeightPixels 128:16:16
+autoScale off
+origAssembly hg17
+dataVersion ENCODE Oct 2005 Freeze
+html encodeAffyChipPvalStrict
+
+release beta
 track encodeAffyChIpHl60PvalStrict
 shortLabel Affy Strict pVal
 longLabel Affymetrix ChIP/Chip (retinoic acid-treated HL-60 cells) Strict P-Value
@@ -1877,6 +1898,16 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 12
 
     track encodeAffyChIpHl60PvalStrictp63_ActD
+    release alpha
+    subTrack encodeAffyChIpHl60PvalStrict
+    subGroups factor=actd time=0h
+    shortLabel Affy p63 ActD ME-180
+    longLabel Affymetrix ChIP/Chip (p63, actinomycin-D treated ME-180) Strict P-Value
+    color 0,0,200
+    priority 13
+
+    track encodeAffyChIpHl60PvalStrictp63_ActD
+    release beta
     subTrack encodeAffyChIpHl60PvalStrict
     subGroups factor=actd time=0h
     shortLabel Affy p63-ActD
@@ -1885,6 +1916,16 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 13
 
     track encodeAffyChIpHl60PvalStrictp63_mActD
+    release alpha
+    subTrack encodeAffyChIpHl60PvalStrict
+    subGroups factor=mactd time=0h
+    shortLabel Affy p63 ME-180
+    longLabel Affymetrix ChIP/Chip (p63, ME-180) Strict P-Value
+    color 0,0,200
+    priority 14
+
+    track encodeAffyChIpHl60PvalStrictp63_mActD
+    release beta
     subTrack encodeAffyChIpHl60PvalStrict
     subGroups factor=mactd time=0h
     shortLabel Affy p63
@@ -1893,6 +1934,27 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 14
 
 track encodeAffyChIpHl60SignalStrict
+release alpha
+shortLabel Affy Strict Sig
+longLabel Affymetrix ChIP/Chip (HL-60 and ME-180 cells) Strict Signal
+compositeTrack on
+subGroup1 factor Factor H3K9K14ac2=H3K9ac2 H4Kac4=H4Kac4 Pol2=Pol2 actd=p63_ActD mactd=p63_mActD
+subGroup2 time Timepoint 0h=0hrs 2h=2hrs 8h=8hrs 32h=32hrs
+group encodeChip
+priority 43.8
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type wig -2.78 3.97
+spanList 1
+viewLimits 0:2.0
+maxHeightPixels 128:16:16
+autoScale off
+origAssembly hg17
+dataVersion ENCODE Oct 2005 Freeze
+html encodeAffyChipSignalStrict
+
+track encodeAffyChIpHl60SignalStrict
+release beta
 shortLabel Affy Strict Sig
 longLabel Affymetrix ChIP/Chip (retinoic acid-treated HL-60 cells) Strict Signal
 compositeTrack on
@@ -2007,14 +2069,35 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 12
 
     track encodeAffyChIpHl60SignalStrictp63_ActD
+    release alpha
     subTrack encodeAffyChIpHl60SignalStrict
     subGroups factor=actd time=0h
-    shortLabel Affy p63-ActD
+    shortLabel Affy p63-ActD ME-180
+    longLabel Affymetrix ChIP/Chip (p63, actinomycin-D treated ME-180) Strict Signal
+    color 0,0,200
+    priority 13
+
+    track encodeAffyChIpHl60SignalStrictp63_ActD
+    release beta
+    subTrack encodeAffyChIpHl60SignalStrict
+    subGroups factor=actd time=0h
+    shortLabel Affy p63 ActD ME-180
     longLabel Affymetrix ChIP/Chip (actinomycin-D treated p63 HL-60) Strict Signal
     color 0,0,200
     priority 13
 
     track encodeAffyChIpHl60SignalStrictp63_mActD
+    release alpha
+    subTrack encodeAffyChIpHl60SignalStrict
+    subGroups factor=mactd time=0h
+    shortLabel Affy p63 ME-180
+    longLabel Affymetrix ChIP/Chip (p63, ME-180) Strict Signal
+    color 225,0,0
+    color 0,0,200
+    priority 14
+
+    track encodeAffyChIpHl60SignalStrictp63_mActD
+    release beta
     subTrack encodeAffyChIpHl60SignalStrict
     subGroups factor=mactd time=0h
     shortLabel Affy p63
@@ -2024,6 +2107,23 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 14
 
 track encodeAffyChIpHl60SitesStrict
+release alpha
+shortLabel Affy Strict Sites
+longLabel Affymetrix ChIP/Chip (HL-60 and ME-180 cells) Strict Sites
+compositeTrack on
+subGroup1 factor Factor H3K9K14ac2=H3K9K14ac2 H4Kac4=H4Kac4 Pol2=Pol2 actd=p63_ActD mactd=p63_mActD
+subGroup2 time Timepoint 0h=0hrs 2h=2hrs 8h=8hrs 32h=32hrs
+group encodeChip
+priority 43.8
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type bed 3 .
+origAssembly hg17
+dataVersion ENCODE Oct 2005 Freeze
+html encode AffyChipSitesStrict
+
+track encodeAffyChIpHl60SitesStrict
+release beta
 shortLabel Affy Strict Sites
 longLabel Affymetrix ChIP/Chip (retinoic acid-treated HL-60 cells) Strict Sites
 compositeTrack on
@@ -2134,6 +2234,16 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 12
 
     track encodeAffyChIpHl60SitesStrictP63_ActD
+    release alpha
+    subTrack encodeAffyChIpHl60SitesStrict
+    subGroups factor=actd time=0h
+    shortLabel Affy p63 ActD ME-180
+    longLabel Affymetrix ChIP/Chip (p63, actinomycin-D treated ME-180) Strict Sites
+    color 0,0,200
+    priority 13
+
+    track encodeAffyChIpHl60SitesStrictP63_ActD
+    release beta
     subTrack encodeAffyChIpHl60SitesStrict
     subGroups factor=actd time=0h
     shortLabel Affy p63-ActD
@@ -2142,6 +2252,16 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 13
 
     track encodeAffyChIpHl60SitesStrictP63_mActD
+    release alpha
+    subTrack encodeAffyChIpHl60SitesStrict
+    subGroups factor=mactd time=0h
+    shortLabel Affy p63 ME-180
+    longLabel Affymetrix ChIP/Chip (p63, ME-180) Strict Sites
+    color 0,0,200
+    priority 14
+
+    track encodeAffyChIpHl60SitesStrictP63_mActD
+    release beta
     subTrack encodeAffyChIpHl60SitesStrict
     subGroups factor=mactd time=0h
     shortLabel Affy p63
