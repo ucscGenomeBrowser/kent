@@ -10,7 +10,7 @@
 #	are created.  See also, scripts:
 #	mkSwissProtDB.sh and mkProteinsDB.sh
 #
-#	"$Id: KGpathArchaea.sh,v 1.3 2006/07/28 19:12:49 lowe Exp $"
+#	"$Id: KGpathArchaea.sh,v 1.4 2007/04/28 05:47:18 pchan Exp $"
 #
 #	Thu Nov 20 11:16:16 PST 2003 - Created - Hiram
 #		Initial version is a translation of makeKgMm3.doc
@@ -33,7 +33,7 @@
 ###########################  subroutines  ############################
 
 #	ensure usage of latest binaries no matter what PATH the user may have
-PATH=/cluster/bin/i386:$PATH
+#PATH=/projects/lowelab/share/bin/i386:$PATH
 export PATH
 
 #	see if a table exists and it has rows
@@ -56,7 +56,7 @@ fi
 
 ###########################  MAIN  ###################################
 
-if [ "$#" -ne 4 ]; then
+if [ "$#" -ne 5 ]; then
     echo "usage: KGpath <DB> <RO_DB> <YYMMDD>"
     echo -e "\t<DB> - organism database to load"
     echo -e "\t<RO_DB> - read only from this database (the target)"
@@ -90,7 +90,7 @@ echo "`date` KGpath.sh $*"
 
 foundALL=""
 for i in hgsql kgXref rmKGPepMrna \
-	/cluster/data/genbank/bin/i386/gbGetSeqs wget \
+	gbGetSeqs wget \
 	hgMrnaRefseq kgGetPep pslReps hgKgMrna kgPrepBestMrna spm3 spm7 \
 	kgResultBestMrna dnaGene rmKGPepMrna kgXref kgAliasM kgAliasP \
 	kgProtAlias kgAliasKgXref kgAliasRefseq kgProtAliasNCBI \
@@ -111,15 +111,18 @@ fi
 DB=$1
 RO_DB=$2
 DATE=$3
-SPECIES=$4
+GENUS=$4
+SPECIES=$5
+
 PDB=proteins${DATE}
-TOP=/cluster/data/kgDB/bed/${DB}
-export DB RO_DB DATE PDB TOP
+# TOP=/cluster/data/kgDB/bed/${DB}
+# export DB RO_DB DATE PDB TOP
+export DB RO_DB DATE PDB
 echo DB=$DB
 echo RO_DB=$RO_DB
 echo DATE=$DATE
 echo PDB=$PDB
-echo TOP=$TOP
+# echo TOP=$TOP
 
 #	This perl script getKeggList.pl is a tricky operation
 #	It requires SOAP and XML modules to be installed
@@ -134,7 +137,7 @@ echo TOP=$TOP
 
 
 if [ ! -s ${SPECIES}.lis ]; then
-    wget --timestamping -O ${SPECIES}.html "http://www.genome.ad.jp/dbget-bin/www_bfind_sub?dbkey=pathway&keywords=${SPECIES}&mode=bfind&max_hit=1000&.cgifields=max_hit"
+    wget --timestamping -O ${SPECIES}.html "http://www.genome.ad.jp/dbget-bin/www_bfind_sub?dbkey=pathway&keywords=${GENUS}+${SPECIES}&mode=bfind&max_hit=1000&.cgifields=max_hit"
     grep -i HREF ${SPECIES}.html | perl -wpe "s/<[^>]+>//g" |sed -e 's/path:d/path:/g' > ${SPECIES}.lis
     wc -l ${SPECIES}.lis
     echo "$HOME/kent/src/hg/protein/getKeggList2.pl ${SPECIES} > keggList.tab"
@@ -183,7 +186,8 @@ TablePopulated "keggMapDesc" ${DB} || { \
 }
 echo "KEGG pathways done."
 exit 0
-cd ${TOP}
+
+# cd ${TOP}
 
 SPECIES=Hs
 case ${RO_DB} in
