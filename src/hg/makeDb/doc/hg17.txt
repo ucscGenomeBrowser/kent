@@ -6665,6 +6665,13 @@ EOF
     cd maf
     hgLoadMaf hg17 -warn multiz8way -pathPrefix=$mafDir/$table/maf
 
+    # someone dropped from hgwdev
+    # reload (2007-03-19 kate)
+    nice hgLoadMaf hg17 -warn multiz8way -pathPrefix=/gbdb/hg17/multiz8wayFixed
+    cat /gbdb/hg17/multiz8wayFixed/*.maf | \
+        nice hgLoadMafSummary hg17 -minSize=30000 -mergeGap=1500 -maxSize=200000  \
+            multiz8waySummary stdin
+
     # load blastz maf tables
     # TODO: change mafWiggle to use db names instead of species names
     # in speciesOrder 
