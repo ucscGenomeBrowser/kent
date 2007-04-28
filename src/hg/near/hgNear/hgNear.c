@@ -20,7 +20,7 @@
 #include "hgNear.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.164 2007/04/04 17:01:33 angie Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.165 2007/04/28 00:16:20 fanhsu Exp $";
 
 char *excludeVars[] = { "submit", "Submit", idPosVarName, NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -38,6 +38,7 @@ struct hash *genomeSettings;  /* Genome-specific settings from settings.ra. */
 struct hash *columnHash;  /* Hash of active columns keyed by name. */
 
 struct genePos *curGeneId;	  /* Identity of current gene. */
+int  kgVersion = KG_UNKNOWN;      /* KG version */
 
 /* ---- General purpose helper routines. ---- */
 
@@ -1666,14 +1667,23 @@ for (ord = ordList; ord != NULL; ord = ord->next)
 return ordList;
 }
 
-static char *lookupProtein(struct sqlConnection *conn, char *mrnaName)
+char *lookupProtein(struct sqlConnection *conn, char *mrnaName)
 /* Given mrna name look up protein.  FreeMem result when done. */
 {
 char query[256];
 char buf[64];
-safef(query, sizeof(query), 
+
+if (kgVersion == KG_III)
+    {
+    safef(query, sizeof(query), 
+	"select spID from kgXref where kgId='%s'", mrnaName);
+    }
+else
+    {
+    safef(query, sizeof(query), 
 	"select protein from %s where transcript='%s'", 
 	genomeSetting("canonicalTable"), mrnaName);
+    }
 if (!sqlQuickQuery(conn, query, buf, sizeof(buf)))
     return NULL;
 return cloneString(buf);
@@ -1864,6 +1874,9 @@ if (isNotEmpty(oldDb) && !sameString(oldDb, database))
 hSetDb(database);
 getGenomeSettings();
 conn = hAllocConn();
+
+/* if kgProtMap2 table exists, this means we are doing KG III */
+if (hTableExists("kgProtMap2")) kgVersion = KG_III;
 
 /* Get groupOn.  Revert to default if no advanced filter. */
 groupOn = cartUsualString(cart, groupVarName, "expression");
