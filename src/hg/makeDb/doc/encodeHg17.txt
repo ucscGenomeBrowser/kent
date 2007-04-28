@@ -328,6 +328,7 @@ cat > doUcsd.csh << 'EOF'
 # GENCODE Sanger Havana annotations  (2005-08-18 kate)
     # Used latest (6/7/05) data submission, which was submitted
     #   in hg17 coords and lifted to hg16.  This was described in makeEncodeHg16.doc
+
     ssh hgwdev
     cd /cluster/data/encode/Gencode
     cd 2005-06-07
@@ -915,6 +916,8 @@ cat > load.csh << 'EOF'
 # UCSD/LI Chip/Chip on Nimblegen and PCR platforms (2006-12-04)
 # from Keith Ching <keching@ucsd.edu)
 
+# New data submitted 2007-03-01 
+
     ssh kkstore03
     cd /cluster/data/encode/UCSD
     mkdir 2006-12-04/lab
@@ -924,6 +927,14 @@ cat > load.csh << 'EOF'
     # PCR data: CTCF, 2 histones, TAF1 in HeLa, U937, GM, and IMR90
     # candidates for merging into existing tracks: LI Ng gIF, LI Chip Various
     # (asking submitters 2006-12-20 kate)
+
+    # New data submitted 2007-03-01 
+    # Nimblegen data: 3 histones, Pol2, TAF2, CTCF in GM06990
+    #                 4 histones, CTCF in HeLa
+    # PCR data: 4 histones in HeLa, H3K4me2 in GM06990
+    cd /cluster/data/encode/UCSD
+    mkdir -p 2007-03-01/lab
+    cd 2007-03-01/lab
 
 ##########################################################################
 # UT-Austin (Vishy Iyer lab) Chip/chip  (2005-10-10 kate)
@@ -1848,6 +1859,8 @@ cat > loadSig.csh << 'EOF'
 # 6 datasets -- Pol2 (2 antibodies) and H3K4ac in HeLa and GM006990
 
 # New data submitted 2007-01-30 by guoneng.zhong@yale.edu
+# 7 datasets
+# 5 factors in HeLa and K562 cells
 
 awk '{print $4}' *_?/*-hits.bed | sort -n | textHistogram -real -binSize=.5 stdin
 0.500000 ************************************************************ 628
@@ -2024,12 +2037,15 @@ cat > loadSig.csh << 'EOF'
     # Note size difference between Gm06990 and Hela -- inform submitter
 
 # New data submitted 2007-01-30 by guoneng.zhong@yale.edu
+# 7 datasets
+# 5 factors in HeLa and K562 cells
     cd /cluster/data/encode/yale/chip/2007-01-30
     mkdir lab
     cd lab
     tar xvfz jan07_batch.tgz
 
-# Resubmitted data submitted 2007-03-20 by guoneng.zhong@yale.edu
+# Resubmitted data for Nov06 and Jan07
+# submitted 2007-03-20 by guoneng.zhong@yale.edu
     /cluster/data/encode/yale/chip
     mkdir -p 2007-03-20/lab
     cd 2007-03-20/lab
@@ -2368,6 +2384,23 @@ cat > load.csh << 'EOF'
     # subtracks
 
     lab/GERP_TBA_Cons.bed
+
+    # Post wiggles for downloads (2007-04-16 kate)
+    ssh kkstore03
+    cd /cluster/data/encode/MSA/Gerp
+    cd 2006-02-01
+    mkdir downloads
+cat > makeDownloads.csh << 'EOF'
+    foreach prog (TBA MLAGAN MAVID)
+        echo $prog
+        ls lab/chr*_${prog}_*.wig | \
+            sed 's/lab\/chr//' | sort -n | sed 's/^/lab\/chr/' | \
+            xargs cat | \
+            gzip -c -4 > download/GERP_${prog}.scores.wig.gz
+    end
+'EOF'
+# << happy emacs
+    csh makeDownloads.csh >&! makeDownloads.log &
 
 
 ##########################################################################
@@ -3275,6 +3308,17 @@ hgLoadBed -notItemRgb -strict hg17 encodeUViennaRnaz rnazNoHeader.bed
 cp rnaz_track.html \
    ~/kent/src/hg/makeDb/trackDb/human/hg17/encodeUViennaRnaz.html
 # edit description and change re-format publications
+
+###########################################################################
+# Stanford ChIP/Seq
+# Submitted 2007-03-14 by David Johnson <seasquirtdoctor@gmail.com>
+# NRSF/REST experiment
+# New data type for ENCODE -- needs track design
+# "Millions" of 25bp tags (Solexa sequencing of IP fragments)
+
+    cd /cluster/data/encode/stanford
+    mkdir -p 2007-03-14/lab
+    cd 2007-03-14/lab
 
 ############################################################################
 # Gencode Loci RACEfrags - 5' RACE-ARRAY experiments on Gencode loci
