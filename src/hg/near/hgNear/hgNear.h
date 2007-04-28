@@ -22,6 +22,12 @@ struct genePos
     };
 #define genePosTooFar 1000000000	/* Definitely not in neighborhood. */
 
+#define KG_UNKNOWN 0
+#define KG_I       1
+#define KG_II      2
+#define KG_III     3
+extern int kgVersion;           /* KG version */
+
 int genePosCmpName(const void *va, const void *vb);
 /* Sort function to compare two genePos by name. */
 
@@ -795,6 +801,9 @@ boolean userSettingsProcessForm(struct userSettings *us);
 
 void userSettingsDropDown(struct userSettings *us);
 /* Display list of available saved settings . */
+
+extern char *lookupProtein(struct sqlConnection *conn, char *mrnaName);
+/* Given mrna name look up protein.  FreeMem result when done. */
 
 #endif /* HGNEAR_H */
 
