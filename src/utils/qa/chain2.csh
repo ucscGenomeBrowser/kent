@@ -5,34 +5,37 @@
 # 
 #  03-28-04 & 10-26-2005
 #  Checks chain tracks.
-#  Written by Bob Kuhn - augemnted by Ann Zweig.
+#  Written by Bob Kuhn - augmented by Ann Zweig.
 #  Runs slow processes (quick processes are in chain.csh).
 # 
 ###############################################
 
 
 set db=""
+set split=""
 set trackname=""
-set set currDir=$cwd
 
-if ($2 == "") then
+if ( $#argv != 2 ) then
   # no command line args
   echo
   echo "  runs test suite on chain track (on both regular and Link tables)"
   echo "  expects trackname in chrN_chainOrg format."
+  echo "  though it now works for chainOrg format assemblies"
   echo "  this can take a long time."
   echo
   echo "    usage:  database, trackname"
   echo "    e.g. chain2.csh mm7 chrN_chainXenTro1 > & mm7.chain2.xenTro1 &"
+  echo "      or chain2.csh anoCar1 chainXenTro1  > & anoCar1.chain.xenTro1 &"
   echo
   exit
 else
-  set db=$1
-  set trackname=$2
+  set db=$argv[1]
+  set trackname=$argv[2]
 endif
 
 set track=`echo $trackname | sed -e "s/chrN_//"`
 set Org=`echo $track | sed -e "s/chain//"`
+set split=`getSplit.csh $db chain$Org hgwdev`
 
 echo "using database $db "
 echo "trackname: $trackname"
@@ -43,55 +46,76 @@ echo "Org: $Org"
 # -------------------------------------------------
 # get chroms from chromInfo:
 
-~kuhn/bin/getChromlist.csh $db
+if ( $split == "unsplit" ) then
+  getChromlist.csh $db > /dev/null
+else
+  getChromlist.csh $db
+endif
 
 # -------------------------------------------------
 # check ends for off-end coords:
-
 
 # slow: 
 
 echo
 echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
-echo "looking for largest coords:"
+echo "looking for annotations off the end of the chrom"
 rm -f $db.$track.offEnd
-foreach chrom (`cat $db.chromlist`)
-  # echo " chrom: $chrom"
-  # echo " chrom_track:  ${chrom}_$track"
-  hgsql -N -e "SELECT chromInfo.chrom, chromInfo.size, \
-      chromInfo.size - MAX(${chrom}_$track.tEnd) \
-      FROM chromInfo, ${chrom}_$track \
-      WHERE chromInfo.chrom = ${chrom}_$track.tName  \
-      GROUP BY chromInfo.chrom" $db >> $db.$track.offEnd
-end
+if ( $split == "unsplit" ) then
+  checkOffend.csh $db $trackname
+else
+  foreach chrom (`cat $db.chromlist`)
+    # echo " chrom: $chrom"
+    # echo " chrom_track:  ${chrom}_$track"
+    hgsql -N -e "SELECT chromInfo.chrom, chromInfo.size, \
+        chromInfo.size - MAX(${chrom}_$track.tEnd) \
+        FROM chromInfo, ${chrom}_$track \
+        WHERE chromInfo.chrom = ${chrom}_$track.tName  \
+        GROUP BY chromInfo.chrom" $db >> $db.$track.offEnd
+  end
+  echo "lines from $db that are off the end of the chrom:"
+  awk '{if($3<0) {print $3} }' $db.$track.offEnd
+  echo "expect blank here - if not, check the file $db.$track.offEnd"
+endif
 
-
-echo
-# echo "lines from $db.KG.tx.offEnd > 0:"
-echo "lines from $db that are off the end of the chrom:"
-awk '{if($3<0) {print $3} }' $db.$track.offEnd
-echo "expect blank here - if not, check the file $db.$track.offEnd"
-echo
 
 # -------------------------------------------------
-# $Org Link:  tName value always matches tables name:
+# check to see if coords in other assembly are off the end.
 
-echo
-echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
-echo "Link tables:  tName value always matches tables name:"
-echo "this is slow"
-echo
+set otherDb=`echo $Org | awk '{print tolower($1)}'`
+hgsql -N -e "SELECT size, chrom FROM chromInfo" $otherDb | sort -nr > $otherDb.size 
+if ( $split == "unsplit" ) then
+  hgsql -N -e "SELECT DISTINCT qSize, qName FROM chain$Org \
+    GROUP by qSize" $db | sort -nr > query.size
+  commTrio.csh query.size $otherDb.size rm
+else
+# not really needed and too complicated here.
+# the chances of this being broken are very small
+#   foreach chrom (`cat $db.chromlist`)
+#     hgsql -N -e "SELECT DISTINCT qSize, qName FROM ${chrom}_chain$Org \
+#       GROUP by qSize" $db | sort -nr > ${chrom}.query.size
+#     commTrio.csh ${chrom}.query.size $otherDb.size   
+#   end
+endif
 
 
-foreach chrom (`cat $db.chromlist`)
-  set var=`hgsql -N -e 'SELECT COUNT(*) FROM '$chrom'_chain'$Org'Link \
-     WHERE tName != "'$chrom'"' $db`
-  if ($var != 0) then
-    echo "${chrom}_chain${Org}Link has illegal tName"
-  else
-    echo "${chrom}_chain${Org}Link is ok"
-  endif
-end
+# -------------------------------------------------
+# for unsplit: checking that all chroms are used
+
+if ( $split == "unsplit" ) then
+  echo
+  echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
+  echo
+  echo "checking that all chroms (scaffolds) have chains in chain table"
+  hgsql -N -e "SELECT DISTINCT(tName) FROM $track" $db | sort > $db.$track.chroms
+  commTrio.csh $db.chromlist $db.$track.chroms
+  echo "have no chains:"
+  set empty=`head -3 $db.chromlist.Only`
+  foreach seq ( $empty )
+    echo "http://genome-test.cse.ucsc.edu/cgi-bin/hgTracks?db=$db&position=$seq&chain$Org=pack"
+  end
+  echo "get some DNA from these and see how it blats""
+endif
 
 # -------------------------------------------------
 # Link table:  make list of uniq chainIds.  
@@ -110,42 +134,28 @@ echo
 echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
 echo "check $trackname for tStart < tEnd"
 echo "if there is no output here, then it passes."
-foreach chrom (`cat $db.chromlist`)
-  set var3=`hgsql -N -e "SELECT COUNT(*) FROM ${chrom}_${track} \
+
+if ( $split == "unsplit" ) then
+  set var3=`hgsql -N -e "SELECT COUNT(*) FROM ${track} \
      WHERE tStart >= tEnd" $db`
   if ($var3 != 0) then
-    echo "${chrom}_${track} has $var3 records with tStart >= tEnd"
+    echo "${track} has $var3 records with tStart >= tEnd"
   endif
-end
+else
+  foreach chrom (`cat $db.chromlist`)
+    set var3=`hgsql -N -e "SELECT COUNT(*) FROM ${chrom}_${track} \
+       WHERE tStart >= tEnd" $db`
+    if ($var3 != 0) then
+      echo "${chrom}_${track} has $var3 records with tStart >= tEnd"
+    endif
+  end
+endif
 
 
 # -------------------------------------------------
 # check qStrand values in $track:
+# dropped this section.  done in chain.csh
 
-echo
-echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
-echo  "check qStrand values ${track}:"
-echo "if there is no output here, then it passes."
-foreach chrom (`cat $db.chromlist`)
-  set null=`hgsql -N -e 'SELECT COUNT(*) FROM '${chrom}_${track}' \
-     WHERE qStrand = ""' $db`
-  set plus=`hgsql -N -e 'SELECT COUNT(*) FROM '${chrom}_${track}' \
-     WHERE qStrand = "+"' $db`
-  set minus=`hgsql -N -e 'SELECT COUNT(*) FROM '${chrom}_${track}' \
-     WHERE qStrand = "-"' $db`
-  if ($null != 0) then
-    echo "${chrom}_${track} has missing qStrand values"
-  endif
-
-  if ($plus == 0) then
-    echo "${chrom}_${track} has no plus-strand values"
-  endif
-
-  if ($minus == 0) then
-    echo "${chrom}_${track} has no minus-strand values"
-  endif
-end
-echo
 
 # -------------------------------------------------
 
