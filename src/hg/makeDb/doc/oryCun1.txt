@@ -1010,3 +1010,12 @@ chain.csh {check in exists $(path1).gz} {check out line+ chain/$(root1).chain}
     nice netClass -verbose=0 -noAr noClass.net oryCun1 hg18 oryCun1.hg18.net 
     nice gzip oryCun1.hg18.net
 
+
+############################################################################
+## create reciprocal best nets on hg18  (2006-03-09 kate)
+
+    ssh kkstore05
+    cd /cluster/data/hg18/bed/blastz.oryCun1
+    ~/kent/src/hg/utils/automation/doRecipBest.pl hg18 oryCun1 >&! rbest.log &
+    # 1.25 hrs
+

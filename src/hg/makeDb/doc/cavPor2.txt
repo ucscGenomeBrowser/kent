@@ -39,6 +39,15 @@ dbDbSpeciesDir lizard
 
     makeGenomeDb.pl -verbose=2 -stop=seq cavPor2.config.ra > makeGenomeDb.out &
 
+    # Need dbDb entry for name lookup
+    hgsql -e 'INSERT INTO dbDb (name, description, nibPath, organism, \
+        defaultPos, active, orderKey, genome, scientificName, \
+        htmlPath, hgNearOk, hgPbOk, sourceName) \
+        VALUES("cavPor2", "Oct. 2005", "/gbdb/cavPor2", "GuineaPig", \
+        "", 0, 99, "GuineaPig", \
+        "Cavia porcellus", "", 0, 0, \
+        "Broad Institute cavPor2 (Draft_v2)")' -h localhost hgcentraltest
+
 ################################################
 ## WINDOWMASKER (2006-03-04 kate)
     ssh kkstore05
@@ -70,3 +79,4 @@ dbDbSpeciesDir lizard
 
     mkdir -p /san/sanvol1/scratch/cavPor2
     cp -p cavPor2.2bit chrom.sizes /san/sanvol1/scratch/cavPor2
+
