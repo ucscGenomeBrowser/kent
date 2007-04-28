@@ -22772,21 +22772,62 @@ delete from cnpFosmid where name='Gap';
 
 hgsql hg17 -e "select * from cnpFosmid" > cnpFosmid_withoutGaps.bed
 
-# Simple lifts for delConrad and delMccarroll
-# Use -multiple for delConrad; increases coverage but doesn't cause big proliferations
-# One data point lifts 13x, another 7x, another 4x.  The rest are once or twice.
-/bin/csh liftDel.csh
+# Simple lifts for delMccarroll
+cat << '_EOF_' > liftConrad.csh
+#!/bin/csh
+hgsql -N -e 'select * from delMccarroll' hg16 > delMccarroll.hg16
+liftOver -minMatch=0.7 delMccarroll.hg16 /gbdb/hg16/liftOver/hg16ToHg17.over.chain.gz delMccarroll.bed delMccarroll.err
+hgLoadBed -sqlTable=delMccarroll.sql -tab -noBin hg17 delMccarroll delMccarroll.bed
+'_EOF_'
+
+# Lift both chromStart/chromEnd and thickStart/thickEnd for delConrad and join
+cat << '_EOF_' > liftConrad.csh
+#!/bin/csh
+hgsql -N -e 'select chrom, chromStart, chromEnd, name, score, strand from delConrad' hg16 > delConrad.hg16.1
+hgsql -N -e 'select chrom, thickStart, thickEnd, name, score, strand from delConrad' hg16 > delConrad.hg16.2
+liftOver -minMatch=0.7 delConrad.hg16.1 /gbdb/hg16/liftOver/hg16ToHg17.over.chain.gz delConrad.tmp.1 delConrad.err.1
+liftOver -minMatch=0.7 delConrad.hg16.2 /gbdb/hg16/liftOver/hg16ToHg17.over.chain.gz delConrad.tmp.2 delConrad.err.2
+trimConrad.pl < delConrad.tmp.1 > delConrad.trim.1
+trimConrad.pl < delConrad.tmp.2 > delConrad.trim.2
+sort delConrad.trim.1 > delConrad.sort.1
+sort delConrad.trim.2 > delConrad.sort.2
+join delConrad.sort.1 delConrad.sort.2 > delConrad.join
+awk '{print $2, $3, $4, $1, 1000, $5, $7, $8}' delConrad.join > delConrad.bed
+hgLoadBed -sqlTable=delConrad.sql -noBin hg17 delConrad delConrad.bed
+'_EOF_'
 
 # Andy Sharp says the Sebat data has already been lifted, so be conservative here
 # Create hg16.cnpSebatLiftCandidate that excludes 5 rows that had wild proliferations
-/bin/csh liftSebat.csh
+cat << '_EOF_' > liftSebat.csh
+hgsql -N -e 'select chrom, chromStart, chromEnd, name, probes, individuals from cnpSebatLiftCandidate' hg16 > cnpSebat.hg16
+liftOver -minMatch=0.7 -bedPlus=4 cnpSebat.hg16 /gbdb/hg16/liftOver/hg16ToHg17.over.chain.gz cnpSebat.bed cnpSebat.err
+hgLoadBed -sqlTable=delSebat.sql -tab hg17 cnpSebat cnpSebat.bed
+'_EOF_'
 
 # For Andy's data, use bacEndPairs first, then lift the remainder
-/bin/csh liftSharp.csh
+cat << '_EOF_' > liftSharp.csh
+# assumes a copy of hg16.cnpSharp in hg17.cnpSharpHg16Copy
+/cluster/home/heather/kent/src/hg/snp/snpLoad/cnpLookup hg17 bacEndPairs cnpSharpHg16Copy cnpSharpLookup.out cnpSharpLookup.lift cnpSharpLookup.log
+sed -e 's/Gain and Loss/GainAndLoss/' cnpSharpLookup.lift > cnpSharpLookup.lift.fix
+mv cnpSharpLookup.lift.fix cnpSharpLookup.lift
+liftOver -minMatch=0.7 -bedPlus=4 cnpSharpLookup.lift /gbdb/hg16/liftOver/hg16ToHg17.over.chain.gz cnpSharp.bed cnpSharp.err
+sed -e 's/GainAndLoss/Gain And Loss/' cnpSharp.bed > cnpSharp.bed.fix
+mv cnpSharp.bed.fix cnpSharp.bed
+hgLoadBed -tab -sqlTable=cnpSharp.sql hg17 cnpSharp cnpSharpLookup.out
+hgLoadBed -tab -oldTable hg17 cnpSharp cnpSharp.bed
+'_EOF_'
 
 # For the Iafrate data, the BAC End lookup wasn't good, so just lift
 # Create hg16.cnpIafrateLiftCandidate that excludes 2 rows that had wild proliferations
-/bin/csh liftIafrate.csh
+cat << '_EOF_' > liftIafrate.csh
+hgsql -N -e 'select chrom, chromStart, chromEnd, name, variationType, score from cnpIafrateLiftCandidate' hg16 > cnpIafrate.hg16
+sed -e 's/Gain and Loss/GainAndLoss/' cnpIafrate.hg16 > cnpIafrate.hg16.fix
+mv cnpIafrate.hg16.fix cnpIafrate.hg16
+liftOver -minMatch=0.7 -bedPlus=4 cnpIafrate.hg16 /gbdb/hg16/liftOver/hg16ToHg17.over.chain.gz cnpIafrate.bed cnpIafrate.err
+sed -e 's/GainAndLoss/Gain And Loss/' cnpIafrate.bed > cnpIafrate.bed.fix
+mv cnpIafrate.bed.fix cnpIafrate.bed
+hgLoadBed -sqlTable=cnpIafrate.sql -tab hg17 cnpIafrate cnpIafrate.bed
+'_EOF_'
 
 ##############################################################################
 # Add HapMap CNVRs from Matt Hurles (Heather Dec 2006)
