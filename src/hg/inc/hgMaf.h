@@ -1,6 +1,8 @@
 /* hgMaf.h - Stuff to load up mafs from the browser database. 
  *           Also, items for maf track display */
 
+#include "trackDb.h"
+
 /* Track settings and variables */
 #define SPECIES_TREE_VAR        "speciesTree"
 #define SPECIES_ORDER_VAR       "speciesOrder"
@@ -17,6 +19,7 @@
 #define BASE_COLORS_OFFSET_VAR  "baseColorsOffset"
 #define CONS_WIGGLE             "wiggle"
 #define ITEM_FIRST_CHAR_CASE	"itemFirstCharCase"
+#define DEFAULT_CONS_LABEL      "Conservation"
 
 struct mafAli *mafLoadInRegion(struct sqlConnection *conn, char *table,
 	char *chrom, int start, int end);
@@ -46,3 +49,16 @@ struct mafAli *hgMafFrag(
 
 int mafCmp(const void *va, const void *vb);
 /* Compare to sort based on start of first component. */
+
+struct consWiggle {
+    struct consWiggle *next;    /* Next in list */
+    char *table;                /* phastCons table */
+    char *label;                /* Label to print on UI */
+};
+
+struct consWiggle *wigMafWiggles(struct trackDb *tdb);
+/* get conservation wiggle table names and labels from trackDb setting,
+   ignoring those where table doesn't exist */
+
+char *wigMafWiggleVar(struct trackDb *tdb, struct consWiggle *wig);
+/* Return name of cart variable for this cons wiggle */

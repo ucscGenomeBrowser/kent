@@ -108,7 +108,7 @@
 #include "hapmapTrack.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1324 2007/04/27 23:09:29 hartera Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1325 2007/04/28 23:59:40 kate Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -8117,6 +8117,17 @@ struct rgbColor rgbColor =  vgColorIxToRgb(vg, color);
 rgbColor.r = (rgbColor.r+255)/2;
 rgbColor.g = (rgbColor.g+255)/2;
 rgbColor.b = (rgbColor.b+255)/2;
+return vgFindColorIx(vg, rgbColor.r, rgbColor.g, rgbColor.b);
+}
+
+
+Color slightlyLighterColor(struct vGfx *vg, Color color)
+/* Get slightly lighter shade of a color */ 
+{
+struct rgbColor rgbColor =  vgColorIxToRgb(vg, color);
+rgbColor.r = (rgbColor.r+128)/2;
+rgbColor.g = (rgbColor.g+128)/2;
+rgbColor.b = (rgbColor.b+128)/2;
 return vgFindColorIx(vg, rgbColor.r, rgbColor.g, rgbColor.b);
 }
 

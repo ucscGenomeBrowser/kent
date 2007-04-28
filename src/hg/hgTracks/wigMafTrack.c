@@ -17,7 +17,9 @@
 #include "mafFrames.h"
 #include "phyloTree.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.106 2007/04/19 00:06:30 kate Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.107 2007/04/28 23:59:40 kate Exp $";
+
+#define GAP_ITEM_LABEL  "Gaps"
 
 struct wigMafItem
 /* A maf track item -- 
@@ -67,6 +69,9 @@ for (el = *pList; el != NULL; el = next)
 Color wigMafItemLabelColor(struct track *tg, void *item, struct vGfx *vg)
 /* Return color to draw a maf item based on the species group it is in */
 {
+struct wigMafItem *mi = (struct wigMafItem *)item;
+if (sameString(mi->name, GAP_ITEM_LABEL))
+    return getOrangeColor();
 return (((struct wigMafItem *)item)->group % 2 ? 
                         tg->ixAltColor : tg->ixColor);
 }
@@ -283,19 +288,23 @@ if (firstCase != NULL)
 
 loadMafsToTrack(track);
 
-/* Add item for score wiggle base alignment */
-if (track->subtracks)
+/* NOTE: we are building up the item list backwards */
+
+/* Add items for conservation wiggles */
+struct track *wigTrack = track->subtracks;
+enum trackVisibility wigVis = (wigTrack->visibility == tvDense ? tvDense : tvFull);
+while (wigTrack !=  NULL)
     {
-    enum trackVisibility wigVis = 
-    	(track->visibility == tvDense ? tvDense : tvFull);
-    scoreHeight = wigTotalHeight(track->subtracks, wigVis);
-    mi = scoreItem(scoreHeight, track->subtracks->shortLabel);
+    scoreHeight = wigTotalHeight(wigTrack, wigVis);
+    mi = scoreItem(scoreHeight, wigTrack->shortLabel);
     slAddHead(&miList, mi);
+    wigTrack = wigTrack->next;
     }
 
 /* Make up item that will show gaps in this organism. */
 AllocVar(mi);
-mi->name = "Gaps";
+
+mi->name = GAP_ITEM_LABEL;
 mi->height = tl.fontHeight;
 slAddHead(&miList, mi);
 
@@ -433,7 +442,7 @@ if (winBaseCount < MAF_SUMMARY_VIEW)
 #endif
     hFreeConn(&conn);
     }
-if (wigTrack != NULL)
+while (wigTrack != NULL)
     {
     /* display score graph along with pairs only if a wiggle
      * is provided */
@@ -442,6 +451,7 @@ if (wigTrack != NULL)
     /* mark this as not a pairwise item */
     markNotPairwiseItem(mi);
     slAddHead(&miList, mi);
+    wigTrack = wigTrack->next;
     }
 if (displayPairwise(track))
     /* make up items for other organisms by scanning through
@@ -460,8 +470,9 @@ static struct wigMafItem *loadWigMafItems(struct track *track,
                                                  boolean isBaseLevel)
 /* Load up items */
 {
-struct wigMafItem *miList = NULL;
+struct wigMafItem *miList = NULL, *mi;
 int scoreHeight = tl.fontHeight * 4;
+struct track *wigTrack = track->subtracks;
 
 track->customPt = (char *)-1;   /* no maf's loaded or attempted to load */
 
@@ -482,13 +493,7 @@ if (track->visibility == tvFull || track->visibility == tvPack)
     }
 else if (track->visibility == tvSquish)
     {
-    if (track->subtracks)
-        {
-        /* have a wiggle */
-        scoreHeight = wigTotalHeight(track->subtracks, tvFull);
-        miList = scoreItem(scoreHeight, track->subtracks->shortLabel);
-        }
-    else
+    if (!wigTrack)
         {
         scoreHeight = tl.fontHeight * 4;
         if (winBaseCount < MAF_SUMMARY_VIEW)
@@ -496,17 +501,35 @@ else if (track->visibility == tvSquish)
         /* not a real meausre of conservation, so don't label it so */
         miList = scoreItem(scoreHeight, "");
         }
+    else while (wigTrack)
+        {
+        /* have a wiggle */
+        scoreHeight = wigTotalHeight(wigTrack, tvFull);
+        mi = scoreItem(scoreHeight, wigTrack->shortLabel);
+        slAddTail(&miList, mi);
+        wigTrack = wigTrack->next;
+        }
     }
 else 
     {
     /* dense mode, zoomed out - show density plot, with track label */
-    if (!track->subtracks)
+    if (!wigTrack)
+        {
         /* no wiggle -- use mafs if close in */
         if (winBaseCount < MAF_SUMMARY_VIEW)
             loadMafsToTrack(track);
-    AllocVar(miList);
-    miList->name = cloneString(track->shortLabel);
-    miList->height = tl.fontHeight;
+        AllocVar(miList);
+        miList->name = cloneString(track->shortLabel);
+        miList->height = tl.fontHeight;
+        }
+    else while (wigTrack)
+        {
+        AllocVar(mi);
+        mi->name = cloneString(wigTrack->shortLabel);
+        mi->height = tl.fontHeight;
+        slAddTail(&miList, mi);
+        wigTrack = wigTrack->next;
+        }
     }
 return miList;
 }
@@ -521,13 +544,14 @@ struct track *wigTrack = track->subtracks;
 miList = loadWigMafItems(track, zoomedToBaseLevel);
 track->items = miList;
 
-if (wigTrack != NULL) 
+while (wigTrack != NULL) 
     // load wiggle subtrack items
     {
     /* update track visibility from parent track,
      * since hgTracks will update parent vis before loadItems */
     wigTrack->visibility = track->visibility;
     wigTrack->loadItems(wigTrack);
+    wigTrack = wigTrack->next;
     }
 }
 
@@ -1972,18 +1996,8 @@ struct track *wigTrack = track->subtracks;
 enum trackVisibility scoreVis;
 
 scoreVis = (vis == tvDense ? tvDense : tvFull);
-if (wigTrack != NULL)
-    {
-    /* draw conservation wiggle */
-    wigTrack->ixColor = vgFindRgb(vg, &wigTrack->color);
-    wigTrack->ixAltColor = vgFindRgb(vg, &wigTrack->altColor);
-    vgSetClip(vg, xOff, yOff, width, wigTotalHeight(wigTrack, scoreVis) - 1);
-    wigTrack->drawItems(wigTrack, seqStart, seqEnd, vg, xOff, yOff,
-                         width, font, color, scoreVis);
-    vgUnclip(vg);
-    yOff += wigTotalHeight(wigTrack, scoreVis);
-    }
-else
+
+if (wigTrack == NULL)
     {
     /* no wiggle */
     int height = tl.fontHeight * 4;
@@ -2007,6 +2021,26 @@ else
         }
     yOff += height;
     }
+else
+    {
+    Color wigColor = 0;
+    while (wigTrack != NULL)
+        {
+        /* draw conservation wiggles */
+        if (!wigColor)
+            wigColor = vgFindRgb(vg, &wigTrack->color);
+        else
+            wigColor = slightlyLighterColor(vg, wigColor);
+        wigTrack->ixColor = wigColor;
+        wigTrack->ixAltColor = vgFindRgb(vg, &wigTrack->altColor);
+        vgSetClip(vg, xOff, yOff, width, wigTotalHeight(wigTrack, scoreVis) - 1);
+        wigTrack->drawItems(wigTrack, seqStart, seqEnd, vg, xOff, yOff,
+                             width, font, color, scoreVis);
+        vgUnclip(vg);
+        yOff += wigTotalHeight(wigTrack, scoreVis);
+        wigTrack = wigTrack->next;
+        }
+    }
 return yOff;
 }
 
@@ -2024,8 +2058,13 @@ if (vis == tvFull || vis == tvPack)
     if (zoomedToBaseLevel)
 	{
 	struct wigMafItem *wiList = track->items;
-	if (track->subtracks != NULL)
-	    wiList = wiList->next;
+        /* skip over cons wiggles */
+        struct track *wigTrack = track->subtracks;
+        while (wigTrack)
+            {
+            wiList = wiList->next;
+            wigTrack = wigTrack->next;
+            }
 	y = wigMafDrawBases(track, seqStart, seqEnd, vg, xOff, y, width, font,
 				    color, vis, wiList);
 				    //MG_RED, vis, wiList);
@@ -2042,15 +2081,12 @@ void wigMafMethods(struct track *track, struct trackDb *tdb,
                                         int wordCount, char *words[])
 /* Make track for maf multiple alignment. */
 {
-char *setting, *fields[20];
-int fieldCt = 0;
-char *wigTable = NULL;
-char *wigLabel;
 struct track *wigTrack;
 int i;
 char *savedType;
 char option[64];
 struct dyString *wigType;
+struct consWiggle *consWig, *consWigList = NULL;
 
 track->loadItems = wigMafLoad;
 track->freeItems = wigMafFree;
@@ -2065,70 +2101,63 @@ track->itemLabelColor = wigMafItemLabelColor;
 track->mapsSelf = TRUE;
 //track->canPack = TRUE;
 
-if ((setting = trackDbSetting(tdb, CONS_WIGGLE)) == NULL)
+/* deal with conservation wiggle(s) */
+consWigList = wigMafWiggles(tdb);
+if (consWigList == NULL)
     return;
-fieldCt = chopLine(cloneString(setting), fields);
 
-/* set up display of conservation wiggle */
-safef(option, sizeof(option), "%s.%s", track->mapName, CONS_WIGGLE);
-
-/* determine which conservation wiggle to use -- from cart, 
- or if none there, first entry in trackDb setting */
-wigLabel = cartCgiUsualString(cart, option, NULL);
-if (wigLabel == NULL)
+/* determine which conservation wiggles to use -- from cart, 
+ or if none there, use first entry in trackDb setting */
+boolean first = TRUE;
+for (consWig = consWigList; consWig != NULL; consWig = consWig->next)
     {
-    if (fieldCt > 1)
-        wigLabel = fields[1];
-    else
-        wigLabel = "Conservation";
-    }
-
-/* get wiggle table name */
-wigTable = fields[0];
-for (i = 0; i < fieldCt; i++)
-    {
-    if (sameString(wigLabel, fields[i]))
+    if (differentString(consWig->label, DEFAULT_CONS_LABEL))
         {
-        wigTable = fields[i-1];
-        break;
+        safef(option, sizeof option, "%s.cons.%s", 
+                tdb->tableName, consWig->label);
+        if (!cartCgiUsualBoolean(cart, option, first))
+            continue;
         }
+    first = FALSE;
+    //  manufacture and initialize wiggle subtrack
+    /* CAUTION: this code is very interdependent with
+       hgTracks.c:fillInFromType()
+       Also, both the main track and subtrack share the same tdb */
+    // restore "type" line, but change type to "wig"
+    savedType = tdb->type;
+    wigType = newDyString(64);
+    dyStringClear(wigType);
+    dyStringPrintf(wigType, "type wig ");
+    for (i = 1; i < wordCount; i++)
+        {
+        dyStringPrintf(wigType, "%s ", words[i]);
+        }
+    dyStringPrintf(wigType, "\n");
+    tdb->type = cloneString(wigType->string);
+    wigTrack = trackFromTrackDb(tdb);
+    tdb->type = savedType;
+
+    /* replace tablename with wiggle table from "wiggle" setting */
+    wigTrack->mapName = cloneString(consWig->table);
+
+    /* Tweak wiggle left labels: replace underscore with space and
+     * append 'Cons' */
+    struct dyString *ds = dyStringNew(0);
+    dyStringAppend(ds, consWig->label);
+    if (differentString(consWig->label, DEFAULT_CONS_LABEL))
+        dyStringAppend(ds, " Cons");
+    wigTrack->shortLabel = dyStringCannibalize(&ds);
+    subChar(wigTrack->shortLabel, '_', ' ');
+
+    /* setup wiggle methods in subtrack */
+    wigMethods(wigTrack, tdb, wordCount, words);
+
+    wigTrack->mapsSelf = FALSE;
+    wigTrack->drawLeftLabels = NULL;
+    wigTrack->next = NULL;
+    slAddTail(&track->subtracks, wigTrack);
+    dyStringFree(&wigType);
     }
-if (!hTableExists(wigTable))
-    errAbort("Missing conservation wiggle table: %s\n", wigTable);
-
-//  manufacture and initialize wiggle subtrack
-/* CAUTION: this code is very interdependent with
-   hgTracks.c:fillInFromType()
-   Also, both the main track and subtrack share the same tdb */
-// restore "type" line, but change type to "wig"
-savedType = tdb->type;
-wigType = newDyString(64);
-dyStringClear(wigType);
-dyStringPrintf(wigType, "type wig ");
-for (i = 1; i < wordCount; i++)
-    {
-    dyStringPrintf(wigType, "%s ", words[i]);
-    }
-dyStringPrintf(wigType, "\n");
-tdb->type = cloneString(wigType->string);
-wigTrack = trackFromTrackDb(tdb);
-tdb->type = savedType;
-
-// replace tablename with wiggle table from "wiggle" setting
-wigTrack->mapName = cloneString(wigTable);
-
-/* use label with -'s replaced with spaces */
-subChar(wigLabel, '_', ' ');
-wigTrack->shortLabel = cloneString(wigLabel);
-
-// setup wiggle methods in subtrack
-wigMethods(wigTrack, tdb, wordCount, words);
-
-wigTrack->mapsSelf = FALSE;
-wigTrack->drawLeftLabels = NULL;
-track->subtracks = wigTrack;
-track->subtracks->next = NULL;
-dyStringFree(&wigType);
 }
 
 

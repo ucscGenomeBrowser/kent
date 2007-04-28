@@ -30,7 +30,7 @@
 
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.365 2007/04/27 18:30:16 aamp Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.366 2007/04/28 23:59:41 kate Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1791,6 +1791,10 @@ void wigMafUi(struct trackDb *tdb)
 /* UI for maf/wiggle track
  * NOTE: calls wigUi */
 {
+#define CLEAR_BUTTON_LABEL    "Clear All"
+#define SET_ALL_BUTTON_LABEL  "Set All"
+#define DEFAULTS_BUTTON_LABEL "Set Defaults"
+
 char *defaultCodonSpecies = trackDbSetting(tdb, SPECIES_CODON_DEFAULT);
 char *speciesTarget = trackDbSetting(tdb, SPECIES_TARGET_VAR);
 char *speciesTree = trackDbSetting(tdb, SPECIES_TREE_VAR);
@@ -1802,30 +1806,32 @@ char *groups[20];
 char sGroup[24];
 char *treeImage = NULL;
 struct wigMafSpecies *wmSpecies, *wmSpeciesList = NULL;
+struct slName *speciesName, *speciesList = NULL;
 int group, prevGroup;
 int speciesCt = 0, groupCt = 1;
-int i, j;
-char option[64];
-int fieldCt;
-char *fields[20];
+int i;
+char option[100];
 struct phyloTree *tree;
-char *consNames[10];
-char *consWiggle = trackDbSetting(tdb, CONS_WIGGLE);
+struct consWiggle *consWig, *consWiggles = wigMafWiggles(tdb);
+
+char javascript[2048];
+char buttonVar[64];
+char *button;
+char *form = "mainForm";
 
 puts("<TABLE><TR><TD>");
 
-/* check for alternate conservation wiggles -- create dropbox */
-if (consWiggle)
+if (consWiggles->next)
     {
-    safef(option, sizeof(option), "%s.%s", tdb->tableName, CONS_WIGGLE);
-    fieldCt = chopLine(consWiggle, fields);
-    if (fieldCt > 2)
+    /* check for alternate conservation wiggles -- create checkboxes */
+    puts("<P STYLE=\"margin-top:10;\"><B>Conservation:</B>" );
+    boolean first = TRUE;
+    for (consWig = consWiggles; consWig != NULL; consWig = consWig->next)
         {
-        puts("<P><B>Conservation:</B>" );
-        for (i=1, j=0; i < fieldCt; i+=2, j++)
-            consNames[j] = fields[i];
-        cgiMakeDropList(option, consNames, fieldCt/2,
-            cartCgiUsualString(cart, option, consNames[0]));
+        safef(option, sizeof(option), "%s.cons.%s", tdb->tableName,consWig->label);
+        cgiMakeCheckBox(option, cartUsualBoolean(cart, option, first));
+        first = FALSE;
+        printf ("%s&nbsp;", consWig->label);
         }
     }
 
@@ -1852,6 +1858,7 @@ for (group = 0; group < groupCt; group++)
         wmSpecies->name = cloneString(species[i]);
         wmSpecies->group = group;
         slAddHead(&wmSpeciesList, wmSpecies);
+        slAddTail(&speciesList, slNameNew(cloneString(species[i])));
         }
     }
 slReverse(&wmSpeciesList);
@@ -1861,8 +1868,84 @@ slReverse(&wmSpeciesList);
 char *currentCodonMode;
 #endif
 
+puts("\n<P STYLE=><B>Pairwise alignments:</B>&nbsp;");
 
-puts("<P><B>Pairwise alignments:</B><BR>" );
+safef(buttonVar, sizeof buttonVar, "%s", "set_defaults_button");
+cgiMakeHiddenVar(buttonVar, "");
+safef(javascript, sizeof javascript,
+      "document.%s.action = '%s'; document.%s.%s.value='%s'; "
+      "document.%s.submit();",
+      form, cgiScriptName(), form, buttonVar, DEFAULTS_BUTTON_LABEL, form);
+cgiMakeOnClickButton(javascript, DEFAULTS_BUTTON_LABEL);
+button = cgiOptionalString(buttonVar);
+if (isNotEmpty(button))
+    {
+    char *words[100];
+    char *setting = trackDbSetting(tdb, "speciesDefaultOff");
+    int wordCt = chopLine(setting, words);
+    /* turn on all species */
+    for (speciesName = speciesList; speciesName  != NULL; 
+                    speciesName = speciesName->next)
+        {
+        safef(option, sizeof(option), "%s.%s", 
+                tdb->tableName, speciesName->name);
+        cartSetBoolean(cart, option, TRUE);
+        }
+    /* turn off those that are default off */
+    int i;
+    for (i = 0; i < wordCt; i++)
+        {
+        safef(option, sizeof(option), "%s.%s", tdb->tableName, words[i]);
+        cartSetBoolean(cart, option, FALSE);
+        }
+    }
+
+puts("&nbsp;");
+safef(buttonVar, sizeof buttonVar, "%s", "set_all_button");
+cgiMakeHiddenVar(buttonVar, "");
+safef(javascript, sizeof javascript,
+      "document.%s.action = '%s'; document.%s.%s.value='%s'; "
+      "document.%s.submit();",
+      form, cgiScriptName(), form, buttonVar, SET_ALL_BUTTON_LABEL, form);
+cgiMakeOnClickButton(javascript, SET_ALL_BUTTON_LABEL);
+
+cgiContinueHiddenVar("g");
+
+button = cgiOptionalString(buttonVar);
+if (isNotEmpty(button))
+    {
+    for (speciesName = speciesList; speciesName  != NULL; 
+		    speciesName = speciesName->next)
+        {
+        safef(option, sizeof(option), "%s.%s", 
+                tdb->tableName, speciesName->name);
+        fprintf(stderr, "option %s\n", option);
+        cartSetBoolean(cart, option, TRUE);
+        }
+    }
+puts("&nbsp;");
+safef(buttonVar, sizeof buttonVar, "%s", "clear_all_button");
+cgiMakeHiddenVar(buttonVar, "");
+safef(javascript, sizeof javascript,
+      "document.%s.action = '%s'; document.%s.%s.value='%s'; "
+      "document.%s.submit();",
+      form, cgiScriptName(), form, buttonVar, CLEAR_BUTTON_LABEL, form);
+cgiMakeOnClickButton(javascript, CLEAR_BUTTON_LABEL);
+
+cgiContinueHiddenVar("g");
+
+button = cgiOptionalString(buttonVar);
+if (isNotEmpty(button))
+    {
+    for (speciesName = speciesList; speciesName  != NULL; 
+		    speciesName = speciesName->next)
+        {
+        safef(option, sizeof(option), "%s.%s", 
+                tdb->tableName, speciesName->name);
+        fprintf(stderr, "option %s\n", option);
+        cartSetBoolean(cart, option, FALSE);
+        }
+    }
 
 if ((speciesTree != NULL) && ((tree = phyloParseString(speciesTree)) != NULL))
 {
@@ -1892,7 +1975,7 @@ if ((speciesTree != NULL) && ((tree = phyloParseString(speciesTree)) != NULL))
 }
 
 if (groupCt == 1)
-    puts("<TABLE><TR>");
+    puts("\n<TABLE><TR>");
 group = -1;
 for (wmSpecies = wmSpeciesList, i = 0; wmSpecies != NULL; 
 		    wmSpecies = wmSpecies->next, i++)
@@ -1904,9 +1987,12 @@ for (wmSpecies = wmSpeciesList, i = 0; wmSpecies != NULL;
 	{
 	i = 0;
 	if (group != 0)
-	    puts("</TR></TABLE>");
+	    puts("</TR></TABLE>\n");
+        /* replace underscores in group names */
+        subChar(groups[group], '_', ' ');
 	printf("<P>&nbsp;&nbsp;<B><EM>%s</EM></B>", groups[group]);
-	puts("<TABLE><TR>");
+
+	puts("\n<TABLE><TR>");
 	}
     if (i != 0 && (i % 5) == 0)
 	puts("</TR><TR>");
@@ -1916,13 +2002,13 @@ for (wmSpecies = wmSpeciesList, i = 0; wmSpecies != NULL;
     label = hOrganism(wmSpecies->name);
     if (label == NULL)
 	label = wmSpecies->name;
-    *label = tolower(*label);
+    //*label = tolower(*label);
     printf ("%s<BR>", label);
     puts("</TD>");
     }
-puts("</TR></TABLE><BR>");
+puts("</TR></TABLE><BR>\n");
 
-puts("<P><B>Multiple alignment base-level:</B><BR>" );
+puts("<B>Multiple alignment base-level:</B><BR>" );
 safef(option, sizeof option, "%s.%s", tdb->tableName, MAF_DOT_VAR);
 cgiMakeCheckBox(option, cartCgiUsualBoolean(cart, option, FALSE));
 puts("Display bases identical to reference as dots<BR>" );
@@ -1997,7 +2083,7 @@ treeImage = trackDbSetting(tdb, "treeImage");
 if (treeImage)
     printf("</TD><TD><IMG ALIGN=TOP SRC=\"/images/%s\"></TD></TR></TABLE>", treeImage);
 else
-    puts("</TD></TR></TABLE");
+    puts("</TD></TR></TABLE>");
 
 if (trackDbSetting(tdb, CONS_WIGGLE) != NULL)
     {
@@ -2010,10 +2096,10 @@ void genericWiggleUi(struct trackDb *tdb, int optionNum )
 /* put up UI for any standard wiggle track (a.k.a. sample track)*/
 {
 
-	char options[7][256];
-	int thisHeightPer, thisLineGap;
-	float thisMinYRange, thisMaxYRange;
-	char *interpolate, *fill;
+char options[7][256];
+int thisHeightPer, thisLineGap;
+float thisMinYRange, thisMaxYRange;
+char *interpolate, *fill;
 
 snprintf( &options[0][0], 256, "%s.heightPer", tdb->tableName );
 snprintf( &options[1][0], 256, "%s.linear.interp", tdb->tableName );
@@ -2076,10 +2162,10 @@ void humMusUi(struct trackDb *tdb, int optionNum )
 /* put up UI for human/mouse conservation sample tracks (humMusL and musHumL)*/
 {
 
-	char options[7][256];
-	int thisHeightPer, thisLineGap;
-	float thisMinYRange, thisMaxYRange;
-	char *interpolate, *fill;
+char options[7][256];
+int thisHeightPer, thisLineGap;
+float thisMinYRange, thisMaxYRange;
+char *interpolate, *fill;
 
 snprintf( &options[0][0], 256, "%s.heightPer", tdb->tableName );
 snprintf( &options[1][0], 256, "%s.linear.interp", tdb->tableName );

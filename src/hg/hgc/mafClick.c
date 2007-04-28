@@ -13,7 +13,7 @@
 #include "hui.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: mafClick.c,v 1.38 2006/06/30 19:38:59 braney Exp $";
+static char const rcsid[] = "$Id: mafClick.c,v 1.39 2007/04/28 23:59:39 kate Exp $";
 
 #define ADDEXONCAPITAL
 
@@ -444,6 +444,17 @@ static char *showAll[] = {
 	"diff",
 };
 
+static void conservationStatsLink(struct trackDb *tdb, 
+                                    char *label, char *table)
+/* write link that to display statistics of phastCons table */
+{
+char *chrom = cartCgiUsualString(cart, "c", "chr7");
+printf("<A HREF=\"%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%d&db=%s"
+        "&parentWigMaf=%s\" TARGET=\"_blank\">%s</A>",
+hgcPathAndSettings(), table, table, chrom, 
+winStart, winEnd, winStart, database, tdb->tableName, label);
+}
+
 static void mafOrAxtClick(struct sqlConnection *conn, struct trackDb *tdb, char *axtOtherDb)
 /* Display details for MAF or AXT tracks. */
 {
@@ -459,7 +470,7 @@ else
     char dbChrom[64];
     char option[128];
     char *capTrack;
-    char *wigTable = trackDbSetting(tdb, CONS_WIGGLE);
+    struct slPair *consWig, *consWiggles; 
     struct hash *speciesOffHash = NULL;
     char *speciesOrder = NULL;
     char *speciesTarget = trackDbSetting(tdb, SPECIES_TARGET_VAR);
@@ -588,18 +599,34 @@ else
 	char *codeVarVal = cartUsualString(cart, codeVarName, "coding");
 	boolean onlyCds = sameWord(codeVarVal, "coding");
 #endif
-
-	if (wigTable)
-	    {
-	    char *chrom = cartCgiUsualString(cart, "c", "chr7");
-	    char other[128];
-	    safef(other, ArraySize(other), "%d", winStart);
-	    printf("<P><B>See also: </B>");
-	    printf("<A HREF=\"%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%s&db=%s&parentWigMaf=%s\" TARGET=\"_blank\">",
-		hgcPathAndSettings(), wigTable, wigTable, chrom, winStart,
-			winEnd, other, database, tdb->tableName);
-	    printf("Alignment score statistics</A></P>\n");
+        /* add links for conservation score statistics */
+        boolean first = TRUE;
+        consWiggles = wigMafWiggles(tdb);
+        for (consWig = consWiggles; consWig != NULL; 
+                consWig = consWig->next)
+            {
+            if (first)
+                printf("\n<P>");
+            if (sameString(consWig->name, DEFAULT_CONS_LABEL))
+                conservationStatsLink(tdb, 
+                        "Conservation score statistics", 
+                        (char *)consWig->val);
+            else
+                {
+                if (!cartCgiUsualBoolean(cart, 
+                    wigMafWiggleVar(tdb, consWig), FALSE))
+                        continue;
+                if (first)
+                    {
+                    printf("\n<P>Conservation score statistics:");
+                    first = FALSE;
+                    }
+                printf("&nbsp;&nbsp;");
+                conservationStatsLink(tdb, 
+                    consWig->name, (char *)consWig->val);
+                }
 	    }
+        puts("</P>\n");
 
 #ifdef ADDEXONCAPITAL
 	puts("<FORM ACTION=\"/cgi-bin/hgc\" NAME=\"gpForm\" METHOD=\"GET\">");

@@ -17,9 +17,10 @@
 #include "asParse.h"
 #include "customTrack.h"
 #include "bedCart.h"
+#include "hgMaf.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: schema.c,v 1.43 2007/04/12 21:36:56 angie Exp $";
+static char const rcsid[] = "$Id: schema.c,v 1.44 2007/04/28 23:59:41 kate Exp $";
 
 static char *nbForNothing(char *val)
 /* substitute &nbsp; for empty strings to keep table formating sane */
@@ -548,10 +549,13 @@ if (curTrack == NULL)
     return FALSE;
 if (sameString(curTrack->tableName, curTable))
     return TRUE;
-else if (startsWith("wigMaf", curTrack->type) &&
-	 trackDbSetting(curTrack, "wiggle") &&
-	 sameString(curTable, trackDbSetting(curTrack, "wiggle")))
-    return TRUE;
+else if (startsWith("wigMaf", curTrack->type))
+    {
+    struct consWiggle *wig, *wiggles = wigMafWiggles(curTrack);
+    for (wig = wiggles; wig != NULL; wig = wig->next)
+        if (sameString(curTable, wig->table))
+            return TRUE;
+    }
 else if (curTrack->subtracks != NULL)
     {
     struct trackDb *sTdb = NULL;

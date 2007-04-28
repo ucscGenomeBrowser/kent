@@ -21,7 +21,7 @@
 #include "correlate.h"	/* our structure defns and the corrHelpText string */
 #include "bedGraph.h"
 
-static char const rcsid[] = "$Id: correlate.c,v 1.56 2006/12/15 21:53:34 hiram Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.57 2007/04/28 23:59:41 kate Exp $";
 
 #define MAX_POINTS_STR	"300,000,000"
 #define MAX_POINTS	300000000
@@ -297,7 +297,6 @@ static void fillInTrackTable(struct trackTable *table,
 struct trackDb *tdb;
 
 tdb = findCompositeTdb(table->tdb,table->tableName);
-
 table->shortLabel = cloneString(tdb->shortLabel);
 table->longLabel = cloneString(tdb->longLabel);
 table->actualTdb = tdb;
@@ -371,9 +370,8 @@ else if (startsWith("wig",tdb->type))
     {
     if (startsWith("wigMaf",tdb->type))
 	{
-	char *wigTable = trackDbSetting(tdb, "wiggle");
 	freeMem(table->actualTable);
-	table->actualTable = cloneString(wigTable);
+	table->actualTable = cloneString(table->tableName);
 	}
     table->isWig = TRUE;
     }

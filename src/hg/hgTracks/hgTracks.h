@@ -429,6 +429,9 @@ Color getSeqColor(char *name, struct vGfx *vg);
 Color lighterColor(struct vGfx *vg, Color color);
 /* Get lighter shade of a color */ 
 
+Color slightlyLighterColor(struct vGfx *vg, Color color);
+/* Get slightly lighter shade of a color */ 
+
 void clippedBarbs(struct vGfx *vg, int x, int y, 
 	int width, int barbHeight, int barbSpacing, int barbDir, Color color,
 	boolean needDrawMiddle);

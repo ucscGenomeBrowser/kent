@@ -24,8 +24,9 @@
 #include "hgTables.h"
 #include "joiner.h"
 #include "bedCart.h"
+#include "hgMaf.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.152 2007/04/16 19:40:08 angie Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.153 2007/04/28 23:59:41 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -746,37 +747,28 @@ if (trackDupe != NULL && trackDupe[0] != 0)
     char *type = nextWord(&s);
     if (sameString(type, "wigMaf"))
         {
-	static char *wigMafAssociates[] = {"frames", "summary", "wiggle"};
-	int i, j;
+	static char *wigMafAssociates[] = {"frames", "summary"};
+	int i;
 	for (i=0; i<ArraySize(wigMafAssociates); ++i)
 	    {
 	    char *setting = wigMafAssociates[i];
-	    char *tables = trackDbSetting(track, setting);
-            if (tables != NULL)
+	    char *table = trackDbSetting(track, setting);
+            if (table != NULL)
                 {
-                char *table;
-                char *fields[10];
-                int fieldCt = chopLine(cloneString(tables), fields);
-                if (fieldCt == 1)
-                    {
-                    table = fields[0];
-                    name = slNameNew(table);
-                    slAddHead(pList, name);
-                    hashAdd(uniqHash, table, NULL);
-                    }
-                else if (sameString(setting, "wiggle"))
-                    {
-                    /* include alternate wiggle tables */
-                    for (j = fieldCt-2; j >= 0; j-=2)
-                        {
-                        table = fields[j];
-                        name = slNameNew(table);
-                        slAddHead(pList, name);
-                        hashAdd(uniqHash, table, NULL);
-                        }
-                    }
+                name = slNameNew(table);
+                slAddHead(pList, name);
+                hashAdd(uniqHash, table, NULL);
                 }
 	    }
+        /* include conservation wiggle tables */
+        struct consWiggle *wig, *wiggles = wigMafWiggles(track);
+        slReverse(&wiggles);
+        for (wig = wiggles; wig != NULL; wig = wig->next)
+            {
+            name = slNameNew(wig->table);
+            slAddHead(pList, name);
+            hashAdd(uniqHash, wig->table, NULL);
+            }
 	}
     if (trackDbIsComposite(track))
         {
