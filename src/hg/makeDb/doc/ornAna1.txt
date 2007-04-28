@@ -411,3 +411,173 @@ TMPDIR=/scratch/tmp
 #########################################################################
 #########################################################################
 #########################################################################
+
+############################
+# HUMAN (hg18) PROTEINS TRACK (DONE braney 2007-04-28)
+    ssh kkstore05
+    bash 
+
+    mkdir /cluster/data/ornAna1/blastDb
+    cd /cluster/data/ornAna1
+    ls downloads/*.fa M/*.fa | grep -v chrUn > temp.lst
+    cat `cat temp.lst` > temp.fa
+    faSplit gap temp.fa 10000000 blastDb/x -lift=blastDb.lft
+    faSplit sequence downloads/chrUn.fa 100 blastDb/un
+    rm temp.fa
+    cd blastDb
+    for i in *.fa
+    do
+	/cluster/bluearc/blast229/formatdb -i $i -p F
+    done
+    rm *.fa *.log
+
+    mkdir -p /san/sanvol1/scratch/ornAna1/blastDb
+    cd /cluster/data/ornAna1/blastDb
+    for i in nhr nin nsq; 
+    do 
+	echo $i
+	cp *.$i /san/sanvol1/scratch/ornAna1/blastDb
+    done
+
+    mkdir -p /cluster/data/ornAna1/bed/tblastn.hg18KG
+    cd /cluster/data/ornAna1/bed/tblastn.hg18KG
+    echo  /san/sanvol1/scratch/ornAna1/blastDb/*.nsq | xargs ls -S | sed "s/\.nsq//"  > query.lst
+    wc -l query.lst
+# 154 query.lst
+
+   # we want around 250000 jobs
+   calc `wc /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl | awk "{print \\\$1}"`/\(250000/`wc query.lst | awk "{print \\\$1}"`\)
+# 36727/(250000/154) = 22.623832
+
+   mkdir -p /cluster/bluearc/ornAna1/bed/tblastn.hg18KG/kgfa
+   split -l 60 /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl  /cluster/bluearc/ornAna1/bed/tblastn.hg18KG/kgfa/kg
+   ln -s /cluster/bluearc/ornAna1/bed/tblastn.hg18KG/kgfa kgfa
+   cd kgfa
+   for i in *; do 
+     nice pslxToFa $i $i.fa; 
+     rm $i; 
+     done
+   cd ..
+   ls -1S kgfa/*.fa > kg.lst
+   mkdir -p /cluster/bluearc/ornAna1/bed/tblastn.hg18KG/blastOut
+   ln -s /cluster/bluearc/ornAna1/bed/tblastn.hg18KG/blastOut
+   for i in `cat kg.lst`; do  mkdir blastOut/`basename $i .fa`; done
+   tcsh
+   cd /cluster/data/ornAna1/bed/tblastn.hg18KG
+   cat << '_EOF_' > blastGsub
+#LOOP
+blastSome $(path1) {check in line $(path2)} {check out exists blastOut/$(root2)/q.$(root1).psl }
+#ENDLOOP
+'_EOF_'
+
+   cat << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/cluster/bluearc/blast229/data
+export BLASTMAT
+g=`basename $2`
+f=/tmp/`basename $3`.$g
+for eVal in 0.01 0.001 0.0001 0.00001 0.000001 1E-09 1E-11
+do
+if /cluster/bluearc/blast229/blastall -M BLOSUM80 -m 0 -F no -e $eVal -p tblastn -d $1 -i $2 -o $f.8
+then
+        mv $f.8 $f.1
+        break;
+fi
+done
+if test -f  $f.1
+then
+    if /cluster/bin/i386/blastToPsl $f.1 $f.2
+    then
+	liftUp -nosort -type=".psl" -nohead $f.3 /cluster/data/ornAna1/blastDb.lft carry $f.2
+        liftUp -nosort -type=".psl" -pslQ -nohead $3.tmp /cluster/data/hg18/bed/blat.hg18KG/protein.lft warn $f.3
+
+        if pslCheck -prot $3.tmp
+        then
+            mv $3.tmp $3
+            rm -f $f.1 $f.2 $f.3 $f.4
+        fi
+        exit 0 
+    fi
+fi 
+rm -f $f.1 $f.2 $3.tmp $f.8 $f.3 $f.4
+exit 1
+'_EOF_'
+    # << happy emacs
+    chmod +x blastSome
+    gensub2 query.lst kg.lst blastGsub blastSpec
+    exit # back to bash
+    
+    ssh pk
+    cd /cluster/data/ornAna1/bed/tblastn.hg18KG
+    para create blastSpec
+
+    para try, push, etc.
+
+# Completed: 94402 of 94402 jobs
+# CPU time in finished jobs:   16325847s  272097.44m  4534.96h  188.96d  0.518 y
+# IO & Wait Time:                603783s   10063.06m   167.72h    6.99d  0.019 y
+# Average job time:                 179s       2.99m     0.05h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            1411s      23.52m     0.39h    0.02d
+# Submission to last job:         75065s    1251.08m    20.85h    0.87d
+
+    ssh kkstore05
+    cd /cluster/data/ornAna1/bed/tblastn.hg18KG
+
+    tcsh
+    mkdir chainRun
+    cd chainRun
+    cat << '_EOF_' > chainGsub
+#LOOP
+chainOne $(path1)
+#ENDLOOP
+'_EOF_'
+
+    cat << '_EOF_' > chainOne
+(cd $1; cat q.*.psl | simpleChain -prot -outPsl -maxGap=150000 stdin /cluster/bluearc/ornAna1/bed/tblastn.hg18KG/blastOut/c.`basename $1`.psl)
+'_EOF_'
+    chmod +x chainOne
+    ls -1dS /cluster/bluearc/ornAna1/bed/tblastn.hg18KG/blastOut/kg?? > chain.lst
+    gensub2 chain.lst single chainGsub chainSpec
+    # do the cluster run for chaining
+    ssh pk
+    cd /cluster/data/ornAna1/bed/tblastn.hg18KG/chainRun
+    para create chainSpec
+    para maxNode 30
+    para try, check, push, check etc.
+
+# Completed: 613 of 613 jobs
+# CPU time in finished jobs:       5247s      87.45m     1.46h    0.06d  0.000 y
+# IO & Wait Time:                 61655s    1027.58m    17.13h    0.71d  0.002 y
+# Average job time:                 109s       1.82m     0.03h    0.00d
+# Longest finished job:             305s       5.08m     0.08h    0.00d
+# Submission to last job:          2287s      38.12m     0.64h    0.03d
+
+    ssh kkstore05
+    cd /cluster/data/ornAna1/bed/tblastn.hg18KG/blastOut
+    for i in kg??
+    do
+       cat c.$i.psl | awk "(\$13 - \$12)/\$11 > 0.6 {print}" > c60.$i.psl
+       sort -rn c60.$i.psl | pslUniq stdin u.$i.psl
+       awk "((\$1 / \$11) ) > 0.60 { print   }" c60.$i.psl > m60.$i.psl
+       echo $i
+    done
+    sort -T /tmp -k 14,14 -k 16,16n -k 17,17n u.*.psl m60* | uniq > /cluster/data/ornAna1/bed/tblastn.hg18KG/blastHg18KG.psl
+    cd ..
+    pslCheck blastHg18KG.psl
+
+    # load table 
+    ssh hgwdev
+    cd /cluster/data/ornAna1/bed/tblastn.hg18KG
+    hgLoadPsl ornAna1 blastHg18KG.psl
+
+    # check coverage
+    nice featureBits -noRandom  ornAna1 blastHg18KG
+# 16607325 bases of 1842236818 (0.901%) in intersection
+
+    nice featureBits -noRandom  -enrichment ornAna1 ensGene:cds  blastHg18KG
+# ensGene:cds 1.193%, blastHg18KG 0.901%, both 0.763%, cover 63.91%, enrich 70.89x
+    ssh kkstore05
+    rm -rf /cluster/data/ornAna1/bed/tblastn.hg18KG/blastOut
+    rm -rf /cluster/bluearc/ornAna1/bed/tblastn.hg18KG/blastOut
+#end tblastn
