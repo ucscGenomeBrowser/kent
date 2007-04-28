@@ -3,7 +3,7 @@
 # Caenorhabditis elegans
 #	Washington University School of Medicine GSC and Sanger Institute WS170
 
-#  $Id: ce4.txt,v 1.14 2007/04/25 17:09:41 hiram Exp $
+#  $Id: ce4.txt,v 1.15 2007/04/28 00:00:20 hiram Exp $
 
 
 #########################################################################
@@ -205,6 +205,7 @@ done
 ### The sequences below were an experiment beginning early 2006
 
 # FETCH acedb database for construction of Sanger Links table
+## OBSOLETE procedure attempted on WS150
 #	DONE - 2006-01-09 - Hiram
     ssh kkstore02
     mkdir /cluster/store5/worm/ce4/bed/acedb
@@ -220,6 +221,7 @@ done
 
 #########################################################################
 #	Create sangerLinks data and table
+## OBSOLETE procedure attempted on WS150
     ssh kkstore02
     mkdir /cluster/store5/worm/ce4/bed/sangerLinks
     cd /cluster/store5/worm/ce4/bed/sangerLinks
@@ -270,7 +272,152 @@ done
     #	     63     441    3477
 
 ###############################################################################
-## SANGER GENE TRACK (DONE - 2007-03-28 - Hiram)
+## SANGER GENE TRACK 2nd attempt (DONE - 2007-04-27 - Hiram)
+##	There is a tremendous amount of extraneous notations in the gff
+##	files.  Filter them down to a manageable set, change the chrom
+##	names, eliminate duplicates, select only what will work in
+##	ldHgGene
+    ssh kkstore02
+    mkdir /cluster/data/ce4/bed/ws170Genes
+    cd /cluster/data/ce4/bed/ws170Genes
+for C in I II III IV V X
+do
+    echo -n "${C} "
+    zcat ../../WS170/CHROMOSOME_${C}.gff.gz | \
+    sed -e "s/CHROMOSOME_III/chrIII/g; s/CHROMOSOME_II/chrII/g; \
+        s/CHROMOSOME_IV/chrIV/g; s/CHROMOSOME_I/chrI/g; \
+        s/CHROMOSOME_X/chrX/g; s/CHROMOSOME_V/chrV/g; \
+        s/CHROMOSOME_M/chrM/g;" \
+        -e 's/Sequence "\(.*\)"$/\1/' -e 's/Transcript "\(.*\)"$/\1/' \
+        -e 's/CDS "//' -e 's/"//' \
+                > chr${C}.gff
+done
+C=M
+echo -n "${C} "
+zcat ../../WS170/CHROMOSOME_MtDNA.gff.gz | \
+sed -e "s/CHROMOSOME_III/chrIII/g; s/CHROMOSOME_II/chrII/g; \
+    s/CHROMOSOME_IV/chrIV/g; s/CHROMOSOME_I/chrI/g; \
+    s/CHROMOSOME_X/chrX/g; s/CHROMOSOME_V/chrV/g; \
+    s/CHROMOSOME_M/chrM/g; s/chrMtDNA/chrM/g;" \
+    -e 's/Sequence "\(.*\)"$/\1/' -e 's/Transcript "\(.*\)"$/\1/' \
+    -e 's/CDS "//' -e 's/"//' \
+            > chr${C}.gff
+for C in I II III IV V X M
+do
+    echo "chr${C}.gff -> filtered.chr${C}.gff"
+    grep -v "^#" chr${C}.gff | awk -F'\t' '
+BEGIN { IGNORECASE=1 }
+{
+    if (match($2,"curated|Coding_transcript")) {
+        if (match($3,"intron|coding_exon|cds|three_prime_UTR|five_prime_UTR")) {
+            gsub("Transcript ","",$9)
+            gsub(" .*","",$9)
+            gsub("three_prime_UTR","3utr",$3)
+            gsub("five_prime_UTR","5utr",$3)
+            for (i = 1; i < 9; ++i) {
+                printf "%s\t", $i
+            }
+            printf "%s\n", $9
+        }
+    }
+}
+' | sort -u | sort -k4n > filtered.chr${C}.gff
+done
+
+    ssh hgwdev
+    cd /cluster/data/ce4/bed/ws170Genes
+    time nice -n +19 ldHgGene ce4 sangerGene filtered.*.gff
+    #	Read 52047 transcripts in 980039 lines in 7 files
+    #	52047 groups 7 seqs 3 sources 5 feature types
+    #	30497 gene predictions
+    #	real    0m2.569s
+
+    ##	This requires the following to also be re-run
+    cd /cluster/data/ce4/bed/sangerGene
+    # Add proteinID field to sangerGene table, used by Gene Sorter
+    hgsql -e 'alter table sangerGene add proteinID varchar(40) NOT NULL;' ce4
+    # To add index on this column
+    hgsql -e 'alter table sangerGene add index(proteinID);' ce4
+    # Use SwissProt IDs in sangerLinks table to fill proteinID 
+    # column in the sangerGene table
+    hgsql -e 'update sangerGene as g, sangerLinks as l \
+      set g.proteinID = l.protName where g.name = l.orfName;' ce4
+    # check there are rows with the protName field filled
+    hgsql -N -e "select proteinId from sangerGene" ce4 | sort | uniq -c | wc -l
+    #	22126
+    hgLoadSqlTab ce4 orfToGene ~/kent/src/hg/lib/orfToGene.sql orfToGene.tab
+    hgClusterGenes ce4 sangerGene sangerIsoforms sangerCanonical
+    #	Got 19965 clusters, from 30497 genes in 7 chromosomes
+    hgLoadSqlTab ce4 sangerLinks ~/kent/src/hg/lib/sangerLinks.sql \
+	sangerLinks.tab
+    hgPepPred ce4 generic sangerPep wormpep170/wormpep170
+    hgMapToGene ce4 refGene sangerGene sangerToRefSeq
+
+    cd /cluster/data/ce4/bed/blastp/self/run/out
+    hgLoadBlastTab ce4 sangerBlastTab *.tab
+    #	Scanning through 986 files
+    #	Loading database with 1214556 rows
+
+
+    #	Running joinerCheck to see what is sane:
+    joinerCheck -identifier=wormBaseId -database=ce4 -times -keys all.joiner
+    #	Error: 999 of 27783 elements of ce4.orfToGene.name are not in key
+    #		sangerGene.name
+    #	indicates the non-coding genes in orfToGene are missing
+    #	from sangerGene.  So, removing those from orfToGene:
+    hgsql -N -e "select name from orfToGene;" ce4 | sort > orfToGene.name
+    hgsql -N -e "select name from sangerGene;" ce4 | sort > sangerGene.name
+    comm -23 orfToGene.name sangerGene.name > rm.orfToGene.name
+    wc -l rm.orfToGene.name
+    hgsql -N -e "select count(*) from orfToGene;" ce4
+    #	27783
+    for G in `cat rm.orfToGene.name`
+do
+    hgsql -e 'delete from orfToGene where name="'"${G}"'";' ce4
+    echo $G
+done
+    hgsql -N -e "select count(*) from orfToGene;" ce4
+    #	26874
+
+###############################################################################
+## RNA sangerGenes (DONE - 2007-04-27 - Hiram)
+    ssh kkstore02
+    cd /cluster/data/ce4/bed/ws170Genes
+for C in I II III IV V X M
+do
+    echo "chr${C}.gff -> rna.chr${C}.gff"
+    grep -v "^#" chr${C}.gff | awk -F'\t' '
+BEGIN { IGNORECASE=1 }
+{
+    if (match($2,"^miRNA|^ncRNA|^rRNA|^scRNA|^snRNA|^snlRNA|^snoRNA|^tRNA|^tRNAscan-SE-1.23")) {
+        if (match($3,"exon")) {
+            gsub("Transcript ","",$9)
+            gsub(" .*","",$9)
+            for (i = 1; i < 9; ++i) {
+                printf "%s\t", $i
+            }
+            printf "%s\n", $9
+        }
+    }
+}
+' | sort -u | sort -k4n > rna.chr${C}.gff
+done
+
+    ssh hgwdev
+    cd /cluster/data/ce4/bed/ws170Genes
+    time nice -n +19 ldHgGene ce4 sangerRnaGene rna.*.gff
+    #	Read 999 transcripts in 1030 lines in 7 files
+    #	999 groups 7 seqs 9 sources 1 feature types
+    #	999 gene predictions
+
+    time nice -n +19 ldHgGene ce4 sangerPseudoGene pseudoGene.*.gff
+    #	Read 1154 transcripts in 1154 lines in 7 files
+    #	1154 groups 6 seqs 1 sources 1 feature types
+    #	1154 gene predictions
+
+
+###############################################################################
+## SANGER GENE TRACK 1st attempt - was reloaded (DONE - 2007-03-28 - Hiram)
     mkdir /cluster/data/ce4/bed/sangerGene
     cd /cluster/data/ce4/bed/sangerGene
     #	this tar file package was prepared at WormBase at Jim's request
@@ -371,6 +518,7 @@ close (LS);
 
 ###############################################################################
 ######## MAKING GENE SORTER TABLES #### (DONE - 2007-04-02 - Hiram)
+### re-done 2007-04-27 with new sangerGene table
 # These are instructions for building the
 # Gene Sorter browser.  Don't start these until
 # there is a sangerGene table with a proteinID column containing Swiss-Prot
@@ -380,10 +528,10 @@ close (LS);
     # Creates the sangerIsoforms and sangerCanonical tables
     ssh hgwdev
     hgClusterGenes ce4 sangerGene sangerIsoforms sangerCanonical
-    #	Got 21048 clusters, from 28281 genes in 7 chromosomes
+    #	Got 20090 clusters, from 30391 genes in 7 chromosomes
 
     featureBits ce4 sangerCanonical
-    #	57495511 bases of 100281244 (57.334%) in intersection
+    #	56953095 bases of 100281244 (56.793%) in intersection
     featureBits ce2 sangerCanonical
     # 54156601 bases of 100291761 (53.999%) in intersection
     featureBits ce1 sangerCanonical 
@@ -1438,3 +1586,108 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     #	<< happy emacs
 
     display histo.png &
+
+##########################################################################
+####  Blat sangerGene proteins to determine exons
+#	(DONE - 2007-04-27 - hiram)
+    ssh hgwdev
+    cd /cluster/data/ce4/bed
+    mkdir blat.ce4SG.2007-04-27
+    ln -s  blat.ce4SG.2007-04-27 blat.ce4SG
+    cd blat.ce4SG
+    pepPredToFa ce4 sangerPep sangerPep.fa
+
+    #	The kluster run
+    #	created san nib directory from goldenPath chromosomes fa files
+    ssh pk
+    cd /cluster/data/ce4/bed/blat.ce4SG
+    cat << '_EOF_' > blatSome
+#!/bin/csh -fe
+blat -t=dnax -q=prot -out=pslx /san/sanvol1/scratch/worms/ce4/nib/$1.nib sgfa/$2.fa $3
+'_EOF_'
+    # << happy emacs
+    chmod +x blatSome
+    ls -1S /san/sanvol1/scratch/worms/ce4/nib > ce4.lst
+    mkdir sgfa
+    cd sgfa
+    faSplit sequence ../sangerPep.fa 3000 sg
+    ls -1S *.fa > ../sg.lst
+    cd ..
+    cat << '_EOF_' > template
+#LOOP
+blatSome $(root1) $(root2) {check out line psl/$(root1)/$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    # << keep emacs happy
+    gensub2 ce4.lst sg.lst template jobList
+    mkdir psl
+    cd psl
+    sed -e "s/.nib//" ../ce4.lst | xargs mkdir
+    cd ..
+    para create jobList
+    para try ... check ... push ... etc
+# Completed: 20335 of 20335 jobs
+# CPU time in finished jobs:      64312s    1071.87m    17.86h    0.74d  0.002 y
+# IO & Wait Time:                 53465s     891.08m    14.85h    0.62d  0.002 y
+# Average job time:                   6s       0.10m     0.00h    0.00d
+# Longest finished job:             278s       4.63m     0.08h    0.00d
+# Submission to last job:           788s      13.13m     0.22h    0.01d
+
+    ssh kkstore02
+    cd /cluster/data/ce4/bed/blat.ce4SG.2007-04-27
+    pslSort dirs raw.psl /tmp psl/*
+    #	-rw-rw-r--  1 70076854 Apr 27 16:19 raw.psl
+    pslReps -nohead -minCover=0.9 -minAli=0.9 raw.psl cooked.psl /dev/null
+    #	Processed 156107 alignments
+    #	-rw-rw-r--  1 25783288 Apr 27 16:20 cooked.psl
+    pslUniq cooked.psl ce4SG.psl
+    #	-rw-rw-r--   1  41321225 Mar 24 11:14 ce4SG.psl
+    cut -f 10 ce4SG.psl > sgName.lst
+    faSomeRecords sangerPep.fa sgName.lst ce4SG.fa
+    faSize ce4SG.fa
+    #	10183094 bases (8184565 N's 1998529 real 1998529 upper 0 lower) in
+    #	23192 sequences in 1 files
+    faSize sangerPep.fa
+    #	10186194 bases (8187162 N's 1999032 real 1999032 upper 0 lower) in
+    #	23224 sequences in 1 files
+
+    #	You may need to build this pslxToFa - it is not in the standard build
+    pslxToFa ce4SG.psl ce4SG_ex.fa -liftTarget=genome.lft \
+	-liftQuery=protein.lft
+    #	-rw-rw-r--  1  5128274 Apr 27 16:29 protein.lft
+    #	-rw-rw-r--  1  6545612 Apr 27 16:29 genome.lft
+    #	-rw-rw-r--  1 12409406 Apr 27 16:29 ce4SG_ex.fa
+    wc -l *.psl *.lft *.fa sgName.lst
+    #	  23192 ce4SG.psl
+    #	  25361 cooked.psl
+    #	 156112 raw.psl
+    #	 146926 genome.lft
+    #	 146926 protein.lft
+    #	 238132 ce4SG.fa
+    #	 293852 ce4SG_ex.fa
+    #	 238243 sangerPep.fa
+    #	  23192 sgName.lst
+    #	1291936 total
+
+    #	back on hgwdev
+    ssh hgwdev
+    cd /cluster/data/ce4/bed/blat.ce4SG
+    ## This doesn't work here, it complains about a missing kgXref table
+    #	may need to make this command in src/hg/oneShot/kgName
+    kgName ce4 ce4SG.psl blastSGRef01
+    #	After about an hour, it exited with this message:
+    #	sqlFreeConnection called on cache (ce4) that doesn't contain
+    #	the given connection
+    #	This may be a lurking error in this program, because the
+    #	resulting file seems to have the correct number of lines:
+    hgsql ce4 < ~/kent/src/hg/lib/blastRef.sql
+    echo "rename table blastRef to blastSGRef01" | hgsql ce4
+    echo "load data local infile 'blastSGRef01' into table blastSGRef01" | hgsql ce4
+     wc -l sgName.lst blastSGRef01 ce4SG.psl
+    #	 36727 sgName.lst
+    #	 36727 blastSGRef01
+    #	 36727 ce4SG.psl
+    #	110181 total
+    hgPepPred ce4 generic blastSGPep04 ce4SG.fa
+    #	end blat proteins
+    
