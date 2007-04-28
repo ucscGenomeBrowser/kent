@@ -11,7 +11,7 @@
 #include "hgNear.h"
 #include "spDb.h"
 
-static char const rcsid[] = "$Id: go.c,v 1.19 2007/03/16 22:53:35 fanhsu Exp $";
+static char const rcsid[] = "$Id: go.c,v 1.20 2007/04/28 00:10:50 fanhsu Exp $";
 
 static boolean goExists(struct column *col, struct sqlConnection *conn)
 /* This returns true if go database and goaPart table exists. */
@@ -80,7 +80,17 @@ hPrintf("<TD>");
 if (gp->protein != NULL && gp->protein[0] != 0)
     {
     struct sqlConnection *spConn = sqlConnect(UNIPROT_DB_NAME);
-    char *proteinAcc = spFindAcc(spConn, gp->protein);
+    char *proteinAcc;
+    
+    if (kgVersion == KG_III)
+    	{
+    	proteinAcc = spFindAcc(spConn, lookupProtein(conn, gp->name));
+	}
+    else
+    	{
+    	proteinAcc = spFindAcc(spConn, gp->protein);
+        }
+
     safef(query, sizeof(query), 
 	    "select term.name,term.acc from goaPart,term "
 	    "where goaPart.%s = '%s' "
@@ -154,7 +164,7 @@ if (searchString != NULL )
 	    if (prevHash == NULL || hashLookup(prevHash, row[0]) != NULL)
                 {
 		hashStore(proteinHash, row[0]);
-                }
+		}
 	    }
 	sqlFreeResult(&sr);
 
