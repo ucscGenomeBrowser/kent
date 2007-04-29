@@ -268,7 +268,7 @@ else
   rm -f badStrands
   foreach chrom (`cat $db.chromlist`)
     set badStrands=`hgsql -N -e 'SELECT COUNT(*) FROM '$chrom'_chain'$Org' \
-      WHERE qStrand != "-" AND qStrand != "+"' mm8`
+      WHERE qStrand != "-" AND qStrand != "+"' $db`
     # echo $badStrands
     if ( $badStrands > 0 ) then
       echo $chrom >> badStrands
@@ -281,7 +281,6 @@ else
       | gawk '{ printf("%-'${length}'s %8s %8s \n", $1, $2, $3) }'
   end #foreach
   echo
-  echo "check that qStrand has valid values:"
   if ( -e badStrands ) then
     echo 'these chroms have some qStrands that are neither "+" nor "-"'
     cat badStrands

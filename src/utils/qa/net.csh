@@ -105,7 +105,6 @@ end
 
 echo
 echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
-echo "looking for largest coords:"
 
 checkOffend.csh $db net$Org
 

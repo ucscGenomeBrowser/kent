@@ -73,7 +73,7 @@ else
         WHERE chromInfo.chrom = ${chrom}_$track.tName  \
         GROUP BY chromInfo.chrom" $db >> $db.$track.offEnd
   end
-  echo "lines from $db that are off the end of the chrom:"
+  echo "rows from $db that are off the end of the chrom:"
   awk '{if($3<0) {print $3} }' $db.$track.offEnd
   echo "expect blank here - if not, check the file $db.$track.offEnd"
 endif
@@ -82,7 +82,7 @@ endif
 # -------------------------------------------------
 # check to see if coords in other assembly are off the end.
 
-set otherDb=`echo $Org | awk '{print tolower($1)}'`
+set otherDb=`echo $Org | perl -wpe '$_ = lcfirst($_)'`
 hgsql -N -e "SELECT size, chrom FROM chromInfo" $otherDb | sort -nr > $otherDb.size 
 if ( $split == "unsplit" ) then
   hgsql -N -e "SELECT DISTINCT qSize, qName FROM chain$Org \
