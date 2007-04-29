@@ -139,7 +139,11 @@ int xEnd = x+width-1, yEnd = y+height-1;
 
 /* Draw box over centromere, may be drawn already with lettering
  * which we don't want. */
+
 vgBox(vg, x, y, width, height, bgColor);
+
+char *savedHint = vgGetHint(vg,"fat");
+vgSetHint(vg,"fat","on");
 
 /* Make up triangle on left of centromere and draw. */
 poly = gfxPolyNew();
@@ -157,6 +161,7 @@ gfxPolyAddPoint(poly, xEnd, yEnd);
 vgDrawPoly(vg, poly, fgColor, TRUE);
 gfxPolyFree(&poly);
 
+vgSetHint(vg,"fat",savedHint);
 }
 
 	
