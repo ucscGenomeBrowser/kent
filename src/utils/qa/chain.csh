@@ -47,15 +47,19 @@ echo "Org: $Org"
 # -------------------------------------------------
 # get chroms from chromInfo:
 
+getChromlist.csh $db > /dev/null
 rm -f $db.$Org.pushlist
+rm -f $db.$Org.pushlistLink
 if ( $split == "unsplit" ) then
-  echo "unsplit chain track.  chromlist suppressed"
-  echo $track >> $db.$Org.pushlist
+   echo "unsplit chain track.  echo of long chromlist suppressed"
+   echo $track >> $db.$Org.pushlist
   echo
 else
-  getChromlist.csh $db
+  # make push list for split tables
   foreach chrom (`cat $db.chromlist`)
+    echo $chrom
     echo ${chrom}_$track >> $db.$Org.pushlist
+    echo ${chrom}_${track}Link >> $db.$Org.pushlistLink
   end
 endif
 
@@ -338,18 +342,6 @@ else
   echo "only prints if there is a problem"
   echo
   echo
-endif
-
-# -------------------------------------------------
-# make push list for split tables
-
-if ( $split != "unsplit" ) then
-  rm -f $db.$Org.pushlist
-  rm -f $db.$Org.pushlistLink
-  foreach chrom (`cat $db.chromlist`)
-    echo ${chrom}_$track >> $db.$Org.pushlist
-    echo ${chrom}_${track}Link >> $db.$Org.pushlistLink
-  end
 endif
 
 # -------------------------------------------------
