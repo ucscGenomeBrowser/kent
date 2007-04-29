@@ -13,7 +13,7 @@
 #include "hui.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: mafClick.c,v 1.39 2007/04/28 23:59:39 kate Exp $";
+static char const rcsid[] = "$Id: mafClick.c,v 1.40 2007/04/29 00:33:39 kate Exp $";
 
 #define ADDEXONCAPITAL
 
@@ -470,7 +470,7 @@ else
     char dbChrom[64];
     char option[128];
     char *capTrack;
-    struct slPair *consWig, *consWiggles; 
+    struct consWiggle *consWig, *consWiggles; 
     struct hash *speciesOffHash = NULL;
     char *speciesOrder = NULL;
     char *speciesTarget = trackDbSetting(tdb, SPECIES_TARGET_VAR);
@@ -607,10 +607,9 @@ else
             {
             if (first)
                 printf("\n<P>");
-            if (sameString(consWig->name, DEFAULT_CONS_LABEL))
+            if (sameString(consWig->label, DEFAULT_CONS_LABEL))
                 conservationStatsLink(tdb, 
-                        "Conservation score statistics", 
-                        (char *)consWig->val);
+                        "Conservation score statistics", consWig->table);
             else
                 {
                 if (!cartCgiUsualBoolean(cart, 
@@ -623,7 +622,7 @@ else
                     }
                 printf("&nbsp;&nbsp;");
                 conservationStatsLink(tdb, 
-                    consWig->name, (char *)consWig->val);
+                    consWig->label, consWig->table);
                 }
 	    }
         puts("</P>\n");
