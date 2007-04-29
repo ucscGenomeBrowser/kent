@@ -4,6 +4,7 @@
  * This file is copyright 2002 Jim Kent, but license is hereby
  * granted for all use - public, private or commercial. */
 
+#include <math.h>
 #include "common.h"
 #include "hash.h"
 #include "memgfx.h"
@@ -15,7 +16,7 @@
 #include "vGfx.h"
 #include "vGfxPrivate.h"
 
-static char const rcsid[] = "$Id: pscmGfx.c,v 1.20 2007/04/15 00:43:41 galt Exp $";
+static char const rcsid[] = "$Id: pscmGfx.c,v 1.21 2007/04/29 22:42:43 galt Exp $";
 
 
 static struct pscmGfx *boxPscm;	 /* Used to keep from drawing the same box again
@@ -250,22 +251,7 @@ pscmSetColor(pscm, color);
 psDrawBox(pscm->ps, x, y, 1, 1);
 }
 
-void pscmLine(struct pscmGfx *pscm, 
-	int x1, int y1, int x2, int y2, int color)
-/* Draw a line from one point to another. */
-{
-pscmSetColor(pscm, color);
-if ((x1==x2) || (y1 == y2))
-    {
-    /* pad a half-pixel at each end */
-    psDrawBox(pscm->ps, x1-0.5, y1-0.5, x2-x1+1, y2-y1+1);
-    }
-else
-    {
-    psDrawLine(pscm->ps, x1, y1, x2, y2);
-    }
-boxPscm = NULL;
-}
+
 
 static void pscmVerticalSmear(struct pscmGfx *pscm,
 	int xOff, int yOff, int width, int height, 
@@ -344,30 +330,333 @@ psFillUnder(pscm->ps, x1, y1, x2, y2, bottom);
 boxPscm = NULL;
 }
 
+void psPolyFindExtremes(struct gfxPoly *poly, 
+  int *pMinX, int *pMaxX,  
+  int *pMinY, int *pMaxY)
+/* find min and max of x and y */
+{
+struct gfxPoint *p = poly->ptList;
+int minX, maxX, minY, maxY;
+minX = maxX =  p->x;
+minY = maxY =  p->y;
+for (;;)
+    {
+    p = p->next;
+    if (p == poly->ptList)
+	break;
+    if (minX > p->x) minX = p->x;
+    if (minY > p->y) minY = p->y;
+    if (maxX < p->x) maxX = p->x;
+    if (maxY < p->y) maxY = p->y;
+    }
+*pMinX = minX;
+*pMaxX = maxX;
+*pMinY = minY;
+*pMaxY = maxY;
+}
+
+double gfxSlope(struct gfxPoint *q, struct gfxPoint *p)
+/* determine slope from two gfxPoints */
+{
+double dx = p->x - q->x;
+double dy = p->y - q->y;
+return dy/dx;
+}
+
+boolean colinearPoly(struct gfxPoly *poly)
+/* determine if points are co-linear */
+{
+if (poly->ptCount < 2) return TRUE;
+struct gfxPoint *q = poly->ptList, *p=q->next;
+double m0 = gfxSlope(q,p);
+for (;;)
+    {
+    p = p->next;
+    if (p == poly->ptList)
+	break;
+    double m1 = gfxSlope(q,p);
+    if (!(isinf(m0) && isinf(m1)) && (m1 != m0))
+	return FALSE;
+    }
+return TRUE;
+}
+
+double fatPixel(double c, double center, double fat)
+/* fatten coordinate by scaling */
+{
+return center+((c-center)*fat);
+}
+
+
+void pscmPolyFatten(struct psPoly *psPoly, 
+  int minX, int maxX, int minY, int maxY)
+/* Fatten polygon by finding the center and then
+ * scaling by 0.5 pixel from the center in all directions.
+ * Caller assures dx and dy will NOT be zero. */
+{
+int dx = maxX - minX;
+int dy = maxY - minY;
+double centerX = (maxX + minX) / 2.0;
+double centerY = (maxY + minY) / 2.0;
+double fatX = (dx + 1.0)/dx;
+double fatY = (dy + 1.0)/dy;
+struct psPoint *p = psPoly->ptList;
+for (;;)
+    {
+    p->x = fatPixel(p->x, centerX, fatX);
+    p->y = fatPixel(p->y, centerY, fatY);
+    p = p->next;
+    if (p == psPoly->ptList)
+	break;
+    }
+}
+
+void findLineParams(double x1, double y1, double x2, double y2, double *m, double *b)
+/* Return parameters slope m and y-intercept b of equation for line from x1,y1 to x2,y2, 
+ * vertical lines return infinite slope with b = x value instead */
+{
+double dx = x2 - x1;
+double dy = y2 - y1;
+*m = dy/dx;
+if (dx == 0)
+    *b = x1;
+else
+    *b = y1 - (*m)*x1;
+}
+
+
+double bDeltaForParallelLine(double d, double m)
+/* find delta-b value for parallel line at distance d for line slope m */
+{
+return d * sqrt(1 + m*m); /* do not call with m == infinity */
+}
+
+void adjustBForParallelLine(boolean cw, double m, 
+double x1, double y1, 
+double x2, double y2, 
+double *b)
+/* adjust the b value for parallel line at distance d for line slope m 
+ *  cw if clockwise */
+{
+if (isinf(m))  /* handle vertical lines */
+    {
+    if ((cw && (y2 < y1)) || (!cw && (y2 > y1)))
+	*b += 1;   /* b holds x-value rather than y-intercept */
+    else
+	*b -= 1;
+    }
+else
+    {
+    /* Y axis is increasing downwards */
+    double bDelta = bDeltaForParallelLine(1.0, m);
+    if ((cw && (x2 > x1)) || (!cw && (x2 < x1)))
+       *b += bDelta; 
+    else
+       *b -= bDelta;
+    }
+}
+
+void findLinesIntersection(boolean cw, double m0, double b0, double m1, double b1, 
+double px, double py, boolean posDeltaX, boolean posDeltaY,
+double *ix, double *iy)
+/* find intersection between two lines */
+{
+
+/* colinear vert */
+if ((isinf(m0) && isinf(m1)) && (b0 == b1)) 
+    {
+    if (cw ^ posDeltaY)
+    	*ix = px+1;
+    else
+    	*ix = px-1;
+    *iy = py; 
+    }
+/* colinear horiz */
+else if (((m0==0)&&(m1==0)) && (b0 == b1)) 
+    {
+    if (cw ^ posDeltaX)
+    	*iy = py+1;
+    else
+    	*iy = py-1;
+    *ix = px; 
+    }
+/* colinear */
+else if ((m0 == m1) && (b0 == b1))  
+    {
+    /* inner point shifted 1 pixel away from the point,
+     *   moving perpendicular to m0 towards the center */
+
+    double dx, dy;
+    double m = -1/m0; 
+    dx = sqrt(1/(1+m*m));
+    dy = m * dx;
+
+    if (!(cw ^ posDeltaX))
+	{
+	*ix = px + dx;
+	*iy = py + dy;
+	}
+    else
+	{
+	*ix = px - dx;
+	*iy = py - dy;
+	}
+
+    }
+/* non-colinear */
+else
+    {
+    if (isinf(m0) && isinf(m1))
+	{  /* should be handled earlier by colinear vert lines above */
+	errAbort("pscmGfx: m0 and m1 both inf, shouldn't get here");
+	}
+    else if (!isinf(m0) && isinf(m1))
+	{
+    	*ix = b1;
+	*iy = m0*(*ix)+b0;
+	}
+    else if (isinf(m0) && !isinf(m1))
+	{
+    	*ix = b0;
+	*iy = m1*(*ix)+b1;
+	}
+    else if (!isinf(m0) && !isinf(m1))
+	{
+    	*ix = -(b1-b0)/(m1-m0);
+	*iy = m0*(*ix)+b0;
+	}
+    }
+}
+
+boolean pscmIsClockwise(struct psPoly *psPoly)
+/* determine if polygon points are in clockwise order or not
+ * using cross-product sum*/
+{
+struct psPoint *p = psPoly->ptList,*q;
+double x0, y0; 
+double x1, y1;
+double x2, y2;
+double crossProd = 0;
+x1 = p->x;
+y1 = p->y;
+p = p->next;
+x2 = p->x;
+y2 = p->y;
+p = p->next;
+q = p;
+for (;;)
+    {
+    x0 = x1;
+    y0 = y1;
+    x1 = x2;
+    y1 = y2;
+    x2 = p->x;
+    y2 = p->y;
+    crossProd += ((x1-x0)*(y2-y1) - (y1-y0)*(x2-x1));
+    p = p->next;
+    if (p == q) 
+	break;
+    }
+return (crossProd > 0);
+}
+
+void pscmPolyTrapStrokeOutline(struct pscmGfx *pscm, struct psPoly *psPoly)
+/* Stroke a fattened polygon using trapezoids. 
+ * Make each stroke-segment of the poly be made of a 4-sided trapezoidal figure
+ * whose inner edge is parallel 1 pixel away and the points are found
+ * by finding the intersections of these parallel lines. */
+{
+
+struct psPoint *p = psPoly->ptList,*q;
+double px0, py0; /* outer points */
+double px1, py1;
+double m0,b0;
+double m1,b1;
+double ix0,iy0;  /* inner points */
+double ix1,iy1;
+
+boolean cw = pscmIsClockwise(psPoly);
+
+px1 = p->x;
+py1 = p->y;
+p = p->next;
+findLineParams(px1, py1, p->x, p->y, &m1, &b1);
+adjustBForParallelLine(cw, m1, px1, py1, p->x, p->y, &b1);
+px0 = px1;
+py0 = py1;
+px1 = p->x;
+py1 = p->y;
+p = p->next;
+m0 = m1;
+b0 = b1;
+findLineParams(px1, py1, p->x, p->y, &m1, &b1);
+adjustBForParallelLine(cw, m1, px1, py1, p->x, p->y, &b1);
+
+findLinesIntersection(cw,m0,b0,m1,b1,px1,py1,
+    (px1<px0) ^ (m0 < 0),
+    (py1>py0),
+    &ix1,&iy1);
+
+px0 = px1;
+py0 = py1;
+px1 = p->x;
+py1 = p->y;
+p = p->next;
+q = p;
+for (;;)
+    {
+
+    m0 = m1;
+    b0 = b1;
+    ix0 = ix1;
+    iy0 = iy1;
+    findLineParams(px1, py1, p->x, p->y, &m1, &b1);
+    adjustBForParallelLine(cw, m1, px1, py1, p->x, p->y, &b1);
+
+    findLinesIntersection(cw,m0,b0,m1,b1,px1,py1,
+	(px1<px0) ^ (m0 < 0),
+	(py1>py0),
+	&ix1,&iy1);
+
+    struct psPoly *inner = psPolyNew();
+    psPolyAddPoint(inner,px0, py0);
+    psPolyAddPoint(inner,px1, py1);
+    psPolyAddPoint(inner,ix1, iy1);
+    psPolyAddPoint(inner,ix0, iy0);
+    psDrawPoly(pscm->ps, inner, TRUE);
+    psPolyFree(&inner);
+
+    px0 = px1;
+    py0 = py1;
+    px1 = p->x;
+    py1 = p->y;
+    p = p->next;
+    if (p == q) 
+	break;
+    }
+
+}
+
 void pscmDrawPoly(struct pscmGfx *pscm, struct gfxPoly *poly, Color color, 
 	boolean filled)
 /* Draw a polygon, possibly filled, in color. */
 {
 struct gfxPoint *p = poly->ptList;
 struct psPoly *psPoly = psPolyNew();
+int minX, maxX, minY, maxY;
 if (poly->ptCount < 1)  /* nothing to do */
     {
     return;
     }
-if (poly->ptCount == 1)  /* a single point */
+psPolyFindExtremes(poly, &minX, &maxX, &minY, &maxY);
+/*  check for co-linear polygon, render as line instead */
+if (colinearPoly(poly)) 
     {
-    struct gfxPoint *p = poly->ptList;
-    pscmBox(pscm, p->x, p->y, 1, 1, color);
+    pscmLine(pscm, minX, minY, maxX, maxY, color);
     return;
     }
-if (poly->ptCount == 2)  /* a single line */
-    {
-    struct gfxPoint *p1 = poly->ptList;
-    struct gfxPoint *p2 = p1->next;
-    pscmLine(pscm, p1->x, p1->y, p2->x, p2->y, color);
-    }
 pscmSetColor(pscm, color);
-
+/* convert pixel coords to real values */
 for (;;)
     {
     psPolyAddPoint(psPoly,p->x, p->y);
@@ -375,9 +664,82 @@ for (;;)
     if (p == poly->ptList)
 	break;
     }
-psDrawPoly(pscm->ps, psPoly, filled);
-
+boolean fat = sameString(pscmGetHint(pscm,"fat"),"on");
+if (fat)
+    pscmPolyFatten(psPoly, minX, maxX, minY, maxY);
+if (fat && !filled)
+    pscmPolyTrapStrokeOutline(pscm,psPoly);
+else
+    psDrawPoly(pscm->ps, psPoly, filled);
 psPolyFree(&psPoly);
+}
+
+
+
+void pscmFatLine(struct pscmGfx *pscm, double x1, double y1, double x2, double y2)
+/* Draw a line from x1/y1 to x2/y2 by making a filled polygon.
+ *  This also avoids some problems with stroke-width variation
+ *  from different postscript implementations. */
+{
+struct psPoly *psPoly = psPolyNew();
+
+double cX = (x1+x2)/2.0;
+double cY = (y1+y2)/2.0;
+double fX;
+double fY;
+
+/* fatten by lengthing line by 0.5 at each end */
+fX = fY = 1.0+0.5*sqrt(0.5);  
+
+/* expand the length of the line by a half-pixel on each end */
+x1 = fatPixel(x1,cX,fX);
+x2 = fatPixel(x2,cX,fX);
+y1 = fatPixel(y1,cY,fY);
+y2 = fatPixel(y2,cY,fY);
+
+
+/* calculate 4 corners {h,i,j,k} of the rectangle covered */
+
+double m = (y2 - y1)/(x2 - x1);
+m = -1/m;  /* rotate slope 90 degrees */
+
+double ddX = sqrt( (0.5*0.5) / (m*m+1) );
+double ddY = m * ddX;
+
+double hX = x1-ddX, hY = y1-ddY;
+double iX = x1+ddX, iY = y1+ddY;
+double jX = x2+ddX, jY = y2+ddY;
+double kX = x2-ddX, kY = y2-ddY;
+
+psPolyAddPoint(psPoly,hX,hY);
+psPolyAddPoint(psPoly,iX,iY);
+psPolyAddPoint(psPoly,jX,jY);
+psPolyAddPoint(psPoly,kX,kY);
+psDrawPoly(pscm->ps, psPoly, TRUE);
+psPolyFree(&psPoly);
+
+}
+
+
+void pscmLine(struct pscmGfx *pscm, 
+	int x1, int y1, int x2, int y2, int color)
+/* Draw a line from one point to another. */
+{
+pscmSetColor(pscm, color);
+if ((x1==x2) || (y1 == y2))
+    {
+    /* pad a half-pixel at each end */
+    psDrawBox(pscm->ps, x1-0.5, y1-0.5, x2-x1+1, y2-y1+1);
+    }
+else
+    {
+    boolean fat = sameString(pscmGetHint(pscm,"fat"),"on");
+    if (fat)
+    	pscmFatLine(pscm, x1, y1, x2, y2);
+    else
+    	psDrawLine(pscm->ps, x1, y1, x2, y2);
+    }
+boxPscm = NULL;
 }
 
 
