@@ -8,6 +8,7 @@
 if ($#argv < 1 || $#argv > 2) then
   echo
   echo " runs the three chain and net scripts in succession"
+  echo " now works for unsplit assemblies"
   echo
   echo "    usage:  database Tablename"
   echo
@@ -23,12 +24,19 @@ endif
 
 # capitalize the first letter of the "other" chain table:
 
+set split=`getSplit.csh $db chain$Org hgwdev`
 
-
-# run the three scripts in order
-nice chain.csh $db chrN_chain$table > & $db.chain.$table
-nice chain2.csh $db chrN_chain$table > & $db.chain2.$table
-nice net.csh $db net$table > & $db.net.$table
+if ( $split == "unsplit" ) then
+  # run the three scripts in order
+  nice chain.csh  $db chain$table      >& $db.chain.$table
+  nice chain2.csh $db chain$table      >& $db.chain2.$table
+  nice net.csh    $db net$table        >& $db.net.$table
+else
+  # run the three scripts in order
+  nice chain.csh  $db chrN_chain$table >& $db.chain.$table
+  nice chain2.csh $db chrN_chain$table >& $db.chain2.$table
+  nice net.csh    $db net$table        >& $db.net.$table
+endif
 
 
 
