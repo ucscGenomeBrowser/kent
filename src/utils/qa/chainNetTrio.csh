@@ -24,7 +24,7 @@ endif
 
 # capitalize the first letter of the "other" chain table:
 
-set split=`getSplit.csh $db chain$table hgwdev`
+set split=`getSplit.csh $db chain$Org hgwdev`
 
 if ( $split == "unsplit" ) then
   # run the three scripts in order

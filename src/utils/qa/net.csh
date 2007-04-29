@@ -54,7 +54,7 @@ updateTimes.csh $db $trackname
 echo
 echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
 echo "rowcounts:"
-hgsql -e "SELECT COUNT(*) FROM $trackname" $db
+hgsql -t -e "SELECT COUNT(*) AS rows FROM $trackname" $db
 
 
 # -------------------------------------------------
@@ -77,7 +77,7 @@ echo
 echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
 echo "Chrom List:"
 echo
-getChromlist.csh $db
+getChromlist.csh $db > /dev/null
 
 # -------------------------------------------------
 # check for each chrom having data:
@@ -107,7 +107,7 @@ echo
 echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
 echo "looking for largest coords:"
 
-~kuhn/bin/checkOffend.csh $db net$Org
+checkOffend.csh $db net$Org
 
 
 # -------------------------------------------------

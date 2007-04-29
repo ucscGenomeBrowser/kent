@@ -109,12 +109,22 @@ if ( $split == "unsplit" ) then
   echo "checking that all chroms (scaffolds) have chains in chain table"
   hgsql -N -e "SELECT DISTINCT(tName) FROM $track" $db | sort > $db.$track.chroms
   commTrio.csh $db.chromlist $db.$track.chroms
-  echo "have no chains:"
-  set empty=`head -3 $db.chromlist.Only`
-  foreach seq ( $empty )
-    echo "http://genome-test.cse.ucsc.edu/cgi-bin/hgTracks?db=$db&position=$seq&chain$Org=pack"
-  end
-  echo "get some DNA from these and see how it blats""
+  if ( `wc -l $db.chromlist.Only | awk '{print $1}'` > 0 ) then
+    # some chroms have not chains.  display links.
+    # get multiz info for link
+    set multiz=`hgsql -N -e "SHOW TABLES LIKE 'multiz%'" $db | head -1`
+    echo "these have no chains:"
+    set empty=`head -3 $db.chromlist.Only`
+    if ( $multiz != "" ) then
+      set multiz="&${multiz}=pack"
+    endif
+    foreach seq ( $empty )
+      echo "http://genome-test.cse.ucsc.edu/cgi-bin/hgTracks?db=$db&position=$seq&chain$Org=pack$multiz"
+    end
+    echo "get some DNA from these and see how it blats"
+  else
+    echo "all chroms have chains"
+  endif
 endif
 
 # -------------------------------------------------

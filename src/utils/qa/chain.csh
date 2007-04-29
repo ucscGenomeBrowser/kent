@@ -172,7 +172,6 @@ endif
 echo
 echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
 echo "checking min and max score values"
-echo "look through this list for outliers."
 echo
 
 if ( $split == "unsplit" ) then
@@ -182,6 +181,7 @@ if ( $split == "unsplit" ) then
   echo "-----		---	---"
   echo "$chrom		$min	$max"
 else
+  echo "look through this list for outliers."
   echo "chrom" "min" "max" \
     | gawk '{ printf("%-'${length}'s %8s %12s \n", $1, $2, $3) }'
   echo "-----" "---" "---" \
@@ -204,9 +204,9 @@ echo "rowcounts"
 echo
 
 if ( $split == "unsplit" ) then
-  echo chain$trackname
+  echo $trackname
   hgsql -t -e "SELECT COUNT(*) AS rows FROM chain${Org}" $db
-  echo chain${trackname}Link
+  echo ${trackname}Link
   hgsql -t -e "SELECT COUNT(*) AS rows FROM chain${Org}Link" $db
   echo "too many chroms to do a count per chrom"
 else
@@ -247,7 +247,8 @@ if ( $split == "unsplit" ) then
   if ( $badStrands > 0 ) then
     echo 'some qStrands are neither "+" nor "-"'
   else
-    echo 'all qStrands are "+" or "-"'
+    echo 'all qStrands are either "+" or "-"'
+    echo
   endif
   echo "posStrand negStrand" \
     | gawk '{ printf("%8s %8s \n", $1, $2) }'
@@ -298,7 +299,7 @@ echo
 echo
 echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
 echo "use these three rows to check (manually) that qStrand is \
-   displayed properly in the browser:"
+   displayed properly in the $db browser:"
 echo
 
 if ( $split == "unsplit" ) then
@@ -324,7 +325,7 @@ echo  "check that tables are sorted by tStart:"
 echo
 
 if ( $split == "unsplit" ) then
-  echo "can't check chrom ordering on unslit chorms right now"
+  echo "can't check chrom ordering on unsplit chorms right now"
 else
   echo  "tStart:"
   foreach chrom (`cat $db.chromlist`)
