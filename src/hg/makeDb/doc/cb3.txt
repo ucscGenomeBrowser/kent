@@ -3,7 +3,7 @@
 # Caenorhabditis briggsae
 #	Washington University School of Medicine GSC and Sanger Institute
 #
-#  $Id: cb3.txt,v 1.9 2007/04/30 23:11:20 hiram Exp $
+#  $Id: cb3.txt,v 1.10 2007/04/30 23:20:12 hiram Exp $
 
 ###########################################################################
 ## Download sequence (DONE - 2007-01-22 - Hiram)
@@ -686,3 +686,8 @@ chainOne $(path1)
     rm -rf /cluster/data/cb3/bed/tblastn.ce4SG/blastOut
     rm -rf /cluster/bluearc/worms/cb3/bed/tblastn.ce4SG
 #end tblastn
+
+############################################################################
+## Reset defaultDb genome (DONE - 2007-04-30 - Hiram)
+    ssh hgwdev
+    hgsql -e 'update defaultDb set name="cb3" where name="cb2";' hgcentraltest
