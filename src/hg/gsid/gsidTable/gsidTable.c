@@ -20,7 +20,7 @@
 #include "gsidTable.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidTable.c,v 1.12 2007/04/26 22:23:26 galt Exp $";
+static char const rcsid[] = "$Id: gsidTable.c,v 1.13 2007/04/30 23:56:29 galt Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "submit_filter", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -37,6 +37,10 @@ struct hash *oldCart;	/* Old cart hash. */
 //struct hash *genomeSettings;  /* Genome-specific settings from settings.ra. */
 struct hash *columnHash;  /* Hash of active columns keyed by name. */
 int passedFilterCount;  /* number of subjects passing filter */
+
+struct sqlConnection *conn;
+struct column *colList, *col;
+
 
 void controlPanelStart()
 /* Put up start of tables around a control panel. */ {
@@ -1246,8 +1250,6 @@ si = slElementFromIx(subjList, maxCount-1);
 if (si != NULL)
     si->next = NULL;
 
-saveSubjList(subjList);
-
 return subjList;
 }
 
@@ -1281,7 +1283,16 @@ else if (cartVarExists(cart, getSeqVarName))
 else if (cartVarExists(cart, redirectName))
     {
     subjList = getOrderedList(ord, colList, conn, BIGNUM);
-    cartRemove(cart, redirectName);
+    if (subjList)
+	{
+    	cartRemove(cart, redirectName);
+	}
+    else  /* if everything has been filtered out, we'll have to go back */
+	{
+	hPrintf("No subject(s) found with the filtering conditions specified.<br>");
+	hPrintf("Click <a href=\"gsidTable?gsidTable.do.advFilter=filter+%28now+on%29\">here</a> "
+	    "to return to Select Subjects.<br>");
+	}
     }
 else
     {
@@ -1296,28 +1307,10 @@ void doMiddle(struct cart *theCart)
  * This routine sets up some globals and then
  * dispatches to the appropriate page-maker. */
 {
-//char *var = NULL;
-struct sqlConnection *conn;
-struct column *colList, *col;
-//char *oldOrg;
 cart = theCart;
 
-getDbAndGenome(cart, &database, &genome);
-hSetDb(database);
-conn = hAllocConn();
-
-/* Get sortOn.  Revert to default by subject Id. */
-orderOn = cartUsualString(cart, orderVarName, "+subjId");
-
-displayCountString = cartUsualString(cart, countVarName, "50");
-if (sameString(displayCountString, "all")) 
-    displayCount = BIGNUM;
-else
-    displayCount = atoi(displayCountString);
-colList = getColumns(conn);
-
 if (cartVarExists(cart, confVarName))
-    doConfigure(conn, colList); //, NULL);
+    doConfigure(conn, colList);
 else if (cartVarExists(cart, defaultConfName))
     doDefaultConfigure(conn, colList);
 else if (cartVarExists(cart, hideAllConfName))
@@ -1345,8 +1338,6 @@ else if ((col = advFilterKeyClearPressed(colList)) != NULL)
 else 
     displayData(conn, colList);
 
-hFreeConn(&conn);
-//cartSetString(cart, oldOrgVarName, genome);
 cartRemovePrefix(cart, "gsidTable.do.");
 
 }
@@ -1369,19 +1360,63 @@ cgiSpoof(&argc, argv);
 htmlSetStyle(htmlStyleUndecoratedLink);
 htmlSetBgColor(HG_CL_OUTSIDE);
 oldCart = hashNew(10);
-struct dyString *head = dyStringNew(1024);
 
-if (cgiVarExists("submit_filter") && cgiVarExists(redirectName))  
+cart = cartAndCookie(hUserCookie(), excludeVars, oldCart);
+
+getDbAndGenome(cart, &database, &genome);
+hSetDb(database);
+conn = hAllocConn();
+
+/* Get sortOn.  Revert to default by subject Id. */
+orderOn = cartUsualString(cart, orderVarName, "+subjId");
+
+displayCountString = cartUsualString(cart, countVarName, "50");
+if (sameString(displayCountString, "all")) 
+    displayCount = BIGNUM;
+else
+    displayCount = atoi(displayCountString);
+colList = getColumns(conn);
+
+if (cgiVarExists("submit_filter"))  
     {  
-    dyStringPrintf(head,	
-    	"<META HTTP-EQUIV=\"REFRESH\" CONTENT=\"0;URL=/cgi-bin/%s\">"
-	"<META HTTP-EQUIV=\"Pragma\" CONTENT=\"no-cache\">"
-    	"<META HTTP-EQUIV=\"Expires\" CONTENT=\"-1\">"
-	, cgiString(redirectName));
+    struct dyString *head = dyStringNew(1024);
+    boolean redir = cgiVarExists(redirectName);
+    struct subjInfo *subjList = NULL;
+    struct column *ordList = colList;
+    struct column *ord = curOrder(ordList);
+    subjList = getOrderedList(ord, colList, conn, BIGNUM);
+    saveSubjList(subjList);
+    if ((!subjList || redir))
+	{
+	if (subjList && redir)
+	    {
+	    dyStringPrintf(head,	
+		"<META HTTP-EQUIV=\"REFRESH\" CONTENT=\"0;URL=/cgi-bin/%s\">"
+		"<META HTTP-EQUIV=\"Pragma\" CONTENT=\"no-cache\">"
+		"<META HTTP-EQUIV=\"Expires\" CONTENT=\"-1\">"
+		, cgiString(redirectName));
+    	    cartRemove(cart, redirectName);
+	    }
+	htmStartWithHead(stdout, head->string, "GSID Table View v"CGI_VERSION);
+	if (!subjList) /* if everything has been filtered out, we'll have to go back */
+	    {
+	    hPrintf("No subject(s) found with the filtering conditions specified.<br>");
+	    hPrintf("Click <a href=\"gsidTable?gsidTable.do.advFilter=filter+%28now+on%29\">here</a> "
+		"to return to Select Subjects.<br>");
+	    }
+	cartCheckout(&cart);
+    	htmlEnd();
+	hFreeConn(&conn);
+	return 0;
+	}
     }
 
-cartHtmlShellWithHead(head->string,"GSID Table View v"CGI_VERSION, 
-    doMiddle, hUserCookie(), excludeVars, oldCart);
+htmStart(stdout, "GSID Table View v"CGI_VERSION);
+cartWarnCatcher(doMiddle, cart, htmlVaWarn);
+cartCheckout(&cart);
+htmlEnd();
+
+hFreeConn(&conn);
 
 return 0;
 }
