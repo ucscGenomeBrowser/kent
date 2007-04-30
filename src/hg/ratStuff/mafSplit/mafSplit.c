@@ -9,7 +9,7 @@
 #include "maf.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: mafSplit.c,v 1.3 2006/04/28 19:20:30 angie Exp $";
+static char const rcsid[] = "$Id: mafSplit.c,v 1.4 2007/04/30 22:23:18 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -31,6 +31,18 @@ errAbort(
   "                     output filename, expect each target sequence name to\n"
   "                     end with a unique number and use that number as the\n"
   "                     integer to tack onto outRoot.\n"
+  "   -useHashedName=N  For use only with -byTarget.\n"
+  "                     Instead of auto-incrementing an integer or requiring\n"
+  "                     a unique number in the sequence name, use a hash\n"
+  "                     function on the sequence name to compute an N-bit\n"
+  "                     number.  This limits the max #filenames to 2^N and\n"
+  "                     ensures that even if different subsets of sequences\n"
+  "                     appear in different pairwise mafs, the split file\n"
+  "                     names will be consistent (due to hash function).\n"
+  "                     This option is useful when a \"scaffold-based\"\n"
+  "                     assembly has more than one sequence name pattern,\n"
+  "                     e.g. both chroms and scaffolds.\n"
+  "\n"
   );
 }
 
@@ -38,6 +50,7 @@ static struct optionSpec options[] = {
    {"byTarget", OPTION_BOOLEAN},
    {"outDirDepth", OPTION_INT},
    {"useSequenceName", OPTION_BOOLEAN},
+   {"useHashedName", OPTION_INT},
    {NULL, 0},
 };
 
@@ -45,6 +58,7 @@ static struct optionSpec options[] = {
 static boolean byTarget = FALSE;
 static int outDirDepth = 0;
 static boolean useSequenceName = FALSE;
+static int hashedNameBits = 0;
 
 
 static int numberFromName(char *name)
@@ -56,6 +70,14 @@ if (!isdigit(*s))
 while (s > name && isdigit(*(s-1)))
     s--;
 return atoi(s);
+}
+
+static int numberFromHashedName(char *name, int hashedNameBits)
+/* Run name through a hash function and mask to hashedNameBits. */
+{
+int hashedName = hashCrc(name);
+unsigned mask = (1 << hashedNameBits) - 1;
+return hashedName & mask;
 }
 
 static char *mkOutPath(char *outRootDir, char *outRootFile, int seqNum)
@@ -96,7 +118,7 @@ static char prevTarget[512];
 struct mafFile *mf = mafOpen(mafInName);
 struct mafAli *maf = NULL;
 
-prevTarget[0] = 0;
+prevTarget[0] = '\0';
 while ((maf = mafNext(mf)) != NULL)
     {
     struct mafComp *mc = maf->components;
@@ -110,7 +132,17 @@ while ((maf = mafNext(mf)) != NULL)
 	}
     else 
 	{
-	char *path = (char *)hashFindVal(pathHash, targetName);
+	char *path;
+	if (hashedNameBits > 0)
+	    {
+	    /* Hash paths by themselves instead of by target, because 
+	     * we may end up reusing a path for several targets. */
+	    int tHashed = numberFromHashedName(targetName, hashedNameBits);
+	    path = mkOutPath(outRootDir, outRootFile, tHashed);
+	    path = (char *)hashFindVal(pathHash, path);
+	    }
+	else
+	    path = (char *)hashFindVal(pathHash, targetName);
 	carefulClose(&prevFile);
 	if (path != NULL)
 	    {
@@ -123,18 +155,23 @@ while ((maf = mafNext(mf)) != NULL)
 	    int seqNum = (*pSeqNum)++;
 	    if (useSequenceName)
 		seqNum = numberFromName(targetName);
+	    else if (hashedNameBits > 0)
+		seqNum = numberFromHashedName(targetName, hashedNameBits);
 	    path = mkOutPath(outRootDir, outRootFile, seqNum);
 	    verbose(3, "Opening path %s for writing and adding it to hash "
 		    "for %s\n", path, targetName);
 	    f = mustOpen(path, "w");
 	    fprintf(f, "##maf version=1 scoring=blastz\n");
-	    hashAdd(pathHash, targetName, path);
+	    if (hashedNameBits > 0)
+		hashAdd(pathHash, path, path);
+	    else
+		hashAdd(pathHash, targetName, path);
 	    }
 	prevFile = f;
 	}
     mafWrite(f, maf);
-    mafAliFree(&maf);
     safef(prevTarget, sizeof(prevTarget), "%s", targetName);
+    mafAliFree(&maf);
     }
 mafFileFree(&mf);
 }
@@ -293,12 +330,24 @@ optionInit(&argc, argv, options);
 byTarget = optionExists("byTarget");
 outDirDepth = optionInt("outDirDepth", outDirDepth);
 useSequenceName = optionExists("useSequenceName");
+hashedNameBits = optionInt("useHashedName", hashedNameBits);
 if (outDirDepth > 0 && !byTarget)
     errAbort("-outDirDepth=N can be specified only when -byTarget is "
 	     "specified.");
 if (useSequenceName && !byTarget)
     errAbort("-useSequenceName can be specified only when -byTarget is "
 	     "specified.");
+if (hashedNameBits > 0 && !byTarget)
+    errAbort("-useHashedName can be specified only when -byTarget is "
+	     "specified.");
+if (hashedNameBits > 0 && useSequenceName)
+    errAbort("-useHashedName and -useSequenceName are mutually exclusive.  "
+	     "Please pick one.");
+if (hashedNameBits > 0 &&
+    (hashedNameBits < 2 || hashedNameBits > 17))
+    errAbort("-useHashedName=N: N should be between 2 and 17.  If you "
+	     "strongly disagree, modify mafSplit.c.  Watch fileserver if "
+	     "exceeding.");
 if (argc < 4)
     usage();
 mafSplit(argv[1], argv[2], argc-3, &argv[3]);
