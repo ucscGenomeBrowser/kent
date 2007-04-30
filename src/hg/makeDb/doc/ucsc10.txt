@@ -5,7 +5,7 @@
 
 # Directories
 set dir = /cluster/data/hg18/bed/ucsc.10
-set gbDir = /cluster/store10/markd/genbank/ncalign/results/hg18
+set gbDir = $dir/gb
 set scratchDir = /san/sanvol1/scratch
 
 # Databases
@@ -25,7 +25,7 @@ set wormDb = ce2
 set yeastDb = sacCer1
 
 # Database to rebuild visiGene text from
-set vgTextDbs = mm7 mm8 hg17 hg18
+set vgTextDbs = (mm7 mm8 hg17 hg18)
 
 # Proteins in various species
 set tempFa = $dir/ucscGenes.faa
@@ -106,7 +106,15 @@ end
 # as special genes.  Takes 40 seconds
 txAbFragFind $db antibodyAccs
 pslCat mrna/*.psl -nohead | fgrep -w -f antibodyAccs > antibody.psl
-clusterPsl -prefix=ab.ab.antibody. antibody.psl stdout | awk '$10 > 20' | cut -f 1-12 > antibody.bed
+clusterPsl -prefix=ab.ab.antibody. antibody.psl antibody.cluster
+if ($db =~ mm*) then
+    echo chr12 > abChrom.lst
+    echo chr16 >> abChrom.lst
+    echo chr6 >> abChrom.lst
+    fgrep -w -f abChrom.lst antibody.cluster | cut -f 1-12 | bedOrBlocks stdin antibody.bed
+else
+    awk '$13 > 100' antibody.cluster | cut -f 1-12 > antibody.bed
+endif
 
 # Convert psls to bed, saving mapping info and weeding antibodies.  Takes 2.5 min
 foreach c (`echo 'select chrom from chromInfo' | hgsql -N $db`)
@@ -145,11 +153,11 @@ foreach c (`echo 'select chrom from chromInfo' | hgsql -N $db`)
     txgGoodEdges est/$c.txg  trim.weights 2 est est/$c.edges
 end
 
-# Setup mouse dir
+# Setup other species dir
 mkdir -p $xdb
 cd $xdb
 
-# Get mouse mrna including ESTs.  Takes about three minutes
+# Get other species mrna including ESTs.  Takes about three minutes
 mkdir -p refSeq mrna est
 foreach c (`echo 'select chrom from chromInfo' | hgsql -N $xdb`)
     echo $c
@@ -159,14 +167,14 @@ foreach c (`echo 'select chrom from chromInfo' | hgsql -N $xdb`)
 end
 #ignore gripe about missing data in chrM
 
-# Create mouse splicing graphs.  Takes a minute and a half.
-rm -f mouse.txg
+# Create other species splicing graphs.  Takes a minute and a half.
+rm -f other.txg
 foreach c (`echo 'select chrom from chromInfo' | hgsql -N $xdb`)
     echo $c
-    txBedToGraph refSeq/$c.bed refSeq mrna/$c.bed mrna est/$c.bed est stdout >> mouse.txg
+    txBedToGraph refSeq/$c.bed refSeq mrna/$c.bed mrna est/$c.bed est stdout >> other.txg
 end
 
-# Clean up all but final mouse.txg
+# Clean up all but final other.txg
 rm -r est mrna refSeq
 
 # Unpack chains and nets, apply synteny filter and split by chromosome
@@ -190,7 +198,7 @@ cd $dir/bedToGraph
 echo "#\!/bin/tcsh -ef" > ../txOrtho/spec
 foreach f (*.txg)
     set c=$f:r
-    echo txOrtho ../bedToGraph/$f ../$xdb/chains/$c.chain ../$xdb/nets/$c.net ../$xdb/mouse.txg edges/$c.edges >> ../txOrtho/spec
+    echo txOrtho ../bedToGraph/$f ../$xdb/chains/$c.chain ../$xdb/nets/$c.net ../$xdb/other.txg edges/$c.edges >> ../txOrtho/spec
 end
 cd ..
 
@@ -224,7 +232,7 @@ echo "select chrom, txStart, txEnd, name, id, strand from exoniphy order by chro
 	| hgsql -N $db > exoniphy.bed
 bedToTxEdges exoniphy.bed exoniphy.edges
 
-# Add evidence from ests, orthologous mouse transcripts, and exoniphy
+# Add evidence from ests, orthologous other species transcripts, and exoniphy
 # Takes 36 seconds.
 mkdir -p graphWithEvidence
 foreach c (`echo 'select chrom from chromInfo' | hgsql -N $db`)
@@ -237,8 +245,14 @@ end
 # Do  txWalk  - takes 32 seconds (mostly loading the mrnaSize.tab again and
 # again...)
 mkdir -p txWalk
+if ($db =~ mm*) then
+    set sef = 0.6
+else
+    set sef = 0.75
+endif
 foreach c (`echo 'select chrom from chromInfo' | hgsql -N $db`)
-    txWalk graphWithEvidence/$c.txg trim.weights 3 txWalk/$c.bed -evidence=txWalk/$c.ev -sizes=mrnaSize.tab -defrag=0.25
+    txWalk graphWithEvidence/$c.txg trim.weights 3 txWalk/$c.bed \
+    	-evidence=txWalk/$c.ev -sizes=mrnaSize.tab -defrag=0.25 -singleExonFactor=$sef
 end
 
 # Make a file that lists the various categories of alt-splicing we see.
@@ -300,7 +314,7 @@ end
 cd ..
 
 # Run protein/transcript blat job on cluster
-ssh $cpuFarm "cd $dir; para make spec;"
+ssh $cpuFarm "cd $dir/blat/protein; para make spec;"
 #CPU time in finished jobs:      13571s     226.18m     3.77h    0.16d  0.000 y
 #IO & Wait Time:                  5645s      94.08m     1.57h    0.07d  0.000 y
 #Average job time:                  49s       0.82m     0.01h    0.00d
@@ -505,8 +519,6 @@ hgMapToGene $db -tempDb=$tempDb gnfAtlas2 knownGene knownToGnfAtlas2 '-type=bed 
 hgsql --skip-column-names -e "select mrnaAcc,locusLinkId from refLink" $db > refToLl.txt
 hgMapToGene $db -tempDb=$tempDb refGene knownGene knownToLocusLink -lookup=refToLl.txt
 hgMapToGene $db -tempDb=$tempDb refGene knownGene knownToRefSeq
-knownToVisiGene $db -table=$tempDb.knownToVisiGene -fromProbePsl=vgAllProbes
-vgGetText /usr/local/apache/cgi-bin/visiGeneData/visiGene.text $vgTextDbs
 if ($db =~ hg*) then
     hgMapToGene $db -tempDb=$tempDb affyGnf1h knownGene knownToGnf1h
     hgMapToGene $db -tempDb=$tempDb HInvGeneMrna knownGene knownToHInv
@@ -518,6 +530,7 @@ if ($db =~ hg*) then
     time hgExpDistance $tempDb hgFixed.gnfHumanAtlas2MedianRatio \
 	hgFixed.gnfHumanAtlas2MedianExps gnfAtlas2Distance \
 	-lookup=knownToGnfAtlas2
+    knownToVisiGene $db -table=$tempDb.knownToVisiGene -fromProbePsl=vgAllProbes
 endif
 if ($db =~ mm*) then
     hgMapToGene $db -tempDb=$tempDb affyGnf1m knownGene knownToGnf1m
@@ -530,7 +543,9 @@ if ($db =~ mm*) then
     hgExpDistance $tempDb $db.affyGnfU74C affyGnfU74CExps affyGnfU74CDistance -lookup=knownToU74
     hgExpDistance $tempDb hgFixed.gnfMouseAtlas2MedianRatio \
 	    hgFixed.gnfMouseAtlas2MedianExps gnfAtlas2Distance -lookup=knownToGnf1m
+    knownToVisiGene $db -table=$tempDb.knownToVisiGene -fromProbePsl=vgProbes
 endif
+vgGetText /usr/local/apache/cgi-bin/visiGeneData/visiGene.text $vgTextDbs
 
 # Create Human P2P protein-interaction Gene Sorter columns
 if ($db =~ hg*) then
