@@ -205,7 +205,7 @@
 #include "geneCheckDetails.h"
 #include "kg1ToKg2.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1280 2007/04/30 22:03:50 lowec Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1281 2007/04/30 23:08:43 hiram Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -5924,7 +5924,8 @@ if ((addp == 1) || (pred != NULL))
 	addp = 1;
     sprintf(buffer, "%s",readName);
     
-    if (!sameString(pred, "ce3.blastWBPep01")  &&
+    if (!(sameString(pred, "ce3.blastWBPep01") ||
+		sameString(pred, "ce4.blastSGPep01"))  &&
 	(ptr = strchr(buffer, '.')) != NULL)
 	{
 	*ptr = 0;
@@ -16007,7 +16008,7 @@ if (blastRef != NULL)
 	*table++ = 0;
 	if (hTableExistsDb(thisDb, table))
 	    {
-	    if ((ptr = strchr(acc, '.')))
+	    if (!isCe && (ptr = strchr(acc, '.')))
 		*ptr = 0;
 	    safef(query, sizeof(query), "select geneId, extra1, refPos from %s where acc = '%s'", blastRef, acc);
 	    sr = sqlGetResult(conn, query);
@@ -16036,7 +16037,7 @@ if (isDm == TRUE)
 else if (isSacCer == TRUE)
     cartWebStart(cart, "Yeast Protein %s", useName);
 else if (isCe == TRUE)
-    cartWebStart(cart, "Worm Protein %s", useName);
+    cartWebStart(cart, "C. elegans Protein %s", useName);
 else
     cartWebStart(cart, "Human Protein %s", useName);
 if (pos != NULL)
@@ -16054,8 +16055,14 @@ if (pos != NULL)
 	}
     else if (isCe == TRUE)
 	{
-	char *assembly = "ce3";
-	printf("<B>Worm position:</B>\n");
+	char *assembly;
+	if (sameString("blastWBRef01", tdb->tableName))
+	    assembly = "ce3";
+	else if (sameString("blastCe4SG", tdb->tableName))
+	    assembly = "ce4";
+	else
+	    assembly = "ce3";
+	printf("<B>C. elegans position:</B>\n");
 	printf("<A TARGET=_blank HREF=\"%s?position=%s&db=%s\">",
 	    hgTracksName(), pos, assembly);
 	}
@@ -16904,10 +16911,8 @@ struct sqlResult *sr;
 char **row = NULL;
 
 safef(tableName, sizeof(tableName), "snp%d%sorthoAllele", snpVersion, database);
-fprintf(stderr, "checking for %s.%s\n", orthoDb, tableName);
 if (!hTableExistsDb(orthoDb, tableName)) 
     {
-    fprintf(stderr, "%s.%s not found\n", orthoDb, tableName);
     sqlDisconnect(&conn);
     return;
     }
@@ -18529,6 +18534,7 @@ else if (sameWord(track, "firstEF"))
 else if ( sameWord(track, "blastHg16KG") ||  sameWord(track, "blatHg16KG" ) ||
         startsWith("blastDm",  track) || sameWord(track, "blastMm6KG") || 
         sameWord(track, "blastSacCer1SG") || sameWord(track, "blastHg17KG") ||
+        sameWord(track, "blastCe4SG") ||
         sameWord(track, "blastCe3WB") || sameWord(track, "blastHg18KG") )
     {
     blastProtein(tdb, item);
