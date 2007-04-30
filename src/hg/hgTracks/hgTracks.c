@@ -108,7 +108,7 @@
 #include "hapmapTrack.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1325 2007/04/28 23:59:40 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1326 2007/04/30 13:24:36 giardine Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -11309,7 +11309,10 @@ while ((row = sqlNextRow(sr)) != NULL)
     escId = sqlEscapeString(el->name);
     safef(query, sizeof(query), "select * from hgFixed.gv where id = '%s'", escId);
     details = gvLoadByQuery(conn2, query);
-    if (!gvFilterType(details))
+    /* searched items are always visible */
+    if (hgFindMatches != NULL && hashIntValDefault(hgFindMatches, el->name, 0) == 1)
+        slAddHead(&list, el);
+    else if (!gvFilterType(details))
         gvPosFree(&el);
     else if (!gvFilterLoc(details))
         gvPosFree(&el);
