@@ -205,7 +205,7 @@
 #include "geneCheckDetails.h"
 #include "kg1ToKg2.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1279 2007/04/27 18:30:12 aamp Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1280 2007/04/30 22:03:50 lowec Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -18096,8 +18096,8 @@ blastzAln = (sqlUnsigned(row[4])==1);
 
 printPos(chr, chromStart, chromEnd, NULL, TRUE, name);
 printf("<B>Item:</B> %s<BR>\n", name);
-if(blastzAln){printf("<B>Alignment to the repeat consensus verified with blastz:</B> YES<BR>\n");}
-else{printf("<B>Alignment to repeat consensus verified with blastz:</B> NO<BR>\n");}
+if(blastzAln){printf("<B>Alignment to the repeat consensus verified with blastz:</B> yes<BR>\n");}
+else{printf("<B>Alignment to repeat consensus verified with blastz:</B> no<BR>\n");}
 
 sqlFreeResult(&sr);
 hFreeConn(&conn);
