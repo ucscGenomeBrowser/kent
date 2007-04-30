@@ -25,7 +25,7 @@
 #include "paypalSignEncrypt.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidMember.c,v 1.18 2007/04/30 23:49:55 galt Exp $";
+static char const rcsid[] = "$Id: gsidMember.c,v 1.19 2007/04/30 23:53:57 galt Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "debug", "fixMembers", "update", "gsidM_password", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -762,7 +762,7 @@ safef(buttonData, sizeof(buttonData),
 "cmd=_xclick\n"
 "business=%s\n"
 "invoice=%s\n"
-"item_name=GSID HIV Access Yearly %s Access Fee\n"
+"item_name=GSID HIV Yearly %s Access Fee\n"
 "item_number=%s\n"
 "amount=%s.00\n"
 "no_shipping=2\n"
