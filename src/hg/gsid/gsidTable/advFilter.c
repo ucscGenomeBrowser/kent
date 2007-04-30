@@ -13,7 +13,7 @@
 #include "hPrint.h"
 #include "gsidTable.h"
 
-static char const rcsid[] = "$Id: advFilter.c,v 1.2 2007/04/26 22:23:26 galt Exp $";
+static char const rcsid[] = "$Id: advFilter.c,v 1.3 2007/04/30 20:40:52 galt Exp $";
 
 struct subjInfo *advFilterResults(struct column *colList, 
 	struct sqlConnection *conn)
@@ -262,7 +262,7 @@ struct column *col;
 boolean passPresent[2];
 int onOff = 0;
 
-makeTitle("Table View Filter", "gsidTableHelp.html#Filter");
+makeTitle("Select Subjects", "gsidTableHelp.html#Filter");
 hPrintf("<FORM ACTION=\"../cgi-bin/gsidTable\" METHOD=POST>\n");
 cartSaveSession(cart);
 
