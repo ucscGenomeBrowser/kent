@@ -12,7 +12,7 @@ set rn rn2,rn3,rn4
 set fr fr1,fr2
 set ce ce1,ce2,ce4
 set cb cb1
-set dm dm1,dm2
+set dm dm1,dm2,dm3
 set dp dp2,dp3
 set sacCer sacCer1
 set panTro panTro1,panTro2
@@ -40,9 +40,10 @@ set gasAcu gasAcu1
 set oryLat oryLat1
 set equCab equCab1
 set anoCar anoCar1
+set ornAna ornAna1
 
 # Define all organism/assembly-specific databases.
-set gbd $hg,$mm,$rn,$fr,$ce,$cb,$dm,$dp,$sacCer,$panTro,$galGal,$ci,$danRer,$canFam,$droYak,$droMult,$anoGam,$apiMel,$cioSav,$tetNig,$xenTro,$monDom,$bosTau,$rheMac,$strPur,$felCat,$gasAcu,$oryLat,$equCab,$anoCar
+set gbd $hg,$mm,$rn,$fr,$ce,$cb,$dm,$dp,$sacCer,$panTro,$galGal,$ci,$danRer,$canFam,$droYak,$droMult,$anoGam,$apiMel,$cioSav,$tetNig,$xenTro,$monDom,$bosTau,$rheMac,$strPur,$felCat,$gasAcu,$oryLat,$equCab,$anoCar,$ornAna
 
 # Define organism databases based on whole-genome shotgun projects 
 # (Assembly based on WGS project contigs accessioned in Genbank)
