@@ -23,6 +23,8 @@ else
 endif
 
 # capitalize the first letter of the "other" chain table:
+# just in case
+set table=`echo $table | perl -wpe '$_ = ucfirst($_)'`
 
 set split=`getSplit.csh $db chain$table hgwdev`
 

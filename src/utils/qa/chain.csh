@@ -308,7 +308,6 @@ if ( $split == "unsplit" ) then
 else
   set last=''
   set last=`hgsql -N -e "SELECT MAX(chrom) FROM chromInfo" $db`
-  
   hgsql -t -e "SELECT tName, tStart, tEnd, qName, qStrand \
       FROM ${last}_$track WHERE tStart > 10000000 LIMIT 3" $db
   echo

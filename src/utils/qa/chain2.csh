@@ -85,9 +85,11 @@ endif
 set otherDb=`echo $Org | perl -wpe '$_ = lcfirst($_)'`
 hgsql -N -e "SELECT size, chrom FROM chromInfo" $otherDb | sort -nr > $otherDb.size 
 if ( $split == "unsplit" ) then
+  echo "check to see if qSize matches coords in other assembly."
   hgsql -N -e "SELECT DISTINCT qSize, qName FROM chain$Org \
-    GROUP by qSize" $db | sort -nr > query.size
-  commTrio.csh query.size $otherDb.size rm
+    GROUP by qSize" $db | sort -nr > $db.query.size
+  commTrio.csh query.size $otherDb.size 
+  echo "expect zero for $db.query.size"
 else
 # not really needed and too complicated here.
 # the chances of this being broken are very small
@@ -169,4 +171,5 @@ endif
 
 # -------------------------------------------------
 
+echo
 echo "the end."

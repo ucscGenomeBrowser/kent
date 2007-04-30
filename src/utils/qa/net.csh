@@ -75,8 +75,6 @@ echo
 
 echo
 echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
-echo "Chrom List:"
-echo
 getChromlist.csh $db > /dev/null
 
 # -------------------------------------------------
@@ -86,6 +84,8 @@ echo
 echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
 echo "check that each chrom has data:"
 echo "if there is no output, then it passes."
+echo 'if this list is long (as in scaffold assemblies), grep for "Look" \
+      to get past the list'
 set var=""
 
 foreach chrom (`cat $db.chromlist`)
