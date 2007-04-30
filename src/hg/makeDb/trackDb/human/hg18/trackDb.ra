@@ -515,6 +515,12 @@ visibility hide
 color 255, 127, 0
 type bed 4 +
 
+searchTable exaptedRepeats
+searchMethod exact
+searchType bed
+searchPriority 11
+termRegex exap[0-9]+
+
 track chainTetNig1
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
