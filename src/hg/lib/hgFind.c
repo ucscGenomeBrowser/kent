@@ -31,7 +31,7 @@
 #include "hgConfig.h"
 #include "trix.h"
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.197 2007/04/10 05:06:19 heather Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.198 2007/04/30 22:38:47 angie Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -1089,33 +1089,55 @@ boolean findChromContigPos(char *name, char **retChromName,
 {
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = NULL;
-struct slName *allChroms = hAllChromNames();
-struct slName *chromPtr;
 char **row;
 char query[256];
 boolean foundIt = FALSE;
 
-for (chromPtr=allChroms;  chromPtr != NULL;  chromPtr=chromPtr->next)
+/* In case this is a scaffold-based assembly, check for unsplit table first: */
+if (sqlTableExists(conn, "gold"))
     {
-    char tableName[256];
-    safef(tableName, sizeof(tableName), "%s_gold", chromPtr->name);
-    if (! sqlTableExists(conn, tableName))
-	continue;
-    safef(query, sizeof(query), 
-	  "select chromStart,chromEnd from %s where frag = '%s'",
-	  tableName, name);
+    safef(query, sizeof(query),
+	  "select chrom,chromStart,chromEnd from gold where frag = '%s'",
+	  name);
     sr = sqlMustGetResult(conn, query);
     row = sqlNextRow(sr);
     if (row != NULL)
 	{
-	*retChromName = chromPtr->name;
-	*retWinStart = atoi(row[0]);
-	*retWinEnd = atoi(row[1]);
+	*retChromName = cloneString(row[0]);
+	*retWinStart = atoi(row[1]);
+	*retWinEnd = atoi(row[2]);
 	foundIt = TRUE;
 	}
     sqlFreeResult(&sr);
-    if (foundIt)
-	break;
+    }
+else
+    {
+    struct slName *allChroms = hAllChromNames();
+    struct slName *chromPtr;
+
+    for (chromPtr=allChroms;  chromPtr != NULL;  chromPtr=chromPtr->next)
+	{
+	char tableName[256];
+	safef(tableName, sizeof(tableName), "%s_gold", chromPtr->name);
+	if (! sqlTableExists(conn, tableName))
+	    continue;
+	safef(query, sizeof(query), 
+	      "select chromStart,chromEnd from %s where frag = '%s'",
+	      tableName, name);
+	sr = sqlMustGetResult(conn, query);
+	row = sqlNextRow(sr);
+	if (row != NULL)
+	    {
+	    *retChromName = chromPtr->name;
+	    *retWinStart = atoi(row[0]);
+	    *retWinEnd = atoi(row[1]);
+	    foundIt = TRUE;
+	    }
+	sqlFreeResult(&sr);
+	if (foundIt)
+	    break;
+	}
+    slNameFreeList(&allChroms);
     }
 hFreeConn(&conn);
 return foundIt;
