@@ -11552,16 +11552,13 @@ hgLoadSqlTab -oldTable hgFixed gvAttr ~/humPhen/kent/src/hg/lib/gv.sql gvAttrIPN
 # Do the same for hg17.  See hg17.txt for details.
 
 ##########################################################################
-# ORegAnno: oreganno, hgFixed.oregannoAttr, hgFixed.oregannoLink
-# Belinda Giardine Sept 2006
+# ORegAnno: oreganno, oregannoAttr, oregannoLink
+# Belinda Giardine  April 2007 
 # This has regulatory annotations from ORegAnno.
-# Parse flat file received from Obi Griffith, into 3 tables, load.
-# Has other species but only Human has enough entries for now.
-
-# Reloaded attributes and links Dec 2006
-# Moved these from hgFixed to hg18
-# Addition of other species showed that keeping these in hgFixed 
-# caused more complications than benefits.
+# Get updated file from Obi Griffith 
+# Parse flat file into 3 tables, truncate tables, load.
+# Has other species but only Human and Fly has enough entries for now.
+# Found and fixed bug in parsing script with this load
 
 ##########################################################################
 # LIFT ACEMBLY FROM HG17 TO HG18 (DONE, Fan, 9/28/06)
