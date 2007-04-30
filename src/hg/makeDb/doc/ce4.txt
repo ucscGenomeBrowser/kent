@@ -3,7 +3,7 @@
 # Caenorhabditis elegans
 #	Washington University School of Medicine GSC and Sanger Institute WS170
 
-#  $Id: ce4.txt,v 1.15 2007/04/28 00:00:20 hiram Exp $
+#  $Id: ce4.txt,v 1.16 2007/04/30 23:14:58 hiram Exp $
 
 
 #########################################################################
@@ -1290,22 +1290,30 @@ done
 
     # Set up parasol directory to calculate trees on these regions
     ssh pk
-    mkdir /san/sanvol1/scratch/worms/ce4/cons/treeRun1
-    cd /san/sanvol1/scratch/worms/ce4/cons/treeRun1
+    mkdir /san/sanvol1/scratch/worms/ce4/cons/treeRun4
+    cd /san/sanvol1/scratch/worms/ce4/cons/treeRun4
     mkdir tree log
 
     #	Tuning this loop should come back to here to recalculate 
     # Create  script that calls phastCons with right arguments
     #	expected-lengths and target-coverage taken from ce2 history
+    #	for treeRun4 --expected-lengths 15 --target-coverage 0.60
+    #		and using ave.noncons.mod from treeRun3
+    #	for treeRun3 --expected-lengths 15 --target-coverage 0.55
+    #		and using ave.noncons.mod from treeRun2 in place of
+    #		/cluster/data/ce4/bed/multiz5way/cons/starting-tree.mod 
+    #	for treeRun2 --expected-lengths 15 --target-coverage 0.65
+    #	for treeRun1 --expected-lengths 25 --target-coverage 0.45
+    #		mistakenly: --gc 0.277
     cat > makeTree.csh << '_EOF_'
 #!/bin/csh -fe
 set C=$1:h
 mkdir -p log/${C} tree/${C}
     /cluster/bin/phast/$MACHTYPE/phastCons ../ss/$1 \
-      /cluster/data/ce4/bed/multiz5way/cons/starting-tree.mod \
-      --gc 0.277 --nrates 1,1 --no-post-probs --ignore-missing \
-      --expected-lengths 25 --target-coverage 0.45 \
-      --quiet --log log/$1 --estimate-trees tree/$1
+	/san/sanvol1/scratch/worms/ce4/cons/treeRun3/ave.noncons.mod \
+	--gc 0.377 --nrates 1,1 --no-post-probs --ignore-missing \
+	--expected-lengths 15 --target-coverage 0.60 \
+	--quiet --log log/$1 --estimate-trees tree/$1
 '_EOF_'
     #	<< happy emacs
     chmod a+x makeTree.csh
@@ -1322,21 +1330,21 @@ makeTree.csh $(path1)
     gensub2 ../randomSs.list single template jobList
     para create jobList
     para try/push/check/etc
-# Completed: 13 of 13 jobs
-# CPU time in finished jobs:       4072s      67.87m     1.13h    0.05d  0.000 y
-# IO & Wait Time:                    42s       0.70m     0.01h    0.00d  0.000 y
-# Average job time:                 316s       5.27m     0.09h    0.00d
-# Longest finished job:             443s       7.38m     0.12h    0.01d
-# Submission to last job:        101690s    1694.83m    28.25h    1.18d
+# Completed: 28 of 28 jobs
+# CPU time in finished jobs:       2264s      37.73m     0.63h    0.03d  0.000 y
+# IO & Wait Time:                    95s       1.59m     0.03h    0.00d  0.000 y
+# Average job time:                  84s       1.40m     0.02h    0.00d
+# Longest finished job:             156s       2.60m     0.04h    0.00d
+# Submission to last job:           157s       2.62m     0.04h    0.00d
 
     # Now combine parameter estimates.  We can average the .mod files
     # using phyloBoot.  This must be done separately for the conserved
     # and nonconserved models
     ssh kkstore02
-    cd /san/sanvol1/scratch/worms/ce4/cons/treeRun1
+    cd /san/sanvol1/scratch/worms/ce4/cons/treeRun4
     ls -1 tree/chr*/*.cons.mod > cons.list
-    time /cluster/bin/phast/$MACHTYPE/phyloBoot --read-mods '*cons.list' \
-	--output-average ../ave.cons.mod > cons_summary.txt 2>&1 &
+    /cluster/bin/phast/$MACHTYPE/phyloBoot --read-mods '*cons.list' \
+	--output-average ../ave.cons.mod > cons_summary.txt 2>&1
     ls -1 tree/chr*/*.noncons.mod > noncons.list
     /cluster/bin/phast/$MACHTYPE/phyloBoot --read-mods '*noncons.list' \
 	--output-average ../ave.noncons.mod > noncons_summary.txt
@@ -1346,9 +1354,54 @@ makeTree.csh $(path1)
     #	measuring entropy
     #	consEntopy <target coverage> <expected lengths>
     #		 ave.cons.mod ave.noncons.mod --NH 9.78
-    #	never stops with the --NH argument
-    /cluster/bin/phast/$MACHTYPE/consEntropy .45 25 \
+    /cluster/bin/phast/$MACHTYPE/consEntropy --NH 9.78 .60 15 \
                         ave.cons.mod ave.noncons.mod
+
+    #	for treeRun4 --expected-lengths 15 --target-coverage 0.60
+# (Solving for new omega: 15.000000 141.732548 61.619960 42.817579 40.070343
+#	39.988928 )
+# Transition parameters: gamma=0.600000, omega=15.000000, mu=0.066667,
+#	nu=0.100000
+# Relative entropy: H=0.977026 bits/site
+# Expected min. length: L_min=6.777394 sites
+# Expected max. length: L_max=6.565768 sites
+# Phylogenetic information threshold: PIT=L_min*H=6.621688 bits
+Recommended expected length: omega=39.988928 sites (for L_min*H=9.780000)
+    #	for treeRun3 --expected-lengths 15 --target-coverage 0.55
+# (Solving for new omega: 15.000000 77.051147 42.798715 35.637374 35.053109
+#	35.048618 )
+# Transition parameters: gamma=0.550000, omega=15.000000,
+#	mu=0.066667, nu=0.081481
+# Relative entropy: H=0.923015 bits/site
+# Expected min. length: L_min=7.718135 sites
+# Expected max. length: L_max=7.015398 sites
+# Phylogenetic information threshold: PIT=L_min*H=7.123957 bits
+# Recommended expected length: omega=35.048618 sites (for L_min*H=9.780000)
+
+    #	for treeRun2 --expected-lengths 15 --target-coverage 0.65
+# ( Solving for new omega: 15.000000 466.852221 137.016323 64.163096
+#	47.673547 45.689998 45.653095 )
+# Transition parameters: gamma=0.650000, omega=15.000000,
+#	mu=0.066667, nu=0.123810
+# Relative entropy: H=1.050500 bits/site
+# Expected min. length: L_min=5.807815 sites
+# Expected max. length: L_max=6.063484 sites
+# Phylogenetic information threshold: PIT=L_min*H=6.101107 bits
+# Recommended expected length: omega=45.653095 sites (for L_min*H=9.780000)
+
+    #	for treeRun1 --expected-lengths 25 --target-coverage 0.45
+    #		mistakenly: --gc 0.277
+    /cluster/bin/phast/$MACHTYPE/consEntropy --NH 9.78 .45 25 \
+                        ave.cons.mod ave.noncons.mod
+# ( Solving for new omega: 25.000000 26.470691 26.427531 )
+# Transition parameters: gamma=0.450000, omega=25.000000,
+#	mu=0.040000, nu=0.032727
+# Relative entropy: H=0.700176 bits/site
+# Expected min. length: L_min=13.739278 sites
+# Expected max. length: L_max=11.506136 sites
+# Phylogenetic information threshold: PIT=L_min*H=9.619918 bits
+# Recommended expected length: omega=26.427531 sites (for L_min*H=9.780000)
+
 # Transition parameters: gamma=0.450000, omega=25.000000, mu=0.040000, nu=0.032727
 # Relative entropy: H=0.700176 bits/site
 # Expected min. length: L_min=13.739278 sites
@@ -1356,31 +1409,25 @@ makeTree.csh $(path1)
 # Phylogenetic information threshold: PIT=L_min*H=9.619918 bits
 
     ssh pk
+    #	After some experimentation, going to go with consRun3 at this time
     # Create cluster dir to do main phastCons run
-    mkdir /san/sanvol1/scratch/worms/ce4/cons/consRun1
-    cd /san/sanvol1/scratch/worms/ce4/cons/consRun1
-    #	using the ave.cons.mod from above:
+    mkdir /san/sanvol1/scratch/worms/ce4/cons/consRun3
+    cd /san/sanvol1/scratch/worms/ce4/cons/consRun3
+    #	using the ave.cons.mod from treeRun3 above:
 ALPHABET: A C G T 
 ORDER: 0
 SUBST_MOD: REV
-BACKGROUND: 0.361500 0.138500 0.138500 0.361500 
+BACKGROUND: 0.311500 0.188500 0.188500 0.311500 
 RATE_MAT:
-  -0.783738    0.143159    0.375884    0.264695 
-   0.373661   -1.566253    0.210740    0.981853 
-   0.981097    0.210740   -1.563712    0.371876 
-   0.264695    0.376173    0.142475   -0.783343 
-TREE: ((((cb3:0.080856,caeRem2:0.068552):0.021712,caePb1:0.084283):0.033656,ce4:
-0.076566):0.107433,priPac1:0.107433);
+  -0.871104    0.170916    0.455562    0.244626 
+   0.282442   -1.213584    0.179324    0.751817 
+   0.752825    0.179324   -1.214011    0.281862 
+   0.244626    0.454952    0.170565   -0.870143 
+TREE: ((((cb3:0.089669,caeRem2:0.075007):0.023378,caePb1:0.092376):0.038979,ce4:0.082842):0.118524,priPac1:0.118524);
 
     mkdir ppRaw bed
 
     # Create script to run phastCons with right parameters
-    #	These parameters:
-    #	--rho 0.28 --expected-length 14 --target-coverage 0.008 --quiet \
-    #	were taken from Kate's 17-way in Hg17, removing the
-    #	--not-informative panTro2 since that isn't relevant here, nor
-    #	would be --not-informative rn4 - Jim says rn4 is far enough away
-    #	from ce4 that it is informative.
     #	This job is I/O intensive in its output files, thus it is all
     #	working over in /scratch/tmp/
     cat > doPhast << '_EOF_'
@@ -1389,7 +1436,7 @@ mkdir /scratch/tmp/${2}
 cp -p ../ss/${1}/${2}.ss ../ave.cons.mod /scratch/tmp/${2}
 pushd /scratch/tmp/${2} > /dev/null
 /cluster/bin/phast/${MACHTYPE}/phastCons ${2}.ss ave.cons.mod \
-   --expected-length 25 --target-coverage 0.45 --quiet \
+   --expected-length 15 --target-coverage 0.55 --quiet \
 	--seqname ${1} --idpref ${1} --viterbi ${2}.bed --score > ${2}.pp
 popd > /dev/null
 mkdir -p ppRaw/${1}
@@ -1420,31 +1467,34 @@ doPhast $(root1) $(file1)
     para try/check/push/etc.
     #	These jobs are very fast and very I/O intensive
 # Completed: 29 of 29 jobs
-# CPU time in finished jobs:        350s       5.83m     0.10h    0.00d  0.000 y
-# IO & Wait Time:                   107s       1.79m     0.03h    0.00d  0.000 y
-# Average job time:                  16s       0.26m     0.00h    0.00d
-# Longest running job:                0s       0.00m     0.00h    0.00d
+# CPU time in finished jobs:        353s       5.89m     0.10h    0.00d  0.000 y
+# IO & Wait Time:                    89s       1.48m     0.02h    0.00d  0.000 y
+# Average job time:                  15s       0.25m     0.00h    0.00d
 # Longest finished job:              21s       0.35m     0.01h    0.00d
-# Submission to last job:            57s       0.95m     0.02h    0.00d
+# Submission to last job:            31s       0.52m     0.01h    0.00d
 
     # combine predictions and transform scores to be in 0-1000 interval
     #	it uses a lot of memory, so on kolossus:
     ssh kolossus
-    cd /san/sanvol1/scratch/worms/ce4/cons/consRun1
+    cd /san/sanvol1/scratch/worms/ce4/cons/consRun3
     #	The sed's and the sort get the file names in chrom,start order
     #	You might like to verify it is correct by first looking at the
     #	list it produces:
     find ./bed -type f | sed -e "s#/# x #g; s#\.# y #g; s#-# z #g" \
 	| sort -k7,7 -k9,9n \
-	| sed -e "s# z #-#g; s# y #\.#g; s# x #/#g" | less
-    #	if that looks right, then let it run:
+	| sed -e "s# z #-#g; s# y #\.#g; s# x #/#g"
+    #	if that looks right (== in chrom and numerical order), then let it run:
     find ./bed -type f | sed -e "s#/# x #g; s#\.# y #g; s#-# z #g" \
 	| sort -k7,7 -k9,9n \
 	| sed -e "s# z #-#g; s# y #\.#g; s# x #/#g" | xargs cat \
 	| awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' \
 	| /cluster/bin/scripts/lodToBedScore /dev/stdin \
 	    > phastConsElements5way.bed
-    #	~ 1 minute
+    #	way too many negative
+    #		scores with --expected-length 15 --target-coverage 0.60 
+    #	OK with--expected-length 15 --target-coverage 0.55 
+    #	way too many negative
+    #		scores with --expected-length 15 --target-coverage 0.65 
     cp -p phastConsElements5way.bed /cluster/data/ce4/bed/multiz5way
 
     # Figure out how much is actually covered by the bed file as so:
@@ -1456,12 +1506,14 @@ doPhast $(root1) $(file1)
     #	13272335 lower) in 7 sequences in 7 files
     #	%13.24 masked total, %13.24 masked real
 
-    cd /san/sanvol1/scratch/worms/ce4/cons/consRun1
+    cd /san/sanvol1/scratch/worms/ce4/cons/consRun3
     #	The 100281244 comes from the non-n genome as counted above.
     awk '
 {sum+=$3-$2}
 END{printf "%% %.2f = 100.0*%d/100281244\n",100.0*sum/100281244,sum}' \
 	phastConsElements5way.bed
+    #	--expected-length 15 --target-coverage 0.55
+    #	% 2.36 = 100.0*2370557/100281244
     #	--expected-length 25 --target-coverage 0.45
     #	% 1.36 = 100.0*1366061/100281244
 
@@ -1472,6 +1524,10 @@ END{printf "%% %.2f = 100.0*%d/100281244\n",100.0*sum/100281244,sum}' \
 
     HGDB_CONF=~/.hg.conf.read-only time nice -n +19 featureBits ce4 \
 	-enrichment sangerGene:cds phastConsElements5way.bed
+    #	--expected-length 15 --target-coverage 0.55
+    #	sangerGene:cds 25.286%, phastConsElements5way.bed 2.364%, both 0.668%,
+    #	cover 2.64%, enrich 1.12x
+
     #	--expected-length 25 --target-coverage 0.45
     #	sangerGene:cds 25.335%, phastConsElements5way.bed 1.362%, both 0.410%,
     #	cover 1.62%, enrich 1.19x
@@ -1480,20 +1536,25 @@ END{printf "%% %.2f = 100.0*%d/100281244\n",100.0*sum/100281244,sum}' \
     ssh hgwdev
     cd /cluster/data/ce4/bed/multiz5way
     #	the copy was already done above
-    # cp -p /san/sanvol1/scratch/worms/ce4/cons/consRun1/phastConsElements5way.bed .
+    # cp -p /san/sanvol1/scratch/worms/ce4/cons/consRun3/phastConsElements5way.bed .
     time nice -n +19 hgLoadBed ce4 phastConsElements5way \
 	phastConsElements5way.bed
-    #	Loaded 21461 elements of size 5
+    #	Loaded 51538 elements of size 5
 
     #	should measure the same as above
     time nice -n +19 featureBits ce4 -enrichment sangerGene:cds \
 	phastConsElements5way
+    #	--expected-length 15 --target-coverage 0.55
+    #	sangerGene:cds 25.286%, phastConsElements5way 2.364%, both 0.668%,
+    #	cover 2.64%, enrich 1.12x
+
+    #	--expected-length 25 --target-coverage 0.45
     #	sangerGene:cds 25.335%, phastConsElements5way 1.362%, both 0.410%,
     #	cover 1.62%, enrich 1.19x
 
     # Create merged posterier probability file and wiggle track data files
     ssh kkstore02
-    cd /san/sanvol1/scratch/worms/ce4/cons/consRun1
+    cd /san/sanvol1/scratch/worms/ce4/cons/consRun3
     # the sed business gets the names sorted by chromName, chromStart
     #	so that everything goes in numerical order into wigEncode
     #	This was verified above to be correct
@@ -1503,27 +1564,28 @@ END{printf "%% %.2f = 100.0*%d/100281244\n",100.0*sum/100281244,sum}' \
 	| sed -e "s# z #-#g; s# y #\.#g; s# x #/#g" | xargs cat \
 	    | wigEncode -noOverlap stdin \
 		phastCons5way.wig phastCons5way.wib
-    #	real    1m7.510s
-    #	-rw-rw-r--  1 61949779 Apr 24 16:59 phastCons5way.wib
-    #	-rw-rw-r--  1 11066165 Apr 24 16:59 phastCons5way.wig
+    #	Converted stdin, upper limit 0.98, lower limit 0.00
+    #	real    0m32.137s
+    #	-rw-rw-r--  1 61949779 Apr 30 13:29 phastCons5way.wib
+    #	-rw-rw-r--  1 11279833 Apr 30 13:29 phastCons5way.wig
 
-    time nice -n +19 cp -p phastCons5way.wi? /cluster/data/ce4/bed/multiz5way/
+    nice -n +19 cp -p phastCons5way.wi? /cluster/data/ce4/bed/multiz5way/
 
     #	prepare compressed copy of ascii data values for downloads
     ssh pk
-    cd /san/sanvol1/scratch/worms/ce4/cons/consRun1
+    cd /san/sanvol1/scratch/worms/ce4/cons/consRun3
     cat << '_EOF_' > gzipAscii.sh
 #!/bin/sh
 
 TOP=`pwd`
 export TOP
 
-mkdir -p phastCons5way
+mkdir -p phastCons5wayScores
 
 for D in ppRaw/chr*
 do
     C=${D/ppRaw\/}
-    out=phastCons5way/${C}.data.gz
+    out=phastCons5wayScores/${C}.data.gz
     echo "========================== ${C} ${D}"
     find ./${D} -type f | sed -e "s#/# x #g; s#\.# y #g; s#-# z #g" \
 	| sort -k7,7 -k9,9n \
@@ -1534,7 +1596,7 @@ done
     #	<< happy emacs
     chmod +x gzipAscii.sh
     time nice -n +19 ./gzipAscii.sh
-    #	real    18m15.212s
+    #	real    1m14.178s
 
     #	copy them for downloads
     ssh kkstore02
@@ -1542,7 +1604,7 @@ done
     #	avoid the data full problem on store9
     mkdir /cluster/data/ce4/bed/multiz5way/phastCons5wayScores
     cd /cluster/data/ce4/bed/multiz5way/phastCons5wayScores
-    cp -p  /san/sanvol1/scratch/worms/ce4/cons/consRun1/phastCons5wayScores/* .
+    cp -p  /san/sanvol1/scratch/worms/ce4/cons/consRun3/phastCons5wayScores/* .
 
     ssh hgwdev
     cd /usr/local/apache/htdocs/goldenPath/ce4
@@ -1552,16 +1614,14 @@ done
     ssh hgwdev
     cd /cluster/data/ce4/bed/multiz5way
     ln -s `pwd`/phastCons5way.wib /gbdb/ce4/wib/phastCons5way.wib
-    time nice -n +19 hgLoadWiggle ce4 phastCons5way phastCons5way.wig
-    #	real    2m55.836s
+    nice -n +19 hgLoadWiggle ce4 phastCons5way phastCons5way.wig
 
     #  Create histogram to get an overview of all the data
     ssh hgwdev
     cd /cluster/data/ce4/bed/multiz5way
-    time nice -n +19 hgWiggle -doHistogram \
+    nice -n +19 hgWiggle -doHistogram \
 	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
 	    -db=ce4 phastCons5way > histogram.data 2>&1
-    #	real    28m24.388s
 
     #	create plot of histogram:
 
@@ -1572,7 +1632,7 @@ set size 1.4, 0.8
 set key left box
 set grid noxtics
 set grid ytics
-set title " Mouse Mm8 Histogram phastCons5way track"
+set title " Worm Ce4 Histogram phastCons5way track"
 set xlabel " phastCons5way score"
 set ylabel " Relative Frequency"
 set y2label " Cumulative Relative Frequency (CRF)"
@@ -1680,14 +1740,96 @@ blatSome $(root1) $(root2) {check out line psl/$(root1)/$(root2).psl}
     #	the given connection
     #	This may be a lurking error in this program, because the
     #	resulting file seems to have the correct number of lines:
-    hgsql ce4 < ~/kent/src/hg/lib/blastRef.sql
-    echo "rename table blastRef to blastSGRef01" | hgsql ce4
-    echo "load data local infile 'blastSGRef01' into table blastSGRef01" | hgsql ce4
-     wc -l sgName.lst blastSGRef01 ce4SG.psl
-    #	 36727 sgName.lst
-    #	 36727 blastSGRef01
-    #	 36727 ce4SG.psl
-    #	110181 total
-    hgPepPred ce4 generic blastSGPep04 ce4SG.fa
-    #	end blat proteins
-    
+
+    #	Need a reference table loaded, perl script makes up relationships
+    cat << '_EOF_' >> mkRef.pl
+#!/usr/bin/env perl
+
+use warnings;
+use strict;
+
+my $argc = scalar(@ARGV);
+
+sub usage() {
+    print STDERR "usage: ./mkRef.pl blastSGRef01.tab\n";
+    print STDERR "reads ../sangerGene/genePred.tab and ",
+        "../sangerGene/orfToGene.tab\n";
+    print STDERR "writes references to the given input file, ",
+        "e.g. blastSGRef01.tab\n";
+}
+
+if (1 != $argc) {
+    usage;
+    exit 255;
+}
+my $outFile = shift;
+
+my %orfToGene;  # key is all lowercase orf name, value is gene name
+
+my $inFile="../sangerGene/orfToGene.tab";
+open (FH,"<$inFile") or die "can not read $inFile";
+while (my $line=<FH>) {
+    chomp $line;
+    my ($orf, $gene) = split('\s+',$line);
+    $orfToGene{lc($orf)} = $gene
+}
+close (FH);
+
+my %links;      # key is all lowercase orf name, value is SwissProt name
+
+$inFile="../sangerGene/sangerLinks.tab";
+open (FH,"<$inFile") or die "can not read $inFile";
+while (my $line=<FH>) {
+    chomp $line;
+    my ($orf, $SP, $comments) = split('\s+',$line);
+    $links{lc($orf)} = $SP
+}
+close (FH);
+
+my %ce4Position;        # key is all lowercase orf name, value is ce4 position
+
+$inFile="../sangerGene/genePred.tab";
+open (FH,"<$inFile") or die "can not read $inFile";
+while (my $line=<FH>) {
+    chomp $line;
+    my ($bin, $orf, $chr, $strand, $start, $end, $other) = split('\s+',$line);
+    $ce4Position{lc($orf)} = sprintf("%s:%d-%d", $chr, $start, $end);
+}
+close (FH);
+
+open (OF,">$outFile") or die "can not write to $outFile";
+
+$inFile="sgName.lst";
+open (FH,"<$inFile") or die "can not read $inFile";
+while (my $orf=<FH>) {
+    chomp $orf;
+    if (!exists($orfToGene{lc($orf)})) {
+        $orfToGene{lc($orf)} = "";
+    }
+    if (!exists($links{lc($orf)})) {
+        $links{lc($orf)} = "";
+    }
+    if (!exists($ce4Position{lc($orf)})) {
+        $ce4Position{lc($orf)} = "";
+    }
+    printf OF "%s\t%s\t%s\t%s\t%s\n", $orf, $orfToGene{lc($orf)},
+        $ce4Position{lc($orf)}, $links{lc($orf)}, "";
+}
+close (FH);
+close (OF);
+'_EOF_'
+    # << happy emacs
+    chmod +x ./mkRef.pl
+    ./mkRef.pl blastSGRef.01.tab
+
+    hgLoadSqlTab ce4 blastSGRef01 ~/kent/src/hg/lib/blastRef.sql \
+	blastSGRef01.tab
+    wc -l sgName.lst blastSGRef01.tab ce4SG.psl
+    #	23192 sgName.lst
+    #	23192 blastSGRef01.tab
+    #	23192 ce4SG.psl
+
+    #	And load the protein sequences
+    hgPepPred ce4 generic blastSGPep01 ce4SG.fa
+#	end blat proteins
+##############################################################################
