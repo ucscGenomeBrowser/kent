@@ -647,13 +647,13 @@ cat mrna/*.psl | hgLoadPsl hg18 stdin -table=jkgInputMrna2
 hgLoadBed hg18 jkgRefSeqBed2 refSeq/*.bed
 hgLoadBed hg18 jkgMrnaBed2 mrna/*.bed
 hgLoadBed hg18 jkgAntibodyBed2 antibody.bed
-cat refSeq/*.unusual | cut -f 1-4 |  hgLoadBed hg18 jkgRefSeqUnusual2  stdin
+cat refSeq/*.unusual | cut -f 1-4 |  hgLoadBed -noStrict hg18 jkgRefSeqUnusual2  stdin
 cat bedToGraph/*.txg | txgToAgx stdin stdout | hgLoadBed -notItemRgb -sqlTable=jkgNativeGraph2.sql hg18 jkgNativeGraph2 stdin
 awk '$8=="exon" {print $1,$2,$3,$4,$5,$6}' txOrtho/edges/*.edges | hgLoadBed hg18 jkgOrthoExons2 stdin
 awk '$8=="intron" {print $1,$2,$3,$4,$5,$6}' txOrtho/edges/*.edges | hgLoadBed hg18 jkgOrthoIntrons2 stdin
 awk '$8=="exon" {print $1,$2,$3,$4,$5,$6}' est/*.edges | hgLoadBed hg18 jkgEstExons2 stdin
 awk '$8=="intron" {print $1,$2,$3,$4,$5,$6}' est/*.edges | hgLoadBed hg18 jkgEstIntrons2 stdin
-hgLoadBed -strict hg18 jkgTxWalk2 abWalk.bed
+hgLoadBed hg18 jkgTxWalk2 txWalk.bed antibody.bed
 hgLoadBed hg18 jkgAltSplice2 altSplice.bed
 ldHgGene hg18 jkgTxCdsPick2 pick.gtf -gtf -genePredExt
 hgLoadCdsEvidence hg18 jkgTxCdsEvidence2 unweighted.tce
