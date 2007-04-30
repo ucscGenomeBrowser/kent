@@ -7,7 +7,7 @@
 #include "sqlNum.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: txCdsOrtho.c,v 1.6 2007/03/29 07:05:52 kent Exp $";
+static char const rcsid[] = "$Id: txCdsOrtho.c,v 1.7 2007/04/30 23:14:58 kent Exp $";
 
 FILE *fRa = NULL;
 
@@ -266,7 +266,7 @@ fprintf(f, "%d\t%d\t%d\t%d\t%d\t%d\t",
 	atgDots, atgDashes, kozakDots, kozakDashes, stopDots, stopDashes);
 fprintf(f, "%d\t%d\t%d\t%d\t",
 	atgConserved, kozakConserved, stopConserved, nativeAtg);
-fprintf(f, "%d\t%d\n", nativeKozak, nativeStop);
+fprintf(f, "%d\t%d\t%d\t%d\n", nativeKozak, nativeStop, possibleSize, orfSize);
 
 /* Handle output to ra file. */
 if (fRa)
