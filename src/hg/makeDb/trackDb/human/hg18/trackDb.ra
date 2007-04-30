@@ -508,7 +508,7 @@ otherDb fr1
 
 track exaptedRepeats
 shortLabel Exapted Repeats
-longLabel Repeats Exapted as Conserved Nonexonic Elements
+longLabel Repeats Exapted as Conserved Non-Exonic Elements
 priority 149.09
 group varRep
 visibility hide
