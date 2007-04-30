@@ -6,7 +6,7 @@
 #include "jksql.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: makeOrthoAtgTable.c,v 1.2 2007/03/29 07:06:10 kent Exp $";
+static char const rcsid[] = "$Id: makeOrthoAtgTable.c,v 1.3 2007/04/30 23:14:28 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -30,8 +30,9 @@ void analyzeOne(int totalOrfs, char *fileName)
 int nativeAtgCount = 0, nativeKozakCount = 0, nativeStopCount = 0;
 int atgCount = 0, kozakCount = 0, stopCount=0, count = 0;
 int atgAli = 0, kozakAli = 0, stopAli = 0;
+double totalOrfSizeRatio = 0.0;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[16];
+char *row[18];
 while (lineFileRow(lf, row))
     {
     boolean xenoAtg = (row[10][0] == '1');
@@ -43,6 +44,10 @@ while (lineFileRow(lf, row))
     int atgDotCount = lineFileNeedNum(lf, row, 4);
     int kozakDotCount = lineFileNeedNum(lf, row, 6);
     int stopDotCount = lineFileNeedNum(lf, row, 8);
+    int possibleOrfSize = lineFileNeedNum(lf, row, 16);
+    int orfSize = lineFileNeedNum(lf, row, 17);
+    double orfSizeRatio = (double)orfSize/possibleOrfSize;
+    totalOrfSizeRatio += orfSizeRatio;
     if (nativeAtg)
        {
        ++nativeAtgCount;
@@ -87,21 +92,23 @@ safef(query, sizeof(query), "select scientificName from dbDb where name='%s'", d
 char *scientificName = sqlQuickString(conn, query);
 hDisconnectCentral(&conn);
 
+printf("%4.2f%%\t", 100.0 * atgCount/atgAli);
 printf("%s\t%s\t%s\t", organism, scientificName, dbName);
 printf("%4.2f%%\t", 100.0 * count/totalOrfs);
 printf("%4.2f%%\t", 100.0 * atgAli/nativeAtgCount);
 printf("%4.2f%%\t", 100.0 * atgCount/atgAli);
-printf("%4.2f%%\t", 100.0 * kozakAli/nativeKozakCount);
-printf("%4.2f%%\t", 100.0 * kozakCount/kozakAli);
+// printf("%4.2f%%\t", 100.0 * kozakAli/nativeKozakCount);
+// printf("%4.2f%%\t", 100.0 * kozakCount/kozakAli);
 printf("%4.2f%%\t", 100.0 * stopAli/nativeStopCount);
-printf("%4.2f%%\n", 100.0 * stopCount/stopAli);
+printf("%4.2f%%\t", 100.0 * stopCount/stopAli);
+printf("%4.2f%%\n", 100.0 * totalOrfSizeRatio/count);
 }
 
 void makeOrthoAtgTable(int totalOrfs, int fileCount, char *files[])
 /* makeOrthoAtgTable - Create a table that lists how often atg, kozak, stop is conserved based on output from txCdsOrtho.. */
 {
 int i;
-printf("species\tbinomial name\tdb\t%%genes\t%%orfAli\t%%orfId\t%%kozAli\t%%kozId\t%%stopAli\t%%stopId\n");
+printf("%%startId\tspecies\tbinomial name\tdb\t%%genes\t%%startAli\t%%startId\t%%stopAli\t%%stopId\t%%orfCover\n");
 for (i=0; i<fileCount; ++i)
     analyzeOne(totalOrfs, files[i]);
 }
