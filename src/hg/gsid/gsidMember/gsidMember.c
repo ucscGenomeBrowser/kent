@@ -25,7 +25,7 @@
 #include "paypalSignEncrypt.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidMember.c,v 1.17 2007/04/30 21:04:08 galt Exp $";
+static char const rcsid[] = "$Id: gsidMember.c,v 1.18 2007/04/30 23:49:55 galt Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "debug", "fixMembers", "update", "gsidM_password", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -693,7 +693,7 @@ hPrintf(
 "<h2>HIV VAC</h2>\n"
 "<p align=\"left\">"
 "</p>"
-"GSID provides access to data from the 2003 VaxGen AIDSVAX phase III trials on a yearly fee-membership basis.<br>\n"
+"GSID provides access to data from the 2003 VaxGen AIDSVAX phase III trials on a yearly access-fee basis.<br>\n"
 "Academic and non-profit researchers get a substantial discount. <br>\n"
 "<br>\n"
 "If you are already a member, click <a href=https://%s/>here</a> to access HIVVAC.<br>\n"
@@ -762,7 +762,7 @@ safef(buttonData, sizeof(buttonData),
 "cmd=_xclick\n"
 "business=%s\n"
 "invoice=%s\n"
-"item_name=GSID HIV Access Yearly %s Membership Fee\n"
+"item_name=GSID HIV Access Yearly %s Access Fee\n"
 "item_number=%s\n"
 "amount=%s.00\n"
 "no_shipping=2\n"
@@ -834,7 +834,7 @@ freez(&buttonEncrypted);
 //fprintf(stderr, "encrypted button form: [%s]\n", buttonHtml);
 
 hPrintf(
-"Pay yearly %s membership fee using paypal to activate your account.<br>\n"
+"Pay yearly %s access fee using paypal to activate your account.<br>\n"
 "Be sure to click the \"Return to Merchant\" link when done.<br>\n"
 "%s\n"
 "<br>\n"
