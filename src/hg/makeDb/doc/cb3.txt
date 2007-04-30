@@ -3,7 +3,7 @@
 # Caenorhabditis briggsae
 #	Washington University School of Medicine GSC and Sanger Institute
 #
-#  $Id: cb3.txt,v 1.8 2007/04/27 23:59:28 hiram Exp $
+#  $Id: cb3.txt,v 1.9 2007/04/30 23:11:20 hiram Exp $
 
 ###########################################################################
 ## Download sequence (DONE - 2007-01-22 - Hiram)
@@ -518,9 +518,8 @@ TMPDIR=/scratch/tmp
 # priPac1    6.526      5.345
 
 ###########################################################################
-# ELEGANS (ce4) PROTEINS TRACK (WORKING -  hiram - 2007-04-27)
+# ELEGANS (ce4) PROTEINS TRACK (DONE -  Hiram - 2007-04-27,30)
     ssh kkstore02
-    # bash  if not using bash shell already
 
     #	breaking up this target genome into manageable pieces
     mkdir /cluster/data/cb3/blastDb
@@ -617,45 +616,44 @@ exit 1
     gensub2 query.lst sg.lst template jobList
     para create jobList
 #    para try, check, push, check etc.
-XXX - running 2007-04-27 16:57
+# Completed: 49623 of 49623 jobs
+# CPU time in finished jobs:     517498s    8624.97m   143.75h    5.99d  0.016 y
+# IO & Wait Time:                160940s    2682.33m    44.71h    1.86d  0.005 y
+# Average job time:                  14s       0.23m     0.00h    0.00d
+# Longest finished job:              39s       0.65m     0.01h    0.00d
+# Submission to last job:          3858s      64.30m     1.07h    0.04d
 
-# Completed: 50336 of 50336 jobs
-# CPU time in finished jobs:     955647s   15927.45m   265.46h   11.06d  0.030 y
-# IO & Wait Time:                199548s    3325.80m    55.43h    2.31d  0.006 y
-# Average job time:                  23s       0.38m     0.01h    0.00d
-# Longest finished job:              59s       0.98m     0.02h    0.00d
-# Submission to last job:          3074s      51.23m     0.85h    0.04d
-
-    ssh kkstore02
-    cd /cluster/data/cb3/bed/tblastn.ce4SG
-    mkdir chainRun
-    cd chainRun
-    tcsh
-    cat << '_EOF_' > chainGsub
+    # do the cluster run for chaining
+    ssh pk
+    mkdir /cluster/data/cb3/bed/tblastn.ce4SG/chainRun
+    cd /cluster/data/cb3/bed/tblastn.ce4SG/chainRun
+    cat << '_EOF_' > template
 #LOOP
 chainOne $(path1)
 #ENDLOOP
 '_EOF_'
+    # << happy emacs
 
     cat << '_EOF_' > chainOne
 (cd $1; cat q.*.psl | simpleChain -prot -outPsl -maxGap=50000 stdin /cluster/bluearc/worms/cb3/bed/tblastn.ce4SG/blastOut/c.`basename $1`.psl)
 '_EOF_'
+    # << happy emacs
     chmod +x chainOne
-    ls -1dS /cluster/bluearc/worms/cb3/bed/tblastn.ce4SG/blastOut/sg?? > chain.lst
-    gensub2 chain.lst single chainGsub chainSpec
-    # do the cluster run for chaining
-    ssh kk
+
+    ls -1dS /cluster/bluearc/worms/cb3/bed/tblastn.ce4SG/blastOut/sg?? \
+	> chain.lst
+    gensub2 chain.lst single template jobList
     cd /cluster/data/cb3/bed/tblastn.ce4SG/chainRun
-    para create chainSpec
+    para create jobList
     para maxNode 30
     para try, check, push, check etc.
+# Completed: 357 of 357 jobs
+# CPU time in finished jobs:         84s       1.39m     0.02h    0.00d  0.000 y
+# IO & Wait Time:                 25172s     419.54m     6.99h    0.29d  0.001 y
+# Average job time:                  71s       1.18m     0.02h    0.00d
+# Longest finished job:              95s       1.58m     0.03h    0.00d
+# Submission to last job:           124s       2.07m     0.03h    0.00d
 
-# Completed: 484 of 484 jobs
-# CPU time in finished jobs:        485s       8.08m     0.13h    0.01d  0.000 y
-# IO & Wait Time:                  1739s      28.99m     0.48h    0.02d  0.000 y
-# Average job time:                   5s       0.08m     0.00h    0.00d
-# Longest finished job:              16s       0.27m     0.00h    0.00d
-# Submission to last job:           102s       1.70m     0.03h    0.00d
 
     ssh kkstore02
     cd /cluster/data/cb3/bed/tblastn.ce4SG/blastOut
@@ -666,24 +664,25 @@ chainOne $(path1)
        awk "((\$1 / \$11) ) > 0.60 { print   }" c60.$i.psl > m60.$i.psl
        echo $i
     done
-    sort -T /tmp -k 14,14 -k 16,16n -k 17,17n u.*.psl m60* | uniq > /cluster/data/cb3/bed/tblastn.ce4SG/blastHg18KG.psl
+    sort -T /scratch/tmp -k 14,14 -k 16,16n -k 17,17n u.*.psl m60* | uniq \
+	> /cluster/data/cb3/bed/tblastn.ce4SG/blastCe4SG.psl
     cd ..
-    pslCheck blastHg18KG.psl
+    pslCheck blastCe4SG.psl
 
     # load table 
     ssh hgwdev
     cd /cluster/data/cb3/bed/tblastn.ce4SG
-    hgLoadPsl cb3 blastHg18KG.psl
+    hgLoadPsl cb3 blastCe4SG.psl
 
     # check coverage
-    featureBits cb3 blastHg18KG 
-# 3424422 bases of 100281244 (3.415%) in intersection
+    featureBits cb3 blastCe4SG 
+    18218293 bases of 108433446 (16.801%) in intersection
+#	3424422 bases of 100281244 (3.415%) in intersection
 
-    featureBits cb3 sangerGene:cds blastHg18KG  -enrichment
-# sangerGene:cds 27.876%, blastHg18KG 3.415%, both 3.231%, cover 11.59%, enrich 3.39x
+    featureBits ce4 sangerGene
+#	27906202 bases of 100281244 (27.828%) in intersection
 
     ssh kkstore02
     rm -rf /cluster/data/cb3/bed/tblastn.ce4SG/blastOut
-    rm -rf /cluster/bluearc/worms/cb3/bed/tblastn.ce4SG/blastOut
+    rm -rf /cluster/bluearc/worms/cb3/bed/tblastn.ce4SG
 #end tblastn
-
