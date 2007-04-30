@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/makePushQSql.pl instead.
 
-# $Id: makePushQSql.pl,v 1.4 2007/04/30 23:47:49 angie Exp $
+# $Id: makePushQSql.pl,v 1.5 2007/04/30 23:51:01 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -561,6 +561,7 @@ _EOF_
      machine (currently hgwbeta) to execute the sql file.  (Make sure that
      qapushq does not already have a table named $db.)  Then use the Push
      Queue web interface to update the sizes of all tracks.
+ *** If you haven't already, please add $db to makeDb/schema/all.joiner !
 
 _EOF_
   );
