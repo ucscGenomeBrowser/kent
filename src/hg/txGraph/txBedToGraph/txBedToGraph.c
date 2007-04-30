@@ -22,6 +22,7 @@ int maxJoinSize = 70000;	/* This excludes most of the chr14 IG mess */
 boolean forceRefSeqJoin = TRUE;
 int maxBleedOver = 6;
 char *prefix = "a";
+double singleExonMaxOverlap = 0.60;
 
 void usage()
 /* Explain usage and exit. */
@@ -37,7 +38,9 @@ errAbort(
   "    -maxBleedOver=N - Maximum amount of exon that can be lost when snapping\n"
   "                    soft to hard edges. Default %d\n"
   "    -prefix=xyz - Use the given prefix for the graph names, default %s\n"
-  , maxJoinSize, maxBleedOver, prefix
+  "    -singleExonMaxOverlap=0.N - Maximum ratio of single exon that can overlap\n"
+  "                                a multi-exon gene.  Default %g\n"
+  , maxJoinSize, maxBleedOver, prefix, singleExonMaxOverlap
   );
 }
 
@@ -272,7 +275,7 @@ for (cluster = clusterList; cluster != NULL; cluster = nextCluster)
     nextCluster = cluster->next;
     safef(name, sizeof(name), "%s%d", prefix, ++id);
     verbose(2, "Got cluster of %d called %s.\n", slCount(cluster->lbList), name);
-    struct txGraph *graph = makeGraph(cluster->lbList, maxBleedOver, name);
+    struct txGraph *graph = makeGraph(cluster->lbList, maxBleedOver, singleExonMaxOverlap, name);
     slAddHead(&graphList, graph);
     lbClusterFree(&cluster);
     }
@@ -340,6 +343,7 @@ optionInit(&argc, argv, options);
 maxJoinSize = optionInt("maxJoinSize", maxJoinSize);
 forceRefSeqJoin = !optionExists("noForceRefSeqJoin");
 maxBleedOver = optionInt("maxBleedOver", maxBleedOver);
+singleExonMaxOverlap = optionDouble("singleExonMaxOverlap", singleExonMaxOverlap);
 prefix = optionVal("prefix", prefix);
 if (argc < 4 || argc%2 != 0)
     usage();

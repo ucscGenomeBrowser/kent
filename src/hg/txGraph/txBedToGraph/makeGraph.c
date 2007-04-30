@@ -780,7 +780,7 @@ return edge;
 }
 
 static void removeEnclosedDoubleSofts(struct rbTree *vertexTree, struct rbTree *edgeTree, 
-	int maxBleedOver)
+	int maxBleedOver, double singleExonMaxOverlap)
 /* Move double-softs that overlap spliced things to a very great extent into
  * the spliced things. Also remove tiny double-softs (no more than 2*maxBleedOver). */
 {
@@ -799,25 +799,6 @@ for (edgeRef = edgeRefList; edgeRef != NULL; edgeRef = edgeRef->next)
 	}
     }
 
-/* Traverse graph again building up list of edgeRefs to the spliced
- * exons on the ranges. */
-struct lm *lm = rangeTree->lm;
-for (edgeRef = edgeRefList; edgeRef != NULL; edgeRef = edgeRef->next)
-    {
-    struct edge *edge = edgeRef->val;
-    struct vertex *start = edge->start;
-    struct vertex *end = edge->end;
-    if (start->type == ggHardStart || end->type == ggHardEnd)
-	{
-	struct range *r = rangeTreeFindEnclosing(rangeTree,
-		start->position, end->position);
-	struct slRef *ref;
-	lmAllocVar(lm, ref);
-	ref->val = edge;
-	slAddHead(&r->val, ref);
-	}
-    }
-
 /* Traverse graph yet one more time looking for doubly-soft exons
  * that are overlapping the spliced exons. */
 for (edgeRef = edgeRefList; edgeRef != NULL; edgeRef = edgeRef->next)
@@ -827,9 +808,10 @@ for (edgeRef = edgeRefList; edgeRef != NULL; edgeRef = edgeRef->next)
     struct vertex *end = edge->end;
     if (start->type == ggSoftStart && end->type == ggSoftEnd)
         {
-	int s = start->position + maxBleedOver;
-	int e = end->position - maxBleedOver;
-	if (e - s <= 0)
+	int s = start->position;
+	int e = end->position;
+	int size = e - s;
+	if (size <= maxBleedOver+maxBleedOver)
 	     {
 	     /* Tiny case, just remove edge and forget it. */
 	     rbTreeRemove(edgeTree, edge);
@@ -839,22 +821,11 @@ for (edgeRef = edgeRefList; edgeRef != NULL; edgeRef = edgeRef->next)
 	     {
 	     /* Normal case, look for exon list that encloses us, and
 	      * if any single exon in that list encloses us, merge into it. */
-	     struct range *r = rangeTreeFindEnclosing(rangeTree, s, e);
-	     if (r != NULL)
+	     int splicedOverlap = rangeTreeOverlapSize(rangeTree, s, e);
+	     if (splicedOverlap > 0 && splicedOverlap > singleExonMaxOverlap*size)
 	         {
-		 struct slRef *el;
-		 for (el = r->val; el != NULL; el = el->next)
-		     {
-		     struct edge *hardEdge = el->val;
-		     if (hardEdge->start->position <= s && hardEdge->end->position >= e)
-		         {
-			 rbTreeRemove(edgeTree, edge);
-			 hardEdge->evList = slCat(edge->evList, hardEdge->evList);
-			 edge->evList = NULL;
-			 ++removedCount;
-			 break;
-			 }
-		     }
+		 rbTreeRemove(edgeTree, edge);
+		 ++removedCount;
 		 }
 	     }
 	}
@@ -1034,10 +1005,13 @@ slReverse(&txg->edgeList);
 return txg;
 }
 
-struct txGraph *makeGraph(struct linkedBeds *lbList, int maxBleedOver, char *name)
+struct txGraph *makeGraph(struct linkedBeds *lbList, int maxBleedOver, 
+	double singleExonMaxOverlap, char *name)
 /* Create a graph corresponding to linkedBedsList.
  * The maxBleedOver parameter controls how much of a soft edge that
- * can be cut off when snapping to a hard edge. */
+ * can be cut off when snapping to a hard edge.  The singleExonMaxOverlap
+ * controls what ratio of a single exon transcript can overlap spliced 
+ * transcripts */
 {
 /* Create tree of all unique vertices. */
 struct rbTree *vertexTree = makeVertexTree(lbList);
@@ -1063,7 +1037,7 @@ halfHardConsensuses(vertexTree, edgeTree);
 verbose(2, "%d edges, %d vertices after medianHalfHards\n", 
 	edgeTree->n, vertexTree->n);
 
-removeEnclosedDoubleSofts(vertexTree, edgeTree, maxBleedOver);
+removeEnclosedDoubleSofts(vertexTree, edgeTree, maxBleedOver, singleExonMaxOverlap);
 verbose(2, "%d edges, %d vertices after mergeEnclosedDoubleSofts\n",
 	edgeTree->n, vertexTree->n);
 

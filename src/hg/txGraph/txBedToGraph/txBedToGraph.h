@@ -11,7 +11,10 @@ struct linkedBeds
     int id;			/* Corresponds to source ID when filled in. */
     };
 
-struct txGraph *makeGraph(struct linkedBeds *lbList, int maxBleedOver, char *name);
+struct txGraph *makeGraph(struct linkedBeds *lbList, int maxBleedOver, 
+	double singleExonMaxOverlap, char *name);
 /* Create a graph corresponding to linkedBedsList.
  * The maxBleedOver parameter controls how much of a soft edge that
- * can be cut off when snapping to a hard edge. */
+ * can be cut off when snapping to a hard edge.  The singleExonMaxOverlap
+ * controls what ratio of a single exon transcript can overlap spliced 
+ * transcripts */
