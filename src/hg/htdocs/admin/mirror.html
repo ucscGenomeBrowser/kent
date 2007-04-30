@@ -736,7 +736,7 @@ done
 <LI>Issue permission to the "$DBVERSION" database.<BR>
 Permission could be issued as follows: <BR>
 <PRE>
-mysql&gt; grant select on $DBVERSION.* to $USERNAME@$HOSTNAME identified by "$PASSWORD";
+mysql&gt; grant SELECT, CREATE TEMPORARY TABLES on $DBVERSION.* to $USERNAME@$HOSTNAME identified by "$PASSWORD";
 </PRE>
 <BR>
 To make this command work, you need to set up $USERNAME,$HOSTNAME and

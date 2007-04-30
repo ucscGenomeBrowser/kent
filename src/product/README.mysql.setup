@@ -55,19 +55,21 @@ databases.
 for DB in cb1 hgcentral hgFixed hg17 proteins040315
 do
     mysql -u root -p${SQL_PASSWORD} -e "GRANT SELECT, INSERT, UPDATE, DELETE, \
-	CREATE, DROP, ALTER on ${DB}.* TO browser@localhost \
+	CREATE, DROP, ALTER, CREATE TEMPORARY TABLES on ${DB}.* \
+	TO browser@localhost \
 	IDENTIFIED BY 'genome';" mysql
 done
 
-The above granted permissions are recommended for browser
-developers.  The WEB browser CGI binaries only
-need "GRANT SELECT" permissions.  For example, you could
-create a special user for the browser genome databases only.
-In this example, user: "readonly" with password: "access"
+The above granted permissions are recommended for browser developers.
+The WEB browser CGI binaries only need SELECT and CREATE TEMPORARY
+TABLES permissions.  For example, you could create a special user for
+the browser genome databases only.  In this example, user: "readonly"
+with password: "access"
 
 for DB in cb1 hgcentral hgFixed hg17 proteins040315
 do
-    mysql -u root -p${SQL_PASSWORD} -e "GRANT SELECT on ${DB}.* TO \
+    mysql -u root -p${SQL_PASSWORD} -e "GRANT SELECT, CREATE TEMPORARY TABLES \
+	on ${DB}.* TO \
 	readonly@localhost IDENTIFIED BY 'access';" mysql
 done
 
@@ -94,7 +96,7 @@ access and the "readwrite" user for hgcentral database access:
 # written 'name=value' (note that there is no space between
 # the name and its value.
 #
-#	$Id: README.mysql.setup,v 1.10 2007/03/09 01:13:00 hiram Exp $
+#	$Id: README.mysql.setup,v 1.11 2007/04/30 22:15:56 angie Exp $
 #
 ###########################################################
 # db.host is the name of the MySQL host to connect to
@@ -209,4 +211,4 @@ To test this access with your ~/.hg.conf file in place:
 $ hgsql -e "show tables;" hgcentral
 
 ====================================================================
-This file last updated: $Date: 2007/03/09 01:13:00 $
+This file last updated: $Date: 2007/04/30 22:15:56 $
