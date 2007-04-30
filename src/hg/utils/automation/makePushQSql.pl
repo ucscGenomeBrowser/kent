@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/makePushQSql.pl instead.
 
-# $Id: makePushQSql.pl,v 1.3 2007/04/27 23:31:48 angie Exp $
+# $Id: makePushQSql.pl,v 1.4 2007/04/30 23:47:49 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -230,7 +230,10 @@ sub getTrackDb {
 	$otherTables .= " $1";
 	push @wigTables, $1;
       }
-      if ($settings =~ /(frames|summary)\s+(\w+)/) {
+      if ($settings =~ /frames\s+(\w+)/) {
+	$otherTables .= " $1";
+      }
+      if ($settings =~ /summary\s+(\w+)/) {
 	$otherTables .= " $1";
       }
     }
@@ -290,7 +293,7 @@ sub getTrackEntries {
   my %trackEntries = ();
   # For each table, if it is a track table then make an entry for it and
   # remove it from $allTables.
-  foreach my $table (keys %{$allTables}) {
+  foreach my $table (sort keys %{$allTables}) {
     my $track = $table;
     $track =~ s/^$prefixPattern// if ($prefixPattern);
     my $tdb = $trackDb->{$track};
@@ -302,8 +305,29 @@ sub getTrackEntries {
       $entry{'shortLabel'} = $shortLabel;
       $entry{'priority'} = $priority;
       $entry{'tables'} = $table . $otherTables;
+      $entry{'files'} = "";
       if ($type =~ /^chain ?/) {
 	$entry{'tables'} .= " ${table}Link";
+	my $net = $table;
+	if ($prefixPattern) {
+	  $net =~ s/^${prefixPattern}chain/net/;
+	} else {
+	  $net =~ s/^chain/net/;
+	}
+	# Lump in nets with chains, when we find them.
+	if (defined $allTables->{$net}) {
+	  $entry{'tables'} .= " $net";
+	  $entry{'shortLabel'} .= " and Net";
+	  if ($net =~ /^net(\w+)/) {
+	    my $ODb = $1;
+	    my $downloads = "$HgAutomate::goldenPath/$db/vs$ODb/*";
+	    if (&HgAutomate::machineHasFile($dbHost, $downloads)) {
+	      $entry{'files'} = $downloads;
+	    } else {
+	      &HgAutomate::verbose(1, "$dbHost does not have $downloads\n");
+	    }
+	  }
+	}
       }
       if ($type =~ /^wig\s/) {
 	push @wigTables, $table;
@@ -314,15 +338,20 @@ sub getTrackEntries {
       # it gets messy, so for now we'll settle for reminding the developer
       # to determine files associated with wiggle tables and to look in
       # extFile.
-      $entry{'files'} = "";
       if ($type =~ /^netAlign\s+(\w+)/) {
 	my $oDb = $1;
 	my $ODb = ucfirst($oDb);
-	my $downloads = "$HgAutomate::goldenPath/$db/vs$ODb/*";
-	if (&HgAutomate::machineHasFile($dbHost, $downloads)) {
-	  $entry{'files'} = $downloads;
-	} else {
-	  &HgAutomate::verbose(1, "$dbHost does not have $downloads\n");
+	my $chainTrack = $prefixPattern ? "${prefixPattern}chain$ODb" :
+	  "chain$ODb";
+	if (! defined $trackEntries{$chainTrack}) {
+	  my $downloads = "$HgAutomate::goldenPath/$db/vs$ODb/*";
+	  if (&HgAutomate::machineHasFile($dbHost, $downloads)) {
+	    $entry{'files'} = $downloads;
+	  } else {
+	    &HgAutomate::verbose(1, "$dbHost does not have $downloads\n");
+	  }
+	  &HgAutomate::verbose(1, "Found net table $table that was not " .
+			       "already lumped in with a chain entry...?\n");
 	}
       }
       # Remove accounted-for tables.
