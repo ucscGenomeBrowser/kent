@@ -12650,6 +12650,8 @@ hgLoadBed hg18 cnpRedon cnpRedon.bed
 
 #########################################################
 # Structural Variation from Lars Feuk (Heather Jan - April 2007)
+# These tables are all tiny so I'm not using indices
+# I kept the bin column in all but Sebat but I could have done without that, # too
 
     ssh hgwdev
     cd /cluster/data/hg18/bed/sv
@@ -12662,13 +12664,13 @@ hgLoadBed hg18 cnpRedon cnpRedon.bed
     sharp.pl < sharp.in > sharp.prelim
     # adjust
     sharp2.pl < sharp.prelim > sharp.bed
-    hgLoadBed hg18 cnpSharp2 sharp.bed -tab -sql=/cluster/home/heather/kent/src/hg/lib/cnpSharp2.sql
+    hgLoadBed hg18 cnpSharp2 sharp.bed -tab -sqlTable=/cluster/home/heather/kent/src/hg/lib/cnpSharp2.sql
 
     # Iafrate (format different from hg17)
     cp Iafrate*txt iafrate.in
     # use editor to change TABTAB to TAB0TAB and get rid of header
     iafrate.pl < iafrate.in > iafrate.bed
-    hgLoadBed hg18 cnpIafrate2 iafrate.bed -tab -sql=/cluster/home/heather/kent/src/hg/lib/cnpIafrate2.sql
+    hgLoadBed hg18 cnpIafrate2 iafrate.bed -tab -sqlTable=/cluster/home/heather/kent/src/hg/lib/cnpIafrate2.sql
 
     # Sebat (format different from hg17)
     cp Sebat*txt sebat.in
@@ -12689,8 +12691,9 @@ hgLoadBed hg18 cnpRedon cnpRedon.bed
     # use editor to get rid of header
     mccarroll.pl < mccarroll.in > mccarroll.prelim
     sort -g mccarroll.prelim > mccarroll.sort
+    # sort isn't perfect, use editor to finish
     mccarroll2.pl < mccarroll.sort > mccarroll.bed
-    hgLoadBed hg18 delMccarroll mccarroll.bed -tab 
+    hgLoadBed hg18 delMccarroll mccarroll.bed -tab -sqlTable=/cluster/home/heather/kent/src/hg/lib/delMccarroll.sql
 
     # Conrad (different format from hg17)
     cp Conrad*txt conrad.prelim
@@ -12700,13 +12703,16 @@ hgLoadBed hg18 cnpRedon cnpRedon.bed
     # use editor to sort conrad.prelim3 (lame)
     # assign Ids
     conradId.pl < conrad.prelim3 > conrad.bed
-    hgLoadBed hg18 delConrad2 conrad.bed -tab -sql=/cluster/home/heather/kent/src/hg/lib/delConrad2.sql
+    hgLoadBed hg18 delConrad2 conrad.bed -tab -sqlTable=/cluster/home/heather/kent/src/hg/lib/delConrad2.sql
 
     # Hinds (different format from hg17)
     cp Hinds*txt hinds.in
     # use editor to remove header
-    hinds.pl < hinds.in > hinds.bed
-    hgLoadBed hg18 delHinds2 hinds.bed -tab -sql=/cluster/home/heather/kent/src/hg/lib/delHinds2.sql
+    hinds.pl < hinds.in > hinds.prelim
+    sort -g hinds.prelim > hinds.sort
+    # sort isn't perfect, use editor to finish
+    hinds2.pl < hinds.sort > hinds.bed
+    hgLoadBed hg18 delHinds2 hinds.bed -tab -sqlTable=/cluster/home/heather/kent/src/hg/lib/delHinds2.sql
 
     # Locke (new data)
     cp Locke*txt locke.in
