@@ -14,7 +14,7 @@
 #include "hui.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hgGateway.c,v 1.96 2006/10/20 05:01:14 kate Exp $";
+static char const rcsid[] = "$Id: hgGateway.c,v 1.97 2007/05/01 05:11:12 kate Exp $";
 
 boolean isPrivateHost;		/* True if we're on genome-test. */
 struct cart *cart = NULL;
@@ -73,6 +73,7 @@ puts(
 "</CENTER>\n"
 "</FONT></TD></TR></TABLE></CENTER>\n"
 );
+
 cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
 
 puts(
@@ -145,7 +146,14 @@ printf("</td>\n");
 puts(
 "</tr></table>\n"
 "</td></tr><tr><td><center>\n"
-"<a HREF=\"../cgi-bin/cartReset\">Click here to reset</a> the browser user interface settings to their defaults.<BR>\n"
+"<a HREF=\"../cgi-bin/cartReset\">Click here to reset</a> the browser user interface settings to their defaults."
+
+#define SURVEY 1
+#ifdef SURVEY
+"&nbsp;&nbsp;&nbsp;<FONT STYLE=\"background-color:yellow;\"><A STYLE=\"text-decoration:none;\" HREF=\"http://www.surveymonkey.com/s.asp?u=881163743177\" TARGET=_BLANK><EM><B>Your feedback</EM></B></A></FONT>"
+#endif
+
+"<BR>\n"
 "</center>\n"
 "</td></tr><tr><td><center>\n"
 );
@@ -164,6 +172,7 @@ cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
 cgiMakeButton("hgTracksConfigPage", "configure tracks and display");
 puts("</TD><TD VALIGN=\"TOP\">");
 cgiMakeOnClickButton("document.mainForm.position.value=''","clear position");
+
 puts("</TD></TR>");
 puts("</TABLE>");
 puts("</center>\n"
