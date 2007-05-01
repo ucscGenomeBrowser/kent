@@ -9,7 +9,7 @@
 #	Data release policy: http://medaka.utgenome.org/#policy
 #	Ensembl: http://www.ensembl.org/Oryzias_latipes/index.html
 #
-#	"$Id: oryLat1.txt,v 1.28 2007/04/23 23:09:29 hiram Exp $"
+#	"$Id: oryLat1.txt,v 1.29 2007/05/01 23:14:58 hiram Exp $"
 #
 
 ##########################################################################
@@ -3434,3 +3434,9 @@ done
     #	 oryLat1.ensGtp.transcript - hits 23087 of 23087 ok
     #	 oryLat1.ensPep.name - hits 23073 of 23073 ok
     #	running -times flag
+
+#########################################################################
+##  Reset date on request (DONE - 2007-05-01 - Hiram)
+    hgsql hgcentraltest \
+	-e 'update dbDb set description = "Apr. 2006" where name = "oryLat1";'
+
