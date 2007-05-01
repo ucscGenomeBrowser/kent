@@ -679,3 +679,23 @@ caePb1.perChromTables = no
 	where name="caePb1"' hgcentraltest
     hgsql -e 'update genomeClade set genome="C. brenneri"
 	where genome="C. PB2801"' hgcentraltest
+
+##########################################################################
+## Creating downloads (DONE - 2007-04-30 - Hiram)
+    #	There is only one chrom, make its trfMaskChrom file exist
+    ssh hgwdev
+    mkdir /cluster/data/caePb1/bed/simpleRepeat/trfMaskChrom
+    cd /cluster/data/caePb1/bed/simpleRepeat/trfMaskChrom
+    ## symlink didn't work here, the symlink ended up in the tar file
+    cp -p ../trfMask.bed ./chrUn.bed
+    cd  /cluster/data/caePb1
+    /cluster/bin/scripts/makeDownloads.pl caePb1 
+    ## *!* EDIT THE README.txt FILES *!* ##
+
+##########################################################################
+## Creating pushQ (DONE - 2007-04-30 - Hiram)
+    ssh hgwdev
+    mkdir /cluster/data/caePb1/pushQ
+    cd /cluster/data/caePb1/pushQ
+    /cluster/bin/scripts/makePushQSql.pl caePb1 > caePb1.sql 2> stderr.out
+

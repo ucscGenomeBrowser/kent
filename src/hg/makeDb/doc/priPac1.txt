@@ -3,7 +3,7 @@
 # Pristionchus pacificus
 #	Washington University School of Medicine GSC and Sanger Institute
 #
-#  $Id: priPac1.txt,v 1.5 2007/04/27 23:57:43 hiram Exp $
+#  $Id: priPac1.txt,v 1.6 2007/05/01 22:34:25 hiram Exp $
 ###########################################################################
 ## Download sequence - (DONE - 2007-02-25 - Hiram)
     ssh kkstore02
@@ -361,3 +361,31 @@ priPac1.perChromTables = no
     hgsql -e 'update dbDb set defaultPos="chrUn:64713500-64721000"
 	where name="priPac1"' hgcentraltest
 
+##########################################################################
+## Creating downloads (DONE - 2007-05-01 - Hiram)
+    #	There is only one chrom, make its trfMaskChrom file exist
+    ssh hgwdev
+    mkdir /cluster/data/priPac1/bed/simpleRepeat/trfMaskChrom
+    cd /cluster/data/priPac1/bed/simpleRepeat/trfMaskChrom
+    ## symlink didn't work here, the symlink ended up in the tar file
+    cp -p ../trfMask.bed ./chrUn.bed
+    cd  /cluster/data/priPac1
+    nice -n +19 /cluster/bin/scripts/makeDownloads.pl priPac1 
+    ## *!* EDIT THE README.txt FILES *!* ##
+
+    ## make the links to the liftOver files:
+    cd /cluster/data/priPac1/bed/liftOver
+    md5sum *.gz > md5sum.txt
+    cd /usr/local/apache/htdocs/goldenPath/priPac1/liftOver
+    ln -s /cluster/data/priPac1/bed/liftOver/* .
+
+##########################################################################
+## Creating pushQ (DONE - 2007-05-01 - Hiram)
+    ssh hgwdev
+    mkdir /cluster/data/priPac1/pushQ
+    cd /cluster/data/priPac1/pushQ
+    /cluster/bin/scripts/makePushQSql.pl priPac1 > priPac1.sql 2> stderr.out
+    ## check the stderr.out for anything that needs to be fixed
+    ## copy priPac1.sql to hgwbeta:/tmp
+    ## then on hgwbeta
+    hgsql qapushq < priPac1.sql

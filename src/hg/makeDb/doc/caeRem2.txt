@@ -4,7 +4,7 @@
 #	From Wash U GSC
 #	http://genome.wustl.edu/genome.cgi?GENOME=Caenorhabditis+remanei
 
-#  $Id: caeRem2.txt,v 1.8 2007/04/27 23:58:49 hiram Exp $
+#  $Id: caeRem2.txt,v 1.9 2007/05/01 22:33:08 hiram Exp $
 
 #########################################################################
 # DOWNLOAD SEQUENCE (DONE - 2007-03-16 - Hiram)
@@ -446,3 +446,43 @@ caeRem2.perChromTables = no
     cvs commit Caenorhabditis_remanei.jpg
     cp -p Caenorhabditis_remanei.jpg /usr/local/apache/htdocs/images
 
+##########################################################################
+## Creating downloads (DONE - 2007-05-01 - Hiram)
+    #	There is only one chrom, make its trfMaskChrom file exist
+    ssh hgwdev
+    mkdir /cluster/data/caeRem2/bed/simpleRepeat/trfMaskChrom
+    cd /cluster/data/caeRem2/bed/simpleRepeat/trfMaskChrom
+    ## symlink didn't work here, the symlink ended up in the tar file
+    cp -p ../trfMask.bed ./chrUn.bed
+    cd  /cluster/data/caeRem2
+    nice -n +19 /cluster/bin/scripts/makeDownloads.pl caeRem2 
+    ## *!* EDIT THE README.txt FILES *!* ##
+    ## Also add the WindowMasker business to bigZips
+
+    cd /cluster/data/caeRem2/goldenPath/bigZips
+    mkdir chrUn
+    cp -p ../../bed/WindowMasker/windowmasker.sdust.bed.gz ./chrUn/
+    gunzip chrUn/*.gz
+    tar cvzf ./chromWMSdust.bed.tar.gz ./chrUn
+    rm -fr chrUn
+    md5sum *.gz > md5sum.txt
+    ## add description to README.txt
+    # chromWMSdust.bed.tar.gz - per-chrom bed files used as repeat areas
+    #	identified by WindowMasker with the -sdust option.
+
+    ## make the links to the liftOver files:
+    cd /cluster/data/caeRem2/bed/liftOver
+    md5sum *.gz > md5sum.txt
+    cd /usr/local/apache/htdocs/goldenPath/caeRem2/liftOver
+    ln -s /cluster/data/caeRem2/bed/liftOver/* .
+
+##########################################################################
+## Creating pushQ (DONE - 2007-05-01 - Hiram)
+    ssh hgwdev
+    mkdir /cluster/data/caeRem2/pushQ
+    cd /cluster/data/caeRem2/pushQ
+    /cluster/bin/scripts/makePushQSql.pl caeRem2 > caeRem2.sql 2> stderr.out
+    ## check the stderr.out for anything that needs to be fixed
+    ## copy caeRem2.sql to hgwbeta:/tmp
+    ## then on hgwbeta
+    hgsql qapushq < caeRem2.sql
