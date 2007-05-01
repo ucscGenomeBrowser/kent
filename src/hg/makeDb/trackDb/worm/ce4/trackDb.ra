@@ -156,7 +156,7 @@ type chain ce4
 otherDb ce4
 
 track multiz5way
-shortLabel Conservation
+shortLabel 5-Way Multiz
 longLabel Multiz Alignment & Conservation (5 nematodes)
 group compGeno
 priority 104.2
@@ -177,3 +177,46 @@ summary multiz5waySummary
 speciesOrder caePb1 caeRem2 cb3 priPac1
 treeImage phylo/ce4_5way.gif
 speciesCodonDefault ce4
+
+track multiz4way
+shortLabel 4-Way Multiz
+longLabel Multiz Alignment & Conservation (4 nematodes)
+group compGeno
+priority 104.2
+visibility pack
+color 0, 10, 100
+altColor 0,90,10
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+wiggle phastCons4way
+spanList 1
+pairwiseHeight 12
+yLineOnOff Off
+# frames multiz4wayFrames
+# irows on
+autoScaleDefault Off
+windowingFunction mean
+summary multiz4waySummary
+speciesOrder caePb1 caeRem2 cb3
+treeImage phylo/ce4_4way.gif
+speciesCodonDefault ce4
+
+track phastConsElements5way
+shortLabel 5-way Most Conserved
+longLabel PhastCons Conserved Elements, 5-way Multiz Alignment
+group compGeno
+priority 104.4
+visibility hide
+exonArrows off
+showTopScorers 200
+type bed 5 .
+
+track phastConsElements4way
+shortLabel 4-way Most Conserved
+longLabel PhastCons Conserved Elements, 4-way Multiz Alignment
+group compGeno
+priority 104.4
+visibility hide
+exonArrows off
+showTopScorers 200
+type bed 5 .
