@@ -36,16 +36,33 @@ endif
 
 set track=`echo $trackname | sed -e "s/chrN_//"`
 set Org=`echo $track | sed -e "s/chain//"`
+set otherDb=`echo $Org | perl -wpe '$_ = lcfirst($_)'`
 set split=`getSplit.csh $db chain$Org hgwdev`
 
 echo "using database $db "
 echo "trackname: $trackname"
 echo "track: $track"
 echo "Org: $Org"
+echo
 
+# ------------------------------------------------
+# check level for html and trackDb entry:
+
+echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
+echo "check level for html and trackDb entry:"
+if ( $split == "unsplit" ) then
+  echo
+  findLevel.csh $db chain$Org
+else
+  # need to fix findLevel to work with split chroms.
+  # findLevel.csh $db ${oneChrom}_chain$Org
+endif
 
 # -------------------------------------------------
 # get chroms from chromInfo:
+
+echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
+echo
 
 getChromlist.csh $db > /dev/null
 rm -f $db.$Org.pushlist
@@ -66,6 +83,8 @@ endif
 # ------------------------------------------------
 # check updateTimes for each table:
 
+echo
+echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
 echo
 echo "check updateTimes for each table:"
 echo "first: hgwdev"
@@ -94,9 +113,13 @@ else
     set numTNames=`hgsql -N -e "SELECT COUNT(DISTINCT(tName)) \
      FROM ${chrom}_chain$Org" $db`
     if ($numTNames != 1) then
-      echo num = $numTNames    
-      echo "Not all of the tNames in ${chrom}_chain$Org match the table name "
-      echo "(you should check this table by hand)."
+      if ($numTNames == 0) then
+        echo "${chrom}_chain$Org is empty."
+      else
+        echo "There are $numTNames tNames in ${chrom}_chain$Org"
+        echo "Should be only one"
+        echo "(you should check this table by hand)."
+      endif
     else
       set tName=`hgsql -N -e "SELECT tName FROM ${chrom}_chain$Org\
         LIMIT 1" $db`
@@ -108,10 +131,13 @@ else
     set numTNames=`hgsql -N -e "SELECT COUNT(DISTINCT(tName)) \
       FROM ${chrom}_chain${Org}Link" $db`
     if ($numTNames != 1) then
-      echo num = $numTNames    
-      echo "Not all of the tNames in ${chrom}_chain${Org}Link match \
-       the table name "
-      echo "(you should check this table by hand)."
+      if ($numTNames == 0) then
+        echo "${chrom}_chain${Org}Link is empty."
+      else
+        echo "There are $numTNames tNames in ${chrom}_chain${Org}Link"
+        echo "Should be only one"
+        echo "(you should check this table by hand)."
+      endif
     else
       set tName=`hgsql -N -e "SELECT tName FROM ${chrom}_chain${Org} \
         LIMIT 1" $db`
@@ -323,7 +349,7 @@ echo  "check that tables are sorted by tStart:"
 echo
 
 if ( $split == "unsplit" ) then
-  echo "can't check chrom ordering on unsplit chorms right now"
+  echo "can't check chrom ordering on unsplit chroms right now"
 else
   echo  "tStart:"
   foreach chrom (`cat $db.chromlist`)

@@ -88,7 +88,7 @@ if ( $split == "unsplit" ) then
   echo "check to see if qSize matches coords in other assembly."
   hgsql -N -e "SELECT DISTINCT qSize, qName FROM chain$Org \
     GROUP by qSize" $db | sort -nr > $db.query.size
-  commTrio.csh query.size $otherDb.size 
+  commTrio.csh $db.query.size $otherDb.size 
   echo "expect zero for $db.query.size"
 else
 # not really needed and too complicated here.
@@ -123,7 +123,7 @@ if ( $split == "unsplit" ) then
     foreach seq ( $empty )
       echo "http://genome-test.cse.ucsc.edu/cgi-bin/hgTracks?db=$db&position=$seq&chain$Org=pack$multiz"
     end
-    echo "get some DNA from these and see how it blats"
+    echo "get some DNA from these and see how it blats on $otherDb"
   else
     echo "all chroms have chains"
   endif
