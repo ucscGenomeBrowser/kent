@@ -14,13 +14,14 @@ shortLabel vac
 longLabel Immunization Status
 priority 2
 visibility on
-type remap "Vaccine"="+" "Placebo"="-"
+type string
+#type remap "Vaccine"="+" "Placebo"="-"
 filterDropDown on
 
 #(not in main table gsidSubjInfo)
 name hivQuan
 shortLabel HIV
-longLabel HIV Quantity
+longLabel HIV Quantity - viral load in HIV-1 RNA copies/mL
 priority 3
 visibility on
 type integer
