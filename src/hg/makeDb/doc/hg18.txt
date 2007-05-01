@@ -15326,3 +15326,49 @@ TMPDIR=/scratch/tmp
     # 1643928877 bases of 2881515245 (57.051%) in intersection
 #########################################################################
 
+#########################################################################
+# exaptedRepeats track (4/30/07, Craig)
+# see also: Lowe, Bejerano, Haussler.  Thousands of human mobile element
+# fragments undergo strong purifying selection near developmental genes.
+# PNAS. (in press). Epub 2007 Apr 26.
+#
+# Code to do this is in these c-shells:
+#
+more /cluster/store12/lowec/survey/repeatIntersections/species/create.csh
+#
+more /cluster/store12/lowec/survey/repeatIntersections/species/block.jobs2
+more /cluster/store12/lowec/survey/repeatIntersections/species/analyze.csh
+#
+more /cluster/store12/lowec/survey/repeatIntersections/speciesOk/tableJobsNew
+more /cluster/store12/lowec/survey/repeatIntersections/speciesOk/makeACell.csh
+#
+# Here is a general overview of how to do this:
+# Take your favorite set of genomic regions
+# in this case they are conserved noncoding elements in human taken
+# from existing publications and methods:
+# PMID: 16410828, 15131266, 16024819
+# Lunter G, Ponting CP, Hein J.  Genome-wide identification of human
+# functional DNA using a neutral indel model.  PLoS Comput Biol. 2006
+# Jan;2(1):e5.
+# Bejerano G, Pheasant M, Makunin I, Stephen S, Kent WJ, Mattick JS,
+# Haussler D. Ultraconserved elements in the human genome.
+# Science. 2004 May 28;304(5675):1321-5.
+# Siepel A et al.  Evolutionarily conserved elements in vertebrate,
+# insect, worm, and yeast genomes.  Genome Res. 2005 Aug;15(8):1034-50.
+#
+# Now you need to intersect with current repeat masker annotation.
+# at the most basic level this is just a featureBits with human
+# repeat annotation, but othologous bases in other species often
+# have different repeatmasker annotation.  For this reason we also
+# map all our elements to a species through
+# syntenic nets, intersect with repeatMasker in that species, 
+# and then map those hits back to the original species.  This is a
+# liftover, into a featuresBits, and into another liftover.
+# Fucntional elements map much nicer than repeats, so that is why
+# we don't just map another species repeat annotation
+# to human and do a featureBits in human.  The above scripts
+# also keep different repeat families separate, so that we
+# can tell which repeat consensus is hitting which functional
+# elements.
+#
+#######################################################################
