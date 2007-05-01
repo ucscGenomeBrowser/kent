@@ -1389,7 +1389,7 @@ identifier ratStsTrueName typeOf=stsName
 identifier rhMapName
 "Zebrafish RH (Radiation Hybrid) Map Name"
     $danRer.rhMap.qName dupeOk
-    $danRer.rhMapInfo.name minCheck=0.90 unique
+    $danRer.rhMapZfishInfo.name minCheck=0.90 unique
  
 identifier igtcName
 "IGTC (genetrap.org) sequence name"
