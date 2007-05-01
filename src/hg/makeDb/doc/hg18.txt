@@ -12674,7 +12674,7 @@ hgLoadBed hg18 cnpRedon cnpRedon.bed
     cp Sebat*txt sebat.in
     # use editor to get rid of header
     sebat.pl < sebat.in > sebat.bed
-    hgLoadBed hg18 cnpSebat2 sebat.bed -tab -sql=/cluster/home/heather/kent/src/hg/lib/cnpSebat2.sql
+    hgLoadBed hg18 cnpSebat2 sebat.bed -noBin -tab -sqlTable=/cluster/home/heather/kent/src/hg/lib/cnpSebat2.sql
 
     # Tuzun (I called this cnpFosmid in hg17)
     # simple bed 4 .
