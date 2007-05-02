@@ -14,7 +14,7 @@
 #include "hui.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hgGateway.c,v 1.97 2007/05/01 05:11:12 kate Exp $";
+static char const rcsid[] = "$Id: hgGateway.c,v 1.98 2007/05/02 01:20:06 kate Exp $";
 
 boolean isPrivateHost;		/* True if we're on genome-test. */
 struct cart *cart = NULL;
@@ -150,7 +150,7 @@ puts(
 
 #define SURVEY 1
 #ifdef SURVEY
-"&nbsp;&nbsp;&nbsp;<FONT STYLE=\"background-color:yellow;\"><A STYLE=\"text-decoration:none;\" HREF=\"http://www.surveymonkey.com/s.asp?u=881163743177\" TARGET=_BLANK><EM><B>Your feedback</EM></B></A></FONT>"
+"&nbsp;&nbsp;&nbsp;<FONT STYLE=\"background-color:yellow;\"><A HREF=\"http://www.surveymonkey.com/s.asp?u=881163743177\" TARGET=_BLANK><EM><B>Take survey</EM></B></A></FONT>"
 #endif
 
 "<BR>\n"
