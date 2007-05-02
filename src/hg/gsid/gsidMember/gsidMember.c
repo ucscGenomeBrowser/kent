@@ -25,7 +25,7 @@
 #include "paypalSignEncrypt.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidMember.c,v 1.19 2007/04/30 23:53:57 galt Exp $";
+static char const rcsid[] = "$Id: gsidMember.c,v 1.20 2007/05/02 23:54:51 galt Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "debug", "fixMembers", "update", "gsidM_password", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -82,7 +82,7 @@ else
 
 
 boolean checkPwdCharClasses(char *password)
-/* check that password uses at least 3 character classes */
+/* check that password uses at least 2 character classes */
 {
 /* [A-Z] [a-z] [0-9] [!@#$%^&*()] */
 int classes[4]={0,0,0,0};
@@ -94,7 +94,7 @@ while ((c=*password++))
     if (c >= '0' && c <= '9') classes[2] = 1;
     if (strchr("!@#$%^&*()",c)) classes[3] = 1;
     }
-return ((classes[0]+classes[1]+classes[2]+classes[3])>=3);
+return ((classes[0]+classes[1]+classes[2]+classes[3])>=2);
 }
 
 unsigned int randInt(unsigned int n)
@@ -657,7 +657,7 @@ if (!checkPwdCharClasses(newPassword))
     {
     freez(&errMsg);
     errMsg = cloneString(
-	"Password must contain characters from 3 of the following 4 classes: "
+	"Password must contain characters from 2 of the following 4 classes: "
 	"[A-Z] [a-z] [0-9] [!@#$%^&*()].");
     changePasswordPage(conn);
     return;
@@ -879,7 +879,7 @@ if (!password || sameString(password,"") || (strlen(password)<8))
 if (!checkPwdCharClasses(password))
     {
     freez(&errMsg);
-    errMsg = cloneString("Password must contain characters from 3 of the following 4 classes: [A-Z] [a-z] [0-9] [!@#$%^&*()].");
+    errMsg = cloneString("Password must contain characters from 2 of the following 4 classes: [A-Z] [a-z] [0-9] [!@#$%^&*()].");
     signupPage(conn);
     return;
     }
