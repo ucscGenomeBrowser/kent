@@ -8,7 +8,7 @@
 if ($#argv < 1 || $#argv > 2) then
   echo
   echo " runs the three chain and net scripts in succession"
-  echo " now works for unsplit assemblies"
+  echo " works for both split and unsplit chain tables"
   echo
   echo "    usage:  database Tablename"
   echo
