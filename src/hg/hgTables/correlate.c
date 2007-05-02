@@ -20,8 +20,9 @@
 #define INCL_HELP_TEXT
 #include "correlate.h"	/* our structure defns and the corrHelpText string */
 #include "bedGraph.h"
+#include "hgMaf.h"
 
-static char const rcsid[] = "$Id: correlate.c,v 1.57 2007/04/28 23:59:41 kate Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.58 2007/05/02 22:05:21 kate Exp $";
 
 #define MAX_POINTS_STR	"300,000,000"
 #define MAX_POINTS	300000000
@@ -174,8 +175,10 @@ if (tdb &&
 	startsWith("wig ",tdb->type) ||
 	startsWith("genePred",tdb->type) ||
 	startsWith("psl",tdb->type) ||
-	startsWith("wigMaf ",tdb->type) ||
-	startsWith("bed ",tdb->type) )
+	startsWith("bed ",tdb->type) ||
+	(startsWith("wigMaf ",tdb->type) && 
+                /* has a wiggle */
+                wigMafWiggles(tdb)))
     )
     return TRUE;
 //hPrintf("<P>correlateTableOK: %s FALSE</P>\n", tdb->type);
@@ -370,8 +373,14 @@ else if (startsWith("wig",tdb->type))
     {
     if (startsWith("wigMaf",tdb->type))
 	{
+        struct consWiggle *wiggles = wigMafWiggles(tdb);
+        if (!wiggles)
+            /* should have found this earlier (correlateOK) */
+            errAbort("No conservation wiggle found for track %s",
+                        tdb->tableName);
 	freeMem(table->actualTable);
-	table->actualTable = cloneString(table->tableName);
+        /* for now, always use first one found */
+	table->actualTable = cloneString(wiggles->table);
 	}
     table->isWig = TRUE;
     }
