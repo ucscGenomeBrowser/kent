@@ -205,7 +205,7 @@
 #include "geneCheckDetails.h"
 #include "kg1ToKg2.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1281 2007/04/30 23:08:43 hiram Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1282 2007/05/02 21:35:57 galt Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -4501,8 +4501,9 @@ for (same = 1; same >= 0; same -= 1)
 printf("</TT></PRE>");
 
 psl = pslList;
-if (pslTrimToTargetRange(psl, winStart, winEnd) != NULL &&
-    !startsWith("xeno", typeName))
+if (pslTrimToTargetRange(psl, winStart, winEnd) != NULL 
+    && !startsWith("xeno", typeName)
+    && !startsWith("user", typeName))
     {
     safef(otherString, sizeof(otherString), "%d&aliTrack=%s",
 	  psl->tStart, typeName);
@@ -5724,6 +5725,8 @@ else
 
 if (startsWith("xeno", track))
     errAbort("htcCdnaAliInWindow does not support translated alignments.");
+else if (startsWith("user", track))
+    errAbort("htcCdnaAliInWindow does not support hgBlat alignments.");
 else
     showSomePartialDnaAlignment(partPsl, wholePsl, rnaSeq,
 				NULL, cdsStart, cdsEnd);
