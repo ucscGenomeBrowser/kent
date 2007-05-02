@@ -15341,7 +15341,9 @@ TMPDIR=/scratch/tmp
         hg18.orfeomeTables.hgwdev = yes
         hg18.orfeomeTables.hgwbeta = yes
     # will need to enable for rr later.  In the future, this can just be enabled
-    # as part the normal genbank build.
+    # as part the normal genbank build.  Change above to:
+        hg18.orfeomeTables.defaulkt = yes
+    
     
 #########################################################################
 # exaptedRepeats track (4/30/07, Craig)
