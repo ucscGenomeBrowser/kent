@@ -1181,6 +1181,7 @@ identifier knownGeneId dependency
     $kgDb.kgProtAlias.kgID
     $kgDb.kgSpAlias.kgID
     $kgDb.kgXref.kgID full
+    $kgDb.kgTxInfo.name full
     $kgDb.knownBlastTab.query
     $kgDb.knownBlastTab.target
     $kgDb.knownCanonical.transcript 
