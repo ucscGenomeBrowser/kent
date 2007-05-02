@@ -23,7 +23,7 @@
 #include "customFactory.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.63 2007/04/23 20:58:15 galt Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.64 2007/05/02 21:07:37 hiram Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -59,7 +59,7 @@ void customFactoryCheckChromNameDb(char *db, char *word, struct lineFile *lf)
  * just make sure it's a chromosome. */
 {
 if (!hgIsOfficialChromNameDb(db, word))
-    lineFileAbort(lf, "%s not a chromosome", word);
+    lineFileAbort(lf, "%s not a chromosome (note: chrom names are case sensitive)", word);
 }
 
 static char *saveHost = NULL;
@@ -1601,7 +1601,7 @@ while ((line = customPpNextReal(cpp)) != NULL)
 		    continue;
 		else
 		    {
-		    errAbort("Unrecognized format line %d of %s:\n\t%s",
+		    errAbort("Unrecognized format line %d of %s:\n\t%s (note: chrom names are case sensitive)",
 			lf->lineIx, lf->fileName, emptyForNull(line));
 		    }
 		}
