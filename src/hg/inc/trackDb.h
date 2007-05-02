@@ -100,6 +100,9 @@ void trackDbOverrideVisbility(struct hash *tdHash, char *visibilityRa,
 /* Override visbility settings using a ra file.  If hideFirst, set all 
  * visibilities to hide before applying visibilityRa. */
 
+void trackDbOverridePriority(struct hash *tdHash, char *priorityRa);
+/* Override priority settings using a ra file. */
+
 struct trackDb *trackDbFromRa(char *raFile);
 /* Load track info from ra file into list. */
 
