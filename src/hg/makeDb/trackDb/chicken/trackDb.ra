@@ -16,6 +16,13 @@ visibility hide
 color 50,50,50
 type bed 4 +
 
+# see priority.ra
+#
+# track chainAnoCar1
+# priority 260
+# 
+# track netAnoCar1
+# priority 260.1
 
 
 
