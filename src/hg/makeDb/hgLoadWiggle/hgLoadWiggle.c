@@ -13,7 +13,7 @@
 #include "portable.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgLoadWiggle.c,v 1.20 2006/12/18 23:11:20 angie Exp $";
+static char const rcsid[] = "$Id: hgLoadWiggle.c,v 1.21 2007/05/02 20:46:49 hiram Exp $";
 
 /* Command line switches. */
 static boolean noBin = FALSE;		/* Suppress bin field. */
@@ -101,7 +101,7 @@ static unsigned chromosomeSize(char *chromosome)
 struct hashEl *el = hashLookup(chromHash,chromosome);
 
 if (el == NULL)
-    errAbort("Couldn't find size of chromosome %s", chromosome);
+    errAbort("Couldn't find size of chromosome %s (note: chrom names are case sensitive)", chromosome);
 return *(unsigned *)el->val;
 }
 
