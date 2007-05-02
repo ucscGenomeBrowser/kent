@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/makePushQSql.pl instead.
 
-# $Id: makePushQSql.pl,v 1.5 2007/04/30 23:51:01 angie Exp $
+# $Id: makePushQSql.pl,v 1.6 2007/05/02 23:29:42 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -352,6 +352,10 @@ sub getTrackEntries {
 	  }
 	  &HgAutomate::verbose(1, "Found net table $table that was not " .
 			       "already lumped in with a chain entry...?\n");
+	} else {
+	  # This net has already been included in the corresponding Chain
+	  # track entry, and removed from the hash, so skip to the next table.
+	  next;
 	}
       }
       # Remove accounted-for tables.
@@ -560,7 +564,7 @@ _EOF_
  *** When everything looks complete and correct, use hgsql on the qapushq
      machine (currently hgwbeta) to execute the sql file.  (Make sure that
      qapushq does not already have a table named $db.)  Then use the Push
-     Queue web interface to update the sizes of all tracks.
+     Queue web interface to check the contents of all entries.
  *** If you haven't already, please add $db to makeDb/schema/all.joiner !
 
 _EOF_
