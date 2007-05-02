@@ -1008,3 +1008,20 @@ doBlastzChainNet.pl DEF -chainMinScore=3000 -chainLinearGap=medium \
     # request push of 
     nscanGene
     nscanPep
+
+##########################################################################
+## ADD chrM record into chrM_gold.  (DONE, 2007-05-02, Fan)
+
+# get a template record from oryLat1
+
+    hgsql oryLat1 -e 'select * from chrM_gold' equCab1.chrM_gold.tab
+
+# edit it with equCab1 chrM legth and accession.
+    
+    vi equCab1.chrM_gold.tab
+
+# load it into chrM_gold table
+
+hgsql equCab1 -e 'load data local infile "equCab1M.tab" into table chrM_gold'
+
+##########################################################################
