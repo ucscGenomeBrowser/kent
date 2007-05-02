@@ -252,21 +252,21 @@ origAssembly hg17
     subTrack encodeGencodeRaceFrags
     shortLabel RACEfrags GM06990
     longLabel Gencode RACEfrags from GM06990 cells
-    color 125,130,255
+    color 0,0,205
     priority 14
 
     track encodeGencodeRaceFragsHL60
     subTrack encodeGencodeRaceFrags
     shortLabel RACEfrags HL60
     longLabel Gencode RACEfrags from HL60 cells
-    color 100,155,255
+    color 0,0,255
     priority 15
 
     track encodeGencodeRaceFragsHela
     subTrack encodeGencodeRaceFrags
     shortLabel RACEfrags HeLaS3
     longLabel Gencode RACEfrags from HeLaS3 cells
-    color 75,180,255
+    color 125,130,255
     priority 16
 
 track encodeEgaspFull
