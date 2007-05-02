@@ -12,7 +12,7 @@
 #include "hash.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.27 2007/02/02 19:49:19 kent Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.28 2007/05/02 17:26:17 kate Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -313,6 +313,29 @@ while ((raRecord = raNextRecord(lf)) != NULL)
         struct trackDb *td = hashFindVal(tdHash, trackName);
         if (td != NULL)
             td->visibility = parseVisibility(visibility, lf);
+        }
+    hashFree(&raRecord);
+    }
+lineFileClose(&lf);
+}
+
+void trackDbOverridePriority(struct hash *tdHash, char *priorityRa)
+/* Override priority settings using a ra file. */
+{
+struct lineFile *lf;
+struct hash *raRecord;
+
+/* Parse the ra file, adjusting priority accordingly */
+lf = lineFileOpen(priorityRa, TRUE);
+while ((raRecord = raNextRecord(lf)) != NULL)
+    {
+    char *trackName = hashFindVal(raRecord, "track");
+    char *priority = hashFindVal(raRecord, "priority");
+    if ((trackName != NULL) && (priority != NULL))
+        {
+        struct trackDb *td = hashFindVal(tdHash, trackName);
+        if (td != NULL)
+            td->priority = atof(priority);
         }
     hashFree(&raRecord);
     }
