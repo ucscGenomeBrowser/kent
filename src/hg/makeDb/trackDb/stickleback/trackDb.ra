@@ -193,3 +193,12 @@ visibility hide
 spectrum on
 type netAlign oryLat1 chainOryLat1
 otherDb oryLat1
+
+# in priority.ra
+#
+# track chainAnoCar1
+# priority 275.5
+# 
+# track netAnoCar1
+# priority 275.6
+
