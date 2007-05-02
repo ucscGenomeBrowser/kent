@@ -11,7 +11,7 @@
 #include "portable.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgTrackDb.c,v 1.29 2007/01/12 00:32:56 kate Exp $";
+static char const rcsid[] = "$Id: hgTrackDb.c,v 1.30 2007/05/02 00:20:00 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -32,6 +32,7 @@ errAbort(
   "   for special-purpose browsers.  All visibility will be set to hide and\n"
   "   then specific track are modified using the track and visibility fields\n"
   "   in this file.\n"
+  "  -priority=priority.ra - A ra file used to override the priority settings\n"
   "  -hideFirst - Before applying vis.ra, set all visibilities to hide.\n"
   "  -strict - only include tables that exist (and complain about missing html files).\n"
   "  -raName=trackDb.ra - Specify a file name to use other than trackDb.ra\n"
@@ -42,6 +43,7 @@ errAbort(
 
 static struct optionSpec optionSpecs[] = {
     {"visibility", OPTION_STRING},
+    {"priority", OPTION_STRING},
     {"raName", OPTION_STRING},
     {"strict", OPTION_BOOLEAN},
     {"hideFirst", OPTION_BOOLEAN},
@@ -260,7 +262,7 @@ else
 }
 
 void hgTrackDb(char *org, char *database, char *trackDbName, char *sqlFile, char *hgRoot,
-               char *visibilityRa, boolean strict)
+               char *visibilityRa, char *priorityRa, boolean strict)
 /* hgTrackDb - Create trackDb table from text files. */
 {
 struct hash *uniqHash = newHash(8);
@@ -282,6 +284,8 @@ layerOn(strict, database, rootDir, uniqHash, htmlHash, TRUE, &tdList);
 if (visibilityRa != NULL)
     trackDbOverrideVisbility(uniqHash, visibilityRa,
 			     optionExists("hideFirst"));
+if (priorityRa != NULL)
+    trackDbOverridePriority(uniqHash, priorityRa);
 slSort(&tdList, trackDbCmp);
 printf("Loaded %d track descriptions total\n", slCount(tdList));
 
@@ -351,6 +355,7 @@ raName = optionVal("raName", raName);
 release = optionVal("release", release);
 
 hgTrackDb(argv[1], argv[2], argv[3], argv[4], argv[5],
-          optionVal("visibility", NULL), optionExists("strict"));
+          optionVal("visibility", NULL), optionVal("priority", NULL), 
+          optionExists("strict"));
 return 0;
 }

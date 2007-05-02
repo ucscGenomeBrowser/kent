@@ -137,8 +137,16 @@ update: #clean
 			vis="-visibility=$$org/visibility.ra" ; \
 		    else \
 			vis="" ; \
-		fi ; fi ; fi; \
-		cmd="hgTrackDb $$vis $$org $$DB trackDb_${USER} ../../lib/trackDb.sql ." ; \
+                    fi ; fi ; \
+		    if test -f $$dbpath/priority.ra ; then \
+			pri="-priority=$$dbpath/priority.ra" ; \
+		    else if test -f $$org/priority.ra ; then \
+			pri="-priority=$$org/priority.ra" ; \
+		    else \
+			pri="" ; \
+                    fi ; fi ; \
+		fi ; \
+		cmd="hgTrackDb $$vis $$pri $$org $$DB trackDb_${USER} ../../lib/trackDb.sql ." ; \
 		echo $$cmd ;  $$cmd ; \
 		cmd="hgFindSpec $$org $$DB hgFindSpec_${USER} ../../lib/hgFindSpec.sql ." ; \
 		echo $$cmd ;  $$cmd ; \
@@ -166,8 +174,16 @@ alpha: clean
 			vis="-visibility=$$org/visibility.ra" ; \
 		    else \
 			vis="" ; \
-		fi ; fi ; fi; \
-		cmd="hgTrackDb -release=alpha $$vis $$org $$DB trackDb ../../lib/trackDb.sql ." ; \
+                    fi ; fi ; \
+		    if test -f $$dbpath/priority.ra ; then \
+			pri="-priority=$$dbpath/priority.ra" ; \
+		    else if test -f $$org/priority.ra ; then \
+			pri="-priority=$$org/priority.ra" ; \
+		    else \
+			pri="" ; \
+                    fi ; fi ; \
+		fi ; \
+		cmd="hgTrackDb -release=alpha $$vis $$pri $$org $$DB trackDb ../../lib/trackDb.sql ." ; \
 		echo $$cmd ;  $$cmd ; \
 		cmd="hgFindSpec $$org $$DB hgFindSpec ../../lib/hgFindSpec.sql ." ; \
 		echo $$cmd ;  $$cmd ; \
@@ -199,8 +215,16 @@ strict: clean
 			vis="-visibility=$$org/visibility.ra" ; \
 		    else \
 			vis="" ; \
-		fi ; fi ; fi; \
-		cmd="hgTrackDb -strict -release=beta $$vis $$org $$DB trackDb ../../lib/trackDb.sql ." ; \
+                    fi ; fi ; \
+		    if test -f $$dbpath/priority.ra ; then \
+			pri="-priority=$$dbpath/priority.ra" ; \
+		    else if test -f $$org/priority.ra ; then \
+			pri="-priority=$$org/priority.ra" ; \
+		    else \
+			pri="" ; \
+                    fi ; fi ; \
+		fi ; \
+		cmd="hgTrackDb -strict -release=beta $$vis $$pri $$org $$DB trackDb ../../lib/trackDb.sql ." ; \
 		echo $$cmd ;  $$cmd ; \
 		cmd="hgFindSpec -strict $$org $$DB hgFindSpec ../../lib/hgFindSpec.sql ." ; \
 		echo $$cmd ;  $$cmd ; \
@@ -228,8 +252,16 @@ archaea: clean
 			vis="-visibility=$$org/visibility.ra" ; \
 		    else \
 			vis="" ; \
-		fi ; fi ; fi; \
-		cmd="hgTrackDb -strict -release=alpha $$vis $$org $$DB trackDb ../../lib/trackDb.sql ." ; \
+                    fi ; fi ; \
+		    if test -f $$dbpath/priority.ra ; then \
+			pri="-priority=$$dbpath/priority.ra" ; \
+		    else if test -f $$org/priority.ra ; then \
+			pri="-priority=$$org/priority.ra" ; \
+		    else \
+			pri="" ; \
+                    fi ; fi ; \
+		fi; \
+		cmd="hgTrackDb -strict -release=alpha $$vis $$pri $$org $$DB trackDb ../../lib/trackDb.sql ." ; \
 		echo $$cmd ;  $$cmd ; \
 		cmd="hgFindSpec -strict $$org $$DB hgFindSpec ../../lib/hgFindSpec.sql ." ; \
 		echo $$cmd ;  $$cmd ; \
