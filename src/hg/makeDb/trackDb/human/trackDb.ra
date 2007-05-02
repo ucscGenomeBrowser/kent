@@ -656,6 +656,27 @@ type bed 6 +
     longLabel Orthologous Alleles from Macaque (rheMac2)
     priority 6
 
+# in priority.ra 
+#
+# track chainDanRer4
+# priority 168
+# 
+# track netDanRer4
+# priority 168.1
+# 
+# track chainAnoCar1
+# priority 183
+# 
+# track netAnoCar1
+# priority 183.1
+# 
+# track chainCanFam2
+# priority 228
+# 
+# track netCanFam2
+# priority 228.1
+
+
 searchName hapmapSnpsCEU
 searchTable hapmapSnpsCEU
 searchMethod exact

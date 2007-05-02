@@ -1,0 +1,18 @@
+track chainDanRer4
+priority 168
+
+track netDanRer4
+priority 168.1
+
+track chainAnoCar1
+priority 183
+
+track netAnoCar1
+priority 183.1
+
+track chainCanFam2
+priority 228
+
+track netCanFam2
+priority 228.1
+
