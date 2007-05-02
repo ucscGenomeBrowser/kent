@@ -321,7 +321,7 @@ echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
 echo "checking max values for score by type (for type != gap):"
 echo
 
-  hgsql -e 'SELECT MAX(score) AS scores, type FROM '$trackname' GROUP BY type ORDER BY type DESC' $db
+  hgsql -e 'SELECT MAX(score) AS scores, type FROM '$trackname' WHERE type != "gap" GROUP BY type ORDER BY type DESC' $db
 
 
 
