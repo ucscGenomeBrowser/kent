@@ -4,7 +4,7 @@
 #	From Wash U GSC
 #	http://genome.wustl.edu/genome.cgi?GENOME=Caenorhabditis+remanei
 
-#  $Id: caeRem2.txt,v 1.9 2007/05/01 22:33:08 hiram Exp $
+#  $Id: caeRem2.txt,v 1.10 2007/05/02 17:13:16 hiram Exp $
 
 #########################################################################
 # DOWNLOAD SEQUENCE (DONE - 2007-03-16 - Hiram)
@@ -486,3 +486,173 @@ caeRem2.perChromTables = no
     ## copy caeRem2.sql to hgwbeta:/tmp
     ## then on hgwbeta
     hgsql qapushq < caeRem2.sql
+
+###########################################################################
+# ELEGANS (ce4) PROTEINS TRACK (DONE -  Hiram - 2007-05-01)
+    ssh kkstore01
+
+    #	breaking up this target genome into manageable pieces
+    mkdir /cluster/data/caeRem2/blastDb
+    cd /cluster/data/caeRem2
+    twoBitToFa caeRem2.unmasked.2bit temp.fa
+    faSplit gap temp.fa 1000000 blastDb/x -lift=blastDb.lft
+    #	210 pieces of 210 written
+    rm temp.fa
+    cd blastDb
+    for i in *.fa
+    do
+	/cluster/bluearc/blast229/formatdb -i $i -p F
+    done
+    rm *.fa
+
+    ##	copy to san for kluster access
+    mkdir -p /san/sanvol1/scratch/worms/caeRem2/blastDb
+    cd /san/sanvol1/scratch/worms/caeRem2/blastDb
+    rsync -a --progress --stats /cluster/data/caeRem2/blastDb/ .
+
+    ## create the query protein set
+    mkdir -p /cluster/data/caeRem2/bed/tblastn.ce4SG
+    cd /cluster/data/caeRem2/bed/tblastn.ce4SG
+    echo  /san/sanvol1/scratch/worms/caeRem2/blastDb/*.nsq | xargs ls -S \
+	| sed "s/\.nsq//"  > query.lst
+    wc -l query.lst
+# 210 query.lst
+
+   # we want around 50000 jobs
+   calc `wc /cluster/data/ce4/bed/blat.ce4SG/ce4SG.psl | awk "{print \\\$1}"`/\(50000/`wc query.lst | awk "{print \\\$1}"`\)
+# 23192/(50000/210) = 97.406400
+
+   mkdir -p /cluster/bluearc/worms/caeRem2/bed/tblastn.ce4SG/sgfa
+   split -l 98 /cluster/data/ce4/bed/blat.ce4SG/ce4SG.psl \
+	/cluster/bluearc/worms/caeRem2/bed/tblastn.ce4SG/sgfa/sg
+   ln -s /cluster/bluearc/worms/caeRem2/bed/tblastn.ce4SG/sgfa sgfa
+   cd sgfa
+   for i in *; do 
+     nice pslxToFa $i $i.fa; 
+     rm $i; 
+     done
+   cd ..
+   ls -1S sgfa/*.fa > sg.lst
+   mkdir -p /cluster/bluearc/worms/caeRem2/bed/tblastn.ce4SG/blastOut
+   ln -s /cluster/bluearc/worms/caeRem2/bed/tblastn.ce4SG/blastOut ./blastOut
+   for i in `cat sg.lst`; do  mkdir blastOut/`basename $i .fa`; done
+   
+   cd /cluster/data/caeRem2/bed/tblastn.ce4SG
+   cat << '_EOF_' > template
+#LOOP
+blastSome $(path1) {check in line $(path2)} {check out exists blastOut/$(root2)/q.$(root1).psl }
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+   cat << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/cluster/bluearc/blast229/data
+export BLASTMAT
+g=`basename $2`
+f=/tmp/`basename $3`.$g
+for eVal in 0.01 0.001 0.0001 0.00001 0.000001 1E-09 1E-11
+do
+if /cluster/bluearc/blast229/blastall -M BLOSUM80 -m 0 -F no -e $eVal -p tblastn -d $1 -i $2 -o $f.8
+then
+        mv $f.8 $f.1
+        break;
+fi
+done
+if test -f  $f.1
+then
+    if /cluster/bin/i386/blastToPsl $f.1 $f.2
+    then
+	liftUp -nosort -type=".psl" -nohead $f.3 /cluster/data/caeRem2/blastDb.lft carry $f.2
+        liftUp -nosort -type=".psl" -pslQ -nohead $3.tmp /cluster/data/ce4/bed/blat.ce4SG/protein.lft warn $f.3
+
+        if pslCheck -prot $3.tmp
+        then
+            mv $3.tmp $3
+            rm -f $f.1 $f.2 $f.3 $f.4
+        fi
+        exit 0
+    fi
+fi
+rm -f $f.1 $f.2 $3.tmp $f.8 $f.3 $f.4
+exit 1
+'_EOF_'
+    # << happy emacs
+    chmod +x blastSome
+
+    ssh pk
+    cd /cluster/data/caeRem2/bed/tblastn.ce4SG
+    gensub2 query.lst sg.lst template jobList
+    para create jobList
+#    para try, check, push, check etc.
+# Completed: 49770 of 49770 jobs
+# CPU time in finished jobs:     773169s   12886.15m   214.77h    8.95d  0.025 y
+# IO & Wait Time:                173488s    2891.47m    48.19h    2.01d  0.006 y
+# Average job time:                  19s       0.32m     0.01h    0.00d
+# Longest finished job:            1778s      29.63m     0.49h    0.02d
+# Submission to last job:          6918s     115.30m     1.92h    0.08d
+
+    # do the cluster run for chaining
+    ssh pk
+    mkdir /cluster/data/caeRem2/bed/tblastn.ce4SG/chainRun
+    cd /cluster/data/caeRem2/bed/tblastn.ce4SG/chainRun
+    cat << '_EOF_' > template
+#LOOP
+chainOne $(path1)
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    cat << '_EOF_' > chainOne
+(cd $1; cat q.*.psl | simpleChain -prot -outPsl -maxGap=50000 stdin /cluster/bluearc/worms/caeRem2/bed/tblastn.ce4SG/blastOut/c.`basename $1`.psl)
+'_EOF_'
+    # << happy emacs
+    chmod +x chainOne
+
+    ls -1dS /cluster/bluearc/worms/caeRem2/bed/tblastn.ce4SG/blastOut/sg?? \
+	> chain.lst
+    gensub2 chain.lst single template jobList
+    para create jobList
+    para maxNode 30
+    para try, check, push, check etc.
+# Completed: 237 of 237 jobs
+# CPU time in finished jobs:       7408s     123.46m     2.06h    0.09d  0.000 y
+# IO & Wait Time:                  1415s      23.59m     0.39h    0.02d  0.000 y
+# Average job time:                  37s       0.62m     0.01h    0.00d
+# Longest finished job:             867s      14.45m     0.24h    0.01d
+# Submission to last job:          1227s      20.45m     0.34h    0.01d
+
+    ssh kkstore01
+    cd /cluster/data/caeRem2/bed/tblastn.ce4SG/blastOut
+    for i in sg??
+    do
+       cat c.$i.psl | awk "(\$13 - \$12)/\$11 > 0.6 {print}" > c60.$i.psl
+       sort -rn c60.$i.psl | pslUniq stdin u.$i.psl
+       awk "((\$1 / \$11) ) > 0.60 { print   }" c60.$i.psl > m60.$i.psl
+       echo $i
+    done
+    sort -T /scratch/tmp -k 14,14 -k 16,16n -k 17,17n u.*.psl m60* | uniq \
+	> /cluster/data/caeRem2/bed/tblastn.ce4SG/blastCe4SG.psl
+    cd ..
+    pslCheck blastCe4SG.psl
+
+    # load table 
+    ssh hgwdev
+    cd /cluster/data/caeRem2/bed/tblastn.ce4SG
+    hgLoadPsl caeRem2 blastCe4SG.psl
+
+    # check coverage
+    featureBits caeRem2 blastCe4SG 
+    #	19763359 bases of 146898439 (13.454%) in intersection
+    featureBits cb3 blastCe4SG
+    #	18218293 bases of 108433446 (16.801%) in intersection
+    featureBits ce4 sangerGene
+    #	27906202 bases of 100281244 (27.828%) in intersection
+
+    ssh kkstore01
+    rm -rf /cluster/data/caeRem2/bed/tblastn.ce4SG/blastOut
+    rm -rf /cluster/bluearc/worms/caeRem2/bed/tblastn.ce4SG
+    rmdir /cluster/bluearc/worms/caeRem2/bed
+    rmdir /cluster/bluearc/worms/caeRem2
+#end tblastn
+
