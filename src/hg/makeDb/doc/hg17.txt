@@ -23732,3 +23732,14 @@ EOF
 awk -f reformat.awk all_tss_switchdb_psgene > switchDbTss.bed
 ln -s ~/kent/src/hg/lib/switchDbTss.sql
 hgLoadBed -sqlTable=switchDbTss.sql hg17 switchDbTss switchDbTss.bed
+
+############################################################################
+# enable ORFeome track build.  (markd 2007-05-02)
+    cd ~/kent/src/hg/makeDb/genbank
+    cvs update -d etc
+    # edit etc/genbank.conf to add 
+        hg17.orfeomeTables.hgwdev = yes
+        hg17.orfeomeTables.hgwbeta = yes
+    # will need to enable for rr later.  In the future, this can just be enabled
+    # as part the normal genbank build.
+    
