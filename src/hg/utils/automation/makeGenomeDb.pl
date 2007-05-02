@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/automation/makeGenomeDb.pl instead.
 
-# $Id: makeGenomeDb.pl,v 1.5 2007/04/06 04:24:56 hiram Exp $
+# $Id: makeGenomeDb.pl,v 1.6 2007/05/02 23:22:01 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -645,6 +645,39 @@ _EOF_
     $bossScript->add("hgGoldGapGl -noGl $db $allAgp\n");
   }
 
+  if ($gotAgp && $gotMito) {
+    # When we load gold/gap from assembly AGP, but pull in chrM sequence
+    # separately, chrM is conspicuously absent from gold/gap -- so add a fake
+    # entry for it in gold (so featureBits gold --> 100%) and if split tables,
+    # make a token chrM_gap table.
+    my $bin = 585;
+    if ($chromBased || $opt_debug) {
+      my $defaultChrom = `head -1 $topDir/chrom.sizes | cut -f 1`;
+      chomp $defaultChrom;
+      $bossScript->add(<<_EOF_
+
+# Add fake chrM_{gap,gold} to make featureBits happy.
+set mSize = `faSize $topDir/M/chrM.fa | grep bases | awk '{print \$1;}'`
+hgsql $db -e \\
+    'create table chrM_gap select * from ${defaultChrom}_gap where 0; \\
+     create table chrM_gold select * from ${defaultChrom}_gold where 0; \\
+     insert into chrM_gold \\
+       values($bin,"chrM",0,'\$mSize',1,"F","gi|$mitoAcc",0,'\$mSize',"+");'
+_EOF_
+      );
+    } else {
+      $bossScript->add(<<_EOF_
+
+# Add fake chrM entry in gold table to make featureBits happy.
+set mSize = `faSize $topDir/M/chrM.fa | grep bases | awk '{print \$1;}'`
+hgsql $db -e \\
+    'insert into gold \\
+        values($bin,"chrM",0,'\$mSize',1,"F","gi|$mitoAcc",0,'\$mSize',"+");'
+_EOF_
+      );
+    }
+  }
+
   $bossScript->add(<<_EOF_
 
 # Load gc5base
@@ -961,6 +994,21 @@ showDiffBasesAllScales .
 indelDoubleInsert on
 indelQueryInsert on
 indelPolyA on
+
+# Unsplit EST track for scaffold-based assembly.
+track all_est
+shortLabel \$Organism ESTs
+longLabel \$Organism ESTs Including Unspliced
+group rna
+priority 57
+visibility hide
+spectrum on
+intronGap 30
+type psl est
+baseColorUseSequence genbank
+indelDoubleInsert on
+indelQueryInsert on
+maxItems 300
 
 _EOF_
     ;
