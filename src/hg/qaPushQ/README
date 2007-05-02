@@ -22,9 +22,11 @@ To prevent incorrect states or accidentally reposting twice,
 backdoor to unlock a record:
 add action=unlock&qid=000027 as URL parms to cgi-bin/qaPushQ will unlock record 27.
 
-Currently users must be added manually to the database:
+Currently users must be added manually to the database
+  (note the role should eeither be 'qa' or 'dev'):
 hgsql qapushq
-insert into users values ('newname','','','','');
+insert into users values ('newname','','dev','');
+
 To clear the password:
 update users set password='' where user='theuser';
 To empty the pseudo-cart:
