@@ -36,7 +36,7 @@ shortLabel WormBase RNAs
 longLabel WormBase RNA Annotations
 group genes
 priority 32.1
-visibility pack
+visibility hide
 color 0,0,200
 type genePred
 url http://www.wormbase.org/db/gene/gene?name=$$
@@ -46,7 +46,7 @@ shortLabel WormBase PseudoGenes
 longLabel WormBase PseudoGene Annotations
 group genes
 priority 33.1
-visibility pack
+visibility hide
 color 0,0,200
 type genePred
 url http://www.wormbase.org/db/gene/gene?name=$$
@@ -165,7 +165,7 @@ color 0, 10, 100
 altColor 0,90,10
 type wigMaf 0.0 1.0
 maxHeightPixels 100:40:11
-wiggle phastCons5way
+wiggle phastCons5way all_5 phastCons4way Caenorhabditis phastCons2way C_brenneri
 spanList 1
 pairwiseHeight 12
 yLineOnOff Off
@@ -183,7 +183,7 @@ shortLabel 4-Way Multiz
 longLabel Multiz Alignment & Conservation (4 nematodes)
 group compGeno
 priority 104.2
-visibility pack
+visibility hide
 color 0, 10, 100
 altColor 0,90,10
 type wigMaf 0.0 1.0
