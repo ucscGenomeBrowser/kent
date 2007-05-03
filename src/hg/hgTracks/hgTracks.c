@@ -108,7 +108,7 @@
 #include "hapmapTrack.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1328 2007/05/01 00:28:39 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1329 2007/05/02 01:20:06 kate Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -13417,7 +13417,8 @@ if (!hideControls)
 
 #define SURVEY 1
 #ifdef SURVEY
-        hPrintf("&nbsp;&nbsp;<FONT STYLE=\"background-color:yellow;\" SIZE=3><A STYLE=\"text-decoration:none;\" HREF=\"http://www.surveymonkey.com/s.asp?u=881163743177\" TARGET=_BLANK><EM><B>Your feedback</EM></B></A></FONT>\n");
+        //hPrintf("&nbsp;&nbsp;<FONT SIZE=3><A STYLE=\"text-decoration:none; padding:2px; background-color:yellow; border:solid 1px\" HREF=\"http://www.surveymonkey.com/s.asp?u=881163743177\" TARGET=_BLANK><EM><B>Your feedback</EM></B></A></FONT>\n");
+        hPrintf("&nbsp;&nbsp;<FONT SIZE=3><A STYLE=\"background-color:yellow;\" HREF=\"http://www.surveymonkey.com/s.asp?u=881163743177\" TARGET=_BLANK><EM><B>Take survey</EM></B></A></FONT>\n");
 #endif
 	hPutc('\n');
 

@@ -11,7 +11,7 @@
 #include "hgNear.h"
 #include "spDb.h"
 
-static char const rcsid[] = "$Id: go.c,v 1.20 2007/04/28 00:10:50 fanhsu Exp $";
+static char const rcsid[] = "$Id: go.c,v 1.21 2007/05/03 21:31:58 fanhsu Exp $";
 
 static boolean goExists(struct column *col, struct sqlConnection *conn)
 /* This returns true if go database and goaPart table exists. */
@@ -40,7 +40,17 @@ struct hash *hash = newHash(6);
 if (gp->protein != NULL && gp->protein[0] != 0)
     {
     struct sqlConnection *spConn = sqlConnect(UNIPROT_DB_NAME);
-    char *proteinAcc = spFindAcc(spConn, gp->protein);
+    char *proteinAcc;
+    
+    if (kgVersion == KG_III)
+    	{
+    	proteinAcc = spFindAcc(spConn, lookupProtein(conn, gp->name));
+	}
+    else
+    	{
+    	proteinAcc = spFindAcc(spConn, gp->protein);
+        }
+    
     safef(query, sizeof(query), 
 	    "select term.name from goaPart,term where goaPart.%s = '%s' and goaPart.goId = term.acc", col->goaIdColumn, proteinAcc);
     sr = sqlGetResult(col->goConn, query);
@@ -184,7 +194,17 @@ if (searchString != NULL )
     for (gp = list; gp != NULL; gp = next)
 	{
 	next = gp->next;
-        char *proteinAcc = spFindAcc(spConn, gp->protein);
+        char *proteinAcc;
+    
+        if (kgVersion == KG_III)
+    	    {
+    	    proteinAcc = spFindAcc(spConn, lookupProtein(conn, gp->name));
+	    }
+        else
+    	    {
+    	    proteinAcc = spFindAcc(spConn, gp->protein);
+            }
+
         if (proteinAcc && hashLookup(proteinHash, proteinAcc))
              {
              slAddHead(&newList, gp);

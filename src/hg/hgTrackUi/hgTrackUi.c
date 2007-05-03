@@ -30,7 +30,7 @@
 
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.366 2007/04/28 23:59:41 kate Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.367 2007/05/03 00:01:19 kate Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1821,7 +1821,7 @@ char *form = "mainForm";
 
 puts("<TABLE><TR><TD>");
 
-if (consWiggles->next)
+if (consWiggles && consWiggles->next)
     {
     /* check for alternate conservation wiggles -- create checkboxes */
     puts("<P STYLE=\"margin-top:10;\"><B>Conservation:</B>" );
@@ -1870,33 +1870,37 @@ char *currentCodonMode;
 
 puts("\n<P STYLE=><B>Pairwise alignments:</B>&nbsp;");
 
-safef(buttonVar, sizeof buttonVar, "%s", "set_defaults_button");
-cgiMakeHiddenVar(buttonVar, "");
-safef(javascript, sizeof javascript,
-      "document.%s.action = '%s'; document.%s.%s.value='%s'; "
-      "document.%s.submit();",
-      form, cgiScriptName(), form, buttonVar, DEFAULTS_BUTTON_LABEL, form);
-cgiMakeOnClickButton(javascript, DEFAULTS_BUTTON_LABEL);
-button = cgiOptionalString(buttonVar);
-if (isNotEmpty(button))
+char *defaultOffSpecies = trackDbSetting(tdb, "speciesDefaultOff");
+if (defaultOffSpecies)
     {
-    char *words[100];
-    char *setting = trackDbSetting(tdb, "speciesDefaultOff");
-    int wordCt = chopLine(setting, words);
-    /* turn on all species */
-    for (speciesName = speciesList; speciesName  != NULL; 
-                    speciesName = speciesName->next)
+    safef(buttonVar, sizeof buttonVar, "%s", "set_defaults_button");
+    cgiMakeHiddenVar(buttonVar, "");
+    safef(javascript, sizeof javascript,
+          "document.%s.action = '%s'; document.%s.%s.value='%s'; "
+          "document.%s.submit();",
+          form, cgiScriptName(), form, buttonVar, DEFAULTS_BUTTON_LABEL, form);
+    cgiMakeOnClickButton(javascript, DEFAULTS_BUTTON_LABEL);
+    button = cgiOptionalString(buttonVar);
+    if (isNotEmpty(button))
         {
-        safef(option, sizeof(option), "%s.%s", 
-                tdb->tableName, speciesName->name);
-        cartSetBoolean(cart, option, TRUE);
-        }
-    /* turn off those that are default off */
-    int i;
-    for (i = 0; i < wordCt; i++)
-        {
-        safef(option, sizeof(option), "%s.%s", tdb->tableName, words[i]);
-        cartSetBoolean(cart, option, FALSE);
+        char *words[100];
+        //char *setting = trackDbSetting(tdb, "speciesDefaultOff");
+        int wordCt = chopLine(defaultOffSpecies, words);
+        /* turn on all species */
+        for (speciesName = speciesList; speciesName  != NULL; 
+                        speciesName = speciesName->next)
+            {
+            safef(option, sizeof(option), "%s.%s", 
+                    tdb->tableName, speciesName->name);
+            cartSetBoolean(cart, option, TRUE);
+            }
+        /* turn off those that are default off */
+        int i;
+        for (i = 0; i < wordCt; i++)
+            {
+            safef(option, sizeof(option), "%s.%s", tdb->tableName, words[i]);
+            cartSetBoolean(cart, option, FALSE);
+            }
         }
     }
 

@@ -17,7 +17,7 @@
 #include "mafFrames.h"
 #include "phyloTree.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.107 2007/04/28 23:59:40 kate Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.108 2007/05/02 22:26:48 kate Exp $";
 
 #define GAP_ITEM_LABEL  "Gaps"
 
@@ -292,13 +292,16 @@ loadMafsToTrack(track);
 
 /* Add items for conservation wiggles */
 struct track *wigTrack = track->subtracks;
-enum trackVisibility wigVis = (wigTrack->visibility == tvDense ? tvDense : tvFull);
-while (wigTrack !=  NULL)
+if (wigTrack)
     {
-    scoreHeight = wigTotalHeight(wigTrack, wigVis);
-    mi = scoreItem(scoreHeight, wigTrack->shortLabel);
-    slAddHead(&miList, mi);
-    wigTrack = wigTrack->next;
+    enum trackVisibility wigVis = (wigTrack->visibility == tvDense ? tvDense : tvFull);
+    while (wigTrack !=  NULL)
+        {
+        scoreHeight = wigTotalHeight(wigTrack, wigVis);
+        mi = scoreItem(scoreHeight, wigTrack->shortLabel);
+        slAddHead(&miList, mi);
+        wigTrack = wigTrack->next;
+        }
     }
 
 /* Make up item that will show gaps in this organism. */
