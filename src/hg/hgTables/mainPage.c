@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.115 2007/04/12 21:57:30 angie Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.116 2007/05/03 21:48:15 kate Exp $";
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
 /* Sort track by shortLabel. */
@@ -701,7 +701,7 @@ if (isPositional)
     }
 
 /* Correlation line. */
-if (correlateTableOK(curTrack))
+if (correlateTrackTableOK(curTrack, curTable))
     {
     char *table2 = cartUsualString(cart, hgtaCorrelateTable, "none");
     hPrintf("<TR><TD><B>correlation:</B>\n");

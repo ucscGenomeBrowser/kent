@@ -22,7 +22,7 @@
 #include "bedGraph.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: correlate.c,v 1.58 2007/05/02 22:05:21 kate Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.59 2007/05/03 21:48:15 kate Exp $";
 
 #define MAX_POINTS_STR	"300,000,000"
 #define MAX_POINTS	300000000
@@ -166,23 +166,41 @@ jsMakeTrackingRadioButton(hgtaNextCorrelateOp, "op", val, selVal);
 }
 #endif
 
-boolean correlateTableOK(struct trackDb *tdb)
+boolean correlateTrackTableOK(struct trackDb *tdb, char *table)
 /*	is this table OK to correlate with ?	*/
 {
-if (tdb &&
-	(startsWith("bedGraph", tdb->type) ||
-	startsWith("bed5FloatScore",tdb->type) ||
-	startsWith("wig ",tdb->type) ||
-	startsWith("genePred",tdb->type) ||
-	startsWith("psl",tdb->type) ||
-	startsWith("bed ",tdb->type) ||
-	(startsWith("wigMaf ",tdb->type) && 
-                /* has a wiggle */
-                wigMafWiggles(tdb)))
-    )
-    return TRUE;
-//hPrintf("<P>correlateTableOK: %s FALSE</P>\n", tdb->type);
+if (!tdb)
+    return FALSE;
+if (startsWith("bedGraph", tdb->type) ||
+    startsWith("bed5FloatScore",tdb->type) ||
+    startsWith("wig ",tdb->type) ||
+    startsWith("genePred",tdb->type) ||
+    startsWith("psl",tdb->type) ||
+    startsWith("bed ",tdb->type))
+        return TRUE;
+if (startsWith("wigMaf ",tdb->type))
+    {
+    /* can correlate if we've picked a conservation wiggle, otherwise not.
+     * later we can add support for the other table types */
+    if (table == NULL)
+        /* don't care about table */
+        return TRUE;
+    struct consWiggle *wig, *wigs = wigMafWiggles(tdb);
+    if (!wigs)
+        return FALSE;
+    /* check if table is one of the wiggles */
+    for (wig = wigs; wig != NULL; wig = wig->next)
+        if (sameString(table, wig->table))
+            return TRUE;
+    return FALSE;
+    }
 return FALSE;
+}
+
+boolean correlateTrackOK(struct trackDb *tdb)
+/*	is this track OK to correlate with ?	*/
+{
+return correlateTrackTableOK(tdb, NULL);
 }
 
 static struct trackDb *getLimitedTrackList(struct grp **grpList)
@@ -207,7 +225,7 @@ if (restrictedTrackList)
  */
 for (tdb = fullTrackList; tdb != NULL; tdb = tdb->next)
     {
-    if (correlateTableOK(tdb))
+    if (correlateTrackOK(tdb))
 	{
 	struct trackDb *tdbClone;
 	if (!hashLookup(groupsInTrackList,tdb->grp))
@@ -373,14 +391,20 @@ else if (startsWith("wig",tdb->type))
     {
     if (startsWith("wigMaf",tdb->type))
 	{
-        struct consWiggle *wiggles = wigMafWiggles(tdb);
+        struct consWiggle *wig, *wiggles = wigMafWiggles(tdb);
         if (!wiggles)
             /* should have found this earlier (correlateOK) */
             errAbort("No conservation wiggle found for track %s",
                         tdb->tableName);
+        boolean found = FALSE;
+        for (wig = wiggles; wig != NULL; wig = wig->next)
+            if (sameString(curTable, wig->table))
+                found = TRUE;
+        if (!found)
+            errAbort("Conservation wiggle %s not found for track %s",
+                        curTable, tdb->tableName);
 	freeMem(table->actualTable);
-        /* for now, always use first one found */
-	table->actualTable = cloneString(wiggles->table);
+	table->actualTable = cloneString(curTable);
 	}
     table->isWig = TRUE;
     }
@@ -448,13 +472,18 @@ if (!slNameInList(nameList, selTable))
     selTable = nameList->name;
 /* Print out label and drop-down list. */
 hPrintf("<B>table: </B>");
+fprintf(stderr, "   track=%s\n",track->tableName); 
 hPrintf("<SELECT NAME=%s>\n", table);
 for (name = nameList; name != NULL; name = name->next)
     {
     struct trackDb *tdb = NULL;
     tdb = findCompositeTdb(track, name->name);
-    if (correlateTableOK(tdb))
+    fprintf(stderr, "tdb=%s, table=%s\n",tdb->tableName, name->name);
+    if (correlateTrackTableOK(tdb, name->name))
+    //if (correlateTrackTableOK(track, name->name))
+    //if (correlateTrackTableOK(tdb, name->name))
 	{
+        fprintf(stderr, "     can correlate\n");
 	hPrintf("<OPTION VALUE=%s", name->name);
 	if (sameString(selTable, name->name))
 	    hPrintf(" SELECTED");
@@ -715,7 +744,7 @@ struct dataVector *vector;
 int regionSize = region->end - region->start;
 long startTime, endTime;
 
-if (! correlateTableOK(table->actualTdb))
+if (! correlateTrackOK(table->actualTdb))
     internalErr();	/*	this should have been ensured long befor now */
 
 startTime = clock1000();
@@ -2283,7 +2312,7 @@ tableList = NULL;	/*	initialize the list	*/
 /*	We are going to be TRUE here since this selection was limited on
  *	the mainPage to only these types of tables.
  */
-correlateOK1 = correlateTableOK(curTrack);
+correlateOK1 = correlateTrackOK(curTrack);
 
 table2onEntry = cartUsualString(cart, hgtaNextCorrelateTable, "none");
 

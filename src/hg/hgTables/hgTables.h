@@ -344,7 +344,7 @@ boolean anyCorrelation();
 #define hgtaCorrelateMaxLimitCount "hgta_corrMaxLimitCount"
 #define hgtaCorrelateWinSize "hgta_corrWinSize"
 
-boolean correlateTableOK(struct trackDb *tdb);
+boolean correlateTrackTableOK(struct trackDb *tdb, char *table);
 /*	is this table OK to correlate with ?	*/
 
 /* --------- Functions related to composite tracks/subtracks. ------------- */
