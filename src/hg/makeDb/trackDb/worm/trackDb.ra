@@ -194,6 +194,18 @@ type psl protein
 pred hg17.blastKGPep01
 blastRef hg17.blastKGRef01
 
+track blastCe4SG
+shortLabel C. elegans Proteins
+longLabel C. elegans Proteins Mapped by Chained tBLASTn
+group genes
+priority 250.2
+visibility pack
+colorChromDefault off
+url http://www.wormbase.org/db/gene/gene?name=
+type psl protein
+pred ce4.blastSGPep01
+blastRef ce4.blastSGRef01
+
 searchName miRNAPrefix
 searchTable miRNA
 searchMethod prefix
