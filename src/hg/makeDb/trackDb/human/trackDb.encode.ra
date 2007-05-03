@@ -2588,7 +2588,7 @@ dataVersion ENCODE June 2005 Freeze
     color 58,119,40
 
 
-track encodeStanfordChip
+track encodeStanfordChipTrinklein
 compositeTrack on
 shortLabel Stanf ChIP
 longLabel Stanford ChIP/chip (HCT116, Jurkat, K562 cells;  Sp1, Sp3 ChIP)
@@ -2608,42 +2608,42 @@ origAssembly hg16
 dataVersion ENCODE June 2005 Freeze
 
     track encodeStanfordChipHCT116Sp1
-    subTrack encodeStanfordChip
+    subTrack encodeStanfordChipTrinklein
     shortLabel Stan HCT116 Sp1
     longLabel Stanford ChIP/chip (HCT116 cells, Sp1 ChIP)
     priority 1
 
     track encodeStanfordChipHCT116Sp3
-    subTrack encodeStanfordChip
+    subTrack encodeStanfordChipTrinklein
     shortLabel Stan HCT116 Sp3
     longLabel Stanford ChIP/chip (HCT116 cells, Sp3 ChIP)
     priority 2
 
     track encodeStanfordChipJurkatSp1
-    subTrack encodeStanfordChip
+    subTrack encodeStanfordChipTrinklein
     shortLabel Stan Jurkat Sp1
     longLabel Stanford ChIP/chip (Jurkat cells, Sp1 ChIP)
     priority 3
 
     track encodeStanfordChipJurkatSp3
-    subTrack encodeStanfordChip
+    subTrack encodeStanfordChipTrinklein
     shortLabel Stan Jurkat Sp3
     longLabel Stanford ChIP/chip (Jurkat cells, Sp3 ChIP)
     priority 4
 
     track encodeStanfordChipK562Sp1
-    subTrack encodeStanfordChip
+    subTrack encodeStanfordChipTrinklein
     shortLabel Stan K562 Sp1
     longLabel Stanford ChIP/chip (K562 cells, Sp1 ChIP)
     priority 5
 
     track encodeStanfordChipK562Sp3
-    subTrack encodeStanfordChip
+    subTrack encodeStanfordChipTrinklein
     shortLabel Stan K562 Sp3
     longLabel Stanford ChIP/chip (K562 cells, Sp3 ChIP)
     priority 6
 
-track encodeStanfordChipSmoothed
+track encodeStanfordChipSmoothedTrinklein
 compositeTrack on
 shortLabel Stanf ChIP Score
 longLabel Stanford ChIP/chip Smoothed Score
@@ -2663,40 +2663,132 @@ origAssembly hg16
 dataVersion ENCODE June 2005 Freeze
 
     track encodeStanfordChipSmoothedHCT116Sp1
-    subTrack encodeStanfordChipSmoothed
+    subTrack encodeStanfordChipSmoothedTrinklein
     shortLabel Stan Sc HCT116 Sp1
     longLabel Stanford ChIP/chip Smoothed Score (HCT116 cells, Sp1 ChIP)
     priority 1
 
     track encodeStanfordChipSmoothedHCT116Sp3
-    subTrack encodeStanfordChipSmoothed
+    subTrack encodeStanfordChipSmoothedTrinklein
     shortLabel Stan Sc HCT116 Sp3
     longLabel Stanford ChIP/chip Smoothed Score (HCT116 cells, Sp3 ChIP)
     priority 2
 
     track encodeStanfordChipSmoothedJurkatSp1
-    subTrack encodeStanfordChipSmoothed
+    subTrack encodeStanfordChipSmoothedTrinklein
     shortLabel Stan Sc Jurkat Sp1
     longLabel Stanford ChIP/chip Smoothed Score (Jurkat cells, Sp1 ChIP)
     priority 3
 
     track encodeStanfordChipSmoothedJurkatSp3
-    subTrack encodeStanfordChipSmoothed
+    subTrack encodeStanfordChipSmoothedTrinklein
     shortLabel Stan Sc Jurkat Sp3
     longLabel Stanford ChIP/chip Smoothed Score (Jurkat cells, Sp3 ChIP)
     priority 4
 
     track encodeStanfordChipSmoothedK562Sp1
-    subTrack encodeStanfordChipSmoothed
+    subTrack encodeStanfordChipSmoothedTrinklein
     shortLabel Stan Sc K562 Sp1
     longLabel Stanford ChIP/chip Smoothed Score (K562 cells, Sp1 ChIP)
     priority 5
 
     track encodeStanfordChipSmoothedK562Sp3
-    subTrack encodeStanfordChipSmoothed
+    subTrack encodeStanfordChipSmoothedTrinklein
     shortLabel Stan Sc K562 Sp3
     longLabel Stanford ChIP/chip Smoothed Score (K562 cells, Sp3 ChIP)
     priority 6
+
+track encodeStanfordChipJohnson
+compositeTrack on
+shortLabel Stanf ChIP2
+longLabel Stanford ChIP/chip Johnson (GMO6990, HeLa, HepG2, Jurkat, K562 cells; GABP, SRF, TAF, NRST/REST ChIP)
+group encodeChip
+priority 56.0
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type bedGraph 4
+color 120,0,20
+altColor 150,0,25
+maxHeightPixels 128:16:16
+autoScale off
+minLimit 0
+maxLimit 114
+viewLimits 0:10
+origAssembly hg17
+dataVersion Mar 2007
+
+    track encodeStanfordChipGMO6990GABP
+    subTrack encodeStanfordChipJohnson
+    shortLabel Stan GMO6690 GABP
+    longLabel Stanford ChIP/chip (GMO6990 cells, GABP ChIP)
+    priority 1
+
+    track encodeStanfordChipGMO6990SRF
+    subTrack encodeStanfordChipJohnson
+    shortLabel Stan GMO6690 SRF
+    longLabel Stanford ChIP/chip (GMO6990 cells, SRF ChIP)
+    priority 2
+
+    track encodeStanfordChipHepG2GABP
+    subTrack encodeStanfordChipJohnson
+    shortLabel Stan HepG2 GABP
+    longLabel Stanford ChIP/chip (HepG2 cells, GABP ChIP)
+    priority 3
+
+    track encodeStanfordChipHepG2SRF
+    subTrack encodeStanfordChipJohnson
+    shortLabel Stan HepG2 SRF
+    longLabel Stanford ChIP/chip (HepG2 cells, SRF ChIP)
+    priority 4
+
+    track encodeStanfordChipHeLaGABP
+    subTrack encodeStanfordChipJohnson
+    shortLabel Stan HeLa GABP
+    longLabel Stanford ChIP/chip (HeLa cells, GABP ChIP)
+    priority 5
+
+    track encodeStanfordChipHeLaSRF
+    subTrack encodeStanfordChipJohnson
+    shortLabel Stan HeLa SRF
+    longLabel Stanford ChIP/chip (HeLa cells, SRF ChIP)
+    priority 6
+
+    track encodeStanfordChipHeLaTAF
+    subTrack encodeStanfordChipJohnson
+    shortLabel Stan HeLa TAF
+    longLabel Stanford ChIP/chip (HeLa cells, TAF ChIP)
+    priority 7
+
+    track encodeStanfordChipK562GABP
+    subTrack encodeStanfordChipJohnson
+    shortLabel Stan K562 GABP
+    longLabel Stanford ChIP/chip (K562 cells, GABP ChIP)
+    priority 8
+
+    track encodeStanfordChipK562SRF
+    subTrack encodeStanfordChipJohnson
+    shortLabel Stan K562 SRF
+    longLabel Stanford ChIP/chip (K562 cells, SRF ChIP)
+    priority 9
+
+    track encodeStanfordChipK562TAF
+    subTrack encodeStanfordChipJohnson
+    shortLabel Stan K562 TAF
+    longLabel Stanford ChIP/chip (K562 cells, TAF ChIP)
+    priority 10
+
+    track encodeStanfordChipNRSFMono
+    subTrack encodeStanfordChipJohnson
+    shortLabel Stan Jurkat NRSF/REST/Mono 
+    longLabel Stanford ChIP/chip (Jurkat cells, NRSF/REST/Mono ChIP)
+    priority 11
+
+    track encodeStanfordChipNRSFUpstate
+    subTrack encodeStanfordChipJohnson
+    shortLabel Stan Jurkat NRSF/REST/Upstate 
+    longLabel Stanford ChIP/chip (Jurkat cells, NRSF/REST/Upstate ChIP)
+    priority 12
+
 
 track encodeUtexChip
 compositeTrack on
