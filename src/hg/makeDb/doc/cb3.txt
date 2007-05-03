@@ -3,7 +3,7 @@
 # Caenorhabditis briggsae
 #	Washington University School of Medicine GSC and Sanger Institute
 #
-#  $Id: cb3.txt,v 1.10 2007/04/30 23:20:12 hiram Exp $
+#  $Id: cb3.txt,v 1.11 2007/05/03 23:17:34 hiram Exp $
 
 ###########################################################################
 ## Download sequence (DONE - 2007-01-22 - Hiram)
@@ -676,11 +676,16 @@ chainOne $(path1)
 
     # check coverage
     featureBits cb3 blastCe4SG 
-    18218293 bases of 108433446 (16.801%) in intersection
-#	3424422 bases of 100281244 (3.415%) in intersection
+    #	18218293 bases of 108433446 (16.801%) in intersection
+    featureBits caeRem2 blastCe4SG 
+    #	19763359 bases of 146898439 (13.454%) in intersection
+    featureBits caePb1 blastCe4SG
+    #	22988044 bases of 175247318 (13.117%) in intersection
+    featureBits priPac1 blastCe4SG 
+    #	5617285 bases of 145948246 (3.849%) in intersection
 
     featureBits ce4 sangerGene
-#	27906202 bases of 100281244 (27.828%) in intersection
+    #	27906202 bases of 100281244 (27.828%) in intersection
 
     ssh kkstore02
     rm -rf /cluster/data/cb3/bed/tblastn.ce4SG/blastOut

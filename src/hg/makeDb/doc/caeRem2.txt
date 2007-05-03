@@ -4,7 +4,7 @@
 #	From Wash U GSC
 #	http://genome.wustl.edu/genome.cgi?GENOME=Caenorhabditis+remanei
 
-#  $Id: caeRem2.txt,v 1.10 2007/05/02 17:13:16 hiram Exp $
+#  $Id: caeRem2.txt,v 1.11 2007/05/03 23:17:34 hiram Exp $
 
 #########################################################################
 # DOWNLOAD SEQUENCE (DONE - 2007-03-16 - Hiram)
@@ -644,6 +644,10 @@ chainOne $(path1)
     # check coverage
     featureBits caeRem2 blastCe4SG 
     #	19763359 bases of 146898439 (13.454%) in intersection
+    featureBits caePb1 blastCe4SG
+    #	22988044 bases of 175247318 (13.117%) in intersection
+    featureBits priPac1 blastCe4SG 
+    #	5617285 bases of 145948246 (3.849%) in intersection
     featureBits cb3 blastCe4SG
     #	18218293 bases of 108433446 (16.801%) in intersection
     featureBits ce4 sangerGene
