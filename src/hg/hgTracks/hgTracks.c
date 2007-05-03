@@ -108,7 +108,7 @@
 #include "hapmapTrack.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1331 2007/05/03 19:19:45 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1332 2007/05/03 21:07:44 donnak Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -13442,7 +13442,7 @@ if (!hideControls)
     hPrintf("</TD><TD COLSPAN=15>");
     hWrites("Click on a feature for details. "
 	  "Click on base position to zoom in around cursor. "
-	  "Click on left mini-buttons for track-specific options." );
+	  "Click gray/blue bars on left for track options and descriptions." );
     hPrintf("</TD><TD COLSPAN=6 ALIGN=CENTER NOWRAP>");
     hPrintf("move end<BR>");
     hButton("hgt.dinkRL", " < ");
