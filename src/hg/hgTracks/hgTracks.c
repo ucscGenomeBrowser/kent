@@ -108,7 +108,7 @@
 #include "hapmapTrack.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1330 2007/05/03 00:17:16 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1331 2007/05/03 19:19:45 angie Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -999,7 +999,8 @@ slFreeList(&exonList);
 }
 
 void linkedFeaturesLabelNextPrevItem(struct track *tg, boolean next)
-/* Default next-gene function for linkedFeatures.  Changes winStart/winEnd. */
+/* Default next-gene function for linkedFeatures.  Changes winStart/winEnd
+ * and updates position in cart. */
 {
 int start = winStart;
 int end = winEnd;
@@ -1075,6 +1076,7 @@ sizeWanted = winEnd - winStart;
 bufferToEdge = (int)(0.05 * (float)sizeWanted);
 if (items)
     {
+    char pos[256];
     if (next)
 	{
 	slSort(&items, bedCmp);
@@ -1119,6 +1121,8 @@ if (items)
     if (winStart < 0)
 	winStart = 0;
     bedFreeList(&items);
+    safef(pos, sizeof(pos), "%s:%d-%d", chromName, winStart+1, winEnd);
+    cartSetString(cart, "position", cloneString(pos));
     }
 else 
     warn("Sorry, no item found");
