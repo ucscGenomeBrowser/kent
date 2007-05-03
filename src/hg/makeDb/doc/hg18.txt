@@ -15377,13 +15377,13 @@ more /cluster/store12/lowec/survey/repeatIntersections/speciesOk/makeACell.csh
 #
 # Now you need to intersect with current repeat masker annotation.
 # at the most basic level this is just a featureBits with human
-# repeat annotation, but othologous bases in other species often
+# repeat annotation, but orthologous bases in other species often
 # have different repeatmasker annotation.  For this reason we also
 # map all our elements to a species through
 # syntenic nets, intersect with repeatMasker in that species, 
 # and then map those hits back to the original species.  This is a
 # liftover, into a featuresBits, and into another liftover.
-# Fucntional elements map much nicer than repeats, so that is why
+# Functional elements map much nicer than repeats, so that is why
 # we don't just map another species repeat annotation
 # to human and do a featureBits in human.  The above scripts
 # also keep different repeat families separate, so that we
