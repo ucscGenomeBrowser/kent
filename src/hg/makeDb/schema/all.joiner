@@ -2004,6 +2004,7 @@ identifier blastHg18KGPep04Id
      strPur1.blastHg18KG.qName
      bosTau2.blastHg18KG.qName
      oryLat1.blastHg18KG.qName
+     ornAna1.blastHg18KG.qName
 
 identifier blastHg18KGRef04Id 
 "hg18 ref 04"
@@ -2020,6 +2021,7 @@ identifier blastHg18KGRef04Id
      strPur1.blastHg18KG.qName
      bosTau2.blastHg18KG.qName
      oryLat1.blastHg18KG.qName
+     ornAna1.blastHg18KG.qName
 
 identifier blastHg17KGRef01SwissId 
 "hg17 proteins swiss 01"
