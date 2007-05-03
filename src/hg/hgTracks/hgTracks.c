@@ -108,7 +108,7 @@
 #include "hapmapTrack.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1329 2007/05/02 01:20:06 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1330 2007/05/03 00:17:16 kate Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -8969,14 +8969,7 @@ if (isWithCenterLabels(track))
     y += fontHeight;
 if (track->mapsSelf)
     {
-    /* Wiggle track's ->height is actually one less than what it returns from 
-     * totalHeight()... I think the least disruptive way to account for this
-     * (and not touch Ryan Weber's Sample stuff) is to just correct here if 
-     * we see wiggle or bedGraph: */
-    if (isWig)
-        return y+track->height + 1;
-    else
-        return y+track->height;
+    return y+track->height;
     }
 if (track->subType == lfSubSample && track->items == NULL)
      y += track->lineHeight;
