@@ -20,7 +20,7 @@
 #include "hgNear.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.166 2007/05/03 22:43:37 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.167 2007/05/03 23:19:29 fanhsu Exp $";
 
 char *excludeVars[] = { "submit", "Submit", idPosVarName, NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -1676,7 +1676,7 @@ char buf[64];
 if (kgVersion == KG_III)
     {
     safef(query, sizeof(query), 
-	"select displayID from kgXref where kgId='%s'", mrnaName);
+	"select spDisplayID from kgXref where kgId='%s'", mrnaName);
     }
 else
     {
