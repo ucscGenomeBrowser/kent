@@ -458,7 +458,9 @@ if (ord->protKey)
     protHash = newHash(17);
     for (gp = *pGeneList; gp != NULL; gp = gp->next)
 	{
-	char *id = (ord->protKey ? gp->protein : gp->name);
+	char *id = (ord->protKey 
+	    ? (kgVersion == KG_III ? lookupProtein(conn, gp->name) : gp->protein)
+	    : gp->name);
 	hashAdd(protHash, id, gp);
 	}
 
