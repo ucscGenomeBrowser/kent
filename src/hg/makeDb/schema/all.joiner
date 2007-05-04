@@ -2001,6 +2001,7 @@ identifier blastHg18KGPep04Id
      felCat3.blastHg18KG.qName
      dm2.blastHg18KG.qName
      fr2.blastHg18KG.qName
+     mm8.blastHg18KG.qName
      strPur1.blastHg18KG.qName
      bosTau2.blastHg18KG.qName
      oryLat1.blastHg18KG.qName
@@ -2020,6 +2021,7 @@ identifier blastHg18KGRef04Id
      felCat3.blastHg18KG.qName
      dm2.blastHg18KG.qName
      fr2.blastHg18KG.qName
+     mm8.blastHg18KG.qName
      strPur1.blastHg18KG.qName
      bosTau2.blastHg18KG.qName
      oryLat1.blastHg18KG.qName
