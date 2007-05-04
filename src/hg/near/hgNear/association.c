@@ -160,7 +160,9 @@ sqlFreeResult(&sr);
 /* Look for matching associations and put them on newList. */
 for (gp = list; gp != NULL; gp = gp->next)
     {
-    char *key = (col->protKey ? gp->protein : gp->name);
+    char *key = (col->protKey 
+	? (kgVersion == KG_III ? lookupProtein(conn, gp->name) : gp->protein)
+	: gp->name);
     struct assocList *al = hashFindVal(ag->listHash, key);
     if (al != NULL)
 	{
@@ -266,7 +268,9 @@ char **row;
 boolean gotOne = FALSE;
 struct dyString *dy = newDyString(512);
 char *result = NULL;
-char *key = (col->protKey ? gp->protein : gp->name);
+char *key = (col->protKey 
+    ? (kgVersion == KG_III ? lookupProtein(conn, gp->name) : gp->protein)
+    : gp->name);
 struct hash *uniqHash = NULL;
 
 if (col->weedDupes) uniqHash = newHash(8);
@@ -308,7 +312,9 @@ char query[1024];
 struct sqlResult *sr;
 char **row;
 boolean gotOne = FALSE;
-char *key = (col->protKey ? gp->protein : gp->name);
+char *key = (col->protKey 
+    ? (kgVersion == KG_III ? lookupProtein(conn, gp->name) : gp->protein)
+    : gp->name);
 struct hash *uniqHash = NULL;
 
 if (col->weedDupes) uniqHash = newHash(8);
