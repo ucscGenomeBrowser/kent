@@ -83,7 +83,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: lowelab.c,v 1.4 2007/05/04 06:22:24 pchan Exp $";
+static char const rcsid[] = "$Id: lowelab.c,v 1.5 2007/05/04 21:21:18 pchan Exp $";
 
 extern char *uniprotFormat;
 
@@ -1575,7 +1575,7 @@ struct minGeneInfo* getGbProtCodeInfo(struct sqlConnection *conn, char* dbName, 
     return ginfo;
 }
 
-void printQueryGeneInfo(struct sqlConnection *conn, struct bed *blastpTrack, char *queryName)
+void printQueryGeneInfo(struct sqlConnection *conn, struct bed *blastpTrack, char *queryName, unsigned int *querySeqLength)
 /* Get and print blastp query gene info */
 {
     char query[512];
@@ -1638,6 +1638,8 @@ void printQueryGeneInfo(struct sqlConnection *conn, struct bed *blastpTrack, cha
                 printf("Query gene not found for %s at %s:%u-%u\n", blastpTrack->name, blastpTrack->chrom, blastpTrack->chromStart, blastpTrack->chromEnd);
             else
             {
+                *querySeqLength = queryEnd - queryStart;
+                
                 /* Print query gene info */
                 printf("<B>Gene: </B>%s<BR>\n", queryName);
                 
@@ -1727,7 +1729,7 @@ struct blastTab* loadBlastpHits(struct sqlConnection *conn, char* queryName)
     return list;
 }
 
-void printBlastpResult(struct sqlConnection *conn, struct blastTab *blastpHitsList, char* sectionClade)
+void printBlastpResult(struct sqlConnection *conn, struct blastTab *blastpHitsList, char* sectionClade, unsigned int querySeqLength)
 /* Print Blastp result of given clade */
 {
     char query[512];
@@ -1743,6 +1745,10 @@ void printBlastpResult(struct sqlConnection *conn, struct blastTab *blastpHitsLi
     unsigned int hitEnd = 0;
     char **buffer = NULL;
 
+    int tStart = cartInt(cart, "o");
+    int tEnd = cartInt(cart, "t");
+    char *tChrom = cartString(cart, "c");
+
     printf("<br><a name=\"%s\"><b>BLASTP Alignment Hits to %sl Proteins</b></a><br>\n", sectionClade, sectionClade);
  
     /* Print table */
@@ -1756,15 +1762,15 @@ void printBlastpResult(struct sqlConnection *conn, struct blastTab *blastpHitsLi
     printf("<td width=\"18%%\"><b>Organism</b></td>\n");
     printf("<td width=\"7%%\"><b>Gene</b></td>\n");
     printf("<td><b>Product</b></td>\n");
-    printf("<td width=\"6%%\"><b>Alignment Length</b></td>\n");
+    printf("<td width=\"5%%\"><b>Percentage of Full Length</b></td>\n"); 
     printf("<td width=\"8%%\"><b>Query Position</b></td>\n");
-    printf("<td width=\"8%%\"><b>Target Position</b></td>\n");
-    printf("<td width=\"5%%\"><b>Mismatch</b></td>\n");
-    printf("<td width=\"5%%\"><b>Gap</b></td>\n");
     printf("<td width=\"5%%\"><b>Identity (%%)</b></td>\n");
     printf("<td width=\"5%%\"><b>E-value</b></td>\n");
     printf("<td width=\"5%%\"><b>Log of E-value</b></td>\n");
     printf("<td width=\"5%%\"><b>Bit Score</b></td>\n");
+    printf("<td width=\"6%%\"><b>Alignment Length</b></td>\n");
+    printf("<td width=\"5%%\"><b>Mismatch</b></td>\n");
+    printf("<td width=\"5%%\"><b>Gap</b></td>\n");
     printf("</tr>\n");
     
     blastpHits = blastpHitsList;
@@ -1779,7 +1785,7 @@ void printBlastpResult(struct sqlConnection *conn, struct blastTab *blastpHitsLi
         {
             printf("<tr style=\"vertical-align: top;\">\n");
            
-            printf("<td><i>%s</i></td>\n", genome);
+            printf("<td><a name=\"%s:%s:%u-%u\"><i>%s</i></td>\n", blastpTarget[1], tChrom, tStart, tEnd, genome);
             
             if (hTableExists(refSeq))
             {
@@ -1806,15 +1812,15 @@ void printBlastpResult(struct sqlConnection *conn, struct blastTab *blastpHitsLi
             else
                 printf("<td>%s</td>\n", "N/A");                
             
-            printf("<td style=\"text-align: right;\">%u</td>\n", blastpHits->aliLength);
+            printf("<td style=\"text-align: center;\">%0.2f</td>\n", ((double) (blastpHits->qEnd - blastpHits->qStart) / ((double) querySeqLength / 3.0f)) * 100.0f);
             printf("<td style=\"text-align: center;\">%u - %u</td>\n", blastpHits->qStart + 1, blastpHits->qEnd);
-            printf("<td style=\"text-align: center;\">%u - %u</td>\n", blastpHits->tStart + 1, blastpHits->tEnd);
-            printf("<td style=\"text-align: right;\">%u</td>\n", blastpHits->mismatch);
-            printf("<td style=\"text-align: right;\">%u</td>\n", blastpHits->gapOpen);
             printf("<td style=\"text-align: right;\">%0.2f</td>\n", blastpHits->identity);
             printf("<td style=\"text-align: right;\">%0.0e</td>\n", blastpHits->eValue);
             printf("<td style=\"text-align: right;\">e%0.0f</td>\n", (blastpHits->eValue == 0)? 0 : log(blastpHits->eValue) / log(10));
             printf("<td style=\"text-align: right;\">%0.1f</td>\n", blastpHits->bitScore);
+            printf("<td style=\"text-align: right;\">%u</td>\n", blastpHits->aliLength);
+            printf("<td style=\"text-align: right;\">%u</td>\n", blastpHits->mismatch);
+            printf("<td style=\"text-align: right;\">%u</td>\n", blastpHits->gapOpen);
     
             printf("</tr>\n");
         }
@@ -1833,6 +1839,7 @@ void doBlastP(struct trackDb *tdb, char *targetName)
 /* Handle the BlastP Archaea and BlastP Bacteria tracks. */
 {
     char queryName[50];
+    unsigned int querySeqLength = 0;
     struct sqlConnection *conn = hAllocConn();
     struct bed *blastpTrack;
     struct blastTab *blastpHitsList;
@@ -1844,7 +1851,7 @@ void doBlastP(struct trackDb *tdb, char *targetName)
     cartWebStart(cart, "%s", "BlastP Alignment Hits");
     
     blastpTrack = getBlastpTrackRecord(conn, tdb, targetName);
-    printQueryGeneInfo(conn, blastpTrack, queryName);
+    printQueryGeneInfo(conn, blastpTrack, queryName, &querySeqLength);
 
     blastpHitsList = loadBlastpHits(conn, queryName);
     
@@ -1861,13 +1868,13 @@ void doBlastP(struct trackDb *tdb, char *targetName)
     }
     printf("<br>\n");
     
-    printBlastpResult(conn, blastpHitsList, clade);
+    printBlastpResult(conn, blastpHitsList, clade, querySeqLength);
     
     thisClade = cladeList;
     while (thisClade != NULL)
     {
         if (differentWord(thisClade->name, clade))
-            printBlastpResult(conn, blastpHitsList, thisClade->name);
+            printBlastpResult(conn, blastpHitsList, thisClade->name, querySeqLength);
         thisClade = thisClade->next;
     }
 
