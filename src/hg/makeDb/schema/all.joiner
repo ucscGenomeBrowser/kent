@@ -1992,7 +1992,7 @@ identifier blastHg18KGPep04Id
 "hg18 peptides 04"
      hg18.blastKGPep04.name
      hg18.blastKGRef04.acc full
-     hg18.knownGene.name  minCheck=0.95
+     hg18.knownGeneOld2.name  minCheck=0.95
      monDom4.blastHg18KG.qName
      galGal3.blastHg18KG.qName
      xenTro2.blastHg18KG.qName
@@ -2015,7 +2015,7 @@ identifier blastHg18KGPep04Id
 identifier blastHg18KGRef04Id 
 "hg18 ref 04"
      hg18.blastKGRef04.acc
-     hg18.knownGene.name  minCheck=0.95
+     hg18.knownGeneOld2.name  minCheck=0.95
      monDom4.blastHg18KG.qName
      galGal3.blastHg18KG.qName
      xenTro2.blastHg18KG.qName
