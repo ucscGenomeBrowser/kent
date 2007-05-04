@@ -205,7 +205,7 @@
 #include "geneCheckDetails.h"
 #include "kg1ToKg2.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1282 2007/05/02 21:35:57 galt Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1283 2007/05/04 03:24:58 galt Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -4501,16 +4501,23 @@ for (same = 1; same >= 0; same -= 1)
 printf("</TT></PRE>");
 
 psl = pslList;
-if (pslTrimToTargetRange(psl, winStart, winEnd) != NULL 
-    && !startsWith("xeno", typeName)
-    && !startsWith("user", typeName))
+for (psl = pslList; psl != NULL; psl = psl->next)
     {
-    safef(otherString, sizeof(otherString), "%d&aliTrack=%s",
-	  psl->tStart, typeName);
-    hgcAnchorSomewhere("htcCdnaAliInWindow", cgiEncode(psl->qName),
-		       otherString, psl->tName);
-    printf("<BR>View details of parts of alignment within browser window</A>.<BR>\n");
+    if ( pslTrimToTargetRange(psl, winStart, winEnd) != NULL 
+	&& 
+	!startsWith("xeno", typeName)
+	&& !(startsWith("user", typeName) && pslIsProtein(psl))
+	&& psl->tStart == startFirst
+	)
+	{
+	safef(otherString, sizeof(otherString), "%d&aliTrack=%s",
+	      psl->tStart, typeName);
+	hgcAnchorSomewhere("htcCdnaAliInWindow", cgiEncode(psl->qName),
+			   otherString, psl->tName);
+	printf("<BR>View details of parts of alignment within browser window</A>.<BR>\n");
+	}
     }
+
 }
 
 struct psl *getAlignments(struct sqlConnection *conn, char *table, char *acc)
@@ -5685,38 +5692,88 @@ if (sqlTableExists(conn, "gbCdnaInfo"))
     sqlFreeResult(&sr);
     }
 
-/* Look up alignments in database */
-hFindSplitTable(seqName, track, table, &hasBin);
-safef(query, sizeof(query),
-      "select * from %s where qName = '%s' and tStart=%d",
-      table, acc, start);
-sr = sqlGetResult(conn, query);
-if ((row = sqlNextRow(sr)) == NULL)
-    errAbort("Couldn't find alignment for %s at %d", acc, start);
-wholePsl = pslLoad(row+hasBin);
-sqlFreeResult(&sr);
+if (startsWith("user", track))
+    {
+    char *pslName, *faName, *qName;
+    struct lineFile *lf;
+    bioSeq *oSeqList = NULL, *oSeq = NULL;
+    struct psl *psl;
+    int start;
+    enum gfType tt, qt;
+    boolean isProt;
+    char *ss = cartOptionalString(cart, "ss");
 
-/* get bz rna snapshot for blastz alignments */
-if (sameString("mrnaBlastz", track) || sameString("pseudoMrna", track))
-    {
-    struct sqlConnection *conn = hAllocConn();
-    unsigned retId = 0;
-    char *gbdate = NULL;
-    safef(accTmp, sizeof(accTmp),"bz-%s",acc);
-    if (hRnaSeqAndIdx(accTmp, &rnaSeq, &retId, gbdate, conn) == -1)
-        rnaSeq = hRnaSeq(acc);
-    hFreeConn(&conn);
-    }
-else if (sameString("HInvGeneMrna", track))
-    {
-    /* get RNA accession for the gene id in the alignment */
-    safef(query, sizeof(query), "select mrnaAcc from HInv where geneId='%s'",
-	  acc);
-    rnaSeq = hRnaSeq(sqlQuickString(conn, query));
+    if ((ss != NULL) && !ssFilesExist(ss))
+	{
+	ss = NULL;
+	cartRemove(cart, "ss");
+	errAbort("hgBlat temporary files not found");
+	}
+
+    start = cartInt(cart, "o");
+    qName = acc;
+    parseSs(ss, &pslName, &faName, NULL);
+    pslxFileOpen(pslName, &qt, &tt, &lf);
+    isProt = (qt == gftProt);
+    if (isProt)
+	errAbort("hgBlat protein alignments not supported for htcCdnaAliInWindow");
+    while ((psl = pslNext(lf)) != NULL)
+	{
+	if (sameString(psl->tName, seqName) 
+	 && sameString(psl->qName, qName)
+	 && psl->tStart == start 
+	    )
+	    break;
+	pslFree(&psl);
+	}
+    lineFileClose(&lf);
+    if (psl == NULL)
+	errAbort("Couldn't find alignment at %s:%d", seqName, start);
+    oSeqList = faReadAllSeq(faName, !isProt);
+    for (oSeq = oSeqList; oSeq != NULL; oSeq = oSeq->next)
+	{
+	if (sameString(oSeq->name, qName))
+	    break;
+	}
+    if (oSeq == NULL)  
+	errAbort("%s is in %s but not in %s. Internal error.", qName, pslName, faName);
+    wholePsl = psl;
+    rnaSeq = oSeq;
     }
 else
-    rnaSeq = hRnaSeq(acc);
+    {
+    /* Look up alignments in database */
+    hFindSplitTable(seqName, track, table, &hasBin);
+    safef(query, sizeof(query),
+	  "select * from %s where qName = '%s' and tStart=%d",
+	  table, acc, start);
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) == NULL)
+	errAbort("Couldn't find alignment for %s at %d", acc, start);
+    wholePsl = pslLoad(row+hasBin);
+    sqlFreeResult(&sr);
 
+    /* get bz rna snapshot for blastz alignments */
+    if (sameString("mrnaBlastz", track) || sameString("pseudoMrna", track))
+	{
+	struct sqlConnection *conn = hAllocConn();
+	unsigned retId = 0;
+	char *gbdate = NULL;
+	safef(accTmp, sizeof(accTmp),"bz-%s",acc);
+	if (hRnaSeqAndIdx(accTmp, &rnaSeq, &retId, gbdate, conn) == -1)
+	    rnaSeq = hRnaSeq(acc);
+	hFreeConn(&conn);
+	}
+    else if (sameString("HInvGeneMrna", track))
+	{
+	/* get RNA accession for the gene id in the alignment */
+	safef(query, sizeof(query), "select mrnaAcc from HInv where geneId='%s'",
+	      acc);
+	rnaSeq = hRnaSeq(sqlQuickString(conn, query));
+	}
+    else
+	rnaSeq = hRnaSeq(acc);
+    }
 /* Get partial psl for part of alignment in browser window: */
 if (wholePsl->tStart >= winStart && wholePsl->tEnd <= winEnd)
     partPsl = wholePsl;
@@ -5725,8 +5782,6 @@ else
 
 if (startsWith("xeno", track))
     errAbort("htcCdnaAliInWindow does not support translated alignments.");
-else if (startsWith("user", track))
-    errAbort("htcCdnaAliInWindow does not support hgBlat alignments.");
 else
     showSomePartialDnaAlignment(partPsl, wholePsl, rnaSeq,
 				NULL, cdsStart, cdsEnd);
