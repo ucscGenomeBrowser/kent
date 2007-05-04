@@ -659,6 +659,10 @@ cat > doLoad.csh << 'EOF'
 # Affy's mapping files (hartera). Update is add missing data is only for the 
 # Mid, Late and Pan-S subtracks of the UVa DNA Rep Seg track. The Early 
 # subtrack does not have data in this region. (DONE, hartera, 2007-04-16)
+
+# New Origins data, by new method (bubble trapping) submitted 2007-05-04
+# by Chris Taylor.  2 datasets (GM and HeLa cells) on Affy ENCODE arrays.
+
     cd /cluster/data/encode/UVa
     mkdir -p 2005-08-30
     cd 2005-08-30
@@ -760,6 +764,18 @@ cat > doLoad.csh << 'EOF'
         echo $d
         hgLoadBed -noBin hg17 $d $d.bed
     end
+
+# New Origins data, by new method (bubble trapping) submitted 2007-05-04
+# by Chris Taylor.  2 datasets (GM and HeLa cells) on Affy ENCODE arrays.
+    cd /cluster/data/encode/Uva
+    mkdir -p 2007-05-04/lab
+    cd 2007-05-04/lab
+    cp /var/ftp/encode/* .
+#-rw-r--r--  1 kate protein  5710 May  3 23:03 Ori-Bubble-HeLa.bed
+#-rw-r--r--  1 kate protein  1880 May  3 23:01 Ori-Bubbledescription.txt
+#-rw-r--r--  1 kate protein 18379 May  3 23:02 Ori-NS-GM.bed
+#-rw-r--r--  1 kate protein 10524 May  3 23:02 Ori-NS-HeLa.bed
+#-rw-r--r--  1 kate protein  2127 May  3 23:02 Ori-NSdescription.txt
      
 ##########################################################################
 # Indels from Jim Mullikin
