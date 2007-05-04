@@ -83,7 +83,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: lowelab.c,v 1.3 2007/04/21 04:49:38 pchan Exp $";
+static char const rcsid[] = "$Id: lowelab.c,v 1.4 2007/05/04 06:22:24 pchan Exp $";
 
 extern char *uniprotFormat;
 
@@ -847,8 +847,6 @@ while ((row = sqlNextRow(sr)) != NULL)
 
 }
 
-
-
 void doEasyGenes(struct trackDb *tdb, char *egName)
 {
 char *track = tdb->tableName;
@@ -1488,6 +1486,397 @@ void doJgiGene(struct trackDb *tdb, char *jgiName)
   jgiGeneFree(&jgi);
 }
 
+int parseDelimitedString(char *inString, char delimiter, char *outString[], int outSize)
+{
+    int arrayCount = 0;
+    int charCount = 0;
+    int start = 0;
+    char *out = NULL;
+    
+    for (charCount = 0; charCount < strlen(inString); charCount++)
+    {
+        if (inString[charCount] == delimiter)
+        {
+            if (arrayCount < outSize)
+            {
+                out = malloc(sizeof(char) * (charCount - start + 1));
+                memcpy(out, inString + start, sizeof(char) * (charCount - start));
+                out[charCount - start] = '\0';
+                outString[arrayCount++] = out;               
+                start = charCount + 1;
+            }
+        }
+    }
+    if (arrayCount < outSize)
+    {
+        out = malloc(sizeof(char) * (charCount - start + 1));
+        memcpy(out, inString + start, sizeof(char) * (charCount - start));
+        out[charCount - start] = '\0';
+        outString[arrayCount++] = out;               
+    }
+    
+    return arrayCount;
+}
+
+struct bed * getBlastpTrackRecord(struct sqlConnection *conn, struct trackDb *tdb, char *targetName)
+/* Get blastp track record clicked by user*/
+{
+    char *track = tdb->tableName;
+    struct bed *blastpTrack = NULL;
+    char *dupe, *words[16];
+    int wordCount;
+    int bedSize = 0;
+    char query[512];
+    struct sqlResult *sr;
+    char **row;
+    int rowOffset;
+   
+    int start = cartInt(cart, "o");
+    int end = cartInt(cart, "t");
+    char *chrom = cartString(cart, "c");
+
+    dupe = cloneString(tdb->type);
+    wordCount = chopLine(dupe, words);
+    if (wordCount > 1)
+        bedSize = atoi(words[1]);
+    if (bedSize < 3) bedSize = 3;
+    
+    rowOffset = hOffsetPastBin(seqName, track);
+    sprintf(query, "select distinct * from %s where name = '%s' and chrom = '%s' and chromStart = %d and chromEnd = %d",
+            track, targetName, chrom, start, end);
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) != NULL)
+        blastpTrack = bedLoadN(row+rowOffset, bedSize);
+
+    freez(&dupe);
+    sqlFreeResult(&sr);
+    
+    return blastpTrack;
+}
+
+struct minGeneInfo* getGbProtCodeInfo(struct sqlConnection *conn, char* dbName, char *geneName)
+/* Get refseq protein annotation by given gene name in a given database */
+{
+    char query[512];
+    struct sqlResult *sr;
+    char **row;
+    struct minGeneInfo* ginfo = NULL;
+    char gbProtCodeXra[] = "gbProtCodeXra";
+    
+    if (hTableExists(gbProtCodeXra))
+    {
+        sprintf(query, "select * from %s.%s where name = '%s'", dbName, gbProtCodeXra, geneName);
+        sr = sqlGetResult(conn, query);
+        if ((row = sqlNextRow(sr)) != NULL) 
+            ginfo = minGeneInfoLoad(row);
+    }
+    
+    sqlFreeResult(&sr);
+    return ginfo;
+}
+
+void printQueryGeneInfo(struct sqlConnection *conn, struct bed *blastpTrack, char *queryName)
+/* Get and print blastp query gene info */
+{
+    char query[512];
+    struct sqlResult *srRefSeq;
+    char **row;
+    int geneCount;
+    char **buffer = NULL;
+    char *targetGeneName[2];
+    struct minGeneInfo* ginfo;
+    
+    char refSeq[] = "refSeq";
+    char blastpHits[] = "blastpHits";
+    
+    unsigned int queryStart = 0;
+    unsigned int queryEnd = 0;
+    
+    parseDelimitedString(blastpTrack->name, ':', targetGeneName, 2); 
+        
+    if (hTableExists(refSeq) && hTableExists(blastpHits))
+    {
+        /* Get query gene from refSeq */
+        sprintf(query, "select count(*) from %s where chrom = '%s' and strand = '%s' and cdsStart <= %u and cdsEnd >= %u",
+                refSeq, blastpTrack->chrom, blastpTrack->strand, blastpTrack->chromStart, blastpTrack->chromEnd);
+        srRefSeq = sqlGetResult(conn, query);
+        if ((row = sqlNextRow(srRefSeq)) != NULL)
+        {
+            geneCount = atoi(row[0]);
+            sqlFreeResult(&srRefSeq);
+            
+            if (geneCount == 1)
+            {
+                sprintf(query, "select name, cdsStart, cdsEnd from %s where chrom = '%s' and strand = '%s' and cdsStart <= %u and cdsEnd >= %u",
+                        refSeq, blastpTrack->chrom, blastpTrack->strand, blastpTrack->chromStart, blastpTrack->chromEnd);
+                srRefSeq = sqlGetResult(conn, query);
+                if ((row = sqlNextRow(srRefSeq)) != NULL)
+                {
+                    strcpy(queryName, row[0]);
+                    queryStart = strtoul(row[1], buffer, 10);
+                    queryEnd = strtoul(row[2], buffer, 10);
+                }
+                sqlFreeResult(&srRefSeq);
+            }
+            else
+            {
+                /* Check blastpHits if more than 1 query gene is found within the region */
+                sprintf(query, "select a.name, a.cdsStart, a.cdsEnd from %s a, %s b where a.chrom = '%s' and a.strand = '%s' and a.cdsStart <= %u and a.cdsEnd >= %u and a.name = b.query and b.target like '%%%s'",
+                        refSeq, blastpHits,
+                        blastpTrack->chrom, blastpTrack->strand, blastpTrack->chromStart, blastpTrack->chromEnd, targetGeneName[0]);
+                srRefSeq = sqlGetResult(conn, query);
+                if ((row = sqlNextRow(srRefSeq)) != NULL)
+                {
+                    strcpy(queryName, row[0]);
+                    queryStart = strtoul(row[1], buffer, 10);
+                    queryEnd = strtoul(row[2], buffer, 10);
+                }
+                sqlFreeResult(&srRefSeq);
+            }
+            
+            if ((queryStart == 0) && (queryEnd == 0))
+                printf("Query gene not found for %s at %s:%u-%u\n", blastpTrack->name, blastpTrack->chrom, blastpTrack->chromStart, blastpTrack->chromEnd);
+            else
+            {
+                /* Print query gene info */
+                printf("<B>Gene: </B>%s<BR>\n", queryName);
+                
+                ginfo = getGbProtCodeInfo(conn, database, queryName);
+                if (ginfo != NULL)
+                {
+                    if (ginfo->product != NULL && differentString(ginfo->product,"none"))
+                        medlineLinkedLine("Product", ginfo->product, ginfo->product);
+                }
+                
+                printf("<B>Position:</B> "
+                       "<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
+                       hgTracksPathAndSettings(), database, blastpTrack->chrom, queryStart + 1, queryEnd);
+                printf("%s:%d-%d</A><BR>\n", blastpTrack->chrom, queryStart + 1, queryEnd);
+                printf("<B>Strand:</B> %s<BR>\n", blastpTrack->strand);
+                printf("<B>Genomic size: </B> %d nt<BR>\n", (queryEnd - queryStart));
+            }
+        }
+        else
+            printf("<BR>Query gene not found for %s at %s:%u-%u<BR>\n", blastpTrack->name, blastpTrack->chrom, blastpTrack->chromStart, blastpTrack->chromEnd);            
+    }
+ 
+    sqlFreeResult(&srRefSeq);
+    free(targetGeneName[0]);
+    free(targetGeneName[1]);
+}
+
+void getGenomeClade(struct sqlConnection *conn, char *dbName, char *genome, char *clade)
+/* Get genome and clade for a given database name */
+{
+    char query[512];
+    struct sqlResult *srDb;
+    char **rowDb;
+
+    sprintf(query, "select a.genome, c.label from centraldb.genomeClade a, centraldb.dbDb b, centraldb.clade c where a.genome = b.genome and a.clade = c.name and b.name = '%s'", dbName);
+    srDb = sqlGetResult(conn, query);
+    if ((rowDb = sqlNextRow(srDb)) != NULL)
+    {
+        strcpy(genome, rowDb[0]);
+        strcpy(clade, rowDb[1]);
+    }
+    sqlFreeResult(&srDb);
+}
+
+struct slName* getAllClades(struct sqlConnection *conn)
+/* Get all available clades in database */
+{
+    char query[512];
+    struct sqlResult *srDb;
+    char **rowDb;
+    struct slName *list = NULL;
+    char clade[50];
+
+    sprintf(query, "select label from centraldb.clade");
+    srDb = sqlGetResult(conn, query);
+    while ((rowDb = sqlNextRow(srDb)) != NULL)
+    {
+        strcpy(clade, rowDb[0]);
+        slNameAddTail(&list, clade);
+    }
+    sqlFreeResult(&srDb);
+    
+    return list;
+}
+
+struct blastTab* loadBlastpHits(struct sqlConnection *conn, char* queryName)
+/* Load all blastp hits of the given query gene into a list */
+{
+    char query[512];
+    struct sqlResult *srBlastpHits;
+    struct blastTab *list = NULL;
+    struct blastTab *blastpHits;
+    char **row;
+    char blastpHitsTable[] = "blastpHits";
+
+    if (hTableExists(blastpHitsTable))
+    {
+        sprintf(query, "select * from %s where query = '%s'", blastpHitsTable, queryName);
+        srBlastpHits = sqlGetResult(conn, query);
+        while ((row = sqlNextRow(srBlastpHits)) != NULL)
+        {
+            blastpHits = blastTabLoad(row);
+            slAddTail(&list, blastpHits);
+        }
+    }
+    sqlFreeResult(&srBlastpHits);
+    return list;
+}
+
+void printBlastpResult(struct sqlConnection *conn, struct blastTab *blastpHitsList, char* sectionClade)
+/* Print Blastp result of given clade */
+{
+    char query[512];
+    struct sqlResult *sr;
+    char **row;
+    char refSeq[] = "refSeq";
+    struct blastTab *blastpHits;
+    struct minGeneInfo *ginfo;
+    char *blastpTarget[2];
+    char genome[50] = "";
+    char clade[50] = "";
+    unsigned int hitStart = 0;
+    unsigned int hitEnd = 0;
+    char **buffer = NULL;
+
+    printf("<br><a name=\"%s\"><b>BLASTP Alignment Hits to %sl Proteins</b></a><br>\n", sectionClade, sectionClade);
+ 
+    /* Print table */
+    printf("<table style=\"width: 100%%;\" bgcolor=\"#%s\" border=\"0\" cellpadding=\"1\" cellspacing=\"0\">", HG_COL_BORDER);
+    printf("<tbody><tr><td>\n");
+    printf("<table style=\"width: 100%%; text-align: left;\" bgcolor=\"%s\" border=\"1\" cellpadding=\"2\" cellspacing=\"2\">\n", HG_COL_INSIDE);
+    printf("<tbody>\n");
+
+    /* Print table column heading */
+    printf("<tr style=\"vertical-align: top;\">\n");
+    printf("<td width=\"18%%\"><b>Organism</b></td>\n");
+    printf("<td width=\"7%%\"><b>Gene</b></td>\n");
+    printf("<td><b>Product</b></td>\n");
+    printf("<td width=\"6%%\"><b>Alignment Length</b></td>\n");
+    printf("<td width=\"8%%\"><b>Query Position</b></td>\n");
+    printf("<td width=\"8%%\"><b>Target Position</b></td>\n");
+    printf("<td width=\"5%%\"><b>Mismatch</b></td>\n");
+    printf("<td width=\"5%%\"><b>Gap</b></td>\n");
+    printf("<td width=\"5%%\"><b>Identity (%%)</b></td>\n");
+    printf("<td width=\"5%%\"><b>E-value</b></td>\n");
+    printf("<td width=\"5%%\"><b>Log of E-value</b></td>\n");
+    printf("<td width=\"5%%\"><b>Bit Score</b></td>\n");
+    printf("</tr>\n");
+    
+    blastpHits = blastpHitsList;
+    while (blastpHits != NULL)
+    {
+        parseDelimitedString(blastpHits->target, ':', blastpTarget, 2);
+        
+        /* Get species info */
+        getGenomeClade(conn, blastpTarget[0], genome, clade);
+
+        if (sameWord(clade, sectionClade))
+        {
+            printf("<tr style=\"vertical-align: top;\">\n");
+           
+            printf("<td><i>%s</i></td>\n", genome);
+            
+            if (hTableExists(refSeq))
+            {
+                sprintf(query, "select chrom, cdsStart, cdsEnd from %s.%s where name = '%s'",
+                        blastpTarget[0], refSeq, blastpTarget[1]);
+                sr = sqlGetResult(conn, query);
+                if ((row = sqlNextRow(sr)) != NULL)
+                {
+                    hitStart = strtoul(row[1], buffer, 10) + blastpHits->tStart * 3 + 1;
+                    hitEnd = strtoul(row[1], buffer, 10) + blastpHits->tEnd * 3;
+                    printf("<td><a href=\"http://archdev.cse.ucsc.edu/cgi-bin/hgTracks\?position=%s:%u-%u&db=%s\" TARGET=_blank>%s</a></td>\n",
+                           row[0], hitStart, hitEnd, blastpTarget[0], blastpTarget[1]);
+                }
+                else
+                    printf("<td>%s</td>\n", blastpTarget[1]);
+                sqlFreeResult(&sr);
+            }
+            else
+                printf("<td>%s</td>\n", blastpTarget[1]);
+
+            ginfo = getGbProtCodeInfo(conn, blastpTarget[0], blastpTarget[1]);
+            if (ginfo != NULL && ginfo->product != NULL && differentString(ginfo->product,"none"))
+                printf("<td>%s</td>\n", ginfo->product);
+            else
+                printf("<td>%s</td>\n", "N/A");                
+            
+            printf("<td style=\"text-align: right;\">%u</td>\n", blastpHits->aliLength);
+            printf("<td style=\"text-align: center;\">%u - %u</td>\n", blastpHits->qStart + 1, blastpHits->qEnd);
+            printf("<td style=\"text-align: center;\">%u - %u</td>\n", blastpHits->tStart + 1, blastpHits->tEnd);
+            printf("<td style=\"text-align: right;\">%u</td>\n", blastpHits->mismatch);
+            printf("<td style=\"text-align: right;\">%u</td>\n", blastpHits->gapOpen);
+            printf("<td style=\"text-align: right;\">%0.2f</td>\n", blastpHits->identity);
+            printf("<td style=\"text-align: right;\">%0.0e</td>\n", blastpHits->eValue);
+            printf("<td style=\"text-align: right;\">e%0.0f</td>\n", (blastpHits->eValue == 0)? 0 : log(blastpHits->eValue) / log(10));
+            printf("<td style=\"text-align: right;\">%0.1f</td>\n", blastpHits->bitScore);
+    
+            printf("</tr>\n");
+        }
+        free(blastpTarget[0]);        
+        free(blastpTarget[1]);
+        blastpHits = blastpHits->next;
+    }
+    /* Close table */
+    printf("</tbody>\n");
+    printf("</table>\n");
+    printf("</td></tr></tbody>\n");
+    printf("</table>\n");
+}
+
+void doBlastP(struct trackDb *tdb, char *targetName)
+/* Handle the BlastP Archaea and BlastP Bacteria tracks. */
+{
+    char queryName[50];
+    struct sqlConnection *conn = hAllocConn();
+    struct bed *blastpTrack;
+    struct blastTab *blastpHitsList;
+    struct slName *cladeList;
+    struct slName *thisClade;
+    char genome[100];
+    char clade[50];
+ 
+    cartWebStart(cart, "%s", "BlastP Alignment Hits");
+    
+    blastpTrack = getBlastpTrackRecord(conn, tdb, targetName);
+    printQueryGeneInfo(conn, blastpTrack, queryName);
+
+    blastpHitsList = loadBlastpHits(conn, queryName);
+    
+    cladeList = getAllClades(conn);
+    getGenomeClade(conn, database, genome, clade);
+
+    printf("<br><b>Jump to:</b> [<a href=\"#%s\">%sl proteins</a>]", clade, clade);
+    thisClade = cladeList;
+    while (thisClade != NULL)
+    {
+        if (differentWord(thisClade->name, clade))
+            printf(" [<a href=\"#%s\">%sl proteins</a>]", thisClade->name, thisClade->name);
+        thisClade = thisClade->next;
+    }
+    printf("<br>\n");
+    
+    printBlastpResult(conn, blastpHitsList, clade);
+    
+    thisClade = cladeList;
+    while (thisClade != NULL)
+    {
+        if (differentWord(thisClade->name, clade))
+            printBlastpResult(conn, blastpHitsList, thisClade->name);
+        thisClade = thisClade->next;
+    }
+
+    printf("<BR>Note: All measurements are counted by the number of amino acids.<BR>\n");
+    printf("<hr>\n");
+    hFreeConn(&conn);
+    printTrackHtml(tdb);
+}
+
 void doWiki(struct trackDb *tdb, char *itemName)
 {
   char strand[2]; 
@@ -1554,6 +1943,12 @@ else if (sameWord(track,"snoRNAs"))
 else if (sameWord(track,"easyGene"))
     {
     doEasyGenes(tdb, item);
+    }
+else if (startsWith("BlastP_", track)
+        && differentWord(track, "BlastP_Crenarchaea") && differentWord(track, "BlastP_Nanoarch") && differentWord(track, "BlastP_Euryarch")
+        && differentWord(track, "BlastP_Bacteria"))
+    {
+    doBlastP(tdb, item);
     }
 else if (sameWord(track,"wiki"))
    {
