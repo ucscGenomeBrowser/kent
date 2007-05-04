@@ -1005,6 +1005,35 @@ dataVersion ENCODE June & Oct 2005 Freezes
     longLabel UC Davis ChIP/Chip NimbleGen (C-Myc ab, HeLa Cells)
     priority 2
     dataVersion ENCODE Oct 2005 Freeze
+    
+    track encodeUCDavisPolII_GM
+    subTrack encodeUCDavisChip
+    shortLabel UCD PolII_GM
+    longLabel UC Davis ChIP/Chip NimbleGen (PolII, GM Cells)
+    priority 3
+    dataVersion ENCODE Mar 2007
+    
+    track encodeUCDavisPolII_HelaS3
+    subTrack encodeUCDavisChip
+    shortLabel UCD PolII_HelaS3
+    longLabel UC Davis ChIP/Chip NimbleGen (PolII, HelaS3 Cells)
+    priority 4
+    dataVersion ENCODE Mar 2007
+    
+    track encodeUCDavisTaf_GM
+    subTrack encodeUCDavisChip
+    shortLabel UCD Taf_GM
+    longLabel UC Davis ChIP/Chip NimbleGen (TAF, GM Cells)
+    priority 5
+    dataVersion ENCODE Mar 2007
+    
+    track encodeUCDavisTaf_HelaS3
+    subTrack encodeUCDavisChip
+    shortLabel UCD Taf_HelaS3
+    longLabel UC Davis ChIP/Chip NimbleGen (TAF, HelaS3 Cells)
+    priority 6
+    dataVersion ENCODE Mar 2007
+    
 
 track encodeUcDavisChipHits
 compositeTrack on
