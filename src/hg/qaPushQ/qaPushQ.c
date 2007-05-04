@@ -29,7 +29,7 @@
 #include "dbDb.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.95 2007/05/04 23:16:09 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.96 2007/05/04 23:29:15 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -2911,7 +2911,7 @@ pushQFree(&q);
 }
 
 
-void listQueues(char *action);  /* forward decl */
+void listQueues(char *action, boolean isTransfer);  /* forward decl */
 
 void doTransfer()
 /* Present choice of queues to which the selected and locked record may be transferred */
@@ -2933,7 +2933,7 @@ printf("<br>\n");
 printf("<br>\n");
 
 safef(tempUrl, sizeof(tempUrl), "action=transferTo&qid=%s&toOrg", newQid);
-listQueues(tempUrl);
+listQueues(tempUrl, TRUE);
 
 printf("<a href=\"/cgi-bin/qaPushQ?action=edit&qid=%s&cb=%s\">RETURN</a> <br>\n",newQid,newRandState);
 pushQFree(&q);
@@ -3138,7 +3138,7 @@ freez(&field);
 return result;
 }
 
-void listQueues(char *action)
+void listQueues(char *action, boolean isTransfer)
 /* list the available queues other than self */
 {
 struct sqlResult *sr;
@@ -3153,7 +3153,8 @@ safef(query, sizeof(query), "show tables");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    if (!sameString(row[0],"pushQ") && 
+    if (!(isTransfer && sameString(row[0],pushQtbl)) &&
+	!sameString(row[0],"pushQ") && 
 	!sameString(row[0],"users") && 
 	!sameString(row[0],"gbjunk"))
 	{
@@ -3163,7 +3164,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    if (sameString(displayQ,"pushQ"))
 		displayQ = "Main Push Queue";
 	    char *extra = (sameString(row[0],pushQtbl) ? " (you are here)" : "");
-    	    printf("<A href=qaPushQ?%s=%s&cb=%s>%s%s</A><br>\n",action,row[0],newRandState,displayQ,extra);
+    	    printf("<A href=qaPushQ?%s=%s&cb=%s>%s</A>%s<br>\n",action,row[0],newRandState,displayQ,extra);
 	    }
 	}
     }
@@ -3178,7 +3179,7 @@ void doShowGateway()
 printf("<h2>Gateway - Choose Queue</h2>\n");
 printf("<br>\n");
 
-listQueues("org");
+listQueues("org", FALSE);
 
 printf("<a href=\"/cgi-bin/qaPushQ?cb=%s\">RETURN</a> <br>\n",newRandState);
 }
