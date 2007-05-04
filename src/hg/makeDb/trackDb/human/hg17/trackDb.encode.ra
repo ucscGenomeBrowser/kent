@@ -985,8 +985,8 @@ chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr2
 type bedGraph 4
 maxHeightPixels 128:16:16
 minLimit -3.99
-maxLimit 4.63
-viewLimits 1:4
+maxLimit 4.82
+viewLimits 0:3
 color 32,128,180
 altColor 180,128,32
 autoScale Off
@@ -1011,28 +1011,28 @@ dataVersion ENCODE June & Oct 2005 Freezes
     shortLabel UCD PolII_GM
     longLabel UC Davis ChIP/Chip NimbleGen (PolII, GM Cells)
     priority 3
-    dataVersion ENCODE Mar 2007
+    dataVersion Mar 2007
     
     track encodeUCDavisPolII_HelaS3
     subTrack encodeUCDavisChip
     shortLabel UCD PolII_HelaS3
     longLabel UC Davis ChIP/Chip NimbleGen (PolII, HelaS3 Cells)
     priority 4
-    dataVersion ENCODE Mar 2007
+    dataVersion Mar 2007
     
     track encodeUCDavisTaf_GM
     subTrack encodeUCDavisChip
     shortLabel UCD Taf_GM
     longLabel UC Davis ChIP/Chip NimbleGen (TAF, GM Cells)
     priority 5
-    dataVersion ENCODE Mar 2007
+    dataVersion Mar 2007
     
     track encodeUCDavisTaf_HelaS3
     subTrack encodeUCDavisChip
     shortLabel UCD Taf_HelaS3
     longLabel UC Davis ChIP/Chip NimbleGen (TAF, HelaS3 Cells)
     priority 6
-    dataVersion ENCODE Mar 2007
+    dataVersion Mar 2007
     
 
 track encodeUcDavisChipHits
