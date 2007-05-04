@@ -16,7 +16,7 @@
 #include "vGfx.h"
 #include "vGfxPrivate.h"
 
-static char const rcsid[] = "$Id: pscmGfx.c,v 1.21 2007/04/29 22:42:43 galt Exp $";
+static char const rcsid[] = "$Id: pscmGfx.c,v 1.22 2007/05/04 06:09:43 galt Exp $";
 
 
 static struct pscmGfx *boxPscm;	 /* Used to keep from drawing the same box again
@@ -74,7 +74,7 @@ psClipRect(pscm->ps, x1, y1, x2-x1, y2-y1);
 void pscmUnclip(struct pscmGfx *pscm)
 /* Set clipping rect to cover full thing. */
 {
-psClipRect(pscm->ps, 0, 0, pscm->ps->userWidth, pscm->ps->userHeight);
+pscmSetClip(pscm, 0, 0, pscm->ps->userWidth, pscm->ps->userHeight);
 }
 
 static Color pscmClosestColor(struct pscmGfx *pscm, 
