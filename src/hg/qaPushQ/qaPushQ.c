@@ -29,7 +29,7 @@
 #include "dbDb.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.94 2006/09/21 01:42:07 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.95 2007/05/04 23:16:09 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -3153,8 +3153,7 @@ safef(query, sizeof(query), "show tables");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    if (!sameString(row[0],pushQtbl) && 
-	!sameString(row[0],"pushQ") && 
+    if (!sameString(row[0],"pushQ") && 
 	!sameString(row[0],"users") && 
 	!sameString(row[0],"gbjunk"))
 	{
@@ -3163,7 +3162,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    char *displayQ = row[0];
 	    if (sameString(displayQ,"pushQ"))
 		displayQ = "Main Push Queue";
-    	    printf("<A href=qaPushQ?%s=%s&cb=%s>%s</A><br>\n",action,row[0],newRandState,displayQ);
+	    char *extra = (sameString(row[0],pushQtbl) ? " (you are here)" : "");
+    	    printf("<A href=qaPushQ?%s=%s&cb=%s>%s%s</A><br>\n",action,row[0],newRandState,displayQ,extra);
 	    }
 	}
     }
