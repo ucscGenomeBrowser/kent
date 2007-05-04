@@ -8,7 +8,7 @@
 #include "psGfx.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: psGfx.c,v 1.30 2007/04/15 00:29:47 galt Exp $";
+static char const rcsid[] = "$Id: psGfx.c,v 1.31 2007/05/04 06:08:45 galt Exp $";
 
 static void psFloatOut(FILE *f, double x)
 /* Write out a floating point number, but not in too much
@@ -85,6 +85,9 @@ ps->yScale = -ps->yScale;
 ps->yOff = ps->ptHeight - ps->yOff;
 
 psWriteHeader(ps->f, ptWidth, ptHeight);
+
+/* adding a gsave here fixes an old ghostview bug with cliprestore */
+fprintf(ps->f, "gsave\n");
 
 /* Set initial clipping rectangle. */
 psClipRect(ps, 0, 0, ps->userWidth, ps->userHeight);
