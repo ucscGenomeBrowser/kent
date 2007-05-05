@@ -83,7 +83,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: lowelab.c,v 1.7 2007/05/05 18:25:04 pchan Exp $";
+static char const rcsid[] = "$Id: lowelab.c,v 1.8 2007/05/05 18:35:33 pchan Exp $";
 
 extern char *uniprotFormat;
 
@@ -1561,11 +1561,13 @@ struct minGeneInfo* getGbProtCodeInfo(struct sqlConnection *conn, char* dbName, 
     struct sqlResult *sr;
     char **row;
     struct minGeneInfo* ginfo = NULL;
-    char gbProtCodeXra[] = "gbProtCodeXra";
+    char gbProtCodeXra[50];
     
+    strcpy(gbProtCodeXra, dbName);
+    strcat(gbProtCodeXra, ".gbProtCodeXra");
     if (hTableExists(gbProtCodeXra))
     {
-        sprintf(query, "select * from %s.%s where name = '%s'", dbName, gbProtCodeXra, geneName);
+        sprintf(query, "select * from %s where name = '%s'", gbProtCodeXra, geneName);
         sr = sqlGetResult(conn, query);
         if ((row = sqlNextRow(sr)) != NULL) 
             ginfo = minGeneInfoLoad(row);
