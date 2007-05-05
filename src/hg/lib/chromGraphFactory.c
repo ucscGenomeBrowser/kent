@@ -721,12 +721,18 @@ else if (sameString(markerType, cgfMarkerAffy500))
     	firstLineLabels, fileList, affy500Table,
     	"select chrom,chromStart,name from %s", NULL, NULL, report);
     }
-else if (sameString(markerType, cgfMarkerHumanHap300))
+else if (sameString(markerType, cgfMarkerHumanHap300)
+      || sameString(markerType, cgfMarkerHumanHap550)
+      || sameString(markerType, cgfMarkerHumanHap650)
+        )
     {
-    char *table = "snpArrayIllumina300";
+    char *table = "";
+    if (sameString(markerType, cgfMarkerHumanHap300)) table = "snpArrayIllumina300";
+    if (sameString(markerType, cgfMarkerHumanHap550)) table = "snpArrayIllumina550";
+    if (sameString(markerType, cgfMarkerHumanHap650)) table = "snpArrayIllumina650";
     if (!sqlTableExists(conn, table))
         errAbort("Sorry, no data for %s on this assembly.",
-		cgfMarkerHumanHap300);
+		markerType);
     ok = mayProcessDb(conn, cpp, colCount, formatType,
     	firstLineLabels, fileList, table,
     	"select chrom,chromStart,name from %s", NULL, NULL, report);
