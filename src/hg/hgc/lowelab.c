@@ -83,7 +83,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: lowelab.c,v 1.6 2007/05/05 05:28:28 lowe Exp $";
+static char const rcsid[] = "$Id: lowelab.c,v 1.7 2007/05/05 18:25:04 pchan Exp $";
 
 extern char *uniprotFormat;
 
@@ -1735,7 +1735,7 @@ void printBlastpResult(struct sqlConnection *conn, struct blastTab *blastpHitsLi
     char query[512];
     struct sqlResult *sr;
     char **row;
-    char refSeq[] = "refSeq";
+    char refSeq[50];
     struct blastTab *blastpHits;
     struct minGeneInfo *ginfo;
     char *blastpTarget[2];
@@ -1787,10 +1787,13 @@ void printBlastpResult(struct sqlConnection *conn, struct blastTab *blastpHitsLi
            
             printf("<td><a name=\"%s:%s:%u-%u\"><i>%s</i></td>\n", blastpTarget[1], tChrom, tStart, tEnd, genome);
             
+            /* Get target gene position from refSeq */
+            strcpy(refSeq, blastpTarget[0]);
+            strcat(refSeq, ".refSeq");
             if (hTableExists(refSeq))
             {
-                sprintf(query, "select chrom, cdsStart, cdsEnd from %s.%s where name = '%s'",
-                        blastpTarget[0], refSeq, blastpTarget[1]);
+                sprintf(query, "select chrom, cdsStart, cdsEnd from %s where name = '%s'",
+                        refSeq, blastpTarget[1]);
                 sr = sqlGetResult(conn, query);
                 if ((row = sqlNextRow(sr)) != NULL)
                 {
@@ -1806,13 +1809,14 @@ void printBlastpResult(struct sqlConnection *conn, struct blastTab *blastpHitsLi
             else
                 printf("<td>%s</td>\n", blastpTarget[1]);
 
+            /* Get target gene product annotation */
             ginfo = getGbProtCodeInfo(conn, blastpTarget[0], blastpTarget[1]);
             if (ginfo != NULL && ginfo->product != NULL && differentString(ginfo->product,"none"))
                 printf("<td>%s</td>\n", ginfo->product);
             else
                 printf("<td>%s</td>\n", "N/A");                
             
-             printf("<td style=\"text-align: center;\">%0.f</td>\n", ((double) (blastpHits->qEnd - blastpHits->qStart) / ((double) (querySeqLength-3) / 3.0f)) * 100.0f);
+            printf("<td style=\"text-align: center;\">%0.f</td>\n", ((double) (blastpHits->qEnd - blastpHits->qStart) / ((double) (querySeqLength-3) / 3.0f)) * 100.0f);
             printf("<td style=\"text-align: center;\">%u - %u</td>\n", blastpHits->qStart + 1, blastpHits->qEnd);
             printf("<td style=\"text-align: right;\">%0.1f</td>\n", blastpHits->identity);
             printf("<td style=\"text-align: right;\">%0.0e</td>\n", blastpHits->eValue);
