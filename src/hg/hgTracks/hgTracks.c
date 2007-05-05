@@ -108,7 +108,7 @@
 #include "hapmapTrack.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1332 2007/05/03 21:07:44 donnak Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1333 2007/05/05 01:59:38 galt Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -707,6 +707,7 @@ if (x < xEnd)
 	hPrintf(directUrl, item, chromName, start, end, encodedTrack, database);
 	if (withHgsid)
 	     hPrintf("&%s", cartSidUrlString(cart));
+	hPrintf("\" ");
 	}
     else
 	{
