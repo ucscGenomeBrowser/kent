@@ -13854,14 +13854,18 @@ BASE=/cluster/data/hg18/bed/blastz.sorAra1.2007-03-08
 
 
 #########################################################################
-# BLASTZ ORNANA1 (PLATYPUS) - (DONE 2007-02-23 angie)
+# BLASTZ ORNANA1 (PLATYPUS) - (DONE 2007-02-23, REDONE 2007-04-04 angie)
+# The first time around, the copy of ornAna1.2bit still had the pre-release -- 
+# doh!  Differences are miniscule (a couple contigs' orientation changed),
+# but redo just to get it 100% right.
+# In the re-run, I changed SEQ2_LIMIT which made the cluster run more 
+# efficient but had side-effects on the results because blastz's dynamic 
+# masking was applied differently (different groupings of sequences) --
+# in retrospect, would have been better to use the suboptimal SEQ2_LIMIT 
+# and have fewer differences to slog through.
     ssh kkstore02
-    mkdir /cluster/data/hg18/bed/blastz.ornAna1.2007-02-21
-    cd /cluster/data/hg18/bed/blastz.ornAna1.2007-02-21
-
-    # If I had to do it over, I would go with a larger SEQ2_LIMIT because 
-    # there were 437k jobs, avg <40s.
-
+    mkdir /cluster/data/hg18/bed/blastz.ornAna1.2007-04-02
+    cd /cluster/data/hg18/bed/blastz.ornAna1.2007-04-02
     cat << '_EOF_' > DEF
 # human vs. platypus
 
@@ -13872,7 +13876,6 @@ BLASTZ_L=6000
 BLASTZ_K=2200
 BLASTZ_M=50
 BLASTZ_Q=/cluster/data/blastz/HoxD55.q
-BLASTZ=blastz.v7.x86_64
 
 # TARGET: hg18
 SEQ1_DIR=/scratch/hg/hg18/hg18.2bit
@@ -13881,21 +13884,21 @@ SEQ1_CHUNK=20000000
 SEQ1_LAP=10000
 
 # QUERY: ornAna1
-SEQ2_DIR=/san/sanvol1/scratch/ornAna1/ornAna1.2bit
-SEQ2_LEN=/san/sanvol1/scratch/ornAna1/chrom.sizes
+SEQ2_DIR=/iscratch/i/ornAna1/ornAna1.2bit
+SEQ2_LEN=/iscratch/i/ornAna1/chrom.sizes
 SEQ2_CHUNK=20000000
-SEQ2_LIMIT=75
+SEQ2_LIMIT=400
 SEQ2_LAP=0
 
-BASE=/cluster/data/hg18/bed/blastz.ornAna1.2007-02-21
+BASE=/cluster/data/hg18/bed/blastz.ornAna1.2007-04-02
 TMPDIR=/scratch/tmp
 '_EOF_'
     # << emacs
 
-    ~/kent/src/hg/utils/automation/doBlastzChainNet.pl DEF \
-      -blastzOutRoot /san/sanvol1/scratch/hg18.ornAna1 \
-      -bigClusterHub pk -smallClusterHub pk \
+    doBlastzChainNet.pl DEF \
+      -blastzOutRoot /cluster/bluearc/hg18.ornAna1 \
       >& do.log & tail -f do.log
+
 
 ########################################################################
 # 28-WAY VERTEBRATE MULTIZ (2007-03-20 kate)
