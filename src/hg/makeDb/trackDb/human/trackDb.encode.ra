@@ -2711,8 +2711,8 @@ color 120,0,20
 altColor 150,0,25
 maxHeightPixels 128:16:16
 autoScale off
-minLimit 0
-maxLimit 114
+minLimit 500
+maxLimit 1000
 viewLimits 0:10
 origAssembly hg17
 dataVersion Mar 2007
