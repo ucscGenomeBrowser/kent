@@ -791,3 +791,15 @@ TMPDIR=/scratch/tmp
     hgsql -e 'update dbDb set defaultPos="scaffold_72:3056494-3141055"
 	where name="anoCar1";' hgcentraltest
 
+
+############################################################################
+# SWAP ORNANA1 CHAIN/NET (DONE 5/2/07 angie)
+    ssh kkstore05
+    mkdir /cluster/data/anoCar1/bed/blastz.ornAna1.swap
+    cd /cluster/data/anoCar1/bed/blastz.ornAna1.swap
+    doBlastzChainNet.pl -swap \
+      /cluster/data/ornAna1/bed/blastz.anoCar1/DEF >& do.log &
+    tail -f do.log
+    ln -s blastz.ornAna1.swap /cluster/data/anoCar1/bed/blastz.ornAna1
+
+
