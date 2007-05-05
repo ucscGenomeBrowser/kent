@@ -83,7 +83,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: lowelab.c,v 1.5 2007/05/04 21:21:18 pchan Exp $";
+static char const rcsid[] = "$Id: lowelab.c,v 1.6 2007/05/05 05:28:28 lowe Exp $";
 
 extern char *uniprotFormat;
 
@@ -1762,15 +1762,15 @@ void printBlastpResult(struct sqlConnection *conn, struct blastTab *blastpHitsLi
     printf("<td width=\"18%%\"><b>Organism</b></td>\n");
     printf("<td width=\"7%%\"><b>Gene</b></td>\n");
     printf("<td><b>Product</b></td>\n");
-    printf("<td width=\"5%%\"><b>Percentage of Full Length</b></td>\n"); 
-    printf("<td width=\"8%%\"><b>Query Position</b></td>\n");
-    printf("<td width=\"5%%\"><b>Identity (%%)</b></td>\n");
+    printf("<td width=\"5%%\"><b>Percent Length of Full Protein</b></td>\n"); 
+    printf("<td width=\"8%%\"><b>Position in Source Protein</b></td>\n");
+    printf("<td width=\"5%%\"><b>Protein Identity (%%)</b></td>\n");
     printf("<td width=\"5%%\"><b>E-value</b></td>\n");
     printf("<td width=\"5%%\"><b>Log of E-value</b></td>\n");
     printf("<td width=\"5%%\"><b>Bit Score</b></td>\n");
-    printf("<td width=\"6%%\"><b>Alignment Length</b></td>\n");
-    printf("<td width=\"5%%\"><b>Mismatch</b></td>\n");
-    printf("<td width=\"5%%\"><b>Gap</b></td>\n");
+    printf("<td width=\"6%%\"><b>Protein Alignment Length</b></td>\n");
+    printf("<td width=\"5%%\"><b>Protein Mismatchs</b></td>\n");
+    printf("<td width=\"5%%\"><b>Alignment Gaps</b></td>\n");
     printf("</tr>\n");
     
     blastpHits = blastpHitsList;
@@ -1812,9 +1812,9 @@ void printBlastpResult(struct sqlConnection *conn, struct blastTab *blastpHitsLi
             else
                 printf("<td>%s</td>\n", "N/A");                
             
-            printf("<td style=\"text-align: center;\">%0.2f</td>\n", ((double) (blastpHits->qEnd - blastpHits->qStart) / ((double) querySeqLength / 3.0f)) * 100.0f);
+             printf("<td style=\"text-align: center;\">%0.f</td>\n", ((double) (blastpHits->qEnd - blastpHits->qStart) / ((double) (querySeqLength-3) / 3.0f)) * 100.0f);
             printf("<td style=\"text-align: center;\">%u - %u</td>\n", blastpHits->qStart + 1, blastpHits->qEnd);
-            printf("<td style=\"text-align: right;\">%0.2f</td>\n", blastpHits->identity);
+            printf("<td style=\"text-align: right;\">%0.1f</td>\n", blastpHits->identity);
             printf("<td style=\"text-align: right;\">%0.0e</td>\n", blastpHits->eValue);
             printf("<td style=\"text-align: right;\">e%0.0f</td>\n", (blastpHits->eValue == 0)? 0 : log(blastpHits->eValue) / log(10));
             printf("<td style=\"text-align: right;\">%0.1f</td>\n", blastpHits->bitScore);
