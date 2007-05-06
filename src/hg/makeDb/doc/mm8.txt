@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: mm8.txt,v 1.44 2007/04/25 22:14:36 fanhsu Exp $"
+#	"$Id: mm8.txt,v 1.45 2007/05/06 15:07:45 kent Exp $"
 #
 
 #  NOTE:  this doc may have genePred loads that fail to include
@@ -5809,6 +5809,64 @@ BASE=/cluster/data/mm8/bed/blastz.xenTro2.2006-04-20
     #	59601009 bases of 2627444668 (2.268%) in intersection
     featureBits mm3 genscanSubopt
     #	56085184 bases of 2505900260 (2.238%) in intersection
+
+##########################################################################
+# BUILD NIBB IMAGE PROGES (in progress 2007-05-05 Jim)
+
+# Make directory on san for cluster job and copy in sequence
+    ssh pk
+    mkdir /san/sanvol1/scratch/mm8/nibbPics
+    cd /san/sanvol1/scratch/mm8/nibbPics
+    cp /cluster/data/xenTro1/bed/nibbPics/nibbImageProbes.fa .
+
+# Make parasol job dir and sequence list files
+    mkdir run
+    cd run
+    mkdir psl
+    ls -1 /scratch/hg/mm8/nib/*.nib > genome.lst
+    echo ../nibbImageProbes.fa > mrna.lst
+
+# Create parasol gensub file file
+cat << '_EOF_' > gsub
+#LOOP
+blatz -rna -minScore=6000 -out=psl $(path1) $(path2) psl/$(root1)_$(root2).psl
+#ENDLOOP
+'_EOF_'
+
+# Create parasol batch
+    gensub2 genome.lst mrna.lst gsub spec
+    para create spec
+
+# Do para try/push/time etc.
+#Completed: 49 of 49 jobs
+#CPU time in finished jobs:      12585s     209.74m     3.50h    0.15d  0.000 y
+#IO & Wait Time:                   411s       6.86m     0.11h    0.00d  0.000 y
+#Average job time:                 265s       4.42m     0.07h    0.00d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:            1145s      19.08m     0.32h    0.01d
+#Submission to last job:          1195s      19.92m     0.33h    0.01d
+
+
+# Make sort and filter
+    catDir psl | sort -k 10 \
+        | pslReps stdin stdout /dev/null -nohead -minAli=0.60 -nearTop=0.001 -minCover=0.10 -minNearTopSize=80 \
+	| sort -k 14,14 -k 16,16n \
+	| sed 's#/scratch/hg/mm8/nib/chr#chr#' \
+	| sed 's/.nib//' > ../nibbImageProbes.psl
+
+# Make bed file and copy in stuff
+    ssh hgwdev
+    cd /cluster/data/mm8/bed
+    mkdir nibbPics
+    cd nibbPics
+    cp /cluster/data/xenTro1/bed/nibbPics/nibbImageProbes.fa .
+    cp /san/sanvol1/scratch/mm8/nibbPics/nibbImageProbes.psl .
+
+# Load into database
+    ln -s /cluster/data/xenTro1/bed/nibbPics/nibbImageProbes.fa /gbdb/mm8/nibbImageProbes.fa
+    hgLoadSeq mm8 /gbdb/mm8/nibbImageProbes.fa
+    hgLoadPsl mm8 nibbImageProbes.psl
+
 
 #############################################################################
 #  miRNA track (DONE - 2006-05-22 - Fan)
