@@ -20,7 +20,7 @@
 #include "gsidTable.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidTable.c,v 1.13 2007/04/30 23:56:29 galt Exp $";
+static char const rcsid[] = "$Id: gsidTable.c,v 1.14 2007/05/06 21:57:09 fanhsu Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "submit_filter", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -254,7 +254,7 @@ void doMainDisplay(struct sqlConnection *conn,
 {
 char buf[128];
 //safef(buf, sizeof(buf), "GSID %s Table View", genome);
-safef(buf, sizeof(buf), "GSID %s Table View (under development)", genome);
+safef(buf, sizeof(buf), "GSID %s Table View", genome);
 hPrintf("<FORM ACTION=\"../cgi-bin/gsidTable\" NAME=\"mainForm\" METHOD=GET>\n");
 makeTitle(buf, "gsidTableHelp.html");
 cartSaveSession(cart);
