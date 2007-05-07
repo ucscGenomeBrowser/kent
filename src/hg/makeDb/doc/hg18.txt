@@ -15393,5 +15393,9 @@ more /cluster/store12/lowec/survey/repeatIntersections/speciesOk/makeACell.csh
 # can tell which repeat consensus is hitting which functional
 # elements.
 #
+
 #######################################################################
+# UCSC GENES (DONE 2007-03-xx kent)
+
+see file: ucscGenes10.txt
 
