@@ -1,6 +1,7 @@
 /* kgResultBestRef2 - program to select best mRNA for each protein */
 
 #include <sys/param.h>
+#include <limits.h>
 #include "common.h"
 #include "hCommon.h"
 #include "hdb.h"
