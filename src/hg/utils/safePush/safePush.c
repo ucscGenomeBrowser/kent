@@ -9,13 +9,13 @@
 #include "options.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: safePush.c,v 1.6 2007/03/22 20:07:27 heather Exp $";
+static char const rcsid[] = "$Id: safePush.c,v 1.7 2007/05/07 17:28:03 hiram Exp $";
 
 /* Command line flags - all default to false. */
 boolean oldOk, chrom, prefix, allTables, allDatabases, test;
 
 /* Command line string options - null by default. */
-char *list, *single;
+char *list, *singleOp;
 
 /* List of all machines on round robin. */
 char *roundRobin[] = 
@@ -364,9 +364,9 @@ else if (sameString(destType, "list"))
 else if (sameString(destType, "single"))
     {
     sourceHost = envHost;
-    if (single == NULL)
+    if (singleOp == NULL)
         errAbort("Must have -single option with destType single.");
-    destHost = single;
+    destHost = singleOp;
     }
 else
     errAbort("Unrecognized destType. Run program with no parameters for usage.");
@@ -389,7 +389,7 @@ allTables = optionExists("allTables");
 allDatabases = optionExists("allDatabases");
 test = optionExists("test");
 list = optionVal("list", NULL);
-single = optionVal("single", NULL);
+singleOp = optionVal("single", NULL);
 user = getCfgValue("HGDB_USER", "db.user");
 password = getCfgValue("HGDB_PASSWORD", "db.password");
 
