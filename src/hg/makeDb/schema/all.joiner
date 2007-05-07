@@ -2532,6 +2532,9 @@ tablesIgnored $dm
     flyreg
     flyreg2
 
+tablesIgnored $equCab
+    chr%_gold
+
 tablesIgnored $fr
     chr%_gold
 
