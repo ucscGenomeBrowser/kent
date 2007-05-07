@@ -33,7 +33,12 @@
 			    instructions to incrementally create a mirror of the
 			    UCSC Genome Browser. You may choose to set up either a
 			    full mirror browser or a partial one, depending on your disk
-			    space and needs.
+			    space and needs.  See also:
+			    <A HREF="http://genomewiki.ucsc.edu/index.php/Minimal_Browser_Installation"
+				TARGET=_blank>Minimal Browser Installation</A>
+			    instructions on
+			    <A HREF="http://genomewiki.ucsc.edu"
+				TARGET=_blank>genomewiki.</A>
 			    <P>
 			    <B> Prerequisites:</B>
 			    <P>
@@ -174,14 +179,15 @@ rsync -navz --progress rsync://hgdownload.cse.ucsc.edu
 </PRE>
 This should respond with:
 <PRE>
-genome          UCSC Human Genome Downloads (111 GB)
-sars            UCSC Human Genome SARS Downloads (215MB)
-htdocs          UCSC Human Genome Web Site Htdocs (28MB)
+genome          UCSC Human Genome Downloads (348G)
+sars            UCSC Human Genome SARS Downloads (193MB)
+htdocs          UCSC Human Genome Web Site Htdocs (504MB)
 goldenPath      UCSC Human Golden Path Downloads (170 GB)
-cgi-bin         UCSC Human Genome Web Site CGI Binaries
-gbdb            UCSC Human Genome Browser New Config Files (313 GB)
+cgi-bin         UCSC Human Genome Web Site CGI Binaries x86_64
+cgi-bin-i386    UCSC Human Genome Web Site CGI Binaries i386
+gbdb            UCSC Human Genome Browser Gbdb Config Files
 archives        UCSC Human Genome Browser Archived Config Files
-mysql           UCSC Human Genome Raw Mysql Tables (356 GB)
+mysql           UCSC Human Genome Raw Mysql Tables (500 GB)
 </PRE>
 <BR>
 <LI>Determine the destination of the copy ($WEBROOT) and fire off the production copy (270 Mb)<BR>
@@ -725,7 +731,8 @@ for SQL in *.sql
 do
     T_NAME=${SQL%%.sql}
     echo "loading table ${T_NAME}"
-    mysql -youraccountoptions -e "DROP TABLE ${T_NAME};" ${DB} > /dev/null 2> /dev/null
+    mysql -youraccountoptions -e "DROP TABLE ${T_NAME};" ${DB} \
+	> /dev/null 2> /dev/null
     mysql -youraccountoptions ${DB} < ${SQL}
     zcat "${T_NAME}.txt.gz" | mysql -youraccountoptions --local-infile=1 \
         -e "LOAD DATA LOCAL INFILE \"/dev/stdin\" INTO TABLE ${T_NAME};" ${DB}
@@ -736,7 +743,8 @@ done
 <LI>Issue permission to the "$DBVERSION" database.<BR>
 Permission could be issued as follows: <BR>
 <PRE>
-mysql&gt; grant SELECT, CREATE TEMPORARY TABLES on $DBVERSION.* to $USERNAME@$HOSTNAME identified by "$PASSWORD";
+mysql&gt; grant SELECT, CREATE TEMPORARY TABLES on $DBVERSION.*
+   to $USERNAME@$HOSTNAME identified by "$PASSWORD";
 </PRE>
 <BR>
 To make this command work, you need to set up $USERNAME,$HOSTNAME and
@@ -833,25 +841,18 @@ db.user=myhguser
 # this is the password to use with the above hostname
 db.password=myhguserpassword
 db.trackDb=trackDb
+
 ###########################################################
 # central.host is the name of the host of the central MySQL
 # database where items common to all versions of the genome
 # and the user database is stored.  central.db is the name of
 # the database to access on that host for this information.
-# Typical table names in the central.db:
-#	blatServers
-#	dbDb
-#	defaultDb
-#	gdbPdb
-#	liftOverChain
-#	sessionDb
-#	userDb
 central.host=localhost
 central.db=hgcentral
 #
-# The central.user needs SELECT, INSERT, UPDATE, DELETE, CREATE, DROP and ALTER
-#	permissions for hgcentral to allow maintainence of the session
-#	and user Db's
+# The central.user needs SELECT, INSERT, UPDATE, DELETE,
+#	CREATE, DROP and ALTER permissions for hgcentral
+#	to allow maintainence of the session and user Db's
 #
 central.user=myhguser
 central.password=myhguserpassword
@@ -864,6 +865,49 @@ backupcentral.db=hgcentral
 backupcentral.user=myhguser
 backupcentral.password=myhguserpassword
 backupcentral.domain=.mydomain.edu
+
+# Change this default documentRoot if different in your installation,
+#       to allow some of the browser cgi binaries to find help text
+#       files
+browser.documentRoot=/usr/local/apache/htdocs
+
+#  New browser function as of March 2007, allowing saved genome browser
+#       sessions into genomewiki
+wiki.host=genomewiki.ucsc.edu
+wiki.userNameCookie=wikidb_mw1_UserName
+wiki.loggedInCookie=wikidb_mw1_UserID
+
+# New browser function as of March 2007.  Future browser code will
+#       have this on by default, and can be turned off with =off
+#   Initial release of this function requires it to be turned on here.
+browser.indelOptions=on
+
+#       personalize the background of the browser with a specified jpg
+#       floret.jpg is the standard UCSC default
+browser.background=/images/floret.jpg
+#  new option for track reording functions, August 2006
+hgTracks.trackReordering=on
+
+#  New browser function as of April 2007, custom track data is kept
+#       in a database instead of in trash files.  This function requires
+#       several other factors to be in place before it will work.
+#  In this first implementation, this is an optional feature, but
+#       approximately by the end of the year 2007, this will be
+#       required.
+#
+#       See also:
+#       http://genomewiki.ucsc.edu/index.php?title=Using_custom_track_database
+#  Uncomment these settings and provide host, user, and password
+#  settings
+# customTracks.host=&lt;your specific host name&gt;
+# customTracks.user=&lt;your specific MySQL user for this function&gt;
+# customTracks.password=&lt;MySQL password for specified user&gt;
+# customTracks.useAll=yes
+# customTracks.tmpdir=/data/tmp
+#       tmpdir of /data/tmp is the default location if not specified
+#       here
+#       Set this to a directory as recommended in the genomewiki
+#       discussion mentioned above.
 </PRE>
 </OL>
 
