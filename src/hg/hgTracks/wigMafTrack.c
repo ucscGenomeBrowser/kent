@@ -17,7 +17,7 @@
 #include "mafFrames.h"
 #include "phyloTree.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.108 2007/05/02 22:26:48 kate Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.109 2007/05/07 18:59:45 kate Exp $";
 
 #define GAP_ITEM_LABEL  "Gaps"
 
@@ -1936,8 +1936,12 @@ tryagain:
             }
 	else
 	    {
+            /* show bases starting at index (additional bases at start are
+             * likely for codon framing feature), but assure we don't index
+             * past end of empty string */
+            int ixAlign = min(2, strlen(line)-1);
 	    spreadAlignString(vg, x, y, width, mi->height-1, color,
-        		font, &line[2], &selfLine[2], winBaseCount, dots, FALSE);
+        		font, &line[ixAlign], &selfLine[2], winBaseCount, dots, FALSE);
 	    }
 	}
     else
