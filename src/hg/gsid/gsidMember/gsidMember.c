@@ -25,7 +25,7 @@
 #include "paypalSignEncrypt.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidMember.c,v 1.20 2007/05/02 23:54:51 galt Exp $";
+static char const rcsid[] = "$Id: gsidMember.c,v 1.21 2007/05/07 19:31:24 galt Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "debug", "fixMembers", "update", "gsidM_password", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -703,7 +703,7 @@ hPrintf(
 "<font color=red>%s</font>"
 "<h3>Sign up</h3>\n"
 "<form method=post action=\"/cgi-bin-signup/gsidMember\" name=mainForm >\n"
-"NOTE: Your e-mail is also your user-id and MUST match what you will use with paypal.\n"
+"NOTE: Your e-mail is also your user-id.\n"
 "<table>\n"
 "<tr><td>E-mail</td><td><input type=text name=gsidM_email value=\"%s\"size=20>\n"
 "<tr><td>Password</td><td><input type=password name=gsidM_password value=\"%s\" size=10></td></tr>\n"
