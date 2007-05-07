@@ -6,10 +6,10 @@
 #include "hash.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: axtToBed.c,v 1.9 2006/06/20 16:44:16 angie Exp $";
-bool extended = FALSE;
-bool bed4 = FALSE;
-bool axtName = FALSE;
+static char const rcsid[] = "$Id: axtToBed.c,v 1.10 2007/05/07 17:26:10 hiram Exp $";
+static bool extendedOp = FALSE;
+static bool bed4 = FALSE;
+static bool axtName = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -40,7 +40,7 @@ for (;;)
         break;
     s = lineFileNeedNum(lf, row, 2) - 1;
     e = lineFileNeedNum(lf, row, 3);
-    if (extended)
+    if (extendedOp)
         {
         int xs = lineFileNeedNum(lf, row, 5) - 1;
         int xe = lineFileNeedNum(lf, row, 6);
@@ -62,7 +62,7 @@ int main(int argc, char *argv[])
 optionHash(&argc, argv);
 if (argc != 3)
     usage();
-extended = optionExists("extended");
+extendedOp = optionExists("extended");
 bed4 = optionExists("bed4");
 axtName = optionExists("axtName");
 axtToBed(argv[1],argv[2]);
