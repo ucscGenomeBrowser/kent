@@ -3,7 +3,7 @@
 # Caenorhabditis elegans
 #	Washington University School of Medicine GSC and Sanger Institute WS170
 
-#  $Id: ce4.txt,v 1.18 2007/05/03 23:18:37 hiram Exp $
+#  $Id: ce4.txt,v 1.19 2007/05/07 19:21:17 hiram Exp $
 
 
 #########################################################################
@@ -1052,7 +1052,7 @@ autoMultiz $(root1) {check out line+ /cluster/data/ce4/bed/multiz5way/maf/$(root
     #	from multiz5way.maf
 
 ############################################################################
-# ANNOTATE MULTIZ8WAY MAF AND LOAD TABLES (DONE - 2007-05-03 - Hiram)
+# ANNOTATE MULTIZ5WAY MAF AND LOAD TABLES (DONE - 2007-05-03 - Hiram)
     ssh kolossus
     #	need the nBed stuff on these 5 genomes, if this hasn't been
     # done before:
@@ -1126,6 +1126,48 @@ done
 	~/kent/src/hg/lib/mafSummary.sql multiz5waySummary.tab
     #	real    0m4.525
 
+    #	Create per-chrom individual maf files for downloads
+    ssh kkstore02
+    cd /cluster/data/ce4/bed/multiz5way
+    mkdir mafDownloads
+    time for M in anno/maf/chr*.maf
+    do
+	B=`basename $M`
+	nice -n +19 cp -p ${M} mafDownloads/${B}
+	nice -n +19 gzip mafDownloads/${B}
+	echo ${B} done
+    done
+
+    ssh hgwdev
+    # upstream mafs 
+    #	There isn't any refGene table, trying sangerGene instead
+    time for S in 1000 2000 5000
+    do
+        echo "making upstream${S}.maf"
+        nice -n +19 featureBits ce4 sangerGene:upstream:${S} \
+		-fa=/dev/null -bed=up.bad
+        awk -F'\t' \
+'{printf("%s\t%s\t%s\t%s\t%s\t%s\n", $1, $2, $3, substr($4, 0, 9), 0, $5)}' \
+		up.bad > up.bed
+        rm up.bad
+        nice -n +19 mafFrags ce4 multiz5way up.bed upstream${S}.maf \
+                -orgs=species.lst
+        rm up.bed
+	nice -n +19 gzip -c upstream${S}.maf \
+	    > mafDownloads/sangerGene.upstream${S}.maf.gz
+	rm -f upstream${S}.maf
+    done > mafFrags.log 2>&1 &
+
+
+    cd mafDownloads
+    md5sum *.gz > md5sum.txt
+
+    #	deliver to downloads
+    ssh hgwdev
+    mkdir /usr/local/apache/htdocs/goldenPath/ce4/multiz5way
+    cd /usr/local/apache/htdocs/goldenPath/ce4/multiz5way
+    ln -s /cluster/data/ce4/bed/multiz5way/mafDownloads/* .
+
 #######################################################################
 # MULTIZ5WAY MAF FRAMES (DONE - 2007-05-03 - Hiram)
     ssh hgwdev
@@ -1136,55 +1178,41 @@ done
 
     #------------------------------------------------------------------------
     # get the genes for all genomes
-    # mRNAs with CDS.  single select to get cds+psl, then split that up and
-    # create genePred
-    # using refGene for danRer4
-    for qDB in danRer4
-    do
-	geneTbl=refGene
-      echo hgsql -N -e \"'select * from '$geneTbl\;\" ${qDB}
-      hgsql -N -e "select * from $geneTbl" ${qDB} | cut -f 2-100 \
-      | genePredSingleCover stdin stdout | gzip -2c \
-        > /scratch/tmp/$qDB.tmp.gz
-      mv /scratch/tmp/$qDB.tmp.gz genes/$qDB.gp.gz
-      rm -f $tmpExt
-    done
-
     # using sangerGene for ce4
     # using blastCe4SG for cb3, caePb1, caeRem2, priPac1
-XXXX need to figure this out
     for qDB in ce4 cb3 caePb1 caeRem2 priPac1
     do
       if [ $qDB = "cb3" -o $qDB = "caePb1" -o $qDB = "caeRem2" -o $qDB = "priPac1" ]; then
-        geneTbl=blastCe4SG
+	geneTbl=blastCe4SG
+	  echo hgsql -N -e \"'select * from '$geneTbl\;\" ${qDB}
+	  hgsql -N -e "select * from $geneTbl" ${qDB} | cut -f 2-100 \
+		> /scratch/tmp/$qDB.tmp.psl
+	    mrnaToGene -allCds /scratch/tmp/$qDB.tmp.psl stdout \
+	  | genePredSingleCover stdin stdout | gzip -2c \
+	    > /scratch/tmp/$qDB.tmp.gz
+	  rm -f /scratch/tmp/$qDB.tmp.psl
+	  mv /scratch/tmp/$qDB.tmp.gz genes/$qDB.gp.gz
       elif [ $qDB = "ce4" ]; then
-        geneTbl=sangerGene
+	geneTbl=sangerGene
+	  echo hgsql -N -e \"'select * from '$geneTbl\;\" ${qDB}
+	  hgsql -N -e "select * from $geneTbl" ${qDB} | cut -f 2-11 \
+	  | genePredSingleCover stdin stdout | gzip -2c \
+	    > /scratch/tmp/$qDB.tmp.gz
+	  mv /scratch/tmp/$qDB.tmp.gz genes/$qDB.gp.gz
       fi
-      echo hgsql -N -e \"'select * from '$geneTbl\;\" ${qDB}
-      hgsql -N -e "select * from $geneTbl" ${qDB} | cut -f 2-11 \
-      | genePredSingleCover stdin stdout | gzip -2c \
-        > /scratch/tmp/$qDB.tmp.gz
-      mv /scratch/tmp/$qDB.tmp.gz genes/$qDB.gp.gz
-      rm -f $tmpExt
     done
 
-###
-    
-    ssh kkstore04
+    ssh kkstore02
     cd /cluster/data/ce4/bed/multiz5way/frames
-    time cat ../maf/*.maf | nice -n +19 genePredToMafFrames ce4 \
-	stdin stdout gasAcu1 genes/gasAcu1.gp.gz ce4 \
-	genes/ce4.gp.gz fr2 genes/fr2.gp.gz tetNig1 \
-	genes/tetNig1.gp.gz danRer4 genes/danRer4.gp.gz \
+    cat ../maf/*.maf | nice -n +19 genePredToMafFrames ce4 \
+	stdin stdout ce4 genes/ce4.gp.gz cb3 \
+	genes/cb3.gp.gz caePb1 genes/caePb1.gp.gz caeRem2 \
+	genes/caeRem2.gp.gz priPac1 genes/priPac1.gp.gz \
 	| gzip > multiz5way.mafFrames.gz
-    #	real    0m40.989s
 
     ssh hgwdev
     cd /cluster/data/ce4/bed/multiz5way/frames
-    time nice -n +19 hgLoadMafFrames ce4 multiz5wayFrames \
-	multiz5way.mafFrames.gz
-    #	real    0m22.466s
-
+    nice -n +19 hgLoadMafFrames ce4 multiz5wayFrames multiz5way.mafFrames.gz
 
 ###########################################################################
 # HUMAN (hg18) PROTEINS TRACK (DONE braney 2007-04-20)
@@ -1983,7 +2011,7 @@ close (OF);
 #	end blat proteins
 
 ##########################################################################
-## 4-Way multiple alignment (WORKING - 2007-05-01 - Hiram)
+## 4-Way multiple alignment (DONE - 2007-05-01 - Hiram)
 
     mkdir /cluster/data/ce4/bed/multiz4way
     cd /cluster/data/ce4/bed/multiz4way
