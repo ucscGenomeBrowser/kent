@@ -11,7 +11,7 @@
 #include "net.h"
 #include "hPrint.h"
 
-static char const rcsid[] = "$Id: sequence.c,v 1.3 2007/03/15 16:56:18 fanhsu Exp $";
+static char const rcsid[] = "$Id: sequence.c,v 1.4 2007/05/07 19:22:07 fanhsu Exp $";
 
 static boolean sequenceExists(struct section *section, 
 	struct sqlConnection *conn, char *subjId)
@@ -36,7 +36,7 @@ char *seq, *seqId;
 int i, l;
 char *chp;
 
-printf("<B>DNA Sequences</B><BR>");
+printf("<B>GP120 DNA Sequences</B><BR>");
 safef(query, sizeof(query), 
       "select dnaSeqId, seq from gsIdXref, dnaSeq where subjId = '%s' and id = dnaSeqId order by dnaSeqId", subjId);
 sr = sqlMustGetResult(conn, query);
@@ -66,7 +66,7 @@ while (row != NULL)
     }
 sqlFreeResult(&sr);
 
-printf("<B>Protein Sequences</B><BR>");
+printf("<B>GP120 Protein Sequences</B><BR>");
 safef(query, sizeof(query), 
       "select aaSeqId, seq from gsIdXref, aaSeq where subjId = '%s' and aaSeqId = id order by aaSeqId", subjId);
 sr = sqlMustGetResult(conn, query);
