@@ -1186,3 +1186,55 @@ chainOne $(path1)
 
 
 #########################################################################
+# UPDATE ASSEMBLY VERSION STRING AND VERIFY SAME DATA (DONE 5/7/07 angie)
+# WUSTL's platypus project website now calls the assembly rev Mar. 2007,
+# 5.0.1 (as opposed to 5.0 or 6.0) so follow suit:
+    ssh hgwdev
+    hgsql hgcentraltest -e \
+      'update dbDb set description = "Mar. 2007" where name = "ornAna1";'
+    hgsql hgcentraltest -e \
+      'update dbDb set sourceName = "WUSTL version 5.0.1" where name = "ornAna1";'
+    # We got the data in Feb. not Mar., so I redownloaded files from 
+    # http://genome.wustl.edu/pub/organism/Other_Vertebrates/Ornithorhynchus_anatinus/assembly/Ornithorhynchus_anatinus-5.0.1/output/
+    # and verified it's the same seq/agp.
+    ssh kolossus
+    mkdir /tmp/checkOrnAna1
+    cd /tmp/checkOrnAna1
+    wget http://genome.wustl.edu/pub/organism/Other_Vertebrates/Ornithorhynchus_anatinus/assembly/Ornithorhynchus_anatinus-5.0.1/output/chromosomes.agp.gz
+    wget http://genome.wustl.edu/pub/organism/Other_Vertebrates/Ornithorhynchus_anatinus/assembly/Ornithorhynchus_anatinus-5.0.1/output/chromosomes.fa.gz
+    gunzip chr*gz
+
+    # Compare AGP:
+    wc -l /cluster/data/ornAna1/ornAna1.agp 
+#689178 /cluster/data/ornAna1/ornAna1.agp
+    wc -l chr*.agp
+#689178 chromosomes.agp
+    sort -k 1,1 -k 2n,2n /cluster/data/ornAna1/ornAna1.agp > tmp1
+    sort -k 1,1 -k 2n,2n chromosomes.agp > tmp2
+    cmp tmp1 tmp2
+    # No output -- good, no change!!
+
+    # Compare FASTA:
+    faSize chromosomes.fa
+#871323289 bases (58126753 N's 813196536 real 813196535 upper 1 lower) in 125840 sequences in 1 files
+#Total size: mean 6924.1 sd 381372.6 min 108 (Contig271463) max 59581953 (chr3) median 894
+    # OK, that only has chroms and Contigs, not Ultras!
+    wget http://genome.wustl.edu/pub/organism/Other_Vertebrates/Ornithorhynchus_anatinus/assembly/Ornithorhynchus_anatinus-5.0.1/output/supercontigs.fa.gz
+    gunzip su*.gz
+#1996203893 bases (153985390 N's 1842218503 real 1842218503 upper 0 lower) in 205536 sequences in 1 files
+    # The "1842218503 real" base count matches expected.
+
+    # Neither downloaded fasta file has Ultra497... but it would be 
+    # reconstructed from AGP to be the same as what we have.  
+    # We can compare chr5's affected region:
+    echo chr5 > list
+    faSomeRecords chromosomes.fa list stdout | faFrag stdin 647408 657392 tmp1
+    twoBitToFa /cluster/data/ornAna1/ornAna1.2bit \
+      -seq=chr5 -start=647408 -end=657392 tmp2
+    faCmp tmp1 tmp2
+#tmp1 and tmp2 are the same
+
+    # Whew!
+
+
+#########################################################################
