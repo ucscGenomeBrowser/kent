@@ -46,6 +46,7 @@ DIRS = \
 	kgXref2 \
 	pbCalDist \
 	pbCalPi \
+	pbCalResStd \
 	pbHgnc \
 	pfamXref \
 	rmKGPepMrna \
