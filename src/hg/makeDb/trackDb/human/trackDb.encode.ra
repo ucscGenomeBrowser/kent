@@ -21,72 +21,13 @@ type bed 6 +
 origAssembly hg16
 dataVersion ENCODE June 2005 Freeze
 
-track encodeGencodeGeneOct05
-compositeTrack on
-shortLabel Gencode Genes
-longLabel Gencode Gene Annotations
-dataVersion ENCODE Oct 2005 Freeze
-group encodeGenes
-priority 10.5
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-visibility hide
-type genePred
-cdsDrawDefault genomic\ codons
-baseColorUseCds given
-baseColorDefault genomicCodons
-itemClassTbl gencodeGeneClassOct05
-geneClasses Artifact Known Novel_CDS Novel_transcript Novel_transcript_gencode_conf Putative Putative_gencode_conf TEC Processed_pseudogene Unprocessed_pseudogene
-gClass_Known 33,91,51
-gClass_Novel_CDS 33,91,51
-gClass_Novel_transcript_gencode_conf 33,91,51
-gClass_Putative_gencode_conf 33,91,51
-gClass_Novel_transcript  84,188,0
-gClass_TEC  84,188,0
-gClass_Putative  84,188,0
-gClass_Artifact 163,168,163
-gClass_Processed_pseudogene 0,91,191
-gClass_Unprocessed_pseudogene 0,91,191
-origAssembly hg17
-
-    track encodeGencodeGeneKnownOct05
-    subTrack encodeGencodeGeneOct05
-    shortLabel Gencode Ref
-    longLabel Gencode Reference Genes
-    color 33,91,51
-    priority 1
-
-    track encodeGencodeGenePutativeOct05
-    subTrack encodeGencodeGeneOct05
-    shortLabel Gencode Putative
-    longLabel Gencode Putative Genes
-    color  84,188,0
-    priority 2
-
-    track encodeGencodeGenePseudoOct05
-    subTrack encodeGencodeGeneOct05
-    shortLabel Gencode Pseudo
-    longLabel Gencode Pseudogenes
-    color 0,91,191
-    priority 3
-
-track encodeGencodeIntronOct05
-shortLabel Gencode Introns
-longLabel Gencode Intron Validation 
-dataVersion ENCODE Oct 2005 Freeze
-group encodeGenes
-priority 10.6
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr8,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr9,chrX
-visibility hide
-type bed 6 +
-origAssembly hg17
-
 track encodeGencodeGeneMar07
 compositeTrack on
 shortLabel Gencode Genes Mar07
-longLabel Gencode Gene Annotations
+longLabel Gencode Gene Annotations (March 2007)
 dataVersion Mar 2007
 group encodeGenes
-priority 10.7
+priority 10.5
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type genePred
@@ -143,13 +84,72 @@ origAssembly hg17
     itemRgb on
     priority 5
 
+track encodeGencodeGeneOct05
+compositeTrack on
+shortLabel Gencode Genes Oct05
+longLabel Gencode Gene Annotations (October 2005)
+dataVersion ENCODE Oct 2005 Freeze
+group encodeGenes
+priority 10.6
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type genePred
+cdsDrawDefault genomic\ codons
+baseColorUseCds given
+baseColorDefault genomicCodons
+itemClassTbl gencodeGeneClassOct05
+geneClasses Artifact Known Novel_CDS Novel_transcript Novel_transcript_gencode_conf Putative Putative_gencode_conf TEC Processed_pseudogene Unprocessed_pseudogene
+gClass_Known 33,91,51
+gClass_Novel_CDS 33,91,51
+gClass_Novel_transcript_gencode_conf 33,91,51
+gClass_Putative_gencode_conf 33,91,51
+gClass_Novel_transcript  84,188,0
+gClass_TEC  84,188,0
+gClass_Putative  84,188,0
+gClass_Artifact 163,168,163
+gClass_Processed_pseudogene 0,91,191
+gClass_Unprocessed_pseudogene 0,91,191
+origAssembly hg17
+
+    track encodeGencodeGeneKnownOct05
+    subTrack encodeGencodeGeneOct05
+    shortLabel Gencode Ref
+    longLabel Gencode Reference Genes
+    color 33,91,51
+    priority 1
+
+    track encodeGencodeGenePutativeOct05
+    subTrack encodeGencodeGeneOct05
+    shortLabel Gencode Putative
+    longLabel Gencode Putative Genes
+    color  84,188,0
+    priority 2
+
+    track encodeGencodeGenePseudoOct05
+    subTrack encodeGencodeGeneOct05
+    shortLabel Gencode Pseudo
+    longLabel Gencode Pseudogenes
+    color 0,91,191
+    priority 3
+
+track encodeGencodeIntronOct05
+shortLabel Gencode Introns Oct05
+longLabel Gencode Intron Validation (October 2005) 
+dataVersion ENCODE Oct 2005 Freeze
+group encodeGenes
+priority 10.7
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr8,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr9,chrX
+visibility hide
+type bed 6 +
+origAssembly hg17
+
 track encodeGencodeRaceFrags
 compositeTrack on
 shortLabel Gencode RACEfrags
 longLabel 5' RACE-Array experiments on Gencode loci
 dataVersion Mar 2007
 group encodeGenes
-priority 10.7
+priority 11
 chromosomes chr1,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type genePred
@@ -3167,6 +3167,24 @@ dataVersion ENCODE Oct 2005 Freeze
     longLabel University of Virginia DNA Replication Origins Confidence Intervals
     color 100,100,100
     priority 2
+
+    track encodeUvaDnaRepOriginsBubbleHela
+    subTrack encodeUvaDnaRepOrigins
+    longLabel University of Virginia Predicted DNA Replication Origins, Bubble (HeLa)
+    shortLabel UVa DNA Rep Bubble
+    priority 3
+
+    track encodeUvaDnaRepOriginsNSHela
+    subTrack encodeUvaDnaRepOrigins
+    longLabel University of Virginia Predicted DNA Replication Origins, Nascent Strand (HeLa)
+    shortLabel UVa DNA Rep NS 
+    priority 4
+
+    track encodeUvaDnaRepOriginsNSGM
+    subTrack encodeUvaDnaRepOrigins
+    longLabel University of Virginia Predicted DNA Replication Origins, Nascent Strand (GM06990)
+    shortLabel UVa DNA Rep NS GM
+    priority 5
 
 track encodeUvaDnaRepTr50
 shortLabel UVa DNA Rep TR50
