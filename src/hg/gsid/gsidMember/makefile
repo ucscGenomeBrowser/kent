@@ -12,7 +12,7 @@ HG_WARN=${HG_WARN_ERR}
 
 my: compile
 	chmod a+rx $A${EXE}
-	mv $A${EXE} ${CGI_BIN}-galt/$A
+	mv $A${EXE} ${CGI_BIN}-signup/$A
 
 compile: $O $(MYLIBS)
 	${CC} ${COPT} -o $A $O $(MYLIBS) $L

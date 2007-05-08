@@ -25,7 +25,7 @@
 #include "paypalSignEncrypt.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidMember.c,v 1.22 2007/05/08 06:06:23 galt Exp $";
+static char const rcsid[] = "$Id: gsidMember.c,v 1.23 2007/05/08 06:09:55 galt Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "debug", "fixMembers", "update", "gsidM_password", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -799,12 +799,9 @@ safef(buttonData, sizeof(buttonData),
 
 //debug  TODO: clean that out of trash
 //writeGulp("../trash/debug.buttonData", buttonData, strlen(buttonData));
-fprintf(stderr, "debug: about to encrypt buttonData=[%s]\n", buttonData);fflush(stderr);
+//fprintf(stderr, "debug: about to encrypt buttonData=[%s]\n", buttonData);fflush(stderr);
 
 char *buttonEncrypted = sign_and_encryptFromFiles(buttonData, "gsid_key.pem", "gsid_cert.pem", cfgOption("paypalCert"), FALSE);
-
-
-fprintf(stderr, "debug: returned from button-encryption step\n");fflush(stderr);
 
 if (buttonEncrypted)
     {
