@@ -163,7 +163,7 @@ while (row2 != NULL)
     	accession = sqlGetField(conn, proteinDatabaseName, "displayId", "acc", cond_str);
 	if (accession == NULL)
 	    {
-	    printf("1 %s not found.\n", protDisplayId);fflush(stdout); 
+	    verbose(2, "'%s' not found.\n", protDisplayId);
 	    goto skip;
 	    }
 	}
