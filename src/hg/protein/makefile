@@ -44,6 +44,7 @@ DIRS = \
 	kgPutBack \
 	kgXref \
 	kgXref2 \
+	pbCalDist \
 	pbCalPi \
 	pbHgnc \
 	pfamXref \
