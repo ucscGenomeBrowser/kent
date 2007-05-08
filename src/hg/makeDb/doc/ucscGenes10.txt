@@ -16,7 +16,7 @@ set Xdb = Mm8
 set ydb = canFam2
 set zdb = rheMac2
 set spDb = sp070202
-set pbDb = pbDb
+set pbDb = proteins070202
 set ratDb = rn4
 set RatDb = Rn4
 set fishDb = danRer4
@@ -501,6 +501,9 @@ rm foo.alias foo.protAlias
 hgLoadSqlTab $tempDb kgAlias ~/kent/src/hg/lib/kgAlias.sql ucscGenes.alias
 hgLoadSqlTab $tempDb kgProtAlias ~/kent/src/hg/lib/kgProtAlias.sql ucscGenes.protAlias
 
+# Load up kgProtMap2 table that says where exons are in terms of CDS
+hgLoadPsl $tempDb ucscProtMap.psl -table=kgProtMap2
+
 # Make full text index.  Takes a minute or so.  After this the genome browser
 # tracks display will work including the position search.  The genes details
 # page, gene sorter, and proteome browser still need more tables.
@@ -530,7 +533,6 @@ if ($db =~ hg*) then
     time hgExpDistance $tempDb hgFixed.gnfHumanAtlas2MedianRatio \
 	hgFixed.gnfHumanAtlas2MedianExps gnfAtlas2Distance \
 	-lookup=knownToGnfAtlas2
-    knownToVisiGene $db -table=$tempDb.knownToVisiGene -fromProbePsl=vgAllProbes
 endif
 if ($db =~ mm*) then
     hgMapToGene $db -tempDb=$tempDb affyGnf1m knownGene knownToGnf1m
@@ -543,8 +545,8 @@ if ($db =~ mm*) then
     hgExpDistance $tempDb $db.affyGnfU74C affyGnfU74CExps affyGnfU74CDistance -lookup=knownToU74
     hgExpDistance $tempDb hgFixed.gnfMouseAtlas2MedianRatio \
 	    hgFixed.gnfMouseAtlas2MedianExps gnfAtlas2Distance -lookup=knownToGnf1m
-    knownToVisiGene $db -table=$tempDb.knownToVisiGene -fromProbePsl=vgProbes
 endif
+knownToVisiGene $db -table=$tempDb.knownToVisiGene -fromProbePsl=vgAllProbes
 vgGetText /usr/local/apache/cgi-bin/visiGeneData/visiGene.text $vgTextDbs
 
 # Create Human P2P protein-interaction Gene Sorter columns
@@ -688,18 +690,19 @@ cd /san/sanvol1/scratch/$db
 mkdir ucscGenes
 cd ucscGenes
 mkdir splitProt
-faSplit sequence $dir/ucscGenes.faa 10000 splitProt
+faSplit sequence $dir/ucscGenes.faa 10000 splitProt/
 mkdir pfam
 cd pfam
+mkdir out
 ls -1 ../splitProt > in.lst
 cat << _EOF_ > doPfam
 #!/bin/tcsh -ef
-/san/sanvol1/pfam/hmmpfam -E 0.1 /san/sanvol1/pfam/Pfam_fs $1 > $2
+/san/sanvol1/pfam/hmmpfam -E 0.1 /san/sanvol1/pfam/Pfam_fs \$1 > \$2
 _EOF_
 chmod a+x doPfam
 cat << _EOF_ > gsub
 #LOOP
-doPfam ../splitProt/$(path1) out/$(root1).pf
+doPfam ../splitProt/\$(path1) out/\$(root1).pf
 #ENDLOOP
 _EOF_
 gensub2 in.lst single gsub spec
@@ -729,15 +732,16 @@ hgLoadSqlTab $tempDb knownToPfam ~/kent/src/hg/lib/knownTo.sql knownToPfam.tab
 cd /san/sanvol1/scratch/$db/ucscGenes
 mkdir scop
 cd scop
+mkdir out
 ls -1 ../splitProt > in.lst
 cat << _EOF_ > doScop
 #!/bin/tcsh -ef
-/san/sanvol1/pfam/hmmpfam -E 0.1 /san/sanvol1/scop/scop.hmm $1 > $2
+/san/sanvol1/pfam/hmmpfam -E 0.1 /san/sanvol1/scop/scop.hmm \$1 > \$2
 _EOF_
 chmod a+x doScop
 cat << _EOF_ > gsub
 #LOOP
-doScop ../splitProt/$(path1) out/$(root1).pf
+doScop ../splitProt/\$(path1) out/\$(root1).pf
 #ENDLOOP
 _EOF_
 gensub2 in.lst single gsub spec
@@ -752,24 +756,28 @@ scopCollapse scopPlusScore.tab /cluster/store12/scop/model.tab ucscScop.tab \
 hgLoadSqlTab $tempDb knownToSuper ~/kent/src/hg/lib/knownToSuper.sql knownToSuper.tab
 
 # Regenerate ccdsKgMap table
-/cluster/data/genbank/bin/x86_64/mkCcdsGeneMap  -db=$db -loadDb ccdsGene knownGene ccdsKgMap
+#/cluster/data/genbank/bin/x86_64/mkCcdsGeneMap  -db=$db -loadDb ccdsGene knownGene ccdsKgMap
+/cluster/data/genbank/bin/x86_64/mkCcdsGeneMap  -db=$tempDb -loadDb $db.ccdsGene knownGene ccdsKgMap
 
 # Map old to new mapping
+hgsql $db -N -e 'select * from knownGene' > knownGene_1.gp
+genePredToBed knownGene_1.gp >knownGene_1.bed
 cat refSeq/*.bed mrna/*.bed | txGeneExplainUpdate1 knownGene_1.bed ucscGenes.bed stdin abWalk.bed kg1ToKg2.bed
 hgLoadSqlTab $tempDb kg1ToKg2 ~/kent/src/hg/lib/kg1ToKg2.sql kg1ToKg2.bed
 
 # Build kgSpAlias table, which combines content of both kgAlias and kgProtAlias tables.
 
-    hgsql $db -N -e \
+    hgsql $tempDb -N -e \
     'select kgXref.kgID, spID, alias from kgXref, kgAlias where kgXref.kgID=kgAlias.kgID' >j.tmp
          
-    hgsql $db -N -e \
+    hgsql $tempDb -N -e \
     'select kgXref.kgID, spID, alias from kgXref, kgProtAlias where kgXref.kgID=kgProtAlias.kgID'\
     >>j.tmp
     cat j.tmp|sort -u  >kgSpAlias.tab
     rm j.tmp
 
-    loadSqlTab $tempDb kgSpAlias ~/kent/src/hg/lib/kgSpAlias.sql ./kgSpAlias.tab
+    hgLoadSqlTab $tempDb kgSpAlias ~/kent/src/hg/lib/kgSpAlias.sql ./kgSpAlias.tab
+    exit
 
 # RE-BUILD HG18 PROTEOME BROWSER TABLES (DONE, Fan, 4/2/07). 
 
@@ -789,14 +797,14 @@ hgLoadSqlTab $tempDb kg1ToKg2 ~/kent/src/hg/lib/kg1ToKg2.sql kg1ToKg2.bed
 
 # Build the pepMwAa table
 
-  hgsql pbDb -N -e \
+  hgsql $pbDb -N -e \
 "select info.acc, molWeight, aaSize from $spDb.info, $spDb.accToTaxon where accToTaxon.taxon=$taxon and accToTaxon.acc = info.acc" > pepMwAa.tab
 
 hgLoadSqlTab $tempDb pepMwAa ~/kent/src/hg/lib/pepMwAa.sql ./pepMwAa.tab
 
 o Build the pepPi table
 
-    hgsql pbDb -e \
+    hgsql $pbDb -e \
     "select info.acc from $spDb.info, $spDb.accToTaxon where accToTaxon.taxon=$taxon and accToTaxon.acc = info.acc" > protAcc.lis
 
     hgsql $tempDb -N -e 'select proteinID from knownGene where proteinID like "%-%"' | sort -u >> protAcc.lis
@@ -806,18 +814,15 @@ o Build the pepPi table
 
 # Calculate and load pep distributions
 
-    /cluster/home/fanhsu/bin/x86_64/pbCalDist $spDb pbDb $taxon $tempDb >pbCalDist.out
-    wc  pbCalDist.out
+    pbCalDist $spDb $pbDb $taxon $tempDb 
+    hgLoadSqlTab $tempDb pepExonCntDist ~/kent/src/hg/lib/pepExonCntDist.sql ./pepExonCntDist.tab
+    hgLoadSqlTab $tempDb pepCCntDist ~/kent/src/hg/lib/pepCCntDist.sql ./pepCCntDist.tab
+    hgLoadSqlTab $tempDb pepHydroDist ~/kent/src/hg/lib/pepHydroDist.sql ./pepHydroDist.tab
+    hgLoadSqlTab $tempDb pepMolWtDist ~/kent/src/hg/lib/pepMolWtDist.sql ./pepMolWtDist.tab
+    hgLoadSqlTab $tempDb pepResDist ~/kent/src/hg/lib/pepResDist.sql ./pepResDist.tab
+    hgLoadSqlTab $tempDb pepIPCntDist ~/kent/src/hg/lib/pepIPCntDist.sql ./pepIPCntDist.tab
+    hgLoadSqlTab $tempDb pepPiDist ~/kent/src/hg/lib/pepPiDist.sql ./pepPiDist.tab
 
-    hgsql $tempDb
-    load data local infile "pepExonCntDist.tab" into table pepExonCntDist;
-    load data local infile "pepCCntDist.tab" into table pepCCntDist;
-    load data local infile "pepHydroDist.tab" into table pepHydroDist;
-    load data local infile "pepMolWtDist.tab" into table pepMolWtDist;
-    load data local infile "pepResDist.tab" into table pepResDist;
-    load data local infile "pepIPCntDist.tab" into table pepIPCntDist;
-    load data local infile "pepPiDist.tab" into table pepPiDist;
-    quit
 
 # Calculate frequency distributions
 
