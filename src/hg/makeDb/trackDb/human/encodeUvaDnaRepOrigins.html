@@ -63,3 +63,51 @@ MacAlpine, D., Lee, C., Hwang, D.S., Gingeras, T.R. and Dutta, A.
 TARGET=_blank>Temporal profile of replication of human chromosomes</A>.
 <em>Proc Natl Acad Sci U S A</em> <B>102</B>(18), 6419-24 (2005).</P>
 
+
+<H2>Description</H2>
+<P>
+ENCODE region-wide mapping of replication origins was performed by the bubble trapping method from HeLa (cervix carcinoma) cells.
+
+<H2>Methods</H2>
+<P>
+The circular bubble DNA component of replication intermediates was enriched by agarose trapping and cloned to form a library. DNA from the library was labeled and hybridized to Affymetrix ENCODE tiling arrays, which have 25-mer probes tiled every 22 bp on average in the non-repetitive ENCODE regions. As experimental control, genomic DNA was hybridized to arrays independently.
+
+Replication origins were identified by estimating the significance of the enrichment of the bubble-trapped DNA (treatment) signal over genomic DNA (control) signal in a sliding window of 10000 bp. An estimate of significance in the window was calculated by computing the p-value using the Wilcoxon Rank Sum test over all three biological replicates and control signal estimates in that window. The origins (Ori-bubble) hence represented in the UCSC browser track are the genomic regions that showed signal enrichment pValue <= 0.001.
+
+<H2>Verification</H2>
+<P>
+The origin mapping experiments were completed for two biological sets. 
+
+<H2>Credits</H2>
+<P>
+Data generation and analysis for this track were performed by the DNA replication group in the Dutta Lab and Hamlin Lab at the University of Virginia: Neerja Karnani,  Larry Mesner, Christopher Taylor, Ankit Malhotra, Gabe Robins and Anindya Dutta, Joyce Hamlin.
+
+Christopher Taylor and Neerja Karnani prepared the data for presentation in the UCSC Genome Browser. 
+
+<H2>References</H2>
+<P>
+Mesner LD, Crawford EL, Hamlin JL. Isolating Apparently Pure Libraries of Replication Origins from Complex Genomes. Mol Cell. 2006, 21(5):719-26.
+
+<H2>Description</H2>
+<P>
+ENCODE region-wide mapping of replication origins was performed.  Origin-centered nascent-strands were purified from HeLa (cervix carcinoma) and GM06990 (lymphoblastoid) cell lines and hybridized to Affymetrix ENCODE arrays.
+
+<H2>Methods</H2>
+<P>
+Cells in their exponential stage of growth were labeled in culture with bromodeoxyuridine (BrdU) for 30 mins and DNA isolated. Nascent strands of 0.5-2.5kb representing the replication origins were purified by sucrose gradient followed by immunoprecipitation with BrdU antibody. The purified nascent strands were amplified and hybridized to Affymetrix ENCODE tiling arrays, which have 25-mer probes tiled every 22 bp on average in the non-repetitive ENCODE regions. As experimental control, genomic DNA was hybridized to arrays independently.
+
+Replication origins were identified by estimating the significance of the enrichment of nascent strands DNA (treatment) signal over genomic DNA (control) signal in a sliding window of 1000bp. An estimate of significance in the window was calculated by computing the p-value using the Wilcoxon Rank Sum test over all three biological replicates and control signal estimates in that window. The origins (Ori-NS) represented in the UCSC browser track are the genomic regions that showed signal enrichment pValue <= 0.001.
+
+<H2>Verification</H2>
+<P>
+The origin mapping experiments were completed for three biological sets.
+
+<H2>Credits</H2>
+<P>
+Data generation and analysis for this track were performed by the DNA replication group in the Dutta Lab at the University of Virginia: Neerja Karnani, Christopher Taylor, Ankit Malhotra, Gabe Robins and Anindya Dutta. 
+
+Christopher Taylor and Neerja Karnani prepared the data for presentation in the UCSC Genome Browser. 
+
+<H2>References</H2>
+<P>
+Giacca M, Pelizon C, Falaschi A. Mapping replication origins by quantifying relative abundance of nascent DNA strands using competitive polymerase chain reaction. Methods. 1997,13(3):301-12.
