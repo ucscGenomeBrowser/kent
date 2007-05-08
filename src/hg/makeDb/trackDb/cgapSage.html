@@ -47,6 +47,18 @@ for exploring and analyzing this data is available from the
 <A HREF="http://cgap.nci.nih.gov/SAGE" TARGET=_blank>CGAP SAGE Genie</A> web site.
 </P>
 
+<H4>Mapping SAGE tags to the human genome</H4>
+<P>
+First, a subset of all single-base SNPs from dbSNP were gathered.  The SNPs 
+discarded include those which have flanking sequence that does not map to a 
+unique location, SNPs with the reference allele not matching the reference
+genome, and SNPs that overlap tandom repeat sequence. For all 21-mers in the
+genome: if the 21-mer contained a SNP or
+multiple SNPs, we created all possible versions of the 21-mer using all
+combinations of SNPs.  We used 21-mers beginning with CATG as a mapping.
+We discarded mappings that are not seen in the SAGE tag dataset.
+Finally, we discarded any non-unique mappings.
+</P>
 
 <H4>Human Embryonic Stem Cell library construction</H4>
 <P>
