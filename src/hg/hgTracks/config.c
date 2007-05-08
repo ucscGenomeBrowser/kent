@@ -11,6 +11,7 @@
 #include "customTrack.h"
 #include "hgTracks.h"
 #include "hgConfig.h"
+#include "jsHelper.h"
 
 void textSizeDropDown()
 /* Create drop down for font size. */
@@ -100,7 +101,12 @@ for (group = groupList; group != NULL; group = group->next)
 	   "onClick=\"document.mainForm.%s.value='%s';\">", 
 	   configDefaultAll, "default", configGroupTarget, group->name);
     hPrintf(" ");
-    cgiMakeButton("submit", "submit");
+    /* do not want all the submit buttons named the same.  It is
+     * confusing to the javascript submit() function.
+     */
+    char submitName[256];
+    safef(submitName, sizeof(submitName), "%sSubmit", group->name);
+    cgiMakeButton(submitName, "submit");
     if (withPriorityOverride)
         {
         hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
@@ -228,9 +234,13 @@ if (sameString(groupTarget, "none"))
     freez(&groupTarget);
 
 dyStringPrintf(title, "Configure Image");
+
+
 hPrintf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=POST>\n", hgTracksName());
 webStartWrapperDetailedNoArgs(cart, "", title->string, FALSE, FALSE, FALSE, FALSE);
 cartSaveSession(cart);
+
+hPrintf("<INPUT TYPE=HIDDEN NAME=\"hgTracksConfigPage\" VALUE=\"\">");
 
 hPrintf(" image width: ");
 hIntVar("pix", tl.picWidth, 4);
@@ -248,7 +258,8 @@ if (trackLayoutInclFontExtras())
     hPrintf("&nbsp;bold&nbsp;");
     hPrintf("&nbsp;");
     }
-cgiMakeButton("Submit", "submit");
+/* do not want all the submit buttons named the same thing, this one is: */
+cgiMakeButton("topSubmit", "submit");
 hPrintf("<P>");
 hTableStart();
 if (ideoTrack != NULL)
@@ -290,7 +301,9 @@ hPrintf("</TD><TD>");
 hPrintf("Next/previous exon navigation");
 hPrintf("</TD></TR>\n");
 hPrintf("<TR><TD>");
-hCheckBox(configPriorityOverride , cartUsualBoolean(cart, configPriorityOverride , FALSE));
+char *javascript="onClick=\"document.mainForm.hgTracksConfigPage.value='configure';document.mainForm.submit();\"";
+hCheckBoxJS(configPriorityOverride,
+	cartUsualBoolean(cart, configPriorityOverride , FALSE), javascript);
 hPrintf("</TD><TD>");
 hPrintf("Enable track re-ordering");
 hPrintf("</TD></TR>\n");
