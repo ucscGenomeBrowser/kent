@@ -159,6 +159,9 @@ void cgiMakeCheckBoxWithMsg(char *name, boolean checked, char *msg);
 void cgiMakeCheckBox(char *name, boolean checked);
 /* Make check box. */
 
+void cgiMakeCheckBoxJS(char *name, boolean checked, char *javascript);
+/* Make check box with javascript */
+
 void cgiMakeTextArea(char *varName, char *initialVal, int rowCount, int columnCount);
 /* Make a text area with area rowCount X columnCount and with text: intialVal. */
 

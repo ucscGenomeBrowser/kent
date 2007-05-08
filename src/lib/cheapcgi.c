@@ -12,7 +12,7 @@
 #include "errabort.h"
 #include "mime.h"
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.85 2006/12/19 18:49:52 kent Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.86 2007/05/08 17:15:31 hiram Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -904,6 +904,17 @@ void cgiMakeCheckBox(char *name, boolean checked)
 /* Make check box. */
 {
 cgiMakeCheckBoxWithMsg(name, checked, NULL);
+}
+
+void cgiMakeCheckBoxJS(char *name, boolean checked, char *javascript)
+/* Make check box with javascript. */
+{
+char buf[256];
+
+printf("<INPUT TYPE=CHECKBOX NAME=\"%s\" VALUE=on %s %s>", name,
+    javascript, (checked ? " CHECKED" : ""));
+safef(buf, sizeof(buf), "%s%s", cgiBooleanShadowPrefix(), name);
+cgiMakeHiddenVar(buf, "1");
 }
 
 void cgiMakeHiddenBoolean(char *name, boolean on)
