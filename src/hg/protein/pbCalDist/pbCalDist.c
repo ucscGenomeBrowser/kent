@@ -85,16 +85,15 @@ return(highestCnt);
 
 int main(int argc, char *argv[])
 {
-struct sqlConnection *conn, *conn2, *conn3;
-char query[256], query2[256], query3[256];
-struct sqlResult *sr, *sr2, *sr3;
-char **row, **row2, **row3;
-char *r1, *r2, *r3, *r4;
+struct sqlConnection *conn, *conn2;
+char query2[256];
+struct sqlResult *sr, *sr2;
+char **row2;
 char cond_str[255];
 char *proteinDatabaseName;	/* example: sp031112 */
 char *protDbName;		/* example: proteins031112 */
 char emptyStr[1] = {""};
-FILE *o1, *o2, *o3, *o4, *o5;
+FILE *o2;
 char *accession;
 char *aaSeq;
 char *chp;
@@ -103,7 +102,6 @@ int cCnt;
 char *answer, *answer2;
 double hydroSum;
 char *protDisplayId;
-char *kgId;
 int aaResCnt[30];
 double aaResCntDouble[30];
 char aaAlphabet[30];
@@ -115,19 +113,16 @@ int pIcnt;
 double pI[100000];
 
 double aa_hydro[256];
-int icnt, jExon, pcnt, ipcnt;
+int icnt, jExon, pcnt, ipcnt = 0;
 double aaLenDouble[100000];
 double avgHydro[100000];
 double cCountDouble[100000];
 double exonCountDouble[100000];
-double pfamCountDouble[100000];
 double interProCountDouble[100000];
 char *taxon;
 char *database;
 char *exonCnt;
-int pfamCount;
 int interProCount;
-struct slName *taxonList, *name;
 
 if (argc != 5) usage();
 
@@ -220,7 +215,7 @@ while (row2 != NULL)
 	exonCnt = strdup(answer2);
 	if (atoi(exonCnt) == 0)
 	    {
-	    errAbort("%s %s %s has 0 block count\n", accession, protDisplayId, kgId);
+	    errAbort("%s %s has 0 block count\n", accession, protDisplayId);
 	    }
 	exonCountDouble[jExon] = (double)(atoi(exonCnt));
 	jExon++;
