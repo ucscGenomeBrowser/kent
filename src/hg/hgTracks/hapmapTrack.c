@@ -585,16 +585,16 @@ else
     }
 
 /* determine graphics attributes for vgTextCentered */
-int heightPer, x1, x2, w;
-Color textColor = MG_BLACK;
-
-heightPer = tg->heightPer;
+int x1, x2, w;
 x1 = round((double)((int)chromStart-winStart)*scale) + xOff;
 x2 = round((double)((int)chromEnd-winStart)*scale) + xOff;
 w = x2-x1;
 if (w < 1)
     w = 1;
-y += (heightPer >> 1) - 3;
+
+int fontHeight = mgFontLineHeight(font);
+int heightPer = tg->heightPer;
+y += heightPer / 2 - fontHeight / 2;
 
 /* might possibly reverse and then reverse again, but this keeps the logic simple */
 if (sameString(strand, "-"))
@@ -602,6 +602,7 @@ if (sameString(strand, "-"))
 if (cartUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE))
     reverseComplement(allele, 1);
 
+Color textColor = MG_BLACK;
 vgTextCentered(vg, x1, y, w, heightPer, textColor, font, allele);
 
 }
