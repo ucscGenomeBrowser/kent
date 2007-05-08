@@ -25,7 +25,7 @@
 #include "paypalSignEncrypt.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidMember.c,v 1.23 2007/05/08 06:09:55 galt Exp $";
+static char const rcsid[] = "$Id: gsidMember.c,v 1.24 2007/05/08 21:53:14 galt Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "debug", "fixMembers", "update", "gsidM_password", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -834,9 +834,12 @@ freez(&buttonEncrypted);
 //fprintf(stderr, "encrypted button form: [%s]\n", buttonHtml);
 
 hPrintf(
-"Pay yearly %s access fee using paypal to activate your account.<br>\n"
-"Be sure to click the \"Return to Merchant\" link when done.<br>\n"
+"Pay yearly %s access fee to activate your account.<br>\n"
 "%s\n"
+"Your payment will be processed by Paypal.<br>\n"
+"You can use a variety of payment methods including credit card.<br>\n"
+"You do not need to be a Paypal member.<br>\n"
+"Be sure to click the \"Return to Merchant\" link when done paying.<br>\n"
 "<br>\n"
 , type
 , buttonHtml
