@@ -30,7 +30,7 @@
 
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.368 2007/05/08 16:19:13 heather Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.369 2007/05/08 21:54:33 heather Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2314,15 +2314,45 @@ cgiMakeDropList(HAP_POP_MIXED, menu, menuSize,
 freez(&menu);
 
 puts("<BR><B>Monomorphism:</B>&nbsp;");
-menuSize = 4;
+puts("<B>CEU:</B>&nbsp;");
+menuSize = 3;
 menu = needMem((size_t)(menuSize * sizeof(char *)));
 menuPos = 0;
 menu[menuPos++] = "no filter";
-menu[menuPos++] = "all populations";
-menu[menuPos++] = "some populations";
-menu[menuPos++] = "no populations";
-cgiMakeDropList(HAP_MONO, menu, menuSize, 
-    cartCgiUsualString(cart, HAP_MONO, HAP_MONO_DEFAULT));
+menu[menuPos++] = "yes";
+menu[menuPos++] = "no";
+cgiMakeDropList(HAP_MONO_CEU, menu, menuSize, 
+    cartCgiUsualString(cart, HAP_MONO_CEU, HAP_MONO_DEFAULT));
+freez(&menu);
+puts("<B>CHB:</B>&nbsp;");
+menuSize = 3;
+menu = needMem((size_t)(menuSize * sizeof(char *)));
+menuPos = 0;
+menu[menuPos++] = "no filter";
+menu[menuPos++] = "yes";
+menu[menuPos++] = "no";
+cgiMakeDropList(HAP_MONO_CHB, menu, menuSize, 
+    cartCgiUsualString(cart, HAP_MONO_CHB, HAP_MONO_DEFAULT));
+freez(&menu);
+puts("<B>JPT:</B>&nbsp;");
+menuSize = 3;
+menu = needMem((size_t)(menuSize * sizeof(char *)));
+menuPos = 0;
+menu[menuPos++] = "no filter";
+menu[menuPos++] = "yes";
+menu[menuPos++] = "no";
+cgiMakeDropList(HAP_MONO_JPT, menu, menuSize, 
+    cartCgiUsualString(cart, HAP_MONO_JPT, HAP_MONO_DEFAULT));
+freez(&menu);
+puts("<B>YRI:</B>&nbsp;");
+menuSize = 3;
+menu = needMem((size_t)(menuSize * sizeof(char *)));
+menuPos = 0;
+menu[menuPos++] = "no filter";
+menu[menuPos++] = "yes";
+menu[menuPos++] = "no";
+cgiMakeDropList(HAP_MONO_YRI, menu, menuSize, 
+    cartCgiUsualString(cart, HAP_MONO_YRI, HAP_MONO_DEFAULT));
 freez(&menu);
 
 puts("<BR><BR><B>Polymorphism type:</B>&nbsp;");

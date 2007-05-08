@@ -16,7 +16,10 @@ float minFreqFilter = 0.0;
 float maxFreqFilter = 0.5;
 float minHetFilter = 0.0;
 float maxHetFilter = 0.5;
-char *monoFilter = HAP_MONO_DEFAULT;
+char *monoFilterCEU = HAP_MONO_DEFAULT;
+char *monoFilterCHB = HAP_MONO_DEFAULT;
+char *monoFilterJPT = HAP_MONO_DEFAULT;
+char *monoFilterYRI = HAP_MONO_DEFAULT;
 char *chimpFilter = HAP_CHIMP_DEFAULT;
 int chimpQualFilter = 0;
 char *macaqueFilter = HAP_MACAQUE_DEFAULT;
@@ -71,7 +74,10 @@ if (maxHetFilter > 0.5)
     maxHetFilter = 0.5;
     cartSetDouble(cart, HAP_MAX_HET, 0.5);
     }
-monoFilter = cartUsualString(cart, HAP_MONO, HAP_MONO_DEFAULT);
+monoFilterCEU = cartUsualString(cart, HAP_MONO_CEU, HAP_MONO_DEFAULT);
+monoFilterCHB = cartUsualString(cart, HAP_MONO_CHB, HAP_MONO_DEFAULT);
+monoFilterJPT = cartUsualString(cart, HAP_MONO_JPT, HAP_MONO_DEFAULT);
+monoFilterYRI = cartUsualString(cart, HAP_MONO_YRI, HAP_MONO_DEFAULT);
 chimpFilter = cartUsualString(cart, HAP_CHIMP, HAP_CHIMP_DEFAULT);
 chimpQualFilter = 
     sqlUnsigned(cartUsualString(cart, HAP_CHIMP_QUAL, HAP_CHIMP_QUAL_DEFAULT));
@@ -111,7 +117,10 @@ if (minFreqFilter > sqlFloat(HAP_MIN_FREQ_DEFAULT)) return FALSE;
 if (maxFreqFilter < sqlFloat(HAP_MAX_FREQ_DEFAULT)) return FALSE;
 if (minHetFilter > sqlFloat(HAP_MIN_HET_DEFAULT)) return FALSE;
 if (maxFreqFilter < sqlFloat(HAP_MAX_HET_DEFAULT)) return FALSE;
-if (differentString(monoFilter, HAP_MONO_DEFAULT)) return FALSE;
+if (differentString(monoFilterCEU, HAP_MONO_DEFAULT)) return FALSE;
+if (differentString(monoFilterCHB, HAP_MONO_DEFAULT)) return FALSE;
+if (differentString(monoFilterJPT, HAP_MONO_DEFAULT)) return FALSE;
+if (differentString(monoFilterYRI, HAP_MONO_DEFAULT)) return FALSE;
 if (differentString(chimpFilter, HAP_CHIMP_DEFAULT)) return FALSE;
 if (chimpQualFilter > sqlUnsigned(HAP_CHIMP_QUAL_DEFAULT)) return FALSE;
 if (differentString(macaqueFilter, HAP_MACAQUE_DEFAULT)) return FALSE;
@@ -254,24 +263,6 @@ if (freqYRI > ret) ret = freqYRI;
 return ret;
 }
 
-int getMonoCount(struct hapmapAllelesSummary *summaryItem)
-/* return count of monomorphic populations */
-{
-int count = 0;
-if (summaryItem->totalAlleleCountCEU > 0 && 
-    summaryItem->majorAlleleCountCEU == summaryItem->totalAlleleCountCEU)
-    count++;
-if (summaryItem->totalAlleleCountCHB > 0 && 
-    summaryItem->majorAlleleCountCHB == summaryItem->totalAlleleCountCHB)
-    count++;
-if (summaryItem->totalAlleleCountJPT > 0 && 
-    summaryItem->majorAlleleCountJPT == summaryItem->totalAlleleCountJPT)
-    count++;
-if (summaryItem->totalAlleleCountYRI > 0 && 
-    summaryItem->majorAlleleCountYRI == summaryItem->totalAlleleCountYRI)
-    count++;
-return count;
-}
 
 char *getMajorAllele(struct hapmapAllelesSummary *summaryItem)
 {
@@ -369,11 +360,26 @@ if (maxFreqFilter < sqlFloat(HAP_MAX_FREQ_DEFAULT))
 if (summaryItem->score/1000.0 < minHetFilter) return TRUE;
 if (summaryItem->score/1000.0 > maxHetFilter) return TRUE;
 
-int monoCount = getMonoCount(summaryItem);
-if (sameString(monoFilter, "all populations") && monoCount < summaryItem->popCount) return TRUE;
-if (sameString(monoFilter, "some populations") && monoCount == summaryItem->popCount) return TRUE;
-if (sameString(monoFilter, "some populations") && monoCount == 0) return TRUE;
-if (sameString(monoFilter, "no populations") && monoCount > 0) return TRUE;
+if (summaryItem->totalAlleleCountCEU > 0)
+    {
+    if (sameString(monoFilterCEU, "yes") && summaryItem->majorAlleleCountCEU != summaryItem->totalAlleleCountCEU) return TRUE;
+    if (sameString(monoFilterCEU, "no") && summaryItem->majorAlleleCountCEU == summaryItem->totalAlleleCountCEU) return TRUE;
+    }
+if (summaryItem->totalAlleleCountCHB > 0)
+    {
+    if (sameString(monoFilterCHB, "yes") && summaryItem->majorAlleleCountCHB != summaryItem->totalAlleleCountCHB) return TRUE;
+    if (sameString(monoFilterCHB, "no") && summaryItem->majorAlleleCountCHB == summaryItem->totalAlleleCountCHB) return TRUE;
+    }
+if (summaryItem->totalAlleleCountJPT > 0)
+    {
+    if (sameString(monoFilterJPT, "yes") && summaryItem->majorAlleleCountJPT != summaryItem->totalAlleleCountJPT) return TRUE;
+    if (sameString(monoFilterJPT, "no") && summaryItem->majorAlleleCountJPT == summaryItem->totalAlleleCountJPT) return TRUE;
+    }
+if (summaryItem->totalAlleleCountYRI > 0)
+    {
+    if (sameString(monoFilterYRI, "yes") && summaryItem->majorAlleleCountYRI != summaryItem->totalAlleleCountYRI) return TRUE;
+    if (sameString(monoFilterYRI, "no") && summaryItem->majorAlleleCountYRI == summaryItem->totalAlleleCountYRI) return TRUE;
+    }
 
 /* orthoAlleles */
 /* if ortho data not available, then filters aren't used */
