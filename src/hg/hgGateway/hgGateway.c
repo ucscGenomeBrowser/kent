@@ -14,7 +14,7 @@
 #include "hui.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hgGateway.c,v 1.98 2007/05/02 01:20:06 kate Exp $";
+static char const rcsid[] = "$Id: hgGateway.c,v 1.99 2007/05/08 20:45:39 aamp Exp $";
 
 boolean isPrivateHost;		/* True if we're on genome-test. */
 struct cart *cart = NULL;
@@ -32,6 +32,7 @@ char *oldClade = NULL;
 char *defaultPosition = hDefaultPos(db);
 char *position = cloneString(cartUsualString(cart, "position", defaultPosition));
 boolean gotClade = hGotClade();
+char *survey = getCfgValue("HGDB_SURVEY", "survey");
 
 /* JavaScript to copy input data on the change genome button to a hidden form
 This was done in order to be able to flexibly arrange the UI HTML
@@ -146,13 +147,15 @@ printf("</td>\n");
 puts(
 "</tr></table>\n"
 "</td></tr><tr><td><center>\n"
-"<a HREF=\"../cgi-bin/cartReset\">Click here to reset</a> the browser user interface settings to their defaults."
+"<a HREF=\"../cgi-bin/cartReset\">Click here to reset</a> the browser user interface settings to their defaults.");
 
 #define SURVEY 1
 #ifdef SURVEY
-"&nbsp;&nbsp;&nbsp;<FONT STYLE=\"background-color:yellow;\"><A HREF=\"http://www.surveymonkey.com/s.asp?u=881163743177\" TARGET=_BLANK><EM><B>Take survey</EM></B></A></FONT>"
+if (survey && sameWord(survey, "on"))
+    puts("&nbsp;&nbsp;&nbsp;<FONT STYLE=\"background-color:yellow;\"><A HREF=\"http://www.surveymonkey.com/s.asp?u=881163743177\" TARGET=_BLANK><EM><B>Take survey</EM></B></A></FONT>");
 #endif
 
+puts(
 "<BR>\n"
 "</center>\n"
 "</td></tr><tr><td><center>\n"
