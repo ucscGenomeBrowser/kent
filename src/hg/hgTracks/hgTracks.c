@@ -108,7 +108,7 @@
 #include "hapmapTrack.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1334 2007/05/08 17:19:15 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1335 2007/05/08 17:26:46 hiram Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -14165,14 +14165,15 @@ setKgVars();
 hDefaultConnect();
 initTl();
 
+char *configPageCall = cartUsualString(cart, "hgTracksConfigPage", "notSet");
 /* Do main display. */
 if (cartVarExists(cart, "chromInfoPage"))
     {
     cartRemove(cart, "chromInfoPage");
     chromInfoPage();
     }
-else if (sameWord(cartUsualString(cart, "hgTracksConfigPage", "notSet"),
-	"configure"))
+else if (sameWord(configPageCall, "configure") ||
+	sameWord(configPageCall, "configure tracks and display"))
     {
     cartRemove(cart, "hgTracksConfigPage");
     configPage();
