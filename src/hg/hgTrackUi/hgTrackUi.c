@@ -30,7 +30,7 @@
 
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.367 2007/05/03 00:01:19 kate Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.368 2007/05/08 16:19:13 heather Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2394,6 +2394,8 @@ cgiMakeIntVar(HAP_MACAQUE_QUAL, minMacaqueQual, 4);
 puts("(range: 0 to 100)\n");
 
 puts("</P>\n");
+
+printf("<P><B>Select subtracks to display:</B></P>\n");
 }
 
 void specificUi(struct trackDb *tdb)
