@@ -12,7 +12,7 @@
 #include "errabort.h"
 #include "mime.h"
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.86 2007/05/08 17:15:31 hiram Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.87 2007/05/08 21:11:25 hiram Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -180,7 +180,7 @@ for(mp=mp->multi;mp;mp=mp->next)
     cdName=getMimeHeaderFieldVal(cd,"name");
     cdFileName=getMimeHeaderFieldVal(cd,"filename");
     //debug
-    //fprintf(stderr,"GALT: main:[%s], name:[%s], filename:[%s]\n",cdMain,cdName,cdFileName);
+    //fprintf(stderr,"cgiParseMultipart: main:[%s], name:[%s], filename:[%s]\n",cdMain,cdName,cdFileName);
     //fflush(stderr);
     if (!sameString(cdMain,"form-data"))
 	errAbort("main content-type expected [form-data], found [%s]",cdMain);
@@ -192,12 +192,25 @@ for(mp=mp->multi;mp;mp=mp->next)
     //fflush(stderr);
     
     /* filename if there is one */
+    /* Internet Explorer on Windows is sending full path names, strip
+     * directory name from those.  Using \ and / and : as potential
+     * path separator characters, e.g.:
+     *	 C:\Documents and Settings\tmp\file.txt.gz
+     */
     if(cdFileName) 
 	{
+	char *lastPathSep = strrchr(cdFileName, (int) '\\');
+	if (!lastPathSep)
+		lastPathSep = strrchr(cdFileName, (int) '/');
+	if (!lastPathSep)
+		lastPathSep = strrchr(cdFileName, (int) ':');
 	char varNameFilename[256];
 	safef(varNameFilename, sizeof(varNameFilename), "%s__filename", cdName);
 	AllocVar(el);
-	el->val = cloneString(cdFileName);
+	if (lastPathSep)
+	    el->val = cloneString(lastPathSep+1);
+	else
+	    el->val = cloneString(cdFileName);
 	slAddHead(&list, el);
 	hashAddSaveName(hash, varNameFilename, el, &el->name);
     	}
