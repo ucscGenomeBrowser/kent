@@ -108,7 +108,7 @@
 #include "hapmapTrack.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1329.2.1 2007/05/05 19:14:46 aamp Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1329.2.2 2007/05/08 21:27:13 aamp Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -13398,6 +13398,7 @@ if (!hideControls)
     /* Make line that says position. */
 	{
 	char buf[256];
+	char *survey = getCfgValue("HGDB_SURVEY", "survey");
         char *javascript = "onchange=\"document.location = '/cgi-bin/hgTracks?db=' + document.TrackForm.db.options[document.TrackForm.db.selectedIndex].value;\"";
         if (containsStringNoCase(database, "zoo"))
             {
@@ -13415,11 +13416,11 @@ if (!hideControls)
 	hOnClickButton(clearButtonJavascript,"clear");
 	hPrintf(" size %s bp. ", buf);
         hButton("hgTracksConfigPage", "configure");
-
 #define SURVEY 1
 #ifdef SURVEY
         //hPrintf("&nbsp;&nbsp;<FONT SIZE=3><A STYLE=\"text-decoration:none; padding:2px; background-color:yellow; border:solid 1px\" HREF=\"http://www.surveymonkey.com/s.asp?u=881163743177\" TARGET=_BLANK><EM><B>Your feedback</EM></B></A></FONT>\n");
-        hPrintf("&nbsp;&nbsp;<FONT SIZE=3><A STYLE=\"background-color:yellow;\" HREF=\"http://www.surveymonkey.com/s.asp?u=881163743177\" TARGET=_BLANK><EM><B>Take survey</EM></B></A></FONT>\n");
+	if (survey && sameWord(survey, "on"))
+	    hPrintf("&nbsp;&nbsp;<FONT SIZE=3><A STYLE=\"background-color:yellow;\" HREF=\"http://www.surveymonkey.com/s.asp?u=881163743177\" TARGET=_BLANK><EM><B>Take survey</EM></B></A></FONT>\n");
 #endif
 	hPutc('\n');
 
