@@ -3387,6 +3387,12 @@ cp rnaz_track.html \
     cd /cluster/data/encode/stanford
     mkdir -p 2007-03-14/lab
     cd 2007-03-14/lab
+    sort NRSF_chipseq_hg17.bed > data.bed
+    sort NRSF_chipseq_control_hg17.bed > control.bed
+    fix.pl < data.bed > fix.bed
+    fix.pl < control.bed > control_fix.bed
+    hgLoadBed hg17 encodeStanfordNRSF fix.bed -tab
+    hgLoadBed hg17 encodeStanfordNRSFControl control_fix.bed -tab
 
 ############################################################################
 # Stanford ChIP/chip
