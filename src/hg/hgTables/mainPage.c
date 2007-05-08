@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.116 2007/05/03 21:48:15 kate Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.117 2007/05/08 17:42:08 hiram Exp $";
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
 /* Sort track by shortLabel. */
@@ -456,15 +456,23 @@ struct outputType otChromGraphData = { NULL,
     "data points", };
 
 
-static void showOutputTypeRow(boolean isWig, boolean isPositional,
-	boolean isMaf, boolean isChromGraphCt)
+static void showOutputTypeRow(boolean isWig, boolean isBedGr,
+    boolean isPositional, boolean isMaf, boolean isChromGraphCt)
 /* Print output line. */
 {
 struct outputType *otList = NULL;
 
 hPrintf("<TR><TD><B>output format:</B>\n");
 
-if (isWig)
+if (isBedGr)
+    {
+    slAddTail(&otList, &otAllFields);
+    slAddTail(&otList, &otSelected);
+    slAddTail(&otList, &otWigData);
+    slAddTail(&otList, &otWigBed);
+    slAddTail(&otList, &otCustomTrack);
+    }
+else if (isWig)
     {
     slAddTail(&otList, &otWigData);
     slAddTail(&otList, &otWigBed);
@@ -745,7 +753,7 @@ if (curTrack && curTrack->type)		/*	dbg	*/
     }
 
 /* Print output type line. */
-showOutputTypeRow((isWig || isBedGr), isPositional, isMaf, isChromGraphCt);
+showOutputTypeRow(isWig, isBedGr, isPositional, isMaf, isChromGraphCt);
 
 /* Print output destination line. */
     {
