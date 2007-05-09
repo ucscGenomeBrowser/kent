@@ -141,6 +141,5 @@ CREATE TABLE snp (
 		   '21', '22', '23', '24' ) NOT NULL,
     INDEX      chrom      (chrom,bin),
     INDEX      chromStart (chrom,chromStart),
-    INDEX      chromEnd   (chrom,chromEnd),
     INDEX      name       (name)
 );

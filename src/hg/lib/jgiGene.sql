@@ -20,6 +20,5 @@ CREATE TABLE jgiGene (
     INDEX(bin),
     INDEX(chrom),
     INDEX(chromStart),
-    INDEX(chromEnd),
     PRIMARY KEY(name)
 );

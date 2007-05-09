@@ -16,6 +16,5 @@ CREATE TABLE softPromoter (
     blockString varchar(255) not null,	# From original file.  I'm not sure how to interpret.
               #Indices
     INDEX(chrom(12),chromStart),
-    INDEX(chrom(12),chromEnd),
     INDEX(name(12))
 );

@@ -15,6 +15,5 @@ CREATE TABLE roughAli (
     otherEnd int unsigned not null,	# End in other sequence
               #Indices
     INDEX(chrom(12),chromStart),
-    INDEX(chrom(12),chromEnd),
     INDEX(name(12))
 );

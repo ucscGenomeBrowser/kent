@@ -101,7 +101,6 @@ CREATE TABLE snpSingleValid (
               #Indices
     INDEX(chrom,bin),
     INDEX(chrom,chromStart),
-    INDEX(chrom,chromEnd),
     INDEX(name)
 );
 

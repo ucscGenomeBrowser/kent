@@ -28,7 +28,6 @@ CREATE TABLE snpMap (
               #Indices
     INDEX(chrom(12),bin),
     INDEX(chrom(12),chromStart),
-    INDEX(chrom(12),chromEnd),
     INDEX(name)
 );
 

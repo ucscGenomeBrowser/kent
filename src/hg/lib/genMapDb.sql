@@ -24,6 +24,5 @@ CREATE TABLE genMapDb (
     stsEnd int unsigned not null,	# End position in chrom for STS marker
               #Indices
     INDEX(chrom,chromStart),
-    INDEX(chrom,chromEnd),
     INDEX(name)
 );

@@ -27,6 +27,5 @@ CREATE TABLE hapmapPrimateAlleles (
               #Indices
     INDEX chrom      (chrom,bin),
     INDEX chromStart (chrom,chromStart),
-    INDEX chromEnd   (chrom,chromEnd),
     INDEX name       (name)
 );

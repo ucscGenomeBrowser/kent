@@ -23,6 +23,5 @@ CREATE TABLE encodeRna (
               #Indices
     index (chrom(6),bin),
     index (chrom(6),chromStart),
-    index (chrom(6),chromEnd),
     index (name)
 );

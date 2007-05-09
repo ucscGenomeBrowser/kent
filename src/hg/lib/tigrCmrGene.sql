@@ -29,6 +29,5 @@ CREATE TABLE tigrCmrGene (
               #Indices
     INDEX(bin),
     INDEX(chromStart),
-    INDEX(chromEnd),
     PRIMARY KEY(name)
 );

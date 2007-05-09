@@ -31,6 +31,5 @@ CREATE TABLE stsMarker (
     lab varchar(255) not null,	# Laboratory that placed the FISH clone
               #Indices
     INDEX chrom (chrom(12),chromStart),
-    INDEX chrom_2 (chrom(12),chromEnd),
     INDEX name (name)
 );
