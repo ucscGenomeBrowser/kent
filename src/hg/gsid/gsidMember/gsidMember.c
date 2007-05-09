@@ -25,7 +25,7 @@
 #include "paypalSignEncrypt.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidMember.c,v 1.24 2007/05/08 21:53:14 galt Exp $";
+static char const rcsid[] = "$Id: gsidMember.c,v 1.25 2007/05/09 17:46:26 galt Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "debug", "fixMembers", "update", "gsidM_password", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -697,7 +697,7 @@ hPrintf(
 "Academic and non-profit researchers get a substantial discount. <br>\n"
 "<br>\n"
 "If you are already a member, click <a href=https://%s/>here</a> to access HIVVAC.<br>\n"
-"To view your existing account, click <a href=\"gsidMember?gsidMember.do.displayAccount=1\">here</a>.<br>\n"
+"To view your existing account, click <a href=\"gsidMember?gsidMember.do.displayAccountPage=1\">here</a>.<br>\n"
 "To change your password, click <a href=\"gsidMember?gsidMember.do.changePasswordPage=1\">here</a>.<br>\n"
 "Lost your password? Click <a href=\"gsidMember?gsidMember.do.lostPasswordPage=1\">here</a>.<br>\n"
 "<font color=red>%s</font>"
@@ -1018,7 +1018,7 @@ hPrintf(
 
 /* ----- account login/display functions ---- */
 
-void accountLoginPage(struct sqlConnection *conn)
+void displayAccountPage(struct sqlConnection *conn)
 /* draw the account login page */
 {
 char *email = cartUsualString(cart, "gsidM_email", "");
@@ -1063,7 +1063,7 @@ if (sameString(email,""))
     {
     freez(&errMsg);
     errMsg = cloneString("Email cannot be blank.");
-    accountLoginPage(conn);
+    displayAccountPage(conn);
     return;
     }
 /* for password security, use cgi hash instead of cart */
@@ -1072,7 +1072,7 @@ if (sameString(password,""))
     {
     freez(&errMsg);
     errMsg = cloneString("Password cannot be blank.");
-    accountLoginPage(conn);
+    displayAccountPage(conn);
     return;
     }
 
@@ -1084,7 +1084,7 @@ if ((row = sqlNextRow(sr)) == NULL)
     char temp[256];
     safef(temp,sizeof(temp),"Email %s not found.",email);
     errMsg = cloneString(temp);
-    accountLoginPage(conn);
+    displayAccountPage(conn);
     return;
     }
 struct members *m = membersLoad(row);
@@ -1127,8 +1127,9 @@ membersFree(&m);
 
 }
 
+/*
 void upgradeMembersTable(struct sqlConnection* conn)
-/* one-time upgrade of members table to store encrypted passwords */
+/ * one-time upgrade of members table to store encrypted passwords * /
 {
 char query[256];
 
@@ -1146,7 +1147,7 @@ for(email=list;email;email=email->next)
     
     if (password)
 	{
-	if (!startsWith("$1$",password)) /* upgrade has not already been done */
+	if (!startsWith("$1$",password)) / * upgrade has not already been done * /
 	    {
 	    uglyf("does not start with $1$<br>\n");
 	    char encPwd[35] = "";
@@ -1164,6 +1165,8 @@ for(email=list;email;email=email->next)
     }
 slFreeList(&list);
 }
+*/
+
 
 void doMiddle(struct cart *theCart)
 /* Write the middle parts of the HTML page. 
@@ -1179,7 +1182,7 @@ conn = hAllocConn();
 
 if (cartVarExists(cart, "debug"))
     debugShowAllMembers(conn);
-// remove after a while when it is no longer needed
+/* remove after a while when it is no longer needed
 else if (cartVarExists(cart, "fixMembers"))
     {
     upgradeMembersTable(conn);
@@ -1192,6 +1195,7 @@ else if (cartVarExists(cart, "fixMembers"))
     "Click <a href=gsidMember?gsidMember.do.signupPage=1>here</a> to return.<br>"
     );
     }
+*/
 else if (cartVarExists(cart, "update"))
     {
     updatePasswordsFile(conn);
@@ -1217,6 +1221,8 @@ else if (cartVarExists(cart, "gsidMember.do.changePasswordPage"))
     changePasswordPage(conn);
 else if (cartVarExists(cart, "gsidMember.do.changePassword"))
     changePassword(conn);
+else if (cartVarExists(cart, "gsidMember.do.displayAccountPage"))
+    displayAccountPage(conn);
 else if (cartVarExists(cart, "gsidMember.do.displayAccount"))
     displayAccount(conn);
 else if (cartVarExists(cart, "gsidMember.do.signup"))
