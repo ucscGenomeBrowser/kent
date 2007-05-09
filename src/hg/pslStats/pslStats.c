@@ -8,7 +8,7 @@
 #include "psl.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: pslStats.c,v 1.4 2007/05/09 06:16:41 markd Exp $";
+static char const rcsid[] = "$Id: pslStats.c,v 1.5 2007/05/09 07:59:30 markd Exp $";
 
 /* size for query name hashs */
 static int queryHashPowTwo = 22;
@@ -53,7 +53,7 @@ struct querySizeCnt *qs = hel->val;
 if (qs != NULL)
     {
     if (qs->qSize != qSize)
-        errAbort("conflicting query for %s: %d and %d", qName, qs->qSize, qSize);
+        errAbort("conflicting query sizes for %s: %d and %d", qName, qs->qSize, qSize);
     }
 else
     {
@@ -112,7 +112,7 @@ if (qs == NULL)
     qs->minQSize = qs->maxQSize = qSize;
     }
 else if (qs->minQSize != qSize)
-    errAbort("conflicting query for %s: %d and %d", qName, qs->minQSize, qSize);
+    errAbort("conflicting query sizes for %s: %d and %d", qName, qs->minQSize, qSize);
 return hel->val;
 }
 
