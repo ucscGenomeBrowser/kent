@@ -187,5 +187,8 @@ void hashMustRemove(struct hash *hash, char *name);
 char *hashToRaString(struct hash *hash);
 /* Convert hash to string in ra format. */
 
+int hashNumEntries(struct hash *hash);
+/* count the number of entries in a hash */
+
 #endif /* HASH_H */
 

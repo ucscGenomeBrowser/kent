@@ -9,7 +9,7 @@
 #include "obscure.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hash.c,v 1.36 2007/04/14 17:07:27 markd Exp $";
+static char const rcsid[] = "$Id: hash.c,v 1.37 2007/05/09 06:15:35 markd Exp $";
 
 /*
  * Hash a string key.  This code is taken from Tcl interpreter. I was borrowed
@@ -554,4 +554,13 @@ for (el = list; el != NULL; el = el->next)
    }
 hashElFreeList(&list);
 return dyStringCannibalize(&dy);
+}
+
+int hashNumEntries(struct hash *hash)
+/* count the number of entries in a hash */
+{
+int n = 0, i;
+for (i=0; i<hash->size; ++i)
+    n += bucketLen(hash->table[i]);
+return n;
 }
