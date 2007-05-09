@@ -108,7 +108,7 @@
 #include "hapmapTrack.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1337 2007/05/09 21:08:44 hartera Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1338 2007/05/09 21:51:08 hartera Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -4893,16 +4893,15 @@ int tblIx;
 boolean fieldExists = FALSE;
 
 /* If vegaInfo is available, use it to determine the color:
- *  Known - black
- *  {Novel_CDS, Novel_Transcript} - dark blue
+ * Colors are based on those used by the RefSeq track.
+ *  {Known, Novel_CDS, Novel_Transcript} - dark blue
  *  {Putative,Ig_Segment} - medium blue
  *  {Predicted_gene,Pseudogene,Ig_Pseudogene_Segment} - light blue
  *  None of the above - gray
  * If no vegaInfo, color it normally. 
  * For Zebrafish, the info table is called vegaInfoZfish and the 
  * categories are now different in zebrafish and in human from hg17 onwards.
- * KNOWN - black
- * NOVEL - dark blue
+ * KNOWN and NOVEL - dark blue
  * PUTATIVE - medium blue
  * PREDICTED - light blue
  * others e.g. UNCLASSIFIED will be gray.
@@ -4940,13 +4939,10 @@ if (infoTable != NULL && fieldExists)
     if ((row = sqlNextRow(sr)) != NULL)
         {
 	if (sameWord("Known", row[0]) ||
-            sameWord("KNOWN", row[0]))
-	    {
-	    col = blackIndex();
-	    }
-	else if (sameWord("Novel_CDS", row[0]) ||
-		 sameWord("Novel_Transcript", row[0]) ||
-                 sameWord("NOVEL", row[0]))
+            sameWord("KNOWN", row[0]) ||
+            sameWord("Novel_CDS", row[0]) ||
+            sameWord("Novel_Transcript", row[0]) ||
+            sameWord("NOVEL", row[0]))
 	    {
 	    /* Use the usual color (dark blue) */
 	    }
