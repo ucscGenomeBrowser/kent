@@ -100,10 +100,8 @@ if ( $choice == "init" ) then
 
   # get list of active $gbd databases
   hgsql -h genome-centdb hgcentral -B -N \
-    -e "SELECT name FROM dbDb WHERE active = 1" \
+    -e "SELECT name FROM dbDb WHERE active = 1 ORDER BY RAND()" \
     > $outPath/databaseAdayList
-  #   | sed -e "s/ /\n/g" | sort > $outPath/databaseAdayList
-  # ( seems more random without the sort )
 
   # add a tag at the end of the list 
   # (this will show when it's time to create a new list)
