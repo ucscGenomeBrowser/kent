@@ -24,14 +24,12 @@ url http://vega.sanger.ac.uk/Danio_rerio/geneview?transcript=$$
     shortLabel Vega Genes
     longLabel Vega Gene Annotations
     priority 1
-    color 0,100,180
     
     track vegaPseudoGene
     subTrack vegaGeneZfish
     shortLabel Vega Pseudogenes
     longLabel Vega Annotated Pseudogenes
     priority 2
-    color 155,0,125
 
 track vegaNew
 shortLabel Vega Genes New
