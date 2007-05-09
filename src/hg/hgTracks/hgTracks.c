@@ -108,7 +108,7 @@
 #include "hapmapTrack.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1336 2007/05/08 19:51:08 aamp Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1337 2007/05/09 21:08:44 hartera Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -4887,7 +4887,10 @@ char **row;
 char query[256];
 struct dyString *dy = dyStringNew(256);
 struct dyString *dy2 = dyStringNew(256);
-char *infoTable = NULL, *infoCol = NULL;
+char *infoTable = NULL;
+char *infoCol = NULL;
+int tblIx;
+boolean fieldExists = FALSE;
 
 /* If vegaInfo is available, use it to determine the color:
  *  Known - black
@@ -4912,19 +4915,27 @@ else if (sameWord(organism, "Zebrafish") && hTableExists("vegaInfoZfish"))
 if (dy != NULL)
     infoTable = dyStringCannibalize(&dy);
 
-/* for hg15 and hg16 coloring is based on entries in the confidence column */
-if (sameString(database, "hg15") || sameString(database, "hg16"))
-    dyStringPrintf(dy2, "%s", "method");
-/* for other databases, coloring is based on entries in the method column */
-else
-    dyStringPrintf(dy2, "%s", "confidence");
-if (dy2 != NULL)
-    infoCol = dyStringCannibalize(&dy2);
+/* for some assemblies coloring is based on entries in the confidence column 
+   where vegaInfo has this column otherwise the method column is used. 
+   Check the field list for these columns. */
 
-if (infoTable != NULL && infoCol != NULL)
+tblIx = sqlFieldIndex(conn, infoTable, "confidence");
+fieldExists = (tblIx > -1) ? TRUE : FALSE;
+if (fieldExists)
+   dyStringPrintf(dy2, "%s", "confidence");
+else
+   {
+   tblIx = sqlFieldIndex(conn, infoTable, "method");
+   fieldExists = (tblIx > -1) ? TRUE : FALSE;
+   dyStringPrintf(dy2, "%s", "method");
+   }
+
+if (infoTable != NULL && fieldExists)
     {
+    /* use the value for infoCol defined above */
+    infoCol = dyStringCannibalize(&dy2);
     sprintf(query, "select %s from %s where transcriptId = '%s'",
-	    infoCol, infoTable, lf->name);
+	     infoCol, infoTable, lf->name);
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) != NULL)
         {
