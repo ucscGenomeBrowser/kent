@@ -105,6 +105,7 @@ if (macaqueQualFilter > 100)
     macaqueQualFilter = 100;
     cartSetInt(cart, HAP_MACAQUE_QUAL, 100);
     }
+
 }
 
 boolean allDefaults()
@@ -278,10 +279,11 @@ return summaryItem->majorAlleleYRI;
 }
 
 char *getMinorAllele(struct hapmapAllelesSummary *summaryItem, char *majorAllele)
+/* return the allele that isn't the majorAllele */
 {
-if (!majorAllele) return NULL;
+if (!majorAllele) return cloneString("none");
 if (sameString(summaryItem->isMixed, "YES"))
-    return NULL;
+    return cloneString("none");
 if (sameString(summaryItem->allele1, majorAllele))
     return summaryItem->allele2;
 return summaryItem->allele1;
@@ -381,30 +383,30 @@ if (summaryItem->totalAlleleCountYRI > 0)
     if (sameString(monoFilterYRI, "no") && summaryItem->majorAlleleCountYRI == summaryItem->totalAlleleCountYRI) return TRUE;
     }
 
+/* ortho quality */
+if (summaryItem->chimpAlleleQuality < chimpQualFilter) return TRUE;
+if (summaryItem->macaqueAlleleQuality < macaqueQualFilter) return TRUE;
+
 /* orthoAlleles */
-/* if ortho data not available, then filters aren't used */
+/* if any filter set, data must be available */
 if (differentString(chimpFilter, "no filter") && sameString(summaryItem->chimpAllele, "none"))
-    return FALSE;
-if (differentString(macaqueFilter, "no filter") && sameString(summaryItem->macaqueAllele, "none")) 
-    return FALSE;
-if (differentString(chimpFilter, "no filter") && sameString(summaryItem->chimpAllele, "N")) 
-    return FALSE;
+    return TRUE;
+if (differentString(macaqueFilter, "no filter") && sameString(summaryItem->macaqueAllele, "none"))
+    return TRUE;
+if (differentString(chimpFilter, "no filter") && sameString(summaryItem->chimpAllele, "N"))
+    return TRUE;
 if (differentString(macaqueFilter, "no filter") && sameString(summaryItem->macaqueAllele, "N")) 
-    return FALSE;
+    return TRUE;
 
-/* handle mismatches first - interesting and tricky */
-if (sameString(chimpFilter, "matches neither human allele")) return orthoAlleleCheck(summaryItem, "chimp");
-if (sameString(macaqueFilter, "matches neither human allele")) return orthoAlleleCheck(summaryItem, "macaque");
-
-/* If mixed, then we can't compare ortho allele. */
+/* If mixed, then we can't tell if we have a match, so must filter out. */
 if (sameString(chimpFilter, "matches major human allele") && sameString(summaryItem->isMixed, "YES")) 
-    return FALSE;
+    return TRUE;
 if (sameString(macaqueFilter, "matches major human allele") && sameString(summaryItem->isMixed, "YES")) 
-    return FALSE;
+    return TRUE;
 if (sameString(chimpFilter, "matches minor human allele") && sameString(summaryItem->isMixed, "YES")) 
-    return FALSE;
+    return TRUE;
 if (sameString(macaqueFilter, "matches minor human allele") && sameString(summaryItem->isMixed, "YES")) 
-    return FALSE;
+    return TRUE;
 
 char *majorAllele = getMajorAllele(summaryItem);
 if (sameString(chimpFilter, "matches major human allele") && differentString(summaryItem->chimpAllele, majorAllele)) 
@@ -412,20 +414,17 @@ if (sameString(chimpFilter, "matches major human allele") && differentString(sum
 if (sameString(macaqueFilter, "matches major human allele") && differentString(summaryItem->macaqueAllele, majorAllele)) 
     return TRUE;
 
-/* can't filter if allele2 is "none" */
-if (sameString(chimpFilter, "matches minor human allele") && sameString(summaryItem->allele2, "none"))
-    return FALSE;
-if (sameString(macaqueFilter, "matches minor human allele") && sameString(summaryItem->allele2, "none"))
-    return FALSE;
-
 char *minorAllele = getMinorAllele(summaryItem, majorAllele);
 if (sameString(chimpFilter, "matches minor human allele") && differentString(summaryItem->chimpAllele, minorAllele)) 
     return TRUE;
 if (sameString(macaqueFilter, "matches minor human allele") && differentString(summaryItem->macaqueAllele, minorAllele)) 
     return TRUE;
 
-if (summaryItem->chimpAlleleQuality < chimpQualFilter) return TRUE;
-if (summaryItem->macaqueAlleleQuality < macaqueQualFilter) return TRUE;
+/* mismatches */
+if (sameString(chimpFilter, "matches neither human allele") && orthoAlleleCheck(summaryItem, "chimp"))
+    return TRUE;
+if (sameString(macaqueFilter, "matches neither human allele") && orthoAlleleCheck(summaryItem, "macaque"))
+    return TRUE;
 
 return FALSE;
 }
