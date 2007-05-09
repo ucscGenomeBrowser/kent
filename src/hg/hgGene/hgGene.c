@@ -17,7 +17,7 @@
 #include "hgColors.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.102 2007/04/30 23:12:02 kent Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.103 2007/05/09 14:22:22 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -216,7 +216,14 @@ if (summaryTables != NULL)
 	if (summary != NULL && summary[0] != 0)
 	    {
 	    summary = abbreviateSummary(summary);
-	    hPrintf("<B>%s:</B> %s", genomeSetting("summarySource"), summary);
+	    hPrintf("<B>%s", genomeSetting("summarySource"));
+	    if (genomeOptionalSetting("summaryIdSql"))
+	        {
+		char *summaryId = genoQuery(id, "summaryIdSql", conn);
+		if (summaryId != NULL)
+		    hPrintf(" (%s)", summaryId);
+		}
+	    hPrintf(":</B> %s", summary);
 	    freez(&summary);
 	    hPrintf("<BR>");
 	    }
