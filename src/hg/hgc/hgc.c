@@ -205,7 +205,7 @@
 #include "geneCheckDetails.h"
 #include "kg1ToKg2.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1283 2007/05/04 03:24:58 galt Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1284 2007/05/09 16:59:16 kate Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -3954,13 +3954,44 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
 	    {
 	    struct hTableInfo *hti = ctToHti(ct);
 	    struct bedFilter *bf;
-	    struct bed *bedList2;
+	    struct bed *bedList2, *ctBedList = NULL;
 	    AllocVar(bf);
-	    bedList2 = bedFilterListInRange(ct->bedList, bf, seqName, winStart,
+            if (ct->dbTrack)
+                {
+                struct bed *bed;
+                int fieldCount = ct->fieldCount;
+                char query[512];
+                int rowOffset;
+                char **row;
+                struct sqlConnection *conn = sqlCtConn(TRUE);
+                struct sqlResult *sr = NULL;
+
+                safef(query, sizeof(query), "select * from %s", ct->dbTableName);
+                sr = hRangeQuery(conn, ct->dbTableName, seqName,
+                    winStart, winEnd, NULL, &rowOffset);
+                while ((row = sqlNextRow(sr)) != NULL)
+                    {
+                    bed = bedLoadN(row+rowOffset, fieldCount);
+                    if (bf == NULL || bedFilterOne(bf, bed))
+                        {
+                        struct bed *copy = cloneBed(bed);
+                        slAddHead(&ctBedList, copy);
+                        }
+                    }
+                sqlFreeResult(&sr);
+                sqlDisconnect(&conn);
+                }
+            else
+                {
+                ctBedList = ct->bedList;
+                }
+	    bedList2 = bedFilterListInRange(ctBedList, bf, seqName, winStart,
 					    winEnd);
 	    fbList = fbFromBed(track, hti, bedList2, winStart, winEnd,
 			       TRUE, FALSE);
 	    bedFreeList(&bedList2);
+            if (!ct->bedList)
+                bedFreeList(&ctBedList);
 	    }
 	else
 	    fbList = fbGetRange(track, seqName, winStart, winEnd);
