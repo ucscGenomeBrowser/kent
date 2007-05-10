@@ -43,8 +43,9 @@ errAbort(
   "   SEQ workingDir db - find sequence using assembly db. \n"
   "   ALI workingDir db - find or blat any needed alignments for vgProbes track. \n"
   "   EXT workingDir db - add any needed seq and extfile records for vgProbes track. \n"
-  "   PSLMAP workingDir db fromDb - pslMap using chains fromDb to db for vgAllProbes track. \n"
-  "   REMAP  workingDir db fromDb track fa - import db.track psls of fromDb using fa fasta file for vgAllProbes track. \n"
+  "   PSLMAP  workingDir db fromDb - pslMap using chains fromDb to db for vgAllProbes track. \n"
+  "   REMAP   workingDir db fromDb track fa - import db.track psls of fromDb using fa fasta file for vgAllProbes track. \n"
+  "   SELFMAP workingDir db - migrate self vgProbes to vgAllProbes track. \n"
   "   EXTALL workingDir db - add any needed seq and extfile records for vgAllProbes track. \n"
   "\n"
   "workingDir is a directory with space for intermediate and final results.\n"
@@ -1478,6 +1479,41 @@ markNoneVgPrbAli(conn, fromTaxon, db, "vgPrbAliAll");
 
 }
 
+static void doSelfMapAli(struct sqlConnection *conn, 
+    int taxon, char *db)
+{
+char cmd[256];
+
+/* get non-bac $db.vgProbes not yet aligned */
+getPslMapAli(conn, db, taxon, db, FALSE);
+/* get bac $db.vgProbes not yet aligned */
+getPslMapAli(conn, db, taxon, db, TRUE);
+
+safef(cmd,sizeof(cmd),"cat bac.psl nonBac.psl > vgPrbSelfMap.psl");
+verbose(1,"%s\n",cmd); system(cmd);
+
+}
+
+static void doAlignmentsSelfMap(
+    struct sqlConnection *conn, char *db)
+/* copy anything in vgProbes but not in vgAllProbes to vgAllProbes */
+{
+int taxon = findTaxon(conn,db);
+
+populateMissingVgPrbAli(conn, taxon, db, "vgPrbAliAll");
+
+updateVgPrbAli(conn, db, "vgPrbAliAll","vgAllProbes");
+
+doSelfMapAli(conn, taxon, db);
+
+rollupPsl("vgPrbSelfMap.psl", "vgAllProbes", conn, db);
+
+updateVgPrbAli(conn, db, "vgPrbAliAll","vgAllProbes");
+
+markNoneVgPrbAli(conn, taxon, db, "vgPrbAliAll");
+
+}
+
 
 static void doSeqAndExtFile(struct sqlConnection *conn, char *db, char *table)
 {
@@ -1615,6 +1651,14 @@ else if (sameWord(command,"REMAP"))
     /* re-map anything in track specified that is not aligned, 
       nor even attempted yet, using specified fasta file. */
     doAlignmentsReMap(conn,argv[3],argv[4],argv[5],argv[6]);
+    }
+else if (sameWord(command,"SELFMAP"))
+    {
+    if (argc != 4)
+	usage();
+    /* re-map anything in track specified that is not aligned, 
+      nor even attempted yet, using specified fasta file. */
+    doAlignmentsSelfMap(conn,argv[3]);
     }
 else if (sameWord(command,"EXTALL"))
     {
