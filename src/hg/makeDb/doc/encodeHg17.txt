@@ -662,7 +662,7 @@ cat > doLoad.csh << 'EOF'
 
 # New Origins data, by new method (bubble trapping) submitted 2007-05-04
 # by Chris Taylor.  2 datasets (GM and HeLa cells) on Affy ENCODE arrays.
-
+# New subtracks added (hartera, 2007-05-07)
     cd /cluster/data/encode/UVa
     mkdir -p 2005-08-30
     cd 2005-08-30
@@ -767,6 +767,8 @@ cat > doLoad.csh << 'EOF'
 
 # New Origins data, by new method (bubble trapping) submitted 2007-05-04
 # by Chris Taylor.  2 datasets (GM and HeLa cells) on Affy ENCODE arrays.
+# This is for the UVa DNA Rep Ori track (University of Virginia DNA
+# Replication Origins track).
     cd /cluster/data/encode/Uva
     mkdir -p 2007-05-04/lab
     cd 2007-05-04/lab
@@ -776,7 +778,26 @@ cat > doLoad.csh << 'EOF'
 #-rw-r--r--  1 kate protein 18379 May  3 23:02 Ori-NS-GM.bed
 #-rw-r--r--  1 kate protein 10524 May  3 23:02 Ori-NS-HeLa.bed
 #-rw-r--r--  1 kate protein  2127 May  3 23:02 Ori-NSdescription.txt
-     
+    # Load data into database (hartera, 2007-05-07)
+    # New methods used are Bubble and Nascent Strand (NS).
+    # Ori-Bubble-HeLa.bed - Bubble method, HeLa cells
+    # Ori-NS-HeLa.bed - Nascent strand method, HeLa cells
+    # Ori-NS-GM.bed - Nascent strand method, GM06990 cells 
+    cd /cluster/data/encode/UVa/2007-05-04
+  
+    grep -v "^track" ./lab/Ori-Bubble-HeLa.bed > UvaDnaRepOriginsBubbleHela.bed
+    grep -v "^track" ./lab/Ori-NS-HeLa.bed > UvaDnaRepOriginsNSHela.bed
+    grep -v "^track" ./lab/Ori-NS-GM.bed > UvaDnaRepOriginsNSGM.bed
+   
+    foreach f (UvaDnaRepOrigins*.bed)
+        set d = $f:r
+        echo $d
+        hgLoadBed -noBin hg17 encode${d} $d.bed >> load.log
+    end
+    
+    # add trackDb.encode.ra entries for new subtracks. Merge the new method
+    # descriptions with the encodeUvaDnaRepOrigins.html description.
+
 ##########################################################################
 # Indels from Jim Mullikin
 # Heather, Sept. 2005
@@ -943,7 +964,10 @@ cat > load.csh << 'EOF'
     # PCR data: CTCF, 2 histones, TAF1 in HeLa, U937, GM, and IMR90
     # candidates for merging into existing tracks: LI Ng gIF, LI Chip Various
     # (asking submitters 2006-12-20 kate)
-
+    # Adding 2006-12-04 data (hartera, 2007-05-02)
+    
+    # Data includes various cell lines and antibodies using both PCR and 
+    # Nimblegen and there are no gamma interferon treatments. 
     # New data submitted 2007-03-01 
     # Nimblegen data: 3 histones, Pol2, TAF2, CTCF in GM06990
     #                 4 histones, CTCF in HeLa
@@ -951,7 +975,7 @@ cat > load.csh << 'EOF'
     cd /cluster/data/encode/UCSD
     mkdir -p 2007-03-01/lab
     cd 2007-03-01/lab
-
+    
 ##########################################################################
 # UT-Austin (Vishy Iyer lab) Chip/chip  (2005-10-10 kate)
     cd /cluster/data/encode
@@ -1339,7 +1363,7 @@ cat > load.csh << 'EOF'
 
 # Update 2007-03-28 (Kate). Received from Julien Lagarde (jlagarde@imim.es)
 # Julien requested 5 subtracks: reference genes, putative, polymorphic,
-# pseudogenes, polyA features. Track update (DONE, 2007-04-10, hartera)
+# pseudogenes, polyA features. Track update (DONE, 2007-04-14, hartera)
     cd /cluster/data/encode
     mkdir -p Gencode/2005-10-07/lab
     cd Gencode/2005-10-07/lab
@@ -1400,6 +1424,7 @@ cat > load.csh << 'EOF'
     # Gencode polyA features: "polyA_signal", "polyA_site", "pseudo_polyA"
     # cut -f2 *chr_coords_hg17.gff | sort | uniq shows all the types.
     # New description sent 2007-04-12, ucsc_description2.html
+    # Update finished 2004-04-14, hartera.
     cd /cluster/data/encode/Gencode
     mkdir -p 2007-03-28/lab
     ln -s 2007-03-28 latest
@@ -2118,6 +2143,8 @@ cat > loadSig.csh << 'EOF'
     cd 2007-03-20/lab
     cp /var/ftp/encode/ucsc_resubmission.tgz .
     tar tvfz *.tgz
+    # Loading resubmitted data (hartera, 2007-04-25). This is only the hits
+    # data 
 
 # New data submitted 2007-03-27 by guoneng.zhong@yale.edu
     cd /cluster/data/encode/yale/chip/2007-03-27
@@ -3424,14 +3451,89 @@ cp rnaz_track.html \
 ############################################################################
 # Gencode Loci RACEfrags - 5' RACE-ARRAY experiments on Gencode loci
 # Submitted on 2007-04-11 by France Denoeud: fdenoeud@genoscope.cns.fr
-# of the Gencode group. 
-    
+# of the Gencode group.
 # Create a directory for the data and copy the data there. Data was 
-# sent by e-mail. (hartera, 2007-04-15)
+# sent by e-mail. (DONE, hartera, 2007-04-25)
 
 mkdir -p /cluster/data/encode/GencodeRACEfrags/2007-04-11/lab
 # Data is in file: RACEFRAGS_UCSC.gff
 # Also add the e-mails from France as a README.txt - these explain how the 
-# track should be displayed.
+# track should be displayed. It was decided that the BAC end pairs display
+# should be used where the arrows between blocks have no lines through them.
+# README.txt is in 2007-04-11 directory.
+cd /cluster/data/encode/GencodeRACEfrags/
+ln -s 2007-04-11 latest
+cd 2007-04-11
+# 16 subtracks:
+# 5' RACE Primers and 15 other cell/tissue types called RACEfrags from $2
+# where $2 is cell/tissue in column 2.
+# Sometimes there are overlapping "exons".
+awk '{print $2;}' lab/RACEFRAGS_UCSC.gff | sort | uniq
+# list of primer and cell/tissue types:
+# 5RACE_primer
+# Brain
+# Colon
+# GM06990
+# HL60
+# HeLa
+# Heart
+# Kidney
+# Liver
+# Lung
+# Muscle
+# Placenta
+# Small-Intest
+# Spleen
+# Stomach
+# Testis
 
+# change 5RACE_primer to just Primer:
+awk '{print $2;}' lab/RACEFRAGS_UCSC.gff | sort | uniq > subtracks.txt
+
+# 5' RACE was performed on about 400 ENCODE genes and the RACE products were
+# pooled together (in 5 pools of about 80 genes each) for hybridization on the
+# tiling arrays. There were a few pooling erros therefore sometimes a gene
+# product from tissue A is sometimes in pool1 and the product from the same
+# gene in tissue B is in pool 2 or there are RACEfrags for the same gene in
+# the same tissue that came from different pools (France Denoeud, 2007-04-17)
+# create GFF files for loading, change 3rd column to CDS so ldHgGene loads
+# tables correctly.
+foreach s (`cat subtracks.txt`)
+   echo $s
+   set t = $s
+   if ($s == "5RACE_primer") then
+      set t = "Primer"
+   else if ($s == "HeLa") then
+      set t = "Hela"
+   else if ($s == "Small-Intest") then 
+      set t = "SmallIntest"
+   endif
+   grep $s lab/RACEFRAGS_UCSC.gff > encodeGencodeRaceFrags${t}.gff
+   if (t == "Primer") then
+     perl -pi.bak -e 's/(\s+)primer/$1CDS/' encodeGencodeRaceFrags${t}.gff
+   else
+     perl -pi.bak -e 's/racefrag_pool[0-9]+/CDS/' encodeGencodeRaceFrags${t}.gff  
+   endif
+end
+
+# Need to be able to distinguish individual RACEfrags for the details page so
+# that we can list the pools for each RACEfrag:
+
+# Load the gff files for the subtracks into the database:
+cat << 'EOF' > load.csh
+foreach f (*.gff)
+    set table = $f:r
+    echo $table
+    ldHgGene hg17 $table $f
+end
+'EOF'
+
+chmod +x load.csh
+csh load.csh >&! load.log
+rm *.bak load.log
+
+# Loading program will merge overlapping RACEfrags to show one "exon".
+# Added trackDb track and hgFindSpec search entries to trackDb.ra.
+# Reordered tracks in trackDb/trackDb.encode.ra and edited description 
+# (2007-04-25, hartera).
 
