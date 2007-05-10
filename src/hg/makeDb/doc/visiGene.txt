@@ -1304,12 +1304,62 @@ para time
 #
 #This shows that all completed (because dlist3X is empty)
 
------------------------------------------------
+#-----------------------------------------------
 
 # Rsync request
 #please rsync from /san to hgnfs1:
 
 rsync hgwdev:/san/sanvol1/visiGene/gbdb/full/inSitu/Mouse/jax/
 hgnfs1:/hgnfs1:/export/gbdb2/full/inSitu/Mouse/jax/
+
+#
+################### (galt 2007-05-09 done)
+# Adding support to vgProbeTrack and knownToVisiGene for
+#  the BLATZ'd frog probes to mm8 which Jim did recently.
+# knownToVisiGene no longer uses -fromProbePsl option,
+#  instead it automatically detects vgProbes and vgAllProbes
+#  and uses them in that order if no symbolic matches were found.
+# Added a SELFMAP command to vgProbeTrack to migrate any missing
+#  self alignments in vgProbes to vgAllProbes 
+# Made a backup of visiGene.vg* first:
+ssh hgwdev
+cd /san/sanvol1/visiGene/dump
+mkdir visiGene.20070509
+cd visiGene.20070509
+hgsqldump visiGene -T .
+
+cd ~/kent/src/hg/visiGene/vgProbeTrack
+
+vgProbeTrack -sqlPath=.. REMAP working mm8 nibb nibbImageProbes /gbdb/mm8/nibbImageProbes.fa
+#FYI: Table mm8.vgAllProbes does not exist
+#hgPepPred visiGene generic vgRemapTemp /gbdb/mm8/nibbImageProbes.fa
+#Processing /gbdb/mm8/nibbImageProbes.fa
+#Count of Psls found for reMap: 1379
+#cat vgPrbReMap.psl vgAllProbes.psl | sort -u | sort -k 10,10 >vgAllProbesNew.psl
+#hgLoadPsl mm8 vgAllProbesNew.psl -table=vgAllProbes
+#Processing vgAllProbesNew.psl
+#rm vgPrbReMap.psl vgAllProbes.psl vgAllProbesNew.psl
+
+vgProbeTrack SELFMAP working mm8
+#Count of nonBac Psls found for pslMap: 24615
+#Count of bac Psls found for pslMap: 0
+#cat bac.psl nonBac.psl > vgPrbSelfMap.psl
+#cat vgPrbSelfMap.psl vgAllProbes.psl | sort -u | sort -k 10,10 >
+#vgAllProbesNew.psl
+#hgLoadPsl mm8 vgAllProbesNew.psl -table=vgAllProbes
+#Processing vgAllProbesNew.psl
+#rm vgPrbSelfMap.psl vgAllProbes.psl vgAllProbesNew.psl
+
+vgProbeTrack EXTALL working mm8
+#rc = 981 = count of sequences for vgPrbExt.fa, to use with mm8 trackvgAllProbes
+#cp vgPrbExt.fa /cluster/data/mm8/bed/visiGene/vgPrbExt_YDGSWH.fa
+#ln -s /cluster/data/mm8/bed/visiGene/vgPrbExt_YDGSWH.fa/gbdb/mm8/visiGene/vgPrbExt_YDGSWH.fa
+#hgLoadSeq mm8 /gbdb/mm8/visiGene/vgPrbExt_YDGSWH.fa
+#981 sequences
+#Updating seq table
+
+knownToVisiGene mm8
+
+####################################################
 
 
