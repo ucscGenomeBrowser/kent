@@ -70,7 +70,6 @@
 #include "mcnBreakpoints.h"
 #include "altGraph.h"
 #include "altGraphX.h"
-#include "loweLabTracks.h"
 #include "geneGraph.h"
 #include "genMapDb.h"
 #include "genomicSuperDups.h"
@@ -108,7 +107,18 @@
 #include "hapmapTrack.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1338 2007/05/09 21:51:08 hartera Exp $";
+#ifdef LOWELAB
+#include "loweLabTracks.h"
+#include "rnaPLFoldTrack.h"
+#endif
+
+#ifdef LOWELAB_WIKI
+#include "wiki.h"
+#endif
+
+
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1339 2007/05/10 23:45:46 mhoechsm Exp $";
+
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -12949,7 +12959,6 @@ registerTrackHandler("delHinds", delHindsMethods);
 registerTrackHandler("delHinds2", delHindsMethods);
 registerTrackHandler("hapmapLd", ldMethods);
 registerTrackHandler("rertyHumanDiversityLd", ldMethods);
-registerTrackHandler("rnaLpFold", rnaLpFoldMethods);
 registerTrackHandler("recombRate", recombRateMethods);
 registerTrackHandler("recombRateMouse", recombRateMouseMethods);
 registerTrackHandler("recombRateRat", recombRateRatMethods);
@@ -13100,6 +13109,7 @@ registerTrackHandler("esRegGeneToMotif", eranModuleMethods );
 registerTrackHandler("leptin", mafMethods );
 registerTrackHandler("igtc", igtcMethods );
 /* Lowe lab related */
+#ifdef LOWELAB
 registerTrackHandler("refSeq", archaeaGeneMethods);
 registerTrackHandler("gbProtCode", gbGeneMethods);
 registerTrackHandler("tigrCmrORFs", tigrGeneMethods);
@@ -13113,6 +13123,13 @@ registerTrackHandler("armadilloScore",valAlMethods);
 registerTrackHandler("rnaGenes",rnaGenesMethods);
 registerTrackHandler("sargassoSea",sargassoSeaMethods);
 registerTrackHandler("llaPfuPrintC2", loweExpRatioMethods);
+registerTrackHandler("plFoldPlus", rnaPLFoldMethods);
+registerTrackHandler("plFoldMinus", rnaPLFoldMethods);
+#endif
+
+#ifdef LOWELAB_WIKI
+registerTrackHandler("wiki", wikiMethods);
+#endif
 
 /*Test for my own MA data
 registerTrackHandler("llaPfuPrintCExps",arrayMethods);*/
