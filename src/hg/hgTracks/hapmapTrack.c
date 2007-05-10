@@ -267,27 +267,43 @@ return ret;
 
 char *getMajorAllele(struct hapmapAllelesSummary *summaryItem)
 {
+char *allele = NULL;
+
 if (sameString(summaryItem->isMixed, "YES"))
-    return NULL;
+    return cloneString("none");
+
 if (summaryItem->totalAlleleCountCEU > 0)
-    return summaryItem->majorAlleleCEU;
+    allele = cloneString(summaryItem->majorAlleleCEU);
 if (summaryItem->totalAlleleCountCHB > 0)
-    return summaryItem->majorAlleleCHB;
+    allele = cloneString(summaryItem->majorAlleleCHB);
 if (summaryItem->totalAlleleCountJPT > 0)
-    return summaryItem->majorAlleleJPT;
-return summaryItem->majorAlleleYRI;
+    allele = cloneString(summaryItem->majorAlleleJPT);
+if (summaryItem->totalAlleleCountYRI > 0)
+    allele = cloneString(summaryItem->majorAlleleYRI);
+
+if (!allele)
+    return cloneString("none");
+if (sameString(summaryItem->strand, "-"))
+    reverseComplement(allele, 1);
+return allele;
 }
 
 char *getMinorAllele(struct hapmapAllelesSummary *summaryItem, char *majorAllele)
 /* return the allele that isn't the majorAllele */
 {
+char *allele = NULL;
 if (!majorAllele) return cloneString("none");
 if (sameString(summaryItem->isMixed, "YES"))
     return cloneString("none");
 if (sameString(summaryItem->allele1, majorAllele))
-    return summaryItem->allele2;
-return summaryItem->allele1;
-
+    allele = cloneString(summaryItem->allele2);
+else
+    allele = cloneString(summaryItem->allele1);
+if (!allele)
+    return cloneString("none");
+if (sameString(summaryItem->strand, "-"))
+    reverseComplement(allele, 1);
+return allele;
 }
 
 boolean orthoAlleleCheck(struct hapmapAllelesSummary *summaryItem, char *species)
