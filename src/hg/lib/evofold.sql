@@ -18,6 +18,5 @@ CREATE TABLE evofold (
               #Indices
     INDEX(name(16)),
     INDEX(chrom(8), bin),
-    INDEX(chrom(8), chromStart),
-    INDEX(chrom(8), chromEnd)
+    INDEX(chrom(8), chromStart)
 );

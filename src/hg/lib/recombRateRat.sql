@@ -12,6 +12,5 @@ CREATE TABLE recombRateRat (
     shrspAvg float not null,	# Calculated SHRSPxBN recombination rate
     fhhAvg float not null,	# Calculated FHHxACI recombination rate
               #Indices
-    INDEX(chrom(8),chromStart),
-    INDEX(chrom(8),chromEnd)
+    INDEX(chrom(8),chromStart)
 );

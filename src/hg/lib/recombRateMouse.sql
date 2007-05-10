@@ -12,6 +12,5 @@ CREATE TABLE recombRateMouse (
     wiAvg float not null,	# Calculated WI genetic map recombination rate
     mgdAvg float not null,	# Calculated MGD genetic map recombination rate
               #Indices
-    INDEX(chrom(8),chromStart),
-    INDEX(chrom(8),chromEnd)
+    INDEX(chrom(8),chromStart)
 );

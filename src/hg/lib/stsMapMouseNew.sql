@@ -22,6 +22,5 @@ CREATE TABLE stsMapMouseNew (
     mgiPos float not null,	# Position on MGD genetic map
               #Indices
     INDEX(identNo),
-    INDEX(chrom(8),chromStart),
-    INDEX(chrom(8),chromEnd)
+    INDEX(chrom(8),chromStart)
 );

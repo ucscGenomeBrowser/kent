@@ -24,6 +24,5 @@ CREATE TABLE simpleRepeat (
     sequence longblob not null,	# Sequence of repeat unit element
               #Indices
     INDEX(chrom(16),bin),
-    INDEX(chrom(16),chromStart),
-    INDEX(chrom(16),chromEnd)
+    INDEX(chrom(16),chromStart)
 );

@@ -15,6 +15,5 @@ CREATE TABLE ensPhusionBlast (
     xenoStart int unsigned not null,	# Start position in $Xeno chromosome
     xenoEnd int unsigned not null,	# End position in $Xeno chromosome
               #Indices
-    INDEX(bin),
-    INDEX(chrom(12),chromStart,chromEnd)
+    INDEX(chrom(16),bin)
 );

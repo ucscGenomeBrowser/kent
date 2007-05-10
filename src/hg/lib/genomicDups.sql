@@ -22,6 +22,5 @@ CREATE TABLE genomicDups (
     jcK float not null,	# K-value calculated with Jukes-Cantor
               #Indices
     INDEX(chrom(8),bin),
-    INDEX(chrom(8),chromStart),
-    INDEX(chrom(8),chromEnd)
+    INDEX(chrom(8),chromStart)
 );

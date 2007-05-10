@@ -35,6 +35,5 @@ CREATE TABLE stsMap (
     decodePos float not null,	# Position on deCODE map
               #Indices
     INDEX(name(16)),
-    INDEX(chrom(8),chromStart),
-    INDEX(chrom(8),chromEnd)
+    INDEX(chrom(8),chromStart)
 );

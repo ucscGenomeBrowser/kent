@@ -11,6 +11,5 @@ CREATE TABLE est3 (
     strand char(1) not null,	# + or - strand
     estCount int unsigned not null,	# Number of ESTs supporting this
               #Indices
-    INDEX(chrom(12),chromStart),
-    INDEX(chrom(12),chromEnd)
+    INDEX(chrom(12),chromStart)
 );

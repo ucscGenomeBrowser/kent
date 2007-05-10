@@ -11,6 +11,5 @@ CREATE TABLE isochores (
     name varchar(255) not null,	# Name of isochore - AT-rich or GC-rich
     gcPpt int unsigned not null,	# GC content in parts per thousand
               #Indices
-    INDEX(chrom(12),chromStart),
-    INDEX(chrom(12),chromEnd)
+    INDEX(chrom(12),chromStart)
 );

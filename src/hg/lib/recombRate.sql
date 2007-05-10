@@ -19,6 +19,5 @@ CREATE TABLE recombRate (
     genethonFemale float not null,	# Calculated Genethon female recombination rate
     genethonMale float not null,	# Calculated Genethon male recombination rate
               #Indices
-    INDEX(chrom(8),chromStart),
-    INDEX(chrom(8),chromEnd)
+    INDEX(chrom(8),chromStart)
 );

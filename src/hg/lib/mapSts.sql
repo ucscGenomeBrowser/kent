@@ -17,8 +17,7 @@ CREATE TABLE mapGenethon (
     otherAcc varchar(255) not null,	# Accession number of other contigs that the marker hits
               #Indices
     INDEX(name(16)),
-    INDEX(chrom(16),chromStart),
-    INDEX(chrom(16),chromEnd)
+    INDEX(chrom(16),chromStart)
 );
 
 CREATE TABLE mapGm99Gb4 (
@@ -34,8 +33,7 @@ CREATE TABLE mapGm99Gb4 (
     otherAcc varchar(255) not null,	# Accession number of other contigs that the marker hits
               #Indices
     INDEX(name(16)),
-    INDEX(chrom(16),chromStart),
-    INDEX(chrom(16),chromEnd)
+    INDEX(chrom(16),chromStart)
 );
 
 CREATE TABLE mapMarshfield (
@@ -51,8 +49,7 @@ CREATE TABLE mapMarshfield (
     otherAcc varchar(255) not null,	# Accession number of other contigs that the marker hits
               #Indices
     INDEX(name(16)),
-    INDEX(chrom(16),chromStart),
-    INDEX(chrom(16),chromEnd)
+    INDEX(chrom(16),chromStart)
 );
 
 CREATE TABLE mapShgcG3 (
@@ -68,8 +65,7 @@ CREATE TABLE mapShgcG3 (
     otherAcc varchar(255) not null,	# Accession number of other contigs that the marker hits
               #Indices
     INDEX(name(16)),
-    INDEX(chrom(16),chromStart),
-    INDEX(chrom(16),chromEnd)
+    INDEX(chrom(16),chromStart)
 );
 
 CREATE TABLE mapShgcTng (
@@ -85,8 +81,7 @@ CREATE TABLE mapShgcTng (
     otherAcc varchar(255) not null,	# Accession number of other contigs that the marker hits
               #Indices
     INDEX(name(16)),
-    INDEX(chrom(16),chromStart),
-    INDEX(chrom(16),chromEnd)
+    INDEX(chrom(16),chromStart)
 );
 
 CREATE TABLE mapWiJac (
@@ -102,7 +97,6 @@ CREATE TABLE mapWiJac (
     otherAcc varchar(255) not null,	# Accession number of other contigs that the marker hits
               #Indices
     INDEX(name(16)),
-    INDEX(chrom(16),chromStart),
-    INDEX(chrom(16),chromEnd)
+    INDEX(chrom(16),chromStart)
 );
 

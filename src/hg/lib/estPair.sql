@@ -16,6 +16,5 @@ CREATE TABLE estPair (
     start3 int unsigned not null,	# Start position of 3' EST in chromosome
     end3 int unsigned not null,	# End position of 3' EST in chromosome
               #Indices
-    INDEX (chrom(12), chromStart),
-    INDEX(chrom(12), chromEnd)
+    INDEX (chrom(12), chromStart)
 );

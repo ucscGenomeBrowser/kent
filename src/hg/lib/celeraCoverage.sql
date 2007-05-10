@@ -11,6 +11,5 @@ CREATE TABLE celeraCoverage (
     name varchar(255) not null,	# Source of Information
               #Indices
     index(chrom),
-    index(chromStart),
-    index(chromEnd)
+    index(chromStart)
 );

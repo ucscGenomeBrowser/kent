@@ -20,6 +20,5 @@ CREATE TABLE encodeBuPromHeart (
     scoreValue float not null, 	# the value associated with the score column
               #Indices
     index name (name),
-    index chromStart (chrom, chromStart),
-    index chromEnd (chrom, chromEnd)
+    index chromStart (chrom, chromStart)
 );

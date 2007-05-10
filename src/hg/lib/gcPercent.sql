@@ -11,6 +11,5 @@ CREATE TABLE gcPercent (
     name varchar(255) not null,	# Constant string GCpct
     gcPpt int unsigned not null,	# GC percentage for 20Kb block
               #Indices
-    UNIQUE(chrom(12),chromStart),
-    INDEX(chrom(12), chromEnd)
+    UNIQUE(chrom(12),chromStart)
 );

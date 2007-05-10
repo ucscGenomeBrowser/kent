@@ -13,6 +13,5 @@ CREATE TABLE dvBed (
               #Indices
     INDEX chrom (chrom(13),bin),
     INDEX name (name(16)),
-    INDEX chrom_2 (chrom(13),chromStart),
-    INDEX chrom_3 (chrom(13),chromEnd)
+    INDEX chrom_2 (chrom(13),chromStart)
 );

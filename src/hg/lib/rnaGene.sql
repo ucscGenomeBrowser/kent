@@ -16,6 +16,5 @@ CREATE TABLE rnaGene (
     fullScore float not null,	# Score as in Sean Eddys files.
     isPsuedo tinyint unsigned not null,	# TRUE(1) if psuedo, FALSE(0) otherwise
               #Indices
-    INDEX(chrom(12),chromStart),
-    INDEX(chrom(12),chromEnd)
+    INDEX(chrom(12),chromStart)
 );

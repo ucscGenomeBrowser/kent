@@ -10,6 +10,5 @@ CREATE TABLE rgdSslp (
     chromEnd int unsigned not null,	# End position in genoSeq
     name varchar(255) not null,	# Constant string GCpct
               #Indices
-    UNIQUE(chrom(12),chromStart),
-    INDEX(chrom(12), chromEnd)
+    UNIQUE(chrom(12),chromStart)
 );

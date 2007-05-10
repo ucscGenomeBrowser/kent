@@ -23,7 +23,6 @@ CREATE TABLE stsMapRat (
     shrspPos float not null,	# Position on SHRSPxBN genetic map
               #Indices
     INDEX(identNo),
-    INDEX(chrom(8),chromStart),
-    INDEX(chrom(8),chromEnd)
+    INDEX(chrom(8),chromStart)
 
 );

@@ -15,6 +15,5 @@ CREATE TABLE stsMapMouse (
     markerId int unsigned not null,	# Marker Identification number of STS
               #Indices
     PRIMARY KEY(identNo),
-    INDEX(chrom(8),chromStart),
-    INDEX(chrom(8),chromEnd)
+    INDEX(chrom(8),chromStart)
 );
