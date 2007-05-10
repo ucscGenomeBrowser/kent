@@ -121,6 +121,7 @@ EOF
 
 #########################################################################
 # SIMPLE REPEATS (TRF) (DONE 12/20/06 angie - REDONE 2/6/07)
+#                      (dropped chromEnd index 07-10-07 kuhn)
     # The first time around I just piped twoBitToFa|trfBig but due to the
     # large number of scaffolds, that took 12.5 hours.  This time, make it
     # a small cluster job.
