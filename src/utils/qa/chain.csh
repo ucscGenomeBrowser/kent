@@ -48,9 +48,9 @@ echo
 # ------------------------------------------------
 # check level for html and trackDb entry:
 
-echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
-echo "check level for html and trackDb entry:"
 if ( $split == "unsplit" ) then
+  echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
+  echo "check level for html and trackDb entry:"
   echo
   findLevel.csh $db chain$Org
 else
@@ -332,10 +332,13 @@ if ( $split == "unsplit" ) then
       FROM $track WHERE tStart > 10000000 LIMIT 3" $db
   echo
 else
-  set last=''
-  set last=`hgsql -N -e "SELECT MAX(chrom) FROM chromInfo" $db`
+  # pick a random chrom > 10 million and pull out three records
+  set rand=''
+  set rand=`hgsql -N -e "SELECT chrom FROM chromInfo \
+     WHERE size > 10000000 ORDER BY RAND() \
+     LIMIT 1" $db`
   hgsql -t -e "SELECT tName, tStart, tEnd, qName, qStrand \
-      FROM ${last}_$track WHERE tStart > 10000000 LIMIT 3" $db
+      FROM ${rand}_$track WHERE tStart > 10000000 LIMIT 3" $db
   echo
 endif
 
