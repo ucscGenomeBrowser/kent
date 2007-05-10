@@ -15,7 +15,6 @@ group genes
 priority 37
 visibility hide
 chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chr23,chr24,chr25,chrUn_random
-color 12,12,120
 type genePred
 url http://vega.sanger.ac.uk/Danio_rerio/geneview?transcript=$$
     
@@ -23,12 +22,14 @@ url http://vega.sanger.ac.uk/Danio_rerio/geneview?transcript=$$
     subTrack vegaGeneZfish
     shortLabel Vega Genes
     longLabel Vega Gene Annotations
+    color 12,12,120
     priority 1
     
     track vegaPseudoGene
     subTrack vegaGeneZfish
     shortLabel Vega Pseudogenes
     longLabel Vega Annotated Pseudogenes
+    color 12,12,120
     priority 2
 
 track vegaNew
@@ -67,6 +68,14 @@ shortLabel Affy Zebrafish
 longLabel Alignments of Affymetrix Consensus Sequences from Zebrafish Chip
 group regulation
 priority 89
+visibility hide
+type psl .
+
+track compugenZebrafish
+shortLabel Compugen Oligos
+longLabel Alignments of Compugen Zebrafish Oligo Sequences
+group regulation
+priority 90
 visibility hide
 type psl .
 
@@ -467,6 +476,13 @@ searchType psl
 xrefTable affyToHg16Orthologs
 xrefQuery select name,geneSymbol from %s where geneSymbol like '%s%%'
 searchPriority 20
+
+searchTable compugenZebrafish
+searchMethod exact
+searchType psl
+shortCircuit 1
+termRegex CGENZEB_[0-9]+
+searchPriority 15
 
 searchTable bacEndPairs
 searchMethod exact
