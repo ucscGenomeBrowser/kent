@@ -205,7 +205,7 @@
 #include "geneCheckDetails.h"
 #include "kg1ToKg2.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1286 2007/05/11 18:49:32 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1287 2007/05/11 19:52:09 pchan Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -19244,12 +19244,12 @@ else if (startsWith("dbRIP", track))
     }
 
 /* Lowe Lab Stuff */
-
+#ifdef LOWELAB
 else if (loweLabClick(track, item, tdb))
     {
     /* do nothing, everything handled in loweLabClick */
     }
-
+#endif
 else if (tdb != NULL)
     {
     genericClickHandler(tdb, item, NULL);
