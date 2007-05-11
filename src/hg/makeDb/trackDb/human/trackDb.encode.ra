@@ -4130,15 +4130,92 @@ query select chrom, txStart,txEnd, name from %s where name like '%s%%'
 searchPriority 50
 
 searchTable encodeGencodeRaceFragsPrimer
+searchName raceFragsPrimer
 searchType genePred
 termRegex 5RACE[0-9]+_primer 
-searchPriority 51
+searchPriority 50
 
 searchTable encodeGencodeRaceFragsPrimer
+searchName raceFragsPrimer2
 searchType genePred
 searchMethod prefix
 termRegex 5RACE[0-9]+ 
-searchPriority 52
+searchPriority 51
+
+searchTable encodeGencodeRaceFragsBrain
+searchType genePred
+termRegex 5RACE[0-9]+ 
+searchPriority 51
+
+searchTable encodeGencodeRaceFragsColon
+searchType genePred
+termRegex 5RACE[0-9]+ 
+searchPriority 51
+
+searchTable encodeGencodeRaceFragsGM06990
+searchType genePred
+termRegex 5RACE[0-9]+ 
+searchPriority 51
+
+searchTable encodeGencodeRaceFragsHL60
+searchType genePred
+termRegex 5RACE[0-9]+ 
+searchPriority 51
+
+searchTable encodeGencodeRaceFragsHeart
+searchType genePred
+termRegex 5RACE[0-9]+ 
+searchPriority 51
+
+searchTable encodeGencodeRaceFragsHela
+searchType genePred
+termRegex 5RACE[0-9]+ 
+searchPriority 51
+
+searchTable encodeGencodeRaceFragsKidney
+searchType genePred
+termRegex 5RACE[0-9]+ 
+searchPriority 51
+
+searchTable encodeGencodeRaceFragsLiver
+searchType genePred
+termRegex 5RACE[0-9]+ 
+searchPriority 51
+
+searchTable encodeGencodeRaceFragsLung
+searchType genePred
+termRegex 5RACE[0-9]+ 
+searchPriority 51
+
+searchTable encodeGencodeRaceFragsMuscle
+searchType genePred
+termRegex 5RACE[0-9]+ 
+searchPriority 51
+
+searchTable encodeGencodeRaceFragsPlacenta
+searchType genePred
+termRegex 5RACE[0-9]+ 
+searchPriority 51
+
+searchTable encodeGencodeRaceFragsSmallIntest
+searchType genePred
+termRegex 5RACE[0-9]+ 
+searchPriority 51
+
+searchTable encodeGencodeRaceFragsSpleen
+searchType genePred
+termRegex 5RACE[0-9]+ 
+searchPriority 51
+
+searchTable encodeGencodeRaceFragsStomach
+searchType genePred
+termRegex 5RACE[0-9]+ 
+searchPriority 51
+
+searchTable encodeGencodeRaceFragsTestis
+searchType genePred
+termRegex 5RACE[0-9]+ 
+searchPriority 51
 
 searchTable encodePseudogeneConsensus
 searchType genePred
