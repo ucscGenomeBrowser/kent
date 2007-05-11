@@ -30,7 +30,7 @@
 
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.369 2007/05/08 21:54:33 heather Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.370 2007/05/11 02:53:16 hartera Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1190,7 +1190,7 @@ radioButton(varName, geneLabel, "none");
 }
 
 void hg17KgUI(struct trackDb *tdb)
-/* Put up refGene-specifc controls */
+/* Put up refGene-specific controls */
 {
 hg17KgIdConfig(tdb);
 baseColorDrawOptDropDown(cart, tdb);
@@ -1251,7 +1251,7 @@ printf("<BR>\n");
 }
 
 void knownGeneUI(struct trackDb *tdb)
-/* Put up refGene-specifc controls */
+/* Put up refGene-specific controls */
 {
 /* This is incompatible with adding Protein ID to lf->extra */
 knownGeneIdConfig(tdb); 
@@ -1325,21 +1325,21 @@ if (omimAvail != 0)
 }
 
 void refGeneUI(struct trackDb *tdb)
-/* Put up refGene-specifc controls */
+/* Put up refGene-specific controls */
 {
 geneIdConfig2(tdb);
 baseColorDrawOptDropDown(cart, tdb);
 }
 
 void retroGeneUI(struct trackDb *tdb)
-/* Put up retroGene-specifc controls */
+/* Put up retroGene-specific controls */
 {
 geneIdConfig(tdb);
 baseColorDrawOptDropDown(cart, tdb);
 }
 
 void gencodeUI(struct trackDb *tdb)
-/* Put up gencode-specifc controls */
+/* Put up gencode-specific controls */
 {
 geneIdConfig(tdb);
 }
