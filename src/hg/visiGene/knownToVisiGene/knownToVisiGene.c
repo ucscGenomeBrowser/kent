@@ -23,23 +23,17 @@ errAbort(
   "options:\n"
   "   -table=XXX - give another name to table other than knownToVisiGene\n"
   "   -visiDb=XXX - use a VisiGene database other than 'visiGene'\n"
-  "   -fromProbePsl=XXX - use a probe track psl table for mapping,\n"
-  "      e.g. vgAllProbes for human.\n"
   );
-  /*
-  "options:\n"
-  "   -xxx=XXX\n"
-  */
 }
 
 char *outTable = "knownToVisiGene";
 char *visiDb = "visiGene";
-char *fromProbePsl = NULL;
+boolean vgProbes = FALSE;
+boolean vgAllProbes = FALSE;
 
 static struct optionSpec options[] = {
    {"table", OPTION_STRING},
    {"visiDb", OPTION_STRING},
-   {"fromProbePsl", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -222,8 +216,13 @@ struct hash *knownToRefSeqHash = newHash(18);
 struct hash *knownToGeneHash = newHash(18);
 struct hash *favorHugoHash = newHash(18);
 struct hash *knownToProbeHash = newHash(18);
+struct hash *knownToAllProbeHash = newHash(18);
 struct genePred *knownList = NULL, *known;
 struct hash *dupeHash = newHash(17);
+
+
+vgProbes = sqlTableExists(hConn,"vgProbes");
+vgAllProbes = sqlTableExists(hConn,"vgAllProbes");
 
 /* Go through and make up hashes of images keyed by various fields. */
 sr = sqlGetResult(iConn,
@@ -242,21 +241,15 @@ while ((row = sqlNextRow(sr)) != NULL)
     int id = sqlUnsigned(row[0]);
     float priority = atof(row[1]);
     int privateUser = sqlSigned(row[7]);
+    char vgPrb_Id[256];
+    safef(vgPrb_Id, sizeof(vgPrb_Id), "vgPrb_%s",row[8]);
     if (privateUser == 0)
 	{
-	if (fromProbePsl)
-	    {
-	    char vgPrb_Id[256];
-	    safef(vgPrb_Id, sizeof(vgPrb_Id), "vgPrb_%s",row[8]);
-	    addPrioritizedImage(probeImageHash, id, priority, vgPrb_Id);
-	    }
-	else
-	    {
-	    addPrioritizedImage(geneImageHash, id, priority, row[2]);
-	    addPrioritizedImage(locusLinkImageHash, id, priority, row[3]);
-	    addPrioritizedImage(refSeqImageHash, id, priority, row[4]);
-	    addPrioritizedImage(genbankImageHash, id, priority, row[5]);
-	    }
+	addPrioritizedImage(probeImageHash, id, priority, vgPrb_Id);
+	addPrioritizedImage(geneImageHash, id, priority, row[2]);
+	addPrioritizedImage(locusLinkImageHash, id, priority, row[3]);
+	addPrioritizedImage(refSeqImageHash, id, priority, row[4]);
+	addPrioritizedImage(genbankImageHash, id, priority, row[5]);
 	}
     }
 verbose(2, "Made hashes of image: geneImageHash %d, locusLinkImageHash %d, refSeqImageHash %d"
@@ -281,50 +274,47 @@ sqlFreeResult(&sr);
 verbose(2, "Got %d known genes\n", slCount(knownList));
 
 /* Build up hashes from knownGene to other things. */
-if (fromProbePsl)
-    {
-    bestProbeOverlap(hConn, fromProbePsl, knownList, knownToProbeHash);
-    }
-else
-    {
-    foldIntoHash(hConn, "knownToLocusLink", "name", "value", knownToLocusLinkHash, NULL, FALSE);
-    foldIntoHash(hConn, "knownToRefSeq", "name", "value", knownToRefSeqHash, NULL, FALSE);
-    foldIntoHash(hConn, "kgXref", "kgID", "geneSymbol", knownToGeneHash, favorHugoHash, FALSE);
-    foldIntoHash(hConn, "kgAlias", "kgID", "alias", knownToGeneHash, favorHugoHash, TRUE);
-    foldIntoHash(hConn, "kgProtAlias", "kgID", "alias", knownToGeneHash, favorHugoHash, TRUE);
-    }
-verbose(2, "knownToLocusLink %d, knownToRefSeq %d, knownToGene %d knownToProbe %d\n", 
+if (vgProbes)
+    bestProbeOverlap(hConn, "vgProbes", knownList, knownToProbeHash);
+if (vgAllProbes)
+    bestProbeOverlap(hConn, "vgAllProbes", knownList, knownToAllProbeHash);
+
+foldIntoHash(hConn, "knownToLocusLink", "name", "value", knownToLocusLinkHash, NULL, FALSE);
+foldIntoHash(hConn, "knownToRefSeq", "name", "value", knownToRefSeqHash, NULL, FALSE);
+foldIntoHash(hConn, "kgXref", "kgID", "geneSymbol", knownToGeneHash, favorHugoHash, FALSE);
+foldIntoHash(hConn, "kgAlias", "kgID", "alias", knownToGeneHash, favorHugoHash, TRUE);
+foldIntoHash(hConn, "kgProtAlias", "kgID", "alias", knownToGeneHash, favorHugoHash, TRUE);
+
+verbose(2, "knownToLocusLink %d, knownToRefSeq %d, knownToGene %d knownToProbe %d knownToAllProbe %d\n", 
    knownToLocusLinkHash->elCount, knownToRefSeqHash->elCount, knownToGeneHash->elCount,
-   knownToProbeHash->elCount);
+   knownToProbeHash->elCount, knownToAllProbeHash->elCount);
 
 /* Try and find an image for each gene. */
 for (known = knownList; known != NULL; known = known->next)
     {
     char *name = known->name;
     int imageId = 0;
-    if (fromProbePsl)
+    {
+    imageId = bestImage(name, knownToLocusLinkHash, locusLinkImageHash);
+    if (imageId == 0)
+	imageId = bestImage(name, knownToRefSeqHash, refSeqImageHash);
+    if (imageId == 0)
 	{
-	imageId = bestImage(name, knownToProbeHash, probeImageHash);
+	struct prioritizedImage *pi = hashFindVal(genbankImageHash, name);
+	if (pi != NULL)
+	    imageId = pi->imageId;
 	}
-    else
-	{
-	imageId = bestImage(name, knownToLocusLinkHash, locusLinkImageHash);
-	if (imageId == 0)
-	    imageId = bestImage(name, knownToRefSeqHash, refSeqImageHash);
-	if (imageId == 0)
-	    {
-	    struct prioritizedImage *pi = hashFindVal(genbankImageHash, name);
-	    if (pi != NULL)
-		imageId = pi->imageId;
-	    }
-	if (imageId == 0)
-	    imageId = bestImage(name, knownToGeneHash, geneImageHash);
-	}	    
+    if (imageId == 0)
+	imageId = bestImage(name, knownToGeneHash, geneImageHash);
+    if (vgProbes && imageId == 0)
+	imageId = bestImage(name, knownToProbeHash, probeImageHash);
+    if (vgAllProbes && imageId == 0)
+	imageId = bestImage(name, knownToAllProbeHash, probeImageHash);
+    }	    
     if (imageId != 0)
         {
 	fprintf(f, "%s\t%d\n", name, imageId);
 	}
-	
     }
 
 createTable(hConn, outTable);
@@ -338,7 +328,6 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 outTable = optionVal("table", outTable);
 visiDb = optionVal("visiDb", visiDb);
-fromProbePsl = optionVal("fromProbePsl", fromProbePsl);
 if (argc != 2)
     usage();
 knownToVisiGene(argv[1]);
