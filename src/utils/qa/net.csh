@@ -21,7 +21,7 @@ if ($2 == "") then
   echo "  expects trackname in netOrg format"
   echo "  e.g. net.csh mm7 netXenTro1 > & mm7.net.xenTro1 & "
   echo
-  echo "    usage:  database, trackname"
+  echo "    usage:  database trackname"
   echo
   exit
 else
@@ -56,6 +56,17 @@ echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
 echo "rowcounts:"
 hgsql -t -e "SELECT COUNT(*) AS rows FROM $trackname" $db
 
+
+
+# ------------------------------------------------
+# featureBits
+
+echo
+echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
+echo "run featureBits"
+echo
+
+runBits.csh $db $track
 
 # -------------------------------------------------
 # get two records:
@@ -321,7 +332,8 @@ echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
 echo "checking max values for score by type (for type != gap):"
 echo
 
-  hgsql -e 'SELECT MAX(score) AS scores, type FROM '$trackname' WHERE type != "gap" GROUP BY type ORDER BY type DESC' $db
+hgsql -e 'SELECT MAX(score) AS scores, type FROM '$trackname' \
+  GROUP BY type ORDER BY type DESC' $db
 
 
 

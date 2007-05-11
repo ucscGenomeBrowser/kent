@@ -23,7 +23,7 @@ if ( $#argv != 2 ) then
   echo "  though it now works for chainOrg format assemblies"
   echo "  this can take a long time."
   echo
-  echo "    usage:  database, trackname"
+  echo "    usage:  database trackname"
   echo "    e.g. chain2.csh mm7 chrN_chainXenTro1 > & mm7.chain2.xenTro1 &"
   echo "      or chain2.csh anoCar1 chainXenTro1  > & anoCar1.chain.xenTro1 &"
   echo
@@ -51,6 +51,18 @@ if ( $split == "unsplit" ) then
 else
   getChromlist.csh $db
 endif
+
+
+
+# ------------------------------------------------
+# featureBits
+
+echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
+echo "run featureBits"
+echo
+
+runBits.csh $db $track
+
 
 # -------------------------------------------------
 # check ends for off-end coords:

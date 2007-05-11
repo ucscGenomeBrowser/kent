@@ -24,7 +24,7 @@ if ( $#argv == 0 || $#argv > 2) then
   echo "  though it now works for chainOrg format assemblies"
   echo "  slow processes are in chain2.csh"
   echo
-  echo "    usage:  database, trackname"
+  echo "    usage:  database trackname"
   echo "    e.g. chain.csh mm7     chrN_chainXenTro1 > & mm7.chain.xenTro1 &"
   echo "      or chain.csh anoCar1 chainXenTro1      > & anoCar1.chain.xenTro1 &"
   echo
