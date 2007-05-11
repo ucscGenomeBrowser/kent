@@ -788,4 +788,86 @@ augustus/src/augustus --AUGUSTUS_CONFIG_PATH=/cluster/data/felCat3/bed/augustus/
     ~/kent/src/hg/utils/automation/doRecipBest.pl felCat3 canFam2 \
         -buildDir=`pwd` >&! rbest.log  &
 
+##########################################################################
+# MULTIZ4WAY (Heather, in progress)
 
+  # split, rename, rsync (takes about an hour)
+  ssh kkstore05
+
+  # dog
+  cd /cluster/data/felCat3/bed/blastz.canFam2.2006-11-18.swap/mafRBestNet
+  mkdir split
+  zcat *gz | mafSplit dummyArg /cluster/data/felCat3/bed/blastz.canFam2.2006-11-18.swap/mafRBestNet/split/
+             stdin -byTarget -outDirDepth=2 -useSequenceName
+  cd split
+  ./rename.csh
+  cd /san/sanvol1/scratch/felCat3/mafNet/canFam2
+  rsync -av /cluster/data/felCat3/bed/blastz.canFam2.2006-11-18.swap/mafRBestNet/split .
+
+  # human
+  cd /cluster/data/felCat3/bed/blastz.hg18.2006-11-10.swap/mafRBestNet
+  mkdir split
+  zcat *gz | mafSplit dummyArg /cluster/data/felCat3/bed/blastz.hg18.2006-11-10.swap/mafRBestNet/split/
+             stdin -byTarget -outDirDepth=2 -useSequenceName
+  cd split
+  ./rename.csh
+  cd /san/sanvol1/scratch/felCat3/mafNet/hg18
+  rsync -av /cluster/data/felCat3/bed/blastz.hg18.2006-11-10.swap/mafRBestNet/split .
+
+  # mouse
+  cd /cluster/data/felCat3/bed/blastz.mm8.2006-11-15.swap/mafRBestNet
+  mkdir split
+  zcat *gz | mafSplit dummyArg /cluster/data/felCat3/bed/blastz.mm8.2006-11-15.swap/mafRBestNet/split/
+             stdin -byTarget -outDirDepth=2 -useSequenceName
+  cd split
+  ./rename.csh
+  cd /san/sanvol1/scratch/felCat3/mafNet/mm8
+  rsync -av /cluster/data/felCat3/bed/blastz.mm8.2006-11-15.swap/mafRBestNet/split .
+
+  # setup multiz4way, including run and maf (output will be to /cluster/data/felCat3/bed/multiz4way/maf)
+  cd /cluster/data/felCat3/bed/multiz4way
+  # use the following for species.lst:
+  # felCat3 canFam2 mm8 hg18
+  # use the following for tree.nh:
+  # (((felCat3 canFam2) mm8) hg18)
+  mkdir run
+  cd run
+
+  # create scaf.lst
+  perl -wpe 's/^scaffold_(\d+)\s+.*$//; $d0 = $1 % 10; $d1 = ($1/10) % 10; \
+      print "$d1/$d0/scaffold_$1";' /cluster/data/felCat3/chrom.sizes > scaf.lst
+
+  # spec file
+cat  << 'EOF' > spec
+#LOOP
+./autoMultiz.csh $(dir1) $(root1) {check out line+ /cluster/data/felCat3/bed/multiz4way/maf/$(dir1)/$(root1).maf}
+#ENDLOOP
+'EOF'
+    # << emacs
+
+  # autoMultiz.csh in-lined here
+
+  # stash binaries
+  mkdir penn
+  cd penn
+  cp /cluster/bin/penn/multiz.v11.2007-03-19/multiz-tba/multiz .
+  cp /cluster/bin/penn/multiz.v11.2007-03-19/multiz-tba/maf_project .
+  cp /cluster/bin/penn/multiz.v11.2007-03-19/multiz-tba/autoMZ .
+
+  # setup output directories
+  cd /cluster/data/felCat3/bed/multiz4way
+  mkdir maf
+  cd maf
+  foreach d1 (0 1 2 3 4 5 6 7 8 9)
+    mkdir $d1
+    foreach d0 (0 1 2 3 4 5 6 7 8 9)
+      mkdir $d1/$d0
+    end
+  end
+
+  # cluster run
+  ssh pk
+  cd /cluster/data/felCat3/bed/multiz4way/run
+  gensub2 scaf.lst single spec jobList
+  para create jobList
+  para try
