@@ -3537,3 +3537,15 @@ rm *.bak load.log
 # Reordered tracks in trackDb/trackDb.encode.ra and edited description 
 # (2007-04-25, hartera).
 
+# The encodeGencodeRaceFragsPrimer.gff contains a "." insteand of a strand
+# so add + for the strand. (2007-05-10, hartera)
+
+hgsql -e 'update encodeGencodeRaceFragsPrimer set strand = "+";' hg17
+
+# Added trackDb.encode.ra setting:
+# autoTranslate 0
+# to remove protein translation on details page as it does not make sense
+# to have it for this track. Also added code to hgTrackUi.c so that the 
+# genePred track configurations controls for selecting the item label and 
+# codon coloring are not drawn as they are not applicable either for this 
+# track.
