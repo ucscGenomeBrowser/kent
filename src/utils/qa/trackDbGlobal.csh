@@ -15,6 +15,7 @@ set year=""
 set yearMonth=""
 set lastyear=""
 set dropdir=""
+set dirs=""
 set diffs=0
 set outfile=""
 set summaryFile=""
@@ -119,9 +120,9 @@ foreach db ( $dbs )
   endif
   compareTrackDbAll.csh $db hgwbeta $machine $mode >& $outfile
   if ( $status ) then
-    echo "$db err" | gawk '{printf "%7s %3s", $1, $2}'
+    echo "$db hgcentralErr" | gawk '{printf "%7s %3s", $1, $2}'
     echo 
-    echo '<A HREF ="'$dbSummaryOut'">'$db'</A> error \n\n' \
+    echo '<A HREF ="'$dbSummaryOut'">'$db'</A> hgcentralErr \n\n' \
         >> $summaryFile
   else
     set diffs=`cat $outfile | egrep " Diff|The diff" | wc -l` 
