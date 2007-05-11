@@ -310,6 +310,7 @@ return allele;
 
 boolean orthoAlleleCheck(struct hapmapAllelesSummary *summaryItem, char *species)
 /* return TRUE if disqualified from being ortho mismatch */
+/* orthoAllele is adjusted for strand; population allele is not */
 {
 char *orthoAllele = NULL;
 
@@ -320,16 +321,28 @@ else if (sameString(species, "macaque"))
 else
     return TRUE;
 
+char *allele1 = cloneString(summaryItem->allele1);
+char *allele2 = cloneString(summaryItem->allele2);
+if (sameString(summaryItem->strand, "-"))
+    {
+    reverseComplement(allele1, 1);
+    if (differentString(allele2, "none"))
+        reverseComplement(allele2, 1);
+    }
+
 if (isComplexObserved(summaryItem->observed)) 
     {
-    if (sameString(orthoAllele, summaryItem->allele1)) return TRUE;
+    if (sameString(orthoAllele, allele1)) return TRUE;
     /* monomorphic are disqualified due to insufficient info; can't prove this is an ortho mismatch */
     if (sameString(summaryItem->allele2, "none")) return TRUE;
-    if (sameString(orthoAllele, summaryItem->allele2)) return TRUE;
+    if (sameString(orthoAllele, allele2)) return TRUE;
     }
 
 /* simple case: check for match in observed string */
 /* this is inclusive of monomorphic */
+/* reverse complement the orthoAllele (simpler than parsing observed) */
+if (sameString(summaryItem->strand, "-"))
+    reverseComplement(orthoAllele, 1);
 char *subString = strstr(summaryItem->observed, orthoAllele);
 if (subString) return TRUE;
 
@@ -424,6 +437,10 @@ if (sameString(macaqueFilter, "matches major human allele") && sameString(summar
 if (sameString(chimpFilter, "matches minor human allele") && sameString(summaryItem->isMixed, "YES")) 
     return TRUE;
 if (sameString(macaqueFilter, "matches minor human allele") && sameString(summaryItem->isMixed, "YES")) 
+    return TRUE;
+if (sameString(chimpFilter, "matches neither human allele") && sameString(summaryItem->isMixed, "YES")) 
+    return TRUE;
+if (sameString(macaqueFilter, "matches neither human allele") && sameString(summaryItem->isMixed, "YES")) 
     return TRUE;
 
 char *majorAllele = getMajorAllele(summaryItem);
