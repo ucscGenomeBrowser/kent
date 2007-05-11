@@ -205,7 +205,7 @@
 #include "geneCheckDetails.h"
 #include "kg1ToKg2.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1284 2007/05/09 16:59:16 kate Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1285 2007/05/11 18:16:38 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -16976,7 +16976,7 @@ while ((row = sqlNextRow(sr)) != NULL)
         otherDb = "panTro2";
     if (sameString(table, "hapmapAllelesMacaque"))
         otherDb = "rheMac2";
-    orthoStart = max(start - 250, 1);
+    orthoStart = max(ortho->orthoStart - 250, 1);
     // orthoEnd = min(start + 250, hChromSize(ortho->orthoChrom));
     orthoEnd = orthoStart + 500;
     linkToOtherBrowser(otherDb, ortho->orthoChrom, orthoStart, orthoEnd);
