@@ -295,6 +295,8 @@ char *allele = NULL;
 if (!majorAllele) return cloneString("none");
 if (sameString(summaryItem->isMixed, "YES"))
     return cloneString("none");
+if (sameString(summaryItem->strand, "-"))
+   reverseComplement(majorAllele, 1);
 if (sameString(summaryItem->allele1, majorAllele))
     allele = cloneString(summaryItem->allele2);
 else
