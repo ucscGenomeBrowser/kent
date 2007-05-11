@@ -30,7 +30,7 @@
 
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.370 2007/05/11 02:53:16 hartera Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.371 2007/05/11 06:00:00 hartera Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2590,10 +2590,10 @@ else if (tdb->type != NULL)
             {
             if (sameString(track, "acembly"))
                 acemblyUi(tdb);
-            else if (startsWith("encodeGencode", track))
+            else if (startsWith("encodeGencode", track) && !sameString("encodeGencodeRaceFrags", track))
                 gencodeUI(tdb);
             nmdFilterOptions(tdb);
-            if (! sameString(track, "tigrGeneIndex") && !sameString(track, "ensGeneNonCoding"))
+            if (!sameString(track, "tigrGeneIndex") && !sameString(track, "ensGeneNonCoding") && !sameString(track, "encodeGencodeRaceFrags"))
 		baseColorDrawOptDropDown(cart, tdb);
             }
 	else if (sameWord(words[0], "expRatio"))
