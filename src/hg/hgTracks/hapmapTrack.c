@@ -603,6 +603,9 @@ else
         allele = cloneString(thisItem->allele1);
     else
         allele = cloneString(thisItem->allele2);
+    /* population snps are not adjusted for strand in database! */
+    if (sameString(strand, "-"))
+        reverseComplement(allele, 1);
     }
 
 /* determine graphics attributes for vgTextCentered */
@@ -617,9 +620,6 @@ int fontHeight = mgFontLineHeight(font);
 int heightPer = tg->heightPer;
 y += heightPer / 2 - fontHeight / 2;
 
-/* might possibly reverse and then reverse again, but this keeps the logic simple */
-if (sameString(strand, "-"))
-    reverseComplement(allele, 1);
 if (cartUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE))
     reverseComplement(allele, 1);
 
