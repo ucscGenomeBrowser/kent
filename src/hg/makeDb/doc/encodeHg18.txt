@@ -1,0 +1,53 @@
+#!/bin/csh -f
+exit
+
+#############################################################################
+# This is the make doc for hg18 ENCODE
+
+#############################################################################
+# Create encodeRegions table
+
+    ssh hgwdev
+    cd /cluster/data/encode
+    mkdir convertHg18
+    ln -s convertHg18 hg18
+    ln -s convertHg17 hg17
+    cd hg18
+    hgsql hg17 -N -e "SELECT * FROM encodeRegions ORDER BY name" | \
+        liftOver stdin /gbdb/hg17/liftOver/hg17ToHg18.over.chain.gz \
+                encodeRegions.tab encodeRegions.unmapped
+    hgLoadBed hg18 encodeRegions encodeRegions.bed
+    cp encodeRegions.bed ~/browser/ENCODE/build35_regions.bed
+    # cvs add, install in /usr/local/apache/htdocs/ENCODE
+
+#############################################################################
+# MSA alignments (kate)
+#  Submittted by Elliott Margulies, 2007-05-11
+
+    ssh kkstore03
+    cd /cluster/data/encode/TBA
+    mkdir -p APR-07/lab
+    cd APR-07/lab
+    wget -r -nv -nd -np ftp://kronos.nhgri.nih.gov/pub/outgoing/elliott/msa/APR-2007/apr_2007_tba_hg18.tar
+
+    cd ..
+    mkdir maf
+cat > getMafs.csh << 'EOF'
+    foreach f (lab/*/*.maf.gz)
+        echo $f
+        gunzip -c $f | \
+            sed 's/^s human\./s hg18./' \
+                        > maf/$f:t:r:r:e.maf
+    end
+'EOF'
+    csh getMafs.csh >&! getMafs.log &
+
+    ssh hgwdev
+    cd /cluster/data/encode/TBA/APR-07/maf
+    set gdir = /gbdb/hg18/encode/TBA/APR-07/maf
+    mkdir -p $gdir
+    rm -f $gdir/*.maf
+    ln -s /cluster/data/encode/TBA/APR-07/maf/*.maf $gdir
+    hgLoadMaf -pathPrefix=$gdir -WARN hg18 encodeTbaAlign >&! load.log
+    cat *.maf | hgLoadMafSummary hg18 encodeTbaSummary stdin
+
