@@ -120,9 +120,9 @@ foreach db ( $dbs )
   endif
   compareTrackDbAll.csh $db hgwbeta $machine $mode >& $outfile
   if ( $status ) then
-    echo "$db hgcentralErr" | gawk '{printf "%7s %3s", $1, $2}'
+    echo "$db dbDbErr" | gawk '{printf "%7s %3s", $1, $2}'
     echo 
-    echo '<A HREF ="'$dbSummaryOut'">'$db'</A> hgcentralErr \n\n' \
+    echo '<A HREF ="'$dbSummaryOut'">'$db'</A> dbDbErr \n\n' \
         >> $summaryFile
   else
     set diffs=`cat $outfile | egrep " Diff|The diff" | wc -l` 
