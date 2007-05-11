@@ -546,7 +546,8 @@ if ($db =~ mm*) then
     hgExpDistance $tempDb hgFixed.gnfMouseAtlas2MedianRatio \
 	    hgFixed.gnfMouseAtlas2MedianExps gnfAtlas2Distance -lookup=knownToGnf1m
 endif
-knownToVisiGene $db -table=$tempDb.knownToVisiGene -fromProbePsl=vgAllProbes
+# next command needs $db.vgProbes and $db.vgAllProbes to be copied to $tempDb
+knownToVisiGene $tempDb
 vgGetText /usr/local/apache/cgi-bin/visiGeneData/visiGene.text $vgTextDbs
 
 # Create Human P2P protein-interaction Gene Sorter columns
