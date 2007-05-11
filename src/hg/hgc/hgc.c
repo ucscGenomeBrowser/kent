@@ -205,7 +205,7 @@
 #include "geneCheckDetails.h"
 #include "kg1ToKg2.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1285 2007/05/11 18:16:38 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1286 2007/05/11 18:49:32 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -16968,7 +16968,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("<BR><B>Ortho allele:</B> %s\n", ortho->orthoAllele);
     printf("<BR><B>Ortho strand:</B> %s\n", ortho->orthoStrand);
     printf("<BR><B>Quality (0-100):</B> %d\n", ortho->score);
-    printf("<BR><B>Ortho </B>");
+    printf("<BR><B>Human </B>");
     bedPrintPos((struct bed *)ortho, 3);
 
     printf("<BR>");
