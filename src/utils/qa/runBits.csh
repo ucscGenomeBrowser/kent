@@ -37,14 +37,14 @@ set split=`getSplit.csh $db $track hgwdev`
 
 echo
 echo "featureBits $db $track"
-# featureBits $db $track
+featureBits $db $track
 if ($status) then
   echo "quitting"
   echo
   exit
 endif
 echo "featureBits $db $track gap"
-# featureBits $db $track gap
+featureBits $db $track gap
 echo
 
 echo "check for overlap to unbridged gaps:"
