@@ -16,7 +16,7 @@
 #include "genbank.h"
 #include "hgTracks.h"
 
-static char const rcsid[] = "$Id: cds.c,v 1.51 2007/03/31 19:38:14 markd Exp $";
+static char const rcsid[] = "$Id: cds.c,v 1.52 2007/05/11 20:11:10 angie Exp $";
 
 /* Definitions of cds colors for coding coloring display */
 #define CDS_ERROR   0
@@ -134,7 +134,7 @@ static int convertCoordUsingPsl( int s, struct psl *psl )
 int i;
 int idx = -1;
 unsigned *qStarts = psl->qStarts;
-unsigned tStart = 0;
+int tStart = 0;
 unsigned thisQStart = 0;
 
 if (psl == NULL)
