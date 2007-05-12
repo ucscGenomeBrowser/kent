@@ -31,7 +31,7 @@ shortLabel Conservation
 longLabel VAX004 DNA Sequence Conservation
 group compGeno
 priority 23.5
-visibility hide
+visibility full
 color 12,12,120
 autoScaleDefault Off
 graphTypeDefault Bar
@@ -60,7 +60,7 @@ shortLabel AaConservation
 longLabel VAX004 Protein Sequence Conservation
 group compGeno
 priority 26.5
-visibility full
+visibility hide
 color 12,12,120
 autoScaleDefault Off
 graphTypeDefault Bar
