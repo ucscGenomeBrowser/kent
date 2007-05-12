@@ -16,7 +16,7 @@
 #include "genbank.h"
 #include "hgTracks.h"
 
-static char const rcsid[] = "$Id: cds.c,v 1.52 2007/05/11 20:11:10 angie Exp $";
+static char const rcsid[] = "$Id: cds.c,v 1.53 2007/05/12 06:13:18 angie Exp $";
 
 /* Definitions of cds colors for coding coloring display */
 #define CDS_ERROR   0
@@ -1250,36 +1250,61 @@ if (indelShowPolyA && mrnaSeq)
     /* Draw green lines for polyA first, so if the entire transcript is 
      * jammed into one pixel and the other end has a blue line, blue is 
      * what the user sees. */
-    if (psl->qStarts[0] != 0)
+    if (psl->qStarts[0] != 0 && psl->strand[0] == '-')
 	{
-	int polyTSize = 0;
-	/* If we reverse-complemented in baseColorDrawSetup, test for 
-	 * polyT head: */
-	if (psl->strand[0] == '-' || psl->strand[1] == '-')
-	    polyTSize = headPolyTSizeLoose(mrnaSeq->dna, mrnaSeq->size);
-	if (polyTSize > 0 && (polyTSize + 3) >= psl->qStarts[0])
+	if (psl->strand[1] == '-')
 	    {
-	    s = psl->tStarts[0];
-	    drawVertLine(vg, s, xOff, y, heightPer-1, scale,
-			 cdsColor[CDS_POLY_A]);
-	    gotPolyAStart = TRUE;
+	    warn("warning: %s has strand \"--\" which "
+		 "baseColorOverdrawQInsert doesn't know how to handle",
+		 psl->qName);
+	    }
+	else
+	    {
+	    /* We reverse-complemented in baseColorDrawSetup, so test for 
+	     * polyT head: */
+	    int polyTSize = headPolyTSizeLoose(mrnaSeq->dna, mrnaSeq->size);
+	    if (polyTSize > 0 && (polyTSize + 3) >= psl->qStarts[0])
+		{
+		s = psl->tStarts[0];
+		drawVertLine(vg, s, xOff, y, heightPer-1, scale,
+			     cdsColor[CDS_POLY_A]);
+		gotPolyAStart = TRUE;
+		}
 	    }
 	}
-    if (psl->qStarts[lastBlk] + psl->blockSizes[lastBlk] != psl->qSize)
+    if ((psl->qStarts[lastBlk] + psl->blockSizes[lastBlk] != psl->qSize) &&
+	psl->strand[0] == '+')
 	{
-	/* If we didn't reverse-complement in baseColorDrawSetup, test for
-	 * polyA tail: */
-	int polyASize = 0;
-	if (psl->strand[0] != '-' && psl->strand[1] != '-')
-	    polyASize = tailPolyASizeLoose(mrnaSeq->dna, mrnaSeq->size);
-	if (polyASize > 0 &&
-	    ((polyASize + 3) >= (psl->qSize -
-			 (psl->qStarts[lastBlk] + psl->blockSizes[lastBlk]))))
+	if (psl->strand[1] == '-')
 	    {
-	    s = psl->tStarts[lastBlk] + psl->blockSizes[lastBlk];
-	    drawVertLine(vg, s, xOff, y, heightPer-1, scale,
-			 cdsColor[CDS_POLY_A]);
-	    gotPolyAEnd = TRUE;
+	    /* We reverse-complemented in baseColorDrawSetup, so test for 
+	     * polyT head: */
+	    int polyTSize = headPolyTSizeLoose(mrnaSeq->dna, mrnaSeq->size);
+	    int rcQStart = (psl->qSize -
+			(psl->qStarts[lastBlk] + psl->blockSizes[lastBlk]));
+	    if (polyTSize > 0 && (polyTSize + 3) >= rcQStart)
+		{
+		s = psl->tStarts[0];
+		drawVertLine(vg, s, xOff, y, heightPer-1, scale,
+			     cdsColor[CDS_POLY_A]);
+		gotPolyAStart = TRUE;
+		}
+	    }
+	else
+	    {
+	    /* We didn't reverse-complement in baseColorDrawSetup, so test for
+	     * polyA tail: */
+	    int polyASize = tailPolyASizeLoose(mrnaSeq->dna, mrnaSeq->size);
+	    if (polyASize > 0 &&
+		((polyASize + 3) >= 
+		 (psl->qSize -
+		  (psl->qStarts[lastBlk] + psl->blockSizes[lastBlk]))))
+		{
+		s = psl->tStarts[lastBlk] + psl->blockSizes[lastBlk];
+		drawVertLine(vg, s, xOff, y, heightPer-1, scale,
+			     cdsColor[CDS_POLY_A]);
+		gotPolyAEnd = TRUE;
+		}
 	    }
 	}
     }
@@ -1290,7 +1315,8 @@ if (indelShowQInsert)
 	{
 	/* Insert at beginning of query -- draw vertical blue line 
 	 * unless it's polyA. */
-	s = psl->tStarts[0];
+	s = (psl->strand[1] == '-') ? (psl->tSize - psl->tStarts[0]) :
+				      psl->tStarts[0];
 	drawVertLine(vg, s, xOff, y, heightPer-1, scale,
 		     cdsColor[CDS_QUERY_INSERTION_AT_END]);
 	}
@@ -1307,7 +1333,8 @@ if (indelShowQInsert)
 	    if (tBlkStart <= tPrevBlkEnd)
 		{
 		/* Insert in query only -- draw vertical orange line. */
-		s = psl->tStarts[i];
+		s = (psl->strand[1] == '-') ? (psl->tSize - psl->tStarts[i]) :
+					      psl->tStarts[i];
 		drawVertLine(vg, s, xOff, y, heightPer-1, scale,
 			     cdsColor[CDS_QUERY_INSERTION]);
 		}
@@ -1323,7 +1350,9 @@ if (indelShowQInsert)
 	{
 	/* Insert at end of query -- draw vertical blue line unless it's 
 	 * all polyA. */
-	s = psl->tStarts[lastBlk] + psl->blockSizes[lastBlk];
+	s = (psl->strand[1] == '-') ?
+	    (psl->tSize - (psl->tStarts[lastBlk] + psl->blockSizes[lastBlk])) :
+	    (psl->tStarts[lastBlk] + psl->blockSizes[lastBlk]);
 	drawVertLine(vg, s, xOff, y, heightPer-1, scale,
 		     cdsColor[CDS_QUERY_INSERTION_AT_END]);
 	}
