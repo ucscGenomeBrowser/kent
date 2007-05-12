@@ -1,10 +1,10 @@
 track hivGene
-shortLabel Genes
-longLabel HIV Genes
+shortLabel Genes/Regions
+longLabel HIV Genes and Regions
 group genes
 priority 10
 visibility pack
-color 12,12,200
+color 150,0,0
 type bed 4
 
 track vax003
