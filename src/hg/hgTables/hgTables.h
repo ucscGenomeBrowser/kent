@@ -4,41 +4,23 @@
 #define HGTABLES_H
 
 
-#ifndef JKSQL_H
 #include "jksql.h"
-#endif
 
-#ifndef LOCALMEM_H
 #include "localmem.h"
-#endif
 
-#ifndef DYSTRING_H
 #include "dystring.h"
-#endif
 
-#ifndef HDB_H
 #include "hdb.h"
-#endif
 
-#ifndef HCOMMON_H
 #include "hCommon.h"
-#endif
 
-#ifndef CUSTOMTRACK_H
 #include "customTrack.h"
-#endif
 
-#ifndef GRP_H
 #include "grp.h"
-#endif
 
-#ifndef JOINER_H
 #include "joiner.h"
-#endif
 
-#ifndef HPRINT_H
 #include "hPrint.h"
-#endif
 
 struct region
 /* A part (or all) of a chromosome. */
@@ -174,12 +156,6 @@ struct trackDb *findSelectedTrack(struct trackDb *trackList,
 /* Find selected track - from CGI variable if possible, else
  * via various defaults. */
 
-struct customTrack *getCustomTracks();
-/* Get custom track list. */
-
-void removeNamedCustom(struct customTrack **pList, char *name);
-/* Remove named custom track from list if it's on there. */
-
 struct trackDb *findTrack(char *name, struct trackDb *trackList);
 /* Find track, or return NULL if can't find it. */
 
@@ -190,11 +166,6 @@ struct trackDb *findTrackInGroup(char *name, struct trackDb *trackList,
 	struct grp *group);
 /* Find named track that is in group (NULL for any group).
  * Return NULL if can't find it. */
-
-struct trackDb *findSelectedTrack(struct trackDb *trackList, 
-	struct grp *group, char *varName);
-/* Find selected track - from CGI variable if possible, else
- * via various defaults. */
 
 struct asObject *asForTable(struct sqlConnection *conn, char *table);
 /* Get autoSQL description if any associated with table. */
@@ -656,6 +627,9 @@ void wigShowFilter(struct sqlConnection *conn);
 /* ----------- Custom track stuff. -------------- */
 struct customTrack *getCustomTracks();
 /* Get custom track list. */
+
+void removeNamedCustom(struct customTrack **pList, char *name);
+/* Remove named custom track from list if it's on there. */
 
 void flushCustomTracks();
 /* Flush custom track list. */
