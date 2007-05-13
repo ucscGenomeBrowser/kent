@@ -117,7 +117,7 @@
 #endif
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1339 2007/05/10 23:45:46 mhoechsm Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1340 2007/05/13 19:16:24 lowe Exp $";
 
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
@@ -132,7 +132,9 @@ boolean gotKgColor;	/* Set to true if just take color from table. */
 #define LOW 1
 #define MEDIUM 2
 #define BRIGHT 3
-#define MAXPIXELS 14000
+#ifdef LOWELAB
+#define MAXPIXELS 60000
+#endif
 #define MAXCHAINS 50000000
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 int imagePixelHeight = 0;
