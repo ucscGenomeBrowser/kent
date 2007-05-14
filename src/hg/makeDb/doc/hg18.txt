@@ -6337,7 +6337,7 @@ xenopus_xenTro1:0.782453):0.156067,
     zebrafish_danRer3:0.782561):0.156067);
 '_EOF_'
 
-    /cluster/bin/phast/draw_tree 17way.nh > 17way.ps
+    /cluster/bin/draw_tree 17way.nh > 17way.ps
     /cluster/bin/phast/all_dists 17way.nh > 17way.distances.txt
     grep hg18 17way.distances.txt | sort -k3,3n | \
         awk '{printf ("%.4f\t%s\n", $3, $2)}' > distances.txt
@@ -14632,11 +14632,16 @@ cat > spec << 'EOF'
     mkdir cons
     cd cons
 
-    # use background and rate matrix from 17way run (same as ENCODE run),
-    # merged together with the 28way 4d tree as the model file
-    grep -v TREE /cluster/data/hg18/bed/multiz17way/cons/elliotsEncode.mod > 28way.mod
-    echo -n 'TREE: ' >> 28way.mod
-    cat ../4d/tree_4d.28way.nh >> 28way.mod
+    # Create tree model for phastCons
+    # Adjust model file base composition background and rate matrix to be
+    # representative of whole-genome (.41 -- as was done for ENCODE)
+    # using utility, 'modFreqs' from Adam (5/07)
+    # NOTE: updated all phast source and rebuilt to phast.2007-05-04
+    set gc = `grep BACKGROUND /cluster/data/hg18/bed/multiz17way/cons/elliotsEncode.mod | \
+                awk '{printf "%0.3f\n", $3 + $4;}'`
+    echo $gc
+        # .41
+    /cluster/bin/phast.2007-05-04/modFreqs ../4d/phyloFit.mod $gc > 28way.mod
 
     # split 28way mafs into 10M chunks and generate sufficient statistics 
     # files for # phastCons
@@ -14693,6 +14698,7 @@ end
     cd run.cons
     cat > doPhast.csh << 'EOF'
 #!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast.2007-05-04
 set c = $1
 set f = $2
 set len = $3
@@ -14704,10 +14710,10 @@ mkdir -p $tmp
 set san = /san/sanvol1/scratch/hg18/multiz28way/cons
 cp -p $san/ss/$c/$f.ss tree.mod $tmp
 pushd $tmp > /dev/null
-/cluster/bin/phast/$MACHTYPE/phastCons $f.ss tree.mod \
+$PHASTBIN/phastCons $f.ss tree.mod \
 --rho $rho --expected-length $len --target-coverage $cov --quiet \
 --not-informative "panTro2,rheMac2" \
---seqname $c --idpref $c --viterbi $f.bed --score > $f.pp
+--seqname $c --idpref $c --most-conserved $f.bed --score > $f.pp
 popd > /dev/null
 mkdir -p $san/$grp/pp/$c $san/$grp/bed/$c
 sleep 1
@@ -14717,15 +14723,6 @@ rm -fr $tmp
 'EOF'
     # << happy emacs
     chmod a+x doPhast.csh
-
-    # Create template file
-    #	root1 == chrom name, file1 == ss file name without .ss suffix
-    cat > template << 'EOF'
-#LOOP
-../doPhast.csh $(root1) $(file1) 14 .008 .28
-#ENDLOOP
-'EOF'
-    # << happy emacs
 
     # Create parasol batch and run it
     pushd /san/sanvol1/scratch/hg18/multiz28way/cons
@@ -14737,7 +14734,16 @@ rm -fr $tmp
     mkdir all ../all
     cd all
     cp ../../28way.mod tree.mod
-    gensub2 ../in.list single ../template jobList
+
+    # Create template file
+    #	root1 == chrom name, file1 == ss file name without .ss suffix
+    cat > template << 'EOF'
+#LOOP
+../doPhast.csh $(root1) $(file1) 14 .15 .3
+#ENDLOOP
+'EOF'
+    # << happy emacs
+    gensub2 ../in.list single template jobList
     para create jobList
         # 337 jobs
     para try
@@ -14757,24 +14763,114 @@ rm -fr $tmp
         awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' | \
             /cluster/bin/scripts/lodToBedScore /dev/stdin > mostConserved.bed
     #	~ 1 minute
-    mkdir 
     cp -p mostConserved.bed /cluster/data/hg18/bed/multiz28way/cons/all
 
     # load into database
     ssh hgwdev
     cd /cluster/data/hg18/bed/multiz28way/cons/all
     hgLoadBed hg18 phastConsElements28way mostConserved.bed
-        # Loaded 2968542 elements of size 5
+        # 4925952 elements
+        # Loaded 2038708 elements of size 5
     # compare with previous tracks
     hgsql hg18 -s -N -e "select count(*) from phastConsElements17way"
         # 2229902
-    # ~30% more elements
-    # Try for 5% overall cov, and 70% CDS cov (used elen=13, tcov=.007, rho=.27)
-    featureBits hg18 -enrichment refGene:cds phastConsElements28way
-# refGene:cds 1.094%, phastConsElements28way 5.021%, both 0.782%, cover 71.48%, enrich 14.24x
-    # compare with previous tracks
+    hgsql hg18 -s -N -e "select count(*) from phastConsElements17way where chrom='chr7'"
+        # 114703
+    # Try for 5% overall cov, and 70% CDS cov 
+    # Compare to chr7 for 17way -- chr7 is .7% lower than whole genome,
+    # so aim for 4.3% on chr7
+
+    featureBits hg18 -chrom=chr7 -enrichment refGene:cds phastConsElements28way
+# USED FOR 17WAY
+#   too little coverage
+    # 14 .008 .28
+# refGene:cds 0.911%, phastConsElements28way 3.551%, both 0.653%, cover 71.74%, enrich 20.20x
+    # 14 .1 .28
+# refGene:cds 0.911%, phastConsElements28way 3.954%, both 0.648%, cover 71.12%, enrich 17.98x
+    # 12 .1 .28
+# refGene:cds 0.911%, phastConsElements28way 3.914%, both 0.644%, cover 70.74%, enrich 18.08x
+    # 14 .2 .3
+    # 234653 elements
+# refGene:cds 0.911%, phastConsElements28way 4.423%, both 0.659%, cover 72.34%, enrich 16.36x
+    # 13 .2 .28
+# refGene:cds 0.911%, phastConsElements28way 4.266%, both 0.644%, cover 70.73%, enrich 16.58x
+# USE THIS ONE
+#  minimum change to params to achieve coverage
+    # 14 .2 .28
+    # 249585 elements
+# refGene:cds 0.911%, phastConsElements28way 4.269%, both 0.646%, cover 70.92%, enrich 16.61x
+    # 15 .2 .28
+# refGene:cds 0.911%, phastConsElements28way 4.271%, both 0.647%, cover 71.08%, enrich 16.64x
+    # 14 .3 .28
+# refGene:cds 0.911%, phastConsElements28way 4.644%, both 0.645%, cover 70.89%, enrich 15.27x
+    # 14 .35 .28
+# refGene:cds 0.911%, phastConsElements28way 4.879%, both 0.646%, cover 70.90%, enrich 14.53x
+    # 14 .15 .3
+    # 207188 elements
+# refGene:cds 0.912%, phastConsElements28way 4.260%, both 0.660%, cover 72.34%, enrich 16.98x
+    # 16 .15 .3
+    # 193531 elements
+# refGene:cds 0.912%, phastConsElements28way 4.289%, both 0.663%, cover 72.66%, enrich 16.94x
+    # 20 .15 .3
+    # 173668 elements
+# refGene:cds 0.912%, phastConsElements28way 4.321%, both 0.667%, cover 73.11%, enrich 16.92x
+    # 24 .15 .3
+    # 159646 elements
+# refGene:cds 0.912%, phastConsElements28way 4.338%, both 0.670%, cover 73.40%, enrich 16.92x
+    # 30 .15 .3
+    # 144399 elements
+# refGene:cds 0.912%, phastConsElements28way 4.349%, both 0.673%, cover 73.72%, enrich 16.95x
+    # 40 .15 .3
+    # 128087 elements
+# refGene:cds 0.912%, phastConsElements28way 4.353%, both 0.676%, cover 74.09%, enrich 17.02x
+    # 50 .15 .3
+    # 117338 elements
+# refGene:cds 0.912%, phastConsElements28way 4.352%, both 0.678%, cover 74.32%, enrich 17.08x
+    # 50 .1 .3
+    # 116930 elements
+# refGene:cds 0.912%, phastConsElements28way 4.347%, both 0.678%, cover 74.32%, enrich 17.10x
+    # 50 .05 .3
+    # 93391 elements
+# refGene:cds 0.912%, phastConsElements28way 4.193%, both 0.680%, cover 74.57%, enrich 17.78x
+    # 50 .07 .3
+    # 99358
+# refGene:cds 0.912%, phastConsElements28way 4.231%, both 0.680%, cover 74.51%, enrich 17.61x
+    # 45 .07 .3
+    # 102864 elements
+# refGene:cds 0.912%, phastConsElements28way 4.227%, both 0.679%, cover 74.41%, enrich 17.60x
+    # USE THIS ONE 
+    # matches element count for 17way
+    # 45 .1 .3
+    # 110836 elements
+# refGene:cds 0.912%, phastConsElements28way 4.277%, both 0.678%, cover 74.33%, enrich 17.38x
+    # 75 .1 .3
+    # Try for really long elements
+    # 93524 elements
+# refGene:cds 0.912%, phastConsElements28way 4.279%, both 0.682%, cover 74.73%, enrich 17.47x
+    # 100 .1 .3
+    # 85757 elements
+# refGene:cds 0.912%, phastConsElements28way 4.270%, both 0.683%, cover 74.90%, enrich 17.54
+    # 71218 elements
+    # 200 .1 .3
+# refGene:cds 0.912%, phastConsElements28way 4.225%, both 0.686%, cover 75.16%, enrich 17.79x
+    # 200 .12 .3
+# refGene:cds 0.912%, phastConsElements28way 4.241%, both 0.686%, cover 75.13%, enrich 17.72x
+    # USE THIS ONE 
+    # for really long elements
+    # 200 .15 .3
+        # 75659
+# refGene:cds 0.912%, phastConsElements28way 4.261%, both 0.685%, cover 75.11%, enrich 17.63x
+
+    featureBits hg18 -chrom=chr7 -enrichment refGene:cds phastConsElements17way
+# refGene:cds 0.911%, phastConsElements17way 4.838%, both 0.639%, cover 70.22%, enrich 14.51x
     featureBits hg18 -enrichment refGene:cds phastConsElements17way
 # refGene:cds 1.072%, phastConsElements17way 5.510%, both 0.759%, cover 70.83%, enrich 12.86x
+
+    # compare element sizes to other runs:
+    # e.g. select min(chromEnd-chromStart) from encodeTbaPhastConsEl
+    # hg17 ENCODE TBA phastCons:  min=1, max=1961
+    # hg17 ENCODE TBA gerp:       min=3, max=1426
+    # hg18 17way:                 min=1, max=12590   #el on chr7: 114703
 
     # Create merged posterier probability file and wiggle track data files
     #	pk is currently closer to the san than any other machine
@@ -14782,37 +14878,43 @@ rm -fr $tmp
     cd /san/sanvol1/scratch/hg18/multiz28way/cons/all
     # sort by chromName, chromStart so that items are in numerical order 
     #  for wigEncode
-    find ./pp -name "chr*.pp" | \
-        sed -e "s/\// x /g" -e "s/\./ y /g" -e "s/-/ z /g" | \
-	sort -k7,7 -k9,9n | \
-	sed -e "s/ x /\//g" -e "s/ y /\./g" -e "s/ z /-/g" | \
-	xargs cat | \
+cat > listPp.csh << 'EOF'
+    foreach d (pp/chr*/)
+        ls $d/*.pp | sort -n -t\. -k2
+    end
+'EOF'
+    csh listPp.csh | xargs cat | \
         nice wigEncode stdin phastCons28way.wig phastCons28way.wib
+
     # about 23 minutes for above
     cp -p phastCons28way.wi? /cluster/data/hg18/bed/multiz28way/cons/all
 
     # Load gbdb and database with wiggle.
     ssh hgwdev
+    cd /cluster/data/hg18/bed/multiz28way/cons/all
     ln -s /cluster/data/hg18/bed/multiz28way/cons/all/phastCons28way.wib \
-        /gbdb/hg18/multiz28way/phastCons28way.wib
+        /gbdb/hg18/multiz28way
     hgLoadWiggle -pathPrefix=/gbdb/hg18/multiz28way hg18 \
         phastCons28way phastCons28way.wig
     #  ~ 3 minute load
 
     ## Run phastCons on subgroup (placentals)
     ssh pk
-    cd /cluster/data/hg18/bed/multiz28way/cons/run.cons
-    mkdir placental ../placental
-    cd placental
+    cd /cluster/data/hg18/bed/multiz28way/cons
 
     # create pruned tree
-    set species = `cat ../../species.lst`
+    set species = `cat ../species.lst`
     echo $species | sed 's/ /,/g' 
     #anoCar1,bosTau3,canFam2,cavPor2,danRer4,dasNov1,echTel1,equCab1,eriEur1,felCat3,fr2,galGal3,gasAcu1,hg18,loxAfr1,mm8,monDom4,ornAna1,oryCun1,oryLat1,otoGar1,panTro2,rheMac2,rn4,sorAra1,tetNig1,tupBel1,xenTro2
 
-    /cluster/bin/phast/tree_doctor ../../28way.mod \
-        --prune-all-but=bosTau3,canFam2,cavPor2,dasNov1,echTel1,equCab1,eriEur1,felCat3,,hg18,loxAfr1,mm8,oryCun1,otoGar1,panTro2,rheMac2,rn4,sorAra1,tupBel1 \
-                > tree.mod
+    /cluster/bin/phast.2007-04-04/tree_doctor 28way.mod \
+             --prune-all-but=bosTau3,canFam2,cavPor2,dasNov1,echTel1,equCab1,eriEur1,felCat3,,hg18,loxAfr1,mm8,oryCun1,otoGar1,panTro2,rheMac2,rn4,sorAra1,tupBel1 \
+                                      > placental.mod
+
+    # setup tree for run
+    mkdir placental run.cons/placental
+    cd run.cons/placental
+    cp ../../placental.mod tree.mod
 
     # Create template file
     #	root1 == chrom name, file1 == ss file name without .ss suffix
@@ -14859,49 +14961,52 @@ rm -fr $tmp
     cd /cluster/data/hg18/bed/multiz28way/cons/placental
     hgLoadBed hg18 phastConsElements28wayPlacMammal mostConserved.bed
     featureBits hg18 -enrichment refGene:cds phastConsElements28wayPlacMammal >&! ../run.cons/placental/fb.out
-    # 14 .008 .28 -- USING THIS ONE
+
     # experiments
-        # Loaded 1753513 elements
-    # 14 .2 .28
-        # Loaded 4778609 elements
-    # 14 .1 .28
-        # Loaded 3490833 elements
-    # 13 .1 .3
-        # Loaded 3445154 elements
-    # 14 .2 .3
-        # Loaded 4566312 elements
-    # 13 .2 .28
-        # Loaded 4992426 elements 
-    # 14 .2 .33 -- USING THIS ONE
-        # Loaded 4244212 elements
-    # 15 .2 .3
-        # Loaded 4390848 elements
-    # 15 .18 .33
-        # Loaded 3869393 elements
-# USING THIS ONE
-# refGene:cds 1.094%, phastConsElements28wayPlacental 3.518%, both 0.742%, cover 67.86%, enrich 19.29x
-# refGene:cds 1.094%, phastConsElements28wayPlacental 4.544%, both 0.752%, cover 68.79%, enrich 15.14x
-# refGene:cds 1.094%, phastConsElements28wayPlacental 4.101%, both 0.748%, cover 68.34%, enrich 16.66x
-# refGene:cds 1.094%, phastConsElements28wayPlacental 4.228%, both 0.758%, cover 69.33%, enrich 16.40x
-# refGene:cds 1.094%, phastConsElements28wayPlacental 4.691%, both 0.766%, cover 69.98%, enrich 14.92x
-# refGene:cds 1.094%, phastConsElements28wayPlacental 4.559%, both 0.750%, cover 68.60%, enrich 15.05x
-#  USING THE NEXT ONE (14.2.33)
-# refGene:cds 1.094%, phastConsElements28wayPlacental 4.907%, both 0.784%, cover 71.65%, enrich 14.60x
-# refGene:cds 1.094%, phastConsElements28wayPlacental 4.681%, both 0.767%, cover 70.15%, enrich 14.99x
-# refGene:cds 1.094%, phastConsElements28wayPlacental 4.813%, both 0.785%, cover 71.76%, enrich 14.91x
+    # USING THIS ONE: min change from 17way to achieve coverage
+    # 14.2.28
+    # 169516 elements
+# refGene:cds 0.912%, phastConsElements28wayPlacMammalChr7Short 3.437%, both 0.615%, cover 67.40%, enrich 19.61x
+    # USING THIS ONE: vertebrate elements have similar count to 17way ("medium")
+    # 45.1.3
+    # 76715 elements
+# refGene:cds 0.912%, phastConsElements28wayPlacMammalChr7Med 3.312%, both 0.642%, cover 70.33%, enrich 21.24x
+    # USING THIS ONE: long elements
+    # 53430 elements
+# refGene:cds 0.912%, phastConsElements28wayPlacMammalChr7Long 3.245%, both 0.648%, cover 71.06%, enrich 21.90x
+
+    # Go for 4.3% coverage, to match vertebrate elements
+    # 45.1.4
+    # 62480 elements
+# refGene:cds 0.912%, phastConsElements28wayPlacMammal 3.970%, both 0.691%, cover 75.71%, enrich 19.07x
+    # 45.1.5
+    # 51100 elements
+# refGene:cds 0.912%, phastConsElements28wayPlacMammal 4.626%, both 0.727%, cover 79.68%, enrich 17.22x
+    # 45.15.4
+    # 68086 elements
+# refGene:cds 0.912%, phastConsElements28wayPlacMammal 4.035%, both 0.692%, cover 75.80%, enrich 18.79x
+    # 45.2.3
+    # 91575 elements
+# refGene:cds 0.912%, phastConsElements28wayPlacMammal 3.428%, both 0.643%, cover 70.46%, enrich 20.55x
+    # 45.8.3
+    # 120272 elements
+# refGene:cds 0.912%, phastConsElements28wayPlacMammal 3.682%, both 0.648%, cover 71.07%, enrich 19.30x
 
     # Create merged posterier probability file and wiggle track data files
     #	pk is currently closer to the san than any other machine
     ssh pk
     cd /san/sanvol1/scratch/hg18/multiz28way/cons/placental
+
     # sort by chromName, chromStart so that items are in numerical order 
     #  for wigEncode
-    find ./pp -name "chr*.pp" | \
-        sed -e "s/\// x /g" -e "s/\./ y /g" -e "s/-/ z /g" | \
-	sort -k7,7 -k9,9n | \
-	sed -e "s/ x /\//g" -e "s/ y /\./g" -e "s/ z /-/g" | \
-	xargs cat | \
-        nice wigEncode stdin phastCons28wayPlacMammal.wig phastCons28wayPlacMammal.wib >&! wigEncode.log &
+cat > listPp.csh << 'EOF'
+    foreach d (pp/chr*/)
+        ls $d/*.pp | sort -n -t\. -k2
+    end
+'EOF'
+    csh listPp.csh | xargs cat | \
+        nice wigEncode stdin \
+                phastCons28wayPlacMammal.wig phastCons28wayPlacMammal.wib
     # about 23 minutes for above
     cp -p phastCons28wayPlacMammal.wi? /cluster/data/hg18/bed/multiz28way/cons/placental
 
