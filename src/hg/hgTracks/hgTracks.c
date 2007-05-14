@@ -111,13 +111,12 @@
 #include "loweLabTracks.h"
 #include "rnaPLFoldTrack.h"
 #endif
-
 #ifdef LOWELAB_WIKI
 #include "wiki.h"
 #endif
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1340 2007/05/13 19:16:24 lowe Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1341 2007/05/14 16:58:32 lowe Exp $";
 
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
@@ -134,6 +133,8 @@ boolean gotKgColor;	/* Set to true if just take color from table. */
 #define BRIGHT 3
 #ifdef LOWELAB
 #define MAXPIXELS 60000
+#else
+#define MAXPIXELS 14000
 #endif
 #define MAXCHAINS 50000000
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
