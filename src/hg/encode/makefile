@@ -9,7 +9,8 @@ all:
 	    done
 
 install:
-	cp *.csh *.pl /cluster/data/encode/bin/scripts
+	chmod +x *.csh *.pl
+	cp -p *.csh *.pl /cluster/data/encode/bin/scripts
 
 # List of directories to build
 USE_DIRS = $(DIRS)
