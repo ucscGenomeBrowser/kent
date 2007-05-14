@@ -16,7 +16,7 @@
 #include "trashDir.h"
 #include "customFactory.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.68 2007/04/26 22:22:04 galt Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.69 2007/05/14 04:52:01 angie Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -165,9 +165,14 @@ dyStringFree(&dy);
 
 static void cartCopyCustomTracks(struct cart *cart)
 /* If cart contains any live custom tracks, save off a new copy of them, 
- * to prevent clashes by multiple loaders of the same session. */
+ * to prevent clashes by multiple loaders of the same session. 
+ * Call hSetDb to avoid the possibility of it getting set incorrectly 
+ * as a side-effect during customFactory parsing. */
 {
 struct hashEl *el, *elList = hashElListHash(cart->hash);
+char *db = cartOptionalString(cart, "db");
+if (db)
+    hSetDb(db);
 
 for (el = elList; el != NULL; el = el->next)
     {
@@ -333,7 +338,7 @@ for (cv = cgiVarList(); cv != NULL; cv = cv->next)
 /* If some CGI other than hgSession been passed hgSession loading instructions,
  * apply those to cart before we do anything else.  (If this is hgSession,
  * let it handle the settings so it can display feedback to the user.) */
-if (cgiScriptName() && !endsWith(cgiScriptName(), "hgSession"))
+if (! (cgiScriptName() && endsWith(cgiScriptName(), "hgSession")))
     {
     if (cartVarExists(cart, hgsDoOtherUser))
 	{
