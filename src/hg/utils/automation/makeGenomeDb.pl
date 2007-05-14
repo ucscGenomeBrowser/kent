@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/automation/makeGenomeDb.pl instead.
 
-# $Id: makeGenomeDb.pl,v 1.6 2007/05/02 23:22:01 angie Exp $
+# $Id: makeGenomeDb.pl,v 1.7 2007/05/14 23:05:25 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -649,7 +649,9 @@ _EOF_
     # When we load gold/gap from assembly AGP, but pull in chrM sequence
     # separately, chrM is conspicuously absent from gold/gap -- so add a fake
     # entry for it in gold (so featureBits gold --> 100%) and if split tables,
-    # make a token chrM_gap table.
+    # make a token chrM_gap table.  Use bin=585 (512+ 64 + 8 + 1), the
+    # smallest bin that starts at 0.  The smallest bin is 128k bases, which
+    # should always cover the entire mitochondrial genome (typically ~16k).
     my $bin = 585;
     if ($chromBased || $opt_debug) {
       my $defaultChrom = `head -1 $topDir/chrom.sizes | cut -f 1`;
