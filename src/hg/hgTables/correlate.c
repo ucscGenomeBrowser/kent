@@ -22,7 +22,7 @@
 #include "bedGraph.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: correlate.c,v 1.59 2007/05/03 21:48:15 kate Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.60 2007/05/14 23:40:40 kate Exp $";
 
 #define MAX_POINTS_STR	"300,000,000"
 #define MAX_POINTS	300000000
@@ -480,8 +480,6 @@ for (name = nameList; name != NULL; name = name->next)
     tdb = findCompositeTdb(track, name->name);
     fprintf(stderr, "tdb=%s, table=%s\n",tdb->tableName, name->name);
     if (correlateTrackTableOK(tdb, name->name))
-    //if (correlateTrackTableOK(track, name->name))
-    //if (correlateTrackTableOK(tdb, name->name))
 	{
         fprintf(stderr, "     can correlate\n");
 	hPrintf("<OPTION VALUE=%s", name->name);
