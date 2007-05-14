@@ -4,7 +4,7 @@
 #include "xa.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: hgWaba.c,v 1.6 2006/05/31 00:56:01 angie Exp $";
+static char const rcsid[] = "$Id: hgWaba.c,v 1.7 2007/05/14 21:34:45 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -49,8 +49,7 @@ char *wabaFullCreate =
 "   hSym longblob not null,            # HMM symbols\n"
 "           #Indices\n"
 "   INDEX(query(16)),\n"
-"   INDEX(chrom(16), chromStart),\n"
-"   INDEX(chrom(16), chromEnd)\n"
+"   INDEX(chrom(16), chromStart)\n"
 ")";
 
 int xaAliCmpTstart(const void *va, const void *vb)

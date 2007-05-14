@@ -12,7 +12,7 @@
 #include "glDbRep.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgLoadGap.c,v 1.4 2006/04/26 16:23:16 angie Exp $";
+static char const rcsid[] = "$Id: hgLoadGap.c,v 1.5 2007/05/14 21:34:45 angie Exp $";
 
 
 /* Command line switches. */
@@ -62,8 +62,7 @@ char *createGapSplit =
 "   bridge varchar(255) not null,	# yes, no, mrna, bacEndPair, etc.\n"
 "             #Indices\n"
 "   INDEX(bin),\n"
-"   UNIQUE(chromStart),\n"
-"   UNIQUE(chromEnd)\n"
+"   UNIQUE(chromStart)\n"
 ")\n";
 
 char *createGapUnsplit = 
@@ -79,8 +78,7 @@ char *createGapUnsplit =
 "   bridge varchar(255) not null,	# yes, no, mrna, bacEndPair, etc.\n"
 "             #Indices\n"
 "   INDEX(chrom(16), bin),\n"
-"   UNIQUE(chrom(16), chromStart),\n"
-"   UNIQUE(chrom(16), chromEnd)\n"
+"   UNIQUE(chrom(16), chromStart)\n"
 ")\n";
 
 

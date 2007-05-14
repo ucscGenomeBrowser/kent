@@ -36,7 +36,7 @@ static char* createSql =
     "    colorG tinyint unsigned not null,   # Color green component 0-255\n"
     "    colorB tinyint unsigned not null,   # Color blue component 0-255\n"
     "              #Indices\n"
-    "    index(bin,chrom(8),chromStart,chromEnd)\n"
+    "    index(bin,chrom(8),chromStart)\n"
     ");\n";
 
 int itemAttrCmp(const void *va, const void *vb)

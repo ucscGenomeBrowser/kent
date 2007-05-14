@@ -9,7 +9,7 @@
 #include "sample.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgLoadSample.c,v 1.5 2006/05/03 15:41:18 angie Exp $";
+static char const rcsid[] = "$Id: hgLoadSample.c,v 1.6 2007/05/14 21:34:45 angie Exp $";
 
 /* Command line switches. */
 boolean noBin = FALSE;		/* Suppress bin field. */
@@ -176,8 +176,7 @@ else if (!oldTable)
        dyStringAppend(dy, "  INDEX(chrom(8),bin),\n");
     if (bedSize >= 4)
        dyStringAppend(dy, "  INDEX(name(16)),\n");
-    dyStringAppend(dy, "  INDEX(chrom(8),chromStart),\n");
-    dyStringAppend(dy, "  INDEX(chrom(8),chromEnd)\n");
+    dyStringAppend(dy, "  INDEX(chrom(8),chromStart)\n");
     dyStringAppend(dy, ")\n");
     sqlRemakeTable(conn, track, dy->string);
     }

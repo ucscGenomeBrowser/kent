@@ -13,7 +13,7 @@
 #include "portable.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgLoadWiggle.c,v 1.21 2007/05/02 20:46:49 hiram Exp $";
+static char const rcsid[] = "$Id: hgLoadWiggle.c,v 1.22 2007/05/14 21:34:45 angie Exp $";
 
 /* Command line switches. */
 static boolean noBin = FALSE;		/* Suppress bin field. */
@@ -327,8 +327,7 @@ if ((!oldTable) && (!noLoad))
 	dyStringPrintf(dy, "  INDEX(chrom(%d),bin)\n", indexLen);
     else
 	{
-	dyStringPrintf(dy, "  INDEX(chrom(%d),chromStart),\n", indexLen);
-	dyStringPrintf(dy, "  INDEX(chrom(%d),chromEnd)\n", indexLen);
+	dyStringPrintf(dy, "  INDEX(chrom(%d),chromStart)\n", indexLen);
 	}
     dyStringAppend(dy, ")\n");
     verbose(2, "%s", dy->string);

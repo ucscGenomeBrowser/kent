@@ -10,7 +10,7 @@
 #include "liftSpec.h"
 #include "ctgPos.h"
 
-static char const rcsid[] = "$Id: hgCtgPos.c,v 1.6 2004/06/17 18:39:06 hiram Exp $";
+static char const rcsid[] = "$Id: hgCtgPos.c,v 1.7 2007/05/14 21:34:45 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -85,8 +85,7 @@ char *createCtgPos =
 "   chromEnd int unsigned not null,	# End in chromosome\n"
 "             #Indices\n"
 "   PRIMARY KEY(contig),\n"
-"   UNIQUE(chrom(16),chromStart),\n"
-"   UNIQUE(chrom(16),chromEnd)\n"
+"   UNIQUE(chrom(16),chromStart)\n"
 ")\n";
 
 void saveCtgPos(struct ctgPos *ctgList, char *database)

@@ -11,7 +11,7 @@
 #include "gsSeqInfo.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: hgClonePos.c,v 1.13 2004/07/16 21:58:17 hiram Exp $";
+static char const rcsid[] = "$Id: hgClonePos.c,v 1.14 2007/05/14 21:34:45 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -46,8 +46,7 @@ char *createClonePos =
 "   faFile varchar(255) not null,	# File with sequence.\n"
 "             #Indices\n"
 "   INDEX(name(12)),\n"
-"   INDEX(chrom(12),chromStart),\n"
-"   INDEX(chrom(12),chromEnd)\n"
+"   INDEX(chrom(12),chromStart)\n"
 ")\n";
 
 void addCloneInfo(char *glFileName, struct hash *cloneHash, struct clonePos **pCloneList)
