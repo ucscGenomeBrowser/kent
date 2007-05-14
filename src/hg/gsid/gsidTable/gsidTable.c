@@ -20,7 +20,7 @@
 #include "gsidTable.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidTable.c,v 1.15 2007/05/14 01:42:46 fanhsu Exp $";
+static char const rcsid[] = "$Id: gsidTable.c,v 1.16 2007/05/14 05:34:43 galt Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "submit_filter", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -1401,8 +1401,8 @@ if (cgiVarExists("submit_filter"))
 	if (!subjList) /* if everything has been filtered out, we'll have to go back */
 	    {
 	    hPrintf("No subject(s) found with the filtering conditions specified.<br>");
-	    hPrintf("Click <a href=\"gsidTable?gsidTable.do.advFilter=filter+%c28now+on%c29\">here</a> "
-		"to return to Select Subjects.<br>", '%', '%');
+	    hPrintf("Click <a href=\"gsidTable?gsidTable.do.advFilter=filter+%%28now+on%%29\">here</a> "
+		"to return to Select Subjects.<br>");
 	    }
 	cartCheckout(&cart);
     	htmlEnd();
