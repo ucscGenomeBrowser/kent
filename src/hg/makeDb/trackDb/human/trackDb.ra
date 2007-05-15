@@ -645,6 +645,7 @@ group varRep
 priority 144.48
 visibility hide
 type bed 6 + 
+exonArrows off
 
     track hapmapSnpsCEU
     subTrack hapmapSnps
