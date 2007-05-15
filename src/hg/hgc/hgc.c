@@ -205,7 +205,7 @@
 #include "geneCheckDetails.h"
 #include "kg1ToKg2.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1287 2007/05/11 19:52:09 pchan Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1288 2007/05/15 06:16:14 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -16776,7 +16776,7 @@ printf("</TR>\n");
 }
 
 
-void doHapmapSnpsSummary(struct trackDb *tdb, char *itemName)
+void doHapmapSnpsSummary(struct trackDb *tdb, char *itemName, boolean showOrtho)
 {
 char *table = tdb->tableName;
 struct hapmapAllelesSummary *summaryItem;
@@ -16820,12 +16820,14 @@ het = summaryItem->score / 10.0;
 printf("<BR><B>Heterozygosity over all populations:</B> %3.2f%%<BR>\n", het);
 
 
-if (differentString(summaryItem->chimpAllele, "none") || 
-    differentString(summaryItem->macaqueAllele, "none"))
+if (showOrtho && 
+    (differentString(summaryItem->chimpAllele, "none") || 
+    differentString(summaryItem->macaqueAllele, "none")))
     {
     printf("<BR><B>Orthologous alleles:</B><BR>\n");
     printf("<TABLE BORDER=1>\n");
     printf("<TR><TH>Species</TH> <TH>Allele</TH> <TH>Quality Score</TH></TR>\n");
+    // printf("<TR><TH>Species</TH> <TH>Allele</TH> <TH>Strand</TH> <TH>Quality Score</TH></TR>\n");
     if (differentString(summaryItem->chimpAllele, "none"))
         {
         printf("<TR>");
@@ -16844,6 +16846,7 @@ if (differentString(summaryItem->chimpAllele, "none") ||
 	}
     printf("</TABLE>\n");
     }
+
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
@@ -16874,9 +16877,11 @@ row = sqlNextRow(sr);
 thisItem = hapmapSnpsLoad(row+rowOffset);
 printf("<B>SNP rsId:</B> <A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
 printf("type=rs&rs=%s\" TARGET=_blank> %s</A><BR>\n", itemName, itemName);
-bedPrintPos((struct bed *)thisItem, 3);
-printf("<BR><B>Polymorphism type:</B> %s<BR>\n", thisItem->observed);
+printf("<B>Human Position:</B> <A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
+      hgTracksPathAndSettings(), database, thisItem->chrom, thisItem->chromStart, thisItem->chromEnd);
+printf("%s:%d-%d</A><BR>\n", thisItem->chrom, thisItem->chromStart, thisItem->chromEnd);
 printf("<B>Strand:</B> %s<BR>\n", thisItem->strand);
+printf("<B>Polymorphism type:</B> %s<BR>\n", thisItem->observed);
 if (thisItem->homoCount1 >= thisItem->homoCount2)
     {
     majorAllele = cloneString(thisItem->allele1);
@@ -16937,12 +16942,13 @@ printf("</TABLE>\n");
 sqlFreeResult(&sr);
 
 /* get summary data here */
-doHapmapSnpsSummary(tdb, itemName);
+doHapmapSnpsSummary(tdb, itemName, TRUE);
 printTrackHtml(tdb);
 hFreeConn(&conn);
 }
 
 void doHapmapOrthos(struct trackDb *tdb, char *itemName)
+/* could assume just one match */
 {
 char *table = tdb->tableName;
 struct hapmapAllelesOrtho *ortho;
@@ -16953,8 +16959,7 @@ char query[256];
 int rowOffset = hOffsetPastBin(seqName, table);
 int start = cartInt(cart, "o");
 char *otherDb = NULL;
-int orthoStart = 0;
-int orthoEnd = 0;
+char *otherDbName = NULL;
 
 genericHeader(tdb, itemName);
 
@@ -16965,24 +16970,48 @@ sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     ortho = hapmapAllelesOrthoLoad(row+rowOffset);
-    printf("<BR><B>Ortho allele:</B> %s\n", ortho->orthoAllele);
-    printf("<BR><B>Ortho strand:</B> %s\n", ortho->orthoStrand);
-    printf("<BR><B>Quality (0-100):</B> %d\n", ortho->score);
-    printf("<BR><B>Human </B>");
-    bedPrintPos((struct bed *)ortho, 3);
-
+    printf("<B>Human Position:</B> "
+           "<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
+                  hgTracksPathAndSettings(), database, ortho->chrom, ortho->chromStart+1, ortho->chromEnd);
+    printf("%s:%d-%d</A><BR>\n", ortho->chrom, ortho->chromStart, ortho->chromEnd);
+    printf("<B>Human Strand: </B> %s\n", ortho->strand);
     printf("<BR>");
+    printf("<B>Polymorphism type:</B> %s<BR>\n", ortho->observed);
+
     if (sameString(table, "hapmapAllelesChimp"))
+        {
         otherDb = "panTro2";
+	otherDbName = "Chimp";
+	}
     if (sameString(table, "hapmapAllelesMacaque"))
+        {
         otherDb = "rheMac2";
-    orthoStart = max(ortho->orthoStart - 250, 1);
-    // orthoEnd = min(start + 250, hChromSize(ortho->orthoChrom));
-    orthoEnd = orthoStart + 500;
-    linkToOtherBrowser(otherDb, ortho->orthoChrom, orthoStart, orthoEnd);
-    printf("Open %s browser</A> centered at this position.<BR>\n", otherDb);
+	otherDbName = "Macaque";
+	}
+
+    printf("<B>%s </B>", otherDbName);
+    printf("<B>Position:</B> "
+           "<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
+                  hgTracksPathAndSettings(), otherDb, ortho->orthoChrom, ortho->orthoStart+1, ortho->orthoEnd);
+    linkToOtherBrowser(otherDb, ortho->orthoChrom, ortho->orthoStart, ortho->orthoEnd);
+    printf("%s:%d-%d</A><BR>\n", ortho->orthoChrom, ortho->orthoStart, ortho->orthoEnd);
+
+    printf("<B>%s </B>", otherDbName);
+    printf("<B>Strand:</B> %s\n", ortho->orthoStrand);
+    printf("<BR>");
+
+    printf("<B>%s </B>", otherDbName);
+    printf("<B>Allele:</B> %s\n", ortho->orthoAllele);
+    printf("<BR>");
+    printf("<B>%s </B>", otherDbName);
+    printf("<B>Allele Quality (0-100):</B> %d\n", ortho->score);
 
     }
+
+printf("<BR>\n");
+/* get summary data here */
+/* don't repeat ortho display */
+doHapmapSnpsSummary(tdb, itemName, FALSE);
 printTrackHtml(tdb);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
