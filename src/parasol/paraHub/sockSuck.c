@@ -9,7 +9,10 @@ unsigned char localHost[4] = {127,0,0,1};	   /* Address for local host */
 void unpackIp(in_addr_t packed, unsigned char unpacked[4])
 /* Unpack IP address into 4 bytes. */
 {
-memcpy(unpacked, &packed, sizeof(unpacked));
+/* We cannot use sizeof(unpacked) because an array on a stack 
+ * is just a pointer, and so pointer-size is all that sizeof returns 
+ * for unpacked. We'll use the size of the source instead. */
+memcpy(unpacked, &packed, sizeof(packed));
 }
 
 boolean ipAddressOk(in_addr_t packed, unsigned char *spec)
