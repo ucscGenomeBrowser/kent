@@ -82,8 +82,16 @@ scores are not available for chimp chromosomes chr21 and chrY.
 Filters are provided for the data attributes described above. Additionally,
 a filter is provided for heterozgosity over all populations. The measure of
 heterozygosity used is 2pq (from Hardy-Weinberg equilibrium). 
-Filters are applied to all six subtracks, even
-if a subtrack is not displayed.
+Filters are applied to all six subtracks, even if a subtrack is not displayed.
+<P>
+Interactions between filters are resolved as follows:
+<UL>
+<LI>If the major allele is different between populations, it is not possible to determine
+an overall major allele for human, and thus not possible to apply the matching filters
+for the orthologous alleles.</LI>
+<LI>If a SNP is monomorphic in all populations, the minor allele is not verified, and thus 
+it is not possible to apply the filter to match orthologous alleles to a minor allele.  </LI>
+</UL>
 </P>
 
 <H2>Credits</H2>
