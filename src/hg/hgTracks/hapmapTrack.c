@@ -283,8 +283,6 @@ if (summaryItem->totalAlleleCountYRI > 0)
 
 if (!allele)
     return cloneString("none");
-if (sameString(summaryItem->strand, "-"))
-    reverseComplement(allele, 1);
 return allele;
 }
 
@@ -295,16 +293,12 @@ char *allele = NULL;
 if (!majorAllele) return cloneString("none");
 if (sameString(summaryItem->isMixed, "YES"))
     return cloneString("none");
-if (sameString(summaryItem->strand, "-"))
-   reverseComplement(majorAllele, 1);
 if (sameString(summaryItem->allele1, majorAllele))
     allele = cloneString(summaryItem->allele2);
 else
     allele = cloneString(summaryItem->allele1);
 if (!allele)
     return cloneString("none");
-if (sameString(summaryItem->strand, "-"))
-    reverseComplement(allele, 1);
 return allele;
 }
 
@@ -321,28 +315,16 @@ else if (sameString(species, "macaque"))
 else
     return TRUE;
 
-char *allele1 = cloneString(summaryItem->allele1);
-char *allele2 = cloneString(summaryItem->allele2);
-if (sameString(summaryItem->strand, "-"))
-    {
-    reverseComplement(allele1, 1);
-    if (differentString(allele2, "none"))
-        reverseComplement(allele2, 1);
-    }
-
 if (isComplexObserved(summaryItem->observed)) 
     {
-    if (sameString(orthoAllele, allele1)) return TRUE;
+    if (sameString(orthoAllele, summaryItem->allele1)) return TRUE;
     /* monomorphic are disqualified due to insufficient info; can't prove this is an ortho mismatch */
     if (sameString(summaryItem->allele2, "none")) return TRUE;
-    if (sameString(orthoAllele, allele2)) return TRUE;
+    if (sameString(orthoAllele, summaryItem->allele2)) return TRUE;
     }
 
 /* simple case: check for match in observed string */
 /* this is inclusive of monomorphic */
-/* reverse complement the orthoAllele (simpler than parsing observed) */
-if (sameString(summaryItem->strand, "-"))
-    reverseComplement(orthoAllele, 1);
 char *subString = strstr(summaryItem->observed, orthoAllele);
 if (subString) return TRUE;
 
@@ -622,10 +604,9 @@ else
         allele = cloneString(thisItem->allele1);
     else
         allele = cloneString(thisItem->allele2);
-    /* population snps are not adjusted for strand in database! */
-    if (sameString(strand, "-"))
-        reverseComplement(allele, 1);
     }
+if (sameString(strand, "-"))
+    reverseComplement(allele, 1);
 
 /* determine graphics attributes for vgTextCentered */
 int x1, x2, w;
