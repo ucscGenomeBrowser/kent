@@ -205,7 +205,7 @@
 #include "geneCheckDetails.h"
 #include "kg1ToKg2.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1289 2007/05/15 20:21:37 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1290 2007/05/15 21:15:43 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -16877,8 +16877,8 @@ thisItem = hapmapSnpsLoad(row+rowOffset);
 printf("<B>SNP rsId:</B> <A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
 printf("type=rs&rs=%s\" TARGET=_blank> %s</A><BR>\n", itemName, itemName);
 printf("<B>Human Position:</B> <A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
-      hgTracksPathAndSettings(), database, thisItem->chrom, thisItem->chromStart, thisItem->chromEnd);
-printf("%s:%d-%d</A><BR>\n", thisItem->chrom, thisItem->chromStart, thisItem->chromEnd);
+      hgTracksPathAndSettings(), database, thisItem->chrom, thisItem->chromStart+1, thisItem->chromEnd);
+printf("%s:%d-%d</A><BR>\n", thisItem->chrom, thisItem->chromStart+1, thisItem->chromEnd);
 printf("<B>Strand:</B> %s<BR>\n", thisItem->strand);
 printf("<B>Polymorphism type:</B> %s<BR>\n", thisItem->observed);
 if (thisItem->homoCount1 >= thisItem->homoCount2)
@@ -16972,7 +16972,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("<B>Human Position:</B> "
            "<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
                   hgTracksPathAndSettings(), database, ortho->chrom, ortho->chromStart+1, ortho->chromEnd);
-    printf("%s:%d-%d</A><BR>\n", ortho->chrom, ortho->chromStart, ortho->chromEnd);
+    printf("%s:%d-%d</A><BR>\n", ortho->chrom, ortho->chromStart+1, ortho->chromEnd);
     printf("<B>Human Strand: </B> %s\n", ortho->strand);
     printf("<BR>");
     printf("<B>Polymorphism type:</B> %s<BR>\n", ortho->observed);
@@ -16991,9 +16991,9 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("<B>%s </B>", otherDbName);
     printf("<B>Position:</B> "
            "<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
-                  hgTracksPathAndSettings(), otherDb, ortho->orthoChrom, ortho->orthoStart+1, ortho->orthoEnd);
+                  hgTracksPathAndSettings(), otherDb, ortho->orthoChrom, ortho->orthoStart, ortho->orthoEnd);
     linkToOtherBrowser(otherDb, ortho->orthoChrom, ortho->orthoStart, ortho->orthoEnd);
-    printf("%s:%d-%d</A><BR>\n", ortho->orthoChrom, ortho->orthoStart, ortho->orthoEnd);
+    printf("%s:%d-%d</A><BR>\n", ortho->orthoChrom, ortho->orthoStart+1, ortho->orthoEnd);
 
     printf("<B>%s </B>", otherDbName);
     printf("<B>Strand:</B> %s\n", ortho->orthoStrand);
