@@ -205,7 +205,7 @@
 #include "geneCheckDetails.h"
 #include "kg1ToKg2.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1288 2007/05/15 06:16:14 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1289 2007/05/15 20:21:37 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -16827,7 +16827,6 @@ if (showOrtho &&
     printf("<BR><B>Orthologous alleles:</B><BR>\n");
     printf("<TABLE BORDER=1>\n");
     printf("<TR><TH>Species</TH> <TH>Allele</TH> <TH>Quality Score</TH></TR>\n");
-    // printf("<TR><TH>Species</TH> <TH>Allele</TH> <TH>Strand</TH> <TH>Quality Score</TH></TR>\n");
     if (differentString(summaryItem->chimpAllele, "none"))
         {
         printf("<TR>");
