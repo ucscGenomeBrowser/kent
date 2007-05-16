@@ -15475,3 +15475,131 @@ TMPDIR=/scratch/tmp
 
 see file: ucscGenes10.txt
 
+#######################################################################
+# CGAP SAGE (DONE 2007-04-17 Andy)
+
+   ssh hgwdev
+   bash
+   mkdir /san/sanVol1/scratch/andy/cgapSage
+   cd /san/sanVol1/scratch/andy/cgapSage
+   echo "select * from cgapSageLib" | hgsql hg18 | tail +2 > libs.txt
+   echo "select * from snp127 where class='single' and locType='exact'" | hgsql hg18 | tail +2 | cut -f2- > allSnpss.txt
+   echo "select name from snp127Exceptions where exception='ObservedWrongSize' or exception='SingleClassBetweenLocType' or exception='SingleClassRangeLocType' or exception='MultipleAlignment'" | hgsql hg18 | tail +2 > exceptions
+  tabGrep -v exceptions 4 allSnps.txt > snps.txt
+   rm allSnps.txt exceptions   
+   echo select chrom,chromStart,chromEnd,name from simpleRepeat | hgsql hg18 | tail +2 > trf.bed
+   cut -f1-4 snps.txt > snps.bed
+   overlapSelect -selectFmt=bed -inFmt=bed -nonOverlapping trf.bed snps.bed snps.noTrf.bed
+   cut -f4 snps.noTrf.bed > snps.noTrf
+   tabGrep snps.noTrf 4 snps.txt > snps.noTrf.txt
+   mv snps.noTrf.txt snps.txt
+   grep -v random /cluster/data/hg18/chrom.sizes | grep -v hap > chrom.sizes
+   mkdir chromSnps
+   for c in `cat chrom.sizes | cut -f1`; do 
+     awk "{if (\$1==\"$c\") print;}" snps.txt > chromSnps/$c.snps.txt; 
+     echo $c; 
+   done
+   rm snps.txt
+   wget ftp://ftp1.nci.nih.gov/pub/SAGE/HUMAN/Hs.libraries.gz
+   gunzip Hs.libraries.gz
+cat << "EOF" > cleanLibs.awk
+BEGIN{FS="\t"}
+{
+for (i = 1; i <= 12; i++)
+    {
+    printf("%s\t", $i);
+    }
+sex = "";
+if ($13=="male")
+    {
+    sex = "male,";
+    }
+else if ($13=="female")
+    {
+    sex = "female,";
+    }
+else if ($13=="male and female")
+    {
+    sex = "male,female,";
+    }
+else if ($13=="unknown")
+    {
+    sex = "";
+    }
+printf("%s\t", sex);
+for (i = 14; i <= 20; i++)
+    {
+    printf("%s\t", $i);
+    }
+printf("%s\n", $21);
+}
+EOF
+   tail +2 Hs.libraries | awk -f cleanLibs.awk > libs.txt
+   ln -s ~/kent/src/hg/lib/cgapSage/cgapSageLib.sql 
+   hgLoadSqlTab hg18 cgapSageLib cgapSageLib.sql libs.txt
+   partitionSequence.pl -lstDir small 5000000 30 hg18.2bit chrom.sizes 0 > sequence.lst
+   grep -v small sequence.lst > seq.lst
+   cat small/* >> seq.lst
+   mv seq.lst sequence.lst
+   rm -rf small/
+   wget ftp://ftp1.nci.nih.gov/pub/SAGE/HUMAN/Hs_long.frequencies.gz
+   gunzip Hs_long.frequencies.gz
+   cat << "EOF" > doJobList.sh
+#!/bin/bash
+
+# basic vars
+
+part=$1;
+range=${part#*2bit:};
+chrom=${range%:*};
+nums=${range#*:}
+firstnum=${nums:0:1}
+
+outDir=output/${chrom}/${firstnum}
+mkdir -p $outDir
+echo ./doFind.sh $1 {check out exists `pwd`/${outDir}/${range}.bed}
+EOF
+   chmod +x doJobList.sh
+   for part in `cat sequence.lst`; do ./doJobList.sh $part >> jobList; done
+   cat << "EOF" > doFind.sh
+#!/bin/bash
+
+# basic vars
+
+part=$1;
+range=${part#*2bit:};
+chrom=${range%:*};
+nums=${range#*:}
+firstnum=${nums:0:1}
+
+# dirs/files
+
+startDir=`pwd`
+scratch=/scratch/tmp/$part
+output=$2
+
+# begin
+
+mkdir -p $scratch
+pushd $scratch
+twoBitToFa -noMask $startDir/"$part" part.fa
+cgapSageFind part.fa $startDir/Hs_long.frequencies $startDir/libs.txt \
+     $startDir/chromSnps/${chrom}.snps.txt output.bed
+cp output.bed $output
+popd
+rm -rf $scratch
+EOF
+chmod +x doFind.sh
+ssh pk
+cd /san/sanVol1/scratch/andy/cgapSage
+para create jobList
+para try
+para push
+# takes like 5-10 min
+exit 
+# back to hgwdev
+find output/ -name '*.bed' -exec cat '{}' >> output.bed \;
+cgapSageDupeRemove output.bed tmp.bed
+cgapSageDupeRemove -unique tmp.bed final.bed
+ln -s ~/kent/src/hg/lib/cgapSage/cgapSage.sql
+hgLoadBed -sqlTable=cgapSage.sql -tab hg18 cgapSage final.bed 
