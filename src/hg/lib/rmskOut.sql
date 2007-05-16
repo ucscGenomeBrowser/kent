@@ -5,6 +5,7 @@
 
 #RepeatMasker .out record
 CREATE TABLE rmskOut (
+    bin smallint unsigned not null,     # bin index field for range queries
     swScore int unsigned not null,	# Smith Waterman alignment score
     milliDiv int unsigned not null,	# Base mismatches in parts per thousand
     milliDel int unsigned not null,	# Bases deleted in parts per thousand
@@ -12,15 +13,15 @@ CREATE TABLE rmskOut (
     genoName varchar(255) not null,	# Genomic sequence name
     genoStart int unsigned not null,	# Start in genomic sequence
     genoEnd int unsigned not null,	# End in genomic sequence
-    genoLeft int not null,	# Size left in genomic sequence
-    strand char(1) not null,	# Relative orientation + or -
+    genoLeft int not null,		# -#bases after match in genomic sequence
+    strand char(1) not null,		# Relative orientation + or -
     repName varchar(255) not null,	# Name of repeat
     repClass varchar(255) not null,	# Class of repeat
     repFamily varchar(255) not null,	# Family of repeat
-    repStart int not null,	# Start in repeat sequence
+    repStart int not null,		# Start (if strand is +) or -#bases after match (if strand is -) in repeat sequence
     repEnd int unsigned not null,	# End in repeat sequence
-    repLeft int not null,	# Size left in repeat sequence
-    id char(1) not null,	# First digit of id field in RepeatMasker .out file.  Best ignored
+    repLeft int not null,		# -#bases after match (if strand is +) or start (if strand is -) in repeat sequence
+    id char(1) not null,		# First digit of id field in RepeatMasker .out file.  Best ignored.
               #Indices
-    PRIMARY KEY(swScore)
+    INDEX(genoName,bin)
 );
