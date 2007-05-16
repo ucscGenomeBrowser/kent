@@ -84,13 +84,14 @@ a filter is provided for heterozgosity over all populations. The measure of
 heterozygosity used is 2pq (from Hardy-Weinberg equilibrium). 
 Filters are applied to all six subtracks, even if a subtrack is not displayed.
 <P>
-Interactions between filters are resolved as follows:
+Notes on orthologous allele filters:
 <UL>
-<LI>If the major allele is different between populations, it is not possible to determine
-an overall major allele for human, and thus not possible to apply the matching filters
-for the orthologous alleles.</LI>
-<LI>If a SNP is monomorphic in all populations, the minor allele is not verified, and thus 
-it is not possible to apply the filter to match orthologous alleles to a minor allele.  </LI>
+<LI>If the major allele is different between populations, no overall major
+allele for human is determined, thus the &quot;matching&quot; filters for
+orthologous alleles do not apply to these SNPs.</LI>
+<LI>If a SNP is monomorphic in all populations, the minor allele is not
+verified in the HapMap dataset.  In these cases, the filter to match
+orthologous alleles to the minor human allele will yield no results.</LI>
 </UL>
 </P>
 
