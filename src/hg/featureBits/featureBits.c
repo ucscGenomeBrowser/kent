@@ -15,7 +15,7 @@
 #include "chain.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: featureBits.c,v 1.46 2006/07/26 04:18:03 baertsch Exp $";
+static char const rcsid[] = "$Id: featureBits.c,v 1.47 2007/05/16 19:26:21 kuhn Exp $";
 
 static struct optionSpec optionSpecs[] =
 /* command line option specifications */
@@ -71,8 +71,9 @@ errAbort(
   "usage:\n"
   "   featureBits database table(s)\n"
   "This will return the number of bits in all the tables anded together\n"
+  "Pipe warning:  output goes to stderr.\n"
   "Options:\n"
-  "   -bed=output.bed   Put intersection into bed format\n"
+  "   -bed=output.bed   Put intersection into bed format. Can use stdout.\n"
   "   -fa=output.fa     Put sequence in intersection into .fa file\n"
   "   -faMerge          For fa output merge overlapping features.\n"
   "   -minSize=N        Minimum size to output (default 1)\n"
