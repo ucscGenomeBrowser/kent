@@ -17,7 +17,7 @@
 #include "jksql.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: chkMetaDataTbls.c,v 1.10 2006/01/25 20:03:57 genbank Exp $";
+static char const rcsid[] = "$Id: chkMetaDataTbls.c,v 1.11 2007/05/17 18:59:51 markd Exp $";
 
 static char* validRefSeqStatus[] = {
     "Unknown", "Reviewed", "Validated", "Provisional", "Predicted", "Inferred", NULL
@@ -387,7 +387,7 @@ static void checkXRef(struct metaData* md)
 if (!md->inGbAlign)
     return;  /* can't check anything else */
 if (!md->inGbCdnaInfo)
-    gbError("%s: not in mrna table, referenced in %s", md->acc,
+    gbError("%s: not in gbCdnaInfo table, referenced in %s", md->acc,
             getTablesDesc(md));
 if (!md->inSeq)
     gbError("%s: not in seq table, referenced in %s", md->acc,

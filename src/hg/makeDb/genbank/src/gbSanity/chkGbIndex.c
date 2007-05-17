@@ -13,7 +13,7 @@
 #include "gbFileOps.h"
 #include "gbVerb.h"
 
-static char const rcsid[] = "$Id: chkGbIndex.c,v 1.3 2006/01/22 08:09:59 markd Exp $";
+static char const rcsid[] = "$Id: chkGbIndex.c,v 1.4 2007/05/17 18:59:51 markd Exp $";
 
 static void chkProcessed(struct gbEntry* entry, struct gbProcessed* processed)
 /* check a single processed object */
@@ -106,6 +106,12 @@ chkEntryProcessed(entry);
 chkEntryAligned(entry);
 }
 
+static boolean shouldCheck(struct gbEntry* entry)
+/* should an entry be checked */
+{
+return ((entry->processed == NULL) || (entry->processed->molType == mol_mRNA));
+}
+
 void chkGbIndex(struct gbSelect* select, struct metaDataTbls* metaDataTbls)
 /* Check a single partationing of genbank or refseq gbIndex files,
  * checking internal consistency and add to metadata */
@@ -118,8 +124,11 @@ gbVerbEnter(1, "check gbIndex: %s", gbSelectDesc(select));
 cookie = hashFirst(select->release->entryTbl);
 while ((hel = hashNext(&cookie)) != NULL)
     {
-    chkEntry(hel->val);
-    chkMetaDataGbEntry(metaDataTbls, select, hel->val);
+    if (shouldCheck(hel->val))
+        {
+        chkEntry(hel->val);
+        chkMetaDataGbEntry(metaDataTbls, select, hel->val);
+        }
     }
 gbVerbLeave(1, "check gbIndex: %s", gbSelectDesc(select));
 }
