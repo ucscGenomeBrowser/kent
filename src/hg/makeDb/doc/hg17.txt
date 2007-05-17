@@ -23755,5 +23755,5 @@ hgLoadBed -sqlTable=switchDbTss.sql hg17 switchDbTss switchDbTss.bed
         hg17.orfeomeTables.hgwbeta = yes
     # will need to enable for rr later.  In the future, this can just be enabled
     # as part the normal genbank build.  Change above to:
-        hg18.orfeomeTables.default = yse
+        hg18.orfeomeTables.default = yes
     
