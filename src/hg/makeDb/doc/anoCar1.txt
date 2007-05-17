@@ -580,6 +580,7 @@ chainOne $(path1)
     anoCar1.downloadDir = anoCar1
     anoCar1.perChromTables = no
 
+
     cvs ci -m "Added anoCar1." etc/genbank.conf
     # update /cluster/data/genbank/:
     make etc-update
@@ -611,6 +612,13 @@ chainOne $(path1)
         etc/hgwdev.dbs
     cvs ci -m "Added anoCar1." etc/align.dbs etc/hgwdev.dbs
     make etc-update
+
+###   (2007-05-16 markd)
+    # modify genbank to not load native RefSeq, since there are none.
+    # remove empty files and rerun gbDbLoadStep
+    anoCar1.refseq.mrna.native.load = no
+    nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad anoCar1
+    
 
 ##########################################################################
 ## BLASTZ FROG xenTro2 (WORKING - 2007-02-20 - Hiram)
