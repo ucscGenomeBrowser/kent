@@ -3345,6 +3345,7 @@ dataVersion ENCODE Oct 2005 Freeze, May 2007 data
     shortLabel UVa DNA Rep NS GM
     dataVersion May 2007
     priority 5
+
 track encodeUvaDnaRepTr50
 shortLabel UVa DNA Rep TR50
 longLabel University of Virginia DNA Smoothed Timing at 50% Replication
