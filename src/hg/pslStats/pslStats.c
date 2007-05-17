@@ -8,7 +8,7 @@
 #include "psl.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: pslStats.c,v 1.5 2007/05/09 07:59:30 markd Exp $";
+static char const rcsid[] = "$Id: pslStats.c,v 1.6 2007/05/17 00:42:23 markd Exp $";
 
 /* size for query name hashs */
 static int queryHashPowTwo = 22;
@@ -32,9 +32,9 @@ errAbort(
   "\n"
   "Options:\n"
   "  -queryStats - output per-query statistics, the default is per-alignment stats\n"
-  "  -overallStats - output overall statstics.\n"
+  "  -overallStats - output overall statistics.\n"
   "  -queries=querySizeFile - tab separated file with of expected qNames and sizes.\n"
-  "   If specified statistic will include queries that didn't align.\n");
+  "   If specified, statistic will include queries that didn't align.\n");
 }
 
 struct querySizeCnt
