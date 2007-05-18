@@ -7,6 +7,8 @@
 #ifndef PSCMGFX_H
 #define PSCMGFX_H
 
+#include "memgfx.h"
+
 struct pscmGfx 
 /* Structure to simululate 256 color image
  * in postScript - so to make it easier to
@@ -41,6 +43,9 @@ void pscmUnclip(struct pscmGfx *pscm);
 
 int pscmFindColorIx(struct pscmGfx *pscm, int r, int g, int b);
 /* Find color index for rgb. */
+
+void pscmSetColor(struct pscmGfx *pscm, int colorIx);
+/* Set color to index. */
 
 void pscmBox(struct pscmGfx *pscm, int x, int y, 
 	int width, int height, int colorIx);
