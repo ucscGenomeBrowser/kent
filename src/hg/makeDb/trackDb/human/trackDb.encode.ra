@@ -3270,27 +3270,34 @@ type bed 3 .
 dataVersion ENCODE Oct 2005 Freeze, May 2007 data
 
     track encodeUvaDnaRepOriginsNSGM
+    release alpha
     subTrack encodeUvaDnaRepOrigins
     longLabel University of Virginia DNA Replication Origins, Ori-NS, GM06990
     shortLabel UVa Ori-NS GM
+    color 205,0,0
     dataVersion May 2007
     priority 1
 
     track encodeUvaDnaRepOriginsNSHela
+    release alpha
     subTrack encodeUvaDnaRepOrigins
     longLabel University of Virginia DNA Replication Origins, Ori-NS, HeLa
     shortLabel UVa Ori-NS HeLa
+    color 250,0,0
     dataVersion May 2007
     priority 2
 
     track encodeUvaDnaRepOriginsBubbleHela
+    release alpha
     subTrack encodeUvaDnaRepOrigins
     longLabel University of Virginia DNA Replication Origins, Ori-Bubble, HeLa
     shortLabel UVa Ori-Bubble HeLa
+    color 0,0,128
     dataVersion May 2007
     priority 3
 
     track encodeUvaDnaRepOriginsTR50Hela
+    release alpha
     subTrack encodeUvaDnaRepOrigins
     longLabel University of Virginia DNA Replication Origins, Ori-TR50, HeLa
     shortLabel UVa Ori-TR50 HeLa
@@ -3311,6 +3318,7 @@ type bed 3 .
 dataVersion ENCODE Oct 2005 Freeze, May 2007 data
 
     track encodeUvaDnaRepOriginsPred
+    release beta
     subTrack encodeUvaDnaRepOrigins
     longLabel University of Virginia Predicted DNA Replication Origins, H-L DNA (HeLa)
     shortLabel UVa DNA Rep Ori
@@ -3318,33 +3326,13 @@ dataVersion ENCODE Oct 2005 Freeze, May 2007 data
     priority 1
 
     track encodeUvaDnaRepOriginsConf
+    release beta
     subTrack encodeUvaDnaRepOrigins
     shortLabel UVa DNA Rep Conf
     longLabel University of Virginia DNA Replication Origins Confidence Intervals, H-L DNA (HeLa)
     color 100,100,100
     dataVersion ENCODE Oct 2005 Freeze
     priority 2
-
-    track encodeUvaDnaRepOriginsBubbleHela
-    subTrack encodeUvaDnaRepOrigins
-    longLabel University of Virginia Predicted DNA Replication Origins, Ori-Bubble (HeLa)
-    shortLabel UVa DNA Rep Bubble
-    dataVersion May 2007
-    priority 3
-
-    track encodeUvaDnaRepOriginsNSHela
-    subTrack encodeUvaDnaRepOrigins
-    longLabel University of Virginia Predicted DNA Replication Origins, Ori-NS (HeLa)
-    shortLabel UVa DNA Rep NS 
-    dataVersion May 2007
-    priority 4
-
-    track encodeUvaDnaRepOriginsNSGM
-    subTrack encodeUvaDnaRepOrigins
-    longLabel University of Virginia Predicted DNA Replication Origins, Ori-NS (GM06990)
-    shortLabel UVa DNA Rep NS GM
-    dataVersion May 2007
-    priority 5
 
 track encodeUvaDnaRepTr50
 shortLabel UVa DNA Rep TR50
