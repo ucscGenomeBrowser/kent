@@ -8,7 +8,7 @@
 #include "psGfx.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: psGfx.c,v 1.31 2007/05/04 06:08:45 galt Exp $";
+static char const rcsid[] = "$Id: psGfx.c,v 1.32 2007/05/18 01:16:14 galt Exp $";
 
 static void psFloatOut(FILE *f, double x)
 /* Write out a floating point number, but not in too much
@@ -44,6 +44,12 @@ char *s =
 fprintf(f, "%%!PS-Adobe-3.1 EPSF-3.0\n");
 fprintf(f, "%%%%BoundingBox: 0 0 %d %d\n\n", (int)ceil(width), (int)ceil(height));
 fprintf(f, "%s", s);
+}
+
+void psSetLineWidth(struct psGfx *ps, double factor)
+/* Set line width to factor * a single pixel width. */
+{
+fprintf(ps->f, "%f setlinewidth\n", factor * ps->xScale);
 }
 
 struct psGfx *psOpen(char *fileName, 
@@ -93,7 +99,7 @@ fprintf(ps->f, "gsave\n");
 psClipRect(ps, 0, 0, ps->userWidth, ps->userHeight);
 
 /* Set line width to a single pixel. */
-fprintf(ps->f, "%f setlinewidth\n", ps->xScale);
+psSetLineWidth(ps,1);
 
 return ps;
 }
