@@ -29,7 +29,7 @@
 #include "dbDb.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.96 2007/05/04 23:29:15 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.97 2007/05/18 18:26:54 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -3144,9 +3144,11 @@ void listQueues(char *action, boolean isTransfer)
 struct sqlResult *sr;
 char **row;
 char query[256];
-if (!sameString(pushQtbl,"pushQ"))
+char *monthChange = isTransfer ? "" : "&month=current";
+if (!(isTransfer && sameString(pushQtbl,"pushQ")))
     {
-    printf("<A href=qaPushQ?%s=%s&cb=%s>Main Push Queue</A><br>\n",action,"pushQ",newRandState);
+    char *extra = (sameString(pushQtbl,"pushQ") ? " (you are here)" : "");
+    printf("<A href=qaPushQ?%s=%s%s&cb=%s>Main Push Queue</A>%s<br>\n",action,"pushQ",monthChange,newRandState,extra);
     printf("<br>\n");
     }
 safef(query, sizeof(query), "show tables");
@@ -3164,7 +3166,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    if (sameString(displayQ,"pushQ"))
 		displayQ = "Main Push Queue";
 	    char *extra = (sameString(row[0],pushQtbl) ? " (you are here)" : "");
-    	    printf("<A href=qaPushQ?%s=%s&cb=%s>%s</A>%s<br>\n",action,row[0],newRandState,displayQ,extra);
+    	    printf("<A href=qaPushQ?%s=%s%s&cb=%s>%s</A>%s<br>\n",action,row[0],monthChange,newRandState,displayQ,extra);
 	    }
 	}
     }
