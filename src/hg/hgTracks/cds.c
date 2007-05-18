@@ -16,7 +16,7 @@
 #include "genbank.h"
 #include "hgTracks.h"
 
-static char const rcsid[] = "$Id: cds.c,v 1.53 2007/05/12 06:13:18 angie Exp $";
+static char const rcsid[] = "$Id: cds.c,v 1.54 2007/05/18 17:44:24 angie Exp $";
 
 /* Definitions of cds colors for coding coloring display */
 #define CDS_ERROR   0
@@ -1284,10 +1284,10 @@ if (indelShowPolyA && mrnaSeq)
 			(psl->qStarts[lastBlk] + psl->blockSizes[lastBlk]));
 	    if (polyTSize > 0 && (polyTSize + 3) >= rcQStart)
 		{
-		s = psl->tStarts[0];
+		s = psl->tStart;
 		drawVertLine(vg, s, xOff, y, heightPer-1, scale,
 			     cdsColor[CDS_POLY_A]);
-		gotPolyAStart = TRUE;
+		gotPolyAEnd = TRUE;
 		}
 	    }
 	else
