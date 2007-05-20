@@ -297,14 +297,53 @@ oldToNew kg2ToKg3
 baseColorUseCds given
 baseColorDefault genomicCodons
 
-track augustusAbinitio
+track augustus
+compositeTrack on
 shortLabel Augustus
-longLabel Augustus Ab Initio Gene Predictions
+longLabel Augustus Gene Predictions
 group genes
 priority 51.7
 visibility hide
-color 180,0,0
 type genePred
+cdsDrawDefault genomic\ codons
+baseColorUseCds given
+baseColorDefault genomicCodons
+
+    track augustusHints
+    subTrack augustus
+    shortLabel Augustus Hints
+    longLabel Augustus Gene Predictions Using Hints
+    priority 1
+    color 139,0,0
+
+    track augustusXRA
+    subTrack augustus
+    shortLabel Augustus De Novo
+    longLabel Augustus De Novo Gene Predictions
+    priority 2
+    color 180,0,0
+
+    track augustusAbinitio
+    subTrack augustus off
+    shortLabel Augustus Ab Initio
+    longLabel Augustus Ab Initio Gene Predictions
+    priority 3
+    color 255,0,0
+
+searchTable augustusHints
+searchType genePred
+termRegex g[0-9]+\.t[0-9]+
+searchPriority 50
+
+searchTable augustusXRA
+searchType genePred
+termRegex g[0-9]+\.t[0-9]+
+searchPriority 50
+
+searchTable augustusAbinitio
+searchType genePred
+termRegex g[0-9]+\.t[0-9]+
+searchPriority 50
 
 track nscanGene
 shortLabel N-SCAN
