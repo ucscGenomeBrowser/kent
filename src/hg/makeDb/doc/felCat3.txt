@@ -12,7 +12,7 @@
     mkdir /cluster/data/felCat3/downloads
     cd /cluster/data/felCat3/downloads
 
-    wget ftp://ftp.broad.mit.edu/pub/assemblies/mammals/cat/felCat3*"
+    wget "ftp://ftp.broad.mit.edu/pub/assemblies/mammals/cat/felCat3*"
 
 # trimHeader in fasta and qual files
 
