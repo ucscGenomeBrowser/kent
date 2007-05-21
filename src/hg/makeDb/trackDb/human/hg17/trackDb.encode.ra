@@ -2270,7 +2270,6 @@ dataVersion May 2006
     priority 2
 
 track encodeNhgriDukeDnaseHs
-html encodeNhgriDukeDnaseHsFeb07
 compositeTrack on
 shortLabel Duke/NHGRI DNase
 longLabel Duke/NHGRI DNaseI-Hypersensitivity
