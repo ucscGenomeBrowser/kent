@@ -128,14 +128,14 @@ int i;
 if (vis == tvDense)
     /* Just use the skeleton one. */
     {
-    double aveTpm = 0;
-    for (i = 0; i < tag->numLibs; i++)
-	/* Average the lib tpms. */
-	aveTpm += tag->tagTpms[i];
-    if (tag->numLibs > 0)
-	aveTpm /= tag->numLibs;
+/*     double aveTpm = 0; */
+/*     for (i = 0; i < tag->numLibs; i++) */
+/* 	/\* Average the lib tpms. *\/ */
+/* 	aveTpm += tag->tagTpms[i]; */
+/*     if (tag->numLibs > 0) */
+/* 	aveTpm /= tag->numLibs; */
     safef(skel->name, sizeof(skel->name), "whatever");
-    skel->grayIx = grayIxForCgap(aveTpm);
+    skel->grayIx = 9;
     addSimpleFeature(skel);
     libList = skel;
     }
@@ -204,8 +204,9 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
     struct cgapSage *tag = cgapSageLoad(row+rowOffset);
     struct linkedFeatures *oneLfList = cgapSageToLinkedFeatures(tag, libHash, tg->visibility);
-    itemList = slCat(itemList, oneLfList);
+    itemList = slCat(oneLfList, itemList);
     }
+slReverse(&itemList);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 tg->items = itemList;
