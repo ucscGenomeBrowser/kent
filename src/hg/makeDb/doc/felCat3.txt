@@ -791,51 +791,35 @@ augustus/src/augustus --AUGUSTUS_CONFIG_PATH=/cluster/data/felCat3/bed/augustus/
 ##########################################################################
 # MULTIZ4WAY (Heather, in progress)
 
-  # split, rename, rsync (takes about an hour)
+  # split
+  # create 1024 files 000.maf through 1023.maf
+  # Files vary from almost 2000 - over 13000 lines each
+  # A little over 6,000,000 lines total
   ssh kkstore05
-
-  # dog
   cd /cluster/data/felCat3/bed/blastz.canFam2.2006-11-18.swap/mafRBestNet
-  mkdir split
-  zcat *gz | mafSplit dummyArg /cluster/data/felCat3/bed/blastz.canFam2.2006-11-18.swap/mafRBestNet/split/
-             stdin -byTarget -outDirDepth=2 -useSequenceName
-  cd split
-  ./rename.csh
-  cd /san/sanvol1/scratch/felCat3/mafNet/canFam2
-  rsync -av /cluster/data/felCat3/bed/blastz.canFam2.2006-11-18.swap/mafRBestNet/split .
-
-  # human
+  zcat *gz | mafSplit dummyArg /san/sanvol1/scratch/felCat3/mafNet/canFam2/split
+           stdin -byTarget -useHashedName=10
   cd /cluster/data/felCat3/bed/blastz.hg18.2006-11-10.swap/mafRBestNet
-  mkdir split
-  zcat *gz | mafSplit dummyArg /cluster/data/felCat3/bed/blastz.hg18.2006-11-10.swap/mafRBestNet/split/
-             stdin -byTarget -outDirDepth=2 -useSequenceName
-  cd split
-  ./rename.csh
-  cd /san/sanvol1/scratch/felCat3/mafNet/hg18
-  rsync -av /cluster/data/felCat3/bed/blastz.hg18.2006-11-10.swap/mafRBestNet/split .
-
-  # mouse
+  zcat *gz | mafSplit dummyArg /san/sanvol1/scratch/felCat3/mafNet/hg18/split
+             stdin -byTarget -useHashedName=10
   cd /cluster/data/felCat3/bed/blastz.mm8.2006-11-15.swap/mafRBestNet
-  mkdir split
-  zcat *gz | mafSplit dummyArg /cluster/data/felCat3/bed/blastz.mm8.2006-11-15.swap/mafRBestNet/split/
-             stdin -byTarget -outDirDepth=2 -useSequenceName
-  cd split
-  ./rename.csh
-  cd /san/sanvol1/scratch/felCat3/mafNet/mm8
-  rsync -av /cluster/data/felCat3/bed/blastz.mm8.2006-11-15.swap/mafRBestNet/split .
+  zcat *gz | mafSplit dummyArg /san/sanvol1/scratch/felCat3/mafNet/mm8/split
+             stdin -byTarget -useHashedName=10 
 
-  # setup multiz4way, including run and maf (output will be to /cluster/data/felCat3/bed/multiz4way/maf)
+  # setup multiz4way 
+  # output will be to /cluster/data/felCat3/bed/multiz4way/maf
   cd /cluster/data/felCat3/bed/multiz4way
+  mkdir maf
+  mkdir run
+  cd run
+
   # use the following for species.lst:
   # felCat3 canFam2 mm8 hg18
   # use the following for tree.nh:
   # (((felCat3 canFam2) mm8) hg18)
-  mkdir run
-  cd run
 
-  # create scaf.lst
-  perl -wpe 's/^scaffold_(\d+)\s+.*$//; $d0 = $1 % 10; $d1 = ($1/10) % 10; \
-      print "$d1/$d0/scaffold_$1";' /cluster/data/felCat3/chrom.sizes > scaf.lst
+  # create split.lst
+  perl -we 'for ($i=0; $i<1024; $i++) { printf "split%03d\n", $i; }' > split.lst
 
   # spec file
 cat  << 'EOF' > spec
@@ -845,7 +829,41 @@ cat  << 'EOF' > spec
 'EOF'
     # << emacs
 
-  # autoMultiz.csh in-lined here
+  # autoMultiz.csh 
+cat  << 'EOF' > autoMultiz.csh
+#!/bin/csh -ef
+    set db = felCat3
+    set c = $1
+    set mafOut = $2
+    set run = `pwd`
+    set pairs = /san/sanvol1/scratch/$db/mafNet
+
+# set up temp dir
+    set tmp = /scratch/tmp/$db/multiz.$c
+    rm -fr $tmp
+    mkdir -p $tmp
+    cp ../{tree.nh,species.lst} $tmp
+    pushd $tmp
+
+    foreach s (`cat species.lst`)
+        if ($s == $db) then
+            continue
+        endif
+        set clusterMaf = $pairs/$s/$c.maf
+        set localMaf = $db.$s.sing.maf
+        if (-e $clusterMaf) then
+            cp $clusterMaf $localMaf
+        else
+            echo "##maf version=1 scoring=autoMZ" > $localMaf
+        endif
+    end
+    set path = ($run/penn $path); rehash
+    $run/penn/autoMZ + T=$tmp E=$db "`cat tree.nh`" $db.*.sing.maf $c.maf
+    popd
+    cp $tmp/$c.maf $mafOut
+    rm -fr $tmp
+'EOF'
+    # << emacs
 
   # stash binaries
   mkdir penn
@@ -854,20 +872,11 @@ cat  << 'EOF' > spec
   cp /cluster/bin/penn/multiz.v11.2007-03-19/multiz-tba/maf_project .
   cp /cluster/bin/penn/multiz.v11.2007-03-19/multiz-tba/autoMZ .
 
-  # setup output directories
-  cd /cluster/data/felCat3/bed/multiz4way
-  mkdir maf
-  cd maf
-  foreach d1 (0 1 2 3 4 5 6 7 8 9)
-    mkdir $d1
-    foreach d0 (0 1 2 3 4 5 6 7 8 9)
-      mkdir $d1/$d0
-    end
-  end
-
   # cluster run
   ssh pk
   cd /cluster/data/felCat3/bed/multiz4way/run
-  gensub2 scaf.lst single spec jobList
+  gensub2 split.lst single spec jobList
   para create jobList
   para try
+  para check
+  para push
