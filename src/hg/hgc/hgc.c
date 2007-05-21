@@ -205,7 +205,7 @@
 #include "geneCheckDetails.h"
 #include "kg1ToKg2.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1290 2007/05/15 21:15:43 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1291 2007/05/21 19:47:12 angie Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -6175,9 +6175,11 @@ if (offset >= 0)
 	printf("<B>Divergence:</B> %3.1f%%<BR>\n", 0.1 * ro->milliDiv);
 	printf("<B>Deletions:</B>  %3.1f%%<BR>\n", 0.1 * ro->milliDel);
 	printf("<B>Insertions:</B> %3.1f%%<BR>\n", 0.1 * ro->milliIns);
-	printf("<B>Begin in repeat:</B> %d<BR>\n", ro->repStart);
+	printf("<B>Begin in repeat:</B> %d<BR>\n",
+	       (ro->strand[0] == '-' ? ro->repLeft : ro->repStart));
 	printf("<B>End in repeat:</B> %d<BR>\n", ro->repEnd);
-	printf("<B>Left in repeat:</B> %d<BR>\n", ro->repLeft);
+	printf("<B>Left in repeat:</B> %d<BR>\n",
+	       (ro->strand[0] == '-' ? -ro->repStart : -ro->repLeft));
 	printPos(seqName, ro->genoStart, ro->genoEnd, ro->strand, TRUE,
 		 ro->repName);
 	}
