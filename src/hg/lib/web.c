@@ -13,7 +13,7 @@
 #include "hgColors.h"
 #include "wikiLink.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.120 2007/05/22 21:49:45 galt Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.121 2007/05/22 21:56:34 galt Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -332,19 +332,19 @@ else
     if (!isGsid)
 	{
     	if (endsWith(scriptName, "hgBlat"))
-	    puts("       <A HREF=\"/goldenPath/help/hgTracksHelp.html#BLATAlign\"");
+	    puts("       <A HREF=\"../goldenPath/help/hgTracksHelp.html#BLATAlign\"");
     	else if (endsWith(scriptName, "hgText"))
-	    puts("       <A HREF=\"/goldenPath/help/hgTextHelp.html\"");
+	    puts("       <A HREF=\"../goldenPath/help/hgTextHelp.html\"");
     	else if (endsWith(scriptName, "hgNear"))
-	    puts("       <A HREF=\"/goldenPath/help/hgNearHelp.html\"");
+	    puts("       <A HREF=\"../goldenPath/help/hgNearHelp.html\"");
     	else if (endsWith(scriptName, "hgTables"))
-	    puts("       <A HREF=\"/goldenPath/help/hgTablesHelp.html\"");
+	    puts("       <A HREF=\"../goldenPath/help/hgTablesHelp.html\"");
     	else if (endsWith(scriptName, "hgGenome"))
-	    puts("       <A HREF=\"/goldenPath/help/hgGenomeHelp.html\"");
+	    puts("       <A HREF=\"../goldenPath/help/hgGenomeHelp.html\"");
     	else if (endsWith(scriptName, "hgSession"))
-	    puts("       <A HREF=\"/goldenPath/help/hgTracksHelp.html#Sessions\"");
+	    puts("       <A HREF=\"../goldenPath/help/hgTracksHelp.html#Sessions\"");
     	else 
-	    puts("       <A HREF=\"/goldenPath/help/hgTracksHelp.html\"");
+	    puts("       <A HREF=\"../goldenPath/help/hgTracksHelp.html\"");
 	puts("       class=\"topbar\">");
     	puts("           Help</A> ");
     	}
