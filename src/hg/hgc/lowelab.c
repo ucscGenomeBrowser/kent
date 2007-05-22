@@ -83,7 +83,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: lowelab.c,v 1.8 2007/05/05 18:35:33 pchan Exp $";
+static char const rcsid[] = "$Id: lowelab.c,v 1.9 2007/05/22 23:58:58 galt Exp $";
 
 extern char *uniprotFormat;
 
@@ -727,7 +727,7 @@ while ((row = sqlNextRow(sr)) != NULL)
   {
     trna = tRNAsLoad(row+rowOffset);
     
-    printf("<img align=right src=\"/RNA-img/%s/%s-%s-%s.gif\" alt='tRNA secondary structure for %s'>\n",
+    printf("<img align=right src=\"../RNA-img/%s/%s-%s-%s.gif\" alt='tRNA secondary structure for %s'>\n",
 	   database,database,trna->chrom,trna->name,trna->name);
     
     printf("<B>tRNA name: </B> %s<BR>\n",trna->name);
