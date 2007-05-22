@@ -13,7 +13,7 @@
 #include "hgColors.h"
 #include "wikiLink.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.121 2007/05/22 21:56:34 galt Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.122 2007/05/22 21:58:46 galt Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -326,7 +326,7 @@ else
 	       uiState, theCart ? "&" : "?" );
 	puts("&nbsp;&nbsp;&nbsp;");
 	}
-    if (!isGsid) puts("       <A HREF=\"/FAQ/\" class=\"topbar\">" "\n"
+    if (!isGsid) puts("       <A HREF=\"../FAQ/\" class=\"topbar\">" "\n"
 	 "           FAQ</A> &nbsp;&nbsp;&nbsp;" "\n" 
 	 );
     if (!isGsid)
