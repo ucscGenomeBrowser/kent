@@ -28,9 +28,9 @@
 #include "tfbsConsSites.h"
 #include "hapmapSnps.h"
 
-#define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
+#define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.371 2007/05/11 06:00:00 hartera Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.372 2007/05/22 23:12:12 galt Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -249,7 +249,7 @@ printf("<BR>\n");
 /* prematurely close the hgTracks FORM because forms cannot be nested */
 /* we will open another FORM here, and allow it to be closed later */
 printf("</FORM>\n");
-puts("<FORM ACTION=\"/cgi-bin/hgTrackUi\" NAME=\"snp125UiForm\" METHOD=\"GET\">");
+puts("<FORM ACTION=\"../cgi-bin/hgTrackUi\" NAME=\"snp125UiForm\" METHOD=\"GET\">");
 cartSaveSession(cart);
 cgiContinueHiddenVar("g");
 cgiContinueHiddenVar("c");
@@ -2085,7 +2085,7 @@ else
 
 treeImage = trackDbSetting(tdb, "treeImage");
 if (treeImage)
-    printf("</TD><TD><IMG ALIGN=TOP SRC=\"/images/%s\"></TD></TR></TABLE>", treeImage);
+    printf("</TD><TD><IMG ALIGN=TOP SRC=\"../images/%s\"></TD></TR></TABLE>", treeImage);
 else
     puts("</TD></TR></TABLE>");
 
@@ -2677,7 +2677,7 @@ else
 	char *tableName = tdb->tableName;
 	if (sameString(tableName, "mrna"))
 	    tableName = "all_mrna";
-	printf("<P><A HREF=\"/cgi-bin/hgTables?db=%s&hgta_group=%s&hgta_track=%s"
+	printf("<P><A HREF=\"../cgi-bin/hgTables?db=%s&hgta_group=%s&hgta_track=%s"
 	       "&hgta_table=%s&hgta_doSchema=describe+table+schema\" "
 	       "TARGET=_BLANK>"
 	       "View table schema</A></P>\n",
@@ -2697,7 +2697,7 @@ else
 	char *words[2];
 	if ((chopLine(cloneString(tdb->subtracks->tableName), words) > 0) &&
 	    hTableOrSplitExists(words[0]))
-	    printf("<P><A HREF=\"/cgi-bin/hgTables?db=%s&hgta_group=%s&hgta_track=%s"
+	    printf("<P><A HREF=\"../cgi-bin/hgTables?db=%s&hgta_group=%s&hgta_track=%s"
 		   "&hgta_table=%s&hgta_doSchema=describe+table+schema\" "
 		   "TARGET=_BLANK>"
 		   "View table schema</A></P>\n",
