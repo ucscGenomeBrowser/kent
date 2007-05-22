@@ -13,7 +13,7 @@
 #include "hgColors.h"
 #include "wikiLink.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.122 2007/05/22 21:58:46 galt Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.123 2007/05/22 22:04:00 galt Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -141,7 +141,7 @@ if (withHtmlHeader)
     htmlTextOut(newString);
     puts(
 	"	</TITLE>" "\n"
-	"	<LINK REL=\"STYLESHEET\" HREF=\"/style/HGStyle.css\">" "\n");
+	"	<LINK REL=\"STYLESHEET\" HREF=\"../style/HGStyle.css\">" "\n");
     if (extraStyle != NULL)
         puts(extraStyle);
     puts(
@@ -160,13 +160,13 @@ if (withLogo)
     if (isEncode)
 	{
 	puts("<A HREF=\"http://www.genome.gov/10005107\" TARGET=\"_BLANK\">"
-	     "<IMG SRC=\"/images/encodelogo.gif\" height=50 ALT=\"ENCODE Project at NHGRI\">"
+	     "<IMG SRC=\"../images/encodelogo.gif\" height=50 ALT=\"ENCODE Project at NHGRI\">"
 	     "</A>");
-	puts("<IMG SRC=\"/images/encode.jpg\" ALT=\"ENCODE Project at UCSC\">");
+	puts("<IMG SRC=\"../images/encode.jpg\" ALT=\"ENCODE Project at UCSC\">");
 	}
     else
 	{
-	puts("<IMG SRC=\"/images/title.jpg\">");
+	puts("<IMG SRC=\"../images/title.jpg\">");
 	}
     puts("</TH></TR>" "\n"
     	 "" "\n" );
@@ -198,7 +198,7 @@ if (isGsid)
     printf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#2636D1\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"2\"><TR>\n");
 
     /* Home */
-    printf("<TD ALIGN=CENTER><A HREF=\"/index.html\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Home</FONT></A></TD>");
+    printf("<TD ALIGN=CENTER><A HREF=\"../index.html\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Home</FONT></A></TD>");
 
     /* Blat */
     printf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgBlat?command=start\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Blat</FONT></A></TD>");
@@ -229,12 +229,12 @@ puts(
 
 if (isEncode)
     {
-    printf("&nbsp;<A HREF=\"/encode/\" class=\"topbar\">" "\n");
+    printf("&nbsp;<A HREF=\"../encode/\" class=\"topbar\">" "\n");
     puts("           Home</A>");
     }
 else
     {
-    printf("&nbsp;<A HREF=\"/index.html%s\" class=\"topbar\">" "\n", uiState);
+    printf("&nbsp;<A HREF=\"../index.html%s\" class=\"topbar\">" "\n", uiState);
     puts("           Home</A> &nbsp;&nbsp;&nbsp;");
     if (isGsid) 
 	{

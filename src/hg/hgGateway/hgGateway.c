@@ -14,7 +14,7 @@
 #include "hui.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hgGateway.c,v 1.99 2007/05/08 20:45:39 aamp Exp $";
+static char const rcsid[] = "$Id: hgGateway.c,v 1.100 2007/05/22 22:08:45 galt Exp $";
 
 boolean isPrivateHost;		/* True if we're on genome-test. */
 struct cart *cart = NULL;
@@ -67,7 +67,7 @@ puts(
 "<TR><TD><FONT SIZE=\"2\">\n"
 "<CENTER>\n"
 "The UCSC Genome Browser was created by the \n"
-"<A HREF=\"/staff.html\">Genome Bioinformatics Group of UC Santa Cruz</A>.\n"
+"<A HREF=\"../staff.html\">Genome Bioinformatics Group of UC Santa Cruz</A>.\n"
 "<BR>"
 "Software Copyright (c) The Regents of the University of California.\n"
 "All rights reserved.\n"
@@ -78,7 +78,7 @@ puts(
 cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
 
 puts(
-"<input TYPE=\"IMAGE\" BORDER=\"0\" NAME=\"hgt.dummyEnterButton\" src=\"/images/DOT.gif\" WIDTH=1 HEIGHT=1 ALT=dot>\n"
+"<input TYPE=\"IMAGE\" BORDER=\"0\" NAME=\"hgt.dummyEnterButton\" src=\"../images/DOT.gif\" WIDTH=1 HEIGHT=1 ALT=dot>\n"
 "<center>\n"
 "<table bgcolor=\"cccc99\" border=\"0\" CELLPADDING=1 CELLSPACING=0>\n"
 "<tr><td>\n"
