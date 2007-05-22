@@ -14,16 +14,16 @@ Genomic mappings of 17-base LongSAGE tags are displayed.  Tag counts are
 normalized to tags per million (TPM) in each library.  Tags with higher TPM are
 more darkly shaded.  The <TT>CATG</TT> restriction site before the start of the
 tag is rendered as a thick line; the 17 bases of the tag are drawn as a thinner
-line.  Thus the thin end points in the direction of transcription.
+line.  Thus the thin end of the tag points in the direction of transcription.
 
 The track display modes are:
 <UL>
 <LI> <B>dense</B> - Draws locations of mapped tags on a single line.
 <LI> <B>squish</B> - Draws one item per tag per tissue without labels.
 <LI> <B>pack</B> - Draws one item per tag per tissue with labels. The label
-includes the number of libraries containing the tag.
+includes the number of libraries of each tissue type containing the tag.
 Clicking on an item lists the libraries containing the tag, with the libraries
-from the particular tissue in bold.  Clicking on a library in the lists
+from the selected tissue in bold.  Clicking on a library in the list
 displays detailed information about that library.
 <LI> <B>full</B> - Draws one item per tag per library.
 Clicking on an item displays information about the library, along with other
@@ -43,7 +43,7 @@ TARGET=_blank>The Cancer Genome Anatomy Project</A>.
 </P>
 <P>
 Information about the various SAGE libraries, data downloads and other tools
-for exploring and analyzing this data is available from the 
+for exploring and analyzing these data is available from the 
 <A HREF="http://cgap.nci.nih.gov/SAGE" TARGET=_blank>CGAP SAGE Genie</A> web
 site.
 </P>
@@ -53,7 +53,7 @@ site.
 First, a subset of all single-base SNPs from dbSNP were gathered.  The SNPs 
 discarded include those which have flanking sequence that does not map to a 
 unique location, SNPs with the reference allele not matching the reference
-genome, and SNPs that overlap tandom repeat sequence. For all 21-mers in the
+genome, and SNPs that overlap tandem repeat sequence. For all 21-mers in the
 genome: if the 21-mer contained a SNP or
 multiple SNPs, we created all possible versions of the 21-mer using all
 combinations of SNPs.  We used 21-mers beginning with CATG as a mapping.
@@ -61,11 +61,11 @@ We discarded mappings that are not seen in the SAGE tag dataset.
 Finally, we discarded any non-unique mappings.
 </P>
 
-<H4>Human Embryonic Stem Cell library construction</H4>
+<H4>Human embryonic stem cell (ESC) library construction</H4>
 <P>
 Detailed information regarding the human ESC lines used in this study can be
 found at <A HREF="http://stemcells.nih.gov"
-TARGET=_blank>http://stemcells.nih.gov</A> and in Hirst, et al. 2007.
+TARGET=_blank>http://stemcells.nih.gov</A> and in Hirst, <em>et al.</em> 2007.
 The ESC tags were generated from RNA purified from human ESCs maintained under
 conditions that promote their maintenance in an undifferentiated state.
 </P>
