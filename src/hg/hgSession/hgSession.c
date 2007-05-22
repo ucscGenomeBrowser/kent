@@ -16,7 +16,7 @@
 #include "customFactory.h"
 #include "hgSession.h"
 
-static char const rcsid[] = "$Id: hgSession.c,v 1.26 2007/03/28 21:14:24 angie Exp $";
+static char const rcsid[] = "$Id: hgSession.c,v 1.27 2007/05/22 22:36:05 galt Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -73,7 +73,7 @@ char *session = cartSidUrlString(cart);
 char returnAddress[512];
 
 safef(returnAddress, sizeof(returnAddress), "/cgi-bin/hgSession?%s", session);
-printf("<A HREF=\"/cgi-bin/cartReset?%s&destination=%s\">Click here to "
+printf("<A HREF=\"../cgi-bin/cartReset?%s&destination=%s\">Click here to "
        "reset</A> the browser user interface settings to their defaults.\n",
        session, cgiEncodeFull(returnAddress));
 }
@@ -378,7 +378,7 @@ else
 
 showCartLinks();
 
-printf("<FORM ACTION=\"/cgi-bin/hgSession\" NAME=\"mainForm\" METHOD=%s "
+printf("<FORM ACTION=\"../cgi-bin/hgSession\" NAME=\"mainForm\" METHOD=%s "
        "ENCTYPE=\"multipart/form-data\">\n",
        formMethod);
 cartSaveSession(cart);
@@ -556,7 +556,7 @@ if (sqlTableExists(conn, namedSessionTable))
 		"<P>Note: the session contains a reference to at least one "
 		"custom track.  Custom tracks are "
 		"subject to an expiration policy described in the "
-		"<A HREF=\"/goldenPath/help/customTrack.html\" "
+		"<A HREF=\"../goldenPath/help/customTrack.html\" "
 		"TARGET=_BLANK>custom track documentation</A>.  "
 		"In order to keep a custom track from expiring, you can "
 		"periodically view the custom track in the genome browser."
@@ -565,7 +565,7 @@ if (sqlTableExists(conn, namedSessionTable))
 	dyStringPrintf(dyMessage,
 		"<P>Note: the session contains a reference to saved BLAT "
 		"results, which are subject to the same expiration policy as "
-		"<A HREF=\"/goldenPath/help/customTrack.html\" "
+		"<A HREF=\"../goldenPath/help/customTrack.html\" "
 		"TARGET=_BLANK>custom tracks</A>.  "
 		"In order to keep BLAT results from expiring, you can "
 		"periodically view them in the genome browser."
@@ -655,7 +655,7 @@ if (isNotEmpty(ss))
 	dyStringPrintf(dyMessage,
 		"<P>Note: the session contains saved BLAT results "
 		"which are subject to the same expiration policy as "
-		"<A HREF=\"/goldenPath/help/customTrack.html\" "
+		"<A HREF=\"../goldenPath/help/customTrack.html\" "
 		"TARGET=_BLANK>custom tracks</A>.  "
 		"In order to keep blat results from expiring, you can "
 		"periodically view them in the genome browser."
