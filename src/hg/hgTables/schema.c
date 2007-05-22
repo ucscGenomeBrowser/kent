@@ -20,7 +20,7 @@
 #include "hgMaf.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: schema.c,v 1.44 2007/04/28 23:59:41 kate Exp $";
+static char const rcsid[] = "$Id: schema.c,v 1.45 2007/05/22 23:03:30 galt Exp $";
 
 static char *nbForNothing(char *val)
 /* substitute &nbsp; for empty strings to keep table formating sane */
@@ -122,7 +122,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	if ((isSqlStringType(row[1]) && !sameString(row[1], "longblob")) ||
 	    isSqlEnumType(row[1]) || isSqlSetType(row[1]))
 	    {
-	    hPrintf("<A HREF=\"..%s", getScriptName());
+	    hPrintf("<A HREF=\"%s", getScriptName());
 	    hPrintf("?%s", cartSidUrlString(cart));
 	    hPrintf("&%s=%s", hgtaDatabase, db);
 	    hPrintf("&%s=%s", hgtaHistoTable, table);
@@ -133,7 +133,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    }
 	else if (isSqlNumType(row[1]))
 	    {
-	    hPrintf("<A HREF=\"..%s", getScriptName());
+	    hPrintf("<A HREF=\"%s", getScriptName());
 	    hPrintf("?%s", cartSidUrlString(cart));
 	    hPrintf("&%s=%s", hgtaDatabase, db);
 	    hPrintf("&%s=%s", hgtaHistoTable, table);
@@ -408,7 +408,7 @@ if (jpList != NULL)
 	boolean aViaIndex, bViaIndex;
 	hPrintSpaces(6);
 	hPrintf("%s.", jp->b->database);
-	hPrintf("<A HREF=\"..%s?", cgiScriptName());
+	hPrintf("<A HREF=\"%s?", cgiScriptName());
 	hPrintf("%s&", cartSidUrlString(cart));
 	hPrintf("%s=%s&", hgtaDoSchemaDb, jp->b->database);
 	hPrintf("%s=%s", hgtaDoSchemaTable, jp->b->table);
@@ -477,7 +477,7 @@ showItemRgb=bedItemRgb(ct->tdb);	/* should we expect itemRgb */
 hPrintf("<B>Custom Track ID:</B> %s ", table);
 hPrintf("<B>Field Count:</B> %d<BR>", ct->fieldCount);
 hPrintf("On loading, all custom tracks are converted to ");
-hPrintf("<A HREF=\"/goldenPath/help/customTrack.html#BED\">BED</A> ");
+hPrintf("<A HREF=\"../goldenPath/help/customTrack.html#BED\">BED</A> ");
 hPrintf("format.");
 
 if (ct->dbTrack)

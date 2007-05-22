@@ -14,7 +14,7 @@
 #include "hui.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: userRegions.c,v 1.9 2007/03/12 21:46:32 hiram Exp $";
+static char const rcsid[] = "$Id: userRegions.c,v 1.10 2007/05/22 23:03:31 galt Exp $";
 
 void doSetUserRegions(struct sqlConnection *conn)
 /* Respond to set regions button. */
@@ -22,7 +22,7 @@ void doSetUserRegions(struct sqlConnection *conn)
 char helpName[PATH_LEN], *helpBuf;
 char *oldPasted = cartUsualString(cart, hgtaEnteredUserRegions, "");
 htmlOpen("Enter region definition\n");
-hPrintf("<FORM ACTION=\"..%s\" METHOD=POST "
+hPrintf("<FORM ACTION=\"%s\" METHOD=POST "
     " ENCTYPE=\"multipart/form-data\" NAME=\"mainForm\">\n", getScriptName());
 cartSaveSession(cart);
 hPrintf("<TABLE><TR><TD ALIGN=LEFT>\n");

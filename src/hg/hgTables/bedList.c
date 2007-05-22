@@ -21,7 +21,7 @@
 #include "bedCart.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: bedList.c,v 1.56 2007/03/31 19:38:14 markd Exp $";
+static char const rcsid[] = "$Id: bedList.c,v 1.57 2007/05/22 23:03:30 galt Exp $";
 
 boolean htiIsPsl(struct hTableInfo *hti)
 /* Return TRUE if table looks to be in psl format. */
@@ -314,13 +314,13 @@ htmlOpen("Output %s as %s", table, (doCt ? "Custom Track" : "BED"));
 if (doGalaxy()) 
     startGalaxyForm();
 else
-    hPrintf("<FORM ACTION=\"..%s\" METHOD=GET>\n", getScriptName());
+    hPrintf("<FORM ACTION=\"%s\" METHOD=GET>\n", getScriptName());
 cartSaveSession(cart);
 hPrintf("%s\n", "<TABLE><TR><TD>");
 if (doCt)
     {
     hPrintf("%s\n", "</TD><TD>"
-	 "<A HREF=\"/goldenPath/help/customTrack.html\" TARGET=_blank>"
+	 "<A HREF=\"../goldenPath/help/customTrack.html\" TARGET=_blank>"
 	 "Custom track</A> header: </B>");
     }
 else
@@ -328,7 +328,7 @@ else
     cgiMakeCheckBox(hgtaPrintCustomTrackHeaders,
 	    cartCgiUsualBoolean(cart, hgtaPrintCustomTrackHeaders, FALSE));
     hPrintf("%s\n", "</TD><TD> <B> Include "
-	 "<A HREF=\"/goldenPath/help/customTrack.html\" TARGET=_blank>"
+	 "<A HREF=\"../goldenPath/help/customTrack.html\" TARGET=_blank>"
 	 "custom track</A> header: </B>");
     }
 hPrintf("%s\n", "</TD></TR><TR><TD></TD><TD>name=");

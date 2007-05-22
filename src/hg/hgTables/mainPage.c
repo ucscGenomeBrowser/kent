@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.117 2007/05/08 17:42:08 hiram Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.118 2007/05/22 23:03:30 galt Exp $";
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
 /* Sort track by shortLabel. */
@@ -842,7 +842,7 @@ hPrintf("%s",
   "contributors and usage restrictions associated with these data.");
 
 /* Main form. */
-hPrintf("<FORM ACTION=\"..%s\" NAME=\"mainForm\" METHOD=%s>\n",
+hPrintf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=%s>\n",
 	getScriptName(), cartUsualString(cart, "formMethod", "POST"));
 cartSaveSession(cart);
 jsWriteFunctions();

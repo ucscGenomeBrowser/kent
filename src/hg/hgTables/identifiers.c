@@ -13,7 +13,7 @@
 #include "trashDir.h"
 #include "web.h"
 
-static char const rcsid[] = "$Id: identifiers.c,v 1.12 2007/04/16 20:28:33 angie Exp $";
+static char const rcsid[] = "$Id: identifiers.c,v 1.13 2007/05/22 23:03:30 galt Exp $";
 
 
 static void getXrefInfo(char **retXrefTable, char **retIdField,
@@ -91,7 +91,7 @@ htmlOpen("Paste In Identifiers for %s", curTableLabel());
 if (idField == NULL)
     errAbort("Sorry, I can't tell which field of table %s to treat as the "
 	     "identifier field.", curTable);
-hPrintf("<FORM ACTION=\"..%s\" METHOD=%s>\n", getScriptName(),
+hPrintf("<FORM ACTION=\"%s\" METHOD=%s>\n", getScriptName(),
 	cartUsualString(cart, "formMethod", "POST"));
 cartSaveSession(cart);
 hPrintf("Please paste in the identifiers you want to include.\n");
@@ -117,7 +117,7 @@ htmlOpen("Upload Identifiers for %s", curTableLabel());
 if (idField == NULL)
     errAbort("Sorry, I can't tell which field of table %s to treat as the "
 	     "identifier field.", curTable);
-hPrintf("<FORM ACTION=\"..%s\" METHOD=POST ENCTYPE=\"multipart/form-data\">\n",
+hPrintf("<FORM ACTION=\"%s\" METHOD=POST ENCTYPE=\"multipart/form-data\">\n",
 	getScriptName());
 cartSaveSession(cart);
 hPrintf("Please enter the name of a file from your computer that contains a ");
