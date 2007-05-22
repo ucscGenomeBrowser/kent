@@ -25,7 +25,7 @@
 #include "paypalSignEncrypt.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidMember.c,v 1.26 2007/05/17 00:15:26 galt Exp $";
+static char const rcsid[] = "$Id: gsidMember.c,v 1.27 2007/05/22 22:19:26 galt Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "debug", "fixMembers", "update", "gsidM_password", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -228,7 +228,7 @@ FILE *f=mustOpen("ipn.log","a");
 struct dyString *dy=newDyString(256);
 struct dyString *dyVerify = NULL;
 char *paypalServer = cfgOption("paypalServer");
-dyStringAppend(dy,"/cgi-bin/webscr?cmd=_notify-validate");
+dyStringAppend(dy,"../cgi-bin/webscr?cmd=_notify-validate");
 for(this=cgiVars;this;this=this->next)
     {
     fprintf(f,"%s=%s\n", this->name, this->val);
