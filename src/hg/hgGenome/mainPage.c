@@ -30,7 +30,7 @@
 #include "hgGenome.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.18 2007/05/18 01:27:40 galt Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.19 2007/05/23 00:30:47 galt Exp $";
 
 
 static char *allColors[] = {
@@ -523,12 +523,12 @@ int graphRows = linesOfGraphs();
 int graphCols = graphsPerLine();
 int i, j;
 int realCount = 0;
-char *scriptName = "/cgi-bin/hgGenome";
+char *scriptName = "../cgi-bin/hgGenome";
 
 cartWebStart(cart, "%s Genome Graphs", genome);
 
 /* Start form and save session var. */
-hPrintf("<FORM ACTION=\"..%s\" NAME=\"mainForm\" METHOD=GET>\n", scriptName);
+hPrintf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=GET>\n", scriptName);
 cartSaveSession(cart);
 
 /* Write some javascript functions */
