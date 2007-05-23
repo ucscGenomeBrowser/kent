@@ -17,7 +17,7 @@
 #include "trashDir.h"
 #include "psGfx.h"
 
-static char const rcsid[] = "$Id: pbTracks.c,v 1.49 2007/03/28 17:48:19 fanhsu Exp $";
+static char const rcsid[] = "$Id: pbTracks.c,v 1.50 2007/05/23 01:37:38 galt Exp $";
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
@@ -285,7 +285,7 @@ hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackForm\" METHOD=POST>\n\n", "../cgi-bin/p
 cartSaveSession(cart);
 
 hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#"HG_COL_HOTLINKS"\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"2\"><TR>\n");
-hPrintf("<TD ALIGN=LEFT><A HREF=\"/index.html\">%s</A></TD>", wrapWhiteFont("Home"));
+hPrintf("<TD ALIGN=LEFT><A HREF=\"../index.html\">%s</A></TD>", wrapWhiteFont("Home"));
 hPrintf("<TD ALIGN=CENTER><FONT COLOR=\"#FFFFFF\" SIZE=4>%s</FONT></TD>",
         "UCSC Proteome Browser");
 hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/pbTracks?%s=%u&pbt.psOutput=on\">%s</A></TD>\n",

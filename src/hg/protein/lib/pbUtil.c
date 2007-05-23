@@ -17,7 +17,7 @@
 #include "pbStamp.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: pbUtil.c,v 1.21 2007/04/12 22:22:29 fanhsu Exp $";
+static char const rcsid[] = "$Id: pbUtil.c,v 1.22 2007/05/23 01:37:38 galt Exp $";
 
 void hWrites(char *string)
 /* Write string with no '\n' if not suppressed. */
@@ -808,7 +808,7 @@ connCentral = hConnectCentral();
 
 hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#"HG_COL_HOTLINKS"\" BORDER=\"0\" CELLSPACING=\"0\"");    
 hPrintf("CELLPADDING=\"2\"><TR>\n");
-hPrintf("<TD ALIGN=LEFT><A HREF=\"/index.html\">%s</A></TD>", wrapWhiteFont("Home"));
+hPrintf("<TD ALIGN=LEFT><A HREF=\"../index.html\">%s</A></TD>", wrapWhiteFont("Home"));
 hPrintf("<TD ALIGN=CENTER><FONT COLOR=\"#FFFFFF\" SIZE=4>%s</FONT></TD>",
         "UCSC Proteome Browser");
 if (proteinInSupportedGenome)

@@ -18,7 +18,7 @@
 #include "trashDir.h"
 #include "psGfx.h"
 
-static char const rcsid[] = "$Id: pbGlobal.c,v 1.38 2007/05/04 21:32:43 fanhsu Exp $";
+static char const rcsid[] = "$Id: pbGlobal.c,v 1.39 2007/05/23 01:37:38 galt Exp $";
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
@@ -369,7 +369,7 @@ hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackForm\" METHOD=POST>\n\n", "../cgi-bin/p
 cartSaveSession(cart);
 
 hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#"HG_COL_HOTLINKS"\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"2\"><TR>\n");
-hPrintf("<TD ALIGN=LEFT><A HREF=\"/index.html\">%s</A></TD>", wrapWhiteFont("Home"));
+hPrintf("<TD ALIGN=LEFT><A HREF=\"../index.html\">%s</A></TD>", wrapWhiteFont("Home"));
 hPrintf("<TD ALIGN=CENTER><FONT COLOR=\"#FFFFFF\" SIZE=4>%s</FONT></TD>",
         "UCSC Proteome Browser");
 hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/pbGlobal?%s=%u&pbt.psOutput=on\">%s</A></TD>\n",
@@ -513,7 +513,7 @@ else
 	    if (answer == NULL)
 		{
 	        errAbort(
-		"'%s' does not seem to be a valid UniProt(Swiss-Prot/TrEMBL) protein ID or a gene symbol.<br><br>Click <A HREF=\"/cgi-bin/pbGateway\">here</A> to start another query."
+		"'%s' does not seem to be a valid UniProt(Swiss-Prot/TrEMBL) protein ID or a gene symbol.<br><br>Click <A HREF=\"../cgi-bin/pbGateway\">here</A> to start another query."
 		    	, queryID);
 	    	}
 	    
@@ -587,7 +587,7 @@ if (proteinAC == NULL)
     proteinAC = sqlGetField(conn, protDbName, "spXref3", "accession", cond_str);
     if (proteinAC == NULL)
 	{
-	errAbort("'%s' does not seem to be a valid Swiss-Prot/TrEMBL protein ID or gene symbol.<br><br>Click <A HREF=\"/cgi-bin/pbGateway\">here</A> to start another query."
+	errAbort("'%s' does not seem to be a valid Swiss-Prot/TrEMBL protein ID or gene symbol.<br><br>Click <A HREF=\"../cgi-bin/pbGateway\">here</A> to start another query."
 	, proteinID);
 	}
     else
