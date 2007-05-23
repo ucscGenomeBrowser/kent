@@ -46,13 +46,13 @@ if (sameString(position, "proteome") || sameString(position, "hgBatch"))
     position = defaultPosition;
 
 puts(
-"<FORM ACTION=\"/cgi-bin/pbGlobal\" NAME=\"mainForm\" METHOD=\"GET\">\n"
+"<FORM ACTION=\"../cgi-bin/pbGlobal\" NAME=\"mainForm\" METHOD=\"GET\">\n"
 "<CENTER>"
 "<TABLE BGCOLOR=\"FFFEF3\" BORDERCOLOR=\"cccc99\" BORDER=0 CELLPADDING=1>\n"
 "<TR><TD><FONT SIZE=\"2\">\n"
 "<CENTER>\n"
 "The UCSC Proteome Browser was created by the \n"
-"<A HREF=\"/staff.html\">Genome Bioinformatics Group of UC Santa Cruz</A>.\n"
+"<A HREF=\"../staff.html\">Genome Bioinformatics Group of UC Santa Cruz</A>.\n"
 "<BR>"
 "Software Copyright (c) The Regents of the University of California.\n"
 "All rights reserved.\n"
@@ -67,7 +67,7 @@ puts("<INPUT TYPE=SUBMIT>");
 puts("</FORM>\n"
 );
 
-printf("<FORM ACTION=\"/cgi-bin/pbGateway\" METHOD=\"GET\" NAME=\"orgForm\"><input type=\"hidden\" name=\"org\" value=\"%s\">\n", organism);
+printf("<FORM ACTION=\"../cgi-bin/pbGateway\" METHOD=\"GET\" NAME=\"orgForm\"><input type=\"hidden\" name=\"org\" value=\"%s\">\n", organism);
 printf("<input type=\"hidden\" name=\"db\" value=\"%s\">\n", db);
 cartSaveSession(cart);
 puts("</FORM><BR>");

@@ -189,7 +189,7 @@ for (probe = probeList; probe != NULL; probe = probe->next)
 
     /* Create hyperlink to probe page around gene name. */
     dyStringClear(dy);
-    dyStringPrintf(dy, "<A HREF=\"../cgi-bin/%s?%s&%s=%d&%s=%d\" target=_parent>",
+    dyStringPrintf(dy, "<A HREF=\"%s?%s&%s=%d&%s=%d\" target=_parent>",
     	hgVisiGeneCgiName(), sidUrl, hgpDoProbe, probe->val, hgpSs, submissionSource);
     safef(query, sizeof(query), 
     	"select probeType.name from probeType,probe where probe.id = %d "

@@ -37,7 +37,7 @@ return "VisiGene";
 char *hgVisiGeneCgiName()
 /* Return name of executable. */
 {
-return "hgVisiGene";
+return "../cgi-bin/hgVisiGene";
 }
 
 char *shortOrgName(char *binomial)
@@ -254,7 +254,7 @@ if (imageCount > 0)
 	char *imageFile = visiGeneThumbSizePath(conn, id);
 	printf("<TR>");
 	printf("<TD>");
-	printf("<A HREF=\"../cgi-bin/%s?%s&%s=%d&%s=do\" target=\"image\" >", 
+	printf("<A HREF=\"%s?%s&%s=%d&%s=do\" target=\"image\" >", 
 	    hgVisiGeneCgiName(), 
 	    sidUrl, hgpId, id, hgpDoImage);
 	printf("<IMG SRC=\"%s\"></A><BR>\n", imageFile);
@@ -346,7 +346,7 @@ if (imageId != 0)
     fullCaption(conn, imageId);
 
     safef(buf,sizeof(buf),"%s%s%s", dir, name, extension);
-    safef(url,sizeof(url),"../cgi-bin/%s?%s=go&%s&%s=%d",
+    safef(url,sizeof(url),"%s?%s=go&%s&%s=%d",
     	hgVisiGeneCgiName(), hgpDoDownload, sidUrl, hgpId, imageId);
    
     printf("<B>Full-size image:</B> %d x %d &nbsp; <A HREF='%s'> download </A> ", w, h, url);
@@ -384,16 +384,16 @@ void doControls(struct sqlConnection *conn)
 {
 char *listSpec = cartUsualString(cart, hgpListSpec, "");
 htmlSetBgColor(0xD0FFE0);
-htmlSetStyle("	<LINK REL=\"STYLESHEET\" HREF=\"/style/HGStyle.css\">" "\n");
+htmlSetStyle("	<LINK REL=\"STYLESHEET\" HREF=\"../style/HGStyle.css\">" "\n");
 htmStart(stdout, "do controls");
-printf("<FORM ACTION=\"../cgi-bin/%s\" NAME=\"mainForm\" target=\"_parent\" METHOD=GET>\n",
+printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" target=\"_parent\" METHOD=GET>\n",
 	hgVisiGeneCgiName());
 cartSaveSession(cart);
 
 printf("<TABLE WIDTH=100%%><TR>");
 printf("<TD WIDTH=230 bgcolor=\"#"HG_COL_HOTLINKS"\">");
-printf("&nbsp;<B><A HREF=\"/index.html\" target=\"_parent\" class=\"topbar\">UCSC</A> ");
-printf("&nbsp;<A HREF=\"../cgi-bin/%s?%s=\" target=\"_parent\" class=\"topbar\">VisiGene</A></B> ",
+printf("&nbsp;<B><A HREF=\"../index.html\" target=\"_parent\" class=\"topbar\">UCSC</A> ");
+printf("&nbsp;<A HREF=\"%s?%s=\" target=\"_parent\" class=\"topbar\">VisiGene</A></B> ",
 	hgVisiGeneCgiName(), hgpListSpec);
 printf("</TD>");
 
@@ -424,7 +424,7 @@ printf(
 printf("</TD>");
 
 printf("<TD ALIGN=Right>");
-printf("<A HREF=\"/goldenPath/help/hgTracksHelp.html#VisiGeneHelp\" target=_parent>");
+printf("<A HREF=\"../goldenPath/help/hgTracksHelp.html#VisiGeneHelp\" target=_parent>");
 printf("Help");
 printf("</A>&nbsp;");
 printf("</TD>");
@@ -537,12 +537,12 @@ printf("</HEAD>\n");
 
 
 printf("  <frameset rows=\"27,*\">\n");
-printf("    <frame name=\"controls\" src=\"../cgi-bin/%s?%s=go&%s&%s=%d\" noresize marginwidth=\"0\" marginheight=\"0\" frameborder=\"0\">\n",
+printf("    <frame name=\"controls\" src=\"%s?%s=go&%s&%s=%d\" noresize marginwidth=\"0\" marginheight=\"0\" frameborder=\"0\">\n",
     hgVisiGeneCgiName(), hgpDoControls, sidUrl, hgpId, imageId);
 printf("  <frameset cols=\"230,*\"> \n");
-printf("    <frame src=\"../cgi-bin/%s?%s=go&%s&%s=%d\" noresize frameborder=\"0\" name=\"list\">\n",
+printf("    <frame src=\"%s?%s=go&%s&%s=%d\" noresize frameborder=\"0\" name=\"list\">\n",
     hgVisiGeneCgiName(), hgpDoThumbnails, sidUrl, hgpId, imageId);
-printf("    <frame src=\"../cgi-bin/%s?%s=go&%s&%s=%d\" name=\"image\" noresize frameborder=\"0\">\n",
+printf("    <frame src=\"%s?%s=go&%s&%s=%d\" name=\"image\" noresize frameborder=\"0\">\n",
     hgVisiGeneCgiName(), hgpDoImage, sidUrl, hgpId, imageId);
 printf("  </frameset>\n");
 
@@ -649,7 +649,7 @@ char *listSpec = NULL;
 webStartWrapperDetailedNoArgs(cart, "", "VisiGene Image Browser",
         FALSE, FALSE, FALSE, TRUE);
 
-printf("<FORM ACTION=\"../cgi-bin/%s\" METHOD=GET>\n",
+printf("<FORM ACTION=\"%s\" METHOD=GET>\n",
 	hgVisiGeneCgiName());
 puts("<P>VisiGene is a virtual microscope for viewing <em>in situ</em> images. \n"
 "These images show where a gene is used in an organism, sometimes down to \n"
