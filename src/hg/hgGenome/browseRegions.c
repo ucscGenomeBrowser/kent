@@ -14,7 +14,7 @@
 static void quotedBrowserUrl(FILE *f, struct bed3 *bed, struct genoGraph *gg)
 /* Print URL that will open browser at bed position with genoGraph track on */
 {
-fprintf(f, "\"../cgi-bin/hgTracks?db=%s&position=%s:%d-%d&%s=full\"",
+fprintf(f, "\"../../cgi-bin/hgTracks?db=%s&position=%s:%d-%d&%s=full\"",
         database, bed->chrom, bed->chromStart+1, bed->chromEnd,
 	gg->name);
 }
@@ -35,7 +35,7 @@ char *indexFrame = "index";
 struct tempName indexTn;
 trashDirFile(&indexTn, "hgg", "index", ".html");
 FILE *f = mustOpen(indexTn.forCgi, "w");
-htmlSetBackground(hBackgroundImage());
+htmlSetBackground(addSuffix("../",hBackgroundImage()));
 htmStart(f, "Region Index");
 fprintf(f, "<BODY>");
 fprintf(f, "<B>%s</B><BR>\n", gg->shortLabel);
