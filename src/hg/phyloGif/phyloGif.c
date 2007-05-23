@@ -19,10 +19,10 @@
  *  
  *
  *  One may use as a cgi in html GET: 
- *    <IMG SRC="/cgi-bin/phyloGif?phyloGif_width=120&phyloGif_height=120&phyloGif_tree=(a:1,b:1);" >
+ *    <IMG SRC="../cgi-bin/phyloGif?phyloGif_width=120&phyloGif_height=120&phyloGif_tree=(a:1,b:1);" >
  *
  *  Or as cgi in html POST:
-<form method="POST" action="/cgi-bin/phyloGif/phylo.gif" name="mainForm">
+<form method="POST" action="../cgi-bin/phyloGif/phylo.gif" name="mainForm">
 <table>
 <tr><td>width:</td><td><INPUT type="text" name="phyloGif_width" value="240" size="4"></td></tr>
 <tr><td>height:</td><td><INPUT type="text" name="phyloGif_height" value="512" size="4"></td></tr>
@@ -66,7 +66,7 @@
 #include "errabort.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: phyloGif.c,v 1.16 2007/04/27 20:28:36 angie Exp $";
+static char const rcsid[] = "$Id: phyloGif.c,v 1.17 2007/05/23 23:19:03 galt Exp $";
 
 struct cart *cart=NULL;      /* The user's ui state. */
 struct hash *oldVars = NULL;
