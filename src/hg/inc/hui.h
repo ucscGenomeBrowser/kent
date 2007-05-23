@@ -13,13 +13,13 @@ char *hUserCookie();
 char *wrapWhiteFont(char *s);
 /* Write white font around s */
 
-#define HELP_DIR "/goldenPath/help"
+#define HELP_DIR "../goldenPath/help"
 /*	will be appended to DOCUMENT_ROOT	*/
 
 #define DOCUMENT_ROOT	"/usr/local/apache/htdocs"
 /*	default DocumentRoot as configured in Apache httpd.conf	*/
 /*	DocumentRoot can be set in hg.conf as browser.documentRoot */
-#define DEFAULT_BACKGROUND	"/images/floret.jpg"
+#define DEFAULT_BACKGROUND	"../images/floret.jpg"
 /*	full path is determined by Apache's DocumentRoot since this is a
  *	relative URL reference
  */
@@ -498,8 +498,8 @@ enum baseColorDrawOpt
 #define BASE_COLOR_DEFAULT "baseColorDefault"
 
 /* Coloring help pages: */
-#define CDS_HELP_PAGE "/goldenPath/help/hgCodonColoring.html"
-#define CDS_MRNA_HELP_PAGE "/goldenPath/help/hgCodonColoringMrna.html"
+#define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
+#define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
 
 void baseColorDrawOptDropDown(struct cart *cart, struct trackDb *tdb);
@@ -517,7 +517,7 @@ enum baseColorDrawOpt baseColorDrawOptEnabled(struct cart *cart,
 #define INDEL_QUERY_INSERT "indelQueryInsert"
 #define INDEL_POLY_A "indelPolyA"
 
-#define INDEL_HELP_PAGE "/goldenPath/help/hgIndelDisplay.html"
+#define INDEL_HELP_PAGE "../goldenPath/help/hgIndelDisplay.html"
 
 void indelShowOptions(struct cart *cart, struct trackDb *tdb);
 /* Make HTML inputs for indel display options if any are applicable. */
