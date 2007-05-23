@@ -13,7 +13,7 @@
 #include "hgColors.h"
 #include "wikiLink.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.123 2007/05/22 22:04:00 galt Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.124 2007/05/23 22:48:58 galt Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -319,7 +319,7 @@ else
 	       uiState);
 	puts("           PDF/PS</A> &nbsp;&nbsp;&nbsp;");
 	}
-    if (wikiLinkEnabled())
+    if (wikiLinkEnabled() && !endsWith(scriptName, "hgSession"))
 	{
 	printf("<A HREF=\"../cgi-bin/hgSession%s%shgS_doMainPage=1\" "
 	       "class=\"topbar\">Session</A>",
