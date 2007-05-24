@@ -921,6 +921,7 @@ done
 rm -f getIrows.sh
 twobit=/cluster/data/felCat3/felCat3.2bit
 outdir=../maf
+# do smaller jobs first
 for file in `ls -1rS ../../maf/*.maf`
 do
   echo "echo $file" >> getIrows.sh
@@ -933,11 +934,14 @@ chmod +x getIrows.sh
   # << emacs
 
   # run mafAddIRows
-  # takes an hour or so depending on load on kolossus
+  # takes 30 minutes or so depending on load on kolossus
+  # could have used kki (see ornAna1.txt)
   ssh kolossus
   cd /cluster/data/felCat3/bed/multiz4way/anno/run
   ./getIrows.sh
 
-
-
-
+  # concat
+  ssh kkstore05
+  cd /cluster/data/felCat3/bed/multiz4way/anno
+  cat maf/*.maf >> felCat3.maf
+  # rollup file is 10,888,983 lines
