@@ -32,5 +32,7 @@ CREATE TABLE hapmapAllelesSummary (
     chimpAllele enum ('A', 'C', 'G', 'N', 'T', 'none') not null,	# chimp allele
     chimpAlleleQuality int unsigned not null,			# quality score (0-100)
     macaqueAllele enum ('A', 'C', 'G', 'N', 'T', 'none') not null,	# macaque allele
-    macaqueAlleleQuality int unsigned not null			# quality score (0-100)
+    macaqueAlleleQuality int unsigned not null,			# quality score (0-100)
+    index name (name),
+    index chrom (chrom, bin)
 );

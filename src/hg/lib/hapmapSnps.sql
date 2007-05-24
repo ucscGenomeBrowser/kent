@@ -17,5 +17,8 @@ CREATE TABLE hapmapSnps (
     homoCount1 int unsigned not null,			# Count of individuals who are homozygous for allele1
     allele2 enum('C', 'G', 'T', 'none') not null,	# This allele may not have been observed
     homoCount2 int unsigned not null,			# Count of individuals who are homozygous for allele2
-    heteroCount int unsigned not null			# Count of individuals who are heterozygous
+    heteroCount int unsigned not null,			# Count of individuals who are heterozygous
+              #Indices
+    INDEX name (name),
+    INDEX chrom (chrom, bin)
 );
