@@ -789,7 +789,7 @@ augustus/src/augustus --AUGUSTUS_CONFIG_PATH=/cluster/data/felCat3/bed/augustus/
         -buildDir=`pwd` >&! rbest.log  &
 
 ##########################################################################
-# MULTIZ4WAY (Heather, in progress)
+# MULTIZ4WAY (Heather, DONE, May 2007)
 
   # split
   # create 1024 files 000.maf through 1023.maf
@@ -880,3 +880,64 @@ cat  << 'EOF' > autoMultiz.csh
   para try
   para check
   para push
+  para time
+  Completed: 1024 of 1024 jobs
+  # CPU time in finished jobs:        740s      12.33m     0.21h    0.01d  0.000 y
+  # IO & Wait Time:                  8688s     144.80m     2.41h    0.10d  0.000 y
+  # Average job time:                   9s       0.15m     0.00h    0.00d
+  # Longest running job:                0s       0.00m     0.00h    0.00d
+  # Longest finished job:              51s       0.85m     0.01h    0.00d
+  # Submission to last job:          1616s      26.93m     0.45h    0.02d
+
+##########################################################################
+# ANNOTATE MULTIZ4WAY MAF AND LOAD TABLES (In progress Heather)
+
+  # create felCat3.Nbed (already have it for hg18, mm8, canFam2)
+  ssh kolossus
+  cd /cluster/data/felCat3
+  twoBitInfo -nBed felCat3.2bit felCat3.N.bed
+
+  # directory structure and nBeds file (input to mafAddIRows)
+  ssh kkstore05
+  mkdir /cluster/data/felCat3/bed/multiz4way/anno
+  cd /cluster/data/felCat3/bed/multiz4way/anno
+  mkdir maf run
+  cd run
+  # setup.sh 
+  cat  << 'EOF' > setup.sh
+#!/bin/sh
+for DB in canFam2 hg18 mm8
+do
+  ln -s /cluster/data/${DB}/${DB}.N.bed ${DB}.bed
+  echo ${DB}.bed >> nBeds
+done
+'EOF'
+  # << emacs
+
+  # setup for mafAddIRows
+  # makeIrows.sh
+  cat << 'EOF' > makeIrows.sh
+#!/bin/sh
+rm -f getIrows.sh
+twobit=/cluster/data/felCat3/felCat3.2bit
+outdir=../maf
+for file in `ls -1rS ../../maf/*.maf`
+do
+  echo "echo $file" >> getIrows.sh
+  base=`basename $file`
+  echo nice mafAddIRows -nBeds=nBeds $file $twobit $outdir/$base >>
+  getIrows.sh
+done
+chmod +x getIrows.sh
+'EOF'
+  # << emacs
+
+  # run mafAddIRows
+  # takes an hour or so depending on load on kolossus
+  ssh kolossus
+  cd /cluster/data/felCat3/bed/multiz4way/anno/run
+  ./getIrows.sh
+
+
+
+
