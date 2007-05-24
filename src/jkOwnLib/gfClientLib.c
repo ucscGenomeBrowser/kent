@@ -22,7 +22,10 @@ boolean gotSingle = FALSE;
 char *buf;		/* This will leak memory but won't matter. */
 
 if (nibIsFile(fileName) || twoBitIsSpec(fileName)
-    || sameString(fileName, "stdin"))
+    || sameString(fileName, "stdin")
+    || endsWith(fileName, ".Z")
+    || endsWith(fileName, ".gz")
+    || endsWith(fileName, ".bz2"))
     gotSingle = TRUE;
 /* Detect .fa files (where suffix is not standardized)
  * by first character being a '>'. */
