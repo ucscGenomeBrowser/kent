@@ -78,6 +78,28 @@ type genePred nscanPep
 baseColorUseCds given
 baseColorDefault genomicCodons
 
+track multiz4way
+shortLabel Conservation
+longLabel 4 Species Multiz Alignment & Conservation
+group compGeno
+priority 104.2
+visibility pack
+color 0, 10, 100
+altColor 0,90,10
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+spanList 1
+pairwiseHeight 12
+yLineOnOff Off
+irows on
+autoScaleDefault Off
+windowingFunction mean
+summary multiz4waySummary
+speciesCodonDefault hg18
+speciesGroups vertebrate
+sGroup_vertebrate felCat3 hg18 canFam2 mm8
+
+
 searchTable nscanGene
 searchType genePred
 termRegex scaffold_[0-9]+\.[0-9]+\.[0-9]
