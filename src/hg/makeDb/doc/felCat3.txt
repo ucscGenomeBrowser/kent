@@ -940,8 +940,26 @@ chmod +x getIrows.sh
   cd /cluster/data/felCat3/bed/multiz4way/anno/run
   ./getIrows.sh
 
-  # concat
+  # concat and filter
   ssh kkstore05
   cd /cluster/data/felCat3/bed/multiz4way/anno
   cat maf/*.maf >> felCat3.maf
   # rollup file is 10,888,983 lines
+  mafFilter -overlap -reject=rf felCat3.maf > felCat3.mf.maf
+# rejected minRow: 454
+# total rejected: 454 blocks
+  # mafFilter rejected 454 single-row (felCat3 only) blocks due to 
+  # its default minRow of 2.  That's reasonable, so replace the original 
+  # with the filtered version.
+  mv felCat3.maf felCat3.preFilter.maf
+  mv felCat3.mf.maf felCat3.maf
+  # TO DO when kkstore05 isn't so busy:
+  # gzip -c felCat3.preFilter.maf > felCat3.preFilter.maf.gz
+
+  # load
+  mkdir -p /gbdb/felCat3/multiz4way/anno
+  ln -s /cluster/data/felCat3/bed/multiz4way/anno/felCat3.maf /gbdb/felCat3/multiz4way/anno/
+  time nice hgLoadMaf -pathPrefix=/gbdb/felCat3/multiz4way/anno felCat3 multiz4way
+  # Loaded 2344109 mafs in 1 files from /gbdb/felCat3/multiz4way/anno
+  # 60.419u 16.819s 1:48.05 71.4%   0+0k 0+0io 2pf+0w
+
