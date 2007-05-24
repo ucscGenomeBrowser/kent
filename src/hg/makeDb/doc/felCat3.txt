@@ -957,9 +957,25 @@ chmod +x getIrows.sh
   # gzip -c felCat3.preFilter.maf > felCat3.preFilter.maf.gz
 
   # load
+  ssh hgwdev
   mkdir -p /gbdb/felCat3/multiz4way/anno
   ln -s /cluster/data/felCat3/bed/multiz4way/anno/felCat3.maf /gbdb/felCat3/multiz4way/anno/
   time nice hgLoadMaf -pathPrefix=/gbdb/felCat3/multiz4way/anno felCat3 multiz4way
   # Loaded 2344109 mafs in 1 files from /gbdb/felCat3/multiz4way/anno
   # 60.419u 16.819s 1:48.05 71.4%   0+0k 0+0io 2pf+0w
+
+  # summary
+  ssh kolossus
+  cd /cluster/data/felCat3/bed/multiz4way/anno 
+  time nice hgLoadMafSummary felCat3 -minSize=30000 -mergeGap=1500 -maxSize=200000 -test \
+      multiz4waySummary felCat3.maf
+  # Created 323552 summary blocks from 1510110 components and 2344109 mafs from felCat3.maf
+  # 107.717u 21.889s 3:08.00 68.9%  0+0k 0+0io 3pf+0w
+  # Creates multiz4waySummary.tab
+  ssh hgwdev
+  sed -e 's/mafSummary/multiz4waySummary/' ~/kent/src/hg/lib/mafSummary.sql > /tmp/multiz4waySummary.sql
+  cd /cluster/data/felCat3/bed/multiz4way/anno 
+  time nice hgLoadSqlTab felCat3 multiz4waySummary /tmp/multiz4waySummary.sql multiz4waySummary.tab
+  # 0.000u 0.003s 0:04.18 0.0%      0+0k 0+0io 3pf+0w
+
 
