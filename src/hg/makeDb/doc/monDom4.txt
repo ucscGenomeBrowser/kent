@@ -3129,3 +3129,89 @@ BASE=/cluster/data/monDom4/bed/blastz.ornAna1.2007-04-02
     ln -s blastz.ornAna1.2007-04-02 /cluster/data/monDom4/bed/blastz.ornAna1
 
 
+#########################################################################
+# BLASTZ DOG canFam2 (DONE 2007-05-24 braney)
+    ssh kolossus
+    mkdir /cluster/data/monDom4/bed/blastz.canFam2
+    cd /cluster/data/monDom4/bed/blastz.canFam2
+    cat << '_EOF_' > DEF
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/parasol/bin
+
+BLASTZ=blastz.v7
+
+# settings for more distant organism alignments
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=10000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+BLASTZ_ABRIDGE_REPEATS=0
+
+# TARGET: Dog (canFam2)
+SEQ1_DIR=/san/sanvol1/scratch/canFam2/nib
+SEQ1_LEN=/san/sanvol1/scratch/canFam2/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Opossum monDom4
+#SEQ2_DIR=/iscratch/i/monDom4/monDom4RMExtra.2bit
+SEQ2_DIR=/san/sanvol1/scratch/monDom4/monDom4.2bit
+#SEQ2_LEN=/iscratch/i/monDom4/chrom.sizes        
+SEQ2_LEN=/cluster/data/monDom4/chrom.sizes        
+SEQ2_CHUNK=30000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/monDom4/bed/blastz.canFam2
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << emacs
+
+    doBlastzChainNet.pl DEF \
+      -bigClusterHub=pk  -chainMinScore=5000 -chainLinearGap=loose \
+      >& blastz.out 2>&1 &
+
+
+#########################################################################
+# BLASTZ Rhesus rheMac2 (IN PROGRESS 2007-05-24 braney)
+    ssh kolossus
+    mkdir /cluster/data/monDom4/bed/blastz.rheMac2
+    cd /cluster/data/monDom4/bed/blastz.rheMac2
+    cat << '_EOF_' > DEF
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/parasol/bin
+
+BLASTZ=blastz.v7
+
+# settings for more distant organism alignments
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=10000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+BLASTZ_ABRIDGE_REPEATS=0
+
+# TARGET: Dog (canFam2)
+SEQ1_DIR=/san/sanvol1/scratch/canFam2/nib
+SEQ1_LEN=/san/sanvol1/scratch/canFam2/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Opossum monDom4
+#SEQ2_DIR=/iscratch/i/monDom4/monDom4RMExtra.2bit
+SEQ2_DIR=/san/sanvol1/scratch/monDom4/monDom4.2bit
+#SEQ2_LEN=/iscratch/i/monDom4/chrom.sizes        
+SEQ2_LEN=/cluster/data/monDom4/chrom.sizes        
+SEQ2_CHUNK=30000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/monDom4/bed/blastz.rheMac2
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << emacs
+
+    doBlastzChainNet.pl DEF \
+      -bigClusterHub=pk  -chainMinScore=5000 -chainLinearGap=loose \
+      >& blastz.out 2>&1 &
+
+
