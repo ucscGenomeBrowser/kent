@@ -13,7 +13,7 @@
 #include "trashDir.h"
 #include "web.h"
 
-static char const rcsid[] = "$Id: identifiers.c,v 1.13 2007/05/22 23:03:30 galt Exp $";
+static char const rcsid[] = "$Id: identifiers.c,v 1.14 2007/05/24 18:51:29 angie Exp $";
 
 
 static void getXrefInfo(char **retXrefTable, char **retIdField,
@@ -352,6 +352,7 @@ fileName = identifierFileName();
 if (fileName != NULL)
     remove(fileName);
 cartRemove(cart, hgtaIdentifierFile);
+cartRemove(cart, hgtaPastedIdentifiers);
 mainPageAfterOpen(conn);
 htmlClose();
 }
