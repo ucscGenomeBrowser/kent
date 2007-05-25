@@ -83,7 +83,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: lowelab.c,v 1.9 2007/05/22 23:58:58 galt Exp $";
+static char const rcsid[] = "$Id: lowelab.c,v 1.10 2007/05/25 03:10:14 pchan Exp $";
 
 extern char *uniprotFormat;
 
@@ -1731,7 +1731,7 @@ struct blastTab* loadBlastpHits(struct sqlConnection *conn, char* queryName)
     return list;
 }
 
-void printBlastpResult(struct sqlConnection *conn, struct blastTab *blastpHitsList, char* sectionClade, unsigned int querySeqLength)
+void printBlastpResult(struct sqlConnection *conn, struct blastTab *blastpHitsList, unsigned int querySeqLength)
 /* Print Blastp result of given clade */
 {
     char query[512];
@@ -1751,8 +1751,8 @@ void printBlastpResult(struct sqlConnection *conn, struct blastTab *blastpHitsLi
     int tEnd = cartInt(cart, "t");
     char *tChrom = cartString(cart, "c");
 
-    printf("<br><a name=\"%s\"><b>BLASTP Alignment Hits to %sl Proteins</b></a><br>\n", sectionClade, sectionClade);
- 
+	printf("<br>\n");
+	
     /* Print table */
     printf("<table style=\"width: 100%%;\" bgcolor=\"#%s\" border=\"0\" cellpadding=\"1\" cellspacing=\"0\">", HG_COL_BORDER);
     printf("<tbody><tr><td>\n");
@@ -1762,6 +1762,7 @@ void printBlastpResult(struct sqlConnection *conn, struct blastTab *blastpHitsLi
     /* Print table column heading */
     printf("<tr style=\"vertical-align: top;\">\n");
     printf("<td width=\"18%%\"><b>Organism</b></td>\n");
+    printf("<td width=\"5%%\"><b>Domain</b></td>\n");
     printf("<td width=\"7%%\"><b>Gene</b></td>\n");
     printf("<td><b>Product</b></td>\n");
     printf("<td width=\"5%%\"><b>Percent Length of Full Protein</b></td>\n"); 
@@ -1783,53 +1784,52 @@ void printBlastpResult(struct sqlConnection *conn, struct blastTab *blastpHitsLi
         /* Get species info */
         getGenomeClade(conn, blastpTarget[0], genome, clade);
 
-        if (sameWord(clade, sectionClade))
+        printf("<tr style=\"vertical-align: top;\">\n");
+       
+        printf("<td><a name=\"%s:%s:%u-%u\"><i>%s</i></td>\n", blastpTarget[1], tChrom, tStart, tEnd, genome);
+        printf("<td>%s</td>\n", clade);
+        
+        /* Get target gene position from refSeq */
+        strcpy(refSeq, blastpTarget[0]);
+        strcat(refSeq, ".refSeq");
+        if (hTableExists(refSeq))
         {
-            printf("<tr style=\"vertical-align: top;\">\n");
-           
-            printf("<td><a name=\"%s:%s:%u-%u\"><i>%s</i></td>\n", blastpTarget[1], tChrom, tStart, tEnd, genome);
-            
-            /* Get target gene position from refSeq */
-            strcpy(refSeq, blastpTarget[0]);
-            strcat(refSeq, ".refSeq");
-            if (hTableExists(refSeq))
+            sprintf(query, "select chrom, cdsStart, cdsEnd from %s where name = '%s'",
+                    refSeq, blastpTarget[1]);
+            sr = sqlGetResult(conn, query);
+            if ((row = sqlNextRow(sr)) != NULL)
             {
-                sprintf(query, "select chrom, cdsStart, cdsEnd from %s where name = '%s'",
-                        refSeq, blastpTarget[1]);
-                sr = sqlGetResult(conn, query);
-                if ((row = sqlNextRow(sr)) != NULL)
-                {
-                    hitStart = strtoul(row[1], buffer, 10) + blastpHits->tStart * 3 + 1;
-                    hitEnd = strtoul(row[1], buffer, 10) + blastpHits->tEnd * 3;
-                    printf("<td><a href=\"http://archdev.cse.ucsc.edu/cgi-bin/hgTracks\?position=%s:%u-%u&db=%s\" TARGET=_blank>%s</a></td>\n",
-                           row[0], hitStart, hitEnd, blastpTarget[0], blastpTarget[1]);
-                }
-                else
-                    printf("<td>%s</td>\n", blastpTarget[1]);
-                sqlFreeResult(&sr);
+                hitStart = strtoul(row[1], buffer, 10) + blastpHits->tStart * 3 + 1;
+                hitEnd = strtoul(row[1], buffer, 10) + blastpHits->tEnd * 3;
+                printf("<td><a href=\"http://archdev.cse.ucsc.edu/cgi-bin/hgTracks\?position=%s:%u-%u&db=%s\" TARGET=_blank>%s</a></td>\n",
+                       row[0], hitStart, hitEnd, blastpTarget[0], blastpTarget[1]);
             }
             else
                 printf("<td>%s</td>\n", blastpTarget[1]);
-
-            /* Get target gene product annotation */
-            ginfo = getGbProtCodeInfo(conn, blastpTarget[0], blastpTarget[1]);
-            if (ginfo != NULL && ginfo->product != NULL && differentString(ginfo->product,"none"))
-                printf("<td>%s</td>\n", ginfo->product);
-            else
-                printf("<td>%s</td>\n", "N/A");                
-            
-            printf("<td style=\"text-align: center;\">%0.f</td>\n", ((double) (blastpHits->qEnd - blastpHits->qStart) / ((double) (querySeqLength-3) / 3.0f)) * 100.0f);
-            printf("<td style=\"text-align: center;\">%u - %u</td>\n", blastpHits->qStart + 1, blastpHits->qEnd);
-            printf("<td style=\"text-align: right;\">%0.1f</td>\n", blastpHits->identity);
-            printf("<td style=\"text-align: right;\">%0.0e</td>\n", blastpHits->eValue);
-            printf("<td style=\"text-align: right;\">e%0.0f</td>\n", (blastpHits->eValue == 0)? 0 : log(blastpHits->eValue) / log(10));
-            printf("<td style=\"text-align: right;\">%0.1f</td>\n", blastpHits->bitScore);
-            printf("<td style=\"text-align: right;\">%u</td>\n", blastpHits->aliLength);
-            printf("<td style=\"text-align: right;\">%u</td>\n", blastpHits->mismatch);
-            printf("<td style=\"text-align: right;\">%u</td>\n", blastpHits->gapOpen);
-    
-            printf("</tr>\n");
+            sqlFreeResult(&sr);
         }
+        else
+            printf("<td>%s</td>\n", blastpTarget[1]);
+
+        /* Get target gene product annotation */
+        ginfo = getGbProtCodeInfo(conn, blastpTarget[0], blastpTarget[1]);
+        if (ginfo != NULL && ginfo->product != NULL && differentString(ginfo->product,"none"))
+            printf("<td>%s</td>\n", ginfo->product);
+        else
+            printf("<td>%s</td>\n", "N/A");                
+        
+        printf("<td style=\"text-align: center;\">%0.f</td>\n", ((double) (blastpHits->qEnd - blastpHits->qStart) / ((double) (querySeqLength-3) / 3.0f)) * 100.0f);
+        printf("<td style=\"text-align: center;\">%u - %u</td>\n", blastpHits->qStart + 1, blastpHits->qEnd);
+        printf("<td style=\"text-align: right;\">%0.1f</td>\n", blastpHits->identity);
+        printf("<td style=\"text-align: right;\">%0.0e</td>\n", blastpHits->eValue);
+        printf("<td style=\"text-align: right;\">e%0.0f</td>\n", (blastpHits->eValue == 0)? 0 : log(blastpHits->eValue) / log(10));
+        printf("<td style=\"text-align: right;\">%0.1f</td>\n", blastpHits->bitScore);
+        printf("<td style=\"text-align: right;\">%u</td>\n", blastpHits->aliLength);
+        printf("<td style=\"text-align: right;\">%u</td>\n", blastpHits->mismatch);
+        printf("<td style=\"text-align: right;\">%u</td>\n", blastpHits->gapOpen);
+
+        printf("</tr>\n");
+
         free(blastpTarget[0]);        
         free(blastpTarget[1]);
         blastpHits = blastpHits->next;
@@ -1849,10 +1849,6 @@ void doBlastP(struct trackDb *tdb, char *targetName)
     struct sqlConnection *conn = hAllocConn();
     struct bed *blastpTrack;
     struct blastTab *blastpHitsList;
-    struct slName *cladeList;
-    struct slName *thisClade;
-    char genome[100];
-    char clade[50];
  
     cartWebStart(cart, "%s", "BlastP Alignment Hits");
     
@@ -1861,29 +1857,8 @@ void doBlastP(struct trackDb *tdb, char *targetName)
 
     blastpHitsList = loadBlastpHits(conn, queryName);
     
-    cladeList = getAllClades(conn);
-    getGenomeClade(conn, database, genome, clade);
-
-    printf("<br><b>Jump to:</b> [<a href=\"#%s\">%sl proteins</a>]", clade, clade);
-    thisClade = cladeList;
-    while (thisClade != NULL)
-    {
-        if (differentWord(thisClade->name, clade))
-            printf(" [<a href=\"#%s\">%sl proteins</a>]", thisClade->name, thisClade->name);
-        thisClade = thisClade->next;
-    }
-    printf("<br>\n");
+    printBlastpResult(conn, blastpHitsList, querySeqLength);
     
-    printBlastpResult(conn, blastpHitsList, clade, querySeqLength);
-    
-    thisClade = cladeList;
-    while (thisClade != NULL)
-    {
-        if (differentWord(thisClade->name, clade))
-            printBlastpResult(conn, blastpHitsList, thisClade->name, querySeqLength);
-        thisClade = thisClade->next;
-    }
-
     printf("<BR>Note: All measurements are counted by the number of amino acids.<BR>\n");
     printf("<hr>\n");
     hFreeConn(&conn);
