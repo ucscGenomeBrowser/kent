@@ -58,17 +58,9 @@ void cgapSageUi(struct trackDb *tdb)
 {
 struct sqlConnection *conn = hAllocConn();
 struct slName *tissueList = getListFromCgapSageLibs(conn, "tissue", FALSE, TRUE);
-struct slName *libList = getListFromCgapSageLibs(conn, "newLibName", FALSE, FALSE);
-struct slName *libIdList = getListFromCgapSageLibs(conn, "newLibName", TRUE, FALSE);
 char *tissueHl = cartUsualString(cart, "cgapSage.tissueHl", "All");
-char *libHl = cartUsualString(cart, "cgapSage.libHl", "All");
 puts("<BR><B>Tissue:</B>");
 cgapSageDropList(tissueList, NULL, "cgapSage.tissueHl", tissueHl);
-puts("<BR>\n");
-puts("<BR><B>Library:</B>\n");
-cgapSageDropList(libList, libIdList, "cgapSage.libHl", libHl);
 hFreeConn(&conn);
 slNameFreeList(&tissueList);
-slNameFreeList(&libList);
-slNameFreeList(&libIdList);
 }
