@@ -7,6 +7,7 @@
 #define CFG_WIKI_HOST "wiki.host"
 #define CFG_WIKI_USER_NAME_COOKIE "wiki.userNameCookie"
 #define CFG_WIKI_LOGGED_IN_COOKIE "wiki.loggedInCookie"
+#define CFG_WIKI_SESSION_COOKIE "wiki.sessionCookie"
 
 char *wikiLinkHost();
 /* Return the wiki host specified in hg.conf, or NULL.  Allocd here. */
