@@ -13,7 +13,7 @@ char *hUserCookie();
 char *wrapWhiteFont(char *s);
 /* Write white font around s */
 
-#define HELP_DIR "../goldenPath/help"
+#define HELP_DIR "/goldenPath/help"
 /*	will be appended to DOCUMENT_ROOT	*/
 
 #define DOCUMENT_ROOT	"/usr/local/apache/htdocs"
