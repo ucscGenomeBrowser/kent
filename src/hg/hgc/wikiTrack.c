@@ -15,7 +15,7 @@
 #include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.3 2007/05/25 21:33:37 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.4 2007/05/25 22:41:52 hiram Exp $";
 
 #define NEW_ITEM_SCORE "newItemScore"
 #define NEW_ITEM_STRAND "newItemStrand"
@@ -24,6 +24,9 @@ static char const rcsid[] = "$Id: wikiTrack.c,v 1.3 2007/05/25 21:33:37 hiram Ex
 #define NEW_ITEM_NAME "defaultName"
 #define ITEM_NOT_CLASSIFIED "Not classified"
 #define ITEM_SCORE_DEFAULT "1000"
+#define NEW_ITEM_COMMENT_DEFAULT "enter description and comments"
+#define NO_ITEM_COMMENT_SUPPLIED "(no description supplied)"
+#define NEW_ITEM_CATEGORY "[[Category:Genome Annotation]]"
 
 static char *encodedHgcReturnUrl(int hgsid)
 /* Return a CGI-encoded hgSession URL with hgsid.  Free when done. */
@@ -118,9 +121,6 @@ if (wikiPage->string)
 else
     hPrintf("comments from '%s'<BR>\nempty<BR>\n", wikiPageUrl);
 freeDyString(&wikiPage);
-hPrintf("<hr>\n<PRE>");
-dumpCookieList();
-hPrintf("</PRE>\n<hr>\n");
 }
 
 void doWikiTrack(char *itemName, char *chrom, int winStart, int winEnd)
@@ -214,7 +214,7 @@ if (wikiTrackEnabled(&userName) && startsWith("Make new entry", itemName))
     /* seventh row is initial comment/description text entry */
     webPrintWideCellStart(2, HG_COL_TABLE);
     hPrintf("<B>initial comments/description:</B><BR>");
-    cgiMakeTextArea(NEW_ITEM_COMMENT, "enter description and comments", 5, 40);
+    cgiMakeTextArea(NEW_ITEM_COMMENT, NEW_ITEM_COMMENT_DEFAULT, 5, 40);
     webPrintLinkCellEnd();
     webPrintLinkTableNewRow();
     /* seventh row is the submit and cancel buttons */
@@ -237,62 +237,6 @@ else
 cartHtmlEnd();
 }
 
-/*
- *  a login to the wiki created cookies in the ucsc.edu domain:
-wikiHiramDb_hc1_UserName
-wikiHiramDb_hc1_UserID
-wikiHiramDb_hc1__session
- *  using the hgwdev-hiram browser created the cookie in the
- *  hgwdev-hiram.cse.ucsc.edu domain:
-hguid.hgwdev-hiram
- *  logging out of the wiki created:
-wikiHiramDb_hc1_LoggedOut
-and left UserName and __session
-
-while logged out:
-wikiHiramDb_hc1__session=nbloaafcd8vmjefkavo69566s4 (0)
-wikiHiramDb_hc1_UserName=Hiram (0)
-hguid.hgwdev-hiram=2389762 (0)
-wikiHiramDb_hc1_LoggedOut=20070524212656 (0)
-after login:
-wikiHiramDb_hc1__session=nbloaafcd8vmjefkavo69566s4 (0)
-wikiHiramDb_hc1_UserName=Hiram (0)
-hguid.hgwdev-hiram=2389762 (0)
-wikiHiramDb_hc1_LoggedOut=20070524212656 (0)
-wikiHiramDb_hc1_UserID=1 (0)
-! ? no difference ?
-
-and edit request returns Vars:
-X - wpSection	input	hidden	
-wpStarttime	input	hidden	20070524213126
-X - wpEdittime	input	hidden	20070524213126
-wpScrolltop	input	hidden	
-X - wpTextbox1	textarea	n/a	
-
-X - wpSummary	input	text	
-X - wpMinoredit	input	checkbox	n/a
-wpWatchthis	input	checkbox	n/a
-X - wpSave	input	submit	n/a
-wpPreview	input	submit	n/a
-wpDiff	input	submit	n/a
-X - wpEditToken	input	hidden	7d5150e607336e72655e685cd60c6bae
-wpAutoSummary	input	hidden	d41d8cd98f00b204e9800998ecf8427e
-search	input	text	
-go	input	submit	n/a
-fulltext	input	submit	n/a
-
-The bulk page creator
-http://meta.wikimedia.org/wiki/MediaWiki_Bulk_Page_Creator
-mentions:
-$submit_vars['wpTextbox1'] = $body;
-$submit_vars['wpSummary'] = "";
-$submit_vars['wpSection'] = "";
-$submit_vars['wpEdittime'] = "";
-$submit_vars['wpMinoredit'] = "1";
-$submit_vars['wpSave'] = "Save page";
-$submit_vars['wpEditToken'] = $token;
-
- */
 static void htmlCloneFormVarSet(struct htmlForm *parent,
 	struct htmlForm *clone, char *name, char *val)
 /* clone form variable from parent, with new value,
@@ -326,57 +270,21 @@ static void addNewItemDescription(char * descriptionKey, char *userName)
 {
 char *newDescription = cartNonemptyString(cart, NEW_ITEM_COMMENT);
 struct dyString *content = newDyString(1024);
-struct htmlCookie *cookies = NULL;
 struct htmlCookie *cookie;
 char wikiPageUrl[512];
+
+/* must pass the session cookie from the wiki in order to edit */
+AllocVar(cookie);
+cookie->name = cloneString(cfgOption(CFG_WIKI_SESSION_COOKIE));
+cookie->value = cloneString(findCookieData(cookie->name));
+
+/* fetch the edit page to get the wpEditToken, and current contents */
 safef(wikiPageUrl, sizeof(wikiPageUrl), "%s/index.php/%s?action=edit",
 	cfgOptionDefault(CFG_WIKI_URL, NULL), descriptionKey);
-printf("addNewItem: '%s'<BR>\n", wikiPageUrl);
-struct cgiVar *v;
-for (v=cookieList; v != NULL; v = v->next)
-    {
-    if (startsWith("wiki", v->name) && endsWith(v->name, "_session"))
-	{
-	AllocVar(cookie);
-	cookie->name = cloneString(v->name);
-	cookie->value = cloneString(v->val);
-	slAddHead(&cookies,cookie);
-	}
-    }
-hPrintf("<HR>\n<B>Sending cookies:</B><PRE>\n");
-for (cookie = cookies; cookie != NULL; cookie = cookie->next)
-    {
-    printf("%s\t%s\t%s\t%s\t%s\t%s\n",
-        cookie->name, cookie->value, naForNull(cookie->domain),
-        naForNull(cookie->path), naForNull(cookie->expires),
-        (cookie->secure ? "SECURE" : "UNSECURE"));
-    }
-hPrintf("</PRE>\n");
-char *fullText = htmlSlurpWithCookies(wikiPageUrl,cookies);
+char *fullText = htmlSlurpWithCookies(wikiPageUrl,cookie);
 struct htmlPage *page = htmlPageParseOk(wikiPageUrl, fullText);
-hPrintf("<HR>\n<B>Cookies returned:</B><PRE>\n");
-for (cookie = page->cookies; cookie != NULL; cookie = cookie->next)
-    {
-    printf("%s\t%s\t%s\t%s\t%s\t%s\n",
-        cookie->name, cookie->value, naForNull(cookie->domain),
-        naForNull(cookie->path), naForNull(cookie->expires),
-        (cookie->secure ? "SECURE" : "UNSECURE"));
-    }
-hPrintf("</PRE>\n");
-hPrintf("<HR>\n<B>Vars returned:</B><PRE>\n");
-struct htmlForm *form;
-struct htmlFormVar *var;
-for (form = page->forms; form != NULL; form = form->next)
-    {
-    for (var = form->vars; var != NULL; var = var->next)
-        htmlFormVarPrint(var, stdout, "");
-    }
-hPrintf("</PRE>\n");
-hPrintf("<HR>\n<B>Forms returned:</B><PRE>\n");
-for (form = page->forms; form != NULL; form = form->next)
-        htmlFormPrint(form, stdout);
-hPrintf("</PRE>\n");
 
+/* create a stripped down edit form, we don't want all the variables */
 struct htmlForm *strippedEditForm;
 AllocVar(strippedEditForm);
 
@@ -384,70 +292,61 @@ struct htmlForm *currentEditForm = htmlFormGet(page,"editform");
 if (NULL == currentEditForm)
     errAbort("addNewItemDescription: can not get editform ?");
 strippedEditForm->name = cloneString(currentEditForm->name);
+/* the lower case "post" in the editform does not work ? */
 /*strippedEditForm->method = cloneString(currentEditForm->method);*/
 strippedEditForm->method = cloneString("POST");
 strippedEditForm->startTag = currentEditForm->startTag;
 strippedEditForm->endTag = currentEditForm->endTag;
 
-/*
-struct htmlFormVar *wpTextbox1 = htmlPageGetVar(page, currentEditForm, "Textbox1");
+/* fetch any current page contents in the edit form to continue them */
+struct htmlFormVar *wpTextbox1 =
+	htmlPageGetVar(page, currentEditForm, "wpTextbox1");
+
 if (wpTextbox1->curVal)
-    dyStringPrintf(content, "%s\n%s\nsignature here",
-	wpTextbox1->curVal, newDescription);
+    dyStringPrintf(content, "%s\n==Comments added by: ~~~~==\n",
+	wpTextbox1->curVal);
 else
-*/
-dyStringPrintf(content, "==NEW ITEM==\n\n%s\nsignature here", newDescription);
+    dyStringPrintf(content, "==NEW ITEM, created by: ~~~~==\n");
+
+if (sameWord(NEW_ITEM_COMMENT_DEFAULT,newDescription))
+    dyStringPrintf(content, "%s\n", NO_ITEM_COMMENT_SUPPLIED);
+else
+    dyStringPrintf(content, "%s\n", newDescription);
+
+
+if (!wpTextbox1->curVal)
+    dyStringPrintf(content, "%s\n", NEW_ITEM_CATEGORY);
 
 htmlCloneFormVarSet(currentEditForm, strippedEditForm,
 	"wpTextbox1", content->string);
-htmlCloneFormVarSet(currentEditForm, strippedEditForm,
-	"wpSummary", "");
-htmlCloneFormVarSet(currentEditForm, strippedEditForm,
-	"wpSection", "");
-htmlCloneFormVarSet(currentEditForm, strippedEditForm,
-	"wpMinoredit", "1");
-htmlCloneFormVarSet(currentEditForm, strippedEditForm,
-	"wpSave", "Save page");
+htmlCloneFormVarSet(currentEditForm, strippedEditForm, "wpSummary", "");
+htmlCloneFormVarSet(currentEditForm, strippedEditForm, "wpSection", "");
+htmlCloneFormVarSet(currentEditForm, strippedEditForm, "wpMinoredit", "1");
 /*
-htmlCloneFormVarSet(currentEditForm, strippedEditForm, "wpStarttime", NULL);
+htmlCloneFormVarSet(currentEditForm, strippedEditForm, "wpSave", "Save page");
 */
 htmlCloneFormVarSet(currentEditForm, strippedEditForm, "wpEdittime", NULL);
 htmlCloneFormVarSet(currentEditForm, strippedEditForm, "wpEditToken", NULL);
-/*
-htmlPageSetVar(page,strippedEditForm, "wpRecreate", "1");
-*/
 
 htmlPageSetVar(page,currentEditForm, "wpTextbox1", content->string);
 htmlPageSetVar(page,currentEditForm, "wpSummary", "");
 htmlPageSetVar(page,currentEditForm, "wpSection", "");
 htmlPageSetVar(page,currentEditForm, "wpMinoredit", "1");
 htmlPageSetVar(page,currentEditForm, "wpSave", "Save page");
-/*
-struct htmlFormVar *wpEditToken = htmlPageGetVar(page, currentEditForm, "wpEditToken");
-htmlPageSetVar(page,currentEditForm, "wpEditToken", wpEditToken->curVal);
-*/
-verboseSetLevel(4);
+
 char newUrl[1024];
-/* fake out htmlPageFromForm since it doesn't understand : */
+/* fake out htmlPageFromForm since it doesn't understand the colon : */
 safef(newUrl, ArraySize(newUrl), "%s%s",
 	"http://genomewiki.ucsc.edu", currentEditForm->action);
+/* something, somewhere encoded the & into &amp; which does not work */
 char *fixedString = replaceChars(newUrl, "&amp;", "&");
-verbose(3,"createItem: url: '%s'\n", fixedString);
 currentEditForm->action = cloneString(fixedString);
 strippedEditForm->action = cloneString(fixedString);
-hPrintf("<PRE>\n");
-hPrintf("Sending Form:\n================================================\n");
-htmlFormPrint(strippedEditForm, stdout);
-hPrintf("\n===============================================\n");
-hPrintf("page url: '%s'\nform action: '%s'\n", page->url, strippedEditForm->action);
-hPrintf("Sending Vars:\n");
-for (var = strippedEditForm->vars; var != NULL; var = var->next)
-    htmlFormVarPrint(var, stdout, "");
-hPrintf("\n");
 struct htmlPage *editPage = htmlPageFromForm(page,strippedEditForm,"submit", "Submit");
-hPrintf("</PRE>\n<HR>");
-hPrintf("%s", editPage->htmlText);
-hPrintf("\n<HR>");
+
+if (NULL == editPage)
+    errAbort("addNewItemDescription: the edit is failing ?");
+
 freeDyString(&content);
 }
 
@@ -482,16 +381,6 @@ hgParseChromRange(pos, &chrName, &itemStart, &itemEnd);
 
 safef(descriptionKey,ArraySize(descriptionKey),
 	"GenomeAnnotation:%s-%d", database, 1);
-
-/*
-struct dyString *wikiItemName = newDyString(256);
-char *noBlanks = replaceChars(itemName," ","_");
-dyStringPrintf(wikiItemName,"BED:%s:%s:%d-%d:%s:%s", database, chrName,
-    itemStart+1, itemEnd, plusStrand ? "%2B" : "-",
-	noBlanks);
-freeDyString(&wikiItemName);
-*/
-
 
 AllocVar(newItem);
 newItem->bin = binFromRange(itemStart, itemEnd);
