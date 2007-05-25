@@ -6,11 +6,9 @@
 #include "linefile.h"
 #include "dystring.h"
 #include "jksql.h"
-#include "hgConfig.h"
-#include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.1 2007/05/22 22:15:25 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.2 2007/05/25 22:54:32 hiram Exp $";
 
 void wikiTrackStaticLoad(char **row, struct wikiTrack *ret)
 /* Load a row from wikiTrack table into ret.  The contents of ret will
@@ -31,6 +29,7 @@ ret->class = row[10];
 ret->creationDate = row[11];
 ret->lastModifiedDate = row[12];
 ret->descriptionKey = row[13];
+ret->id = sqlUnsigned(row[14]);
 }
 
 struct wikiTrack *wikiTrackLoad(char **row)
@@ -54,6 +53,7 @@ ret->class = cloneString(row[10]);
 ret->creationDate = cloneString(row[11]);
 ret->lastModifiedDate = cloneString(row[12]);
 ret->descriptionKey = cloneString(row[13]);
+ret->id = sqlUnsigned(row[14]);
 return ret;
 }
 
@@ -63,7 +63,7 @@ struct wikiTrack *wikiTrackLoadAll(char *fileName)
 {
 struct wikiTrack *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[14];
+char *row[15];
 
 while (lineFileRow(lf, row))
     {
@@ -81,7 +81,7 @@ struct wikiTrack *wikiTrackLoadAllByChar(char *fileName, char chopper)
 {
 struct wikiTrack *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[14];
+char *row[15];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -125,8 +125,8 @@ void wikiTrackSaveToDb(struct sqlConnection *conn, struct wikiTrack *el, char *t
  * If worried about this use wikiTrackSaveToDbEscaped() */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s',%u,'%s','%s','%s','%s','%s','%s','%s','%s')", 
-	tableName,  el->bin,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->score,  el->strand,  el->db,  el->owner,  el->color,  el->class,  el->creationDate,  el->lastModifiedDate,  el->descriptionKey);
+dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s',%u,'%s','%s','%s','%s','%s','%s','%s','%s',%u)", 
+	tableName,  el->bin,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->score,  el->strand,  el->db,  el->owner,  el->color,  el->class,  el->creationDate,  el->lastModifiedDate,  el->descriptionKey,  el->id);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -153,8 +153,8 @@ creationDate = sqlEscapeString(el->creationDate);
 lastModifiedDate = sqlEscapeString(el->lastModifiedDate);
 descriptionKey = sqlEscapeString(el->descriptionKey);
 
-dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s',%u,'%s','%s','%s','%s','%s','%s','%s','%s')", 
-	tableName, el->bin ,  chrom, el->chromStart , el->chromEnd ,  name, el->score ,  strand,  db,  owner,  color,  class,  creationDate,  lastModifiedDate,  descriptionKey);
+dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s',%u,'%s','%s','%s','%s','%s','%s','%s','%s',%u)", 
+	tableName, el->bin ,  chrom, el->chromStart , el->chromEnd ,  name, el->score ,  strand,  db,  owner,  color,  class,  creationDate,  lastModifiedDate,  descriptionKey, el->id );
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 freez(&chrom);
@@ -192,6 +192,7 @@ ret->class = sqlStringComma(&s);
 ret->creationDate = sqlStringComma(&s);
 ret->lastModifiedDate = sqlStringComma(&s);
 ret->descriptionKey = sqlStringComma(&s);
+ret->id = sqlUnsignedComma(&s);
 *pS = s;
 return ret;
 }
@@ -278,10 +279,15 @@ fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->descriptionKey);
 if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%u", el->id);
 fputc(lastSep,f);
 }
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
+
+#include "hgConfig.h"
+#include "wikiLink.h"
 
 
 boolean wikiTrackEnabled(char **wikiUserName)

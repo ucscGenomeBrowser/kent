@@ -15,4 +15,5 @@ table wikiTrack
     string creationDate;      "date item created"
     string lastModifiedDate;  "date item last updated"
     string descriptionKey;    "name of wiki description page"
+    uint id;	       "auto-increment item ID"
     )

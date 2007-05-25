@@ -12,14 +12,16 @@ CREATE TABLE wikiTrack (
     name varchar(255) not null,	# Name of item
     score int unsigned not null,	# Score from 0-1000
     strand char(1) not null,	# + or -
-    db varchar(26) not null,	# database for item
+    db varchar(36) not null,	# database for item
     owner varchar(255) not null,	# creator of item
     color varchar(255) not null,	# rgb color of item (currently unused)
     class varchar(255) not null,	# classification of item (browser group)
     creationDate varchar(255) not null,	# date item created
     lastModifiedDate varchar(255) not null,	# date item last updated
     descriptionKey varchar(255) not null,	# name of wiki description page
+    id int unsigned not null auto_increment,	# auto-increment item ID
               #Indices
-    INDEX chrom(db,bin,chrom),
-    INDEX name(db,name)
+    PRIMARY KEY(id),
+    INDEX chrom (db,bin,chrom),
+    INDEX name (db,name)
 );

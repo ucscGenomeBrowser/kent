@@ -9,7 +9,7 @@
 #include "jksql.h"
 #endif
 
-#define WIKITRACK_NUM_COLS 14
+#define WIKITRACK_NUM_COLS 15
 
 struct wikiTrack
 /* wikiTrack bed 6+ structure */
@@ -29,6 +29,7 @@ struct wikiTrack
     char *creationDate;	/* date item created */
     char *lastModifiedDate;	/* date item last updated */
     char *descriptionKey;	/* name of wiki description page */
+    unsigned id;	/* auto-increment item ID */
     };
 
 void wikiTrackStaticLoad(char **row, struct wikiTrack *ret);
