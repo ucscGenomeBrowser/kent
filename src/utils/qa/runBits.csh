@@ -29,7 +29,7 @@ else
 endif
 
 set track=`echo $trackname | sed -e "s/chrN_//"`
-set split=`getSplit.csh $db $track hgwdev` 
+set split=`getSplit.csh $db gap hgwdev` 
 
 
 # ------------------------------------------------
@@ -88,8 +88,8 @@ if ( -e $db.$track.unbridged.gaps ) then
   set url3="&$track=pack&gap=pack"
   set n=3
   while ( $n )
-    set pos=`sed -n -e "${n}p" $db.unbridged.gaps \
-      | awk '{print $1":"$2"-"$3}'`
+    set pos=`sed -n -e "${n}p" $db.$track.unbridged.gaps \
+      | awk '{print $1":"$2+1"-"$3}'`
     echo "$url1&position=$pos$url3"
     set n=`echo $n | awk '{print $1-1}'`
   end
