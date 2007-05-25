@@ -128,11 +128,10 @@ if ( $split == "unsplit" ) then
     # get multiz info for link
     set multiz=`hgsql -N -e "SHOW TABLES LIKE 'multiz%'" $db | head -1`
     echo "these have no chains:"
-    set empty=`head -3 $db.chromlist.Only`
     if ( $multiz != "" ) then
       set multiz="&${multiz}=pack"
     endif
-    foreach seq ( $empty )
+    foreach seq ( `head -3 $db.chromlist.Only` )
       echo "http://genome-test.cse.ucsc.edu/cgi-bin/hgTracks?db=$db&position=$seq&chain$Org=pack$multiz"
     end
     echo "get some DNA from these and see how it blats on $otherDb"
