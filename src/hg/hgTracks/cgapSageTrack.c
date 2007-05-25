@@ -128,14 +128,14 @@ int i;
 if (vis == tvDense)
     /* Just use the skeleton one. */
     {
-/*     double aveTpm = 0; */
-/*     for (i = 0; i < tag->numLibs; i++) */
-/* 	/\* Average the lib tpms. *\/ */
-/* 	aveTpm += tag->tagTpms[i]; */
-/*     if (tag->numLibs > 0) */
-/* 	aveTpm /= tag->numLibs; */
+    double aveTpm = 0;
+    for (i = 0; i < tag->numLibs; i++)
+	/* Average the lib tpms. */
+	aveTpm += tag->tagTpms[i];
+    if (tag->numLibs > 0)
+	aveTpm /= tag->numLibs;
     safef(skel->name, sizeof(skel->name), "whatever");
-    skel->grayIx = 9;
+    skel->grayIx = grayIxForCgap(aveTpm);
     addSimpleFeature(skel);
     libList = skel;
     }
