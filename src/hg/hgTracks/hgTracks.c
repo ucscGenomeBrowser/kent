@@ -116,7 +116,7 @@
 #endif
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1342 2007/05/23 00:21:53 galt Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1343 2007/05/25 20:03:38 aamp Exp $";
 
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
@@ -1850,8 +1850,7 @@ if (start != -1 && !lfs->noLine)
 	if (vis == tvFull || vis == tvPack) 
 	    clippedBarbs(vg, x1, midY, w, tl.barbHeight, tl.barbSpacing, 
 	  	lfs->orientation, bColor, TRUE);
-	else
-	    vgLine(vg, x1, midY, x2, midY, color);
+	vgLine(vg, x1, midY, x2, midY, color);
 	}
     }
 }
