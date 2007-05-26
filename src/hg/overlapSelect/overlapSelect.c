@@ -149,6 +149,11 @@ static void outputStats(struct chromAnn* inCa, FILE *outFh,
                         struct slRef *overlappingRecs)
 /* output for the -statOutput option; pairs of inRec and overlap ids */
 {
+if (overlappingRecs == NULL)
+    {
+    // -statsOutputAll and nothing overlapping
+    fprintf(outFh, "%s\t%s\t%0.3g\t%0.3g\t%d\n", getPrintId(inCa), "", 0.0, 0.0, 0);
+    }
 struct slRef *selectCaRef;
 for (selectCaRef = overlappingRecs; selectCaRef != NULL; selectCaRef = selectCaRef->next)
     {
@@ -170,7 +175,7 @@ if (mergeOutput || idOutput || statsOutput)
     overlappingRecsPtr = &overlappingRecs;
 
 overlaps = selectIsOverlapped(selectOpts, inCa, &criteria, overlappingRecsPtr);
-if ((nonOverlapping) ? !overlaps : overlaps)
+if (((nonOverlapping) ? !overlaps : overlaps) || outputAll)
     {
     if (mergeOutput)
         outputMerge(inCa, ioFiles->outFh, overlappingRecs);
@@ -440,12 +445,7 @@ idOutput = optionExists("idOutput");
 statsOutput = optionExists("statsOutput") || optionExists("statsOutputAll");
 if ((mergeOutput + idOutput + statsOutput) > 1)
     errAbort("can only specify one of -mergeOutput, -idOutput, -statsOutput, or -statsOutputAll");
-if (optionExists("statsOutputAll"))
-    {
-    if (!useAggregate)
-        errAbort("-statsOutputAll only works with -aggregate");
-    outputAll = TRUE;
-    }
+outputAll = optionExists("statsOutputAll");
 if (mergeOutput)
     {
     if (nonOverlapping)
