@@ -17,7 +17,7 @@
 #include "pbStamp.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: pbUtil.c,v 1.22 2007/05/23 01:37:38 galt Exp $";
+static char const rcsid[] = "$Id: pbUtil.c,v 1.23 2007/05/26 17:42:15 angie Exp $";
 
 void hWrites(char *string)
 /* Write string with no '\n' if not suppressed. */
@@ -851,8 +851,11 @@ while (row3 != NULL)
     org       = row3[1];
     orgSciName= row3[2];
     
+    protDbName = hPdbFromGdb(gDatabase);
+    proteinsConn = sqlConnect(protDbName);
+
     conn = sqlConnect(gDatabase);
-    safef(cond_str, sizeof(cond_str), "alias='%s'", queryID);
+    safef(cond_str, sizeof(cond_str), "alias='%s' and spID != ''", queryID);
     answer = sqlGetField(conn, gDatabase, "kgSpAlias", "count(distinct spID)", cond_str);
     if ((answer != NULL) && (!sameWord(answer, "0")))
 	{
@@ -863,9 +866,10 @@ while (row3 != NULL)
 	hPrintf(" (%s):</B></FONT>\n", org);
 	hPrintf("<UL>");
     	    
-	conn = sqlConnect(gDatabase);
        	safef(query, sizeof(query), 
-              "select distinct spID from %s.kgSpAlias where alias='%s'", gDatabase, queryID);
+              "select distinct spID from %s.kgSpAlias where alias='%s' "
+	      "and spID != ''",
+	      gDatabase, queryID);
 
     	sr = sqlMustGetResult(conn, query);
     	row = sqlNextRow(sr);
@@ -873,9 +877,6 @@ while (row3 != NULL)
     	while (row != NULL)
 	    {
    	    spID = row[0];
-	    
-	    protDbName = hPdbFromGdb(gDatabase);
-	    proteinsConn = sqlConnect(protDbName);
     	    safef(cond_str, sizeof(cond_str), "accession='%s'", spID);
     	    displayID = sqlGetField(proteinsConn, protDbName, "spXref3", "displayID", cond_str);
     	    safef(cond_str, sizeof(cond_str), "accession='%s'", spID);
@@ -907,6 +908,7 @@ while (row3 != NULL)
 	hPrintf("</UL>");fflush(stdout);
    	sqlFreeResult(&sr);
 	}
+    sqlDisconnect(&proteinsConn);
     row3 = sqlNextRow(srCentral);
     }
 sqlFreeResult(&srCentral);
