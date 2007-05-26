@@ -48,19 +48,30 @@ for exploring and analyzing these data is available from the
 site.
 </P>
 
-<H4>Mapping SAGE tags to the human genome</H4>
+<H4>Mapping SAGE tags to the $organism genome</H4>
 <P>
-First, a subset of all single-base SNPs from dbSNP were gathered.  The SNPs 
-discarded include those which have flanking sequence that does not map to a 
-unique location, SNPs with the reference allele not matching the reference
-genome, and SNPs that overlap tandem repeat sequence. For all 21-mers in the
-genome: if the 21-mer contained a SNP or
-multiple SNPs, we created all possible versions of the 21-mer using all
-combinations of SNPs.  We used 21-mers beginning with CATG as a mapping.
-We discarded mappings that are not seen in the SAGE tag dataset.
-Finally, we discarded any non-unique mappings.
+The goal of the SAGE tag mapping is to identify the genomic
+loci of the associated mRNAs. Since it is impossible to disambiguate tags
+that map to multiple loci, only unique genomic mappings are kept. To compensate
+for polypmorphisms between the reference genome and the mRNA libraries, 
+SNPs are considered by the mapping algorithm.
 </P>
-
+<P>
+For each position in the genome on both strands, all
+possible 21-mers, given all combinations of SNPs, were considered.  The 21-mers
+beginning with <TT>CATG</TT> were generated for use in mapping. Only 21-mers
+that were unique across the genome were used in placing SAGE tags.
+</P>
+<P>
+Only SNPs from <a href="http://www.ncbi.nlm.nih.gov/SNP/index.html"
+_target=blank>dbSNP</a> with the following characteristics were used:
+<UL>
+<LI>single-base
+<LI>maps to a single genomic location
+<LI>reference allele matches reference genome
+<LI>does not occur in a tandem repeat
+</UL>
+</P>
 <H4>Human embryonic stem cell (ESC) library construction</H4>
 <P>
 Detailed information regarding the human ESC lines used in this study can be
@@ -71,7 +82,7 @@ conditions that promote their maintenance in an undifferentiated state.
 </P>
 
 <P>
-A complete set of embryonic stem cell LongSAGE tags are available through the
+A complete set of embryonic stem cell LongSAGE tags is available through the
 <A HREF="http://www.transcriptomes.org" TARGET=_blank>BCCA-GSC embryonic stem
 cell transcriptomes web site</A> and through the <A
 HREF="http://cgap.nci.nih.gov/SAGE" TARGET=_blank>CGAP web portal</A>.
@@ -92,7 +103,7 @@ Cancer Institute</A>, <A HREF="http://www.nih.gov/" TARGET=_blank>U.S. National
 Institutes of Health</A>.
 </P>
 
-<P>The Human Embryonic Stem Cell library was supported by funds from the
+<P>The human embryonic stem cell library was supported by funds from the
 National Cancer Institute, National Institutes of Health, under Contract
 No. N01-C0-12400 and by grants from Genome Canada, Genome British Columbia and
 the Canadian Stem Cell Network.
