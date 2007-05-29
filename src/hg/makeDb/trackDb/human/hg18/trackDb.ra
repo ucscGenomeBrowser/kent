@@ -132,7 +132,7 @@ type bed 5 .
 
     track phastConsElements28wayPlacMammal
     subTrack mostConserved28way
-    shortLabel Pl Mammal
+    shortLabel Plac Mammal
     longLabel PhastCons Placental Mammal Conserved Elements, 28-way Multiz Alignment
     color 100,50,170
     priority 2
