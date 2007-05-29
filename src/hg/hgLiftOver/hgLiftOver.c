@@ -17,7 +17,7 @@
 #include "liftOver.h"
 #include "liftOverChain.h"
 
-static char const rcsid[] = "$Id: hgLiftOver.c,v 1.51 2006/12/14 17:51:24 hartera Exp $";
+static char const rcsid[] = "$Id: hgLiftOver.c,v 1.52 2007/05/22 22:30:23 galt Exp $";
 
 /* CGI Variables */
 #define HGLFT_USERDATA_VAR "hglft_userData"     /* typed/pasted in data */
@@ -240,7 +240,7 @@ void webDataFormats()
 webNewSection("Data Formats");
 puts("<LI>");
 puts(
-    "<A HREF=\"/goldenPath/help/customTrack.html#BED\" TARGET=_blank>"
+    "<A HREF=\"../goldenPath/help/customTrack.html#BED\" TARGET=_blank>"
     "Browser Extensible Data (BED)</A>\n");
 puts("</LI>");
 puts("<LI>");
@@ -488,7 +488,7 @@ if (!refreshOnly && userData != NULL && userData[0] != '\0')
         printf("%s. &nbsp;&nbsp;&nbsp;", errCt > 1 ? "s" : "");
         printf("<A HREF=%s TARGET=_blank>Display failure file</A>&nbsp; &nbsp;\n",
                          unmappedTn.forCgi);
-        printf("<A HREF=\"/cgi-bin/hgLiftOver?%s=1\" TARGET=_blank>Explain failure messages</A>\n", HGLFT_ERRORHELP_VAR);
+        printf("<A HREF=\"../cgi-bin/hgLiftOver?%s=1\" TARGET=_blank>Explain failure messages</A>\n", HGLFT_ERRORHELP_VAR);
         puts("<P>Failed input regions:\n");
         fclose(unmapped);
         errFile = lineFileOpen(unmappedTn.forCgi, TRUE);

@@ -301,6 +301,21 @@ Some settings used by various tracks:
         (used chiefly by ENCODE)
     o origAssembly - prints out a message on the details page, indicating
         that the data was lifted from this assembly (used chiefly by ENCODE)
+    o release <alpha | beta> - restricts inclusion of a trackDb entry 
+        in the database.  TrackDb entries marked 'release beta' are 
+        included in the trackDb database when 'make beta' 
+        (or 'make strict') are used to create it.  Those marked 
+        'release alpha' are included when 'make alpha' (or 'make') 
+        is used.  This setting is used to avoid inadvertently changing 
+        the configuration of an existing public track when it is 
+        undergoing further development.  It provides a temporary 
+        development-only version of the trackDb.  In this situation, 
+        the developer should mark the existing trackDb entry (as on 
+        the public server) 'release beta', and then add a parallel 
+        entry marked 'release alpha' (the development version).  
+        The existence of two entries should be noted in the pushQ.  
+        Q/A will retire the duplicate entry and remove the release 
+        labels when the track is published.
     o html - specifies alternate filename for track description. Should only
         be used when updating an existing track (used chiefly by ENCODE).
         in conjunction with the 'release alpha' setting.

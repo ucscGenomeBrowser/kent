@@ -21,7 +21,7 @@
 #include "wiggle.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: galaxy.c,v 1.11 2007/03/22 23:38:08 hiram Exp $";
+static char const rcsid[] = "$Id: galaxy.c,v 1.12 2007/05/22 23:03:30 galt Exp $";
 
 char *getGalaxyUrl()
 /* returns the url for the galaxy cgi, based on script name */
@@ -120,7 +120,7 @@ cgiMakeButton(hgtaDoGalaxyQuery, "Send query to Galaxy");
 hPrintf("</FORM>\n");
 hPrintf(" ");
 /* new form as action is different */
-hPrintf("<FORM ACTION=\"..%s\" METHOD=GET>\n", cgiScriptName());
+hPrintf("<FORM ACTION=\"%s\" METHOD=GET>\n", cgiScriptName());
 cgiMakeButton(hgtaDoMainPage, "Cancel");
 hPrintf("</FORM>\n");
 }

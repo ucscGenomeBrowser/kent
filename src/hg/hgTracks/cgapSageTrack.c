@@ -39,14 +39,12 @@ struct cgapSageTpmHashEl
     };
 
 static boolean keepThisLib(char *tissue, char *libId)
+/* Tissue filtering code checks cart. */
 {
 char *tissueHl = cartUsualString(cart, "cgapSage.tissueHl", "All");
-char *libHl = cartUsualString(cart, "cgapSage.libHl", "All");
-if (!tissue || !libId)
+if (!tissue)
     errAbort("NULL tissue or libId passed into keepThisLib()");
-if (sameString(tissueHl, "All") && sameString(libHl, "All"))
-    return TRUE;
-if (sameString(tissue, tissueHl) || sameString(libId, libHl))
+if (sameString(tissueHl, "All") || sameString(tissue, tissueHl))
     return TRUE;
 return FALSE;
 }
@@ -204,8 +202,9 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
     struct cgapSage *tag = cgapSageLoad(row+rowOffset);
     struct linkedFeatures *oneLfList = cgapSageToLinkedFeatures(tag, libHash, tg->visibility);
-    itemList = slCat(itemList, oneLfList);
+    itemList = slCat(oneLfList, itemList);
     }
+slReverse(&itemList);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 tg->items = itemList;

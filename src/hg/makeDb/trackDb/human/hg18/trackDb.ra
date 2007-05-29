@@ -57,20 +57,48 @@ color 173,17,162
 type genePred
 
 release alpha
-track multiz28wayAnno
-shortLabel 28-Way Cons 
-longLabel Vertebrate Multiz Alignment & Conservation (28 Species)
-irows on
-summary multiz28wayAnnoSummary
-frames multiz28wayFrames
-#wiggle phastCons28way Vertebrate phastCons28wayPlacental Pl_Mammal_5% phastCons28wayPlacMammal Pl_Mammal
-wiggle phastCons28way
+track phyloP
+shortLabel 28-Way PhyloP
+compositeTrack on
+longLabel PhyloP Conservation P-Values (28 Vertebrate Species)
 spanList 1
 maxHeightPixels 100:40:11
 autoScaleDefault Off
 windowingFunction mean
 group compGeno
 priority 103.1
+visibility pack
+color 0, 10, 100
+altColor 0,90,10
+type wig 0.0 2.87
+viewLimits .2:1.6
+
+    track phyloP28way
+    subTrack phyloP
+    shortLabel Vertebrate
+    longLabel Vertebrate PhyloP Conservation P-Values
+    priority 1
+
+    track phyloP28wayPlacMammal
+    subTrack phyloP
+    shortLabel Plac Mammal
+    longLabel Placental Mammal PhyloP Conservation P-Values
+    priority 2
+
+release alpha
+track multiz28wayAnno
+shortLabel 28-Way Cons 
+longLabel Vertebrate Multiz Alignment & Conservation (28 Species)
+irows on
+summary multiz28wayAnnoSummary
+frames multiz28wayFrames
+wiggle phastCons28way Vertebrate phastCons28wayPlacMammal Plac_Mammal
+spanList 1
+maxHeightPixels 100:40:11
+autoScaleDefault Off
+windowingFunction mean
+group compGeno
+priority 103.2
 visibility pack
 color 0, 10, 100
 altColor 0,90,10
@@ -98,23 +126,16 @@ type bed 5 .
     track phastConsElements28way
     subTrack mostConserved28way
     shortLabel Vertebrate
-    longLabel PhastCons Vertebrate Conserved Elements, 28-way Vertebrate Multiz Alignment
+    longLabel PhastCons Vertebrate Conserved Elements, 28-way Multiz Alignment
     color 170,100,50
     priority 1
 
-    track phastConsElements28wayPlacental
-    subTrack mostConserved28way
-    shortLabel Pl Mammal 5%
-    longLabel PhastCons Placental Mammal 5% Conserved Elements, 28-way Vertebrate Multiz Alignment
-    color 100,170,50
-    priority 2
-
     track phastConsElements28wayPlacMammal
     subTrack mostConserved28way
-    shortLabel Pl Mammal
-    longLabel PhastCons Placental Mammal Conserved Elements, 28-way Vertebrate Multiz Alignment
+    shortLabel Plac Mammal
+    longLabel PhastCons Placental Mammal Conserved Elements, 28-way Multiz Alignment
     color 100,50,170
-    priority 3
+    priority 2
 
 track multiz17way
 shortLabel Conservation
@@ -297,14 +318,53 @@ oldToNew kg2ToKg3
 baseColorUseCds given
 baseColorDefault genomicCodons
 
-track augustusAbinitio
+track augustus
+compositeTrack on
 shortLabel Augustus
-longLabel Augustus Ab Initio Gene Predictions
+longLabel Augustus Gene Predictions
 group genes
 priority 51.7
 visibility hide
-color 180,0,0
 type genePred
+cdsDrawDefault genomic\ codons
+baseColorUseCds given
+baseColorDefault genomicCodons
+
+    track augustusHints
+    subTrack augustus
+    shortLabel Augustus Hints
+    longLabel Augustus Gene Predictions Using Hints
+    priority 1
+    color 139,0,0
+
+    track augustusXRA
+    subTrack augustus
+    shortLabel Augustus De Novo
+    longLabel Augustus De Novo Gene Predictions
+    priority 2
+    color 180,0,0
+
+    track augustusAbinitio
+    subTrack augustus off
+    shortLabel Augustus Ab Initio
+    longLabel Augustus Ab Initio Gene Predictions
+    priority 3
+    color 255,0,0
+
+searchTable augustusHints
+searchType genePred
+termRegex g[0-9]+\.t[0-9]+
+searchPriority 50
+
+searchTable augustusXRA
+searchType genePred
+termRegex g[0-9]+\.t[0-9]+
+searchPriority 50
+
+searchTable augustusAbinitio
+searchType genePred
+termRegex g[0-9]+\.t[0-9]+
+searchPriority 50
 
 track nscanGene
 shortLabel N-SCAN

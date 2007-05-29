@@ -156,7 +156,7 @@ type chain ce4
 otherDb ce4
 
 track multiz5way
-shortLabel 5-Way Multiz
+shortLabel Conservation
 longLabel Multiz Alignment & Conservation (5 nematodes)
 group compGeno
 priority 104.2
@@ -203,7 +203,7 @@ speciesCodonDefault ce4
 # speciesCodonDefault ce4
 
 track phastConsElements5way
-shortLabel 5-way Most Conserved
+shortLabel Most Conserved
 longLabel PhastCons Conserved Elements, 5-way Multiz Alignment
 group compGeno
 priority 104.4

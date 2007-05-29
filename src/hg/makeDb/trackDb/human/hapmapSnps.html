@@ -14,10 +14,10 @@ macaque.
 <P>
 The HapMap data are from these four human populations:
 <UL>
-<LI>Yoruba in Ibadan, Nigeria (abbreviation: YRI)</LI>
-<LI>Japanese in Tokyo, Japan (abbreviation: JPT)</LI>
-<LI>Han Chinese in Beijing, China (abbreviation: CHB)</LI>
-<LI>CEPH (Utah residents with ancestry from northern and western Europe) (abbreviation: CEU)</LI>
+<LI>Yoruba in Ibadan, Nigeria (YRI)</LI>
+<LI>Japanese in Tokyo, Japan (JPT)</LI>
+<LI>Han Chinese in Beijing, China (CHB)</LI>
+<LI>CEPH (Utah residents with ancestry from northern and western Europe) (CEU)</LI>
 </UL>
 Each of the populations is displayed in a separate subtrack.
 </P>
@@ -76,14 +76,24 @@ The orthologous alleles from chimp and macaque are displayed in brown using a co
 gradient based on quality score.
 Quality scores range from 0 to 100 representing low to high quality. For 
 orthologous alleles, the higher the quality, the darker the display. Quality 
-scores are not available for chimp chromosomes chr21 and chrY.
+scores are not available for chimp chromosomes chr21 and chrY; these were set to
+98, consistent with the panTro2 browser quality track.
 </P>
 <P>
 Filters are provided for the data attributes described above. Additionally,
 a filter is provided for heterozgosity over all populations. The measure of
 heterozygosity used is 2pq (from Hardy-Weinberg equilibrium). 
-Filters are applied to all six subtracks, even
-if a subtrack is not displayed.
+Filters are applied to all six subtracks, even if a subtrack is not displayed.
+<P>
+Notes on orthologous allele filters:
+<UL>
+<LI>If the major allele is different between populations, no overall major
+allele for human is determined, thus the &quot;matching&quot; filters for
+orthologous alleles do not apply to these SNPs.</LI>
+<LI>If a SNP is monomorphic in all populations, the minor allele is not
+verified in the HapMap dataset.  In these cases, the filter to match
+orthologous alleles to the minor human allele will yield no results.</LI>
+</UL>
 </P>
 
 <H2>Credits</H2>

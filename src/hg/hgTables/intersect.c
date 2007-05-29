@@ -16,7 +16,7 @@
 #include "hgTables.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: intersect.c,v 1.38 2007/01/03 23:14:13 angie Exp $";
+static char const rcsid[] = "$Id: intersect.c,v 1.39 2007/05/22 23:03:30 galt Exp $";
 
 /* We keep two copies of variables, so that we can
  * cancel out of the page. */
@@ -128,7 +128,7 @@ char *op, *setting;
 boolean wigOptions = (isWiggle(database, curTable) || isBedGraph(curTable));
 htmlOpen("Intersect with %s", name);
 
-hPrintf("<FORM ACTION=\"..%s\" NAME=\"mainForm\" METHOD=GET>\n", getScriptName());
+hPrintf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=GET>\n", getScriptName());
 cartSaveSession(cart);
 hPrintf("<TABLE BORDER=0>\n");
 /* Print group and track line. */

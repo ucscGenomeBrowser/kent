@@ -2,6 +2,7 @@
 # geneome databases to update on hgwbeta.  These will also be copied to
 # hgnfs1
 ##
+anoCar1
 anoGam1
 apiMel1
 apiMel2
@@ -49,6 +50,7 @@ mm7
 mm8
 monDom1
 monDom4
+ornAna1
 oryLat1
 panTro1
 panTro2

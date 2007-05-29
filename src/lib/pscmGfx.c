@@ -16,7 +16,7 @@
 #include "vGfx.h"
 #include "vGfxPrivate.h"
 
-static char const rcsid[] = "$Id: pscmGfx.c,v 1.22 2007/05/04 06:09:43 galt Exp $";
+static char const rcsid[] = "$Id: pscmGfx.c,v 1.23 2007/05/18 01:18:46 galt Exp $";
 
 
 static struct pscmGfx *boxPscm;	 /* Used to keep from drawing the same box again
@@ -247,8 +247,7 @@ if (x != lx || y != ly || width != lw || height != lh || color != lc ||
 void pscmDot(struct pscmGfx *pscm, int x, int y, int color)
 /* Set a dot. */
 {
-pscmSetColor(pscm, color);
-psDrawBox(pscm->ps, x, y, 1, 1);
+pscmBox(pscm, x, y, 1, 1, color);
 }
 
 

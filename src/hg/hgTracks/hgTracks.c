@@ -116,7 +116,7 @@
 #endif
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1341 2007/05/14 16:58:32 lowe Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1343 2007/05/25 20:03:38 aamp Exp $";
 
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
@@ -1850,8 +1850,7 @@ if (start != -1 && !lfs->noLine)
 	if (vis == tvFull || vis == tvPack) 
 	    clippedBarbs(vg, x1, midY, w, tl.barbHeight, tl.barbSpacing, 
 	  	lfs->orientation, bColor, TRUE);
-	else
-	    vgLine(vg, x1, midY, x2, midY, color);
+	vgLine(vg, x1, midY, x2, midY, color);
 	}
     }
 }
@@ -12617,7 +12616,7 @@ char *orgEnc = cgiEncode(organism);
 
 hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#000000\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>\n");
 hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#536ED3\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"2\"><TR>\n");
-hPrintf("<TD ALIGN=CENTER><A HREF=\"/index.html?org=%s\" class=\"topbar\">Home</A></TD>", orgEnc);
+hPrintf("<TD ALIGN=CENTER><A HREF=\"../index.html?org=%s\" class=\"topbar\">Home</A></TD>", orgEnc);
 
 hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgGateway?org=%s&db=%s\" class=\"topbar\">Genomes</A></TD>", orgEnc, database);
 if (hIsGsidServer())
@@ -12743,7 +12742,7 @@ hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgTracks?%s=%u&hgt.psOutput=on\" 
        cartSessionId(cart), "PDF/PS");
 if (wikiLinkEnabled())
     {
-    printf("<TD ALIGN=CENTER><A HREF=\"/cgi-bin/hgSession?%s=%u"
+    printf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgSession?%s=%u"
 	   "&hgS_doMainPage=1\" class=\"topbar\">Session</A></TD>",
 	   cartSessionVarName(), cartSessionId(cart));
     }
@@ -14261,7 +14260,7 @@ isPrivateHost = hIsPrivateHost();
 htmlPushEarlyHandlers();
 cgiSpoof(&argc, argv);
 htmlSetBackground(hBackgroundImage());
-htmlSetStyle("<LINK REL=\"STYLESHEET\" HREF=\"/style/HGStyle.css\">"); 
+htmlSetStyle("<LINK REL=\"STYLESHEET\" HREF=\"../style/HGStyle.css\">"); 
 oldVars = hashNew(8);
 cartHtmlShell("UCSC Genome Browser v"CGI_VERSION, doMiddle, hUserCookie(), excludeVars, oldVars);
 if (measureTiming)

@@ -62,6 +62,7 @@ printf("<B>Tag sequence</B>: %s<BR>\n", tag->name);
 printf("<B>Position:</B> "
        "<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">%s:%d-%d</a><BR>\n",
        hgTracksPathAndSettings(), database, tag->chrom, tag->chromStart+1, tag->chromEnd, tag->chrom, tag->chromStart+1, tag->chromEnd);
+printf("<B>Strand:</B> %c<BR>\n", tag->strand[0]);
 if (tag->numSnps > 0)
     {
     int i;
@@ -212,7 +213,7 @@ if (startsWith("libId", itemName))
     }
 printCgapTagSection(tag, libHash, itemName);
 webNewSection("Track Details");
-printf("%s", tdb->html);
+printTrackHtml(tdb);
 cgapSageFree(&tag);
 hFreeConn(&conn);
 hashFreeWithVals(&libHash, cgapSageLibFree);

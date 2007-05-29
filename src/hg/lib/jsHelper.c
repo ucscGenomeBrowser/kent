@@ -180,7 +180,7 @@ void jsCreateHiddenForm(struct cart *cart, char *scriptName,
 {
 int i;
 hPrintf(
-    "<FORM ACTION=\"..%s\" "
+    "<FORM ACTION=\"%s\" "
     "METHOD=\"GET\" NAME=\"hiddenForm\">\n", scriptName);
 cartSaveSession(cart);
 for (i=0; i<varCount; ++i)

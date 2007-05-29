@@ -9,7 +9,7 @@
 #include "jksql.h"
 #include "rmskOut.h"
 
-static char const rcsid[] = "$Id: hgLoadOut.c,v 1.17 2006/08/01 00:14:43 angie Exp $";
+static char const rcsid[] = "$Id: hgLoadOut.c,v 1.18 2007/05/16 20:51:37 angie Exp $";
 
 char *createRmskOut = "CREATE TABLE %s (\n"
 "   bin smallint unsigned not null,     # bin index field for range queries\n"
@@ -20,15 +20,15 @@ char *createRmskOut = "CREATE TABLE %s (\n"
 "   genoName varchar(255) not null,	# Genomic sequence name\n"
 "   genoStart int unsigned not null,	# Start in genomic sequence\n"
 "   genoEnd int unsigned not null,	# End in genomic sequence\n"
-"   genoLeft int not null,	# Size of genomic sequence\n"
-"   strand char(1) not null,	# Relative orientation + or -\n"
+"   genoLeft int not null,		# -#bases after match in genomic sequence\n"
+"   strand char(1) not null,		# Relative orientation + or -\n"
 "   repName varchar(255) not null,	# Name of repeat\n"
 "   repClass varchar(255) not null,	# Class of repeat\n"
 "   repFamily varchar(255) not null,	# Family of repeat\n"
-"   repStart int not null,	# Start in repeat sequence\n"
-"   repEnd int not null,	# End in repeat sequence\n"
-"   repLeft int not null,	# Size of repeat sequence\n"
-"   id char(1) not null,	# '*' or ' '.  I don't know what this means\n"
+"   repStart int not null,		# Start (if strand is +) or -#bases after match (if strand is -) in repeat sequence\n"
+"   repEnd int not null,		# End in repeat sequence\n"
+"   repLeft int not null,		# -#bases after match (if strand is +) or start (if strand is -) in repeat sequence\n"
+"   id char(1) not null,		# First digit of id field in RepeatMasker .out file.  Best ignored.\n"
 "             #Indices\n";
 
 boolean noBin = FALSE;

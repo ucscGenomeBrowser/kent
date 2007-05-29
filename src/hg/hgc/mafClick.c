@@ -13,7 +13,7 @@
 #include "hui.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: mafClick.c,v 1.40 2007/04/29 00:33:39 kate Exp $";
+static char const rcsid[] = "$Id: mafClick.c,v 1.41 2007/05/22 23:58:58 galt Exp $";
 
 #define ADDEXONCAPITAL
 
@@ -628,7 +628,7 @@ else
         puts("</P>\n");
 
 #ifdef ADDEXONCAPITAL
-	puts("<FORM ACTION=\"/cgi-bin/hgc\" NAME=\"gpForm\" METHOD=\"GET\">");
+	puts("<FORM ACTION=\"../cgi-bin/hgc\" NAME=\"gpForm\" METHOD=\"GET\">");
 	cartSaveSession(cart);
 	cgiContinueHiddenVar("g");
 	cgiContinueHiddenVar("c");

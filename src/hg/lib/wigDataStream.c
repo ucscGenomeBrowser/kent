@@ -9,7 +9,7 @@
 #include "obscure.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.80 2006/11/22 00:25:50 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.81 2007/05/22 22:25:37 galt Exp $";
 
 /*	Routines that are not strictly part of the wigDataStream object,
 	but they are used to do things with the object.
@@ -816,6 +816,7 @@ unsigned long long validData = 0;
 unsigned long long valuesMatched = 0;
 unsigned long long noDataBytes = 0;
 unsigned long long bytesSkipped = 0;
+boolean doRawStats = FALSE;
 boolean doStats = FALSE;
 boolean doBed = FALSE;
 boolean doAscii = FALSE;
@@ -842,7 +843,8 @@ boolean maxReached = FALSE;
 doAscii = operations & wigFetchAscii;
 doDataArray = operations & wigFetchDataArray;
 doBed = operations & wigFetchBed;
-doStats = operations & wigFetchStats;
+doRawStats = operations & wigFetchRawStats;
+doStats = (operations & wigFetchStats) || doRawStats;
 doNoOp = operations & wigFetchNoOp;
 
 /*	for timing purposes, allow the wigFetchNoOp to go through */
@@ -944,6 +946,14 @@ for ( ; (!maxReached) && nextRow(wds, row, WIGGLE_NUM_COLS);
     struct asciiDatum *asciiOut = NULL;	/* to address data[] in wigAsciiData */
     unsigned chromPosition;
     boolean range0TakesAll = FALSE;
+
+    if (doRawStats)
+	{
+	accumStats(wds, lowerLimit, upperLimit, sumData, sumSquares,
+	    statsCount, chromStart, chromEnd);
+	resetStats(&lowerLimit, &upperLimit, &sumData, &sumSquares,
+	    &statsCount, &chromStart, &chromEnd);
+	}
 
     ++rowCount;
     wiggle = wiggleLoad(row);

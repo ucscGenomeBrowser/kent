@@ -2586,7 +2586,121 @@ dataVersion ENCODE June 2005 Freeze
     color 58,119,40
 
 
+track encodeStanfordChip
+release beta
+compositeTrack on
+shortLabel Stanf ChIP
+longLabel Stanford ChIP-chip (HCT116, Jurkat, K562 cells;  Sp1, Sp3 ChIP)
+group encodeChip
+priority 55.0
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type bedGraph 4
+color 120,0,20
+altColor 150,0,25
+maxHeightPixels 128:16:16
+autoScale off
+minLimit 0
+maxLimit 114
+viewLimits 0:10
+origAssembly hg16
+dataVersion ENCODE June 2005 Freeze
+
+    track encodeStanfordChipHCT116Sp1
+    subTrack encodeStanfordChip
+    shortLabel Stan HCT116 Sp1
+    longLabel Stanford ChIP-chip (HCT116 cells, Sp1 ChIP)
+    priority 1
+
+    track encodeStanfordChipHCT116Sp3
+    subTrack encodeStanfordChip
+    shortLabel Stan HCT116 Sp3
+    longLabel Stanford ChIP-chip (HCT116 cells, Sp3 ChIP)
+    priority 2
+
+    track encodeStanfordChipJurkatSp1
+    subTrack encodeStanfordChip
+    shortLabel Stan Jurkat Sp1
+    longLabel Stanford ChIP-chip (Jurkat cells, Sp1 ChIP)
+    priority 3
+
+    track encodeStanfordChipJurkatSp3
+    subTrack encodeStanfordChip
+    shortLabel Stan Jurkat Sp3
+    longLabel Stanford ChIP-chip (Jurkat cells, Sp3 ChIP)
+    priority 4
+
+    track encodeStanfordChipK562Sp1
+    subTrack encodeStanfordChip
+    shortLabel Stan K562 Sp1
+    longLabel Stanford ChIP-chip (K562 cells, Sp1 ChIP)
+    priority 5
+
+    track encodeStanfordChipK562Sp3
+    subTrack encodeStanfordChip
+    shortLabel Stan K562 Sp3
+    longLabel Stanford ChIP-chip (K562 cells, Sp3 ChIP)
+    priority 6
+
+track encodeStanfordChipSmoothed
+release beta
+compositeTrack on
+shortLabel Stanf ChIP Score
+longLabel Stanford ChIP-chip Smoothed Score
+group encodeChip
+priority 55.1
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type bedGraph 4
+color 120,0,20
+altColor 150,0,25
+maxHeightPixels 128:16:16
+autoScale off
+minLimit 0
+maxLimit 721474
+viewLimits 0:1000
+origAssembly hg16
+dataVersion ENCODE June 2005 Freeze
+
+    track encodeStanfordChipSmoothedHCT116Sp1
+    subTrack encodeStanfordChipSmoothed
+    shortLabel Stan Sc HCT116 Sp1
+    longLabel Stanford ChIP-chip Smoothed Score (HCT116 cells, Sp1 ChIP)
+    priority 1
+
+    track encodeStanfordChipSmoothedHCT116Sp3
+    subTrack encodeStanfordChipSmoothed
+    shortLabel Stan Sc HCT116 Sp3
+    longLabel Stanford ChIP-chip Smoothed Score (HCT116 cells, Sp3 ChIP)
+    priority 2
+
+    track encodeStanfordChipSmoothedJurkatSp1
+    subTrack encodeStanfordChipSmoothed
+    shortLabel Stan Sc Jurkat Sp1
+    longLabel Stanford ChIP-chip Smoothed Score (Jurkat cells, Sp1 ChIP)
+    priority 3
+
+    track encodeStanfordChipSmoothedJurkatSp3
+    subTrack encodeStanfordChipSmoothed
+    shortLabel Stan Sc Jurkat Sp3
+    longLabel Stanford ChIP-chip Smoothed Score (Jurkat cells, Sp3 ChIP)
+    priority 4
+
+    track encodeStanfordChipSmoothedK562Sp1
+    subTrack encodeStanfordChipSmoothed
+    shortLabel Stan Sc K562 Sp1
+    longLabel Stanford ChIP-chip Smoothed Score (K562 cells, Sp1 ChIP)
+    priority 5
+
+    track encodeStanfordChipSmoothedK562Sp3
+    subTrack encodeStanfordChipSmoothed
+    shortLabel Stan Sc K562 Sp3
+    longLabel Stanford ChIP-chip Smoothed Score (K562 cells, Sp3 ChIP)
+    priority 6
+
+
 track encodeStanfordChipTrinklein
+release alpha
 compositeTrack on
 shortLabel Stanf ChIP
 longLabel Stanford ChIP-chip (HCT116, Jurkat, K562 cells;  Sp1, Sp3 ChIP)
@@ -2642,6 +2756,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 6
 
 track encodeStanfordChipSmoothedTrinklein
+release alpha
 compositeTrack on
 shortLabel Stanf ChIP Score
 longLabel Stanford ChIP-chip Smoothed Score
@@ -3155,27 +3270,34 @@ type bed 3 .
 dataVersion ENCODE Oct 2005 Freeze, May 2007 data
 
     track encodeUvaDnaRepOriginsNSGM
+    release alpha
     subTrack encodeUvaDnaRepOrigins
     longLabel University of Virginia DNA Replication Origins, Ori-NS, GM06990
     shortLabel UVa Ori-NS GM
+    color 205,0,0
     dataVersion May 2007
     priority 1
 
     track encodeUvaDnaRepOriginsNSHela
+    release alpha
     subTrack encodeUvaDnaRepOrigins
     longLabel University of Virginia DNA Replication Origins, Ori-NS, HeLa
     shortLabel UVa Ori-NS HeLa
+    color 250,0,0
     dataVersion May 2007
     priority 2
 
     track encodeUvaDnaRepOriginsBubbleHela
+    release alpha
     subTrack encodeUvaDnaRepOrigins
     longLabel University of Virginia DNA Replication Origins, Ori-Bubble, HeLa
     shortLabel UVa Ori-Bubble HeLa
+    color 0,0,128
     dataVersion May 2007
     priority 3
 
     track encodeUvaDnaRepOriginsTR50Hela
+    release alpha
     subTrack encodeUvaDnaRepOrigins
     longLabel University of Virginia DNA Replication Origins, Ori-TR50, HeLa
     shortLabel UVa Ori-TR50 HeLa
@@ -3196,6 +3318,7 @@ type bed 3 .
 dataVersion ENCODE Oct 2005 Freeze, May 2007 data
 
     track encodeUvaDnaRepOriginsPred
+    release beta
     subTrack encodeUvaDnaRepOrigins
     longLabel University of Virginia Predicted DNA Replication Origins, H-L DNA (HeLa)
     shortLabel UVa DNA Rep Ori
@@ -3203,6 +3326,7 @@ dataVersion ENCODE Oct 2005 Freeze, May 2007 data
     priority 1
 
     track encodeUvaDnaRepOriginsConf
+    release beta
     subTrack encodeUvaDnaRepOrigins
     shortLabel UVa DNA Rep Conf
     longLabel University of Virginia DNA Replication Origins Confidence Intervals, H-L DNA (HeLa)
@@ -3210,26 +3334,6 @@ dataVersion ENCODE Oct 2005 Freeze, May 2007 data
     dataVersion ENCODE Oct 2005 Freeze
     priority 2
 
-    track encodeUvaDnaRepOriginsBubbleHela
-    subTrack encodeUvaDnaRepOrigins
-    longLabel University of Virginia Predicted DNA Replication Origins, Ori-Bubble (HeLa)
-    shortLabel UVa DNA Rep Bubble
-    dataVersion May 2007
-    priority 3
-
-    track encodeUvaDnaRepOriginsNSHela
-    subTrack encodeUvaDnaRepOrigins
-    longLabel University of Virginia Predicted DNA Replication Origins, Ori-NS (HeLa)
-    shortLabel UVa DNA Rep NS 
-    dataVersion May 2007
-    priority 4
-
-    track encodeUvaDnaRepOriginsNSGM
-    subTrack encodeUvaDnaRepOrigins
-    longLabel University of Virginia Predicted DNA Replication Origins, Ori-NS (GM06990)
-    shortLabel UVa DNA Rep NS GM
-    dataVersion May 2007
-    priority 5
 track encodeUvaDnaRepTr50
 shortLabel UVa DNA Rep TR50
 longLabel University of Virginia DNA Smoothed Timing at 50% Replication

@@ -26,7 +26,7 @@
 #include "bedCart.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.153 2007/04/28 23:59:41 kate Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.154 2007/05/22 23:03:30 galt Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -287,7 +287,7 @@ boolean searchPosition(char *range, struct region *region)
 struct hgPositions *hgp = NULL;
 char retAddr[512];
 char position[512];
-safef(retAddr, sizeof(retAddr), "..%s", getScriptName());
+safef(retAddr, sizeof(retAddr), "%s", getScriptName());
 hgp = findGenomePosWeb(range, &region->chrom, &region->start, &region->end,
 	cart, TRUE, retAddr);
 if (hgp != NULL && hgp->singlePos != NULL)

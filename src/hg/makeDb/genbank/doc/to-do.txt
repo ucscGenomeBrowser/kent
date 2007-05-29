@@ -1090,4 +1090,7 @@ Error: danRer1: gene danRer1.refFlat:1854 NM_131267 chr7: NM_131267 geneName "ir
 - force occ to be in same directory as cluster genome.
 - change mgc/orefome tracks to only update if there is new data.
 
+- tRNAs seems to be missing from the pipeline K00167, it blat by
+  the web server, but is wacked by the repeat content filter.
 
+- synthetic human mRNAs end up labeled `synthetic' in Xeno tracks.

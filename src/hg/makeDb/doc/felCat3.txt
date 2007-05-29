@@ -12,7 +12,7 @@
     mkdir /cluster/data/felCat3/downloads
     cd /cluster/data/felCat3/downloads
 
-    wget ftp://ftp.broad.mit.edu/pub/assemblies/mammals/cat/felCat3*"
+    wget "ftp://ftp.broad.mit.edu/pub/assemblies/mammals/cat/felCat3*"
 
 # trimHeader in fasta and qual files
 
@@ -789,53 +789,37 @@ augustus/src/augustus --AUGUSTUS_CONFIG_PATH=/cluster/data/felCat3/bed/augustus/
         -buildDir=`pwd` >&! rbest.log  &
 
 ##########################################################################
-# MULTIZ4WAY (Heather, in progress)
+# MULTIZ4WAY (Heather, DONE, May 2007)
 
-  # split, rename, rsync (takes about an hour)
+  # split
+  # create 1024 files 000.maf through 1023.maf
+  # Files vary from almost 2000 - over 13000 lines each
+  # A little over 6,000,000 lines total
   ssh kkstore05
-
-  # dog
   cd /cluster/data/felCat3/bed/blastz.canFam2.2006-11-18.swap/mafRBestNet
-  mkdir split
-  zcat *gz | mafSplit dummyArg /cluster/data/felCat3/bed/blastz.canFam2.2006-11-18.swap/mafRBestNet/split/
-             stdin -byTarget -outDirDepth=2 -useSequenceName
-  cd split
-  ./rename.csh
-  cd /san/sanvol1/scratch/felCat3/mafNet/canFam2
-  rsync -av /cluster/data/felCat3/bed/blastz.canFam2.2006-11-18.swap/mafRBestNet/split .
-
-  # human
+  zcat *gz | mafSplit dummyArg /san/sanvol1/scratch/felCat3/mafNet/canFam2/split
+           stdin -byTarget -useHashedName=10
   cd /cluster/data/felCat3/bed/blastz.hg18.2006-11-10.swap/mafRBestNet
-  mkdir split
-  zcat *gz | mafSplit dummyArg /cluster/data/felCat3/bed/blastz.hg18.2006-11-10.swap/mafRBestNet/split/
-             stdin -byTarget -outDirDepth=2 -useSequenceName
-  cd split
-  ./rename.csh
-  cd /san/sanvol1/scratch/felCat3/mafNet/hg18
-  rsync -av /cluster/data/felCat3/bed/blastz.hg18.2006-11-10.swap/mafRBestNet/split .
-
-  # mouse
+  zcat *gz | mafSplit dummyArg /san/sanvol1/scratch/felCat3/mafNet/hg18/split
+             stdin -byTarget -useHashedName=10
   cd /cluster/data/felCat3/bed/blastz.mm8.2006-11-15.swap/mafRBestNet
-  mkdir split
-  zcat *gz | mafSplit dummyArg /cluster/data/felCat3/bed/blastz.mm8.2006-11-15.swap/mafRBestNet/split/
-             stdin -byTarget -outDirDepth=2 -useSequenceName
-  cd split
-  ./rename.csh
-  cd /san/sanvol1/scratch/felCat3/mafNet/mm8
-  rsync -av /cluster/data/felCat3/bed/blastz.mm8.2006-11-15.swap/mafRBestNet/split .
+  zcat *gz | mafSplit dummyArg /san/sanvol1/scratch/felCat3/mafNet/mm8/split
+             stdin -byTarget -useHashedName=10 
 
-  # setup multiz4way, including run and maf (output will be to /cluster/data/felCat3/bed/multiz4way/maf)
+  # setup multiz4way 
+  # output will be to /cluster/data/felCat3/bed/multiz4way/maf
   cd /cluster/data/felCat3/bed/multiz4way
+  mkdir maf
+  mkdir run
+  cd run
+
   # use the following for species.lst:
   # felCat3 canFam2 mm8 hg18
   # use the following for tree.nh:
   # (((felCat3 canFam2) mm8) hg18)
-  mkdir run
-  cd run
 
-  # create scaf.lst
-  perl -wpe 's/^scaffold_(\d+)\s+.*$//; $d0 = $1 % 10; $d1 = ($1/10) % 10; \
-      print "$d1/$d0/scaffold_$1";' /cluster/data/felCat3/chrom.sizes > scaf.lst
+  # create split.lst
+  perl -we 'for ($i=0; $i<1024; $i++) { printf "split%03d\n", $i; }' > split.lst
 
   # spec file
 cat  << 'EOF' > spec
@@ -845,7 +829,41 @@ cat  << 'EOF' > spec
 'EOF'
     # << emacs
 
-  # autoMultiz.csh in-lined here
+  # autoMultiz.csh 
+cat  << 'EOF' > autoMultiz.csh
+#!/bin/csh -ef
+    set db = felCat3
+    set c = $1
+    set mafOut = $2
+    set run = `pwd`
+    set pairs = /san/sanvol1/scratch/$db/mafNet
+
+# set up temp dir
+    set tmp = /scratch/tmp/$db/multiz.$c
+    rm -fr $tmp
+    mkdir -p $tmp
+    cp ../{tree.nh,species.lst} $tmp
+    pushd $tmp
+
+    foreach s (`cat species.lst`)
+        if ($s == $db) then
+            continue
+        endif
+        set clusterMaf = $pairs/$s/$c.maf
+        set localMaf = $db.$s.sing.maf
+        if (-e $clusterMaf) then
+            cp $clusterMaf $localMaf
+        else
+            echo "##maf version=1 scoring=autoMZ" > $localMaf
+        endif
+    end
+    set path = ($run/penn $path); rehash
+    $run/penn/autoMZ + T=$tmp E=$db "`cat tree.nh`" $db.*.sing.maf $c.maf
+    popd
+    cp $tmp/$c.maf $mafOut
+    rm -fr $tmp
+'EOF'
+    # << emacs
 
   # stash binaries
   mkdir penn
@@ -854,20 +872,110 @@ cat  << 'EOF' > spec
   cp /cluster/bin/penn/multiz.v11.2007-03-19/multiz-tba/maf_project .
   cp /cluster/bin/penn/multiz.v11.2007-03-19/multiz-tba/autoMZ .
 
-  # setup output directories
-  cd /cluster/data/felCat3/bed/multiz4way
-  mkdir maf
-  cd maf
-  foreach d1 (0 1 2 3 4 5 6 7 8 9)
-    mkdir $d1
-    foreach d0 (0 1 2 3 4 5 6 7 8 9)
-      mkdir $d1/$d0
-    end
-  end
-
   # cluster run
   ssh pk
   cd /cluster/data/felCat3/bed/multiz4way/run
-  gensub2 scaf.lst single spec jobList
+  gensub2 split.lst single spec jobList
   para create jobList
   para try
+  para check
+  para push
+  para time
+  Completed: 1024 of 1024 jobs
+  # CPU time in finished jobs:        740s      12.33m     0.21h    0.01d  0.000 y
+  # IO & Wait Time:                  8688s     144.80m     2.41h    0.10d  0.000 y
+  # Average job time:                   9s       0.15m     0.00h    0.00d
+  # Longest running job:                0s       0.00m     0.00h    0.00d
+  # Longest finished job:              51s       0.85m     0.01h    0.00d
+  # Submission to last job:          1616s      26.93m     0.45h    0.02d
+
+##########################################################################
+# ANNOTATE MULTIZ4WAY MAF AND LOAD TABLES (In progress Heather)
+
+  # create felCat3.Nbed (already have it for hg18, mm8, canFam2)
+  ssh kolossus
+  cd /cluster/data/felCat3
+  twoBitInfo -nBed felCat3.2bit felCat3.N.bed
+
+  # directory structure and nBeds file (input to mafAddIRows)
+  ssh kkstore05
+  mkdir /cluster/data/felCat3/bed/multiz4way/anno
+  cd /cluster/data/felCat3/bed/multiz4way/anno
+  mkdir maf run
+  cd run
+  # setup.sh 
+  cat  << 'EOF' > setup.sh
+#!/bin/sh
+for DB in canFam2 hg18 mm8
+do
+  ln -s /cluster/data/${DB}/${DB}.N.bed ${DB}.bed
+  echo ${DB}.bed >> nBeds
+done
+'EOF'
+  # << emacs
+
+  # setup for mafAddIRows
+  # makeIrows.sh
+  cat << 'EOF' > makeIrows.sh
+#!/bin/sh
+rm -f getIrows.sh
+twobit=/cluster/data/felCat3/felCat3.2bit
+outdir=../maf
+# do smaller jobs first
+for file in `ls -1rS ../../maf/*.maf`
+do
+  echo "echo $file" >> getIrows.sh
+  base=`basename $file`
+  echo nice mafAddIRows -nBeds=nBeds $file $twobit $outdir/$base >>
+  getIrows.sh
+done
+chmod +x getIrows.sh
+'EOF'
+  # << emacs
+
+  # run mafAddIRows
+  # takes 30 minutes or so depending on load on kolossus
+  # could have used kki (see ornAna1.txt)
+  ssh kolossus
+  cd /cluster/data/felCat3/bed/multiz4way/anno/run
+  ./getIrows.sh
+
+  # concat and filter
+  ssh kkstore05
+  cd /cluster/data/felCat3/bed/multiz4way/anno
+  cat maf/*.maf >> felCat3.maf
+  # rollup file is 10,888,983 lines
+  mafFilter -overlap -reject=rf felCat3.maf > felCat3.mf.maf
+# rejected minRow: 454
+# total rejected: 454 blocks
+  # mafFilter rejected 454 single-row (felCat3 only) blocks due to 
+  # its default minRow of 2.  That's reasonable, so replace the original 
+  # with the filtered version.
+  mv felCat3.maf felCat3.preFilter.maf
+  mv felCat3.mf.maf felCat3.maf
+  # TO DO when kkstore05 isn't so busy:
+  # gzip -c felCat3.preFilter.maf > felCat3.preFilter.maf.gz
+
+  # load
+  ssh hgwdev
+  mkdir -p /gbdb/felCat3/multiz4way/anno
+  ln -s /cluster/data/felCat3/bed/multiz4way/anno/felCat3.maf /gbdb/felCat3/multiz4way/anno/
+  time nice hgLoadMaf -pathPrefix=/gbdb/felCat3/multiz4way/anno felCat3 multiz4way
+  # Loaded 2344109 mafs in 1 files from /gbdb/felCat3/multiz4way/anno
+  # 60.419u 16.819s 1:48.05 71.4%   0+0k 0+0io 2pf+0w
+
+  # summary
+  ssh kolossus
+  cd /cluster/data/felCat3/bed/multiz4way/anno 
+  time nice hgLoadMafSummary felCat3 -minSize=30000 -mergeGap=1500 -maxSize=200000 -test \
+      multiz4waySummary felCat3.maf
+  # Created 323552 summary blocks from 1510110 components and 2344109 mafs from felCat3.maf
+  # 107.717u 21.889s 3:08.00 68.9%  0+0k 0+0io 3pf+0w
+  # Creates multiz4waySummary.tab
+  ssh hgwdev
+  sed -e 's/mafSummary/multiz4waySummary/' ~/kent/src/hg/lib/mafSummary.sql > /tmp/multiz4waySummary.sql
+  cd /cluster/data/felCat3/bed/multiz4way/anno 
+  time nice hgLoadSqlTab felCat3 multiz4waySummary /tmp/multiz4waySummary.sql multiz4waySummary.tab
+  # 0.000u 0.003s 0:04.18 0.0%      0+0k 0+0io 3pf+0w
+
+

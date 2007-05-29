@@ -22160,6 +22160,19 @@ hgLoadBed hg17 snp125OrthoPanTro2 snpOrtho.tab -tab -sqlTable=/cluster/home/heat
 # add index
 alter table snp125OrthoPanTro2 add index name (name);
 alter table snp125OrthoPanTro2 add index chrom (chrom, bin);
+# tweak to match panTro2 assembly
+mysql> update snp125OrthoPanTro2 set score = 98 where orthoChrom = "chr21";
+# Query OK, 127754 rows affected (26.26 sec)
+# Rows matched: 127754  Changed: 127754  Warnings: 0
+mysql> update snp125OrthoPanTro2 set score = 98 where orthoChrom = "chrY";
+# Query OK, 24958 rows affected (25.86 sec)
+# Rows matched: 24958  Changed: 24958  Warnings: 0
+mysql> update snp125OrthoPanTro2 set score = 98 where orthoChrom = "chrY_random";
+# Query OK, 135 rows affected (26.19 sec)
+# Rows matched: 135  Changed: 135  Warnings: 0
+
+
+
 
 # macaque
 cd /san/sanvol1/snp/liftOver/hg17/rheMac2Qual/output
@@ -22808,7 +22821,7 @@ hgLoadBed -sqlTable=delConrad.sql -noBin hg17 delConrad delConrad.bed
 cat << '_EOF_' > liftSebat.csh
 hgsql -N -e 'select chrom, chromStart, chromEnd, name, probes, individuals from cnpSebatLiftCandidate' hg16 > cnpSebat.hg16
 liftOver -minMatch=0.7 -bedPlus=4 cnpSebat.hg16 /gbdb/hg16/liftOver/hg16ToHg17.over.chain.gz cnpSebat.bed cnpSebat.err
-hgLoadBed -sqlTable=delSebat.sql -tab hg17 cnpSebat cnpSebat.bed
+hgLoadBed -sqlTable=cnpSebat.sql -tab hg17 cnpSebat cnpSebat.bed
 '_EOF_'
 
 # For Andy's data, use bacEndPairs first, then lift the remainder
@@ -23742,5 +23755,5 @@ hgLoadBed -sqlTable=switchDbTss.sql hg17 switchDbTss switchDbTss.bed
         hg17.orfeomeTables.hgwbeta = yes
     # will need to enable for rr later.  In the future, this can just be enabled
     # as part the normal genbank build.  Change above to:
-        hg18.orfeomeTables.default = yse
+        hg18.orfeomeTables.default = yes
     

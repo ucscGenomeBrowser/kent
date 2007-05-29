@@ -33,6 +33,9 @@ void psClose(struct psGfx **pPs);
 void psTranslate(struct psGfx *ps, double xTrans, double yTrans);
 /* add a constant to translate all coordinates */
 
+void psSetLineWidth(struct psGfx *ps, double factor);
+/* Set line width to factor * a single pixel width. */
+
 void psClipRect(struct psGfx *ps, double x, double y, 
 	double width, double height);
 /* Set clipping rectangle. */

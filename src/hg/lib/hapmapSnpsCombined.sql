@@ -26,5 +26,8 @@ CREATE TABLE hapmapSnpsCombined (
     heteroCountCEU int unsigned not null,	# Count of CEU individuals who are heterozygous
     heteroCountCHB int unsigned not null,	# Count of CHB individuals who are heterozygous
     heteroCountJPT int unsigned not null,	# Count of JPT individuals who are heterozygous
-    heteroCountYRI int unsigned not null	# Count of YRI individuals who are heterozygous
+    heteroCountYRI int unsigned not null,	# Count of YRI individuals who are heterozygous
+              #Indices
+    INDEX name (name),
+    INDEX chrom (chrom, bin)
 );

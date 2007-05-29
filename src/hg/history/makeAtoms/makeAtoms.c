@@ -10,7 +10,7 @@
 #include "element.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: makeAtoms.c,v 1.3 2007/04/20 14:35:14 braney Exp $";
+static char const rcsid[] = "$Id: makeAtoms.c,v 1.4 2007/05/27 16:17:19 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -75,6 +75,9 @@ struct atom
 int num;
 struct run *run;
 };
+
+static struct atom *atoms = NULL;
+static int numAtoms = 0;
 
 struct species *getSpeciesRanges(char *bedName, struct hash **hash)
 {
@@ -198,6 +201,9 @@ return aCol;
 boolean colContig(struct column *colOne, struct atom *atom)
 {
 struct aBase *one = colOne->bases;
+if (atom->run == NULL)
+    return FALSE;
+
 struct aBase *prev = atom->run->bases;
 
 for(; one && prev ; one = one->next, prev = prev->next)
@@ -250,8 +256,6 @@ else
     }
 }
 
-static struct atom *atoms = NULL;
-static int numAtoms = 0;
 
 struct atom *getNewAtom()
 {
@@ -347,6 +351,102 @@ for( aBase = aCol->bases; aBase ;  aBase = aBase->next)
     }
 }
 
+void MoveColumnFromAtom(int atomNum, struct aBase *colBase, struct column *aCol)
+{
+struct aBase *aBase;
+struct atom *atom = &atoms[atomNum - 1];
+struct run *run = atom->run;
+int delta = -1;
+boolean doReverse = FALSE;
+
+for( aBase = run->bases; aBase ; aBase = aBase->next)
+    if ((delta = baseInRange(aBase, run->length, colBase, &doReverse)) != -1)
+	break;
+
+//printf("delta %d length %d\n",delta,run->length);
+
+if (aBase == NULL)
+    errAbort("couldn't find column\n");
+
+for( aBase = run->bases; aBase ; aBase = aBase->next)
+    {
+    struct aBase *newBase;
+    struct species *species = aBase->species;
+
+    species->atomSequence[aBase->offset + delta - species->chromStart] = 0;
+
+    AllocVar(newBase);
+    newBase->offset = aBase->offset + delta;
+    newBase->species = aBase->species;
+    if (!doReverse)
+	newBase->strand = aBase->strand;
+    else
+	{
+	//printf("doing reverse\n");
+	newBase->strand = (aBase->strand == '+')? '-' : '+';
+	}
+    slAddHead(&aCol->bases, newBase);
+    }
+
+dropDups(aCol);
+
+/* fix up atoms */
+if (delta == 0)
+    {
+    run->length--;
+    for( aBase = run->bases; aBase ; aBase = aBase->next)
+	aBase->offset++;
+    }
+else if (delta == run->length - 1 )
+    {
+    run->length--;
+    }
+else
+    {
+    struct run *newRun;
+    struct atom *newAtom = getNewAtom();
+    int newAtomNum = newAtom->num;
+
+    errAbort("boop");
+    AllocVar(newRun);
+    newAtom->run = newRun;
+    newRun->length = run->length - delta - 1;
+
+    for( aBase = run->bases; aBase ; aBase = aBase->next)
+	{
+	struct aBase *newBase;
+	struct species *species = aBase->species;
+	int ii;
+
+	AllocVar(newBase);
+	newBase->strand = aBase->strand;
+	newBase->species = aBase->species;
+	newBase->offset = aBase->offset + delta + 1;
+	for(ii=0; ii < newRun->length; ii++)
+	    species->atomSequence[newBase->offset + ii 
+	    	- species->chromStart] = newAtomNum;
+
+	slAddHead(&newRun->bases, newBase);
+	}
+
+
+    /* make current atom the part before delta */
+    run->length = delta;
+    }
+
+if (run->length == 0)
+    {
+    struct aBase *aBase, *nextBase;
+
+    for( aBase = atom->run->bases; aBase ; aBase = nextBase)
+	{
+	nextBase = aBase->next;
+	freez(&aBase);
+	}
+    //atom->run = NULL;
+    freez(&atom->run);
+    }
+}
 
 boolean checkBases(struct column *aCol)
 {
@@ -383,7 +483,6 @@ for( aBase = aCol->bases; aBase ;  aBase = nextBase)
 
     if (nextAtomNum)
 	{
-#ifdef NOTNOW
 	if (doTransitive)
 	    {
 	    /* this will deassign atoms which will change the atomSequence
@@ -392,7 +491,6 @@ for( aBase = aCol->bases; aBase ;  aBase = nextBase)
 	    nextBase = aCol->bases;
 	    }
 	else	/* drop this base from column */
-#endif
 	    {
 	    //printf("droppoing base %d\n",nextAtomNum);
 	    if (prevBase)
@@ -444,6 +542,7 @@ for(psl = *list; psl;  psl = nextPsl)
 
     if (psl->tEnd < base)
 	{
+	pslFree(&psl);
 	if (prevPsl != NULL)
 	    prevPsl->next = nextPsl;
 	else
@@ -469,6 +568,7 @@ for(species = speciesList; species; species = species->next)
 
     /* get space for atom sequence */
     species->atomSequence = needLargeMem(sizeof(int) * rangeWidth);
+    memset(species->atomSequence, 0, sizeof(int) * rangeWidth);
 
     /* grab psl's for this species */
     for(psl = allPsl; psl ; psl = nextPsl)
@@ -599,7 +699,6 @@ if (argc != 5)
 
 if (optionExists("trans"))
     {
-    errAbort("can't do transitive now");
     doTransitive = TRUE;
     }
 

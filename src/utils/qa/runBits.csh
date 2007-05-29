@@ -29,23 +29,36 @@ else
 endif
 
 set track=`echo $trackname | sed -e "s/chrN_//"`
-set split=`getSplit.csh $db $track hgwdev` 
+set split=`getSplit.csh $db gap hgwdev` 
 
 
 # ------------------------------------------------
 # featureBits
 
 echo
-echo "featureBits $db $track"
-featureBits $db $track
+echo "counting gaps in denominator throughout"
+echo
+echo "featureBits -countGaps $db $track"
+featureBits -countGaps $db $track
 if ($status) then
   echo "quitting"
   echo
   exit
 endif
-echo "featureBits $db $track gap"
-featureBits $db $track gap
+
 echo
+echo "featureBits -countGaps $db $track gap"
+rm -f file
+featureBits -countGaps $db $track gap >& file 
+cat file
+
+set isZero=`head -1 file | awk '{print $1}'`
+rm file
+
+if ( $isZero == "0" ) then
+  echo
+  exit
+endif
 
 echo "check for overlap to unbridged gaps:"
 rm -f $db.unbridgedGap.bed
@@ -62,24 +75,28 @@ else
   end
 endif
 
-featureBits $db $track $db.unbridgedGap.bed -bed=stdout > $db.unbridged.gaps
+rm -f $db.$track.unbridged.gaps
+featureBits $db $track $db.unbridgedGap.bed -bed=$db.$track.unbridged.gaps
 echo
-if ( -e $db.unbridged.gaps ) then
+if ( -e $db.$track.unbridged.gaps ) then
   # print 3 records, both as text and as links
-  head -3 $db.unbridged.gaps
+  echo "total number:"
+  wc -l $db.$track.unbridged.gaps
+  head -3 $db.$track.unbridged.gaps
   echo
   set url1="http://genome-test.cse.ucsc.edu/cgi-bin/hgTracks?db=$db"
   set url3="&$track=pack&gap=pack"
   set n=3
   while ( $n )
-    set pos=`sed -n -e "${n}p" $db.unbridged.gaps \
-      | awk '{print $1":"$2"-"$3}'`
-    echo "$url1&$pos$url3"
+    set pos=`sed -n -e "${n}p" $db.$track.unbridged.gaps \
+      | awk '{print $1":"$2+1"-"$3}'`
+    echo "$url1&position=$pos$url3"
     set n=`echo $n | awk '{print $1-1}'`
   end
 else
   echo "no overlap with unbridged gaps"
 endif
+echo
 
 rm -f db.unbridgedGap.bed
 

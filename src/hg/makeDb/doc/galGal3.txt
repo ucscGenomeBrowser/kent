@@ -1332,6 +1332,7 @@ cat  << 'EOF' > spec
     ssh hgwdev
     cd ~/browser/images/phylo
     cvs add galGal3_7way.gif
+    # note:  markd says it is best to use "cvs add -kb" for binary files - b0b
     cvs ci -m "phyloGif-generated galGal3 7way tree image." galGal3_7way.gif
     # Do a "make alpha" to install the file in htdocs/images/phylo/ :
     cd ~/browser

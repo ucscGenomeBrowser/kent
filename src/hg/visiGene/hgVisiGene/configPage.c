@@ -17,7 +17,7 @@ void configPage()
 webStartWrapperDetailedNoArgs(cart, "", "VisiGene Configure",
         FALSE, FALSE, FALSE, TRUE);
 
-printf("<FORM ACTION=\"../cgi-bin/%s\" METHOD=GET>\n",
+printf("<FORM ACTION=\"%s\" METHOD=GET>\n",
 	hgVisiGeneCgiName());
 
 printf("<TABLE>");

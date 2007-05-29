@@ -3,6 +3,7 @@
 
 #include "common.h"
 #include "psGfx.h"
+#include "pscmGfx.h"
 #include "linefile.h"
 #include "hash.h"
 #include "cheapcgi.h"
@@ -29,7 +30,7 @@
 #include "hgGenome.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.17 2007/04/06 21:21:21 galt Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.19 2007/05/23 00:30:47 galt Exp $";
 
 
 static char *allColors[] = {
@@ -144,13 +145,28 @@ if (gg != NULL)
 
 		/* Handle first point as special case here, so don't
 		 * have to test for first point in inner loop. */
-		int x,y,start,lastStart,lastX,lastY;
+
+		double x,lastX;
+		int y,start,lastStart,lastY;
+
 		start = lastStart = cgb->chromStart;
 		x = lastX = pixelsPerBase*start + chromX;
 		y = lastY = (height - ((cgb->val - gMin)*gScale)) + chromY+yOff;
 		if (y < minY) y = minY;
 		else if (y > maxY) y = maxY;
-		vgDot(vg, x, y, color);
+
+		struct pscmGfx *pscm = NULL;
+		if (vg->pixelBased)
+		    {
+    		    vgDot(vg, x, y, color);
+		    }
+		else
+		    {
+		    pscm = (struct pscmGfx *)vg->data;
+		    pscmSetColor(pscm, color);
+		    psFillEllipse(pscm->ps, x, y, 0.01, 0.01);
+		    psSetLineWidth(pscm->ps, 0.01);
+		    }
 
 		/* Draw rest of points, connecting with line to previous point
 		 * if not too far off. */
@@ -158,13 +174,23 @@ if (gg != NULL)
 		    {
 		    start = cgb->chromStart;
 		    x = pixelsPerBase*start + chromX;
+		    if (vg->pixelBased)
+			x = (int) x;
 		    y = (height - ((cgb->val - gMin)*gScale)) + chromY+yOff;
 		    if (y < minY) y = minY;
 		    else if (y > maxY) y = maxY;
 		    if (x != lastX || y != lastY)
 		        {
 			if (start - lastStart <= maxGapToFill)
-			    vgLine(vg, lastX, lastY, x, y, color);
+			    {
+			    if (vg->pixelBased)
+				vgLine(vg, lastX, lastY, x, y, color);
+			    else
+				{
+				pscmSetColor(pscm, color);
+				psDrawLine(pscm->ps, lastX, lastY, x, y);
+				}
+			    }
 			else
 			    {
 			    if (yellowMissing && leftLabel)
@@ -173,13 +199,27 @@ if (gg != NULL)
 				if (width > 0)
 				    vgBox(vg, lastX+1, minY, width, height, missingColor);
 				}
-			    vgDot(vg, x, y, color);
+			    if (vg->pixelBased)
+				{
+				vgDot(vg, x, y, color);
+				}
+			    else
+				{
+				pscmSetColor(pscm, color);
+				psFillEllipse(pscm->ps, x, y, 0.01, 0.01);
+				}
 			    }
 			}
 		    lastX = x;
 		    lastY = y;
 		    lastStart = start;
 		    }
+
+		if (!vg->pixelBased)
+		    {
+		    psSetLineWidth(pscm->ps, 1);
+		    }
+
 		vgUnclip(vg);
 		}
 	    }
@@ -483,12 +523,12 @@ int graphRows = linesOfGraphs();
 int graphCols = graphsPerLine();
 int i, j;
 int realCount = 0;
-char *scriptName = "/cgi-bin/hgGenome";
+char *scriptName = "../cgi-bin/hgGenome";
 
 cartWebStart(cart, "%s Genome Graphs", genome);
 
 /* Start form and save session var. */
-hPrintf("<FORM ACTION=\"..%s\" NAME=\"mainForm\" METHOD=GET>\n", scriptName);
+hPrintf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=GET>\n", scriptName);
 cartSaveSession(cart);
 
 /* Write some javascript functions */

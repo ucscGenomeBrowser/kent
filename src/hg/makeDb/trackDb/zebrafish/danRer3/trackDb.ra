@@ -25,7 +25,7 @@ type bed 3 +
 
 track rhMap
 shortLabel Radiation Hybrid
-longLabel Alignments of Sequences for Radiaton Hybrid Map (RH map)
+longLabel Alignments of Sequences for Radiation Hybrid Map (RH map)
 group map
 priority 14
 visibility hide

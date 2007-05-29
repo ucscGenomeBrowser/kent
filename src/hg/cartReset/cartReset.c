@@ -7,10 +7,10 @@
 #include "hui.h"
 #include "cart.h"
 
-static char const rcsid[] = "$Id: cartReset.c,v 1.9 2006/11/30 20:51:42 galt Exp $";
+static char const rcsid[] = "$Id: cartReset.c,v 1.10 2007/05/23 23:09:44 galt Exp $";
 
 
-static char *defaultDestination = "/cgi-bin/hgGateway";
+static char *defaultDestination = "../cgi-bin/hgGateway";
 
 void doMiddle()
 /* cartReset - Reset cart. */

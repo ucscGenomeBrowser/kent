@@ -975,6 +975,7 @@ doPhast.csh $(dir1) $(file1) 12 .005 .26
     cp ornAna1_6way.gif ~/browser/images/phylo/
     cd ~/browser/images/phylo
     cvs add ornAna1_6way.gif
+    # note:  markd says it is best to use "cvs add -kb" for binary files - b0b
     cvs ci ornAna1_6way.gif
     cd ../..
     cvsup

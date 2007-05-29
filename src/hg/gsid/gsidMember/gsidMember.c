@@ -25,7 +25,7 @@
 #include "paypalSignEncrypt.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidMember.c,v 1.25 2007/05/09 17:46:26 galt Exp $";
+static char const rcsid[] = "$Id: gsidMember.c,v 1.27 2007/05/22 22:19:26 galt Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "debug", "fixMembers", "update", "gsidM_password", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -228,7 +228,7 @@ FILE *f=mustOpen("ipn.log","a");
 struct dyString *dy=newDyString(256);
 struct dyString *dyVerify = NULL;
 char *paypalServer = cfgOption("paypalServer");
-dyStringAppend(dy,"/cgi-bin/webscr?cmd=_notify-validate");
+dyStringAppend(dy,"../cgi-bin/webscr?cmd=_notify-validate");
 for(this=cgiVars;this;this=this->next)
     {
     fprintf(f,"%s=%s\n", this->name, this->val);
@@ -400,7 +400,7 @@ if (!sameString("Completed",paymentStatus))
     /* send payer an email confirming */
     char cmd[256];
     safef(cmd,sizeof(cmd), 
-    "echo \"We received your payment through Paypal. However your account is not yet activated.\nPayment status is %s %s. When your payment status is completed your account will be activated and you will receive another email.  Thank you.\" | mail -s \"Payment received for GSID HIV access.\" %s"
+    "echo \"We received your payment through PayPal. However your account is not yet activated.\nPayment status is %s %s. When your payment status is completed your account will be activated and you will receive another email.  Thank you.\" | mail -s \"Payment received for GSID HIV access.\" %s"
     , paymentStatus
     , cgiUsualString("payment_reason","") 
     , email);
@@ -836,9 +836,9 @@ freez(&buttonEncrypted);
 hPrintf(
 "Pay yearly %s access fee to activate your account.<br>\n"
 "%s\n"
-"Your payment will be processed by Paypal.<br>\n"
+"Your payment will be processed by PayPal.<br>\n"
 "You can use a variety of payment methods including credit card.<br>\n"
-"You do not need to be a Paypal member.<br>\n"
+"You do not need to be a PayPal member.<br>\n"
 "Be sure to click the \"Return to Merchant\" link when done paying.<br>\n"
 "<br>\n"
 , type
@@ -964,7 +964,7 @@ if (sameString(status,"Completed"))
     "<br>\n"
     "Thank you for your payment. "
     "Your transaction has been completed, and a receipt for your purchase has been emailed to you.<br>\n"
-    "You may log into paypal at http://%s/us to view details of this transaction.\n"
+    "You may log into PayPal at http://%s/us to view details of this transaction.\n"
     "<br>\n"
     "<br>\n"
     "<big>\n"
@@ -985,7 +985,7 @@ else
     "However, your account is not activated yet (status=%s).<br>\n"
     "<br>\n"
     "When your transaction has been completed, a notice will be emailed to you.<br>\n"
-    "You may log into paypal at http://%s/us to view details of this transaction.\n"
+    "You may log into PayPal at http://%s/us to view details of this transaction.\n"
     "<br>\n"
     "<br>\n"
     "<big>\n"
@@ -1006,7 +1006,7 @@ hPrintf(
 "<p>\n"
 "<CENTER><H1>GSID HIV VAC - Payment Cancelled</H1></CENTER>\n"
 "<br>\n"
-"Because you cancelled your Paypal payment, your account has not been activated.<br>\n"
+"Because you cancelled your PayPal payment, your account has not been activated.<br>\n"
 "<br>\n"
 "<big>\n"
 "Go to <a href=\"/hiv-signup-html/\">GSID HIV VAC</A> to sign up.\n"

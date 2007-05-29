@@ -15475,3 +15475,258 @@ TMPDIR=/scratch/tmp
 
 see file: ucscGenes10.txt
 
+#######################################################################
+# CGAP SAGE (DONE 2007-04-17 Andy)
+
+   ssh hgwdev
+   bash
+   mkdir /san/sanVol1/scratch/andy/cgapSage
+   cd /san/sanVol1/scratch/andy/cgapSage
+   echo "select * from cgapSageLib" | hgsql hg18 | tail +2 > libs.txt
+   echo "select * from snp127 where class='single' and locType='exact'" | hgsql hg18 | tail +2 | cut -f2- > allSnpss.txt
+   echo "select name from snp127Exceptions where exception='ObservedWrongSize' or exception='SingleClassBetweenLocType' or exception='SingleClassRangeLocType' or exception='MultipleAlignment'" | hgsql hg18 | tail +2 > exceptions
+  tabGrep -v exceptions 4 allSnps.txt > snps.txt
+   rm allSnps.txt exceptions   
+   echo select chrom,chromStart,chromEnd,name from simpleRepeat | hgsql hg18 | tail +2 > trf.bed
+   cut -f1-4 snps.txt > snps.bed
+   overlapSelect -selectFmt=bed -inFmt=bed -nonOverlapping trf.bed snps.bed snps.noTrf.bed
+   cut -f4 snps.noTrf.bed > snps.noTrf
+   tabGrep snps.noTrf 4 snps.txt > snps.noTrf.txt
+   mv snps.noTrf.txt snps.txt
+   grep -v random /cluster/data/hg18/chrom.sizes | grep -v hap > chrom.sizes
+   mkdir chromSnps
+   for c in `cat chrom.sizes | cut -f1`; do 
+     awk "{if (\$1==\"$c\") print;}" snps.txt > chromSnps/$c.snps.txt; 
+     echo $c; 
+   done
+   rm snps.txt
+   wget ftp://ftp1.nci.nih.gov/pub/SAGE/HUMAN/Hs.libraries.gz
+   gunzip Hs.libraries.gz
+cat << "EOF" > cleanLibs.awk
+BEGIN{FS="\t"}
+{
+for (i = 1; i <= 12; i++)
+    {
+    printf("%s\t", $i);
+    }
+sex = "";
+if ($13=="male")
+    {
+    sex = "male,";
+    }
+else if ($13=="female")
+    {
+    sex = "female,";
+    }
+else if ($13=="male and female")
+    {
+    sex = "male,female,";
+    }
+else if ($13=="unknown")
+    {
+    sex = "";
+    }
+printf("%s\t", sex);
+for (i = 14; i <= 20; i++)
+    {
+    printf("%s\t", $i);
+    }
+printf("%s\n", $21);
+}
+EOF
+   tail +2 Hs.libraries | awk -f cleanLibs.awk > libs.txt
+   ln -s ~/kent/src/hg/lib/cgapSage/cgapSageLib.sql 
+   hgLoadSqlTab hg18 cgapSageLib cgapSageLib.sql libs.txt
+   partitionSequence.pl -lstDir small 5000000 30 hg18.2bit chrom.sizes 0 > sequence.lst
+   grep -v small sequence.lst > seq.lst
+   cat small/* >> seq.lst
+   mv seq.lst sequence.lst
+   rm -rf small/
+   wget ftp://ftp1.nci.nih.gov/pub/SAGE/HUMAN/Hs_long.frequencies.gz
+   gunzip Hs_long.frequencies.gz
+   cat << "EOF" > doJobList.sh
+#!/bin/bash
+
+# basic vars
+
+part=$1;
+range=${part#*2bit:};
+chrom=${range%:*};
+nums=${range#*:}
+firstnum=${nums:0:1}
+
+outDir=output/${chrom}/${firstnum}
+mkdir -p $outDir
+echo ./doFind.sh $1 {check out exists `pwd`/${outDir}/${range}.bed}
+EOF
+   chmod +x doJobList.sh
+   for part in `cat sequence.lst`; do ./doJobList.sh $part >> jobList; done
+   cat << "EOF" > doFind.sh
+#!/bin/bash
+
+# basic vars
+
+part=$1;
+range=${part#*2bit:};
+chrom=${range%:*};
+nums=${range#*:}
+firstnum=${nums:0:1}
+
+# dirs/files
+
+startDir=`pwd`
+scratch=/scratch/tmp/$part
+output=$2
+
+# begin
+
+mkdir -p $scratch
+pushd $scratch
+twoBitToFa -noMask $startDir/"$part" part.fa
+cgapSageFind part.fa $startDir/Hs_long.frequencies $startDir/libs.txt \
+     $startDir/chromSnps/${chrom}.snps.txt output.bed
+cp output.bed $output
+popd
+rm -rf $scratch
+EOF
+chmod +x doFind.sh
+ssh pk
+cd /san/sanVol1/scratch/andy/cgapSage
+para create jobList
+para try
+para push
+# takes like 5-10 min
+exit 
+# back to hgwdev
+find output/ -name '*.bed' -exec cat '{}' >> output.bed \;
+cgapSageDupeRemove output.bed tmp.bed
+cgapSageDupeRemove -unique tmp.bed final.bed
+ln -s ~/kent/src/hg/lib/cgapSage/cgapSage.sql
+hgLoadBed -sqlTable=cgapSage.sql -tab hg18 cgapSage final.bed 
+
+#########################################################################
+# HapMap SNPs (DONE 2007-05-23 Andy)
+ssh hgwdev
+bash
+cd /cluster/data/hg18/bed
+mkdir -p hapmap/zips
+cd hapmap/zips
+wget -nd -r -N -A html http://www.hapmap.org/genotypes/latest_ncbi_build36/rs_strand/non-redundant/
+grep gz index.html | sed 's/^.*href=\"\(geno.*\.txt\.gz\)\".*$/\1/' > files.txt
+wget -N -i files.txt --base=http://www.hapmap.org/genotypes/latest_ncbi_build36/rs_strand/non-redundant/ 
+rm index.html robots.txt files.txt
+cd ../
+mkdir samples
+cd samples/
+wget http://www.hapmap.org/downloads/samples_individuals/pedinfo2sample_CEU.txt.gz
+wget http://www.hapmap.org/downloads/samples_individuals/pedinfo2sample_CHB.txt.gz
+wget http://www.hapmap.org/downloads/samples_individuals/pedinfo2sample_JPT.txt.gz
+wget http://www.hapmap.org/downloads/samples_individuals/pedinfo2sample_YRI.txt.gz
+cp /cluster/store12/snp/hapmap/rel21a/genotypes/2007-01/rs_strand/non-redundant/*.pl .
+ln -s ../zips
+./filterPedigree.pl < pedinfo2sample_CEU.txt > filtered.CEU
+./filterPedigree.pl < pedinfo2sample_YRI.txt > filtered.YRI
+zcat zips/*chr22_CEU* | head -1 | tr ' ' '\n' > header.CEU
+zcat zips/*chr22_YRI* | head -1 | tr ' ' '\n' > header.YRI
+grep -n -f filtered.CEU header.CEU | cut -f1 -d':' > offsets.CEU
+grep -n -f filtered.YRI header.YRI | cut -f1 -d':' > offsets.YRI
+for pop in CEU YRI CHB JPT; do
+   for f in zips/genotypes_chr*_${pop}_r22_nr.b36.txt.gz; do
+      zcat $f | ./filter${pop}.pl >> ../${pop}.merge
+      echo Done with $f
+   done
+done
+cd ../
+for pop in CEU YRI CHB JPT; do
+   ~/kent/src/hg/snp/snpLoad/hapmap1 ${pop}.merge ${pop}.condense
+   mv hapmap1.log ${pop}.hapmap1.log
+done
+wc -l *.log
+#0 CEU.hapmap1.log
+#0 CHB.hapmap1.log
+#0 JPT.hapmap1.log
+#0 YRI.hapmap1.log
+#0 total
+rm *.log
+cp ~/kent/src/hg/lib/hapmapSnps.sql .
+for pop in CEU CHB JPT YRI; do 
+     sed "s/hapmapSnps/hapmapSnps$pop/" hapmapSnps.sql > hapmapSnps${pop}.sql
+     hgLoadBed -sqlTable=hapmapSnps${pop}.sql hg18 hapmapSnps$pop ${pop}.condense
+done
+# Don't worry if you see:
+#load of hapmapSnpsCEU did not go as planned... etc.
+# unless it says rows skipped.
+~/kent/src/hg/snp/snpLoad/hapmap2 hg18
+#building CEU hash...
+#Can't start query:
+#select * from hapmapAllelesCEU
+#
+#mySQL error 1146: Table 'hg18.hapmapAllelesCEU' doesn't exist
+# But this works: 
+~heather/kent/src/hg/snp/snpLoad/hapmap2 hg18
+# (gotta bug Heather about that one)
+ln -s ~/kent/src/hg/lib/hapmapSnpsCombined.sql
+hgLoadBed -sqlTable=hapmapSnpsCombined.sql hg18 hapmapSnpsCombined hapmapSnpsCombined.tab
+# Checks:
+~heather/kent/src/hg/snp/snpLoad/snpCheckCluster2 hg18 hapmapSnpsCombined
+#match count = 0
+### clean up
+rm *.sql hapmapSnpsCombined.tab bed.tab
+tar cfvz merge.tar.gz *.merge
+tar cfvz condense.tar.gz *.condense
+rm *.condense *.merge
+mkdir logs
+mv *.errors *.log *.out logs
+mkdir orthos
+cd orthos/
+
+# a couple quick scripts... I kinda think these are weird in make-docs
+cat << "EOF" > joinify.awk
+{
+if ($1 == "variableStep")
+   {
+   sub("chrom=", "", $2);
+   chrom = $2;
+   }
+else if ($1 != "#")
+   {
+   printf("%s,%s\t%s\n", chrom, $1, $2);
+   }
+}
+EOF
+
+cat << "EOF" > join.sh
+#!/bin/bash
+sed 's/\(^chr\w\+\)\t/\1,/' $1 > bed
+sort -k1,1 bed > tmp; mv tmp bed
+awk -f joinify.awk $2 > scores
+sort -k1,1 scores > tmp; mv tmp scores
+join -1 1 -2 1 bed scores | tr ',' ' ' | 
+  awk '{printf("%s\t%s\t%s\t%s\t%d\t%s\t%s\n", $1, $2, $3, $4, $9, $6, $7);}' > qual.tab
+rm scores bed
+EOF
+chmod +x join.sh
+
+# back to business
+cp /san/sanvol1/snp/liftOver/hg18/rheMac2/output/all.out rheMac2.bed
+hgWiggle -db=rheMac2 -bedFile=rheMac2.bed quality > rheMac2.scores
+cp /san/sanvol1/snp/liftOver/hg18/panTro2/output/all.out panTro2.bed
+hgWiggle -db=panTro2 -bedFile=panTro2.bed quality > panTro2.scores
+./join.sh rheMac2.bed rheMac2.scores
+~heather/kent/src/hg/snp/snpLoad/snpOrtho hg18 snp126 qual.tab
+sed 's/snpOrtho/snp126OrthoRheMac2/' ~/kent/src/hg/lib/snpOrtho.sql  > snpOrthoRheMac2.sql
+hgLoadBed -tab -sqlTable=snpOrthoRheMac2.sql hg18 snp126OrthoRheMac2 snpOrtho.tab
+./join.sh panTro2.bed panTro2.scores
+~heather/kent/src/hg/snp/snpLoad/snpOrtho hg18 snp126 qual.tab
+sed 's/snpOrtho/snp126OrthoPanTro2/' ~/kent/src/hg/lib/snpOrtho.sql  > snpOrthoPanTro2.sql
+hgLoadBed -tab -sqlTable=snpOrthoPanTro2.sql hg18 snp126OrthoPanTro2 snpOrtho.tab
+sed 's/hapmapAllelesOrtho/hapmapAllelesMacaque/' ~/kent/src/hg/lib/hapmapAllelesOrtho.sql  > hapmapAllelesMacaque.sql
+sed 's/hapmapAllelesOrtho/hapmapAllelesChimp/' ~/kent/src/hg/lib/hapmapAllelesOrtho.sql  > hapmapAllelesChimp.sql
+~heather/kent/src/hg/snp/snpLoad/hapmapOrtho hg18 hapmapSnpsCombined snp126OrthoPanTro2
+hgLoadBed -tab -sqlTable=hapmapAllelesChimp.sql hg18 hapmapAllelesChimp hapmapOrtho.tab 
+~heather/kent/src/hg/snp/snpLoad/hapmapOrtho hg18 hapmapSnpsCombined snp126OrthoRheMac2
+hgLoadBed -tab -sqlTable=hapmapAllelesMacaque.sql hg18 hapmapAllelesMacaque hapmapOrtho.tab 
+~heather/kent/src/hg/snp/snpLoad/hapmapSummary hg17 hapmapSnpsCombined hapmapAllelesChimp \
+~heather/kent/src/hg/snp/snpLoad/hapmapSummary hg18 hapmapSnpsCombined hapmapAllelesChimp hapmapAllelesMacaque
+ln -s ~/kent/src/hg/lib/hapmapAllelesSummary.sql
+hgLoadBed -tab -sqlTable=hapmapAllelesSummary.sql hg18 hapmapAllelesSummary hapmapSummary.tab 

@@ -3128,4 +3128,43 @@ BASE=/cluster/data/monDom4/bed/blastz.ornAna1.2007-04-02
       >& do.log & tail -f do.log
     ln -s blastz.ornAna1.2007-04-02 /cluster/data/monDom4/bed/blastz.ornAna1
 
+#########################################################################
+# BLASTZ Rhesus rheMac2 (DONE 2007-05-27 braney)
+    ssh kolossus
+    mkdir /cluster/data/monDom4/bed/blastz.rheMac2
+    cd /cluster/data/monDom4/bed/blastz.rheMac2
+    cat << '_EOF_' > DEF
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+
+# settings for more distant organism alignments
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=10000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+BLASTZ_ABRIDGE_REPEATS=0
+    
+# TARGET: Opossum monDom4
+SEQ1_DIR=/san/sanvol1/scratch/monDom4/monDom4.2bit
+SEQ1_LEN=/san/sanvol1/scratch/monDom4/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Rhesus (rheMac2)
+SEQ2_DIR=/san/sanvol1/scratch/rheMac2/nib
+SEQ2_LEN=/san/sanvol1/scratch/rheMac2/chrom.sizes
+SEQ2_CHUNK=30000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/monDom4/bed/blastz.rheMac2
+TMPDIR=/scratch/tmp
+    # << emacs
+
+    doBlastzChainNet.pl DEF \
+      -bigClusterHub=pk  -chainMinScore=5000 -chainLinearGap=loose \
+      >& blastz.out 2>&1 &
+
 

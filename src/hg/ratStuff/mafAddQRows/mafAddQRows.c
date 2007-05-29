@@ -1,4 +1,4 @@
-/* mafAddQRows - Add qualiy data to a maf.                                   */
+/* mafAddQRows - Add quality data to a maf.                                  */
 /*                                                                           */
 /* For each species with quality data we want to add to the maf, the quality */
 /* data is stored in an external qac file which contains quality data for    */
@@ -48,6 +48,16 @@
 /* fake quality value use to indicate gaps */
 #define FAKE_GAP_QUAL 100
 
+static double divisor;
+
+struct speciesList 
+/* list of species for which we are adding quality data */
+    {
+    struct speciesList *next;
+    char *name;
+    char *dir;
+    };
+
 struct indexEntry
 /* map chromosome name to file offset in a qac file */
     {
@@ -65,76 +75,107 @@ struct qData
     struct qaSeq *qa;   /* cache to avoid reloading quality data */
     };
 
+static struct optionSpec options[] = {
+	{"divisor", OPTION_DOUBLE},
+	{NULL, 0}
+};
+
+
 static void usage()
 /* Explain usage and exit. */
 {
 errAbort(
     "mafAddQRows - Add quality data to a maf\n"
     "usage:\n"
-    "   mafAddQRows in.maf out.maf <list of species>\n"
-    "   assumes species.qac, species.qdx exist in the current directory\n"
+    "   mafAddQRows species.lst in.maf out.maf\n"
+    "where each species.lst line contains two fields\n"
+    "   1) species name\n"
+    "   2) directory where the .qac and .qdx files are located\n"
+    "options:\n"
+    "  -divisor=n is value to divide Q value by.  Default is 5.\n"
 );
 }
 
-static struct hash *loadQacIndex(char *species)
+
+static struct slPair *buildSpeciesList(char *speciesFile)
+/* read species and directory info from the species.lst file */
+{
+struct slPair *speciesList = NULL;
+struct lineFile *lf = lineFileOpen(speciesFile, TRUE);
+char *row[1];
+
+while (lineFileNextRow(lf, row, 2))
+    slPairAdd(&speciesList, row[0], (void *) cloneString(row[1]));
+
+lineFileClose(&lf);
+
+return speciesList;
+}
+
+
+static struct hash *loadQacIndex(struct slPair *species)
 /* Buid a hash mapping chrom to file offset in a qac file for the */
 /* argument species.                                              */
 {
 char buffer[1024];
-FILE *qdx;
+struct lineFile *lf;
+char *row[1];
 int seqCount;
 struct hash *qacIndex;
-char seq_name[1024];
-off_t offset;
 struct hashEl *hel;
 struct indexEntry *ie;
 
-safef(buffer, sizeof(buffer), "%s.qdx", species);
-qdx = mustOpen(buffer, "rb");
+safef(buffer, sizeof(buffer), "%s/%s.qdx", (char *) species->val, species->name);
+lf = lineFileOpen(buffer, TRUE);
 
 /* get the count of sequences in the qac file */
-if (fgets(buffer, sizeof(buffer), qdx) == NULL)
-    errnoAbort("Error reading %s quality index\n", species);
-if (sscanf(buffer, "%d", &seqCount) != 1)
-    errAbort("Can't get sequence count from %s quality index\n", species);
+if (lineFileNextRow(lf, row, 1) == FALSE)
+    errAbort("Index file %s is empty.", lf->fileName);
+seqCount = lineFileNeedFullNum(lf, row, 0);
 
-/* build an populate a hash mapping chrom to file offset */
+/* build and populate a hash mapping chrom to file offset */
 qacIndex = newHash(digitsBaseTwo((unsigned long) seqCount));
-while (fgets(buffer, sizeof(buffer), qdx) != NULL)
+while (lineFileNextRow(lf, row, 2))
     {
-    if (sscanf(buffer, "%s %ld", seq_name, &offset) != 2)
-        errAbort("Can't parse %s quality index line:\n%s\n", species, buffer);
-
-    if ((hel = hashLookup(qacIndex, seq_name)) == NULL)
+    if ((hel = hashLookup(qacIndex, row[0])) == NULL)
         {
         AllocVar(ie);
-        ie->name = cloneString(seq_name);
-        ie->offset = offset;
+        ie->name = cloneString(row[0]);
+        errno = 0;
+        ie->offset = (off_t) strtol(row[1], NULL, 0);
+        if (errno != 0)
+            errnoAbort("Unable to convert %s to a long on line %d of %s.",
+                row[1], lf->lineIx, lf->fileName);
         hashAdd(qacIndex, ie->name, ie);
         seqCount--;
         }
+    else
+        {
+        errAbort("Duplicate sequence name %s on line %d of %s.",
+            row[0], lf->lineIx, lf->fileName);
+        }
     }
-if (ferror(qdx))
-    errnoAbort("Error reading %s quality index\n", species);
 
 /* sanity check */
 if (seqCount != 0)
-    errAbort("%s quality index is inconsistent\n", species);
+    errAbort("%s quality index is inconsistent.", species->name);
 
-carefulClose(&qdx);
+lineFileClose(&lf);
+
 return qacIndex;
 }
 
-static struct qData *qDataLoad(char *species)
+
+static struct qData *qDataLoad(struct slPair *species)
 /* Populate a qData struct for the named species. */
 {
 char buffer[1024];
 struct qData *qd;
 
 AllocVar(qd);
-qd->name = cloneString(species);
+qd->name = cloneString(species->name);
 
-safef(buffer, sizeof(buffer), "%s.qac", species);
+safef(buffer, sizeof(buffer), "%s/%s.qac", (char *) species->val, species->name);
 qd->fd = qacOpenVerify(buffer, &(qd->isSwapped));
 
 qd->index = loadQacIndex(species);
@@ -143,34 +184,34 @@ qd->qa = NULL;
 return qd;
 }
 
-static struct hash *buildSpeciesHash(int argc, char *argv[])
+
+static struct hash *buildSpeciesHash(struct slPair *speciesList)
 /* Build a hash keyed on species name.  Each species we are adding "q" */
 /* lines for will have an entry in this hash.  The hash contains:      */
 /*   1) species name [hash key]                                        */
 /*   2) file descriptor for qac file (will be opened)                  */
 /*   3) flag telling us if the qac file above needs to be swapped      */
 /*   4) hash mapping chrom name to an indexEntry                       */
-/*   5) a small 1-element cache for holding quality data               */
+/*   5) a 1-element cache for holding quality data for a chromosome    */
 {
 struct hash *speciesHash;
+struct slPair *pair;
 struct hashEl *hel;
 struct qData *qd;
-int i;
 
-speciesHash = newHash(digitsBaseTwo((unsigned long) argc - 3));
+speciesHash = newHash(digitsBaseTwo((unsigned long) slCount(speciesList)));
 
-for (i = 3; i < argc; i++)
+for (pair = speciesList; pair != NULL; pair = pair->next)
     {
-    /* skip over duplicate species given on the command line */
-    if ((hel = hashLookup(speciesHash, argv[i])) == NULL)
-        {
-        qd = qDataLoad(argv[i]);
-        hashAdd(speciesHash, qd->name, qd);
-        }
+    if ((hel = hashLookup(speciesHash, pair->name)) != NULL)
+        errAbort("Duplicate species %s in species list file.", pair->name);
+    qd = qDataLoad(pair);
+    hashAdd(speciesHash, qd->name, qd);
     }
 
 return speciesHash;
 }
+
 
 static struct qData *loadQualityData (struct mafComp *mc, struct hash *speciesHash)
 /* return qData if found or NULL if not */
@@ -209,6 +250,7 @@ if (qd->qa == NULL || ! sameString(qd->qa->name, chrom))
 return qd;
 }
 
+
 static char convertToQChar(UBYTE *q)
 /* convert a q value into the appropriate character */
 {
@@ -226,12 +268,13 @@ switch (*q)
         return('0');
         break;
     default:
-        val = (int) floor((double) *q / 5);
+        val = (int) floor((double) *q / divisor);
         val = (val < 9) ? val : 9;
     }
 
 return '0' + val;
 }
+
 
 void mafAddQRows(char *inMaf, char *outMaf, struct hash *speciesHash)
 /* mafAddQRows - Add quality data to a maf. */
@@ -291,15 +334,30 @@ while ((ma = mafNext(mf)) != NULL)
 carefulClose(&outf);
 }
 
+
 int main(int argc, char *argv[])
 {
+struct slPair *speciesList;
 struct hash *speciesHash;
 
-if (argc < 4)
+optionInit(&argc, argv, options);
+
+if (argc != 4)
     usage();
 
-speciesHash = buildSpeciesHash(argc, argv);
-mafAddQRows(argv[1], argv[2], speciesHash);
+divisor = optionDouble("divisor", 5.0);
+
+if (divisor <= 0)
+    {
+    errAbort("Invalid divisor: %f\n", divisor);
+    }
+
+/* load metadata about the quality data we're adding */
+speciesList = buildSpeciesList(argv[1]);
+speciesHash = buildSpeciesHash(speciesList);
+slPairFreeValsAndList(&speciesList);
+
+mafAddQRows(argv[2], argv[3], speciesHash);
 
 return EXIT_SUCCESS;
 }

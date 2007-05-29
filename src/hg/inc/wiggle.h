@@ -276,7 +276,7 @@ enum wigDataFetchType
 /*	bit masks to specify type of data to fetch via getData()	*/
     {
     wigFetchNoOp = 1, wigFetchAscii = 2, wigFetchBed = 4, wigFetchStats = 8,
-	wigFetchDataArray = 16,
+	wigFetchDataArray = 16, wigFetchRawStats = 32,
     };
 
 struct wiggleDataStream

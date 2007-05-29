@@ -13,7 +13,7 @@
 #include "hgColors.h"
 #include "wikiLink.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.119 2007/04/09 06:54:13 kent Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.124 2007/05/23 22:48:58 galt Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -141,7 +141,7 @@ if (withHtmlHeader)
     htmlTextOut(newString);
     puts(
 	"	</TITLE>" "\n"
-	"	<LINK REL=\"STYLESHEET\" HREF=\"/style/HGStyle.css\">" "\n");
+	"	<LINK REL=\"STYLESHEET\" HREF=\"../style/HGStyle.css\">" "\n");
     if (extraStyle != NULL)
         puts(extraStyle);
     puts(
@@ -160,13 +160,13 @@ if (withLogo)
     if (isEncode)
 	{
 	puts("<A HREF=\"http://www.genome.gov/10005107\" TARGET=\"_BLANK\">"
-	     "<IMG SRC=\"/images/encodelogo.gif\" height=50 ALT=\"ENCODE Project at NHGRI\">"
+	     "<IMG SRC=\"../images/encodelogo.gif\" height=50 ALT=\"ENCODE Project at NHGRI\">"
 	     "</A>");
-	puts("<IMG SRC=\"/images/encode.jpg\" ALT=\"ENCODE Project at UCSC\">");
+	puts("<IMG SRC=\"../images/encode.jpg\" ALT=\"ENCODE Project at UCSC\">");
 	}
     else
 	{
-	puts("<IMG SRC=\"/images/title.jpg\">");
+	puts("<IMG SRC=\"../images/title.jpg\">");
 	}
     puts("</TH></TR>" "\n"
     	 "" "\n" );
@@ -198,7 +198,7 @@ if (isGsid)
     printf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#2636D1\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"2\"><TR>\n");
 
     /* Home */
-    printf("<TD ALIGN=CENTER><A HREF=\"/index.html\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Home</FONT></A></TD>");
+    printf("<TD ALIGN=CENTER><A HREF=\"../index.html\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Home</FONT></A></TD>");
 
     /* Blat */
     printf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgBlat?command=start\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Blat</FONT></A></TD>");
@@ -229,22 +229,22 @@ puts(
 
 if (isEncode)
     {
-    printf("&nbsp;<A HREF=\"/encode/\" class=\"topbar\">" "\n");
+    printf("&nbsp;<A HREF=\"../encode/\" class=\"topbar\">" "\n");
     puts("           Home</A>");
     }
 else
     {
-    printf("&nbsp;<A HREF=\"/index.html%s\" class=\"topbar\">" "\n", uiState);
+    printf("&nbsp;<A HREF=\"../index.html%s\" class=\"topbar\">" "\n", uiState);
     puts("           Home</A> &nbsp;&nbsp;&nbsp;");
     if (isGsid) 
 	{
-    	printf("       <A HREF=\"/cgi-bin/gsidSubj%s\" class=\"topbar\">\n",
+    	printf("       <A HREF=\"../cgi-bin/gsidSubj%s\" class=\"topbar\">\n",
 	       uiState);
 	puts("           Subject View</A> &nbsp;&nbsp;&nbsp;");
 	}
     if (!isGsid)
 	{
-	printf("       <A HREF=\"/cgi-bin/hgGateway%s\" class=\"topbar\">\n",
+	printf("       <A HREF=\"../cgi-bin/hgGateway%s\" class=\"topbar\">\n",
 	       uiState);
     	puts("           Genomes</A> &nbsp;&nbsp;&nbsp;");
     	}
@@ -253,13 +253,13 @@ else
 	endsWith(scriptName, "hgSession") || endsWith(scriptName, "hgCustom") ||
 	endsWith(scriptName, "hgc"))
 	{
-	printf("       <A HREF=\"/cgi-bin/hgTracks%s\" class=\"topbar\">\n",
+	printf("       <A HREF=\"../cgi-bin/hgTracks%s\" class=\"topbar\">\n",
 	       uiState);
 	puts("           Genome Browser</A> &nbsp;&nbsp;&nbsp;");
 	}
     if (!endsWith(scriptName, "hgBlat"))
 	{
-    	printf("       <A HREF=\"/cgi-bin/hgBlat?command=start%s%s\" class=\"topbar\">", 
+    	printf("       <A HREF=\"../cgi-bin/hgBlat?command=start%s%s\" class=\"topbar\">", 
 		theCart ? "&" : "", uiState+1 );
     	puts("           Blat</A> &nbsp;&nbsp;&nbsp;");
 	}
@@ -275,18 +275,18 @@ else
 	{
 	struct trackDb *tdb = hTrackDbForTrack(table);
 	if (tdb != NULL)
-	    printf("       <A HREF=\"/cgi-bin/hgTables%s&hgta_doMainPage=1&"
+	    printf("       <A HREF=\"../cgi-bin/hgTables%s&hgta_doMainPage=1&"
 		   "hgta_group=%s&hgta_track=%s&hgta_table=%s\" "
 		   "class=\"topbar\">\n",
 		uiState, tdb->grp, table, table);
 	else
-	    printf("       <A HREF=\"/cgi-bin/hgTables%s&hgta_doMainPage=1\" "
+	    printf("       <A HREF=\"../cgi-bin/hgTables%s&hgta_doMainPage=1\" "
 		   "class=\"topbar\">\n",
 		uiState);
 	trackDbFree(&tdb);
 	}
     else
-	printf("       <A HREF=\"/cgi-bin/hgTables%s%shgta_doMainPage=1\" "
+	printf("       <A HREF=\"../cgi-bin/hgTables%s%shgta_doMainPage=1\" "
 	       "class=\"topbar\">\n",
 	       uiState, theCart ? "&" : "?" );
     }
@@ -296,20 +296,20 @@ else
 	{
 	if (isGsid)
 	    {
-	    printf("       <A HREF=\"/cgi-bin/gsidTable%s\" class=\"topbar\">\n",
+	    printf("       <A HREF=\"../cgi-bin/gsidTable%s\" class=\"topbar\">\n",
 	           uiState);
 	    puts("           Table View</A> &nbsp;&nbsp;&nbsp;");
 	    }
 	else
 	    {
-	    printf("       <A HREF=\"/cgi-bin/hgNear%s\" class=\"topbar\">\n",
+	    printf("       <A HREF=\"../cgi-bin/hgNear%s\" class=\"topbar\">\n",
 	           uiState);
 	    puts("           Gene Sorter</A> &nbsp;&nbsp;&nbsp;");
 	    }
 	}
     if ((!endsWith(scriptName, "hgPcr")) && (db == NULL || hgPcrOk(db)))
 	{
-	printf("       <A HREF=\"/cgi-bin/hgPcr%s\" class=\"topbar\">\n",
+	printf("       <A HREF=\"../cgi-bin/hgPcr%s\" class=\"topbar\">\n",
 	       uiState);
 	puts("           PCR</A> &nbsp;&nbsp;&nbsp;");
 	}
@@ -319,32 +319,32 @@ else
 	       uiState);
 	puts("           PDF/PS</A> &nbsp;&nbsp;&nbsp;");
 	}
-    if (wikiLinkEnabled())
+    if (wikiLinkEnabled() && !endsWith(scriptName, "hgSession"))
 	{
-	printf("<A HREF=\"/cgi-bin/hgSession%s%shgS_doMainPage=1\" "
+	printf("<A HREF=\"../cgi-bin/hgSession%s%shgS_doMainPage=1\" "
 	       "class=\"topbar\">Session</A>",
 	       uiState, theCart ? "&" : "?" );
 	puts("&nbsp;&nbsp;&nbsp;");
 	}
-    if (!isGsid) puts("       <A HREF=\"/FAQ/\" class=\"topbar\">" "\n"
+    if (!isGsid) puts("       <A HREF=\"../FAQ/\" class=\"topbar\">" "\n"
 	 "           FAQ</A> &nbsp;&nbsp;&nbsp;" "\n" 
 	 );
     if (!isGsid)
 	{
     	if (endsWith(scriptName, "hgBlat"))
-	    puts("       <A HREF=\"/goldenPath/help/hgTracksHelp.html#BLATAlign\"");
+	    puts("       <A HREF=\"../goldenPath/help/hgTracksHelp.html#BLATAlign\"");
     	else if (endsWith(scriptName, "hgText"))
-	    puts("       <A HREF=\"/goldenPath/help/hgTextHelp.html\"");
+	    puts("       <A HREF=\"../goldenPath/help/hgTextHelp.html\"");
     	else if (endsWith(scriptName, "hgNear"))
-	    puts("       <A HREF=\"/goldenPath/help/hgNearHelp.html\"");
+	    puts("       <A HREF=\"../goldenPath/help/hgNearHelp.html\"");
     	else if (endsWith(scriptName, "hgTables"))
-	    puts("       <A HREF=\"/goldenPath/help/hgTablesHelp.html\"");
+	    puts("       <A HREF=\"../goldenPath/help/hgTablesHelp.html\"");
     	else if (endsWith(scriptName, "hgGenome"))
-	    puts("       <A HREF=\"/goldenPath/help/hgGenomeHelp.html\"");
+	    puts("       <A HREF=\"../goldenPath/help/hgGenomeHelp.html\"");
     	else if (endsWith(scriptName, "hgSession"))
-	    puts("       <A HREF=\"/goldenPath/help/hgTracksHelp.html#Sessions\"");
+	    puts("       <A HREF=\"../goldenPath/help/hgTracksHelp.html#Sessions\"");
     	else 
-	    puts("       <A HREF=\"/goldenPath/help/hgTracksHelp.html\"");
+	    puts("       <A HREF=\"../goldenPath/help/hgTracksHelp.html\"");
 	puts("       class=\"topbar\">");
     	puts("           Help</A> ");
     	}

@@ -205,7 +205,7 @@
 #include "geneCheckDetails.h"
 #include "kg1ToKg2.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1290 2007/05/15 21:15:43 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1292 2007/05/22 23:58:58 galt Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -2093,7 +2093,7 @@ if (hTableOrSplitExists(tdb->tableName))
 	if (chopLine(cloneString(trackTable), words) > 0)
 	    trackTable = words[0];
 	}
-    printf("<P><A HREF=\"/cgi-bin/hgTables?db=%s&hgta_group=%s&hgta_track=%s"
+    printf("<P><A HREF=\"../cgi-bin/hgTables?db=%s&hgta_group=%s&hgta_track=%s"
 	   "&hgta_table=%s&position=%s:%d-%d&"
 	   "hgta_doSchema=describe+table+schema\" TARGET=_BLANK>"
 	   "View table schema</A></P>\n",
@@ -2129,7 +2129,7 @@ if ((origAssembly = trackDbSetting(fullTdb, "origAssembly")) != NULL)
         freeze = hFreezeFromDb(origAssembly);
         if (freeze == NULL)
             freeze = origAssembly;
-        printf("<B>Data coordinates converted via <A TARGET=_BLANK HREF=\"/goldenPath/help/hgTracksHelp.html#Liftover\">liftOver</A> from:</B> %s (%s)<BR>\n", freeze, origAssembly);
+        printf("<B>Data coordinates converted via <A TARGET=_BLANK HREF=\"../goldenPath/help/hgTracksHelp.html#Liftover\">liftOver</A> from:</B> %s (%s)<BR>\n", freeze, origAssembly);
         }
     }
 }
@@ -2715,7 +2715,7 @@ if (tfbsConsFactorList)
 		sr = sqlGetResult(conn, query); 
 		if ((row = sqlNextRow(sr)) != NULL)                                                         
 		    {
-		    printf("<A HREF=\"/cgi-bin/pbTracks?proteinID=%s&db=%s\" target=_blank><B>Proteome Browser Entry</B></A><BR>",  tfbsConsFactor->id,factorDb);
+		    printf("<A HREF=\"../cgi-bin/pbTracks?proteinID=%s&db=%s\" target=_blank><B>Proteome Browser Entry</B></A><BR>",  tfbsConsFactor->id,factorDb);
 		    sqlFreeResult(&sr); 
 		    }
 		}
@@ -2832,7 +2832,7 @@ if (printFactors)
 		sr = sqlGetResult(conn, query); 
 		if ((row = sqlNextRow(sr)) != NULL)                                                         
 		    {
-		    printf("<A HREF=\"/cgi-bin/pbTracks?proteinID=%s\" target=_blank><B>Proteome Browser</B></A><BR><BR>",  tfbs->id);
+		    printf("<A HREF=\"../cgi-bin/pbTracks?proteinID=%s\" target=_blank><B>Proteome Browser</B></A><BR><BR>",  tfbs->id);
 		    sqlFreeResult(&sr); 
 		    }
 		}
@@ -6175,9 +6175,11 @@ if (offset >= 0)
 	printf("<B>Divergence:</B> %3.1f%%<BR>\n", 0.1 * ro->milliDiv);
 	printf("<B>Deletions:</B>  %3.1f%%<BR>\n", 0.1 * ro->milliDel);
 	printf("<B>Insertions:</B> %3.1f%%<BR>\n", 0.1 * ro->milliIns);
-	printf("<B>Begin in repeat:</B> %d<BR>\n", ro->repStart);
+	printf("<B>Begin in repeat:</B> %d<BR>\n",
+	       (ro->strand[0] == '-' ? ro->repLeft : ro->repStart));
 	printf("<B>End in repeat:</B> %d<BR>\n", ro->repEnd);
-	printf("<B>Left in repeat:</B> %d<BR>\n", ro->repLeft);
+	printf("<B>Left in repeat:</B> %d<BR>\n",
+	       (ro->strand[0] == '-' ? -ro->repStart : -ro->repLeft));
 	printPos(seqName, ro->genoStart, ro->genoEnd, ro->strand, TRUE,
 		 ro->repName);
 	}
@@ -8212,13 +8214,13 @@ printf(" TARGET=_blank>SAM-T02</A></B><BR><BR>\n");
 
 printf("<B>Multiple Alignment:</B> ");
 /* printf("<A HREF=\"http://www.soe.ucsc.edu/~karplus/SARS/%s/summary.html#alignment",  */
-printf("<A HREF=\"/SARS/%s/summary.html#alignment", 
+printf("<A HREF=\"../SARS/%s/summary.html#alignment", 
        itemName);
 printf("\" TARGET=_blank>%s</A><BR>\n", itemName);
 
 printf("<B>Secondary Structure Predictions:</B> ");
 /* printf("<A HREF=\"http://www.soe.ucsc.edu/~karplus/SARS/%s/summary.html#secondary-structure",  */
-printf("<A HREF=\"/SARS/%s/summary.html#secondary-structure", 
+printf("<A HREF=\"../SARS/%s/summary.html#secondary-structure", 
        itemName);
 printf("\" TARGET=_blank>%s</A><BR>\n", itemName);
 
@@ -8231,7 +8233,7 @@ if (sqlGetField(conn2, database, "protHomolog", "proteinID", cond_str) != NULL)
     predFN = sqlGetField(conn2, database, "protPredFile", "predFileName", cond_str);
     if (predFN != NULL)
 	{
-	printf("<A HREF=\"/SARS/%s/", itemName);
+	printf("<A HREF=\"../SARS/%s/", itemName);
 	/* printf("%s.t2k.undertaker-align.pdb\">%s</A><BR>\n", itemName,itemName); */
 	printf("%s\">%s</A><BR>\n", predFN,itemName);
 	gotPDBFile = 1;
@@ -8295,7 +8297,7 @@ if (homologCount == 0)
     printf("None<BR>\n");
 
 printf("<BR><B>Details:</B> ");
-printf("<A HREF=\"/SARS/%s/summary.html", itemName);
+printf("<A HREF=\"../SARS/%s/summary.html", itemName);
 printf("\" TARGET=_blank>%s</A><BR>\n", itemName);
 
 htmlHorizontalLine();
