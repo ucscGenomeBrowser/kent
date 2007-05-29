@@ -3270,7 +3270,6 @@ type bed 3 .
 dataVersion ENCODE Oct 2005 Freeze, May 2007 data
 
     track encodeUvaDnaRepOriginsNSGM
-    release alpha
     subTrack encodeUvaDnaRepOrigins
     longLabel University of Virginia DNA Replication Origins, Ori-NS, GM06990
     shortLabel UVa Ori-NS GM
@@ -3279,7 +3278,6 @@ dataVersion ENCODE Oct 2005 Freeze, May 2007 data
     priority 1
 
     track encodeUvaDnaRepOriginsNSHela
-    release alpha
     subTrack encodeUvaDnaRepOrigins
     longLabel University of Virginia DNA Replication Origins, Ori-NS, HeLa
     shortLabel UVa Ori-NS HeLa
@@ -3288,7 +3286,6 @@ dataVersion ENCODE Oct 2005 Freeze, May 2007 data
     priority 2
 
     track encodeUvaDnaRepOriginsBubbleHela
-    release alpha
     subTrack encodeUvaDnaRepOrigins
     longLabel University of Virginia DNA Replication Origins, Ori-Bubble, HeLa
     shortLabel UVa Ori-Bubble HeLa
@@ -3297,42 +3294,11 @@ dataVersion ENCODE Oct 2005 Freeze, May 2007 data
     priority 3
 
     track encodeUvaDnaRepOriginsTR50Hela
-    release alpha
     subTrack encodeUvaDnaRepOrigins
     longLabel University of Virginia DNA Replication Origins, Ori-TR50, HeLa
     shortLabel UVa Ori-TR50 HeLa
     dataVersion May 2007
     priority 4
-
-track encodeUvaDnaRepOrigins
-release beta
-html encodeUvaDnaRepOriginsOld
-compositeTrack on
-shortLabel UVa DNA Rep Ori
-longLabel University of Virginia DNA Replication Origins
-group encodeChrom
-priority 64.2
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-visibility hide
-type bed 3 .
-dataVersion ENCODE Oct 2005 Freeze, May 2007 data
-
-    track encodeUvaDnaRepOriginsPred
-    release beta
-    subTrack encodeUvaDnaRepOrigins
-    longLabel University of Virginia Predicted DNA Replication Origins, H-L DNA (HeLa)
-    shortLabel UVa DNA Rep Ori
-    dataVersion ENCODE Oct 2005 Freeze
-    priority 1
-
-    track encodeUvaDnaRepOriginsConf
-    release beta
-    subTrack encodeUvaDnaRepOrigins
-    shortLabel UVa DNA Rep Conf
-    longLabel University of Virginia DNA Replication Origins Confidence Intervals, H-L DNA (HeLa)
-    color 100,100,100
-    dataVersion ENCODE Oct 2005 Freeze
-    priority 2
 
 track encodeUvaDnaRepTr50
 shortLabel UVa DNA Rep TR50
