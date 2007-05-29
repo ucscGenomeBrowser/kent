@@ -86,6 +86,34 @@ viewLimits .2:1.6
     priority 2
 
 release alpha
+track phastConsHq
+shortLabel 28-Way HQ
+compositeTrack on
+longLabel PhastCons Conservation: Species with high-quality assemblies
+spanList 1
+maxHeightPixels 100:40:11
+autoScaleDefault Off
+windowingFunction mean
+group compGeno
+priority 103.2
+visibility pack
+color 0, 10, 100
+altColor 0,90,10
+type wig 0.0 1.0
+
+    track phastCons28wayHq
+    subTrack phastConsHq
+    shortLabel Vertebrate
+    longLabel Vertebrate HQ PhastCons Conservation (18 species)
+    priority 1
+
+    track phastCons28wayHqPlacMammal
+    subTrack phastConsHq
+    shortLabel Plac Mammal
+    longLabel Placental Mammal HQ PhastCons Conservation (8 species)
+    priority 2
+
+release alpha
 track multiz28wayAnno
 shortLabel 28-Way Cons 
 longLabel Vertebrate Multiz Alignment & Conservation (28 Species)
@@ -98,7 +126,7 @@ maxHeightPixels 100:40:11
 autoScaleDefault Off
 windowingFunction mean
 group compGeno
-priority 103.2
+priority 103.3
 visibility pack
 color 0, 10, 100
 altColor 0,90,10
@@ -117,7 +145,7 @@ compositeTrack on
 shortLabel 28-Way Most Cons
 longLabel PhastCons Conserved Elements, 28-way Vertebrate Multiz Alignment
 group compGeno
-priority 103.3
+priority 103.4
 visibility hide
 exonArrows off
 showTopScorers 200
