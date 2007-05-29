@@ -3258,7 +3258,6 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 4
 
 track encodeUvaDnaRepOrigins
-release alpha
 compositeTrack on
 shortLabel UVa DNA Rep Ori
 longLabel University of Virginia DNA Replication Origins
