@@ -5,21 +5,23 @@ the nascent strand method (Ori-NS), the bubble trapping method (Ori-Bubble)
 and the TR<SUB>50</SUB> local minima method (Ori-TR50). 
 Tracks are available for <A HREF=
 "http://www.atcc.org/common/catalog/numSearch/numResults.cfm?atccNum=CCL-2"
-TARGET=_blank>HeLa</A> cells for all methods and <A HREF="http://ccr.coriell.org/nigms/nigms_cgi/display.cgi?GM06990"
- TARGET=_blank>GM06990</A> cells for Ori-NS.
+TARGET=_blank>HeLa</A> cells (cervix carcinoma) for all methods and 
+<A HREF="http://ccr.coriell.org/nigms/nigms_cgi/display.cgi?GM06990"
+ TARGET=_blank>GM06990</A> cells (lymphoblastoid) for Ori-NS.
 
 <H2>Display Conventions and Configuration</H2>
 <P>
 This annotation follows the display conventions for composite 
-tracks.  All subtracks with checked boxes will be displayed.
+tracks. To show only selected subtracks within this annotation, 
+uncheck the boxes next to the tracks you wish to hide.
 </P>
 
 <H2>Nascent Strand Method (Ori-NS)</H2>
 <H3>Description</H3>
 <P>
 ENCODE region-wide mapping of replication origins was performed.  
-Origin-centered nascent-strands purified from HeLa (cervix carcinoma) and 
-GM06990 (lymphoblastoid) cell lines were hybridized to Affymetrix 
+Origin-centered nascent-strands purified from HeLa and 
+GM06990 cell lines were hybridized to Affymetrix 
 ENCODE tiling arrays.
 
 <H3>Methods</H3>
@@ -38,8 +40,8 @@ arrays independently.</P>
 Replication origins were identified by estimating the 
 significance of the enrichment of nascent strands DNA (treatment) signal over 
 genomic DNA (control) signal in a sliding window of 1000bp. An estimate of 
-significance in the window was calculated by computing the p-value using the W
-ilcoxon Rank Sum test over all three biological replicates and control signal 
+significance in the window was calculated by computing the p-value using the 
+Wilcoxon Rank-Sum test over all three biological replicates and control signal 
 estimates in that window. The origins (Ori-NS) represented in the subtrack are 
 the genomic regions that showed a signal enrichment pValue <= 0.001.
 
@@ -62,13 +64,13 @@ the UCSC Genome Browser.
 Giacca M, Pelizon C, Falaschi A. <A HREF="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=pubmed&cmd=Retrieve&dopt=AbstractPlus&list_uids=9441856&query_hl=7" 
 TARGET=_blank>Mapping replication origins by quantifying relative abundance 
 of nascent DNA strands using competitive polymerase chain reaction</A>. 
-<em>Methods</em>. 1997,13(3):301-12.
+<em>Methods</em>. 1997;13(3):301-12.
 </P>
 
 <H2>Bubble Trapping Method (Ori-Bubble)</H2>
 <H3>Description</H3>
 <P>
-ENCODE region-wide mapping of replication origins in HeLa (cervix carcinoma) 
+ENCODE region-wide mapping of replication origins in HeLa 
 cells was performed by the bubble trapping method. Replication origins were
 identified by hybridization to Affymetrix ENCODE tiling arrays. 
 
@@ -76,7 +78,7 @@ identified by hybridization to Affymetrix ENCODE tiling arrays.
 <P>
 The bubble trapping method works on the principle that circular plasmids can be
 trapped in gelling agarose followed by the application of electrical current
-for an prolonged period of time (see Mesner <em>et al</em>. 2006 for more 
+for a prolonged period of time (see Mesner <em>et al</em>. 2006 for more 
 details). Entrapment occurs by an apparent physical linkage of the circular 
 DNA with the agarose matrix. The circular bubble component of the DNA 
 replication intermediates was therefore enriched by agarose trapping. After 
@@ -89,7 +91,7 @@ Replication origins were identified by estimating the significance of the
 enrichment of the bubble-trapped DNA (treatment) signal over genomic DNA 
 (control) signal in a sliding window of 10,000 bp. An estimate of significance 
 in the window was calculated by computing the p-value using the Wilcoxon 
-Rank Sum test over all three biological replicates and the control signal 
+Rank-Sum test over all three biological replicates and the control signal 
 estimates in that window. The origins (Ori-Bubble) hence represented in the 
 UCSC browser track are the genomic regions that showed a signal enrichment 
 pValue <= 0.001.
@@ -118,7 +120,7 @@ from complex genomes</A>. <em>Mol Cell</em>. 2006 Mar 3;21(5):719-26.
 <H2>TR<SUB>50</SUB> local minima method (Ori-TR50)</H2>
 <H3>Description</H3>
 <P>
-ENCODE region-wide mapping of replication origins in HeLa (cervix carcinoma) 
+ENCODE region-wide mapping of replication origins in HeLa 
 cells was performed by the TR<SUB>50</SUB> local minima method. Replication 
 origins were identified by hybridization to Affymetrix ENCODE tiling arrays.
 </P>
