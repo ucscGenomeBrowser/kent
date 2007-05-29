@@ -17,7 +17,7 @@
 #include "mafFrames.h"
 #include "phyloTree.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.110 2007/05/07 19:25:23 braney Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.111 2007/05/29 05:01:06 kate Exp $";
 
 #define GAP_ITEM_LABEL  "Gaps"
 
@@ -529,7 +529,7 @@ else
         {
         AllocVar(mi);
         mi->name = cloneString(wigTrack->shortLabel);
-        mi->height = tl.fontHeight;
+        mi->height = tl.fontHeight + 1;
         slAddTail(&miList, mi);
         wigTrack = wigTrack->next;
         }
@@ -565,7 +565,7 @@ struct wigMafItem *mi;
 int total = 0;
 for (mi = track->items; mi != NULL; mi = mi->next)
     total += mi->height;
-track->height =  total;
+track->height = total;
 return track->height;
 }
 
