@@ -98,7 +98,7 @@ summary multiz4waySummary
 speciesCodonDefault hg18
 speciesGroups vertebrate
 sGroup_vertebrate felCat3 hg18 canFam2 mm8
-
+treeImage phylo/felCat3_4way.gif
 
 searchTable nscanGene
 searchType genePred
