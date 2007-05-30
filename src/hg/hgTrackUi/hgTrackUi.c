@@ -30,7 +30,7 @@
 
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.372 2007/05/22 23:12:12 galt Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.373 2007/05/30 19:34:58 kate Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2687,7 +2687,7 @@ else
         tableName = hTableForTrack(hGetDb(), tdb->tableName);
 	struct sqlConnection *conn = hAllocConn();
 	char *date = firstWordInLine(sqlTableUpdate(conn, tableName));
-	if (date != NULL)
+	if (date != NULL && !startsWith("wigMaf", tdb->type))
 	    printf("<B>Data last updated:</B> %s<BR>\n", date);
 	hFreeConn(&conn);
 	}
