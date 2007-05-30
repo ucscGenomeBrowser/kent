@@ -91,6 +91,7 @@ maxHeightPixels 100:40:11
 spanList 1
 pairwiseHeight 12
 yLineOnOff Off
+frames multiz4wayFrames
 irows on
 autoScaleDefault Off
 windowingFunction mean
