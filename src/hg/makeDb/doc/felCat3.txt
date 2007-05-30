@@ -906,7 +906,7 @@ cat  << 'EOF' > autoMultiz.csh
   # Submission to last job:          1616s      26.93m     0.45h    0.02d
 
 ##########################################################################
-# ANNOTATE MULTIZ4WAY MAF AND LOAD TABLES (In progress Heather)
+# ANNOTATE MULTIZ4WAY MAF AND LOAD TABLES (Done, May 2007, Heather)
 
   # create felCat3.Nbed (already have it for hg18, mm8, canFam2)
   ssh kolossus
@@ -995,5 +995,86 @@ chmod +x getIrows.sh
   cd /cluster/data/felCat3/bed/multiz4way/anno 
   time nice hgLoadSqlTab felCat3 multiz4waySummary /tmp/multiz4waySummary.sql multiz4waySummary.tab
   # 0.000u 0.003s 0:04.18 0.0%      0+0k 0+0io 3pf+0w
+
+
+#########################################################################
+# MULTIZ4WAY DOWNLOADABLES (Done May 2007 Heather)
+    ssh kolossus
+    mkdir /cluster/data/felCat3/bed/multiz4way/mafDownloads
+
+# Tried for upstream data with nscanGene, didn't get anything
+# ssh hgwdev
+# cd /cluster/data/felCat3/bed/multiz4way/mafDownloads
+# nice featureBits felCat3 nscanGene:upstream:1000 -fa=/dev/null -bed=up.bad
+# nice featureBits felCat3 nscanGene:upstream:2000 -fa=/dev/null -bed=up.bad
+# nice featureBits felCat3 nscanGene:upstream:5000 -fa=/dev/null -bed=up.bad
+
+    # Make a gzipped version of the monolithic annotated maf file:
+    cd /cluster/data/felCat3/bed/multiz4way
+    gzip -c anno/felCat3.maf > mafDownloads/felCat3.maf.gz
+    cd mafDownloads
+    md5sum felCat3.maf.gz > md5sum.txt
+
+    ssh hgwdev
+    set dir = /usr/local/apache/htdocs/goldenPath/felCat3/multiz4way
+    mkdir $dir
+    ln -s /cluster/data/felCat3/bed/multiz4way/mafDownloads/{*.gz,md5sum.txt} $dir
+    cp /usr/local/apache/htdocs/goldenPath/ornAna1/multiz6way/README.txt $dir
+    # edit README.txt
+
+
+#########################################################################
+# MULTIZ4WAY MAF FRAMES (Done May 2007 Heather)
+    # using nscanGene for felCat3
+    # using knownGene for mm8 hg18
+    # using ensGene for canFam2 
+    # genePreds (name specific fields to get around bin, knownGene extras)
+    ssh hgwdev
+    mkdir /cluster/data/felCat3/bed/multiz4way/frames
+    cd /cluster/data/felCat3/bed/multiz4way/frames
+    mkdir genes
+    cd genes
+
+    cat << '_EOF_' > getGenes.csh
+#!/bin/csh -ef
+    foreach queryDb (felCat3 mm8 hg18 canFam2)
+      if ($queryDb == "felCat3") then
+        set geneTbl = nscanGene
+      else if ($queryDb == "canFam2") then
+        set geneTbl = ensGene
+      else
+        set geneTbl = knownGene
+      endif
+      hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from $geneTbl" ${queryDb} \
+      | genePredSingleCover stdin stdout | gzip -2c  > /scratch/tmp/$queryDb.tmp.gz
+      mv /scratch/tmp/$queryDb.tmp.gz $queryDb.gp.gz
+    end
+'_EOF_'
+    # << this line makes emacs coloring happy
+    ./getGenes.csh
+
+    # create frames
+    ssh kolossus
+    cd /cluster/data/felCat3/bed/multiz4way/frames
+    cat << '_EOF_' > getFrames.csh
+#!/bin/csh -ef
+    set multizDir = /cluster/data/felCat3/bed/multiz4way
+    set mafDir = $multizDir/mafDownloads
+    set geneDir = $multizDir/frames/genes
+    cd $multizDir/frames
+    genePredToMafFrames felCat3 $mafDir/felCat3.maf.gz felCat3.mafFrames \
+      felCat3 genes/felCat3.gp.gz \
+      hg18 genes/hg18.gp.gz \
+      mm8 genes/mm8.gp.gz \
+      canFam2 genes/canFam2.gp.gz
+    gzip felCat3.mafFrames
+'_EOF_'
+    # << this line makes emacs coloring happy
+    ./getFrames.csh
+
+    # load the database
+    ssh hgwdev
+    cd /cluster/data/felCat3/bed/multiz4way/frames
+    hgLoadMafFrames felCat3 multiz4wayFrames felCat3.mafFrames.gz
 
 
