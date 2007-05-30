@@ -114,11 +114,11 @@ type wig 0.0 1.0
     priority 2
 
 release alpha
-track multiz28wayAnno
+track multiz28way
 shortLabel 28-Way Cons 
-longLabel Vertebrate Multiz Alignment & Conservation (28 Species)
+longLabel Vertebrate Multiz Alignment & PhastCons Conservation (28 Species)
 irows on
-summary multiz28wayAnnoSummary
+summary multiz28waySummary
 frames multiz28wayFrames
 wiggle phastCons28way Vertebrate phastCons28wayPlacMammal Plac_Mammal
 spanList 1
