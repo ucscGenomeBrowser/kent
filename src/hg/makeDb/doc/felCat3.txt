@@ -791,7 +791,7 @@ augustus/src/augustus --AUGUSTUS_CONFIG_PATH=/cluster/data/felCat3/bed/augustus/
 ##########################################################################
 # MULTIZ4WAY (Heather, DONE, May 2007)
 
-  # split
+  # split; write to /san (will be using pk)
   # create 1024 files 000.maf through 1023.maf
   # Files vary from almost 2000 - over 13000 lines each
   # A little over 6,000,000 lines total
@@ -811,13 +811,29 @@ augustus/src/augustus --AUGUSTUS_CONFIG_PATH=/cluster/data/felCat3/bed/augustus/
   cd /cluster/data/felCat3/bed/multiz4way
   mkdir maf
   mkdir run
-  cd run
 
   # use the following for species.lst:
   # felCat3 canFam2 mm8 hg18
   # use the following for tree.nh:
-  # (((felCat3 canFam2) mm8) hg18)
+  # ((felCat3 canFam2) (mm8 hg18))
+  # use the following for tree-species.nh:
+  # ((cat, dog), (mouse, human))
+  # create tree image for details page using phyloGif
+  # The treeImage setting in trackDb.ra is
+  # phylo/felCat3_4way.gif (relative to htdocs/images).
+  /data/apache/cgi-bin/phyloGif -phyloGif_tree=tree-species.nh -phyloGif_width=260 \
+      -phyloGif_height=260 > felCat3_4way.gif
+  # If you haven't already, check out the browser CVS tree in your ~/:
+  # (cd; cvs co -d hgwdev:/projects/hg/cvsroot browser)
+  cp felCat3_4way.gif ~browser/images/phylo/
+  cd ~/browser/images/phylo
+  cvs add felCat3_4way.gif
+  cvs commit -m "new image" felCat3_4way.gif
+  cd ../..
+  cvs update -d
+  make alpha
 
+  cd run
   # create split.lst
   perl -we 'for ($i=0; $i<1024; $i++) { printf "split%03d\n", $i; }' > split.lst
 
@@ -944,11 +960,11 @@ chmod +x getIrows.sh
   ssh kkstore05
   cd /cluster/data/felCat3/bed/multiz4way/anno
   cat maf/*.maf >> felCat3.maf
-  # rollup file is 10,888,983 lines
+  # rollup file is 29,932,626 lines
   mafFilter -overlap -reject=rf felCat3.maf > felCat3.mf.maf
-# rejected minRow: 454
-# total rejected: 454 blocks
-  # mafFilter rejected 454 single-row (felCat3 only) blocks due to 
+# rejected minRow: 2279
+# total rejected: 2279 blocks
+  # mafFilter rejected 2279 single-row (felCat3 only) blocks due to 
   # its default minRow of 2.  That's reasonable, so replace the original 
   # with the filtered version.
   mv felCat3.maf felCat3.preFilter.maf
@@ -972,6 +988,8 @@ chmod +x getIrows.sh
   # Created 323552 summary blocks from 1510110 components and 2344109 mafs from felCat3.maf
   # 107.717u 21.889s 3:08.00 68.9%  0+0k 0+0io 3pf+0w
   # Creates multiz4waySummary.tab
+
+  # load
   ssh hgwdev
   sed -e 's/mafSummary/multiz4waySummary/' ~/kent/src/hg/lib/mafSummary.sql > /tmp/multiz4waySummary.sql
   cd /cluster/data/felCat3/bed/multiz4way/anno 
