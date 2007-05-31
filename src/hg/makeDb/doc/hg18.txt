@@ -15730,3 +15730,22 @@ hgLoadBed -tab -sqlTable=hapmapAllelesMacaque.sql hg18 hapmapAllelesMacaque hapm
 ~heather/kent/src/hg/snp/snpLoad/hapmapSummary hg18 hapmapSnpsCombined hapmapAllelesChimp hapmapAllelesMacaque
 ln -s ~/kent/src/hg/lib/hapmapAllelesSummary.sql
 hgLoadBed -tab -sqlTable=hapmapAllelesSummary.sql hg18 hapmapAllelesSummary hapmapSummary.tab 
+
+#############################################################################
+# RE-BUILD WGRNA TRACK (DONE, 2007-05-31, Fan)
+
+  ssh hgwdev
+  cd /cluster/data/hg18/bed
+
+  mkdir wgRna-2007-05-31
+  cd wgRna-2007-05-31
+
+# Received the data file, wg_may2007.txt (saved from wg_may2007.doc)
+# from Michel Weber's email
+# (Michel.Weber@ibcg.biotoul.fr)
+# and place it under cd /cluster/data/hg18/bed/wgRna-2007-05-31.
+
+  cat wg_may2007.txt|sed -e 's/ /\t/g' > wgRna.tab
+
+  hgLoadBed -sqlTable=/cluster/home/fanhsu/src/hg/lib/wgRna.sql hg18 wgRna wgRna.tab
+#############################################################################
