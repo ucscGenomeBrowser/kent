@@ -16,7 +16,7 @@
 #include "genbank.h"
 #include "hgTracks.h"
 
-static char const rcsid[] = "$Id: cds.c,v 1.56 2007/05/29 05:33:20 markd Exp $";
+static char const rcsid[] = "$Id: cds.c,v 1.57 2007/05/31 18:54:32 markd Exp $";
 
 /* Definitions of cds colors for coding coloring display */
 #define CDS_ERROR   0
@@ -134,7 +134,7 @@ static int convertCoordUsingPsl( int s, struct psl *psl )
 int i;
 int idx = -1;
 unsigned *qStarts = psl->qStarts;
-int tStart = 0;
+unsigned tStart = 0;
 unsigned thisQStart = 0;
 
 if (psl == NULL)
@@ -155,7 +155,7 @@ for ( i=0; i<psl->blockCount; i++ )
     tStart = psl->tStarts[i];
     tEnd = tStart + psl->blockSizes[i];
     if (psl->strand[1] == '-') 
-         reverseIntRange(&tStart, &tEnd, psl->tSize);
+         reverseUnsignedRange(&tStart, &tEnd, psl->tSize);
 
     if (s >= tStart-3 && s < tEnd)
 	{
