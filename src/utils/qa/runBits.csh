@@ -78,7 +78,11 @@ endif
 rm -f $db.$track.unbridged.gaps
 featureBits $db $track $db.unbridgedGap.bed -bed=$db.$track.unbridged.gaps
 echo
-if ( -e $db.$track.unbridged.gaps ) then
+
+set isZero=`wc -l $db.$track.unbridged.gaps | awk '{print $1}'`
+if ( $isZero == "0" ) then
+  exit
+else
   # print 3 records, both as text and as links
   echo "total number:"
   wc -l $db.$track.unbridged.gaps
@@ -93,8 +97,6 @@ if ( -e $db.$track.unbridged.gaps ) then
     echo "$url1&position=$pos$url3"
     set n=`echo $n | awk '{print $1-1}'`
   end
-else
-  echo "no overlap with unbridged gaps"
 endif
 echo
 
