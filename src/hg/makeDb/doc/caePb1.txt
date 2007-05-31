@@ -420,7 +420,7 @@ close (FH);
 	where name="caePb1";' hgcentraltest
 
 ############################################################################
-##  SWAP cb3 alignments (DONE - 2007-04-18 - Hiram)
+## SWAP BLASTZ cb3 alignments (DONE - 2007-04-18 - Hiram)
     ssh kkstore01
     cd /cluster/data/cb3/bed/blastz.caePb1.2007-04-18
     cat fb.cb3.chainCaePb1Link.txt
