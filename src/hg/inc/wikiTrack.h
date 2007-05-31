@@ -106,6 +106,7 @@ void wikiTrackOutput(struct wikiTrack *el, FILE *f, char sep, char lastSep);
 
 /* hgc variables */
 #define G_CREATE_WIKI_ITEM "htcCreateWikiItem"
+#define G_ADD_WIKI_COMMENTS "htcAddWikiComments"
 
 boolean wikiTrackEnabled(char **wikiUserName);
 /*determine if wikiTrack can be used, and is this user logged into the wiki ?*/
