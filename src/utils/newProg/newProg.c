@@ -4,7 +4,7 @@
 #include "dystring.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: newProg.c,v 1.21 2007/03/30 19:52:43 markd Exp $";
+static char const rcsid[] = "$Id: newProg.c,v 1.22 2007/05/31 16:47:54 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -17,9 +17,9 @@ errAbort(
   "with a standard skeleton\n"
   "\n"
   "Options:\n"
-  "   -cvs\n"
-  "This will also check it into CVS.  'progName' should include full path\n"
-  "in source repository\n");
+  "   -jkhgap - include jkhgap.a and mysql libraries as well as jkweb.a archives \n"
+  "   -cvs    - also check source into CVS, 'progName' must include full\n"
+  "           - path in source repository starting with 'kent/'");
 }
 
 void makeC(char *name, char *description, char *progPath, boolean doCvs)
@@ -36,7 +36,7 @@ fprintf(f, "#include \"options.h\"\n");
 fprintf(f, "\n");
 if (doCvs)
     {
-    fprintf(f, "static char const rcsid[] = \"$Id: newProg.c,v 1.21 2007/03/30 19:52:43 markd Exp $\";\n");
+    fprintf(f, "static char const rcsid[] = \"$Id: newProg.c,v 1.22 2007/05/31 16:47:54 hiram Exp $\";\n");
     fprintf(f, "\n");
     }
 fprintf(f, "void usage()\n");
@@ -81,15 +81,45 @@ fclose(f);
 void makeMakefile(char *progName, char *makeName)
 /* Make makefile. */
 {
+char *upLevel;
+char *L;
+char *myLibs;
 FILE *f = mustOpen(makeName, "w");
+
+if (fileExists("../inc/common.mk"))
+	upLevel = cloneString("..");
+else if (fileExists("../../inc/common.mk"))
+	upLevel = cloneString("../..");
+else if (fileExists("../../../inc/common.mk"))
+	upLevel = cloneString("../../..");
+else if (fileExists("../../../../inc/common.mk"))
+	upLevel = cloneString("../../../..");
+else if (fileExists("../../../../../inc/common.mk"))
+	upLevel = cloneString("../../../../..");
+else
+    {
+    warn("WARNING: can not find inc/common.mk 1 to 4 directories up, fix the makefile");
+    upLevel = cloneString("../../../../..");
+    }
+
+if (optionExists("jkhgap"))
+    {
+    L = cloneString("L = $(MYSQLLIBS) -lm");
+    myLibs = cloneString("MYLIBS =  $(MYLIBDIR)/jkhgap.a ${MYLIBDIR}/jkweb.a");
+    }
+else
+    {
+    L = cloneString("L = -lm");
+    myLibs = cloneString("MYLIBS =  ${MYLIBDIR}/jkweb.a");
+    }
 
 fprintf(f, 
 
-"include ../../../inc/common.mk\n"
+"include %s/inc/common.mk\n"
 "\n"
-"L = -lm\n"
-"MYLIBDIR = ../../../lib/${MACHTYPE}\n"
-"MYLIBS =  ${MYLIBDIR}/jkweb.a\n"
+"%s\n"
+"MYLIBDIR = %s/lib/${MACHTYPE}\n"
+"%s\n"
 "\n"
 "O = %s.o\n"
 "\n"
@@ -99,7 +129,7 @@ fprintf(f,
 "\n"
 "clean:\n"
 "\trm -f $O\n"
-, progName, progName, progName, progName);
+, upLevel, L, upLevel, myLibs, progName, progName, progName, progName);
 
 
 fclose(f);
@@ -130,15 +160,15 @@ splitPath(dirName, NULL, fileOnly, NULL);
 safef(fileName, sizeof(fileName), "%s/%s.c", dirName, fileOnly);
 makeC(fileOnly, description, fileName, doCvs);
 
-sprintf(fileName, "%s/makefile", dirName);
-makeMakefile(fileOnly, fileName);
+/* makefile is now constructed properly with ../.. paths */
+if (!setCurrentDir(dirName))
+    errAbort("Couldn't change dir to %s", dirName);
+makeMakefile(fileOnly, "makefile");
 
 if (doCvs)
     {
     /* Set current directory.  Return FALSE if it fails. */
     printf("Adding %s to CVS\n", module);
-    if (!setCurrentDir(dirName))
-        errAbort("Couldn't change dir to %s", dirName);
     if (!setCurrentDir(".."))
         errAbort("Couldn't change dir to ..");
     safef(command, sizeof(command), "cvs add %s", fileOnly);
