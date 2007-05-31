@@ -461,7 +461,7 @@ close (FH);
     #	5618476 bases of 175247318 (3.206%) in intersection
 
 ##############################################################################
-## BLASTZ swap ce4 (DONE - 2007-03-04 -- Hiram
+## BLASTZ swap ce4 (DONE - 2007-03-04 -- Hiram)
     ssh kkstore01
     cd  /cluster/data/ce4/bed/blastz.caePb1.um.2007-03-04
     cat fb.ce4.chainCaePb1Link.txt
@@ -478,7 +478,7 @@ close (FH);
     #	74758640 bases of 175247318 (42.659%) in intersection
 
 ##############################################################################
-## BLASTZ caeRem2 (WORKING - 2007-04-19 - Hiram)
+## BLASTZ caeRem2 (DONE - 2007-04-19,20 - Hiram)
     ssh kkstore01
     mkdir /cluster/data/caePb1/bed/blastz.caeRem2.2007-04-19
     cd /cluster/data/caePb1/bed/blastz.caeRem2.2007-04-19
@@ -527,7 +527,7 @@ TMPDIR=/scratch/tmp
     #	78402339 bases of 146898439 (53.372%) in intersection
 
 ##############################################################################
-## BLASTZ priPac1 (WORKING - 2007-04-20 - Hiram)
+## BLASTZ priPac1 (DONE - 2007-04-20,21 - Hiram)
     mkdir /cluster/data/caePb1/bed/blastz.priPac1.2007-04-20
     cd /cluster/data/caePb1/bed/blastz.priPac1.2007-04-20
 
