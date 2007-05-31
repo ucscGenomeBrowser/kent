@@ -15,7 +15,7 @@
 #include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.5 2007/05/31 22:00:09 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.6 2007/05/31 23:02:17 hiram Exp $";
 
 #define NEW_ITEM_SCORE "newItemScore"
 #define NEW_ITEM_STRAND "newItemStrand"
@@ -256,7 +256,7 @@ return item;
 
 static void displayItem(struct wikiTrack *item, char *userName, int wikiItemId)
 /* given an already fetched item, get the item description from
- *	the wiki.  Put up edit form if userName is not NULL
+ *	the wiki.  Put up edit form(s) if userName is not NULL
  */
 { 
 char *url = cfgOptionDefault(CFG_WIKI_URL, NULL);
@@ -270,6 +270,11 @@ hPrintf("<B>Created </B>%s<B> by:&nbsp;</B>", item->creationDate);
 hPrintf("<A HREF=\"%s/index.php/User:%s\" TARGET=_blank>%s</A><BR />\n", url,
     item->owner, item->owner);
 hPrintf("<B>Last update:&nbsp;</B>%s<BR />\n", item->lastModifiedDate);
+if ((NULL != userName) && sameWord(userName, item->owner))
+    hPrintf("<B>Owner'%s' has deletion rights</B><BR />\n", item->owner);
+
+hPrintf("<BR />\n");
+
 if (NULL == userName)
     {
     offerLogin("add comments to items on");
@@ -506,7 +511,7 @@ else
     snprintf(position, 128, "%s:%d-%d", seqName, winStart+1, winEnd);
     newPos = addCommasToPos(position);
     dyStringPrintf(content, "%s\n<P>"
-"[http://genome-hiram.ucsc.edu/cgi-bin/hgTracks?db=%s&position=%s:%d-%d %s %s]"
+"[http://genome-hiram.cse.ucsc.edu/cgi-bin/hgTracks?db=%s&position=%s:%d-%d %s %s]"
 	"&nbsp;&nbsp;''created: ~~~~''<BR /><BR />\n",
 	NEW_ITEM_CATEGORY, database, seqName, winStart, winEnd,
 	    database, newPos);
@@ -562,6 +567,21 @@ safef(query, ArraySize(query),
 	WIKI_TRACK_TABLE, id);
 sqlUpdate(conn,query);
 hDisconnectCentral(&conn);
+}
+
+void doDeleteWikiItem(char *itemName, char *chrom, int winStart, int winEnd)
+/* handle delete item clicks for wikiTrack */
+{
+char *userName = NULL;
+char *idString = cartUsualString(cart, WIKI_ITEM_ID, NULL);
+cartWebStart(cart, "%s (%s)", "User Annotation Track, delete item: ", itemName);
+if (NULL == idString)
+    errAbort("delete wiki item: NULL wikiItemId");
+if (! wikiTrackEnabled(&userName))
+    errAbort("delete wiki item: wiki track not enabled");
+struct wikiTrack *item = findItem(itemName, sqlSigned(idString));
+displayItem(item, userName, sqlSigned(idString));
+cartHtmlEnd();
 }
 
 void doAddWikiComments(char *itemName, char *chrom, int winStart, int winEnd)
