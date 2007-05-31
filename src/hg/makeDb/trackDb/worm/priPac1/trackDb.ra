@@ -35,3 +35,10 @@ indelDoubleInsert on
 indelQueryInsert on
 indelPolyA on
 
+# set in priority.ra:
+# track chainCe4
+# priority 136
+# 
+# track netCe4
+# priority 136.1 
+
