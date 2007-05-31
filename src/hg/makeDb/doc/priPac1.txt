@@ -3,7 +3,7 @@
 # Pristionchus pacificus
 #	Washington University School of Medicine GSC and Sanger Institute
 #
-#  $Id: priPac1.txt,v 1.7 2007/05/03 23:18:03 hiram Exp $
+#  $Id: priPac1.txt,v 1.8 2007/05/31 18:12:21 hiram Exp $
 ###########################################################################
 ## Download sequence - (DONE - 2007-02-25 - Hiram)
     ssh kkstore02
@@ -168,6 +168,27 @@ dbDbSpeciesDir worm
     ssh hgwdev
     hgsql -e 'update dbDb set defaultPos="chrUn:66109664-66116326"
 	where name="priPac1";' hgcentraltest
+
+###########################################################################
+## Simple Repeats (DONE - 2007-03-14 - Hiram)
+##	Documented 31 may 2007
+    ssh kolossus
+    mkdir /cluster/data/priPac1/bed/simpleRepeat
+    cd /cluster/data/priPac1/bed/simpleRepeat
+    twoBitToFa ../../priPac1.unmasked.2bit stdout \
+    | trfBig -trf=/cluster/bin/i386/trf stdin /dev/null \
+        -bedAt=simpleRepeat.bed -tempDir=/scratch/tmp
+
+    awk '{if ($5 <= 12) print;}' simpleRepeat.bed > trfMask.bed
+
+    ssh hgwdev
+    cd /cluster/data/priPac1/bed/simpleRepeat
+    nice -n +19 hgLoadBed priPac1 simpleRepeat \
+      /cluster/data/priPac1/bed/simpleRepeat/simpleRepeat.bed \
+      -sqlTable=$HOME/kent/src/hg/lib/simpleRepeat.sql
+ 
+    featureBits priPac1 simpleRepeat > fb.priPac1.simpleRepeat.txt 2>&1
+    #	3043060 bases of 145948246 (2.085%) in intersection
 
 ############################################################################
 ## BLASTZ swap ce4 (DONE - 2007-04-06 - Hiram)

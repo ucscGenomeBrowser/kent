@@ -3,7 +3,7 @@
 # Caenorhabditis elegans
 #	Washington University School of Medicine GSC and Sanger Institute WS170
 
-#  $Id: ce4.txt,v 1.19 2007/05/07 19:21:17 hiram Exp $
+#  $Id: ce4.txt,v 1.20 2007/05/31 18:12:20 hiram Exp $
 
 
 #########################################################################
@@ -199,6 +199,27 @@ done
     cd /cluster/data/ce4/goldenPath/bigZips
     gzip mrna.fa est.fa refMrna.fa
     md5sum *.gz > md5sum.txt
+
+###########################################################################
+## Simple Repeats (DONE - 2007-02-24 - Hiram)
+##		Documented 31 May 2007
+    ssh kolossus
+    mkdir /cluster/data/ce4/bed/simpleRepeat
+    cd /cluster/data/ce4/bed/simpleRepeat
+    twoBitToFa ../../ce4.unmasked.2bit stdout \
+    | trfBig -trf=/cluster/bin/i386/trf stdin /dev/null \
+        -bedAt=simpleRepeat.bed -tempDir=/scratch/tmp
+    
+    awk '{if ($5 <= 12) print;}' simpleRepeat.bed > trfMask.bed
+
+    ssh hgwdev
+    cd /cluster/data/ce4/bed/simpleRepeat
+    nice -n +19 hgLoadBed ce4 simpleRepeat \
+      /cluster/data/ce4/bed/simpleRepeat/simpleRepeat.bed \
+      -sqlTable=$HOME/kent/src/hg/lib/simpleRepeat.sql
+    
+    featureBits ce4 simpleRepeat > fb.ce4.simpleRepeat.txt 2>&1
+    #	3801183 bases of 100281244 (3.791%) in intersection
 
 #########################################################################
 #########################################################################
