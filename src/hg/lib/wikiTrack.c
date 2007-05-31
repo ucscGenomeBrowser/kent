@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.2 2007/05/25 22:54:32 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.3 2007/05/31 22:01:33 hiram Exp $";
 
 void wikiTrackStaticLoad(char **row, struct wikiTrack *ret)
 /* Load a row from wikiTrack table into ret.  The contents of ret will
@@ -288,25 +288,27 @@ fputc(lastSep,f);
 
 #include "hgConfig.h"
 #include "wikiLink.h"
-
+#include "cheapcgi.h"
 
 boolean wikiTrackEnabled(char **wikiUserName)
 /*determine if wikiTrack can be used, and is this user logged into the wiki ?*/
 {
 if (wikiUserName)
     *wikiUserName = NULL;  /* assume not logged in until proven otherwise */
-if (wikiLinkEnabled())	/* must have wiki login system enabled */
+
+/* must have wiki login system enabled, and the new cfg option exists too. */
+if (wikiLinkEnabled() && (cfgOption(CFG_WIKI_SESSION_COOKIE) != NULL))
     {
     char *wikiUser = wikiLinkUserName();
-    if (wikiUser)
+    if ( (wikiUser) &&
+	(findCookieData(cfgOption(CFG_WIKI_SESSION_COOKIE)) != NULL) )
 	{
 	if (wikiUserName)
-	    *wikiUserName = wikiUser;
+	    *wikiUserName = wikiUser;  /* returning name indicates logged in */
 	}
-    if (cfgOption(CFG_WIKI_URL) != NULL)
-	return TRUE;
+    return TRUE; /* system is enabled */
     }
-return FALSE;
+return FALSE;  /* system is not enabled */
 }
 
 /* from hg/lib/wikiTrack.sql */
