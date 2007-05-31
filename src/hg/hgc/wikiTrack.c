@@ -15,7 +15,7 @@
 #include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.6 2007/05/31 23:02:17 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.7 2007/05/31 23:04:08 hiram Exp $";
 
 #define NEW_ITEM_SCORE "newItemScore"
 #define NEW_ITEM_STRAND "newItemStrand"
@@ -511,7 +511,7 @@ else
     snprintf(position, 128, "%s:%d-%d", seqName, winStart+1, winEnd);
     newPos = addCommasToPos(position);
     dyStringPrintf(content, "%s\n<P>"
-"[http://genome-hiram.cse.ucsc.edu/cgi-bin/hgTracks?db=%s&position=%s:%d-%d %s %s]"
+"[http://hgwdev-hiram.cse.ucsc.edu/cgi-bin/hgTracks?db=%s&position=%s:%d-%d %s %s]"
 	"&nbsp;&nbsp;''created: ~~~~''<BR /><BR />\n",
 	NEW_ITEM_CATEGORY, database, seqName, winStart, winEnd,
 	    database, newPos);
