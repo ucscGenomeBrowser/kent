@@ -38,3 +38,17 @@ cdsDrawOptions enabled
 baseColorUseCds genbank
 baseColorUseSequence genbank
 showDiffBasesAllScales .
+
+# set in priority.ra:
+# track chainCaePb1
+# priority 136
+# 
+# track netCaePb1
+# priority 136.1
+# 
+# track chainCb3
+# priority 137
+# 
+# track netCb3
+# priority 137.1
+
