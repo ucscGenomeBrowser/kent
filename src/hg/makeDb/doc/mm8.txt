@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: mm8.txt,v 1.46 2007/05/16 00:07:56 aamp Exp $"
+#	"$Id: mm8.txt,v 1.47 2007/05/31 17:32:40 fanhsu Exp $"
 #
 
 #  NOTE:  this doc may have genePred loads that fail to include
@@ -8316,3 +8316,25 @@ cgapSageDupeRemove output.bed tmp.bed
 cgapSageDupeRemove -unique tmp.bed final.bed
 ln -s ~/kent/src/hg/lib/cgapSage/cgapSage.sql
 hgLoadBed -sqlTable=cgapSage.sql -tab mm8 cgapSage final.bed 
+
+#############################################################################
+#  REBUILD miRNA TRACK (DONE - 2007-05-31 - Fan)
+    #   updated data from: Michel.Weber@ibcg.biotoul.fr
+    #   notify them when done.
+    ssh hgwdev
+    cd /cluster/data/mm8/bed
+    mkdir miRNA-2007-05-31
+    cd miRNA-2007-05-31
+    # save the mouse_miRNA_track_may2007.txt file from email
+
+    cat mouse_miRNA_track_may2007.txt|sed -e 's/ /\t/g' > miRNA.tab
+
+    hgLoadBed mm8 miRNA miRNA.tab
+
+# check previous release track before update
+    featureBits mm8 miRNA
+    #33398 bases of 2567283971 (0.001%) in intersection
+
+    featureBits mm7 miRNA
+    # 20620 bases of 2583394090 (0.001%) in intersection
+#############################################################################
