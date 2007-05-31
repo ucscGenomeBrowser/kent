@@ -15,7 +15,7 @@
 #include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.4 2007/05/25 22:41:52 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.5 2007/05/31 22:00:09 hiram Exp $";
 
 #define NEW_ITEM_SCORE "newItemScore"
 #define NEW_ITEM_STRAND "newItemStrand"
@@ -25,17 +25,27 @@ static char const rcsid[] = "$Id: wikiTrack.c,v 1.4 2007/05/25 22:41:52 hiram Ex
 #define ITEM_NOT_CLASSIFIED "Not classified"
 #define ITEM_SCORE_DEFAULT "1000"
 #define NEW_ITEM_COMMENT_DEFAULT "enter description and comments"
-#define NO_ITEM_COMMENT_SUPPLIED "(no description supplied)"
+#define ADD_ITEM_COMMENT_DEFAULT "add comments"
+#define NO_ITEM_COMMENT_SUPPLIED "(no initial description supplied)"
 #define NEW_ITEM_CATEGORY "[[Category:Genome Annotation]]"
+#define WIKI_ITEM_ID "wikiItemId"
 
 static char *encodedHgcReturnUrl(int hgsid)
 /* Return a CGI-encoded hgSession URL with hgsid.  Free when done. */
 {
 char retBuf[1024];
-safef(retBuf, sizeof(retBuf), "http://%s/cgi-bin/hgc?%s&g=%s&c=%s&o=%d&l=%d&r=%d",
+safef(retBuf, sizeof(retBuf), "http://%s/cgi-bin/hgc?%s&g=%s&c=%s&o=%d&l=%d&r=%d&db=%s&i=Make+new+entry",
     cgiServerName(), cartSidUrlString(cart), WIKI_TRACK_TABLE, seqName,
-	winStart, winStart, winEnd);
+	winStart, winStart, winEnd, database);
 /*
+g=wikiTrack
+c=chrII
+o=13934373
+l=13934373
+r=15279311
+t=15279311
+i=Make+new+entry
+db=ce3
     cgiContinueHiddenVar("c");
     cgiContinueHiddenVar("o");
     cgiContinueHiddenVar("l");
@@ -62,31 +72,109 @@ freez(&retEnc);
 return(cloneString(buf));
 }
 
-static void displayItem(char *itemName, char *userName)
-/* given an itemName and possibly a wiki userName, fetch the item data
- *	from the hgcentral database, and the item description from
- *	the wiki
- */
-{ 
-char *url = cfgOptionDefault(CFG_WIKI_URL, NULL);
-struct wikiTrack *item;
-char query[256];
-struct sqlConnection *conn = hConnectCentral();
-cartWebStart(cart, "%s (%s)", "User Annotation Track", itemName);
-safef(query, ArraySize(query), "SELECT * FROM %s WHERE name='%s' AND db='%s' limit 1",
-    WIKI_TRACK_TABLE, itemName, database);
-item = wikiTrackLoadByQuery(conn, query);
-if (NULL == item)
-    errAbort("display wiki item: failed to load item %s", itemName);
-hDisconnectCentral(&conn);
+void offerLogin(char *loginType)
+{
+char *wikiHost = wikiLinkHost();
+printf("<P>Please login to %s the annotation track.</P>\n", loginType);
+printf("<P>The login page is handled by our "
+       "<A HREF=\"http://%s/\" TARGET=_BLANK>wiki system</A>:\n", wikiHost);
+printf("<A HREF=\"%s\"><B>click here to login.</B></A><BR />\n",
+	wikiTrackUserLoginUrl(cartSessionId(cart)));
+printf("The wiki also serves as a forum for users "
+       "to share knowledge and ideas.\n</P>\n");
+}
 
-/*safef(wikiPageUrl, sizeof(wikiPageUrl), * "%s/index.php/%s?action=raw",*/
-/* fetch previous description comments from the wiki */
+#ifdef NOT
+boolean stringInBetween(char *begin, char *end, char *haystack,
+	char **start, char **stop)
+/* return true if string starting with begin and ending with end
+ *	is found within haystack.  In addition, return the start and
+ *	stop locations of that string.
+ * If not found, return false
+ */
+{
+char *pos, *p;
+int len;
+if ((p = stringIn(begin, haystack)) != NULL)
+    {
+    pos = p + strlen(begin);
+    if ((p = stringIn(end, pos)) != NULL)
+        {
+	start = pos;
+	stop = p + strlen(end);
+        return TRUE;
+        }
+    }
+return FALSE;
+}
+#endif
+
+#define WIKI_NO_TEXT_RESPONSE "There is currently no text in this page"
+
+static char *stripEditURLs(char *rendered)
+/* test for actual text, remove edit sections and any html comment strings */
+{
+char *stripped = cloneString(rendered);
+char *found = NULL;
+char *begin = "<div class=\"editsection\"";
+char *end = "></a>";
+
+/* XXXX is this response going to be language dependent ? */
+if (stringIn(WIKI_NO_TEXT_RESPONSE,rendered))
+	return NULL;
+
+/* remove any edit sections */
+while (NULL != (found = stringBetween(begin, end, stripped)) )
+    {
+    if (strlen(found) > 0)
+	{
+	struct dyString *rm = newDyString(1024);
+	dyStringPrintf(rm, "%s%s%s", begin, found, end);
+	stripString(stripped, rm->string);
+	freeMem(found);
+	freeDyString(&rm);
+	}
+    }
+
+/* and remove comment strings from the wiki */
+begin = "<!--";
+end = "-->";
+while (NULL != (found = stringBetween(begin, end, stripped)) )
+    {
+    if (strlen(found) > 0)
+	{
+	struct dyString *rm = newDyString(1024);
+	dyStringPrintf(rm, "%s%s%s", begin, found, end);
+	stripString(stripped, rm->string);
+	freeMem(found);
+	freeDyString(&rm);
+	}
+    }
+
+return stripped;
+}
+
+static void startEditForm(char *actionType)
+{
+hPrintf("<FORM ACTION=\"%s\">\n\n", hgcName());
+cartSaveSession(cart);
+cgiMakeHiddenVar("g", actionType);
+cgiContinueHiddenVar("c");
+cgiContinueHiddenVar("o");
+hPrintf("\n");
+cgiContinueHiddenVar("l");
+cgiContinueHiddenVar("r");
+hPrintf("\n");
+}
+
+static char *fetchWikiRawText(char *descriptionKey)
+/* fetch page from wiki in raw form as it is in the edit form */
+{
 char wikiPageUrl[512];
-safef(wikiPageUrl, sizeof(wikiPageUrl), "%s/index.php/%s?action=render",
-	cfgOptionDefault(CFG_WIKI_URL, NULL), item->descriptionKey);
+safef(wikiPageUrl, sizeof(wikiPageUrl), "%s/index.php/%s?action=raw",
+	cfgOptionDefault(CFG_WIKI_URL, NULL), descriptionKey);
 struct lineFile *lf = netLineFileMayOpen(wikiPageUrl);
-/*struct dyString *wikiPage = netSlurpUrl(wikiPageUrl);*/
+
 struct dyString *wikiPage = newDyString(1024);
 if (lf)
     {
@@ -97,30 +185,132 @@ if (lf)
     lineFileClose(&lf);
     }
 
-hPrintf("<B>Classification group:&nbsp;</B>%s<BR>\n", item->class);
+/* test for text, remove any edit sections and comment strings */
+char *rawText = NULL;
+if (wikiPage->string)
+    {
+    /* XXXX is this response going to be language dependent ? */
+    if (stringIn(WIKI_NO_TEXT_RESPONSE,wikiPage->string))
+	return NULL;
+    rawText = dyStringCannibalize(&wikiPage);
+    }
+freeDyString(&wikiPage);
+
+return rawText;
+}
+
+static char *fetchWikiRenderedText(char *descriptionKey)
+/* fetch page from wiki in rendered form, strip it of edit URLS,
+ *	html comments, and test for actual proper return.
+ *  returned string can be freed after use */
+{
+/* fetch previous description comments from the wiki */
+char wikiPageUrl[512];
+safef(wikiPageUrl, sizeof(wikiPageUrl), "%s/index.php/%s?action=render",
+	cfgOptionDefault(CFG_WIKI_URL, NULL), descriptionKey);
+struct lineFile *lf = netLineFileMayOpen(wikiPageUrl);
+
+struct dyString *wikiPage = newDyString(1024);
+if (lf)
+    {
+    char *line;
+    int lineSize;
+    while (lineFileNext(lf, &line, &lineSize))
+	dyStringPrintf(wikiPage, "%s\n", line);
+    lineFileClose(&lf);
+    }
+
+/* test for text, remove any edit sections and comment strings */
+char *strippedRender = NULL;
+if (wikiPage->string)
+    strippedRender = stripEditURLs(wikiPage->string);
+freeDyString(&wikiPage);
+
+return strippedRender;
+}
+
+static struct wikiTrack *findItem(char *itemName, int wikiItemId)
+/* given a wikiItemId (or zero) return the row from the table */
+{
+struct wikiTrack *item;
+char query[256];
+struct sqlConnection *conn = hConnectCentral();
+
+/* XXXX need to do proper location limit search here, and take care of
+ *	multiple hits
+ */
+if (0 == wikiItemId)
+    safef(query, ArraySize(query), "SELECT * FROM %s WHERE name='%s' "
+	"AND db='%s' limit 1", WIKI_TRACK_TABLE, itemName, database);
+else
+    safef(query, ArraySize(query), "SELECT * FROM %s WHERE id='%d' limit 1",
+	WIKI_TRACK_TABLE, wikiItemId);
+
+item = wikiTrackLoadByQuery(conn, query);
+if (NULL == item)
+    errAbort("display wiki item: failed to load item '%s'", itemName);
+hDisconnectCentral(&conn);
+
+return item;
+}
+
+static void displayItem(struct wikiTrack *item, char *userName, int wikiItemId)
+/* given an already fetched item, get the item description from
+ *	the wiki.  Put up edit form if userName is not NULL
+ */
+{ 
+char *url = cfgOptionDefault(CFG_WIKI_URL, NULL);
+char *strippedRender = fetchWikiRenderedText(item->descriptionKey);
+
+hPrintf("<B>Classification group:&nbsp;</B>%s<BR />\n", item->class);
 printPosOnChrom(item->chrom, item->chromStart, item->chromEnd,
     item->strand, FALSE, item->name);
-hPrintf("<B>Score:&nbsp;</B>%u<BR>\n", item->score);
+hPrintf("<B>Score:&nbsp;</B>%u<BR />\n", item->score);
 hPrintf("<B>Created </B>%s<B> by:&nbsp;</B>", item->creationDate);
-hPrintf("<A HREF=\"%s/index.php/User:%s\" TARGET=_blank>%s</A><BR>\n", url,
+hPrintf("<A HREF=\"%s/index.php/User:%s\" TARGET=_blank>%s</A><BR />\n", url,
     item->owner, item->owner);
-hPrintf("<B>Last update:&nbsp;</B>%s<BR>\n", item->lastModifiedDate);
+hPrintf("<B>Last update:&nbsp;</B>%s<BR />\n", item->lastModifiedDate);
 if (NULL == userName)
     {
-    hPrintf("<P>To add comments to this item: \n");
-    hPrintf("<A HREF=\"%s\"><B>login to genomewiki</B></A></P>\n",
-       wikiTrackUserLoginUrl(cartSessionId(cart)));
+    offerLogin("add comments to items on");
     }
 else
     {
-    hPrintf("Add ");
-hPrintf("<A HREF=\"%s/index.php?title=%s&amp;action=edit\" TARGET=_blank>comments</A> to this item's description", url, item->descriptionKey);
+    startEditForm(G_ADD_WIKI_COMMENTS);
+    webPrintLinkTableStart();
+    /* first row is a title line */
+    char label[256];
+    safef(label, ArraySize(label), "<B>'%s' adding comments to item '%s'</B>\n",
+	userName, item->name);
+    webPrintWideLabelCell(label, 2);
+    webPrintLinkTableNewRow();
+    /* second row is initial comment/description text entry */
+    webPrintWideCellStart(2, HG_COL_TABLE);
+    hPrintf("<B>add comments:</B><BR />");
+    cgiMakeTextArea(NEW_ITEM_COMMENT, ADD_ITEM_COMMENT_DEFAULT, 3, 40);
+    webPrintLinkCellEnd();
+    webPrintLinkTableNewRow();
+    webPrintLinkCellStart();
+    cgiMakeButton("submit", "add comments");
+    webPrintLinkCellEnd();
+    webPrintLinkTableEnd();
+    char idString[128];
+    safef(idString, ArraySize(idString), "%d", item->id);
+    cgiMakeHiddenVar("i", item->name);
+    cgiMakeHiddenVar(WIKI_ITEM_ID, idString);
+    hPrintf("</FORM>");
+
+    hPrintf("For extensive edits, it is more convenient to edit the ");
+hPrintf("<A HREF=\"%s/index.php/%s\" TARGET=_blank>wiki article</A> for this item's description", url, item->descriptionKey);
     }
-if (wikiPage->string)
-    hPrintf("comments from '%s'<BR>\n%s<BR>\n", wikiPageUrl, wikiPage->string);
+if (strippedRender)
+    {
+    hPrintf("<HR>\n%s<BR />\n", strippedRender);
+    freeMem(strippedRender);
+    }
 else
-    hPrintf("comments from '%s'<BR>\nempty<BR>\n", wikiPageUrl);
-freeDyString(&wikiPage);
+    hPrintf("<BR />\n(no comments for this item at the current time)<BR />\n");
+
 }
 
 void doWikiTrack(char *itemName, char *chrom, int winStart, int winEnd)
@@ -133,21 +323,12 @@ if (wikiTrackEnabled(&userName) && startsWith("Make new entry", itemName))
     cartWebStart(cart, "%s", "User Annotation Track: Create new item");
     if (NULL == userName)
 	{
-	hPrintf("<P>To add items to the wiki track, \n");
-	hPrintf("<A HREF=\"%s\"><B>login to genomewiki</B></A></P>\n",
-	   wikiTrackUserLoginUrl(cartSessionId(cart)));
+	offerLogin("add new items to");
 	cartHtmlEnd();
 	return;
 	}
-    hPrintf("<FORM ACTION=\"%s\">\n\n", hgcName());
-    cartSaveSession(cart);
-    cgiMakeHiddenVar("g", G_CREATE_WIKI_ITEM);
-    cgiContinueHiddenVar("c");
-    cgiContinueHiddenVar("o");
-    hPrintf("\n");
-    cgiContinueHiddenVar("l");
-    cgiContinueHiddenVar("r");
-    hPrintf("\n");
+
+    startEditForm(G_CREATE_WIKI_ITEM);
 
     webPrintLinkTableStart();
     /* first row is a title line */
@@ -213,7 +394,7 @@ if (wikiTrackEnabled(&userName) && startsWith("Make new entry", itemName))
     webPrintLinkTableNewRow();
     /* seventh row is initial comment/description text entry */
     webPrintWideCellStart(2, HG_COL_TABLE);
-    hPrintf("<B>initial comments/description:</B><BR>");
+    hPrintf("<B>initial comments/description:</B><BR />");
     cgiMakeTextArea(NEW_ITEM_COMMENT, NEW_ITEM_COMMENT_DEFAULT, 5, 40);
     webPrintLinkCellEnd();
     webPrintLinkTableNewRow();
@@ -231,7 +412,12 @@ if (wikiTrackEnabled(&userName) && startsWith("Make new entry", itemName))
     }
 else
     {
-    displayItem(itemName, userName);
+    struct wikiTrack *item = findItem(itemName, 0);
+    cartWebStart(cart, "%s (%s)", "User Annotation Track", item->name);
+    /* if we can get the hgc clicks to add item id to the incoming data,
+     *	then use that item Id here
+     */
+    displayItem(item, userName, 0);
     }
 
 cartHtmlEnd();
@@ -266,12 +452,16 @@ slAddHead(&clone->vars, cloneVar);
 }
 
 
-static void addNewItemDescription(char * descriptionKey, char *userName)
+static void addDescription(char * descriptionKey)
 {
-char *newDescription = cartNonemptyString(cart, NEW_ITEM_COMMENT);
+char *newComments = cartNonemptyString(cart, NEW_ITEM_COMMENT);
 struct dyString *content = newDyString(1024);
 struct htmlCookie *cookie;
 char wikiPageUrl[512];
+
+/* was nothing changed in the add comments entry box ? */
+if (sameWord(ADD_ITEM_COMMENT_DEFAULT,newComments))
+    return;
 
 /* must pass the session cookie from the wiki in order to edit */
 AllocVar(cookie);
@@ -281,6 +471,7 @@ cookie->value = cloneString(findCookieData(cookie->name));
 /* fetch the edit page to get the wpEditToken, and current contents */
 safef(wikiPageUrl, sizeof(wikiPageUrl), "%s/index.php/%s?action=edit",
 	cfgOptionDefault(CFG_WIKI_URL, NULL), descriptionKey);
+
 char *fullText = htmlSlurpWithCookies(wikiPageUrl,cookie);
 struct htmlPage *page = htmlPageParseOk(wikiPageUrl, fullText);
 
@@ -290,7 +481,7 @@ AllocVar(strippedEditForm);
 
 struct htmlForm *currentEditForm = htmlFormGet(page,"editform");
 if (NULL == currentEditForm)
-    errAbort("addNewItemDescription: can not get editform ?");
+    errAbort("addDescription: can not get editform ?");
 strippedEditForm->name = cloneString(currentEditForm->name);
 /* the lower case "post" in the editform does not work ? */
 /*strippedEditForm->method = cloneString(currentEditForm->method);*/
@@ -302,20 +493,30 @@ strippedEditForm->endTag = currentEditForm->endTag;
 struct htmlFormVar *wpTextbox1 =
 	htmlPageGetVar(page, currentEditForm, "wpTextbox1");
 
-if (wpTextbox1->curVal)
-    dyStringPrintf(content, "%s\n==Comments added by: ~~~~==\n",
-	wpTextbox1->curVal);
+if (wpTextbox1->curVal && (strlen(wpTextbox1->curVal) > 2))
+    {
+    char *rawText = fetchWikiRawText(descriptionKey);
+    dyStringPrintf(content, "%s<P>\n''comments added: ~~~~''<BR /><BR />\n",
+	rawText);
+    }
 else
-    dyStringPrintf(content, "==NEW ITEM, created by: ~~~~==\n");
+    {
+    char position[128];
+    char *newPos;
+    snprintf(position, 128, "%s:%d-%d", seqName, winStart+1, winEnd);
+    newPos = addCommasToPos(position);
+    dyStringPrintf(content, "%s\n<P>"
+"[http://genome-hiram.ucsc.edu/cgi-bin/hgTracks?db=%s&position=%s:%d-%d %s %s]"
+	"&nbsp;&nbsp;''created: ~~~~''<BR /><BR />\n",
+	NEW_ITEM_CATEGORY, database, seqName, winStart, winEnd,
+	    database, newPos);
+    }
 
-if (sameWord(NEW_ITEM_COMMENT_DEFAULT,newDescription))
-    dyStringPrintf(content, "%s\n", NO_ITEM_COMMENT_SUPPLIED);
+if (sameWord(NEW_ITEM_COMMENT_DEFAULT,newComments))
+    dyStringPrintf(content, "%s\n</P>\n", NO_ITEM_COMMENT_SUPPLIED);
 else
-    dyStringPrintf(content, "%s\n", newDescription);
+    dyStringPrintf(content, "%s\n</P>\n", newComments);
 
-
-if (!wpTextbox1->curVal)
-    dyStringPrintf(content, "%s\n", NEW_ITEM_CATEGORY);
 
 htmlCloneFormVarSet(currentEditForm, strippedEditForm,
 	"wpTextbox1", content->string);
@@ -345,9 +546,39 @@ strippedEditForm->action = cloneString(fixedString);
 struct htmlPage *editPage = htmlPageFromForm(page,strippedEditForm,"submit", "Submit");
 
 if (NULL == editPage)
-    errAbort("addNewItemDescription: the edit is failing ?");
+    errAbort("addDescription: the edit is failing ?");
 
 freeDyString(&content);
+}
+
+static void updateLastModifiedDate(int id)
+/* set lastModifiedDate to now() */
+{
+struct sqlConnection *conn = hConnectCentral();
+char query[512];
+
+safef(query, ArraySize(query),
+    "UPDATE %s set lastModifiedDate=now() WHERE id='%d'",
+	WIKI_TRACK_TABLE, id);
+sqlUpdate(conn,query);
+hDisconnectCentral(&conn);
+}
+
+void doAddWikiComments(char *itemName, char *chrom, int winStart, int winEnd)
+/* handle add comment item clicks for wikiTrack */
+{
+char *userName = NULL;
+char *idString = cartUsualString(cart, WIKI_ITEM_ID, NULL);
+cartWebStart(cart, "%s (%s)", "User Annotation Track", itemName);
+if (NULL == idString)
+    errAbort("add wiki comments: NULL wikiItemId");
+if (! wikiTrackEnabled(&userName))
+    errAbort("add wiki comments: wiki track not enabled");
+struct wikiTrack *item = findItem(itemName, sqlSigned(idString));
+addDescription(item->descriptionKey);
+updateLastModifiedDate(sqlSigned(idString));
+displayItem(item, userName, sqlSigned(idString));
+cartHtmlEnd();
 }
 
 void doCreateWikiItem(char *itemName, char *chrom, int winStart, int winEnd)
@@ -380,7 +611,7 @@ if (NULL == pos)
 hgParseChromRange(pos, &chrName, &itemStart, &itemEnd);
 
 safef(descriptionKey,ArraySize(descriptionKey),
-	"GenomeAnnotation:%s-%d", database, 1);
+	"GenomeAnnotation:%s-%d", database, 0);
 
 AllocVar(newItem);
 newItem->bin = binFromRange(itemStart, itemEnd);
@@ -412,21 +643,25 @@ char query[512];
 if (sameWord(itemName,NEW_ITEM_NAME))
     {
     safef(newItemName, ArraySize(newItemName), "%s-%d", database, id);
-    safef(query, ArraySize(query), "UPDATE %s set creationDate=now(),lastModifiedDate=now(),descriptionKey='%s',name='%s-%d' WHERE name='%s' AND db='%s'",
-	WIKI_TRACK_TABLE, descriptionKey, database, id, itemName, database);
+    safef(query, ArraySize(query), "UPDATE %s set creationDate=now(),lastModifiedDate=now(),descriptionKey='%s',name='%s-%d' WHERE id='%d'",
+	WIKI_TRACK_TABLE, descriptionKey, database, id, id);
     
     }
 else
     {
     safef(newItemName, ArraySize(newItemName), "%s", itemName);
-    safef(query, ArraySize(query), "UPDATE %s set creationDate=now(),lastModifiedDate=now(),descriptionKey='%s' WHERE name='%s' AND db='%s'",
-	WIKI_TRACK_TABLE, descriptionKey, itemName, database);
+    safef(query, ArraySize(query), "UPDATE %s set creationDate=now(),lastModifiedDate=now(),descriptionKey='%s' WHERE id='%d'",
+	WIKI_TRACK_TABLE, descriptionKey, id);
     }
 sqlUpdate(conn,query);
 
-addNewItemDescription(descriptionKey, userName);
+cartWebStart(cart, "%s %s", "User Annotation Track, created new item: ",
+	newItemName);
 
-displayItem(newItemName, userName);
+addDescription(descriptionKey);
+
+struct wikiTrack *item = findItem(newItemName, id);
+displayItem(item, userName, id);
 
 cartHtmlEnd();
 }
