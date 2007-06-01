@@ -15,7 +15,7 @@
 #include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.7 2007/05/31 23:04:08 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.8 2007/06/01 19:08:42 hiram Exp $";
 
 #define NEW_ITEM_SCORE "newItemScore"
 #define NEW_ITEM_STRAND "newItemStrand"
@@ -29,6 +29,12 @@ static char const rcsid[] = "$Id: wikiTrack.c,v 1.7 2007/05/31 23:04:08 hiram Ex
 #define NO_ITEM_COMMENT_SUPPLIED "(no initial description supplied)"
 #define NEW_ITEM_CATEGORY "[[Category:Genome Annotation]]"
 #define WIKI_ITEM_ID "wikiItemId"
+#define DEFAULT_BROWSER "genome.ucsc.edu"
+#define TEST_EMAIL_VERIFIED "GenomeAnnotation:TestEmailVerified"
+#define EMAIL_NEEDS_TO_BE_VERIFIED \
+	"You must confirm your e-mail address before editing pages"
+#define USER_PREFERENCES_MESSAGE \
+    "Please set and validate your e-mail address through your"
 
 static char *encodedHgcReturnUrl(int hgsid)
 /* Return a CGI-encoded hgSession URL with hgsid.  Free when done. */
@@ -254,6 +260,40 @@ hDisconnectCentral(&conn);
 return item;
 }
 
+static struct htmlPage *fetchEditPage(char *descriptionKey)
+/* fetch edit page for descriptionKey page name in wiki */
+{
+struct htmlCookie *cookie;
+char wikiPageUrl[512];
+
+/* must pass the session cookie from the wiki in order to edit */
+AllocVar(cookie);
+cookie->name = cloneString(cfgOption(CFG_WIKI_SESSION_COOKIE));
+cookie->value = cloneString(findCookieData(cookie->name));
+
+/* fetch the edit page to get the wpEditToken, and current contents */
+safef(wikiPageUrl, sizeof(wikiPageUrl), "%s/index.php/%s?action=edit",
+	cfgOptionDefault(CFG_WIKI_URL, NULL), descriptionKey);
+
+char *fullText = htmlSlurpWithCookies(wikiPageUrl,cookie);
+struct htmlPage *page = htmlPageParseOk(wikiPageUrl, fullText);
+/* fullText pointer is placed in page->fullText */
+
+return (page);
+}
+
+static boolean emailVerified()
+/* TRUE indicates email has been verified for this wiki user */
+{
+struct htmlPage *page = fetchEditPage(TEST_EMAIL_VERIFIED);
+char *stringFound = stringIn(EMAIL_NEEDS_TO_BE_VERIFIED, page->fullText);
+htmlPageFree(&page);
+if (NULL == stringFound)
+    return TRUE;
+else
+    return FALSE;
+}
+
 static void displayItem(struct wikiTrack *item, char *userName, int wikiItemId)
 /* given an already fetched item, get the item description from
  *	the wiki.  Put up edit form(s) if userName is not NULL
@@ -271,7 +311,25 @@ hPrintf("<A HREF=\"%s/index.php/User:%s\" TARGET=_blank>%s</A><BR />\n", url,
     item->owner, item->owner);
 hPrintf("<B>Last update:&nbsp;</B>%s<BR />\n", item->lastModifiedDate);
 if ((NULL != userName) && sameWord(userName, item->owner))
-    hPrintf("<B>Owner'%s' has deletion rights</B><BR />\n", item->owner);
+    {
+    startEditForm(G_DELETE_WIKI_ITEM);
+    webPrintLinkTableStart();
+    webPrintLinkCellStart();
+    hPrintf("Owner '%s' has deletion rights&nbsp;&nbsp;", item->owner);
+    webPrintLinkCellEnd();
+    webPrintLinkCellStart();
+    cgiMakeButton("submit", "DELETE");
+    webPrintLinkCellEnd();
+    webPrintLinkCellStart();
+    hPrintf("&nbsp;(no questions asked)");
+    webPrintLinkCellEnd();
+    webPrintLinkTableEnd();
+    char idString[128];
+    safef(idString, ArraySize(idString), "%d", item->id);
+    cgiMakeHiddenVar("i", item->name);
+    cgiMakeHiddenVar(WIKI_ITEM_ID, idString);
+    hPrintf("</FORM>");
+    }
 
 hPrintf("<BR />\n");
 
@@ -281,32 +339,43 @@ if (NULL == userName)
     }
 else
     {
-    startEditForm(G_ADD_WIKI_COMMENTS);
-    webPrintLinkTableStart();
-    /* first row is a title line */
-    char label[256];
-    safef(label, ArraySize(label), "<B>'%s' adding comments to item '%s'</B>\n",
-	userName, item->name);
-    webPrintWideLabelCell(label, 2);
-    webPrintLinkTableNewRow();
-    /* second row is initial comment/description text entry */
-    webPrintWideCellStart(2, HG_COL_TABLE);
-    hPrintf("<B>add comments:</B><BR />");
-    cgiMakeTextArea(NEW_ITEM_COMMENT, ADD_ITEM_COMMENT_DEFAULT, 3, 40);
-    webPrintLinkCellEnd();
-    webPrintLinkTableNewRow();
-    webPrintLinkCellStart();
-    cgiMakeButton("submit", "add comments");
-    webPrintLinkCellEnd();
-    webPrintLinkTableEnd();
-    char idString[128];
-    safef(idString, ArraySize(idString), "%d", item->id);
-    cgiMakeHiddenVar("i", item->name);
-    cgiMakeHiddenVar(WIKI_ITEM_ID, idString);
-    hPrintf("</FORM>");
+    if (! emailVerified())
+	{
+	hPrintf("<P>%s.  %s <A HREF=\"%s/index.php/Special:Preferences\" "
+	    "TARGET=_blank>user preferences.</A></P>\n",
+	    EMAIL_NEEDS_TO_BE_VERIFIED, USER_PREFERENCES_MESSAGE, 
+		cfgOptionDefault(CFG_WIKI_URL, NULL));
+	}
+    else
+	{
+	startEditForm(G_ADD_WIKI_COMMENTS);
+	webPrintLinkTableStart();
+	/* first row is a title line */
+	char label[256];
+	safef(label, ArraySize(label),
+	    "<B>'%s' adding comments to item '%s'</B>\n", userName, item->name);
+	webPrintWideLabelCell(label, 2);
+	webPrintLinkTableNewRow();
+	/* second row is initial comment/description text entry */
+	webPrintWideCellStart(2, HG_COL_TABLE);
+	hPrintf("<B>add comments:</B><BR />");
+	cgiMakeTextArea(NEW_ITEM_COMMENT, ADD_ITEM_COMMENT_DEFAULT, 3, 40);
+	webPrintLinkCellEnd();
+	webPrintLinkTableNewRow();
+	webPrintLinkCellStart();
+	cgiMakeButton("submit", "add comments");
+	webPrintLinkCellEnd();
+	webPrintLinkTableEnd();
+	char idString[128];
+	safef(idString, ArraySize(idString), "%d", item->id);
+	cgiMakeHiddenVar("i", item->name);
+	cgiMakeHiddenVar(WIKI_ITEM_ID, idString);
+	hPrintf("</FORM>");
 
-    hPrintf("For extensive edits, it is more convenient to edit the ");
-hPrintf("<A HREF=\"%s/index.php/%s\" TARGET=_blank>wiki article</A> for this item's description", url, item->descriptionKey);
+	hPrintf("For extensive edits, it is more convenient to edit the ");
+	hPrintf("<A HREF=\"%s/index.php/%s\" TARGET=_blank>wiki article</A> "
+	   "for this item's description", url, item->descriptionKey);
+	}
     }
 if (strippedRender)
     {
@@ -333,87 +402,95 @@ if (wikiTrackEnabled(&userName) && startsWith("Make new entry", itemName))
 	return;
 	}
 
-    startEditForm(G_CREATE_WIKI_ITEM);
-
-    webPrintLinkTableStart();
-    /* first row is a title line */
-    char label[256];
-    safef(label, ArraySize(label), "<B>Create new item, owner: '%s'</B>\n",
-	userName);
-    webPrintWideLabelCell(label, 2);
-    webPrintLinkTableNewRow();
-    /* second row is group classification pull-down menu */
-    webPrintWideCellStart(2, HG_COL_TABLE);
-    puts("<B>classification group:&nbsp;</B>");
-    struct grp *group, *groupList = hLoadGrps();
-    int groupCount = 0;
-    for (group = groupList; group; group=group->next)
-	++groupCount;
-    char **classMenu = NULL;
-    classMenu = (char **)needMem((size_t)(groupCount * sizeof(char *)));
-    groupCount = 0;
-    classMenu[groupCount++] = cloneString(ITEM_NOT_CLASSIFIED);
-    for (group = groupList; group; group=group->next)
+    if (! emailVerified())
+	hPrintf("<P>%s.  %s <A HREF=\"%s/index.php/Special:Preferences\" "
+	    "TARGET=_blank>user preferences.</A></P>\n",
+	    EMAIL_NEEDS_TO_BE_VERIFIED, USER_PREFERENCES_MESSAGE, 
+		cfgOptionDefault(CFG_WIKI_URL, NULL));
+    else
 	{
-	if (differentWord("Custom Tracks", group->label))
-	    classMenu[groupCount++] = cloneString(group->label);
-	}
-    grpFreeList(&groupList);
+	startEditForm(G_CREATE_WIKI_ITEM);
 
-    cgiMakeDropList(NEW_ITEM_CLASS, classMenu, groupCount,
-	    cartUsualString(cart,NEW_ITEM_CLASS,ITEM_NOT_CLASSIFIED));
-    webPrintLinkCellEnd();
-    webPrintLinkTableNewRow();
-    /* third row is position entry box */
-    webPrintWideCellStart(2, HG_COL_TABLE);
-    puts("<B>position:&nbsp;</B>");
-    savePosInTextBox(seqName, winStart+1, winEnd);
-    hPrintf("&nbsp;(size: ");
-    printLongWithCommas(stdout, (long long)(winEnd - winStart));
-    hPrintf(")");
-    webPrintLinkCellEnd();
-    webPrintLinkTableNewRow();
-    /* fourth row is strand selection radio box */
-    webPrintWideCellStart(2, HG_COL_TABLE);
-    char *strand = cartUsualString(cart, NEW_ITEM_STRAND, "plus");
-    boolean plusStrand = sameWord("plus",strand) ? TRUE : FALSE;
-    hPrintf("<B>strand:&nbsp;");
-    cgiMakeRadioButton(NEW_ITEM_STRAND, "plus", plusStrand);
-    hPrintf("&nbsp;+&nbsp;&nbsp;");
-    cgiMakeRadioButton(NEW_ITEM_STRAND, "minus", ! plusStrand);
-    hPrintf("&nbsp;-</B>");
-    webPrintLinkCellEnd();
-    webPrintLinkTableNewRow();
-    /* fifth row is item name text entry */
-    webPrintWideCellStart(2, HG_COL_TABLE);
-    hPrintf("<B>item name:&nbsp;</B>");
-    cgiMakeTextVar("i", NEW_ITEM_NAME, 18);
-    webPrintLinkCellEnd();
-    webPrintLinkTableNewRow();
-    /* sixth row is item score text entry */
-    webPrintWideCellStart(2, HG_COL_TABLE);
-    hPrintf("<B>item score:&nbsp;</B>");
-    cgiMakeTextVar(NEW_ITEM_SCORE, ITEM_SCORE_DEFAULT, 4);
-    hPrintf("&nbsp;(range:&nbsp;0&nbsp;to&nbsp;%s)", ITEM_SCORE_DEFAULT);
-    webPrintLinkCellEnd();
-    webPrintLinkTableNewRow();
-    /* seventh row is initial comment/description text entry */
-    webPrintWideCellStart(2, HG_COL_TABLE);
-    hPrintf("<B>initial comments/description:</B><BR />");
-    cgiMakeTextArea(NEW_ITEM_COMMENT, NEW_ITEM_COMMENT_DEFAULT, 5, 40);
-    webPrintLinkCellEnd();
-    webPrintLinkTableNewRow();
-    /* seventh row is the submit and cancel buttons */
-    webPrintLinkCellStart();
-    cgiMakeButton("submit", "create new item");
-    hPrintf("</FORM>");
-    webPrintLinkCellEnd();
-    webPrintLinkCellStart();
-    hPrintf("<FORM ACTION=\"%s\">", hgTracksName());
-    cgiMakeButton("cancel", "cancel");
-    hPrintf("</FORM>");
-    webPrintLinkCellEnd();
-    webPrintLinkTableEnd();
+	webPrintLinkTableStart();
+	/* first row is a title line */
+	char label[256];
+	safef(label, ArraySize(label), "<B>Create new item, owner: '%s'</B>\n",
+	    userName);
+	webPrintWideLabelCell(label, 2);
+	webPrintLinkTableNewRow();
+	/* second row is group classification pull-down menu */
+	webPrintWideCellStart(2, HG_COL_TABLE);
+	puts("<B>classification group:&nbsp;</B>");
+	struct grp *group, *groupList = hLoadGrps();
+	int groupCount = 0;
+	for (group = groupList; group; group=group->next)
+	    ++groupCount;
+	char **classMenu = NULL;
+	classMenu = (char **)needMem((size_t)(groupCount * sizeof(char *)));
+	groupCount = 0;
+	classMenu[groupCount++] = cloneString(ITEM_NOT_CLASSIFIED);
+	for (group = groupList; group; group=group->next)
+	    {
+	    if (differentWord("Custom Tracks", group->label))
+		classMenu[groupCount++] = cloneString(group->label);
+	    }
+	grpFreeList(&groupList);
+
+	cgiMakeDropList(NEW_ITEM_CLASS, classMenu, groupCount,
+		cartUsualString(cart,NEW_ITEM_CLASS,ITEM_NOT_CLASSIFIED));
+	webPrintLinkCellEnd();
+	webPrintLinkTableNewRow();
+	/* third row is position entry box */
+	webPrintWideCellStart(2, HG_COL_TABLE);
+	puts("<B>position:&nbsp;</B>");
+	savePosInTextBox(seqName, winStart+1, winEnd);
+	hPrintf("&nbsp;(size: ");
+	printLongWithCommas(stdout, (long long)(winEnd - winStart));
+	hPrintf(")");
+	webPrintLinkCellEnd();
+	webPrintLinkTableNewRow();
+	/* fourth row is strand selection radio box */
+	webPrintWideCellStart(2, HG_COL_TABLE);
+	char *strand = cartUsualString(cart, NEW_ITEM_STRAND, "plus");
+	boolean plusStrand = sameWord("plus",strand) ? TRUE : FALSE;
+	hPrintf("<B>strand:&nbsp;");
+	cgiMakeRadioButton(NEW_ITEM_STRAND, "plus", plusStrand);
+	hPrintf("&nbsp;+&nbsp;&nbsp;");
+	cgiMakeRadioButton(NEW_ITEM_STRAND, "minus", ! plusStrand);
+	hPrintf("&nbsp;-</B>");
+	webPrintLinkCellEnd();
+	webPrintLinkTableNewRow();
+	/* fifth row is item name text entry */
+	webPrintWideCellStart(2, HG_COL_TABLE);
+	hPrintf("<B>item name:&nbsp;</B>");
+	cgiMakeTextVar("i", NEW_ITEM_NAME, 18);
+	webPrintLinkCellEnd();
+	webPrintLinkTableNewRow();
+	/* sixth row is item score text entry */
+	webPrintWideCellStart(2, HG_COL_TABLE);
+	hPrintf("<B>item score:&nbsp;</B>");
+	cgiMakeTextVar(NEW_ITEM_SCORE, ITEM_SCORE_DEFAULT, 4);
+	hPrintf("&nbsp;(range:&nbsp;0&nbsp;to&nbsp;%s)", ITEM_SCORE_DEFAULT);
+	webPrintLinkCellEnd();
+	webPrintLinkTableNewRow();
+	/* seventh row is initial comment/description text entry */
+	webPrintWideCellStart(2, HG_COL_TABLE);
+	hPrintf("<B>initial comments/description:</B><BR />");
+	cgiMakeTextArea(NEW_ITEM_COMMENT, NEW_ITEM_COMMENT_DEFAULT, 5, 40);
+	webPrintLinkCellEnd();
+	webPrintLinkTableNewRow();
+	/* seventh row is the submit and cancel buttons */
+	webPrintLinkCellStart();
+	cgiMakeButton("submit", "create new item");
+	hPrintf("</FORM>");
+	webPrintLinkCellEnd();
+	webPrintLinkCellStart();
+	hPrintf("<FORM ACTION=\"%s\">", hgTracksName());
+	cgiMakeButton("cancel", "cancel");
+	hPrintf("</FORM>");
+	webPrintLinkCellEnd();
+	webPrintLinkTableEnd();
+	}
     }
 else
     {
@@ -456,17 +533,18 @@ slAddHead(&clone->vars, cloneVar);
 
 }
 
-
-static void addDescription(char * descriptionKey)
+static void addDescription(char * descriptionKey, char *itemName)
 {
 char *newComments = cartNonemptyString(cart, NEW_ITEM_COMMENT);
 struct dyString *content = newDyString(1024);
-struct htmlCookie *cookie;
-char wikiPageUrl[512];
 
 /* was nothing changed in the add comments entry box ? */
 if (sameWord(ADD_ITEM_COMMENT_DEFAULT,newComments))
     return;
+
+#ifdef NOT
+struct htmlCookie *cookie;
+char wikiPageUrl[512];
 
 /* must pass the session cookie from the wiki in order to edit */
 AllocVar(cookie);
@@ -479,6 +557,9 @@ safef(wikiPageUrl, sizeof(wikiPageUrl), "%s/index.php/%s?action=edit",
 
 char *fullText = htmlSlurpWithCookies(wikiPageUrl,cookie);
 struct htmlPage *page = htmlPageParseOk(wikiPageUrl, fullText);
+#endif
+
+struct htmlPage *page = fetchEditPage(descriptionKey);
 
 /* create a stripped down edit form, we don't want all the variables */
 struct htmlForm *strippedEditForm;
@@ -511,10 +592,11 @@ else
     snprintf(position, 128, "%s:%d-%d", seqName, winStart+1, winEnd);
     newPos = addCommasToPos(position);
     dyStringPrintf(content, "%s\n<P>"
-"[http://hgwdev-hiram.cse.ucsc.edu/cgi-bin/hgTracks?db=%s&position=%s:%d-%d %s %s]"
-	"&nbsp;&nbsp;''created: ~~~~''<BR /><BR />\n",
-	NEW_ITEM_CATEGORY, database, seqName, winStart, winEnd,
-	    database, newPos);
+"[http://%s/cgi-bin/hgTracks?db=%s&wikiTrack=pack&position=%s:%d-%d %s %s]"
+	"&nbsp;&nbsp;<B>%s</B>&nbsp;&nbsp;''created: ~~~~''<BR /><BR />\n",
+	NEW_ITEM_CATEGORY,
+	    cfgOptionDefault(CFG_WIKI_BROWSER, DEFAULT_BROWSER), database,
+		seqName, winStart, winEnd, database, newPos, itemName);
     }
 
 if (sameWord(NEW_ITEM_COMMENT_DEFAULT,newComments))
@@ -559,11 +641,21 @@ freeDyString(&content);
 static void updateLastModifiedDate(int id)
 /* set lastModifiedDate to now() */
 {
-struct sqlConnection *conn = hConnectCentral();
 char query[512];
+struct sqlConnection *conn = hConnectCentral();
 
 safef(query, ArraySize(query),
     "UPDATE %s set lastModifiedDate=now() WHERE id='%d'",
+	WIKI_TRACK_TABLE, id);
+sqlUpdate(conn,query);
+hDisconnectCentral(&conn);
+}
+
+static void deleteItem(int id)
+{
+char query[512];
+struct sqlConnection *conn = hConnectCentral();
+safef(query, ArraySize(query), "DELETE FROM %s WHERE id='%d'",
 	WIKI_TRACK_TABLE, id);
 sqlUpdate(conn,query);
 hDisconnectCentral(&conn);
@@ -574,13 +666,18 @@ void doDeleteWikiItem(char *itemName, char *chrom, int winStart, int winEnd)
 {
 char *userName = NULL;
 char *idString = cartUsualString(cart, WIKI_ITEM_ID, NULL);
-cartWebStart(cart, "%s (%s)", "User Annotation Track, delete item: ", itemName);
+cartWebStart(cart, "%s (%s)", "User Annotation Track, deleted item: ",
+	itemName);
 if (NULL == idString)
     errAbort("delete wiki item: NULL wikiItemId");
 if (! wikiTrackEnabled(&userName))
     errAbort("delete wiki item: wiki track not enabled");
-struct wikiTrack *item = findItem(itemName, sqlSigned(idString));
-displayItem(item, userName, sqlSigned(idString));
+deleteItem(sqlSigned(idString));
+hPrintf("<BR />\n");
+hPrintf("<FORM ACTION=\"%s\">", hgTracksName());
+cgiMakeButton("submit", "Return to tracks display");
+hPrintf("</FORM>");
+hPrintf("<BR />\n");
 cartHtmlEnd();
 }
 
@@ -595,7 +692,7 @@ if (NULL == idString)
 if (! wikiTrackEnabled(&userName))
     errAbort("add wiki comments: wiki track not enabled");
 struct wikiTrack *item = findItem(itemName, sqlSigned(idString));
-addDescription(item->descriptionKey);
+addDescription(item->descriptionKey, item->name);
 updateLastModifiedDate(sqlSigned(idString));
 displayItem(item, userName, sqlSigned(idString));
 cartHtmlEnd();
@@ -674,11 +771,12 @@ else
 	WIKI_TRACK_TABLE, descriptionKey, id);
     }
 sqlUpdate(conn,query);
+hDisconnectCentral(&conn);
 
 cartWebStart(cart, "%s %s", "User Annotation Track, created new item: ",
 	newItemName);
 
-addDescription(descriptionKey);
+addDescription(descriptionKey, newItemName);
 
 struct wikiTrack *item = findItem(newItemName, id);
 displayItem(item, userName, id);
