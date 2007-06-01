@@ -8,7 +8,7 @@
 #  Robert Kuhn
 ################################
 
-set database=""
+set db=""
 set machine="hgw1"
 set table=""
 set field=""
@@ -28,7 +28,7 @@ if ( $#argv < 3 | $#argv > 4 ) then
   echo
   exit
 else
-  set database=$argv[1]
+  set db=$argv[1]
   set table=$argv[2]
   set field=$argv[3]
 endif
@@ -37,13 +37,19 @@ if ( $#argv == 4 ) then
   set machine=$argv[4]
 endif
 
-set dumpfile=`getRRdumpfile.csh $database $machine`
+set dumpfile=`getRRdumpfile.csh $db $machine`
+if ( $status ) then
+  echo
+  echo "  database $db -- not found in status dumps"
+  echo
+  exit 1
+endif
 
 # check that table exists in dump of this database
 cat $dumpfile | grep -w "^$table" > /dev/null
 if ( $status ) then
   echo
-  echo "  table $table -- not found in database $database"
+  echo "  table $table -- not found in database $db"
   echo
   exit 1
 endif
@@ -53,7 +59,7 @@ head -1 $dumpfile | grep -iw "$field" > /dev/null
 if ( $status ) then
   echo
   echo "  $field -- no such field in TABLE STATUS output"
-  echo "  for $database.$table.  try one of the following"
+  echo "  for $db.$table.  try one of the following"
   echo
   head -1 $dumpfile | sed -e "s/\t/\n/g" 
   echo
@@ -72,7 +78,7 @@ set debug="false"
 # set debug="true"
 if ( $debug == "true" ) then
   echo
-  echo "database = $database"
+  echo "database = $db"
   echo "table    = $table"
   echo "field    = $field"
   echo "machine  = $machine"

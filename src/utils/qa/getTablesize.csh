@@ -12,9 +12,11 @@
 set tableinput=""
 set tables=""
 set db=""
-set list=""
+set list="false"
 set first=""
+set firstIndex=""
 set second=""
+set secondIndex=""
 set machine1="hgwbeta"
 set machine2=""
 set mach1Tot=0
@@ -65,17 +67,71 @@ else
   set tables=$tableinput
 endif
 
+# make headers for output table
+# get width of first column from longest tablename
+
+set longtable=5
+set length=5
+foreach table (`echo $tables`)
+  set len=`echo $table | awk '{print length($1)}'`
+  if ( $len > $length ) then
+    set length=$len
+    set longtable=$table
+  endif
+end
+set length=`echo $length | awk '{print $1+1}'`
+set offset=`echo $longtable | sed -e "s/./-/g"`
+set offset2=`echo $longtable | sed -e "s/./x/g"`
+
+echo
+# print headers
+if ( "" == $machine2 ) then
+    # print top header
+    echo "xxxxx" "$machine1" \
+    | gawk '{ printf("%-'${length}'s %17s \n", $1, $2) }' \
+    | sed -e "s/xxxxx/     /"
+    echo "$offset2 " "-----------------" \
+    | gawk '{ printf("%-'${length}'s %17s \n", $1, $2) }' \
+    | sed -e "s/x/ /g"
+    
+    # print second header
+    echo "table" "Mbytes" "index" \
+    | gawk '{ printf("%-'${length}'s %8s %8s \n", $1, $2, $3) }'
+    echo "$offset" "--------" "--------" \
+    | gawk '{ printf("%-'${length}'s %8s %8s \n", $1, $2, $3) }'
+else
+    # print top header
+    echo "xxxxx" "$machine1" "$machine2" \
+    | gawk '{ printf("%-'${length}'s %17s %17s \n", $1, $2, $3) }' \
+    | sed -e "s/xxxxx/     /"
+    echo "$offset2 " "-----------------" "-----------------" \
+    | gawk '{ printf("%-'${length}'s %17s %-17s \n", $1, $2, $3) }' \
+    | sed -e "s/x/ /g"
+    
+    # print second header
+    echo "table" "Mbytes" "index" "Mbytes" "index" \
+    | gawk '{ printf("%-'${length}'s %8s %8s %8s %8s \n", \
+    $1, $2, $3, $4, $5) }'
+    echo "$offset" "--------" "--------" "--------" "--------" \
+    | gawk '{ printf("%-'${length}'s %-8s %-8s %-8s %-8s \n", \
+    $1, $2, $3, $4, $5) }'
+endif
+
 foreach table ($tables)
-  echo
-  echo $table
-  echo "============="
   set first=`getRRtableStatus.csh $db $table Data_length $machine1`
   if ( $status ) then
     set first=0
   else
     set first=`echo $first | awk '{printf("%0.2f", $1/1000000) }'`
   endif 
-  echo "$first megabytes"
+
+  set firstIndex=`getRRtableStatus.csh $db $table Index_length $machine1`
+  if ( $status ) then
+    set firstIndex=0
+  else
+    set firstIndex=`echo $firstIndex | awk '{printf("%0.2f", $1/1000000) }'`
+  endif 
+
   if ( "" != $machine2) then
     set second=`getRRtableStatus.csh $db $table Data_length $machine1`
     if ( $status ) then
@@ -83,10 +139,28 @@ foreach table ($tables)
     else
       set second=`echo $second | awk '{printf("%0.2f", $1/1000000) }'`
     endif 
-    echo "$second megabytes"
+    
+    set secondIndex=`getRRtableStatus.csh $db $table Index_length $machine1`
+    if ( $status ) then
+      set secondIndex=0
+    else
+      set secondIndex=`echo $secondIndex | awk '{printf("%0.2f", $1/1000000) }'`
+    endif 
+
   endif 
-  set mach1Tot=`echo $mach1Tot $first  | awk '{print $1+$2}'`
-  set mach2Tot=`echo $mach2Tot $second | awk '{print $1+$2}'`
+  # increment index separately?
+  set mach1Tot=`echo $mach1Tot $first $firstIndex | awk '{print $1+$2+$3}'`
+  set mach2Tot=`echo $mach2Tot $second $secondIndex | awk '{print $1+$2+$3}'`
+  if ( "" == $machine2 ) then
+      # print results
+      echo "$table" "$first" "$firstIndex" \
+      | gawk '{ printf("%-'${length}'s %8s %8s \n", $1, $2, $3) }'
+  else
+      # print results
+      echo "$table" "$first" "$firstIndex" "$second" "$secondIndex" \
+      | gawk '{ printf("%-'${length}'s %8s %8s %8s %8s \n", \
+      $1, $2, $3, $4, $5) }'
+  endif
 end 
 
 # output totals if more than one table
@@ -102,9 +176,11 @@ if ( "true" == $list ) then
 endif 
 
 echo "as of STATUS dumps:"
-checkTableStatus.csh | grep $machine1
+checkTableStatus.csh | grep $machine1 \
+   | awk '{ printf("%8s %9s\n", $1, $2)}'
 if ( "" != $machine2 ) then
-  checkTableStatus.csh | grep $machine2
+  checkTableStatus.csh | grep $machine2 | grep $machine2 \
+     | awk '{ printf("%8s %9s\n", $1, $2)}'
 endif
 echo
 
