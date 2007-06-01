@@ -102,11 +102,15 @@ void wikiTrackOutput(struct wikiTrack *el, FILE *f, char sep, char lastSep);
 
 /* configuration variables */
 #define CFG_WIKI_URL "wikiTrack.URL"
+#define CFG_WIKI_BROWSER "wikiTrack.browser"
+
+/* name of database table in hgcentral */
 #define WIKI_TRACK_TABLE "wikiTrack"
 
 /* hgc variables */
 #define G_CREATE_WIKI_ITEM "htcCreateWikiItem"
 #define G_ADD_WIKI_COMMENTS "htcAddWikiComments"
+#define G_DELETE_WIKI_ITEM "htcDeleteWikiItem"
 
 boolean wikiTrackEnabled(char **wikiUserName);
 /*determine if wikiTrack can be used, and is this user logged into the wiki ?*/
