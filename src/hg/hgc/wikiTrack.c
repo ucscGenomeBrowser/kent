@@ -15,7 +15,7 @@
 #include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.8 2007/06/01 19:08:42 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.9 2007/06/01 23:04:38 hiram Exp $";
 
 #define NEW_ITEM_SCORE "newItemScore"
 #define NEW_ITEM_STRAND "newItemStrand"
@@ -387,6 +387,16 @@ else
 
 }
 
+/* Javascript to color the background of the color pull-down menu */
+static char *colorMenuJS =
+"onchange=\"var form = document.getElementById(\"" G_CREATE_WIKI_ITEM "\");\n"
+"document." G_CREATE_WIKI_ITEM ".dummy.style.display='inline';\n"
+"document." G_CREATE_WIKI_ITEM ".dummy.select();\n"
+"document." G_CREATE_WIKI_ITEM ".dummy.style.display='none';\n"
+"form.evt_bgcolor.style.background = form.evt_bgcolor[form.evt_bgcolor.selectedIndex].value;\n"
+"form.evt_bgcolor.style.color = compatible_textcolor(form.evt_bgcolor[form.evt_bgcolor.selectedIndex].value);\n"
+"document.gpForm.submit();\"";
+
 void doWikiTrack(char *itemName, char *chrom, int winStart, int winEnd)
 /* handle item clicks on wikiTrack - may create new items */
 {
@@ -471,6 +481,31 @@ if (wikiTrackEnabled(&userName) && startsWith("Make new entry", itemName))
 	hPrintf("<B>item score:&nbsp;</B>");
 	cgiMakeTextVar(NEW_ITEM_SCORE, ITEM_SCORE_DEFAULT, 4);
 	hPrintf("&nbsp;(range:&nbsp;0&nbsp;to&nbsp;%s)", ITEM_SCORE_DEFAULT);
+	webPrintLinkCellEnd();
+	webPrintLinkTableNewRow();
+	/* seventh row is item color pull-down menu */
+	webPrintWideCellStart(2, HG_COL_TABLE);
+	hPrintf("<B>item color:&nbsp;</B>");
+hPrintf("<SELECT NAME=\"itemColor\" style=\"width:7em\">\n");
+hPrintf("<OPTION VALUE = \"#ffffff\" >\n");
+hPrintf("<OPTION SELECTED value = \"#eeeeee\" >\n");
+hPrintf("<OPTION VALUE = \"#66cc66\" >\n");
+hPrintf("<OPTION VALUE = \"#99ffcc\" >\n");
+hPrintf("<OPTION VALUE = \"#ccffcc\" >\n");
+hPrintf("<OPTION VALUE = \"#ccffff\" >\n");
+hPrintf("<OPTION VALUE = \"#99ccff\" >\n");
+hPrintf("<OPTION VALUE = \"#addadd\" >\n");
+hPrintf("<OPTION VALUE = \"#ffaa99\" >\n");
+hPrintf("<OPTION VALUE = \"#ffcc99\" >\n");
+hPrintf("<OPTION VALUE = \"#ffddbb\" >\n");
+hPrintf("<OPTION VALUE = \"#ffccff\" >\n");
+hPrintf("<OPTION VALUE = \"#eeddff\" >\n");
+hPrintf("<OPTION VALUE = \"#efe7de\" >\n");
+hPrintf("<OPTION VALUE = \"#fffbba\" >\n");
+hPrintf("<OPTION VALUE = \"#ffffcc\" >\n");
+hPrintf("<OPTION VALUE = \"#daddad\" >\n");
+hPrintf("<OPTION VALUE = \"#cabcab\" >\n");
+hPrintf("</SELECT>\n");
 	webPrintLinkCellEnd();
 	webPrintLinkTableNewRow();
 	/* seventh row is initial comment/description text entry */
