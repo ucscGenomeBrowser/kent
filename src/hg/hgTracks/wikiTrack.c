@@ -3,29 +3,57 @@
 #include "jksql.h"
 #include "hgTracks.h"
 #include "hdb.h"
+#include "ra.h"
+#include "bedCart.h"
 #include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.2 2007/06/01 19:07:21 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.3 2007/06/01 22:36:53 hiram Exp $";
 
 static char *wikiTrackItemName(struct track *tg, void *item)
 /* Return name of bed track item. */
 {
-struct bed *bed = item;
-if (bed->name == NULL)
+struct linkedFeatures *lf = item;
+if (lf->name == NULL)
     return "";
-return bed->name;
+return lf->name;
+}
+
+static int hexToDecimal(char *hexString)
+/* return decimal value for hex string (from utils/subChar/subChar.c) */
+{
+int acc = 0;
+char c;
+
+tolowers(hexString);
+stripChar(hexString, '#');	/* can start with # (as in html) */
+while ((c = *hexString++) != 0)
+    {
+    acc <<= 4;
+    if (c >= '0' && c <= '9')
+       acc += c - '0';
+    else if (c >= 'a' && c <= 'f')
+       acc += c + 10 - 'a';
+/* ignoring bad characters
+    else
+       errAbort("Expecting hexadecimal character got %s", hexString);
+*/
+    }
+return acc;
 }
 
 static void wikiTrackLoadItems(struct track *tg)
 /* Load the items from the wikiTrack table */
 {
-struct bed *bed, *list = NULL;
+struct bed *bed;
 struct sqlConnection *conn = hConnectCentral();
 struct sqlResult *sr;
 char **row;
 int rowOffset;
 char where[256];
+struct linkedFeatures *lfList = NULL, *lf;
+int scoreMin = 0;
+int scoreMax = 99999;
 
 safef(where, ArraySize(where), "db='%s'", database);
 
@@ -40,30 +68,46 @@ while ((row = sqlNextRow(sr)) != NULL)
     bed->name = cloneString(item->name);
     bed->score = item->score;
     safecpy(bed->strand, sizeof(bed->strand), item->strand);
-    slAddHead(&list, bed);
+    bed->thickStart = item->chromStart;
+    bed->thickEnd = item->chromEnd;
+    bed->itemRgb = hexToDecimal(item->color);
+    bed8To12(bed);
+    lf = lfFromBedExtra(bed, scoreMin, scoreMax);
+    lf->extra = (void *)USE_ITEM_RGB;	/* signal for coloring */
+    lf->filterColor=bed->itemRgb;
+    slAddHead(&lfList, lf);
     wikiTrackFree(&item);
     }
 sqlFreeResult(&sr);
 hDisconnectCentral(&conn);
-slReverse(&list);
+
+slSort(&lfList, linkedFeaturesCmp);
 
 if (wikiTrackEnabled(NULL))
     {
-// add dummy links
-AllocVar(bed);
-bed->chrom = chromName;
-bed->chromStart = winStart;
-bed->chromEnd = winEnd;
-bed->name = "Make new entry";
-bed->strand[0] = '+';
-bed->score = 100;
-slAddHead(&list, bed);
+    // add special item to allow creation of new entries
+    AllocVar(bed);
+    bed->chrom = chromName;
+    bed->chromStart = winStart;
+    bed->chromEnd = winEnd;
+    bed->name = cloneString("Make new entry");
+    bed->score = 100;
+    bed->strand[0] = '+';
+    bed->thickStart = winStart;
+    bed->thickEnd = winEnd;
+    bed->itemRgb = 0xcc0000;
+    bed8To12(bed);
+    lf = lfFromBedExtra(bed, scoreMin, scoreMax);
+    lf->extra = (void *)USE_ITEM_RGB;	/* signal for coloring */
+    lf->filterColor=bed->itemRgb;
+    slAddHead(&lfList, lf);
     }
 
-tg->items = list;
+tg->items = lfList;
 }
 
 void wikiTrackMethods(struct track *tg)
+/* establish loadItems function for wiki track */
 {
 tg->loadItems = wikiTrackLoadItems;
 }
@@ -80,7 +124,7 @@ if (wikiTrackEnabled(NULL))
     if (! sqlTableExists(conn,WIKI_TRACK_TABLE))
 	errAbort("loadWikiTrack configuration error, set wikiTrack.URL in hg.conf");
 
-    bedMethods(tg);
+    linkedFeaturesMethods(tg);
     AllocVar(tdb);
     tg->mapName = "wikiTrack";
     tg->canPack = TRUE;
@@ -100,6 +144,15 @@ if (wikiTrackEnabled(NULL))
     tdb->shortLabel = tg->shortLabel;
     tdb->longLabel = tg->longLabel;
     tdb->useScore = 1;
+#ifdef NOT
+    tdb->settings = NULL;
+    tdb->settingsHash = raFromString(tdb->settings);
+    /* add to hash */
+    hashReplace(tdb->settingsHash, "itemRgb", "on");
+    /* regenerate settings string */
+    tdb->settings = hashToRaString(tdb->settingsHash);
+    tdb->type = cloneString("bed 9");
+#endif
     trackDbPolish(tdb);
     tg->tdb = tdb;
 
