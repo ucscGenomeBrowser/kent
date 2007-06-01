@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/mkPhotoGateway.pl instead.
 
-# $Id: mkPhotoGateway.pl,v 1.1 2007/02/21 00:42:20 hiram Exp $
+# $Id: mkPhotoGateway.pl,v 1.2 2007/06/01 19:39:14 galt Exp $
 
 use warnings;
 use strict;
@@ -83,7 +83,7 @@ printf STDERR "found %d images, %d latest dbs\n",
 
 print FH "<HTML><HEAD><TITLE>Genome Browser Photo Gateway</TITLE>\n";
 print FH '<LINK REL="STYLESHEET" HREF="/style/HGStyle.css">', "\n";
-print FH "</HEAD>\n<BODY BACKGROUND=\"/images/floretHiram.jpg\"";
+print FH "</HEAD>\n<BODY BACKGROUND=\"../images/floretHiram.jpg\"";
 print FH "\t",
 	'BGCOLOR="#FFF9D2" LINK="#0000CC" VLINK="#330066" ALINK="#6600FF"',
 	">\n";
