@@ -6,7 +6,7 @@
 #include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.1 2007/05/22 22:17:45 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.2 2007/06/01 19:07:21 hiram Exp $";
 
 static char *wikiTrackItemName(struct track *tg, void *item)
 /* Return name of bed track item. */
@@ -68,8 +68,8 @@ void wikiTrackMethods(struct track *tg)
 tg->loadItems = wikiTrackLoadItems;
 }
 
-void loadWikiTrack(struct track **pGroupList)
-/* Load up wiki track and append to list. */
+void addWikiTrack(struct track **pGroupList)
+/* Add wiki track and append to group list. */
 {
 if (wikiTrackEnabled(NULL))
     {
