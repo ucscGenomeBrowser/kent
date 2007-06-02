@@ -17,7 +17,7 @@ while [[ $1 == '-+' ]] ; do
     esac
 done
 
-cvs status 2>&1 | cvsStatusFilter | awk 'BEGIN{FS="\t"} !/^Locally_Removed/{print $2}'
+cvs status 2>&1 | cvsStatusFilter | awk 'BEGIN{FS="\t"} (NR>1)&&($2!="Locally_Removed"){print $1}'
 if [ "${PIPESTATUS[*]}" != "0 0 0" ] ; then
     exit 1
 fi

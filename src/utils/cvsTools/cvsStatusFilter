@@ -10,7 +10,7 @@ BEGIN {
         "Filter the output of cvs status and extract information\n"\
         "in a parsable format. This requries both stdout and stderr\n"\
         "from cvs status. Output format is\n"\
-        "   id  status\n"\
+        "   file status workRev repRev stTag stDate stOpts\n"\
         "Options:\n"\
         "  -h - print this help message and exit\n"
 
@@ -27,12 +27,25 @@ BEGIN {
     }
     OFS="\t";
     dir=".";
-
+    print "#file","stat","workRev","repRev","stTag","stDate","stOpts";
 }
+
+# return a value, or empty string if value is "(none)"
+function getValNone(val) {
+    if (val == "(none)") {
+        return "";
+    } else {
+        return val;
+    }
+}
+
+# check for errors
 /status aborted/ {
     print $0 > "/dev/stderr";
     exit 1
 }
+
+# determine directory
 /cvs status: Examining/ {
     dir=$4;
 }
@@ -40,6 +53,7 @@ BEGIN {
     dir=$4;
 }
 
+# Get file and status:
 # File: cvs-stat         	Status: Locally Added
 # File: no file cvs-modified		Status: Entry Invalid
 /File:.*Status:/ {
@@ -54,9 +68,38 @@ BEGIN {
     for (i = stIdx+1; i <= NF; i++) {
         stat = stat "_" $i;
     }
-    if (dir == ".") {
-        print stat, fname;
-    } else {
-        print stat, dir "/" fname;
-    }
 }
+
+#   Working revision:	1.3	Wed Mar 16 15:47:54 2005
+/^   Working revision:/ {
+    workRev = $3;
+}
+
+#   Repository revision:	1.3	/projects/compbio/cvsroot/kent/src/utils/cvsTools/cvsFiles,v
+/^   Repository revision:/ {
+    repRev = $3;
+}
+
+#   Sticky Tag:		(none)
+/^   Sticky Tag:/ {
+    stTag = getValNone($3);
+}
+
+#   Sticky Date:		(none)
+/^   Sticky Date:/ {
+    stDate = getValNone($3);
+}
+
+#   Sticky Options:	(none)
+/^   Sticky Options:/ {
+    stOpts = getValNone($3);
+
+    # output
+    if (dir == ".") {
+        file = fname;
+    } else {
+        file = dir "/" fname;
+    }
+    print file,stat,workRev,repRev,stTag,stDate,stOpts;
+}
+
