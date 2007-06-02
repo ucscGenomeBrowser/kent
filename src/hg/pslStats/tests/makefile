@@ -1,7 +1,8 @@
 include ../../../inc/common.mk
 
 test:	untransAlignTest untransQueryTest untransOverallTest \
-	untransAlignUnalnTest untransQueryUnalnTest untransOverallUnalnTest
+	untransAlignUnalnTest untransQueryUnalnTest untransOverallUnalnTest \
+	cdna2cdnaAlignTest cdna2cdnaQueryTest cdna2cdnaOverallTest
 
 # basic set of tests with an untranslated psl
 untransAlignTest: mkdirs
@@ -27,6 +28,19 @@ untransQueryUnalnTest: mkdirs
 
 untransOverallUnalnTest: mkdirs
 	pslStats -overallStats -queries=input/basic.queries input/basic.psl output/$@.stats
+	diff -u expected/$@.stats output/$@.stats
+
+# cDNA to cDNA alignments, will have tCover that is interesting
+cdna2cdnaAlignTest: mkdirs
+	pslStats -queries=input/cdna2cdna.queries input/cdna2cdna.psl output/$@.stats
+	diff -u expected/$@.stats output/$@.stats
+
+cdna2cdnaQueryTest: mkdirs
+	pslStats -queryStats -queries=input/cdna2cdna.queries input/cdna2cdna.psl output/$@.stats
+	diff -u expected/$@.stats output/$@.stats
+
+cdna2cdnaOverallTest: mkdirs
+	pslStats -overallStats -queries=input/cdna2cdna.queries input/cdna2cdna.psl output/$@.stats
 	diff -u expected/$@.stats output/$@.stats
 
 clean::

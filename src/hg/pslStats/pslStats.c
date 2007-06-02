@@ -8,7 +8,7 @@
 #include "psl.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: pslStats.c,v 1.6 2007/05/17 00:42:23 markd Exp $";
+static char const rcsid[] = "$Id: pslStats.c,v 1.7 2007/06/02 21:57:18 markd Exp $";
 
 /* size for query name hashs */
 static int queryHashPowTwo = 22;
@@ -94,6 +94,8 @@ struct sumStats
     float maxIndent;
     float minQCover;   /* min/max coverage of query */
     float maxQCover;
+    float minTCover;   /* min/max coverage of target */
+    float maxTCover;
     float minRepMatch; /* fraction that is repeat matches */
     float maxRepMatch;
 };
@@ -161,6 +163,15 @@ else
     return ((float)calcAligned(psl))/((float)psl->qSize);
 }
 
+static float calcTCover(struct psl *psl)
+/* calculate target coverage */
+{
+if (psl->tSize == 0)
+    return 0.0; /* should never happen */
+else
+    return ((float)calcAligned(psl))/((float)psl->tSize);
+}
+
 static float calcRepMatch(struct psl *psl)
 /* calculate fraction of aligned that is repeat match */
 {
@@ -212,6 +223,7 @@ static void sumStatsAccumulate(struct sumStats *ss, struct psl *psl)
 {
 float ident = calcIdent(psl);
 float qCover = calcQCover(psl);
+float tCover = calcTCover(psl);
 float repMatch = calcRepMatch(psl);
 ss->totalQSize += psl->qSize;
 if (ss->alnCnt == 0)
@@ -219,6 +231,7 @@ if (ss->alnCnt == 0)
     ss->minQSize = ss->maxQSize = psl->qSize;
     ss->minIdent = ss->maxIndent = ident;
     ss->minQCover = ss->maxQCover = qCover;
+    ss->minTCover = ss->maxTCover = tCover;
     ss->minRepMatch = ss->maxRepMatch = repMatch;
     }
 else
@@ -229,6 +242,8 @@ else
     ss->maxIndent = max(ss->maxIndent, ident);
     ss->minQCover = min(ss->minQCover, qCover);
     ss->maxQCover = max(ss->maxQCover, qCover);
+    ss->minTCover = min(ss->minTCover, tCover);
+    ss->maxTCover = max(ss->maxTCover, tCover);
     ss->minRepMatch = min(ss->minRepMatch, repMatch);
     ss->maxRepMatch = max(ss->maxRepMatch, repMatch);
     }
@@ -240,10 +255,10 @@ ss->alnCnt++;
 
 /* header for alignment statistics */
 static char *alnStatsHdr = "#qName\t" "qSize\t" "tName\t" "tStart\t" "tEnd\t"
-"ident\t" "qCover\t" "repMatch\n";
+"ident\t" "qCover\t" "repMatch\t" "tCover\n";
 
 /* format for alignStats output */
-static char *alnStatsFmt = "%s\t%d\t%s\t%d\t%d\t%0.4f\t%0.4f\t%0.4f\n";
+static char *alnStatsFmt = "%s\t%d\t%s\t%d\t%d\t%0.4f\t%0.4f\t%0.4f\t%0.4f\n";
 
 static void alignStatsOutputUnaligned(FILE *fh, struct hash* querySizesTbl)
 /* output stats on unaligned */
@@ -254,7 +269,7 @@ while ((hel = hashNext(&cookie)) != NULL)
     {
     struct querySizeCnt *qs = hel->val;
     if (qs->alnCnt == 0)
-        fprintf(fh, alnStatsFmt, hel->name, qs->qSize, "", 0, 0, 0.0, 0.0, 0.0);
+        fprintf(fh, alnStatsFmt, hel->name, qs->qSize, "", 0, 0, 0.0, 0.0, 0.0, 0.0);
     }
 }
 
@@ -271,7 +286,7 @@ fputs(alnStatsHdr, fh);
 while ((psl = pslNext(pslLf)) != NULL)
     {
     fprintf(fh, alnStatsFmt, psl->qName, psl->qSize, psl->tName, psl->tStart, psl->tEnd,
-            calcIdent(psl), calcQCover(psl), calcRepMatch(psl));
+            calcIdent(psl), calcQCover(psl), calcRepMatch(psl), calcTCover(psl));
     if (querySizesTbl != NULL)
         querySizeCntGet(querySizesTbl, psl->qName, psl->qSize)->alnCnt++;
     pslFree(&psl);
@@ -286,17 +301,19 @@ carefulClose(&fh);
 
 /* header for query statistics */
 static char *queryStatsHdr = "#qName\t" "qSize\t" "alnCnt\t" "minIdent\t" "maxIndent\t" "meanIdent\t"
-"minQCover\t" "maxQCover\t" "meanQCover\t" "minRepMatch\t" "maxRepMatch\t" "meanRepMatch\n";
+"minQCover\t" "maxQCover\t" "meanQCover\t" "minRepMatch\t" "maxRepMatch\t" "meanRepMatch\t"
+"minTCover\t" "maxTCover\n";
 
 static void queryStatsOutput(FILE *fh, struct sumStats *qs)
 /* output statistic on a query */
 {
 fprintf(fh, "%s\t%d\t%d\t" "%0.4f\t%0.4f\t%0.4f\t"
-        "%0.4f\t%0.4f\t%0.4f\t"  "%0.4f\t%0.4f\t%0.4f\n",
+        "%0.4f\t%0.4f\t%0.4f\t"  "%0.4f\t%0.4f\t%0.4f\t" "%0.4f\t%0.4f\n",
         qs->qName, qs->minQSize, qs->alnCnt,
         qs->minIdent, qs->maxIndent, calcMeanIdent(qs),
         qs->minQCover, qs->maxQCover, calcMeanQCover(qs),
-        qs->minRepMatch, qs->maxRepMatch, calcMeanRepMatch(qs));
+        qs->minRepMatch, qs->maxRepMatch, calcMeanRepMatch(qs),
+        qs->minTCover, qs->maxTCover);
 }
 
 static void outputQueryStats(struct hash *queryStatsTbl, char *statsFile)
@@ -336,7 +353,8 @@ outputQueryStats(queryStatsTbl, statsFile);
 /* header for overall statistics */
 static char *overallStatsHdr = "#queryCnt\t" "minQSize\t" "maxQSize\t" "meanQSize\t"
 "alnCnt\t" "minIdent\t" "maxIndent\t" "meanIdent\t"
-"minQCover\t" "maxQCover\t" "meanQCover\t" "minRepMatch\t" "maxRepMatch\t" "meanRepMatch\n";
+"minQCover\t" "maxQCover\t" "meanQCover\t" "minRepMatch\t" "maxRepMatch\t" "meanRepMatch\t"
+"minTCover\t" "maxTCover\n";
 
 static void outputOverallStats(char *statsFile, struct sumStats *os)
 /* output overall statistic */
@@ -344,12 +362,13 @@ static void outputOverallStats(char *statsFile, struct sumStats *os)
 FILE *fh = mustOpen(statsFile, "w");
 fputs(overallStatsHdr, fh);
 fprintf(fh, "%d\t%d\t%d\t%d\t%d\t" "%0.4f\t%0.4f\t%0.4f\t"
-        "%0.4f\t%0.4f\t%0.4f\t"  "%0.4f\t%0.4f\t%0.4f\n",
+        "%0.4f\t%0.4f\t%0.4f\t"  "%0.4f\t%0.4f\t%0.4f\t" "%0.4f\t%0.4f\n",
         os->queryCnt, os->minQSize, os->maxQSize, calcMeanQSize(os),
         os->alnCnt,
         os->minIdent, os->maxIndent, calcMeanIdent(os),
         os->minQCover, os->maxQCover, calcMeanQCover(os),
-        os->minRepMatch, os->maxRepMatch, calcMeanRepMatch(os));
+        os->minRepMatch, os->maxRepMatch, calcMeanRepMatch(os),
+        os->minTCover, os->maxTCover);
 carefulClose(&fh);
 }
 
