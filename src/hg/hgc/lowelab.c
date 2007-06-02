@@ -55,6 +55,7 @@
 #include "netAlign.h"
 #include "tigrCmrGene.h"
 #include "jgiGene.h"
+#include "lowelabPfamHit.h"
 #include "sargassoSeaXra.h"
 #include "codeBlastScore.h"
 #include "codeBlast.h"
@@ -83,7 +84,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: lowelab.c,v 1.10 2007/05/25 03:10:14 pchan Exp $";
+static char const rcsid[] = "$Id: lowelab.c,v 1.11 2007/06/02 20:43:33 lowe Exp $";
 
 extern char *uniprotFormat;
 
@@ -1486,6 +1487,77 @@ void doJgiGene(struct trackDb *tdb, char *jgiName)
   jgiGeneFree(&jgi);
 }
 
+void doPfamHit(struct trackDb *tdb, char *hitName)
+/* Handle the Pfam hits track. */
+{
+  char *track = tdb->tableName;
+  struct lowelabPfamHits *pfamHit;
+  char query[512];
+  struct sqlConnection *conn = hAllocConn();
+  struct sqlConnection *spConn = NULL;
+  struct sqlResult *sr;
+  char *dupe, *words[16];
+  char **row;
+  int wordCount;
+  int rowOffset;
+  char *description; 
+  int start = cartInt(cart, "o");
+  char *pdb = hPdbFromGdb(database);
+  spConn = sqlConnect(pdb);
+  
+  genericHeader(tdb,hitName);
+  dupe = cloneString(tdb->type);
+  wordCount = chopLine(dupe, words);
+
+  rowOffset = hOffsetPastBin(seqName, track);
+  
+  sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d", track, hitName,seqName,start);
+  sr = sqlGetResult(conn, query);
+  while ((row = sqlNextRow(sr)) != NULL)
+    {
+      pfamHit = lowelabPfamHitsLoad(row+rowOffset);
+
+      safef(query, sizeof(query), "select description from proteome.pfamDesc where pfamAC='%s'", pfamHit->pfamAC);
+      
+	if (!sqlTableExists(spConn,"pfamDesc")) 
+	    {
+	    safef(query, sizeof(query), 
+	    "select extDbRef.extAcc1 from extDbRef,extDb "
+	    "where extDbRef.acc = '%s' "
+	    "and extDbRef.extDb = extDb.id "
+	    "and extDb.val = '%s'"
+	    , pfamHit->pfamAC,pfamHit->pfamID);
+	    }
+	
+	description = sqlQuickString(spConn, query);
+	if (description == NULL)
+	    description = cloneString("n/a");
+	
+	printf("<A HREF=\"http://www.sanger.ac.uk/cgi-bin/Pfam/getacc?%s\" TARGET=_blank>", 
+	       pfamHit->pfamAC );
+	printf("%s</A> - %s<BR><BR>\n", pfamHit->pfamAC, description);
+	freez(&description);
+	
+	printf("<B>Domain assignment based on %d%% identity BlastP hit to Pfam-A SwissProt Sequence:</B><BR>\n"
+	       "<A HREF=\"http://www.expasy.org/uniprot/%s\">%s</A> (%s, %d%% full-length alignment) "
+	     "<BR><A HREF=\"http://www.sanger.ac.uk/cgi-bin/Pfam/swisspfamget.pl?name=%s\">[Pfam Domain Structure]</A><BR>\n",
+	     pfamHit->ident,pfamHit->swissAC,pfamHit->swissAC,pfamHit->protCoord,pfamHit->percLen,pfamHit->swissAC);
+      
+      printf("<BR><B>Position:</B> "
+             "<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
+             hgTracksPathAndSettings(), database, pfamHit->chrom, pfamHit->chromStart + 1, pfamHit->chromEnd);
+      printf("%s:%d-%d</A><BR>\n", pfamHit->chrom, pfamHit->chromStart + 1, pfamHit->chromEnd);
+      printf("<B>Strand:</B> %s<BR>\n", pfamHit->strand);
+      printf("<B>Genomic size: </B> %d nt<BR>\n", (pfamHit->chromEnd - pfamHit->chromStart));
+      if (pfamHit->next != NULL)
+        printf("<hr>\n");
+    }
+  sqlFreeResult(&sr);
+  hFreeConn(&conn);
+  printTrackHtml(tdb);
+  lowelabPfamHitsFree(&pfamHit);
+}
+
 int parseDelimitedString(char *inString, char delimiter, char *outString[], int outSize)
 {
     int arrayCount = 0;
@@ -1907,6 +1979,10 @@ else if (sameWord(track, "tigrCmrORFs"))
 else if (sameWord(track, "jgiGene"))
     {
     doJgiGene(tdb,item);
+    }
+else if (sameWord(track, "lowelabPfamHits"))
+    {
+    doPfamHit(tdb,item);
     }
 else if (sameWord(track, "tigrOperons"))
     {
