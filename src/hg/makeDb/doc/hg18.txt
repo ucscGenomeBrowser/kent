@@ -11358,6 +11358,7 @@ gzip illumina.bed
     cp 1.bed all.bed
     cat 2.bed >> all.bed
     hgLoadBed hg18 snpArrayAffy6SV all.bed -tab
+    mysql> delete from snpArrayAffy6SV where chrom = "chr0";
 
 
 ##########################################################################
