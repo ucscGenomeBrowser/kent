@@ -11295,7 +11295,7 @@ rm hg17.data hg17.data.sort hg18.data.sort bed.tab join.out
 gzip illumina.bed
 
 ##########################################################################
-# New SNP Array data (Heather April 2006)
+# New SNP Array data (Heather April 2007)
 # Affymetrix introduced a new genotyping array in February
 # I got the data from Venu in April
 # It is based on dbSNP build 126
@@ -11324,9 +11324,44 @@ gzip illumina.bed
     # 69 more unknown)
     hgLoadBed hg18 snpArrayAffyGenomeWide affyLookup.out -tab -sqlTable=snpArrayAffyGenomeWide.sql
 
+##########################################################################
+# More new SNP Array data from Affymetrix  (Heather May 2007)
+# Source: Venu_Valmeekam@affymetrix.com
+# This is the 6.0 array, announced mid-May
+# It contains 2 components: single-base substitutions and copy-number probes
+# Single-base substitutions are based on snp127
+
+    ssh hgwdev
+
+    cd /cluster/data/hg18/bed/snp/affy/6.0/single
+    unzip GenomeWideSNP_6_ucsc_1.tsv.zip
+    unzip GenomeWideSNP_6_ucsc_2.tsv.zip
+    format.pl < GenomeWideSNP_6_ucsc_1.tsv > 1.bed
+    format.pl < GenomeWideSNP_6_ucsc_2.tsv > 2.bed
+    cp 1.bed all.bed
+    cat 2.bed >> all.bed
+    hgLoadBed hg18 snpArrayAffy6Prelim all.bed -tab -sqltable=snpArrayAffy6Prelim.sql
+    mysql> update snpArrayAffy6Prelim set chrom = "chrM" where chrom = "chrMT";
+    /cluster/home/heather/kent/src/hg/snp/snpLoad/affyLookup hg18 snpArrayAffy6Prelim snp127
+    # missing count = 1149
+    # multiple count = 2396
+    # used the strict version of affyLookup (class="single", locType="exact", size=1)
+    hgLoadBed hg18 snpArrayAffy6 affyLookup.out -tab -sqlTable=snpArrayAffy6.sql
+    mysql> alter table snpArrayAffy6 add index name(name);
+    mysql> alter table snpArrayAffy6 add index chrom(chrom, bin);
+
+    cd /cluster/data/hg18/bed/snp/affy/6.0/sv
+    unzip GenomeWideSNP_6_CN_ucsc_1.tsv.zip
+    unzip GenomeWideSNP_6_CN_ucsc_2.tsv.zip
+    format.pl < GenomeWideSNP_6_CN_ucsc_1.tsv > 1.bed
+    format.pl < GenomeWideSNP_6_CN_ucsc_2.tsv > 2.bed
+    cp 1.bed all.bed
+    cat 2.bed >> all.bed
+    hgLoadBed hg18 snpArrayAffy6SV all.bed -tab
+
 
 ##########################################################################
-# New Illumina Array data (Heather April 2006)
+# New Illumina Array data (Heather April 2007)
 # HumanHap300v3, HumanHap550v3, HumanHap650v3
 # Data from Luana Galver (lgalver@illumina.com)  
 # Based on dbSNP build 126
@@ -15606,11 +15641,13 @@ hgLoadBed -sqlTable=cgapSage.sql -tab hg18 cgapSage final.bed
 
 #########################################################################
 # HapMap SNPs (DONE 2007-05-23 Andy)
+# rel22
 ssh hgwdev
 bash
 cd /cluster/data/hg18/bed
 mkdir -p hapmap/zips
 cd hapmap/zips
+# archived to http://www.hapmap.org/genotypes/2007-03
 wget -nd -r -N -A html http://www.hapmap.org/genotypes/latest_ncbi_build36/rs_strand/non-redundant/
 grep gz index.html | sed 's/^.*href=\"\(geno.*\.txt\.gz\)\".*$/\1/' > files.txt
 wget -N -i files.txt --base=http://www.hapmap.org/genotypes/latest_ncbi_build36/rs_strand/non-redundant/ 
