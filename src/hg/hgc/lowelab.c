@@ -84,7 +84,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: lowelab.c,v 1.11 2007/06/02 20:43:33 lowe Exp $";
+static char const rcsid[] = "$Id: lowelab.c,v 1.12 2007/06/02 23:06:20 pchan Exp $";
 
 extern char *uniprotFormat;
 
@@ -1813,6 +1813,7 @@ void printBlastpResult(struct sqlConnection *conn, struct blastTab *blastpHitsLi
     struct blastTab *blastpHits;
     struct minGeneInfo *ginfo;
     char *blastpTarget[2];
+    char *clades[2];
     char genome[50] = "";
     char clade[50] = "";
     unsigned int hitStart = 0;
@@ -1834,7 +1835,7 @@ void printBlastpResult(struct sqlConnection *conn, struct blastTab *blastpHitsLi
     /* Print table column heading */
     printf("<tr style=\"vertical-align: top;\">\n");
     printf("<td width=\"18%%\"><b>Organism</b></td>\n");
-    printf("<td width=\"5%%\"><b>Domain</b></td>\n");
+    printf("<td width=\"7%%\"><b>Clade</b></td>\n");
     printf("<td width=\"7%%\"><b>Gene</b></td>\n");
     printf("<td><b>Product</b></td>\n");
     printf("<td width=\"5%%\"><b>Percent Length of Full Protein</b></td>\n"); 
@@ -1855,11 +1856,12 @@ void printBlastpResult(struct sqlConnection *conn, struct blastTab *blastpHitsLi
         
         /* Get species info */
         getGenomeClade(conn, blastpTarget[0], genome, clade);
+        parseDelimitedString(clade, '-', clades, 2);       
 
         printf("<tr style=\"vertical-align: top;\">\n");
        
         printf("<td><a name=\"%s:%s:%u-%u\"><i>%s</i></td>\n", blastpTarget[1], tChrom, tStart, tEnd, genome);
-        printf("<td>%s</td>\n", clade);
+        printf("<td>%s<br>%s</td>\n", clades[0], clades[1]);
         
         /* Get target gene position from refSeq */
         strcpy(refSeq, blastpTarget[0]);
