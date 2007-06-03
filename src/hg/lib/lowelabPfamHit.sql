@@ -5,6 +5,7 @@
 
 #Pfam domain hits mapped to the genome
 CREATE TABLE lowelabPfamHits (
+    bin int unsigned not null, 
     chrom varchar(255) not null,	# chromosome
     chromStart int unsigned not null,	# Start position in chromosome
     chromEnd int unsigned not null,	# End position in chromosome
@@ -18,5 +19,5 @@ CREATE TABLE lowelabPfamHits (
     ident int unsigned not null,	# Percent identity of Pfam-A seq with this hit (should be >90%)
     percLen int unsigned not null,	# Percent length of Pfam domain relative to protein length)
               #Indices
-    PRIMARY KEY(chrom)
+    PRIMARY KEY(name,chrom,chromStart)
 );
