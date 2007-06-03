@@ -1,4 +1,4 @@
-#qName	qSize	alnCnt	minIdent	maxIndent	meanIdent	minQCover	maxQCover	meanQCover	minRepMatch	maxRepMatch	meanRepMatch
+#qName	qSize	alnCnt	minIdent	maxIndent	meanIdent	minQCover	maxQCover	meanQCover	minRepMatch	maxRepMatch	meanRepMatch	minTCover	maxTCover
 NM_144664.3	3868	1	0.9706	0.9706	0.9706	0.0088	0.0088	0.0088	0.9706	0.9706	0.9706	0.0000	0.0000
 NM_144706.2	1430	1	0.9466	0.9466	0.9466	0.1832	0.1832	0.1832	0.8550	0.8550	0.8550	0.0000	0.0000
 NM_152834.2	2138	2	0.9524	0.9756	0.9639	0.0192	0.0196	0.0194	0.9524	0.9756	0.9639	0.0000	0.0000
