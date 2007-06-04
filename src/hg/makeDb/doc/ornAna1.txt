@@ -549,7 +549,6 @@ cat  << 'EOF' > spec
 
 #########################################################################
 # ANNOTATE MULTIZ6WAY MAF AND LOAD TABLES (DONE 4/25/2007 angie)
-# -- mafFilter'd and reloaded 6/9/2006
     ssh kolossus
     mkdir /cluster/data/ornAna1/bed/multiz6way.2007-04-24/anno
     cd /cluster/data/ornAna1/bed/multiz6way.2007-04-24/anno
@@ -594,7 +593,7 @@ cat  << 'EOF' > spec
 #total rejected: 66 blocks
     # mafFilter rejected 66 single-row (ornAna1 only) blocks due to 
     # its default minRow of 2.  That's reasonable, so replace the original 
-    # with the filtered version (and reload the db tables based on the file).
+    # with the filtered version (and load the db tables w/filtered).
     gzip -c ornAna1.maf > ornAna1.preFilter.maf.gz
     mv ornAna1.mf.maf ornAna1.maf
 

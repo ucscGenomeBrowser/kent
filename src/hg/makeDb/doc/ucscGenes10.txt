@@ -1,4 +1,5 @@
 # :vim nowrap
+# for emacs: -*- mode: sh; -*-
 # This describes how to make the UCSC genes on hg18, though
 # hopefully by editing the variables that follow immediately
 # this will work on other databases too.
