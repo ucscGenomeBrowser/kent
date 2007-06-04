@@ -8,7 +8,7 @@
 #include "hgRelate.h"
 #include "blastTab.h"
 
-static char const rcsid[] = "$Id: hgLoadBlastTab.c,v 1.8 2006/04/07 18:55:05 angie Exp $";
+static char const rcsid[] = "$Id: hgLoadBlastTab.c,v 1.9 2007/06/04 22:57:42 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -22,6 +22,8 @@ errAbort(
   "options:\n"
   "   -createOnly - just create the table, don't load it\n"
   "   -maxPer=N - maximum to load for any query sequence\n"
+  "   -bestOnly - keep only the first hit for {query,target} (blast output\n"
+  "               is sorted by score so first hit is best-scoring hit)\n"
   );
 }
 
@@ -30,6 +32,7 @@ int maxPer = BIGNUM;
 static struct optionSpec options[] = {
    {"createOnly", OPTION_BOOLEAN},
    {"maxPer", OPTION_INT},
+   {"bestOnly", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -58,6 +61,8 @@ sqlRemakeTable(conn, tableName, dy->string);
 dyStringFree(&dy);
 }
 
+#define THASH_BITS 12
+
 void hgLoadBlastTab(char *database, char *table, int inCount, char *inNames[])
 /* hgLoadBlastTab - Load blast table into database. */
 {
@@ -68,6 +73,8 @@ sqlDisconnect(&conn);
 if (!optionExists("createOnly"))
     {
     FILE *f = hgCreateTabFile(".", table);
+    struct hash *tHash;
+    boolean bestOnly = optionExists("bestOnly");
     int i;
     int count = 0;
     int qHitCount = 0;
@@ -76,6 +83,8 @@ if (!optionExists("createOnly"))
     lastQ[0] = 0;
     verbose(1, "Scanning through %d files\n", inCount);
 
+    if (bestOnly)
+	tHash = hashNew(THASH_BITS);
     for (i=0; i<inCount; ++i)
 	{
 	struct lineFile *lf = lineFileOpen(inNames[i], TRUE);
@@ -90,6 +99,18 @@ if (!optionExists("createOnly"))
 	        {
 		safef(lastQ, sizeof(lastQ), "%s", bt.query);
 		qHitCount = 0;
+		if (bestOnly)
+		    {
+		    hashFree(&tHash);
+		    tHash = hashNew(THASH_BITS);
+		    }
+		}
+	    /* Keep only the best alignment of query and target: */
+	    if (bestOnly)
+		{
+		if (hashLookup(tHash, bt.target) != NULL)
+		    continue;
+		hashAddInt(tHash, bt.target, 1);
 		}
 	    ++qHitCount;
 	    if (qHitCount <= maxPer)
@@ -100,6 +121,8 @@ if (!optionExists("createOnly"))
 	    }
 	lineFileClose(&lf);
 	}
+    if (bestOnly)
+	hashFree(&tHash);
     verbose(1, "Loading database with %d rows\n", count);
     conn = sqlConnect(database);
     hgLoadTabFile(conn, ".", table, &f);
