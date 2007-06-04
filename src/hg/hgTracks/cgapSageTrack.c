@@ -127,15 +127,28 @@ if (vis == tvDense)
     /* Just use the skeleton one. */
     {
     double aveTpm = 0;
+    int libsUsed = 0;
     for (i = 0; i < tag->numLibs; i++)
-	/* Average the lib tpms. */
-	aveTpm += tag->tagTpms[i];
-    if (tag->numLibs > 0)
-	aveTpm /= tag->numLibs;
-    safef(skel->name, sizeof(skel->name), "whatever");
-    skel->grayIx = grayIxForCgap(aveTpm);
-    addSimpleFeature(skel);
-    libList = skel;
+	{
+	char libId[16];
+	char *libName;
+	safef(libId, sizeof(libId), "%d", tag->libIds[i]);
+	libName = hashMustFindVal(libHash, libId);
+	if (keepThisLib(libName, libId))
+            /* Average the lib tpms. */
+	    {
+	    libsUsed++;
+	    aveTpm += tag->tagTpms[i];
+	    }
+	}
+    if (libsUsed > 0)
+	{
+	aveTpm /= libsUsed;
+	safef(skel->name, sizeof(skel->name), "whatever");
+	skel->grayIx = grayIxForCgap(aveTpm);
+	addSimpleFeature(skel);
+	libList = skel;
+	}
     }
 else if (vis == tvPack)
     {
@@ -161,10 +174,10 @@ else
     {
     for (i = 0; i < tag->numLibs; i++)
 	{
-	struct linkedFeatures *lf;
 	char libId[16];
-	char extra[32];
 	char *libName;
+	char extra[32];
+	struct linkedFeatures *lf;
 	safef(libId, sizeof(libId), "%d", tag->libIds[i]);
 	libName = hashMustFindVal(libHash, libId);
 	if (keepThisLib(libName, libId))
