@@ -9,14 +9,14 @@
 	<META 
 	content="human genome, human proteome, proteome browser, protein browser, graphical display" 
 	name=keywords>
-        <LINK REL="STYLESHEET" HREF="/style/HGStyle.css">
+        <LINK REL="STYLESHEET" HREF="../../../style/HGStyle.css">
 </HEAD>
 
 <BODY BGCOLOR="FFF9D2" LINK="0000CC" VLINK="#330066" ALINK="#330066">
 <A NAME="TOP"></A>
 
 <TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH="100%">
-    <TR><TH COLSPAN=2 ALIGN="left"><IMG SRC="/images/title.jpg"></TH></TR>
+    <TR><TH COLSPAN=2 ALIGN="left"><IMG SRC="../../../images/title.jpg"></TH></TR>
 
 <!----Hotlinks Bar-------------------------------------->
     <TR><TD COLSPAN=2 HEIGHT=40>
@@ -51,7 +51,7 @@
             <TR><TD>
                 <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
                     <TR><TD>
-                        <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+                        <TABLE BGCOLOR="D9E4F8" BACKGROUND="../../../images/hr.gif" WIDTH=100%>
                             <TR><TD>
                             <FONT SIZE="4"><B>&nbsp;UCSC Proteome Browser User's Guide </B></FONT>
                             </TD></TR>
@@ -97,7 +97,7 @@
             <TR><TD>                
 		<TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
                     <TR><TD>                        
-			<TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+			<TABLE BGCOLOR="D9E4F8" BACKGROUND="../../../images/hr.gif" WIDTH=100%>
                             <TR><TD><FONT SIZE="4"><A NAME="TOC"></A><B>&nbsp; Overview</B></FONT>
                             </TD></TR>
                         </TABLE>
@@ -245,7 +245,7 @@
             <TR><TD>
                 <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
                     <TR><TD>
-                        <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+                        <TABLE BGCOLOR="D9E4F8" BACKGROUND="../../../images/hr.gif" WIDTH=100%>
                             <TR><TD><FONT SIZE="4"><A NAME="TOC"></A><B>&nbsp; Protein Tracks</B></FONT>
                             </TD></TR>
                         </TABLE>
@@ -321,7 +321,7 @@
             <TR><TD>
                 <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
                     <TR><TD>
-                        <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+                        <TABLE BGCOLOR="D9E4F8" BACKGROUND="../../../images/hr.gif" WIDTH=100%>
                             <TR><TD><FONT SIZE="4"><A NAME="TOC"></A><B>&nbsp; Protein Property Histograms</B></FONT>
                             </TD></TR>
                         </TABLE>
@@ -389,7 +389,7 @@
             <TR><TD>
                 <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
                     <TR><TD>
-                        <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+                        <TABLE BGCOLOR="D9E4F8" BACKGROUND="../../../images/hr.gif" WIDTH=100%>
                             <TR><TD><FONT SIZE="4"><A NAME="TOC"></A><B>&nbsp; Exon Count</B></FONT>
                             </TD></TR>
                         </TABLE>
@@ -414,7 +414,7 @@
             <TR><TD>
                 <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
                     <TR><TD>
-                        <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+                        <TABLE BGCOLOR="D9E4F8" BACKGROUND="../../../images/hr.gif" WIDTH=100%>
                             <TR><TD><FONT SIZE="4"><A NAME="TOC"></A><B>&nbsp; Polarity and Isoelectric Point</B></FONT>
                             </TD></TR>
                         </TABLE>
@@ -439,7 +439,7 @@
             <TR><TD>
                 <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
                     <TR><TD>
-                        <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+                        <TABLE BGCOLOR="D9E4F8" BACKGROUND="../../../images/hr.gif" WIDTH=100%>
                             <TR><TD><FONT SIZE="4"><A NAME="TOC"></A><B>&nbsp; Molecular Weight</B></FONT>
                             </TD></TR>
                         </TABLE>
@@ -466,7 +466,7 @@
             <TR><TD>
                 <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
                     <TR><TD>
-                        <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+                        <TABLE BGCOLOR="D9E4F8" BACKGROUND="../../../images/hr.gif" WIDTH=100%>
                             <TR><TD><FONT SIZE="4"><A NAME="TOC"></A><B>&nbsp; Hydrophobicity</B></FONT>
                             </TD></TR>
                         </TABLE>
@@ -492,7 +492,7 @@
             <TR><TD>
                 <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
                     <TR><TD>
-                        <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+                        <TABLE BGCOLOR="D9E4F8" BACKGROUND="../../../images/hr.gif" WIDTH=100%>
                             <TR><TD><FONT SIZE="4"><A NAME="TOC"></A><B>&nbsp; Cysteine Count</B></FONT>
                             </TD></TR>
                         </TABLE>
@@ -518,7 +518,7 @@
             <TR><TD>
                 <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
                     <TR><TD>
-                        <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+                        <TABLE BGCOLOR="D9E4F8" BACKGROUND="../../../images/hr.gif" WIDTH=100%>
                             <TR><TD><FONT SIZE="4"><A NAME="TOC"></A><B>&nbsp; Glycosylation</B></FONT>
                             </TD></TR>
                         </TABLE>
@@ -544,7 +544,7 @@
             <TR><TD>
                 <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
                     <TR><TD>
-                        <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+                        <TABLE BGCOLOR="D9E4F8" BACKGROUND="../../../images/hr.gif" WIDTH=100%>
                             <TR><TD><FONT SIZE="4"><A NAME="TOC"></A><B>&nbsp; Protein Domains</B></FONT>
                             </TD></TR>
                         </TABLE>
@@ -570,7 +570,7 @@
             <TR><TD>
                 <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
                     <TR><TD>
-                        <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+                        <TABLE BGCOLOR="D9E4F8" BACKGROUND="../../../images/hr.gif" WIDTH=100%>
                             <TR><TD><FONT SIZE="4"><A NAME="TOC"></A><B>&nbsp; Amino Acid Anomalies</B></FONT>
                             </TD></TR>
                         </TABLE>
