@@ -30,7 +30,7 @@
 #include "hgGenome.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.19 2007/05/23 00:30:47 galt Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.20 2007/06/05 23:48:09 galt Exp $";
 
 
 static char *allColors[] = {
@@ -478,7 +478,7 @@ if (ggList != NULL)
 else
     {
     hPrintf("<BR>No graph data is available for this assembly.  "
-	    "You can still upload your own data.");
+	    "Upload your own data or import from a table or custom track.");
     }
 return result;
 }
@@ -583,6 +583,8 @@ for (i=0; i<graphRows; ++i)
     }
 hPrintf("</TABLE>");
 cgiMakeButton(hggUpload, "upload");
+hPrintf(" ");
+cgiMakeButton(hggImport, "import");
 hPrintf(" ");
 cgiMakeButton(hggConfigure, "configure");
 hPrintf(" ");

@@ -6,6 +6,9 @@
 #ifndef HGGENOME_H
 #define HGGENOME_H
 
+#include "grp.h"
+#include "hPrint.h"
+
 /*** Prefixes for variables in cart we don't share with other apps. ***/
 #define hggPrefix "hgGenome_"
 #define hggDo hggPrefix "do"
@@ -45,10 +48,85 @@
 #define hggCorrelate hggDo "Correlate"
 #define hggUpload hggDo "Upload"
 #define hggSubmitUpload hggDo "SubmitUpload"
+#define hggImport hggDo "Import"
+#define hggSubmitImport hggDo "SubmitImport"
 #define hggClick hggDo "Click"
 #define hggPsOutput hggDo "PsOutput"
 #define hggClickX hggClick ".x"
 #define hggClickY hggClick ".y"
+
+
+
+/* -- import-track related -- */
+
+#define hggGroup hggPrefix "group"
+#define hggTrack hggPrefix "track"
+#define hggTable hggPrefix "table"
+
+
+#define hggBedConvertType hggPrefix "bedConvertType"
+#define hggBedConvertTypeJs "js_bedConvertType"
+#define hggBedCoverage "coverage"
+#define hggBedDepth "depth"
+
+
+/* Global variables - generally set during initialization and then read-only. */
+extern char *curTable;  /* Current selected table. */
+extern struct trackDb *curTrack;        /* Currently selected track. */
+
+
+struct trackDb *getFullTrackList();
+/* Get all tracks including custom tracks if any. */
+
+struct customTrack *getCustomTracks();
+/* Get custom track list. */
+
+struct trackDb *findSelectedTrack(struct trackDb *trackList,
+        struct grp *group, char *varName);
+/* Find selected track - from CGI variable if possible, else
+ * via various defaults. */
+
+struct customTrack *lookupCt(char *name);
+/* Find named custom track. */
+
+struct customTrack *newCt(char *ctName, char *ctDesc, int visNum, char *ctUrl,
+                          int fields);
+/* Make a new custom track record for the query results. */
+
+void removeNamedCustom(struct customTrack **pList, char *name);
+/* Remove named custom track from list if it's on there. */
+
+struct hTableInfo *ctToHti(struct customTrack *ct);
+/* Create an hTableInfo from a customTrack. */
+
+struct hTableInfo *getHti(char *db, char *table);
+/* Return primary table info. */
+
+struct hTableInfo *maybeGetHti(char *db, char *table);
+/* Return primary table info, but don't abort if table not there. */
+
+
+
+#define hgtaCtName "hgta_ctName"
+#define hgtaCtDesc "hgta_ctDesc"
+#define hgtaCtVis "hgta_ctVis"
+#define hgtaCtUrl "hgta_ctUrl"
+#define hgtaCtWigOutType "hgta_ctWigOutType"
+
+/* Prefix for temp name files created for custom tracks */
+#define hgtaCtTempNamePrefix "hgtct"
+/* Prefix for variables containing filters themselves. */
+#define hgtaFilterVarPrefix hgtaFilterPrefix "v."
+/* Prefix for variables managed by filter page. */
+#define hgtaFilterPrefix "hgta_fil."
+
+#define hgtaPrintCustomTrackHeaders "hgta_printCustomTrackHeaders"
+
+#define outWigData "wigData"
+#define hgtaIntersectTable "hgta_intersectTable"
+#define hgtaIntersectTrack "hgta_intersectTrack"
+#define hgtaInvertTable2 "hgta_invertTable2"
+#define hgtaIntersectOp "hgta_intersectOp"
 
 /*** External vars declared in hgGenome.c ***/
 extern struct cart *cart;
@@ -164,6 +242,9 @@ void printMainHelp();
 void uploadPage();
 /* Put up initial upload page. */
 
+void importPage();
+/* Put up initial import page. */
+
 void configurePage();
 /* Put up configuration page. */
 
@@ -179,6 +260,9 @@ void submitUpload(struct sqlConnection *conn);
 void submitUpload2(struct sqlConnection *conn);
 /* Called when they've submitted from uploads page */
 
+void submitImport(struct sqlConnection *conn);
+/* Called when they've submitted from import page */
+
 void browseRegions(struct sqlConnection *conn);
 /* Put up a frame with a list of links on the left and the
  * first link selected on the right. */
@@ -188,5 +272,55 @@ void sortGenes(struct sqlConnection *conn);
 
 void clickOnImage(struct sqlConnection *conn);
 /* Handle click on image - calculate position in forward to genome browser. */
+
+
+/* ----------- Wiggle business in wiggle.c -------------------- */
+
+#define	MAX_REGION_DISPLAY	1000
+
+boolean isWiggle(char *db, char *table);
+/* Return TRUE if db.table is a wiggle. */
+
+boolean isBedGraph(char *table);
+/* Return TRUE if table is specified as a bedGraph in the current database's 
+ * trackDb. */
+
+void wiggleMinMax(struct trackDb *tdb, double *min, double *max);
+/*	obtain wiggle data limits from trackDb or cart or settings */
+
+struct wiggleDataStream *wigChromRawStats(char *chrom);
+/* Fetch stats for wig data in chrom.
+ * Returns a wiggleDataStream, free it with wiggleDataStreamFree() */
+
+
+
+/* ------------ */
+
+struct sqlResult *chromQuery(struct sqlConnection *conn, char *table,
+        char *fields, char *chrom, boolean isPositional,
+        char *extraWhere);
+/* Construct and execute query for table on chrom. Returns NULL if
+ * table doesn't exist (e.g. missing split table for chrom). */
+
+struct bed *getBeds(char *chrom, struct lm *lm, int *retFieldCount);
+/* Get list of beds on single chrom. */
+
+
+struct bed *customTrackGetBedsForChrom(char *name, char *chrom,
+	struct lm *lm,	int *retFieldCount);
+/* Get list of beds from custom track of given name that are
+ * in given chrom. You can bedFree this when done. */ 
+
+
+boolean isMafTable(char *database, struct trackDb *track, char *table);
+/* Return TRUE if table is maf. */
+
+
+boolean isChromGraph(struct trackDb *track);
+/* Return TRUE if it's a chromGraph track */
+
+char *getBedGraphField(char *table, char *type);
+/* get the bedGraph dataValue field name from the track type */
+
 
 #endif /* HGGENOME_H */

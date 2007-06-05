@@ -31,14 +31,14 @@ static char *markerNames[] = {
     cgfMarkerHumanHap650,
     };
 
-char *formatNames[] = {
+static char *formatNames[] = {
     cgfFormatGuess,
     cgfFormatTab,
     cgfFormatComma,
     cgfFormatSpace,
     };
 
-char *colLabelNames[] = {
+static char *colLabelNames[] = {
     cgfColLabelGuess,
     cgfColLabelNumbered,
     cgfColLabelFirstRow,
@@ -180,7 +180,7 @@ void updateCustomTracks(struct customTrack *upList)
 struct customTrack *oldList = customTracksParseCart(cart, NULL, NULL);
 struct customTrack *outList = customTrackAddToList(oldList, upList, NULL, FALSE);
 customTracksSaveCart(cart, outList);
-hPrintf("This data is now available in the drop-down menus on the ");
+hPrintf("These data are now available in the drop-down menus on the ");
 hPrintf("main page for graphing.<BR>");
 }
 
