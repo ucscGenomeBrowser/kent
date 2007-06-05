@@ -978,7 +978,7 @@ dataVersion ENCODE Oct 2005 Freeze
 track encodeUCDavisChip
 compositeTrack on
 shortLabel UCD Ng ChIP
-longLabel UC Davis ChIP-chip NimbleGen (E2F1, Myc ab, HeLa Cells)
+longLabel UC Davis ChIP-chip NimbleGen (E2F1, c-Myc, TAF, POLII)
 group encodeChip
 priority 56.0
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -1009,7 +1009,7 @@ dataVersion ENCODE June & Oct 2005 Freezes
     track encodeUCDavisPolII_GM
     subTrack encodeUCDavisChip
     shortLabel UCD PolII_GM
-    longLabel UC Davis ChIP-chip NimbleGen (PolII, GM Cells)
+    longLabel UC Davis ChIP-chip NimbleGen (PolII, GM06990 Cells)
     priority 3
     dataVersion Mar 2007
     
@@ -1023,7 +1023,7 @@ dataVersion ENCODE June & Oct 2005 Freezes
     track encodeUCDavisTaf_GM
     subTrack encodeUCDavisChip
     shortLabel UCD Taf_GM
-    longLabel UC Davis ChIP-chip NimbleGen (TAF, GM Cells)
+    longLabel UC Davis ChIP-chip NimbleGen (TAF, GM06990 Cells)
     priority 5
     dataVersion Mar 2007
     
