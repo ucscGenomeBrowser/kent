@@ -134,7 +134,8 @@ if ( $choice == "next" ) then
   echo $list $todaysDb | sed -e "s/ /\n/g" > $outPath/databaseAdayList
 
   # give the file the correct permissions
-  chmod 774 $outPath/databaseAdayList
+  # complains when someone else runs it 
+  # chmod 774 $outPath/databaseAdayList
   exit 0
 endif
 
