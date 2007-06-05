@@ -1859,6 +1859,7 @@ ftp://ftp.flybase.net/releases/FB2006_01/dmel_r5.1/chado-xml/chado_dmel_genes.xm
 # HGNEAR TABLES
 
 # HGNEAR PROTEIN BLAST TABLES (DONE (except for dmBlastTab in other dbs -- leave those with dm2) 4/6/07)
+# self redone 6/4/07, see below
     ssh hgwdev
     mkdir /cluster/data/dm3/bed/hgNearBlastp
     cd /cluster/data/dm3/bed/hgNearBlastp
@@ -1920,6 +1921,28 @@ _EOF_
 #Loading database with 4564 rows
         run.dm3.sacCer1/loadPairwise.csh
 #Loading database with 2184 rows
+
+    # self redone 6/4/07 to make use of hgLoadBlastTab's new -bestOnly.
+    # query databases.
+    mkdir /cluster/data/dm3/bed/hgNearBlastp/070604
+    cd /cluster/data/dm3/bed/hgNearBlastp/070604
+    cat << _EOF_ > config.ra
+# Latest fly vs. other Gene Sorter orgs:
+# human, mouse, rat, zebrafish, worm, yeast
+
+targetGenesetPrefix flyBase
+targetDb dm3
+queryDbs 
+
+dm3Fa     /cluster/data/dm3/bed/hgNearBlastp/070405/dm3.flyBasePep.faa
+
+buildDir /cluster/data/dm3/bed/hgNearBlastp/070604
+scratchDir /san/sanvol1/scratch/dm3HgNearBlastp
+_EOF_
+    ~/kent/src/hg/utils/automation/doHgNearBlastp.pl -noLoad config.ra >& do.log &
+    tail -f do.log
+    run.dm3.dm3/loadPairwise.csh
+#Loading database with 764012 rows
 
 #TODO when dm3 hgNear tables have been pushed and other dbs can be updated:
 # *** -noLoad was specified -- you can run these scripts manually to load dmBlastTab in query databases:
