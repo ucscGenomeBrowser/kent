@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/automation/doHgNearBlastp.pl instead.
 
-# $Id: doHgNearBlastp.pl,v 1.2 2007/04/09 21:14:11 angie Exp $
+# $Id: doHgNearBlastp.pl,v 1.3 2007/06/05 05:04:33 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -327,6 +327,7 @@ sub loadPairwise {
 
   $filePattern = 'out/*.tab' if (! defined $filePattern);
   my $tableName = $tablePrefix . 'BlastTab';
+  my $bestOnly = ($max > 1) ? '-bestOnly' : '';
   my $runDir = "$buildDir/run.$tDb.$qDb";
   my $bossScript = "$buildDir/run.$tDb.$qDb/loadPairwise.csh";
   my $fh = HgAutomate::mustOpen(">$bossScript");
@@ -339,7 +340,7 @@ sub loadPairwise {
 # This script will fail if any of its commands fail.
 
 cd $runDir
-hgLoadBlastTab $tDb $tableName -maxPer=$max $filePattern
+hgLoadBlastTab $tDb $tableName -maxPer=$max $bestOnly $filePattern
 _EOF_
     ;
   close($fh);
