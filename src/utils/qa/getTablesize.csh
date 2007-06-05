@@ -21,6 +21,8 @@ set machine1="hgwbeta"
 set machine2=""
 set mach1Tot=0
 set mach2Tot=0
+set mach1dump=""
+set mach2dump=""
 
 if ( $#argv < 2 || $#argv > 4 ) then
   echo
@@ -179,7 +181,7 @@ echo "as of STATUS dumps:"
 checkTableStatus.csh | grep $machine1 \
    | awk '{ printf("%8s %9s\n", $1, $2)}'
 if ( "" != $machine2 ) then
-  checkTableStatus.csh | grep $machine2 | grep $machine2 \
+  checkTableStatus.csh | grep $machine2 \
      | awk '{ printf("%8s %9s\n", $1, $2)}'
 endif
 echo
