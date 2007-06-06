@@ -15,12 +15,15 @@ static struct cgapSage *cgapSageTagLoad(struct sqlConnection *conn, struct track
 struct cgapSage *tag = NULL;
 struct sqlResult *sr;
 char **row;
-char *chrom = cartString(cart, "c");
-int start = cartInt(cart, "o");
-int end = cartUsualInt(cart, "t", 0);
+char *chrom = cgiString("c");
+int start = cgiInt("o");
+int end = cgiUsualInt("t", 0);
+char *tagName = cgiString("i");
 int rowOffset;
 char extraWhere[128];
-safef(extraWhere, sizeof(extraWhere), "chromStart=%d and chromEnd=%d", start, end);
+if (tagName == NULL)
+    errAbort("Missing tag sequence in click for cgapSage track.");
+safef(extraWhere, sizeof(extraWhere), "name=\'%s\'", tagName);
 sr = hOrderedRangeQuery(conn, tdb->tableName, chrom, start, end,
 			extraWhere, &rowOffset);
 row = sqlNextRow(sr);
@@ -136,8 +139,8 @@ if ((clickedLibId && sameString(s, clickedLibId)) ||
     {
     safef(s, sizeof(s), "<B>%d</B>", libId);
     webPrintLinkCell(s);
-    safef(s, sizeof(s), "<A HREF=\"%s&o=%d&t=%d&c=%s&g=cgapSage&i=libId.%d\"><B>%s</B></A>", 
-	  hgcPathAndSettings(), tag->chromStart, tag->chromEnd, tag->chrom, libId,
+    safef(s, sizeof(s), "<A HREF=\"%s&o=%d&t=%d&c=%s&g=cgapSage&i=%s&lib=%d\"><B>%s</B></A>", 
+	  hgcPathAndSettings(), tag->chromStart, tag->chromEnd, tag->chrom, tag->name, libId,
 	  lib->newLibName);
     webPrintLinkCell(s);
     safef(s, sizeof(s), "<B>%s</B>", lib->tissue);
@@ -153,8 +156,8 @@ else
     {
     safef(s, sizeof(s), "%d", libId);
     webPrintLinkCell(s);  
-    safef(s, sizeof(s), "<A HREF=\"%s&o=%d&t=%d&c=%s&g=cgapSage&i=libId.%d\">%s</A>", hgcPathAndSettings(), 
-	  tag->chromStart, tag->chromEnd, tag->chrom, libId,
+    safef(s, sizeof(s), "<A HREF=\"%s&o=%d&t=%d&c=%s&g=cgapSage&i=%s&lib=%d\">%s</A>", hgcPathAndSettings(), 
+	  tag->chromStart, tag->chromEnd, tag->chrom, tag->name, libId,
 	  lib->newLibName);
     webPrintLinkCell(s);
     webPrintLinkCell(lib->tissue);
@@ -167,17 +170,13 @@ else
     }
 }
 
-static void printCgapTagSection(struct cgapSage *tag, struct hash *libHash, char *itemName)
+static void printCgapTagSection(struct cgapSage *tag, struct hash *libHash)
 /* Print section with frequency and TPM info for all the libs with the tag. */
 {
 int i;
 int N = tag->numLibs;
-char *libId = NULL;
-char *tissue = NULL;
-if (startsWith("libId", itemName))
-    libId = itemName + 6;
-else
-    tissue = itemName;
+char *libId = cgiUsualString("lib", NULL);
+char *tissue = cgiUsualString("tiss", NULL);
 /* char *libSex = cgapSageLibSex(lib->sex); */
 webNewSection("Libraries With Selected SAGE Tag");
 webPrintLinkTableStart();
@@ -204,14 +203,15 @@ void doCgapSage(struct trackDb *tdb, char *itemName)
 struct sqlConnection *conn = hAllocConn();
 struct cgapSage *tag = cgapSageTagLoad(conn, tdb);
 struct hash *libHash = getLibHash(conn);
+char *libId = cgiUsualString("lib", NULL);
 genericHeader(tdb, NULL);
 /* Print out tag information. */
 printCgapSageHeader(tag);
-if (startsWith("libId", itemName))
+if (libId)
     {
-    printCgapLibSection(libHash, itemName + 6);    
+    printCgapLibSection(libHash, libId);
     }
-printCgapTagSection(tag, libHash, itemName);
+printCgapTagSection(tag, libHash);
 webNewSection("Track Details");
 printTrackHtml(tdb);
 cgapSageFree(&tag);
