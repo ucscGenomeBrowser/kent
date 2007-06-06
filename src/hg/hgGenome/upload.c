@@ -26,6 +26,8 @@ static char *markerNames[] = {
     cgfMarkerSnp,
     // cgfMarkerAffy100,
     cgfMarkerAffy500,
+    cgfMarkerAffy6,
+    cgfMarkerAffy6SV,
     cgfMarkerHumanHap300,
     cgfMarkerHumanHap550,
     cgfMarkerHumanHap650,

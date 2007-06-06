@@ -16,6 +16,8 @@
 #include "trashDir.h"
 
 #define affy500Table "snpArrayAffy500"
+#define affy6Table "snpArrayAffy6"
+#define affy6SVTable "snpArrayAffy6SV"
 #define illumina300Table "snpArrayIllumina300"
 #define illumina550Table "snpArrayIllumina550"
 #define illumina650Table "snpArrayIllumina650"
@@ -247,6 +249,28 @@ if (sqlTableExists(conn, table))
     {
     AllocVar(mtr);
     mtr->type = cgfMarkerAffy500;
+    mtr->table = table;
+    mtr->query = "select count(*) from %s where name='%s'";
+    slAddHead(&list, mtr);
+    }
+
+/* Affy 6 recognizer */
+table = affy6Table;
+if (sqlTableExists(conn, table))
+    {
+    AllocVar(mtr);
+    mtr->type = cgfMarkerAffy6;
+    mtr->table = table;
+    mtr->query = "select count(*) from %s where name='%s'";
+    slAddHead(&list, mtr);
+    }
+
+/* Affy 6SV recognizer */
+table = affy6SVTable;
+if (sqlTableExists(conn, table))
+    {
+    AllocVar(mtr);
+    mtr->type = cgfMarkerAffy6SV;
     mtr->table = table;
     mtr->query = "select count(*) from %s where name='%s'";
     slAddHead(&list, mtr);
@@ -749,13 +773,20 @@ else if (sameString(markerType, cgfMarkerAffy100))
     {
     warn("Support for Affy 100k chip coming soon.");
     }
-else if (sameString(markerType, cgfMarkerAffy500))
+else if (sameString(markerType, cgfMarkerAffy500)
+      || sameString(markerType, cgfMarkerAffy6)
+      || sameString(markerType, cgfMarkerAffy6SV)
+        )
     {
-    if (!sqlTableExists(conn, affy500Table))
+    char *table = "";
+    if (sameString(markerType, cgfMarkerAffy500)) table = affy500Table;
+    if (sameString(markerType, cgfMarkerAffy6))   table = affy6Table;
+    if (sameString(markerType, cgfMarkerAffy6SV)) table = affy6SVTable;
+    if (!sqlTableExists(conn, table))
         errAbort("Sorry, no data for %s on this assembly.",
-		cgfMarkerAffy500);
+		markerType);
     ok = mayProcessDb(conn, cpp, colCount, formatType,
-    	firstLineLabels, fileList, affy500Table,
+    	firstLineLabels, fileList, table,
     	"select chrom,chromStart,name from %s", NULL, NULL, report);
     }
 else if (sameString(markerType, cgfMarkerHumanHap300)
