@@ -732,8 +732,8 @@ augustus/src/augustus --AUGUSTUS_CONFIG_PATH=/cluster/data/felCat3/bed/augustus/
     rm -f *.tab
 
     # update trackDb; need a felCat3-specific page to describe informants
-    human/felCat3/nscanGene.html    
-    human/felCat3/trackDb.ra
+    cat/felCat3/nscanGene.html    
+    cat/felCat3/trackDb.ra
 
 
 ##########################################################################
