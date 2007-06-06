@@ -1334,7 +1334,7 @@ for (chr = chromList; chr != NULL; chr = chr->next)
 	if (midPoint < chromSize)
 	    {
 	    dyStringPrintf(dy,"%s\t%d\t%f\n", 
-		chrom, i*windowSize+(windowSize/2), depth[i] >= 0.5 ? 1.0 : 0.0);
+		chrom, i*windowSize+(windowSize/2), depth[i] > 0.0 ? 1.0 : 0.0);
 	    }
 	}
     freez(&depth);
