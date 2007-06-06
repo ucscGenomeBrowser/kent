@@ -116,7 +116,7 @@
 #endif
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1343 2007/05/25 20:03:38 aamp Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1344 2007/06/06 08:07:25 aamp Exp $";
 
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
@@ -1954,9 +1954,20 @@ boolean nextItemCompatible(struct track *tg)
 return (withNextExonArrows && tg->nextItemButtonable && tg->nextPrevItem);
 }
 
+static void genericMapItem(struct track *tg, void *item, char *itemName, int start, int end,
+			    int x, int y, int width, int height)
+/* This is meant to be used by genericDrawItems to set to tg->mapItem in */
+/* case tg->mapItem isn't set to anything already. */
+{
+char *directUrl = trackDbSetting(tg->tdb, "directUrl");
+boolean withHgsid = (trackDbSetting(tg->tdb, "hgsid") != NULL);
+mapBoxHgcOrHgGene(start, end, x, y, width, height, tg->mapName, 
+			  itemName, itemName, directUrl, withHgsid);
+}
+
 void genericDrawNextItemStuff(struct track *tg, struct vGfx *vg, enum trackVisibility vis, struct slList *item, 
 			      int x2, int textX, int y, int heightPer,
-			      boolean snapLeft, Color color, char *name, char *directUrl, boolean withHgsid)
+			      boolean snapLeft, Color color, char *name)
 /* After the item is drawn in genericDrawItems, draw next/prev item related */
 /* buttons and the corresponding mapboxes. */
 {
@@ -1985,36 +1996,30 @@ if (vis == tvPack)
     int w = x2-textX;
     if (lButton)
 	{
-	mapBoxHgcOrHgGene(s, e, textX, y, insideX-textX, heightPer, tg->mapName, 
-			  tg->mapItemName(tg, item), name, directUrl, withHgsid);
+	tg->mapItem(tg, item, name, s, e, textX, y, insideX-textX, heightPer);
 	tg->nextPrevItem(tg, item, insideX, y, buttonW, heightPer, FALSE);
 	if (rButton)
 	    {
-	    mapBoxHgcOrHgGene(s, e, insideX + buttonW, y, x2 - (insideX + 2*buttonW), heightPer, tg->mapName, 
-			      tg->mapItemName(tg, item), name, directUrl, withHgsid);				    
+	    tg->mapItem(tg, item, name, s, e, insideX + buttonW, y, x2 - (insideX + 2*buttonW), heightPer);
 	    tg->nextPrevItem(tg, item, x2-buttonW, y, buttonW, heightPer, TRUE);			    
 	    }
 	else 
-	    mapBoxHgcOrHgGene(s, e, insideX + buttonW, y, x2 - (insideX + buttonW), heightPer, tg->mapName, 
-			      tg->mapItemName(tg, item), name, directUrl, withHgsid);
+	    tg->mapItem(tg, item, name, s, e, insideX + buttonW, y, x2 - (insideX + buttonW), heightPer);
 	}
     else if (snapLeft && rButton)
 	/* This is a special case where there's a next-item button, NO */
 	/* prev-item button, AND the gene name is drawn left of the browser window. */
 	{
-	mapBoxHgcOrHgGene(s, e, textX, y, x2 - buttonW - textX, heightPer, tg->mapName, 
-			  tg->mapItemName(tg, item), name, directUrl, withHgsid);
+	tg->mapItem(tg, item, name, s, e, textX, y, x2 - buttonW - textX, heightPer);
 	tg->nextPrevItem(tg, item, x2-buttonW, y, buttonW, heightPer, TRUE);			
 	}
     else if (rButton)
 	{
-	mapBoxHgcOrHgGene(s, e, textX, y, w - buttonW, heightPer, tg->mapName, 
-			  tg->mapItemName(tg, item), name, directUrl, withHgsid);
+	tg->mapItem(tg, item, name, s, e, textX, y, w - buttonW, heightPer);
 	tg->nextPrevItem(tg, item, x2-buttonW, y, buttonW, heightPer, TRUE);			
 	}
     else
-	mapBoxHgcOrHgGene(s, e, textX, y, w, heightPer, tg->mapName, 
-			  tg->mapItemName(tg, item), name, directUrl, withHgsid);
+	tg->mapItem(tg, item, name, s, e, textX, y, w, heightPer);
     }
 /* Full mode is a little easier to deal with. */
 else if (vis == tvFull)
@@ -2022,9 +2027,7 @@ else if (vis == tvFull)
     int geneMapBoxX = insideX;
     int geneMapBoxW = insideWidth;
     /* Draw the first gene mapbox, in the left margin. */
-    mapBoxHgcOrHgGene(s, e, trackPastTabX, y, insideX - trackPastTabX, heightPer, 
-		      tg->mapName, tg->mapItemName(tg, item), name, directUrl, 
-		      withHgsid);
+    tg->mapItem(tg, item, name, s, e, trackPastTabX, y, insideX - trackPastTabX, heightPer);
     /* Make the button mapboxes. */
     if (lButton)
 	tg->nextPrevItem(tg, item, insideX, y, buttonW, heightPer, FALSE);
@@ -2043,8 +2046,7 @@ else if (vis == tvFull)
 	}
     else if (rButton)
 	geneMapBoxW -= buttonW;
-    mapBoxHgcOrHgGene(s, e, geneMapBoxX, y, geneMapBoxW, heightPer, tg->mapName, 
-		      tg->mapItemName(tg, item), name, directUrl, withHgsid);
+    tg->mapItem(tg, item, name, s, e, geneMapBoxX, y, geneMapBoxW, heightPer);
     }
 }
 
@@ -2060,9 +2062,8 @@ int lineHeight = tg->lineHeight;
 int heightPer = tg->heightPer;
 int y;
 boolean withLabels = (withLeftLabels && vis == tvPack && !tg->drawName);
-char *directUrl = trackDbSetting(tg->tdb, "directUrl");
-boolean withHgsid = (trackDbSetting(tg->tdb, "hgsid") != NULL);
-
+if (tg->mapItem == NULL)
+    tg->mapItem = genericMapItem;
 if (vis == tvPack || vis == tvSquish)
     {
     struct spaceSaver *ss = tg->ss;
@@ -2169,10 +2170,11 @@ if (vis == tvPack || vis == tvSquish)
 		{
 		if (nextItemCompatible(tg))
 		    genericDrawNextItemStuff(tg, vg, vis, item, x2, textX, y, heightPer, snapLeft, 
-					     color, name, directUrl, withHgsid);
+					     color, name);
 		else
-		    mapBoxHgcOrHgGene(s, e, textX, y, w, heightPer, tg->mapName, 
-				      tg->mapItemName(tg, item), name, directUrl, withHgsid);
+		    {
+		    tg->mapItem(tg, item, tg->mapItemName(tg, item), s, e, textX, y, w, heightPer);
+		    }
 		}
             }
 
@@ -2219,7 +2221,7 @@ else
 	    /* them here if we're drawing nextItem buttons. */
 	    if (nextItemCompatible(tg))
 		genericDrawNextItemStuff(tg, vg, vis, item, -1, -1, y, heightPer, FALSE, 
-					 color, tg->itemName(tg, item), directUrl, withHgsid);
+					 color, tg->itemName(tg, item));
 	    y += lineHeight;
 	    }
 	} 
@@ -8980,8 +8982,6 @@ static int doMapItems(struct track *track, int fontHeight, int y)
 {
 char *type = track->tdb->type;
 int newy;
-char *directUrl = trackDbSetting(track->tdb, "directUrl");
-boolean withHgsid = (trackDbSetting(track->tdb, "hgsid") != NULL);
 int trackPastTabX = (withLeftLabels ? trackTabWidth : 0);
 int trackPastTabWidth = tl.picWidth - trackPastTabX;
 int start = 1;
@@ -9027,13 +9027,13 @@ for (item = track->items; item != NULL; item = item->next)
         }
     else
         {
+	if (track->mapItem == NULL)
+	    track->mapItem = genericMapItem;
         if (!track->mapsSelf)
             {
-            mapBoxHgcOrHgGene(track->itemStart(track, item),
-                    track->itemEnd(track, item), trackPastTabX,
-                    y, trackPastTabWidth,height, track->mapName,
-                    track->mapItemName(track, item),
-                    track->itemName(track, item), directUrl, withHgsid);
+	    track->mapItem(track, item, track->itemName(track, item), track->itemStart(track, item),
+			   track->itemEnd(track, item), trackPastTabX,
+			   y, trackPastTabWidth,height);
             }
         y += height;
         }
