@@ -5,6 +5,7 @@
 
 #Mappings and frequencies for CGAP SAGE tags
 CREATE TABLE cgapSage (
+    bin smallint unsigned not null,
     chrom varchar(255) not null,	# Reference sequence chromosome or scaffold
     chromStart int unsigned not null,	# Start in Chromosome
     chromEnd int unsigned not null,	# End in Chromosome
@@ -20,5 +21,6 @@ CREATE TABLE cgapSage (
     numSnps int unsigned not null,	# Number of class=single SNPs in this region
     snps longblob not null,	# List of SNPs
               #Indices
-    PRIMARY KEY(chrom)
+    INDEX chrom (chrom(8), bin),
+    INDEX chromStart (chrom(8), chromStart)
 );
