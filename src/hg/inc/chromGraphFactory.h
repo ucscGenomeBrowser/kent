@@ -4,9 +4,7 @@
 #ifndef CHROMGRAPHFACTORY_H
 #define CHROMGRAPHFACTORY_H
 
-#ifndef CUSTOMFACTORY_H
 #include "customFactory.h"
-#endif
 
 struct customTrack *chromGraphParser(struct customPp *cpp,
 	char *formatType, char *markerType, char *columnLabels,
