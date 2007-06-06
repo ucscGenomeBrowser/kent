@@ -1103,7 +1103,7 @@ hPrintf("</TD></TR>\n");
 
 hPrintf("</TABLE>\n");
 
-hPrintf("<i>Note: Loading some kinds of tables can take up to a minute. ");
+hPrintf("<i>Note: Loading some tables can take up to a minute. ");
 hPrintf("If you are importing more than one data set please give them ");
 hPrintf("different names.  Only the most recent data set of a given name is ");
 hPrintf("kept.  Otherwise data sets will be kept for at least 48 hours from ");
