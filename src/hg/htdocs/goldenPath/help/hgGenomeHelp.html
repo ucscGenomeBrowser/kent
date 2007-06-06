@@ -35,10 +35,12 @@
 	        <H3> Table of Contents: </H3>
 	 	<UL><B>
   		<LI><A CLASS="toc" HREF="#Introduction">Introduction</A>
-        	<LI><A CLASS="toc" HREF="#FormatUpload">Formatting &amp; Uploading Data</A>
+        	<LI><A CLASS="toc" HREF="#FormatUpload">Formatting, Uploading &amp; 
+			Importing Data</A>
 	   	  <UL>
                   <LI><A CLASS="toc" HREF="#Format">Formatting Data</A>
                   <LI><A CLASS="toc" HREF="#Upload">Uploading Data</A>
+                  <LI><A CLASS="toc" HREF="#Import">Importing Data</A>
 		  </UL>
 		<LI><A CLASS="toc" HREF="#Sample">Quick Start</A>
         	<LI><A CLASS="toc" HREF="#Displaying">Displaying Data in Genome Graphs</A>
@@ -148,7 +150,7 @@
   <TR><TD>
     <TABLE BGCOLOR="D9E4F8" BACKGROUND="../../images/hr.gif" WIDTH=100%>
     <TR><TD>
-    <FONT SIZE="4"><B>&nbsp; Formatting &amp; Uploading Data </B></FONT>
+    <FONT SIZE="4"><B>&nbsp; Formatting, Uploading &amp; Importing Data </B></FONT>
     </TD></TR>
     </TABLE>
      <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
@@ -219,16 +221,17 @@
   for the cow genome, as it does not have a SNP track.</P>
   <P>
 
+
 <!-------Uploading Data---------------------------->
 <A NAME="Upload"></A>
   <HR>
   <B><FONT SIZE="3" COLOR="#0000FF">Uploading Data</FONT></B>
 
-  <P>Once you have created your input file, you must upload it to 
-  Genome Graphs. From the main Genome Graphs page, choose your 
+  <P>Once you have created your input file, you must upload it to
+  Genome Graphs. From the main Genome Graphs page, choose your
   clade, genome, and assembly to which your data pertains.
-  If you are unsure of the UCSC assembly name, you can check 
-  <A HREF="../../FAQ/FAQreleases#release1">this</A> page. 
+  If you are unsure of the UCSC assembly name, you can check
+  <A HREF="../../FAQ/FAQreleases#release1">this</A> page.
   Now, press the upload button to go to the upload page.</P>
 
   <P>To upload a file in any of the supported formats, locate the 
@@ -286,7 +289,63 @@
 
   <LI><B>file name:</B> The controls here let you select 
    which file on your computer to upload.</LI>
+  </UL>
+
+
+<!-------Importing Data---------------------------->
+<A NAME="Import"></A>
+  <HR>
+  <B><FONT SIZE="3" COLOR="#0000FF">Importing Data</FONT></B>
+
+  <P>In addition to supplying your own genome-wide data files, you can also
+import existing database tables from an assembly into the 
+Genome Graphs tool.  Any table containing positional information can be 
+imported.  This includes tables of the following types: BED, PSL, wiggle, 
+MAF, and bedGraph.  Custom track tables can be imported 
+as well.  The tables made by Genome Graphs (chromGraph) can not be imported 
+as they are already in the format used by the tool, thus no conversion is 
+necessary.  All tables imported into Genome Graphs will be converted into 
+a custom track of type chromGraph using a window-size of 10,000 bases.</P>
+
+  <P>To import a table or custom track, choose the group, track, and table 
+from the lists, then press the submit button.  The other controls are optional, 
+though completing them will enhance the display. The controls for display 
+min and max values and connecting lines can be set later via the configuration 
+page as well. Here is a description of each control.</P>
+
   <UL>
+  <LI><B>name of data set:</B> This will be displayed in the graph list 
+  in the Genome Graphs tool and as the track name in the Genome Browser. 
+  Only the first 16 characters are visible in some contexts. For data 
+  sets with multiple graphs, this is the first part of the name, shared 
+  with all members of the data set.</LI>
+
+  <LI><B>description:</B> Enter a short sentence describing the data set. 
+  It will be displayed in the Genome Graphs tool and in the Genome Browser.</LI>
+
+  <LI><B>display min value/max value:</B> Set the range of the data set to 
+  be plotted. If left blank, the range will be taken from the min and max 
+  values in the data set itself. If you would like all of your data sets to 
+  share the same scale, you will need to set this.</LI>
+
+  <LI><B>label values:</B> A comma-separated list of numbers for the vertical 
+  axis. If left blank the axis will be labeled at the 1/3 and 2/3 point.</LI>
+
+  <LI><B>draw connecting lines:</B> Lines connecting data points separated 
+  by no more than this number of bases are drawn.</LI>
+
+  <LI><B>depth or coverage:</B> When importing positional tables, you 
+  can choose to convert those tables to the chromGraph format by using 
+  either the <EM>depth</EM> or <EM>coverage</EM> conversion method. Both 
+  conversion methods use a non-overlapping window size of 10,000 bases 
+  when converting to the chromGraph format. In the <EM>depth</EM> method, 
+  the weighted average for each 10,000 base window is assigned to a single
+  point in the center of this window.  Whereas the <EM>coverage</EM> method 
+  is binary &mdash if there is even one point in the input table in that 
+  10,000 base window, the resulting graph will have a value of 1 for that 
+  range.</LI>
+  </UL>
+
   </P>
   <P>
   </TD><TD WIDTH=15></TD></TR>
