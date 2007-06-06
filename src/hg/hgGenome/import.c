@@ -26,22 +26,6 @@
 
 #include "wiggle.h"
 
-/*
-char *formatNames[] = {
-    cgfFormatGuess,
-    cgfFormatTab,
-    cgfFormatComma,
-    cgfFormatSpace,
-    };
-
-char *colLabelNames[] = {
-    cgfColLabelGuess,
-    cgfColLabelNumbered,
-    cgfColLabelFirstRow,
-    };
-
-*/
-
 
 /* from hgTables.c */
 
@@ -305,12 +289,10 @@ return track;
 struct trackDb *getFullTrackList()
 /* Get all tracks including custom tracks if any. */
 {
-struct trackDb *list = hTrackDb(NULL), *tdb, *newList=NULL, *next;
+struct trackDb *list = hTrackDb(NULL), *tdb, *next;
 struct customTrack *ctList, *ct;
 
-// BOOKMARK
 
-/* Filter Out Chains and Nets */
 for (tdb = list; tdb != NULL; tdb = next)
     {
     next = tdb->next;
@@ -319,13 +301,7 @@ for (tdb = list; tdb != NULL; tdb = next)
         {
         tdb->tableName = cloneString("all_mrna");
         }
-    //debug: remove: Jim now wants to keep chains and nets
-    //if (startsWith("chain",tdb->tableName) || startsWith("net",tdb->tableName))
-	//continue;  /* filter out chains and nets */
-    slAddHead(&newList, tdb);	
     }
-slReverse(&newList);
-list = newList;
 
 /* Create dummy group for custom tracks if any */
 ctList = getCustomTracks();
@@ -399,19 +375,12 @@ struct hash *uniqHash = newHash(8);
 struct slName *name, *nameList = NULL;
 char *trackTable = track->tableName;
 
-fprintf(stderr," tablesForTrack 1 database=%s trackTable=%s \n",database,trackTable); fflush(stderr); //debug
-
-
 hashAdd(uniqHash, trackTable, NULL);
 if (useJoiner)
     {
 
-    fprintf(stderr," tablesForTrack 2 \n"); fflush(stderr); //debug
-
     struct joinerPair *jpList, *jp;
     jpList = joinerRelate(allJoiner, database, trackTable);
-
-    fprintf(stderr," tablesForTrack 2.5 \n"); fflush(stderr); //debug
 
     for (jp = jpList; jp != NULL; jp = jp->next)
         {
@@ -433,23 +402,15 @@ if (useJoiner)
             }
         }
 
-    fprintf(stderr," tablesForTrack 3 \n"); fflush(stderr); //debug
-
     slNameSort(&nameList);
     }
-
-fprintf(stderr," tablesForTrack 4 \n"); fflush(stderr); //debug
 
 name = slNameNew(trackTable);
 if (!trackDbIsComposite(track))
     /* suppress for composite tracks -- only the subtracks have tables */
     slAddHead(&nameList, name);
 
-fprintf(stderr," tablesForTrack 5 \n"); fflush(stderr); //debug
-
 addTablesAccordingToTrackType(&nameList, uniqHash, track);
-
-fprintf(stderr," tablesForTrack 6 \n"); fflush(stderr); //debug
 
 hashFree(&uniqHash);
 return nameList;
@@ -460,8 +421,6 @@ static char *findSelectedTable(struct sqlConnection *conn, struct trackDb *track
  * found. */
 {
 
-fprintf(stderr," findSelectedTable 1 \n"); fflush(stderr); //debug
-
 if (track == NULL)
     return cartString(cart, var);
 else if (isCustomTrack(track->tableName))
@@ -469,17 +428,11 @@ else if (isCustomTrack(track->tableName))
 else
     {
 
-fprintf(stderr," findSelectedTable 2 \n"); fflush(stderr); //debug
-
     struct slName *tableList = tablesForTrack(track, TRUE);
     char *table = cartUsualString(cart, var, tableList->name);
 
-fprintf(stderr," findSelectedTable 3 \n"); fflush(stderr); //debug
-
     if (slNameInList(tableList, table))
         return table;
-
-fprintf(stderr," findSelectedTable 4 \n"); fflush(stderr); //debug
 
     return tableList->name;
     }
@@ -494,29 +447,16 @@ void initGroupsTracksTables(struct sqlConnection *conn)
 
 fullTrackList = getFullTrackList();
 
-fprintf(stderr," initGroupsTracksTables 2 \n"); fflush(stderr); //debug
-
 curTrack = findSelectedTrack(fullTrackList, NULL, hggTrack);
-
-fprintf(stderr," initGroupsTracksTables 3 \n"); fflush(stderr);//debug
 
 fullGroupList = makeGroupList(conn, fullTrackList, TRUE);
 
-fprintf(stderr," initGroupsTracksTables 4 \n"); fflush(stderr);//debug
-
 curGroup = findSelectedGroup(fullGroupList, hggGroup);
-
-fprintf(stderr," initGroupsTracksTables 5 curGroup->name=%s \n",curGroup->name); fflush(stderr);//debug
 
 if (sameString(curGroup->name, "allTables"))
     curTrack = NULL;
 
-if (curTrack)
-fprintf(stderr," initGroupsTracksTables 5.5 curTrack=%s \n",curTrack->tableName); fflush(stderr);//debug
-
 curTable = findSelectedTable(conn, curTrack, hggTable);
-
-fprintf(stderr," initGroupsTracksTables 6 curTable=%s\n",curTable); fflush(stderr);//debug
 
 if (curTrack == NULL)
     {
@@ -527,8 +467,6 @@ if (curTrack == NULL)
     else
         curTrack = tdb;
     }
-
-fprintf(stderr," initGroupsTracksTables 7 \n"); fflush(stderr);//debug
 
 }
 
@@ -900,32 +838,15 @@ else
     nameList = tablesForTrack(track, useJoiner);
 
 
-//debug: remove
-//hPrintf("<br>\n");
-//hPrintf("database: %s<br>\n", database);
-//hPrintf("<br>\n");
-
 /* filter out non-positional tables, chains and nets, and other untouchables */
 for (name = nameList; name != NULL; name = next)
     {
-    //debug
-    //fflush(stdout);
 
     next = name->next;
     boolean isCt = isCustomTrack(name->name);
-    //debug: remove
-    //hPrintf("name->name=[%s]  ct?=%d <br>\n",name->name, isCt);
 
-    // BOOKMARK
-
-    // DEBUG: remove: Jim wantst to keep these
-    //if (startsWith("chain", name->name) || startsWith("net", name->name))
-	//    continue;  /* filter out chains and nets */
-    
     if (strchr(name->name, '.'))
 	    continue;  /* filter out anything starting with database, e.g. db.name (like Locus Variants) */
-    //if (startsWith("hgFixed.", name->name))
-	//    continue;  /* filter out "hgFixed." (e.g. Locus Variants) */
     if (!isCt)  /* all custom tracks are positional */
 	{
     	struct hTableInfo *hti = hFindTableInfoDb(database, NULL, name->name);
@@ -938,9 +859,6 @@ for (name = nameList; name != NULL; name = next)
     }
 slReverse(&newList);
 nameList = newList;
-
-//debug: remove
-//hPrintf("<br>\n");
 
 /* Get currently selected table.  If it isn't in our list
  * then revert to first in list. */
@@ -988,8 +906,6 @@ cartSaveSession(cart);
 
 jsWriteFunctions();
 
-
-fprintf(stderr," importPage ----------------------------\n"); fflush(stderr); //debug
 
 allJoiner = joinerRead("all.joiner");
 initGroupsTracksTables(conn);
@@ -1121,7 +1037,6 @@ hPrintf("</FORM>\n");
 
 /* Hidden form - for benefit of javascript. */
     {
-    //  "clade", "org", "db", 
     static char *saveVars[] = {
 	hggImport,
 	hggGroup, hggTrack, hggTable, 
