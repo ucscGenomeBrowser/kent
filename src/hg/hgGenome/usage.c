@@ -3,7 +3,7 @@
 #include "common.h"
 #include "hPrint.h"
 
-static char const rcsid[] = "$Id: usage.c,v 1.6 2007/01/26 01:39:38 ann Exp $";
+static char const rcsid[] = "$Id: usage.c,v 1.7 2007/06/06 21:40:57 ann Exp $";
 
 void printMainHelp()
 /* Put up main page help info. */
@@ -29,6 +29,9 @@ hPrintf("%s",
 "        </LI>\n"
 "        <LI><B>upload: </B> Takes you to a page where you can upload your "
 "        own data.\n"
+"        </LI>\n"
+"        <LI><B>import: </B> Takes you to a page where you can import "
+"        database tables from this assembly.\n"
 "        </LI>\n"
 "        <LI><B>configure: </B> Takes you to a page where you can control "
 "        many aspects of the display including the overall size of the image, "
