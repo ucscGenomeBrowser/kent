@@ -3,7 +3,7 @@
 # Pristionchus pacificus
 #	Washington University School of Medicine GSC and Sanger Institute
 #
-#  $Id: priPac1.txt,v 1.9 2007/06/05 21:24:17 hiram Exp $
+#  $Id: priPac1.txt,v 1.10 2007/06/06 17:11:57 hiram Exp $
 ###########################################################################
 ## Download sequence - (DONE - 2007-02-25 - Hiram)
     ssh kkstore02
@@ -170,6 +170,20 @@ dbDbSpeciesDir worm
 	where name="priPac1";' hgcentraltest
 
 ###########################################################################
+## RepeatMasker (DONE - 2007-03-04 - Hiram)
+    ssh kkstore02
+    mkdir /cluster/data/priPac1/bed/RepeatMasker
+    cd /cluster/data/priPac1/bed/RepeatMasker
+    time nice -n +19 doRepeatMasker.pl \
+	-buildDir=/cluster/data/priPac1/bed/RepeatMaskerpriPac1 \
+	> doRepeatMasker.out 2>&1 &
+    #	real  271m29.185s
+    twoBitToFa ../../priPac1.rmsk.2bit stdout | faSize stdin > faSize.rmsk.txt
+    #	174852139 bases (28905831 N's 145946308 real
+    #	143274679 upper 2671629 lower) in 1 sequences in 1 files
+    #	%1.53 masked total, %1.83 masked real
+
+###########################################################################
 ## Simple Repeats (DONE - 2007-03-14 - Hiram)
 ##	Documented 31 may 2007
     ssh kolossus
@@ -189,6 +203,18 @@ dbDbSpeciesDir worm
  
     featureBits priPac1 simpleRepeat > fb.priPac1.simpleRepeat.txt 2>&1
     #	3043060 bases of 145948246 (2.085%) in intersection
+
+############################################################################
+## Add TRF to RMSK (DONE - 2007-03-04 - Hiram)
+    ssh kkstore02
+    cd /cluster/data/priPac1
+    cat bed/simpleRepeat/trfMask.bed \
+	twoBitMask -add -type=.bed priPac1.rmsk.2bit stdin priPac1.rmskTrf.2bit
+    twoBitToFa priPac1.rmskTrf.2bit stdout | faSize stdin \
+	> faSize.priPac1.rmskTrf.txt
+    #	174852139 bases (28905831 N's 145946308 real
+    #	143130041 upper 2816267 lower) in 1 sequences in 1 files
+    #	%1.61 masked total, %1.93 masked real
 
 ############################################################################
 ## BLASTZ swap ce4 (DONE - 2007-04-06 - Hiram)

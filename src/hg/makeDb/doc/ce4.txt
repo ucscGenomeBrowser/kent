@@ -3,7 +3,7 @@
 # Caenorhabditis elegans
 #	Washington University School of Medicine GSC and Sanger Institute WS170
 
-#  $Id: ce4.txt,v 1.20 2007/05/31 18:12:20 hiram Exp $
+#  $Id: ce4.txt,v 1.21 2007/06/06 17:11:58 hiram Exp $
 
 
 #########################################################################
@@ -74,6 +74,18 @@ dbDbSpeciesDir worm
     # << happy emacs
 
     nice -n +19 makeGenomeDb.pl ce4.config.ra > makeGenomeDb.out 2>&1
+
+###########################################################################
+## RepeatMasker (DONE - 2007-02-23 - Hiram)
+    ssh kkstore02
+    cd /cluster/data/ce4
+    time nice -n +19 doRepeatMasker.pl ce4 > doRepeatMasker.out 2>&1 &
+    mv doRepeatMasker.out bed/RepeatMasker.2007-02-23
+    #	real    48m37.395s
+    twoBitToFa ce4.rmsk.2bit stdout | faSize stdin > faSize.rmsk.txt
+    #	100281244 bases (0 N's 100281244 real 87184653 upper 13096591 lower)
+    #	in 7 sequences in 1 files
+    #	%13.06 masked total, %13.06 masked real
 
 #########################################################################
 # MAKE 11.OOC FILE FOR BLAT (DONE - 2007-01-18 - Hiram)
@@ -220,6 +232,18 @@ done
     
     featureBits ce4 simpleRepeat > fb.ce4.simpleRepeat.txt 2>&1
     #	3801183 bases of 100281244 (3.791%) in intersection
+
+############################################################################
+## Add TRF to RMSK (DONE - 2007-03-04 - Hiram)
+    ssh kkstore02
+    cd /cluster/data/ce4
+    cat bed/simpleRepeat/trfMask.bed \
+	twoBitMask -add -type=.bed ce4.rmsk.2bit stdin ce4.rmskTrf.2bit
+    twoBitToFa ce4.rmskTrf.2bit stdout | faSize stdin \
+	> faSize.ce4.rmskTrf.txt
+    #	100281244 bases (0 N's 100281244 real 87008909 upper 13272335 lower)
+    #	in 7 sequences in 1 files
+    #	%13.24 masked total, %13.24 masked real
 
 #########################################################################
 #########################################################################
