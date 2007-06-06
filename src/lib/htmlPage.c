@@ -23,7 +23,7 @@
 #include "net.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: htmlPage.c,v 1.32 2006/07/29 00:17:28 galt Exp $";
+static char const rcsid[] = "$Id: htmlPage.c,v 1.33 2007/06/06 16:37:29 hiram Exp $";
 
 void htmlStatusFree(struct htmlStatus **pStatus)
 /* Free up resources associated with status */
@@ -588,7 +588,7 @@ for (;;)
 		else
 		    {
 		    val = e = skipLeadingSpaces(e);
-		    if (e[0] == '"')
+		    if (e[0] == '"' || e[0] == '\'')
 			{
 			if (!parseQuotedString(val, val, &e))
 			    break;
@@ -692,6 +692,7 @@ for (tag = form->startTag->next; tag != form->endTag; tag = tag->next)
 	char *type = htmlTagAttributeVal(page, tag, "TYPE", NULL);
 	char *varName = htmlTagAttributeVal(page, tag, "NAME", NULL);
 	char *value = htmlTagAttributeVal(page, tag, "VALUE", NULL);
+
 	if (type == NULL)
 	    type = "TEXT";
 	if (varName == NULL)
