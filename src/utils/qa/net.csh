@@ -37,7 +37,6 @@ echo "track: $track"
 echo "trackname: $trackname"
 echo "Org: $Org"
 
-
 # -------------------------------------------------
 # check updateTimes:
 
@@ -211,7 +210,8 @@ echo "here's a list of counts by type:"
 echo
 echo "type	count"
 echo "____	_____"
-hgsql -N -e 'SELECT DISTINCT(type) AS types, COUNT(*) AS number FROM '$trackname' GROUP BY types ORDER BY number DESC' $db
+hgsql -N -e 'SELECT DISTINCT(type) AS types, COUNT(*) AS number \
+   FROM '$trackname' GROUP BY types ORDER BY number DESC' $db
 
 
 # -------------------------------------------------
@@ -223,7 +223,8 @@ echo "here's a list of counts by level:"
 echo
 echo "level	count"
 echo "_____	_____"
-hgsql -N -e 'SELECT DISTINCT(level) AS levels, COUNT(*) AS number FROM '$trackname' GROUP BY levels ORDER BY level' $db
+hgsql -N -e 'SELECT DISTINCT(level) AS levels, COUNT(*) AS number \
+    FROM '$trackname' GROUP BY levels ORDER BY level' $db
 
 
 
@@ -332,8 +333,7 @@ echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
 echo "checking max values for score by type (for type != gap):"
 echo
 
-hgsql -e 'SELECT MAX(score) AS scores, type FROM '$trackname' \
-  GROUP BY type ORDER BY type DESC' $db
+  hgsql -e 'SELECT MAX(score) AS scores, type FROM '$trackname' GROUP BY type ORDER BY type DESC' $db
 
 
 
@@ -488,5 +488,16 @@ echo
 end #foreach
 echo 
 
+# -------------------------------------------------
+# add track to list of files to push and find size of entire push:
+
+echo
+echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
+
+echo $trackname >> $db.$Org.pushlist
+sort -u $db.$Org.pushlist > pushlist2
+
+getTablesize.csh $db pushlist2 hgwdev
+rm -f pushlist2
 
 echo "the end."

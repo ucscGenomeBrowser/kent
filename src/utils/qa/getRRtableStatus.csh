@@ -37,6 +37,12 @@ if ( $#argv == 4 ) then
   set machine=$argv[4]
 endif
 
+checkMachineName.csh $machine
+if ( $status ) then
+  echo
+  exit 1
+endif
+
 set dumpfile=`getRRdumpfile.csh $db $machine`
 if ( $status ) then
   echo

@@ -70,13 +70,14 @@ rm -f $db.$Org.pushlistLink
 if ( $split == "unsplit" ) then
    echo "unsplit chain track.  echo of long chromlist suppressed"
    echo $track >> $db.$Org.pushlist
+   echo ${track}Link >> $db.$Org.pushlist
   echo
 else
   # make push list for split tables
   foreach chrom (`cat $db.chromlist`)
     echo $chrom
     echo ${chrom}_$track >> $db.$Org.pushlist
-    echo ${chrom}_${track}Link >> $db.$Org.pushlistLink
+    echo ${chrom}_${track}Link >> $db.$Org.pushlist
   end
 endif
 
