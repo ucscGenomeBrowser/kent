@@ -1167,7 +1167,7 @@ hPrintf(
 "<LI><B>draw connecting lines:</B> Lines connecting data points separated by "
 " no more than this number of bases are drawn.  </LI>"
 "<LI><B>depth or coverage:</B>"
-"When choosing simple positional types, you can use either "
+" When choosing simple positional types, you can use either "
 "depth or coverage.  A window-size of 10,000 bases "
 "is used in the conversion to chromGraph.  For coverage, the "
 "output is binary showing which areas have data and which do not. "
