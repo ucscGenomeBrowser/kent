@@ -16,6 +16,9 @@
 #include "trashDir.h"
 
 #define affy500Table "snpArrayAffy500"
+#define illumina300Table "snpArrayIllumina300"
+#define illumina550Table "snpArrayIllumina550"
+#define illumina650Table "snpArrayIllumina650"
 
 typedef int (*Chopper)(char *line, char **cols, int maxCol);
 /* A function that breaks a row into columns. */
@@ -248,6 +251,40 @@ if (sqlTableExists(conn, table))
     mtr->query = "select count(*) from %s where name='%s'";
     slAddHead(&list, mtr);
     }
+
+/* Illumina 300 recognizer */
+table = illumina300Table;
+if (sqlTableExists(conn, table))
+    {
+    AllocVar(mtr);
+    mtr->type = cgfMarkerHumanHap300;
+    mtr->table = table;
+    mtr->query = "select count(*) from %s where name='%s'";
+    slAddHead(&list, mtr);
+    }
+
+/* Illumina 550 recognizer */
+table = illumina550Table;
+if (sqlTableExists(conn, table))
+    {
+    AllocVar(mtr);
+    mtr->type = cgfMarkerHumanHap550;
+    mtr->table = table;
+    mtr->query = "select count(*) from %s where name='%s'";
+    slAddHead(&list, mtr);
+    }
+
+/* Illumina 650 recognizer */
+table = illumina650Table;
+if (sqlTableExists(conn, table))
+    {
+    AllocVar(mtr);
+    mtr->type = cgfMarkerHumanHap650;
+    mtr->table = table;
+    mtr->query = "select count(*) from %s where name='%s'";
+    slAddHead(&list, mtr);
+    }
+
 
 /* SNP table */
 table = findSnpTable(conn);
@@ -727,9 +764,9 @@ else if (sameString(markerType, cgfMarkerHumanHap300)
         )
     {
     char *table = "";
-    if (sameString(markerType, cgfMarkerHumanHap300)) table = "snpArrayIllumina300";
-    if (sameString(markerType, cgfMarkerHumanHap550)) table = "snpArrayIllumina550";
-    if (sameString(markerType, cgfMarkerHumanHap650)) table = "snpArrayIllumina650";
+    if (sameString(markerType, cgfMarkerHumanHap300)) table = illumina300Table;
+    if (sameString(markerType, cgfMarkerHumanHap550)) table = illumina550Table;
+    if (sameString(markerType, cgfMarkerHumanHap650)) table = illumina650Table;
     if (!sqlTableExists(conn, table))
         errAbort("Sorry, no data for %s on this assembly.",
 		markerType);
