@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "cgapSage/cgapSageLib.h"
 
-static char const rcsid[] = "$Id: cgapSageLib.c,v 1.2 2007/02/20 06:38:29 aamp Exp $";
+static char const rcsid[] = "$Id: cgapSageLib.c,v 1.3 2007/06/06 19:45:44 aamp Exp $";
 
 /* definitions for sex column */
 static char *values_sex[] = {"male", "female", NULL};
@@ -283,4 +283,27 @@ fputc(lastSep,f);
 }
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
+
+struct hash *getTotTagsHash(struct cgapSageLib *libs)
+/* Read in the library file and hash up the total tags. */
+{
+struct hash *totTagsHash = newHash(9);
+struct cgapSageLib *lib;
+for (lib = libs; lib != NULL; lib = lib->next)
+    {
+    char buf[16];
+    safef(buf, sizeof(buf), "%d", lib->libId);
+    hashAddInt(totTagsHash, buf, (int)lib->totalTags);
+    }
+return totTagsHash;
+}
+
+struct hash *getTotTagsHashFromFile(char *libFile)
+/* Load a file then call getTotTagsHash. */
+{
+struct cgapSageLib *libs = cgapSageLibLoadAll(libFile);
+struct hash *libTotHash = getTotTagsHash(libs);
+cgapSageLibFreeList(&libs);
+return libTotHash;
+}
 

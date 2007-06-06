@@ -93,5 +93,11 @@ void cgapSageLibOutput(struct cgapSageLib *el, FILE *f, char sep, char lastSep);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+struct hash *getTotTagsHash(struct cgapSageLib *libs);
+/* Read in the library file and hash up the total tags. */
+
+struct hash *getTotTagsHashFromFile(char *libFile);
+/* Load a file then call getTotTagsHash. */
+
 #endif /* CGAPSAGELIB_H */
 

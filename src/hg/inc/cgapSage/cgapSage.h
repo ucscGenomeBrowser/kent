@@ -66,5 +66,8 @@ void cgapSageOutput(struct cgapSage *el, FILE *f, char sep, char lastSep);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+int cgapSageCmp(const void *va, const void *vb);
+/* Compare based on chrom,start,end,name. */
+
 #endif /* CGAPSAGE_H */
 
