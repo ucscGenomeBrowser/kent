@@ -23,7 +23,7 @@
 #include "customFactory.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.64 2007/05/02 21:07:37 hiram Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.65 2007/06/06 02:38:59 angie Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -1694,6 +1694,15 @@ struct customTrack *customFactoryParseAnyDb(char *text, boolean isFile,
 return customFactoryParseOptionalDb(text, isFile, retBrowserLines, FALSE);
 }
 
+static void readAndIgnore(char *fileName)
+/* Read a few bytes from fileName, so its access time is updated. */
+{
+char buf[256];
+FILE *f = mustOpen(fileName, "r");
+fgets(buf, sizeof(buf), f);
+fclose(f);
+}
+
 void customFactoryTestExistence(char *fileName, boolean *retGotLive,
 				boolean *retGotExpired)
 /* Test existence of custom track fileName.  If it exists, parse it just 
@@ -1705,6 +1714,7 @@ struct customTrack *trackList = NULL, *track = NULL;
 char *line = NULL;
 struct sqlConnection *ctConn = NULL;
 boolean dbTrack = ctDbUseAll();
+boolean isLive = FALSE;
 
 if (!fileExists(fileName))
     {
@@ -1752,6 +1762,7 @@ while ((line = customPpNextReal(cpp)) != NULL)
 		 line, lf->lineIx, lf->fileName);
 	}
     assert(track);
+    assert(track->tdb);
 
     /* don't verify database for custom track -- we might be testing existence 
      * for another database. */
@@ -1761,23 +1772,47 @@ while ((line = customPpNextReal(cpp)) != NULL)
         {
 	if (ctConn && ctDbTableExists(ctConn, track->dbTableName))
 	    {
-	    if (retGotLive)
-		*retGotLive = TRUE;
-	    /* Touch it to keep it alive. */
-	    ctTouchLastUse(ctConn, track->dbTableName, TRUE);
-	    }
-	else
-	    {
-	    if (retGotExpired)
-		*retGotExpired = TRUE;
+	    /* If this track specifies a wibFile, require and access it too. */
+	    char *wibFile = trackDbSetting(track->tdb, "wibFile");
+	    isLive = TRUE;
+	    if (wibFile != NULL)
+		{
+		isLive = fileExists(wibFile);
+		if (isLive)
+		    readAndIgnore(wibFile);
+		}
+	    if (isLive)
+		{
+		/* Touch database table to keep it alive. */
+		ctTouchLastUse(ctConn, track->dbTableName, TRUE);
+		}
 	    }
 	}
     else
-	/* Track data in this file -- definitely live, no need to read it. */
+	/* Track data in this file -- if any track in this file names a 
+	 * wigFile, require and access it too. */
+	{
+	char *wigFile = trackDbSetting(track->tdb, "wigFile");
+	isLive = TRUE;
+	if (wigFile != NULL)
+	    {
+	    isLive = fileExists(wigFile);
+	    if (isLive)
+		readAndIgnore(wigFile);
+	    }
+	while (customFactoryNextRealTilTrack(cpp))
+	    /* Skip data lines until we get to next track or EOF. */
+	    ;
+	}
+    if (isLive)
 	{
 	if (retGotLive)
 	    *retGotLive = TRUE;
-	break;
+	}
+    else
+	{
+	if (retGotExpired)
+	    *retGotExpired = TRUE;
 	}
     slAddHead(&trackList, track);
     }
