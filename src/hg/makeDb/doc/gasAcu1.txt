@@ -2597,3 +2597,29 @@ TMPDIR=/scratch/tmp
     # for SEQ1_LEN.  So I edited DEF to use /cluster/data location and 
     # continued -load.
 
+##########################################################################
+# NSCAN track - (2007-06-05 markd)
+# uses danRer4 as informant, no pseudogene masking 
+#
+    cd /cluster/data/gasAcu1/bed/nscan/
+
+    # obtainedf NSCAN predictions from michael brent's group
+    # at WUSTL
+    wget -nv http://mblab.wustl.edu/predictions/Gasterosteus_aculeatus/gasAcu1.gtf
+    wget -nv http://mblab.wustl.edu/predictions/Gasterosteus_aculeatus/gasAcu1.prot.fa
+
+    gzip -9 gasAcu1.*
+    chmod a-w *.gz
+
+    # load tracks.  Note that these have *utr features, rather than
+    # exon features.  currently ldHgGene creates separate genePred exons
+    # for these.
+    ldHgGene -bin -gtf -genePredExt gasAcu1 nscanGene gasAcu1.gtf.gz
+    hgPepPred gasAcu1 generic nscanPep gasAcu1.prot.fa.gz
+    rm -f *.tab
+
+    # update trackDb; need a gasAcu1-specific page to describe informants
+    stickleback/gasAcu1/nscanGene.html    
+    stickleback/gasAcu1/trackDb.ra
+
+
