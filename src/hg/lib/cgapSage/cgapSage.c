@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "cgapSage/cgapSage.h"
 
-static char const rcsid[] = "$Id: cgapSage.c,v 1.2 2007/03/30 03:47:21 aamp Exp $";
+static char const rcsid[] = "$Id: cgapSage.c,v 1.3 2007/06/06 19:46:23 aamp Exp $";
 
 struct cgapSage *cgapSageLoad(char **row)
 /* Load a cgapSage from row fetched with select * from cgapSage
@@ -264,3 +264,16 @@ fputc(lastSep,f);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+int cgapSageCmp(const void *va, const void *vb)
+/* Compare based on chrom,start,name. */
+{
+const struct cgapSage *a = *((struct cgapSage **)va);
+const struct cgapSage *b = *((struct cgapSage **)vb);
+int dif;
+dif = strcmp(a->chrom, b->chrom);
+if (dif == 0)
+    dif = a->chromStart - b->chromStart;
+if (dif == 0)
+    dif = strcmp(a->name, b->name);
+return dif;
+}
