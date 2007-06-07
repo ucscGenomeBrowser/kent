@@ -76,7 +76,7 @@ else
     # get disk usage 4 dirs deep and sort by size
     # if the unit can't be logged into, do the du through the wire
     #   (ok per erich if only now and then)
-    echo $unit | egrep 'bluearc|home|sanvol1|sanvol2' >& /dev/null
+    echo $unit | egrep 'bluearc|home' >& /dev/null
     if ( ! $status ) then
       du -m --max-depth=4 $unit | sort -nr > tempfile
     else
