@@ -34,11 +34,15 @@
 #include "chromInfo.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.322 2007/03/31 16:45:49 markd Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.323 2007/06/07 22:56:18 lowe Exp $";
 
-
+#ifdef LOWELAB
+#define DEFAULT_PROTEINS "proteins060115"
+#define DEFAULT_GENOME "Pyrobaculum aerophilum"
+#else
 #define DEFAULT_PROTEINS "proteins"
 #define DEFAULT_GENOME "Human"
+#endif
 
 
 static struct sqlConnCache *hdbCc = NULL;  /* cache for primary database connection */
