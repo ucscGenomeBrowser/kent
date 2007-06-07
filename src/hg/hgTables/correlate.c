@@ -22,7 +22,7 @@
 #include "bedGraph.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: correlate.c,v 1.60 2007/05/14 23:40:40 kate Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.61 2007/06/07 21:58:47 hiram Exp $";
 
 #define MAX_POINTS_STR	"300,000,000"
 #define MAX_POINTS	300000000
@@ -316,6 +316,7 @@ static void fillInTrackTable(struct trackTable *table,
  *	else.	*/
 {
 struct trackDb *tdb;
+boolean isCustomDbTable = FALSE;
 
 tdb = findCompositeTdb(table->tdb,table->tableName);
 table->shortLabel = cloneString(tdb->shortLabel);
@@ -324,13 +325,30 @@ table->actualTdb = tdb;
 table->actualTable = cloneString(tdb->tableName);
 table->isBedGraph = FALSE;
 table->isWig = FALSE;
+table->dbTableName = NULL;
+if (isCustomTrack(table->actualTable))
+    {
+    struct customTrack *ct = lookupCt(table->actualTable);
+    if (ctDbAvailable(ct->dbTableName))
+	{
+	table->dbTableName = ct->dbTableName;
+	isCustomDbTable = TRUE;
+	}
+    }
+
 if (startsWith("bedGraph", tdb->type))
     {
     table->isBedGraph = TRUE;
     /*	find the column name that belongs to the specified numeric
      *	column from the bedGraph type line
      */
-    if (!table->isCustom)
+    if (isCustomDbTable)
+	conn = sqlCtConn(TRUE);
+
+    /* there are no bedGraph custom tracks yet, but when they do show
+     * up, they will only correlate if they are in the database
+     */
+    if (!table->isCustom || isCustomDbTable)
 	{
 	char query[256];
 	struct sqlResult *sr;
@@ -355,6 +373,8 @@ if (startsWith("bedGraph", tdb->type))
 		table->bedGraphColumnName = cloneString(row[0]);
 	    }
 	sqlFreeResult(&sr);
+	if (isCustomDbTable)
+	    sqlDisconnect(&conn);
 	}
     }
 else if (sameString("cpgIsland", tdb->tableName))
@@ -435,7 +455,7 @@ return tt;
  **********************************************************************/
 
 static struct grp *showGroupFieldLimited(char *groupVar, char *groupScript,
-    struct sqlConnection *conn, boolean allTablesOk, struct grp *groupList)
+    boolean allTablesOk, struct grp *groupList)
 /* Show group control. Returns selected group. */
 {
 struct grp *group;
@@ -500,7 +520,7 @@ return selTable;
 
 static struct trackDb *showGroupTrackRowLimited(char *groupVar,
     char *groupScript, char *trackVar, char *trackScript,
-	struct sqlConnection *conn, char *tableVar, char **table2Return)
+	char *tableVar, char **table2Return)
 /* Show group & track row of controls, limited by track type.
     Returns selected track */
 {
@@ -515,7 +535,7 @@ hPrintf("Select a group, track and table to correlate with:\n");
 hPrintf("<TABLE BORDER=0>\n");
 hPrintf("<TR><TD>");
 
-selGroup = showGroupFieldLimited(groupVar, groupScript, conn, FALSE, groupList);
+selGroup = showGroupFieldLimited(groupVar, groupScript, FALSE, groupList);
 nbSpaces(3);
 track2 = showTrackFieldLimited(selGroup, trackVar, trackScript, trackList);
 
@@ -556,6 +576,13 @@ int vIndex = vector->count;	/* it is starting at zero	*/
 struct bed *bedList = NULL, *bed;
 int bedFieldCount = 0;
 struct lm *lm = lmInit(64*1024);
+char *dbTableName = table->actualTable;
+
+if (NULL != table->dbTableName)
+    {
+    dbTableName = table->dbTableName;
+    conn = sqlCtConn(TRUE);
+    }
 
 /*	cookedBedList can read anything but bedGraph, so read bedGraph
  *	by itself, use cookedBedList for the other types.
@@ -570,12 +597,12 @@ if (table->isBedGraph)
     char **row;
     int rowOffset = 0;
 
-    if (table->isCustom)
+    if (table->isCustom && (NULL == table->dbTableName))
 	errAbort("Custom track bed graph correlations not yet implemented");
 
     safef(fields,ArraySize(fields), "chromStart,chromEnd,%s",
 	table->bedGraphColumnName);
-    sr = hExtendedRangeQuery(conn, table->actualTable, region->chrom,
+    sr = hExtendedRangeQuery(conn, dbTableName, region->chrom,
 	region->start, region->end, filter, TRUE, fields, &rowOffset);
     while ((row = sqlNextRow(sr)) != NULL)
 	{
@@ -606,6 +633,8 @@ else
     /*	and now read in the bed list for this data set	*/
     bedList=cookedBedList(conn, table->actualTable, region, lm, &bedFieldCount);
     }
+if (NULL != table->dbTableName)
+    sqlDisconnect(&conn);
 
 slSort(&bedList, bedLineCmp);   /* make sure it is sorted by chrom,chromStart*/
 
@@ -743,7 +772,7 @@ int regionSize = region->end - region->start;
 long startTime, endTime;
 
 if (! correlateTrackOK(table->actualTdb))
-    internalErr();	/*	this should have been ensured long befor now */
+    internalErr();	/*	this should have been ensured long before now */
 
 startTime = clock1000();
 /*	assume entire region is going to produce numbers	*/
@@ -761,15 +790,22 @@ if (table->isWig)
     struct wigAsciiData *next;
     int vIndex = vector->count;	/* it is starting at zero	*/
     register int bases = 0;
+    char *dbTableName = table->actualTable;
+
+    if (NULL != table->dbTableName)
+	{
+	dbTableName = table->dbTableName;
+	conn = sqlCtConn(TRUE);
+	}
 
     /*	we still do not have a proper minSpan finder for custom tracks */
     /*	they should have a spanList setup during their encoding, then it
      *	would always be there.
      */
-    if (table->isCustom)
+    if (table->isCustom && (NULL == table->dbTableName))
 	span = 1;
     else
-	span = minSpan(conn, table->actualTable, region->chrom,
+	span = minSpan(conn, dbTableName, region->chrom,
 	    region->start, region->end, cart, table->actualTdb);
 
     wigData = getWiggleData(conn, table->actualTable, region,
@@ -801,6 +837,7 @@ if (table->isWig)
 	    }
 	}
     vector->count += bases;
+
     freeWigAsciiData(&wigData);
     vector->start = vector->position[0];
     if (vector->count > 0)
@@ -2332,7 +2369,7 @@ cartSaveSession(cart);
 
 /* Print group, track, and table selection menus */
 tdb2 = showGroupTrackRowLimited(hgtaNextCorrelateGroup, onChange, 
-    hgtaNextCorrelateTrack, onChange, conn, hgtaNextCorrelateTable, &table2);
+    hgtaNextCorrelateTrack, onChange, hgtaNextCorrelateTable, &table2);
 
 tableName2 = tdb2->shortLabel;
 

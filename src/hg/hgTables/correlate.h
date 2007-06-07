@@ -89,6 +89,7 @@ struct trackTable
     struct trackTable *next;
     struct trackDb *tdb;	/*	may be wigMaf primary	*/
     char *tableName;	/* the actual name, without composite confusion */
+    char *dbTableName;	/* the actual database name, without ct confusion */
     char *shortLabel;
     char *longLabel;
     boolean isBedGraph;		/* type of data in table	*/
