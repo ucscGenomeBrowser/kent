@@ -45,6 +45,29 @@ echo "track: $track"
 echo "Org: $Org"
 echo
 
+
+# ------------------------------------------------
+# check for priority values for all chains on this assembly:
+
+echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
+echo "all chains/nets for this assembly:"
+echo
+
+# make a list of chain and nets to match actual tables
+set chainlist=`hgsql -N -e 'SHOW TABLES LIKE "net%"' $db` 
+hgsql -N -e 'SHOW TABLES LIKE "net%"' $db \
+  | sed -e "s/net/chain/g" > chainlist
+echo $chainlist | sed -e "s/ /\n/g" >> chainlist
+echo "priority" >> chainlist
+echo "----" >> chainlist
+
+hgsql -t -e "SELECT tableName, priority FROM trackDb \
+  WHERE tableName LIKE 'chain%' OR tableName LIKE 'net%' \
+  ORDER BY priority" $db \
+  | grep -f chainlist
+
+exit
+
 # ------------------------------------------------
 # check level for html and trackDb entry:
 
