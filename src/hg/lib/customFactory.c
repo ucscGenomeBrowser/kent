@@ -23,7 +23,7 @@
 #include "customFactory.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.65 2007/06/06 02:38:59 angie Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.66 2007/06/07 23:05:57 hiram Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -1035,7 +1035,11 @@ if (dbRequested)
     struct pipeline *dataPipe = wigLoaderPipe(track);
     FILE *in = mustOpen(wigAscii, "r");
     FILE *out = pipelineFile(dataPipe);
-    copyOpenFile(in, out);
+    char c;
+    int fputcErr = 0;
+
+    while ((c = fgetc(in)) != EOF && fputcErr != EOF)
+	fputcErr = fputc(c, out);
     carefulClose(&in);
     fflush(out);		/* help see error from loader failure */
     if(ferror(out) || pipelineWait(dataPipe))
