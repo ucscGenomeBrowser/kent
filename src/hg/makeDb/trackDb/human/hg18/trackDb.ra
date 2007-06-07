@@ -1,3 +1,5 @@
+#include trackDb.encode.ra
+
 track clonePos
 priority 14
 shortLabel Coverage
