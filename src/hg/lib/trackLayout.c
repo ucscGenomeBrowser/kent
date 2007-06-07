@@ -15,8 +15,13 @@ void trackLayoutSetPicWidth(struct trackLayout *tl, char *s)
 if (s != NULL && isdigit(s[0]))
     {
     tl->picWidth = atoi(s);
+#ifdef LOWELAB    
+    if (tl->picWidth > 60000)
+      tl->picWidth = 60000;   
+#else
     if (tl->picWidth > 5000)
-        tl->picWidth = 5000;
+      tl->picWidth = 5000;   
+#endif
     if (tl->picWidth < 320)
         tl->picWidth = 320;
     }
