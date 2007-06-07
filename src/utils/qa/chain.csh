@@ -66,8 +66,6 @@ hgsql -t -e "SELECT tableName, priority FROM trackDb \
   ORDER BY priority" $db \
   | grep -f chainlist
 
-exit
-
 # ------------------------------------------------
 # check level for html and trackDb entry:
 
