@@ -12,7 +12,7 @@
 #include "errabort.h"
 #include "mime.h"
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.87 2007/05/08 21:11:25 hiram Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.88 2007/06/07 00:49:47 angie Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -321,14 +321,33 @@ slReverse(&list);
 char *findCookieData(char *varName)
 /* Get the string associated with varName from the cookie string. */
 {
+struct hashEl *hel;
 struct cgiVar *var;
 
 /* make sure that the cookie hash table has been created */
 parseCookies(&cookieHash, &cookieList);
 if (cookieHash == NULL)
     return NULL;
-if ((var = hashFindVal(cookieHash, varName)) == NULL)
+/* Watch out for multiple cookies with the same name (hel is a list) --
+ * warn if we find them. */
+hel = hashLookup(cookieHash, varName);
+if (hel == NULL)
     return NULL;
+else
+    var = (struct cgiVar *)hel->val;
+while (hel->next != NULL)
+    {
+    char *remoteAddr = getenv("REMOTE_ADDR");
+    if (remoteAddr == NULL)
+	remoteAddr = "";
+    /* This is too early to call warn -- it will mess up html output. */
+    fprintf(stderr,
+	    "findCookieData: Duplicate cookie value from IP=%s: "
+	    "%s has both %s and %s\n",
+	    remoteAddr,
+	    varName, var->val, ((struct cgiVar *)(hel->next->val))->val);
+    hel = hel->next;
+    }
 return var->val;
 }
 
