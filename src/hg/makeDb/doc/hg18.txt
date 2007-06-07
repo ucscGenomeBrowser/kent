@@ -14318,6 +14318,191 @@ cat > loadMaf.csh << 'EOF'
 'EOF'
     csh loadMaf.csh >& loadMaf.log  &
 
+	#####################
+	## Quality Annotation
+	##
+
+	## create .qac and .qdx files for each species in the 28-way alignment
+	o human (hg18)
+		Unable to find quality data.
+
+	o chimp (panTro2)
+		/cluster/data/panTro2/bed/quality/qac/*.qac
+		/cluster/data/panTro2/wustl/*.agp
+		qacAddGapIdx in.agp in.qac panTro2.qac panTro2.qdx
+
+	o rhesus (rheMac2)
+		/cluster/data/rheMac2/qual/foo.qv
+		/cluster/data/rheMac2/downloads/foo.agp
+		qacAddGapIdx in.agp in.qac rheMac2.qac rheMac2.qdx
+
+	o bushbaby (otoGar1)
+		http://www.broad.mit.edu/ftp/pub/assemblies/mammals/bushbaby/otoGar1
+			assembly.agp
+			Draft_v1.agp.chromosome.qual.gz
+		qaAgpToQacIdx assembly.agp Draft_v1.agp.chromosome.qual.gz otoGar1.qac otoGar1.qdx
+
+	o treeshrew (tupBel1)
+		http://www.broad.mit.edu/ftp/pub/assemblies/mammals/treeShrew/tupBel1
+			assembly.agp
+			Draft_v1.agp.chromosome.qual.gz
+		qaAgpToQacIdx assembly.agp Draft_v1.agp.chromosome.qual.gz tupBel1.qac tupBel1.qdx
+
+	o rat (rn4)
+		/cluster/data/rn4/downloads/foo.qual
+		/cluster/data/rn4/CHROM/foo.agp
+		qacAddGapIdx in.agp in.qac rn4.qac rn4.qdx
+
+	o mouse (mm8)
+		Unable to find quality data.
+
+	o guinea pig (cavPor2)
+		http://www.broad.mit.edu/ftp/pub/assemblies/mammals/guineaPig/cavPor2
+			assembly.agp
+			Draft_v2.agp.chromosome.qual.gz
+		qaAgpToQacIdx assembly.agp Draft_v2.agp.chromosome.qual.gz cavPor2.qac cavPor2.qdx
+
+	o rabbit (oryCun1)
+		http://www.broad.mit.edu/ftp/pub/assemblies/mammals/rabbit/oryCun1
+			assembly.agp
+			Draft_v1.agp.chromosome.qual.gz
+		qaAgpToQacIdx assembly.agp Draft_v1.agp.chromosome.qual.gz oryCun1.qac oryCun1.qdx
+
+	o shrew (sorAra1)
+		http://www.broad.mit.edu/ftp/pub/assemblies/mammals/commonShrew/sorAra1
+			assembly.agp
+			Draft_v1.agp.chromosome.qual.gz
+		qaAgpToQacIdx assembly.agp Draft_v1.agp.chromosome.qual.gz sorAra1.qac sorAra1.qdx 
+
+	o hedgehog (eriEur1)
+		http://www.broad.mit.edu/ftp/pub/assemblies/mammals/hedgehog/eriEur1
+			assembly.agp
+			Draft_v1.agp.chromosome.qual.gz
+		qaAgpToQacIdx assembly.agp Draft_v1.agp.chromosome.qual.gz eriEur1.qac eriEur1.qdx
+
+	o dog (canFam2)
+		/cluster/data/canFam2/bed/quality/chrom.qac
+		/cluster/data/canFam2/broad/foo.agp
+		qacAddGapIdx in.agp in.qac canFam2.qac canFam2.qdx
+
+	o cat (felCat3)
+		/cluster/data/felCat3/downloads/assembly.agp
+		/cluster/data/felCat3/downloads/Draft_v3.agp.chromosome.qual.gz
+		qaAgpToQacIdx assembly.agp Draft_v3.agp.chromosome.qual.gz felCat3.qac felCat3.qdx
+
+	o horse (equCab1)
+		/cluster/data/equCab1/downloads/assembly.agp
+		/cluster/data/equCab1/downloads/Draft_v1.agp.chromosome.qual.gz
+		qaAgpToQacIdx assembly.agp Draft_v1.agp.chromosome.qual.gz equCab1.qac equCab1.qdx
+
+	o cow (bosTau3)
+		/cluster/data/bosTau3/baylor/chroms/foo.qual
+		/cluster/data/bosTau3/baylor/foo.agp
+		qacAddGapIdx in.agp in.qac bosTau3.qac bosTau3.qdx
+
+	o armadillo (dasNov1)
+		http://www.broad.mit.edu/ftp/pub/assemblies/mammals/armadillo/dasNov1
+			assembly.agp
+			assembly.quals.gz
+		combineQuals assembly.agp assembly.quals.gz combined.quals
+		qaAgpToQacIdx assembly.agp combined.quals.gz dasNov1.qac dasNov1.qdx
+
+	o elephant (loxAfr1)
+		http://www.broad.mit.edu/ftp/pub/assemblies/mammals/elephant/loxAfr1
+			assembly.agp
+			assembly.quals.gz
+		combineQuals assembly.agp assembly.quals.gz combined.quals
+		qaAgpToQacIdx assembly.agp combined.quals.gz loxAfr1.qac loxAfr1.qdx
+
+	o tenrec (echTel1)
+		http://www.broad.mit.edu/ftp/pub/assemblies/mammals/tenrec/echTel1
+			assembly.agp
+			Draft_v1.agp.chromosome.qual.gz
+		qaAgpToQacIdx assembly.agp Draft_v1.agp.chromosome.qual.gz echTel1.qac echTel1.qdx
+
+	o opossum (monDom4)
+		/cluster/data/monDom4/broad.mit.edu/foo.qac
+		/cluster/data/monDom4/broad.mit.edu/foo.agp
+		qacAddGapIdx in.agp in.qac monDom4.qac monDom4.qdx
+
+	o platypus (ornAna1)
+		/cluster/data/ornAna1
+			agp files are present, but there are no quality files
+
+	o chicken (galGal3)
+		Unable to find quality data.
+
+	o lizard (anoCar1)
+		/cluster/data/anoCar1/downloads/assembly.agp
+		/cluster/data/anoCar1/downloads/scaffold.lifted.qac
+		qacAddGapIdx in.agp in.qac anoCar1.qac anoCar1.qdx
+
+	o frog (xenTro2)
+		Unable to find quality data.
+
+	o tetraodon (tetNig1)
+		Unable to find quality data.
+
+	o fugu (fr2)
+		Unable to find quality data.
+
+	o stickleback (gasAcu1)
+		/cluster/data/gasAcu1/downloads/foo.agp
+		/cluster/data/gasAcu1/downloads/foo.qual
+		qacAddGapIdx in.agp in.qac gasAcu1.qac gasAcu1.qdx
+
+	o medaka (oryLat1)
+		/cluster/data/oryLat1/bed/qual/foo.qual
+		/cluster/data/oryLat1/downloads/foo.agp
+		qacAddGapIdx in.agp in.qac oryLat1.qac oryLat1.qdx
+
+	o zebrafish (danRer4)
+		Unable to find quality data.
+
+	## NOTE
+	quality data for chrM needed: dog, guineapig, horse, hedgehog, stickleback, medaka, rat
+	quality data for chrUn needed: medaka
+
+	## copy all .qac and .qdx files to the san
+	cp *.qac *.qdx /san/sanvol1/rico/quality
+
+	## create species list (species.lst) containing the following
+	anoCar1 /san/sanvol1/rico/quality
+	bosTau3 /san/sanvol1/rico/quality
+	canFam2 /san/sanvol1/rico/quality
+	cavPor2 /san/sanvol1/rico/quality
+	dasNov1 /san/sanvol1/rico/quality
+	echTel1 /san/sanvol1/rico/quality
+	equCab1 /san/sanvol1/rico/quality
+	eriEur1 /san/sanvol1/rico/quality
+	felCat3 /san/sanvol1/rico/quality
+	gasAcu1 /san/sanvol1/rico/quality
+	loxAfr1 /san/sanvol1/rico/quality
+	monDom4 /san/sanvol1/rico/quality
+	oryCun1 /san/sanvol1/rico/quality
+	oryLat1 /san/sanvol1/rico/quality
+	otoGar1 /san/sanvol1/rico/quality
+	panTro2 /san/sanvol1/rico/quality
+	rheMac2 /san/sanvol1/rico/quality
+	rn4     /san/sanvol1/rico/quality
+	sorAra1 /san/sanvol1/rico/quality
+	tupBel1 /san/sanvol1/rico/quality 
+
+	## the following script will add quality data to each of the mafs
+cat > addQData << 'EOF'
+#!/bin/sh
+
+INPUT_DIR=/cluster/data/hg18/bed/multiz28way/anno/maf
+OUTPUT_DIR=/cluster/store12/rico/hg18/bed/multiz28way/qual/maf
+
+for maf in `ls -1Sr ${INPUT_DIR}/*.maf`
+do
+	file=`basename $maf`
+
+	mafAddQRows species.lst $maf ${OUTPUT_DIR}/$file
+done
+'EOF'
+
     # Gene frames
     ssh hgwdev
     cd /cluster/data/hg18/bed/multiz28way
