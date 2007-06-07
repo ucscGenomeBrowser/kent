@@ -13,7 +13,7 @@
 #include "hgColors.h"
 #include "wikiLink.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.125 2007/06/01 19:40:11 galt Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.126 2007/06/07 22:22:57 lowe Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -293,6 +293,7 @@ else
     if (!isGsid) puts("           Tables</A> &nbsp;&nbsp;&nbsp;");
     if (!endsWith(scriptName, "hgNear")) 
     /*  possible to make this conditional: if (db != NULL && hgNearOk(db))	*/
+        if (db != NULL && hgNearOk(db))
 	{
 	if (isGsid)
 	    {
@@ -608,12 +609,12 @@ void printSomeGenomeListHtmlNamed(char *customOrgCgiName, char *db, struct dbDb 
  * param onChangeText - Optional (can be NULL) text to pass in 
  *                              any onChange javascript. */
 {
-char *orgList[128];
+char *orgList[1024];
 int numGenomes = 0;
 struct dbDb *cur = NULL;
-struct hash *hash = hashNew(7); // 2^^7 entries = 128
+struct hash *hash = hashNew(10); // 2^^10 entries = 1024
 char *selGenome = hGenomeOrArchive(db);
-char *values [128];
+char *values [1024];
 char *cgiName;
 
 for (cur = dbList; cur != NULL; cur = cur->next)
@@ -695,7 +696,7 @@ char *genome = hGenomeOrArchive(db);
 char *selAssembly = NULL;
 
 if (genome == NULL)
-    genome = "Human";
+    genome = "Pyrococcus furiosus";
 for (cur = dbList; cur != NULL; cur = cur->next)
     {
     /* Only for this genome */
