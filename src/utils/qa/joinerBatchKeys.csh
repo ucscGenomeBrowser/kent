@@ -52,15 +52,15 @@ set active=`getRRdatabases.csh hgw1 | grep -v "last dump"`
 
 # grep out of the $active list, the ones that they want to check during this run
 if ($dbs == 'hg') then
-  set thisRun=`echo  $active | sed -e "s/ /\n/g" | grep hg`
+  set thisRun=`echo  $active | sed -e "s/ /\n/g" | grep '^hg'`
 endif
 
 if ($dbs == 'mm_rn') then
-  set thisRun=`echo  $active | sed -e "s/ /\n/g" | grep 'mm\|rn'`
+  set thisRun=`echo  $active | sed -e "s/ /\n/g" | grep '^mm\|^rn'`
 endif
 
 if ($dbs == 'other') then
-  set thisRun=`echo  $active | sed -e "s/ /\n/g" | grep -v 'hg\|mm\|rn'`
+  set thisRun=`echo  $active | sed -e "s/ /\n/g" | grep -v '^hg\|^mm\|^rn'`
 endif
 
 ####################################################
