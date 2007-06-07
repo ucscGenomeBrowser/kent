@@ -1,7 +1,7 @@
 table tRNAs
 "transfer RNA genes"
   (
-  string chrom;      "Reference sequence chromosome or scaffold"
+  string chrom;      "chromosome"
   uint chromStart;   "Start position in chromosome"
   uint chromEnd;     "End position in chromosome"
   string name;       "transfer RNA gene name"
@@ -11,4 +11,6 @@ table tRNAs
   string ac;         "Anticodon for the tRNA"
   string intron;     "Coordinates for intron"
   float trnaScore;        "tRNAScanSE score"
+  string seq;         "Sequence of tRNA"
+  string ss;      "Secondary structure string for tRNA"
   )
