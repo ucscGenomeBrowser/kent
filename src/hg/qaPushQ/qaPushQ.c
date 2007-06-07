@@ -29,7 +29,7 @@
 #include "dbDb.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.97 2007/05/18 18:26:54 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.98 2007/06/07 21:38:24 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -3257,15 +3257,11 @@ chost     = cfgOption("archivecentral.host"    );
 cuser     = cfgOption("archivecentral.user"    );
 cpassword = cfgOption("archivecentral.password");
 
-if (isEncode)
-    webStart(NULL, "10 Latest Changes (all assemblies)");
-else    
-    webStart(NULL, "Track and Table Releases");
+webStart(NULL, "Track and Table Releases");
 
 
-//printf("%s %s %s %s</br>\n",centraldb, host, user, password);
 
-// is this necessary? only allowed one connection at a time?
+// only allowed one connection at a time?
 sqlDisconnect(&conn);
 
 betaconn = sqlConnectRemote(chost, cuser, cpassword, centraldb);
@@ -3288,11 +3284,29 @@ sqlFreeResult(&sr);
 slReverse(&kiList);
 sqlDisconnect(&betaconn);
 
-// is this necessary? are we really only allowed one remoteconn at a time?
+// are we really only allowed one remoteconn at a time?
 conn = sqlConnectRemote(host, user, password, database);
 
-if (!isEncode)
-{
+/* filter the db list to make sure we actually have data */
+struct dbDb *newList=NULL, *kiNext;
+for (ki = kiList; ki != NULL; ki = kiNext)
+    {
+    kiNext = ki->next;
+    safef(query,sizeof(query),
+	"select count(*) from pushQ "
+	"where priority='L' and releaseLog != '' and dbs like '%%%s%%' %s"
+	"order by qadate desc, qid desc",
+	ki->name,
+	encodeClause
+	);
+    if (sqlQuickNum(conn, query) > 0)
+	{
+    	slAddHead(&newList, ki);
+	}
+    }
+slReverse(&newList);
+kiList = newList;
+
 /* 10 Latest Changes */
 printf("<ul>\n");
 printf("<li><a CLASS=\"toc\" HREF=\"#recent\" ><b>10 Latest Changes (all assemblies)</b></a></li>");
@@ -3312,15 +3326,11 @@ for (ki = kiList; ki != NULL; ki = ki->next)
 printf("</ul>\n");
 printf("<p>\n");
 printf(" For more information about the tracks and tables listed on this page, refer to the <a href=/goldenPath/gbdDescriptions.html>Description of the annotation database</a> and the <a href=/goldenPath/help/hgTracksHelp.html#IndivTracks>User's Guide</a>.<p>\n");
-}
 
 strftime (now, sizeof(now), "%02d %b %Y", loctime); /* default to today's date */
-if (!isEncode)
-    {
-    printf("<em>Last updated %s. <a HREF=\"mailto:genome@soe.ucsc.edu\">Inquiries and feedback welcome</a>.</em>\n",now);
-    /* 10 LATEST CHANGES */
-    webNewSection("<A NAME=recent></A> 10 Latest Changes (all assemblies)");
-    }
+printf("<em>Last updated %s. <a HREF=\"mailto:genome@soe.ucsc.edu\">Inquiries and feedback welcome</a>.</em>\n",now);
+/* 10 LATEST CHANGES */
+webNewSection("<A NAME=recent></A> 10 Latest Changes (all assemblies)");
 
 printf("<TABLE BORDER=1 BORDERCOLOR=\"#aaaaaa\" CELLPADDING=4 WIDTH=\"100%%\">\n"
     "<TR>\n"
@@ -3392,14 +3402,6 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 printf("</table>\n");
 
-if (isEncode)
-    {
-    printf("<br>\n");
-    printf("<em>Last updated %s. <a HREF=\"mailto:genome@soe.ucsc.edu\">Inquiries and feedback welcome</a>.</em>\n",now);
-    }
-    
-if (!isEncode)
-{
 /* REGULAR LOG */
 for (ki = kiList; ki != NULL; ki = ki->next)
     {
@@ -3419,9 +3421,11 @@ for (ki = kiList; ki != NULL; ki = ki->next)
     
     safef(query,sizeof(query),
 	"select releaseLog, qadate from pushQ "
-	"where priority='L' and releaseLog != '' and dbs like '%%%s%%' "
+	"where priority='L' and releaseLog != '' and dbs like '%%%s%%' %s"
 	"order by qadate desc, qid desc",
-	ki->name);
+	ki->name,
+	encodeClause
+	);
 	
     //printf("query=%s\n",query);
     sr = sqlGetResult(conn, query);
@@ -3439,7 +3443,6 @@ for (ki = kiList; ki != NULL; ki = ki->next)
     printf("</table>\n");
 
     }
-}
 
 dbDbFreeList(&kiList);
 
