@@ -304,12 +304,21 @@ void sessionTouchLastUse(struct sqlConnection *conn, char *encUserName,
 /* Increment namedSessionDb.useCount and update lastUse for this session. */
 
 void cartLoadUserSession(struct sqlConnection *conn, char *sessionOwner,
-			 char *sessionName, struct cart *cart);
-/* If permitted, load the contents of the given user's session. */
+			 char *sessionName, struct cart *cart,
+			 struct hash *oldVars, char *actionVar);
+/* If permitted, load the contents of the given user's session, and then
+ * reload the CGI settings (to support override of session settings).
+ * If non-NULL, oldVars will contain values overloaded when reloading CGI.
+ * If non-NULL, actionVar is a cartRemove wildcard string specifying the
+ * CGI action variable that sent us here. */
 
-void cartLoadSettings(struct lineFile *lf, struct cart *cart);
-/* Load settings (cartDump output) into current session. */
-
+void cartLoadSettings(struct lineFile *lf, struct cart *cart,
+		      struct hash *oldVars, char *actionVar);
+/* Load settings (cartDump output) into current session, and then
+ * reload the CGI settings (to support override of session settings).
+ * If non-NULL, oldVars will contain values overloaded when reloading CGI.
+ * If non-NULL, actionVar is a cartRemove wildcard string specifying the
+ * CGI action variable that sent us here. */
 
 #endif /* CART_H */
 

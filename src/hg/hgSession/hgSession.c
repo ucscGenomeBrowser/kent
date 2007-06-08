@@ -16,7 +16,7 @@
 #include "customFactory.h"
 #include "hgSession.h"
 
-static char const rcsid[] = "$Id: hgSession.c,v 1.27 2007/05/22 22:36:05 galt Exp $";
+static char const rcsid[] = "$Id: hgSession.c,v 1.28 2007/06/08 19:15:46 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -719,10 +719,12 @@ if (hel != NULL)
     {
     char *encSessionName = hel->name + strlen(hgsLoadPrefix);
     char *sessionName = cgiDecodeClone(encSessionName);
+    char wildStr[256];
+    safef(wildStr, sizeof(wildStr), "%s*", hgsLoadPrefix);
     dyStringPrintf(dyMessage,
 		   "Loaded settings from session <B>%s</B>.<BR>\n",
 		   htmlEncode(sessionName));
-    cartLoadUserSession(conn, userName, sessionName, cart);
+    cartLoadUserSession(conn, userName, sessionName, cart, NULL, wildStr);
     checkForCustomTracks(dyMessage);
     didSomething = TRUE;
     }
@@ -752,7 +754,7 @@ else
     }
 }
 
-char *doOtherUser()
+char *doOtherUser(char *actionVar)
 /* Load settings from another user's named session.  
  * Return a message confirming what we did. */
 {
@@ -764,7 +766,7 @@ char *sessionName = trimSpaces(cartString(cart, hgsOtherUserSessionName));
 dyStringPrintf(dyMessage,
       "Loaded settings from user <B>%s</B>'s session <B>%s</B>.",
       otherUser, htmlEncode(sessionName));
-cartLoadUserSession(conn, otherUser, sessionName, cart);
+cartLoadUserSession(conn, otherUser, sessionName, cart, NULL, actionVar);
 checkForCustomTracks(dyMessage);
 hDisconnectCentral(&conn);
 return dyStringCannibalize(&dyMessage);
@@ -784,7 +786,7 @@ cartDump(cart);
 textOutClose(&compressPipe);
 }
 
-char *doLoad(boolean fromUrl)
+char *doLoad(boolean fromUrl, char *actionVar)
 /* Load settings from a file or URL sent by the user.  
  * Return a message confirming what we did. */
 {
@@ -810,7 +812,7 @@ else
 		   (unsigned long)strlen(settings));
     lf = lineFileOnString("settingsFromFile", TRUE, cloneString(settings));
     }
-cartLoadSettings(lf, cart);
+cartLoadSettings(lf, cart, NULL, actionVar);
 checkForCustomTracks(dyMessage);
 lineFileClose(&lf);
 return dyStringCannibalize(&dyMessage);
@@ -837,7 +839,7 @@ else if (cartVarExists(cart, hgsDoNewSession))
     }
 else if (cartVarExists(cart, hgsDoOtherUser))
     {
-    char *message = doOtherUser();
+    char *message = doOtherUser(hgsDoOtherUser);
     doMainPage(message);
     }
 else if (cartVarExists(cart, hgsDoSaveLocal))
@@ -846,12 +848,12 @@ else if (cartVarExists(cart, hgsDoSaveLocal))
     }
 else if (cartVarExists(cart, hgsDoLoadLocal))
     {
-    char *message = doLoad(FALSE);
+    char *message = doLoad(FALSE, hgsDoLoadLocal);
     doMainPage(message);
     }
 else if (cartVarExists(cart, hgsDoLoadUrl))
     {
-    char *message = doLoad(TRUE);
+    char *message = doLoad(TRUE, hgsDoLoadUrl);
     doMainPage(message);
     }
 else
