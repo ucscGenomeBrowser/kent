@@ -16,7 +16,7 @@
 #include "trashDir.h"
 #include "customFactory.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.70 2007/06/08 19:15:46 angie Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.71 2007/06/08 21:32:06 angie Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -454,8 +454,8 @@ if (encoded->stringSize < 16*1024 || cart->userInfo->useCount > 0)
     }
 else
     {
-    fprintf(stderr, "Cart stuffing bot?  Not writing %d bytes to cart on first use of %d\n",
-    	encoded->stringSize, cart->userInfo->id);
+    fprintf(stderr, "Cart stuffing bot?  Not writing %d bytes to cart on first use of %d from IP=%s\n",
+    	encoded->stringSize, cart->userInfo->id, cgiRemoteAddr());
     }
 
 /* Cleanup */
