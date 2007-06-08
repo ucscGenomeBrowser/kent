@@ -541,3 +541,15 @@ chainSome $(path1)
     rm -rf blastOut
 
 # End tblastn
+
+
+###########################################################################
+# SWAP/CHAIN/NET DM3 (DONE 6/8/07 angie)
+    ssh kkstore02
+    mkdir /cluster/data/droSec1/bed/blastz.dm3.swap
+    cd /cluster/data/droSec1/bed/blastz.dm3.swap
+    doBlastzChainNet.pl -swap /cluster/data/dm3/bed/blastz.droSec1/DEF >& do.log &
+    tail -f do.log
+    ln -s blastz.dm3.swap /cluster/data/droSec1/bed/blastz.dm3
+
+

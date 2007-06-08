@@ -620,3 +620,13 @@ chainSome $(path1)
     ldHgGene -gtf droEre1 geneMapper geneMapper.gtf
 
 
+###########################################################################
+# SWAP/CHAIN/NET DM3 (DONE 6/8/07 angie)
+    ssh kkstore02
+    mkdir /cluster/data/droEre1/bed/blastz.dm3.swap
+    cd /cluster/data/droEre1/bed/blastz.dm3.swap
+    doBlastzChainNet.pl -swap /cluster/data/dm3/bed/blastz.droEre1/DEF >& do.log &
+    tail -f do.log
+    ln -s blastz.dm3.swap /cluster/data/droEre1/bed/blastz.dm3
+
+

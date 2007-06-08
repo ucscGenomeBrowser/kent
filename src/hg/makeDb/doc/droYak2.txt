@@ -775,3 +775,12 @@ chainSome $(path1)
     ln -s blastz.droSim1.swap /cluster/data/droYak2/bed/blastz.droSim1
 
 
+###########################################################################
+# SWAP/CHAIN/NET DM3 (DONE 6/7/07 angie)
+    ssh kkstore03
+    mkdir /cluster/data/droYak2/bed/blastz.dm3.swap
+    cd /cluster/data/droYak2/bed/blastz.dm3.swap
+    doBlastzChainNet.pl -swap /cluster/data/dm3/bed/blastz.droYak2/DEF >& do.log &
+    tail -f do.log
+    ln -s blastz.dm3.swap /cluster/data/droYak2/bed/blastz.dm3
+

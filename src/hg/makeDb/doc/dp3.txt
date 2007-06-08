@@ -1007,3 +1007,13 @@ chainSome $(path1)
     ldHgGene -gtf -genePredExt dp3 geneid *.gtf
 
 
+###########################################################################
+# SWAP/CHAIN/NET DM3 (DONE 6/7/07 angie)
+    ssh kkstore04
+    mkdir /cluster/data/dp3/bed/blastz.dm3.swap
+    cd /cluster/data/dp3/bed/blastz.dm3.swap
+    doBlastzChainNet.pl -swap /cluster/data/dm3/bed/blastz.dp3/DEF >& do.log &
+    tail -f do.log
+    ln -s blastz.dm3.swap /cluster/data/dp3/bed/blastz.dm3
+
+

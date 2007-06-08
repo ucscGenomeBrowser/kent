@@ -1172,3 +1172,13 @@ chainSome $(path1)
     ln -s blastz.dm2.swap /cluster/data/anoGam1/bed/blastz.dm2
 
 
+###########################################################################
+# SWAP/CHAIN/NET DM3 (DONE 6/7/07 angie)
+    ssh kkstore03
+    mkdir /cluster/data/anoGam1/bed/blastz.dm3.swap
+    cd /cluster/data/anoGam1/bed/blastz.dm3.swap
+    doBlastzChainNet.pl -swap /cluster/data/dm3/bed/blastz.anoGam1/DEF >& do.log &
+    tail -f do.log
+    ln -s blastz.dm3.swap /cluster/data/anoGam1/bed/blastz.dm3
+
+
