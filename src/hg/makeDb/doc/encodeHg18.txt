@@ -51,3 +51,73 @@ cat > getMafs.csh << 'EOF'
     hgLoadMaf -pathPrefix=$gdir -WARN hg18 encodeTbaAlign >&! load.log
     cat *.maf | hgLoadMafSummary hg18 encodeTbaSummary stdin
 
+##############################################################################
+# Lifting rampage (Andy)
+# 
+
+bash
+cd /cluster/data/encode/convertHg18
+/cluster/data/encode/bin/scripts/listEncodeTables.csh hg17 > hg17.tables
+wc -l hg17.tables
+#554 hg17.tables (dang)
+
+# start with easy beds i.e. the ones like "bed <num> ."
+
+grep "bed.*\." hg17.tables > easyBeds.tables
+grep -v "bed.*\." hg17.tables > remaining.tables
+wc -l easyBeds.tables
+#127 easyBeds.tables
+mkdir easyBeds
+for fields in 3 4 5 6 9 12; do 
+    for table in `grep "bed $fields" easyBeds.tables | cut -f1`; do 
+       /cluster/data/encode/bin/scripts/convertBedTable.csh hg17 hg18 \
+         $table $fields >> easyBeds.script.log 
+       mv $table.* easyBeds/
+    done
+done
+# still got 4 like "bed ." 
+egrep -v "bed (3|4|5|6|9|12)" easyBeds.tables
+#encodeYaleChIPSTAT1HeLaBingRenSites     encodeChip      bed .
+#encodeYaleChIPSTAT1HeLaMaskLess36mer36bpSite    encodeChip      bed .
+#encodeYaleChIPSTAT1HeLaMaskLess50mer38bpSite    encodeChip      bed .
+#encodeYaleChIPSTAT1HeLaMaskLess50mer50bpSite    encodeChip      bed .
+# these are all bed 3
+for table in `egrep -v "bed (3|4|5|6|9|12)" easyBeds.tables | cut -f1`; do
+       /cluster/data/encode/bin/scripts/convertBedTable.csh hg17 hg18 \
+         $table 3 >> easyBeds.script.log
+       mv $table.* easyBeds/
+done
+
+# ok now there's ones like "bed <num> +"
+wc -l remaining.tables
+#427 remaining.tables
+grep '\+' remaining.tables > plusBed.tables
+grep -v '\+' remaining.tables > tmp; mv tmp remaining.tables 
+wc -l remaining.tables plusBed.tables 
+#  383 remaining.tables
+#   44 plusBed.tables
+#  427 total
+mkdir plusBeds
+for fields in 4 5 6 9 12; do
+    for table in `grep "bed $fields" plusBed.tables | cut -f1`; do
+       /cluster/data/encode/bin/scripts/convertBedTable.csh hg17 hg18 \
+         $table $fields >> plusBeds.script.log
+       mv $table.* plusBeds/
+    done
+done
+
+# how about bedGraph ones?
+grep bedGraph remaining.tables > bedGraph.tables
+grep -v bedGraph remaining.tables > tmp; mv tmp remaining.tables 
+wc -l bedGraph.tables remaining.tables 
+#  186 bedGraph.tables
+#  197 remaining.tables
+#  383 total
+mkdir bedGraph
+for table in `cut -f1 bedGraph.tables`; do
+       /cluster/data/encode/bin/scripts/convertBedTable.csh hg17 hg18 \
+         $table 4 >> bedGraph.script.log
+       mv $table.* bedGraph/
+done
+
+# 197 left!
