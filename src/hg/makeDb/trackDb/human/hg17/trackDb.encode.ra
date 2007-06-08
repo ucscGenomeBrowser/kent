@@ -1963,8 +1963,8 @@ type bed 5
 
 track encodeUWRegulomeBase
 compositeTrack on
-shortLabel UW/Reg QCP DNaseI Sens
-longLabel UW/Regulome QCP DNaseI Sensitivity
+shortLabel UW/Reg  DNaseI Sens
+longLabel UW/Regulome DNaseI Sensitivity
 group encodeChrom
 priority 66.05
 # NOTE: Missing regions
@@ -1973,7 +1973,7 @@ visibility hide
 maxHeightPixels 128:16:16
 minLimit -13.40
 maxLimit 15.55
-viewLimits 0.5:3
+viewLimits 2:6.33
 maxHeightPixels 128:16:16
 type bedGraph 5
 autoScaleDefault Off
@@ -2234,8 +2234,8 @@ dataVersion ENCODE Oct2005 Freeze
 
 track encodeRegulomeDnaseArray
 compositeTrack on
-shortLabel UW DNase GM
-longLabel UW Array DNase I hypersensitivity in GM06990 Cells
+shortLabel UW DNase-array
+longLabel UW DNase-array hypersensitivity in GM06990 Cells
 group encodeChrom
 priority 66.5
 type bedGraph 4
