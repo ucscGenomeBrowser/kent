@@ -44,7 +44,7 @@ if ( "$HOST" != "hgwdev" ) then
  exit 1
 endif
 
-# set machine name2 and check validity
+# set machine names and check validity
 if ( $#argv > 2 ) then
   set machine1="$argv[3]"
   checkMachineName.csh $machine1
@@ -63,15 +63,32 @@ endif
 # check if it is a file or a tablename and set list
 file $tableinput | egrep "ASCII text" > /dev/null
 if ( ! $status ) then
-  set tables=`cat $tableinput`
+  # there is a file
   set list="true"
+  cat $tableinput | grep % > /dev/null
+  if ( ! $status ) then
+    # there are wildcards
+    set wildcards=`cat $tableinput | grep %`
+    set tables=`cat $tableinput`
+    foreach table ( $wildcards )
+      set expand=`hgsql -N -e 'SHOW TABLES LIKE "'$table'"' $db`
+      set substitute=`echo $table $expand`
+      set tables=`echo $tables | sed -e "s/$table/$substitute/"`
+    end
+  else
+    set tables=`cat $tableinput`
+  endif
 else
   set tables=$tableinput
+  echo $tables | grep % > /dev/null
+  if ( ! $status ) then
+    set tables=`hgsql -N -e 'SHOW TABLES LIKE "'$tables'"' $db`
+    set list="true"
+  endif
 endif
 
 # make headers for output table
 # get width of first column from longest tablename
-
 set longtable=5
 set length=5
 foreach table (`echo $tables`)
@@ -84,8 +101,8 @@ end
 set length=`echo $length | awk '{print $1+1}'`
 set offset=`echo $longtable | sed -e "s/./-/g"`
 set offset2=`echo $longtable | sed -e "s/./x/g"`
-
 echo
+
 # print headers
 if ( "" == $machine2 ) then
     # print top header
@@ -120,6 +137,13 @@ else
 endif
 
 foreach table ($tables)
+  # checkfor place-saver on wildcards
+  echo $table | egrep "%" > /dev/null
+  if ( ! $status ) then
+    echo " -${table}-"
+    continue
+  endif
+
   set first=`getRRtableStatus.csh $db $table Data_length $machine1`
   if ( $status ) then
     set first=0
