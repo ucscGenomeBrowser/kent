@@ -12,7 +12,7 @@
 #include "errabort.h"
 #include "mime.h"
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.88 2007/06/07 00:49:47 angie Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.89 2007/06/08 21:31:12 angie Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -57,6 +57,16 @@ char *cgiServerName()
 /* Return name of server */
 {
 return getenv("SERVER_NAME");
+}
+
+char *cgiRemoteAddr()
+/* Return IP address of client (or "unknown"). */
+{
+static char *dunno = "unknown";
+char *remoteAddr = getenv("REMOTE_ADDR");
+if (remoteAddr == NULL)
+    remoteAddr = dunno;
+return remoteAddr;
 }
 
 char *_cgiRawInput()
@@ -337,15 +347,16 @@ else
     var = (struct cgiVar *)hel->val;
 while (hel->next != NULL)
     {
-    char *remoteAddr = getenv("REMOTE_ADDR");
-    if (remoteAddr == NULL)
-	remoteAddr = "";
-    /* This is too early to call warn -- it will mess up html output. */
-    fprintf(stderr,
-	    "findCookieData: Duplicate cookie value from IP=%s: "
-	    "%s has both %s and %s\n",
-	    remoteAddr,
-	    varName, var->val, ((struct cgiVar *)(hel->next->val))->val);
+    char *nextVal = ((struct cgiVar *)(hel->next->val))->val;
+    if (!sameString(var->val, nextVal))
+	{
+	/* This is too early to call warn -- it will mess up html output. */
+	fprintf(stderr,
+		"findCookieData: Duplicate cookie value from IP=%s: "
+		"%s has both %s and %s\n",
+		cgiRemoteAddr(),
+		varName, var->val, nextVal);
+	}
     hel = hel->next;
     }
 return var->val;
