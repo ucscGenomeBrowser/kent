@@ -75,3 +75,24 @@ dbDbSpeciesDir shrew
 
     mkdir -p /san/sanvol1/scratch/sorAra1
     cp -p sorAra1.2bit chrom.sizes /san/sanvol1/scratch/sorAra1
+
+################################################
+# DOWNLOADS (2007-06-05 kate)
+
+    ssh kkstore05
+    cd /cluster/data/sorAra1
+    mkdir bigZips
+    cd bigZips
+    nice twoBitToFa ../sorAra1.2bit sorAra1.fa
+    cp ../downloads/assembly.agp sorAra1.agp
+    nice gzip sorAra1.fa sorAra1.agp
+    md5sum *.gz > md5sum.txt
+
+    ssh hgwdev
+    set d = /usr/local/apache/htdocs/goldenPath
+    set bd = /cluster/data/sorAra1
+    cp $d/felCat3/bigZips/README.txt $bd/bigZips
+    # EDIT
+    mkdir -p $d/sorAra1/bigZips
+    ln -s $bd/bigZips/{*.gz,md5sum.txt,README.txt} $d/sorAra1/bigZips
+   

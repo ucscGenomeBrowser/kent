@@ -84,3 +84,22 @@ twoBitToFa ../otoGar1/otoGar1.unmasked.2bit \
     #	to /usr/local/apache/htdocs/images
     #	It is still a bit dark, a -gamma argument could lighten it
 
+################################################
+# DOWNLOADS (2007-06-05 kate)
+
+    ssh kkstore05
+    cd /cluster/data/otoGar1
+    mkdir bigZips
+    cd bigZips
+    nice twoBitToFa ../otoGar1.2bit otoGar1.fa
+    nice gzip otoGar1.fa 
+    md5sum *.gz > md5sum.txt
+
+    ssh hgwdev
+    set d = /usr/local/apache/htdocs/goldenPath
+    set bd = /cluster/data/otoGar1
+    cp $d/sorAra1/bigZips/README.txt $bd/bigZips
+    # EDIT
+    mkdir -p $d/otoGar1/bigZips
+    ln -s $bd/bigZips/{*.gz,md5sum.txt,README.txt} $d/otoGar1/bigZips
+   

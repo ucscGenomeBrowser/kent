@@ -80,3 +80,23 @@ dbDbSpeciesDir lizard
     mkdir -p /san/sanvol1/scratch/cavPor2
     cp -p cavPor2.2bit chrom.sizes /san/sanvol1/scratch/cavPor2
 
+################################################
+# DOWNLOADS (2007-06-05 kate)
+
+    ssh kkstore05
+    cd /cluster/data/cavPor2
+    mkdir bigZips
+    cd bigZips
+    nice twoBitToFa ../cavPor2.2bit cavPor2.fa
+    cp ../downloads/assembly.agp cavPor2.agp
+    nice gzip cavPor2.fa cavPor2.agp
+    md5sum *.gz > md5sum.txt
+
+    ssh hgwdev
+    set d = /usr/local/apache/htdocs/goldenPath
+    set bd = /cluster/data/cavPor2
+    cp $d/sorAra1/bigZips/README.txt $bd/bigZips
+    # EDIT
+    mkdir -p $d/cavPor2/bigZips
+    ln -s $bd/bigZips/{*.gz,md5sum.txt,README.txt} $d/cavPor2/bigZips
+   

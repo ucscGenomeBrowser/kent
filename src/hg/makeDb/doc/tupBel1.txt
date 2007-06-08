@@ -1,0 +1,25 @@
+# Tupaia belangeri -- 2X Tree Shrew 2X assembly from the Broad
+# Assembly named:  tupBel1
+# Sequence downloaded and masked by Robert Baertsch, 12/06
+################################################
+
+# DOWNLOADS (2007-06-05 kate)
+#  Posted masked sequence to download site since
+#  it is used in the 28way multiz on hg18
+
+    ssh kkstore05
+    cd /cluster/data/tupBel1
+    mkdir bigZips
+    cd bigZips
+    nice twoBitToFa ../tupBel1.2bit tupBel1.fa
+    nice gzip tupBel1.fa
+    md5sum *.gz > md5sum.txt
+
+    ssh hgwdev
+    set d = /usr/local/apache/htdocs/goldenPath
+    set bd = /cluster/data/tupBel1
+    cp $d/sorAra1/bigZips/README.txt $bd/bigZips
+    # EDIT
+    mkdir -p $d/tupBel1/bigZips
+    ln -s $bd/bigZips/{*.gz,md5sum.txt,README.txt} $d/tupBel1/bigZips
+   

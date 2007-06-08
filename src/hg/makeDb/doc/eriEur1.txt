@@ -71,3 +71,24 @@ dbDbSpeciesDir hedgehog
 
     mkdir -p /san/sanvol1/scratch/eriEur1
     cp -p eriEur1.2bit chrom.sizes /san/sanvol1/scratch/eriEur1
+
+################################################
+# DOWNLOADS (2007-06-05 kate)
+
+    ssh kkstore05
+    cd /cluster/data/eriEur1
+    mkdir bigZips
+    cd bigZips
+    nice twoBitToFa ../eriEur1.2bit eriEur1.fa
+    cp ../downloads/assembly.agp eriEur1.agp
+    nice gzip eriEur1.fa eriEur1.agp
+    md5sum *.gz > md5sum.txt
+
+    ssh hgwdev
+    set d = /usr/local/apache/htdocs/goldenPath
+    set bd = /cluster/data/eriEur1
+    cp $d/sorAra1/bigZips/README.txt $bd/bigZips
+    # edit 
+    mkdir -p $d/eriEur1/bigZips
+    ln -s $bd/bigZips/{*.gz,md5sum.txt,README.txt} $d/eriEur1/bigZips
+   
