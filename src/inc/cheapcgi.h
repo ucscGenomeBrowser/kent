@@ -26,23 +26,26 @@ struct cgiVar
     boolean saved;		/* True if saved. */
     };
 
-/* return the list of cgiVar's */
 struct cgiVar* cgiVarList();
+/* return the list of cgiVar's */
 
-/* Get the string associated with varName from the cookie string. */
 char *findCookieData(char *varName);
+/* Get the string associated with varName from the cookie string. */
 
 void dumpCookieList();
 /* Print out the cookie list. */
 
-/* Return TRUE if looks like we're being run as a CGI. */
 boolean cgiIsOnWeb();
+/* Return TRUE if looks like we're being run as a CGI. */
 
-/* Return name of script so libs can do context-sensitive stuff. */
 char *cgiScriptName();
+/* Return name of script so libs can do context-sensitive stuff. */
 
-/* Return name of server */
 char *cgiServerName();
+/* Return name of server */
+
+char *cgiRemoteAddr();
+/* Return IP address of client (or "unknown"). */
 
 /* These routines abort the html output if the input isn't
  * there or is misformatted. */
