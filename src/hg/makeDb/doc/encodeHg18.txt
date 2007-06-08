@@ -51,6 +51,11 @@ cat > getMafs.csh << 'EOF'
     hgLoadMaf -pathPrefix=$gdir -WARN hg18 encodeTbaAlign >&! load.log
     cat *.maf | hgLoadMafSummary hg18 encodeTbaSummary stdin
 
+<<<<<<< encodeHg18.txt
+
+###########################################
+# 
+=======
 ##############################################################################
 # Lifting rampage (Andy)
 # 
@@ -121,3 +126,23 @@ for table in `cut -f1 bedGraph.tables`; do
 done
 
 # 197 left!
+
+
+######################################
+# Continue lifting rampage (ting, 06-07-2007)
+#
+
+# Examining remaining.tables
+# All GIS tables are bed 12, so lift these
+		grep Gis remaining.tables > Gis.tables
+		grep -v Gis remaining.tables > tmp; mv tmp remaining.tables
+		wc -l Gis.tables remaining.tables
+		#    7 Gis.tables
+		#  190 remaining.tables
+		#  197 total
+		mkdir bedGis
+		doGis.csh
+		# 7 tables lifted.
+
+# 190 remaining.
+
