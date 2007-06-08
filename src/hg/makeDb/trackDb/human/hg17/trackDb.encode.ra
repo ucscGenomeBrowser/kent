@@ -1963,8 +1963,8 @@ type bed 5
 
 track encodeUWRegulomeBase
 compositeTrack on
-shortLabel UW/Reg  DNaseI Sens
-longLabel UW/Regulome DNaseI Sensitivity
+shortLabel UW QCP DNaseI Sens
+longLabel UW QCP DNaseI Sensitivity
 group encodeChrom
 priority 66.05
 # NOTE: Missing regions
@@ -2255,14 +2255,14 @@ dataVersion May 2006
     track encodeRegulomeDnaseGM06990Sens
     subTrack encodeRegulomeDnaseArray
     shortLabel DnaseI Sens
-    longLabel UW DNase/Array GM06990 Sensitivity 
+    longLabel UW DNase-array GM06990 Sensitivity 
     color 000,000,153
     priority 1
 
     track encodeRegulomeDnaseGM06990Sites
     subTrack encodeRegulomeDnaseArray
     shortLabel DnaseI HSs 
-    longLabel UW DNase/Array GM06990 HSs
+    longLabel UW DNase-array GM06990 HSs
     noInherit on
     visibility dense
     useScore 1
