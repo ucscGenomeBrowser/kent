@@ -2,7 +2,7 @@ include ../../../inc/common.mk
 HG_WARN = ${HG_WARN_ERR}
 
 CFLAGS= -ggdb
-O = element.o
+O = element.o atom.o
 
 ../../../lib/$(MACHTYPE)/element.a: $(O) $(MACHTYPE)
 	ar rcus $*.a $(O)
