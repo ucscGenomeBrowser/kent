@@ -10,7 +10,7 @@
 #include "element.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: makeAtoms.c,v 1.4 2007/05/27 16:17:19 braney Exp $";
+static char const rcsid[] = "$Id: makeAtoms.c,v 1.5 2007/06/10 22:06:29 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -20,15 +20,16 @@ errAbort(
   "     alignments between the regions.  Outputs a set of atoms and the \n"
   "     atom sequence for each range\n"
   "usage:\n"
-  "   makeAtoms regions.bed input.psl out.atoms out.seq\n"
+  "   makeAtoms regions.bed input.blocks out.atoms\n"
   "arguments:\n"
   "   regions.bed    bed4 file with name set to species name\n"
-  "   input.psl      PSL alignments between \n"
+  "   input.blocks   alignment blocks\n"
   "   out.atoms      list of atoms\n"
-  "   out.seq        sequence of atoms for each species\n"
   "options:\n"
   );
 }
+
+extern char *bigWords[10*10*1024];
 
 static struct optionSpec options[] = {
    {"trans", OPTION_BOOLEAN},
@@ -37,6 +38,34 @@ static struct optionSpec options[] = {
 
 
 boolean doTransitive = FALSE;
+
+struct block
+{
+struct block *next;
+unsigned tStart,qStart,size;
+char strand;
+} ;
+
+struct blockList
+{
+struct block *blocks;
+char *tName;
+char *qName;
+struct block *currentBlock;
+struct block *lastBlock;
+};
+
+
+struct listList
+{
+struct listList *next;
+struct blockList *blockList;
+};
+
+struct listHead
+{
+struct listList *listHead;
+};
 
 struct species
 {
@@ -76,8 +105,7 @@ int num;
 struct run *run;
 };
 
-static struct atom *atoms = NULL;
-static int numAtoms = 0;
+static unsigned numAtoms = 1;
 
 struct species *getSpeciesRanges(char *bedName, struct hash **hash)
 {
@@ -123,37 +151,22 @@ return diff;
 }
 
 /* get the query base for a given target base */
-int getBase(struct psl *psl, int base, char *strand)
+int getBase(struct block *block, int base, char *strand)
 {
 int offset = -1;
 int  diff;
-int *tStart = psl->tStarts;
-int *lastTStart = &psl->tStarts[psl->blockCount];
-int *qStart = psl->qStarts;
-int *block = psl->blockSizes;
 
-for(;  tStart < lastTStart; tStart++, qStart++, block++)
-    {
-    if (*tStart > base)
-	return -1;
+diff = base - block->tStart;
 
-    if (*tStart + *block > base)
-	break;
-    }
-
-if (tStart == lastTStart)
-    return -1;
-
-diff = base - *tStart;
-
-*strand = psl->strand[0];
+*strand = block->strand;
 if (*strand == '+')
-    offset = *qStart + diff;
+    offset = block->qStart + diff;
 else
-    offset = psl->qSize - (*qStart + diff) - 1;
+    offset = (block->qStart + block->size) - diff - 1;
 
 return offset;
 }
+
 
 void AddBaseToCol(struct column *aCol, struct species *species, 
     int offset, char strand)
@@ -168,33 +181,49 @@ abr->offset = offset;
 abr->strand = strand;
 }
 
-struct column *getSet(int base, struct psl *psl, struct hash *speciesHash)
+struct column *getSet(int base, char *name, struct listHead *listHead, 
+    struct hash *speciesHash)
 {
 struct column *aCol = NULL;
+struct listList *listList = listHead->listHead;
 
 AllocVar(aCol);
 
-for(; psl && (psl->tStart <= base); psl = psl->next)
+for(; listList ; listList = listList->next)
     {
-    if (psl->tEnd > base)
+    struct blockList *blockList = listList->blockList;
+    struct block *block = blockList->currentBlock;
+
+    if (block == NULL)
+	continue;
+
+    for(; (blockList->currentBlock < blockList->lastBlock) && 
+	    (blockList->currentBlock->tStart + blockList->currentBlock->size <= base); 
+	    blockList->currentBlock++)
+	;
+
+    block = blockList->currentBlock;
+    for(; (block < blockList->lastBlock) && (block->tStart <= base); block++)
 	{
-	char strand;
-	int offset = getBase(psl, base, &strand);
-
-	if (offset < 0)
+	if(block->tStart + block->size <= base)
+	    {
+	//    ++blockList->currentBlock;
 	    continue;
+	    }
 
-	char *ptr = strchr(psl->qName, '.');
+	char strand;
+	int offset = getBase(block, base, &strand);
 
-	*ptr = 0;
-	struct species *species = hashMustFindVal(speciesHash, psl->qName);
-	*ptr = '.';
+	struct species *species = hashMustFindVal(speciesHash, 
+	    blockList->qName);
 
-	//printf("off %d\n",offset);
-	if (offset >= 0)
-	    AddBaseToCol(aCol, species, offset, strand);
+	//if (offset > species->chromEnd)
+	    //errAbort("adding bad base");
+    
+	AddBaseToCol(aCol, species, offset, strand);
 	}
     }
+
 return aCol;
 }
 
@@ -256,33 +285,6 @@ else
     }
 }
 
-
-struct atom *getNewAtom()
-{
-static int allocAtoms = 0;
-struct atom *ret;
-
-if (numAtoms == allocAtoms)
-    {
-    int oldSize = allocAtoms * sizeof(struct atom);
-
-    allocAtoms += 100;
-    int newSize = allocAtoms * sizeof(struct atom);
-
-    if (atoms == NULL)
-	atoms = needMem(newSize);
-    else
-    	atoms = needMoreMem(atoms, oldSize, newSize);
-    }
-
-ret = &atoms[numAtoms];
-ret->num = numAtoms + 1;
-numAtoms++;
-
-return ret;
-}
-
-
 void deleteCol(struct column *col)
 {
     struct aBase *aBase, *nextBase;
@@ -303,37 +305,24 @@ for(; aBase ; aBase = aBase->next)
     {
     struct species *species = aBase->species;
 
-    species->atomSequence[aBase->offset - species->chromStart] = atom->num;
+    if (aBase->strand == '-')
+	species->atomSequence[aBase->offset - species->chromStart] = -atom->num;
+    else
+	species->atomSequence[aBase->offset - species->chromStart] = atom->num;
     }
 }
 
-int baseInRange(struct aBase *aBase, int length, struct aBase *colBase, boolean *doReverse)
-{
-if (/*(aBase->strand == colBase->strand) &&*/ (aBase->species == colBase->species ))
-    {
-    int delta; 
-    *doReverse = FALSE;
-
-    delta = colBase->offset - aBase->offset ;
-    if ((delta >= 0) && ( delta < length))
-	{
-	if (aBase->strand != colBase->strand)
-	    *doReverse = TRUE;
-	return delta;
-	}
-    }
-return -1;
-}
 
 void dropDups(struct column *aCol)
 {
 struct aBase *prevBase = NULL;
-struct aBase *aBase;
+struct aBase *aBase, *nextBase;
 
 slSort(&aCol->bases, baseSort);
 
-for( aBase = aCol->bases; aBase ;  aBase = aBase->next)
+for( aBase = aCol->bases; aBase ;  aBase = nextBase)
     {
+    nextBase = aBase->next;
     if (prevBase)
 	{
 	if (aBase->species == prevBase->species) 
@@ -343,6 +332,7 @@ for( aBase = aCol->bases; aBase ;  aBase = aBase->next)
 	    if (diff == 0)
 		{
 		prevBase->next = aBase->next;
+		freez(&aBase);
 		continue;
 		}
 	    }
@@ -351,101 +341,115 @@ for( aBase = aCol->bases; aBase ;  aBase = aBase->next)
     }
 }
 
-void MoveColumnFromAtom(int atomNum, struct aBase *colBase, struct column *aCol)
+void addList(struct hash *blockHash, char *name, struct blockList *blockList)
 {
-struct aBase *aBase;
-struct atom *atom = &atoms[atomNum - 1];
-struct run *run = atom->run;
-int delta = -1;
-boolean doReverse = FALSE;
+struct listList *listList;
+struct listHead *listHead;
 
-for( aBase = run->bases; aBase ; aBase = aBase->next)
-    if ((delta = baseInRange(aBase, run->length, colBase, &doReverse)) != -1)
-	break;
-
-//printf("delta %d length %d\n",delta,run->length);
-
-if (aBase == NULL)
-    errAbort("couldn't find column\n");
-
-for( aBase = run->bases; aBase ; aBase = aBase->next)
+if ((listHead = hashFindVal(blockHash, name)) == NULL)
     {
-    struct aBase *newBase;
-    struct species *species = aBase->species;
+    AllocVar(listHead);
+    hashAdd(blockHash, name, listHead);
+    }
 
-    species->atomSequence[aBase->offset + delta - species->chromStart] = 0;
+AllocVar(listList);
+listList->blockList = blockList;
+slAddHead(&listHead->listHead, listList);
+}
 
-    AllocVar(newBase);
-    newBase->offset = aBase->offset + delta;
-    newBase->species = aBase->species;
-    if (!doReverse)
-	newBase->strand = aBase->strand;
+struct hash *getBlocks(char *blockName)
+{
+struct lineFile *lf = lineFileOpen(blockName, TRUE);
+char *row[30];
+boolean needHeader = TRUE;
+struct hash *blockHash = newHash(5);
+struct blockList *blockList = NULL;
+struct block *block = NULL;
+int wordsRead;
+
+while( (wordsRead = lineFileChopNext(lf, row, sizeof(row)/sizeof(char *)) ))
+    {
+    if (needHeader)
+	{
+	int count;
+
+	if (row[0][0] != '>')
+	    errAbort("expecting '>' on line %d\n",lf->lineIx);
+
+	char *qName = strchr(row[0], '.');
+	char *ptr;
+
+	*qName++ = 0;
+	qName = strchr(qName, '.');
+	*qName++ = 0;
+	ptr = strchr(qName, '.');
+	*ptr++ = 0;
+
+	AllocVar(blockList);
+	blockList->tName = cloneString(&row[0][1]);
+	blockList->qName = cloneString(qName);
+
+	addList(blockHash, blockList->tName, blockList);
+	if (!sameString(blockList->qName, blockList->tName))
+	    addList(blockHash, blockList->qName, blockList);
+
+	count = atoi(row[1]);
+	block = blockList->blocks = 
+	    needLargeMem(count * sizeof(struct block));
+	blockList->lastBlock = &blockList->blocks[count];
+	needHeader = FALSE;
+	}
     else
 	{
-	//printf("doing reverse\n");
-	newBase->strand = (aBase->strand == '+')? '-' : '+';
+	if (row[0][0] == '>')
+	    errAbort("not expecting '>' on line %d\n",lf->lineIx);
+
+	block->tStart = atoi(row[0]);
+	block->qStart = atoi(row[1]);
+	block->size = atoi(row[2]);
+	block->strand = row[3][0];
+	block++;
+
+	if (block == blockList->lastBlock)
+	    needHeader = TRUE;
 	}
-    slAddHead(&aCol->bases, newBase);
     }
 
-dropDups(aCol);
+return blockHash;
+}
 
-/* fix up atoms */
-if (delta == 0)
+struct listHead *getListHead(struct hash *blockHash, char *name)
+{
+return hashFindVal(blockHash, name);
+}
+
+int blockCmp(const void *va, const void *vb)
+{
+const struct block *a = *((struct block **)va);
+const struct block *b = *((struct block **)vb);
+
+return a->tStart - b->tStart;
+}
+
+
+void swapBlocks(struct blockList *blockList)
+{
+struct block *block = blockList->blocks;
+unsigned tmp;
+char *tmpName;
+
+for(; block < blockList->lastBlock; block++)
     {
-    run->length--;
-    for( aBase = run->bases; aBase ; aBase = aBase->next)
-	aBase->offset++;
-    }
-else if (delta == run->length - 1 )
-    {
-    run->length--;
-    }
-else
-    {
-    struct run *newRun;
-    struct atom *newAtom = getNewAtom();
-    int newAtomNum = newAtom->num;
-
-    errAbort("boop");
-    AllocVar(newRun);
-    newAtom->run = newRun;
-    newRun->length = run->length - delta - 1;
-
-    for( aBase = run->bases; aBase ; aBase = aBase->next)
-	{
-	struct aBase *newBase;
-	struct species *species = aBase->species;
-	int ii;
-
-	AllocVar(newBase);
-	newBase->strand = aBase->strand;
-	newBase->species = aBase->species;
-	newBase->offset = aBase->offset + delta + 1;
-	for(ii=0; ii < newRun->length; ii++)
-	    species->atomSequence[newBase->offset + ii 
-	    	- species->chromStart] = newAtomNum;
-
-	slAddHead(&newRun->bases, newBase);
-	}
-
-
-    /* make current atom the part before delta */
-    run->length = delta;
+    tmp = block->tStart;
+    block->tStart = block->qStart;
+    block->qStart = tmp;
     }
 
-if (run->length == 0)
-    {
-    struct aBase *aBase, *nextBase;
+tmpName = blockList->tName;
+blockList->tName = blockList->qName;
+blockList->qName = tmpName;
 
-    for( aBase = atom->run->bases; aBase ; aBase = nextBase)
-	{
-	nextBase = aBase->next;
-	freez(&aBase);
-	}
-    //atom->run = NULL;
-    freez(&atom->run);
-    }
+slSort(&blockList->blocks, blockCmp);
 }
 
 boolean checkBases(struct column *aCol)
@@ -483,6 +487,7 @@ for( aBase = aCol->bases; aBase ;  aBase = nextBase)
 
     if (nextAtomNum)
 	{
+#ifdef NOTNOW
 	if (doTransitive)
 	    {
 	    /* this will deassign atoms which will change the atomSequence
@@ -491,6 +496,7 @@ for( aBase = aCol->bases; aBase ;  aBase = nextBase)
 	    nextBase = aCol->bases;
 	    }
 	else	/* drop this base from column */
+#endif
 	    {
 	    //printf("droppoing base %d\n",nextAtomNum);
 	    if (prevBase)
@@ -498,7 +504,7 @@ for( aBase = aCol->bases; aBase ;  aBase = nextBase)
 	    else
 		aCol->bases = nextBase;
 	    aBase->offset = -1;
-	    //freeMem(aBase);
+	    freeMem(aBase);
 	    }
 	continue;
 	}
@@ -509,91 +515,78 @@ for( aBase = aCol->bases; aBase ;  aBase = nextBase)
 return prevBase == NULL;
 }
 
-
-struct aBase *findBase(int atomNum, int offset, struct species *species)
-{
-struct atom *anAtom = &atoms[atomNum - 1];
-struct aBase *aBase = anAtom->run->bases;
-int length = anAtom->run->length;
-offset += species->chromStart;
-
-for(; aBase; aBase = aBase->next)
-    {
-    if ((aBase->species ==  species)
-        && (offset >= aBase->offset) && (offset < aBase->offset + length))
-	{
-	return aBase;
-	}
-    }
-errAbort("didn't find species %s in atom %d\n",species->name, atomNum);
-return NULL;
-}
-
-void cleanPsl(int base, struct psl **list)
-{
-struct psl *psl, *prevPsl, *nextPsl;
-
-prevPsl = NULL;
-for(psl = *list; psl;  psl = nextPsl)
-    {
-    nextPsl = psl->next;
-    if (psl->tStart > base)
-	break;
-
-    if (psl->tEnd < base)
-	{
-	pslFree(&psl);
-	if (prevPsl != NULL)
-	    prevPsl->next = nextPsl;
-	else
-	    *list = nextPsl;
-	continue;
-	}
-    prevPsl = psl;
-    }
-}
-
-void makeAtoms(char *bedName, char *pslName, 
-	char *outAtomName, char *outSeqName)
+void makeAtoms(char *bedName, char *blockName, char *outAtomName)
 {
 struct hash *speciesHash = newHash(3);
 struct species *speciesList = getSpeciesRanges(bedName, &speciesHash);
 struct species *species;
-struct psl *allPsl = pslLoadAll(pslName);
+struct hash *blockHash = getBlocks(blockName);
+FILE *outAtoms = mustOpen(outAtomName,"w");
+struct atom ourAtom;
+
+memset(&ourAtom, 0, sizeof ourAtom);
 
 for(species = speciesList; species; species = species->next)
     {
-    struct psl *nextPsl, *psl;
+    // struct psl *nextPsl, *psl;
     int rangeWidth = species->chromEnd - species->chromStart;
 
     /* get space for atom sequence */
-    species->atomSequence = needLargeMem(sizeof(int) * rangeWidth);
-    memset(species->atomSequence, 0, sizeof(int) * rangeWidth);
-
-    /* grab psl's for this species */
-    for(psl = allPsl; psl ; psl = nextPsl)
-	{
-	nextPsl = psl->next;
-
-	if (startsWith(species->name,psl->tName))
-	    {
-	    slAddHead(&species->pslList, psl);
-	    }
-	}
-    slSort(&species->pslList, pslCmpTarget);
+    species->atomSequence = needLargeZeroedMem(sizeof(int) * rangeWidth);
     }
 
 for(species = speciesList; species; species = species->next)
     {
     int base;
     struct atom *atom = NULL;
+    struct listHead *listHead = getListHead(blockHash, species->name);
+    int rangeWidth = species->chromEnd - species->chromStart;
+
+    if (listHead == NULL)
+	{
+	fprintf(outAtoms, ">%d %d %d\n", numAtoms, rangeWidth, 1);
+	numAtoms++;
+	fprintf(outAtoms, "%s.%s:%d-%d %c\n",species->name, species->chrom, 
+		species->chromStart + 1, species->chromEnd, '+');
+	continue;
+	}
+
+    struct listList *list = listHead->listHead;
+
+    //FILE *debugF = NULL;
+    //printf("species %s\n",species->name);
+    //if (sameString("hg18", species->name))
+	//debugF = mustOpen("test.bed", "w");
+
+    for(; list ; list = list->next)
+	{
+	struct blockList *blockList = list->blockList;
+
+	if (blockList->blocks == NULL)
+	    continue;
+
+	if (!sameString(blockList->tName, species->name))
+	    swapBlocks(blockList);
+	blockList->currentBlock = blockList->blocks;
+
+	/*
+	if (sameString("hg18", species->name))
+	    {
+	    struct block *block = blockList->blocks;
+	    for(; block < blockList->lastBlock; block++)
+		fprintf(debugF, "%s\t%d\t%d\t%s\n","chrX", block->tStart, block->tStart + block->size, blockList->qName);
+	    }
+	    */
+	}
 
     for(base = species->chromStart; base < species->chromEnd; base++)
 	{
-	/* get rid of psl's we won't use since we're passed them */
-	cleanPsl(base, &species->pslList);
+	//if (species->atomSequence)
+	    //if ( species->atomSequence[base])
+		//continue;
 
-	struct column *aCol = getSet(base, species->pslList, speciesHash);
+	struct column *aCol = getSet(base, species->name,
+	    listHead, speciesHash);
 	AddBaseToCol(aCol, species, base, '+');
 
 	dropDups(aCol);
@@ -613,7 +606,47 @@ for(species = speciesList; species; species = species->next)
 	if ((atom == NULL) || !colContig(aCol, atom))
 	    {
 	    //printf("base %d\n",base);
-	    atom = getNewAtom();
+	    if (atom)
+		{
+		if (atom->run == NULL)
+		    continue;
+
+		struct aBase *abr = atom->run->bases; 
+		int count = 0;
+
+		for(; abr; abr = abr->next)
+		    abr->order = count++;
+
+		fprintf(outAtoms, ">%d %d %d\n", atom->num, atom->run->length,count);
+
+		abr = atom->run->bases; 
+		for(; abr; abr = abr->next)
+		    {
+		    fprintf(outAtoms, "%s.%s:%d-%d %c\n",abr->species->name, abr->species->chrom, 
+			    abr->offset + 1, abr->offset + atom->run->length, abr->strand);
+		    }
+
+		//fprintf(outSeq,"%d\n",numAtoms);
+	
+		//unsigned int *pint = getNewAtomLen();
+		//*pint = atom->run->length;
+		numAtoms++;
+
+		}
+	    atom = &ourAtom;
+	    if (atom->run)
+		{
+		struct aBase *abr = atom->run->bases; 
+		struct aBase *nextAbr;
+
+		for(; abr; abr = nextAbr)
+		    {
+		    nextAbr = abr->next;
+		    freez(&abr);
+		    }
+		freez(&atom->run);
+		}
+	    atom->num = numAtoms;
 	    }
 
 	SetAtomForCol(atom, aCol);
@@ -621,34 +654,43 @@ for(species = speciesList; species; species = species->next)
 
 	deleteCol(aCol);
 	}
-    }
-
-FILE *outAtoms = mustOpen(outAtomName,"w");
-struct atom *atom;
-
-for(atom = atoms; atom < &atoms[numAtoms] ; atom++)
-    {
-    if (atom->run == NULL)
-	continue;
-
-    struct aBase *abr = atom->run->bases; 
-    int count = 0;
-
-    for(; abr; abr = abr->next)
-	abr->order = count++;
-
-    fprintf(outAtoms, ">%d %d %d\n", atom->num, atom->run->length,count);
-
-    abr = atom->run->bases; 
-    for(; abr; abr = abr->next)
+    if (atom)
 	{
-	fprintf(outAtoms, "%s.%s:%d-%d %c\n",abr->species->name, abr->species->chrom, 
-		abr->offset + 1, abr->offset + atom->run->length, abr->strand);
+	if (atom->run == NULL)
+	    continue;
+
+	struct aBase *abr = atom->run->bases; 
+	int count = 0;
+
+	for(; abr; abr = abr->next)
+	    abr->order = count++;
+
+	fprintf(outAtoms, ">%d %d %d\n", atom->num, atom->run->length,count);
+
+	abr = atom->run->bases; 
+	for(; abr; abr = abr->next)
+	    {
+	    fprintf(outAtoms, "%s.%s:%d-%d %c\n",abr->species->name, abr->species->chrom, 
+		    abr->offset + 1, abr->offset + atom->run->length, abr->strand);
+	    }
+
+	//fprintf(outSeq,"%d\n",numAtoms);
+
+	//unsigned int *pint = getNewAtomLen();
+	//*pint = atom->run->length;
+	numAtoms++;
+
 	}
+    list = listHead->listHead;
+
+    for(; list ; list = list->next)
+	freez(&list->blockList->blocks);
+    if (species->atomSequence)
+	freez(&species->atomSequence);
     }
 
-FILE *outSeq = mustOpen(outSeqName,"w");
 
+#ifdef NOTNOW
 for(species = speciesList; species; species = species->next)
     {
     int offset;
@@ -688,21 +730,17 @@ for(species = speciesList; species; species = species->next)
     if (!((count & 0x7) == 0x7))
 	fprintf(outSeq,"\n");
     }
+#endif
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 5)
+if (argc != 4)
     usage();
 
-if (optionExists("trans"))
-    {
-    doTransitive = TRUE;
-    }
-
-makeAtoms(argv[1],argv[2],argv[3],argv[4]);
+makeAtoms(argv[1],argv[2],argv[3]);
 printf("Success\n");
 return 0;
 }
