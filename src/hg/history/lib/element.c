@@ -7,7 +7,7 @@
 
 #include "element.h"
 
-static char buffer[16*1024];
+static char buffer[10*1024*1024];
 
 static struct element *newEdge(struct element *parent, struct element *child);
 
@@ -39,6 +39,8 @@ for(genome=genomes; genome; genome = genome->next)
     }
 }
 
+char *bigWords[10*10*1024];
+
 struct phyloTree *readEleTree(struct lineFile *lf, struct element **parents, 
 	int numParents, boolean addStartStop)
 {
@@ -48,17 +50,17 @@ struct genome *genome = NULL;
 int wordsRead, elementsLeft = 0, numChildren = 0;
 boolean needGenome = TRUE;
 int count = 0;
-char *words[16*1024];
-struct element **elements;
+//char *words[10*1024];
+struct element **elements = NULL;
 struct possibleEdge *p;
 struct element *element = NULL;
 
-//printf("numParents %d\n",numParents);
-while( (wordsRead = lineFileChopNext(lf, words, sizeof(words)/sizeof(char *)) ))
+while( (wordsRead = lineFileChopNext(lf, bigWords, sizeof(bigWords)/sizeof(char *)) ))
     {
+
     if (needGenome)
 	{
-	if ((wordsRead != 4) || (words[0][0] != '>'))
+	if ((wordsRead != 4) || (bigWords[0][0] != '>'))
 	    errAbort("elTree genomes are named starting with a '>' with 4 total words");
 
 	AllocVar(node);
@@ -68,11 +70,11 @@ while( (wordsRead = lineFileChopNext(lf, words, sizeof(words)/sizeof(char *)) ))
 	genome->node = node;
 	//slAddHead(&allGenomes, genome);
 
-	node->ident->name = genome->name = cloneString(&words[0][1]);
+	node->ident->name = genome->name = cloneString(&bigWords[0][1]);
 	genome->elementHash = newHash(8);
-	elementsLeft = atoi(words[1]);
-	numChildren = atoi(words[2]);
-	node->ident->length =  atof(words[3]);
+	elementsLeft = atoi(bigWords[1]);
+	numChildren = atoi(bigWords[2]);
+	node->ident->length =  atof(bigWords[3]);
 	elements = NULL;
 	if (elementsLeft)
 	    {
@@ -80,7 +82,7 @@ while( (wordsRead = lineFileChopNext(lf, words, sizeof(words)/sizeof(char *)) ))
 	    elements = needMem((elementsLeft + 2) * sizeof(struct element *));
 	    }
 
-	verbose(2, "adding genome %s\n",genome->name);
+	verbose(2, "adding genome %s with %d elements\n",genome->name, elementsLeft);
 	}
     else
 	{
@@ -91,8 +93,8 @@ while( (wordsRead = lineFileChopNext(lf, words, sizeof(words)/sizeof(char *)) ))
 	    errAbort("must specify genome name before listing elements");
 
 	if (wordsRead /2> elementsLeft)
-	    errAbort("too many elements in genome (%d vs %d)  %s",wordsRead,elementsLeft,genome->name);
-	if ( (words[0][0] == '>'))
+	    errAbort("too many elements in genome (%d vs %d)  %s",wordsRead/2,elementsLeft,genome->name);
+	if ( (bigWords[0][0] == '>'))
 	    errAbort("too few elements in genome %s elementsLeft %d\n",genome->name,elementsLeft);
 	elementsLeft -= wordsRead/2;
 
@@ -124,16 +126,16 @@ while( (wordsRead = lineFileChopNext(lf, words, sizeof(words)/sizeof(char *)) ))
 
 	    element->genome = genome;
 	    element->species = genome->name;
-	    element->name = cloneString(words[ii]);
+	    element->name = cloneString(bigWords[ii]);
 	    if (parents)
 		{
 		if (addStartStop)
-		    element->parent = parents[atoi(words[ii+1]) ];
+		    element->parent = parents[atoi(bigWords[ii+1]) ];
 		else
-		    element->parent = parents[atoi(words[ii+1]) - 1 ];
+		    element->parent = parents[atoi(bigWords[ii+1]) - 1 ];
 
 		if (element->parent == NULL)
-		    errAbort("parent is null %s",words[ii+1]);
+		    errAbort("parent is null %s",bigWords[ii+1]);
 
 		newEdge(element->parent, element);
 		}
@@ -216,13 +218,18 @@ while( (wordsRead = lineFileChopNext(lf, words, sizeof(words)/sizeof(char *)) ))
 	p->element = genome->elements;
 	element->calced.next = p;
 	}
-
     for(ii=0; ii < count; ii++)
+	{
 	if (elements[ii] == NULL)
 	    errAbort("elemen %d isnull\n",ii);
+	verbose(2, "elem count %d\n",elements[ii]->count);
+	}
 
     for(ii=0; ii < numChildren; ii++)
-	phyloAddEdge(node, readEleTree(lf,elements, count, addStartStop));
+	{
+	struct phyloTree *childNode = readEleTree(lf,elements, count, addStartStop);
+	phyloAddEdge(node, childNode);
+	}
 
     freez(&elements);
     return node;
@@ -239,7 +246,7 @@ struct genome *readGenomes(char *fileName)
 {
 struct genome *allGenomes = NULL, *genome = NULL;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *words[8*2048];
+char *words[100*2048];
 int wordsRead, wordsLeft = 0;
 boolean needGenome = TRUE;
 
@@ -267,7 +274,7 @@ while( (wordsRead = lineFileChopNext(lf, words, sizeof(words)/sizeof(char *)) ))
 	    errAbort("must specify genome name before listing elements");
 
 	if (wordsRead > wordsLeft)
-	    errAbort("too many elements in genome (%d vs %d)  %s",wordsRead,wordsLeft,genome->name);
+	    errAbort("too many elements in genome (%d vs %d)  %s",wordsRead/2,wordsLeft/2,genome->name);
 	if ( (words[0][0] == '>'))
 	    errAbort("too few elements in genome %s\n",genome->name);
 	wordsLeft -= wordsRead;
@@ -457,7 +464,7 @@ struct distance *readDistances(char *fileName, struct hash *genomeHash,
     struct hash **pDistHash, struct hash **pDistEleHash)
 {
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *words[16 * 1024];
+char *words[128 * 1024];
 int wordsRead;
 struct distance *distances = NULL;
 
@@ -625,12 +632,13 @@ int ii;
     //;
 fprintf(f, ">%s %d %d %g\n",g->name, slCount(g->elements), node->numEdges, node->ident->length);
 
-for(e = g->elements; e; e = e->next)
+for(e = g->elements, ii = 0; e; e = e->next, ii++)
     {
     if (e->isFlipped)
 	fprintf(f, "-");
     fprintf(f,"%s.%s %d ",e->name,e->version, (e->parent) ? e->parent->count + 1 : 0 );
-    //fprintf(f,"%s ",e->name);
+    if (((ii + 1) % 8) == 0)
+	fprintf(f,"\n");
     }
 fprintf(f,"\n");
 
@@ -647,12 +655,16 @@ outElems(f, node);
 char *nextVersion()
 {
 static int count = 0;
-static char buffer[4];
+static char buffer[5];
 
-buffer[0] = count / (26*26) + 'A';
-buffer[1] = (count % (26 * 26)) / 26 + 'A';
-buffer[2] = count % 26 + 'A';
-buffer[3] = 0;
+if ((count / (26*26 *26)) > 25)
+    errAbort("version overflow");
+
+buffer[0] = count / (26*26*26) + 'A';
+buffer[1] = (count % (26*26*26)) / (26*26) + 'A';
+buffer[2] = (count % (26 * 26)) / 26 + 'A';
+buffer[3] = count % 26 + 'A';
+buffer[4] = 0;
 
 count++;
 return buffer;
