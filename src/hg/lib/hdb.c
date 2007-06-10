@@ -34,7 +34,7 @@
 #include "chromInfo.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.323 2007/06/07 22:56:18 lowe Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.324 2007/06/10 04:38:14 markd Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -859,6 +859,8 @@ return(hTableExistsDb(hGetDb2(), table));
 boolean hTableOrSplitExistsDb(char *db, char *track)
 /* Return TRUE if track table (or split table) exists in db. */
 {
+if (!sqlDatabaseExists(db))
+    return FALSE;
 struct hash *hash = tableListHash(db);
 return (hashLookup(hash, track) != NULL);
 }
