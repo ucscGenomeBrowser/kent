@@ -9,8 +9,9 @@
 #include "phyloTree.h"
 #include "element.h"
 #include "dystring.h"
+#include "math.h"
 
-static char const rcsid[] = "$Id: atomDrop.c,v 1.1 2007/04/20 14:38:42 braney Exp $";
+static char const rcsid[] = "$Id: atomDrop.c,v 1.2 2007/06/10 21:51:54 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -50,6 +51,8 @@ int numInstances;
 int length;
 struct instance *instances;
 int stringNum;
+int numSpecies;
+int numSpeciesDuped;
 };
 
 struct instance
@@ -171,17 +174,42 @@ lineFileClose(&lf);
 return atoms;
 }
 
-int atomCmp(const void *va, const void *vb)
-/* Compare to sort based on chrom,chromStart. */
+int instanceCmp(const void *va, const void *vb)
+/* Compare to sort based species */
+{
+const struct instance *a = *((struct instance **)va);
+const struct instance *b = *((struct instance **)vb);
+
+return strcmp(a->species, b->species);
+}
+
+int atomNameCmp(const void *va, const void *vb)
 {
 const struct atom *a = *((struct atom **)va);
 const struct atom *b = *((struct atom **)vb);
-int diff = a->length - b->length;
+int aNum = atoi(a->name);
+int bNum = atoi(b->name);
 
-if (diff == 0)
-    return a->numInstances - b->numInstances;
+return aNum - bNum;
+}
 
-return diff;
+
+int atomScoreCmp(const void *va, const void *vb)
+{
+const struct atom *a = *((struct atom **)va);
+const struct atom *b = *((struct atom **)vb);
+double aMult = (a->numSpeciesDuped + 1);
+double bMult = (b->numSpeciesDuped + 1);
+
+//double aScore = aMult * pow( a->length, a->numSpecies);
+//double bScore = bMult * pow( b->length, b->numSpecies);
+double aScore = log(a->numInstances) * aMult * (double)a->length * (double)a->numSpecies* (double)a->numSpecies;
+double bScore = log(b->numInstances) * bMult * (double)b->length * (double)b->numSpecies* (double)b->numSpecies;
+
+if (aScore - bScore > 0)
+    return 1;
+
+return -1;
 }
 
 struct sequence *getSequences(char *inName, struct hash *atomHash)
@@ -263,6 +291,41 @@ slReverse(&seqHead);
 return seqHead;
 }
 
+void calcNumSpecies(struct atom *atoms)
+{
+struct instance *instance;
+
+slSort(&atoms->instances, instanceCmp);
+
+for(; atoms; atoms = atoms->next)
+    {
+    int count = 0;;
+    int dups = 0;
+    char *lastSpecies = NULL;
+
+    for( instance = atoms->instances;  instance; instance = instance->next)
+	{
+	boolean same = FALSE;
+
+	if (lastSpecies && sameString(instance->species, lastSpecies))
+	    same = TRUE;
+
+	if (same)
+	    dups++;
+	if (lastSpecies && !same)
+	    {
+	    if (dups >= 1)
+		atoms->numSpeciesDuped++;
+
+	    dups = 0;
+	    count++;
+	    }
+	lastSpecies = instance->species;
+	}
+    atoms->numSpecies = count + 1;
+    }
+}
+
 void atomDrop(char *inAtomName, char *outAtomName)
 {
 struct hash *atomHash = newHash(20);
@@ -270,24 +333,32 @@ struct atom *atoms = getAtoms(inAtomName, atomHash);
 struct atom *atom;
 int count = 0;
 
-slSort(&atoms, atomCmp);
+calcNumSpecies(atoms);
+
+slSort(&atoms, atomScoreCmp);
 
 for(atom = atoms; atom ; atom = atom->next)
     count++;
 
-count *= 1;
+count *= 5;
 count /= 100;
 count++;
 
 for(atom = atoms; count-- ; atom = atom->next)
     ;
 
+slSort(&atom, atomNameCmp);
 FILE *f = fopen(outAtomName, "w");
 
 for(; atom; atom = atom->next)
     {
+    double pow();
     struct instance *instance;
+    //double aMult = (atom->numSpeciesDuped + 1);
+    //double aScore = aMult * pow( (double)atom->length, (double)atom->numSpecies);
+    //double aScore = aMult * log(atom->numInstances) * (double)atom->length * (double)atom->numSpecies* (double)atom->numSpecies;
 
+    // fprintf(f, ">%s %d %d %d %d %g\n",atom->name, atom->length, atom->numInstances, atom->numSpecies, atom->numSpeciesDuped, aScore + 0.2 );
     fprintf(f, ">%s %d %d\n",atom->name, atom->length, atom->numInstances);
 
     for( instance = atom->instances;  instance; instance = instance->next)
