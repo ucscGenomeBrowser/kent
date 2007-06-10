@@ -10,7 +10,7 @@
 #include "element.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: atomToChain.c,v 1.1 2007/04/20 14:39:40 braney Exp $";
+static char const rcsid[] = "$Id: atomToChain.c,v 1.2 2007/06/10 21:55:37 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -162,7 +162,7 @@ while( (wordsRead = lineFileChopNext(lf, bigWords, sizeof(bigWords)/sizeof(char 
 
 	ptr = strchr(start, '-');
 	*ptr++ = 0;
-	instance->start = atoi(start);
+	instance->start = atoi(start) - 1;
 	instance->end = atoi(ptr);
 	instance->strand = *bigWords[1];
 	
