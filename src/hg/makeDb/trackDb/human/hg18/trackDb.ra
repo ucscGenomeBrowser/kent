@@ -1381,10 +1381,10 @@ type bed 4 .
     type bed 6 +
     priority 5
 
-    track snpArrayIllumina300
+    track snpArrayIllumina650
     subTrack snpArray
-    shortLabel Illumina 300
-    longLabel Illumina Human Hap 300v3
+    shortLabel Illumina 650
+    longLabel Illumina Human Hap 650v3
     type bed 6 +
     priority 6
 
@@ -1395,12 +1395,13 @@ type bed 4 .
     type bed 6 +
     priority 7
 
-    track snpArrayIllumina650
+    track snpArrayIllumina300
     subTrack snpArray
-    shortLabel Illumina 650
-    longLabel Illumina Human Hap 650v3
+    shortLabel Illumina 300
+    longLabel Illumina Human Hap 300v3
     type bed 6 +
     priority 8
+
 
 searchName affy6
 searchTable snpArrayAffy6
