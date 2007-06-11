@@ -13,7 +13,7 @@
 #include "hui.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: mafClick.c,v 1.41 2007/05/22 23:58:58 galt Exp $";
+static char const rcsid[] = "$Id: mafClick.c,v 1.42 2007/06/11 17:33:44 kate Exp $";
 
 #define ADDEXONCAPITAL
 
@@ -607,7 +607,7 @@ else
             {
             if (first)
                 printf("\n<P>");
-            if (sameString(consWig->label, DEFAULT_CONS_LABEL))
+            if (sameString(consWig->leftLabel, DEFAULT_CONS_LABEL))
                 conservationStatsLink(tdb, 
                         "Conservation score statistics", consWig->table);
             else
@@ -621,8 +621,9 @@ else
                     first = FALSE;
                     }
                 printf("&nbsp;&nbsp;");
+                subChar(consWig->uiLabel, '_', ' ');
                 conservationStatsLink(tdb, 
-                    consWig->label, consWig->table);
+                    consWig->uiLabel, consWig->table);
                 }
 	    }
         puts("</P>\n");
