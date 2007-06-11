@@ -1360,7 +1360,7 @@ type bed 4 .
     type bed 6 +
     priority 2
 
-    track snpArray5
+    track snpArrayAffy5
     subTrack snpArray
     shortLabel Affy SNP 5.0
     longLabel Affymetrix SNP 5.0 
@@ -1410,8 +1410,8 @@ termRegex (SNP_A-[0-9]+)
 searchPriority 12
 padding 250
 
-searchName affyGenomeWide
-searchTable snpArray5
+searchName affy5
+searchTable snpArrayAffy5
 searchMethod exact
 searchType bed
 termRegex (SNP_A-[0-9]+)
