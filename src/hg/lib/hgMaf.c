@@ -13,7 +13,7 @@
 #include "scoredRef.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: hgMaf.c,v 1.8 2007/06/11 17:04:03 kate Exp $";
+static char const rcsid[] = "$Id: hgMaf.c,v 1.9 2007/06/11 20:06:37 kate Exp $";
 
 int mafCmp(const void *va, const void *vb)
 /* Compare to sort based on start of first component. */
@@ -391,7 +391,7 @@ for (i = 0; i < fieldCt; i += 3)
         wig->table = cloneString(wigTable);
         wigLabel = (i+1 == fieldCt ? DEFAULT_CONS_LABEL : fields[i+1]);
         wig->leftLabel = cloneString(wigLabel);
-        wigLabel = (i+2 == fieldCt ? wig->leftLabel : fields[i+2]);
+        wigLabel = (i+2 >= fieldCt ? wig->leftLabel : fields[i+2]);
         wig->uiLabel = cloneString(wigLabel);
         slAddTail(&wigList, wig);
         }
