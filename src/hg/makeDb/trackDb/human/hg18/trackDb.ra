@@ -1943,3 +1943,24 @@ type genePred
 cdsEvidence jkgTxCdsEvidence2
 txInfo jkgTxInfo2
 
+track omicia
+compositeTrack on
+shortLabel Omicia OMIM
+longLabel Omicia OMIM mapping, Early Access R1
+visibility pack
+group phenDis
+priority 50
+exonArrows off
+type bed 6 .
+
+    track omiciaAuto
+    subTrack omicia
+    shortLabel Omicia OMIM
+    longLabel Omicia OMIM mapping, Early Access R1, April 2007
+    priority 1
+
+    track omiciaHand
+    subTrack omicia
+    shortLabel Omicia OMIM Hand-Curation
+    longLabel Omicia OMIM Hand-Curation, Early Access R1, May 2007
+    priority 2
