@@ -1029,6 +1029,9 @@ doBlastzChainNet.pl DEF -chainMinScore=3000 -chainLinearGap=medium \
     nscanGene
     nscanPep
 
+# QA NOTE (ASZ 06-11-2007): mytouch of nscanPep table to bring into line with nscanGene.
+# sudo mytouch equCab1 nscanPep sudo mytouch equCab1 nscanPep 200705081600.00
+
 ##########################################################################
 ## ADD chrM record into chrM_gold.  (DONE, 2007-05-02, Fan)
 

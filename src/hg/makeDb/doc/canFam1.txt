@@ -1627,6 +1627,8 @@ rm $TMP/$root.ss.gz
     hgPepPred canFam1 generic genscanPep genscan.pep
     hgLoadBed canFam1 genscanSubopt genscanSubopt.bed
 
+# QA NOTE (ASZ 6-11-2007): sudo mytouch canFam1 genscanPep 200501061300.00
+
 
 # PRODUCING FUGU BLAT ALIGNMENTS (DONE 7/15/04 angie)
     ssh kk
@@ -2329,6 +2331,8 @@ popd
     hgPepPred canFam1 generic twinscanPep twinscanPep.fa
     featureBits -enrichment canFam1 xenoRefGene twinscan
 #xenoRefGene 1.676%, twinscan 1.384%, both 1.030%, cover 61.42%, enrich 44.39x
+
+# QA NOTE (ASZ 6-11-2007): sudo mytouch canFam1 twinscanPep 200411091200.00
 
 # Pick up photo from NHGRI (DONE - 2004-12-22 - Hiram)
     ssh hgwdev
