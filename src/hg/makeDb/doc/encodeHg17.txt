@@ -1973,7 +1973,67 @@ cat > loadSig.csh << 'EOF'
     mv /var/ftp/encode/joel_affy.tgz
     tar xvfrz joel_affy.tgz
 
-    
+    #	Loaded into hg17 2007-06-11 - Hiram
+    cd /cluster/data/encode/yale/rna/2007-03-20
+    ln -s \
+      lab/joel_affy/encode_Yale_Affy_HELAS3_PolyA_RNA_Tars_Relaxed_ncbi35.bed \
+	./encodeYaleAffyHELAS3PolyARNATarsRelaxed.bed
+    ln -s \
+    lab/joel_affy/encode_Yale_Affy_HELAS3_PolyA_RNA_Tars_Stringent_ncbi35.bed \
+	./encodeYaleAffyHELAS3PolyARNATarsStringent.bed
+    ln -s \
+    lab/joel_affy/encode_Yale_Affy_HELAS3_PolyA_RNA_Transcript_Map_ncbi35.wig \
+	./encodeYaleAffyHELAS3PolyARNATranscriptMap_lab.wig
+    ln -s \
+      lab/joel_affy/encode_Yale_Affy_HELAS3_Total_RNA_Tars_Relaxed_ncbi35.bed \
+	./encodeYaleAffyHELAS3TotalRNATarsRelaxed.bed
+    ln -s \
+    lab/joel_affy/encode_Yale_Affy_HELAS3_Total_RNA_Tars_Stringent_ncbi35.bed \
+	./encodeYaleAffyHELAS3TotalRNATarsStringent.bed
+    ln -s \
+    lab/joel_affy/encode_Yale_Affy_HELAS3_Total_RNA_Transcript_Map_ncbi35.wig \
+	./encodeYaleAffyHELAS3TotalRNATranscriptMap_lab.wig
+#	It looks like the start coordinates in the .wig are now correct
+#	0-relative, but they still need to be trimmed to not overlap.
+#	And previously, both start and end were bumped one, these ends
+#	have not been bumped one.
+#	And they appear to have a bunch of extra blanks around the tab
+#	separators, clean them up with the sed.
+    for F in ./encodeYaleAffyHELAS3PolyARNATranscriptMap_lab.wig \
+	./encodeYaleAffyHELAS3TotalRNATranscriptMap_lab.wig
+do
+    T=`echo $F | sed -e "s/_lab//"`
+    sed -e "s/ //g" ${F} | sort -k1,1 -k2,2n \
+            | /cluster/data/encode/bin/scripts/trimOverlap.pl > ${T}.trim
+done
+
+    wigEncode encodeYaleAffyHELAS3PolyARNATranscriptMap.wig.trim \
+        encodeYaleAffyHELAS3PolyARNATranscriptMap.wig \
+        encodeYaleAffyHELAS3PolyARNATranscriptMap.wib
+    wigEncode encodeYaleAffyHELAS3TotalRNATranscriptMap.wig.trim \
+        encodeYaleAffyHELAS3TotalRNATranscriptMap.wig \
+        encodeYaleAffyHELAS3TotalRNATranscriptMap.wib
+    hgLoadWiggle -pathPrefix=/gbdb/hg17/wib hg17 \
+        encodeYaleAffyHELAS3PolyARNATranscriptMap \
+        encodeYaleAffyHELAS3PolyARNATranscriptMap.wig
+    ln -s  `pwd`/encodeYaleAffyHELAS3PolyARNATranscriptMap.wib \
+        /gbdb/hg17/wib/encodeYaleAffyHELAS3PolyARNATranscriptMap.wib 
+    hgLoadWiggle -pathPrefix=/gbdb/hg17/wib hg17 \
+        encodeYaleAffyHELAS3TotalRNATranscriptMap \
+        encodeYaleAffyHELAS3TotalRNATranscriptMap.wig
+    ln -s  `pwd`/encodeYaleAffyHELAS3TotalRNATranscriptMap.wib \
+        /gbdb/hg17/wib/encodeYaleAffyHELAS3TotalRNATranscriptMap.wib 
+
+
+    for F in encodeYaleAffyHELAS3PolyARNATarsRelaxed \
+	encodeYaleAffyHELAS3PolyARNATarsStringent \
+	encodeYaleAffyHELAS3TotalRNATarsRelaxed \
+	encodeYaleAffyHELAS3TotalRNATarsStringent
+do
+    hgLoadBed hg17 ${F} ${F}.bed
+done
+
+
 ##########################################################################
 # Yale Chip/chip (2005-10-31 kate)
 # Final submission: 10/26 by Zhengdong Zhang
