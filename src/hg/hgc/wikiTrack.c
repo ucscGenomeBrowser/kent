@@ -15,13 +15,14 @@
 #include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.9 2007/06/01 23:04:38 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.10 2007/06/11 18:16:29 hiram Exp $";
 
 #define NEW_ITEM_SCORE "newItemScore"
 #define NEW_ITEM_STRAND "newItemStrand"
 #define NEW_ITEM_CLASS "newItemClass"
 #define NEW_ITEM_COMMENT "newItemComment"
 #define NEW_ITEM_NAME "defaultName"
+#define NEW_ITEM_COLOR "itemColor"
 #define ITEM_NOT_CLASSIFIED "Not classified"
 #define ITEM_SCORE_DEFAULT "1000"
 #define NEW_ITEM_COMMENT_DEFAULT "enter description and comments"
@@ -35,6 +36,47 @@ static char const rcsid[] = "$Id: wikiTrack.c,v 1.9 2007/06/01 23:04:38 hiram Ex
 	"You must confirm your e-mail address before editing pages"
 #define USER_PREFERENCES_MESSAGE \
     "Please set and validate your e-mail address through your"
+
+static char *colorValues[] = {
+"#ffffff",
+"#eeeeee",
+"#66cc66",
+"#99ffcc",
+"#ccffcc",
+"#ccffff",
+"#99ccff",
+"#addadd",
+"#ffaa99",
+"#ffcc99",
+"#ffddbb",
+"#ffccff",
+"#eeddff",
+"#efe7de",
+"#fffbba",
+"#ffffcc",
+"#daddad",
+"#cabcab"
+};
+static char *colorMenu[] = {
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+};
 
 static char *encodedHgcReturnUrl(int hgsid)
 /* Return a CGI-encoded hgSession URL with hgsid.  Free when done. */
@@ -162,7 +204,7 @@ return stripped;
 
 static void startEditForm(char *actionType)
 {
-hPrintf("<FORM ACTION=\"%s\">\n\n", hgcName());
+hPrintf("<FORM ID=\"editForm\" NAME=\"editForm\" ACTION=\"%s\">\n\n", hgcName());
 cartSaveSession(cart);
 cgiMakeHiddenVar("g", actionType);
 cgiContinueHiddenVar("c");
@@ -387,15 +429,63 @@ else
 
 }
 
-/* Javascript to color the background of the color pull-down menu */
-static char *colorMenuJS =
-"onchange=\"var form = document.getElementById(\"" G_CREATE_WIKI_ITEM "\");\n"
-"document." G_CREATE_WIKI_ITEM ".dummy.style.display='inline';\n"
-"document." G_CREATE_WIKI_ITEM ".dummy.select();\n"
-"document." G_CREATE_WIKI_ITEM ".dummy.style.display='none';\n"
-"form.evt_bgcolor.style.background = form.evt_bgcolor[form.evt_bgcolor.selectedIndex].value;\n"
-"form.evt_bgcolor.style.color = compatible_textcolor(form.evt_bgcolor[form.evt_bgcolor.selectedIndex].value);\n"
-"document.gpForm.submit();\"";
+static void outputJavaScript()
+{
+hPrintf("<SCRIPT>\n");
+hPrintf("var x9;\n");
+hPrintf("this.selectTog = function() {\n"
+"if (this.active)\n"
+" this.hide();\n"
+"else\n"
+" this.show();\n"
+"}\n");
+hPrintf("function hex2dec(s){return parseInt(s,16);}\n");
+hPrintf("function compatible_textcolor(color){\n"
+" var r = hex2dec(color.substr(1,2));\n"
+" var b = hex2dec(color.substr(3,2));\n"
+" var g = hex2dec(color.substr(5,2));\n"
+" var brightness = Math.round((r*299+g*587+b*114)/1000);\n"
+" if (brightness < 128){return \"#ffffff\";}\n"
+" else{return \"#000000\";}\n"
+"}\n");
+
+hPrintf("function cUpdate(new_color) {\n"
+" document.editForm.itemColor[document.editForm.itemColor.options.length-1].value = new_color;\n"
+" document.editForm.itemColor.style.background = new_color;\n"
+" document.editForm.itemColor.style.color = compatible_textcolor(new_color);\n"
+" document.editForm.itemColor[document.editForm.itemColor.options.length-1].style.color = compatible_textcolor(new_color);\n"
+" document.getElementById(\"custom_evt_color\").style.background = new_color;\n"
+"}\n");
+
+hPrintf("function do_on_load() {\n"
+"alert(\"do_on_load\");\n"
+"if (!document.editForm || !document.editForm.itemColor)\n"
+"   return;\n"
+" x9 = new color_select('x9',document.editForm.itemColor[document.editForm.itemColor.selectedIndex].value);\n"
+" x9.change_update_function = \"cUpdate\";\n"
+" x9.hide_update_function = \"cUpdate\";\n"
+" x9.attach_to_element(document.getElementById(\"itemColorDropDown\"));\n"
+" x9.setrgb(\"\");\n"
+" x9.update_color_box();\n"
+" for (i=0; i<document.editForm.itemColor.options.length; i++) {\n"
+"   document.editForm.itemColor[i].style.background = document.editForm.itemColor[i].value;\n"
+"   document.editForm.itemColor[i].style.color = compatible_textcolor(document.editForm.itemColor[i].value);\n"
+" }\n"
+" setTimeout('update_bg_color_select_box()', 200);\n"
+"}\n");
+
+hPrintf("function updateColorSelectBox() {\n"
+" var form = document.getElementById(\"editForm\");\n"
+" document.editForm.noName.style.display='inline';\n"
+" document.editForm.noName.select();\n"
+" document.editForm.noName.style.display='none';\n"
+" form.itemColor.style.background = form.itemColor[form.itemColor.selectedIndex].value;\n"
+" form.itemColor.style.color = compatible_textcolor(form.itemColor[form.itemColor.selectedIndex].value);\n"
+"alert(\"updateColorSelectBox\");\n"
+"}\n");
+hPrintf("</SCRIPT>\n");
+}
+static char *colorMenuJS = "onchange=\"updateColorSelectBox()\" style=\"width:7em\"";
 
 void doWikiTrack(char *itemName, char *chrom, int winStart, int winEnd)
 /* handle item clicks on wikiTrack - may create new items */
@@ -419,6 +509,7 @@ if (wikiTrackEnabled(&userName) && startsWith("Make new entry", itemName))
 		cfgOptionDefault(CFG_WIKI_URL, NULL));
     else
 	{
+	outputJavaScript();
 	startEditForm(G_CREATE_WIKI_ITEM);
 
 	webPrintLinkTableStart();
@@ -486,6 +577,15 @@ if (wikiTrackEnabled(&userName) && startsWith("Make new entry", itemName))
 	/* seventh row is item color pull-down menu */
 	webPrintWideCellStart(2, HG_COL_TABLE);
 	hPrintf("<B>item color:&nbsp;</B>");
+	hPrintf("<INPUT NAME=\"noName\" VALUE=\"\" SIZE=1 "
+		"STYLE=\"display:none;\">\n");
+	cgiMakeDropListFull(NEW_ITEM_COLOR, colorMenu, colorValues, 
+                         ArraySize(colorMenu), colorValues[0],
+				colorMenuJS);
+	hPrintf("<span id=\"itemColorDropDown\" class=\"color_select_icon\" "
+" style=\"visibility:hidden; vertical-align:top;background-image:url(http://genome-test.csc.edu/images/itemColorDropDown.gif);\" onClick=\"x9.selectTog();\">&nbsp;&nbsp;&nbsp;&nbsp;</span>\n");
+
+#ifdef NOT
 hPrintf("<SELECT NAME=\"itemColor\" style=\"width:7em\">\n");
 hPrintf("<OPTION VALUE = \"#ffffff\" >\n");
 hPrintf("<OPTION SELECTED value = \"#eeeeee\" >\n");
@@ -506,6 +606,7 @@ hPrintf("<OPTION VALUE = \"#ffffcc\" >\n");
 hPrintf("<OPTION VALUE = \"#daddad\" >\n");
 hPrintf("<OPTION VALUE = \"#cabcab\" >\n");
 hPrintf("</SELECT>\n");
+#endif
 	webPrintLinkCellEnd();
 	webPrintLinkTableNewRow();
 	/* seventh row is initial comment/description text entry */
@@ -520,7 +621,7 @@ hPrintf("</SELECT>\n");
 	hPrintf("</FORM>");
 	webPrintLinkCellEnd();
 	webPrintLinkCellStart();
-	hPrintf("<FORM ACTION=\"%s\">", hgTracksName());
+	hPrintf("<FORM NAME=\"cancel\" ACTION=\"%s\">", hgTracksName());
 	cgiMakeButton("cancel", "cancel");
 	hPrintf("</FORM>");
 	webPrintLinkCellEnd();
@@ -746,7 +847,7 @@ boolean plusStrand = sameWord("plus",strand) ? TRUE : FALSE;
 char descriptionKey[256];
 struct sqlConnection *conn = hConnectCentral();
 char *userName = NULL;
-char *color = "000000";
+char *color = cartUsualString(cart, NEW_ITEM_COLOR, "#000000");
 int score = 0;
 struct wikiTrack *newItem;
 
