@@ -2148,6 +2148,13 @@ identifier jkgTranscriptId
     $hg,$mm.jkgTxInfo.name
     $hg,$mm.jkgTxCdsEvidence.name
 
+#links between omicia and links and attributes tables
+identifier omiciaHg18Id
+"Omicia track identifier: links annotations to attributes and external links"
+    hg18.omicia.name
+    hg18.omiciaAttr.id
+    hg18.omiciaLink.id
+
 # Dependencies not already captured in identifiers
 
 dependency $hg.gladHumESDistance $hg.knownToGnfAtlas2 hgFixed.gladHumESRatio
