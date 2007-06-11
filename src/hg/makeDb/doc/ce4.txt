@@ -3,7 +3,7 @@
 # Caenorhabditis elegans
 #	Washington University School of Medicine GSC and Sanger Institute WS170
 
-#  $Id: ce4.txt,v 1.21 2007/06/06 17:11:58 hiram Exp $
+#  $Id: ce4.txt,v 1.22 2007/06/11 18:13:50 hiram Exp $
 
 
 #########################################################################
@@ -155,6 +155,13 @@ ce4.downloadDir = ce4
     mkdir /cluster/data/ce4/goldenPath
     cd /cluster/data/ce4/goldenPath
     mkdir bigZips chromosomes database
+
+    for C in I II III IV V X M
+do
+    maskOutFa ${C}/chr${C}.fa hard ${C}/chr${C}.fa.masked
+done
+    tar cvzf goldenPath/bigZips/chromFaMasked.tar.gz */chr*.fa.masked
+
     cd chromosomes
     for C in I II III IV V X M
 do
