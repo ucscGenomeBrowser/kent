@@ -106,6 +106,7 @@
 #include "dnaMotif.h"
 #include "hapmapTrack.h"
 #include "trashDir.h"
+#include "omicia.h"
 
 #ifdef LOWELAB
 #include "loweLabTracks.h"
@@ -116,7 +117,7 @@
 #endif
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1344 2007/06/06 08:07:25 aamp Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1345 2007/06/11 17:21:55 giardine Exp $";
 
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
@@ -11102,6 +11103,42 @@ else
     return gvColorByType(tg, item, vg);
 }
 
+Color omiciaColor(struct track *tg, void *item, struct vGfx *vg)
+/* color by confidence score */
+{
+struct bed *el = item;  
+if (sameString(tg->mapName, "omiciaHand"))
+    return vgFindColorIx(vg, 0, 0, 0);
+else if (el->score <= 100) 
+    return vgFindColorIx(vg, 0, 10, 0); //10.8
+else if (el->score <= 125)
+    return vgFindColorIx(vg, 0, 13, 0); //13.5
+else if (el->score <= 150)
+    return vgFindColorIx(vg, 0, 16, 0); //16.2
+else if (el->score <= 250) 
+    return vgFindColorIx(vg, 0, 27, 0); //27
+else if (el->score <= 400)
+    return vgFindColorIx(vg, 0, 43, 0); //43.2
+else if (el->score <= 550) 
+    return vgFindColorIx(vg, 0, 59, 0); //59.4
+else if (el->score <= 700)
+    return vgFindColorIx(vg, 0, 75, 0); //75.6
+else if (el->score <= 850)
+    return vgFindColorIx(vg, 0, 91, 0); //91.8
+else if (el->score <= 1000)
+    return vgFindColorIx(vg, 0, 108, 0);
+else if (el->score <= 1300)
+    return vgFindColorIx(vg, 0, 140, 0); //140.4
+else if (el->score <= 1450)
+    return vgFindColorIx(vg, 0, 156, 0); //156.6
+else if (el->score <= 1600)
+    return vgFindColorIx(vg, 0, 172, 0); //172.8
+else if (el->score <= 2050)
+    return vgFindColorIx(vg, 0, 221, 0); //221.4
+else  /*2350*/
+    return vgFindColorIx(vg, 0, 253, 0); //253.8
+}
+
 boolean gvFilterAccuracy(struct gv *el)
 /* Check to see if this element should be excluded. */
 {
@@ -11443,6 +11480,13 @@ void oregannoMethods (struct track *tg)
 /* load so can allow filtering on type */
 {
 tg->loadItems = loadOreganno;
+}
+
+void omiciaMethods (struct track *tg)
+/* color set by score */
+{
+tg->itemColor = omiciaColor;
+tg->itemNameColor = omiciaColor;
 }
 
 void loadBed12Source(struct track *tg)
@@ -13206,6 +13250,7 @@ registerTrackHandler("transMapAncMRnaAliGene", transMapMethods);
 registerTrackHandler("retroposons", dbRIPMethods);
 
 registerTrackHandler("hapmapSnps", hapmapMethods);
+registerTrackHandler("omicia", omiciaMethods);
 
 /* Load regular tracks, blatted tracks, and custom tracks. 
  * Best to load custom last. */
