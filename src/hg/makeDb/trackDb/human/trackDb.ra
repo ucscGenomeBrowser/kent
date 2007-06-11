@@ -360,6 +360,118 @@ altColor 0,0,255
 chromosomes chr22,chr21
 type sample
 
+track affyTxnPhase3
+compositeTrack on
+shortLabel Affy Txn Phase3
+longLabel Affymetrix Transcriptome Phase 3 Long RNA
+group regulation
+defaultViewLimits 0:150
+autoScaleDefault Off
+group regulation
+priority 98.1
+maxHeightPixels 100:30:10
+canPack off
+centerLabelsDense on
+type wig 0 1000
+
+    track affyTxnPhase3HDF
+    shortLabel HDF RNA
+    subTrack affyTxnPhase3
+    longLabel Affymetrix PolyA+ (Cytosolic) HDF RNA whole genome signal
+    priority 1
+
+    track affyTxnPhase3HeLaCyto
+    shortLabel HeLaCyto
+    subTrack affyTxnPhase3
+    longLabel Affymetrix PolyA+ (Cytosolic) HeLaCyto RNA whole genome signal
+    priority 2
+
+    track affyTxnPhase3HeLaNuclear
+    shortLabel HeLaNuclear RNA
+    subTrack affyTxnPhase3
+    longLabel Affymetrix PolyA+ (Cytosolic) HeLaNuclear RNA whole genome signal
+    priority 3
+
+    track affyTxnPhase3HepG2Cyto
+    shortLabel HepG2Cyto RNA
+    subTrack affyTxnPhase3
+    longLabel Affymetrix PolyA+ (Cytosolic) HepG2Cyto RNA whole genome signal
+    priority 4
+
+    track affyTxnPhase3HepG2Nuclear
+    shortLabel HepG2Nuclear RNA
+    subTrack affyTxnPhase3
+    longLabel Affymetrix PolyA+ (Cytosolic) HepG2Nuclear RNA whole genome signal
+    priority 5
+
+    track affyTxnPhase3Jurkat
+    shortLabel Jurkat RNA
+    subTrack affyTxnPhase3
+    longLabel Affymetrix PolyA+ (Cytosolic) Jurkat RNA whole genome signal
+    priority 6
+
+    track affyTxnPhase3NCCIT
+    shortLabel NCCIT RNA
+    subTrack affyTxnPhase3
+    longLabel Affymetrix PolyA+ (Cytosolic) NCCIT RNA whole genome signal
+    priority 7
+
+    track affyTxnPhase3PC3
+    shortLabel PC3 RNA
+    subTrack affyTxnPhase3
+    longLabel Affymetrix PolyA+ (Cytosolic) PC3 RNA whole genome signal
+    priority 8
+
+    track affyTxnPhase3SK_N_AS
+    shortLabel SK-N-AS RNA
+    subTrack affyTxnPhase3
+    longLabel Affymetrix PolyA+ (Cytosolic) SK-N-AS RNA whole genome signal
+    priority 9
+
+    track affyTxnPhase3U87MG
+    shortLabel U87MG
+    subTrack affyTxnPhase3
+    longLabel Affymetrix PolyA+ (Cytosolic) U87MG RNA whole genome signal
+    priority 10
+
+track affyTxnPhase3S
+compositeTrack on
+shortLabel Affy Txn Phase3
+longLabel Affymetrix Transcriptome Phase 3 Short RNA
+group regulation
+defaultViewLimits 0:150
+autoScaleDefault Off
+group regulation
+priority 98.2
+maxHeightPixels 100:30:10
+canPack off
+centerLabelsDense on
+type wig 0 1000
+
+    track affyTxnPhase3HeLabottom_strand
+    shortLabel HeLa bottom
+    subTrack affyTxnPhase3S
+    longLabel Affymetrix PolyA+ (Cytosolic) Hela Bottom Strand RNA whole genome signal
+    priority 1
+
+    track affyTxnPhase3HeLatop_strand
+    shortLabel HeLa top
+    subTrack affyTxnPhase3S
+    longLabel Affymetrix PolyA+ (Cytosolic) Hela Top Strand RNA whole genome signal
+    priority 2
+
+    track affyTxnPhase3HepG2bottom_strand
+    shortLabel HepG2 bottom
+    subTrack affyTxnPhase3S
+    longLabel Affymetrix PolyA+ (Cytosolic) HepG2 Bottom Strand RNA whole genome signal
+    priority 3
+
+    track affyTxnPhase3HepG2top_strand
+    shortLabel HepG2 top
+    subTrack affyTxnPhase3S
+    longLabel Affymetrix PolyA+ (Cytosolic) HepG2 Top Strand RNA whole genome signal
+    priority 4
+
 track affyU133
 shortLabel Affy U133
 longLabel Alignments of Affymetrix Consensus/Exemplars from HG-U133
