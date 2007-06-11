@@ -2,7 +2,7 @@
 
 # This file describes browser build for the panTro2 chimp genome: Feb 2006
 #
-#	"$Id: panTro2.txt,v 1.8 2007/04/25 22:21:40 fanhsu Exp $"
+#	"$Id: panTro2.txt,v 1.9 2007/06/11 17:20:51 kate Exp $"
 #
 
 #  NOTE:  this doc may have genePred loads that fail to include
@@ -1417,8 +1417,8 @@ cat > rbest.csh << 'EOF'
     set swapChain = panTro2ToHg18.swap.chain
     echo "merge and swap $swapChain"
     zcat /cluster/data/panTro2/bed/liftOver/panTro2ToHg18.over.chain.gz | \ 
-        chainMergeSort stdin | \
-        chainSwap stdin $swapChain
+        chainSwap stdin stdout | \
+        chainMergeSort stdin > $swapChain
     echo "split chain"
     chainSplit swapChain/ $swapChain
     echo "run netter"
@@ -1429,7 +1429,7 @@ cat > rbest.csh << 'EOF'
                         stdout /dev/null | \
         netSyntenic stdin rbest.noClass.net
     echo "split net"
-    eetSplit rbest.noClass.net rBestNet
+    netSplit rbest.noClass.net rBestNet
     echo "extract chains from net"
     netChainSubset -verbose=0 rbest.noClass.net $swapChain stdout | \
         chainMergeSort stdin | \
@@ -2320,7 +2320,7 @@ TMPDIR=/scratch/tmp
     cat ../blastz.hg17/fb.panTro2.chainHg17Link
         # 2759308860 bases of 2823407242 (97.730%) in intersection
 
-    # SWAP ALIGNMENTS (2006-03-19 kate)
+    # SWAP ALIGNMENTS (2006-07-11 kate)
     ssh kkstore02
     cd /cluster/data/hg18/bed
     mkdir blastz.panTro2.swap

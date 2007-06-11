@@ -37,6 +37,14 @@ cat > getMafs.csh << 'EOF'
         echo $f
         gunzip -c $f | \
             sed 's/^s human\./s hg18./' \
+            sed 's/^s cow\./s bosTau2./' \
+            sed 's/^s dog\./s canFam2./' \
+            sed 's/^s chicken\./s galGal3./' \
+            sed 's/^s monodelphis\./s monDom4./' \
+            sed 's/^s chimp\./s panTro2./' \
+            sed 's/^s macaque\./s rheMac2./' \
+            sed 's/^s rat\./s rn4./' \
+            sed 's/^s xenopus\./s xenTro2./' \
                         > maf/$f:t:r:r:e.maf
     end
 'EOF'

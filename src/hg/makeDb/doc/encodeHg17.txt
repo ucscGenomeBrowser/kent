@@ -1009,6 +1009,9 @@ cat > load.csh << 'EOF'
     cd /cluster/data/encode/UCSD
     mkdir -p 2007-03-01/lab
     cd 2007-03-01/lab
+
+    # New data submitted 2007-05-23
+    #  PCR data:  Histones, TAF2, Pol2, CTCF in GM and K562
     
 ##########################################################################
 # UT-Austin (Vishy Iyer lab) Chip/chip  (2005-10-10 kate)
