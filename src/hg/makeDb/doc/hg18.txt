@@ -14318,9 +14318,15 @@ cat > loadMaf.csh << 'EOF'
 'EOF'
     csh loadMaf.csh >& loadMaf.log  &
 
-	#####################
-	## Quality Annotation
-	##
+
+########################################################################
+# ANNOTATE 28-WAY ALIGNMENT WITH QUALITY DATA (2007-06-11 rico)
+#
+# The basic idea here is to create a qac file which has quality data for each
+# (chromosome/scaffold/etc) and then index the qac file.  Once this is done,
+# mafAddQRows can be used to add the quality data to a given maf.  The agp
+# files are used so that gaps can be represented in the qac files as a special
+# value.
 
 	## create .qac and .qdx files for each species in the 28-way alignment
 	o human (hg18)
