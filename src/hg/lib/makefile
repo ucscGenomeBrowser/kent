@@ -89,7 +89,7 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     vegaInfo.o vegaInfoZfish.o visiGene.o vntr.o \
     wabAli.o web.o ncRna.o wgRna.o wigAsciiToBinary.o wigDataStream.o wiggle.o \
     wiggleCart.o wiggleUtils.o wikiLink.o zdobnovSynt.o oreganno.o \
-    oregannoUi.o gvUi.o gv.o
+    oregannoUi.o gvUi.o gv.o omicia.o
 
 
 ../../lib/$(MACHTYPE)/jkhgap.a: $(O) 
