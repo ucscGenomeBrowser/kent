@@ -122,7 +122,7 @@ longLabel Vertebrate Multiz Alignment & PhastCons Conservation (28 Species)
 irows on
 summary multiz28waySummary
 frames multiz28wayFrames
-wiggle phastCons28way Vertebrate phastCons28wayPlacMammal Plac_Mammal
+wiggle phastCons28way Vertebrate Vertebrate phastCons28wayPlacMammal Plac_Mammal Placental_Mammal
 spanList 1
 maxHeightPixels 100:40:11
 autoScaleDefault Off

@@ -53,7 +53,8 @@ int mafCmp(const void *va, const void *vb);
 struct consWiggle {
     struct consWiggle *next;    /* Next in list */
     char *table;                /* phastCons table */
-    char *label;                /* Label to print on UI */
+    char *leftLabel;            /* Left label for hgTracks */
+    char *uiLabel;              /* Label to print on trackUi */
 };
 
 struct consWiggle *wigMafWiggles(struct trackDb *tdb);

@@ -30,7 +30,7 @@
 
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.373 2007/05/30 19:34:58 kate Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.374 2007/06/11 17:04:03 kate Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1791,9 +1791,9 @@ void wigMafUi(struct trackDb *tdb)
 /* UI for maf/wiggle track
  * NOTE: calls wigUi */
 {
-#define CLEAR_BUTTON_LABEL    "Clear All"
-#define SET_ALL_BUTTON_LABEL  "Set All"
-#define DEFAULTS_BUTTON_LABEL "Set Defaults"
+#define CLEAR_BUTTON_LABEL    "Clear all"
+#define SET_ALL_BUTTON_LABEL  "Set all"
+#define DEFAULTS_BUTTON_LABEL "Set defaults"
 
 char *defaultCodonSpecies = trackDbSetting(tdb, SPECIES_CODON_DEFAULT);
 char *speciesTarget = trackDbSetting(tdb, SPECIES_TARGET_VAR);
@@ -1828,10 +1828,11 @@ if (consWiggles && consWiggles->next)
     boolean first = TRUE;
     for (consWig = consWiggles; consWig != NULL; consWig = consWig->next)
         {
-        safef(option, sizeof(option), "%s.cons.%s", tdb->tableName,consWig->label);
+        safef(option, sizeof(option), "%s.cons.%s", tdb->tableName,consWig->leftLabel);
         cgiMakeCheckBox(option, cartUsualBoolean(cart, option, first));
         first = FALSE;
-        printf ("%s&nbsp;", consWig->label);
+        subChar(consWig->uiLabel, '_', ' ');
+        printf ("%s&nbsp;", consWig->uiLabel);
         }
     }
 

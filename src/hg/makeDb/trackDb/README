@@ -122,11 +122,15 @@ The format of the type fields:
    Settings in the trackDb.ra record:
       wiggle - contains table names of conservation wiggles
                           (loaded with hgLoadWiggle)
-        in the format "wiggle <table1> <label1>... <tableN> <labelN>"
-           where the first table is the default, and the labels are displayed
-           in the left label area of the conservation wiggle.  If only
-           one table is listed, and no label is present, the default
-           label "Conservation" will be displayed.
+        in the format:
+    "wiggle <table1> <leftLabel1> <uiLabel1>... <tableN> <leftLabelN> <uiLabelN>"
+           where the first table is the default. The left label is used
+           to prefix the label 'Cons' in the left label area of the
+           conservation wiggle display.  The UI label is displayed on 
+           the trackUI page.  If only one table is listed, and no label 
+           is present, the default label "Conservation" will be displayed. 
+           The labels cannot contain spaces -- underscores in the labels
+           are translated to spaces in the display.
       speciesOrder - specifies the order of each pairwise items in the display
         Each species is specified as in the MAF file
         Organism names with embedded dots and/or spaces,

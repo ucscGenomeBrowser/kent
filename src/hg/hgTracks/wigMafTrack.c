@@ -17,7 +17,7 @@
 #include "mafFrames.h"
 #include "phyloTree.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.111 2007/05/29 05:01:06 kate Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.112 2007/06/11 17:04:03 kate Exp $";
 
 #define GAP_ITEM_LABEL  "Gaps"
 
@@ -2116,10 +2116,10 @@ if (consWigList == NULL)
 boolean first = TRUE;
 for (consWig = consWigList; consWig != NULL; consWig = consWig->next)
     {
-    if (differentString(consWig->label, DEFAULT_CONS_LABEL))
+    if (differentString(consWig->leftLabel, DEFAULT_CONS_LABEL))
         {
         safef(option, sizeof option, "%s.cons.%s", 
-                tdb->tableName, consWig->label);
+                tdb->tableName, consWig->leftLabel);
         if (!cartCgiUsualBoolean(cart, option, first))
             continue;
         }
@@ -2148,8 +2148,8 @@ for (consWig = consWigList; consWig != NULL; consWig = consWig->next)
     /* Tweak wiggle left labels: replace underscore with space and
      * append 'Cons' */
     struct dyString *ds = dyStringNew(0);
-    dyStringAppend(ds, consWig->label);
-    if (differentString(consWig->label, DEFAULT_CONS_LABEL))
+    dyStringAppend(ds, consWig->leftLabel);
+    if (differentString(consWig->leftLabel, DEFAULT_CONS_LABEL))
         dyStringAppend(ds, " Cons");
     wigTrack->shortLabel = dyStringCannibalize(&ds);
     subChar(wigTrack->shortLabel, '_', ' ');

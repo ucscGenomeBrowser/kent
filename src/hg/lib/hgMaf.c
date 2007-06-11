@@ -13,7 +13,7 @@
 #include "scoredRef.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: hgMaf.c,v 1.7 2007/04/28 23:59:39 kate Exp $";
+static char const rcsid[] = "$Id: hgMaf.c,v 1.8 2007/06/11 17:04:03 kate Exp $";
 
 int mafCmp(const void *va, const void *vb)
 /* Compare to sort based on start of first component. */
@@ -382,16 +382,17 @@ char *setting = trackDbSetting(tdb, CONS_WIGGLE);
 if (!setting)
     return NULL;
 fieldCt = chopLine(cloneString(setting), fields);
-for (i = 0; i < fieldCt; i += 2)
+for (i = 0; i < fieldCt; i += 3)
     {
     wigTable = fields[i];
     if (hTableExists(wigTable));
         {
-        wigLabel = (i+1 == fieldCt ? DEFAULT_CONS_LABEL :
-                                        cloneString(fields[i+1]));
         AllocVar(wig);
         wig->table = cloneString(wigTable);
-        wig->label = cloneString(wigLabel);
+        wigLabel = (i+1 == fieldCt ? DEFAULT_CONS_LABEL : fields[i+1]);
+        wig->leftLabel = cloneString(wigLabel);
+        wigLabel = (i+2 == fieldCt ? wig->leftLabel : fields[i+2]);
+        wig->uiLabel = cloneString(wigLabel);
         slAddTail(&wigList, wig);
         }
     }
@@ -402,6 +403,6 @@ char *wigMafWiggleVar(struct trackDb *tdb, struct consWiggle *wig)
 /* Return name of cart variable for this cons wiggle */
 {
 char option[128];
-safef(option, sizeof option, "%s.cons.%s", tdb->tableName, wig->label);
+safef(option, sizeof option, "%s.cons.%s", tdb->tableName, wig->leftLabel);
 return (cloneString(option));
 }
