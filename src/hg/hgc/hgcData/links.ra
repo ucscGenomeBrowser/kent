@@ -767,3 +767,8 @@ name IPNMDB
 label IPNMDB
 url http://www.molgen.ua.ac.be/CMTMutations/DataSource/Mutations.cfm?ID=%s
 acc yes
+
+name Omicia
+label Omicia
+url http://www.omicia.com:9080/omiminfo?omim_allele=%s
+acc yes

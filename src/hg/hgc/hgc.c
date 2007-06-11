@@ -204,8 +204,9 @@
 #include "geneCheck.h"
 #include "geneCheckDetails.h"
 #include "kg1ToKg2.h"
+#include "omicia.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1293 2007/05/31 21:02:03 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1294 2007/06/11 15:19:13 giardine Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -17960,6 +17961,86 @@ else if (sameString(gvPrevCat, gvAttrCategory[i]) &&
 /* else don't need type or category */
 }
 
+void printLinksRaLink (char *acc, char *raKey, char *displayVal)
+/* print a link with instructions in hgcData/links.ra file */
+{
+struct hash *linkInstructions = NULL;
+struct hash *thisLink = NULL;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char query[256];
+char *linktype, *label;
+char *doubleEntry = NULL;
+
+hgReadRa(database, organism, rootDir, "links.ra", &linkInstructions);
+
+/* determine how to do link from .ra file */
+thisLink = hashFindVal(linkInstructions, raKey);
+if (thisLink == NULL) 
+    return; /* no link found */
+/* type determined by fields: url = external, dataSql = internal, others added later? */
+/* need to print header here for some displays */
+linktype = hashFindVal(thisLink, "dataSql");
+label = hashFindVal(thisLink, "label");
+if (label == NULL) 
+    label = "";
+if (linktype != NULL) 
+    {
+    safef(query, sizeof(query), linktype, acc);
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+        /* should this print more than 1 column, get count from ra? */
+        if (row[0] != NULL)
+            {
+            /* print label and result */
+            printf("<B>%s</B> - %s", label, row[0]);
+            /* check for link */
+            doubleEntry = hashFindVal(thisLink, "dataLink");
+            if (doubleEntry != NULL)
+                {
+                char url[512];
+                struct hash *newLink;
+                char *accCol = NULL, *format = NULL;
+                int colNum = 1;
+                newLink = hashFindVal(linkInstructions, doubleEntry);
+                accCol = hashFindVal(thisLink, "dataLinkCol");
+                if (newLink == NULL || accCol == NULL)
+                   errAbort("missing required fields in .ra file");
+                colNum = atoi(accCol);
+                format = hashFindVal(newLink, "url");
+                safef(url, sizeof(url), format, row[colNum - 1]);
+                printf(" - <A HREF=\"%s\" TARGET=_blank>%s</A>\n",
+                    url, row[colNum - 1]);
+                }
+            printf("<BR>\n");
+            }
+        }
+    sqlFreeResult(&sr);
+    }
+else 
+    {
+    linktype = hashFindVal(thisLink, "url");
+    if (linktype != NULL)
+        {
+        char url[512];
+        char *encodedAcc = cgiEncode(acc);
+        char *encode = hashFindVal(thisLink, "needsEncoded");
+        if (encode != NULL && sameString(encode, "yes"))
+            safef(url, sizeof(url), linktype, encodedAcc);
+        else
+            safef(url, sizeof(url), linktype, acc);
+        if (displayVal == NULL || sameString(displayVal, ""))
+            printf("<B>%s</B> - <A HREF=\"%s\" TARGET=_blank>%s</A><BR>\n", label, url, acc);
+        else
+            printf("<B>%s</B> - <A HREF=\"%s\" TARGET=_blank>%s</A><BR>\n", label, url, displayVal);
+        }
+    }
+hFreeConn(&conn);
+return;
+}
+
 int printGvLink (char *id, int i)
 {
 struct gvLink *link = NULL;
@@ -18055,6 +18136,65 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 hFreeConn(&conn2);
 return attrCnt;
+}
+
+void doOmicia (struct trackDb *tdb, char *itemName)
+/* this prints the detail page for the Omicia OMIM track */
+{
+char *table = tdb->tableName;
+struct omiciaLink *link = NULL;
+struct omiciaAttr *attr = NULL;
+void *omim = NULL;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char query[256];
+int start = cartInt(cart, "o");
+
+genericHeader(tdb, itemName);
+printf("<B>Name:</B> %s<BR>\n", itemName);
+safef(query, sizeof(query),
+      "select * from %s where chrom = '%s' and "
+      "chromStart = %d and name = '%s'", table, seqName, start, itemName);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    float score;
+    struct omiciaAuto *om;
+    if (sameString(table, "omiciaAuto")) 
+        omim = omiciaAutoLoad(row);
+    else 
+        omim = omiciaHandLoad(row);
+    om = (struct omiciaAuto *)omim;
+    printPos(om->chrom, om->chromStart, om->chromEnd, om->strand, TRUE, om->name);
+    /* print score separately, so can divide by 100 to retrieve original */
+    score = (float)om->score / 100.00;
+    printf("<B>Confidence score:</B> %g<BR>\n", score);
+    }
+sqlFreeResult(&sr);
+
+/* print links */
+safef(query, sizeof(query), "select * from omiciaLink where id = '%s'", itemName);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    link = omiciaLinkLoad(row);
+    printLinksRaLink(link->acc, link->raKey, link->displayVal);
+    }
+sqlFreeResult(&sr);
+
+/* print attributes */
+safef(query, sizeof(query), "select * from omiciaAttr where id = '%s' order by attrType", itemName);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    attr = omiciaAttrLoad(row);
+    /* start with simple case print label and value */
+    printf("<B>%s:</B> %s<BR>\n", attr->attrType, attr->attrVal);
+    }
+sqlFreeResult(&sr);
+
+printTrackHtml(tdb);
 }
 
 void doGv (struct trackDb *tdb, char *itemName)
@@ -19273,6 +19413,11 @@ else if (startsWith("dbRIP", track))
     {
     dbRIP(tdb, item, NULL);
     }
+else if (sameString("omiciaAuto", track) || sameString("omiciaHand", track))
+    {
+    doOmicia(tdb, item);
+    }
+
 
 /* Lowe Lab Stuff */
 #ifdef LOWELAB
