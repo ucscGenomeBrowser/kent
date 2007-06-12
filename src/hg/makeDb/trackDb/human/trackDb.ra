@@ -360,9 +360,109 @@ altColor 0,0,255
 chromosomes chr22,chr21
 type sample
 
+track affyTxnPhase3FragsL
+compositeTrack on
+shortLabel Affy TxnP3 lRNA
+longLabel Affymetrix Transcriptome Phase 3 Long RNA Fragments
+group regulation
+priority 98.01
+type bed 3 .
+
+    track affyTxnPhase3FragsHDF
+    subTrack affyTxnPhase3FragsL
+    shortLabel HDF
+    longLabel Affymetrix Transcriptome Phase 3 HDF Long RNA Fragments
+    priority 1
+
+    track affyTxnPhase3FragsHeLaCyto
+    subTrack affyTxnPhase3FragsL
+    shortLabel HeLa Cyto
+    longLabel Affymetrix Transcriptome Phase 3 HeLa Cyto Long RNA Fragments
+    priority 2
+
+    track affyTxnPhase3FragsHeLaNuclear
+    subTrack affyTxnPhase3FragsL
+    shortLabel HeLa Cyto
+    longLabel Affymetrix Transcriptome Phase 3 HeLa Cyto Long RNA Fragments
+    priority 3
+
+    track affyTxnPhase3FragsHepG2Cyto
+    subTrack affyTxnPhase3FragsL
+    shortLabel HepG2 Cyto
+    longLabel Affymetrix Transcriptome Phase 3 HepG2 Cyto Long RNA Fragments
+    priority 4
+
+    track affyTxnPhase3FragsHepG2Nuclear
+    subTrack affyTxnPhase3FragsL
+    shortLabel HepG2 Nuclear
+    longLabel Affymetrix Transcriptome Phase 3 HepG2 Nuclear Long RNA Fragments
+    priority 5
+
+    track affyTxnPhase3FragsJurkat
+    subTrack affyTxnPhase3FragsL
+    shortLabel Jurkat
+    longLabel Affymetrix Transcriptome Phase 3 Jurkat Long RNA Fragments
+    priority 6
+
+    track affyTxnPhase3FragsNCCIT
+    subTrack affyTxnPhase3FragsL
+    shortLabel NCCIT
+    longLabel Affymetrix Transcriptome Phase 3 NCCIT Long RNA Fragments
+    priority 7
+
+    track affyTxnPhase3FragsPC3
+    subTrack affyTxnPhase3FragsL
+    shortLabel PC3
+    longLabel Affymetrix Transcriptome Phase 3 PC3 Long RNA Fragments
+    priority 8
+
+    track affyTxnPhase3FragsSK_N_AS
+    subTrack affyTxnPhase3FragsL
+    shortLabel SK-N-AS
+    longLabel Affymetrix Transcriptome Phase 3 SK-N-AS Long RNA Fragments
+    priority 9
+
+    track affyTxnPhase3FragsU87MG
+    subTrack affyTxnPhase3FragsL
+    shortLabel U87MG
+    longLabel Affymetrix Transcriptome Phase 3 U87MG Long RNA Fragments
+    priority 10
+
+track affyTxnPhase3FragsS
+compositeTrack on
+shortLabel Affy TxnP3 sRNA
+longLabel Affymetrix Transcriptome Phase 3 Short RNA Fragments
+group regulation
+priority 98.02
+type bed 3 .
+
+    track affyTxnPhase3FragsHeLaBottomStrand
+    subTrack affyTxnPhase3FragsS
+    shortLabel HeLa Bottom
+    longLabel Affymetrix Transcriptome Phase 3 HeLa Bottom Strand Short RNA Fragments
+    priority 1
+
+    track affyTxnPhase3FragsHeLaTopStrand
+    subTrack affyTxnPhase3FragsS
+    shortLabel HeLa Top
+    longLabel Affymetrix Transcriptome Phase 3 HeLa Top Strand Short RNA Fragments
+    priority 2
+
+    track affyTxnPhase3FragsHepG2BottomStrand
+    subTrack affyTxnPhase3FragsS
+    shortLabel HepG2 Bottom
+    longLabel Affymetrix Transcriptome Phase 3 HepG2 Bottom Strand Short RNA Fragments
+    priority 3
+
+    track affyTxnPhase3FragsHepG2TopStrand
+    subTrack affyTxnPhase3FragsS
+    shortLabel HepG2 Top
+    longLabel Affymetrix Transcriptome Phase 3 HepG2 Top Strand Short RNA Fragments
+    priority 4
+
 track affyTxnPhase3
 compositeTrack on
-shortLabel Affy Txn Phase3
+shortLabel Affy Txn Phase3L
 longLabel Affymetrix Transcriptome Phase 3 Long RNA
 group regulation
 defaultViewLimits 0:150
@@ -371,7 +471,6 @@ group regulation
 priority 98.1
 maxHeightPixels 100:30:10
 canPack off
-centerLabelsDense on
 type wig 0 1000
 
     track affyTxnPhase3HDF
@@ -429,14 +528,14 @@ type wig 0 1000
     priority 9
 
     track affyTxnPhase3U87MG
-    shortLabel U87MG
+    shortLabel U87MG RNA
     subTrack affyTxnPhase3
     longLabel Affymetrix PolyA+ (Cytosolic) U87MG RNA whole genome signal
     priority 10
 
 track affyTxnPhase3S
-compositeTrack on
-shortLabel Affy Txn Phase3
+compositeTrack on smart
+shortLabel Affy Txn Phase3S
 longLabel Affymetrix Transcriptome Phase 3 Short RNA
 group regulation
 defaultViewLimits 0:150
@@ -445,7 +544,6 @@ group regulation
 priority 98.2
 maxHeightPixels 100:30:10
 canPack off
-centerLabelsDense on
 type wig 0 1000
 
     track affyTxnPhase3HeLabottom_strand
