@@ -526,6 +526,9 @@ void linkedFeaturesFreeList(struct linkedFeatures **pList);
 void freeLinkedFeaturesSeries(struct linkedFeaturesSeries **pList);
 /* Free up a linked features series list. */
 
+int linkedFeaturesCmp(const void *va, const void *vb);
+/* Compare to sort based on chrom,chromStart. */
+
 int linkedFeaturesCmpStart(const void *va, const void *vb);
 /* Help sort linkedFeatures by starting pos. */
 
@@ -920,6 +923,15 @@ void linkedFeaturesSeriesDrawAt(struct track *tg, void *item,
 
 #define NEXT_ITEM_ARROW_BUFFER 5
 /* Space around "next item" arrow (in pixels). */
+
+void addWikiTrack(struct track **pGroupList);
+/* Add wiki track and append to group list. */
+
+void wikiTrackMethods(struct track *tg);
+/* establish loadItems function for wiki track */
+
+void bed8To12(struct bed *bed);
+/* Turn a bed 8 into a bed 12 by defining one block. */
 
 #endif /* HGTRACKS_H */
 

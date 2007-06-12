@@ -103,6 +103,7 @@
 #include "bed12Source.h"
 #include "dbRIP.h"
 #include "wikiLink.h"
+#include "wikiTrack.h"
 #include "dnaMotif.h"
 #include "hapmapTrack.h"
 #include "trashDir.h"
@@ -117,7 +118,7 @@
 #endif
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1346 2007/06/12 01:01:40 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1347 2007/06/12 21:24:48 hiram Exp $";
 
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
@@ -11818,6 +11819,7 @@ if (sameWord(type, "bed"))
 
     if (wordCount > 1)
         fieldCount = atoi(words[1]);
+
     track->bedSize = fieldCount;
 
     if (fieldCount < 8)
@@ -13177,6 +13179,8 @@ registerTrackHandler("plFoldMinus", rnaPLFoldMethods);
 #ifdef LOWELAB_WIKI
 registerTrackHandler("wiki", wikiMethods);
 #endif
+if (wikiTrackEnabled(NULL))
+    registerTrackHandler("wikiTrack", wikiTrackMethods);
 
 /*Test for my own MA data
 registerTrackHandler("llaPfuPrintCExps",arrayMethods);*/
@@ -13262,6 +13266,8 @@ if (restrictionEnzymesOk())
     {
     slSafeAddHead(&trackList, cuttersTg());
     }
+if (wikiTrackEnabled(NULL))
+    addWikiTrack(&trackList);
 loadCustomTracks(&trackList);
 groupTracks(&trackList, pGroupList);
 
