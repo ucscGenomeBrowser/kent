@@ -146,6 +146,14 @@ if (x < xEnd)
     }
 }
 
+int cgapLinkedFeaturesCmp(const void *va, const void *vb)
+/* Compare to sort based on chrom,chromStart. */
+{
+const struct linkedFeatures *a = *((struct linkedFeatures **)va);
+const struct linkedFeatures *b = *((struct linkedFeatures **)vb);
+return (int)b->score - (int)a->score;
+}
+
 static struct linkedFeatures *cgapSageToLinkedFeatures(struct cgapSage *tag, 
                   struct hash *libHash, struct hash *libTotHash, enum trackVisibility vis)
 /* Convert a single CGAP tag to a list of linkedFeatures. */
@@ -193,15 +201,19 @@ else if (vis == tvPack)
 	struct cgapSageTpmHashEl *tpm = (struct cgapSageTpmHashEl *)tpmEl->val;
 	char link[256];
 	char *encTissName = NULL;
+	double score = 0;
 	safef(tiss->name, sizeof(tiss->name), "%s (%d)", tpmEl->name, tpm->count);
 	encTissName = cgiEncode(tpmEl->name);
 	safef(link, sizeof(link), "i=%s&tiss=%s", tag->name, encTissName);
-	tiss->grayIx = grayIxForCgap((double)tpm->freqTotal*(1000000/(double)tpm->libTotals));
+	score = (double)tpm->freqTotal*(1000000/(double)tpm->libTotals);
+	tiss->score = (float)score;
+	tiss->grayIx = grayIxForCgap(score);
 	tiss->extra = cloneString(link);
 	freeMem(encTissName);
 	addSimpleFeature(tiss);
 	slAddHead(&libList, tiss);
 	}
+    slSort(&libList, cgapLinkedFeaturesCmp);
     hashElFreeList(&tpmList);
     freeHashAndVals(&tpmHash);
     }
