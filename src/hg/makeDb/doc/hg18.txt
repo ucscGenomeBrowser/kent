@@ -11322,7 +11322,7 @@ gzip illumina.bed
     # multiple count = 724
     # Use the first run (better to avoid nearly 700 multiples at the cost of
     # 69 more unknown)
-    hgLoadBed hg18 snpArrayAffyGenomeWide affyLookup.out -tab -sqlTable=snpArrayAffyGenomeWide.sql
+    hgLoadBed hg18 snpArrayAffy5 affyLookup.out -tab -sqlTable=snpArrayAffy5.sql
 
 ##########################################################################
 # More new SNP Array data from Affymetrix  (Heather May 2007)
@@ -11389,7 +11389,7 @@ gzip illumina.bed
     mysql> alter table snpArrayIllumina650 add index name (name);
     mysql> alter table snpArrayIllumina650 add index chrom (chrom, bin);
 
-    #  fix strand convention
+    # fix strand convention
     mysql> update snpArrayIllumina300 set strand = "+" where strand = "F";
     mysql> update snpArrayIllumina300 set strand = "-" where strand = "R";
     mysql> update snpArrayIllumina550 set strand = "+" where strand = "F";
@@ -11407,6 +11407,20 @@ gzip illumina.bed
     # | [A/C]    |
     # | [T/G]    |
     # +----------+
+
+    # fix observed
+    mysql> update snpArrayIllumina300 set observed = "A/c" where observed = "[A/c]";
+    mysql> update snpArrayIllumina550 set observed = "A/c" where observed = "[A/c]";
+    mysql> update snpArrayIllumina650 set observed = "A/c" where observed = "[A/c]";
+    mysql> update snpArrayIllumina300 set observed = "A/G" where observed = "[A/G]";
+    mysql> update snpArrayIllumina550 set observed = "A/G" where observed = "[A/G]";
+    mysql> update snpArrayIllumina650 set observed = "A/G" where observed = "[A/G]";
+    mysql> update snpArrayIllumina300 set observed = "C/T" where observed = "[T/C]";
+    mysql> update snpArrayIllumina550 set observed = "C/T" where observed = "[T/C]";
+    mysql> update snpArrayIllumina650 set observed = "C/T" where observed = "[T/C]";
+    mysql> update snpArrayIllumina300 set observed = "G/T" where observed = "[T/G]";
+    mysql> update snpArrayIllumina550 set observed = "G/T" where observed = "[T/G]";
+    mysql> update snpArrayIllumina650 set observed = "G/T" where observed = "[T/G]";
 
     # Note 2 rows in 300 and 15 rows in 550 and 650 where chrom = "chrXY"
 
