@@ -8,7 +8,7 @@
 #include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.3 2007/06/01 22:36:53 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.4 2007/06/12 21:23:35 hiram Exp $";
 
 static char *wikiTrackItemName(struct track *tg, void *item)
 /* Return name of bed track item. */
@@ -128,7 +128,7 @@ if (wikiTrackEnabled(NULL))
     AllocVar(tdb);
     tg->mapName = "wikiTrack";
     tg->canPack = TRUE;
-    tg->visibility = tvHide;
+    tg->visibility = tvPack;
     tg->hasUi = FALSE;
     tg->shortLabel = cloneString("Wiki Track");
     safef(longLabel, sizeof(longLabel), "Wiki Track user annotations");
@@ -136,10 +136,11 @@ if (wikiTrackEnabled(NULL))
     tg->loadItems = wikiTrackLoadItems;
     tg->itemName = wikiTrackItemName;
     tg->mapItemName = wikiTrackItemName;
-    tg->priority = 99;
-    tg->defaultPriority = 99;
-    tg->groupName = "x";
-    tg->defaultGroupName = "x";
+    tg->priority = 99.99;
+    tg->defaultPriority = 99.99;
+    tg->groupName = cloneString("map");
+    tg->defaultGroupName = cloneString("map");
+    tg->exonArrows = TRUE;
     tdb->tableName = tg->mapName;
     tdb->shortLabel = tg->shortLabel;
     tdb->longLabel = tg->longLabel;
