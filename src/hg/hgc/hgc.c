@@ -204,9 +204,10 @@
 #include "geneCheck.h"
 #include "geneCheckDetails.h"
 #include "kg1ToKg2.h"
+#include "wikiTrack.h"
 #include "omicia.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1295 2007/06/12 15:09:10 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1296 2007/06/12 21:28:47 hiram Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -18527,6 +18528,18 @@ else if (sameWord(track, "htcGetDnaExtended1"))
     {
     doGetDnaExtended1();
     }
+else if (sameWord(track, G_DELETE_WIKI_ITEM))
+    {
+    doDeleteWikiItem(item, seqName, winStart, winEnd);
+    }
+else if (sameWord(track, G_ADD_WIKI_COMMENTS))
+    {
+    doAddWikiComments(item, seqName, winStart, winEnd);
+    }
+else if (sameWord(track, G_CREATE_WIKI_ITEM))
+    {
+    doCreateWikiItem(item, seqName, winStart, winEnd);
+    }
 else if (startsWith("transMap", track))
     transMapClickHandler(tdb, item);
 else if (sameString(track, "hgcTransMapCdnaAli"))
@@ -18565,6 +18578,8 @@ else if (sameWord(track, "affyU95") || sameWord(track, "affyU133") || sameWord(t
     {
     doAffy(tdb, item, NULL);
     }
+else if (sameWord(track, WIKI_TRACK_TABLE))
+    doWikiTrack(item, seqName, winStart, winEnd);
 else if (sameWord(track, OLIGO_MATCH_TRACK_NAME))
     doOligoMatch(item);
 else if (sameWord(track, "refFullAli"))

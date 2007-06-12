@@ -10,7 +10,7 @@ A = hgc
 
 O = $A.o cgapSageClick.o expClick.o mafClick.o regMotif.o wiggleClick.o retroClick.o \
 	lowelab.o rnaFoldClick.o transMapClick.o txCdsInfo.o \
-	ccdsClick.o mgcClick.o dbRIP.o
+	ccdsClick.o mgcClick.o dbRIP.o wikiTrack.o
 
 include ../../inc/cgi_build_rules.mk
 

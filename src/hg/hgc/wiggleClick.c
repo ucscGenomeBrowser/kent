@@ -9,6 +9,8 @@
 #include "obscure.h"
 #include "customTrack.h"
 
+static char const rcsid[] = "$Id: wiggleClick.c,v 1.27 2007/06/12 21:28:47 hiram Exp $";
+
 void genericWiggleClick(struct sqlConnection *conn, struct trackDb *tdb, 
 	char *item, int start)
 /* Display details for Wiggle data tracks.

@@ -15,7 +15,7 @@
 #include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.10 2007/06/11 18:16:29 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.11 2007/06/12 21:28:47 hiram Exp $";
 
 #define NEW_ITEM_SCORE "newItemScore"
 #define NEW_ITEM_STRAND "newItemStrand"
@@ -374,6 +374,17 @@ if ((NULL != userName) && sameWord(userName, item->owner))
     }
 
 hPrintf("<BR />\n");
+hPrintf("<B>Description and comments from the "
+    "<A HREF=\"%s/index.php/%s\" TARGET=_blank>wiki article:</A></B><HR>\n",
+       url, item->descriptionKey);
+if (strippedRender)
+    {
+    hPrintf("\n%s<BR /><HR>\n", strippedRender);
+    freeMem(strippedRender);
+    }
+else
+    hPrintf("<HR>\n(no comments for this item at the current time)"
+	"<BR /><HR>\n");
 
 if (NULL == userName)
     {
@@ -419,15 +430,7 @@ else
 	   "for this item's description", url, item->descriptionKey);
 	}
     }
-if (strippedRender)
-    {
-    hPrintf("<HR>\n%s<BR />\n", strippedRender);
-    freeMem(strippedRender);
-    }
-else
-    hPrintf("<BR />\n(no comments for this item at the current time)<BR />\n");
-
-}
+}	/*	displayItem()	*/
 
 static void outputJavaScript()
 {
@@ -729,7 +732,7 @@ else
     newPos = addCommasToPos(position);
     dyStringPrintf(content, "%s\n<P>"
 "[http://%s/cgi-bin/hgTracks?db=%s&wikiTrack=pack&position=%s:%d-%d %s %s]"
-	"&nbsp;&nbsp;<B>%s</B>&nbsp;&nbsp;''created: ~~~~''<BR /><BR />\n",
+	"&nbsp;&nbsp;<B>'%s'</B>&nbsp;&nbsp;''created: ~~~~''<BR /><BR />\n",
 	NEW_ITEM_CATEGORY,
 	    cfgOptionDefault(CFG_WIKI_BROWSER, DEFAULT_BROWSER), database,
 		seqName, winStart, winEnd, database, newPos, itemName);
