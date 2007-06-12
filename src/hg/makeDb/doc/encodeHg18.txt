@@ -59,15 +59,10 @@ cat > getMafs.csh << 'EOF'
     hgLoadMaf -pathPrefix=$gdir -WARN hg18 encodeTbaAlign >&! load.log
     cat *.maf | hgLoadMafSummary hg18 encodeTbaSummary stdin
 
-<<<<<<< encodeHg18.txt
-
-###########################################
-# 
-=======
 ##############################################################################
 # Lifting rampage (Andy)
-# 
 
+ssh hgwdev
 bash
 cd /cluster/data/encode/convertHg18
 /cluster/data/encode/bin/scripts/listEncodeTables.csh hg17 > hg17.tables
@@ -133,9 +128,6 @@ for table in `cut -f1 bedGraph.tables`; do
        mv $table.* bedGraph/
 done
 
-# 197 left!
-
-
 ######################################
 # Continue lifting rampage (ting, 06-07-2007)
 #
@@ -153,4 +145,114 @@ done
 		# 7 tables lifted.
 
 # 190 remaining.
+
+####################################################
+# More lifting (Andy)
+
+ssh hgwdev
+bash
+cd /cluster/data/encode/convertHg18
+
+# genePred tables
+grep genePred remaining.tables > genePred.tables
+grep -v genePred remaining.tables > tmp; mv tmp remaining.tables
+wc -l genePred.tables remaining.tables 
+#  68 genePred.tables
+# 122 remaining.tables
+# 190 total
+mkdir genePred
+for table in `cut -f1 genePred.tables`; do
+    /cluster/data/encode/bin/scripts/convertGenePredTable.csh hg17 hg18 $table >> genePred.scripts.log;
+    mv $table.* genePred/
+done
+# ERRORS, uh oh
+# fixed /cluster/data/encode/bin/scripts/convertGenePredTable.csh
+# binned hg17 tables weren't working right.
+grep error genePred.scripts.log | sed 's/^.*converting\ \(.*\)\.txt.*$/\1/' > genePredBins.tables
+for table in `cat genePredBins.tables`; do
+    /cluster/data/encode/bin/scripts/convertGenePredTable.csh hg17 hg18 $table >> genePredBins.scripts.log;
+    mv $table.* genePred/
+done
+
+# missed bed tables.  There's a few like "bed5FloatScore" and "bed 3", etc.
+# these can be treated as normal beds
+grep bed remaining.tables | cut -f1,3 | sed 's/bed5FloatScore/bed 5/' > \
+  bedOther.tables
+grep -v bed remaining.tables > tmp
+wc -l bedOther.tables tmp
+#  14 bedOther.tables
+# 108 tmp
+# 122 total
+mkdir bedOther
+for fields in 3 4 5; do 
+    for table in `grep "bed $fields" bedOther.tables | cut -f1`; do 
+       /cluster/data/encode/bin/scripts/convertBedTable.csh hg17 hg18 \
+         $table $fields >> bedOther.script.log 
+       mv $table.* bedOther/
+    done
+done
+
+# wiggle
+# first tally up which ones are in which DBs.  The older ones can go hg16->hg18 instead
+# of hg17->hg18.  Make three sets of tables and do set operations:
+hgsql hg16 -e 'show tables' > hg16.all.tables
+hgsql hg17 -e 'show tables' > hg17.all.tables
+grep -v wigMaf remaining.tables | cut -f1 > wig.tables
+grep wigMaf remaining.tables > tmp; mv tmp remaining.tables
+wc -l wig.tables remaining.tables 
+# 119 wig.tables
+#   3 remaining.tables
+# 122 total
+#  OOPS I forgot to subtract the 14 tables from last one.
+
+# How many of the wiggle tables are in hg17?  I hope all 119
+grep -Fw -f wig.tables hg17.all.tables | wc -l
+# 105
+# good.  Ok how about hg16?
+grep -Fw -f wig.tables hg16.all.tables | wc -l
+# 61
+# I guess then hg17 should have 44 newer ones.
+grep -Fw -f wig.tables hg16.all.tables > hg16.wig.tables
+grep -Fwv -f hg16.wig.tables wig.tables > hg17.wig.tables
+wc -l *wig.tables
+#  61 hg16.wig.tables
+#  44 hg17.wig.tables
+# 105 wig.tables
+# Awesome.  These two sets shouldn't intersect at all:
+grep -Fw -f hg16.wig.tables hg17.wig.tables | wc -l
+# 0
+# Great.  Now lets move on.  Let's use hgWiggle on each of these tables to 
+# fetch the old data.  Then we'll convert that to bed 4, lift that, then 
+# run wigEncode on the lifted data.
+
+mkdir ../hg18.wib
+mkdir -p /gbdb/hg18/encode/wib
+
+mkdir fromHg16.wig
+for table in `cat hg16.wig.tables`; do 
+    hgWiggle -db=hg16 $table \
+       | grep -v "^#" | awk -f varStepToBed.awk > $table.old.wig
+    liftOver -bedPlus=3 -tab $table.old.wig /gbdb/hg16/liftOver/hg16ToHg18.over.chain.gz \
+      $table.new.wig $table.unmapped
+    sort -k1,1 -k2,2n $table.new.wig > tmp.wig; mv tmp.wig $table.new.wig
+    wigEncode $table.new.wig $table.wig $table.wib 2>> wigFromHg16.log
+    mv $table.wib ../hg18.wib/
+    ln -s /cluster/data/encode/hg18.wib/${table}.wib /gbdb/hg18/encode/wib/${table}.wib
+    hgLoadWiggle -pathPrefix=/gbdb/hg18/encode/wib hg18 $table $table.wig
+    mv $table.*wig $table.unmapped fromHg16.wig/
+done
+
+mkdir fromHg17.wig
+for table in `cat hg17.wig.tables`; do
+    hgWiggle -db=hg17 $table \
+       | grep -v "^#" | awk -f varStepToBed.awk > $table.old.wig
+    liftOver -bedPlus=3 -tab $table.old.wig /gbdb/hg17/liftOver/hg17ToHg18.over.chain.gz \
+      $table.new.wig $table.unmapped
+    sort -k1,1 -k2,2n $table.new.wig > tmp.wig; mv tmp.wig $table.new.wig
+    wigEncode $table.new.wig $table.wig $table.wib 2>> wigFromHg17.log
+    mv $table.wib ../hg18.wib/
+    ln -s /cluster/data/encode/hg18.wib/${table}.wib /gbdb/hg18/encode/wib/${table}.wib
+    hgLoadWiggle -pathPrefix=/gbdb/hg18/encode/wib hg18 $table $table.wig
+    mv $table.*wig $table.unmapped fromHg17.wig/
+done
 
