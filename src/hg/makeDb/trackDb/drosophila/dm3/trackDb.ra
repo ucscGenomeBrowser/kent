@@ -84,7 +84,7 @@ group genes
 priority 45.5
 visibility hide
 color 0,100,180
-type genePred
+type bed
 otherDb dm2
 
 searchTable bacEndPairs
