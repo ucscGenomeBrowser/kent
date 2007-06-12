@@ -206,7 +206,7 @@
 #include "kg1ToKg2.h"
 #include "omicia.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1294 2007/06/11 15:19:13 giardine Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1295 2007/06/12 15:09:10 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -19385,7 +19385,9 @@ else if (sameString("snpArrayAffy250Nsp", track) ||
     {
     doSnpArray(tdb, item, "Affy");
     }
-else if (sameString("snpArrayIllumina300", track))
+else if (sameString("snpArrayIllumina300", track) ||
+         sameString("snpArrayIllumina550", track) ||
+	 sameString("snpArrayIllumina650", track))
     {
     doSnpArray(tdb, item, "Illumina");
     }
