@@ -117,7 +117,7 @@
 #endif
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1345 2007/06/11 17:21:55 giardine Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1346 2007/06/12 01:01:40 angie Exp $";
 
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
@@ -2171,7 +2171,7 @@ if (vis == tvPack || vis == tvSquish)
 		{
 		if (nextItemCompatible(tg))
 		    genericDrawNextItemStuff(tg, vg, vis, item, x2, textX, y, heightPer, snapLeft, 
-					     color, name);
+					     color, tg->mapItemName(tg, item));
 		else
 		    {
 		    tg->mapItem(tg, item, tg->mapItemName(tg, item), s, e, textX, y, w, heightPer);
@@ -2222,7 +2222,7 @@ else
 	    /* them here if we're drawing nextItem buttons. */
 	    if (nextItemCompatible(tg))
 		genericDrawNextItemStuff(tg, vg, vis, item, -1, -1, y, heightPer, FALSE, 
-					 color, tg->itemName(tg, item));
+					 color, tg->mapItemName(tg, item));
 	    y += lineHeight;
 	    }
 	} 
@@ -9032,7 +9032,8 @@ for (item = track->items; item != NULL; item = item->next)
 	    track->mapItem = genericMapItem;
         if (!track->mapsSelf)
             {
-	    track->mapItem(track, item, track->itemName(track, item), track->itemStart(track, item),
+	    track->mapItem(track, item, track->mapItemName(track, item),
+			   track->itemStart(track, item),
 			   track->itemEnd(track, item), trackPastTabX,
 			   y, trackPastTabWidth,height);
             }
