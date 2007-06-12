@@ -29,7 +29,7 @@
 #include "dbDb.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.98 2007/06/07 21:38:24 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.99 2007/06/12 02:15:26 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -38,6 +38,8 @@ char ** saveEnv;
 char html[BUFMAX];
 
 char *action = NULL;   /* have to put declarations first */
+boolean crossPost = FALSE;  /* are we doing cross-post from dev to beta (or vice versa)? */
+			    /* support showSizes across machines */
 
 char *database = NULL;
 char *host     = NULL;
@@ -624,9 +626,17 @@ else
 	    "<!transferbutton>", 
 	    "<input TYPE=SUBMIT NAME=\"transfer\" VALUE=\"Transfer\">&nbsp;&nbsp;"); 
 	
-	replaceInStr(html, sizeof(html), "<!sizesbutton>", 
-	    "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input TYPE=SUBMIT NAME=\"showSizes\" VALUE=\"Show Sizes\">"); 
-	
+	char sizesButton[1024];
+	safef(sizesButton, sizeof(sizesButton), 
+	    "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input TYPE=SUBMIT NAME=\"showSizes\" VALUE=\"Show Sizes\""
+	    " ONCLICK=\"if (document.forms[0].currLoc.value!='%s') {"
+			" document.forms[0]._action.value='xpost';"
+			" document.forms[0].action='http://%s.cse.ucsc.edu/cgi-bin/qaPushQ';"
+			"};return true;\">"
+	    , utsName.nodename
+	    , sameString(utsName.nodename, "hgwdev") ? "hgwbeta" : "hgwdev" 
+	    ); 
+	replaceInStr(html, sizeof(html), "<!sizesbutton>", sizesButton);
 	}
     else 
 	{ /* we don't have a lock yet, disable and readonly */
@@ -958,8 +968,6 @@ safef(query, sizeof(query), "select * from %s%s%s",
     monthsql,
     " order by priority, rank, qadate desc, qid desc limit 200"
     );
-
-// debug printf("query=%s",query); 
 
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -1614,11 +1622,6 @@ getCgiData(&isOK, TRUE ,&q->openIssues, -1                  , "openIssues");
 getCgiData(&isOK, TRUE ,&q->notes     , -1                  , "notes"     );
 getCgiData(&isOK, TRUE ,&q->releaseLog, -1                  , "releaseLog");
 
-
-/* debug!
-errAbort("Got to past loading q->qid priority data. %d %d <br>\n",newqid,sizeof(newQid));
-return;
-*/
 
 /* check for things too big  */
 if (!isOK)
@@ -2610,6 +2613,7 @@ char filePath[1024];
 char fileName[1024];
 char *found=NULL;
 struct fileInfo *fi = NULL;
+char *crossUrl = "";
 
 safef(newQid, sizeof(newQid), cgiString("qid"));
 
@@ -2617,9 +2621,14 @@ printf("<H2>Show File Sizes </H2>\n");
 
 q = mustLoadPushQ(newQid); 
 
-printf("<a href=\"/cgi-bin/qaPushQ?action=showSizesHelp&qid=%s&cb=%s\" target=\"_blank\">HELP</a> \n",
-    q->qid,newRandState);
-printf("<a href=\"/cgi-bin/qaPushQ?action=edit&qid=%s&cb=%s\">RETURN</a> \n",newQid,newRandState);
+if (crossPost)  // support showSizes across machines
+    {
+    crossUrl = sameString(utsName.nodename, "hgwdev") ? "http://hgwbeta.cse.ucsc.edu" : "http://hgwdev.cse.ucsc.edu";
+    }
+
+printf("<a href=\"%s/cgi-bin/qaPushQ?action=showSizesHelp&qid=%s&cb=%s\" target=\"_blank\">HELP</a> \n",
+    crossUrl,q->qid,newRandState);
+printf("<a href=\"%s/cgi-bin/qaPushQ?action=edit&qid=%s&cb=%s\">RETURN</a> \n",crossUrl,newQid,newRandState);
 printf(" <br>\n");
 printf("Location: %s <br>\n",q->currLoc);
 printf("Database: %s <br>\n",q->dbs    );
@@ -2901,10 +2910,10 @@ sprintLongWithCommas(nicenumber, sizeMB );
 printf("<p style=\"color:red\">Total: %s MB</p>\n",nicenumber);
 
 printf(" <br>\n");
-printf("<a href=\"/cgi-bin/qaPushQ?action=setSize&qid=%s&sizeMB=%lu&cb=%s\">"
-       "Set Size as %s MB</a> <br>\n",newQid,sizeMB,newRandState,nicenumber);
+printf("<a href=\"%s/cgi-bin/qaPushQ?action=setSize&qid=%s&sizeMB=%lu&cb=%s\">"
+       "Set Size as %s MB</a> <br>\n",crossUrl,newQid,sizeMB,newRandState,nicenumber);
 printf(" <br>\n");
-printf("<a href=\"/cgi-bin/qaPushQ?action=edit&qid=%s&cb=%s\">RETURN</a> <br>\n",newQid,newRandState);
+printf("<a href=\"%s/cgi-bin/qaPushQ?action=edit&qid=%s&cb=%s\">RETURN</a> <br>\n",crossUrl,newQid,newRandState);
 
 pushQFree(&q);
 
@@ -3514,6 +3523,11 @@ htmShell("Push Queue debug", doMsg, NULL);
 exit(0);
 */
 
+if (crossPost)  // support showSizes across machines
+    {
+    host = sameString(utsName.nodename, "hgwdev") ? "hgwbeta.cse.ucsc.edu" : "hgwdev.cse.ucsc.edu";
+    }
+
 newRandState = randDigits(20);
 
 conn = sqlConnectRemote(host, user, password, database);
@@ -3728,7 +3742,16 @@ host     = cfgOption("pq.host"    );
 user     = cfgOption("pq.user"    );
 password = cfgOption("pq.password");
 
-action = cgiUsualString("action","display");  /* get action, defaults to display of push queue */
+/* workaround for name-collision on form.action now as form._action on form */
+action = cgiUsualString("_action","display");  /* get action, defaults to display of push queue */
+action = cgiUsualString("action",action);  
+
+if (sameString(action,"xpost"))
+    {
+    crossPost = TRUE;  /* are we doing cross-post from dev to beta (or vice versa)? */
+    action = "post";
+    }
+
 /* initCgiInput() is not exported in cheapcgi.h, but it should get called by cgiUsualString
 So it will find all input regardless of Get/Put/Post/etc and make available as cgivars */
 
