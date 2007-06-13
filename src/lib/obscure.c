@@ -11,7 +11,7 @@
 #include "obscure.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: obscure.c,v 1.44 2007/03/02 00:45:01 kent Exp $";
+static char const rcsid[] = "$Id: obscure.c,v 1.45 2007/06/13 18:18:36 kuhn Exp $";
 static int _dotForUserMod = 100; /* How often does dotForUser() output a dot. */
 
 long incCounterFile(char *fileName)
@@ -523,7 +523,7 @@ else
 }
 
 void printLongWithCommas(FILE *f, long long l)
-/* Print out a long number with commas a thousands, millions, etc. */
+/* Print out a long number with commas at thousands, millions, etc. */
 {
 char ascii[32];
 sprintLongWithCommas(ascii, l);
