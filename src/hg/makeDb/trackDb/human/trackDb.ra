@@ -364,6 +364,8 @@ track affyTxnPhase3FragsL
 compositeTrack on
 shortLabel Affy TxnP3 lRNA
 longLabel Affymetrix Transcriptome Phase 3 Long RNA Fragments
+color 100,50,0
+altColor 0,0,255
 group regulation
 priority 98.01
 type bed 3 .
@@ -382,8 +384,8 @@ type bed 3 .
 
     track affyTxnPhase3FragsHeLaNuclear
     subTrack affyTxnPhase3FragsL
-    shortLabel HeLa Cyto
-    longLabel Affymetrix Transcriptome Phase 3 HeLa Cyto Long RNA Fragments
+    shortLabel HeLa Nuclear
+    longLabel Affymetrix Transcriptome Phase 3 HeLa Nuclear Long RNA Fragments
     priority 3
 
     track affyTxnPhase3FragsHepG2Cyto
@@ -436,28 +438,28 @@ group regulation
 priority 98.02
 type bed 3 .
 
-    track affyTxnPhase3FragsHeLaBottomStrand
-    subTrack affyTxnPhase3FragsS
-    shortLabel HeLa Bottom
-    longLabel Affymetrix Transcriptome Phase 3 HeLa Bottom Strand Short RNA Fragments
-    priority 1
-
     track affyTxnPhase3FragsHeLaTopStrand
     subTrack affyTxnPhase3FragsS
     shortLabel HeLa Top
     longLabel Affymetrix Transcriptome Phase 3 HeLa Top Strand Short RNA Fragments
-    priority 2
+    priority 1
 
-    track affyTxnPhase3FragsHepG2BottomStrand
+    track affyTxnPhase3FragsHeLaBottomStrand
     subTrack affyTxnPhase3FragsS
-    shortLabel HepG2 Bottom
-    longLabel Affymetrix Transcriptome Phase 3 HepG2 Bottom Strand Short RNA Fragments
-    priority 3
+    shortLabel HeLa Bottom
+    longLabel Affymetrix Transcriptome Phase 3 HeLa Bottom Strand Short RNA Fragments
+    priority 2
 
     track affyTxnPhase3FragsHepG2TopStrand
     subTrack affyTxnPhase3FragsS
     shortLabel HepG2 Top
     longLabel Affymetrix Transcriptome Phase 3 HepG2 Top Strand Short RNA Fragments
+    priority 3
+
+    track affyTxnPhase3FragsHepG2BottomStrand
+    subTrack affyTxnPhase3FragsS
+    shortLabel HepG2 Bottom
+    longLabel Affymetrix Transcriptome Phase 3 HepG2 Bottom Strand Short RNA Fragments
     priority 4
 
 track affyTxnPhase3
@@ -480,7 +482,7 @@ type wig 0 1000
     priority 1
 
     track affyTxnPhase3HeLaCyto
-    shortLabel HeLaCyto
+    shortLabel HeLaCyto RNA
     subTrack affyTxnPhase3
     longLabel Affymetrix PolyA+ (Cytosolic) HeLaCyto RNA whole genome signal
     priority 2
