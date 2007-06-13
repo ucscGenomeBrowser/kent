@@ -137,9 +137,9 @@ if (x < xEnd)
     char *encodedItem = cgiEncode(itemName);
     char *encodedTrack = cgiEncode(tg->mapName);
     hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, xEnd, yEnd);
-    hPrintf("HREF=\"%s&o=%d&t=%d&g=%s&%s&c=%s&db=%s&pix=%d\" ",
+    hPrintf("HREF=\"%s&o=%d&t=%d&g=%s&%s&c=%s&l=%d&r=%d&db=%s&pix=%d\" ",
 	    hgcNameAndSettings(), start, end, encodedTrack, (char *)lf->extra,
-	    chromName, database, tl.picWidth);
+	    chromName, winStart, winEnd, database, tl.picWidth);
     hPrintf(">\n");
     freeMem(encodedItem);
     freeMem(encodedTrack);
@@ -164,7 +164,8 @@ int i;
 if (vis == tvDense)
     /* Just use the skeleton one. */
     {
-    double aveTpm = 0;
+    int tagTotal = 0;
+    int freqTotal = 0;
     int libsUsed = 0;
     for (i = 0; i < tag->numLibs; i++)
 	{
@@ -173,17 +174,18 @@ if (vis == tvDense)
 	safef(libId, sizeof(libId), "%d", tag->libIds[i]);
 	libName = hashMustFindVal(libHash, libId);
 	if (keepThisLib(libName, libId))
-            /* Average the lib tpms. */
 	    {
+	    int libTotal = hashIntVal(libTotHash, libId);
+	    tagTotal += libTotal;
+	    freqTotal += tag->freqs[i];
 	    libsUsed++;
-	    aveTpm += tag->tagTpms[i];
 	    }
 	}
     if (libsUsed > 0)
 	{
-	aveTpm /= libsUsed;
 	safef(skel->name, sizeof(skel->name), "whatever");
-	skel->grayIx = grayIxForCgap(aveTpm);
+	skel->score = (float)((double)freqTotal * (1000000/tagTotal));
+	skel->grayIx = grayIxForCgap(skel->score);
 	addSimpleFeature(skel);
 	libList = skel;
 	}
@@ -213,7 +215,6 @@ else if (vis == tvPack)
 	addSimpleFeature(tiss);
 	slAddHead(&libList, tiss);
 	}
-    slSort(&libList, cgapLinkedFeaturesCmp);
     hashElFreeList(&tpmList);
     freeHashAndVals(&tpmHash);
     }
@@ -229,10 +230,11 @@ else
 	safef(libId, sizeof(libId), "%d", tag->libIds[i]);
 	libName = hashMustFindVal(libHash, libId);
 	if (keepThisLib(libName, libId))
-	    {
+	    {	    
 	    lf = CloneVar(skel);
 	    safef(lf->name, sizeof(lf->name), "%s", libName);
 	    safef(link, sizeof(link), "i=%s&lib=%s", tag->name, libId);
+	    lf->score = (float)tag->tagTpms[i];
 	    lf->grayIx = grayIxForCgap(tag->tagTpms[i]);
 	    lf->extra = cloneString(link);
 	    addSimpleFeature(lf);	
@@ -240,6 +242,7 @@ else
 	    }
 	}
     }
+slSort(&libList, cgapLinkedFeaturesCmp);
 slReverse(&libList);
 return libList;
 }
