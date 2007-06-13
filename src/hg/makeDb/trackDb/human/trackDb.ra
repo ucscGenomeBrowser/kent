@@ -364,8 +364,6 @@ track affyTxnPhase3FragsL
 compositeTrack on
 shortLabel Affy TxnP3 lRNA
 longLabel Affymetrix Transcriptome Phase 3 Long RNA Fragments
-color 100,50,0
-altColor 0,0,255
 group regulation
 priority 98.01
 type bed 3 .
