@@ -118,7 +118,7 @@
 #endif
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1347 2007/06/12 21:24:48 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1348 2007/06/13 19:37:34 kuhn Exp $";
 
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
@@ -14052,8 +14052,9 @@ for (chromPtr = chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
 	   hgTracksName(), cartSessionVarName(), cartSessionId(cart),
 	   chromPtr->name, chromPtr->name);
     cgiTableFieldEnd();
-    cgiSimpleTableFieldStart();
+    cgiTableFieldStartAlignRight();
     printLongWithCommas(stdout, size);
+    puts("&nbsp;&nbsp;");
     cgiTableFieldEnd();
     cgiTableRowEnd();
     total += size;
@@ -14097,8 +14098,9 @@ while ((row = sqlNextRow(sr)) != NULL)
 	   hgTracksName(), cartSessionVarName(), cartSessionId(cart),
 	   row[0], row[0]);
     cgiTableFieldEnd();
-    cgiSimpleTableFieldStart();
+    cgiTableFieldStartAlignRight();
     printLongWithCommas(stdout, size);
+    puts("&nbsp;&nbsp;");
     cgiTableFieldEnd();
     cgiTableRowEnd();
     total += size;

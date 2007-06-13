@@ -292,6 +292,9 @@ void cgiTableRowEnd();
 void cgiSimpleTableFieldStart();
 /* Start table field */
 
+void cgiTableFieldStartAlignRight();
+/* Start table field */
+
 void cgiTableFieldEnd();
 /* End table field */
 

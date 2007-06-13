@@ -12,7 +12,7 @@
 #include "errabort.h"
 #include "mime.h"
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.89 2007/06/08 21:31:12 angie Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.90 2007/06/13 19:37:34 kuhn Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -866,6 +866,12 @@ void cgiSimpleTableFieldStart()
 /* Start table field */
 {
 printf("<TD>");
+}
+
+void cgiTableFieldStartAlignRight()
+/* Start table field and align right*/
+{
+printf("<TD ALIGN = RIGHT>");
 }
 
 void cgiTableFieldEnd()
