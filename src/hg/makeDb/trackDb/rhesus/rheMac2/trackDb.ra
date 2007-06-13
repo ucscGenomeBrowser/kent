@@ -25,16 +25,6 @@ color 150,100,30
 altColor 230,170,40
 type bed 3 +
 
-track refGene
-shortLabel Human RefSeq
-longLabel Human RefSeq Genes aligned with Blatz
-group genes
-priority 35
-visibility dense
-color 12,12,120
-type genePred refPep refMrna
-idXref refLink mrnaAcc name
-
 track refGeneBlatz
 shortLabel Human RefSeq Blatz 
 longLabel Human mRNAs aligned with Blatz ident > 83% nearBest .5%
