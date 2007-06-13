@@ -460,7 +460,7 @@ type bed 3 .
     longLabel Affymetrix Transcriptome Phase 3 HepG2 Bottom Strand Short RNA Fragments
     priority 4
 
-track affyTxnPhase3
+track affyTxnPhase3L
 compositeTrack on
 shortLabel Affy Txn Phase3L
 longLabel Affymetrix Transcriptome Phase 3 Long RNA
@@ -475,61 +475,61 @@ type wig 0 1000
 
     track affyTxnPhase3HDF
     shortLabel HDF RNA
-    subTrack affyTxnPhase3
+    subTrack affyTxnPhase3L
     longLabel Affymetrix PolyA+ (Cytosolic) HDF RNA whole genome signal
     priority 1
 
     track affyTxnPhase3HeLaCyto
     shortLabel HeLaCyto RNA
-    subTrack affyTxnPhase3
+    subTrack affyTxnPhase3L
     longLabel Affymetrix PolyA+ (Cytosolic) HeLaCyto RNA whole genome signal
     priority 2
 
     track affyTxnPhase3HeLaNuclear
     shortLabel HeLaNuclear RNA
-    subTrack affyTxnPhase3
+    subTrack affyTxnPhase3L
     longLabel Affymetrix PolyA+ (Cytosolic) HeLaNuclear RNA whole genome signal
     priority 3
 
     track affyTxnPhase3HepG2Cyto
     shortLabel HepG2Cyto RNA
-    subTrack affyTxnPhase3
+    subTrack affyTxnPhase3L
     longLabel Affymetrix PolyA+ (Cytosolic) HepG2Cyto RNA whole genome signal
     priority 4
 
     track affyTxnPhase3HepG2Nuclear
     shortLabel HepG2Nuclear RNA
-    subTrack affyTxnPhase3
+    subTrack affyTxnPhase3L
     longLabel Affymetrix PolyA+ (Cytosolic) HepG2Nuclear RNA whole genome signal
     priority 5
 
     track affyTxnPhase3Jurkat
     shortLabel Jurkat RNA
-    subTrack affyTxnPhase3
+    subTrack affyTxnPhase3L
     longLabel Affymetrix PolyA+ (Cytosolic) Jurkat RNA whole genome signal
     priority 6
 
     track affyTxnPhase3NCCIT
     shortLabel NCCIT RNA
-    subTrack affyTxnPhase3
+    subTrack affyTxnPhase3L
     longLabel Affymetrix PolyA+ (Cytosolic) NCCIT RNA whole genome signal
     priority 7
 
     track affyTxnPhase3PC3
     shortLabel PC3 RNA
-    subTrack affyTxnPhase3
+    subTrack affyTxnPhase3L
     longLabel Affymetrix PolyA+ (Cytosolic) PC3 RNA whole genome signal
     priority 8
 
     track affyTxnPhase3SK_N_AS
     shortLabel SK-N-AS RNA
-    subTrack affyTxnPhase3
+    subTrack affyTxnPhase3L
     longLabel Affymetrix PolyA+ (Cytosolic) SK-N-AS RNA whole genome signal
     priority 9
 
     track affyTxnPhase3U87MG
     shortLabel U87MG RNA
-    subTrack affyTxnPhase3
+    subTrack affyTxnPhase3L
     longLabel Affymetrix PolyA+ (Cytosolic) U87MG RNA whole genome signal
     priority 10
 
