@@ -3,7 +3,7 @@
 # an object which can be loaded and saved from RAM in a fairly 
 # automatic way.
 
-#Jackson Labs Mouse Orthologs
+#Jackson Lab Mouse Orthologs
 CREATE TABLE jaxOrtholog (
     humanSymbol varchar(255) not null,	# Human HUGO symbol
     humanBand varchar(255) not null,	# Human chromosomal location

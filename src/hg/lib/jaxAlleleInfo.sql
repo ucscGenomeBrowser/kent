@@ -3,7 +3,7 @@
 # an object which can be loaded and saved from RAM in a fairly 
 # automatic way.
 
-#Extra info for Jackson Labs allele transcripts.
+#Extra info for Jackson Lab allele transcripts.
 CREATE TABLE jaxAlleleInfo (
     name varchar(255) not null,	# Allele transcript name.
     mgiID varchar(255) not null,	# MGI:NNNNNN ID for links.
