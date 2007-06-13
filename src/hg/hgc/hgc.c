@@ -207,7 +207,7 @@
 #include "wikiTrack.h"
 #include "omicia.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1296 2007/06/12 21:28:47 hiram Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1297 2007/06/13 22:48:35 donnak Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -13423,7 +13423,7 @@ genericClickHandler(tdb, item, buf);
 }
 
 void doJaxQTL(struct trackDb *tdb, char *item)
-/* Put up info on Quantitative Trait Locus from Jackson Labs. */
+/* Put up info on Quantitative Trait Locus from Jackson Lab. */
 {
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
@@ -13566,7 +13566,7 @@ printTrackHtml(tdb);
 }
 
 void doJaxQTL3(struct trackDb *tdb, char *item)
-/* Put up info on Quantitative Trait Locus from Jackson Labs. */
+/* Put up info on Quantitative Trait Locus from Jackson Lab. */
 {
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;

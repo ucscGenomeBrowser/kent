@@ -6,7 +6,7 @@
 #define JAXQTL_H
 
 struct jaxQTL
-/* Quantitative Trait Loci from Jackson Labs / Mouse Genome Informatics */
+/* Quantitative Trait Loci from Jackson Lab / Mouse Genome Informatics */
     {
     struct jaxQTL *next;  /* Next in singly linked list. */
     char *chrom;	/* Human chromosome or FPC contig */

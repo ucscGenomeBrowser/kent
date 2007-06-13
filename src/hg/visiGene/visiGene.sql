@@ -126,7 +126,7 @@ CREATE TABLE copyright (
 # Source of data - an external database, a contributor, etc.
 CREATE TABLE submissionSource (
     id int auto_increment not null, # ID of submission source"
-    name varchar(255) not null,     # Short name: Jackson Labs, Paul Gray, etc.
+    name varchar(255) not null,     # Short name: Jackson Lab, Paul Gray, etc.
     acknowledgement longtext not null, # Something extra to put in the caption after copyright.
     setUrl longblob not null,	# URL for whole set
     itemUrl longblob not null,	# URL for item.  Put %s where image.submitId should go

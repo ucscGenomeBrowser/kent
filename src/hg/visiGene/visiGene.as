@@ -90,7 +90,7 @@ table submissionSource
 "Source of data - an external database, a contributor, etc."
     (
     int id;			"ID of submission source"
-    string name;		"Short name: Jackson Labs, Paul Gray, etc."
+    string name;		"Short name: Jackson Lab, Paul Gray, etc."
     string acknowledgement;	"Something extra to put in the caption after copyright"
     lstring sourceUrl;		"URL for image source"
     lstring itemUrl;		"URL for item.  Put %s where imageFile.submitId should go"
