@@ -79,13 +79,13 @@ viewLimits .2:1.6
     subTrack phyloP
     shortLabel Vertebrate
     longLabel Vertebrate PhyloP Conservation P-Values
-    priority 1
+    priority 2
 
     track phyloP28wayPlacMammal
     subTrack phyloP
     shortLabel Plac Mammal
     longLabel Placental Mammal PhyloP Conservation P-Values
-    priority 2
+    priority 1
 
 release alpha
 track phastConsHq
@@ -107,13 +107,13 @@ type wig 0.0 1.0
     subTrack phastConsHq
     shortLabel Vertebrate
     longLabel Vertebrate HQ PhastCons Conservation (18 species)
-    priority 1
+    priority 2
 
     track phastCons28wayHqPlacMammal
     subTrack phastConsHq
     shortLabel Plac Mammal
     longLabel Placental Mammal HQ PhastCons Conservation (8 species)
-    priority 2
+    priority 1
 
 release alpha
 track multiz28way
@@ -122,7 +122,7 @@ longLabel Vertebrate Multiz Alignment & PhastCons Conservation (28 Species)
 irows on
 summary multiz28waySummary
 frames multiz28wayFrames
-wiggle phastCons28way Vertebrate Vertebrate phastCons28wayPlacMammal Plac_Mammal Placental_Mammal
+wiggle phastCons28wayPlacMammal Plac_Mammal Placental_Mammal phastCons28way Vertebrate Vertebrate 
 spanList 1
 maxHeightPixels 100:40:11
 autoScaleDefault Off
@@ -158,14 +158,14 @@ type bed 5 .
     shortLabel Vertebrate
     longLabel PhastCons Vertebrate Conserved Elements, 28-way Multiz Alignment
     color 170,100,50
-    priority 1
+    priority 2
 
     track phastConsElements28wayPlacMammal
     subTrack mostConserved28way
     shortLabel Plac Mammal
     longLabel PhastCons Placental Mammal Conserved Elements, 28-way Multiz Alignment
     color 100,50,170
-    priority 2
+    priority 1
 
 track multiz17way
 shortLabel Conservation
