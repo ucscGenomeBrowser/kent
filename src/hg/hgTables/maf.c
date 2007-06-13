@@ -15,7 +15,7 @@
 #include "hgMaf.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: maf.c,v 1.11 2007/06/13 17:28:04 heather Exp $";
+static char const rcsid[] = "$Id: maf.c,v 1.12 2007/06/13 17:35:22 heather Exp $";
 
 boolean isMafTable(char *database, struct trackDb *track, char *table)
 /* Return TRUE if table is maf. */
@@ -24,7 +24,7 @@ char setting[128], *p = setting;
 
 if (track == NULL)
     return FALSE;
-if (sameString(track->type, ""))
+if (isEmpty(track->type))
     return FALSE;
 safecpy(setting, sizeof setting, track->type);
 char *type = nextWord(&p);
