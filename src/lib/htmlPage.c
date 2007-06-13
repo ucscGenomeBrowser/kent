@@ -23,7 +23,7 @@
 #include "net.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: htmlPage.c,v 1.34 2007/06/13 18:18:36 kuhn Exp $";
+static char const rcsid[] = "$Id: htmlPage.c,v 1.35 2007/06/13 18:20:38 kuhn Exp $";
 
 void htmlStatusFree(struct htmlStatus **pStatus)
 /* Free up resources associated with status */
@@ -1104,7 +1104,7 @@ asciiEntityDecode(url, url, strlen(url));
 if (startsWith("http:", url) || startsWith("https:", url))
     return url;
 
-/* If it's got a colon, but no http or https, then its some
+/* If it's got a colon, but no http or https, then it's some
  * protocol we don't understand, like a mailto.  Just return NULL. */
 if (strchr(url, ':') != NULL)
     {
