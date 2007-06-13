@@ -133,10 +133,6 @@ if ( $choice == "next" ) then
   # put the top db at the bottom of the list
   set list=`grep -v $todaysDb $outPath/databaseAdayList`
   echo $list $todaysDb | sed -e "s/ /\n/g" > $outPath/databaseAdayList
-
-  # give the file the correct permissions
-  # complains when someone else runs it 
-  # chmod 774 $outPath/databaseAdayList
   exit 0
 endif
 
