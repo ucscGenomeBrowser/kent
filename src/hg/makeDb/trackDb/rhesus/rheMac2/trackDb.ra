@@ -5,6 +5,7 @@ group map
 priority 9
 visibility hide
 color 150,0,0
+type ctgPos
 
 track exoniphy
 shortLabel Exoniphy
