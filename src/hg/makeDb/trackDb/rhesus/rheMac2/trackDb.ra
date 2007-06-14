@@ -261,3 +261,19 @@ visibility hide
 spectrum on
 type netAlign rheMac2 chainSelf
 otherDb rheMac2
+
+track atom98091
+shortLabel atom98091 
+longLabel atom98091 (canFam2=orange,mm8=green,rn4=blue,rheMac2=brick,panTro2=dk blue,hg18=dk green)
+group x
+priority 1.1
+visibility hide
+type bed 6
+
+track atom995
+shortLabel atom995 
+longLabel atom995 (canFam2=orange,mm8=green,rn4=blue,rheMac2=brick,panTro2=dk blue,hg18=dk green)
+group x
+priority 1.1
+visibility hide
+type bed 6

@@ -199,6 +199,22 @@ visibility dense
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 type bed 6 +
 
+track atom98091
+shortLabel atom98091 
+longLabel atom98091 (canFam2=orange,mm8=green,rn4=blue,rheMac2=brick,panTro2=dk blue,hg18=dk green)
+group x
+priority 1.1
+visibility hide
+type bed 6
+
+track atom995
+shortLabel atom995 
+longLabel atom995 (canFam2=orange,mm8=green,rn4=blue,rheMac2=brick,panTro2=dk blue,hg18=dk green)
+group x
+priority 1.1
+visibility hide
+type bed 6
+
 searchTable nscanGene
 searchType genePred
 termRegex chr[0-9a-zA-Z_].*\.[0-9]+\.a
