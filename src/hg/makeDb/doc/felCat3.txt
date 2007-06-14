@@ -1078,3 +1078,40 @@ chmod +x getIrows.sh
     hgLoadMafFrames felCat3 multiz4wayFrames felCat3.mafFrames.gz
 
 
+##########################################################################
+# PHASTCONS (In progress, June 2007, Heather)
+# Using Angie's process from ornAna1.txt
+
+    ssh hgwdev
+    cd /cluster/data/felCat3/bed/multiz4way
+    mkdir phastCons
+    cd phastCons
+
+    # tree_doctor
+    # Does the order matter in the prune-all-but argument?
+    /cluster/bin/phast.new/tree_doctor \
+    --prune-all-but=felCat3,canFam2,mm8,hg18 \
+    /cluster/data/hg18/bed/multiz28way/cons/28way.mod > 4way.mod
+
+    # msa_split
+    # msa_split requires its MAF and FA inputs to contain one sequence each
+    # input is from /cluster/data/felCat3/bed/multiz4way/maf/split*.maf
+    # output is to /san/sanvol1/scratch/felCat3/multiz4way/phastCons/ss
+    ssh kkstore05
+    cd /cluster/data/felCat3/bed/multiz4way/phastCons
+    nice ./doSplitOnFileserver.csh > & split.log &
+    # this could take a few hours
+    # not bothering to restructure as a cluster run (Angie suggested this in
+    # ornAna1.txt)
+
+    # check a single chunk
+    # phyloFit
+    ssh kolossus
+    cd /cluster/data/felCat3/bed/multiz4way/phastCons
+    /cluster/bin/phast.new/phyloFit -i SS -E -p MED -s HKY55 \
+    # phastCons
+    /cluster/bin/phast.new/phastCons --estimate-rho /tmp/estimatedRho.mod \
+    --target-coverage 0.005 --expected-length 12 --no-post-probs \
+    /san/sanvol1/scratch/felCat3/multiz4way/phastCons/ss/split873/chr3.30000001-40000000.ss ../4way.mod
+    # (rho = ??))
+
