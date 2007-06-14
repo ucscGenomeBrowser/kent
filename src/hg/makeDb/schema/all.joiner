@@ -2593,6 +2593,34 @@ tablesIgnored $apiMel
 tablesIgnored $hg
     acescan
     affyTranscriptome
+    affyTxnPhase3FragsHDF
+    affyTxnPhase3FragsHeLaCyto
+    affyTxnPhase3FragsHeLaNuclear
+    affyTxnPhase3FragsHepG2Cyto
+    affyTxnPhase3FragsHepG2Nuclear
+    affyTxnPhase3FragsJurkat
+    affyTxnPhase3FragsNCCIT
+    affyTxnPhase3FragsPC3
+    affyTxnPhase3FragsSK_N_AS
+    affyTxnPhase3FragsU87MG
+    affyTxnPhase3FragsHeLaTopStrand
+    affyTxnPhase3FragsHeLaBottomStrand
+    affyTxnPhase3FragsHepG2TopStrand
+    affyTxnPhase3FragsHepG2BottomStrand
+    affyTxnPhase3HDF
+    affyTxnPhase3HeLaCyto
+    affyTxnPhase3HeLaNuclear
+    affyTxnPhase3HepG2Cyto
+    affyTxnPhase3HepG2Nuclear
+    affyTxnPhase3Jurkat
+    affyTxnPhase3NCCIT
+    affyTxnPhase3PC3
+    affyTxnPhase3SK_N_AS
+    affyTxnPhase3U87MG
+    affyTxnPhase3HeLabottom_strand
+    affyTxnPhase3HeLatop_strand
+    affyTxnPhase3HepG2bottom_strand
+    affyTxnPhase3HepG2top_strand
     zoom1_affyTranscriptome
     zoom2_affyTranscriptome
     chimpDels
