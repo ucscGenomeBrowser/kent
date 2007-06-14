@@ -16,7 +16,7 @@
 #include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.13 2007/06/14 22:19:40 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.14 2007/06/14 22:36:01 hiram Exp $";
 
 #define NEW_ITEM_SCORE "newItemScore"
 #define NEW_ITEM_STRAND "newItemStrand"
@@ -770,7 +770,7 @@ safef(descriptionKey,ArraySize(descriptionKey),
 AllocVar(newItem);
 newItem->bin = binFromRange(itemStart, itemEnd);
 newItem->chrom = cloneString(chrName);
-newItem->chromStart = itemStart;
+newItem->chromStart = itemStart - 1;
 newItem->chromEnd = itemEnd;
 newItem->name = cloneString(itemName);
 newItem->score = score;
