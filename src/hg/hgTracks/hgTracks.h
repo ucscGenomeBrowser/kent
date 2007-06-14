@@ -561,6 +561,9 @@ Color lfChromColor(struct track *tg, void *item, struct vGfx *vg);
 char *lfMapNameFromExtra(struct track *tg, void *item);
 /* Return map name of item from extra field. */
 
+char *linkedFeaturesName(struct track *tg, void *item);
+/* Return name of item. */
+
 int getFilterColor(char *type, int colorIx);
 /* Get color corresponding to type - MG_RED for "red" etc. */
 
