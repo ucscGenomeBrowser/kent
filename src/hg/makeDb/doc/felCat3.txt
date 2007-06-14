@@ -1089,9 +1089,8 @@ chmod +x getIrows.sh
 
     # tree_doctor
     # Does the order matter in the prune-all-but argument?
-    /cluster/bin/phast.new/tree_doctor \
-    --prune-all-but=felCat3,canFam2,mm8,hg18 \
-    /cluster/data/hg18/bed/multiz28way/cons/28way.mod > 4way.mod
+    /cluster/bin/phast.new/tree_doctor  --prune-all-but=felCat3,canFam2,mm8,hg18 \
+        /cluster/data/hg18/bed/multiz28way/cons/28way.mod > 4way.mod
 
     # msa_split
     # msa_split requires its MAF and FA inputs to contain one sequence each
@@ -1100,18 +1099,37 @@ chmod +x getIrows.sh
     ssh kkstore05
     cd /cluster/data/felCat3/bed/multiz4way/phastCons
     nice ./doSplitOnFileserver.csh > & split.log &
-    # this could take a few hours
-    # not bothering to restructure as a cluster run (Angie suggested this in
-    # ornAna1.txt)
+    # this took 5.5 hours to create directories split000 - split999
+    # not bothering to restructure as a cluster run (Angie suggested this in ornAna1.txt)
+    # 50k WARNINGs in split.log
+    # make a list of all output (sort each split dir by size)
+    ./makeInput.sh
 
     # check a single chunk
-    # phyloFit
     ssh kolossus
     cd /cluster/data/felCat3/bed/multiz4way/phastCons
-    /cluster/bin/phast.new/phyloFit -i SS -E -p MED -s HKY55 \
-    # phastCons
+    /cluster/bin/phast.new/phyloFit -i SS -E -p MED -s HKY85 \
+        --tree "`cat ../tree-commas.nh`" \
+        /san/sanvol1/scratch/felCat3/multiz4way/phastCons/ss/split495/scaffold_216010.1-806250.ss \
+	-o phyloFit.tree
+
+    # get value of rho
+    ssh kolossus
+    mkdir runs.cons
+    cd run.cons
     /cluster/bin/phast.new/phastCons --estimate-rho /tmp/estimatedRho.mod \
-    --target-coverage 0.005 --expected-length 12 --no-post-probs \
-    /san/sanvol1/scratch/felCat3/multiz4way/phastCons/ss/split873/chr3.30000001-40000000.ss ../4way.mod
-    # (rho = ??))
+        --target-coverage 0.005 --expected-length 12 --no-post-probs \
+        /san/sanvol1/scratch/felCat3/multiz4way/phastCons/ss/split495/scaffold_216010.1-806250.ss ../4way.mod
+    # rho = 0.226082
+
+    # template goes here (uses rho)
+
+    # run all
+    mv ../in.list .
+    gensub2 in.list single template jobList
+
+    para create jobList
+    para try
+    para check
+    para push 
 
