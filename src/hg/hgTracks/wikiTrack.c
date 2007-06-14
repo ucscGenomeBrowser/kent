@@ -9,11 +9,11 @@
 #include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.5 2007/06/14 22:21:13 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.6 2007/06/14 22:56:38 aamp Exp $";
 
 
 static void wikiTrackMapItem(struct track *tg, void *item,
-	char *itemName, int start, int end, int x, int y, int width, int height)
+	char *itemName, char *mapItemName, int start, int end, int x, int y, int width, int height)
 /* create a special map box item with different i=hgcClickName and
  * pop-up statusLine with the item name
  */
