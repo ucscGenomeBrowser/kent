@@ -59,30 +59,35 @@ if ( $#argv == 4 ) then
 endif
 
 # check if it is a file or a tablename and set list
-file $tableinput | egrep "ASCII text" > /dev/null
+file $tableinput | egrep -q "ASCII text"
 if ( ! $status ) then
-  # there is a file
+  set tables=`cat $tableinput`
   set list="true"
-  cat $tableinput | grep % > /dev/null
-  if ( ! $status ) then
-    # there are wildcards
-    set wildcards=`cat $tableinput | grep %`
-    set tables=`cat $tableinput`
-    foreach table ( $wildcards )
-      set expand=`hgsql -N -e 'SHOW TABLES LIKE "'$table'"' $db`
-      set substitute=`echo $table $expand`
-      set tables=`echo $tables | sed -e "s/$table/$substitute/"`
-    end
-  else
-    set tables=`cat $tableinput`
-  endif
 else
-  set tables=$tableinput
-  echo $tables | grep % > /dev/null
-  if ( ! $status ) then
-    set tables=`hgsql -N -e 'SHOW TABLES LIKE "'$tables'"' $db`
-    set list="true"
-  endif
+  set tables=`echo $tableinput`
+endif
+
+# check for wildcards
+echo $tables | sed -e "s/ /\n/g" | grep -q % 
+if ( ! $status ) then
+  # there are wildcards
+  set list="true"
+  set wildcards=`echo $tables | sed -e "s/ /\n/g" | grep %`
+  foreach wildcard ( $wildcards )
+    # find all tables that match
+    set tableString=`echo $wildcard | sed -e "s/%//g"`
+    # this will only work if the wildcard is at the end
+    # put in a trap here for a warning.
+    set wildTables=`getRRdumpfile.csh $db $machine1 | xargs awk '{print $1}' \
+      | egrep $tableString`
+    if ( "" != $machine2 ) then
+      set wildTables2=`getRRdumpfile.csh $db $machine2 | xargs awk '{print $1}' \
+        | grep $tableString`
+      set expand=`echo $wildTables $wildTables2 | sed -e "s/ /\n/"g | sort -u `  
+    endif
+    set substitute=`echo $wildcard $expand`
+    set tables=`echo $tables | sed -e "s/$wildcard/$substitute/"`
+  end
 endif
 
 # make headers for output table
@@ -103,41 +108,47 @@ echo
 
 # print headers
 if ( "" == $machine2 ) then
-    # print top header
-    echo "xxxxx" "$machine1" \
-    | gawk '{ printf("%-'${length}'s %17s \n", $1, $2) }' \
-    | sed -e "s/xxxxx/     /"
-    echo "$offset2 " "-----------------" \
-    | gawk '{ printf("%-'${length}'s %17s \n", $1, $2) }' \
-    | sed -e "s/x/ /g"
-    
-    # print second header
-    echo "table" "Mbytes" "index" \
-    | gawk '{ printf("%-'${length}'s %8s %8s \n", $1, $2, $3) }'
-    echo "$offset" "--------" "--------" \
-    | gawk '{ printf("%-'${length}'s %8s %8s \n", $1, $2, $3) }'
+  # print top header
+  echo "xxxxx" "$machine1" \
+  | gawk '{ printf("%-'${length}'s %17s \n", $1, $2) }' \
+  | sed -e "s/xxxxx/     /"
+  echo "$offset2 " "-----------------" \
+  | gawk '{ printf("%-'${length}'s %17s \n", $1, $2) }' \
+  | sed -e "s/x/ /g"
+  
+  # print second header
+  echo "table" "Mbytes" "index" \
+  | gawk '{ printf("%-'${length}'s %8s %8s \n", $1, $2, $3) }'
+  echo "$offset" "--------" "--------" \
+  | gawk '{ printf("%-'${length}'s %8s %8s \n", $1, $2, $3) }'
 else
-    # print top header
-    echo "xxxxx" "$machine1" "$machine2" \
-    | gawk '{ printf("%-'${length}'s %17s %17s \n", $1, $2, $3) }' \
-    | sed -e "s/xxxxx/     /"
-    echo "$offset2 " "-----------------" "-----------------" \
-    | gawk '{ printf("%-'${length}'s %17s %-17s \n", $1, $2, $3) }' \
-    | sed -e "s/x/ /g"
-    
-    # print second header
-    echo "table" "Mbytes" "index" "Mbytes" "index" \
-    | gawk '{ printf("%-'${length}'s %8s %8s %8s %8s \n", \
-    $1, $2, $3, $4, $5) }'
-    echo "$offset" "--------" "--------" "--------" "--------" \
-    | gawk '{ printf("%-'${length}'s %-8s %-8s %-8s %-8s \n", \
+  # print top header
+  echo "xxxxx" "$machine1" "$machine2" \
+  | gawk '{ printf("%-'${length}'s %17s %17s \n", $1, $2, $3) }' \
+  | sed -e "s/xxxxx/     /"
+  echo "$offset2 " "-----------------" "-----------------" \
+  | gawk '{ printf("%-'${length}'s %17s %-17s \n", $1, $2, $3) }' \
+  | sed -e "s/x/ /g"
+  
+  # print second header
+  echo "table" "Mbytes" "index" "Mbytes" "index" \
+  | gawk '{ printf("%-'${length}'s %8s %8s %8s %8s \n", \
+  $1, $2, $3, $4, $5) }'
+  echo "$offset" "--------" "--------" "--------" "--------" \
+  | gawk '{ printf("%-'${length}'s %-8s %-8s %-8s %-8s \n", \
     $1, $2, $3, $4, $5) }'
 endif
 
+# process sizes
 foreach table ($tables)
-  # checkfor place-saver on wildcards
-  echo $table | egrep "%" > /dev/null
+  # print place-saver for wildcards
+  echo $table | egrep -q %
   if ( ! $status ) then
+    echo $table | egrep -q ".%."
+    if ( ! $status ) then
+      echo " -${table}-  internal wildcard not supported"
+      continue
+    endif
     echo " -${table}-"
     continue
   endif
@@ -156,25 +167,29 @@ foreach table ($tables)
     set firstIndex=`echo $firstIndex | awk '{printf("%0.2f", $1/1000000) }'`
   endif 
 
+  # process second machine, if needed
   if ( "" != $machine2) then
-    set second=`getRRtableStatus.csh $db $table Data_length $machine1`
+    set second=`getRRtableStatus.csh $db $table Data_length $machine2`
     if ( $status ) then
       set second=0
     else
       set second=`echo $second | awk '{printf("%0.2f", $1/1000000) }'`
     endif 
     
-    set secondIndex=`getRRtableStatus.csh $db $table Index_length $machine1`
+    set secondIndex=`getRRtableStatus.csh $db $table Index_length $machine2`
     if ( $status ) then
       set secondIndex=0
     else
       set secondIndex=`echo $secondIndex | awk '{printf("%0.2f", $1/1000000) }'`
     endif 
-
   endif 
+
+  # increment totals
   # increment index separately?
   set mach1Tot=`echo $mach1Tot $first $firstIndex | awk '{print $1+$2+$3}'`
   set mach2Tot=`echo $mach2Tot $second $secondIndex | awk '{print $1+$2+$3}'`
+
+  # output results
   if ( "" == $machine2 ) then
       # print results
       echo "$table" "$first" "$firstIndex" \
