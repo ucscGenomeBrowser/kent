@@ -13,7 +13,7 @@
 #include "hgColors.h"
 #include "wikiLink.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.127 2007/06/14 13:53:50 heather Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.128 2007/06/14 19:25:55 lowe Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -696,7 +696,11 @@ char *genome = hGenomeOrArchive(db);
 char *selAssembly = NULL;
 
 if (genome == NULL)
+#ifdef LOWELAB
+    genome = "Pyrococcus furiosus";
+#else 
     genome = "Human";
+#endif
 for (cur = dbList; cur != NULL; cur = cur->next)
     {
     /* Only for this genome */
