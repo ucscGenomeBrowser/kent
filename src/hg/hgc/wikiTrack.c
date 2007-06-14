@@ -16,7 +16,7 @@
 #include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.15 2007/06/14 22:41:29 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.16 2007/06/14 22:47:35 hiram Exp $";
 
 #define NEW_ITEM_SCORE "newItemScore"
 #define NEW_ITEM_STRAND "newItemStrand"
@@ -630,7 +630,7 @@ else
 	"&nbsp;&nbsp;<B>'%s'</B>&nbsp;&nbsp;''created: ~~~~''<BR /><BR />\n",
 	NEW_ITEM_CATEGORY,
 	    cfgOptionDefault(CFG_WIKI_BROWSER, DEFAULT_BROWSER), database,
-		seqName, winStart, winEnd, database, newPos, itemName);
+		seqName, winStart+1, winEnd, database, newPos, itemName);
     }
 
 if (sameWord(NEW_ITEM_COMMENT_DEFAULT,newComments))
