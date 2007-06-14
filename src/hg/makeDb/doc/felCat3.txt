@@ -1115,7 +1115,7 @@ chmod +x getIrows.sh
 
     # get value of rho
     ssh kolossus
-    mkdir runs.cons
+    mkdir run.cons
     cd run.cons
     /cluster/bin/phast.new/phastCons --estimate-rho /tmp/estimatedRho.mod \
         --target-coverage 0.005 --expected-length 12 --no-post-probs \
@@ -1125,6 +1125,8 @@ chmod +x getIrows.sh
     # template goes here (uses rho)
 
     # run all
+    ssh pk
+    cd /cluster/data/felCat3/bed/multiz4way/phastCons/run.cons
     mv ../in.list .
     gensub2 in.list single template jobList
 
@@ -1132,4 +1134,26 @@ chmod +x getIrows.sh
     para try
     para check
     para push 
+
+    para time
+    # Completed: 103985 of 103985 jobs
+    # CPU time in finished jobs:      11039s     183.98m     3.07h    0.13d 0.000 y
+    # IO & Wait Time:               1170173s   19502.89m   325.05h   13.54d 0.037 y
+    # Average job time:                  11s       0.19m     0.00h    0.00d
+    # Longest running job:                0s       0.00m     0.00h    0.00d
+    # Longest finished job:             177s       2.95m     0.05h    0.00d
+    # Submission to last job:          7596s     126.60m     2.11h    0.09d
+
+    # create Most Conserved track
+    ssh kolossus
+    cd /san/sanvol1/scratch/felCat3/multiz4way/phastCons
+    find ./bed -name "*.bed" \
+    | sed -e "s/\// x /g" -e "s/\./ y /g" -e "s/-/ z /g" \
+    | sort -k7,7 -k9,9n \
+    | sed -e "s/ x /\//g" -e "s/ y /\./g" -e "s/ z /-/g" \
+    | xargs cat \
+    | awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' \
+    | /cluster/bin/scripts/lodToBedScore /dev/stdin >
+    phastConsElements4way.bed
+
 
