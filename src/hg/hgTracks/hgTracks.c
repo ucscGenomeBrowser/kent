@@ -118,7 +118,7 @@
 #endif
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1348 2007/06/13 19:37:34 kuhn Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1349 2007/06/14 00:09:03 braney Exp $";
 
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
@@ -2911,6 +2911,31 @@ slSort(&itemList, bedCmp);
 tg->items = itemList;
 }
 
+void atomDrawSimpleAt(struct track *tg, void *item, 
+	struct vGfx *vg, int xOff, int y, 
+	double scale, MgFont *font, Color color, enum trackVisibility vis);
+
+int atomTotalHeight(struct track *tg, enum trackVisibility vis)
+/* Most fixed height track groups will use this to figure out the height 
+ * they use. */
+{
+return tgFixedTotalHeightOptionalOverflow(tg,vis, 6*6, 6*6, FALSE);
+}
+
+int atomItemHeight(struct track *tg, void *item)
+/* Return item height for fixed height track. */
+{
+return 6 * 6;
+}
+
+static void atomMethods(struct track *tg)
+/* Fill in track methods for dbRIP tracks */
+{
+bedMethods(tg);
+tg->drawItemAt = atomDrawSimpleAt;
+tg->itemHeight = atomItemHeight;
+tg->totalHeight = atomTotalHeight;
+}
 
 static void dbRIPMethods(struct track *tg)
 /* Fill in track methods for dbRIP tracks */
@@ -5118,6 +5143,68 @@ void bedLoadItem(struct track *tg, char *table, ItemLoader loader)
 /* Generic tg->item loader. */
 {
 bedLoadItemByQuery(tg, table, NULL, loader);
+}
+
+
+void atomDrawSimpleAt(struct track *tg, void *item, 
+	struct vGfx *vg, int xOff, int y, 
+	double scale, MgFont *font, Color color, enum trackVisibility vis)
+/* Draw a single simple bed item at position. */
+{
+struct bed *bed = item;
+int heightPer = tg->heightPer;
+int x1 = round((double)((int)bed->chromStart-winStart)*scale) + xOff;
+int x2 = round((double)((int)bed->chromEnd-winStart)*scale) + xOff;
+int w;
+struct trackDb *tdb = tg->tdb;
+int scoreMin = atoi(trackDbSettingOrDefault(tdb, "scoreMin", "0"));
+int scoreMax = atoi(trackDbSettingOrDefault(tdb, "scoreMax", "1000"));
+char *directUrl = trackDbSetting(tdb, "directUrl");
+boolean withHgsid = (trackDbSetting(tdb, "hgsid") != NULL);
+//boolean thickDrawItem = (trackDbSetting(tdb, "thickDrawItem") != NULL);
+int colors[6] =
+{
+orangeColor,
+greenColor,
+blueColor,
+brickColor,
+darkBlueColor,
+darkGreenColor } ;
+
+if (tg->itemColor != NULL)
+    color = tg->itemColor(tg, bed, vg);
+else
+    {
+    if (tg->colorShades)
+	color = tg->colorShades[grayInRange(bed->score, scoreMin, scoreMax)];
+    }
+
+w = x2-x1;
+if (w < 1)
+    w = 1;
+//if (color)
+    {
+    int ii;
+
+    for(ii=0; ii < 6; ii++)
+	{
+	if (bed->score & (1 << ii))
+	    vgBox(vg, x1, y+(ii*6), w, 6, colors[ii]);
+	}
+    if (tg->drawName && vis != tvSquish)
+	{
+	/* Clip here so that text will tend to be more visible... */
+	char *s = tg->itemName(tg, bed);
+	w = x2-x1;
+	if (w > mgFontStringWidth(font, s))
+	    {
+	    Color textColor = vgContrastingColor(vg, color);
+	    vgTextCentered(vg, x1, y, w, heightPer, textColor, font, s);
+	    }
+	mapBoxHgcOrHgGene(bed->chromStart, bed->chromEnd, x1, y, x2 - x1, heightPer,
+		tg->mapName, tg->mapItemName(tg, bed), NULL, directUrl, withHgsid);
+	}
+    }
 }
 
 
@@ -13074,6 +13161,9 @@ registerTrackHandler("blastHg17KG", blastMethods);
 registerTrackHandler("blastHg18KG", blastMethods);
 registerTrackHandler("blatHg16KG", blastMethods);
 registerTrackHandler("blatzHg17KG", blatzMethods);
+registerTrackHandler("atom995", atomMethods);
+registerTrackHandler("atom98091", atomMethods);
+registerTrackHandler("atom13480779", atomMethods);
 registerTrackHandler("mrnaMapHg17KG", blatzMethods);
 registerTrackHandler("blastSacCer1SG", blastMethods);
 registerTrackHandler("tblastnHg16KGPep", blastMethods);
