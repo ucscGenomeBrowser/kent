@@ -118,7 +118,7 @@
 #endif
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1349 2007/06/14 00:09:03 braney Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1350 2007/06/14 22:27:26 aamp Exp $";
 
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
@@ -1892,7 +1892,7 @@ for (lf = lfs->features; lf != NULL; lf = lf->next)
 	int x1 = round((double)((int)lf->start-winStart)*scale) + xOff;
 	int x2 = round((double)((int)lf->end-winStart)*scale) + xOff;
 	int w = x2-x1;
-	tg->mapItem(tg, lf, lf->name, lf->start, lf->end, x1, y, w, tg->heightPer);
+	tg->mapItem(tg, lf, lf->name, tg->mapItemName(tg, item), lf->start, lf->end, x1, y, w, tg->heightPer);
 	}
     }
 lfSeriesDrawConnecter(lfs, vg, prevEnd, lfs->end, scale, xOff, midY, 
@@ -1956,7 +1956,7 @@ boolean nextItemCompatible(struct track *tg)
 return (withNextExonArrows && tg->nextItemButtonable && tg->nextPrevItem);
 }
 
-static void genericMapItem(struct track *tg, void *item, char *itemName, int start, int end,
+static void genericMapItem(struct track *tg, void *item, char *itemName, char *mapItemName, int start, int end,
 			    int x, int y, int width, int height)
 /* This is meant to be used by genericDrawItems to set to tg->mapItem in */
 /* case tg->mapItem isn't set to anything already. */
@@ -1964,12 +1964,12 @@ static void genericMapItem(struct track *tg, void *item, char *itemName, int sta
 char *directUrl = trackDbSetting(tg->tdb, "directUrl");
 boolean withHgsid = (trackDbSetting(tg->tdb, "hgsid") != NULL);
 mapBoxHgcOrHgGene(start, end, x, y, width, height, tg->mapName, 
-			  itemName, itemName, directUrl, withHgsid);
+			  mapItemName, itemName, directUrl, withHgsid);
 }
 
 void genericDrawNextItemStuff(struct track *tg, struct vGfx *vg, enum trackVisibility vis, struct slList *item, 
 			      int x2, int textX, int y, int heightPer,
-			      boolean snapLeft, Color color, char *name)
+			      boolean snapLeft, Color color)
 /* After the item is drawn in genericDrawItems, draw next/prev item related */
 /* buttons and the corresponding mapboxes. */
 {
@@ -1998,30 +1998,36 @@ if (vis == tvPack)
     int w = x2-textX;
     if (lButton)
 	{
-	tg->mapItem(tg, item, name, s, e, textX, y, insideX-textX, heightPer);
+	tg->mapItem(tg, item, tg->itemName(tg, item), tg->mapItemName(tg, item), 
+		    s, e, textX, y, insideX-textX, heightPer);
 	tg->nextPrevItem(tg, item, insideX, y, buttonW, heightPer, FALSE);
 	if (rButton)
 	    {
-	    tg->mapItem(tg, item, name, s, e, insideX + buttonW, y, x2 - (insideX + 2*buttonW), heightPer);
+	    tg->mapItem(tg, item, tg->itemName(tg, item), tg->mapItemName(tg, item), 
+			s, e, insideX + buttonW, y, x2 - (insideX + 2*buttonW), heightPer);
 	    tg->nextPrevItem(tg, item, x2-buttonW, y, buttonW, heightPer, TRUE);			    
 	    }
 	else 
-	    tg->mapItem(tg, item, name, s, e, insideX + buttonW, y, x2 - (insideX + buttonW), heightPer);
+	    tg->mapItem(tg, item, tg->itemName(tg, item), tg->mapItemName(tg, item), 
+			s, e, insideX + buttonW, y, x2 - (insideX + buttonW), heightPer);
 	}
     else if (snapLeft && rButton)
 	/* This is a special case where there's a next-item button, NO */
 	/* prev-item button, AND the gene name is drawn left of the browser window. */
 	{
-	tg->mapItem(tg, item, name, s, e, textX, y, x2 - buttonW - textX, heightPer);
+	tg->mapItem(tg, item, tg->itemName(tg, item), tg->mapItemName(tg, item), 
+		    s, e, textX, y, x2 - buttonW - textX, heightPer);
 	tg->nextPrevItem(tg, item, x2-buttonW, y, buttonW, heightPer, TRUE);			
 	}
     else if (rButton)
 	{
-	tg->mapItem(tg, item, name, s, e, textX, y, w - buttonW, heightPer);
+	tg->mapItem(tg, item, tg->itemName(tg, item), tg->mapItemName(tg, item), 
+		    s, e, textX, y, w - buttonW, heightPer);
 	tg->nextPrevItem(tg, item, x2-buttonW, y, buttonW, heightPer, TRUE);			
 	}
     else
-	tg->mapItem(tg, item, name, s, e, textX, y, w, heightPer);
+	tg->mapItem(tg, item, tg->itemName(tg, item), tg->mapItemName(tg, item), 
+		    s, e, textX, y, w, heightPer);
     }
 /* Full mode is a little easier to deal with. */
 else if (vis == tvFull)
@@ -2029,7 +2035,8 @@ else if (vis == tvFull)
     int geneMapBoxX = insideX;
     int geneMapBoxW = insideWidth;
     /* Draw the first gene mapbox, in the left margin. */
-    tg->mapItem(tg, item, name, s, e, trackPastTabX, y, insideX - trackPastTabX, heightPer);
+    tg->mapItem(tg, item, tg->itemName(tg, item), tg->mapItemName(tg, item), 
+		s, e, trackPastTabX, y, insideX - trackPastTabX, heightPer);
     /* Make the button mapboxes. */
     if (lButton)
 	tg->nextPrevItem(tg, item, insideX, y, buttonW, heightPer, FALSE);
@@ -2048,7 +2055,8 @@ else if (vis == tvFull)
 	}
     else if (rButton)
 	geneMapBoxW -= buttonW;
-    tg->mapItem(tg, item, name, s, e, geneMapBoxX, y, geneMapBoxW, heightPer);
+    tg->mapItem(tg, item, tg->itemName(tg, item), tg->mapItemName(tg, item), 
+		s, e, geneMapBoxX, y, geneMapBoxW, heightPer);
     }
 }
 
@@ -2172,10 +2180,11 @@ if (vis == tvPack || vis == tvSquish)
 		{
 		if (nextItemCompatible(tg))
 		    genericDrawNextItemStuff(tg, vg, vis, item, x2, textX, y, heightPer, snapLeft, 
-					     color, tg->mapItemName(tg, item));
+					     color);
 		else
 		    {
-		    tg->mapItem(tg, item, tg->mapItemName(tg, item), s, e, textX, y, w, heightPer);
+		    tg->mapItem(tg, item, tg->itemName(tg, item), 
+				tg->mapItemName(tg, item), s, e, textX, y, w, heightPer);
 		    }
 		}
             }
@@ -2223,7 +2232,7 @@ else
 	    /* them here if we're drawing nextItem buttons. */
 	    if (nextItemCompatible(tg))
 		genericDrawNextItemStuff(tg, vg, vis, item, -1, -1, y, heightPer, FALSE, 
-					 color, tg->mapItemName(tg, item));
+					 color);
 	    y += lineHeight;
 	    }
 	} 
@@ -9120,7 +9129,8 @@ for (item = track->items; item != NULL; item = item->next)
 	    track->mapItem = genericMapItem;
         if (!track->mapsSelf)
             {
-	    track->mapItem(track, item, track->mapItemName(track, item),
+	    track->mapItem(track, item, track->itemName(track, item), 
+			   track->mapItemName(track, item),
 			   track->itemStart(track, item),
 			   track->itemEnd(track, item), trackPastTabX,
 			   y, trackPastTabWidth,height);

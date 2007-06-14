@@ -58,7 +58,7 @@ tg->customPt = heightHash;
 return rowCount;
 }
 
-void altGraphXMapItem(struct track *tg, void *item, char *itemName, int start, int end, 
+void altGraphXMapItem(struct track *tg, void *item, char *itemName, char *mapItemName, int start, int end, 
 		    int x, int y, int width, int height)
 /* Create a link to hgc for altGraphX track */
 {
@@ -174,7 +174,7 @@ if(tg->mapsSelf && tg->mapItem)
 	    textX = insideX - nameWidth;
 	width = width + (x1 - textX);
 	}
-    tg->mapItem(tg, ag, "notUsed", ag->tStart, ag->tEnd, textX, yOff, width, heightPer);
+    tg->mapItem(tg, ag, "notUsed", "notUsed", ag->tStart, ag->tEnd, textX, yOff, width, heightPer);
     }
 
 /* Draw the edges (exons and introns). */

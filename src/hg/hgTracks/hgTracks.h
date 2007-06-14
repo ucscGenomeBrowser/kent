@@ -114,7 +114,7 @@ struct track
     /* Get color for the item's label (optional). */
 
     void (*mapItem)(struct track *tg, void *item, 
-    	char *itemName, int start, int end, 
+    	char *itemName, char *mapItemName, int start, int end, 
 	int x, int y, int width, int height); 
     /* Write out image mapping for a given item */
 
@@ -817,8 +817,8 @@ void linkedFeaturesSeriesMethods(struct track *tg);
 void loadMaScoresBed(struct track *tg);
 /* This one loads microarray specific beds (multiple scores). */
 
-void lfsMapItemName(struct track *tg, void *item, char *itemName, int start, int end,
-                    int x, int y, int width, int height);
+void lfsMapItemName(struct track *tg, void *item, char *itemName, char *mapItemName, int start, int end, 
+		    int x, int y, int width, int height);
 
 Color expressionColor(struct track *tg, void *item, struct vGfx *vg,
                       float denseMax, float fullMax);
