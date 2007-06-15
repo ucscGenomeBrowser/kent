@@ -49,7 +49,11 @@
 		    different formats described below.  Three
 		    formats were developed to allow the file to be
 		    written most compactly, depending on the density of
-		    the data:
+		    the data.  When possible, please use the
+		    <B>variableStep</B> or <B>fixedStep</B> data types.
+		    The <B>BED</B> format is the most inefficient format and
+		    is not capable of loading as many data points as the other
+		    two formats.
 		    <UL>
 
 		    <LI> <B>BED</B> format with no declaration line and four columns of data:
@@ -118,12 +122,18 @@
 		    <UL><LI>The BED format is a subset of the previous 
 		    description, with four columns of data:
 <FONT color="#0000FF"><PRE> <I>chrom chromStart chromEnd dataValue</I></PRE></FONT> 
-		    <B>Note:</B> These BED coordinates are zero-based, 
-		    half-open. 
+		    <B>Note:</B> These BED coordinates are
+		    <A HREF="../../FAQ/FAQtracks#tracks1">zero-based,
+		    half-open,</A> unlike the 1-relative coordinates for the
+		    <B>variableStep</B> and <B>fixedStep</B> formats.
 		    <P>
 		    In many cases this format will be too verbose to
-		    conveniently specify a large number of data
-		    values.  Two other two methods of specifying
+		    conveniently specify a large number of data values.
+		    When possible, please use the <B>variableStep</B> or
+		    <B>fixedStep</B> data types.  The <B>BED</B> format
+		    is the most inefficient format and is not capable of
+		    loading as many data points as the other two formats.
+		    Two other two methods of specifying
 		    data were developed to be more space efficient.</LI>
 <P>
 		    <LI>The <B>variableStep</B> two column data format is the most commonly used
