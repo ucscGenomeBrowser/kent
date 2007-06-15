@@ -13,7 +13,7 @@
 #include "hgColors.h"
 #include "wikiLink.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.128 2007/06/14 19:25:55 lowe Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.129 2007/06/15 21:13:14 hiram Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -141,7 +141,7 @@ if (withHtmlHeader)
     htmlTextOut(newString);
     puts(
 	"	</TITLE>" "\n"
-	"	<LINK REL=\"STYLESHEET\" HREF=\"../style/HGStyle.css\">" "\n");
+	"	<LINK REL=\"STYLESHEET\" HREF=\"../style/HGStyle.css\" TYPE=\"text/css\">" "\n");
     if (extraStyle != NULL)
         puts(extraStyle);
     puts(
