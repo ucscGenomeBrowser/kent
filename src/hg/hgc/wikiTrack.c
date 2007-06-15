@@ -16,7 +16,7 @@
 #include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.16 2007/06/14 22:47:35 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.17 2007/06/15 21:16:09 hiram Exp $";
 
 #define NEW_ITEM_SCORE "newItemScore"
 #define NEW_ITEM_STRAND "newItemStrand"
@@ -46,21 +46,21 @@ static void colorMenuOutput()
 hPrintf("<INPUT NAME=\"noName\" VALUE=\"\" SIZE=1 STYLE=\"display:none;\" >\n");
 
 hPrintf("<SELECT NAME=\"itemColor\" style=\"width:8em; background-color:#000000;\" %s>\n", colorMenuJS);
-hPrintf("<OPTION SELECTED VALUE = \"#000000\" style=\"background-color:#000000;\" >\n");
-hPrintf("<OPTION value = \"#333333\" style=\"background-color:#333333;\" >\n");
-hPrintf("<OPTION VALUE = \"#555555\" style=\"background-color:#555555;\" >\n");
-hPrintf("<OPTION VALUE = \"#777777\" style=\"background-color:#777777;\" >\n");
-hPrintf("<OPTION VALUE = \"#999999\" style=\"background-color:#999999;\" >\n");
-hPrintf("<OPTION VALUE = \"#bbbbbb\" style=\"background-color:#bbbbbb;\" >\n");
-hPrintf("<OPTION VALUE = \"#dddddd\" style=\"background-color:#dddddd;\" >\n");
-hPrintf("<OPTION VALUE = \"#ff0000\" style=\"background-color:#ff0000;\" >\n");
-hPrintf("<OPTION VALUE = \"#dd2200\" style=\"background-color:#dd2200;\" >\n");
-hPrintf("<OPTION VALUE = \"#bb4400\" style=\"background-color:#bb4400;\" >\n");
-hPrintf("<OPTION VALUE = \"#996600\" style=\"background-color:#996600;\" >\n");
-hPrintf("<OPTION VALUE = \"#778800\" style=\"background-color:#778800;\" >\n");
-hPrintf("<OPTION VALUE = \"#55aa00\" style=\"background-color:#55aa00;\" >\n");
-hPrintf("<OPTION VALUE = \"#33cc00\" style=\"background-color:#33cc00;\" >\n");
-hPrintf("<OPTION VALUE = \"#00ff00\" style=\"background-color:#00ff00;\" >\n");
+hPrintf("<OPTION SELECTED VALUE = \"#000000\" style=\"background-color:#000000;\" >black</OPTION>\n");
+hPrintf("<OPTION value = \"#333333\" style=\"background-color:#333333;\" ><FONT color=\"#333333\">gray 3</FONT></OPTION>\n");
+hPrintf("<OPTION VALUE = \"#555555\" style=\"background-color:#555555;\" >gray 5</OPTION>\n");
+hPrintf("<OPTION VALUE = \"#777777\" style=\"background-color:#777777;\" >gray 7</OPTION>\n");
+hPrintf("<OPTION VALUE = \"#999999\" style=\"background-color:#999999;\" >gray 9</OPTION>\n");
+hPrintf("<OPTION VALUE = \"#bbbbbb\" style=\"background-color:#bbbbbb;\" >gray 11</OPTION>\n");
+hPrintf("<OPTION VALUE = \"#dddddd\" style=\"background-color:#dddddd;\" >gray 13</OPTION>\n");
+hPrintf("<OPTION VALUE = \"#ff0000\" style=\"background-color:#ff0000;\" >red</OPTION>\n");
+hPrintf("<OPTION VALUE = \"#dd2200\" style=\"background-color:#dd2200;\" >red 13 green 2</OPTION>\n");
+hPrintf("<OPTION VALUE = \"#bb4400\" style=\"background-color:#bb4400;\" >red 11 green 4</OPTION>\n");
+hPrintf("<OPTION VALUE = \"#996600\" style=\"background-color:#996600;\" >red 9 green 6</OPTION>\n");
+hPrintf("<OPTION VALUE = \"#778800\" style=\"background-color:#778800;\" >red 7 green 8</OPTION>\n");
+hPrintf("<OPTION VALUE = \"#55aa00\" style=\"background-color:#55aa00;\" >red 5 green 10</OPTION>\n");
+hPrintf("<OPTION VALUE = \"#33cc00\" style=\"background-color:#33cc00;\" >red 3 green 12</OPTION>\n");
+hPrintf("<OPTION VALUE = \"#00ff00\" style=\"background-color:#00ff00;\" >green</OPTION>\n");
 hPrintf("</SELECT>\n");
 }
 
@@ -314,6 +314,10 @@ hPrintf("<B>Last update:&nbsp;</B>%s<BR />\n", item->lastModifiedDate);
 if ((NULL != userName) && sameWord(userName, item->owner))
     {
     startEditForm(G_DELETE_WIKI_ITEM);
+    char idString[128];
+    safef(idString, ArraySize(idString), "%d", item->id);
+    cgiMakeHiddenVar("i", idString);
+    hPrintf("\n");
     webPrintLinkTableStart();
     webPrintLinkCellStart();
     hPrintf("Owner '%s' has deletion rights&nbsp;&nbsp;", item->owner);
@@ -325,9 +329,6 @@ if ((NULL != userName) && sameWord(userName, item->owner))
     hPrintf("&nbsp;(no questions asked)");
     webPrintLinkCellEnd();
     webPrintLinkTableEnd();
-    char idString[128];
-    safef(idString, ArraySize(idString), "%d", item->id);
-    cgiMakeHiddenVar("i", idString);
     hPrintf("</FORM>");
     }
 
@@ -365,11 +366,15 @@ else
     else
 	{
 	startEditForm(G_ADD_WIKI_COMMENTS);
+	char idString[128];
+	safef(idString, ArraySize(idString), "%d", item->id);
+	cgiMakeHiddenVar("i", idString);
+	hPrintf("\n");
 	webPrintLinkTableStart();
 	/* first row is a title line */
 	char label[256];
 	safef(label, ArraySize(label),
-	    "<B>'%s' adding comments to item '%s'</B>\n", userName, item->name);
+	    "'%s' adding comments to item '%s'\n", userName, item->name);
 	webPrintWideLabelCell(label, 2);
 	webPrintLinkTableNewRow();
 	/* second row is initial comment/description text entry */
@@ -378,14 +383,20 @@ else
 	cgiMakeTextArea(NEW_ITEM_COMMENT, ADD_ITEM_COMMENT_DEFAULT, 3, 40);
 	webPrintLinkCellEnd();
 	webPrintLinkTableNewRow();
-	webPrintLinkCellStart();
+	/*webPrintLinkCellStart(); more careful explicit alignment */
+	hPrintf("<TD BGCOLOR=\"#%s\" ALIGN=\"CENTER\" VALIGN=\"TOP\">",
+		HG_COL_TABLE);
 	cgiMakeButton("submit", "add comments");
+	hPrintf("</FORM>\n");
+	webPrintLinkCellEnd();
+	/*webPrintLinkCellStart(); doesn't valign center properly */
+	hPrintf("<TD BGCOLOR=\"#%s\" ALIGN=\"CENTER\" VALIGN=\"TOP\">",
+		HG_COL_TABLE);
+	hPrintf("<FORM NAME=\"cancel\" ACTION=\"%s\">", hgTracksName());
+	cgiMakeButton("cancel", "return to tracks display");
+	hPrintf("</FORM>");
 	webPrintLinkCellEnd();
 	webPrintLinkTableEnd();
-	char idString[128];
-	safef(idString, ArraySize(idString), "%d", item->id);
-	cgiMakeHiddenVar("i", idString);
-	hPrintf("</FORM>");
 
 	hPrintf("For extensive edits, it may be more convenient to edit the ");
 	hPrintf("wiki article <A HREF=\"%s/index.php/%s\" TARGET=_blank>%s</A> "
@@ -440,7 +451,7 @@ if (wikiTrackEnabled(&userName) && sameWord("0", wikiItemId))
 	webPrintLinkTableStart();
 	/* first row is a title line */
 	char label[256];
-	safef(label, ArraySize(label), "<B>Create new item, owner: '%s'</B>\n",
+	safef(label, ArraySize(label), "Create new item, owner: '%s'\n",
 	    userName);
 	webPrintWideLabelCell(label, 2);
 	webPrintLinkTableNewRow();
@@ -512,11 +523,15 @@ if (wikiTrackEnabled(&userName) && sameWord("0", wikiItemId))
 	webPrintLinkCellEnd();
 	webPrintLinkTableNewRow();
 	/* seventh row is the submit and cancel buttons */
-	webPrintLinkCellStart();
+	/*webPrintLinkCellStart(); more careful explicit alignment */
+	hPrintf("<TD BGCOLOR=\"#%s\" ALIGN=\"CENTER\" VALIGN=\"TOP\">",
+		HG_COL_TABLE);
 	cgiMakeButton("submit", "create new item");
 	hPrintf("</FORM>");
 	webPrintLinkCellEnd();
-	webPrintLinkCellStart();
+	/*webPrintLinkCellStart(); doesn't valign center properly */
+	hPrintf("<TD BGCOLOR=\"#%s\" ALIGN=\"CENTER\" VALIGN=\"TOP\">",
+		HG_COL_TABLE);
 	hPrintf("<FORM NAME=\"cancel\" ACTION=\"%s\">", hgTracksName());
 	cgiMakeButton("cancel", "cancel");
 	hPrintf("</FORM>");
@@ -575,23 +590,6 @@ struct dyString *content = newDyString(1024);
 /* was nothing changed in the add comments entry box ? */
 if (sameWord(ADD_ITEM_COMMENT_DEFAULT,newComments))
     return;
-
-#ifdef NOT
-struct htmlCookie *cookie;
-char wikiPageUrl[512];
-
-/* must pass the session cookie from the wiki in order to edit */
-AllocVar(cookie);
-cookie->name = cloneString(cfgOption(CFG_WIKI_SESSION_COOKIE));
-cookie->value = cloneString(findCookieData(cookie->name));
-
-/* fetch the edit page to get the wpEditToken, and current contents */
-safef(wikiPageUrl, sizeof(wikiPageUrl), "%s/index.php/%s?action=edit",
-	cfgOptionDefault(CFG_WIKI_URL, NULL), descriptionKey);
-
-char *fullText = htmlSlurpWithCookies(wikiPageUrl,cookie);
-struct htmlPage *page = htmlPageParseOk(wikiPageUrl, fullText);
-#endif
 
 struct htmlPage *page = fetchEditPage(descriptionKey);
 
@@ -711,7 +709,7 @@ if (! wikiTrackEnabled(&userName))
 deleteItem(sqlSigned(wikiItemId));
 hPrintf("<BR />\n");
 hPrintf("<FORM ACTION=\"%s\">", hgTracksName());
-cgiMakeButton("submit", "Return to tracks display");
+cgiMakeButton("submit", "return to tracks display");
 hPrintf("</FORM>");
 hPrintf("<BR />\n");
 cartHtmlEnd();
