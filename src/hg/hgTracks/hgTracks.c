@@ -118,7 +118,7 @@
 #endif
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1350 2007/06/14 22:27:26 aamp Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1351 2007/06/15 21:14:00 hiram Exp $";
 
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
@@ -14414,7 +14414,7 @@ isPrivateHost = hIsPrivateHost();
 htmlPushEarlyHandlers();
 cgiSpoof(&argc, argv);
 htmlSetBackground(hBackgroundImage());
-htmlSetStyle("<LINK REL=\"STYLESHEET\" HREF=\"../style/HGStyle.css\">"); 
+htmlSetStyle("<LINK REL=\"STYLESHEET\" HREF=\"../style/HGStyle.css\" TYPE=\"text/css\">"); 
 oldVars = hashNew(8);
 cartHtmlShell("UCSC Genome Browser v"CGI_VERSION, doMiddle, hUserCookie(), excludeVars, oldVars);
 if (measureTiming)

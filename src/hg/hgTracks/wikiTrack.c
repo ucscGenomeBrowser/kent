@@ -9,7 +9,7 @@
 #include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.6 2007/06/14 22:56:38 aamp Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.7 2007/06/15 21:14:00 hiram Exp $";
 
 
 static void wikiTrackMapItem(struct track *tg, void *item,
@@ -125,7 +125,7 @@ if (wikiTrackEnabled(NULL))
     bed->chromEnd = winEnd;
     bed->name = cloneString("Make new entry");
     bed->score = 100;
-    bed->strand[0] = '+';
+    bed->strand[0] = ' ';  /* no barbs when strand is unknown */
     bed->thickStart = winStart;
     bed->thickEnd = winEnd;
     bed->itemRgb = 0xcc0000;
