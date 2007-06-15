@@ -16,7 +16,7 @@
 #include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.17 2007/06/15 21:16:09 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.18 2007/06/15 22:06:31 hiram Exp $";
 
 #define NEW_ITEM_SCORE "newItemScore"
 #define NEW_ITEM_STRAND "newItemStrand"
@@ -43,11 +43,11 @@ static char *colorMenuJS = "onchange=\"updateColorSelectBox();\" style=\"width:8
 static void colorMenuOutput()
 /* the item color pull-down menu in the create item form */
 {
-hPrintf("<INPUT NAME=\"noName\" VALUE=\"\" SIZE=1 STYLE=\"display:none;\" >\n");
+hPrintf("<INPUT NAME=\"colorPullDown\" VALUE=\"\" SIZE=1 STYLE=\"display:none;\" >\n");
 
 hPrintf("<SELECT NAME=\"itemColor\" style=\"width:8em; background-color:#000000;\" %s>\n", colorMenuJS);
 hPrintf("<OPTION SELECTED VALUE = \"#000000\" style=\"background-color:#000000;\" >black</OPTION>\n");
-hPrintf("<OPTION value = \"#333333\" style=\"background-color:#333333;\" ><FONT color=\"#333333\">gray 3</FONT></OPTION>\n");
+hPrintf("<OPTION value = \"#333333\" style=\"background-color:#333333;\" >gray 3</OPTION>\n");
 hPrintf("<OPTION VALUE = \"#555555\" style=\"background-color:#555555;\" >gray 5</OPTION>\n");
 hPrintf("<OPTION VALUE = \"#777777\" style=\"background-color:#777777;\" >gray 7</OPTION>\n");
 hPrintf("<OPTION VALUE = \"#999999\" style=\"background-color:#999999;\" >gray 9</OPTION>\n");
@@ -145,9 +145,9 @@ while (NULL != (found = stringBetween(begin, end, stripped)) )
 return stripped;
 }
 
-static void startEditForm(char *actionType)
+static void startForm(char *name, char *actionType)
 {
-hPrintf("<FORM ID=\"editForm\" NAME=\"editForm\" ACTION=\"%s\">\n\n", hgcName());
+hPrintf("<FORM ID=\"%s\" NAME=\"%s\" ACTION=\"%s\">\n\n", name, name, hgcName());
 cartSaveSession(cart);
 cgiMakeHiddenVar("g", actionType);
 cgiContinueHiddenVar("c");
@@ -313,7 +313,7 @@ hPrintf("<A HREF=\"%s/index.php/User:%s\" TARGET=_blank>%s</A><BR />\n", url,
 hPrintf("<B>Last update:&nbsp;</B>%s<BR />\n", item->lastModifiedDate);
 if ((NULL != userName) && sameWord(userName, item->owner))
     {
-    startEditForm(G_DELETE_WIKI_ITEM);
+    startForm("deleteForm", G_DELETE_WIKI_ITEM);
     char idString[128];
     safef(idString, ArraySize(idString), "%d", item->id);
     cgiMakeHiddenVar("i", idString);
@@ -329,7 +329,7 @@ if ((NULL != userName) && sameWord(userName, item->owner))
     hPrintf("&nbsp;(no questions asked)");
     webPrintLinkCellEnd();
     webPrintLinkTableEnd();
-    hPrintf("</FORM>");
+    hPrintf("\n</FORM>\n");
     }
 
 if (NULL != userName)
@@ -365,7 +365,7 @@ else
 	}
     else
 	{
-	startEditForm(G_ADD_WIKI_COMMENTS);
+	startForm("addComments", G_ADD_WIKI_COMMENTS);
 	char idString[128];
 	safef(idString, ArraySize(idString), "%d", item->id);
 	cgiMakeHiddenVar("i", idString);
@@ -387,14 +387,14 @@ else
 	hPrintf("<TD BGCOLOR=\"#%s\" ALIGN=\"CENTER\" VALIGN=\"TOP\">",
 		HG_COL_TABLE);
 	cgiMakeButton("submit", "add comments");
-	hPrintf("</FORM>\n");
+	hPrintf("\n</FORM>\n");
 	webPrintLinkCellEnd();
 	/*webPrintLinkCellStart(); doesn't valign center properly */
 	hPrintf("<TD BGCOLOR=\"#%s\" ALIGN=\"CENTER\" VALIGN=\"TOP\">",
 		HG_COL_TABLE);
-	hPrintf("<FORM NAME=\"cancel\" ACTION=\"%s\">", hgTracksName());
+	hPrintf("\n<FORM ID=\"cancel\" NAME=\"cancel\" ACTION=\"%s\">", hgTracksName());
 	cgiMakeButton("cancel", "return to tracks display");
-	hPrintf("</FORM>");
+	hPrintf("\n</FORM>\n");
 	webPrintLinkCellEnd();
 	webPrintLinkTableEnd();
 
@@ -410,13 +410,13 @@ else
 static void outputJavaScript()
 /* java script functions used in the create item form */
 {
-hPrintf("<SCRIPT>\n");
+hPrintf("<SCRIPT TYPE=\"text/javascript\">\n");
 
 hPrintf("function updateColorSelectBox() {\n"
-" var form = document.getElementById(\"editForm\");\n"
-" document.editForm.noName.style.display='inline';\n"
-" document.editForm.noName.select();\n"
-" document.editForm.noName.style.display='none';\n"
+" var form = document.getElementById(\"createItem\");\n"
+" document.createItem.colorPullDown.style.display='inline';\n"
+" document.createItem.colorPullDown.select();\n"
+" document.createItem.colorPullDown.style.display='none';\n"
 " form.itemColor.style.background = form.itemColor[form.itemColor.selectedIndex].value;\n"
 " form.itemColor.style.color = form.itemColor[form.itemColor.selectedIndex].value;\n"
 "}\n");
@@ -446,7 +446,7 @@ if (wikiTrackEnabled(&userName) && sameWord("0", wikiItemId))
     else
 	{
 	outputJavaScript();
-	startEditForm(G_CREATE_WIKI_ITEM);
+	startForm("createItem", G_CREATE_WIKI_ITEM);
 
 	webPrintLinkTableStart();
 	/* first row is a title line */
@@ -527,14 +527,14 @@ if (wikiTrackEnabled(&userName) && sameWord("0", wikiItemId))
 	hPrintf("<TD BGCOLOR=\"#%s\" ALIGN=\"CENTER\" VALIGN=\"TOP\">",
 		HG_COL_TABLE);
 	cgiMakeButton("submit", "create new item");
-	hPrintf("</FORM>");
+	hPrintf("\n</FORM>\n");
 	webPrintLinkCellEnd();
 	/*webPrintLinkCellStart(); doesn't valign center properly */
 	hPrintf("<TD BGCOLOR=\"#%s\" ALIGN=\"CENTER\" VALIGN=\"TOP\">",
 		HG_COL_TABLE);
-	hPrintf("<FORM NAME=\"cancel\" ACTION=\"%s\">", hgTracksName());
+	hPrintf("\n<FORM ID=\"cancel\" NAME=\"cancel\" ACTION=\"%s\">", hgTracksName());
 	cgiMakeButton("cancel", "cancel");
-	hPrintf("</FORM>");
+	hPrintf("\n</FORM>\n");
 	webPrintLinkCellEnd();
 	webPrintLinkTableEnd();
 	createPageHelp("wikiTrackCreateItemHelp");
@@ -708,9 +708,9 @@ if (! wikiTrackEnabled(&userName))
     errAbort("delete wiki item: wiki track not enabled");
 deleteItem(sqlSigned(wikiItemId));
 hPrintf("<BR />\n");
-hPrintf("<FORM ACTION=\"%s\">", hgTracksName());
+hPrintf("<FORM ID=\"delete\" NAME=\"delete\" ACTION=\"%s\">", hgTracksName());
 cgiMakeButton("submit", "return to tracks display");
-hPrintf("</FORM>");
+hPrintf("\n</FORM>\n");
 hPrintf("<BR />\n");
 cartHtmlEnd();
 }
