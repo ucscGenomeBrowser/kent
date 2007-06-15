@@ -22,7 +22,7 @@
 #include "bedGraph.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: correlate.c,v 1.61 2007/06/07 21:58:47 hiram Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.62 2007/06/15 04:43:48 kate Exp $";
 
 #define MAX_POINTS_STR	"300,000,000"
 #define MAX_POINTS	300000000
@@ -418,8 +418,10 @@ else if (startsWith("wig",tdb->type))
                         tdb->tableName);
         boolean found = FALSE;
         for (wig = wiggles; wig != NULL; wig = wig->next)
-            if (sameString(curTable, wig->table))
+            {
+            if (sameString(table->tableName, wig->table))
                 found = TRUE;
+            }
         if (!found)
             errAbort("Conservation wiggle %s not found for track %s",
                         curTable, tdb->tableName);
@@ -492,16 +494,13 @@ if (!slNameInList(nameList, selTable))
     selTable = nameList->name;
 /* Print out label and drop-down list. */
 hPrintf("<B>table: </B>");
-fprintf(stderr, "   track=%s\n",track->tableName); 
 hPrintf("<SELECT NAME=%s>\n", table);
 for (name = nameList; name != NULL; name = name->next)
     {
     struct trackDb *tdb = NULL;
     tdb = findCompositeTdb(track, name->name);
-    fprintf(stderr, "tdb=%s, table=%s\n",tdb->tableName, name->name);
     if (correlateTrackTableOK(tdb, name->name))
 	{
-        fprintf(stderr, "     can correlate\n");
 	hPrintf("<OPTION VALUE=%s", name->name);
 	if (sameString(selTable, name->name))
 	    hPrintf(" SELECTED");
