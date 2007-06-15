@@ -16,7 +16,7 @@
 #include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.18 2007/06/15 22:06:31 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.19 2007/06/15 22:09:31 hiram Exp $";
 
 #define NEW_ITEM_SCORE "newItemScore"
 #define NEW_ITEM_STRAND "newItemStrand"
@@ -339,15 +339,16 @@ if (NULL != userName)
 	   url, item->descriptionKey);
 
 hPrintf("<B>Description and comments from the wiki article: "
-    "<A HREF=\"%s/index.php/%s\" TARGET=_blank>%s</A> are shown below:</B><HR>\n",
+  "<A HREF=\"%s/index.php/%s\" TARGET=_blank>%s</A> are shown below:</B><HR>\n",
        url, item->descriptionKey, item->descriptionKey);
+
 if (strippedRender)
     {
     hPrintf("\n%s\n<HR>\n", strippedRender);
     freeMem(strippedRender);
     }
 else
-    hPrintf("<HR>\n(no comments for this item at the current time)"
+    hPrintf("\n(no comments for this item at the current time)"
 	"<BR /><HR>\n");
 
 if (NULL == userName)
