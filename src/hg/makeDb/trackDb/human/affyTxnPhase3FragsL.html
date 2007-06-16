@@ -1,0 +1,167 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=Generator content="Microsoft Word 11 (filtered)">
+<title>Description: Affy Txn lRNA regions</title>
+
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:Tahoma;
+	panose-1:2 11 6 4 3 5 4 4 2 4;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin:0in;
+	margin-bottom:.0001pt;
+	font-size:12.0pt;
+	font-family:"Times New Roman";}
+h2
+	{margin-right:0in;
+	margin-left:0in;
+	font-size:18.0pt;
+	font-family:"Times New Roman";
+	font-weight:bold;}
+a:link, span.MsoHyperlink
+	{color:blue;
+	text-decoration:underline;}
+a:visited, span.MsoHyperlinkFollowed
+	{color:purple;
+	text-decoration:underline;}
+p
+	{margin-right:0in;
+	margin-left:0in;
+	font-size:12.0pt;
+	font-family:"Times New Roman";}
+p.MsoAcetate, li.MsoAcetate, div.MsoAcetate
+	{margin:0in;
+	margin-bottom:.0001pt;
+	font-size:8.0pt;
+	font-family:Tahoma;}
+span.msoIns
+	{text-decoration:underline;
+	color:teal;}
+span.msoDel
+	{text-decoration:line-through;
+	color:red;}
+@page Section1
+	{size:8.5in 11.0in;
+	margin:.5in .5in .5in .5in;}
+div.Section1
+	{page:Section1;}
+ /* List Definitions */
+ ol
+	{margin-bottom:0in;}
+ul
+	{margin-bottom:0in;}
+-->
+</style>
+
+</head>
+
+<body lang=EN-US link=blue vlink=purple>
+
+<div class=Section1>
+
+<h2>Description (change track name to “Affy Txn lRNA regions”)</h2>
+
+<p class=MsoNormal style='margin-bottom:12.0pt'>This track displays
+transcriptome data from tiling GeneChips produced by <a
+href="http://www.affymetrix.com" target="_blank">Affymetrix</a>. For the
+complete non-repetitive portion of the human genome, more than 256 million
+probe pairs were tiled every 5 bp in non-repeat-masked areas and hybridized to
+cytosolic polyA+ long RNA (&gt;200 nucleotides) from 8 different cell lines
+(some cell lines were female and contain no data for chrY). For HeLa and HepG2,
+in addition to cytosolic polyA+ RNA, samples were also produced for nuclear
+RNA. For experimental details and results, see Kapranov <em>et al</em>. in the
+References section below. This track contains the coordinates of transcribed
+fragments (transfrags) representing long RNAs.</p>
+
+<p class=MsoNormal align=center style='text-align:center'><img border=0
+width=32 height=32 src="affyTxnP3lRNA_files/image001.gif"></p>
+
+<h2>Display Conventions and Configuration</h2>
+
+<p>This annotation follows the display conventions for composite tracks. The
+subtracks within this annotation may be configured in a variety of ways to
+highlight different aspects of the displayed data. The graphical configuration
+options are shown at the top of the track description page, followed by a list
+of subtracks. For more information about the graphical configuration options,
+click the <a
+href="Documents%20and%20Settings/pkapra/Local%20Settings/Temporary%20Internet%20Files/Local%20Settings/Temporary%20Internet%20Files/goldenPath/help/hgWiggleTrackHelp.html">Graph
+configuration help</a> link. To display only selected subtracks, uncheck the
+boxes next to the tracks you wish to hide. A separate track named “Affy Txn lRNA
+signals” contains signals (PM-MM values) for each probe pair plotted against
+its genomic coordinates  (see Kapranov <em>et al</em>. in the References
+section below). </p>
+
+<h2>Methods</h2>
+
+<p>For each data point, probes within 30 bp on either side were used to improve
+the estimate of expression level for a particular probe. This helped to smooth
+the data and produce a more robust estimate of the transcription level at a
+particular genomic location. The following analysis method was used: </p>
+
+<p class=MsoNormal style='margin-left:.5in;text-indent:-.5in'>1.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>Replicate
+arrays were quantile-normalized and the median intensity (using both PM and MM
+intensities) of each array was scaled to a target value of 50. </p>
+
+<p class=MsoNormal style='margin-left:.5in;text-indent:-.5in'>2.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>The
+expression level was estimated for each mapped probe position by </p>
+
+<p class=MsoNormal style='margin-left:1.0in;text-indent:-1.0in'><span
+style='font-size:10.0pt;font-family:"Courier New"'>o<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span>collecting all the probe pairs that fell within a window of ± 30
+bp </p>
+
+<p class=MsoNormal style='margin-left:1.0in;text-indent:-1.0in'><span
+style='font-size:10.0pt;font-family:"Courier New"'>o<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span>calculating all non-redundant pairwise averages of PM - MM values
+of all probe pairs in the window </p>
+
+<p class=MsoNormal style='margin-left:1.0in;text-indent:-1.0in'><span
+style='font-size:10.0pt;font-family:"Courier New"'>o<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span>taking the median of all resulting pairwise averages </p>
+
+<p class=MsoNormal style='margin-left:.5in;text-indent:-.5in'>3.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>The
+resulting signal value is the Hodges-Lehmann estimator associated with the
+Wilcoxon signed-rank statistic of the PM - MM values that lie within ± 30 bp of
+the sliding window centered at every genomic coordinate. This data is displayed
+in the track “Affy Txn lRNA signals”.</p>
+
+<p class=MsoNormal style='margin-left:.5in;text-indent:-.5in'>4.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>Transcribed
+regions (transfrags) were determined by connecting adjacent positive probes
+with a maximum allowable gap of 11 nucleotides and a minimum run of 49
+nucleotides (at least 11 probes with at most 1 negative probe in-between 2
+positive probes). Transfrags which overlap pseudogenes, or harboring low
+complexity or repetitive sequences were discarded.</p>
+
+<h2>Credits</h2>
+
+<p>Data generation and analysis was performed by the transcriptome group at
+Affymetrix together with assistance from colleagues at the University of Leipzig, Fraunhofer Institute, and University of Vienna: Kapranov P., Cheng J.,
+Dike S., Nix D.A., Duttagupta R., Willingham A.T., Stadler P.F., Hertel J., Hackermüller
+J., Hofacker I.L., Bell I., Cheung E., Drenkow J., Dumais E., Patel S., Helt G.,
+Ganesh M., Ghosh S., Piccolboni A., Sementchenko V., Tammana H., Gingeras T.R.</p>
+
+<p>Questions or comments about this annotation? Email. </p>
+
+<h2>References</h2>
+
+<p>Kapranov <em>et al</em>. <a
+href="http://www.ncbi.nlm.nih.gov/sites/entrez?Db=pubmed&amp;Cmd=ShowDetailView&amp;TermToSearch=17510325&amp;ordinalpos=1&amp;itool=EntrezSystem2.PEntrez.Pubmed.Pubmed_ResultsPanel.Pubmed_RVDocSum"
+target="_blank">RNA Maps Reveal New RNA Classes and a Possible Function for
+Pervasive Transcription</a>. <em>Science</em> <b>316</b>(5830), 1484-8 (2007).</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+</div>
+
+</body>
+
+</html>
