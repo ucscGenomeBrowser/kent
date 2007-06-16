@@ -620,8 +620,8 @@ identifier vegaPseudoZfishName typeOf=vegaZfishName
 identifier vegaPseudoGeneZfishName typeOf=vegaPseudoZfishName dependency
 "Link together Zebrafish VEGA predicted gene structure additional information"
     danRer4.vegaPseudoGene.name
-    danRer4.vegaInfoZfish.transcriptId minCheck=0.007
-    danRer4.vegaToCloneId.transcriptId minCheck=0.007
+    danRer4.vegaInfoZfish.transcriptId minCheck=0.005
+    danRer4.vegaToCloneId.transcriptId minCheck=0.005
 
 identifier vegaPseudogeneName typeOf=vegaName
 "Link together VEGA pseudogene and other info."
