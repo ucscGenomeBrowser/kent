@@ -6,7 +6,7 @@
 #include "gbEntry.h"
 #include "localmem.h"
 
-static char const rcsid[] = "$Id: gbUpdate.c,v 1.2 2003/09/12 15:24:24 markd Exp $";
+static char const rcsid[] = "$Id: gbUpdate.c,v 1.3 2007/06/16 19:01:50 markd Exp $";
 
 void gbUpdateNameFromFile(char* updateName, char* fileName)
 /* Get an update name from a file name in the dir */
@@ -79,7 +79,7 @@ void gbUpdateCountAligns(struct gbUpdate* update, struct gbAligned* aligned,
                          unsigned numAligns)
 /* increment the count of the number of alignments */
 {
-if (aligned->entry->orgCat == GB_NATIVE)
+if (aligned->alignOrgCat == GB_NATIVE)
     update->numNativeAligns[gbTypeIdx(aligned->entry->type)] += numAligns;
 else
     update->numXenoAligns[gbTypeIdx(aligned->entry->type)] += numAligns;
