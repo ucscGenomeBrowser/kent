@@ -24,7 +24,7 @@ clean:
 ${GB_BINARCH}/gbAlignGet: gbAlignGet.o gbAlignCommon.o  ${LIBGENBANK}
 	@${MKDIR} ${GB_BINARCH}
 	${CC} ${COPT} ${CFLAGS} ${CFLAGS} ${LDFLAGS} -o ${GB_BINARCH}/gbAlignGet gbAlignCommon.o gbAlignGet.o $(LIBS)
-${GB_BINARCH}/gbAlignInstall: $O gbAlignInstall.o gbAlignCommon.o ${MYLIBS}
+${GB_BINARCH}/gbAlignInstall: $O gbAlignInstall.o gbAlignCommon.o ${LIBGENBANK}
 	@${MKDIR} ${GB_BINARCH}
 	${CC} ${COPT} ${CFLAGS} ${CFLAGS} -o ${GB_BINARCH}/gbAlignInstall gbAlignCommon.o gbAlignInstall.o $(LIBS)
 
