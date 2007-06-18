@@ -17,7 +17,7 @@
 #include "dbLoadPartitions.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: extFileUpdate.c,v 1.7 2006/03/19 18:18:24 markd Exp $";
+static char const rcsid[] = "$Id: extFileUpdate.c,v 1.8 2007/06/18 01:41:48 markd Exp $";
 
 /*
  * Algorithm:
@@ -264,7 +264,7 @@ if (ri != NULL)
  * day, then gbExtFile can end up with the old version.  Check for this
  * and update gbSeq version if it occured */
 statVer = checkGbStatusVer(acc);
-if (statVer != 0)
+if ((statVer != 0) && (statVer != version))
     {
     fprintf(stderr, "Warning: %s %s.%d in gbSeqTbl, %s.%d in gbStatus, updating to new version\n",
             type, acc, version, acc, statVer);
@@ -304,7 +304,7 @@ if (ri != NULL)
 else 
     {
     /* not in ra table */
-    if (isPepInRefLink(os->acc))
+    if ((gbGuessSrcDb(os->acc) == GB_REFSEQ) && isPepInRefLink(os->acc))
         {
         fprintf(stderr, "Warning: %s %s.%d in gbSeqTbl and refLink, not in ra file, unchanged\n",
                 os->type, os->acc, os->version);
