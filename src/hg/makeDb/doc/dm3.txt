@@ -1785,7 +1785,8 @@ ftp://ftp.flybase.net/releases/FB2006_01/dmel_r5.1/chado-xml/chado_dmel_genes.xm
 
 
 #########################################################################
-# MAP UNIPROT IDS TO CG*-R* IDS (DONE 4/5/07 angie)
+# MAP UNIPROT IDS TO CG*-R* IDS (DONE 4/5/07 angie - REDONE 6/18/07)
+# Redone 6/18/07 after folding in DHGP's chr*Het heterochromatin annotations.
     # In dm2, I combined three sources: specific transcript mappings 
     # from uniProt.description, less specific gene mappings from 
     # uniProt.description, and fbUniProt mappings extracted from 
@@ -1858,13 +1859,13 @@ ftp://ftp.flybase.net/releases/FB2006_01/dmel_r5.1/chado-xml/chado_dmel_genes.xm
 #########################################################################
 # HGNEAR TABLES
 
-# HGNEAR PROTEIN BLAST TABLES (DONE (except for dmBlastTab in other dbs -- leave those with dm2) 4/6/07)
-# self redone 6/4/07, see below
+# HGNEAR PROTEIN BLAST TABLES (DONE (except for dmBlastTab in other dbs -- leave those with dm2) 4/6/07 - REDONE 6/18/07)
+# Redone 6/18/07 after folding in DHGP's chr*Het heterochromatin annotations.
     ssh hgwdev
     mkdir /cluster/data/dm3/bed/hgNearBlastp
     cd /cluster/data/dm3/bed/hgNearBlastp
-    mkdir 070405
-    cd 070405
+    mkdir 070618
+    cd 070618
     # Get the proteins used by the other hgNear organisms:
     pepPredToFa hg18 knownGenePep hg18.known.faa
     pepPredToFa mm8 knownGenePep mm8.known.faa
@@ -1888,61 +1889,39 @@ targetDb dm3
 queryDbs hg18 mm8 rn4 danRer3 ce2 sacCer1
 recipBest hg18 mm8 rn4 danRer3 ce2 sacCer1
 
-dm3Fa     /cluster/data/dm3/bed/hgNearBlastp/070405/dm3.flyBasePep.faa
-hg18Fa    /cluster/data/dm3/bed/hgNearBlastp/070405/hg18.known.faa
-mm8Fa     /cluster/data/dm3/bed/hgNearBlastp/070405/mm8.known.faa
-rn4Fa     /cluster/data/dm3/bed/hgNearBlastp/070405/rn4.known.faa
-danRer3Fa /cluster/data/dm3/bed/hgNearBlastp/070405/danRer3.ensPep.faa
-ce2Fa     /cluster/data/dm3/bed/hgNearBlastp/070405/ce2.sangerPep.faa
-sacCer1Fa /cluster/data/dm3/bed/hgNearBlastp/070405/sacCer1.sgdPep.faa
+dm3Fa     /cluster/data/dm3/bed/hgNearBlastp/070618/dm3.flyBasePep.faa
+hg18Fa    /cluster/data/dm3/bed/hgNearBlastp/070618/hg18.known.faa
+mm8Fa     /cluster/data/dm3/bed/hgNearBlastp/070618/mm8.known.faa
+rn4Fa     /cluster/data/dm3/bed/hgNearBlastp/070618/rn4.known.faa
+danRer3Fa /cluster/data/dm3/bed/hgNearBlastp/070618/danRer3.ensPep.faa
+ce2Fa     /cluster/data/dm3/bed/hgNearBlastp/070618/ce2.sangerPep.faa
+sacCer1Fa /cluster/data/dm3/bed/hgNearBlastp/070618/sacCer1.sgdPep.faa
 
-buildDir /cluster/data/dm3/bed/hgNearBlastp/070405
+buildDir /cluster/data/dm3/bed/hgNearBlastp/070618
 scratchDir /san/sanvol1/scratch/dm3HgNearBlastp
 _EOF_
     # Run with -noLoad so we can eyeball files, manually load dm3 tables now,
     # and later overload other databases' dmBlastTab tables.
-    ~/kent/src/hg/utils/automation/doHgNearBlastp.pl -noLoad -workhorse kkr4u00 config.ra >& do.log &
+    doHgNearBlastp.pl -noLoad config.ra >& do.log &
     tail -f do.log
-    # Ran these manually:
+    # Ran the load scripts for dm3 tables manually as suggested by the
+    # output of doHgNearBlastp.pl:
 # *** -noLoad was specified -- you can run this script manually to load dm3 tables:
         run.dm3.dm3/loadPairwise.csh
-#Loading database with 1303101 rows
-
+#Loading database with 778403 rows
 # *** -noLoad was specified -- you can run these scripts manually to load dm3 tables:
         run.dm3.hg18/loadPairwise.csh
-#Loading database with 5864 rows
+#Loading database with 5894 rows
         run.dm3.mm8/loadPairwise.csh
-#Loading database with 5585 rows
+#Loading database with 5614 rows
         run.dm3.rn4/loadPairwise.csh
-#Loading database with 3032 rows
+#Loading database with 3046 rows
         run.dm3.danRer3/loadPairwise.csh
-#Loading database with 5275 rows
+#Loading database with 5306 rows
         run.dm3.ce2/loadPairwise.csh
-#Loading database with 4564 rows
+#Loading database with 4587 rows
         run.dm3.sacCer1/loadPairwise.csh
-#Loading database with 2184 rows
-
-    # self redone 6/4/07 to make use of hgLoadBlastTab's new -bestOnly.
-    # query databases.
-    mkdir /cluster/data/dm3/bed/hgNearBlastp/070604
-    cd /cluster/data/dm3/bed/hgNearBlastp/070604
-    cat << _EOF_ > config.ra
-# Latest fly vs. other Gene Sorter orgs:
-# human, mouse, rat, zebrafish, worm, yeast
-
-targetGenesetPrefix flyBase
-targetDb dm3
-queryDbs 
-
-dm3Fa     /cluster/data/dm3/bed/hgNearBlastp/070405/dm3.flyBasePep.faa
-
-buildDir /cluster/data/dm3/bed/hgNearBlastp/070604
-scratchDir /san/sanvol1/scratch/dm3HgNearBlastp
-_EOF_
-    ~/kent/src/hg/utils/automation/doHgNearBlastp.pl -noLoad config.ra >& do.log &
-    tail -f do.log
-    run.dm3.dm3/loadPairwise.csh
-#Loading database with 764012 rows
+#Loading database with 2199 rows
 
 #TODO when dm3 hgNear tables have been pushed and other dbs can be updated:
 # *** -noLoad was specified -- you can run these scripts manually to load dmBlastTab in query databases:
@@ -1954,12 +1933,13 @@ _EOF_
         run.sacCer1.dm3/loadPairwise.csh
 
 
-# CLUSTER GENES AND MAP TO OTHER DATA (DONE 4/5/07 angie)
+# CLUSTER GENES AND MAP TO OTHER DATA (DONE 4/5/07 angie - REDONE 6/18/07)
+# Redone 6/18/07 after folding in DHGP's chr*Het heterochromatin annotations.
     ssh hgwdev
     # First we have to add a proteinId column to flyBaseGene.
     hgClusterGenes dm3 flyBaseGene flyBaseIsoforms flyBaseCanonical \
       -protAccQuery='select name,alias from flyBaseToUniProt'
-#Got 13665 clusters, from 19768 genes in 15 chromosomes
+#Got 14067 clusters, from 20284 genes in 15 chromosomes
     # Create table that maps between flyBase genes and RefSeq
     hgMapToGene dm3 refGene flyBaseGene flyBaseToRefSeq
     # Create table that maps between known genes and Pfam domains
@@ -1977,7 +1957,8 @@ _EOF_
     See README in /cluster/store1/geneOntology.
 
 
-# MAKE A DESCRIPTION TABLE FOR HGNEAR KNOWNDETAILS (DONE 4/5/07 angie)
+# MAKE A DESCRIPTION TABLE FOR HGNEAR KNOWNDETAILS (DONE 4/5/07 angie - REDONE 6/18/07)
+# Redone 6/18/07 after folding in DHGP's chr*Het heterochromatin annotations.
     # hgNear's knownDetails column type expects a single table that links 
     # transcript ID with uniProt description, so whip one up here:
     # (used by hgGene too though hgGene could join on the fly)
@@ -1990,7 +1971,8 @@ _EOF_
     hgsql dm3 -e 'create index name on flyBaseToDescription(name(12))'
 
 
-# FLYP2P (DONE 4/5/07 angie)
+# FLYP2P (DONE 4/5/07 angie - REDONE 6/18/07)
+# Redone 6/18/07 after folding in DHGP's chr*Het heterochromatin annotations.
     # See hg/near/makeNear.doc...
     mkdir /cluster/data/dm3/bed/p2p
     cd /cluster/data/dm3/bed/p2p
@@ -2031,8 +2013,152 @@ _EOF_
       summary.txt.070406
 
 
+#########################################################################
+# "FLYBASE 5.1" DHGP HETEROCHROMATIN ANNOTATIONS (DONE 6/18/07 angie)
+# These heterochromatin annotations have just been published in Science
+# http://www.sciencemag.org/cgi/content/full/316/5831/1586
+# -- future updates will be from FlyBase, but for now the GFF is in the
+# paper's Supplemental Data!
+    ssh kkstore05
+    mkdir /cluster/data/dm3/bed/flybase5.1/Het
+    cd /cluster/data/dm3/bed/flybase5.1/Het
+    wget ftp://ftp.dhgp.org/pub/DHGP/Science_2007_Supplemental_Data/Supplemental_File_B_GFF/R5_all_GFF_results.tar.gz
+    foreach chr (2LHet 2RHet 3LHet 3RHet U Uextra XHet YHet)
+      wget ftp://ftp.dhgp.org/pub/DHGP/Science_2007_Supplemental_Data/Supplemental_File_C_FASTA/${chr}_translation_dmel_RELEASE5-1.FASTA
+    end
+    tar xvzf R5_all_GFF_results.tar.gz
+    # Of course they invented a completely new encoding of names and 
+    # properties into GFF 9th col and FASTA headers.  So instead of 
+    # attempting to reuse the flybase-parsing script, just pick out
+    # the rows we need and parse each row type...  we will not get
+    # enough info to complete flyBase2004Xref, but c'est la vie.
+    # There are files for non-het chroms... I took a look at 2L_annotation
+    # and its annotations seem to be relative to chr2L:22000975... adding
+    # that offset, almost all of the ones I checked appear in our current
+    # dm3 flyBaseGene.  So I'll just use the Het files and ignore the others.
+    foreach type (3_UTR 5_UTR CDS CDS_exon annotation exon transcript)
+      echo $type
+      awk '{print $3;}' {*Het,U*}_${type}_dmel* | sort | uniq -c
+    end
+    # Looks like the file-types and $3-types we need are these:
+    # CDS_exon   CDS_exon
+    # annotation exon, gene, ncRNA, pseudogene, rRNA
+    # I will exclude RR* (repeat region)
+    # I'll build up a .gff type by type:
+    cp /dev/null extract.gff
+    awk '$9 !~ /^name=RR/ && $3 == "CDS_exon" {print;}' {*Het,U*}_CDS_exon*GFF \
+    | perl -wpe 's/^/chr/; s/CDS_exon/CDS/; \
+                 s/name=\w+:\d+_(C\w\d+-R[A-Z]+).*/$1/ || die "$_";' \
+      >> extract.gff
+    awk '$9 !~ /^genegrp=RR/ && $3 == "exon" {print;}' {*Het,U*}_annotation*GFF \
+    | perl -wpe 's/^/chr/; \
+                 s/genegrp=\w+; transgrp=(C\w\d+-R[A-Z]+).*/$1/ || die "$_";' \
+      >> extract.gff
+    # All of the rows break down into either CG* IDs (coding) or CR* (nonc):
+    wc -l extract.gff 
+#3245 extract.gff
+    awk '$9 ~ /^CR/ {print;}' extract.gff | wc -l
+#261
+    awk '$9 ~ /^CG/ {print;}' extract.gff | wc -l
+#2984
+    expr 261 + 2984
+#3245
+    # Break out coding and noncoding, and sort for readability:
+    awk '$9 ~ /^CR/ {print;}' extract.gff \
+    | sort -k 9,9 -k 1,1 -k 4n,4n \
+    > flyBaseNoncodingHet.gff
+    awk '$9 ~ /^CG/ {print;}' extract.gff \
+    | sort -k 9,9 -k 1,1 -k 4n,4n \
+    > flyBaseGeneHet.gff
+
+    # gff -> genePred -> bed for noncoding
+    ldHgGene dummy dummy flyBaseNoncodingHet.gff -nobin -out=stdout \
+    | genePredToBed \
+    | awk 'BEGIN {OFS="\t";} $7 == 0 && $8 == 0 {$7 = $2; $8 = $2;} {print;}' \
+      > flyBaseNoncodingHet.bed
+#Read 127 transcripts in 261 lines in 1 files
+
+    # Now get what we can get for flyBase2004Xref:
+    awk '$3 ~ /^(gene|pseudogene|.*RNA)$/ {print;}' {*Het,U*}_annotation*GFF \
+    | perl -pe 's/^\w+\tgadfly\t(pseudogene|\w+RNA)?(gene)?.*name=(\w+); symbol=([^;]*); (dbxref=FlyBase:(FBgn\d+))?.*$/$3\t$4\t\t\t$6\t\t\t$1/ \
+                || die "$_";\
+                s/^(\w+)\t\t/$1\t$1\t/;' \
+    | sort -k 1,1 \
+      > flyBase2004XrefHet.tab
+    # That almost works but it needs C*-R* IDs and has only C*'s.
+    # Join with the C*-R* IDs:
+    awk '{print $9;}' fly*gff \
+    | sort -u \
+    | perl -wpe 's/^(\w+)/$1\t$1/;' \
+    > cgTocgr.txt
+    join -j 1 -a 2 -t'	' -o '1.2 2.2 2.3 2.4 2.5 2.6 2.7 2.8' \
+      cgTocgr.txt flyBase2004XrefHet.tab \
+    > tmp.tab
+    mv tmp.tab flyBase2004XrefHet.tab
+    # Uh-oh, some of these are already in flyBase2004Xref, so we'll get 
+    # mysql errors (unique index) from trying to overload... and with
+    # more of the fields filled in, so omit them from the new load.
+    awk '{print $1;}' ../flyBase2004Xref.tab | sort > tmp1
+    awk '{print $1;}' flyBase2004XrefHet.tab | sort > tmp2
+    comm -1 -2 tmp1 tmp2
+#CG41431-RA
+#CG41432-RA
+#CG41434-RA
+#CG41436-RA
+    # Only 4 such -- manually removed them from flyBase2004XrefHet.tab.
+    perl -wpe 's/^>(\w+)-P(\w+)/>$1-R$2/' {*Het,U*}_*.FASTA \
+      > flyBasePepHet.fa
+    # Manually removed those 4 from the fa too.
+    # Also removed this lone RR element from the fa: RR40941-RA
+
+    # Now *additively* load the new data on top of the old:
+    ssh hgwdev
+    cd /cluster/data/dm3/bed/flybase5.1/Het
+    # Protein-coding genes:
+    ldHgGene -oldTable -nobin dm3 flyBaseGene flyBaseGeneHet.gff
+#Read 503 transcripts in 2984 lines in 1 files
+#  503 groups 7 seqs 1 sources 2 feature types
+    cat ../flyBasePep.fa flyBasePepHet.fa \
+    | hgPepPred dm3 generic flyBasePep stdin
+    # Noncoding genes:
+    hgLoadBed -oldTable dm3 flyBaseNoncoding flyBaseNoncodingHet.bed
+#Loaded 127 elements of size 12
+    # Cross-referencing info for both coding and noncoding:
+    hgLoadSqlTab -oldTable dm3 flyBase2004Xref \
+      ~/kent/src/hg/lib/flyBase2004Xref.sql flyBase2004XrefHet.tab
+
+    # Make sure there are no joinerCheck errors at this point, because 
+    # if left here they can spread via doHgNearBlastp:
+    runJoiner.csh dm3 flyBasePep
+
+    # See if there are still large regions where refGene has genes but
+    # flybase doesn't:
+    featureBits dm3 refGene \!flyBaseGene -minSize=1000 -bed=stdout
+    # better now that the Het's (except for Uextra) are included.
+
+    # add upstream* downloadable files
+    ssh hgwdev
+    mkdir /cluster/data/dm3/bed/flybase5.1/bigZips
+    cd /cluster/data/dm3/bed/flybase5.1/bigZips
+    foreach size (1000 2000 5000)
+      echo upstream$size
+      nice featureBits dm3 flyBaseGene:upstream:$size -fa=stdout \
+      | nice gzip -c > upstream$size.fa.gz
+    end
+    nice md5sum *.gz > md5sum.txt
+    ln -s /cluster/data/dm3/bed/flybase5.1/bigZips/*.gz \
+      /usr/local/apache/htdocs/goldenPath/dm3/bigZips/
+    cat md5sum.txt \
+      >> /usr/local/apache/htdocs/goldenPath/dm3/bigZips/md5sum.txt
+    # Edited out the old upstream* md5sums.
+
 
 #########################################################################
+# TWEAK DEFAULT POSITION (DONE 6/18/07 angie)
+    ssh hgwdev
+    hgsql hgcentraltest -e 'update dbDb set defaultPos="chr2L:826001-851000" where name = "dm3";'
+
+
 #########################################################################
 #########################################################################
 #########################################################################
