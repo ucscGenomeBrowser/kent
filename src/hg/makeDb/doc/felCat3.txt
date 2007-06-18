@@ -1239,4 +1239,26 @@ chmod +x getIrows.sh
     # 0.3320  hg18
     # 0.5306  mm8
 
+    # downloadables
+    ssh kkstore05
+    cd /cluster/data/felCat3/bed/multiz4way
+    mkdir phastConsDownloads
+    cd phastConsDownloads
+    ./make.csh
+    nice gzip felCat3.pp
+    md5sum felCat3.pp.gz > md5sum.txt
+
+    ssh hgwdev
+    cd /cluster/data/felCat3/bed/multiz4way/phastConsDownloads
+    set dir = /usr/local/apache/htdocs/goldenPath/felCat3/phastCons4way
+    mkdir $dir
+    ln -s /cluster/data/felCat3/bed/multiz4way/phastConsDownloads/{*.gz,md5sum.txt} $dir
+    cp /usr/local/apache/htdocs/goldenPath/ornAna1/phastCons6way/README.txt $dir
+    # edit README.txt
+
+    # clean up
+    ssh kkstore05
+    rm /cluster/data/felCat3/bed/multiz4way/phastCons/*.tab
+    rm -r /san/sanvol1/scratch/felCat3/multiz4way/phastCons
+
 
