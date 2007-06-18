@@ -122,6 +122,10 @@ char *trackDbRequiredSetting(struct trackDb *tdb, char *name);
 char *trackDbSettingOrDefault(struct trackDb *tdb, char *name, char *defaultVal);
 /* Return setting string, or defaultVal if none exists */
 
+struct hashEl *trackDbSettingsLike(struct trackDb *tdb, char *wildStr);
+/* Return a list of settings whose names match wildStr (may contain wildcard 
+ * characters).  Free the result with hashElFreeList. */
+
 bool trackDbIsComposite(struct trackDb *tdb);
 /* Determine if this is a composite track. This is currently defined
  * as a top-level dummy track, with a list of subtracks of the same type */
