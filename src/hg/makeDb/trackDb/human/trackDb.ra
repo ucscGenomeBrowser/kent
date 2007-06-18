@@ -362,7 +362,7 @@ type sample
 
 track affyTxnPhase3FragsL
 compositeTrack on
-shortLabel Affy TxnP3 lRNA
+shortLabel Affy Tx lRNA Reg
 longLabel Affymetrix Transcriptome Phase 3 Long RNA Fragments
 group regulation
 priority 98.01
@@ -430,7 +430,7 @@ type bed 3 .
 
 track affyTxnPhase3FragsS
 compositeTrack on
-shortLabel Affy TxnP3 sRNA
+shortLabel Affy Tx sRNA Reg
 longLabel Affymetrix Transcriptome Phase 3 Short RNA Fragments
 group regulation
 priority 98.02
@@ -462,8 +462,8 @@ type bed 3 .
 
 track affyTxnPhase3L
 compositeTrack on
-shortLabel Affy Txn Phase3L
-longLabel Affymetrix Transcriptome Phase 3 Long RNA
+shortLabel Affy Tx lRNA Sig
+longLabel Affymetrix Transcriptome Phase 3 Long RNA Signal
 group regulation
 defaultViewLimits 0:150
 autoScaleDefault Off
@@ -535,8 +535,8 @@ type wig 0 1000
 
 track affyTxnPhase3S
 compositeTrack on smart
-shortLabel Affy Txn Phase3S
-longLabel Affymetrix Transcriptome Phase 3 Short RNA
+shortLabel Affy Tx sRNA Sig
+longLabel Affymetrix Transcriptome Phase 3 Short RNA Signal
 group regulation
 defaultViewLimits 0:150
 autoScaleDefault Off
