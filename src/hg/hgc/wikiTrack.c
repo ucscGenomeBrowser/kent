@@ -16,7 +16,7 @@
 #include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.20 2007/06/18 17:42:24 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.21 2007/06/18 20:40:37 hiram Exp $";
 
 #define NEW_ITEM_SCORE "newItemScore"
 #define NEW_ITEM_STRAND "newItemStrand"
@@ -621,7 +621,7 @@ struct htmlFormVar *wpTextbox1 =
 if (wpTextbox1->curVal && (strlen(wpTextbox1->curVal) > 2))
     {
     char *rawText = fetchWikiRawText(item->descriptionKey);
-    dyStringPrintf(content, "%s\n\n==''comments added: ~~~~''==\n\n",
+    dyStringPrintf(content, "%s\n\n''comments added: ~~~~''\n\n",
 	rawText);
     }
 else
