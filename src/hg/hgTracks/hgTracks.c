@@ -118,7 +118,7 @@
 #endif
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1352 2007/06/18 16:20:33 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1353 2007/06/18 17:40:17 hiram Exp $";
 
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
@@ -1042,7 +1042,7 @@ else
     }
 size = end - start;
 /* Now it's time to do the search. */
-for ( ; sizeWanted > 0 && sizeWanted < ((2^31)-1); )
+for ( ; sizeWanted > 0 && sizeWanted < BIGNUM; )
     {
     if (sameWord(tg->mapName, WIKI_TRACK_TABLE))
 	items = wikiTrackGetBedRange(tg->mapName, chromName, start, end);
