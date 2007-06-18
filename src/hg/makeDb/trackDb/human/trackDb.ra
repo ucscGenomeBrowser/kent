@@ -438,26 +438,26 @@ type bed 3 .
 
     track affyTxnPhase3FragsHeLaTopStrand
     subTrack affyTxnPhase3FragsS
-    shortLabel HeLa Top
-    longLabel Affymetrix Transcriptome Phase 3 HeLa Top Strand Short RNA Fragments
+    shortLabel HeLa +
+    longLabel Affymetrix Transcriptome Phase 3 HeLa Plus Strand Short RNA Fragments
     priority 1
 
     track affyTxnPhase3FragsHeLaBottomStrand
     subTrack affyTxnPhase3FragsS
-    shortLabel HeLa Bottom
-    longLabel Affymetrix Transcriptome Phase 3 HeLa Bottom Strand Short RNA Fragments
+    shortLabel HeLa -
+    longLabel Affymetrix Transcriptome Phase 3 HeLa Minus Strand Short RNA Fragments
     priority 2
 
     track affyTxnPhase3FragsHepG2TopStrand
     subTrack affyTxnPhase3FragsS
-    shortLabel HepG2 Top
-    longLabel Affymetrix Transcriptome Phase 3 HepG2 Top Strand Short RNA Fragments
+    shortLabel HepG2 +
+    longLabel Affymetrix Transcriptome Phase 3 HepG2 Plus Strand Short RNA Fragments
     priority 3
 
     track affyTxnPhase3FragsHepG2BottomStrand
     subTrack affyTxnPhase3FragsS
-    shortLabel HepG2 Bottom
-    longLabel Affymetrix Transcriptome Phase 3 HepG2 Bottom Strand Short RNA Fragments
+    shortLabel HepG2 -
+    longLabel Affymetrix Transcriptome Phase 3 HepG2 Minus Strand Short RNA Fragments
     priority 4
 
 track affyTxnPhase3L
@@ -534,7 +534,7 @@ type wig 0 1000
     priority 10
 
 track affyTxnPhase3S
-compositeTrack on smart
+compositeTrack on
 shortLabel Affy Tx sRNA Sig
 longLabel Affymetrix Transcriptome Phase 3 Short RNA Signal
 group regulation
@@ -546,28 +546,28 @@ maxHeightPixels 100:30:10
 canPack off
 type wig 0 1000
 
-    track affyTxnPhase3HeLabottom_strand
-    shortLabel HeLa bottom
+    track affyTxnPhase3HeLatop_strand
+    shortLabel HeLa +
     subTrack affyTxnPhase3S
-    longLabel Affymetrix PolyA+ (Cytosolic) Hela Bottom Strand RNA Whole Genome Signal
+    longLabel Affymetrix PolyA+ (Cytosolic) Hela Plus Strand RNA Whole Genome Signal
     priority 1
 
-    track affyTxnPhase3HeLatop_strand
-    shortLabel HeLa top
+    track affyTxnPhase3HeLabottom_strand
+    shortLabel HeLa -
     subTrack affyTxnPhase3S
-    longLabel Affymetrix PolyA+ (Cytosolic) Hela Top Strand RNA Whole Genome Signal
+    longLabel Affymetrix PolyA+ (Cytosolic) Hela Minus Strand RNA Whole Genome Signal
     priority 2
 
-    track affyTxnPhase3HepG2bottom_strand
-    shortLabel HepG2 bottom
+    track affyTxnPhase3HepG2top_strand
+    shortLabel HepG2 +
     subTrack affyTxnPhase3S
-    longLabel Affymetrix PolyA+ (Cytosolic) HepG2 Bottom Strand RNA Whole Genome Signal
+    longLabel Affymetrix PolyA+ (Cytosolic) HepG2 Plus Strand RNA Whole Genome Signal
     priority 3
 
-    track affyTxnPhase3HepG2top_strand
-    shortLabel HepG2 top
+    track affyTxnPhase3HepG2bottom_strand
+    shortLabel HepG2 -
     subTrack affyTxnPhase3S
-    longLabel Affymetrix PolyA+ (Cytosolic) HepG2 Top Strand RNA Whole Genome Signal
+    longLabel Affymetrix PolyA+ (Cytosolic) HepG2 Minus Strand RNA Whole Genome Signal
     priority 4
 
 track affyU133
