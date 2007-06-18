@@ -933,6 +933,10 @@ void addWikiTrack(struct track **pGroupList);
 void wikiTrackMethods(struct track *tg);
 /* establish loadItems function for wiki track */
 
+struct bed *wikiTrackGetBedRange(char *mapName, char *chromName,
+	int start, int end);
+/* fetch wiki track items as simple bed 3 list in given range */
+
 void bed8To12(struct bed *bed);
 /* Turn a bed 8 into a bed 12 by defining one block. */
 

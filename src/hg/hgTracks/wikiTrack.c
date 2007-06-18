@@ -9,7 +9,7 @@
 #include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.7 2007/06/15 21:14:00 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.8 2007/06/18 16:20:33 hiram Exp $";
 
 
 static void wikiTrackMapItem(struct track *tg, void *item,
@@ -102,12 +102,6 @@ while ((row = sqlNextRow(sr)) != NULL)
     AllocVar(id);
     id->chromStart = item->id;
     lf->itemAttr = id;
-/*
-    int *extraId;
-    AllocVar(extraId);
-    *extraId = item->id;
-    lf->extra = extraId;
-*/
     slAddHead(&lfList, lf);
     wikiTrackFree(&item);
     }
@@ -137,12 +131,35 @@ if (wikiTrackEnabled(NULL))
     }
 
 tg->items = lfList;
-}
+}	/*	static void wikiTrackLoadItems(struct track *tg)	*/
 
-void wikiTrackMethods(struct track *tg)
-/* establish loadItems function for wiki track */
+struct bed *wikiTrackGetBedRange(char *mapName, char *chromName,
+	int start, int end)
+/* fetch wiki track items as simple bed 3 list in given range */
 {
-tg->loadItems = wikiTrackLoadItems;
+struct bed *bed, *bedList = NULL;
+struct sqlConnection *conn = hConnectCentral();
+struct sqlResult *sr;
+char **row;
+char where[256];
+int rowOffset;
+
+safef(where, ArraySize(where), "db='%s'", database);
+
+sr = hRangeQuery(conn, mapName, chromName, start, end, where, &rowOffset);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct wikiTrack *item = wikiTrackLoad(row);
+    AllocVar(bed);
+    bed->chrom = cloneString(item->chrom);
+    bed->chromStart = item->chromStart;
+    bed->chromEnd = item->chromEnd;
+    slAddHead(&bedList, bed);
+    wikiTrackFree(&item);
+    }
+sqlFreeResult(&sr);
+hDisconnectCentral(&conn);
+return bedList;
 }
 
 void addWikiTrack(struct track **pGroupList)
@@ -175,6 +192,7 @@ if (wikiTrackEnabled(NULL))
     tg->groupName = cloneString("map");
     tg->defaultGroupName = cloneString("map");
     tg->exonArrows = TRUE;
+    tg->labelNextItemButtonable = TRUE;
     tdb->tableName = tg->mapName;
     tdb->shortLabel = tg->shortLabel;
     tdb->longLabel = tg->longLabel;
@@ -185,4 +203,10 @@ if (wikiTrackEnabled(NULL))
     slAddHead(pGroupList, tg);
     hDisconnectCentral(&conn);
     }
+}
+
+void wikiTrackMethods(struct track *tg)
+/* establish loadItems function for wiki track */
+{
+tg->loadItems = wikiTrackLoadItems;
 }
