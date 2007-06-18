@@ -16,7 +16,7 @@
 #include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.21 2007/06/18 20:40:37 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.22 2007/06/18 23:26:38 hiram Exp $";
 
 #define NEW_ITEM_SCORE "newItemScore"
 #define NEW_ITEM_STRAND "newItemStrand"
@@ -47,20 +47,13 @@ hPrintf("<INPUT NAME=\"colorPullDown\" VALUE=\"\" SIZE=1 STYLE=\"display:none;\"
 
 hPrintf("<SELECT NAME=\"itemColor\" style=\"width:8em; background-color:#000000;\" %s>\n", colorMenuJS);
 hPrintf("<OPTION SELECTED VALUE = \"#000000\" style=\"background-color:#000000;\" >black</OPTION>\n");
-hPrintf("<OPTION value = \"#333333\" style=\"background-color:#333333;\" >gray 3</OPTION>\n");
-hPrintf("<OPTION VALUE = \"#555555\" style=\"background-color:#555555;\" >gray 5</OPTION>\n");
-hPrintf("<OPTION VALUE = \"#777777\" style=\"background-color:#777777;\" >gray 7</OPTION>\n");
-hPrintf("<OPTION VALUE = \"#999999\" style=\"background-color:#999999;\" >gray 9</OPTION>\n");
-hPrintf("<OPTION VALUE = \"#bbbbbb\" style=\"background-color:#bbbbbb;\" >gray 11</OPTION>\n");
-hPrintf("<OPTION VALUE = \"#dddddd\" style=\"background-color:#dddddd;\" >gray 13</OPTION>\n");
+hPrintf("<OPTION value = \"#0000ff\" style=\"background-color:#0000ff;\" >blue</OPTION>\n");
+hPrintf("<OPTION VALUE = \"#9600c8\" style=\"background-color:#9600c8;\" >purple</OPTION>\n");
 hPrintf("<OPTION VALUE = \"#ff0000\" style=\"background-color:#ff0000;\" >red</OPTION>\n");
-hPrintf("<OPTION VALUE = \"#dd2200\" style=\"background-color:#dd2200;\" >red 13 green 2</OPTION>\n");
-hPrintf("<OPTION VALUE = \"#bb4400\" style=\"background-color:#bb4400;\" >red 11 green 4</OPTION>\n");
-hPrintf("<OPTION VALUE = \"#996600\" style=\"background-color:#996600;\" >red 9 green 6</OPTION>\n");
-hPrintf("<OPTION VALUE = \"#778800\" style=\"background-color:#778800;\" >red 7 green 8</OPTION>\n");
-hPrintf("<OPTION VALUE = \"#55aa00\" style=\"background-color:#55aa00;\" >red 5 green 10</OPTION>\n");
-hPrintf("<OPTION VALUE = \"#33cc00\" style=\"background-color:#33cc00;\" >red 3 green 12</OPTION>\n");
-hPrintf("<OPTION VALUE = \"#00ff00\" style=\"background-color:#00ff00;\" >green</OPTION>\n");
+hPrintf("<OPTION VALUE = \"#e67800\" style=\"background-color:#e67800;\" >orange</OPTION>\n");
+hPrintf("<OPTION VALUE = \"#dcdc00\" style=\"background-color:#dcdc00;\" >yellow</OPTION>\n");
+hPrintf("<OPTION VALUE = \"#00b400\" style=\"background-color:#00b400;\" >green</OPTION>\n");
+hPrintf("<OPTION VALUE = \"#8c8c8c\" style=\"background-color:#8c8c8c;\" >gray</OPTION>\n");
 hPrintf("</SELECT>\n");
 }
 
@@ -503,6 +496,7 @@ if (wikiTrackEnabled(&userName) && sameWord("0", wikiItemId))
 	hPrintf("<B>item name:&nbsp;</B>");
 	cgiMakeTextVar("i", NEW_ITEM_NAME, 18);
 	webPrintLinkCellEnd();
+#ifdef NOT
 	webPrintLinkTableNewRow();
 	/* sixth row is item score text entry */
 	webPrintWideCellStart(2, HG_COL_TABLE);
@@ -510,6 +504,7 @@ if (wikiTrackEnabled(&userName) && sameWord("0", wikiItemId))
 	cgiMakeTextVar(NEW_ITEM_SCORE, ITEM_SCORE_DEFAULT, 4);
 	hPrintf("&nbsp;(range:&nbsp;0&nbsp;to&nbsp;%s)", ITEM_SCORE_DEFAULT);
 	webPrintLinkCellEnd();
+#endif
 	webPrintLinkTableNewRow();
 	/* seventh row is item color pull-down menu */
 	webPrintWideCellStart(2, HG_COL_TABLE);
@@ -783,7 +778,10 @@ if (! wikiTrackEnabled(&userName))
 if (NULL == userName)
     errAbort("create new wiki item: user not logged in ?");
 
+#ifdef NOT
 score = sqlSigned(cartUsualString(cart, NEW_ITEM_SCORE, ITEM_SCORE_DEFAULT));
+#endif
+score = 0;
 pos = stripCommas(cartOptionalString(cart, "getDnaPos"));
 if (NULL == pos)
     errAbort("create new wiki item: called incorrectly, without getDnaPos");
