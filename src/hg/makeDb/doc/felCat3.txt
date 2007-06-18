@@ -812,6 +812,10 @@ augustus/src/augustus --AUGUSTUS_CONFIG_PATH=/cluster/data/felCat3/bed/augustus/
   mkdir maf
   mkdir run
 
+  # tree_doctor
+  /cluster/bin/phast.new/tree_doctor  --prune-all-but=felCat3,canFam2,mm8,hg18 \
+     /cluster/data/hg18/bed/multiz28way/cons/28way.mod  | awk '$1 == "TREE:" {print $2;}'  > 4way.nh
+
   # use the following for species.lst:
   # felCat3 canFam2 mm8 hg18
   # use the following for tree.nh:
@@ -1145,6 +1149,7 @@ chmod +x getIrows.sh
     # Submission to last job:          7596s     126.60m     2.11h    0.09d
 
     # create Most Conserved track
+    # Takes about 10 minutes
     ssh kolossus
     cd /san/sanvol1/scratch/felCat3/multiz4way/phastCons
     find ./bed -name "*.bed" \
@@ -1155,5 +1160,83 @@ chmod +x getIrows.sh
     | awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' \
     | /cluster/bin/scripts/lodToBedScore /dev/stdin >
     phastConsElements4way.bed
+    cp phastConsElements4way.bed /cluster/data/felCat3/bed/multiz4way/phastCons
+
+    # estimate coverage
+    # ornAna1 targets: 5% overall coverage, 70% CDS coverage
+    # xenTro1 target: 4% overall coverage
+    ssh hgwdev
+    cd /cluster/data/felCat3/bed/multiz4way/phastCons
+    # attempted genome-wide, ran over an hour without completing
+
+    # pick scaffolds with NSCAN annotations:
+    featureBits -chrom=scaffold_0 felCat3 -enrichment nscanGene:cds phastConsElements4way.bed
+    # nscanGene:cds 10.166%, phastConsElements4way.bed 0.358%, both 0.358%, cover 3.53%, enrich 9.84x
+    featureBits -chrom=scaffold_1000 felCat3 -enrichment nscanGene:cds phastConsElements4way.bed
+    # nscanGene:cds 5.882%, phastConsElements4way.bed 2.677%, both 2.286%, cover 38.87%, enrich 14.52x
+    featureBits -chrom=scaffold_100011 felCat3 -enrichment nscanGene:cds phastConsElements4way.bed
+    # nscanGene:cds 3.830%, phastConsElements4way.bed 2.286%, both 1.993%, cover 52.04%, enrich 22.76x
+    featureBits -chrom=scaffold_100063 felCat3 -enrichment nscanGene:cds phastConsElements4way.bed
+    # nscanGene:cds 2.668%, phastConsElements4way.bed 1.487%, both 0.701%, cover 26.29%, enrich 17.69x
+    featureBits -chrom=scaffold_100077 felCat3 -enrichment nscanGene:cds phastConsElements4way.bed
+    # nscanGene:cds 2.671%, phastConsElements4way.bed 1.784%, both 0.968%, cover 36.25%, enrich 20.32x
+    featureBits -chrom=scaffold_100083 felCat3 -enrichment nscanGene:cds phastConsElements4way.bed
+    # nscanGene:cds 3.633%, phastConsElements4way.bed 6.358%, both 3.633%, cover 100.00%, enrich 15.73x
+    featureBits -chrom=scaffold_100088 felCat3 -enrichment nscanGene:cds phastConsElements4way.bed
+    # nscanGene:cds 1.384%, phastConsElements4way.bed 2.254%, both 0.625%, cover 45.15%, enrich 20.03x
+
+    # the largest scaffolds:
+    featureBits -chrom=scaffold_217569 felCat3 -enrichment nscanGene:cds phastConsElements4way.bed
+    # nscanGene:cds 0.877%, phastConsElements4way.bed 3.784%, both 0.607%, cover 69.21%, enrich 18.29x
+    featureBits -chrom=scaffold_213970 felCat3 -enrichment nscanGene:cds phastConsElements4way.bed
+    # nscanGene:cds 0.000%, phastConsElements4way.bed 1.531%, both 0.000%, cover nan%, enrich  nanx
+    featureBits -chrom=scaffold_138821 felCat3 -enrichment nscanGene:cds phastConsElements4way.bed
+    # nscanGene:cds 6.129%, phastConsElements4way.bed 5.286%, both 3.572%, cover 58.28%, enrich 11.02x
+    featureBits -chrom=scaffold_149667 felCat3 -enrichment nscanGene:cds phastConsElements4way.bed
+    # nscanGene:cds 0.658%, phastConsElements4way.bed 0.900%, both 0.344%, cover 52.30%, enrich 58.14x
+    featureBits -chrom=scaffold_217324 felCat3 -enrichment nscanGene:cds phastConsElements4way.bed
+    # nscanGene:cds 0.746%, phastConsElements4way.bed 3.041%, both 0.531%, cover 71.21%, enrich 23.42x
+    featureBits -chrom=scaffold_132063 felCat3 -enrichment nscanGene:cds phastConsElements4way.bed
+    # nscanGene:cds 1.903%, phastConsElements4way.bed 2.062%, both 1.142%, cover 60.03%, enrich 29.11x
+    featureBits -chrom=scaffold_194753 felCat3 -enrichment nscanGene:cds phastConsElements4way.bed
+    # nscanGene:cds 0.843%, phastConsElements4way.bed 2.334%, both 0.230%, cover 27.28%, enrich 11.69x
+
+    # not as good as ornAna1, but hopefully good enough
+
+    # load
+    hgLoadBed felCat3 phastConsElements4way phastConsElements4way.bed
+
+    # create merged posterior probability file and wiggle track data files
+    ssh kolossus
+    cd /san/sanvol1/scratch/felCat3/multiz4way/phastCons/
+    # sort by chromName, chromStart so that items are in numerical order 
+    #  for wigEncode
+    time find ./pp -name "*.pp" | \
+        sed -e "s/\// x /g" -e "s/\./ y /g" -e "s/-/ z /g" | \
+        sort -k7,7 -k9,9n | \
+        sed -e "s/ x /\//g" -e "s/ y /\./g" -e "s/ z /-/g" | \
+        xargs cat | \
+        nice wigEncode -noOverlap stdin phastCons4way.wig phastCons4way.wib
+        cp -p phastCons4way.wi?  /cluster/data/felCat3/bed/multiz4way/phastCons
+    # 0.166u 1.856s 2:10.13 1.5%      0+0k 0+0io 0pf+0w
+    cp -p phastCons4way.wi? /cluster/data/felCat3/bed/multiz4way/phastCons
+
+    # load gbdb and database with wiggle
+    ssh hgwdev
+    cd /cluster/data/felCat3/bed/multiz4way/phastCons
+    ln -s /cluster/data/felCat3/bed/multiz4way/phastCons/phastCons4way.wib /gbdb/felCat3/multiz4way
+    hgLoadWiggle -pathPrefix=/gbdb/felCat3/multiz4way felCat3 phastCons4way phastCons4way.wig
+
+    # tally up tree distances
+    ssh hgwdev
+    cd /cluster/data/felCat3/bed/multiz4way
+    tail -1 phastCons/phyloFit.tree.mod | sed -e 's/^TREE: //' > 4way.phyloFit.nh
+    /cluster/bin/phast.new/all_dists 4way.nh > 4way.distances.txt
+    grep felCat3 4way.distances.txt | sort -k3,3n |  awk '{printf ("%.4f\t%s\n", $3, $1)}' > distances.txt
+
+    cat distances.txt
+    # 0.1993  canFam2
+    # 0.3320  hg18
+    # 0.5306  mm8
 
 
