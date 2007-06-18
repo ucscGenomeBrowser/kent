@@ -16,7 +16,7 @@
 #include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.19 2007/06/15 22:09:31 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.20 2007/06/18 17:42:24 hiram Exp $";
 
 #define NEW_ITEM_SCORE "newItemScore"
 #define NEW_ITEM_STRAND "newItemStrand"
@@ -64,21 +64,21 @@ hPrintf("<OPTION VALUE = \"#00ff00\" style=\"background-color:#00ff00;\" >green<
 hPrintf("</SELECT>\n");
 }
 
-static char *encodedHgcReturnUrl(int hgsid)
+static char *encodedHgcReturnUrl(int id, int hgsid)
 /* Return a CGI-encoded hgSession URL with hgsid.  Free when done. */
 {
 char retBuf[1024];
-safef(retBuf, sizeof(retBuf), "http://%s/cgi-bin/hgc?%s&g=%s&c=%s&o=%d&l=%d&r=%d&db=%s&i=0",
+safef(retBuf, sizeof(retBuf), "http://%s/cgi-bin/hgc?%s&g=%s&c=%s&o=%d&l=%d&r=%d&db=%s&i=%d",
     cgiServerName(), cartSidUrlString(cart), WIKI_TRACK_TABLE, seqName,
-	winStart, winStart, winEnd, database);
+	winStart, winStart, winEnd, database, id);
 return cgiEncode(retBuf);
 }   
 
-static char *wikiTrackUserLoginUrl(int hgsid)
+static char *wikiTrackUserLoginUrl(int id, int hgsid)
 /* Return the URL for the wiki user login page. */
 {
+char *retEnc = encodedHgcReturnUrl(id, hgsid);
 char buf[2048];
-char *retEnc = encodedHgcReturnUrl(hgsid);
 if (! wikiLinkEnabled())
     errAbort("wikiLinkUserLoginUrl called when wiki is not enabled (specified "
              "in hg.conf).");
@@ -89,7 +89,7 @@ freez(&retEnc);
 return(cloneString(buf));
 }
 
-static void offerLogin(char *loginType)
+static void offerLogin(int id, char *loginType)
 /* display login prompts to the wiki when user isn't already logged in */
 {
 char *wikiHost = wikiLinkHost();
@@ -97,7 +97,7 @@ printf("<P>Please login to %s the annotation track.</P>\n", loginType);
 printf("<P>The login page is handled by our "
        "<A HREF=\"http://%s/\" TARGET=_BLANK>wiki system</A>:\n", wikiHost);
 printf("<A HREF=\"%s\"><B>click here to login.</B></A><BR />\n",
-	wikiTrackUserLoginUrl(cartSessionId(cart)));
+	wikiTrackUserLoginUrl(id, cartSessionId(cart)));
 printf("The wiki also serves as a forum for users "
        "to share knowledge and ideas.\n</P>\n");
 }
@@ -342,7 +342,7 @@ hPrintf("<B>Description and comments from the wiki article: "
   "<A HREF=\"%s/index.php/%s\" TARGET=_blank>%s</A> are shown below:</B><HR>\n",
        url, item->descriptionKey, item->descriptionKey);
 
-if (strippedRender)
+if (strippedRender && (strlen(strippedRender) > 2))
     {
     hPrintf("\n%s\n<HR>\n", strippedRender);
     freeMem(strippedRender);
@@ -353,7 +353,7 @@ else
 
 if (NULL == userName)
     {
-    offerLogin("add comments to items on");
+    offerLogin(item->id, "add comments to items on");
     }
 else
     {
@@ -434,7 +434,7 @@ if (wikiTrackEnabled(&userName) && sameWord("0", wikiItemId))
     cartWebStart(cart, "%s", "User Annotation Track: Create new item");
     if (NULL == userName)
 	{
-	offerLogin("add new items to");
+	offerLogin(0, "add new items to");
 	cartHtmlEnd();
 	return;
 	}
@@ -583,7 +583,7 @@ slAddHead(&clone->vars, cloneVar);
 
 }
 
-static void addDescription(char * descriptionKey, char *itemName)
+static void addDescription(struct wikiTrack *item, char *userName)
 {
 char *newComments = cartNonemptyString(cart, NEW_ITEM_COMMENT);
 struct dyString *content = newDyString(1024);
@@ -592,7 +592,7 @@ struct dyString *content = newDyString(1024);
 if (sameWord(ADD_ITEM_COMMENT_DEFAULT,newComments))
     return;
 
-struct htmlPage *page = fetchEditPage(descriptionKey);
+struct htmlPage *page = fetchEditPage(item->descriptionKey);
 
 /* create a stripped down edit form, we don't want all the variables */
 struct htmlForm *strippedEditForm;
@@ -612,30 +612,55 @@ strippedEditForm->endTag = currentEditForm->endTag;
 struct htmlFormVar *wpTextbox1 =
 	htmlPageGetVar(page, currentEditForm, "wpTextbox1");
 
+/* decide on whether adding comments to existing text, or starting a
+ *	new article from scratch.
+ *	This function could be extended to actually checking the current
+ *	contents to see if the "Category:" or "created:" lines have been
+ *	removed, and then restore them.
+ */
 if (wpTextbox1->curVal && (strlen(wpTextbox1->curVal) > 2))
     {
-    char *rawText = fetchWikiRawText(descriptionKey);
-    dyStringPrintf(content, "%s<P>\n''comments added: ~~~~''<BR /><BR />\n",
+    char *rawText = fetchWikiRawText(item->descriptionKey);
+    dyStringPrintf(content, "%s\n\n==''comments added: ~~~~''==\n\n",
 	rawText);
     }
 else
     {
+    boolean recreateHeader = FALSE;
     char position[128];
     char *newPos;
+    char *userSignature;
+    /* In the case where this is a restoration of the header lines,
+     *	may be a different creator than this user adding comments.
+     *	So, get the header line correct to represent the actual creator.
+     */
+    if (sameWord(userName, item->owner))
+	userSignature = cloneString("~~~~");
+    else
+	{
+	struct dyString *tt = newDyString(1024);
+	dyStringPrintf(tt, "[[User:%s|%s]] ", item->owner, item->owner);
+	dyStringPrintf(tt, "%s", item->creationDate);
+	userSignature = dyStringCannibalize(&tt);
+	recreateHeader = TRUE;
+	}
     snprintf(position, 128, "%s:%d-%d", seqName, winStart+1, winEnd);
     newPos = addCommasToPos(position);
-    dyStringPrintf(content, "%s\n<P>"
+    dyStringPrintf(content, "%s\n"
 "[http://%s/cgi-bin/hgTracks?db=%s&wikiTrack=pack&position=%s:%d-%d %s %s]"
-	"&nbsp;&nbsp;<B>'%s'</B>&nbsp;&nbsp;''created: ~~~~''<BR /><BR />\n",
+	"&nbsp;&nbsp;<B>'%s'</B>&nbsp;&nbsp;''created: %s''\n\n",
 	NEW_ITEM_CATEGORY,
 	    cfgOptionDefault(CFG_WIKI_BROWSER, DEFAULT_BROWSER), database,
-		seqName, winStart+1, winEnd, database, newPos, itemName);
+		seqName, winStart+1, winEnd, database, newPos, item->name,
+		userSignature);
+    if (recreateHeader)
+	dyStringPrintf(content, "\n\n''comments added: ~~~~''\n\n");
     }
 
 if (sameWord(NEW_ITEM_COMMENT_DEFAULT,newComments))
-    dyStringPrintf(content, "%s\n</P>\n", NO_ITEM_COMMENT_SUPPLIED);
+    dyStringPrintf(content, "%s\n\n", NO_ITEM_COMMENT_SUPPLIED);
 else
-    dyStringPrintf(content, "%s\n</P>\n", newComments);
+    dyStringPrintf(content, "%s\n\n", newComments);
 
 
 htmlCloneFormVarSet(currentEditForm, strippedEditForm,
@@ -727,8 +752,10 @@ if (NULL == wikiItemId)
     errAbort("add wiki comments: NULL wikiItemId");
 if (! wikiTrackEnabled(&userName))
     errAbort("add wiki comments: wiki track not enabled");
+if (NULL == userName)
+    errAbort("add wiki comments: user not logged in ?");
 
-addDescription(item->descriptionKey, item->name);
+addDescription(item, userName);
 updateLastModifiedDate(sqlSigned(wikiItemId));
 displayItem(item, userName);
 cartHtmlEnd();
@@ -812,11 +839,11 @@ hDisconnectCentral(&conn);
 cartWebStart(cart, "%s %s", "User Annotation Track, created new item: ",
 	newItemName);
 
-addDescription(descriptionKey, newItemName);
-
 char wikiItemId[64];
 safef(wikiItemId,ArraySize(wikiItemId),"%d", id);
 struct wikiTrack *item = findItem(wikiItemId);
+
+addDescription(item, userName);
 displayItem(item, userName);
 
 cartHtmlEnd();
