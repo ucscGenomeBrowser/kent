@@ -1659,9 +1659,9 @@ windowingFunction mean
 minLimit 0
 maxLimit 20
 viewLimits 0:10
-dataVersion ENCODE Oct 2005 Freeze and Nov 2006, Jan 2007 and Apr 2007 updates
+dataVersion ENCODE Oct 2005 Freeze and Nov 2006, Jan 2007, Apr 2007 and Jun 2007 updates
 subGroup1 celltype Cell_Type hela=HeLaS3 gm=GM06990 k562=K562
-subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF1 pol2=Pol2 pol2n=Pol2-N h4kac4=H4Kac4 baf47=BAF47 stat1=STAT1 p65c=P65-C p65n=P65-N smarca4=SMARCA4 smarca6=SMARCA6 nrsf=NRSF
+subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF1 pol2=Pol2 pol2n=Pol2-N h4kac4=H4Kac4 h3k27me3=H3K27me3 baf47=BAF47 stat1=STAT1 p65c=P65-C p65n=P65-N smarca4=SMARCA4 smarca6=SMARCA6 nrsf=NRSF
     
     track encodeYaleChipPvalBaf155
     release alpha
@@ -1670,6 +1670,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     longLabel Yale ChIP-chip (BAF155 ab, HeLa S3 cells) P-Value 
     color 50,50,200
     subGroups celltype=hela factor=baf155
+    dataVersion ENCODE Oct 2005 Freeze
     priority 1
 
     track encodeYaleChipPvalBaf170
@@ -1679,6 +1680,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     longLabel Yale ChIP-chip (BAF170 ab, HeLa S3 cells) P-Value 
     color 200,50,50
     subGroups celltype=hela factor=baf170
+    dataVersion ENCODE Oct 2005 Freeze
     priority 2
 
     track encodeYaleChipPvalFos
@@ -1688,6 +1690,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     longLabel Yale ChIP-chip (c-Fos ab, HeLa S3 cells) P-Value
     subGroups celltype=hela factor=fos
     color 112,63,175
+    dataVersion ENCODE Oct 2005 Freeze
     priority 3
 
     track encodeYaleChipPvalJun
@@ -1697,6 +1700,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     longLabel Yale ChIP-chip (c-Jun ab, HeLa S3 cells) P-Value
     subGroups celltype=hela factor=jun
     color 50,50,200
+    dataVersion ENCODE Oct 2005 Freeze
     priority 4
 
     track encodeYaleChipPvalTaf
@@ -1706,6 +1710,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     longLabel Yale ChIP-chip (TAF1 ab, HeLa S3 cells) P-Value
     color 200,50,50
     subGroups celltype=hela factor=taf1
+    dataVersion ENCODE Oct 2005 Freeze
     priority 5
 
     track encodeYaleChipPvalPol2Hela
@@ -1738,6 +1743,16 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     dataVersion Nov 2006
     priority 8
 
+    track encodeYaleChipPvalH3k27me3Hela
+    release alpha
+    subTrack encodeYaleChipPval
+    shortLabel YU H3K27me3 HeLa P
+    longLabel Yale ChIP-chip (H3K27me3 ab, HeLa S3 cells) P-Value
+    color 112,63,175
+    subGroups celltype=hela factor=h3k27me3
+    dataVersion Jun 2007
+    priority 9
+    
     track encodeYaleChipPvalStat1HelaIfna
     release alpha
     subTrack encodeYaleChipPval
@@ -1746,7 +1761,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     color 100,20,20
     subGroups celltype=hela factor=stat1
     dataVersion Jan 2007
-    priority 9
+    priority 10
     
     track encodeYaleChipPvalP65nHelaTnfa
     release alpha
@@ -1756,7 +1771,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     color 20,20,100
     subGroups celltype=hela factor=p65n
     dataVersion Jan 2007
-    priority 10
+    priority 11
 
     track encodeYaleChipPvalP65cHelaTfna
     release alpha
@@ -1766,7 +1781,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     color 20,100,20
     subGroups celltype=hela factor=p65c
     dataVersion Jan 2007
-    priority 11
+    priority 12
 
     track encodeYaleChipPvalSmarca4Hela
     release alpha
@@ -1776,7 +1791,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     color 50,50,200
     subGroups celltype=hela factor=smarca4
     dataVersion Apr 2007
-    priority 12
+    priority 13
     
     track encodeYaleChipPvalSmarca6Hela
     release alpha
@@ -1786,7 +1801,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     color 200,50,50
     subGroups celltype=hela factor=smarca6
     dataVersion Apr 2007
-    priority 13
+    priority 14
     
     track encodeYaleChipPvalNrsfHela
     release alpha
@@ -1796,7 +1811,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     color 100,20,20
     subGroups celltype=hela factor=nrsf
     dataVersion Apr 2007
-    priority 14
+    priority 15
 
     track encodeYaleChipPvalPol2Gm06990
     release alpha
@@ -1806,7 +1821,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     longLabel Yale ChIP-chip (Pol2 ab, GM06990 cells) P-Value
     subGroups celltype=gm factor=pol2
     dataVersion Nov 2006
-    priority 15
+    priority 16
 
     track encodeYaleChipPvalPol2nGm06990
     release alpha
@@ -1816,7 +1831,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     color 20,20,100
     subGroups celltype=gm factor=pol2n
     dataVersion Nov 2006
-    priority 16
+    priority 17
 
     track encodeYaleChipPvalH4kac4Gm06990
     release alpha
@@ -1826,7 +1841,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     color 20,100,20
     subGroups celltype=gm factor=h4kac4
     dataVersion Nov 2006
-    priority 17
+    priority 18
 
     track encodeYaleChipPvalBaf155K562
     release alpha
@@ -1836,7 +1851,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     color 50,50,200
     subGroups celltype=k562 factor=baf155
     dataVersion Jan 2007
-    priority 18
+    priority 19
 
     track encodeYaleChipPvalBaf170K562
     release alpha
@@ -1846,7 +1861,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     color 200,50,50
     subGroups celltype=k562 factor=baf170
     dataVersion Jan 2007
-    priority 19
+    priority 20
 
     track encodeYaleChipPvalBaf47K562
     release alpha
@@ -1856,7 +1871,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     color 112,63,175
     subGroups celltype=k562 factor=baf47
     dataVersion Jan 2007
-    priority 20
+    priority 21
 
 track encodeYaleChipSig
 release alpha
@@ -1875,9 +1890,9 @@ maxLimit 3.353
 windowingFunction mean
 viewLimits 0:2
 autoScale Off
-dataVersion ENCODE Oct 2005 Freeze and Nov 2006, Jan 2007 and Apr 2007 updates
+dataVersion ENCODE Oct 2005 Freeze and Nov 2006, Jan 2007, Apr 2007 and Jun 2007 updates
 subGroup1 celltype Cell_Type hela=HeLaS3 gm=GM06990 k562=K562
-subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF1 pol2=Pol2 pol2n=Pol2-N h4kac4=H4Kac4 baf47=BAF47 stat1=STAT1 p65c=P65-C p65n=P65-N smarca4=SMARCA4 smarca6=SMARCA6 nrsf=NRSF
+subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF1 pol2=Pol2 pol2n=Pol2-N h4kac4=H4Kac4 h3k27me3=H3K27me3 baf47=BAF47 stat1=STAT1 p65c=P65-C p65n=P65-N smarca4=SMARCA4 smarca6=SMARCA6 nrsf=NRSF
 
     track encodeYaleChipSignalBaf155
     release alpha
@@ -1886,6 +1901,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     longLabel Yale ChIP-chip (BAF155 ab, HeLa S3 cells) Signal
     color 50,50,200
     subGroups celltype=hela factor=baf155
+    dataVersion ENCODE Oct 2005 Freeze
     priority 1
 
     track encodeYaleChipSignalBaf170
@@ -1895,6 +1911,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     longLabel Yale ChIP-chip (BAF170 ab, HeLa S3 cells) Signal
     color 200,50,50
     subGroups celltype=hela factor=baf170
+    dataVersion ENCODE Oct 2005 Freeze
     priority 2
 
     track encodeYaleChipSignalFos
@@ -1904,6 +1921,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     longLabel Yale ChIP-chip (c-Fos ab, HeLa S3 cells) Signal
     color 112,63,175
     subGroups celltype=hela factor=fos
+    dataVersion ENCODE Oct 2005 Freeze
     priority 3
 
     track encodeYaleChipSignalJun
@@ -1913,6 +1931,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     longLabel Yale ChIP-chip (c-Jun ab, HeLa S3 cells) Signal
     color 50,50,200
     subGroups celltype=hela factor=jun
+    dataVersion ENCODE Oct 2005 Freeze
     priority 4
 
     track encodeYaleChipSignalTaf
@@ -1922,6 +1941,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     longLabel Yale ChIP-chip (TAF1 ab, HeLa S3 cells) Signal
     color 200,50,50
     subGroups celltype=hela factor=taf1
+    dataVersion ENCODE Oct 2005 Freeze
     priority 5
 
     track encodeYaleChipSignalPol2Hela
@@ -1931,6 +1951,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     longLabel YU ChIP-chip (Pol2 ab, HeLa S3 cells) Signal
     color 100,20,20
     subGroups celltype=hela factor=pol2
+    dataVersion Nov 2006
     priority 6
 
     track encodeYaleChipSignalPol2nHela
@@ -1940,6 +1961,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     longLabel Yale ChIP-chip (Pol2 N-terminus ab, HeLa S3 cells) Signal
     color 20,20,100
     subGroups celltype=hela factor=pol2n
+    dataVersion Nov 2006
     priority 7
 
     track encodeYaleChipSignalH4kac4Hela
@@ -1949,7 +1971,18 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     longLabel Yale ChIP-chip (H4Kac4 ab, HeLa S3 cells) Signal
     color 50,50,200
     subGroups celltype=hela factor=h4kac4
+    dataVersion Nov 2006
     priority 8
+
+    track encodeYaleChipSignalH3k27me3Hela
+    release alpha
+    subTrack encodeYaleChipSig
+    shortLabel YU H3K27me3 HeLa S
+    longLabel Yale ChIP-chip (H3K27me3 ab, HeLa S3 cells) Signal
+    color 112,63,175
+    subGroups celltype=hela factor=h3k27me3
+    dataVersion Jun 2007
+    priority 9
 
     track encodeYaleChipSignalStat1HelaIfna
     release alpha
@@ -1959,7 +1992,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     color 100,20,20
     subGroups celltype=hela factor=stat1
     dataVersion Jan 2007
-    priority 9
+    priority 10
     
     track encodeYaleChipSignalP65nHelaTnfa
     release alpha
@@ -1969,7 +2002,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     color 20,20,100
     subGroups celltype=hela factor=p65n
     dataVersion Jan 2007
-    priority 10
+    priority 11
 
     track encodeYaleChipSignalP65cHelaTfna
     release alpha
@@ -1979,7 +2012,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     color 20,100,20
     subGroups celltype=hela factor=p65c
     dataVersion Jan 2007
-    priority 11
+    priority 12
 
     track encodeYaleChipSignalSmarca4Hela
     release alpha
@@ -1989,7 +2022,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     color 50,50,200
     subGroups celltype=hela factor=smarca4
     dataVersion Apr 2007
-    priority 12
+    priority 13
     
     track encodeYaleChipSignalSmarca6Hela
     release alpha
@@ -1999,7 +2032,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     color 200,50,50
     subGroups celltype=hela factor=smarca6
     dataVersion Apr 2007
-    priority 13
+    priority 14
     
     track encodeYaleChipSignalNrsfHela
     release alpha
@@ -2009,7 +2042,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     color 100,20,20
     subGroups celltype=hela factor=nrsf
     dataVersion Apr 2007
-    priority 14
+    priority 15
 
     track encodeYaleChipSignalPol2Gm06990
     release alpha
@@ -2018,7 +2051,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     color 100,20,20
     longLabel Yale ChIP-chip (Pol2 ab, GM06990 cells) Signal
     subGroups celltype=gm factor=pol2
-    priority 15
+    priority 16
 
     track encodeYaleChipSignalPol2nGm06990
     release alpha
@@ -2027,7 +2060,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     longLabel Yale ChIP-chip (Pol2 N-terminus ab, GM06990 cells) Signal
     color 20,20,100
     subGroups celltype=gm factor=pol2n
-    priority 16
+    priority 17
 
     track encodeYaleChipSignalH4kac4Gm06990
     release alpha
@@ -2036,7 +2069,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     longLabel Yale ChIP-chip (H4Kac4 ab, GM06990 cells) Signal
     color 20,100,20
     subGroups celltype=gm factor=h4kac4
-    priority 17
+    priority 18
 
     track encodeYaleChipSignalBaf155K562
     release alpha
@@ -2046,7 +2079,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     color 50,50,200
     subGroups celltype=k562 factor=baf155
     dataVersion Jan 2007
-    priority 18
+    priority 19
 
     track encodeYaleChipSignalBaf170K562
     release alpha
@@ -2056,7 +2089,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     color 200,50,50
     subGroups celltype=k562 factor=baf170
     dataVersion Jan 2007
-    priority 19
+    priority 20
 
     track encodeYaleChipSignalBaf47K562
     release alpha
@@ -2066,7 +2099,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     color 112,63,175
     subGroups celltype=k562 factor=baf47
     dataVersion Jan 2007
-    priority 20
+    priority 21
 
 track encodeYaleChipSites
 release alpha
