@@ -118,7 +118,7 @@
 #endif
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1353 2007/06/18 17:40:17 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1354 2007/06/19 02:20:45 hartera Exp $";
 
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
@@ -1042,12 +1042,9 @@ else
     }
 size = end - start;
 /* Now it's time to do the search. */
-for ( ; sizeWanted > 0 && sizeWanted < BIGNUM; )
+for (;;)
     {
-    if (sameWord(tg->mapName, WIKI_TRACK_TABLE))
-	items = wikiTrackGetBedRange(tg->mapName, chromName, start, end);
-    else
-	items = hGetBedRange(tg->mapName, chromName, start, end, NULL);
+    items = hGetBedRange(tg->mapName, chromName, start, end, NULL);
     /* If we got something, or weren't able to search as big as we wanted to */
     /* (in case we're at the end of the chrom).  */
     if ((items != NULL) || (size < sizeWanted))
@@ -4969,7 +4966,7 @@ if (dy != NULL)
 
 /* for some assemblies coloring is based on entries in the confidence column 
    where vegaInfo has this column otherwise the method column is used. 
-   Check the field list for these columns. */
+   Check the table field list for these columns. */
 
 tblIx = sqlFieldIndex(conn, infoTable, "confidence");
 fieldExists = (tblIx > -1) ? TRUE : FALSE;
@@ -10011,9 +10008,15 @@ struct sqlResult *sr;
 char **row;
 int rowOffset;
 char option[128]; /* Option -  score filter */
+char *words[3];
+int wordCt;
 char *optionScoreVal;
 int optionScore = 0;
 char query[128] ;
+char *setting = NULL;
+bool doScoreCtFilter = FALSE;
+int scoreFilterCt = 0;
+char *topTable = NULL;
 
 if (tg->bedSize <= 3)
     loader = bedLoad3;
@@ -10024,6 +10027,26 @@ else if (tg->bedSize == 5)
 else
     loader = bedLoad6;
 
+/* limit to a specified count of top scoring items.
+ * If this is selected, it overrides selecting item by specified score */
+if ((setting = trackDbSetting(tg->tdb, "filterTopScorers")) != NULL)
+    {
+    wordCt = chopLine(cloneString(setting), words);
+    if (wordCt >= 3)
+        {
+        safef(option, sizeof(option), "%s.filterTopScorersOn", tg->mapName);
+        doScoreCtFilter =
+            cartCgiUsualBoolean(cart, option, sameString(words[0], "on"));
+        safef(option, sizeof(option), "%s.filterTopScorersCt", tg->mapName);
+        scoreFilterCt = cartCgiUsualInt(cart, option, atoi(words[1]));
+        topTable = words[2];
+        /* if there are not too many rows in the table then can define */
+        /* top table as the track or subtrack table */
+        if (sameWord(topTable, "self"))
+            topTable = cloneString(tg->mapName);
+        }
+    }
+
 /* limit to items above a specified score */
 safef(option, sizeof(option), "%s.scoreFilter", tg->mapName);
 optionScoreVal = trackDbSetting(tg->tdb, "scoreFilter");
@@ -10031,7 +10054,15 @@ if (optionScoreVal != NULL)
     optionScore = atoi(optionScoreVal);
 optionScore = cartUsualInt(cart, option, optionScore);
 
-if (optionScore > 0 && tg->bedSize >= 5)
+if (hTableExists(topTable) && doScoreCtFilter)
+    {
+    safef(query, sizeof(query),
+                "select * from %s order by score desc limit %d",
+                                topTable, scoreFilterCt);
+    sr = sqlGetResult(conn, query);
+    rowOffset = hOffsetPastBin(hDefaultChrom(), topTable);
+    }
+else if (optionScore > 0 && tg->bedSize >= 5)
     {
     safef(query, sizeof(query), "score >= %d", optionScore);
     sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, 
