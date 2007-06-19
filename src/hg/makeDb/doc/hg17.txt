@@ -23757,3 +23757,66 @@ hgLoadBed -sqlTable=switchDbTss.sql hg17 switchDbTss switchDbTss.bed
     # as part the normal genbank build.  Change above to:
         hg18.orfeomeTables.default = yes
     
+###########################################################################
+# Transcriptome Phase 3 tracks (Andy 2007-06-10)
+
+ssh hgwdev
+bash
+cd /san/sanVol1/scratch/andy
+mkdir transcriptome
+cd transcriptome/
+cd /cluster/data/hg17
+cp /var/ftp/encode/Affy_transcriptome_phase3.tar .
+tar xfv Affy_transcriptome_phase3.tar 
+find . -name '*.bz2' -exec bunzip2 '{}' \;
+cat > processWig.sh << "EOF"
+#!/bin/bash
+
+theDir=`dirname $1`;
+theFile=`basename $1`;
+table=affyTxnPhase3${theFile%.sig.wig};
+tmp=/scratch/tmp/trans3rdPhase.$$
+
+mkdir $tmp
+cp $1 $tmp
+pushd $tmp
+head -n1 $theFile > $table.sig.track.txt
+tail +2 $theFile > tmp; mv tmp $theFile
+wigEncode $theFile $table.wig $table.wib
+popd
+cp $tmp/${table}.* $theDir
+rm -rf $tmp
+EOF
+chmod +x processWig.sh
+cat > gsub << "EOF"
+#LOOP
+./processWig.sh {check in line+ $(path1)} {check out exists $(dir1)/$(root1).track.txt}
+#ENDLOOP
+EOF
+find . -name '*.sig.wig' > wig.lst
+gensub2 wig.lst single gsub spec
+ssh pk
+cd /san/sanVol1/scratch/andy/transcriptome
+para create spec
+para push
+exit
+cd /cluster/data/hg17/bed
+mkdir transcriptome3rdPhase/{wig,wib,bed}
+cd transcriptome3rdPhase/wib/
+cp /san/sanVol1/scratch/andy/transcriptome/graphs/human_{long,short}_rna/affyTxnPhase3*.wib .
+pushd /gbdb/hg17/wib
+ln -s /cluster/data/hg17/bed/transcriptome3rdPhase/wib/* .
+popd
+cd ../wig/
+cp /san/sanVol1/scratch/andy/transcriptome/graphs/human_{long,short}_rna/affyTxnPhase3*.wig .
+for f in *; do
+   hgLoadWiggle hg17 ${f%.wig} $f
+done
+cd ../bed
+for f in /san/sanVol1/scratch/andy/transcriptome/transfrags/human_{long,short}_rna/*; do
+   newName=`basename $f`;
+   newName=${newName%.bz2};
+   bzcat $f | tail +2 > $newName;
+   tab=affyTxnPhase3Frags${newName%.bed};
+   hgLoadBed hg17 $tab $newName;
+done
