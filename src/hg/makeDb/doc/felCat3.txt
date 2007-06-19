@@ -1010,6 +1010,18 @@ chmod +x getIrows.sh
   time nice hgLoadSqlTab felCat3 multiz4waySummary /tmp/multiz4waySummary.sql multiz4waySummary.tab
   # 0.000u 0.003s 0:04.18 0.0%      0+0k 0+0io 3pf+0w
 
+  # summary is only useful for scaffolds larger than 1 million, which is just
+  # 7 in felCat3
+  mysql> insert into multiz4waySummaryNew select * from multiz4waySummary where chrom = "scaffold_217569";
+  mysql> insert into multiz4waySummaryNew select * from multiz4waySummary where chrom = "scaffold_213970";
+  mysql> insert into multiz4waySummaryNew select * from multiz4waySummary where chrom = "scaffold_138821";
+  mysql> insert into multiz4waySummaryNew select * from multiz4waySummary where chrom = "scaffold_149667";
+  mysql> insert into multiz4waySummaryNew select * from multiz4waySummary where chrom = "scaffold_217324";
+  mysql> insert into multiz4waySummaryNew select * from multiz4waySummary where chrom = "scaffold_132063";
+  mysql> insert into multiz4waySummaryNew select * from multiz4waySummary where chrom = "scaffold_194753";
+  mysql> rename table multiz4waySummary to multiz4waySummaryAll;
+  mysql> rename table multiz4waySummaryNew to multiz4waySummary;
+
 
 #########################################################################
 # MULTIZ4WAY DOWNLOADABLES (Done May 2007 Heather)
