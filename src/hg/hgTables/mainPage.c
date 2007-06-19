@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.118 2007/05/22 23:03:30 galt Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.119 2007/06/19 20:45:58 donnak Exp $";
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
 /* Sort track by shortLabel. */
@@ -832,8 +832,14 @@ void mainPageAfterOpen(struct sqlConnection *conn)
 hPrintf("%s", 
   "Use this program to retrieve the data associated with a track in text "
   "format, to calculate intersections between tracks, and to retrieve "
-  "DNA sequence covered by a track. See <A HREF=\"#Help\">Using the Table "
-  "Browser</A> for a description of the controls in this form. "
+  "DNA sequence covered by a track. For help in using this application "
+  "see <A HREF=\"#Help\">Using the Table Browser</A> for a description "
+  "of the controls in this form, the "
+  "<A HREF=\"../goldenPath/help/hgTablesHelp.html\">User's Guide</A> for "
+  "general information and sample queries, and the OpenHelix Table Browser "
+  "<A HREF=\"http://www.openhelix.com/downloads/ucsc/ucsc_home.shtml\" "
+  "TARGET=_blank>tutorial</A> for a narrated presentation of the software "
+  "features and usage. "
   "For more complex queries, you may want to use "
   "<A HREF=\"http://main.g2.bx.psu.edu\" target=_BLANK>Galaxy</A> or "
   "our <A HREF=\"http://genome.ucsc.edu/FAQ/FAQdownloads#download29\">public "
