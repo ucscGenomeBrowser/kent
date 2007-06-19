@@ -377,25 +377,25 @@ type bed 3 .
     track affyTxnPhase3FragsHeLaCyto
     subTrack affyTxnPhase3FragsL
     shortLabel HeLa Cyto lRNA
-    longLabel Affymetrix PolyA+ (Cytosolic) HeLa Cyto Long RNA Fragments
+    longLabel Affymetrix PolyA+ (Cytosolic) HeLa Long RNA Fragments
     priority 2
 
     track affyTxnPhase3FragsHeLaNuclear
     subTrack affyTxnPhase3FragsL
     shortLabel HeLa Nucl lRNA
-    longLabel Affymetrix PolyA+ (Nuclear) HeLa Nuclear Long RNA Fragments
+    longLabel Affymetrix PolyA+ (Nuclear) HeLa Long RNA Fragments
     priority 3
 
     track affyTxnPhase3FragsHepG2Cyto
     subTrack affyTxnPhase3FragsL
     shortLabel HepG2 Cyto lRNA
-    longLabel Affymetrix PolyA+ (Cytosolic) HepG2 Cyto Long RNA Fragments
+    longLabel Affymetrix PolyA+ (Cytosolic) HepG2 Long RNA Fragments
     priority 4
 
     track affyTxnPhase3FragsHepG2Nuclear
     subTrack affyTxnPhase3FragsL
     shortLabel HepG2 Nucl lRNA
-    longLabel Affymetrix PolyA+ (Nuclear) HepG2 Nuclear Long RNA Fragments
+    longLabel Affymetrix PolyA+ (Nuclear) HepG2 Long RNA Fragments
     priority 5
 
     track affyTxnPhase3FragsJurkat
