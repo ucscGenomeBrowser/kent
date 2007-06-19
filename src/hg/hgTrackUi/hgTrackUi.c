@@ -30,7 +30,7 @@
 
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.375 2007/06/19 02:22:17 hartera Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.376 2007/06/19 16:05:03 hartera Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1428,12 +1428,6 @@ char *scoreValString = trackDbSetting(tdb, "scoreFilter");
 int scoreSetting;
 int scoreVal = 0;
 char tempScore[256];
-char *words[2];
-
-/* filter top-scoring N items in track */
-char *scoreCtString = trackDbSetting(tdb, "filterTopScorers");
-char *scoreFilterCt = NULL;
-bool doScoreCtFilter = FALSE;
 
 /* initial value of score theshold is 0, unless
  * overridden by the scoreFilter setting in the track */
@@ -1445,26 +1439,6 @@ scoreSetting = cartUsualInt(cart,  option,  scoreVal);
 safef(tempScore, sizeof(tempScore), "%d",scoreSetting);
 cgiMakeTextVar( option, tempScore, 11);
 printf("&nbsp;&nbsp;(range: 0&nbsp;to&nbsp;%d)", maxScore);
-
-fprintf(stderr, "scoreCtString is %s here \n", scoreCtString);
-if (scoreCtString != NULL)
-    {
-    /* show only top-scoring items. This option only displayed if trackDb
-     * setting exists.  Format:  filterTopScorers <on|off> <count> <table> */
-    chopLine(cloneString(scoreCtString), words);
-    safef(option, sizeof(option), "%s.filterTopScorersOn", tdb->tableName);
-    doScoreCtFilter =
-        cartCgiUsualBoolean(cart, option, sameString(words[0], "on"));
-    puts("<P>");
-    cgiMakeCheckBox(option, cartCgiUsualBoolean(cart, option, doScoreCtFilter));
-    safef(option, sizeof(option), "%s.filterTopScorersCt", tdb->tableName);
-    scoreFilterCt = cartCgiUsualString(cart, option, words[1]);
-
-    puts("&nbsp; <B> Show only items in top-scoring </B>");
-    cgiMakeTextVar(option, scoreFilterCt, 5);
-    printf("&nbsp; (range: 1 to 100000, total items: %d)",
-                getTableSize(tdb->tableName));
-    }
 }
 
 void crossSpeciesUi(struct trackDb *tdb)
