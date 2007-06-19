@@ -448,25 +448,25 @@ type wig 0 1000
     priority 1
 
     track affyTxnPhase3HeLaCyto
-    shortLabel HeLaCyto lRNA
+    shortLabel HeLa Cyto lRNA
     subTrack affyTxnPhase3L
     longLabel Affymetrix PolyA+ (Cytosolic) HeLa Long RNA Signal
     priority 2
 
     track affyTxnPhase3HeLaNuclear
-    shortLabel HeLaNuclear lRNA
+    shortLabel HeLa Nucl lRNA
     subTrack affyTxnPhase3L
     longLabel Affymetrix PolyA+ (Nuclear) HeLa Long RNA Signal
     priority 3
 
     track affyTxnPhase3HepG2Cyto
-    shortLabel HepG2Cyto lRNA
+    shortLabel HepG2 Cyto lRNA
     subTrack affyTxnPhase3L
     longLabel Affymetrix PolyA+ (Cytosolic) HepG2 Long RNA Signal
     priority 4
 
     track affyTxnPhase3HepG2Nuclear
-    shortLabel HepG2Nucl lRNA
+    shortLabel HepG2 Nucl lRNA
     subTrack affyTxnPhase3L
     longLabel Affymetrix PolyA+ (Nuclear) HepG2 Long RNA Signal
     priority 5
