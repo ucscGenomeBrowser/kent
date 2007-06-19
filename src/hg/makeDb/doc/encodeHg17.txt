@@ -2061,6 +2061,16 @@ done
 # New data submitted 2007-03-27 by guoneng.zhong@yale.edu
 # 3 datasets, 3 factors in HeLa S3 cells
 
+# New data submitted 2007-06-06 by guoneng.zhong@yale.edu
+# This is the same as the data from 2007-03-27 (April 2007 batch) but it 
+# has only one *-signal.wig file for each directory and additionally, there is
+# now P-value data. 
+# Prepared and loaded P-value and Signal data (2007-06-06 - 2007-06-07, hartera)
+
+# New data submitted 2007-06-15 by guoneng.zhong@yale.edu
+# 1 dataset, 1 factor in HeLa S3 cells
+# Loaded P-value and Signal data (2007-06-18, hartera)
+
 awk '{print $4}' *_?/*-hits.bed | sort -n | textHistogram -real -binSize=.5 stdin
 0.500000 ************************************************************ 628
 1.000000 ************** 148
@@ -2371,78 +2381,6 @@ Loaded 385149 elements of size 4
     # March 20, 2007.
     # Added trackDb entries for Nov06 and Jan07 P-value and Signal data.
 
-# Resubmitted hits data for Nov06 and Jan07 - this is for the Sites track
-# submitted 2007-03-20 by guoneng.zhong@yale.edu
-# Load data into database (2007-06-03, hartera)
-    /cluster/data/encode/yale/chip
-    mkdir -p 2007-03-20/lab
-    cd 2007-03-20/lab
-    cp /var/ftp/encode/ucsc_resubmission.tgz .
-    tar tvfz *.tgz
-    # Loading resubmitted data (hartera, 2007-06-03) 
-    # This is only the hits data as only this has changed for the 
-    # November 2006 and January 2007 submissions. Load as subtracks for the
-    # Yale ChIP Sites track.
-    cd /cluster/data/encode/yale/chip/2007-03-20
-    # These data sets relate to the 2006-11-29 data:
-    ln -s lab/miyoung_1 pol2n_hela
-    ln -s lab/miyoung_2 pol2n_gm06990
-    ln -s lab/miyoung_3 pol2_hela
-    ln -s lab/miyoung_4 pol2_gm06990
-    ln -s lab/miyoung_7 h4kac4_hela
-    ln -s lab/miyoung_8 h4kac4_gm06990
-    # format is antibody_cell
-
-    # These data sets relate to the 2007-01-30 data:
-    ln -s lab/ghia_8_2  baf155_k562
-    ln -s lab/ghia_10_1 baf170_k562
-    ln -s lab/ghia_14_1 baf47_k562
-    ln -s lab/ghia_15 baf47_hela
-    ln -s lab/ghia_24 stat1_hela_ifna
-    ln -s lab/miyoung_10 p65c_hela_tnfa
-    ln -s lab/miyoung_11 p65n_hela_tnfa
-    # format for the last 3 is antibody_cell_treatment
-    # ifna = interferon alpha, tnfa = tumor necrosis factor (TNF) alpha 
-    # These are BED 4 files. Previously, we were sent BED 5 files with an ID
-    # to link to the DART database.   
-    # Load the Sites track data:
-# NEED TO MODIFY BELOW    
-cat > loadSites.csh << 'EOF'
-    set pfx = encodeYaleChip
-    foreach d (pol2n_hela pol2n_gm06990 pol2_hela pol2_gm06990 h4kac4_hela h4kac4_gm06990, baf155_k562 baf170_k562 baf47_k562 stat1_hela_ifna p65c_hela_tnfa p65n_hela_tnfa)
-        if ($d =~ baf*) then
-             set factor = `echo $d | sed 's/_.*//'`
-             set cell = `echo $d | sed 's/.*_//'`
-             set Factor = `echo $factor | perl -wpe 's/(.*)/\u$1/'`
-             set Cell = `echo $cell | perl -wpe 's/(.*)/\u$1/'`
-             echo $Factor $Cell
-        else
-             set factor = `echo $d | sed 's/_.*//'`
-             set cell = `echo $d | perl -wpe 's/^.*_(.*)_.*$/$1/'`
-             set stim = `echo $d | perl -wpe 's/.*_.*_//' `
-             set Factor = `echo $factor | perl -wpe 's/(.*)/\u$1/'`
-             set Cell = `echo $cell | perl -wpe 's/(.*)/\u$1/'`
-             set Stim = `echo $stim | perl -wpe 's/(.*)/\u$1/'`
-             echo $Factor $Cell $Stim
-        endif
-        set factor = $d:t
-        set Factor = `echo $factor | sed 's/\(.*\)/\u\1/'`
-        echo $Factor
-        set p = $d/Encode_Yale_ChIpChip_${factor}_Hela_Maskless50merevery38bp
-
-        # load sites
-        set table = ${pfx}Sites$Factor
-        echo $table
-        set f = ${p}_Sites.bed
-        dos2unix $f
-        sed -e "s/bed5FloatScore/$table/" \
-            $HOME/kent/src/hg/lib/bed5FloatScore.sql > $table.sql
-        sed 's/=/ /' $f | \
-          awk '{printf "%s\t%d\t%d\t%s\t%d\t%.3f\n",$1,$2-1,$3,"",($4 * 330),$4}' |\
-            hgLoadBed -strict -sqlTable=$table.sql hg17 $table stdin
-        end
-'EOF'
-    
 # New data submitted 2007-03-27 by guoneng.zhong@yale.edu
 # Start processing data (2007-06-06, hartera)
     cd /cluster/data/encode/yale/chip/2007-03-27
@@ -2490,7 +2428,7 @@ cat > loadSites.csh << 'EOF'
 # This is the same as the data from 2007-03-27 (April 2007 batch) but it 
 # has only one *-signal.wig file for each directory and additionally, there is
 # now P-value data. 
-# Start processing data (2007-06-06, hartera)
+# Prepared and loaded P-value and Signal data (2007-06-06 - 2007-06-07, hartera)
     mkdir -p /cluster/data/encode/yale/chip/2007-06-06/lab
     cd /cluster/data/encode/yale/chip/2007-06-06/lab
     unzip yale-apr07_batch_b.zip
@@ -2573,9 +2511,86 @@ Reading encodeYaleChipSignalNrsfHela.trim
 Loaded 382721 elements of size 4
     # Added trackDb entries for subtracks for P-value and Signal Apr07 data.
 
+# New data submitted 2007-06-15 by guoneng.zhong@yale.edu
+# Loaded P-value and Signal data (2007-06-18, hartera)
+    cd /cluster/data/encode/yale/chip/2007-06-15
+    mkdir lab
+    cd lab
+    unzip yale-jun07_batch.zip
+    cd /cluster/data/encode/yale/chip/2007-06-15
+    # files are in 1 dir, 1 per experiment
+    # antibody is against me3K27 Histone H3, so this is H3K27me3
+    # info.txt in experiment dir indicates antibody/cell line
+    # files to load are: ghia_?/*_*_*-hits.bed, *signal.wig, *pvalue.wig
+    # pvalue and wig appear same format as previous, with overlap,
+    # so use same processing as previous datasets (above).
+    # Signal data range: 0 - 2.704
+    # P-value data range: 0 - 14.574
+    # Hits for 10% FDR range: 0.426667 - 2.704167
+    # Signal data distribution:
+0.000000 ************************************************************ 336894
+0.500000 ***** 30711
+1.000000 ** 11315
+1.500000 * 3403
+2.000000  375
+2.500000  23
+
+    # P-value distribution:
+0.000000 ************************************************************ 291121
+2.000000 ***** 23592
+4.000000 **** 19303
+6.000000 *** 16880
+8.000000 *** 14049
+10.000000 ** 9892
+12.000000 * 5884
+14.000000  2000
+ 
+    # make link to directory:    
+    ln -s lab/jun07_batch/ghia_49  h3k27me3_hela
+cat > loadSig.csh << 'EOF'
+#!/bin/csh -ef
+  set pfx = encodeYaleChip
+  foreach d (h3k27me3_hela)
+        set factor = `echo $d | sed 's/_.*//'`
+        set cell = `echo $d | sed 's/.*_//'`
+        set Factor = `echo $factor | perl -wpe 's/(.*)/\u$1/'`
+        set Cell = `echo $cell | perl -wpe 's/(.*)/\u$1/'`
+        echo $Factor $Cell
+
+        # load pval 
+        set table = ${pfx}Pval$Factor$Cell
+        echo $table
+        set f = $d/*_*_*-pvalue.wig
+        sort -k1,1 -k2,2n $f | \
+            /cluster/data/encode/bin/scripts/trimOverlap.pl > $table.trim
+        hgLoadBed -bedGraph=4 hg17 $table $table.trim
+
+        # load signal 
+        set table = ${pfx}Signal$Factor$Cell
+        echo $table
+        set f = $d/*_*_*-signal.wig
+        sort -k1,1 -k2,2n $f | \
+            /cluster/data/encode/bin/scripts/trimOverlap.pl > $table.trim
+        hgLoadBed -bedGraph=4 hg17 $table $table.trim 
+  end
+'EOF'
+    chmod +x loadSig.csh
+    loadSig.csh >&! loadSig.log &
+    egrep 'trim|Loaded' *.log
+Reading encodeYaleChipPvalH3k27me3Hela.trim
+Loaded 382721 elements of size 4
+Reading encodeYaleChipSignalH3k27me3Hela.trim
+Loaded 382721 elements of size 4
+    # added human/hg17/trackDb.encode.ra subtrack entry for Pval and Sig tracks
+    # added information about the antibody and its target to the
+    # tracks' description pages.
+
 # Resubmitted hits data for Nov06 and Jan07 - this is for the Sites track
 # submitted 2007-03-20 by guoneng.zhong@yale.edu
-# Load data into database (2007-06-03, hartera)
+# E-mailed to ask whether start coordinates are 0-based or 1-based, 2007-06-04
+# Received e-mail on 2007-06-18 to confirm that the start coordinates 
+# for this track are 1-based.
+# Started preparing data (  , hartera)
     /cluster/data/encode/yale/chip
     mkdir -p 2007-03-20/lab
     cd 2007-03-20/lab
@@ -2645,6 +2660,8 @@ cat > loadSites.csh << 'EOF'
         end
 'EOF'
     # Load hits data for Apr07 batch:
+    # Load hits data for Jun07 batch:
+
 ##########################################################################
 # UTexas STAGE (2005-10-31, 11-17 kate)
 # Submitted 10/15 by Akshay Bhinge <akshayb@mail.utexas.edu>
