@@ -99,7 +99,7 @@ windowingFunction mean
 summary multiz4waySummary
 speciesCodonDefault hg18
 speciesGroups vertebrate
-sGroup_vertebrate hg18 canFam2 mm8
+sGroup_vertebrate canFam2 mm8 hg18
 treeImage phylo/felCat3_4way.gif
 
 track phastConsElements4way
