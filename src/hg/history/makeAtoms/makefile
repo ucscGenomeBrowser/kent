@@ -2,8 +2,8 @@ include ../../../inc/common.mk
 
 L = ${MYSQLLIBS} -lm
 MYLIBDIR = ../../../lib/$(MACHTYPE)
-MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a $(MYLIBDIR)/element.a
-# CFLAGS=-ggdb
+MYLIBS =  $(MYLIBDIR)/element.a $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a 
+CFLAGS=-ggdb
 
 O = makeAtoms.o
 
