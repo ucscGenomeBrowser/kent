@@ -1887,6 +1887,7 @@ identifier extFileId
     #$gbd.multiz12way.extFile
     #$gbd.multiz15way.extFile
     #$gbd.multiz17way.extFile
+    #$gbd.multiz28way.extFile
 
 identifier gbExtFileId
 "External file ID for GenBank incremental update system"
@@ -2495,6 +2496,8 @@ tablesIgnored $gbd
     multiz15wayFrames
     multiz17waySummary
     multiz17wayFrames
+    multiz28waySummary
+    multiz28wayFrames
     phastCons4way
     phastConsElements4way
     phastCons5way
