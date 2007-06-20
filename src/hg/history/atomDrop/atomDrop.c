@@ -11,7 +11,7 @@
 #include "dystring.h"
 #include "math.h"
 
-static char const rcsid[] = "$Id: atomDrop.c,v 1.2 2007/06/10 21:51:54 braney Exp $";
+static char const rcsid[] = "$Id: atomDrop.c,v 1.3 2007/06/20 22:59:00 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -25,18 +25,24 @@ errAbort(
   "   out.atom       output atoms\n"
   "options:\n"
   "   -minLen=N       minimum size of atom to consider\n"
+  "   -justSort       just sort the atoms and output in sort order\n"
+  "   -percent        percent to drop (default 5)\n"
   );
 }
 
 static struct optionSpec options[] = {
+   {"percent", OPTION_INT},
    {"minLen", OPTION_INT},
+   {"justSort", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
 int maxGap = 100000;
 int minLen = 1;
+boolean justSort = FALSE;
 boolean noOverlap = FALSE;
 char *stringsFile = NULL;
+int dropPercent = 5;
 
 #define NUMSTARTS 10000
 int instanceStarts[NUMSTARTS];
@@ -161,7 +167,7 @@ while( (wordsRead = lineFileChopNext(lf, bigWords, sizeof(bigWords)/sizeof(char 
 
 	ptr = strchr(start, '-');
 	*ptr++ = 0;
-	instance->start = atoi(start);
+	instance->start = atoi(start) - 1;
 	instance->end = atoi(ptr);
 	instance->strand = *bigWords[1];
 	
@@ -337,17 +343,25 @@ calcNumSpecies(atoms);
 
 slSort(&atoms, atomScoreCmp);
 
-for(atom = atoms; atom ; atom = atom->next)
+if (!justSort)
+    {
+    for(atom = atoms; atom ; atom = atom->next)
+	count++;
+
+    count *= dropPercent;
+    count /= 100;
     count++;
 
-count *= 5;
-count /= 100;
-count++;
+    for(atom = atoms; count-- ; atom = atom->next)
+	;
+    slSort(&atom, atomNameCmp);
+    }
+else
+    {
+    slReverse(&atoms);
+    atom = atoms;
+    }
 
-for(atom = atoms; count-- ; atom = atom->next)
-    ;
-
-slSort(&atom, atomNameCmp);
 FILE *f = fopen(outAtomName, "w");
 
 for(; atom; atom = atom->next)
@@ -364,7 +378,7 @@ for(; atom; atom = atom->next)
     for( instance = atom->instances;  instance; instance = instance->next)
 	{
 	fprintf(f,"%s.%s:%d-%d %c\n",instance->species,instance->chrom,
-	    instance->start, instance->end, instance->strand);
+	    instance->start+1, instance->end, instance->strand);
 	}
     }
 }
@@ -377,7 +391,9 @@ optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
 
+dropPercent = optionInt("percent", dropPercent);
 minLen = optionInt("minLen", minLen);
+justSort = optionExists("justSort");
 
 atomDrop(argv[1],argv[2]);
 return 0;
