@@ -13,7 +13,7 @@
 #include "values.h"
 #include "atom.h"
 
-static char const rcsid[] = "$Id: atom.c,v 1.1 2007/06/10 21:58:53 braney Exp $";
+static char const rcsid[] = "$Id: atom.c,v 1.2 2007/06/20 23:06:42 braney Exp $";
 
 int minLen = 1;
 
@@ -488,6 +488,72 @@ for(; data < last; )
     }
 }
 #endif
+
+struct atom *readAtom( struct lineFile *lf)
+{
+int wordsRead;
+struct atom *anAtom = NULL;
+int intCount = 0;
+int count = 0;
+
+while( (wordsRead = lineFileChopNext(lf, bigWords, sizeof(bigWords)/sizeof(char *)) ))
+    {
+    if (wordsRead == 0)
+	continue;
+
+    if (*bigWords[0] == '>')
+	{
+	if (wordsRead != 3)
+	    errAbort("need 3 fields on atom def line");
+
+	intCount = atoi(bigWords[2]);
+	AllocVar(anAtom);
+	anAtom->name = cloneString(&bigWords[0][1]);
+	anAtom->length = atoi(bigWords[1]);
+	anAtom->numInstances = intCount;
+	count = 0;
+	}
+    else
+	{
+	struct instance *instance;
+	char *ptr, *chrom, *start;
+
+	intCount--;
+	if (wordsRead != 2)
+	    errAbort("need 2 fields on instance def line");
+	if (anAtom == NULL)
+	    continue;
+
+	AllocVar(instance);
+	instance->num = count++;
+	slAddHead(&anAtom->instances, instance);
+
+	ptr = strchr(bigWords[0], '.');
+	*ptr++ = 0;
+	chrom = ptr;
+	instance->species = getShareString(bigWords[0]);
+
+	ptr = strchr(chrom, ':');
+	*ptr++ = 0;
+	start = ptr;
+	instance->chrom = getShareString(chrom);
+
+	ptr = strchr(start, '-');
+	*ptr++ = 0;
+	instance->start = atoi(start) - 1;
+	instance->end = atoi(ptr);
+	instance->strand = *bigWords[1];
+	
+	if (intCount == 0)
+	    {
+	    slReverse(&anAtom->instances);
+	    return anAtom;
+	    }
+	}
+    }
+
+return NULL;
+}
 
 struct atom *getAtoms(char *atomsName, struct hash *atomHash)
 {
