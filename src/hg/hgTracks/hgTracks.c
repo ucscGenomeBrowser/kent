@@ -118,7 +118,7 @@
 #endif
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1355 2007/06/19 16:04:00 hartera Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1356 2007/06/20 01:21:28 braney Exp $";
 
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
@@ -13174,9 +13174,8 @@ registerTrackHandler("blastHg17KG", blastMethods);
 registerTrackHandler("blastHg18KG", blastMethods);
 registerTrackHandler("blatHg16KG", blastMethods);
 registerTrackHandler("blatzHg17KG", blatzMethods);
-registerTrackHandler("atom995", atomMethods);
-registerTrackHandler("atom98091", atomMethods);
-registerTrackHandler("atom13480779", atomMethods);
+registerTrackHandler("atom1005", atomMethods);
+registerTrackHandler("atom98416", atomMethods);
 registerTrackHandler("mrnaMapHg17KG", blatzMethods);
 registerTrackHandler("blastSacCer1SG", blastMethods);
 registerTrackHandler("tblastnHg16KGPep", blastMethods);
