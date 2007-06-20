@@ -30,6 +30,7 @@ if ( $#argv < 2 || $#argv > 4 ) then
   echo "           tablelist may be single table"
   echo "           defaults to hgwbeta"
   echo "           uses overnight STATUS dumps.  not real time"
+  echo '             accepts "%" wildcard'
   echo
   exit
 else
@@ -206,10 +207,10 @@ end
 echo
 if ( "true" == $list ) then
   echo $machine1 "total" "=" $mach1Tot megabytes \
-    | awk '{printf("%7s %5s %1s %0.2f %9s\n", $1, $2, $3, $4, $5)}'
+    | awk '{printf("%7s %5s %1s %8s %9s\n", $1, $2, $3, $4, $5)}'
   if ( "" != $machine2 ) then
     echo $machine2 "total" "=" $mach2Tot megabytes \
-      | awk '{printf("%7s %5s %1s %0.2f %9s\n", $1, $2, $3, $4, $5)}'
+      | awk '{printf("%7s %5s %1s %8s %9s\n", $1, $2, $3, $4, $5)}'
   endif
   echo
 endif 
