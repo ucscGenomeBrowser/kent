@@ -5652,3 +5652,56 @@ chainOne $(path1)
 
 #end human proteins
 #################################################################
+
+
+#########################################################################
+# CHROMOSOME BANDS (DONE 6/19/07 angie)
+    ssh hgwdev
+    cd /cluster/data/dm2/bed/flybase4.3
+    grep chromosome_band flybase.gff3 \
+    | perl -wpe 'chomp; @w = split; \
+                 $w[3]--; $w[3] = 0 if ($w[3] < 0); \
+                 $w[8] =~ s/^.*ID=band-(\w+);$/$1/; \
+                 if ($w[4] <= 0) { s/^.*$//; } else { \
+                 s/^.*$/chr$w[0]\t$w[3]\t$w[4]\t$w[8]\t\n/; }' \
+      > cytoBand.txt
+    # Did a bit of manual cleanup... there are some rows that have negative
+    # starts that should clearly have negative ends, but for some reason 
+    # their end coords have been substituted with 10, 20, 30, 40 --
+    # I just deleted those 12 rows.
+    hgLoadSqlTab dm2 cytoBand ~/kent/src/hg/lib/cytoBand.sql cytoBand.txt
+    # Drop or modify the items that are off the end of their chroms:
+    awk '{print "delete from dm2.cytoBand where chrom = \""$1"\" and chromStart >= "$2"; update dm2.cytoBand set chromEnd = "$2" where chrom = \""$1"\" and chromEnd > "$2";";}' \
+      /cluster/data/dm2/chrom.sizes \
+    | hgsql dm2
+    checkTableCoords -verbose=2 dm2 cytoBand
+
+    # Normally we would just create cytoBandIdeo by select * from cytoBand --
+    # but that gives too high of a resolution for any bands to be visible!  
+    # So make a boiled-down cytoBandIdeo that just has {number, letter} 
+    # instead of {number, letter, number}.
+    perl -we 'while (<>) { \
+                chomp; @w=split(" "); \
+                if ($w[3] =~ /(\d+[A-Z]+)\d+/) { \
+                  $b = $1; \
+                } else { die "doh!" } \
+                if (! defined $lastB) { \
+                  $start = $w[1]; \
+                } elsif ($lastB ne $b) { \
+                  print "$chrom\t$start\t$end\t$lastB\t\n"; \
+                  $start = $w[1]; \
+                } \
+                ($chrom, $end, $lastB) = ($w[0], $w[2], $b); \
+              } \
+              print "$chrom\t$start\t$end\t$lastB\t\n";' cytoBand.txt \
+      > cytoBandIdeo.txt
+    hgLoadSqlTab dm2 cytoBandIdeo ~/kent/src/hg/lib/cytoBandIdeo.sql \
+      cytoBandIdeo.txt
+    # Drop or modify the items that are off the end of their chroms:
+    awk '{print "delete from dm2.cytoBandIdeo where chrom = \""$1"\" and chromStart >= "$2"; update dm2.cytoBandIdeo set chromEnd = "$2" where chrom = \""$1"\" and chromEnd > "$2";";}' \
+      /cluster/data/dm2/chrom.sizes \
+    | hgsql dm2
+    checkTableCoords -verbose=2 dm2 cytoBandIdeo
+
+
+#########################################################################
