@@ -13,6 +13,9 @@ set tableinput=""
 set tables=""
 set db=""
 set list="false"
+set expand=""
+set wildTables=""
+set wildTables2=""
 set first=""
 set firstIndex=""
 set second=""
@@ -61,15 +64,15 @@ endif
 
 # check if it is a file or a tablename and set list
 file $tableinput | egrep -q "ASCII text"
-if ( ! $status ) then
+if ( $status ) then
+  set tables=`echo $tableinput`
+else
   set tables=`cat $tableinput`
   set list="true"
-else
-  set tables=`echo $tableinput`
 endif
 
 # check for wildcards
-echo $tables | sed -e "s/ /\n/g" | grep -q % 
+echo $tables | grep -q % 
 if ( ! $status ) then
   # there are wildcards
   set list="true"
@@ -84,8 +87,8 @@ if ( ! $status ) then
     if ( "" != $machine2 ) then
       set wildTables2=`getRRdumpfile.csh $db $machine2 | xargs awk '{print $1}' \
         | grep $tableString`
-      set expand=`echo $wildTables $wildTables2 | sed -e "s/ /\n/"g | sort -u `  
     endif
+    set expand=`echo $wildTables $wildTables2 | sed -e "s/ /\n/"g | sort -u `  
     set substitute=`echo $wildcard $expand`
     set tables=`echo $tables | sed -e "s/$wildcard/$substitute/"`
   end
