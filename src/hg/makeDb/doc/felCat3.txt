@@ -790,12 +790,12 @@ augustus/src/augustus --AUGUSTUS_CONFIG_PATH=/cluster/data/felCat3/bed/augustus/
 
     # downloadables
     ssh hgwdev
-    ln -s /cluster/data/felCat3/bed/blastz.canFam2.2006-11-18.swap/mafRBestNet/felCat3.canFam2.rbest.maf.gz \
-        /usr/local/apache/htdocs/goldenPath/felCat3/vsCanFam2/felCat3.canFam2.rbest.maf.gz
-    ln -s /cluster/data/felCat3/bed/blastz.hg18.swap/mafRBestNet/felCat3.hg18.rbest.maf.gz \
-        /usr/local/apache/htdocs/goldenPath/felCat3/vsHg18/felCat3.hg18.rbest.maf.gz
-    ln -s /cluster/data/felCat3/bed/blastz.mm8.2006-11-15.swap/mafRBestNet/felCat3.mm8.rbest.maf.gz \
-        /usr/local/apache/htdocs/goldenPath/felCat3/vsMm8/felCat3.mm8.rbest.maf.gz
+    ln -s /cluster/data/felCat3/bed/blastz.canFam2.2006-11-18.swap/axtRBestNet/felCat3.canFam2.rbest.axt.gz \
+        /usr/local/apache/htdocs/goldenPath/felCat3/vsCanFam2/felCat3.canFam2.rbest.axt.gz
+    ln -s /cluster/data/felCat3/bed/blastz.hg18.swap/axtRBestNet/felCat3.hg18.rbest.axt.gz \
+        /usr/local/apache/htdocs/goldenPath/felCat3/vsHg18/felCat3.hg18.rbest.axt.gz
+    ln -s /cluster/data/felCat3/bed/blastz.mm8.2006-11-15.swap/axtRBestNet/felCat3.mm8.rbest.axt.gz \
+        /usr/local/apache/htdocs/goldenPath/felCat3/vsMm8/felCat3.mm8.rbest.axt.gz
 
 
 ##########################################################################
@@ -1010,8 +1010,8 @@ chmod +x getIrows.sh
   time nice hgLoadSqlTab felCat3 multiz4waySummary /tmp/multiz4waySummary.sql multiz4waySummary.tab
   # 0.000u 0.003s 0:04.18 0.0%      0+0k 0+0io 3pf+0w
 
-  # summary is only useful for scaffolds larger than 1 million, which is just
-  # 7 in felCat3
+  # summary is only useful for scaffolds larger than 1 million, which is just 7 in felCat3
+  # Angie subsequently changed hgLoadMafSummary so by default it will skip small sequences
   mysql> insert into multiz4waySummaryNew select * from multiz4waySummary where chrom = "scaffold_217569";
   mysql> insert into multiz4waySummaryNew select * from multiz4waySummary where chrom = "scaffold_213970";
   mysql> insert into multiz4waySummaryNew select * from multiz4waySummary where chrom = "scaffold_138821";
