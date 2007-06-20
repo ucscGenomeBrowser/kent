@@ -10,7 +10,7 @@
 #include "element.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: atomToBed.c,v 1.1 2007/06/13 18:22:05 braney Exp $";
+static char const rcsid[] = "$Id: atomToBed.c,v 1.2 2007/06/20 23:00:28 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -211,27 +211,31 @@ slReverse(&atoms);
 for(; atoms; atoms = atoms->next)
     {
     struct instance *instances = atoms->instances;
-    unsigned colorBits = 0;
+    unsigned scoreBits = 0;
 
     for(; instances; instances = instances->next)
 	{
 	if (sameString("canFam2", instances->species))
-	    colorBits |= (1 << 0);
+	    scoreBits |= (1 << 0);
 	else if (sameString("mm8", instances->species))
-	    colorBits |= (1 << 1);
+	    scoreBits |= (1 << 1);
 	else if (sameString("rn4", instances->species))
-	    colorBits |= (1 << 2);
+	    scoreBits |= (1 << 2);
+	else if (sameString("rheMac2", instances->species))
+	    scoreBits |= (1 << 3);
+	else if (sameString("panTro2", instances->species))
+	    scoreBits |= (1 << 4);
+	else if (sameString("hg18", instances->species))
+	    scoreBits |= (1 << 5);
 	}
 
     for(instances = atoms->instances; instances; instances = instances->next)
 	{
 	if (sameString(species, instances->species))
 	    {
-	    fprintf(f, "%s %d %d %s 0 %c %d %d %s\n",
+	    fprintf(f, "%s %d %d %s %d %c\n",
 		instances->chrom, instances->start, instances->end,
-		atoms->name, instances->strand,
-		instances->start, instances->end,
-		colors[colorBits]);
+		atoms->name, scoreBits, instances->strand);
 	    }
 	}
     }
