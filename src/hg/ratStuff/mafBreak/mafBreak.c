@@ -9,7 +9,7 @@
 #include "bed.h"
 #include "dlist.h"
 
-static char const rcsid[] = "$Id: mafBreak.c,v 1.1 2007/02/14 18:27:33 braney Exp $";
+static char const rcsid[] = "$Id: mafBreak.c,v 1.2 2007/06/20 22:02:41 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -107,7 +107,7 @@ return cHash;
 struct hash *loadRegions(char *file)
 /* load regions into a hash of lists by chrom */
 {
-struct bed *bed = NULL, *bedList = NULL, *nextBed = NULL;
+struct bed *bed = NULL,  *nextBed = NULL;
 struct hash *regionHash = newHash(6);
 struct bed *regions;
 char *chrom = NULL;
@@ -219,7 +219,6 @@ struct mafComp *masterMc = maf->components;
 while ((hel = hashNext(&cookie)) != NULL)
     {
     struct speciesBreaks *sb = hel->val;
-    int depth = 0;
     struct mafComp *mc = mafMayFindCompSpecies(maf, hel->name, '.');
 
     if (mc != NULL)
@@ -229,6 +228,13 @@ while ((hel = hashNext(&cookie)) != NULL)
 	/* check for leftStatus */
 	if ((mc->leftStatus == 'N') || (mc->leftStatus == 'n'))
 	    {
+	    int numDashes = 0;
+	    char *ptr = mc->text;
+
+	    if (mc->text)
+		while (*ptr++ == '-')
+		    numDashes++;
+
 	    aBreak = getBreak(sb);
 
 	    if (mc->leftStatus == 'n')
@@ -236,7 +242,7 @@ while ((hel = hashNext(&cookie)) != NULL)
 		aBreak->type = 1;
 		sb->currentNestLevel++;
 		}
-	    aBreak->refAddress = masterMc->start;
+	    aBreak->refAddress = masterMc->start + numDashes;
 	    aBreak->nestLevel = sb->currentNestLevel;
 
 	    //printf("adding break %s %d %d\n",hel->name,aBreak->refAddress, aBreak->nestLevel);
@@ -244,8 +250,15 @@ while ((hel = hashNext(&cookie)) != NULL)
 
 	if ((mc->rightStatus == 'N') || (mc->rightStatus == 'n'))
 	    {
+	    int numDashes = 0;
+	    char *ptr = &mc->text[maf->textSize - 1];
+
+	    if (mc->text)
+		while (*ptr-- == '-')
+		    numDashes++;
+
 	    aBreak = getBreak(sb);
-	    aBreak->refAddress = masterMc->start + masterMc->size;
+	    aBreak->refAddress = masterMc->start + masterMc->size - numDashes;
 	    aBreak->nestLevel = sb->currentNestLevel;
 	    if (mc->rightStatus == 'n')
 		{
@@ -254,6 +267,8 @@ while ((hel = hashNext(&cookie)) != NULL)
 		}
 
 	    //printf("adding break %s %d %d\n",hel->name,aBreak->refAddress, aBreak->nestLevel);
+	    if (mc->rightStatus == 'N')
+		assert(sb->currentNestLevel== 0);
 	    }
 	}
     }
@@ -303,21 +318,20 @@ for(; bed;  bed = bed->next)
 			}
 		    else if (nestBreak->type == 0)
 			{
-			assert(countNestLevel == 0);
+			//assert(countNestLevel == 0);
 			nestLevel = 0;
 			break;
 			}
 		    }
 
 		if (nestLevel == -1)
-		    errAbort("didn't find nest level");
-
-		//fprintf(f, "%d\t",  nestBreak->refAddress);
-		fprintf(f, "%d\t", bed->chromStart - nestBreak->refAddress);
+		    fprintf(f, "%d\t", -1);
+		else
+		    fprintf(f, "%d\t", bed->chromStart - nestBreak->refAddress);
 		break;
 		}
 	    }
-	nestLevel = -1;
+	nestLevel = -1000000000;
 	for(; aBreak < &sb->breaks[sb->numBreaks] ;  aBreak++)
 	    {
 	    int countNestLevel = 0;
@@ -325,8 +339,9 @@ for(; bed;  bed = bed->next)
 	    if ((aBreak->refAddress >= bed->chromStart) &&
 		(aBreak->refAddress < bed->chromEnd))
 		{
-		fprintf(f, "-1\n");
-		nestLevel = -2;
+		nestLevel = aBreak->nestLevel;
+	//	fprintf(f, "-1\n");
+	//	nestLevel = -2;
 		break;
 		}
 	    if (bed->chromEnd < aBreak->refAddress)
@@ -351,10 +366,10 @@ for(; bed;  bed = bed->next)
 		}
 	    }
 
-	if (nestLevel == -1)
+	if (nestLevel == -1000000000)
 	    errAbort("didn't find after nest level %s",hel->name);
 
-	if (nestLevel != -2)
+	//if (nestLevel != -2)
 	    fprintf(f, "%d\n",  aBreak->refAddress - bed->chromEnd);
 	}
     }
@@ -372,7 +387,6 @@ struct mafAli *maf = NULL;
 verbose(1, "extracting from %s\n", file);
 for(maf = mafNext(mf); maf; mafAliFree(&maf), maf = mafNext(mf) )
     {
-    struct mafAli *submaf;
     struct mafComp *mc = maf->components;
 
     thisChrom = chromFromSrc(mc->src);
@@ -395,6 +409,7 @@ for(maf = mafNext(mf); maf; mafAliFree(&maf), maf = mafNext(mf) )
 if (bHead)
     outItems(f, bHead, speciesHash);
 
+clearBreaks(speciesHash);
 mafFileFree(&mf);
 }
 
@@ -406,7 +421,6 @@ struct hash *bedHash = NULL;
 struct hash *speciesHash = NULL;
 struct hash *statsHash = newHash(5);
 FILE *f = NULL;
-struct mafFile *mf = NULL;
 
 verbose(1, "Extracting from %d files to %s\n", mafCount, out);
 bedHash = loadRegions(regionFile);
@@ -426,7 +440,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 outDir = optionExists("outDir");
 ignoreDups = optionExists("ignoreDups");
-if (argc < 4)
+if (argc < 5)
     usage();
 mafBreak(argv[1], argv[2], argv[3], argc - 4, &argv[4]);
 return 0;
