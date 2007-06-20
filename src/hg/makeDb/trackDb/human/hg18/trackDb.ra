@@ -122,7 +122,7 @@ longLabel Vertebrate Multiz Alignment & PhastCons Conservation (28 Species)
 irows on
 summary multiz28waySummary
 frames multiz28wayFrames
-wiggle phastCons28wayPlacMammal Plac_Mammal Placental_Mammal phastCons28way Vertebrate Vertebrate 
+wiggle phastCons28wayPlacMammal Mammal Placental_Mammal phastCons28way Vertebrate Vertebrate 
 spanList 1
 maxHeightPixels 100:40:11
 autoScaleDefault Off
@@ -153,19 +153,19 @@ exonArrows off
 showTopScorers 200
 type bed 5 .
 
+    track phastConsElements28wayPlacMammal
+    subTrack mostConserved28way
+    shortLabel Mammal
+    longLabel PhastCons Placental Mammal Conserved Elements, 28-way Multiz Alignment
+    color 100,50,170
+    priority 1
+
     track phastConsElements28way
     subTrack mostConserved28way
     shortLabel Vertebrate
     longLabel PhastCons Vertebrate Conserved Elements, 28-way Multiz Alignment
     color 170,100,50
     priority 2
-
-    track phastConsElements28wayPlacMammal
-    subTrack mostConserved28way
-    shortLabel Plac Mammal
-    longLabel PhastCons Placental Mammal Conserved Elements, 28-way Multiz Alignment
-    color 100,50,170
-    priority 1
 
 track multiz17way
 shortLabel Conservation
