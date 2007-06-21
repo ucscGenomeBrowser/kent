@@ -137,3 +137,11 @@ idSql select allenBrainUrl.url from knownToAllenBrain,allenBrainUrl where knownT
 url %s
 priority 10
 
+name wikiTrack
+shortLabel User annotations
+tables kgXref
+idSql select kgID from kgXref where kgID = '%s'
+url ../cgi-bin/hgGene?hgg_gene=%s&hgg_do_wikiTrack=1
+hgsid on
+dbInUrl on
+priority 10

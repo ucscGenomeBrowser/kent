@@ -8,8 +8,9 @@
 #include "hui.h"
 #include "hdb.h"
 #include "hgGene.h"
+#include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: links.c,v 1.31 2007/04/09 02:31:19 kent Exp $";
+static char const rcsid[] = "$Id: links.c,v 1.32 2007/06/21 23:03:21 hiram Exp $";
 
 struct link
 /* A link to another web site. */
@@ -74,6 +75,10 @@ for (ra = raList; ra != NULL; ra = ra->next)
 	if (checkDatabases(linkOptionalField(ra, "databases")) 
 	    && sqlTablesExist(conn, linkOptionalField(ra, "tables")))
 	    {
+	    /* only include the wikiTrack if it is enabled */
+	    if (sameWord(linkRequiredField(ra, "name"), "wikiTrack") &&
+		! wikiTrackEnabled(NULL))
+		continue;
 	    AllocVar(link);
 	    link->priority = atof(linkRequiredField(ra, "priority"));
 	    link->name = linkRequiredField(ra, "name");
@@ -235,14 +240,16 @@ for (link = linkList; link != NULL; link = link->next)
     char *url = linkGetUrl(link, conn, geneId);
     if (url != NULL)
 	{
-	char *target = (link->useHgsid ? "" : " TARGET=_blank");
+	boolean fakeOut = link->useHgsid &&
+		differentWord(link->name,"wikiTrack");
+	char *target = (fakeOut ? "" : " TARGET=_blank");
 	if (++itemPos > maxPerRow)
 	    {
 	    hPrintf("</TR>\n<TR>");
 	    itemPos = 1;
 	    ++rowIx;
 	    }
-	if (link->useHgsid)
+	if (fakeOut)
 	    webPrintLinkCellStart();
 	else
 	    webPrintLinkOutCellStart();
