@@ -16,27 +16,15 @@
 #include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.22 2007/06/18 23:26:38 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.23 2007/06/21 21:04:42 hiram Exp $";
 
-#define NEW_ITEM_SCORE "newItemScore"
-#define NEW_ITEM_STRAND "newItemStrand"
-#define NEW_ITEM_CLASS "newItemClass"
-#define NEW_ITEM_COMMENT "newItemComment"
-#define NEW_ITEM_NAME "defaultName"
-#define NEW_ITEM_COLOR "itemColor"
-#define ITEM_NOT_CLASSIFIED "Not classified"
 #define ITEM_SCORE_DEFAULT "1000"
-#define NEW_ITEM_COMMENT_DEFAULT "enter description and comments"
 #define ADD_ITEM_COMMENT_DEFAULT "add comments"
-#define NO_ITEM_COMMENT_SUPPLIED "(no initial description supplied)"
-#define NEW_ITEM_CATEGORY "[[Category:Genome Annotation]]"
-#define DEFAULT_BROWSER "genome.ucsc.edu"
 #define TEST_EMAIL_VERIFIED "GenomeAnnotation:TestEmailVerified"
 #define EMAIL_NEEDS_TO_BE_VERIFIED \
 	"You must confirm your e-mail address before editing pages"
 #define USER_PREFERENCES_MESSAGE \
     "Please set and validate your e-mail address through your"
-#define WIKI_NO_TEXT_RESPONSE "There is currently no text in this page"
 
 static char *colorMenuJS = "onchange=\"updateColorSelectBox();\" style=\"width:8em;\"";
 
@@ -58,7 +46,7 @@ hPrintf("</SELECT>\n");
 }
 
 static char *encodedHgcReturnUrl(int id, int hgsid)
-/* Return a CGI-encoded hgSession URL with hgsid.  Free when done. */
+/* Return a CGI-encoded hgc URL with hgsid.  Free when done. */
 {
 char retBuf[1024];
 safef(retBuf, sizeof(retBuf), "http://%s/cgi-bin/hgc?%s&g=%s&c=%s&o=%d&l=%d&r=%d&db=%s&i=%d",
@@ -85,57 +73,15 @@ return(cloneString(buf));
 static void offerLogin(int id, char *loginType)
 /* display login prompts to the wiki when user isn't already logged in */
 {
+char *loginUrl = wikiTrackUserLoginUrl(id, cartSessionId(cart));
 char *wikiHost = wikiLinkHost();
 printf("<P>Please login to %s the annotation track.</P>\n", loginType);
 printf("<P>The login page is handled by our "
        "<A HREF=\"http://%s/\" TARGET=_BLANK>wiki system</A>:\n", wikiHost);
-printf("<A HREF=\"%s\"><B>click here to login.</B></A><BR />\n",
-	wikiTrackUserLoginUrl(id, cartSessionId(cart)));
+printf("<A HREF=\"%s\"><B>click here to login.</B></A><BR />\n", loginUrl);
 printf("The wiki also serves as a forum for users "
        "to share knowledge and ideas.\n</P>\n");
-}
-
-static char *stripEditURLs(char *rendered)
-/* test for actual text, remove edit sections and any html comment strings */
-{
-char *stripped = cloneString(rendered);
-char *found = NULL;
-char *begin = "<div class=\"editsection\"";
-char *end = "></a>";
-
-/* XXXX is this response going to be language dependent ? */
-if (stringIn(WIKI_NO_TEXT_RESPONSE,rendered))
-	return NULL;
-
-/* remove any edit sections */
-while (NULL != (found = stringBetween(begin, end, stripped)) )
-    {
-    if (strlen(found) > 0)
-	{
-	struct dyString *rm = newDyString(1024);
-	dyStringPrintf(rm, "%s%s%s", begin, found, end);
-	stripString(stripped, rm->string);
-	freeMem(found);
-	freeDyString(&rm);
-	}
-    }
-
-/* and remove comment strings from the wiki */
-begin = "<!--";
-end = "-->";
-while (NULL != (found = stringBetween(begin, end, stripped)) )
-    {
-    if (strlen(found) > 0)
-	{
-	struct dyString *rm = newDyString(1024);
-	dyStringPrintf(rm, "%s%s%s", begin, found, end);
-	stripString(stripped, rm->string);
-	freeMem(found);
-	freeDyString(&rm);
-	}
-    }
-
-return stripped;
+freeMem(loginUrl);
 }
 
 static void startForm(char *name, char *actionType)
@@ -151,6 +97,7 @@ cgiContinueHiddenVar("r");
 hPrintf("\n");
 }
 
+#ifdef NOT
 static char *fetchWikiRawText(char *descriptionKey)
 /* fetch page from wiki in raw form as it is in the edit form */
 {
@@ -183,54 +130,6 @@ freeDyString(&wikiPage);
 return rawText;
 }
 
-static char *fetchWikiRenderedText(char *descriptionKey)
-/* fetch page from wiki in rendered form, strip it of edit URLs,
- *	html comments, and test for actual proper return.
- *  returned string can be freed after use */
-{
-/* fetch previous description comments from the wiki */
-char wikiPageUrl[512];
-safef(wikiPageUrl, sizeof(wikiPageUrl), "%s/index.php/%s?action=render",
-	cfgOptionDefault(CFG_WIKI_URL, NULL), descriptionKey);
-struct lineFile *lf = netLineFileMayOpen(wikiPageUrl);
-
-struct dyString *wikiPage = newDyString(1024);
-if (lf)
-    {
-    char *line;
-    int lineSize;
-    while (lineFileNext(lf, &line, &lineSize))
-	dyStringPrintf(wikiPage, "%s\n", line);
-    lineFileClose(&lf);
-    }
-
-/* test for text, remove any edit sections and comment strings */
-char *strippedRender = NULL;
-if (wikiPage->string)
-    strippedRender = stripEditURLs(wikiPage->string);
-freeDyString(&wikiPage);
-
-return strippedRender;
-}
-
-static struct wikiTrack *findItem(char *wikiItemId)
-/* given a wikiItemId return the row from the table */
-{
-struct wikiTrack *item;
-char query[256];
-struct sqlConnection *conn = hConnectCentral();
-
-safef(query, ArraySize(query), "SELECT * FROM %s WHERE id='%s' limit 1",
-	WIKI_TRACK_TABLE, wikiItemId);
-
-item = wikiTrackLoadByQuery(conn, query);
-if (NULL == item)
-    errAbort("display wiki item: failed to load item '%s'", wikiItemId);
-hDisconnectCentral(&conn);
-
-return item;
-}
-
 static struct htmlPage *fetchEditPage(char *descriptionKey)
 /* fetch edit page for descriptionKey page name in wiki */
 {
@@ -252,6 +151,7 @@ struct htmlPage *page = htmlPageParseOk(wikiPageUrl, fullText);
 
 return (page);
 }
+#endif
 
 static boolean emailVerified()
 /* TRUE indicates email has been verified for this wiki user */
@@ -265,6 +165,7 @@ else
     return FALSE;
 }
 
+#ifdef NOT
 static void createPageHelp(char *pageFileName)
 /* find the specified html help page and display it, or issue a missing
  *	page message so the site administrator can fix it.
@@ -287,6 +188,7 @@ else
     }
 puts(helpBuf);
 }
+#endif
 
 static void displayItem(struct wikiTrack *item, char *userName)
 /* given an already fetched item, get the item description from
@@ -294,12 +196,20 @@ static void displayItem(struct wikiTrack *item, char *userName)
  */
 { 
 char *url = cfgOptionDefault(CFG_WIKI_URL, NULL);
+/*
 char *strippedRender = fetchWikiRenderedText(item->descriptionKey);
+*/
 
+if (isNotEmpty(item->alignID))
+    hPrintf("<B>UCSC gene id:&nbsp;</B><A "
+	"HREF=\"../cgi-bin/hgGene?hgg_gene=%s\" TARGET=_blank>%s</A><BR />\n",
+	    item->alignID, item->alignID);
 hPrintf("<B>Classification group:&nbsp;</B>%s<BR />\n", item->class);
 printPosOnChrom(item->chrom, item->chromStart, item->chromEnd,
     item->strand, FALSE, item->name);
+#ifdef NOT
 hPrintf("<B>Score:&nbsp;</B>%u<BR />\n", item->score);
+#endif
 hPrintf("<B>Created </B>%s<B> by:&nbsp;</B>", item->creationDate);
 hPrintf("<A HREF=\"%s/index.php/User:%s\" TARGET=_blank>%s</A><BR />\n", url,
     item->owner, item->owner);
@@ -331,18 +241,9 @@ if (NULL != userName)
 	"</em> to receive email notices of any comment additions.</B><BR />\n",
 	   url, item->descriptionKey);
 
-hPrintf("<B>Description and comments from the wiki article: "
-  "<A HREF=\"%s/index.php/%s\" TARGET=_blank>%s</A> are shown below:</B><HR>\n",
-       url, item->descriptionKey, item->descriptionKey);
-
-if (strippedRender && (strlen(strippedRender) > 2))
-    {
-    hPrintf("\n%s\n<HR>\n", strippedRender);
-    freeMem(strippedRender);
-    }
-else
-    hPrintf("\n(no comments for this item at the current time)"
-	"<BR /><HR>\n");
+hPrintf("<HR>\n");
+displayComments(item);
+hPrintf("<HR>\n");
 
 if (NULL == userName)
     {
@@ -535,10 +436,11 @@ if (wikiTrackEnabled(&userName) && sameWord("0", wikiItemId))
 	webPrintLinkTableEnd();
 	createPageHelp("wikiTrackCreateItemHelp");
 	}
+
     }
 else
     {
-    struct wikiTrack *item = findItem(wikiItemId);
+    struct wikiTrack *item = findWikiItemId(wikiItemId);
     cartWebStart(cart, "%s (%s)", "User Annotation Track", item->name,
 	wikiItemId);
     /* if we can get the hgc clicks to add item id to the incoming data,
@@ -550,6 +452,7 @@ else
 cartHtmlEnd();
 }	/*	void doWikiTrack()	*/
 
+#ifdef NOT
 static void htmlCloneFormVarSet(struct htmlForm *parent,
 	struct htmlForm *clone, char *name, char *val)
 /* clone form variable from parent, with new value,
@@ -577,6 +480,7 @@ else
 slAddHead(&clone->vars, cloneVar);
 
 }
+#endif
 
 static void addDescription(struct wikiTrack *item, char *userName)
 {
@@ -719,7 +623,7 @@ void doDeleteWikiItem(char *wikiItemId, char *chrom, int winStart, int winEnd)
 /* handle delete item clicks for wikiTrack */
 {
 char *userName = NULL;
-struct wikiTrack *item = findItem(wikiItemId);
+struct wikiTrack *item = findWikiItemId(wikiItemId);
 
 cartWebStart(cart, "%s (%s)", "User Annotation Track, deleted item: ",
 	item->name);
@@ -740,7 +644,7 @@ void doAddWikiComments(char *wikiItemId, char *chrom, int winStart, int winEnd)
 /* handle add comment item clicks for wikiTrack */
 {
 char *userName = NULL;
-struct wikiTrack *item = findItem(wikiItemId);
+struct wikiTrack *item = findWikiItemId(wikiItemId);
 
 cartWebStart(cart, "%s (%s)", "User Annotation Track", item->name);
 if (NULL == wikiItemId)
@@ -807,6 +711,7 @@ newItem->creationDate = cloneString("0");
 newItem->lastModifiedDate = cloneString("0");
 newItem->descriptionKey = cloneString(descriptionKey);
 newItem->id = 0;
+newItem->alignID = cloneString("0");
 
 wikiTrackSaveToDbEscaped(conn, newItem, WIKI_TRACK_TABLE, 1024);
 
@@ -839,7 +744,7 @@ cartWebStart(cart, "%s %s", "User Annotation Track, created new item: ",
 
 char wikiItemId[64];
 safef(wikiItemId,ArraySize(wikiItemId),"%d", id);
-struct wikiTrack *item = findItem(wikiItemId);
+struct wikiTrack *item = findWikiItemId(wikiItemId);
 
 addDescription(item, userName);
 displayItem(item, userName);
