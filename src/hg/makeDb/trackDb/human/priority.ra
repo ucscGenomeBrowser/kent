@@ -16,3 +16,14 @@ priority 228
 track netCanFam2
 priority 228.1
 
+track chainOryLat1
+priority 120
+
+track netOryLat1
+priority 120.1
+
+track chainGasAcu1
+priority 130
+
+track netGasAcu1
+priority 130.1
