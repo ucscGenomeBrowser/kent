@@ -115,9 +115,8 @@ type wig 0.0 1.0
     longLabel Placental Mammal HQ PhastCons Conservation (8 species)
     priority 1
 
-release alpha
 track multiz28way
-shortLabel 28-Way Cons 
+shortLabel Conservation 
 longLabel Vertebrate Multiz Alignment & PhastCons Conservation (28 Species)
 irows on
 summary multiz28waySummary
@@ -141,10 +140,9 @@ speciesDefaultOff panTro2 rn4 otoGar1 felCat3 loxAfr1 bosTau3 echTel1 danRer4 fr
 itemFirstCharCase noChange
 treeImage phylo/hg18_28way.gif
 
-release alpha
 track mostConserved28way
 compositeTrack on
-shortLabel 28-Way Most Cons
+shortLabel Most Conserved
 longLabel PhastCons Conserved Elements, 28-way Vertebrate Multiz Alignment
 group compGeno
 priority 103.4
@@ -168,7 +166,7 @@ type bed 5 .
     priority 2
 
 track multiz17way
-shortLabel Conservation
+shortLabel 17-Way Cons
 longLabel Vertebrate Multiz Alignment & Conservation (17 Species)
 group compGeno
 priority 104.2
@@ -194,7 +192,7 @@ treeImage phylo/hg17_17way.gif
 speciesCodonDefault hg18
 
 track phastConsElements17way
-shortLabel Most Conserved
+shortLabel 17-Way Most Cons
 longLabel PhastCons Conserved Elements, 17-way Vertebrate Multiz Alignment
 group compGeno
 priority 104.4
