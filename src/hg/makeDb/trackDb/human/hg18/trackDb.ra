@@ -136,7 +136,7 @@ type wigMaf 0.0 1.0
 speciesGroups Primate Placental_Mammal Vertebrate
 sGroup_Primate panTro2 rheMac2 otoGar1
 sGroup_Placental_Mammal tupBel1 mm8 rn4 cavPor2 oryCun1 sorAra1 eriEur1 canFam2 felCat3 equCab1 bosTau3 dasNov1 loxAfr1 echTel1
-sGroup_Vertebrate monDom4 ornAna1 anoCar1 galGal3 xenTro2 fr2 tetNig1 gasAcu1 oryLat1 danRer4
+sGroup_Vertebrate monDom4 ornAna1 anoCar1 galGal3 xenTro2 danRer4 tetNig1 fr2 gasAcu1 oryLat1
 speciesDefaultOff panTro2 rn4 otoGar1 felCat3 loxAfr1 bosTau3 echTel1 danRer4 fr2 tetNig1 oryLat1 tupBel1 cavPor2 oryCun1 sorAra1 eriEur1
 itemFirstCharCase noChange
 treeImage phylo/hg18_28way.gif
