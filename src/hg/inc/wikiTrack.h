@@ -11,6 +11,9 @@
 #ifndef HTMLPAGE_H
 #include "htmlPage.h"
 #endif
+#ifndef CART_H
+#include "cart.h"
+#endif
 
 #define WIKITRACK_NUM_COLS 16
 
@@ -119,13 +122,13 @@ void wikiTrackOutput(struct wikiTrack *el, FILE *f, char sep, char lastSep);
 /* hgc and hgGene variables */
 #define WIKI_NO_TEXT_RESPONSE "There is currently no text in this page"
 #define ADD_ITEM_COMMENT_DEFAULT "add comments"
-#define NEW_ITEM_COMMENT "newItemComment"
-#define NEW_ITEM_SCORE "newItemScore"
+#define NEW_ITEM_COMMENT "wikiCommentText"
+#define NEW_ITEM_SCORE "wikiItemScore"
 #define NEW_ITEM_COMMENT_DEFAULT "enter description and comments"
-#define NEW_ITEM_NAME "defaultName"
-#define NEW_ITEM_COLOR "itemColor"
-#define NEW_ITEM_STRAND "newItemStrand"
-#define NEW_ITEM_CLASS "newItemClass"
+#define NEW_ITEM_NAME "wikiDefaultName"
+#define NEW_ITEM_COLOR "wikiItemColor"
+#define NEW_ITEM_STRAND "wikiItemStrand"
+#define NEW_ITEM_CLASS "wikiItemClass"
 #define NEW_ITEM_CATEGORY "[[Category:Genome Annotation]]"
 #define ITEM_NOT_CLASSIFIED "Not classified"
 #define NO_ITEM_COMMENT_SUPPLIED "(no initial description supplied)"
@@ -170,6 +173,11 @@ void createPageHelp(char *pageFileName);
 
 struct htmlPage *fetchEditPage(char *descriptionKey);
 /* fetch edit page for descriptionKey page name in wiki */
+
+void addDescription(struct wikiTrack *item, char *userName,
+    char *seqName, int winStart, int winEnd, struct cart *cart,
+	char *database);
+/* add description to an existing wiki item */
 
 #ifdef NOT
 void wikiItemCreateForm(char *userName, char *cgiName, struct cart *cart,
