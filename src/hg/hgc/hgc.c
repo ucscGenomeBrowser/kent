@@ -206,8 +206,9 @@
 #include "kg1ToKg2.h"
 #include "wikiTrack.h"
 #include "omicia.h"
+#include "atomDb.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1299 2007/06/19 16:03:26 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1300 2007/06/21 23:15:10 braney Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -908,6 +909,76 @@ for (i=0, bed=bedList;  bed != NULL && i < maxScorers;  bed=bed->next, i++)
     }
 if (bed != NULL)
     printf("(list truncated -- more than %d elements)<BR>\n", maxScorers);
+}
+
+void linkToOtherBrowser(char *otherDb, char *chrom, int start, int end);
+
+void doAtom( struct trackDb *tdb, char *item)
+{
+char table[64];
+boolean hasBin;
+struct bed *bed;
+char query[512];
+struct sqlResult *sr;
+char **row;
+boolean firstTime = TRUE;
+char *escapedName = sqlEscapeString(item);
+int start = cartInt(cart, "o");
+struct sqlConnection *conn = hAllocConn();
+char *user = cfgOption("db.user");
+char *password = cfgOption("db.password");
+struct sqlConnection *sc;
+struct atom ret;
+
+genericHeader(tdb, item);
+hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
+sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d", table, escapedName, seqName, start);
+sr = sqlGetResult(conn, query);
+printf("<B>This is the item you clicked on:</B><BR>\n");
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    if (firstTime)
+	firstTime = FALSE;
+    else
+	htmlHorizontalLine();
+    bed = bedLoadN(row+hasBin, 4);
+    bedPrintPos(bed, 4);
+    }
+sqlFreeResult(&sr);
+
+sprintf(query, "select * from %s where name = '%s'", table, escapedName);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    bed = bedLoadN(row+hasBin, 4);
+    if (bed->chromStart != start)
+	{
+	htmlHorizontalLine();
+	firstTime = FALSE;
+	printf("<B>Another instances on %s:</B><BR>\n",database);
+	bedPrintPos(bed, 4);
+	}
+    }
+sqlFreeResult(&sr);
+
+sc = sqlConnectRemote("localhost", user, password, "hgFixed");
+safef(query, sizeof(query),
+      "select * from %s where name = '%s'", table, item);
+sr = sqlGetResult(sc, query);
+htmlHorizontalLine();
+printf("<BR><B>All Instances</B><BR>\n");
+printf("<PRE>\n");
+//printf("Ins#\tSpecies\t\tChrom\tStart\tEnd\tStrand\n");
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    atomStaticLoad(row, &ret);
+    //atomOutput(&ret, stdout, '\t', '\n');
+    linkToOtherBrowser(ret.species, ret.chrom, ret.start, ret.end);
+    printf( "%d\t%-10s\t%-10s\t%15d\t%15d\t%c\n",ret.instance,
+	ret.species,ret.chrom, ret.start, ret.end, ret.strand[0]);
+    }
+printf("</A>");
+sqlFreeResult(&sr);
 }
 
 void genericBedClick(struct sqlConnection *conn, struct trackDb *tdb, 
@@ -18800,6 +18871,10 @@ else if (sameWord(track, "tfbsConsSites"))
 else if (sameWord(track, "tfbsCons"))
     {
     tfbsCons(tdb, item);
+    }
+else if (startsWith("atom", track))
+    {
+    doAtom(tdb, item);
     }
 else if (sameWord(track, "firstEF"))
     {
