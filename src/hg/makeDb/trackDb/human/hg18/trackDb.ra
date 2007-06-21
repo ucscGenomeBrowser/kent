@@ -69,7 +69,7 @@ autoScaleDefault Off
 windowingFunction mean
 group compGeno
 priority 103.1
-visibility pack
+visibility hide
 color 0, 10, 100
 altColor 0,90,10
 type wig 0.0 2.87
@@ -98,7 +98,7 @@ autoScaleDefault Off
 windowingFunction mean
 group compGeno
 priority 103.2
-visibility pack
+visibility hide
 color 0, 10, 100
 altColor 0,90,10
 type wig 0.0 1.0
