@@ -14217,6 +14217,7 @@ cat > loadMaf.csh << 'EOF'
 'EOF'
      csh loadMaf.csh >&! loadMaf.log &
 
+
     # look at coverage
     ssh kkstore02
     cd /cluster/data/hg18/bed/multiz25wayStrict
@@ -14338,7 +14339,8 @@ cat > loadMaf.csh << 'EOF'
     date
 'EOF'
     csh loadMaf.csh >& loadMaf.log  &
-    # NOTE: summary table lost, reloaded on 6/4/07 (kate)
+
+    # NOTE: rebuilt hgLoadMafSummary to exclude chroms<1MB (2007-06-21 kate)
 
 
 ########################################################################
@@ -15586,6 +15588,7 @@ cat > mafFrags.csh << 'EOF'
 
     # Create downloads dir for new species without genome databases
     #foreach db (tupBel1 cavPor2 eriEur1 sorAra1)
+    # NOTE: Keeping these only on genome-test for now.
     foreach db (tupBel1 cavPor2 eriEur1 sorAra1)
         echo $db
         set Db = `echo $db | perl -wpe 's/(.*)/\u$1/'`
@@ -15608,6 +15611,7 @@ cat > mafFrags.csh << 'EOF'
     # EDIT README's for the species
 
     # Post reciprocal best nets 
+    # NOTE: Keeping these only on genome-test for now.
 cat > downloads4.csh << 'EOF'
     foreach db (felCat3 otoGar1 loxAfr1 oryCun1 echTel1 dasNov1 \
             tupBel1 cavPor2 eriEur1 sorAra1)
