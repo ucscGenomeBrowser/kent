@@ -16,7 +16,7 @@
 #include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.24 2007/06/21 21:21:42 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.25 2007/06/21 21:58:57 hiram Exp $";
 
 #define ITEM_SCORE_DEFAULT "1000"
 #define ADD_ITEM_COMMENT_DEFAULT "add comments"
@@ -97,62 +97,6 @@ cgiContinueHiddenVar("r");
 hPrintf("\n");
 }
 
-#ifdef NOT
-static char *fetchWikiRawText(char *descriptionKey)
-/* fetch page from wiki in raw form as it is in the edit form */
-{
-char wikiPageUrl[512];
-safef(wikiPageUrl, sizeof(wikiPageUrl), "%s/index.php/%s?action=raw",
-	cfgOptionDefault(CFG_WIKI_URL, NULL), descriptionKey);
-struct lineFile *lf = netLineFileMayOpen(wikiPageUrl);
-
-struct dyString *wikiPage = newDyString(1024);
-if (lf)
-    {
-    char *line;
-    int lineSize;
-    while (lineFileNext(lf, &line, &lineSize))
-	dyStringPrintf(wikiPage, "%s\n", line);
-    lineFileClose(&lf);
-    }
-
-/* test for text, remove any edit sections and comment strings */
-char *rawText = NULL;
-if (wikiPage->string)
-    {
-    /* XXXX is this response going to be language dependent ? */
-    if (stringIn(WIKI_NO_TEXT_RESPONSE,wikiPage->string))
-	return NULL;
-    rawText = dyStringCannibalize(&wikiPage);
-    }
-freeDyString(&wikiPage);
-
-return rawText;
-}
-
-static struct htmlPage *fetchEditPage(char *descriptionKey)
-/* fetch edit page for descriptionKey page name in wiki */
-{
-struct htmlCookie *cookie;
-char wikiPageUrl[512];
-
-/* must pass the session cookie from the wiki in order to edit */
-AllocVar(cookie);
-cookie->name = cloneString(cfgOption(CFG_WIKI_SESSION_COOKIE));
-cookie->value = cloneString(findCookieData(cookie->name));
-
-/* fetch the edit page to get the wpEditToken, and current contents */
-safef(wikiPageUrl, sizeof(wikiPageUrl), "%s/index.php/%s?action=edit",
-	cfgOptionDefault(CFG_WIKI_URL, NULL), descriptionKey);
-
-char *fullText = htmlSlurpWithCookies(wikiPageUrl,cookie);
-struct htmlPage *page = htmlPageParseOk(wikiPageUrl, fullText);
-/* fullText pointer is placed in page->fullText */
-
-return (page);
-}
-#endif
-
 static boolean emailVerified()
 /* TRUE indicates email has been verified for this wiki user */
 {
@@ -164,31 +108,6 @@ if (NULL == stringFound)
 else
     return FALSE;
 }
-
-#ifdef NOT
-static void createPageHelp(char *pageFileName)
-/* find the specified html help page and display it, or issue a missing
- *	page message so the site administrator can fix it.
- */
-{
-char helpName[PATH_LEN], *helpBuf;
-
-hPrintf("<HR />\n");
-
-safef(helpName, ArraySize(helpName), "%s%s/%s.html", hDocumentRoot(), HELP_DIR,
-	pageFileName);
-if (fileExists(helpName))
-    readInGulp(helpName, &helpBuf, NULL);
-else
-    {
-    char missingHelp[512];
-    safef(missingHelp, ArraySize(missingHelp),
-        "<P>(missing help text file in %s)</P>\n", helpName);
-    helpBuf = cloneString(missingHelp);
-    }
-puts(helpBuf);
-}
-#endif
 
 static void displayItem(struct wikiTrack *item, char *userName)
 /* given an already fetched item, get the item description from
@@ -452,149 +371,6 @@ else
 cartHtmlEnd();
 }	/*	void doWikiTrack()	*/
 
-#ifdef NOT
-static void htmlCloneFormVarSet(struct htmlForm *parent,
-	struct htmlForm *clone, char *name, char *val)
-/* clone form variable from parent, with new value,
- * if *val is NULL, clone val from parent
- */
-{
-struct htmlFormVar *cloneVar;
-struct htmlFormVar *var;
-if (parent == NULL)
-    errAbort("Null parent form passed to htmlCloneFormVarSet");
-if (clone == NULL)
-    errAbort("Null clone form passed to htmlCloneFormVarSet");
-var = htmlFormVarGet(parent, name);
-if (var == NULL)
-    errAbort("Variable '%s' not found in parent in htmlCloneFormVarSet", name);
-
-AllocVar(cloneVar);
-cloneVar->name = cloneString(var->name);
-cloneVar->tagName = cloneString(var->tagName);
-cloneVar->type = cloneString(var->type);
-if (NULL == val)
-    cloneVar->curVal = cloneString(var->curVal);
-else
-    cloneVar->curVal = cloneString(val);
-slAddHead(&clone->vars, cloneVar);
-
-}
-#endif
-
-static void addDescription(struct wikiTrack *item, char *userName)
-{
-char *newComments = cartNonemptyString(cart, NEW_ITEM_COMMENT);
-struct dyString *content = newDyString(1024);
-
-/* was nothing changed in the add comments entry box ? */
-if (sameWord(ADD_ITEM_COMMENT_DEFAULT,newComments))
-    return;
-
-struct htmlPage *page = fetchEditPage(item->descriptionKey);
-
-/* create a stripped down edit form, we don't want all the variables */
-struct htmlForm *strippedEditForm;
-AllocVar(strippedEditForm);
-
-struct htmlForm *currentEditForm = htmlFormGet(page,"editform");
-if (NULL == currentEditForm)
-    errAbort("addDescription: can not get editform ?");
-strippedEditForm->name = cloneString(currentEditForm->name);
-/* the lower case "post" in the editform does not work ? */
-/*strippedEditForm->method = cloneString(currentEditForm->method);*/
-strippedEditForm->method = cloneString("POST");
-strippedEditForm->startTag = currentEditForm->startTag;
-strippedEditForm->endTag = currentEditForm->endTag;
-
-/* fetch any current page contents in the edit form to continue them */
-struct htmlFormVar *wpTextbox1 =
-	htmlPageGetVar(page, currentEditForm, "wpTextbox1");
-
-/* decide on whether adding comments to existing text, or starting a
- *	new article from scratch.
- *	This function could be extended to actually checking the current
- *	contents to see if the "Category:" or "created:" lines have been
- *	removed, and then restore them.
- */
-if (wpTextbox1->curVal && (strlen(wpTextbox1->curVal) > 2))
-    {
-    char *rawText = fetchWikiRawText(item->descriptionKey);
-    dyStringPrintf(content, "%s\n\n''comments added: ~~~~''\n\n",
-	rawText);
-    }
-else
-    {
-    boolean recreateHeader = FALSE;
-    char position[128];
-    char *newPos;
-    char *userSignature;
-    /* In the case where this is a restoration of the header lines,
-     *	may be a different creator than this user adding comments.
-     *	So, get the header line correct to represent the actual creator.
-     */
-    if (sameWord(userName, item->owner))
-	userSignature = cloneString("~~~~");
-    else
-	{
-	struct dyString *tt = newDyString(1024);
-	dyStringPrintf(tt, "[[User:%s|%s]] ", item->owner, item->owner);
-	dyStringPrintf(tt, "%s", item->creationDate);
-	userSignature = dyStringCannibalize(&tt);
-	recreateHeader = TRUE;
-	}
-    snprintf(position, 128, "%s:%d-%d", seqName, winStart+1, winEnd);
-    newPos = addCommasToPos(position);
-    dyStringPrintf(content, "%s\n"
-"[http://%s/cgi-bin/hgTracks?db=%s&wikiTrack=pack&position=%s:%d-%d %s %s]"
-	"&nbsp;&nbsp;<B>'%s'</B>&nbsp;&nbsp;''created: %s''\n\n",
-	NEW_ITEM_CATEGORY,
-	    cfgOptionDefault(CFG_WIKI_BROWSER, DEFAULT_BROWSER), database,
-		seqName, winStart+1, winEnd, database, newPos, item->name,
-		userSignature);
-    if (recreateHeader)
-	dyStringPrintf(content, "\n\n''comments added: ~~~~''\n\n");
-    }
-
-if (sameWord(NEW_ITEM_COMMENT_DEFAULT,newComments))
-    dyStringPrintf(content, "%s\n\n", NO_ITEM_COMMENT_SUPPLIED);
-else
-    dyStringPrintf(content, "%s\n\n", newComments);
-
-
-htmlCloneFormVarSet(currentEditForm, strippedEditForm,
-	"wpTextbox1", content->string);
-htmlCloneFormVarSet(currentEditForm, strippedEditForm, "wpSummary", "");
-htmlCloneFormVarSet(currentEditForm, strippedEditForm, "wpSection", "");
-htmlCloneFormVarSet(currentEditForm, strippedEditForm, "wpMinoredit", "1");
-/*
-htmlCloneFormVarSet(currentEditForm, strippedEditForm, "wpSave", "Save page");
-*/
-htmlCloneFormVarSet(currentEditForm, strippedEditForm, "wpEdittime", NULL);
-htmlCloneFormVarSet(currentEditForm, strippedEditForm, "wpEditToken", NULL);
-
-htmlPageSetVar(page,currentEditForm, "wpTextbox1", content->string);
-htmlPageSetVar(page,currentEditForm, "wpSummary", "");
-htmlPageSetVar(page,currentEditForm, "wpSection", "");
-htmlPageSetVar(page,currentEditForm, "wpMinoredit", "1");
-htmlPageSetVar(page,currentEditForm, "wpSave", "Save page");
-
-char newUrl[1024];
-/* fake out htmlPageFromForm since it doesn't understand the colon : */
-safef(newUrl, ArraySize(newUrl), "%s%s",
-	"http://genomewiki.ucsc.edu", currentEditForm->action);
-/* something, somewhere encoded the & into &amp; which does not work */
-char *fixedString = replaceChars(newUrl, "&amp;", "&");
-currentEditForm->action = cloneString(fixedString);
-strippedEditForm->action = cloneString(fixedString);
-struct htmlPage *editPage = htmlPageFromForm(page,strippedEditForm,"submit", "Submit");
-
-if (NULL == editPage)
-    errAbort("addDescription: the edit is failing ?");
-
-freeDyString(&content);
-}	/*	static void addDescription()	*/
-
 static void updateLastModifiedDate(int id)
 /* set lastModifiedDate to now() */
 {
@@ -654,7 +430,7 @@ if (! wikiTrackEnabled(&userName))
 if (NULL == userName)
     errAbort("add wiki comments: user not logged in ?");
 
-addDescription(item, userName);
+addDescription(item, userName, seqName, winStart, winEnd, cart, database);
 updateLastModifiedDate(sqlSigned(wikiItemId));
 displayItem(item, userName);
 cartHtmlEnd();
@@ -746,7 +522,7 @@ char wikiItemId[64];
 safef(wikiItemId,ArraySize(wikiItemId),"%d", id);
 struct wikiTrack *item = findWikiItemId(wikiItemId);
 
-addDescription(item, userName);
+addDescription(item, userName, seqName, winStart, winEnd, cart, database);
 displayItem(item, userName);
 
 cartHtmlEnd();
