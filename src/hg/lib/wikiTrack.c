@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.3 2007/05/31 22:01:33 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.4 2007/06/21 21:04:00 hiram Exp $";
 
 void wikiTrackStaticLoad(char **row, struct wikiTrack *ret)
 /* Load a row from wikiTrack table into ret.  The contents of ret will
@@ -30,6 +30,7 @@ ret->creationDate = row[11];
 ret->lastModifiedDate = row[12];
 ret->descriptionKey = row[13];
 ret->id = sqlUnsigned(row[14]);
+ret->alignID = row[15];
 }
 
 struct wikiTrack *wikiTrackLoad(char **row)
@@ -54,6 +55,7 @@ ret->creationDate = cloneString(row[11]);
 ret->lastModifiedDate = cloneString(row[12]);
 ret->descriptionKey = cloneString(row[13]);
 ret->id = sqlUnsigned(row[14]);
+ret->alignID = cloneString(row[15]);
 return ret;
 }
 
@@ -63,7 +65,7 @@ struct wikiTrack *wikiTrackLoadAll(char *fileName)
 {
 struct wikiTrack *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[15];
+char *row[16];
 
 while (lineFileRow(lf, row))
     {
@@ -81,7 +83,7 @@ struct wikiTrack *wikiTrackLoadAllByChar(char *fileName, char chopper)
 {
 struct wikiTrack *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[15];
+char *row[16];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -125,8 +127,8 @@ void wikiTrackSaveToDb(struct sqlConnection *conn, struct wikiTrack *el, char *t
  * If worried about this use wikiTrackSaveToDbEscaped() */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s',%u,'%s','%s','%s','%s','%s','%s','%s','%s',%u)", 
-	tableName,  el->bin,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->score,  el->strand,  el->db,  el->owner,  el->color,  el->class,  el->creationDate,  el->lastModifiedDate,  el->descriptionKey,  el->id);
+dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s',%u,'%s','%s','%s','%s','%s','%s','%s','%s',%u,'%s')", 
+	tableName,  el->bin,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->score,  el->strand,  el->db,  el->owner,  el->color,  el->class,  el->creationDate,  el->lastModifiedDate,  el->descriptionKey,  el->id,  el->alignID);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -141,7 +143,7 @@ void wikiTrackSaveToDbEscaped(struct sqlConnection *conn, struct wikiTrack *el, 
  * before inserting into database. */ 
 {
 struct dyString *update = newDyString(updateSize);
-char  *chrom, *name, *strand, *db, *owner, *color, *class, *creationDate, *lastModifiedDate, *descriptionKey;
+char  *chrom, *name, *strand, *db, *owner, *color, *class, *creationDate, *lastModifiedDate, *descriptionKey, *alignID;
 chrom = sqlEscapeString(el->chrom);
 name = sqlEscapeString(el->name);
 strand = sqlEscapeString(el->strand);
@@ -152,9 +154,10 @@ class = sqlEscapeString(el->class);
 creationDate = sqlEscapeString(el->creationDate);
 lastModifiedDate = sqlEscapeString(el->lastModifiedDate);
 descriptionKey = sqlEscapeString(el->descriptionKey);
+alignID = sqlEscapeString(el->alignID);
 
-dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s',%u,'%s','%s','%s','%s','%s','%s','%s','%s',%u)", 
-	tableName, el->bin ,  chrom, el->chromStart , el->chromEnd ,  name, el->score ,  strand,  db,  owner,  color,  class,  creationDate,  lastModifiedDate,  descriptionKey, el->id );
+dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s',%u,'%s','%s','%s','%s','%s','%s','%s','%s',%u,'%s')", 
+	tableName, el->bin ,  chrom, el->chromStart , el->chromEnd ,  name, el->score ,  strand,  db,  owner,  color,  class,  creationDate,  lastModifiedDate,  descriptionKey, el->id ,  alignID);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 freez(&chrom);
@@ -167,6 +170,7 @@ freez(&class);
 freez(&creationDate);
 freez(&lastModifiedDate);
 freez(&descriptionKey);
+freez(&alignID);
 }
 
 struct wikiTrack *wikiTrackCommaIn(char **pS, struct wikiTrack *ret)
@@ -193,6 +197,7 @@ ret->creationDate = sqlStringComma(&s);
 ret->lastModifiedDate = sqlStringComma(&s);
 ret->descriptionKey = sqlStringComma(&s);
 ret->id = sqlUnsignedComma(&s);
+ret->alignID = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -213,6 +218,7 @@ freeMem(el->class);
 freeMem(el->creationDate);
 freeMem(el->lastModifiedDate);
 freeMem(el->descriptionKey);
+freeMem(el->alignID);
 freez(pEl);
 }
 
@@ -281,6 +287,10 @@ fprintf(f, "%s", el->descriptionKey);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 fprintf(f, "%u", el->id);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->alignID);
+if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
 
@@ -289,6 +299,30 @@ fputc(lastSep,f);
 #include "hgConfig.h"
 #include "wikiLink.h"
 #include "cheapcgi.h"
+#include "hdb.h"
+#include "hui.h"
+#include "net.h"
+#include "cart.h"
+#include "hPrint.h"
+#include "grp.h"
+#include "obscure.h"
+#include "hCommon.h"
+#include "web.h"
+#include "hgColors.h"
+
+#ifdef NOT
+static void savePosInTextBox(char *chrom, int start, int end)
+/* Save basic position/database info in text box and hidden var. 
+   Positions becomes chrom:start-end*/
+{
+char position[128];
+char *newPos;
+snprintf(position, 128, "%s:%d-%d", chrom, start, end);
+newPos = addCommasToPos(position);
+cgiMakeTextVar("getDnaPos", newPos, strlen(newPos) + 2);
+cgiContinueHiddenVar("db");
+}
+#endif
 
 boolean wikiTrackEnabled(char **wikiUserName)
 /*determine if wikiTrack can be used, and is this user logged into the wiki ?*/
@@ -296,8 +330,11 @@ boolean wikiTrackEnabled(char **wikiUserName)
 if (wikiUserName)
     *wikiUserName = NULL;  /* assume not logged in until proven otherwise */
 
-/* must have wiki login system enabled, and the new cfg option exists too. */
-if (wikiLinkEnabled() && (cfgOption(CFG_WIKI_SESSION_COOKIE) != NULL))
+/* must have wiki login system enabled, and the new cfg options exist too. */
+if (wikiLinkEnabled() &&
+	(cfgOption(CFG_WIKI_SESSION_COOKIE) != NULL) &&
+	(cfgOption(CFG_WIKI_BROWSER) != NULL) &&
+	(cfgOption(CFG_WIKI_URL) != NULL))
     {
     char *wikiUser = wikiLinkUserName();
     if ( (wikiUser) &&
@@ -328,7 +365,12 @@ static char *createString =
     "creationDate varchar(255) not null,\n"
     "lastModifiedDate varchar(255) not null,\n"
     "descriptionKey varchar(255) not null,\n"
-    "INDEX chrom(db,bin,chrom)\n"
+    "id int unsigned not null auto_increment,\n"
+    "alignID varchar(255) not null,\n"
+    "PRIMARY KEY(id),\n"
+    "INDEX chrom (db,bin,chrom),\n"
+    "INDEX name (db,name),\n"
+    "INDEX align (alignID)\n"
 ")\n";
 
 char *wikiTrackGetCreateSql(char *tableName)
@@ -340,3 +382,412 @@ dyStringPrintf(createTable, createString, tableName);
 
 return (dyStringCannibalize(&createTable));
 }
+
+struct wikiTrack *findWikiItemId(char *wikiItemId)
+/* given a wikiItemId return the row from the table */
+{
+struct wikiTrack *item;
+char query[256];
+struct sqlConnection *conn = hConnectCentral();
+
+safef(query, ArraySize(query), "SELECT * FROM %s WHERE id='%s' limit 1",
+	WIKI_TRACK_TABLE, wikiItemId);
+
+item = wikiTrackLoadByQuery(conn, query);
+if (NULL == item)
+    errAbort("display wiki item: failed to load item '%s'", wikiItemId);
+hDisconnectCentral(&conn);
+
+return item;
+}
+
+struct wikiTrack *findWikiItemByAlignID(char *db, char *alignID)
+/* given a db and UCSC known gene alignID, find the wiki item */
+{
+struct wikiTrack *item = NULL;
+
+/* make sure neither of these arguments is NULL */
+if (db && alignID)
+    {
+    char query[256];
+    struct sqlConnection *conn = hConnectCentral();
+    safef(query, ArraySize(query),
+	"SELECT * FROM %s WHERE db='%s' AND alignID='%s' limit 1",
+	    WIKI_TRACK_TABLE, db, alignID);
+
+    item = wikiTrackLoadByQuery(conn, query);
+
+    hDisconnectCentral(&conn);
+    }
+
+return item;
+}
+
+struct wikiTrack *findWikiItemByName(char *db, char *name)
+/* given a db,name pair return the row from the table, can return NULL */
+{
+struct wikiTrack *item = NULL;
+
+/* make sure neither of these arguments is NULL */
+if (name && db)
+    {
+    char query[256];
+    struct sqlConnection *conn = hConnectCentral();
+    safef(query, ArraySize(query),
+	"SELECT * FROM %s WHERE db='%s' AND name='%s' limit 1",
+	    WIKI_TRACK_TABLE, db, name);
+
+    item = wikiTrackLoadByQuery(conn, query);
+
+    hDisconnectCentral(&conn);
+    }
+
+return item;
+}
+
+static char *stripEditURLs(char *rendered)
+/* test for actual text, remove edit sections and any html comment strings */
+{
+char *stripped = cloneString(rendered);
+char *found = NULL;
+char *begin = "<div class=\"editsection\"";
+char *end = "></a>";
+
+/* XXXX is this response going to be language dependent ? */
+if (stringIn(WIKI_NO_TEXT_RESPONSE,rendered))
+	return NULL;
+
+/* remove any edit sections */
+while (NULL != (found = stringBetween(begin, end, stripped)) )
+    {
+    if (strlen(found) > 0)
+	{
+	struct dyString *rm = newDyString(1024);
+	dyStringPrintf(rm, "%s%s%s", begin, found, end);
+	stripString(stripped, rm->string);
+	freeMem(found);
+	freeDyString(&rm);
+	}
+    }
+
+/* and remove comment strings from the wiki */
+begin = "<!--";
+end = "-->";
+while (NULL != (found = stringBetween(begin, end, stripped)) )
+    {
+    if (strlen(found) > 0)
+	{
+	struct dyString *rm = newDyString(1024);
+	dyStringPrintf(rm, "%s%s%s", begin, found, end);
+	stripString(stripped, rm->string);
+	freeMem(found);
+	freeDyString(&rm);
+	}
+    }
+
+return stripped;
+}
+
+void htmlCloneFormVarSet(struct htmlForm *parent,
+	struct htmlForm *clone, char *name, char *val)
+/* clone form variable from parent, with new value,
+ * if *val is NULL, clone val from parent
+ */
+{
+struct htmlFormVar *cloneVar;
+struct htmlFormVar *var;
+if (parent == NULL)
+    errAbort("Null parent form passed to htmlCloneFormVarSet");
+if (clone == NULL)
+    errAbort("Null clone form passed to htmlCloneFormVarSet");
+var = htmlFormVarGet(parent, name);
+if (var == NULL)
+    errAbort("Variable '%s' not found in parent in htmlCloneFormVarSet", name);
+
+AllocVar(cloneVar);
+cloneVar->name = cloneString(var->name);
+cloneVar->tagName = cloneString(var->tagName);
+cloneVar->type = cloneString(var->type);
+if (NULL == val)
+    cloneVar->curVal = cloneString(var->curVal);
+else
+    cloneVar->curVal = cloneString(val);
+slAddHead(&clone->vars, cloneVar);
+
+}
+
+char *fetchWikiRawText(char *descriptionKey)
+/* fetch page from wiki in raw form as it is in the edit form */
+{
+char wikiPageUrl[512];
+safef(wikiPageUrl, sizeof(wikiPageUrl), "%s/index.php/%s?action=raw",
+	cfgOptionDefault(CFG_WIKI_URL, NULL), descriptionKey);
+struct lineFile *lf = netLineFileMayOpen(wikiPageUrl);
+
+struct dyString *wikiPage = newDyString(1024);
+if (lf)
+    {
+    char *line;
+    int lineSize;
+    while (lineFileNext(lf, &line, &lineSize))
+	dyStringPrintf(wikiPage, "%s\n", line);
+    lineFileClose(&lf);
+    }
+
+/* test for text, remove any edit sections and comment strings */
+char *rawText = NULL;
+if (wikiPage->string)
+    {
+    /* XXXX is this response going to be language dependent ? */
+    if (stringIn(WIKI_NO_TEXT_RESPONSE,wikiPage->string))
+	return NULL;
+    rawText = dyStringCannibalize(&wikiPage);
+    }
+freeDyString(&wikiPage);
+
+return rawText;
+}
+
+char *fetchWikiRenderedText(char *descriptionKey)
+/* fetch page from wiki in rendered form, strip it of edit URLs,
+ *	html comments, and test for actual proper return.
+ *  returned string can be freed after use */
+{
+char wikiPageUrl[512];
+safef(wikiPageUrl, sizeof(wikiPageUrl), "%s/index.php/%s?action=render",
+	cfgOptionDefault(CFG_WIKI_URL, NULL), descriptionKey);
+struct lineFile *lf = netLineFileMayOpen(wikiPageUrl);
+
+struct dyString *wikiPage = newDyString(1024);
+if (lf)
+    {
+    char *line;
+    int lineSize;
+    while (lineFileNext(lf, &line, &lineSize))
+	dyStringPrintf(wikiPage, "%s\n", line);
+    lineFileClose(&lf);
+    }
+
+/* test for text, remove any edit sections and comment strings */
+char *strippedRender = NULL;
+if (wikiPage->string)
+    strippedRender = stripEditURLs(wikiPage->string);
+freeDyString(&wikiPage);
+
+return strippedRender;
+}
+
+void displayComments(struct wikiTrack *item)
+/* display the rendered comments for this item */
+{
+char *url = cfgOptionDefault(CFG_WIKI_URL, NULL);
+char *comments = fetchWikiRenderedText(item->descriptionKey);
+
+hPrintf("<B>Description and comments from the "
+  "<A HREF=\"%s/index.php/%s\" TARGET=_blank>wiki article:</A> %s:</B><BR />\n",
+       url, item->descriptionKey, item->descriptionKey);
+
+if (comments && (strlen(comments) > 2))
+    {
+    hPrintf("\n%s\n", comments);
+    }
+else
+    hPrintf("\n(no comments for this item at the current time)<BR />\n");
+}
+
+void createPageHelp(char *pageFileName)
+/* find the specified html help page and display it, or issue a missing
+ *	page message so the site administrator can fix it.
+ */
+{
+char helpName[PATH_LEN], *helpBuf;
+
+hPrintf("<HR />\n");
+
+safef(helpName, ArraySize(helpName), "%s%s/%s.html", hDocumentRoot(), HELP_DIR,
+	pageFileName);
+if (fileExists(helpName))
+    readInGulp(helpName, &helpBuf, NULL);
+else
+    {
+    char missingHelp[512];
+    safef(missingHelp, ArraySize(missingHelp),
+        "<P>(missing help text file in %s)</P>\n", helpName);
+    helpBuf = cloneString(missingHelp);
+    }
+puts(helpBuf);
+}
+
+struct htmlPage *fetchEditPage(char *descriptionKey)
+/* fetch edit page for descriptionKey page name in wiki */
+{
+struct htmlCookie *cookie;
+char wikiPageUrl[512];
+
+/* must pass the session cookie from the wiki in order to edit */
+AllocVar(cookie);
+cookie->name = cloneString(cfgOption(CFG_WIKI_SESSION_COOKIE));
+cookie->value = cloneString(findCookieData(cookie->name));
+
+/* fetch the edit page to get the wpEditToken, and current contents */
+safef(wikiPageUrl, sizeof(wikiPageUrl), "%s/index.php/%s?action=edit",
+	cfgOptionDefault(CFG_WIKI_URL, NULL), descriptionKey);
+
+char *fullText = htmlSlurpWithCookies(wikiPageUrl,cookie);
+struct htmlPage *page = htmlPageParseOk(wikiPageUrl, fullText);
+/* fullText pointer is placed in page->fullText */
+
+return (page);
+}
+
+#ifdef NOT
+static char *colorMenuJS = "onchange=\"updateColorSelectBox();\" style=\"width:8em;\"";
+
+static void colorMenuOutput()
+/* the item color pull-down menu in the create item form */
+{
+hPrintf("<INPUT NAME=\"colorPullDown\" VALUE=\"\" SIZE=1 STYLE=\"display:none;\" >\n");
+
+hPrintf("<SELECT NAME=\"itemColor\" style=\"width:8em; background-color:#000000;\" %s>\n", colorMenuJS);
+hPrintf("<OPTION SELECTED VALUE = \"#000000\" style=\"background-color:#000000;\" >black</OPTION>\n");
+hPrintf("<OPTION value = \"#0000ff\" style=\"background-color:#0000ff;\" >blue</OPTION>\n");
+hPrintf("<OPTION VALUE = \"#9600c8\" style=\"background-color:#9600c8;\" >purple</OPTION>\n");
+hPrintf("<OPTION VALUE = \"#ff0000\" style=\"background-color:#ff0000;\" >red</OPTION>\n");
+hPrintf("<OPTION VALUE = \"#e67800\" style=\"background-color:#e67800;\" >orange</OPTION>\n");
+hPrintf("<OPTION VALUE = \"#dcdc00\" style=\"background-color:#dcdc00;\" >yellow</OPTION>\n");
+hPrintf("<OPTION VALUE = \"#00b400\" style=\"background-color:#00b400;\" >green</OPTION>\n");
+hPrintf("<OPTION VALUE = \"#8c8c8c\" style=\"background-color:#8c8c8c;\" >gray</OPTION>\n");
+hPrintf("</SELECT>\n");
+}
+
+static void outputJavaScript()
+/* java script functions used in the create item form */
+{
+hPrintf("<SCRIPT TYPE=\"text/javascript\">\n");
+
+hPrintf("function updateColorSelectBox() {\n"
+" var form = document.getElementById(\"createItem\");\n"
+" document.createItem.colorPullDown.style.display='inline';\n"
+" document.createItem.colorPullDown.select();\n"
+" document.createItem.colorPullDown.style.display='none';\n"
+" form.itemColor.style.background = form.itemColor[form.itemColor.selectedIndex].value;\n"
+" form.itemColor.style.color = form.itemColor[form.itemColor.selectedIndex].value;\n"
+"}\n");
+hPrintf("</SCRIPT>\n");
+}
+
+static void startForm(char *name, char *actionType, char *cgiName,
+	struct cart *cart)
+{
+hPrintf("<FORM ID=\"%s\" NAME=\"%s\" ACTION=\"%s\">\n\n", name, name, cgiName);
+cartSaveSession(cart);
+cgiMakeHiddenVar("g", actionType);
+cgiContinueHiddenVar("c");
+cgiContinueHiddenVar("o");
+hPrintf("\n");
+cgiContinueHiddenVar("l");
+cgiContinueHiddenVar("r");
+hPrintf("\n");
+}
+
+void wikiItemCreateForm(char *userName, char *cgiName, struct cart *cart,
+	int winStart, int winEnd, char *seqName)
+/* put up the create new item form */
+{
+outputJavaScript();
+startForm("createItem", G_CREATE_WIKI_ITEM, cgiName, cart);
+
+webPrintLinkTableStart();
+/* first row is a title line */
+char label[256];
+safef(label, ArraySize(label), "Create new item, owner: '%s'\n",
+    userName);
+webPrintWideLabelCell(label, 2);
+webPrintLinkTableNewRow();
+/* second row is group classification pull-down menu */
+webPrintWideCellStart(2, HG_COL_TABLE);
+puts("<B>classification group:&nbsp;</B>");
+struct grp *group, *groupList = hLoadGrps();
+int groupCount = 0;
+for (group = groupList; group; group=group->next)
+    ++groupCount;
+char **classMenu = NULL;
+classMenu = (char **)needMem((size_t)(groupCount * sizeof(char *)));
+groupCount = 0;
+classMenu[groupCount++] = cloneString(ITEM_NOT_CLASSIFIED);
+for (group = groupList; group; group=group->next)
+    {
+    if (differentWord("Custom Tracks", group->label))
+	classMenu[groupCount++] = cloneString(group->label);
+    }
+grpFreeList(&groupList);
+
+cgiMakeDropList(NEW_ITEM_CLASS, classMenu, groupCount,
+	cartUsualString(cart,NEW_ITEM_CLASS,ITEM_NOT_CLASSIFIED));
+webPrintLinkCellEnd();
+webPrintLinkTableNewRow();
+/* third row is position entry box */
+webPrintWideCellStart(2, HG_COL_TABLE);
+puts("<B>position:&nbsp;</B>");
+savePosInTextBox(seqName, winStart+1, winEnd);
+hPrintf("&nbsp;(size: ");
+printLongWithCommas(stdout, (long long)(winEnd - winStart));
+hPrintf(")");
+webPrintLinkCellEnd();
+webPrintLinkTableNewRow();
+/* fourth row is strand selection radio box */
+webPrintWideCellStart(2, HG_COL_TABLE);
+char *strand = cartUsualString(cart, NEW_ITEM_STRAND, "plus");
+boolean plusStrand = sameWord("plus",strand) ? TRUE : FALSE;
+hPrintf("<B>strand:&nbsp;");
+cgiMakeRadioButton(NEW_ITEM_STRAND, "plus", plusStrand);
+hPrintf("&nbsp;+&nbsp;&nbsp;");
+cgiMakeRadioButton(NEW_ITEM_STRAND, "minus", ! plusStrand);
+hPrintf("&nbsp;-</B>");
+webPrintLinkCellEnd();
+webPrintLinkTableNewRow();
+/* fifth row is item name text entry */
+webPrintWideCellStart(2, HG_COL_TABLE);
+hPrintf("<B>item name:&nbsp;</B>");
+cgiMakeTextVar("i", NEW_ITEM_NAME, 18);
+webPrintLinkCellEnd();
+#ifdef NOT
+webPrintLinkTableNewRow();
+/* sixth row is item score text entry */
+webPrintWideCellStart(2, HG_COL_TABLE);
+hPrintf("<B>item score:&nbsp;</B>");
+cgiMakeTextVar(NEW_ITEM_SCORE, ITEM_SCORE_DEFAULT, 4);
+hPrintf("&nbsp;(range:&nbsp;0&nbsp;to&nbsp;%s)", ITEM_SCORE_DEFAULT);
+webPrintLinkCellEnd();
+#endif
+webPrintLinkTableNewRow();
+/* seventh row is item color pull-down menu */
+webPrintWideCellStart(2, HG_COL_TABLE);
+hPrintf("<B>item color:&nbsp;</B>");
+colorMenuOutput();
+webPrintLinkCellEnd();
+webPrintLinkTableNewRow();
+/* seventh row is initial comment/description text entry */
+webPrintWideCellStart(2, HG_COL_TABLE);
+hPrintf("<B>initial comments/description:</B><BR />");
+cgiMakeTextArea(NEW_ITEM_COMMENT, NEW_ITEM_COMMENT_DEFAULT, 5, 40);
+webPrintLinkCellEnd();
+webPrintLinkTableNewRow();
+/* seventh row is the submit and cancel buttons */
+/*webPrintLinkCellStart(); more careful explicit alignment */
+hPrintf("<TD BGCOLOR=\"#%s\" ALIGN=\"CENTER\" VALIGN=\"TOP\">",
+	HG_COL_TABLE);
+cgiMakeButton("submit", "create new item");
+hPrintf("\n</FORM>\n");
+webPrintLinkCellEnd();
+/*webPrintLinkCellStart(); doesn't valign center properly */
+hPrintf("<TD BGCOLOR=\"#%s\" ALIGN=\"CENTER\" VALIGN=\"TOP\">",
+	HG_COL_TABLE);
+hPrintf("\n<FORM ID=\"cancel\" NAME=\"cancel\" ACTION=\"%s\">", hgTracksName());
+cgiMakeButton("cancel", "cancel");
+hPrintf("\n</FORM>\n");
+webPrintLinkCellEnd();
+webPrintLinkTableEnd();
+createPageHelp("wikiTrackCreateItemHelp");
+}
+#endif

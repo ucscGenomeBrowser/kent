@@ -20,8 +20,10 @@ CREATE TABLE wikiTrack (
     lastModifiedDate varchar(255) not null,	# date item last updated
     descriptionKey varchar(255) not null,	# name of wiki description page
     id int unsigned not null auto_increment,	# auto-increment item ID
+    alignID varchar(255) not null,	# knownGene unique name
               #Indices
     PRIMARY KEY(id),
     INDEX chrom (db,bin,chrom),
-    INDEX name (db,name)
+    INDEX name (db,name),
+    INDEX align (alignID)
 );
