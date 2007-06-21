@@ -11,10 +11,11 @@
 #include "htmlPage.h"
 #include "hgColors.h"
 #include "hdb.h"
+#include "binRange.h"
 #include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.2 2007/06/21 21:59:16 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.3 2007/06/21 23:00:10 hiram Exp $";
 
 static char *hgGeneUrl()
 {
@@ -64,136 +65,81 @@ printf("The wiki also serves as a forum for users "
 freeMem(loginUrl);
 }
 
-#ifdef NOT
-static void addDescription(struct wikiTrack *item, char *userName,
-    char *seqName, int winStart, int winEnd)
+
+static struct wikiTrack *startNewItem(char *chrom, int itemStart,
+	int itemEnd, char *strand)
+/* create the database item to get a new one started */
 {
-char *newComments = cartNonemptyString(cart, NEW_ITEM_COMMENT);
-struct dyString *content = newDyString(1024);
+char descriptionKey[256];
+struct sqlConnection *conn = hConnectCentral();
+char *userName = NULL;
+int score = 0;
+struct wikiTrack *newItem;
 
-/* was nothing changed in the add comments entry box ? */
-if (sameWord(ADD_ITEM_COMMENT_DEFAULT,newComments))
-    return;
+if (! wikiTrackEnabled(&userName))
+    errAbort("create new wiki item: wiki track not enabled");
+if (NULL == userName)
+    errAbort("create new wiki item: user not logged in ?");
 
-struct htmlPage *page = fetchEditPage(item->descriptionKey);
+safef(descriptionKey,ArraySize(descriptionKey),
+	"UCSCGeneAnnotation:%s-%d", database, 0);
 
-/* create a stripped down edit form, we don't want all the variables */
-struct htmlForm *strippedEditForm;
-AllocVar(strippedEditForm);
+AllocVar(newItem);
+newItem->bin = binFromRange(itemStart, itemEnd);
+newItem->chrom = cloneString(chrom);
+newItem->chromStart = itemStart;
+newItem->chromEnd = itemEnd;
+newItem->name = cloneString(curGeneId);
+newItem->score = score;
+safef(newItem->strand, sizeof(newItem->strand), "%s", strand);
+newItem->db = cloneString(database);
+newItem->owner = cloneString(userName);
+#define GENE_CLASS "Genes and Gene Prediction Tracks"
+newItem->class = cloneString(GENE_CLASS);
+newItem->color = cloneString("#000000");
+newItem->creationDate = cloneString("0");
+newItem->lastModifiedDate = cloneString("0");
+newItem->descriptionKey = cloneString(descriptionKey);
+newItem->id = 0;
+newItem->alignID = cloneString(curGeneId);
 
-struct htmlForm *currentEditForm = htmlFormGet(page,"editform");
-if (NULL == currentEditForm)
-    errAbort("addDescription: can not get editform ?");
+wikiTrackSaveToDbEscaped(conn, newItem, WIKI_TRACK_TABLE, 1024);
 
-strippedEditForm->name = cloneString(currentEditForm->name);
-/* the lower case "post" in the editform does not work ? */
-/*strippedEditForm->method = cloneString(currentEditForm->method);*/
-strippedEditForm->method = cloneString("POST");
-strippedEditForm->startTag = currentEditForm->startTag;
-strippedEditForm->endTag = currentEditForm->endTag;
+int id = sqlLastAutoId(conn);
+safef(descriptionKey,ArraySize(descriptionKey),
+	"UCSCGeneAnnotation:%s-%d", database, id);
 
-/* fetch any current page contents in the edit form to continue them */
-struct htmlFormVar *wpTextbox1 =
-	htmlPageGetVar(page, currentEditForm, "wpTextbox1");
+wikiTrackFree(&newItem);
 
-/* decide on whether adding comments to existing text, or starting a
- *	new article from scratch.
- *	This function could be extended to actually checking the current
- *	contents to see if the "Category:" or "created:" lines have been
- *	removed, and then restore them.
- */
-if (wpTextbox1->curVal && (strlen(wpTextbox1->curVal) > 2))
-    {
-    char *rawText = fetchWikiRawText(item->descriptionKey);
-    dyStringPrintf(content, "%s\n\n''comments added: ~~~~''\n\n",
-	rawText);
-    }
-else
-    {
-    boolean recreateHeader = FALSE;
-    char position[128];
-    char *newPos;
-    char *userSignature;
-    /* In the case where this is a restoration of the header lines,
-     *	may be a different creator than this user adding comments.
-     *	So, get the header line correct to represent the actual creator.
-     */
-    if (sameWord(userName, item->owner))
-	userSignature = cloneString("~~~~");
-    else
-	{
-	struct dyString *tt = newDyString(1024);
-	dyStringPrintf(tt, "[[User:%s|%s]] ", item->owner, item->owner);
-	dyStringPrintf(tt, "%s", item->creationDate);
-	userSignature = dyStringCannibalize(&tt);
-	recreateHeader = TRUE;
-	}
-    snprintf(position, 128, "%s:%d-%d", seqName, winStart+1, winEnd);
-    newPos = addCommasToPos(position);
-    dyStringPrintf(content, "%s\n"
-"[http://%s/cgi-bin/hgTracks?db=%s&wikiTrack=pack&position=%s:%d-%d %s %s]"
-	"&nbsp;&nbsp;<B>'%s'</B>&nbsp;&nbsp;''created: %s''\n\n",
-	NEW_ITEM_CATEGORY,
-	    cfgOptionDefault(CFG_WIKI_BROWSER, DEFAULT_BROWSER), database,
-		seqName, winStart+1, winEnd, database, newPos, item->name,
-		userSignature);
-    if (recreateHeader)
-	dyStringPrintf(content, "\n\n''comments added: ~~~~''\n\n");
-    }
+char query[1024];
+safef(query, ArraySize(query), "UPDATE %s set creationDate=now(),lastModifiedDate=now(),descriptionKey='%s' WHERE id='%d'",
+    WIKI_TRACK_TABLE, descriptionKey, id);
 
-if (sameWord(NEW_ITEM_COMMENT_DEFAULT,newComments))
-    dyStringPrintf(content, "%s\n\n", NO_ITEM_COMMENT_SUPPLIED);
-else
-    dyStringPrintf(content, "%s\n\n", newComments);
+sqlUpdate(conn,query);
+hDisconnectCentral(&conn);
 
-htmlCloneFormVarSet(currentEditForm, strippedEditForm,
-	"wpTextbox1", content->string);
-htmlCloneFormVarSet(currentEditForm, strippedEditForm, "wpSummary", "");
-htmlCloneFormVarSet(currentEditForm, strippedEditForm, "wpSection", "");
-htmlCloneFormVarSet(currentEditForm, strippedEditForm, "wpMinoredit", "1");
-/*
-htmlCloneFormVarSet(currentEditForm, strippedEditForm, "wpSave", "Save page");
-*/
-htmlCloneFormVarSet(currentEditForm, strippedEditForm, "wpEdittime", NULL);
-htmlCloneFormVarSet(currentEditForm, strippedEditForm, "wpEditToken", NULL);
+char wikiItemId[64];
+safef(wikiItemId,ArraySize(wikiItemId),"%d", id);
+struct wikiTrack *item = findWikiItemId(wikiItemId);
 
-htmlPageSetVar(page,currentEditForm, "wpTextbox1", content->string);
-htmlPageSetVar(page,currentEditForm, "wpSummary", "");
-htmlPageSetVar(page,currentEditForm, "wpSection", "");
-htmlPageSetVar(page,currentEditForm, "wpMinoredit", "1");
-htmlPageSetVar(page,currentEditForm, "wpSave", "Save page");
+hPrintf("created item: %s<BR>\n", item->name);
+addDescription(item, userName, curGeneChrom,
+    curGeneStart, curGeneEnd, cart, database);
+return(item);
+}
 
-char newUrl[1024];
-/* fake out htmlPageFromForm since it doesn't understand the colon : */
-safef(newUrl, ArraySize(newUrl), "%s%s",
-	"http://genomewiki.ucsc.edu", currentEditForm->action);
-/* something, somewhere encoded the & into &amp; which does not work */
-char *fixedString = replaceChars(newUrl, "&amp;", "&");
-currentEditForm->action = cloneString(fixedString);
-strippedEditForm->action = cloneString(fixedString);
-struct htmlPage *editPage = htmlPageFromForm(page,strippedEditForm,"submit", "Submit");
-
-if (NULL == editPage)
-    errAbort("addDescription: the edit is failing ?");
-
-freeDyString(&content);
-}	/*	static void addDescription()	*/
-#endif
-
-static void addComments(struct wikiTrack *item, char *userName)
+static void addComments(struct wikiTrack **item, char *userName)
 {
-if (item)
+if (*item)
     {
-    hPrintf("add comments to %s, %s, %s:%d-%d<BR>\n",
-	item->name, userName, curGeneChrom, curGeneStart, curGeneEnd);
-    addDescription(item, userName, curGeneChrom,
+    addDescription(*item, userName, curGeneChrom,
 	curGeneStart, curGeneEnd, cart, database);
-/*
-    cartRemove(cart, NEW_ITEM_COMMENT);
-*/
     }
 else
-    hPrintf("starting new item comments here<BR>\n");
+    {
+    *item = startNewItem(curGeneChrom, curGeneStart, curGeneEnd,
+	curGenePred->strand);
+    }
 }
 
 void doWikiTrack(struct sqlConnection *conn)
@@ -212,17 +158,10 @@ cartWebStart(cart, title);
 if(!wikiTrackEnabled(&userName))
     errAbort("wikiTrackPrint: called when wiki track is not enabled");
 
-if (!cartVarExists(cart, hggDoWikiAddComment))
-    cartRemove(cart, NEW_ITEM_COMMENT);
-
-if (cartVarExists(cart, NEW_ITEM_COMMENT))
-    hPrintf("%s cart var exists '%s'<BR>\n", NEW_ITEM_COMMENT,
-	cartUsualString(cart, NEW_ITEM_COMMENT, "no comment"));
-else
-    hPrintf("%s cart var does not exist<BR>\n", NEW_ITEM_COMMENT);
-
 if (cartVarExists(cart, hggDoWikiAddComment))
-    addComments(item, userName);
+    addComments(&item, userName);
+else
+    cartRemove(cart, NEW_ITEM_COMMENT);
 
 if (NULL != item)
     {
