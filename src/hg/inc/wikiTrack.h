@@ -8,8 +8,11 @@
 #ifndef JKSQL_H
 #include "jksql.h"
 #endif
+#ifndef HTMLPAGE_H
+#include "htmlPage.h"
+#endif
 
-#define WIKITRACK_NUM_COLS 15
+#define WIKITRACK_NUM_COLS 16
 
 struct wikiTrack
 /* wikiTrack bed 6+ structure */
@@ -30,6 +33,7 @@ struct wikiTrack
     char *lastModifiedDate;	/* date item last updated */
     char *descriptionKey;	/* name of wiki description page */
     unsigned id;	/* auto-increment item ID */
+    char *alignID;	/* knownGene unique name */
     };
 
 void wikiTrackStaticLoad(char **row, struct wikiTrack *ret);
@@ -112,11 +116,65 @@ void wikiTrackOutput(struct wikiTrack *el, FILE *f, char sep, char lastSep);
 #define G_ADD_WIKI_COMMENTS "htcAddWikiComments"
 #define G_DELETE_WIKI_ITEM "htcDeleteWikiItem"
 
+/* hgc and hgGene variables */
+#define WIKI_NO_TEXT_RESPONSE "There is currently no text in this page"
+#define ADD_ITEM_COMMENT_DEFAULT "add comments"
+#define NEW_ITEM_COMMENT "newItemComment"
+#define NEW_ITEM_SCORE "newItemScore"
+#define NEW_ITEM_COMMENT_DEFAULT "enter description and comments"
+#define NEW_ITEM_NAME "defaultName"
+#define NEW_ITEM_COLOR "itemColor"
+#define NEW_ITEM_STRAND "newItemStrand"
+#define NEW_ITEM_CLASS "newItemClass"
+#define NEW_ITEM_CATEGORY "[[Category:Genome Annotation]]"
+#define ITEM_NOT_CLASSIFIED "Not classified"
+#define NO_ITEM_COMMENT_SUPPLIED "(no initial description supplied)"
+#define DEFAULT_BROWSER "genome.ucsc.edu"
+
 boolean wikiTrackEnabled(char **wikiUserName);
 /*determine if wikiTrack can be used, and is this user logged into the wiki ?*/
 
 char *wikiTrackGetCreateSql(char *tableName);
 /* return sql create statement for wiki track with tableName */
 
+struct wikiTrack *findWikiItemId(char *wikiItemId);
+/* given a wikiItemId return the row from the table */
+
+struct wikiTrack *findWikiItemByAlignID(char *db, char *alignID);
+/* given a db and UCSC known gene alignID, find the wiki item */
+
+struct wikiTrack *findWikiItemByName(char *db, char *name);
+/* given a db,name pair return the row from the table, can return NULL */
+
+void htmlCloneFormVarSet(struct htmlForm *parent,
+	struct htmlForm *clone, char *name, char *val);
+/* clone form variable from parent, with new value,
+ * if *val is NULL, clone val from parent
+ */
+
+char *fetchWikiRawText(char *descriptionKey);
+/* fetch page from wiki in raw form as it is in the edit form */
+
+char *fetchWikiRenderedText(char *descriptionKey);
+/* fetch page from wiki in rendered form, strip it of edit URLs,
+ *	html comments, and test for actual proper return.
+ *  returned string can be freed after use */
+
+void displayComments(struct wikiTrack *item);
+/* display the rendered comments for this item */
+
+void createPageHelp(char *pageFileName);
+/* find the specified html help page and display it, or issue a missing
+ *	page message so the site administrator can fix it.
+ */
+
+struct htmlPage *fetchEditPage(char *descriptionKey);
+/* fetch edit page for descriptionKey page name in wiki */
+
+#ifdef NOT
+void wikiItemCreateForm(char *userName, char *cgiName, struct cart *cart,
+    int winStart, int winEnd, char *seqName);
+/* put up the create new item form */
+#endif
 
 #endif /* WIKITRACK_H */
