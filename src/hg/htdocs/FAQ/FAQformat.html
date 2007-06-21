@@ -378,9 +378,9 @@ chr22  TeleGene promoter  1020000  1020000  800 -  .  touch2
                     multiple alignments in a format that is easy to
                     parse and relatively easy to read.  This format
                     stores multiple alignments at the DNA level
-                    between entire genomes. The previously existing formats 
+                    between entire genomes. Previously used formats 
 		    are suitable for multiple alignments of single proteins or 
-		    regions of DNA without rearrangements, and would require 
+		    regions of DNA without rearrangements, but would require 
 		    considerable extension to cope with genomic issues such as
                     forward and reverse strand directions, multiple pieces 
 		    to the alignment, and so forth.
@@ -402,14 +402,25 @@ chr22  TeleGene promoter  1020000  1020000  800 -  .  touch2
                     alignment is in a separate paragraph that begins
                     with an &quot;a&quot; line and contains an &quot;s&quot; line 
 		    for each sequence in the multiple alignment.  
-		    Some MAF files may contain two  optional line types: an 
-		    "i" line containing information about what is in the aligned
-		    species DNA before and after the immediately preceding "s" 
-		    line, and an "e" line containing information about the size 		    of the gap between the alignments that span the current 
-		    block. Parsers may ignore any other types of paragraphs and 
+		    Some MAF files may contain other  optional line types: 
+		    <UL>
+		    <LI>
+		    an "i" line containing information about what is in the 
+		    aligned species DNA before and after the immediately 
+		    preceding "s" line
+		    <LI>
+		    an "e" line containing information about the size of the 
+		    gap between the alignments that span the current 
+		    block 
+		    <LI>
+		    a "q" line indicating the quality score of each aligned base
+		    for the species
+		    </UL>
+		    <P>
+		    Parsers may ignore any other types of paragraphs and 
 		    other types of lines within an alignment paragraph. 
                     <P>
-		    <B>The Header Line</B>
+		    <B>Header Line</B>
 		    <P>
                     The first line of a <em>.maf</em> file begins with ##maf. 
 		    This word is followed by white-space-separated
@@ -437,7 +448,7 @@ chr22  TeleGene promoter  1020000  1020000  800 -  .  touch2
                     </UL>
                     Undefined variables are ignored by the parser.
                     <P>
-		    <B>The Alignments Parameter Line</B>
+		    <B>Alignments Parameter Line</B>
 		    <P>
                     The second line displays the parameters that were
                     used to run the alignment program.
@@ -469,8 +480,7 @@ chr22  TeleGene promoter  1020000  1020000  800 -  .  touch2
 		    <B>Lines starting with 's' -- a sequence within an alignment block</B>
 		    <P>
 		    <FONT color="#0000FF">
-<PRE><TT> 
- s hg16.chr7    27707221 13 + 158545518 gcagctgaaaaca
+<PRE><TT> s hg16.chr7    27707221 13 + 158545518 gcagctgaaaaca
  s panTro1.chr6 28869787 13 + 161576975 gcagctgaaaaca
  s baboon         249182 13 +   4622798 gcagctgaaaaca
  s mm4.chr6     53310102 13 + 151104725 ACAGCTGAAAATA
@@ -512,8 +522,8 @@ chr22  TeleGene promoter  1020000  1020000  800 -  .  touch2
 		    <B>Lines starting with 'i' -- information about what's 
 		    happening before and after this block in the aligning 
 		    species</B> 
-                    <P><FONT color=#0000ff><PRE><TT>
- s hg16.chr7    27707221 13 + 158545518 gcagctgaaaaca s panTro1.chr6 28869787 13 + 161576975 gcagctgaaaaca
+                    <P><FONT color=#0000ff>
+<PRE><TT> s hg16.chr7    27707221 13 + 158545518 gcagctgaaaaca s panTro1.chr6 28869787 13 + 161576975 gcagctgaaaaca
  i panTro1.chr6 N 0 C 0
  s baboon         249182 13 +   4622798 gcagctgaaaaca
  i baboon       I 234 n 19</TT></PRE></FONT>
@@ -556,8 +566,8 @@ chr22  TeleGene promoter  1020000  1020000  800 -  .  touch2
 		    <P>
 		    <B>Lines starting with 'e' -- information about empty parts 
 		    of the alignment block</B>                        
-		    <P><FONT color=#0000ff><PRE><TT>
- s hg16.chr7    27707221 13 + 158545518 gcagctgaaaaca
+		    <P><FONT color=#0000ff>
+<PRE><TT> s hg16.chr7    27707221 13 + 158545518 gcagctgaaaaca
  e mm4.chr6     53310102 13 + 151104725 I</TT></PRE></FONT>
 		    <P>
 		    The 'e' lines indicate that there isn't aligning DNA for a 
@@ -604,6 +614,63 @@ chr22  TeleGene promoter  1020000  1020000  800 -  .  touch2
 		    on how many bases are in the gap between the bridging 
 		    alignments.
 		    </UL>
+		    <B>Lines starting with 'q' -- information about the quality
+		    score of each aligned base for the species</B> 
+                    <P><FONT color=#0000ff>
+<PRE><TT> s hg18.chr1                  32741 26 + 247249719 TTTTTGAAAAACAAACAACAAGTTGG
+ s panTro2.chrUn            9697231 26 +  58616431 TTTTTGAAAAACAAACAACAAGTTGG
+ q panTro2.chrUn                                   99999999999999999999999999
+ s dasNov1.scaffold_179265     1474  7 +      4584 TT----------AAGCA---------
+ q dasNov1.scaffold_179265                         99----------32239--------- </TT></PRE></FONT>
+		    <P>
+		    The 'q' lines contain a compressed version of the actual
+		    raw quality data, representing the quality score of each 
+		    aligned base for the species with a single character of 0-9 
+		    or F. The following fields are defined by position rather 
+		    than name=value pairs:
+		    <UL>
+                    <LI>src -- The name of the source sequence for the 
+		    alignment. Should be the same as the 's' line immediately 
+		    preceding this line.             
+		    <LI>score -- A MAF quality score corresponding to 
+		    the aligning nucleotide or amino acid in the preceding 
+		    's' line.  Insertions (dashes) in the preceding 's' line
+	       	    are represented by dashes in the 'q' line as well. 
+		    The score character can be 'F' (finished
+		    sequence) or a numeric value derived from the actual quality
+		    values (which range from 0-97) or the manually assigned
+		    value of 98. These numeric scores are calculated as: 
+<BLOCKQUOTE><TT>MAF score = min( floor(actual quality value/5), 9 )</TT></BLOCKQUOTE>
+		    This results in the following mapping: 
+		    <P>
+            	    <TABLE BORDER=1 BORDERCOLOR="#aaaaaa"> 
+		    <TR>
+                    <TH nowrap><FONT color="#006666"><B>MAF quality score</B></FONT></TH>
+		    <TH nowrap><FONT color="#006666"><B>Raw quality score range</B></FONT></TH>
+                    <TH nowrap><FONT color="#006666"><B>Quality level</B></FONT></TH>
+                    </TR>
+		    <TR>
+                    <TD ALIGN="center">raw_score/5</TD>
+		    <TD ALIGN="center">0-44</TD>
+                    <TD ALIGN="center">Low</TD>
+                    </TR>
+		    <TR>
+                    <TD ALIGN="center">9</TD>
+		    <TD ALIGN="center">45-97</TD>
+                    <TD ALIGN="center">High</TD>
+                    </TR>
+		    <TR>
+                    <TD ALIGN="center">0</TD>
+		    <TD ALIGN="center">98</TD>
+                    <TD ALIGN="center">Manually assigned</TD>
+                    </TR>
+		    <TR>
+                    <TD ALIGN="center">F</TD>
+		    <TD ALIGN="center">99</TD>
+                    <TD ALIGN="center">Finished</TD>
+                    </TR>
+		    </TABLE>
+		    </UL><BR>
                     <P>
 		    <B>A Simple Example</B>
 		    <P>                     
