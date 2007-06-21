@@ -413,7 +413,7 @@ chr22  TeleGene promoter  1020000  1020000  800 -  .  touch2
 		    gap between the alignments that span the current 
 		    block 
 		    <LI>
-		    a "q" line indicating the quality score of each aligned base
+		    a "q" line indicating the quality of each aligned base
 		    for the species
 		    </UL>
 		    <P>
@@ -624,7 +624,7 @@ chr22  TeleGene promoter  1020000  1020000  800 -  .  touch2
  q dasNov1.scaffold_179265                         99----------32239--------- </TT></PRE></FONT>
 		    <P>
 		    The 'q' lines contain a compressed version of the actual
-		    raw quality data, representing the quality score of each 
+		    raw quality data, representing the quality of each 
 		    aligned base for the species with a single character of 0-9 
 		    or F. The following fields are defined by position rather 
 		    than name=value pairs:
@@ -632,25 +632,25 @@ chr22  TeleGene promoter  1020000  1020000  800 -  .  touch2
                     <LI>src -- The name of the source sequence for the 
 		    alignment. Should be the same as the 's' line immediately 
 		    preceding this line.             
-		    <LI>score -- A MAF quality score corresponding to 
-		    the aligning nucleotide or amino acid in the preceding 
+		    <LI>value -- A MAF quality value corresponding to 
+		    the aligning nucleotide acid in the preceding 
 		    's' line.  Insertions (dashes) in the preceding 's' line
 	       	    are represented by dashes in the 'q' line as well. 
-		    The score character can be 'F' (finished
-		    sequence) or a numeric value derived from the actual quality
-		    values (which range from 0-97) or the manually assigned
-		    value of 98. These numeric scores are calculated as: 
-<BLOCKQUOTE><TT>MAF score = min( floor(actual quality value/5), 9 )</TT></BLOCKQUOTE>
+		    The quality value can be 'F' (finished
+		    sequence) or a number derived from the actual quality
+		    scores (which range from 0-97) or the manually assigned
+		    score of 98. These numeric values are calculated as: 
+<BLOCKQUOTE><TT>MAF quality value = min( floor(actual quality value/5), 9 )</TT></BLOCKQUOTE>
 		    This results in the following mapping: 
 		    <P>
             	    <TABLE BORDER=1 BORDERCOLOR="#aaaaaa"> 
 		    <TR>
-                    <TH nowrap><FONT color="#006666"><B>MAF quality score</B></FONT></TH>
+                    <TH nowrap><FONT color="#006666"><B>MAF quality value</B></FONT></TH>
 		    <TH nowrap><FONT color="#006666"><B>Raw quality score range</B></FONT></TH>
                     <TH nowrap><FONT color="#006666"><B>Quality level</B></FONT></TH>
                     </TR>
 		    <TR>
-                    <TD ALIGN="center">raw_score/5</TD>
+                    <TD ALIGN="center">0-8</TD>
 		    <TD ALIGN="center">0-44</TD>
                     <TD ALIGN="center">Low</TD>
                     </TR>
