@@ -16,7 +16,7 @@
 #include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.23 2007/06/21 21:04:42 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.24 2007/06/21 21:21:42 hiram Exp $";
 
 #define ITEM_SCORE_DEFAULT "1000"
 #define ADD_ITEM_COMMENT_DEFAULT "add comments"
@@ -200,7 +200,7 @@ char *url = cfgOptionDefault(CFG_WIKI_URL, NULL);
 char *strippedRender = fetchWikiRenderedText(item->descriptionKey);
 */
 
-if (isNotEmpty(item->alignID))
+if (isNotEmpty(item->alignID) && differentWord(item->alignID,"0"))
     hPrintf("<B>UCSC gene id:&nbsp;</B><A "
 	"HREF=\"../cgi-bin/hgGene?hgg_gene=%s\" TARGET=_blank>%s</A><BR />\n",
 	    item->alignID, item->alignID);
