@@ -118,7 +118,7 @@
 #endif
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1356 2007/06/20 01:21:28 braney Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1357 2007/06/21 23:15:48 braney Exp $";
 
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
@@ -2931,13 +2931,13 @@ int atomTotalHeight(struct track *tg, enum trackVisibility vis)
 /* Most fixed height track groups will use this to figure out the height 
  * they use. */
 {
-return tgFixedTotalHeightOptionalOverflow(tg,vis, 6*6, 6*6, FALSE);
+return tgFixedTotalHeightOptionalOverflow(tg,vis, 6*7, 6*7, FALSE);
 }
 
 int atomItemHeight(struct track *tg, void *item)
 /* Return item height for fixed height track. */
 {
-return 6 * 6;
+return 6 * 7;
 }
 
 static void atomMethods(struct track *tg)
@@ -5174,14 +5174,15 @@ int scoreMax = atoi(trackDbSettingOrDefault(tdb, "scoreMax", "1000"));
 char *directUrl = trackDbSetting(tdb, "directUrl");
 boolean withHgsid = (trackDbSetting(tdb, "hgsid") != NULL);
 //boolean thickDrawItem = (trackDbSetting(tdb, "thickDrawItem") != NULL);
-int colors[6] =
+int colors[7] =
 {
 orangeColor,
 greenColor,
 blueColor,
 brickColor,
 darkBlueColor,
-darkGreenColor } ;
+darkGreenColor,
+1} ;
 
 if (tg->itemColor != NULL)
     color = tg->itemColor(tg, bed, vg);
@@ -5198,7 +5199,7 @@ if (w < 1)
     {
     int ii;
 
-    for(ii=0; ii < 6; ii++)
+    for(ii=0; ii < 7; ii++)
 	{
 	if (bed->score & (1 << ii))
 	    vgBox(vg, x1, y+(ii*6), w, 6, colors[ii]);
