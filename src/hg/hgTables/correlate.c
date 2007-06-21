@@ -22,7 +22,7 @@
 #include "bedGraph.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: correlate.c,v 1.62 2007/06/15 04:43:48 kate Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.63 2007/06/21 22:01:16 kate Exp $";
 
 #define MAX_POINTS_STR	"300,000,000"
 #define MAX_POINTS	300000000
@@ -326,6 +326,7 @@ table->actualTable = cloneString(tdb->tableName);
 table->isBedGraph = FALSE;
 table->isWig = FALSE;
 table->dbTableName = NULL;
+
 if (isCustomTrack(table->actualTable))
     {
     struct customTrack *ct = lookupCt(table->actualTable);
@@ -424,9 +425,9 @@ else if (startsWith("wig",tdb->type))
             }
         if (!found)
             errAbort("Conservation wiggle %s not found for track %s",
-                        curTable, tdb->tableName);
+                        table->tableName, tdb->tableName);
 	freeMem(table->actualTable);
-	table->actualTable = cloneString(curTable);
+	table->actualTable = cloneString(table->tableName);
 	}
     table->isWig = TRUE;
     }
