@@ -394,16 +394,30 @@ searchType genePred
 termRegex g[0-9]+\.t[0-9]+
 searchPriority 50
 
-track nscanGene
+track nscan
+compositeTrack on
 shortLabel N-SCAN
 longLabel N-SCAN Gene Predictions
 group genes
 priority 45.1
 visibility hide
-color 34,139,34
-type genePred nscanPep
+type genePred
 baseColorUseCds given
 baseColorDefault genomicCodons
+
+    track nscanPasaGene
+    subTrack nscan
+    shortLabel N-SCAN PASA-EST
+    longLabel N-SCAN PASA-EST Gene Predictions
+    color 34,139,34
+    priority 1
+
+    track nscanGene
+    subTrack nscan
+    shortLabel N-SCAN
+    longLabel N-SCAN Gene Predictions
+    color 84,119,34
+    priority 2
 
 track phastConsElements
 shortLabel Most Conserved

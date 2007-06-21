@@ -16358,4 +16358,25 @@ hgLoadBed -tab -sqlTable=hapmapAllelesSummary.sql hg18 hapmapAllelesSummary hapm
   cat wg_may2007.txt|sed -e 's/ /\t/g' > wgRna.tab
 
   hgLoadBed -sqlTable=/cluster/home/fanhsu/src/hg/lib/wgRna.sql hg18 wgRna wgRna.tab
+
 #############################################################################
+# N-SCAN GENES track (2007-06-21 markd)
+# create a composite track with exists ab-inito and new PASA N-SCAN predictions
+
+    # download pasa predictions
+    cd /cluster/data/hg18/bed/nscan/pasa
+    wget http://mblab.wustl.edu/predictions/human/hg18_PASA/hg18.pasa.gtf
+    wget http://mblab.wustl.edu/predictions/human/hg18_PASA/hg18.prot.fa
+    bzip2 hg18.*
+    chmod a-w hg18.*
+
+    ldHgGene -gtf -genePredExt hg18 nscanPasaGene hg18.pasa.gtf.bz2
+    hgPepPred hg18 generic nscanPasaPep  hg18.prot.fa.bz2
+    rm *.tab
+
+    # update trackDb; need a hg18-specific page to describe informants and PASA
+    human/hg18/nscan.html
+    human/hg18/trackDb.ra
+
+    # remove old human/hg18/nscanGene.html
+
