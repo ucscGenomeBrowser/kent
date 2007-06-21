@@ -14,7 +14,7 @@
 #include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.1 2007/06/21 21:05:40 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.2 2007/06/21 21:59:16 hiram Exp $";
 
 static char *hgGeneUrl()
 {
@@ -64,18 +64,16 @@ printf("The wiki also serves as a forum for users "
 freeMem(loginUrl);
 }
 
+#ifdef NOT
 static void addDescription(struct wikiTrack *item, char *userName,
     char *seqName, int winStart, int winEnd)
 {
 char *newComments = cartNonemptyString(cart, NEW_ITEM_COMMENT);
 struct dyString *content = newDyString(1024);
 
-hPrintf("addDescription entered<BR>\n");
 /* was nothing changed in the add comments entry box ? */
 if (sameWord(ADD_ITEM_COMMENT_DEFAULT,newComments))
     return;
-
-return;
 
 struct htmlPage *page = fetchEditPage(item->descriptionKey);
 
@@ -86,6 +84,7 @@ AllocVar(strippedEditForm);
 struct htmlForm *currentEditForm = htmlFormGet(page,"editform");
 if (NULL == currentEditForm)
     errAbort("addDescription: can not get editform ?");
+
 strippedEditForm->name = cloneString(currentEditForm->name);
 /* the lower case "post" in the editform does not work ? */
 /*strippedEditForm->method = cloneString(currentEditForm->method);*/
@@ -147,7 +146,6 @@ if (sameWord(NEW_ITEM_COMMENT_DEFAULT,newComments))
 else
     dyStringPrintf(content, "%s\n\n", newComments);
 
-
 htmlCloneFormVarSet(currentEditForm, strippedEditForm,
 	"wpTextbox1", content->string);
 htmlCloneFormVarSet(currentEditForm, strippedEditForm, "wpSummary", "");
@@ -180,6 +178,7 @@ if (NULL == editPage)
 
 freeDyString(&content);
 }	/*	static void addDescription()	*/
+#endif
 
 static void addComments(struct wikiTrack *item, char *userName)
 {
@@ -188,7 +187,7 @@ if (item)
     hPrintf("add comments to %s, %s, %s:%d-%d<BR>\n",
 	item->name, userName, curGeneChrom, curGeneStart, curGeneEnd);
     addDescription(item, userName, curGeneChrom,
-	curGeneStart, curGeneEnd);
+	curGeneStart, curGeneEnd, cart, database);
 /*
     cartRemove(cart, NEW_ITEM_COMMENT);
 */
@@ -213,6 +212,15 @@ cartWebStart(cart, title);
 if(!wikiTrackEnabled(&userName))
     errAbort("wikiTrackPrint: called when wiki track is not enabled");
 
+if (!cartVarExists(cart, hggDoWikiAddComment))
+    cartRemove(cart, NEW_ITEM_COMMENT);
+
+if (cartVarExists(cart, NEW_ITEM_COMMENT))
+    hPrintf("%s cart var exists '%s'<BR>\n", NEW_ITEM_COMMENT,
+	cartUsualString(cart, NEW_ITEM_COMMENT, "no comment"));
+else
+    hPrintf("%s cart var does not exist<BR>\n", NEW_ITEM_COMMENT);
+
 if (cartVarExists(cart, hggDoWikiAddComment))
     addComments(item, userName);
 
@@ -230,11 +238,12 @@ if (isEmpty(userName))
 else
     {
     hPrintf("<FORM ID=\"hgg_wikiAddComment\" NAME=\"hgg_wikiAddComment\" "
-	"METHOD=\"POST\" ACTION=\"../cgi-bin/hgGene?hgg_gene=%s&%s&%s=1&"
-	"%s=1&db=%s\">\n\n",
-	curGeneId, cartSidUrlString(cart), hggDoWikiTrack, hggDoWikiAddComment,
-	    database);
+	"METHOD=\"POST\" ACTION=\"../cgi-bin/hgGene\">\n\n");
     cartSaveSession(cart);
+    cgiMakeHiddenVar(hggDoWikiTrack, "1");
+    cgiMakeHiddenVar(hggDoWikiAddComment, "1");
+    cgiMakeHiddenVar("db", database);
+    cgiMakeHiddenVar("hgg_gene", curGeneId);
     webPrintLinkTableStart();
     /* first row is a title line */
     char label[256];
