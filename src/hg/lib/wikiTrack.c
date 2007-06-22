@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.6 2007/06/22 18:48:05 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.7 2007/06/22 18:52:34 hiram Exp $";
 
 void wikiTrackStaticLoad(char **row, struct wikiTrack *ret)
 /* Load a row from wikiTrack table into ret.  The contents of ret will
@@ -584,7 +584,7 @@ char *url = cfgOptionDefault(CFG_WIKI_URL, NULL);
 char *comments = fetchWikiRenderedText(item->descriptionKey);
 
 hPrintf("<B>Description and comments from the "
-  "<A HREF=\"%s/index.php/%s\" TARGET=_blank>wiki article:</A> %s:</B><BR />\n",
+  "<A HREF=\"%s/index.php/%s\" TARGET=_blank>wiki article:</A> %s:</B><BR>\n",
        url, item->descriptionKey, item->descriptionKey);
 
 if (comments && (strlen(comments) > 2))
@@ -592,7 +592,7 @@ if (comments && (strlen(comments) > 2))
     hPrintf("\n%s\n", comments);
     }
 else
-    hPrintf("\n(no comments for this item at the current time)<BR />\n");
+    hPrintf("\n(no comments for this item at the current time)<BR>\n");
 }
 
 void createPageHelp(char *pageFileName)
