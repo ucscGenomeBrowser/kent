@@ -84,7 +84,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: lowelab.c,v 1.12 2007/06/02 23:06:20 pchan Exp $";
+static char const rcsid[] = "$Id: lowelab.c,v 1.13 2007/06/22 20:39:19 pchan Exp $";
 
 extern char *uniprotFormat;
 
@@ -1875,7 +1875,7 @@ void printBlastpResult(struct sqlConnection *conn, struct blastTab *blastpHitsLi
             {
                 hitStart = strtoul(row[1], buffer, 10) + blastpHits->tStart * 3 + 1;
                 hitEnd = strtoul(row[1], buffer, 10) + blastpHits->tEnd * 3;
-                printf("<td><a href=\"http://archdev.cse.ucsc.edu/cgi-bin/hgTracks\?position=%s:%u-%u&db=%s\" TARGET=_blank>%s</a></td>\n",
+                printf("<td><a href=\"hgTracks\?position=%s:%u-%u&db=%s\" TARGET=_blank>%s</a></td>\n",
                        row[0], hitStart, hitEnd, blastpTarget[0], blastpTarget[1]);
             }
             else
