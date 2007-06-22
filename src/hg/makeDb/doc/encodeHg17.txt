@@ -3010,6 +3010,7 @@ cat > makeDownloads.csh << 'EOF'
 # MSA SCONE Conservation (2005-12-12 kate)
 # From Harvard Med School, Saurabh Asthana <faplap@gmail.com>
 # Reusbmitted 12/21/05
+# Resubmitted 6/22/07 (kate)
 
     cd /cluster/data/encode/MSA
     mkdir -p SconeCons/2005-12-21/lab
@@ -3057,6 +3058,28 @@ cat > load.csh << 'EOF'
     set d = /gbdb/hg17/encode/TBA/SEP-05
     ln -s `pwd`/tbaScone.wib $d
     hgLoadWiggle -pathPrefix=$d hg17 encodeTbaSconeCons tbaScone.wig 
+
+# Resubmitted 6/22/07 (kate)
+    ssh kkstore03
+    cd /cluster/data/encode/MSA/SconeCons
+    mkdir -p 2007-06-22/lab
+    rm latest
+    ln -s SconeCons/2007-06-22 latest
+    cd latest/lab
+    wget -r -nd http://ika.bwh.harvard.edu/graft/tracks/pvalue.SCONE.wig.tar.bz2
+    bunzip2 pvalue.SCONE.wig.tar.bz2
+    tar xvf pvalue.SCONE.wig.tar
+    cd ..
+
+    # conservation
+    ssh hgwdev
+    cd /cluster/data/encode/MSA/SconeCons/latest
+    cat lab/*.wig | \
+        wigEncode stdin tbaScone.wig tbaScone.wib
+    set d = /gbdb/hg17/encode/TBA/SEP-05/Update/Scone
+    mkdir -p $d
+    ln -s /cluster/data/encode/MSA/SconeCons/2007-06-22/tbaScone.wib $d
+    hgLoadWiggle -pathPrefix=$d hg17 encodeTbaSconeConsUpdate tbaScone.wig 
 
 ##########################################################################
 # MSA Conservation  (2005-12-07 kate)
