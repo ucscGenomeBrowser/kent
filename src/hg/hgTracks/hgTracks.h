@@ -281,7 +281,7 @@ struct gsidSeq
     };
 
 extern struct gsidSubj *gsidSelectedSubjList;
-extern struct gsidSubj *gsidSelectedSeqList;
+extern struct gsidSeq  *gsidSelectedSeqList;
 
 extern struct trackLayout tl;
 
