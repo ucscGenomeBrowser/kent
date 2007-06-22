@@ -133,6 +133,11 @@ void wikiTrackOutput(struct wikiTrack *el, FILE *f, char sep, char lastSep);
 #define ITEM_NOT_CLASSIFIED "Not classified"
 #define NO_ITEM_COMMENT_SUPPLIED "(no initial description supplied)"
 #define DEFAULT_BROWSER "genome.ucsc.edu"
+#define TEST_EMAIL_VERIFIED "GenomeAnnotation:TestEmailVerified"
+#define EMAIL_NEEDS_TO_BE_VERIFIED \
+	"You must confirm your e-mail address before editing"
+#define USER_PREFERENCES_MESSAGE \
+    "Please set and validate your e-mail address through your"
 
 boolean wikiTrackEnabled(char **wikiUserName);
 /*determine if wikiTrack can be used, and is this user logged into the wiki ?*/
@@ -179,10 +184,12 @@ void addDescription(struct wikiTrack *item, char *userName,
 	char *database);
 /* add description to an existing wiki item */
 
-#ifdef NOT
-void wikiItemCreateForm(char *userName, char *cgiName, struct cart *cart,
-    int winStart, int winEnd, char *seqName);
-/* put up the create new item form */
-#endif
+char *encodedReturnUrl(char *(*hgUrl)());
+/* Return a CGI-encoded URL with hgsid.  Free when done.
+ *	The given function hgUrl() will construct the actual cgi binary URL
+ */
+
+boolean emailVerified();
+/* TRUE indicates email has been verified for this wiki user */
 
 #endif /* WIKITRACK_H */
