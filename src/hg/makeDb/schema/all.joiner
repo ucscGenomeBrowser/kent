@@ -100,7 +100,7 @@ set familyDb $hg,$mm,$ce,$sacCer,$dm
 set ccdsDb hg18,hg17,mm8
 
 # Magic for tables split between chromosomes
-set split splitPrefix=chr%_
+set split splitPrefix=chr%\_
 
 # Define the shared identifiers and the fields they appear in.
 
