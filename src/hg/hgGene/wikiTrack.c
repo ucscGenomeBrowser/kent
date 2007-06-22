@@ -15,7 +15,7 @@
 #include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.4 2007/06/22 18:51:40 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.5 2007/06/22 23:04:42 hiram Exp $";
 
 static char *hgGeneUrl()
 {
@@ -75,7 +75,7 @@ newItem->bin = binFromRange(itemStart, itemEnd);
 newItem->chrom = cloneString(chrom);
 newItem->chromStart = itemStart;
 newItem->chromEnd = itemEnd;
-newItem->name = cloneString(curGeneId);
+newItem->name = cloneString(curGeneName);
 newItem->score = score;
 safef(newItem->strand, sizeof(newItem->strand), "%s", strand);
 newItem->db = cloneString(database);
@@ -135,7 +135,8 @@ char *userName = NULL;
 struct wikiTrack *item = findWikiItemByAlignID(database, curGeneId);
 char title[1024];
 
-safef(title,ArraySize(title), "UCSC gene annotations %s", curGeneId);
+safef(title,ArraySize(title), "UCSC gene annotations %s (%s)",
+	curGeneName, curGeneId);
 cartWebStart(cart, title);
 
 /* we already know the wiki track is enabled since we are here,
@@ -173,7 +174,8 @@ else if (emailVerified())  /* prints message when not verified */
     /* first row is a title line */
     char label[256];
     safef(label, ArraySize(label),
-	"'%s' adding comments to gene '%s'\n", userName, curGeneId);
+	"'%s' adding comments to gene %s (%s)\n",
+	    userName, curGeneName, curGeneId);
     webPrintWideLabelCell(label, 2);
     webPrintLinkTableNewRow();
     /* second row is initial comment/description text entry */
@@ -200,8 +202,9 @@ else if (emailVerified())  /* prints message when not verified */
 	   "for this item's description", url, item->descriptionKey,
 		item->descriptionKey);
 	}
-    createPageHelp("wikiTrackAddCommentHelp");
     }
+
+createPageHelp("wikiTrackAddCommentHelp");
 
 cartWebEnd();
 }
