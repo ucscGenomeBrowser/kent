@@ -118,7 +118,7 @@
 #endif
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1357 2007/06/21 23:15:48 braney Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1358 2007/06/22 01:04:04 hartera Exp $";
 
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
@@ -10012,9 +10012,15 @@ struct sqlResult *sr;
 char **row;
 int rowOffset;
 char option[128]; /* Option -  score filter */
+char *words[3];
+int wordCt;
 char *optionScoreVal;
 int optionScore = 0;
-char query[128] ;
+char query[128];
+char *setting = NULL;
+bool doScoreCtFilter = FALSE;
+int scoreFilterCt = 0;
+char *topTable = NULL;
 
 if (tg->bedSize <= 3)
     loader = bedLoad3;
@@ -10025,6 +10031,26 @@ else if (tg->bedSize == 5)
 else
     loader = bedLoad6;
 
+/* limit to a specified count of top scoring items.
+ * If this is selected, it overrides selecting item by specified score */
+if ((setting = trackDbSetting(tg->tdb, "filterTopScorers")) != NULL)
+    {
+    wordCt = chopLine(cloneString(setting), words);
+    if (wordCt >= 3)
+        {
+        safef(option, sizeof(option), "%s.filterTopScorersOn", tg->mapName);
+        doScoreCtFilter =
+            cartCgiUsualBoolean(cart, option, sameString(words[0], "on"));
+        safef(option, sizeof(option), "%s.filterTopScorersCt", tg->mapName);
+        scoreFilterCt = cartCgiUsualInt(cart, option, atoi(words[1]));
+        topTable = words[2];
+        /* if there are not too many rows in the table then can define */
+        /* top table as the track or subtrack table */
+        if (sameWord(topTable, "self"))
+            topTable = cloneString(tg->mapName);
+        }
+    }
+
 /* limit to items above a specified score */
 safef(option, sizeof(option), "%s.scoreFilter", tg->mapName);
 optionScoreVal = trackDbSetting(tg->tdb, "scoreFilter");
@@ -10032,9 +10058,17 @@ if (optionScoreVal != NULL)
     optionScore = atoi(optionScoreVal);
 optionScore = cartUsualInt(cart, option, optionScore);
 
-if (optionScore > 0 && tg->bedSize >= 5)
+if (hTableExists(topTable) && doScoreCtFilter)
     {
-    safef(query, sizeof(query), "score >= %d", optionScore);
+    safef(query, sizeof(query), 
+                "select * from %s order by score desc limit %d", 
+                                topTable, scoreFilterCt);
+    sr = sqlGetResult(conn, query);
+    rowOffset = hOffsetPastBin(hDefaultChrom(), topTable);
+    }
+else if (optionScore > 0 && tg->bedSize >= 5)
+    {
+    safef(query, sizeof(query), "score >= %d",optionScore);
     sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, 
                          query, &rowOffset);
     }
@@ -10047,6 +10081,13 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
     bed = loader(row+rowOffset);
     slAddHead(&list, bed);
+    }
+if (doScoreCtFilter)
+    {
+    /* filter out items not in this window */
+    struct bed *newList = 
+        bedFilterListInRange(list, NULL, chromName, winStart, winEnd);
+    list = newList;
     }
 slReverse(&list);
 sqlFreeResult(&sr);
