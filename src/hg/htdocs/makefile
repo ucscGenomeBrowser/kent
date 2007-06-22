@@ -1,14 +1,17 @@
 
 HTDOCS=/usr/local/apache/htdocs
 HTDOCS_USER=${HTDOCS}-${USER}
+CVSUP = cvs update 
 
-all:
+user:
 	${MAKE} doInstall DEST=${HTDOCS_USER}
 
 alpha:
+	${CVSUP} -d -P
 	${MAKE} doInstall DEST=${HTDOCS}
 
 beta:
+	${CVSUP} -d -P
 	${MAKE} doInstall DEST=${HTDOCS} EXCL='--exclude=/eng'
 
 
