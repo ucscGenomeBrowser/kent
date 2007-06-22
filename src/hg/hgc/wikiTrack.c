@@ -16,7 +16,7 @@
 #include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.26 2007/06/22 18:50:02 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.27 2007/06/22 23:04:12 hiram Exp $";
 
 #define ITEM_SCORE_DEFAULT "1000"
 #define ADD_ITEM_COMMENT_DEFAULT "add comments"
@@ -97,15 +97,19 @@ static void displayItem(struct wikiTrack *item, char *userName)
  *	the wiki.  Put up edit form(s) if userName is not NULL
  */
 { 
+boolean geneAnnotation = FALSE;
 char *url = cfgOptionDefault(CFG_WIKI_URL, NULL);
 /*
 char *strippedRender = fetchWikiRenderedText(item->descriptionKey);
 */
 
 if (isNotEmpty(item->alignID) && differentWord(item->alignID,"0"))
+    {
     hPrintf("<B>UCSC gene id:&nbsp;</B><A "
 	"HREF=\"../cgi-bin/hgGene?hgg_gene=%s\" TARGET=_blank>%s</A><BR>\n",
 	    item->alignID, item->alignID);
+    geneAnnotation = TRUE;
+    }
 hPrintf("<B>Classification group:&nbsp;</B>%s<BR>\n", item->class);
 printPosOnChrom(item->chrom, item->chromStart, item->chromEnd,
     item->strand, FALSE, item->name);
@@ -116,7 +120,7 @@ hPrintf("<B>Created </B>%s<B> by:&nbsp;</B>", item->creationDate);
 hPrintf("<A HREF=\"%s/index.php/User:%s\" TARGET=_blank>%s</A><BR>\n", url,
     item->owner, item->owner);
 hPrintf("<B>Last update:&nbsp;</B>%s<BR>\n", item->lastModifiedDate);
-if ((NULL != userName) && sameWord(userName, item->owner))
+if ((NULL != userName) && sameWord(userName, item->owner) && !geneAnnotation)
     {
     startForm("deleteForm", G_DELETE_WIKI_ITEM);
     char idString[128];
