@@ -1214,6 +1214,7 @@ identifier knownGeneId dependency
     $ccdsDb.ccdsKgMap.geneId
     $kgDb3.knownCanonical.protein exclude=
     $kgDb3.kgProtMap.qName 
+    $kgDb3.kgColor.kgID full
 
 identifier knownGeneOld2Id dependency 
 "Old knownGene (KGII) and kgXref tables kept after KGIII implementation"
