@@ -15,7 +15,7 @@
 #include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.3 2007/06/21 23:00:10 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.4 2007/06/22 18:51:40 hiram Exp $";
 
 static char *hgGeneUrl()
 {
@@ -25,23 +25,11 @@ safef(retBuf, ArraySize(retBuf), "cgi-bin/hgGene?%s=1&%s",
 return retBuf;
 }
 
-static char *encodedHgGeneReturnUrl()
-/* Return a CGI-encoded hgGene URL with hgsid.  Free when done. */
-{
-char retBuf[1024];
-safef(retBuf, sizeof(retBuf), "http://%s/%s", cgiServerName(), hgGeneUrl());
-return cgiEncode(retBuf);
-}   
-
 static char *wikiTrackUserLoginUrl()
 /* Return the URL for the wiki user login page. */
 {
-char *retEnc = encodedHgGeneReturnUrl();
+char *retEnc = encodedReturnUrl(hgGeneUrl);
 char buf[2048];
-
-if (! wikiLinkEnabled())
-    errAbort("wikiLinkUserLoginUrl called when wiki is not enabled (specified "
-             "in hg.conf).");
 
 safef(buf, sizeof(buf),
       "%s/index.php?title=Special:UserloginUCSC&returnto=%s",
@@ -58,13 +46,11 @@ char *loginUrl = wikiTrackUserLoginUrl();
 printf("<P>Please login to add annotations to this UCSC gene.</P>\n");
 printf("<P>The login page is handled by our "
        "<A HREF=\"http://%s/\" TARGET=_BLANK>wiki system</A>:\n", wikiHost);
-printf("<A HREF=\"%s\"><B>click here to login.</B></A><BR />\n",
-	loginUrl);
+printf("<A HREF=\"%s\"><B>click here to login.</B></A><BR>\n", loginUrl);
 printf("The wiki also serves as a forum for users "
        "to share knowledge and ideas.\n</P>\n");
 freeMem(loginUrl);
 }
-
 
 static struct wikiTrack *startNewItem(char *chrom, int itemStart,
 	int itemEnd, char *strand)
@@ -174,7 +160,7 @@ else
 
 if (isEmpty(userName))
     offerLogin();
-else
+else if (emailVerified())  /* prints message when not verified */
     {
     hPrintf("<FORM ID=\"hgg_wikiAddComment\" NAME=\"hgg_wikiAddComment\" "
 	"METHOD=\"POST\" ACTION=\"../cgi-bin/hgGene\">\n\n");
@@ -192,7 +178,7 @@ else
     webPrintLinkTableNewRow();
     /* second row is initial comment/description text entry */
     webPrintWideCellStart(2, HG_COL_TABLE);
-    hPrintf("<B>add comments:</B><BR />");
+    hPrintf("<B>add comments:</B><BR>");
     cgiMakeTextArea(NEW_ITEM_COMMENT, ADD_ITEM_COMMENT_DEFAULT, 3, 40);
     webPrintLinkCellEnd();
     webPrintLinkTableNewRow();
