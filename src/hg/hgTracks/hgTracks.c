@@ -118,7 +118,7 @@
 #endif
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1359 2007/06/22 16:14:59 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1360 2007/06/22 16:44:05 fanhsu Exp $";
 
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
@@ -231,6 +231,9 @@ struct hgPositions *hgp = NULL;
 
 /* subject list used for GSID */
 struct gsidSubj *gsidSelectedSubjList = NULL;
+
+/* sequence list used for GSID */
+struct gsidSeq *gsidSelectedSeqList = NULL;
 
 struct trackLayout tl;
 
