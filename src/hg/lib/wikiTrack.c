@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.5 2007/06/21 21:58:21 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.6 2007/06/22 18:48:05 hiram Exp $";
 
 void wikiTrackStaticLoad(char **row, struct wikiTrack *ret)
 /* Load a row from wikiTrack table into ret.  The contents of ret will
@@ -754,156 +754,33 @@ if (NULL == editPage)
     errAbort("addDescription: the edit is failing ?");
 
 freeDyString(&content);
-}	/*	static void addDescription()	*/
+}	/*	void addDescription()	*/
 
-#ifdef NOT
-static char *colorMenuJS = "onchange=\"updateColorSelectBox();\" style=\"width:8em;\"";
-
-static void colorMenuOutput()
-/* the item color pull-down menu in the create item form */
+char *encodedReturnUrl(char *(*hgUrl)())
+/* Return a CGI-encoded URL with hgsid.  Free when done.
+ *	The given function hgUrl() will construct the actual cgi binary URL
+ */
 {
-hPrintf("<INPUT NAME=\"colorPullDown\" VALUE=\"\" SIZE=1 STYLE=\"display:none;\" >\n");
+char retBuf[1024];
+safef(retBuf, sizeof(retBuf), "http://%s/%s", cgiServerName(), (*hgUrl)());
+return cgiEncode(retBuf);
+}   
 
-hPrintf("<SELECT NAME=\"itemColor\" style=\"width:8em; background-color:#000000;\" %s>\n", colorMenuJS);
-hPrintf("<OPTION SELECTED VALUE = \"#000000\" style=\"background-color:#000000;\" >black</OPTION>\n");
-hPrintf("<OPTION value = \"#0000ff\" style=\"background-color:#0000ff;\" >blue</OPTION>\n");
-hPrintf("<OPTION VALUE = \"#9600c8\" style=\"background-color:#9600c8;\" >purple</OPTION>\n");
-hPrintf("<OPTION VALUE = \"#ff0000\" style=\"background-color:#ff0000;\" >red</OPTION>\n");
-hPrintf("<OPTION VALUE = \"#e67800\" style=\"background-color:#e67800;\" >orange</OPTION>\n");
-hPrintf("<OPTION VALUE = \"#dcdc00\" style=\"background-color:#dcdc00;\" >yellow</OPTION>\n");
-hPrintf("<OPTION VALUE = \"#00b400\" style=\"background-color:#00b400;\" >green</OPTION>\n");
-hPrintf("<OPTION VALUE = \"#8c8c8c\" style=\"background-color:#8c8c8c;\" >gray</OPTION>\n");
-hPrintf("</SELECT>\n");
-}
-
-static void outputJavaScript()
-/* java script functions used in the create item form */
+boolean emailVerified()
+/* TRUE indicates email has been verified for this wiki user */
 {
-hPrintf("<SCRIPT TYPE=\"text/javascript\">\n");
-
-hPrintf("function updateColorSelectBox() {\n"
-" var form = document.getElementById(\"createItem\");\n"
-" document.createItem.colorPullDown.style.display='inline';\n"
-" document.createItem.colorPullDown.select();\n"
-" document.createItem.colorPullDown.style.display='none';\n"
-" form.itemColor.style.background = form.itemColor[form.itemColor.selectedIndex].value;\n"
-" form.itemColor.style.color = form.itemColor[form.itemColor.selectedIndex].value;\n"
-"}\n");
-hPrintf("</SCRIPT>\n");
-}
-
-static void startForm(char *name, char *actionType, char *cgiName,
-	struct cart *cart)
-{
-hPrintf("<FORM ID=\"%s\" NAME=\"%s\" ACTION=\"%s\">\n\n", name, name, cgiName);
-cartSaveSession(cart);
-cgiMakeHiddenVar("g", actionType);
-cgiContinueHiddenVar("c");
-cgiContinueHiddenVar("o");
-hPrintf("\n");
-cgiContinueHiddenVar("l");
-cgiContinueHiddenVar("r");
-hPrintf("\n");
-}
-
-void wikiItemCreateForm(char *userName, char *cgiName, struct cart *cart,
-	int winStart, int winEnd, char *seqName)
-/* put up the create new item form */
-{
-outputJavaScript();
-startForm("createItem", G_CREATE_WIKI_ITEM, cgiName, cart);
-
-webPrintLinkTableStart();
-/* first row is a title line */
-char label[256];
-safef(label, ArraySize(label), "Create new item, owner: '%s'\n",
-    userName);
-webPrintWideLabelCell(label, 2);
-webPrintLinkTableNewRow();
-/* second row is group classification pull-down menu */
-webPrintWideCellStart(2, HG_COL_TABLE);
-puts("<B>classification group:&nbsp;</B>");
-struct grp *group, *groupList = hLoadGrps();
-int groupCount = 0;
-for (group = groupList; group; group=group->next)
-    ++groupCount;
-char **classMenu = NULL;
-classMenu = (char **)needMem((size_t)(groupCount * sizeof(char *)));
-groupCount = 0;
-classMenu[groupCount++] = cloneString(ITEM_NOT_CLASSIFIED);
-for (group = groupList; group; group=group->next)
+struct htmlPage *page = fetchEditPage(TEST_EMAIL_VERIFIED);
+char *stringFound = stringIn(EMAIL_NEEDS_TO_BE_VERIFIED, page->fullText);
+htmlPageFree(&page);
+if (NULL == stringFound)
+    return TRUE;
+else
     {
-    if (differentWord("Custom Tracks", group->label))
-	classMenu[groupCount++] = cloneString(group->label);
+    hPrintf("<P>%s annotations.  %s "
+	"<A HREF=\"%s/index.php/Special:Preferences\" "
+	"TARGET=_blank>user preferences.</A></P>\n",
+	    EMAIL_NEEDS_TO_BE_VERIFIED, USER_PREFERENCES_MESSAGE, 
+		cfgOptionDefault(CFG_WIKI_URL, NULL));
+    return FALSE;
     }
-grpFreeList(&groupList);
-
-cgiMakeDropList(NEW_ITEM_CLASS, classMenu, groupCount,
-	cartUsualString(cart,NEW_ITEM_CLASS,ITEM_NOT_CLASSIFIED));
-webPrintLinkCellEnd();
-webPrintLinkTableNewRow();
-/* third row is position entry box */
-webPrintWideCellStart(2, HG_COL_TABLE);
-puts("<B>position:&nbsp;</B>");
-savePosInTextBox(seqName, winStart+1, winEnd);
-hPrintf("&nbsp;(size: ");
-printLongWithCommas(stdout, (long long)(winEnd - winStart));
-hPrintf(")");
-webPrintLinkCellEnd();
-webPrintLinkTableNewRow();
-/* fourth row is strand selection radio box */
-webPrintWideCellStart(2, HG_COL_TABLE);
-char *strand = cartUsualString(cart, NEW_ITEM_STRAND, "plus");
-boolean plusStrand = sameWord("plus",strand) ? TRUE : FALSE;
-hPrintf("<B>strand:&nbsp;");
-cgiMakeRadioButton(NEW_ITEM_STRAND, "plus", plusStrand);
-hPrintf("&nbsp;+&nbsp;&nbsp;");
-cgiMakeRadioButton(NEW_ITEM_STRAND, "minus", ! plusStrand);
-hPrintf("&nbsp;-</B>");
-webPrintLinkCellEnd();
-webPrintLinkTableNewRow();
-/* fifth row is item name text entry */
-webPrintWideCellStart(2, HG_COL_TABLE);
-hPrintf("<B>item name:&nbsp;</B>");
-cgiMakeTextVar("i", NEW_ITEM_NAME, 18);
-webPrintLinkCellEnd();
-#ifdef NOT
-webPrintLinkTableNewRow();
-/* sixth row is item score text entry */
-webPrintWideCellStart(2, HG_COL_TABLE);
-hPrintf("<B>item score:&nbsp;</B>");
-cgiMakeTextVar(NEW_ITEM_SCORE, ITEM_SCORE_DEFAULT, 4);
-hPrintf("&nbsp;(range:&nbsp;0&nbsp;to&nbsp;%s)", ITEM_SCORE_DEFAULT);
-webPrintLinkCellEnd();
-#endif
-webPrintLinkTableNewRow();
-/* seventh row is item color pull-down menu */
-webPrintWideCellStart(2, HG_COL_TABLE);
-hPrintf("<B>item color:&nbsp;</B>");
-colorMenuOutput();
-webPrintLinkCellEnd();
-webPrintLinkTableNewRow();
-/* seventh row is initial comment/description text entry */
-webPrintWideCellStart(2, HG_COL_TABLE);
-hPrintf("<B>initial comments/description:</B><BR />");
-cgiMakeTextArea(NEW_ITEM_COMMENT, NEW_ITEM_COMMENT_DEFAULT, 5, 40);
-webPrintLinkCellEnd();
-webPrintLinkTableNewRow();
-/* seventh row is the submit and cancel buttons */
-/*webPrintLinkCellStart(); more careful explicit alignment */
-hPrintf("<TD BGCOLOR=\"#%s\" ALIGN=\"CENTER\" VALIGN=\"TOP\">",
-	HG_COL_TABLE);
-cgiMakeButton("submit", "create new item");
-hPrintf("\n</FORM>\n");
-webPrintLinkCellEnd();
-/*webPrintLinkCellStart(); doesn't valign center properly */
-hPrintf("<TD BGCOLOR=\"#%s\" ALIGN=\"CENTER\" VALIGN=\"TOP\">",
-	HG_COL_TABLE);
-hPrintf("\n<FORM ID=\"cancel\" NAME=\"cancel\" ACTION=\"%s\">", hgTracksName());
-cgiMakeButton("cancel", "cancel");
-hPrintf("\n</FORM>\n");
-webPrintLinkCellEnd();
-webPrintLinkTableEnd();
-createPageHelp("wikiTrackCreateItemHelp");
 }
-#endif
