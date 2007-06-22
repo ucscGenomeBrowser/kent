@@ -208,7 +208,7 @@
 #include "omicia.h"
 #include "atomDb.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1302 2007/06/22 01:02:11 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1303 2007/06/22 18:17:05 braney Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -936,18 +936,21 @@ if (bed != NULL)
 
 void linkToOtherBrowser(char *otherDb, char *chrom, int start, int end);
 
+void mafPrettyOut(FILE *f, struct mafAli *maf, int lineSize, 
+	boolean onlyDiff, int blockNo);
+
 void doAtom( struct trackDb *tdb, char *item)
 {
 char table[64];
 boolean hasBin;
-struct bed *bed;
+//struct bed *bed;
 char query[512];
 struct sqlResult *sr;
 char **row;
-boolean firstTime = TRUE;
-char *escapedName = sqlEscapeString(item);
+//boolean firstTime = TRUE;
+//char *escapedName = sqlEscapeString(item);
 int start = cartInt(cart, "o");
-struct sqlConnection *conn = hAllocConn();
+//struct sqlConnection *conn = hAllocConn();
 char *user = cfgOption("db.user");
 char *password = cfgOption("db.password");
 struct sqlConnection *sc;
@@ -955,6 +958,7 @@ struct atom ret;
 
 genericHeader(tdb, item);
 hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
+#if 0
 sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d", table, escapedName, seqName, start);
 sr = sqlGetResult(conn, query);
 printf("<B>This is the item you clicked on:</B><BR>\n");
@@ -983,25 +987,49 @@ while ((row = sqlNextRow(sr)) != NULL)
 	}
     }
 sqlFreeResult(&sr);
+#endif
 
 sc = sqlConnectRemote("localhost", user, password, "hgFixed");
 safef(query, sizeof(query),
       "select * from %s where name = '%s'", table, item);
 sr = sqlGetResult(sc, query);
-htmlHorizontalLine();
-printf("<BR><B>All Instances</B><BR>\n");
+printf("<B>Atom %s instances ('*' marks item you clicked on)</B><BR>\n",item);
 printf("<PRE>\n");
 //printf("Ins#\tSpecies\t\tChrom\tStart\tEnd\tStrand\n");
+printf( "  #\t%-10s\t%-10s\t%-15s\t%-15s\t%-15s\t%s\n",
+    "species","chrom", "          start", "          end", "          length", "strand");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     atomStaticLoad(row, &ret);
     //atomOutput(&ret, stdout, '\t', '\n');
     linkToOtherBrowser(ret.species, ret.chrom, ret.start, ret.end);
-    printf( "%d\t%-10s\t%-10s\t%15d\t%15d\t%c\n",ret.instance,
-	ret.species,ret.chrom, ret.start, ret.end, ret.strand[0]);
+    if (sameString(ret.chrom, seqName) && (start + 1 == ret.start) && 
+	sameString(ret.species, database))
+	printf("* ");
+    else
+	printf("  ");
+    printf( "%d\t%-10s\t%-10s\t%15d\t%15d\t%15d\t\t%c\n",ret.instance,
+	ret.species,ret.chrom, ret.start, ret.end, ret.end - ret.start + 1, ret.strand[0]);
     }
 printf("</A>");
 sqlFreeResult(&sr);
+
+
+char buffer[4096];
+struct mafFile *mf;
+safef(buffer, sizeof buffer, "/gbdb/hgFixed/%s/%s.maf",table, item);
+mf = mafMayOpen(buffer);
+if (mf != NULL)
+    {
+    mafFileFree(&mf);
+    mf = mafReadAll(buffer);
+    struct mafAli *mafAli;
+    int count = 0;
+
+    printf("<BR><B>Multiple Alignment</B><BR>");
+    for (mafAli=mf->alignments; mafAli; mafAli = mafAli->next)
+	mafPrettyOut(stdout, mafAli, 70, FALSE, count++);
+    }
 }
 
 void genericBedClick(struct sqlConnection *conn, struct trackDb *tdb, 
