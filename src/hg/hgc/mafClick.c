@@ -13,7 +13,7 @@
 #include "hui.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: mafClick.c,v 1.42 2007/06/11 17:33:44 kate Exp $";
+static char const rcsid[] = "$Id: mafClick.c,v 1.43 2007/06/22 18:17:32 braney Exp $";
 
 #define ADDEXONCAPITAL
 
@@ -79,7 +79,7 @@ for (i=0; i<size; i++)
     }
 }
 
-static void mafPrettyOut(FILE *f, struct mafAli *maf, int lineSize, 
+void mafPrettyOut(FILE *f, struct mafAli *maf, int lineSize, 
 	boolean onlyDiff, int blockNo)
 {
 int ii, ch;
