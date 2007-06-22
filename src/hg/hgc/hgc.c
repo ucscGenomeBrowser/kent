@@ -208,7 +208,7 @@
 #include "omicia.h"
 #include "atomDb.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1301 2007/06/22 00:36:54 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1302 2007/06/22 01:02:11 hartera Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -866,6 +866,29 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 }
 
+void showBedTopScorers(struct bed *bedList, char *item, int start, int max)
+/* Show a list of track items sorted by descending score,
+ *  with current item highlighted.
+ *  max is upper bound on how many items will be displayed. */
+{
+int i;
+struct bed *bed;
+
+puts("<B>Top-scoring elements in window:</B><BR>");
+for (i=0, bed=bedList;  bed != NULL && i < max;  bed=bed->next, i++)
+    {
+    if (sameWord(item, bed->name) && bed->chromStart == start)
+        printf("&nbsp;&nbsp;&nbsp;<B>%s</B> ", bed->name);
+    else
+        printf("&nbsp;&nbsp;&nbsp;%s ", bed->name);
+    printf("(%s:%d-%d) %d<BR>\n",
+               bed->chrom, bed->chromStart+1, bed->chromEnd, bed->score);
+
+    }
+if (bed != NULL)
+    printf("(list truncated -- more than %d elements)<BR>\n", max);
+}
+
 void showBedTopScorersInWindow(struct sqlConnection *conn,
 			       struct trackDb *tdb, char *item, int start,
 			       int maxScorers)
@@ -993,6 +1016,11 @@ struct sqlResult *sr;
 char **row;
 boolean firstTime = TRUE;
 char *showTopScorers = trackDbSetting(tdb, "showTopScorers");
+char *filterTopScorers = trackDbSetting(tdb,"filterTopScorers");
+boolean doFilterTopScorers = FALSE;
+char *words[3];
+int filterTopScoreCt = 0;
+char *filterTopScoreTable = NULL;
 char *escapedName = sqlEscapeString(item);
 
 hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
@@ -1012,9 +1040,30 @@ while ((row = sqlNextRow(sr)) != NULL)
     bedPrintPos(bed, bedSize);
     }
 sqlFreeResult(&sr);
+safef(query, sizeof query, "%s.%s", table, "filterTopScorersOn");
+if (filterTopScorers != NULL)
+    {
+    if (chopLine(cloneString(filterTopScorers), words) == 3)
+        {
+        doFilterTopScorers = sameString(words[0], "on");
+        filterTopScoreCt = atoi(words[1]);
+        filterTopScoreTable = words[2];
+        }
+    }
+
 if (bedSize >= 5 && showTopScorers != NULL)
     {
     int maxScorers = sqlUnsigned(showTopScorers);
+    doFilterTopScorers = cartCgiUsualBoolean(cart, query, doFilterTopScorers);
+    if (doFilterTopScorers && hTableExists(filterTopScoreTable))
+        {
+        /* limit to those in the top N, from table */
+        safef(query, sizeof query, "%s.%s", table, "filterTopScorersCt");
+        filterTopScoreCt = cartCgiUsualInt(cart, query, filterTopScoreCt);
+        }
+    else
+        /* show all */
+        filterTopScoreTable = NULL;
     showBedTopScorersInWindow(conn, tdb, item, start, maxScorers);
     }
 }
