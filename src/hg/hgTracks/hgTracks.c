@@ -118,7 +118,7 @@
 #endif
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1358 2007/06/22 01:04:04 hartera Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1359 2007/06/22 16:14:59 kate Exp $";
 
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
@@ -8355,6 +8355,14 @@ for (i=0; i<count; i++, text++, textPos++)
         if (!selfLine && match != NULL && match[i])
             if ((*text != ' ') && (toupper(*text) == toupper(match[i])))
                 cBuf[0] = '.';
+
+#ifdef FADE_IN_DOT_MODE
+        /* Color gaps in lighter color, even when non-matching bases
+           are displayed as dots instead of faded out */
+        /* We may want to use this, or add a config setting for it */
+        if (*text == '=' || *text == '-' || *text == '.' || *text == 'N')
+            clr = noMatchColor;
+#endif
         }
     else
         {
@@ -8374,6 +8382,7 @@ for (i=0; i<count; i++, text++, textPos++)
         /* restore char for unaligned sequence to lower case */
         if (tolower(cBuf[0]) == tolower(UNALIGNED_SEQ))
             cBuf[0] = UNALIGNED_SEQ;
+
         /* display bases */
         vgTextCentered(vg, x1+x, y, x2-x1, height, clr, font, cBuf);
         }
@@ -10058,7 +10067,7 @@ if (optionScoreVal != NULL)
     optionScore = atoi(optionScoreVal);
 optionScore = cartUsualInt(cart, option, optionScore);
 
-if (hTableExists(topTable) && doScoreCtFilter)
+if (doScoreCtFilter && (topTable != NULL) && hTableExists(topTable))
     {
     safef(query, sizeof(query), 
                 "select * from %s order by score desc limit %d", 
@@ -13719,14 +13728,28 @@ if (showTrackControls)
 	if (group->trackList == NULL)
 	    continue;
 
-	/* Print group label on left. */
+        /* check if group section should be displayed */
+        static char closeVarName[128];
+        safef(closeVarName, sizeof(closeVarName), 
+                "%s%s_%s_%s", "hgt", "group", group->name, "close");
+        boolean isOpen = !(cartUsualInt(cart, closeVarName, 0));
+        char *otherState = (isOpen ? "1" : "0");
+        char *indicator = (isOpen ? "-" : "+");
+        char *indicatorImg =
+                (isOpen ? "../images/remove.gif" : "../images/add.gif");
+	
 	hPrintf("<TR>");
 	cg->rowOpen = TRUE;
-	hPrintf("<th colspan=%d BGCOLOR=#536ED3>", 
-		MAX_CONTROL_COLUMNS);
+        hPrintf("<th align=\"left\" colspan=%d BGCOLOR=#536ED3>", MAX_CONTROL_COLUMNS);
+        hPrintf("<A HREF=\"%s?%s&%s=%s#%s\" class=\"bigBlue\"><IMG src=\"%s\" alt=\"%s\" class=\"bigBlue\"></A>&nbsp;&nbsp;",
+            hgTracksName(), cartSidUrlString(cart), closeVarName, 
+            otherState, group->name, indicatorImg, indicator);
+        if (!startsWith("ENCODE", group->label))
+            htmlNbSpaces((CONTROL_TABLE_WIDTH/6 - strlen(group->label))/2);
+
 	hPrintf("<B>%s</B>", wrapWhiteFont(group->label));
 	hPrintf("\n<A NAME=\"#%s\"></A>\n",group->name);
-	hPrintf("</th>\n", MAX_CONTROL_COLUMNS);
+	hPrintf("</th>\n");
 	controlGridEndRow(cg);
 
 	/* First group gets ruler. */
@@ -13746,6 +13769,8 @@ if (showTrackControls)
 
 	for (tr = group->trackList; tr != NULL; tr = tr->next)
 	    {
+            if (!isOpen)
+                continue;
 	    track = tr->track;
 	    controlGridStartCell(cg);
 	    if (track->hasUi)
