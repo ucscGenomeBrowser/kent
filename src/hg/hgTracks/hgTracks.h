@@ -272,7 +272,16 @@ struct gsidSubj
     char *subjId;
     };
 
+/* global GSID sequence list */
+struct gsidSeq
+    {
+    struct gsidSeq  *next;
+    char *seqId;
+    char *subjId;
+    };
+
 extern struct gsidSubj *gsidSelectedSubjList;
+extern struct gsidSubj *gsidSelectedSeqList;
 
 extern struct trackLayout tl;
 
