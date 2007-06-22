@@ -14,6 +14,7 @@ set tables=""
 set db=""
 set list="false"
 set expand=""
+set tableString=""
 set wildTables=""
 set wildTables2=""
 set first=""
@@ -74,35 +75,73 @@ endif
 # check for wildcards
 echo $tables | grep -q % 
 if ( ! $status ) then
-  # there are wildcards
+  # there are wildcards. expand substitution to get all tables
   set list="true"
   set wildcards=`echo $tables | sed -e "s/ /\n/g" | grep %`
   foreach wildcard ( $wildcards )
-    # find all tables that match
-    set tableString=`echo $wildcard | sed -e "s/%//g"`
-    # this will only work if the wildcard is at the end
-    # put in a trap here for a warning.
+    # find all the tables that meet the wildcard criterion
+    echo $wildcard | egrep -q '.%.'
+    if ( ! $status ) then
+      # wildcard in middle
+      set frags=`echo $wildcard | awk -F% '{print NF}'`
+      if ( $frags > 2 ) then
+        echo
+        echo "  sorry, internal wildcard is supported only if there are no others."
+        echo
+        exit 1
+      endif
+      set part1=`echo $wildcard | awk -F% '{print $1}'`
+      set part2=`echo $wildcard | awk -F% '{print $2}'`
+      set tableString='^'${part1}'.*'${part2}'$'
+
+    else 
+      echo $wildcard | egrep -q '^%.'
+      if ( ! $status ) then
+        # wildcard at beginning
+        set tableString=`echo $wildcard | sed -e "s/%//"`
+        echo $tableString | egrep -q '.%$'
+        if ( $status ) then
+          # wildcard at beginning only
+          set tableString=`echo ${tableString}'$'`
+        else
+          # wildcard at end, too 
+          set tableString=`echo $wildcard | sed -e "s/%//g"`
+        endif
+
+      else
+        echo $wildcard | egrep -q '.%$'
+        if ( ! $status ) then
+          # wildcard at end only
+          set tableString=`echo $wildcard | sed -e "s/%//g"`
+          set tableString=`echo '^'${tableString}`
+        endif
+      endif
+    endif
+
+    # add in all the tables that meet the wildcard criterion
     set wildTables=`getRRdumpfile.csh $db $machine1 | xargs awk '{print $1}' \
-      | egrep $tableString`
+      | egrep "$tableString"`
     if ( "" != $machine2 ) then
       set wildTables2=`getRRdumpfile.csh $db $machine2 | xargs awk '{print $1}' \
-        | grep $tableString`
+        | grep "$tableString"`
     endif
     set expand=`echo $wildTables $wildTables2 | sed -e "s/ /\n/"g | sort -u `  
-    set substitute=`echo $wildcard $expand`
-    set tables=`echo $tables | sed -e "s/$wildcard/$substitute/"`
+    set tables=`echo $tables | sed -e "s/$wildcard/& $expand/"`
+    set tableString=""
   end
 endif
 
+
 # make headers for output table
 # get width of first column from longest tablename
-set longtable=5
+set longtable="table"
 set length=5
 foreach table (`echo $tables`)
   set len=`echo $table | awk '{print length($1)}'`
   if ( $len > $length ) then
     set length=$len
     set longtable=$table
+  else
   endif
 end
 set length=`echo $length | awk '{print $1+1}'`
@@ -148,11 +187,6 @@ foreach table ($tables)
   # print place-saver for wildcards
   echo $table | egrep -q %
   if ( ! $status ) then
-    echo $table | egrep -q ".%."
-    if ( ! $status ) then
-      echo " -${table}-  internal wildcard not supported"
-      continue
-    endif
     echo " -${table}-"
     continue
   endif
