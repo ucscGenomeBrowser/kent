@@ -208,7 +208,7 @@
 #include "omicia.h"
 #include "atomDb.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1300 2007/06/21 23:15:10 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1301 2007/06/22 00:36:54 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -16863,6 +16863,7 @@ int rowOffset = hOffsetPastBin(seqName, table);
 int start = cartInt(cart, "o");
 float het = 0.0;
  
+if (!hTableExists("hapmapAllelesSummary")) return;
 safef(query, sizeof(query), "select * from hapmapAllelesSummary where chrom = '%s' and "
       "chromStart=%d and name = '%s'", seqName, start, itemName);
 sr = sqlGetResult(conn, query);
