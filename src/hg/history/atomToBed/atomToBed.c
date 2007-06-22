@@ -10,7 +10,7 @@
 #include "element.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: atomToBed.c,v 1.2 2007/06/20 23:00:28 braney Exp $";
+static char const rcsid[] = "$Id: atomToBed.c,v 1.3 2007/06/22 20:23:00 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -212,21 +212,53 @@ for(; atoms; atoms = atoms->next)
     {
     struct instance *instances = atoms->instances;
     unsigned scoreBits = 0;
+    boolean haveSpecies = FALSE;
 
     for(; instances; instances = instances->next)
 	{
+	if (sameString(species, instances->species))
+	    {
+	    if (haveSpecies)
+		scoreBits |= (1 << 7);
+	    haveSpecies = TRUE;
+	    }
+
 	if (sameString("canFam2", instances->species))
+	    {
+	    if (scoreBits & (1 << 0))
+		scoreBits |= (1 << 6);
 	    scoreBits |= (1 << 0);
+	    }
 	else if (sameString("mm8", instances->species))
+	    {
+	    if (scoreBits & (1 << 1))
+		scoreBits |= (1 << 6);
 	    scoreBits |= (1 << 1);
+	    }
 	else if (sameString("rn4", instances->species))
+	    {
+	    if (scoreBits & (1 << 2))
+		scoreBits |= (1 << 6);
 	    scoreBits |= (1 << 2);
+	    }
 	else if (sameString("rheMac2", instances->species))
+	    {
+	    if (scoreBits & (1 << 3))
+		scoreBits |= (1 << 6);
 	    scoreBits |= (1 << 3);
+	    }
 	else if (sameString("panTro2", instances->species))
+	    {
+	    if (scoreBits & (1 << 4))
+		scoreBits |= (1 << 6);
 	    scoreBits |= (1 << 4);
+	    }
 	else if (sameString("hg18", instances->species))
+	    {
+	    if (scoreBits & (1 << 5))
+		scoreBits |= (1 << 6);
 	    scoreBits |= (1 << 5);
+	    }
 	}
 
     for(instances = atoms->instances; instances; instances = instances->next)
