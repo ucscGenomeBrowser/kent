@@ -2871,6 +2871,14 @@ dataVersion ENCODE Oct 2005 Freeze
     color 100,90,160
     priority 4
 
+    track encodeTbaSconeConsUpdate
+    release alpha
+    subTrack encodeTbaCons
+    shortLabel TBA SCONE Cons New
+    longLabel TBA SCONE Conservation 2007 Update
+    color 100,90,160
+    priority 5
+
 track encodeTbaElements
 compositeTrack on
 shortLabel TBA Elements
