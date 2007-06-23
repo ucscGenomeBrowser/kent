@@ -208,7 +208,7 @@
 #include "omicia.h"
 #include "atomDb.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1303 2007/06/22 18:17:05 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1304 2007/06/23 02:36:56 braney Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -1003,13 +1003,13 @@ while ((row = sqlNextRow(sr)) != NULL)
     atomStaticLoad(row, &ret);
     //atomOutput(&ret, stdout, '\t', '\n');
     linkToOtherBrowser(ret.species, ret.chrom, ret.start, ret.end);
-    if (sameString(ret.chrom, seqName) && (start + 1 == ret.start) && 
+    if (sameString(ret.chrom, seqName) && (start  == ret.start) && 
 	sameString(ret.species, database))
 	printf("* ");
     else
 	printf("  ");
     printf( "%d\t%-10s\t%-10s\t%15d\t%15d\t%15d\t\t%c\n",ret.instance,
-	ret.species,ret.chrom, ret.start, ret.end, ret.end - ret.start + 1, ret.strand[0]);
+	ret.species,ret.chrom, ret.start + 1, ret.end, ret.end - ret.start + 1, ret.strand[0]);
     }
 printf("</A>");
 sqlFreeResult(&sr);
@@ -1024,11 +1024,39 @@ if (mf != NULL)
     mafFileFree(&mf);
     mf = mafReadAll(buffer);
     struct mafAli *mafAli;
-    int count = 0;
+    int count = 1;
+    int numBlocks = 0;
 
-    printf("<BR><B>Multiple Alignment</B><BR>");
     for (mafAli=mf->alignments; mafAli; mafAli = mafAli->next)
+	numBlocks++;
+
+    for (mafAli=mf->alignments; mafAli; mafAli = mafAli->next)
+	{
+	printf("<BR><B>Multiple Alignment Block %d of %d</B><BR>",
+	    count, numBlocks);
 	mafPrettyOut(stdout, mafAli, 70, FALSE, count++);
+	if (mafAli->next != NULL)
+	    {
+	    struct mafAli *next = mafAli->next;
+	    struct mafComp *comp1 = mafAli->components;
+	    struct mafComp *comp2 = next->components;
+
+	    printf("<BR><B>Gaps:</B>\n");
+	    for(; comp1 ; comp1 = comp1->next, comp2 = comp2->next)
+		{
+		int diff;
+		char dbOnly[4096];
+
+		diff = comp2->start - (comp1->start + comp1->size);
+
+		safef(dbOnly, sizeof(dbOnly), "%s", comp1->src);
+		chopPrefix(dbOnly);
+		printf("%-20s %d\n",hOrganism(dbOnly), diff);
+		}
+
+	    printf("<BR>");
+	    }
+	}
     }
 }
 
