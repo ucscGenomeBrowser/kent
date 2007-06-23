@@ -84,7 +84,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: lowelab.c,v 1.13 2007/06/22 20:39:19 pchan Exp $";
+static char const rcsid[] = "$Id: lowelab.c,v 1.14 2007/06/23 00:00:40 pchan Exp $";
 
 extern char *uniprotFormat;
 
@@ -1748,12 +1748,18 @@ void getGenomeClade(struct sqlConnection *conn, char *dbName, char *genome, char
     struct sqlResult *srDb;
     char **rowDb;
 
-    sprintf(query, "select a.genome, c.label from centraldb.genomeClade a, centraldb.dbDb b, centraldb.clade c where a.genome = b.genome and a.clade = c.name and b.name = '%s'", dbName);
+    sprintf(query, "select count(*) from centraldb.genomeClade a, centraldb.dbDb b, centraldb.clade c where a.genome = b.genome and a.clade = c.name and b.name = '%s'", dbName);
     srDb = sqlGetResult(conn, query);
     if ((rowDb = sqlNextRow(srDb)) != NULL)
     {
-        strcpy(genome, rowDb[0]);
-        strcpy(clade, rowDb[1]);
+        sqlFreeResult(&srDb);
+        sprintf(query, "select a.genome, c.label from centraldb.genomeClade a, centraldb.dbDb b, centraldb.clade c where a.genome = b.genome and a.clade = c.name and b.name = '%s'", dbName);
+        srDb = sqlGetResult(conn, query);
+        if ((rowDb = sqlNextRow(srDb)) != NULL)
+        {
+            strcpy(genome, rowDb[0]);
+            strcpy(clade, rowDb[1]);
+        }
     }
     sqlFreeResult(&srDb);
 }
@@ -1866,7 +1872,7 @@ void printBlastpResult(struct sqlConnection *conn, struct blastTab *blastpHitsLi
         /* Get target gene position from refSeq */
         strcpy(refSeq, blastpTarget[0]);
         strcat(refSeq, ".refSeq");
-        if (hTableExists(refSeq))
+        if (hDbExists(blastpTarget[0]) && hTableExists(refSeq))
         {
             sprintf(query, "select chrom, cdsStart, cdsEnd from %s where name = '%s'",
                     refSeq, blastpTarget[1]);
@@ -1886,11 +1892,16 @@ void printBlastpResult(struct sqlConnection *conn, struct blastTab *blastpHitsLi
             printf("<td>%s</td>\n", blastpTarget[1]);
 
         /* Get target gene product annotation */
-        ginfo = getGbProtCodeInfo(conn, blastpTarget[0], blastpTarget[1]);
-        if (ginfo != NULL && ginfo->product != NULL && differentString(ginfo->product,"none"))
-            printf("<td>%s</td>\n", ginfo->product);
+        if (hDbExists(blastpTarget[0]))
+        {
+            ginfo = getGbProtCodeInfo(conn, blastpTarget[0], blastpTarget[1]);
+            if (ginfo != NULL && ginfo->product != NULL && differentString(ginfo->product,"none"))
+                printf("<td>%s</td>\n", ginfo->product);
+            else
+                printf("<td>%s</td>\n", "N/A");
+            }
         else
-            printf("<td>%s</td>\n", "N/A");                
+            printf("<td>%s</td>\n", "N/A");        
         
         printf("<td style=\"text-align: center;\">%0.f</td>\n", ((double) (blastpHits->qEnd - blastpHits->qStart) / ((double) (querySeqLength-3) / 3.0f)) * 100.0f);
         printf("<td style=\"text-align: center;\">%u - %u</td>\n", blastpHits->qStart + 1, blastpHits->qEnd);
