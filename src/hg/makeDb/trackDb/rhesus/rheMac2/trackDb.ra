@@ -262,17 +262,17 @@ spectrum on
 type netAlign rheMac2 chainSelf
 otherDb rheMac2
 
-track atom98416
-shortLabel atom98416 
-longLabel atom98416 (canFam2=orange,mm8=green,rn4=blue,rheMac2=brick,panTro2=dk blue,hg18=dk green)
+track atom97565
+shortLabel atom97565 
+longLabel atom97565 (canFam2=orange,mm8=green,rn4=blue,rheMac2=brick,panTro2=dk blue,hg18=dk green)
 group x
 priority 1.1
 visibility hide
 type bed 6
 
-track atom1005
-shortLabel atom1005 
-longLabel atom1005 (canFam2=orange,mm8=green,rn4=blue,rheMac2=brick,panTro2=dk blue,hg18=dk green)
+track atom992
+shortLabel atom992 
+longLabel atom992 (canFam2=orange,mm8=green,rn4=blue,rheMac2=brick,panTro2=dk blue,hg18=dk green)
 group x
 priority 1.1
 visibility hide
