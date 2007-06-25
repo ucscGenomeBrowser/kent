@@ -2170,6 +2170,12 @@ shortCircuit 1
 termRegex h?sa-(mir|let)-.+
 searchPriority 18.5
 
+searchTable switchDbTss
+searchMethod prefix
+searchType bed
+shortCircuit 1
+searchPriority 19
+
 searchTable uniGene_2
 searchType bed
 termRegex Hs\.[0-9]+
