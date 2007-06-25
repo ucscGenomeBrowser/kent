@@ -16,7 +16,7 @@
 #include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.29 2007/06/25 23:08:08 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.30 2007/06/25 23:53:35 hiram Exp $";
 
 #define ITEM_SCORE_DEFAULT "1000"
 #define ADD_ITEM_COMMENT_DEFAULT "add comments"
@@ -120,7 +120,25 @@ hPrintf("<B>Created </B>%s<B> by:&nbsp;</B>", item->creationDate);
 hPrintf("<A HREF=\"%s/index.php/User:%s\" TARGET=_blank>%s</A><BR>\n", url,
     item->owner, item->owner);
 hPrintf("<B>Last update:&nbsp;</B>%s<BR>\n", item->lastModifiedDate);
-if ((NULL != userName) && sameWord(userName, item->owner) && !geneAnnotation)
+char *editors = cfgOptionDefault(CFG_WIKI_EDITORS, NULL);
+char *editor = NULL;
+if ((NULL != userName) && editors)
+    {
+    int i;
+    int wordCount = chopByChar(editors, ',', NULL, 0);
+    char **words = (char **)needMem((size_t)(wordCount * sizeof(char *)));
+    chopByChar(editors, ',', words, wordCount);
+    for (i = 0; i < wordCount; ++i)
+	{
+	if (sameWord(userName, words[i]))
+	    {
+	    editor = words[i];
+	    break;
+	    }
+	}
+    }
+if ((NULL != userName) &&
+	(editor || (sameWord(userName, item->owner) && !geneAnnotation)))
     {
     startForm("deleteForm", G_DELETE_WIKI_ITEM);
     char idString[128];
@@ -129,7 +147,10 @@ if ((NULL != userName) && sameWord(userName, item->owner) && !geneAnnotation)
     hPrintf("\n");
     webPrintLinkTableStart();
     webPrintLinkCellStart();
-    hPrintf("Owner '%s' has deletion rights&nbsp;&nbsp;", item->owner);
+    if (editor && (differentWord(userName, item->owner)))
+	hPrintf("Editor '%s' has deletion rights&nbsp;&nbsp;", editor);
+    else
+	hPrintf("Owner '%s' has deletion rights&nbsp;&nbsp;", item->owner);
     webPrintLinkCellEnd();
     webPrintLinkCellStart();
     cgiMakeButton("submit", "DELETE");
