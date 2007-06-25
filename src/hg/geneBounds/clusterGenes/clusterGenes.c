@@ -11,7 +11,7 @@
 #include "bits.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: clusterGenes.c,v 1.36 2007/04/06 03:54:58 markd Exp $";
+static char const rcsid[] = "$Id: clusterGenes.c,v 1.37 2007/06/25 06:16:25 markd Exp $";
 
 /* Notes:
  *  strand is passed as '*' when -ignoreStrand is specified.
@@ -120,7 +120,7 @@ else
     /* will strip directories and trailing extensions, if any */
     char trackName[256];
     splitPath(table, NULL, trackName, NULL);
-    if (endsWith(table, ".gz"))
+    if (endsWith(table, ".gz") || endsWith(table, ".bz2") || endsWith(table, ".Z"))
         {
         char *ext2 = strrchr(trackName, '.');
         if (ext2 != NULL)
