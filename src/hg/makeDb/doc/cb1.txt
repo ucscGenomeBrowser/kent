@@ -884,7 +884,17 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
     # 25001 gene predictions
     hgPepPred cb1 generic twinscanPep twinscanPep.fa
 # Add track to trackDb.ra for cb1
-
+   
+#######################################################################
+# TWINSCAN CLEANUP (DONE, 2007-06-25, hartera)
+    ssh kkstore02
+    cd /cluster/store5/worm/cb1/bed/twinscan
+    # remove cbAll.gtf as same as in chr_gtf directory
+    rm cbAll.gtf
+    rm *.tab
+    # gzip other files
+    gzip chr_gtf/*.gtf chr_ptx/*.ptx chr_tx/*.tx
+    
 #######################################################################
 # Ce2 BLASTZ CLEANUP (DONE, 2007-06-25, hartera)
     ssh kkstore02
