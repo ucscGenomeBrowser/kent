@@ -9,7 +9,7 @@
 #include "bed.h"
 #include "dlist.h"
 
-static char const rcsid[] = "$Id: mafBreak.c,v 1.2 2007/06/20 22:02:41 braney Exp $";
+static char const rcsid[] = "$Id: mafBreak.c,v 1.3 2007/06/25 16:51:13 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -185,6 +185,8 @@ while ((hel = hashNext(&cookie)) != NULL)
     //printf("clearing %s\n",hel->name);
     sb->numBreaks = 0;
     sb->currentNestLevel = 0;
+    freez(&sb->breaks);
+    sb->allocedBreaks = 0;
     }
 }
 
@@ -258,13 +260,13 @@ while ((hel = hashNext(&cookie)) != NULL)
 		    numDashes++;
 
 	    aBreak = getBreak(sb);
-	    aBreak->refAddress = masterMc->start + masterMc->size - numDashes;
-	    aBreak->nestLevel = sb->currentNestLevel;
 	    if (mc->rightStatus == 'n')
 		{
 		aBreak->type = -1;
 		sb->currentNestLevel--;
 		}
+	    aBreak->refAddress = masterMc->start + masterMc->size - numDashes;
+	    aBreak->nestLevel = sb->currentNestLevel;
 
 	    //printf("adding break %s %d %d\n",hel->name,aBreak->refAddress, aBreak->nestLevel);
 	    if (mc->rightStatus == 'N')
@@ -318,7 +320,7 @@ for(; bed;  bed = bed->next)
 			}
 		    else if (nestBreak->type == 0)
 			{
-			//assert(countNestLevel == 0);
+			assert(countNestLevel == 0);
 			nestLevel = 0;
 			break;
 			}
@@ -331,6 +333,7 @@ for(; bed;  bed = bed->next)
 		break;
 		}
 	    }
+	assert(aBreak < &sb->breaks[sb->numBreaks]);
 	nestLevel = -1000000000;
 	for(; aBreak < &sb->breaks[sb->numBreaks] ;  aBreak++)
 	    {
