@@ -23833,3 +23833,33 @@ done
    cd ../
    rm -r pslChrom
    # this removed 1.2 G of data.
+
+#######################################################################
+# CLEANUP OF ACEMBLY_050217 DATA (DONE, 2007-06-25, hartera)
+   ssh kkstore02
+   cd /cluster/store5/gs.18/build35/bed/acembly_050217
+   rm GeneCheck.out GeneCheck2 acembly acembly.chk acembly.details \
+      chrom.out genePred.tab hg16.name hg16Pep.name
+   cd acembly_gene_lists
+   rm test transcripts.names *.bak main_gene.list.IDsort mp.ids mp.sort ptest \
+      maintest gid.tab gid.tab.sort genesGffs.ids genesGffs.ids.uniq 
+   cd ../
+   # remove fasta files as included in gzipped tar file
+   rm -r acembly.ncbi_35.genes.proteins.fasta 
+   cd acembly.ncbi_35.genes.gff
+   gzip *.gff 
+
+#######################################################################
+# CLEANUP OF DANRER2 BLASTZ SWAP (DONE, 2007-06-25, hartera)
+   ssh kkstore02
+   cd /cluster/store5/gs.18/build35/bed/blastz.danRer2.2004-12-08
+   # remove old axtChrom directory
+   rm -r axtChrom.orig
+   cd axtChain
+   # chain directories can be recreated from all.chain files so remove
+   rm -r chain chainAR
+   # gzip net files
+   gzip net/*.net
+   # gzip .over files
+   gzip over/*.over
+   # removed ~1.3 G data 
