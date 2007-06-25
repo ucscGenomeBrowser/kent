@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/doRepeatMasker.pl instead.
 
-# $Id: doRepeatMasker.pl,v 1.2 2006/10/19 23:04:58 aamp Exp $
+# $Id: doRepeatMasker.pl,v 1.3 2007/06/25 23:05:05 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -201,10 +201,10 @@ foreach spec (`cat \$inLst`)
   $RepeatMasker -align -s $repeatLib \$base.fa
 end
 
-# Lift up and use tail +4 to strip the RepeatMasker header for easy
-# concatenation later:
+# Lift up (leave the RepeatMasker header in place because we'll liftUp
+# again later):
 liftUp -type=.out stdout \$inLft error *.out \\
-| tail +4 > tmpOut__out
+  > tmpOut__out
 
 $liftRMAlign \$inLft > tmpOut__align
 
@@ -262,7 +262,10 @@ sub doCat {
 				      "$buildDir/run.cluster/run.time");
 
   my $whatItDoes = 
-"It concatenates .out files from cluster run into a single $db.fa.out.";
+"It concatenates .out files from cluster run into a single $db.fa.out.\n" .
+"liftUp (with no lift specs) is used to concatenate .out files because it\n" .
+"uniquifies (per input file) the .out IDs which can then be used to join\n" .
+"fragmented repeats in the Nested Repeats track.";
   my $fileServer = &HgAutomate::chooseFileServer($runDir);
   my $bossScript = new HgRemoteScript("$runDir/doCat.csh", $fileServer,
 				      $runDir, $whatItDoes);
@@ -289,7 +292,7 @@ _EOF_
   }
   for (my $l = 0;  $l <= $levels - 2;  $l++) {
     $bossScript->add(<<_EOF_
-${indent}  cat ${path}???/*.out > ${path}cat.out
+${indent}  liftUp ${path}cat.out /dev/null carry ${path}???/*.out
 ${indent}  cat ${path}???/*.align > ${path}cat.align
 ${indent}end
 _EOF_
@@ -299,15 +302,7 @@ _EOF_
   }
   $bossScript->add(<<_EOF_
 
-# Add header to top-level $db.fa.out:
-cat > /tmp/rmskHead.txt <<EOF
-   SW  perc perc perc  query      position in query         matching        repeat          position in  repeat
-score  div. del. ins.  sequence    begin    end   (left)   repeat          class/family     begin  end (left)  ID
-
-EOF
-
-cat /tmp/rmskHead.txt > $db.fa.out
-cat $partDir/???/*.out >> $db.fa.out
+liftUp $db.fa.out /dev/null carry $partDir/???/*.out
 cat $partDir/???/*.align >> $db.fa.align
 _EOF_
   );
@@ -315,6 +310,7 @@ _EOF_
     $bossScript->add(<<_EOF_
 
 # Split into per-chrom files for hgdownload.
+head -3 $db.fa.out > /tmp/rmskHead.txt
 tail +4 $db.fa.out \\
 | splitFileByColumn -col=5 stdin /cluster/data/$db -chromDirs \\
     -ending=.fa.out -head=/tmp/rmskHead.txt
