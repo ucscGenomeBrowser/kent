@@ -36,7 +36,7 @@ struct wikiTrack
     char *lastModifiedDate;	/* date item last updated */
     char *descriptionKey;	/* name of wiki description page */
     unsigned id;	/* auto-increment item ID */
-    char *alignID;	/* knownGene unique name */
+    char *geneSymbol;	/* knownGene kgXref geneSymbol name */
     };
 
 void wikiTrackStaticLoad(char **row, struct wikiTrack *ret);
@@ -148,8 +148,8 @@ char *wikiTrackGetCreateSql(char *tableName);
 struct wikiTrack *findWikiItemId(char *wikiItemId);
 /* given a wikiItemId return the row from the table */
 
-struct wikiTrack *findWikiItemByAlignID(char *db, char *alignID);
-/* given a db and UCSC known gene alignID, find the wiki item */
+struct wikiTrack *findWikiItemByGeneSymbol(char *db, char *geneSymbol);
+/* given a db and UCSC known gene geneSymbol, find the wiki item */
 
 struct wikiTrack *findWikiItemByName(char *db, char *name);
 /* given a db,name pair return the row from the table, can return NULL */

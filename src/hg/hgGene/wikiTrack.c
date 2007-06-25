@@ -15,7 +15,7 @@
 #include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.5 2007/06/22 23:04:42 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.6 2007/06/25 16:39:23 hiram Exp $";
 
 static char *hgGeneUrl()
 {
@@ -87,7 +87,7 @@ newItem->creationDate = cloneString("0");
 newItem->lastModifiedDate = cloneString("0");
 newItem->descriptionKey = cloneString(descriptionKey);
 newItem->id = 0;
-newItem->alignID = cloneString(curGeneId);
+newItem->geneSymbol = cloneString(curGeneId);
 
 wikiTrackSaveToDbEscaped(conn, newItem, WIKI_TRACK_TABLE, 1024);
 
@@ -132,7 +132,7 @@ void doWikiTrack(struct sqlConnection *conn)
 /* display wiki track business */
 {
 char *userName = NULL;
-struct wikiTrack *item = findWikiItemByAlignID(database, curGeneId);
+struct wikiTrack *item = findWikiItemByGeneSymbol(database, curGeneId);
 char title[1024];
 
 safef(title,ArraySize(title), "UCSC gene annotations %s (%s)",

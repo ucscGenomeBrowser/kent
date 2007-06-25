@@ -16,5 +16,5 @@ table wikiTrack
     string lastModifiedDate;  "date item last updated"
     string descriptionKey;    "name of wiki description page"
     uint id;	       "auto-increment item ID"
-    string alignID;    "knownGene unique name"
+    string geneSymbol;    "knownGene kgXref geneSymbol name"
     )

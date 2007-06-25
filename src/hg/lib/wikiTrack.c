@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.7 2007/06/22 18:52:34 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.8 2007/06/25 16:39:19 hiram Exp $";
 
 void wikiTrackStaticLoad(char **row, struct wikiTrack *ret)
 /* Load a row from wikiTrack table into ret.  The contents of ret will
@@ -30,7 +30,7 @@ ret->creationDate = row[11];
 ret->lastModifiedDate = row[12];
 ret->descriptionKey = row[13];
 ret->id = sqlUnsigned(row[14]);
-ret->alignID = row[15];
+ret->geneSymbol = row[15];
 }
 
 struct wikiTrack *wikiTrackLoad(char **row)
@@ -55,7 +55,7 @@ ret->creationDate = cloneString(row[11]);
 ret->lastModifiedDate = cloneString(row[12]);
 ret->descriptionKey = cloneString(row[13]);
 ret->id = sqlUnsigned(row[14]);
-ret->alignID = cloneString(row[15]);
+ret->geneSymbol = cloneString(row[15]);
 return ret;
 }
 
@@ -128,7 +128,7 @@ void wikiTrackSaveToDb(struct sqlConnection *conn, struct wikiTrack *el, char *t
 {
 struct dyString *update = newDyString(updateSize);
 dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s',%u,'%s','%s','%s','%s','%s','%s','%s','%s',%u,'%s')", 
-	tableName,  el->bin,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->score,  el->strand,  el->db,  el->owner,  el->color,  el->class,  el->creationDate,  el->lastModifiedDate,  el->descriptionKey,  el->id,  el->alignID);
+	tableName,  el->bin,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->score,  el->strand,  el->db,  el->owner,  el->color,  el->class,  el->creationDate,  el->lastModifiedDate,  el->descriptionKey,  el->id,  el->geneSymbol);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -143,7 +143,7 @@ void wikiTrackSaveToDbEscaped(struct sqlConnection *conn, struct wikiTrack *el, 
  * before inserting into database. */ 
 {
 struct dyString *update = newDyString(updateSize);
-char  *chrom, *name, *strand, *db, *owner, *color, *class, *creationDate, *lastModifiedDate, *descriptionKey, *alignID;
+char  *chrom, *name, *strand, *db, *owner, *color, *class, *creationDate, *lastModifiedDate, *descriptionKey, *geneSymbol;
 chrom = sqlEscapeString(el->chrom);
 name = sqlEscapeString(el->name);
 strand = sqlEscapeString(el->strand);
@@ -154,10 +154,10 @@ class = sqlEscapeString(el->class);
 creationDate = sqlEscapeString(el->creationDate);
 lastModifiedDate = sqlEscapeString(el->lastModifiedDate);
 descriptionKey = sqlEscapeString(el->descriptionKey);
-alignID = sqlEscapeString(el->alignID);
+geneSymbol = sqlEscapeString(el->geneSymbol);
 
 dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s',%u,'%s','%s','%s','%s','%s','%s','%s','%s',%u,'%s')", 
-	tableName, el->bin ,  chrom, el->chromStart , el->chromEnd ,  name, el->score ,  strand,  db,  owner,  color,  class,  creationDate,  lastModifiedDate,  descriptionKey, el->id ,  alignID);
+	tableName, el->bin ,  chrom, el->chromStart , el->chromEnd ,  name, el->score ,  strand,  db,  owner,  color,  class,  creationDate,  lastModifiedDate,  descriptionKey, el->id ,  geneSymbol);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 freez(&chrom);
@@ -170,7 +170,7 @@ freez(&class);
 freez(&creationDate);
 freez(&lastModifiedDate);
 freez(&descriptionKey);
-freez(&alignID);
+freez(&geneSymbol);
 }
 
 struct wikiTrack *wikiTrackCommaIn(char **pS, struct wikiTrack *ret)
@@ -197,7 +197,7 @@ ret->creationDate = sqlStringComma(&s);
 ret->lastModifiedDate = sqlStringComma(&s);
 ret->descriptionKey = sqlStringComma(&s);
 ret->id = sqlUnsignedComma(&s);
-ret->alignID = sqlStringComma(&s);
+ret->geneSymbol = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -218,7 +218,7 @@ freeMem(el->class);
 freeMem(el->creationDate);
 freeMem(el->lastModifiedDate);
 freeMem(el->descriptionKey);
-freeMem(el->alignID);
+freeMem(el->geneSymbol);
 freez(pEl);
 }
 
@@ -289,7 +289,7 @@ fputc(sep,f);
 fprintf(f, "%u", el->id);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->alignID);
+fprintf(f, "%s", el->geneSymbol);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
@@ -366,11 +366,11 @@ static char *createString =
     "lastModifiedDate varchar(255) not null,\n"
     "descriptionKey varchar(255) not null,\n"
     "id int unsigned not null auto_increment,\n"
-    "alignID varchar(255) not null,\n"
+    "geneSymbol varchar(255) not null,\n"
     "PRIMARY KEY(id),\n"
     "INDEX chrom (db,bin,chrom),\n"
     "INDEX name (db,name),\n"
-    "INDEX align (alignID)\n"
+    "INDEX gene (geneSymbol)\n"
 ")\n";
 
 char *wikiTrackGetCreateSql(char *tableName)
@@ -401,19 +401,19 @@ hDisconnectCentral(&conn);
 return item;
 }
 
-struct wikiTrack *findWikiItemByAlignID(char *db, char *alignID)
-/* given a db and UCSC known gene alignID, find the wiki item */
+struct wikiTrack *findWikiItemByGeneSymbol(char *db, char *geneSymbol)
+/* given a db and UCSC known gene geneSymbol, find the wiki item */
 {
 struct wikiTrack *item = NULL;
 
 /* make sure neither of these arguments is NULL */
-if (db && alignID)
+if (db && geneSymbol)
     {
     char query[256];
     struct sqlConnection *conn = hConnectCentral();
     safef(query, ArraySize(query),
-	"SELECT * FROM %s WHERE db='%s' AND alignID='%s' limit 1",
-	    WIKI_TRACK_TABLE, db, alignID);
+	"SELECT * FROM %s WHERE db='%s' AND geneSymbol='%s' limit 1",
+	    WIKI_TRACK_TABLE, db, geneSymbol);
 
     item = wikiTrackLoadByQuery(conn, query);
 

@@ -16,7 +16,7 @@
 #include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.27 2007/06/22 23:04:12 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.28 2007/06/25 16:39:26 hiram Exp $";
 
 #define ITEM_SCORE_DEFAULT "1000"
 #define ADD_ITEM_COMMENT_DEFAULT "add comments"
@@ -103,11 +103,11 @@ char *url = cfgOptionDefault(CFG_WIKI_URL, NULL);
 char *strippedRender = fetchWikiRenderedText(item->descriptionKey);
 */
 
-if (isNotEmpty(item->alignID) && differentWord(item->alignID,"0"))
+if (isNotEmpty(item->geneSymbol) && differentWord(item->geneSymbol,"0"))
     {
     hPrintf("<B>UCSC gene id:&nbsp;</B><A "
 	"HREF=\"../cgi-bin/hgGene?hgg_gene=%s\" TARGET=_blank>%s</A><BR>\n",
-	    item->alignID, item->alignID);
+	    item->geneSymbol, item->geneSymbol);
     geneAnnotation = TRUE;
     }
 hPrintf("<B>Classification group:&nbsp;</B>%s<BR>\n", item->class);
@@ -459,7 +459,7 @@ newItem->creationDate = cloneString("0");
 newItem->lastModifiedDate = cloneString("0");
 newItem->descriptionKey = cloneString(descriptionKey);
 newItem->id = 0;
-newItem->alignID = cloneString("0");
+newItem->geneSymbol = cloneString("0");
 
 wikiTrackSaveToDbEscaped(conn, newItem, WIKI_TRACK_TABLE, 1024);
 
