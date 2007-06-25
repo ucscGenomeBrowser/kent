@@ -15,7 +15,7 @@
 #include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.6 2007/06/25 16:39:23 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.7 2007/06/25 23:07:28 hiram Exp $";
 
 static char *hgGeneUrl()
 {
@@ -51,6 +51,99 @@ printf("The wiki also serves as a forum for users "
        "to share knowledge and ideas.\n</P>\n");
 freeMem(loginUrl);
 }
+
+static struct bed *bedItem(char *chr, int start, int end, char *name)
+{
+struct bed *bb;
+AllocVar(bb);
+bb->chrom = chr; /* do not need to clone chr string, it is already a clone */
+bb->chromStart = start;
+bb->chromEnd = end;
+bb->name = cloneString(name);
+return bb;
+}
+
+static struct bed *geneCluster(struct sqlConnection *conn, char *geneSymbol,
+	struct bed **returnBed)
+/* simple cluster of all knownGenes with name geneSymbol
+ *	any items overlapping are clustered together
+ */
+{
+struct sqlResult *sr;
+char **row;
+struct bed *bed;
+struct bed *bedList = NULL;
+struct bed *clustered = NULL;
+char query[1024];
+
+safef(query, ArraySize(query), "SELECT e.chrom,e.txStart,e.txEnd,e.alignID FROM knownGene e, kgXref j WHERE e.alignID = j.kgID AND j.geneSymbol ='%s' ORDER BY e.chrom,e.txStart", geneSymbol);
+
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    AllocVar(bed);
+    bed->chrom = cloneString(row[0]);
+    bed->chromStart = sqlUnsigned(row[1]);
+    bed->chromEnd = sqlUnsigned(row[2]);
+    bed->name = cloneString(row[3]);
+    slAddHead(&bedList, bed);
+    }
+sqlFreeResult(&sr);
+slSort(&bedList, bedCmpExtendedChr);
+
+hPrintf("raw bed list count: %d<BR>\n", slCount(bedList));
+
+/* now cluster that list */
+int start = BIGNUM;
+int end = 0;
+char *prevChr = NULL;
+for (bed = bedList; bed; bed = bed->next)
+    {
+    int txStart = bed->chromStart;
+    int txEnd = bed->chromEnd;
+    if (prevChr)
+	{
+	boolean notOverlap = TRUE;
+	if ((txEnd > start) && (txStart < end))
+	    notOverlap = FALSE;
+	if (notOverlap || differentWord(prevChr,bed->chrom))
+	    {
+	    struct bed *bb = bedItem(prevChr, start, end, geneSymbol);
+	    slAddHead(&clustered, bb);
+	    start = txStart;
+	    end = txEnd;
+	    prevChr = cloneString(bed->chrom);
+	    }
+	else
+	    {
+	    if (start > txStart)
+		start = txStart;
+	    if (end < txEnd)
+		end = txEnd;
+	    }
+	if (differentWord(prevChr,bed->chrom))
+	    {
+		freeMem(prevChr);
+		prevChr = cloneString(bed->chrom);
+	    }
+	}
+    else
+	{
+	start = txStart;
+	end = txEnd;
+	prevChr = cloneString(bed->chrom);
+	}
+    }
+struct bed *bb = bedItem(prevChr, start, end, geneSymbol);
+slAddHead(&clustered, bb);
+slSort(&clustered, bedCmpExtendedChr);
+if (returnBed)
+    *returnBed = bedList;
+else
+    bedFreeList(&bedList);
+hPrintf("custered bed list count: %d<BR>\n", slCount(clustered));
+return clustered;
+}	/*	static struct bed *geneCluster()	*/
 
 static struct wikiTrack *startNewItem(char *chrom, int itemStart,
 	int itemEnd, char *strand)
@@ -134,16 +227,24 @@ void doWikiTrack(struct sqlConnection *conn)
 char *userName = NULL;
 struct wikiTrack *item = findWikiItemByGeneSymbol(database, curGeneId);
 char title[1024];
+struct bed *bedList = NULL;
+struct bed *clusterList = geneCluster(conn, curGeneName, &bedList);
 
-safef(title,ArraySize(title), "UCSC gene annotations %s (%s)",
-	curGeneName, curGeneId);
+safef(title,ArraySize(title), "UCSC gene annotations %s", curGeneName);
 cartWebStart(cart, title);
+
+/* safety check */
+int locusLocationCount = slCount(clusterList);
+int rawListCount = slCount(bedList);
+if ((0 == rawListCount) || (0 == locusLocationCount))
+    errAbort("hgGene.doWikiTrack: can not find any genes called %s",
+	curGeneName);
 
 /* we already know the wiki track is enabled since we are here,
  *	now calling this just to see if user is logged into the wiki
  */
 if(!wikiTrackEnabled(&userName))
-    errAbort("wikiTrackPrint: called when wiki track is not enabled");
+    errAbort("hgGene.doWikiTrack: called when wiki track is not enabled");
 
 if (cartVarExists(cart, hggDoWikiAddComment))
     addComments(&item, userName);
@@ -206,5 +307,24 @@ else if (emailVerified())  /* prints message when not verified */
 
 createPageHelp("wikiTrackAddCommentHelp");
 
+hPrintf("<HR>\n");
+
+hPrintf("<B>There are %d locus locations for gene %s:</B><BR>\n",
+    locusLocationCount, curGeneName);
+struct bed *el;
+for (el = clusterList; el; el = el->next)
+    hPrintf("%s:%d-%d<BR>\n", el->chrom, el->chromStart, el->chromEnd);
+hPrintf("<B>From %d separate UCSC gene IDs:</B><BR>\n", rawListCount);
+for (el = bedList; el; el = el->next)
+    {
+    hPrintf("%s", el->name);
+    if (el->next)
+	hPrintf(", ");
+    }
+hPrintf("<BR>\n");
+
 cartWebEnd();
+
+bedFreeList(&bedList);
+bedFreeList(&clusterList);
 }
