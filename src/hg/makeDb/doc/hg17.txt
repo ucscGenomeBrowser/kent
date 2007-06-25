@@ -23820,3 +23820,16 @@ for f in /san/sanVol1/scratch/andy/transcriptome/transfrags/human_{long,short}_r
    tab=affyTxnPhase3Frags${newName%.bed};
    hgLoadBed hg17 $tab $newName;
 done
+
+#######################################################################
+# CLEANUP OF DANRER1 BLASTZ SWAP (DONE, 2007-06-25, hartera)
+   ssh kkstore02
+   cd /cluster/data/hg17/bed/blastz.danRer1.swap/axtChain
+   rm -r run1
+   cd ../mafNet.new
+   gzip *.maf
+   # we don't tend to keep the Blastz PSLs anymore and this is an old 
+   # zebrafish assembly so remove these.
+   cd ../
+   rm -r pslChrom
+   # this removed 1.2 G of data.
