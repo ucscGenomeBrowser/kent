@@ -755,6 +755,16 @@ xrefTable flyBase2004Xref
 xrefQuery select name,symbol from %s where symbol like '%%%s%%'
 searchPriority 1.3
 
+searchName flyBaseGeneSymbolOneLetter
+searchTable flyBaseGene
+searchMethod exact
+searchType genePred
+termRegex [A-Z]
+dontCheck [^[:space:]]+
+xrefTable flyBase2004Xref
+xrefQuery select name,symbol from %s where symbol like '%s'
+searchPriority 1.3
+
 searchTable flyBaseNoncoding
 searchMethod exact
 searchType bed
