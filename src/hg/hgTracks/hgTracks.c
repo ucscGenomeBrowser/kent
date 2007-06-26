@@ -118,7 +118,7 @@
 #endif
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1362 2007/06/23 02:37:22 braney Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1363 2007/06/26 00:17:59 hartera Exp $";
 
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
@@ -12063,7 +12063,8 @@ else if (sameWord(type, "expRatio"))
     {
     expRatioMethodsFromDotRa(track);
     }
-else if (sameWord(type, "bed5FloatScore"))
+else if (sameWord(type, "bed5FloatScore") || 
+         sameWord(type, "bedFloatScoreWithFdr"))
     {
     track->bedSize = 5;
     bedMethods(track);
