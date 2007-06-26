@@ -15,7 +15,7 @@
 #include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.7 2007/06/25 23:07:28 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.8 2007/06/26 23:01:56 hiram Exp $";
 
 static char *hgGeneUrl()
 {
@@ -76,6 +76,13 @@ struct bed *bedList = NULL;
 struct bed *clustered = NULL;
 char query[1024];
 
+if (! (sqlTableExists(conn, "knownGene") && sqlTableExists(conn, "kgXref")))
+    {
+    if (returnBed)
+	*returnBed = NULL;
+    return NULL;
+    }
+
 safef(query, ArraySize(query), "SELECT e.chrom,e.txStart,e.txEnd,e.alignID FROM knownGene e, kgXref j WHERE e.alignID = j.kgID AND j.geneSymbol ='%s' ORDER BY e.chrom,e.txStart", geneSymbol);
 
 sr = sqlGetResult(conn, query);
@@ -90,8 +97,6 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 slSort(&bedList, bedCmpExtendedChr);
-
-hPrintf("raw bed list count: %d<BR>\n", slCount(bedList));
 
 /* now cluster that list */
 int start = BIGNUM;
@@ -141,52 +146,47 @@ if (returnBed)
     *returnBed = bedList;
 else
     bedFreeList(&bedList);
-hPrintf("custered bed list count: %d<BR>\n", slCount(clustered));
 return clustered;
 }	/*	static struct bed *geneCluster()	*/
 
-static struct wikiTrack *startNewItem(char *chrom, int itemStart,
-	int itemEnd, char *strand)
-/* create the database item to get a new one started */
+static int addWikiTrackItem(char *db, char *chrom, int start, int end,
+    char *name, int score, char *strand, char *owner, char *class,
+	char *color, char *category, char *geneSymbol, char *wikiKey)
+/* create new wikiTrack row with given parameters */
 {
-char descriptionKey[256];
 struct sqlConnection *conn = hConnectCentral();
-char *userName = NULL;
-int score = 0;
 struct wikiTrack *newItem;
 
-if (! wikiTrackEnabled(&userName))
-    errAbort("create new wiki item: wiki track not enabled");
-if (NULL == userName)
-    errAbort("create new wiki item: user not logged in ?");
-
-safef(descriptionKey,ArraySize(descriptionKey),
-	"UCSCGeneAnnotation:%s-%d", database, 0);
-
 AllocVar(newItem);
-newItem->bin = binFromRange(itemStart, itemEnd);
+newItem->bin = binFromRange(start, end);
 newItem->chrom = cloneString(chrom);
-newItem->chromStart = itemStart;
-newItem->chromEnd = itemEnd;
-newItem->name = cloneString(curGeneName);
+newItem->chromStart = start;
+newItem->chromEnd = end;
+newItem->name = cloneString(name);
 newItem->score = score;
 safef(newItem->strand, sizeof(newItem->strand), "%s", strand);
-newItem->db = cloneString(database);
-newItem->owner = cloneString(userName);
-#define GENE_CLASS "Genes and Gene Prediction Tracks"
-newItem->class = cloneString(GENE_CLASS);
-newItem->color = cloneString("#000000");
+newItem->db = cloneString(db);
+newItem->owner = cloneString(owner);
+newItem->class = cloneString(class);
+newItem->color = cloneString(color);
 newItem->creationDate = cloneString("0");
 newItem->lastModifiedDate = cloneString("0");
-newItem->descriptionKey = cloneString(descriptionKey);
+newItem->descriptionKey = cloneString("0");
 newItem->id = 0;
-newItem->geneSymbol = cloneString(curGeneId);
+newItem->geneSymbol = cloneString(geneSymbol);
 
 wikiTrackSaveToDbEscaped(conn, newItem, WIKI_TRACK_TABLE, 1024);
 
 int id = sqlLastAutoId(conn);
-safef(descriptionKey,ArraySize(descriptionKey),
-	"UCSCGeneAnnotation:%s-%d", database, id);
+char descriptionKey[256];
+/* when wikiKey is NULL, assign the default key of category:db-id,
+ *	else, it is the proper key
+ */
+if (wikiKey)
+    safef(descriptionKey,ArraySize(descriptionKey), "%s", wikiKey);
+else
+    safef(descriptionKey,ArraySize(descriptionKey),
+	"%s:%s-%d", category, db, id);
 
 wikiTrackFree(&newItem);
 
@@ -196,18 +196,37 @@ safef(query, ArraySize(query), "UPDATE %s set creationDate=now(),lastModifiedDat
 
 sqlUpdate(conn,query);
 hDisconnectCentral(&conn);
+return (id);
+}
+
+static struct wikiTrack *startNewItem(char *chrom, int itemStart,
+	int itemEnd, char *name, char *strand)
+/* create the database item to get a new one started */
+{
+char *userName = NULL;
+int score = 0;
+int id = 0;
+
+if (! wikiTrackEnabled(&userName))
+    errAbort("create new wiki item: wiki track not enabled");
+if (NULL == userName)
+    errAbort("create new wiki item: user not logged in ?");
+
+id = addWikiTrackItem(database, chrom, itemStart, itemEnd, name,
+    score, strand, userName, GENE_CLASS, "#000000",
+	"UCSCGeneAnnotation", name, NULL);
 
 char wikiItemId[64];
 safef(wikiItemId,ArraySize(wikiItemId),"%d", id);
 struct wikiTrack *item = findWikiItemId(wikiItemId);
 
 hPrintf("created item: %s<BR>\n", item->name);
-addDescription(item, userName, curGeneChrom,
-    curGeneStart, curGeneEnd, cart, database);
+addDescription(item, userName, chrom, itemStart, itemEnd, cart, database);
 return(item);
 }
 
-static void addComments(struct wikiTrack **item, char *userName)
+static void addComments(struct wikiTrack **item, char *userName,
+    struct bed *clusterList)
 {
 if (*item)
     {
@@ -216,8 +235,15 @@ if (*item)
     }
 else
     {
-    *item = startNewItem(curGeneChrom, curGeneStart, curGeneEnd,
-	curGenePred->strand);
+    struct bed *el = clusterList;
+    *item = startNewItem(el->chrom, el->chromStart, el->chromEnd, el->name, "+");
+    el = el->next;
+    for ( ; el; el = el->next)
+	{
+	(void) addWikiTrackItem(database, el->chrom, el->chromStart,
+	    el->chromEnd, el->name, 0, "+", userName, GENE_CLASS, "#000000",
+	    "UCSCGeneAnnotation", el->name, (*item)->descriptionKey);
+	}
     }
 }
 
@@ -229,25 +255,33 @@ struct wikiTrack *item = findWikiItemByGeneSymbol(database, curGeneId);
 char title[1024];
 struct bed *bedList = NULL;
 struct bed *clusterList = geneCluster(conn, curGeneName, &bedList);
+boolean editOK = FALSE;
 
 safef(title,ArraySize(title), "UCSC gene annotations %s", curGeneName);
 cartWebStart(cart, title);
 
-/* safety check */
+/* safety check, both of these lists should be non-zero */
 int locusLocationCount = slCount(clusterList);
 int rawListCount = slCount(bedList);
 if ((0 == rawListCount) || (0 == locusLocationCount))
-    errAbort("hgGene.doWikiTrack: can not find any genes called %s",
-	curGeneName);
+    {
+    hPrintf("<EM>(Feature under development, not available for "
+	"all genome browsers yet)</EM><BR>\n");
+    hPrintf("hgGene.doWikiTrack: can not find any genes "
+	"called %s<BR>\n",curGeneName);
+    cartWebEnd();
+    }
 
 /* we already know the wiki track is enabled since we are here,
  *	now calling this just to see if user is logged into the wiki
  */
 if(!wikiTrackEnabled(&userName))
     errAbort("hgGene.doWikiTrack: called when wiki track is not enabled");
+if (isNotEmpty(userName) && emailVerified())
+    editOK = TRUE;
 
-if (cartVarExists(cart, hggDoWikiAddComment))
-    addComments(&item, userName);
+if (editOK && cartVarExists(cart, hggDoWikiAddComment))
+    addComments(&item, userName, clusterList);
 else
     cartRemove(cart, NEW_ITEM_COMMENT);
 
@@ -308,9 +342,10 @@ else if (emailVerified())  /* prints message when not verified */
 createPageHelp("wikiTrackAddCommentHelp");
 
 hPrintf("<HR>\n");
+char *editors = cfgOptionDefault("wikiTrack.editors", NULL);
 
-hPrintf("<B>There are %d locus locations for gene %s:</B><BR>\n",
-    locusLocationCount, curGeneName);
+hPrintf("<B>There are %d locus locations for gene %s: (%s)</B><BR>\n",
+    locusLocationCount, curGeneName, editors);
 struct bed *el;
 for (el = clusterList; el; el = el->next)
     hPrintf("%s:%d-%d<BR>\n", el->chrom, el->chromStart, el->chromEnd);
