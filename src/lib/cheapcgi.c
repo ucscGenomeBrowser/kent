@@ -12,7 +12,7 @@
 #include "errabort.h"
 #include "mime.h"
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.90 2007/06/13 19:37:34 kuhn Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.91 2007/06/26 19:38:14 angie Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -332,7 +332,7 @@ char *findCookieData(char *varName)
 /* Get the string associated with varName from the cookie string. */
 {
 struct hashEl *hel;
-struct cgiVar *var;
+char *firstResult;
 
 /* make sure that the cookie hash table has been created */
 parseCookies(&cookieHash, &cookieList);
@@ -344,22 +344,23 @@ hel = hashLookup(cookieHash, varName);
 if (hel == NULL)
     return NULL;
 else
-    var = (struct cgiVar *)hel->val;
-while (hel->next != NULL)
+    firstResult = ((struct cgiVar *)hel->val)->val;
+hel = hel->next;
+while (hel != NULL)
     {
-    char *nextVal = ((struct cgiVar *)(hel->next->val))->val;
-    if (!sameString(var->val, nextVal))
+    char *val = ((struct cgiVar *)(hel->val))->val;
+    if (sameString(varName, hel->name) && !sameString(firstResult, val))
 	{
 	/* This is too early to call warn -- it will mess up html output. */
 	fprintf(stderr,
 		"findCookieData: Duplicate cookie value from IP=%s: "
 		"%s has both %s and %s\n",
 		cgiRemoteAddr(),
-		varName, var->val, nextVal);
+		varName, firstResult, val);
 	}
     hel = hel->next;
     }
-return var->val;
+return firstResult;
 }
 
 static char *cgiInputSource(char *s)
