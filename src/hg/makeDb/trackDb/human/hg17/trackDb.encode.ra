@@ -2364,8 +2364,6 @@ chromosomes chr1,chr10,chr11,chr13,chr14,chr15,chr16,chr19,chr2,chr20,chr21,chr2
 dataVersion ENCODE Oct 2005 Freeze
 type bed5FloatScore
 useScore 1
-url http://dart.gersteinlab.org/cgi-bin/ar/lookup.cgi?acc=$$
-urlLabel Yale DART Link:
 
     track encodeYaleChipSitesBaf155
     release beta
@@ -2373,6 +2371,8 @@ urlLabel Yale DART Link:
     shortLabel Yale BAF155
     longLabel Yale ChIP-chip (BAF155 ab, HeLa cells) Sites 
     color 50,50,200
+    url http://dart.gersteinlab.org/cgi-bin/ar/lookup.cgi?acc=$$
+    urlLabel Yale DART Link:
     priority 1
 
     track encodeYaleChipSitesBaf170
@@ -2381,6 +2381,8 @@ urlLabel Yale DART Link:
     shortLabel Yale BAF170
     longLabel Yale ChIP-chip (BAF170 ab, HeLa cells) Sites 
     color 200,50,50
+    url http://dart.gersteinlab.org/cgi-bin/ar/lookup.cgi?acc=$$
+    urlLabel Yale DART Link:
     priority 2
 
     track encodeYaleChipSitesFos
@@ -2389,6 +2391,8 @@ urlLabel Yale DART Link:
     shortLabel Yale c-Fos
     longLabel Yale ChIP-chip (c-Fos ab, HeLa cells) Sites
     color 112,63,175
+    url http://dart.gersteinlab.org/cgi-bin/ar/lookup.cgi?acc=$$
+    urlLabel Yale DART Link:
     priority 3
 
     track encodeYaleChipSitesJun
@@ -2397,6 +2401,8 @@ urlLabel Yale DART Link:
     shortLabel Yale c-Jun
     longLabel Yale ChIP-chip (c-Jun ab, HeLa cells) Sites 
     color 200,50,50
+    url http://dart.gersteinlab.org/cgi-bin/ar/lookup.cgi?acc=$$
+    urlLabel Yale DART Link:
     priority 4
 
     track encodeYaleChipSitesTaf
@@ -2405,6 +2411,8 @@ urlLabel Yale DART Link:
     shortLabel Yale TAF1
     longLabel Yale ChIP-chip (TAF1 ab, HeLa cells) Sites
     color 50,50,200
+    url http://dart.gersteinlab.org/cgi-bin/ar/lookup.cgi?acc=$$
+    urlLabel Yale DART Link:
     priority 5
 
 track encodeYaleChipRfbr
