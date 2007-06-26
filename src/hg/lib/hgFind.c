@@ -31,7 +31,7 @@
 #include "hgConfig.h"
 #include "trix.h"
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.198 2007/04/30 22:38:47 angie Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.199 2007/06/26 05:56:09 angie Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -2795,7 +2795,10 @@ boolean found = FALSE;
 if (hfs == NULL || term == NULL || hgp == NULL)
     errAbort("NULL passed to hgFindUsingSpec.\n");
 
-if (strlen(term)<2 && !sameString(hfs->searchName, "knownGene")) return FALSE;
+if (strlen(term)<2 && !
+    (sameString(hfs->searchName, "knownGene") ||
+     sameString(hfs->searchName, "flyBaseGeneSymbolOneLetter")))
+    return FALSE;
 
 if (isNotEmpty(hfs->termRegex) && ! matchRegex(term, hfs->termRegex))
     return(FALSE);
