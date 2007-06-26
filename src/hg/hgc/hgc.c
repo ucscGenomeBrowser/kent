@@ -208,7 +208,7 @@
 #include "omicia.h"
 #include "atomDb.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1304 2007/06/23 02:36:56 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1305 2007/06/26 00:16:44 hartera Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -3095,6 +3095,11 @@ while ((row = sqlNextRow(sr)) != NULL)
     b5 = bed5FloatScoreLoad(row+hasBin);
     bedPrintPos((struct bed *)b5, 4);
     printf("<B>Score:</B> %f<BR>\n", b5->floatScore);
+    if (sameString(tdb->type, "bed5FloatScoreWithFdr"))
+        {
+        if (row[7] != NULL)
+           printf("<B>False Discovery Rate (FDR):</B> %s%%<BR>\n", row[7]);
+        }
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
@@ -3233,7 +3238,8 @@ if (wordCount > 0)
         {
 	genericWiggleClick(conn, tdb, item, start);
         }
-    else if (sameString(type, "bed5FloatScore"))
+    else if (sameString(type, "bed5FloatScore") || 
+             sameString(type, "bed5FloatScoreWithFdr"))
 	{
 	doBed5FloatScore(tdb, item);
 	}
