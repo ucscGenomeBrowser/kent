@@ -16,7 +16,7 @@
 #include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.30 2007/06/25 23:53:35 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.31 2007/06/26 23:00:55 hiram Exp $";
 
 #define ITEM_SCORE_DEFAULT "1000"
 #define ADD_ITEM_COMMENT_DEFAULT "add comments"
@@ -92,6 +92,36 @@ cgiContinueHiddenVar("r");
 hPrintf("\n");
 }
 
+static struct bed *multipleItems(struct wikiTrack *item)
+{
+struct sqlResult *sr;
+char **row;
+struct sqlConnection *conn = hConnectCentral();
+char query[1024];
+struct bed *bedList = NULL;
+
+safef(query, ArraySize(query), "SELECT chrom,chromStart,chromEnd,id FROM %s "
+    "WHERE descriptionKey='%s' ORDER BY chrom,chromStart;",
+	WIKI_TRACK_TABLE, item->descriptionKey);
+sr = sqlGetResult(conn, query);
+while ( (row = sqlNextRow(sr)) != NULL)
+    {
+    int elId = sqlUnsigned(row[3]);
+    if (elId == item->id)
+	continue;
+    struct bed *bed;
+    AllocVar(bed);
+    bed->chrom = cloneString(row[0]);
+    bed->chromStart = sqlUnsigned(row[1]);
+    bed->chromEnd = sqlUnsigned(row[2]);
+    slAddHead(&bedList,bed);
+    }
+sqlFreeResult(&sr);
+slSort(&bedList, bedCmpExtendedChr);
+hDisconnectCentral(&conn);
+return bedList;
+}
+
 static void displayItem(struct wikiTrack *item, char *userName)
 /* given an already fetched item, get the item description from
  *	the wiki.  Put up edit form(s) if userName is not NULL
@@ -147,7 +177,7 @@ if ((NULL != userName) &&
     hPrintf("\n");
     webPrintLinkTableStart();
     webPrintLinkCellStart();
-    if (editor && (differentWord(userName, item->owner)))
+    if (editor && (differentWord(userName, item->owner) || geneAnnotation))
 	hPrintf("Editor '%s' has deletion rights&nbsp;&nbsp;", editor);
     else
 	hPrintf("Owner '%s' has deletion rights&nbsp;&nbsp;", item->owner);
@@ -215,6 +245,15 @@ else if (emailVerified()) /* prints message when not verified */
     hPrintf("wiki article <A HREF=\"%s/index.php/%s\" TARGET=_blank>%s</A> "
        "for this item's description", url, item->descriptionKey,
 	    item->descriptionKey);
+    struct bed *itemList = multipleItems(item);
+    if (slCount(itemList) > 1)
+	{
+	hPrintf("This gene symbol is also found in the following "
+	    "locations:<BR>\n");
+	struct bed *el;
+	for (el = itemList; el; el = el->next)
+	    hPrintf("%s:%d-%d<BR>\n", el->chrom, el->chromStart, el->chromEnd);
+	}
     createPageHelp("wikiTrackAddCommentHelp");
     }
 }	/*	displayItem()	*/
