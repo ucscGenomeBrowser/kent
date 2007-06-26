@@ -208,7 +208,7 @@
 #include "omicia.h"
 #include "atomDb.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1305 2007/06/26 00:16:44 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1306 2007/06/26 18:29:19 braney Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -1013,6 +1013,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 printf("</A>");
 sqlFreeResult(&sr);
+printf("<IMG src=http://hgwdev.cse.ucsc.edu/~bsuh/gif/%s.gif><BR>",item);
 
 
 char buffer[4096];
