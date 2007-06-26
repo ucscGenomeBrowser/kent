@@ -14,7 +14,7 @@
 #include "chainDb.h"
 #include "chainCart.h"
 
-static char const rcsid[] = "$Id: chainTrack.c,v 1.27 2006/02/23 01:41:31 baertsch Exp $";
+static char const rcsid[] = "$Id: chainTrack.c,v 1.28 2007/06/26 23:10:11 angie Exp $";
 
 
 struct cartOptions
@@ -169,12 +169,10 @@ if (hash->size)
 		slSort(&lf->components, linkedFeaturesCmpStart);
 	    extra = (STARTSLOP < maxOverRight)?STARTSLOP:maxOverRight;
 	    end = seqEnd + extra;
-	    lastSf = NULL;
+	    for (lastSf=sf=lf->components;  sf;  lastSf=sf, sf=sf->next)
+		;
 	    while (lf->end > end )
 		{
-		for(lastSf=sf=lf->components;sf;lastSf=sf,sf=sf->next)
-		    ;
-
 		/* get out if we have an element off right side */
 		if (( (lastSf != NULL) &&(lastSf->end > seqEnd)) || (extra > MAXLOOK))
 		    break;
@@ -185,6 +183,8 @@ if (hash->size)
                 doQuery(conn, fullName, lm,  hash, start, end, lf->extra, isSplit);
 		if (lf->components != NULL)
 		    slSort(&lf->components, linkedFeaturesCmpStart);
+		for (sf=lastSf;  sf != NULL;  lastSf=sf, sf=sf->next)
+		    ;
 		}
 
 	    /* if we didn't find an element off to the right , add one */
