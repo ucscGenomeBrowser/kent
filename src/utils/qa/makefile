@@ -49,6 +49,7 @@ install:
 	cp -p --remove-destination getField.csh            ${SCRIPTS}
 	cp -p --remove-destination getGbdbBeta.csh         ${SCRIPTS}
 	cp -p --remove-destination getJoinerKeyErrors.pl   ${SCRIPTS}
+	cp -p --remove-destination getOrderKey.csh         ${SCRIPTS}
 	cp -p --remove-destination getRRdatabases.csh      ${SCRIPTS}
 	cp -p --remove-destination getRRdumpfile.csh       ${SCRIPTS}
 	cp -p --remove-destination getRRtableStatus.csh    ${SCRIPTS}
