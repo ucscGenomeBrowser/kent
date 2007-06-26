@@ -139,6 +139,7 @@ void wikiTrackOutput(struct wikiTrack *el, FILE *f, char sep, char lastSep);
 	"You must confirm your e-mail address before editing"
 #define USER_PREFERENCES_MESSAGE \
     "Please set and validate your e-mail address through your"
+#define GENE_CLASS "Genes and Gene Prediction Tracks"
 
 boolean wikiTrackEnabled(char **wikiUserName);
 /*determine if wikiTrack can be used, and is this user logged into the wiki ?*/
