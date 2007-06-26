@@ -261,8 +261,6 @@ chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr2
 visibility hide
 type bed 4 .
 dataVersion ENCODE Oct 2005 Freeze
-url http://dart.gersteinlab.org/cgi-bin/ar/lookup.cgi?acc=$$
-urlLabel Yale DART Link:
 
     track encodeYaleAffyNeutRNATars
     subTrack encodeYaleAffyRNATars
@@ -271,6 +269,8 @@ urlLabel Yale DART Link:
     priority 1
     color 50,100,50
     subGroups celltype=neutro
+    url http://dart.gersteinlab.org/cgi-bin/ar/lookup.cgi?acc=$$
+    urlLabel Yale DART Link:
 
     track encodeYaleAffyPlacRNATars
     subTrack encodeYaleAffyRNATars
@@ -279,6 +279,8 @@ urlLabel Yale DART Link:
     priority 12
     color 50,50,150
     subGroups celltype=plac
+    url http://dart.gersteinlab.org/cgi-bin/ar/lookup.cgi?acc=$$
+    urlLabel Yale DART Link:
 
     track encodeYaleAffyNB4RARNATars
     subTrack encodeYaleAffyRNATars
@@ -287,6 +289,8 @@ urlLabel Yale DART Link:
     priority 13
     color 150,50,50
     subGroups celltype=nb4
+    url http://dart.gersteinlab.org/cgi-bin/ar/lookup.cgi?acc=$$
+    urlLabel Yale DART Link:
 
     track encodeYaleAffyNB4TPARNATars
     subTrack encodeYaleAffyRNATars
@@ -295,6 +299,8 @@ urlLabel Yale DART Link:
     priority 14
     color 120,50,50
     subGroups celltype=nb4
+    url http://dart.gersteinlab.org/cgi-bin/ar/lookup.cgi?acc=$$
+    urlLabel Yale DART Link:
 
     track encodeYaleAffyNB4UntrRNATars
     subTrack encodeYaleAffyRNATars
@@ -303,6 +309,8 @@ urlLabel Yale DART Link:
     priority 15
     color 90,50,50
     subGroups celltype=nb4
+    url http://dart.gersteinlab.org/cgi-bin/ar/lookup.cgi?acc=$$
+    urlLabel Yale DART Link:
 
     track encodeYaleAffyHELAS3PolyARNATarsRelaxed
     subTrack encodeYaleAffyRNATars
