@@ -19,7 +19,7 @@
 #include "bedCart.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.49 2007/05/22 23:03:30 galt Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.50 2007/06/26 22:04:33 angie Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -1108,6 +1108,12 @@ for (tokPtr = tokList;  tokPtr != NULL;  tokPtr = tokPtr->next)
 	    *ptr = '%';
 	    dyStringPrintf(clause, "%s", tokPtr->string);
 	    }
+	}
+    else if (tokPtr->type == kxtPunct &&
+	     sameString(",", tokPtr->string))
+	{
+	/* Don't take just any old punct, but allow comma for in-lists. */
+	dyStringAppend(clause, tokPtr->string);
 	}
     else if (tokPtr->type == kxtEnd)
 	{
