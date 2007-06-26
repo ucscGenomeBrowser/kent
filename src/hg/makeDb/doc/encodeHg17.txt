@@ -2026,6 +2026,23 @@ done
         /gbdb/hg17/wib/encodeYaleAffyHELAS3TotalRNATranscriptMap.wib 
 
 
+rm -f encodeYaleAffyHELAS3PolyARNATarsRelaxed.bed
+rm -f encodeYaleAffyHELAS3PolyARNATarsStringent.bed
+rm -f encodeYaleAffyHELAS3TotalRNATarsRelaxed.bed
+rm -f encodeYaleAffyHELAS3TotalRNATarsStringent.bed
+awk '{printf "%s\t%s\t%s\tsite_%d\n", $1,$2,$3,NR}' \
+lab/joel_affy/encode_Yale_Affy_HELAS3_PolyA_RNA_Tars_Relaxed_ncbi35.bed \
+> encodeYaleAffyHELAS3PolyARNATarsRelaxed.bed
+awk '{printf "%s\t%s\t%s\tsite_%d\n", $1,$2,$3,NR}' \
+lab/joel_affy/encode_Yale_Affy_HELAS3_PolyA_RNA_Tars_Stringent_ncbi35.bed \
+> encodeYaleAffyHELAS3PolyARNATarsStringent.bed
+awk '{printf "%s\t%s\t%s\tsite_%d\n", $1,$2,$3,NR}' \
+lab/joel_affy/encode_Yale_Affy_HELAS3_Total_RNA_Tars_Relaxed_ncbi35.bed \
+> encodeYaleAffyHELAS3TotalRNATarsRelaxed.bed
+awk '{printf "%s\t%s\t%s\tsite_%d\n", $1,$2,$3,NR}' \
+lab/joel_affy/encode_Yale_Affy_HELAS3_Total_RNA_Tars_Stringent_ncbi35.bed \
+> encodeYaleAffyHELAS3TotalRNATarsStringent.bed
+
     for F in encodeYaleAffyHELAS3PolyARNATarsRelaxed \
 	encodeYaleAffyHELAS3PolyARNATarsStringent \
 	encodeYaleAffyHELAS3TotalRNATarsRelaxed \
