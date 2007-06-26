@@ -110,6 +110,7 @@ void wikiTrackOutput(struct wikiTrack *el, FILE *f, char sep, char lastSep);
 /* configuration variables */
 #define CFG_WIKI_URL "wikiTrack.URL"
 #define CFG_WIKI_BROWSER "wikiTrack.browser"
+#define CFG_WIKI_EDITORS "wikiTrack.editors"
 
 /* name of database table in hgcentral */
 #define WIKI_TRACK_TABLE "wikiTrack"
