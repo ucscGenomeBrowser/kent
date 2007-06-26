@@ -30,7 +30,7 @@
 
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.377 2007/06/22 01:07:08 hartera Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.378 2007/06/26 00:19:08 hartera Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2644,7 +2644,7 @@ else if (tdb->type != NULL)
 		scoreUi(tdb, 1000);
 	    }
         else if (sameWord(words[0], "bed5FloatScore") || 
-                sameWord(words[0], "bed6FloatScoreWithFdr"))
+                sameWord(words[0], "bed5FloatScoreWithFdr"))
             scoreUi(tdb, 1000);
 	else if (sameWord(words[0], "psl"))
 	    {
