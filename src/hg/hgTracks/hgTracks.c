@@ -118,7 +118,7 @@
 #endif
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1363 2007/06/26 00:17:59 hartera Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1364 2007/06/26 06:02:16 kate Exp $";
 
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
@@ -13468,6 +13468,54 @@ if (track->labelNextPrevItem != NULL)
     track->labelNextPrevItem(track, sameString(whichWay, "nextItem"));
 }
 
+void hNbSpaces(int count)
+/* Print a number of non-breaking spaces.
+   Consider moving this to lib/hPrint.c */
+{
+if (!suppressHtml)
+    htmlNbSpaces(count);
+}
+
+char *collapseGroupVar(char *name)
+/* Construct cart variable name for collapsing group */
+{
+static char varName[128];
+safef(varName, sizeof(varName), 
+        "%s%s_%s_%s", "hgt", "group", name, "close");
+return (cloneString(varName));
+}
+
+boolean isCollapsedGroup(char *name)
+/* Determine if group is collapsed */
+{
+return cartUsualInt(cart, collapseGroupVar(name), 0);
+}
+
+void collapseGroupGoodies(boolean isOpen, boolean wantSmallImage,
+                                char **img, char **indicator, char **otherState)
+/* Get image, char representation of image, and 'otherState' (1 or 0)
+ * for a group, based on whether it is collapsed, and whether we want
+ * larger or smaller image for collapse box */
+{
+if (otherState)
+    *otherState = (isOpen ? "1" : "0");
+if (indicator)
+    *indicator = (isOpen ? "-" : "+");
+if (img)
+    {
+    if (wantSmallImage)
+        *img = (isOpen ? "../images/remove_sm.gif" : "../images/add_sm.gif");
+    else
+        *img = (isOpen ? "../images/remove.gif" : "../images/add.gif");
+    }
+}
+
+void collapseGroup(char *name, boolean doCollapse)
+/* Set cart variable to cause group to collapse */
+{
+cartSetBoolean(cart, collapseGroupVar(name), doCollapse);
+}
+
 void doTrackForm(char *psOutput)
 /* Make the tracks display form with the zoom/scroll
  * buttons and the active image. */
@@ -13728,30 +13776,26 @@ if (showTrackControls)
     cg = startControlGrid(MAX_CONTROL_COLUMNS, "left");
     for (group = groupList; group != NULL; group = group->next)
         {
-	struct trackRef *tr;
-
 	if (group->trackList == NULL)
 	    continue;
 
+	struct trackRef *tr;
+
         /* check if group section should be displayed */
-        static char closeVarName[128];
-        safef(closeVarName, sizeof(closeVarName), 
-                "%s%s_%s_%s", "hgt", "group", group->name, "close");
-        boolean isOpen = !(cartUsualInt(cart, closeVarName, 0));
-        char *otherState = (isOpen ? "1" : "0");
-        char *indicator = (isOpen ? "-" : "+");
-        char *indicatorImg =
-                (isOpen ? "../images/remove.gif" : "../images/add.gif");
-	
+        char *otherState;
+        char *indicator;
+        char *indicatorImg;
+        boolean isOpen = !isCollapsedGroup(group->name);
+        collapseGroupGoodies(isOpen, TRUE, &indicatorImg, 
+                                &indicator, &otherState);
 	hPrintf("<TR>");
 	cg->rowOpen = TRUE;
         hPrintf("<th align=\"left\" colspan=%d BGCOLOR=#536ED3>", MAX_CONTROL_COLUMNS);
         hPrintf("<A HREF=\"%s?%s&%s=%s#%s\" class=\"bigBlue\"><IMG src=\"%s\" alt=\"%s\" class=\"bigBlue\"></A>&nbsp;&nbsp;",
-            hgTracksName(), cartSidUrlString(cart), closeVarName, 
+            hgTracksName(), cartSidUrlString(cart), 
+            collapseGroupVar(group->name),
             otherState, group->name, indicatorImg, indicator);
-        if (!startsWith("ENCODE", group->label))
-            htmlNbSpaces((CONTROL_TABLE_WIDTH/6 - strlen(group->label))/2);
-
+        hNbSpaces(((1.7 * (77 - strlen(group->label)))-1)/2 );
 	hPrintf("<B>%s</B>", wrapWhiteFont(group->label));
 	hPrintf("\n<A NAME=\"#%s\"></A>\n",group->name);
 	hPrintf("</th>\n");
@@ -14447,6 +14491,40 @@ else if (cartVarExists(cart, configDefaultAll))
     {
     cartRemove(cart, configDefaultAll);
     configPageSetTrackVis(-1);
+    }
+else if (cartVarExists(cart, configHideAllGroups))
+    {
+    cartRemove(cart, configHideAllGroups);
+    struct grp *grp = NULL, *grps = hLoadGrps();
+    for (grp = grps; grp != NULL; grp = grp->next)
+        collapseGroup(grp->name, TRUE);
+    configPageSetTrackVis(-2);
+    }
+else if (cartVarExists(cart, configShowAllGroups))
+    {
+    cartRemove(cart, configShowAllGroups);
+    struct grp *grp = NULL, *grps = hLoadGrps();
+    for (grp = grps; grp != NULL; grp = grp->next)
+        collapseGroup(grp->name, FALSE);
+    configPageSetTrackVis(-2);
+    }
+else if (cartVarExists(cart, configHideEncodeGroups))
+    {
+    cartRemove(cart, configHideEncodeGroups);
+    struct grp *grp = NULL, *grps = hLoadGrps();
+    for (grp = grps; grp != NULL; grp = grp->next)
+        if (startsWith("encode", grp->name))
+            collapseGroup(grp->name, TRUE);
+    configPageSetTrackVis(-2);
+    }
+else if (cartVarExists(cart, configShowEncodeGroups))
+    {
+    cartRemove(cart, configShowEncodeGroups);
+    struct grp *grp = NULL, *grps = hLoadGrps();
+    for (grp = grps; grp != NULL; grp = grp->next)
+        if (startsWith("encode", grp->name))
+            collapseGroup(grp->name, FALSE);
+    configPageSetTrackVis(-2);
     }
 else
     {

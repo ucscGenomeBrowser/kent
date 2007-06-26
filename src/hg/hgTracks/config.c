@@ -79,14 +79,25 @@ if (changeVis != -2)
 cgiMakeHiddenVar(configGroupTarget, "none");
 for (group = groupList; group != NULL; group = group->next)
     {
-    struct trackRef *tr;
-
     if (group->trackList == NULL)
 	continue;
 
+    struct trackRef *tr;
+
+    /* check if track group should be displayed */
+    char *otherState;
+    char *indicator;
+    char *indicatorImg;
+    boolean isOpen = !isCollapsedGroup(group->name);
+    collapseGroupGoodies(isOpen, FALSE, &indicatorImg, &indicator, &otherState);
+
     hTableStart();
     hPrintf("<TR>");
-    hPrintf("<TH align=LEFT colspan=3 BGCOLOR=#536ED3>");
+    hPrintf("<TH align=\"left\" colspan=3 BGCOLOR=#536ED3>");
+    hPrintf("<A HREF=\"%s?%s&%s=%s#%s\" class=\"bigBlue\"><IMG src=\"%s\" alt=\"%s\" class=\"bigBlue\"></A>&nbsp;&nbsp;",
+             hgTracksName(), cartSidUrlString(cart), 
+             collapseGroupVar(group->name),
+             otherState, group->name, indicatorImg, indicator);
     hPrintf("<B>&nbsp;%s</B> ", wrapWhiteFont(group->label));
     hPrintf("&nbsp;&nbsp;&nbsp;");
     hPrintf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\" "
@@ -157,6 +168,8 @@ for (group = groupList; group != NULL; group = group->next)
     /* Loop through this group. */
     for (tr = group->trackList; tr != NULL; tr = tr->next)
 	{
+        if (!isOpen)
+            continue;
 	struct track *track = tr->track;
 	hPrintf("<TR>");
 	hPrintf("<TD>");
@@ -310,14 +323,27 @@ hPrintf("</TD></TR>\n");
 hTableEnd();
 
 webNewSection("Configure Tracks");
-hPrintf("Control tracks in all groups here: ");
+hPrintf("\n<TABLE BORDER=0>\n");
+hPrintf("<TD>Show track group controls:</TD><TD>");
+cgiMakeButton(configHideAllGroups, "collapse all");
+hPrintf("</TD><TD>");
+cgiMakeButton(configShowAllGroups, "expand all");
+hPrintf("</TD><TD>");
+cgiMakeButton(configHideEncodeGroups, "collapse ENCODE");
+hPrintf("</TD><TD>");
+cgiMakeButton(configShowEncodeGroups, "expand ENCODE");
+hPrintf("</TD><TD>");
+hPrintf("</TR>\n<TR>");
+hPrintf("<TD>Control tracks in all groups:</TD><TD>");
 cgiMakeButton(configHideAll, "hide all");
-hPrintf(" ");
+hPrintf("</TD><TD>");
 cgiMakeButton(configShowAll, "show all");
-hPrintf(" ");
+hPrintf("</TD><TD>");
 cgiMakeButton(configDefaultAll, "default");
-hPrintf(" ");
-hPrintf("&nbsp;&nbsp;Control track visibility more selectively below.<P>");
+hPrintf("</TD><TD></TR>\n");
+hPrintf("<TR>");
+hPrintf("<TD COLSPAN=10>Control track and group visibility more selectively below.</TD>");
+hPrintf("</TR>\n</TABLE>\n");
 trackConfig(trackList, groupList, groupTarget, vis);
 
 dyStringFree(&title);

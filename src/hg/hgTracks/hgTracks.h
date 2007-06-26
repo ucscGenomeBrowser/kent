@@ -892,6 +892,10 @@ void setRulerMode();
 #define configHideAll "hgt_doConfigHideAll"
 #define configShowAll "hgt_doConfigShowAll"
 #define configDefaultAll "hgt_doDefaultShowAll"
+#define configHideAllGroups "hgt_doConfigHideAllGroups"
+#define configShowAllGroups "hgt_doConfigShowAllGroups"
+#define configHideEncodeGroups "hgt_doConfigHideEncodeGroups"
+#define configShowEncodeGroups "hgt_doConfigShowEncodeGroups"
 #define configGroupTarget "hgt_configGroupTarget"
 #define configPriorityOverride "hgt_priorityOverride"
 
@@ -948,6 +952,18 @@ struct bed *wikiTrackGetBedRange(char *mapName, char *chromName,
 
 void bed8To12(struct bed *bed);
 /* Turn a bed 8 into a bed 12 by defining one block. */
+
+char *collapseGroupVar(char *name);
+/* Construct cart variable name for collapsing group */
+
+boolean isCollapsedGroup(char *name);
+/* Determine if group is collapsed */
+
+void collapseGroupGoodies(boolean isOpen, boolean wantSmallImage,
+                            char **img, char **indicator, char **otherState);
+/* Get image, char representation of image, and 'otherState' (1 or 0)
+ * for a group, based on whether it is collapsed, and whether we want
+ * larger or smaller image for collapse box */
 
 #endif /* HGTRACKS_H */
 
