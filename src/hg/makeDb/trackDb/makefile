@@ -109,7 +109,7 @@ BACT_DBS = \
 	vibrPara1 vibrVuln_CMCP6_1 vibrVuln_YJ016_1
 
 GSID_DBS = \
-	hiv1
+	hiv1 vax004
 
 ARCHIVED_DBS = \
 	rheMac1 \
