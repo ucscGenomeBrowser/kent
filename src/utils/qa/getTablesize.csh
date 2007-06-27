@@ -141,7 +141,6 @@ foreach table (`echo $tables`)
   if ( $len > $length ) then
     set length=$len
     set longtable=$table
-  else
   endif
 end
 set length=`echo $length | awk '{print $1+1}'`
