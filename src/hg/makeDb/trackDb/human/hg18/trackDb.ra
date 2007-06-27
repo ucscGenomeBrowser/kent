@@ -394,7 +394,20 @@ searchType genePred
 termRegex g[0-9]+\.t[0-9]+
 searchPriority 50
 
+track nscanGene
+release beta
+shortLabel N-SCAN
+longLabel N-SCAN Gene Predictions
+group genes
+priority 45.1
+visibility hide
+color 34,139,34
+type genePred nscanPep
+baseColorUseCds given
+baseColorDefault genomicCodons
+
 track nscan
+release alpha
 compositeTrack on
 shortLabel N-SCAN
 longLabel N-SCAN Gene Predictions
