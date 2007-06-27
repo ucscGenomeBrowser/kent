@@ -419,6 +419,7 @@ baseColorUseCds given
 baseColorDefault genomicCodons
 
     track nscanPasaGene
+    release alpha
     subTrack nscan
     shortLabel N-SCAN PASA-EST
     longLabel N-SCAN PASA-EST Gene Predictions
@@ -426,6 +427,7 @@ baseColorDefault genomicCodons
     priority 1
 
     track nscanGene
+    release alpha
     subTrack nscan
     shortLabel N-SCAN
     longLabel N-SCAN Gene Predictions
