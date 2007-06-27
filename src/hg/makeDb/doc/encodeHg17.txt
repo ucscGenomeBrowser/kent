@@ -1897,9 +1897,15 @@ cat > load.csh << 'EOF'
 	  checkTableCoords hg17 encodeUCDavisPolII_GM
 	  checkTableCoords hg17 encodeUCDavisPolII_HelaS3
 	  checkTableCoords hg17 encodeUCDavisTaf_GM
-	  checkTableCoords hg17 encodeUCDavisTaf_HelaS3 
+	  checkTableCoords hg17 encodeUCDavisTaf_HelaS3
 
 # Note: currently these 4 tables are subtracks under encodeUCDavisChip
+
+# Change table names since we don't want "_" there. --ting, 062707
+    hgsql hg17 -e "ALTER TABLE encodeUCDavisPolII_GM RENAME TO encodeUCDavisPolIIGM;"
+    hgsql hg17 -e "ALTER TABLE encodeUCDavisPolII_HelaS3 RENAME TO encodeUCDavisPolIIHelaS3;"
+    hgsql hg17 -e "ALTER TABLE encodeUCDavisTaf_GM RENAME TO encodeUCDavisTafGM;"
+    hgsql hg17 -e "ALTER TABLE encodeUCDavisTaf_HelaS3 RENAME TO encodeUCDavisTafHelaS3;"
 
 
 ##########################################################################
