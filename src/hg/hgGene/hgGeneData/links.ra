@@ -141,7 +141,6 @@ name wikiTrack
 shortLabel User annotations
 tables kgXref
 idSql select kgID from kgXref where kgID = '%s'
-url ../cgi-bin/hgGene?hgg_gene=%s&hgg_do_wikiTrack=1
-hgsid on
+url ../cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=none&hgg_do_wikiTrack=1
 dbInUrl on
 priority 10
