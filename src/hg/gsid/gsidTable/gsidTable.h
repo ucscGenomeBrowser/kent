@@ -106,6 +106,7 @@ extern struct hash *columnHash;		  /* Hash of active columns keyed by name. */
         /* Advanced filter submit list. */
 
 #define gsidSubjList "gsidTable.gsidSubjList"
+#define gsidSeqList "gsidTable.gsidSeqList"
 
 #define keyWordUploadPrefix "gsidTable.do.keyUp." /* Prefix for keyword uploads. */
 #define keyWordPastePrefix "gsidTable.do.keyPaste." /* Prefix for keyword paste-ins. */
