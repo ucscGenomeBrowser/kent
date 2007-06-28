@@ -51,8 +51,6 @@ if ( $#argv == 3 ) then
   endif
 endif
 
-echo here4
-
 # get list of active files from beta
 # and strip off the pathnames from list leaving only filenames
 
