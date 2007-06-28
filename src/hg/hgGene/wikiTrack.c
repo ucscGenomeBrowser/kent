@@ -15,7 +15,7 @@
 #include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.9 2007/06/28 16:46:56 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.10 2007/06/28 19:34:35 hiram Exp $";
 
 static char *hgGeneUrl()
 {
@@ -52,7 +52,8 @@ printf("The wiki also serves as a forum for users "
 freeMem(loginUrl);
 }
 
-static struct bed *bedItem(char *chr, int start, int end, char *name)
+static struct bed *bedItem(char *chr, int start, int end, char *name,
+    int plusCount, int negativeCount)
 {
 struct bed *bb;
 AllocVar(bb);
@@ -60,6 +61,12 @@ bb->chrom = chr; /* do not need to clone chr string, it is already a clone */
 bb->chromStart = start;
 bb->chromEnd = end;
 bb->name = cloneString(name);
+if ((0 == negativeCount) && (plusCount > 0))
+    safecpy(bb->strand, sizeof(bb->strand), "+");
+else if ((0 == plusCount) && (negativeCount > 0))
+    safecpy(bb->strand, sizeof(bb->strand), "-");
+else
+    safecpy(bb->strand, sizeof(bb->strand), " ");
 return bb;
 }
 
@@ -91,26 +98,33 @@ return geneName;
 }
 
 static struct bed *geneCluster(struct sqlConnection *conn, char *geneSymbol,
-	struct bed **returnBed)
+	struct bed **allIsoforms, struct bed **allProteins)
 /* simple cluster of all knownGenes with name geneSymbol
  *	any items overlapping are clustered together
+ * returned answer is the cluster list
+ * also, if given, return full list of genes in allIsoforms
  */
 {
 struct sqlResult *sr;
 char **row;
 struct bed *bed;
+struct bed *protein;
 struct bed *bedList = NULL;
+struct bed *proteinList = NULL;
 struct bed *clustered = NULL;
 char query[1024];
 
 if (! (sqlTableExists(conn, "knownGene") && sqlTableExists(conn, "kgXref")))
     {
-    if (returnBed)
-	*returnBed = NULL;
+    if (allIsoforms)
+	*allIsoforms = NULL;
     return NULL;
     }
 
-safef(query, ArraySize(query), "SELECT e.chrom,e.txStart,e.txEnd,e.alignID FROM knownGene e, kgXref j WHERE e.alignID = j.kgID AND j.geneSymbol ='%s' ORDER BY e.chrom,e.txStart", geneSymbol);
+safef(query, ArraySize(query),
+	"SELECT e.chrom,e.txStart,e.txEnd,e.alignID,e.strand "
+	"FROM knownGene e, kgXref j WHERE e.alignID = j.kgID AND "
+	"j.geneSymbol ='%s' ORDER BY e.chrom,e.txStart", geneSymbol);
 
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -120,15 +134,29 @@ while ((row = sqlNextRow(sr)) != NULL)
     bed->chromStart = sqlUnsigned(row[1]);
     bed->chromEnd = sqlUnsigned(row[2]);
     bed->name = cloneString(row[3]);
+    safecpy(bed->strand, sizeof(bed->strand), row[4]);
     slAddHead(&bedList, bed);
     }
 sqlFreeResult(&sr);
 slSort(&bedList, bedCmpExtendedChr);
+for (bed = bedList; bed; bed = bed->next)
+    {
+    char *swissProtAcc = getSwissProtAcc(conn, spConn, bed->name);
+    AllocVar(protein);
+    protein->chrom = cloneString(bed->chrom);
+    protein->chromStart = bed->chromStart;
+    protein->chromEnd = bed->chromEnd;
+    protein->name = cloneString(swissProtAcc);
+    slAddHead(&proteinList, protein);
+    }
+slSort(&proteinList, bedCmpExtendedChr);
 
-/* now cluster that list */
+/* now cluster that list, anything overlapping collapses into one item */
 int start = BIGNUM;
 int end = 0;
 char *prevChr = NULL;
+int strandPlus = 0;
+int strandNegative = 0;
 for (bed = bedList; bed; bed = bed->next)
     {
     int txStart = bed->chromStart;
@@ -140,11 +168,17 @@ for (bed = bedList; bed; bed = bed->next)
 	    notOverlap = FALSE;
 	if (notOverlap || differentWord(prevChr,bed->chrom))
 	    {
-	    struct bed *bb = bedItem(prevChr, start, end, geneSymbol);
+	    struct bed *bb = bedItem(prevChr, start, end, geneSymbol,
+		strandPlus, strandNegative);
 	    slAddHead(&clustered, bb);
 	    start = txStart;
 	    end = txEnd;
+	    /* do not need to freeMem(prevChr) because it is now used
+	     * in the bed item
+	     */
 	    prevChr = cloneString(bed->chrom);
+	    strandPlus = 0;
+	    strandNegative = 0;
 	    }
 	else
 	    {
@@ -165,14 +199,24 @@ for (bed = bedList; bed; bed = bed->next)
 	end = txEnd;
 	prevChr = cloneString(bed->chrom);
 	}
+    if (sameWord("+",bed->strand))
+	++strandPlus;
+    if (sameWord("-",bed->strand))
+	++strandNegative;
     }
-struct bed *bb = bedItem(prevChr, start, end, geneSymbol);
+/* and the final item is waiting to go on the list */
+struct bed *bb = bedItem(prevChr, start, end, geneSymbol,
+	strandPlus, strandNegative);
 slAddHead(&clustered, bb);
 slSort(&clustered, bedCmpExtendedChr);
-if (returnBed)
-    *returnBed = bedList;
+if (allIsoforms)
+    *allIsoforms = bedList;
 else
     bedFreeList(&bedList);
+if (allProteins)
+    *allProteins = proteinList;
+else
+    bedFreeList(&proteinList);
 return clustered;
 }	/*	static struct bed *geneCluster()	*/
 
@@ -227,7 +271,9 @@ return (id);
 }
 
 static struct wikiTrack *startNewItem(struct sqlConnection *conn,
-    char *chrom, int itemStart, int itemEnd, char *name, char *strand)
+    char *chrom, int itemStart, int itemEnd, char *name, char *strand,
+	struct bed *clusterList, struct bed *allIsoforms,
+	    struct bed *allProteins)
 /* create the database item to get a new one started */
 {
 char *userName = NULL;
@@ -238,23 +284,51 @@ char *aliases = aliasString(curGeneId, conn);
 struct dyString *extraHeader = dyStringNew(0);
 char *protein = NULL;
 char *canonical = canonicalGene(conn, curGeneId, &protein);
+char transcriptTag[1024];
+
+safef(transcriptTag, ArraySize(transcriptTag), "%s", curGeneId);
 
 if (canonical)
     dyStringPrintf(extraHeader,
-	"[http://%s/cgi-bin/hgGene?db=%s&hgg_gene=%s canonical gene details]&nbsp;''%s''<BR>\n",
-	    cfgOptionDefault(CFG_WIKI_BROWSER, DEFAULT_BROWSER), database,
-	    canonical, name);
-else
-    dyStringPrintf(extraHeader,
-	"[http://%s/cgi-bin/hgGene?db=%s&hgg_gene=%s gene details]&nbsp;''%s''<BR>\n",
-	    cfgOptionDefault(CFG_WIKI_BROWSER, DEFAULT_BROWSER), database,
-	    curGeneId, name);
+	"Canonical gene details [http://%s/cgi-bin/hgGene?org=%s&hgg_gene=%s "
+	    "%s %s]<BR>\n",
+	    cfgOptionDefault(CFG_WIKI_BROWSER, DEFAULT_BROWSER), genome,
+	    canonical, name, canonical);
 if (protein)
     dyStringPrintf(extraHeader,
-	"[http://%s/cgi-bin/pbTracks?db=%s&proteinID=%s "
-	    "protein details]&nbsp;''%s''<BR>\n",
-		cfgOptionDefault(CFG_WIKI_BROWSER, DEFAULT_BROWSER), database,
+	"Canonical protein details [http://%s/cgi-bin/pbTracks?org=%s"
+	"&proteinID=%s %s]<BR>\n",
+		cfgOptionDefault(CFG_WIKI_BROWSER, DEFAULT_BROWSER), genome,
 		    protein, protein);
+if ((slCount(allIsoforms) > 1) || (!canonical))
+    {
+    dyStringPrintf(extraHeader, "Isoform genes and protein: ");
+    struct bed *el;
+    struct bed *pt;
+    for (pt = allProteins, el = allIsoforms; el; el = el->next, pt = pt->next)
+	{
+	if (isNotEmpty(canonical) && sameWord(canonical,el->name))
+	    continue;
+	if (isNotEmpty(pt->name))
+	    {
+	    dyStringPrintf(extraHeader,
+		"[http://%s/cgi-bin/hgGene?org=%s&hgg_gene=%s %s]"
+		" [http://%s/cgi-bin/pbTracks?org=%s&proteinID=%s (%s)]",
+		    cfgOptionDefault(CFG_WIKI_BROWSER, DEFAULT_BROWSER), genome,
+			el->name, el->name,
+		    cfgOptionDefault(CFG_WIKI_BROWSER, DEFAULT_BROWSER), genome,
+			pt->name, pt->name);
+	    }
+	else
+	    dyStringPrintf(extraHeader,
+		"[http://%s/cgi-bin/hgGene?org=%s&hgg_gene=%s %s] (N/A)",
+		    cfgOptionDefault(CFG_WIKI_BROWSER, DEFAULT_BROWSER),
+			genome, el->name, el->name);
+	if (el->next)
+	    dyStringPrintf(extraHeader,", ");
+	}
+    dyStringPrintf(extraHeader, "<BR>\n");
+    }
 dyStringPrintf(extraHeader, "%s", description);
 if (aliases)
     {
@@ -278,29 +352,32 @@ safef(wikiItemId,ArraySize(wikiItemId),"%d", id);
 struct wikiTrack *item = findWikiItemId(wikiItemId);
 
 addDescription(item, userName, chrom, itemStart, itemEnd, cart, database,
-	extraHeader->string);
+	extraHeader->string, transcriptTag);
 dyStringFree(&extraHeader);
 return(item);
 }
 
 static void addComments(struct sqlConnection *conn, struct wikiTrack **item,
-    char *userName, struct bed *clusterList)
+    char *userName, struct bed *clusterList, struct bed *allIsoforms,
+	struct bed *allProteins)
 {
 if (*item)
     {
+    char transcriptTag[1024];
+    safef(transcriptTag, ArraySize(transcriptTag), "%s", curGeneId);
     addDescription(*item, userName, curGeneChrom,
-	curGeneStart, curGeneEnd, cart, database, NULL);
+	curGeneStart, curGeneEnd, cart, database, NULL, transcriptTag);
     }
 else
     {
     struct bed *el = clusterList;
     *item = startNewItem(conn, el->chrom, el->chromStart, el->chromEnd,
-	el->name, "+");
+	el->name, el->strand, clusterList, allIsoforms, allProteins);
     el = el->next;
     for ( ; el; el = el->next)
 	{
 	(void) addWikiTrackItem(database, el->chrom, el->chromStart,
-	    el->chromEnd, el->name, 0, "+", userName, GENE_CLASS, "#000000",
+	    el->chromEnd, el->name, 0, el->strand, userName, GENE_CLASS, "#000000",
 	    "UCSCGeneAnnotation", el->name, (*item)->descriptionKey);
 	}
     }
@@ -312,8 +389,10 @@ void doWikiTrack(struct sqlConnection *conn)
 char *userName = NULL;
 struct wikiTrack *item = findWikiItemByGeneSymbol(database, curGeneName);
 char title[1024];
-struct bed *bedList = NULL;
-struct bed *clusterList = geneCluster(conn, curGeneName, &bedList);
+struct bed *allIsoforms = NULL;
+struct bed *allProteins = NULL;
+struct bed *clusterList = geneCluster(conn, curGeneName, &allIsoforms,
+	&allProteins);
 boolean editOK = FALSE;
 
 safef(title,ArraySize(title), "UCSC gene annotations: %s", curGeneName);
@@ -321,7 +400,7 @@ cartWebStart(cart, title);
 
 /* safety check, both of these lists should be non-zero */
 int locusLocationCount = slCount(clusterList);
-int rawListCount = slCount(bedList);
+int rawListCount = slCount(allIsoforms);
 if ((0 == rawListCount) || (0 == locusLocationCount))
     {
     hPrintf("<EM>(Feature under development, not available for "
@@ -341,7 +420,7 @@ if (isNotEmpty(userName) && emailVerified())
     editOK = TRUE;
 
 if (editOK && cartVarExists(cart, hggDoWikiAddComment))
-    addComments(conn, &item, userName, clusterList);
+    addComments(conn, &item, userName, clusterList, allIsoforms, allProteins);
 else
     cartRemove(cart, NEW_ITEM_COMMENT);
 
@@ -403,6 +482,7 @@ else if (emailVerified())  /* prints message when not verified */
 createPageHelp("wikiTrackGeneAnnotationHelp");
 
 hPrintf("<HR>\n");
+hPrintf("<em>Some extra information, perhaps not needed here when item already exists</em><BR>\n");
 
 if ((1 == locusLocationCount) && (1 == rawListCount))
     {
@@ -420,11 +500,12 @@ else
 
     struct bed *el;
     for (el = clusterList; el; el = el->next)
-	hPrintf("%s:%d-%d<BR>\n", el->chrom, el->chromStart, el->chromEnd);
+	hPrintf("%s:%d-%d %s<BR>\n", el->chrom, el->chromStart,
+	    el->chromEnd, el->strand);
     hPrintf("<B>From %d separate UCSC gene IDs:</B><BR>\n", rawListCount);
-    for (el = bedList; el; el = el->next)
+    for (el = allIsoforms; el; el = el->next)
 	{
-	hPrintf("%s", el->name);
+	hPrintf("%s %s", el->name, el->strand);
 	if (el->next)
 	    hPrintf(", ");
 	}
@@ -433,6 +514,6 @@ else
 
 cartWebEnd();
 
-bedFreeList(&bedList);
+bedFreeList(&allIsoforms);
 bedFreeList(&clusterList);
 }
