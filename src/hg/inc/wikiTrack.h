@@ -183,7 +183,7 @@ struct htmlPage *fetchEditPage(char *descriptionKey);
 
 void addDescription(struct wikiTrack *item, char *userName,
     char *seqName, int winStart, int winEnd, struct cart *cart,
-	char *database, char *extraHeader);
+	char *database, char *extraHeader, char *extraTag);
 /* add description to an existing wiki item */
 
 char *encodedReturnUrl(char *(*hgUrl)());

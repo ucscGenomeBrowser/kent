@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.9 2007/06/28 16:47:06 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.10 2007/06/28 19:35:24 hiram Exp $";
 
 void wikiTrackStaticLoad(char **row, struct wikiTrack *ret)
 /* Load a row from wikiTrack table into ret.  The contents of ret will
@@ -642,7 +642,7 @@ return (page);
 
 void addDescription(struct wikiTrack *item, char *userName,
     char *seqName, int winStart, int winEnd, struct cart *cart,
-	char *database, char *extraHeader)
+	char *database, char *extraHeader, char *extraTag)
 /* add description to an existing wiki item */
 {
 char *newComments = cartNonemptyString(cart, NEW_ITEM_COMMENT);
@@ -682,8 +682,11 @@ struct htmlFormVar *wpTextbox1 =
 if (wpTextbox1->curVal && (strlen(wpTextbox1->curVal) > 2))
     {
     char *rawText = fetchWikiRawText(item->descriptionKey);
-    dyStringPrintf(content, "%s\n\n''comments added: ~~~~''\n\n",
-	rawText);
+    dyStringPrintf(content, "%s\n\n''comments added: ~~~~''", rawText);
+    if (extraTag)
+	dyStringPrintf(content, "&nbsp;'''%s'''\n\n", extraTag);
+    else
+	dyStringPrintf(content, "\n\n");
     }
 else
     {
@@ -709,21 +712,31 @@ else
     newPos = addCommasToPos(position);
     if (extraHeader)
 	{
-	dyStringPrintf(content, "%s\n%s\n''created: %s''\n\n",
-	    NEW_ITEM_CATEGORY, extraHeader, userSignature);
+	dyStringPrintf(content, "%s\n%s\n",
+	    NEW_ITEM_CATEGORY, extraHeader);
 	}
     else
 	{
-    dyStringPrintf(content, "%s\n"
+	dyStringPrintf(content, "%s\n"
 "[http://%s/cgi-bin/hgTracks?db=%s&wikiTrack=pack&position=%s:%d-%d %s %s]"
-	"&nbsp;&nbsp;<B>'%s'</B>&nbsp;&nbsp;''created: %s''\n\n",
+	"&nbsp;&nbsp;<B>'%s'</B>&nbsp;&nbsp;",
 	NEW_ITEM_CATEGORY,
 	    cfgOptionDefault(CFG_WIKI_BROWSER, DEFAULT_BROWSER), database,
-		seqName, winStart+1, winEnd, database, newPos, item->name,
-		userSignature);
+		seqName, winStart+1, winEnd, database, newPos, item->name);
 	}
+    dyStringPrintf(content, "''created: %s''", userSignature);
+    if (extraTag)
+	dyStringPrintf(content, "&nbsp;'''%s'''\n\n", extraTag);
+    else
+	dyStringPrintf(content, "\n\n");
     if (recreateHeader)
-	dyStringPrintf(content, "\n\n''comments added: ~~~~''\n\n");
+	{
+	dyStringPrintf(content, "''comments added: ~~~~''");
+	if (extraTag)
+	    dyStringPrintf(content, "&nbsp;'''%s'''\n\n", extraTag);
+	else
+	    dyStringPrintf(content, "\n\n");
+	}
     }
 
 if (sameWord(NEW_ITEM_COMMENT_DEFAULT,newComments))
