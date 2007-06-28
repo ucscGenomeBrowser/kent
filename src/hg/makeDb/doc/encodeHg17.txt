@@ -2686,6 +2686,10 @@ CREATE TABLE bed5FloatScoreWithFdr (
 );
 'EOF'
 # prepare data and load tables for Sites track
+# check first that the *hits*.bed files are all sorted for the comm
+# command to work correctly. If not, these should be sorted before running the
+# loadSites.csh script. 
+
 cat > loadSites.csh << 'EOF'
 #!/bin/csh -ef
     set pfx = encodeYaleChip
@@ -2785,6 +2789,10 @@ Loaded 1000 elements of size 7
     # smarca4_hela, smarca6_hela, nrsf_hela, format is antibody_cell
     # copy over the MySQL table definition:
     cp /cluster/data/encode/yale/chip/2007-03-20/bed5FloatScoreWithFdr.sql . 
+
+# check first that the *hits*.bed files are all sorted for the comm
+# command to work correctly. If not, these should be sorted before running the
+# loadSites.csh script. 
     # create loading script:
 cat > loadSites.csh << 'EOF'
 #!/bin/csh -ef
@@ -2850,6 +2858,10 @@ Loaded 1639 elements of size 7
     # h3k27me3_hela format is antibody_cell
     # copy over the MySQL table definition:
     cp /cluster/data/encode/yale/chip/2007-03-20/bed5FloatScoreWithFdr.sql . 
+    
+# check first that the *hits*.bed files are all sorted for the comm
+# command to work correctly. If not, these should be sorted before running the
+# loadSites.csh script. 
     # create loading script:
 cat > loadSites.csh << 'EOF'
 #!/bin/csh -ef
