@@ -15,7 +15,7 @@
 #include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.8 2007/06/26 23:01:56 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.9 2007/06/28 16:46:56 hiram Exp $";
 
 static char *hgGeneUrl()
 {
@@ -61,6 +61,33 @@ bb->chromStart = start;
 bb->chromEnd = end;
 bb->name = cloneString(name);
 return bb;
+}
+
+static char *canonicalGene(struct sqlConnection *conn, char *id, char **protein)
+/* given UCSC gene id, find canonical UCSC gene id and protein if asked for */
+{
+char *geneName;
+struct sqlResult *sr;
+char **row;
+char query[1024];
+
+safef(query, ArraySize(query), "SELECT e.transcript,e.protein FROM "
+	"knownCanonical e, knownIsoforms j "
+	"WHERE e.clusterId = j.clusterId AND j.transcript ='%s'", id);
+
+sr = sqlGetResult(conn, query);
+row = sqlNextRow(sr);
+if (row)
+    {
+    geneName = cloneString(row[0]);
+    if (protein)
+	*protein = cloneString(row[1]);
+    }
+else
+    geneName = NULL;
+
+sqlFreeResult(&sr);
+return geneName;
 }
 
 static struct bed *geneCluster(struct sqlConnection *conn, char *geneSymbol,
@@ -199,13 +226,43 @@ hDisconnectCentral(&conn);
 return (id);
 }
 
-static struct wikiTrack *startNewItem(char *chrom, int itemStart,
-	int itemEnd, char *name, char *strand)
+static struct wikiTrack *startNewItem(struct sqlConnection *conn,
+    char *chrom, int itemStart, int itemEnd, char *name, char *strand)
 /* create the database item to get a new one started */
 {
 char *userName = NULL;
 int score = 0;
 int id = 0;
+char *description = descriptionString(curGeneId, conn);
+char *aliases = aliasString(curGeneId, conn);
+struct dyString *extraHeader = dyStringNew(0);
+char *protein = NULL;
+char *canonical = canonicalGene(conn, curGeneId, &protein);
+
+if (canonical)
+    dyStringPrintf(extraHeader,
+	"[http://%s/cgi-bin/hgGene?db=%s&hgg_gene=%s canonical gene details]&nbsp;''%s''<BR>\n",
+	    cfgOptionDefault(CFG_WIKI_BROWSER, DEFAULT_BROWSER), database,
+	    canonical, name);
+else
+    dyStringPrintf(extraHeader,
+	"[http://%s/cgi-bin/hgGene?db=%s&hgg_gene=%s gene details]&nbsp;''%s''<BR>\n",
+	    cfgOptionDefault(CFG_WIKI_BROWSER, DEFAULT_BROWSER), database,
+	    curGeneId, name);
+if (protein)
+    dyStringPrintf(extraHeader,
+	"[http://%s/cgi-bin/pbTracks?db=%s&proteinID=%s "
+	    "protein details]&nbsp;''%s''<BR>\n",
+		cfgOptionDefault(CFG_WIKI_BROWSER, DEFAULT_BROWSER), database,
+		    protein, protein);
+dyStringPrintf(extraHeader, "%s", description);
+if (aliases)
+    {
+    dyStringPrintf(extraHeader, "%s\n", aliases);
+    freeMem(aliases);
+    }
+
+dyStringPrintf(extraHeader, "\n<HR>\n");
 
 if (! wikiTrackEnabled(&userName))
     errAbort("create new wiki item: wiki track not enabled");
@@ -220,23 +277,25 @@ char wikiItemId[64];
 safef(wikiItemId,ArraySize(wikiItemId),"%d", id);
 struct wikiTrack *item = findWikiItemId(wikiItemId);
 
-hPrintf("created item: %s<BR>\n", item->name);
-addDescription(item, userName, chrom, itemStart, itemEnd, cart, database);
+addDescription(item, userName, chrom, itemStart, itemEnd, cart, database,
+	extraHeader->string);
+dyStringFree(&extraHeader);
 return(item);
 }
 
-static void addComments(struct wikiTrack **item, char *userName,
-    struct bed *clusterList)
+static void addComments(struct sqlConnection *conn, struct wikiTrack **item,
+    char *userName, struct bed *clusterList)
 {
 if (*item)
     {
     addDescription(*item, userName, curGeneChrom,
-	curGeneStart, curGeneEnd, cart, database);
+	curGeneStart, curGeneEnd, cart, database, NULL);
     }
 else
     {
     struct bed *el = clusterList;
-    *item = startNewItem(el->chrom, el->chromStart, el->chromEnd, el->name, "+");
+    *item = startNewItem(conn, el->chrom, el->chromStart, el->chromEnd,
+	el->name, "+");
     el = el->next;
     for ( ; el; el = el->next)
 	{
@@ -251,13 +310,13 @@ void doWikiTrack(struct sqlConnection *conn)
 /* display wiki track business */
 {
 char *userName = NULL;
-struct wikiTrack *item = findWikiItemByGeneSymbol(database, curGeneId);
+struct wikiTrack *item = findWikiItemByGeneSymbol(database, curGeneName);
 char title[1024];
 struct bed *bedList = NULL;
 struct bed *clusterList = geneCluster(conn, curGeneName, &bedList);
 boolean editOK = FALSE;
 
-safef(title,ArraySize(title), "UCSC gene annotations %s", curGeneName);
+safef(title,ArraySize(title), "UCSC gene annotations: %s", curGeneName);
 cartWebStart(cart, title);
 
 /* safety check, both of these lists should be non-zero */
@@ -270,6 +329,7 @@ if ((0 == rawListCount) || (0 == locusLocationCount))
     hPrintf("hgGene.doWikiTrack: can not find any genes "
 	"called %s<BR>\n",curGeneName);
     cartWebEnd();
+    return;
     }
 
 /* we already know the wiki track is enabled since we are here,
@@ -281,17 +341,20 @@ if (isNotEmpty(userName) && emailVerified())
     editOK = TRUE;
 
 if (editOK && cartVarExists(cart, hggDoWikiAddComment))
-    addComments(&item, userName, clusterList);
+    addComments(conn, &item, userName, clusterList);
 else
     cartRemove(cart, NEW_ITEM_COMMENT);
 
 if (NULL != item)
     {
     displayComments(item);
+    hPrintf("\n<HR>\n");
     }
 else
     {
-    hPrintf("<em>(no annotations for this gene at this time)</em><BR>\n<HR>\n");
+    char *protein;
+    char *canonical = canonicalGene(conn, curGeneId, &protein);
+    hPrintf("<em>(no annotations for this gene at this time)</em><B>%s %s</B><BR>\n<HR>\n", canonical, protein);
     }
 
 if (isEmpty(userName))
@@ -308,14 +371,12 @@ else if (emailVerified())  /* prints message when not verified */
     webPrintLinkTableStart();
     /* first row is a title line */
     char label[256];
-    safef(label, ArraySize(label),
-	"'%s' adding comments to gene %s (%s)\n",
-	    userName, curGeneName, curGeneId);
+    safef(label, ArraySize(label), "'%s' adding comments to gene %s\n",
+	userName, curGeneName);
     webPrintWideLabelCell(label, 2);
     webPrintLinkTableNewRow();
     /* second row is initial comment/description text entry */
     webPrintWideCellStart(2, HG_COL_TABLE);
-    hPrintf("<B>add comments:</B><BR>");
     cgiMakeTextArea(NEW_ITEM_COMMENT, ADD_ITEM_COMMENT_DEFAULT, 3, 40);
     webPrintLinkCellEnd();
     webPrintLinkTableNewRow();
@@ -339,24 +400,36 @@ else if (emailVerified())  /* prints message when not verified */
 	}
     }
 
-createPageHelp("wikiTrackAddCommentHelp");
+createPageHelp("wikiTrackGeneAnnotationHelp");
 
 hPrintf("<HR>\n");
-char *editors = cfgOptionDefault("wikiTrack.editors", NULL);
 
-hPrintf("<B>There are %d locus locations for gene %s: (%s)</B><BR>\n",
-    locusLocationCount, curGeneName, editors);
-struct bed *el;
-for (el = clusterList; el; el = el->next)
-    hPrintf("%s:%d-%d<BR>\n", el->chrom, el->chromStart, el->chromEnd);
-hPrintf("<B>From %d separate UCSC gene IDs:</B><BR>\n", rawListCount);
-for (el = bedList; el; el = el->next)
+if ((1 == locusLocationCount) && (1 == rawListCount))
     {
-    hPrintf("%s", el->name);
-    if (el->next)
-	hPrintf(", ");
+    hPrintf("<B>There is a single location for gene %s (%s)</B><BR>\n",
+	    curGeneName, curGeneId);
     }
-hPrintf("<BR>\n");
+else
+    {
+    if (1 == locusLocationCount)
+	hPrintf("<B>There is a single locus location for gene %s:</B><BR>\n",
+	    curGeneName);
+    else
+	hPrintf("<B>There are %d locus locations for gene %s:</B><BR>\n",
+	    locusLocationCount, curGeneName);
+
+    struct bed *el;
+    for (el = clusterList; el; el = el->next)
+	hPrintf("%s:%d-%d<BR>\n", el->chrom, el->chromStart, el->chromEnd);
+    hPrintf("<B>From %d separate UCSC gene IDs:</B><BR>\n", rawListCount);
+    for (el = bedList; el; el = el->next)
+	{
+	hPrintf("%s", el->name);
+	if (el->next)
+	    hPrintf(", ");
+	}
+    hPrintf("<BR>\n");
+    }
 
 cartWebEnd();
 

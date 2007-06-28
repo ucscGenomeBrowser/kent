@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.8 2007/06/25 16:39:19 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.9 2007/06/28 16:47:06 hiram Exp $";
 
 void wikiTrackStaticLoad(char **row, struct wikiTrack *ret)
 /* Load a row from wikiTrack table into ret.  The contents of ret will
@@ -642,7 +642,7 @@ return (page);
 
 void addDescription(struct wikiTrack *item, char *userName,
     char *seqName, int winStart, int winEnd, struct cart *cart,
-	char *database)
+	char *database, char *extraHeader)
 /* add description to an existing wiki item */
 {
 char *newComments = cartNonemptyString(cart, NEW_ITEM_COMMENT);
@@ -707,6 +707,13 @@ else
 	}
     snprintf(position, 128, "%s:%d-%d", seqName, winStart+1, winEnd);
     newPos = addCommasToPos(position);
+    if (extraHeader)
+	{
+	dyStringPrintf(content, "%s\n%s\n''created: %s''\n\n",
+	    NEW_ITEM_CATEGORY, extraHeader, userSignature);
+	}
+    else
+	{
     dyStringPrintf(content, "%s\n"
 "[http://%s/cgi-bin/hgTracks?db=%s&wikiTrack=pack&position=%s:%d-%d %s %s]"
 	"&nbsp;&nbsp;<B>'%s'</B>&nbsp;&nbsp;''created: %s''\n\n",
@@ -714,6 +721,7 @@ else
 	    cfgOptionDefault(CFG_WIKI_BROWSER, DEFAULT_BROWSER), database,
 		seqName, winStart+1, winEnd, database, newPos, item->name,
 		userSignature);
+	}
     if (recreateHeader)
 	dyStringPrintf(content, "\n\n''comments added: ~~~~''\n\n");
     }

@@ -17,7 +17,7 @@
 #include "hgColors.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.104 2007/06/21 23:03:21 hiram Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.105 2007/06/28 16:46:56 hiram Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -193,21 +193,20 @@ stripString(summary, pattern);
 return summary;
 }
 
-void printDescription(char *id, struct sqlConnection *conn)
-/* Print out description of gene given ID. */
+char *descriptionString(char *id, struct sqlConnection *conn)
+/* return description as it would be printed in html, can free after use */
 {
-char *description = NULL;
+char *descrBySql = NULL;
 char *summaryTables = genomeOptionalSetting("summaryTables");
-int  i, exonCnt = 0, cdsExonCnt = 0;
-int  cdsStart, cdsEnd;
+struct dyString *description = dyStringNew(0);
 
-description = genoQuery(id, "descriptionSql", conn);
-hPrintf("<B>Description:</B> ");
-if (description != NULL)
-    hPrintf("%s<BR>", description);
+descrBySql = genoQuery(id, "descriptionSql", conn);
+dyStringPrintf(description, "<B>Description:</B> ");
+if (descrBySql != NULL)
+    dyStringPrintf(description, "%s<BR>", descrBySql);
 else
-    hPrintf("%s<BR>", "No description available");
-freez(&description);
+    dyStringPrintf(description, "%s<BR>", "No description available");
+freez(&descrBySql);
 if (summaryTables != NULL)
     {
     if (sqlTablesExist(conn, summaryTables))
@@ -216,19 +215,33 @@ if (summaryTables != NULL)
 	if (summary != NULL && summary[0] != 0)
 	    {
 	    summary = abbreviateSummary(summary);
-	    hPrintf("<B>%s", genomeSetting("summarySource"));
+	    dyStringPrintf(description, "<B>%s",
+		genomeSetting("summarySource"));
 	    if (genomeOptionalSetting("summaryIdSql"))
 	        {
 		char *summaryId = genoQuery(id, "summaryIdSql", conn);
 		if (summaryId != NULL)
-		    hPrintf(" (%s)", summaryId);
+		    dyStringPrintf(description, " (%s)", summaryId);
 		}
-	    hPrintf(":</B> %s", summary);
+	    dyStringPrintf(description, ":</B> %s", summary);
 	    freez(&summary);
-	    hPrintf("<BR>");
+	    dyStringPrintf(description, "<BR>");
 	    }
 	}
     }
+return dyStringCannibalize(&description);
+}
+
+static void printDescription(char *id, struct sqlConnection *conn)
+/* Print out description of gene given ID. */
+{
+char *description = descriptionString(id, conn);
+int  i, exonCnt = 0, cdsExonCnt = 0;
+int  cdsStart, cdsEnd;
+
+hPrintf("%s", description);
+freez(&description);
+
 /* print genome position and size */
 hPrintf("<B>Strand:</B> %s</A>\n", curGenePred->strand);
 hPrintf("&nbsp;&nbsp;<B>Genomic Size:</B> %d\n", curGeneEnd - curGeneStart);

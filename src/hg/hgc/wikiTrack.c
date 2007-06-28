@@ -16,7 +16,7 @@
 #include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.31 2007/06/26 23:00:55 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.32 2007/06/28 16:46:58 hiram Exp $";
 
 #define ITEM_SCORE_DEFAULT "1000"
 #define ADD_ITEM_COMMENT_DEFAULT "add comments"
@@ -243,13 +243,13 @@ else if (emailVerified()) /* prints message when not verified */
 
     hPrintf("For extensive edits, it may be more convenient to edit the ");
     hPrintf("wiki article <A HREF=\"%s/index.php/%s\" TARGET=_blank>%s</A> "
-       "for this item's description", url, item->descriptionKey,
+       "for this item's description.<BR>", url, item->descriptionKey,
 	    item->descriptionKey);
     struct bed *itemList = multipleItems(item);
-    if (slCount(itemList) > 1)
+    if (slCount(itemList) > 0)
 	{
-	hPrintf("This gene symbol is also found in the following "
-	    "locations:<BR>\n");
+	hPrintf("<HR>\nThis gene symbol '%s' is also found in the following "
+	    "locations:<BR>\n", item->name);
 	struct bed *el;
 	for (el = itemList; el; el = el->next)
 	    hPrintf("%s:%d-%d<BR>\n", el->chrom, el->chromStart, el->chromEnd);
@@ -462,7 +462,7 @@ if (! wikiTrackEnabled(&userName))
 if (NULL == userName)
     errAbort("add wiki comments: user not logged in ?");
 
-addDescription(item, userName, seqName, winStart, winEnd, cart, database);
+addDescription(item, userName, seqName, winStart, winEnd, cart, database, NULL);
 updateLastModifiedDate(sqlSigned(wikiItemId));
 displayItem(item, userName);
 cartHtmlEnd();
@@ -554,7 +554,7 @@ char wikiItemId[64];
 safef(wikiItemId,ArraySize(wikiItemId),"%d", id);
 struct wikiTrack *item = findWikiItemId(wikiItemId);
 
-addDescription(item, userName, seqName, winStart, winEnd, cart, database);
+addDescription(item, userName, seqName, winStart, winEnd, cart, database, NULL);
 displayItem(item, userName);
 
 cartHtmlEnd();

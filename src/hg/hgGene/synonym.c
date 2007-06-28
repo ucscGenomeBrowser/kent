@@ -9,7 +9,7 @@
 #include "spDb.h"
 #include "ccdsGeneMap.h"
 
-static char const rcsid[] = "$Id: synonym.c,v 1.1 2007/04/09 02:10:58 kent Exp $";
+static char const rcsid[] = "$Id: synonym.c,v 1.2 2007/06/28 16:46:56 hiram Exp $";
 
 static void printOurMrnaUrl(FILE *f, char *accession)
 /* Print URL for Entrez browser on a nucleotide. */
@@ -51,9 +51,8 @@ sqlFreeResult(&sr);
 return(cnt);
 }
 
-
-static void printAlias(char *id, struct sqlConnection *conn)
-/* Print out description of gene given ID. */
+char *aliasString(char *id, struct sqlConnection *conn)
+/* return alias string as it would be printed in html, can free after use */
 {
 char query[256];
 struct sqlResult *sr = NULL;
@@ -64,7 +63,8 @@ int cnt = 0;
 totalCount = countAlias(id,conn);
 if (totalCount > 0)
     {
-    hPrintf("<B>Alternate Gene Symbols:</B> ");
+    struct dyString *aliasReturn = dyStringNew(0);
+    dyStringPrintf(aliasReturn, "<B>Alternate Gene Symbols:</B> ");
     safef(query, sizeof(query), "select alias from kgAlias where kgId = '%s' order by alias", id);
     sr = sqlGetResult(conn, query);
     row = sqlNextRow(sr);
@@ -73,14 +73,28 @@ if (totalCount > 0)
         /* skip kgId and the maint gene symbol (curGeneName) */
         if ((!sameWord(id, row[0])) && (!sameWord(row[0], curGeneName))) 
 		{
-    		hPrintf("%s", row[0]);
-		if (cnt < (totalCount-1)) hPrintf(", ");
+    		dyStringPrintf(aliasReturn, "%s", row[0]);
+		if (cnt < (totalCount-1)) dyStringPrintf(aliasReturn, ", ");
 		cnt++;
 		}
     	row = sqlNextRow(sr);
     	}
-    hPrintf("<BR>");   
+    dyStringPrintf(aliasReturn, "<BR>");   
     sqlFreeResult(&sr);
+    return dyStringCannibalize(&aliasReturn);
+    }
+return NULL;
+}
+
+static void printAlias(char *id, struct sqlConnection *conn)
+/* Print out description of gene given ID. */
+{
+char *aliases = aliasString(id, conn);
+
+if (aliases)
+    {
+    hPrintf("%s", aliases);
+    freeMem(aliases);
     }
 }
 
