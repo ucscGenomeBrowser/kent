@@ -79,48 +79,25 @@ if (changeVis != -2)
 cgiMakeHiddenVar(configGroupTarget, "none");
 for (group = groupList; group != NULL; group = group->next)
     {
+    struct trackRef *tr;
+
     if (group->trackList == NULL)
 	continue;
 
-    struct trackRef *tr;
-
-    /* check if track group should be displayed */
+    /* check if group section should be displayed */
     char *otherState;
     char *indicator;
     char *indicatorImg;
     boolean isOpen = !isCollapsedGroup(group->name);
-    collapseGroupGoodies(isOpen, FALSE, &indicatorImg, &indicator, &otherState);
-
-    if (sameString("encodeGenes", group->name))
-        {
-        /* add track group var for ENCODE groups, with collapse/expand buttons */
-        hTableStart();
-        hPrintf("<TR>");
-        hPrintf("<TH align=\"left\" colspan=3 BGCOLOR=#539ED3>");
-        hPrintf("<B>&nbsp;%s</B> ", wrapWhiteFont("ENCODE Track Groups"));
-        hPrintf("&nbsp;&nbsp;&nbsp;");
-        char *minusImg, *plusImg, *minusAlt, *plusAlt;
-        collapseGroupGoodies(TRUE, FALSE, &minusImg, &minusAlt, NULL);
-        collapseGroupGoodies(FALSE, FALSE, &plusImg, &plusAlt, NULL);
-        hPrintf("<A HREF=\"%s?%s&%s=1\" class=\"bigBlue\"><IMG src=\"%s\" alt=\"%s\" class=\"bigBlue\"></A>",
-                hgTracksName(), cartSidUrlString(cart), 
-                configHideEncodeGroups, minusImg, minusAlt);
-        hPrintf(" ");
-        hPrintf("<A HREF=\"%s?%s&%s=1\" class=\"bigBlue\"><IMG src=\"%s\" alt=\"%s\" class=\"bigBlue\"></A>",
-                hgTracksName(), cartSidUrlString(cart), 
-                configShowEncodeGroups, plusImg, plusAlt);
-        hPrintf("<TR>");
-        hTableEnd();
-        hPrintf("<BR>");
-        }
-
+    collapseGroupGoodies(isOpen, FALSE, &indicatorImg, 
+                            &indicator, &otherState);
     hTableStart();
     hPrintf("<TR>");
     hPrintf("<TH align=\"left\" colspan=3 BGCOLOR=#536ED3>");
-    hPrintf("<A HREF=\"%s?%s&hgTracksConfigPage=configure&%s=%s#%s\" class=\"bigBlue\"><IMG src=\"%s\" alt=\"%s\" class=\"bigBlue\"></A>&nbsp;&nbsp;",
-             hgTracksName(), cartSidUrlString(cart), 
-             collapseGroupVar(group->name),
-             otherState, group->name, indicatorImg, indicator);
+    hPrintf("<A HREF=\"%s?%s&hgTracksConfigPage=configure&%s=%s#%s\" class=\"bigBlue\"><IMG height=22 width=22 src=\"%s\" alt=\"%s\" class=\"bigBlue\"></A>&nbsp;&nbsp;",
+        hgTracksName(), cartSidUrlString(cart), 
+        collapseGroupVar(group->name),
+        otherState, group->name, indicatorImg, indicator);
     hPrintf("<B>&nbsp;%s</B> ", wrapWhiteFont(group->label));
     hPrintf("&nbsp;&nbsp;&nbsp;");
     hPrintf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\" "
@@ -346,26 +323,14 @@ hPrintf("</TD></TR>\n");
 hTableEnd();
 
 webNewSection("Configure Tracks");
-hPrintf("Control tracks in all groups:");
-hPrintf(" ");
+hPrintf("Control tracks in all groups: ");
 cgiMakeButton(configHideAll, "hide all");
 hPrintf(" ");
 cgiMakeButton(configShowAll, "show all");
 hPrintf(" ");
 cgiMakeButton(configDefaultAll, "default");
-hPrintf("&nbsp;&nbsp;&nbsp;");
-hPrintf("Show all groups: ");
-char *minusImg, *plusImg, *minusAlt, *plusAlt;
-collapseGroupGoodies(TRUE, FALSE, &minusImg, &minusAlt, NULL);
-collapseGroupGoodies(FALSE, FALSE, &plusImg, &plusAlt, NULL);
-hPrintf("<A HREF=\"%s?%s&%s=1\" class=\"bigBlue\"><IMG src=\"%s\" alt=\"%s\" class=\"bigBlue\"></A>",
-         hgTracksName(), cartSidUrlString(cart), 
-         configHideAllGroups, minusImg, minusAlt);
 hPrintf(" ");
-hPrintf("<A HREF=\"%s?%s&%s=1\" class=\"bigBlue\"><IMG src=\"%s\" alt=\"%s\" class=\"bigBlue\"></A>",
-         hgTracksName(), cartSidUrlString(cart), 
-         configShowAllGroups, plusImg, plusAlt);
-hPrintf("<P STYLE=\"margin-top:5;\">Control track and group visibility more selectively below.<P>\n");
+hPrintf("<BR>Control track and group visibility more selectively below.<P>");
 trackConfig(trackList, groupList, groupTarget, vis);
 
 dyStringFree(&title);
