@@ -16,7 +16,7 @@
 #include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.33 2007/06/28 19:35:53 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.34 2007/06/28 23:03:18 hiram Exp $";
 
 #define ITEM_SCORE_DEFAULT "1000"
 #define ADD_ITEM_COMMENT_DEFAULT "add comments"
@@ -77,6 +77,7 @@ printf("<A HREF=\"%s\"><B>click here to login.</B></A><BR>\n", loginUrl);
 printf("The wiki also serves as a forum for users "
        "to share knowledge and ideas.\n</P>\n");
 freeMem(loginUrl);
+freeMem(wikiHost);
 }
 
 static void startForm(char *name, char *actionType)
@@ -222,7 +223,6 @@ else if (emailVerified()) /* prints message when not verified */
     webPrintLinkTableNewRow();
     /* second row is initial comment/description text entry */
     webPrintWideCellStart(2, HG_COL_TABLE);
-    hPrintf("<B>add comments:</B><BR>");
     cgiMakeTextArea(NEW_ITEM_COMMENT, ADD_ITEM_COMMENT_DEFAULT, 3, 40);
     webPrintLinkCellEnd();
     webPrintLinkTableNewRow();
@@ -439,6 +439,12 @@ if (NULL == wikiItemId)
     errAbort("delete wiki item: NULL wikiItemId");
 if (! wikiTrackEnabled(&userName))
     errAbort("delete wiki item: wiki track not enabled");
+char comments[1024];
+safef(comments,ArraySize(comments), "This item '''%s''' on assembly %s "
+    "at %s:%d-%d has been deleted from the wiki track\n\n", item->db,
+	item->name, item->chrom, item->chromStart, item->chromEnd);
+prefixComments(item, comments, userName, seqName, winStart, winEnd,
+    database, NULL, "(deleted item)");
 deleteItem(sqlSigned(wikiItemId));
 hPrintf("<BR>\n");
 hPrintf("<FORM ID=\"delete\" NAME=\"delete\" ACTION=\"%s\">", hgTracksName());

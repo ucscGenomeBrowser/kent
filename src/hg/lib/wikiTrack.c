@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.10 2007/06/28 19:35:24 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.11 2007/06/28 23:03:23 hiram Exp $";
 
 void wikiTrackStaticLoad(char **row, struct wikiTrack *ret)
 /* Load a row from wikiTrack table into ret.  The contents of ret will
@@ -640,10 +640,145 @@ struct htmlPage *page = htmlPageParseOk(wikiPageUrl, fullText);
 return (page);
 }
 
+void prefixComments(struct wikiTrack *item, char *comments, char *userName,
+    char *seqName, int winStart, int winEnd, char *database,
+	char *extraHeader, char *extraTag)
+/* add comments at the beginning of an existing wiki item */
+{
+/* do nothing if given nothing */
+if (NULL == comments)
+    return;
+
+struct dyString *content = newDyString(1024);
+
+struct htmlPage *page = fetchEditPage(item->descriptionKey);
+
+/* create a stripped down edit form, we don't want all the variables */
+struct htmlForm *strippedEditForm;
+AllocVar(strippedEditForm);
+
+struct htmlForm *currentEditForm = htmlFormGet(page,"editform");
+if (NULL == currentEditForm)
+    errAbort("prefixComments: can not get editform ? (wiki login confused ?)");
+
+strippedEditForm->name = cloneString(currentEditForm->name);
+/* the lower case "post" in the editform does not work ? */
+/*strippedEditForm->method = cloneString(currentEditForm->method);*/
+strippedEditForm->method = cloneString("POST");
+strippedEditForm->startTag = currentEditForm->startTag;
+strippedEditForm->endTag = currentEditForm->endTag;
+
+/* fetch any current page contents in the edit form to continue them */
+struct htmlFormVar *wpTextbox1 =
+	htmlPageGetVar(page, currentEditForm, "wpTextbox1");
+
+/* these new comments are the first thing on the page */
+dyStringPrintf(content, "''comments added: ~~~~''");
+if (extraTag)
+    dyStringPrintf(content, "&nbsp;'''%s'''", extraTag);
+dyStringPrintf(content, "\n\n%s<BR>\n", comments);
+
+/* might want to recreate the header if it has gone missing */
+/* decide on whether adding comments to existing text, or starting a
+ *	new article from scratch.
+ *	This function could be extended to actually checking the current
+ *	contents to see if the "Category:" or "created:" lines have been
+ *	removed, and then restore them.
+ */
+if (!(wpTextbox1->curVal && (strlen(wpTextbox1->curVal) > 2)))
+    {
+    boolean recreateHeader = FALSE;
+    char position[128];
+    char *newPos;
+    char *userSignature;
+    /* In the case where this is a restoration of the header lines,
+     *	may be a different creator than this user adding comments.
+     *	So, get the header line correct to represent the actual creator.
+     */
+    if (sameWord(userName, item->owner))
+	userSignature = cloneString("~~~~");
+    else
+	{
+	struct dyString *tt = newDyString(1024);
+	dyStringPrintf(tt, "[[User:%s|%s]] ", item->owner, item->owner);
+	dyStringPrintf(tt, "%s", item->creationDate);
+	userSignature = dyStringCannibalize(&tt);
+	recreateHeader = TRUE;
+	}
+    snprintf(position, 128, "%s:%d-%d", seqName, winStart+1, winEnd);
+    newPos = addCommasToPos(position);
+    
+    if (extraHeader)
+	{
+	dyStringPrintf(content, "%s\n%s\n",
+	    NEW_ITEM_CATEGORY, extraHeader);
+	}
+    else
+	{
+	dyStringPrintf(content, "%s\n"
+"[http://%s/cgi-bin/hgTracks?db=%s&wikiTrack=pack&position=%s:%d-%d %s %s]"
+	"&nbsp;&nbsp;<B>'%s'</B>&nbsp;&nbsp;",
+	NEW_ITEM_CATEGORY,
+	    cfgOptionDefault(CFG_WIKI_BROWSER, DEFAULT_BROWSER), database,
+		seqName, winStart+1, winEnd, database, newPos, item->name);
+	}
+    dyStringPrintf(content, "''created: %s''", userSignature);
+    if (extraTag)
+	dyStringPrintf(content, "&nbsp;'''%s'''", extraTag);
+    }
+
+/* append previous content, if any */
+if (wpTextbox1->curVal && (strlen(wpTextbox1->curVal) > 2))
+    {
+    char *rawText = fetchWikiRawText(item->descriptionKey);
+    dyStringPrintf(content, "\n\n%s", rawText);
+    }
+else
+    {
+    dyStringPrintf(content, "\n\n%s", NO_ITEM_COMMENT_SUPPLIED);
+    }
+
+htmlCloneFormVarSet(currentEditForm, strippedEditForm,
+	"wpTextbox1", content->string);
+htmlCloneFormVarSet(currentEditForm, strippedEditForm, "wpSummary", "");
+htmlCloneFormVarSet(currentEditForm, strippedEditForm, "wpSection", "");
+htmlCloneFormVarSet(currentEditForm, strippedEditForm, "wpMinoredit", "1");
+/*
+htmlCloneFormVarSet(currentEditForm, strippedEditForm, "wpSave", "Save page");
+*/
+htmlCloneFormVarSet(currentEditForm, strippedEditForm, "wpEdittime", NULL);
+htmlCloneFormVarSet(currentEditForm, strippedEditForm, "wpEditToken", NULL);
+
+htmlPageSetVar(page,currentEditForm, "wpTextbox1", content->string);
+htmlPageSetVar(page,currentEditForm, "wpSummary", "");
+htmlPageSetVar(page,currentEditForm, "wpSection", "");
+htmlPageSetVar(page,currentEditForm, "wpMinoredit", "1");
+htmlPageSetVar(page,currentEditForm, "wpSave", "Save page");
+
+char newUrl[1024];
+char *wikiHost = wikiLinkHost();
+/* fake out htmlPageFromForm since it doesn't understand the colon : */
+safef(newUrl, ArraySize(newUrl), "http://%s%s",
+	wikiHost, currentEditForm->action);
+freeMem(wikiHost);
+/* something, somewhere encoded the & into &amp; which does not work */
+char *fixedString = replaceChars(newUrl, "&amp;", "&");
+currentEditForm->action = cloneString(fixedString);
+strippedEditForm->action = cloneString(fixedString);
+struct htmlPage *editPage = htmlPageFromForm(page,strippedEditForm,"submit", "Submit");
+freeMem(fixedString);
+
+if (NULL == editPage)
+    errAbort("prefixComments: the edit is failing ?");
+
+freeDyString(&content);
+}	/*	void prefixComments()	*/
+
+
 void addDescription(struct wikiTrack *item, char *userName,
     char *seqName, int winStart, int winEnd, struct cart *cart,
 	char *database, char *extraHeader, char *extraTag)
-/* add description to an existing wiki item */
+/* add description to the end of an existing wiki item */
 {
 char *newComments = cartNonemptyString(cart, NEW_ITEM_COMMENT);
 struct dyString *content = newDyString(1024);
@@ -660,7 +795,7 @@ AllocVar(strippedEditForm);
 
 struct htmlForm *currentEditForm = htmlFormGet(page,"editform");
 if (NULL == currentEditForm)
-    errAbort("addDescription: can not get editform ?");
+    errAbort("addDescription: can not get editform ? (wiki login confused ?)");
 
 strippedEditForm->name = cloneString(currentEditForm->name);
 /* the lower case "post" in the editform does not work ? */
@@ -726,9 +861,8 @@ else
 	}
     dyStringPrintf(content, "''created: %s''", userSignature);
     if (extraTag)
-	dyStringPrintf(content, "&nbsp;'''%s'''\n\n", extraTag);
-    else
-	dyStringPrintf(content, "\n\n");
+	dyStringPrintf(content, "&nbsp;'''%s'''", extraTag);
+    dyStringPrintf(content, "\n\n");
     if (recreateHeader)
 	{
 	dyStringPrintf(content, "''comments added: ~~~~''");
@@ -762,14 +896,17 @@ htmlPageSetVar(page,currentEditForm, "wpMinoredit", "1");
 htmlPageSetVar(page,currentEditForm, "wpSave", "Save page");
 
 char newUrl[1024];
+char *wikiHost = wikiLinkHost();
 /* fake out htmlPageFromForm since it doesn't understand the colon : */
-safef(newUrl, ArraySize(newUrl), "%s%s",
-	"http://genomewiki.ucsc.edu", currentEditForm->action);
+safef(newUrl, ArraySize(newUrl), "http://%s%s",
+	wikiHost, currentEditForm->action);
+freeMem(wikiHost);
 /* something, somewhere encoded the & into &amp; which does not work */
 char *fixedString = replaceChars(newUrl, "&amp;", "&");
 currentEditForm->action = cloneString(fixedString);
 strippedEditForm->action = cloneString(fixedString);
 struct htmlPage *editPage = htmlPageFromForm(page,strippedEditForm,"submit", "Submit");
+freeMem(fixedString);
 
 if (NULL == editPage)
     errAbort("addDescription: the edit is failing ?");

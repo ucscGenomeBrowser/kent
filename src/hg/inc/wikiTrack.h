@@ -181,10 +181,15 @@ void createPageHelp(char *pageFileName);
 struct htmlPage *fetchEditPage(char *descriptionKey);
 /* fetch edit page for descriptionKey page name in wiki */
 
+void prefixComments(struct wikiTrack *item, char *comments, char *userName,
+    char *seqName, int winStart, int winEnd, char *database,
+	char *extraHeader, char *extraTag);
+/* add comments at the beginning of an existing wiki item */
+
 void addDescription(struct wikiTrack *item, char *userName,
     char *seqName, int winStart, int winEnd, struct cart *cart,
 	char *database, char *extraHeader, char *extraTag);
-/* add description to an existing wiki item */
+/* add description to the end of an existing wiki item */
 
 char *encodedReturnUrl(char *(*hgUrl)());
 /* Return a CGI-encoded URL with hgsid.  Free when done.
