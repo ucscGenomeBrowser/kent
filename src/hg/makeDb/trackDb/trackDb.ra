@@ -1113,25 +1113,6 @@ visibility hide
 color 50,0,100
 type psl xeno
 
-track vgProbes
-shortLabel VG Probes
-longLabel Mouse In Situ mRNA Probes from JAX, Mahoney, GENSAT, Allen Brain 
-group regulation
-priority 92.5
-visibility hide
-color 50,0,100
-type psl .
-
-track vgAllProbes
-shortLabel VG All Probes
-longLabel Mouse and Frog In Situ mRNA Probes from JAX, Mahoney, GENSAT, NIBB, Allen Brain
-group regulation
-priority 92.6
-visibility hide
-color 50,0,100
-type psl .
-
-
 track esRegGeneToMotif
 shortLabel Regulatory Module 
 longLabel Eran Segal Regulatory Module
