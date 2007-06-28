@@ -18,6 +18,7 @@ set currDir=""
 set dbs=""
 set status=""
 set encode=""
+set split=""
 
 if ( $#argv != 2 ) then
   echo
@@ -33,17 +34,23 @@ else
 endif
 echo
 
+if ( "$HOST" != "hgwdev" ) then
+ echo "\n error: you must run this script on dev!\n"
+ exit 1
+endif
+
 # make sure this is a valid database name
 set dbs=`hgsql -e "SELECT name FROM dbDb" hgcentraltest | grep -w $db`
 if ( "$dbs" != $db ) then
+  echo
   echo "   Invalid database name.  Try again."
   echo
   exit
 endif
 
-
 # check for trackDb dir at $USER root
-if (! -e ~/trackDb/) then
+file ~/trackDb | grep -q 'symbolic link'
+if ( $status ) then
   echo "\n  this program presumes you have a symlink to trackDb \
     in your home dir\n"
   exit
@@ -53,9 +60,10 @@ else
   set currDir=`pwd`
 endif
 
-# check trackDb for db/table combination 
-hgsql -N -e 'SHOW TABLES' $db | grep -wqi $tableName
-if ($status) then
+# detect split chroms and check trackDb for db/table combination 
+set split=`getSplit.csh $db $tableName hgwdev`'_'
+hgsql -N -e 'SHOW TABLES' $db | egrep -wqi "${split}$tableName|$tableName"
+if ($status) then 
   # look for ref to composite main entries which have no tables
   find ../../ -name "trackDb*ra" | xargs grep -wq "subTrack.$tableName" 
   if ($status) then
@@ -74,7 +82,7 @@ else
   endif
 endif
 
-# check for entry in trackDb.ra, starting at ssembly level
+# check for entry in trackDb.ra, starting at assembly level
 grep -wq track.$tableName trackDb.ra >& /dev/null
 if (! $status ) then
   # the track is mentioned in the assembly-level trackDb.ra file
