@@ -118,7 +118,7 @@
 #endif
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1364 2007/06/26 06:02:16 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1365 2007/06/28 00:42:10 kate Exp $";
 
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
@@ -13791,10 +13791,11 @@ if (showTrackControls)
 	hPrintf("<TR>");
 	cg->rowOpen = TRUE;
         hPrintf("<th align=\"left\" colspan=%d BGCOLOR=#536ED3>", MAX_CONTROL_COLUMNS);
-        hPrintf("<A HREF=\"%s?%s&%s=%s#%s\" class=\"bigBlue\"><IMG src=\"%s\" alt=\"%s\" class=\"bigBlue\"></A>&nbsp;&nbsp;",
+        hPrintf("<A HREF=\"%s?%s&%s=%s#%s\" class=\"bigBlue\"><IMG height=18 width=18 src=\"%s\" alt=\"%s\" class=\"bigBlue\"></A>&nbsp;&nbsp;",
             hgTracksName(), cartSidUrlString(cart), 
             collapseGroupVar(group->name),
             otherState, group->name, indicatorImg, indicator);
+
         hNbSpaces(((1.7 * (77 - strlen(group->label)))-1)/2 );
 	hPrintf("<B>%s</B>", wrapWhiteFont(group->label));
 	hPrintf("\n<A NAME=\"#%s\"></A>\n",group->name);
