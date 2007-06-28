@@ -37,6 +37,14 @@ echo "track: $track"
 echo "trackname: $trackname"
 echo "Org: $Org"
 
+# ------------------------------------------------
+# check level for html and trackDb entry:
+
+echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
+echo "check level for html and trackDb entry:"
+echo
+findLevel.csh $db net$Org
+
 # -------------------------------------------------
 # check updateTimes:
 

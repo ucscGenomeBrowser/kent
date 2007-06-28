@@ -69,15 +69,10 @@ hgsql -t -e "SELECT tableName, priority FROM trackDb \
 # ------------------------------------------------
 # check level for html and trackDb entry:
 
-if ( $split == "unsplit" ) then
-  echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
-  echo "check level for html and trackDb entry:"
-  echo
-  findLevel.csh $db chain$Org
-else
-  # need to fix findLevel to work with split chroms.
-  # findLevel.csh $db ${oneChrom}_chain$Org
-endif
+echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
+echo "check level for html and trackDb entry:"
+echo
+findLevel.csh $db chain$Org
 
 # -------------------------------------------------
 # get chroms from chromInfo:
