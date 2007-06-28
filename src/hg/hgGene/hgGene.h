@@ -188,6 +188,12 @@ void printProteinSeqLink(struct sqlConnection *conn, char *geneId);
 void printMrnaSeqLink(struct sqlConnection *conn, char *geneId);
 /* Print out link to fetch mRNA. */
 
+char *descriptionString(char *id, struct sqlConnection *conn);
+/* return description as it would be printed in html, can free after use */
+
+char *aliasString(char *id, struct sqlConnection *conn);
+/* return alias string as it would be printed in html, can free after use */
+
 /* -------- CGI Command Variables ---------- */
 #define hggDoPrefix "hgg_do_"	/* Prefix for all commands. */
 #define hggDoKgMethod "hgg_do_kgMethod"
