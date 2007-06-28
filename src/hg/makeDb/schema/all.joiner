@@ -591,6 +591,11 @@ identifier augustusXRAName dependency
    $gbd.augustusXRA.name
    $gbd.augustusXRAPep.name chopBefore=. full unique
 
+identifier augustusAbinitioName dependency
+"Link together augustusAbinitio predicted gene structure and peptide"
+   $gbd.augustusAbinitio.name
+   $gbd.augustusAbinitioPep.name chopBefore=. full unique
+
 identifier vegaName
 "Link together various VEGA human curated gene annotation"
     $gbd.vegaInfo.transcriptId
