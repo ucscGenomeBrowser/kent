@@ -334,6 +334,30 @@ mv makeGenomeDb.log makeGenomeDb.log.1
     featureBits bosTau3 chainHg18Link
     # 1378293354 bases of 2731807384 (50.454%) in intersection
 
+#########################################################################
+# BLASTZ/CHAIN/NET MM8 (Done March 2007 heather)
+# Do target = mm8 first because bosTau3 is 13k scaffolds (documented in mm8.txt)
+# Then do swap
+
+    mkdir /cluster/data/bosTau3/bed/blastz.mm8.2007-03-23
+    ln -s /cluster/data/bosTau3/bed/blastz.mm8.2007-03-23 /cluster/data/bosTau3/bed/blastz.mm8
+    cd /cluster/data/bosTau3/bed/blastz.mm8
+    doBlastzChainNet.pl /cluster/data/mm8/bed/blastz.bosTau3/DEF -swap >& do.log &
+    featureBits bosTau3 chainMm8Link
+    # 707594985 bases of 2731807384 (25.902%) in intersection
+
+#########################################################################
+# BLASTZ/CHAIN/NET RN4 (Done March 2007 heather)
+# Do target = rn4 first because bosTau3 is 13k scaffolds (documented in rn4.txt)
+# Then do swap
+
+    mkdir /cluster/data/bosTau3/bed/blastz.rn4.2007-03-26
+    ln -s /cluster/data/bosTau3/bed/blastz.rn4.2007-03-26 /cluster/data/bosTau3/bed/blastz.rn4
+    cd /cluster/data/bosTau3/bed/blastz.rn4
+    doBlastzChainNet.pl /cluster/data/rn4/bed/blastz.bosTau3/DEF -swap >& do.log &
+    featureBits bosTau3 chainRn4Link
+    # 666169091 bases of 2731807384 (24.386%) in intersection
+
 ###########################################################################
 # HUMAN (hg18) PROTEINS TRACK (DONE braney 2007-04-24)
     ssh kkstore05
@@ -519,3 +543,131 @@ chainOne $(path1)
     rm -rf /cluster/bluearc/bosTau3/bed/tblastn.hg18KG/blastOut
 #end tblastn
 ##########################################################################
+
+# CpG Islands (Done, June 27 2007, Heather)
+
+    ssh kkstore05
+    cd /cluster/data/bosTau3/bed
+    mkdir cpgIsland
+    cd cpgIsland
+    zcat ../../goldenPath/bigZips/bosTau3.fa.masked.gz | faSplit about stdin 2000000 split
+
+    ssh hgwdev
+    cd /cluster/data/bosTau3/bed/cpgIsland
+    # Build software from Asif Chinwalla (achinwal@watson.wustl.edu)
+    cvs co hg3rdParty/cpgIslands
+    cd hg3rdParty/cpgIslands
+    make
+    # gcc readseq.c cpg_lh.c -o cpglh.exe
+    # cpg_lh.c: In function `main':
+    # cpg_lh.c:74: warning: conflicting types for built-in function 'malloc'
+    mv cpglh.exe /cluster/data/bosTau3/bed/cpgIsland/
+    
+    ssh kkstore05
+    # could also have used kolossus
+    cd /cluster/data/bosTau3/bed/cpgIsland
+    cat << '_EOF_' > run.csh
+#!/bin/csh -ef
+foreach f (split*)
+    set fout=$f:t:r:r.cpg
+    echo $fout
+    ./cpglh.exe $f > $fout
+end
+'_EOF_'
+    # << this line makes emacs coloring happy
+    run.csh
+
+    # Transform cpglh output to bed +
+    cat << '_EOF_' > filter.awk
+{
+$2 = $2 - 1;
+width = $3 - $2;
+printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
+       $1, $2, $3, $5,$6, width,
+       $6, width*$7*0.01, 100.0*2*$6/width, $7, $9);
+}
+'_EOF_'
+    # << this line makes emacs coloring happy
+    awk -f filter.awk *.cpg > cpgIsland.bed
+
+    # load into database
+    ssh hgwdev
+    cd /cluster/data/bosTau3/bed/cpgIsland
+    hgLoadBed bosTau3 cpgIslandExt -tab \
+      -sqlTable=$HOME/kent/src/hg/lib/cpgIslandExt.sql cpgIsland.bed
+    wc -l cpgIsland.bed 
+    # 38189 cpgIsland.bed
+    featureBits bosTau3 cpgIslandExt
+    # 24374280 bases of 2731807384 (0.892%) in intersection
+
+
+##########################################################################
+# GENSCAN (June 2007 Heather)
+# Assume none of the 200K scaffolds are all Ns
+# (These cause Genscan to run forever)
+    ssh hgwdev
+    mkdir /cluster/data/bosTau3/bed/genscan
+    cd /cluster/data/bosTau3/bed/genscan
+    # Make 3 subdirectories for genscan to put their output files in
+    mkdir gtf pep subopt
+    cvs co hg3rdParty/genscanlinux
+
+    # generate hard-masked sequence
+    ssh kkstore05
+    cd /cluster/data/bosTau3/bed/genscan
+    zcat ../../goldenPath/bigZips/bosTau3.fa.gz | maskOutFa stdin hard bosTau3.hardmask.fa
+    mkdir split
+    cd split
+    faSplit about ../bosTau3.hardmask.fa 2000000 split
+    # Generate file list and check that no files are completed masked
+    cd ..
+    cat << '_EOF_' > makeList.csh
+    foreach f ( /cluster/data/bosTau3/bed/genscan/split/*.fa )
+        egrep '[ACGT]' $f > /dev/null
+        if ($status == 0) echo $f >> genome.list
+    end
+    '_EOF_'
+    wc -l genome.list
+    # 252 genome.list
+
+    # Log into kki (not kk!).  kki is the driver node for the small
+    # cluster (kkr1u00-kkr8u00). Genscan has a problem running on the
+    # big cluster, due to limited memory and swap space on each
+    # processing node.
+    ssh kki
+    cd /cluster/data/bosTau3/bed/genscan
+    # Create template file, gsub, for gensub2.  For example (3-line file):
+    cat << '_EOF_' > gsub
+#LOOP
+/cluster/bin/x86_64/gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check out line pep/$(root1).pep} -subopt={check out line subopt/$(root1).bed} -exe=hg3rdParty/genscanlinux/genscan -par=hg3rdParty/genscanlinux/HumanIso.smat -tmp=/tmp -window=2400000
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+    /parasol/bin/gensub2 genome.list single gsub jobList
+
+    para create jobList
+    para try
+    para check
+    para push 
+
+    # WORKING HERE
+
+    # Concatenate
+    ssh kkstore05
+    cd /cluster/data/bosTau3/bed/genscan
+    cat gtf/*.gtf > genscan.gtf
+    cat pep/*.pep > genscan.pep
+    cat subopt/*.bed > genscanSubopt.bed
+
+    # Load into the database 
+    ssh hgwdev
+    cd /cluster/data/bosTau3/bed/genscan
+    ldHgGene -gtf bosTau3 genscan genscan.gtf
+
+    hgPepPred bosTau3 generic genscanPep genscan.pep
+    hgLoadBed bosTau3 genscanSubopt genscanSubopt.bed
+
+    featureBits bosTau3 genscan
+    featureBits bosTau3 genscanSubopt
+    # Should be zero intersection with rmsk
+    featureBits bosTau3 genscan rmsk
