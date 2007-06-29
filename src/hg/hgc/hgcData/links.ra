@@ -104,6 +104,39 @@ label PubMed
 url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&dopt=Citation&list_uids=%s
 acc yes
 
+name FHCDB
+label FHCDB
+url http://www.angis.org.au/pbin/Databases/Heart/fhcquery.cgi?choice=mnum;submit=Search;mut_id=%s
+acc yes
+
+name LQTSdb
+label LQTSdb
+url http://www.ssi.dk/graphics/html/lqtsdb/%s.htm
+acc yes
+
+name KinMutBase
+label KinMutBase
+url http://bioinf.uta.fi/cgi-bin/submit/kmb/KMBfetch.cgi?%s
+acc yes
+
+name CA2base
+label CA2base
+url http://bioinf.uta.fi/cgi-bin/fetch_idbase.cgi?gene=CA2;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name CLCN7base
+label CLCN7base
+url http://bioinf.uta.fi/cgi-bin/fetch_idbase.cgi?gene=CLCN7;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name OSTM1base
+label OSTM1base
+url http://bioinf.uta.fi/cgi-bin/fetch_idbase.cgi?gene=OSTM1;view=full;mut=%s
+acc yes
+needsEncoded yes
+
 name BTKbase
 label BTKbase
 url http://bioinf.uta.fi/cgi-bin/fetch_idbase.cgi?gene=BTK;view=full;mut=%s
