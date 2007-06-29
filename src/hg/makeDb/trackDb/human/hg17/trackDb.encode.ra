@@ -3123,6 +3123,14 @@ dataVersion ENCODE Oct 2005 Freeze
     color 100,90,160
     priority 4
 
+    track encodeTbaSconeElUpdate
+    release alpha
+    subTrack encodeTbaElements
+    shortLabel TBA SCONE New
+    longLabel TBA SCONE Conserved Elements 2007 Update
+    color 100,90,160
+    priority 5
+
 track encodeMlaganAlign
 shortLabel MLAGAN Alignment
 longLabel MLAGAN Alignments
