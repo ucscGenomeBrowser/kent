@@ -3,7 +3,7 @@
 # an object which can be loaded and saved from RAM in a fairly 
 # automatic way.
 
-#Quantitative Trait Loci from Jackson Labs / Mouse Genome Informatics
+#Quantitative Trait Loci from Jackson Lab / Mouse Genome Informatics
 CREATE TABLE jaxQTL (
     chrom varchar(255) not null,	# Human chromosome or FPC contig
     chromStart int unsigned not null,	# Start position in chromosome

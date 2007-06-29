@@ -23,7 +23,7 @@
 #include "net.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: htmlPage.c,v 1.33 2007/06/06 16:37:29 hiram Exp $";
+static char const rcsid[] = "$Id: htmlPage.c,v 1.35 2007/06/13 18:20:38 kuhn Exp $";
 
 void htmlStatusFree(struct htmlStatus **pStatus)
 /* Free up resources associated with status */
@@ -1089,7 +1089,7 @@ for (i=0; i<inLength;++i)
 
 
 char *htmlExpandUrl(char *base, char *url)
-/* Expand URL that is relative to base to stand on it's own. 
+/* Expand URL that is relative to base to stand on its own. 
  * Return NULL if it's not http or https. */
 {
 struct dyString *dy = NULL;

@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/makeDownloads.pl instead.
 
-# $Id: makeDownloads.pl,v 1.5 2006/12/21 22:23:43 angie Exp $
+# $Id: makeDownloads.pl,v 1.6 2007/06/25 21:33:04 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -642,9 +642,9 @@ upstream1000.fa.gz - Sequences 1000 bases upstream of annotated
     out of synch with the RefSeq data in assemblies that are
     incrementally updated nightly.
 
-upstream2000.zip - Same as upstream1000, but 2000 bases.
+upstream2000.fa.gz - Same as upstream1000, but 2000 bases.
 
-upstream5000.zip - Same as upstream1000, but 5000 bases.
+upstream5000.fa.gz - Same as upstream1000, but 5000 bases.
 
 _EOF_
     ;

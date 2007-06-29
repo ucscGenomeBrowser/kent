@@ -5,6 +5,7 @@ group map
 priority 9
 visibility hide
 color 150,0,0
+type ctgPos
 
 track exoniphy
 shortLabel Exoniphy
@@ -24,16 +25,6 @@ visibility hide
 color 150,100,30
 altColor 230,170,40
 type bed 3 +
-
-track refGene
-shortLabel Human RefSeq
-longLabel Human RefSeq Genes aligned with Blatz
-group genes
-priority 35
-visibility dense
-color 12,12,120
-type genePred refPep refMrna
-idXref refLink mrnaAcc name
 
 track refGeneBlatz
 shortLabel Human RefSeq Blatz 
@@ -270,3 +261,19 @@ visibility hide
 spectrum on
 type netAlign rheMac2 chainSelf
 otherDb rheMac2
+
+track atom97565
+shortLabel atom97565 
+longLabel atom97565 (canFam2=orange,mm8=green,rn4=blue,rheMac2=brick,panTro2=dk blue,hg18=dk green)
+group x
+priority 1.1
+visibility hide
+type bed 6
+
+track atom992
+shortLabel atom992 
+longLabel atom992 (canFam2=orange,mm8=green,rn4=blue,rheMac2=brick,panTro2=dk blue,hg18=dk green)
+group x
+priority 1.1
+visibility hide
+type bed 6

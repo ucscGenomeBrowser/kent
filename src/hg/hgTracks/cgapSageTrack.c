@@ -124,7 +124,7 @@ struct linkedFeatures *lf = item;
 return (char *)lf->extra;
 }
 
-static void cgapSageMapItem(struct track *tg, void *item, char *itemName, int start, int end,
+static void cgapSageMapItem(struct track *tg, void *item, char *itemName, char *mapItemName, int start, int end,
 			    int x, int y, int width, int height)
 {
 struct linkedFeatures *lf = item;

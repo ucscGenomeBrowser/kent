@@ -42,7 +42,7 @@ echo "Org: $Org"
 
 echo
 echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
-echo "Update Times (hgwdev vs. bgwbeta):"
+echo "Update Times (hgwdev vs. hgwbeta):"
 echo
 updateTimes.csh $db $trackname
 

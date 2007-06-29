@@ -21,7 +21,7 @@
 #include "botDelay.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgBlat.c,v 1.113 2007/03/31 19:38:14 markd Exp $";
+static char const rcsid[] = "$Id: hgBlat.c,v 1.114 2007/06/22 19:30:28 galt Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -576,10 +576,10 @@ for (seq = seqList; seq != NULL; seq = seq->next)
 	}
     else
 	{
-	gfAlignStrand(&conn, serve->nibDir, seq, FALSE, 16, tFileCache, gvo);
+	gfAlignStrand(&conn, serve->nibDir, seq, FALSE, minMatchShown, tFileCache, gvo);
 	reverseComplement(seq->dna, seq->size);
 	conn = gfConnect(serve->host, serve->port);
-	gfAlignStrand(&conn, serve->nibDir, seq, TRUE, 16, tFileCache, gvo);
+	gfAlignStrand(&conn, serve->nibDir, seq, TRUE, minMatchShown, tFileCache, gvo);
 	}
     gfOutputQuery(gvo, f);
     }

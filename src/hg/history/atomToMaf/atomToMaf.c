@@ -12,7 +12,7 @@
 #include "maf.h"
 #include "twoBit.h"
 
-static char const rcsid[] = "$Id: atomToMaf.c,v 1.1 2007/06/10 22:34:42 braney Exp $";
+static char const rcsid[] = "$Id: atomToMaf.c,v 1.2 2007/06/20 23:04:47 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -31,6 +31,7 @@ errAbort(
   "   -minLen=N       minimum size of atom to consider\n"
   "   -base=filename  name of file containing atoms with base atoms\n"
   "   -dups           output only dup'ed atoms\n"
+  "   -mega=atoms     the mega-atom file for sequence names\n"
   );
 }
 
@@ -38,12 +39,14 @@ static struct optionSpec options[] = {
    {"minLen", OPTION_INT},
    {"base", OPTION_STRING},
    {"dups", OPTION_BOOLEAN},
+   {"mega", OPTION_STRING},
    {NULL, 0},
 };
 
-char *baseAtoms = NULL;
+char *baseName = NULL;
 int minLen = 1;
 boolean justDups = FALSE;
+char *megaName = NULL;
 
 struct nameList
 {
@@ -93,6 +96,7 @@ struct twoBits
 struct twoBits *next;
 char *species;
 char *twoBitName;
+struct twoBitFile *bitFile;
 };
 
 char *bigWords[10*10*1024];
@@ -121,6 +125,7 @@ while( (wordsRead = lineFileChopNext(lf, bigWords, sizeof(bigWords)/sizeof(char 
     slAddHead(&allBits, bits);
     bits->species = cloneString(bigWords[0]);
     bits->twoBitName = cloneString(bigWords[1]);
+    bits->bitFile = twoBitOpen(bits->twoBitName);
     }
 
 return allBits;
@@ -278,8 +283,8 @@ struct mafComp *bComp = b->components;
 return aComp->start - bComp->start;
 }
 
-void outAtomList(char *species, struct atom *atoms, struct twoBits *twoBits, 
-    struct hash *sizeHash, FILE *f)
+void outAtomList(FILE *f, char *species, struct atom *atoms, 
+    struct twoBits *twoBits, struct hash *sizeHash, struct atom *megaAtom)
 {
 char buffer[4096];
 struct mafAli *allAli = NULL;
@@ -309,7 +314,7 @@ for(; atoms; atoms = atoms->next)
 	    safef(buffer, sizeof buffer, "%s.%s",
 		instance->species,instance->chrom);
 	    //printf("firstComp %s\n",buffer);
-	    firstComp->src = getShareString(buffer);
+	    firstComp->src = cloneString(buffer);
 	    firstComp->strand = instance->strand;
 	    firstComp->start = instance->start;
 	    firstComp->size = instance->end - instance->start;
@@ -318,6 +323,7 @@ for(; atoms; atoms = atoms->next)
 
     for(ali = aliList; ali ; ali = ali->next)
 	{
+	int count = 1;
 	boolean first = TRUE;
 	instance = atoms->instances;
 	for(; instance; instance = instance->next)
@@ -333,8 +339,9 @@ for(; atoms; atoms = atoms->next)
 
 		safef(buffer, sizeof buffer, "%s.%s",
 		    instance->species,instance->chrom);
+		count++;
 //		printf("later Comp %s\n",buffer);
-		comp->src = getShareString(buffer);
+		comp->src = cloneString(buffer);
 		comp->strand = instance->strand;
 		comp->start = instance->start;
 		comp->size = instance->end - instance->start;
@@ -353,7 +360,7 @@ else
 
 for(; twoBits; twoBits = twoBits->next)
     {
-    struct twoBitFile *bitFile = twoBitOpen(twoBits->twoBitName);
+    struct twoBitFile *bitFile = twoBits->bitFile;
     struct hash *hash = hashMustFindVal(sizeHash, twoBits->species);
 
     for(ali = allAli; ali ; ali = ali->next)
@@ -382,11 +389,37 @@ for(; twoBits; twoBits = twoBits->next)
 		}
 	    }
 	}
-    twoBitClose(&bitFile);
+    //twoBitClose(&bitFile);
     }
 
-for(ali = allAli; ali ; ali = ali->next)
+struct mafAli *nextAli;
+for(ali = allAli; ali ; ali = nextAli)
+    {
+    nextAli = ali->next;
+
+    if (megaAtom)
+	{
+	struct mafComp *comp = NULL;
+	struct instance *instance = megaAtom->instances;
+
+	for(comp = ali->components; comp ;  comp = comp->next)
+	    {
+	    char buffer[4096];
+
+	    safef(buffer, sizeof(buffer), "%s.%s:%d-%d.%c",
+		instance->species, instance->chrom,
+		instance->start, instance->end,
+		instance->strand);
+
+	    freez(&comp->src);
+	    comp->src = cloneString(buffer);
+	    instance = instance->next;
+	    }
+	}
+
     mafWrite(f, ali);
+    mafAliFree(&ali);
+    }
 }
 
 struct hash *getBaseHash(char *fileName)
@@ -485,19 +518,26 @@ struct atom *atoms = getAtoms(inAtomName, atomHash);
 struct hash *sizeHash = getSizeHashes(sizeFile);
 struct twoBits *twoBits = get2BitNames(seqFile);
 
-if (baseAtoms == NULL)
+if (baseName == NULL)
     {
     FILE *f = mustOpen(outMafName, "w");
 
     slReverse(&atoms);
 
-    outAtomList(species, atoms, twoBits, sizeHash, f);
+    outAtomList(f, species, atoms, twoBits, sizeHash, NULL);
     }
 else
     {
-    struct hash *baseHash = getBaseHash(baseAtoms);
+    struct hash *baseHash = getBaseHash(baseName);
     struct hashCookie cook = hashFirst(baseHash);
     struct hashEl *hashEl;
+    struct hash *megaHash = NULL;
+
+    if (megaName != NULL)
+	{
+	megaHash = newHash(20);
+	getAtoms(megaName, megaHash);
+	}
 
     while((hashEl = hashNext(&cook)) != NULL)
 	{
@@ -507,18 +547,12 @@ else
 
 	safef(buffer, sizeof buffer, "%s/%s.maf",outMafName, hashEl->name);
 
-
 	for(; nl; nl = nl->next)
 	    {
-	    //printf("waling hash looking for %s\n",nl->name);
 	    struct atom *anAtom = hashMustFindVal(atomHash, nl->name);
-	    //if (anAtom)
-		//printf("found\n");
-	    if (justDups && isDup(anAtom))
-		{
-		//printf("adding\n");
+
+	    if ((!justDups) || isDup(anAtom))
 		slAddHead(&atomList, anAtom);
-		}
 	    }
 
 
@@ -526,8 +560,13 @@ else
 	    {
 	    slReverse(&atomList);
 	    FILE *f = mustOpen(buffer, "w");
+	    struct atom *megaAtom = NULL;
+
 	    verbose(2, "opened %s\n",buffer);
-	    outAtomList(species, atomList, twoBits, sizeHash, f);
+	    if (megaName)
+		megaAtom = hashMustFindVal(megaHash, hashEl->name);
+
+	    outAtomList(f, species, atomList, twoBits, sizeHash, megaAtom);
 	    fclose(f);
 	    }
 	}
@@ -542,7 +581,8 @@ if (argc != 6)
     usage();
 
 minLen = optionInt("minLen", minLen);
-baseAtoms = optionVal("base", NULL);
+baseName = optionVal("base", NULL);
+megaName = optionVal("mega", NULL);
 justDups = optionExists("dups");
 
 atomToMaf(argv[1],argv[2],argv[3],argv[4],argv[5]);

@@ -20,7 +20,7 @@
 #include "gsidTable.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidTable.c,v 1.16 2007/05/14 05:34:43 galt Exp $";
+static char const rcsid[] = "$Id: gsidTable.c,v 1.17 2007/06/22 16:28:16 fanhsu Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "submit_filter", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -1172,22 +1172,51 @@ void saveSubjList(struct subjInfo *subjList)
 /* save the filtered list of subject gsids to a file for other applications to use */
 {
 char *outName = cartOptionalString(cart, gsidSubjList);
+char *outName2= cartOptionalString(cart, gsidSeqList);
 struct tempName tn;
+struct tempName tn2;
+struct sqlResult *sr;
+char **row;
+char query[255];
+
 if (!outName) 
     {
     trashDirFile(&tn, "ct", "gsidSubj", ".list");
     outName = tn.forCgi;
     }
+
+if (!outName2) 
+    {
+    trashDirFile(&tn2, "ct", "gsidSeq", ".list");
+    outName2 = tn2.forCgi;
+    }
 FILE *outF = mustOpen(outName,"w");
+FILE *outF2= mustOpen(outName2,"w");
 while (subjList)
     {
     fprintf(outF, "%s\n", subjList->fields[0]);
+    
+    safef(query, sizeof(query), 
+	  "select dnaSeqId from gsIdXref where subjId='%s'",
+	  subjList->fields[0]);
+
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+    	{
+        fprintf(outF2, "%s\t%s\n", subjList->fields[0], row[0]);
+    	//row = sqlNextRow(sr);
+    	}
+    sqlFreeResult(&sr);
+
     subjList=subjList->next;
     }
-carefulClose(&outF);
-cartSetString(cart, gsidSubjList, outName);
-}
 
+carefulClose(&outF);
+carefulClose(&outF2);
+
+cartSetString(cart, gsidSubjList, outName);
+cartSetString(cart, gsidSeqList, outName2);
+}
 
 struct column *curOrder(struct column *ordList)
 /* Get ordering currently selected by user, or default

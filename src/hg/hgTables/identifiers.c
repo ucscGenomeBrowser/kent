@@ -13,8 +13,18 @@
 #include "trashDir.h"
 #include "web.h"
 
-static char const rcsid[] = "$Id: identifiers.c,v 1.14 2007/05/24 18:51:29 angie Exp $";
+static char const rcsid[] = "$Id: identifiers.c,v 1.15 2007/06/20 00:33:38 angie Exp $";
 
+
+static boolean forCurTable()
+/* Return TRUE if cart Identifier stuff is for curTable. */
+{
+char *identifierTable = cartOptionalString(cart, hgtaIdentifierTable);
+
+return (identifierTable &&
+	(sameString(identifierTable, curTable) ||
+	 sameString(connectingTableForTrack(identifierTable), curTable)));
+}
 
 static void getXrefInfo(char **retXrefTable, char **retIdField,
 			char **retAliasField)
@@ -84,7 +94,8 @@ hPrintf("\n");
 void doPasteIdentifiers(struct sqlConnection *conn)
 /* Respond to paste identifiers button. */
 {
-char *oldPasted = cartUsualString(cart, hgtaPastedIdentifiers, "");
+char *oldPasted = forCurTable() ?
+    cartUsualString(cart, hgtaPastedIdentifiers, "") : "";
 struct hTableInfo *hti = hFindTableInfoDb(database, NULL, curTable);
 char *idField = getIdField(database, curTrack, curTable, hti);
 htmlOpen("Paste In Identifiers for %s", curTableLabel());
@@ -162,7 +173,8 @@ for (table = tableList;  table != NULL;  table = table->next)
 static void addXrefIdsToHash(struct sqlConnection *conn, struct hash *hash,
 			     char *table, char *idField, char *aliasField,
 			     struct lm *lm)
-/* Query all id-alias pairs from table and hash alias -> id. */
+/* Query all id-alias pairs from table and hash alias -> id. 
+ * Ignore self (alias = id) mappings -- we already got those above. */
 {
 struct sqlResult *sr;
 char **row;
@@ -172,6 +184,8 @@ safef(query, sizeof(query), "select %s,%s from %s",
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
+    if (sameString(row[0], row[1]))
+	continue;
     hashAdd(hash, row[0], lmCloneString(lm, row[1]));
     }
 sqlFreeResult(&sr);
@@ -294,16 +308,13 @@ mainPageAfterOpen(conn);
 htmlClose();
 }
 
-
 char *identifierFileName()
-/* File name identifiers are in, or NULL if no such file. */
+/* File name identifiers are in, or NULL if not for curTable or no such file. */
 {
 char *fileName = cartOptionalString(cart, hgtaIdentifierFile);
-char *identifierTable = cartOptionalString(cart, hgtaIdentifierTable);
 if (fileName == NULL)
     return NULL;
-if (identifierTable != NULL && !sameString(identifierTable, curTable) &&
-    !sameString(connectingTableForTrack(identifierTable), curTable))
+if (! forCurTable())
     return NULL;
 if (fileExists(fileName))
     return fileName;

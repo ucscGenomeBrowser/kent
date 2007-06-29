@@ -28,7 +28,7 @@
 #include "gbSql.h"
 #include "sqlDeleter.h"
 
-static char const rcsid[] = "$Id: gbAlignData.c,v 1.25 2006/06/03 07:34:25 markd Exp $";
+static char const rcsid[] = "$Id: gbAlignData.c,v 1.26 2007/06/16 19:01:50 markd Exp $";
 
 /* table names */
 static char *REF_SEQ_ALI = "refSeqAli";
@@ -533,6 +533,16 @@ while (lineFileNextRow(pslLf, row, PSL_NUM_COLS))
 gzLineFileClose(&pslLf);
 }
 
+static boolean shouldUpdateRefFlatEntry(struct gbSelect* select, 
+                                        struct gbStatus* status)
+/* check if an refFlat entry should be update.  If alignment category
+ * has changed, don't do anything, as it should have been deleted and
+ * scheduled for reload. */
+{
+return (status->selectProc->update == select->update)
+    && (status->entry->orgCat == status->entry->aligned->alignOrgCat);
+}
+
 static void updateRefFlatEntry(struct sqlConnection *conn,
                                struct gbSelect* select, 
                                struct gbStatus* status)
@@ -542,7 +552,6 @@ struct refSeqTblInfo *tblInfo;
 char* geneName = (status->geneName == NULL) ? "" : status->geneName;
 char *buf = needMem(2*strlen(geneName)+1);
 geneName = sqlEscapeString2(buf, geneName);
-
 
 if (status->entry->orgCat == GB_NATIVE)
     tblInfo = gRefGeneInfo;
@@ -565,7 +574,7 @@ static void updateRefFlat(struct sqlConnection *conn, struct gbSelect* select,
 struct gbStatus* status;
 for (status = statusTbl->metaChgList; status != NULL; status = status->next)
     {
-    if (status->selectProc->update == select->update)
+    if (shouldUpdateRefFlatEntry(select, status))
         updateRefFlatEntry(conn, select, status);
     }
 }

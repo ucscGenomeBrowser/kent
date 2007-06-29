@@ -100,6 +100,10 @@ void bedPrintPos(struct bed *bed, int bedSize);
 /* Print first three fields of a bed type structure in
  * standard format. */
 
+void savePosInTextBox(char *chrom, int start, int end);
+/* Save basic position/database info in text box and hidden var. 
+   Positions becomes chrom:start-end*/
+
 void genericHeader(struct trackDb *tdb, char *item);
 /* Put up generic track info. */
 
@@ -267,5 +271,17 @@ void showTxInfo(char *geneName, struct trackDb *tdb, char *txInfoTable);
 
 void showCdsEvidence(char *geneName, struct trackDb *tdb, char *evTable);
 /* Print out stuff from cdsEvidence table. */
+
+void doWikiTrack(char *itemName, char *chrom, int winStart, int winEnd);
+/* handle item clicks on wikiTrack - may create new items */
+
+void doCreateWikiItem(char *itemName, char *chrom, int winStart, int winEnd);
+/* handle create item clicks for wikiTrack */
+
+void doAddWikiComments(char *itemName, char *chrom, int winStart, int winEnd);
+/* handle add comment item clicks for wikiTrack */
+
+void doDeleteWikiItem(char *itemName, char *chrom, int winStart, int winEnd);
+/* handle delete item clicks for wikiTrack */
 
 #endif

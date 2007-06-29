@@ -13,7 +13,7 @@
 #include "hgColors.h"
 #include "wikiLink.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.127 2007/06/14 13:53:50 heather Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.129 2007/06/15 21:13:14 hiram Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -141,7 +141,7 @@ if (withHtmlHeader)
     htmlTextOut(newString);
     puts(
 	"	</TITLE>" "\n"
-	"	<LINK REL=\"STYLESHEET\" HREF=\"../style/HGStyle.css\">" "\n");
+	"	<LINK REL=\"STYLESHEET\" HREF=\"../style/HGStyle.css\" TYPE=\"text/css\">" "\n");
     if (extraStyle != NULL)
         puts(extraStyle);
     puts(
@@ -696,7 +696,11 @@ char *genome = hGenomeOrArchive(db);
 char *selAssembly = NULL;
 
 if (genome == NULL)
+#ifdef LOWELAB
+    genome = "Pyrococcus furiosus";
+#else 
     genome = "Human";
+#endif
 for (cur = dbList; cur != NULL; cur = cur->next)
     {
     /* Only for this genome */

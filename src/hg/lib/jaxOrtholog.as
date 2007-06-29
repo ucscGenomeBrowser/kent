@@ -1,5 +1,5 @@
 table jaxOrtholog
-"Jackson Labs Mouse Orthologs"
+"Jackson Lab Mouse Orthologs"
     (
     string humanSymbol;	"Human HUGO Gene Nomenclature Committee symbol"
     string humanBand; "Human chromosomal location"

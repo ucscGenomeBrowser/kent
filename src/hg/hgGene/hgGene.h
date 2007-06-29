@@ -191,6 +191,8 @@ void printMrnaSeqLink(struct sqlConnection *conn, char *geneId);
 /* -------- CGI Command Variables ---------- */
 #define hggDoPrefix "hgg_do_"	/* Prefix for all commands. */
 #define hggDoKgMethod "hgg_do_kgMethod"
+#define hggDoWikiTrack "hgg_do_wikiTrack"
+#define hggDoWikiAddComment "hgg_do_wikiAddComment"
 #define hggDoGetMrnaSeq "hgg_do_getMrnaSeq"
 #define hggDoGetProteinSeq "hgg_do_getProteinSeq"
 #define hggDoRnaFoldDisplay "hgg_do_rnaFoldDisplay"
@@ -204,6 +206,9 @@ void printMrnaSeqLink(struct sqlConnection *conn, char *geneId);
 
 void doKgMethod(struct sqlConnection *conn);
 /* Present KG Method, Credits, and Data Use Restrictions. */
+
+void doWikiTrack(struct sqlConnection *conn);
+/* Put up wiki track editing controls */
 
 void doTxInfoDescription(struct sqlConnection *conn);
 /* Put up info on fields in txInfo table. */

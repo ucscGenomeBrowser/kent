@@ -4,19 +4,40 @@
 #include "hgTracks.h"
 #include "hdb.h"
 #include "ra.h"
+#include "itemAttr.h"
 #include "bedCart.h"
 #include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.3 2007/06/01 22:36:53 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.8 2007/06/18 16:20:33 hiram Exp $";
 
-static char *wikiTrackItemName(struct track *tg, void *item)
-/* Return name of bed track item. */
+
+static void wikiTrackMapItem(struct track *tg, void *item,
+	char *itemName, char *mapItemName, int start, int end, int x, int y, int width, int height)
+/* create a special map box item with different i=hgcClickName and
+ * pop-up statusLine with the item name
+ */
 {
+char *hgcClickName = tg->mapItemName(tg, item);
+char *statusLine = tg->itemName(tg, item);
+mapBoxHgcOrHgGene(start, end, x, y, width, height, tg->mapName, 
+			  hgcClickName, statusLine, NULL, FALSE);
+}
+
+static char *wikiTrackMapItemName(struct track *tg, void *item)
+/* Return the unique id track item. */
+{
+struct itemAttr *ia;
+char id[64];
+int iid = 0;
 struct linkedFeatures *lf = item;
-if (lf->name == NULL)
-    return "";
-return lf->name;
+if (lf->itemAttr != NULL)
+    {
+    ia = lf->itemAttr;
+    iid = (int)(ia->chromStart);
+    }
+safef(id,ArraySize(id),"%d", iid);
+return cloneString(id);
 }
 
 static int hexToDecimal(char *hexString)
@@ -75,6 +96,12 @@ while ((row = sqlNextRow(sr)) != NULL)
     lf = lfFromBedExtra(bed, scoreMin, scoreMax);
     lf->extra = (void *)USE_ITEM_RGB;	/* signal for coloring */
     lf->filterColor=bed->itemRgb;
+
+    /* overload itemAttr fields to be able to pass id to hgc click box */
+    struct itemAttr *id;
+    AllocVar(id);
+    id->chromStart = item->id;
+    lf->itemAttr = id;
     slAddHead(&lfList, lf);
     wikiTrackFree(&item);
     }
@@ -92,7 +119,7 @@ if (wikiTrackEnabled(NULL))
     bed->chromEnd = winEnd;
     bed->name = cloneString("Make new entry");
     bed->score = 100;
-    bed->strand[0] = '+';
+    bed->strand[0] = ' ';  /* no barbs when strand is unknown */
     bed->thickStart = winStart;
     bed->thickEnd = winEnd;
     bed->itemRgb = 0xcc0000;
@@ -104,12 +131,35 @@ if (wikiTrackEnabled(NULL))
     }
 
 tg->items = lfList;
-}
+}	/*	static void wikiTrackLoadItems(struct track *tg)	*/
 
-void wikiTrackMethods(struct track *tg)
-/* establish loadItems function for wiki track */
+struct bed *wikiTrackGetBedRange(char *mapName, char *chromName,
+	int start, int end)
+/* fetch wiki track items as simple bed 3 list in given range */
 {
-tg->loadItems = wikiTrackLoadItems;
+struct bed *bed, *bedList = NULL;
+struct sqlConnection *conn = hConnectCentral();
+struct sqlResult *sr;
+char **row;
+char where[256];
+int rowOffset;
+
+safef(where, ArraySize(where), "db='%s'", database);
+
+sr = hRangeQuery(conn, mapName, chromName, start, end, where, &rowOffset);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct wikiTrack *item = wikiTrackLoad(row);
+    AllocVar(bed);
+    bed->chrom = cloneString(item->chrom);
+    bed->chromStart = item->chromStart;
+    bed->chromEnd = item->chromEnd;
+    slAddHead(&bedList, bed);
+    wikiTrackFree(&item);
+    }
+sqlFreeResult(&sr);
+hDisconnectCentral(&conn);
+return bedList;
 }
 
 void addWikiTrack(struct track **pGroupList)
@@ -128,35 +178,35 @@ if (wikiTrackEnabled(NULL))
     AllocVar(tdb);
     tg->mapName = "wikiTrack";
     tg->canPack = TRUE;
-    tg->visibility = tvHide;
+    tg->visibility = tvPack;
     tg->hasUi = FALSE;
     tg->shortLabel = cloneString("Wiki Track");
     safef(longLabel, sizeof(longLabel), "Wiki Track user annotations");
     tg->longLabel = longLabel;
     tg->loadItems = wikiTrackLoadItems;
-    tg->itemName = wikiTrackItemName;
-    tg->mapItemName = wikiTrackItemName;
-    tg->priority = 99;
-    tg->defaultPriority = 99;
-    tg->groupName = "x";
-    tg->defaultGroupName = "x";
+    tg->itemName = linkedFeaturesName;
+    tg->mapItemName = wikiTrackMapItemName;
+    tg->mapItem = wikiTrackMapItem;
+    tg->priority = 99.99;
+    tg->defaultPriority = 99.99;
+    tg->groupName = cloneString("map");
+    tg->defaultGroupName = cloneString("map");
+    tg->exonArrows = TRUE;
+    tg->labelNextItemButtonable = TRUE;
     tdb->tableName = tg->mapName;
     tdb->shortLabel = tg->shortLabel;
     tdb->longLabel = tg->longLabel;
     tdb->useScore = 1;
-#ifdef NOT
-    tdb->settings = NULL;
-    tdb->settingsHash = raFromString(tdb->settings);
-    /* add to hash */
-    hashReplace(tdb->settingsHash, "itemRgb", "on");
-    /* regenerate settings string */
-    tdb->settings = hashToRaString(tdb->settingsHash);
-    tdb->type = cloneString("bed 9");
-#endif
     trackDbPolish(tdb);
     tg->tdb = tdb;
 
     slAddHead(pGroupList, tg);
     hDisconnectCentral(&conn);
     }
+}
+
+void wikiTrackMethods(struct track *tg)
+/* establish loadItems function for wiki track */
+{
+tg->loadItems = wikiTrackLoadItems;
 }

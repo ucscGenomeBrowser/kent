@@ -11409,9 +11409,9 @@ gzip illumina.bed
     # +----------+
 
     # fix observed
-    mysql> update snpArrayIllumina300 set observed = "A/c" where observed = "[A/c]";
-    mysql> update snpArrayIllumina550 set observed = "A/c" where observed = "[A/c]";
-    mysql> update snpArrayIllumina650 set observed = "A/c" where observed = "[A/c]";
+    mysql> update snpArrayIllumina300 set observed = "A/C" where observed = "[A/C]";
+    mysql> update snpArrayIllumina550 set observed = "A/C" where observed = "[A/C]";
+    mysql> update snpArrayIllumina650 set observed = "A/C" where observed = "[A/C]";
     mysql> update snpArrayIllumina300 set observed = "A/G" where observed = "[A/G]";
     mysql> update snpArrayIllumina550 set observed = "A/G" where observed = "[A/G]";
     mysql> update snpArrayIllumina650 set observed = "A/G" where observed = "[A/G]";
@@ -11428,6 +11428,9 @@ gzip illumina.bed
     /cluster/home/heather/kent/src/hg/snp/snpLoad/illuminaLookup hg18 snpArrayIllumina300 snp126 snp126Exceptions illuminaLookup.hg18.300
     /cluster/home/heather/kent/src/hg/snp/snpLoad/illuminaLookup hg18 snpArrayIllumina550 snp126 snp126Exceptions illuminaLookup.hg18.550
     /cluster/home/heather/kent/src/hg/snp/snpLoad/illuminaLookup hg18 snpArrayIllumina650 snp126 snp126Exceptions illuminaLookup.hg18.650
+    # Not found: 2 in 300, 15 in 550 and 650
+    # These are in snp127
+    # Mixed: 55 in 300, 74 in 550, 81 in 650
 
 ##########################################################################
 # Added gvPos table for Locus Variants (Belinda Giardine Sept 2006)
@@ -14214,6 +14217,7 @@ cat > loadMaf.csh << 'EOF'
 'EOF'
      csh loadMaf.csh >&! loadMaf.log &
 
+
     # look at coverage
     ssh kkstore02
     cd /cluster/data/hg18/bed/multiz25wayStrict
@@ -14335,7 +14339,8 @@ cat > loadMaf.csh << 'EOF'
     date
 'EOF'
     csh loadMaf.csh >& loadMaf.log  &
-    # NOTE: summary table lost, reloaded on 6/4/07 (kate)
+
+    # NOTE: rebuilt hgLoadMafSummary to exclude chroms<1MB (2007-06-21 kate)
 
 
 ########################################################################
@@ -15583,6 +15588,7 @@ cat > mafFrags.csh << 'EOF'
 
     # Create downloads dir for new species without genome databases
     #foreach db (tupBel1 cavPor2 eriEur1 sorAra1)
+    # NOTE: Keeping these only on genome-test for now.
     foreach db (tupBel1 cavPor2 eriEur1 sorAra1)
         echo $db
         set Db = `echo $db | perl -wpe 's/(.*)/\u$1/'`
@@ -15605,6 +15611,7 @@ cat > mafFrags.csh << 'EOF'
     # EDIT README's for the species
 
     # Post reciprocal best nets 
+    # NOTE: Keeping these only on genome-test for now.
 cat > downloads4.csh << 'EOF'
     foreach db (felCat3 otoGar1 loxAfr1 oryCun1 echTel1 dasNov1 \
             tupBel1 cavPor2 eriEur1 sorAra1)
@@ -16301,21 +16308,26 @@ sort -k1,1 bed > tmp; mv tmp bed
 awk -f joinify.awk $2 > scores
 sort -k1,1 scores > tmp; mv tmp scores
 join -1 1 -2 1 bed scores | tr ',' ' ' | 
-  awk '{printf("%s\t%s\t%s\t%s\t%d\t%s\t%s\n", $1, $2, $3, $4, $9, $6, $7);}' > qual.tab
+  awk '{printf("%s\t%s\t%s\t%s\t%d\t%s\t%s\n", $1, $2, $3, $4, $8, $6, $7);}' > qual.tab
 rm scores bed
 EOF
 chmod +x join.sh
 
 # back to business
-cp /san/sanvol1/snp/liftOver/hg18/rheMac2/output/all.out rheMac2.bed
+cd /cluster/data/dbSNP/ortho/hg18/panTro2Seq
+awk '{printf("%s\t%s\t%s\t%s\t0\t%s\t%s\n", $2, $3, $4, $5, $7, $8);}' snp126orthoPrelim.tab > snp126orthoPrelim.bed
+cp snp126orthoPrelim.bed /cluster/data/hg18/bed/hapmap/orthos/panTro2.bed.new
+cd /cluster/data/dbSNP/ortho/hg18/rheMac2Seq
+awk '{printf("%s\t%s\t%s\t%s\t0\t%s\t%s\n", $2, $3, $4, $5, $7, $8);}' snp126orthoPrelim.tab > snp126orthoPrelim.bed
+cp snp126orthoPrelim.bed /cluster/data/hg18/bed/hapmap/orthos/rheMac2.bed.new
+cd /cluster/data/hg18/bed/hapmap/orthos
 hgWiggle -db=rheMac2 -bedFile=rheMac2.bed quality > rheMac2.scores
-cp /san/sanvol1/snp/liftOver/hg18/panTro2/output/all.out panTro2.bed
 hgWiggle -db=panTro2 -bedFile=panTro2.bed quality > panTro2.scores
-./join.sh rheMac2.bed rheMac2.scores
+./join.sh rheMac2.bed.new rheMac2.scores
 ~heather/kent/src/hg/snp/snpLoad/snpOrtho hg18 snp126 qual.tab
 sed 's/snpOrtho/snp126OrthoRheMac2/' ~/kent/src/hg/lib/snpOrtho.sql  > snpOrthoRheMac2.sql
 hgLoadBed -tab -sqlTable=snpOrthoRheMac2.sql hg18 snp126OrthoRheMac2 snpOrtho.tab
-./join.sh panTro2.bed panTro2.scores
+./join.sh panTro2.bed.new panTro2.scores
 ~heather/kent/src/hg/snp/snpLoad/snpOrtho hg18 snp126 qual.tab
 sed 's/snpOrtho/snp126OrthoPanTro2/' ~/kent/src/hg/lib/snpOrtho.sql  > snpOrthoPanTro2.sql
 hgLoadBed -tab -sqlTable=snpOrthoPanTro2.sql hg18 snp126OrthoPanTro2 snpOrtho.tab
@@ -16325,7 +16337,6 @@ sed 's/hapmapAllelesOrtho/hapmapAllelesChimp/' ~/kent/src/hg/lib/hapmapAllelesOr
 hgLoadBed -tab -sqlTable=hapmapAllelesChimp.sql hg18 hapmapAllelesChimp hapmapOrtho.tab 
 ~heather/kent/src/hg/snp/snpLoad/hapmapOrtho hg18 hapmapSnpsCombined snp126OrthoRheMac2
 hgLoadBed -tab -sqlTable=hapmapAllelesMacaque.sql hg18 hapmapAllelesMacaque hapmapOrtho.tab 
-~heather/kent/src/hg/snp/snpLoad/hapmapSummary hg17 hapmapSnpsCombined hapmapAllelesChimp \
 ~heather/kent/src/hg/snp/snpLoad/hapmapSummary hg18 hapmapSnpsCombined hapmapAllelesChimp hapmapAllelesMacaque
 ln -s ~/kent/src/hg/lib/hapmapAllelesSummary.sql
 hgLoadBed -tab -sqlTable=hapmapAllelesSummary.sql hg18 hapmapAllelesSummary hapmapSummary.tab 
@@ -16347,4 +16358,25 @@ hgLoadBed -tab -sqlTable=hapmapAllelesSummary.sql hg18 hapmapAllelesSummary hapm
   cat wg_may2007.txt|sed -e 's/ /\t/g' > wgRna.tab
 
   hgLoadBed -sqlTable=/cluster/home/fanhsu/src/hg/lib/wgRna.sql hg18 wgRna wgRna.tab
+
 #############################################################################
+# N-SCAN GENES track (2007-06-21 markd)
+# create a composite track with exists ab-inito and new PASA N-SCAN predictions
+
+    # download pasa predictions
+    cd /cluster/data/hg18/bed/nscan/pasa
+    wget http://mblab.wustl.edu/predictions/human/hg18_PASA/hg18.pasa.gtf
+    wget http://mblab.wustl.edu/predictions/human/hg18_PASA/hg18.prot.fa
+    bzip2 hg18.*
+    chmod a-w hg18.*
+
+    ldHgGene -gtf -genePredExt hg18 nscanPasaGene hg18.pasa.gtf.bz2
+    hgPepPred hg18 generic nscanPasaPep  hg18.prot.fa.bz2
+    rm *.tab
+
+    # update trackDb; need a hg18-specific page to describe informants and PASA
+    human/hg18/nscan.html
+    human/hg18/trackDb.ra
+
+    # remove old human/hg18/nscanGene.html
+

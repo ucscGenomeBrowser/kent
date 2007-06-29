@@ -69,7 +69,7 @@ irows on
 autoScaleDefault Off
 windowingFunction mean
 summary multiz6waySummary
-speciesCodonDefault hg18
+speciesCodonDefault ornAna1
 speciesGroups vertebrate
 sGroup_vertebrate monDom4 hg18 mm8 galGal3 anoCar1
 treeImage phylo/ornAna1_6way.gif

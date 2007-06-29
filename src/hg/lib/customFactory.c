@@ -23,7 +23,7 @@
 #include "customFactory.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.66 2007/06/07 23:05:57 hiram Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.67 2007/06/18 23:47:51 angie Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -1707,6 +1707,30 @@ fgets(buf, sizeof(buf), f);
 fclose(f);
 }
 
+static boolean testFileSettings(struct trackDb *tdb, char *ctFileName)
+/* Return TRUE unless tdb has a setting that ends in File but doesn't 
+ * specify an existing local file.  */
+{
+boolean isLive = TRUE;
+struct hashEl *fileSettings = trackDbSettingsLike(tdb, "*File");
+struct hashEl *s;
+for (s = fileSettings;  s != NULL;  s = s->next)
+    {
+    char *fileName = (char *)(s->val);
+    if (fileExists(fileName))
+	readAndIgnore(fileName);
+    else
+	{
+	isLive = FALSE;
+	verbose(3, "Custom track %s setting-file %s=%s does not exist\n",
+		ctFileName, s->name, fileName);
+	break;
+	}
+    }
+hashElFreeList(&fileSettings);
+return isLive;
+}
+
 void customFactoryTestExistence(char *fileName, boolean *retGotLive,
 				boolean *retGotExpired)
 /* Test existence of custom track fileName.  If it exists, parse it just 
@@ -1718,7 +1742,6 @@ struct customTrack *trackList = NULL, *track = NULL;
 char *line = NULL;
 struct sqlConnection *ctConn = NULL;
 boolean dbTrack = ctDbUseAll();
-boolean isLive = FALSE;
 
 if (!fileExists(fileName))
     {
@@ -1739,6 +1762,7 @@ if (dbTrack)
 /* Loop through this once for each track. */
 while ((line = customPpNextReal(cpp)) != NULL)
     {
+    boolean isLive = TRUE;
     /* Parse out track line and save it in track var.
      * First time through make up track var from thin air
      * if no track line. Find out explicit type setting if any.
@@ -1771,39 +1795,29 @@ while ((line = customPpNextReal(cpp)) != NULL)
     /* don't verify database for custom track -- we might be testing existence 
      * for another database. */
 
+    isLive = (isLive && testFileSettings(track->tdb, fileName));
+
     if (track->dbDataLoad)
 	/* Track was loaded into the database -- check if it still exists. */
         {
 	if (ctConn && ctDbTableExists(ctConn, track->dbTableName))
 	    {
-	    /* If this track specifies a wibFile, require and access it too. */
-	    char *wibFile = trackDbSetting(track->tdb, "wibFile");
-	    isLive = TRUE;
-	    if (wibFile != NULL)
-		{
-		isLive = fileExists(wibFile);
-		if (isLive)
-		    readAndIgnore(wibFile);
-		}
 	    if (isLive)
 		{
 		/* Touch database table to keep it alive. */
 		ctTouchLastUse(ctConn, track->dbTableName, TRUE);
 		}
 	    }
+	else
+	    {
+	    isLive = FALSE;
+	    verbose(3, "Custom track %s dbTableName %s does not exist\n",
+		    fileName, track->dbTableName);
+	    }
 	}
     else
-	/* Track data in this file -- if any track in this file names a 
-	 * wigFile, require and access it too. */
+	/* Track data in this file. */
 	{
-	char *wigFile = trackDbSetting(track->tdb, "wigFile");
-	isLive = TRUE;
-	if (wigFile != NULL)
-	    {
-	    isLive = fileExists(wigFile);
-	    if (isLive)
-		readAndIgnore(wigFile);
-	    }
 	while (customFactoryNextRealTilTrack(cpp))
 	    /* Skip data lines until we get to next track or EOF. */
 	    ;

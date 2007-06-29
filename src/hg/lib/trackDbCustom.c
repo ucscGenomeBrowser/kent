@@ -12,7 +12,7 @@
 #include "hash.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.28 2007/05/02 17:26:17 kate Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.29 2007/06/18 23:42:41 angie Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -375,6 +375,28 @@ char *trackDbSettingOrDefault(struct trackDb *tdb, char *name, char *defaultVal)
 {
     char *val = trackDbSetting(tdb, name);
     return (val == NULL ? defaultVal : val);
+}
+
+struct hashEl *trackDbSettingsLike(struct trackDb *tdb, char *wildStr)
+/* Return a list of settings whose names match wildStr (may contain wildcard 
+ * characters).  Free the result with hashElFreeList. */
+{
+struct hashEl *allSettings = hashElListHash(tdb->settingsHash);
+struct hashEl *matchingSettings = NULL;
+struct hashEl *hel = allSettings;
+
+while (hel != NULL)
+    {
+    struct hashEl *next = hel->next;
+    if (wildMatch(wildStr, hel->name))
+	{
+	slAddHead(&matchingSettings, hel);
+	}
+    else
+	hashElFree(&hel);
+    hel = next;
+    }
+return matchingSettings;
 }
 
 bool trackDbIsComposite(struct trackDb *tdb)

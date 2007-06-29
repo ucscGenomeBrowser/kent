@@ -20,9 +20,11 @@ if ( $#argv < 1 || $#argv > 3 ) then
   echo "  checks the links in all the files in a directory on the RR."
   echo "    (uses directory on hgwbeta to get list)."
   echo
-  echo "    usage:  path in /htdocs (zero for root), "
-  echo '      [yymmdd (or other dateString)] defaults to "today",'
-  echo "      [excludeList] filename or list of files not to check. "
+  echo "    usage:  pathIn/htdocs [yymmdd] [excludeList]"
+  echo '      where:'
+  echo '        pathIn/htdocs: (zero for root) '
+  echo '        yymmdd: any dateString for output files. defaults to "today"'
+  echo "        excludeList: filename or list of files not to check. "
   echo
   exit
 endif
@@ -34,26 +36,22 @@ else
   set filePath=`echo $argv[1] | sed -e 's/\/$//'`
 endif
 
-if ( $#argv == 2 ) then
-  echo
-  echo " Sorry, you cannot use only two arguments.  "
-  echo " if exclude list is used, date must be given explicitly"
-  echo
-  echo "$0"
-  $0
-  exit
+if ( $#argv > 1 ) then
+  set yymmdd=$argv[2]
 endif
 
-# set variable and check if exclude list exists
-set yymmdd=$argv[2]
-set exclude=$argv[3]
-
-if ( -e $exclude ) then
+if ( $#argv == 3 ) then
+  set exclude=$argv[3]
+  file $exclude | grep -q "ASCII text"
+  if ( $status ) then
+    echo "\nexclude file does not exist\n"
+    exit 1
+  else
     set exclude=`cat $exclude`
-else
-   echo "\nexclude file does not exist\n"
-   exit 1
+  endif
 endif
+
+echo here4
 
 # get list of active files from beta
 # and strip off the pathnames from list leaving only filenames

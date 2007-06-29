@@ -55,3 +55,4 @@ struct baseAtom *baseAtoms;
 };
 
 struct atom *getAtoms(char *atomsName, struct hash *atomHash);
+struct atom *readAtom( struct lineFile *lf);

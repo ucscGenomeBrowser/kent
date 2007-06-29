@@ -519,7 +519,7 @@ int rowOffset;
 
 loadFilters();
 
-if (allDefaults()) 
+if (allDefaults() || !hTableExists("hapmapAllelesSummary")) 
     {
     hapmapLoadSimple(tg);
     return;

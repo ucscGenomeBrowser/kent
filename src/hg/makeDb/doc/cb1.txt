@@ -884,3 +884,35 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
     # 25001 gene predictions
     hgPepPred cb1 generic twinscanPep twinscanPep.fa
 # Add track to trackDb.ra for cb1
+   
+#######################################################################
+# TWINSCAN CLEANUP (DONE, 2007-06-25, hartera)
+    ssh kkstore02
+    cd /cluster/store5/worm/cb1/bed/twinscan
+    # remove cbAll.gtf as same as in chr_gtf directory
+    rm cbAll.gtf
+    rm *.tab
+    # gzip other files
+    gzip chr_gtf/*.gtf chr_ptx/*.ptx chr_tx/*.tx
+    
+#######################################################################
+# Ce2 BLASTZ CLEANUP (DONE, 2007-06-25, hartera)
+    ssh kkstore02
+    cd /cluster/store5/worm/cb1/bed/blastzCe2.2004-05-05/pslChrom
+    rm psl.tab
+    gzip chrUn_blastzCe2.psl
+    cd /cluster/store5/worm/cb1/bed/blastzCe2/lav/chrUn
+    gzip *.lav
+    cd /cluster/store5/worm/cb1/bed/blastzCe2/axtChain
+    gzip all.chain
+    # this is the same as the chrUn.chain since there is only one chrom
+    # so the chain directory can be removed. 
+    rm -r chain
+    cd run1/chain/
+    gzip chrUn.chain
+    cd ..
+    rm -r err
+    rm batch batch.bak para.results
+    cd /cluster/store5/worm/cb1/bed/blastzCe2/axtChrom
+    gzip chrUn.axt
+     

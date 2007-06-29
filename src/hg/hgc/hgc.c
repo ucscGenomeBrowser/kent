@@ -204,9 +204,11 @@
 #include "geneCheck.h"
 #include "geneCheckDetails.h"
 #include "kg1ToKg2.h"
+#include "wikiTrack.h"
 #include "omicia.h"
+#include "atomDb.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1295 2007/06/12 15:09:10 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1305 2007/06/26 00:16:44 hartera Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -864,6 +866,29 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 }
 
+void showBedTopScorers(struct bed *bedList, char *item, int start, int max)
+/* Show a list of track items sorted by descending score,
+ *  with current item highlighted.
+ *  max is upper bound on how many items will be displayed. */
+{
+int i;
+struct bed *bed;
+
+puts("<B>Top-scoring elements in window:</B><BR>");
+for (i=0, bed=bedList;  bed != NULL && i < max;  bed=bed->next, i++)
+    {
+    if (sameWord(item, bed->name) && bed->chromStart == start)
+        printf("&nbsp;&nbsp;&nbsp;<B>%s</B> ", bed->name);
+    else
+        printf("&nbsp;&nbsp;&nbsp;%s ", bed->name);
+    printf("(%s:%d-%d) %d<BR>\n",
+               bed->chrom, bed->chromStart+1, bed->chromEnd, bed->score);
+
+    }
+if (bed != NULL)
+    printf("(list truncated -- more than %d elements)<BR>\n", max);
+}
+
 void showBedTopScorersInWindow(struct sqlConnection *conn,
 			       struct trackDb *tdb, char *item, int start,
 			       int maxScorers)
@@ -909,6 +934,132 @@ if (bed != NULL)
     printf("(list truncated -- more than %d elements)<BR>\n", maxScorers);
 }
 
+void linkToOtherBrowser(char *otherDb, char *chrom, int start, int end);
+
+void mafPrettyOut(FILE *f, struct mafAli *maf, int lineSize, 
+	boolean onlyDiff, int blockNo);
+
+void doAtom( struct trackDb *tdb, char *item)
+{
+char table[64];
+boolean hasBin;
+//struct bed *bed;
+char query[512];
+struct sqlResult *sr;
+char **row;
+//boolean firstTime = TRUE;
+//char *escapedName = sqlEscapeString(item);
+int start = cartInt(cart, "o");
+//struct sqlConnection *conn = hAllocConn();
+char *user = cfgOption("db.user");
+char *password = cfgOption("db.password");
+struct sqlConnection *sc;
+struct atom ret;
+
+genericHeader(tdb, item);
+hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
+#if 0
+sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d", table, escapedName, seqName, start);
+sr = sqlGetResult(conn, query);
+printf("<B>This is the item you clicked on:</B><BR>\n");
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    if (firstTime)
+	firstTime = FALSE;
+    else
+	htmlHorizontalLine();
+    bed = bedLoadN(row+hasBin, 4);
+    bedPrintPos(bed, 4);
+    }
+sqlFreeResult(&sr);
+
+sprintf(query, "select * from %s where name = '%s'", table, escapedName);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    bed = bedLoadN(row+hasBin, 4);
+    if (bed->chromStart != start)
+	{
+	htmlHorizontalLine();
+	firstTime = FALSE;
+	printf("<B>Another instances on %s:</B><BR>\n",database);
+	bedPrintPos(bed, 4);
+	}
+    }
+sqlFreeResult(&sr);
+#endif
+
+sc = sqlConnectRemote("localhost", user, password, "hgFixed");
+safef(query, sizeof(query),
+      "select * from %s where name = '%s'", table, item);
+sr = sqlGetResult(sc, query);
+printf("<B>Atom %s instances ('*' marks item you clicked on)</B><BR>\n",item);
+printf("<PRE>\n");
+//printf("Ins#\tSpecies\t\tChrom\tStart\tEnd\tStrand\n");
+printf( "  #\t%-10s\t%-10s\t%-15s\t%-15s\t%-15s\t%s\n",
+    "species","chrom", "          start", "          end", "          length", "strand");
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    atomStaticLoad(row, &ret);
+    //atomOutput(&ret, stdout, '\t', '\n');
+    linkToOtherBrowser(ret.species, ret.chrom, ret.start, ret.end);
+    if (sameString(ret.chrom, seqName) && (start  == ret.start) && 
+	sameString(ret.species, database))
+	printf("* ");
+    else
+	printf("  ");
+    printf( "%d\t%-10s\t%-10s\t%15d\t%15d\t%15d\t\t%c\n",ret.instance,
+	ret.species,ret.chrom, ret.start + 1, ret.end, ret.end - ret.start + 1, ret.strand[0]);
+    }
+printf("</A>");
+sqlFreeResult(&sr);
+
+
+char buffer[4096];
+struct mafFile *mf;
+safef(buffer, sizeof buffer, "/gbdb/hgFixed/%s/%s.maf",table, item);
+mf = mafMayOpen(buffer);
+if (mf != NULL)
+    {
+    mafFileFree(&mf);
+    mf = mafReadAll(buffer);
+    struct mafAli *mafAli;
+    int count = 1;
+    int numBlocks = 0;
+
+    for (mafAli=mf->alignments; mafAli; mafAli = mafAli->next)
+	numBlocks++;
+
+    for (mafAli=mf->alignments; mafAli; mafAli = mafAli->next)
+	{
+	printf("<BR><B>Multiple Alignment Block %d of %d</B><BR>",
+	    count, numBlocks);
+	mafPrettyOut(stdout, mafAli, 70, FALSE, count++);
+	if (mafAli->next != NULL)
+	    {
+	    struct mafAli *next = mafAli->next;
+	    struct mafComp *comp1 = mafAli->components;
+	    struct mafComp *comp2 = next->components;
+
+	    printf("<BR><B>Gaps:</B>\n");
+	    for(; comp1 ; comp1 = comp1->next, comp2 = comp2->next)
+		{
+		int diff;
+		char dbOnly[4096];
+
+		diff = comp2->start - (comp1->start + comp1->size);
+
+		safef(dbOnly, sizeof(dbOnly), "%s", comp1->src);
+		chopPrefix(dbOnly);
+		printf("%-20s %d\n",hOrganism(dbOnly), diff);
+		}
+
+	    printf("<BR>");
+	    }
+	}
+    }
+}
+
 void genericBedClick(struct sqlConnection *conn, struct trackDb *tdb, 
 		     char *item, int start, int bedSize)
 /* Handle click in generic BED track. */
@@ -921,6 +1072,11 @@ struct sqlResult *sr;
 char **row;
 boolean firstTime = TRUE;
 char *showTopScorers = trackDbSetting(tdb, "showTopScorers");
+char *filterTopScorers = trackDbSetting(tdb,"filterTopScorers");
+boolean doFilterTopScorers = FALSE;
+char *words[3];
+int filterTopScoreCt = 0;
+char *filterTopScoreTable = NULL;
 char *escapedName = sqlEscapeString(item);
 
 hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
@@ -940,9 +1096,30 @@ while ((row = sqlNextRow(sr)) != NULL)
     bedPrintPos(bed, bedSize);
     }
 sqlFreeResult(&sr);
+safef(query, sizeof query, "%s.%s", table, "filterTopScorersOn");
+if (filterTopScorers != NULL)
+    {
+    if (chopLine(cloneString(filterTopScorers), words) == 3)
+        {
+        doFilterTopScorers = sameString(words[0], "on");
+        filterTopScoreCt = atoi(words[1]);
+        filterTopScoreTable = words[2];
+        }
+    }
+
 if (bedSize >= 5 && showTopScorers != NULL)
     {
     int maxScorers = sqlUnsigned(showTopScorers);
+    doFilterTopScorers = cartCgiUsualBoolean(cart, query, doFilterTopScorers);
+    if (doFilterTopScorers && hTableExists(filterTopScoreTable))
+        {
+        /* limit to those in the top N, from table */
+        safef(query, sizeof query, "%s.%s", table, "filterTopScorersCt");
+        filterTopScoreCt = cartCgiUsualInt(cart, query, filterTopScoreCt);
+        }
+    else
+        /* show all */
+        filterTopScoreTable = NULL;
     showBedTopScorersInWindow(conn, tdb, item, start, maxScorers);
     }
 }
@@ -2918,6 +3095,11 @@ while ((row = sqlNextRow(sr)) != NULL)
     b5 = bed5FloatScoreLoad(row+hasBin);
     bedPrintPos((struct bed *)b5, 4);
     printf("<B>Score:</B> %f<BR>\n", b5->floatScore);
+    if (sameString(tdb->type, "bed5FloatScoreWithFdr"))
+        {
+        if (row[7] != NULL)
+           printf("<B>False Discovery Rate (FDR):</B> %s%%<BR>\n", row[7]);
+        }
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
@@ -3056,7 +3238,8 @@ if (wordCount > 0)
         {
 	genericWiggleClick(conn, tdb, item, start);
         }
-    else if (sameString(type, "bed5FloatScore"))
+    else if (sameString(type, "bed5FloatScore") || 
+             sameString(type, "bed5FloatScoreWithFdr"))
 	{
 	doBed5FloatScore(tdb, item);
 	}
@@ -13422,7 +13605,7 @@ genericClickHandler(tdb, item, buf);
 }
 
 void doJaxQTL(struct trackDb *tdb, char *item)
-/* Put up info on Quantitative Trait Locus from Jackson Labs. */
+/* Put up info on Quantitative Trait Locus from Jackson Lab. */
 {
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
@@ -13565,7 +13748,7 @@ printTrackHtml(tdb);
 }
 
 void doJaxQTL3(struct trackDb *tdb, char *item)
-/* Put up info on Quantitative Trait Locus from Jackson Labs. */
+/* Put up info on Quantitative Trait Locus from Jackson Lab. */
 {
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
@@ -16791,6 +16974,7 @@ int rowOffset = hOffsetPastBin(seqName, table);
 int start = cartInt(cart, "o");
 float het = 0.0;
  
+if (!hTableExists("hapmapAllelesSummary")) return;
 safef(query, sizeof(query), "select * from hapmapAllelesSummary where chrom = '%s' and "
       "chromStart=%d and name = '%s'", seqName, start, itemName);
 sr = sqlGetResult(conn, query);
@@ -18527,6 +18711,18 @@ else if (sameWord(track, "htcGetDnaExtended1"))
     {
     doGetDnaExtended1();
     }
+else if (sameWord(track, G_DELETE_WIKI_ITEM))
+    {
+    doDeleteWikiItem(item, seqName, winStart, winEnd);
+    }
+else if (sameWord(track, G_ADD_WIKI_COMMENTS))
+    {
+    doAddWikiComments(item, seqName, winStart, winEnd);
+    }
+else if (sameWord(track, G_CREATE_WIKI_ITEM))
+    {
+    doCreateWikiItem(item, seqName, winStart, winEnd);
+    }
 else if (startsWith("transMap", track))
     transMapClickHandler(tdb, item);
 else if (sameString(track, "hgcTransMapCdnaAli"))
@@ -18565,6 +18761,8 @@ else if (sameWord(track, "affyU95") || sameWord(track, "affyU133") || sameWord(t
     {
     doAffy(tdb, item, NULL);
     }
+else if (sameWord(track, WIKI_TRACK_TABLE))
+    doWikiTrack(item, seqName, winStart, winEnd);
 else if (sameWord(track, OLIGO_MATCH_TRACK_NAME))
     doOligoMatch(item);
 else if (sameWord(track, "refFullAli"))
@@ -18785,6 +18983,10 @@ else if (sameWord(track, "tfbsConsSites"))
 else if (sameWord(track, "tfbsCons"))
     {
     tfbsCons(tdb, item);
+    }
+else if (startsWith("atom", track))
+    {
+    doAtom(tdb, item);
     }
 else if (sameWord(track, "firstEF"))
     {

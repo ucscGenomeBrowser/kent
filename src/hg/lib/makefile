@@ -6,7 +6,7 @@ L = -lm $(MYSQLLIBS)
 
 O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetails.o \
     affyOffset.o affyPairs.o agp.o agpFrag.o agpGap.o alignSeqSizes.o altGraph.o \
-    altGraphX.o ancientRref.o  axtInfo.o \
+    altGraphX.o ancientRref.o atomDb.o  axtInfo.o \
     axtLib.o bactigPos.o bdgpExprLink.o bdgpGeneInfo.o \
     bed.o bed5FloatScore.o bed5Pval.o bed6FloatScore.o bed12Source.o \
     bedCart.o bgiGeneInfo.o bgiGeneSnp.o bgiSnp.o bioImage.o \
@@ -66,7 +66,7 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     refLink.o refSeqStatus.o \
     rgdQtl.o rgdQtl.o rgdQtl.o rgdQtl.o rgdQtl.o rgdQtl.o rgdQtl.o \
     rgdQtl.o riken.o rhMapZfishInfo.o rikenBest.o rikenCluster.o rmskOut.o \
-    rnaFold.o rnaGene.o rnaGroup.o rnaPLFold.o tRNAs.o gbRNAs.o snoRNAs.o lowelabPfamHit.o \
+    rnaFold.o rnaGene.o rnaGroup.o rnaPLFold.o tRNAs.o gbRNAs.o snoRNAs.o lowelabPfamHit.o lowelabArkinOperonScore.o \
     rnaSecStr.o tfbsConsFactors.o retroMrnaInfo.o \
     roughAli.o transMapInfo.o sage.o sageCounts.o sageExp.o sample.o \
     sqlProg.o tfbsCons.o tfbsConsSites.o \
@@ -88,7 +88,7 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     txEdgeOrtho.o txGraph.o txInfo.o txRnaAccs.o \
     vegaInfo.o vegaInfoZfish.o visiGene.o vntr.o \
     wabAli.o web.o ncRna.o wgRna.o wigAsciiToBinary.o wigDataStream.o wiggle.o \
-    wiggleCart.o wiggleUtils.o wikiLink.o zdobnovSynt.o oreganno.o \
+    wiggleCart.o wiggleUtils.o wikiLink.o wikiTrack.o zdobnovSynt.o oreganno.o \
     oregannoUi.o gvUi.o gv.o omicia.o
 
 

@@ -69,7 +69,7 @@ autoScaleDefault Off
 windowingFunction mean
 group compGeno
 priority 103.1
-visibility pack
+visibility hide
 color 0, 10, 100
 altColor 0,90,10
 type wig 0.0 2.87
@@ -79,13 +79,13 @@ viewLimits .2:1.6
     subTrack phyloP
     shortLabel Vertebrate
     longLabel Vertebrate PhyloP Conservation P-Values
-    priority 1
+    priority 2
 
     track phyloP28wayPlacMammal
     subTrack phyloP
     shortLabel Plac Mammal
     longLabel Placental Mammal PhyloP Conservation P-Values
-    priority 2
+    priority 1
 
 release alpha
 track phastConsHq
@@ -98,7 +98,7 @@ autoScaleDefault Off
 windowingFunction mean
 group compGeno
 priority 103.2
-visibility pack
+visibility hide
 color 0, 10, 100
 altColor 0,90,10
 type wig 0.0 1.0
@@ -107,22 +107,21 @@ type wig 0.0 1.0
     subTrack phastConsHq
     shortLabel Vertebrate
     longLabel Vertebrate HQ PhastCons Conservation (18 species)
-    priority 1
+    priority 2
 
     track phastCons28wayHqPlacMammal
     subTrack phastConsHq
     shortLabel Plac Mammal
     longLabel Placental Mammal HQ PhastCons Conservation (8 species)
-    priority 2
+    priority 1
 
-release alpha
 track multiz28way
-shortLabel 28-Way Cons 
+shortLabel Conservation 
 longLabel Vertebrate Multiz Alignment & PhastCons Conservation (28 Species)
 irows on
 summary multiz28waySummary
 frames multiz28wayFrames
-wiggle phastCons28way Vertebrate Vertebrate phastCons28wayPlacMammal Plac_Mammal Placental_Mammal
+wiggle phastCons28wayPlacMammal Mammal Placental_Mammal phastCons28way Vertebrate Vertebrate 
 spanList 1
 maxHeightPixels 100:40:11
 autoScaleDefault Off
@@ -136,15 +135,14 @@ type wigMaf 0.0 1.0
 speciesGroups Primate Placental_Mammal Vertebrate
 sGroup_Primate panTro2 rheMac2 otoGar1
 sGroup_Placental_Mammal tupBel1 mm8 rn4 cavPor2 oryCun1 sorAra1 eriEur1 canFam2 felCat3 equCab1 bosTau3 dasNov1 loxAfr1 echTel1
-sGroup_Vertebrate monDom4 ornAna1 anoCar1 galGal3 xenTro2 fr2 tetNig1 gasAcu1 oryLat1 danRer4
+sGroup_Vertebrate monDom4 ornAna1 anoCar1 galGal3 xenTro2 danRer4 tetNig1 fr2 gasAcu1 oryLat1
 speciesDefaultOff panTro2 rn4 otoGar1 felCat3 loxAfr1 bosTau3 echTel1 danRer4 fr2 tetNig1 oryLat1 tupBel1 cavPor2 oryCun1 sorAra1 eriEur1
 itemFirstCharCase noChange
 treeImage phylo/hg18_28way.gif
 
-release alpha
 track mostConserved28way
 compositeTrack on
-shortLabel 28-Way Most Cons
+shortLabel Most Conserved
 longLabel PhastCons Conserved Elements, 28-way Vertebrate Multiz Alignment
 group compGeno
 priority 103.4
@@ -153,26 +151,26 @@ exonArrows off
 showTopScorers 200
 type bed 5 .
 
+    track phastConsElements28wayPlacMammal
+    subTrack mostConserved28way
+    shortLabel Mammal
+    longLabel PhastCons Placental Mammal Conserved Elements, 28-way Multiz Alignment
+    color 100,50,170
+    priority 1
+
     track phastConsElements28way
     subTrack mostConserved28way
     shortLabel Vertebrate
     longLabel PhastCons Vertebrate Conserved Elements, 28-way Multiz Alignment
     color 170,100,50
-    priority 1
-
-    track phastConsElements28wayPlacMammal
-    subTrack mostConserved28way
-    shortLabel Plac Mammal
-    longLabel PhastCons Placental Mammal Conserved Elements, 28-way Multiz Alignment
-    color 100,50,170
     priority 2
 
 track multiz17way
-shortLabel Conservation
+shortLabel 17-Way Cons
 longLabel Vertebrate Multiz Alignment & Conservation (17 Species)
 group compGeno
 priority 104.2
-visibility pack
+visibility hide 
 color 0, 10, 100
 altColor 0,90,10
 type wigMaf 0.0 1.0
@@ -194,7 +192,7 @@ treeImage phylo/hg17_17way.gif
 speciesCodonDefault hg18
 
 track phastConsElements17way
-shortLabel Most Conserved
+shortLabel 17-Way Most Cons
 longLabel PhastCons Conserved Elements, 17-way Vertebrate Multiz Alignment
 group compGeno
 priority 104.4
@@ -396,16 +394,30 @@ searchType genePred
 termRegex g[0-9]+\.t[0-9]+
 searchPriority 50
 
-track nscanGene
+track nscan
+compositeTrack on
 shortLabel N-SCAN
 longLabel N-SCAN Gene Predictions
 group genes
 priority 45.1
 visibility hide
-color 34,139,34
-type genePred nscanPep
+type genePred
 baseColorUseCds given
 baseColorDefault genomicCodons
+
+    track nscanPasaGene
+    subTrack nscan
+    shortLabel N-SCAN PASA-EST
+    longLabel N-SCAN PASA-EST Gene Predictions
+    color 34,139,34
+    priority 1
+
+    track nscanGene
+    subTrack nscan
+    shortLabel N-SCAN
+    longLabel N-SCAN Gene Predictions
+    color 84,119,34
+    priority 2
 
 track phastConsElements
 shortLabel Most Conserved
@@ -1597,6 +1609,30 @@ visibility hide
 spectrum on
 type netAlign ornAna1 chainOrnAna1Pre
 otherDb ornAna1
+
+track atom13480779
+shortLabel atom13480779 
+longLabel atom13480779 (canFam2=orange,mm8=green,rn4=blue,rheMac2=brick,panTro2=dk blue,hg18=dk green)
+group x
+priority 1.1
+visibility hide
+type bed 6
+
+track atom97565
+shortLabel atom97565 
+longLabel atom97565 (canFam2=orange,mm8=green,rn4=blue,rheMac2=brick,panTro2=dk blue,hg18=dk green)
+group x
+priority 1.1
+visibility hide
+type bed 6
+
+track atom992
+shortLabel atom992
+longLabel atom992 (canFam2=orange,mm8=green,rn4=blue,rheMac2=brick,panTro2=dk blue,hg18=dk green)
+group x
+priority 1.1
+visibility hide
+type bed 6
 
 track multizMetazoan
 shortLabel Metazoan Maf

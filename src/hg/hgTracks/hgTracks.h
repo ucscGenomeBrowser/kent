@@ -114,7 +114,7 @@ struct track
     /* Get color for the item's label (optional). */
 
     void (*mapItem)(struct track *tg, void *item, 
-    	char *itemName, int start, int end, 
+    	char *itemName, char *mapItemName, int start, int end, 
 	int x, int y, int width, int height); 
     /* Write out image mapping for a given item */
 
@@ -272,7 +272,16 @@ struct gsidSubj
     char *subjId;
     };
 
+/* global GSID sequence list */
+struct gsidSeq
+    {
+    struct gsidSeq  *next;
+    char *seqId;
+    char *subjId;
+    };
+
 extern struct gsidSubj *gsidSelectedSubjList;
+extern struct gsidSeq  *gsidSelectedSeqList;
 
 extern struct trackLayout tl;
 
@@ -526,6 +535,9 @@ void linkedFeaturesFreeList(struct linkedFeatures **pList);
 void freeLinkedFeaturesSeries(struct linkedFeaturesSeries **pList);
 /* Free up a linked features series list. */
 
+int linkedFeaturesCmp(const void *va, const void *vb);
+/* Compare to sort based on chrom,chromStart. */
+
 int linkedFeaturesCmpStart(const void *va, const void *vb);
 /* Help sort linkedFeatures by starting pos. */
 
@@ -557,6 +569,9 @@ Color lfChromColor(struct track *tg, void *item, struct vGfx *vg);
 
 char *lfMapNameFromExtra(struct track *tg, void *item);
 /* Return map name of item from extra field. */
+
+char *linkedFeaturesName(struct track *tg, void *item);
+/* Return name of item. */
 
 int getFilterColor(char *type, int colorIx);
 /* Get color corresponding to type - MG_RED for "red" etc. */
@@ -811,8 +826,8 @@ void linkedFeaturesSeriesMethods(struct track *tg);
 void loadMaScoresBed(struct track *tg);
 /* This one loads microarray specific beds (multiple scores). */
 
-void lfsMapItemName(struct track *tg, void *item, char *itemName, int start, int end,
-                    int x, int y, int width, int height);
+void lfsMapItemName(struct track *tg, void *item, char *itemName, char *mapItemName, int start, int end, 
+		    int x, int y, int width, int height);
 
 Color expressionColor(struct track *tg, void *item, struct vGfx *vg,
                       float denseMax, float fullMax);
@@ -877,6 +892,10 @@ void setRulerMode();
 #define configHideAll "hgt_doConfigHideAll"
 #define configShowAll "hgt_doConfigShowAll"
 #define configDefaultAll "hgt_doDefaultShowAll"
+#define configHideAllGroups "hgt_doConfigHideAllGroups"
+#define configShowAllGroups "hgt_doConfigShowAllGroups"
+#define configHideEncodeGroups "hgt_doConfigHideEncodeGroups"
+#define configShowEncodeGroups "hgt_doConfigShowEncodeGroups"
 #define configGroupTarget "hgt_configGroupTarget"
 #define configPriorityOverride "hgt_priorityOverride"
 
@@ -920,6 +939,31 @@ void linkedFeaturesSeriesDrawAt(struct track *tg, void *item,
 
 #define NEXT_ITEM_ARROW_BUFFER 5
 /* Space around "next item" arrow (in pixels). */
+
+void addWikiTrack(struct track **pGroupList);
+/* Add wiki track and append to group list. */
+
+void wikiTrackMethods(struct track *tg);
+/* establish loadItems function for wiki track */
+
+struct bed *wikiTrackGetBedRange(char *mapName, char *chromName,
+	int start, int end);
+/* fetch wiki track items as simple bed 3 list in given range */
+
+void bed8To12(struct bed *bed);
+/* Turn a bed 8 into a bed 12 by defining one block. */
+
+char *collapseGroupVar(char *name);
+/* Construct cart variable name for collapsing group */
+
+boolean isCollapsedGroup(char *name);
+/* Determine if group is collapsed */
+
+void collapseGroupGoodies(boolean isOpen, boolean wantSmallImage,
+                            char **img, char **indicator, char **otherState);
+/* Get image, char representation of image, and 'otherState' (1 or 0)
+ * for a group, based on whether it is collapsed, and whether we want
+ * larger or smaller image for collapse box */
 
 #endif /* HGTRACKS_H */
 

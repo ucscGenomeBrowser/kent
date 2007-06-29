@@ -12,13 +12,14 @@
 #include "dystring.h"
 #include "mafSummary.h"
 
-static char const rcsid[] = "$Id: hgLoadMafSummary.c,v 1.16 2006/07/13 16:42:51 hiram Exp $";
+static char const rcsid[] = "$Id: hgLoadMafSummary.c,v 1.17 2007/06/20 01:16:16 angie Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
     {"mergeGap", OPTION_INT},
     {"minSize", OPTION_INT},
     {"maxSize", OPTION_INT},
+    {"minSeqSize", OPTION_INT},
     {"test", OPTION_BOOLEAN},
     {NULL, 0}
 };
@@ -26,6 +27,7 @@ boolean test = FALSE;
 int mergeGap = 500;
 int minSize = 10000;
 int maxSize = 50000;
+int minSeqSize = 1000000;
 char *database = NULL;
 long summaryCount = 0;
 
@@ -40,9 +42,12 @@ errAbort(
     "   -mergeGap=N   max size of gap to merge regions (default %d)\n"
     "   -minSize=N         merge blocks smaller than N (default %d)\n"
     "   -maxSize=N         break up blocks larger than N (default %d)\n"
+    "   -minSeqSize=N skip alignments when reference sequence is less than N\n"
+    "                 (default %d -- match with hgTracks min window size for\n"
+    "                 using summary table)\n"
     "   -test         suppress loading the database. Just create .tab file(s)\n"
     "                     in current dir.\n",
-                                mergeGap, minSize, maxSize 
+mergeGap, minSize, maxSize, minSeqSize
   );
 }
 
@@ -231,6 +236,8 @@ verbose(1, "Indexing and tabulating %s\n", fileName);
 while ((maf = mafNext(mf)) != NULL)
     {
     mcMaster = mafMaster(maf, mf, fileName);
+    if (mcMaster->srcSize < minSeqSize)
+	continue;
     while (mcMaster->size > maxSize)
         {
         /* break maf into maxSize pieces */
@@ -279,6 +286,7 @@ test = optionExists("test");
 mergeGap = optionInt("mergeGap", mergeGap);
 minSize = optionInt("minSize", minSize);
 maxSize = optionInt("maxSize", maxSize);
+minSeqSize = optionInt("minSeqSize", minSeqSize);
 if (argc != 4)
     usage();
 database = argv[1];

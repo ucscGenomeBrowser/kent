@@ -100,7 +100,7 @@ set familyDb $hg,$mm,$ce,$sacCer,$dm
 set ccdsDb hg18,hg17,mm8
 
 # Magic for tables split between chromosomes
-set split splitPrefix=chr%_
+set split splitPrefix=chr%\_
 
 # Define the shared identifiers and the fields they appear in.
 
@@ -620,8 +620,8 @@ identifier vegaPseudoZfishName typeOf=vegaZfishName
 identifier vegaPseudoGeneZfishName typeOf=vegaPseudoZfishName dependency
 "Link together Zebrafish VEGA predicted gene structure additional information"
     danRer4.vegaPseudoGene.name
-    danRer4.vegaInfoZfish.transcriptId minCheck=0.007
-    danRer4.vegaToCloneId.transcriptId minCheck=0.007
+    danRer4.vegaInfoZfish.transcriptId minCheck=0.005
+    danRer4.vegaToCloneId.transcriptId minCheck=0.005
 
 identifier vegaPseudogeneName typeOf=vegaName
 "Link together VEGA pseudogene and other info."
@@ -1040,8 +1040,8 @@ identifier estOrMrnaAccession typeOf=genbankAccession
     $gbd,!ce2,!hg16,!hg17,!hg18,!mm7.altGraphX.mrnaRefs comma
     ce2.altGraphX.mrnaRefs comma minCheck=0.97
     hg16.altGraphX.mrnaRefs comma minCheck=0.99
-    hg17.altGraphX.mrnaRefs comma minCheck=0.99
-    hg18.altGraphX.mrnaRefs comma minCheck=0.99
+    hg17.altGraphX.mrnaRefs comma minCheck=0.97
+    hg18.altGraphX.mrnaRefs comma minCheck=0.98
     mm7.altGraphX.mrnaRefs comma minCheck=0.99
 
 identifier estAccession typeOf=estOrMrnaAccession
@@ -1214,6 +1214,7 @@ identifier knownGeneId dependency
     $ccdsDb.ccdsKgMap.geneId
     $kgDb3.knownCanonical.protein exclude=
     $kgDb3.kgProtMap.qName 
+    $kgDb3.kgColor.kgID full
 
 identifier knownGeneOld2Id dependency 
 "Old knownGene (KGII) and kgXref tables kept after KGIII implementation"
@@ -1887,6 +1888,7 @@ identifier extFileId
     #$gbd.multiz12way.extFile
     #$gbd.multiz15way.extFile
     #$gbd.multiz17way.extFile
+    #$gbd.multiz28way.extFile
 
 identifier gbExtFileId
 "External file ID for GenBank incremental update system"
@@ -2495,6 +2497,8 @@ tablesIgnored $gbd
     multiz15wayFrames
     multiz17waySummary
     multiz17wayFrames
+    multiz28waySummary
+    multiz28wayFrames
     phastCons4way
     phastConsElements4way
     phastCons5way
@@ -2593,6 +2597,34 @@ tablesIgnored $apiMel
 tablesIgnored $hg
     acescan
     affyTranscriptome
+    affyTxnPhase3FragsHDF
+    affyTxnPhase3FragsHeLaCyto
+    affyTxnPhase3FragsHeLaNuclear
+    affyTxnPhase3FragsHepG2Cyto
+    affyTxnPhase3FragsHepG2Nuclear
+    affyTxnPhase3FragsJurkat
+    affyTxnPhase3FragsNCCIT
+    affyTxnPhase3FragsPC3
+    affyTxnPhase3FragsSK_N_AS
+    affyTxnPhase3FragsU87MG
+    affyTxnPhase3FragsHeLaTopStrand
+    affyTxnPhase3FragsHeLaBottomStrand
+    affyTxnPhase3FragsHepG2TopStrand
+    affyTxnPhase3FragsHepG2BottomStrand
+    affyTxnPhase3HDF
+    affyTxnPhase3HeLaCyto
+    affyTxnPhase3HeLaNuclear
+    affyTxnPhase3HepG2Cyto
+    affyTxnPhase3HepG2Nuclear
+    affyTxnPhase3Jurkat
+    affyTxnPhase3NCCIT
+    affyTxnPhase3PC3
+    affyTxnPhase3SK_N_AS
+    affyTxnPhase3U87MG
+    affyTxnPhase3HeLabottom_strand
+    affyTxnPhase3HeLatop_strand
+    affyTxnPhase3HepG2bottom_strand
+    affyTxnPhase3HepG2top_strand
     zoom1_affyTranscriptome
     zoom2_affyTranscriptome
     chimpDels

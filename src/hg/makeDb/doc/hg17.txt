@@ -23757,3 +23757,109 @@ hgLoadBed -sqlTable=switchDbTss.sql hg17 switchDbTss switchDbTss.bed
     # as part the normal genbank build.  Change above to:
         hg18.orfeomeTables.default = yes
     
+###########################################################################
+# Transcriptome Phase 3 tracks (Andy 2007-06-10)
+
+ssh hgwdev
+bash
+cd /san/sanVol1/scratch/andy
+mkdir transcriptome
+cd transcriptome/
+cd /cluster/data/hg17
+cp /var/ftp/encode/Affy_transcriptome_phase3.tar .
+tar xfv Affy_transcriptome_phase3.tar 
+find . -name '*.bz2' -exec bunzip2 '{}' \;
+cat > processWig.sh << "EOF"
+#!/bin/bash
+
+theDir=`dirname $1`;
+theFile=`basename $1`;
+table=affyTxnPhase3${theFile%.sig.wig};
+tmp=/scratch/tmp/trans3rdPhase.$$
+
+mkdir $tmp
+cp $1 $tmp
+pushd $tmp
+head -n1 $theFile > $table.sig.track.txt
+tail +2 $theFile > tmp; mv tmp $theFile
+wigEncode $theFile $table.wig $table.wib
+popd
+cp $tmp/${table}.* $theDir
+rm -rf $tmp
+EOF
+chmod +x processWig.sh
+cat > gsub << "EOF"
+#LOOP
+./processWig.sh {check in line+ $(path1)} {check out exists $(dir1)/$(root1).track.txt}
+#ENDLOOP
+EOF
+find . -name '*.sig.wig' > wig.lst
+gensub2 wig.lst single gsub spec
+ssh pk
+cd /san/sanVol1/scratch/andy/transcriptome
+para create spec
+para push
+exit
+cd /cluster/data/hg17/bed
+mkdir transcriptome3rdPhase/{wig,wib,bed}
+cd transcriptome3rdPhase/wib/
+cp /san/sanVol1/scratch/andy/transcriptome/graphs/human_{long,short}_rna/affyTxnPhase3*.wib .
+pushd /gbdb/hg17/wib
+ln -s /cluster/data/hg17/bed/transcriptome3rdPhase/wib/* .
+popd
+cd ../wig/
+cp /san/sanVol1/scratch/andy/transcriptome/graphs/human_{long,short}_rna/affyTxnPhase3*.wig .
+for f in *; do
+   hgLoadWiggle hg17 ${f%.wig} $f
+done
+cd ../bed
+for f in /san/sanVol1/scratch/andy/transcriptome/transfrags/human_{long,short}_rna/*; do
+   newName=`basename $f`;
+   newName=${newName%.bz2};
+   bzcat $f | tail +2 > $newName;
+   tab=affyTxnPhase3Frags${newName%.bed};
+   hgLoadBed hg17 $tab $newName;
+done
+
+#######################################################################
+# CLEANUP OF DANRER1 BLASTZ SWAP (DONE, 2007-06-25, hartera)
+   ssh kkstore02
+   cd /cluster/data/hg17/bed/blastz.danRer1.swap/axtChain
+   rm -r run1
+   cd ../mafNet.new
+   gzip *.maf
+   # we don't tend to keep the Blastz PSLs anymore and this is an old 
+   # zebrafish assembly so remove these.
+   cd ../
+   rm -r pslChrom
+   # this removed 1.2 G of data.
+
+#######################################################################
+# CLEANUP OF ACEMBLY_050217 DATA (DONE, 2007-06-25, hartera)
+   ssh kkstore02
+   cd /cluster/store5/gs.18/build35/bed/acembly_050217
+   rm GeneCheck.out GeneCheck2 acembly acembly.chk acembly.details \
+      chrom.out genePred.tab hg16.name hg16Pep.name
+   cd acembly_gene_lists
+   rm test transcripts.names *.bak main_gene.list.IDsort mp.ids mp.sort ptest \
+      maintest gid.tab gid.tab.sort genesGffs.ids genesGffs.ids.uniq 
+   cd ../
+   # remove fasta files as included in gzipped tar file
+   rm -r acembly.ncbi_35.genes.proteins.fasta 
+   cd acembly.ncbi_35.genes.gff
+   gzip *.gff 
+
+#######################################################################
+# CLEANUP OF DANRER2 BLASTZ SWAP (DONE, 2007-06-25, hartera)
+   ssh kkstore02
+   cd /cluster/store5/gs.18/build35/bed/blastz.danRer2.2004-12-08
+   # remove old axtChrom directory
+   rm -r axtChrom.orig
+   cd axtChain
+   # chain directories can be recreated from all.chain files so remove
+   rm -r chain chainAR
+   # gzip net files
+   gzip net/*.net
+   # gzip .over files
+   gzip over/*.over
+   # removed ~1.3 G data 

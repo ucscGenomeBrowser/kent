@@ -195,8 +195,11 @@ while( (wordsRead = lineFileChopNext(lf, bigWords, sizeof(bigWords)/sizeof(char 
 	    }
 	}
     }
-    slReverse(&genome->breaks);
-    slReverse(&genome->elements);
+    if (genome)
+	{
+	slReverse(&genome->breaks);
+	slReverse(&genome->elements);
+	}
     //AllocVar(p);
     //p->element = genome->elements->next;
     //p->count = 1;
@@ -228,7 +231,8 @@ while( (wordsRead = lineFileChopNext(lf, bigWords, sizeof(bigWords)/sizeof(char 
     for(ii=0; ii < numChildren; ii++)
 	{
 	struct phyloTree *childNode = readEleTree(lf,elements, count, addStartStop);
-	phyloAddEdge(node, childNode);
+	if (childNode != NULL)
+	    phyloAddEdge(node, childNode);
 	}
 
     freez(&elements);

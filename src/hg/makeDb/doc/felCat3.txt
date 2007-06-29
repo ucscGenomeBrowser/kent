@@ -788,6 +788,16 @@ augustus/src/augustus --AUGUSTUS_CONFIG_PATH=/cluster/data/felCat3/bed/augustus/
     ~/kent/src/hg/utils/automation/doRecipBest.pl felCat3 canFam2 \
         -buildDir=`pwd` >&! rbest.log  &
 
+    # downloadables
+    ssh hgwdev
+    ln -s /cluster/data/felCat3/bed/blastz.canFam2.2006-11-18.swap/axtRBestNet/felCat3.canFam2.rbest.axt.gz \
+        /usr/local/apache/htdocs/goldenPath/felCat3/vsCanFam2/felCat3.canFam2.rbest.axt.gz
+    ln -s /cluster/data/felCat3/bed/blastz.hg18/axtRBestNet/felCat3.hg18.rbest.axt.gz \
+        /usr/local/apache/htdocs/goldenPath/felCat3/vsHg18/felCat3.hg18.rbest.axt.gz
+    ln -s /cluster/data/felCat3/bed/blastz.mm8.2006-11-15.swap/axtRBestNet/felCat3.mm8.rbest.axt.gz \
+        /usr/local/apache/htdocs/goldenPath/felCat3/vsMm8/felCat3.mm8.rbest.axt.gz
+
+
 ##########################################################################
 # MULTIZ4WAY (Heather, DONE, May 2007)
 
@@ -811,6 +821,10 @@ augustus/src/augustus --AUGUSTUS_CONFIG_PATH=/cluster/data/felCat3/bed/augustus/
   cd /cluster/data/felCat3/bed/multiz4way
   mkdir maf
   mkdir run
+
+  # tree_doctor
+  /cluster/bin/phast.new/tree_doctor  --prune-all-but=felCat3,canFam2,mm8,hg18 \
+     /cluster/data/hg18/bed/multiz28way/cons/28way.mod  | awk '$1 == "TREE:" {print $2;}'  > 4way.nh
 
   # use the following for species.lst:
   # felCat3 canFam2 mm8 hg18
@@ -996,6 +1010,18 @@ chmod +x getIrows.sh
   time nice hgLoadSqlTab felCat3 multiz4waySummary /tmp/multiz4waySummary.sql multiz4waySummary.tab
   # 0.000u 0.003s 0:04.18 0.0%      0+0k 0+0io 3pf+0w
 
+  # summary is only useful for scaffolds larger than 1 million, which is just 7 in felCat3
+  # Angie subsequently changed hgLoadMafSummary so by default it will skip small sequences
+  mysql> insert into multiz4waySummaryNew select * from multiz4waySummary where chrom = "scaffold_217569";
+  mysql> insert into multiz4waySummaryNew select * from multiz4waySummary where chrom = "scaffold_213970";
+  mysql> insert into multiz4waySummaryNew select * from multiz4waySummary where chrom = "scaffold_138821";
+  mysql> insert into multiz4waySummaryNew select * from multiz4waySummary where chrom = "scaffold_149667";
+  mysql> insert into multiz4waySummaryNew select * from multiz4waySummary where chrom = "scaffold_217324";
+  mysql> insert into multiz4waySummaryNew select * from multiz4waySummary where chrom = "scaffold_132063";
+  mysql> insert into multiz4waySummaryNew select * from multiz4waySummary where chrom = "scaffold_194753";
+  mysql> rename table multiz4waySummary to multiz4waySummaryAll;
+  mysql> rename table multiz4waySummaryNew to multiz4waySummary;
+
 
 #########################################################################
 # MULTIZ4WAY DOWNLOADABLES (Done May 2007 Heather)
@@ -1021,6 +1047,7 @@ chmod +x getIrows.sh
     ln -s /cluster/data/felCat3/bed/multiz4way/mafDownloads/{*.gz,md5sum.txt} $dir
     cp /usr/local/apache/htdocs/goldenPath/ornAna1/multiz6way/README.txt $dir
     # edit README.txt
+    # create /usr/local/apache/htdocs/goldenPath/hg18/multiz4way/4way.nh
 
 
 #########################################################################
@@ -1076,5 +1103,187 @@ chmod +x getIrows.sh
     ssh hgwdev
     cd /cluster/data/felCat3/bed/multiz4way/frames
     hgLoadMafFrames felCat3 multiz4wayFrames felCat3.mafFrames.gz
+
+
+##########################################################################
+# PHASTCONS (DONE, June 2007, Heather)
+# Using Angie's process from ornAna1.txt
+
+    ssh hgwdev
+    cd /cluster/data/felCat3/bed/multiz4way
+    mkdir phastCons
+    cd phastCons
+
+    # tree_doctor
+    # Does the order matter in the prune-all-but argument?
+    /cluster/bin/phast.new/tree_doctor  --prune-all-but=felCat3,canFam2,mm8,hg18 \
+        /cluster/data/hg18/bed/multiz28way/cons/28way.mod > 4way.mod
+
+    # msa_split
+    # msa_split requires its MAF and FA inputs to contain one sequence each
+    # input is from /cluster/data/felCat3/bed/multiz4way/maf/split*.maf
+    # output is to /san/sanvol1/scratch/felCat3/multiz4way/phastCons/ss
+    ssh kkstore05
+    cd /cluster/data/felCat3/bed/multiz4way/phastCons
+    nice ./doSplitOnFileserver.csh > & split.log &
+    # this took 5.5 hours to create directories split000 - split999
+    # not bothering to restructure as a cluster run (Angie suggested this in ornAna1.txt)
+    # 50k WARNINGs in split.log
+    # make a list of all output (sort each split dir by size)
+    ./makeInput.sh
+
+    # check a single chunk
+    ssh kolossus
+    cd /cluster/data/felCat3/bed/multiz4way/phastCons
+    /cluster/bin/phast.new/phyloFit -i SS -E -p MED -s HKY85 \
+        --tree "`cat ../tree-commas.nh`" \
+        /san/sanvol1/scratch/felCat3/multiz4way/phastCons/ss/split495/scaffold_216010.1-806250.ss \
+	-o phyloFit.tree
+
+    # get value of rho
+    ssh kolossus
+    mkdir run.cons
+    cd run.cons
+    /cluster/bin/phast.new/phastCons --estimate-rho /tmp/estimatedRho.mod \
+        --target-coverage 0.005 --expected-length 12 --no-post-probs \
+        /san/sanvol1/scratch/felCat3/multiz4way/phastCons/ss/split495/scaffold_216010.1-806250.ss ../4way.mod
+    # rho = 0.226082
+
+    # template goes here (uses rho)
+
+    # run all
+    ssh pk
+    cd /cluster/data/felCat3/bed/multiz4way/phastCons/run.cons
+    mv ../in.list .
+    gensub2 in.list single template jobList
+
+    para create jobList
+    para try
+    para check
+    para push 
+
+    para time
+    # Completed: 103985 of 103985 jobs
+    # CPU time in finished jobs:      11039s     183.98m     3.07h    0.13d 0.000 y
+    # IO & Wait Time:               1170173s   19502.89m   325.05h   13.54d 0.037 y
+    # Average job time:                  11s       0.19m     0.00h    0.00d
+    # Longest running job:                0s       0.00m     0.00h    0.00d
+    # Longest finished job:             177s       2.95m     0.05h    0.00d
+    # Submission to last job:          7596s     126.60m     2.11h    0.09d
+
+    # create Most Conserved track
+    # Takes about 10 minutes
+    ssh kolossus
+    cd /san/sanvol1/scratch/felCat3/multiz4way/phastCons
+    find ./bed -name "*.bed" \
+    | sed -e "s/\// x /g" -e "s/\./ y /g" -e "s/-/ z /g" \
+    | sort -k7,7 -k9,9n \
+    | sed -e "s/ x /\//g" -e "s/ y /\./g" -e "s/ z /-/g" \
+    | xargs cat \
+    | awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' \
+    | /cluster/bin/scripts/lodToBedScore /dev/stdin >
+    phastConsElements4way.bed
+    cp phastConsElements4way.bed /cluster/data/felCat3/bed/multiz4way/phastCons
+
+    # estimate coverage
+    # ornAna1 targets: 5% overall coverage, 70% CDS coverage
+    # xenTro1 target: 4% overall coverage
+    ssh hgwdev
+    cd /cluster/data/felCat3/bed/multiz4way/phastCons
+    # attempted genome-wide, ran over an hour without completing
+
+    # pick scaffolds with NSCAN annotations:
+    featureBits -chrom=scaffold_0 felCat3 -enrichment nscanGene:cds phastConsElements4way.bed
+    # nscanGene:cds 10.166%, phastConsElements4way.bed 0.358%, both 0.358%, cover 3.53%, enrich 9.84x
+    featureBits -chrom=scaffold_1000 felCat3 -enrichment nscanGene:cds phastConsElements4way.bed
+    # nscanGene:cds 5.882%, phastConsElements4way.bed 2.677%, both 2.286%, cover 38.87%, enrich 14.52x
+    featureBits -chrom=scaffold_100011 felCat3 -enrichment nscanGene:cds phastConsElements4way.bed
+    # nscanGene:cds 3.830%, phastConsElements4way.bed 2.286%, both 1.993%, cover 52.04%, enrich 22.76x
+    featureBits -chrom=scaffold_100063 felCat3 -enrichment nscanGene:cds phastConsElements4way.bed
+    # nscanGene:cds 2.668%, phastConsElements4way.bed 1.487%, both 0.701%, cover 26.29%, enrich 17.69x
+    featureBits -chrom=scaffold_100077 felCat3 -enrichment nscanGene:cds phastConsElements4way.bed
+    # nscanGene:cds 2.671%, phastConsElements4way.bed 1.784%, both 0.968%, cover 36.25%, enrich 20.32x
+    featureBits -chrom=scaffold_100083 felCat3 -enrichment nscanGene:cds phastConsElements4way.bed
+    # nscanGene:cds 3.633%, phastConsElements4way.bed 6.358%, both 3.633%, cover 100.00%, enrich 15.73x
+    featureBits -chrom=scaffold_100088 felCat3 -enrichment nscanGene:cds phastConsElements4way.bed
+    # nscanGene:cds 1.384%, phastConsElements4way.bed 2.254%, both 0.625%, cover 45.15%, enrich 20.03x
+
+    # the largest scaffolds:
+    featureBits -chrom=scaffold_217569 felCat3 -enrichment nscanGene:cds phastConsElements4way.bed
+    # nscanGene:cds 0.877%, phastConsElements4way.bed 3.784%, both 0.607%, cover 69.21%, enrich 18.29x
+    featureBits -chrom=scaffold_213970 felCat3 -enrichment nscanGene:cds phastConsElements4way.bed
+    # nscanGene:cds 0.000%, phastConsElements4way.bed 1.531%, both 0.000%, cover nan%, enrich  nanx
+    featureBits -chrom=scaffold_138821 felCat3 -enrichment nscanGene:cds phastConsElements4way.bed
+    # nscanGene:cds 6.129%, phastConsElements4way.bed 5.286%, both 3.572%, cover 58.28%, enrich 11.02x
+    featureBits -chrom=scaffold_149667 felCat3 -enrichment nscanGene:cds phastConsElements4way.bed
+    # nscanGene:cds 0.658%, phastConsElements4way.bed 0.900%, both 0.344%, cover 52.30%, enrich 58.14x
+    featureBits -chrom=scaffold_217324 felCat3 -enrichment nscanGene:cds phastConsElements4way.bed
+    # nscanGene:cds 0.746%, phastConsElements4way.bed 3.041%, both 0.531%, cover 71.21%, enrich 23.42x
+    featureBits -chrom=scaffold_132063 felCat3 -enrichment nscanGene:cds phastConsElements4way.bed
+    # nscanGene:cds 1.903%, phastConsElements4way.bed 2.062%, both 1.142%, cover 60.03%, enrich 29.11x
+    featureBits -chrom=scaffold_194753 felCat3 -enrichment nscanGene:cds phastConsElements4way.bed
+    # nscanGene:cds 0.843%, phastConsElements4way.bed 2.334%, both 0.230%, cover 27.28%, enrich 11.69x
+
+    # not as good as ornAna1, but hopefully good enough
+
+    # load
+    hgLoadBed felCat3 phastConsElements4way phastConsElements4way.bed
+
+    # create merged posterior probability file and wiggle track data files
+    ssh kolossus
+    cd /san/sanvol1/scratch/felCat3/multiz4way/phastCons/
+    # sort by chromName, chromStart so that items are in numerical order 
+    #  for wigEncode
+    time find ./pp -name "*.pp" | \
+        sed -e "s/\// x /g" -e "s/\./ y /g" -e "s/-/ z /g" | \
+        sort -k7,7 -k9,9n | \
+        sed -e "s/ x /\//g" -e "s/ y /\./g" -e "s/ z /-/g" | \
+        xargs cat | \
+        nice wigEncode -noOverlap stdin phastCons4way.wig phastCons4way.wib
+        cp -p phastCons4way.wi?  /cluster/data/felCat3/bed/multiz4way/phastCons
+    # 0.166u 1.856s 2:10.13 1.5%      0+0k 0+0io 0pf+0w
+    cp -p phastCons4way.wi? /cluster/data/felCat3/bed/multiz4way/phastCons
+
+    # load gbdb and database with wiggle
+    ssh hgwdev
+    cd /cluster/data/felCat3/bed/multiz4way/phastCons
+    ln -s /cluster/data/felCat3/bed/multiz4way/phastCons/phastCons4way.wib /gbdb/felCat3/multiz4way
+    hgLoadWiggle -pathPrefix=/gbdb/felCat3/multiz4way felCat3 phastCons4way phastCons4way.wig
+
+    # tally up tree distances
+    ssh hgwdev
+    cd /cluster/data/felCat3/bed/multiz4way
+    tail -1 phastCons/phyloFit.tree.mod | sed -e 's/^TREE: //' > 4way.phyloFit.nh
+    /cluster/bin/phast.new/all_dists 4way.nh > 4way.distances.txt
+    grep felCat3 4way.distances.txt | sort -k3,3n |  awk '{printf ("%.4f\t%s\n", $3, $1)}' > distances.txt
+
+    cat distances.txt
+    # 0.1993  canFam2
+    # 0.3320  hg18
+    # 0.5306  mm8
+
+    # downloadables
+    ssh kkstore05
+    cd /cluster/data/felCat3/bed/multiz4way
+    mkdir phastConsDownloads
+    cd phastConsDownloads
+    ./make.csh
+    nice gzip felCat3.pp
+    md5sum felCat3.pp.gz > md5sum.txt
+
+    ssh hgwdev
+    cd /cluster/data/felCat3/bed/multiz4way/phastConsDownloads
+    set dir = /usr/local/apache/htdocs/goldenPath/felCat3/phastCons4way
+    mkdir $dir
+    ln -s /cluster/data/felCat3/bed/multiz4way/phastConsDownloads/{*.gz,md5sum.txt} $dir
+    cp /usr/local/apache/htdocs/goldenPath/ornAna1/phastCons6way/README.txt $dir
+    # edit README.txt
+    cp /cluster/data/felCat3/bed/multiz4way/phastCons/4way.mod /usr/local/apache/htdocs/goldenPath/felCat3/phastCons4way
+
+
+    # clean up
+    ssh kkstore05
+    rm /cluster/data/felCat3/bed/multiz4way/phastCons/*.tab
+    rm -r /san/sanvol1/scratch/felCat3/multiz4way/phastCons
 
 

@@ -84,9 +84,20 @@ for (group = groupList; group != NULL; group = group->next)
     if (group->trackList == NULL)
 	continue;
 
+    /* check if group section should be displayed */
+    char *otherState;
+    char *indicator;
+    char *indicatorImg;
+    boolean isOpen = !isCollapsedGroup(group->name);
+    collapseGroupGoodies(isOpen, FALSE, &indicatorImg, 
+                            &indicator, &otherState);
     hTableStart();
     hPrintf("<TR>");
-    hPrintf("<TH align=LEFT colspan=3 BGCOLOR=#536ED3>");
+    hPrintf("<TH align=\"left\" colspan=3 BGCOLOR=#536ED3>");
+    hPrintf("<A HREF=\"%s?%s&hgTracksConfigPage=configure&%s=%s#%s\" class=\"bigBlue\"><IMG height=22 width=22 src=\"%s\" alt=\"%s\" class=\"bigBlue\"></A>&nbsp;&nbsp;",
+        hgTracksName(), cartSidUrlString(cart), 
+        collapseGroupVar(group->name),
+        otherState, group->name, indicatorImg, indicator);
     hPrintf("<B>&nbsp;%s</B> ", wrapWhiteFont(group->label));
     hPrintf("&nbsp;&nbsp;&nbsp;");
     hPrintf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\" "
@@ -157,6 +168,8 @@ for (group = groupList; group != NULL; group = group->next)
     /* Loop through this group. */
     for (tr = group->trackList; tr != NULL; tr = tr->next)
 	{
+        if (!isOpen)
+            continue;
 	struct track *track = tr->track;
 	hPrintf("<TR>");
 	hPrintf("<TD>");
@@ -310,14 +323,14 @@ hPrintf("</TD></TR>\n");
 hTableEnd();
 
 webNewSection("Configure Tracks");
-hPrintf("Control tracks in all groups here: ");
+hPrintf("Control tracks in all groups: ");
 cgiMakeButton(configHideAll, "hide all");
 hPrintf(" ");
 cgiMakeButton(configShowAll, "show all");
 hPrintf(" ");
 cgiMakeButton(configDefaultAll, "default");
 hPrintf(" ");
-hPrintf("&nbsp;&nbsp;Control track visibility more selectively below.<P>");
+hPrintf("<BR>Control track and group visibility more selectively below.<P>");
 trackConfig(trackList, groupList, groupTarget, vis);
 
 dyStringFree(&title);

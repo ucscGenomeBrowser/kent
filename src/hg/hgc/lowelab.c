@@ -56,6 +56,7 @@
 #include "tigrCmrGene.h"
 #include "jgiGene.h"
 #include "lowelabPfamHit.h"
+#include "lowelabArkinOperonScore.h"
 #include "sargassoSeaXra.h"
 #include "codeBlastScore.h"
 #include "codeBlast.h"
@@ -84,7 +85,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: lowelab.c,v 1.12 2007/06/02 23:06:20 pchan Exp $";
+static char const rcsid[] = "$Id: lowelab.c,v 1.15 2007/06/25 17:51:37 pchan Exp $";
 
 extern char *uniprotFormat;
 
@@ -1558,6 +1559,99 @@ void doPfamHit(struct trackDb *tdb, char *hitName)
   lowelabPfamHitsFree(&pfamHit);
 }
 
+void doArkinOperons(struct trackDb *tdb, char *arkinOperonName)
+/* Handle the Arkin operons track. */
+{
+    char *track = tdb->tableName;
+    struct bed *arkinOperon;
+    struct lowelabArkinOperonScore *arkinOperonScore;
+    char query[512];
+    struct sqlConnection *conn = hAllocConn();
+    struct sqlResult *sr;
+    char *dupe, *words[16];
+    char **row;
+    int wordCount;
+    int rowOffset;
+    int bedSize = 0;
+
+    genericHeader(tdb, arkinOperonName);
+
+    dupe = cloneString(tdb->type);
+    wordCount = chopLine(dupe, words);
+    if (wordCount > 1)
+        bedSize = atoi(words[1]);
+    if (bedSize < 3) bedSize = 3;
+
+    rowOffset = hOffsetPastBin(seqName, track);
+    sprintf(query, "select * from %s where name = '%s'", track, arkinOperonName);
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+    {
+        arkinOperon = bedLoadN(row+rowOffset, bedSize);
+        printf("<B>Arkin operon name: </B> %s<BR>\n",arkinOperonName);
+        
+        printf("<BR><B>Position:</B> "
+               "<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
+               hgTracksPathAndSettings(), database, arkinOperon->chrom, arkinOperon->chromStart + 1, arkinOperon->chromEnd);
+        printf("%s:%d-%d</A><BR>\n", arkinOperon->chrom, arkinOperon->chromStart + 1, arkinOperon->chromEnd);
+        printf("<B>Strand:</B> %s<BR>\n", arkinOperon->strand);
+        printf("<B>Genomic size: </B> %d nt<BR>\n", (arkinOperon->chromEnd - arkinOperon->chromStart));
+        if (arkinOperon->next != NULL)
+            printf("<hr>\n");
+    }
+    sqlFreeResult(&sr);
+
+    printf("<br><B>Arkin operon predicted gene pairs</B><br>\n");
+	
+    /* Print table */
+    printf("<table style=\"width: 50%%;\" bgcolor=\"#%s\" border=\"0\" cellpadding=\"1\" cellspacing=\"0\">", HG_COL_BORDER);
+    printf("<tbody><tr><td>\n");
+    printf("<table style=\"width: 100%%; text-align: left;\" bgcolor=\"%s\" border=\"1\" cellpadding=\"2\" cellspacing=\"2\">\n", HG_COL_INSIDE);
+    printf("<tbody>\n");
+
+    /* Print table column heading */
+    printf("<tr style=\"vertical-align: top;\">\n");
+    printf("<td width=\"25%%\"><b>Gene 1</b></td>\n");
+    printf("<td width=\"25%%\"><b>Gene 2</b></td>\n");
+    printf("<td width=\"25%%\"><b>Probability of the Same Operon</b></td>\n");
+    printf("<td width=\"25%%\"><b>Gene neighbor score</b></td>\n"); 
+    printf("</tr>\n");
+
+    sprintf(query, "select * from lowelabArkinOperonScore where name = '%s'", arkinOperonName);
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+    {
+        arkinOperonScore = lowelabArkinOperonScoreLoad(row);
+        printf("<tr style=\"vertical-align: top;\">\n");
+       
+        printf("<td>%s</td>\n", arkinOperonScore->gene1);
+        printf("<td>%s</td>\n", arkinOperonScore->gene2);
+        printf("<td style=\"text-align: right;\">%0.3f</td>\n", arkinOperonScore->prob);
+        printf("<td style=\"text-align: right;\">%0.3f</td>\n", arkinOperonScore->gnMinus);
+
+        printf("</tr>\n");
+        
+        arkinOperonScore = arkinOperonScore->next;
+    }
+    sqlFreeResult(&sr);
+
+    /* Close table */
+    printf("</tbody>\n");
+    printf("</table>\n");
+    printf("</td></tr></tbody>\n");
+    printf("</table>\n");
+
+    printf("<br>Note:\n");
+    printf("<br>Probability of the Same Operon - Estimated probability that the pair is in the same operon. Values near 1 or 0 are confident predictions of being in the same operon or not, while values near 0.5 are low-confidence predictions.\n");
+    printf("<br>Gene neighbor score - An indicator of conservation (gene neighbor score, surprisal subtracted). Positive scores indicate conservation, and scores above 5 are generally strongly indicative of operons\n");
+
+    bedFree(&arkinOperon);
+    lowelabArkinOperonScoreFree(&arkinOperonScore);
+
+    hFreeConn(&conn);
+    printTrackHtml(tdb);
+}
+
 int parseDelimitedString(char *inString, char delimiter, char *outString[], int outSize)
 {
     int arrayCount = 0;
@@ -1748,12 +1842,18 @@ void getGenomeClade(struct sqlConnection *conn, char *dbName, char *genome, char
     struct sqlResult *srDb;
     char **rowDb;
 
-    sprintf(query, "select a.genome, c.label from centraldb.genomeClade a, centraldb.dbDb b, centraldb.clade c where a.genome = b.genome and a.clade = c.name and b.name = '%s'", dbName);
+    sprintf(query, "select count(*) from centraldb.genomeClade a, centraldb.dbDb b, centraldb.clade c where a.genome = b.genome and a.clade = c.name and b.name = '%s'", dbName);
     srDb = sqlGetResult(conn, query);
     if ((rowDb = sqlNextRow(srDb)) != NULL)
     {
-        strcpy(genome, rowDb[0]);
-        strcpy(clade, rowDb[1]);
+        sqlFreeResult(&srDb);
+        sprintf(query, "select a.genome, c.label from centraldb.genomeClade a, centraldb.dbDb b, centraldb.clade c where a.genome = b.genome and a.clade = c.name and b.name = '%s'", dbName);
+        srDb = sqlGetResult(conn, query);
+        if ((rowDb = sqlNextRow(srDb)) != NULL)
+        {
+            strcpy(genome, rowDb[0]);
+            strcpy(clade, rowDb[1]);
+        }
     }
     sqlFreeResult(&srDb);
 }
@@ -1866,7 +1966,7 @@ void printBlastpResult(struct sqlConnection *conn, struct blastTab *blastpHitsLi
         /* Get target gene position from refSeq */
         strcpy(refSeq, blastpTarget[0]);
         strcat(refSeq, ".refSeq");
-        if (hTableExists(refSeq))
+        if (hDbExists(blastpTarget[0]) && hTableExists(refSeq))
         {
             sprintf(query, "select chrom, cdsStart, cdsEnd from %s where name = '%s'",
                     refSeq, blastpTarget[1]);
@@ -1875,7 +1975,7 @@ void printBlastpResult(struct sqlConnection *conn, struct blastTab *blastpHitsLi
             {
                 hitStart = strtoul(row[1], buffer, 10) + blastpHits->tStart * 3 + 1;
                 hitEnd = strtoul(row[1], buffer, 10) + blastpHits->tEnd * 3;
-                printf("<td><a href=\"http://archdev.cse.ucsc.edu/cgi-bin/hgTracks\?position=%s:%u-%u&db=%s\" TARGET=_blank>%s</a></td>\n",
+                printf("<td><a href=\"hgTracks\?position=%s:%u-%u&db=%s\" TARGET=_blank>%s</a></td>\n",
                        row[0], hitStart, hitEnd, blastpTarget[0], blastpTarget[1]);
             }
             else
@@ -1886,11 +1986,16 @@ void printBlastpResult(struct sqlConnection *conn, struct blastTab *blastpHitsLi
             printf("<td>%s</td>\n", blastpTarget[1]);
 
         /* Get target gene product annotation */
-        ginfo = getGbProtCodeInfo(conn, blastpTarget[0], blastpTarget[1]);
-        if (ginfo != NULL && ginfo->product != NULL && differentString(ginfo->product,"none"))
-            printf("<td>%s</td>\n", ginfo->product);
+        if (hDbExists(blastpTarget[0]))
+        {
+            ginfo = getGbProtCodeInfo(conn, blastpTarget[0], blastpTarget[1]);
+            if (ginfo != NULL && ginfo->product != NULL && differentString(ginfo->product,"none"))
+                printf("<td>%s</td>\n", ginfo->product);
+            else
+                printf("<td>%s</td>\n", "N/A");
+            }
         else
-            printf("<td>%s</td>\n", "N/A");                
+            printf("<td>%s</td>\n", "N/A");        
         
         printf("<td style=\"text-align: center;\">%0.f</td>\n", ((double) (blastpHits->qEnd - blastpHits->qStart) / ((double) (querySeqLength-3) / 3.0f)) * 100.0f);
         printf("<td style=\"text-align: center;\">%u - %u</td>\n", blastpHits->qStart + 1, blastpHits->qEnd);
@@ -1989,6 +2094,10 @@ else if (sameWord(track, "lowelabPfamHits"))
 else if (sameWord(track, "tigrOperons"))
     {
     doTigrOperons(tdb,item);
+    }
+else if (sameWord(track, "lowelabArkinOperons"))
+    {
+    doArkinOperons(tdb,item);
     }
 else if (sameWord(track,"codeBlast"))
     {

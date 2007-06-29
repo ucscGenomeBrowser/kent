@@ -13,7 +13,7 @@
 #include "bed.h"
 #include "wigCommon.h"
 
-static char const rcsid[] = "$Id: transcriptome.c,v 1.7 2006/04/07 04:15:45 kate Exp $";
+static char const rcsid[] = "$Id: transcriptome.c,v 1.8 2007/06/14 22:56:38 aamp Exp $";
 
 
 
@@ -191,7 +191,7 @@ return track->height;
 }
 
 static void affyTxnPhase2MapItem(struct track *tg, void *item, 
-			  char *itemName, int start, int end, 
+			  char *itemName, char *mapItemName, int start, int end, 
 			  int x, int y, int width, int height)
 /* Don't map anything. */
 {

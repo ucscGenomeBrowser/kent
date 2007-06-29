@@ -35,7 +35,7 @@
 #include "hgText.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.167 2006/12/19 18:49:52 kent Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.168 2007/06/19 22:21:05 donnak Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -671,7 +671,17 @@ puts("<P>This tool allows you to download portions of the Genome Browser \n"
      "Choose a genome and assembly, \n"
      "then press the Submit button.\n");
 puts("See the <A HREF=\"/goldenPath/help/hgTextHelp.html\">Table Browser "
-     "User Guide</A> for more information.<P>\n");
+     "User Guide</A> for more information.<P>\n"
+     "<FONT COLOR=\"#FF0000\"><B>NOTE: This software has been replaced by a "
+     "<A HREF=\"hgTables\">newer version</A> of the Table Browser. "
+     "This version of the tool is no longer "
+     "maintained or updated by UCSC; therefore, we can make no guarantees "
+     "about the completeness or correctness of the data returned. "
+     "We are happy to assist you in the transition to the new Table "
+     "Browser, which has many more features. Please "
+     "email our public <A HREF=\"mailto:genome@soe.ucsc.edu\">mailing "
+     "list</A> with questions or comments.</B> "
+     "</FONT><P> ");
 
 puts("<center>");
 printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=\"%s\">\n",
@@ -1128,6 +1138,18 @@ printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=\"%s\">\n\n",
 cartSaveSession(cart);
 cgiMakeHiddenVar("db", database);
 cgiContinueHiddenVar("tbUserKeys");
+
+puts("<FONT COLOR=\"#FF0000\"><B>NOTE: This software has been replaced by a "
+     "<A HREF=\"hgTables\">newer version</A> of the Table Browser. "
+     "This version of the tool is no longer "
+     "maintained or updated by UCSC; therefore, we can make no guarantees "
+     "about the completeness or correctness of the data returned. "
+     "We are happy to assist you in the transition to the new Table "
+     "Browser, which has many more features. Please "
+     "email our public <A HREF=\"mailto:genome@soe.ucsc.edu\">mailing "
+     "list</A> with questions or comments.</B> "
+     "</FONT><P> ");
+
 puts("<A HREF=\"/goldenPath/help/hgTextHelp.html#ChooseTable\">"
      "<B>Help</B></A>");
 

@@ -103,6 +103,7 @@
 #include "bed12Source.h"
 #include "dbRIP.h"
 #include "wikiLink.h"
+#include "wikiTrack.h"
 #include "dnaMotif.h"
 #include "hapmapTrack.h"
 #include "trashDir.h"
@@ -117,7 +118,7 @@
 #endif
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1346 2007/06/12 01:01:40 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1364 2007/06/26 06:02:16 kate Exp $";
 
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
@@ -230,6 +231,9 @@ struct hgPositions *hgp = NULL;
 
 /* subject list used for GSID */
 struct gsidSubj *gsidSelectedSubjList = NULL;
+
+/* sequence list used for GSID */
+struct gsidSeq *gsidSelectedSeqList = NULL;
 
 struct trackLayout tl;
 
@@ -1041,9 +1045,12 @@ else
     }
 size = end - start;
 /* Now it's time to do the search. */
-for (;;)
+for ( ; sizeWanted > 0 && sizeWanted < BIGNUM; )
     {
-    items = hGetBedRange(tg->mapName, chromName, start, end, NULL);
+    if (sameWord(tg->mapName, WIKI_TRACK_TABLE))
+	items = wikiTrackGetBedRange(tg->mapName, chromName, start, end);
+    else
+	items = hGetBedRange(tg->mapName, chromName, start, end, NULL);
     /* If we got something, or weren't able to search as big as we wanted to */
     /* (in case we're at the end of the chrom).  */
     if ((items != NULL) || (size < sizeWanted))
@@ -1891,7 +1898,7 @@ for (lf = lfs->features; lf != NULL; lf = lf->next)
 	int x1 = round((double)((int)lf->start-winStart)*scale) + xOff;
 	int x2 = round((double)((int)lf->end-winStart)*scale) + xOff;
 	int w = x2-x1;
-	tg->mapItem(tg, lf, lf->name, lf->start, lf->end, x1, y, w, tg->heightPer);
+	tg->mapItem(tg, lf, lf->name, tg->mapItemName(tg, item), lf->start, lf->end, x1, y, w, tg->heightPer);
 	}
     }
 lfSeriesDrawConnecter(lfs, vg, prevEnd, lfs->end, scale, xOff, midY, 
@@ -1955,7 +1962,7 @@ boolean nextItemCompatible(struct track *tg)
 return (withNextExonArrows && tg->nextItemButtonable && tg->nextPrevItem);
 }
 
-static void genericMapItem(struct track *tg, void *item, char *itemName, int start, int end,
+static void genericMapItem(struct track *tg, void *item, char *itemName, char *mapItemName, int start, int end,
 			    int x, int y, int width, int height)
 /* This is meant to be used by genericDrawItems to set to tg->mapItem in */
 /* case tg->mapItem isn't set to anything already. */
@@ -1963,12 +1970,12 @@ static void genericMapItem(struct track *tg, void *item, char *itemName, int sta
 char *directUrl = trackDbSetting(tg->tdb, "directUrl");
 boolean withHgsid = (trackDbSetting(tg->tdb, "hgsid") != NULL);
 mapBoxHgcOrHgGene(start, end, x, y, width, height, tg->mapName, 
-			  itemName, itemName, directUrl, withHgsid);
+			  mapItemName, itemName, directUrl, withHgsid);
 }
 
 void genericDrawNextItemStuff(struct track *tg, struct vGfx *vg, enum trackVisibility vis, struct slList *item, 
 			      int x2, int textX, int y, int heightPer,
-			      boolean snapLeft, Color color, char *name)
+			      boolean snapLeft, Color color)
 /* After the item is drawn in genericDrawItems, draw next/prev item related */
 /* buttons and the corresponding mapboxes. */
 {
@@ -1997,30 +2004,36 @@ if (vis == tvPack)
     int w = x2-textX;
     if (lButton)
 	{
-	tg->mapItem(tg, item, name, s, e, textX, y, insideX-textX, heightPer);
+	tg->mapItem(tg, item, tg->itemName(tg, item), tg->mapItemName(tg, item), 
+		    s, e, textX, y, insideX-textX, heightPer);
 	tg->nextPrevItem(tg, item, insideX, y, buttonW, heightPer, FALSE);
 	if (rButton)
 	    {
-	    tg->mapItem(tg, item, name, s, e, insideX + buttonW, y, x2 - (insideX + 2*buttonW), heightPer);
+	    tg->mapItem(tg, item, tg->itemName(tg, item), tg->mapItemName(tg, item), 
+			s, e, insideX + buttonW, y, x2 - (insideX + 2*buttonW), heightPer);
 	    tg->nextPrevItem(tg, item, x2-buttonW, y, buttonW, heightPer, TRUE);			    
 	    }
 	else 
-	    tg->mapItem(tg, item, name, s, e, insideX + buttonW, y, x2 - (insideX + buttonW), heightPer);
+	    tg->mapItem(tg, item, tg->itemName(tg, item), tg->mapItemName(tg, item), 
+			s, e, insideX + buttonW, y, x2 - (insideX + buttonW), heightPer);
 	}
     else if (snapLeft && rButton)
 	/* This is a special case where there's a next-item button, NO */
 	/* prev-item button, AND the gene name is drawn left of the browser window. */
 	{
-	tg->mapItem(tg, item, name, s, e, textX, y, x2 - buttonW - textX, heightPer);
+	tg->mapItem(tg, item, tg->itemName(tg, item), tg->mapItemName(tg, item), 
+		    s, e, textX, y, x2 - buttonW - textX, heightPer);
 	tg->nextPrevItem(tg, item, x2-buttonW, y, buttonW, heightPer, TRUE);			
 	}
     else if (rButton)
 	{
-	tg->mapItem(tg, item, name, s, e, textX, y, w - buttonW, heightPer);
+	tg->mapItem(tg, item, tg->itemName(tg, item), tg->mapItemName(tg, item), 
+		    s, e, textX, y, w - buttonW, heightPer);
 	tg->nextPrevItem(tg, item, x2-buttonW, y, buttonW, heightPer, TRUE);			
 	}
     else
-	tg->mapItem(tg, item, name, s, e, textX, y, w, heightPer);
+	tg->mapItem(tg, item, tg->itemName(tg, item), tg->mapItemName(tg, item), 
+		    s, e, textX, y, w, heightPer);
     }
 /* Full mode is a little easier to deal with. */
 else if (vis == tvFull)
@@ -2028,7 +2041,8 @@ else if (vis == tvFull)
     int geneMapBoxX = insideX;
     int geneMapBoxW = insideWidth;
     /* Draw the first gene mapbox, in the left margin. */
-    tg->mapItem(tg, item, name, s, e, trackPastTabX, y, insideX - trackPastTabX, heightPer);
+    tg->mapItem(tg, item, tg->itemName(tg, item), tg->mapItemName(tg, item), 
+		s, e, trackPastTabX, y, insideX - trackPastTabX, heightPer);
     /* Make the button mapboxes. */
     if (lButton)
 	tg->nextPrevItem(tg, item, insideX, y, buttonW, heightPer, FALSE);
@@ -2047,7 +2061,8 @@ else if (vis == tvFull)
 	}
     else if (rButton)
 	geneMapBoxW -= buttonW;
-    tg->mapItem(tg, item, name, s, e, geneMapBoxX, y, geneMapBoxW, heightPer);
+    tg->mapItem(tg, item, tg->itemName(tg, item), tg->mapItemName(tg, item), 
+		s, e, geneMapBoxX, y, geneMapBoxW, heightPer);
     }
 }
 
@@ -2171,10 +2186,11 @@ if (vis == tvPack || vis == tvSquish)
 		{
 		if (nextItemCompatible(tg))
 		    genericDrawNextItemStuff(tg, vg, vis, item, x2, textX, y, heightPer, snapLeft, 
-					     color, tg->mapItemName(tg, item));
+					     color);
 		else
 		    {
-		    tg->mapItem(tg, item, tg->mapItemName(tg, item), s, e, textX, y, w, heightPer);
+		    tg->mapItem(tg, item, tg->itemName(tg, item), 
+				tg->mapItemName(tg, item), s, e, textX, y, w, heightPer);
 		    }
 		}
             }
@@ -2222,7 +2238,7 @@ else
 	    /* them here if we're drawing nextItem buttons. */
 	    if (nextItemCompatible(tg))
 		genericDrawNextItemStuff(tg, vg, vis, item, -1, -1, y, heightPer, FALSE, 
-					 color, tg->mapItemName(tg, item));
+					 color);
 	    y += lineHeight;
 	    }
 	} 
@@ -2910,6 +2926,31 @@ slSort(&itemList, bedCmp);
 tg->items = itemList;
 }
 
+void atomDrawSimpleAt(struct track *tg, void *item, 
+	struct vGfx *vg, int xOff, int y, 
+	double scale, MgFont *font, Color color, enum trackVisibility vis);
+
+int atomTotalHeight(struct track *tg, enum trackVisibility vis)
+/* Most fixed height track groups will use this to figure out the height 
+ * they use. */
+{
+return tgFixedTotalHeightOptionalOverflow(tg,vis, 6*8, 6*8, FALSE);
+}
+
+int atomItemHeight(struct track *tg, void *item)
+/* Return item height for fixed height track. */
+{
+return 6 * 8;
+}
+
+static void atomMethods(struct track *tg)
+/* Fill in track methods for dbRIP tracks */
+{
+bedMethods(tg);
+tg->drawItemAt = atomDrawSimpleAt;
+tg->itemHeight = atomItemHeight;
+tg->totalHeight = atomTotalHeight;
+}
 
 static void dbRIPMethods(struct track *tg)
 /* Fill in track methods for dbRIP tracks */
@@ -5117,6 +5158,70 @@ void bedLoadItem(struct track *tg, char *table, ItemLoader loader)
 /* Generic tg->item loader. */
 {
 bedLoadItemByQuery(tg, table, NULL, loader);
+}
+
+
+void atomDrawSimpleAt(struct track *tg, void *item, 
+	struct vGfx *vg, int xOff, int y, 
+	double scale, MgFont *font, Color color, enum trackVisibility vis)
+/* Draw a single simple bed item at position. */
+{
+struct bed *bed = item;
+int heightPer = tg->heightPer;
+int x1 = round((double)((int)bed->chromStart-winStart)*scale) + xOff;
+int x2 = round((double)((int)bed->chromEnd-winStart)*scale) + xOff;
+int w;
+struct trackDb *tdb = tg->tdb;
+int scoreMin = atoi(trackDbSettingOrDefault(tdb, "scoreMin", "0"));
+int scoreMax = atoi(trackDbSettingOrDefault(tdb, "scoreMax", "1000"));
+char *directUrl = trackDbSetting(tdb, "directUrl");
+boolean withHgsid = (trackDbSetting(tdb, "hgsid") != NULL);
+//boolean thickDrawItem = (trackDbSetting(tdb, "thickDrawItem") != NULL);
+int colors[8] =
+{
+orangeColor,
+greenColor,
+blueColor,
+brickColor,
+darkBlueColor,
+darkGreenColor,
+1, 
+MG_RED} ;
+
+if (tg->itemColor != NULL)
+    color = tg->itemColor(tg, bed, vg);
+else
+    {
+    if (tg->colorShades)
+	color = tg->colorShades[grayInRange(bed->score, scoreMin, scoreMax)];
+    }
+
+w = x2-x1;
+if (w < 1)
+    w = 1;
+//if (color)
+    {
+    int ii;
+
+    for(ii=0; ii < 8; ii++)
+	{
+	if (bed->score & (1 << ii))
+	    vgBox(vg, x1, y+(ii*6), w, 6, colors[ii]);
+	}
+    if (tg->drawName && vis != tvSquish)
+	{
+	/* Clip here so that text will tend to be more visible... */
+	char *s = tg->itemName(tg, bed);
+	w = x2-x1;
+	if (w > mgFontStringWidth(font, s))
+	    {
+	    Color textColor = vgContrastingColor(vg, color);
+	    vgTextCentered(vg, x1, y, w, heightPer, textColor, font, s);
+	    }
+	mapBoxHgcOrHgGene(bed->chromStart, bed->chromEnd, x1, y, x2 - x1, heightPer,
+		tg->mapName, tg->mapItemName(tg, bed), NULL, directUrl, withHgsid);
+	}
+    }
 }
 
 
@@ -8254,6 +8359,14 @@ for (i=0; i<count; i++, text++, textPos++)
         if (!selfLine && match != NULL && match[i])
             if ((*text != ' ') && (toupper(*text) == toupper(match[i])))
                 cBuf[0] = '.';
+
+#ifdef FADE_IN_DOT_MODE
+        /* Color gaps in lighter color, even when non-matching bases
+           are displayed as dots instead of faded out */
+        /* We may want to use this, or add a config setting for it */
+        if (*text == '=' || *text == '-' || *text == '.' || *text == 'N')
+            clr = noMatchColor;
+#endif
         }
     else
         {
@@ -8273,6 +8386,7 @@ for (i=0; i<count; i++, text++, textPos++)
         /* restore char for unaligned sequence to lower case */
         if (tolower(cBuf[0]) == tolower(UNALIGNED_SEQ))
             cBuf[0] = UNALIGNED_SEQ;
+
         /* display bases */
         vgTextCentered(vg, x1+x, y, x2-x1, height, clr, font, cBuf);
         }
@@ -9032,7 +9146,8 @@ for (item = track->items; item != NULL; item = item->next)
 	    track->mapItem = genericMapItem;
         if (!track->mapsSelf)
             {
-	    track->mapItem(track, item, track->mapItemName(track, item),
+	    track->mapItem(track, item, track->itemName(track, item), 
+			   track->mapItemName(track, item),
 			   track->itemStart(track, item),
 			   track->itemEnd(track, item), trackPastTabX,
 			   y, trackPastTabWidth,height);
@@ -9910,9 +10025,15 @@ struct sqlResult *sr;
 char **row;
 int rowOffset;
 char option[128]; /* Option -  score filter */
+char *words[3];
+int wordCt;
 char *optionScoreVal;
 int optionScore = 0;
-char query[128] ;
+char query[128];
+char *setting = NULL;
+bool doScoreCtFilter = FALSE;
+int scoreFilterCt = 0;
+char *topTable = NULL;
 
 if (tg->bedSize <= 3)
     loader = bedLoad3;
@@ -9923,6 +10044,26 @@ else if (tg->bedSize == 5)
 else
     loader = bedLoad6;
 
+/* limit to a specified count of top scoring items.
+ * If this is selected, it overrides selecting item by specified score */
+if ((setting = trackDbSetting(tg->tdb, "filterTopScorers")) != NULL)
+    {
+    wordCt = chopLine(cloneString(setting), words);
+    if (wordCt >= 3)
+        {
+        safef(option, sizeof(option), "%s.filterTopScorersOn", tg->mapName);
+        doScoreCtFilter =
+            cartCgiUsualBoolean(cart, option, sameString(words[0], "on"));
+        safef(option, sizeof(option), "%s.filterTopScorersCt", tg->mapName);
+        scoreFilterCt = cartCgiUsualInt(cart, option, atoi(words[1]));
+        topTable = words[2];
+        /* if there are not too many rows in the table then can define */
+        /* top table as the track or subtrack table */
+        if (sameWord(topTable, "self"))
+            topTable = cloneString(tg->mapName);
+        }
+    }
+
 /* limit to items above a specified score */
 safef(option, sizeof(option), "%s.scoreFilter", tg->mapName);
 optionScoreVal = trackDbSetting(tg->tdb, "scoreFilter");
@@ -9930,9 +10071,17 @@ if (optionScoreVal != NULL)
     optionScore = atoi(optionScoreVal);
 optionScore = cartUsualInt(cart, option, optionScore);
 
-if (optionScore > 0 && tg->bedSize >= 5)
+if (doScoreCtFilter && (topTable != NULL) && hTableExists(topTable))
     {
-    safef(query, sizeof(query), "score >= %d", optionScore);
+    safef(query, sizeof(query), 
+                "select * from %s order by score desc limit %d", 
+                                topTable, scoreFilterCt);
+    sr = sqlGetResult(conn, query);
+    rowOffset = hOffsetPastBin(hDefaultChrom(), topTable);
+    }
+else if (optionScore > 0 && tg->bedSize >= 5)
+    {
+    safef(query, sizeof(query), "score >= %d",optionScore);
     sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, 
                          query, &rowOffset);
     }
@@ -9945,6 +10094,13 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
     bed = loader(row+rowOffset);
     slAddHead(&list, bed);
+    }
+if (doScoreCtFilter)
+    {
+    /* filter out items not in this window */
+    struct bed *newList = 
+        bedFilterListInRange(list, NULL, chromName, winStart, winEnd);
+    list = newList;
     }
 slReverse(&list);
 sqlFreeResult(&sr);
@@ -11818,6 +11974,7 @@ if (sameWord(type, "bed"))
 
     if (wordCount > 1)
         fieldCount = atoi(words[1]);
+
     track->bedSize = fieldCount;
 
     if (fieldCount < 8)
@@ -11906,7 +12063,8 @@ else if (sameWord(type, "expRatio"))
     {
     expRatioMethodsFromDotRa(track);
     }
-else if (sameWord(type, "bed5FloatScore"))
+else if (sameWord(type, "bed5FloatScore") || 
+         sameWord(type, "bedFloatScoreWithFdr"))
     {
     track->bedSize = 5;
     bedMethods(track);
@@ -13072,6 +13230,8 @@ registerTrackHandler("blastHg17KG", blastMethods);
 registerTrackHandler("blastHg18KG", blastMethods);
 registerTrackHandler("blatHg16KG", blastMethods);
 registerTrackHandler("blatzHg17KG", blatzMethods);
+registerTrackHandler("atom992", atomMethods);
+registerTrackHandler("atom97565", atomMethods);
 registerTrackHandler("mrnaMapHg17KG", blatzMethods);
 registerTrackHandler("blastSacCer1SG", blastMethods);
 registerTrackHandler("tblastnHg16KGPep", blastMethods);
@@ -13177,6 +13337,8 @@ registerTrackHandler("plFoldMinus", rnaPLFoldMethods);
 #ifdef LOWELAB_WIKI
 registerTrackHandler("wiki", wikiMethods);
 #endif
+if (wikiTrackEnabled(NULL))
+    registerTrackHandler("wikiTrack", wikiTrackMethods);
 
 /*Test for my own MA data
 registerTrackHandler("llaPfuPrintCExps",arrayMethods);*/
@@ -13262,6 +13424,8 @@ if (restrictionEnzymesOk())
     {
     slSafeAddHead(&trackList, cuttersTg());
     }
+if (wikiTrackEnabled(NULL))
+    addWikiTrack(&trackList);
 loadCustomTracks(&trackList);
 groupTracks(&trackList, pGroupList);
 
@@ -13302,6 +13466,54 @@ if (track == NULL)
     return;
 if (track->labelNextPrevItem != NULL)
     track->labelNextPrevItem(track, sameString(whichWay, "nextItem"));
+}
+
+void hNbSpaces(int count)
+/* Print a number of non-breaking spaces.
+   Consider moving this to lib/hPrint.c */
+{
+if (!suppressHtml)
+    htmlNbSpaces(count);
+}
+
+char *collapseGroupVar(char *name)
+/* Construct cart variable name for collapsing group */
+{
+static char varName[128];
+safef(varName, sizeof(varName), 
+        "%s%s_%s_%s", "hgt", "group", name, "close");
+return (cloneString(varName));
+}
+
+boolean isCollapsedGroup(char *name)
+/* Determine if group is collapsed */
+{
+return cartUsualInt(cart, collapseGroupVar(name), 0);
+}
+
+void collapseGroupGoodies(boolean isOpen, boolean wantSmallImage,
+                                char **img, char **indicator, char **otherState)
+/* Get image, char representation of image, and 'otherState' (1 or 0)
+ * for a group, based on whether it is collapsed, and whether we want
+ * larger or smaller image for collapse box */
+{
+if (otherState)
+    *otherState = (isOpen ? "1" : "0");
+if (indicator)
+    *indicator = (isOpen ? "-" : "+");
+if (img)
+    {
+    if (wantSmallImage)
+        *img = (isOpen ? "../images/remove_sm.gif" : "../images/add_sm.gif");
+    else
+        *img = (isOpen ? "../images/remove.gif" : "../images/add.gif");
+    }
+}
+
+void collapseGroup(char *name, boolean doCollapse)
+/* Set cart variable to cause group to collapse */
+{
+cartSetBoolean(cart, collapseGroupVar(name), doCollapse);
 }
 
 void doTrackForm(char *psOutput)
@@ -13564,19 +13776,29 @@ if (showTrackControls)
     cg = startControlGrid(MAX_CONTROL_COLUMNS, "left");
     for (group = groupList; group != NULL; group = group->next)
         {
-	struct trackRef *tr;
-
 	if (group->trackList == NULL)
 	    continue;
 
-	/* Print group label on left. */
+	struct trackRef *tr;
+
+        /* check if group section should be displayed */
+        char *otherState;
+        char *indicator;
+        char *indicatorImg;
+        boolean isOpen = !isCollapsedGroup(group->name);
+        collapseGroupGoodies(isOpen, TRUE, &indicatorImg, 
+                                &indicator, &otherState);
 	hPrintf("<TR>");
 	cg->rowOpen = TRUE;
-	hPrintf("<th colspan=%d BGCOLOR=#536ED3>", 
-		MAX_CONTROL_COLUMNS);
+        hPrintf("<th align=\"left\" colspan=%d BGCOLOR=#536ED3>", MAX_CONTROL_COLUMNS);
+        hPrintf("<A HREF=\"%s?%s&%s=%s#%s\" class=\"bigBlue\"><IMG src=\"%s\" alt=\"%s\" class=\"bigBlue\"></A>&nbsp;&nbsp;",
+            hgTracksName(), cartSidUrlString(cart), 
+            collapseGroupVar(group->name),
+            otherState, group->name, indicatorImg, indicator);
+        hNbSpaces(((1.7 * (77 - strlen(group->label)))-1)/2 );
 	hPrintf("<B>%s</B>", wrapWhiteFont(group->label));
 	hPrintf("\n<A NAME=\"#%s\"></A>\n",group->name);
-	hPrintf("</th>\n", MAX_CONTROL_COLUMNS);
+	hPrintf("</th>\n");
 	controlGridEndRow(cg);
 
 	/* First group gets ruler. */
@@ -13596,6 +13818,8 @@ if (showTrackControls)
 
 	for (tr = group->trackList; tr != NULL; tr = tr->next)
 	    {
+            if (!isOpen)
+                continue;
 	    track = tr->track;
 	    controlGridStartCell(cg);
 	    if (track->hasUi)
@@ -14046,8 +14270,9 @@ for (chromPtr = chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
 	   hgTracksName(), cartSessionVarName(), cartSessionId(cart),
 	   chromPtr->name, chromPtr->name);
     cgiTableFieldEnd();
-    cgiSimpleTableFieldStart();
+    cgiTableFieldStartAlignRight();
     printLongWithCommas(stdout, size);
+    puts("&nbsp;&nbsp;");
     cgiTableFieldEnd();
     cgiTableRowEnd();
     total += size;
@@ -14091,8 +14316,9 @@ while ((row = sqlNextRow(sr)) != NULL)
 	   hgTracksName(), cartSessionVarName(), cartSessionId(cart),
 	   row[0], row[0]);
     cgiTableFieldEnd();
-    cgiSimpleTableFieldStart();
+    cgiTableFieldStartAlignRight();
     printLongWithCommas(stdout, size);
+    puts("&nbsp;&nbsp;");
     cgiTableFieldEnd();
     cgiTableRowEnd();
     total += size;
@@ -14266,6 +14492,40 @@ else if (cartVarExists(cart, configDefaultAll))
     cartRemove(cart, configDefaultAll);
     configPageSetTrackVis(-1);
     }
+else if (cartVarExists(cart, configHideAllGroups))
+    {
+    cartRemove(cart, configHideAllGroups);
+    struct grp *grp = NULL, *grps = hLoadGrps();
+    for (grp = grps; grp != NULL; grp = grp->next)
+        collapseGroup(grp->name, TRUE);
+    configPageSetTrackVis(-2);
+    }
+else if (cartVarExists(cart, configShowAllGroups))
+    {
+    cartRemove(cart, configShowAllGroups);
+    struct grp *grp = NULL, *grps = hLoadGrps();
+    for (grp = grps; grp != NULL; grp = grp->next)
+        collapseGroup(grp->name, FALSE);
+    configPageSetTrackVis(-2);
+    }
+else if (cartVarExists(cart, configHideEncodeGroups))
+    {
+    cartRemove(cart, configHideEncodeGroups);
+    struct grp *grp = NULL, *grps = hLoadGrps();
+    for (grp = grps; grp != NULL; grp = grp->next)
+        if (startsWith("encode", grp->name))
+            collapseGroup(grp->name, TRUE);
+    configPageSetTrackVis(-2);
+    }
+else if (cartVarExists(cart, configShowEncodeGroups))
+    {
+    cartRemove(cart, configShowEncodeGroups);
+    struct grp *grp = NULL, *grps = hLoadGrps();
+    for (grp = grps; grp != NULL; grp = grp->next)
+        if (startsWith("encode", grp->name))
+            collapseGroup(grp->name, FALSE);
+    configPageSetTrackVis(-2);
+    }
 else
     {
     tracksDisplay();
@@ -14306,7 +14566,7 @@ isPrivateHost = hIsPrivateHost();
 htmlPushEarlyHandlers();
 cgiSpoof(&argc, argv);
 htmlSetBackground(hBackgroundImage());
-htmlSetStyle("<LINK REL=\"STYLESHEET\" HREF=\"../style/HGStyle.css\">"); 
+htmlSetStyle("<LINK REL=\"STYLESHEET\" HREF=\"../style/HGStyle.css\" TYPE=\"text/css\">"); 
 oldVars = hashNew(8);
 cartHtmlShell("UCSC Genome Browser v"CGI_VERSION, doMiddle, hUserCookie(), excludeVars, oldVars);
 if (measureTiming)

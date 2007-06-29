@@ -3,7 +3,7 @@
 # an object which can be loaded and saved from RAM in a fairly 
 # automatic way.
 
-#Quantitative Trait Loci from Jackson Labs / Mouse Genome Informatics
+#Quantitative Trait Loci from Jackson Lab / Mouse Genome Informatics
 CREATE TABLE jaxQtlRaw (
     mgiID varchar(255) not null,	# MGI ID
     name varchar(255) not null,	# Name of item

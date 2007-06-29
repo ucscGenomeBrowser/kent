@@ -56,7 +56,7 @@ for(i = 0; i < ArraySize(tissues); i++)
 return -1;
 }
 
-void lfsMapItemName(struct track *tg, void *item, char *itemName, int start, int end, 
+void lfsMapItemName(struct track *tg, void *item, char *itemName, char *mapItemName, int start, int end, 
 		    int x, int y, int width, int height)
 {
 if(tg->visibility != tvDense && tg->visibility != tvHide)

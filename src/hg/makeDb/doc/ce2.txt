@@ -2713,3 +2713,25 @@ chainSome $(path1)
 
     nice -n +19 featureBits ce2 picTar
     #	39233 bases of 100291761 (0.039%) in intersection
+
+########################################################################
+# CLEANUP OF CB1 BLASTZ (DONE, 2007-06-25, hartera)
+    ssh kkstore02
+    cd /cluster/store5/worm/ce2/bed/blastz.cb1.2004-04-12/axtChain
+    rm -r cb1NetSplit cb1NetSplit1 tmp1
+    cd ..
+    rm -r axtChain.2004-04-29test
+    # Looks like new chians were made on 2004-04-29 
+    cd /cluster/store5/worm/ce2/bed/blastz.cb1.2004-04-12/axtChain.2004-04-29
+    # remove the split net and chain directories as these can easily be
+    # created from the all.chain and cb1.net files
+    rm -r chain cb1NetSplit run1/chain
+    # gzip files
+    gzip all.chain *.net
+    cd /cluster/store5/worm/ce2/bed/blastz.cb1.2004-04-12/
+    rm -r axtNet1
+    cd axtNet.2004-04-29
+    # remove *.axt files as these are also in the sortedaxtNet directory
+    rm *.axt sortedaxtNet/axtNetCb1.tab 
+    cd /cluster/store5/worm/ce2/bed/blastz.cb1.2004-04-12/axtChrom/maf
+    gzip sortedaxtNet/*.axt

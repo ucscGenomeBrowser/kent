@@ -23,14 +23,15 @@ endif
 
 
 if ($#argv == 0 || $#argv > 2) then
-  # no command line args
+  # wrong number of command line args
   echo
   echo "  checks all the static links in htdocs tree."
   echo "  uses directory on beta."
   echo "  excludes files listed in /cluster/bin/scripts/linkCheckExclude"
   echo
-  echo '    usage: <file of paths | all> -- "all" uses /cluster/bin/scripts/staticpaths'
-  echo '       yymmdd (or other date string  --  defaults to "today")'
+  echo '    usage: <file of paths | all> [yymmdd]'
+  echo '       "all" uses /cluster/bin/scripts/staticpaths'
+  echo '        yymmdd: any dateString for output files. defaults to "today"'
   echo
   exit
 else
@@ -39,6 +40,10 @@ else
     set pathfile="/cluster/bin/scripts/staticpaths"
   else
     set pathfile=$argv[1]
+    file $pathfile | grep -q "ASCII text"
+    if ( $status ) then
+      echo "\n file of paths $pathfile does not exist\n"
+      exit 1
   endif
   if ($#argv == 2) then
     set yymmdd=$argv[2]

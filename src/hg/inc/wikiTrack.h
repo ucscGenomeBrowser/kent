@@ -8,8 +8,14 @@
 #ifndef JKSQL_H
 #include "jksql.h"
 #endif
+#ifndef HTMLPAGE_H
+#include "htmlPage.h"
+#endif
+#ifndef CART_H
+#include "cart.h"
+#endif
 
-#define WIKITRACK_NUM_COLS 15
+#define WIKITRACK_NUM_COLS 16
 
 struct wikiTrack
 /* wikiTrack bed 6+ structure */
@@ -30,6 +36,7 @@ struct wikiTrack
     char *lastModifiedDate;	/* date item last updated */
     char *descriptionKey;	/* name of wiki description page */
     unsigned id;	/* auto-increment item ID */
+    char *geneSymbol;	/* knownGene kgXref geneSymbol name */
     };
 
 void wikiTrackStaticLoad(char **row, struct wikiTrack *ret);
@@ -103,6 +110,7 @@ void wikiTrackOutput(struct wikiTrack *el, FILE *f, char sep, char lastSep);
 /* configuration variables */
 #define CFG_WIKI_URL "wikiTrack.URL"
 #define CFG_WIKI_BROWSER "wikiTrack.browser"
+#define CFG_WIKI_EDITORS "wikiTrack.editors"
 
 /* name of database table in hgcentral */
 #define WIKI_TRACK_TABLE "wikiTrack"
@@ -112,11 +120,77 @@ void wikiTrackOutput(struct wikiTrack *el, FILE *f, char sep, char lastSep);
 #define G_ADD_WIKI_COMMENTS "htcAddWikiComments"
 #define G_DELETE_WIKI_ITEM "htcDeleteWikiItem"
 
+/* hgc and hgGene variables */
+#define WIKI_NO_TEXT_RESPONSE "There is currently no text in this page"
+#define ADD_ITEM_COMMENT_DEFAULT "add comments"
+#define NEW_ITEM_COMMENT "wikiCommentText"
+#define NEW_ITEM_SCORE "wikiItemScore"
+#define NEW_ITEM_COMMENT_DEFAULT "enter description and comments"
+#define NEW_ITEM_NAME "wikiDefaultName"
+#define NEW_ITEM_COLOR "wikiItemColor"
+#define NEW_ITEM_STRAND "wikiItemStrand"
+#define NEW_ITEM_CLASS "wikiItemClass"
+#define NEW_ITEM_CATEGORY "[[Category:Genome Annotation]]"
+#define ITEM_NOT_CLASSIFIED "Not classified"
+#define NO_ITEM_COMMENT_SUPPLIED "(no initial description supplied)"
+#define DEFAULT_BROWSER "genome.ucsc.edu"
+#define TEST_EMAIL_VERIFIED "GenomeAnnotation:TestEmailVerified"
+#define EMAIL_NEEDS_TO_BE_VERIFIED \
+	"You must confirm your e-mail address before editing"
+#define USER_PREFERENCES_MESSAGE \
+    "Please set and validate your e-mail address through your"
+
 boolean wikiTrackEnabled(char **wikiUserName);
 /*determine if wikiTrack can be used, and is this user logged into the wiki ?*/
 
 char *wikiTrackGetCreateSql(char *tableName);
 /* return sql create statement for wiki track with tableName */
 
+struct wikiTrack *findWikiItemId(char *wikiItemId);
+/* given a wikiItemId return the row from the table */
+
+struct wikiTrack *findWikiItemByGeneSymbol(char *db, char *geneSymbol);
+/* given a db and UCSC known gene geneSymbol, find the wiki item */
+
+struct wikiTrack *findWikiItemByName(char *db, char *name);
+/* given a db,name pair return the row from the table, can return NULL */
+
+void htmlCloneFormVarSet(struct htmlForm *parent,
+	struct htmlForm *clone, char *name, char *val);
+/* clone form variable from parent, with new value,
+ * if *val is NULL, clone val from parent
+ */
+
+char *fetchWikiRawText(char *descriptionKey);
+/* fetch page from wiki in raw form as it is in the edit form */
+
+char *fetchWikiRenderedText(char *descriptionKey);
+/* fetch page from wiki in rendered form, strip it of edit URLs,
+ *	html comments, and test for actual proper return.
+ *  returned string can be freed after use */
+
+void displayComments(struct wikiTrack *item);
+/* display the rendered comments for this item */
+
+void createPageHelp(char *pageFileName);
+/* find the specified html help page and display it, or issue a missing
+ *	page message so the site administrator can fix it.
+ */
+
+struct htmlPage *fetchEditPage(char *descriptionKey);
+/* fetch edit page for descriptionKey page name in wiki */
+
+void addDescription(struct wikiTrack *item, char *userName,
+    char *seqName, int winStart, int winEnd, struct cart *cart,
+	char *database);
+/* add description to an existing wiki item */
+
+char *encodedReturnUrl(char *(*hgUrl)());
+/* Return a CGI-encoded URL with hgsid.  Free when done.
+ *	The given function hgUrl() will construct the actual cgi binary URL
+ */
+
+boolean emailVerified();
+/* TRUE indicates email has been verified for this wiki user */
 
 #endif /* WIKITRACK_H */

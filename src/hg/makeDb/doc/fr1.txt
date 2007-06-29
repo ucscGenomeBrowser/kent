@@ -2382,3 +2382,14 @@ XXXX - running 2007-01-11 20:55
     #	Wrote 5850 overused 11-mers to /cluster/data/fr1/11.ooc
 
     cp -p /cluster/data/fr1/11.ooc /cluster/bluearc/fr1
+
+#########################################################################
+# CLEANUP OF DANRER2 BLASTZ (DONE, 2007-06-25, hartera)
+    ssh kkstore02
+    cd /cluster/store5/Fugu_Rubripes_V3/bed/blastz.danRer2.swap/
+    # split chain files can be recreated from all.chain files so remove chains
+    rm -r chainAR
+    cd ..
+    gzip axtChrom/*.axt 
+    # removed about 0.9 G of data
+

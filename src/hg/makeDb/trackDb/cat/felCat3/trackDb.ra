@@ -88,6 +88,7 @@ color 0, 10, 100
 altColor 0,90,10
 type wigMaf 0.0 1.0
 maxHeightPixels 100:40:11
+wiggle phastCons4way
 spanList 1
 pairwiseHeight 12
 yLineOnOff Off
@@ -96,10 +97,20 @@ irows on
 autoScaleDefault Off
 windowingFunction mean
 summary multiz4waySummary
-speciesCodonDefault hg18
+speciesCodonDefault felCat3
 speciesGroups vertebrate
-sGroup_vertebrate hg18 canFam2 mm8
+sGroup_vertebrate canFam2 mm8 hg18
 treeImage phylo/felCat3_4way.gif
+
+track phastConsElements4way
+shortLabel Most Conserved
+longLabel PhastCons Conserved Elements
+group compGeno
+priority 105
+visibility hide
+exonArrows off
+showTopScorers 200
+type bed 5 .
 
 searchTable nscanGene
 searchType genePred

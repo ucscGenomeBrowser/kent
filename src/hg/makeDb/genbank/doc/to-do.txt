@@ -1094,3 +1094,9 @@ Error: danRer1: gene danRer1.refFlat:1854 NM_131267 chr7: NM_131267 geneName "ir
   the web server, but is wacked by the repeat content filter.
 
 - synthetic human mRNAs end up labeled `synthetic' in Xeno tracks.
+
+- perhaps user lower identity and higher coverage criteria for
+  ESTs, as they are noise.  Maybe apply only to spliced ESTs.
+
+- genePredToGtf breaks on dm2 refGene.txt, gets start stop codons wrong
+  need to create 5UTR/3UTR features instead of just UTR

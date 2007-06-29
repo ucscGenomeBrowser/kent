@@ -6,7 +6,7 @@
 #define JAXORTHOLOG_H
 
 struct jaxOrtholog
-/* Jackson Labs Mouse Orthologs */
+/* Jackson Lab Mouse Orthologs */
     {
     struct jaxOrtholog *next;  /* Next in singly linked list. */
     char *humanSymbol;	/* Human HUGO symbol */

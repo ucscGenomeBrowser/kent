@@ -8,7 +8,7 @@
 #define JAXQTL3_NUM_COLS 14
 
 struct jaxQTL3
-/* Quantitative Trait Loci from Jackson Labs / Mouse Genome Informatics */
+/* Quantitative Trait Loci from Jackson Lab / Mouse Genome Informatics */
     {
     struct jaxQTL3 *next;  /* Next in singly linked list. */
     char *chrom;	/* chromosome */
