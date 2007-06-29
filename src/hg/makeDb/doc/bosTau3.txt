@@ -650,7 +650,10 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     para check
     para push 
 
-    # WORKING HERE
+    # chr9 (split08.fa) failed due to insufficient memory
+    # Tried again on kki, still failed
+    # Tried on kolossus, still failed
+    # Tried on kolossus with -window=1000000, that worked
 
     # Concatenate
     ssh kkstore05
@@ -668,6 +671,8 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     hgLoadBed bosTau3 genscanSubopt genscanSubopt.bed
 
     featureBits bosTau3 genscan
+    # 59251085 bases of 2731807384 (2.169%) in intersection
     featureBits bosTau3 genscanSubopt
+    # 58996872 bases of 2731807384 (2.160%) in intersection
     # Should be zero intersection with rmsk
     featureBits bosTau3 genscan rmsk
