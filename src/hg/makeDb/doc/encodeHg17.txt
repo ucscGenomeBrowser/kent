@@ -3328,6 +3328,7 @@ cat > load.csh << 'EOF'
 'EOF'
     csh load.csh >&! load.log &
         # Loaded 18817 elements 
+
     featureBits -enrichment hg17 encodeRegions encodeTbaSconeEl
         # encodeRegions 1.047%, encodeTbaSconeEl 0.083%, both 0.083%, cover 7.92%, enrich 95.55x
     featureBits -enrichment hg17 encodeRegions encodeTbaPhastConsEl
@@ -3365,6 +3366,35 @@ cat > load.csh << 'EOF'
     mkdir -p $d
     ln -s /cluster/data/encode/MSA/SconeCons/2007-06-22/tbaScone.wib $d
     hgLoadWiggle -pathPrefix=$d hg17 encodeTbaSconeConsUpdate tbaScone.wig 
+
+    # elements
+    ssh kkstore03
+    cd /cluster/data/encode/MSA/SconeCons
+    cd 2007-06-22/lab
+    mkdir bed
+    cd bed
+    wget -r -nd http://ika.bwh.harvard.edu/graft/tracks/elements.SCONE.bed.tar.bz2
+    bunzip2 elements.SCONE.bed.tar.bz2
+    tar xvf elements.SCONE.bed.tar
+    cd ..
+
+cat > load.csh << 'EOF'
+    set out = sconeRegions.bed
+    rm -f $out
+    foreach f (lab/bed/*.bed)
+        set r = $f:t:r
+        echo $r
+        grep '^chr' $f | \
+            awk '{printf("%s\t%d\t%d\t%s\t1000\n", \
+                        $1,$2,$3,$4)}' >> $out
+    end
+'EOF'
+    csh load.csh >&! load.log &
+    ssh hgwdev
+    cd /cluster/data/encode/MSA/SconeCons/latest
+    hgLoadBed hg17 encodeTbaSconeElUpdate sconeRegions.bed
+        # Loaded 33293 elements of size 5
+        # previous: Loaded 18817 elements 
 
 ##########################################################################
 # MSA Conservation  (2005-12-07 kate)
