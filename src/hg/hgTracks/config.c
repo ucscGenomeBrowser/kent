@@ -323,14 +323,17 @@ hPrintf("</TD></TR>\n");
 hTableEnd();
 
 webNewSection("Configure Tracks");
-hPrintf("Control tracks in all groups: ");
+hPrintf("Tracks: ");
 cgiMakeButton(configHideAll, "hide all");
 hPrintf(" ");
 cgiMakeButton(configShowAll, "show all");
 hPrintf(" ");
 cgiMakeButton(configDefaultAll, "default");
+hPrintf("&nbsp;&nbsp;&nbsp;Groups:  ");
+cgiMakeButton(configHideAllGroups, "collapse all");
 hPrintf(" ");
-hPrintf("<BR>Control track and group visibility more selectively below.<P>");
+cgiMakeButton(configShowAllGroups, "expand all");
+hPrintf("<P STYLE=\"margin-top:5;\">Control track and group visibility more selectively below.<P>");
 trackConfig(trackList, groupList, groupTarget, vis);
 
 dyStringFree(&title);
