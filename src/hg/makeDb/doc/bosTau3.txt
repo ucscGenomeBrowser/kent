@@ -19,6 +19,9 @@
     cd chroms
     wget ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Btaurus/fasta/Btau20060815-freeze/linearScaffolds/*
 
+NOTE: chrM is available from NCBI nucleotides NC_006853.
+I didn't check for it soon enough to include it here, but it should
+be included in bosTau4.
 
 #########################################################################
 # MAKE GENOME DB (September 2006 Heather)
