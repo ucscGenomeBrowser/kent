@@ -965,5 +965,8 @@ void collapseGroupGoodies(boolean isOpen, boolean wantSmallImage,
  * for a group, based on whether it is collapsed, and whether we want
  * larger or smaller image for collapse box */
 
+struct bed *loadGvAsBed (struct track *tg, char *chr, int start, int end);
+/* load gv* with filters, for a range, as a bed list (for next item button) */
+
 #endif /* HGTRACKS_H */
 

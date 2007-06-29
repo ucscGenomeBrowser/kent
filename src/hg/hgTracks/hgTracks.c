@@ -118,7 +118,7 @@
 #endif
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1365 2007/06/28 00:42:10 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1366 2007/06/29 12:48:03 giardine Exp $";
 
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
@@ -1049,6 +1049,8 @@ for ( ; sizeWanted > 0 && sizeWanted < BIGNUM; )
     {
     if (sameWord(tg->mapName, WIKI_TRACK_TABLE))
 	items = wikiTrackGetBedRange(tg->mapName, chromName, start, end);
+    else if (sameWord(tg->mapName, "gvPos"))
+	items = loadGvAsBed(tg, chromName, start, end);
     else
 	items = hGetBedRange(tg->mapName, chromName, start, end, NULL);
     /* If we got something, or weren't able to search as big as we wanted to */
@@ -11551,6 +11553,36 @@ hFreeConn(&conn);
 hFreeConn(&conn2);
 }
 
+struct bed *loadGvAsBed (struct track *tg, char *chr, int start, int end)
+/* load gv* with filters, for a range, as a bed list (for next item button) */
+{
+char *chromNameCopy = cloneString(chromName);
+int winStartCopy = winStart;
+int winEndCopy = winEnd;
+struct gvPos *el = NULL;
+struct bed *bed, *list = NULL;
+/* set globals and use loadGv */
+chromName = chr;
+winStart = start;
+winEnd = end;
+loadGV(tg);
+/* now walk through tg->items creating the bed list */
+for (el = tg->items; el != NULL; el = el->next)
+    {
+    AllocVar(bed);
+    bed->chromStart = el->chromStart;
+    bed->chromEnd = el->chromEnd;
+    bed->chrom = cloneString(el->chrom);
+    bed->name = cloneString(el->name);
+    slAddHead(&list, bed);
+    }
+/* reset globals */
+chromName = chromNameCopy;
+winStart = winStartCopy;
+winEnd = winEndCopy;
+return list;
+}
+
 boolean oregannoFilterType (struct oreganno *el)
 /* filter of the type of region from the oregannoAttr table */
 {
@@ -11631,6 +11663,8 @@ tg->itemColor = gvColor;
 tg->itemNameColor = gvColor;
 tg->itemName = gvName;
 tg->mapItemName = gvPosMapName;
+tg->labelNextItemButtonable = TRUE;
+tg->labelNextPrevItem = linkedFeaturesLabelNextPrevItem;
 }
 
 void oregannoMethods (struct track *tg)
