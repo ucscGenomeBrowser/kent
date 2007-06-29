@@ -67,16 +67,22 @@ struct genoHeatmap
 
 /*** Routines from hgHeatmap.h ***/
 
-int heatmapHeight();
+int selectedHeatmapHeight();
+/* Return height of user selected heatmaps from the web interface. */
+
+int heatmapHeight(char* heatmap);
 /* Return height of heatmap. */
 
 char *heatmapName();
 /* Return name of heatmap */
 
+struct slName* heatmapNames();
+/* Return names of all heatmaps */
+
 int experimentHeight();
 /* Return height of an experiment */
 
-int experimentCount();
+int experimentCount(char* heatmap);
 /* Return the number of experiments */
 
 #define betweenRowPad 3
@@ -92,6 +98,19 @@ void getGenoHeatmaps(struct sqlConnection *conn);
 
 struct genoLay *ggLayout(struct sqlConnection *conn);
 /* Figure out how to lay out image. */
+
+struct genoHeatmap *getUserHeatmaps();
+/* Get list of all user graphs */
+
+int* addChromOrder(char* heatmap, char* chromName);
+/* Add the ChromOrder of a specific heatmap and chromosome combo to 
+   the ghOrder hash */
+
+int* getChromOrder(char* heatmap, char* chromName);
+/* Return the ChromOrder of a specific heatmap and chromosome combo to 
+   the ghOrder hash 
+   return an array for reordering the experiments in a chromosome 
+*/
 
 void hghDoUsualHttp();
 /* Wrap html page dispatcher with code that writes out

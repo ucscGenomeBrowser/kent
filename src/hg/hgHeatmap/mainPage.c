@@ -2,7 +2,7 @@
  * on the top and the graphic. */
 
 #define EXPR_DATA_SHADES 16
-#define DEFAULT_MAX_DEVIATION 3.0
+#define DEFAULT_MAX_DEVIATION 1.0
 
 #include "common.h"
 #include "hgHeatmap.h"
@@ -26,8 +26,7 @@
 #include "cytoBand.h"
 #include "hCytoBand.h"
 
-
-static char const rcsid[] = "$Id: mainPage.c,v 1.1 2007/06/28 23:42:06 heather Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.2 2007/06/29 00:21:09 heather Exp $";
 
 /* Page drawing stuff. */
 
@@ -63,61 +62,10 @@ sqlFreeResult(&sr);
 return tupleList;
 }
 
-
 /* return an array for reordering the experiments in a chromosome */
-int* getChromOrder(char *chromName)
+double maxDeviation(char* heatmap)
 {
-const char *orderSuffix = "_order";
-
-struct hashEl *e = hashLookup(ghOrder, chromName);
-
-if (e)
-    return e->val;
-
-char* trackOrderName;
-
-AllocArray(trackOrderName, strlen(chromName) + strlen(orderSuffix) + 1);
-/* could use safef */
-strcpy(trackOrderName, chromName);
-strcat(trackOrderName, orderSuffix);
-
-e = hashLookup(ghHash, heatmapName());
-
-struct genoHeatmap *gh = e->val;
-struct trackDb *tdb = gh->tDb;
-
-char *pS = trackDbSetting(tdb, trackOrderName);
-
-int *chromOrder;
-int orderCount = experimentCount();
-AllocArray(chromOrder, orderCount);
-
-int i;
-for(i = 0; i < orderCount; ++i)
-    {
-    if (pS && *pS)
-	{
-	int order = sqlSignedComma(&pS);
-	if (order >= 0 && order < orderCount)
-	    {
-	    chromOrder[order] = i;
-	    }
-	}
-    else
-	{
-	chromOrder[i] = i;
-	}
-    }
-
-hashAdd(ghOrder, chromName, chromOrder);
-return chromOrder;
-}
-
-
-/* return an array for reordering the experiments in a chromosome */
-double maxDeviation()
-{
-struct hashEl *e = hashLookup(ghHash, heatmapName());
+struct hashEl *e = hashLookup(ghHash, heatmap);
 
 if (! e)
     return DEFAULT_MAX_DEVIATION;
@@ -142,7 +90,7 @@ void vgMakeColorGradient(struct vGfx *vg,
     struct rgbColor *start, struct rgbColor *end,
     int steps, Color *colorIxs)
 /* Make a color gradient that goes smoothly from start
- * to end colors in given number of steps.  Put indices
+ * to end colors in given number of steps.  Put indicesgl->chromLis
  * in color table in colorIxs */
 {
 double scale = 0, invScale;
@@ -163,9 +111,9 @@ for (i=0; i<=steps; ++i)
 }
 
 
-void drawChromHeatmap(struct vGfx *vg, struct sqlConnection *conn, 
-	struct genoLay *gl, char *chromHeatmap, int yOff, int height,
-	boolean leftLabel, boolean rightLabel, boolean firstInRow)
+void drawChromHeatmaps(struct vGfx *vg, struct sqlConnection *conn, 
+		       struct genoLay *gl, char *chromHeatmap, int yOff, 
+		       boolean leftLabel, boolean rightLabel, boolean firstInRow)
 /* Draw chromosome graph on all chromosomes in layout at given
  * y offset and height. */
 {
@@ -174,7 +122,7 @@ struct genoLayChrom *chrom=NULL;
 struct bed *gh=NULL, *nb=NULL;
 double pixelsPerBase = 1.0/gl->basesPerPixel;
 
-double md = maxDeviation();
+double md = maxDeviation(chromHeatmap);
 double val;
 double absVal;
 int valId;
@@ -192,19 +140,19 @@ vgMakeColorGradient(vg, &black, &green, EXPR_DATA_SHADES, shadesOfGreen);
 for(chrom = gl->chromList; chrom; chrom = chrom->next)
     {
     gh = getChromHeatmap(ctConn, chromHeatmap, chrom->fullName);
-
+   
     int chromX = chrom->x, chromY = chrom->y;
-    int minY = chromY + yOff;
-    /* int maxY = chromY + yOff + height; */
-    vgSetClip(vg, chromX, minY, chrom->width, height);
-    vgBox(vg, chromX, chromY + yOff, chrom->width, height, MG_GRAY);
+
+    vgSetClip(vg, chromX, chromY+yOff, chrom->width, heatmapHeight(chromHeatmap));
+
+    vgBox(vg, chromX, chromY+yOff , chrom->width, heatmapHeight(chromHeatmap), MG_GRAY);
 
     for(nb = gh; nb; nb = nb->next)
 	{
 	start = nb->chromStart;
 	end = nb->chromEnd;
 
-	int *chromOrder = getChromOrder(chrom->fullName);
+	int *chromOrder = getChromOrder(chromHeatmap, chrom->fullName);
 
 	int i;
 	for(i = 0; i < nb->expCount; ++i)
@@ -212,7 +160,7 @@ for(chrom = gl->chromList; chrom; chrom = chrom->next)
 	    val = nb->expScores[i];
 	    valId = nb->expIds[i];
 	    int orderId = chromOrder[valId];
-
+	      
 	    if(val > 0)
 		absVal = val;
 	    else
@@ -237,14 +185,14 @@ for(chrom = gl->chromList; chrom; chrom = chrom->next)
 	    vgBox(vg, x, y, w, h, valCol);
 
 	    }
-	}
-
+      	}
+      
     bedFreeList(&gh);
     }
 }
 
 void genomeGif(struct sqlConnection *conn, struct genoLay *gl,
-	       int oneRowHeight, char *psOutput)
+	       char *psOutput)
 /* Create genome GIF file and HTML that includes it. */
 {
 struct vGfx *vg;
@@ -253,9 +201,6 @@ Color shadesOfGray[10];
 int maxShade = ArraySize(shadesOfGray)-1;
 int spacing = 1;
 int yOffset = 2*spacing;
-int innerHeight = oneRowHeight - 3*spacing;
-char *heatmap;
-
 
 if (psOutput)
     {
@@ -280,20 +225,18 @@ genoLayDrawChromLabels(gl, vg, MG_BLACK);
 genoLayDrawBandedChroms(gl, vg, database, conn, 
 	shadesOfGray, maxShade, MG_BLACK);
 
-heatmap = heatmapName();
 
-if(heatmap[0] == 0)
-    heatmap = NULL;
+struct slName *heatmap, *heatmaps= heatmapNames();
 
 /* Draw chromosome heatmaps. */
-drawChromHeatmap(vg, conn, gl, heatmap, 
-	         gl->betweenChromOffsetY + yOffset, 
-	         innerHeight, TRUE, TRUE, TRUE);
+ int totalYOff = 0;
+ for (heatmap= heatmaps; heatmap!= NULL; heatmap = heatmap->next)
+     {
+     drawChromHeatmaps(vg, conn, gl, heatmap->name, 
+		       totalYOff + yOffset, TRUE, TRUE, TRUE);
 
-vgBox(vg, 0, 0, gl->picWidth, 1, MG_GRAY);
-vgBox(vg, 0, gl->picHeight-1, gl->picWidth, 1, MG_GRAY);
-vgBox(vg, 0, 0, 1, gl->picHeight, MG_GRAY);
-vgBox(vg, gl->picWidth-1, 0, 1, gl->picHeight, MG_GRAY);
+     totalYOff += heatmapHeight(heatmap->name) + spacing;
+     }
 vgClose(&vg);
 }
 
@@ -391,6 +334,7 @@ boolean renderGraphic(struct sqlConnection *conn, char *psOutput)
 {
 struct genoLay *gl;
 boolean result = FALSE;
+
 if (TRUE || ghList != NULL)
     {
     /* Get genome layout.  This can fail so it is wrapped in an error
@@ -402,7 +346,8 @@ if (TRUE || ghList != NULL)
 
 	/* Draw picture. Enclose in table to add a couple of pixels between
 	 * it and controls on IE. */
-	genomeGif(conn, gl, heatmapHeight()+betweenRowPad, psOutput);
+	genomeGif(conn, gl, psOutput);
+
 	result = TRUE;
 	}
     errCatchEnd(errCatch);

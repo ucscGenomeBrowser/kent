@@ -5,21 +5,22 @@
  * utility functions. */
 
 #include "common.h"
+
 #include "bed.h"
 #include "cart.h"
 #include "customTrack.h"
 #include "genoLay.h"
 #include "hash.h"
+#include "hCommon.h"
 #include "hdb.h"
 #include "hgHeatmap.h"
-#include "hCommon.h"
 #include "hPrint.h"
 #include "htmshell.h"
 #include "hui.h"
 #include "trackLayout.h"
 #include "web.h"
 
-static char const rcsid[] = "$Id: hgHeatmap.c,v 1.1 2007/06/28 23:42:06 heather Exp $";
+static char const rcsid[] = "$Id: hgHeatmap.c,v 1.2 2007/06/29 00:21:09 heather Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -54,33 +55,58 @@ struct customTrack *ct, *ctList = customTracksParseCart(cart, NULL, NULL);
 
 for (ct = ctList; ct != NULL; ct = ct->next)
     {
+
     struct trackDb *tdb = ct->tdb;
+     
     if(sameString(tdb->type, "array"))
         {
-	char *pS = trackDbSetting(tdb, "expNames");
-	/* set pSc (probably a library routine that does this) */
-	int pSc = 0;
-	for (pSc = 0; pS && *pS; ++pS)
-	{
-	    if(*pS == ',')
-		{
-		++pSc;
-		}
-	}
+        char *pS = trackDbSetting(tdb, "expNames");
+        /* set pSc (probably a library routine that does this) */
+        int pSc = 0;
+        for (pSc = 0; pS && *pS; ++pS)
+        {
+            if(*pS == ',')
+                {
+                ++pSc;
+                }
+        }
 
-	AllocVar(gh);
-	gh->name = ct->dbTableName;
-	gh->shortLabel = tdb->shortLabel;
-	gh->longLabel = tdb->longLabel;
-	gh->expCount = pSc;
-	gh->tDb = tdb;
-	slAddHead(&list, gh);
-	}
+        AllocVar(gh);
+        gh->name = ct->dbTableName;
+        gh->shortLabel = tdb->shortLabel;
+        gh->longLabel = tdb->longLabel;
+        gh->expCount = pSc;
+        gh->tDb = tdb;
+        slAddHead(&list, gh);
+        }
     }
-slReverse(&list);
 
+slReverse(&list);
 return list;
 }
+
+
+/* --- Get list of heatmap names. ---- */
+struct slName* heatmapNames()
+{
+struct slName *list = NULL;
+struct customTrack *ct, *ctList = customTracksParseCart(cart, NULL, NULL);
+
+for (ct = ctList; ct != NULL; ct = ct->next)
+    {
+    struct trackDb *tdb = ct->tdb;
+    struct slName* name;
+    if(sameString(tdb->type, "array"))
+        {
+        name = newSlName(ct->dbTableName);
+        slAddHead(&list, name);
+        }
+    }
+
+slReverse(&list);
+return list;
+}
+
 
 struct genoHeatmap *getDbHeatmaps(struct sqlConnection *conn)
 /* Get graphs defined in database. */
@@ -111,8 +137,95 @@ for (ref = ghList; ref != NULL; ref = ref->next)
     gh = ref->val;
     hashAdd(ghHash, gh->name, gh);
     }
-
 ghOrder = hashNew(0);
+}
+
+/* Add the ChromOrder of a specific heatmap and chromosome combo to 
+   the ghOrder hash 
+*/
+int* addChromOrder(char* heatmap, char* chromName)
+{
+const char* orderSuffix ="_order";
+
+char* orderKey;
+AllocArray(orderKey, strlen(heatmap) + strlen(chromName) + strlen(orderSuffix) + 2);
+/* could use safef */
+strcpy(orderKey, heatmap);
+strcat(orderKey, "_");
+strcat(orderKey, chromName);
+strcat(orderKey, orderSuffix);
+struct hashEl *e = hashLookup(ghOrder, orderKey);
+
+if (e)
+    {
+    return e->val;
+    }
+
+char* trackOrderName;
+
+AllocArray(trackOrderName, strlen(chromName) + strlen(orderSuffix) + 1);
+/* could use safef */
+strcpy(trackOrderName, chromName);
+strcat(trackOrderName, orderSuffix);
+
+e = hashLookup(ghHash, heatmap);
+
+struct genoHeatmap *gh = e->val;
+struct trackDb *tdb = gh->tDb;
+
+char *pS = trackDbSetting(tdb, trackOrderName);
+
+int orderCount = experimentCount(heatmap);
+int* chromOrder;
+AllocArray(chromOrder, orderCount);
+
+int i;
+for(i = 0; i < orderCount; ++i)
+    {
+    if (pS && *pS)
+	{
+	int order = sqlSignedComma(&pS);
+	if (order >= 0 && order < orderCount)
+	    {
+	    chromOrder[order] = i;
+	    }
+	}
+    else
+	{
+	chromOrder[i] = i;
+	}
+    }
+
+hashAdd(ghOrder, orderKey, chromOrder);
+
+return chromOrder;
+}
+
+/* Return the ChromOrder of a specific heatmap and chromosome combo to 
+   the ghOrder hash 
+   return an array for reordering the experiments in a chromosome 
+*/
+int* getChromOrder(char* heatmap, char* chromName)
+{
+const char *orderSuffix = "_order";
+
+char* orderKey;
+AllocArray(orderKey, strlen(heatmap) + strlen(chromName) + strlen(orderSuffix) + 2);
+/* could use safef */
+strcpy(orderKey, heatmap);
+strcat(orderKey, "_");
+strcat(orderKey, chromName);
+strcat(orderKey, orderSuffix);
+
+
+struct hashEl *e = hashLookup(ghOrder, orderKey);
+
+if (e)
+    {
+    return e->val;
+    }
+
+return addChromOrder(heatmap, chromName);
 }
 
 /* Routines to fetch cart variables. */
@@ -128,24 +241,43 @@ char *heatmapName()
 return skipLeadingSpaces(cartUsualString(cart, hghHeatmap, ""));
 }
 
-int heatmapHeight()
-/* Return height of the heatmap. */
+
+int selectedHeatmapHeight()
+/* Return height of user selected heatmaps from the web interface.
+   Currently implemented as the total height of all heatmaps.  
+   Should be modified later to the total height of selected heatmaps  
+*/
 {
-return experimentCount() * experimentHeight();
+struct slName *heatmap, *heatmaps = heatmapNames();
+int totalHeight=0;
+int spacing =1;
+
+for (heatmap = heatmaps; heatmap!=NULL; heatmap = heatmap->next)
+    {
+    totalHeight += experimentCount(heatmap->name) * experimentHeight();
+    totalHeight += spacing;
+    }
+totalHeight += betweenRowPad;
+return totalHeight;
 }
 
-int experimentCount()
+
+int heatmapHeight(char* heatmap)
+/* Return height of the heatmap. */
+{
+if (heatmap == NULL)
+    return 0;
+return experimentCount(heatmap) * experimentHeight();
+}
+
+int experimentCount(char* heatmap)
 /* Return number of experiments */
 {
-char *heatmap = heatmapName();
-if(heatmap)
+struct hashEl *el = hashLookup(ghHash, heatmap);
+if (el)
     {
-    struct hashEl *el = hashLookup(ghHash, heatmap);
-    if (el)
-	{
-	struct genoHeatmap *gh = el->val;
-	return gh->expCount;
-	}
+    struct genoHeatmap *gh = el->val;
+    return gh->expCount;
     }
 return 0;
 }
@@ -169,9 +301,9 @@ tl.picWidth = cartUsualInt(cart, hghImageWidth, hgDefaultPixWidth);
 
 /* Get list of chromosomes and lay them out. */
 chromList = genoLayDbChroms(conn, FALSE);
-oneRowHeight = heatmapHeight()+betweenRowPad;
+oneRowHeight = selectedHeatmapHeight();
 return genoLayNew(chromList, tl.font, tl.picWidth, oneRowHeight,
-	minLeftLabelWidth, minRightLabelWidth, chromLayout());
+		   minLeftLabelWidth, minRightLabelWidth, chromLayout());
 }
 
 void dispatchPage()
@@ -251,3 +383,4 @@ cart = cartForSession(hUserCookie(), excludeVars, oldCart);
 dispatchLocation();
 return 0;
 }
+
