@@ -208,7 +208,7 @@
 #include "omicia.h"
 #include "atomDb.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1307 2007/06/28 20:28:27 hiram Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1308 2007/06/29 00:03:01 hartera Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -891,10 +891,12 @@ if (bed != NULL)
 
 void showBedTopScorersInWindow(struct sqlConnection *conn,
 			       struct trackDb *tdb, char *item, int start,
-			       int maxScorers)
+			       int maxScorers, char *filterTable, int filterCt)
 /* Show a list of track items in the current browser window, ordered by 
  * score.  Track must be BED 5 or greater.  maxScorers is upper bound on 
- * how many items will be displayed. */
+ * how many items will be displayed. If filterTable is not NULL and exists,
+ * it contains the 100K top-scorers in the entire track, and filterCt 
+ * is the threshold for how many are candidates for display. */
 {
 struct sqlResult *sr = NULL;
 char **row = NULL;
@@ -902,36 +904,41 @@ struct bed *bedList = NULL, *bed = NULL;
 char table[64];
 boolean hasBin = FALSE;
 char query[512];
-int i=0;
 
-hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
-safef(query, sizeof(query),
-      "select * from %s where chrom = '%s' and chromEnd > %d and "
-      "chromStart < %d",
-      table, seqName, winStart, winEnd);
+if (filterTable)
+    {
+    /* Track display only shows top-scoring N elements -- restrict
+     * the list to these.  Get them from the filter table */
+    hasBin = hOffsetPastBin(hDefaultChrom(), filterTable);
+    safef(query, sizeof(query), "select * from %s order by score desc limit %d",
+            filterTable, filterCt);
+    }
+else
+    {
+    hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
+    safef(query, sizeof(query),
+          "select * from %s where chrom = '%s' and chromEnd > %d and "
+          "chromStart < %d order by score desc",
+          table, seqName, winStart, winEnd);
+    }
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     bed = bedLoadN(row+hasBin, 5);
-    slAddHead(&bedList, bed);
+    if (!filterTable ||
+            (sameString(bed->chrom, seqName) && 
+                bed->chromStart < winEnd && bed->chromEnd > winStart))
+        {
+        slAddHead(&bedList, bed);
+        }
+    else
+        bedFree(&bed);
     }
 sqlFreeResult(&sr);
 if (bedList == NULL)
     return;
-slSort(&bedList, bedCmpScore);
 slReverse(&bedList);
-puts("<B>Top-scoring elements in window:</B><BR>");
-for (i=0, bed=bedList;  bed != NULL && i < maxScorers;  bed=bed->next, i++)
-    {
-    if (sameWord(item, bed->name) && bed->chromStart == start)
-	printf("&nbsp;&nbsp;&nbsp;<B>%s</B> ", bed->name);
-    else
-	printf("&nbsp;&nbsp;&nbsp;%s ", bed->name);
-    printf("(%s:%d-%d) %d<BR>\n",
-	   bed->chrom, bed->chromStart+1, bed->chromEnd, bed->score);
-    }
-if (bed != NULL)
-    printf("(list truncated -- more than %d elements)<BR>\n", maxScorers);
+showBedTopScorers(bedList, item, start, maxScorers);
 }
 
 void linkToOtherBrowser(char *otherDb, char *chrom, int start, int end);
@@ -1110,6 +1117,7 @@ if (filterTopScorers != NULL)
 
 if (bedSize >= 5 && showTopScorers != NULL)
     {
+    /* list top-scoring elements in window */
     int maxScorers = sqlUnsigned(showTopScorers);
     doFilterTopScorers = cartCgiUsualBoolean(cart, query, doFilterTopScorers);
     if (doFilterTopScorers && hTableExists(filterTopScoreTable))
@@ -1121,7 +1129,8 @@ if (bedSize >= 5 && showTopScorers != NULL)
     else
         /* show all */
         filterTopScoreTable = NULL;
-    showBedTopScorersInWindow(conn, tdb, item, start, maxScorers);
+    showBedTopScorersInWindow(conn, tdb, item, start, maxScorers,
+                                filterTopScoreTable, filterTopScoreCt);
     }
 }
 
@@ -3102,6 +3111,7 @@ while ((row = sqlNextRow(sr)) != NULL)
            printf("<B>False Discovery Rate (FDR):</B> %s%%<BR>\n", row[7]);
         }
     }
+
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 /* printTrackHtml is done in genericClickHandlerPlus. */
