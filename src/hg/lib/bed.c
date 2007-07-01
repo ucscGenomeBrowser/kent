@@ -11,7 +11,7 @@
 #include "binRange.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: bed.c,v 1.54 2007/04/13 18:55:39 kate Exp $";
+static char const rcsid[] = "$Id: bed.c,v 1.55 2007/07/01 01:00:23 hiram Exp $";
 
 void bedStaticLoad(char **row, struct bed *ret)
 /* Load a row from bed table into ret.  The contents of ret will
@@ -318,6 +318,29 @@ safef(ret->strand, sizeof(ret->strand), "%s", row[5]);
 return ret;
 }
 
+/* it turns out that it isn't just hgLoadBed and custom tracks
+ *	that may encounter the r,g,b specification.  Any program that
+ *	reads bed files may enconter them, so take care of them
+ *	at any time.  The strchr() function is very fast which will
+ *	be a failure in the vast majority of cases parsing integers,
+ *	therefore, this shouldn't be too severe a performance hit.
+ */
+static int itemRgbColumn(char *column9)
+{
+int itemRgb = 0;
+/*  Allow comma separated list of rgb values here   */
+char *comma = strchr(column9, ',');
+if (comma)
+    {
+    if (-1 == (itemRgb = bedParseRgb(column9)))
+	errAbort("ERROR: expecting r,g,b specification, "
+		    "found: '%s'", column9);
+    }
+else
+    itemRgb = sqlUnsigned(column9);
+return itemRgb;
+}
+
 struct bed *bedLoad12(char **row)
 /* Load a bed from row fetched with select * from bed
  * from database.  Dispose of this with bedFree(). */
@@ -335,7 +358,7 @@ ret->score = sqlSigned(row[4]);
 strcpy(ret->strand, row[5]);
 ret->thickStart = sqlUnsigned(row[6]);
 ret->thickEnd = sqlUnsigned(row[7]);
-ret->itemRgb = sqlUnsigned(row[8]);
+ret->itemRgb = itemRgbColumn(row[8]);
 sqlSignedDynamicArray(row[10], &ret->blockSizes, &sizeOne);
 assert(sizeOne == ret->blockCount);
 sqlSignedDynamicArray(row[11], &ret->chromStarts, &sizeOne);
@@ -368,7 +391,7 @@ if (wordCount > 7)
 else
      bed->thickEnd = bed->chromEnd;
 if (wordCount > 8)
-    bed->itemRgb = sqlUnsigned(row[8]);
+    bed->itemRgb = itemRgbColumn(row[8]);
 if (wordCount > 9)
     bed->blockCount = sqlUnsigned(row[9]);
 if (wordCount > 10)
@@ -467,7 +490,7 @@ if (wordCount > 7)
 else
      bed->thickEnd = bed->chromEnd;
 if (wordCount > 8)
-    bed->itemRgb = sqlUnsigned(row[9]);
+    bed->itemRgb = itemRgbColumn(row[9]);
 if (wordCount > 9)
     bed->blockCount = sqlUnsigned(row[10]);
 if (wordCount > 10)
