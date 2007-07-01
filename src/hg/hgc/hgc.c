@@ -208,7 +208,7 @@
 #include "omicia.h"
 #include "atomDb.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1308 2007/06/29 00:03:01 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1309 2007/07/01 00:39:21 braney Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -1020,8 +1020,16 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 printf("</A>");
 sqlFreeResult(&sr);
-printf("<IMG src=http://hgwdev.cse.ucsc.edu/~bsuh/gif/%s.gif><BR>",item);
+printf("<TABLE>");
 
+printf("<THEAD>");
+printf("<TBODY>");
+printf("<TR><TH>");
+printf("Brian's Gap Tree<TD>Bernard's Tree");
+printf("<TR><TH>");
+printf("<IMG src=http://hgwdev.cse.ucsc.edu/~braney/992png/%s.png><BR>",item);
+printf("<TD><IMG src=http://hgwdev.cse.ucsc.edu/~bsuh/gif/%s.gif><BR>",item);
+printf("</TABLE>");
 
 char buffer[4096];
 struct mafFile *mf;
