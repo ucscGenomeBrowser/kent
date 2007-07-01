@@ -70,6 +70,8 @@ Options:
          inId inOverlap inOverBases inBases
   -statsOutputAll - like -statsOutput, however output all inFile records,
       even ones that are not overlapped.
+  -statsOutputBoth - like -statsOutput, however output all selectFile and
+      inFile records, even ones that with no overlap.
   -mergeOutput - output file with be a merge of the input file with the
       selectFile records that selected it.  The format is
          inRec<tab>selectRec.

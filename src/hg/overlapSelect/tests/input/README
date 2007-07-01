@@ -33,3 +33,7 @@
     - two that don't overlap
 - mrna-self2.psl
     - three that overlap, one with no overlap
+
+- statsSelect.bed
+     - select file used in some stats tests, has both NM_015110, NM_001206,
+       NM_022755, and NM_001012267.

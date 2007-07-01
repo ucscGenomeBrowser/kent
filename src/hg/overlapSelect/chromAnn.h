@@ -28,6 +28,7 @@ struct chromAnn
     char **rawCols;  /* optional columns of original record, NULL terminated,
                       * single malloc block,  */
     struct chromAnnBlk *blocks;  /* ranges associated with this object */
+    boolean used;    /* flag to indicated that this chromAnn has been used */
 };
 
 struct chromAnnBlk

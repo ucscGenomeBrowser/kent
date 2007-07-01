@@ -11,9 +11,9 @@
 #include "chromAnn.h"
 #include "verbose.h"
 
-/* tables are never freed  */
-static struct chromBins* selectBins = NULL;  /* per-chrom binKeepers of
-                                              * chromAnn objects */
+/* per-chrom binKeepers of * chromAnn objects */
+static struct chromBins* selectBins = NULL;
+
 static struct binKeeper *selectBinsGet(char *chrom, boolean create)
 /* get chromosome binKeeper, optionally creating if it doesn't exist */
 {
@@ -262,6 +262,7 @@ for (o = overlapping; o != NULL; o = o->next)
     if (selectOverlappingEntry(opts, inCa, selCa, criteria))
         {
         anyHits = TRUE;
+        selCa->used = TRUE;
         if (overlappingRecs != NULL)
             refAdd(&curOverRecs, selCa);
         else
@@ -362,6 +363,47 @@ verbose(2, "selectAggregateOverlap: %s: %s %d-%d, %c => %0.3g\n", inCa->name, in
         ((inCa->strand == '\0') ? '?' : inCa->strand), stats.inOverlap);
 return stats;
 }
+
+struct selectTableIter selectTableFirst()
+/* iterator over select table */
+{
+struct selectTableIter iter;
+ZeroVar(&iter);
+return iter;
+}
+
+static boolean nextBin(struct selectTableIter *iter)
+/* advance to next bin */
+{
+struct hashEl *hel = hashNext(&iter->hashCookie);
+if (hel == NULL)
+    return FALSE;
+iter->currentBin = hel->val;
+iter->binCookie = binKeeperFirst(iter->currentBin);
+return TRUE;
+}
+
+struct chromAnn *selectTableNext(struct selectTableIter *iter)
+/* next element in select table */
+{
+if (selectBins == NULL)
+    return NULL;
+if (iter->currentBin == NULL)
+    {
+    iter->hashCookie = hashFirst(selectBins->chromTbl);
+    if (!nextBin(iter))
+        return NULL;
+    }
+while (TRUE)
+    {
+    struct binElement* bel = binKeeperNext(&iter->binCookie);
+    if (bel != NULL)
+        return bel->val;
+    if (!nextBin(iter))
+        return NULL;
+    }
+}
+
 
 void selectTableFree()
 /* free selectTable structures. */

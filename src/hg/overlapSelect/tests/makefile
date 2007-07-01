@@ -12,6 +12,7 @@ test:   pslSelectTests \
 	idOutputTests \
 	statsOutputTests \
 	statsOutputAllTests \
+	statsOutputBothTests \
 	thresholdTests \
 	similarityTests \
 	overlapBasesTests \
@@ -292,6 +293,21 @@ psl_over_NM_001206bedStatsOutputAll: mkout
 # select beds overlaping NM_015110 with bed and statsOutputAll
 bed_over_NM_015110bedStatsOutputAll: mkout
 	${OVERSEL} -statsOutputAll input/NM_015110.bed input/mrna.bed output/$@.stats
+	${DIFF} expected/$@.stats output/$@.stats
+
+###
+# -statsOutputBoth tests
+###
+statsOutputBothTests: psl_over_bedStatsOutputBoth bed_over_bedStatsOutputBoth
+
+# select psls overlaping bed and statsOutputBoth
+psl_over_bedStatsOutputBoth: mkout
+	${OVERSEL} -statsOutputBoth input/statsSelect.bed input/mrna.psl output/$@.stats
+	${DIFF} expected/$@.stats output/$@.stats
+
+# select beds overlaping with bed and statsOutputBoth
+bed_over_bedStatsOutputBoth: mkout
+	${OVERSEL} -statsOutputBoth input/statsSelect.bed input/mrna.bed output/$@.stats
 	${DIFF} expected/$@.stats output/$@.stats
 
 ###

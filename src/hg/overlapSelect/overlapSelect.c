@@ -38,6 +38,7 @@ static struct optionSpec optionSpecs[] = {
     {"mergeOutput", OPTION_BOOLEAN},
     {"statsOutput", OPTION_BOOLEAN},
     {"statsOutputAll", OPTION_BOOLEAN},
+    {"statsOutputBoth", OPTION_BOOLEAN},
     {"idOutput", OPTION_BOOLEAN},
     {"aggregate", OPTION_BOOLEAN},
     {NULL, 0}
@@ -68,6 +69,7 @@ boolean mergeOutput = FALSE;
 boolean idOutput = FALSE;
 boolean statsOutput = FALSE;
 boolean outputAll = FALSE;
+boolean outputBoth = FALSE;
 struct overlapCriteria criteria = {0.0, 1.1, 0.0, 1.1, -1};
 
 struct ioFiles
@@ -145,6 +147,9 @@ for (selectCaRef = overlappingRecs; selectCaRef != NULL; selectCaRef = selectCaR
     }
 }
 
+/* format string for stats output */
+static char *statsFmt = "%s\t%s\t%0.3g\t%0.3g\t%d\n";
+
 static void outputStats(struct chromAnn* inCa, FILE *outFh,
                         struct slRef *overlappingRecs)
 /* output for the -statOutput option; pairs of inRec and overlap ids */
@@ -152,15 +157,27 @@ static void outputStats(struct chromAnn* inCa, FILE *outFh,
 if (overlappingRecs == NULL)
     {
     // -statsOutputAll and nothing overlapping
-    fprintf(outFh, "%s\t%s\t%0.3g\t%0.3g\t%d\n", getPrintId(inCa), "", 0.0, 0.0, 0);
+    fprintf(outFh, statsFmt, getPrintId(inCa), "", 0.0, 0.0, 0);
     }
 struct slRef *selectCaRef;
 for (selectCaRef = overlappingRecs; selectCaRef != NULL; selectCaRef = selectCaRef->next)
     {
     struct chromAnn *selectCa = selectCaRef->val;
     unsigned overBases = selectOverlapBases(inCa, selectCa);
-    fprintf(outFh, "%s\t%s\t%0.3g\t%0.3g\t%d\n", getPrintId(inCa), getPrintId(selectCa),
+    fprintf(outFh, statsFmt, getPrintId(inCa), getPrintId(selectCa),
             selectFracOverlap(inCa, overBases), selectFracOverlap(selectCa, overBases), overBases);
+    }
+}
+
+static void outputStatsSelNotUsed(FILE *outFh)
+/* output stats for select chromAnns that were not used */
+{
+struct selectTableIter iter = selectTableFirst();
+struct chromAnn *selCa;
+while ((selCa = selectTableNext(&iter)) != NULL)
+    {
+    if (!selCa->used)
+        fprintf(outFh, statsFmt, "", getPrintId(selCa), 0.0, 0.0, 0);
     }
 }
 
@@ -350,6 +367,9 @@ switch (inFmt)
         break;
     }
 rowReaderFree(&ioFiles.inRr);
+if (statsOutput && outputBoth)
+    outputStatsSelNotUsed(ioFiles.outFh);
+
 carefulClose(&ioFiles.outFh);
 carefulClose(&ioFiles.dropFh);
 /* enable for memory analysis */
@@ -442,10 +462,13 @@ criteria.bases = optionInt("overlapBases", -1);
 /* output options */
 mergeOutput = optionExists("mergeOutput");
 idOutput = optionExists("idOutput");
-statsOutput = optionExists("statsOutput") || optionExists("statsOutputAll");
+statsOutput = optionExists("statsOutput") || optionExists("statsOutputAll") || optionExists("statsOutputBoth");
 if ((mergeOutput + idOutput + statsOutput) > 1)
-    errAbort("can only specify one of -mergeOutput, -idOutput, -statsOutput, or -statsOutputAll");
+    errAbort("can only specify one of -mergeOutput, -idOutput, -statsOutput, -statsOutputAll, or -statsOutputBoth");
 outputAll = optionExists("statsOutputAll");
+outputBoth = optionExists("statsOutputBoth");
+if (outputBoth)
+    outputAll = TRUE;
 if (mergeOutput)
     {
     if (nonOverlapping)

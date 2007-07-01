@@ -2,6 +2,8 @@
  * functions as a global object. */
 #ifndef SELECT_TABLE_H
 #define SELECT_TABLE_H
+#include "binRange.h"
+#include "hash.h"
 
 struct rowReader;
 
@@ -35,6 +37,14 @@ struct overlapAggStats
     unsigned inBases;         // number of possible bases to overlap
 };
 
+struct selectTableIter
+/* iterator over select table */
+{
+    struct hashCookie hashCookie;
+    struct binKeeper *currentBin;
+    struct binKeeperCookie binCookie;
+};
+
 struct coordCols;
 struct lineFile;
 struct chromAnn;
@@ -65,6 +75,12 @@ boolean selectIsOverlapped(unsigned opts, struct chromAnn *inCa,
 
 struct overlapAggStats selectAggregateOverlap(unsigned opts, struct chromAnn *inCa);
 /* Compute the aggregate overlap of a chromAnn */
+
+struct selectTableIter selectTableFirst();
+/* iterator over select table */
+
+struct chromAnn *selectTableNext(struct selectTableIter *iter);
+/* next element in select table */
 
 void selectTableFree();
 /* free selectTable structures. */
