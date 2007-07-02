@@ -1788,13 +1788,13 @@ identifier dbSnpRnId typeOf=dbSnpId
 
 identifier hapmapSnpId 
 "HapMap SNPs"
-    hg17.hapmapAllelesSummary.name
-    hg17.hapmapSnpsCEU.name
-    hg17.hapmapSnpsCHB.name
-    hg17.hapmapSnpsJPT.name
-    hg17.hapmapSnpsYRI.name
-    hg17.hapmapAllelesChimp.name
-    hg17.hapmapAllelesMacaque.name
+    $hg.hapmapAllelesSummary.name
+    $hg.hapmapSnpsCEU.name
+    $hg.hapmapSnpsCHB.name
+    $hg.hapmapSnpsJPT.name
+    $hg.hapmapSnpsYRI.name
+    $hg.hapmapAllelesChimp.name
+    $hg.hapmapAllelesMacaque.name
 
 identifier hapmapLdSnpId external=dbSNP fuzzy
 "HapMap dbSNP ID"
