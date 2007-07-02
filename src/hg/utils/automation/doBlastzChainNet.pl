@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/automation/doBlastzChainNet.pl instead.
 
-# $Id: doBlastzChainNet.pl,v 1.7 2007/03/12 18:50:34 kate Exp $
+# $Id: doBlastzChainNet.pl,v 1.8 2007/07/02 22:16:39 angie Exp $
 
 # to-do items:
 # - lots of testing
@@ -79,6 +79,8 @@ my $defaultChainLinearGap = "loose";
 my $defaultChainMinScore = "1000";	# from axtChain itself
 my $defaultTRepeats = "";		# for netClass option tRepeats
 my $defaultQRepeats = "";		# for netClass option qRepeats
+my $defaultSeq1Limit = 30;
+my $defaultSeq2Limit = 100;
 
 sub usage {
   # Usage / help / self-documentation:
@@ -177,7 +179,7 @@ Assumptions:
    tParts and qParts directories).  This limit only effects SEQ1 or SEQ2
    when they are 2bit files.  Some 2bit files have too many contigs.  This
    reduces the number of blastz hippos (jobs taking forever compared to 
-   the other jobs).
+   the other jobs).  SEQ1_LIMIT defaults to $defaultSeq1Limit and SEQ2_LIMIT defaults to $defaultSeq2Limit.
 7. DEF's BLASTZ_ABRIDGE_REPEATS should be set to something nonzero if 
    abridging of lineage-specific repeats is to be performed.  If so, the 
    following additional constraints apply:
@@ -454,8 +456,10 @@ sub doPartition {
   my $seq2Dir = $defVars{'SEQ2_CTGDIR'} || $defVars{'SEQ2_DIR'};
   my $seq1Len = $defVars{'SEQ1_CTGLEN'} || $defVars{'SEQ1_LEN'};
   my $seq2Len = $defVars{'SEQ2_CTGLEN'} || $defVars{'SEQ2_LEN'};
-  my $seq1Limit = $defVars{'SEQ1_LIMIT'} || 0;
-  my $seq2Limit = $defVars{'SEQ2_LIMIT'} || 0;
+  my $seq1Limit = (defined $defVars{'SEQ1_LIMIT'}) ? $defVars{'SEQ1_LIMIT'} :
+    $defaultSeq1Limit;
+  my $seq2Limit = (defined $defVars{'SEQ2_LIMIT'}) ? $defVars{'SEQ2_LIMIT'} :
+    $defaultSeq2Limit;
 
   my $partitionTargetCmd = 
     ("$partition $defVars{SEQ1_CHUNK} $defVars{SEQ1_LAP} " .
