@@ -208,7 +208,7 @@
 #include "omicia.h"
 #include "atomDb.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1309 2007/07/01 00:39:21 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1310 2007/07/02 18:16:00 angie Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -592,7 +592,7 @@ if (end == 0)
         printf("<B>Band:</B> %s<BR>\n", sband);
     return;
 }
-gotE = hChromBand(chrom, end, eband);
+gotE = hChromBand(chrom, end-1, eband);
 /* if eband equals sband, just use sband */
 if (gotE && sameString(sband,eband))
    gotE = FALSE;
