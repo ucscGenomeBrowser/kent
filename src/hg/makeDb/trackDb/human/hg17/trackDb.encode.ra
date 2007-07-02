@@ -2120,6 +2120,7 @@ chromosomes chr1,chr10,chr11,chr13,chr14,chr15,chr16,chr19,chr2,chr20,chr21,chr2
 dataVersion ENCODE Oct 2005 Freeze
 type bed5FloatScore
 useScore 1
+showTopScorers 20
 filterTopScorers on 200 self
 subGroup1 celltype Cell_Type hela=HeLaS3 gm=GM06990 k562=K562 
 subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF1 pol2=Pol2 pol2n=Pol2-N h4kac4=H4Kac4 h3k27me3=H3K27me3 baf47=BAF47 stat1=STAT1 p65c=P65-C p65n=P65-N smarca4=SMARCA4 smarca6=SMARCA6 nrsf=NRSF
