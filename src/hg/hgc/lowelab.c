@@ -85,7 +85,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: lowelab.c,v 1.15 2007/06/25 17:51:37 pchan Exp $";
+static char const rcsid[] = "$Id: lowelab.c,v 1.16 2007/07/02 01:30:45 pchan Exp $";
 
 extern char *uniprotFormat;
 
@@ -1955,60 +1955,65 @@ void printBlastpResult(struct sqlConnection *conn, struct blastTab *blastpHitsLi
         parseDelimitedString(blastpHits->target, ':', blastpTarget, 2);
         
         /* Get species info */
+        memset(genome, 0, 50);
+        memset(clade, 0, 50);
         getGenomeClade(conn, blastpTarget[0], genome, clade);
-        parseDelimitedString(clade, '-', clades, 2);       
 
-        printf("<tr style=\"vertical-align: top;\">\n");
-       
-        printf("<td><a name=\"%s:%s:%u-%u\"><i>%s</i></td>\n", blastpTarget[1], tChrom, tStart, tEnd, genome);
-        printf("<td>%s<br>%s</td>\n", clades[0], clades[1]);
-        
-        /* Get target gene position from refSeq */
-        strcpy(refSeq, blastpTarget[0]);
-        strcat(refSeq, ".refSeq");
-        if (hDbExists(blastpTarget[0]) && hTableExists(refSeq))
+        if ((strcmp(genome , "") != 0) && (strcmp(clade, "") != 0))
         {
-            sprintf(query, "select chrom, cdsStart, cdsEnd from %s where name = '%s'",
-                    refSeq, blastpTarget[1]);
-            sr = sqlGetResult(conn, query);
-            if ((row = sqlNextRow(sr)) != NULL)
+            parseDelimitedString(clade, '-', clades, 2);       
+    
+            printf("<tr style=\"vertical-align: top;\">\n");
+           
+            printf("<td><a name=\"%s:%s:%u-%u\"><i>%s</i></td>\n", blastpTarget[1], tChrom, tStart, tEnd, genome);
+            printf("<td>%s<br>%s</td>\n", clades[0], clades[1]);
+            
+            /* Get target gene position from refSeq */
+            strcpy(refSeq, blastpTarget[0]);
+            strcat(refSeq, ".refSeq");
+            if (hDbExists(blastpTarget[0]) && hTableExists(refSeq))
             {
-                hitStart = strtoul(row[1], buffer, 10) + blastpHits->tStart * 3 + 1;
-                hitEnd = strtoul(row[1], buffer, 10) + blastpHits->tEnd * 3;
-                printf("<td><a href=\"hgTracks\?position=%s:%u-%u&db=%s\" TARGET=_blank>%s</a></td>\n",
-                       row[0], hitStart, hitEnd, blastpTarget[0], blastpTarget[1]);
+                sprintf(query, "select chrom, cdsStart, cdsEnd from %s where name = '%s'",
+                        refSeq, blastpTarget[1]);
+                sr = sqlGetResult(conn, query);
+                if ((row = sqlNextRow(sr)) != NULL)
+                {
+                    hitStart = strtoul(row[1], buffer, 10) + blastpHits->tStart * 3 + 1;
+                    hitEnd = strtoul(row[1], buffer, 10) + blastpHits->tEnd * 3;
+                    printf("<td><a href=\"hgTracks\?position=%s:%u-%u&db=%s\" TARGET=_blank>%s</a></td>\n",
+                           row[0], hitStart, hitEnd, blastpTarget[0], blastpTarget[1]);
+                }
+                else
+                    printf("<td>%s</td>\n", blastpTarget[1]);
+                sqlFreeResult(&sr);
             }
             else
                 printf("<td>%s</td>\n", blastpTarget[1]);
-            sqlFreeResult(&sr);
-        }
-        else
-            printf("<td>%s</td>\n", blastpTarget[1]);
-
-        /* Get target gene product annotation */
-        if (hDbExists(blastpTarget[0]))
-        {
-            ginfo = getGbProtCodeInfo(conn, blastpTarget[0], blastpTarget[1]);
-            if (ginfo != NULL && ginfo->product != NULL && differentString(ginfo->product,"none"))
-                printf("<td>%s</td>\n", ginfo->product);
+    
+            /* Get target gene product annotation */
+            if (hDbExists(blastpTarget[0]))
+            {
+                ginfo = getGbProtCodeInfo(conn, blastpTarget[0], blastpTarget[1]);
+                if (ginfo != NULL && ginfo->product != NULL && differentString(ginfo->product,"none"))
+                    printf("<td>%s</td>\n", ginfo->product);
+                else
+                    printf("<td>%s</td>\n", "N/A");
+                }
             else
-                printf("<td>%s</td>\n", "N/A");
-            }
-        else
-            printf("<td>%s</td>\n", "N/A");        
-        
-        printf("<td style=\"text-align: center;\">%0.f</td>\n", ((double) (blastpHits->qEnd - blastpHits->qStart) / ((double) (querySeqLength-3) / 3.0f)) * 100.0f);
-        printf("<td style=\"text-align: center;\">%u - %u</td>\n", blastpHits->qStart + 1, blastpHits->qEnd);
-        printf("<td style=\"text-align: right;\">%0.1f</td>\n", blastpHits->identity);
-        printf("<td style=\"text-align: right;\">%0.0e</td>\n", blastpHits->eValue);
-        printf("<td style=\"text-align: right;\">e%0.0f</td>\n", (blastpHits->eValue == 0)? 0 : log(blastpHits->eValue) / log(10));
-        printf("<td style=\"text-align: right;\">%0.1f</td>\n", blastpHits->bitScore);
-        printf("<td style=\"text-align: right;\">%u</td>\n", blastpHits->aliLength);
-        printf("<td style=\"text-align: right;\">%u</td>\n", blastpHits->mismatch);
-        printf("<td style=\"text-align: right;\">%u</td>\n", blastpHits->gapOpen);
-
-        printf("</tr>\n");
-
+                printf("<td>%s</td>\n", "N/A");        
+            
+            printf("<td style=\"text-align: center;\">%0.f</td>\n", ((double) (blastpHits->qEnd - blastpHits->qStart) / ((double) (querySeqLength-3) / 3.0f)) * 100.0f);
+            printf("<td style=\"text-align: center;\">%u - %u</td>\n", blastpHits->qStart + 1, blastpHits->qEnd);
+            printf("<td style=\"text-align: right;\">%0.1f</td>\n", blastpHits->identity);
+            printf("<td style=\"text-align: right;\">%0.0e</td>\n", blastpHits->eValue);
+            printf("<td style=\"text-align: right;\">e%0.0f</td>\n", (blastpHits->eValue == 0)? 0 : log(blastpHits->eValue) / log(10));
+            printf("<td style=\"text-align: right;\">%0.1f</td>\n", blastpHits->bitScore);
+            printf("<td style=\"text-align: right;\">%u</td>\n", blastpHits->aliLength);
+            printf("<td style=\"text-align: right;\">%u</td>\n", blastpHits->mismatch);
+            printf("<td style=\"text-align: right;\">%u</td>\n", blastpHits->gapOpen);
+    
+            printf("</tr>\n");
+        }
         free(blastpTarget[0]);        
         free(blastpTarget[1]);
         blastpHits = blastpHits->next;
