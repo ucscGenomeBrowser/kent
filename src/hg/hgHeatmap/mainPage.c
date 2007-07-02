@@ -26,7 +26,7 @@
 #include "cytoBand.h"
 #include "hCytoBand.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.2 2007/06/29 00:21:09 heather Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.3 2007/07/02 21:18:23 heather Exp $";
 
 /* Page drawing stuff. */
 
@@ -55,9 +55,10 @@ struct bed *tupleList = NULL;
 while ((row = sqlNextRow(sr)) != NULL)
     {
     tuple = bedLoadN(row+1, 15);
-    slAddTail(&tupleList, tuple);
+    slAddHead(&tupleList, tuple);
     }
 sqlFreeResult(&sr);
+slReverse(&tupleList);
 
 return tupleList;
 }
