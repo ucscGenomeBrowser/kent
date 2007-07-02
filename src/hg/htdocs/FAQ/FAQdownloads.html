@@ -96,8 +96,29 @@
 			to the data.
 			<P>
 			We recommend that you download data via our FTP site at 
-			<A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/">ftp://hgdownload.cse.ucsc.edu/goldenPath/</A>, 
+			<A HREF="ftp://hgdownload.cse.ucsc.edu/">ftp://hgdownload.cse.ucsc.edu/</A>, 
 			particularly if you plan to download multiple files or files of large size. 
+			To do so:
+<BLOCKQUOTE><PRE>
+    ftp hgdownload.cse.ucsc.edu 
+    user name: anonymous
+    password: your email address
+    go to the goldenPath directory, pick an assembly directory, then a data directory
+</PRE></BLOCKQUOTE></P>
+<P>
+			To download multiple files from the UNIX ftp command 
+			line, use the "mget" command. You may want to use the
+			&quot;prompt&quot; command to toggle the interactive 
+			mode if you do not want to be prompted for each file 
+			that you download.
+<BLOCKQUOTE><PRE>
+    mget [filename1] [filename2] ...
+
+    - <em>or</em> -
+
+    mget -a (to download all the files in the directory) 
+</PRE></BLOCKQUOTE></P>
+			<P>
 			You can also download data from our 
 			<A HREF="http://hgdownload.cse.ucsc.edu/downloads.html">Downloads</A>
 			page or our <A HREF="../cgi-bin/das/dsn" TARGET=_blank>DAS 
