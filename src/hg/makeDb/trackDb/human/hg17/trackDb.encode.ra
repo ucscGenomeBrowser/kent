@@ -1780,7 +1780,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     dataVersion Jan 2007
     priority 11
 
-    track encodeYaleChipPvalP65cHelaTfna
+    track encodeYaleChipPvalP65cHelaTnfa
     release alpha
     subTrack encodeYaleChipPval
     shortLabel YU P65-C HeLa TNF P
@@ -2010,7 +2010,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     dataVersion Jan 2007
     priority 11
 
-    track encodeYaleChipSignalP65cHelaTfna
+    track encodeYaleChipSignalP65cHelaTnfa
     release alpha
     subTrack encodeYaleChipSignal
     shortLabel YU P65-C HeLa TNF S
@@ -2246,7 +2246,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     dataVersion Jan 2007
     priority 11
 
-    track encodeYaleChipSitesP65cHelaTfna
+    track encodeYaleChipSitesP65cHelaTnfa
     release alpha
     subTrack encodeYaleChipSites
     shortLabel YU P65-C HeLa TNF
