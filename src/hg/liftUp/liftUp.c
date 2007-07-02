@@ -17,8 +17,9 @@
 #include "options.h"
 #include "verbose.h"
 #include "xa.h"
+#include "sqlNum.h"
 
-static char const rcsid[] = "$Id: liftUp.c,v 1.44 2007/03/31 19:38:15 markd Exp $";
+static char const rcsid[] = "$Id: liftUp.c,v 1.45 2007/07/02 23:30:48 angie Exp $";
 
 boolean isPtoG = TRUE;  /* is protein to genome lift */
 boolean nohead = FALSE;	/* No header for psl files? */
@@ -209,7 +210,8 @@ if (spec && spec->strand == '-')
 }
 
 void liftOut(char *destFile, struct hash *liftHash, int sourceCount, char *sources[])
-/* Lift up coordinates in .out file. */
+/* Lift up coordinates in .out file.  Add offset to id (15th) column to 
+ * maintain non-overlapping id ranges for different input files. */
 {
 FILE *dest = mustOpen(destFile, "w");
 char *source;
@@ -220,7 +222,8 @@ char *line, *words[32];
 char *s;
 int begin, end, left;
 char leftString[18];
-char *id;
+int highestIdSoFar = 0, idOffset = 0;
+char idStr[32];
 struct liftSpec *spec;
 char *newName;
 
@@ -254,9 +257,14 @@ for (i=0; i<sourceCount; ++i)
 	if (wordCount < 14 || wordCount > 17)
 	    errAbort("Expecting 14-17 words (found %d) line %d of %s", wordCount, lf->lineIx, lf->fileName);
 	if (wordCount >= 15)
-	    id = words[14];
+	    {
+	    int numId = sqlUnsigned(words[14]) + idOffset;
+	    if (numId > highestIdSoFar)
+		highestIdSoFar = numId;
+	    safef(idStr, sizeof(idStr), "%d", numId);
+	    }
 	else
-	    id = "";
+	    idStr[0] = '\0';
 	begin = numField(words, 5, 0, lf);
 	end = numField(words, 6, 0, lf);
 	s = words[7];
@@ -284,9 +292,10 @@ for (i=0; i<sourceCount; ++i)
 	  "%5s %5s %4s %4s  %-9s %7d %7d %9s %1s  %-14s %-19s %6s %4s %6s %6s\n",
 	  words[0], words[1], words[2], words[3], newName,
 	  begin, end, leftString,
-	  words[8], words[9], words[10], words[11], words[12], words[13], id);
+	  words[8], words[9], words[10], words[11], words[12], words[13], idStr);
 	}
 	lineFileClose(&lf);
+	idOffset = highestIdSoFar;
     }
 if (ferror(dest))
     errAbort("error writing %s", destFile);
@@ -1465,7 +1474,7 @@ void liftUp(char *destFile, char *liftFile, char *howSpec, int sourceCount, char
 /* liftUp - change coordinates of .psl, .agp, or .out file
  * to parent coordinate system. */
 {
-struct liftSpec *lifts;
+struct liftSpec *lifts = NULL;
 struct hash *liftHash;
 char *destType = optionVal("type", destFile);
 
@@ -1479,8 +1488,13 @@ else if (sameWord(howSpec, "error"))
     how = errorMissing;
 else
     usage();
-lifts = readLifts(liftFile);
-verbose(1, "Got %d lifts in %s\n", slCount(lifts), liftFile);
+if (how == carryMissing && sameString("/dev/null", liftFile))
+    verbose(1, "Carrying input -- ignoring /dev/null liftFile\n");
+else
+    {
+    lifts = readLifts(liftFile);
+    verbose(1, "Got %d lifts in %s\n", slCount(lifts), liftFile);
+    }
 
 if (endsWith(destType, ".out"))
     {
