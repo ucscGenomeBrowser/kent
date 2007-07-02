@@ -118,7 +118,7 @@
 #endif
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1366 2007/06/29 12:48:03 giardine Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1367 2007/07/02 23:16:36 mhoechsm Exp $";
 
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
@@ -13366,10 +13366,12 @@ registerTrackHandler("sargassoSea",sargassoSeaMethods);
 registerTrackHandler("llaPfuPrintC2", loweExpRatioMethods);
 registerTrackHandler("plFoldPlus", rnaPLFoldMethods);
 registerTrackHandler("plFoldMinus", rnaPLFoldMethods);
+registerTrackHandler("rnaHybridization", rnaHybridizationMethods);
 #endif
 
 #ifdef LOWELAB_WIKI
 registerTrackHandler("wiki", wikiMethods);
+registerTrackHandler("wikibme", wikiMethods);
 #endif
 if (wikiTrackEnabled(NULL))
     registerTrackHandler("wikiTrack", wikiTrackMethods);

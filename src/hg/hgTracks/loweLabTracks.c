@@ -14,6 +14,7 @@
 #include "hgTracks.h"
 #include "expRatioTracks.h"
 #include "loweLabTracks.h"
+#include "rnaHybridization.h"
 
 /* Declare our color gradients and the the number of colors in them */
 #define LL_EXPR_DATA_SHADES 16
@@ -25,6 +26,29 @@ int LLmaxRGBShade = LL_EXPR_DATA_SHADES - 1;
 #define LL_COG_SHADES 26
 Color LLshadesOfCOGS[LL_COG_SHADES];
 /**** Lowe lab additions ***/
+
+
+/* RNA Hybridization additions */
+#define RNA_HYBRIDIZATION_SHADES 10
+Color rnaHybShadesPos[RNA_HYBRIDIZATION_SHADES];
+Color rnaHybShadesNeg[RNA_HYBRIDIZATION_SHADES];
+int rnaHybShadesInitialized = 0;
+
+void rnaHybShadesInit(struct vGfx *vg) 
+/* Allocate the LD for positive and negative values, and error cases */
+{
+static struct rgbColor white  = {255, 255, 255};
+static struct rgbColor red   =  {255,   0,   0};
+static struct rgbColor blue  =  {  0,   0, 255};
+
+
+vgMakeColorGradient(vg, &white, &blue,  RNA_HYBRIDIZATION_SHADES, rnaHybShadesPos);
+vgMakeColorGradient(vg, &white, &red,   RNA_HYBRIDIZATION_SHADES, rnaHybShadesNeg);
+
+ rnaHybShadesInitialized = 1;
+}
+
+
 
 void initializeColors(struct vGfx *vg)
 {
@@ -611,6 +635,55 @@ linkedFeaturesMethods(tg);
 tg->loadItems = loadOperon;
 tg->colorShades = shadesOfGray;
 tg->drawItemAt = tigrOperonDrawAt;
+}
+
+void loadRNAHybridization(struct track *tg)
+/* Load the items in one custom track - just move beds in
+ * window... */
+{
+struct rnaHybridization *rnaHyb, *list = NULL;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+int rowOffset;
+
+sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    rnaHyb = rnaHybridizationLoad(row);
+    slAddHead(&list, rnaHyb);
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+slReverse(&list);
+tg->items = list;
+}
+
+
+Color rnaHybColor(struct track *tg, void *item, struct vGfx *vg)
+/* Return color to draw gene in. */
+{
+struct rnaHybridization *rh=item;
+int cindex = (int)(rh->gcContent * (float)(RNA_HYBRIDIZATION_SHADES - 1));
+
+if(!rnaHybShadesInitialized)
+  rnaHybShadesInit(vg);  
+
+if(strcmp(rh->strandTarget, "+") == 0)
+{
+   return rnaHybShadesPos[cindex];   
+}
+else
+{
+  return rnaHybShadesNeg[cindex];
+}
+
+}
+
+void rnaHybridizationMethods(struct track *tg)
+{
+  tg->loadItems = loadRNAHybridization;
+  tg->itemColor = rnaHybColor;
 }
 
 /**** End of Lowe lab additions ****/
