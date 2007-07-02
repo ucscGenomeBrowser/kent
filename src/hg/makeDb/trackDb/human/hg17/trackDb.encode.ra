@@ -2057,6 +2057,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     color 100,20,20
     longLabel Yale ChIP-chip (Pol2 ab, GM06990 cells) Signal
     subGroups celltype=gm factor=pol2
+    dataVersion Nov 2006
     priority 16
 
     track encodeYaleChipSignalPol2nGm06990
@@ -2066,6 +2067,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     longLabel Yale ChIP-chip (Pol2 N-terminus ab, GM06990 cells) Signal
     color 20,20,100
     subGroups celltype=gm factor=pol2n
+    dataVersion Nov 2006
     priority 17
 
     track encodeYaleChipSignalH4kac4Gm06990
@@ -2075,6 +2077,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     longLabel Yale ChIP-chip (H4Kac4 ab, GM06990 cells) Signal
     color 20,100,20
     subGroups celltype=gm factor=h4kac4
+    dataVersion Nov 2006
     priority 18
 
     track encodeYaleChipSignalBaf155K562
@@ -2298,6 +2301,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     type bed5FloatScoreWithFdr
     longLabel Yale ChIP-chip (Pol2 ab, GM06990 cells) Sites
     subGroups celltype=gm factor=pol2
+    dataVersion Nov 2006
     priority 16
 
     track encodeYaleChipSitesPol2nGm06990
@@ -2308,6 +2312,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     color 20,20,100
     type bed5FloatScoreWithFdr
     subGroups celltype=gm factor=pol2n
+    dataVersion Nov 2006
     priority 17
 
     track encodeYaleChipSitesH4kac4Gm06990
@@ -2318,6 +2323,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     color 20,100,20
     type bed5FloatScoreWithFdr
     subGroups celltype=gm factor=h4kac4
+    dataVersion Nov 2006
     priority 18
 
     track encodeYaleChipSitesBaf155K562
