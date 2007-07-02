@@ -84,8 +84,9 @@
 #include "transMapClick.h"
 #include "ccdsClick.h"
 #include "memalloc.h"
+#include "rnaHybridization.h"
 
-static char const rcsid[] = "$Id: lowelab.c,v 1.16 2007/07/02 01:30:45 pchan Exp $";
+static char const rcsid[] = "$Id: lowelab.c,v 1.17 2007/07/02 23:12:50 mhoechsm Exp $";
 
 extern char *uniprotFormat;
 
@@ -2049,9 +2050,18 @@ void doBlastP(struct trackDb *tdb, char *targetName)
     printTrackHtml(tdb);
 }
 
-void doWiki(struct trackDb *tdb, char *itemName)
+void doWiki(char *track, struct trackDb *tdb, char *itemName)
 {
-  char strand[2]; 
+  char strand[2];
+  char wikiea[] = "wikiea";
+  char wikibme[] = "wikibme";
+  char *wiki;
+
+  if(sameWord(track, "wiki"))
+    wiki = wikiea;
+  else
+    wiki = wikibme;
+
 
   printf("<HEAD>");
 
@@ -2059,15 +2069,49 @@ void doWiki(struct trackDb *tdb, char *itemName)
   {
     strand[0] = itemName[strlen(itemName)-1];
     strand[1] = 0;
-    printf("<META HTTP-EQUIV=\"REFRESH\" content=\"0; URL=http://cali.cse.ucsc.edu/wikiea/index.php/BED:%s:%s:%d-%d:%s\"</META>", database, seqName, winStart, winEnd, strand);
+    printf("<META HTTP-EQUIV=\"REFRESH\" content=\"0; URL=http://cali.cse.ucsc.edu/%s/index.php/BED:%s:%s:%d-%d:%s\"</META>", wiki, database, seqName, winStart, winEnd, strand);
   }
   else
   {   
-    printf("<META HTTP-EQUIV=\"REFRESH\" content=\"0; URL=http://cali.cse.ucsc.edu/wikiea/index.php/BED:%s:%s:%s\"</META>", database, seqName, itemName);
+    printf("<META HTTP-EQUIV=\"REFRESH\" content=\"0; URL=http://cali.cse.ucsc.edu/%s/index.php/BED:%s:%s:%s\"</META>", wiki, database, seqName, itemName);
   }
-
+  
   printf("</HEAD>");
 }
+
+void doRNAHybridization(struct trackDb *tdb, char *itemName)
+{
+  struct sqlConnection *conn = hAllocConn();
+  char query[512];
+  struct sqlResult *sr;
+  char **row;
+  struct rnaHybridization *rnaHyb;
+  char rnaHybridizationTable[] = "rnaHybridization";
+  
+  cartWebStart(cart, "%s", "RNAHybridization Sites");
+  
+  if (hTableExists(rnaHybridizationTable))
+    {
+      /* Get query gene from refSeq */
+      sprintf(query, "select * from %s where name='%s'", rnaHybridizationTable, itemName);
+      sr = sqlGetResult(conn, query);
+      if ((row = sqlNextRow(sr)) != NULL)
+	{
+	  rnaHyb = rnaHybridizationLoad(row);
+
+	  printf("5%s3<br>", rnaHyb->patternSeq);
+	  printf("3%s5", rnaHyb->targetSeq);
+	  printf("<a href=\"http://archdev-mhoechsm.cse.ucsc.edu/cgi-bin/hgTracks\?position=%s:%u-%u&db=%s\" TARGET=_blank> open in browser</a>", rnaHyb->chromTarget, rnaHyb->chromStartTarget, rnaHyb->chromEndTarget, database);
+
+	  freeMem(rnaHyb);
+	}
+      
+      sqlFreeResult(&sr);
+    }
+  
+  hFreeConn(&conn);
+}
+
 
 bool loweLabClick(char *track, char *item, struct trackDb *tdb)
 /* check if we have one of the lowelab tracks */
@@ -2130,10 +2174,14 @@ else if (startsWith("BlastP_", track)
     {
     doBlastP(tdb, item);
     }
-else if (sameWord(track,"wiki"))
+else if (sameWord(track,"wiki") || sameWord(track,"wikibme"))
    {
-   doWiki(tdb,item);
-   }  
+   doWiki(track,tdb,item);
+   }
+else if (sameWord(track,"rnaHybridization"))  
+  {
+    doRNAHybridization(tdb, item);
+  }
 else 
     return FALSE;
 return TRUE;
