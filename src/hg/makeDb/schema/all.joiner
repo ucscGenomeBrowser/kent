@@ -581,6 +581,11 @@ identifier nscanName dependency
     $gbd.nscanGene.name
     $gbd.nscanPep.name unique
 
+identifier nscanPasaName dependency
+"Link together nscan predicted gene structure (PASA) and peptide"
+    $gbd.nscanPasaGene.name
+    $gbd.nscanPasaPep.name unique
+
 identifier augustusHintsName dependency
 "Link together augustusHints predicted gene structure and peptide"
    $gbd.augustusHints.name
