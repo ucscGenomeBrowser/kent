@@ -208,7 +208,7 @@
 #include "omicia.h"
 #include "atomDb.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1310 2007/07/02 18:16:00 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1311 2007/07/02 22:21:58 hartera Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -592,7 +592,7 @@ if (end == 0)
         printf("<B>Band:</B> %s<BR>\n", sband);
     return;
 }
-gotE = hChromBand(chrom, end-1, eband);
+gotE = hChromBand(chrom, end, eband);
 /* if eband equals sband, just use sband */
 if (gotE && sameString(sband,eband))
    gotE = FALSE;
@@ -941,6 +941,51 @@ slReverse(&bedList);
 showBedTopScorers(bedList, item, start, maxScorers);
 }
 
+void getBedTopScorers(struct sqlConnection *conn, struct trackDb *tdb, 
+                   char *table, char *item, int start, int bedSize)
+/* This function determines if showTopScorers is set in trackDb and also */
+/* if the filterTopScorers setting is on. Then it passes the relevant */
+/* settings to showBedTopScorersInWindow() so that the top N scoring */
+/* items in the window are listed on the details page */
+{
+char *showTopScorers = trackDbSetting(tdb, "showTopScorers");
+char *filterTopScorers = trackDbSetting(tdb,"filterTopScorers");
+boolean doFilterTopScorers = FALSE;
+char *words[3];
+char query[512];
+int filterTopScoreCt = 0;
+char *filterTopScoreTable = NULL;
+
+safef(query, sizeof query, "%s.%s", table, "filterTopScorersOn");
+if (filterTopScorers != NULL)
+    {
+    if (chopLine(cloneString(filterTopScorers), words) == 3)
+        {
+        doFilterTopScorers = sameString(words[0], "on");
+        filterTopScoreCt = atoi(words[1]);
+        filterTopScoreTable = words[2];
+        }
+    }
+
+if (bedSize >= 5 && showTopScorers != NULL)
+    {
+    /* list top-scoring elements in window */
+    int maxScorers = sqlUnsigned(showTopScorers);
+    doFilterTopScorers = cartCgiUsualBoolean(cart, query, doFilterTopScorers);
+    if (doFilterTopScorers && hTableExists(filterTopScoreTable))
+        {
+        /* limit to those in the top N, from table */
+        safef(query, sizeof query, "%s.%s", table, "filterTopScorersCt");
+        filterTopScoreCt = cartCgiUsualInt(cart, query, filterTopScoreCt);
+        }
+    else
+        /* show all */
+        filterTopScoreTable = NULL;
+    showBedTopScorersInWindow(conn, tdb, item, start, maxScorers,
+                                filterTopScoreTable, filterTopScoreCt);
+    }
+}
+
 void linkToOtherBrowser(char *otherDb, char *chrom, int start, int end);
 
 void mafPrettyOut(FILE *f, struct mafAli *maf, int lineSize, 
@@ -1020,16 +1065,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 printf("</A>");
 sqlFreeResult(&sr);
-printf("<TABLE>");
+printf("<IMG src=http://hgwdev.cse.ucsc.edu/~bsuh/gif/%s.gif><BR>",item);
 
-printf("<THEAD>");
-printf("<TBODY>");
-printf("<TR><TH>");
-printf("Brian's Gap Tree<TD>Bernard's Tree");
-printf("<TR><TH>");
-printf("<IMG src=http://hgwdev.cse.ucsc.edu/~braney/992png/%s.png><BR>",item);
-printf("<TD><IMG src=http://hgwdev.cse.ucsc.edu/~bsuh/gif/%s.gif><BR>",item);
-printf("</TABLE>");
 
 char buffer[4096];
 struct mafFile *mf;
@@ -1087,12 +1124,6 @@ char query[512];
 struct sqlResult *sr;
 char **row;
 boolean firstTime = TRUE;
-char *showTopScorers = trackDbSetting(tdb, "showTopScorers");
-char *filterTopScorers = trackDbSetting(tdb,"filterTopScorers");
-boolean doFilterTopScorers = FALSE;
-char *words[3];
-int filterTopScoreCt = 0;
-char *filterTopScoreTable = NULL;
 char *escapedName = sqlEscapeString(item);
 
 hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
@@ -1113,33 +1144,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 safef(query, sizeof query, "%s.%s", table, "filterTopScorersOn");
-if (filterTopScorers != NULL)
-    {
-    if (chopLine(cloneString(filterTopScorers), words) == 3)
-        {
-        doFilterTopScorers = sameString(words[0], "on");
-        filterTopScoreCt = atoi(words[1]);
-        filterTopScoreTable = words[2];
-        }
-    }
-
-if (bedSize >= 5 && showTopScorers != NULL)
-    {
-    /* list top-scoring elements in window */
-    int maxScorers = sqlUnsigned(showTopScorers);
-    doFilterTopScorers = cartCgiUsualBoolean(cart, query, doFilterTopScorers);
-    if (doFilterTopScorers && hTableExists(filterTopScoreTable))
-        {
-        /* limit to those in the top N, from table */
-        safef(query, sizeof query, "%s.%s", table, "filterTopScorersCt");
-        filterTopScoreCt = cartCgiUsualInt(cart, query, filterTopScoreCt);
-        }
-    else
-        /* show all */
-        filterTopScoreTable = NULL;
-    showBedTopScorersInWindow(conn, tdb, item, start, maxScorers,
-                                filterTopScoreTable, filterTopScoreCt);
-    }
+getBedTopScorers(conn, tdb, table, item, start, bedSize);
 }
 
 #define INTRON 10 
@@ -3097,6 +3102,7 @@ struct dyString *query = newDyString(512);
 char **row;
 boolean firstTime = TRUE;
 int start = cartInt(cart, "o");
+int bedSize = 5;
 
 hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
 dyStringPrintf(query, "select * from %s where chrom = '%s' and ",
@@ -3119,6 +3125,7 @@ while ((row = sqlNextRow(sr)) != NULL)
            printf("<B>False Discovery Rate (FDR):</B> %s%%<BR>\n", row[7]);
         }
     }
+getBedTopScorers(conn, tdb, table, item, start, bedSize);
 
 sqlFreeResult(&sr);
 hFreeConn(&conn);
@@ -10591,14 +10598,8 @@ if (row != NULL)
 	row = sqlNextRow(sr);
 	if (row != NULL)
 	    {
-	    int i;
-	    char **cl;
-	    cl = (char **)needMem(52*sizeof(char *));
-	    for (i = 0; i < 52; ++i)
-		cl[i] = cloneString(row[i]);
 	    info2Row = stsInfo2Load(row);
-	    infoRow = stsInfoLoad(cl);
-	    freeMem(cl);
+	    infoRow = stsInfoLoad(row);
 	    }
 	}
     else if (stsInfoExists)
