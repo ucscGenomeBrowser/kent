@@ -302,7 +302,12 @@ bga->query = bq;
 if (!bfSkipBlankLines(bf))
     return NULL;
 line = bfNextLine(bf);
-if (startsWith("  Database:", line))
+/*
+the last condition was added to deal with the new blast output format and is meant to find lines such as this one:
+TBLASTN 2.2.15 [Oct-15-2006]
+I am hoping that by looking for only "BLAST" this will work with things like blastp, blastn, psi-blast, etc
+*/
+if (startsWith("  Database:", line) || (stringIn("BLAST", line) != NULL))
     return NULL;
 if (line[0] != '>')
     bfError(bf, "Expecting >target");
@@ -359,7 +364,12 @@ char *line;
 *retLine = line = bfNextLine(bf);
 if (line == NULL)
     return FALSE;
-if (line[0] == '>' || startsWith("Query=", line) || startsWith("  Database:", line))
+/*
+the last condition was added to deal with the new blast output format and is meant to find lines such as this one:
+TBLASTN 2.2.15 [Oct-15-2006]
+I am hoping that by looking for only "BLAST" this will work with things like blastp, blastn, psi-blast, etc
+*/
+if (line[0] == '>' || startsWith("Query=", line) || startsWith("  Database:", line) || (stringIn("BLAST", line) != NULL))
     {
     lineFileReuse(lf);
     return FALSE;
