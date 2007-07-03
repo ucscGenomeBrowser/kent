@@ -23,7 +23,7 @@
 #include "customFactory.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.67 2007/06/18 23:47:51 angie Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.68 2007/07/03 04:46:07 angie Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -1718,7 +1718,10 @@ for (s = fileSettings;  s != NULL;  s = s->next)
     {
     char *fileName = (char *)(s->val);
     if (fileExists(fileName))
+	{
 	readAndIgnore(fileName);
+	verbose(4, "setting %s: %s\n", s->name, fileName);
+	}
     else
 	{
 	isLive = FALSE;

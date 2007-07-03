@@ -9,7 +9,7 @@
 #include "customTrack.h"
 #include "customFactory.h"
 
-static char const rcsid[] = "$Id: refreshNamedSessionCustomTracks.c,v 1.4 2007/04/25 17:30:37 angie Exp $";
+static char const rcsid[] = "$Id: refreshNamedSessionCustomTracks.c,v 1.5 2007/07/03 04:46:07 angie Exp $";
 
 #define savedSessionTable "namedSessionDb"
 
@@ -72,6 +72,8 @@ while (isNotEmpty(namePt))
 	    else
 		verbose(2, "Found expired custom track: %s\n", dataPt);
 	    }
+	if (thisGotLiveCT)
+	    verbose(4, "Found live custom track: %s\n", dataPt);
 	}
     namePt = nextNamePt;
     }
