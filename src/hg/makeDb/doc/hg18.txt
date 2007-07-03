@@ -16380,3 +16380,39 @@ hgLoadBed -tab -sqlTable=hapmapAllelesSummary.sql hg18 hapmapAllelesSummary hapm
 
     # remove old human/hg18/nscanGene.html
 
+###########################################################################
+# AUGUSTUS track (DONE 2007-7-3 Mario)
+#
+# augustusHints subtrack
+
+mkdir -p /cluster/data/hg18/bed/augustus/usingHints/predictions/Trefseq.hmRNA.hsEST.R.X.final
+cd /cluster/data/hg18/bed/augustus/usingHints/predictions/Trefseq.hmRNA.hsEST.R.X.final
+wget http://augustus.gobics.de/predictions/hg18/usingEvidence/augustus.hg18.Trefseq.hmRNA.hsEST.R.X.pep.gff
+wget http://augustus.gobics.de/predictions/hg18/usingEvidence/augustus.hg18.Trefseq.hmRNA.hsEST.R.X.pep.aa
+ldHgGene -bin hg18 augustusHints augustus.hg18.Trefseq.hmRNA.hsEST.R.X.gff
+hgPepPred hg18 generic augustusHintsPep augustus.hg18.Trefseq.hmRNA.hsEST.R.X.pep.aa
+
+
+# augustus de novo subtrack
+
+mkdir -p /cluster/data/hg18/bed/augustus/usingHints/predictions/Xp.RA.it
+cd /cluster/data/hg18/bed/augustus/usingHints/predictions/Xp.RA.it
+wget http://augustus.gobics.de/predictions/hg18/deNovo/augustus.hg18.Xp.RA.it.pep.gff
+wget http://augustus.gobics.de/predictions/hg18/deNovo/augustus.hg18.Xp.RA.it.pep.aa
+ldHgGene -bin hg18 augustusXRA augustus.hg18.Xp.RA.it.gff
+hgPepPred hg18 generic augustusXRAPep augustus.hg18.Xp.RA.it.pep.aa
+
+
+# augustus ab initio subtrack
+
+mkdir -p /cluster/data/hg18/bed/augustus/abinitio
+cd /cluster/data/hg18/bed/augustus/abinitio
+wget http://augustus.gobics.de/predictions/hg18/abinitio/augustus.pep.gff
+wget http://augustus.gobics.de/predictions/hg18/abinitio/augustus.pep.aa
+ldHgGene -bin hg18 augustusAbinitio augustus.gff
+hgPepPred hg18 generic augustusAbinitioPep augustus.pep.aa
+
+
+
+
+
