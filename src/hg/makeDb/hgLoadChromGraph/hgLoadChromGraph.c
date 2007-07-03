@@ -1,5 +1,6 @@
 /* hgLoadChromGraph - Load up chromosome graph. */
 #include "common.h"
+#include "obscure.h"
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
@@ -9,7 +10,7 @@
 #include "hgRelate.h"
 #include "chromGraph.h"
 
-static char const rcsid[] = "$Id: hgLoadChromGraph.c,v 1.4 2006/06/28 19:35:01 kent Exp $";
+static char const rcsid[] = "$Id: hgLoadChromGraph.c,v 1.5 2007/07/03 00:59:23 aamp Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -20,11 +21,14 @@ errAbort(
   "   hgLoadChromGraph database track input.tab\n"
   "options:\n"
   "   -noLoad - don't load database\n"
+  "   -idTable - Use a table on the same database to fetch coordinates\n"
+  "              e.g. \"snp127\".\n" 
   );
 }
 
 static struct optionSpec options[] = {
    {"noLoad", OPTION_BOOLEAN},
+   {"idTable", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -47,17 +51,95 @@ char *metaCreateString =
 "    PRIMARY KEY(name(32))\n"
 ");\n";
 
+void checkTableForFields(struct sqlConnection *conn, char *tableName)
+/* Do basic checks on the table to make sure it's kosher. i.e. */
+/* chrom, chromStart, name all exist along with the table itself. */
+{
+struct slName *fieldList;
+if (!sqlTableExists(conn, tableName))
+    errAbort("table %s not found.", tableName);
+fieldList = sqlListFields(conn, tableName);
+if (!slNameInList(fieldList, "chrom"))
+    errAbort("table %s doesn't have a chrom field. It must have chrom, chromStart, and name at the minimum.", tableName);
+if (!slNameInList(fieldList, "chromStart"))
+    errAbort("table %s doesn't have a chrom field. It must have chrom, chromStart, and name at the minimum.", tableName);
+if (!slNameInList(fieldList, "name"))
+    errAbort("table %s doesn't have a chrom field. It must have chrom, chromStart, and name at the minimum.", tableName);
+slNameFreeList(&fieldList);
+}
 
+struct hash *posHashFromTable(struct sqlConnection *conn, char *table)
+/* Store name, chrom, chromStart in a hash of slPairs. (cheap) */
+{
+struct hash *posHash = newHash(24);
+struct sqlResult *sr = NULL;
+char query[256];
+char **row;
+safef(query, sizeof(query), "select name,chrom,chromStart from %s", table);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    int chromStart = (int)sqlUnsigned(row[2]);
+    struct slPair *pair;
+    AllocVar(pair);
+    pair->name = cloneString(row[1]);
+    pair->val = intToPt(chromStart);
+    hashAdd(posHash, row[0], pair);
+    }
+sqlFreeResult(&sr);
+return posHash;
+}
+
+struct chromGraph *chromGraphListWithTable(char *fileName, char *db, char *table)
+/* Read the chromGraph file and convert to the  chr,chromStart format. */
+{
+struct sqlConnection *conn = sqlConnect(db);
+struct hash *posHash = NULL;
+struct lineFile *lf;
+struct chromGraph *list = NULL;
+char *words[2];
+checkTableForFields(conn, table);
+posHash = posHashFromTable(conn, table);
+sqlDisconnect(&conn);
+lf = lineFileOpen(fileName, TRUE);
+while (lineFileRow(lf, words))
+    {
+    struct chromGraph *cg;
+    double val = sqlDouble(words[1]);
+    /* Look up ID in hash. */
+    struct slPair *infoFromHash = hashFindVal(posHash, words[0]);
+    if (!infoFromHash)
+	warn("%s line %d: %s not found in %s table", fileName, lf->lineIx, words[0], table);
+    else
+	{
+	AllocVar(cg);
+	cg->chrom = cloneString(infoFromHash->name);
+	cg->chromStart = ptToInt(infoFromHash->val);
+	cg->val = sqlDouble(words[1]);
+	slAddHead(&list, cg);
+	}   
+    }
+slReverse(&list);
+/* Free stuff up. */
+lineFileClose(&lf);
+hashFreeWithVals(&posHash, slPairFree);
+return list;
+}
 
 void hgLoadChromGraph(boolean doLoad, char *db, char *track, char *fileName)
 /* hgLoadChromGraph - Load up chromosome graph. */
 {
 double minVal,maxVal;
-struct chromGraph *el, *list = chromGraphLoadAll(fileName);
+struct chromGraph *el, *list;
 FILE *f;
 char *tempDir = ".";
 char path[PATH_LEN], gbdbPath[PATH_LEN];
+char *idTable = optionVal("idTable", NULL);
 
+if (idTable == NULL)
+    list = chromGraphLoadAll(fileName);
+else 
+    list = chromGraphListWithTable(fileName, db, idTable);
 if (list == NULL)
     errAbort("%s is empty", fileName);
 
