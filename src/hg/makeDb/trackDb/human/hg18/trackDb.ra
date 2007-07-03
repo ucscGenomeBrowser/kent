@@ -373,7 +373,7 @@ baseColorDefault genomicCodons
     color 180,0,0
 
     track augustusAbinitio
-    subTrack augustus off
+    subTrack augustus
     shortLabel Augustus Ab Initio
     longLabel Augustus Ab Initio Gene Predictions
     priority 3
