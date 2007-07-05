@@ -86,7 +86,7 @@
 #include "memalloc.h"
 #include "rnaHybridization.h"
 
-static char const rcsid[] = "$Id: lowelab.c,v 1.17 2007/07/02 23:12:50 mhoechsm Exp $";
+static char const rcsid[] = "$Id: lowelab.c,v 1.18 2007/07/05 05:33:40 pchan Exp $";
 
 extern char *uniprotFormat;
 
@@ -2050,6 +2050,36 @@ void doBlastP(struct trackDb *tdb, char *targetName)
     printTrackHtml(tdb);
 }
 
+void doUltraConserved(struct trackDb *tdb, char *item)
+/* Handle the ultraConserved track. */
+{
+    char tableName[65];
+    int start = cartInt(cart, "o");
+    int end = cartInt(cart, "t");
+    struct hashEl* hashItem;
+    struct hashCookie cookie;
+    struct sqlConnection *conn = hAllocConn();
+   
+    cookie = hashFirst(trackHash);
+    hashItem = hashNext(&cookie);
+    while (hashItem != NULL)
+    {
+        memset(tableName, 0, 65);
+        strcpy(tableName, hashItem->name);
+        if (strstr(tableName, "multiz") != NULL)
+            break;
+        hashItem = hashNext(&cookie);
+    }
+    tdb = hashFindVal(trackHash, tableName);
+    winStart = start;
+    winEnd = end;
+
+    genericHeader(tdb, NULL);
+    genericMafClick(conn, tdb, item, start);
+    printTrackHtml(tdb);
+    hFreeConn(&conn);
+}
+
 void doWiki(char *track, struct trackDb *tdb, char *itemName)
 {
   char strand[2];
@@ -2174,6 +2204,10 @@ else if (startsWith("BlastP_", track)
     {
     doBlastP(tdb, item);
     }
+else if (sameWord(track,"ultraConserved"))  
+  {
+    doUltraConserved(tdb, item);
+  }
 else if (sameWord(track,"wiki") || sameWord(track,"wikibme"))
    {
    doWiki(track,tdb,item);
