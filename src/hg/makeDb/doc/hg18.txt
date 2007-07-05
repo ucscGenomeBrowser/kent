@@ -16335,6 +16335,11 @@ mysql> update snp126OrthoPanTro2 set orthoScore = 98 where orthoChrom = "chrY_ra
 sed 's/hapmapAllelesOrtho/hapmapAllelesChimp/' ~/kent/src/hg/lib/hapmapAllelesOrtho.sql  > hapmapAllelesChimp.sql
 ~heather/kent/src/hg/snp/snpLoad/hapmapOrtho hg18 hapmapSnpsCombined snp126OrthoPanTro2
 hgLoadBed -tab -sqlTable=hapmapAllelesChimp.sql hg18 hapmapAllelesChimp hapmapOrtho.tab 
+# sanity check
+mysql> select count(*) from hapmapAllelesChimp where chrom = orthoChrom;
+# 3,492,708
+mysql> select count(*) from hapmapAllelesChimp where chrom != orthoChrom;
+# 374,010 
 
 # macaque alleles
 cd /cluster/data/dbSNP/ortho/hg18/rheMac2Seq
