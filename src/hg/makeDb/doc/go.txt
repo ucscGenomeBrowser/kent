@@ -97,6 +97,9 @@ zcat gene_association.goa_uniprot.gz\
 
 # Passed 10341476 of 12083865 of 12083865, 85.58%
 
+# angie suggests running this at the end (it only make goaPart.as):
+# makeTableDescriptions go hg/lib/goaPart.as (BK 2007-07-05)
+
 # Ask sys-admin to switch the database pointer go to point to go061219.
 ##########################################################################
 
