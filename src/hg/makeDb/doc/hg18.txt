@@ -16286,7 +16286,8 @@ mv *.errors *.log *.out logs
 mkdir orthos
 cd orthos/
 
-# a couple quick scripts... I kinda think these are weird in make-docs
+# hgWiggle output has the chromosome in a comment, followed by the values
+# This script prints that chromosome on every line
 cat << "EOF" > joinify.awk
 {
 if ($1 == "variableStep")
@@ -16313,30 +16314,43 @@ rm scores bed
 EOF
 chmod +x join.sh
 
-# back to business
+# chimp alleles
 cd /cluster/data/dbSNP/ortho/hg18/panTro2Seq
 awk '{printf("%s\t%s\t%s\t%s\t0\t%s\t%s\n", $2, $3, $4, $5, $7, $8);}' snp126orthoPrelim.tab > snp126orthoPrelim.bed
 cp snp126orthoPrelim.bed /cluster/data/hg18/bed/hapmap/orthos/panTro2.bed.new
+cd /cluster/data/hg18/bed/hapmap/orthos
+hgWiggle -db=panTro2 -bedFile=panTro2.bed quality > panTro2.scores
+# create qual.tab; combine panTro2 sequence with panTro2 quality score 
+./join.sh panTro2.bed.new panTro2.scores
+grep chr21 panTro2.bed.new >> qual.tab
+grep chrY panTro2.bed.new >> qual.tab
+# create snpOrtho.tab; a table in human coords that has associated ortho alleles
+~heather/kent/src/hg/snp/snpLoad/snpOrtho hg18 snp126 qual.tab
+sed 's/snpOrtho/snp126OrthoPanTro2/' ~/kent/src/hg/lib/snpOrtho.sql  > snpOrthoPanTro2.sql
+hgLoadBed -tab -sqlTable=snpOrthoPanTro2.sql hg18 snp126OrthoPanTro2 snpOrtho.tab
+# get the HapMap subset 
+sed 's/hapmapAllelesOrtho/hapmapAllelesChimp/' ~/kent/src/hg/lib/hapmapAllelesOrtho.sql  > hapmapAllelesChimp.sql
+~heather/kent/src/hg/snp/snpLoad/hapmapOrtho hg18 hapmapSnpsCombined snp126OrthoPanTro2
+hgLoadBed -tab -sqlTable=hapmapAllelesChimp.sql hg18 hapmapAllelesChimp hapmapOrtho.tab 
+
+# macaque alleles
 cd /cluster/data/dbSNP/ortho/hg18/rheMac2Seq
 awk '{printf("%s\t%s\t%s\t%s\t0\t%s\t%s\n", $2, $3, $4, $5, $7, $8);}' snp126orthoPrelim.tab > snp126orthoPrelim.bed
 cp snp126orthoPrelim.bed /cluster/data/hg18/bed/hapmap/orthos/rheMac2.bed.new
 cd /cluster/data/hg18/bed/hapmap/orthos
 hgWiggle -db=rheMac2 -bedFile=rheMac2.bed quality > rheMac2.scores
-hgWiggle -db=panTro2 -bedFile=panTro2.bed quality > panTro2.scores
+# create qual.tab: combine rheMac2 sequence with rheMac2 quality score 
 ./join.sh rheMac2.bed.new rheMac2.scores
+# create snpOrtho.tab; a table in human coords that has associated ortho alleles
 ~heather/kent/src/hg/snp/snpLoad/snpOrtho hg18 snp126 qual.tab
 sed 's/snpOrtho/snp126OrthoRheMac2/' ~/kent/src/hg/lib/snpOrtho.sql  > snpOrthoRheMac2.sql
 hgLoadBed -tab -sqlTable=snpOrthoRheMac2.sql hg18 snp126OrthoRheMac2 snpOrtho.tab
-./join.sh panTro2.bed.new panTro2.scores
-~heather/kent/src/hg/snp/snpLoad/snpOrtho hg18 snp126 qual.tab
-sed 's/snpOrtho/snp126OrthoPanTro2/' ~/kent/src/hg/lib/snpOrtho.sql  > snpOrthoPanTro2.sql
-hgLoadBed -tab -sqlTable=snpOrthoPanTro2.sql hg18 snp126OrthoPanTro2 snpOrtho.tab
+# get the HapMap subset
 sed 's/hapmapAllelesOrtho/hapmapAllelesMacaque/' ~/kent/src/hg/lib/hapmapAllelesOrtho.sql  > hapmapAllelesMacaque.sql
-sed 's/hapmapAllelesOrtho/hapmapAllelesChimp/' ~/kent/src/hg/lib/hapmapAllelesOrtho.sql  > hapmapAllelesChimp.sql
-~heather/kent/src/hg/snp/snpLoad/hapmapOrtho hg18 hapmapSnpsCombined snp126OrthoPanTro2
-hgLoadBed -tab -sqlTable=hapmapAllelesChimp.sql hg18 hapmapAllelesChimp hapmapOrtho.tab 
 ~heather/kent/src/hg/snp/snpLoad/hapmapOrtho hg18 hapmapSnpsCombined snp126OrthoRheMac2
 hgLoadBed -tab -sqlTable=hapmapAllelesMacaque.sql hg18 hapmapAllelesMacaque hapmapOrtho.tab 
+
+# create summary table
 ~heather/kent/src/hg/snp/snpLoad/hapmapSummary hg18 hapmapSnpsCombined hapmapAllelesChimp hapmapAllelesMacaque
 ln -s ~/kent/src/hg/lib/hapmapAllelesSummary.sql
 hgLoadBed -tab -sqlTable=hapmapAllelesSummary.sql hg18 hapmapAllelesSummary hapmapSummary.tab 
