@@ -86,7 +86,7 @@
 #include "memalloc.h"
 #include "rnaHybridization.h"
 
-static char const rcsid[] = "$Id: lowelab.c,v 1.18 2007/07/05 05:33:40 pchan Exp $";
+static char const rcsid[] = "$Id: lowelab.c,v 1.19 2007/07/05 06:40:11 pchan Exp $";
 
 extern char *uniprotFormat;
 
@@ -2058,6 +2058,7 @@ void doUltraConserved(struct trackDb *tdb, char *item)
     int end = cartInt(cart, "t");
     struct hashEl* hashItem;
     struct hashCookie cookie;
+    struct trackDb *multizTrack;
     struct sqlConnection *conn = hAllocConn();
    
     cookie = hashFirst(trackHash);
@@ -2070,13 +2071,18 @@ void doUltraConserved(struct trackDb *tdb, char *item)
             break;
         hashItem = hashNext(&cookie);
     }
-    tdb = hashFindVal(trackHash, tableName);
+    multizTrack = hashFindVal(trackHash, tableName);
     winStart = start;
     winEnd = end;
 
     genericHeader(tdb, NULL);
-    genericMafClick(conn, tdb, item, start);
-    printTrackHtml(tdb);
+    if (tdb->html != NULL && tdb->html[0] != 0)
+    {
+        puts(tdb->html);
+        htmlHorizontalLine();
+    }
+    genericMafClick(conn, multizTrack, item, start);
+    printTrackHtml(multizTrack);
     hFreeConn(&conn);
 }
 
