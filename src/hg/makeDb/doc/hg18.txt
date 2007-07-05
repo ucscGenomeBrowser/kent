@@ -16328,6 +16328,9 @@ grep chrY panTro2.bed.new >> qual.tab
 ~heather/kent/src/hg/snp/snpLoad/snpOrtho hg18 snp126 qual.tab
 sed 's/snpOrtho/snp126OrthoPanTro2/' ~/kent/src/hg/lib/snpOrtho.sql  > snpOrthoPanTro2.sql
 hgLoadBed -tab -sqlTable=snpOrthoPanTro2.sql hg18 snp126OrthoPanTro2 snpOrtho.tab
+mysql> update snp126OrthoPanTro2 set orthoScore = 98 where orthoChrom = "chr21";
+mysql> update snp126OrthoPanTro2 set orthoScore = 98 where orthoChrom = "chrY";
+mysql> update snp126OrthoPanTro2 set orthoScore = 98 where orthoChrom = "chrY_random";
 # get the HapMap subset 
 sed 's/hapmapAllelesOrtho/hapmapAllelesChimp/' ~/kent/src/hg/lib/hapmapAllelesOrtho.sql  > hapmapAllelesChimp.sql
 ~heather/kent/src/hg/snp/snpLoad/hapmapOrtho hg18 hapmapSnpsCombined snp126OrthoPanTro2
