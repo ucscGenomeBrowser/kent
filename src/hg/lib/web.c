@@ -13,7 +13,7 @@
 #include "hgColors.h"
 #include "wikiLink.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.129 2007/06/15 21:13:14 hiram Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.130 2007/07/05 23:11:47 kate Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -979,7 +979,7 @@ cartSetString(cart, "db", db);
 cartSetString(cart, "org", genome);
 }
 
-void webIncludeFile(char *file)
+boolean webIncludeFile(char *file)
 /* Include an HTML file in a CGI.
  *   The file path is relative to the web server document root */
 {
@@ -988,16 +988,25 @@ size_t len = 0;
 char path[256];
 
 if (file == NULL)
-    errAbort("Program error: including null file");
+    {
+    printf("<BR>Program Error: Empty file name for include file<BR>");
+    return FALSE;
+    }
 safef(path, sizeof path, "%s/%s", hDocumentRoot(), file);
 if (!fileExists(path))
-   errAbort("Missing file %s", path); 
+    {
+   printf("<BR>Program Error: Missing file %s</BR>", path); 
+   return FALSE;
+   }
 readInGulp(path, &str, &len);
-
 if (len <= 0)
-    errAbort("Error reading included file: %s", path);
+    {
+    printf("<BR>Program Error: Unable to read included file: %s</BR>", path);
+    return FALSE;
+    }
 puts(str);
 freeMem(str);
+return TRUE;
 }
 
 void webPrintLinkTableStart()
