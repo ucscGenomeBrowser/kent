@@ -10,7 +10,7 @@
 #include "hgRelate.h"
 #include "chromGraph.h"
 
-static char const rcsid[] = "$Id: hgLoadChromGraph.c,v 1.5 2007/07/03 00:59:23 aamp Exp $";
+static char const rcsid[] = "$Id: hgLoadChromGraph.c,v 1.6 2007/07/05 16:45:00 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -105,7 +105,6 @@ lf = lineFileOpen(fileName, TRUE);
 while (lineFileRow(lf, words))
     {
     struct chromGraph *cg;
-    double val = sqlDouble(words[1]);
     /* Look up ID in hash. */
     struct slPair *infoFromHash = hashFindVal(posHash, words[0]);
     if (!infoFromHash)
