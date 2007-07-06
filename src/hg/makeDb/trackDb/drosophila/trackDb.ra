@@ -107,7 +107,7 @@ type netAlign dp2 chainDp2
 otherDb dp2
 
 track chainDp3
-shortLabel (dp3) D. pseudo. Chain
+shortLabel D. pseudo. Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 138
@@ -121,7 +121,7 @@ type chain dp3
 otherDb dp3
 
 track netDp3
-shortLabel (dp3) D. pseudo. Net
+shortLabel D. pseudo. Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 138.1
@@ -329,8 +329,7 @@ type netAlign droGri1 chainDroGri1
 otherDb droGri1
 
 track chainDroAna2
-release alpha
-shortLabel ($o_db) $o_Organism Chain
+shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 139
@@ -342,8 +341,7 @@ type chain droAna2
 otherDb droAna2
 
 track netDroAna2
-release alpha
-shortLabel ($o_db) $o_Organism Net
+shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 139.1
