@@ -14,6 +14,12 @@ refreshNamedSessionCustomTracks: $O ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/refreshNamedSessionCustomTracks $O ${MYLIBS} $L
 	${STRIP} ${BINDIR}/refreshNamedSessionCustomTracks${EXE}
 
+script:
+	chmod a+x refreshSledgeHammer.pl
+	rm -f ${SCRIPTS}/refreshSledgeHammer.pl
+	echo cp -p refreshSledgeHammer.pl ${SCRIPTS}
+	cp -p refreshSledgeHammer.pl ${SCRIPTS}
+
 clean:
 	rm -f $O
 
