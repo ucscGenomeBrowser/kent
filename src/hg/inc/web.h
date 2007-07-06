@@ -187,7 +187,7 @@ void getDbAndGenome(struct cart *cart, char **retDb, char **retGenome);
 void saveDbAndGenome(struct cart *cart, char *db, char *genome);
 /* Save db and genome (as org) in cart. */
 
-void webIncludeFile(char *file);
+boolean webIncludeFile(char *file);
 /* Include an HTML file in a CGI.
  *   The file path is relative to the web server document root */
 
