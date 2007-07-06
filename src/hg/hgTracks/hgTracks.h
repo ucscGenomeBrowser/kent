@@ -968,5 +968,11 @@ void collapseGroupGoodies(boolean isOpen, boolean wantSmallImage,
 struct bed *loadGvAsBed (struct track *tg, char *chr, int start, int end);
 /* load gv* with filters, for a range, as a bed list (for next item button) */
 
+void parseSs(char *ss, char **retPsl, char **retFa);
+/* Parse out ss variable into components. */
+
+boolean ssFilesExist(char *ss);
+/* Return TRUE if both files in ss exist. */
+
 #endif /* HGTRACKS_H */
 

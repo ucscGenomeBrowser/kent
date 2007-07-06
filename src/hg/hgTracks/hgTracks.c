@@ -118,7 +118,7 @@
 #endif
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1367 2007/07/02 23:16:36 mhoechsm Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1368 2007/07/06 22:15:30 angie Exp $";
 
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
@@ -3123,6 +3123,11 @@ struct psl *psl;
 struct linkedFeatures *lfList = NULL, *lf;
 enum gfType qt, tt;
 int sizeMul = 1;
+enum baseColorDrawOpt drawOpt = baseColorGetDrawOpt(tg);
+boolean indelShowDoubleInsert, indelShowQueryInsert, indelShowPolyA;
+
+indelEnabled(cart, (tg ? tg->tdb : NULL),
+	     &indelShowDoubleInsert, &indelShowQueryInsert, &indelShowPolyA);
 
 parseSs(ss, &pslFileName, &faFileName);
 pslxFileOpen(pslFileName, &qt, &tt, &f);
@@ -3141,12 +3146,41 @@ while ((psl = pslNext(f)) != NULL)
 	sprintf(buf2, "%s %s", ss, psl->qName);
 	lf->extra = cloneString(buf2);
 	slAddHead(&lfList, lf);
+	if (drawOpt != baseColorDrawOff ||
+	    indelShowQueryInsert || indelShowPolyA)
+	    lf->original = psl;
+	else
+	    pslFree(&psl);
 	}
-    pslFree(&psl);
+    else
+	pslFree(&psl);
     }
 slSort(&lfList, linkedFeaturesCmpStart);
 lineFileClose(&f);
 tg->items = lfList;
+}
+
+static void addUserSeqBaseAndIndelSettings(struct trackDb *tdb)
+/* If user sequence is a dna or rna alignment, add settings to enable 
+ * base-level differences and indel display. */
+{
+enum gfType qt, tt;
+struct lineFile *lf;
+char *faFileName, *pslFileName;
+parseSs(userSeqString, &pslFileName, &faFileName);
+pslxFileOpen(pslFileName, &qt, &tt, &lf);
+lineFileClose(&lf);
+if (qt != gftProt)
+    {
+    if (tdb->settingsHash == NULL)
+	tdb->settingsHash = hashNew(0);
+    hashAdd(tdb->settingsHash, "baseColorDefault", cloneString("diffBases"));
+    hashAdd(tdb->settingsHash, "baseColorUseSequence", cloneString("ss"));
+    hashAdd(tdb->settingsHash, "showDiffBasesAllScales", cloneString("."));
+    hashAdd(tdb->settingsHash, "indelDoubleInsert", cloneString("on"));
+    hashAdd(tdb->settingsHash, "indelQueryInsert", cloneString("on"));
+    hashAdd(tdb->settingsHash, "indelPolyA", cloneString("on"));
+    }
 }
 
 struct track *userPslTg()
@@ -3170,6 +3204,7 @@ tdb->longLabel = tg->longLabel;
 tdb->type = cloneString("psl");
 tg->exonArrows = TRUE;
 trackDbPolish(tdb);
+addUserSeqBaseAndIndelSettings(tdb);
 tg->tdb = tdb;
 return tg;
 }
@@ -12117,6 +12152,10 @@ else if (sameWord(type, "chromGraph"))
 else if (sameWord(type, "altGraphX"))
     {
     altGraphXMethods(track);
+    }
+else if (sameWord(type, "rmsk"))
+    {
+    repeatMethods(track);
     }
 }
 

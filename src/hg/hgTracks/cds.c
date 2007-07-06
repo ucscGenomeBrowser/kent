@@ -11,12 +11,13 @@
 #include "dnautil.h"
 #include "hdb.h"
 #include "psl.h"
+#include "fa.h"
 #include "genePred.h"
 #include "cds.h"
 #include "genbank.h"
 #include "hgTracks.h"
 
-static char const rcsid[] = "$Id: cds.c,v 1.57 2007/05/31 18:54:32 markd Exp $";
+static char const rcsid[] = "$Id: cds.c,v 1.58 2007/07/06 22:15:30 angie Exp $";
 
 /* Definitions of cds colors for coding coloring display */
 #define CDS_ERROR   0
@@ -594,14 +595,48 @@ return ret;
 }
 
 
-static struct dnaSeq *maybeGetSeqUpper(char *name, char *tableName)
+static struct dnaSeq *maybeGetUserSeq(char *qName)
+/* Look in user's blat sequence file for qName. */
+{
+static struct hash *userSeqHash = NULL;
+struct dnaSeq *userSeq = NULL;
+char *ss = cartOptionalString(cart, "ss");
+
+if (ss == NULL || !ssFilesExist(ss))
+    return NULL;
+
+if (userSeqHash == NULL)
+    {
+    struct dnaSeq *seqList = NULL, *seq;
+    char *faFileName, *pslFileName;
+    parseSs(ss, &pslFileName, &faFileName);
+    seqList = faReadAllMixed(faFileName);
+    userSeqHash = hashNew(0);
+    for (seq = seqList;  seq != NULL;  seq = seq->next)
+	{
+	hashAdd(userSeqHash, seq->name, seq);
+	}
+    }
+
+userSeq = hashFindVal(userSeqHash, qName);
+if (userSeq == NULL)
+    return NULL;
+else
+    return cloneDnaSeq(userSeq);
+}
+
+static struct dnaSeq *maybeGetSeqUpper(char *name, char *tableName,
+				       struct trackDb *tdb)
 /* Look up the sequence in genbank tables (hGenBankGetMrna also searches 
- * seq if it can't find it in GB tables), uppercase and return it if we find 
- * it, return NULL if we don't find it. */
+ * seq if it can't find it in GB tables) or user's blat sequence, 
+ * uppercase and return it if we find it, return NULL if we don't find it. */
 {
 struct dnaSeq *mrnaSeq = NULL;
+char *seqSource = trackDbSetting(tdb, BASE_COLOR_USE_SEQUENCE);
 if (sameString(tableName,"refGene"))
     mrnaSeq = hGenBankGetMrna(name, "refMrna");
+else if (sameString(seqSource, "ss"))
+    mrnaSeq = maybeGetUserSeq(name);
 else
     mrnaSeq = hGenBankGetMrna(name, NULL);
 
@@ -1398,7 +1433,7 @@ if (drawOpt == baseColorDrawItemBases ||
     drawOpt == baseColorDrawDiffCodons ||
     indelShowPolyA)
     {
-    *retMrnaSeq = maybeGetSeqUpper(lf->name, tg->mapName);
+    *retMrnaSeq = maybeGetSeqUpper(lf->name, tg->mapName, tg->tdb);
     if (*retMrnaSeq != NULL && *retPsl != NULL)
 	{
 	if ((*retPsl)->strand[0] == '-' || (*retPsl)->strand[1] == '-')
