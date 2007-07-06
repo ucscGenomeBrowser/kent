@@ -197,7 +197,7 @@ type netAlign droYak1 chainDroYak1
 otherDb droYak1
 
 track chainDroYak2
-shortLabel droYak2 Chain
+shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 141
@@ -209,7 +209,7 @@ type chain droYak2
 otherDb droYak2
 
 track netDroYak2
-shortLabel droYak2 Net
+shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 141.1
