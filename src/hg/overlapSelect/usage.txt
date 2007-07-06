@@ -1,6 +1,6 @@
 overlapSelect [options] selectFile inFile outFile
 
-Select records based on overlaping chromosome ranges.  The ranges are
+Select records based on overlapping chromosome ranges.  The ranges are
 specified in the selectFile, with each block specifying a range.
 Records are copied from the inFile to outFile based on the selection
 criteria.  Selection is based on blocks or exons rather than entire
@@ -12,7 +12,7 @@ with -in* apply to inFile.
 Options:
   -selectFmt=fmt - specify selectFile format:
           psl - PSL format (default for *.psl files).
-          genePred - gepePred format (default for *.gp or
+          genePred - genePred format (default for *.gp or
                      *.genePred files).
           bed - BED format (default for *.bed files).
                 If BED doesn't have blocks, the bed range is used. 
@@ -32,9 +32,9 @@ Options:
       spec, in format described above.
   -inCds - Use only CDS in the inFile
   -inRange - Use entire range instead of blocks of records in the inFile.
-  -nonOverlapping - select non-overlaping instead of overlaping records
-  -strand - must be on the same strand to be considered overlaping
-  -oppositeStrand - must be on the opposite strand to be considered overlaping
+  -nonOverlapping - select non-overlapping instead of overlapping records
+  -strand - must be on the same strand to be considered overlapping
+  -oppositeStrand - must be on the opposite strand to be considered overlapping
   -excludeSelf - don't compare records with the same coordinates and name.
       Warning: using only one of -inCds or -selectCds will result in different
       coordinates for the same record.
@@ -43,13 +43,13 @@ Options:
       compute it based on the total number of inFile bases overlap by selectFile
       records. -overlapSimilarity and -mergeOutput will not work with
       this option.
-  -overlapThreshold=0.0 - minimun fraction of an inFile record that
+  -overlapThreshold=0.0 - minimum fraction of an inFile record that
       must be overlapped by a single select record to be considered
       overlapping.  Note that this is only coverage by a single select
       record, not total coverage.
   -overlapThresholdCeil=1.1 - select only inFile records with less than
       this amount of overlap with a single record.
-  -overlapSimilarity=0.0 - minimun fraction of inFile and select records that
+  -overlapSimilarity=0.0 - minimum fraction of inFile and select records that
       Note that this is only coverage by a single select record and this
       is; bidirectional inFile and selectFile must overlap by this
       amount.  A value of 1.0 will select identical records (or CDS if
@@ -60,8 +60,8 @@ Options:
   -overlapBases=-1 - minimum number of bases of overlap, < 0 disables.
   -statsOutput - output overlap statistics instead of selected records. 
       If no overlap criteria is specified, all overlapping entries are
-      reported, Otherwise only the pairs passing the citeria are
-      reported. This results in a tab-seperated file with the columns:
+      reported, Otherwise only the pairs passing the criteria are
+      reported. This results in a tab-separated file with the columns:
          inId selectId inOverlap selectOverlap overBases
       Where inOverlap is the fraction of the inFile record overlapped by
       the selectFile record and selectOverlap is the fraction of the
@@ -69,16 +69,16 @@ Options:
       is:
          inId inOverlap inOverBases inBases
   -statsOutputAll - like -statsOutput, however output all inFile records,
-      even ones that are not overlapped.
+      including those that are not overlapped.
   -statsOutputBoth - like -statsOutput, however output all selectFile and
-      inFile records, even ones that with no overlap.
+      inFile records, including those that are not overlapped.
   -mergeOutput - output file with be a merge of the input file with the
       selectFile records that selected it.  The format is
          inRec<tab>selectRec.
       if multiple select records hit, inRec is repeated. This will increase
       the memory required. Not supported with -nonOverlapping or -aggregate.
-  -idOutput - output a table seprate file of pairs of
+  -idOutput - output a tab-separated file of pairs of
          inId selectId
-      with -aggregate, omly a single column of inId is written
+      with -aggregate, only a single column of inId is written
   -dropped=file  - output rows that were dropped to this file.
   -verbose=n - verbose > 1 prints some details,
