@@ -1,9 +1,0 @@
-Settings for starting blat servers
-
-translated server:
-   gfServer start blatX 17778 -trans -mask -log=trans.log *.2bit
-untranslated server:
-   gfServer start blatX 17779 -log=untrans.log *.2bit
-untranslated server plus PCR server:
-   gfServer start blatX 17779 -stepSize=5 -log=untrans.log *.2bit
-

@@ -1,7 +1,0 @@
-string s = "A";
-int i = 10;
-print("A");
-print("A" + 10);
-print(s + 10);
-print(s + i);
-

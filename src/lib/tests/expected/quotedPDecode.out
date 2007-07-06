@@ -1,3 +1,0 @@
-original input: [taxes=20are=20quite=20high=20=]
-quoted-printable encoding: [taxes=3d20are=3d20quite=3d20high=3d20=3d=]
-quoted-p decoding: [taxes are quite high ]

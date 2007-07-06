@@ -1,5 +1,0 @@
-machine hgwbeta.cse.ucsc.edu
-quick true
-dbSpec all
-table refGene
-zoomCount 1

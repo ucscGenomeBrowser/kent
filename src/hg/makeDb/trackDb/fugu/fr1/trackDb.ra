@@ -1,8 +1,0 @@
-track genomicSuperDups
-shortLabel Segmental Dups
-longLabel Duplications of >1000 Bases of Non-RepeatMasked Sequence
-group varRep
-priority 146
-visibility hide
-type bed 6 .
-

@@ -1,3 +1,0 @@
-array of int a = (1,2,3,4);
-
-string s = para (int x in a) max "id";

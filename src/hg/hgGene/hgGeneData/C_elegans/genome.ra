@@ -1,7 +1,0 @@
-name global
-knownGene sangerGene
-knownGenePep sangerPep
-knownToRef sangerToRefSeq
-nameSql select value from orfToGene where name = '%s'
-descriptionSql select description from sangerLinks where orfName = '%s'
-proteinSql select protName from sangerLinks where orfName = '%s'

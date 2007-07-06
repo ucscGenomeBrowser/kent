@@ -1,4 +1,0 @@
-
-array of int a = (4,3,1,2);
-int sum = para (x in a) + x;
-print(sum);

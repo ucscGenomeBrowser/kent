@@ -1,7 +1,0 @@
-This directory contains three programs for doing In-Silico PCR:
-   webPcr - Web CGI script which queries gfServer to perform PCR.
-   gfPcr - Command line program which queries gfServer to perform PCR.
-   isPcr - Command line program that builds its own index (rather than
-       relying on gfServer) to do PCR.  This uses a lot of memory and
-       is best done one chromosome at a time in batch mode, ideally on
-       a cluster of machines.

@@ -1,9 +1,0 @@
-int i = 1;
-print(i);
-++i;
-print(i);
---i;
-print(i);
-
-for (i=0; i<10; ++i)
-   print(i);

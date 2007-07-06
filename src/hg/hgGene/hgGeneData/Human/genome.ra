@@ -1,6 +1,0 @@
-name global
-knownGeneMrna knownGeneMrna
-summaryTables refSeqSummary knownToRefSeq
-summarySql select summary from refSeqSummary,knownToRefSeq where knownToRefSeq.name='%s' and (refSeqSummary.mrnaAcc=knownToRefSeq.value)
-summaryIdSql select value from knownToRefSeq where name='%s'
-summarySource RefSeq Summary
