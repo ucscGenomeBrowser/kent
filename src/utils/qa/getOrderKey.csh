@@ -31,21 +31,26 @@ endif
 
 # get list of all dbs in range at all three levels
 set dev=`hgsql -N -e "SELECT name FROM dbDb \
-  WHERE orderKey >= $lowerLimit and orderKey <= $upperLimit \
-  ORDER BY orderKey" hgcentraltest`
+  WHERE orderKey >= $lowerLimit and orderKey <= $upperLimit" \
+  hgcentraltest`
 
 set beta=`hgsql -N -h hgwbeta -e "SELECT name FROM dbDb \
-  WHERE orderKey >= $lowerLimit and orderKey <= $upperLimit \
-  ORDER BY orderKey" hgcentralbeta`
+  WHERE orderKey >= $lowerLimit and orderKey <= $upperLimit" \
+  hgcentralbeta`
 
 set rr=`hgsql -N -h genome-centdb -e "SELECT name FROM dbDb \
-  WHERE orderKey >= $lowerLimit and orderKey <= $upperLimit \
-  ORDER BY orderKey" hgcentral`
+  WHERE orderKey >= $lowerLimit and orderKey <= $upperLimit" \
+  hgcentral`
 
 set all=`echo $dev $beta $rr | sed -e "s/ /\n/g" | sort -u`
 
 # get orderKey value at all three levels
 rm -f orderKeyOutfile
+echo
+echo "db dev bet rr" | gawk '{ printf("%-8s  %3s  %3s  %3s \n", \
+  $1, $2, $3, $4) }'
+echo "------- --- --- ---" | gawk '{ printf("%-8s  %3s  %3s  %3s \n", \
+  $1, $2, $3, $4) }'
 foreach db ( $all )
   set dev=0
   set beta=0
@@ -60,7 +65,6 @@ foreach db ( $all )
     $1, $2, $3, $4) }' >> orderKeyOutfile
 end
 
-echo
 if ( -e orderKeyOutfile ) then
   sort -k2 -n orderKeyOutfile
 else
