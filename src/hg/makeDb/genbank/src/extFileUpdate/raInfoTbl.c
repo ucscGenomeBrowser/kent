@@ -37,7 +37,7 @@ ri->fileSize = sqlUnsigned((char*)hashMustFindVal(raRec, recSzFld));
 ri->extFileId = extFileId;
 }
 
-static boolean raRecLoad(struct raInfoTbl *rit, struct lineFile *raLf,
+static boolean raRecLoad(struct raInfoTbl *rit, unsigned srcDb, struct lineFile *raLf,
                          unsigned cdnaExtId, unsigned pepExtId)
 /* load next ra record */
 {
@@ -50,7 +50,7 @@ acc = hashMustFindVal(raRec, "acc");
 ver = sqlSigned((char*)hashMustFindVal(raRec, "ver"));
 raInfoAdd(rit, raRec, acc, ver, "siz", "fao", "fas", cdnaExtId);
 
-if ((protAccVer = hashFindVal(raRec, "prt")) != NULL)
+if ((srcDb == GB_REFSEQ) && ((protAccVer = hashFindVal(raRec, "prt")) != NULL))
     {
     if (pepExtId == 0)
         errAbort("%s has protein %s, but no pep.fa file", acc, protAccVer);
@@ -71,11 +71,11 @@ rit->accMap = hashNew(23);
 return rit;
 }
 
-void raInfoTblRead(struct raInfoTbl *rit, char *raFile, unsigned cdnaExtId, unsigned pepExtId)
+void raInfoTblRead(struct raInfoTbl *rit, unsigned srcDb, char *raFile, unsigned cdnaExtId, unsigned pepExtId)
 /* read a ra file into the table */
 {
 struct lineFile *raLf = lineFileOpen(raFile, TRUE);
-while (raRecLoad(rit, raLf, cdnaExtId, pepExtId))
+while (raRecLoad(rit, srcDb, raLf, cdnaExtId, pepExtId))
     continue;
 
 lineFileClose(&raLf);

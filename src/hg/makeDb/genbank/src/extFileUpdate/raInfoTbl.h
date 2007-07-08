@@ -16,7 +16,8 @@ struct raInfo
 struct raInfoTbl *raInfoTblNew();
 /* construct a new raInfoTbl */
 
-void raInfoTblRead(struct raInfoTbl *rit, char *raFile, unsigned cdnaExtId, unsigned pepExtId);
+void raInfoTblRead(struct raInfoTbl *rit, unsigned srcDb, char *raFile,
+                   unsigned cdnaExtId, unsigned pepExtId);
 /* read a ra file into the table */
 
 struct raInfo *raInfoTblGet(struct raInfoTbl *rit, char *accVer);
