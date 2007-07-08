@@ -41,7 +41,7 @@ static boolean raRecLoad(struct raInfoTbl *rit, struct lineFile *raLf,
                          unsigned cdnaExtId, unsigned pepExtId)
 /* load next ra record */
 {
-char *acc, protAcc[GB_ACC_BUFSZ];
+char *acc, *protAccVer, protAcc[GB_ACC_BUFSZ];
 int ver;
 struct hash *raRec = raNextRecord(raLf);
 if (raRec == NULL)
@@ -50,9 +50,11 @@ acc = hashMustFindVal(raRec, "acc");
 ver = sqlSigned((char*)hashMustFindVal(raRec, "ver"));
 raInfoAdd(rit, raRec, acc, ver, "siz", "fao", "fas", cdnaExtId);
 
-if ((pepExtId != 0) && ((acc = hashFindVal(raRec, "prt")) != NULL))
+if ((protAccVer = hashFindVal(raRec, "prt")) != NULL)
     {
-    ver = gbSplitAccVer(acc, protAcc);
+    if (pepExtId == 0)
+        errAbort("%s has protein %s, but no pep.fa file", acc, protAccVer);
+    ver = gbSplitAccVer(protAccVer, protAcc);
     raInfoAdd(rit, raRec, protAcc, ver, "prs", "pfo", "pfs", pepExtId);
     }
 hashFree(&raRec);

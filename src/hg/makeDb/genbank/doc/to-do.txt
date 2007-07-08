@@ -1100,3 +1100,7 @@ Error: danRer1: gene danRer1.refFlat:1854 NM_131267 chr7: NM_131267 geneName "ir
 
 - genePredToGtf breaks on dm2 refGene.txt, gets start stop codons wrong
   need to create 5UTR/3UTR features instead of just UTR
+
+- have gbSanity generate an error if nothing checked.
+
+- hg17 NM_001502 - CDS updated, but refgene was not updated.

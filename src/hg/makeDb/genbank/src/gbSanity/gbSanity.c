@@ -39,7 +39,7 @@
 #include "../dbload/dbLoadOptions.h"
 #include <stdarg.h>
 
-static char const rcsid[] = "$Id: gbSanity.c,v 1.13 2007/04/18 05:54:50 markd Exp $";
+static char const rcsid[] = "$Id: gbSanity.c,v 1.14 2007/07/08 06:07:46 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -61,7 +61,7 @@ static char* gGbdbMapToCurrent = NULL;  /* map this gbdb root to current */
 static boolean gCheckExtSeqRecs = FALSE;
 static struct dbLoadOptions gOptions; /* options from cmdline and conf */
 
-void checkGbCdnaInfoStrKeys(struct sqlConnection* conn)
+static void checkGbCdnaInfoStrKeys(struct sqlConnection* conn)
 /* Verify that the ids appear valid for all of the unique string tables
  * referenced by the mrna table.  This does a join of the mrna with
  * all of the other tables.  If the number of results don't match
@@ -105,7 +105,7 @@ gbReleaseUnload(select->release);
 gbVerbLeave(1, "check: %s", gbSelectDesc(select));
 }
 
-unsigned getLoadOrgCats(char* database, unsigned srcDb, unsigned type)
+static unsigned getLoadOrgCats(char* database, unsigned srcDb, unsigned type)
 /* determine orgCats that should be loaded, or zero if none */
 {
 struct dbLoadAttr* attr;
@@ -137,8 +137,8 @@ if (attr->load && attr->loadDesc)
 return descOrgCats;
 }
 
-void checkSanity(struct gbSelect* select,
-                 struct sqlConnection* conn)
+static void checkSanity(struct gbSelect* select,
+                        struct sqlConnection* conn)
 /* check sanity on a select partation */
 {
 /* load and validate all metadata */
@@ -155,8 +155,8 @@ chkAlignTables(select, conn, metaDataTbls, &gOptions);
 metaDataTblsFree(&metaDataTbls);
 }
 
-void checkRelease(struct gbRelease* release, char* database,
-                  unsigned type, unsigned orgCats, char* accPrefix)
+static void checkRelease(struct gbRelease* release, char* database,
+                         unsigned type, unsigned orgCats, char* accPrefix)
 /* Check a release/type */
 {
 struct sqlConnection* conn = hAllocConn();
@@ -172,7 +172,7 @@ checkSanity(&select, conn);
 hFreeConn(&conn);
 }
 
-void releaseSanity(struct gbRelease* release, char *database)
+static void releaseSanity(struct gbRelease* release, char *database)
 /* Run sanity checks on a release */
 {
 unsigned orgCats;
@@ -180,7 +180,9 @@ unsigned orgCats;
 /* check if native, and/or xeno should be included */
 orgCats = getLoadOrgCats(database, release->srcDb, GB_MRNA);
 if (orgCats != 0)
+    {
     checkRelease(release, database, GB_MRNA, orgCats, NULL);
+    }
 
 orgCats = getLoadOrgCats(database, release->srcDb, GB_EST);
 if (orgCats != 0)
@@ -196,8 +198,8 @@ if (orgCats != 0)
     }
 }
 
-struct gbRelease* newestReleaseWithAligns(struct gbIndex* index,
-                                          char* database, unsigned srcDb)
+static struct gbRelease* newestReleaseWithAligns(struct gbIndex* index,
+                                                 char* database, unsigned srcDb)
 /* find the newest release for srcDb that has alignements */
 {
 /* can't look at update objects, since they haven't been loaded */
@@ -222,7 +224,7 @@ for (release = index->rels[gbSrcDbIdx(srcDb)]; release != NULL;
 return NULL;
 }
 
-void gbSanity(char* database)
+static void gbSanity(char* database)
 /* Run sanity checks */
 {
 struct gbIndex* index = gbIndexNew(database, NULL);

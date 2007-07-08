@@ -17,7 +17,7 @@
 #include "dbLoadPartitions.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: extFileUpdate.c,v 1.8 2007/06/18 01:41:48 markd Exp $";
+static char const rcsid[] = "$Id: extFileUpdate.c,v 1.9 2007/07/08 06:07:46 markd Exp $";
 
 /*
  * Algorithm:
@@ -148,7 +148,9 @@ if (fileExists(gbdbPath))
     if (gbProcessedGetPepFa(select, relPath))
         {
         mkGbdbPath(gbdbPath, relPath);
-        if (fileExists(gbdbPath))
+        /* peptide file might be empty if only ncRNAs, raInfoTblRead handles
+         * this. */
+        if (fileExists(gbdbPath) && (fileSize(gbdbPath) > 0))
             pepFaId = extFileTblGet(extFileTbl, conn, gbdbPath);
         }
     gbProcessedGetPath(select, "ra.gz", relPath);
