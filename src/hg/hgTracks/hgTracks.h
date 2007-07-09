@@ -168,6 +168,8 @@ struct track
                                 loaded and drawn by this track.  This
                                 is used for "composite" tracks, such
                                 as "mafWiggle */
+    struct track *parent;      /* currently used just with supertracks --
+                                  eventually for arbitrary hierarchy */
 
     void (*nextPrevItem)(struct track *tg, void *item, int x, int y, int w, int h, boolean next);    
     /* Function will draw the button on a track item and assign a map */
