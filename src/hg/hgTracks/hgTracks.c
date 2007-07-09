@@ -118,7 +118,7 @@
 #endif
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1368 2007/07/06 22:15:30 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1368.2.1 2007/07/09 04:01:01 kate Exp $";
 
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
@@ -12332,13 +12332,20 @@ slSort(&track->subtracks, trackPriCmp);
 }
 
 struct track *trackFromTrackDb(struct trackDb *tdb)
-/* Create a track based on the tdb. */
+/* Create a track based on the tdb. If a parent trackDb is
+ * present, create a parent track.  This can be used to
+ * create an arbitrary track hierarchy -- for now there will be just
+ * two -- regular tracks and those with a parent, or 'super' track.
+ */
 {
-struct track *track = trackNew();
+struct track *track = NULL;
 char *iatName = NULL;
 char *exonArrows;
 char *nextItem;
 
+if (!tdb)
+    return NULL;
+track = trackNew();
 track->mapName = cloneString(tdb->tableName);
 track->visibility = tdb->visibility;
 track->shortLabel = tdb->shortLabel;
@@ -12386,6 +12393,8 @@ track->labelNextItemButtonable = track->nextItemButtonable;
 iatName = trackDbSetting(tdb, "itemAttrTbl");
 if (iatName != NULL)
     track->itemAttrTbl = itemAttrTblNew(iatName);
+
+track->parent = trackFromTrackDb(tdb->parent);
 fillInFromType(track, tdb);
 return track;
 }
@@ -13892,11 +13901,39 @@ if (showTrackControls)
 	    controlGridEndCell(cg);
 	    }
 
+        /* Remake group track list into a ui list that includes
+         * 'super' tracks.  The first reference to a super track
+         * causes it to replace the referring track in the list.
+         */
+        struct hash *superHash = hashNew(0);
 	for (tr = group->trackList; tr != NULL; tr = tr->next)
 	    {
             if (!isOpen)
-                continue;
+                break;
+            struct track *parent = tr->track->parent;
+            if (parent)
+                {
+                if (!hashFindVal(superHash, parent->mapName))
+                    /* parent is not yet in the list, so replace track
+                     * with parent */
+                    {
+                    parent->next = tr->track->next;
+                    tr->track = parent;
+                    hashAdd(superHash, parent->mapName, parent);
+                    }
+                }
+            }
+
+	for (tr = group->trackList; tr != NULL; tr = tr->next)
+	    {
+            if (!isOpen)
+                break;
 	    track = tr->track;
+
+            /* ignore any remaining members of supertrack */
+            if (track->parent)
+                continue;
+
 	    controlGridStartCell(cg);
 	    if (track->hasUi)
 		{
