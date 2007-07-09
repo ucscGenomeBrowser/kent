@@ -36,7 +36,7 @@ if ($#argv == 0 || $#argv > 2) then
   exit
 else
   if ($argv[1] == "all") then
-    # use default
+    # use default list of paths
     set pathfile="/cluster/bin/scripts/staticpaths"
   else
     set pathfile=$argv[1]
@@ -44,6 +44,7 @@ else
     if ( $status ) then
       echo "\n file of paths $pathfile does not exist\n"
       exit 1
+    endif
   endif
   if ($#argv == 2) then
     set yymmdd=$argv[2]
