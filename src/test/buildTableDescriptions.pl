@@ -268,6 +268,8 @@ sub matchAutoSqlByFields {
   # try standard types first, to save time (and avoid dupl's for std types).
   if ($fields eq $tASRef->{"psl"}->{fields}) {
     return $tASRef->{"psl"};
+  } elsif ($fields eq $tASRef->{"genePredExt"}->{fields}) {
+    return $tASRef->{"genePredExt"};
   } elsif ($fields eq $tASRef->{"genePred"}->{fields}) {
     return $tASRef->{"genePred"};
   } elsif ($fields eq $tASRef->{"lfs"}->{fields}) {
@@ -373,7 +375,7 @@ foreach my $db (@dbs) {
       my $as =
 	&matchAutoSqlByFields($tableFields{$table}, \%tableAutoSql,
 			      \%fieldsAutoSql);
-      if ((defined $as) && (! defined $tableAutoSql{$table})) {
+      if (defined $as) {
 	$tableAutoSql{$table} = $as;
       }
     }
