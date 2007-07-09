@@ -118,7 +118,7 @@
 #endif
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1368.2.1 2007/07/09 04:01:01 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1368.2.2 2007/07/09 05:28:19 kate Exp $";
 
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
@@ -9331,7 +9331,8 @@ return vis;
 }
 
 enum trackVisibility limitVisibility(struct track *tg)
-/* Return default visibility limited by number of items. 
+/* Return default visibility limited by number of items and
+ * by parent visibility if part of a supertrack. 
  * This also sets tg->height. */
 {
 if (!tg->limitedVisSet)
@@ -13196,6 +13197,38 @@ for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
         subtrack->visibility = track->visibility;
 }
 
+void superTrackVis(struct track *track)
+/* Limit track visibility by supertrack parent */
+{
+char *ps = cartOptionalString(cart, track->parent->mapName);
+if (!ps)
+    return;
+enum trackVisibility parentVis = hTvFromString(ps);
+track->parent->visibility = parentVis;
+if (parentVis == tvHide || track->visibility == tvHide)
+    {
+    track->visibility = tvHide;
+    return;
+    }
+if (parentVis == tvDense || track->visibility == tvDense)
+    {
+    track->visibility = tvDense;
+    return;
+    }
+if (track->visibility == tvSquish || 
+    (parentVis == tvSquish && track->canPack))
+    {
+    track->visibility = tvSquish;
+    return;
+    }
+if (track->visibility == tvPack || 
+    (parentVis == tvPack && track->canPack))
+    {
+    track->visibility = tvPack;
+    return;
+    }
+}
+
 struct track *getTrackList( struct group **pGroupList)
 /* Return list of all tracks. */
 {
@@ -13530,6 +13563,8 @@ for (track = trackList; track != NULL; track = track->next)
 	}
     if (s != NULL)
 	track->visibility = hTvFromString(s);
+    if (track->parent)
+        superTrackVis(track);
     if (isCompositeTrack(track))
         compositeTrackVis(track);
     }
@@ -13919,6 +13954,7 @@ if (showTrackControls)
                     {
                     parent->next = tr->track->next;
                     tr->track = parent;
+                    tr->track->hasUi = TRUE;
                     hashAdd(superHash, parent->mapName, parent);
                     }
                 }
