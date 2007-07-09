@@ -30,7 +30,7 @@
 
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.378 2007/06/26 00:19:08 hartera Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.378.4.1 2007/07/09 06:21:19 kate Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2456,6 +2456,30 @@ puts("</P>\n");
 printf("<P><B>Select subtracks to display:</B></P>\n");
 }
 
+void superTrackUi(struct trackDb *superTdb)
+/* List tracks in this collection, with visibility controls and UI links */
+{
+struct trackDb *tdb;
+printf("<P><TABLE>");
+for (tdb = superTdb->subtracks; tdb != NULL; tdb = tdb->next)
+    {
+    printf("<TR>");
+    printf("<TD><A HREF=\"%s?%s=%u&c=%s&g=%s\">%s</A></TD>", hgTrackUiName(),
+                cartSessionVarName(), cartSessionId(cart),
+                chromosome, cgiEncode(tdb->tableName), tdb->shortLabel);
+    printf("<TD>");
+    char *onlyVisibility = trackDbSetting(tdb, "onlyVisibility");
+    hTvDropDownClassVisOnly(tdb->tableName,
+        hTvFromString(cartUsualString(cart,tdb->tableName, tvHide)),
+        tdb->canPack, (tdb->visibility == tvHide) ?
+                         "hiddenText" : "normalText", onlyVisibility );
+    printf("</TD>");
+    printf("<TD>%s</TD>", tdb->longLabel);
+    printf("</TR>");
+    }
+printf("</TABLE>");
+}
+
 void specificUi(struct trackDb *tdb)
 	/* Draw track specific parts of UI. */
 {
@@ -2656,9 +2680,12 @@ else if (tdb->type != NULL)
 	}
     freeMem(typeLine);
     }
-
+char *setting;
 if (trackDbSetting(tdb, "compositeTrack"))
     hCompositeUi(cart, tdb, NULL, NULL, "mainForm");
+else if ((setting = trackDbSetting(tdb, "superTrack")) && 
+                sameString(setting, "on"))
+    superTrackUi(tdb);
 }
 
 void trackUi(struct trackDb *tdb)
