@@ -34,7 +34,7 @@
 #include "chromInfo.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.324 2007/06/10 04:38:14 markd Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.324.6.1 2007/07/09 04:11:26 kate Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -3364,7 +3364,7 @@ if (!trackDbSetting(subtrackTdb, "noInherit"))
 
 struct trackDb *hTrackDb(char *chrom)
 /* Load tracks associated with current chromosome (which may be NULL for
- * all). */
+ * all) */
 {
 struct sqlConnection *conn = hAllocConn();
 struct trackDb *tdbList = loadTrackDb(conn, NULL);
@@ -3373,8 +3373,10 @@ struct trackDb *tdbRetList = NULL;
 char *database = hGetDb();
 boolean privateHost = hIsPrivateHost();
 struct hash *compositeHash = newHash(0);
+struct hash *superHash = newHash(0);
 struct trackDb *tdb, *compositeTdb;
-struct trackDb *nextTdb;
+struct trackDb *nextTdb, *superTdb;
+char *setting;
 
 /* Process list */
 while (tdbList != NULL)
@@ -3385,6 +3387,9 @@ while (tdbList != NULL)
         slAddHead(&tdbFullList, tdb);
         hashAdd(compositeHash, tdb->tableName, tdb);
         }
+    else if ((setting = trackDbSetting(tdb, "superTrack")) != NULL &&
+             sameString(setting, "on"))
+                    hashAdd(superHash, tdb->tableName, tdb);
     else
         processTrackDb(database, tdb, chrom, privateHost, &tdbFullList);
     }
@@ -3428,6 +3433,17 @@ for (nextTdb = tdb = tdbSubtrackedList; nextTdb != NULL; tdb = nextTdb)
     }
 hFreeConn(&conn);
 slSort(&tdbRetList, trackDbCmp);
+
+/* Add pointers to parent (super) track */
+for (tdb = tdbRetList; tdb != NULL; tdb = tdb->next)
+    {
+    if ((setting = trackDbSetting(tdb, "superTrack")) != NULL)
+        {
+        if ((superTdb = 
+            (struct trackDb *)hashFindVal(superHash, setting)) != NULL)
+                tdb->parent = superTdb;
+        }
+    }
 return tdbRetList;
 }
 
