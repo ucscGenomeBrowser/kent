@@ -208,7 +208,7 @@
 #include "omicia.h"
 #include "atomDb.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1311 2007/07/02 22:21:58 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1312 2007/07/09 18:48:19 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -16906,7 +16906,7 @@ if (summaryItem->totalAlleleCountCEU > 0)
     {
     printf("<TR>");
     printf("<TD>CEU</TD>");
-    printf("<TD bgcolor = \"lightgray\">%d (100%%)</TD>", summaryItem->totalAlleleCountCEU);
+    printf("<TD bgcolor = \"lightgrey\">%d (100%%)</TD>", summaryItem->totalAlleleCountCEU);
     printf("</TR>\n");
     }
 else
@@ -16916,7 +16916,7 @@ if (summaryItem->totalAlleleCountCHB > 0)
     {
     printf("<TR>");
     printf("<TD>CHB</TD>");
-    printf("<TD bgcolor = \"lightgray\">%d (100%%)</TD>", summaryItem->totalAlleleCountCHB);
+    printf("<TD bgcolor = \"lightgrey\">%d (100%%)</TD>", summaryItem->totalAlleleCountCHB);
     printf("</TR>\n");
     }
 else
@@ -16926,7 +16926,7 @@ if (summaryItem->totalAlleleCountJPT > 0)
     {
     printf("<TR>");
     printf("<TD>JPT</TD>");
-    printf("<TD bgcolor = \"lightgray\">%d (100%%)</TD>", summaryItem->totalAlleleCountJPT);
+    printf("<TD bgcolor = \"lightgrey\">%d (100%%)</TD>", summaryItem->totalAlleleCountJPT);
     printf("</TR>\n");
     }
 else
@@ -16936,7 +16936,7 @@ if (summaryItem->totalAlleleCountYRI > 0)
     {
     printf("<TR>");
     printf("<TD>YRI</TD>");
-    printf("<TD bgcolor = \"lightgray\">%d (100%%)</TD>", summaryItem->totalAlleleCountYRI);
+    printf("<TD bgcolor = \"lightgrey\">%d (100%%)</TD>", summaryItem->totalAlleleCountYRI);
     printf("</TR>\n");
     }
 else
@@ -16975,13 +16975,13 @@ printf("<TR>");
 printf("<TD>%s</TD>", pop);
 if (count1 > count2)
     {
-    printf("<TD bgcolor = \"lightgray\">%d (%3.2f%%)</TD>", count1, freq1);
+    printf("<TD bgcolor = \"lightgrey\">%d (%3.2f%%)</TD>", count1, freq1);
     printf("<TD>%d (%3.2f%%)</TD>", count2, freq2);
     }
 else
     {
     printf("<TD>%d (%3.2f%%)</TD>", count1, freq1);
-    printf("<TD bgcolor = \"lightgray\">%d (%3.2f%%)</TD>", count2, freq2);
+    printf("<TD bgcolor = \"lightgrey\">%d (%3.2f%%)</TD>", count2, freq2);
     }
 printf("</TR>\n");
 
