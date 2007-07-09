@@ -118,7 +118,7 @@
 #endif
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1368.2.2 2007/07/09 05:28:19 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1368.2.3 2007/07/09 17:57:29 kate Exp $";
 
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
@@ -13952,9 +13952,12 @@ if (showTrackControls)
                     /* parent is not yet in the list, so replace track
                      * with parent */
                     {
+                    char buf[24];
+                    safef(buf, sizeof buf, "%s...", parent->shortLabel);
+                    parent->shortLabel = cloneString(buf);
+                    parent->hasUi = TRUE;
                     parent->next = tr->track->next;
                     tr->track = parent;
-                    tr->track->hasUi = TRUE;
                     hashAdd(superHash, parent->mapName, parent);
                     }
                 }
