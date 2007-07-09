@@ -30,7 +30,7 @@
 
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.378.4.1 2007/07/09 06:21:19 kate Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.378.4.2 2007/07/09 23:30:06 kate Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2470,7 +2470,7 @@ for (tdb = superTdb->subtracks; tdb != NULL; tdb = tdb->next)
     printf("<TD>");
     char *onlyVisibility = trackDbSetting(tdb, "onlyVisibility");
     hTvDropDownClassVisOnly(tdb->tableName,
-        hTvFromString(cartUsualString(cart,tdb->tableName, tvHide)),
+        hTvFromString(cartUsualString(cart,tdb->tableName, "hide")),
         tdb->canPack, (tdb->visibility == tvHide) ?
                          "hiddenText" : "normalText", onlyVisibility );
     printf("</TD>");
