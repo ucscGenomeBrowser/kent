@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/automation/doBlastzChainNet.pl instead.
 
-# $Id: doBlastzChainNet.pl,v 1.8 2007/07/02 22:16:39 angie Exp $
+# $Id: doBlastzChainNet.pl,v 1.9 2007/07/09 21:06:15 angie Exp $
 
 # to-do items:
 # - lots of testing
@@ -847,9 +847,6 @@ sub netChains {
     die "netChains: looks like previous stage was not successful " .
       "(can't find [$tDb.$qDb.]all.chain[.gz]).\n";
   }
-  my $over = $tDb . "To$QDb.over.chain.gz";
-  my $altOver = "$tDb.$qDb.over.chain.gz";
-  my $liftOverDir = "$HgAutomate::clusterData/$tDb/$HgAutomate::trackBuild/liftOver";
   my $whatItDoes =
 "It generates nets (without repeat/gap stats -- those are added later on
 $dbHost) from chains, and generates axt, maf and .over.chain from the nets.";
@@ -863,9 +860,7 @@ chainPreNet $chain $defVars{SEQ1_LEN} $defVars{SEQ2_LEN} stdout \\
 
 # Make liftOver chains:
 netChainSubset -verbose=0 noClass.net $chain stdout \\
-| chainStitchId stdin stdout | gzip -c > $altOver
-mkdir -p $liftOverDir
-cp -p $altOver $liftOverDir/$over
+| chainStitchId stdin stdout | gzip -c > $tDb.$qDb.over.chain.gz
 
 _EOF_
     );
@@ -1003,10 +998,16 @@ sub makeDownloads {
   my $net = $isSelf ? "" : "$tDb.$qDb.net.gz";
   my $whatItDoes =
 "It makes an md5sum.txt file for downloadable files, with relative paths
-matching what the user will see on the download server.";
+matching what the user will see on the download server, and installs the
+over.chain file in the liftOver dir.";
   my $bossScript = new HgRemoteScript("$runDir/makeMd5sum.csh", $workhorse,
 				      $runDir, $whatItDoes, $DEF);
+  my $over = $tDb . "To$QDb.over.chain.gz";
+  my $altOver = "$tDb.$qDb.over.chain.gz";
+  my $liftOverDir = "$HgAutomate::clusterData/$tDb/$HgAutomate::trackBuild/liftOver";
   $bossScript->add(<<_EOF_
+mkdir -p $liftOverDir
+cp -p $altOver $liftOverDir/$over
 md5sum $tDb.$qDb.all.chain.gz $net > md5sum.txt
 _EOF_
   );
