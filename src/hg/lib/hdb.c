@@ -34,7 +34,7 @@
 #include "chromInfo.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.324.6.1 2007/07/09 04:11:26 kate Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.324.6.2 2007/07/09 21:09:09 kate Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -3464,6 +3464,7 @@ static struct trackDb *loadTrackDbForTrack(struct sqlConnection *conn,
 {
 struct trackDb *trackTdb = NULL;
 char where[256];
+char *setting;
 
 safef(where, sizeof(where), "tableName = '%s'", track);
 trackTdb = loadAndLookupTrackDb(conn, where);
@@ -3492,6 +3493,17 @@ else if (trackTdb != NULL && trackDbSetting(trackTdb, "subTrack"))
     if (cTdb)
 	subtrackInherit(trackTdb, cTdb);
     freez(&subTrackSetting);
+    }
+else if (trackTdb != NULL && 
+    (setting = trackDbSetting(trackTdb, "superTrack")) &&
+    sameString(setting, "on"))
+    {
+    struct trackDb *superTrackMembers = NULL;
+    safef(where, sizeof(where),
+	  "settings rlike '^(.*\n)?superTrack %s([ \t\n].*)?$'",
+	  track);
+    superTrackMembers = loadAndLookupTrackDb(conn, where);
+    trackTdb->subtracks = superTrackMembers;
     }
 return trackTdb;
 }
