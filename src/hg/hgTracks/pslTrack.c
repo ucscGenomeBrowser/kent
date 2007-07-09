@@ -415,6 +415,26 @@ hFreeConn(&conn);
 return(FALSE);
 }
 
+boolean gsidCheckSelected(struct track *tg)
+{
+char *setting; 
+
+/* check subject only if the selectSubject is set to on in trackDb for this track */
+setting = trackDbSetting(tg->tdb, SELECT_SUBJ);
+if (isNotEmpty(setting))
+    {
+    if (sameString(setting, "on")) 
+	{
+	/* return TRUE only if the user has selected the subjects */
+	if (cartOptionalString(cart, gsidSubjList))
+	    {
+	    return(TRUE);
+	    }
+	}
+    }
+return(FALSE);
+}
+
 static void connectedLfFromPslsInRange(struct sqlConnection *conn,
     struct track *tg, int start, int end, char *chromName,
     boolean isXeno, boolean nameGetsPos, int sizeMul)
@@ -430,24 +450,13 @@ struct linkedFeatures *lfList = NULL, *lf;
 char optionChr[128]; /* Option -  chromosome filter */
 char extraWhere[128];
 boolean checkSelected;  /* flag indicating if checking for selection of an entry is needed */
-char *setting; 
 
 checkSelected = FALSE;
+
+/* if this is a GSID track, check if we need to check for inclusion of the item */
 if (hIsGsidServer())
     {
-    /* check subject only if the selectSubject is set to on in trackDb for this track */
-    setting = trackDbSetting(tg->tdb, SELECT_SUBJ);
-    if (isNotEmpty(setting))
-    	{
-    	if (sameString(setting, "on")) 
-	    {
-	    /* turn on the flag only if the user has selected the subjects */
-	    if (cartOptionalString(cart, gsidSubjList))
-		{
-	    	checkSelected = TRUE;
-		}
-	    }
-        }
+    checkSelected = gsidCheckSelected(tg);
     }
 
 safef( optionChr, sizeof(optionChr), "%s.chromFilter", tg->mapName);
