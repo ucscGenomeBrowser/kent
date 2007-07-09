@@ -349,25 +349,27 @@ boolean  gsidSelectedSubjListLoaded = FALSE;
 
 void initializeGsidSubjList()
 {
-FILE *inf;
-char line[255];
 struct gsidSubj *subj;
+struct lineFile *lf;
+
+char *line;
+int lineSize;
 
 char *subjListFileName;
 
 subjListFileName = cartOptionalString(cart, gsidSubjList);
 if (subjListFileName)
     {
-    inf = fopen(subjListFileName, "r");
-    while (fgets(line, 200, inf) != NULL)
+    lf = lineFileOpen(subjListFileName, TRUE);
+
+    while (lineFileNext(lf, &line, &lineSize))
     	{
-    	*(line + strlen(line) - 1) = '\0';
     	AllocVar(subj);
     	subj->subjId = cloneString(line);
     	slAddHead(&gsidSelectedSubjList, subj);
     	}
     slReverse(&gsidSelectedSubjList);
-    fclose(inf);
+    lineFileClose(&lf);
     gsidSelectedSubjListLoaded = TRUE;
     }
 }
