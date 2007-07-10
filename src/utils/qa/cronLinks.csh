@@ -38,6 +38,6 @@ nice checkAllStaticLinks.csh all $dateString >& links.$dateString &
 echo "link-checking complete"
 date
 echo "results at:"
-echo "http://$directory/dateString/linkCheck.all.$dateString"
+echo "http://$directory/$dateString/linkCheck.all.$dateString"
 
 
