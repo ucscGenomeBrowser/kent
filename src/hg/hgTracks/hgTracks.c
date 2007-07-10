@@ -118,7 +118,7 @@
 #endif
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1368.2.3 2007/07/09 17:57:29 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1368.2.4 2007/07/10 00:57:56 kate Exp $";
 
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
@@ -13568,7 +13568,6 @@ for (track = trackList; track != NULL; track = track->next)
     if (isCompositeTrack(track))
         compositeTrackVis(track);
     }
-
 return trackList;
 }
 
@@ -13604,10 +13603,25 @@ safef(varName, sizeof(varName),
 return (cloneString(varName));
 }
 
+char *collapseSupertrackVar(char *name)
+/* Construct cart variable name for collapsing supertrack */
+{
+static char varName[128];
+safef(varName, sizeof(varName), 
+        "%s_%s_%s_%s", "hgt", "super", name, "close");
+return (cloneString(varName));
+}
+
 boolean isCollapsedGroup(char *name)
 /* Determine if group is collapsed */
 {
 return cartUsualInt(cart, collapseGroupVar(name), 0);
+}
+
+boolean isCollapsedSupertrack(char *name)
+/* Determine if group is collapsed */
+{
+return cartUsualInt(cart, collapseSupertrackVar(name), 0);
 }
 
 void collapseGroupGoodies(boolean isOpen, boolean wantSmallImage,
@@ -13946,15 +13960,12 @@ if (showTrackControls)
             if (!isOpen)
                 break;
             struct track *parent = tr->track->parent;
-            if (parent)
+            if (parent && isCollapsedSupertrack(parent->mapName))
                 {
                 if (!hashFindVal(superHash, parent->mapName))
                     /* parent is not yet in the list, so replace track
                      * with parent */
                     {
-                    char buf[24];
-                    safef(buf, sizeof buf, "%s...", parent->shortLabel);
-                    parent->shortLabel = cloneString(buf);
                     parent->hasUi = TRUE;
                     parent->next = tr->track->next;
                     tr->track = parent;
@@ -13962,20 +13973,35 @@ if (showTrackControls)
                     }
                 }
             }
-
 	for (tr = group->trackList; tr != NULL; tr = tr->next)
 	    {
             if (!isOpen)
                 break;
 	    track = tr->track;
 
-            /* ignore any remaining members of supertrack */
-            if (track->parent)
+            /* ignore remaining members of collapsed supertrack */
+            if (track->parent && isCollapsedSupertrack(track->parent->mapName))
                 continue;
 
 	    controlGridStartCell(cg);
 	    if (track->hasUi)
 		{
+                if (track->parent || hashFindVal(superHash, track->mapName))
+                    {
+                    /* supertrack member (uncollapsed) or parent (collapsed) */
+                    char *otherState;
+                    char *indicator;
+                    char *indicatorImg;
+                    boolean isSuperOpen = (track->parent != NULL);
+                    collapseGroupGoodies(isSuperOpen, TRUE, &indicatorImg, 
+                                            &indicator, &otherState);
+                    char *super = (track->parent ? track->parent->mapName :
+                                                   track->mapName);
+                    hPrintf("<A HREF=\"%s?%s&%s=%s\" class=\"bigBlue\"><IMG height=13 width=13 src=\"%s\" alt=\"%s\" class=\"bigBlue\"></A>",
+                        hgTracksName(), cartSidUrlString(cart), 
+                        collapseSupertrackVar(super),
+                        otherState, indicatorImg, indicator);
+                    }
 		char *encodedMapName = cgiEncode(track->mapName);
 		hPrintf("<A HREF=\"%s?%s=%u&c=%s&g=%s\">", hgTrackUiName(),
 		    cartSessionVarName(), cartSessionId(cart),
@@ -13986,18 +14012,20 @@ if (showTrackControls)
 	    if (track->hasUi)
 		hPrintf("</A>");
 
-	    /* If track is not on this chrom print an informational
-	       message for the user. */
-	    if(hTrackOnChrom(track->tdb, chromName)) 
+            if (hashFindVal(superHash, track->mapName))
+                ;
+	    else if(hTrackOnChrom(track->tdb, chromName)) 
 		{
-		/* check for option of limiting visibility to one mode */
-		char *onlyVisibility =
-			trackDbSetting(track->tdb, "onlyVisibility");
-		hTvDropDownClassVisOnly(track->mapName, track->visibility,
-		    track->canPack, (track->visibility == tvHide) ? 
-			 "hiddenText" : "normalText", onlyVisibility );
-		}
+                /* check for option of limiting visibility to one mode */
+                char *onlyVisibility =
+                        trackDbSetting(track->tdb, "onlyVisibility");
+                hTvDropDownClassVisOnly(track->mapName, track->visibility,
+                    track->canPack, (track->visibility == tvHide) ? 
+                         "hiddenText" : "normalText", onlyVisibility );
+                }
 	    else 
+                /* If track is not on this chrom print an informational
+                message for the user. */
 		hPrintf("[No data-%s]", chromName);
 	    controlGridEndCell(cg);
 	    }
