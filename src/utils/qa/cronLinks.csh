@@ -25,8 +25,10 @@ if ( "$HOST" != "hgwdev" ) then
  exit 1
 endif
 
-set directory="/usr/local/apache/htdocs/qa/test-results/staticLinks"
-cd $directory
+set dirPath="/usr/local/apache/htdocs"
+set machine="genome-test.cse.ucsc.edu"
+set directory="qa/test-results/staticLinks"
+cd $dirPath/$directory
 set dateString=`date +%Y-%m-%d`
 
 if ( ! -d $dateString ) then
@@ -38,6 +40,6 @@ nice checkAllStaticLinks.csh all $dateString >& links.$dateString &
 echo "link-checking complete"
 date
 echo "results at:"
-echo "http://$directory/$dateString/linkCheck.all.$dateString"
+echo "http://$machine/$directory/$dateString/linkCheck.all.$dateString"
 
 
