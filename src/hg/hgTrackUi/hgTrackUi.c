@@ -30,7 +30,7 @@
 
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.378.4.2 2007/07/09 23:30:06 kate Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.378.4.3 2007/07/10 01:10:03 kate Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2698,11 +2698,18 @@ printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=%s>\n\n",
        hgTracksName(), cartUsualString(cart, "formMethod", "POST"));
 cartSaveSession(cart);
 printf("<H1>%s</H1>\n", tdb->longLabel);
-printf("<B>Display&nbsp;mode:&nbsp;</B>");
-hTvDropDownClassVisOnly(tdb->tableName,
-    hTvFromString(cartUsualString(cart,tdb->tableName, vis)),
-    tdb->canPack, "normalText", onlyVisibility );
-printf("&nbsp;");
+
+/* suppress visibility controls for supertrack */
+char *setting = trackDbSetting(tdb, "superTrack");
+if ((setting && differentString(setting, "on")) || !setting)
+    {
+    printf("<B>Display&nbsp;mode:&nbsp;</B>");
+    hTvDropDownClassVisOnly(tdb->tableName,
+        hTvFromString(cartUsualString(cart,tdb->tableName, vis)),
+        tdb->canPack, "normalText", onlyVisibility );
+    printf("&nbsp;");
+    }
+
 cgiMakeButton("Submit", "Submit");
 if (isCustomTrack(tdb->tableName))
     {
