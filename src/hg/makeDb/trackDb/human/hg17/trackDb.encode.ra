@@ -1910,7 +1910,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     dataVersion ENCODE Oct 2005 Freeze
     priority 1
 
-    track encodeYaleChipSignalBaf170
+    track leChipSignal
     release alpha
     subTrack encodeYaleChipSig
     shortLabel YU BAF170 HeLa S
@@ -1954,7 +1954,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     release alpha
     subTrack encodeYaleChipSig
     shortLabel YU Pol2 HeLa S
-    longLabel YU ChIP-chip (Pol2 ab, HeLa S3 cells) Signal
+    longLabel Yale ChIP-chip (Pol2 ab, HeLa S3 cells) Signal
     color 100,20,20
     subGroups celltype=hela factor=pol2
     dataVersion Nov 2006
@@ -2131,7 +2131,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     track encodeYaleChipSitesBaf155
     release alpha
     subTrack encodeYaleChipSites
-    shortLabel Yale BAF155 HeLa
+    shortLabel YU BAF155 HeLa
     longLabel Yale ChIP-chip (BAF155 ab, HeLa S3 cells) Sites 
     color 50,50,200
     subGroups celltype=hela factor=baf155
@@ -2142,7 +2142,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     track encodeYaleChipSitesBaf170
     release alpha
     subTrack encodeYaleChipSites
-    shortLabel Yale BAF170 HeLa
+    shortLabel YU BAF170 HeLa
     longLabel Yale ChIP-chip (BAF170 ab, HeLa S3 cells) Sites 
     color 200,50,50
     subGroups celltype=hela factor=baf170
@@ -2153,7 +2153,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     track encodeYaleChipSitesFos
     release alpha
     subTrack encodeYaleChipSites
-    shortLabel Yale c-Fos HeLa
+    shortLabel YU c-Fos HeLa
     longLabel Yale ChIP-chip (c-Fos ab, HeLa S3 cells) Sites
     color 112,63,175
     subGroups celltype=hela factor=fos
@@ -2164,7 +2164,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     track encodeYaleChipSitesJun
     release alpha
     subTrack encodeYaleChipSites
-    shortLabel Yale c-Jun HeLa
+    shortLabel YU c-Jun HeLa
     longLabel Yale ChIP-chip (c-Jun ab, HeLa S3 cells) Sites 
     color 50,50,200
     subGroups celltype=hela factor=jun
@@ -2175,7 +2175,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     track encodeYaleChipSitesTaf
     release alpha
     subTrack encodeYaleChipSites
-    shortLabel Yale TAF1 HeLa
+    shortLabel YU TAF1 HeLa
     longLabel Yale ChIP-chip (TAF1 ab, HeLa S3 cells) Sites
     color 200,50,50
     subGroups celltype=hela factor=taf1
@@ -2187,7 +2187,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     release alpha
     subTrack encodeYaleChipSites
     shortLabel YU Pol2 HeLa
-    longLabel YU ChIP-chip (Pol2 ab, HeLa S3 cells) Sites
+    longLabel Yale ChIP-chip (Pol2 ab, HeLa S3 cells) Sites
     color 100,20,20
     type bed5FloatScoreWithFdr
     subGroups celltype=hela factor=pol2
