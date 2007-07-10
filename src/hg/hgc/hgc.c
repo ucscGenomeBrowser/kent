@@ -208,7 +208,7 @@
 #include "omicia.h"
 #include "atomDb.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1312 2007/07/09 18:48:19 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1313 2007/07/10 07:02:30 hartera Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -592,7 +592,7 @@ if (end == 0)
         printf("<B>Band:</B> %s<BR>\n", sband);
     return;
 }
-gotE = hChromBand(chrom, end, eband);
+gotE = hChromBand(chrom, end-1, eband);
 /* if eband equals sband, just use sband */
 if (gotE && sameString(sband,eband))
    gotE = FALSE;
@@ -1065,8 +1065,16 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 printf("</A>");
 sqlFreeResult(&sr);
-printf("<IMG src=http://hgwdev.cse.ucsc.edu/~bsuh/gif/%s.gif><BR>",item);
+printf("<TABLE>");
 
+printf("<THEAD>");
+printf("<TBODY>");
+printf("<TR><TH>");
+printf("Brian's Gap Tree<TD>Bernard's Tree");
+printf("<TR><TH>");
+printf("<IMG src=http://hgwdev.cse.ucsc.edu/~braney/992png/%s.png><BR>",item);
+printf("<TD><IMG src=http://hgwdev.cse.ucsc.edu/~bsuh/gif/%s.gif><BR>",item);
+printf("</TABLE>");
 
 char buffer[4096];
 struct mafFile *mf;
@@ -10598,8 +10606,14 @@ if (row != NULL)
 	row = sqlNextRow(sr);
 	if (row != NULL)
 	    {
+            int i;
+	    char **cl;
+	    cl = (char **)needMem(52*sizeof(char *));
+	    for (i = 0; i < 52; ++i)
+		cl[i] = cloneString(row[i]);
 	    info2Row = stsInfo2Load(row);
-	    infoRow = stsInfoLoad(row);
+	    infoRow = stsInfoLoad(cl);
+	    freeMem(cl);
 	    }
 	}
     else if (stsInfoExists)
