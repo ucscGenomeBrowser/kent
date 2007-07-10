@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/doRepeatMasker.pl instead.
 
-# $Id: doRepeatMasker.pl,v 1.3 2007/06/25 23:05:05 angie Exp $
+# $Id: doRepeatMasker.pl,v 1.4 2007/07/10 00:58:25 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -315,6 +315,10 @@ tail +4 $db.fa.out \\
 | splitFileByColumn -col=5 stdin /cluster/data/$db -chromDirs \\
     -ending=.fa.out -head=/tmp/rmskHead.txt
 
+# Use the ID column to join up fragments of interrupted repeats for the
+# Nested Repeats track.
+$Bin/extractNestedRepeats.pl $db.fa.out > $db.nestedRepeats.bed
+
 _EOF_
     );
   }
@@ -349,13 +353,17 @@ sub doLoad {
   &HgAutomate::checkExistsUnlessDebug('cat', 'load', "$buildDir/$db.fa.out");
 
   my $split = $chromBased ? " (split)" : "";
-  my $whatItDoes = "It loads $db.fa.out into the$split rmsk table.";
+  my $whatItDoes =
+"It loads $db.fa.out into the$split rmsk table and $db.nestedRepeats.bed\n" .
+"into the nestedRepeats table.";
   my $bossScript = new HgRemoteScript("$runDir/doLoad.csh", $dbHost,
 				      $runDir, $whatItDoes);
 
   $split = $chromBased ? "-split" : "-nosplit";
   $bossScript->add(<<_EOF_
 hgLoadOut -table=rmsk $split $db $db.fa.out
+hgLoadBed $db nestedRepeats $db.nestedRepeats.bed \\
+  -sqlTable=\$HOME/kent/src/hg/lib/nestedRepeats.sql
 _EOF_
   );
   $bossScript->execute();
