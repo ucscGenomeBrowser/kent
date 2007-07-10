@@ -1,6 +1,6 @@
 #!/bin/sh
 # Start Tcl from a cluster bin directory \
-exec /cluster/bin/tcl/`uname -m`/bin/tclsh8.4  $0 ${1+"$@"}
+exec /cluster/bin/tcl/`uname -m`/bin/tclsh8.4 $0 ${1+"$@"}
 package require Tclx
 
 #
@@ -541,7 +541,7 @@ package require Itcl
     
     # update the working directory
     public method update {} {
-        set cmd [list cvs -Q update -kk -d]
+        set cmd [list cvs -Q update -kk -dP]
         try_eval {
             workDirEval {
                 cvsExec $cmd
