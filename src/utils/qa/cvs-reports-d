@@ -1078,7 +1078,7 @@ set gDiffStyle {
     .del  {background-color: red; font-weight: bold; padding-right: 100%;}
     .add  {background-color: lime; font-weight: bold; padding-right: 100%;}
     .repl {background-color: blue; font-weight: bold; padding-right: 100%;}
-    .begin {background-color: yellow: bold; padding-right: 100%;}
+    .begin {background-color: yellow; font-weight: bold; padding-right: 100%;}
 </STYLE>
 }
 
