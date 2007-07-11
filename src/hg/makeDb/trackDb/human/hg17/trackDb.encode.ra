@@ -359,14 +359,14 @@ type bed 6 .
     shortLabel Stanf NRSF Enriched
     longLabel Stanford NRSF/REST Enriched
     priority 1
-    color 140,0,0
+    color 0,128,0
 
     track encodeStanfordNRSFControl
     subTrack encodeStanfordNRSF
     shortLabel Stanf NRSF Control
     longLabel Stanford NRSF/REST Control
     priority 2
-    color 255,128,0
+    color 0,128,0
 
 track encodeStanfordNRSFOverlaps
 compositeTrack on
