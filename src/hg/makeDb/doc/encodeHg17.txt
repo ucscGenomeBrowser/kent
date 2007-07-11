@@ -4251,11 +4251,9 @@ cp rnaz_track.html \
 # edit description and change re-format publications
 
 ###########################################################################
-# Stanford ChIP/Seq
+# Stanford ChIP-seq
 # Submitted 2007-03-14 by David Johnson <seasquirtdoctor@gmail.com>
-# NRSF/REST experiment
-# New data type for ENCODE -- needs track design
-# "Millions" of 25bp tags (Solexa sequencing of IP fragments)
+# 25bp tags (Solexa sequencing of IP fragments)
 
     ssh hgwdev
     cd /cluster/data/encode/stanford
@@ -4265,7 +4263,7 @@ cp rnaz_track.html \
     sort NRSF_chipseq_control_hg17.bed > control.bed
     fix.pl < data.bed > fix.bed
     fix.pl < control.bed > control_fix.bed
-    hgLoadBed hg17 encodeStanfordNRSF fix.bed -tab
+    hgLoadBed hg17 encodeStanfordNRSFEnriched fix.bed -tab
     hgLoadBed hg17 encodeStanfordNRSFControl control_fix.bed -tab
 
 ############################################################################
