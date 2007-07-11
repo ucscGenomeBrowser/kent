@@ -4,7 +4,7 @@
 #	From Wash U GSC
 #	http://genome.wustl.edu/genome.cgi?GENOME=Caenorhabditis+remanei
 
-#  $Id: caeRem2.txt,v 1.13 2007/07/11 20:18:54 hiram Exp $
+#  $Id: caeRem2.txt,v 1.14 2007/07/11 21:14:00 markd Exp $
 
 #########################################################################
 # DOWNLOAD SEQUENCE (DONE - 2007-03-16 - Hiram)
@@ -393,6 +393,9 @@ caeRem2.perChromTables = no
     ssh hgwdev
     cd /cluster/data/genbank
     time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad caeRem2
+    #   logFile: var/dbload/hgwdev/logs/2007.07.11-13:49:20.dbload.log
+    #   17:10.13
+
     #	logFile: var/dbload/hgwdev/logs/2007.04.23-14:31:51.dbload.log
     #	real    6m57.557s
 
