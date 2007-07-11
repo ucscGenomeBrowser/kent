@@ -3,7 +3,7 @@
 # Pristionchus pacificus
 #	Washington University School of Medicine GSC and Sanger Institute
 #
-#  $Id: priPac1.txt,v 1.10 2007/06/06 17:11:57 hiram Exp $
+#  $Id: priPac1.txt,v 1.11 2007/07/11 00:43:31 hiram Exp $
 ###########################################################################
 ## Download sequence - (DONE - 2007-02-25 - Hiram)
     ssh kkstore02
@@ -362,6 +362,8 @@ priPac1.perChromTables = no
     ssh kkstore01
     cd /cluster/data/genbank
     time nice -n +19 bin/gbAlignStep -initial priPac1 &
+logFile: var/build/logs/2007.07.10-17:00:50.priPac1.initalign.log
+
     #	logFile: var/build/logs/2007.04.23-10:35:55.priPac1.initalign.log
     #	real    199m22.907s
 

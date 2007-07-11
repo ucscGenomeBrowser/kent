@@ -620,6 +620,8 @@ caePb1.perChromTables = no
     ssh kkstore01
     cd /cluster/data/genbank
     time nice -n +19 bin/gbAlignStep -initial caePb1 &
+logFile: var/build/logs/2007.07.10-17:01:24.caePb1.initalign.log
+
     #	logFile: var/build/logs/2007.04.23-10:18:05.caePb1.initalign.log
     #	real    190m48.232s
 

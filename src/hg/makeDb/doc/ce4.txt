@@ -3,7 +3,7 @@
 # Caenorhabditis elegans
 #	Washington University School of Medicine GSC and Sanger Institute WS170
 
-#  $Id: ce4.txt,v 1.22 2007/06/11 18:13:50 hiram Exp $
+#  $Id: ce4.txt,v 1.23 2007/07/11 00:43:31 hiram Exp $
 
 
 #########################################################################
@@ -383,6 +383,11 @@ done
     #	52047 groups 7 seqs 3 sources 5 feature types
     #	30497 gene predictions
     #	real    0m2.569s
+    ## this didn't work with the bin column, so alter that table
+    hgsql -e "alter table sangerGene drop column bin;" ce4
+    ## done 2007-07-10
+    ## found when trying to click through on sequence links, mRNA or
+    ## protein when on a gene details page
 
     ##	This requires the following to also be re-run
     cd /cluster/data/ce4/bed/sangerGene
