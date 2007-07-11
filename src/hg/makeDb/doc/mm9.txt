@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.3 2007/04/14 00:12:07 hiram Exp $"
+#	"$Id: mm9.txt,v 1.4 2007/07/11 00:44:05 hiram Exp $"
 #
 
 #######################################################################
@@ -15,12 +15,65 @@
     mkdir /cluster/store5/mm9
     ln -s /cluster/store5/mm9 /cluster/data/mm9
     cd /cluster/data/mm9
+    ## After testing with the pre-release below, the real thing begins here
+    mkdir mouse_37
+    cd mouse_37
+    ## Ouch, the files are no longer delivered conveniently in a single
+    ## directory.  They are in several locations now ...
+    
+NCBI=ftp://ftp.ncbi.nih.gov/genomes
+MAPVIEW=MapView/Mus_musculus/sequence/BUILD.37.1/initial_release
+for F in README README_CURRENT_BUILD
+do
+    wget  --dont-remove-listing --timestamping \
+        "${NCBI}/M_musculus/${F}" -O ${F}
+done
+for F in allcontig.agp.gz seq_contig.md.gz ideogram.gz
+do
+    wget  --dont-remove-listing --timestamping \
+        "${NCBI}/${MAPVIEW}/${F}" -O ${F}
+done
+
+mkdir -p chrAgp
+cd chrAgp
+for C in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 X Y
+do
+    wget  --dont-remove-listing --timestamping \
+        "${NCBI}/M_musculus/Assembled_chromosomes/mm_ref_chr${C}.agp.gz" \
+        -O chr${C}.agp.gz
+done
+
+cd ..
+for C in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 X Y
+do
+    zcat chrAgp/chr${C}.agp.gz | grep "^c"
+done > chrOnly.agp
+
+mkdir -p chrfasta
+cd chrfasta
+for C in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 X Y
+do
+    wget  --dont-remove-listing --timestamping \
+        "${NCBI}/M_musculus/Assembled_chromosomes/mm_ref_chr${C}.fa.gz" \
+        -O chr${C}.fa.gz
+done
+
+cd ..
+mkdir chrUn
+mkdir chrM
+wget  --dont-remove-listing --timestamping \
+	"${NCBI}/M_musculus/CHR_Un/mm_ref_chrUn.fa.gz -O chrUn/chrUn.fa.gz
+wget  --dont-remove-listing --timestamping \
+	"${NCBI}/M_musculus/CHR_MT/mm_ref_chrUn.fa.gz \
+	-O chrM/mm_ref_chrUn.fa.gz
+    ## run the chrNamesFixed sequence below
+
+    ## pre-release testing download sequence  ###############################
     mkdir ncbi
     cd ncbi
     cp -p /cluster/data/mm8/ncbi/.wgetrc .
     WGETRC=`pwd`/.wgetrc
     export WGETRC
-    ## After testing with the pre-release below, the real thing
 
     time nice -n +19 wget --timestamping --force-directories \
 	--directory-prefix=. --dont-remove-listing --recursive \
@@ -45,13 +98,18 @@ passwd = <your email address>
 	ftp://ftp.ncbi.nih.gov/genomes/M_musculus/pre_release
     ##	Ran a quick test build with that to see if it would work
 
+    ### this procedure run for the pre_release and the mouse_37 sequence
+    ### for pre_release the sed was:
+    # zcat chrfasta/chr${C}.fa.gz | sed -e "s/^>lcl|/>/; s/.fa.*//"
     mkdir chrNamesFixed
     for C in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 X Y
 do
-    zcat chrfasta/chr${C}.fa.gz | sed -e "s/^>lcl|/>/; s/.fa.*//" \
+    zcat chrfasta/chr${C}.fa.gz | sed -e "s/^>gi.*/>chr${C}/" \
 	| gzip -c > chrNamesFixed/chr${C}.fa.gz
     echo chr${C} done
 done
+    zcat chrM/mm_ref_chrMT.fa.gz | sed -e "s/^>gi.*/>chrM/" \
+	| gzip -c > chrNamesFixed/chrM.fa.gz
 
 ##########################################################################
 ## Initial makeGenomeDb.pl (DONE - 2007-04-05 - Hiram)
