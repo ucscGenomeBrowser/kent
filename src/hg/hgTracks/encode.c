@@ -31,8 +31,17 @@ Color encodeStanfordNRSFColor(struct track *tg, void *item, struct vGfx *vg)
 /* color by strand */
 {
 struct bed *thisItem = item;
-if (thisItem->strand[0] == '-') return MG_RED;
-return MG_GREEN;
+int r = tg->color.r;
+int g = tg->color.g;
+int b = tg->color.b;
+
+if (thisItem->strand[0] == '-') 
+    {
+    r = g;
+    g = b;
+    b = tg->color.r;
+    }
+return vgFindColorIx(vg, r, g, b);
 }
 
 void encodeStanfordNRSFMethods(struct track *tg)
