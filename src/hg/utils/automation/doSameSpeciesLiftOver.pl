@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/automation/doSameSpeciesLiftOver.pl instead.
 
-# $Id: doSameSpeciesLiftOver.pl,v 1.2 2007/04/09 20:47:53 hiram Exp $
+# $Id: doSameSpeciesLiftOver.pl,v 1.3 2007/07/11 21:58:30 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -429,6 +429,7 @@ end
 
 chainMergeSort \$tmpDir/chainMerged/*.chain \\
 | chainSplit $lump \$tmpDir/chainSplit stdin
+endsInLf \$tmpDir/chainSplit/*.chain
 rm -rf \$tmpDir/chainMerged/
 
 mkdir \$tmpDir/netSplit \$tmpDir/overSplit
@@ -440,6 +441,8 @@ foreach f (\$tmpDir/chainSplit/*.chain)
   netChainSubset \$tmpDir/netSplit/\$split.net \$f stdout \\
   | chainStitchId stdin \$tmpDir/overSplit/\$split.chain
 end
+endsInLf \$tmpDir/netSplit/*.net
+endsInLf \$tmpDir/overSplit/*.chain
 
 cat \$tmpDir/chainSplit/*.chain | gzip -c > $tDb.$qDb.all.chain.gz
 cat \$tmpDir/netSplit/*.net     | gzip -c > $tDb.$qDb.noClass.net.gz
