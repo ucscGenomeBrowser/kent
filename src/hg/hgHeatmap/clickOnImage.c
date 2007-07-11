@@ -6,6 +6,8 @@
 #include "genoLay.h"
 #include "hgHeatmap.h"
 
+#define CLICKSPAN 5000000
+
 struct genoLayChrom *genoLayChromAt(struct genoLay *gl, int x, int y)
 /* Return chromosome if any at x,y */
 {
@@ -29,7 +31,7 @@ struct genoLayChrom *chrom = genoLayChromAt(gl, x, y);
 if (chrom != NULL)
     {
     int base = gl->basesPerPixel*(x - chrom->x);
-    int start = base-500000, end=base+500000;
+    int start = base-CLICKSPAN, end=base+CLICKSPAN;
     if (start<0) start=0;
     printf("Location: ../cgi-bin/hgTracks?db=%s&%s&position=%s:%d-%d\r\n\r\n",
     	database, cartSidUrlString(cart), chrom->fullName, start+1, end);

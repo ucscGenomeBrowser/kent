@@ -35,6 +35,9 @@
 #define hghClickX hghClick ".x"
 #define hghClickY hghClick ".y"
 
+/*** customTrack***/
+#define CUSTOMDB "CUSTOMDB"
+
 /*** External vars declared in hgHeatmap.c ***/
 extern struct cart *cart;
 extern struct hash *oldCart;
@@ -61,9 +64,9 @@ struct genoHeatmap
     char *shortLabel;           /* Short label. */
     char *longLabel;            /* Long label. */
     int expCount;		/* number of experiments */
+    char *database;             /* database */
     struct trackDb *tDb;	/* the track database */
     };
-
 
 /*** Routines from hgHeatmap.h ***/
 
@@ -135,5 +138,9 @@ void submitUpload2(struct sqlConnection *conn);
 
 void clickOnImage(struct sqlConnection *conn);
 /* Handle click on image - calculate position in forward to genome browser. */
+
+/* Convert a row of strings to a bed.
+   Only load chromStart, chromEnd, expScores fields */
+struct bed *bedLoad15Simple(char *row[]);
 
 #endif /* HGHEATMAP_H */

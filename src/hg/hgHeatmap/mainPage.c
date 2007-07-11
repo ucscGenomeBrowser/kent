@@ -2,7 +2,7 @@
  * on the top and the graphic. */
 
 #define EXPR_DATA_SHADES 16
-#define DEFAULT_MAX_DEVIATION 1.0
+#define DEFAULT_MAX_DEVIATION 2.0
 
 #include "common.h"
 #include "hgHeatmap.h"
@@ -22,15 +22,14 @@
 #include "trashDir.h"
 #include "vGfx.h"
 #include "web.h"
-
 #include "cytoBand.h"
 #include "hCytoBand.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.3 2007/07/02 21:18:23 heather Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.4 2007/07/11 23:41:43 jzhu Exp $";
 
 /* Page drawing stuff. */
 
-struct bed *getChromHeatmap(struct sqlConnection *conn, char *tableName, char *chromName)
+struct bed *getChromHeatmap(char *database, char *tableName, char *chromName)
 /* get the bed15 for each chromosome track */
 {
 if (tableName == NULL)
@@ -47,19 +46,26 @@ query[0] = '\0';
 
 safef(query, sizeof(query),
      "select * from %s where chrom = \"%s\" \n",
-     tableName, chromName);
-struct sqlResult *sr = sqlGetResult(conn, query);
+    tableName, chromName);
 
+struct sqlConnection *conn;
+
+if (strcmp(database, CUSTOMDB)==0)
+    conn = sqlCtConn(TRUE);
+else
+    conn = sqlConnect(database);
+
+struct sqlResult *sr = sqlGetResult(conn, query);
 struct bed *tuple = NULL;
 struct bed *tupleList = NULL;
+
 while ((row = sqlNextRow(sr)) != NULL)
     {
     tuple = bedLoadN(row+1, 15);
     slAddHead(&tupleList, tuple);
     }
 sqlFreeResult(&sr);
-slReverse(&tupleList);
-
+sqlDisconnect(&conn);
 return tupleList;
 }
 
@@ -112,13 +118,13 @@ for (i=0; i<=steps; ++i)
 }
 
 
-void drawChromHeatmaps(struct vGfx *vg, struct sqlConnection *conn, 
+void drawChromHeatmaps(struct vGfx *vg, /*struct sqlConnection *conn*/ char* database, 
 		       struct genoLay *gl, char *chromHeatmap, int yOff, 
 		       boolean leftLabel, boolean rightLabel, boolean firstInRow)
 /* Draw chromosome graph on all chromosomes in layout at given
  * y offset and height. */
 {
-struct sqlConnection *ctConn = sqlCtConn(TRUE);
+//struct sqlConnection *ctConn = sqlCtConn(TRUE);
 struct genoLayChrom *chrom=NULL;
 struct bed *gh=NULL, *nb=NULL;
 double pixelsPerBase = 1.0/gl->basesPerPixel;
@@ -140,7 +146,7 @@ vgMakeColorGradient(vg, &black, &green, EXPR_DATA_SHADES, shadesOfGreen);
 
 for(chrom = gl->chromList; chrom; chrom = chrom->next)
     {
-    gh = getChromHeatmap(ctConn, chromHeatmap, chrom->fullName);
+    gh = getChromHeatmap(/*ctConn*/database, chromHeatmap, chrom->fullName);
    
     int chromX = chrom->x, chromY = chrom->y;
 
@@ -187,7 +193,6 @@ for(chrom = gl->chromList; chrom; chrom = chrom->next)
 
 	    }
       	}
-      
     bedFreeList(&gh);
     }
 }
@@ -227,40 +232,54 @@ genoLayDrawBandedChroms(gl, vg, database, conn,
 	shadesOfGray, maxShade, MG_BLACK);
 
 
-struct slName *heatmap, *heatmaps= heatmapNames();
+struct genoHeatmap *gh= NULL;
+struct slRef *ref= NULL;
+char *db, *tableName;
 
 /* Draw chromosome heatmaps. */
  int totalYOff = 0;
- for (heatmap= heatmaps; heatmap!= NULL; heatmap = heatmap->next)
-     {
-     drawChromHeatmaps(vg, conn, gl, heatmap->name, 
+for (ref = ghList; ref != NULL; ref = ref->next)
+    {
+    gh= ref->val;
+    db = gh->database;
+    tableName = gh->name;
+    drawChromHeatmaps(vg, db, gl, tableName, 
 		       totalYOff + yOffset, TRUE, TRUE, TRUE);
-
-     totalYOff += heatmapHeight(heatmap->name) + spacing;
-     }
+    totalYOff += heatmapHeight(tableName) + spacing;
+    }
 vgClose(&vg);
 }
 
 void graphDropdown(struct sqlConnection *conn, char *varName, char *curVal, char *js)
 /* Make a drop-down with available chrom graphs */
 {
-int totalCount = 1 + slCount(ghList);
+int realCount = slCount(ghList), totalCount=0;
 char **menu, **values;
 int i = 0;
 struct slRef *ref;
 
+if ( realCount == 0)
+    totalCount = realCount +1;
+else
+    totalCount = realCount;
+
 AllocArray(menu, totalCount);
 AllocArray(values, totalCount);
-menu[0] = "-- nothing --";
-values[0] = "";
+
+if ( realCount == 0)
+    {
+    menu[0] = "-- nothing --";
+    values[0] = "";
+    }
 
 for (ref = ghList; ref != NULL; ref = ref->next)
     {
     struct genoHeatmap *gh = ref->val;
-    ++i;
     menu[i] = gh->shortLabel;
     values[i] = gh->name;
+    ++i;
     }
+
 cgiMakeDropListFull(varName, menu, values, totalCount, curVal, js);
 freez(&menu);
 freez(&values);

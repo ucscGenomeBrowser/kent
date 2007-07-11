@@ -19,8 +19,9 @@
 #include "hui.h"
 #include "trackLayout.h"
 #include "web.h"
+#include "microarray.h"
 
-static char const rcsid[] = "$Id: hgHeatmap.c,v 1.2 2007/06/29 00:21:09 heather Exp $";
+static char const rcsid[] = "$Id: hgHeatmap.c,v 1.3 2007/07/11 23:41:43 jzhu Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -77,29 +78,8 @@ for (ct = ctList; ct != NULL; ct = ct->next)
         gh->longLabel = tdb->longLabel;
         gh->expCount = pSc;
         gh->tDb = tdb;
+	gh->database = CUSTOMDB;
         slAddHead(&list, gh);
-        }
-    }
-
-slReverse(&list);
-return list;
-}
-
-
-/* --- Get list of heatmap names. ---- */
-struct slName* heatmapNames()
-{
-struct slName *list = NULL;
-struct customTrack *ct, *ctList = customTracksParseCart(cart, NULL, NULL);
-
-for (ct = ctList; ct != NULL; ct = ct->next)
-    {
-    struct trackDb *tdb = ct->tdb;
-    struct slName* name;
-    if(sameString(tdb->type, "array"))
-        {
-        name = newSlName(ct->dbTableName);
-        slAddHead(&list, name);
         }
     }
 
@@ -111,7 +91,45 @@ return list;
 struct genoHeatmap *getDbHeatmaps(struct sqlConnection *conn)
 /* Get graphs defined in database. */
 {
-return NULL;
+struct genoHeatmap *list = NULL, *gh;
+
+/* Look up track in database, errAbort if it's not there. */
+char* trackName="cnvLungBroadv2";
+struct trackDb *tdb;
+tdb = hMaybeTrackInfo(conn, trackName);
+if (tdb == NULL)
+    return NULL;
+
+AllocVar(gh);
+gh->name = tdb->tableName;
+gh->shortLabel = tdb->shortLabel;
+gh->longLabel = tdb->longLabel;
+gh->tDb = tdb;
+gh->database= database;
+/*microarray specific settings*/
+struct microarrayGroups *maGs = maGetTrackGroupings(database, tdb);
+struct maGrouping *allA= maGs->allArrays;
+gh->expCount = allA->size;
+
+slAddHead(&list,gh);
+
+return list;
+}
+
+/* --- Get list of heatmap names. ---- */
+struct slName* heatmapNames()
+{
+struct genoHeatmap *gh= NULL;
+struct slName *list = NULL, *name=NULL;
+struct slRef *ref= NULL;
+
+for (ref = ghList; ref != NULL; ref = ref->next)
+    {
+    gh= ref->val;
+    name = newSlName(gh->name);
+    slAddHead(&list, name);
+    }
+return list;
 }
 
 void getGenoHeatmaps(struct sqlConnection *conn)
@@ -248,13 +266,17 @@ int selectedHeatmapHeight()
    Should be modified later to the total height of selected heatmaps  
 */
 {
-struct slName *heatmap, *heatmaps = heatmapNames();
+struct genoHeatmap *gh= NULL;
+struct slRef *ref= NULL;
+char *name;
+
 int totalHeight=0;
 int spacing =1;
-
-for (heatmap = heatmaps; heatmap!=NULL; heatmap = heatmap->next)
+for (ref = ghList; ref != NULL; ref = ref->next)
     {
-    totalHeight += experimentCount(heatmap->name) * experimentHeight();
+    gh= ref->val;
+    name = gh->name;
+    totalHeight += experimentCount(name) * experimentHeight();
     totalHeight += spacing;
     }
 totalHeight += betweenRowPad;
