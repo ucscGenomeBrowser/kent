@@ -6,7 +6,7 @@
 #include "portable.h"
 #include "chain.h"
 
-static char const rcsid[] = "$Id: chainSplit.c,v 1.8 2005/09/23 06:19:27 galt Exp $";
+static char const rcsid[] = "$Id: chainSplit.c,v 1.9 2007/07/11 21:47:50 angie Exp $";
 
 boolean splitOnQ = FALSE;
 int lump = 0;
@@ -20,7 +20,7 @@ errAbort(
   "   chainSplit outDir inChain(s)\n"
   "options:\n"
   "   -q  - Split on query (default is on target)\n"
-  "   -lump=N  Lump together so have only N pieces.\n"
+  "   -lump=N  Lump together so have only N split files.\n"
   );
 }
 
@@ -31,19 +31,21 @@ static struct optionSpec options[] = {
 };
 
 char *lumpName(char *name)
-/* Look for integer part of name,  then do mod operation 
+/* Look for integer part of name (or hash it),  then do mod operation 
  * on it to assign to lump. */
 {
 char *s = name, c;
+static char buf[32];
 for (;;)
     {
     c = *s;
     if (c == 0)
-        errAbort("No digits in %s,  need digits in name for lump optoin", 
-		name);
+	{
+	safef(buf, sizeof(buf), "%03d", hashString(name) % lump);
+	return buf;
+	}
     if (isdigit(c))
         {
-	static char buf[32];
 	int lumpIx = atoi(s) % lump;
 	lumpIx %= lump;
 	safef(buf, sizeof(buf), "%03d", lumpIx);
