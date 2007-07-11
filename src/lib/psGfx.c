@@ -8,7 +8,7 @@
 #include "psGfx.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: psGfx.c,v 1.32 2007/05/18 01:16:14 galt Exp $";
+static char const rcsid[] = "$Id: psGfx.c,v 1.33 2007/07/11 23:44:06 galt Exp $";
 
 static void psFloatOut(FILE *f, double x)
 /* Write out a floating point number, but not in too much
@@ -42,7 +42,8 @@ char *s =
 ;
 
 fprintf(f, "%%!PS-Adobe-3.1 EPSF-3.0\n");
-fprintf(f, "%%%%BoundingBox: 0 0 %d %d\n\n", (int)ceil(width), (int)ceil(height));
+fprintf(f, "%%%%BoundingBox: 0 0 %d %d\n", (int)ceil(width), (int)ceil(height));
+fprintf(f, "%%%%LanguageLevel: 3\n\n");
 fprintf(f, "%s", s);
 }
 
