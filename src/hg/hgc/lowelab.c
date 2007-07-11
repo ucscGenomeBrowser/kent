@@ -86,7 +86,7 @@
 #include "memalloc.h"
 #include "rnaHybridization.h"
 
-static char const rcsid[] = "$Id: lowelab.c,v 1.19 2007/07/05 06:40:11 pchan Exp $";
+static char const rcsid[] = "$Id: lowelab.c,v 1.20 2007/07/11 20:41:04 pchan Exp $";
 
 extern char *uniprotFormat;
 
@@ -321,10 +321,13 @@ if (hTableExists("COG"))
 	    	    {
 		    COGXra=COGXraLoad(row2);
 		    if(COGXra!=NULL)
-    printf("<B>COG: </B> "
-               "<A HREF=\"http://www.ncbi.nlm.nih.gov/COG/old/palox.cgi?%s\" "
-	       "TARGET=_BLANK>%s</A>\n", COGXra->name, COGXra->name);
-		        printf(" %s<BR><BR>\n", COGXra->info); 
+		      printf("<B>COG:</B> "
+			     "<A HREF=\"http://www.ncbi.nlm.nih.gov/COG/grace/wiew.cgi?%s\" "
+			     ">%s</A>&nbsp; "
+			     "<A HREF=\"http://www.ncbi.nlm.nih.gov/COG/grace/wiew.cgi?fun=%s\" "
+			     ">Code %s</A>&nbsp;\n", 
+			     COGXra->name, COGXra->name, COG->code,COG->code);
+		    printf(" %s<BR><BR>\n", COGXra->info); 
 		    }
 		    sqlFreeResult(&sr2);
 		    hFreeConn(&conn2);
