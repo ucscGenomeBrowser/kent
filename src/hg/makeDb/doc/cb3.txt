@@ -3,7 +3,7 @@
 # Caenorhabditis briggsae
 #	Washington University School of Medicine GSC and Sanger Institute
 #
-#  $Id: cb3.txt,v 1.12 2007/07/11 00:43:31 hiram Exp $
+#  $Id: cb3.txt,v 1.13 2007/07/11 20:18:54 hiram Exp $
 
 ###########################################################################
 ## Download sequence (DONE - 2007-01-22 - Hiram)
@@ -155,11 +155,8 @@ cb3.downloadDir = cb3
     ssh kkstore02
     cd /cluster/data/genbank
     time nice -n +19 bin/gbAlignStep -initial cb3 &
- logFile: var/build/logs/2007.07.10-16:59:38.cb3.initalign.log
-
-    #	logFile: var/build/logs/2007.04.13-16:07:24.cb3.initalign.log
-    #	real    38m57.377s - second time
-    #	real    64m21.661s - first time
+    #	logFile: var/build/logs/2007.07.10-16:59:38.cb3.initalign.log
+    #	real    134m52.159s
 
     # load database when finished
     ssh hgwdev

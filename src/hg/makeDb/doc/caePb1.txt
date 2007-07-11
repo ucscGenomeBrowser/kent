@@ -620,17 +620,15 @@ caePb1.perChromTables = no
     ssh kkstore01
     cd /cluster/data/genbank
     time nice -n +19 bin/gbAlignStep -initial caePb1 &
-logFile: var/build/logs/2007.07.10-17:01:24.caePb1.initalign.log
-
-    #	logFile: var/build/logs/2007.04.23-10:18:05.caePb1.initalign.log
-    #	real    190m48.232s
+    #	logFile: var/build/logs/2007.07.10-17:01:24.caePb1.initalign.log
+    #	real    353m16.891s
 
     # load database when finished
     ssh hgwdev
     cd /cluster/data/genbank
     time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad caePb1
-    #	logFile: var/dbload/hgwdev/logs/2007.04.23-14:05:48.dbload.log
-    #	real    22m3.514s
+    #	logFile: var/dbload/hgwdev/logs/2007.07.11-12:52:25.dbload.log
+    #	real    7m49.325s
 
     # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank
