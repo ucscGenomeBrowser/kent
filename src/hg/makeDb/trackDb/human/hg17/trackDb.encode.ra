@@ -1910,7 +1910,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     dataVersion ENCODE Oct 2005 Freeze
     priority 1
 
-    track leChipSignal
+    track encodeYaleChipSignalBaf170
     release alpha
     subTrack encodeYaleChipSig
     shortLabel YU BAF170 HeLa S
@@ -2002,7 +2002,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     
     track encodeYaleChipSignalP65nHelaTnfa
     release alpha
-    subTrack encodeYaleChipSignal
+    subTrack encodeYaleChipSig
     shortLabel YU P65-N HeLa TNF S
     longLabel Yale ChIP-chip (NFKB p65 N-terminus ab, HeLa S3 cells, TNF-alpha treated) Signal
     color 20,20,100
@@ -2012,7 +2012,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
 
     track encodeYaleChipSignalP65cHelaTnfa
     release alpha
-    subTrack encodeYaleChipSignal
+    subTrack encodeYaleChipSig
     shortLabel YU P65-C HeLa TNF S
     longLabel Yale ChIP-chip (NFKB p65 C-terminus ab, HeLa S3 cells, TNF-alpha treated) Signal
     color 20,100,20
@@ -2022,7 +2022,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
 
     track encodeYaleChipSignalSmarca4Hela
     release alpha
-    subTrack encodeYaleChipSignal
+    subTrack encodeYaleChipSig
     shortLabel YU SMARCA4 HeLa S
     longLabel Yale ChIP-chip (SMARCA4, HeLa S3 cells) Signal
     color 50,50,200
@@ -2032,7 +2032,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     
     track encodeYaleChipSignalSmarca6Hela
     release alpha
-    subTrack encodeYaleChipSignal
+    subTrack encodeYaleChipSig
     shortLabel YU SMARCA6 HeLa S
     longLabel Yale ChIP-chip (SMARCA6, HeLa S3 cells) Signal
     color 200,50,50
@@ -2042,7 +2042,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     
     track encodeYaleChipSignalNrsfHela
     release alpha
-    subTrack encodeYaleChipSignal
+    subTrack encodeYaleChipSig
     shortLabel YU NRSF HeLa S
     longLabel Yale ChIP-chip (NRSF, HeLa S3 cells) Signal
     color 100,20,20
