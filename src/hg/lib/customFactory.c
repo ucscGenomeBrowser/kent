@@ -23,7 +23,7 @@
 #include "customFactory.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.68 2007/07/03 04:46:07 angie Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.69 2007/07/11 18:20:17 kate Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -1503,8 +1503,11 @@ return dyStringCannibalize(&ds);
 }
 
 char *ctGenome(struct customTrack *ct)
-/* return database setting */
+/* return database setting, using old-style var name if present*/
 {
+char *setting = trackDbSetting(ct->tdb, "db");
+if (setting)
+    return setting;
 return trackDbSetting(ct->tdb, "genome");
 }
 
@@ -1632,7 +1635,7 @@ while ((line = customPpNextReal(cpp)) != NULL)
             if (dataUrl)
                 ctAddToSettings(track, "dataUrl", dataUrl);
             if (!ctGenome(track) && ctDb)
-                ctAddToSettings(track, "genome", ctDb);
+                ctAddToSettings(track, "db", ctDb);
 	    }
 	}
     trackList = slCat(trackList, oneList);
