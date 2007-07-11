@@ -1536,7 +1536,6 @@ type bed .
     altColor 50,50,200
 
 track encodeYaleChipPval
-html encodeYaleChipPvalNew
 compositeTrack on
 shortLabel Yale ChIP pVal
 longLabel Yale ChIP-chip P-Value
@@ -1743,7 +1742,6 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     priority 21
 
 track encodeYaleChipSig
-html encodeYaleChipSignalNew
 compositeTrack on
 shortLabel Yale ChIP Signal
 longLabel Yale ChIP-chip Signal
@@ -1951,7 +1949,6 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     priority 21
 
 track encodeYaleChipSites
-html encodeYaleChipSitesNew
 compositeTrack on
 shortLabel Yale ChIP Sites
 longLabel Yale ChIP-chip Sites 
