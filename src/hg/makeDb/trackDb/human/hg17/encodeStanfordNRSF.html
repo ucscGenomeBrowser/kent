@@ -1,6 +1,6 @@
 <H2>Description</H2>
 <P>
-This track shows 25mer sequence reads obtained via a Chip-seq protocol 
+This track shows 25mer sequence reads obtained via a ChIP-seq protocol 
 from an NRSF/REST-enriched ChIP sample and a companion control sample
 of the same fixed chromatin without immuno-enrichment.
 
@@ -24,11 +24,11 @@ Libraries were prepared from the ChIP DNA using the ligation mediated PCR Solexa
 The Solexa library construction protocol was modified to include a PCR preamplification following 
 linker ligation and preceding gel electrophoresis.  Reducing the size and narrowing the
 size range of DNAs collected from gel purification is intended to improve positional resolution of
-Chip-seq.
+ChIP-seq.
 <H3>Site analysis</H3>
 Cistematic (Wold lab) was used to perform motif-oriented analysis.  The NRSE2 PSFM was used to
 identify canonical NRSE sites.   These sites were used to compare and call the distances from
-peaks of Chip-seq read-tab distributions at each location.
+peaks of ChIP-seq read-tab distributions at each location.
 <H3>Data filtering</H3>
 Reads which mapped to multiple genomic locations are not included.
 Up to two mismatches were allowed.
@@ -37,7 +37,7 @@ NRSF binding in or near promoters is expected to be correlated with low levels o
 Labeled cRNA was hybridized to Illumina Sentrix RefSeq8 whole-genome gene expression microarrays.
 Illumina BeadStudio software was used to extract and normalize the data (rank-invariant method).
 A database of transcription start sites from SwitchGear Genomics was used to obtain high-confidence
-promoter predictions.   The 230 transcripts occuring near Chip-seq peaks had a median expression 
+promoter predictions.   The 230 transcripts occuring near ChIP-seq peaks had a median expression 
 intensity of 6.8, while the full set of 20,589 transcripts had a median expression intensity of 23.6.
 The difference of medians was significant (P = 1 x 10-11) by the Mann-Whitney test.
 
@@ -45,12 +45,12 @@ The difference of medians was significant (P = 1 x 10-11) by the Mann-Whitney te
 <P>
 These data represent a pool of 4 replicate immunoprecipitations.  
 <P>
-NRSF-binding sites previously identified by QPCR or transfection assays (74 loci) plus a set of known negatives
+NRSF-binding sites previously identified by qPCR or transfection assays (74 loci) plus a set of known negatives
 (139 loci) were used to estimate a sensitivity of 87% and a specificity of 97% for clusters of 13 tags 
 separated by no more than 100bp.
 <P>
-771 computationally high-scoring NRSE motifs were to assess the precision of Chip-seq site location. 
-754 sites were found in the Chip-seq experiments, and the center of a 21-bp NRSE motif was within 50 base pairs
+771 computationally high-scoring NRSE motifs were to assess the precision of ChIP-seq site location. 
+754 sites were found in the ChIP-seq experiments, and the center of a 21-bp NRSE motif was within 50 base pairs
 of the called ChIPSeq peak for 94% of these.
 <P>
 
