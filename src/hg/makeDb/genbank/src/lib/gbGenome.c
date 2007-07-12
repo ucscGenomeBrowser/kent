@@ -3,22 +3,24 @@
 #include "gbDefs.h"
 #include "localmem.h"
 
-static char const rcsid[] = "$Id: gbGenome.c,v 1.58 2007/07/10 23:25:08 hiram Exp $";
+static char const rcsid[] = "$Id: gbGenome.c,v 1.59 2007/07/12 01:50:35 markd Exp $";
 
 struct dbToSpecies
-/* structure mapping database prefix to species (e.g. hg -> "Homo sapiens").
- * subSpeciesPrefix is check in a second pass, so it can also be used
- * when genus was used instead of genus species. */
+/* structure mapping database prefix to species (e.g. hg -> "Homo sapiens"). */
 {
     char *dbPrefix;           /* prefix of database (e.g. hg) */
     char **names;             /* list of species name, terminate by null.
                                * first name is prefered. */
-    char *subSpeciesPrefix;   /* if not null, used to check for subspecies;
-                               * should end in a blank */
 };
 
 static char *hgNames[] = {"Homo sapiens", NULL};
-static char *mmNames[] = {"Mus musculus", "Mus sp.", NULL};
+static char *mmNames[] = {"Mus musculus", "Mus sp.", 
+                          "Mus musculus bactrianus",
+                          "Mus musculus castaneus",
+                          "Mus musculus domesticus",
+                          "Mus musculus molossinus",
+                          "Mus musculus musculus",
+                          "Mus musculus wagneri", NULL};
 static char *rnNames[] = {"Rattus norvegicus", "Rattus sp.", NULL};
 static char *ciNames[] = {"Ciona intestinalis", NULL};
 static char *cioSavNames[] = {"Ciona savignyi", NULL};
@@ -27,7 +29,8 @@ static char *frNames[] = {"Takifugu rubripes", NULL};
 static char *dmNames[] = {"Drosophila melanogaster", "Drosophila sp.", NULL};
 static char *dpNames[] = {"Drosophila pseudoobscura", NULL};
 static char *sacCerNames[] = {"Saccharomyces cerevisiae", NULL};
-static char *panTroNames[] = {"Pan troglodytes", NULL};
+static char *panTroNames[] = {"Pan troglodytes", "Pan troglodytes troglodytes", 
+                              "Pan troglodytes verus", NULL};
 static char *rheMacNames[] = {"Macaca mulatta", NULL};
 static char *monDomNames[] = {"Monodelphis domestica", NULL};
 static char *galGalNames[] = {"Gallus gallus", "Gallus sp.", NULL};
@@ -42,7 +45,7 @@ static char *loxAfrNames[] = {"Loxodonta africana", NULL};
 static char *dasNovNames[] = {"Dasypus novemcinctus", NULL};
 static char *canFamNames[] = {"Canis familiaris", "Canis sp.",
                               "Canis lupus familiaris",
-			      "Canis canis", NULL};
+			      "Canis lupus", NULL};
 static char *felCatNames[] = {"Felis catus", NULL};
 static char *droYakNames[] = {"Drosophila yakuba", NULL};
 static char *droAnaNames[] = {"Drosophila ananassae", NULL};
@@ -72,57 +75,56 @@ static char *canHgNames[] = {"Boreoeutheria ancestor", NULL};
 static char *endNames[] = {NULL};
 
 static struct dbToSpecies dbToSpeciesMap[] = {
-    {"hg", hgNames, NULL},
-    {"mm", mmNames, "Mus musculus "},
-    {"rn", rnNames, "Rattus norvegicus "},
-    {"ci", ciNames, NULL},
-    {"cioSav", cioSavNames, NULL},
-    {"fr", frNames, NULL},
-    {"dm", dmNames, NULL},
-    {"dp", dpNames, NULL},
-    {"sacCer", sacCerNames, NULL},
-    {"panTro", panTroNames, "Pan troglodytes "},
-    {"rheMac", rheMacNames, NULL},
-    {"monDom", monDomNames, NULL},
-    {"galGal", galGalNames, NULL},
-    {"ce", ceNames, NULL},
-    {"cb", cbNames, NULL},
-    {"caeRem", caeRemNames, NULL},
-    {"caePb", caePbNames, NULL},
-    {"caeRei", caeRemNames, NULL}, /* db spelling mistake, should be Rem */
-    {"danRer", danRerNames, NULL},
-    {"canFam", canFamNames, NULL},
-    {"felCat", felCatNames, NULL},
-    {"loxAfr", loxAfrNames, NULL},
-    {"dasNov", dasNovNames, NULL},
-    {"echTel", echTelNames, NULL},
-    {"oryCun", oryCunNames, NULL},
-    {"equCab", equCabNames, NULL},
-    {"droYak", droYakNames, NULL},
-    {"droAna", droAnaNames, NULL},
-    {"droMoj", droMojNames, NULL},
-    {"droVir", droVirNames, NULL},
-    {"droEre", droEreNames, NULL},
-    {"droSim", droSimNames, NULL},
-    {"droGri", droGriNames, NULL},
-    {"droPer", droPerNames, NULL},
-    {"droSec", droSecNames, NULL},
-    {"anoGam", anoGamNames, NULL},
-    {"apiMel", apiMelNames, NULL},
-    {"triCas", triCasNames, NULL},
-    /*  "Tetraodon" was once used for "Tetraodon nigroviridis" */
-    {"tetNig", tetNigNames, "Tetraodon"},
-    {"bosTau", bosTauNames, "Bos taurus "},
-    {"xenTro", xenTroNames, "Xenopus tropicalis "},
-    {"anoCar", anoCarNames, "Anolis carolinensis "},
-    {"gasAcu", gasAcuNames, NULL},
-    {"oryLat", oryLatNames, NULL},
-    {"ornAna", ornAnaNames, NULL},
-    {"braFlo", braFloNames, NULL},
-    {"priPac", priPacNames, NULL},
-    {"canHg", canHgNames, "Boreoeutheria ancestor"},
-    {"strPur", strPurNames, NULL},
-    {NULL, endNames, NULL}
+    {"hg", hgNames},
+    {"mm", mmNames},
+    {"rn", rnNames},
+    {"ci", ciNames},
+    {"cioSav", cioSavNames},
+    {"fr", frNames},
+    {"dm", dmNames},
+    {"dp", dpNames},
+    {"sacCer", sacCerNames},
+    {"panTro", panTroNames},
+    {"rheMac", rheMacNames},
+    {"monDom", monDomNames},
+    {"galGal", galGalNames},
+    {"ce", ceNames},
+    {"cb", cbNames},
+    {"caeRem", caeRemNames},
+    {"caePb", caePbNames},
+    {"caeRei", caeRemNames}, /* db spelling mistake, should be Rem */
+    {"danRer", danRerNames},
+    {"canFam", canFamNames},
+    {"felCat", felCatNames},
+    {"loxAfr", loxAfrNames},
+    {"dasNov", dasNovNames},
+    {"echTel", echTelNames},
+    {"oryCun", oryCunNames},
+    {"equCab", equCabNames},
+    {"droYak", droYakNames},
+    {"droAna", droAnaNames},
+    {"droMoj", droMojNames},
+    {"droVir", droVirNames},
+    {"droEre", droEreNames},
+    {"droSim", droSimNames},
+    {"droGri", droGriNames},
+    {"droPer", droPerNames},
+    {"droSec", droSecNames},
+    {"anoGam", anoGamNames},
+    {"apiMel", apiMelNames},
+    {"triCas", triCasNames},
+    {"tetNig", tetNigNames},
+    {"bosTau", bosTauNames},
+    {"xenTro", xenTroNames},
+    {"anoCar", anoCarNames},
+    {"gasAcu", gasAcuNames},
+    {"oryLat", oryLatNames},
+    {"ornAna", ornAnaNames},
+    {"braFlo", braFloNames},
+    {"priPac", priPacNames},
+    {"canHg",  canHgNames},
+    {"strPur", strPurNames},
+    {NULL, endNames}
 };
 
 struct gbGenome* gbGenomeNew(char* database)
@@ -163,21 +165,6 @@ for (i = 0; dbToSpeciesMap[i].dbPrefix != NULL; i++)
 return NULL;
 }
 
-static struct dbToSpecies *subSpeciesSearch(char* organism)
-/* search by sub-species name */
-{
-int i;
-for (i = 0; dbToSpeciesMap[i].dbPrefix != NULL; i++)
-    {
-    struct dbToSpecies* dbMap = &(dbToSpeciesMap[i]);
-    if ((dbMap->subSpeciesPrefix != NULL)
-        && startsWith(dbMap->subSpeciesPrefix, organism))
-        return dbMap;
-    }
-    return NULL;
-}
-
-
 char* gbGenomePreferedOrgName(char* organism)
 /* determine the prefered organism name, if this organism is known,
  * otherwise NULL.  Used for sanity checks. */
@@ -190,10 +177,7 @@ static char organismCache[256];
 
 if (cacheEmpty || !sameString(organism, organismCache))
     {
-    /* do search in two passes to allow handing genus-only names */
     dbMapCache = speciesSearch(organism);
-    if (dbMapCache == NULL)
-        dbMapCache = subSpeciesSearch(organism);
     strcpy(organismCache, organism);
     cacheEmpty = FALSE;
     }
@@ -223,9 +207,6 @@ for (i = 0; genome->dbMap->names[i] != NULL; i++)
         return GB_NATIVE;
     }
 
-if ((genome->dbMap->subSpeciesPrefix != NULL)
-    && startsWith(genome->dbMap->subSpeciesPrefix, organism))
-    return GB_NATIVE;
 return GB_XENO;
 }
 
