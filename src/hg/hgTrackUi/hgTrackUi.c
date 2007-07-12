@@ -30,7 +30,7 @@
 
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.378.4.3 2007/07/10 01:10:03 kate Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.378.4.4 2007/07/12 18:35:19 kate Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2736,38 +2736,55 @@ if (isCustomTrack(tdb->tableName))
     }
 else
     {
+    printf("<P>");
+#define SCHEMA_LINK "<A HREF=\"../cgi-bin/hgTables?db=%s&hgta_group=%s&hgta_track=%s&hgta_table=%s&hgta_doSchema=describe+table+schema\" TARGET=_BLANK> View table schema</A></P>\n"
     if (hTableOrSplitExists(tdb->tableName))
 	{
         /* Make link to TB schema */
 	char *tableName = tdb->tableName;
 	if (sameString(tableName, "mrna"))
 	    tableName = "all_mrna";
-	printf("<P><A HREF=\"../cgi-bin/hgTables?db=%s&hgta_group=%s&hgta_track=%s"
-	       "&hgta_table=%s&hgta_doSchema=describe+table+schema\" "
-	       "TARGET=_BLANK>"
-	       "View table schema</A></P>\n",
-	       database, tdb->grp, tableName, tableName);
-
-        /* Print update time of the table (or one of the components if split) */
-        tableName = hTableForTrack(hGetDb(), tdb->tableName);
-	struct sqlConnection *conn = hAllocConn();
-	char *date = firstWordInLine(sqlTableUpdate(conn, tableName));
-	if (date != NULL && !startsWith("wigMaf", tdb->type))
-	    printf("<B>Data last updated:</B> %s<BR>\n", date);
-	hFreeConn(&conn);
-	}
+        printf(SCHEMA_LINK, database, tdb->grp, tableName, tableName);
+        }
     else if (tdb->subtracks != NULL)
 	{
 	/* handle multi-word subTrack settings: */
 	char *words[2];
 	if ((chopLine(cloneString(tdb->subtracks->tableName), words) > 0) &&
 	    hTableOrSplitExists(words[0]))
-	    printf("<P><A HREF=\"../cgi-bin/hgTables?db=%s&hgta_group=%s&hgta_track=%s"
-		   "&hgta_table=%s&hgta_doSchema=describe+table+schema\" "
-		   "TARGET=_BLANK>"
-		   "View table schema</A></P>\n",
-		   database, tdb->grp, tdb->tableName, tdb->subtracks->tableName);
+	    printf(SCHEMA_LINK,
+               database, tdb->grp, tdb->tableName, tdb->subtracks->tableName);
 	}
+
+    /* Print data version trackDB setting, if any */
+    char *version = trackDbSetting(tdb, "dataVersion");
+    if (version)
+        printf("<B>Data version:</B> %s<BR>\n", version);
+
+   /* Print lift information from trackDb, if any */
+    char *origAssembly = trackDbSetting(tdb, "origAssembly");
+    if (origAssembly)
+        {
+        if (differentString(origAssembly, database))
+            {
+            char *freeze = hFreezeFromDb(origAssembly);
+            if (freeze == NULL)
+                freeze = origAssembly;
+            printf("<B>Data coordinates converted via <A TARGET=_BLANK HREF=\"../goldenPath/help/hgTracksHelp.html#Liftover\">liftOver</A> from:</B> %s (%s)<BR>\n", freeze, origAssembly);
+            }
+        }
+
+    if (hTableOrSplitExists(tdb->tableName))
+        {
+        /* Print update time of the table (or one of the components if split) */
+        char *tableName = hTableForTrack(hGetDb(), tdb->tableName);
+	struct sqlConnection *conn = hAllocConn();
+	char *date = firstWordInLine(sqlTableUpdate(conn, tableName));
+	if (date != NULL && !startsWith("wigMaf", tdb->type))
+	    printf("<B>Data last updated:</B> %s<BR>\n", date);
+	hFreeConn(&conn);
+	}
+
     }
 
 if (tdb->html != NULL && tdb->html[0] != 0)
