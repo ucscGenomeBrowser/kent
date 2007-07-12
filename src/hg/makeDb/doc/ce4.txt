@@ -3,7 +3,7 @@
 # Caenorhabditis elegans
 #	Washington University School of Medicine GSC and Sanger Institute WS170
 
-#  $Id: ce4.txt,v 1.23 2007/07/11 00:43:31 hiram Exp $
+#  $Id: ce4.txt,v 1.24 2007/07/12 23:40:03 angie Exp $
 
 
 #########################################################################
@@ -655,7 +655,7 @@ setenv BLASTMAT /cluster/bluearc/blast229/data
 blastSome.csh {check in line+ $(path1)} {check out line out/$(root1).tab}
 #ENDLOOP
 '_EOF_'
-     # Create parasol batch
+     # << Create parasol batch
 
      ls ../../split/*.fa > split.lst
      gensub2 split.lst single gsub jobList
@@ -3007,3 +3007,92 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
 
     display histo.png &
 
+
+############################################################################
+# ADJUST KIMEXPDISTANCE NAMES TO MATCH SANGERCANONICAL (DONE 7/12/07 angie)
+# kimExpDistance has all [A-Z]+[0-9]+\.[0-9]+ names, but now sangerCanonical
+# has some of the new    [A-Z]+[0-9]+\.[0-9]+\.[0-9]+ names, so when hgNear 
+# looks for a canonical name in kimExpDistance, it often can't find it.
+# Canonical also has     [A-Z]+[0-9]+\.[0-9]+[a-z]
+# and                    [A-Z]+[0-9]+\.[0-9]+[a-z]\.[0-9]+
+# kimExpDistance has 4   [A-Z]+[0-9]+\.[0-9]+[A-Z]
+# Update the names in kimExpDistance to match sangerCanonical.
+    ssh hgwdev
+    # Look at just the names and how they differ between the two sources:
+    hgsql ce4 -N -e 'select transcript from sangerCanonical' \
+      | sort > /tmp/canonicalNames
+    hgsql ce4 -N -e 'select * from kimExpDistance' \
+      > /tmp/kimExpDistance
+    awk -F"\t" '{print $1;}' /tmp/kimExpDistance \
+      | uniq | sort -u > /tmp/kimExpNames
+    sdiff /tmp/canonicalNames /tmp/kimExpNames | less
+    comm -23 /tmp/canonicalNames /tmp/kimExpNames | wc -l
+#7529
+    comm -13 /tmp/canonicalNames /tmp/kimExpNames | wc -l
+#6698
+    # Pretty significant non-overlap, but I think much of it can be 
+    # resolved by slight tweaks to kimExpDistance names so that they 
+    # match the latest, more-specifically-versioned canonical transcripts.
+    # Also, kimExpDistance has many names with no match in canonical,
+    # which means many thousands of unnecessary rows bloating the table.
+    cat > fixExpDistance.pl <<'_EOF_'
+#!/bin/env perl
+use warnings;
+use strict;
+
+my @kimExpNames;
+my @kimSpecial;
+open(F, "/tmp/kimExpNames") || die;
+while (<F>) {
+  chomp;
+  push @kimExpNames, $_;
+  push @kimSpecial, $_ if ($_ =~ /\dA$/);
+}
+close(F);
+
+my %kim2canon;
+open(F, "/tmp/canonicalNames") || die;
+while (<F>) {
+  chomp;
+  my $kim = $_;
+  my @special = grep m/^$kim$/i, @kimSpecial;
+  if (scalar(@special)) {
+    $kim2canon{$special[0]} = $kim;
+  } else {
+    my $simple = $kim;
+    $simple =~ s/^(\w+\.\d+).*$/$1/;
+    $kim2canon{$simple} = $kim;
+  }
+}
+close(F);
+
+while (<>) {
+  chomp;
+  my ($query, $target, $distance) = split('\t');
+  my $canonicalQ = $kim2canon{$query};
+  my $canonicalT = $kim2canon{$target};
+  if (defined $canonicalQ && defined $canonicalT) {
+    print "$canonicalQ\t$canonicalT\t$distance\n";
+  }
+}
+'_EOF_'
+    # << emacs
+    chmod a+x fixExpDistance.pl
+    ./fixExpDistance.pl /tmp/kimExpDistance > kimExpDistanceFixedNames.tab
+    # Look the file over, grep for some IDs in /tmp/canonicalNames.
+    # Load into the db as kimExprDistanceTest.  It will take a while
+    # because it's still 12M rows (down from 19M).
+    time nice hgLoadSqlTab ce4 kimExpDistanceTest \
+      ~/kent/src/hg/lib/distance.sql kimExpDistanceFixedNames.tab
+#0.000u 0.000s 2:28.94 0.0%      0+0k 0+0io 0pf+0w
+
+    # Test hgNear with kimExpDistanceTest instead of kimExpDistance.
+    # Don't delete the original table just yet, but do clean it up soon
+    # because it's quite large.
+    hgsql ce4 -e 'rename table kimExpDistance to kimExpDistanceOrig;'
+    hgsql ce4 -e 'rename table kimExpDistanceTest to kimExpDistance;'
+    runJoiner.csh ce4 kimExpDistance
+    # Test hgNear again with kimExpDistance.
+
+
+############################################################################
