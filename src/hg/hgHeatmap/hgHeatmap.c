@@ -21,7 +21,7 @@
 #include "web.h"
 #include "microarray.h"
 
-static char const rcsid[] = "$Id: hgHeatmap.c,v 1.3 2007/07/11 23:41:43 jzhu Exp $";
+static char const rcsid[] = "$Id: hgHeatmap.c,v 1.4 2007/07/12 05:45:16 jzhu Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -78,7 +78,7 @@ for (ct = ctList; ct != NULL; ct = ct->next)
         gh->longLabel = tdb->longLabel;
         gh->expCount = pSc;
         gh->tDb = tdb;
-	gh->database = CUSTOMDB;
+	gh->database = CUSTOM_TRASH;
         slAddHead(&list, gh);
         }
     }

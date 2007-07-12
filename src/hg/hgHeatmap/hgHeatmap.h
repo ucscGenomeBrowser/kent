@@ -35,9 +35,6 @@
 #define hghClickX hghClick ".x"
 #define hghClickY hghClick ".y"
 
-/*** customTrack***/
-#define CUSTOMDB "CUSTOMDB"
-
 /*** External vars declared in hgHeatmap.c ***/
 extern struct cart *cart;
 extern struct hash *oldCart;

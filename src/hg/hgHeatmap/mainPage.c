@@ -25,7 +25,7 @@
 #include "cytoBand.h"
 #include "hCytoBand.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.4 2007/07/11 23:41:43 jzhu Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.5 2007/07/12 05:45:16 jzhu Exp $";
 
 /* Page drawing stuff. */
 
@@ -50,7 +50,7 @@ safef(query, sizeof(query),
 
 struct sqlConnection *conn;
 
-if (strcmp(database, CUSTOMDB)==0)
+if (sameWord(database, CUSTOM_TRASH))
     conn = sqlCtConn(TRUE);
 else
     conn = sqlConnect(database);
