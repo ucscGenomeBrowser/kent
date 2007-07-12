@@ -31,7 +31,7 @@
 #include "hgConfig.h"
 #include "trix.h"
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.199 2007/06/26 05:56:09 angie Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.200 2007/07/12 19:41:19 angie Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -2886,6 +2886,45 @@ if (isNewChimp(hgp->database))
 return FALSE;
 }
 
+static void collapseSamePos(struct hgPositions *hgp)
+/* If all positions in all tables in hgp are the same position, then 
+ * trim all but the first table/pos. */
+{
+struct hgPosTable *firstTable = NULL, *table;
+struct hgPos *firstPos = NULL, *pos;
+char *chrom = NULL;
+int start, end;
+
+for (table = hgp->tableList; table != NULL; table = table->next)
+    {
+    for (pos = table->posList; pos != NULL; pos = pos->next)
+        {
+	if (pos->chrom != NULL)
+	    {
+	    if (chrom == NULL)
+		{
+		chrom = pos->chrom;
+		start = pos->chromStart;
+		end = pos->chromEnd;
+		firstTable = table;
+		firstPos = pos;
+		}
+	    else if (! (sameString(chrom, pos->chrom) &&
+			start == pos->chromStart &&
+			end == pos->chromEnd))
+		return;
+	    }
+	}
+    }
+if (firstPos)
+    {
+    hgp->tableList = firstTable;
+    hgp->tableList->posList = firstPos;
+    hgPosTableFreeList(&(hgp->tableList->next));
+    hgPosFreeList(&(hgp->tableList->posList->next));
+    }
+}
+
 struct hgPositions *hgPositionsFind(char *term, char *extraCgi,
 	char *hgAppNameIn, struct cart *cart, boolean multiTerm)
 /* Return table of positions that match term or NULL if none such. */
@@ -3019,6 +3058,8 @@ else
         cartSetString(cart, "hgFind.matches", hgpMatchNames->string);
     }
 slReverse(&hgp->tableList);
+if (multiTerm)
+    collapseSamePos(hgp);
 fixSinglePos(hgp);
 return hgp;
 }
