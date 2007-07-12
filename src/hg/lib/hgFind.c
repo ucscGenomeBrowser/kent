@@ -31,7 +31,7 @@
 #include "hgConfig.h"
 #include "trix.h"
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.200 2007/07/12 19:41:19 angie Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.201 2007/07/12 19:51:24 angie Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -2893,7 +2893,7 @@ static void collapseSamePos(struct hgPositions *hgp)
 struct hgPosTable *firstTable = NULL, *table;
 struct hgPos *firstPos = NULL, *pos;
 char *chrom = NULL;
-int start, end;
+int start=0, end=0;
 
 for (table = hgp->tableList; table != NULL; table = table->next)
     {
