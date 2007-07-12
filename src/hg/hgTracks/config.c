@@ -94,6 +94,7 @@ for (group = groupList; group != NULL; group = group->next)
     hTableStart();
     hPrintf("<TR>");
     hPrintf("<TH align=\"left\" colspan=3 BGCOLOR=#536ED3>");
+    hPrintf("\n<A NAME=\"%s\"></A>",group->name);
     hPrintf("<A HREF=\"%s?%s&hgTracksConfigPage=configure&%s=%s#%s\" class=\"bigBlue\"><IMG height=22 width=22 src=\"%s\" alt=\"%s\" class=\"bigBlue\"></A>&nbsp;&nbsp;",
         hgTracksName(), cartSidUrlString(cart), 
         collapseGroupVar(group->name),
