@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.114 2007/03/16 17:14:53 angie Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.115 2007/07/13 17:49:57 galt Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -1001,6 +1001,21 @@ else
         }
     ctList = customTracksParseCartDetailed(cart, &browserLines, &ctFileName,
 					    &replacedCts, NULL, &err);
+
+    /* exclude special setting used by table browser to indicate
+     * db assembly for error-handling purposes only */
+    char *db = NULL;
+    if (trackConfig && (db = stringIn("db=", trackConfig)) != NULL)
+        {
+        db += 3;
+        char *nextTok = skipToSpaces(db);
+        if (!nextTok)
+            nextTok = strchr(db, 0);
+        db = cloneStringZ(db,nextTok-db);
+        if (!sameString(db,database))
+            err = "Invalid configuration found - remove db= or return it to it's original value";
+        }
+
     if (cartVarExists(cart, hgCtUpdatedTrack) && !hasData)
         {
         /* update custom track config and doc, but not data*/
