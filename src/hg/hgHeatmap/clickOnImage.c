@@ -6,7 +6,7 @@
 #include "genoLay.h"
 #include "hgHeatmap.h"
 
-#define CLICKSPAN 5000000
+#define CLICKSPAN 1500000
 
 struct genoLayChrom *genoLayChromAt(struct genoLay *gl, int x, int y)
 /* Return chromosome if any at x,y */

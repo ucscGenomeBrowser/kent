@@ -25,7 +25,7 @@
 #include "cytoBand.h"
 #include "hCytoBand.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.5 2007/07/12 05:45:16 jzhu Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.6 2007/07/13 06:57:34 jzhu Exp $";
 
 /* Page drawing stuff. */
 
@@ -39,14 +39,21 @@ if (tableName == NULL)
 if (! hashLookup(ghHash, tableName))
     return NULL;
 
-/* get the data from the custom track database */
+char accessTname[512];
+/* specific code for cnvLungBroadv2, use downSampled table for fast display */
+if (sameWord(tableName,"cnvLungBroadv2"))
+    safef(accessTname, sizeof(accessTname), "%s_downSample", tableName);
+else
+    safef(accessTname, sizeof(accessTname), "%s", tableName);
+
+/* get the data from the database */
 char **row = NULL;
 char query[512];
 query[0] = '\0';
 
 safef(query, sizeof(query),
      "select * from %s where chrom = \"%s\" \n",
-    tableName, chromName);
+    accessTname, chromName);
 
 struct sqlConnection *conn;
 
@@ -118,13 +125,12 @@ for (i=0; i<=steps; ++i)
 }
 
 
-void drawChromHeatmaps(struct vGfx *vg, /*struct sqlConnection *conn*/ char* database, 
+void drawChromHeatmaps(struct vGfx *vg, char* database, 
 		       struct genoLay *gl, char *chromHeatmap, int yOff, 
 		       boolean leftLabel, boolean rightLabel, boolean firstInRow)
 /* Draw chromosome graph on all chromosomes in layout at given
  * y offset and height. */
 {
-//struct sqlConnection *ctConn = sqlCtConn(TRUE);
 struct genoLayChrom *chrom=NULL;
 struct bed *gh=NULL, *nb=NULL;
 double pixelsPerBase = 1.0/gl->basesPerPixel;
@@ -146,7 +152,7 @@ vgMakeColorGradient(vg, &black, &green, EXPR_DATA_SHADES, shadesOfGreen);
 
 for(chrom = gl->chromList; chrom; chrom = chrom->next)
     {
-    gh = getChromHeatmap(/*ctConn*/database, chromHeatmap, chrom->fullName);
+    gh = getChromHeatmap(database, chromHeatmap, chrom->fullName);
    
     int chromX = chrom->x, chromY = chrom->y;
 

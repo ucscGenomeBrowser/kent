@@ -21,7 +21,7 @@
 #include "web.h"
 #include "microarray.h"
 
-static char const rcsid[] = "$Id: hgHeatmap.c,v 1.4 2007/07/12 05:45:16 jzhu Exp $";
+static char const rcsid[] = "$Id: hgHeatmap.c,v 1.5 2007/07/13 06:57:34 jzhu Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -83,7 +83,6 @@ for (ct = ctList; ct != NULL; ct = ct->next)
         }
     }
 
-slReverse(&list);
 return list;
 }
 
@@ -91,15 +90,13 @@ return list;
 struct genoHeatmap *getDbHeatmaps(struct sqlConnection *conn)
 /* Get graphs defined in database. */
 {
-struct genoHeatmap *list = NULL, *gh;
-
-/* Look up track in database, errAbort if it's not there. */
 char* trackName="cnvLungBroadv2";
 struct trackDb *tdb;
 tdb = hMaybeTrackInfo(conn, trackName);
 if (tdb == NULL)
     return NULL;
 
+struct genoHeatmap *list = NULL, *gh;
 AllocVar(gh);
 gh->name = tdb->tableName;
 gh->shortLabel = tdb->shortLabel;
