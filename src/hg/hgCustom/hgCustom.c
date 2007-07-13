@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.115 2007/07/13 17:49:57 galt Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.116 2007/07/13 22:56:40 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -59,13 +59,12 @@ errAbort(
 #define hgCtDoRefresh     hgCtDo "refresh"
 #define hgCtDoRefreshSet  hgCtDo "refresh_set"
 #define hgCtDoRefreshClr  hgCtDo "refresh_clr"
-#define hgCtDoChangeDb    hgCtDo "changeDb"
 #define hgCtDoGenomeBrowser	  hgCtDo "gb"
 #define hgCtDoTableBrowser	  hgCtDo "tb"
 
 /* Global variables */
 struct cart *cart;
-struct hash *oldCart = NULL;
+struct hash *oldVars = NULL;
 char *excludeVars[] = {"Submit", "submit", "SubmitFile", NULL};
 char *database = NULL;
 char *organism = NULL;
@@ -363,7 +362,6 @@ else
     printf("<INPUT TYPE=\"HIDDEN\" NAME=\"org\" VALUE=\"%s\">\n", organism);
     printf("<INPUT TYPE=\"HIDDEN\" NAME=\"db\" VALUE=\"%s\">\n", database);
     printf("<INPUT TYPE=\"HIDDEN\" NAME=\"hgct_do_add\" VALUE=\"1\">\n");
-    printf("<INPUT TYPE=\"HIDDEN\" NAME=\"hgct_do_changeDb\" VALUE=\"1\">\n");
     }
 puts("</FORM>");
 }
@@ -576,7 +574,6 @@ if (assemblyMenu)
     cartSaveSession(cart);
     printf("<INPUT TYPE=\"HIDDEN\" NAME=\"org\" VALUE=\"%s\">\n", organism);
     printf("<INPUT TYPE=\"HIDDEN\" NAME=\"db\" VALUE=\"%s\">\n", database);
-    printf("<INPUT TYPE=\"HIDDEN\" NAME=\"hgct_do_changeDb\" VALUE=\"1\">\n");
     puts("</FORM>");
     }
 
@@ -927,12 +924,9 @@ struct customTrack *ct = NULL;
 boolean ctUpdated = FALSE;
 
 cart = theCart;
-getDbAndGenome(cart, &database, &organism);
-saveDbAndGenome(cart, database, organism);
+getDbAndGenome(cart, &database, &organism, oldVars);
 hSetDb(database);
 
-if (cartVarExists(cart, hgCtDoChangeDb))
-    cartSetString(cart, "position", hDefaultPos(database));
 if (cartVarExists(cart, hgCtDoAdd))
     doAddCustom(NULL);
 else if (cartVarExists(cart, hgCtTable))
@@ -1084,8 +1078,8 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 htmlPushEarlyHandlers();
-oldCart = hashNew(8);
+oldVars = hashNew(10);
 cgiSpoof(&argc, argv);
-cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldCart);
+cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);
 return 0;
 }

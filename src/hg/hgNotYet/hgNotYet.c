@@ -14,7 +14,7 @@
 #include "hui.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hgNotYet.c,v 1.3 2007/01/30 22:30:56 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgNotYet.c,v 1.4 2007/07/13 22:56:41 angie Exp $";
 
 boolean isPrivateHost;		/* True if we're on genome-test. */
 struct cart *cart = NULL;
@@ -36,7 +36,7 @@ void doMiddle(struct cart *theCart)
 char *scientificName = NULL;
 cart = theCart;
 
-getDbGenomeClade(cart, &db, &organism, &clade);
+getDbGenomeClade(cart, &db, &organism, &clade, oldVars);
 if (! hDbIsActive(db))
     {
     db = hDefaultDb();
@@ -76,7 +76,7 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 isPrivateHost = hIsPrivateHost();
-oldVars = hashNew(8);
+oldVars = hashNew(10);
 cgiSpoof(&argc, argv);
 
 cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);

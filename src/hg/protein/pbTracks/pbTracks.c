@@ -17,7 +17,7 @@
 #include "trashDir.h"
 #include "psGfx.h"
 
-static char const rcsid[] = "$Id: pbTracks.c,v 1.50 2007/05/23 01:37:38 galt Exp $";
+static char const rcsid[] = "$Id: pbTracks.c,v 1.51 2007/07/13 22:56:44 angie Exp $";
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
@@ -30,6 +30,7 @@ boolean proteinInSupportedGenome=TRUE;  /* The protein is in supported genome DB
 					   and PB V1.1 sharing the same PB library */
 
 struct cart *cart;	/* The cart where we keep persistent variables. */
+struct hash *oldVars = NULL; /* The cart vars before new cgi stuff added. */
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -363,7 +364,7 @@ cart = theCart;
   hPrintf("State: %s\n", state->string); }
 */
 
-getDbAndGenome(cart, &database, &organism);
+getDbAndGenome(cart, &database, &organism, oldVars);
 
 hSetDb(database);
 /* if kgProtMap2 table exists, this means we are doing KG III */
@@ -527,9 +528,10 @@ cgiVarExcludeExcept(except);
 int main(int argc, char *argv[])
 {
 cgiSpoof(&argc, argv);
+oldVars = hashNew(10);
 htmlSetBackground(hBackgroundImage());
 if (cgiVarExists("pbt.reset"))
     resetVars();
-cartHtmlShellPB("UCSC Proteome Browser", doMiddle, hUserCookie(), excludeVars, NULL);
+cartHtmlShellPB("UCSC Proteome Browser", doMiddle, hUserCookie(), excludeVars, oldVars);
 return 0;
 }

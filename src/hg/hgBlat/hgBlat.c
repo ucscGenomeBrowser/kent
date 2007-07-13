@@ -21,7 +21,7 @@
 #include "botDelay.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgBlat.c,v 1.114 2007/06/22 19:30:28 galt Exp $";
+static char const rcsid[] = "$Id: hgBlat.c,v 1.115 2007/07/13 22:56:40 angie Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -427,7 +427,7 @@ enum gfType qType, tType;
 struct hash *tFileCache = gfFileCacheNew();
 boolean feelingLucky = cgiBoolean("Lucky");
 
-getDbAndGenome(cart, &db, &genome);
+getDbAndGenome(cart, &db, &genome, oldVars);
 if(!feelingLucky)
     cartWebStart(cart, "%s BLAT Results", organism);
 /* Load user sequence and figure out if it is DNA or protein. */
@@ -713,27 +713,13 @@ void doMiddle(struct cart *theCart)
 /* Write header and body of html page. */
 {
 char *userSeq;
-char *db, *organism, *oldDb, *oldOrg;
+char *db, *organism;
 boolean clearUserSeq = cgiBoolean("Clear");
 
 cart = theCart;
 dnaUtilOpen();
 
-getDbAndGenome(cart, &db, &organism);
-/* stomp cart vars dependent on old db */
-oldDb = hashFindVal(oldVars, "db");
-dbChange = differentStringNullOk(db, oldDb);
-if (dbChange && oldDb)
-    {
-    cartRemove(cart, "position");
-    }
-
-/* cart support for bare urls specifying ?db= without org which may differ */
-oldOrg = cartOptionalString(cart, "org");
-if (!sameOk(organism,oldOrg))
-    {
-    cartSetString(cart, "org", organism);
-    }
+getDbAndGenome(cart, &db, &organism, oldVars);
 
 /* Get sequence - from userSeq variable, or if 
  * that is empty from a file. */
@@ -766,7 +752,7 @@ char *excludeVars[] = {"Submit", "submit", "Clear", "Lucky", "type", "userSeq", 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-oldVars = hashNew(8);
+oldVars = hashNew(10);
 cgiSpoof(&argc, argv);
 
 /* org has precedence over db when changeInfo='orgChange' */

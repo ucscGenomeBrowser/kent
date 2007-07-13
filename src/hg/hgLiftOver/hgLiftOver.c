@@ -17,7 +17,7 @@
 #include "liftOver.h"
 #include "liftOverChain.h"
 
-static char const rcsid[] = "$Id: hgLiftOver.c,v 1.52 2007/05/22 22:30:23 galt Exp $";
+static char const rcsid[] = "$Id: hgLiftOver.c,v 1.53 2007/07/13 22:56:41 angie Exp $";
 
 /* CGI Variables */
 #define HGLFT_USERDATA_VAR "hglft_userData"     /* typed/pasted in data */
@@ -40,7 +40,7 @@ static char const rcsid[] = "$Id: hgLiftOver.c,v 1.52 2007/05/22 22:30:23 galt E
 
 /* Global Variables */
 struct cart *cart;	        /* CGI and other variables */
-struct hash *oldCart = NULL;
+struct hash *oldVars = NULL;
 
 /* Data Formats */
 #define POSITION_FORMAT "Position"
@@ -361,7 +361,7 @@ char *userData;
 /* char *dataFile; */
 char *dataFormat;
 char *organism;
-char *db, *previousDb;    
+char *db;
 float minBlocks, minMatch;
 boolean multiple, fudgeThick;
 int minSizeQ, minSizeT;
@@ -391,8 +391,7 @@ else
 dataFormat = cartCgiUsualString(cart, HGLFT_DATAFORMAT_VAR, DEFAULT_FORMAT);
 cartWebStart(cart, "Lift Genome Annotations");
 
-getDbAndGenome(cart, &db, &organism);
-previousDb = hPreviousAssembly(db);
+getDbAndGenome(cart, &db, &organism, oldVars);
 
 chainList = liftOverChainListFiltered();
 
@@ -520,9 +519,9 @@ char *excludeVars[] = {"Submit", "submit", "SubmitFile",
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-oldCart = hashNew(8);
+oldVars = hashNew(10);
 cgiSpoof(&argc, argv);
-cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldCart);
+cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);
 return 0;
 }
 

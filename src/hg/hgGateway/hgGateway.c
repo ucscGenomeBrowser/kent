@@ -14,7 +14,7 @@
 #include "hui.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hgGateway.c,v 1.100 2007/05/22 22:08:45 galt Exp $";
+static char const rcsid[] = "$Id: hgGateway.c,v 1.101 2007/07/13 22:56:40 angie Exp $";
 
 boolean isPrivateHost;		/* True if we're on genome-test. */
 struct cart *cart = NULL;
@@ -26,9 +26,6 @@ char *db = NULL;
 void hgGateway()
 /* hgGateway - Human Genome Browser Gateway. */
 {
-char *oldDb = NULL;
-char *oldOrg = NULL;
-char *oldClade = NULL;
 char *defaultPosition = hDefaultPos(db);
 char *position = cloneString(cartUsualString(cart, "position", defaultPosition));
 boolean gotClade = hGotClade();
@@ -48,15 +45,6 @@ char *onChangeClade = "onchange=\"document.orgForm.clade.value = document.mainFo
    If databases were changed then use the new default position too.
 */
 
-oldDb = hashFindVal(oldVars, "db");
-oldOrg = hashFindVal(oldVars, "org");
-oldClade = hashFindVal(oldVars, "clade");
-if ((oldDb    && differentWord(oldDb, db)) ||
-    (oldOrg   && differentWord(oldOrg, organism)) ||
-    (oldClade && differentWord(oldClade, clade)))
-    {
-    position = defaultPosition;
-    }
 if (sameString(position, "genome") || sameString(position, "hgBatch"))
     position = defaultPosition;
 
@@ -211,7 +199,7 @@ void doMiddle(struct cart *theCart)
 char *scientificName = NULL;
 cart = theCart;
 
-getDbGenomeClade(cart, &db, &organism, &clade);
+getDbGenomeClade(cart, &db, &organism, &clade, oldVars);
 if (! hDbIsActive(db))
     {
     db = hDefaultDb();
@@ -249,7 +237,7 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 isPrivateHost = hIsPrivateHost();
-oldVars = hashNew(8);
+oldVars = hashNew(10);
 cgiSpoof(&argc, argv);
 
 cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);

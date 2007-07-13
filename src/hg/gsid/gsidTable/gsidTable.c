@@ -20,7 +20,7 @@
 #include "gsidTable.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidTable.c,v 1.17 2007/06/22 16:28:16 fanhsu Exp $";
+static char const rcsid[] = "$Id: gsidTable.c,v 1.18 2007/07/13 22:56:40 angie Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "submit_filter", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -1392,7 +1392,7 @@ oldCart = hashNew(10);
 
 cart = cartAndCookie(hUserCookie(), excludeVars, oldCart);
 
-getDbAndGenome(cart, &database, &genome);
+getDbAndGenome(cart, &database, &genome, oldCart);
 hSetDb(database);
 conn = hAllocConn();
 

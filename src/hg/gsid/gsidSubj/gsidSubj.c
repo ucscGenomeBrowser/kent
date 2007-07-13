@@ -18,7 +18,7 @@
 #include "gsidSubj.h"
 //#include "ccdsGeneMap.h"
 
-static char const rcsid[] = "$Id: gsidSubj.c,v 1.4 2007/01/14 16:56:22 fanhsu Exp $";
+static char const rcsid[] = "$Id: gsidSubj.c,v 1.5 2007/07/13 22:56:39 angie Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -280,7 +280,7 @@ void cartMain(struct cart *theCart)
 {
 struct sqlConnection *conn = NULL;
 cart = theCart;
-getDbAndGenome(cart, &database, &genome);
+getDbAndGenome(cart, &database, &genome, oldCart);
 
 /* !!! force database to hiv1 until move to server hiv1 is complete 
    and the default database of hgcentral on it point to hiv1. */

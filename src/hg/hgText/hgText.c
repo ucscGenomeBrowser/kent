@@ -35,7 +35,7 @@
 #include "hgText.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.168 2007/06/19 22:21:05 donnak Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.169 2007/07/13 22:56:41 angie Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -444,30 +444,6 @@ return(pos);
 }
 
 
-void handleDbChange()
-/* 
-   Copied from hgGateway:
-   If we are changing databases via explicit cgi request,
-   then remove custom track data which will 
-   be irrelevant in this new database .
-   If databases were changed then use the new default position too.
-*/
-{
-char *oldDb  = hashFindVal(oldVars, "db");
-char *oldPos = hashFindVal(oldVars, "position");
-if ((oldDb != NULL) && (! sameWord(oldDb, database)))
-    {
-    position = hDefaultPos(database);
-    if ((! isGenome(position)) &&
-	(oldPos != NULL) && sameWord(position, oldPos))
-	position = searchPosition(position,
-				  &chrom, &winStart, &winEnd);
-    cartRemove(cart, "hgt.customText");
-    cartRemove(cart, "hgt.customFile");
-    cartRemove(cart, "ct");
-    }
-}
-
 char *getTableVar()
 {
 char *table  = cgiOptionalString("table");
@@ -650,7 +626,6 @@ if (! hDbIsActive(database))
     database = hDefaultDb();
     organism = hGenome(database);
     }
-handleDbChange();
 
 puts(
 "<CENTER>"
@@ -5006,7 +4981,7 @@ hgBotDelay();
 cart = theCart;
 table = getTableName();
 db = getTableDb();
-getDbAndGenome(cart, &database, &organism);
+getDbAndGenome(cart, &database, &organism, oldVars);
 database = cloneString(database);
 hSetDb(database);
 hDefaultConnect();
@@ -5176,7 +5151,7 @@ int main(int argc, char *argv[])
 {
 struct cart *theCart;
 
-oldVars = hashNew(8);
+oldVars = hashNew(10);
 cgiSpoof(&argc, argv);
 /* Sometimes we output HTML and sometimes plain text; let each outputter 
  * take care of headers instead of using a fixed cart*Shell(). */

@@ -23,26 +23,11 @@ char *db = NULL;
 void pbGateway()
 /* pbGateway - Human Proteome Browser Gateway. */
 {
-char *oldDb = NULL;
-char *oldOrg = NULL;
 char *defaultPosition = hDefaultPos(db);
 char *position = cloneString(cartUsualString(cart, "position", defaultPosition));
 
-/* 
-   If we are changing databases via explicit cgi request,
-   then remove custom track data which will 
-   be irrelevant in this new database .
-   If databases were changed then use the new default position too.
-*/
-
-oldDb = hashFindVal(oldVars, dbCgiName);
-oldOrg = hashFindVal(oldVars, orgCgiName);
-if ((oldDb && !containsStringNoCase(oldDb, db))
-|| (oldOrg && !containsStringNoCase(oldOrg, organism)))
-    {
-    position = defaultPosition;
-    }
-if (sameString(position, "proteome") || sameString(position, "hgBatch"))
+if (sameString(position, "proteome") || sameString(position, "genome") ||
+    sameString(position, "hgBatch"))
     position = defaultPosition;
 
 puts(
@@ -78,7 +63,7 @@ void doMiddle(struct cart *theCart)
 {
 cart = theCart;
 
-getDbAndGenome(cart, &db, &organism);
+getDbAndGenome(cart, &db, &organism, oldVars);
 if (! hDbIsActive(db))
     {
     db = hDefaultDb();
@@ -106,7 +91,7 @@ char *excludeVars[] = {NULL};
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-oldVars = hashNew(8);
+oldVars = hashNew(10);
 cgiSpoof(&argc, argv);
 
 cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);

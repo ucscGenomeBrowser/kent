@@ -20,7 +20,7 @@
 #include "hgNear.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.168 2007/05/23 01:05:56 galt Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.169 2007/07/13 22:56:44 angie Exp $";
 
 char *excludeVars[] = { "submit", "Submit", idPosVarName, NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -28,12 +28,12 @@ char *excludeVars[] = { "submit", "Submit", idPosVarName, NULL };
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
+struct hash *oldVars = NULL; /* The cart vars before new cgi stuff added. */
 char *database;		/* Name of genome database - hg15, mm3, or the like. */
 char *genome;		/* Name of genome - mouse, human, etc. */
 char *groupOn;		/* Current grouping strategy. */
 int displayCount;	/* Number of items to display. */
 char *displayCountString; /* Ascii version of display count, including 'all'. */
-struct hash *oldCart;	/* Old cart hash. */
 struct hash *genomeSettings;  /* Genome-specific settings from settings.ra. */
 struct hash *columnHash;  /* Hash of active columns keyed by name. */
 
@@ -1866,7 +1866,7 @@ struct column *colList, *col;
 char *oldDb;
 cart = theCart;
 
-getDbAndGenome(cart, &database, &genome);
+getDbAndGenome(cart, &database, &genome, oldVars);
 makeSureDbHasHgNear();
 oldDb = cartOptionalString(cart, oldDbVarName);
 if (isNotEmpty(oldDb) && !sameString(oldDb, database))
@@ -1982,7 +1982,7 @@ int main(int argc, char *argv[])
 cgiSpoof(&argc, argv);
 htmlSetStyle(htmlStyleUndecoratedLink);
 htmlSetBgColor(HG_CL_OUTSIDE);
-oldCart = hashNew(10);
-cartHtmlShell("Gene Sorter v"CGI_VERSION, doMiddle, hUserCookie(), excludeVars, oldCart);
+oldVars = hashNew(10);
+cartHtmlShell("Gene Sorter v"CGI_VERSION, doMiddle, hUserCookie(), excludeVars, oldVars);
 return 0;
 }

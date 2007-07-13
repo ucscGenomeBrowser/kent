@@ -16,7 +16,7 @@
 #include "trashDir.h"
 #include "customFactory.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.71 2007/06/08 21:32:06 angie Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.72 2007/07/13 22:56:42 angie Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -243,6 +243,19 @@ for (cv = cgiVarList(); cv != NULL; cv = cv->next)
 hashFree(&booHash);
 }
 
+static void hashEmpty(struct hash *hash)
+/* Remove everything from hash. */
+{
+struct hashEl *hel, *helList = hashElListHash(hash);
+for (hel = helList;  hel != NULL;  hel = hel->next)
+    {
+    freez(&(hel->val));
+    hashRemove(hash, hel->name);
+    }
+hashElFreeList(&helList);
+assert(hashNumEntries(hash) == 0);
+}
+
 void cartLoadUserSession(struct sqlConnection *conn, char *sessionOwner,
 			 char *sessionName, struct cart *cart,
 			 struct hash *oldVars, char *actionVar)
@@ -282,6 +295,8 @@ if ((row = sqlNextRow(sr)) != NULL)
 	cartParseOverHash(cart, row[1]);
 	cartSetInt(cart, sessionVar, hgsid);
 	cartCopyCustomTracks(cart);
+	if (oldVars)
+	    hashEmpty(oldVars);
 	/* Overload settings explicitly passed in via CGI (except for the
 	 * command that sent us here): */
 	loadCgiOverHash(cart, oldVars);
@@ -337,6 +352,8 @@ while (lineFileNext(lf, &line, &size))
 	} /* not hgsid */
     } /* each line */
 cartCopyCustomTracks(cart);
+if (oldVars)
+    hashEmpty(oldVars);
 /* Overload settings explicitly passed in via CGI (except for the
  * command that sent us here): */
 loadCgiOverHash(cart, oldVars);
@@ -1097,7 +1114,7 @@ char titlePlus[128];
 char *proteinID;
 pushWarnHandler(cartEarlyWarningHandler);
 cart = cartAndCookie(cookieName, exclude, oldVars);
-getDbAndGenome(cart, &db, &org);
+getDbAndGenome(cart, &db, &org, oldVars);
 proteinID = cartOptionalString(cart, "proteinID");
 safef(titlePlus, sizeof(titlePlus), "%s protein %s - %s", org, proteinID, title);
 popWarnHandler();
@@ -1144,7 +1161,7 @@ char titlePlus[128];
 char extra[128];
 pushWarnHandler(cartEarlyWarningHandler);
 cart = cartAndCookie(cookieName, exclude, oldVars);
-getDbAndGenome(cart, &db, &org);
+getDbAndGenome(cart, &db, &org, oldVars);
 clade = hClade(org);
 pos = cartOptionalString(cart, positionCgiName);
 pos = addCommasToPos(stripCommas(pos));

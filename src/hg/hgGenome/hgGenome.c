@@ -31,11 +31,11 @@
 #include "jsHelper.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: hgGenome.c,v 1.56 2007/06/05 23:48:09 galt Exp $";
+static char const rcsid[] = "$Id: hgGenome.c,v 1.57 2007/07/13 22:56:40 angie Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
-struct hash *oldCart;	/* Old cart hash. */
+struct hash *oldVars;	/* Old cart hash. */
 char *database;		/* Name of genome database - hg15, mm3, or the like. */
 char *genome;		/* Name of genome - mouse, human, etc. */
 struct trackLayout tl;  /* Dimensions of things, fonts, etc. */
@@ -486,7 +486,7 @@ void dispatchLocation()
  * then we call hggDoUsualHttp. */
 {
 struct sqlConnection *conn = NULL;
-getDbAndGenome(cart, &database, &genome);
+getDbAndGenome(cart, &database, &genome, oldVars);
 hSetDb(database);
 cartSetString(cart, "db", database); /* Some custom tracks code needs this */
 withLabels = cartUsualBoolean(cart, hggLabels, TRUE);
@@ -517,8 +517,8 @@ cgiSpoof(&argc, argv);
 // htmlSetStyle(htmlStyleUndecoratedLink);
 if (argc != 1)
     usage();
-oldCart = hashNew(12);
-cart = cartForSession(hUserCookie(), excludeVars, oldCart);
+oldVars = hashNew(12);
+cart = cartForSession(hUserCookie(), excludeVars, oldVars);
 dispatchLocation();
 return 0;
 }

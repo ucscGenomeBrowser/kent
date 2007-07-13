@@ -17,7 +17,7 @@
 #include "liftOver.h"
 #include "liftOverChain.h"
 
-static char const rcsid[] = "$Id: hgConvert.c,v 1.25 2007/02/10 18:52:19 kent Exp $";
+static char const rcsid[] = "$Id: hgConvert.c,v 1.26 2007/07/13 22:56:40 angie Exp $";
 
 /* CGI Variables */
 #define HGLFT_TOORG_VAR   "hglft_toOrg"           /* TO organism */
@@ -26,7 +26,7 @@ static char const rcsid[] = "$Id: hgConvert.c,v 1.25 2007/02/10 18:52:19 kent Ex
 
 /* Global Variables */
 struct cart *cart;	        /* CGI and other variables */
-struct hash *oldCart = NULL;
+struct hash *oldVars = NULL;
 
 /* Javascript to support New Assembly pulldown when New Genome changes. */
 /* Copies selected values to a hidden form */
@@ -314,7 +314,7 @@ char *fromPos = cartString(theCart, "position");
 struct dbDb *dbList, *fromDb, *toDb;
 
 cart = theCart;
-getDbAndGenome(cart, &db, &organism);
+getDbAndGenome(cart, &db, &organism, oldVars);
 hSetDb(db);
 
 liftOverList = liftOverChainListFiltered();
@@ -339,9 +339,9 @@ char *excludeVars[] = { "submit", HGLFT_DO_CONVERT, NULL};
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-oldCart = hashNew(8);
+oldVars = hashNew(10);
 cgiSpoof(&argc, argv);
-cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldCart);
+cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);
 return 0;
 }
 

@@ -13,7 +13,7 @@
 #include "hgColors.h"
 #include "wikiLink.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.131 2007/07/13 20:10:37 galt Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.132 2007/07/13 22:56:43 angie Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -177,7 +177,7 @@ if (theCart)
     char *theGenome = NULL;
     char *genomeEnc = NULL;
 
-    getDbAndGenome(theCart, &theDb, &theGenome);
+    getDbAndGenome(theCart, &theDb, &theGenome, NULL);
     genomeEnc = cgiEncode(theGenome);
 
     snprintf(uiState, sizeof(uiState), "?%s=%s&%s=%s&%s=%u", 
@@ -897,8 +897,11 @@ return retDb;
 
 
 void getDbGenomeClade(struct cart *cart, char **retDb, char **retGenome,
-		      char **retClade)
-/*
+		      char **retClade, struct hash *oldVars)
+/* Examine CGI and cart variables to determine which db, genome, or clade
+ *  has been selected, and then adjust as necessary so that all three are 
+ * consistent.  Detect changes and reset db-specific cart variables.
+ * Save db, genome and clade in the cart so it will be consistent hereafter.
  * The order of preference here is as follows:
  * If we got a request that explicitly names the db, that takes
  * highest priority, and we synch the organism to that db.
@@ -964,21 +967,50 @@ else
 *retDb = cloneString(*retDb);
 *retGenome = cloneString(*retGenome);
 *retClade = hClade(*retGenome);
+
+/* Detect change of database and reset db-specific cart variables: */
+if (oldVars)
+    {
+    char *oldDb = hashFindVal(oldVars, "db");
+    char *oldOrg = hashFindVal(oldVars, "org");
+    char *oldClade = hashFindVal(oldVars, "clade");
+    if ((oldDb    && differentWord(oldDb, *retDb)) ||
+	(oldOrg   && differentWord(oldOrg, *retGenome)) ||
+	(oldClade && differentWord(oldClade, *retClade)))
+	{
+	/* Change position to default -- unless it was passed in via CGI: */
+	if (cgiOptionalString("position") == NULL)
+	    cartSetString(cart, "position", hDefaultPos(*retDb));
+	/* hgBlat results (hgUserPsl track): */
+	cartRemove(cart, "ss");
+	/* hgTables correlate: */
+	cartRemove(cart, "hgta_correlateTrack");
+	cartRemove(cart, "hgta_correlateTable");
+	cartRemove(cart, "hgta_correlateGroup");
+	cartRemove(cart, "hgta_correlateOp");
+	cartRemove(cart, "hgta_nextCorrelateTrack");
+	cartRemove(cart, "hgta_nextCorrelateTable");
+	cartRemove(cart, "hgta_nextCorrelateGroup");
+	cartRemove(cart, "hgta_nextCorrelateOp");
+	cartRemove(cart, "hgta_corrWinSize");
+	cartRemove(cart, "hgta_corrMaxLimitCount");
+	}
+    }
+
+/* Save db, genome (as org) and clade in cart. */
+cartSetString(cart, "db", *retDb);
+cartSetString(cart, "org", *retGenome);
+if (gotClade)
+    cartSetString(cart, "clade", *retClade);
 }
 
-void getDbAndGenome(struct cart *cart, char **retDb, char **retGenome)
+void getDbAndGenome(struct cart *cart, char **retDb, char **retGenome,
+		    struct hash *oldVars)
 /* Get just the db and genome. */
 {
 char *garbage = NULL;
-getDbGenomeClade(cart, retDb, retGenome, &garbage);
+getDbGenomeClade(cart, retDb, retGenome, &garbage, oldVars);
 freeMem(garbage);
-}
-
-void saveDbAndGenome(struct cart *cart, char *db, char *genome)
-/* Save db and genome (as org) in cart. */
-{
-cartSetString(cart, "db", db);
-cartSetString(cart, "org", genome);
 }
 
 boolean webIncludeFile(char *file)

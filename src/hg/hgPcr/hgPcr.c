@@ -22,7 +22,7 @@
 #include "botDelay.h"
 #include "oligoTm.h"
 
-static char const rcsid[] = "$Id: hgPcr.c,v 1.15 2006/10/20 05:01:14 kate Exp $";
+static char const rcsid[] = "$Id: hgPcr.c,v 1.16 2007/07/13 22:56:41 angie Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -384,7 +384,7 @@ char *rPrimer = cartUsualString(cart, "wp_r", "");
 boolean flipReverse = cartUsualBoolean(cart, "wp_flipReverse", FALSE);
 struct pcrServer *serverList = getServerList();
 
-getDbAndGenome(cart, &db, &organism);
+getDbAndGenome(cart, &db, &organism, oldVars);
 
 /* Get variables. */
 maxSize = cartUsualInt(cart, "wp_size", maxSize);
@@ -426,7 +426,7 @@ char *excludeVars[] = {"Submit", "submit", "wp_f", "wp_r", "wp_showPage", NULL};
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-oldVars = hashNew(8);
+oldVars = hashNew(10);
 cgiSpoof(&argc, argv);
 htmlSetBackground(hBackgroundImage());
 cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);

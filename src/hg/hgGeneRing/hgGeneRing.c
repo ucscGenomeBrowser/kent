@@ -17,7 +17,7 @@
 #include "bdgpGeneInfo.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgGeneRing.c,v 1.5 2005/02/28 10:21:56 galt Exp $";
+static char const rcsid[] = "$Id: hgGeneRing.c,v 1.6 2007/07/13 22:56:40 angie Exp $";
 
 char *errMsg = NULL;
 
@@ -61,23 +61,9 @@ char *db = NULL;
 
 /* ------ old junk cloned from hgGateway --------- */
 
-
-/*
-  Remove any custom track data from the cart.
-*/
-void removeCustomTrackData()
-{
-cartRemove(cart, "hgt.customText");
-cartRemove(cart, "hgt.customFile");
-cartRemove(cart, "ct");
-}
-
 void hgGateway()
 /* hgGateway - Human Genome Browser Gateway. */
 {
-char *oldDb = NULL;
-char *oldOrg = NULL;
-char *oldClade = NULL;
 char *defaultPosition = hDefaultPos(db);
 char *position = cloneString(cartUsualString(cart, "position", defaultPosition));
 boolean gotClade = hGotClade();
@@ -89,23 +75,6 @@ char *onChangeDB = "onchange=\"document.orgForm.db.value = document.mainForm.db.
 char *onChangeOrg = "onchange=\"document.orgForm.org.value = document.mainForm.org.options[document.mainForm.org.selectedIndex].value; document.orgForm.db.value = 0; document.orgForm.submit();\"";
 char *onChangeClade = "onchange=\"document.orgForm.clade.value = document.mainForm.clade.options[document.mainForm.clade.selectedIndex].value; document.orgForm.org.value = 0; document.orgForm.db.value = 0; document.orgForm.submit();\"";
 
-/* 
-   If we are changing databases via explicit cgi request,
-   then remove custom track data which will 
-   be irrelevant in this new database .
-   If databases were changed then use the new default position too.
-*/
-
-oldDb = hashFindVal(oldVars, "db");
-oldOrg = hashFindVal(oldVars, "org");
-oldClade = hashFindVal(oldVars, "clade");
-if ((oldDb    && differentWord(oldDb, db)) ||
-    (oldOrg   && differentWord(oldOrg, organism)) ||
-    (oldClade && differentWord(oldClade, clade)))
-    {
-    position = defaultPosition;
-    removeCustomTrackData();
-    }
 if (sameString(position, "genome") || sameString(position, "hgBatch"))
     position = defaultPosition;
 
@@ -943,7 +912,7 @@ void doMiddle(struct cart *theCart)
 char *action = cgiUsualString("ring_action", "");
 cart = theCart;
 
-getDbGenomeClade(cart, &db, &organism, &clade);
+getDbGenomeClade(cart, &db, &organism, &clade, oldVars);
 if (! hDbIsActive(db))
     {
     db = hDefaultDb();
@@ -994,7 +963,7 @@ char *excludeVars[] = {NULL};
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-oldVars = hashNew(8);
+oldVars = hashNew(10);
 cgiSpoof(&argc, argv);
 
 nodeHash = newHash(8);

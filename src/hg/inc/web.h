@@ -168,8 +168,11 @@ If NULL, no default selection.
  */
 
 void getDbGenomeClade(struct cart *cart, char **retDb, char **retGenome,
-	char **retClade);
-/*
+		      char **retClade, struct hash *oldVars);
+/* Examine CGI and cart variables to determine which db, genome, or clade
+   has been selected, and then adjust as necessary so that all three are 
+   consistent.  Detect changes and reset db-specific cart variables.
+   Save db, genome and clade in the cart so it will be consistent hereafter.
   The order of preference here is as follows:
 If we got a request that explicitly names the db, that takes
 highest priority, and we synch the organism to that db.
@@ -181,11 +184,9 @@ If someone requests an organism we try to give them the same db as
 was in their cart, unless the organism doesn't match.
 */
 
-void getDbAndGenome(struct cart *cart, char **retDb, char **retGenome);
+void getDbAndGenome(struct cart *cart, char **retDb, char **retGenome,
+		    struct hash *oldVars);
 /* Like getDbGenomeClade above, but just get db and genome. */
-
-void saveDbAndGenome(struct cart *cart, char *db, char *genome);
-/* Save db and genome (as org) in cart. */
 
 boolean webIncludeFile(char *file);
 /* Include an HTML file in a CGI.

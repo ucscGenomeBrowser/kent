@@ -17,11 +17,11 @@
 #include "hgColors.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.105 2007/06/28 16:46:56 hiram Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.106 2007/07/13 22:56:40 angie Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
-struct hash *oldCart;	/* Old cart hash. */
+struct hash *oldVars;	/* Old cart hash. */
 char *database;		/* Name of genome database - hg15, mm3, or the like. */
 char *genome;		/* Name of genome - mouse, human, etc. */
 char *curGeneId;	/* Current Gene Id. */
@@ -467,9 +467,9 @@ static void getGenePosition(struct sqlConnection *conn)
 /* Get gene position - from cart if it looks valid,
  * otherwise from database. */
 {
-char *oldGene = hashFindVal(oldCart, hggGene);
-char *oldStarts = hashFindVal(oldCart, hggStart);
-char *oldEnds = hashFindVal(oldCart, hggEnd);
+char *oldGene = hashFindVal(oldVars, hggGene);
+char *oldStarts = hashFindVal(oldVars, hggStart);
+char *oldEnds = hashFindVal(oldVars, hggEnd);
 char *newGene = curGeneId;
 char *newChrom = cartOptionalString(cart, hggChrom);
 char *newStarts = cartOptionalString(cart, hggStart);
@@ -576,7 +576,7 @@ void cartMain(struct cart *theCart)
 {
 struct sqlConnection *conn = NULL;
 cart = theCart;
-getDbAndGenome(cart, &database, &genome);
+getDbAndGenome(cart, &database, &genome, oldVars);
 hSetDb(database);
 
 /* if kgProtMap2 table exists, this means we are doing KG III */
@@ -629,7 +629,7 @@ cgiSpoof(&argc, argv);
 htmlSetStyle(htmlStyleUndecoratedLink);
 if (argc != 1)
     usage();
-oldCart = hashNew(12);
-cartEmptyShell(cartMain, hUserCookie(), excludeVars, oldCart);
+oldVars = hashNew(10);
+cartEmptyShell(cartMain, hUserCookie(), excludeVars, oldVars);
 return 0;
 }

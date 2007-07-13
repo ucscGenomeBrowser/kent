@@ -118,7 +118,7 @@
 #endif
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1368 2007/07/06 22:15:30 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1369 2007/07/13 22:56:41 angie Exp $";
 
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
@@ -14524,8 +14524,7 @@ cart = theCart;
 /* Be careful though, it breaks if custom track
  * is more than 4k */
 /*state = cgiUrlString(); printf("State: %s\n", state->string);   */
-getDbAndGenome(cart, &database, &organism);
-saveDbAndGenome(cart, database, organism);
+getDbAndGenome(cart, &database, &organism, oldVars);
 
 protDbName = hPdbFromGdb(database);
 debugTmp = cartUsualString(cart, "hgDebug", "off");
@@ -14643,7 +14642,7 @@ htmlPushEarlyHandlers();
 cgiSpoof(&argc, argv);
 htmlSetBackground(hBackgroundImage());
 htmlSetStyle("<LINK REL=\"STYLESHEET\" HREF=\"../style/HGStyle.css\" TYPE=\"text/css\">"); 
-oldVars = hashNew(8);
+oldVars = hashNew(10);
 cartHtmlShell("UCSC Genome Browser v"CGI_VERSION, doMiddle, hUserCookie(), excludeVars, oldVars);
 if (measureTiming)
     {
