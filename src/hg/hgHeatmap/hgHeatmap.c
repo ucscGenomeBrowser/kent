@@ -20,8 +20,9 @@
 #include "trackLayout.h"
 #include "web.h"
 #include "microarray.h"
+#include "hgChromGraph.h"
 
-static char const rcsid[] = "$Id: hgHeatmap.c,v 1.6 2007/07/13 22:56:41 angie Exp $";
+static char const rcsid[] = "$Id: hgHeatmap.c,v 1.7 2007/07/14 22:50:36 jzhu Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -90,6 +91,7 @@ return list;
 struct genoHeatmap *getDbHeatmaps(struct sqlConnection *conn)
 /* Get graphs defined in database. */
 {
+/* hardcoded for demo */
 char* trackName="cnvLungBroadv2";
 struct trackDb *tdb;
 tdb = hMaybeTrackInfo(conn, trackName);
@@ -276,7 +278,12 @@ for (ref = ghList; ref != NULL; ref = ref->next)
     totalHeight += experimentCount(name) * experimentHeight();
     totalHeight += spacing;
     }
+
+/* hard coded */
+totalHeight += chromGraphHeight();
+
 totalHeight += betweenRowPad;
+
 return totalHeight;
 }
 

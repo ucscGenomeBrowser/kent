@@ -6,7 +6,7 @@
 
 #include "common.h"
 #include "hgHeatmap.h"
-
+#include "chromGraph.h"
 #include "bed.h"
 #include "cart.h"
 #include "customTrack.h"
@@ -24,8 +24,9 @@
 #include "web.h"
 #include "cytoBand.h"
 #include "hCytoBand.h"
+#include "hgChromGraph.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.6 2007/07/13 06:57:34 jzhu Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.7 2007/07/14 22:50:36 jzhu Exp $";
 
 /* Page drawing stuff. */
 
@@ -69,6 +70,42 @@ struct bed *tupleList = NULL;
 while ((row = sqlNextRow(sr)) != NULL)
     {
     tuple = bedLoadN(row+1, 15);
+    slAddHead(&tupleList, tuple);
+    }
+sqlFreeResult(&sr);
+sqlDisconnect(&conn);
+return tupleList;
+}
+
+struct chromGraph *getChromGraph (char* database, char* tableName, char* chromName)
+/* get chromGraph data for each chromosome */
+{
+if (tableName == NULL)
+    return NULL;
+
+/* get the data from the database */
+char **row = NULL;
+char query[512];
+query[0] = '\0';
+
+safef(query, sizeof(query),
+     "select * from %s where chrom = \"%s\" \n",
+      tableName, chromName);
+
+struct sqlConnection *conn;
+
+if (sameWord(database, CUSTOM_TRASH))
+    conn = sqlCtConn(TRUE);
+else
+    conn = sqlConnect(database);
+
+struct sqlResult *sr = sqlGetResult(conn, query);
+struct chromGraph *tuple = NULL;
+struct chromGraph *tupleList = NULL;
+
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    tuple = chromGraphLoad(row);
     slAddHead(&tupleList, tuple);
     }
 sqlFreeResult(&sr);
@@ -124,6 +161,96 @@ for (i=0; i<=steps; ++i)
     }
 }
 
+/* drawChromGraph in hgHeatmap */
+void drawChromGraphSimple (struct vGfx *vg, char* database, 
+			   struct genoLay *gl, char *tableName, int yOff, Color color,
+			   boolean leftLabel, boolean rightLabel, boolean firstInRow)
+{
+struct genoLayChrom *chrom=NULL;
+struct chromGraph *cg=NULL, *icg=NULL;
+double val;
+
+double pixelsPerBase = 1.0/gl->basesPerPixel;
+
+int x,lastX;
+int y,lastY;
+int start,lastStart;
+double gMin =  chromGraphMin();
+double gMax = chromGraphMax();
+double height = chromGraphHeight();
+double gScale = height/(gMax-gMin);
+int maxGapToFill = chromGraphMaxGapToFill();
+
+vgUnclip(vg);
+
+/* Draw graphs on each chromosome */
+for(chrom = gl->chromList; chrom; chrom = chrom->next)
+    {
+    int chromX = chrom->x, chromY = chrom->y;
+
+    cg = getChromGraph (database, tableName, chrom->fullName);
+    if (cg== NULL)
+	continue;
+
+    /* lable , zero line */
+    y = (height - (0 - gMin)*gScale) + chromY+yOff ;
+    int width = 10;
+    if (! refOnList(gl->rightList, chrom))
+	/* left side */
+	x = chrom->x  -width;
+    else
+	/* right side */
+	x = chrom->x + chrom->size *pixelsPerBase;
+
+    vgBox(vg, x,  y , width, 1, color); 
+ 
+    /* Handle first point as special case here, so don't
+     * have to test for first point in inner loop. */
+    val = cg->val;
+
+    /* within a boundary */
+    if(val > gMax)
+	val = gMax;
+    else if (val < gMin)
+	val = gMin;
+
+    start = lastStart = cg->chromStart;
+    x = lastX = pixelsPerBase*start + chromX;
+    y = lastY = (height - (val - gMin)*gScale) + chromY+yOff ;
+
+    vgDot(vg, x, y, color);
+    cg= cg->next;
+
+    /* Draw rest of points, connecting with line to previous point
+     * if not too far off. */
+    for(icg = cg; icg!=NULL ; icg = icg->next)
+	{
+       	start = icg->chromStart;
+	val = icg->val;
+
+	if( val > gMax)
+	    val = gMax;
+	else if (val < gMin)
+	    val = gMin;
+
+	x = pixelsPerBase*start + chromX;
+	y = (height - (val - gMin)*gScale) + chromY+yOff;
+
+        if (x != lastX || y != lastY)
+	    {
+	    if (-(start - lastStart) <= maxGapToFill)
+		vgLine(vg, lastX, lastY, x, y, color);
+	    else
+		vgDot(vg, x, y, color);
+	    }
+	lastX = x;
+	lastY = y;
+	lastStart = start;
+	}
+    chromGraphFree(&cg);
+    }
+return;
+}
 
 void drawChromHeatmaps(struct vGfx *vg, char* database, 
 		       struct genoLay *gl, char *chromHeatmap, int yOff, 
@@ -156,8 +283,7 @@ for(chrom = gl->chromList; chrom; chrom = chrom->next)
    
     int chromX = chrom->x, chromY = chrom->y;
 
-    vgSetClip(vg, chromX, chromY+yOff, chrom->width, heatmapHeight(chromHeatmap));
-
+//   vgSetClip(vg, chromX, chromY+yOff, chrom->width, heatmapHeight(chromHeatmap));
     vgBox(vg, chromX, chromY+yOff , chrom->width, heatmapHeight(chromHeatmap), MG_GRAY);
 
     for(nb = gh; nb; nb = nb->next)
@@ -220,7 +346,6 @@ if (psOutput)
     }
 else
     {
-
     /* Create gif file and make reference to it in html. */
     trashDirFile(&gifTn, "hgh", "ideo", ".gif");
     vg = vgOpenGif(gl->picWidth, gl->picHeight, gifTn.forCgi);
@@ -237,7 +362,6 @@ genoLayDrawChromLabels(gl, vg, MG_BLACK);
 genoLayDrawBandedChroms(gl, vg, database, conn, 
 	shadesOfGray, maxShade, MG_BLACK);
 
-
 struct genoHeatmap *gh= NULL;
 struct slRef *ref= NULL;
 char *db, *tableName;
@@ -249,9 +373,25 @@ for (ref = ghList; ref != NULL; ref = ref->next)
     gh= ref->val;
     db = gh->database;
     tableName = gh->name;
+
     drawChromHeatmaps(vg, db, gl, tableName, 
 		       totalYOff + yOffset, TRUE, TRUE, TRUE);
     totalYOff += heatmapHeight(tableName) + spacing;
+
+    /* hard-code for demo.
+       also draw summary ChromGraph when the tableName is cnvBroadLungv2 
+       the space for the CrhomGraph is hardcoded here chromGraphOffset=10    
+    */
+    if (sameWord(tableName,"cnvLungBroadv2"))
+	{
+	Color color = chromGraphColor();
+	char summaryTable[512];
+	safef(summaryTable, sizeof(summaryTable),"cnvLungBroadv2_summary");
+	drawChromGraphSimple (vg, db, gl, summaryTable, 
+			      totalYOff + yOffset, color, TRUE, TRUE, TRUE);
+	totalYOff += chromGraphHeight() + spacing;
+	}
+
     }
 vgClose(&vg);
 }
