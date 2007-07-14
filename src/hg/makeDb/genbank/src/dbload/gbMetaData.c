@@ -33,9 +33,13 @@
 #include "gbSql.h"
 #include "gbMiscDiff.h"
 
-static char const rcsid[] = "$Id: gbMetaData.c,v 1.40 2007/04/20 22:54:58 markd Exp $";
+static char const rcsid[] = "$Id: gbMetaData.c,v 1.41 2007/07/14 00:16:02 markd Exp $";
 
-// FIXME: move mrna, otherse to objects.
+/* mol enum shared by gbCdnaInfo and refSeqStatus */
+#define molEnumDef \
+  "mol enum('DNA', 'RNA', 'ds-RNA', 'ds-mRNA', 'ds-rRNA', 'mRNA', 'ms-DNA', 'ms-RNA',"\
+  "         'rRNA', 'scRNA', 'snRNA', 'snoRNA', 'ss-DNA', 'ss-RNA', 'ss-snoRNA', 'tRNA',"\
+  "         'cRNA', 'ss-cRNA', 'ds-cRNA') not null,\n"
 
 static char* gbCdnaInfoCreate =
 /* This keeps track of mRNA. */
@@ -61,9 +65,7 @@ static char* gbCdnaInfoCreate =
   "productName int unsigned not null,"            /* Ref in productName table. */
   "author int unsigned not null,"                 /* Ref in author table. */
   "gi int unsigned not null,"                     /* NCBI GI number. */
-  "mol enum('DNA', 'RNA', 'ds-RNA', 'ds-mRNA', 'ds-rRNA', 'mRNA', 'ms-DNA', 'ms-RNA',"
-  "         'rRNA', 'scRNA', 'snRNA', 'snoRNA', 'ss-DNA', 'ss-RNA', 'ss-snoRNA', 'tRNA',"
-  "         'cRNA', 'ss-cRNA') not null,\n"
+  molEnumDef
   /* Extra indices. */
   "unique(acc),"
   "index(type),"
@@ -82,8 +84,7 @@ static char* refSeqStatusCreate =
 "CREATE TABLE refSeqStatus ("
 "    mrnaAcc varchar(255) not null,"
 "    status enum('Unknown', 'Reviewed', 'Validated', 'Provisional', 'Predicted', 'Inferred') not null,"
-"    mol enum('DNA', 'RNA', 'ds-RNA', 'ds-mRNA', 'ds-rRNA', 'mRNA', 'ms-DNA', 'ms-RNA',"
-"             'rRNA', 'scRNA', 'snRNA', 'snoRNA', 'ss-DNA', 'ss-RNA', 'ss-snoRNA', 'tRNA') not null,\n"
+molEnumDef
 "    PRIMARY KEY(mrnaAcc))";
 
 static char* refLinkCreate = 

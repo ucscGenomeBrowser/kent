@@ -7,7 +7,7 @@
 #include "gbGenome.h"
 #include "hash.h"
 
-static char const rcsid[] = "$Id: gbDefs.c,v 1.6 2007/04/20 22:54:58 markd Exp $";
+static char const rcsid[] = "$Id: gbDefs.c,v 1.7 2007/07/14 00:16:02 markd Exp $";
 
 /* Directories */
 char* GB_PROCESSED_DIR = "data/processed";
@@ -41,6 +41,7 @@ static struct {
     {mol_tRNA,      "tRNA"},
     {mol_cRNA,      "cRNA"},
     {mol_ss_cRNA,   "ss-cRNA"},
+    {mol_ds_cRNA,   "ds-cRNA"},
     {-1,            NULL}
 };
 static struct hash *molSymToType = NULL;
