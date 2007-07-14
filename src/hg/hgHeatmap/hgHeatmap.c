@@ -22,7 +22,7 @@
 #include "microarray.h"
 #include "hgChromGraph.h"
 
-static char const rcsid[] = "$Id: hgHeatmap.c,v 1.7 2007/07/14 22:50:36 jzhu Exp $";
+static char const rcsid[] = "$Id: hgHeatmap.c,v 1.8 2007/07/14 23:11:12 jzhu Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -374,7 +374,7 @@ void dispatchLocation()
  * then we call hghDoUsualHttp. */
 {
 struct sqlConnection *conn = NULL;
-getDbAndGenome(cart, &database, &genome, oldVars);
+getDbAndGenome(cart, &database, &genome); //, oldVars);
 hSetDb(database);
 cartSetString(cart, "db", database); /* Some custom tracks code needs this */
 conn = hAllocConn();
