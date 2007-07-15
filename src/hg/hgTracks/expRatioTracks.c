@@ -1218,7 +1218,18 @@ else
 	if (x2 > insideWidth-1) 
 	    x2 = insideWidth-1;
 	w = x2 - x1 + 1;
-	mapBoxHcTwoItems(probe->start, probe->end, x1+xOff, y, w, totalHeight, tg->mapName, probe->name, probe->name, probe->name);
+	if (sameString(tg->mapName, "expRatioUCSFDemo"))
+	    {
+            struct slList *item;
+            for (item = tg->items; item != NULL; item = item->next)
+                {
+                char *name = tg->itemName(tg, item);
+                mapBoxHcTwoItems(probe->start, probe->end, x1+xOff, y, w, lineHeight, tg->mapName, name, name, name); 
+                y = y + lineHeight;
+                }
+	    }
+	else 
+	    mapBoxHcTwoItems(probe->start, probe->end, x1+xOff, y, w, totalHeight, tg->mapName, probe->name, probe->name, probe->name);
 	}
     }
 }
@@ -1486,3 +1497,4 @@ tg->drawLeftLabels = expRatioDrawLeftLabels;
 tg->loadItems = ctLoadMultScoresBed;
 tg->trackFilter = lfsFromExpRatio;
 }
+

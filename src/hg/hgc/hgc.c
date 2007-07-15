@@ -208,7 +208,7 @@
 #include "omicia.h"
 #include "atomDb.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1313 2007/07/10 07:02:30 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1314 2007/07/15 23:05:34 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -18657,6 +18657,13 @@ genericHeader(tdb, item);
 printTrackHtml(tdb);
 }
 
+void doUCSFDemo(struct trackDb *tdb, char *item)
+{
+genericHeader(tdb, item);
+printf("Work with Jing for details");
+printTrackHtml(tdb);
+}
+
 struct trackDb *tdbForTableArg()
 /* get trackDb for track passed in table arg */
 {
@@ -19661,7 +19668,10 @@ else if (sameString("omiciaAuto", track) || sameString("omiciaHand", track))
     {
     doOmicia(tdb, item);
     }
-
+else if (sameString("expRatioUCSFDemo", track))
+    {
+    doUCSFDemo(tdb, item);
+    }
 
 /* Lowe Lab Stuff */
 #ifdef LOWELAB
