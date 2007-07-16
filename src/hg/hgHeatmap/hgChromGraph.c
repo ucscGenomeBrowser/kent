@@ -8,22 +8,34 @@ int chromGraphHeight()
 return 30;
 }
 
-double chromGraphMax()
+double chromGraphMax(char* tableName)
 {
-return 0.4; 
+if (sameWord (tableName, "cnvLungBroadv2_summary"))
+    return 0.4; 
+if (sameWord (tableName, "cnvLungBroadv2_ave100K_summary"))
+    return 0.1;
+return 0.5;
 }
 
-double chromGraphMin()
+double chromGraphMin(char* tableName)
 {
-return -0.5; 
+if (sameWord (tableName, "cnvLungBroadv2_summary"))
+    return -0.5; 
+if (sameWord (tableName, "cnvLungBroadv2_ave100K_summary"))
+    return -0.1;
+return -0.5;
 }
 
-int chromGraphMaxGapToFill()
+int chromGraphMaxGapToFill(char* tableName)
 {
 return 1000000;
 }
 
-Color chromGraphColor()
+Color chromGraphColor(char* tableName)
 {
+if (sameWord (tableName, "cnvLungBroadv2_summary"))
+    return MG_BLUE;
+if (sameWord (tableName, "cnvLungBroadv2_ave100K_summary"))
+    return MG_BLACK;
 return MG_BLUE;
 }

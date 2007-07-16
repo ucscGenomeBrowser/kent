@@ -2,7 +2,7 @@
  * on the top and the graphic. */
 
 #define EXPR_DATA_SHADES 16
-#define DEFAULT_MAX_DEVIATION 2.0
+#define DEFAULT_MAX_DEVIATION 0.7
 
 #include "common.h"
 #include "hgHeatmap.h"
@@ -26,7 +26,7 @@
 #include "hCytoBand.h"
 #include "hgChromGraph.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.7 2007/07/14 22:50:36 jzhu Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.8 2007/07/16 22:35:18 jzhu Exp $";
 
 /* Page drawing stuff. */
 
@@ -124,16 +124,21 @@ if (! e)
 struct genoHeatmap *gh = e->val;
 struct trackDb *tdb = gh->tDb;
 
-char *es = trackDbSetting(tdb, "expScale");
-
-if(*es)
+if (tdb)
     {
-    return atof(es);
+    char *es = trackDbSetting(tdb, "expScale");
+    
+    if(*es)
+	{
+	return atof(es);
+	}
+    else
+	{
+	return DEFAULT_MAX_DEVIATION;
+	}
     }
 else
-    {
     return DEFAULT_MAX_DEVIATION;
-    }
 }
 
 
@@ -163,7 +168,7 @@ for (i=0; i<=steps; ++i)
 
 /* drawChromGraph in hgHeatmap */
 void drawChromGraphSimple (struct vGfx *vg, char* database, 
-			   struct genoLay *gl, char *tableName, int yOff, Color color,
+			   struct genoLay *gl, char *tableName, int yOff,
 			   boolean leftLabel, boolean rightLabel, boolean firstInRow)
 {
 struct genoLayChrom *chrom=NULL;
@@ -175,12 +180,12 @@ double pixelsPerBase = 1.0/gl->basesPerPixel;
 int x,lastX;
 int y,lastY;
 int start,lastStart;
-double gMin =  chromGraphMin();
-double gMax = chromGraphMax();
+double gMin =  chromGraphMin(tableName);
+double gMax = chromGraphMax(tableName);
 double height = chromGraphHeight();
 double gScale = height/(gMax-gMin);
-int maxGapToFill = chromGraphMaxGapToFill();
-
+int maxGapToFill = chromGraphMaxGapToFill(tableName);
+Color color = chromGraphColor(tableName);
 vgUnclip(vg);
 
 /* Draw graphs on each chromosome */
@@ -384,14 +389,22 @@ for (ref = ghList; ref != NULL; ref = ref->next)
     */
     if (sameWord(tableName,"cnvLungBroadv2"))
 	{
-	Color color = chromGraphColor();
 	char summaryTable[512];
+
 	safef(summaryTable, sizeof(summaryTable),"cnvLungBroadv2_summary");
 	drawChromGraphSimple (vg, db, gl, summaryTable, 
-			      totalYOff + yOffset, color, TRUE, TRUE, TRUE);
+			      totalYOff + yOffset,  TRUE, TRUE, TRUE);
 	totalYOff += chromGraphHeight() + spacing;
 	}
+    if (sameWord(tableName,"cnvLungBroadv2_ave100K"))
+	{
+	char summaryTable[512];
 
+	safef(summaryTable, sizeof(summaryTable),"cnvLungBroadv2_ave100K_summary");
+	drawChromGraphSimple (vg, db, gl, summaryTable, 
+			      totalYOff + yOffset,  TRUE, TRUE, TRUE);
+	totalYOff += chromGraphHeight() + spacing;
+	}
     }
 vgClose(&vg);
 }

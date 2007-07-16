@@ -22,7 +22,7 @@
 #include "microarray.h"
 #include "hgChromGraph.h"
 
-static char const rcsid[] = "$Id: hgHeatmap.c,v 1.8 2007/07/14 23:11:12 jzhu Exp $";
+static char const rcsid[] = "$Id: hgHeatmap.c,v 1.9 2007/07/16 22:35:18 jzhu Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -92,26 +92,32 @@ struct genoHeatmap *getDbHeatmaps(struct sqlConnection *conn)
 /* Get graphs defined in database. */
 {
 /* hardcoded for demo */
-char* trackName="cnvLungBroadv2";
-struct trackDb *tdb;
-tdb = hMaybeTrackInfo(conn, trackName);
-if (tdb == NULL)
-    return NULL;
-
+char *trackNames[2]={"cnvLungBroadv2_ave100K", "cnvLungBroadv2"};
+char *trackName;
 struct genoHeatmap *list = NULL, *gh;
-AllocVar(gh);
-gh->name = tdb->tableName;
-gh->shortLabel = tdb->shortLabel;
-gh->longLabel = tdb->longLabel;
-gh->tDb = tdb;
-gh->database= database;
-/*microarray specific settings*/
-struct microarrayGroups *maGs = maGetTrackGroupings(database, tdb);
-struct maGrouping *allA= maGs->allArrays;
-gh->expCount = allA->size;
 
-slAddHead(&list,gh);
+int i;
+for (i=0; i<2; i++)
+    {
+    trackName = trackNames[i];
+    struct trackDb *tdb;
+    tdb = hMaybeTrackInfo(conn, trackName);
+    if (!tdb)
+	continue;
+    AllocVar(gh);
 
+    gh->name = tdb->tableName;
+    gh->shortLabel = tdb->shortLabel;
+    gh->longLabel = tdb->longLabel;
+    gh->tDb = tdb;
+    /*microarray specific settings*/
+    struct microarrayGroups *maGs = maGetTrackGroupings(database, tdb);
+    struct maGrouping *allA= maGs->allArrays;
+    gh->expCount = allA->size;
+    gh->database= database;
+
+    slAddHead(&list,gh);
+    }
 return list;
 }
 
@@ -189,8 +195,12 @@ e = hashLookup(ghHash, heatmap);
 
 struct genoHeatmap *gh = e->val;
 struct trackDb *tdb = gh->tDb;
+char *pS;
 
-char *pS = trackDbSetting(tdb, trackOrderName);
+if (tdb)
+    pS = trackDbSetting(tdb, trackOrderName);
+else
+    pS = NULL;
 
 int orderCount = experimentCount(heatmap);
 int* chromOrder;
@@ -268,6 +278,7 @@ int selectedHeatmapHeight()
 struct genoHeatmap *gh= NULL;
 struct slRef *ref= NULL;
 char *name;
+char *database;
 
 int totalHeight=0;
 int spacing =1;
@@ -275,12 +286,15 @@ for (ref = ghList; ref != NULL; ref = ref->next)
     {
     gh= ref->val;
     name = gh->name;
+    database = gh->database;
     totalHeight += experimentCount(name) * experimentHeight();
     totalHeight += spacing;
+    
+    /* hard coded */
+    if ( ! (sameWord (database,CUSTOM_TRASH)))
+	totalHeight += chromGraphHeight();
     }
 
-/* hard coded */
-totalHeight += chromGraphHeight();
 
 totalHeight += betweenRowPad;
 

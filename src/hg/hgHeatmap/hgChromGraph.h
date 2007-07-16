@@ -11,12 +11,12 @@
 
 int chromGraphHeight();
 
-double chromGraphMax();
+double chromGraphMax(char* tableName);
 
-double chromGraphMin();
+double chromGraphMin(char* tableName);
 
-int chromGraphMaxGapToFill();
+int chromGraphMaxGapToFill(char* tableName);
 
-Color chromGraphColor();
+Color chromGraphColor(char* tableName);
 
 #endif /* HGCHROMGRAPH_H */
