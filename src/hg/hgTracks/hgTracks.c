@@ -118,7 +118,7 @@
 #endif
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1370 2007/07/16 22:06:09 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1371 2007/07/16 22:42:19 hiram Exp $";
 
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
@@ -13008,6 +13008,11 @@ if (sameString(database, "oryLat1"))
     {
     hPrintf("<TD ALIGN=CENTER><A HREF=\"http://medaka.utgenome.org/browser_ens_jump.php?revision=version1.0&chr=chromosome%s&start=%d&end=%d\" TARGET=_blank class=\"topbar\">%s</A></TD>",
         skipChr(chromName), winStart+1, winEnd, "UTGB");
+    }
+if (sameString(database, "cb3"))
+    {
+    hPrintf("<TD ALIGN=CENTER><A HREF=\"http://www.wormbase.org/db/seq/gbrowse/briggsae?name=%s:%d-%d\" TARGET=_blank class=\"topbar\">%s</A></TD>", 
+        skipChr(chromName), winStart+1, winEnd, "WormBase");
     }
 if (sameString(database, "ce4"))
     {
