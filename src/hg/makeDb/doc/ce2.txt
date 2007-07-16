@@ -2735,3 +2735,81 @@ chainSome $(path1)
     rm *.axt sortedaxtNet/axtNetCb1.tab 
     cd /cluster/store5/worm/ce2/bed/blastz.cb1.2004-04-12/axtChrom/maf
     gzip sortedaxtNet/*.axt
+
+#######################################################################
+## LIFTOVER To Ce4 (DONE - 2007-07-16 Hiram)
+    ssh kkr1u00
+    cd /cluster/data/ce4
+    mkdir nib
+    cd nib
+    for C in I II III IV V X M
+do
+    faToNib -softMask ../goldenPath/chromosomes/chr${C}.fa.gz chr${C}.nib
+done
+    #	Writing 15072419 bases in 7536218 bytes
+    #	Writing 15279316 bases in 7639666 bytes
+    #	Writing 13783681 bases in 6891849 bytes
+    #	Writing 17493784 bases in 8746900 bytes
+    #	Writing 20919398 bases in 10459707 bytes
+    #	Writing 17718852 bases in 8859434 bytes
+    #	Writing 13794 bases in 6905 bytes
+
+    $HOME/kent/src/hg/makeDb/makeLoChain/makeLoChain-split.csh \
+    	ce4 /cluster/data/ce4/nib
+    # as it says, DO THIS NEXT:
+    ssh kk
+    #	if bin/scripts is not in your PATH, add it for this command:
+    PATH=$PATH:/cluster/bin/scripts \
+    $HOME/kent/src/hg/makeDb/makeLoChain/makeLoChain-align.csh \
+	ce2 /cluster/data/ce2/nib ce4 /iscratch/i/ce4/split10k \
+	/cluster/data/ce4/jkStuff/11.ooc
+    # as it says, DO THIS NEXT:
+    cd /cluster/data/ce2/bed/blat.ce4.2007-07-16/run
+    para try, check, push, check, ...
+# Completed: 49 of 49 jobs
+# CPU time in finished jobs:      14998s     249.97m     4.17h    0.17d  0.000 y
+# IO & Wait Time:                   405s       6.74m     0.11h    0.00d  0.000 y
+# Average job time:                 314s       5.24m     0.09h    0.00d
+# Longest finished job:             706s      11.77m     0.20h    0.01d
+# Submission to last job:           728s      12.13m     0.20h    0.01d
+
+    # as it says, DO THIS NEXT:
+    #	this does the liftUp and makes the psl files
+    #	kkr1u00 is down at this time, fixup this script to work on kkr3u00
+    ssh kkr3u00
+    cd /cluster/data/ce2/bed
+    ln -s blat.ce4.2007-07-16 ce4
+    time $HOME/kent/src/hg/makeDb/makeLoChain/makeLoChain-lift.csh ce2 ce4
+    #	real    1m1.780s
+    # as it says, DO THIS NEXT:
+    #	the prepares the batch to run for the chaining
+    ssh kki
+    time $HOME/kent/src/hg/makeDb/makeLoChain/makeLoChain-chain.csh \
+	ce2 /cluster/data/ce2/nib ce4 /cluster/data/ce4/nib
+    # as it says, DO THIS NEXT:
+    #	running the chain batch
+    cd /cluster/data/ce2/bed/blat.ce4.2007-07-16/chainRun
+    para try, check, push, check, ...
+# Completed: 7 of 7 jobs
+# CPU time in finished jobs:         19s       0.31m     0.01h    0.00d  0.000 y
+# IO & Wait Time:                    17s       0.29m     0.00h    0.00d  0.000 y
+# Average job time:                   5s       0.09m     0.00h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:               7s       0.12m     0.00h    0.00d
+# Submission to last job:             7s       0.12m     0.00h    0.00d
+
+    ssh kkstore02
+    $HOME/kent/src/hg/makeDb/makeLoChain/makeLoChain-net.csh ce2 ce4
+    #	Created /cluster/data/ce2/bed/liftOver/ce2ToCe4.over.chain.gz
+    # as it says, DO THIS NEXT:
+    ssh hgwdev
+    $HOME/kent/src/hg/makeDb/makeLoChain/makeLoChain-load.csh ce2 ce4
+    #	It says this:
+    # 	Now, add link for
+    #	/usr/local/apache/htdocs/goldenPath/ce2/liftOver/ce2ToCe4.over.chain
+    #	to hgLiftOver
+    #	But I believe that link was already done:
+    cd /gbdb/ce2/liftOver
+    ls -og ce2ToCe4*
+    #	lrwxrwxrwx  1 53 Jun  5 16:35 ce2ToCe4.over.chain.gz ->
+    #		/cluster/data/ce2/bed/liftOver/ce2ToCe4.over.chain.gz
