@@ -1,407 +1,4 @@
-track encodeGencodeGeneJun05
-shortLabel Gencode Genes Jun05
-longLabel Gencode Gene Annotations
-dataVersion ENCODE June 2005 Freeze
-group encodeGenes
-color 73,76,73
-priority 10.8
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-visibility hide
-type genePred
-cdsDrawDefault genomic\ codons
-baseColorUseCds given
-baseColorDefault genomicCodons
-itemClassTbl gencodeGeneClass
-geneClasses Artifact Known Novel_CDS Novel_transcript Novel_transcript_gencode_conf Putative Putative_gencode_conf TEC Processed_pseudogene Unprocessed_pseudogene
-gClass_Known 33,91,51
-gClass_Novel_CDS 33,91,51
-gClass_Novel_transcript_gencode_conf 33,91,51
-gClass_Putative_gencode_conf 33,91,51
-gClass_Novel_transcript  84,188,0
-gClass_TEC  84,188,0
-gClass_Putative  84,188,0
-gClass_Artifact 163,168,163
-gClass_Processed_pseudogene 0,91,191
-gClass_Unprocessed_pseudogene 0,91,191
-origAssembly hg17
-
-track encodeGencodeIntronJun05
-shortLabel Gencode Introns Jun05
-longLabel Gencode Intron Validation (Jun 2005)
-dataVersion ENCODE June 2005 Freeze
-group encodeGenes
-priority 10.9
-# NOTE: missing regions
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr8,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr9,chrX
-visibility hide
-type bed 6 +
-origAssembly hg17
-
-track encodeGisRnaPet
-compositeTrack on
-shortLabel GIS PET RNA
-longLabel Genome Institute of Singapore PET of PolyA+ RNA
-group encodeGenes
-# NOTE: genome-wide, except randoms and chrY
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX,chrM
-visibility hide
-itemRgb on
-type bed 12
-dataVersion ENCODE Oct 2005 Freeze
-origAssembly hg17
-priority 49.2
-
-    track encodeGisRnaPetMCF7
-    subTrack encodeGisRnaPet
-    shortLabel GIS RNA MCF7
-    longLabel Genome Institute of Singapore PET of PolyA+ RNA (log phase MCF7)
-    priority 1
-
-    track encodeGisRnaPetMCF7Estr
-    subTrack encodeGisRnaPet
-    shortLabel GIS RNA MCF7 Est
-    longLabel Genome Institute of Singapore PET of PolyA+ RNA (estrogen-stim MCF7)
-    priority 2
-
-    track encodeGisRnaPetHCT116
-    subTrack encodeGisRnaPet
-    shortLabel GIS RNA HCT116
-    longLabel Genome Institute of Singapore PET of PolyA+ RNA (5FU-stim HCT116)
-    priority 3
-    color 58,119,40
-
-track encodeAffyRnaSignal
-compositeTrack on
-shortLabel Affy RNA Signal
-longLabel Affymetrix PolyA+ RNA Signal
-group encodeTxLevels
-priority 19.02
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-visibility hide
-type wig -1168.00 1591.5
-spanList 1
-maxHeightPixels 128:16:16
-autoScale off
-viewLimits 0:25
-dataVersion ENCODE Oct 2005 Freeze
-
-    track encodeAffyRnaGm06990Signal
-    subTrack encodeAffyRnaSignal
-    shortLabel Affy RNA GM06990
-    longLabel Affymetrix PolyA+ RNA (GM06990) Signal
-    color 150,90,0
-    priority 1
-
-    track encodeAffyRnaHeLaSignal
-    subTrack encodeAffyRnaSignal
-    shortLabel Affy RNA HeLa
-    longLabel Affymetrix PolyA+ RNA (HeLa) Signal
-    color 220,132,12
-    priority 2
-
-    track encodeAffyRnaHl60SignalHr00
-    subTrack encodeAffyRnaSignal
-    shortLabel Affy RNA RA 0h
-    longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL-60, 0hrs) Signal
-    color 50,50,150
-    priority 3
-
-    track encodeAffyRnaHl60SignalHr02
-    subTrack encodeAffyRnaSignal
-    shortLabel Affy RNA RA 2h
-    longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL-60, 2hrs) Signal
-    color 50,50,180
-    priority 4
-
-    track encodeAffyRnaHl60SignalHr08
-    subTrack encodeAffyRnaSignal
-    shortLabel Affy RNA RA 8h
-    longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL-60, 8hrs) Signal
-    color 50,50,210
-    priority 5
-
-    track encodeAffyRnaHl60SignalHr32
-    subTrack encodeAffyRnaSignal
-    shortLabel Affy RNA RA 32h
-    longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL-60, 32hrs) Signal
-    color 50,50,240
-    priority 6
-
-track encodeAffyRnaTransfrags
-compositeTrack on
-shortLabel Affy Transfrags
-longLabel Affymetrix PolyA+ RNA Transfrags
-group encodeTxLevels
-priority 19.03
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-visibility hide
-type bed 3 .
-dataVersion ENCODE Oct 2005 Freeze
-
-    track encodeAffyRnaGm06990Sites
-    subTrack encodeAffyRnaTransfrags
-    shortLabel Affy RNA GM06990
-    longLabel Affymetrix PolyA+ RNA (GM06990) Sites 
-    color 150,90,0
-    priority 1
-
-    track encodeAffyRnaHeLaSites
-    subTrack encodeAffyRnaTransfrags
-    shortLabel Affy RNA HeLa
-    longLabel Affymetrix PolyA+ RNA (HeLa) Sites 
-    color 220,132,12
-    priority 2
-
-    track encodeAffyRnaHl60SitesHr00
-    subTrack encodeAffyRnaTransfrags
-    shortLabel Affy RNA RA 0h
-    longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL-60, 0hrs) Sites 
-    color 50,50,150
-    priority 3
-
-    track encodeAffyRnaHl60SitesHr02
-    subTrack encodeAffyRnaTransfrags
-    shortLabel Affy RNA RA 2h
-    longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL-60, 2hrs) Sites 
-    color 50,50,180
-    priority 4
-
-    track encodeAffyRnaHl60SitesHr08
-    subTrack encodeAffyRnaTransfrags
-    shortLabel Affy RNA RA 8h
-    longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL-60, 8hrs) Sites 
-    color 50,50,210
-    priority 5
-
-    track encodeAffyRnaHl60SitesHr32
-    subTrack encodeAffyRnaTransfrags
-    shortLabel Affy RNA RA 32h
-    longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL-60, 32hrs) Sites 
-    color 50,50,240
-    priority 6
-
-track encodeYaleAffyRNATransMap
-compositeTrack on
-shortLabel Yale RNA
-longLabel Yale RNA Transcript Map (Neutrophil, Placenta and NB4 cells)
-group encodeTxLevels
-priority 30.0
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-visibility hide
-type wig -2658 3275
-spanList 1
-maxHeightPixels 128:16:16
-viewLimits 0:100
-autoScale Off
-windowingFunction mean
-dataVersion ENCODE Oct 2005 Freeze
-
-    track encodeYaleAffyNeutRNATransMap
-    subTrack encodeYaleAffyRNATransMap
-    shortLabel Yale RNA Neutro
-    longLabel Yale Neutrophil RNA Transcript Map
-    priority 1
-    color 50,100,50
-    subGroups celltype=neutro 
-
-    track encodeYaleAffyPlacRNATransMap
-    subTrack encodeYaleAffyRNATransMap
-    shortLabel Yale RNA Plcnta
-    longLabel Yale Placenta RNA Transcript Map
-    priority 2
-    color 50,50,150
-    subGroups celltype=plac
-
-    track encodeYaleAffyNB4RARNATransMap
-    subTrack encodeYaleAffyRNATransMap
-    shortLabel Yale RNA NB4 RA
-    longLabel Yale NB4 RNA Transcript Map, Treated with Retinoic Acid
-    priority 3
-    color 150,50,50
-    subGroups celltype=nb4
-
-    track encodeYaleAffyNB4TPARNATransMap
-    subTrack encodeYaleAffyRNATransMap
-    shortLabel Yale RNA NB4 TPA
-    longLabel Yale NB4 RNA Transcript Map, Treated with 12-O-tetradecanoylphorbol-13 Acetate (TPA)
-    priority 4
-    color 120,50,50
-    subGroups celltype=nb4
-
-    track encodeYaleAffyNB4UntrRNATransMap
-    subTrack encodeYaleAffyRNATransMap
-    shortLabel Yale RNA NB4 Un
-    longLabel Yale NB4 RNA Transcript Map, Untreated
-    priority 5
-    color 90,50,50
-    subGroups celltype=nb4
-
-    track encodeYaleAffyHELAS3PolyARNATranscriptMap
-    subTrack encodeYaleAffyRNATransMap
-    shortLabel Yale RNA HELA PolyA
-    longLabel Yale HELA S3 PolyA RNA Transcript Map
-    priority 6
-    color 50,50,150
-    subGroups celltype=hela
-
-    track encodeYaleAffyHELAS3TotalRNATranscriptMap
-    subTrack encodeYaleAffyRNATransMap
-    shortLabel Yale RNA HELA Total
-    longLabel Yale HELA S3 Total RNA Transcript Map
-    priority 7
-    color 50,50,150
-    subGroups celltype=hela
-
-track encodeYaleAffyRNATars
-compositeTrack on
-shortLabel Yale TAR
-longLabel Yale RNA Transcriptionally Active Regions (TARs)
-group encodeTxLevels
-priority 31.0
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-visibility hide
-type bed 4 .
-dataVersion ENCODE Oct 2005 Freeze
-
-    track encodeYaleAffyNeutRNATars
-    subTrack encodeYaleAffyRNATars
-    shortLabel Yale TAR Neutro
-    longLabel Yale Neutrophil RNA Transcriptionally Active Region (TAR)
-    priority 1
-    color 50,100,50
-    subGroups celltype=neutro
-    url http://dart.gersteinlab.org/cgi-bin/ar/lookup.cgi?acc=$$
-    urlLabel Yale DART Link:
-
-    track encodeYaleAffyPlacRNATars
-    subTrack encodeYaleAffyRNATars
-    shortLabel Yale TAR Plcnta
-    longLabel Yale Placenta RNA Transcriptionally Active Region
-    priority 12
-    color 50,50,150
-    subGroups celltype=plac
-    url http://dart.gersteinlab.org/cgi-bin/ar/lookup.cgi?acc=$$
-    urlLabel Yale DART Link:
-
-    track encodeYaleAffyNB4RARNATars
-    subTrack encodeYaleAffyRNATars
-    shortLabel Yale TAR NB4 RA
-    longLabel Yale NB4 RNA, TAR, Treated with Retinoic Acid
-    priority 13
-    color 150,50,50
-    subGroups celltype=nb4
-    url http://dart.gersteinlab.org/cgi-bin/ar/lookup.cgi?acc=$$
-    urlLabel Yale DART Link:
-
-    track encodeYaleAffyNB4TPARNATars
-    subTrack encodeYaleAffyRNATars
-    shortLabel Yale TAR NB4 TPA
-    longLabel Yale NB4 RNA, TAR, Treated with 12-O-tetradecanoylphorbol-13 Acetate (TPA)
-    priority 14
-    color 120,50,50
-    subGroups celltype=nb4
-    url http://dart.gersteinlab.org/cgi-bin/ar/lookup.cgi?acc=$$
-    urlLabel Yale DART Link:
-
-    track encodeYaleAffyNB4UntrRNATars
-    subTrack encodeYaleAffyRNATars
-    shortLabel Yale TAR NB4 Un
-    longLabel Yale NB4 RNA, TAR, Untreated
-    priority 15
-    color 90,50,50
-    subGroups celltype=nb4
-    url http://dart.gersteinlab.org/cgi-bin/ar/lookup.cgi?acc=$$
-    urlLabel Yale DART Link:
-
-    track encodeYaleAffyHELAS3PolyARNATarsRelaxed
-    subTrack encodeYaleAffyRNATars
-    shortLabel Yale TAR HELA PolyA R
-    longLabel Yale HELA S3 PolyA RNA, TAR, Relaxed
-    priority 16
-    color 50,50,150
-    subGroups celltype=hela
-
-    track encodeYaleAffyHELAS3PolyARNATarsStringent
-    subTrack encodeYaleAffyRNATars
-    shortLabel Yale TAR HELA PolyA S
-    longLabel Yale HELA S3 PolyA RNA, TAR, Stringent
-    priority 17
-    color 50,50,150
-    subGroups celltype=hela
-
-    track encodeYaleAffyHELAS3TotalRNATarsRelaxed
-    subTrack encodeYaleAffyRNATars
-    shortLabel Yale TAR HELA Total R
-    longLabel Yale HELA S3 Total RNA, TAR, Relaxed
-    priority 18
-    color 50,150,50
-    subGroups celltype=hela
-
-    track encodeYaleAffyHELAS3TotalRNATarsStringent
-    subTrack encodeYaleAffyRNATars
-    shortLabel Yale TAR HELA Total S
-    longLabel Yale HELA S3 Total RNA, TAR, Stringent
-    priority 19
-    color 50,150,50
-    subGroups celltype=hela
-
-track encodeStanfordNRSF
-compositeTrack on
-shortLabel Stanf NRSF Tags
-longLabel Stanford NRSF/REST
-group encodeChip
-priority 83
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX,chrY,chrM
-visibility hide
-type bed 6 .
-
-    track encodeStanfordNRSFEnriched
-    subTrack encodeStanfordNRSF
-    shortLabel Stanf NRSF Enriched
-    longLabel Stanford NRSF/REST Enriched
-    priority 1
-    color 0,128,0
-
-    track encodeStanfordNRSFControl
-    subTrack encodeStanfordNRSF
-    shortLabel Stanf NRSF Control
-    longLabel Stanford NRSF/REST Control
-    priority 2
-    color 0,128,0
-
-track encodeStanfordNRSFOverlaps
-compositeTrack on
-shortLabel Stanf NRSF Overlaps
-longLabel Stanford NRSF/REST Overlaps
-group encodeChip
-priority 84
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX,chrY,chrM
-visibility hide
-type bedGraph 4
-
-    track encodeStanfordNRSFCoreOverlaps
-    subTrack encodeStanfordNRSFOverlaps
-    shortLabel Stanf NRSF Core Overlaps
-    longLabel Stanford NRSF/REST Core Overlaps
-    priority 1
-    color 101,201,301
-    maxHeightPixels 128:16:16
-    minLimit 0
-    maxLimit 1000
-    viewLimits 0:1000
-    autoScale Off
-
-    track encodeStanfordNRSFControlOverlaps
-    subTrack encodeStanfordNRSFOverlaps
-    shortLabel Stanf NRSF Control Overlaps
-    longLabel Stanford NRSF/REST Control Overlaps
-    priority 2
-    color 251,151,51
-    maxHeightPixels 128:16:16
-    minLimit 0
-    maxLimit 1000
-    viewLimits 0:1000
-    autoScale Off
+# ENCODE Chromatin Immunoprecipitation track group
 
 track encodeGisChipPetAll
 compositeTrack on
@@ -428,11 +25,13 @@ type bed 12
     longLabel Genome Institute of Singapore ChIP-PET: STAT1 Ab on gIF treated HeLa cells
     color 67,79,35
     dataVersion ENCODE Oct 2005 Freeze
+    origAassembly hg17
     priority 2
 
     track encodeGisChipPetStat1NoGif
     subTrack encodeGisChipPetAll
     shortLabel STAT1 HeLa -gIF
+    origAassembly hg17
     longLabel Genome Institute of Singapore ChIP-PET: STAT1 Ab on untreated HeLa cells
     color 125,140,35
     dataVersion ENCODE Oct 2005 Freeze
@@ -444,6 +43,7 @@ type bed 12
     longLabel Genome Institute of Singapore ChIP-PET: c-Myc Ab on P493 B cells
     color 158,35,135
     dataVersion Oct 2006
+    origAassembly hg17
     priority 4
 
 track encodeSangerChip
@@ -520,6 +120,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 & Jan 2007 data
     subGroups celltype=gm06990 factor=h3k9me3
     longLabel Sanger Institute ChIP-chip (H3K9me3 ab, GM06990 cells)
     dataVersion Jan 2007
+    origAssembly hg17
     priority 6
     color 10,10,130
 
@@ -529,6 +130,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 & Jan 2007 data
     subGroups celltype=gm06990 factor=h3k27me3
     longLabel Sanger Institute ChIP-chip (H3K27me3 ab, GM06990 cells)
     dataVersion Jan 2007
+    origAssembly hg17
     priority 7
     color 10,10,130
     
@@ -538,6 +140,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 & Jan 2007 data
     subGroups celltype=gm06990 factor=h3k36me3
     longLabel Sanger Institute ChIP-chip (H3K36me3 ab, GM06990 cells)
     dataVersion Jan 2007
+    origAssembly hg17
     priority 8
     color 10,10,130
 
@@ -547,6 +150,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 & Jan 2007 data
     subGroups celltype=gm06990 factor=h3k79me3
     longLabel Sanger Institute ChIP-chip (H3K79me3 ab, GM06990 cells)
     dataVersion Jan 2007
+    origAssembly hg17
     priority 9
     color 10,10,130
     
@@ -556,6 +160,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 & Jan 2007 data
     subGroups celltype=gm06990 factor=ctcf
     longLabel Sanger Institute ChIP-chip (CTCF ab, GM06990 cells)
     dataVersion Jan 2007
+    origAssembly hg17
     priority 10
     color 10,10,130
    
@@ -605,6 +210,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 & Jan 2007 data
     longLabel Sanger Institute ChIP-chip (H3K4me1 ab, HeLa cells) 
     subGroups celltype=hela factor=h3k4me1
     dataVersion ENCODE Oct 2005 Freeze
+    origAssembly hg17
     priority 15
     color 10,10,130
 
@@ -614,6 +220,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 & Jan 2007 data
     longLabel Sanger Institute ChIP-chip (H3K4me2 ab, HeLa cells)
     subGroups celltype=hela factor=h3k4me2
     dataVersion ENCODE Oct 2005 Freeze
+    origAssembly hg17
     priority 16
     color 10,10,130
 
@@ -623,6 +230,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 & Jan 2007 data
     longLabel Sanger Institute ChIP-chip (H3K4me3 ab, HeLa cells)
     subGroups celltype=hela factor=h3k4me3
     dataVersion ENCODE Oct 2005 Freeze
+    origAssembly hg17
     priority 17
     color 10,10,130
 
@@ -632,6 +240,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 & Jan 2007 data
     longLabel Sanger Institute ChIP-chip (H3ac ab, HeLa cells) 
     subGroups celltype=hela factor=h3ac
     dataVersion ENCODE Oct 2005 Freeze
+    origAssembly hg17
     priority 18
     color 10,10,130
 
@@ -641,6 +250,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 & Jan 2007 data
     longLabel Sanger Institute ChIP-chip (H4ac ab, HeLa cells)
     subGroups celltype=hela factor=h4ac
     dataVersion ENCODE Oct 2005 Freeze
+    origAssembly hg17
     priority 19
     color 10,10,130
 
@@ -650,6 +260,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 & Jan 2007 data
     longLabel Sanger Institute ChIP-chip (H3K4me1 ab, HFL-1 cells) 
     subGroups celltype=hfl1 factor=h3k4me1
     dataVersion Jan 2006
+    origAssembly hg17
     priority 20
     color 10,10,10
 
@@ -659,6 +270,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 & Jan 2007 data
     longLabel Sanger Institute ChIP-chip (H3K4me2 ab, HFL-1 cells)
     subGroups celltype=hfl1 factor=h3k4me2
     dataVersion Jan 2006
+    origAssembly hg17
     priority 21
     color 10,10,10
 
@@ -668,6 +280,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 & Jan 2007 data
     longLabel Sanger Institute ChIP-chip (H3K4me3 ab, HFL-1 cells)
     subGroups celltype=hfl1 factor=h3k4me3
     dataVersion Jan 2006
+    origAssembly hg17
     priority 22
     color 10,10,10
 
@@ -677,6 +290,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 & Jan 2007 data
     longLabel Sanger Institute ChIP-chip (H3ac ab, HFL-1 cells) 
     subGroups celltype=hfl1 factor=h3ac
     dataVersion Jan 2006
+    origAssembly hg17
     priority 23
     color 10,10,10
 
@@ -686,6 +300,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 & Jan 2007 data
     longLabel Sanger Institute ChIP-chip (H4ac ab, HFL-1 cells)
     subGroups celltype=hfl1 factor=h4ac
     dataVersion Jan 2006
+    origAssembly hg17
     priority 24
     color 10,10,10
 
@@ -695,6 +310,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 & Jan 2007 data
     subGroups celltype=molt4 factor=h3k4me1
     longLabel Sanger Institute ChIP-chip (H3K4me1 ab, MOLT4 cells) 
     dataVersion August 2006
+    origAssembly hg17
     priority 25
     color 10,10,130
 
@@ -704,6 +320,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 & Jan 2007 data
     subGroups celltype=molt4 factor=h3k4me2
     longLabel Sanger Institute ChIP-chip (H3K4me2 ab, MOLT4 cells)
     dataVersion August 2006
+    origAssembly hg17
     priority 26
     color 10,10,130
 
@@ -713,6 +330,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 & Jan 2007 data
     subGroups celltype=molt4 factor=h3k4me3
     longLabel Sanger Institute ChIP-chip (H3K4me3 ab, MOLT4 cells)
     dataVersion August 2006
+    origAssembly hg17
     priority 27
     color 10,10,130
 
@@ -722,6 +340,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 & Jan 2007 data
     subGroups celltype=molt4 factor=h3ac
     longLabel Sanger Institute ChIP-chip (H3ac ab, MOLT4 cells) 
     dataVersion August 2006
+    origAssembly hg17
     priority 28
     color 10,10,130
 
@@ -731,6 +350,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 & Jan 2007 data
     subGroups celltype=molt4 factor=h4ac
     longLabel Sanger Institute ChIP-chip (H4ac ab, MOLT4 cells)
     dataVersion August 2006
+    origAssembly hg17
     priority 29
     color 10,10,130
 
@@ -740,6 +360,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 & Jan 2007 data
     longLabel Sanger Institute ChIP-chip (H3K4me1 ab, PTR8 cells) 
     subGroups celltype=ptr8 factor=h3k4me1
     dataVersion August 2006
+    origAssembly hg17
     priority 30
     color 10,10,10
 
@@ -749,6 +370,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 & Jan 2007 data
     longLabel Sanger Institute ChIP-chip (H3K4me2 ab, PTR8 cells)
     subGroups celltype=ptr8 factor=h3k4me2
     dataVersion August 2006
+    origAssembly hg17
     priority 31
     color 10,10,10
 
@@ -758,6 +380,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 & Jan 2007 data
     longLabel Sanger Institute ChIP-chip (H3K4me3 ab, PTR8 cells)
     subGroups celltype=ptr8 factor=h3k4me3
     dataVersion August 2006
+    origAssembly hg17
     priority 32
     color 10,10,10
 
@@ -779,6 +402,7 @@ subGroup1 datatype Data_Type hit=Hit center=Peak_Center
 subGroup2 celltype Cell_Type gm06990=GM06990 hela=HeLa  k562=K562
 subGroup3 factor Factor h3k4me1=H3K4me1 h3k4me2=H3K4me2 h3k4me3=H3K4me3 h3ac=H3ac h4ac=H4ac
 dataVersion ENCODE Oct 2005 Freeze
+origAssembly hg17
 
     track encodeSangerChipHitH3K4me1GM06990
     subTrack encodeSangerChipHits
@@ -1055,6 +679,7 @@ dataVersion ENCODE June & Oct 2005 Freezes
     longLabel UC Davis ChIP-chip NimbleGen (E2F1 ab, HeLa Cells)
     priority 1
     dataVersion ENCODE June 2005 Freeze
+    origAssembly hg16
 
     track encodeUCDavisChipMyc
     subTrack encodeUCDavisChip
@@ -1062,6 +687,7 @@ dataVersion ENCODE June & Oct 2005 Freezes
     longLabel UC Davis ChIP-chip NimbleGen (C-Myc ab, HeLa Cells)
     priority 2
     dataVersion ENCODE Oct 2005 Freeze
+    origAssembly hg17
     
     track encodeUCDavisPolIIGM
     subTrack encodeUCDavisChip
@@ -1069,6 +695,8 @@ dataVersion ENCODE June & Oct 2005 Freezes
     longLabel UC Davis ChIP-chip NimbleGen (PolII, GM06990 Cells)
     priority 3
     dataVersion Mar 2007
+    origAssembly hg17
+    
     
     track encodeUCDavisPolIIHelaS3
     subTrack encodeUCDavisChip
@@ -1076,6 +704,8 @@ dataVersion ENCODE June & Oct 2005 Freezes
     longLabel UC Davis ChIP-chip NimbleGen (PolII, HelaS3 Cells)
     priority 4
     dataVersion Mar 2007
+    origAssembly hg17
+    
     
     track encodeUCDavisTafGM
     subTrack encodeUCDavisChip
@@ -1083,6 +713,8 @@ dataVersion ENCODE June & Oct 2005 Freezes
     longLabel UC Davis ChIP-chip NimbleGen (TAF, GM06990 Cells)
     priority 5
     dataVersion Mar 2007
+    origAssembly hg17
+    
     
     track encodeUCDavisTafHelaS3
     subTrack encodeUCDavisChip
@@ -1090,6 +722,7 @@ dataVersion ENCODE June & Oct 2005 Freezes
     longLabel UC Davis ChIP-chip NimbleGen (TAF, HelaS3 Cells)
     priority 6
     dataVersion Mar 2007
+    origAssembly hg17
     
 
 track encodeUcDavisChipHits
@@ -1109,6 +742,7 @@ dataVersion ENCODE June & Oct 2005 Freezes
     priority 1
     color 180,128,32
     dataVersion Oct 2006
+    origAssembly hg17
 
     track encodeUcDavisChipHitsMyc
     subTrack encodeUcDavisChipHits
@@ -1117,6 +751,7 @@ dataVersion ENCODE June & Oct 2005 Freezes
     priority 2
     color 32,128,180
     dataVersion Oct 2006
+    origAssembly hg17
 
 track encodeUcsdNgGif
 compositeTrack on
@@ -1146,6 +781,7 @@ dataVersion ENCODE June & Oct 2005 Freezes
     color 33,91,51
     priority 1
     dataVersion ENCODE Oct 2005 Freeze
+    origAssembly hg17
 
     track encodeUcsdNgHeLaDmH3K4_p30
     subTrack encodeUcsdNgGif
@@ -1155,6 +791,7 @@ dataVersion ENCODE June & Oct 2005 Freezes
     color 33,91,51
     priority 2
     dataVersion ENCODE Oct 2005 Freeze
+    origAssembly hg17
 
     track encodeUcsdNgHeLaH3K4me3_p0
     subTrack encodeUcsdNgGif
@@ -1164,6 +801,7 @@ dataVersion ENCODE June & Oct 2005 Freezes
     color 0,63,135
     priority 3
     dataVersion ENCODE June 2005 Freeze
+    origAssembly hg16
 
     track encodeUcsdNgHeLaH3K4me3_p30
     subTrack encodeUcsdNgGif
@@ -1173,6 +811,7 @@ dataVersion ENCODE June & Oct 2005 Freezes
     color 0,63,135
     priority 4
     dataVersion ENCODE June 2005 Freeze
+    origAssembly hg16
 
     track encodeUcsdNgHeLaAcH3_p0
     subTrack encodeUcsdNgGif
@@ -1182,6 +821,7 @@ dataVersion ENCODE June & Oct 2005 Freezes
     color 33,91,51
     priority 5
     dataVersion ENCODE Oct 2005 Freeze
+    origAssembly hg17
 
     track encodeUcsdNgHeLaAcH3_p30
     subTrack encodeUcsdNgGif
@@ -1191,6 +831,7 @@ dataVersion ENCODE June & Oct 2005 Freezes
     color 33,91,51
     priority 6
     dataVersion ENCODE Oct 2005 Freeze
+    origAssembly hg17
 
     track encodeUcsdNgHeLaAcH4_p0
     subTrack encodeUcsdNgGif
@@ -1200,6 +841,7 @@ dataVersion ENCODE June & Oct 2005 Freezes
     color 0,63,135
     priority 7
     dataVersion ENCODE Oct 2005 Freeze
+    origAssembly hg17
 
     track encodeUcsdNgHeLaStat1_p30
     subTrack encodeUcsdNgGif
@@ -1209,6 +851,7 @@ dataVersion ENCODE June & Oct 2005 Freezes
     color 33,91,51
     priority 8
     dataVersion ENCODE Oct 2005 Freeze
+    origAssembly hg17
 
     track encodeUcsdNgHeLaRnap_p0
     subTrack encodeUcsdNgGif
@@ -1218,6 +861,7 @@ dataVersion ENCODE June & Oct 2005 Freezes
     color 0,63,135
     priority 9
     dataVersion ENCODE June 2005 Freeze
+    origAssembly hg17
 
     track encodeUcsdNgHeLaRnap_p30
     subTrack encodeUcsdNgGif
@@ -1227,6 +871,7 @@ dataVersion ENCODE June & Oct 2005 Freezes
     subGroups gif=yes factor=pol2 peak=signal
     priority 10
     dataVersion ENCODE June 2005 Freeze
+    origAssembly hg17
 
     track encodeUcsdNgHeLaDmH3K4_p0_peak
     subTrack encodeUcsdNgGif
@@ -1236,6 +881,7 @@ dataVersion ENCODE June & Oct 2005 Freezes
     color 33,91,51
     priority 11
     dataVersion ENCODE Oct 2005 Freeze
+    origAssembly hg17
 
     track encodeUcsdNgHeLaDmH3K4_p30_peak
     subTrack encodeUcsdNgGif
@@ -1245,6 +891,7 @@ dataVersion ENCODE June & Oct 2005 Freezes
     color 33,91,51
     priority 12
     dataVersion ENCODE Oct 2005 Freeze
+    origAssembly hg17
 
     track encodeUcsdNgHeLaAcH3_p0_peak
     subTrack encodeUcsdNgGif
@@ -1254,6 +901,7 @@ dataVersion ENCODE June & Oct 2005 Freezes
     color 0,63,135
     priority 13
     dataVersion ENCODE Oct 2005 Freeze
+    origAssembly hg17
 
     track encodeUcsdNgHeLaAcH3_p30_peak
     subTrack encodeUcsdNgGif
@@ -1263,6 +911,7 @@ dataVersion ENCODE June & Oct 2005 Freezes
     color 0,63,135
     priority 14
     dataVersion ENCODE Oct 2005 Freeze
+    origAssembly hg17
 
     track encodeUcsdNgHeLaAcH4_p0_peak
     subTrack encodeUcsdNgGif
@@ -1272,6 +921,7 @@ dataVersion ENCODE June & Oct 2005 Freezes
     subGroups gif=no factor=h4ac peak=peak
     priority 15
     dataVersion ENCODE Oct 2005 Freeze
+    origAssembly hg17
 
     track encodeUcsdNgHeLaStat1_p30_peak
     subTrack encodeUcsdNgGif
@@ -1281,6 +931,7 @@ dataVersion ENCODE June & Oct 2005 Freezes
     longLabel Ludwig Institute/UCSD ChIP-chip Ng Peak: HeLa, STAT1, 30 min after gamma interferon
     priority 16
     dataVersion ENCODE Oct 2005 Freeze
+    origAssembly hg17
 
 track encodeUppsalaChip
 compositeTrack on
@@ -1301,6 +952,7 @@ color 204,0,051
 altColor 50, 50, 50
 yLineMark 2.378
 dataVersion ENCODE Oct 2005 Freeze
+origAssembly hg17
 
     track encodeUppsalaChipAch3
     subTrack encodeUppsalaChip
@@ -1352,6 +1004,7 @@ autoScale off
 color 204,0,051 
 altColor 50, 50, 50
 dataVersion ENCODE May 2006
+origAssembly hg17
 
     track encodeUppsalaChipH3acBut0h
     subTrack encodeUppsalaChipBut
@@ -1552,6 +1205,7 @@ maxLimit 20
 viewLimits 0:10
 subGroup1 celltype Cell_Type hela=HeLaS3 gm=GM06990 k562=K562
 subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF1 pol2=Pol2 pol2n=Pol2-N h4kac4=H4Kac4 h3k27me3=H3K27me3 baf47=BAF47 stat1=STAT1 p65c=P65-C p65n=P65-N smarca4=SMARCA4 smarca6=SMARCA6 nrsf=NRSF
+origAssembly hg17
     
     track encodeYaleChipPvalBaf155
     subTrack encodeYaleChipPval
@@ -1560,6 +1214,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     color 50,50,200
     subGroups celltype=hela factor=baf155
     dataVersion ENCODE Oct 2005 Freeze
+    origAssembly hg17
     priority 1
 
     track encodeYaleChipPvalBaf170
@@ -1569,6 +1224,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     color 200,50,50
     subGroups celltype=hela factor=baf170
     dataVersion ENCODE Oct 2005 Freeze
+    origAssembly hg17
     priority 2
 
     track encodeYaleChipPvalFos
@@ -1578,6 +1234,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     subGroups celltype=hela factor=fos
     color 112,63,175
     dataVersion ENCODE Oct 2005 Freeze
+    origAssembly hg17
     priority 3
 
     track encodeYaleChipPvalJun
@@ -1587,6 +1244,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     subGroups celltype=hela factor=jun
     color 50,50,200
     dataVersion ENCODE Oct 2005 Freeze
+    origAssembly hg17
     priority 4
 
     track encodeYaleChipPvalTaf
@@ -1596,6 +1254,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     color 200,50,50
     subGroups celltype=hela factor=taf1
     dataVersion ENCODE Oct 2005 Freeze
+    origAssembly hg17
     priority 5
 
     track encodeYaleChipPvalPol2Hela
@@ -1605,6 +1264,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     color 100,20,20
     subGroups celltype=hela factor=pol2
     dataVersion Nov 2006
+    origAssembly hg17
     priority 6
 
     track encodeYaleChipPvalPol2nHela
@@ -1614,6 +1274,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     color 20,20,100
     subGroups celltype=hela factor=pol2n
     dataVersion Nov 2006
+    origAssembly hg17
     priority 7
 
     track encodeYaleChipPvalH4kac4Hela
@@ -1623,6 +1284,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     color 50,50,200
     subGroups celltype=hela factor=h4kac4
     dataVersion Nov 2006
+    origAssembly hg17
     priority 8
 
     track encodeYaleChipPvalH3k27me3Hela
@@ -1632,6 +1294,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     color 112,63,175
     subGroups celltype=hela factor=h3k27me3
     dataVersion Jun 2007
+    origAssembly hg17
     priority 9
     
     track encodeYaleChipPvalStat1HelaIfna
@@ -1641,6 +1304,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     color 100,20,20
     subGroups celltype=hela factor=stat1
     dataVersion Jan 2007
+    origAssembly hg17
     priority 10
     
     track encodeYaleChipPvalP65nHelaTnfa
@@ -1650,6 +1314,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     color 20,20,100
     subGroups celltype=hela factor=p65n
     dataVersion Jan 2007
+    origAssembly hg17
     priority 11
 
     track encodeYaleChipPvalP65cHelaTnfa
@@ -1659,6 +1324,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     color 20,100,20
     subGroups celltype=hela factor=p65c
     dataVersion Jan 2007
+    origAssembly hg17
     priority 12
 
     track encodeYaleChipPvalSmarca4Hela
@@ -1668,6 +1334,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     color 50,50,200
     subGroups celltype=hela factor=smarca4
     dataVersion Apr 2007
+    origAssembly hg17
     priority 13
     
     track encodeYaleChipPvalSmarca6Hela
@@ -1677,6 +1344,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     color 200,50,50
     subGroups celltype=hela factor=smarca6
     dataVersion Apr 2007
+    origAssembly hg17
     priority 14
     
     track encodeYaleChipPvalNrsfHela
@@ -1686,6 +1354,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     color 100,20,20
     subGroups celltype=hela factor=nrsf
     dataVersion Apr 2007
+    origAssembly hg17
     priority 15
 
     track encodeYaleChipPvalPol2Gm06990
@@ -1695,6 +1364,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     longLabel Yale ChIP-chip (Pol2 ab, GM06990 cells) P-Value
     subGroups celltype=gm factor=pol2
     dataVersion Nov 2006
+    origAssembly hg17
     priority 16
 
     track encodeYaleChipPvalPol2nGm06990
@@ -1704,6 +1374,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     color 20,20,100
     subGroups celltype=gm factor=pol2n
     dataVersion Nov 2006
+    origAssembly hg17
     priority 17
 
     track encodeYaleChipPvalH4kac4Gm06990
@@ -1713,6 +1384,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     color 20,100,20
     subGroups celltype=gm factor=h4kac4
     dataVersion Nov 2006
+    origAssembly hg17
     priority 18
 
     track encodeYaleChipPvalBaf155K562
@@ -1722,6 +1394,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     color 50,50,200
     subGroups celltype=k562 factor=baf155
     dataVersion Jan 2007
+    origAssembly hg17
     priority 19
 
     track encodeYaleChipPvalBaf170K562
@@ -1731,6 +1404,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     color 200,50,50
     subGroups celltype=k562 factor=baf170
     dataVersion Jan 2007
+    origAssembly hg17
     priority 20
 
     track encodeYaleChipPvalBaf47K562
@@ -1740,6 +1414,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     color 112,63,175
     subGroups celltype=k562 factor=baf47
     dataVersion Jan 2007
+    origAssembly hg17
     priority 21
 
 track encodeYaleChipSig
@@ -1767,6 +1442,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     color 50,50,200
     subGroups celltype=hela factor=baf155
     dataVersion ENCODE Oct 2005 Freeze
+    origAssembly hg17
     priority 1
 
     track encodeYaleChipSignalBaf170
@@ -1776,6 +1452,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     color 200,50,50
     subGroups celltype=hela factor=baf170
     dataVersion ENCODE Oct 2005 Freeze
+    origAssembly hg17
     priority 2
 
     track encodeYaleChipSignalFos
@@ -1785,6 +1462,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     color 112,63,175
     subGroups celltype=hela factor=fos
     dataVersion ENCODE Oct 2005 Freeze
+    origAssembly hg17
     priority 3
 
     track encodeYaleChipSignalJun
@@ -1794,6 +1472,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     color 50,50,200
     subGroups celltype=hela factor=jun
     dataVersion ENCODE Oct 2005 Freeze
+    origAssembly hg17
     priority 4
 
     track encodeYaleChipSignalTaf
@@ -1803,6 +1482,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     color 200,50,50
     subGroups celltype=hela factor=taf1
     dataVersion ENCODE Oct 2005 Freeze
+    origAssembly hg17
     priority 5
 
     track encodeYaleChipSignalPol2Hela
@@ -1812,6 +1492,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     color 100,20,20
     subGroups celltype=hela factor=pol2
     dataVersion Nov 2006
+    origAssembly hg17
     priority 6
 
     track encodeYaleChipSignalPol2nHela
@@ -1821,6 +1502,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     color 20,20,100
     subGroups celltype=hela factor=pol2n
     dataVersion Nov 2006
+    origAssembly hg17
     priority 7
 
     track encodeYaleChipSignalH4kac4Hela
@@ -1830,6 +1512,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     color 50,50,200
     subGroups celltype=hela factor=h4kac4
     dataVersion Nov 2006
+    origAssembly hg17
     priority 8
 
     track encodeYaleChipSignalH3k27me3Hela
@@ -1839,6 +1522,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     color 112,63,175
     subGroups celltype=hela factor=h3k27me3
     dataVersion Jun 2007
+    origAssembly hg17
     priority 9
 
     track encodeYaleChipSignalStat1HelaIfna
@@ -1848,6 +1532,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     color 100,20,20
     subGroups celltype=hela factor=stat1
     dataVersion Jan 2007
+    origAssembly hg17
     priority 10
     
     track encodeYaleChipSignalP65nHelaTnfa
@@ -1857,6 +1542,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     color 20,20,100
     subGroups celltype=hela factor=p65n
     dataVersion Jan 2007
+    origAssembly hg17
     priority 11
 
     track encodeYaleChipSignalP65cHelaTnfa
@@ -1866,6 +1552,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     color 20,100,20
     subGroups celltype=hela factor=p65c
     dataVersion Jan 2007
+    origAssembly hg17
     priority 12
 
     track encodeYaleChipSignalSmarca4Hela
@@ -1875,6 +1562,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     color 50,50,200
     subGroups celltype=hela factor=smarca4
     dataVersion Apr 2007
+    origAssembly hg17
     priority 13
     
     track encodeYaleChipSignalSmarca6Hela
@@ -1884,6 +1572,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     color 200,50,50
     subGroups celltype=hela factor=smarca6
     dataVersion Apr 2007
+    origAssembly hg17
     priority 14
     
     track encodeYaleChipSignalNrsfHela
@@ -1893,6 +1582,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     color 100,20,20
     subGroups celltype=hela factor=nrsf
     dataVersion Apr 2007
+    origAssembly hg17
     priority 15
 
     track encodeYaleChipSignalPol2Gm06990
@@ -1902,6 +1592,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     longLabel Yale ChIP-chip (Pol2 ab, GM06990 cells) Signal
     subGroups celltype=gm factor=pol2
     dataVersion Nov 2006
+    origAssembly hg17
     priority 16
 
     track encodeYaleChipSignalPol2nGm06990
@@ -1911,6 +1602,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     color 20,20,100
     subGroups celltype=gm factor=pol2n
     dataVersion Nov 2006
+    origAssembly hg17
     priority 17
 
     track encodeYaleChipSignalH4kac4Gm06990
@@ -1920,6 +1612,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     color 20,100,20
     subGroups celltype=gm factor=h4kac4
     dataVersion Nov 2006
+    origAssembly hg17
     priority 18
 
     track encodeYaleChipSignalBaf155K562
@@ -1929,6 +1622,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     color 50,50,200
     subGroups celltype=k562 factor=baf155
     dataVersion Jan 2007
+    origAssembly hg17
     priority 19
 
     track encodeYaleChipSignalBaf170K562
@@ -1938,6 +1632,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     color 200,50,50
     subGroups celltype=k562 factor=baf170
     dataVersion Jan 2007
+    origAssembly hg17
     priority 20
 
     track encodeYaleChipSignalBaf47K562
@@ -1947,6 +1642,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     color 112,63,175
     subGroups celltype=k562 factor=baf47
     dataVersion Jan 2007
+    origAssembly hg17
     priority 21
 
 track encodeYaleChipSites
@@ -1963,6 +1659,7 @@ showTopScorers 20
 filterTopScorers on 200 self
 subGroup1 celltype Cell_Type hela=HeLaS3 gm=GM06990 k562=K562 
 subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF1 pol2=Pol2 pol2n=Pol2-N h4kac4=H4Kac4 h3k27me3=H3K27me3 baf47=BAF47 stat1=STAT1 p65c=P65-C p65n=P65-N smarca4=SMARCA4 smarca6=SMARCA6 nrsf=NRSF
+origAssembly hg17
 
     track encodeYaleChipSitesBaf155
     subTrack encodeYaleChipSites
@@ -1972,6 +1669,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     subGroups celltype=hela factor=baf155
     url http://dart.gersteinlab.org/cgi-bin/ar/lookup.cgi?acc=$$
     urlLabel Yale DART Link:
+    origAssembly hg17
     priority 1
 
     track encodeYaleChipSitesBaf170
@@ -1982,6 +1680,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     subGroups celltype=hela factor=baf170
     url http://dart.gersteinlab.org/cgi-bin/ar/lookup.cgi?acc=$$
     urlLabel Yale DART Link:
+    origAssembly hg17
     priority 2
 
     track encodeYaleChipSitesFos
@@ -1992,6 +1691,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     subGroups celltype=hela factor=fos
     url http://dart.gersteinlab.org/cgi-bin/ar/lookup.cgi?acc=$$
     urlLabel Yale DART Link:
+    origAssembly hg17
     priority 3
 
     track encodeYaleChipSitesJun
@@ -2002,6 +1702,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     subGroups celltype=hela factor=jun
     url http://dart.gersteinlab.org/cgi-bin/ar/lookup.cgi?acc=$$
     urlLabel Yale DART Link:
+    origAssembly hg17
     priority 4
 
     track encodeYaleChipSitesTaf
@@ -2012,6 +1713,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     subGroups celltype=hela factor=taf1
     url http://dart.gersteinlab.org/cgi-bin/ar/lookup.cgi?acc=$$
     urlLabel Yale DART Link:
+    origAssembly hg17
     priority 5
 
     track encodeYaleChipSitesPol2Hela
@@ -2022,6 +1724,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     type bed5FloatScoreWithFdr
     subGroups celltype=hela factor=pol2
     dataVersion Nov 2006
+    origAssembly hg17
     priority 6
 
     track encodeYaleChipSitesPol2nHela
@@ -2032,6 +1735,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     type bed5FloatScoreWithFdr
     subGroups celltype=hela factor=pol2n
     dataVersion Nov 2006
+    origAssembly hg17
     priority 7
 
     track encodeYaleChipSitesH4kac4Hela
@@ -2042,6 +1746,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     type bed5FloatScoreWithFdr
     subGroups celltype=hela factor=h4kac4
     dataVersion Nov 2006
+    origAssembly hg17
     priority 8
 
     track encodeYaleChipSitesH3k27me3Hela
@@ -2052,6 +1757,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     type bed5FloatScoreWithFdr
     subGroups celltype=hela factor=h3k27me3
     dataVersion Jun 2007
+    origAssembly hg17
     priority 9
 
     track encodeYaleChipSitesStat1HelaIfna
@@ -2062,6 +1768,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     type bed5FloatScoreWithFdr
     subGroups celltype=hela factor=stat1
     dataVersion Jan 2007
+    origAssembly hg17
     priority 10
     
     track encodeYaleChipSitesP65nHelaTnfa
@@ -2072,6 +1779,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     type bed5FloatScoreWithFdr
     subGroups celltype=hela factor=p65n
     dataVersion Jan 2007
+    origAssembly hg17
     priority 11
 
     track encodeYaleChipSitesP65cHelaTnfa
@@ -2082,6 +1790,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     type bed5FloatScoreWithFdr
     subGroups celltype=hela factor=p65c
     dataVersion Jan 2007
+    origAssembly hg17
     priority 12
 
     track encodeYaleChipSitesSmarca4Hela
@@ -2092,6 +1801,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     type bed5FloatScore
     subGroups celltype=hela factor=smarca4
     dataVersion Apr 2007
+    origAssembly hg17
     priority 13
     
     track encodeYaleChipSitesSmarca6Hela
@@ -2102,6 +1812,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     type bed5FloatScoreWithFdr
     subGroups celltype=hela factor=smarca6
     dataVersion Apr 2007
+    origAssembly hg17
     priority 14
     
     track encodeYaleChipSitesNrsfHela
@@ -2112,6 +1823,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     type bed5FloatScoreWithFdr
     subGroups celltype=hela factor=nrsf
     dataVersion Apr 2007
+    origAssembly hg17
     priority 15
 
     track encodeYaleChipSitesPol2Gm06990
@@ -2122,6 +1834,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     longLabel Yale ChIP-chip (Pol2 ab, GM06990 cells) Sites
     subGroups celltype=gm factor=pol2
     dataVersion Nov 2006
+    origAssembly hg17
     priority 16
 
     track encodeYaleChipSitesPol2nGm06990
@@ -2131,6 +1844,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     color 20,20,100
     type bed5FloatScoreWithFdr
     subGroups celltype=gm factor=pol2n
+    origAssembly hg17
     dataVersion Nov 2006
     priority 17
 
@@ -2142,6 +1856,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     type bed5FloatScoreWithFdr
     subGroups celltype=gm factor=h4kac4
     dataVersion Nov 2006
+    origAssembly hg17
     priority 18
 
     track encodeYaleChipSitesBaf155K562
@@ -2152,6 +1867,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     type bed5FloatScoreWithFdr
     subGroups celltype=k562 factor=baf155
     dataVersion Jan 2007
+    origAssembly hg17
     priority 19
 
     track encodeYaleChipSitesBaf170K562
@@ -2162,6 +1878,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     type bed5FloatScoreWithFdr
     subGroups celltype=k562 factor=baf170
     dataVersion Jan 2007
+    origAssembly hg17
     priority 20
 
     track encodeYaleChipSitesBaf47K562
@@ -2172,6 +1889,7 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     type bed5FloatScoreWithFdr
     subGroups celltype=k562 factor=baf47
     dataVersion Jan 2007
+    origAssembly hg17
     priority 21
 
 track encodeYaleChipRfbr
@@ -2182,6 +1900,7 @@ group encodeChip
 priority 65.24
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 dataVersion Dec 2005 Freeze
+origAssembly hg17
 type bed 4 .
 url http://dart.gersteinlab.org/cgi-bin/ar/lookup.cgi?acc=$$
 urlLabel Yale DART Link:
@@ -2199,1091 +1918,6 @@ urlLabel Yale DART Link:
     longLabel Yale ChIP-chip Regulatory Factor Binding Regions (RFBR) Deserts
     color 200,50,50
     priority 2
-    
-track encodeBu_ORChID1
-shortLabel BU ORChID
-longLabel Boston University ORChID (OH Radical Cleavage Intensity Database)
-group encodeChrom
-priority 60.0
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-visibility hide
-type wig -0.56 1.58
-spanList 1
-maxHeightPixels 128:36:16
-windowingFunction Mean
-color 44,44,200
-altColor 200,44,44
-viewLimits 0.22:0.5
-autoScale Off
-origAssembly hg16
-dataVersion ENCODE Oct 2005 Freeze
-
-track encodeUtexStage
-compositeTrack on
-shortLabel UT-Austin STAGE
-longLabel University of Texas, Austin STAGE (Sequence Tag Analysis of Genomic Enrichment)
-group encodeChrom
-priority 63.1
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-visibility hide
-color 120,30,50
-altColor 50,0,0
-type bed 5
-
-    track encodeUtexStageStat1HelaTags
-    subTrack encodeUtexStage
-    shortLabel UT STAT1 HeLa Tags
-    longLabel University of Texas, Austin STAGE (STAT1, HeLa) Tags
-    dataVersion Oct 2006
-    priority 1
-
-    track encodeUtexStageCMycHelaTags
-    subTrack encodeUtexStage
-    shortLabel UT Myc HeLa Tags
-    longLabel University of Texas, Austin STAGE (c-Myc, HeLa) Tags
-    priority 2
-    dataVersion ENCODE Oct 2005 Freeze
-
-    track encodeUtexStageMycHelaPeaks
-    shortLabel UT Myc HeLa Pk
-    longLabel University of Texas, Austin STAGE (c-Myc, HeLa) Peaks
-    subTrack encodeUtexStage
-    noInherit on
-    color 120,30,50
-    type bed 5 .
-    priority 3
-    dataVersion ENCODE Oct 2005 Freeze
-
-track encodeUWRegulomeBase
-compositeTrack on
-shortLabel UW QCP DNaseI Sens
-longLabel UW QCP DNaseI Sensitivity
-group encodeChrom
-priority 66.05
-# NOTE: Missing regions
-chromosomes chr1,chr10,chr11,chr12,chr13,chr16,chr18,chr19,chr2,chr21,chr22,chr4,chr5,chr7,chr8,chr9,chrX
-visibility hide
-maxHeightPixels 128:16:16
-minLimit -13.40
-maxLimit 15.55
-viewLimits 2:6.33
-maxHeightPixels 128:16:16
-type bedGraph 5
-autoScaleDefault Off
-smoothingWindow 2
-dataVersion ENCODE June 2006
-
-    track encodeUWRegulomeBaseCD4
-    subTrack encodeUWRegulomeBase
-    shortLabel CD4
-    longLabel CD4 DNaseI Sensitivity
-    color 0,0,255
-    priority 1
-
-    track encodeUWRegulomeBaseCaCo2
-    subTrack encodeUWRegulomeBase
-    shortLabel CaCo2
-    longLabel CaCo2 DNaseI Sensitivity
-    color 0,48,224
-    priority 2
-
-    track encodeUWRegulomeBaseCaLU3
-    subTrack encodeUWRegulomeBase
-    shortLabel CaLU3
-    longLabel CaLU3 DNaseI Sensitivity
-    color 0,96,176
-    priority 3
-
-    track encodeUWRegulomeBaseEryAdult
-    subTrack encodeUWRegulomeBase
-    shortLabel EryAdult
-    longLabel EryAdult DNaseI Sensitivity
-    color 0,119,153
-    priority 4
-
-    track encodeUWRegulomeBaseEryFetal
-    subTrack encodeUWRegulomeBase
-    shortLabel EryFetal
-    longLabel EryFetal DNaseI Sensitivity
-    color 0,153,119
-    priority 5
-
-    track encodeUWRegulomeBaseGM
-    subTrack encodeUWRegulomeBase
-    shortLabel GM
-    longLabel GM DNaseI Sensitivity
-    color 0,187,85
-    priority 6
-
-    track encodeUWRegulomeBaseHMEC
-    subTrack encodeUWRegulomeBase
-    shortLabel HMEC
-    longLabel HMEC DNaseI Sensitivity
-    color 56,238,0
-    priority 7
-
-    track encodeUWRegulomeBaseHRE
-    subTrack encodeUWRegulomeBase
-    shortLabel HRE
-    longLabel HRE DNaseI Sensitivity
-    color 0,255,0
-    priority 8
-
-    track encodeUWRegulomeBaseHeLa
-    subTrack encodeUWRegulomeBase
-    shortLabel HeLa
-    longLabel HeLa DNaseI Sensitivity
-    color 68,238,0
-    priority 9
-
-    track encodeUWRegulomeBaseHepG2
-    subTrack encodeUWRegulomeBase
-    shortLabel HepG2
-    longLabel HepG2 DNaseI Sensitivity
-    color 96,192,326
-    priority 10
-
-    track encodeUWRegulomeBaseHuh7
-    subTrack encodeUWRegulomeBase
-    shortLabel Huh7
-    longLabel Huh7 DNaseI Sensitivity
-    color 136,170,0
-    priority 11
-
-    track encodeUWRegulomeBaseK562
-    subTrack encodeUWRegulomeBase
-    shortLabel K562
-    longLabel K562 DNaseI Sensitivity
-    color 170,136,0
-    priority 12
-
-    track encodeUWRegulomeBaseNHBE
-    subTrack encodeUWRegulomeBase
-    shortLabel NHBE
-    longLabel NHBE DNaseI Sensitivity
-    color 204,102,0
-    priority 13
-
-    track encodeUWRegulomeBasePANC
-    subTrack encodeUWRegulomeBase
-    shortLabel PANC
-    longLabel PANC DNaseI Sensitivity
-    color 238,68,0
-    priority 14
-
-    track encodeUWRegulomeBaseSAEC
-    subTrack encodeUWRegulomeBase
-    shortLabel SAEC
-    longLabel SAEC DNaseI Sensitivity
-    color 255,0,0
-    priority 15
-
-    track encodeUWRegulomeBaseSKnSH
-    subTrack encodeUWRegulomeBase
-    shortLabel SKnSH
-    longLabel SKnSH DNaseI Sensitivity
-    color 255,0,255
-    priority 16
-
-track encodeRegulomeAmplicon
-compositeTrack on
-shortLabel UW/Reg Amplicon
-longLabel ENCODE UW/Regulome Amplicon
-group encodeChrom
-priority 66.4
-chromosomes chr2,chr5,chr7,chr8,chr9,chr11,chr12,chr16,chr18,chrX
-type bed 5 .
-useScore 1
-subGroup1 amplicon Amplicon even=Even odd=Odd
-dataVersion ENCODE Oct2005 Freeze
-
-    track encodeRegulomeAmplEvenCACO2
-    subTrack encodeRegulomeAmplicon
-    shortLabel CACO2 (Even)
-    longLabel CACO2 Amplicon (Even)
-    subGroups amplicon=even
-    color 60,50,240
-    priority 1
-
-    track encodeRegulomeAmplEvenGM
-    subTrack encodeRegulomeAmplicon
-    shortLabel GM06990 (Even)
-    longLabel GM06990 Amplicon (Even)
-    subGroups amplicon=even
-    color 90,50,210
-    priority 3
-
-    track encodeRegulomeAmplEvenKNSH
-    subTrack encodeRegulomeAmplicon
-    shortLabel SKNSH (Even)
-    longLabel SKNSH Amplicon (Even)
-    subGroups amplicon=even
-    color 120,50,180
-    priority 5
-
-    track encodeRegulomeAmplEvenHuh7
-    subTrack encodeRegulomeAmplicon
-    shortLabel Huh7 (Even)
-    longLabel Huh7 Amplicon (Even)
-    subGroups amplicon=even
-    color 150,50,150
-    priority 7
-
-    track encodeRegulomeAmplEvenHepG2
-    subTrack encodeRegulomeAmplicon
-    shortLabel HepG2 (Even)
-    longLabel HepG2 Amplicon (Even)
-    subGroups amplicon=even
-    color 180,50,120
-    priority 9
-
-    track encodeRegulomeAmplEvenK562
-    subTrack encodeRegulomeAmplicon
-    shortLabel K562 (Even)
-    longLabel K562 Amplicon (Even)
-    subGroups amplicon=even
-    color 210,50,90
-    priority 11
-
-    track encodeRegulomeAmplEvenCD34
-    subTrack encodeRegulomeAmplicon
-    shortLabel CD34 (Even)
-    longLabel CD34 Amplicon (Even)
-    subGroups amplicon=even
-    color 240,50,60
-    priority 13
-
-    track encodeRegulomeAmplEvenHeLa
-    subTrack encodeRegulomeAmplicon
-    shortLabel HeLa (Even)
-    longLabel HeLa Amplicon (Even)
-    subGroups amplicon=even
-    color 60,50,240
-    priority 15
-
-    track encodeRegulomeAmplOddCACO2
-    subTrack encodeRegulomeAmplicon
-    shortLabel CACO2 (Odd)
-    longLabel CACO2 Amplicon (Odd)
-    subGroups amplicon=odd
-    color 60,50,240
-    priority 2
-
-    track encodeRegulomeAmplOddGM
-    subTrack encodeRegulomeAmplicon
-    shortLabel GM06990 (Odd)
-    longLabel GM06990 Amplicon (Odd)
-    subGroups amplicon=odd
-    color 90,50,210
-    priority 4
-
-    track encodeRegulomeAmplOddKNSH
-    subTrack encodeRegulomeAmplicon
-    shortLabel SKNSH (Odd)
-    longLabel SKNSH Amplicon (Odd)
-    subGroups amplicon=odd
-    color 120,50,180
-    priority 6
-
-    track encodeRegulomeAmplOddHuh7
-    subTrack encodeRegulomeAmplicon
-    shortLabel Huh7 (Odd)
-    longLabel Huh7 Amplicon (Odd)
-    subGroups amplicon=odd
-    color 150,50,150
-    priority 8
-
-    track encodeRegulomeAmplOddHepG2
-    subTrack encodeRegulomeAmplicon
-    shortLabel HepG2 (Odd)
-    longLabel HepG2 Amplicon (Odd)
-    subGroups amplicon=odd
-    color 180,50,120
-    priority 10
-
-    track encodeRegulomeAmplEvenK562
-    subTrack encodeRegulomeAmplicon
-    shortLabel K562 (Odd)
-    longLabel K562 Amplicon (Odd)
-    subGroups amplicon=odd
-    color 210,50,90
-    priority 12
-
-    track encodeRegulomeAmplOddCD34
-    subTrack encodeRegulomeAmplicon
-    shortLabel CD34 (Odd)
-    longLabel CD34 Amplicon (Odd)
-    subGroups amplicon=odd
-    color 240,50,60
-    priority 14
-
-    track encodeRegulomeAmplOddHeLa
-    subTrack encodeRegulomeAmplicon
-    shortLabel HeLa (Odd)
-    longLabel HeLa Amplicon (Odd)
-    subGroups amplicon=odd
-    color 60,50,240
-    priority 16
-
-track encodeRegulomeDnaseArray
-compositeTrack on
-shortLabel UW DNase-array
-longLabel UW DNaseI hypersensitivity by DNase-array
-group encodeChrom
-priority 66.5
-type bedGraph 4
-maxHeightPixels 128:32:16
-minLimit -5
-maxLimit 10
-graphType bar
-viewLimits 0:4
-yLineMark 0.0
-yLineOnOff Off
-smoothingWindow Off
-windowingFunction maximum
-autoScale Off
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-dataVersion May 2006
-
-    track encodeRegulomeDnaseGM06990Sens
-    subTrack encodeRegulomeDnaseArray
-    shortLabel DnaseI Sens
-    longLabel UW DNase-array GM06990 Sensitivity 
-    color 000,000,153
-    priority 1
-
-    track encodeRegulomeDnaseGM06990Sites
-    subTrack encodeRegulomeDnaseArray
-    shortLabel DnaseI HSs 
-    longLabel UW DNase-array GM06990 HSs
-    noInherit on
-    visibility dense
-    useScore 1
-    type bed5FloatScore
-    priority 2
-
-track encodeNhgriDukeDnaseHs
-compositeTrack on
-shortLabel Duke/NHGRI DNase
-longLabel Duke/NHGRI DNaseI-Hypersensitivity
-group encodeChrom
-priority 61.1
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-visibility hide
-type bedGraph 4
-maxHeightPixels 128:16:16
-minLimit -2.592
-maxLimit 5.001
-viewLimits 0:1
-windowingFunction mean
-autoScale Off
-dataVersion ENCODE June & Oct 2005 Freezes and August 2006
-subGroup1 group Group raw=DNase-chip_Raw pval=DNase-chip_Pval mpss=MPSS
-
-    track encodeNhgriDnaseHsChipRawGm06990
-    subTrack encodeNhgriDukeDnaseHs
-    shortLabel DNase GM069 Raw
-    longLabel Duke/NHGRI DNaseI-Hypersensitivity Raw (GM06990)
-    color 80,50,80
-    dataVersion ENCODE Oct 2005 Freeze
-    subGroups group=raw
-    priority 1
-
-    track encodeNhgriDnaseHsChipRawCd4
-    subTrack encodeNhgriDukeDnaseHs
-    shortLabel DNase CD4 Raw
-    longLabel Duke/NHGRI DNaseI-Hypersensitivity Raw (CD4+)
-    color 120,10,120
-    subGroups group=raw
-    dataVersion ENCODE Oct 2005 Freeze
-    priority 2
-
-    track encodeNhgriDnaseHsChipRawHela
-    subTrack encodeNhgriDukeDnaseHs
-    shortLabel DNase HeLa Raw
-    longLabel Duke/NHGRI DNaseI-Hypersensitivity Raw (HeLaS3)
-    color 180,12,140
-    dataVersion Aug 2006
-    subGroups group=raw
-    priority 3
-
-    track encodeNhgriDnaseHsChipRawHepG2
-    subTrack encodeNhgriDukeDnaseHs
-    shortLabel DNase HepG2 Raw
-    longLabel Duke/NHGRI DNaseI-Hypersensitivity Raw (HepG2)
-    color 240,12,132
-    dataVersion Sept 2006
-    subGroups group=raw
-    priority 4
-
-    track encodeNhgriDnaseHsChipRawH9
-    subTrack encodeNhgriDukeDnaseHs
-    shortLabel DNase H9 Raw
-    longLabel Duke/NHGRI DNaseI-Hypersensitivity Raw (H9)
-    color 255,0,0
-    dataVersion ENCODE Feb 2007
-    subGroups group=raw
-    priority 5
-   
-    track encodeNhgriDnaseHsChipRawImr90
-    subTrack encodeNhgriDukeDnaseHs
-    shortLabel DNase IMR90 Raw
-    longLabel Duke/NHGRI DNaseI-Hypersensitivity Raw (IMR990)
-    color 238,40,100
-    dataVersion ENCODE Feb 2007
-    subGroups group=raw
-    priority 6
-
-    track encodeNhgriDnaseHsChipRawK562
-    subTrack encodeNhgriDukeDnaseHs
-    shortLabel DNase K562 Raw
-    longLabel Duke/NHGRI DNaseI-Hypersensitivity Raw (K562)
-    color 204,102,0
-    dataVersion ENCODE Feb 2007
-    subGroups group=raw
-    priority 7
-
-    track encodeNhgriDnaseHsChipPvalGm06990
-    subTrack encodeNhgriDukeDnaseHs
-    shortLabel DNase GM069 Pval
-    longLabel Duke/NHGRI DNaseI-Hypersensitivity P-Value (GM06990)
-    noInherit on
-    type bed 5 +
-    useScore 1
-    color 80,50,80
-    priority 8
-    subGroups group=pval
-    dataVersion Aug 2006
-
-    track encodeNhgriDnaseHsChipPvalCd4
-    subTrack encodeNhgriDukeDnaseHs
-    noInherit on
-    shortLabel DNase CD4 Pval
-    longLabel Duke/NHGRI DNaseI-Hypersensitivity P-Value (CD4+)
-    type bed 5 +
-    useScore 1
-    color 120,10,120
-    priority 9
-    subGroups group=pval
-    dataVersion Aug 2006
-
-    track encodeNhgriDnaseHsChipPvalHela
-    subTrack encodeNhgriDukeDnaseHs
-    noInherit on
-    shortLabel DNase HeLa Pval
-    longLabel Duke/NHGRI DNaseI-Hypersensitivity P-Value (HeLaS3)
-    type bed 5 +
-    useScore 1
-    color 180,12,140
-    priority 10
-    subGroups group=pval
-    dataVersion Aug 2006
-
-    track encodeNhgriDnaseHsChipPvalHepG2
-    subTrack encodeNhgriDukeDnaseHs
-    noInherit on
-    shortLabel DNase HepG2 Pval
-    longLabel Duke/NHGRI DNaseI-Hypersensitivity P-Value (HepG2)
-    type bed 5 +
-    useScore 1
-    color 240,12,132
-    priority 11
-    subGroups group=pval
-    dataVersion Sept 2006
-
-    track encodeNhgriDnaseHsChipPvalH9
-    subTrack encodeNhgriDukeDnaseHs
-    noInherit on
-    shortLabel DNase H9 Pval
-    longLabel Duke/NHGRI DNaseI-Hypersensitivity P-Value (H9)
-    type bed 5 +
-    useScore 1
-    color 255,0,0 
-    priority 12
-    subGroups group=pval
-    dataVersion Feb 2007
-
-    track encodeNhgriDnaseHsChipPvalImr90
-    subTrack encodeNhgriDukeDnaseHs
-    noInherit on
-    shortLabel DNase IMR90 Pval
-    longLabel Duke/NHGRI DNaseI-Hypersensitivity P-Value (IMR90)
-    type bed 5 +
-    useScore 1
-    color 238,40,100
-    priority 13
-    subGroups group=pval
-    dataVersion Feb 2007
-
-    track encodeNhgriDnaseHsChipPvalK562
-    subTrack encodeNhgriDukeDnaseHs
-    noInherit on
-    shortLabel DNase K562 Pval
-    longLabel Duke/NHGRI DNaseI-Hypersensitivity P-Value (K562)
-    type bed 5 +
-    useScore 1
-    color 204,102,0
-    priority 14
-    subGroups group=pval
-    dataVersion Feb 2007
-
-    track encodeNhgriDnaseHsMpssCd4
-    subTrack encodeNhgriDukeDnaseHs off
-    shortLabel DNase CD4 MS
-    longLabel Duke/NHGRI DNaseI-Hypersensitive Sites (CD4+ T-Cells, MPSS method)
-    dataVersion ENCODE June 2005 Freeze
-    color 120,10,120
-    noInherit on
-    type bed 5 .
-    useScore 1
-    subGroups group=mpss
-    priority 15
-
-    track encodeNhgriDnaseHsMpssCd4Act
-    subTrack encodeNhgriDukeDnaseHs off
-    shortLabel DNase CD4-act MS
-    longLabel Duke/NHGRI DNaseI-Hypersensitive Sites (CD4+ T-Cells Activated, MPSS method)
-    dataVersion ENCODE June 2005 Freeze
-    noInherit on
-    type bed 5 .
-    useScore 1
-    subGroups group=mpss
-    priority 16
-
-track encodeTbaAlign
-shortLabel TBA Alignment
-longLabel TBA Alignments
-group encodeCompGeno
-priority 70.1
-visibility hide
-color 0, 10, 100
-altColor 1,128,0
-type wigMaf 0.0 1.0
-pairwiseHeight 10
-summary encodeTbaSummary
-speciesGroups primate placental mammal vertebrate
-sGroup_primate chimp colobus_monkey baboon macaque dusky_titi owl_monkey marmoset mouse_lemur galago
-sGroup_placental rat mouse rabbit cow dog rfbat hedgehog shrew armadillo elephant tenrec
-sGroup_mammal monodelphis  platypus 
-sGroup_vertebrate chicken xenopus tetraodon fugu zebrafish
-treeImage phylo/species28.gif
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-dataVersion ENCODE Oct 2005 Freeze
-
-track encodeTbaAlignAnno
-shortLabel TBA Alignment Anno
-longLabel TBA Alignments Anno
-group x
-priority 70.1
-visibility hide
-color 0, 10, 100
-altColor 1,128,0
-type wigMaf 0.0 1.0
-summary encodeTbaAnnoSummary
-speciesGroups primate placental mammal vertebrate
-sGroup_primate chimp colobus_monkey baboon macaque dusky_titi owl_monkey marmoset mouse_lemur galago
-sGroup_placental rat mouse rabbit cow dog rfbat hedgehog shrew armadillo elephant tenrec
-sGroup_mammal monodelphis  platypus 
-sGroup_vertebrate chicken xenopus tetraodon fugu zebrafish
-#speciesOrder chimp colobus_monkey baboon macaque dusky_titi owl_monkey marmoset mouse_lemur galago rat mouse rabbit cow dog rfbat hedgehog shrew armadillo elephant tenrec monodelphis  platypus chicken xenopus tetraodon fugu zebrafish
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-irows on
-frames encodeTbaFrames
-speciesCodonDefault hg17
-dataVersion ENCODE Oct 2005 Freeze
-
-track encodeTbaCons
-compositeTrack on
-shortLabel TBA Cons
-longLabel  TBA Conservation
-group encodeCompGeno
-priority 70.2
-type wig 0.0 1.0
-spanList 1
-maxHeightPixels 100:25:11
-autoScaleDefault Off
-windowingFunction mean
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-dataVersion ENCODE Oct 2005 Freeze
-
-    track encodeTbaPhastCons
-    subTrack encodeTbaCons
-    shortLabel TBA PhastCons
-    longLabel TBA PhastCons Conservation
-    color 170,100,50
-    priority 1
-
-    track encodeTbaGerpCons
-    subTrack encodeTbaCons
-    shortLabel TBA GERP Cons
-    longLabel TBA GERP Conservation
-    type wig -25.74 4.48
-    viewLimits 0:1
-    noInherit on
-    maxHeightPixels 100:25:11
-    autoScaleDefault Off
-    windowingFunction mean
-    smoothingWindow 3
-    color 120,80,120
-    priority 3
-
-    track encodeTbaSconeCons
-    subTrack encodeTbaCons
-    shortLabel TBA SCONE Cons
-    longLabel TBA SCONE Conservation
-    color 100,90,160
-    priority 4
-
-    track encodeTbaSconeConsUpdate
-    release alpha
-    subTrack encodeTbaCons
-    shortLabel TBA SCONE Cons New
-    longLabel TBA SCONE Conservation 2007 Update
-    color 100,90,160
-    priority 5
-
-track encodeTbaElements
-compositeTrack on
-shortLabel TBA Elements
-longLabel TBA Conserved Elements
-group encodeCompGeno
-priority 70.3
-visibility hide
-exonArrows off
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-type bed 5 .
-dataVersion ENCODE Oct 2005 Freeze
-
-    track encodeTbaPhastConsEl
-    subTrack encodeTbaElements
-    shortLabel TBA PhastCons
-    longLabel TBA PhastCons Conserved Elements
-    color 170,100,50
-    priority 1
-
-    track encodeTbaBinConsEl
-    subTrack encodeTbaElements
-    shortLabel TBA BinCons
-    longLabel TBA BinCons Conserved Elements
-    color 190,70,80
-    priority 2
-
-    track encodeTbaGerpEl
-    subTrack encodeTbaElements
-    shortLabel TBA GERP 
-    longLabel TBA GERP Conserved Elements
-    color 120,80,120
-    priority 3
-
-    track encodeTbaSconeEl
-    subTrack encodeTbaElements
-    shortLabel TBA SCONE
-    longLabel TBA SCONE Conserved Elements
-    color 100,90,160
-    priority 4
-
-    track encodeTbaSconeElUpdate
-    release alpha
-    subTrack encodeTbaElements
-    shortLabel TBA SCONE New
-    longLabel TBA SCONE Conserved Elements 2007 Update
-    color 100,90,160
-    priority 5
-
-track encodeMlaganAlign
-shortLabel MLAGAN Alignment
-longLabel MLAGAN Alignments
-group encodeCompGeno
-priority 72.0
-visibility hide
-color 0, 10, 100
-altColor 1,128,0
-type wigMaf 0.0 1.0
-pairwiseHeight 10
-summary encodeMlaganSummary
-speciesGroups primate placental mammal vertebrate
-sGroup_primate chimp colobus_monkey baboon macaque dusky_titi owl_monkey marmoset mouse_lemur galago
-sGroup_placental rat mouse rabbit cow dog rfbat hedgehog shrew armadillo elephant tenrec
-sGroup_mammal monodelphis  platypus 
-sGroup_vertebrate chicken xenopus tetraodon fugu zebrafish
-treeImage phylo/species28.gif
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-dataVersion ENCODE Oct 2005 Freeze
-
-track encodeMlaganAlignAnno
-shortLabel MLAGAN Alignment Anno
-longLabel MLAGAN Alignments Anno
-group x
-priority 72.0
-visibility hide
-color 0, 10, 100
-altColor 1,128,0
-type wigMaf 0.0 1.0
-summary encodeMlaganAnnoSummary
-maxHeightPixels 100:40:11
-speciesGroups primate placental mammal vertebrate
-sGroup_primate chimp colobus_monkey baboon macaque dusky_titi owl_monkey marmoset mouse_lemur galago
-sGroup_placental rat mouse rabbit cow dog rfbat hedgehog shrew armadillo elephant tenrec
-sGroup_mammal monodelphis  platypus 
-sGroup_vertebrate chicken xenopus tetraodon fugu zebrafish
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-irows on
-frames encodeMlaganFrames
-speciesCodonDefault hg17
-dataVersion ENCODE Oct 2005 Freeze
-
-track encodeMlaganCons
-compositeTrack on
-shortLabel MLAGAN Cons
-longLabel MLAGAN Conservation
-group encodeCompGeno
-priority 72.1
-visibility hide
-type wig 0.0 1.0
-maxHeightPixels 100:25:11
-windowingFunction mean
-autoScaleDefault Off
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-dataVersion ENCODE Oct 2005 Freeze
-
-    track encodeMlaganPhastCons
-    subTrack encodeMlaganCons
-    shortLabel MLAGAN PhastCons
-    longLabel MLAGAN PhastCons Conservation
-    type wig 0.0 1.0
-    noInherit on
-    maxHeightPixels 100:25:11
-    autoScaleDefault Off
-    windowingFunction mean
-    color 170,100,50
-    priority 1
-
-    track encodeMlaganGerpCons
-    subTrack encodeMlaganCons
-    shortLabel MLAGAN GERP Cons
-    longLabel MLAGAN GERP Conservation
-    type wig -25.74 4.48
-    viewLimits 0:1
-    noInherit on
-    maxHeightPixels 100:25:11
-    autoScaleDefault Off
-    windowingFunction mean
-    smoothingWindow 3
-    color 120,80,120
-    priority 3
-
-track encodeMlaganElements
-compositeTrack on
-shortLabel MLAGAN Elements
-longLabel MLAGAN Conserved Elements
-group encodeCompGeno
-priority 72.3
-visibility hide
-exonArrows off
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-type bed 5 .
-dataVersion ENCODE Oct 2005 Freeze
-
-    track encodeMlaganPhastConsEl
-    subTrack encodeMlaganElements
-    shortLabel MLAGAN PhastCons
-    longLabel MLAGAN PhastCons Conserved Elements
-    color 170,100,50
-    priority 1
-
-    track encodeMlaganBinConsEl
-    subTrack encodeMlaganElements
-    shortLabel MLAGAN BinCons
-    longLabel MLAGAN BinCons Conserved Elements
-    color 170,5,10
-    priority 2
-
-    track encodeMlaganGerpEl
-    subTrack encodeMlaganElements
-    shortLabel MLAGAN GERP
-    longLabel MLAGAN GERP Conserved Elements
-    color 120,80,120
-    priority 3
-
-track encodeMavidAlign
-shortLabel MAVID Alignment
-longLabel MAVID Alignments
-group encodeCompGeno
-priority 74.1
-visibility hide
-color 0, 10, 100
-altColor 1,128,0
-type wigMaf 0.0 1.0
-pairwiseHeight 10
-summary encodeMavidSummary
-speciesGroups primate placental mammal vertebrate
-sGroup_primate chimp colobus_monkey baboon macaque dusky_titi owl_monkey marmoset mouse_lemur galago
-sGroup_placental rat mouse rabbit cow dog rfbat hedgehog shrew armadillo elephant tenrec
-sGroup_mammal monodelphis  platypus 
-sGroup_vertebrate chicken xenopus tetraodon fugu zebrafish
-treeImage phylo/species28.gif
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-dataVersion ENCODE Oct 2005 Freeze
-
-track encodeMavidAlignAnno
-shortLabel MAVID Alignment Anno
-longLabel MAVID Alignments Anno
-group x
-priority 74.1
-visibility hide
-color 0, 10, 100
-altColor 1,128,0
-type wigMaf 0.0 1.0
-summary encodeMavidAnnoSummary
-maxHeightPixels 100:40:11
-speciesGroups primate placental mammal vertebrate
-sGroup_primate panTro1 colobus_monkey baboon rheMac1 dusky_titi owl_monkey marmoset mouse_lemur galago
-sGroup_placental rat mouse rabbit cow dog rfbat hedgehog shrew armadillo elephant tenrec
-sGroup_mammal monodelphis  platypus 
-sGroup_vertebrate chicken xenopus tetraodon fugu zebrafish
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-irows on
-frames encodeMavidFrames
-dataVersion ENCODE Oct 2005 Freeze
-
-track encodeMavidCons
-compositeTrack on
-shortLabel MAVID Cons
-longLabel MAVID Conservation
-group encodeCompGeno
-priority 74.2
-visibility hide
-type wig 0.0 1.0
-maxHeightPixels 100:25:11
-windowingFunction mean
-autoScaleDefault Off
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-dataVersion ENCODE Oct 2005 Freeze
-
-    track encodeMavidPhastCons
-    subTrack encodeMavidCons
-    shortLabel MAVID PhastCons
-    longLabel MAVID PhastCons Conservation
-    type wig 0.0 1.0
-    noInherit on
-    maxHeightPixels 100:25:11
-    autoScaleDefault Off
-    windowingFunction mean
-    color 170,100,50
-    priority 1
-
-    track encodeMavidGerpCons
-    subTrack encodeMavidCons
-    shortLabel MAVID GERP Cons
-    longLabel MAVID GERP Conservation
-    type wig -22.58 4.48
-    viewLimits 0:1
-    noInherit on
-    maxHeightPixels 100:25:11
-    autoScaleDefault Off
-    windowingFunction mean
-    smoothingWindow 3
-    color 120,80,120
-    priority 3
-
-track encodeMavidElements
-compositeTrack on
-shortLabel MAVID Elements
-longLabel MAVID Conserved Elements
-group encodeCompGeno
-priority 74.3
-visibility hide
-exonArrows off
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-type bed 5 .
-dataVersion ENCODE Oct 2005 Freeze
-
-    track encodeMavidPhastConsEl
-    subTrack encodeMavidElements
-    shortLabel MAVID PhastCons
-    longLabel MAVID PhastCons Conserved Elements
-    color 170,100,50
-    priority 1
-
-    track encodeMavidBinConsEl
-    subTrack encodeMavidElements
-    shortLabel MAVID BinCons
-    longLabel MAVID BinCons Conserved Elements
-    color 170,5,10
-    priority 2
-
-    track encodeMavidGerpEl
-    subTrack encodeMavidElements
-    shortLabel MAVID GERP
-    longLabel MAVID GERP Conserved Elements
-    color 120,80,120
-    priority 3
-
-track encodeMsaElements
-compositeTrack on
-shortLabel Consens Elements
-longLabel MSA Consensus Constrained Elements
-group encodeCompGeno
-priority 70.0
-visibility hide
-exonArrows off
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-type bed 4 .
-dataVersion ENCODE Oct 2005 Freeze
-
-    track encodeMsaElUnion
-    shortLabel Loose
-    longLabel MSA Consensus Loose Constrained Elements
-    subTrack encodeMsaElements
-    priority 1
-    color 80,70,180
-
-    track encodeMsaElModerate
-    subTrack encodeMsaElements
-    shortLabel Moderate
-    longLabel MSA Consensus Moderate Constrained Elements
-    priority 2
-    color 80,105,148
-
-    track encodeMsaElIntersect
-    subTrack encodeMsaElements
-    shortLabel Strict
-    longLabel MSA Consensus Strict Constrained Elements
-    priority 3
-    color 80,145,105
-
-track encodeMsaAlignComp
-compositeTrack on
-shortLabel Align Agree
-longLabel MSA Alignment Agreement
-group encodeCompGeno
-priority 75.0
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-type wig 0 1.0
-viewLimits .5:1
-maxHeightPixels 128:16:16
-autoScale on
-spanList 1
-dataVersion ENCODE Oct 2005 Freeze
-
-    track encodeMsaAlignMean
-    subTrack encodeMsaAlignComp
-    shortLabel Mean
-    longLabel Mean Agreement MAVID-MLAGAN-TBA
-    color 20,20,20
-    priority 1
-
-    track encodeMsaAlignMavidMlagan
-    subTrack encodeMsaAlignComp
-    shortLabel MAVID-MLAGAN
-    longLabel Agreement MAVID-MLAGAN
-    color 20,20,150
-    priority 2
-
-    track encodeMsaAlignMavidTba
-    subTrack encodeMsaAlignComp
-    shortLabel MAVID-TBA
-    longLabel Agreement MAVID-TBA
-    color 20,20,150
-    priority 3
-
-    track encodeMsaAlignMlaganTba
-    subTrack encodeMsaAlignComp
-    shortLabel MLAGAN-TBA
-    longLabel Agreement MLAGAN-TBA
-    color 20,20,150
-    priority 4
-
-track encodeMsaAlignUngapped
-compositeTrack on
-shortLabel Align Gaps
-longLabel MSA Alignment Gaps (#Ungapped Species)
-group encodeCompGeno
-priority 75.1
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-type wig 0 27
-spanList 1
-viewLimits 0:27
-autoScale on
-maxHeightPixels 128:16:16
-dataVersion ENCODE Oct 2005 Freeze
-
-    track encodeMsaAlignMavidUngapped
-    subTrack encodeMsaAlignUngapped
-    shortLabel MAVID
-    longLabel Ungapped Species in MAVID
-    color 110,40,30
-    priority 1
-
-    track encodeMsaAlignMlaganUngapped
-    subTrack encodeMsaAlignUngapped
-    shortLabel MLAGAN
-    longLabel Ungapped Species in MLAGAN
-    color 110,40,30
-    priority 2
-
-    track encodeMsaAlignTbaUngapped
-    subTrack encodeMsaAlignUngapped
-    shortLabel TBA
-    longLabel Ungapped Species in TBA
-    color 110,40,30
-    priority 3
-
-track encodeEvoFold
-shortLabel UCSC EvoFold
-longLabel UCSC, RNA secondary structure predicted by EvoFold (id_strand_score)
-group encodeGenes
-priority 63.11
-visibility hide
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-color 30,120,0
-type bed 6 +
-mafTrack encodeTbaAlign
-dataVersion May 2006
-
-track encodeUViennaRnaz
-shortLabel Vienna RNAz
-longLabel University of Vienna, RNA secondary structure predicted by RNAz 
-group encodeGenes
-priority 63.12
-visibility hide
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-color 30,120,0
-type bed 4
-dataVersion Dec 2006
-
-track encodeDless
-shortLabel DLESS
-longLabel Detection of LinEage Specific Selection (DLESS)
-group encodeCompGeno
-priority 100.191
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-gainColor 0,255,0
-lossColor 255,0,0
-visibility hide
-type bed 4 +
-dataVersion ENCODE Oct 2005 Freeze
-
-searchTable encodeGisRnaPetHCT116
-searchMethod exact
-searchType bed
-termRegex [0-9]+-[0-9]+-[0-9]+
-shortCircuit 1
-searchPriority 50
-
-searchTable encodeGisRnaPetMCF7
-searchMethod exact
-searchType bed
-termRegex [0-9]+-[0-9]+-[0-9]+
-shortCircuit 1
-searchPriority 50
-
-searchTable encodeGisRnaPetMCF7Estr
-searchMethod exact
-searchType bed
-termRegex [0-9]+-[0-9]+-[0-9]+
-shortCircuit 1
-searchPriority 50
 
 searchTable encodeUppsalaChipSites
 searchMethod exact

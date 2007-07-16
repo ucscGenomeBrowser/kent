@@ -829,6 +829,7 @@ type bed 9 +
 itemRgb on
 exonArrowsDense on
 dataVersion ENCODE June 2005 Freeze
+origAssembly hg16
 
     track encodeStanfordPromotersAGS
     subTrack encodeStanfordPromoters
@@ -3139,6 +3140,7 @@ viewLimits -0.6:0.7
 color 20,150,20
 altColor 50,100,50
 dataVersion ENCODE Oct 2005 Freeze
+origAssembly hg17
 
     track encodeUncFaireSignal
     subTrack encodeUncFaire
@@ -3274,6 +3276,7 @@ dataVersion ENCODE Oct 2005 Freeze, May 2007 data
     shortLabel UVa Ori-NS GM
     color 205,0,0
     dataVersion May 2007
+    origAssembly hg17
     priority 1
 
     track encodeUvaDnaRepOriginsNSHela
@@ -3282,6 +3285,7 @@ dataVersion ENCODE Oct 2005 Freeze, May 2007 data
     shortLabel UVa Ori-NS HeLa
     color 250,0,0
     dataVersion May 2007
+    origAssembly hg17
     priority 2
 
     track encodeUvaDnaRepOriginsBubbleHela
@@ -3290,6 +3294,7 @@ dataVersion ENCODE Oct 2005 Freeze, May 2007 data
     shortLabel UVa Ori-Bubble HeLa
     color 0,0,128
     dataVersion May 2007
+    origAssembly hg17
     priority 3
 
     track encodeUvaDnaRepOriginsTR50Hela
@@ -3297,6 +3302,7 @@ dataVersion ENCODE Oct 2005 Freeze, May 2007 data
     longLabel University of Virginia DNA Replication Origins, Ori-TR50, HeLa
     shortLabel UVa Ori-TR50 HeLa
     dataVersion May 2007
+    origAssembly hg17
     priority 4
 
 track encodeUvaDnaRepTr50
@@ -3313,6 +3319,7 @@ maxHeightPixels 128:16:16
 autoScale Off
 windowingFunction mean
 dataVersion ENCODE Oct 2005 Freeze
+origAssembly hg17
 
 track encode_tba
 shortLabel TBA Nov04
