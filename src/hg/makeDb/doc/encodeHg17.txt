@@ -2918,24 +2918,6 @@ Loaded 2553 elements of size 7
     # the Yale Chip Pval, Signal and Sites tracks in the table of the 
     # antibody and antibody target descriptions.
   
-##########################################################################
-# UTexas STAGE (2005-10-31, 11-17 kate)
-# Submitted 10/15 by Akshay Bhinge <akshayb@mail.utexas.edu>
-# Resubmitted 11/17
-#  2 files - raw and peaks, for c-Myc in HeLa
-# range .001 to 1.0.  Peaks restricted to >.8
-# Adjusted data in Tags file:  set score=1 items to 300 so
-# they'll be visible with gray-scale tags requested by Akshay.
-# (This is why it's loaded as blocked bed).  Huh ??
-#
-# New data (raw tags for STAT1 in HeLa) submitted 2006-10-16
-    #cd /cluster/data/encode/UTexas/stage/2005-10-15
-    cd /cluster/data/encode/UTexas/stage/2005-11-17
-    grep '^chr' lab/myc.tag.prob.bed | \
-        awk '{if ($5 == 1) $5 = 300; \
-                printf("%s\t%d\t%d\t%s\t%d\t%s\t%d\t%d\t0\t1\t%d,\t0\n", \
-                $1, $2, $3, $4, $5, $6, $2, $3, $3 - $2)}' | \
-        hgLoadBed -noBin -strict hg17 encodeUtexStageMycHelaTags stdin
     foreach b (1, 5, 10)
        awk 'BEGIN {OFS="\t"} {print $0, $b;}' Sites${b}.bed
     end
@@ -2990,7 +2972,6 @@ Loaded 2553 elements of size 7
     grep '^chr' lab/myc.tag.prob.bed | \
        awk '{printf("%s\t%d\t%d\t%s\t%d\n",$1,$2,$3,$4,$5)}' | \
     hgLoadBed -noBin -strict hg17 encodeUtexStageCMycHelaTags stdin
-
     
 ##########################################################################
 # Univ. Uppsala, Sweden Chip/chip
