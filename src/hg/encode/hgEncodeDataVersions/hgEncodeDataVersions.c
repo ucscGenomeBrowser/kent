@@ -9,7 +9,7 @@
 #include "hCommon.h"
 #include "cart.h"
 
-static char const rcsid[] = "$Id: hgEncodeDataVersions.c,v 1.2 2005/11/23 23:38:56 kate Exp $";
+static char const rcsid[] = "$Id: hgEncodeDataVersions.c,v 1.3 2007/07/17 01:14:47 angie Exp $";
 
 /* Global variables */
 struct cart *cart;
@@ -90,13 +90,14 @@ void doMiddle(struct cart *theCart)
 /* Set up globals and make web page */
 {
 char *db = NULL;
+char *ignored;
 struct trackDb *tracks;
 struct trackRef *tr;
 struct group *group, *groups = NULL;
 
 cart = theCart;
-db = cartUsualString(theCart, "db", "hg17");
 cartWebStart(cart, "ENCODE Track Data Versions (%s)", db);
+getDbAndGenome(cart, &db, &ignored, NULL);
 hSetDb(db);
 tracks = hTrackDb(NULL);
 groups = groupTracks(tracks);

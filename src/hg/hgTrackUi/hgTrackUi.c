@@ -30,7 +30,7 @@
 
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.378 2007/06/26 00:19:08 hartera Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.379 2007/07/17 01:14:47 angie Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2795,9 +2795,10 @@ void doMiddle(struct cart *theCart)
 struct trackDb *tdb = NULL;
 char *track;
 struct customTrack *ct, *ctList = NULL;
+char *ignored;
 cart = theCart;
 track = cartString(cart, "g");
-database = cartUsualString(cart, "db", hGetDb());
+getDbAndGenome(cart, &database, &ignored, NULL);
 hSetDb(database);
 chromosome = cartUsualString(cart, "c", hDefaultChrom());
 if (sameWord(track, RULER_TRACK_NAME))

@@ -17,7 +17,7 @@
 #include "liftOver.h"
 #include "liftOverChain.h"
 
-static char const rcsid[] = "$Id: hgLiftOver.c,v 1.53 2007/07/13 22:56:41 angie Exp $";
+static char const rcsid[] = "$Id: hgLiftOver.c,v 1.54 2007/07/17 01:14:46 angie Exp $";
 
 /* CGI Variables */
 #define HGLFT_USERDATA_VAR "hglft_userData"     /* typed/pasted in data */
@@ -311,11 +311,12 @@ return score;
 }
 
 
-struct liftOverChain *defaultChoices(struct liftOverChain *chainList)
+struct liftOverChain *defaultChoices(struct liftOverChain *chainList,
+				     char *cartDb)
 /* Out of a list of liftOverChains and a cart, choose a
  * list to display. */
 {
-char *fromOrg, *fromDb, *toOrg, *toDb, *cartDb, *cartOrg;
+char *fromOrg, *fromDb, *toOrg, *toDb, *cartOrg;
 struct liftOverChain *choice = NULL;  
 struct hash *dbRank = hGetDatabaseRank();
 double bestScore = -1;
@@ -326,7 +327,6 @@ fromOrg = cartCgiUsualString(cart, HGLFT_FROMORG_VAR, "0");
 fromDb = cartCgiUsualString(cart, HGLFT_FROMDB_VAR, "0");
 toOrg = cartCgiUsualString(cart, HGLFT_TOORG_VAR, "0");
 toDb = cartCgiUsualString(cart, HGLFT_TODB_VAR, "0");
-cartDb = cartCgiUsualString(cart, "db", "0");
 cartOrg = hArchiveOrganism(cartDb);
 
 if (sameWord(fromOrg,"0"))
@@ -395,7 +395,7 @@ getDbAndGenome(cart, &db, &organism, oldVars);
 
 chainList = liftOverChainListFiltered();
 
-choice = defaultChoices(chainList);
+choice = defaultChoices(chainList, db);
 
 minSizeQ = cartCgiUsualInt(cart, HGLFT_MINSIZEQ, choice->minSizeQ);
 minSizeT = cartCgiUsualInt(cart, HGLFT_MINSIZET, choice->minSizeT);

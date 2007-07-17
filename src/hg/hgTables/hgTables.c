@@ -26,7 +26,7 @@
 #include "bedCart.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.155 2007/07/13 22:56:41 angie Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.156 2007/07/17 01:14:46 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -1334,11 +1334,10 @@ void doMetaData(struct sqlConnection *conn)
 /* Get meta data for a database. */
 {
 puts("Content-Type:text/plain\n");
-char *db= cartString(cart, "db");
 char *query = "";
 if (cartVarExists(cart, hgtaMetaStatus))
     {
-    printf("Table status for database %s\n", db);
+    printf("Table status for database %s\n", database);
     query = "SHOW TABLE STATUS";
     }
 else if (cartVarExists(cart, hgtaMetaVersion))
