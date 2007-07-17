@@ -52,6 +52,11 @@ char *hBackgroundImage();
 #define OLIGO_MATCH_TRACK_LABEL "Short Match"
 #define OLIGO_MATCH_TRACK_LONGLABEL "Perfect Match to Short Sequence"
 
+/* Definitions for User Psl track (hgBlat results). */
+#define USER_PSL_TRACK_NAME "hgUserPsl"
+#define USER_PSL_TRACK_LABEL "Blat Sequence"
+#define USER_PSL_TRACK_LONGLABEL "Your Sequence from BLAT Search"
+
 /* Display of bases on the ruler, and multiple alignments.
  * If present, indicates reverse strand */
 #define COMPLEMENT_BASES_VAR    "complement"
