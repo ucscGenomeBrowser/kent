@@ -11,7 +11,7 @@
 #include "bits.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: clusterGenes.c,v 1.37 2007/06/25 06:16:25 markd Exp $";
+static char const rcsid[] = "$Id: clusterGenes.c,v 1.38 2007/07/17 23:15:53 markd Exp $";
 
 /* Notes:
  *  strand is passed as '*' when -ignoreStrand is specified.
@@ -826,7 +826,7 @@ bed.chrom = cluster->chrom;
 bed.chromStart = cluster->start;
 bed.chromEnd = cluster->end;
 bed.blockCount = 0;
-safef(nameBuf, sizeof(nameBuf), "cl%d", cluster->id);
+safef(nameBuf, sizeof(nameBuf), "%d", cluster->id);
 bed.name = nameBuf;
 bed.strand[0] = ((strand == ignoredStrand) ? '+' : strand);
 bed.thickStart = cluster->start;
