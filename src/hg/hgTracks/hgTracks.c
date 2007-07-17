@@ -118,7 +118,7 @@
 #endif
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1371 2007/07/16 22:42:19 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1372 2007/07/17 23:26:24 fanhsu Exp $";
 
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
@@ -12080,6 +12080,14 @@ else if (sameWord(type, "wigMaf"))
     {
     wigMafMethods(track, tdb, wordCount, words);
     }
+else if (sameWord(type, "wigMafGsid"))
+    {
+    wigMafMethods(track, tdb, wordCount, words);
+    }
+else if (sameWord(type, "wigMafGsidProt"))
+    {
+    wigMafMethods(track, tdb, wordCount, words);
+    }
 else if (sameWord(type, "wigMafProt"))
     {
     wigMafMethods(track, tdb, wordCount, words);
@@ -12905,9 +12913,17 @@ if (gotBlat)
     {
     hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgBlat?%s\" class=\"topbar\">Blat</A></TD>", uiVars->string);
     }
-hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgTables?db=%s&position=%s:%d-%d&%s=%u\" class=\"topbar\">%s</A></TD>",
+if (hIsGsidServer())
+    {
+    hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/gsidTable?db=%s\" class=\"topbar\">%s</A></TD>",
+       database, "Table View");
+    }
+else
+    {
+    hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgTables?db=%s&position=%s:%d-%d&%s=%u\" class=\"topbar\">%s</A></TD>",
        database, chromName, winStart+1, winEnd, cartSessionVarName(),
        cartSessionId(cart), "Tables");
+    }
 if (hgNearOk(database))
     {
     hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgNear?%s\" class=\"topbar\">%s</A></TD>",
