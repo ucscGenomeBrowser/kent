@@ -12,6 +12,7 @@
 #define SPECIES_GROUP_PREFIX    "sGroup_"
 #define SPECIES_HTML_TARGET	"sT"
 #define SPECIES_CODON_DEFAULT	"speciesCodonDefault"
+#define SPECIES_USE_FILE        "speciesUseFile"
 #define PAIRWISE_VAR            "pairwise"
 #define PAIRWISE_HEIGHT         "pairwiseHeight"
 #define SUMMARY_VAR             "summary"
