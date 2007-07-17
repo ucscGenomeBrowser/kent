@@ -17,7 +17,7 @@
 #include "mafFrames.h"
 #include "phyloTree.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.112 2007/06/11 17:04:03 kate Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.113 2007/07/17 18:03:02 braney Exp $";
 
 #define GAP_ITEM_LABEL  "Gaps"
 
@@ -129,6 +129,7 @@ char *speciesTarget = trackDbSetting(track->tdb, SPECIES_TARGET_VAR);
 char *speciesTree = trackDbSetting(track->tdb, SPECIES_TREE_VAR);
 bool useTarg;	/* use phyloTree to find shortest path */
 struct phyloTree *tree = NULL;
+char *speciesUseFile = trackDbSetting(track->tdb, SPECIES_USE_FILE);
 
 /* either speciesOrder or speciesGroup is specified in trackDb */
 char *speciesOrder = trackDbSetting(track->tdb, SPECIES_ORDER_VAR);
@@ -158,12 +159,21 @@ else
 if (useTarg && (tree = phyloParseString(speciesTree)) == NULL)
     useTarg = FALSE;
 
-if (speciesOrder == NULL && speciesGroup == NULL)
+if (speciesOrder == NULL && speciesGroup == NULL && speciesUseFile == NULL)
     errAbort(
-      "Track %s missing required trackDb setting: speciesOrder or speciesGroup",
+      "Track %s missing required trackDb setting: speciesOrder, speciesGroups, or speciesUseFile",
                 track->mapName);
+
 if (speciesGroup)
     groupCt = chopLine(cloneString(speciesGroup), groups);
+
+if (speciesUseFile)
+    {
+    if ((speciesGroup != NULL) || (speciesOrder != NULL))
+	errAbort("Can't specify speciesUseFile and speciesGroup or speciesOrder");
+    speciesOrder = cartGetOrderFromFile(cart, speciesUseFile);
+    speciesOff = NULL;
+    }
 
 /* keep track of species configured off initially for track */
 if (speciesOff)
