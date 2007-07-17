@@ -208,7 +208,7 @@
 #include "omicia.h"
 #include "atomDb.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1314 2007/07/15 23:05:34 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1315 2007/07/17 00:10:23 angie Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -18681,9 +18681,10 @@ char *track = cartString(cart, "g");
 char *item = cartOptionalString(cart, "i");
 char *parentWigMaf = cartOptionalString(cart, "parentWigMaf");
 struct trackDb *tdb = NULL;
+char *ignored;
 
 /*	database and organism are global variables used in many places	*/
-database = cartUsualString(cart, "db", hGetDb());
+getDbAndGenome(cart, &database, &ignored, NULL);
 organism = hOrganism(database);
 scientificName = hScientificName(database);
 
