@@ -1218,15 +1218,17 @@ else
 	if (x2 > insideWidth-1) 
 	    x2 = insideWidth-1;
 	w = x2 - x1 + 1;
-	if (sameString(tg->mapName, "expRatioUCSFDemo"))
+	if (sameString(tg->mapName, "expRatioUCSFDemo") || sameString(tg->mapName, "cnvLungBroadv2"))
 	    {
             struct slList *item;
             for (item = tg->items; item != NULL; item = item->next)
                 {
                 char *name = tg->itemName(tg, item);
-                mapBoxHcTwoItems(probe->start, probe->end, x1+xOff, y, w, lineHeight, tg->mapName, name, name, name); 
+                mapBoxHcTwoItems(winStart, winEnd, xOff, y, winEnd-winStart, lineHeight, tg->mapName, name, name, name); 
+//                mapBoxHcTwoItems(probe->start, probe->end, x1+xOff, y, w, lineHeight, tg->mapName, name, name, name); 
                 y = y + lineHeight;
                 }
+	    break;
 	    }
 	else 
 	    mapBoxHcTwoItems(probe->start, probe->end, x1+xOff, y, w, totalHeight, tg->mapName, probe->name, probe->name, probe->name);
