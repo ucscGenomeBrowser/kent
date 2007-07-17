@@ -13,7 +13,7 @@
 #include "hgColors.h"
 #include "wikiLink.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.132 2007/07/13 22:56:43 angie Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.133 2007/07/17 00:07:05 angie Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -89,8 +89,6 @@ char *scriptName = cgiScriptName();
 char *db = NULL;
 boolean isEncode = FALSE;
 boolean isGsid   = hIsGsidServer();
-if (theCart)
-    db = cartOptionalString(theCart, "db");
 
 if (scriptName == NULL)
     scriptName = cloneString("");
@@ -173,16 +171,15 @@ if (withLogo)
     }
 if (theCart)
     {
-    char *theDb = NULL;
     char *theGenome = NULL;
     char *genomeEnc = NULL;
 
-    getDbAndGenome(theCart, &theDb, &theGenome, NULL);
+    getDbAndGenome(theCart, &db, &theGenome, NULL);
     genomeEnc = cgiEncode(theGenome);
 
     snprintf(uiState, sizeof(uiState), "?%s=%s&%s=%s&%s=%u", 
 	     orgCgiName, genomeEnc,
-	     dbCgiName, theDb,
+	     dbCgiName, db,
 	     cartSessionVarName(), cartSessionId(theCart));
     }
 else
