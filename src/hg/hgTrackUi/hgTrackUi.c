@@ -30,7 +30,7 @@
 
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.379 2007/07/17 01:14:47 angie Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.380 2007/07/17 18:00:15 braney Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1827,6 +1827,7 @@ char *speciesTarget = trackDbSetting(tdb, SPECIES_TARGET_VAR);
 char *speciesTree = trackDbSetting(tdb, SPECIES_TREE_VAR);
 char *speciesOrder = trackDbSetting(tdb, SPECIES_ORDER_VAR);
 char *speciesGroup = trackDbSetting(tdb, SPECIES_GROUP_VAR);
+char *speciesUseFile = trackDbSetting(tdb, SPECIES_USE_FILE);
 char *framesTable = trackDbSetting(tdb, "frames");
 char *species[100];
 char *groups[20];
@@ -1864,12 +1865,20 @@ if (consWiggles && consWiggles->next)
     }
 
 /* determine species and groups for pairwise -- create checkboxes */
-if (speciesOrder == NULL && speciesGroup == NULL)
+if (speciesOrder == NULL && speciesGroup == NULL && speciesUseFile == NULL)
     errAbort(
-      "Track %s missing required trackDb setting: speciesOrder or speciesGroup",
+      "Track %s missing required trackDb setting: speciesOrder, speciesGroups, or speciesUseFile",
                 tdb->tableName);
+
 if (speciesGroup)
     groupCt = chopLine(speciesGroup, groups);
+
+if (speciesUseFile)
+    {
+    if ((speciesGroup != NULL) || (speciesOrder != NULL))
+	errAbort("Can't specify speciesUseFile and speciesGroup or speciesOrder");
+    speciesOrder = cartGetOrderFromFile(cart, speciesUseFile);
+    }
 
 for (group = 0; group < groupCt; group++)
     {
