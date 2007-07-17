@@ -11906,6 +11906,15 @@ do
         hgsql -e "delete from tfbsConsFactors where name=\"${N}\";" hg18
 done
 
+# Reload tfbsCons to correct errors (2007-07-17 - Hiram)
+    cd /cluster/data/hg18/bed/tfbsCons
+    hgLoadBed -tab hg18 tfbsConsSites \
+	-sqlTable=$HOME/kent/src/hg/lib/tfbsConsSites.sql tfbsConsSites.bed
+    hgsql -N -e "select name from tfbsConsSites;" hg18 | sort -u \
+	> names.new.2007-07-17
+    #	showing zero difference still, nothing more to be done
+    comm -13 names.new.2007-07-17 names.factors
+
 ##############################################################################
 # REWORK PLACE ASSEMBLY CLONES ON CONTIGS AND SEQUENCE
 #	(WORKING - 2006-10-23 - Hiram)
