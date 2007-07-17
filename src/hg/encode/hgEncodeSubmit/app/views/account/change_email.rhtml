@@ -1,0 +1,26 @@
+<%= error_messages_for :user %>
+
+<% unless @changed -%>
+  <h1>
+    Step 1 of 3
+  </h1>    
+
+  <% form_for :user do |f| -%>
+    <p>
+      <label for="user_email">New Email</label> <br />
+      <%= f.text_field :email %> <br />
+      <%= submit_tag "Update email!" %>
+  <% end -%>
+<% else -%>
+  <h1>
+    Step 2 of 3
+  </h1>
+  <p>  
+    Thanks. An email has been sent to the address provided 
+    (<%= self.current_user.new_email %>).
+  </p>
+  <p>
+    Please follow the instructions contained within the 
+    email to complete this process.
+  </p> 
+<% end -%>

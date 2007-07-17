@@ -1,0 +1,18 @@
+<h1>Upload Submission Archive File</h1>
+
+<%= form_tag ({:action => 'upload'}, :multipart => true) %>
+
+  <h3>for <%= @submission.name -%></h3>
+
+  <p><label for="submission_upload_url">Submit Using URL</label><br/>
+  <%= text_field_tag 'upload_url', "http://", :size => 40 %><br/>
+
+  <p><label for="submission_upload_file">Submit Local Archive File</label><br/>
+  <%= file_field_tag 'upload_file', :size => 25 %><br/>
+
+  <%= submit_tag "Upload" %><br/>
+<% end_form_tag %>
+
+<%= link_to 'Back', {:action => 'list'} %>
+
+

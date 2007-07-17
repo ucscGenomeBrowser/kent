@@ -1,0 +1,16 @@
+<h1><%= @classified.title -%></h1>
+
+<p>
+<strong>Price: </strong> <%= number_to_currency(@classified.price) %><br/>
+<strong>Location: </strong> <%= @classified.location %><br/>
+<strong>Category: </strong> <%= link_to @classified.category.name, :action => "show_category", :id => @classified.category.id %><br/>
+<strong>Date Posted: </strong> <%= distance_of_time_in_words_to_now(@classified.created_at) %><br/>
+<strong>Last Updated: </strong> <%= distance_of_time_in_words(@classified.updated_at, Time.now) %> ago
+</p>
+
+<p><%= @classified.description %></p>
+
+<hr />
+
+<p>Interested? Contact <%= mail_to @classified.email -%></p>
+<%= link_to 'Back', {:action => 'list'} %>

@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1" />
+  <meta http-equiv="Content-Language" content="en-us" />
+  <title>ENCODE Pipeline</title>
+<%= stylesheet_link_tag "style" %>
+</head>
+<body id="encode-pipeline">
+<div id="container">
+  <div id="header">
+    <h1>ENCODE Pipeline</h1>
+  </div>
+  <% if flash[:error] %><div id="error"><%= flash[:error] %></div><% end %>  
+  <% if flash[:warning] %><div id="warning"><%= flash[:warning] %></div><% end %>  
+  <% if flash[:notice] %><div id="notice"><%= flash[:notice] %></div><% end %>  
+  <div id="content">
+      <%= yield -%>
+  </div>
+  <div id="sidebar">
+    Logged in as: <br/>
+    <%= @current_user.login %> <br/>
+    <%= link_to 'Log out', :controller => 'account', :action => 'logout' %> <br/>
+    <%= link_to 'Change profile', :controller => 'account', :action => 'change_profile' %> <br/>
+    <%= link_to 'Change password', :controller => 'account', :action => 'change_password' %> <br/>
+    <%= link_to 'Change email', :controller => 'account', :action => 'change_email' %> <br/>
+    <%= link_to 'My Submissions', :controller => 'pipeline', :action => 'show_user' %> <br/>
+    <%= link_to 'All Submissions', :controller => 'pipeline', :action => 'list' %> <br/>
+  </div>
+</div>
+</body>
+</html>

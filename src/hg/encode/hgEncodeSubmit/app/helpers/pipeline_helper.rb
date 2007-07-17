@@ -1,0 +1,2 @@
+module PipelineHelper
+end

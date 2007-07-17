@@ -1,0 +1,19 @@
+<h1>Editing Submission: <%= @submission.name -%></h1>
+
+<%= error_messages_for 'submission' -%>
+
+<%= start_form_tag :action => 'update', :id => @submission %>
+
+  <p><label for="submission_name">Name</label><br/>
+  <%= text_field 'submission', 'name'  %></p>
+  
+  <p><label for="submission_s_type">Type</label><br/>
+  <%= text_field 'submission', 's_type'  %></p>
+  
+  <p><label for="submission_status">Status:</label>
+  <%= @submission.status %></p>
+  
+  <%= submit_tag "Save changes" %>
+<%= end_form_tag %>
+
+<%= link_to 'Back', {:action => 'list'} %>
