@@ -8,8 +8,9 @@
 #include "hdb.h"
 #include "hCommon.h"
 #include "cart.h"
+#include "web.h"
 
-static char const rcsid[] = "$Id: hgEncodeDataVersions.c,v 1.3 2007/07/17 01:14:47 angie Exp $";
+static char const rcsid[] = "$Id: hgEncodeDataVersions.c,v 1.4 2007/07/17 17:27:28 angie Exp $";
 
 /* Global variables */
 struct cart *cart;
