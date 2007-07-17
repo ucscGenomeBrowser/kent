@@ -2497,24 +2497,6 @@ windowingFunction mean
 autoScale off
 origAssembly hg16
 dataVersion ENCODE June 2005 Freeze
-release beta
-
-        track encodeUcsdNgChip
-        compositeTrack on
-        shortLabel LI Ng TAF1 IMR90
-        longLabel Ludwig Institute NimbleGen ChIP-chip: TAF1 antibody, IMR90 cells
-        group encodeChip
-        priority 51.0
-        visibility full
-        maxHeightPixels 128:16:16
-        type wig -5.61 6.47
-        spanList 50
-        viewLimits -1:2
-        windowingFunction mean
-        autoScale off
-        origAssembly hg16
-        dataVersion ENCODE June 2005 Freeze
-        release alpha
 
     track encodeUcsdNgChipSignal
     subTrack encodeUcsdNgChip
