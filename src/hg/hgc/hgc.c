@@ -208,7 +208,7 @@
 #include "omicia.h"
 #include "atomDb.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1315 2007/07/17 00:10:23 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1316 2007/07/17 22:58:27 angie Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -3516,10 +3516,10 @@ else
     {
     struct trackDb *tdb;
     AllocVar(tdb);
-    tdb->tableName = cloneString("hgUserPsl");
-    tdb->shortLabel = cloneString("BLAT Sequence");
+    tdb->tableName = cloneString(USER_PSL_TRACK_NAME);
+    tdb->shortLabel = cloneString(USER_PSL_TRACK_LABEL);
     tdb->type = cloneString("psl");
-    tdb->longLabel = cloneString("Your Sequence from BLAT Search");
+    tdb->longLabel = cloneString(USER_PSL_TRACK_LONGLABEL);
     tdb->visibility = tvFull;
     tdb->priority = 11.0;
     trackDbPolish(tdb);
@@ -3624,7 +3624,7 @@ printf("<TR><TD>Track<BR>Name</TD><TD>Toggle<BR>Case</TD><TD>Under-<BR>line</TD>
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
     char *track = tdb->tableName;
-    if (sameString("hgUserPsl", track) ||
+    if (sameString(USER_PSL_TRACK_NAME, track) ||
 	(lookupCt(track) != NULL) ||
 	(fbUnderstandTrack(track) && !dnaIgnoreTrack(track)))
 	{
@@ -3932,7 +3932,7 @@ struct hTableInfo *htiForUserPsl()
 struct hTableInfo *hti;
 
 AllocVar(hti);
-hti->rootName = cloneString("hgUserPsl");
+hti->rootName = cloneString(USER_PSL_TRACK_NAME);
 hti->isPos = TRUE;
 hti->isSplit = FALSE;
 hti->hasBin = FALSE;
@@ -4128,7 +4128,7 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     char *track = tdb->tableName;
     struct featureBits *fbList = NULL, *fb;
     struct customTrack *ct = lookupCt(track);
-    if (sameString("hgUserPsl", track) ||
+    if (sameString(USER_PSL_TRACK_NAME, track) ||
 	(ct != NULL) ||
 	(fbUnderstandTrack(track) && !dnaIgnoreTrack(track)))
         {
@@ -4154,7 +4154,7 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
 	if (! hasSettings)
 	    continue;
 
-	if (sameString("hgUserPsl", track))
+	if (sameString(USER_PSL_TRACK_NAME, track))
 	    {
 	    struct hTableInfo *hti = htiForUserPsl();
 	    struct bedFilter *bf;
@@ -5182,10 +5182,11 @@ struct psl *pslList = NULL, *psl;
 char *pslName, *faName, *qName;
 char *encItem = cgiEncode(item);
 enum gfType qt, tt;
+char helpName[PATH_LEN], *helpBuf;
 
 cartWebStart(cart, "BLAT Search Alignments");
 printf("<H2>BLAT Search Alignments</H2>\n");
-printf("<H3>Click over a line to see detailed letter by letter display</H3>");
+printf("<H3>Click on a line to see detailed letter-by-letter display</H3>");
 parseSs(item, &pslName, &faName, &qName);
 pslxFileOpen(pslName, &qt, &tt, &lf);
 while ((psl = pslNext(lf)) != NULL)
@@ -5203,6 +5204,10 @@ slReverse(&pslList);
 lineFileClose(&lf);
 printAlignments(pslList, start, "htcUserAli", "user", encItem);
 pslFreeList(&pslList);
+safef(helpName, sizeof(helpName), "%s%s/%s.html", hDocumentRoot(), HELP_DIR,
+      USER_PSL_TRACK_NAME);
+readInGulp(helpName, &helpBuf, NULL);
+puts(helpBuf);
 }
 
 void doHgGold(struct trackDb *tdb, char *fragName)
@@ -19164,7 +19169,7 @@ else if (sameWord(track, "mouseOrtho"))
     {
     doMouseOrtho(tdb, item);
     }
-else if (sameWord(track, "hgUserPsl"))
+else if (sameWord(track, USER_PSL_TRACK_NAME))
     {
     doUserPsl(track, item);
     }
