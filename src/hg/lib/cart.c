@@ -16,7 +16,7 @@
 #include "trashDir.h"
 #include "customFactory.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.72 2007/07/13 22:56:42 angie Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.73 2007/07/17 17:58:06 braney Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -1205,3 +1205,26 @@ void cartSetDbDisconnector(DbDisconnect disconnector)
 {
 cartDefaultDisconnector = disconnector;
 }
+
+char *cartGetOrderFromFile(struct cart *cart, char *speciesUseFile)
+/* Look in a cart variable that holds the filename that has a list of 
+ * species to show in a maf file */
+{
+char *val;
+struct dyString *orderDY = dyStringNew(256);
+char *words[16];
+
+if ((val = cartUsualString(cart, speciesUseFile, NULL)) == NULL)
+    errAbort("can't find species list file var '%s' in cart\n",speciesUseFile);
+
+struct lineFile *lf = lineFileOpen(val, TRUE);
+
+if (lf == NULL)
+    errAbort("can't open species list file %s",val);
+
+while( ( lineFileChopNext(lf, words, sizeof(words)/sizeof(char *)) ))
+    dyStringPrintf(orderDY, "%s ",words[0]);
+
+return dyStringCannibalize(&orderDY);
+}
+
