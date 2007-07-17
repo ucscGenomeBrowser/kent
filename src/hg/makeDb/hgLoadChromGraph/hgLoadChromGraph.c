@@ -10,7 +10,7 @@
 #include "hgRelate.h"
 #include "chromGraph.h"
 
-static char const rcsid[] = "$Id: hgLoadChromGraph.c,v 1.6 2007/07/05 16:45:00 kate Exp $";
+static char const rcsid[] = "$Id: hgLoadChromGraph.c,v 1.7 2007/07/17 08:31:49 aamp Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -23,12 +23,20 @@ errAbort(
   "   -noLoad - don't load database\n"
   "   -idTable - Use a table on the same database to fetch coordinates\n"
   "              e.g. \"snp127\".\n" 
+  "   -minusLog10 - log10 the data then minus it before loading.\n"
+  "   -pathPrefix - Specify a location to use in metaChromGraph \n"
+  "                 instead of /gbdb/<database>/chromGraph for the\n"
+  "                 .cgb file.\n\n"
+  "*NOTE: remember to put .cgb file in a good place for the web server\n"
+  "       and make a link to the file in /gbdb/<database>/chromGraph.\n"
   );
 }
 
 static struct optionSpec options[] = {
    {"noLoad", OPTION_BOOLEAN},
    {"idTable", OPTION_STRING},
+   {"minusLog10", OPTION_BOOLEAN},
+   {"pathPrefix", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -134,6 +142,7 @@ FILE *f;
 char *tempDir = ".";
 char path[PATH_LEN], gbdbPath[PATH_LEN];
 char *idTable = optionVal("idTable", NULL);
+char *pathPrefix = NULL;
 
 if (idTable == NULL)
     list = chromGraphLoadAll(fileName);
@@ -146,6 +155,13 @@ if (list == NULL)
 minVal = maxVal = list->val;
 for (el = list->next; el != NULL; el = el->next)
     {
+    if (optionExists("minusLog10"))
+	{
+	if (el->val == 1)
+	    el->val = 0;
+	else if (el->val > 0)
+	    el->val = -1 * log(el->val)/log(10);
+	}
     if (el->val < minVal)
         minVal = el->val;
     if (el->val > maxVal)
@@ -185,28 +201,12 @@ if (doLoad)
 	sqlUpdate(conn, dy->string);
 	}
 
-    /* Make directory for track. */
-    safef(path, sizeof(path), "/cluster/data/%s/bed/%s", db, track);
-    makeDir(path);
-
     /* Make chrom graph file */
-    safef(path, sizeof(path), "/cluster/data/%s/bed/%s/%s.cgb", 
-    	db, track, track);
+    safef(path, sizeof(path), "%s.cgb", track);
     chromGraphToBin(list, path);
-
-    /* Link to gbdb */
-    safef(path, sizeof(path), "/gbdb/%s", db);
-    makeDir(path);
     safef(path, sizeof(path), "/gbdb/%s/chromGraph", db);
-    makeDir(path);
-    safef(gbdbPath, sizeof(gbdbPath), "%s/%s.cgb", path, track);
-    remove(gbdbPath);
-    dyStringClear(dy);
-    dyStringPrintf(dy, "ln -s /cluster/data/%s/bed/%s/%s.cgb ",
-    	db, track, track);
-    dyStringPrintf(dy, "%s", gbdbPath);
-    if (system(dy->string) != 0)
-        errnoAbort("%s failed", dy->string);
+    pathPrefix = optionVal("pathPrefix", path);
+    safef(gbdbPath, sizeof(gbdbPath), "%s/%s.cgb", pathPrefix, track);
 
     /* Create new line in meta table */
     dyStringClear(dy);
