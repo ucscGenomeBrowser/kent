@@ -1,7 +1,7 @@
 
 HTDOCS=/usr/local/apache/htdocs
 HTDOCS_USER=${HTDOCS}-${USER}
-CVSUP = cvs update 
+CVSUP = cvs -q update 
 
 user:
 	${MAKE} doInstall DEST=${HTDOCS_USER}
