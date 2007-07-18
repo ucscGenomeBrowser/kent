@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/liftRMAlign.pl instead.
 
-# $Id: liftRMAlign.pl,v 1.4 2007/06/20 19:31:24 angie Exp $
+# $Id: liftRMAlign.pl,v 1.5 2007/07/18 17:11:48 angie Exp $
 
 use warnings;
 use strict;
@@ -119,7 +119,7 @@ foreach my $chunk (@orderedChunks) {
       &updateSpacing("$oldName$maybeSuffix$leftSpace$oldStart");
       $_ = sprintf("$initSpace%-15s %9d%s%-9d\n",
 		   $newName, $newStart, $seqStuff, $newEnd);
-    } elsif (/^(C\s+|\s+)(\S+)(\s+)(\d+)(\s+\S+\s+)(-?\d+)\s*$/) {
+    } elsif (/^(C\s+|\s+)(\S+)(\s+)(-?\d+)(\s+\S+\s+)(-?\d+)\s*$/) {
       # repeat sequence line -- reformat to use larger coords like chunk.
       my ($initSpace, $repName, $leftSpace, $repStart, $seqStuff, $repEnd) =
 	($1, $2, $3, $4, $5, $6);
