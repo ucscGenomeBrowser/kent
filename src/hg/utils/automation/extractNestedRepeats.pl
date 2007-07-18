@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/extractNestedRepeats.pl instead.
 
-# $Id: extractNestedRepeats.pl,v 1.1 2007/07/10 00:57:18 angie Exp $
+# $Id: extractNestedRepeats.pl,v 1.2 2007/07/18 23:32:21 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -90,11 +90,13 @@ sub mostCommonName {
 sub writeGroups {
   # Take a listRef indexed by id of listRefs describing repeats in the group,
   # make a bed12 row for the group and write it to stdout.
-  my ($groupedRef, $warnSkipped) = @_;
+  my ($groupedRef, $warnSkipped, $offset) = @_;
 
   for (my $id = 1;  $id < @{$groupedRef};  $id++) {
+    my $realId = $id + $offset;
     if (! $groupedRef->[$id]) {
-      print STDERR "Skipped id $id (in lines preceding $.)\n" if ($warnSkipped);
+      print STDERR "Skipped id $realId (in lines preceding $.)\n"
+	if ($warnSkipped);
       next;
     }
     my @fragmentRefs = @{$groupedRef->[$id]};
@@ -114,7 +116,7 @@ sub writeGroups {
       }
       print "$chrom\t$chromStart\t$chromEnd\t$name\t$score\t$strand\t" .
 	"$chromStart\t$chromEnd\t0\t$blkCount\t$blkSizes\t$blkStarts\t" .
-	  "$blkStrands\t$id\t$class\t$family\n";
+	  "$blkStrands\t$realId\t$class\t$family\n";
     }
   }
 }
@@ -132,6 +134,7 @@ sub writeGroups {
 my $prevChr;
 my $prevId = 0;
 my @groupedById = ();
+my $offset = 0;
 while (<>) {
   # Skip header lines:
   next if (/^(   SW.*|score.*|\s*)$/);
@@ -146,13 +149,14 @@ while (<>) {
   my $chrRollover = ($prevChr && $chr ne $prevChr);
   if ($chrRollover ||
       ($opt_rolloverFudge && $id == 1 && $prevId > $opt_rolloverFudge)) {
-    &writeGroups(\@groupedById, !$chrRollover);
+    &writeGroups(\@groupedById, !$chrRollover, $offset);
     @groupedById = ();
+    $offset = $id;
   }
-  push @{$groupedById[$id]},
+  push @{$groupedById[$id-$offset]},
     [$chr, $start, $end, $strand, $repName, $repClassFam];
   $prevId = $id;
   $prevChr = $chr;
 }
-&writeGroups(\@groupedById);
+&writeGroups(\@groupedById, 0, $offset);
 
