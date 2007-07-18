@@ -1,45 +1,47 @@
 <H2>Description</H2>
 <P>
+ChIP-seq is a new approach for investigating entire transcription factor-DNA interactomes.
+ChIP-seq is comprised of chromatin immunoprecipitation (ChIP) followed by single-molecule-based
+sequencing (seq).  ChIP-seq avoids the complications of array hybridization, and can be
+performed for half the cost of whole-genome tiling arrays.
+<P>
 This track shows 25mer sequence reads obtained via a ChIP-seq protocol 
 from an NRSF/REST-enriched ChIP sample and a companion control sample
-of the same fixed chromatin without immuno-enrichment.
-
-Chromatic immunoprecipitation was applied to NRSF/REST loci identified by a
-PSFM (position specific frequency matrix) computational screen.
+of the same fixed chromatin without immuno-enrichment.   These sequence
+reads were later analyzed using a peak locator (data to be available in the future)
+to identify NRSF-positive binding events.
+<P>
+Chromatin immunoprecipitation was applied to NRSF/REST loci identified by a
+PSFM (position specific frequency matrix) computational screen.   NRSF/REST
+is a zinc finger repressor that negatively regulates many neuronal genes in
+stem and progenitor cells and in nonneuronal cell types such as the
+Jurkat T cell line used for this track.
 <P>
 NRSF (neuron-restrictive silencer factor), also known as REST (repressor element-1 
 silencing transcription factor), was chosen because prior studies provide
-a large set of target genes.  In addition, the DNA motif bound by NRSF (NRSE/RE1) is long (21bp)
-and well-specified, and there is a high-quality monoclonal antibody that recognizes
-NRSF efficiently in ChIP experiments.
+a large set of target genes.  In addition, the DNA motif bound by NRSF 
+(known as NRSE/RE1) is long (21bp) and well-specified, and there is a high-quality 
+monoclonal antibody that recognizes NRSF efficiently in ChIP experiments.
 
 <H2>Methods</H2>
 <P>
-<H3>Cell culture and chromatin immunoprecipitation</H3>
-A Jurkat human T lymphoblast cell line was cultured according to standard protocols.
+A Jurkat human T lymphoblast cell line from 
+<A HREF="http://www.atcc.org/" TARGET=_blank>ATCC</A>
+was cultured according to standard protocols.
 Chromatin immunoprecipitation was performed as described in Mortazavi et al. (2006) using a
 custom monoclonal antibody.  
-<H3>Library preparation</H3>
 Libraries were prepared from the ChIP DNA using the ligation mediated PCR Solexa protocol.  
 The Solexa library construction protocol was modified to include a PCR preamplification following 
 linker ligation and preceding gel electrophoresis.  Reducing the size and narrowing the
 size range of DNAs collected from gel purification is intended to improve positional resolution of
 ChIP-seq.
-<H3>Site analysis</H3>
-Cistematic (Wold lab) was used to perform motif-oriented analysis.  The NRSE2 PSFM was used to
+<P>
+<A HREF="http://woldlab.caltech.edu/html/cistematic" TARGET=_blank>Cistematic</A>
+(Wold lab) was used to perform motif-oriented analysis.  The NRSE2 PSFM was used to
 identify canonical NRSE sites.   These sites were used to compare and call the distances from
-peaks of ChIP-seq read-tab distributions at each location.
-<H3>Data filtering</H3>
+peaks of ChIP-seq read-tag distributions at each location.
 Reads which mapped to multiple genomic locations are not included.
 Up to two mismatches were allowed.
-<H3>Whole-genome gene expression</H3>
-NRSF binding in or near promoters is expected to be correlated with low levels of transcription.
-Labeled cRNA was hybridized to Illumina Sentrix RefSeq8 whole-genome gene expression microarrays.
-Illumina BeadStudio software was used to extract and normalize the data (rank-invariant method).
-A database of transcription start sites from SwitchGear Genomics was used to obtain high-confidence
-promoter predictions.   The 230 transcripts occuring near ChIP-seq peaks had a median expression 
-intensity of 6.8, while the full set of 20,589 transcripts had a median expression intensity of 23.6.
-The difference of medians was significant (P = 1 x 10-11) by the Mann-Whitney test.
 
 <H2>Verification</H2>
 <P>
@@ -53,6 +55,15 @@ separated by no more than 100bp.
 754 sites were found in the ChIP-seq experiments, and the center of a 21-bp NRSE motif was within 50 base pairs
 of the called ChIPSeq peak for 94% of these.
 <P>
+NRSF binding in or near promoters is expected to be correlated with low levels of transcription.
+Labeled cRNA was hybridized to Illumina Sentrix RefSeq8 whole-genome gene expression microarrays.
+Illumina BeadStudio software was used to extract and normalize the data (rank-invariant method).
+A database of transcription start sites from 
+<A HREF="http://www.switchdb.com/" TARGET=_blank>SwitchGear Genomics</A>
+was used to obtain high-confidence
+promoter predictions.   The 230 transcripts occuring near ChIP-seq peaks had a median expression 
+intensity of 6.8, while the full set of 20,589 transcripts had a median expression intensity of 23.6.
+The difference of medians was significant (P = 1 x 10-11) by the Mann-Whitney test.
 
 <H2>Display conventions</H2>
 
