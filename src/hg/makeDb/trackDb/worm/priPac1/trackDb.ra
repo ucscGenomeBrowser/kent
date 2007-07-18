@@ -50,3 +50,15 @@ indelPolyA on
 # track netCe4
 # priority 136.1 
 
+track all_est
+shortLabel $Organism ESTs
+longLabel $Organism ESTs Including Unspliced
+group rna
+priority 57
+visibility hide
+spectrum on
+intronGap 30
+type psl est
+baseColorUseSequence genbank
+indelDoubleInsert on
+indelQueryInsert on
