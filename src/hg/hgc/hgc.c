@@ -208,7 +208,7 @@
 #include "omicia.h"
 #include "atomDb.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1316 2007/07/17 22:58:27 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1317 2007/07/18 23:37:44 jzhu Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -18665,8 +18665,51 @@ printTrackHtml(tdb);
 void doUCSFDemo(struct trackDb *tdb, char *item)
 {
 genericHeader(tdb, item);
-printf("Work with Jing for details");
-printTrackHtml(tdb);
+
+printf("Name:<B>%s</B><BR>\n", item);
+
+/* this prints the detail page for the clinical information for Cancer Demo datasets */
+char *table = tdb->tableName;
+char *cliniTable =NULL, *key=NULL;
+char query[256];
+
+if ( sameString(table, "CGHBreastCancerUCSF") || sameString(table, "expBreastCancerUCSF"))
+    {
+    cliniTable = "phenBreastTumors";
+    key ="id";
+    }
+else if ( sameString(table, "cnvLungBroadv2"))
+    {
+    cliniTable = "tspLungClinical";
+    key = "tumorID";
+    }
+else
+    return;
+
+safef(query, sizeof(query),
+      "select * from %s where %s = '%s' ", cliniTable, key,item);
+
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr, *startSr;
+char **row;
+
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    startSr = sr;
+
+    int numFields = sqlCountColumns(sr);
+    int i;
+    char *fieldName=NULL, *value=NULL;
+    for (i=0; i< numFields; i++)
+	{
+	fieldName = sqlFieldName(sr);
+	value = row[i];
+	printf("%s: <B>%s</B><BR>\n", fieldName, value);
+	}
+    }
+sqlFreeResult(&sr);
+//printTrackHtml(tdb);
 }
 
 struct trackDb *tdbForTableArg()
@@ -19674,7 +19717,7 @@ else if (sameString("omiciaAuto", track) || sameString("omiciaHand", track))
     {
     doOmicia(tdb, item);
     }
-else if (sameString("expRatioUCSFDemo", track))
+else if ( sameString("expRatioUCSFDemo", track) || sameString("cnvLungBroadv2", track) || sameString("CGHBreastCancerUCSF", track) || sameString("expBreastCancerUCSF", track))
     {
     doUCSFDemo(tdb, item);
     }
