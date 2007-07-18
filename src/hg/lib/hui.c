@@ -12,7 +12,7 @@
 #include "hgConfig.h"
 #include "chainCart.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.87 2007/07/06 22:15:30 angie Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.88 2007/07/18 22:34:04 kate Exp $";
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -114,7 +114,7 @@ static char *hTvStrings[] =
     "dense",
     "full",
     "pack",
-    "squish"
+    "squish",
     };
 
 enum trackVisibility hTvFromStringNoAbort(char *s)
@@ -237,6 +237,18 @@ if (visOnly != NULL)
     else
 	cgiMakeDropListClass(varName, noPack, ArraySize(noPack), noPack[vis], class);
     }
+}
+
+void hideShowDropDown(char *varName, boolean show, char *class)
+/* Make hide/show dropdown for varName */
+{
+static char *hideShow[] =
+    {
+    "hide",
+    "show"
+    };
+cgiMakeDropListClass(varName, hideShow, ArraySize(hideShow), 
+                    hideShow[show], class);
 }
 
 

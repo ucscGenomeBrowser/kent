@@ -45,6 +45,8 @@ struct trackDb
 				 * to access. */
     /* additional data, not in database */
     struct trackDb *subtracks;  /* not null if composite track */
+    struct trackDb *parent;     /* not null if part of supertrack -- use
+                                   later for arbitrary hierarchies */
     };
 
 struct trackDb *trackDbLoad(char **row);

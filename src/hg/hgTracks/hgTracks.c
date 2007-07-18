@@ -117,9 +117,7 @@
 #include "wiki.h"
 #endif
 
-
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1372 2007/07/17 23:26:24 fanhsu Exp $";
-
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1373 2007/07/18 22:34:04 kate Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -9331,7 +9329,8 @@ return vis;
 }
 
 enum trackVisibility limitVisibility(struct track *tg)
-/* Return default visibility limited by number of items. 
+/* Return default visibility limited by number of items and
+ * by parent visibility if part of a supertrack. 
  * This also sets tg->height. */
 {
 if (!tg->limitedVisSet)
@@ -12340,13 +12339,20 @@ slSort(&track->subtracks, trackPriCmp);
 }
 
 struct track *trackFromTrackDb(struct trackDb *tdb)
-/* Create a track based on the tdb. */
+/* Create a track based on the tdb. If a parent trackDb is
+ * present, create a parent track.  This can be used to
+ * create an arbitrary track hierarchy -- for now there will be just
+ * two -- regular tracks and those with a parent, or 'super' track.
+ */
 {
-struct track *track = trackNew();
+struct track *track = NULL;
 char *iatName = NULL;
 char *exonArrows;
 char *nextItem;
 
+if (!tdb)
+    return NULL;
+track = trackNew();
 track->mapName = cloneString(tdb->tableName);
 track->visibility = tdb->visibility;
 track->shortLabel = tdb->shortLabel;
@@ -12394,6 +12400,8 @@ track->labelNextItemButtonable = track->nextItemButtonable;
 iatName = trackDbSetting(tdb, "itemAttrTbl");
 if (iatName != NULL)
     track->itemAttrTbl = itemAttrTblNew(iatName);
+
+track->parent = trackFromTrackDb(tdb->parent);
 fillInFromType(track, tdb);
 return track;
 }
@@ -13213,6 +13221,14 @@ for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
         subtrack->visibility = track->visibility;
 }
 
+void superTrackVis(struct track *track)
+/* Limit track visibility by supertrack parent */
+{
+char *show = cartUsualString(cart, track->parent->mapName, "show");
+if (sameString("hide", show))
+    track->visibility = tvHide;
+}
+
 struct track *getTrackList( struct group **pGroupList)
 /* Return list of all tracks. */
 {
@@ -13547,10 +13563,11 @@ for (track = trackList; track != NULL; track = track->next)
 	}
     if (s != NULL)
 	track->visibility = hTvFromString(s);
+    if (track->parent)
+        superTrackVis(track);
     if (isCompositeTrack(track))
         compositeTrackVis(track);
     }
-
 return trackList;
 }
 
@@ -13892,6 +13909,7 @@ if (showTrackControls)
 	hPrintf("<TR>");
 	cg->rowOpen = TRUE;
         hPrintf("<th align=\"left\" colspan=%d BGCOLOR=#536ED3>", MAX_CONTROL_COLUMNS);
+	hPrintf("\n<A NAME=\"%s\"></A>",group->name);
         hPrintf("<A HREF=\"%s?%s&%s=%s#%s\" class=\"bigBlue\"><IMG height=18 width=18 src=\"%s\" alt=\"%s\" class=\"bigBlue\"></A>&nbsp;&nbsp;",
             hgTracksName(), cartSidUrlString(cart), 
             collapseGroupVar(group->name),
@@ -13899,7 +13917,6 @@ if (showTrackControls)
 
         hNbSpaces(((1.7 * (77 - strlen(group->label)))-1)/2 );
 	hPrintf("<B>%s</B>", wrapWhiteFont(group->label));
-	hPrintf("\n<A NAME=\"#%s\"></A>\n",group->name);
 	hPrintf("</th>\n");
 	controlGridEndRow(cg);
 
@@ -13918,11 +13935,45 @@ if (showTrackControls)
 	    controlGridEndCell(cg);
 	    }
 
+        /* Scan group track list to find super tracks, saving in a hash */
+        struct hash *superHash = hashNew(0);
 	for (tr = group->trackList; tr != NULL; tr = tr->next)
 	    {
             if (!isOpen)
-                continue;
+                break;
+            track = tr->track;
+            if (track->parent)
+                {
+                struct track *parent = hashFindVal(superHash, track->parent->mapName);
+                if (!parent)
+                    {
+                    /* parent is not yet hashed, so add it, with modified label */
+                    parent = track->parent;
+                    char buf[24];
+                    safef(buf, sizeof buf, "%s...", parent->shortLabel);
+                    parent->shortLabel = cloneString(buf);
+                    parent->hasUi = TRUE;
+                    hashAdd(superHash, parent->mapName, parent);
+                    }
+                /* note whether a child track is visible */
+                if (track->visibility != tvHide)
+                    parent->visibility = tvDense;
+                }
+            }
+	for (tr = group->trackList; tr != NULL; tr = tr->next)
+	    {
+            if (!isOpen)
+                break;
 	    track = tr->track;
+            if (track->parent)
+                {
+                struct track *parent = hashFindVal(superHash, track->parent->mapName);
+                if (!parent)
+                    /* ignore members of supertrack except first */
+                    continue;
+                /* display supertrack for first member */
+                track = track->parent;
+                }
 	    controlGridStartCell(cg);
 	    if (track->hasUi)
 		{
@@ -13936,18 +13987,33 @@ if (showTrackControls)
 	    if (track->hasUi)
 		hPrintf("</A>");
 
-	    /* If track is not on this chrom print an informational
-	       message for the user. */
-	    if(hTrackOnChrom(track->tdb, chromName)) 
+	    if (hTrackOnChrom(track->tdb, chromName)) 
 		{
-		/* check for option of limiting visibility to one mode */
-		char *onlyVisibility =
-			trackDbSetting(track->tdb, "onlyVisibility");
-		hTvDropDownClassVisOnly(track->mapName, track->visibility,
-		    track->canPack, (track->visibility == tvHide) ? 
-			 "hiddenText" : "normalText", onlyVisibility );
-		}
+                struct track *parent = hashFindVal(superHash, track->mapName);
+                if (parent)
+                    {
+                    /* hide/show dropdown for supertrack when first member is
+                     * encountered in track list */
+                    boolean showSuper = sameString("show",
+                                        cartUsualString(cart, parent->mapName, "show"));
+                    hideShowDropDown(parent->mapName, showSuper, 
+                                     showSuper && (parent->visibility != tvHide) ? 
+                                                "normalText": "hiddenText");
+                    /* remove so we don't repeat display */
+                    hashRemove(superHash, parent->mapName);
+                    }
+                else
+                    {
+                    /* check for option of limiting visibility to one mode */
+                    char *onlyVisibility = trackDbSetting(track->tdb, "onlyVisibility");
+                    hTvDropDownClassVisOnly(track->mapName, track->visibility,
+                                            track->canPack, (track->visibility == tvHide) ? 
+                                            "hiddenText" : "normalText", onlyVisibility );
+                    }
+                }
 	    else 
+                /* If track is not on this chrom print an informational
+                message for the user. */
 		hPrintf("[No data-%s]", chromName);
 	    controlGridEndCell(cg);
 	    }
