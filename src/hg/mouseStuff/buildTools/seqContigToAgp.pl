@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-#	$Id: seqContigToAgp.pl,v 1.1 2007/07/19 15:52:53 hiram Exp $
+#	$Id: seqContigToAgp.pl,v 1.2 2007/07/19 17:12:46 hiram Exp $
 
 use strict;
 use warnings;
@@ -142,14 +142,14 @@ while (my $line=<FH>) {
 			$chrN, $chrStart, $chrEnd, $partCount++, "N",
 			    $contigGap, "contig", "no";
 		    printf RC "chr%s_random\t%d\t%d\t%d\t%s\t%d\t%s\t%s\n",
-			$chrN, $chrStart, $chrEnd, ++$scafPartCount, "N",
-			    $contigGap, "contig", "no";
+			$chrN, $chrStart, $chrEnd, ++$scafPartCount,
+			    "N", $contigGap, "contig", "no";
 		    $chrStart += $contigGap;
 		    $scafEnd = $chrStart + ($stop - $start);
 		    ++$randomContigCount;
 		    printf RC "chr%s_random\t%d\t%d\t%d\t%s\t%s\t%d\t%d\t%s\n",
-			$chrN, $chrStart, $scafEnd, ++$scafPartCount, $type,
-			    $name, $start, $stop, "+";
+			$chrN, $chrStart, $scafEnd, ++$scafPartCount,
+			    $type, $name, $start, $stop, "+";
 		} else {
 		    my $gapLen = $partStart - $prevChrEnd - 1;
 		    $chrEnd = $chrStart + $gapLen - 1;
