@@ -20,7 +20,7 @@
 #include "gsidTable.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidTable.c,v 1.18 2007/07/13 22:56:40 angie Exp $";
+static char const rcsid[] = "$Id: gsidTable.c,v 1.19 2007/07/19 22:48:02 fanhsu Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "submit_filter", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -1203,8 +1203,9 @@ while (subjList)
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
     	{
-        fprintf(outF2, "%s\t%s\n", subjList->fields[0], row[0]);
-    	//row = sqlNextRow(sr);
+	/* Remove "ss." from the front of the DNA sequence ID, 
+	   so that they could be used both for DNA and protein MSA maf display */
+	fprintf(outF2, "%s\t%s\n", strstr(row[0], "ss.")+3L, subjList->fields[0]);
     	}
     sqlFreeResult(&sr);
 
