@@ -208,7 +208,7 @@
 #include "omicia.h"
 #include "atomDb.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1317 2007/07/18 23:37:44 jzhu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1318 2007/07/19 18:49:49 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -18666,17 +18666,180 @@ void doUCSFDemo(struct trackDb *tdb, char *item)
 {
 genericHeader(tdb, item);
 
-printf("Name:<B>%s</B><BR>\n", item);
+printf("<B>Name:</B> %s<BR>\n", item);
 
 /* this prints the detail page for the clinical information for Cancer Demo datasets */
 char *table = tdb->tableName;
-char *cliniTable =NULL, *key=NULL;
+char *cliniTable=NULL, *key=NULL;
 char query[256];
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr, *startSr;
+char **row;
 
-if ( sameString(table, "CGHBreastCancerUCSF") || sameString(table, "expBreastCancerUCSF"))
+if (sameString(table, "CGHBreastCancerUCSF") || sameString(table, "expBreastCancerUCSF"))
     {
     cliniTable = "phenBreastTumors";
-    key ="id";
+    key = "id";
+
+    /* er, pr */
+    printf("<BR>");
+    printf("<TABLE BORDER=1>\n");
+    printf("<TR><TH>ER</TH> <TH>PR</TH></TR>\n");
+    safef(query, sizeof(query), "select er, pr from %s where %s = '%s' ", cliniTable, key, item);
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) != NULL)
+        {
+        printf("<TR>");
+        printf("<TD>%s</TD>", row[0]);
+        printf("<TD>%s</TD>", row[1]);
+        printf("</TR>");
+	}
+    printf("</TABLE>\n");
+    sqlFreeResult(&sr);
+
+    /* subEuc, subCor */
+    printf("<BR>");
+    printf("<TABLE BORDER=1>\n");
+    printf("<TR><TH>subEuc</TH> <TH>subCor</TH></TR>\n");
+    safef(query, sizeof(query), "select subEuc, subCor from %s where %s = '%s' ", cliniTable, key, item);
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) != NULL)
+        {
+        printf("<TR>");
+        printf("<TD>%s</TD>", row[0]);
+        printf("<TD>%s</TD>", row[1]);
+        printf("</TR>");
+	}
+    printf("</TABLE>\n");
+    sqlFreeResult(&sr);
+
+    /* subtypes */
+    printf("<BR>");
+    printf("<TABLE BORDER=1>\n");
+    printf("<TR><TH>subtype2</TH> <TH>subtype3</TH> <TH>subtype4</TH> <TH>subtype5</TH></TR>\n");
+    safef(query, sizeof(query), "select subtype2, subtype3, subtype4, subtype5 from %s where %s = '%s' ", 
+        cliniTable, key, item);
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) != NULL)
+        {
+        printf("<TR>");
+        printf("<TD>%s</TD>", row[0]);
+        printf("<TD>%s</TD>", row[1]);
+        printf("<TD>%s</TD>", row[2]);
+        printf("<TD>%s</TD>", row[3]);
+        printf("</TR>");
+	}
+    printf("</TABLE>\n");
+    sqlFreeResult(&sr);
+
+    /* stage, size, nodalStatus, SBRGrade */
+    printf("<BR>");
+    printf("<TABLE BORDER=1>\n");
+    printf("<TR><TH>Stage</TH> <TH>Size</TH> <TH>Nodal status</TH> <TH>SBR Grade</TH></TR>\n");
+    safef(query, sizeof(query), 
+        "select stage, size, nodalStatus, SBRGrade from %s where %s = '%s' ", cliniTable, key, item);
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) != NULL)
+        {
+        printf("<TR>");
+        printf("<TD>%s</TD>", row[0]);
+        printf("<TD>%s</TD>", row[1]);
+        printf("<TD>%s</TD>", row[2]);
+        printf("<TD>%s</TD>", row[3]);
+        printf("</TR>");
+	}
+    printf("</TABLE>\n");
+    sqlFreeResult(&sr);
+
+    /* race, familyHistory, ageDx */
+    printf("<BR>");
+    printf("<TABLE BORDER=1>\n");
+    printf("<TR><TH>Race</TH> <TH>Family history</TH> <TH>Age of Diagnosis</TH> </TR>\n");
+    safef(query, sizeof(query), 
+        "select race, familyHistory, ageDx from %s where %s = '%s' ", cliniTable, key, item);
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) != NULL)
+        {
+        printf("<TR>");
+        printf("<TD>%s</TD>", row[0]);
+        printf("<TD>%s</TD>", row[1]);
+        printf("<TD>%s</TD>", row[2]);
+        printf("</TR>");
+	}
+    printf("</TABLE>\n");
+    sqlFreeResult(&sr);
+
+
+    /* rad, chemo, horm, erb, p53, ki67 */
+    printf("<BR>");
+    printf("<TABLE BORDER=1>\n");
+    printf("<TR><TH>Rad</TH> <TH>Chemo</TH> <TH>Horm</TH> <TH>ERB</TH> <TH>p53</TH>");
+    printf("<TH>ki67</TH></TR>\n");
+    safef(query, sizeof(query), 
+        "select rad, chemo, horm, erb, p53, ki67 from %s where %s = '%s' ", cliniTable, key, item);
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) != NULL)
+        {
+        printf("<TR>");
+        printf("<TD>%s</TD>", row[0]);
+        printf("<TD>%s</TD>", row[1]);
+        printf("<TD>%s</TD>", row[2]);
+        printf("<TD>%s</TD>", row[3]);
+        printf("<TD>%s</TD>", row[4]);
+        printf("<TD>%s</TD>", row[5]);
+        printf("</TR>");
+	}
+    printf("</TABLE>\n");
+    sqlFreeResult(&sr);
+
+    /* T/N/M */
+    printf("<BR>");
+    printf("<TABLE BORDER=1>\n");
+    printf("<TR><TH>T</TH> <TH>N</TH> <TH>M</TH></TR>\n");
+    safef(query, sizeof(query), "select T, N, M from %s where %s = '%s' ", cliniTable, key, item);
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) != NULL)
+        {
+        printf("<TR>");
+        printf("<TD>%s</TD>", row[0]);
+        printf("<TD>%s</TD>", row[1]);
+        printf("<TD>%s</TD>", row[2]);
+        printf("</TR>");
+	}
+    printf("</TABLE>\n");
+    sqlFreeResult(&sr);
+
+    /* times */
+    printf("<BR><B>Times:</B><BR>\n");
+    printf("<TABLE BORDER=1>\n");
+    printf("<TR><TH>Type</TH> <TH>Binary</TH> <TH>Value</TH></TR>\n");
+    safef(query, sizeof(query), 
+         "select overallBinary, overallTime, diseaseBinary, diseaseTime, "
+	 "allrecBinary, allrecTime, distrecBinary, distrecTime from %s where %s = '%s' ", 
+	 cliniTable, key, item);
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) != NULL)
+        {
+        printf("<TR><TD>Overall</TD> <TD>%s</TD> <TD>%s</TD></TR>", row[0], row[1]);
+        printf("<TR><TD>Disease</TD> <TD>%s</TD> <TD>%s</TD></TR>", row[2], row[3]);
+        printf("<TR><TD>Allrec</TD> <TD>%s</TD> <TD>%s</TD></TR>", row[4], row[5]);
+        printf("<TR><TD>Distrec</TD> <TD>%s</TD> <TD>%s</TD></TR>", row[6], row[7]);
+	}
+    printf("</TABLE>\n");
+    sqlFreeResult(&sr);
+
+    /* affyChipId */
+    printf("<BR>");
+    safef(query, sizeof(query), "select affyChipId from %s where %s = '%s' ", cliniTable, key, item);
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) != NULL)
+        {
+        printf("<B>Affy Chip ID:</B> %s\n", row[0]);
+	}
+    printf("</TABLE>\n");
+    sqlFreeResult(&sr);
+
+    return;
     }
 else if ( sameString(table, "cnvLungBroadv2"))
     {
@@ -18686,12 +18849,10 @@ else if ( sameString(table, "cnvLungBroadv2"))
 else
     return;
 
+htmlHorizontalLine();
+
 safef(query, sizeof(query),
       "select * from %s where %s = '%s' ", cliniTable, key,item);
-
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr, *startSr;
-char **row;
 
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
@@ -18710,6 +18871,7 @@ if ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 //printTrackHtml(tdb);
+//hFreeConn
 }
 
 struct trackDb *tdbForTableArg()
