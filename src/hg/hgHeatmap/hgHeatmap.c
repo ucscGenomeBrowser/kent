@@ -22,13 +22,14 @@
 #include "microarray.h"
 #include "hgChromGraph.h"
 
-static char const rcsid[] = "$Id: hgHeatmap.c,v 1.10 2007/07/17 20:16:21 jzhu Exp $";
+static char const rcsid[] = "$Id: hgHeatmap.c,v 1.11 2007/07/19 01:40:24 jzhu Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
 struct hash *oldVars;	/* Old cart hash. */
 char *database;		/* Name of genome database - hg15, mm3, or the like. */
 char *genome;		/* Name of genome - mouse, human, etc. */
+char *dataset;          /* Name of dataset - UCSF breast cancer etc. */
 struct trackLayout tl;  /* Dimensions of things, fonts, etc. */
 struct bed *ggUserList;	/* List of user graphs */
 struct bed *ggDbList;	/* List of graphs in database. */
@@ -88,16 +89,33 @@ return list;
 }
 
 
-struct genoHeatmap *getDbHeatmaps(struct sqlConnection *conn)
+struct genoHeatmap *getDbHeatmaps(struct sqlConnection *conn, char *set)
 /* Get graphs defined in database. */
 {
 /* hardcoded for demo */
-char *trackNames[2]={"cnvLungBroadv2_ave100K", "cnvLungBroadv2"};
+int N=2;
+char *trackNames[2];
+
+if (!set)
+    return NULL;
+if ( sameString(set,"Broad Lung cancer 500K chip"))
+    {
+    trackNames[0] = "cnvLungBroadv2_ave100K";
+    trackNames[1]= "cnvLungBroadv2";
+    }
+else if (sameWord(set,"UCSF breast cancer"))
+    {
+    trackNames[0]="CGHBreastCancerUCSF";
+    trackNames[1]= "expBreastCancerUCSF";
+    }
+else
+    return NULL;
+
 char *trackName;
 struct genoHeatmap *list = NULL, *gh;
-
 int i;
-for (i=0; i<2; i++)
+
+for (i=0; i<N; i++)
     {
     trackName = trackNames[i];
     struct trackDb *tdb;
@@ -137,18 +155,21 @@ for (ref = ghList; ref != NULL; ref = ref->next)
 return list;
 }
 
-void getGenoHeatmaps(struct sqlConnection *conn)
+void getGenoHeatmaps(struct sqlConnection *conn, char* set)
 /* Set up ghList and ghHash with all available genome graphs */
 {
-struct genoHeatmap *userList = getUserHeatmaps();
-struct genoHeatmap *dbList = getDbHeatmaps(conn);
+struct genoHeatmap *dbList = getDbHeatmaps(conn,set);
+struct genoHeatmap *userList = NULL;
+
+if (sameString(dataset,"UCSF breast cancer"))
+    userList = getUserHeatmaps();
 struct genoHeatmap *gh;
 struct slRef *ref, *refList = NULL;
 
 /* Build up ghList from user and db lists. */
-for (gh = userList; gh != NULL; gh = gh->next)
-    refAdd(&refList, gh);
 for (gh = dbList; gh != NULL; gh = gh->next)
+    refAdd(&refList, gh);
+for (gh = userList; gh != NULL; gh = gh->next)
     refAdd(&refList, gh);
 slReverse(&refList);
 ghList = refList;
@@ -268,6 +289,11 @@ char *heatmapName()
 return skipLeadingSpaces(cartUsualString(cart, hghHeatmap, ""));
 }
 
+char *dataSetName()
+{
+return skipLeadingSpaces(cartUsualString(cart, hghDataSet, ""));
+}
+
 
 int selectedHeatmapHeight()
 /* Return height of user selected heatmaps from the web interface.
@@ -291,7 +317,8 @@ for (ref = ghList; ref != NULL; ref = ref->next)
     totalHeight += spacing;
     
     /* hard coded */
-    if ( ! (sameWord (database,CUSTOM_TRASH)))
+    if ( sameString(name,"cnvLungBroadv2_ave100K") // || sameString(name,"cnvLungBroadv2")  || sameString(name, "expBreastCancerUCSF")
+	 || sameString(name, "CGHBreastCancerUCSF"))
 	totalHeight += chromGraphHeight();
     }
 
@@ -325,7 +352,7 @@ return 0;
 char *chromLayout()
 /* Return one of above strings specifying layout. */
 {
-return cartUsualString(cart, hghChromLayout, layTwoPerLine);
+return cartUsualString(cart, hghChromLayout, layAllOneLine); //layTwoPerLine);
 }
 
 struct genoLay *ggLayout(struct sqlConnection *conn)
@@ -337,7 +364,7 @@ int minLeftLabelWidth = 0, minRightLabelWidth = 0;
 
 /* Figure out basic dimensions of image. */
 trackLayoutInit(&tl, cart);
-tl.picWidth = cartUsualInt(cart, hghImageWidth, hgDefaultPixWidth);
+tl.picWidth = cartUsualInt(cart, hghImageWidth, hgHeatmapDefaultPixWidth);
 
 /* Get list of chromosomes and lay them out. */
 chromList = genoLayDbChroms(conn, FALSE);
@@ -391,8 +418,11 @@ struct sqlConnection *conn = NULL;
 getDbAndGenome(cart, &database, &genome,oldVars);
 hSetDb(database);
 cartSetString(cart, "db", database); /* Some custom tracks code needs this */
+dataset = cartOptionalString(cart, hghDataSet);  
 conn = hAllocConn();
-getGenoHeatmaps(conn);
+if (!dataset)
+    dataset = "UCSF breast cancer"; /* hard coded*/
+getGenoHeatmaps(conn, dataset);
 
 /* Handle cases that just want a HTTP Location line: */
 if (cartVarExists(cart, hghClickX))

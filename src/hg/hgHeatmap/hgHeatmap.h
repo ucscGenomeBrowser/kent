@@ -14,6 +14,7 @@
 
 /*** Our various cart variables. ***/
 #define hghHeatmap hghPrefix "heatmap"
+#define hghDataSet hghPrefix "dataset"
 #define hghExperimentHeight hghPrefix "experimentHeight"
 #define hghChromLayout hghPrefix "chromLayout"
 #define hghDataSetName hghPrefix "dataSetName"
@@ -76,6 +77,9 @@ int heatmapHeight(char* heatmap);
 char *heatmapName();
 /* Return name of heatmap */
 
+char *dataSetName();
+/* Return name of dataset */
+
 struct slName* heatmapNames();
 /* Return names of all heatmaps */
 
@@ -86,14 +90,15 @@ int experimentCount(char* heatmap);
 /* Return the number of experiments */
 
 #define betweenRowPad 3
-
 #define layTwoPerLine "two per line"
 #define layOnePerLine "one per line"
 #define layAllOneLine "all in one line"
+#define hgHeatmapDefaultPixWidth 925
+
 char *chromLayout();
 /* Return one of above strings specifying layout. */
 
-void getGenoHeatmaps(struct sqlConnection *conn);
+void getGenoHeatmaps(struct sqlConnection *conn, char *dataset);
 /* Set up ggList and ggHash with all available genome heatmaps */
 
 struct genoLay *ggLayout(struct sqlConnection *conn);

@@ -6,7 +6,7 @@
 #include "hPrint.h"
 #include "hgHeatmap.h"
 
-static char const rcsid[] = "$Id: configure.c,v 1.1 2007/06/28 23:42:06 heather Exp $";
+static char const rcsid[] = "$Id: configure.c,v 1.2 2007/07/19 01:40:23 jzhu Exp $";
 
 void makeNumMenu(char *varName, int minVal, int maxVal, int defaultVal)
 /* Make a drop down menu with a limited number of numerical choices. */
@@ -42,7 +42,7 @@ hPrintf("<TABLE>\n");
 hPrintf("<TR><TD>\n");
 hPrintf("image width:");
 hPrintf("</TD><TD>\n");
-cgiMakeIntVar(hghImageWidth, cartUsualInt(cart, hghImageWidth, hgDefaultPixWidth), 4);
+cgiMakeIntVar(hghImageWidth, cartUsualInt(cart, hghImageWidth, hgHeatmapDefaultPixWidth), 4);
 hPrintf("</TD></TR>\n");
 
 hPrintf("<TR><TD>\n");

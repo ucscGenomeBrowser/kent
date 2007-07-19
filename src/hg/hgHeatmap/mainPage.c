@@ -3,6 +3,8 @@
 
 #define EXPR_DATA_SHADES 16
 #define DEFAULT_MAX_DEVIATION 0.7
+#define COLOR_SCALE 1.3
+#define RED_SCALE 1.2
 
 #include "common.h"
 #include "hgHeatmap.h"
@@ -26,7 +28,7 @@
 #include "hCytoBand.h"
 #include "hgChromGraph.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.8 2007/07/16 22:35:18 jzhu Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.9 2007/07/19 01:40:24 jzhu Exp $";
 
 /* Page drawing stuff. */
 
@@ -186,7 +188,6 @@ double height = chromGraphHeight();
 double gScale = height/(gMax-gMin);
 int maxGapToFill = chromGraphMaxGapToFill(tableName);
 Color color = chromGraphColor(tableName);
-vgUnclip(vg);
 
 /* Draw graphs on each chromosome */
 for(chrom = gl->chromList; chrom; chrom = chrom->next)
@@ -268,6 +269,7 @@ struct bed *gh=NULL, *nb=NULL;
 double pixelsPerBase = 1.0/gl->basesPerPixel;
 
 double md = maxDeviation(chromHeatmap);
+double colorScale = COLOR_SCALE / md;
 double val;
 double absVal;
 int valId;
@@ -288,7 +290,7 @@ for(chrom = gl->chromList; chrom; chrom = chrom->next)
    
     int chromX = chrom->x, chromY = chrom->y;
 
-//   vgSetClip(vg, chromX, chromY+yOff, chrom->width, heatmapHeight(chromHeatmap));
+    vgSetClip(vg, chromX, chromY+yOff, chrom->width, heatmapHeight(chromHeatmap));
     vgBox(vg, chromX, chromY+yOff , chrom->width, heatmapHeight(chromHeatmap), MG_GRAY);
 
     for(nb = gh; nb; nb = nb->next)
@@ -306,15 +308,18 @@ for(chrom = gl->chromList; chrom; chrom = chrom->next)
 	    int orderId = chromOrder[valId];
 	      
 	    if(val > 0)
-		absVal = val;
+		{
+		absVal = val * RED_SCALE;
+		}
 	    else
 		absVal = -val;
 
-	    if(absVal > md)
-		absVal = md;  /* we lie to make sure a valid color
-					 * is obtained later on */
+	    int colorIndex = (int)(absVal * (EXPR_DATA_SHADES-1.0) * colorScale);
 
-	    int colorIndex = (int)(absVal * (EXPR_DATA_SHADES-1.0)/md);
+	    /* Clip color index to fit inside of array, since we may have brightened it. */
+            if (colorIndex < 0) colorIndex = 0;
+            if (colorIndex >= EXPR_DATA_SHADES)
+	        colorIndex = EXPR_DATA_SHADES-1;
 
 	    if(val > 0)
 		valCol = shadesOfRed[colorIndex];
@@ -331,6 +336,7 @@ for(chrom = gl->chromList; chrom; chrom = chrom->next)
 	    }
       	}
     bedFreeList(&gh);
+    vgUnclip(vg);
     }
 }
 
@@ -387,20 +393,12 @@ for (ref = ghList; ref != NULL; ref = ref->next)
        also draw summary ChromGraph when the tableName is cnvBroadLungv2 
        the space for the CrhomGraph is hardcoded here chromGraphOffset=10    
     */
-    if (sameWord(tableName,"cnvLungBroadv2"))
+    if ( sameString(tableName,"cnvLungBroadv2_ave100K") // || sameString(tableName,"cnvLungBroadv2") || sameString(tableName, "expBreastCancerUCSF") 
+	 || sameString(tableName, "CGHBreastCancerUCSF"))
 	{
 	char summaryTable[512];
 
-	safef(summaryTable, sizeof(summaryTable),"cnvLungBroadv2_summary");
-	drawChromGraphSimple (vg, db, gl, summaryTable, 
-			      totalYOff + yOffset,  TRUE, TRUE, TRUE);
-	totalYOff += chromGraphHeight() + spacing;
-	}
-    if (sameWord(tableName,"cnvLungBroadv2_ave100K"))
-	{
-	char summaryTable[512];
-
-	safef(summaryTable, sizeof(summaryTable),"cnvLungBroadv2_ave100K_summary");
+	safef(summaryTable, sizeof(summaryTable),  "%s_summary", tableName);
 	drawChromGraphSimple (vg, db, gl, summaryTable, 
 			      totalYOff + yOffset,  TRUE, TRUE, TRUE);
 	totalYOff += chromGraphHeight() + spacing;
@@ -412,33 +410,45 @@ vgClose(&vg);
 void graphDropdown(struct sqlConnection *conn, char *varName, char *curVal, char *js)
 /* Make a drop-down with available chrom graphs */
 {
-int realCount = slCount(ghList), totalCount=0;
 char **menu, **values;
 int i = 0;
 struct slRef *ref;
+int totalCount =0;
 
-if ( realCount == 0)
-    totalCount = realCount +1;
-else
-    totalCount = realCount;
-
-AllocArray(menu, totalCount);
-AllocArray(values, totalCount);
-
-if ( realCount == 0)
+if (sameWord(varName, hghHeatmap))
     {
-    menu[0] = "-- nothing --";
-    values[0] = "";
-    }
+    int realCount = slCount(ghList);
 
-for (ref = ghList; ref != NULL; ref = ref->next)
+    if ( realCount == 0)
+	totalCount = realCount +1;
+    else
+	totalCount = realCount;
+    
+    AllocArray(menu, totalCount);
+    AllocArray(values, totalCount);
+
+    if ( realCount == 0)
+	{
+	menu[0] = "-- nothing --";
+	values[0] = "";
+	}
+
+    for (ref = ghList; ref != NULL; ref = ref->next)
+	{
+	struct genoHeatmap *gh = ref->val;
+	menu[i] = gh->shortLabel;
+	values[i] = gh->name;
+	++i;
+	}
+    }
+else if ( sameWord(varName,hghDataSet))
     {
-    struct genoHeatmap *gh = ref->val;
-    menu[i] = gh->shortLabel;
-    values[i] = gh->name;
-    ++i;
+    totalCount =2;
+    AllocArray(menu, totalCount);
+    AllocArray(values, totalCount);
+    menu[0]=values[0] ="UCSF breast cancer";
+    menu[1]=values[1] ="Broad Lung cancer 500K chip";
     }
-
 cgiMakeDropListFull(varName, menu, values, totalCount, curVal, js);
 freez(&menu);
 freez(&values);
@@ -448,7 +458,8 @@ static void addThresholdHeatmapCarries(struct dyString *dy)
 /* Add javascript that carries over threshold and graph vars
  * to new form. */
 {
-jsDropDownCarryOver(dy, hghHeatmap);
+//jsDropDownCarryOver(dy, hghHeatmap);
+jsDropDownCarryOver(dy, hghDataSet);
 }
 
 static struct dyString *onChangeStart()
@@ -593,34 +604,42 @@ saveOnChangeOtherFunction();
 /* Print clade, genome and assembly line. */
 boolean gotClade = hGotClade();
 char *jsOther = onChangeOther();
+{
+hPrintf("<TABLE>");
+if (gotClade)
     {
-    hPrintf("<TABLE>");
-    if (gotClade)
-	{
-	hPrintf("<TR><TD><B>clade:</B>\n");
-	printCladeListHtml(hGenome(database), onChangeClade());
-	htmlNbSpaces(3);
-	hPrintf("<B>genome:</B>\n");
-	printGenomeListForCladeHtml(database, onChangeOrg());
-	}
-    else
-	{
-	hPrintf("<TR><TD><B>genome:</B>\n");
-	printGenomeListHtml(database, onChangeOrg());
-	}
+//    hPrintf("<TR><TD><B>clade:</B>\n");
+    hPrintf("<TR><TD>\n");
+    printCladeListHtml(hGenome(database), onChangeClade());
     htmlNbSpaces(3);
-    hPrintf("<B>assembly:</B>\n");
-    printAssemblyListHtml(database, jsOther);
-
-    /* Show data selector. */
-    htmlNbSpaces(3);
-    hPrintf("<B>show:</B>\n");
-    char *curVal = heatmapName();
-    graphDropdown(conn, hghHeatmap, curVal, jsOther);
-
-    hPrintf("</TD></TR>\n");
-    hPrintf("</TABLE>");
+//    hPrintf("<B>genome:</B>\n");
+    hPrintf("\n");
+    printGenomeListForCladeHtml(database, onChangeOrg());
     }
+else
+    {
+    hPrintf("<TR><TD><B>genome:</B>\n");
+    printGenomeListHtml(database, onChangeOrg());
+    }
+htmlNbSpaces(3);
+hPrintf("<B>assembly:</B>\n");
+printAssemblyListHtml(database, jsOther);
+
+/* Show data set selector. */
+htmlNbSpaces(3);
+hPrintf("<B>select:</B>\n");
+char *curVal = dataSetName();
+graphDropdown (conn, hghDataSet, curVal, jsOther);
+
+/* Show data. */
+htmlNbSpaces(3);
+hPrintf("<B>data:</B>\n");
+// char *curVal = heatmapName();
+graphDropdown(conn, hghHeatmap, "",""); // curVal, jsOther);
+
+hPrintf("</TD></TR>\n");
+hPrintf("</TABLE>");
+}
 
 
 cgiMakeButton(hghConfigure, "configure");
@@ -643,7 +662,7 @@ hPrintf("</FORM>\n");
      * also all the source/color pairs that depend on the
      * configuration. */
     static char *regularVars[] = {
-      "clade", "org", "db", hghHeatmap,
+      "clade", "org", "db", hghHeatmap, hghDataSet
       };
     int regularCount = ArraySize(regularVars);
     jsCreateHiddenForm(cart, scriptName, regularVars, regularCount);
