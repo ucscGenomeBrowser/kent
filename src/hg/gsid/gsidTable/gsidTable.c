@@ -20,7 +20,7 @@
 #include "gsidTable.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidTable.c,v 1.19 2007/07/19 22:48:02 fanhsu Exp $";
+static char const rcsid[] = "$Id: gsidTable.c,v 1.20 2007/07/19 23:57:57 fanhsu Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "submit_filter", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -1178,6 +1178,7 @@ struct tempName tn2;
 struct sqlResult *sr;
 char **row;
 char query[255];
+char *chp;
 
 if (!outName) 
     {
@@ -1205,8 +1206,16 @@ while (subjList)
     	{
 	/* Remove "ss." from the front of the DNA sequence ID, 
 	   so that they could be used both for DNA and protein MSA maf display */
-	fprintf(outF2, "%s\t%s\n", strstr(row[0], "ss.")+3L, subjList->fields[0]);
-    	}
+	chp = strstr(row[0], "ss.");
+	if (chp != NULL)
+	    {
+	    fprintf(outF2, "%s\t%s\n", chp+3L, subjList->fields[0]);
+    	    }
+	else
+	    {
+	    fprintf(outF2, "%s\t%s\n", row[0], subjList->fields[0]);
+    	    }
+	}
     sqlFreeResult(&sr);
 
     subjList=subjList->next;
