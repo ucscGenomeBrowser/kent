@@ -165,33 +165,86 @@ for (group = groupList; group != NULL; group = group->next)
             }
 	hPrintf("</TR>\n");
 	}
+    /* Scan through this group to find supertracks */
+    struct hash *superHash = hashNew(0);
+    struct trackRef *prevTr = NULL;
+    for (tr = group->trackList; tr != NULL; tr = tr->next)
+        {
+        if (!isOpen)
+            continue;
+        struct track *track = tr->track;
+        struct trackRef *superTr;
+        if (track->parent)
+            {
+            struct track *parent = 
+                    hashFindVal(superHash, track->parent->mapName);
+            if (!parent)
+                {
+                /* first encounter -- insert in list and record in hash */
+                parent = track->parent;
+                parent->hasUi = TRUE;
+                AllocVar(superTr);
+                superTr->track = parent;
+                superTr->next = tr;
+                if (!prevTr)
+                    group->trackList = superTr;
+                else
+                    prevTr->next = superTr;
+                hashAdd(superHash, parent->mapName, parent);
+                }
+            /* note if any member track is visible */
+            if (track->visibility != tvHide)
+                parent->visibility = tvDense;
+            }
+        prevTr = tr;
+        }
 
-    /* Loop through this group. */
+    /* Loop through this group and display */
     for (tr = group->trackList; tr != NULL; tr = tr->next)
 	{
         if (!isOpen)
             continue;
 	struct track *track = tr->track;
+
 	hPrintf("<TR>");
 	hPrintf("<TD>");
+        if (track->parent)
+            /* indicate members of a supertrack */
+            hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;");
 	if (track->hasUi)
 	    hPrintf("<A HREF=\"%s?%s=%u&g=%s\">", hgTrackUiName(),
 		cartSessionVarName(), cartSessionId(cart),
 		track->mapName);
 	hPrintf(" %s", track->shortLabel);
+        if (hashFindVal(superHash, track->mapName))
+            hPrintf("...");
 	if (track->hasUi)
 	    hPrintf("</A>");
 	hPrintf("</TD>");
 	hPrintf("<TD>");
+
 	/* If track is not on this chrom print an informational
 	   message for the user. */
-	if(hTrackOnChrom(track->tdb, chromName)) 
+	if (hTrackOnChrom(track->tdb, chromName))
 	    {
-	    /* check for option of limiting visibility to one mode */
-	    char *onlyVisibility = trackDbSetting(track->tdb, "onlyVisibility");
-	    hTvDropDownClassVisOnly(track->mapName, track->visibility,
-		track->canPack, (track->visibility == tvHide) ? 
-		     "hiddenText" : "normalText", onlyVisibility );
+            if (!hashFindVal(superHash, track->mapName))
+                {
+                /* check for option of limiting visibility to one mode */
+                char *onlyVisibility = trackDbSetting(track->tdb, 
+                                                        "onlyVisibility");
+                hTvDropDownClassVisOnly(track->mapName, track->visibility,
+                            track->canPack, (track->visibility == tvHide) ? 
+                            "hiddenText" : "normalText", onlyVisibility );
+                }
+            else
+                {
+                /* supertrack dropdown is hide/show */
+                boolean showSuper = sameString("show",
+                                cartUsualString(cart, track->mapName, "show"));
+                hideShowDropDown(track->mapName, showSuper,
+                                 showSuper && (track->visibility != tvHide) ?
+                                            "normalText": "hiddenText");
+                }
 	    }
 	else 
 	    hPrintf("[No data-%s]", chromName);
