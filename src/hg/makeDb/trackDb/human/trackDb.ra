@@ -512,25 +512,25 @@ type bed 3 .
     track affyTxnPhase3FragsHeLaTopStrand
     subTrack affyTxnPhase3FragsS
     shortLabel HeLa + sRNA
-    longLabel Affymetrix PolyA (Whole Cell) HeLa Plus Strand Short RNA Fragments
+    longLabel Affymetrix (Whole Cell) HeLa Plus Strand Short RNA Fragments
     priority 1
 
     track affyTxnPhase3FragsHeLaBottomStrand
     subTrack affyTxnPhase3FragsS
     shortLabel HeLa - sRNA
-    longLabel Affymetrix PolyA (Whole Cell) HeLa Minus Strand Short RNA Fragments
+    longLabel Affymetrix (Whole Cell) HeLa Minus Strand Short RNA Fragments
     priority 2
 
     track affyTxnPhase3FragsHepG2TopStrand
     subTrack affyTxnPhase3FragsS
     shortLabel HepG2 + sRNA
-    longLabel Affymetrix PolyA (Whole Cell) HepG2 Plus Strand Short RNA Fragments
+    longLabel Affymetrix (Whole Cell) HepG2 Plus Strand Short RNA Fragments
     priority 3
 
     track affyTxnPhase3FragsHepG2BottomStrand
     subTrack affyTxnPhase3FragsS
     shortLabel HepG2 - sRNA
-    longLabel Affymetrix PolyA (Whole Cell) HepG2 Minus Strand Short RNA Fragments
+    longLabel Affymetrix (Whole Cell) HepG2 Minus Strand Short RNA Fragments
     priority 4
 
 track affyTxnPhase3S
@@ -549,25 +549,25 @@ type wig 0 1000
     track affyTxnPhase3HeLatop_strand
     shortLabel HeLa + sRNA
     subTrack affyTxnPhase3S
-    longLabel Affymetrix PolyA (Whole Cell) Hela Plus Strand Short RNA Signal
+    longLabel Affymetrix (Whole Cell) Hela Plus Strand Short RNA Signal
     priority 1
 
     track affyTxnPhase3HeLabottom_strand
     shortLabel HeLa - sRNA
     subTrack affyTxnPhase3S
-    longLabel Affymetrix PolyA (Whole Cell) Hela Minus Strand Short RNA Signal
+    longLabel Affymetrix (Whole Cell) Hela Minus Strand Short RNA Signal
     priority 2
 
     track affyTxnPhase3HepG2top_strand
     shortLabel HepG2 + sRNA
     subTrack affyTxnPhase3S
-    longLabel Affymetrix PolyA (Whole Cell) HepG2 Plus Strand Short RNA Signal
+    longLabel Affymetrix (Whole Cell) HepG2 Plus Strand Short RNA Signal
     priority 3
 
     track affyTxnPhase3HepG2bottom_strand
     shortLabel HepG2 - sRNA
     subTrack affyTxnPhase3S
-    longLabel Affymetrix PolyA (Whole Cell) HepG2 Minus Strand Short RNA Signal
+    longLabel Affymetrix (Whole Cell) HepG2 Minus Strand Short RNA Signal
     priority 4
 
 track affyU133
