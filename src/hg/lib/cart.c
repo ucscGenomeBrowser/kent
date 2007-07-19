@@ -16,7 +16,7 @@
 #include "trashDir.h"
 #include "customFactory.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.73 2007/07/17 17:58:06 braney Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.74 2007/07/19 23:38:21 angie Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -163,14 +163,15 @@ sqlUpdate(conn, dy->string);
 dyStringFree(&dy);
 }
 
-static void cartCopyCustomTracks(struct cart *cart)
+static void cartCopyCustomTracks(struct cart *cart, struct hash *oldVars)
 /* If cart contains any live custom tracks, save off a new copy of them, 
  * to prevent clashes by multiple loaders of the same session. 
  * Call hSetDb to avoid the possibility of it getting set incorrectly 
  * as a side-effect during customFactory parsing. */
 {
 struct hashEl *el, *elList = hashElListHash(cart->hash);
-char *db = cartOptionalString(cart, "db");
+char *db=NULL, *ignored;
+getDbAndGenome(cart, &db, &ignored, oldVars);
 if (db)
     hSetDb(db);
 
@@ -294,12 +295,12 @@ if ((row = sqlNextRow(sr)) != NULL)
 	cartRemoveLike(cart, "*");
 	cartParseOverHash(cart, row[1]);
 	cartSetInt(cart, sessionVar, hgsid);
-	cartCopyCustomTracks(cart);
 	if (oldVars)
 	    hashEmpty(oldVars);
 	/* Overload settings explicitly passed in via CGI (except for the
 	 * command that sent us here): */
 	loadCgiOverHash(cart, oldVars);
+	cartCopyCustomTracks(cart, oldVars);
 	if (isNotEmpty(actionVar))
 	    cartRemove(cart, actionVar);
 	hDisconnectCentral(&conn2);
@@ -351,12 +352,12 @@ while (lineFileNext(lf, &line, &size))
 	    }
 	} /* not hgsid */
     } /* each line */
-cartCopyCustomTracks(cart);
 if (oldVars)
     hashEmpty(oldVars);
 /* Overload settings explicitly passed in via CGI (except for the
  * command that sent us here): */
 loadCgiOverHash(cart, oldVars);
+cartCopyCustomTracks(cart, oldVars);
 if (isNotEmpty(actionVar))
     cartRemove(cart, actionVar);
 }
