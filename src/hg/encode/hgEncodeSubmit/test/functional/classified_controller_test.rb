@@ -38,7 +38,7 @@ class ClassifiedControllerTest < Test::Unit::TestCase
   def test_list
     get :list
     assert_response :success
-    assert_template "list", "expected template list as response"
+    assert_template "list", "expected list template as response"
   end
 
 end
