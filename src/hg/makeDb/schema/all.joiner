@@ -2104,13 +2104,14 @@ identifier jaxAlleleName external=MGI
 "Jackson Labs/MGI Allele name: concatenated representative transcript ID and allele ID"
     mm6,mm8.jaxAllele.name dupeOk
     mm6,mm8.jaxAlleleInfo.name
-    mm8.jaxAllelePheno.allele
+    mm6,mm8.jaxAllelePheno.allele
 
 identifier jaxPhenotypeName external=MGI
 "Jackson Labs/MGI Phenotype name: representative transcript ID"
     mm6,mm8.jaxPhenotype.name dupeOk
     mm6,mm8.jaxPhenotypeAlias.name
     mm8.jaxAllelePheno.transcript minCheck=0.9
+    mm6.jaxAllelePheno.transcript minCheck=0.8
 
 #links between gv (the new Locus Variants) and related tables 
 identifier gvId
