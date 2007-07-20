@@ -102,6 +102,7 @@ EOF
 
 #########################################################################
 # REPEATMASKER (DONE 12/20/06 angie - REDONE 2/5/07)
+# REPLACED 7/20/07 by beta lib re-run -- see REPEATMASKER BETA TEST below.
     ssh kkstore05
     # Run -debug to create the dir structure and preview the scripts:
     doRepeatMasker.pl ornAna1 -verbose 3 -debug
@@ -381,33 +382,39 @@ TMPDIR=/scratch/tmp
 
 
 #########################################################################
-# REPEATMASKER BETA TEST (DONE 4/19/07 angie)
+# REPEATMASKER BETA TEST (DONE 4/19/07 angie -- REDONE 7/20/07)
+    # 7/17/07: Trying out development lib version.
     ssh kkstore05
     # Run -debug to create the dir structure and preview the scripts:
-    doRepeatMasker.pl ornAna1 -verbose 3 -debug
+    ~/kent/src/hg/utils/automation/doRepeatMasker.pl ornAna1 -verbose 3 -debug
     # Run it for real and tail the log:
-    doRepeatMasker.pl ornAna1 -verbose 3 \
+    cd /cluster/data/ornAna1/bed/RepeatMasker.2007-07-17
+    ~/kent/src/hg/utils/automation/doRepeatMasker.pl ornAna1 -verbose 3 \
       -stop mask \
-      >& /cluster/data/ornAna1/bed/RepeatMasker.2007-04-18/do.log &
-    tail -f /cluster/data/ornAna1/bed/RepeatMasker.2007-04-18/do.log
+      >& do.log & tail -f do.log
     # RepeatMasker and lib version from do.log:
-#grep version of RepeatMasker$ /cluster/bluearc/RepeatMasker/RepeatMasker
-#    April 17 2007 (open-3-1-7) version of RepeatMasker
-#grep RELEASE /cluster/bluearc/RepeatMasker/Libraries/RepeatMaskerLib.embl
-#CC   RELEASE 20061006;                                            *
+#grep version of RepeatMasker$ /cluster/bluearc/RepeatMasker.20070717-dev/RepeatMasker
+#    May 17 2007 (open-3-1-8) version of RepeatMasker
+#grep RELEASE /cluster/bluearc/RepeatMasker.20070717-dev/Libraries/RepeatMaskerLib.embl
+#CC   RELEASE 20070717;                                            *
     # Now load the new files as table rmskBeta for comparison:
     ssh hgwdev
-    cd /cluster/data/ornAna1/bed/RepeatMasker.2007-04-18
+    cd /cluster/data/ornAna1/bed/RepeatMasker.2007-07-17
     hgLoadOut -table=rmskBeta -nosplit ornAna1 ornAna1.fa.out
     # Coverage:
     featureBits ornAna1 rmskBeta
-#632312336 bases of 1842236818 (34.323%) in intersection
-    # a slight drop from the previous version:
-#previous version:
+#882976774 bases of 1842236818 (47.930%) in intersection
+    # wow!  big increase from the initial rmsk:
 #633511004 bases of 1842236818 (34.388%) in intersection
-    # Robert Hubley says that's not unexpected -- he and Arian will look 
-    # more closely.
-    nice featureBits ornAna1 rmsk \!rmskBeta -minSize=200 -bed=stdout | head
+    hgLoadBed ornAna1 nestedRepeats ornAna1.nestedRepeats.bed \
+      -sqlTable=$HOME/kent/src/hg/lib/nestedRepeats.sql
+    # Robert Hubley and Arian looked at it & approved for release.
+    # Continue the doRepeatMasker run so that the rmsk table is reloaded.
+    ~/kent/src/hg/utils/automation/doRepeatMasker.pl ornAna1 -verbose 3 \
+      -continue load \
+      -buildDir /cluster/data/ornAna1/bed/RepeatMasker.2007-07-17 \
+      >& do.log & tail -f do.log
+    hgsql ornAna1 -e 'drop table rmskBeta'
 
 
 #########################################################################
