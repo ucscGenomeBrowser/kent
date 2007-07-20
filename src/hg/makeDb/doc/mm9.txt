@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.4 2007/07/11 00:44:05 hiram Exp $"
+#	"$Id: mm9.txt,v 1.5 2007/07/20 18:24:23 hiram Exp $"
 #
 
 #######################################################################
@@ -33,6 +33,29 @@ do
     wget  --dont-remove-listing --timestamping \
         "${NCBI}/${MAPVIEW}/${F}" -O ${F}
 done
+    # survey the strains contained in seq_contig.md.gz
+    zcat seq_contig.md.gz | awk '{print $9}' | sort | uniq -c | sort -rn
+  13075 Celera
+    360 C57BL/6J
+    101 129/SvJ
+     93 129/Sv
+     79 unknown
+     75 129/SvEvTac
+     40 NOD
+     26 129S7/SvEv
+     14 129/Ola
+      7 129
+      6 Cast/Ei
+      6 BALB/c
+      3 SJL/J
+      3 C3H
+      3 B6/CBAF1J
+      3 AKR/J
+      3 A/J
+      2 Spret/Ei
+      1 group_label
+      1 129/J
+    # we will work on the C57BL/6J strain
 
 mkdir -p chrAgp
 cd chrAgp
@@ -66,7 +89,118 @@ wget  --dont-remove-listing --timestamping \
 wget  --dont-remove-listing --timestamping \
 	"${NCBI}/M_musculus/CHR_MT/mm_ref_chrUn.fa.gz \
 	-O chrM/mm_ref_chrUn.fa.gz
-    ## run the chrNamesFixed sequence below
+
+mkdir contigFasta
+for C in 1 2 3 4 5 6 7 8 9
+do
+    wget  --dont-remove-listing --timestamping \
+        "${NCBI}/M_musculus/CHR_0${C}/mm_ref_chr${C}.fa.gz" \
+        -O contigFasta/chr${C}.fa.gz
+done
+for C in 0 1 2 3 4 5 6 7 8 9
+do
+    wget  --dont-remove-listing --timestamping \
+        "${NCBI}/M_musculus/CHR_1${C}/mm_ref_chr1${C}.fa.gz" \
+        -O contigFasta/chr1${C}.fa.gz
+done
+for C in X Y Un MT
+do
+    wget  --dont-remove-listing --timestamping \
+        "${NCBI}/M_musculus/CHR_${C}/mm_ref_chr${C}.fa.gz" \
+        -O contigFasta/chr${C}.fa.gz
+done
+    mv contigFasta/chrMT.fa.gz contigFasta/chrM.fa.gz
+    ## split up the contigFasta files into their individual contigs
+    ## the sed fixes the fasta header name to just be the contig name
+    mkdir splitContigs
+for F in contigFasta/chr*.fa.gz
+do
+    BN=`basename ${F}`
+    C=${BN/.fa.gz/}
+    echo $F $BN $C
+    echo -n "${C} working ... "
+    mkdir -p splitContigs/${C}
+    zcat ${F} | sed -e "s/.*ref|/>/; s/|.*//" \
+	| faSplit byname stdin splitContigs/${C}/
+    echo "done"
+done
+    ## create agp files for the randoms from seq_contig.md and allcontig.agp
+    ## both fragment and contig agp files
+    $HOME/kent/src/hg/mouseStuff/buildTools/seqContigToAgp.pl \
+	randomFragments.agp randomContigs.agp
+    ## create contig agp file for non-randoms
+    $HOME/kent/src/hg/mouseStuff/buildTools/mkContigAgp.pl allContigs.agp
+    ## combine the two contig agp files
+    cat allContigs.agp randomContigs.agp > mm9.contigs.agp
+    ## separate the random contigs from the non-random contigs
+    $HOME/kent/src/hg/mouseStuff/buildTools/sortRandoms.pl \
+	randomContigs.agp > mvRandoms.sh
+    ## inspect mvRandoms.sh and then run it if it is OK
+    chmod +x mvRandoms.sh
+    ./mvRandoms.sh
+    ## verify all contigs exist properly
+    $HOME/kent/src/hg/mouseStuff/buildTools/checkContigs.pl mm9.contigs.agp
+    ## create all contigs fasta file
+    cd splitContigs
+    find . -type f | xargs cat > ../mm9.contigs.fa
+    ## create assembled sequence from these contigs and agp file
+    cd ..
+    agpToFa -simpleMulti mm9.contigs.agp all mm9.assembled.fa mm9.contigs.fa
+    ## create fragments agp file
+    cat chrOnly.agp randomFragments.agp > mm9.fragments.agp
+    ## verify this agp too will work with the assembled fasta
+    ## need 2bit file to avoid fasta file ordering difficulty
+    faToTwoBit mm9.assembled.fa mm9.assembled.2bit
+    checkAgpAndFa mm9.fragments.agp mm9.assembled.2bit
+    ## it has a problem with chrY because it is supposed to end with:
+chrY    2902556 5902555 29      N       3000000 centromere      no
+chrY    5902556 15902555        30      N       10000000        contig  no
+    ## edit mm9.contigs.agp to add these two lines, and repeat the agpToFa
+    ## after that, this check fails on chrX_random
+    ## this is supposed to be a gap, with N's
+    ## chrX_random     300319  303472  46      N       3154  fragment  yes
+# Loop: chrX_random, dnaOffset=300318, seqSize=1785075
+# agpFrag->chromStart: 300318, agpFrag->chromEnd: 303472, dnaOffset: 300318
+# FASTA gap entry
+# Bad char a found at index 300349
+# Invalid Agp or Fasta file entry for sequence chrX_random
+# agpMatchesFaEntry failed; exiting
+    ## this comes from the use of a single fragment in two parts,
+    ## from allcontig.agp
+NT_165789.2     296206  300318  45      W       CAAA01187194.1  1       4113  +
+NT_165789.2     300319  300349  46      N       31      fragment        no      
+NT_165789.2     300350  303372  47      W       CAAA01187194.1  4145    7167
+    ## which I processed into:
+chrX_random     296206  300318  45      W       CAAA01187194.1  1       4113  +
+chrX_random     300319  303472  46      N       3154    fragment        yes
+    ## should have been
+chrX_random     296206  300318  45      W       CAAA01187194.1  1       4113  +
+chrX_random     300319  300349  46      N       31      fragment        no      
+chrX_random     300350  303372  47      W       CAAA01187194.1  4145    7167  +
+    ## or better yet:
+chrX_random     296206  303372  45      W       CAAA01187194.1  1       7167  +
+chrX_random     303373  303472  46      N       100      fragment        yes
+    ## so, edit the randomFragments.agp to fixup that line as indicated
+    ## the chrOnly.agp file also needs an entry for chrM, add this
+    ## line to chrOnly.agp:
+chrM    1       16299   1       F       NC_005089.1     1       16299   +
+    ## now have successful business:
+    checkAgpAndFa mm9.fragments.agp mm9.assembled.2bit
+# All AGP and FASTA entries agree - both files are valid
+    ## let's get the sequence in order in the fasta file
+    faSplit byname mm9.assembled.fa splitChr/
+    cut -f1 mm9.fragments.agp | uniq -c
+    ## using the order of this fragments.agp file
+    for C in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 X Y M \
+	13_random 16_random 17_random 1_random 3_random 4_random 5_random \
+	7_random 8_random 9_random Un_random X_random Y_random
+do
+    cat splitChr/chr${C}.fa
+done > mm9.fragorder.assembled.fa
+    ## now that fasta file should also be OK
+    checkAgpAndFa mm9.fragments.agp mm9.fragorder.assembled.fa
+# All AGP and FASTA entries agree - both files are valid
+    ## now ready to give this agp and fasta file off to makeGenomeDb.pl
 
     ## pre-release testing download sequence  ###############################
     mkdir ncbi
@@ -112,7 +246,76 @@ done
 	| gzip -c > chrNamesFixed/chrM.fa.gz
 
 ##########################################################################
-## Initial makeGenomeDb.pl (DONE - 2007-04-05 - Hiram)
+## final makeGenomeDb.pl (DONE - 2007-07-19 - Hiram)
+    ## to make this go again, some things need to be removed or set-aside
+
+    ssh hgwdev
+    hgsql -e 'delete from dbDb where name="mm9";' hgcentraltest
+    rm -fr /gbdb/mm9
+
+    ssh kkstore06
+    cd /cluster/data/mm9
+    mv mm9.config.ra mm9.config.pre_release.ra
+    mv bed bed.pre_release
+    mv mm9.unmasked.2bit mm9.unmasked.2bit.pre_release
+    mv mm9.agp mm9.agp.pre_release
+    mv mm9.randoms.2bit mm9.randoms.2bit.pre_release
+    mv mm9.rmsk.2bit mm9.rmsk.2bit.pre_release
+    mv mm9.rmskTrf.2bit mm9.rmskTrf.2bit.pre_release
+    rm mm9.2bit
+    rm -fr ? ??
+    mv dbDbInsert.sql dbDbInsert.sql.pre_release
+    mv makeGenomeDb.out makeGenomeDb.out.pre_release
+    mv chrom.lst chrom.lst.pre_release
+    mv jkStuff jkStuff.pre_release
+    ## ask cluster-admin to rename the existing mm9 db to be mm9prerelease
+
+    cat << '_EOF_' > mm9.config.ra
+# Config parameters for makeGenomeDb.pl:
+db mm9
+scientificName Mus musculus
+commonName Mouse
+assemblyDate Jul. 2007
+assemblyLabel NCBI Build 37
+orderKey 121
+mitoAcc none
+fastaFiles /cluster/data/mm9/mouse_37/mm9.fragorder.assembled.fa
+agpFiles /cluster/data/mm9/mouse_37/mm9.fragments.agp
+# qualFiles /dev/null
+dbDbSpeciesDir mouse
+'_EOF_'
+    # << happy emacs
+    time nice -n +19 makeGenomeDb.pl mm9.config.ra > makeGenomeDb.out 2>&1 &
+    #	real    24m24.468s
+
+    ssh hgwdev
+    featureBits mm9 gold
+# 2620346158 bases of 2620346158 (100.000%) in intersection
+    featureBits mm8 gold
+# 2567283971 bases of 2567283971 (100.000%) in intersection
+    featureBits mm9 gap
+# 105419323 bases of 2620346158 (4.023%) in intersection
+    featureBits mm8 gap
+# 97171117 bases of 2567283971 (3.785%) in intersection
+
+    #	verify index is correct:
+    hgsql mm9 -e "show index from gc5Base;"
+    #	should see good numbers in Cardinality column
+
+    #	Reset default position to be like Mm8
+    hgsql -e \
+'update dbDb set defaultPos="chr12:50258170-50263946" where name="mm9";' \
+	hgcentraltest
+
+    # create initial symlink for 2bit sequence
+    mkdir /gbdb/mm9
+    mkdir /gbdb/mm9/html
+    ln -s /cluster/data/mm9/mm9.unmasked.2bit /gbdb/mm9/mm9.2bit
+
+    ## enter the trackDb business (was done in the pre-release test)
+
+##########################################################################
+## Initial pre-release makeGenomeDb.pl (DONE - 2007-04-05 - Hiram)
     ssh kkstore02
     cd /cluster/data/mm9
     cat << '_EOF_' > mm9.config.ra
@@ -135,7 +338,9 @@ dbDbSpeciesDir mouse
 
 ##########################################################################
 ## Repeat masker (DONE - 2007-04-05 - Hiram)
-    ssh kkstore02
+## 	RE-DONE with final sequence 2007-07-19 - Hiram
+    ssh kkstore06
+    ## use screen for this
     mkdir /cluster/data/mm9/bed/RepeatMasker
     cd /cluster/data/mm9/bed/RepeatMasker
     time nice -n +19 doRepeatMasker.pl -bigClusterHub=kk \
@@ -149,23 +354,108 @@ dbDbSpeciesDir mouse
 
 ##############################################################################
 ## simpleRepeat masking (DONE - 2007-04-07 - Hiram)
+##	RE-DONE with final sequence 2007-07-19 - Hiram
     ssh kolossus
+    ## use screen for this
     mkdir /cluster/data/mm9/bed/simpleRepeat
     cd /cluster/data/mm9/bed/simpleRepeat
     time nice -n +19 twoBitToFa ../../mm9.unmasked.2bit stdout \
 	| trfBig -trf=/cluster/bin/i386/trf stdin /dev/null \
 		-bedAt=simpleRepeat.bed -tempDir=/scratch/tmp
-    #	real    268m17.488s
+    #	real    253m44.602s
+    #	Appears to have an error on something:
+# sh: line 1: 18346 File size limit exceeded/cluster/bin/i386/trf /scratch/tmp/stdin_kolossus_3af1_fe9700.tf 2 7 7 80 10 50 2000 -m -d
+# Expecting 14 words line 4593 of /scratch/tmp/stdin_kolossus_3af1_fe9700.tf.2.7.7.80.10.50.2000.dat got 1
+
+    #	Let's try running this on the kki kluster, by chrom
+    ssh kkr1u00
+    mkdir /iscratch/i/mus/mm9
+    cd /iscratch/i/mus/mm9
+    cp -p /cluster/data/mm9/mm9.unmasked.2bit .
+    cp -p /cluster/data/mm9/chrom.sizes .
+    cut -f1 chrom.sizes | while read C
+do
+  twoBitToFa -noMask -seq=${C} mm9.unmasked.2bit stdout | gzip -c > ${C}.fa.gz
+  echo ${C}
+done
+
+    for R in 2 3 4 5 6 7 8
+do
+    rsync -a --progress /iscratch/i/mus/mm9/ kkr${R}u00:/iscratch/i/mus/mm9/
+done
+
+    ssh kki
+    mkdir /cluster/data/mm9/bed/simpleRepeat/trf
+    cd /cluster/data/mm9/bed/simpleRepeat/trf
+
+    cat << '_EOF_' > runTrf
+#!/bin/csh -fe 
+#
+set C = $1
+set GZ = /iscratch/i/mus/mm9/$C.fa.gz
+mkdir -p /scratch/tmp/$C
+zcat $GZ > /scratch/tmp/$C/$C.fa
+pushd /scratch/tmp/$C
+/cluster/bin/i386/trfBig -trf=/cluster/bin/i386/trf $C.fa \
+	/dev/null -bedAt=$C.bed -tempDir=/scratch/tmp/$C
+popd
+rm -f $C.bed
+cp -p /scratch/tmp/$C/$C.bed .
+rm -fr /scratch/tmp/$C
+'_EOF_'
+    # << happy emacs
+    chmod +x runTrf
+
+    cat << '_EOF_' > template
+#LOOP
+./runTrf $(path1) {check out line $(root1).bed}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    cut -f1 /iscratch/i/mus/mm9/chrom.sizes > chrom.lst
+    gensub2 chrom.lst single template jobList
+    para create jobList
+    para try ... check ... push ... etc ...
+    ## none of these jobs and any trouble, running line counts of these result
+    ## bed files with the previous failed run indicates there are identical
+# Completed: 35 of 35 jobs
+# CPU time in finished jobs:      14620s     243.66m     4.06h    0.17d  0.000 y
+# IO & Wait Time:                   272s       4.54m     0.08h    0.00d  0.000 y
+# Average job time:                 425s       7.09m     0.12h    0.00d
+# Longest finished job:            1386s      23.10m     0.39h    0.02d
+# Submission to last job:          1790s      29.83m     0.50h    0.02d
+
+    cat *.bed > ../simpleRepeat.bed
+    cd ..
     awk '{if ($5 <= 12) print;}' simpleRepeat.bed > trfMask.bed
 
     ssh hgwdev
     cd /cluster/data/mm9/bed/simpleRepeat
     time nice -n +19 hgLoadBed mm9 simpleRepeat \
       simpleRepeat.bed -sqlTable=$HOME/kent/src/hg/lib/simpleRepeat.sql
-    #	Loaded 1167587 elements of size 16
+    #	Loaded 1167619 elements of size 16
+    #	real    0m33.312s
 
     nice -n +19 featureBits mm9 simpleRepeat
-    #	80038870 bases of 2620346127 (3.055%) in intersection
+    #	80054947 bases of 2620346158 (3.055%) in intersection
+
+    ## clean up the /iscratch/i/mus/mm9/ directory
+
+###########################################################################
+# CREATE MICROSAT TRACK (DONE - 2007-07-20 - Hiram)
+    ssh hgwdev
+    mkdir /cluster/data/mm9/bed/microsat
+    cd /cluster/data/mm9/bed/microsat
+    awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+	../simpleRepeat/simpleRepeat.bed > microsat.bed 
+    hgLoadBed mm9 microsat microsat.bed
+    #	Loaded 195688 elements of size 4
+
+    featureBits mm9 microsat
+# 8713212 bases of 2620346158 (0.333%) in intersection
+    featureBits mm8 microsat
+# 8570611 bases of 2567283971 (0.334%) in intersection
 
 ############################################################################
 #  BLATSERVERS ENTRY (DONE - 2007-04-09 - Hiram)
@@ -178,4 +468,22 @@ dbDbSpeciesDir mouse
 	VALUES ("mm9", "blat14", "17791", "0", "1");' \
 	    hgcentraltest
     #	test it with some sequence
+
+########################################################################
+##  CYTOBAND - ideogram track (DONE - 2007-07-19 - Hiram)
+    ssh hgwdev
+    mkdir /cluster/data/mm9/bed/cytoBand
+    cd /cluster/data/mm9/bed/cytoBand
+
+    # Create bed file
+    $HOME/kent/src/utils/ncbi/createNcbiCytoBand.pl ../../mouse_37/ideogram
+    # Load the bed file
+    hgLoadBed -noBin -sqlTable=$HOME/kent/src/hg/lib/cytoBand.sql \
+	mm9 cytoBand cytoBand.bed
+XXX doesn't work, the ideogram file is corrupted
+    # Make cytoBandIdeo track for ideogram gif on hgTracks page.
+    # For mouse cytoBandIdeo is just a replicate of the cytoBand track.
+    hgsql -e "drop table cytoBandIdeo;" mm9
+    hgsql mm9 -e "create table cytoBandIdeo (index(chrom(10),chromStart)) as select * from cytoBand;"
+
 
