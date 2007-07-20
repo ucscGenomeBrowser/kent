@@ -1436,6 +1436,14 @@ spectrum on
 type rmsk
 canPack off
 
+track nestedRepeats
+shortLabel Nested Repeats
+longLabel Nested Repeats from RepeatMasker ID
+group varRep
+priority 149.11
+visibility hide
+type bed 12 +
+
 track rmskCensor
 shortLabel CENSOR Repeats
 longLabel Repeating Elements by CENSOR and RepBase 11.6 (Giri Ihstitute)
