@@ -208,7 +208,7 @@
 #include "omicia.h"
 #include "atomDb.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1318 2007/07/19 18:49:49 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1319 2007/07/20 20:03:13 angie Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -13669,12 +13669,13 @@ if ((row = sqlNextRow(sr)) != NULL)
     printCustomUrl(tdb, jaxQTL->mgiID, FALSE);
     printf("<B>QTL:</B> %s<BR>\n", jaxQTL->name);
     printf("<B>Description:</B> %s <BR>\n", jaxQTL->description);
-    printf("<B>cM position of marker associated with peak LOD score:</B> %3.1f<BR>\n", jaxQTL->cMscore);
-    printf("<B>MIT SSLP marker with highest correlation:</B> %s<BR>",
-	   jaxQTL->marker);
-    printf("<B>Chromosome:</B> %s<BR>\n", skipChr(seqName));
-    printBand(seqName, start, 0, FALSE);
-    printf("<B>Start of marker in chromosome:</B> %d<BR>\n", start+1);
+    if (jaxQTL->cMscore != 0.0)
+	printf("<B>cM position of marker associated with peak LOD score:</B> "
+	       "%3.1f<BR>\n", jaxQTL->cMscore);
+    if (isNotEmpty(jaxQTL->marker))
+	printf("<B>MIT SSLP marker with highest correlation:</B> %s<BR>",
+	       jaxQTL->marker);
+    bedPrintPos((struct bed *)jaxQTL, 3);
     }
 printTrackHtml(tdb);
 
@@ -13855,20 +13856,23 @@ char query[512];
 struct sqlConnection *conn = hAllocConn();
 struct sqlConnection *conn2 = hAllocConn();
 boolean hasBin; 
-char aliasTable[256];
+char aliasTable[256], phenoTable[256];
 struct sqlResult *sr = NULL;
 char **row = NULL;
 boolean first = TRUE;
-boolean gotAlias = FALSE;
 
 genericHeader(tdb, item);
 safef(aliasTable, sizeof(aliasTable), "jaxAlleleInfo");
-gotAlias = hTableExists(aliasTable);
+safef(phenoTable, sizeof(phenoTable), "jaxAllelePheno");
 safef(query, sizeof(query), "name = \"%s\"", item);
 sr = hRangeQuery(conn, track, seqName, winStart, winEnd, query, &hasBin);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct bed *bed = bedLoadN(row+hasBin, 12);
+    /* Watch out for case-insensitive matches (e.g. one allele is <sla>,
+     * another is <Sla>): */
+    if (! sameString(bed->name, item))
+	continue;
     if (first)
 	first = FALSE;
     else
@@ -13876,20 +13880,54 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("<B>MGI Representative Transcript:</B> ");
     htmTextOut(stdout, bed->name);
     puts("<BR>");
-    if (gotAlias)
+    if (hTableExists(aliasTable))
 	{
 	struct sqlResult *sr2 = NULL;
 	char **row2 = NULL;
 	char query2[1024];
 	safef(query2, sizeof(query2),
-	      "select mgiId,source from %s where name = '%s'",
-	      aliasTable, item);
+	      "select mgiId,source,name from %s where name = '%s'",
+	      aliasTable, bed->name);
 	sr2 = sqlGetResult(conn2, query2);
-	if ((row2 = sqlNextRow(sr2)) != NULL)
+	while ((row2 = sqlNextRow(sr2)) != NULL)
 	    {
+	    /* Watch out for case-insensitive matches: */
+	    if (! sameString(bed->name, row2[2]))
+		continue;
 	    if (isNotEmpty(row2[0]))
 		printCustomUrl(tdb, row2[0], TRUE);
 	    printf("<B>Allele Type:</B> %s<BR>\n", row2[1]);
+	    }
+	sqlFreeResult(&sr2);
+	}
+    if (hTableExists(phenoTable))
+	{
+	struct sqlResult *sr2 = NULL;
+	char **row2 = NULL;
+	char query2[1024];
+	struct slName *phenoList, *pheno;
+	safef(query2, sizeof(query2),
+	      "select phenotypes,allele from %s where allele = '%s'",
+	      phenoTable, bed->name);
+	sr2 = sqlGetResult(conn2, query2);
+	while ((row2 = sqlNextRow(sr2)) != NULL)
+	    {
+	    /* Watch out for case-insensitive matches: */
+	    if (! sameString(bed->name, row2[1]))
+		continue;
+	    boolean firstP = TRUE;
+	    phenoList = slNameListFromComma(row2[0]);
+	    slNameSort(&phenoList);
+	    printf("<B>Associated Phenotype(s):</B> ");
+	    for (pheno = phenoList;  pheno != NULL;  pheno = pheno->next)
+		{
+		if (firstP)
+		    firstP = FALSE;
+		else
+		    printf(", ");
+		printf("%s", pheno->name);
+		}
+	    printf("<BR>\n");
 	    }
 	sqlFreeResult(&sr2);
 	}
@@ -13911,14 +13949,21 @@ struct sqlResult *sr = NULL;
 char **row = NULL;
 boolean hasBin; 
 char query[512];
-char aliasTable[256];
+char aliasTable[256], phenoTable[256];
 struct slName *phenoList = NULL, *pheno = NULL;
 boolean first = TRUE;
-boolean gotAlias = FALSE;
+int chromStart=0, chromEnd=0;
+char *selectedPheno = NULL;
 
+/* Parse out the selected phenotype passed in from hgTracks. */
+if ((selectedPheno = strstr(item, " source=")) != NULL)
+    {
+    *selectedPheno = '\0';
+    selectedPheno += strlen(" source=");
+    }
 genericHeader(tdb, item);
 safef(aliasTable, sizeof(aliasTable), "%sAlias", tdb->tableName);
-gotAlias = hTableExists(aliasTable);
+safef(phenoTable, sizeof(phenoTable), "jaxAllelePheno");
 safef(query, sizeof(query), "name = \"%s\"", item);
 sr = hRangeQuery(conn, tdb->tableName, seqName, winStart, winEnd, query,
 		 &hasBin);
@@ -13931,7 +13976,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	printf("<B>MGI Representative Transcript:</B> ");
 	htmTextOut(stdout, bed->name);
 	puts("<BR>");
-	if (gotAlias)
+	if (hTableExists(aliasTable))
 	    {
 	    struct sqlConnection *conn2 = hAllocConn();
 	    char query2[512];
@@ -13946,23 +13991,77 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    }
 	printPos(bed->chrom, bed->chromStart, bed->chromEnd, bed->strand,
 		 FALSE, NULL);
+	chromStart = bed->chromStart;
+	chromEnd = bed->chromEnd;
 	bedFree(&bed);
 	}
     pheno = slNameNew(row[hasBin+12]);
     slAddHead(&phenoList, pheno);
     }
 sqlFreeResult(&sr);
-printf("<B>Phenotype(s):</B> ");
+printf("<B>Phenotype(s) at this locus: </B> ");
 first = TRUE;
+slNameSort(&phenoList);
 for (pheno = phenoList;  pheno != NULL;  pheno = pheno->next)
     {
     if (first)
 	first = FALSE;
     else
 	printf(", ");
-    htmTextOut(stdout, pheno->name);
+    if (sameString(pheno->name, selectedPheno))
+	printf("<B>%s</B>", pheno->name);
+    else
+	printf("%s", pheno->name);
     }
 puts("<BR>");
+if (hTableExists(phenoTable))
+    {
+    struct trackDb *alleleTdb = hMaybeTrackInfo(conn, "jaxAllele");
+    struct sqlConnection *conn2 = hAllocConn();
+    char query2[512];
+    char buf[512];
+    char alleleTable[256];
+    safef(alleleTable, sizeof(alleleTable), "jaxAlleleInfo");
+    boolean gotAllele = hTableExists(alleleTable);
+    safef(query, sizeof(query),
+	  "select allele from %s where transcript = '%s' "
+	  "and phenotypes like '%%%s%%'",
+	  phenoTable, item, selectedPheno);
+    first = TRUE;
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+	char *mgiId = NULL;
+	if (first)
+	    {
+	    first = FALSE;
+	    printf("<B>Allele(s) Associated with %s Phenotype:</B> ",
+		   selectedPheno);
+	    }
+	else
+	    printf(", ");
+	if (gotAllele)
+	    {
+	    safef(query2, sizeof(query2),
+		  "select mgiID from jaxAlleleInfo where name = '%s'",
+		  row[0]);
+	    mgiId = sqlQuickQuery(conn2, query2, buf, sizeof(buf));
+	    }
+	if (mgiId && alleleTdb && alleleTdb->url)
+	    {
+	    struct dyString *dy = dyStringSub(alleleTdb->url, "$$", mgiId);
+	    printf("<A HREF=\"%s\" TARGET=_BLANK>", dy->string);
+	    dyStringFree(&dy);
+	    }
+	htmTextOut(stdout, row[0]);
+	if (mgiId && alleleTdb && alleleTdb->url)
+	    printf("</A>");
+	}
+    sqlFreeResult(&sr);
+    hFreeConn(&conn2);
+    if (!first)
+	puts("<BR>");
+    }
 printTrackHtml(tdb);
 hFreeConn(&conn);
 }

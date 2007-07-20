@@ -117,7 +117,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1373 2007/07/18 22:34:04 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1374 2007/07/20 20:03:14 angie Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -11714,8 +11714,16 @@ tg->itemColor = omiciaColor;
 tg->itemNameColor = omiciaColor;
 }
 
+static int lfExtraCmp(const void *va, const void *vb)
+{
+const struct linkedFeatures *a = *((struct linkedFeatures **)va);
+const struct linkedFeatures *b = *((struct linkedFeatures **)vb);
+return strcmp(a->extra, b->extra);
+}
+
 void loadBed12Source(struct track *tg)
-/* Load bed 12 with extra "source" column as lf with extra value. */
+/* Load bed 12 with extra "source" column as lf with extra value. 
+ * Sort items by source. */
 {
 struct linkedFeatures *list = NULL;
 struct sqlConnection *conn = hAllocConn();
@@ -11734,6 +11742,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     slAddHead(&list, lf);
     }
 sqlFreeResult(&sr);
+slSort(&list, lfExtraCmp);
 tg->items = list;
 }
 
@@ -11774,12 +11783,25 @@ struct linkedFeatures *lf = item;
 return (char *)lf->extra;
 }
 
+char *jaxPhenotypeMapName(struct track *tg, void *item)
+/* Return name and source of jaxPhenotype item for linking to hgc.
+ * This gets CGI-encoded, so we can't just plop in another CGI var -- 
+ * hgc will have to parse it out. */
+{
+struct linkedFeatures *lf = item;
+char buf[512];
+safef(buf, sizeof(buf), "%s source=%s",
+      lf->name, (char *)lf->extra);
+return cloneString(buf);
+}
+
 void jaxPhenotypeMethods(struct track *tg)
 /* Fancy name fetcher for jaxPhenotype. */
 {
 linkedFeaturesMethods(tg);
 tg->loadItems = loadBed12Source;
 tg->itemName = jaxPhenotypeName;
+tg->mapItemName = jaxPhenotypeMapName;
 }
 
 
