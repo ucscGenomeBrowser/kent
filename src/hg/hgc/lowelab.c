@@ -86,7 +86,7 @@
 #include "memalloc.h"
 #include "rnaHybridization.h"
 
-static char const rcsid[] = "$Id: lowelab.c,v 1.20 2007/07/11 20:41:04 pchan Exp $";
+static char const rcsid[] = "$Id: lowelab.c,v 1.21 2007/07/20 09:48:34 pchan Exp $";
 
 extern char *uniprotFormat;
 
@@ -2089,6 +2089,263 @@ void doUltraConserved(struct trackDb *tdb, char *item)
     hFreeConn(&conn);
 }
 
+float computeGCContent(char* dna, int length)
+{
+    float percent = 0.0f;
+    int count = 0;
+    int i = 0;
+    for (i = 0; i < length; i++)
+    {
+        if ((dna[i] == 'C') || (dna[i] == 'c') || (dna[i] == 'G') || (dna[i] == 'g'))
+            count++;
+    }
+    percent = (float) count / (float) length * 100.0f;
+    return percent;
+}
+
+float computeMolecularWeight(char* dna, int length)
+{
+    float weight = 0.0f;
+    int count[4] = {0,0,0,0};
+    int i = 0;
+    for (i = 0; i < length; i++)
+    {
+        if ((dna[i] == 'A') || (dna[i] == 'a')) 
+            count[0]++;
+        else if ((dna[i] == 'C') || (dna[i] == 'c')) 
+            count[1]++;
+        else if ((dna[i] == 'G') || (dna[i] == 'g'))
+            count[2]++;
+        else if ((dna[i] == 'T') || (dna[i] == 't'))
+            count[3]++;
+    }
+    weight = count[0] * 313.209 + count[1] * 289.184 + count[2] * 329.208 + count[3] * 304.196 - 63.980 + 2.016;
+    return weight;
+}
+
+float computeNMolePerOD(char* dna, int length)
+{
+    int extCoeff = 0;
+    float nmolePerOD = 0.0f;
+    
+    enum
+    {
+        baseA = 0,
+        baseC,
+        baseG,
+        baseT
+    };
+    
+    int indExtCoeff[4] = {15400, 7400, 11500, 8700};
+    int neighborExtCoeff[4][4] = {
+        {27400, 21200, 25000, 22800},
+        {21200, 14600, 18000, 15200},
+        {25200, 17600, 21600, 20000},
+        {23400, 16200, 19000, 16800}};
+
+    int i = 0;
+    int *bases = malloc(sizeof(int) * length);
+
+    for (i = 0; i < length; i++)
+    {
+        if ((dna[i] == 'A') || (dna[i] == 'a')) 
+            bases[i] = baseA;
+        else if ((dna[i] == 'C') || (dna[i] == 'c')) 
+            bases[i] = baseC;
+        else if ((dna[i] == 'G') || (dna[i] == 'g'))
+            bases[i] = baseG;
+        else if ((dna[i] == 'T') || (dna[i] == 't'))
+            bases[i] = baseT;
+    }
+    
+    for (i = 0; i < (length - 1); i++)
+        extCoeff += neighborExtCoeff[bases[i]][bases[i + 1]];
+
+    for (i = 1; i < (length - 1); i++)
+        extCoeff -= indExtCoeff[bases[i]];
+        
+    nmolePerOD = pow(10, 6) / (float) extCoeff;
+    
+    free(bases);
+    
+    return nmolePerOD;
+}
+
+void doPrimers(struct trackDb *tdb, char *primerName)
+/* Handle the array primer and GOLD primer tracks. */
+{
+    char *track = tdb->tableName;
+    struct bed *primer;
+    struct dnaSeq *sequence;
+    char query[512];
+    struct sqlConnection *conn = hAllocConn();
+    struct sqlResult *sr;
+    char *dupe, *words[16];
+    char **row;
+    int wordCount;
+    int rowOffset;
+    int bedSize = 0;
+    int pairCount = 0;
+    bool forwardPrimer = TRUE;
+
+    genericHeader(tdb, primerName);
+
+    if (startsWith("Asn", primerName))
+        forwardPrimer = FALSE;
+        
+    dupe = cloneString(tdb->type);
+    wordCount = chopLine(dupe, words);
+    if (wordCount > 1)
+        bedSize = atoi(words[1]);
+    if (bedSize < 3) bedSize = 3;
+
+    rowOffset = hOffsetPastBin(seqName, track);
+    sprintf(query, "select * from %s where name = '%s'", track, primerName);
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+    {
+        primer = bedLoadN(row+rowOffset, bedSize);
+        printf("<B>Primer name: </B> %s<BR>\n",primerName);
+        
+        printf("<BR><B>Position:</B> "
+               "<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
+               hgTracksPathAndSettings(), database, primer->chrom, primer->chromStart + 1, primer->chromEnd);
+        printf("%s:%d-%d</A><BR>\n", primer->chrom, primer->chromStart + 1, primer->chromEnd);
+        printf("<B>Strand:</B> %s<BR>\n", primer->strand);
+        printf("<B>Genomic size:</B> %d nt<BR><BR>\n", (primer->chromEnd - primer->chromStart));
+        
+        sequence = hDnaFromSeq(primer->chrom, primer->chromStart, primer->chromEnd, dnaUpper);
+        if (sequence != NULL)
+        {
+            if (strcmp(primer->strand, "-") == 0)
+                reverseComplement(sequence->dna, sequence->size);
+            printf("<B>Sequence:</B> 5' %s 3'<BR>\n", sequence->dna);
+            printf("<B>GC content:</B> %0.2f%%<BR>\n", computeGCContent(sequence->dna, sequence->size));
+            printf("<B>Molecular weight:</B> %0.1f g/mol<BR>\n", computeMolecularWeight(sequence->dna, sequence->size));
+            printf("<B>nmole/OD<sub>260</sub>:</B> %0.3f <BR>\n", computeNMolePerOD(sequence->dna, sequence->size));
+            printf("<B>ug/OD<sub>260</sub>:</B> %0.3f <BR>\n", computeNMolePerOD(sequence->dna, sequence->size) *
+                   computeMolecularWeight(sequence->dna, sequence->size) * pow(10,-3));
+        }
+            
+        if (primer->next != NULL)
+            printf("<hr>\n");
+    }
+    sqlFreeResult(&sr);
+
+    printf("<br><B>Primer pairing</B><br>\n");
+	
+    /* Print table */
+    printf("<table style=\"width: 90%%;\" bgcolor=\"#%s\" border=\"0\" cellpadding=\"1\" cellspacing=\"0\">", HG_COL_BORDER);
+    printf("<tbody><tr><td>\n");
+    printf("<table style=\"width: 100%%; text-align: left;\" bgcolor=\"%s\" border=\"1\" cellpadding=\"2\" cellspacing=\"2\">\n", HG_COL_INSIDE);
+    printf("<tbody>\n");
+
+    /* Print table column heading */
+    printf("<tr style=\"vertical-align: top;\">\n");
+    printf("<td width=\"20%%\"><b>Primer Name</b></td>\n");
+    printf("<td width=\"10%%\"><b>Primer Type</b></td>\n");
+    printf("<td width=\"30%%\"><b>Primer Sequence</b></td>\n"); 
+    printf("<td width=\"10%%\"><b>PCR Region</b></td>\n"); 
+    printf("<td width=\"10%%\"><b>PCR Length (bp)</b></td>\n"); 
+    printf("<td width=\"10%%\"><b>PCR Region<BR>GC Content (%%)</b></td>\n"); 
+    printf("</tr>\n");
+
+    memset(query, 0, 512);
+    if (strcmp(primer->strand, "+") == 0)
+    {
+        if (hTableExists("genomePcrPrimers"))
+            sprintf(query, "select *, 'Array PCR' primerType from genomePcrPrimers where chrom = '%s' and chromStart > %d and strand = '-'", primer->chrom, primer->chromEnd);
+        if (hTableExists("goldRTprimers"))
+        {
+            if (strcmp(query, "") != 0)
+                sprintf(query, "%s union ", query);
+            sprintf(query, "%sselect *, 'GOLD RT' primerType from goldRTprimers where chrom = '%s' and chromStart > %d and strand = '-'",
+                    query, primer->chrom, primer->chromEnd);            
+        }
+        sprintf(query, "%s order by chromStart", query);
+    }
+    else
+    {
+        if (hTableExists("genomePcrPrimers"))
+            sprintf(query, "select *, 'Array PCR' primerType from genomePcrPrimers where chrom = '%s' and chromEnd < %d and strand = '+'", primer->chrom, primer->chromStart);
+        if (hTableExists("goldRTprimers"))
+        {
+            if (strcmp(query, "") != 0)
+                sprintf(query, "%s union ", query);
+            sprintf(query, "%sselect *, 'GOLD RT' primerType from goldRTprimers where chrom = '%s' and chromEnd < %d and strand = '+'",
+                    query, primer->chrom, primer->chromStart);            
+        }
+        sprintf(query, "%s order by chromStart desc", query);
+    }
+    
+    sr = sqlGetResult(conn, query);
+    while (((row = sqlNextRow(sr)) != NULL) && (pairCount < 6))
+    {
+        if ((forwardPrimer && startsWith("Asn", row[4])) || (!forwardPrimer && startsWith("Sn", row[4])))
+        {
+            printf("<tr style=\"vertical-align: top;\">\n");
+           
+            printf("<td>"
+                   "<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
+                   hgTracksPathAndSettings(), database, row[1], atoi(row[2]) + 1, atoi(row[3]));
+            printf("%s</A></td>\n", row[4]);
+            printf("<td>%s</td>\n", row[7]);
+            sequence = hDnaFromSeq(row[1], atoi(row[2]), atoi(row[3]), dnaUpper);
+            if (sequence != NULL)
+            {
+                if (strcmp(row[6], "-") == 0)
+                    reverseComplement(sequence->dna, sequence->size);
+                printf("<td>5' %s 3'</td>\n", sequence->dna);
+            }
+            else
+                printf("<td>N/A</td>\n");
+            
+            if (strcmp(primer->strand, "+") == 0)
+            {
+                sequence = hDnaFromSeq(primer->chrom, primer->chromStart, atoi(row[3]), dnaUpper);
+                printf("<td>"
+                       "<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
+                   hgTracksPathAndSettings(), database, primer->chrom, primer->chromStart + 1, atoi(row[3]));
+                printf("%s:%d-%d</A></td>\n", primer->chrom, primer->chromStart + 1, atoi(row[3]));
+            }
+            else
+            {
+                sequence = hDnaFromSeq(primer->chrom, atoi(row[2]), primer->chromEnd, dnaUpper);
+                printf("<td>"
+                       "<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
+                   hgTracksPathAndSettings(), database, primer->chrom, atoi(row[2]) + 1, primer->chromEnd);
+                printf("%s:%d-%d</A></td>\n", primer->chrom, atoi(row[2])+ 1, primer->chromEnd);
+            }
+            if (sequence != NULL)
+            {        
+                printf("<td style=\"text-align: right;\">%d</td>\n", sequence->size);
+                printf("<td style=\"text-align: right;\">%0.2f</td>\n", computeGCContent(sequence->dna, sequence->size));
+            }
+            else
+            {
+                printf("<td>N/A</td>\n");
+                printf("<td>N/A</td>\n");
+            }
+    
+            printf("</tr>\n");
+            
+            pairCount++;
+        }
+    }
+    sqlFreeResult(&sr);
+ 
+    /* Close table */
+    printf("</tbody>\n");
+    printf("</table>\n");
+    printf("</td></tr></tbody>\n");
+    printf("</table>\n");
+
+    bedFree(&primer);
+
+    hFreeConn(&conn);
+    printTrackHtml(tdb);
+}
+
 void doWiki(char *track, struct trackDb *tdb, char *itemName)
 {
   char strand[2];
@@ -2216,6 +2473,10 @@ else if (startsWith("BlastP_", track)
 else if (sameWord(track,"ultraConserved"))  
   {
     doUltraConserved(tdb, item);
+  }
+else if (sameWord(track,"genomePcrPrimers") || sameWord(track,"goldRTPrimers"))  
+  {
+    doPrimers(tdb, item);
   }
 else if (sameWord(track,"wiki") || sameWord(track,"wikibme"))
    {
