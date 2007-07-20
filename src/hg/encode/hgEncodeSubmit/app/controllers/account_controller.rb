@@ -139,10 +139,15 @@ class AccountController < ApplicationController
       @user.change_email_address(params[:user][:email])
       if @user.save
         @changed = true
+        flash.clear  
       end
     else
       flash[:notice] = "Please enter an email address" 
     end
+  rescue Net::SMTPFatalError
+    flash[:notice] = "Invalid email address." 
+    @changed = false
+    render :action => 'change_email'
   end
 
   def activate_new_email
