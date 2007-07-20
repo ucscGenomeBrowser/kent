@@ -7,4 +7,15 @@ class CategoryTest < Test::Unit::TestCase
   def test_truth
     assert true
   end
+
+  def test_valid
+    c = Category.new(:name => "Furniture")
+    assert_valid c
+  end
+
+  def test_unique_name
+    c = Category.new(:name => "Sample Category")
+    assert !c.valid?
+  end
+
 end

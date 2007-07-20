@@ -19,6 +19,11 @@ ActiveRecord::Schema.define(:version => 11) do
     t.column "category_id", :integer
   end
 
+  create_table "plugin_schema_info", :id => false, :force => true do |t|
+    t.column "plugin_name", :string
+    t.column "version",     :integer
+  end
+
   create_table "submission_files", :force => true do |t|
     t.column "file_name",     :string
     t.column "file_size",     :string

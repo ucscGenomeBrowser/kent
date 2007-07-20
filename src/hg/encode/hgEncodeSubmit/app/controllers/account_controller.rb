@@ -59,12 +59,6 @@ class AccountController < ApplicationController
     redirect_back_or_default(:controller => '/account', :action => 'index')
   end
 
-  def test_should_activate_user
-    assert_nil User.authenticate('arthur', 'test')
-    get :activate, :id => users(:arthur).activation_code
-    assert_equal users(:arthur), User.authenticate('arthur', 'test')
-  end
-
   def activate
     flash.clear  
     return if params[:id] == nil and params[:activation_code] == nil
@@ -128,7 +122,7 @@ class AccountController < ApplicationController
     cookies.delete :auth_token
     reset_session
     flash[:notice] = "Password has been successfully changed."
-    redirect_to (:action => 'index')
+    redirect_to(:action => 'index')
   rescue ActiveRecord::RecordInvalid
     render :action => 'change_password'
   end

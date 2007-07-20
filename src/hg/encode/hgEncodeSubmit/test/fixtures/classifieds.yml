@@ -1,5 +1,10 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
-one:
+first:
   id: 1
-two:
-  id: 2
+  title: 60GB iPod For Sale
+  price: 499.00
+  location: Evansville, IN
+  description: Black iPod video. Like new condition
+  created_at: <%= 5.days.ago.utc.to_s(:db) %>
+  updated_at: <%= 2.days.ago.utc.to_s(:db) %>
+  email: justin@secondgearllc.com

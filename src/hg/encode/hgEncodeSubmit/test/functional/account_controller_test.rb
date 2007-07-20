@@ -15,7 +15,38 @@ class AccountControllerTest < Test::Unit::TestCase
     @controller = AccountController.new
     @request    = ActionController::TestRequest.new
     @response   = ActionController::TestResponse.new
+
+    # for testing action mailer
+    ActionMailer::Base.delivery_method = :test
+    ActionMailer::Base.perform_deliveries = true
+    ActionMailer::Base.deliveries = []
+    @emails = ActionMailer::Base.deliveries 
+    @emails.clear
   end
+
+  def test_should_activate_user_and_send_activation_email
+    get :activate, :id => users(:aaron).activation_code
+    assert_equal 1, @emails.length
+    assert(@emails.first.subject =~ /Your account has been activated/)
+    assert(@emails.first.body    =~ /#{assigns(:user).login}, your account has been activated/)
+    @emails.clear
+  end
+
+  def test_should_activate_user
+    assert_nil User.authenticate('aaron', 'test')
+    get :activate, :id => users(:aaron).activation_code
+    assert_equal users(:aaron), User.authenticate('aaron', 'test')
+  end
+
+  def test_should_send_activation_email_after_signup
+    create_user
+    assert_equal 1, @emails.length
+    assert(@emails.first.subject =~ /Please activate your new account/)
+    assert(@emails.first.body    =~ /Username: quire/)
+    #assert(@emails.first.body    =~ /Password: quire/)  # this no longer sent in email
+    assert(@emails.first.body    =~ /account\/activate\/#{assigns(:user).activation_code}/)
+  end
+
 
   def test_should_login_and_redirect
     post :login, :login => 'quentin', :password => 'test'
@@ -32,7 +63,7 @@ class AccountControllerTest < Test::Unit::TestCase
   def test_should_allow_signup
     assert_difference User, :count do
       create_user
-      assert_response :redirect
+      assert_response :success
     end
   end
 
@@ -130,14 +161,30 @@ class AccountControllerTest < Test::Unit::TestCase
   end
 
   def test__reset_password__valid_code_and_password__should_reset
+
     @user = users(:aaron)
+
+    @user.host = "hgwdev.cse.ucsc.edu"
+    @user.port = 3001
+    @user.activated_at = Time.now
+
     @user.forgot_password && @user.save
+    @emails.clear
+
+    #assert false, "debug: @user.password_reset_code = #{@user.password_reset_code}"
 
     post :reset_password, :id => @user.password_reset_code, :password  => "new_password", :password_confirmation => "new_password" 
+    assert_response :redirect
+
+    #@user = User.find(2);
+    #assert false, "debug: @user = #{@user.inspect}"
 
     assert_match("Password reset", flash[:notice])
     assert_equal 1, @emails.length # make sure that it e-mails the user notifying that their password was reset
     assert_equal(@user.email, @emails.first.to[0], "should have gone to user") 
+
+    #assert false, "debug: @user = #{@user.inspect}"
+    #assert false, "debug: @user.activated_at = #{@user.activated_at}"
 
     # Make sure that the user can login with this new password
     assert(User.authenticate(@user.login, "new_password"), "password should have been reset")
@@ -145,11 +192,14 @@ class AccountControllerTest < Test::Unit::TestCase
 
   def test__reset_password__valid_code_but_not_matching_password__shouldnt_reset
     @user = users(:aaron)
+    @user.host = "hgwdev.cse.ucsc.edu"
+    @user.port = 3001
+
     @user.forgot_password && @user.save
 
     post :reset_password, :id => @user.password_reset_code, :password  => "new_password", :password_confirmation => "not matching password" 
 
-    assert_equal(0, @emails.length)
+    assert_equal(1, @emails.length)
     assert_match("Password mismatch", flash[:notice])
 
     assert(!User.authenticate(@user.login, "new_password"), "password should not have been reset")
@@ -160,6 +210,7 @@ class AccountControllerTest < Test::Unit::TestCase
 
     assert_match(/invalid password reset code/, flash[:notice])
   end
+
 
   protected
     def create_user(options = {})
@@ -174,4 +225,5 @@ class AccountControllerTest < Test::Unit::TestCase
     def cookie_for(user)
       auth_token users(user).remember_token
     end
+
 end

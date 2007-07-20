@@ -200,7 +200,7 @@ class PipelineController < ApplicationController
 
     @submission.file_name = @filename
     @submission.file_size = @upload.size
-    @submission.file_date = Time.now
+    @submission.file_date = Time.now    # TODO: add .utc to make UTC time?
     @submission.status = "uploaded"
 
     if @submission.save
