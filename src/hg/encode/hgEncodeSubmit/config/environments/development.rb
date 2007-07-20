@@ -17,7 +17,16 @@ config.action_controller.perform_caching             = false
 config.action_view.cache_template_extensions         = false
 config.action_view.debug_rjs                         = true
 
-# Don't care if the mailer can't send
-config.action_mailer.raise_delivery_errors = true
+# deliver the mail for real
+config.action_mailer.delivery_method = :smtp
+#note: moved the setting to here because when
+# it was in the ../environments.rb, this setting
+# in the test.rb did not get over-ridden,
+# therefore had to move setting for this
+# out of there, otherwise emails still
+# attempt to send for real when just running
+# the test harness
 
+# care if the mailer can't send
+config.action_mailer.raise_delivery_errors = true
 
