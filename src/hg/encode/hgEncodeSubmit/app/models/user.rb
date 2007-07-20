@@ -8,7 +8,7 @@ class User < ActiveRecord::Base
   attr_accessor :host
   attr_accessor :port
 
-  validates_presence_of     :login, :email
+  validates_presence_of     :login, :email, :name, :pi, :institution
   validates_presence_of     :password,                   :if => :password_required?
   validates_presence_of     :password_confirmation,      :if => :password_required?
   validates_length_of       :password, :within => 4..40, :if => :password_required?

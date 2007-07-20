@@ -242,6 +242,7 @@ class AccountControllerTest < Test::Unit::TestCase
   protected
     def create_user(options = {})
       post :signup, :user => { :login => 'quire', :email => 'quire@example.com', 
+       :name => 'Quire', :pi=> 'Mary Poppins', :institution => 'Disneyland',
         :password => 'quire', :password_confirmation => 'quire' }.merge(options)
     end
     

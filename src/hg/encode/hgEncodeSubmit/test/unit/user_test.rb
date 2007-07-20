@@ -70,6 +70,8 @@ class UserTest < Test::Unit::TestCase
 
   protected
     def create_user(options = {})
-      User.create({ :login => 'quire', :email => 'quire@example.com', :password => 'quire', :password_confirmation => 'quire' }.merge(options))
+      User.create({ :login => 'quire', :email => 'quire@example.com', 
+       :name => 'Quire', :pi=> 'Mary Poppins', :institution => 'Disneyland',
+       :password => 'quire', :password_confirmation => 'quire' }.merge(options))
     end
 end
