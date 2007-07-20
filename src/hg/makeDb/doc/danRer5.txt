@@ -1,0 +1,31 @@
+# for emacs: -*- mode: sh; -*-
+
+# Danio Rerio (zebrafish) from Sanger, version Zv7 (released 07/13/07)
+#  Project website:
+#    http://www.sanger.ac.uk/Projects/D_rerio/
+#  Assembly notes:
+#    http://www.sanger.ac.uk/Projects/D_rerio/
+#    ftp://ftp.ensembl.org/pub/assembly/zebrafish/Zv7release/Zv7_assembl_information.shmtl
+
+#  NOTE:  this doc may have genePred loads that fail to include
+#  the bin column.  Please correct that for the next build by adding
+#  a bin column when you make any of these tables:
+#
+
+###########################################################################
+# DOWNLOAD SEQUENCE (DONE, 2007-07-16, hartera)
+     ssh kkstore06
+     mkdir /cluster/store4/danRer5 
+     ln -s /cluster/store4/danRer5 /cluster/data
+     cd /cluster/data/danRer5
+     wget --timestamp \
+      ftp://ftp.ensembl.org/pub/assembly/zebrafish/Zv7release/README
+     wget --timestamp \
+      ftp://ftp.ensembl.org/pub/assembly/zebrafish/Zv7release/Zv7_chr.agp
+     wget --timestamp \
+      ftp://ftp.ensembl.org/pub/assembly/zebrafish/Zv7release/Zv7_contigs.fa
+     wget --timestamp \
+      ftp://ftp.ensembl.org/pub/assembly/zebrafish/Zv7release/Zv7_scaffold.agp
+     wget --timestamp \
+      ftp://ftp.ensembl.org/pub/assembly/zebrafish/Zv7release/Zv7_scaffolds.fa
+
