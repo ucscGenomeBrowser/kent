@@ -212,6 +212,33 @@ class AccountControllerTest < Test::Unit::TestCase
   end
 
 
+  # change_profile section
+  def test_should_render_template_change_profile
+    login_as :quentin
+    get :change_profile
+    assert_response :success
+    assert_template "change_profile", "should have rendered change_profile template"
+  end
+
+  def test_should_save_valid_post_change_profile
+    login_as :quentin
+    post :change_profile, 
+      :user => {:id => users('quentin').id, :login => "newLogin", :name => "New Name", :pi => "New PI"}
+    assert_match( "Profile has been successfully changed.", flash[:notice])
+    assert_response :redirect
+  end
+
+  def test_should_not_save_invalid_post_nonunique_login_change_profile
+    login_as :quentin
+    post :change_profile, 
+      :user => {:id => users('quentin').id, :login => users('aaron').login, :name => "New Name", :pi => "New PI"}
+    assert_response :success
+    assert_template "change_profile", "should have rendered change_profile template"
+    assert assigns(:user).errors.on(:login)
+  end
+
+
+
   protected
     def create_user(options = {})
       post :signup, :user => { :login => 'quire', :email => 'quire@example.com', 
