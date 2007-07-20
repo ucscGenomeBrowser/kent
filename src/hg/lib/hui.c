@@ -12,7 +12,7 @@
 #include "hgConfig.h"
 #include "chainCart.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.88 2007/07/18 22:34:04 kate Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.89 2007/07/20 18:30:47 kate Exp $";
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -140,6 +140,8 @@ char *hStringFromTv(enum trackVisibility vis)
 return hTvStrings[vis];
 }
 
+#define TV_DROPDOWN_STYLE "width: 70px"
+
 void hTvDropDown(char *varName, enum trackVisibility vis, boolean canPack)
 /* Make track visibility drop down for varName 
  * uses style "normalText" */
@@ -166,9 +168,11 @@ static char *pack[] =
     };
 static int packIx[] = {tvHide,tvDense,tvSquish,tvPack,tvFull};
 if (canPack)
-    cgiMakeDropListClass(varName, pack, ArraySize(pack), pack[packIx[vis]], class);
+    cgiMakeDropListClassWithStyle(varName, pack, ArraySize(pack), 
+                            pack[packIx[vis]], class, TV_DROPDOWN_STYLE);
 else
-    cgiMakeDropListClass(varName, noPack, ArraySize(noPack), noPack[vis], class);
+    cgiMakeDropListClassWithStyle(varName, noPack, ArraySize(noPack), 
+                            noPack[vis], class, TV_DROPDOWN_STYLE);
 }
 
 void hTvDropDownClassVisOnly(char *varName, enum trackVisibility vis,
@@ -215,27 +219,30 @@ if (visOnly != NULL)
     {
     int visIx = (vis > 0) ? 1 : 0;
     if (sameWord(visOnly,"dense"))
-	cgiMakeDropListClass(varName, denseOnly, ArraySize(denseOnly),
-		denseOnly[visIx], class);
+	cgiMakeDropListClassWithStyle(varName, denseOnly, ArraySize(denseOnly),
+		denseOnly[visIx], class, TV_DROPDOWN_STYLE);
     else if (sameWord(visOnly,"squish"))
-	cgiMakeDropListClass(varName, squishOnly, ArraySize(squishOnly),
-		squishOnly[visIx], class);
+	cgiMakeDropListClassWithStyle(varName, squishOnly, 
+                ArraySize(squishOnly), squishOnly[visIx], 
+                class, TV_DROPDOWN_STYLE);
     else if (sameWord(visOnly,"pack"))
-	cgiMakeDropListClass(varName, packOnly, ArraySize(packOnly),
-		packOnly[visIx], class);
+	cgiMakeDropListClassWithStyle(varName, packOnly, ArraySize(packOnly),
+		packOnly[visIx], class, TV_DROPDOWN_STYLE);
     else if (sameWord(visOnly,"full"))
-	cgiMakeDropListClass(varName, fullOnly, ArraySize(fullOnly),
-		fullOnly[visIx], class);
+	cgiMakeDropListClassWithStyle(varName, fullOnly, ArraySize(fullOnly),
+		fullOnly[visIx], class, TV_DROPDOWN_STYLE);
     else			/* default when not recognized */
-	cgiMakeDropListClass(varName, denseOnly, ArraySize(denseOnly),
-		denseOnly[visIx], class);
+	cgiMakeDropListClassWithStyle(varName, denseOnly, ArraySize(denseOnly),
+		denseOnly[visIx], class, TV_DROPDOWN_STYLE);
     }
     else
     {
     if (canPack)
-	cgiMakeDropListClass(varName, pack, ArraySize(pack), pack[packIx[vis]], class);
+	cgiMakeDropListClassWithStyle(varName, pack, ArraySize(pack), 
+                            pack[packIx[vis]], class, TV_DROPDOWN_STYLE);
     else
-	cgiMakeDropListClass(varName, noPack, ArraySize(noPack), noPack[vis], class);
+	cgiMakeDropListClassWithStyle(varName, noPack, ArraySize(noPack), 
+                            noPack[vis], class, TV_DROPDOWN_STYLE);
     }
 }
 
@@ -247,8 +254,8 @@ static char *hideShow[] =
     "hide",
     "show"
     };
-cgiMakeDropListClass(varName, hideShow, ArraySize(hideShow), 
-                    hideShow[show], class);
+cgiMakeDropListClassWithStyle(varName, hideShow, ArraySize(hideShow), 
+                    hideShow[show], class, TV_DROPDOWN_STYLE);
 }
 
 

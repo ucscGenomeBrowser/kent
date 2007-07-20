@@ -154,6 +154,9 @@ void hTvDropDown(char *varName, enum trackVisibility vis, boolean canPack);
 /* Make track visibility drop down for varName 
  * uses style "normalText" */
 
+
+#define SUPERTRACK_DEFAULT_VIS  "hide"
+
 void hideShowDropDown(char *varName, boolean show, char *class);
 /* Make hide/show dropdown for varName */
 
