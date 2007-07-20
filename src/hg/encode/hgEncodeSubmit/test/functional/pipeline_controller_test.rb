@@ -34,5 +34,18 @@ class PipelineControllerTest < Test::Unit::TestCase
     assert true
   end
 
+  def test_list
+    get :list
+    assert_response :success
+    assert_template "list", "expected list template as response"
+  end
+
+  def test_show_user
+    get :show_user
+    assert_response :success
+    assert_template "list", "expected list template as response"
+  end
+
+
 
 end
