@@ -29,7 +29,6 @@ class AccountControllerTest < Test::Unit::TestCase
     assert_equal 1, @emails.length
     assert(@emails.first.subject =~ /Your account has been activated/)
     assert(@emails.first.body    =~ /#{assigns(:user).login}, your account has been activated/)
-    @emails.clear
   end
 
   def test_should_activate_user
@@ -264,6 +263,34 @@ class AccountControllerTest < Test::Unit::TestCase
     assert assigns(:user).errors.on(:password)
   end
 
+  # change_email section
+  def test_should_render_template_change_email
+    login_as :quentin
+    get :change_email
+    assert_response :success
+    assert_template "change_email", "should have rendered change_email template"
+  end
+
+  def test_should_save_valid_post_change_email
+    login_as :quentin
+    post :change_email, 
+      :user => {:id => users('quentin').id, :email => "bubba@aol.com"}
+    assert_response :success
+    assert_equal 1, @emails.length
+    assert(@emails.first.subject =~ /Request to change your email/)
+    assert(@emails.first.body    =~ \
+     /#{assigns(:user).login}, follow this link to activate the change to your new email address/)
+  end
+
+  def test_should_activate_new_email
+    get :activate_new_email, :id => users(:aaron).email_activation_code
+    @user = User.find(users(:aaron).id)
+    assert_equal @user.email, users(:aaron).new_email
+    assert_response :redirect
+    assert_match( "The email address for your account has been updated.", flash[:notice])
+  end
+
+   
 
 
   protected

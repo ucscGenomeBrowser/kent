@@ -21,3 +21,5 @@ aaron:
   name: Aaron Spelling
   pi: Alice In Wonderland
   institution: Big Pictures
+  new_email: aaron@aol.com
+  email_activation_code: aaronscode # only if you're activating new email
