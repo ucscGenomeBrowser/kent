@@ -12,7 +12,7 @@
 #include "errabort.h"
 #include "mime.h"
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.91 2007/06/26 19:38:14 angie Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.92 2007/07/20 20:39:08 kate Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -1024,24 +1024,17 @@ printf("<INPUT TYPE=TEXT NAME=\"%s\" SIZE=%d VALUE=%g>", varName,
 	maxDigits, initialVal);
 }
 
-
-
-void cgiMakeDropList(char *name, char *menu[], int menuSize, char *checked)
-/* Make a drop-down list with names. 
- * uses style "normalText" */
-{
-    cgiMakeDropListClass(name, menu, menuSize, checked, "normalText");
-}
-
-/* Make a drop-down list with names. */
-void cgiMakeDropListClass(char *name, char *menu[], 
-	int menuSize, char *checked, char *class)
-/* Make a drop-down list with names. */
+void cgiMakeDropListClassWithStyle(char *name, char *menu[], 
+	int menuSize, char *checked, char *class, char *style)
+/* Make a drop-down list with names, text class and style. */
 {
 int i;
 char *selString;
 if (checked == NULL) checked = menu[0];
-printf("<SELECT NAME=\"%s\" class=%s>\n", name, class);
+if (style)
+    printf("<SELECT NAME=\"%s\" class=%s style=\"%s\">\n", name, class, style);
+else
+    printf("<SELECT NAME=\"%s\" class=%s>\n", name, class);
 for (i=0; i<menuSize; ++i)
     {
     if (sameWord(menu[i], checked))
@@ -1051,6 +1044,21 @@ for (i=0; i<menuSize; ++i)
     printf("<OPTION%s>%s</OPTION>\n", selString, menu[i]);
     }
 printf("</SELECT>\n");
+}
+
+void cgiMakeDropListClass(char *name, char *menu[], 
+	int menuSize, char *checked, char *class)
+/* Make a drop-down list with names. */
+{
+    cgiMakeDropListClassWithStyle(name, menu, menuSize, checked, 
+                                        class, NULL);
+}
+
+void cgiMakeDropList(char *name, char *menu[], int menuSize, char *checked)
+/* Make a drop-down list with names. 
+ * uses style "normalText" */
+{
+    cgiMakeDropListClass(name, menu, menuSize, checked, "normalText");
 }
 
 void cgiMakeMultList(char *name, char *menu[], int menuSize, char *checked, int length)
