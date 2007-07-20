@@ -239,6 +239,33 @@ class AccountControllerTest < Test::Unit::TestCase
 
 
 
+  # change_password section
+  def test_should_render_template_change_password
+    login_as :quentin
+    get :change_password
+    assert_response :success
+    assert_template "change_password", "should have rendered change_password template"
+  end
+
+  def test_should_save_valid_post_change_password
+    login_as :quentin
+    post :change_password, 
+      :user => {:id => users('quentin').id, :password => "newPassword", :password_confirmation => "newPassword"}
+    assert_match( "Password has been successfully changed.", flash[:notice])
+    assert_response :redirect
+  end
+
+  def test_should_not_save_invalid_post_nonmatching_passwords_change_password
+    login_as :quentin
+    post :change_profile, 
+      :user => {:id => users('quentin').id, :password => "newPassword", :password_confirmation => "newPassword2"}
+    assert_response :success
+    assert_template "change_profile", "should have rendered change_profile template"
+    assert assigns(:user).errors.on(:password)
+  end
+
+
+
   protected
     def create_user(options = {})
       post :signup, :user => { :login => 'quire', :email => 'quire@example.com', 
