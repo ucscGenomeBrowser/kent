@@ -92,8 +92,8 @@ for (group = groupList; group != NULL; group = group->next)
     collapseGroupGoodies(isOpen, FALSE, &indicatorImg, 
                             &indicator, &otherState);
     hTableStart();
-    hPrintf("<TR>");
-    hPrintf("<TH align=\"left\" colspan=3 BGCOLOR=#536ED3>");
+    hPrintf("<TR NOWRAP>");
+    hPrintf("<TH NOWRAP align=\"left\" colspan=3 BGCOLOR=#536ED3>");
     hPrintf("\n<A NAME=\"%s\"></A>",group->name);
     hPrintf("<A HREF=\"%s?%s&hgTracksConfigPage=configure&%s=%s#%s\" class=\"bigBlue\"><IMG height=22 width=22 src=\"%s\" alt=\"%s\" class=\"bigBlue\"></A>&nbsp;&nbsp;",
         hgTracksName(), cartSidUrlString(cart), 
@@ -207,7 +207,7 @@ for (group = groupList; group != NULL; group = group->next)
 	struct track *track = tr->track;
 
 	hPrintf("<TR>");
-	hPrintf("<TD>");
+	hPrintf("<TD NOWRAP>");
         if (track->parent)
             /* indicate members of a supertrack */
             hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;");
