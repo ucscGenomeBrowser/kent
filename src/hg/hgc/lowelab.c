@@ -86,7 +86,7 @@
 #include "memalloc.h"
 #include "rnaHybridization.h"
 
-static char const rcsid[] = "$Id: lowelab.c,v 1.21 2007/07/20 09:48:34 pchan Exp $";
+static char const rcsid[] = "$Id: lowelab.c,v 1.22 2007/07/21 03:42:04 pchan Exp $";
 
 extern char *uniprotFormat;
 
@@ -216,6 +216,20 @@ void modBaseAnchor(char *swissProtAcc)
 printf("<A HREF=\"http://salilab.org/modbase-cgi/model_search.cgi?searchkw=name&kword=%s\" TARGET=_blank>", swissProtAcc);
 }
 
+float computeGCContent(char* dna, int length)
+{
+    float percent = 0.0f;
+    int count = 0;
+    int i = 0;
+    for (i = 0; i < length; i++)
+    {
+        if ((dna[i] == 'C') || (dna[i] == 'c') || (dna[i] == 'G') || (dna[i] == 'g'))
+            count++;
+    }
+    percent = (float) count / (float) length * 100.0f;
+    return percent;
+}
+
 void doRefSeq(struct trackDb *tdb, char *item, 
 		     char *pepTable, char *extraTable)
 /* Handle click on gene track. */
@@ -224,6 +238,7 @@ struct minGeneInfo ginfo;
 char query[256];
 char query2[256];
 struct sqlResult *sr, *sr2;
+struct dnaSeq *sequence;
 char **row, **row2;
 char *words[16], *dupe = cloneString(tdb->type);
 int wordCount, x, length;
@@ -240,6 +255,9 @@ char *spAcc = NULL;
 struct slName *el, *list;
 char *table = tdb->tableName;
 char *pdb = hPdbFromGdb(database);
+struct genePred *gpList = NULL, *gp = NULL;
+char tableName[64];
+boolean hasBin; 
 
 spConn = sqlConnect( pdb);
 genericHeader(tdb, item);
@@ -489,8 +507,21 @@ goPrint( conn, item, spAcc);
 	    "the picture again to get to the specific info on that model.</I><p>");
     }
 
+hFindSplitTable(seqName, table, tableName, &hasBin);
+safef(query, sizeof(query), "name = \"%s\"", item);
+gpList = genePredReaderLoadQuery(conn, tableName, query);
+for (gp = gpList; gp != NULL; gp = gp->next)
+{
+    sequence = hDnaFromSeq(gp->chrom, gp->txStart, gp->txEnd, dnaUpper);
+    if (sequence != NULL)
+        printf("<B>GC content:</B> %0.2f%%<BR>\n", computeGCContent(sequence->dna, sequence->size));
+}
+
 geneShowPosAndLinks(item, item, tdb, pepTable, "htcTranslatedProtein",
 		    "htcGeneMrna", "htcGeneInGenome", "Predicted mRNA");
+
+genePredFreeList(&gpList);
+
 printTrackHtml(tdb);
 hFreeConn(&conn);
 }
@@ -2089,20 +2120,6 @@ void doUltraConserved(struct trackDb *tdb, char *item)
     hFreeConn(&conn);
 }
 
-float computeGCContent(char* dna, int length)
-{
-    float percent = 0.0f;
-    int count = 0;
-    int i = 0;
-    for (i = 0; i < length; i++)
-    {
-        if ((dna[i] == 'C') || (dna[i] == 'c') || (dna[i] == 'G') || (dna[i] == 'g'))
-            count++;
-    }
-    percent = (float) count / (float) length * 100.0f;
-    return percent;
-}
-
 float computeMolecularWeight(char* dna, int length)
 {
     float weight = 0.0f;
@@ -2186,7 +2203,7 @@ void doPrimers(struct trackDb *tdb, char *primerName)
     int rowOffset;
     int bedSize = 0;
     int pairCount = 0;
-    bool forwardPrimer = TRUE;
+    boolean forwardPrimer = TRUE;
 
     genericHeader(tdb, primerName);
 
