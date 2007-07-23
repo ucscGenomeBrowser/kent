@@ -6,6 +6,5 @@
 #Information about sequences contained in rs_fasta files described in snpExtFile
 CREATE TABLE snpSeq (
     name varchar(255) not null,	   # rsId of sequence
-    chrom varchar(255) not null,   # Separate file per chrom
     file_offset bigint not null	   # byte offset of sequence in file
 );

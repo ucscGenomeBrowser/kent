@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "snpSeq.h"
 
-static char const rcsid[] = "$Id: snpSeq.c,v 1.1 2006/10/12 22:53:52 heather Exp $";
+static char const rcsid[] = "$Id: snpSeq.c,v 1.2 2007/07/23 21:33:28 heather Exp $";
 
 void snpSeqStaticLoad(char **row, struct snpSeq *ret)
 /* Load a row from snpSeq table into ret.  The contents of ret will
@@ -16,8 +16,7 @@ void snpSeqStaticLoad(char **row, struct snpSeq *ret)
 {
 
 ret->name = row[0];
-ret->chrom = row[1];
-ret->file_offset = sqlSigned(row[2]);
+ret->file_offset = sqlSigned(row[1]);
 }
 
 struct snpSeq *snpSeqLoad(char **row)
@@ -28,8 +27,7 @@ struct snpSeq *ret;
 
 AllocVar(ret);
 ret->name = cloneString(row[0]);
-ret->chrom = cloneString(row[1]);
-ret->file_offset = sqlSigned(row[2]);
+ret->file_offset = sqlSigned(row[1]);
 return ret;
 }
 
@@ -39,7 +37,7 @@ struct snpSeq *snpSeqLoadAll(char *fileName)
 {
 struct snpSeq *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[3];
+char *row[2];
 
 while (lineFileRow(lf, row))
     {
@@ -57,7 +55,7 @@ struct snpSeq *snpSeqLoadAllByChar(char *fileName, char chopper)
 {
 struct snpSeq *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[3];
+char *row[2];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -79,7 +77,6 @@ char *s = *pS;
 if (ret == NULL)
     AllocVar(ret);
 ret->name = sqlStringComma(&s);
-ret->chrom = sqlStringComma(&s);
 ret->file_offset = sqlSignedComma(&s);
 *pS = s;
 return ret;
@@ -93,7 +90,6 @@ struct snpSeq *el;
 
 if ((el = *pEl) == NULL) return;
 freeMem(el->name);
-freeMem(el->chrom);
 freez(pEl);
 }
 
@@ -115,10 +111,6 @@ void snpSeqOutput(struct snpSeq *el, FILE *f, char sep, char lastSep)
 {
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->name);
-if (sep == ',') fputc('"',f);
-fputc(sep,f);
-if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->chrom);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 fprintf(f, "%d", el->file_offset);

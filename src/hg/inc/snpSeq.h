@@ -5,14 +5,13 @@
 #ifndef SNPSEQ_H
 #define SNPSEQ_H
 
-#define SNPSEQ_NUM_COLS 3
+#define SNPSEQ_NUM_COLS 2
 
 struct snpSeq
 /* Information about sequences contained in rs_fasta files described in snpExtFile */
     {
     struct snpSeq *next;  /* Next in singly linked list. */
     char *name;	/* rsId of sequence */
-    char *chrom;	/* Separate file per chrom */
     int file_offset;	/* byte offset of sequence in file */
     };
 
