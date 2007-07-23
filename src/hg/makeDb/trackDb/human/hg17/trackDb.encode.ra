@@ -1000,8 +1000,8 @@ dataVersion ENCODE June & Oct 2005 Freezes
 
     track encodeUCDavisChipMyc
     subTrack encodeUCDavisChip
-    shortLabel UCD C-Myc
-    longLabel UC Davis ChIP-chip NimbleGen (C-Myc ab, HeLa Cells)
+    shortLabel UCD c-Myc
+    longLabel UC Davis ChIP-chip NimbleGen (c-Myc ab, HeLa Cells)
     priority 2
     dataVersion ENCODE Oct 2005 Freeze
     
@@ -1055,7 +1055,7 @@ dataVersion ENCODE June & Oct 2005 Freezes
     track encodeUcDavisChipHitsMyc
     subTrack encodeUcDavisChipHits
     shortLabel UCD c-Myc Hits
-    longLabel UC Davis ChIP-chip Hits NimbleGen (C-Myc ab, HeLa Cells)
+    longLabel UC Davis ChIP-chip Hits NimbleGen (c-Myc ab, HeLa Cells)
     priority 2
     color 32,128,180
     dataVersion Oct 2006
