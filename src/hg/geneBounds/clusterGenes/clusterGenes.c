@@ -11,7 +11,7 @@
 #include "bits.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: clusterGenes.c,v 1.38 2007/07/17 23:15:53 markd Exp $";
+static char const rcsid[] = "$Id: clusterGenes.c,v 1.39 2007/07/23 21:35:40 markd Exp $";
 
 /* Notes:
  *  strand is passed as '*' when -ignoreStrand is specified.
@@ -44,9 +44,13 @@ errAbort(
   "    This is useful when the file names don't reflact the desired track\n"
   "    names.\n"
   "   -ignoreStrand - cluster postive and negative strand together\n"
-  "   -clusterBed=bed - output BED file for each cluster\n"
+  "   -clusterBed=bed - output BED file for each cluster.  If -cds is specified,\n"
+  "    this only contains bounds based on CDS\n"
+  "   -clusterTxBed=bed - output BED file for each cluster.  If -cds is specified,\n"
+  "    this contains bounds based on full transcript range of genes, not just CDS\n"
   "   -flatBed=bed - output BED file that contains the exons of all genes\n"
-  "    flattned into a single record.\n"
+  "    flattned into a single record. If -cds is specified, this only contains\n"
+  "    bounds based on CDS\n"
   "   -joinContained - join genes that are contained within a larger loci\n"
   "    into that loci. Intended as a way to handled fragments and exon-level\n"
   "    predictsions, as genes-in-introns on the same strand are very rare.\n"
@@ -65,6 +69,7 @@ static struct optionSpec options[] = {
    {"cds", OPTION_BOOLEAN},
    {"trackNames", OPTION_BOOLEAN},
    {"clusterBed", OPTION_STRING},
+   {"clusterTxBed", OPTION_STRING},
    {"flatBed", OPTION_STRING},
    {"cds", OPTION_BOOLEAN},
    {"joinContained", OPTION_BOOLEAN},
@@ -367,6 +372,7 @@ struct cluster
     struct clusterGene *genes;  /* Associated genes. */
     char *chrom;                /* chrom, memory not owned */
     int start,end;		/* Range covered by cluster. */
+    int txStart,txEnd;          /* txStart/txEnd range, diff if -cds  */
     boolean hasExonConflicts;   /* does this cluster have conflicts? */
     boolean hasCdsConflicts;
     };
@@ -468,11 +474,15 @@ if (cluster->start == cluster->end)
     cluster->chrom = gp->chrom;
     cluster->start = start;
     cluster->end = end;
+    cluster->txStart = gp->txStart;
+    cluster->txEnd = gp->txEnd;
     }
 else
     {
-    if (start < cluster->start) cluster->start = start;
-    if (cluster->end < end) cluster->end = end;
+    cluster->start = min(cluster->start, start);
+    cluster->end = max(cluster->end, end);
+    cluster->txStart = min(cluster->txStart, gp->txStart);
+    cluster->txEnd = max(cluster->txEnd, gp->txEnd);
     }
 }
 
@@ -855,19 +865,19 @@ bedTabOutN(&bed, 12, flatBedFh);
 bitFree(&map);
 }
 
-void outputBed(struct cluster *cluster, char strand, FILE *clBedFh)
+void outputBed(struct cluster *cluster, int start, int end, char strand,
+               FILE *bedFh)
 /* output bed should bounds of cluser */
 {
-fprintf(clBedFh, "%s\t%d\t%d\t%d",
-        cluster->chrom, cluster->start, cluster->end,
+fprintf(bedFh, "%s\t%d\t%d\t%d", cluster->chrom, start, end,
         cluster->id);
 if (strand != ignoredStrand)
-    fprintf(clBedFh, "\t0\t%c", strand);
-fputc('\n', clBedFh);
+    fprintf(bedFh, "\t0\t%c", strand);
+fputc('\n', bedFh);
 }
 
 void outputClusters(struct cluster *clusterList, char strand, FILE *outFh,
-                    FILE *clBedFh, FILE *flatBedFh)
+                    FILE *clBedFh, FILE *clTxBedFh, FILE *flatBedFh)
 /* output clusters */
 {
 struct cluster *cluster;
@@ -880,7 +890,9 @@ for (cluster = clusterList; cluster != NULL; cluster = cluster->next)
             prGene(outFh, cluster, cg);
         ++totalClusterCount;
         if (clBedFh != NULL)
-            outputBed(cluster, strand, clBedFh);
+            outputBed(cluster, cluster->start, cluster->end, strand, clBedFh);
+        if (clTxBedFh != NULL)
+            outputBed(cluster, cluster->txStart, cluster->txEnd, strand, clTxBedFh);
         if (flatBedFh != NULL)
             outputFlatBed(cluster, strand, flatBedFh);
         }
@@ -889,7 +901,7 @@ for (cluster = clusterList; cluster != NULL; cluster = cluster->next)
 
 void clusterGenesOnStrand(struct sqlConnection *conn, struct track* tracks,
                           char *chrom, char strand, FILE *outFh,
-                          FILE *clBedFh, FILE *flatBedFh)
+                          FILE *clBedFh, FILE *clTxBedFh, FILE *flatBedFh)
 /* Scan through genes on this strand, cluster, and write clusters to file. */
 {
 struct genePred *gpList = NULL;
@@ -902,7 +914,7 @@ for (tr = tracks; tr != NULL; tr = tr->next)
     loadGenes(cm, conn, tr, chrom, strand, &gpList);
 
 clusterList = clusterMakerFinish(&cm);
-outputClusters(clusterList, strand, outFh, clBedFh, flatBedFh);
+outputClusters(clusterList, strand, outFh, clBedFh, clTxBedFh, flatBedFh);
 
 genePredFreeList(&gpList);
 clusterFreeList(&clusterList);
@@ -937,6 +949,7 @@ struct sqlConnection *conn = NULL;
 struct track *tracks;
 FILE *outFh = NULL;
 FILE *clBedFh = NULL;
+FILE *clTxBedFh = NULL;
 FILE *flatBedFh = NULL;
 
 if (!sameString(database, "no"))
@@ -951,20 +964,23 @@ chroms = getChroms(conn, tracks);
 outFh = openOutput(outFile);
 if (optionExists("clusterBed"))
     clBedFh = mustOpen(optionVal("clusterBed", NULL), "w");
+if (optionExists("clusterTxBed"))
+    clTxBedFh = mustOpen(optionVal("clusterTxBed", NULL), "w");
 if (optionExists("flatBed"))
     flatBedFh = mustOpen(optionVal("flatBed", NULL), "w");
 
 for (chrom = chroms; chrom != NULL; chrom = chrom->next)
     {
     if (gIgnoreStrand)
-        clusterGenesOnStrand(conn, tracks, chrom->name, ignoredStrand, outFh, clBedFh, flatBedFh);
+        clusterGenesOnStrand(conn, tracks, chrom->name, ignoredStrand, outFh, clBedFh, clTxBedFh, flatBedFh);
     else 
         {
-        clusterGenesOnStrand(conn, tracks, chrom->name, '+', outFh, clBedFh, flatBedFh);
-        clusterGenesOnStrand(conn, tracks, chrom->name, '-', outFh, clBedFh, flatBedFh);
+        clusterGenesOnStrand(conn, tracks, chrom->name, '+', outFh, clBedFh, clTxBedFh, flatBedFh);
+        clusterGenesOnStrand(conn, tracks, chrom->name, '-', outFh, clBedFh, clTxBedFh, flatBedFh);
         }
     }
 carefulClose(&clBedFh);
+carefulClose(&clTxBedFh);
 carefulClose(&flatBedFh);
 carefulClose(&outFh);
 }

@@ -18,8 +18,10 @@ refSeqTest: mkout
 	diff -u expected/$@.flat.bed output/$@.flat.bed
 
 refSeqCdsTest: mkout
-	clusterGenes -cds output/$@.gl no input/blatRefSeq.gp input/ncbiRefSeq.gp
+	clusterGenes -cds -clusterBed=output/$@.bed -clusterTxBed=output/$@.tx.bed output/$@.gl no input/blatRefSeq.gp input/ncbiRefSeq.gp
 	diff -u expected/$@.gl output/$@.gl
+	diff -u expected/$@.bed output/$@.bed
+	diff -u expected/$@.tx.bed output/$@.tx.bed
 
 trackNamesTest: mkout
 	clusterGenes -conflicted -cds -trackNames output/$@.gl no fred input/blatRefSeq.gp barney input/ncbiRefSeq.gp
