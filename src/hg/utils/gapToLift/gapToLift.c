@@ -74,6 +74,59 @@ verbose(2,"#\tchrom count: %d\n", chromCount);
 return (ret);
 }
 
+static void gapSanityCheck(struct agpGap *gapList)
+{
+int prevEnd = 0;
+int prevStart = 0;
+char *prevChr = NULL;
+struct agpGap *gap;
+
+for (gap = gapList; gap; gap = gap->next)
+    {
+    int chrSize = hashIntVal(cInfoHash, gap->chrom);
+    if (gap->chromStart < 0)
+	verbose(1, "WARNING: gap chromStart < 0 at %s:%d-%d\n",
+		gap->chrom, gap->chromStart, gap->chromEnd);
+    if (gap->chromEnd > chrSize)
+	verbose(1, "WARNING: gap chromEnd > chromSize(%d) "
+	    "at %s:%d-%d\n", chrSize, gap->chrom,
+		gap->chromStart, gap->chromEnd);
+    if (gap->chromEnd == chrSize)
+	verbose(1, "WARNING: gap at end of chromosome "
+	    "at %s:%d-%d\n", gap->chrom,
+		gap->chromStart, gap->chromEnd);
+    if (gap->chromStart >= gap->chromEnd)
+	verbose(1, "WARNING: gap chromStart >= chromEnd at %s:%d-%d\n",
+	    gap->chrom, gap->chromStart, gap->chromEnd);
+    if (prevEnd > 0)
+	{
+	if (sameWord(prevChr, gap->chrom) &&
+		(prevEnd >= gap->chromStart))
+	    verbose(1,"WARNING: overlapping gap at "
+		"%s:%d-%d and %s:%d-%d\n",
+		    gap->chrom, prevStart, prevEnd, gap->chrom,
+			gap->chromStart, gap->chromEnd);
+	}
+    else
+	{
+	prevStart = gap->chromStart;
+	prevEnd = gap->chromEnd;
+	}
+    if (isNotEmpty(prevChr))
+	{
+	if (differentWord(prevChr, gap->chrom))
+	    {
+	    freeMem(prevChr);
+	    prevChr = cloneString(gap->chrom);
+	    }
+	}
+    else
+	prevChr = cloneString(gap->chrom);
+    prevStart = gap->chromStart;
+    prevEnd = gap->chromEnd;
+    }
+}
+
 static struct agpGap *loadAllGaps(struct sqlConnection *conn,
 	char *db, struct chromInfo *cInfoList)
 /*	fetch all gaps, returns list of gaps */
@@ -81,9 +134,6 @@ static struct agpGap *loadAllGaps(struct sqlConnection *conn,
 struct agpGap *gapList = NULL;
 struct chromInfo *cInfo;
 int gapCount = 0;
-int prevEnd = 0;
-int prevStart = 0;
-char *prevChr = NULL;
 
 for (cInfo = cInfoList; cInfo; cInfo = cInfo->next)
     {
@@ -96,53 +146,12 @@ for (cInfo = cInfoList; cInfo; cInfo = cInfo->next)
 	struct agpGap *gap = agpGapLoad(row+rowOffset);
 	slAddHead(&gapList, gap);
 	++gapCount;
-	if (sane)
-	    {
-	    if (gap->chromStart < 0)
-		verbose(1, "WARNING: gap chromStart < 0 at %s:%d-%d\n",
-			gap->chrom, gap->chromStart, gap->chromEnd);
-	    if (gap->chromEnd > cInfo->size)
-		verbose(1, "WARNING: gap chromEnd > chromSize(%d) "
-		    "at %s:%d-%d\n", cInfo->size, gap->chrom,
-			gap->chromStart, gap->chromEnd);
-	    if (gap->chromEnd == cInfo->size)
-		verbose(1, "WARNING: gap at end of chromosome "
-		    "at %s:%d-%d\n", gap->chrom,
-			gap->chromStart, gap->chromEnd);
-	    if (gap->chromStart >= gap->chromEnd)
-		verbose(1, "WARNING: gap chromStart >= chromEnd at %s:%d-%d\n",
-		    gap->chrom, gap->chromStart, gap->chromEnd);
-	    if (prevEnd > 0)
-		{
-		if (sameWord(prevChr, gap->chrom) &&
-			(prevEnd >= gap->chromStart))
-		    verbose(1,"WARNING: overlapping gap at "
-			"%s:%d-%d and %s:%d-%d\n",
-			    gap->chrom, prevStart, prevEnd, gap->chrom,
-				gap->chromStart, gap->chromEnd);
-		}
-	    else
-		{
-		prevStart = gap->chromStart;
-		prevEnd = gap->chromEnd;
-		}
-	    if (isNotEmpty(prevChr))
-		{
-		if (differentWord(prevChr, gap->chrom))
-		    {
-		    freeMem(prevChr);
-		    prevChr = cloneString(gap->chrom);
-		    }
-		}
-	    else
-		prevChr = cloneString(gap->chrom);
-	    prevStart = gap->chromStart;
-	    prevEnd = gap->chromEnd;
-	    }
 	}
     sqlFreeResult(&sr);
     }
-slReverse(&gapList);
+slSort(&gapList, bedCmp);
+if (sane)
+    gapSanityCheck(gapList);
 verbose(2,"#\tfound %d gaps\n", gapCount);
 return (gapList);
 }
