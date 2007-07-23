@@ -19,21 +19,21 @@ errAbort(
   "       generates lift file segements separated by non-bridged gaps.\n"
   "options:\n"
   "   -chr=chrN - work only on given chrom\n"
-  "   -sane - perform coordinate sanity checks on gaps\n"
+  "   -insane - do *not* perform coordinate sanity checks on gaps\n"
   "   -bedFile=fileName.bed - output segments to fileName.bed"
   );
 }
 
 /* options */
 static char *workChr = NULL;	/* work only on this given chrom name */
-static boolean sane = FALSE;	/* if TRUE, perform sanity checks on gaps */
+static boolean insane = FALSE;	/* TRUE do not perform sanity checks on gaps */
 static FILE *bedFile = NULL; /* when requested, output segments to bed file */
 static char *bedFileName = NULL; /* output to bedFileName name */
 
 
 static struct optionSpec options[] = {
    {"chr", OPTION_STRING},
-   {"sane", OPTION_BOOLEAN},
+   {"insane", OPTION_BOOLEAN},
    {"bedFile", OPTION_STRING},
    {NULL, 0},
 };
@@ -150,7 +150,7 @@ for (cInfo = cInfoList; cInfo; cInfo = cInfo->next)
     sqlFreeResult(&sr);
     }
 slSort(&gapList, bedCmp);
-if (sane)
+if (! insane)
     gapSanityCheck(gapList);
 verbose(2,"#\tfound %d gaps\n", gapCount);
 return (gapList);
@@ -249,7 +249,7 @@ if (argc != 3)
     usage();
 workChr = optionVal("chr", NULL);
 bedFileName = optionVal("bedFile", NULL);
-sane = optionExists("sane");
+insane = optionExists("insane");
 gapToLift(argv[1], argv[2]);
 return 0;
 }
