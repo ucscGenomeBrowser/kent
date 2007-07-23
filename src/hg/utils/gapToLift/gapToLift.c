@@ -16,6 +16,7 @@ errAbort(
   "usage:\n"
   "   gapToLift [options] db liftFile.lft\n"
   "       uses gap table(s) from specified db.  Writes to liftFile.lft\n"
+  "       generates lift file segements separated by non-bridged gaps.\n"
   "options:\n"
   "   -chr=chrN - work only on given chrom\n"
   "   -sane - perform coordinate sanity checks on gaps\n"
