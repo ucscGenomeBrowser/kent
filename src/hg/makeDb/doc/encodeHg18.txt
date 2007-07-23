@@ -257,12 +257,3 @@ for table in `cat hg17.wig.tables`; do
 done
 
 
-#############################################################################
-# Stanford NRSF ChIP-seq (DONE, Heather, July 2007)
-
-ssh hgwdev
-cd /cluster/data/encode/stanford/2007-03-14
-liftOver fix.bed /gbdb/hg17/liftOver/hg17ToHg18.over.chain.gz hg18.bed core.unmapped
-liftOver control_fix.bed /gbdb/hg17/liftOver/hg17ToHg18.over.chain.gz hg18.control.bed control.unmapped
-hgLoadBed hg18 encodeStanfordNRSFEnriched hg18.bed -tab
-hgLoadBed hg18 encodeStanfordNRSFControl hg18.control.bed -tab
