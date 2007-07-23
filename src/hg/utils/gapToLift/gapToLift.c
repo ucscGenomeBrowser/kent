@@ -18,17 +18,22 @@ errAbort(
   "       uses gap table(s) from specified db.  Writes to liftFile.lft\n"
   "options:\n"
   "   -chr=chrN - work only on given chrom\n"
-  "   -sane - perform coordinate sanity checks on gaps"
+  "   -sane - perform coordinate sanity checks on gaps\n"
+  "   -bedFile=fileName.bed - output segments to fileName.bed"
   );
 }
 
 /* options */
 static char *workChr = NULL;	/* work only on this given chrom name */
-boolean sane = FALSE;	/* if TRUE, perform sanity checks on gaps */
+static boolean sane = FALSE;	/* if TRUE, perform sanity checks on gaps */
+static FILE *bedFile = NULL; /* when requested, output segments to bed file */
+static char *bedFileName = NULL; /* output to bedFileName name */
+
 
 static struct optionSpec options[] = {
    {"chr", OPTION_STRING},
    {"sane", OPTION_BOOLEAN},
+   {"bedFile", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -76,6 +81,7 @@ struct agpGap *gapList = NULL;
 struct chromInfo *cInfo;
 int gapCount = 0;
 int prevEnd = 0;
+int prevStart = 0;
 char *prevChr = NULL;
 
 for (cInfo = cInfoList; cInfo; cInfo = cInfo->next)
@@ -108,13 +114,15 @@ for (cInfo = cInfoList; cInfo; cInfo = cInfo->next)
 	    if (prevEnd > 0)
 		{
 		if (sameWord(prevChr, gap->chrom) &&
-			(prevEnd <= gap->chromStart))
-		    verbose(1,"WARNING: consecutive or overlapping gap at "
-			"%s-%d-%d\n",  gap->chrom, gap->chromStart,
-			    gap->chromEnd);
+			(prevEnd >= gap->chromStart))
+		    verbose(1,"WARNING: overlapping gap at "
+			"%s:%d-%d and %s:%d-%d\n",
+			    gap->chrom, prevStart, prevEnd, gap->chrom,
+				gap->chromStart, gap->chromEnd);
 		}
 	    else
 		{
+		prevStart = gap->chromStart;
 		prevEnd = gap->chromEnd;
 		}
 	    if (isNotEmpty(prevChr))
@@ -127,6 +135,7 @@ for (cInfo = cInfoList; cInfo; cInfo = cInfo->next)
 		}
 	    else
 		prevChr = cloneString(gap->chrom);
+	    prevStart = gap->chromStart;
 	    prevEnd = gap->chromEnd;
 	    }
 	}
@@ -141,8 +150,12 @@ static void liftOutLine(FILE *out, char *chr, int start, int end,
     int count, int chrSize)
 {
 if ((end-start) > 0)
+    {
     fprintf(out, "%d\t%s.%d\t%d\t%s\t%d\n", start, chr,
 	count, end-start, chr, chrSize);
+    if (bedFile)
+	fprintf(bedFile, "%s\t%d\t%d\t%s.%d\n", chr, start, end, chr, count);
+    }
 }
 
 static void gapToLift(char *db, char *outFile)
@@ -158,6 +171,12 @@ int end = 0;
 char *prevChr = NULL;
 int liftCount = 0;
 int chrSize = 0;
+
+if (isNotEmpty(bedFileName))
+    {
+    bedFile = mustOpen(bedFileName, "w");
+    verbose(2,"#\tbed output requested to %s\n", bedFileName);
+    }
 
 for (gap = gapList; gap; gap = gap->next)
     {
@@ -219,6 +238,7 @@ optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
 workChr = optionVal("chr", NULL);
+bedFileName = optionVal("bedFile", NULL);
 sane = optionExists("sane");
 gapToLift(argv[1], argv[2]);
 return 0;
