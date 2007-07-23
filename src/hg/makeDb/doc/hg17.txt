@@ -22171,9 +22171,6 @@ mysql> update snp125OrthoPanTro2 set score = 98 where orthoChrom = "chrY_random"
 # Query OK, 135 rows affected (26.19 sec)
 # Rows matched: 135  Changed: 135  Warnings: 0
 
-
-
-
 # macaque
 cd /san/sanvol1/snp/liftOver/hg17/rheMac2Qual/output
 ./concat.csh
@@ -23863,3 +23860,22 @@ done
    # gzip .over files
    gzip over/*.over
    # removed ~1.3 G data 
+
+
+###########################################################################
+# Stanford ChIP-seq
+# Submitted 2007-03-14 by David Johnson <seasquirtdoctor@gmail.com>
+# 25bp tags (Solexa sequencing of IP fragments)
+# genome-wide, but funded by ENCODE, hence the location of the data
+
+    ssh hgwdev
+    cd /cluster/data/encode/stanford
+    mkdir -p 2007-03-14/lab
+    cd 2007-03-14/lab
+    sort NRSF_chipseq_hg17.bed > data.bed
+    sort NRSF_chipseq_control_hg17.bed > control.bed
+    fix.pl < data.bed > fix.bed
+    fix.pl < control.bed > control_fix.bed
+    hgLoadBed hg17 stanfordNRSFEnriched fix.bed -tab
+    hgLoadBed hg17 stanfordNRSFControl control_fix.bed -tab
+
