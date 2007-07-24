@@ -53,14 +53,16 @@ class PipelineController < ApplicationController
   
   def delete
     submissionDir=File.expand_path("#{RAILS_ROOT}/upload/#{@current_user.id}/#{@submission.id}/")
-    Dir.entries(submissionDir).each { 
-      |f| 
-      fullName = File.join(submissionDir,f)
-      if File.ftype(fullName) == "file"
-        File.delete(fullName)
-      end
-    }
-    Dir.delete(submissionDir)
+    if File.exists?(submissionDir)
+      Dir.entries(submissionDir).each { 
+        |f| 
+        fullName = File.join(submissionDir,f)
+        if File.ftype(fullName) == "file"
+          File.delete(fullName)
+        end
+      }
+      Dir.delete(submissionDir)
+    end
     Submission.find(params[:id]).destroy
     redirect_to :action => 'list'
   end
