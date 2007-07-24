@@ -27,10 +27,11 @@
 #include "dbRIP.h"
 #include "tfbsConsSites.h"
 #include "hapmapSnps.h"
+#include "expRecord.h"
 
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.381 2007/07/18 22:34:04 kate Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.382 2007/07/24 00:03:53 heather Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2307,6 +2308,36 @@ acemblyDropDown("acembly.type", acemblyClass);
 printf("  ");
 }
 
+void ucsfdemoUi(struct trackDb *tdb)
+{
+char **menu;
+int menuSize = 0;
+int menuPos = 0;
+
+puts("<BR><B>ER filter:</B>&nbsp;");
+menuSize = 3;
+menu = needMem((size_t)(menuSize * sizeof(char *)));
+menuPos = 0;
+menu[menuPos++] = "no filter";
+menu[menuPos++] = "pos";
+menu[menuPos++] = "neg";
+cgiMakeDropList(UCSF_DEMO_ER, menu, menuSize, 
+    cartCgiUsualString(cart, UCSF_DEMO_ER, UCSF_DEMO_ER_DEFAULT));
+freez(&menu);
+
+puts("<BR><B>PR filter:</B>&nbsp;");
+menuSize = 3;
+menu = needMem((size_t)(menuSize * sizeof(char *)));
+menuPos = 0;
+menu[menuPos++] = "no filter";
+menu[menuPos++] = "pos";
+menu[menuPos++] = "neg";
+cgiMakeDropList(UCSF_DEMO_PR, menu, menuSize, 
+    cartCgiUsualString(cart, UCSF_DEMO_PR, UCSF_DEMO_PR_DEFAULT));
+freez(&menu);
+
+}
+
 void hapmapSnpsUi(struct trackDb *tdb)
 /* Options for filtering hapmap snps */
 /* Default is always to not filter (include all data) */
@@ -2650,6 +2681,8 @@ else if (startsWith("retroposons", track))
     retroposonsUi(tdb);
 else if (sameString(track, "tfbsConsSites"))
     tfbsConsSitesUi(tdb);
+else if (sameString(track, "CGHBreastCancerUCSF"))
+    ucsfdemoUi(tdb);
 else if (sameString(track, "hapmapSnps"))
     hapmapSnpsUi(tdb);
 else if (sameString(track, "switchDbTss"))
