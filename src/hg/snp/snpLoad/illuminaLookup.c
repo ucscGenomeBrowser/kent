@@ -1,18 +1,24 @@
-/* illuminaLookup - utility program to get coords. */
+/* illuminaLookup - validate illumina SNP arrays. */
+/* report if SNP missing */
+/* report unexpected position */
+/* check strand */
+/* check observed */
+/* report if class != single */
+/* report if locType != exact */
 
 #include "common.h"
 
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: illuminaLookup.c,v 1.5 2006/09/27 18:23:03 heather Exp $";
+static char const rcsid[] = "$Id: illuminaLookup.c,v 1.6 2007/07/24 21:31:59 heather Exp $";
 
 struct snpSubset 
     {
     char *chrom;
     int start;
     int end;
-    char strand;
+    char *strand;
     char *observed;
     char *class;
     char *locType;
@@ -23,9 +29,9 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-    "illuminaLookup - get coords using rsId\n"
+    "illuminaLookup - validation\n"
     "usage:\n"
-    "    illuminaLookup db illuminaTable snpTable exceptionTable outputFile errorFile\n");
+    "    illuminaLookup db illuminaTable snpTable exceptionTable errorFile\n");
 }
 
 
@@ -52,7 +58,8 @@ hFreeConn(&conn);
 return ret;
 }
 
-struct hash *storeSnps(char *tableName, struct hash *exceptionHash, char *errorFileName)
+// struct hash *storeSnps(char *tableName, struct hash *exceptionHash, char *errorFileName)
+struct hash *storeSnps(char *tableName, struct hash *exceptionHash)
 /* store subset data for SNPs in a hash */
 /* exclude SNPs that align multiple places */
 {
@@ -63,7 +70,7 @@ struct sqlResult *sr;
 char **row;
 struct snpSubset *subsetElement = NULL;
 struct hashEl *hel = NULL;
-FILE *errors = mustOpen(errorFileName, "w");
+// FILE *errors = mustOpen(errorFileName, "w");
 
 verbose(1, "creating SNP hash...\n");
 ret = newHash(16);
@@ -76,14 +83,14 @@ while ((row = sqlNextRow(sr)) != NULL)
     hel = hashLookup(exceptionHash, row[0]);
     if (hel != NULL)
         {
-	fprintf(errors, "skipping %s, aligns more than one place\n", row[0]);
+	// fprintf(errors, "skipping %s, aligns more than one place\n", row[0]);
 	continue;
 	}
     AllocVar(subsetElement);
     subsetElement->chrom = cloneString(row[1]);
     subsetElement->start = sqlUnsigned(row[2]);
     subsetElement->end = sqlUnsigned(row[3]);
-    subsetElement->strand = row[4][0];
+    subsetElement->strand = cloneString(row[4]);
     subsetElement->observed = cloneString(row[5]);
     subsetElement->class = cloneString(row[6]);
     subsetElement->locType = cloneString(row[7]);
@@ -92,13 +99,114 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
-carefulClose(&errors);
+// carefulClose(&errors);
 return ret;
+}
+
+boolean isTriallelic(char *obs)
+{
+if (sameString(obs, "A/C/G")) return TRUE;
+if (sameString(obs, "A/C/T")) return TRUE;
+if (sameString(obs, "A/G/T")) return TRUE;
+if (sameString(obs, "C/G/T")) return TRUE;
+return FALSE;
+}
+
+boolean isReverseComplement(char *obs1, char *obs2)
+{
+if (sameString(obs1, "A/C"))
+    {
+    if (sameString(obs2, "G/T")) return TRUE;
+    return FALSE;
+    }
+if (sameString(obs1, "A/G"))
+    {
+    if (sameString(obs2, "C/T")) return TRUE;
+    return FALSE;
+    }
+if (sameString(obs1, "C/T"))
+    {
+    if (sameString(obs2, "A/G")) return TRUE;
+    return FALSE;
+    }
+if (sameString(obs1, "G/T"))
+    {
+    if (sameString(obs2, "A/C")) return TRUE;
+    return FALSE;
+    }
+/* shouldn't get here */
+return FALSE;
+}
+
+char *reverseObserved(char *obs)
+{
+if (sameString(obs, "A/C"))
+    return "G/T";
+if (sameString(obs, "A/G"))
+    return "C/T";
+if (sameString(obs, "C/T"))
+    return "A/G";
+if (sameString(obs, "G/T"))
+    return "A/C";
+return obs;
 }
 
 
 
-void processSnps(struct hash *snpHash, char *illuminaTable, char *fileName, char *errorFileName)
+void logSnps(struct hash *snpHash, char *illuminaTable)
+/* read illuminaTable */
+/* output +/+, +/-, -/+, -/- */
+{
+char query[512];
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+struct hashEl *hel = NULL;
+struct snpSubset *subsetElement = NULL;
+int pos = 0;
+char *strand = NULL;
+char *observed = NULL;
+FILE *plusplus = mustOpen("plusplus", "w");
+FILE *minusplus = mustOpen("minusplus", "w");
+FILE *plusminus = mustOpen("plusminus", "w");
+FILE *minusminus = mustOpen("minusminus", "w");
+
+verbose(1, "logging...\n");
+safef(query, sizeof(query), "select name, chrom, chromStart, strand, observed from %s", illuminaTable);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    hel = hashLookup(snpHash, row[0]);
+    if (hel == NULL) continue;
+    subsetElement = (struct snpSubset *)hel->val;
+    if (!sameString(subsetElement->chrom, row[1])) continue;
+    pos = sqlUnsigned(row[2]);
+    if (pos != subsetElement->start) continue;
+    strand = cloneString(row[3]);
+    observed = cloneString(row[4]);
+    if (sameString(strand, "+") && sameString(subsetElement->strand, "+"))
+        fprintf(plusplus, "snp %s: illumina %s (%s), dbSNP %s (%s)\n",
+	        row[0], observed, strand, subsetElement->observed, subsetElement->strand);
+    else if (sameString(strand, "+") && sameString(subsetElement->strand, "-"))
+        fprintf(plusminus, "snp %s: illumina %s (%s), dbSNP %s (%s)\n",
+	        row[0], observed, strand, subsetElement->observed, subsetElement->strand);
+    else if (sameString(strand, "-") && sameString(subsetElement->strand, "+"))
+        fprintf(minusplus, "snp %s: illumina %s (%s), dbSNP %s (%s)\n",
+	        row[0], observed, strand, subsetElement->observed, subsetElement->strand);
+    else if (sameString(strand, "-") && sameString(subsetElement->strand, "-"))
+        fprintf(minusminus, "snp %s: illumina %s (%s), dbSNP %s (%s)\n",
+	        row[0], observed, strand, subsetElement->observed, subsetElement->strand);
+    }
+
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+carefulClose(&plusplus);
+carefulClose(&plusminus);
+carefulClose(&minusplus);
+carefulClose(&minusminus);
+}
+
+void processSnps(struct hash *snpHash, char *illuminaTable, char *errorFileName)
 /* read illuminaTable */
 /* lookup details in snpHash */
 /* report if SNP missing */
@@ -111,12 +219,13 @@ struct sqlResult *sr;
 char **row;
 struct hashEl *hel = NULL;
 struct snpSubset *subsetElement = NULL;
-FILE *fileHandle = mustOpen(fileName, "w");
 FILE *errors = mustOpen(errorFileName, "w");
-int bin = 0;
+int pos = 0;
+char *strand = NULL;
+char *observed = NULL;
 
 verbose(1, "process SNPs...\n");
-safef(query, sizeof(query), "select dbSnpId, chrom, pos from %s", illuminaTable);
+safef(query, sizeof(query), "select name, chrom, chromStart, strand, observed from %s", illuminaTable);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -134,17 +243,56 @@ while ((row = sqlNextRow(sr)) != NULL)
 	continue;
 	}
 
+    pos = sqlUnsigned(row[2]);
+    if (pos != subsetElement->start)
+        {
+        fprintf(errors, "unexpected position %d for snp %s\n", pos, row[0]);
+	continue;
+	}
+
     if (!sameString(subsetElement->class, "single"))
+        {
 	fprintf(errors, "unexpected class %s for snp %s\n", subsetElement->class, row[0]);
+	continue;
+	}
+
+    strand = cloneString(row[3]);
+    observed = cloneString(row[4]);
+
+    if (sameString(subsetElement->observed, "A/C/G/T"))
+        {
+	fprintf(errors, "snp %s is quad-allelic in dbSNP\n", row[0]);
+	continue;
+	}
+
+    if (isTriallelic(subsetElement->observed))
+        {
+	fprintf(errors, "snp %s is tri-allelic in dbSNP\n", row[0]);
+	continue;
+	}
+        
+
+    /* illumina positive strand - just compare observed */
+    /* this seems odd... */
+    if (sameString(strand, "+") && differentString(observed, subsetElement->observed))
+	fprintf(errors, "observed mismatch for %s: illumina %s (%s), dbSNP %s (%s)\n", 
+	        row[0], observed, strand, subsetElement->observed, subsetElement->strand);
+
+    /* illumina negative strand - reverse complement and compare */
+    if (sameString(strand, "-"))
+        {
+        if (differentString(reverseObserved(observed), subsetElement->observed))
+	    fprintf(errors, "observed mismatch for %s: illumina %s (%s), dbSNP %s (%s)\n", 
+	            row[0], observed, strand, subsetElement->observed, subsetElement->strand);
+	}
+
     if (!sameString(subsetElement->locType, "exact"))
 	fprintf(errors, "unexpected locType %s for snp %s\n", subsetElement->locType, row[0]);
 
-    bin = hFindBin(subsetElement->start, subsetElement->end);
-    fprintf(fileHandle, "%d\t%s\t%d\t%d\t%s\t0\t%c\t%s\n", 
-        bin, subsetElement->chrom, subsetElement->start, subsetElement->end, row[0], subsetElement->strand, subsetElement->observed);
     }
 
-carefulClose(&fileHandle);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
 carefulClose(&errors);
 }
 
@@ -156,21 +304,19 @@ char *snpDb = NULL;
 char *illuminaTableName = NULL;
 char *snpTableName = NULL;
 char *exceptionTableName = NULL;
-char fileName[64];
 char errorFileName[64];
 
 struct hash *snpHash = NULL;
 struct hash *exceptionHash = NULL;
 
-if (argc != 7)
+if (argc != 6)
     usage();
 
 snpDb = argv[1];
 illuminaTableName = argv[2];
 snpTableName = argv[3];
 exceptionTableName = argv[4];
-safef(fileName, ArraySize(fileName), "%s", argv[5]);
-safef(errorFileName, ArraySize(errorFileName), "%s", argv[6]);
+safef(errorFileName, ArraySize(errorFileName), "%s", argv[5]);
 
 /* process args */
 hSetDb(snpDb);
@@ -182,8 +328,10 @@ if (!hTableExists(exceptionTableName))
     errAbort("no %s table in %s\n", exceptionTableName, snpDb);
 
 exceptionHash = storeExceptions(exceptionTableName);
-snpHash = storeSnps(snpTableName, exceptionHash, errorFileName);
-processSnps(snpHash, illuminaTableName, fileName, errorFileName);
+snpHash = storeSnps(snpTableName, exceptionHash);
+// snpHash = storeSnps(snpTableName, exceptionHash, errorFileName);
+logSnps(snpHash, illuminaTableName);
+processSnps(snpHash, illuminaTableName, errorFileName);
 
 return 0;
 }
