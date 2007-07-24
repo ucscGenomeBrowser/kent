@@ -117,7 +117,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1374 2007/07/20 20:03:14 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1375 2007/07/24 00:04:36 heather Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -359,7 +359,7 @@ int packCountRows(struct track *tg, int maxCount, boolean withLabels)
 return packCountRowsOverflow(tg, maxCount, withLabels, FALSE);
 }
 
-static int maximumTrackHeight(struct track *tg)
+int maximumTrackHeight(struct track *tg)
 /* Return the maximum track height allowed in pixels. */
 {
 int maxItems = maxItemsInFullTrack;

@@ -976,5 +976,8 @@ void parseSs(char *ss, char **retPsl, char **retFa);
 boolean ssFilesExist(char *ss);
 /* Return TRUE if both files in ss exist. */
 
+int maximumTrackHeight(struct track *tg);
+/* Return the maximum track height allowed in pixels. */
+
 #endif /* HGTRACKS_H */
 
