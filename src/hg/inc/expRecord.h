@@ -88,6 +88,12 @@ struct expRecord *expRecordLoadTable(struct sqlConnection *conn, char *table);
 struct expRecord *expRecordConnectAndLoadTable(char *database, char *table);
 /* Load expression record format table of given name. */
 
+/* cart variables for filters */
+
+#define UCSF_DEMO_ER "ucsfdemoER"
+#define UCSF_DEMO_ER_DEFAULT "no filter"
+#define UCSF_DEMO_PR "ucsfdemoPR"
+#define UCSF_DEMO_PR_DEFAULT "no filter"
 
 
 #endif /* EXPRECORD_H */
