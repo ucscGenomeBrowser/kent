@@ -1855,8 +1855,9 @@ cat > load.csh << 'EOF'
 # UC Davis Chip/chip (new data, PolII and Taf in GM and HelaS3 cells) 
 # (2007-05-02 ting)
 # Add as subtrack to existing track
-# New datafiles submitted 2007-13-23
+# New datafiles submitted 2007-3-23
 # by Mark Bieda <mcbieda@ucdavis.edu>
+# pushed on 7-24-07 (ann)
 
     # convert to bedGraph
     cd /cluster/data/encode/UcDavis/2007-03-23
