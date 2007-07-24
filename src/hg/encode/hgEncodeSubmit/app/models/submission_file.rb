@@ -6,7 +6,7 @@ class SubmissionFile < ActiveRecord::Base
   validates_presence_of :file_size
   validates_presence_of :file_date
   validates_presence_of :submission_id
-  validates_presence_of :type
+  validates_presence_of :sf_type
   validates_presence_of :status
 
   protected

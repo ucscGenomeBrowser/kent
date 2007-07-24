@@ -2,7 +2,7 @@
 # migrations feature of ActiveRecord to incrementally modify your database, and
 # then regenerate this schema definition.
 
-ActiveRecord::Schema.define(:version => 11) do
+ActiveRecord::Schema.define(:version => 12) do
 
   create_table "categories", :force => true do |t|
     t.column "name", :string
@@ -29,7 +29,7 @@ ActiveRecord::Schema.define(:version => 11) do
     t.column "file_size",     :string
     t.column "file_date",     :datetime
     t.column "submission_id", :integer
-    t.column "type",          :string
+    t.column "sf_type",       :string
     t.column "status",        :string
     t.column "created_at",    :datetime
     t.column "updated_at",    :datetime
