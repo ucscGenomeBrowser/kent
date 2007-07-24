@@ -1,5 +1,13 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 one:
   id: 1
+  name: = "Test1"
+  s_type: = "chip-chip"
+  status: = "new"
+  user_id: = 1
 two:
   id: 2
+  name: = "Test2"
+  s_type: = "chip-seq"
+  status: = "new"
+  user_id: = 2
