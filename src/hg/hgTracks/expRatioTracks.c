@@ -10,6 +10,158 @@
 #include "expRecord.h"
 #include "microarray.h"
 
+#include "hash.h"
+#include "spaceSaver.h"
+
+struct simpleClinical 
+    {
+    char *er;
+    char *pr;
+    };
+
+char *erFilter = UCSF_DEMO_ER_DEFAULT;
+char *prFilter = UCSF_DEMO_PR_DEFAULT;
+struct hash *clinicalHash;
+
+struct hash *getClinicalData(char *tableName)
+{
+struct hash *ret = NULL;
+char query[512];
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+struct simpleClinical *clinicalItem = NULL;
+
+ret = newHash(16);
+safef(query, sizeof(query), "select id, er, pr from %s", tableName);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    AllocVar(clinicalItem);
+    clinicalItem->er = cloneString(row[1]);
+    clinicalItem->pr = cloneString(row[2]);
+    hashAdd(ret, cloneString(row[0]), clinicalItem);
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+return ret;
+}
+
+
+static void loadFiltersAndHash(char *tableName)
+{
+erFilter = cartUsualString(cart, UCSF_DEMO_ER, UCSF_DEMO_ER_DEFAULT);
+prFilter = cartUsualString(cart, UCSF_DEMO_PR, UCSF_DEMO_PR_DEFAULT);
+clinicalHash = getClinicalData(tableName);
+}
+
+boolean ucsfdemoMatch(char *thisER, char *thisPR)
+{
+if (sameString(erFilter, "no filter") && sameString(prFilter, "no filter")) return TRUE;
+if (sameString(erFilter, "no filter") && sameString(prFilter, thisPR)) return TRUE;
+if (sameString(erFilter, thisER) && sameString(prFilter, "no filter")) return TRUE;
+if (sameString(erFilter, thisER) && sameString(prFilter, thisPR)) return TRUE;
+
+return FALSE;
+}
+
+int packCountRowsUCSFDemo(struct track *tg, int maxCount, 
+			  boolean withLabels, boolean allowOverflow)
+/* Return packed height. */
+/* Cloned from packCountRowsOverflow() in hgTracks.c. */
+{
+struct simpleClinical *clinicalItem;
+struct spaceSaver *ss;
+struct slList *item;
+MgFont *font = tl.font;
+int extraWidth = tl.mWidth * 2;
+long long start, end;
+double scale = (double)insideWidth/(winEnd - winStart);
+spaceSaverFree(&tg->ss);
+ss = tg->ss = spaceSaverNew(0, insideWidth, maxCount);
+loadFiltersAndHash("phenBreastTumors");
+for (item = tg->items; item != NULL; item = item->next)
+    {
+    int baseStart = tg->itemStart(tg, item);
+    int baseEnd = tg->itemEnd(tg, item);
+    char *name = tg->itemName(tg, item);	
+    struct hashEl *hel = hashLookup(clinicalHash, name);
+    if (hel == NULL) continue;
+    clinicalItem = (struct simpleClinical *)hel->val;
+    if (!ucsfdemoMatch(clinicalItem->er, clinicalItem->pr)) continue;
+    if (baseStart < winEnd && baseEnd > winStart)
+        {
+	if (baseStart <= winStart)
+	    start = 0;
+	else
+	    start = round((double)(baseStart - winStart)*scale);
+	if (!tg->drawName && withLabels)
+	    start -= mgFontStringWidth(font,
+				       tg->itemName(tg, item)) + extraWidth;
+	if (baseEnd >= winEnd)
+	    end = insideWidth;
+	else
+	    end = round((baseEnd - winStart)*scale);
+	if (start < 0) start = 0;
+	if (spaceSaverAddOverflow(ss, start, end, item, allowOverflow) == NULL)
+	    break;
+	}
+    }
+spaceSaverFinish(ss);
+return ss->rowCount;
+}
+
+int ucsfdemoTotalHeight(struct track *tg, enum trackVisibility vis)
+{
+int rows = 0;
+double maxHeight = maximumTrackHeight(tg);
+
+loadFiltersAndHash("phenBreastTumors");
+
+switch (vis)
+    {
+    case tvFull:
+        {
+        struct slList *item;
+        struct simpleClinical *clinicalItem;
+        for (item = tg->items; item != NULL; item = item->next)
+            {
+            char *name = tg->itemName(tg, item);	
+            struct hashEl *hel = hashLookup(clinicalHash, name);
+            if (hel != NULL)
+                {
+                clinicalItem = (struct simpleClinical *)hel->val;
+	        if (ucsfdemoMatch(clinicalItem->er, clinicalItem->pr))
+	            rows++;
+                }
+            }
+	}
+	break;
+    case tvPack:
+	{
+	rows = packCountRowsUCSFDemo(tg, floor(maxHeight/tg->lineHeight)+1, TRUE, FALSE);
+	break;
+	}
+    case tvSquish:
+        {
+	tg->heightPer = tg->heightPer/2;
+	if ((tg->heightPer & 1) == 0)
+	    tg->heightPer -= 1;
+	tg->lineHeight = tg->heightPer + 1;
+	rows = packCountRowsUCSFDemo(tg, floor(maxHeight/tg->lineHeight)+1, FALSE, FALSE);
+	break;
+	}
+    case tvDense:
+    default:
+        rows = 1;
+	break;
+    }
+tg->height = rows * tg->lineHeight;
+return tg->height;
+}
+
+
+
 void mapBoxHcTwoItems(int start, int end, int x, int y, int width, int height, 
 	char *track, char *item1, char *item2, char *statusLine)
 /* Print out image map rectangle that would invoke the htc (human track click)
@@ -1151,6 +1303,10 @@ void expRatioDrawLeftLabels(struct track *tg, int seqStart, int seqEnd,
 /* identical to full mode, there's this custom leftLabels function. */
 {
 int y = yOff;
+
+if (sameString(tg->mapName, "CGHBreastCancerUCSF"))
+    loadFiltersAndHash("phenBreastTumors");
+
 if (isWithCenterLabels(tg))
     y += mgFontLineHeight(font);
 if ((vis == tvFull) || (vis == tvPack))
@@ -1164,12 +1320,30 @@ if ((vis == tvFull) || (vis == tvPack))
 	vgSetClip(vg, xOff, yOff, width, height);
 	}
     /* Go through and print each label, no mystery here. */
+    /* Apply filtering here */
     for (item = tg->items; item != NULL; item = item->next)
 	{
 	char *name = tg->itemName(tg, item);	
 	int itemHeight = tg->itemHeight(tg, item);
-	vgTextRight(vg, leftLabelX, y, width - 1, itemHeight, color, font, name);
-	y += itemHeight;
+	if (sameString(tg->mapName, "CGHBreastCancerUCSF"))
+	    {
+	    struct hashEl *hel = hashLookup(clinicalHash, name);
+	    struct simpleClinical *clinicalItem;
+	    if (hel != NULL)
+	        {
+		clinicalItem = (struct simpleClinical *)hel->val;
+		if (ucsfdemoMatch(clinicalItem->er, clinicalItem->pr))
+		    {
+	            vgTextRight(vg, leftLabelX, y, width - 1, itemHeight, color, font, name);
+	            y += itemHeight;
+		    }
+                }
+	    }
+	else
+	    {
+	    vgTextRight(vg, leftLabelX, y, width - 1, itemHeight, color, font, name);
+	    y += itemHeight;
+	    }
 	}
     }
 else if (vis == tvDense)
@@ -1219,15 +1393,37 @@ else
 	if (x2 > insideWidth-1) 
 	    x2 = insideWidth-1;
 	w = x2 - x1 + 1;
-	if (sameString(tg->mapName, "expRatioUCSFDemo") || sameString(tg->mapName, "cnvLungBroadv2")  || sameString(tg->mapName, "CGHBreastCancerUCSF")  || sameString(tg->mapName, "expBreastCancerUCSF"))
+	if (sameString(tg->mapName, "expRatioUCSFDemo") || sameString(tg->mapName, "cnvLungBroadv2")  || sameString(tg->mapName, "expBreastCancerUCSF"))
 	    {
             struct slList *item;
             for (item = tg->items; item != NULL; item = item->next)
                 {
                 char *name = tg->itemName(tg, item);
                 mapBoxHcTwoItems(winStart, winEnd, xOff, y, winEnd-winStart, lineHeight, tg->mapName, name, name, name); 
-//                mapBoxHcTwoItems(probe->start, probe->end, x1+xOff, y, w, lineHeight, tg->mapName, name, name, name); 
                 y = y + lineHeight;
+                }
+	    break;
+	    }
+	else if (sameString(tg->mapName, "CGHBreastCancerUCSF"))
+	    {
+            struct slList *item;
+	    struct hashEl *hel = NULL;
+	    struct simpleClinical *clinicalItem;
+            loadFiltersAndHash("phenBreastTumors");
+            for (item = tg->items; item != NULL; item = item->next)
+                {
+                char *name = tg->itemName(tg, item);
+		// look up name in clinical hash
+		hel = hashLookup(clinicalHash, name);
+		if (hel != NULL)
+		    {
+		    clinicalItem = (struct simpleClinical *)hel->val;
+		    if (ucsfdemoMatch(clinicalItem->er, clinicalItem->pr))
+		        {
+                        mapBoxHcTwoItems(winStart, winEnd, xOff, y, winEnd-winStart, lineHeight, tg->mapName, name, name, name); 
+                        y = y + lineHeight;
+			}
+		    }
                 }
 	    break;
 	    }
@@ -1332,6 +1528,8 @@ int i, j;
 char exonDrawCartName[512];
 char *drawExons = trackDbSetting(tg->tdb, "expDrawExons");
 boolean drawExonChecked = FALSE;
+
+
 safef(exonDrawCartName, sizeof(exonDrawCartName), "%s.expDrawExons", tg->mapName);
 drawExonChecked = cartCgiUsualBoolean(cart, exonDrawCartName, FALSE);
 if (drawExons && sameWord(drawExons, "on") && drawExonChecked)
@@ -1373,8 +1571,27 @@ else
 	}
     else
 	{
-	for (i = 0; i < nExps; i++)
+	if (sameString(tg->mapName, "CGHBreastCancerUCSF"))
+            loadFiltersAndHash("phenBreastTumors");
+        struct slList *item;
+	for (item = tg->items, i = 0; item != NULL && i < nExps; item = item->next, i++)
 	    {
+	    /* filter */
+	    if (sameString(tg->mapName, "CGHBreastCancerUCSF"))
+	        {
+	        struct hashEl *hel = NULL;
+	        struct simpleClinical *clinicalItem;
+                char *name = tg->itemName(tg, item);
+		// look up name in clinical hash
+		hel = hashLookup(clinicalHash, name);
+		if (hel != NULL)
+		    {
+		    clinicalItem = (struct simpleClinical *)hel->val;
+		    if (!ucsfdemoMatch(clinicalItem->er, clinicalItem->pr))
+		        continue;
+		    }
+                }
+
 	    for (j = 0; j < insideWidth; j++)
 		{
 		if (pixCountArray[j] > 0)
@@ -1489,6 +1706,8 @@ expRatioMethods(tg);
 tg->drawItems = expRatioDrawItems;
 tg->drawLeftLabels = expRatioDrawLeftLabels;
 tg->trackFilter = lfsFromExpRatio;
+if (sameString(tg->mapName, "CGHBreastCancerUCSF"))
+    tg->totalHeight = ucsfdemoTotalHeight;
 }
 
 void expRatioMethodsFromCt(struct track *tg)
