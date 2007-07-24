@@ -12,6 +12,7 @@ class PipelineControllerTest < Test::Unit::TestCase
   include AuthenticatedTestHelper
 
   fixtures :users
+  fixtures :submissions
 
   def login(username, password)
     controller = @controller
@@ -47,5 +48,42 @@ class PipelineControllerTest < Test::Unit::TestCase
   end
 
 
+  # submissions tests
+
+  def test_new
+    get :new
+    assert_response :success
+    assert_template "new"
+  end
+
+  def test_create
+    post :create, :submission => {:name => "test3" , :s_type => "chip=chip"}
+    assert_response :redirect
+  end
+
+  def test_show
+    get :show, :id => submissions("one").id 
+    assert_response :success
+    assert_template "show"
+  end
+
+  def test_edit
+    get :edit, :id => submissions("one").id 
+    assert_response :success
+    assert_template "edit"
+  end
+
+  def test_update
+    post :update, :id => submissions("one").id,  :submission => {:name => "test3" , :s_type => "chip=seq"}
+    assert_response :redirect
+  end
+
+  def test_delete
+    get :delete, :id => submissions("one").id 
+    assert_response :redirect
+  end
+
+  # TODO: add tests that fail, add tests for upload
+ 
 
 end
