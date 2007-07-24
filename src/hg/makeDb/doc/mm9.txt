@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.6 2007/07/24 00:04:42 hiram Exp $"
+#	"$Id: mm9.txt,v 1.7 2007/07/24 22:51:49 hiram Exp $"
 #
 
 #######################################################################
@@ -559,6 +559,7 @@ XXX doesn't work, the ideogram file is corrupted
 
 ##########################################################################
 ## GENBANK alignments (WORKING - 2007-07-23 - Hiram)
+    ## next time:  don't forget to make the 11.ooc file, see below
     ## generate a lift file that specifies segments separated by non-bridged
     ## gaps
     ssh hgwdev
@@ -594,6 +595,31 @@ mm9.mgcTables.mgc = all
     cd /cluster/data/genbank
     time nice -n +19 bin/gbAlignStep -initial mm9 &
     ## logFile: var/build/logs/2007.07.23-16:44:31.mm9.initalign.log
+    #	real    523m6.929s
+    #  failed the kluster run
+    ssh kk
+    cd /cluster/bluearc/genbank/work/initial.mm9/align
+    para check
+# Checking finished jobs
+# crashed: 27093
+# ranOk: 19107
+# failed 4 times: 27007
+# total jobs in batch: 46200
+    ## forgot to make the ooc file, from mm8 instructions:
+    ssh kolossus
+    cd /cluster/data/mm9
+    time blat mm9.2bit \
+	/dev/null /dev/null -tileSize=11 -makeOoc=11.ooc -repMatch=912
+    #	real    2m29.455s
+    cp -p 11.ooc /san/sanvol1/scratch/mm9
+
+    ## after recovery of the alignments jobs
+    ssh kkstore02
+    cd /cluster/data/genbank
+    time nice -n +19 bin/gbAlignStep -continue=finish -initial mm9 &
+var/build/logs/2007.07.24-14:19:01.mm9.initalign.log
+
+
 
 #########################################################################
 # MAP CONTIGS TRACK (DONE - 2005-10-04 - Hiram)
