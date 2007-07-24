@@ -1857,7 +1857,8 @@ cat > load.csh << 'EOF'
 # Add as subtrack to existing track
 # New datafiles submitted 2007-3-23
 # by Mark Bieda <mcbieda@ucdavis.edu>
-# pushed on 7-24-07 (ann)
+# 
+# 
 
     # convert to bedGraph
     cd /cluster/data/encode/UcDavis/2007-03-23
@@ -1907,6 +1908,20 @@ cat > load.csh << 'EOF'
     hgsql hg17 -e "ALTER TABLE encodeUCDavisPolII_HelaS3 RENAME TO encodeUCDavisPolIIHelaS3;"
     hgsql hg17 -e "ALTER TABLE encodeUCDavisTaf_GM RENAME TO encodeUCDavisTafGM;"
     hgsql hg17 -e "ALTER TABLE encodeUCDavisTaf_HelaS3 RENAME TO encodeUCDavisTafHelaS3;"
+
+# Release note, --ting, 072407
+# encodeUCDavisChip track was replaced by encodeUcDavisChipHits before Nature paper publication.
+# With new raw data submitted, it was decided to release the encodeUCDavisChip track with both
+# old data and new data. 
+# Note: Mark and Peggy will provide new Hits data that go in parallel with the raw data.
+# (2007-7-24) The following subtracks for encodeUCDavisChip were released: (Ann)
+# encodeUCDavisPolIIGM
+# encodeUCDavisPolIIHelaS3
+# encodeUCDavisTafGM
+# encodeUCDavisTafHelaS3
+# encodeUCDavisE2F1Median
+# encodeUCDavisChipMyc
+#
 
 
 ##########################################################################
