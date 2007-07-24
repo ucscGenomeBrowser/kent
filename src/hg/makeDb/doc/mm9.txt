@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.5 2007/07/20 18:24:23 hiram Exp $"
+#	"$Id: mm9.txt,v 1.6 2007/07/24 00:04:42 hiram Exp $"
 #
 
 #######################################################################
@@ -127,7 +127,7 @@ done
     ## create agp files for the randoms from seq_contig.md and allcontig.agp
     ## both fragment and contig agp files
     $HOME/kent/src/hg/mouseStuff/buildTools/seqContigToAgp.pl \
-	randomFragments.agp randomContigs.agp
+	randomFragments.agp randomContigs.agp 2> randomContigs.err
     ## create contig agp file for non-randoms
     $HOME/kent/src/hg/mouseStuff/buildTools/mkContigAgp.pl allContigs.agp
     ## combine the two contig agp files
@@ -175,11 +175,9 @@ chrX_random     296206  300318  45      W       CAAA01187194.1  1       4113  +
 chrX_random     300319  303472  46      N       3154    fragment        yes
     ## should have been
 chrX_random     296206  300318  45      W       CAAA01187194.1  1       4113  +
-chrX_random     300319  300349  46      N       31      fragment        no      
+chrX_random     300319  300349  46      N       31      fragment        yes
 chrX_random     300350  303372  47      W       CAAA01187194.1  4145    7167  +
-    ## or better yet:
-chrX_random     296206  303372  45      W       CAAA01187194.1  1       7167  +
-chrX_random     303373  303472  46      N       100      fragment        yes
+### NCBI had this as a non-bridged fragment, a 'no' - I'm making it a yes
     ## so, edit the randomFragments.agp to fixup that line as indicated
     ## the chrOnly.agp file also needs an entry for chrM, add this
     ## line to chrOnly.agp:
@@ -223,6 +221,7 @@ done > mm9.fragorder.assembled.fa
 login = anonymous
 passwd = <your email address>
 '_EOF_'
+    # << happy emacs
     chmod 600 .wgetrc
     WGETRC=`pwd`/.wgetrc
     export WGETRC
@@ -244,6 +243,24 @@ do
 done
     zcat chrM/mm_ref_chrMT.fa.gz | sed -e "s/^>gi.*/>chrM/" \
 	| gzip -c > chrNamesFixed/chrM.fa.gz
+
+    ## later on, an error was discovered in the processing of chrY_random
+    # a lot of gaps of size zero were inserted.  They didn't cause any
+    # disruption to the assembly track, they only caused extra gap entries
+    # that were useless.  So, to fixup, remove anything in the chrY_gap
+    # table that has a size of zero:
+    hgsql -e 'delete from chrY_random_gap where size<"1";' mm9
+
+    ## And, fixing the one fragment on chrX_random
+    hgsql -e 'INSERT chrX_random_gap VALUES("587", "chrX_random",
+"300318", "300349", "46", "N", "31", "fragment", "yes")' mm9
+
+    hgsql -e 'DELETE from chrX_random_gold where chromStart="296205";' mm9
+    hgsql -e 'INSERT chrX_random_gold VALUES("587", "chrX_random",
+"296205", "300318", "45", "W", "CAAA01187194.1", "0", "4113", "+")' mm9
+    hgsql -e 'INSERT chrX_random_gold VALUES("587", "chrX_random",
+"300349", "303372", "45", "W", "CAAA01187194.1", "4144", "7167", "+")' mm9
+
 
 ##########################################################################
 ## final makeGenomeDb.pl (DONE - 2007-07-19 - Hiram)
@@ -345,12 +362,20 @@ dbDbSpeciesDir mouse
     cd /cluster/data/mm9/bed/RepeatMasker
     time nice -n +19 doRepeatMasker.pl -bigClusterHub=kk \
 	-buildDir=/cluster/data/mm9/bed/RepeatMasker mm9 > do.out 2>&1 &
-    #	real    2329m58.678s
-    #	Something went wrong in the kluster run, it was finished, but
-    #	it didn't know about it
-    time nice -n +19 doRepeatMasker.pl -bigClusterHub=kk \
-	-continue=cat \
-	-buildDir=/cluster/data/mm9/bed/RepeatMasker mm9 > cat.out 2>&1 &
+    #	real    1726m32.849s
+# Completed: 5467 of 5467 jobs
+# CPU time in finished jobs:   54774630s  912910.50m 15215.17h  633.97d  1.737 y
+# IO & Wait Time:                432302s    7205.04m   120.08h    5.00d  0.014 y
+# Average job time:               10098s     168.30m     2.81h    0.12d
+# Longest finished job:           20982s     349.70m     5.83h    0.24d
+# Submission to last job:        100294s    1671.57m    27.86h    1.16d
+
+    ssh kkstore06
+    cd /cluster/data/mm9
+    twoBitToFa mm9.rmsk.2bit stdout | faSize stdin
+# 2725765481 bases (105419509 N's 2620345972 real 1466644650 upper
+#	1153701322 lower) in 35 sequences in 1 files
+# %42.33 masked total, %44.03 masked real
 
 ##############################################################################
 ## simpleRepeat masking (DONE - 2007-04-07 - Hiram)
@@ -457,6 +482,51 @@ rm -fr /scratch/tmp/$C
     featureBits mm8 microsat
 # 8570611 bases of 2567283971 (0.334%) in intersection
 
+#############################################################################
+# PROCESS SIMPLE REPEATS INTO MASK (DONE - 2007-07-21 - Hiram)
+
+    # After the simpleRepeats track has been built, make a filtered version
+    # of the trf output: keep trf's with period <= 12:
+    ssh kkstore06
+    cd /cluster/data/mm9/bed/simpleRepeat
+    mkdir trfMask
+    for F in trf/chr*.bed
+    do
+	echo "${F} -> ${F/trf\//}"
+	awk '{if ($5 <= 12) print;}' ${F} > trfMask/${F/trf\//}
+    done
+
+    ## Add trfMask to repeat masked sequence
+    ssh kkstore06
+    cd /cluster/data/mm9
+    cat  << '_EOF_' > addTrf.csh
+#!/bin/csh -efx
+# This script will fail if any of its commands fail.
+
+set DB = mm9
+set WORK_DIR = /cluster/data/${DB}
+cd ${WORK_DIR}
+set inputTwoBit = ${WORK_DIR}/${DB}.rmsk.2bit
+set outputTwoBit = ${WORK_DIR}/${DB}.rmskTrf.2bit
+cat /cluster/data/${DB}/bed/simpleRepeat/trfMask.bed \
+        | twoBitMask -add -type=.bed ${inputTwoBit} stdin ${outputTwoBit}
+twoBitToFa ${outputTwoBit} stdout | faSize stdin > faSize.${DB}.rmskTrf.txt
+'_EOF_'
+    # << happy emacs
+    chmod +x ./addTrf.csh
+    time ./addTrf.csh
+    cat faSize.mm9.rmskTrf.txt
+# 2725765481 bases (105419509 N's 2620345972 real 1465037892 upper
+#	1155308080 lower) in 35 sequences in 1 files
+# %42.38 masked total, %44.09 masked real
+
+    ln -s mm9.rmskTrf.2bit mm9.2bit
+    # fixup /gbdb/mm9/mm9.2bit symlink to this newly masked sequence
+
+    ## copy to san for genbank kluster run
+    cd /cluster/data/mm9
+    cp -p mm9.rmskTrf.2bit /san/sanvol1/scratch/mm9/mm9.2bit
+
 ############################################################################
 #  BLATSERVERS ENTRY (DONE - 2007-04-09 - Hiram)
 #	After getting a blat server assigned by the Blat Server Gods,
@@ -487,3 +557,59 @@ XXX doesn't work, the ideogram file is corrupted
     hgsql mm9 -e "create table cytoBandIdeo (index(chrom(10),chromStart)) as select * from cytoBand;"
 
 
+##########################################################################
+## GENBANK alignments (WORKING - 2007-07-23 - Hiram)
+    ## generate a lift file that specifies segments separated by non-bridged
+    ## gaps
+    ssh hgwdev
+    cd /cluster/data/mm9/jkStuff
+    gapToLift mm9 nonBridgedGap.lft
+# WARNING: gap at end of chromosome at chrY:5902555-15902555
+# WARNING: overlapping gap at chrY:2902555-5902555 and chrY:5902555-15902555
+    ## These warnings are true, chrY has two gaps next to each other, and
+    ## the second one is actually the end of the chrom.  This is the way the
+    ## NCBI supplied AGP file is.  (this seems to be normal in hg18 too ...)
+    cp -p nonBridgedGap.lft /san/sanvol1/scratch/mm9
+    cd ..
+    cp -p mm9.rmskTrf.2bit /san/sanvol1/scratch/mm9/mm9.2bit
+    ## The genbank.conf entry looks like:
+# mm9
+mm9.serverGenome = /cluster/data/mm9/mm9.2bit
+mm9.clusterGenome = /san/sanvol1/scratch/mm9/mm9.2bit
+mm9.ooc = /cluster/data/mm9/11.ooc
+mm9.align.unplacedChroms = *
+mm9.lift = /cluster/data/mm9/jkStuff/nonBridgedGap.lft
+mm9.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+mm9.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+mm9.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+mm9.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+mm9.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+mm9.downloadDir = mm9
+mm9.refseq.mrna.xeno.load  = yes
+mm9.refseq.mrna.xeno.loadDesc = yes
+mm9.mgcTables.default = full
+mm9.mgcTables.mgc = all
+
+    ssh kkstore02
+    cd /cluster/data/genbank
+    time nice -n +19 bin/gbAlignStep -initial mm9 &
+    ## logFile: var/build/logs/2007.07.23-16:44:31.mm9.initalign.log
+
+#########################################################################
+# MAP CONTIGS TRACK (DONE - 2005-10-04 - Hiram)
+    ## can take contig information directly from previously created
+    ## mm9.contigs.agp
+    ssh hgwdev
+    mkdir /cluster/data/mm9/bed/ctgPos
+    cd /cluster/data/mm9/bed/ctgPos
+    grep CONTIG ../../mouse_37/mm9.contigs.agp \
+	| awk '{printf "%s\t%d\t%s\t%d\t%d\n", $6, $8, $1, $2-1, $3}' \
+	> mm9.ctgPos.tab
+
+    hgsql mm9 < ~/kent/src/hg/lib/ctgPos.sql
+    hgsql mm9 -e 'load data local infile "mm9.ctgPos.tab" into table ctgPos;'
+
+    featureBits -countGaps mm9 ctgPos
+    #	2623952781 bases of 2725765481 (96.265%) in intersection
+    featureBits -countGaps mm8 ctgPos
+    #	2573322222 bases of 2664455088 (96.580%) in intersection
