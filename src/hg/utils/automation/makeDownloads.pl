@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/makeDownloads.pl instead.
 
-# $Id: makeDownloads.pl,v 1.6 2007/06/25 21:33:04 angie Exp $
+# $Id: makeDownloads.pl,v 1.7 2007/07/24 22:17:26 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -769,8 +769,9 @@ sub doCompress {
 				      $runDir, $whatItDoes);
 
   $bossScript->add(<<_EOF_
-rm -rf bigZips database liftOver
-mkdir bigZips database liftOver
+rm -rf bigZips database
+mkdir bigZips database
+mkdir -p liftOver
 
 _EOF_
   );
@@ -815,11 +816,16 @@ actual compressed files.";
   my $gp = "$HgAutomate::goldenPath/$db";
   $bossScript->add(<<_EOF_
 mkdir -p $gp
-foreach d (bigZips $chromGz database liftOver)
+foreach d (bigZips $chromGz database)
   rm -rf $gp/\$d
   mkdir $gp/\$d
   ln -s $runDir/\$d/*.{gz,txt} $gp/\$d/
 end
+# Don't blow away all of liftOver, just the README -- there may be
+# pre-existing links that are not regenerated above.
+mkdir -p $gp/liftOver
+rm -f $gp/liftOver/README.txt
+ln -s $runDir/liftOver/README.txt $gp/liftOver/README.txt
 _EOF_
   );
   if ($geneTable) {
