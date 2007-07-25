@@ -208,7 +208,7 @@
 #include "omicia.h"
 #include "atomDb.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1319 2007/07/20 20:03:13 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1320 2007/07/25 15:45:53 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -19935,7 +19935,7 @@ else if (sameString("hapmapAllelesChimp", track) ||
     }
 else if (sameString("snpArrayAffy250Nsp", track) ||
          sameString("snpArrayAffy250Sty", track) ||
-         sameString("snpArrayAffyGenomeWide", track) ||
+         sameString("snpArrayAffy5", track) ||
          sameString("snpArrayAffy6", track) ||
          sameString("snpArrayAffy10", track) ||
          sameString("snpArrayAffy10v2", track) ||
