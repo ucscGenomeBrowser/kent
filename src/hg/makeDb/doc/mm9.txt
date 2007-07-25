@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.7 2007/07/24 22:51:49 hiram Exp $"
+#	"$Id: mm9.txt,v 1.8 2007/07/25 19:48:23 hiram Exp $"
 #
 
 #######################################################################
@@ -466,6 +466,10 @@ rm -fr /scratch/tmp/$C
     #	80054947 bases of 2620346158 (3.055%) in intersection
 
     ## clean up the /iscratch/i/mus/mm9/ directory
+    ## for downloads:
+    mkdir trfMaskChrom
+    cd trfMaskChrom
+    ln -s ../trf/chr*.bed .
 
 ###########################################################################
 # CREATE MICROSAT TRACK (DONE - 2007-07-20 - Hiram)
@@ -617,12 +621,34 @@ mm9.mgcTables.mgc = all
     ssh kkstore02
     cd /cluster/data/genbank
     time nice -n +19 bin/gbAlignStep -continue=finish -initial mm9 &
-var/build/logs/2007.07.24-14:19:01.mm9.initalign.log
+    #	var/build/logs/2007.07.24-14:19:01.mm9.initalign.log
+    #	real    186m30.221s
 
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad mm9
+    #	var/dbload/hgwdev/logs/2007.07.25-08:47:48.dbload.log
+    #	real    53m16.137s
 
+    featureBits mm9 refGene:cds
+    #	30113840 bases of 2620346127 (1.149%) in intersection
+    featureBits mm9 refGene
+    #	51175624 bases of 2620346127 (1.953%) in intersection
+    featureBits mm9 mrna
+    #	137195240 bases of 2620346127 (5.236%) in intersection
+    featureBits mm9 mgcGenes
+    #	34012201 bases of 2620346127 (1.298%) in intersection
+    featureBits mm9 est
+    #	188799620 bases of 2620346127 (7.205%) in intersection
+    featureBits mm9 intronEst
+    #	52812173 bases of 2620346127 (2.015%) in intersection
+    featureBits mm9 xenoMrna
+    #	51438566 bases of 2620346127 (1.963%) in intersection
+    featureBits mm9 xenoRefGene
+    #	44298281 bases of 2620346127 (1.691%) in intersection
 
 #########################################################################
-# MAP CONTIGS TRACK (DONE - 2005-10-04 - Hiram)
+# MAP CONTIGS TRACK (DONE - 2007-07-23 - Hiram)
     ## can take contig information directly from previously created
     ## mm9.contigs.agp
     ssh hgwdev
@@ -639,3 +665,23 @@ var/build/logs/2007.07.24-14:19:01.mm9.initalign.log
     #	2623952781 bases of 2725765481 (96.265%) in intersection
     featureBits -countGaps mm8 ctgPos
     #	2573322222 bases of 2664455088 (96.580%) in intersection
+
+#########################################################################
+## Create downloads directory (DONE - 2007-07-25 - Hiram)
+    ssh hgwdev
+    mkdir /cluster/data/mm9/bed/simpleRepeat/trfMaskChrom
+    cd /cluster/data/mm9/bed/simpleRepeat/trfMaskChrom
+    ln -s ../trf/chr*.bed .
+
+    cd /cluster/data/mm9
+    time nice -n +19 /cluster/bin/scripts/makeDownloads.pl mm9 \
+	> do.downloads.out 2>&1
+    #	real    41m18.282s
+    ## failed during jkStuff/doInstall.csh:
+# foreach size ( 1000 2000 5000 )
+# echo 1000
+# featureBits mm9 refGene:upstream:1000 -fa=stdout
+# setpriority: Permission denied.
+# Error writing 50 bytes: Operation not permitted
+    ## remove the "nice" statements from the csh, and finish it off
+
