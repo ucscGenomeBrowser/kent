@@ -3,7 +3,7 @@
 # Caenorhabditis elegans
 #	Washington University School of Medicine GSC and Sanger Institute WS170
 
-#  $Id: ce4.txt,v 1.24 2007/07/12 23:40:03 angie Exp $
+#  $Id: ce4.txt,v 1.25 2007/07/25 19:48:00 hiram Exp $
 
 
 #########################################################################
@@ -435,6 +435,16 @@ do
 done
     hgsql -N -e "select count(*) from orfToGene;" ce4
     #	26874
+
+    ## create a gene name to WBGene ID reference table
+    ## to be used to construct URL
+    mkdir /cluster/data/ce4/bed/WBGeneID
+    cd /cluster/data/ce4/bed/WBGeneID
+    #	There was one duplicate entry in the file, the sort -u eliminates it
+    sed -e "s#http://wormbase.org/db/gene/gene?name=##; s#;class=Gene##" \
+	../../downloads/tarFile/url.txt | sort -u > sangerGeneToWBGeneID.tab
+    hgLoadSqlTab ce4 sangerGeneToWBGeneID \
+	~/kent/src/hg/lib/sangerGeneToWBGeneID.sql sangerGeneToWBGeneID.tab
 
 ###############################################################################
 ## RNA sangerGenes (DONE - 2007-04-27 - Hiram)
@@ -3096,3 +3106,136 @@ while (<>) {
 
 
 ############################################################################
+## fixup the sangerPep names to match sangerCanonical
+    ## this is a dead end, it doesn't actually fix anything
+    ssh hgwdev
+    mkdir /cluster/data/ce4/bed/fixupSangerPep
+    cd /cluster/data/ce4/bed/fixupSangerPep
+
+    ## current sangerPep names
+    cut -f1 ../sangerGene/sangerPep.tab | sort -u > sangerPep.names.original.txt
+    ## and canonical names
+    hgsql -N -e "select transcript from sangerCanonical;" ce4 \
+	| sort -u > sangerCanonical.transcript.txt
+    # line counts
+    wc -l *.txt
+    #	19965 sangerCanonical.transcript.txt
+    #	23224 sangerPep.names.original.txt
+    ## unique to canonical
+    comm -23 sangerCanonical.transcript.txt sangerPep.names.original.txt | wc -l
+    #	1630
+    #  add all canonical names to peptides by duplicating the peptides
+    ~/kent/src/hg/utils/wormStuff/oneToTwo.pl newPeptides.tab 2> warnings.txt
+    # verify this is a new superset of peptides
+    cut -f1 newPeptides.tab | sort -u > sangerPep.newNames.txt
+    comm -12 sangerPep.names.original.txt sangerPep.newNames.txt | wc -l
+    #	23224 - same number as was in sangerPep.names.original.txt
+    # new names added:
+    comm -13 sangerPep.names.original.txt sangerPep.newNames.txt | wc -l
+    #	1593
+    # the missing peptides are for canonical non-coding genes
+    comm -23 sangerCanonical.transcript.txt sangerPep.newNames.txt | wc -l
+    # 37
+############################################################################
+## fixup sangerCanonical names to remove the second dot name
+    ssh hgwdev
+    cd /cluster/data/ce4/bed/fixupSangerCanonical
+    hgsql -N -e "select * from sangerCanonical;" ce4 > sangerCanonical.tab
+    cat << '_EOF_' > fixup.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my %names;
+
+open (FH,"<sangerCanonical.tab") or die "can not read sangerCanonical.tab";
+
+while (my $line = <FH>) {
+    chomp $line;
+    my ($chr, $start, $end, $score, $name, $prot) = split('\s+',$line);
+    my ($a, $b, $c, $d) = split('\.',$name);
+    die "found four part name at $line" if (defined($d));
+    my $twoPartName = $name;
+    if (defined($c)) {
+        $twoPartName = sprintf "%s.%s", $a, $b;
+    }
+    die "ERROR: two part name clash at $line" if (exists($names{$twoPartName}));
+    $names{$twoPartName} = $line;
+    if (!defined($prot)) { print STDERR "# no prot: $line\n"; my $prot = ""; }
+    printf "%s\t%d\t%d\t%d\t%s\t%s\n", $chr, $start, $end, $score,
+        $twoPartName, $prot;
+}
+
+close (FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x ./fixup.pl
+    ./fixup.pl > fixed.tab
+    hgsql -e 'delete from sangerCanonical where chrom like "chr%";' ce4
+    hgsql -e \
+	'load data local infile "fixed.tab" into table sangerCanonical;' ce4
+    ## reset indexes
+    hgsql -e "analyze table sangerCanonical;" ce4
+
+############################################################################
+## fixup sangerLinks table (DONE - 2007-07-25 - Hiram)
+    ## it was missing descriptions for the one dot names where only two dot
+    ## names existed
+    mkdir /cluster/data/ce4/bed/fixupSangerLinks
+    cd /cluster/data/ce4/bed/fixupSangerLinks
+    ln -s ../sangerGene/sangerLinks.tab .
+    cat << '_EOF_' > slFixup.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+open (FH,"<sangerLinks.tab") or die "can not read sangerLinks.tab";
+
+my %existing;   # key is full gene symbol name, one or two dots
+                # value is the orfName and description text, tab separated
+my %newNeeded;  # key is shortened one dot name, value is orfName and
+                # description text, tab separated
+my $newCount = 0;
+
+while (my $line = <FH>) {
+    chomp $line;
+    my ($name, $orf, $desc) = split('\t',$line);
+    my ($a, $b, $c, $d) = split('\.', $name);
+    die "ERROR: found three dot name at $line" if (defined($d));
+    if (defined($c)) {
+        my $oneDotName = sprintf "%s.%s", $a, $b;
+        if (exists($newNeeded{$oneDotName})) {
+            my $newString = sprintf "%s\t%s", $orf, $desc;
+            die "ERROR: new one dot name, different descr $name"
+                if ($newNeeded{$oneDotName} ne $newString)
+        } else {
+        $newNeeded{$oneDotName} = sprintf "%s\t%s", $orf, $desc;
+        ++$newCount;
+        }
+    }
+    die "ERROR: duplicate name $name at $line" if (exists($existing{$name}));
+    $existing{$name} = sprintf "%s\t%s", $orf, $desc;
+}
+
+close (FH);
+
+foreach my $key (keys %newNeeded) {
+    die "ERROR: duplicate new name $key for $newNeeded{$key}"
+        if (exists($existing{$key}));
+    printf "%s\t%s\n", $key, $newNeeded{$key};
+}
+
+foreach my $key (keys %existing) {
+    die "ERROR: duplicate existing name $key for $existing{$key}"
+        if (exists($newNeeded{$key}));
+    printf "%s\t%s\n", $key, $existing{$key};
+}
+'_EOF_'
+    # << happy emacs
+    chmod +x ./slFixup.pl
+    ./slFixup.pl > fixedSangerLinks.tab
+
+    hgLoadSqlTab ce4 sangerLinks ~/kent/src/hg/lib/sangerLinks.sql \
+	fixedSangerLinks.tab
