@@ -7,7 +7,7 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = affyLookup.o cnpLookup.o fetchSeq.o \
     hapmap1.o hapmap2.o hapmapLookup.o hapmapMixed.o \
     hapmapOrtho.o hapmapSummary.o hapmapValidate.o \
-    illuminaLookup.o \
+    illuminaLookup.o illuminaLookup2.o \
     snpCheckAlleles.o snpCheckClassAndObserved.o snpCheckCluster.o snpCheckCluster2.o \
     snpClassAndObserved.o snpCleanSeq.o snpCompareLoctype.o snpCompareWeight.o \
     snpContigLocFilter.o snpContigLocFilter125.o \
@@ -25,7 +25,7 @@ O = affyLookup.o cnpLookup.o fetchSeq.o \
 all: affyLookup cnpLookup fetchSeq \
      hapmap1 hapmap hapmapLookup hapmapMixed \
      hapmapOrtho hapmapSummary hapmapValidate \
-     illuminaLookup \
+     illuminaLookup illuminaLookup2 \
      snpCheckAlleles snpCheckClassAndObserved snpCheckCluster snpCheckCluster2 \
      snpClassAndObserved snpCleanSeq snpCompareLoctype snpCompareWeight \
      snpContigLocFilter snpContigLocFilter125 \
@@ -72,6 +72,9 @@ hapmapValidate: hapmapValidate.o ${MYLIBS}
 
 illuminaLookup: illuminaLookup.o ${MYLIBS}
 	${CC} -O -o illuminaLookup illuminaLookup.o ${MYLIBS} $L
+
+illuminaLookup2: illuminaLookup2.o ${MYLIBS}
+	${CC} -O -o illuminaLookup2 illuminaLookup2.o ${MYLIBS} $L
 
 snpCheckAlleles: snpCheckAlleles.o ${MYLIBS}
 	${CC} -O -o snpCheckAlleles snpCheckAlleles.o ${MYLIBS} $L
