@@ -1,5 +1,6 @@
 <%= error_messages_for :user %>
 <% form_for :user do |f| -%>
+<h1>User profile for '<%= @user.name -%>'</h1>
 <p><label for="login">Login</label><br/>
 <%= f.text_field :login %></p>
 
@@ -16,4 +17,6 @@
 <%= f.text_field :institution %></p>
 
 <p><%= submit_tag 'Submit' %></p>
+<%= link_to 'Back', {:controller => 'pipeline', :action => 'list'} %>
+
 <% end -%>
