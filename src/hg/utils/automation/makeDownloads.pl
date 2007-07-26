@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/makeDownloads.pl instead.
 
-# $Id: makeDownloads.pl,v 1.7 2007/07/24 22:17:26 angie Exp $
+# $Id: makeDownloads.pl,v 1.8 2007/07/26 19:16:47 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -518,6 +518,36 @@ files, use the "mget" command:
     - or -
     mget -a (to download all the files in the directory) 
 
+Alternate methods to ftp access.
+
+Using an rsync command to download the entire directory:
+    rsync -avzP rsync://hgdownload.cse.ucsc.edu/goldenPath/$db/database/ .
+For a single file, e.g. gc5Base.txt.gz
+    rsync -avzP \
+        rsync://hgdownload.cse.ucsc.edu/goldenPath/$db/database/gc5Base.txt.gz .
+
+Or with wget, all files:
+    wget --timestamping \
+        'ftp://hgdownload.cse.ucsc.edu/goldenPath/$db/database/*'
+With wget, a single file: 
+    wget --timestamping \
+        'ftp://hgdownload.cse.ucsc.edu/goldenPath/$db/database/gc5Base.txt.gz' \
+        -O gc5Base.txt.gz
+
+To uncompress the *.txt.gz files:
+    gunzip <table>.txt.gz
+The tables can be loaded directly from the .txt.gz compressed file.
+It is not necessary to uncompress them to load into a database,
+as shown in the example below.
+
+To load one of the tables directly into your local mirror database,
+for example the table chromInfo:
+## create table from the sql definition
+\$ hgsql $db < chromInfo.sql
+## load data from the txt.gz file
+\$ zcat chromInfo.txt.gz | hgsql $db --local-infile=1 \
+        -e 'LOAD DATA LOCAL INFILE "/dev/stdin" INTO TABLE chromInfo;'
+
 _EOF_
   ;
   &printAssemblyUsage($fh, $Organism, $assemblyLabel);
@@ -669,6 +699,27 @@ files, use the "mget" command:
     - or -
     mget -a (to download all the files in the directory)
 
+Alternate methods to ftp access.
+
+Using an rsync command to download the entire directory:
+    rsync -avzP rsync://hgdownload.cse.ucsc.edu/goldenPath/$db/bigZips/ .
+For a single file, e.g. chromFa.tar.gz
+    rsync -avzP \
+        rsync://hgdownload.cse.ucsc.edu/goldenPath/$db/bigZips/chromFa.tar.gz .
+
+Or with wget, all files:
+    wget --timestamping \
+        'ftp://hgdownload.cse.ucsc.edu/goldenPath/$db/bigZips/*'
+With wget, a single file:
+    wget --timestamping \
+        'ftp://hgdownload.cse.ucsc.edu/goldenPath/$db/bigZips/chromFa.tar.gz' \
+        -O chromFa.tar.gz
+
+To unpack the *.tar.gz files:
+    tar xvzf <file>.tar.gz
+To uncompress the fa.gz files:
+    gunzip <file>.fa.gz
+
 _EOF_
   ;
   &printAssemblyUsage($fh, $Organism, $assemblyLabel);
@@ -708,6 +759,25 @@ files, use the "mget" command:
     mget <filename1> <filename2> ...
     - or -
     mget -a (to download all the files in the directory)
+
+Alternate methods to ftp access.
+    
+Using an rsync command to download the entire directory:
+    rsync -avzP rsync://hgdownload.cse.ucsc.edu/goldenPath/$db/chromosomes/ .
+For a single file, e.g. chrM.fa.gz
+    rsync -avzP \
+        rsync://hgdownload.cse.ucsc.edu/goldenPath/$db/chromosomes/chrM.fa.gz .
+    
+Or with wget, all files:
+    wget --timestamping \
+        'ftp://hgdownload.cse.ucsc.edu/goldenPath/$db/chromosomes/*'
+With wget, a single file:
+    wget --timestamping \
+        'ftp://hgdownload.cse.ucsc.edu/goldenPath/$db/chromosomes/chrM.fa.gz' \
+        -O chrM.fa.gz
+    
+To uncompress the fa.gz files:
+    gunzip <file>.fa.gz
 
 _EOF_
   ;
@@ -750,12 +820,32 @@ use the "mget" command:
 Please refer to the credits page
 (http://genome.ucsc.edu/goldenPath/credits.html) for guidelines and
 restrictions regarding data use for these assemblies.
+-------------------------------------------------------
+Alternate methods to ftp access.
+
+Using an rsync command to download the entire directory:
+    rsync -avzP rsync://hgdownload.cse.ucsc.edu/goldenPath/$db/liftOver/ .
+For a single file, e.g. mm8ToHg18.over.chain.gz
+    rsync -avzP \
+        rsync://hgdownload.cse.ucsc.edu/goldenPath/$db/liftOver/${db}ToHg18.over.chain.gz .
+
+Or with wget, all files:
+    wget --timestamping \
+        'ftp://hgdownload.cse.ucsc.edu/goldenPath/$db/liftOver/*'
+With wget, a single file:
+    wget --timestamping \
+        'ftp://hgdownload.cse.ucsc.edu/goldenPath/$db/liftOver/${db}ToHg18.over.chain.gz' \ 
+        -O ${db}ToHg18.over.chain.gz
+
+To uncompress the *.chain.gz files:
+    gunzip <file>.chain.gz 
+The liftOver utility can read the files in their .gz format,
+it is not necessary to uncompress them to use with the liftOver command.
 
 _EOF_
   ;
   close($fh);
 } # makeLiftOverReadme
-
 
 sub doCompress {
   # step: compress [workhorse]
