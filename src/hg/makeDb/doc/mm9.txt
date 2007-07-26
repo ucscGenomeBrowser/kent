@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.8 2007/07/25 19:48:23 hiram Exp $"
+#	"$Id: mm9.txt,v 1.9 2007/07/26 18:47:03 hiram Exp $"
 #
 
 #######################################################################
@@ -684,4 +684,18 @@ mm9.mgcTables.mgc = all
 # setpriority: Permission denied.
 # Error writing 50 bytes: Operation not permitted
     ## remove the "nice" statements from the csh, and finish it off
+    ## edit the README files to indicate correct information
 
+##########################################################################
+## Creating pushQ (DONE - 2007-07-26 - Hiram)
+    ssh hgwdev
+    mkdir /cluster/data/mm9/pushQ
+    cd /cluster/data/mm9/pushQ
+    /cluster/bin/scripts/makePushQSql.pl mm9 > mm9.sql 2> stderr.out
+    ## check the stderr.out for anything that needs to be fixed
+    ## copy mm9.sql to hgwbeta:/tmp
+    scp mm9.sql hgwbeta:/tmp
+    ## then on hgwbeta
+    ssh hgwbeta
+    cd /tmp
+    hgsql qapushq < mm9.sql
