@@ -208,7 +208,7 @@
 #include "omicia.h"
 #include "atomDb.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1320 2007/07/25 15:45:53 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1321 2007/07/26 19:40:56 angie Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -13660,8 +13660,9 @@ int start = cartInt(cart, "o");
 struct jaxQTL *jaxQTL;
 
 genericHeader(tdb, item);
-sprintf(query, "select * from jaxQTL where name = '%s' and chrom = '%s' and chromStart = %d",
-    	item, seqName, start);
+safef(query, sizeof(query),
+      "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
+      tdb->tableName, item, seqName, start);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     {
@@ -14008,13 +14009,13 @@ for (pheno = phenoList;  pheno != NULL;  pheno = pheno->next)
 	first = FALSE;
     else
 	printf(", ");
-    if (sameString(pheno->name, selectedPheno))
+    if (selectedPheno && sameString(pheno->name, selectedPheno))
 	printf("<B>%s</B>", pheno->name);
     else
 	printf("%s", pheno->name);
     }
 puts("<BR>");
-if (hTableExists(phenoTable))
+if (hTableExists(phenoTable) && selectedPheno)
     {
     struct trackDb *alleleTdb = hMaybeTrackInfo(conn, "jaxAllele");
     struct sqlConnection *conn2 = hAllocConn();
@@ -19766,23 +19767,23 @@ else if( sameWord( track, "footPrinter" ))
     {
     footPrinterClickHandler( tdb, item );
     }
-else if (sameWord(track, "jaxQTL"))
-    {
-    doJaxQTL(tdb, item);
-    }
 else if (sameWord(track, "jaxQTL3"))
     {
     doJaxQTL3(tdb, item);
     }
-else if (sameWord(track, "jaxAllele"))
+else if (startsWith("jaxQTL", track))
+    {
+    doJaxQTL(tdb, item);
+    }
+else if (startsWith("jaxAllele", track))
     {
     doJaxAllele(tdb, item);
     }
-else if (sameWord(track, "jaxPhenotype"))
+else if (startsWith("jaxPhenotype", track))
     {
     doJaxPhenotype(tdb, item);
     }
-else if (sameWord(track, "jaxRepTranscript"))
+else if (startsWith("jaxRepTranscript", track))
     {
     doJaxAliasGenePred(tdb, item);
     }
