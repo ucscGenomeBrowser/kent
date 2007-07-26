@@ -1,7 +1,9 @@
+# for emacs: -*- mode: sh; -*-
+
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: mm6.txt,v 1.5 2007/03/05 19:57:42 angie Exp $"
+#	"$Id: mm6.txt,v 1.6 2007/07/26 17:20:25 angie Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -9392,6 +9394,23 @@ close(SQL);
       $HOME/kent/src/hg/lib/bed12Source.sql > jaxPhenotype.sql
     hgLoadBed -tab -sqlTable=jaxPhenotype.sql mm6 jaxPhenotype \
       jaxPhenotype.bed
+
+
+##########################################################################
+# MGI ALLELE-PHENOTYPE MAPPING (DONE 7/18/07 angie)
+    # Load in the mapping of alleles to phenotypes from an MGI report
+    # file.  The file is independent of assembly version, but it uses 
+    # some allele names that apparently have changed (or been added)
+    # since mm6 tables were loaded.  So the coverage is not as complete
+    # as for mm8.  Still, this info is very nice to have!
+    cd /cluster/data/mm6/bed/jaxAllele/
+    ln -s alias.tab jaxAlleleInfo.tab
+    /cluster/data/mm8/bed/jax/2007_07/parsePhenotypicAllele.pl \
+      /cluster/data/mm8/bed/jax/2007_07/MGI_PhenotypicAllele.rpt \
+      > jaxAllelePheno.tab
+    hgLoadSqlTab mm6 jaxAllelePheno \
+      ~/kent/src/hg/lib/jaxAllelePheno.sql jaxAllelePheno.tab
+    runJoiner.csh mm6 jaxAllelePheno ~/kent/src/hg/makeDb/schema
 
 
 ##########################################################################
