@@ -117,7 +117,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1375 2007/07/24 00:04:36 heather Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1376 2007/07/26 19:37:21 angie Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -13521,6 +13521,10 @@ registerTrackHandler("tfbsCons", tfbsConsMethods);
 registerTrackHandler("tfbsConsSites", tfbsConsSitesMethods);
 registerTrackHandler("pscreen", simpleBedTriangleMethods);
 registerTrackHandler("dless", dlessMethods);
+registerTrackHandler("jaxAllele", jaxAlleleMethods);
+registerTrackHandler("jaxPhenotype", jaxPhenotypeMethods);
+registerTrackHandler("jaxAlleleLift", jaxAlleleMethods);
+registerTrackHandler("jaxPhenotypeLift", jaxPhenotypeMethods);
 /* ENCODE related */
 registerTrackHandler("encodeGencodeGene", gencodeGeneMethods);
 registerTrackHandler("encodeGencodeGeneJun05", gencodeGeneMethods);
@@ -13533,8 +13537,6 @@ registerTrackHandler("encodeGencodeRaceFrags", gencodeRaceFragsMethods);
 registerTrackHandler("affyTxnPhase2", affyTxnPhase2Methods);
 registerTrackHandler("gvPos", gvMethods);
 registerTrackHandler("oreganno", oregannoMethods);
-registerTrackHandler("jaxAllele", jaxAlleleMethods);
-registerTrackHandler("jaxPhenotype", jaxPhenotypeMethods);
 registerTrackHandler("encodeDless", dlessMethods);
 
 /* transMap */
