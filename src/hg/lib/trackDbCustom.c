@@ -12,7 +12,7 @@
 #include "hash.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.29 2007/06/18 23:42:41 angie Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.30 2007/07/26 19:46:15 kate Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -412,4 +412,35 @@ bool trackDbIsSubtrack(struct trackDb *tdb)
     return (trackDbSetting(tdb, "compositeTrack") != NULL);
 }
 
-
+struct superTrackInfo *getSuperTrackInfo(struct trackDb *tdb)
+/* Get info from supertrack setting.  There are 2 forms:
+ * Parent:   'supertrack on [show]'
+ * Child:    'supertrack <parent> [vis]
+ * Returns NULL if there is no such setting */
+{
+char *words[8];
+struct superTrackInfo *st;
+char *setting = cloneString(trackDbSetting(tdb, "superTrack"));
+if (!setting)
+    return NULL;
+int wordCt = chopLine(setting, words);
+if (wordCt < 1)
+    return FALSE;
+AllocVar(st);
+if (sameString("on", words[0]))
+    {
+    /* parent */
+    st->isParent = TRUE;
+    if (wordCt > 1 && sameString("show", words[1]))
+        st->defaultShow = TRUE;
+    }
+else
+    {
+    /* child */
+    st->parentName = cloneString(words[0]);
+    if (wordCt > 1)
+        st->defaultVis = max(0, hTvFromStringNoAbort(words[1]));
+    }
+//freeMem(setting);
+return st;
+}

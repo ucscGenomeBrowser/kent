@@ -12,7 +12,7 @@
 #include "hgConfig.h"
 #include "chainCart.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.89 2007/07/20 18:30:47 kate Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.90 2007/07/26 19:46:15 kate Exp $";
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -1791,3 +1791,46 @@ else
     compositeUiSelectedSubtracks(cart, tdb, primarySubtrack);
 }
 
+boolean superTrackDropDown(struct cart *cart, struct trackDb *tdb,
+                                int hasVisibleChild)
+/* Display hide/show dropdown for supertrack.  
+ * set hasVisibleChild to -1 if this function should determine this.
+ * Return false if not a supertrack */
+{
+struct superTrackInfo *st = getSuperTrackInfo(tdb);
+if (!st || !st->isParent)
+    return FALSE;
+
+/* determine if supertrack is show/hide */
+boolean show = FALSE;
+/* check CGI variables and cart for user selection */
+//char *setting = cgiOptionalString(tdb->tableName);
+//fprintf(stderr, "from CGI: %s\n", setting);
+//if (!setting)
+    char *setting = cartOptionalString(cart, tdb->tableName);
+if (setting)
+    {
+    if (sameString("show", setting))
+        show = TRUE;
+    }
+else
+    {
+    if (st->defaultShow)
+        show = TRUE;
+    }
+/* Determine if any tracks in supertrack are visible; if not,
+ * the 'show' is grayed out */
+if (show && hasVisibleChild == -1)
+    {
+    hasVisibleChild = 0;
+    struct trackDb *childTdb;
+    for (childTdb = tdb->subtracks; childTdb != NULL; childTdb = tdb->next)
+        {
+        if (childTdb->visibility != tvHide)
+            hasVisibleChild = 1;
+        }
+    }
+hideShowDropDown(tdb->tableName, show, (show && hasVisibleChild) ? 
+                            "normalText" : "hiddenText");
+return TRUE;
+}

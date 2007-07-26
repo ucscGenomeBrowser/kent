@@ -750,4 +750,10 @@ void hCompositeUi(struct cart *cart, struct trackDb *tdb,
  * that have the same type.  If fakeSubmit is non-NULL, add a hidden
  * var with that name so it looks like it was pressed. */
 
+boolean superTrackDropDown(struct cart *cart, struct trackDb *tdb,
+                                int hasVisibleChild);
+/* Display hide/show dropdown for supertrack.  
+ * set hasVisibleChild to -1 if this function should determine this.
+ * Return false if not a supertrack */
+
 #endif /* HUI_H */

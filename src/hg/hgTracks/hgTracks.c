@@ -117,7 +117,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1376 2007/07/26 19:37:21 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1377 2007/07/26 19:46:15 kate Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -459,7 +459,7 @@ void changeTrackVis(struct group *groupList, char *groupTarget,
  * NULL then set visibility for tracks in all groups.  Otherwise,
  * just set it for the given group.  If vis is -2, then visibility is
  * unchanged.  If -1 then set visibility to default, otherwise it should 
- * be tvHide, tvDense, etc. The ifVisible flag when set, causes only
+ * be tvHide, tvDense, etc. The ifVisible flag when set, causes 
  * visibility to change only for non-hidden tracks.
  * If we are going back to default visibility, then reset the track
  * ordering also. */
@@ -482,25 +482,58 @@ for (group = groupList; group != NULL; group = group->next)
 	for (tr = group->trackList; tr != NULL; tr = tr->next)
 	    {
 	    struct track *track = tr->track;
+            struct superTrackInfo *st = getSuperTrackInfo(track->tdb);
 	    if (changeVis == -1)
                 {
-	        track->visibility = track->tdb->visibility;
+                if (st)
+                    {
+                    /* change this track (a super track member)to the
+                     * default visiblity from the trackDb supertrack
+                     * setting */
+                    track->visibility = st->defaultVis;
+                    if (startsWith("encodeAffyRna", track->mapName))
+                        fprintf(stderr, "removing cart var %s\n",
+                                                st->parentName);
+                    /* removing the supertrack parent's cart variable
+                     * assures it has default (hide) vis */
+                    cartRemove(cart, st->parentName);
+                    }
+                else
+                    track->visibility = track->tdb->visibility;
                 /* set the track priority back to the default value */
                 safef(pname, sizeof(pname), "%s.priority",track->mapName);
                 cartRemove(cart, pname);
                 track->priority = track->defaultPriority;
                 if (track->defaultGroupName != NULL && 
-                        differentString(track->groupName, track->defaultGroupName))
+                        differentString(track->groupName, 
+                                track->defaultGroupName))
                     {
                     safef(gname, sizeof(gname), "%s.group",track->mapName);
                     cartRemove(cart, gname);
                     track->groupName = cloneString(track->defaultGroupName);
-                    }
+                    
                 }
             else if (track->visibility != tvHide || !ifVisible)
-                track->visibility = changeVis;
-	    cartSetString(cart, track->mapName, 
-	    	hStringFromTv(track->visibility));
+                {
+                if (!st)
+                    track->visibility = changeVis;
+                }
+            if (st && changeVis != -1)
+                {
+                /* special handling of supertrack members */
+                char *newVis = "show";
+                if (changeVis == tvHide)
+                    newVis = hStringFromTv(tvHide);
+                if (startsWith("encodeAffyRna", st->parentName))
+                        fprintf(stderr, "setting cart var %s to %s\n",
+                                                st->parentName, newVis);
+                cartSetString(cart, st->parentName, newVis);
+                }
+            if (!st)
+                {
+                cartSetString(cart, track->mapName, 
+                                hStringFromTv(track->visibility));
+                }
 	    }
 	}
     }
@@ -13246,13 +13279,30 @@ for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
 void superTrackVis(struct track *track)
 /* Limit track visibility by supertrack parent */
 {
-char *show = cartUsualString(cart, track->parent->mapName, "show");
+char *show = cartUsualString(cart, track->parent->mapName, "hide");
 if (sameString("hide", show))
+    {
     track->visibility = tvHide;
+    }
+    #ifdef FOO
+else 
+    {
+    char *setting = cartOptionalString(cart, track->mapName);
+    if (!setting)
+        track->visibility = tvDense;
+    }
+    #endif
+}
+
+boolean superTrackHasVisibleMembers(struct track *track)
+/* Determine if any member tracks are visible -- currently 
+ * recording this in the parent's visibility setting */
+{
+return (track->visibility != tvHide);
 }
 
 struct track *getTrackList( struct group **pGroupList)
-/* Return list of all tracks. */
+/* Return list of all tracks. Shared by hgTracks and configure page */
 {
 struct track *track, *trackList = NULL;
 /* Register tracks that include some non-standard methods. */
@@ -13582,13 +13632,11 @@ for (track = trackList; track != NULL; track = track->next)
 	s = cgiOptionalString(track->mapName);
 	if (s != NULL)
             {
-	    cartSetString(cart, track->mapName, s);
+            cartSetString(cart, track->mapName, s);
             }
 	}
     if (s != NULL)
 	track->visibility = hTvFromString(s);
-    if (track->parent)
-        superTrackVis(track);
     if (isCompositeTrack(track))
         compositeTrackVis(track);
     }
@@ -13702,12 +13750,11 @@ if (!hideControls)
 if (measureTiming)
     uglyTime("Time before getTrackList");
 trackList = getTrackList(&groupList);
-
 if (measureTiming)
     uglyTime("getTrackList");
 
 /* Honor hideAll and visAll variables */
-if(hideAll || defaultTracks)
+if (hideAll || defaultTracks)
     {
     int vis = (hideAll ? tvHide : -1);
     changeTrackVis(groupList, NULL, vis, FALSE);
@@ -13722,6 +13769,10 @@ else if (cgiVarExists("hgt.prevItem"))
 /* Tell tracks to load their items. */
 for (track = trackList; track != NULL; track = track->next)
     {
+    /* adjust track visibility based on supertrack just before load loop */
+    if (track->parent)
+        superTrackVis(track);
+
     /* remove cart priority variables if they are set  
        to the default values in the trackDb */
     if(!hTrackOnChrom(track->tdb, chromName)) 
@@ -14018,11 +14069,15 @@ if (showTrackControls)
                     {
                     /* hide/show dropdown for supertrack when first member is
                      * encountered in track list */
+                     #ifdef FOO
                     boolean showSuper = sameString("show",
-                                        cartUsualString(cart, parent->mapName, "show"));
+                                cartUsualString(cart, parent->mapName, "hide"));
                     hideShowDropDown(parent->mapName, showSuper, 
                                      showSuper && (parent->visibility != tvHide) ? 
                                                 "normalText": "hiddenText");
+                    #endif
+                    superTrackDropDown(cart, track->tdb, 
+                                superTrackHasVisibleMembers(track));
                     /* remove so we don't repeat display */
                     hashRemove(superHash, parent->mapName);
                     }
@@ -14031,8 +14086,8 @@ if (showTrackControls)
                     /* check for option of limiting visibility to one mode */
                     char *onlyVisibility = trackDbSetting(track->tdb, "onlyVisibility");
                     hTvDropDownClassVisOnly(track->mapName, track->visibility,
-                                            track->canPack, (track->visibility == tvHide) ? 
-                                            "hiddenText" : "normalText", onlyVisibility );
+                                track->canPack, (track->visibility == tvHide) ? 
+                                "hiddenText" : "normalText", onlyVisibility );
                     }
                 }
 	    else 

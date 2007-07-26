@@ -976,6 +976,9 @@ void parseSs(char *ss, char **retPsl, char **retFa);
 boolean ssFilesExist(char *ss);
 /* Return TRUE if both files in ss exist. */
 
+boolean superTrackHasVisibleMembers(struct track *track);
+/* Determine if any member tracks are visible */
+
 int maximumTrackHeight(struct track *tg);
 /* Return the maximum track height allowed in pixels. */
 

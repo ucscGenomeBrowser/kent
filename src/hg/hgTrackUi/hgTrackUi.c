@@ -31,7 +31,7 @@
 
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.382 2007/07/24 00:03:53 heather Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.383 2007/07/26 19:46:15 kate Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1961,7 +1961,6 @@ if (isNotEmpty(button))
         {
         safef(option, sizeof(option), "%s.%s", 
                 tdb->tableName, speciesName->name);
-        fprintf(stderr, "option %s\n", option);
         cartSetBoolean(cart, option, TRUE);
         }
     }
@@ -1984,7 +1983,6 @@ if (isNotEmpty(button))
         {
         safef(option, sizeof(option), "%s.%s", 
                 tdb->tableName, speciesName->name);
-        fprintf(stderr, "option %s\n", option);
         cartSetBoolean(cart, option, FALSE);
         }
     }
@@ -2496,19 +2494,6 @@ puts("</P>\n");
 printf("<P><B>Select subtracks to display:</B></P>\n");
 }
 
-void superTrackVis(struct trackDb *superTdb)
-/* Determine if any tracks in supertrack are visible, and set 
- * supertrack tdb accordingly */
-{
-struct trackDb *tdb;
-for (tdb = superTdb->subtracks; tdb != NULL; tdb = tdb->next)
-    {
-    if (sameString("hide", cartUsualString(cart, tdb->tableName, "hide")))
-        continue;
-    superTdb->visibility = tvDense;
-    }
-}
-
 void superTrackUi(struct trackDb *superTdb)
 /* List tracks in this collection, with visibility controls and UI links */
 {
@@ -2522,8 +2507,9 @@ for (tdb = superTdb->subtracks; tdb != NULL; tdb = tdb->next)
                 chromosome, cgiEncode(tdb->tableName), tdb->shortLabel);
     printf("<TD>");
     char *onlyVisibility = trackDbSetting(tdb, "onlyVisibility");
-    enum trackVisibility tv = hTvFromString(
-                                cartUsualString(cart,tdb->tableName, "hide"));
+    enum trackVisibility tv = 
+                    hTvFromString(cartUsualString(cart,tdb->tableName, 
+                                            hStringFromTv(tdb->visibility)));
     hTvDropDownClassVisOnly(tdb->tableName, tv, tdb->canPack, 
                                 tv == tvHide ?  "hiddenText" : "normalText", 
                                 onlyVisibility );
@@ -2757,24 +2743,25 @@ printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=%s>\n\n",
 cartSaveSession(cart);
 printf("<H1>%s</H1>\n", tdb->longLabel);
 
-/* handle visibility controls for supertrack */
+struct superTrackInfo *st = getSuperTrackInfo(tdb);
+if (st && !st->isParent)
+    {
+    /* print link for parent */
+    char *encodedMapName = cgiEncode(st->parentName);
+    printf("<H3>Configured with: <A HREF=\"%s?%s=%u&c=%s&g=%s\">%s</A></H3>", hgTrackUiName(),
+        cartSessionVarName(), cartSessionId(cart),
+        chromosome, encodedMapName, tdb->shortLabel);
+    freeMem(encodedMapName);
+    }
+
 printf("<B>Display&nbsp;mode:&nbsp;</B>");
-char *setting = trackDbSetting(tdb, "superTrack");
-if ((setting && differentString(setting, "on")) || !setting)
+
+if (!superTrackDropDown(cart, tdb, -1))
     {
     /* normal visibility control dropdown */
     hTvDropDownClassVisOnly(tdb->tableName,
         hTvFromString(cartUsualString(cart,tdb->tableName, vis)),
         tdb->canPack, "normalText", onlyVisibility );
-    }
-else
-    {
-    /* hide/show dropdown for supertrack */
-    superTrackVis(tdb);
-    boolean show = sameString("show",
-                        cartUsualString(cart, tdb->tableName, "show"));
-    hideShowDropDown(tdb->tableName, show, 
-            show && (tdb->visibility != tvHide) ? "normalText": "hiddenText");
     }
 printf("&nbsp;");
 cgiMakeButton("Submit", "Submit");
@@ -2840,7 +2827,6 @@ else
             printf("<B>Data coordinates converted via <A TARGET=_BLANK HREF=\"../goldenPath/help/hgTracksHelp.html#Liftover\">liftOver</A> from:</B> %s (%s)<BR>\n", freeze, origAssembly);
             }
         }
-
     if (hTableOrSplitExists(tdb->tableName))
         {
         /* Print update time of the table (or one of the components if split) */
@@ -2853,7 +2839,6 @@ else
 	}
 
     }
-
 if (tdb->html != NULL && tdb->html[0] != 0)
     {
     htmlHorizontalLine();

@@ -49,6 +49,22 @@ struct trackDb
                                    later for arbitrary hierarchies */
     };
 
+struct superTrackInfo
+/* Describes attributes of supertrack (parent) or a supertrack member (child),
+ * extracted from supertrack setting */
+    {
+    boolean isParent;           /* parent or child */
+    boolean defaultShow;        /* for parent */
+    char *parentName;           /* for child */
+    unsigned char defaultVis;   /* for child */
+    };
+
+struct superTrackInfo *getSuperTrackInfo(struct trackDb *tdb);
+/* Get info from supertrack setting.  There are 2 forms:
+ * Parent:   'supertrack on [show]'
+ * Child:    'supertrack <parent> [vis]
+ * Returns NULL if there is no such setting */
+
 struct trackDb *trackDbLoad(char **row);
 /* Load a trackDb from row fetched with select * from trackDb
  * from database.  Dispose of this with trackDbFree(). */

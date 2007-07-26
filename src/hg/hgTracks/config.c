@@ -227,7 +227,15 @@ for (group = groupList; group != NULL; group = group->next)
 	   message for the user. */
 	if (hTrackOnChrom(track->tdb, chromName))
 	    {
-            if (!hashFindVal(superHash, track->mapName))
+            struct track *parent =
+                (struct track *)hashFindVal(superHash, track->mapName);
+            if (parent)
+                {
+                /* supertrack dropdown is hide/show */
+                superTrackDropDown(cart, parent->tdb, 
+                                superTrackHasVisibleMembers(parent));
+                }
+            else
                 {
                 /* check for option of limiting visibility to one mode */
                 char *onlyVisibility = trackDbSetting(track->tdb, 
@@ -236,20 +244,11 @@ for (group = groupList; group != NULL; group = group->next)
                             track->canPack, (track->visibility == tvHide) ? 
                             "hiddenText" : "normalText", onlyVisibility );
                 }
-            else
-                {
-                /* supertrack dropdown is hide/show */
-                boolean showSuper = sameString("show",
-                                cartUsualString(cart, track->mapName, "show"));
-                hideShowDropDown(track->mapName, showSuper,
-                                 showSuper && (track->visibility != tvHide) ?
-                                            "normalText": "hiddenText");
-                }
 	    }
 	else 
 	    hPrintf("[No data-%s]", chromName);
 	hPrintf("</TD>");
-	hPrintf("<TD>");
+	hPrintf("<TD NOWRAP>");
 	hPrintf("%s", track->longLabel);
 	hPrintf("</TD>");
         if (withPriorityOverride)

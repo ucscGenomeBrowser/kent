@@ -33,8 +33,9 @@
 #include "genbank.h"
 #include "chromInfo.h"
 #include "customTrack.h"
+#include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.325 2007/07/18 22:34:04 kate Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.326 2007/07/26 19:46:15 kate Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -3362,6 +3363,14 @@ if (!trackDbSetting(subtrackTdb, "noInherit"))
     }
 }
 
+static void superTrackMemberVis(struct trackDb *tdb)
+/* Set visibilities for track when it is a member of a supertrack */
+{
+struct superTrackInfo *st = getSuperTrackInfo(tdb);
+if (st && !st->isParent)
+    tdb->visibility = st->defaultVis;
+}
+
 struct trackDb *hTrackDb(char *chrom)
 /* Load tracks associated with current chromosome (which may be NULL for
  * all) */
@@ -3376,20 +3385,19 @@ struct hash *compositeHash = newHash(0);
 struct hash *superHash = newHash(0);
 struct trackDb *tdb, *compositeTdb;
 struct trackDb *nextTdb, *superTdb;
-char *setting;
 
 /* Process list */
 while (tdbList != NULL)
     {
     tdb = slPopHead(&tdbList);
-    if (trackDbSetting(tdb, "compositeTrack"))
+    struct superTrackInfo *st = getSuperTrackInfo(tdb);
+    if (st && st->isParent)
+        hashAdd(superHash, tdb->tableName, tdb);
+    else if (trackDbSetting(tdb, "compositeTrack"))
         {
         slAddHead(&tdbFullList, tdb);
         hashAdd(compositeHash, tdb->tableName, tdb);
         }
-    else if ((setting = trackDbSetting(tdb, "superTrack")) != NULL &&
-             sameString(setting, "on"))
-                    hashAdd(superHash, tdb->tableName, tdb);
     else
         processTrackDb(database, tdb, chrom, privateHost, &tdbFullList);
     }
@@ -3434,14 +3442,18 @@ for (nextTdb = tdb = tdbSubtrackedList; nextTdb != NULL; tdb = nextTdb)
 hFreeConn(&conn);
 slSort(&tdbRetList, trackDbCmp);
 
-/* Add pointers to parent (super) track */
+/* Add pointers to parent (super) track, and set supertrack-specific vis */
 for (tdb = tdbRetList; tdb != NULL; tdb = tdb->next)
     {
-    if ((setting = trackDbSetting(tdb, "superTrack")) != NULL)
+    struct superTrackInfo *st = getSuperTrackInfo(tdb);
+    if (st && !st->isParent)
         {
-        if ((superTdb = 
-            (struct trackDb *)hashFindVal(superHash, setting)) != NULL)
-                tdb->parent = superTdb;
+        superTdb = (struct trackDb *)hashFindVal(superHash, st->parentName);
+        if (superTdb)
+            {
+            superTrackMemberVis(tdb);
+            tdb->parent = superTdb;
+            }
         }
     }
 return tdbRetList;
@@ -3464,7 +3476,6 @@ static struct trackDb *loadTrackDbForTrack(struct sqlConnection *conn,
 {
 struct trackDb *trackTdb = NULL;
 char where[256];
-char *setting;
 
 safef(where, sizeof(where), "tableName = '%s'", track);
 trackTdb = loadAndLookupTrackDb(conn, where);
@@ -3476,7 +3487,7 @@ if (trackTdb != NULL && trackDbSetting(trackTdb, "compositeTrack"))
      * some other track with the same root name. */
     struct trackDb *subTdbList = NULL, *tdb = NULL;
     safef(where, sizeof(where),
-	  "settings rlike '^(.*\n)?subTrack %s([ \t\n].*)?$'",
+	  "settings rlike '[ \t\n]?subTrack %s[ \t\n]?'",
 	  track);
     subTdbList = loadAndLookupTrackDb(conn, where);
     for (tdb = subTdbList; tdb != NULL; tdb = tdb->next)
@@ -3494,16 +3505,28 @@ else if (trackTdb != NULL && trackDbSetting(trackTdb, "subTrack"))
 	subtrackInherit(trackTdb, cTdb);
     freez(&subTrackSetting);
     }
-else if (trackTdb != NULL && 
-    (setting = trackDbSetting(trackTdb, "superTrack")) &&
-    sameString(setting, "on"))
+struct superTrackInfo *st;
+if (trackTdb != NULL && (st = getSuperTrackInfo(trackTdb)) != NULL)
     {
-    struct trackDb *superTrackMembers = NULL;
-    safef(where, sizeof(where),
-      "settings rlike '^(.*\n)?superTrack %s([ \t\n].*)?$' order by priority desc",
-	  track);
-    superTrackMembers = loadAndLookupTrackDb(conn, where);
-    trackTdb->subtracks = superTrackMembers;
+    if (st->isParent)
+        {
+        /* gather all tracks in the super track */
+        struct trackDb *superTrackMembers = NULL;
+        struct trackDb *cTdb = NULL;
+        safef(where, sizeof(where),
+	  "settings rlike '[ \t\n]?superTrack %s[ \t\n]?' order by priority desc",
+              track);
+
+        superTrackMembers = loadAndLookupTrackDb(conn, where);
+        for (cTdb = superTrackMembers; cTdb != NULL; cTdb = cTdb->next)
+            superTrackMemberVis(cTdb);
+        trackTdb->subtracks = superTrackMembers;
+        }
+    else 
+        {
+        /* member of supertrack */
+        superTrackMemberVis(trackTdb);
+        }
     }
 return trackTdb;
 }
