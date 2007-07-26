@@ -155,5 +155,10 @@ char *trackDbInclude(char *raFile, char *line);
 /* Get include filename from trackDb line.  
    Return NULL if line doesn't contain #include */
 
+void trackDbMakeComposites(struct trackDb **pTdbList);
+/* Within a list of trackDbs, force the trackDbs that are subTracks to */
+/* inherit the settings of the main track, and also create a list of */
+/* subTracks for the tdb->subTracks pointer. */
+
 #endif /* TRACKDB_H */
 
