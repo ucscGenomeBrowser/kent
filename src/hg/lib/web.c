@@ -13,7 +13,7 @@
 #include "hgColors.h"
 #include "wikiLink.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.133 2007/07/17 00:07:05 angie Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.134 2007/07/26 21:53:38 angie Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -991,6 +991,8 @@ if (oldVars)
 	cartRemove(cart, "hgta_nextCorrelateOp");
 	cartRemove(cart, "hgta_corrWinSize");
 	cartRemove(cart, "hgta_corrMaxLimitCount");
+	/* hgNear search term: */
+	cartRemove(cart, "near_search");
 	}
     }
 

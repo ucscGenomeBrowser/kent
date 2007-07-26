@@ -20,7 +20,7 @@
 #include "hgNear.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.169 2007/07/13 22:56:44 angie Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.170 2007/07/26 21:53:39 angie Exp $";
 
 char *excludeVars[] = { "submit", "Submit", idPosVarName, NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -1863,14 +1863,10 @@ void doMiddle(struct cart *theCart)
 char *var = NULL;
 struct sqlConnection *conn;
 struct column *colList, *col;
-char *oldDb;
 cart = theCart;
 
 getDbAndGenome(cart, &database, &genome, oldVars);
 makeSureDbHasHgNear();
-oldDb = cartOptionalString(cart, oldDbVarName);
-if (isNotEmpty(oldDb) && !sameString(oldDb, database))
-   cartRemove(cart, searchVarName);
 hSetDb(database);
 getGenomeSettings();
 conn = hAllocConn();
@@ -1961,7 +1957,6 @@ else if (gotAdvFilter())
 else
     doExamples(conn, colList);
 hFreeConn(&conn);
-cartSetString(cart, oldDbVarName, database);
 cartRemovePrefix(cart, "near.do.");
 }
 
