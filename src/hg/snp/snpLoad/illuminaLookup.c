@@ -11,7 +11,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: illuminaLookup.c,v 1.6 2007/07/24 21:31:59 heather Exp $";
+static char const rcsid[] = "$Id: illuminaLookup.c,v 1.7 2007/07/27 00:59:26 heather Exp $";
 
 struct snpSubset 
     {
@@ -22,7 +22,6 @@ struct snpSubset
     char *observed;
     char *class;
     char *locType;
-    char *func;
     };
 
 void usage()
@@ -75,7 +74,7 @@ struct hashEl *hel = NULL;
 verbose(1, "creating SNP hash...\n");
 ret = newHash(16);
 safef(query, sizeof(query), 
-      "select name, chrom, chromStart, chromEnd, strand, observed, class, locType, func from %s", 
+      "select name, chrom, chromStart, chromEnd, strand, observed, class, locType from %s", 
       tableName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -94,7 +93,6 @@ while ((row = sqlNextRow(sr)) != NULL)
     subsetElement->observed = cloneString(row[5]);
     subsetElement->class = cloneString(row[6]);
     subsetElement->locType = cloneString(row[7]);
-    subsetElement->func = cloneString(row[8]);
     hashAdd(ret, cloneString(row[0]), subsetElement);
     }
 sqlFreeResult(&sr);
