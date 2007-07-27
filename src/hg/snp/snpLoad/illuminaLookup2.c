@@ -11,7 +11,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: illuminaLookup2.c,v 1.1 2007/07/26 23:55:25 heather Exp $";
+static char const rcsid[] = "$Id: illuminaLookup2.c,v 1.2 2007/07/27 00:24:33 uid2578 Exp $";
 
 struct snpSubset 
     {
@@ -195,13 +195,13 @@ while ((row = sqlNextRow(sr)) != NULL)
 
     if (!sameString(subsetElement->class, "single"))
         {
-	fprintf(errors, "unexpected class %s for snp %s\n", subsetElement->class, row[0]);
+	fprintf(errors, "unexpected class %s for snp %s\n", subsetElement->class, rsID);
 	continue;
 	}
 
     if (!sameString(subsetElement->locType, "exact"))
         {
-	fprintf(errors, "unexpected locType %s for snp %s\n", subsetElement->locType, row[0]);
+	fprintf(errors, "unexpected locType %s for snp %s\n", subsetElement->locType, rsID);
 	continue;
 	}
 
