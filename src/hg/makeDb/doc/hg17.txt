@@ -23879,3 +23879,16 @@ done
     hgLoadBed hg17 stanfordNRSFEnriched fix.bed -tab
     hgLoadBed hg17 stanfordNRSFControl control_fix.bed -tab
 
+############################################################################
+# Stanford ChIP/chip
+# Submitted 2007-07-11 by David Johnson (seasquirtdoctor@gmail.com)
+# Replaces submission from 2007-03-23
+# 12 subtracks
+# genome-wide, but funded by ENCODE, hence the location of the data
+
+    ssh hgwdev
+    cd /cluster/data/encode/stanford/2007-07-11/lab
+    # Dave gave us bed 5, we need bed 4
+    ./shrink.sh
+    ./load.sh
+

@@ -4249,18 +4249,6 @@ cp rnaz_track.html \
 
 
 ############################################################################
-# Stanford ChIP/chip
-# Submitted 2007-07-11 by David Johnson (seasquirtdoctor@gmail.com)
-# Replaces submission from 2007-03-23
-# 12 subtracks
-
-    ssh hgwdev
-    cd /cluster/data/encode/stanford/2007-07-11/lab
-    # Dave gave us bed 5, we need bed 4
-    ./shrink.sh
-    ./load.sh
-
-############################################################################
 # Gencode Loci RACEfrags - 5' RACE-ARRAY experiments on Gencode loci
 # Submitted on 2007-04-11 by France Denoeud: fdenoeud@genoscope.cns.fr
 # of the Gencode group.
