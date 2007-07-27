@@ -11432,6 +11432,71 @@ gzip illumina.bed
     # These are in snp127
     # Mixed: 55 in 300, 74 in 550, 81 in 650
 
+    # Found 2 strange things here: 
+    # First of all, for snps that are illumina forward strand, dbSNP reverse strand:
+    # in all cases, the observed polymorphism is identical.
+    # Counts:
+    # 36k on the HumanHap300v3 
+    # 52k on the HumanHap550v3 
+    # 59k on the HumanHap650v3
+    # This surprises me, because the dbSNP observation is intended to be reverse-complemented.  
+    # Examples from HumanHap300v3 include rs1000007, rs1000031, rs1000041, rs1000071, rs1000078.
+    # Secondly, for snps that are illumina reverse strand:
+
+    # in all cases is that your observed polymorphism is the reverse complement of the dbSNP polymorphism.   
+    # this could only make sense for the dbSNP forward strand OR the dbSNP reverse strand, although I don't think it matters which one.
+
+    # examples:
+
+    # rs3934834: illumina A/G (-), dbSNP C/T (+)
+    # rs6687776: illumina A/G (-), dbSNP C/T (+)
+    # rs2298217: illumina A/G (-), dbSNP C/T (+)
+    # rs9442380: illumina A/G (-), dbSNP C/T (+)
+    # rs3737728: illumina A/G (-), dbSNP C/T (-)
+    # rs3813199: illumina A/G (-), dbSNP C/T (-)
+    # rs880051: illumina A/G (-), dbSNP C/T (-)
+
+    # rs12562034: illumina C/T (-), dbSNP A/G (+)
+    # rs9442372: illumina C/T (-), dbSNP A/G (+)
+    # rs11260588: illumina C/T (-), dbSNP A/G (+)
+    # rs12726255: illumina C/T (-), dbSNP A/G (+)
+    # rs2887286: illumina C/T (-), dbSNP A/G (-)
+    # rs2649588: illumina C/T (-), dbSNP A/G (-)
+    # rs2296716: illumina C/T (-), dbSNP A/G (-)
+    # rs2474460: illumina C/T (-), dbSNP A/G (-)
+
+    # redo this, just using name/chrom/pos from illumina
+    bed2.pl < 300.in > 300.bed.2
+    hgLoadBed hg18 snpArrayIllumina300Prelim 300.bed.2 -tab
+    /cluster/home/heather/kent/src/hg/snp/snpLoad/illuminaLookup2 hg18 snpArrayIllumina300Prelim snp126 snp126Exceptions
+    mv illuminaLookup.out lookup.300
+    mv illuminaLookup.err lookup.300.err
+    hgLoadBed hg18 snpArrayIllumina300 lookup.300 -tab -sqlTable=snpArrayIllumina300.sql
+
+    bed2.pl < 550.in > 550.bed.2
+    hgLoadBed hg18 snpArrayIllumina550Prelim 550.bed.2 -tab
+    /cluster/home/heather/kent/src/hg/snp/snpLoad/illuminaLookup2 hg18 snpArrayIllumina550Prelim snp126 snp126Exceptions
+    mv illuminaLookup.err lookup.550.err
+    mv illuminaLookup.out lookup.550
+    hgLoadBed hg18 snpArrayIllumina550 lookup.550 -tab -sqlTable=snpArrayIllumina550.sql
+
+    bed2.pl < 650.in > 650.bed.2
+    hgLoadBed hg18 snpArrayIllumina650Prelim 650.bed.2 -tab
+    /cluster/home/heather/kent/src/hg/snp/snpLoad/illuminaLookup2 hg18 snpArrayIllumina650Prelim snp126 snp126Exceptions
+    mv illuminaLookup.out lookup.650
+    mv illuminaLookup.err lookup.650.err
+    hgLoadBed hg18 snpArrayIllumina650 lookup.650 -tab -sqlTable=snpArrayIllumina650.sql
+
+    # add indices
+    mysql> alter table snpArrayIllumina300 add index name (name);
+    mysql> alter table snpArrayIllumina300 add index chrom (chrom, bin);
+    mysql> alter table snpArrayIllumina550 add index name (name);
+    mysql> alter table snpArrayIllumina550 add index chrom (chrom, bin);
+    mysql> alter table snpArrayIllumina650 add index name (name);
+    mysql> alter table snpArrayIllumina650 add index chrom (chrom, bin);
+
+
+
 ##########################################################################
 # Added gvPos table for Locus Variants (Belinda Giardine Sept 2006)
 # This uses the gv* tables in hgFixed for the related data.  The track has
