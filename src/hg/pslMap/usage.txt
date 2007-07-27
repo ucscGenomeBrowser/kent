@@ -47,7 +47,7 @@ Options:
        This is from the start of the query in the positive
        direction.
      o qEndTrunc - similary for qEnd
-  - simplifyMappingIds - simplifying mapping ids (inPsl target
-    name and mapFile query name) before matching them. This
-    first drops everything after the last `-', and then drops
-    everything after the last remaining `.'.
+  -simplifyMappingIds - simplifying mapping ids (inPsl target
+   name and mapFile query name) before matching them. This
+   first drops everything after the last `-', and then drops
+   everything after the last remaining `.'.
