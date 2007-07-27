@@ -70,6 +70,13 @@ negQChain: mkdirs
 	pslCheck -verbose=0 output/$@.psl
 	diff -u expected/$@.psl output/$@.psl
 
+# retro/parent alignment through mRNA, with -simplifyMappingIds
+retroParent: mkdirs
+	${pslMap} -simplifyMappingIds -swapIn -mapInfo=output/$@.mapinfo input/retro.psl input/parent.psl output/$@.psl
+	pslCheck -verbose=0 output/$@.psl
+	diff -u expected/$@.psl output/$@.psl
+	diff -u expected/$@.mapinfo output/$@.mapinfo
+
 clean::
 	rm -rf output
 

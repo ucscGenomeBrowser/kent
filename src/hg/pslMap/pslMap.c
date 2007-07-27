@@ -6,11 +6,12 @@
 #include "linefile.h"
 #include "binRange.h"
 #include "chromBins.h"
+#include "dystring.h"
 #include "psl.h"
 #include "dnautil.h"
 #include "chain.h"
 
-static char const rcsid[] = "$Id: pslMap.c,v 1.15 2006/07/15 00:55:23 markd Exp $";
+static char const rcsid[] = "$Id: pslMap.c,v 1.16 2007/07/27 05:26:19 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -18,7 +19,9 @@ static struct optionSpec optionSpecs[] = {
     {"keepTranslated", OPTION_BOOLEAN},
     {"chainMapFile", OPTION_BOOLEAN},
     {"swapMap", OPTION_BOOLEAN},
+    {"swapIn", OPTION_BOOLEAN},
     {"mapInfo", OPTION_STRING},
+    {"simplifyMappingIds", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
@@ -27,6 +30,8 @@ static char* suffix = NULL;
 static unsigned mapOpts = pslTransMapNoOpts;
 static boolean chainMapFile = FALSE;
 static boolean swapMap = FALSE;
+static boolean swapIn = FALSE;
+static boolean simplifyMappingIds = FALSE;
 static char* mapInfoFile = NULL;
 
 static char *mapInfoHdr =
@@ -66,6 +71,27 @@ AllocVar(mapAln);
 mapAln->psl = psl;
 mapAln->id = id;
 return mapAln;
+}
+
+static char *getMappingId(char *id, struct dyString **idBufPtr)
+/* get the mapping id, optionally simplified.  idBuf will be
+ * allocated if NULL and is used to store the result */
+{
+if (!simplifyMappingIds)
+    return id;
+if (*idBufPtr == NULL)
+    *idBufPtr = dyStringNew(128);
+struct dyString *idBuf = *idBufPtr;
+dyStringClear(idBuf);
+dyStringAppend(idBuf, id);
+char *p = strrchr(idBuf->string, '-');
+if (p != NULL)
+    *p = '\0';
+p = strrchr(idBuf->string, '.');
+if (p != NULL)
+    *p = '\0';
+idBuf->stringSize = strlen(idBuf->string);
+return idBuf->string;
 }
 
 static struct mapAln *chainToPsl(struct chain *ch)
@@ -117,6 +143,7 @@ static struct chromBins* loadMapPsls(char *pslFile)
 /* read a psl file and chromBins by query, linking multiple PSLs for the
  * same query.*/
 {
+struct dyString* idBuf = NULL;
 struct chromBins* mapAlns = chromBinsNew((chromBinsFreeFunc*)pslFree);
 int id = 0;
 struct psl* psl;
@@ -125,10 +152,12 @@ while ((psl = pslNext(pslLf)) != NULL)
     {
     if (swapMap)
         pslSwap(psl, FALSE);
-    chromBinsAdd(mapAlns, psl->qName, psl->qStart, psl->qEnd, mapAlnNew(psl, id));
+    chromBinsAdd(mapAlns, getMappingId(psl->qName, &idBuf), psl->qStart, psl->qEnd,
+                 mapAlnNew(psl, id));
     id++;
     }
 lineFileClose(&pslLf);
+dyStringFree(&idBuf);
 return mapAlns;
 }
 
@@ -209,7 +238,9 @@ static void mapQueryPsl(struct psl* inPsl, struct chromBins *mapAlns,
                         FILE* outPslFh, FILE *mapInfoFh)
 /* map a query psl to all targets  */
 {
-struct binElement *overMapAlns = chromBinsFind(mapAlns, inPsl->tName, inPsl->tStart, inPsl->tEnd);
+static struct dyString *idBuf = NULL;
+struct binElement *overMapAlns
+    = chromBinsFind(mapAlns, getMappingId(inPsl->tName, &idBuf), inPsl->tStart, inPsl->tEnd);
 struct binElement *overMapAln;
 for (overMapAln = overMapAlns; overMapAln != NULL; overMapAln = overMapAln->next)
     mapPslPair(inPsl, (struct mapAln *)overMapAln->val, outPslFh, mapInfoFh);
@@ -217,7 +248,7 @@ slFreeList(&overMapAlns);
 }
 
 static void pslMap(char* inPslFile, char *mapFile, char *outPslFile)
-/* map SNPs to proteins */
+/* project inPsl query through mapFile query to mapFile target */
 {
 struct chromBins *mapAlns;
 struct psl* inPsl;
@@ -237,6 +268,8 @@ if (mapInfoFile != NULL)
     }
 while ((inPsl = pslNext(inPslLf)) != NULL)
     {
+    if (swapIn)
+        pslSwap(inPsl, FALSE);
     mapQueryPsl(inPsl, mapAlns, outPslFh, mapInfoFh);
     pslFree(&inPsl);
     }
@@ -256,6 +289,8 @@ if (optionExists("keepTranslated"))
     mapOpts |= pslTransMapKeepTrans;
 chainMapFile = optionExists("chainMapFile");
 swapMap = optionExists("swapMap");
+swapIn = optionExists("swapIn");
+simplifyMappingIds = optionExists("simplifyMappingIds");
 mapInfoFile = optionVal("mapInfo", NULL);
 pslMap(argv[1], argv[2], argv[3]);
 
