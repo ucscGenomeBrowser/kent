@@ -970,6 +970,9 @@ void collapseGroupGoodies(boolean isOpen, boolean wantSmallImage,
 struct bed *loadGvAsBed (struct track *tg, char *chr, int start, int end);
 /* load gv* with filters, for a range, as a bed list (for next item button) */
 
+struct bed* loadOregannoAsBed (struct track *tg, char *chr, int start, int end);
+/* load oreganno with filters, for a range, as a bed list (for next item button) */
+
 void parseSs(char *ss, char **retPsl, char **retFa);
 /* Parse out ss variable into components. */
 

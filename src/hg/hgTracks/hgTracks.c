@@ -117,7 +117,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1378 2007/07/27 18:02:49 galt Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1379 2007/07/27 20:09:45 giardine Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -1083,6 +1083,8 @@ for ( ; sizeWanted > 0 && sizeWanted < BIGNUM; )
 	items = wikiTrackGetBedRange(tg->mapName, chromName, start, end);
     else if (sameWord(tg->mapName, "gvPos"))
 	items = loadGvAsBed(tg, chromName, start, end);
+    else if (sameWord(tg->mapName, "oreganno"))
+        items = loadOregannoAsBed(tg, chromName, start, end);
     else
 	items = hGetBedRange(tg->mapName, chromName, start, end, NULL);
     /* If we got something, or weren't able to search as big as we wanted to */
@@ -11709,6 +11711,36 @@ tg->items = list;
 hFreeConn(&conn);
 }
 
+struct bed* loadOregannoAsBed (struct track *tg, char *chr, int start, int end)
+/* load oreganno with filters, for a range, as a bed list (for next item button) */
+{
+char *chromNameCopy = cloneString(chromName);
+int winStartCopy = winStart;
+int winEndCopy = winEnd;
+struct oreganno *el = NULL;
+struct bed *bed, *list = NULL;
+/* set globals and use loadOreganno */
+chromName = chr;
+winStart = start;
+winEnd = end;
+loadOreganno(tg);
+/* now walk through tg->items creating the bed list */
+for (el = tg->items; el != NULL; el = el->next)
+    {
+    AllocVar(bed);
+    bed->chromStart = el->chromStart;
+    bed->chromEnd = el->chromEnd;
+    bed->chrom = cloneString(el->chrom);
+    bed->name = cloneString(el->id);
+    slAddHead(&list, bed);
+    }
+/* reset globals */
+chromName = chromNameCopy;
+winStart = winStartCopy;
+winEnd = winEndCopy;
+return list;
+}
+
 char *gvName(struct track *tg, void *item)
 /* Get name to use for gv item. */
 {
@@ -11739,6 +11771,8 @@ void oregannoMethods (struct track *tg)
 /* load so can allow filtering on type */
 {
 tg->loadItems = loadOreganno;
+tg->labelNextItemButtonable = TRUE;
+tg->labelNextPrevItem = linkedFeaturesLabelNextPrevItem;
 }
 
 void omiciaMethods (struct track *tg)
