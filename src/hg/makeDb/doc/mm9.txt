@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.10 2007/07/27 23:32:08 hiram Exp $"
+#	"$Id: mm9.txt,v 1.11 2007/07/27 23:55:18 angie Exp $"
 #
 
 #######################################################################
@@ -705,6 +705,96 @@ mm9.mgcTables.mgc = all
 # Error writing 50 bytes: Operation not permitted
     ## remove the "nice" statements from the csh, and finish it off
     ## edit the README files to indicate correct information
+
+
+##########################################################################
+# MGI LIFTOVER FROM MM8 (DONE 2007-07-26 angie)
+    ssh kolossus
+    mkdir /cluster/data/mm9/bed/jaxLiftOver
+    cd /cluster/data/mm9/bed/jaxLiftOver
+    ldHgGene -out=stdout -nobin placeholder placeholder \
+      /cluster/data/mm8/bed/jax/2007_07/jaxRepTranscript.gff \
+    | liftOver stdin -minBlocks=0.5 \
+      /cluster/data/mm8/bed/liftOver/mm8ToMm9.over.chain.gz \
+      -genePred jaxRepTranscriptLift.{gp,unmapped}
+#Read 31587 transcripts in 232925 lines in 1 files
+    wc -l jaxRepTranscriptLift.{gp,unmapped}
+#  31470 jaxRepTranscriptLift.gp
+#    234 jaxRepTranscriptLift.unmapped
+    liftOver -minBlocks=0.5 /cluster/data/mm8/bed/jax/2007_07/jaxAllele.bed \
+      /cluster/data/mm8/bed/liftOver/mm8ToMm9.over.chain.gz \
+      -bedPlus=12 jaxAlleleLift.{bed,unmapped}
+    wc -l jaxAlleleLift.{bed,unmapped}
+#  12372 jaxAlleleLift.bed
+#      2 jaxAlleleLift.unmapped
+    liftOver -minBlocks=0.5 /cluster/data/mm8/bed/jax/2007_07/jaxPhenotype.bed \
+      /cluster/data/mm8/bed/liftOver/mm8ToMm9.over.chain.gz \
+      -bedPlus=12 -tab jaxPhenotypeLift.{bed,unmapped}
+    wc -l jaxPhenotypeLift.{bed,unmapped}
+#  23806 jaxPhenotypeLift.bed
+#      0 jaxPhenotypeLift.unmapped
+    liftOver -minBlocks=0.5 /cluster/data/mm8/bed/jax/2007_07/jaxQtl.bed \
+      /cluster/data/mm8/bed/liftOver/mm8ToMm9.over.chain.gz \
+      -bedPlus=6 -tab jaxQtlLift.{bed,unmapped}
+    wc -l jaxQtlLift.{bed,unmapped}
+#  1539 jaxQtlLift.bed
+#    12 jaxQtlLift.unmapped
+
+    # Load lifted track tables and original auxiliary tables:
+    ssh hgwdev
+    cd /cluster/data/mm8/bed/jaxLiftOver
+    # jaxRepTranscriptLift
+    ldHgGene -predTab mm9 jaxRepTranscriptLift jaxRepTranscriptLift.gp
+#31470 gene predictions
+    sed -e 's/jaxRepTranscript/jaxRepTranscriptLift/g' \
+      /cluster/data/mm8/bed/jax/2007_07/fixJaxRepTranscript.sql \
+      > fixJaxRepTranscriptLift.sql
+    hgsql mm9 < fixJaxRepTranscriptLift.sql
+    hgLoadSqlTab mm9 jaxRepTranscriptAlias \
+      /cluster/data/mm8/bed/jax/2007_07/jaxRepTranscriptAlias.sql \
+      /cluster/data/mm8/bed/jax/2007_07/jaxRepTranscriptAlias.tab
+    hgsql mm9 -e 'rename table jaxRepTranscriptAlias to jaxRepTranscriptLiftAlias;'
+    # jaxAlleleLift
+    sed -e 's/bed12Source/jaxAlleleLift/g' \
+      $HOME/kent/src/hg/lib/bed12Source.sql > jaxAlleleLift.sql
+    hgLoadBed -sqlTable=jaxAlleleLift.sql mm9 jaxAlleleLift jaxAlleleLift.bed
+#Loaded 12372 elements of size 13
+    sed -e 's/jaxAllele/jaxAlleleLift/g' \
+      /cluster/data/mm8/bed/jax/2007_07/fixJaxAllele.sql > fixJaxAlleleLift.sql
+    # empty file, but just in case it has something in the future...
+    hgsql mm9 < fixJaxAlleleLift.sql
+    hgLoadSqlTab mm9 jaxAlleleInfo \
+      ~/kent/src/hg/lib/jaxAlleleInfo.sql \
+      /cluster/data/mm8/bed/jax/2007_07/jaxAlleleInfo.tab
+    # jaxPhenotypeLift
+    sed -e 's/bed12Source/jaxPhenotypeLift/g' \
+      ~/kent/src/hg/lib/bed12Source.sql > jaxPhenotypeLift.sql
+    hgLoadBed -tab -sqlTable=jaxPhenotypeLift.sql mm9 jaxPhenotypeLift \
+      jaxPhenotypeLift.bed
+#Loaded 23806 elements of size 13
+    sed -e 's/jaxPhenotype/jaxPhenotypeLift/g' \
+      /cluster/data/mm8/bed/jax/2007_07/fixJaxPhenotype.sql \
+      > fixJaxPhenotypeLift.sql
+    # empty file, but just in case it has something in the future...
+    hgsql mm9 < fixJaxPhenotypeLift.sql
+    hgLoadSqlTab mm9 jaxPhenotypeAlias \
+      /cluster/data/mm8/bed/jax/2007_07/jaxPhenotypeAlias.sql \
+      /cluster/data/mm8/bed/jax/2007_07/jaxPhenotypeAlias.tab
+    hgsql mm9 -e 'rename table jaxPhenotypeAlias to jaxPhenotypeLiftAlias;'
+    # phenotype-allele relationships
+    hgLoadSqlTab mm9 jaxAllelePheno \
+      ~/kent/src/hg/lib/jaxAllelePheno.sql \
+      /cluster/data/mm8/bed/jax/2007_07/jaxAllelePheno.tab
+    # jaxQTLLift
+    sed -e 's/jaxQTL/jaxQTLLift/g'\
+      ~/kent/src/hg/lib/jaxQTL.sql  > jaxQTLLift.sql
+    hgLoadBed -tab -notItemRgb -noBin \
+      -sqlTable=jaxQTLLift.sql \
+      mm9 jaxQTLLift jaxQtlLift.bed
+#Loaded 1539 elements of size 10
+    # Add row to mm9.grp for Phenotype and Allele track group:
+    hgsql mm9 -e 'insert into grp values("phenoAllele", "Phenotype and Allele", 4.5);'
+
 
 ##########################################################################
 ## Creating pushQ (DONE - 2007-07-26 - Hiram)
