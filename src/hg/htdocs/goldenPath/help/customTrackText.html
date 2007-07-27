@@ -595,6 +595,12 @@ Genome Browser:</P>
 	If <em>group</em> is not set, the <em>priority</em> attribute defines
 	the track's order relative to other custom tracks displayed in the 
 	default group, &quot;user&quot;.
+	<LI><B>db=<<I>UCSC_assembly_name</I>></B> - When set, indicates the
+	specific genome assembly for which the annotation data is intended;
+	the custom track manager will display an error if a user attempts to 
+	load the track onto a different assembly. Any valid UCSC assembly ID 
+	may be used (<em>eg.</em> hg18, mm8, felCat1, etc.). The default setting
+	is blank, allowing the custom track to be displayed on any assembly. 
 	<LI><B>offset=<<I>offset</I>></B> - Defines a number to be added
 	to all coordinates in the annotation track. The default is &quot;0&quot;.
 	<LI><B>url=<<I>external_url</I>></B> - Defines a URL for an
