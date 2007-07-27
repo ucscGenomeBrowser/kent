@@ -86,7 +86,7 @@
 #include "memalloc.h"
 #include "rnaHybridization.h"
 
-static char const rcsid[] = "$Id: lowelab.c,v 1.22 2007/07/21 03:42:04 pchan Exp $";
+static char const rcsid[] = "$Id: lowelab.c,v 1.23 2007/07/27 21:26:11 mhoechsm Exp $";
 
 extern char *uniprotFormat;
 
@@ -2367,7 +2367,7 @@ void doWiki(char *track, struct trackDb *tdb, char *itemName)
 {
   char strand[2];
   char wikiea[] = "wikiea";
-  char wikibme[] = "wikibme";
+  char wikibme[] = "microbewiki";
   char *wiki;
 
   if(sameWord(track, "wiki"))
@@ -2400,7 +2400,12 @@ void doRNAHybridization(struct trackDb *tdb, char *itemName)
   char **row;
   struct rnaHybridization *rnaHyb;
   char rnaHybridizationTable[] = "rnaHybridization";
-  
+  char tRNATable[] = "tRNAs";
+  char jgiTable[] = "jgiGene"; 
+  char *saveTableName; 
+  int i;
+
+
   cartWebStart(cart, "%s", "RNAHybridization Sites");
   
   if (hTableExists(rnaHybridizationTable))
@@ -2412,9 +2417,67 @@ void doRNAHybridization(struct trackDb *tdb, char *itemName)
 	{
 	  rnaHyb = rnaHybridizationLoad(row);
 
-	  printf("5%s3<br>", rnaHyb->patternSeq);
-	  printf("3%s5", rnaHyb->targetSeq);
-	  printf("<a href=\"http://archdev-mhoechsm.cse.ucsc.edu/cgi-bin/hgTracks\?position=%s:%u-%u&db=%s\" TARGET=_blank> open in browser</a>", rnaHyb->chromTarget, rnaHyb->chromStartTarget, rnaHyb->chromEndTarget, database);
+	  printf("<b>Hybridization Site:</b><br/><br/>");
+	  
+	  /* print hybridization site */
+	  printf("<font face=\"Courier\">");
+	  printf("Pattern 5%s3<br>", rnaHyb->patternSeq);
+
+	  printf("&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp");
+	  for(i=0;i<rnaHyb->matchLength;i++)
+	    printf("|");
+	  printf("<br/>");
+	  
+	  printf("Target&nbsp 3%s5", rnaHyb->targetSeq);
+	  printf("</font><br/><br/>");
+
+
+	  printf("<BR><B>Genomic size: </B> %d nt<BR>\n",rnaHyb->matchLength);
+	  printf("<b>Percentage G-C base-pairs:</b> %d<br/>", (int)(rnaHyb->gcContent * 100));
+
+	  printf("<B>Position:</B> "
+		 "<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
+		 hgTracksPathAndSettings(), database, rnaHyb->chrom, rnaHyb->chromStart+1, rnaHyb->chromEnd);
+	  printf("%s:%d-%d</A><BR>\n", rnaHyb->chrom, rnaHyb->chromStart+1, rnaHyb->chromEnd);
+	  printf("<B>Strand:</B> %s<BR>\n", rnaHyb->strand);
+
+	  printf("<B>Target Position:</B> "
+		 "<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
+		 hgTracksPathAndSettings(), database, rnaHyb->chromTarget, rnaHyb->chromStartTarget+1, rnaHyb->chromEndTarget+1);
+	  printf("%s:%d-%d</A><BR>\n", rnaHyb->chromTarget, rnaHyb->chromStartTarget+1, rnaHyb->chromEndTarget+1);
+	  printf("<B>Target Strand:</B> %s<BR>\n", rnaHyb->strandTarget);
+
+
+	  printf("<br/>");
+
+
+	  if(strlen(rnaHyb->refSeqTarget) > 0)
+	    {
+	      printf("<b>Additional information for target<b><br/>");
+	      printf("<hr/>");
+	      doRefSeq(tdb, rnaHyb->refSeqTarget,"gbProtCodePep","gbProtCodeXra");
+	    }
+	  	  
+	  if(strlen(rnaHyb->JGITarget) > 0)
+	    {
+	      saveTableName = tdb->tableName;
+	      tdb->tableName = jgiTable;
+	      printf("<b>Additional information for target<b><br/>");
+	      printf("<hr/>");
+	      doJgiGene(tdb, rnaHyb->JGITarget);
+	      tdb->tableName = saveTableName;
+	    }
+
+	  if(strlen(rnaHyb->trnaTarget) > 0)
+	    {
+	      saveTableName = tdb->tableName;
+	      tdb->tableName = tRNATable;
+	      printf("<b>Additional information for target<b><br/>");
+	      printf("<hr/>");
+	      doTrnaGenes(tdb, rnaHyb->trnaTarget);
+	      tdb->tableName = saveTableName;
+	    }
+	  
 
 	  freeMem(rnaHyb);
 	}
