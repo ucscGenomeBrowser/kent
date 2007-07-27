@@ -117,7 +117,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1377 2007/07/26 19:46:15 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1378 2007/07/27 18:02:49 galt Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -511,6 +511,7 @@ for (group = groupList; group != NULL; group = group->next)
                     safef(gname, sizeof(gname), "%s.group",track->mapName);
                     cartRemove(cart, gname);
                     track->groupName = cloneString(track->defaultGroupName);
+		    }
                     
                 }
             else if (track->visibility != tvHide || !ifVisible)
