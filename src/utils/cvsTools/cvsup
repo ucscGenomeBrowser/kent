@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/utils/cvsup instead.
 #
-# $Id: cvsup,v 1.1 2007/07/27 18:31:53 angie Exp $
+# $Id: cvsup,v 1.1 2007/07/27 19:08:44 angie Exp $
 
 use warnings;
 use strict;

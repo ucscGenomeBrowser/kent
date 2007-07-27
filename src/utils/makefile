@@ -36,7 +36,6 @@ clean:
 
 SCRIPT_FILES = \
         agpToLift \
-	cvsup \
         iSync \
         lodToBedScore \
 	mkMafFrames.pl
