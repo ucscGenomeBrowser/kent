@@ -20,7 +20,7 @@
 #include "hgNear.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.172 2007/07/27 02:24:02 angie Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.173 2007/07/27 19:31:12 angie Exp $";
 
 char *excludeVars[] = { "submit", "Submit", idPosVarName, NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -1105,7 +1105,6 @@ hPrintf("<SELECT NAME=\"%s\" ", orgVarName);
 hPrintf("onchange='%s'",
   "document.orgForm.org.value=document.mainForm.org.options[document.mainForm.org.selectedIndex].value;"
   "document.orgForm.db.value=0;"
-  "document.orgForm.near_search.value=\"\";"
   "document.orgForm.submit();");
 hPrintf(">\n");
 for (org = orgList; org != NULL; org = org->next)
@@ -1124,7 +1123,6 @@ hPrintf(" assembly ");
 hPrintf("<SELECT NAME=\"%s\" ", dbVarName);
 hPrintf("onchange='%s'",
   "document.orgForm.db.value = document.mainForm.db.options[document.mainForm.db.selectedIndex].value;"
-  "document.orgForm.near_search.value=\"\";"
   "document.orgForm.submit();");
 hPrintf(">\n");
 for (as = asList; as != NULL; as = as->next)
@@ -1687,8 +1685,6 @@ hPrintf("</FORM>\n");
 hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" METHOD=\"GET\" NAME=\"orgForm\">\n");
 hPrintf("<input type=\"hidden\" name=\"org\" value=\"%s\">\n", genome);
 hPrintf("<input type=\"hidden\" name=\"db\" value=\"%s\">\n", database);
-hPrintf("<input type=\"hidden\" name=\"%s\" value=\"%s\">\n", searchVarName,
-	cartUsualString(cart, searchVarName, ""));
 hPrintf("<input type=\"hidden\" name=\"%s\" value=\"%s\">\n", orderVarName,
 	cartUsualString(cart, orderVarName, ""));
 cartSaveSession(cart);
