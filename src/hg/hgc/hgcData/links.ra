@@ -114,6 +114,11 @@ label LQTSdb
 url http://www.ssi.dk/graphics/html/lqtsdb/%s.htm
 acc yes
 
+name RISN
+label RISN Mutation Database
+url http://www.retina-international.org/sci-news/%s
+acc yes
+
 name KinMutBase
 label KinMutBase
 url http://bioinf.uta.fi/cgi-bin/submit/kmb/KMBfetch.cgi?%s
