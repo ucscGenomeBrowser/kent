@@ -11,7 +11,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: illuminaLookup2.c,v 1.3 2007/07/27 02:02:55 heather Exp $";
+static char const rcsid[] = "$Id: illuminaLookup2.c,v 1.4 2007/07/27 02:22:13 heather Exp $";
 
 struct snpSubset 
     {
@@ -140,14 +140,14 @@ while ((row = sqlNextRow(sr)) != NULL)
 
     if (!sameString(subsetElement->chrom, row[0]))
         {
-	fprintf(errors, "unexpected chrom %s for snp %s (skipping)\n", row[0], rsID);
+	fprintf(errors, "mismatch for snp %s (illumina = %s, dbSNP = %s)\n", rsID, row[0], subsetElement->chrom);
 	continue;
 	}
 
     pos = sqlUnsigned(row[1]);
     if (pos != subsetElement->start)
         {
-        fprintf(errors, "unexpected position %d for snp (skipping) %s\n", pos, rsID);
+        fprintf(errors, "mismatch position for snp %s (illumina = %d, dbSNP = %d\n", rsID, pos, subsetElement->start);
 	continue;
 	}
 
