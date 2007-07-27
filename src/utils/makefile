@@ -36,6 +36,7 @@ clean:
 
 SCRIPT_FILES = \
         agpToLift \
+	cvsup \
 	dumpDb.pl \
         iSync \
         lodToBedScore \
