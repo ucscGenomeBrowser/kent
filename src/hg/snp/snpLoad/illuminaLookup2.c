@@ -11,7 +11,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: illuminaLookup2.c,v 1.2 2007/07/27 00:24:33 uid2578 Exp $";
+static char const rcsid[] = "$Id: illuminaLookup2.c,v 1.3 2007/07/27 02:02:55 heather Exp $";
 
 struct snpSubset 
     {
@@ -22,7 +22,6 @@ struct snpSubset
     char *observed;
     char *class;
     char *locType;
-    char *func;
     };
 
 void usage()
@@ -73,7 +72,7 @@ struct hashEl *hel = NULL;
 verbose(1, "creating SNP hash...\n");
 ret = newHash(16);
 safef(query, sizeof(query), 
-      "select name, chrom, chromStart, chromEnd, strand, observed, class, locType, func from %s", 
+      "select name, chrom, chromStart, chromEnd, strand, observed, class, locType from %s", 
       tableName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -89,7 +88,6 @@ while ((row = sqlNextRow(sr)) != NULL)
     subsetElement->observed = cloneString(row[5]);
     subsetElement->class = cloneString(row[6]);
     subsetElement->locType = cloneString(row[7]);
-    subsetElement->func = cloneString(row[8]);
     hashAdd(ret, cloneString(row[0]), subsetElement);
     }
 sqlFreeResult(&sr);
@@ -97,63 +95,11 @@ hFreeConn(&conn);
 return ret;
 }
 
-boolean isTriallelic(char *obs)
-{
-if (sameString(obs, "A/C/G")) return TRUE;
-if (sameString(obs, "A/C/T")) return TRUE;
-if (sameString(obs, "A/G/T")) return TRUE;
-if (sameString(obs, "C/G/T")) return TRUE;
-return FALSE;
-}
-
-boolean isReverseComplement(char *obs1, char *obs2)
-{
-if (sameString(obs1, "A/C"))
-    {
-    if (sameString(obs2, "G/T")) return TRUE;
-    return FALSE;
-    }
-if (sameString(obs1, "A/G"))
-    {
-    if (sameString(obs2, "C/T")) return TRUE;
-    return FALSE;
-    }
-if (sameString(obs1, "C/T"))
-    {
-    if (sameString(obs2, "A/G")) return TRUE;
-    return FALSE;
-    }
-if (sameString(obs1, "G/T"))
-    {
-    if (sameString(obs2, "A/C")) return TRUE;
-    return FALSE;
-    }
-/* shouldn't get here */
-return FALSE;
-}
-
-char *reverseObserved(char *obs)
-{
-if (sameString(obs, "A/C"))
-    return "G/T";
-if (sameString(obs, "A/G"))
-    return "C/T";
-if (sameString(obs, "C/T"))
-    return "A/G";
-if (sameString(obs, "G/T"))
-    return "A/C";
-return obs;
-}
-
-
-
 
 void processSnps(struct hash *snpHash, char *illuminaTable)
 /* read illuminaTable */
 /* lookup details in snpHash */
-/* report if SNP missing */
-/* report if class != single */
-/* report if locType != exact */
+/* report and skip if SNP missing, class != single, locType != exact */
 {
 char query[512];
 struct sqlConnection *conn = hAllocConn();
@@ -180,19 +126,6 @@ while ((row = sqlNextRow(sr)) != NULL)
 	}
     subsetElement = (struct snpSubset *)hel->val;
 
-    if (!sameString(subsetElement->chrom, row[0]))
-        {
-	fprintf(errors, "unexpected chrom %s for snp %s\n", row[0], rsID);
-	continue;
-	}
-
-    pos = sqlUnsigned(row[1]);
-    if (pos != subsetElement->start)
-        {
-        fprintf(errors, "unexpected position %d for snp %s\n", pos, rsID);
-	continue;
-	}
-
     if (!sameString(subsetElement->class, "single"))
         {
 	fprintf(errors, "unexpected class %s for snp %s\n", subsetElement->class, rsID);
@@ -205,7 +138,20 @@ while ((row = sqlNextRow(sr)) != NULL)
 	continue;
 	}
 
-    fprintf(output, "%s\t%s\t%s\t%s0\t%s\t%s\n", row[0], row[1], row[2], row[3], subsetElement->strand, subsetElement->observed);
+    if (!sameString(subsetElement->chrom, row[0]))
+        {
+	fprintf(errors, "unexpected chrom %s for snp %s (skipping)\n", row[0], rsID);
+	continue;
+	}
+
+    pos = sqlUnsigned(row[1]);
+    if (pos != subsetElement->start)
+        {
+        fprintf(errors, "unexpected position %d for snp (skipping) %s\n", pos, rsID);
+	continue;
+	}
+
+    fprintf(output, "%s\t%s\t%s\t%s\t0\t%s\t%s\n", row[0], row[1], row[2], row[3], subsetElement->strand, subsetElement->observed);
 
     }
 
