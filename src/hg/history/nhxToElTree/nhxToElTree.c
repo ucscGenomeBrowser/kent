@@ -8,7 +8,7 @@
 #include "element.h"
 #include "chromColors.h"
 
-static char const rcsid[] = "$Id: nhxToElTree.c,v 1.1 2007/07/21 15:19:47 braney Exp $";
+static char const rcsid[] = "$Id: nhxToElTree.c,v 1.2 2007/07/27 21:49:06 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -22,12 +22,17 @@ errAbort(
   "   species.tree   NH format species tree.\n"
   "   nhx.tree       NHX format reconciled gene tree.\n"
   "   out.eltree     element tree with single element at root\n"
+  "options:\n"
+  "   -prune         prune dead branches\n"
   );
 }
 
 static struct optionSpec options[] = {
+   {"prune", OPTION_BOOLEAN},
    {NULL, 0},
 };
+
+boolean doPrune = FALSE;
 
 struct reconPriv
 {
@@ -50,6 +55,18 @@ double xmaj, ymaj;
 
 #define MAX(a,b)	(((a) > (b)) ? (a) : (b)) 
 
+void checkTree(struct phyloTree *tree)
+{
+if (tree->parent)
+    {
+    if (tree->parent->priv == tree->priv)
+	errAbort("foobar");
+    }
+
+int ii;
+for(ii=0; ii < tree->numEdges; ii++)
+    checkTree(tree->edges[ii]);
+}
 void buildGenomeTree(struct phyloTree *tree, int *lowNumber, 
     struct hash *leafHash, struct slName **childList)
 {
@@ -251,17 +268,19 @@ struct genomePriv *gp = g->priv;
 struct genome *p = parent->priv;
 struct genomePriv *pp = p->priv;
 
-
 if (gp->number < pp->number)
     {
-    if (g->node->parent != p->node)
+    if ((parent->isDup) || (g->node->parent != p->node))
 	{
 	struct phyloTree *t = g->node;
 	struct genome *tg;
 	struct phyloTree *n;
 
-	while(t->parent != p->node)
-	    t = t->parent;
+	if (parent->isDup)
+	    t = parent;
+	else
+	    while(t->parent != p->node)
+		t = t->parent;
 
 	tg = t->priv;
 
@@ -306,50 +325,77 @@ insertLosses(tree);
 
 void assignDups(struct phyloTree *reconNode, struct phyloTree *genomeNode)
 {
-
-printf("looking at %s %s\n",reconNode->ident->name, genomeNode->ident->name);
 struct phyloTree *reconParent = reconNode->parent;
 struct phyloTree *genomeParent = genomeNode->parent;
+//struct genome *genomeGenome = genomeNode->priv;
+
+//printf("assign %p %p\n",reconNode,genomeNode);
+//printf("assign genomeNode->priv %p\n",genomeNode->priv);
+
+{
+//checkTree(genomeNode);
+int ii;
+
+for(ii=0; ii < reconNode->numEdges; ii++)
+    {
+    while (genomeNode->priv == reconNode->edges[ii]->priv)
+	genomeNode = genomeNode->parent;
+
+	//errAbort("goobar");
+    }
+}
 
 reconNode->priv = genomeNode->priv;
+//reconNode->ident->name = genomeGenome->name;
 
 if (reconParent == NULL)
     return;
 
 if (reconParent->isDup)
     {
-    if (!genomeParent->isDup)
+    //if (genomeParent == NULL)
+	//printf("loobar\n");
+    if ((genomeParent == NULL) || (!genomeParent->isDup))
 	{
 	struct phyloTree *t;
 	struct genome *g;
+	static int dupCount = 0;
+	char buffer[1024];
 
-	printf("adding dup\n");
+	safef(buffer, sizeof(buffer), "dup.%d",++dupCount);
 
 	AllocVar(t);
 	AllocVar(g);
-	g->name = cloneString("dup");
+	g->name = cloneString(buffer);
+	g->node = t;
 	t->isDup = TRUE;
 	t->priv = g;
 	AllocVar(t->ident);
 	t->ident->name = g->name;
 
 	t->parent = genomeParent;
-	if (genomeParent->edges[0] == genomeNode)
-	    genomeParent->edges[0] = t;
-	else
-	    genomeParent->edges[1] = t;
 
+	if (genomeParent != NULL)
+	    {
+	    if (genomeParent->edges[0] == genomeNode)
+		genomeParent->edges[0] = t;
+	    else
+		genomeParent->edges[1] = t;
+	    }
+
+	//printf("allocDup\n");
 	phyloAddEdge(t, genomeNode);
+	genomeNode->parent = t;
 	}
     }
 
+//printf("poop\n");
 if (!reconNode->isDup && (reconNode->priv != genomeNode->priv))
     errAbort("species node not matching %s %s",reconNode->ident->name,genomeNode->ident->name);
 
 genomeParent = genomeNode->parent;
 while ((!reconParent->isDup) && (genomeParent->isDup))
     {
-    printf("skipping parents\n");
     genomeParent = genomeParent->parent;
     }
 assignDups(reconNode->parent, genomeParent);
@@ -362,6 +408,7 @@ if (reconTree->numEdges == 0)
     {
     struct genome *g = reconTree->priv;
 
+    //printf("starting up\n");
     assignDups(reconTree, g->node);
     }
 
@@ -374,31 +421,24 @@ for(ii=0; ii < reconTree->numEdges; ii++)
 struct element *addElements(struct phyloTree *reconTree)
 {
 struct genome *g = reconTree->priv;
-printf("adding element to genome %s node %s \n",g->name,reconTree->ident->name);
 char *name = NULL;
+static int fooCount = 0;
 if (reconTree->ident->name)
     name = strchr(reconTree->ident->name, '.');
 if (name != NULL)
     name++;
-printf("adding name %s\n",name);
+else
+    {
+    char buffer[1024];
+
+    safef(buffer, sizeof(buffer), "foo%d",++fooCount);
+    name=cloneString(buffer);
+    }
+
 struct element *element = newElement(g, "0", name);
 int ii;
 struct element *child = NULL;
 struct phyloTree *genomeNode = g->node;
-
-/*
-if ((genomeNode != NULL) && (genomeNode->parent->numEdges 
-    {
-    printf("genomeNode is 1\n");
-    if (!reconTree->isDup)
-	{
-	printf("passing\n");
-	eleAddEdge(element, addElements(genomeNode->edges[0]));
-	genomeNode = genomeNode->edges[0];
-	element = newElement(g, "0", name);
-	}
-    }
-    */
 
 for(ii=0; ii < reconTree->numEdges; ii++)
     eleAddEdge(element, child = addElements(reconTree->edges[ii]));
@@ -407,41 +447,81 @@ if (child != NULL)
     element->version = child->version;
 
 struct element *oldElement;
-while ((genomeNode != NULL) && (reconTree->parent != NULL) && (genomeNode->parent != NULL) && (genomeNode->parent->priv != reconTree->parent->priv))
+//while ((genomeNode != NULL) && (reconTree->parent != NULL) && (genomeNode->parent != NULL) && (genomeNode->parent->priv != reconTree->parent->priv))
+/*
+if (!((genomeNode->parent == NULL) && (reconTree->parent == NULL)))
+{
+//struct genome *parentGenome = genomeNode->parent->priv;
+struct genome *parentRecon = reconTree->parent->priv;
+
+
+if (g->name == parentRecon->name)
+    errAbort("messuy");
+//printf("starting %s\n",g->name);
+//printf("at node %s in recon.  at node %s in genome\n",parentRecon->name, parentGenome->name);
+*/
+//while ((genomeNode != NULL) && (reconTree->parent != NULL) && (genomeNode->parent != NULL) && (genomeNode->parent->priv != reconTree->parent->priv))
+while ( genomeNode->parent->priv != reconTree->parent->priv)
     {
+    assert(genomeNode->parent->priv);
     oldElement = element;
-    printf("should be genome %s recont %s\n",genomeNode->parent->ident->name,reconTree->parent->ident->name);
     if (name == NULL)
 	break;
     genomeNode = genomeNode->parent;
-    printf("passing name %s\n",name);
     element = newElement(genomeNode->priv, "0", name);
     eleAddEdge(element, oldElement);
+//parentGenome = genomeNode->parent->priv;
+//printf("up node %s in recon.  at node %s in genome\n",parentRecon->name, parentGenome->name);
     }
 
+//}
+//printf("out\n");
 return element;
 }
 
-void doOut(FILE *f, struct phyloTree *speciesTree)
+struct phyloTree *findTop(struct phyloTree *tree)
 {
-struct genome *g = speciesTree->priv;
+struct genome *g = tree->priv;
 
 if (g->elements != NULL)
-    {
-    outElementTrees(f, speciesTree);
-    return;
-    }
+    return tree;
 
 int ii;
+struct phyloTree *ret;
 
-for(ii=0; ii < speciesTree->numEdges; ii++)
-    doOut(f, speciesTree->edges[ii]);
+for(ii=0; ii < tree->numEdges; ii++)
+    if ( (ret = findTop(tree->edges[ii])) != NULL)
+	return ret;
+
+return NULL;
 }
+
+
+void pruneDead(struct phyloTree *tree)
+{
+int ii;
+for(ii=0; ii < tree->numEdges; )
+    {
+    struct genome *g = tree->edges[ii]->priv;
+
+    //printf("name %s elements %p\n",g->name,g->elements);
+    if ((g == NULL) || (g->elements == NULL))
+	{
+	phyloDeleteEdge(tree, tree->edges[ii]);
+	continue;
+	}
+    else
+	pruneDead(tree->edges[ii]);
+    ii++;
+    }
+}
+
 
 void nhxToElTree(char *speciesTreeName, char *reconTreeName, char *outFile)
 {
 struct phyloTree *speciesTree = phyloOpenTree(speciesTreeName);
 struct phyloTree *reconTree = phyloOpenTree(reconTreeName);
+struct phyloTree *tree;
 FILE *f = mustOpen(outFile, "w");
 struct hash *leafHash = newHash(10);
 int lowNum = 1;
@@ -453,26 +533,41 @@ myChildren = NULL;
 labelReconTree(reconTree, leafHash, &myChildren, speciesTree->priv);
 
 setAncestors(reconTree);
-printf("ancestors assigned\n");
-phyloPrintTree(reconTree, f);
+//printf("ancestors assigned\n");
+//phyloPrintTree(reconTree, stdout);
 
 addLosses(reconTree);
 
-printf("losses added\n");
-phyloPrintTree(reconTree, f);
+//printf("losses added\n");
+//phyloPrintTree(reconTree, stdout);
 
 addDupsToGenomeTree(reconTree);
 
-printf("species tree with dups added\n");
-phyloPrintTree(speciesTree, f);
+while(speciesTree->parent)
+    speciesTree = speciesTree->parent;
+//printf("species tree with dups added\n");
+//phyloPrintTree(speciesTree, stdout);
 
-printf("reconTree tree with dups referenced\n");
-phyloPrintTree(reconTree, f);
+//printf("reconTree tree with dups referenced\n");
+//phyloPrintTree(reconTree, f);
+checkTree(reconTree);
 
+{
+struct genome *g = reconTree->priv;
+printf("g %s\n",g->name);
 addElements(reconTree);
 
-printf("element tree\n");
-doOut(f, speciesTree);
+}
+
+while(speciesTree->parent)
+    speciesTree = speciesTree->parent;
+tree = findTop(speciesTree);
+
+if (doPrune)
+    pruneDead(tree);
+
+//printf("element tree\n");
+outElementTrees(f, tree);
 }
 
 int main(int argc, char *argv[])
@@ -481,6 +576,8 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 4)
     usage();
+
+doPrune = optionExists("prune");
 
 nhxToElTree(argv[1], argv[2], argv[3]);
 return 0;
