@@ -20,7 +20,7 @@
 #include "hgNear.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.171 2007/07/26 23:08:51 angie Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.172 2007/07/27 02:24:02 angie Exp $";
 
 char *excludeVars[] = { "submit", "Submit", idPosVarName, NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -394,11 +394,27 @@ return upcHashWordsInFile(fileName, 16);
 char *cellLookupVal(struct column *col, struct genePos *gp, 
 	struct sqlConnection *conn)
 /* Get a field in a table defined by col->table, col->keyField, 
- * col->valField. */
+ * col->valField.  If an xrefLookup is specified in col->settings,
+ * use that to look up an alternate name for the result. */
 {
-char query[512];
-safef(query, sizeof(query), "select %s from %s where %s = '%s'",
-	col->valField, col->table, col->keyField, gp->name);
+char *xrefDb = hashFindVal(col->settings, "xrefDb");
+char *xrefTable = hashFindVal(col->settings, "xrefTable");
+char *xrefNameField = hashFindVal(col->settings, "xrefNameField");
+char *xrefAliasField = hashFindVal(col->settings, "xrefAliasField");
+char query[1024];
+if (xrefDb)
+    safef(query, sizeof(query),
+	  "select %s.%s.%s "
+	  "from %s.%s, %s "
+	  "where %s.%s = '%s' "
+	  "and %s.%s = %s.%s.%s;",
+	  xrefDb, xrefTable, xrefAliasField,
+	  xrefDb, xrefTable,   col->table,
+	  col->table, col->keyField,   gp->name,
+	  col->table, col->valField,   xrefDb, xrefTable, xrefNameField);
+else
+    safef(query, sizeof(query), "select %s from %s where %s = '%s'",
+	  col->valField, col->table, col->keyField, gp->name);
 return sqlQuickString(conn, query);
 }
 
@@ -852,6 +868,7 @@ void setupColumnLookup(struct column *col, char *parameters)
 /* Set up column that just looks up one field in a table
  * keyed by the geneId. */
 {
+char *xrefLookup = cloneString(hashFindVal(col->settings, "xrefLookup"));
 col->table = cloneString(nextWord(&parameters));
 col->keyField = cloneString(nextWord(&parameters));
 col->valField = cloneString(nextWord(&parameters));
@@ -863,6 +880,33 @@ if (columnSetting(col, "search", NULL))
     col->simpleSearch = lookupTypeSimpleSearch;
 col->filterControls = lookupAdvFilterControls;
 col->advFilter = lookupAdvFilter;
+if (isNotEmpty(xrefLookup))
+    {
+    char *xrefTable = nextWord(&xrefLookup);
+    char *xrefNameField = nextWord(&xrefLookup);
+    char *xrefAliasField = nextWord(&xrefLookup);
+    if (isNotEmpty(xrefAliasField))
+	{
+	char *xrefOrg = hashFindVal(col->settings, "xrefOrg");
+	char *xrefDb;
+	if (xrefOrg)
+	    xrefDb = hDefaultDbForGenome(xrefOrg);
+	else
+	    xrefDb = cloneString(database);
+	struct sqlConnection *xrefConn = hAllocOrConnect(xrefDb);
+	if (sqlTableExists(xrefConn, xrefTable))
+	    {
+	    /* These are the column settings that will be used by 
+	     * cellLookupVal, so it doesn't have to parse xrefLookup and 
+	     * query for table existence for each cell. */
+	    hashAdd(col->settings, "xrefDb", xrefDb);
+	    hashAdd(col->settings, "xrefTable", xrefTable);
+	    hashAdd(col->settings, "xrefNameField", xrefNameField);
+	    hashAdd(col->settings, "xrefAliasField", xrefAliasField);
+	    }
+	hFreeOrDisconnect(&xrefConn);
+	}
+    }
 }
 
 

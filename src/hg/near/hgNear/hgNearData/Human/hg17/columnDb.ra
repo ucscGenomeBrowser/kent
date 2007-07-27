@@ -1,4 +1,8 @@
 
+name flyOrthologs
+xrefOrg D. melanogaster
+xrefLookup flyBase2004Xref name fbgn
+
 name vidalP2p
 type distance humanVidalP2P query target distance
 visibility off
