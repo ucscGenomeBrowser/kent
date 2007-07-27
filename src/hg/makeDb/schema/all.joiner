@@ -1831,6 +1831,15 @@ identifier snpArrayHg17
     hg17.snpArrayAffy50XbaI.rsId minCheck=0.98
     hg17.snpArrayIllumina300.name
 
+identifier snpArrayHg18
+"SNP array track for hg18"
+    hg18.snp126.name dupeOk
+    hg18.snpArrayAffy5.rsId minCheck=0.98
+    hg18.snpArrayAffy6.rsId minCheck=0.98
+    hg18.snpArrayIllumina300.name
+    hg18.snpArrayIllumina550.name
+    hg18.snpArrayIllumina650.name
+
 identifier snpOrtho
 "ortho SNPs for hg18 only"
     hg18.snp126.name dupeOk
