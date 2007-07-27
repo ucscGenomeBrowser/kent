@@ -1415,37 +1415,7 @@ type bed 4 .
     priority 8
 
 
-searchName affy6
-searchTable snpArrayAffy6
-searchMethod exact
-searchType bed
-termRegex (SNP_A-[0-9]+)
-searchPriority 12
-padding 250
 
-searchName affy5
-searchTable snpArrayAffy5
-searchMethod exact
-searchType bed
-termRegex (SNP_A-[0-9]+)
-searchPriority 12
-padding 250
-
-searchName affy250Nsp
-searchTable snpArrayAffy250Nsp
-searchMethod exact
-searchType bed
-termRegex (SNP_A-[0-9]+)
-searchPriority 12
-padding 250
-
-searchName affy250Sty
-searchTable snpArrayAffy250Sty
-searchMethod exact
-searchType bed
-termRegex (SNP_A-[0-9]+)
-searchPriority 12
-padding 250
 
 track divMMK
 shortLabel McDonald-Kreitman AR
@@ -2008,3 +1978,72 @@ type bed 6 .
     shortLabel Omicia OMIM Hand-Curation
     longLabel Omicia OMIM Hand-Curation, Early Access R1, May 2007
     priority 2
+
+searchName affy6SV
+searchTable snpArrayAffy6SV
+searchMethod exact
+searchType bed
+termRegex (CN_[0-9]+)
+searchPriority 12
+padding 250
+
+searchName affy6
+searchTable snpArrayAffy6
+searchMethod exact
+searchType bed
+termRegex (SNP_A-[0-9]+)
+searchPriority 12
+padding 250
+
+searchName affy5
+searchTable snpArrayAffy5
+searchMethod exact
+searchType bed
+termRegex (SNP_A-[0-9]+)
+searchPriority 12
+padding 250
+
+searchName affy250Nsp
+searchTable snpArrayAffy250Nsp
+searchMethod exact
+searchType bed
+termRegex (SNP_A-[0-9]+)
+searchPriority 12
+padding 250
+
+searchName affy250Sty
+searchTable snpArrayAffy250Sty
+searchMethod exact
+searchType bed
+termRegex (SNP_A-[0-9]+)
+searchPriority 12
+padding 250
+
+searchName illumina300
+searchTable snpArrayIllumina300
+searchMethod exact
+searchType bed
+termRegex (rs[0-9]{3}[0-9]+)
+searchPriority 13
+padding 250
+semiShortCircuit 1
+
+searchName illumina550
+searchTable snpArrayIllumina550
+searchMethod exact
+searchType bed
+termRegex (rs[0-9]{3}[0-9]+)
+searchPriority 13
+padding 250
+semiShortCircuit 1
+
+searchName illumina650
+searchTable snpArrayIllumina650
+searchMethod exact
+searchType bed
+termRegex (rs[0-9]{3}[0-9]+)
+searchPriority 13
+padding 250
+semiShortCircuit 1
+
+
