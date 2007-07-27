@@ -11359,6 +11359,7 @@ gzip illumina.bed
     cat 2.bed >> all.bed
     hgLoadBed hg18 snpArrayAffy6SV all.bed -tab
     mysql> delete from snpArrayAffy6SV where chrom = "chr0";
+    mysql> update snpArrayAffy6SV set chromStart = chromStart - 1;
 
 
 ##########################################################################
@@ -11472,6 +11473,7 @@ gzip illumina.bed
     mv illuminaLookup.out lookup.300
     mv illuminaLookup.err lookup.300.err
     hgLoadBed hg18 snpArrayIllumina300 lookup.300 -tab -sqlTable=snpArrayIllumina300.sql
+    hgsql -N -e 'drop table snpArrayIllumina300Prelim' hg18
 
     bed2.pl < 550.in > 550.bed.2
     hgLoadBed hg18 snpArrayIllumina550Prelim 550.bed.2 -tab
@@ -11479,6 +11481,7 @@ gzip illumina.bed
     mv illuminaLookup.err lookup.550.err
     mv illuminaLookup.out lookup.550
     hgLoadBed hg18 snpArrayIllumina550 lookup.550 -tab -sqlTable=snpArrayIllumina550.sql
+    hgsql -N -e 'drop table snpArrayIllumina550Prelim' hg18
 
     bed2.pl < 650.in > 650.bed.2
     hgLoadBed hg18 snpArrayIllumina650Prelim 650.bed.2 -tab
@@ -11486,6 +11489,7 @@ gzip illumina.bed
     mv illuminaLookup.out lookup.650
     mv illuminaLookup.err lookup.650.err
     hgLoadBed hg18 snpArrayIllumina650 lookup.650 -tab -sqlTable=snpArrayIllumina650.sql
+    hgsql -N -e 'drop table snpArrayIllumina650Prelim' hg18
 
     # add indices
     mysql> alter table snpArrayIllumina300 add index name (name);
