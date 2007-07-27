@@ -11,7 +11,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: illuminaLookup2.c,v 1.4 2007/07/27 02:22:13 heather Exp $";
+static char const rcsid[] = "$Id: illuminaLookup2.c,v 1.5 2007/07/27 19:45:19 heather Exp $";
 
 struct snpSubset 
     {
@@ -95,6 +95,17 @@ hFreeConn(&conn);
 return ret;
 }
 
+boolean biallelic(char *obs)
+{
+if (sameString(obs, "A/C")) return TRUE;
+if (sameString(obs, "A/G")) return TRUE;
+if (sameString(obs, "A/T")) return TRUE;
+if (sameString(obs, "C/G")) return TRUE;
+if (sameString(obs, "C/T")) return TRUE;
+if (sameString(obs, "G/T")) return TRUE;
+return FALSE;
+}
+
 
 void processSnps(struct hash *snpHash, char *illuminaTable)
 /* read illuminaTable */
@@ -147,7 +158,13 @@ while ((row = sqlNextRow(sr)) != NULL)
     pos = sqlUnsigned(row[1]);
     if (pos != subsetElement->start)
         {
-        fprintf(errors, "mismatch position for snp %s (illumina = %d, dbSNP = %d\n", rsID, pos, subsetElement->start);
+        fprintf(errors, "mismatch position for snp %s (illumina = %d, dbSNP = %d)\n", rsID, pos, subsetElement->start);
+	continue;
+	}
+
+    if (!biallelic(subsetElement->observed))
+        {
+        fprintf(errors, "snp %s not bi-alleleic\n", rsID);
 	continue;
 	}
 
