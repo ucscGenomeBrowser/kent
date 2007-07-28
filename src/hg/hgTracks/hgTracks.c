@@ -117,7 +117,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1379 2007/07/27 20:09:45 giardine Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1380 2007/07/28 20:08:24 fanhsu Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -6703,11 +6703,11 @@ char *interProName(struct track *tg, void *item)
 {
 char condStr[255];
 char *desc;
-struct linkedFeatures *lf = item;
+struct bed *it = item;
 struct sqlConnection *conn;
 
 conn = hAllocConn();
-sprintf(condStr, "interProId='%s' limit 1", lf->name);
+sprintf(condStr, "interProId='%s' limit 1", it->name);
 desc = sqlGetField(conn, "proteome", "interProXref", "description", condStr);
 hFreeConn(&conn);
 return(desc);
