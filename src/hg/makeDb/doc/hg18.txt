@@ -11938,7 +11938,7 @@ TMPDIR=/scratch/tmp
       -blastzOutRoot /cluster/bluearc/bosTau3/blastz.hg18 >& do.log &
     tail -f do.log
 
-    nice featureBits -chrom=chr1 hg18 chainFelCat3Link
+    nice featureBits -chrom=chr1 hg18 chainBosTau3Link
     # 114562908 bases of 224999719 (50.917%) in intersection
 
 
