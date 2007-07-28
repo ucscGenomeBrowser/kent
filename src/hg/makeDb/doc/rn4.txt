@@ -4570,4 +4570,39 @@ doBlastzChainNet.pl DEF -chainMinScore=3000 -chainLinearGap=medium \
 	> fb.rn4.chainEquCab1Link.txt 2>&1
     # 867029914 bases of 2571531505 (33.716%) in intersection
 
+
 #########################################################################
+# BLASTZ/CHAIN/NET BOSTAU3 (Done March 2007 heather)
+    mkdir /cluster/data/rn4/bed/blastz.bosTau3.2007-03-25
+    ln -s /cluster/data/rn4/bed/blastz.bosTau3.2007-03-25 /cluster/data/rn4/bed/blastz.bosTau3
+    cd /cluster/data/rn4/bed/blastz.bosTau3
+    cat << '_EOF_' > DEF
+
+BLASTZ_M=50
+
+# TARGET: Rat rn4
+SEQ1_DIR=/scratch/hg/rn4/nib
+SEQ1_LEN=/scratch/hg/rn4/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Cow bosTau3
+SEQ2_DIR=/san/sanvol1/scratch/bosTau3/bosTau3.2bit
+SEQ2_LEN=/san/sanvol1/scratch/bosTau3/chrom.sizes
+SEQ2_LIMIT=500
+SEQ2_CHUNK=50000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/rn4/bed/blastz.bosTau3.2007-03-25
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    doBlastzChainNet.pl DEF \
+      -bigClusterHub pk \
+      -chainMinScore=3000 -chainLinearGap=medium \
+      -blastzOutRoot /cluster/bluearc/bosTau3/blastz.rn4 >& do.log &
+    tail -f do.log
+
+    nice featureBits -chrom=chr1 rn4 chainBosTau3Link
+    # 61426292 bases of 243058842 (25.272%) in intersection
+
