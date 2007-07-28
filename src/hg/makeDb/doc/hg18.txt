@@ -11904,6 +11904,44 @@ TMPDIR=/scratch/tmp
     # reciprocal best net mafs for multiz
      ~/kent/src/hg/utils/automation/doRecipBest.pl hg18 felCat3 >&! rbest.log &
 
+
+#########################################################################
+# BLASTZ/CHAIN/NET BOSTAU3 (Done Feb 2007 heather)
+    mkdir /cluster/data/hg18/bed/blastz.bosTau3.2007-02-23
+    ln -s /cluster/data/hg18/bed/blastz.bosTau3.2007-02-23 /cluster/data/hg18/bed/blastz.bosTau3
+    cd /cluster/data/hg18/bed/blastz.bosTau3
+    cat << '_EOF_' > DEF
+
+BLASTZ_M=50
+
+# TARGET: Human Hg18
+SEQ1_DIR=/san/sanvol1/scratch/hg18/nib
+SEQ1_LEN=/cluster/data/hg18/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Cow bosTau3
+SEQ2_DIR=/san/sanvol1/scratch/bosTau3/bosTau3.2bit
+SEQ2_LEN=/san/sanvol1/scratch/bosTau3/chrom.sizes
+# Maximum number of scaffolds that can be lumped together
+SEQ2_LIMIT=500
+SEQ2_CHUNK=50000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/hg18/bed/blastz.bosTau3.2007-02-23
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    doBlastzChainNet.pl DEF \
+      -bigClusterHub pk \
+      -chainMinScore=3000 -chainLinearGap=medium \
+      -blastzOutRoot /cluster/bluearc/bosTau3/blastz.hg18 >& do.log &
+    tail -f do.log
+
+    nice featureBits -chrom=chr1 hg18 chainFelCat3Link
+    # 114562908 bases of 224999719 (50.917%) in intersection
+
+
 ##############################################################################
 # MAKE tfbsConsSites and tfbsConsFactors for TFBS conserved track (DONE weirauch 11/19/06)
 # Questions?  weirauch@soe.ucsc.edu or braney@soe.ucsc.edu
