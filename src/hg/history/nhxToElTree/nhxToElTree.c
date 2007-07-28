@@ -8,7 +8,7 @@
 #include "element.h"
 #include "chromColors.h"
 
-static char const rcsid[] = "$Id: nhxToElTree.c,v 1.2 2007/07/27 21:49:06 braney Exp $";
+static char const rcsid[] = "$Id: nhxToElTree.c,v 1.3 2007/07/28 21:22:19 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -49,8 +49,7 @@ struct genomePriv
 {
 int number;
 struct hash *childHash;
-double x, y;
-double xmaj, ymaj;
+char *species;
 };
 
 #define MAX(a,b)	(((a) > (b)) ? (a) : (b)) 
@@ -60,7 +59,13 @@ void checkTree(struct phyloTree *tree)
 if (tree->parent)
     {
     if (tree->parent->priv == tree->priv)
+	{
+	struct genome *pg = tree->parent->priv;
+	struct genome *g = tree->priv;
+	printf("p %s g %s\n",pg->name, g->name);
+	printf("child %s parent %s\n",tree->ident->name, tree->parent->ident->name);
 	errAbort("foobar");
+	}
     }
 
 int ii;
@@ -323,38 +328,16 @@ setNumbers(tree);
 insertLosses(tree);
 }
 
-void assignDups(struct phyloTree *reconNode, struct phyloTree *genomeNode)
+void addUpDups(struct phyloTree *reconNode, struct phyloTree *genomeNode)
 {
 struct phyloTree *reconParent = reconNode->parent;
 struct phyloTree *genomeParent = genomeNode->parent;
-//struct genome *genomeGenome = genomeNode->priv;
-
-//printf("assign %p %p\n",reconNode,genomeNode);
-//printf("assign genomeNode->priv %p\n",genomeNode->priv);
-
-{
-//checkTree(genomeNode);
-int ii;
-
-for(ii=0; ii < reconNode->numEdges; ii++)
-    {
-    while (genomeNode->priv == reconNode->edges[ii]->priv)
-	genomeNode = genomeNode->parent;
-
-	//errAbort("goobar");
-    }
-}
-
-reconNode->priv = genomeNode->priv;
-//reconNode->ident->name = genomeGenome->name;
 
 if (reconParent == NULL)
     return;
 
 if (reconParent->isDup)
     {
-    //if (genomeParent == NULL)
-	//printf("loobar\n");
     if ((genomeParent == NULL) || (!genomeParent->isDup))
 	{
 	struct phyloTree *t;
@@ -383,13 +366,11 @@ if (reconParent->isDup)
 		genomeParent->edges[1] = t;
 	    }
 
-	//printf("allocDup\n");
 	phyloAddEdge(t, genomeNode);
 	genomeNode->parent = t;
 	}
     }
 
-//printf("poop\n");
 if (!reconNode->isDup && (reconNode->priv != genomeNode->priv))
     errAbort("species node not matching %s %s",reconNode->ident->name,genomeNode->ident->name);
 
@@ -398,8 +379,8 @@ while ((!reconParent->isDup) && (genomeParent->isDup))
     {
     genomeParent = genomeParent->parent;
     }
-assignDups(reconNode->parent, genomeParent);
 
+addUpDups(reconNode->parent, genomeParent);
 }
 
 void addDupsToGenomeTree(struct phyloTree *reconTree)
@@ -408,12 +389,10 @@ if (reconTree->numEdges == 0)
     {
     struct genome *g = reconTree->priv;
 
-    //printf("starting up\n");
-    assignDups(reconTree, g->node);
+    addUpDups(reconTree, g->node);
     }
 
 int ii;
-
 for(ii=0; ii < reconTree->numEdges; ii++)
     addDupsToGenomeTree(reconTree->edges[ii]);
 }
@@ -447,21 +426,7 @@ if (child != NULL)
     element->version = child->version;
 
 struct element *oldElement;
-//while ((genomeNode != NULL) && (reconTree->parent != NULL) && (genomeNode->parent != NULL) && (genomeNode->parent->priv != reconTree->parent->priv))
-/*
-if (!((genomeNode->parent == NULL) && (reconTree->parent == NULL)))
-{
-//struct genome *parentGenome = genomeNode->parent->priv;
-struct genome *parentRecon = reconTree->parent->priv;
-
-
-if (g->name == parentRecon->name)
-    errAbort("messuy");
-//printf("starting %s\n",g->name);
-//printf("at node %s in recon.  at node %s in genome\n",parentRecon->name, parentGenome->name);
-*/
-//while ((genomeNode != NULL) && (reconTree->parent != NULL) && (genomeNode->parent != NULL) && (genomeNode->parent->priv != reconTree->parent->priv))
-while ( genomeNode->parent->priv != reconTree->parent->priv)
+while ((genomeNode != NULL) && (reconTree->parent != NULL) && (genomeNode->parent != NULL) && (genomeNode->parent->priv != reconTree->parent->priv))
     {
     assert(genomeNode->parent->priv);
     oldElement = element;
@@ -470,12 +435,8 @@ while ( genomeNode->parent->priv != reconTree->parent->priv)
     genomeNode = genomeNode->parent;
     element = newElement(genomeNode->priv, "0", name);
     eleAddEdge(element, oldElement);
-//parentGenome = genomeNode->parent->priv;
-//printf("up node %s in recon.  at node %s in genome\n",parentRecon->name, parentGenome->name);
     }
 
-//}
-//printf("out\n");
 return element;
 }
 
@@ -504,7 +465,6 @@ for(ii=0; ii < tree->numEdges; )
     {
     struct genome *g = tree->edges[ii]->priv;
 
-    //printf("name %s elements %p\n",g->name,g->elements);
     if ((g == NULL) || (g->elements == NULL))
 	{
 	phyloDeleteEdge(tree, tree->edges[ii]);
@@ -516,6 +476,90 @@ for(ii=0; ii < tree->numEdges; )
     }
 }
 
+char * setGenomePath(struct phyloTree *tree)
+{
+int ii;
+struct genome *g = tree->priv;
+struct genomePriv *gp = g->priv;
+
+assert(g);
+
+if (gp == NULL)
+    {
+    AllocVar(gp);
+    g->priv = gp;
+    }
+
+if (tree->isDup)
+    return gp->species = setGenomePath(tree->edges[0]);
+
+gp->species = g->name;
+
+for(ii=0; ii < tree->numEdges; ii++)
+    setGenomePath(tree->edges[ii]);
+
+return g->name;
+}
+
+void assignDups(struct phyloTree *reconTree, struct phyloTree *speciesTree)
+{
+int ii;
+
+if (reconTree->numEdges == 0)
+    return;
+
+while (!reconTree->isDup && speciesTree->isDup)
+    speciesTree = speciesTree->edges[0];
+
+if (!reconTree->isDup)
+    {
+    assert (reconTree->priv == speciesTree->priv);
+    }
+
+reconTree->priv = speciesTree->priv;
+
+if ((speciesTree->numEdges == 1) && (reconTree->numEdges == 1))
+    assignDups(reconTree->edges[0], speciesTree->edges[0]);
+else if ((speciesTree->numEdges == 1) && (reconTree->numEdges == 2))
+    {
+    assert (speciesTree->isDup == reconTree->isDup);
+    assignDups(reconTree->edges[0], speciesTree->edges[0]);
+    assignDups(reconTree->edges[1], speciesTree->edges[0]);
+    }
+else 
+    {
+    for(ii=0; ii < reconTree->numEdges; ii++)
+	{
+	struct genome *rg = reconTree->edges[ii]->priv;
+	struct genomePriv *rgp = rg->priv;
+	struct genome *sg = speciesTree->edges[0]->priv;
+	struct genomePriv *sgp = sg->priv;
+
+	if (rgp->species == sgp->species)
+	    assignDups(reconTree->edges[ii], speciesTree->edges[0]);
+	else
+	    {
+	    struct genome *sg = speciesTree->edges[1]->priv;
+	    struct genomePriv *sgp = sg->priv;
+
+	    assert (rgp->species == sgp->species);
+	    assignDups(reconTree->edges[ii], speciesTree->edges[1]);
+	    }
+	}
+    }
+}
+
+
+void fillGenomeHash(struct phyloTree *tree, struct hash *speciesHash)
+{
+if (!tree->isDup)
+    hashAdd(speciesHash, tree->ident->name, tree);
+
+int ii;
+
+for(ii=0; ii < tree->numEdges; ii++)
+    fillGenomeHash(tree->edges[ii], speciesHash);
+}
 
 void nhxToElTree(char *speciesTreeName, char *reconTreeName, char *outFile)
 {
@@ -524,6 +568,7 @@ struct phyloTree *reconTree = phyloOpenTree(reconTreeName);
 struct phyloTree *tree;
 FILE *f = mustOpen(outFile, "w");
 struct hash *leafHash = newHash(10);
+struct hash *speciesHash = newHash(10);
 int lowNum = 1;
 struct slName *myChildren = NULL;
 
@@ -545,6 +590,24 @@ addDupsToGenomeTree(reconTree);
 
 while(speciesTree->parent)
     speciesTree = speciesTree->parent;
+
+setGenomePath(speciesTree);
+setGenomePath(reconTree);
+fillGenomeHash(speciesTree, speciesHash);
+
+tree = speciesTree;
+if (reconTree->priv != speciesTree->priv)
+    {
+    struct genome *rg = reconTree->priv;
+    struct genomePriv *rpg = rg->priv;
+
+    tree = hashMustFindVal(speciesHash, rpg->species);
+
+    while ((tree->parent) && tree->parent->isDup)
+	tree = tree->parent;
+    }
+assignDups(reconTree, tree);
+
 //printf("species tree with dups added\n");
 //phyloPrintTree(speciesTree, stdout);
 
@@ -552,15 +615,10 @@ while(speciesTree->parent)
 //phyloPrintTree(reconTree, f);
 checkTree(reconTree);
 
-{
-struct genome *g = reconTree->priv;
-printf("g %s\n",g->name);
 addElements(reconTree);
 
-}
-
-while(speciesTree->parent)
-    speciesTree = speciesTree->parent;
+//while(speciesTree->parent)
+ //   speciesTree = speciesTree->parent;
 tree = findTop(speciesTree);
 
 if (doPrune)
