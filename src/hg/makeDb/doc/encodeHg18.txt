@@ -256,4 +256,48 @@ for table in `cat hg17.wig.tables`; do
     mv $table.*wig $table.unmapped fromHg17.wig/
 done
 
+#############################################################################
+# Stanford NRSF ChIP-seq (DONE, Heather, July 2007)
+
+ssh hgwdev
+cd /cluster/data/encode/stanford/2007-03-14
+liftOver fix.bed /gbdb/hg17/liftOver/hg17ToHg18.over.chain.gz hg18.bed core.unmapped
+liftOver control_fix.bed /gbdb/hg17/liftOver/hg17ToHg18.over.chain.gz hg18.control.bed control.unmapped
+hgLoadBed hg18 encodeStanfordNRSFEnriched hg18.bed -tab
+hgLoadBed hg18 encodeStanfordNRSFControl hg18.control.bed -tab
+
+
+
+##########################################################################
+# Boston University ORChID track - (2007-06-29 ting)
+#	data developer contact:  Steve Parker parker@bu.edu
+# This is a new dataset to replace the old one, for the same track.
+# On hg17 the track name is encodeBu_ORChID1, was commented as "non-standard table name"
+# I took this chance to rename it as encodeBUORChID on hg18.
+
+    ssh hgwdev
+    cd /cluster/data/encode/BU
+    mkdir -p orchid/2007-06-29/lab
+    cd -p orchid/2007-06-29/lab
+    wget --timestamping "http://dna.bu.edu/parker/.data/orchid_hg18_encode.wig.gz"
+    cd ..
+    mkdir wib
+# The file orchid_hg18_encode.wig.gz from data provider contains 0-based coordinates,
+# thus wigEncode choked on it -- specifically, at chr16, position 0 (ENm008). 
+# I compared this new data to the old dataset (2005-09-08) and made sure that this
+# is the case. I saved the original file to 'original.wig.gz', and added 1 to all
+# positions in orchid_hg18_encode.wig.gz
+    wigEncode lab/orchid_hg18_encode.wig.gz encodeBUORChID.wig \
+    	wib/encodeBUORChID.wib 
+#   Converted lab/orchid_hg18_encode.wig.gz, upper limit 1.64, lower limit -0.98
+
+# load
+    set dir = /gbdb/hg18/encode/BU/2007-06-29
+    mkdir -p $dir
+    hgLoadWiggle -pathPrefix=$dir hg18 encodeBUORChID encodeBUORChID.wig
+    mkdir -p $dir/wib
+    ln -s `pwd`/wib/encodeBUORChID.wib $dir/wib
+
+# create encodeBUORChID.html at trackDb/human/hg18/
+    
 
