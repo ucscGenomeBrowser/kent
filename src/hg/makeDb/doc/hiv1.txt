@@ -204,3 +204,34 @@ CREATE TABLE gsClinicRec (
     PRIMARY KEY(specimenId)
 );
 
+# CREATE INTERPRO TRACK (DONE, Fan, 7/30/07).
+
+# get fasta file of protein sequences for each InterPro HIV1 domain.
+
+    getInterProFa interProXrefHiv1 interProHiv1.fa
+
+# BLAT the sequence agains the base genome
+
+    gfClient localhost 17778 /gbdb/hiv1/nib -out=psl -t=dnax -q=prot interProHiv1.fa interProHiv1.psl
+
+# Load the resulting psl.
+# copy the .psl file to my home directory and do hgLoadPsl there 
+# to avoid access permission problem
+
+    pushd .
+    cp interProHiv1.psl ~
+    cd ~
+    hgLoadPsl hiv1 table=testPsl interProHiv1.psl
+    rm interProHiv1.psl
+    hgsql hiv1 -e 'drop table testPsl'
+    popd 
+
+# Create the bed file
+
+    hgsql hiv1 -N -e 'select "chr1", tStart, tEnd,  qName from testPsl where (tEnd-tStart)/3/qSize>0.42' >interProHiv1.bed
+
+# load the bed file into the interPro table.
+
+    hgLoadBed hiv1 interPro interProHiv1.bed
+
+
