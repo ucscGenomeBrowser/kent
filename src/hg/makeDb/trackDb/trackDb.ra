@@ -753,7 +753,6 @@ priority 72.03
 visibility hide
 type bed 12
 
-
 track mrna
 shortLabel $Organism mRNAs
 longLabel $Organism mRNAs from GenBank 
@@ -822,7 +821,7 @@ group genes
 priority 34.6
 visibility hide
 color 12,12,120
-type psl
+type bed 4
 
 track protBlat
 shortLabel Protein BLAT
