@@ -3,7 +3,7 @@
 # Caenorhabditis elegans
 #	Washington University School of Medicine GSC and Sanger Institute WS170
 
-#  $Id: ce4.txt,v 1.25 2007/07/25 19:48:00 hiram Exp $
+#  $Id: ce4.txt,v 1.26 2007/07/30 22:42:58 hiram Exp $
 
 
 #########################################################################
@@ -501,7 +501,14 @@ done
     ## Create orfToGene table.  They had one duplicate line in their file:
     sort -u /cluster/data/ce4/downloads/tarFile/gene_name.txt \
 	| sed -e "s/  */\t/" > orfToGene.tab
+    ## plus, they didn't include the self with self references, which are
+    ## needed in the gene sorter so it can find its names.
     hgLoadSqlTab ce4 orfToGene ~/kent/src/hg/lib/orfToGene.sql orfToGene.tab
+    ## fixed this table in /cluster/data/ce4/bed/fixupOrfToGene
+    ## by taking any name in the second column that was not mentioned in
+    ## the first column, and making it refer to itself.
+    hgLoadSqlTab ce4 orfToGene ~/kent/src/hg/lib/orfToGene.sql \
+	fixedOrfToGene.tab
     ln -s /cluster/data/ce4/downloads/tarFile/paragraph.txt ./paragraph.tab
     ln -s /cluster/data/ce4/downloads/tarFile/uniprot.txt ./uniprot.tab
     cat << '_EOF_' > mkSangerLinks.pl
