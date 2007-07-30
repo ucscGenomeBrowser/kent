@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.11 2007/07/27 23:55:18 angie Exp $"
+#	"$Id: mm9.txt,v 1.12 2007/07/30 22:51:59 hiram Exp $"
 #
 
 #######################################################################
@@ -1187,35 +1187,38 @@ done
     #	accession_info.rdb continue to decrease.  Even Mm8 has much less
     #	fragments than did mm7:
     #	e.g.:
-    [hiram@kkstore06 /cluster/data] wc -l mm9/*/chr*.agp | tail -1
+    [hiram@kkstore06 /cluster/data] wc -l mm9/?/chr*.agp mm9/??/chr*.agp | tail -1
+    #	21699 total
+    [hiram@kkstore06 /cluster/data] wc -l mm8/*/chr*.agp | tail -1
     #	21910 total
     [hiram@kkstore06 /cluster/data] wc -l mm7/*/chr*.agp | tail -1
     #	70125 total
     [hiram@kkstore06 /cluster/data] wc -l mm6/*/chr*.agp | tail -1
     #	170812 total
 
-    wc -l accession_info.rdb
-    #	20385 accession_info.rdb
-    wc -l ../../STSmarkers/primer/accession_info.rdb
-    #	20385 ../../STSmarkers/primer/accession_info.rdb
+    wc -l accession_info.rdb \
+	/cluster/data/mm8/bed/STSmarkers.2006-08-29/primer/accession_info.rdb
+/cluster/data/mm8/bed/STSmarkers.2006-08-29/primer/primers.psl.filter.blat
+    #	20333 accession_info.rdb
+    #	20385 /cluster/data/mm8/bed/STSmarkers.2006-08-29/primer/accession_info.rdb
 
     # creates epcr.not.found.nomatch and epcr.not.found.psl
     ~/kent/src/hg/stsMarkers/epcrToPsl -mouse \
 	epcr.not.found ../mouseP.info \
-	accession_info.rdb /cluster/data/mm9 2> dbg.epcrToPsl
+	accession_info.rdb /cluster/data/mm9/mm9.2bit 2> dbg.epcrToPsl
     #	the dbg.epcrToPsl has a number of lines complaining about bad
     #	primers in ../mouseP.info - and indeed they are bad primers,
     #	they do not have a second primer.
 
     # Comparing results to previous:
-    wc -l epcr*
-    #	520 epcr.not.found
-    #	  0 epcr.not.found.nomatch
-    #	520 epcr.not.found.psl
-    wc -l ../../STSmarkers/primer/epcr*
-    #	501 ../../STSmarkers/primer/epcr.not.found
-    #	  0 ../../STSmarkers/primer/epcr.not.found.nomatch
-    #	501 ../../STSmarkers/primer/epcr.not.found.psl
+    wc -l epcr* \
+	/cluster/data/mm8/bed/STSmarkers.2006-08-29/primer/epcr*
+# 527 epcr.not.found
+# 0 epcr.not.found.nomatch
+# 527 epcr.not.found.psl
+# 520 /cluster/data/mm8/bed/STSmarkers.2006-08-29/primer/epcr.not.found
+# 0 /cluster/data/mm8/bed/STSmarkers.2006-08-29/primer/epcr.not.found.nomatch
+# 520 /cluster/data/mm8/bed/STSmarkers.2006-08-29/primer/epcr.not.found.psl
 
     # Mm7 wc epcr*
     wc -l /cluster/data/mm7/bed/STSmarkers/primer/epcr*
@@ -1225,55 +1228,31 @@ done
     #	 158 /cluster/data/mm7/bed/STSmarkers/primer/epcrToPsl
     #	1106 total
 
-    # Mm6 wc epcr*
-    wc -l /cluster/data/mm6/bed/STSmarkers/primer/epcr*
-    #	 472 /cluster/data/mm6/bed/STSmarkers/primer/epcr.not.found
-    #	  63 /cluster/data/mm6/bed/STSmarkers/primer/epcr.not.found.nomatch
-    #	 404 /cluster/data/mm6/bed/STSmarkers/primer/epcr.not.found.psl
-    #	 158 /cluster/data/mm6/bed/STSmarkers/primer/epcrToPsl
-    #	1097 total
-
     cat primers.psl.filter.blat epcr.not.found.psl > primers.psl.filter
-    wc -l primers.psl.filter
-    #	34563 primers.psl.filter
-    wc -l ../../STSmarkers/primer/primers.psl.filter
-    #	34527 primers.psl.filter
-
-    wc -l /cluster/data/mm7/bed/STSmarkers/primer/primers.psl.filter
-    #	34460 /cluster/data/mm7/bed/STSmarkers/primer/primers.psl.filter
-
-    wc -l /cluster/data/mm6/bed/STSmarkers/primer/primers.psl.filter
-    #	33532 /cluster/data/mm6/bed/STSmarkers/primer/primers.psl.filter
-
-    wc -l /cluster/data/mm5/bed/STSmarkers/primer/primers.psl.filter.lifted
-    # 33691 /cluster/data/mm5/bed/STSmarkers/primer/primers.psl.filter.lifted
-
+    wc -l primers.psl.filter \
+	/cluster/data/mm8/bed/STSmarkers.2006-08-29/primer/primers.psl.filter
+XXX - here 2007-07-30
+    #	36064 primers.psl.filter
+    #	34563 /cluster/data/mm8/bed/STSmarkers.2006-08-29/primer/primers.psl.filter
     # create primers.psl.filter.lifted.initial
     #	The PATH setting allows extractPslInfo to find other programs that it
     #	is going to use.
     PATH=~/kent/src/hg/stsMarkers:$PATH \
 	~/kent/src/hg/stsMarkers/extractPslInfo primers.psl.filter
 
-    wc -l *.initial
-    #	34545 primers.psl.filter.initial
-    wc -l ../../STSmarkers/primer/*.initial
-    #	34513 ../../STSmarkers/primer/primers.psl.filter.initial
-    wc -l /cluster/data/mm7/bed/STSmarkers/primer/primers.psl.filter.initial
-    #	34443 /cluster/data/mm7/bed/STSmarkers/primer/primers.psl.filter.initial
-    wc -l /cluster/data/mm6/bed/STSmarkers/primer/primers.psl.filter.initial
-    #	33514 /cluster/data/mm6/bed/STSmarkers/primer/primers.psl.filter.initial
-    wc -l \
-       /cluster/data/mm5/bed/STSmarkers/primer/primers.psl.filter.lifted.initial
-    # 33689 
+    wc -l *.initial \
+/cluster/data/mm8/bed/STSmarkers.2006-08-29/primer/primers.psl.filter.initial
+# 36040 primers.psl.filter.initial
+# 34545 /cluster/data/mm8/bed/STSmarkers.2006-08-29/primer/primers.psl.filter.initial
 
     # create primers.psl.filter.lifted.initial.acc
     PATH=~/kent/src/hg/stsMarkers:$PATH \
     ~/kent/src/hg/stsMarkers/findAccession -agp \
 	-mouse primers.psl.filter.initial /cluster/data/mm9
-    wc -l primers.psl.filter.initial.acc
-    #	34545 primers.psl.filter.initial.acc
-    wc -l ../../STSmarkers/primer/primers.psl.filter.initial.acc
-    #	34513 primers.psl.filter.initial.acc
+    wc -l *.initial.acc /cluster/data/mm8/bed\
+/STSmarkers.2006-08-29/primer/primers.psl.filter.initial.acc
+# 36040 primers.psl.filter.initial.acc
+# 34545 /cluster/data/mm8/bed/STSmarkers.2006-08-29/primer/primers.psl.filter.initial.acc
 
 
     # this needs to be -rat as that specifies how to scan the
@@ -1283,10 +1262,10 @@ done
     ~/kent/src/hg/stsMarkers/getStsId -rat \
 	../mm9.stsInfoMouse.bed  primers.psl.filter.initial.acc \
 	| sort -k4,4n > primers.final
-    wc -l primers.final
-    #	34545 primers.final
-    wc -l ../STSmarkers/primer/primers.final
-    #	34513 primers.final
+    wc -l primers.final \
+	/cluster/data/mm8/bed/STSmarkers.2006-08-29/primer/primers.final
+# 36040 primers.final
+# 34545 /cluster/data/mm8/bed/STSmarkers.2006-08-29/primer/primers.final
 
     cd /cluster/data/mm9/bed/STSmarkers
     # stsMarkers.final is empty for mouse
@@ -1294,10 +1273,10 @@ done
     PATH=~/kent/src/hg/stsMarkers:$PATH \
     ~/kent/src/hg/stsMarkers/combineSeqPrimerPos \
 	stsMarkers.final primer/primers.final > stsMarkers_pos.rdb
-    wc -l stsMarkers_pos.rdb
-    #	33048 stsMarkers_pos.rdb
-    wc -l ../STSmarkers/stsMarkers_pos.rdb
-    #	33075 stsMarkers_pos.rdb
+    wc -l stsMarkers_pos.rdb \
+	/cluster/data/mm8/bed/STSmarkers.2006-08-29/stsMarkers_pos.rdb
+# 34232 stsMarkers_pos.rdb
+# 33048 /cluster/data/mm8/bed/STSmarkers.2006-08-29/stsMarkers_pos.rdb
 
     PATH=~/kent/src/hg/stsMarkers:$PATH \
     ~/kent/src/hg/stsMarkers/createStsBed \
@@ -1306,18 +1285,20 @@ done
     #	The sed removes unneeded blanks
     #	verify score profile remains similar
     awk -F'\t' '{print $5}' stsMapMouse.bed | sort -n | uniq -c
+    #	   591 500
+    #	  1774 750
+    #	28529 1000
+    awk -F'\t' '{print $5}' \
+	/cluster/data/mm8/bed/STSmarkers.2006-08-29/stsMapMouse.bed \
+	| sort -n | uniq -c
     #	  546 500
     #	 1650 750
     #	27705 1000
-    awk -F'\t' '{print $5}' ../STSmarkers/stsMapMouse.bed | sort -n | uniq -c
-    #	  546 500
-    #	 1648 750
-    #	27692 1000
 
-    wc -l stsMapMouse.bed
-    #	29901  stsMapMouse.bed
-    wc -l ../STSmarkers/stsMapMouse.bed
-    #	29888  stsMapMouse.bed
+    wc -l stsMapMouse.bed \
+	/cluster/data/mm8/bed/STSmarkers.2006-08-29/stsMapMouse.bed
+# 30894 stsMapMouse.bed
+# 29901 /cluster/data/mm8/bed/STSmarkers.2006-08-29/stsMapMouse.bed
 
     #  loading STS markers tables
     ssh hgwdev
@@ -1327,24 +1308,18 @@ done
     #	this does leave messages in ucscStsAlias.warnings but they seem
     #	to be very similar to Mm6 with just a few new ones
      
-    wc -l ucscStsAlias.tab
-    #	146767  ucscStsAlias.tab
-    wc -l ../STSmarkers/ucscStsAlias.tab
-    #	146064  ucscStsAlias.tab
-
-    #	After extensive comparison with the currently existing STS markers, it
-    #	appears that this new set only has a couple of new ones, and a couple
-    #	of ones have been dropped.  It seems that the primary correction has
-    #	been to the marker positions.
+    wc -l ucscStsAlias.tab \
+	/cluster/data/mm8/bed/STSmarkers.2006-08-29/ucscStsAlias.tab
+# 160079 ucscStsAlias.tab
+# 146767 /cluster/data/mm8/bed/STSmarkers.2006-08-29/ucscStsAlias.tab
 
 
     ssh hgwdev
     cd /cluster/data/mm9/bed/STSmarkers
-    #	Saving the existing tables for archival purposes
-    hgsql -e "alter table stsInfoMouseNew rename as stsInfoMouseNewFeb2006;" mm9
-    hgsql -e "alter table stsAlias rename as stsAliasFeb2006;" mm9
-    hgsql -e "alter table all_sts_primer rename as all_sts_primerFeb2006;" mm9
-    hgsql -e "alter table stsMapMouseNew rename as stsMapMouseNewFeb2006;" mm9
+    ## when reloading:
+    hgsql -e "drop table stsAlias;" mm9
+    hgsql -e "drop table stsMapMouseNew;" mm9
+    hgsql -e "drop table stsInfoMouseNew;" mm9
 
     hgsql mm9 < ~/kent/src/hg/lib/stsAlias.sql
     hgsql -e \
@@ -1356,27 +1331,19 @@ done
     hgsql -e \
      'load data local infile "mm9.stsInfoMouse.bed" into table stsInfoMouseNew;' mm9
 
+    hgsql -e "drop table all_sts_primer;" mm9
     hgLoadPsl -nobin -table=all_sts_primer mm9 primer/primers.psl.filter
-    # load of all_sts_primer did not go as planned: 34563 record(s), 0
-    # row(s) skipped, 1 warning(s) loading primer/primers.psl.filter
+# load of all_sts_primer did not go as planned: 36064 record(s),
+#	0 row(s) skipped, 1 warning(s) loading primer/primers.psl.filter
     #	After warnings, checkTableCoords to find problems:
     checkTableCoords -verboseBlocks mm9 all_sts_primer
-# mm9.all_sts_primer item 61999 chr10:62418012-62418048: blocks 0 and 1 overlap.
-# mm9.all_sts_primer has 1 records with overlapping blocks.
-    #	Strip the offending item from the load:
-    #	Verify the grep takes out only one item:
-    wc -l primer/primers.psl.filter
-    #	34563 primer/primers.psl.filter
-    grep -P "\t61999\t" primer/primers.psl.filter | wc -l
-    #	1
-    #	and thus leaves the rest
-    grep -v -P "\t61999\t" primer/primers.psl.filter | wc -l
-    #	34562
-    grep -v -P "\t61999\t" primer/primers.psl.filter > fixed.primers.psl.filter
-    hgLoadPsl -nobin -table=all_sts_primer mm9 fixed.primers.psl.filter
+mm9.all_sts_primer item 61999 chr10:62485403-62485439: blocks 0 and 1 overlap.
+mm9.all_sts_primer has 1 records with overlapping blocks.
+    #	Strip the offending item from the load
+    hgsql -e 'delete from all_sts_primer where tName="chr10" AND tStart=62485403 AND tEnd=62485439;' mm9
 
     # load primer sequences	
-    rm /gbdb/mm9/stsMarker/mouseP.fa
+    mkdir /gbdb/mm9/stsMarker
     ln -s /cluster/data/mm9/bed/STSmarkers/mouseP.fa \
 	/gbdb/mm9/stsMarker/mouseP.fa
     # PLEASE NOTE THAT THE If you are going to reload this business, use the
@@ -1384,58 +1351,44 @@ done
     #	hgLoadSeq -replace mm9 /gbdb/mm9/stsMarker/mouseP.fa
     # otherwise there will be a problem that the seq and extFile tables 
     # will be out of sync. 
-    hgLoadSeq -replace mm9 /gbdb/mm9/stsMarker/mouseP.fa
+    hgLoadSeq mm9 /gbdb/mm9/stsMarker/mouseP.fa
     #  Adding /gbdb/mm9/stsMarker/mouseP.fa
-    #  34666 sequences
-    #	Warning: load of seq did not go as planned: 34666 record(s),
-    #	0 row(s) skipped, 1 warning(s) loading ./seq.tab
-
+    #	41330 sequences
+    #	Warning: load of seq did not go as planned: 41330 record(s), 0 row(s)
+    #	skipped, 1 warning(s) loading ./seq.tab
 
     featureBits mm9 all_sts_primer
+    #	3795229 bases of 2620346127 (0.145%) in intersection
+    featureBits mm8 all_sts_primer
     #	3700897 bases of 2567283971 (0.144%) in intersection
-    featureBits mm9 all_sts_primerFeb2006
-    #	3746196 bases of 2567283971 (0.146%) in intersection
-    featureBits mm7 all_sts_primer
-    #	3757119 bases of 2583394090 (0.145%) in intersection
-    featureBits mm6 all_sts_primer
-    #	3677372 bases of 2597150411 (0.142%) in intersection
     featureBits mm9 stsMapMouseNew
+    #	4884563 bases of 2620346127 (0.186%) in intersection
+    featureBits mm8 stsMapMouseNew
     #	4812616 bases of 2567283971 (0.187%) in intersection
-    featureBits mm9 stsMapMouseNewFeb2006
-    #	4801964 bases of 2567283971 (0.187%) in intersection
-    featureBits mm7 stsMapMouseNew
-    #	4805958 bases of 2583394090 (0.186%) in intersection
-    featureBits mm6 stsMapMouseNew
-    #	4638338 bases of 2597150411 (0.179%) in intersection
 
     hgsql -N mm9 -e "select count(*) from stsAlias;"
+    #	160079
+    hgsql -N mm8 -e "select count(*) from stsAlias;"
     #	146767
-    hgsql -N mm9 -e "select count(*) from stsAliasFeb2006;"
-    #	141981
-    hgsql -N mm7 -e "select count(*) from stsAlias;"
-    #	140649
-    hgsql -N mm7 -e "select count(*) from stsAlias;"
-    #	137738
-    hgsql -N mm5 -e "select count(*) from stsAlias;"
-    #	122944
     hgsql -N mm9 -e "select count(*) from stsInfoMouseNew;"
+    #	66865
+    hgsql -N mm8 -e "select count(*) from stsInfoMouseNew;"
     #	60440
-    hgsql -N mm7 -e "select count(*) from stsInfoMouseNew;"
-    #	59843
-    hgsql -N mm7 -e "select count(*) from stsInfoMouseNew;"
-    #	58980
-    hgsql -N mm5 -e "select count(*) from stsInfoMouseNew;"
-    #	58493
 
     #	compare old and new name lists, not much difference:
     awk '{print $4}' stsMapMouse.bed | sort -u > mm9.nameList
-    #	in common with previous version
-    comm -12 ../STSmarkers/mm9.nameList mm9.nameList | wc -l
-    #	28687
-    #	unique to previous version
-    comm -23 ../STSmarkers/mm9.nameList mm9.nameList | wc -l
-    #	11
-    #	unique to this new set
-    comm -13 ../STSmarkers/mm9.nameList mm9.nameList | wc -l
-    #	20
-
+    #	in common with previous version:
+    comm -12 \
+/cluster/data/mm8/bed/STSmarkers.2006-08-29/mm8.nameList \
+	mm9.nameList | wc -l
+    #	28597
+    #	unique to previous version:
+    comm -23 \
+/cluster/data/mm8/bed/STSmarkers.2006-08-29/mm8.nameList \
+	mm9.nameList | wc -l
+    #	110
+    #	unique to this new set:
+    comm -13 \
+/cluster/data/mm8/bed/STSmarkers.2006-08-29/mm8.nameList \
+	mm9.nameList | wc -l
+    #	998
