@@ -168,8 +168,6 @@ struct track
                                 loaded and drawn by this track.  This
                                 is used for "composite" tracks, such
                                 as "mafWiggle */
-    struct track *parent;      /* currently used just with supertracks --
-                                  eventually for arbitrary hierarchy */
 
     void (*nextPrevItem)(struct track *tg, void *item, int x, int y, int w, int h, boolean next);    
     /* Function will draw the button on a track item and assign a map */
@@ -486,14 +484,13 @@ int tgFixedTotalHeightNoOverflow(struct track *tg, enum trackVisibility vis);
 /* Most fixed height track groups will use this to figure out the height 
  * they use. */
 
-void changeTrackVis(struct group *groupList, char *groupTarget, 
-        int changeVis, boolean ifVisible);
+void changeTrackVis(struct group *groupList, char *groupTarget, int changeVis);
 /* Change track visibilities. If groupTarget is 
  * NULL then set visibility for tracks in all groups.  Otherwise,
  * just set it for the given group.  If vis is -2, then visibility is
  * unchanged.  If -1 then set visibility to default, otherwise it should 
- * be tvHide, tvDense, etc. The ifVisible flag when set, causes only
- * visibility to change only for non-hidden tracks */
+ * be tvHide, tvDense, etc. 
+ */
 
 void genericDrawItems(struct track *tg, 
 	int seqStart, int seqEnd,
@@ -979,11 +976,15 @@ void parseSs(char *ss, char **retPsl, char **retFa);
 boolean ssFilesExist(char *ss);
 /* Return TRUE if both files in ss exist. */
 
-boolean superTrackHasVisibleMembers(struct track *track);
-/* Determine if any member tracks are visible */
-
 int maximumTrackHeight(struct track *tg);
 /* Return the maximum track height allowed in pixels. */
+
+void setSuperTrackHasVisibleMembers(struct track *track);
+/* Determine if any member tracks are visible -- currently 
+ * recording this in the parent's visibility setting */
+
+boolean superTrackHasVisibleMembers(struct track *track);
+/* Determine if any member tracks are visible */
 
 #endif /* HGTRACKS_H */
 

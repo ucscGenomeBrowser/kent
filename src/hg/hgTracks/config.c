@@ -59,7 +59,7 @@ struct group *group;
 boolean showedRuler = FALSE;
 
 setRulerMode();
-changeTrackVis(groupList, groupTarget, changeVis, FALSE);
+changeTrackVis(groupList, groupTarget, changeVis);
 
 /* Set up ruler mode according to changeVis. */
 #ifdef BOB_DOESNT_LIKE
@@ -76,6 +76,7 @@ if (changeVis != -2)
     }
 #endif /* BOB_DOESNT_LIKE */
 
+struct hash *superHash = hashNew(0);
 cgiMakeHiddenVar(configGroupTarget, "none");
 for (group = groupList; group != NULL; group = group->next)
     {
@@ -165,56 +166,55 @@ for (group = groupList; group != NULL; group = group->next)
             }
 	hPrintf("</TR>\n");
 	}
-    /* Scan through this group to find supertracks */
-    struct hash *superHash = hashNew(0);
-    struct trackRef *prevTr = NULL;
+    /* Scan track list to determine which supertracks have visible member
+     * tracks, and to insert a track in the list for the supertrack */
+    struct track *track;
+    struct trackRef *prevTr = NULL, *superTr = NULL;
+    struct trackDb *superTdb = NULL;
     for (tr = group->trackList; tr != NULL; tr = tr->next)
         {
         if (!isOpen)
-            continue;
-        struct track *track = tr->track;
-        struct trackRef *superTr;
-        if (track->parent)
+            break;
+        track = tr->track;
+        superTdb = track->tdb->parent;
+        if (superTdb)
             {
-            struct track *parent = 
-                    hashFindVal(superHash, track->parent->mapName);
-            if (!parent)
+            if (!hashLookup(superHash, superTdb->tableName))
                 {
-                /* first encounter -- insert in list and record in hash */
-                parent = track->parent;
-                parent->hasUi = TRUE;
+                struct track *superTrack = trackFromTrackDb(superTdb);
+                superTrack->hasUi = TRUE;
                 AllocVar(superTr);
-                superTr->track = parent;
+                superTr->track = superTrack;
                 superTr->next = tr;
                 if (!prevTr)
                     group->trackList = superTr;
                 else
                     prevTr->next = superTr;
-                hashAdd(superHash, parent->mapName, parent);
+                hashAdd(superHash, superTdb->tableName, superTdb);
                 }
-            /* note if any member track is visible */
-            if (track->visibility != tvHide)
-                parent->visibility = tvDense;
+            /* note in supertrack if member track is visible */
+            if (hTvFromString(cartUsualString(cart, track->mapName,
+                            hStringFromTv(track->visibility))) != tvHide)
+                setSuperTrackHasVisibleMembers(track);
             }
         prevTr = tr;
         }
-
     /* Loop through this group and display */
     for (tr = group->trackList; tr != NULL; tr = tr->next)
 	{
         if (!isOpen)
-            continue;
-	struct track *track = tr->track;
+            break;
+	track = tr->track;
+        struct trackDb *tdb = track->tdb;
 
 	hPrintf("<TR>");
 	hPrintf("<TD NOWRAP>");
-        if (track->parent)
-            /* indicate members of a supertrack */
+        if (tdb->parent)
+            /* indent members of a supertrack */
             hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;");
 	if (track->hasUi)
 	    hPrintf("<A HREF=\"%s?%s=%u&g=%s\">", hgTrackUiName(),
-		cartSessionVarName(), cartSessionId(cart),
-		track->mapName);
+		cartSessionVarName(), cartSessionId(cart), track->mapName);
 	hPrintf(" %s", track->shortLabel);
         if (hashFindVal(superHash, track->mapName))
             hPrintf("...");
@@ -227,22 +227,19 @@ for (group = groupList; group != NULL; group = group->next)
 	   message for the user. */
 	if (hTrackOnChrom(track->tdb, chromName))
 	    {
-            struct track *parent =
-                (struct track *)hashFindVal(superHash, track->mapName);
-            if (parent)
+            if (track->tdb->isSuper)
                 {
                 /* supertrack dropdown is hide/show */
-                superTrackDropDown(cart, parent->tdb, 
-                                superTrackHasVisibleMembers(parent));
+                superTrackDropDown(cart, track->tdb, 
+                                track->visibility != tvDense);
                 }
             else
                 {
                 /* check for option of limiting visibility to one mode */
-                char *onlyVisibility = trackDbSetting(track->tdb, 
-                                                        "onlyVisibility");
                 hTvDropDownClassVisOnly(track->mapName, track->visibility,
                             track->canPack, (track->visibility == tvHide) ? 
-                            "hiddenText" : "normalText", onlyVisibility );
+                            "hiddenText" : "normalText", 
+                            trackDbSetting(track->tdb, "onlyVisibility"));
                 }
 	    }
 	else 

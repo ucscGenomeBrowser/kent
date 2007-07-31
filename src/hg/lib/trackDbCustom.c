@@ -12,7 +12,7 @@
 #include "hash.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.31 2007/07/26 20:08:11 aamp Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.32 2007/07/31 01:08:56 kate Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -400,14 +400,14 @@ return matchingSettings;
 }
 
 bool trackDbIsComposite(struct trackDb *tdb)
-/* Determine if this is a composite track. This is currently defined
+/* Determine if this is a populated composite track. This is currently defined
  * as a top-level dummy track, with a list of subtracks of the same type */
 {
     return (tdb->subtracks && differentString(tdb->type, "wigMaf"));
 }
 
-bool trackDbIsSubtrack(struct trackDb *tdb)
-/* Determine if this is a subtrack. */
+bool trackDbHasCompositeSetting(struct trackDb *tdb)
+/* Determine if this has a trackDb setting indicating it is a composite */
 {
     return (trackDbSetting(tdb, "compositeTrack") != NULL);
 }
@@ -497,35 +497,102 @@ trackDbMakeCompositeHierarchy(pTdbList);
 trackDbFillInCompositeSettings(pTdbList);
 }
 
-struct superTrackInfo *getSuperTrackInfo(struct trackDb *tdb)
+struct superTrackInfo {
+    boolean isSuper;
+    boolean isShow;
+    char *parentName;
+    enum trackVisibility defaultVis;
+};
+
+static struct superTrackInfo *getSuperTrackInfo(struct trackDb *tdb)
+/* Extract super track information from trackDb setting.
+ * Return null if there is none. */
+{
+char *setting = trackDbSetting(tdb, "superTrack");
+if (!setting)
+    return NULL;
+char *words[8];
+int wordCt = chopLine(cloneString(setting), words);
+if (wordCt < 1)
+    return NULL;
+struct superTrackInfo *stInfo;
+AllocVar(stInfo);
+if (sameString("on", words[0]))
+    {
+    /* parent */
+    stInfo->isSuper = TRUE;
+    if (wordCt > 1 && sameString("show", words[1]))
+        stInfo->isShow = TRUE;
+    }
+else
+    {
+    /* child */
+    stInfo->parentName = cloneString(words[0]);
+    if (wordCt > 1)
+        stInfo->defaultVis = max(0, hTvFromStringNoAbort(words[1]));
+    }
+return stInfo;
+}
+
+char *trackDbGetSupertrackName(struct trackDb *tdb)
+/* Find name of supertrack if this track is a member */
+{
+char *ret = NULL;
+struct superTrackInfo *stInfo = getSuperTrackInfo(tdb);
+if (stInfo)
+    {
+    if (stInfo->parentName)
+        ret = cloneString(stInfo->parentName);
+    freeMem(stInfo);
+    }
+return ret;
+}
+
+void trackDbSuperMemberSettings(struct trackDb *tdb)
+/* Set fields in trackDb to indicate this is a member of a
+ * supertrack. */
+{
+struct superTrackInfo *stInfo = getSuperTrackInfo(tdb);
+tdb->parentName = cloneString(stInfo->parentName);
+tdb->visibility = stInfo->defaultVis;
+freeMem(stInfo);
+}
+
+void trackDbSuperSettings(struct trackDb *tdbList)
 /* Get info from supertrack setting.  There are 2 forms:
  * Parent:   'supertrack on [show]'
  * Child:    'supertrack <parent> [vis]
  * Returns NULL if there is no such setting */
 {
-char *words[8];
-struct superTrackInfo *st;
-char *setting = cloneString(trackDbSetting(tdb, "superTrack"));
-if (!setting)
-    return NULL;
-int wordCt = chopLine(setting, words);
-if (wordCt < 1)
-    return FALSE;
-AllocVar(st);
-if (sameString("on", words[0]))
+struct trackDb *tdb;
+struct hash *superHash = hashNew(0);
+struct superTrackInfo *stInfo;
+
+/* find supertracks, setup their settings */
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
-    /* parent */
-    st->isParent = TRUE;
-    if (wordCt > 1 && sameString("show", words[1]))
-        st->defaultShow = TRUE;
+    stInfo = getSuperTrackInfo(tdb);
+    if (!stInfo)
+        continue;
+    if (stInfo->isSuper)
+        {
+        tdb->isSuper = TRUE;
+        tdb->isShow = stInfo->isShow;
+        if (!hashLookup(superHash, tdb->tableName))
+            hashAdd(superHash, tdb->tableName, tdb);
+        }
+    freeMem(stInfo);
     }
-else
+/* adjust settings on supertrack members after verifying they have
+ * a supertrack configured in this trackDb */
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
-    /* child */
-    st->parentName = cloneString(words[0]);
-    if (wordCt > 1)
-        st->defaultVis = max(0, hTvFromStringNoAbort(words[1]));
+    stInfo = getSuperTrackInfo(tdb);
+    if (!stInfo)
+        continue;
+    if (!stInfo->isSuper && hashLookup(superHash, stInfo->parentName))
+        trackDbSuperMemberSettings(tdb);
+    freeMem(stInfo);
     }
-//freeMem(setting);
-return st;
 }
+

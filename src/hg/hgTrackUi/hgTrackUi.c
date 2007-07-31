@@ -31,7 +31,7 @@
 
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.383 2007/07/26 19:46:15 kate Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.384 2007/07/31 01:08:56 kate Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2498,25 +2498,26 @@ void superTrackUi(struct trackDb *superTdb)
 /* List tracks in this collection, with visibility controls and UI links */
 {
 struct trackDb *tdb;
-printf("<P><TABLE>");
+printf("<P><TABLE CELLPADDING=2>");
 for (tdb = superTdb->subtracks; tdb != NULL; tdb = tdb->next)
     {
+    if (!hTableOrSplitExists(tdb->tableName) && !trackDbHasCompositeSetting(tdb))
+        continue;
     printf("<TR>");
     printf("<TD><A HREF=\"%s?%s=%u&c=%s&g=%s\">%s</A>&nbsp;</TD>", 
                 hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
                 chromosome, cgiEncode(tdb->tableName), tdb->shortLabel);
     printf("<TD>");
-    char *onlyVisibility = trackDbSetting(tdb, "onlyVisibility");
     enum trackVisibility tv = 
-                    hTvFromString(cartUsualString(cart,tdb->tableName, 
+                    hTvFromString(cartUsualString(cart, tdb->tableName, 
                                             hStringFromTv(tdb->visibility)));
     hTvDropDownClassVisOnly(tdb->tableName, tv, tdb->canPack, 
-                                tv == tvHide ?  "hiddenText" : "normalText", 
-                                onlyVisibility );
-    printf("<TD>&nbsp;%s", tdb->longLabel);
+                            tv == tvHide ?  "hiddenText" : "normalText", 
+                            trackDbSetting(tdb, "onlyVisibility"));
+    printf("<TD>%s", tdb->longLabel);
     char *dataVersion = trackDbSetting(tdb, "dataVersion");
     if (dataVersion)
-        printf("&nbsp;[%s]", dataVersion);
+        printf("&nbsp&nbsp;<EM><FONT COLOR=#666666 SIZE=-1>%s</FONT></EM>", dataVersion);
     printf("</TD></TR>");
     }
 printf("</TABLE>");
@@ -2724,44 +2725,49 @@ else if (tdb->type != NULL)
 	}
     freeMem(typeLine);
     }
-char *setting;
-if (trackDbSetting(tdb, "compositeTrack"))
-    hCompositeUi(cart, tdb, NULL, NULL, "mainForm");
-else if ((setting = trackDbSetting(tdb, "superTrack")) && 
-                sameString(setting, "on"))
+if (tdb->isSuper)
     superTrackUi(tdb);
+else if (trackDbSetting(tdb, "compositeTrack"))
+    hCompositeUi(cart, tdb, NULL, NULL, "mainForm");
 }
 
 void trackUi(struct trackDb *tdb)
 /* Put up track-specific user interface. */
 {
-char *vis = hStringFromTv(tdb->visibility);
-char *onlyVisibility = trackDbSetting(tdb, "onlyVisibility");
-
 printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=%s>\n\n",
        hgTracksName(), cartUsualString(cart, "formMethod", "POST"));
 cartSaveSession(cart);
-printf("<H1>%s</H1>\n", tdb->longLabel);
+printf("<H1>%s%s</H1>\n", tdb->longLabel, tdb->isSuper ? " Tracks" : "");
 
-struct superTrackInfo *st = getSuperTrackInfo(tdb);
-if (st && !st->isParent)
+/* Print link for supertrack */
+if (tdb->parentName)
     {
-    /* print link for parent */
-    char *encodedMapName = cgiEncode(st->parentName);
-    printf("<H3>Configured with: <A HREF=\"%s?%s=%u&c=%s&g=%s\">%s</A></H3>", hgTrackUiName(),
-        cartSessionVarName(), cartSessionId(cart),
-        chromosome, encodedMapName, tdb->shortLabel);
-    freeMem(encodedMapName);
+    struct trackDb *superTdb = hTrackDbForTrack(tdb->parentName);
+    if (superTdb)
+        {
+        char *encodedMapName = cgiEncode(superTdb->tableName);
+        printf("<H3>Supertrack: <A HREF=\"%s?%s=%u&c=%s&g=%s\">%s</A></H3>", 
+                    hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
+                    chromosome, encodedMapName, superTdb->shortLabel);
+        freeMem(encodedMapName);
+        }
     }
 
+/* Display visibility menu */
 printf("<B>Display&nbsp;mode:&nbsp;</B>");
-
-if (!superTrackDropDown(cart, tdb, -1))
+if (tdb->isSuper)
+    {
+    /* This is a supertrack -- load its members and show hide/show dropdown */
+    hTrackDbLoadSuper(tdb);
+    superTrackDropDown(cart, tdb, -1);
+    }
+else
     {
     /* normal visibility control dropdown */
+    char *vis = hStringFromTv(tdb->visibility);
     hTvDropDownClassVisOnly(tdb->tableName,
         hTvFromString(cartUsualString(cart,tdb->tableName, vis)),
-        tdb->canPack, "normalText", onlyVisibility );
+        tdb->canPack, "normalText", trackDbSetting(tdb, "onlyVisibility"));
     }
 printf("&nbsp;");
 cgiMakeButton("Submit", "Submit");
@@ -2928,7 +2934,17 @@ else
 if (tdb == NULL)
    errAbort("Can't find %s in track database %s chromosome %s",
 	    track, database, chromosome);
-cartWebStart(cart, "%s Track Settings", tdb->shortLabel);
+char *super = trackDbGetSupertrackName(tdb);
+if (super)
+    {
+    /* configured as a supertrack member in trackDb */
+    tdb->parent = hTrackDbForTrack(super);
+    if (tdb->parent)
+        /* the supertrack is also configured, so use supertrack defaults */
+        trackDbSuperMemberSettings(tdb);
+    }
+char *title = (tdb->isSuper ? "Supertrack Settings" : "Track Settings");
+cartWebStart(cart, "%s %s", tdb->shortLabel, title);
 trackUi(tdb);
 printf("<BR>\n");
 webEnd();

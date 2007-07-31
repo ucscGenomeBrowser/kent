@@ -12,7 +12,7 @@
 #include "hgConfig.h"
 #include "chainCart.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.90 2007/07/26 19:46:15 kate Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.91 2007/07/31 01:08:56 kate Exp $";
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -114,7 +114,7 @@ static char *hTvStrings[] =
     "dense",
     "full",
     "pack",
-    "squish",
+    "squish"
     };
 
 enum trackVisibility hTvFromStringNoAbort(char *s)
@@ -1793,40 +1793,33 @@ else
 
 boolean superTrackDropDown(struct cart *cart, struct trackDb *tdb,
                                 int hasVisibleChild)
-/* Display hide/show dropdown for supertrack.  
- * set hasVisibleChild to -1 if this function should determine this.
- * Return false if not a supertrack */
+/* Displays hide/show dropdown for supertrack.  
+ * Set hasVisibleChild to -1 if this function should determine this -- in this
+ * case, the subtracks field must be populated with the child trackDbs.
+ * Returns false if not a supertrack */
 {
-struct superTrackInfo *st = getSuperTrackInfo(tdb);
-if (!st || !st->isParent)
+if (!tdb->isSuper)
     return FALSE;
 
 /* determine if supertrack is show/hide */
 boolean show = FALSE;
-/* check CGI variables and cart for user selection */
 //char *setting = cgiOptionalString(tdb->tableName);
-//fprintf(stderr, "from CGI: %s\n", setting);
-//if (!setting)
-    char *setting = cartOptionalString(cart, tdb->tableName);
-if (setting)
-    {
-    if (sameString("show", setting))
-        show = TRUE;
-    }
-else
-    {
-    if (st->defaultShow)
-        show = TRUE;
-    }
+char *setting = cartUsualString(cart, tdb->tableName, tdb->isShow ? "show" : "hide");
+if (sameString("show", setting))
+    show = TRUE;
+
 /* Determine if any tracks in supertrack are visible; if not,
  * the 'show' is grayed out */
 if (show && hasVisibleChild == -1)
     {
     hasVisibleChild = 0;
-    struct trackDb *childTdb;
-    for (childTdb = tdb->subtracks; childTdb != NULL; childTdb = tdb->next)
+    struct trackDb *cTdb;
+    for (cTdb = tdb->subtracks; cTdb != NULL; cTdb = tdb->next)
         {
-        if (childTdb->visibility != tvHide)
+        cTdb->visibility = hTvFromString(
+                                cartUsualString(cart, cTdb->tableName,
+                                              hStringFromTv(cTdb->visibility)));
+        if (cTdb->visibility != tvHide)
             hasVisibleChild = 1;
         }
     }

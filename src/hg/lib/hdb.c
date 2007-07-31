@@ -35,7 +35,7 @@
 #include "customTrack.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.326 2007/07/26 19:46:15 kate Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.327 2007/07/31 01:08:56 kate Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -3317,6 +3317,8 @@ if (trackDbNotFound)
     errAbort("can not find %s.%s check db.trackDb specification in hg.conf",
         hGetDb(),dyStringCannibalize(&tableNames));
     }
+/* fill in supertrack fields, if any in settings */
+trackDbSuperSettings(tdbList);
 return tdbList;
 }
 
@@ -3363,17 +3365,12 @@ if (!trackDbSetting(subtrackTdb, "noInherit"))
     }
 }
 
-static void superTrackMemberVis(struct trackDb *tdb)
-/* Set visibilities for track when it is a member of a supertrack */
-{
-struct superTrackInfo *st = getSuperTrackInfo(tdb);
-if (st && !st->isParent)
-    tdb->visibility = st->defaultVis;
-}
-
 struct trackDb *hTrackDb(char *chrom)
 /* Load tracks associated with current chromosome (which may be NULL for
- * all) */
+ * all).  Supertracks are loaded as a trackDb, but are not in the returned list,
+ * but are accessible via the parent pointers of the member tracks.  Also,
+ * the supertrack trackDb subtrack fields are not set here (would be
+ * incompatible with the returned list) */
 {
 struct sqlConnection *conn = hAllocConn();
 struct trackDb *tdbList = loadTrackDb(conn, NULL);
@@ -3384,14 +3381,14 @@ boolean privateHost = hIsPrivateHost();
 struct hash *compositeHash = newHash(0);
 struct hash *superHash = newHash(0);
 struct trackDb *tdb, *compositeTdb;
-struct trackDb *nextTdb, *superTdb;
+struct trackDb *nextTdb;
 
 /* Process list */
 while (tdbList != NULL)
     {
     tdb = slPopHead(&tdbList);
-    struct superTrackInfo *st = getSuperTrackInfo(tdb);
-    if (st && st->isParent)
+    if (tdb->isSuper)
+        /* save supertrack entries, but don't add to list */
         hashAdd(superHash, tdb->tableName, tdb);
     else if (trackDbSetting(tdb, "compositeTrack"))
         {
@@ -3442,20 +3439,13 @@ for (nextTdb = tdb = tdbSubtrackedList; nextTdb != NULL; tdb = nextTdb)
 hFreeConn(&conn);
 slSort(&tdbRetList, trackDbCmp);
 
-/* Add pointers to parent (super) track, and set supertrack-specific vis */
+/* Add parent pointers to supertrack members */
 for (tdb = tdbRetList; tdb != NULL; tdb = tdb->next)
     {
-    struct superTrackInfo *st = getSuperTrackInfo(tdb);
-    if (st && !st->isParent)
-        {
-        superTdb = (struct trackDb *)hashFindVal(superHash, st->parentName);
-        if (superTdb)
-            {
-            superTrackMemberVis(tdb);
-            tdb->parent = superTdb;
-            }
-        }
+    if (tdb->parentName)
+        tdb->parent = (struct trackDb *)hashFindVal(superHash, tdb->parentName);
     }
+
 return tdbRetList;
 }
 
@@ -3472,15 +3462,17 @@ return tdbs;
 static struct trackDb *loadTrackDbForTrack(struct sqlConnection *conn,
 					   char *track)
 /* Load trackDb object for a track. this is common code for two external 
- * functions. Handle composite tracks and subtrack inheritance here. */
+ * functions. Handle composite tracks and subtrack inheritance here.
+ */
 {
 struct trackDb *trackTdb = NULL;
 char where[256];
 
 safef(where, sizeof(where), "tableName = '%s'", track);
 trackTdb = loadAndLookupTrackDb(conn, where);
-
-if (trackTdb != NULL && trackDbSetting(trackTdb, "compositeTrack"))
+if (!trackTdb)
+    return NULL;
+if (trackDbSetting(trackTdb, "compositeTrack") != NULL)
     {
     /* Fill in trackDb->subtracks.  Query to get _exact_ match for composite 
      * track name in the subTrack setting, so we don't pick up subtracks of 
@@ -3494,7 +3486,7 @@ if (trackTdb != NULL && trackDbSetting(trackTdb, "compositeTrack"))
 	subtrackInherit(tdb, trackTdb);
     trackTdb->subtracks = subTdbList;
     }
-else if (trackTdb != NULL && trackDbSetting(trackTdb, "subTrack"))
+else if (trackDbSetting(trackTdb, "subTrack") != NULL)
     {
     struct trackDb *cTdb = NULL;
     char *subTrackSetting = cloneString(trackDbSetting(trackTdb, "subTrack"));
@@ -3505,30 +3497,24 @@ else if (trackTdb != NULL && trackDbSetting(trackTdb, "subTrack"))
 	subtrackInherit(trackTdb, cTdb);
     freez(&subTrackSetting);
     }
-struct superTrackInfo *st;
-if (trackTdb != NULL && (st = getSuperTrackInfo(trackTdb)) != NULL)
-    {
-    if (st->isParent)
-        {
-        /* gather all tracks in the super track */
-        struct trackDb *superTrackMembers = NULL;
-        struct trackDb *cTdb = NULL;
-        safef(where, sizeof(where),
-	  "settings rlike '[ \t\n]?superTrack %s[ \t\n]?' order by priority desc",
-              track);
-
-        superTrackMembers = loadAndLookupTrackDb(conn, where);
-        for (cTdb = superTrackMembers; cTdb != NULL; cTdb = cTdb->next)
-            superTrackMemberVis(cTdb);
-        trackTdb->subtracks = superTrackMembers;
-        }
-    else 
-        {
-        /* member of supertrack */
-        superTrackMemberVis(trackTdb);
-        }
-    }
 return trackTdb;
+}
+
+void hTrackDbLoadSuper(struct trackDb *tdb)
+/* Populate child trackDbs of this supertrack */
+{
+if (!tdb || !tdb->isSuper)
+    return;
+
+struct sqlConnection *conn = hAllocConn();
+char where[256];
+safef(where, sizeof(where),
+        "settings rlike '[ \t\n]?superTrack %s[ \t\n]?' order by priority desc",
+        tdb->tableName);
+tdb->subtracks = loadAndLookupTrackDb(conn, where);
+for (tdb = tdb->subtracks; tdb != NULL; tdb = tdb->next)
+    trackDbSuperMemberSettings(tdb);
+hFreeConn(&conn);
 }
 
 struct trackDb *hTrackDbForTrack(char *track)
@@ -3735,22 +3721,6 @@ char *hTrackOpenVis(char *trackName)
 return hTrackCanPack(trackName) ? "pack" : "full";
 }
 
-bool hTrackIsSubtrack(char *trackName)
-/* Return TRUE if this track is a subtrack. */
-/* Wrapper around trackDbIsSubtrack */
-{
-struct sqlConnection *conn = hAllocConn();
-struct trackDb *tdb = hMaybeTrackInfo(conn, trackName);
-boolean ret = FALSE;
-if (tdb != NULL)
-    {
-    ret = trackDbIsSubtrack(tdb);
-    trackDbFree(&tdb);
-    }
-hFreeConn(&conn);
-return ret;
-}
-
 char *hGetParent(char *subtrackName)
 /* Given a subtrack table, find its parent */
 {
@@ -3765,8 +3735,6 @@ if (tdb != NULL)
 hFreeConn(&conn);
 return ret;
 }
-
-
 
 static struct dbDb *hGetIndexedDbsMaybeClade(char *theDb)
 /* Get list of active databases, in theDb's clade if theDb is not NULL.

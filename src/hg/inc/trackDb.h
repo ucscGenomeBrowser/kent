@@ -43,27 +43,17 @@ struct trackDb
     struct hash *settingsHash;  /* Hash for settings. Not saved in database.
                                  * Don't use directly, rely on trackDbSetting
 				 * to access. */
-    /* additional data, not in database */
-    struct trackDb *subtracks;  /* not null if composite track */
-    struct trackDb *parent;     /* not null if part of supertrack -- use
-                                   later for arbitrary hierarchies */
+    /* additional info, determined from settings */
+    struct trackDb *subtracks;  /* not null if composite track.  May be populated
+                                 *  if this is a supertrack */
+    /* for supertracks */
+    boolean isSuper;            /* true if this is a supertrack */
+    boolean isShow;             /* true if this is a supertrack with pseudo-vis 'show' */
+    /* for supertrack members */
+    char *parentName;           /* set if this ia a supertrack member */
+    struct trackDb *parent;     /* may be set if this is a supertrack member -- use
+                                 * later for arbitrary hierarchies */
     };
-
-struct superTrackInfo
-/* Describes attributes of supertrack (parent) or a supertrack member (child),
- * extracted from supertrack setting */
-    {
-    boolean isParent;           /* parent or child */
-    boolean defaultShow;        /* for parent */
-    char *parentName;           /* for child */
-    unsigned char defaultVis;   /* for child */
-    };
-
-struct superTrackInfo *getSuperTrackInfo(struct trackDb *tdb);
-/* Get info from supertrack setting.  There are 2 forms:
- * Parent:   'supertrack on [show]'
- * Child:    'supertrack <parent> [vis]
- * Returns NULL if there is no such setting */
 
 struct trackDb *trackDbLoad(char **row);
 /* Load a trackDb from row fetched with select * from trackDb
@@ -145,11 +135,24 @@ struct hashEl *trackDbSettingsLike(struct trackDb *tdb, char *wildStr);
  * characters).  Free the result with hashElFreeList. */
 
 bool trackDbIsComposite(struct trackDb *tdb);
-/* Determine if this is a composite track. This is currently defined
+/* Determine if this is a populated composite track. This is currently defined
  * as a top-level dummy track, with a list of subtracks of the same type */
 
-bool trackDbIsSubtrack(struct trackDb *tdb);
-/* Determine if this is a subtrack. */
+bool trackDbHasCompositeSetting(struct trackDb *tdb);
+/* Determine if this has a trackDb setting indicating it is a composite */
+
+char *trackDbGetSupertrackName(struct trackDb *tdb);
+/* Find name of supertrack if this track is a member */
+
+void trackDbSuperMemberSettings(struct trackDb *tdb);
+/* Set fields in trackDb to indicate this is a member of a
+ * supertrack. */
+
+void trackDbSuperSettings(struct trackDb *tdbList);
+/* Get info from supertrack setting.  There are 2 forms:
+ * Parent:   'supertrack on [show]'
+ * Child:    'supertrack <parent> [vis]
+ * Returns NULL if there is no such setting */
 
 char *trackDbInclude(char *raFile, char *line);
 /* Get include filename from trackDb line.  
