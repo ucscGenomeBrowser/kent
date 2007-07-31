@@ -372,7 +372,10 @@ hPrintf("Enable track re-ordering");
 hPrintf("</TD></TR>\n");
 hTableEnd();
 
-webNewSection("Configure Tracks");
+char buf[128];
+safef(buf, sizeof buf, "Configure Tracks on %s %s: %s %s", 
+        organization, browserName, organism, hFreezeFromDb(database));
+webNewSection(buf);
 hPrintf("Tracks: ");
 cgiMakeButton(configHideAll, "hide all");
 hPrintf(" ");
