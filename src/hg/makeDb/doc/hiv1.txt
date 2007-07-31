@@ -276,6 +276,20 @@ CREATE TABLE gsClinicRec (
 #   http://www.hiv.lanl.gov/content/hiv-db/MAP/landmark.html
 #   http://www.hiv.lanl.gov/content/hiv-db/MAP/old_map/landmark.html
 #   http://www.hiv.lanl.gov/content/hiv-db/MAP/old_map/Env.html
+#
+#   The content of old.bed is as following:
+	chr1    0       634     5'LTR
+	chr1    5830    5999    tat_exon1
+	chr1    5969    6045    rev_exon1
+	chr1    6614    6691    V1
+	chr1    6695    6811    V2
+	chr1    7109    7216    V3
+	chr1    7376    7477    V4
+	chr1    7601    7636    V5
+	chr1    8378    8653    rev_exon2
+	chr1    8378    8469    tat_exon2
+	chr1    7726    8078    RRE
+	chr1    9085    9719    3'LTR
 
 # concatenate hivGene.bed1 and old.bed into hivGene.bed
 
