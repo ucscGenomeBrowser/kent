@@ -53,7 +53,7 @@ url http://www.informatics.jax.org/searches/accession_report.cgi?id=$$
 urlLabel MGI QTL Detail: 
 
 track jaxQTL2
-shortLabel QTL
+shortLabel MGI QTL
 longLabel Quantitative Trait Loci From Jax/MGI
 group map
 priority 21.1
