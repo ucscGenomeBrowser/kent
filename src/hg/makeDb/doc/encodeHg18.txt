@@ -78,6 +78,7 @@ wc -l easyBeds.tables
 mkdir easyBeds
 for fields in 3 4 5 6 9 12; do 
     for table in `grep "bed $fields" easyBeds.tables | cut -f1`; do 
+       hgsql hg18 -e "drop table $table"
        /cluster/data/encode/bin/scripts/convertBedTable.csh hg17 hg18 \
          $table $fields >> easyBeds.script.log 
        mv $table.* easyBeds/
@@ -256,6 +257,210 @@ for table in `cat hg17.wig.tables`; do
     mv $table.*wig $table.unmapped fromHg17.wig/
 done
 
+##########################################################
+# Wig lifting 
+# we need to find all the old wiggle data and lift that.  
+# Start with hg16
+
+ssh hgwdev
+bash 
+cd /cluster/data/encode/convertHg18
+
+# find those hg16 tables
+
+cat > affyChipChip.hg16.wig.tables << "EOF"
+encodeAffyChIpHl60PvalBrg1Hr00	Affy/2005-06-01/chipchip/wig/EC_AS_HL60_DN_RA_Brg1_00hr_C01_EC_AS_HL60_DN_RA_Input_All_B1_B2_B3.pval.median.wig.bz2
+encodeAffyChIpHl60PvalBrg1Hr02	Affy/2005-06-01/chipchip/wig/EC_AS_HL60_DN_RA_Brg1_02hr_C01_EC_AS_HL60_DN_RA_Input_All_B1_B2_B3.pval.median.wig.bz2
+encodeAffyChIpHl60PvalBrg1Hr08	Affy/2005-06-01/chipchip/wig/EC_AS_HL60_DN_RA_Brg1_08hr_C01_EC_AS_HL60_DN_RA_Input_All_B1_B2_B3.pval.median.wig.bz2
+encodeAffyChIpHl60PvalBrg1Hr32	Affy/2005-06-01/chipchip/wig/EC_AS_HL60_DN_RA_Brg1_32hr_C01_EC_AS_HL60_DN_RA_Input_All_B1_B2_B3.pval.median.wig.bz2
+encodeAffyChIpHl60PvalCebpeHr00	Affy/2005-06-01/chipchip/wig/EC_AS_HL60_DN_RA_CEBPe_00hr_C01_EC_AS_HL60_DN_RA_Input_All_B1_B2_B3.pval.median.wig.bz2
+encodeAffyChIpHl60PvalCebpeHr02	Affy/2005-06-01/chipchip/wig/EC_AS_HL60_DN_RA_CEBPe_02hr_C01_EC_AS_HL60_DN_RA_Input_All_B1_B2_B3.pval.median.wig.bz2
+encodeAffyChIpHl60PvalCebpeHr08	Affy/2005-06-01/chipchip/wig/EC_AS_HL60_DN_RA_CEBPe_08hr_C01_EC_AS_HL60_DN_RA_Input_All_B1_B2_B3.pval.median.wig.bz2
+encodeAffyChIpHl60PvalCebpeHr32	Affy/2005-06-01/chipchip/wig/EC_AS_HL60_DN_RA_CEBPe_32hr_C01_EC_AS_HL60_DN_RA_Input_All_B1_B2_B3.pval.median.wig.bz2
+encodeAffyChIpHl60PvalCtcfHr00	Affy/2005-06-01/chipchip/wig/EC_AS_HL60_DN_RA_CTCF_00hr_C01_EC_AS_HL60_DN_RA_Input_All_B1_B2_B3.pval.median.wig.bz2
+encodeAffyChIpHl60PvalCtcfHr02	Affy/2005-06-01/chipchip/wig/EC_AS_HL60_DN_RA_CTCF_02hr_C01_EC_AS_HL60_DN_RA_Input_All_B1_B2_B3.pval.median.wig.bz2
+encodeAffyChIpHl60PvalCtcfHr08	Affy/2005-06-01/chipchip/wig/EC_AS_HL60_DN_RA_CTCF_08hr_C01_EC_AS_HL60_DN_RA_Input_All_B1_B2_B3.pval.median.wig.bz2
+encodeAffyChIpHl60PvalCtcfHr32	Affy/2005-06-01/chipchip/wig/EC_AS_HL60_DN_RA_CTCF_32hr_C01_EC_AS_HL60_DN_RA_Input_All_B1_B2_B3.pval.median.wig.bz2
+encodeAffyChIpHl60PvalH3K27me3Hr00	Affy/2005-06-01/chipchip/wig/EC_AS_HL60_DN_RA_H3K27T_00hr_C01_EC_AS_HL60_DN_RA_Input_All_B1_B2_B3.pval.median.wig.bz2
+encodeAffyChIpHl60PvalH3K27me3Hr02	Affy/2005-06-01/chipchip/wig/EC_AS_HL60_DN_RA_H3K27T_02hr_C01_EC_AS_HL60_DN_RA_Input_All_B1_B2_B3.pval.median.wig.bz2
+encodeAffyChIpHl60PvalH3K27me3Hr08	Affy/2005-06-01/chipchip/wig/EC_AS_HL60_DN_RA_H3K27T_08hr_C01_EC_AS_HL60_DN_RA_Input_All_B1_B2_B3.pval.median.wig.bz2
+encodeAffyChIpHl60PvalH3K27me3Hr32	Affy/2005-06-01/chipchip/wig/EC_AS_HL60_DN_RA_H3K27T_32hr_C01_EC_AS_HL60_DN_RA_Input_All_B1_B2_B3.pval.median.wig.bz2
+encodeAffyChIpHl60PvalH4Kac4Hr00	Affy/2005-06-01/chipchip/wig/EC_AS_HL60_DN_RA_HisH4_00hr_C01_EC_AS_HL60_DN_RA_Input_All_B1_B2_B3.pval.median.wig.bz2
+encodeAffyChIpHl60PvalH4Kac4Hr02	Affy/2005-06-01/chipchip/wig/EC_AS_HL60_DN_RA_HisH4_02hr_C01_EC_AS_HL60_DN_RA_Input_All_B1_B2_B3.pval.median.wig.bz2
+encodeAffyChIpHl60PvalH4Kac4Hr08	Affy/2005-06-01/chipchip/wig/EC_AS_HL60_DN_RA_HisH4_08hr_C01_EC_AS_HL60_DN_RA_Input_All_B1_B2_B3.pval.median.wig.bz2
+encodeAffyChIpHl60PvalH4Kac4Hr32	Affy/2005-06-01/chipchip/wig/EC_AS_HL60_DN_RA_HisH4_32hr_C01_EC_AS_HL60_DN_RA_Input_All_B1_B2_B3.pval.median.wig.bz2
+encodeAffyChIpHl60PvalP300Hr00	Affy/2005-06-01/chipchip/wig/EC_AS_HL60_DN_RA_P300_00hr_C01_EC_AS_HL60_DN_RA_Input_All_B1_B2_B3.pval.median.wig.bz2
+encodeAffyChIpHl60PvalP300Hr02	Affy/2005-06-01/chipchip/wig/EC_AS_HL60_DN_RA_P300_02hr_C01_EC_AS_HL60_DN_RA_Input_All_B1_B2_B3.pval.median.wig.bz2
+encodeAffyChIpHl60PvalP300Hr08	Affy/2005-06-01/chipchip/wig/EC_AS_HL60_DN_RA_P300_08hr_C01_EC_AS_HL60_DN_RA_Input_All_B1_B2_B3.pval.median.wig.bz2
+encodeAffyChIpHl60PvalP300Hr32	Affy/2005-06-01/chipchip/wig/EC_AS_HL60_DN_RA_P300_32hr_C01_EC_AS_HL60_DN_RA_Input_All_B1_B2_B3.pval.median.wig.bz2
+encodeAffyChIpHl60PvalPu1Hr00	Affy/2005-06-01/chipchip/wig/EC_AS_HL60_DN_RA_PU1_00hr_C01_EC_AS_HL60_DN_RA_Input_All_B1_B2_B3.pval.median.wig.bz2
+encodeAffyChIpHl60PvalPu1Hr02	Affy/2005-06-01/chipchip/wig/EC_AS_HL60_DN_RA_PU1_02hr_C01_EC_AS_HL60_DN_RA_Input_All_B1_B2_B3.pval.median.wig.bz2
+encodeAffyChIpHl60PvalPu1Hr08	Affy/2005-06-01/chipchip/wig/EC_AS_HL60_DN_RA_PU1_08hr_C01_EC_AS_HL60_DN_RA_Input_All_B1_B2_B3.pval.median.wig.bz2
+encodeAffyChIpHl60PvalPu1Hr32	Affy/2005-06-01/chipchip/wig/EC_AS_HL60_DN_RA_PU1_32hr_C01_EC_AS_HL60_DN_RA_Input_All_B1_B2_B3.pval.median.wig.bz2
+encodeAffyChIpHl60PvalRaraHr00	Affy/2005-06-01/chipchip/wig/EC_AS_HL60_DN_RA_RARecA_00hr_C01_EC_AS_HL60_DN_RA_Input_All_B1_B2_B3.pval.median.wig.bz2
+encodeAffyChIpHl60PvalRaraHr02	Affy/2005-06-01/chipchip/wig/EC_AS_HL60_DN_RA_RARecA_02hr_C01_EC_AS_HL60_DN_RA_Input_All_B1_B2_B3.pval.median.wig.bz2
+encodeAffyChIpHl60PvalRaraHr08	Affy/2005-06-01/chipchip/wig/EC_AS_HL60_DN_RA_RARecA_08hr_C01_EC_AS_HL60_DN_RA_Input_All_B1_B2_B3.pval.median.wig.bz2
+encodeAffyChIpHl60PvalRaraHr32	Affy/2005-06-01/chipchip/wig/EC_AS_HL60_DN_RA_RARecA_32hr_C01_EC_AS_HL60_DN_RA_Input_All_B1_B2_B3.pval.median.wig.bz2
+encodeAffyChIpHl60PvalRnapHr00	Affy/2005-06-01/chipchip/wig/EC_AS_HL60_DN_RA_Pol2_00hr_C01_EC_AS_HL60_DN_RA_Input_All_B1_B2_B3.pval.median.wig.bz2
+encodeAffyChIpHl60PvalRnapHr02	Affy/2005-06-01/chipchip/wig/EC_AS_HL60_DN_RA_Pol2_02hr_C01_EC_AS_HL60_DN_RA_Input_All_B1_B2_B3.pval.median.wig.bz2
+encodeAffyChIpHl60PvalRnapHr08	Affy/2005-06-01/chipchip/wig/EC_AS_HL60_DN_RA_Pol2_08hr_C01_EC_AS_HL60_DN_RA_Input_All_B1_B2_B3.pval.median.wig.bz2
+encodeAffyChIpHl60PvalRnapHr32	Affy/2005-06-01/chipchip/wig/EC_AS_HL60_DN_RA_Pol2_32hr_C01_EC_AS_HL60_DN_RA_Input_All_B1_B2_B3.pval.median.wig.bz2
+encodeAffyChIpHl60PvalSirt1Hr00	Affy/2005-06-01/chipchip/wig/EC_AS_HL60_DN_RA_SIRT1_00hr_C01_EC_AS_HL60_DN_RA_Input_All_B1_B2_B3.pval.median.wig.bz2
+encodeAffyChIpHl60PvalSirt1Hr02	Affy/2005-06-01/chipchip/wig/EC_AS_HL60_DN_RA_SIRT1_02hr_C01_EC_AS_HL60_DN_RA_Input_All_B1_B2_B3.pval.median.wig.bz2
+encodeAffyChIpHl60PvalSirt1Hr08	Affy/2005-06-01/chipchip/wig/EC_AS_HL60_DN_RA_SIRT1_08hr_C01_EC_AS_HL60_DN_RA_Input_All_B1_B2_B3.pval.median.wig.bz2
+encodeAffyChIpHl60PvalSirt1Hr32	Affy/2005-06-01/chipchip/wig/EC_AS_HL60_DN_RA_SIRT1_32hr_C01_EC_AS_HL60_DN_RA_Input_All_B1_B2_B3.pval.median.wig.bz2
+encodeAffyChIpHl60PvalTfiibHr32	Affy/2005-06-01/chipchip/wig/EC_AS_HL60_DN_RA_TFIIB-R_32hr_C01_EC_AS_HL60_DN_RA_Input_All_B1_B2_B3.pval.median.wig.bz2
+EOF
+
+mkdir -p wigs/hg16
+cd wigs/hg16
+cat ../../affyChipChip.hg16.wig.tables | while read -a line; do 
+   chain=/gbdb/hg16/liftOver/hg16ToHg18.over.chain.gz
+   table=${line[0]};
+   oldWig=$table.hg16.wig
+   newWig=$table.hg18.wig
+   bad=$table.hg18.unmapped
+   wib=$table.wib
+   wigTable=$table.tab
+   file=/cluster/data/encode/${line[1]}; 
+
+   echo $table
+   bzcat $file | tail +2 | awk -f ../../varStepToBed.awk | \
+     awk 'BEGIN{OFS="\t"}{print $1, $2+1, $3, $4;}' > $oldWig;
+   liftOver -bedPlus=3 $oldWig $chain $newWig $bad
+   bedSort $newWig tmp
+   mv tmp $newWig
+   wigEncode $newWig $wigTable $wib
+done
+
+# One more for BU Orchid
+
+awk -f ../../varStepToBed.awk ../../../BU/orchid/2005-06-09/t0 > encodeBu_ORChID1.hg16.wig
+liftOver -bedPlus=3 encodeBu_ORChID1.hg16.wig /gbdb/hg16/liftOver/hg16ToHg18.over.chain.gz encodeBu_ORChID1.hg18.wig encodeBu_ORChID1.hg18.unmapped
+bedSort encodeBu_ORChID1.hg18.wig tmp; mv tmp encodeBu_ORChID1.hg18.wig
+wigEncode encodeBu_ORChID1.hg18.wig encodeBu_ORChID1.tab encodeBu_ORChID1.wib
+
+# Encode hapmap coverage
+
+for graph in ../../../sanger/coverage/encode*.bedGraph; do
+     table=${graph%.bedGraph}
+     table=${table#*coverage\/}
+     liftOver -bedPlus=3 $graph /gbdb/hg16/liftOver/hg16ToHg18.over.chain.gz \
+       $table.hg18.wig $table.hg18.unmapped
+     bedSort $table.hg18.wig tmp; mv tmp $table.hg18.wig
+     wigEncode $table.hg18.wig $table.tab $table.wib
+done
+
+# hg17 tables
+cd ../
+mkdir hg17
+cd hg17
+cat | while read -a line; do
+    table=${line[0]};
+    file=/cluster/data/encode/${line[1]};
+    chain=/gbdb/hg17/liftOver/hg17ToHg18.over.chain.gz;
+    awk -f ../../varStepToBed.awk $file > $table.hg17.wig;
+    bedSort $table.hg17.wig tmp; mv tmp $table.hg17.wig
+    liftOver -bedPlus=3 $table.hg17.wig $chain $table.hg18.wig $table.hg18.unmapped;
+    bedSort $table.hg18.wig tmp; mv tmp $table.hg18.wig;
+    wigEncode $table.hg18.wig $table.tab $table.wib
+done << "EOF"
+encodeAffyChIpHl60PvalStrictH3K9K14DHr00	Affy/2005-10-03/lab/CHIP/wig/H3K9K14D/00/EC_AS_HL60_DN_RA_H3K9K14D_00hr_C01_EC_AS_HL60_DN_RA_Input_All_B1_B4_B5.pval.median.wig
+encodeAffyChIpHl60PvalStrictH3K9K14DHr02	Affy/2005-10-03/lab/CHIP/wig/H3K9K14D/02/EC_AS_HL60_DN_RA_H3K9K14D_02hr_C01_EC_AS_HL60_DN_RA_Input_All_B1_B4_B5.pval.median.wig
+encodeAffyChIpHl60PvalStrictH3K9K14DHr08	Affy/2005-10-03/lab/CHIP/wig/H3K9K14D/08/EC_AS_HL60_DN_RA_H3K9K14D_08hr_C01_EC_AS_HL60_DN_RA_Input_All_B1_B4_B5.pval.median.wig
+encodeAffyChIpHl60PvalStrictH3K9K14DHr32	Affy/2005-10-03/lab/CHIP/wig/H3K9K14D/32/EC_AS_HL60_DN_RA_H3K9K14D_32hr_C01_EC_AS_HL60_DN_RA_Input_All_B1_B4_B5.pval.median.wig
+encodeAffyChIpHl60PvalStrictHisH4Hr00	Affy/2005-10-03/lab/CHIP/wig/HisH4/00/EC_AS_HL60_DN_RA_HisH4_00hr_C01_EC_AS_HL60_DN_RA_Input_All_B1_B4_B5.pval.median.wig
+encodeAffyChIpHl60PvalStrictHisH4Hr02	Affy/2005-10-03/lab/CHIP/wig/HisH4/02/EC_AS_HL60_DN_RA_HisH4_02hr_C01_EC_AS_HL60_DN_RA_Input_All_B1_B4_B5.pval.median.wig
+encodeAffyChIpHl60PvalStrictHisH4Hr08	Affy/2005-10-03/lab/CHIP/wig/HisH4/08/EC_AS_HL60_DN_RA_HisH4_08hr_C01_EC_AS_HL60_DN_RA_Input_All_B1_B4_B5.pval.median.wig
+encodeAffyChIpHl60PvalStrictHisH4Hr32	Affy/2005-10-03/lab/CHIP/wig/HisH4/32/EC_AS_HL60_DN_RA_HisH4_32hr_C01_EC_AS_HL60_DN_RA_Input_All_B1_B4_B5.pval.median.wig
+encodeAffyChIpHl60PvalStrictp63_ActD	Affy/2005-10-03/lab/CHIP/wig/p63_ActD/EC_AS_ME180_ActD_p63_C01_EC_AS_ME180_CombInput_PlMinActD_B1_B2_B3.pval.median.wig
+encodeAffyChIpHl60PvalStrictp63_mActD	Affy/2005-10-03/lab/CHIP/wig/p63_mActD/EC_AS_ME180_Ctrl_p63_C01_EC_AS_ME180_CombInput_PlMinActD_B1_B2_B3.pval.median.wig
+encodeAffyChIpHl60PvalStrictPol2Hr00	Affy/2005-10-03/lab/CHIP/wig/Pol2/00/EC_AS_HL60_DN_RA_Pol2_00hr_C01_EC_AS_HL60_DN_RA_Input_All_B1_B4_B5.pval.median.wig
+encodeAffyChIpHl60PvalStrictPol2Hr02	Affy/2005-10-03/lab/CHIP/wig/Pol2/02/EC_AS_HL60_DN_RA_Pol2_02hr_C01_EC_AS_HL60_DN_RA_Input_All_B1_B4_B5.pval.median.wig
+encodeAffyChIpHl60PvalStrictPol2Hr08	Affy/2005-10-03/lab/CHIP/wig/Pol2/08/EC_AS_HL60_DN_RA_Pol2_08hr_C01_EC_AS_HL60_DN_RA_Input_All_B1_B4_B5.pval.median.wig
+encodeAffyChIpHl60PvalStrictPol2Hr32	Affy/2005-10-03/lab/CHIP/wig/Pol2/32/EC_AS_HL60_DN_RA_Pol2_32hr_C01_EC_AS_HL60_DN_RA_Input_All_B1_B4_B5.pval.median.wig
+encodeAffyChIpHl60SignalStrictH3K9K14DHr00	Affy/2005-10-03/lab/CHIP/wig/H3K9K14D/00/EC_AS_HL60_DN_RA_H3K9K14D_00hr_C01_EC_AS_HL60_DN_RA_Input_All_B1_B4_B5.sig.median.wig
+encodeAffyChIpHl60SignalStrictH3K9K14DHr02	Affy/2005-10-03/lab/CHIP/wig/H3K9K14D/02/EC_AS_HL60_DN_RA_H3K9K14D_02hr_C01_EC_AS_HL60_DN_RA_Input_All_B1_B4_B5.sig.median.wig
+encodeAffyChIpHl60SignalStrictH3K9K14DHr08	Affy/2005-10-03/lab/CHIP/wig/H3K9K14D/08/EC_AS_HL60_DN_RA_H3K9K14D_08hr_C01_EC_AS_HL60_DN_RA_Input_All_B1_B4_B5.sig.median.wig
+encodeAffyChIpHl60SignalStrictH3K9K14DHr32	Affy/2005-10-03/lab/CHIP/wig/H3K9K14D/32/EC_AS_HL60_DN_RA_H3K9K14D_32hr_C01_EC_AS_HL60_DN_RA_Input_All_B1_B4_B5.sig.median.wig
+encodeAffyChIpHl60SignalStrictHisH4Hr00	Affy/2005-10-03/lab/CHIP/wig/HisH4/00/EC_AS_HL60_DN_RA_HisH4_00hr_C01_EC_AS_HL60_DN_RA_Input_All_B1_B4_B5.sig.median.wig
+encodeAffyChIpHl60SignalStrictHisH4Hr02	Affy/2005-10-03/lab/CHIP/wig/HisH4/02/EC_AS_HL60_DN_RA_HisH4_02hr_C01_EC_AS_HL60_DN_RA_Input_All_B1_B4_B5.sig.median.wig
+encodeAffyChIpHl60SignalStrictHisH4Hr08	Affy/2005-10-03/lab/CHIP/wig/HisH4/08/EC_AS_HL60_DN_RA_HisH4_08hr_C01_EC_AS_HL60_DN_RA_Input_All_B1_B4_B5.sig.median.wig
+encodeAffyChIpHl60SignalStrictHisH4Hr32	Affy/2005-10-03/lab/CHIP/wig/HisH4/32/EC_AS_HL60_DN_RA_HisH4_32hr_C01_EC_AS_HL60_DN_RA_Input_All_B1_B4_B5.sig.median.wig
+encodeAffyChIpHl60SignalStrictp63_ActD	Affy/2005-10-03/lab/CHIP/wig/p63_ActD/EC_AS_ME180_ActD_p63_C01_EC_AS_ME180_CombInput_PlMinActD_B1_B2_B3.sig.median.wig
+encodeAffyChIpHl60SignalStrictp63_mActD	Affy/2005-10-03/lab/CHIP/wig/p63_mActD/EC_AS_ME180_Ctrl_p63_C01_EC_AS_ME180_CombInput_PlMinActD_B1_B2_B3.sig.median.wig
+encodeAffyChIpHl60SignalStrictPol2Hr00	Affy/2005-10-03/lab/CHIP/wig/Pol2/00/EC_AS_HL60_DN_RA_Pol2_00hr_C01_EC_AS_HL60_DN_RA_Input_All_B1_B4_B5.sig.median.wig
+encodeAffyChIpHl60SignalStrictPol2Hr02	Affy/2005-10-03/lab/CHIP/wig/Pol2/02/EC_AS_HL60_DN_RA_Pol2_02hr_C01_EC_AS_HL60_DN_RA_Input_All_B1_B4_B5.sig.median.wig
+encodeAffyChIpHl60SignalStrictPol2Hr08	Affy/2005-10-03/lab/CHIP/wig/Pol2/08/EC_AS_HL60_DN_RA_Pol2_08hr_C01_EC_AS_HL60_DN_RA_Input_All_B1_B4_B5.sig.median.wig
+encodeAffyChIpHl60SignalStrictPol2Hr32	Affy/2005-10-03/lab/CHIP/wig/Pol2/32/EC_AS_HL60_DN_RA_Pol2_32hr_C01_EC_AS_HL60_DN_RA_Input_All_B1_B4_B5.sig.median.wig
+encodeAffyRnaGm06990Signal	Affy/2005-10-03/lab/RNA/wig/GM06990/EC_AS_GM06990_RCyP+_C01vsNULL.sig.wig
+encodeAffyRnaHeLaSignal	Affy/2005-11-22/lab/Affy_HeLa/wig/EC_AS_HeLa_RCyP+_C01vsNULL.sig.wig
+encodeAffyRnaHl60SignalHr00	Affy/2005-10-03/lab/RNA/wig/HL60/00/EC_AS_HL60_RWP+_RA_00hr_C01vsNULL.sig.wig        
+encodeAffyRnaHl60SignalHr02	Affy/2005-10-03/lab/RNA/wig/HL60/02/EC_AS_HL60_RWP+_RA_02hr_C01vsNULL.sig.wig
+encodeAffyRnaHl60SignalHr08	Affy/2005-10-03/lab/RNA/wig/HL60/08/EC_AS_HL60_RWP+_RA_08hr_C01vsNULL.sig.wig
+encodeAffyRnaHl60SignalHr32	Affy/2005-10-03/lab/RNA/wig/HL60/32/EC_AS_HL60_RWP+_RA_32hr_C01vsNULL.sig.wig
+encodeUvaDnaRepTr50	UVa/2005-10-15/lab/smoothedtr50.hg17.wig
+EOF
+
+# Uppsala hg17 is already in bed format
+
+cat | while read -a line; do
+    table=${line[0]};
+    file=/cluster/data/encode/${line[1]};
+    chain=/gbdb/hg17/liftOver/hg17ToHg18.over.chain.gz;
+    liftOver -bedPlus=3 $file $chain $table.hg18.wig $table.hg18.unmapped;
+    bedSort $table.hg18.wig tmp; mv tmp $table.hg18.wig;
+    wigEncode $table.hg18.wig $table.tab $table.wib
+done << "EOF"
+encodeUppsalaChipH3acBut0h      Uppsala/2006-05-29/lab/encodeUppsalaChipH3acBut0h.wig.txt
+encodeUppsalaChipH3acBut12h     Uppsala/2006-05-29/lab/encodeUppsalaChipH3acBut12h.wig.txt
+encodeUppsalaChipH4acBut0h      Uppsala/2006-05-29/lab/encodeUppsalaChipH4acBut0h.wig.txt
+encodeUppsalaChipH4acBut12h     Uppsala/2006-05-29/lab/encodeUppsalaChipH4acBut12h.wig.txt
+EOF
+
+cat | while read -a line; do
+    table=${line[0]};
+    file=/cluster/data/encode/${line[1]};
+    chain=/gbdb/hg17/liftOver/hg17ToHg18.over.chain.gz;
+    liftOver -bedPlus=3 $file $chain $table.hg18.wig $table.hg18.unmapped;
+    bedSort $table.hg18.wig tmp; mv tmp $table.hg18.wig;
+    wigEncode $table.hg18.wig $table.tab $table.wib
+done << "EOF"
+encodeYaleAffyNeutRNATransMap   yale/rna/2005-10-14/encodeYaleAffyNeutRNATransMap.trim
+encodeYaleAffyNB4RARNATransMap  yale/rna/2005-10-14/lab/encode_Yale_Affy_NB4_RA_RNA_Transcript_Map_ncbi35.wig
+encodeYaleAffyNB4TPARNATransMap yale/rna/2005-10-14/lab/encode_Yale_Affy_NB4_TPA_RNA_Transcript_Map_ncbi35.wig
+encodeYaleAffyNB4UntrRNATransMap        yale/rna/2005-10-14/lab/encode_Yale_Affy_NB4_CTRL_RNA_Transcript_Map_ncbi35.wig
+encodeYaleAffyPlacRNATransMap   yale/rna/2005-10-14/lab/encode_Yale_Affy_Placenta_RNA_Transcript_Map_ncbi35.wig
+EOF
+
+# ERRORS ... the first one worked, the others need trimming.
+
+cat | while read -a line; do
+    table=${line[0]};
+    file=/cluster/data/encode/${line[1]};
+    chain=/gbdb/hg17/liftOver/hg17ToHg18.over.chain.gz;
+    liftOver -bedPlus=3 $file $chain $table.hg18.wig $table.hg18.unmapped;
+    bedSort $table.hg18.wig stdout | /cluster/data/encode/bin/scripts/trimOverlap.pl > tmp;
+    mv tmp $table.hg18.wig;
+    wigEncode $table.hg18.wig $table.tab $table.wib;
+done << "EOF"
+encodeYaleAffyNB4RARNATransMap  yale/rna/2005-10-14/lab/encode_Yale_Affy_NB4_RA_RNA_Transcript_Map_ncbi35.wig
+encodeYaleAffyNB4TPARNATransMap yale/rna/2005-10-14/lab/encode_Yale_Affy_NB4_TPA_RNA_Transcript_Map_ncbi35.wig
+encodeYaleAffyNB4UntrRNATransMap        yale/rna/2005-10-14/lab/encode_Yale_Affy_NB4_CTRL_RNA_Transcript_Map_ncbi35.wig
+encodeYaleAffyPlacRNATransMap   yale/rna/2005-10-14/lab/encode_Yale_Affy_Placenta_RNA_Transcript_Map_ncbi35.wig
+EOF
+
+# Forgot an hg16 one
+
+table=encodeUcsdNgChipSignal
+file=/cluster/data/encode/UCSD/nimblegen/2005-05-31/encodeUcsdNgChipSignal.varStep
+chain=/gbdb/hg16/liftOver/hg16ToHg18.over.chain.gz
+awk -f ../../varStepToBed.awk $file > $table.hg16.wig
+liftOver -bedPlus=3 $table.hg16.wig $chain $table.hg18.wig $table.hg18.unmapped
+bedSort $table.hg18.wig stdout | /cluster/data/encode/bin/scripts/trimOverlap.pl > tmp
+mv tmp $table.hg18.wig
+wigEncode $table.hg18.wig $table.tab $table.wib
+
 #############################################################################
 # Stanford NRSF ChIP-seq (DONE, Heather, July 2007)
 
@@ -301,3 +506,71 @@ hgLoadBed hg18 encodeStanfordNRSFControl hg18.control.bed -tab
 # create encodeBUORChID.html at trackDb/human/hg18/
     
 
+#############################################################################
+# Stanford NRSF ChIP-seq (DONE, Heather, July 2007)
+
+ssh hgwdev
+cd /cluster/data/encode/stanford/2007-03-14
+liftOver fix.bed /gbdb/hg17/liftOver/hg17ToHg18.over.chain.gz hg18.bed core.unmapped
+liftOver control_fix.bed /gbdb/hg17/liftOver/hg17ToHg18.over.chain.gz hg18.control.bed control.unmapped
+hgLoadBed hg18 encodeStanfordNRSFEnriched hg18.bed -tab
+hgLoadBed hg18 encodeStanfordNRSFControl hg18.control.bed -tab
+
+############################################################################
+# Yale ENCODE Lifting
+
+ssh hgwdev
+cd /cluster/data/encode/convertHg18
+for table in `cat yale.lst`; do 
+   echo select tableName,type from trackDb where tableName=\"$table\" \
+     | hgsql hg17 | tail +2 >> yale.tables 
+done
+sed -e 's/bed5FloatScoreWithFdr/bed 5/' \
+    -e 's/bedGraph\ 4/bed 4/' -e 's/bed5FloatScore/bed 5/' \
+    < yale.tables > tmp.tables
+mv tmp.tables yale.tables
+mkdir yale
+for fields in 4 5; do
+    for table in `grep "bed $fields" yale.tables | cut -f1`; do
+       /cluster/data/encode/bin/scripts/convertBedTable.csh hg17 hg18 \
+         $table $fields >> yale.script.log
+       mv $table.* yale/
+    done
+done
+
+###########################################################################
+# Affy EC chrom21/chrom22 (Andy DONE 2007-07-20)
+
+ssh hgwdev
+bash
+cd /cluster/data/encode/Affy
+mkdir -p 2007-07-12/lab
+cd 2007-07-12/
+mkdir -p processed/{bed,wigTable,wib,download}
+cd lab/
+cp /var/ftp/encode/encode_ext_RNA_hg18_chr21-22.tar.gz .
+tar xfz encode/encode_ext_RNA_hg18_chr21-22.tar.gz
+rm encode/encode_ext_RNA_hg18_chr21-22.tar.gz
+cd ../
+find lab -name '*.bed' > renamesBed.txt
+find lab -name '*.wig' > renamesWig.txt
+# Make 2nd column for table name
+cat renamesBed.txt | while read -a line; do
+    tail +2 ${line[0]} > processed/bed/${line[1]}.bed
+    hgLoadBed hg18 ${line[1]} processed/bed/${line[1]}.bed
+done
+rm bed.tab
+cat renamesWig.txt | while read -a line; do
+    table=${line[1]}
+    origFile=${line[0]}
+    tail +2 $origFile > processed/download/${table}.wig
+    wigEncode processed/download/${table}.wig processed/wigTable/${table}.tab \
+        processed/wib/${table}.wib 2>> processed/wigEncode.log
+    pushd /gbdb/hg18/encode/wib
+    ln -s /cluster/data/encode/Affy/2007-07-12/processed/wib/${table}.wib
+    popd
+    hgLoadWiggle -pathPrefix=/gbdb/hg18/encode/wib hg18 $table processed/wigTable/${table}.tab
+    gzip processed/download/${table}.wig
+done
+cd /usr/local/apache/htdocs/goldenPath/hg18/encode
+ln -s /cluster/data/encode/Affy/2007-07-12/processed/download/*.gz .
