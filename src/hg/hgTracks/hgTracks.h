@@ -290,6 +290,8 @@ struct hash *trackHash; /* Hash of the tracks by their name. */
 extern char *chromName;	  /* Name of chromosome sequence . */
 extern char *database;	  /* Name of database we're using. */
 extern char *organism;	  /* Name of organism we're working on. */
+extern char *browserName;              /* Test or public browser */
+extern char *organization;             /* UCSC or MGC */
 extern int winStart;	  /* Start of window in sequence. */
 extern int winEnd;	  /* End of window in sequence. */
 extern int maxItemsInFullTrack;  /* Maximum number of items displayed in full */

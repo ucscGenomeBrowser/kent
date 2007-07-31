@@ -117,7 +117,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1381 2007/07/31 01:08:57 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1382 2007/07/31 23:13:40 kate Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -175,6 +175,8 @@ struct hash *hgFindMatches; /* The matches found by hgFind that should be highli
 char *chromName;		/* Name of chromosome sequence . */
 char *database;			/* Name of database we're using. */
 char *organism;			/* Name of organism we're working on. */
+char *browserName;              /* Test or public browser */
+char *organization;             /* UCSC or MGC */
 int winStart;			/* Start of window in sequence. */
 int winEnd;			/* End of window in sequence. */
 static char *position = NULL; 		/* Name of position. */
@@ -13823,10 +13825,9 @@ for (track = trackList; track != NULL; track = track->next)
 /* Center everything from now on. */
 hPrintf("<CENTER>\n");
 
+
 if (!hideControls)
     {
-    char *browserName = (isPrivateHost ? "Test Browser" : "Genome Browser");
-    char *organization = (hIsMgcServer() ? "MGC/ORFeome" : "UCSC");
     hotLinks();
 
     /* Show title . */
@@ -14813,6 +14814,9 @@ int main(int argc, char *argv[])
 enteredMainTime = clock1000();
 uglyTime(NULL);
 isPrivateHost = hIsPrivateHost();
+browserName = (isPrivateHost ? "Test Browser" : "Genome Browser");
+organization = (hIsMgcServer() ? "MGC/ORFeome" : "UCSC");
+
 /* Push very early error handling - this is just
  * for the benefit of the cgiVarExists, which 
  * somehow can't be moved effectively into doMiddle. */
