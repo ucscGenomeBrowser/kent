@@ -31,7 +31,7 @@
 
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.384 2007/07/31 01:08:56 kate Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.385 2007/07/31 22:49:09 kate Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2828,9 +2828,7 @@ else
         if (differentString(origAssembly, database))
             {
             char *freeze = hFreezeFromDb(origAssembly);
-            if (freeze == NULL)
-                freeze = origAssembly;
-            printf("<B>Data coordinates converted via <A TARGET=_BLANK HREF=\"../goldenPath/help/hgTracksHelp.html#Liftover\">liftOver</A> from:</B> %s (%s)<BR>\n", freeze, origAssembly);
+            printf("<B>Data coordinates converted via <A TARGET=_BLANK HREF=\"../goldenPath/help/hgTracksHelp.html#Liftover\">liftOver</A> from:</B> %s %s%s%s<BR>\n", freeze ? freeze : "", freeze ? "(" : "", origAssembly, freeze ? ")":"");
             }
         }
     if (hTableOrSplitExists(tdb->tableName))
