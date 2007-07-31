@@ -234,4 +234,57 @@ CREATE TABLE gsClinicRec (
 
     hgLoadBed hiv1 interPro interProHiv1.bed
 
+# CREATE hivGene TRACK (DONE. 7/31/07, Fan)
+
+# copy the sequence data from HIV Sequence Database web page:
+# http://www.hiv.lanl.gov/content/hiv-db/REVIEWS/HXB2.html and 
+# create raw sequence file, landMark.txt
+
+# Process landMark.txt into hivGene.fa
+
+    faToTab -type=protein landMark.txt landMark.tab
+    cut -f 1 landMark.tab |toLower stdin j1
+    cut -f 2 landMark.tab >j2
+    paste j1 j2 >hivGene.tab
+    rm j1 j2
+
+# create hivGene.fa
+    tabToFa hivGene
+
+# BLAT against base genome
+    gfClient localhost 17778 /gbdb/hiv1/nib -out=psl -t=dnax -q=prot  hivGene.fa hivGene.psl
+
+# load into temp table, testPsl
+    pushd .
+    cp hivGene.psl ~
+    cd ~
+    hgLoadPsl hiv1 table=testPsl hivGene.psl
+    rm hivGene.psl
+    popd 
+
+# create initial bed file
+    hgsql hiv1 -N -e \
+    'select "chr1", tStart, tEnd, qName from testPsl where (tEnd-tStart)/3/qSize>0.70'\
+     >hivGene.bed0
+
+# remove tat and rev, upper case ENV, POL, and GAG
+    cat hivGene.bed0 |grep -v tat |grep -v rev|sed -e 's/env/ENV/' |sed -e 's/pol/POL/'|\
+    sed -e 's/gag/GAG/' >hivGene.bed1
+
+# manually create old.bed from data gathered from:
+
+#   http://www.hiv.lanl.gov/content/hiv-db/MAP/landmark.html
+#   http://www.hiv.lanl.gov/content/hiv-db/MAP/old_map/landmark.html
+#   http://www.hiv.lanl.gov/content/hiv-db/MAP/old_map/Env.html
+
+# concatenate hivGene.bed1 and old.bed into hivGene.bed
+
+    cat hivGene.bed1 old.bed >hivGene.bed
+    rm *.bed1 *.bed0
+
+# load it into hivGene table
+
+    hgLoadBed hiv1 hivGene hivGene.bed
+    hgsql hiv1 -e 'drop table testPsl'
+
 
