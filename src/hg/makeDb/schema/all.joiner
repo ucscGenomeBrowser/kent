@@ -1469,6 +1469,7 @@ identifier wormBaseId external=WormBase dependency
     $ce.mmBlastTab.query
     $ce.rnBlastTab.query
     $ce.scBlastTab.query
+    $ce.sangerGeneToWBGeneID.sangerGene
 
 identifier flyBaseRefId
 "FlyBase (Drosophila) Reference (Literature)"
