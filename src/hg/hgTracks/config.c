@@ -136,7 +136,6 @@ for (group = groupList; group != NULL; group = group->next)
         hDoubleVar(pname, (double)group->priority, 4);
         hPrintf("</TH>\n");
         hPrintf("<TH align=CENTER BGCOLOR=#536ED3><B>&nbsp;%s</B> ", wrapWhiteFont("Group"));
-        hPrintf("&nbsp;&nbsp;&nbsp;");
         hPrintf("</TH>\n");
         }
     hPrintf("</TR>\n");
