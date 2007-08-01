@@ -16,14 +16,14 @@ O = affyLookup.o cnpLookup.o fetchSeq.o \
     snpGetDeletions.o snpGetInsertions.o snpGetSeqDup.o snpGetSimple.o \
     snpLoadFasta.o snpLocType.o snpLocType125.o \
     snpMissing.o snpMoltype.o snpMultiple.o \
-    snpOrtho.o snpOrthoCheck.o snpOrthoJoin.o \
+    snpOrtho.o snpOrthoJoin.o \
     snpOrthoLookup.o snpPAR.o \
     snpReadFasta.o snpReadSeq.o snpReadSeq2.o snpRefUCSC.o \
     snpSort.o snpSplitByChrom.o snpSplitByChrom2.o snpSNP.o \
     subSnpCondense.o trimHeader.o
 
 all: affyLookup cnpLookup fetchSeq \
-     hapmap1 hapmap hapmapLookup hapmapMixed \
+     hapmap1 hapmap2 hapmapLookup hapmapMixed \
      hapmapOrtho hapmapSummary hapmapValidate \
      illuminaLookup illuminaLookup2 \
      snpCheckAlleles snpCheckClassAndObserved snpCheckCluster snpCheckCluster2 \
@@ -34,7 +34,7 @@ all: affyLookup cnpLookup fetchSeq \
      snpGetDeletions snpGetInsertions snpGetSeqDup snpGetSimple \
      snpLoadFasta snpLocType snpLocType125 \
      snpMissing snpMoltype snpMultiple \
-     snpOrtho snpOrthoCheck snpOrthoJoin \
+     snpOrtho snpOrthoJoin \
      snpOrthoLookup snpPAR \
      snpReadFasta snpReadSeq snpReadSeq2 snpRefUCSC \
      snpSort snpSplitByChrom snpSplitByChrom2 snpSNP \
@@ -159,9 +159,6 @@ snpMultiple: snpMultiple.o ${MYLIBS}
 
 snpOrtho: snpOrtho.o ${MYLIBS}
 	${CC} -O -o snpOrtho snpOrtho.o ${MYLIBS} $L
-
-snpOrthoCheck: snpOrthoCheck.o ${MYLIBS}
-	${CC} -O -o snpOrthoCheck snpOrthoCheck.o ${MYLIBS} $L
 
 snpOrthoJoin: snpOrthoJoin.o ${MYLIBS}
 	${CC} -O -o snpOrthoJoin snpOrthoJoin.o ${MYLIBS} $L
