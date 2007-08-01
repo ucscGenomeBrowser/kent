@@ -229,7 +229,7 @@ type bed 5 .
 track nucleosome
 shortLabel Nucleosome map
 longLabel Nucleosome map from SOLiD core alignments
-group x
+group map
 priority 100.0
 visibility hide
 type bed 12
