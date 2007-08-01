@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: mm8.txt,v 1.49 2007/07/28 00:11:05 heather Exp $"
+#	"$Id: mm8.txt,v 1.50 2007/08/01 19:03:38 angie Exp $"
 #
 
 #  NOTE:  this doc may have genePred loads that fail to include
@@ -7597,6 +7597,12 @@ set out = $3
     # Check joiner:
     runJoiner.csh mm8 jaxAllele
     runJoiner.csh mm8 jaxPhenotype
+
+    # 8/1/07 -- oops, jaxRepTranscriptAlias.alias had numeric values while
+    # hgc expects MGI:numeric.  Here's a quick fix:
+    hgsql mm8 -e 'update jaxRepTranscriptAlias set alias = concat("MGI:", alias) where alias rlike "^[0-9]";'
+    # and I also edited parseRepTranscript.pl so I won't make that mistake
+    # next time.
 
 
 ##########################################################################
