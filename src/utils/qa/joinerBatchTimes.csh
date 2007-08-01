@@ -10,9 +10,6 @@ set dbs = ''
 set active = ''
 set thisRun = ''
 
-# set email name of person to whom email about this run gets delivered:
-set who = "ann"
-
 # usage statement
 if ($#argv < 1 || $#argv > 2) then
   echo
@@ -72,5 +69,5 @@ end
 
 echo "\n\nEnd All `date`" >> $log
 
-mail -s "$log results" $who@soe.ucsc.edu < $log
+mail -s "$log results" $USER@soe.ucsc.edu < $log
 
