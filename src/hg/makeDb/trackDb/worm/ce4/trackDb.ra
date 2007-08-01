@@ -225,3 +225,53 @@ type bed 5 .
 # exonArrows off
 # showTopScorers 200
 # type bed 5 .
+
+track nucleosome
+shortLabel Nucleosome map
+longLabel Nucleosome map from SOLiD core alignments
+group x
+priority 100.0
+visibility hide
+type bed 12
+itemRgb on
+compositeTrack on
+
+	track nucleosomeDNAsense
+	subTrack nucleosome
+	shortLabel genomic DNA: sense reads
+	longLabel sheared genomic DNA displayed as mononucleosomal fragments, sense strand reads
+	priority 1
+
+	track nucleosomeDNAantisense
+	subTrack nucleosome
+	shortLabel genomic DNA: antisense reads
+	longLabel sheared genomic DNA displayed as mononucleosomal fragments, antisense strand reads
+	priority 2
+
+	track nucleosomeFragmentsSense
+	subTrack nucleosome
+	shortLabel fragments: sense reads
+	longLabel mononucleosomal fragments, sense strand reads
+	priority 3
+
+	track nucleosomeFragmentsAntisense
+	subTrack nucleosome
+	shortLabel fragments: antisense reads
+	longLabel mononucleosomal fragments, antisense strand reads
+	priority 4
+
+	track nucleosome20MerSense
+	subTrack nucleosome
+	shortLabel 20-mer mask, sense reads
+	longLabel non-unique and almost repetetive 20-mer starts, sense strand
+	priority 5
+	noInherit on
+	type bed 3
+
+	track nucleosome20MerAntisense
+	subTrack nucleosome
+	shortLabel 20-mer mask, antisense reads
+	longLabel non-unique and almost repetetive 20-mer starts, antisense strand
+	priority 6
+	noInherit on
+	type bed 3
