@@ -35,7 +35,7 @@
 #include "customTrack.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.327 2007/07/31 01:08:56 kate Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.328 2007/08/01 00:15:11 kate Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -3479,8 +3479,7 @@ if (trackDbSetting(trackTdb, "compositeTrack") != NULL)
      * some other track with the same root name. */
     struct trackDb *subTdbList = NULL, *tdb = NULL;
     safef(where, sizeof(where),
-	  "settings rlike '[ \t\n]?subTrack %s[ \t\n]?'",
-	  track);
+            "settings rlike '^(.*\n)?subTrack %s([ \n].*)?$'", track);
     subTdbList = loadAndLookupTrackDb(conn, where);
     for (tdb = subTdbList; tdb != NULL; tdb = tdb->next)
 	subtrackInherit(tdb, trackTdb);
@@ -3509,8 +3508,8 @@ if (!tdb || !tdb->isSuper)
 struct sqlConnection *conn = hAllocConn();
 char where[256];
 safef(where, sizeof(where),
-        "settings rlike '[ \t\n]?superTrack %s[ \t\n]?' order by priority desc",
-        tdb->tableName);
+    "settings rlike '^(.*\n)?superTrack %s([ \n].*)?$' order by priority desc",
+    tdb->tableName);
 tdb->subtracks = loadAndLookupTrackDb(conn, where);
 for (tdb = tdb->subtracks; tdb != NULL; tdb = tdb->next)
     trackDbSuperMemberSettings(tdb);
