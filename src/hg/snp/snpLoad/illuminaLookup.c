@@ -11,9 +11,11 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: illuminaLookup.c,v 1.7 2007/07/27 00:59:26 heather Exp $";
+static char const rcsid[] = "$Id: illuminaLookup.c,v 1.8 2007/08/01 19:24:26 jzhu Exp $";
 
 struct snpSubset 
+/* This is just a list of some of the snps.  We're not wanting to drag in snp127, snp128, etc. 
+ * This is stored in a hash keyed by snpId, so we don't bother storing the snpId here. */
     {
     char *chrom;
     int start;
@@ -24,7 +26,7 @@ struct snpSubset
     char *locType;
     };
 
-void usage()
+static void usage()
 /* Explain usage and exit. */
 {
 errAbort(
@@ -34,8 +36,8 @@ errAbort(
 }
 
 
-struct hash *storeExceptions(char *tableName)
-/* store multiply-aligning SNPs */
+static struct hash *readMultipleAlignmentExceptions(char *tableName)
+/* Read in MultipleAlignment exceptions from table and store in a hash keyed by snp ID. */
 {
 struct hash *ret = NULL;
 char query[512];
@@ -57,10 +59,8 @@ hFreeConn(&conn);
 return ret;
 }
 
-// struct hash *storeSnps(char *tableName, struct hash *exceptionHash, char *errorFileName)
-struct hash *storeSnps(char *tableName, struct hash *exceptionHash)
-/* store subset data for SNPs in a hash */
-/* exclude SNPs that align multiple places */
+static struct hash *readSnps(char *tableName, struct hash *multiMapHash)
+/* Store subset data for SNPs in a hash.  Exclude SNPs that align multiple places. */
 {
 struct hash *ret = NULL;
 char query[512];
@@ -68,32 +68,28 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 struct snpSubset *subsetElement = NULL;
-struct hashEl *hel = NULL;
 // FILE *errors = mustOpen(errorFileName, "w");
 
 verbose(1, "creating SNP hash...\n");
-ret = newHash(16);
+ret = newHash(20);
 safef(query, sizeof(query), 
       "select name, chrom, chromStart, chromEnd, strand, observed, class, locType from %s", 
       tableName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    hel = hashLookup(exceptionHash, row[0]);
-    if (hel != NULL)
-        {
-	// fprintf(errors, "skipping %s, aligns more than one place\n", row[0]);
-	continue;
+    if (!hashLookup(multiMapHash, row[0]))
+	{
+	AllocVar(subsetElement);
+	subsetElement->chrom = cloneString(row[1]);
+	subsetElement->start = sqlUnsigned(row[2]);
+	subsetElement->end = sqlUnsigned(row[3]);
+	subsetElement->strand = cloneString(row[4]);
+	subsetElement->observed = cloneString(row[5]);
+	subsetElement->class = cloneString(row[6]);
+	subsetElement->locType = cloneString(row[7]);
+	hashAdd(ret, cloneString(row[0]), subsetElement);
 	}
-    AllocVar(subsetElement);
-    subsetElement->chrom = cloneString(row[1]);
-    subsetElement->start = sqlUnsigned(row[2]);
-    subsetElement->end = sqlUnsigned(row[3]);
-    subsetElement->strand = cloneString(row[4]);
-    subsetElement->observed = cloneString(row[5]);
-    subsetElement->class = cloneString(row[6]);
-    subsetElement->locType = cloneString(row[7]);
-    hashAdd(ret, cloneString(row[0]), subsetElement);
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
@@ -101,7 +97,7 @@ hFreeConn(&conn);
 return ret;
 }
 
-boolean isTriallelic(char *obs)
+static boolean isTriallelic(char *obs)
 {
 if (sameString(obs, "A/C/G")) return TRUE;
 if (sameString(obs, "A/C/T")) return TRUE;
@@ -110,7 +106,7 @@ if (sameString(obs, "C/G/T")) return TRUE;
 return FALSE;
 }
 
-boolean isReverseComplement(char *obs1, char *obs2)
+static boolean isReverseComplement(char *obs1, char *obs2)
 {
 if (sameString(obs1, "A/C"))
     {
@@ -136,7 +132,7 @@ if (sameString(obs1, "G/T"))
 return FALSE;
 }
 
-char *reverseObserved(char *obs)
+static char *reverseObserved(char *obs)
 {
 if (sameString(obs, "A/C"))
     return "G/T";
@@ -151,9 +147,8 @@ return obs;
 
 
 
-void logSnps(struct hash *snpHash, char *illuminaTable)
-/* read illuminaTable */
-/* output +/+, +/-, -/+, -/- */
+static void logSnpStrandMismatch(struct hash *snpHash, char *illuminaTable)
+/* Read illuminaTable.  Output +/+, +/-, -/+, -/- in various log files. */
 {
 char query[512];
 struct sqlConnection *conn = hAllocConn();
@@ -204,7 +199,7 @@ carefulClose(&minusplus);
 carefulClose(&minusminus);
 }
 
-void processSnps(struct hash *snpHash, char *illuminaTable, char *errorFileName)
+static void processSnps(struct hash *snpHash, char *illuminaTable, char *errorFileName)
 /* read illuminaTable */
 /* lookup details in snpHash */
 /* report if SNP missing */
@@ -305,7 +300,7 @@ char *exceptionTableName = NULL;
 char errorFileName[64];
 
 struct hash *snpHash = NULL;
-struct hash *exceptionHash = NULL;
+struct hash *multiMapHash = NULL;
 
 if (argc != 6)
     usage();
@@ -325,10 +320,11 @@ if (!hTableExists(snpTableName))
 if (!hTableExists(exceptionTableName))
     errAbort("no %s table in %s\n", exceptionTableName, snpDb);
 
-exceptionHash = storeExceptions(exceptionTableName);
-snpHash = storeSnps(snpTableName, exceptionHash);
-// snpHash = storeSnps(snpTableName, exceptionHash, errorFileName);
-logSnps(snpHash, illuminaTableName);
+multiMapHash = readMultipleAlignmentExceptions(exceptionTableName);
+verbose(1, "Read %d multiply mapped SNPS\n", multiMapHash->elCount);
+snpHash = readSnps(snpTableName, multiMapHash);
+verbose(1, "Read %d singly SNPS\n", snpHash->elCount);
+logSnpStrandMismatch(snpHash, illuminaTableName);
 processSnps(snpHash, illuminaTableName, errorFileName);
 
 return 0;
