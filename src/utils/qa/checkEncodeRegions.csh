@@ -74,16 +74,24 @@ endif
 
  switch ($theStart)
   case 'chromStart':
-    set num=`hgsql -Ne 'SELECT count(*) FROM '$tbl', encodeRegions WHERE '$tbl'.chrom = encodeRegions.chrom AND '$tbl'.chromStart <= encodeRegions.chromStart AND '$tbl'.chromEnd >= encodeRegions.chromEnd' $db`
+    set num=`hgsql -Ne 'SELECT count(*) FROM '$tbl', encodeRegions \
+      WHERE '$tbl'.chrom = encodeRegions.chrom \
+      AND '$tbl'.chromStart <= encodeRegions.chromStart \
+      AND '$tbl'.chromEnd >= encodeRegions.chromEnd' $db`
     breaksw
   case 'txStart':
-    set num=`hgsql -Ne 'SELECT count(*) FROM '$tbl', encodeRegions WHERE '$tbl'.chrom = encodeRegions.chrom AND '$tbl'.txStart <= encodeRegions.chromStart AND '$tbl'.txEnd >= encodeRegions.chromEnd' $db`
+    set num=`hgsql -Ne 'SELECT count(*) FROM '$tbl', encodeRegions \
+      WHERE '$tbl'.chrom = encodeRegions.chrom \ 
+      AND '$tbl'.txStart <= encodeRegions.chromStart \
+      AND '$tbl'.txEnd >= encodeRegions.chromEnd' $db`
     breaksw
   default:
     echo "\n ERROR: the $tbl table has no chromStart or txStart columns.\n"
     exit 1
     breaksw
  endsw
+
+echo "num = $num"
 
   if ($num != 0) then
     echo "\n ERROR: The $tbl table has $num items OUTSIDE of ENCODE Regions\n"
