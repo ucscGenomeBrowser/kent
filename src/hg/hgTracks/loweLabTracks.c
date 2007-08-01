@@ -29,7 +29,7 @@ Color LLshadesOfCOGS[LL_COG_SHADES];
 
 
 /* RNA Hybridization additions */
-#define RNA_HYBRIDIZATION_SHADES 10
+#define RNA_HYBRIDIZATION_SHADES 20
 Color rnaHybShadesPos[RNA_HYBRIDIZATION_SHADES];
 Color rnaHybShadesNeg[RNA_HYBRIDIZATION_SHADES];
 int rnaHybShadesInitialized = 0;
@@ -647,11 +647,23 @@ struct sqlResult *sr;
 char **row;
 int rowOffset;
 
+int minlengthSetting = cartUsualInt(cart, "rnaHybridization.minlength", 20);
+int maxlengthSetting = cartUsualInt(cart, "rnaHybridization.maxlength", 20);
+double gcSetting = (double)cartUsualInt(cart, "rnaHybridization.gc", 50) / 100;
+int hideTrnaSetting = cartUsualBoolean(cart, "rnaHybridization.hideTrna", FALSE);
+int showKnownTargetsSetting = cartUsualBoolean(cart, "rnaHybridization.showKnownTargets", TRUE);
+
 sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     rnaHyb = rnaHybridizationLoad(row);
-    slAddHead(&list, rnaHyb);
+    
+    if(rnaHyb->matchLength >= minlengthSetting
+    && rnaHyb->matchLength <= maxlengthSetting
+    && rnaHyb->gcContent >= gcSetting
+    && !(hideTrnaSetting && strlen(rnaHyb->trnaTarget) > 0)
+    && !(showKnownTargetsSetting && !rnaHyb->targetAnnotation))
+      slAddHead(&list, rnaHyb);
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
@@ -669,7 +681,7 @@ int cindex = (int)(rh->gcContent * (float)(RNA_HYBRIDIZATION_SHADES - 1));
 if(!rnaHybShadesInitialized)
   rnaHybShadesInit(vg);  
 
-if(strcmp(rh->strandTarget, "+") == 0)
+if(rh->targetAnnotation)
 {
    return rnaHybShadesPos[cindex];   
 }
