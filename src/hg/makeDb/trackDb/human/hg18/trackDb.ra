@@ -2024,7 +2024,7 @@ searchTable snpArrayIllumina300
 searchMethod exact
 searchType bed
 termRegex (rs[0-9]{3}[0-9]+)
-searchPriority 13
+searchPriority 14
 padding 250
 semiShortCircuit 1
 
@@ -2033,7 +2033,7 @@ searchTable snpArrayIllumina550
 searchMethod exact
 searchType bed
 termRegex (rs[0-9]{3}[0-9]+)
-searchPriority 13
+searchPriority 14
 padding 250
 semiShortCircuit 1
 
@@ -2042,7 +2042,7 @@ searchTable snpArrayIllumina650
 searchMethod exact
 searchType bed
 termRegex (rs[0-9]{3}[0-9]+)
-searchPriority 13
+searchPriority 14
 padding 250
 semiShortCircuit 1
 
