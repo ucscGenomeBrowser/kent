@@ -125,7 +125,6 @@ for (group = groupList; group != NULL; group = group->next)
         hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
         hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
         hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
-        hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
         hPrintf(wrapWhiteFont(" Track Order: "));
         }
     hPrintf("</TH>\n");
@@ -135,8 +134,9 @@ for (group = groupList; group != NULL; group = group->next)
         safef(pname, sizeof(pname), "%s.priority",group->name);
         hDoubleVar(pname, (double)group->priority, 4);
         hPrintf("</TH>\n");
-        hPrintf("<TH align=CENTER BGCOLOR=#536ED3><B>&nbsp;%s</B> ", wrapWhiteFont("Group"));
-        hPrintf("</TH>\n");
+        if (isOpen)
+            hPrintf("<TH align=CENTER BGCOLOR=#536ED3><B>&nbsp;%s</B> ", wrapWhiteFont("Group</TH>"));
+        hPrintf("\n");
         }
     hPrintf("</TR>\n");
 
