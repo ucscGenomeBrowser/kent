@@ -208,7 +208,7 @@
 #include "omicia.h"
 #include "atomDb.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1321 2007/07/26 19:40:56 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1322 2007/08/01 20:45:55 fanhsu Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -18236,7 +18236,7 @@ if ((row = sqlNextRow(sr)) != NULL)
 
     if (sameString(dataSource, "Affy"))
         {
-        printf("<BR><BR><A HREF=\"https://www.affymetrix.com/LinkServlet?probeset=%s\" TARGET=_blank>NetAffx</A>\n", itemName);
+        printf("<BR><BR><A HREF=\"https://www.affymetrix.com/LinkServlet?probeset=%s\" TARGET=_blank>NetAffx</A> (log in required, registration is free)\n", itemName);
         if (!sameString(row[3], "unknown"))
             {
             printf("<BR><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
