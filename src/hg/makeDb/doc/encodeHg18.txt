@@ -1,8 +1,22 @@
-#!/bin/csh -f
+!/bin/csh -f
 exit
 
 #############################################################################
 # This is the make doc for hg18 ENCODE
+
+#############################################################################
+# Changes to ENCODE groups (2007-07-31 kate)
+
+# Change labels for Transcripts and Chrom 
+hgsql hg18 -e "UPDATE grp SET label='ENCODE Transcription' where name='encodeTxLevels'"
+hgsql hg18 -e "UPDATE grp SET label='ENCODE Chromatin Structure' where name='encodeChrom'"
+
+# Merge CompGeno and Var groups (few tracks)
+hgsql hg18 -e "UPDATE grp SET label='ENCODE Comparative Genomics and Variation' where name='encodeCompGeno'"
+hgsql hg18 -e "DELETE FROM grp where name='encodeVariation'"
+
+# Retire obsolete group
+hgsql hg18 -e "DELETE FROM grp where name='encode'"
 
 #############################################################################
 # Create encodeRegions table
@@ -15,7 +29,7 @@ exit
     cd hg18
     hgsql hg17 -N -e "SELECT * FROM encodeRegions ORDER BY name" | \
         liftOver stdin /gbdb/hg17/liftOver/hg17ToHg18.over.chain.gz \
-                encodeRegions.tab encodeRegions.unmapped
+                encodeRegions.bed encodeRegions.unmapped
     hgLoadBed hg18 encodeRegions encodeRegions.bed
     cp encodeRegions.bed ~/browser/ENCODE/build35_regions.bed
     # cvs add, install in /usr/local/apache/htdocs/ENCODE
@@ -537,6 +551,19 @@ for fields in 4 5; do
        mv $table.* yale/
     done
 done
+
+###########################################################################
+# Pseudogenes Class table copied from hg17  (20087-08-01 kate)
+# This table is copied unchanged.
+
+    ssh hgwdev
+    cd /cluster/data/encode/convertHg18
+    mkdir pseudogene
+    cd pseudogene
+    hgsqldump --all --tab=. hg17 encodePseudogeneClass
+    hgsql hg18 < encodePseudogeneClass.sql
+    echo "LOAD DATA LOCAL INFILE 'encodePseudogeneClass.txt' \
+                into table encodePseudogeneClass" | hgsql hg18
 
 ###########################################################################
 # Affy EC chrom21/chrom22 (Andy DONE 2007-07-20)
