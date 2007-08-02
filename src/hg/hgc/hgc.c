@@ -208,7 +208,7 @@
 #include "omicia.h"
 #include "atomDb.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1323 2007/08/02 00:54:01 galt Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1324 2007/08/02 01:35:02 galt Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -4009,7 +4009,7 @@ else
 	if (psl->strand[1] == '-')
 	    {
 	    /* psl: if target strand is '-', flip the coords.
-	     * (this is the target part of pslRcBoth from src/lib/psl.c) */
+	     * (this is the target part of pslRc from src/lib/psl.c) */
 	    for (i=0;  i < bed->blockCount;  ++i)
 		{
 		bed->chromStarts[i] =
@@ -5628,7 +5628,7 @@ struct ffAli *pslToFfAliAndSequence(struct psl *psl, struct dnaSeq *qSeq,
 				    boolean *retIsRc, struct dnaSeq **retSeq,
 				    int *retTStart)
 /* Given psl, dig up target sequence and convert to ffAli. 
- * Note: if strand is -, this does a pslRcBoth to psl! */
+ * Note: if strand is -, this does a pslRc to psl! */
 {
 int tStart, tEnd;
 struct dnaSeq *dnaSeq;
@@ -5652,7 +5652,7 @@ if (psl->strand[0] == '-')
     if (retIsRc)
 	*retIsRc = TRUE;
     reverseComplement(dnaSeq->dna, dnaSeq->size);
-    pslRcBoth(psl); 
+    pslRc(psl); 
     }
 return pslToFfAli(psl, qSeq, dnaSeq, tStart);
 }

@@ -362,7 +362,6 @@ void readRnaSeq(char *filename)
 /* Read in file of mRNA fa sequences */
 {
 struct dnaSeq *seqList, *oneSeq;
-int start, end, size;
 
 rnaSeqs = newHash(16);
 seqList = faReadAllDna(filename);
@@ -373,7 +372,6 @@ for (oneSeq = seqList; oneSeq != NULL; oneSeq = oneSeq->next)
 void readLoci(struct lineFile *lf)
 /* Read in file of loci id's, primarily from LocusLink */
 {
-int lineSize, wordCount;
 char *words[4];
 char *name;
 int thisLoci;
@@ -397,7 +395,6 @@ if (numLoci == 0)
 void readVersion(struct lineFile *lf)
 /* Read in file of version numbers for mrnas */
 {
-int lineSize, wordCount;
 char *words[4];
 char *name;
 char *v;
@@ -435,9 +432,8 @@ return(ret);
 struct acc *createAcc(char *name)
 {
 struct acc *ret;
-char *a;
 char *accs[4];
-int wordCount, id = -1;
+int wordCount;
   
 AllocVar(ret);
 if (noVersions)
@@ -450,7 +446,7 @@ else
     if (wordCount > 2) 
         errAbort("Accession not standard, %s\n", name);
     ret->name = accs[0];
-    if (wordCount = 1)
+    if (wordCount == 1)
         {
         if ((!version) || (!hashLookup(version, name)))
             ret->version = findVersion(name);
@@ -512,7 +508,7 @@ int count=0, i;
 
 for (i=1; i<psl->blockCount; ++i)
     {
-    int iStart, iEnd, blockSize = psl->blockSizes[i-1];
+    int iStart, iEnd;
     pi->splice[i] = 0;
     /*    if ((psl->qStarts[i-1] + blockSize == psl->qStarts[i]) && 
 	(psl->tStarts[i] - (psl->tStarts[i-1] + psl->blockSizes[i-1]) > 30))
@@ -602,9 +598,7 @@ void findOrganism(struct sqlConnection *conn, struct acc *acc)
 char query[256];
 struct sqlResult *sr;
 char **row;
-char *a;
-char *accs[4];
-int wordCount, id = -1;
+int id = -1;
 
 
 /*a = cloneString(acc->name);
@@ -634,11 +628,8 @@ struct clone *getMrnaCloneId(struct sqlConnection *conn, char *acc)
 /* Find the clone id for an mrna accession */
 {
 char query[256];
-struct sqlResult *sr, *sr1;
+struct sqlResult *sr;
 char **row;
-char *a;
-char *accs[4];
-int wordCount, i;
 struct clone *ret = NULL;
 
 AllocVar(ret);
@@ -664,11 +655,8 @@ struct clone *getMrnaLibId(struct sqlConnection *conn, char *acc)
 /* Find the library id for an mrna accession */
 {
 char query[256];
-struct sqlResult *sr, *sr1;
+struct sqlResult *sr;
 char **row;
-char *a;
-char *accs[4];
-int wordCount, i;
 struct clone *ret = NULL;
 
 AllocVar(ret);
@@ -789,14 +777,14 @@ void getCoords(struct psl *psl, int gstart, int gend, int *start, int *end, char
 /* Get the genomic DNA that corresponds to an indel, and determine the corresponding \
    start and end positions for this sequence in the query sequence */ 
 {
-int gs = 0, ge = 0, off, i, bStart = -1, bEnd = -1;
+int i, bStart = -1, bEnd = -1;
 
 /* Check that alignment covers the range */
 if ((psl->tStart < gstart) && (psl->tEnd > gend))
   {
     /* Reverse complement xeno alignments if done on target - strand */
     if (psl->strand[1] == '-')
-      pslRcBoth(psl);
+      pslRc(psl);
     
     /* Look in all blocks for the indel */
     for (i = 0; i < psl->blockCount; i++) 
@@ -868,7 +856,6 @@ void searchTransPsl(char *table, DNA *mdna, struct indel *ni, char *strand, unsi
 {
 int start = 0, end = 0;
 boolean nogap = FALSE;
-struct dnaSeq *dummy = NULL, *mseq = NULL;
 char *dna = NULL, *dnaStart = NULL, *dnaEnd = NULL;
 char thisStrand[2];
 struct sqlConnection *conn2 = hAllocConn();
@@ -1071,13 +1058,12 @@ void searchTrans(struct sqlConnection *conn, char *table, struct dnaSeq *rna, st
 {
 struct sqlResult *sr;
 char **row;
-int offset, start, end;
+int offset;
 struct clone *cloneId, *libId;
 struct psl *psl;
 DNA mdna[10000];
 struct sqlConnection *conn2 = hAllocConn();
 struct dnaSeq *gseq;
-char thisStrand[2];
 struct acc *acc;
 char *name;
 struct refseq *rs = NULL;
@@ -1292,7 +1278,7 @@ int nCodonBases = 0, iCodon = -1;   /* to deal with partial codons */
 struct indel *mi, *miList=NULL;
 struct indel *codonSub, *codonSubList=NULL;
 ZeroVar(codonGenPos);
-boolean knownSnp = FALSE, knownValid = FALSE, mmSnp = FALSE, inCds = FALSE;
+boolean knownSnp = FALSE, knownValid = FALSE, inCds = FALSE;
 
 strcpy(rCodon, "---");
 strcpy(dCodon, "---");
@@ -1516,7 +1502,7 @@ struct indel *createIndel(struct sqlConnection *conn, int mstart, int mend, char
 void cdsIndels(struct sqlConnection *conn, struct pslInfo *pi, struct dnaSeq *rna)
 /* Find indels in coding regions and UTRs of mRNA alignment */
 {
-  int i, j;
+  int i;
   int unaligned=0, unalignedCds=0, prevqend=0, prevtend=0, qstart=0, tstart=0;
   int leftShift = 0, rightShift = 0, tLeft = 0, tRight = 0, startIndel = 0;
   struct indel *ni=NULL, *niList=NULL, *uiList=NULL;
@@ -1808,7 +1794,7 @@ if (psl->strand[0] == '-')
   {
    verbose(3, "\treverse complementing\n");
    reverseComplement(dnaSeq->dna, dnaSeq->size);
-   pslRcBoth(pi->psl);
+   pslRc(pi->psl);
   }
 
 /* Analyze the coding region */
@@ -1821,7 +1807,7 @@ processCds(conn, pi, rnaSeq, dnaSeq);
 if (psl->strand[0] == '-') 
   {
    verbose(3, "\treverse complementing back\n");
-   pslRcBoth(pi->psl);
+   pslRc(pi->psl);
   }
 
 verbose(3, "\tdone with psl record\n");

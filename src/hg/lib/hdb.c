@@ -35,7 +35,7 @@
 #include "customTrack.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.328 2007/08/01 00:15:11 kate Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.329 2007/08/02 01:35:02 galt Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -1829,7 +1829,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 		    }
 
 		// psl: if target strand is '-', flip the coords.
-		// (this is the target part of pslRcBoth from src/lib/psl.c)
+		// (this is the target part of pslRc from src/lib/psl.c)
 		for (i=0; i<bedItem->blockCount; ++i)
 		    {
 		    bedItem->chromStarts[i] = tSize - (bedItem->chromStarts[i] +

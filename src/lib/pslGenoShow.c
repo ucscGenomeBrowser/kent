@@ -329,15 +329,13 @@ boolean needsSwap = (psl->strand[0] == '-' && psl->strand[1] == 0);
 if (needsSwap)
     {
     memcpy(origStrand, psl->strand, 2);
-    pslRcBoth(psl);
-    psl->strand[0] = '+';
-    psl->strand[1] = '-';
+    pslRc(psl);
     }
 pslShowAlignmentStranded2(psl, isProt, qName, qSeq, qStart, qEnd,
     tName, tSeq, tStart, tEnd,exnStarts, exnEnds, exnCnt, f);
 if (needsSwap)
     {
-    pslRcBoth(psl);
+    pslRc(psl);
     memcpy(psl->strand, origStrand, 2);
     }
 return psl->blockCount;

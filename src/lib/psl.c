@@ -19,7 +19,7 @@
 #include "binRange.h"
 #include "rangeTree.h"
 
-static char const rcsid[] = "$Id: psl.c,v 1.77 2007/08/02 00:52:58 galt Exp $";
+static char const rcsid[] = "$Id: psl.c,v 1.78 2007/08/02 01:35:03 galt Exp $";
 
 static char *createString = 
 "CREATE TABLE %s (\n"
@@ -1127,13 +1127,17 @@ for (i = 0; i < blockCount; i++)
     }
 }
 
-void pslRcBoth(struct psl *psl)
-/* Swap around things in psl so it works as if the alignment
- * was done on the reverse strand of the target. */
+void pslRc(struct psl *psl)
+/* Reverse-complement a PSL alignment.  This makes the target strand explicit. */
 {
 unsigned tSize = psl->tSize, qSize = psl->qSize;
 unsigned blockCount = psl->blockCount, i;
 unsigned *tStarts = psl->tStarts, *qStarts = psl->qStarts, *blockSizes = psl->blockSizes;
+
+/* swap strand, forcing target to have an explict strand */
+psl->strand[0] = (psl->strand[0] != '-') ? '-' : '+';
+psl->strand[1] = (psl->strand[1] != '-') ? '-' : '+';
+psl->strand[2] = 0;
 
 for (i=0; i<blockCount; ++i)
     {
@@ -1143,32 +1147,13 @@ for (i=0; i<blockCount; ++i)
 reverseUnsigned(tStarts, blockCount);
 reverseUnsigned(qStarts, blockCount);
 reverseUnsigned(blockSizes, blockCount);
-}
-
-void pslRc(struct psl *psl)
-/* reverse-complement a PSL alignment.  This makes target strand explicit. */
-{
-int i;
-
-/* swap strand, forcing target to have an explict strand */
-psl->strand[0] = (psl->strand[0] != '-') ? '-' : '+';
-psl->strand[1] = (psl->strand[1] != '-') ? '-' : '+';
-psl->strand[2] = 0;
-
-for (i = 0; i < psl->blockCount; i++)
-    {
-    psl->qStarts[i] = psl->qSize - (psl->qStarts[i] + psl->blockSizes[i]);
-    psl->tStarts[i] = psl->tSize - (psl->tStarts[i] + psl->blockSizes[i]);
-    }
-reverseUnsigned(psl->tStarts, psl->blockCount);
-reverseUnsigned(psl->qStarts, psl->blockCount);
-reverseUnsigned(psl->blockSizes, psl->blockCount);
 if (psl->qSequence != NULL)
     {
-    rcSeqs(psl->qSequence, psl->blockCount, psl->blockSizes);
-    rcSeqs(psl->tSequence, psl->blockCount, psl->blockSizes);
+    rcSeqs(psl->qSequence, blockCount, blockSizes);
+    rcSeqs(psl->tSequence, blockCount, blockSizes);
     }
 }
+
 
 /* macro to swap to variables */
 #define swapVars(a, b, tmp) ((tmp) = (a), (a) = (b), (b) = (tmp))
