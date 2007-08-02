@@ -236,17 +236,25 @@ type bed 12
 itemRgb on
 compositeTrack on
 
-	track nucleosomeDNAsense
+	track nucleosome20MerSense
 	subTrack nucleosome
-	shortLabel genomic DNA: sense reads
-	longLabel sheared genomic DNA displayed as mononucleosomal fragments, sense strand reads
+	shortLabel 20-mer mask, sense reads
+	longLabel non-unique and almost repetetive 20-mer starts, sense strand
 	priority 1
+	noInherit on
+	visibility dense
+	onlyVisibility dense
+	type bed 3
 
-	track nucleosomeDNAantisense
+	track nucleosome20MerAntisense
 	subTrack nucleosome
-	shortLabel genomic DNA: antisense reads
-	longLabel sheared genomic DNA displayed as mononucleosomal fragments, antisense strand reads
+	shortLabel 20-mer mask, antisense reads
+	longLabel non-unique and almost repetetive 20-mer starts, antisense strand
 	priority 2
+	noInherit on
+	visibility dense
+	onlyVisibility dense
+	type bed 3
 
 	track nucleosomeFragmentsSense
 	subTrack nucleosome
@@ -260,18 +268,14 @@ compositeTrack on
 	longLabel mononucleosomal fragments, antisense strand reads
 	priority 4
 
-	track nucleosome20MerSense
+	track nucleosomeDNAsense
 	subTrack nucleosome
-	shortLabel 20-mer mask, sense reads
-	longLabel non-unique and almost repetetive 20-mer starts, sense strand
+	shortLabel genomic DNA: sense reads
+	longLabel sheared genomic DNA displayed as mononucleosomal fragments, sense strand reads
 	priority 5
-	noInherit on
-	type bed 3
 
-	track nucleosome20MerAntisense
+	track nucleosomeDNAantisense
 	subTrack nucleosome
-	shortLabel 20-mer mask, antisense reads
-	longLabel non-unique and almost repetetive 20-mer starts, antisense strand
+	shortLabel genomic DNA: antisense reads
+	longLabel sheared genomic DNA displayed as mononucleosomal fragments, antisense strand reads
 	priority 6
-	noInherit on
-	type bed 3
