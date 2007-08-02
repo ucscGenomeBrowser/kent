@@ -3,7 +3,7 @@
 # Caenorhabditis elegans
 #	Washington University School of Medicine GSC and Sanger Institute WS170
 
-#  $Id: ce4.txt,v 1.26 2007/07/30 22:42:58 hiram Exp $
+#  $Id: ce4.txt,v 1.27 2007/08/02 19:18:42 hiram Exp $
 
 
 #########################################################################
@@ -415,7 +415,6 @@ done
     #	Scanning through 986 files
     #	Loading database with 1214556 rows
 
-
     #	Running joinerCheck to see what is sane:
     joinerCheck -identifier=wormBaseId -database=ce4 -times -keys all.joiner
     #	Error: 999 of 27783 elements of ce4.orfToGene.name are not in key
@@ -445,6 +444,9 @@ done
 	../../downloads/tarFile/url.txt | sort -u > sangerGeneToWBGeneID.tab
     hgLoadSqlTab ce4 sangerGeneToWBGeneID \
 	~/kent/src/hg/lib/sangerGeneToWBGeneID.sql sangerGeneToWBGeneID.tab
+    ## later, it was discovered that this list needed to also be updated
+    ## with the one-dot names, where only the two-dot names were present.
+    ## all.joiner rule added, but it still is missing gene names.
 
 ###############################################################################
 ## RNA sangerGenes (DONE - 2007-04-27 - Hiram)
@@ -3147,12 +3149,25 @@ while (<>) {
 ## fixup sangerCanonical names to remove the second dot name
     ssh hgwdev
     cd /cluster/data/ce4/bed/fixupSangerCanonical
+    hgsql -e "select chrom,txStart,txEnd,name from sangerGene;" ce4 \
+	| sort -k1,1 -k2,2n > sangerGene.names.txt
     hgsql -N -e "select * from sangerCanonical;" ce4 > sangerCanonical.tab
     cat << '_EOF_' > fixup.pl
 #!/usr/bin/env perl
 
 use strict;
 use warnings;
+
+my %genePositions;
+
+open (FH,"<sangerGene.names.txt") or die "can not read sangerGene.names.txt";
+while (my $line = <FH>) {
+    chomp $line;
+    my ($chr, $start, $end, $name) = split('\s+',$line);
+    die "duplicate name in sangerGene $name" if (exists($genePositions{$name}));
+    $genePositions{$name} = sprintf "%s\t%d\t%d", $chr, $start, $end;
+}
+close (FH);
 
 my %names;
 
@@ -3165,13 +3180,25 @@ while (my $line = <FH>) {
     die "found four part name at $line" if (defined($d));
     my $twoPartName = $name;
     if (defined($c)) {
-        $twoPartName = sprintf "%s.%s", $a, $b;
+	$twoPartName = sprintf "%s.%s", $a, $b;
     }
     die "ERROR: two part name clash at $line" if (exists($names{$twoPartName}));
     $names{$twoPartName} = $line;
     if (!defined($prot)) { print STDERR "# no prot: $line\n"; my $prot = ""; }
-    printf "%s\t%d\t%d\t%d\t%s\t%s\n", $chr, $start, $end, $score,
-        $twoPartName, $prot;
+    die "can not find position for $twoPartName"
+	if (!exists($genePositions{$twoPartName}));
+    my $pos = $genePositions{$twoPartName};
+    my ($existChr, $realStart, $realEnd) = split('\s+', $pos);
+    die "not on same chrom ? $twoPartName Name $chr and $existChr"
+	if ($existChr ne $chr);
+    my $startDiff = $start - $realStart;
+    $startDiff = - $startDiff if ($startDiff < 0);
+    my $endDiff = $end - $realEnd;
+    $endDiff = - $endDiff if ($endDiff < 0);
+    die "start more than 100000 off $twoPartName $pos" if ($startDiff > 100000);
+    die "end more than 20000 off $twoPartName $pos" if ($endDiff > 20000);
+    printf "%s\t%d\t%d\t%d\t%s\t%s\n", $chr, $realStart, $realEnd, $score,
+	$twoPartName, $prot;
 }
 
 close (FH);
@@ -3246,3 +3273,83 @@ foreach my $key (keys %existing) {
 
     hgLoadSqlTab ce4 sangerLinks ~/kent/src/hg/lib/sangerLinks.sql \
 	fixedSangerLinks.tab
+
+#############################################################################
+## creating xxBlastTab tables (WORKING - 2007-07-31 - Hiram)
+    # Make sure there are no joinerCheck errors at this point, because 
+    # if left here they can spread via doHgNearBlastp:
+    ssh hgwdev
+    runJoiner.csh ce4 sangerPep
+ # ce4.orfToGene.name - hits 27812 of 27812 ok
+ # ce4.sangerBlastTab.query - hits 1214556 of 1214556 ok
+ # ce4.sangerBlastTab.target - hits 1214556 of 1214556 ok
+ # ce4.sangerCanonical.transcript - hits 19965 of 19965 ok
+ # ce4.sangerIsoforms.transcript - hits 30497 of 30497 ok
+ # ce4.sangerLinks.orfName - hits 29778 of 30777 ok
+ # ce4.sangerPep.name - hits 23224 of 23224 ok
+ # ce4.sangerToRefSeq.name - hits 30336 of 30336 ok
+
+    ssh hgwdev
+    mkdir /cluster/data/ce4/bed/hgNearBlastp
+    cd /cluster/data/ce4/bed/hgNearBlastp
+    mkdir 070731
+    cd 070731
+    # Get the proteins used by the other hgNear organisms:
+    pepPredToFa hg18 knownGenePep hg18.known.faa
+    pepPredToFa mm8 knownGenePep mm8.known.faa
+    pepPredToFa rn4 knownGenePep rn4.known.faa
+    pepPredToFa danRer4 ensPep danRer4.ensPep.faa
+    pepPredToFa dm3 flyBasePep dm3.flyBasePep.faa
+    pepPredToFa ce4 sangerPep ce4.sangerPep.faa
+    pepPredToFa sacCer1 sgdPep sacCer1.sgdPep.faa
+    # sanity check, number of lines in each faa file
+    wc -l *.faa
+    #	238243 ce4.sangerPep.faa
+    #	435532 danRer4.ensPep.faa
+    #	258316 dm3.flyBasePep.faa
+    #	526563 hg18.known.faa
+    #	315528 mm8.known.faa
+    #	86220 rn4.known.faa
+    #	64956 sacCer1.sgdPep.faa
+    # sanity check, count the number of protein sequences in each
+    for F in *.faa
+do
+    echo -n "${F} "
+    grep "^>" ${F} | wc -l
+done
+# ce4.sangerPep.faa 23224
+# danRer4.ensPep.faa 36048
+# dm3.flyBasePep.faa 20279
+# hg18.known.faa 45480
+# mm8.known.faa 30716
+# rn4.known.faa 8160
+# sacCer1.sgdPep.faa 5766
+
+    cd /cluster/data/ce4/bed/hgNearBlastp
+    cat << '_EOF_' > config.ra
+# Latest worm vs. other Gene Sorter orgs:
+# human, mouse, rat, zebrafish, fly, yeast
+
+targetGenesetPrefix sanger
+targetDb ce4
+queryDbs hg18 mm8 rn4 danRer4 dm3 sacCer1
+recipBest hg18 mm8 rn4 danRer4 dm3 sacCer1
+
+ce4Fa     /cluster/data/ce4/bed/hgNearBlastp/070731/ce4.sangerPep.faa
+hg18Fa    /cluster/data/ce4/bed/hgNearBlastp/070731/hg18.known.faa
+mm8Fa     /cluster/data/ce4/bed/hgNearBlastp/070731/mm8.known.faa
+rn4Fa     /cluster/data/ce4/bed/hgNearBlastp/070731/rn4.known.faa
+danRer4Fa /cluster/data/ce4/bed/hgNearBlastp/070731/danRer4.ensPep.faa
+dm3Fa     /cluster/data/ce4/bed/hgNearBlastp/070731/dm3.flyBasePep.faa
+sacCer1Fa /cluster/data/ce4/bed/hgNearBlastp/070731/sacCer1.sgdPep.faa
+
+buildDir /cluster/data/ce4/bed/hgNearBlastp/070731
+scratchDir /san/sanvol1/scratch/ce4HgNearBlastp
+'_EOF_'
+    # << happy emacs
+
+    # Run this in a screen since it is going to take awhile
+    # Run with -noLoad so we can eyeball files, manually load dm3 tables now,
+    # and later overload other databases' dmBlastTab tables.
+    doHgNearBlastp.pl -noLoad config.ra > do.log 2>&1 &
+    # watch progress in do.log
