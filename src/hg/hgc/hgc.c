@@ -208,7 +208,7 @@
 #include "omicia.h"
 #include "atomDb.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1325 2007/08/02 18:39:21 galt Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1326 2007/08/02 23:36:07 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -17097,10 +17097,15 @@ if (count1 > count2)
     printf("<TD bgcolor = \"lightgrey\">%d (%3.2f%%)</TD>", count1, freq1);
     printf("<TD>%d (%3.2f%%)</TD>", count2, freq2);
     }
-else
+else if (count1 < count2)
     {
     printf("<TD>%d (%3.2f%%)</TD>", count1, freq1);
     printf("<TD bgcolor = \"lightgrey\">%d (%3.2f%%)</TD>", count2, freq2);
+    }
+else
+    {
+    printf("<TD>%d (%3.2f%%)</TD>", count1, freq1);
+    printf("<TD>%d (%3.2f%%)</TD>", count2, freq2);
     }
 printf("</TR>\n");
 
