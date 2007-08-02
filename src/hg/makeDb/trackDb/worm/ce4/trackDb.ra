@@ -233,7 +233,6 @@ group map
 priority 110.0
 visibility hide
 type bed 3
-exonArrows on
 compositeTrack on
 
 	track nucleosome20MerSense
@@ -250,9 +249,9 @@ compositeTrack on
 	priority 2
 	color 255,128,33
 
-track nucleosomeFragments
-shortLabel Nucleosome Fragments
-longLabel Nucleosome fragments from SOLiD core alignments
+track nucleosome
+shortLabel Nucleosome
+longLabel Nucleosome predictions from SOLiD core alignments
 group map
 priority 120.0
 visibility hide
@@ -261,35 +260,25 @@ itemRgb on
 compositeTrack on
 
 	track nucleosomeFragmentsSense
-	subTrack nucleosomeFragments
+	subTrack nucleosome
 	shortLabel fragments +
 	longLabel mononucleosomal fragments, sense strand reads
 	priority 1
 
 	track nucleosomeFragmentsAntisense
-	subTrack nucleosomeFragments
+	subTrack nucleosome
 	shortLabel fragments -
 	longLabel mononucleosomal fragments, antisense strand reads
 	priority 2
 
-track nucleosomeDNA
-shortLabel Nucleosome DNA
-longLabel Nucleosome DNA from SOLiD core alignments
-group map
-priority 130.0
-visibility hide
-type bed 12
-itemRgb on
-compositeTrack on
-
 	track nucleosomeDNAsense
-	subTrack nucleosomeDNA
+	subTrack nucleosome
 	shortLabel genomic DNA +
 	longLabel sheared genomic DNA displayed as mononucleosomal fragments, sense strand reads
-	priority 1
+	priority 3
 
 	track nucleosomeDNAantisense
-	subTrack nucleosomeDNA
+	subTrack nucleosome
 	shortLabel genomic DNA -
 	longLabel sheared genomic DNA displayed as mononucleosomal fragments, antisense strand reads
-	priority 2
+	priority 4
