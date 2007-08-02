@@ -36,7 +36,7 @@ echo "Summary:"
 if ( "$problems" != "") then
     echo "problems:"
     echo "$problems"
-    echo "$problems" | mail -s "BLAT ping failures." galt heather kuhn donnak
+    echo "$problems" | mail -s "BLAT ping failures." galt kuhn donnak
     # use the next line to manually disable if too many failures annoying.
     #mv blatPing.csh blatPing.csh.hold 
 else
