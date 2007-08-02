@@ -22,8 +22,9 @@ if ( $#argv < 2 || $#argv > 3 ) then
   echo
   echo " Determines if all items in a table are within the ENCODE Regions."
   echo
-  echo "  usage:  database tablelist (will accept single table)"
-  echo "          [count] optional: list of count per chrom"
+  echo "  usage:  database tablelist [count]"
+  echo "     (will accept single table)"
+  echo "      where "count" gives list of count per chrom"
   echo
   exit
 else
@@ -33,6 +34,9 @@ endif
 
 if ( $#argv == 3 ) then
   set count=$argv[3]
+  if ( "count" != $count ) then
+    echo '\n ERROR: Third variable can only be "count".\n'
+  endif
 endif
 
 # run this only on hgwdev
@@ -48,7 +52,7 @@ if ( $db != hg16 && $db != hg17 && $db != hg18 ) then
 endif
 
 # check if it is a file or a tablename
-file $tablelist | egrep "ASCII text" > /dev/null
+file $tablelist | egrep -q "ASCII text" 
 if (! $status) then
   set tables=`cat $tablelist`
  else
@@ -58,15 +62,21 @@ endif
 # loop through all of the tables found in the previous statement.
 foreach tbl ($tables)  
   # make sure it's an encode table
-  set match = `echo $tbl | egrep '^encode' | wc -l`
-  if ( $match != 1 ) then
-    echo "\n ERROR: $tbl is not an ENCODE table"
+  echo $tbl | egrep -q '^encode'
+  if ( $status  ) then
+   echo "\n ERROR: $tbl is not an ENCODE table"
+   exit 1
+  endif
+
+  # if the table doesn't exist, print error and exit.
+  set exists=`hgsql -Ne 'SHOW TABLES LIKE '$tbl' $db`
+  if ( $exists == "" ) then
+    echo "\n ERROR: The $tbl table does not exist in the $db database\n"
     exit 1
   endif
 
   # find out if the table has chromStart and/or txStart field 
   set column=`hgsql -Ne 'show columns from '$tbl' like "%Start"' $db`
-  # if the table doesn't exist, it would be nice to print error and exit...
 
   set theStart=`echo $column | awk '{print $1}'`
 
@@ -103,6 +113,7 @@ foreach tbl ($tables)
   set num=0
   set column=""
   set theStart=""
+  set exists=""
 
 end #foreach
 exit
