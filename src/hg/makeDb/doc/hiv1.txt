@@ -301,4 +301,30 @@ CREATE TABLE gsClinicRec (
     hgLoadBed hiv1 hivGene hivGene.bed
     hgsql hiv1 -e 'drop table testPsl'
 
+# CREATE VAX004 TRACK (DONE, Fan, 8/2/07).
+
+    ssh hiv1
+    mkdir -p /cluster/store12/medical/hiv/hiv1/vax004
+    cd /cluster/store12/medical/hiv/hiv1/vax004
+
+    hgsql hiv1 -N -e 'select * from dnaSeq where id like "%U%"' >vax004.tab
+    tabToFa vax004
+
+    mkdir -p /gbdb/hiv1/vax004
+    cp -p vax004.fa /gbdb/hiv1/vax004/vax004.fa
+
+    hgLoadSeq -replace hiv1 /gbdb/hiv1/vax004/vax004.fa
+
+    gfClient -minScore=200 -minIdentity=80 -nohead hiv1.cse.ucsc.edu 17779 \
+    /gbdb/hiv1/nib -out=psl -t=dna -q=dna vax004.fa vax004.psl
+
+    wc *.psl
+    cut -f 10 vax004.psl |wc
+    cut -f 10 vax004.psl |sort -u |wc
+
+# go to home directory to do hgLoadPsl
+    cp vax004.psl ~
+    cd ~
+    hgLoadPsl hiv1 vax004.psl
+    rm vax004.psl
 
