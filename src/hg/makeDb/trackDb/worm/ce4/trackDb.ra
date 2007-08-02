@@ -226,56 +226,70 @@ type bed 5 .
 # showTopScorers 200
 # type bed 5 .
 
-track nucleosome
-shortLabel Nucleosome
-longLabel Nucleosome map from SOLiD core alignments
+track nucleosome20Mer
+shortLabel 20-Mer
+longLabel non-unique and almost repetitive 20-mer starts
 group map
-priority 100.0
+priority 110.0
+visibility hide
+type bed 3
+exonArrows on
+compositeTrack on
+
+	track nucleosome20MerSense
+	subTrack nucleosome20Mer
+	shortLabel 20-mer mask +
+	longLabel non-unique and almost repetitive 20-mer starts, sense strand
+	priority 1
+	color 33,128,255 
+
+	track nucleosome20MerAntisense
+	subTrack nucleosome20Mer
+	shortLabel 20-mer mask -
+	longLabel non-unique and almost repetitive 20-mer starts, antisense strand
+	priority 2
+	color 255,128,33
+
+track nucleosomeFragments
+shortLabel Nucleosome Fragments
+longLabel Nucleosome fragments from SOLiD core alignments
+group map
+priority 120.0
 visibility hide
 type bed 12
 itemRgb on
 compositeTrack on
 
-	track nucleosome20MerSense
-	subTrack nucleosome
-	shortLabel 20-mer mask, sense
-	longLabel non-unique and almost repetetive 20-mer starts, sense strand
-	priority 1
-	noInherit on
-	visibility dense
-	onlyVisibility dense
-	type bed 3
-
-	track nucleosome20MerAntisense
-	subTrack nucleosome
-	shortLabel 20-mer mask, antisense
-	longLabel non-unique and almost repetetive 20-mer starts, antisense strand
-	priority 2
-	noInherit on
-	visibility dense
-	onlyVisibility dense
-	type bed 3
-
 	track nucleosomeFragmentsSense
-	subTrack nucleosome
-	shortLabel fragments: sense
+	subTrack nucleosomeFragments
+	shortLabel fragments +
 	longLabel mononucleosomal fragments, sense strand reads
-	priority 3
+	priority 1
 
 	track nucleosomeFragmentsAntisense
-	subTrack nucleosome
-	shortLabel fragments: antisense
+	subTrack nucleosomeFragments
+	shortLabel fragments -
 	longLabel mononucleosomal fragments, antisense strand reads
-	priority 4
+	priority 2
+
+track nucleosomeDNA
+shortLabel Nucleosome DNA
+longLabel Nucleosome DNA from SOLiD core alignments
+group map
+priority 130.0
+visibility hide
+type bed 12
+itemRgb on
+compositeTrack on
 
 	track nucleosomeDNAsense
-	subTrack nucleosome
-	shortLabel genomic DNA: sense
+	subTrack nucleosomeDNA
+	shortLabel genomic DNA +
 	longLabel sheared genomic DNA displayed as mononucleosomal fragments, sense strand reads
-	priority 5
+	priority 1
 
 	track nucleosomeDNAantisense
-	subTrack nucleosome
-	shortLabel genomic DNA: antisense
+	subTrack nucleosomeDNA
+	shortLabel genomic DNA -
 	longLabel sheared genomic DNA displayed as mononucleosomal fragments, antisense strand reads
-	priority 6
+	priority 2
