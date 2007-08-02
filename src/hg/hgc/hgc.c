@@ -208,7 +208,7 @@
 #include "omicia.h"
 #include "atomDb.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1322 2007/08/01 20:45:55 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1323 2007/08/02 00:54:01 galt Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -5630,7 +5630,7 @@ struct ffAli *pslToFfAliAndSequence(struct psl *psl, struct dnaSeq *qSeq,
 /* Given psl, dig up target sequence and convert to ffAli. 
  * Note: if strand is -, this does a pslRcBoth to psl! */
 {
-int tStart, tEnd, tRcAdjustedStart;
+int tStart, tEnd;
 struct dnaSeq *dnaSeq;
 
 tStart = psl->tStart - 100;
@@ -5647,16 +5647,14 @@ dnaSeq->name = cloneString(psl->tName);
 if (retSeq)
     *retSeq = dnaSeq;
 
-tRcAdjustedStart = tStart;
 if (psl->strand[0] == '-')
     {
     if (retIsRc)
 	*retIsRc = TRUE;
     reverseComplement(dnaSeq->dna, dnaSeq->size);
     pslRcBoth(psl); 
-    tRcAdjustedStart = psl->tSize - tEnd;
     }
-return pslToFfAli(psl, qSeq, dnaSeq, tRcAdjustedStart);
+return pslToFfAli(psl, qSeq, dnaSeq, tStart);
 }
 
 int showPartialDnaAlignment(struct psl *wholePsl,
