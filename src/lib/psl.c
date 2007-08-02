@@ -19,7 +19,7 @@
 #include "binRange.h"
 #include "rangeTree.h"
 
-static char const rcsid[] = "$Id: psl.c,v 1.76 2007/03/04 20:24:19 kent Exp $";
+static char const rcsid[] = "$Id: psl.c,v 1.77 2007/08/02 00:52:58 galt Exp $";
 
 static char *createString = 
 "CREATE TABLE %s (\n"
@@ -1131,15 +1131,14 @@ void pslRcBoth(struct psl *psl)
 /* Swap around things in psl so it works as if the alignment
  * was done on the reverse strand of the target. */
 {
-int tSize = psl->tSize, qSize = psl->qSize;
-int blockCount = psl->blockCount, i;
+unsigned tSize = psl->tSize, qSize = psl->qSize;
+unsigned blockCount = psl->blockCount, i;
 unsigned *tStarts = psl->tStarts, *qStarts = psl->qStarts, *blockSizes = psl->blockSizes;
 
-reverseIntRange(&psl->tStart, &psl->tEnd, psl->tSize);
 for (i=0; i<blockCount; ++i)
     {
-    tStarts[i] = (int)tSize - ((int)tStarts[i] + (int)blockSizes[i]);
-    qStarts[i] = (int)qSize - ((int)qStarts[i] + (int)blockSizes[i]);
+    tStarts[i] = tSize - (tStarts[i] + blockSizes[i]);
+    qStarts[i] = qSize - (qStarts[i] + blockSizes[i]);
     }
 reverseUnsigned(tStarts, blockCount);
 reverseUnsigned(qStarts, blockCount);
@@ -1154,6 +1153,7 @@ int i;
 /* swap strand, forcing target to have an explict strand */
 psl->strand[0] = (psl->strand[0] != '-') ? '-' : '+';
 psl->strand[1] = (psl->strand[1] != '-') ? '-' : '+';
+psl->strand[2] = 0;
 
 for (i = 0; i < psl->blockCount; i++)
     {
