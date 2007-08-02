@@ -79,6 +79,12 @@ label Entrez Gene
 url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=gene&cmd=Retrieve&dopt=full_report&list_uids=%s
 acc yes
 
+name EnsemblGene
+label Ensembl GeneView
+url http://www.ensembl.org/%s/geneview?gene=%s
+acc yes
+accNum 2
+
 name EnsemblHumanGene
 label Ensembl Human GeneView
 url http://www.ensembl.org/Homo_sapiens/geneview?gene=%s
