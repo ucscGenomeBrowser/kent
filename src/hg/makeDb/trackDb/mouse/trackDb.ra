@@ -903,13 +903,13 @@ otherDb rn3
 # track netAnoCar1
 # priority 183.1
 
-
-
 searchTable cytoBand
+searchMethod exact
 searchType cytoBand
 shortCircuit 1
-termRegex [xy0-9]+[pq]([a-z][0-9]([\-\.][0-9]+)?)?
+termRegex (x|y|[1-9][0-9]?)?(q[A-H][0-9]*)(\.[0-9]+)?
 searchPriority 8
+padding 500000
 
 searchTable gold
 searchMethod exact
@@ -1092,6 +1092,24 @@ searchMethod fuzzy
 termRegex [^[:space:]]+
 searchPriority 50
 
+track bacEndPairs
+shortLabel BAC End Pairs
+longLabel BAC End Pairs
+group map
+priority 15
+visibility hide
+type bed 6 +
+exonArrows off
+
+track xenoRefGene
+shortLabel Other RefSeq
+longLabel Non-$Organism RefSeq Genes
+group genes
+priority 35.1
+visibility dense
+color 12,12,120
+type genePred xenoRefPep xenoRefMrna
+
 searchTable igtc
 searchType psl
 searchMethod prefix
@@ -1105,3 +1123,11 @@ group genes
 priority 54
 type bed 12
 visibility hide
+
+searchTable ctgPos
+searchMethod prefix
+shortCircuit 1
+termRegex (NT_|NC_)[0-9]+([0-9\.]+)?
+query select chrom,chromStart,chromEnd,contig from %s where contig like '%s%%'
+searchPriority 5
+
