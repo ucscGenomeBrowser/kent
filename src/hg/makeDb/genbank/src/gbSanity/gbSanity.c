@@ -39,7 +39,7 @@
 #include "../dbload/dbLoadOptions.h"
 #include <stdarg.h>
 
-static char const rcsid[] = "$Id: gbSanity.c,v 1.14 2007/07/08 06:07:46 markd Exp $";
+static char const rcsid[] = "$Id: gbSanity.c,v 1.15 2007/08/03 04:58:19 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -105,17 +105,24 @@ gbReleaseUnload(select->release);
 gbVerbLeave(1, "check: %s", gbSelectDesc(select));
 }
 
+static boolean loadEnabled(unsigned srcDb, unsigned type,
+                           unsigned orgCat)
+/* is load enabled for (srcDb, type, orgCat) */
+{
+struct dbLoadAttr* attr
+    = dbLoadOptionsGetAttr(&gOptions, srcDb, type, orgCat);
+verbose(1, "%s %s %s: %s\n", gbSrcDbName(srcDb), gbTypeName(type),
+        gbOrgCatName(orgCat), (attr->load ? "enabled" : "disabled"));
+return attr->load;
+}
+
 static unsigned getLoadOrgCats(char* database, unsigned srcDb, unsigned type)
 /* determine orgCats that should be loaded, or zero if none */
 {
-struct dbLoadAttr* attr;
 unsigned orgCats = 0;
-
-attr = dbLoadOptionsGetAttr(&gOptions, srcDb, type, GB_NATIVE);
-if (attr->load)
+if (loadEnabled(srcDb, type, GB_NATIVE))
     orgCats |= GB_NATIVE;
-attr = dbLoadOptionsGetAttr(&gOptions, srcDb, type, GB_XENO);
-if (attr->load)
+if (loadEnabled(srcDb, type, GB_XENO))
     orgCats |= GB_XENO;
 return orgCats;
 }
@@ -137,8 +144,8 @@ if (attr->load && attr->loadDesc)
 return descOrgCats;
 }
 
-static void checkSanity(struct gbSelect* select,
-                        struct sqlConnection* conn)
+static boolean checkSanity(struct gbSelect* select,
+                           struct sqlConnection* conn)
 /* check sanity on a select partation */
 {
 /* load and validate all metadata */
@@ -151,12 +158,13 @@ chkGbRelease(select, metaDataTbls);
 chkMetaDataXRef(metaDataTbls);
 
 /* check the alignment tables */
-chkAlignTables(select, conn, metaDataTbls, &gOptions);
+int cnt = chkAlignTables(select, conn, metaDataTbls, &gOptions);
 metaDataTblsFree(&metaDataTbls);
+return (cnt > 0) ? TRUE : FALSE;
 }
 
-static void checkRelease(struct gbRelease* release, char* database,
-                         unsigned type, unsigned orgCats, char* accPrefix)
+static boolean checkRelease(struct gbRelease* release, char* database,
+                            unsigned type, unsigned orgCats, char* accPrefix)
 /* Check a release/type */
 {
 struct sqlConnection* conn = hAllocConn();
@@ -168,34 +176,44 @@ select.type = type;
 
 select.orgCats = orgCats;
 select.accPrefix = accPrefix;
-checkSanity(&select, conn);
+boolean checked = checkSanity(&select, conn);
 hFreeConn(&conn);
+return checked;
 }
 
-static void releaseSanity(struct gbRelease* release, char *database)
+static int releaseSanity(struct gbRelease* release, char *database)
 /* Run sanity checks on a release */
 {
 unsigned orgCats;
+int checkedSetCnt = 0;
 
 /* check if native, and/or xeno should be included */
 orgCats = getLoadOrgCats(database, release->srcDb, GB_MRNA);
 if (orgCats != 0)
     {
-    checkRelease(release, database, GB_MRNA, orgCats, NULL);
+    if (checkRelease(release, database, GB_MRNA, orgCats, NULL))
+        checkedSetCnt++;
     }
 
 orgCats = getLoadOrgCats(database, release->srcDb, GB_EST);
 if (orgCats != 0)
     {
     struct slName* prefixes, *prefix;
+    boolean checkedSome = FALSE;
     if (gOptions.accPrefixRestrict != NULL)
         prefixes = newSlName(gOptions.accPrefixRestrict);
     else
         prefixes = gbReleaseGetAccPrefixes(release, GB_PROCESSED, GB_EST);
     for (prefix = prefixes; prefix != NULL; prefix = prefix->next)
-        checkRelease(release, database, GB_EST, orgCats, prefix->name);
+        {
+        if (checkRelease(release, database, GB_EST, orgCats, prefix->name))
+            checkedSome = TRUE;
+        }
     slFreeList(&prefixes);
+    if (checkedSome)
+        checkedSetCnt++;
     }
+return checkedSetCnt;
 }
 
 static struct gbRelease* newestReleaseWithAligns(struct gbIndex* index,
@@ -218,6 +236,7 @@ for (release = index->rels[gbSrcDbIdx(srcDb)]; release != NULL;
     if (idxFiles != NULL)
         {
         slFreeList(&idxFiles);
+        verbose(1, "checking %s for %s\n", release->name, database);
         return release;
         }
     }
@@ -232,24 +251,37 @@ struct sqlConnection *conn;
 struct gbRelease* release;
 hgSetDb(database);
 gbErrorSetDb(database);
-
+int checkedSetCnt = 0;
 if (gOptions.relRestrict == NULL)
     {
+    int releaseCnt = 0;
     /* Check each partition of the genbank/refseq using the newest aligned
      * release */
     release = newestReleaseWithAligns(index, database, GB_GENBANK);
     if (release != NULL)
-        releaseSanity(release, database);
+        {
+        releaseCnt++;
+        checkedSetCnt += releaseSanity(release, database);
+        }
 
     release = newestReleaseWithAligns(index, database, GB_REFSEQ);
     if (release != NULL)
-        releaseSanity(release, database);
+        {
+        releaseCnt++;
+        checkedSetCnt += releaseSanity(release, database);
+        }
+    if (releaseCnt == 0)
+        errAbort("Error: No RefSeq or Genbank alignments for %s\n"
+                 "have updates been enabled?", database);
     }
 else
     {
     release = gbIndexMustFindRelease(index, gOptions.relRestrict);
-    releaseSanity(release, database);
+    checkedSetCnt += releaseSanity(release, database);
     }
+if (checkedSetCnt == 0)
+    errAbort("Error: no alignment data was checked");
+verbose(1, "%d alignment sets checked", checkedSetCnt);
     
 gbIndexFree(&index);
 
