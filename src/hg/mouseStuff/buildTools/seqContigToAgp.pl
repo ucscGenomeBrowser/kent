@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-#	$Id: seqContigToAgp.pl,v 1.2 2007/07/19 17:12:46 hiram Exp $
+#	$Id: seqContigToAgp.pl,v 1.3 2007/08/03 16:39:51 hiram Exp $
 
 use strict;
 use warnings;
@@ -68,7 +68,8 @@ for (my $i = 0; $i < $fragCount; ++$i) {
 
 open (RF,">$ranFragsAgp") or die "can not write to $ranFragsAgp";
 open (RC,">$ranContigsAgp") or die "can not write to $ranContigsAgp";
-open (FH,'zcat seq_contig.md.gz|egrep -v "Celera|129/S|129/O|129S7/S|unknown|NOD"|') or die "can not read seq_contig.md.gz";
+# open (FH,'zcat seq_contig.md.gz|egrep -v "Celera|129/S|129/O|129S7/S|A/J|unknown|NOD"|') or die "can not read seq_contig.md.gz";
+open (FH,'zcat seq_contig.md.gz|grep "C57BL/6J"|') or die "can not read seq_contig.md.gz";
 
 my $randomContigCount = 0;
 my $seqId = 0;
@@ -114,11 +115,16 @@ while (my $line=<FH>) {
 		    if ($ctgLen != $chrLen);
 		if ($i > 0) {
 		    my $gapLen = $partStart - $prevChrEnd - 1;
-		    $chrEnd = $chrStart + $gapLen - 1;
-		    printf RF "chr%s_random\t%d\t%d\t%d\t%s\t%d\t%s\t%s\n",
-			$chrN, $chrStart, $chrEnd, $partCount++, "N",
-			    $gapLen, "fragment", "yes";
-		    $chrStart += $gapLen;
+		    if ($gapLen > 0) {
+			$chrEnd = $chrStart + $gapLen - 1;
+			printf RF "chr%s_random\t%d\t%d\t%d\t%s\t%d\t%s\t%s\n",
+			    $chrN, $chrStart, $chrEnd, $partCount++, "N",
+				$gapLen, "fragment", "yes";
+			$chrStart += $gapLen;
+		    } else {
+			printf STDERR "# WARNING: zero gap chr%s_random:%d-%d\n",
+			    $chrN, $chrStart, $chrEnd;
+		    }
 		}
 		$chrEnd = $chrStart + $chrLen - 1;
 		printf RF "chr%s_random\t%d\t%d\t%d\t%s\t%s\t%d\t%d\t%s\n",
@@ -152,11 +158,16 @@ while (my $line=<FH>) {
 			    $type, $name, $start, $stop, "+";
 		} else {
 		    my $gapLen = $partStart - $prevChrEnd - 1;
-		    $chrEnd = $chrStart + $gapLen - 1;
-		    printf RF "chr%s_random\t%d\t%d\t%d\t%s\t%d\t%s\t%s\n",
-			$chrN, $chrStart, $chrEnd, $partCount++, "N",
-			    $gapLen, "fragment", "yes";
-		    $chrStart += $gapLen;
+		    if ($gapLen > 0) {
+			$chrEnd = $chrStart + $gapLen - 1;
+			printf RF "chr%s_random\t%d\t%d\t%d\t%s\t%d\t%s\t%s\n",
+			    $chrN, $chrStart, $chrEnd, $partCount++, "N",
+				$gapLen, "fragment", "yes";
+			$chrStart += $gapLen;
+		    } else {
+			printf STDERR "# WARNING: zero gap chr%s_random:%d-%d\n",
+			    $chrN, $chrStart, $chrEnd;
+		    }
 		}
 		$chrEnd = $chrStart + $chrLen - 1;
 		printf RF "chr%s_random\t%d\t%d\t%d\t%s\t%s\t%d\t%d\t%s\n",

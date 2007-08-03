@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-#	$Id: mkContigAgp.pl,v 1.1 2007/07/19 18:44:53 hiram Exp $
+#	$Id: mkContigAgp.pl,v 1.2 2007/08/03 16:39:51 hiram Exp $
 
 use strict;
 use warnings;
@@ -20,6 +20,10 @@ open (CA,">$contigAgp") or die "can not write to $contigAgp";
 #open (FH,'zcat seq_contig.md.gz|egrep -v "Celera|129/S|129/O|129S7/S|A/J|unknown|NOD"|') or die "can not read seq_contig.md.gz";
 open (FH,'zcat seq_contig.md.gz|grep "C57BL/6J"|') or die "can not read seq_contig.md.gz";
 
+my $chrStart = 1;
+my $chrEnd = 1;
+my $prevChrEnd = 1;
+my $prevChr = "";
 my $scafPartCount = 0;
 while (my $line=<FH>) {
     next if ($line =~ m/^#/);
@@ -30,9 +34,32 @@ while (my $line=<FH>) {
     if ($chr !~ m/\|/) {
 	my $contigLen = $stop - $start + 1;
 	$chr = "M" if ($chr =~ m/MT/);
-	printf CA "chr%s\t%d\t%d\t%d\t%s\t%s\t%d\t%d\t%s\n",
+	if ($prevChr ne $chr) {
+	    # first contig does not start at 1, chrom begins with a gap
+	    if ($start != 1) {
+		my $gap = $start - 1;
+		printf CA "chr%s\t1\t%d\t%d\t%s\t%d\t%s\t%s\n",
+		    $chr, $start-1, ++$scafPartCount, "N",
+			    $gap, "contig", "no";
+	    }
+	    printf CA "chr%s\t%d\t%d\t%d\t%s\t%s\t%d\t%d\t%s\n",
 		$chr, $start, $stop, ++$scafPartCount, $type,
-			$name, 1, $contigLen, $strand;
+		    $name, 1, $contigLen, $strand;
+	    $prevChrEnd = $stop;
+	    $prevChr = $chr;
+	} else {
+	    #	when contigs have gaps between them, indicate such
+	    if (($prevChrEnd + 1) != $start) {
+		my $gap = $start - $prevChrEnd - 1;
+		printf CA "chr%s\t%d\t%d\t%d\t%s\t%d\t%s\t%s\n",
+		    $chr, $prevChrEnd+1, $start-1, ++$scafPartCount, "N",
+			    $gap, "contig", "no";
+	    }
+	    printf CA "chr%s\t%d\t%d\t%d\t%s\t%s\t%d\t%d\t%s\n",
+		$chr, $start, $stop, ++$scafPartCount, $type,
+		    $name, 1, $contigLen, $strand;
+	    $prevChrEnd = $stop;
+	}
     }
 }
 
