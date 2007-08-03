@@ -6,14 +6,14 @@
 # Date: 7/17/2002
 # Description:  Convert an output file from ePCR to a psl file
 
-# $Id: epcrToPsl,v 1.2 2006/09/08 19:02:05 hiram Exp $
+# $Id: epcrToPsl,v 1.3 2007/08/03 16:44:33 hiram Exp $
 
 use strict;
 use warnings;
 
 # USAGE message
 if ($#ARGV < 3) {
-  print STDERR "USAGE: epcrToPsl [-mouse -rat -clones <sequence.inf>] <epcr file> <primers file> <accession_info.rdb> <fa dir>\n";
+  print STDERR "USAGE: epcrToPsl [-mouse -rat -clones <sequence.inf>] <epcr file> <primers file> <accession_info.rdb> <db.2bit> \n";
   exit(1);
 }
 my $clones = 0;
@@ -38,7 +38,7 @@ my $primers = shift(@ARGV);
 open(PRIMERS, "$primers") || die("Could not open $primers");
 my $info = shift(@ARGV);
 open(INFO, "$info") || die("Could not open $info");
-my $dir = shift(@ARGV);
+my $twoBit = shift(@ARGV);
 
 my %chr;
 
@@ -130,10 +130,10 @@ while ($line = <FILE>) {
     $strand = "+";
   } else {
     my $to = $start + 7;
-#    printf STDERR "/cluster/bin/i386/twoBitToFa $dir/mm8.2bit:${ctg}:$start-$to out.fa\n";
-    `/cluster/bin/i386/twoBitToFa $dir/mm8.2bit:${ctg}:$start-$to out.fa`;
+#    printf STDERR "/cluster/bin/i386/twoBitToFa $twoBit:${ctg}:$start-$to out.fa\n";
+    `/cluster/bin/i386/twoBitToFa $twoBit:${ctg}:$start-$to out.fa`;
 
-    open(FA, "out.fa") || die("out.fa does not exist - $dir/$chr{$chrom}/$ctg.fa");
+    open(FA, "out.fa") || die("out.fa does not exist - $twoBit/$chr{$chrom}/$ctg.fa");
     my $find = <FA>;
     $find = <FA>;
     chomp($find);
