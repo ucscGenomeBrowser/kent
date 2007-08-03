@@ -1,4 +1,4 @@
-/* hgc - Human Genome Click processor - gets called when user clicks
+/* hc - Human Genome Click processor - gets called when user clicks
  * on something in human tracks display. */
 
 #include "common.h"
@@ -208,7 +208,7 @@
 #include "omicia.h"
 #include "atomDb.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1327 2007/08/03 00:48:46 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1328 2007/08/03 18:25:40 ytlu Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -17725,7 +17725,7 @@ int tStart = psl->tStart;
 int tEnd = psl->tEnd;
 char tName[256];
 struct dnaSeq *tSeq;
-char *tables[4] = {"luGene2", "luGene", "refGene", "mgcGenes"};
+char *tables[4] = {"luGene", "refGene", "mgcGenes", "luGene2"};
 
 /* open file to write to */
 trashDirFile(&indexTn, "index", "index", ".html");
@@ -17735,19 +17735,24 @@ body = mustOpen(bodyTn.forCgi, "w");
 /* get query genes struct info*/
 for(i = 0; i < 4; i++)
     {
-    sprintf(query, "SELECT * FROM %s WHERE name = '%s'"
-	    "AND chrom = '%s' AND txStart <= %d "
-	    "AND txEnd >= %d",
-	    tables[i], geneName, psl->qName, qStart, qEnd);
-
-    sr = sqlMustGetResult(conn, query);
-    if((row = sqlNextRow(sr)) != NULL)
+    if(sqlTableExists(conn, tables[i]))
 	{
-	gene = genePredLoad(row);
-	break;
+	sprintf(query, "SELECT * FROM %s WHERE name = '%s'"
+		"AND chrom = '%s' AND txStart <= %d "
+		"AND txEnd >= %d",
+		tables[i], geneName, psl->qName, qStart, qEnd);
+	sr = sqlMustGetResult(conn, query);
+	if((row = sqlNextRow(sr)) != NULL)
+	    {
+	    int hasBin = 0;
+	    if(hOffsetPastBin(psl->qName, tables[i]))
+		hasBin=1;
+	    gene = genePredLoad(row+hasBin);
+	    break;
+	    }
+	else
+	    sqlFreeResult(&sr);
 	}
-    else
-	sqlFreeResult(&sr);
     }
 if(i == 4)
     errAbort("Can't find query for %s in %s. This entry may no longer exist\n", geneName, geneTable);
@@ -17926,7 +17931,7 @@ printf("<b>Aligned %s bases</B>:%d of %d with %f identity. <BR> <B>Aligned %s CD
 /* print info about the stamp putative element */
 printf("<B>%s </B><BR> <B>Genomic location: </B>"
        " <A HREF=\"%s?db=%s&position=%s:%d-%d\" >%s(%s): %d - %d</A> <BR> <B> Element Structure: </B> %d putative exons and %d putative cds exons<BR><BR>\n", 
-       name, hgTracksName(), db, info->chrom, info->chromStart, info->chromEnd, info->chrom, info->strand, info->chromStart, info->chromEnd, info->tExons[0], info->tExons[1]);
+       name, hgTracksName(), db, info->chrom, info->chromStart+1, info->chromEnd, info->chrom, info->strand, info->chromStart+1, info->chromEnd, info->tExons[0], info->tExons[1]);
 if(info->repeats[0] > 0)
     {
     printf("Repeats elements inserted into %s <BR>\n", name);
