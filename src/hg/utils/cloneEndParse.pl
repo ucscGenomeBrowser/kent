@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/cloneEndParse.pl instead.
 
-# $Id: cloneEndParse.pl,v 1.3 2006/06/16 21:08:16 hiram Exp $
+# $Id: cloneEndParse.pl,v 1.4 2007/08/03 21:42:07 hiram Exp $
 
 # File: convertTxt
 # Author: Heather Trumbower
@@ -39,11 +39,13 @@ sub usage()
 #	The DP6 P6 S6 and SP7 have only one instance each
 #	and very few for M13R S T
 #	big counts for: F M13F R SP6 T7 TJ TK
+#  CORRECTION 2007-08-03 code TJ and TK reverse their meanings
+#  CORRECTION 2007-08-03 code S and T reverse their meanings
 ########################################################################
 sub isForward {
     my $end = shift(@_);
     if (($end =~ /^T7/) || ($end =~ /^M13F/) ||
-	($end eq "F") || ($end =~ /^TJ/) || ($end eq "T")) {
+	($end eq "F") || ($end =~ /^TK/) || ($end eq "S")) {
 	return 1;
     } else {
 	return 0;
@@ -54,8 +56,8 @@ sub isForward {
 sub isReverse {
     my $end = shift(@_);
     if (($end =~ /^SP6/) || ($end eq "M13R") ||
-	($end eq "R") || ($end eq "DP6") || ($end =~ /^TK/) ||
-	($end eq "P6") || ($end eq "S6") || ($end eq "SP7") || ($end eq "S")) {
+	($end eq "R") || ($end eq "DP6") || ($end =~ /^TJ/) ||
+	($end eq "P6") || ($end eq "S6") || ($end eq "SP7") || ($end eq "T")) {
 	return 1;
     } else {
 	return 0;
