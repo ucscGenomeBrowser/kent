@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-#	$Id: oneToTwo.pl,v 1.1 2007/07/20 21:14:05 hiram Exp $
+#	$Id: oneToTwo.pl,v 1.2 2007/08/03 16:41:12 hiram Exp $
 
 use strict;
 use warnings;
@@ -29,8 +29,10 @@ close (FH);
 
 my %canonicalNames;	# key is existing canonical name
 my %oneDotLess;		# key is canonical name without 2nd dot suffix
+my %newCanonicalNames;  # key is new two dot name
 
 my $threeDotCount = 0;
+my $canonicalCount = 0;
 open (FH, "<sangerCanonical.transcript.txt") or
 	die "can not read sangerCanonical.transcript.txt";
 while (my $line = <FH>) {
@@ -48,12 +50,18 @@ while (my $line = <FH>) {
     if (defined($three)) {
 	++$threeDotCount;
     }
+    die "duplicate new two dot name $line" if (exists($newCanonicalNames{$twoDot}));
+    $newCanonicalNames{$twoDot} = $line;
     die "duplicate two dot name $line" if (exists($oneDotLess{$twoDot}));
     $oneDotLess{$twoDot} = $line;
+    ++$canonicalCount;
 }
 close (FH);
 
 printf STDERR "found $threeDotCount three dot names\n";
+printf STDERR "found $canonicalCount names\n";
+
+die "stop here";
 
 foreach my $key (keys %oneDotLess) {
     my $fullName = $oneDotLess{$key};
