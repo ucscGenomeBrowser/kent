@@ -208,7 +208,7 @@
 #include "omicia.h"
 #include "atomDb.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1328 2007/08/03 18:25:40 ytlu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1329 2007/08/03 20:27:03 giardine Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -18106,7 +18106,18 @@ if (linktype != NULL)
     if (accFlag == NULL) 
         safef(url, sizeof(url), linktype);
     else 
-        safef(url, sizeof(url), linktype, link->attrAcc);
+        {
+        char *accNum = hashFindVal(thisLink, "accNum");
+        if (accNum == NULL)
+            safef(url, sizeof(url), linktype, link->attrAcc);
+        else if (sameString(accNum, "2")) 
+            {
+            char *val[2];
+	    char *copy = cloneString(link->attrAcc);
+            if (2 == chopString(copy, ",", val, 2))
+	        safef(url, sizeof(url), linktype, val[0], val[1]);
+            }
+        }
     if (label == NULL)
         label = "";  /* no label */
     printf("%s - <A HREF=\"%s\" TARGET=\"_BLANK\">%s</A>\n", label, url, link->attrAcc);
