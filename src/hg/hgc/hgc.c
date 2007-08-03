@@ -208,7 +208,7 @@
 #include "omicia.h"
 #include "atomDb.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1326 2007/08/02 23:36:07 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1327 2007/08/03 00:48:46 braney Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -1070,10 +1070,17 @@ printf("<TABLE>");
 printf("<THEAD>");
 printf("<TBODY>");
 printf("<TR><TH>");
-printf("Brian's Gap Tree<TD>Bernard's Tree");
+printf("Suh Trees<BR>\n");
+printf("<IMG src=http://hgwdev.cse.ucsc.edu/~braney/suhTrees/%s.tt.png><BR>",item);
+printf("<TD><IMG src=http://hgwdev.cse.ucsc.edu/~braney/suhTrees/%s.gt.png><BR>",item);
 printf("<TR><TH>");
-printf("<IMG src=http://hgwdev.cse.ucsc.edu/~braney/992png/%s.png><BR>",item);
-printf("<TD><IMG src=http://hgwdev.cse.ucsc.edu/~bsuh/gif/%s.gif><BR>",item);
+printf("NJ Trees<BR>\n");
+printf("<IMG src=http://hgwdev.cse.ucsc.edu/~braney/njTrees/%s.tt.png><BR>",item);
+printf("<TD><IMG src=http://hgwdev.cse.ucsc.edu/~braney/njTrees/%s.gt.png><BR>",item);
+printf("<TR><TH>");
+printf("Gap UPGMA Trees<BR>\n");
+printf("<IMG src=http://hgwdev.cse.ucsc.edu/~braney/gap992Trees/%s.tt.png><BR>",item);
+printf("<TD><IMG src=http://hgwdev.cse.ucsc.edu/~braney/gap992Trees/%s.gt.png><BR>",item);
 printf("</TABLE>");
 
 char buffer[4096];
