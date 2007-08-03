@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.12 2007/07/30 22:51:59 hiram Exp $"
+#	"$Id: mm9.txt,v 1.13 2007/08/03 18:31:36 hiram Exp $"
 #
 
 #######################################################################
@@ -666,6 +666,15 @@ mm9.mgcTables.mgc = all
     featureBits mm9 xenoRefGene
     #	40378885 bases of 2620346127 (1.541%) in intersection
     #	44298281 bases of 2620346127 (1.691%) in intersection
+
+    # enable daily alignment and update of hgwdev (DONE - 2007-08-03 - Hiram)
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+    # add mm9 to:
+        etc/align.dbs
+        etc/hgwdev.dbs
+    cvs ci -m "Added mm9 - Mus musculus" etc/align.dbs etc/hgwdev.dbs
+    make etc-update
 
 #########################################################################
 # MAP CONTIGS TRACK (DONE - 2007-07-23 - Hiram)
@@ -1392,3 +1401,99 @@ mm9.all_sts_primer has 1 records with overlapping blocks.
 /cluster/data/mm8/bed/STSmarkers.2006-08-29/mm8.nameList \
 	mm9.nameList | wc -l
     #	998
+
+###########################################################################
+#	Reset default position to be same area as Mm8, 2007-08-02 - Hiram
+    hgsql -e \
+'update dbDb set defaultPos="chr12:57795963-57815592" where name="mm9";' \
+	hgcentraltest
+
+##############################################################################
+# CLONE ENDS - BACEND TRACK (WORKING - 2007-08-02 - Hiram)
+    ssh kkstore06
+    cd /cluster/data/mm9
+    # check disk space: 1.2T free
+    df -h .
+# Filesystem            Size  Used Avail Use% Mounted on
+# /export/cluster/store4
+#			2.3T  997G  1.2T  46% /cluster/store4
+    mkdir -p bed/cloneend/ncbi
+    cd bed/cloneend/ncbi
+
+    wget --timestamping \
+	ftp://ftp.ncbi.nih.gov/genomes/CLONEEND/mus_musculus/*
+
+    cd /cluster/data/mm9/bed/cloneend
+    # seems like the *.mfa files were split just for convenience
+    # concatenate, and convert the title line of the fasta sequences
+    cat << '_EOF_' > convert.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+while (my $line = <>) {
+    if ($line !~ m/^>/) {
+	print $line
+    } else {
+        my @fields = split('\|', $line);
+	my $fieldCount = scalar(@fields);
+        my $printed = 0;
+        for (my $i = 0; $i < $fieldCount; $i++) {
+                if ($fields[$i] eq "gb" || $fields[$i] eq "dbj") {
+                        (my $name, my $vers) = split(/\./,$fields[$i+1]);
+                        print ">$name\n";
+                        $i= $fieldCount;
+                        $printed = 1;
+                }
+        }
+	die("Failed for $line\n") if (!$printed);
+    }
+}
+'_EOF_'
+    # << happy emacs
+    chmod +x convert.pl
+    for F in ncbi/*.mfa.gz
+    do
+	zcat ${F}
+    done | ./convert.pl | gzip > cloneEnds.fa.gz
+
+    #	make sure nothing got broken:
+    faSize ncbi/*.mfa.gz
+# 498162791 bases (16779168 N's 481383623 real 304962409 upper
+#	176421214 lower) in 789466 sequences in 44 files
+
+    faSize cloneEnds.fa.gz
+# 498162791 bases (16779168 N's 481383623 real 304962409 upper
+#	176421214 lower) in 789466 sequences in 1 files
+    #	identical numbers, curiously, these are exactly the same numbers
+    #	as were seen during the build of Mm7.  Do these things not
+    #	change with time ?
+
+    # concatenate the text files, too
+    for F in ncbi/*.txt.gz
+    do
+	zcat ${F}
+    done | gzip > all.txt.gz
+
+    # generate cloneEndPairs.txt and cloneEndSingles.txt
+    cp -p /cluster/data/mm7/bed/cloneend/convertTxt.pl .
+    zcat all.txt.gz | ./convertTxt.pl stdin
+    # Reading in end info
+    # Writing out pair info
+    # Writing out singleton info
+    # 354485 pairs and 78423 singles
+
+    #	faSplit does not function correctly if given a .gz source file
+    #	AND, we need the unzipped file for sequence loading below
+    gunzip cloneEnds.fa.gz
+    # split
+    mkdir splitdir
+    cd splitdir
+    faSplit sequence ../cloneEnds.fa 100 cloneEnds
+    #	Check to ensure no breakage:
+    cat *.fa | faSize stdin
+# 498162791 bases (16779168 N's 481383623 real 304962409 upper 176421214
+# lower) in 789466 sequences in 1 files
+    #	same numbers as before
+
