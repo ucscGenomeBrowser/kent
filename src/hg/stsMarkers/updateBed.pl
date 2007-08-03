@@ -1,6 +1,6 @@
 #!/usr/bin/env perl 
 
-# $Id: updateBed.pl,v 1.5 2006/09/13 23:16:55 hiram Exp $
+# $Id: updateBed.pl,v 1.6 2007/08/03 16:46:12 hiram Exp $
 
 ##Author: Yontao Lu
 ##Date  06/29/03
@@ -280,7 +280,7 @@ while(my $line = <MGDM>)
 	if (exists($mgiId{$eles[1]})) {
 	    if ($mgiId{$eles[1]} ne $eles[0]) {
 		if ($verbose) {
-		printf STDERR "ERROR: duplicate migId key $eles[1] (values $mgiId{$eles[1]} $eles[0]) in $mgdMarkerF at line $.\n";
+		printf STDERR "ERROR: duplicate mgiId key $eles[1] (values $mgiId{$eles[1]} $eles[0]) in $mgdMarkerF at line $.\n";
 		}
 	    }
 	    next;
