@@ -1,4 +1,5 @@
 #include "common.h"
+#include "hCommon.h"
 #include "obscure.h"
 #include "linefile.h"
 #include "errabort.h"
@@ -15,8 +16,9 @@
 #include "wikiLink.h"
 #include "trashDir.h"
 #include "customFactory.h"
+#include "hgMaf.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.74 2007/07/19 23:38:21 angie Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.75 2007/08/04 16:25:20 fanhsu Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -1207,6 +1209,70 @@ void cartSetDbDisconnector(DbDisconnect disconnector)
 cartDefaultDisconnector = disconnector;
 }
 
+void saveDefaultGsidLists(struct cart *cart)
+/* save the default lists of GSID subject and sequence IDs to 2 internal files under trash/ct
+   for applications to use */
+{
+char *outName = NULL;
+char *outName2= NULL;
+FILE *outF, *outF2;
+struct tempName tn;
+struct tempName tn2;
+struct sqlResult *sr=NULL, *sr2=NULL;
+char **row, **row2;
+char query[255], query2[255];
+char *chp;
+struct sqlConnection *conn, *conn2;
+
+conn= hAllocConn();
+conn2= hAllocConn();
+    
+trashDirFile(&tn, "ct", "gsidSubj", ".list");
+outName = tn.forCgi;
+
+trashDirFile(&tn2, "ct", "gsidSeq", ".list");
+outName2 = tn2.forCgi;
+
+outF = mustOpen(outName,"w");
+outF2= mustOpen(outName2,"w");
+
+safef(query, sizeof(query), "select distinct subjId from hiv1.gsIdXref order by subjId limit 50");
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    fprintf(outF, "%s\n", row[0]);fflush(outF);
+
+    safef(query2, sizeof(query2),
+          "select dnaSeqId from hiv1.gsIdXref where subjId='%s' order by dnaSeqId", row[0]);
+
+    sr2 = sqlGetResult(conn2, query2);
+    while ((row2 = sqlNextRow(sr2)) != NULL)
+        {
+        /* Remove "ss." from the front of the DNA sequence ID,
+           so that they could be used both for DNA and protein MSA maf display */
+        chp = strstr(row2[0], "ss.");
+        if (chp != NULL)
+            {
+            fprintf(outF2, "%s\t%s\n", chp+3L, row[0]);
+            }
+        else
+            {
+            fprintf(outF2, "%s\t%s\n", row2[0], row[0]);
+            }
+        }
+    sqlFreeResult(&sr2);
+    }
+
+sqlFreeResult(&sr);
+carefulClose(&outF);
+carefulClose(&outF2);
+hFreeConn(&conn);
+hFreeConn(&conn2);
+
+cartSetString(cart, gsidSubjList, outName);
+cartSetString(cart, gsidSeqList, outName2);
+}
+
 char *cartGetOrderFromFile(struct cart *cart, char *speciesUseFile)
 /* Look in a cart variable that holds the filename that has a list of 
  * species to show in a maf file */
@@ -1214,9 +1280,21 @@ char *cartGetOrderFromFile(struct cart *cart, char *speciesUseFile)
 char *val;
 struct dyString *orderDY = dyStringNew(256);
 char *words[16];
-
 if ((val = cartUsualString(cart, speciesUseFile, NULL)) == NULL)
-    errAbort("can't find species list file var '%s' in cart\n",speciesUseFile);
+    {
+    if (hIsGsidServer())
+	{
+	saveDefaultGsidLists(cart);
+	/* now it should be set */
+	val = cartUsualString(cart, speciesUseFile, NULL);
+	if (val == NULL)
+    	    errAbort("can't find species list file var '%s' in cart\n",speciesUseFile);
+	}
+    else
+	{
+    	errAbort("can't find species list file var '%s' in cart\n",speciesUseFile);
+	}
+    }
 
 struct lineFile *lf = lineFileOpen(val, TRUE);
 
