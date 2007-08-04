@@ -6,11 +6,12 @@
 #include "dnautil.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: orfEnum.c,v 1.4 2007/03/16 16:51:30 kent Exp $";
+static char const rcsid[] = "$Id: orfEnum.c,v 1.5 2007/08/04 00:06:42 kent Exp $";
 
 int minSize=24;
 boolean doAll = TRUE;
 boolean doBiggest = FALSE;
+boolean doBiggestAtg = FALSE;
 boolean doFirst = FALSE;
 boolean firstKozak = FALSE;
 boolean biggestKozak = FALSE;
@@ -29,12 +30,13 @@ errAbort(
   "The following options will make it so not all, but only the ones\n"
   "that meet the criteria, are output.\n"
   "   -biggest - output biggest ORF\n"
+  "   -biggestAtg - output biggest ORF that starts with a proper ATG\n"
   "   -first - output first ORF\n"
   "   -firstKozak - output first with good Kozak sequence\n"
   "   -biggestKozak - output biggest with good Kozak sequence\n"
   "   -firstAboveMin - output first orf bigger than minSize\n"
   "   -firstKozakAboveMin - output first Kozak orf bigger than minSize\n"
-  "This option is the same as doing the above six option\n"
+  "This option is the same as doing the above seven option\n"
   "   -various\n"
   , minSize
   );
@@ -43,6 +45,7 @@ errAbort(
 static struct optionSpec options[] = {
    {"minSize", OPTION_INT},
    {"biggest", OPTION_BOOLEAN},
+   {"biggestAtg", OPTION_BOOLEAN},
    {"first", OPTION_BOOLEAN},
    {"firstKozak", OPTION_BOOLEAN},
    {"biggestKozak", OPTION_BOOLEAN},
@@ -241,6 +244,23 @@ while (faSpeedReadNext(lf, &dna, &dnaSize, &name))
 		    }
 		outputUnique(&refList, biggestOrf, f);
 		}
+	    if (doBiggestAtg)
+		{
+		int biggestSize = 0;
+		struct orfInfo *biggestOrf = NULL;
+		for (orf = orfList; orf != NULL; orf = orf->next)
+		    {
+		    if (orf->gotAtg && orf->size > biggestSize)
+			{
+			biggestSize = orf->size;
+			biggestOrf = orf;
+			}
+		    }
+		if (biggestOrf != NULL)
+		    {
+		    outputUnique(&refList, biggestOrf, f);
+		    }
+		}
 	    if (biggestKozak)
 		{
 		int biggestSize = 0;
@@ -274,14 +294,17 @@ if (argc != 3)
     usage();
 minSize = optionInt("minSize", minSize);
 doBiggest = optionExists("biggest");
+doBiggestAtg = optionExists("biggestAtg");
 doFirst = optionExists("first");
 firstKozak = optionExists("firstKozak");
 biggestKozak = optionExists("biggestKozak");
 firstAboveMin = optionExists("firstAboveMin");
 firstKozakAboveMin = optionExists("firstKozakAboveMin");
 if (optionExists("various"))
-    doBiggest = doFirst = firstKozak = biggestKozak = firstAboveMin = firstKozakAboveMin = TRUE;
-if (doBiggest || doFirst || firstKozak || biggestKozak || firstAboveMin || firstKozakAboveMin )
+    doBiggest = doBiggestAtg = doFirst = firstKozak 
+    	= biggestKozak = firstAboveMin = firstKozakAboveMin = TRUE;
+if (doBiggest || doBiggestAtg || doFirst || firstKozak || biggestKozak 
+	|| firstAboveMin || firstKozakAboveMin )
    doAll = FALSE;
 dnaUtilOpen();
 orfEnum(argv[1], argv[2]);
