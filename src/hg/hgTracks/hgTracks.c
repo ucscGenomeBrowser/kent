@@ -117,7 +117,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1382 2007/07/31 23:13:40 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1383 2007/08/04 22:52:40 fanhsu Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -14816,6 +14816,10 @@ uglyTime(NULL);
 isPrivateHost = hIsPrivateHost();
 browserName = (isPrivateHost ? "Test Browser" : "Genome Browser");
 organization = (hIsMgcServer() ? "MGC/ORFeome" : "UCSC");
+
+/* change title if this is for GSID */
+browserName = (hIsGsidServer() ? "Sequence View" : browserName);
+organization = (hIsGsidServer() ? "GSID" : organization);
 
 /* Push very early error handling - this is just
  * for the benefit of the cgiVarExists, which 
