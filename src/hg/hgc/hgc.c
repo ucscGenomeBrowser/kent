@@ -208,7 +208,7 @@
 #include "omicia.h"
 #include "atomDb.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1329 2007/08/03 20:27:03 giardine Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1330 2007/08/04 17:29:07 fanhsu Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -3378,21 +3378,25 @@ cgiContinueHiddenVar("r");
 puts("Position ");
 savePosInTextBox(seqName, winStart+1, winEnd);
 
-if (tbl[0] == 0)
+/* bypass message about Table Browser for GSID server, since we haven't offered TB for GSID */
+if (!hIsGsidServer())
     {
-    puts("<P>"
-	 "Note: if you would prefer to get DNA for features of a particular "
-	 "track or table, try the ");
-    printf("<A HREF=\"%s\" TARGET=_blank>", hgTablesUrl(TRUE, NULL));
-    puts("Table Browser</A> using the output format sequence.");
-    }
-else
-    {
-    puts("<P>"
-	 "Note: if you would prefer to get DNA for more than one feature of "
-	 "this track at a time, try the ");
-    printf("<A HREF=\"%s\" TARGET=_blank>", hgTablesUrl(FALSE, tbl));
-    puts("Table Browser</A> using the output format sequence.");
+    if (tbl[0] == 0)
+    	{
+    	puts("<P>"
+	     "Note: if you would prefer to get DNA for features of a particular "
+	     "track or table, try the ");
+    	printf("<A HREF=\"%s\" TARGET=_blank>", hgTablesUrl(TRUE, NULL));
+    	puts("Table Browser</A> using the output format sequence.");
+    	}
+    else
+    	{
+    	puts("<P>"
+	     "Note: if you would prefer to get DNA for more than one feature of "
+	     "this track at a time, try the ");
+    	printf("<A HREF=\"%s\" TARGET=_blank>", hgTablesUrl(FALSE, tbl));
+    	puts("Table Browser</A> using the output format sequence.");
+    	}
     }
 
 hgSeqOptionsHtiCart(hti,cart);
