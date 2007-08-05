@@ -117,7 +117,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1383 2007/08/04 22:52:40 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1384 2007/08/05 00:33:25 kate Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -510,24 +510,31 @@ for (group = groupList; group != NULL; group = group->next)
             else
                 {
                 /* change to specified visibility */
-                if (tdb->parentName)
+                if (tdb->parent)
                     {
                     /* Leave supertrack members alone -- only change parent */
-                    if (changeVis == tvHide)
-                        cartRemove(cart, tdb->parentName);
+                    struct trackDb *parentTdb = tdb->parent;
+                    if ((changeVis == parentTdb->visibility) ||
+                        (changeVis != tvHide && 
+                            parentTdb->visibility != tvHide))
+                        {
+                        /* remove if setting to default vis */
+                        cartRemove(cart, parentTdb->tableName);
+                        }
                     else
-                        cartSetString(cart, tdb->parentName, "show");
-                    tdb->parent->visibility = (changeVis == tvHide) ?
-                                                        tvHide : tvDense;
+                        cartSetString(cart, parentTdb->tableName, 
+                                        changeVis == tvHide ? "hide" : "show");
+                    parentTdb->visibility = (changeVis == tvHide) ?  tvHide : tvDense;
                     }
                 else 
                     {
                     /* regular track */
-                    if (changeVis == tvHide)
+                    if (changeVis == tdb->visibility)
+                        /* remove if setting to default vis */
                         cartRemove(cart, track->mapName);
                     else
                         cartSetString(cart, track->mapName, 
-                                hStringFromTv(track->visibility));
+                                                hStringFromTv(changeVis));
                     track->visibility = changeVis;
                     }
                 }
@@ -12913,6 +12920,7 @@ for (bl = browserLines; bl != NULL; bl = bl->next)
         {
 	char *command = words[1];
 	if (sameString(command, "hide") 
+            || sameString(command, "show")      /* for supertracks only */
             || sameString(command, "dense") 
             || sameString(command, "pack") 
             || sameString(command, "squish") 
@@ -12936,7 +12944,15 @@ for (bl = browserLines; bl != NULL; bl = bl->next)
                             else
                                 cartSetString(cart, tg->mapName, command);
                             }
-			}
+                        if (tg->tdb->parentName && 
+                                (toAll || sameString(s, tg->tdb->parentName)))
+                            {
+                            /* change vis of super track */
+                            cartSetString(cart, tg->tdb->parentName,
+                                            (sameString(command,"hide") ? 
+                                                "hide" : "show"));
+                            }
+                        }
 		    }
 		}
 	    }
@@ -12947,6 +12963,7 @@ for (bl = browserLines; bl != NULL; bl = bl->next)
 	    if (!hgIsChromRange(words[2])) 
 	        errAbort("browser position needs to be in chrN:123-456 format");
 	    hgParseChromRange(words[2], &chromName, &winStart, &winEnd);
+
             /*Fix a start window of -1 that is returned when a custom track position
               begins at 0
             */

@@ -12,7 +12,7 @@
 #include "hgConfig.h"
 #include "chainCart.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.91 2007/07/31 01:08:56 kate Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.92 2007/08/05 00:33:25 kate Exp $";
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -1792,10 +1792,14 @@ else
 }
 
 boolean superTrackDropDown(struct cart *cart, struct trackDb *tdb,
-                                int hasVisibleChild)
+                                int visibleChild)
 /* Displays hide/show dropdown for supertrack.  
- * Set hasVisibleChild to -1 if this function should determine this -- in this
- * case, the subtracks field must be populated with the child trackDbs.
+ * Set visibleChild to indicate whether 'show' should be grayed
+ * out to indicate that no supertrack members are visible:
+ *    0 to gray out (no visible children)
+ *    1 don't gray out (there are visible children)
+ *   -1 don't know (this function should determine)
+ * If -1,i the subtracks field must be populated with the child trackDbs.
  * Returns false if not a supertrack */
 {
 if (!tdb->isSuper)
@@ -1803,27 +1807,27 @@ if (!tdb->isSuper)
 
 /* determine if supertrack is show/hide */
 boolean show = FALSE;
-//char *setting = cgiOptionalString(tdb->tableName);
-char *setting = cartUsualString(cart, tdb->tableName, tdb->isShow ? "show" : "hide");
+char *setting = 
+        cartUsualString(cart, tdb->tableName, tdb->isShow ? "show" : "hide");
 if (sameString("show", setting))
     show = TRUE;
 
 /* Determine if any tracks in supertrack are visible; if not,
  * the 'show' is grayed out */
-if (show && hasVisibleChild == -1)
+if (show && (visibleChild == -1))
     {
-    hasVisibleChild = 0;
+    visibleChild = 0;
     struct trackDb *cTdb;
     for (cTdb = tdb->subtracks; cTdb != NULL; cTdb = tdb->next)
         {
-        cTdb->visibility = hTvFromString(
-                                cartUsualString(cart, cTdb->tableName,
-                                              hStringFromTv(cTdb->visibility)));
+        cTdb->visibility = 
+                hTvFromString(cartUsualString(cart, cTdb->tableName,
+                                      hStringFromTv(cTdb->visibility)));
         if (cTdb->visibility != tvHide)
-            hasVisibleChild = 1;
+            visibleChild = 1;
         }
     }
-hideShowDropDown(tdb->tableName, show, (show && hasVisibleChild) ? 
+hideShowDropDown(tdb->tableName, show, (show && visibleChild) ? 
                             "normalText" : "hiddenText");
 return TRUE;
 }

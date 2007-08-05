@@ -35,7 +35,7 @@
 #include "customTrack.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.329 2007/08/02 01:35:02 galt Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.330 2007/08/05 00:33:25 kate Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -3443,7 +3443,8 @@ slSort(&tdbRetList, trackDbCmp);
 for (tdb = tdbRetList; tdb != NULL; tdb = tdb->next)
     {
     if (tdb->parentName)
-        tdb->parent = (struct trackDb *)hashFindVal(superHash, tdb->parentName);
+        tdb->parent = 
+                (struct trackDb *)hashFindVal(superHash, tdb->parentName);
     }
 
 return tdbRetList;
@@ -3508,7 +3509,7 @@ if (!tdb || !tdb->isSuper)
 struct sqlConnection *conn = hAllocConn();
 char where[256];
 safef(where, sizeof(where),
-    "settings rlike '^(.*\n)?superTrack %s([ \n].*)?$' order by priority desc",
+   "settings rlike '^(.*\n)?superTrack %s([ \n].*)?$' order by priority desc",
     tdb->tableName);
 tdb->subtracks = loadAndLookupTrackDb(conn, where);
 for (tdb = tdb->subtracks; tdb != NULL; tdb = tdb->next)

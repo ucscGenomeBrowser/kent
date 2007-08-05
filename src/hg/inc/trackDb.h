@@ -48,7 +48,8 @@ struct trackDb
                                  *  if this is a supertrack */
     /* for supertracks */
     boolean isSuper;            /* true if this is a supertrack */
-    boolean isShow;             /* true if this is a supertrack with pseudo-vis 'show' */
+    boolean isShow;             /* true if this is a supertrack with 
+                                                pseudo-vis 'show' */
     /* for supertrack members */
     char *parentName;           /* set if this ia a supertrack member */
     struct trackDb *parent;     /* may be set if this is a supertrack member -- use

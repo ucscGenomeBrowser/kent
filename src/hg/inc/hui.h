@@ -751,9 +751,14 @@ void hCompositeUi(struct cart *cart, struct trackDb *tdb,
  * var with that name so it looks like it was pressed. */
 
 boolean superTrackDropDown(struct cart *cart, struct trackDb *tdb,
-                                int hasVisibleChild);
-/* Display hide/show dropdown for supertrack.  
- * set hasVisibleChild to -1 if this function should determine this.
- * Return false if not a supertrack */
+                                int visibleChild);
+/* Displays hide/show dropdown for supertrack.  
+ * Set visibleChild to indicate whether 'show' should be grayed
+ * out to indicate that no supertrack members are visible:
+ *    0 to gray out (no visible children)
+ *    1 don't gray out (there are visible children)
+ *   -1 don't know (this function should determine)
+ * If -1,i the subtracks field must be populated with the child trackDbs.
+ * Returns false if not a supertrack */
 
 #endif /* HUI_H */
