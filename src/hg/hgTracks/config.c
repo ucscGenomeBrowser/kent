@@ -229,8 +229,7 @@ for (group = groupList; group != NULL; group = group->next)
             if (track->tdb->isSuper)
                 {
                 /* supertrack dropdown is hide/show */
-                superTrackDropDown(cart, track->tdb, 
-                                track->visibility != tvDense);
+                superTrackDropDown(cart, track->tdb, 1);
                 }
             else
                 {
