@@ -14,7 +14,7 @@
 #include "hui.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hgGateway.c,v 1.102 2007/08/05 00:38:04 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgGateway.c,v 1.103 2007/08/05 16:12:31 fanhsu Exp $";
 
 boolean isPrivateHost;		/* True if we're on genome-test. */
 struct cart *cart = NULL;
@@ -150,14 +150,22 @@ puts(
 );
 
 puts("<TABLE BORDER=\"0\">");
-puts("<TR><TD VALIGN=\"TOP\">");
-cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
-printf(
- "</FORM><FORM ACTION=\"%s\" METHOD=\"GET\"><INPUT TYPE=SUBMIT VALUE=\"%s\">",
-        hgCustomName(), customTracksExist(cart, NULL) ? 
+puts("<TR>");
+
+/* disable custom track for GSID */
+if (!hIsGsidServer())
+    {
+    puts("<TD VALIGN=\"TOP\">");
+    cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
+    printf(
+     	   "</FORM><FORM ACTION=\"%s\" METHOD=\"GET\"><INPUT TYPE=SUBMIT VALUE=\"%s\">",
+           hgCustomName(), customTracksExist(cart, NULL) ? 
                         CT_MANAGE_BUTTON_LABEL : CT_ADD_BUTTON_LABEL);
-cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
-puts("</FORM></TD><TD VALIGN=\"TOP\">");
+    cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
+    puts("</FORM></TD>");
+    }
+
+puts("<TD VALIGN=\"TOP\">");
 puts("<FORM ACTION=\"../cgi-bin/hgTracks\" NAME=\"buttonForm\" METHOD=\"GET\">\n");
 cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
 cgiMakeButton("hgTracksConfigPage", "configure tracks and display");
