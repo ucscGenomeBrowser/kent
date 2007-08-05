@@ -117,7 +117,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1384 2007/08/05 00:33:25 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1385 2007/08/05 16:02:09 fanhsu Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -13981,11 +13981,16 @@ if (!hideControls)
 	hPrintf(" ");
 	hButton("hgt.hideAll", "hide all");
 	}
-
-    hPrintf(" ");
-    hOnClickButton("document.customTrackForm.submit();return false;",
+    
+    /* disable custom track for GSID */
+    if (!hIsGsidServer())
+    	{
+    	hPrintf(" ");
+    	hOnClickButton("document.customTrackForm.submit();return false;",
                         hasCustomTracks ? 
                             CT_MANAGE_BUTTON_LABEL : CT_ADD_BUTTON_LABEL);
+    	}
+    
     hPrintf(" ");
     hButton("hgTracksConfigPage", "configure");
     hPrintf(" ");
