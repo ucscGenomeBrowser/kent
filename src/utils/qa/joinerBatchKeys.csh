@@ -18,7 +18,7 @@ if ($#argv < 1 || $#argv > 2) then
   echo "       all human assemblies [hg]"
   echo "       all mouse and rat assemblies [mm_rn]"
   echo "       all other assemblies [other]"
-  echo "       'extra' tables (e.g. go and proteins) [extra]"
+  echo "       'extra' databases (e.g. go and proteins) [extra]"
   echo
   echo "  usage: hg | mm_rn | other | extra"
   echo
