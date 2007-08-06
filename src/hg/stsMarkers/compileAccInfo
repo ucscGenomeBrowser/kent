@@ -7,10 +7,12 @@
 # Description: Create a file listing all of the
 # contig and accession information
 
-# $Id: compileAccInfo,v 1.2 2006/08/31 22:16:47 hiram Exp $
+# $Id: compileAccInfo,v 1.3 2007/08/06 23:26:04 hiram Exp $
 
 use strict;
 use warnings;
+use Carp ();
+local $SIG{__WARN__} = \&Carp::cluck;
 
 # Usage message
 if ($#ARGV < 1) {
@@ -131,7 +133,10 @@ foreach my $chr (@chroms) {
       while (my $line = <LIFT>) {
 	chomp($line);
 	($start, $thisctg, $ctglength, $thischr, $chrlength) = split(' ',$line);
-	($thischr, $ctg) = split(/\//,$thisctg);
+	$ctg = $thisctg;
+	if ($thisctg =~ m#/#) {
+	    ($thischr, $ctg) = split(/\//,$thisctg);
+	}
 	if ($ctglength != 0) {
 	  $contig[$numctg] = $ctg;
 	  $ctgstart[$numctg] = $start;
@@ -147,7 +152,10 @@ foreach my $chr (@chroms) {
       while (my $line = <LIFT>) {
 	chomp($line);
 	my ($start, $thisctg, $ctglength, $thischr, $chrlength) = split(' ',$line);
-	($thischr, $ctg) = split(/\//,$thisctg);
+	$ctg = $thisctg;
+	if ($thisctg =~ m#/#) {
+	    ($thischr, $ctg) = split(/\//,$thisctg);
+	}
 	if ($ctglength != 0) {
 	  $contig[$numctg] = $ctg;
 	  $ctgstart[$numctg] = $start;
@@ -191,6 +199,7 @@ foreach my $chr (@chroms) {
   }
   $border = -1;
   for (my $i = 0; $i < $numctg; $i++) {
+    next if (!defined $contig[$i]);
     if (open(BARGE, "<$dir/$chr/$contig[$i]/mmBarge")) {
       print STDERR "Processing $contig[$i]\n";
       my $line = <BARGE>;
@@ -263,14 +272,15 @@ foreach my $chr (@chroms) {
   if (!$pre) {
     my $agp = "$dir/$chr/chr$chr.agp";
     my $ranAgp = "$dir/$chr/chr" . $chr . "_random.agp";
+    my $tmpAgp = "$$.agp";
     if ( -f $ranAgp && -f $agp ) {
-	`cat $agp $ranAgp > $$.agp`;
+	`cat $agp $ranAgp > $tmpAgp`;
     } elsif ( -f $ranAgp ) {
-	`cat $ranAgp > $$.agp`;
+	`cat $ranAgp > $tmpAgp`;
     } else {
-	`cat $agp > $$.agp`;
+	`cat $agp > $tmpAgp`;
     }
-    open(AGP, "$$.agp") or die "Can not open created file $$.agp:$!";
+    open(AGP, "$tmpAgp") or die "Can not open created file $tmpAgp:$!";
     while (my $line = <AGP>) {
       chomp($line);
       my ($thischr, $start, $end, $index, $type, $accession) = split(' ',$line);
@@ -300,7 +310,7 @@ foreach my $chr (@chroms) {
       $count++;
     }
     close(AGP);
-    `rm $$.agp`;
+    `rm $tmpAgp`;
   } else {
     foreach my $acc (keys %accchr) {
       if ($accchr{$acc} eq $chr) {
@@ -336,8 +346,21 @@ foreach my $chr (@chroms) {
     if (exists($ntname{$acc})){$ntname=$ntname{$acc};}
     if (!exists($ordered{$acc})){print STDERR "ordered{$acc} does not exist\n";}
     if (!exists($accctgidx{$acc})){print STDERR "accctgidx{$acc} does not exist\n";}
+    die "chr not defined" if (!defined($chr));
+    die "acc not defined" if (!defined($acc));
+    die "ordered{$acc} not exist" if (!exists($ordered{$acc}));
+    die "start{$acc} not exist" if (!exists($start{$acc}));
+    die "end{$acc} not exist" if (!exists($end{$acc}));
+    die "middle not defined" if (!defined($middle));
+    die "accctg{$acc} not exist" if (!exists($accctg{$acc}));
+    die "accctgidx{$acc} not exist" if (!exists($accctgidx{$acc}));
+    die "bargeidx not defined" if (!defined($bargeidx));
+    die "clone not defined" if (!defined($clone));
+    die "btype not defined" if (!defined($btype));
+    die "ntname not defined" if (!defined($ntname));
+    die "phase not defined" if (!defined($phase));
     if (!$nb) {
-      print OUT "chr$chr\t$ordered{$acc}\t$start{$acc}\t$end{$acc}\t$middle\t$accctg{$acc}\t$accctgidx{$acc}\t$bargeidx\t$clone\t$acc\t$btype\t$ntname\t$phase\n";
+      print OUT "chr0XX${chr}YY\t1XX$ordered{$acc}YY\t2XX$start{$acc}YY\t3XX$end{$acc}YY\t4XX${middle}YY\t5XX$accctg{$acc}YY\t6XX$accctgidx{$acc}YY\t7XX${bargeidx}YY\t8XX${clone}YY\t9XX${acc}YY\t10XX${btype}YY\t11XX${ntname}YY\t12XX${phase}YY\n";
     } else {
       print OUT "chr$chr\t$ordered{$acc}\t$start{$acc}\t$end{$acc}\t$middle\t$accctg{$acc}\t$accctgidx{$acc}\t0\t$clone\t$acc\tfalse\t$ntname\t$phase\n";
     }
