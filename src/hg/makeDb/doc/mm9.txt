@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.13 2007/08/03 18:31:36 hiram Exp $"
+#	"$Id: mm9.txt,v 1.14 2007/08/06 23:49:40 hiram Exp $"
 #
 
 #######################################################################
@@ -925,7 +925,7 @@ ftp://ftp.ncbi.nih.gov/repository/UniSTS/UniSTS_MapReports/Mus_musculus/*
 	/cluster/store5/mouseMarker/stsInfoMouse.bed_mm7 \
 	/cluster/store5/mouseMarker/stsInfoMouse.bed_mm6 \
 	/cluster/store5/mouseMarker/stsInfoMouse.bed_mm5
-    #	66865 /cluster/store5/mouseMarker/stsInfoMouse.bed
+    #	66782 /cluster/store5/mouseMarker/stsInfoMouse.bed
     #	60631 /cluster/store5/mouseMarker/stsInfoMouse.bed_mm8.secondTime
     #	59843 /cluster/store5/mouseMarker/stsInfoMouse.bed_mm7
     #	58980 /cluster/store5/mouseMarker/stsInfoMouse.bed_mm6
@@ -938,8 +938,8 @@ ftp://ftp.ncbi.nih.gov/repository/UniSTS/UniSTS_MapReports/Mus_musculus/*
     wc -l mouse?.*
 
     #       0 mouseC.fa
-    #  360300 mouseP.fa
-    #   41330 mouseP.info
+    #  359647 mouseP.fa
+    #   41247 mouseP.info
 
     #	the equivalent Mm8 files:
     #	     0 mouseC.fa
@@ -954,7 +954,7 @@ ftp://ftp.ncbi.nih.gov/repository/UniSTS/UniSTS_MapReports/Mus_musculus/*
     cd /cluster/bluearc/mm9/stsMarkers
     cp -p /cluster/data/mm9/11.ooc .
     mkdir split
-    #	356 files for 41,330 sequences, == about 116 sequences per file
+    #	356 files for 41,247 sequences, == about 116 sequences per file
     faSplit sequence mouseP.fa 400 split/mm_
 
     # PLEASE NOTE /cluster/bin/i386/blat.2 SPECIFICALLY IS USED HERE. 
@@ -976,32 +976,39 @@ ftp://ftp.ncbi.nih.gov/repository/UniSTS/UniSTS_MapReports/Mus_musculus/*
 
     ls -1S /cluster/bluearc/mm9/stsMarkers/split > primers.list
     #	will fetch chrom sequences from the 2bit file
-    cut -r1 /cluster/data/mm9/chrom.sizes > chr.list
+    cut -f1 /cluster/data/mm9/chrom.sizes > chr.list
 
     ## next time, make this script produce its results in /scratch/tmp
     ## then move result file to output instead of writing result
     ## to output
-    cat << '_EOF_' > runBlat2.csh
+    cat << '_EOF_' > runBlat2
 #!/bin/csh -fe
 set primer = /cluster/bluearc/mm9/stsMarkers/split/$1
 set root1 = $1:r
-set fa = /scratch/tmp/$root1.$2.fa
+set fa = $root1.$2.fa
 set ooc = /cluster/bluearc/mm9/stsMarkers/11.ooc
 set root2 = $2:r
+set tmpDir = /scratch/tmp/$root1.$root2
+mkdir $tmpDir
 mkdir -p out/${root2}
 set out = $3
-twoBitToFa -seq=$2 /iscratch/i/mus/mm9/mm9.2bit /scratch/tmp/$root1.$2.fa
+pushd $tmpDir
+twoBitToFa -seq=$2 /iscratch/i/mus/mm9/mm9.2bit ${fa}
+cp -p ${primer} primer.fa
+cp -p ${ooc} 11.ooc
 
-/cluster/bin/i386/blat.2 ${fa} ${primer} -ooc=${ooc} \
-        -minMatch=1 -minScore=0 -minIdentity=80 -oneOff ${out}
-rm -f /scratch/tmp/$root1.$2.fa
+/cluster/bin/i386/blat.2 ${fa} primer.fa -ooc=11.ooc \
+        -minMatch=1 -minScore=0 -minIdentity=80 -oneOff result.psl
+popd
+cp -p ${tmpDir}/result.psl ${out}
+rm -fr ${tmpDir}
 '_EOF_'
     #	<< happy emacs
-    chmod +x runBlat2.csh
+    chmod +x runBlat2
 
     cat << '_EOF_' > template
 #LOOP
-./runBlat2.csh $(path1) $(path2) {check out line+ out/$(root2)/$(root1).psl}
+./runBlat2 $(path1) $(path2) {check out line+ out/$(root2)/$(root1).psl}
 #ENDLOOP
 '_EOF_'
     #	<< happy emacs
@@ -1009,43 +1016,44 @@ rm -f /scratch/tmp/$root1.$2.fa
     gensub2 primers.list chr.list template jobList
     para create jobList
     para try ... check ... push ... etc ...
-# Completed: 12460 of 12460 jobs
-# CPU time in finished jobs:    1437677s   23961.28m   399.35h   16.64d  0.046 y
-# IO & Wait Time:                260668s    4344.47m    72.41h    3.02d  0.008 y
-# Average job time:                 136s       2.27m     0.04h    0.00d
-# Longest finished job:            1845s      30.75m     0.51h    0.02d
-# Submission to last job:         62990s    1049.83m    17.50h    0.73d
+# Completed: 12425 of 12425 jobs
+# CPU time in finished jobs:    1438098s   23968.31m   399.47h   16.64d  0.046 y
+# IO & Wait Time:                237582s    3959.69m    65.99h    2.75d  0.008 y
+# Average job time:                 135s       2.25m     0.04h    0.00d
+# Longest finished job:            2150s      35.83m     0.60h    0.02d
+# Submission to last job:          4736s      78.93m     1.32h    0.05d
 
     # on the file server
     ssh kkstore06
     cd /cluster/data/mm9/bed/STSmarkers/primer
-    time pslSort dirs primers.raw.psl temp out/chr*
+    time nice -n +19 pslSort dirs primers.raw.psl temp out/chr*
     #	real    1m34.193s
-    #	-rw-rw-r--   1 698769655 Jul 27 10:35 primers.raw.psl
+    #	-rw-rw-r--   1 700293557 Aug  6 10:22 primers.raw.psl
 
     #	filter alignments for (qEnd-qStart) vs. (tEnd-tStart)
     #	should not be more than 100 bases different.
     #	This filters out about 948,260 alignments, or
     #	%17.4 = 100.0 * 948260 / 5462936
-    time pslSort dirs stdout temp out/chr* | awk -F"\t" '
+    time nice -n +19 pslSort dirs stdout temp out/chr* | awk -F"\t" '
 { if (((($13 - $12) - ($17 - $16)) > -100) &&
 	((($13 - $12) - ($17 - $16)) < 100)) {print}
 }
-' > primers.psl.100
+' > primers.100.psl
 
     rmdir temp
 
-    wc -l *.100 *.psl
-    #	5348362 primers.psl.100
-    #	6508593 primers.raw.psl
-    echo "6508593-5348362" | bc -q
-    #	1160231 difference
+    wc -l *.psl
+    #	5340677 primers.100.psl
+    #	6498150 primers.raw.psl
+
+    echo "6498150-5340677" | bc -q
+    #	1157473 difference
 
     # a rough comparison with previous results:
 
-    wc -l primers.psl.100 \
+    wc -l primers.100.psl \
 	/cluster/data/mm8/bed/STSmarkers.2006-08-29/primer/primers.psl.100
-# 5348362 primers.psl.100
+# 5340677 primers.100.psl
 # 4514676 /cluster/data/mm8/bed/STSmarkers.2006-08-29/primer/primers.psl.100
 
     # another kluster run for the ePCR
@@ -1097,8 +1105,16 @@ rmdir $wrkdir
     para push
     ... etc ...
     ## two of those produce zero results:
-    #	-rw-rw-r--  1      0 Jul 27 11:22 out/chr3_random.epcr
-    #	-rw-rw-r--  1      0 Jul 27 11:22 out/chr16_random.epcr
+    #	-rw-rw-r--  1      0 Aug  6 12:53 chr3_random.epcr
+    #	-rw-rw-r--  1      0 Aug  6 12:53 chr16_random.epcr
+    ## hence, the two crashed jobs in the check display:
+# Completed: 33 of 35 jobs
+# Crashed: 2 jobs
+# CPU time in finished jobs:      80940s    1349.01m    22.48h    0.94d  0.003 y
+# IO & Wait Time:                     0s       0.00m     0.00h    0.00d  0.000 y
+# Average job time:                2327s      38.78m     0.65h    0.03d
+# Longest finished job:            6980s     116.33m     1.94h    0.08d
+# Submission to last job:         15589s     259.82m     4.33h    0.18d
 
     ssh kkstore06
     cd /cluster/data/mm9/bed/STSmarkers/ePCR
@@ -1113,14 +1129,14 @@ rmdir $wrkdir
     cd /cluster/data/mm9/bed/STSmarkers/primer
 
     ~/kent/src/hg/stsMarkers/filterSTSPrimers \
-    -mouse ../mm9.stsInfoMouse.bed primers.psl.100 \
+    -mouse ../mm9.stsInfoMouse.bed primers.100.psl \
         ../mouseP.info ../ePCR/all.epcr > primers.psl.filter.blat
 
     #  The output should show an increasing count:
     #	Reading name info from: ../mm9.stsInfoMouse.bed
     #	Reading primer info from: ../mouseP.info
     #	Reading ePCR info from: ../ePCR/all.epcr
-    #	Reading alignment results from: primers.psl.100
+    #	Reading alignment results from: primers.100.psl
     #	100000
     #	200000
     #	...
@@ -1166,24 +1182,24 @@ do
 	cp -p ctgLifts/chr${C}_random.contigs.lift ${C}/lift/random.lft
     fi
 done
-    for C in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 Un X Y M
-do
-    mkdir -p ${C}/lift
-    if [ -f fragmentLifts/chr${C}.fragments.lift ]; then
-	cp -p fragmentLifts/chr${C}.fragments.lift ${C}/lift/ordered.lft
-    fi
-    if [ -f fragmentLifts/chr${C}_random.fragments.lift ]; then
-	cp -p fragmentLifts/chr${C}_random.fragments.lift ${C}/lift/random.lft
-    fi
-done
-
+    ## not the fragments
+#    for C in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 Un X Y M
+#do
+#    mkdir -p ${C}/lift
+#    if [ -f fragmentLifts/chr${C}.fragments.lift ]; then
+#	cp -p fragmentLifts/chr${C}.fragments.lift ${C}/lift/ordered.lft
+#    fi
+#    if [ -f fragmentLifts/chr${C}_random.fragments.lift ]; then
+#	cp -p fragmentLifts/chr${C}_random.fragments.lift ${C}/lift/random.lft
+#    fi
+#done
 
     ## now, after that side trip, back to the primer business
     # create file accession_info.rdb
     touch empty_sequence.inf
     ~/kent/src/hg/stsMarkers/compileAccInfo -mouse \
 	/cluster/data/mm9 empty_sequence.inf
-    #	20502 processed
+    #	20363 processed
     mv accession_info.rdb accession_info.rdb.tmp
     ~/kent/src/hg/stsMarkers/sorttbl -x Chr Ord Start \
 	< accession_info.rdb.tmp > accession_info.rdb
@@ -1240,7 +1256,6 @@ done
     cat primers.psl.filter.blat epcr.not.found.psl > primers.psl.filter
     wc -l primers.psl.filter \
 	/cluster/data/mm8/bed/STSmarkers.2006-08-29/primer/primers.psl.filter
-XXX - here 2007-07-30
     #	36064 primers.psl.filter
     #	34563 /cluster/data/mm8/bed/STSmarkers.2006-08-29/primer/primers.psl.filter
     # create primers.psl.filter.lifted.initial
@@ -1296,7 +1311,7 @@ XXX - here 2007-07-30
     awk -F'\t' '{print $5}' stsMapMouse.bed | sort -n | uniq -c
     #	   591 500
     #	  1774 750
-    #	28529 1000
+    #	 28529 1000
     awk -F'\t' '{print $5}' \
 	/cluster/data/mm8/bed/STSmarkers.2006-08-29/stsMapMouse.bed \
 	| sort -n | uniq -c
@@ -1308,6 +1323,10 @@ XXX - here 2007-07-30
 	/cluster/data/mm8/bed/STSmarkers.2006-08-29/stsMapMouse.bed
 # 30894 stsMapMouse.bed
 # 29901 /cluster/data/mm8/bed/STSmarkers.2006-08-29/stsMapMouse.bed
+    ## check the names, look for odd ones
+    ##  the bogus names "-" were fixed for mm9
+    awk -F'\t' '{print $4}' stsMapMouse.bed | sort | head
+    awk -F'\t' '{print $4}' stsMapMouse.bed | sort | tail
 
     #  loading STS markers tables
     ssh hgwdev
@@ -1319,7 +1338,7 @@ XXX - here 2007-07-30
      
     wc -l ucscStsAlias.tab \
 	/cluster/data/mm8/bed/STSmarkers.2006-08-29/ucscStsAlias.tab
-# 160079 ucscStsAlias.tab
+# 146359 ucscStsAlias.tab
 # 146767 /cluster/data/mm8/bed/STSmarkers.2006-08-29/ucscStsAlias.tab
 
 
@@ -1360,11 +1379,18 @@ mm9.all_sts_primer has 1 records with overlapping blocks.
     #	hgLoadSeq -replace mm9 /gbdb/mm9/stsMarker/mouseP.fa
     # otherwise there will be a problem that the seq and extFile tables 
     # will be out of sync. 
-    hgLoadSeq mm9 /gbdb/mm9/stsMarker/mouseP.fa
+    hgLoadSeq -replace  mm9 /gbdb/mm9/stsMarker/mouseP.fa
     #  Adding /gbdb/mm9/stsMarker/mouseP.fa
-    #	41330 sequences
+    #	41247 sequences
     #	Warning: load of seq did not go as planned: 41330 record(s), 0 row(s)
     #	skipped, 1 warning(s) loading ./seq.tab
+
+    ## joinerCheck should be clean:
+    joinerCheck -keys -identifier=mouseStsTrueName -database=mm9 all.joiner
+# Checking keys on database mm9
+#  mm9.stsAlias.trueName - hits 146350 of 146359 ok
+#  mm9.all_sts_primer.qName - hits 35537 of 36063 ok
+#  mm9.stsMapMouseNew.name - hits 30894 of 30894 ok
 
     featureBits mm9 all_sts_primer
     #	3795229 bases of 2620346127 (0.145%) in intersection
@@ -1376,13 +1402,13 @@ mm9.all_sts_primer has 1 records with overlapping blocks.
     #	4812616 bases of 2567283971 (0.187%) in intersection
 
     hgsql -N mm9 -e "select count(*) from stsAlias;"
-    #	160079
+    #	146359
     hgsql -N mm8 -e "select count(*) from stsAlias;"
     #	146767
     hgsql -N mm9 -e "select count(*) from stsInfoMouseNew;"
-    #	66865
+    #	66782
     hgsql -N mm8 -e "select count(*) from stsInfoMouseNew;"
-    #	60440
+    #	60631
 
     #	compare old and new name lists, not much difference:
     awk '{print $4}' stsMapMouse.bed | sort -u > mm9.nameList
@@ -1390,17 +1416,17 @@ mm9.all_sts_primer has 1 records with overlapping blocks.
     comm -12 \
 /cluster/data/mm8/bed/STSmarkers.2006-08-29/mm8.nameList \
 	mm9.nameList | wc -l
-    #	28597
+    #	28596
     #	unique to previous version:
     comm -23 \
 /cluster/data/mm8/bed/STSmarkers.2006-08-29/mm8.nameList \
 	mm9.nameList | wc -l
-    #	110
+    #	111
     #	unique to this new set:
     comm -13 \
 /cluster/data/mm8/bed/STSmarkers.2006-08-29/mm8.nameList \
 	mm9.nameList | wc -l
-    #	998
+    #	1017
 
 ###########################################################################
 #	Reset default position to be same area as Mm8, 2007-08-02 - Hiram
@@ -1409,7 +1435,7 @@ mm9.all_sts_primer has 1 records with overlapping blocks.
 	hgcentraltest
 
 ##############################################################################
-# CLONE ENDS - BACEND TRACK (WORKING - 2007-08-02 - Hiram)
+# CLONE ENDS - BACEND TRACK (DONE - 2007-08-02 - 2007-08-03 - Hiram)
     ssh kkstore06
     cd /cluster/data/mm9
     # check disk space: 1.2T free
@@ -1477,23 +1503,282 @@ while (my $line = <>) {
     done | gzip > all.txt.gz
 
     # generate cloneEndPairs.txt and cloneEndSingles.txt
-    cp -p /cluster/data/mm7/bed/cloneend/convertTxt.pl .
-    zcat all.txt.gz | ./convertTxt.pl stdin
-    # Reading in end info
-    # Writing out pair info
-    # Writing out singleton info
-    # 354485 pairs and 78423 singles
+    zcat all.txt.gz | ~/kent/src/hg/utils/cloneEndParse.pl /dev/stdin
+    #	Reading in end info
+    #	Writing out pair info
+    #	Writing out singleton info
+    #	354485 pairs and 78423 singles
+
 
     #	faSplit does not function correctly if given a .gz source file
     #	AND, we need the unzipped file for sequence loading below
     gunzip cloneEnds.fa.gz
     # split
-    mkdir splitdir
-    cd splitdir
-    faSplit sequence ../cloneEnds.fa 100 cloneEnds
+    mkdir split
+    cd split
+    ## adjust split size based on previous kluster performance, see below
+    faSplit sequence ../cloneEnds.fa 500 cloneEnds
     #	Check to ensure no breakage:
-    cat *.fa | faSize stdin
+    faSize c*.fa
 # 498162791 bases (16779168 N's 481383623 real 304962409 upper 176421214
-# lower) in 789466 sequences in 1 files
+# lower) in 789466 sequences in 98 files
+# %35.41 masked total, %36.65 masked real
     #	same numbers as before
 
+    #	Copy to san for cluster runs
+    mkdir /san/sanvol1/scratch/mm9/cloneEnds
+    rsync -a --progress --stats ./ /san/sanvol1/scratch/mm9/cloneEnds/
+    rm *
+    cd ..
+    rmdir split
+    #	may as well remove the previous assembly copy:
+    rm -fr /san/sanvol1/scratch/mm8/cloneEnds
+
+    # load sequences
+    ssh hgwdev
+    mkdir /gbdb/mm9/cloneend
+    cd /gbdb/mm9/cloneend
+    ln -s /cluster/data/mm9/bed/cloneend/cloneEnds.fa .
+    cd /tmp
+    hgLoadSeq mm9 /gbdb/mm9/cloneend/cloneEnds.fa
+    #  Advisory lock created
+    # Creating .tab file
+    # Adding /gbdb/mm9/cloneend/cloneEnds.fa
+    # 789466 sequences
+    # Updating seq table
+    # Advisory lock has been released
+    # All done
+    ## clean up garbage
+    rm seq.tab
+
+############################################################################
+# BACEND SEQUENCE ALIGNMENTS (WORKING - 2007-08-03 - Hiram)
+    ssh kkstore06
+    mkdir /cluster/data/mm9/noMask
+    cd /cluster/data/mm9/
+    #	Need an unmasked sequence for this work
+    for C in `cut -f1 chrom.sizes`
+do
+    echo twoBitToFa -noMask -seq=${C} mm9.2bit noMask/${C}.fa
+    twoBitToFa -noMask -seq=${C} mm9.2bit noMask/${C}.fa
+done
+    # verify nothing broken
+    faSize noMask/c*.fa
+# 2725765481 bases (105419509 N's 2620345972 real 2620345972 upper 0 lower) in
+# 35 sequences in 35 files
+    # note, this was the same as long ago when the mm9.2bit was measured:
+# 2725765481 bases (105419509 N's 2620345972 real 1466644650 upper
+#	1153701322 lower) in 35 sequences in 1 files
+
+    # copy to san for kluster run
+    mkdir /san/sanvol1/scratch/mm9/noMask
+    rsync -a --progress --stats noMask/ /san/sanvol1/scratch/mm9/noMask/
+
+    # 11.ooc file is already there from the genbank build
+    
+    #	and now for the kluster run
+    ssh pk
+    mkdir /cluster/data/mm9/bed/bacends
+    cd /cluster/data/mm9/bed/bacends
+    mkdir out
+
+    # allow blat to run politely in /tmp while it writes output, then
+    # copy results to results file:
+    cat << '_EOF_' > runBlat
+#!/bin/csh -fe 
+set root1 = $1
+set root2 = $2
+set result = $3
+rm -fr /scratch/tmp/${root1}_${root2}
+mkdir /scratch/tmp/${root1}_${root2}
+cp -p /san/sanvol1/scratch/mm9/11.ooc /scratch/tmp/${root1}_${root2}
+cp -p /san/sanvol1/scratch/mm9/noMask/${root1}.fa \
+	/scratch/tmp/${root1}_${root2}
+cp -p /san/sanvol1/scratch/mm9/cloneEnds/${root2}.fa \
+	/scratch/tmp/${root1}_${root2}
+pushd /scratch/tmp/${root1}_${root2}
+/cluster/bin/x86_64/blat ${root1}.fa ${root2}.fa \
+	-ooc=11.ooc ${root1}.${root2}.psl
+popd
+mkdir -p out/${root2}
+rm -f ${result}
+cp -p /scratch/tmp/${root1}_${root2}/${root1}.${root2}.psl ${result}
+rm -fr /scratch/tmp/${root1}_${root2}
+'_EOF_'
+    #	<< happy emacs
+    chmod +x runBlat
+
+    cat << '_EOF_' > template
+#LOOP
+./runBlat $(root1) $(root2) {check out line+ out/$(root2)/$(root1).$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    # << emacs happy
+
+    ls -1S /san/sanvol1/scratch/mm9/cloneEnds/cloneEnds*.fa > bacEnds.lst
+    ls -1S /san/sanvol1/scratch/mm9/noMask/chr*.fa > chrom.lst
+    gensub2 chrom.lst bacEnds.lst template jobList
+    para create jobList
+    # 17150 jobs written to batch
+    para try, check, push, etc ...
+# Completed: 17150 of 17150 jobs
+# CPU time in finished jobs:     698826s   11647.09m   194.12h    8.09d  0.022 y
+# IO & Wait Time:                262556s    4375.94m    72.93h    3.04d  0.008 y
+# Average job time:                  56s       0.93m     0.02h    0.00d
+# Longest finished job:             332s       5.53m     0.09h    0.00d
+# Submission to last job:        250536s    4175.60m    69.59h    2.90d
+
+    ssh kkstore06
+    cd /cluster/data/mm9/bed/bacends
+    screen
+
+    mkdir temp
+    time nice -n +19 pslSort dirs raw.psl temp out/* > pslSort.out 2>&1 &
+    #	real    22m4.019s
+    #	-rw-rw-r--    1 8423154460 Aug  6 13:40 raw.psl
+
+    time nice -n +19 pslReps -nearTop=0.01 -minCover=0.7 -minAli=0.8 \
+	-noIntrons raw.psl bacEnds.psl /dev/null > pslReps.out 2>&1 &
+    #	real    6m1.174s
+    #	-rw-rw-r--    1 1236810588 Aug  6 13:51 bacEnds.psl
+
+    #	split this large psl file into pieces with 100,000 lines each
+    #	to prepare for a sort
+    time nice -n +19 ~/kent/src/hg/pslSplitOnTarget/pslSplitLineCount.pl \
+	100000 bacEnds.psl split/bacends
+    #	real    0m15.389s
+
+    #	save original file, then sort
+    mv bacEnds.psl bacEnds.psl.save
+    time pslSort dirs bacEnds.psl temp split
+    #	real    2m19.131s
+    #	-rw-rw-r--    1 1236810588 Aug  6 14:38 bacEnds.psl
+
+    ## compare to previous results
+    wc -l bacEnds.psl /cluster/data/mm8/bed/bacends/bacEnds.psl
+    #	10294737 bacEnds.psl
+    #	10229750 /cluster/data/mm8/bed/bacends/bacEnds.psl
+
+    ## work at top-level directory after this
+    mkdir /cluster/data/mm9/bacends
+    cp -p bacEnds.psl /cluster/data/mm9/bacends
+
+############################################################################
+# BACEND PAIRS TRACK (DONE - 2006-02-22 - Hiram)
+
+    ssh kolossus
+    cd /cluster/data/mm9/bacends
+
+    time nice -n +19 pslPairs -tInsert=10000 -minId=0.91 -noBin -min=25000 \
+	-max=350000 -slopval=10000 -hardMax=500000 -slop -short -long -orphan \
+	-mismatch -verbose bacEnds.psl \
+	../bed/cloneend/cloneEndPairs.txt all_bacends bacEnds
+    #	real    0m49.120s
+    ## produces files:
+    #	-rw-rw-r--  1     199185 Aug  6 14:46 bacEnds.slop
+    #	-rw-rw-r--  1     144486 Aug  6 14:46 bacEnds.short
+    #	-rw-rw-r--  1   24399410 Aug  6 14:46 bacEnds.pairs
+    #	-rw-rw-r--  1   25421100 Aug  6 14:46 bacEnds.orphan
+    #	-rw-rw-r--  1     201794 Aug  6 14:46 bacEnds.mismatch
+    #	-rw-rw-r--  1      15928 Aug  6 14:46 bacEnds.long
+
+    # create header required by "rdb" tools
+    echo -e \
+"chr\tstart\tend\tclone\tscore\tstrand\tall\tfeatures\tstarts\tsizes" > header
+    echo -e "10\t10N\t10N\t10\t10N\t10\t10\t10N\t10\t10" >> header
+
+    cat header bacEnds.pairs | \
+	/cluster/bin/scripts/row score ge 300 | \
+	/cluster/bin/scripts/sorttbl chr start | \
+	/cluster/bin/scripts/headchg -del > bacEndPairs.bed
+    #	-rw-rw-r--  1   24201067 Aug  6 14:49 bacEndPairs.bed
+
+    cat header bacEnds.slop bacEnds.short bacEnds.long bacEnds.mismatch \
+	bacEnds.orphan | /cluster/bin/scripts/row score ge 300 | \
+	/cluster/bin/scripts/sorttbl chr start | \
+	/cluster/bin/scripts/headchg -del > bacEndPairsBad.bed
+    #	-rw-rw-r--  1    6888559 Aug  6 14:49 bacEndPairsBad.bed
+
+    /cluster/bin/scripts/extractPslLoad -noBin bacEnds.psl bacEndPairs.bed \
+	bacEndPairsBad.bed >j1.out
+    #	-rw-rw-r--  1  989173324 Aug  6 14:52 j1.out
+    cat j1.out | /cluster/bin/scripts/sorttbl tname tstart >j2.out
+    #	-rw-rw-r--  1  989173324 Aug  6 15:07 j2.out
+    cat j2.out | /cluster/bin/scripts/headchg -del > bacEnds.load.psl
+    #	-rw-rw-r--  1  989173165 Aug  6 15:08 bacEnds.load.psl
+
+    rm j1.out j2.out
+
+    #	CHECK bacEndPairs.bed ID's to make sure they have no blanks in them
+    awk '{print $5}' bacEndPairs.bed | sort -u
+    #	result should be the scores, no extraneous strings:
+#	1000
+#	300
+#	375
+#	500
+#	750
+    #	edit the file and fix it if it has a bad name.
+    wc -l bacEnds.load.psl /cluster/data/mm8/bacends/bacEnds.load.psl
+    #	8167555 bacEnds.load.psl
+    #	8132116 /cluster/data/mm8/bacends/bacEnds.load.psl
+
+    # load into database
+    ssh hgwdev
+    cd /cluster/data/mm9/bacends
+    hgLoadBed -notItemRgb mm9 bacEndPairs bacEndPairs.bed \
+	-sqlTable=$HOME/kent/src/hg/lib/bacEndPairs.sql
+    #	Loaded 239101 elements of size 11
+
+    # note - this track isn't pushed to RR, just used for assembly QA
+    hgLoadBed -notItemRgb mm9 bacEndPairsBad bacEndPairsBad.bed \
+	-sqlTable=$HOME/kent/src/hg/lib/bacEndPairsBad.sql
+    #	Loaded 84679 elements of size 11
+
+    # NOTE: truncates file to 0 if -nobin is used
+    time hgLoadPsl mm9 -table=all_bacends bacEnds.load.psl
+# load of all_bacends did not go as planned: 8167555 record(s), 0 row(s)
+# skipped, 2 warning(s) loading psl.tab
+#	real    4m1.142s
+    ## to find out what the warnings are about:
+    ## first, on hgwdev, dump the loaded table
+    hgsql -N -e "select qName from all_bacends;" mm9 \
+	| sort -u > all_bacends.qName.txt
+    ## then on kkstore06 compare the resulting load with the requested load file
+    diff psl.tab mm9.all_bacends.txt
+    ## this diff shows two markers had their qBaseInsert count changed from
+    ##	a negative number to a zero since that field is an unsigned
+    ## AG326808 and AG609381
+
+    ## joinerCheck should be clean:
+    joinerCheck -keys -identifier=bacEndNames -database=mm9 all.joiner
+# Checking keys on database mm9
+#  mm9.bacEndPairs.lfNames - hits 478202 of 478202 ok
+
+    featureBits mm9 all_bacends
+# 349085662 bases of 2620346127 (13.322%) in intersection
+    featureBits mm8 all_bacends
+# 327086559 bases of 2567283971 (12.741%) in intersection
+    featureBits mm7 all_bacends
+# 334161740 bases of 2583394090 (12.935%) in intersection
+    featureBits mm6 all_bacends
+# 336981828 bases of 2597150411 (12.975%) in intersection
+    featureBits mm5 all_bacends
+# 268502414 bases of 2615483787 (10.266%) in intersection
+    featureBits mm4 all_bacends
+# 243096171 bases of 2627444668 (9.252%) in intersection
+
+    featureBits mm9 bacEndPairs
+# 209909804 bases of 2620346127 (8.011%) in intersection
+    featureBits mm8 bacEndPairs
+# 2572527283 bases of 2567283971 (100.204%) in intersection
+    featureBits mm7 bacEndPairs
+# 2578837424 bases of 2583394090 (99.824%) in intersection
+    featureBits mm6 bacEndPairs
+# 2570768812 bases of 2597150411 (98.984%) in intersection
+    featureBits mm5 bacEndPairs
+# 2567958504 bases of 2615483787 (98.183%) in intersection
+    featureBits mm4 bacEndPairs
+# 2549945356 bases of 2627444668 (97.050%) in intersection
+
+    featureBits mm9 bacEndPairsBad
+# 48850302 bases of 2620346127 (1.864%) in intersection
