@@ -16562,3 +16562,67 @@ liftOver fix.bed /gbdb/hg17/liftOver/hg17ToHg18.over.chain.gz hg18.bed core.unma
 liftOver control_fix.bed /gbdb/hg17/liftOver/hg17ToHg18.over.chain.gz hg18.control.bed control.unmapped
 hgLoadBed hg18 encodeStanfordNRSFEnriched hg18.bed -tab
 hgLoadBed hg18 encodeStanfordNRSFControl hg18.control.bed -tab
+
+#########################################################################
+# REGULATORY POTENTIAL UPDATE (DONE - 2007-08-01 - Hiram)
+    #	download data from "James Taylor" <james@bx.psu.edu>
+    ssh kkstore02
+    mkdir /cluster/data/hg18/bed/regPotential7X.update
+    cd /cluster/data/hg18/bed/regPotential7X.update
+    
+    #	This is a lot of data
+    for C in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X Y
+do
+wget --timestamping \
+"http://www.bx.psu.edu/~james/esperr_rp_7way_scores/genome_scores_hg18/chr${C}.scores.truncated.bz2" 
+echo "DONE - chr${C}.scores.truncated.bz2"
+done
+
+    #	create download gzip files from the bz2 files:
+    time for F in chr*.scores.truncated.bz2
+    do
+	C=`echo $F | awk -F'.' '{print $1}'`
+	echo -n "${C}.regPotential7X.hg18.gz working ... "
+	bzcat ${F} | gzip > ${C}.regPotential7X.hg18.gz
+	touch -r "${F}" "${C}.regPotential7X.hg18.gz"
+	echo "done"
+    done
+
+    time for C in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X Y
+    do
+	zcat chr${C}.regPotential7X.hg18.gz
+    done | wigEncode -noOverlap  stdin regPotential7X.wig regPotential7X.wib
+    #	Converted stdin, upper limit 1.00, lower limit 0.00
+    #	real    16m40.347s
+
+    #	Loading the table on hgwdev
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/regPotential7X.update
+    mkdir /gbdb/hg18/wib/070118
+    ln -s /cluster/data/hg18/bed/regPotential7X.update/regPotential7X.wib \
+	/gbdb/hg18/wib/070118/regPotential7X.wib
+    #	using the tmpDir is faster since it is on local disk and it will
+    #	clean up any temporary .tab file it creates there
+    time nice -n +19 hgLoadWiggle -tmpDir=/scratch/tmp \
+	-pathPrefix=/gbdb/hg18/wib/070118 hg18 regPotential7X regPotential7X.wig
+    #	real    0m38.247s
+
+    #	How about a histogram of the data.
+    ssh kolossus
+    cd /cluster/data/hg18/bed/regPotential7X.update
+    time nice -n +19 hgWiggle -verbose=2 -doHistogram -hBinSize=0.01 \
+       -hBinCount=100 -hMinVal=0.0 -db=hg18 regPotential7X > histogram.data 2>&1
+    #	real    3m15.934s
+    #	73 % of the data values are zero
+
+    #	create download gzip files from the bz2 files:
+    ssh kkstore02
+    cd /cluster/data/hg18/bed/regPotential7X
+    for F in chr*.scores.truncated.bz2
+    do
+	C=`echo $F | awk -F'.' '{print $1}'`
+	echo -n "${C}.regPotential7X.hg18.gz working ... "
+	bzcat ${F} | gzip > ${C}.regPotential7X.hg18.gz
+	echo
+    done
+
