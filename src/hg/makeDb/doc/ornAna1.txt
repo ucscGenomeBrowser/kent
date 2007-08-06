@@ -1259,3 +1259,20 @@ chainOne $(path1)
 
 
 #########################################################################
+# WSSD AND SEGMENTAL DUPLICATIONS (DONE 8/3/07 angie)
+    ssh kkstore05
+    mkdir /cluster/data/ornAna1/bed/genomicSuperDups
+    cd /cluster/data/ornAna1/bed/genomicSuperDups
+    # Unpack file emailed from Ginger Cheng <ginger@gs.washington.edu>
+    # in Evan Eichler's lab:
+    tar xvzf platypusDUP_track.tar.gz
+
+    ssh hgwdev
+    cd /cluster/data/ornAna1/bed/genomicSuperDups
+    hgLoadBed ornAna1 wssdCoverage SmallContig_wssdGE10K_nogap.tab
+    awk '($3 - $2) >= 1000 && ($9 - $8) >= 1000 {print;}' genomicSuperDups \
+    | hgLoadBed ornAna1 genomicSuperDups stdin \
+      -tab -sqlTable=$HOME/kent/src/hg/lib/genomicSuperDups.sql
+
+
+#########################################################################
