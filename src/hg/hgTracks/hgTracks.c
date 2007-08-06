@@ -117,7 +117,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1385 2007/08/05 16:02:09 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1386 2007/08/06 21:49:12 kate Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -514,9 +514,8 @@ for (group = groupList; group != NULL; group = group->next)
                     {
                     /* Leave supertrack members alone -- only change parent */
                     struct trackDb *parentTdb = tdb->parent;
-                    if ((changeVis == parentTdb->visibility) ||
-                        (changeVis != tvHide && 
-                            parentTdb->visibility != tvHide))
+                    if ((changeVis == tvHide && !parentTdb->isShow) ||
+                        (changeVis != tvHide && parentTdb->isShow))
                         {
                         /* remove if setting to default vis */
                         cartRemove(cart, parentTdb->tableName);
@@ -524,7 +523,6 @@ for (group = groupList; group != NULL; group = group->next)
                     else
                         cartSetString(cart, parentTdb->tableName, 
                                         changeVis == tvHide ? "hide" : "show");
-                    parentTdb->visibility = (changeVis == tvHide) ?  tvHide : tvDense;
                     }
                 else 
                     {
