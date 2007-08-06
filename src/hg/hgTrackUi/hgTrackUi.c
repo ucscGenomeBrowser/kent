@@ -31,7 +31,7 @@
 
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.388 2007/08/06 22:26:01 kate Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.389 2007/08/06 22:26:50 kate Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2746,7 +2746,7 @@ if (tdb->parentName)
     if (superTdb)
         {
         char *encodedMapName = cgiEncode(superTdb->tableName);
-        printf("<H3>Member of supertrack: <A HREF=\"%s?%s=%u&c=%s&g=%s\">%s</A></H3>", 
+        printf("<H3>Member of super track: <A HREF=\"%s?%s=%u&c=%s&g=%s\">%s</A></H3>", 
                     hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
                     chromosome, encodedMapName, superTdb->shortLabel);
         freeMem(encodedMapName);
