@@ -69,7 +69,7 @@ foreach tbl ($tables)
   endif
 
   # if the table doesn't exist, print error and exit.
-  set exists=`hgsql -Ne 'SHOW TABLES LIKE '$tbl' $db`
+  set exists=`hgsql -Ne "SHOW TABLES LIKE '"$tbl"'" $db`
   if ( $exists == "" ) then
     echo "\n ERROR: The $tbl table does not exist in the $db database\n"
     exit 1
