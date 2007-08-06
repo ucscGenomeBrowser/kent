@@ -1496,6 +1496,7 @@ type wig 0 1000
     priority 16    
 
 track encodeAffyChIpHl60Pval
+superTrack encodeAffyChipSuper dense
 compositeTrack on
 subGroup1 time Timepoint 0h=0hrs 2h=2hrs 8h=8hrs 32h=32hrs
 subGroup2 factor Factor Brg1=Brg1 CEBPe=CEBPe CTCF=CTCF H3K27me3=H3K27me3 H4Kac4=H4Kac4 P300=P300 PU1=PU1 RARA=RARA Pol2=Pol2 SIRT1=SIRT1 TFIIB=TFIIB
@@ -1842,6 +1843,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 81
 
 track encodeAffyChIpHl60Sites
+superTrack encodeAffyChipSuper dense
 compositeTrack on
 subGroup1 time Timepoint 0h=0hrs 2h=2hrs 8h=8hrs 32h=32hrs
 subGroup2 factor Factor Brg1=Brg1 CEBPe=CEBPe CTCF=CTCF H3K27me3=H3K27me3 H4Kac4=H4Kac4 P300=P300 PU1=PU1 RARA=RARA Pol2=Pol2 SIRT1=SIRT1 TFIIB=TFIIB
@@ -2189,6 +2191,7 @@ dataVersion ENCODE June 2005 Freeze
 #October freeze (strict) data
 release alpha
 track encodeAffyChIpHl60PvalStrict
+superTrack encodeAffyChipSuper dense
 shortLabel Affy Strict pVal
 longLabel Affymetrix ChIP-chip (HL-60 and ME-180 cells) Strict P-Value
 compositeTrack on
@@ -2209,6 +2212,7 @@ html encodeAffyChipPvalStrict
 
 track encodeAffyChIpHl60PvalStrict
 release beta
+superTrack encodeAffyChipSuper dense
 shortLabel Affy Strict pVal
 longLabel Affymetrix ChIP-chip (retinoic acid-treated HL-60 cells) Strict P-Value
 compositeTrack on
@@ -2359,6 +2363,7 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 14
 
 track encodeAffyChIpHl60SignalStrict
+superTrack encodeAffyChipSuper dense
 release alpha
 shortLabel Affy Strict Sig
 longLabel Affymetrix ChIP-chip (HL-60 and ME-180 cells) Strict Signal
@@ -2379,6 +2384,7 @@ dataVersion ENCODE Oct 2005 Freeze
 html encodeAffyChipSignalStrict
 
 track encodeAffyChIpHl60SignalStrict
+superTrack encodeAffyChipSuper dense
 release beta
 shortLabel Affy Strict Sig
 longLabel Affymetrix ChIP-chip (retinoic acid-treated HL-60 cells) Strict Signal
@@ -2532,6 +2538,7 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 14
 
 track encodeAffyChIpHl60SitesStrict
+superTrack encodeAffyChipSuper dense
 release alpha
 shortLabel Affy Strict Sites
 longLabel Affymetrix ChIP-chip (HL-60 and ME-180 cells) Strict Sites
@@ -2548,6 +2555,7 @@ dataVersion ENCODE Oct 2005 Freeze
 html encodeAffyChipSitesStrict
 
 track encodeAffyChIpHl60SitesStrict
+superTrack encodeAffyChipSuper dense
 release beta
 shortLabel Affy Strict Sites
 longLabel Affymetrix ChIP-chip (retinoic acid-treated HL-60 cells) Strict Sites
@@ -2695,6 +2703,7 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 14
 
 track encodeLIChIP
+superTrack encodeUcsdChipSuper dense
 compositeTrack on
 shortLabel LI ChIP Various
 longLabel Ludwig Institute/UCSD ChIP-chip: Pol2 8WG16, TAF1, H3ac, H3K4me2, H3K27me3 antibodies
@@ -2793,6 +2802,7 @@ dataVersion ENCODE June 2005 Freeze
     color 109,51,43
 
 track encodeLIChIPgIF
+superTrack encodeUcsdChipSuper dense
 compositeTrack on
 shortLabel LI gIF ChIP
 longLabel Ludwig Institute/UCSD ChIP-chip - Gamma Interferon Experiments
@@ -2908,6 +2918,7 @@ dataVersion ENCODE June 2005 Freeze
 
 
 track encodeUcsdNgChip
+superTrack encodeUcsdChipSuper dense
 compositeTrack on
 shortLabel LI Ng TAF1 IMR90
 longLabel Ludwig Institute NimbleGen ChIP-chip: TAF1 antibody, IMR90 cells
@@ -2951,6 +2962,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 3
 
 track encodeUcsdNgValChip
+superTrack encodeUcsdChipSuper dense
 compositeTrack on
 shortLabel LI Ng Validation
 longLabel Ludwig Institute ChIP-chip Validation: IMR90 cells
@@ -2994,9 +3006,10 @@ dataVersion ENCODE June 2005 Freeze
     priority 4
     color 58,119,40
 
-
 track encodeStanfordChip
+superTrack encodeStanfordChipSuper dense
 compositeTrack on
+visibility full
 shortLabel Stanf ChIP
 longLabel Stanford ChIP-chip (HCT116, Jurkat, K562 cells;  Sp1, Sp3 ChIP)
 group encodeChip
@@ -3051,6 +3064,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 6
 
 track encodeStanfordChipSmoothed
+superTrack encodeStanfordChipSuper dense
 compositeTrack on
 shortLabel Stanf ChIP Score
 longLabel Stanford ChIP-chip Smoothed Score
@@ -3105,6 +3119,32 @@ dataVersion ENCODE June 2005 Freeze
     longLabel Stanford ChIP-chip Smoothed Score (K562 cells, Sp3 ChIP)
     priority 6
 
+track encodeStanfordNRSF
+superTrack encodeStanfordChipSuper dense
+compositeTrack on
+shortLabel Stanf NRSF Tags
+longLabel Stanford NRSF/REST
+group encodeChip
+priority 83
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX,chrY,chrM
+visibility hide
+type bed 6 .
+origAssembly hg17
+dataVersion March 2007
+
+    track encodeStanfordNRSFEnriched
+    subTrack encodeStanfordNRSF
+    shortLabel Stanf NRSF Enriched
+    longLabel Stanford NRSF/REST Enriched
+    priority 1
+    color 0,128,0
+
+    track encodeStanfordNRSFControl
+    subTrack encodeStanfordNRSF
+    shortLabel Stanf NRSF Control
+    longLabel Stanford NRSF/REST Control
+    priority 2
+    color 0,128,0
 
 track encodeStanfordChipJohnson
 compositeTrack on
@@ -3199,6 +3239,7 @@ dataVersion Mar 2007
 
 
 track encodeUtexChip
+superTrack encodeUtexChipSuper dense
 compositeTrack on
 shortLabel UT-Austin ChIP
 dataVersion ENCODE Oct 2005 Freeze
@@ -3563,6 +3604,7 @@ chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr2
 visibility hide
 type bed 3 .
 dataVersion ENCODE Oct 2005 Freeze, May 2007 data
+origAssembly hg17
 
     track encodeUvaDnaRepOriginsNSGM
     subTrack encodeUvaDnaRepOrigins
@@ -4462,6 +4504,32 @@ dataVersion ENCODE June 2005 Freeze
     subGroups region=intergenicDistal celltype=plac source=yale
     priority 44
     color 230,0,25
+
+track encodeStanfordNRSF
+compositeTrack on
+shortLabel Stanf NRSF ChIP-seq
+longLabel Stanford Neuron-Restrictive Silencer Factor ChIP-seq
+group regulation
+priority 500
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX,chrY,chrM
+visibility hide
+type bed 6 .
+origAssembly hg17
+dataVersion March 2007
+
+    track encodeStanfordNRSFEnriched
+    subTrack encodeStanfordNRSF
+    shortLabel Stanf NRSF Enriched
+    longLabel Stanford NRSF/REST Enriched
+    priority 1
+    color 0,128,0
+
+    track encodeStanfordNRSFControl
+    subTrack encodeStanfordNRSF
+    shortLabel Stanf NRSF Control
+    longLabel Stanford NRSF/REST Control
+    priority 2
+    color 0,128,0
 
 searchTable encodeGencodeGeneKnownOct05
 searchType genePred
