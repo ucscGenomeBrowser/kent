@@ -31,7 +31,7 @@
 
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.386 2007/08/01 23:55:24 kate Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.387 2007/08/06 22:24:10 kate Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2504,7 +2504,7 @@ for (tdb = superTdb->subtracks; tdb != NULL; tdb = tdb->next)
     if (!hTableOrSplitExists(tdb->tableName) && !trackDbHasCompositeSetting(tdb))
         continue;
     printf("<TR>");
-    printf("<TD><A HREF=\"%s?%s=%u&c=%s&g=%s\">%s</A>&nbsp;</TD>", 
+    printf("<TD NOWRAP><A HREF=\"%s?%s=%u&c=%s&g=%s\">%s</A>&nbsp;</TD>", 
                 hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
                 chromosome, cgiEncode(tdb->tableName), tdb->shortLabel);
     printf("<TD>");
