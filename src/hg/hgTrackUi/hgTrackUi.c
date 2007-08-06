@@ -31,7 +31,7 @@
 
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.387 2007/08/06 22:24:10 kate Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.388 2007/08/06 22:26:01 kate Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2941,7 +2941,7 @@ if (super)
         /* the supertrack is also configured, so use supertrack defaults */
         trackDbSuperMemberSettings(tdb);
     }
-char *title = (tdb->isSuper ? "Supertrack Settings" : "Track Settings");
+char *title = (tdb->isSuper ? "Super Track Settings" : "Track Settings");
 cartWebStart(cart, "%s %s", tdb->shortLabel, title);
 trackUi(tdb);
 printf("<BR>\n");
