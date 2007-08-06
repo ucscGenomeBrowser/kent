@@ -1,6 +1,6 @@
 #!/usr/bin/env perl 
 
-# $Id: updateBed.pl,v 1.6 2007/08/03 16:46:12 hiram Exp $
+# $Id: updateBed.pl,v 1.7 2007/08/06 22:09:39 hiram Exp $
 
 ##Author: Yontao Lu
 ##Date  06/29/03
@@ -169,11 +169,17 @@ sub searchPrimer()
 sub searchGeneralMap()
 {
     my @names = @_;
-    for(my $i = 0; $i <@names; $i++) {
-	if(defined($names[$i]) && exists($chr{$names[$i]}) && ($chr{$names[$i]} ne ""))
-	{
-	    return($chr{$names[$i]}, $cm{$names[$i]});
-	}
+    for(my $i = 0; $i <scalar(@names); $i++) {
+	if(defined($names[$i]))
+	    {
+	    if (exists($chr{$names[$i]})
+		&& exists($cm{$names[$i]})
+		&& (length($chr{$names[$i]}) > 0)
+		&& (length($cm{$names[$i]}) > 0))
+		{
+		    return($chr{$names[$i]}, $cm{$names[$i]});
+		}
+	    }
     }
 }
 sub searchGeneticMap(@)
@@ -305,6 +311,7 @@ while(my $line = <MGDS>)
     my (@eles) = split(/\t/, $line);
     #	What do the minus cM numbers mean ?
 #    next if($eles[9] < 0);
+    next if (!defined($eles[8]));	#	we don't do undefined chroms
     next if ($eles[8] =~ m/UN/);	#	we don't do chrUN
     next if ($eles[8] =~ m/XY/);	#	we don't do chrXY
     #  check if we are stomping on existing mgiId entries
@@ -471,6 +478,7 @@ while(my $line = <BED>)
     $line = uc($line);
     my @allName = ();
     my ($id, $name, $sId, $sname, $uistsid, $aliasCount, $alias, $primer1, $primer2, $distance, $isSeq, $organism, $geneticMap, $gChr, $gPosi, $generalMap, $uChr, $uPosi, $RHMap, $rhChr, $rhPosi) = split(/\t/, $line);
+
     $lastId = $id;
     $sId = "MGI:".$sId;
 
@@ -605,6 +613,14 @@ if ($verbose > 1) {
 	$distance = $distanceSum;
     }
 
+## the 66831 item is way too extreme, something is thoroughly wrong with it
+next if ($id == 66831);
+
+## fixup the "-" names, at least give them an id
+$name = $id if ($name =~ m/^-$/);
+my $aliasLength = length($alias);
+die "$id alias list is really really long, count: $aliasCount, length: $aliasLength"
+	if ( ($aliasLength > 4096) || ($aliasCount > 1024) );
 if (!defined($id)) { print STDERR "ERROR: not defined: id\n"; }
 if (!defined($name)) { print STDERR "ERROR: not defined: name\n"; }
 if (!defined($sId)) { print STDERR "ERROR: not defined: sId\n"; }
@@ -773,6 +789,8 @@ while(my $key = shift(@allkeys))
 	$distance = $distanceSum;
     }
 
+## fixup the "-" names, at least give them an id
+$name = $id if ($name =~ m/^-$/);
 if (!defined($id)) { print STDERR "ERROR: not defined: id\n"; }
 if (!defined($name)) { print STDERR "ERROR: not defined: name\n"; }
 if (!defined($sId)) { $sId = ""; }
