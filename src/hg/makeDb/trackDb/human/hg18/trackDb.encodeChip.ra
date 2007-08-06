@@ -1111,7 +1111,7 @@ origAssembly hg17
 track encodeUppsalaChipBut
 superTrack encodeUppsalaChipSuper dense
 compositeTrack on
-shortLabel Uppsala ChIP Butyrate
+shortLabel Uppsala ChIP Buty
 longLabel Uppsala University, Sweden ChIP-chip Na-butyrate time series
 group encodeChip
 priority 61.5
