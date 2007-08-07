@@ -601,3 +601,36 @@ cat renamesWig.txt | while read -a line; do
 done
 cd /usr/local/apache/htdocs/goldenPath/hg18/encode
 ln -s /cluster/data/encode/Affy/2007-07-12/processed/download/*.gz .
+
+###########################################################################
+# Yale Pol II Chip (NOT DONE Andy 08-02-2007)
+
+cd /cluster/data/encode/yale
+mkdir 2007-07-17
+cd 2007-07-17/
+unzip YaleJuly17.zip
+rm YaleJuly17.zip
+cd PolII/
+bedSort PolII_hg18-signal.wig tmp.wig
+mv tmp.wig PolII_hg18-signal.wig 
+../../../bin/scripts/trimOverlap.pl < PolII_hg18-signal.wig > tmp.wig
+mv tmp.wig PolII_hg18-signal.wig 
+mv encodeYalePolIISignal.wib /cluster/data/encode/hg18.wib/
+ln -s /cluster/data/encode/hg18.wib/encodeYalePolIISignal.wib /gbdb/hg18/encode/wib/
+hgLoadWiggle -pathPrefix=/gbdb/hg18/encode/wib hg18 encodeYalePolIISignal encodeYalePolIISignal.wig 
+#Connected to database hg18 for track encodeYalePolIISignal
+#Creating wiggle table definition in hg18.encodeYalePolIISignal
+#Saving wiggle.tab
+#WARNING: Exceeded chr18_random size 4406 > 4262. dropping 145 data point(s)
+# hmmm... that's not a good warning.  I wonder if these guys got the genome wrong.
+hgLoadBed hg18 encodeYalePolIISites PolII_hg18-sites.bed 
+#Reading PolII_hg18-sites.bed
+#Loaded 87253 elements of size 4
+#Sorted
+#Creating table definition for encodeYalePolIISites
+#Saving bed.tab
+#start -142, end 1144 out of range in findBin (max is 512M)
+
+# MORE ERRORS.  Clearly this submission wasn't quite meant to be just yet.
+# to be continued...
+
