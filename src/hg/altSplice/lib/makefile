@@ -26,7 +26,7 @@ clean:
 	rm -f ${O};
 	rm -f ${TESTS}
 	rm -f ./${MACHTYPE}/libSpliceGraph.a
-	rmdir ./${MACHTYPE}
+	rm -fr ./${MACHTYPE}
 
 ctags:
 	ctags *.c *.h ../inc/*.h ../lib/*.c ../../inc/*.h ../../lib/*.c
