@@ -208,7 +208,7 @@
 #include "omicia.h"
 #include "atomDb.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1330 2007/08/04 17:29:07 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1331 2007/08/07 19:32:50 fanhsu Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -7858,6 +7858,37 @@ if (url != NULL && url[0] != 0)
     }
 }
 
+void doVax004(struct trackDb *tdb, char *item)
+/* Put up VAX 004 info. */
+{
+char *id;
+struct sqlConnection *conn = hAllocConn();
+char *aliTbl = tdb->tableName;
+int start = cartInt(cart, "o");
+char cond_str[255], *subjId;
+
+genericHeader(tdb, item);
+
+id = item;
+printf("<H3>Sequence ID: %s", id);
+printf("</H3>\n");
+
+/* display subject ID */
+sprintf(cond_str, "dnaSeqId='%s'", id);
+subjId = sqlGetField(conn, database,"gsIdXref", "subjId", cond_str);
+printf("<H3>Subject ID: ");
+printf("<A HREF=\"../cgi-bin/gsidSubj?hgs_subj=%s\">", subjId);
+printf("%s</A>\n", subjId);
+printf("</H3>");
+
+/* print alignments that track was based on */
+struct psl *pslList = getAlignments(conn, aliTbl, item);
+printf("<H3>Genomic Alignments</H3>");
+printAlignments(pslList, start, "htcCdnaAli", aliTbl, item);
+hFreeConn(&conn);
+
+printTrackHtml(tdb);
+}
 void doUniGene3(struct trackDb *tdb, char *item)
 /* Put up UniGene info. */
 {
@@ -19589,6 +19620,10 @@ else if (sameWord(track, "uniGene_2") || sameWord(track, "uniGene"))
 else if (sameWord(track, "uniGene_3")) 
     {
     doUniGene3(tdb, item);
+    }
+else if (sameWord(track, "vax004")) 
+    {
+    doVax004(tdb, item);
     }
 else if (sameWord(track, "tigrGeneIndex"))
     {
