@@ -1,4 +1,4 @@
-/* hc - Human Genome Click processor - gets called when user clicks
+/* hgc - Human Genome Click processor - gets called when user clicks
  * on something in human tracks display. */
 
 #include "common.h"
@@ -208,7 +208,7 @@
 #include "omicia.h"
 #include "atomDb.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1331 2007/08/07 19:32:50 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1332 2007/08/07 23:27:55 ytlu Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
