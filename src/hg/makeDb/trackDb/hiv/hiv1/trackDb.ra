@@ -9,7 +9,7 @@ type bed 4
 
 track vax004
 shortLabel VAX004
-longLabel HIV VAX004 sequence
+longLabel VAX004 HIV-1 gp120 Sequences
 group map
 priority 40
 visibility hide
@@ -78,7 +78,7 @@ speciesUseFile gsidTable.gsidSeqList
 searchName hivGeneAcc
 searchTable hivGene
 searchMethod exact
-termRegex [A-Z0-9][A-Z0-9]+
+termRegex [A-Z0-9][A-Z0-9_\']+
 searchType bed
 searchPriority 4
 
