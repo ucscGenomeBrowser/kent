@@ -18,7 +18,7 @@
 #include "customFactory.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.75 2007/08/04 16:25:20 fanhsu Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.76 2007/08/08 19:01:11 fanhsu Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -1240,7 +1240,7 @@ safef(query, sizeof(query), "select distinct subjId from hiv1.gsIdXref order by 
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    fprintf(outF, "%s\n", row[0]);fflush(outF);
+    fprintf(outF, "%s\n", row[0]);
 
     safef(query2, sizeof(query2),
           "select dnaSeqId from hiv1.gsIdXref where subjId='%s' order by dnaSeqId", row[0]);
