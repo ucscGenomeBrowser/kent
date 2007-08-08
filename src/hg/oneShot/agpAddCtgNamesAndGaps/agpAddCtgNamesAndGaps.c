@@ -32,9 +32,15 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "agpAddCtgNamesAndGaps - Add contig names to AGP and add gaps between scaffolds for danRer5. words\n"
+  "agpAddCtgNamesAndGaps - Add component names to AGP where there are\n" 
+  "multiple components contributing to one accession with gaps getween them.\n"
   "usage:\n"
-  "   agpAddCtgNamesAndGaps XXX\n"
+  "   agpAddCtgNamesAndGaps <fragment parts and positions> <agp file>"
+  " <output file>\n"
+  "   where fragment parts' file is of format: \n"
+  "   <accession part ID> <Sanger name> <accession> <start> <end>\n" 
+  "   (start and end are relative to accession).\n"
+  "   BX649254.13_01364 zK228P6.01364 BX649254 1 32480\n"
   "options:\n"
   "   -xxx=XXX\n"
   );
@@ -260,7 +266,8 @@ struct agpInfo *agpEl = NULL;
 struct ctgInfo *ctgEl = NULL;
 char NARandom[256];
 char UnRandom[256];
-char chrom[256];
+char chrom[256] = "";
+char *prevChrom = NULL;
 int lineNum = 0;
 boolean endOfScaffold = FALSE;
 int prevEnd = 0, newStart = 0, newEnd = 0, size = 0; 
@@ -269,13 +276,7 @@ safef(NARandom, sizeof(NARandom), "%s_NA", assembly);
 safef(UnRandom, sizeof(UnRandom), "%s_scaffold", assembly);
 while((agpEl = (struct agpInfo*)slPopHead(&agpList)) != NULL)
     {
-    lineNum++;
-    /* if the part number is 1 then this is the start of a new
-     * scaffold so insert 50000 Ns here */
-    if ((lineNum != 1) && (agpEl->partNum == 1))   
-        endOfScaffold = TRUE;
-    else
-        endOfScaffold = FALSE;
+    prevChrom = cloneString(chrom);
     /* create correct chromosome name */
     if (startsWith(NARandom, agpEl->name))
         safef(chrom, sizeof(chrom), "chrNA_random");
@@ -283,6 +284,18 @@ while((agpEl = (struct agpInfo*)slPopHead(&agpList)) != NULL)
         safef(chrom, sizeof(chrom), "chrUn_random");
     else 
         errAbort("Expecting %s_NA or %s_scaffold in contig name\n", assembly, assembly);
+    /* if the new chrom is not the same as the one from the previous line
+     * then reset lineNum to 0 as this is tracking the part number for the 
+     * chromosome. This will also prevent an extra gap line being added.  */
+    if (sameWord(chrom, prevChrom))
+        lineNum = 0;
+    lineNum++;
+    /* if the part number is 1 then this is the start of a new
+     * scaffold so insert 50000 Ns here */
+    if ((lineNum != 1) && (agpEl->partNum == 1))   
+        endOfScaffold = TRUE;
+    else
+        endOfScaffold = FALSE;
     if (endOfScaffold)
         {
         newStart = prevEnd + 1;
@@ -315,6 +328,7 @@ while((agpEl = (struct agpInfo*)slPopHead(&agpList)) != NULL)
     fprintf(out, "\t%s", agpEl->line);
     /* set previous end to the current end */
     prevEnd = newEnd;
+    freez(&prevChrom);
     }
 }
 
