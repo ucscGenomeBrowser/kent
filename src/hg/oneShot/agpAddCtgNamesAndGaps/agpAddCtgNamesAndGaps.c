@@ -287,7 +287,7 @@ while((agpEl = (struct agpInfo*)slPopHead(&agpList)) != NULL)
     /* if the new chrom is not the same as the one from the previous line
      * then reset lineNum to 0 as this is tracking the part number for the 
      * chromosome. This will also prevent an extra gap line being added.  */
-    if (sameWord(chrom, prevChrom))
+    if (!sameWord(chrom, prevChrom))
         lineNum = 0;
     lineNum++;
     /* if the part number is 1 then this is the start of a new
