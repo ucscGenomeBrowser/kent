@@ -31,7 +31,7 @@
 
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.389 2007/08/06 22:26:50 kate Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.390 2007/08/08 21:28:12 fanhsu Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1847,6 +1847,7 @@ char javascript[2048];
 char buttonVar[64];
 char *button;
 char *form = "mainForm";
+int numberPerRow;
 
 puts("<TABLE><TR><TD>");
 
@@ -2034,7 +2035,11 @@ for (wmSpecies = wmSpeciesList, i = 0; wmSpecies != NULL;
 
 	puts("\n<TABLE><TR>");
 	}
-    if (i != 0 && (i % 5) == 0)
+    if (hIsGsidServer()) 
+	numberPerRow = 6;
+    else 
+	numberPerRow = 5;
+    if (i != 0 && (i % numberPerRow) == 0)
 	puts("</TR><TR>");
     puts("<TD>");
     safef(option, sizeof(option), "%s.%s", tdb->tableName, wmSpecies->name);
