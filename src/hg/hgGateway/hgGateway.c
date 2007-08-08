@@ -14,7 +14,7 @@
 #include "hui.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hgGateway.c,v 1.105 2007/08/08 23:03:02 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgGateway.c,v 1.106 2007/08/08 23:04:55 fanhsu Exp $";
 
 boolean isPrivateHost;		/* True if we're on genome-test. */
 struct cart *cart = NULL;
@@ -179,8 +179,12 @@ puts("<P>This is just our test site.  It usually works, but it is filled with tr
  "More data than usual is flat out wrong.  Maybe you want to go to "
 	 "<A HREF=\"http://genome.ucsc.edu\">genome.ucsc.edu</A> instead.");
 
-webNewSection("%s", "Sequence View\n");
-printf("%s", "Sequence View is a customized version of the UCSC Genome Browser, which is specifically tailored to provide functions needed for the GSID HIV Vaccine Database.\n");
+if (hIsGsidServer())
+    {
+    webNewSection("%s", "Sequence View\n");
+    printf("%s", 
+	   "Sequence View is a customized version of the UCSC Genome Browser, which is specifically tailored to provide functions needed for the GSID HIV Vaccine Database.\n");
+    }
 
 hgPositionsHelpHtml(organism, db);
 
