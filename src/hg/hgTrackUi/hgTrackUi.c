@@ -31,7 +31,7 @@
 
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.390 2007/08/08 21:28:12 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.391 2007/08/08 23:20:38 fanhsu Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2092,36 +2092,40 @@ if (framesTable)
     }
 else
     {
-    puts("<P><B>Codon highlighting:</B><BR>" );
+    /* Codon highlighting does not apply to wigMafProt type */
+    if (!strstr(tdb->type, "wigMafProt"))
+	{
+    	puts("<P><B>Codon highlighting:</B><BR>" );
 
 #ifdef GENE_FRAMING
 
-    safef(option, sizeof(option), "%s.%s", tdb->tableName, MAF_FRAME_VAR);
-    currentCodonMode = cartCgiUsualString(cart, option, MAF_FRAME_GENE);
+    	safef(option, sizeof(option), "%s.%s", tdb->tableName, MAF_FRAME_VAR);
+    	currentCodonMode = cartCgiUsualString(cart, option, MAF_FRAME_GENE);
 
-    /* Disable codon highlighting */
-    cgiMakeRadioButton(option, MAF_FRAME_NONE, 
+    	/* Disable codon highlighting */
+   	 cgiMakeRadioButton(option, MAF_FRAME_NONE, 
 		    sameString(MAF_FRAME_NONE, currentCodonMode));
-    puts("None &nbsp;");
+    	puts("None &nbsp;");
 
-    /* Use gene pred */
-    cgiMakeRadioButton(option, MAF_FRAME_GENE, 
+    	/* Use gene pred */
+    	cgiMakeRadioButton(option, MAF_FRAME_GENE, 
 			    sameString(MAF_FRAME_GENE, currentCodonMode));
-    puts("CDS-annotated frame based on");
-    safef(option, sizeof(option), "%s.%s", tdb->tableName, MAF_GENEPRED_VAR);
-    genePredDropDown(cart, makeTrackHash(database, chromosome), NULL, option);
+    	puts("CDS-annotated frame based on");
+    	safef(option, sizeof(option), "%s.%s", tdb->tableName, MAF_GENEPRED_VAR);
+    	genePredDropDown(cart, makeTrackHash(database, chromosome), NULL, option);
 
 #else
-    snprintf(option, sizeof(option), "%s.%s", tdb->tableName, BASE_COLORS_VAR);
-    puts ("&nbsp; Alternate colors every");
-    cgiMakeIntVar(option, cartCgiUsualInt(cart, option, 0), 1);
-    puts ("bases<BR>");
-    snprintf(option, sizeof(option), "%s.%s", tdb->tableName, 
+    	snprintf(option, sizeof(option), "%s.%s", tdb->tableName, BASE_COLORS_VAR);
+    	puts ("&nbsp; Alternate colors every");
+    	cgiMakeIntVar(option, cartCgiUsualInt(cart, option, 0), 1);
+    	puts ("bases<BR>");
+    	snprintf(option, sizeof(option), "%s.%s", tdb->tableName, 
 			    BASE_COLORS_OFFSET_VAR);
-    puts ("&nbsp; Offset alternate colors by");
-    cgiMakeIntVar(option, cartCgiUsualInt(cart, option, 0), 1);
-    puts ("bases<BR>");
+    	puts ("&nbsp; Offset alternate colors by");
+    	cgiMakeIntVar(option, cartCgiUsualInt(cart, option, 0), 1);
+    	puts ("bases<BR>");
 #endif
+	}
     }
 
 treeImage = trackDbSetting(tdb, "treeImage");
