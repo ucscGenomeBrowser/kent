@@ -26,15 +26,16 @@ if ( "$HOST" != "hgwdev" ) then
  exit 1
 endif
 
+set basePath='/usr/local/apache/htdocs/qa/test-results/sync'
 set db=`databaseAday.csh today`
-rm -f /usr/local/apache/htdocs/qa/test-results/sync/$db
-echo "\n$db\n" >> /usr/local/apache/htdocs/qa/test-results/sync/$db
-checkSync.csh $db times >> /usr/local/apache/htdocs/qa/test-results/sync/$db
-checkSync.csh $db hgw1 hgw2 times >> /usr/local/apache/htdocs/qa/test-results/sync/$db
-checkSync.csh $db hgw3 hgw4 times >> /usr/local/apache/htdocs/qa/test-results/sync/$db
-checkSync.csh $db hgw5 hgw6 times >> /usr/local/apache/htdocs/qa/test-results/sync/$db
-checkSync.csh $db hgw7 hgw8 times >> /usr/local/apache/htdocs/qa/test-results/sync/$db
-checkSync.csh $db hgwbeta mgc times >> /usr/local/apache/htdocs/qa/test-results/sync/$db
-cat /usr/local/apache/htdocs/qa/test-results/sync/$db
+rm -f $basePath/$db
+echo "\n$db\n" >> $basePath/$db
+checkSync.csh $db times >> $basePath/$db
+checkSync.csh $db hgw1 hgw2 times >> $basePath/$db
+checkSync.csh $db hgw3 hgw4 times >> $basePath/$db
+checkSync.csh $db hgw5 hgw6 times >> $basePath/$db
+checkSync.csh $db hgw7 hgw8 times >> $basePath/$db
+checkSync.csh $db hgwbeta mgc times >> $basePath/$db
+cat $basePath/$db
 echo "http://hgwdev.cse.ucsc.edu/qa/test-results/sync/$db" | mail -s "sync for today" $USER@soe.ucsc.edu
 

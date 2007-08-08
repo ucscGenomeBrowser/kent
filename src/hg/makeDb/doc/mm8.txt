@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: mm8.txt,v 1.47 2007/05/31 17:32:40 fanhsu Exp $"
+#	"$Id: mm8.txt,v 1.50 2007/08/01 19:03:38 angie Exp $"
 #
 
 #  NOTE:  this doc may have genePred loads that fail to include
@@ -7431,11 +7431,12 @@ set out = $3
 
 
 ############################################################################
-# JAX TRACKS (DONE 10/20/06 angie)
+# JAX TRACKS (DONE 10/20/06 angie - UPDATED 7/18/07)
     ssh kkstore04
-    mkdir /cluster/data/mm8/bed/jax
-    # Files sent by Bob Sinclair unpacked there:
-    unzip MGI_Track_Data.zip
+    mkdir /cluster/data/mm8/bed/jax/2007_07
+    cd /cluster/data/mm8/bed/jax/2007_07
+    wget ftp://ftp.informatics.jax.org/pub/gbrowse/July2007/\*
+    wget ftp://ftp.informatics.jax.org/pub/reports/MGI_PhenotypicAllele.rpt
 
     # Jax Rep Transcript track
     # SEQ_RepTransGenomic_rpt.gff --> jaxRepTranscript{,Alias}
@@ -7443,41 +7444,47 @@ set out = $3
     # -- aliases ~ MGI:\d+
     # Use simple perl script to uniquify transcript names and make alias.tab.
     # Inspired by the mm6 version, but format has changed.
-    parseRepTranscript.pl MGI_Track_Data/SEQ_RepTransGenomic_rpt.gff \
+    cp ../2006_10/parseRepTranscript.pl .
+    # Edit to accomodate latest format tweaks.
+    parseRepTranscript.pl SEQ_RepTransGenomic_rpt.gff \
       > jaxRepTranscript.gff
-   
 
     # Jax Allele track
     # AL_*.gff --> jaxAllele{,Info}
     # -- bed12Source -- add type from filename
     # -- names like NM_011283_Rp1h<tm1Jnz>, XM_129721_Slc9a2<tm1Ges>
     # -- Info: name, mgiID, source {"Gene trapped", ...}
+    cp ../2006_10/parseAllele.pl .
+    # Edit to accomodate latest format tweaks.
     rm -f jaxAllele.bed jaxAlleleInfo.tab fixJaxAllele.sql
-    foreach f (MGI_Track_Data/AL*.gff)
+    foreach f (AL*.gff)
       set type = `echo $f:t:r \
         | sed -e 's/AL_//; s/GTRAP/GeneTrapped/; s/IND/Induced/; \
             s/OTHER/Other/; s/SPON/Spontaneous/; s/TARG/Targeted/; \
             s/TRANS/Transgenic/;'`
       parseAllele.pl $f \
-      | ldHgGene mm8 placeholder stdin -out=stdout \
+      | ldHgGene mm8 placeholder stdin -nobin -out=stdout \
       | /cluster/bin/scripts/genePredToBed \
       | sed -e 's/$/'"\t$type"'/' \
       >> jaxAllele.bed
     end
-    # Most names have a vector(?) in <>'s except these:
-#odd name NM_009309_T
-#odd name NM_015770_a
-#odd name NM_021879_p
-#odd name NM_008415_Jrk
-#odd name NM_008622_Mpv17
-#odd name NM_010241_Fts
+    # This round's formatting inconsistencies:
+#source not given for NM_021879_p<In(7p_7Sox6)100H>
+#source not given for NM_001025560_Sox6<In(7p_7Sox6)100H>
+#source not given for NM_015770_a<jIs(17_In2)1Gso>
+#source not given for NM_010230_Fmn1<ld-Is(17_In2)1Gso>
+#source not given for NM_029931_Mllt3<T(4Mllt3_9Mll)1Thr>
+#source not given for NM_009521_Wnt3<In(11Trp53_11Wnt3)8Brd>
+#source not given for NM_011640_Trp53<In(11Trp53_11Wnt3)8Brd>
+#source not given for NM_001081049_Mll1<T(4Mllt3_9Mll)1Thr>
+#Missing > for mRNA name NM_001081193_Lemd3<Gt(XST167)Byg
 
     # Jax Phenotype track
     # MP_*.gff --> jaxPhenotype{,Alias}
     # -- bed12Source -- add type from filename
     # -- names like NM_001001488_Atp8b1
     rm -f jaxPhenotype.bed jaxPhenotypeAlias.tab fixJaxPhenotype.sql
-    foreach f (MGI_Track_Data/MP_*.gff)
+    foreach f (MP_*.gff)
       set type = `echo $f:t:r \
         | perl -wpe 's/MP_[0-9]*_//; s/[_-](\w)/\u$1/g; s/^(\w)/\u$1/; \
                     s@AdiposeTissue@Adipose@; \
@@ -7505,12 +7512,14 @@ set out = $3
                     s@Tumorigenesis@Tumorigenesis@; \
                     s@VisionEye@Vision/Eye@;'`
       echo $type
-      parsePhenotype.pl $f \
-      | ldHgGene mm8 placeholder stdin -out=stdout \
+      ../2006_10/parsePhenotype.pl $f \
+      | ldHgGene mm8 placeholder stdin -nobin -out=stdout \
       | /cluster/bin/scripts/genePredToBed \
       | sed -e 's@$@'"\t$type"'@' \
       >> jaxPhenotype.bed
     end
+    sort -u jaxPhenotypeAlias.tab > tmp
+    mv tmp jaxPhenotypeAlias.tab
 
     # Jax QTL track
     # QTL*.gff --> jaxQtl2 (or 3?)... but we're missing MIT SSLP marker
@@ -7523,11 +7532,21 @@ set out = $3
       } else { die "parse\n$info"; } \
       $start--; \
       s/^.*$/$chr\t$start\t$end\t$name\t1000\t$strand\t\t$mgiID\t$desc\t0.0\n/;' \
-      MGI_Track_Data/QTL_build36_03_alias.gff > jaxQtl.bed
+      QTL_build36_03_alias.gff > jaxQtl.bed
+
+    # Extract phenotype-allele relationships:
+    # Make a file for the one code not already in a filename:
+    cp /dev/null MP_0003012_no_phenotypic_analysis
+    # Wrote a script to extract the phenotype-allele relationships --
+    # it uses the filenames to map MP:* codes to our phenotype names.
+    chmod a+x parsePhenotypicAllele.pl
+    parsePhenotypicAllele.pl MGI_PhenotypicAllele.rpt > jaxAllelePheno.tab
+    # The file "err" has messages about missing data (no gene name in 
+    # PhenotypicAllele.rpt, or gene/mgiId not found in jaxAlleleInfo).
 
     # Load tables
     ssh hgwdev
-    cd /cluster/data/mm8/bed/jax
+    cd /cluster/data/mm8/bed/jax/2007_07
     # jaxRepTranscript
     ldHgGene mm8 jaxRepTranscript jaxRepTranscript.gff
     hgsql mm8 < fixJaxRepTranscript.sql
@@ -7555,6 +7574,35 @@ set out = $3
     hgLoadBed -tab -notItemRgb -noBin \
       -sqlTable=$HOME/kent/src/hg/lib/jaxQTL.sql \
       mm8 jaxQTL jaxQtl.bed
+    checkTableCoords -verbose=2 mm8 jaxQTL
+#mm8.jaxQTL item Scpro11 chr18:131504376-131504512: chromEnd > chromSize 90736837
+#mm8.jaxQTL item Tswt chr18:134822025-134822132: chromEnd > chromSize 90736837
+#mm8.jaxQTL item Ath13 chr14:164794113-164794369: chromEnd > chromSize 123978870
+#mm8.jaxQTL item Dob7 chr11:131434708-131434798: chromEnd > chromSize 121798632
+    # Manually truncate items that run off the ends of chroms:
+    hgsql mm8 -e 'update jaxQTL set chromEnd = 90736837 \
+      where chrom = "chr18" and chromEnd > 90736837; \
+      delete from jaxQTL where chrom = "chr18" and chromStart > 90736837;'
+    hgsql mm8 -e 'update jaxQTL set chromEnd = 123978870 \
+      where chrom = "chr14" and chromEnd > 123978870; \
+      delete from jaxQTL where chrom = "chr14" and chromStart > 123978870;'
+    hgsql mm8 -e 'update jaxQTL set chromEnd = 121798632 \
+      where chrom = "chr11" and chromEnd > 121798632; \
+      delete from jaxQTL where chrom = "chr11" and chromStart > 121798632;'
+    checkTableCoords -verbose=2 mm8 jaxQTL
+    # phenotype-allele relationships
+    hgLoadSqlTab mm8 jaxAllelePheno \
+      ~/kent/src/hg/lib/jaxAllelePheno.sql jaxAllelePheno.tab
+
+    # Check joiner:
+    runJoiner.csh mm8 jaxAllele
+    runJoiner.csh mm8 jaxPhenotype
+
+    # 8/1/07 -- oops, jaxRepTranscriptAlias.alias had numeric values while
+    # hgc expects MGI:numeric.  Here's a quick fix:
+    hgsql mm8 -e 'update jaxRepTranscriptAlias set alias = concat("MGI:", alias) where alias rlike "^[0-9]";'
+    # and I also edited parseRepTranscript.pl so I won't make that mistake
+    # next time.
 
 
 ##########################################################################
@@ -7606,6 +7654,43 @@ TMPDIR=/scratch/tmp
 
     nice featureBits -chrom=chr1 mm8 chainFelCat3Link
     36333124 bases of 191450312 (18.978%) in intersection
+
+
+#########################################################################
+# BLASTZ/CHAIN/NET BOSTAU3 (Done March 2007 heather)
+    mkdir /cluster/data/mm8/bed/blastz.bosTau3.2007-03-14
+    ln -s /cluster/data/mm8/bed/blastz.bosTau3.2007-03-14 /cluster/data/mm8/bed/blastz.bosTau3
+    cd /cluster/data/mm8/bed/blastz.bosTau3
+    cat << '_EOF_' > DEF
+
+BLASTZ_M=50
+
+# TARGET: Mouse mm8
+SEQ1_DIR=/scratch/hg/mm8/nib
+SEQ1_LEN=/scratch/hg/mm8/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Cow bosTau3
+SEQ2_DIR=/san/sanvol1/scratch/bosTau3/bosTau3.2bit
+SEQ2_LEN=/san/sanvol1/scratch/bosTau3/chrom.sizes
+SEQ2_LIMIT=500
+SEQ2_CHUNK=50000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm8/bed/blastz.bosTau3.2007-03-14
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    doBlastzChainNet.pl DEF \
+      -bigClusterHub pk \
+      -chainMinScore=3000 -chainLinearGap=medium \
+      -blastzOutRoot /cluster/bluearc/bosTau3/blastz.mm8 >& do.log &
+    tail -f do.log
+
+    nice featureBits -chrom=chr1 mm8 chainBosTau3Link
+    # 49896121 bases of 191450312 (26.062%) in intersection
+
 
 #############################################################################
 #  REBUILD miRNA TRACK (DONE - 2006-12-01 - Fan)
@@ -8337,4 +8422,19 @@ hgLoadBed -sqlTable=cgapSage.sql -tab mm8 cgapSage final.bed
 
     featureBits mm7 miRNA
     # 20620 bases of 2583394090 (0.001%) in intersection
+
+
+#############################################################################
+# LIFTOVER TO MM9 (DONE 7/25/07 angie)
+    ssh kkstore04
+    # -debug run to create run dir, preview scripts...
+    doSameSpeciesLiftOver.pl -debug mm8 mm9 \
+      -ooc /san/sanvol1/scratch/mm8/11.ooc
+    # Real run:
+    cd /cluster/data/mm8/bed/blat.mm9.2007-07-24
+    doSameSpeciesLiftOver.pl mm8 mm9 \
+      -ooc /san/sanvol1/scratch/mm8/11.ooc \
+      >& do.log & tail -f do.log
+
+
 #############################################################################

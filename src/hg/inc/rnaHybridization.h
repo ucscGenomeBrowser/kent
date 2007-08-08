@@ -5,7 +5,11 @@
 #ifndef RNAHYBRIDIZATION_H
 #define RNAHYBRIDIZATION_H
 
-#define RNAHYBRIDIZATION_NUM_COLS 13
+#ifndef JKSQL_H
+#include "jksql.h"
+#endif
+
+#define RNAHYBRIDIZATION_NUM_COLS 20
 
 struct rnaHybridization
 /* perfect hybridizations on RNA level */
@@ -21,9 +25,16 @@ struct rnaHybridization
     unsigned chromStartTarget;	/* Start position in chromosome for target region */
     unsigned chromEndTarget;	/* End position in chromosome for target region */
     char strandTarget[2];	/* strand for target region */
+    char *refSeqTarget;	/* refSeq gene name for target or empty */
+    char *aorfTarget;	/* AORF gene name for target or empty */
+    char *igenicsTarget;	/* intergenics name for target or empty */
+    char *trnaTarget;	/*  */
+    char *JGITarget;	/*  */
     char *patternSeq;	/* Sequence of pattern region 5'-3' */
     char *targetSeq;	/* Sequence of target region 3'-5' */
     float gcContent;	/* GC content ranging from 0 to 1 */
+    unsigned matchLength;	/* Length of hybridization site */
+    unsigned targetAnnotation;	/* 1 if target is annotated on same strand, zero otherwise */
     };
 
 void rnaHybridizationStaticLoad(char **row, struct rnaHybridization *ret);
@@ -45,6 +56,31 @@ struct rnaHybridization *rnaHybridizationLoadAllByChar(char *fileName, char chop
 #define rnaHybridizationLoadAllByTab(a) rnaHybridizationLoadAllByChar(a, '\t');
 /* Load all rnaHybridization from tab separated file.
  * Dispose of this with rnaHybridizationFreeList(). */
+
+struct rnaHybridization *rnaHybridizationLoadByQuery(struct sqlConnection *conn, char *query);
+/* Load all rnaHybridization from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with rnaHybridizationFreeList(). */
+
+void rnaHybridizationSaveToDb(struct sqlConnection *conn, struct rnaHybridization *el, char *tableName, int updateSize);
+/* Save rnaHybridization as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
+ * For example "autosql's features include" --> "autosql\'s features include" 
+ * If worried about this use rnaHybridizationSaveToDbEscaped() */
+
+void rnaHybridizationSaveToDbEscaped(struct sqlConnection *conn, struct rnaHybridization *el, char *tableName, int updateSize);
+/* Save rnaHybridization as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size.
+ * of a string that would contain the entire query. Automatically 
+ * escapes all simple strings (not arrays of string) but may be slower than rnaHybridizationSaveToDb().
+ * For example automatically copies and converts: 
+ * "autosql's features include" --> "autosql\'s features include" 
+ * before inserting into database. */ 
 
 struct rnaHybridization *rnaHybridizationCommaIn(char **pS, struct rnaHybridization *ret);
 /* Create a rnaHybridization out of a comma separated string. 

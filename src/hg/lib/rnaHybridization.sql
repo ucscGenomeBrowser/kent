@@ -15,9 +15,16 @@ CREATE TABLE rnaHybridization (
     chromStartTarget int unsigned not null,	# Start position in chromosome for target region
     chromEndTarget int unsigned not null,	# End position in chromosome for target region
     strandTarget char(1) not null,	# strand for target region
+    refSeqTarget varchar(255) not null,	# refSeq gene name for target or empty
+    aorfTarget varchar(255) not null,	# AORF gene name for target or empty
+    igenicsTarget varchar(255) not null,	# intergenics name for target or empty
+    trnaTarget varchar(255) not null,	# 
+    JGITarget varchar(255) not null,	# 
     patternSeq varchar(255) not null,	# Sequence of pattern region 5'-3'
     targetSeq varchar(255) not null,	# Sequence of target region 3'-5'
     gcContent float not null,	# GC content ranging from 0 to 1
+    matchLength int unsigned not null,	# Length of hybridization site
+    targetAnnotation int unsigned not null,	# 1 if target is annotated on same strand, zero otherwise
               #Indices
     PRIMARY KEY(chrom,chromStart,chromEnd,strand,chromTarget,chromStartTarget,chromEndTarget,strandTarget)
 );

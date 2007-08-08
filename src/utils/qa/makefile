@@ -10,10 +10,12 @@ install:
 	cp -p --remove-destination chainNetTrio.csh        ${SCRIPTS}
 	cp -p --remove-destination checkAllStaticLinks.csh ${SCRIPTS}
 	cp -p --remove-destination checkBOT.csh            ${SCRIPTS}
+	cp -p --remove-destination checkEncodeRegions.csh  ${SCRIPTS}
 	cp -p --remove-destination checkGbdbDiffs.csh      ${SCRIPTS}
 	cp -p --remove-destination checkHitter.csh         ${SCRIPTS}
 	cp -p --remove-destination checkMachineName.csh    ${SCRIPTS}
 	cp -p --remove-destination checkMetaData.csh       ${SCRIPTS}
+	cp -p --remove-destination checkMetaAday.csh       ${SCRIPTS}
 	cp -p --remove-destination checkOffend.csh         ${SCRIPTS}
 	cp -p --remove-destination checkScaffoldGaps.csh   ${SCRIPTS}
 	cp -p --remove-destination checkStaticLinks.csh    ${SCRIPTS}

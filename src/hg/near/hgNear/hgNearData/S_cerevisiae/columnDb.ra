@@ -79,6 +79,10 @@ type knownDetails sgdDescription name description
 name zebrafishOrthologs
 itemUrl http://apr2006.archive.ensembl.org/Danio_rerio/transview?transcript=%s
 
+name flyOrthologs
+xrefOrg D. melanogaster
+xrefLookup flyBase2004Xref name fbgn
+
 name p2p
 type distance yeastP2P query target distance
 visibility off

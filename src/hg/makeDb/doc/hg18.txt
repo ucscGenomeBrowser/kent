@@ -11359,6 +11359,7 @@ gzip illumina.bed
     cat 2.bed >> all.bed
     hgLoadBed hg18 snpArrayAffy6SV all.bed -tab
     mysql> delete from snpArrayAffy6SV where chrom = "chr0";
+    mysql> update snpArrayAffy6SV set chromStart = chromStart - 1;
 
 
 ##########################################################################
@@ -11431,6 +11432,74 @@ gzip illumina.bed
     # Not found: 2 in 300, 15 in 550 and 650
     # These are in snp127
     # Mixed: 55 in 300, 74 in 550, 81 in 650
+
+    # Found 2 strange things here: 
+    # First of all, for snps that are illumina forward strand, dbSNP reverse strand:
+    # in all cases, the observed polymorphism is identical.
+    # Counts:
+    # 36k on the HumanHap300v3 
+    # 52k on the HumanHap550v3 
+    # 59k on the HumanHap650v3
+    # This surprises me, because the dbSNP observation is intended to be reverse-complemented.  
+    # Examples from HumanHap300v3 include rs1000007, rs1000031, rs1000041, rs1000071, rs1000078.
+    # Secondly, for snps that are illumina reverse strand:
+
+    # in all cases is that your observed polymorphism is the reverse complement of the dbSNP polymorphism.   
+    # this could only make sense for the dbSNP forward strand OR the dbSNP reverse strand, although I don't think it matters which one.
+
+    # examples:
+
+    # rs3934834: illumina A/G (-), dbSNP C/T (+)
+    # rs6687776: illumina A/G (-), dbSNP C/T (+)
+    # rs2298217: illumina A/G (-), dbSNP C/T (+)
+    # rs9442380: illumina A/G (-), dbSNP C/T (+)
+    # rs3737728: illumina A/G (-), dbSNP C/T (-)
+    # rs3813199: illumina A/G (-), dbSNP C/T (-)
+    # rs880051: illumina A/G (-), dbSNP C/T (-)
+
+    # rs12562034: illumina C/T (-), dbSNP A/G (+)
+    # rs9442372: illumina C/T (-), dbSNP A/G (+)
+    # rs11260588: illumina C/T (-), dbSNP A/G (+)
+    # rs12726255: illumina C/T (-), dbSNP A/G (+)
+    # rs2887286: illumina C/T (-), dbSNP A/G (-)
+    # rs2649588: illumina C/T (-), dbSNP A/G (-)
+    # rs2296716: illumina C/T (-), dbSNP A/G (-)
+    # rs2474460: illumina C/T (-), dbSNP A/G (-)
+
+    # redo this, just using name/chrom/pos from illumina
+    bed2.pl < 300.in > 300.bed.2
+    hgLoadBed hg18 snpArrayIllumina300Prelim 300.bed.2 -tab
+    /cluster/home/heather/kent/src/hg/snp/snpLoad/illuminaLookup2 hg18 snpArrayIllumina300Prelim snp126 snp126Exceptions
+    mv illuminaLookup.out lookup.300
+    mv illuminaLookup.err lookup.300.err
+    hgLoadBed hg18 snpArrayIllumina300 lookup.300 -tab -sqlTable=snpArrayIllumina300.sql
+    hgsql -N -e 'drop table snpArrayIllumina300Prelim' hg18
+
+    bed2.pl < 550.in > 550.bed.2
+    hgLoadBed hg18 snpArrayIllumina550Prelim 550.bed.2 -tab
+    /cluster/home/heather/kent/src/hg/snp/snpLoad/illuminaLookup2 hg18 snpArrayIllumina550Prelim snp126 snp126Exceptions
+    mv illuminaLookup.err lookup.550.err
+    mv illuminaLookup.out lookup.550
+    hgLoadBed hg18 snpArrayIllumina550 lookup.550 -tab -sqlTable=snpArrayIllumina550.sql
+    hgsql -N -e 'drop table snpArrayIllumina550Prelim' hg18
+
+    bed2.pl < 650.in > 650.bed.2
+    hgLoadBed hg18 snpArrayIllumina650Prelim 650.bed.2 -tab
+    /cluster/home/heather/kent/src/hg/snp/snpLoad/illuminaLookup2 hg18 snpArrayIllumina650Prelim snp126 snp126Exceptions
+    mv illuminaLookup.out lookup.650
+    mv illuminaLookup.err lookup.650.err
+    hgLoadBed hg18 snpArrayIllumina650 lookup.650 -tab -sqlTable=snpArrayIllumina650.sql
+    hgsql -N -e 'drop table snpArrayIllumina650Prelim' hg18
+
+    # add indices
+    mysql> alter table snpArrayIllumina300 add index name (name);
+    mysql> alter table snpArrayIllumina300 add index chrom (chrom, bin);
+    mysql> alter table snpArrayIllumina550 add index name (name);
+    mysql> alter table snpArrayIllumina550 add index chrom (chrom, bin);
+    mysql> alter table snpArrayIllumina650 add index name (name);
+    mysql> alter table snpArrayIllumina650 add index chrom (chrom, bin);
+
+
 
 ##########################################################################
 # Added gvPos table for Locus Variants (Belinda Giardine Sept 2006)
@@ -11834,6 +11903,44 @@ TMPDIR=/scratch/tmp
 
     # reciprocal best net mafs for multiz
      ~/kent/src/hg/utils/automation/doRecipBest.pl hg18 felCat3 >&! rbest.log &
+
+
+#########################################################################
+# BLASTZ/CHAIN/NET BOSTAU3 (Done Feb 2007 heather)
+    mkdir /cluster/data/hg18/bed/blastz.bosTau3.2007-02-23
+    ln -s /cluster/data/hg18/bed/blastz.bosTau3.2007-02-23 /cluster/data/hg18/bed/blastz.bosTau3
+    cd /cluster/data/hg18/bed/blastz.bosTau3
+    cat << '_EOF_' > DEF
+
+BLASTZ_M=50
+
+# TARGET: Human Hg18
+SEQ1_DIR=/san/sanvol1/scratch/hg18/nib
+SEQ1_LEN=/cluster/data/hg18/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Cow bosTau3
+SEQ2_DIR=/san/sanvol1/scratch/bosTau3/bosTau3.2bit
+SEQ2_LEN=/san/sanvol1/scratch/bosTau3/chrom.sizes
+# Maximum number of scaffolds that can be lumped together
+SEQ2_LIMIT=500
+SEQ2_CHUNK=50000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/hg18/bed/blastz.bosTau3.2007-02-23
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    doBlastzChainNet.pl DEF \
+      -bigClusterHub pk \
+      -chainMinScore=3000 -chainLinearGap=medium \
+      -blastzOutRoot /cluster/bluearc/bosTau3/blastz.hg18 >& do.log &
+    tail -f do.log
+
+    nice featureBits -chrom=chr1 hg18 chainBosTau3Link
+    # 114562908 bases of 224999719 (50.917%) in intersection
+
 
 ##############################################################################
 # MAKE tfbsConsSites and tfbsConsFactors for TFBS conserved track (DONE weirauch 11/19/06)
@@ -16455,3 +16562,67 @@ liftOver fix.bed /gbdb/hg17/liftOver/hg17ToHg18.over.chain.gz hg18.bed core.unma
 liftOver control_fix.bed /gbdb/hg17/liftOver/hg17ToHg18.over.chain.gz hg18.control.bed control.unmapped
 hgLoadBed hg18 encodeStanfordNRSFEnriched hg18.bed -tab
 hgLoadBed hg18 encodeStanfordNRSFControl hg18.control.bed -tab
+
+#########################################################################
+# REGULATORY POTENTIAL UPDATE (DONE - 2007-08-01 - Hiram)
+    #	download data from "James Taylor" <james@bx.psu.edu>
+    ssh kkstore02
+    mkdir /cluster/data/hg18/bed/regPotential7X.update
+    cd /cluster/data/hg18/bed/regPotential7X.update
+    
+    #	This is a lot of data
+    for C in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X Y
+do
+wget --timestamping \
+"http://www.bx.psu.edu/~james/esperr_rp_7way_scores/genome_scores_hg18/chr${C}.scores.truncated.bz2" 
+echo "DONE - chr${C}.scores.truncated.bz2"
+done
+
+    #	create download gzip files from the bz2 files:
+    time for F in chr*.scores.truncated.bz2
+    do
+	C=`echo $F | awk -F'.' '{print $1}'`
+	echo -n "${C}.regPotential7X.hg18.gz working ... "
+	bzcat ${F} | gzip > ${C}.regPotential7X.hg18.gz
+	touch -r "${F}" "${C}.regPotential7X.hg18.gz"
+	echo "done"
+    done
+
+    time for C in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X Y
+    do
+	zcat chr${C}.regPotential7X.hg18.gz
+    done | wigEncode -noOverlap  stdin regPotential7X.wig regPotential7X.wib
+    #	Converted stdin, upper limit 1.00, lower limit 0.00
+    #	real    16m40.347s
+
+    #	Loading the table on hgwdev
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/regPotential7X.update
+    mkdir /gbdb/hg18/wib/070118
+    ln -s /cluster/data/hg18/bed/regPotential7X.update/regPotential7X.wib \
+	/gbdb/hg18/wib/070118/regPotential7X.wib
+    #	using the tmpDir is faster since it is on local disk and it will
+    #	clean up any temporary .tab file it creates there
+    time nice -n +19 hgLoadWiggle -tmpDir=/scratch/tmp \
+	-pathPrefix=/gbdb/hg18/wib/070118 hg18 regPotential7X regPotential7X.wig
+    #	real    0m38.247s
+
+    #	How about a histogram of the data.
+    ssh kolossus
+    cd /cluster/data/hg18/bed/regPotential7X.update
+    time nice -n +19 hgWiggle -verbose=2 -doHistogram -hBinSize=0.01 \
+       -hBinCount=100 -hMinVal=0.0 -db=hg18 regPotential7X > histogram.data 2>&1
+    #	real    3m15.934s
+    #	73 % of the data values are zero
+
+    #	create download gzip files from the bz2 files:
+    ssh kkstore02
+    cd /cluster/data/hg18/bed/regPotential7X
+    for F in chr*.scores.truncated.bz2
+    do
+	C=`echo $F | awk -F'.' '{print $1}'`
+	echo -n "${C}.regPotential7X.hg18.gz working ... "
+	bzcat ${F} | gzip > ${C}.regPotential7X.hg18.gz
+	echo
+    done
+

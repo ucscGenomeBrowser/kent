@@ -8,7 +8,7 @@
 # the ranges directly to the calculation for nSize which seems to result 
 # in the lower number being used.
 
-# $Id: luConvertPrimerToFa,v 1.1 2006/03/03 19:56:18 angie Exp $
+# $Id: luConvertPrimerToFa,v 1.2 2007/08/03 16:45:40 hiram Exp $
 
 use warnings;
 use strict;
@@ -129,15 +129,28 @@ while(my $line = <INFO>)
     chomp($line);
     my (@eles ) = split(/\t/, $line);
     
-    if($eles[9] !~ /\d/o ||
-       ($eles[9] =~ /^\d+$/o && $eles[9] == 0))
+    #  size field may specify KB, BP, ~, or a comma separated list
+    my $kbMultiplier = 1;
+    if($eles[9] =~ m/KB/i) { $kbMultiplier = 1000; }
+    $eles[9] =~ s/\~|\s*KB\s*|BP//gi;	#	remove known garbage
+    my @sizeList = split(',\s*|-',$eles[9]);
+    my $sizeSum = 0;
+    my $val = $aveSize;
+    if (scalar(@sizeList) > 0)
     {
-	$eles[9] = $aveSize;
+	for (my $j = 0; $j < scalar(@sizeList); ++$j)
+	{
+	    if($sizeList[$j] !~ /\d/o ||
+	       ($sizeList[$j] =~ /^\d+$/o && $sizeList[$j] == 0))
+	    {
+		$sizeSum += $aveSize;
+	    } else {
+		$sizeSum += $sizeList[$j] * $kbMultiplier;
+	    }
+	}
+	$val = int($sizeSum / scalar(@sizeList));
     }
-    my $val = $eles[9];
-    if ($val =~ /(\d+)-(\d+)/) {
-	$val = int(($2 + $1) / 2);
-    }
+    my $priInfo = $val;
    
     if($eles[7] ne "" && $eles[7] ne "N/A")
     {
@@ -150,7 +163,7 @@ while(my $line = <INFO>)
 $eles[7]
 ${ns}
 $ends\n";
-	print PRI "$eles[0]\t$eles[7]\t$eles[8]\t$eles[9]\t$eles[1]\n";
+	print PRI "$eles[0]\t$eles[7]\t$eles[8]\t$priInfo\t$eles[1]\n";
     }
     
     if($eles[24] && $eles[24] ne "N/A" && $eles[24] =~ /\w/o)

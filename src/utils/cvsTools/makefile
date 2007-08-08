@@ -1,5 +1,5 @@
 include ../../inc/common.mk
-CVSTOOLS=cvsFiles  cvsStatusFilter
+CVSTOOLS=  cvsFiles  cvsStatusFilter  cvsup
 
 all: ${CVSTOOLS:%=${BINDIR}/%}
 

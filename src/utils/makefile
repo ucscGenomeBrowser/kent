@@ -20,7 +20,7 @@ scripts:
 	chmod +x genePredToBed/genePredToBed;
 	rm -f ${SCRIPTS}/genePredToBed;
 	echo cp -p genePredToBed/genePredToBed ${SCRIPTS};
-	cp -p genePredToBed/genePredToBed ${SCRIPTS};
+	@cp -p genePredToBed/genePredToBed ${SCRIPTS};
 	cd cvsTools && ${MAKE} scripts
 
 alpha: scripts all
@@ -36,7 +36,6 @@ clean:
 
 SCRIPT_FILES = \
         agpToLift \
-	dumpDb.pl \
         iSync \
         lodToBedScore \
 	mkMafFrames.pl

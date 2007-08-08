@@ -13,7 +13,7 @@
 #include "hgColors.h"
 #include "wikiLink.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.133 2007/07/17 00:07:05 angie Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.135 2007/07/26 22:06:56 angie Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -978,6 +978,9 @@ if (oldVars)
 	/* Change position to default -- unless it was passed in via CGI: */
 	if (cgiOptionalString("position") == NULL)
 	    cartSetString(cart, "position", hDefaultPos(*retDb));
+	/* hgNear search term -- unless it was passed in via CGI: */
+	if (cgiOptionalString("near_search") == NULL)
+	    cartRemove(cart, "near_search");
 	/* hgBlat results (hgUserPsl track): */
 	cartRemove(cart, "ss");
 	/* hgTables correlate: */

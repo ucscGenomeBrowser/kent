@@ -18,6 +18,14 @@ group map
 visibility dense
 type bed 3 +
 
+track wssdCoverage
+shortLabel WSSD Coverage
+longLabel Regions Assayed for SDD
+group map
+priority 29
+visibility hide
+type bed 3 .
+
 # Unsplit mRNA track for scaffold-based assembly.
 track all_mrna
 shortLabel $Organism mRNAs

@@ -9,7 +9,8 @@
     <p>
       <label for="user_email">New Email</label> <br />
       <%= f.text_field :email %> <br />
-      <%= submit_tag "Update email!" %>
+      <%= submit_tag "Update email!" %> <br/>
+      <%= link_to 'Back', {:controller => 'pipeline', :action => 'list'} %>
   <% end -%>
 <% else -%>
   <h1>

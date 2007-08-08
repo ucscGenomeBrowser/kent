@@ -10,9 +10,6 @@ set dbs = ''
 set active = ''
 set thisRun = ''
 
-# set email name of person to whom email about this run gets delivered:
-set who = "ann"
-
 # usage statement
 if ($#argv < 1 || $#argv > 2) then
   echo
@@ -21,8 +18,9 @@ if ($#argv < 1 || $#argv > 2) then
   echo "       all human assemblies [hg]"
   echo "       all mouse and rat assemblies [mm_rn]"
   echo "       all other assemblies [other]"
+  echo "       'extra' databases (e.g. go and proteins) [extra]"
   echo
-  echo "  usage: hg | mm_rn | other"
+  echo "  usage: hg | mm_rn | other | extra"
   echo
   exit 1
 else
@@ -30,10 +28,11 @@ else
 endif
 
 # make sure they made a good database choice
-if ($dbs != 'hg' && $dbs != 'mm_rn' && $dbs != 'other') then
+if ($dbs != 'hg' && $dbs != 'mm_rn' && $dbs != 'other' && $dbs != 'extra') then
   echo
   echo "  I didn't understand your database choice."
-  echo "  Choose between human [hg], mouse and rat [mm_rn], or all others [other]"
+  echo "  Choose between human [hg], mouse and rat [mm_rn],"
+  echo "  all others [other], or extra databases (e.g. proteins) [extra]"
   echo
   exit 1
 endif
@@ -60,7 +59,11 @@ if ($dbs == 'mm_rn') then
 endif
 
 if ($dbs == 'other') then
-  set thisRun=`echo  $active | sed -e "s/ /\n/g" | grep -v '^hg\|^mm\|^rn'`
+  set thisRun=`echo  $active | sed -e "s/ /\n/g" | grep -v '^hg\|^mm\|^rn\|^sp\|^go\|^prot\|^visi\|^uni\|^lost'`
+endif
+
+if ($dbs == 'extra') then
+  set thisRun=`echo  $active | sed -e "s/ /\n/g" | grep '^sp\|^go\|^prot\|^visi\|^uni'`
 endif
 
 ####################################################
@@ -78,5 +81,5 @@ end
 
 echo "\n\nEnd All `date`" >> $log
 
-mail -s "$log results" $who@soe.ucsc.edu < $log
+mail -s "$log results" $USER@soe.ucsc.edu < $log
 

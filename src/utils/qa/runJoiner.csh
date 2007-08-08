@@ -22,7 +22,7 @@ if ( $#argv < 2 || $#argv > 4 ) then
   echo '  set database to "all" for global.'
   echo '  for chains/nets, use tablename format: chainDb#.'
   echo
-  echo "    usage:  database, table, [path to all.joiner]"
+  echo "    usage:  database table [path to all.joiner]"
   echo "           (defaults to tip of the tree) [noTimes]"
   echo
   exit

@@ -37,20 +37,7 @@ if (hIsMgcServer())
 else
     cartWebStart(theCart, "UCSC Known Genes List \n");
 
-database = cgiOptionalString("db");
-
-sprintf(query, "select genome from dbDb where name = '%s'", database);
-answer = sqlQuickQuery(connCentral, query, buf, sizeof(buf));
-if (answer == NULL)
-    {
-    printf("<br>'%s' is not a valid genome database name.", database);
-    cartWebEnd();
-    return;
-    }
-else
-    {
-    genome = strdup(answer);
-    }
+getDbAndGenome(cart, &database, &genome, oldVars);
 if (!hTableExistsDb(database, "knownGene"))
     {
     printf("<br>Database %s currently does not have UCSC Known Genes.", database);

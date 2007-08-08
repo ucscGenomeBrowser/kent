@@ -13,7 +13,7 @@
 #include "rangeTree.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: txCdsPredict.c,v 1.8 2007/03/17 03:31:22 kent Exp $";
+static char const rcsid[] = "$Id: txCdsPredict.c,v 1.9 2007/08/04 00:06:11 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -31,12 +31,15 @@ errAbort(
   "                 use maf with just 3-5 well chosen species.  For human a good mix\n"
   "                 is human/rhesus/dog/mouse.  Use mafFrags and mafSpeciesSubset to\n"
   "                 generate this peculiar maf.\n"
+  "   -anyStart - Allow ORFs that begin at first, second, or third bases in seq as well\n"
+  "               as atg\n"
   );
 }
 
 static struct optionSpec options[] = {
    {"nmd", OPTION_STRING},
    {"maf", OPTION_STRING},
+   {"anyStart", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -375,7 +378,7 @@ return arrayList;
 }
 
 struct cdsEvidence *orfsOnRna(struct dnaSeq *seq, struct hash *nmdHash, struct hash *mafHash,
-	int otherSpeciesCount)
+	int otherSpeciesCount, boolean anyStart)
 /* Return scored list of all ORFs on RNA. */
 {
 DNA *dna = seq->dna;
@@ -415,7 +418,7 @@ calcUpstreams(seq, upAtgCount, upKozakCount);
  * start codon we find. */
 for (startPos=0; startPos<=lastPos; ++startPos)
     {
-    if (startsWith("atg", dna+startPos))
+    if (startsWith("atg", dna+startPos) || (anyStart && startPos < 3))
         {
 	int stopPos = orfEndInSeq(seq, startPos);
 	orf = createCds(seq, startPos, stopPos, upAtgCount, upKozakCount, 
@@ -430,7 +433,7 @@ lmCleanup(&lm);
 return orfList;
 }
 
-void txCdsPredict(char *inFa, char *outCds, char *nmdBed, char *mafFile)
+void txCdsPredict(char *inFa, char *outCds, char *nmdBed, char *mafFile, boolean anyStart)
 /* txCdsPredict - Somewhat simple-minded ORF predictor using a weighting scheme.. */
 {
 struct dnaSeq *rna, *rnaList = faReadAllDna(inFa);
@@ -472,7 +475,7 @@ FILE *f = mustOpen(outCds, "w");
 for (rna = rnaList; rna != NULL; rna = rna->next)
     {
     verbose(3, "%s\n", rna->name);
-    struct cdsEvidence *orfList = orfsOnRna(rna, nmdHash, mafHash, otherSpeciesCount);
+    struct cdsEvidence *orfList = orfsOnRna(rna, nmdHash, mafHash, otherSpeciesCount, anyStart);
     if (orfList != NULL)
 	{
 	slSort(&orfList, cdsEvidenceCmpScore);
@@ -490,6 +493,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
-txCdsPredict(argv[1], argv[2], optionVal("nmd", NULL), optionVal("maf", NULL));
+txCdsPredict(argv[1], argv[2], optionVal("nmd", NULL), 
+	optionVal("maf", NULL), optionExists("anyStart"));
 return 0;
 }

@@ -225,12 +225,8 @@ boolean pslHasIntron(struct psl *psl, struct dnaSeq *seq, int seqOffset);
 void pslTailSizes(struct psl *psl, int *retStartTail, int *retEndTail);
 /* Find the length of "tails" (rather than extensions) implied by psl. */
 
-void pslRcBoth(struct psl *psl);
-/* Swap around things in psl so it works as if the alignment
- * was done on the reverse strand of the target. */
-
 void pslRc(struct psl *psl);
-/* reverse-complement a PSL alignment.  This makes target strand explicit. */
+/* Reverse-complement a PSL alignment.  This makes the target strand explicit. */
 
 void pslSwap(struct psl *psl, boolean noRc);
 /* swap query and target in psl.  If noRc is TRUE, don't reverse-complement

@@ -19,7 +19,7 @@
 #include "binRange.h"
 #include "rangeTree.h"
 
-static char const rcsid[] = "$Id: psl.c,v 1.76 2007/03/04 20:24:19 kent Exp $";
+static char const rcsid[] = "$Id: psl.c,v 1.78 2007/08/02 01:35:03 galt Exp $";
 
 static char *createString = 
 "CREATE TABLE %s (\n"
@@ -1127,48 +1127,33 @@ for (i = 0; i < blockCount; i++)
     }
 }
 
-void pslRcBoth(struct psl *psl)
-/* Swap around things in psl so it works as if the alignment
- * was done on the reverse strand of the target. */
-{
-int tSize = psl->tSize, qSize = psl->qSize;
-int blockCount = psl->blockCount, i;
-unsigned *tStarts = psl->tStarts, *qStarts = psl->qStarts, *blockSizes = psl->blockSizes;
-
-reverseIntRange(&psl->tStart, &psl->tEnd, psl->tSize);
-for (i=0; i<blockCount; ++i)
-    {
-    tStarts[i] = (int)tSize - ((int)tStarts[i] + (int)blockSizes[i]);
-    qStarts[i] = (int)qSize - ((int)qStarts[i] + (int)blockSizes[i]);
-    }
-reverseUnsigned(tStarts, blockCount);
-reverseUnsigned(qStarts, blockCount);
-reverseUnsigned(blockSizes, blockCount);
-}
-
 void pslRc(struct psl *psl)
-/* reverse-complement a PSL alignment.  This makes target strand explicit. */
+/* Reverse-complement a PSL alignment.  This makes the target strand explicit. */
 {
-int i;
+unsigned tSize = psl->tSize, qSize = psl->qSize;
+unsigned blockCount = psl->blockCount, i;
+unsigned *tStarts = psl->tStarts, *qStarts = psl->qStarts, *blockSizes = psl->blockSizes;
 
 /* swap strand, forcing target to have an explict strand */
 psl->strand[0] = (psl->strand[0] != '-') ? '-' : '+';
 psl->strand[1] = (psl->strand[1] != '-') ? '-' : '+';
+psl->strand[2] = 0;
 
-for (i = 0; i < psl->blockCount; i++)
+for (i=0; i<blockCount; ++i)
     {
-    psl->qStarts[i] = psl->qSize - (psl->qStarts[i] + psl->blockSizes[i]);
-    psl->tStarts[i] = psl->tSize - (psl->tStarts[i] + psl->blockSizes[i]);
+    tStarts[i] = tSize - (tStarts[i] + blockSizes[i]);
+    qStarts[i] = qSize - (qStarts[i] + blockSizes[i]);
     }
-reverseUnsigned(psl->tStarts, psl->blockCount);
-reverseUnsigned(psl->qStarts, psl->blockCount);
-reverseUnsigned(psl->blockSizes, psl->blockCount);
+reverseUnsigned(tStarts, blockCount);
+reverseUnsigned(qStarts, blockCount);
+reverseUnsigned(blockSizes, blockCount);
 if (psl->qSequence != NULL)
     {
-    rcSeqs(psl->qSequence, psl->blockCount, psl->blockSizes);
-    rcSeqs(psl->tSequence, psl->blockCount, psl->blockSizes);
+    rcSeqs(psl->qSequence, blockCount, blockSizes);
+    rcSeqs(psl->tSequence, blockCount, blockSizes);
     }
 }
+
 
 /* macro to swap to variables */
 #define swapVars(a, b, tmp) ((tmp) = (a), (a) = (b), (b) = (tmp))

@@ -7,7 +7,7 @@
 
 # Define databases used for various organisms
 set hg hg15,hg16,hg17,hg18
-set mm mm3,mm4,mm5,mm6,mm7,mm8
+set mm mm3,mm4,mm5,mm6,mm7,mm8,mm9
 set rn rn2,rn3,rn4
 set fr fr1,fr2
 set ce ce1,ce2,ce4
@@ -78,7 +78,7 @@ databasesChecked $gbd,$otherDb,$snp125
 databasesIgnored mysql,lost+found,$proteinDb,$zooDb,sc1,hgcentraltest,hgcentralbeta,test,sp040915,sp040515,sp040315,sp040115,proteins040915,proteins040515,proteins040315
 
 # Define various non-self chains
-set chainDest Hg15,Hg16,Hg17,Hg18,Pt0,Mm2,Mm3,Mm4,Mm5,Mm6,Mm7,Mm8,Rn2,Rn3,Rn4,Cb1,Dm1,Dm2,Dm3,Dp1,Dp2,Dp3,PanTro1,PanTro2,GalGal2,GalGal3,Fr1,Fr2,DanRer1,DanRer2,DanRer3,DanRer4,CanFam1,CanFam2,DroYak1,DroYak2,DroAna1,DroAna2,DroMoj1,DroMoj2,DroVir1,DroVir2,DroEre1,DroSec1,DroSim1,DroGri1,DroPer1,AnoGam1,ApiMel1,ApiMel2,TetNig1,XenTro1,XenTro2,MonDom1,MonDom2,MonDom4,RheMac1,RheMac2,BosTau1,BosTau2,FelCat3,GasAcu1,OryLat1,EquCab1,AnoCar1,Ce1,Ce2,Ce4,OrnAna1,CaePb1,CaeRem2,Cb3,PriPac1
+set chainDest Hg15,Hg16,Hg17,Hg18,Pt0,Mm2,Mm3,Mm4,Mm5,Mm6,Mm7,Mm8,Rn2,Rn3,Rn4,Cb1,Dm1,Dm2,Dm3,Dp1,Dp2,Dp3,PanTro1,PanTro2,GalGal2,GalGal3,Fr1,Fr2,DanRer1,DanRer2,DanRer3,DanRer4,CanFam1,CanFam2,DroYak1,DroYak2,DroAna1,DroAna2,DroMoj1,DroMoj2,DroVir1,DroVir2,DroEre1,DroSec1,DroSim1,DroGri1,DroPer1,AnoGam1,ApiMel1,ApiMel2,TetNig1,XenTro1,XenTro2,MonDom1,MonDom2,MonDom4,RheMac1,RheMac2,BosTau1,BosTau2,BosTau3,FelCat3,GasAcu1,OryLat1,EquCab1,AnoCar1,Ce1,Ce2,Ce4,OrnAna1,CaePb1,CaeRem2,Cb3,PriPac1
 
 # Define databases that support known genes
 set kgDb $hg,$mm,$rn
@@ -1390,8 +1390,8 @@ identifier mouseStsTrueName typeOf=stsName
 "Mouse STS (Sequenced Tagged Site, aka mapping sequence) Unique Name"
     $mm.stsInfoMouseNew.name
     $mm.stsAlias.trueName minCheck=0.99
-    $mm,!mm7,!mm8.all_sts_primer.qName chopBefore=_ minCheck=0.99
-    mm7,mm8.all_sts_primer.qName chopBefore=_ minCheck=0.98
+    $mm,!mm7,!mm8,!mm9.all_sts_primer.qName chopBefore=_ minCheck=0.99
+    mm7,mm8,mm9.all_sts_primer.qName chopBefore=_ minCheck=0.98
     $mm.stsMapMouseNew.name
     $mm.jaxQTL3.marker exclude= minCheck=0.99
     $mm.jaxQTL3.flank1 exclude= minCheck=0.95
@@ -1469,6 +1469,7 @@ identifier wormBaseId external=WormBase dependency
     $ce.mmBlastTab.query
     $ce.rnBlastTab.query
     $ce.scBlastTab.query
+    $ce.sangerGeneToWBGeneID.sangerGene
 
 identifier flyBaseRefId
 "FlyBase (Drosophila) Reference (Literature)"
@@ -1830,6 +1831,17 @@ identifier snpArrayHg17
     hg17.snpArrayAffy50HindIII.rsId minCheck=0.98
     hg17.snpArrayAffy50XbaI.rsId minCheck=0.98
     hg17.snpArrayIllumina300.name
+
+identifier snpArrayHg18
+"SNP array track for hg18"
+    hg18.snp126.name dupeOk
+    hg18.snpArrayAffy5.rsId minCheck=0.98
+    hg18.snpArrayAffy6.rsId minCheck=0.98
+    hg18.snpArrayAffy250Nsp.rsId
+    hg18.snpArrayAffy250Sty.rsId
+    hg18.snpArrayIllumina300.name
+    hg18.snpArrayIllumina550.name
+    hg18.snpArrayIllumina650.name
 
 identifier snpOrtho
 "ortho SNPs for hg18 only"

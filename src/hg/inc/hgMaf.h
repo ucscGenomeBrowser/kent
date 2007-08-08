@@ -22,6 +22,9 @@
 #define ITEM_FIRST_CHAR_CASE	"itemFirstCharCase"
 #define DEFAULT_CONS_LABEL      "Conservation"
 
+#define gsidSubjList "gsidTable.gsidSubjList"
+#define gsidSeqList "gsidTable.gsidSeqList"
+
 struct mafAli *mafLoadInRegion(struct sqlConnection *conn, char *table,
 	char *chrom, int start, int end);
 /* Return list of alignments in region. */

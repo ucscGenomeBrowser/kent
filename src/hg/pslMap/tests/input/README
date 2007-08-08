@@ -25,8 +25,11 @@ mRNA->mRNA->DNA mapping test:
     AB000114, BC046356 -> NM_005014 -> genome
 
   refSeqGen.psl - refseq to genome alignments
-  mrnaRefSeq.psl - rrna to refseq alignments, created with
+  mrnaRefSeq.psl - rna to refseq alignments, created with
         blat -noHead rs.fa gb.fa mrnaRefSeq.psl
 
   mrnaRefSeqX.psl - rrna to refseq translated alignments, created with
         blat -noHead -q=rnax -t=dnax rs.fa gb.fa mrnaRefSeqX.psl
+
+retro/parent alignment with -simplifyMappingIds
+  parent.psl, retro.psl from hg18

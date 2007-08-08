@@ -9,7 +9,7 @@ db rn4
 otherUrl http://rgd.mcw.edu/generalSearch/RgdSearch.jsp?quickSearch=1&searchKeyword=%s 
 
 name drosophila
-db dm2
+db dm3
 
 name cElegans
 db ce2

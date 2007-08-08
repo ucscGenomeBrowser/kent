@@ -79,6 +79,12 @@ label Entrez Gene
 url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=gene&cmd=Retrieve&dopt=full_report&list_uids=%s
 acc yes
 
+name EnsemblGene
+label Ensembl GeneView
+url http://www.ensembl.org/%s/geneview?gene=%s
+acc yes
+accNum 2
+
 name EnsemblHumanGene
 label Ensembl Human GeneView
 url http://www.ensembl.org/Homo_sapiens/geneview?gene=%s
@@ -112,6 +118,11 @@ acc yes
 name LQTSdb
 label LQTSdb
 url http://www.ssi.dk/graphics/html/lqtsdb/%s.htm
+acc yes
+
+name RISN
+label RISN Mutation Database
+url http://www.retina-international.org/sci-news/%s
 acc yes
 
 name KinMutBase

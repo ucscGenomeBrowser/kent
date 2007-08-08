@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/makePushQSql.pl instead.
 
-# $Id: makePushQSql.pl,v 1.6 2007/05/02 23:29:42 angie Exp $
+# $Id: makePushQSql.pl,v 1.7 2007/07/26 19:03:04 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -179,7 +179,7 @@ sub getGenbankEntry {
     );
   my @genbankRequiredTables = qw(
     author cds cell description development estOrientInfo gbCdnaInfo
-    gbExtFile gbLoaded gbSeq gbStatus geneName imageClone keyword
+    gbExtFile gbLoaded gbMiscDiff gbSeq gbStatus geneName imageClone keyword
     library mrnaClone mrnaOrientInfo organism productName sex source tissue
     );
   my @genbankTablesInDb = ();

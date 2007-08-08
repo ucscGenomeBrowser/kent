@@ -279,7 +279,7 @@ longLabel <em>D. melanogaster</em> Ortholog (Best Blastp Hit to FlyBase Proteins
 priority 8.3
 visibility off
 type lookup dmBlastTab query target
-itemUrl http://flybase.bio.indiana.edu/cgi-bin/fbidq.html?%s
+itemUrl http://flybase.net/cgi-bin/uniq.html?species=Dmel&cs=yes&db=fbgn&submit=Go&caller=genejump&context=%s
 
 name wormOrthologs
 shortLabel C. elegans

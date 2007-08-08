@@ -168,8 +168,6 @@ struct track
                                 loaded and drawn by this track.  This
                                 is used for "composite" tracks, such
                                 as "mafWiggle */
-    struct track *parent;      /* currently used just with supertracks --
-                                  eventually for arbitrary hierarchy */
 
     void (*nextPrevItem)(struct track *tg, void *item, int x, int y, int w, int h, boolean next);    
     /* Function will draw the button on a track item and assign a map */
@@ -292,6 +290,8 @@ struct hash *trackHash; /* Hash of the tracks by their name. */
 extern char *chromName;	  /* Name of chromosome sequence . */
 extern char *database;	  /* Name of database we're using. */
 extern char *organism;	  /* Name of organism we're working on. */
+extern char *browserName;              /* Test or public browser */
+extern char *organization;             /* UCSC or MGC */
 extern int winStart;	  /* Start of window in sequence. */
 extern int winEnd;	  /* End of window in sequence. */
 extern int maxItemsInFullTrack;  /* Maximum number of items displayed in full */
@@ -486,14 +486,13 @@ int tgFixedTotalHeightNoOverflow(struct track *tg, enum trackVisibility vis);
 /* Most fixed height track groups will use this to figure out the height 
  * they use. */
 
-void changeTrackVis(struct group *groupList, char *groupTarget, 
-        int changeVis, boolean ifVisible);
+void changeTrackVis(struct group *groupList, char *groupTarget, int changeVis);
 /* Change track visibilities. If groupTarget is 
  * NULL then set visibility for tracks in all groups.  Otherwise,
  * just set it for the given group.  If vis is -2, then visibility is
  * unchanged.  If -1 then set visibility to default, otherwise it should 
- * be tvHide, tvDense, etc. The ifVisible flag when set, causes only
- * visibility to change only for non-hidden tracks */
+ * be tvHide, tvDense, etc. 
+ */
 
 void genericDrawItems(struct track *tg, 
 	int seqStart, int seqEnd,
@@ -970,6 +969,9 @@ void collapseGroupGoodies(boolean isOpen, boolean wantSmallImage,
 struct bed *loadGvAsBed (struct track *tg, char *chr, int start, int end);
 /* load gv* with filters, for a range, as a bed list (for next item button) */
 
+struct bed* loadOregannoAsBed (struct track *tg, char *chr, int start, int end);
+/* load oreganno with filters, for a range, as a bed list (for next item button) */
+
 void parseSs(char *ss, char **retPsl, char **retFa);
 /* Parse out ss variable into components. */
 
@@ -978,6 +980,13 @@ boolean ssFilesExist(char *ss);
 
 int maximumTrackHeight(struct track *tg);
 /* Return the maximum track height allowed in pixels. */
+
+void setSuperTrackHasVisibleMembers(struct track *track);
+/* Determine if any member tracks are visible -- currently 
+ * recording this in the parent's visibility setting */
+
+boolean superTrackHasVisibleMembers(struct track *track);
+/* Determine if any member tracks are visible */
 
 #endif /* HGTRACKS_H */
 

@@ -17,7 +17,7 @@
 #include "hgColors.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.106 2007/07/13 22:56:40 angie Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.107 2007/08/03 16:33:17 hiram Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -475,7 +475,10 @@ char *newChrom = cartOptionalString(cart, hggChrom);
 char *newStarts = cartOptionalString(cart, hggStart);
 char *newEnds = cartOptionalString(cart, hggEnd);
 
-if (newChrom != NULL && !sameString(newChrom, "none") && newStarts != NULL && newEnds != NULL)
+if (newChrom != NULL
+	&& !sameString(newChrom, "none")
+	&& newStarts != NULL
+	&& newEnds != NULL)
     {
     if (oldGene == NULL || oldStarts == NULL || oldEnds == NULL
     	|| sameString(oldGene, newGene))
@@ -532,7 +535,7 @@ if ((row = sqlNextRow(sr)) != NULL)
     gp = genePredLoad(row + hasBin);
 sqlFreeResult(&sr);
 if (gp == NULL)
-    errAbort("Can't find %s", query);
+    errAbort("getCurGenePred: Can't find %s", query);
 return gp;
 }
 

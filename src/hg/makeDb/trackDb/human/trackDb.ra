@@ -978,6 +978,59 @@ spectrum on
 type chain hg16
 otherDb hg16
 
+track caseControl
+compositeTrack on
+shortLabel Case Control
+longLabel Case Control Consortium
+group varRep
+visibility hide
+priority 430
+type chromGraph
+minMax 0,8
+linesAt 2,4,6
+
+    track cccBD
+    subTrack caseControl
+    shortLabel CCC Bipolar Dis
+    longLabel Case Control Consortium bipolar disorder trend -log10 P-value
+    priority 1
+
+    track cccCAD
+    subTrack caseControl
+    shortLabel CCC Coronary Art
+    longLabel Case Control Consortium coronary artery disease trend -log10 P-value
+    priority 2
+
+    track cccCD
+    subTrack caseControl
+    shortLabel CCC Crohns Dis
+    longLabel Case Control Consortium Crohn's disease trend -log10 P-value
+    priority 3
+
+    track cccHT
+    subTrack caseControl
+    shortLabel CCC Hypertension
+    longLabel Case Control Consortium hypertension trend -log10 P-value
+    priority 4
+
+    track cccRA
+    subTrack caseControl
+    shortLabel CCC Rheum Arth
+    longLabel Case Control Consortium rheumatoid arthritis trend -log10 P-value
+    priority 5
+
+    track cccT1D
+    subTrack caseControl
+    shortLabel CCC T1 Diabetes
+    longLabel Case Control Consortium type 1 diabetes trend -log10 P-value
+    priority 6
+
+    track cccT2D
+    subTrack caseControl
+    shortLabel CCC T2 Diabetes
+    longLabel Case Control Consortium type 2 diabetes trend -log10 P-value
+    priority 7
+
 track affyTranscription
 shortLabel Transcription
 longLabel Affy. SK-N-AS Transcript Abundance
@@ -1984,6 +2037,99 @@ type netAlign
     spectrum on
     type netAlign dasNov1 chainDasNov1
     otherDb dasNov1
+
+
+track stanfordChip
+compositeTrack on
+shortLabel Stanf ChIP
+longLabel Stanford ChIP-chip (GMO6990, HeLa, HepG2, Jurkat, K562 cells; GABP, SRF, TAF, NRST/REST ChIP)
+group regulation
+priority 501
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type bedGraph 4
+color 120,0,20
+altColor 150,0,25
+maxHeightPixels 128:16:16
+autoScale off
+minLimit 500
+maxLimit 1000
+viewLimits 0:10
+origAssembly hg17
+dataVersion Mar 2007
+
+    track stanfordChipGMO6990GABP
+    subTrack stanfordChip
+    shortLabel Stan GMO6690 GABP
+    longLabel Stanford ChIP-chip (GMO6990 cells, GABP ChIP)
+    priority 1
+
+    track stanfordChipGMO6990SRF
+    subTrack stanfordChip
+    shortLabel Stan GMO6690 SRF
+    longLabel Stanford ChIP-chip (GMO6990 cells, SRF ChIP)
+    priority 2
+
+    track stanfordChipHepG2GABP
+    subTrack stanfordChip
+    shortLabel Stan HepG2 GABP
+    longLabel Stanford ChIP-chip (HepG2 cells, GABP ChIP)
+    priority 3
+
+    track stanfordChipHepG2SRF
+    subTrack stanfordChip
+    shortLabel Stan HepG2 SRF
+    longLabel Stanford ChIP-chip (HepG2 cells, SRF ChIP)
+    priority 4
+
+    track stanfordChipHeLaGABP
+    subTrack stanfordChip
+    shortLabel Stan HeLa GABP
+    longLabel Stanford ChIP-chip (HeLa cells, GABP ChIP)
+    priority 5
+
+    track stanfordChipHeLaSRF
+    subTrack stanfordChip
+    shortLabel Stan HeLa SRF
+    longLabel Stanford ChIP-chip (HeLa cells, SRF ChIP)
+    priority 6
+
+    track stanfordChipHeLaTAF
+    subTrack stanfordChip
+    shortLabel Stan HeLa TAF
+    longLabel Stanford ChIP-chip (HeLa cells, TAF ChIP)
+    priority 7
+
+    track stanfordChipK562GABP
+    subTrack stanfordChip
+    shortLabel Stan K562 GABP
+    longLabel Stanford ChIP-chip (K562 cells, GABP ChIP)
+    priority 8
+
+    track stanfordChipK562SRF
+    subTrack stanfordChip
+    shortLabel Stan K562 SRF
+    longLabel Stanford ChIP-chip (K562 cells, SRF ChIP)
+    priority 9
+
+    track stanfordChipK562TAF
+    subTrack stanfordChip
+    shortLabel Stan K562 TAF
+    longLabel Stanford ChIP-chip (K562 cells, TAF ChIP)
+    priority 10
+
+    track stanfordChipNRSFMono
+    subTrack stanfordChip
+    shortLabel Stan Jurkat NRSF/REST/Mono 
+    longLabel Stanford ChIP-chip (Jurkat cells, NRSF/REST/Mono ChIP)
+    priority 11
+
+    track stanfordChipNRSFUpstate
+    subTrack stanfordChip
+    shortLabel Stan Jurkat NRSF/REST/Upstate 
+    longLabel Stanford ChIP-chip (Jurkat cells, NRSF/REST/Upstate ChIP)
+    priority 12
+
 
 # in priority.ra 
 #

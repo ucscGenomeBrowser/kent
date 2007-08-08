@@ -1,0 +1,4 @@
+name flyOrthologs
+xrefOrg D. melanogaster
+xrefLookup flyBase2004Xref name fbgn
+

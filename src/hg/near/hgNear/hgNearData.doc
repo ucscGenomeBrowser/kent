@@ -94,6 +94,12 @@ The types are:
         Associated fields:
 	    noKeys - If present advanced search does not give
 	        opportunity to paste in list of matching keywords.
+	    xrefLookup - parameters are xrefTable, nameField, aliasField.
+		xrefTable.nameField must join with table.geneIdField.
+		If present, then lookup returns the alias instead of name.
+	    xrefOrg - If present, xrefTable should be in the latest assembly
+		for this organism.  Used only if xrefLookup is given.
+		Spelling must exactly match the organism's dbDb.genome entry.
     association - A column based on database queries which can
         associate potentially multiple values with each gene.
 	Parameters: tables that must exist for column to be displayed.

@@ -9,7 +9,7 @@ db danRer4
 otherUrl http://dec2006.archive.ensembl.org/Danio_rerio/transview?transcript=%s
 
 name drosophila
-db dm2
+db dm3
 
 name cElegans
 db ce2

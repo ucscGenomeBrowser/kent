@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "rnaHybridization.h"
 
-static char const rcsid[] = "$Id: rnaHybridization.c,v 1.1 2007/07/02 23:39:01 mhoechsm Exp $";
+static char const rcsid[] = "$Id: rnaHybridization.c,v 1.2 2007/08/01 00:29:21 mhoechsm Exp $";
 
 void rnaHybridizationStaticLoad(char **row, struct rnaHybridization *ret)
 /* Load a row from rnaHybridization table into ret.  The contents of ret will
@@ -25,9 +25,16 @@ ret->chromTarget = row[6];
 ret->chromStartTarget = sqlUnsigned(row[7]);
 ret->chromEndTarget = sqlUnsigned(row[8]);
 safecpy(ret->strandTarget, sizeof(ret->strandTarget), row[9]);
-ret->patternSeq = row[10];
-ret->targetSeq = row[11];
-ret->gcContent = sqlFloat(row[12]);
+ret->refSeqTarget = row[10];
+ret->aorfTarget = row[11];
+ret->igenicsTarget = row[12];
+ret->trnaTarget = row[13];
+ret->JGITarget = row[14];
+ret->patternSeq = row[15];
+ret->targetSeq = row[16];
+ret->gcContent = sqlFloat(row[17]);
+ret->matchLength = sqlUnsigned(row[18]);
+ret->targetAnnotation = sqlUnsigned(row[19]);
 }
 
 struct rnaHybridization *rnaHybridizationLoad(char **row)
@@ -47,9 +54,16 @@ ret->chromTarget = cloneString(row[6]);
 ret->chromStartTarget = sqlUnsigned(row[7]);
 ret->chromEndTarget = sqlUnsigned(row[8]);
 safecpy(ret->strandTarget, sizeof(ret->strandTarget), row[9]);
-ret->patternSeq = cloneString(row[10]);
-ret->targetSeq = cloneString(row[11]);
-ret->gcContent = sqlFloat(row[12]);
+ret->refSeqTarget = cloneString(row[10]);
+ret->aorfTarget = cloneString(row[11]);
+ret->igenicsTarget = cloneString(row[12]);
+ret->trnaTarget = cloneString(row[13]);
+ret->JGITarget = cloneString(row[14]);
+ret->patternSeq = cloneString(row[15]);
+ret->targetSeq = cloneString(row[16]);
+ret->gcContent = sqlFloat(row[17]);
+ret->matchLength = sqlUnsigned(row[18]);
+ret->targetAnnotation = sqlUnsigned(row[19]);
 return ret;
 }
 
@@ -59,7 +73,7 @@ struct rnaHybridization *rnaHybridizationLoadAll(char *fileName)
 {
 struct rnaHybridization *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[13];
+char *row[20];
 
 while (lineFileRow(lf, row))
     {
@@ -77,7 +91,7 @@ struct rnaHybridization *rnaHybridizationLoadAllByChar(char *fileName, char chop
 {
 struct rnaHybridization *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[13];
+char *row[20];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -87,6 +101,86 @@ while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
 lineFileClose(&lf);
 slReverse(&list);
 return list;
+}
+
+struct rnaHybridization *rnaHybridizationLoadByQuery(struct sqlConnection *conn, char *query)
+/* Load all rnaHybridization from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with rnaHybridizationFreeList(). */
+{
+struct rnaHybridization *list = NULL, *el;
+struct sqlResult *sr;
+char **row;
+
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = rnaHybridizationLoad(row);
+    slAddHead(&list, el);
+    }
+slReverse(&list);
+sqlFreeResult(&sr);
+return list;
+}
+
+void rnaHybridizationSaveToDb(struct sqlConnection *conn, struct rnaHybridization *el, char *tableName, int updateSize)
+/* Save rnaHybridization as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
+ * For example "autosql's features include" --> "autosql\'s features include" 
+ * If worried about this use rnaHybridizationSaveToDbEscaped() */
+{
+struct dyString *update = newDyString(updateSize);
+dyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%u,'%s','%s',%u,%u,'%s','%s','%s','%s','%s','%s','%s','%s',%g,%u,%u)", 
+	tableName,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->dummy,  el->strand,  el->chromTarget,  el->chromStartTarget,  el->chromEndTarget,  el->strandTarget,  el->refSeqTarget,  el->aorfTarget,  el->igenicsTarget,  el->trnaTarget,  el->JGITarget,  el->patternSeq,  el->targetSeq,  el->gcContent,  el->matchLength,  el->targetAnnotation);
+sqlUpdate(conn, update->string);
+freeDyString(&update);
+}
+
+void rnaHybridizationSaveToDbEscaped(struct sqlConnection *conn, struct rnaHybridization *el, char *tableName, int updateSize)
+/* Save rnaHybridization as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size.
+ * of a string that would contain the entire query. Automatically 
+ * escapes all simple strings (not arrays of string) but may be slower than rnaHybridizationSaveToDb().
+ * For example automatically copies and converts: 
+ * "autosql's features include" --> "autosql\'s features include" 
+ * before inserting into database. */ 
+{
+struct dyString *update = newDyString(updateSize);
+char  *chrom, *name, *strand, *chromTarget, *strandTarget, *refSeqTarget, *aorfTarget, *igenicsTarget, *trnaTarget, *JGITarget, *patternSeq, *targetSeq;
+chrom = sqlEscapeString(el->chrom);
+name = sqlEscapeString(el->name);
+strand = sqlEscapeString(el->strand);
+chromTarget = sqlEscapeString(el->chromTarget);
+strandTarget = sqlEscapeString(el->strandTarget);
+refSeqTarget = sqlEscapeString(el->refSeqTarget);
+aorfTarget = sqlEscapeString(el->aorfTarget);
+igenicsTarget = sqlEscapeString(el->igenicsTarget);
+trnaTarget = sqlEscapeString(el->trnaTarget);
+JGITarget = sqlEscapeString(el->JGITarget);
+patternSeq = sqlEscapeString(el->patternSeq);
+targetSeq = sqlEscapeString(el->targetSeq);
+
+dyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%u,'%s','%s',%u,%u,'%s','%s','%s','%s','%s','%s','%s','%s',%g,%u,%u)", 
+	tableName,  chrom, el->chromStart , el->chromEnd ,  name, el->dummy ,  strand,  chromTarget, el->chromStartTarget , el->chromEndTarget ,  strandTarget,  refSeqTarget,  aorfTarget,  igenicsTarget,  trnaTarget,  JGITarget,  patternSeq,  targetSeq, el->gcContent , el->matchLength , el->targetAnnotation );
+sqlUpdate(conn, update->string);
+freeDyString(&update);
+freez(&chrom);
+freez(&name);
+freez(&strand);
+freez(&chromTarget);
+freez(&strandTarget);
+freez(&refSeqTarget);
+freez(&aorfTarget);
+freez(&igenicsTarget);
+freez(&trnaTarget);
+freez(&JGITarget);
+freez(&patternSeq);
+freez(&targetSeq);
 }
 
 struct rnaHybridization *rnaHybridizationCommaIn(char **pS, struct rnaHybridization *ret)
@@ -108,9 +202,16 @@ ret->chromTarget = sqlStringComma(&s);
 ret->chromStartTarget = sqlUnsignedComma(&s);
 ret->chromEndTarget = sqlUnsignedComma(&s);
 sqlFixedStringComma(&s, ret->strandTarget, sizeof(ret->strandTarget));
+ret->refSeqTarget = sqlStringComma(&s);
+ret->aorfTarget = sqlStringComma(&s);
+ret->igenicsTarget = sqlStringComma(&s);
+ret->trnaTarget = sqlStringComma(&s);
+ret->JGITarget = sqlStringComma(&s);
 ret->patternSeq = sqlStringComma(&s);
 ret->targetSeq = sqlStringComma(&s);
 ret->gcContent = sqlFloatComma(&s);
+ret->matchLength = sqlUnsignedComma(&s);
+ret->targetAnnotation = sqlUnsignedComma(&s);
 *pS = s;
 return ret;
 }
@@ -125,6 +226,11 @@ if ((el = *pEl) == NULL) return;
 freeMem(el->chrom);
 freeMem(el->name);
 freeMem(el->chromTarget);
+freeMem(el->refSeqTarget);
+freeMem(el->aorfTarget);
+freeMem(el->igenicsTarget);
+freeMem(el->trnaTarget);
+freeMem(el->JGITarget);
 freeMem(el->patternSeq);
 freeMem(el->targetSeq);
 freez(pEl);
@@ -177,6 +283,26 @@ fprintf(f, "%s", el->strandTarget);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->refSeqTarget);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->aorfTarget);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->igenicsTarget);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->trnaTarget);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->JGITarget);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->patternSeq);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
@@ -185,6 +311,10 @@ fprintf(f, "%s", el->targetSeq);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 fprintf(f, "%g", el->gcContent);
+fputc(sep,f);
+fprintf(f, "%u", el->matchLength);
+fputc(sep,f);
+fprintf(f, "%u", el->targetAnnotation);
 fputc(lastSep,f);
 }
 

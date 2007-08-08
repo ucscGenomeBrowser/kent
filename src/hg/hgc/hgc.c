@@ -1,4 +1,4 @@
-/* hgc - Human Genome Click processor - gets called when user clicks
+/* hc - Human Genome Click processor - gets called when user clicks
  * on something in human tracks display. */
 
 #include "common.h"
@@ -208,7 +208,7 @@
 #include "omicia.h"
 #include "atomDb.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1319 2007/07/20 20:03:13 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1330 2007/08/04 17:29:07 fanhsu Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -1070,10 +1070,17 @@ printf("<TABLE>");
 printf("<THEAD>");
 printf("<TBODY>");
 printf("<TR><TH>");
-printf("Brian's Gap Tree<TD>Bernard's Tree");
+printf("Suh Trees<BR>\n");
+printf("<IMG src=http://hgwdev.cse.ucsc.edu/~braney/suhTrees/%s.tt.png><BR>",item);
+printf("<TD><IMG src=http://hgwdev.cse.ucsc.edu/~braney/suhTrees/%s.gt.png><BR>",item);
 printf("<TR><TH>");
-printf("<IMG src=http://hgwdev.cse.ucsc.edu/~braney/992png/%s.png><BR>",item);
-printf("<TD><IMG src=http://hgwdev.cse.ucsc.edu/~bsuh/gif/%s.gif><BR>",item);
+printf("NJ Trees<BR>\n");
+printf("<IMG src=http://hgwdev.cse.ucsc.edu/~braney/njTrees/%s.tt.png><BR>",item);
+printf("<TD><IMG src=http://hgwdev.cse.ucsc.edu/~braney/njTrees/%s.gt.png><BR>",item);
+printf("<TR><TH>");
+printf("Gap UPGMA Trees<BR>\n");
+printf("<IMG src=http://hgwdev.cse.ucsc.edu/~braney/gap992Trees/%s.tt.png><BR>",item);
+printf("<TD><IMG src=http://hgwdev.cse.ucsc.edu/~braney/gap992Trees/%s.gt.png><BR>",item);
 printf("</TABLE>");
 
 char buffer[4096];
@@ -3371,21 +3378,25 @@ cgiContinueHiddenVar("r");
 puts("Position ");
 savePosInTextBox(seqName, winStart+1, winEnd);
 
-if (tbl[0] == 0)
+/* bypass message about Table Browser for GSID server, since we haven't offered TB for GSID */
+if (!hIsGsidServer())
     {
-    puts("<P>"
-	 "Note: if you would prefer to get DNA for features of a particular "
-	 "track or table, try the ");
-    printf("<A HREF=\"%s\" TARGET=_blank>", hgTablesUrl(TRUE, NULL));
-    puts("Table Browser</A> using the output format sequence.");
-    }
-else
-    {
-    puts("<P>"
-	 "Note: if you would prefer to get DNA for more than one feature of "
-	 "this track at a time, try the ");
-    printf("<A HREF=\"%s\" TARGET=_blank>", hgTablesUrl(FALSE, tbl));
-    puts("Table Browser</A> using the output format sequence.");
+    if (tbl[0] == 0)
+    	{
+    	puts("<P>"
+	     "Note: if you would prefer to get DNA for features of a particular "
+	     "track or table, try the ");
+    	printf("<A HREF=\"%s\" TARGET=_blank>", hgTablesUrl(TRUE, NULL));
+    	puts("Table Browser</A> using the output format sequence.");
+    	}
+    else
+    	{
+    	puts("<P>"
+	     "Note: if you would prefer to get DNA for more than one feature of "
+	     "this track at a time, try the ");
+    	printf("<A HREF=\"%s\" TARGET=_blank>", hgTablesUrl(FALSE, tbl));
+    	puts("Table Browser</A> using the output format sequence.");
+    	}
     }
 
 hgSeqOptionsHtiCart(hti,cart);
@@ -4009,7 +4020,7 @@ else
 	if (psl->strand[1] == '-')
 	    {
 	    /* psl: if target strand is '-', flip the coords.
-	     * (this is the target part of pslRcBoth from src/lib/psl.c) */
+	     * (this is the target part of pslRc from src/lib/psl.c) */
 	    for (i=0;  i < bed->blockCount;  ++i)
 		{
 		bed->chromStarts[i] =
@@ -5628,7 +5639,7 @@ struct ffAli *pslToFfAliAndSequence(struct psl *psl, struct dnaSeq *qSeq,
 				    boolean *retIsRc, struct dnaSeq **retSeq,
 				    int *retTStart)
 /* Given psl, dig up target sequence and convert to ffAli. 
- * Note: if strand is -, this does a pslRcBoth to psl! */
+ * Note: if strand is -, this does a pslRc to psl! */
 {
 int tStart, tEnd, tRcAdjustedStart;
 struct dnaSeq *dnaSeq;
@@ -5653,7 +5664,7 @@ if (psl->strand[0] == '-')
     if (retIsRc)
 	*retIsRc = TRUE;
     reverseComplement(dnaSeq->dna, dnaSeq->size);
-    pslRcBoth(psl); 
+    pslRc(psl); 
     tRcAdjustedStart = psl->tSize - tEnd;
     }
 return pslToFfAli(psl, qSeq, dnaSeq, tRcAdjustedStart);
@@ -13660,8 +13671,9 @@ int start = cartInt(cart, "o");
 struct jaxQTL *jaxQTL;
 
 genericHeader(tdb, item);
-sprintf(query, "select * from jaxQTL where name = '%s' and chrom = '%s' and chromStart = %d",
-    	item, seqName, start);
+safef(query, sizeof(query),
+      "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
+      tdb->tableName, item, seqName, start);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     {
@@ -14008,13 +14020,13 @@ for (pheno = phenoList;  pheno != NULL;  pheno = pheno->next)
 	first = FALSE;
     else
 	printf(", ");
-    if (sameString(pheno->name, selectedPheno))
+    if (selectedPheno && sameString(pheno->name, selectedPheno))
 	printf("<B>%s</B>", pheno->name);
     else
 	printf("%s", pheno->name);
     }
 puts("<BR>");
-if (hTableExists(phenoTable))
+if (hTableExists(phenoTable) && selectedPheno)
     {
     struct trackDb *alleleTdb = hMaybeTrackInfo(conn, "jaxAllele");
     struct sqlConnection *conn2 = hAllocConn();
@@ -17096,10 +17108,15 @@ if (count1 > count2)
     printf("<TD bgcolor = \"lightgrey\">%d (%3.2f%%)</TD>", count1, freq1);
     printf("<TD>%d (%3.2f%%)</TD>", count2, freq2);
     }
-else
+else if (count1 < count2)
     {
     printf("<TD>%d (%3.2f%%)</TD>", count1, freq1);
     printf("<TD bgcolor = \"lightgrey\">%d (%3.2f%%)</TD>", count2, freq2);
+    }
+else
+    {
+    printf("<TD>%d (%3.2f%%)</TD>", count1, freq1);
+    printf("<TD>%d (%3.2f%%)</TD>", count2, freq2);
     }
 printf("</TR>\n");
 
@@ -17712,7 +17729,7 @@ int tStart = psl->tStart;
 int tEnd = psl->tEnd;
 char tName[256];
 struct dnaSeq *tSeq;
-char *tables[4] = {"luGene2", "luGene", "refGene", "mgcGenes"};
+char *tables[4] = {"luGene", "refGene", "mgcGenes", "luGene2"};
 
 /* open file to write to */
 trashDirFile(&indexTn, "index", "index", ".html");
@@ -17722,19 +17739,24 @@ body = mustOpen(bodyTn.forCgi, "w");
 /* get query genes struct info*/
 for(i = 0; i < 4; i++)
     {
-    sprintf(query, "SELECT * FROM %s WHERE name = '%s'"
-	    "AND chrom = '%s' AND txStart <= %d "
-	    "AND txEnd >= %d",
-	    tables[i], geneName, psl->qName, qStart, qEnd);
-
-    sr = sqlMustGetResult(conn, query);
-    if((row = sqlNextRow(sr)) != NULL)
+    if(sqlTableExists(conn, tables[i]))
 	{
-	gene = genePredLoad(row);
-	break;
+	sprintf(query, "SELECT * FROM %s WHERE name = '%s'"
+		"AND chrom = '%s' AND txStart <= %d "
+		"AND txEnd >= %d",
+		tables[i], geneName, psl->qName, qStart, qEnd);
+	sr = sqlMustGetResult(conn, query);
+	if((row = sqlNextRow(sr)) != NULL)
+	    {
+	    int hasBin = 0;
+	    if(hOffsetPastBin(psl->qName, tables[i]))
+		hasBin=1;
+	    gene = genePredLoad(row+hasBin);
+	    break;
+	    }
+	else
+	    sqlFreeResult(&sr);
 	}
-    else
-	sqlFreeResult(&sr);
     }
 if(i == 4)
     errAbort("Can't find query for %s in %s. This entry may no longer exist\n", geneName, geneTable);
@@ -17913,7 +17935,7 @@ printf("<b>Aligned %s bases</B>:%d of %d with %f identity. <BR> <B>Aligned %s CD
 /* print info about the stamp putative element */
 printf("<B>%s </B><BR> <B>Genomic location: </B>"
        " <A HREF=\"%s?db=%s&position=%s:%d-%d\" >%s(%s): %d - %d</A> <BR> <B> Element Structure: </B> %d putative exons and %d putative cds exons<BR><BR>\n", 
-       name, hgTracksName(), db, info->chrom, info->chromStart, info->chromEnd, info->chrom, info->strand, info->chromStart, info->chromEnd, info->tExons[0], info->tExons[1]);
+       name, hgTracksName(), db, info->chrom, info->chromStart+1, info->chromEnd, info->chrom, info->strand, info->chromStart+1, info->chromEnd, info->tExons[0], info->tExons[1]);
 if(info->repeats[0] > 0)
     {
     printf("Repeats elements inserted into %s <BR>\n", name);
@@ -18088,7 +18110,18 @@ if (linktype != NULL)
     if (accFlag == NULL) 
         safef(url, sizeof(url), linktype);
     else 
-        safef(url, sizeof(url), linktype, link->attrAcc);
+        {
+        char *accNum = hashFindVal(thisLink, "accNum");
+        if (accNum == NULL)
+            safef(url, sizeof(url), linktype, link->attrAcc);
+        else if (sameString(accNum, "2")) 
+            {
+            char *val[2];
+	    char *copy = cloneString(link->attrAcc);
+            if (2 == chopString(copy, ",", val, 2))
+	        safef(url, sizeof(url), linktype, val[0], val[1]);
+            }
+        }
     if (label == NULL)
         label = "";  /* no label */
     printf("%s - <A HREF=\"%s\" TARGET=\"_BLANK\">%s</A>\n", label, url, link->attrAcc);
@@ -18235,7 +18268,7 @@ if ((row = sqlNextRow(sr)) != NULL)
 
     if (sameString(dataSource, "Affy"))
         {
-        printf("<BR><BR><A HREF=\"https://www.affymetrix.com/LinkServlet?probeset=%s\" TARGET=_blank>NetAffx</A>\n", itemName);
+        printf("<BR><BR><A HREF=\"https://www.affymetrix.com/LinkServlet?probeset=%s\" TARGET=_blank>NetAffx</A> (log in required, registration is free)\n", itemName);
         if (!sameString(row[3], "unknown"))
             {
             printf("<BR><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
@@ -19766,23 +19799,23 @@ else if( sameWord( track, "footPrinter" ))
     {
     footPrinterClickHandler( tdb, item );
     }
-else if (sameWord(track, "jaxQTL"))
-    {
-    doJaxQTL(tdb, item);
-    }
 else if (sameWord(track, "jaxQTL3"))
     {
     doJaxQTL3(tdb, item);
     }
-else if (sameWord(track, "jaxAllele"))
+else if (startsWith("jaxQTL", track))
+    {
+    doJaxQTL(tdb, item);
+    }
+else if (startsWith("jaxAllele", track))
     {
     doJaxAllele(tdb, item);
     }
-else if (sameWord(track, "jaxPhenotype"))
+else if (startsWith("jaxPhenotype", track))
     {
     doJaxPhenotype(tdb, item);
     }
-else if (sameWord(track, "jaxRepTranscript"))
+else if (startsWith("jaxRepTranscript", track))
     {
     doJaxAliasGenePred(tdb, item);
     }
@@ -19935,7 +19968,7 @@ else if (sameString("hapmapAllelesChimp", track) ||
     }
 else if (sameString("snpArrayAffy250Nsp", track) ||
          sameString("snpArrayAffy250Sty", track) ||
-         sameString("snpArrayAffyGenomeWide", track) ||
+         sameString("snpArrayAffy5", track) ||
          sameString("snpArrayAffy6", track) ||
          sameString("snpArrayAffy10", track) ||
          sameString("snpArrayAffy10v2", track) ||

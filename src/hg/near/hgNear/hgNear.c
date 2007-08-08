@@ -20,7 +20,7 @@
 #include "hgNear.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.169 2007/07/13 22:56:44 angie Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.173 2007/07/27 19:31:12 angie Exp $";
 
 char *excludeVars[] = { "submit", "Submit", idPosVarName, NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -394,11 +394,27 @@ return upcHashWordsInFile(fileName, 16);
 char *cellLookupVal(struct column *col, struct genePos *gp, 
 	struct sqlConnection *conn)
 /* Get a field in a table defined by col->table, col->keyField, 
- * col->valField. */
+ * col->valField.  If an xrefLookup is specified in col->settings,
+ * use that to look up an alternate name for the result. */
 {
-char query[512];
-safef(query, sizeof(query), "select %s from %s where %s = '%s'",
-	col->valField, col->table, col->keyField, gp->name);
+char *xrefDb = hashFindVal(col->settings, "xrefDb");
+char *xrefTable = hashFindVal(col->settings, "xrefTable");
+char *xrefNameField = hashFindVal(col->settings, "xrefNameField");
+char *xrefAliasField = hashFindVal(col->settings, "xrefAliasField");
+char query[1024];
+if (xrefDb)
+    safef(query, sizeof(query),
+	  "select %s.%s.%s "
+	  "from %s.%s, %s "
+	  "where %s.%s = '%s' "
+	  "and %s.%s = %s.%s.%s;",
+	  xrefDb, xrefTable, xrefAliasField,
+	  xrefDb, xrefTable,   col->table,
+	  col->table, col->keyField,   gp->name,
+	  col->table, col->valField,   xrefDb, xrefTable, xrefNameField);
+else
+    safef(query, sizeof(query), "select %s from %s where %s = '%s'",
+	  col->valField, col->table, col->keyField, gp->name);
 return sqlQuickString(conn, query);
 }
 
@@ -852,6 +868,7 @@ void setupColumnLookup(struct column *col, char *parameters)
 /* Set up column that just looks up one field in a table
  * keyed by the geneId. */
 {
+char *xrefLookup = cloneString(hashFindVal(col->settings, "xrefLookup"));
 col->table = cloneString(nextWord(&parameters));
 col->keyField = cloneString(nextWord(&parameters));
 col->valField = cloneString(nextWord(&parameters));
@@ -863,6 +880,33 @@ if (columnSetting(col, "search", NULL))
     col->simpleSearch = lookupTypeSimpleSearch;
 col->filterControls = lookupAdvFilterControls;
 col->advFilter = lookupAdvFilter;
+if (isNotEmpty(xrefLookup))
+    {
+    char *xrefTable = nextWord(&xrefLookup);
+    char *xrefNameField = nextWord(&xrefLookup);
+    char *xrefAliasField = nextWord(&xrefLookup);
+    if (isNotEmpty(xrefAliasField))
+	{
+	char *xrefOrg = hashFindVal(col->settings, "xrefOrg");
+	char *xrefDb;
+	if (xrefOrg)
+	    xrefDb = hDefaultDbForGenome(xrefOrg);
+	else
+	    xrefDb = cloneString(database);
+	struct sqlConnection *xrefConn = hAllocOrConnect(xrefDb);
+	if (sqlTableExists(xrefConn, xrefTable))
+	    {
+	    /* These are the column settings that will be used by 
+	     * cellLookupVal, so it doesn't have to parse xrefLookup and 
+	     * query for table existence for each cell. */
+	    hashAdd(col->settings, "xrefDb", xrefDb);
+	    hashAdd(col->settings, "xrefTable", xrefTable);
+	    hashAdd(col->settings, "xrefNameField", xrefNameField);
+	    hashAdd(col->settings, "xrefAliasField", xrefAliasField);
+	    }
+	hFreeOrDisconnect(&xrefConn);
+	}
+    }
 }
 
 
@@ -1058,10 +1102,9 @@ slReverse(&orgList);
 /* Make genome drop-down. */
 hPrintf("genome ");
 hPrintf("<SELECT NAME=\"%s\" ", orgVarName);
-hPrintf("onchange=\"%s\"",
+hPrintf("onchange='%s'",
   "document.orgForm.org.value=document.mainForm.org.options[document.mainForm.org.selectedIndex].value;"
   "document.orgForm.db.value=0;"
-  // "document.orgForm.near_search.value='';"
   "document.orgForm.submit();");
 hPrintf(">\n");
 for (org = orgList; org != NULL; org = org->next)
@@ -1078,7 +1121,7 @@ hPrintf("</SELECT>");
 /* Make assembly drop-down. */
 hPrintf(" assembly ");
 hPrintf("<SELECT NAME=\"%s\" ", dbVarName);
-hPrintf("onchange=\"%s\"",
+hPrintf("onchange='%s'",
   "document.orgForm.db.value = document.mainForm.db.options[document.mainForm.db.selectedIndex].value;"
   "document.orgForm.submit();");
 hPrintf(">\n");
@@ -1642,8 +1685,6 @@ hPrintf("</FORM>\n");
 hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" METHOD=\"GET\" NAME=\"orgForm\">\n");
 hPrintf("<input type=\"hidden\" name=\"org\" value=\"%s\">\n", genome);
 hPrintf("<input type=\"hidden\" name=\"db\" value=\"%s\">\n", database);
-hPrintf("<input type=\"hidden\" name=\"%s\" value=\"%s\">\n", searchVarName,
-	cartUsualString(cart, searchVarName, ""));
 hPrintf("<input type=\"hidden\" name=\"%s\" value=\"%s\">\n", orderVarName,
 	cartUsualString(cart, orderVarName, ""));
 cartSaveSession(cart);
@@ -1863,14 +1904,10 @@ void doMiddle(struct cart *theCart)
 char *var = NULL;
 struct sqlConnection *conn;
 struct column *colList, *col;
-char *oldDb;
 cart = theCart;
 
 getDbAndGenome(cart, &database, &genome, oldVars);
 makeSureDbHasHgNear();
-oldDb = cartOptionalString(cart, oldDbVarName);
-if (isNotEmpty(oldDb) && !sameString(oldDb, database))
-   cartRemove(cart, searchVarName);
 hSetDb(database);
 getGenomeSettings();
 conn = hAllocConn();
@@ -1961,7 +1998,6 @@ else if (gotAdvFilter())
 else
     doExamples(conn, colList);
 hFreeConn(&conn);
-cartSetString(cart, oldDbVarName, database);
 cartRemovePrefix(cart, "near.do.");
 }
 

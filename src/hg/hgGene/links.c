@@ -10,7 +10,7 @@
 #include "hgGene.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: links.c,v 1.32 2007/06/21 23:03:21 hiram Exp $";
+static char const rcsid[] = "$Id: links.c,v 1.33 2007/07/27 19:31:12 angie Exp $";
 
 struct link
 /* A link to another web site. */
@@ -118,11 +118,7 @@ static void addLinkExtras(struct link *link, struct dyString *dy)
 if (link->useHgsid)
     dyStringPrintf(dy, "&%s", cartSidUrlString(cart));
 if (link->useDb)
-    {
     dyStringPrintf(dy, "&db=%s", database);
-    if (stringIn("hgNear", link->url))
-	dyStringPrintf(dy, "&near.oldOrg=%s", genome);
-    }
 }
 
 char *linkGetUrl(struct link *link, struct sqlConnection *conn,

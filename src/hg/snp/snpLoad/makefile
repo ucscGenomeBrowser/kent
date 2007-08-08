@@ -7,7 +7,7 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = affyLookup.o cnpLookup.o fetchSeq.o \
     hapmap1.o hapmap2.o hapmapLookup.o hapmapMixed.o \
     hapmapOrtho.o hapmapSummary.o hapmapValidate.o \
-    illuminaLookup.o \
+    illuminaLookup.o illuminaLookup2.o \
     snpCheckAlleles.o snpCheckClassAndObserved.o snpCheckCluster.o snpCheckCluster2.o \
     snpClassAndObserved.o snpCleanSeq.o snpCompareLoctype.o snpCompareWeight.o \
     snpContigLocFilter.o snpContigLocFilter125.o \
@@ -16,16 +16,16 @@ O = affyLookup.o cnpLookup.o fetchSeq.o \
     snpGetDeletions.o snpGetInsertions.o snpGetSeqDup.o snpGetSimple.o \
     snpLoadFasta.o snpLocType.o snpLocType125.o \
     snpMissing.o snpMoltype.o snpMultiple.o \
-    snpOrtho.o snpOrthoCheck.o snpOrthoJoin.o \
+    snpOrtho.o snpOrthoJoin.o \
     snpOrthoLookup.o snpPAR.o \
     snpReadFasta.o snpReadSeq.o snpReadSeq2.o snpRefUCSC.o \
     snpSort.o snpSplitByChrom.o snpSplitByChrom2.o snpSNP.o \
     subSnpCondense.o trimHeader.o
 
 all: affyLookup cnpLookup fetchSeq \
-     hapmap1 hapmap hapmapLookup hapmapMixed \
+     hapmap1 hapmap2 hapmapLookup hapmapMixed \
      hapmapOrtho hapmapSummary hapmapValidate \
-     illuminaLookup \
+     illuminaLookup illuminaLookup2 \
      snpCheckAlleles snpCheckClassAndObserved snpCheckCluster snpCheckCluster2 \
      snpClassAndObserved snpCleanSeq snpCompareLoctype snpCompareWeight \
      snpContigLocFilter snpContigLocFilter125 \
@@ -34,7 +34,7 @@ all: affyLookup cnpLookup fetchSeq \
      snpGetDeletions snpGetInsertions snpGetSeqDup snpGetSimple \
      snpLoadFasta snpLocType snpLocType125 \
      snpMissing snpMoltype snpMultiple \
-     snpOrtho snpOrthoCheck snpOrthoJoin \
+     snpOrtho snpOrthoJoin \
      snpOrthoLookup snpPAR \
      snpReadFasta snpReadSeq snpReadSeq2 snpRefUCSC \
      snpSort snpSplitByChrom snpSplitByChrom2 snpSNP \
@@ -72,6 +72,9 @@ hapmapValidate: hapmapValidate.o ${MYLIBS}
 
 illuminaLookup: illuminaLookup.o ${MYLIBS}
 	${CC} -O -o illuminaLookup illuminaLookup.o ${MYLIBS} $L
+
+illuminaLookup2: illuminaLookup2.o ${MYLIBS}
+	${CC} -O -o illuminaLookup2 illuminaLookup2.o ${MYLIBS} $L
 
 snpCheckAlleles: snpCheckAlleles.o ${MYLIBS}
 	${CC} -O -o snpCheckAlleles snpCheckAlleles.o ${MYLIBS} $L
@@ -156,9 +159,6 @@ snpMultiple: snpMultiple.o ${MYLIBS}
 
 snpOrtho: snpOrtho.o ${MYLIBS}
 	${CC} -O -o snpOrtho snpOrtho.o ${MYLIBS} $L
-
-snpOrthoCheck: snpOrthoCheck.o ${MYLIBS}
-	${CC} -O -o snpOrthoCheck snpOrthoCheck.o ${MYLIBS} $L
 
 snpOrthoJoin: snpOrthoJoin.o ${MYLIBS}
 	${CC} -O -o snpOrthoJoin snpOrthoJoin.o ${MYLIBS} $L

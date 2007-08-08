@@ -14,7 +14,7 @@
 #include "../dbload/dbLoadOptions.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: chkAlignTbls.c,v 1.10 2007/04/18 05:54:50 markd Exp $";
+static char const rcsid[] = "$Id: chkAlignTbls.c,v 1.11 2007/08/03 04:58:19 markd Exp $";
 
 /* FIXME: check native vs xeno, flag in metaData. */
 /* FIXME: check OI tables */
@@ -408,18 +408,26 @@ if ((select->orgCats & GB_XENO)
     }
 }
 
-void chkAlignTables(struct gbSelect* select, struct sqlConnection* conn,
-                    struct metaDataTbls* metaDataTbls, struct dbLoadOptions *options)
+int chkAlignTables(struct gbSelect* select, struct sqlConnection* conn,
+                   struct metaDataTbls* metaDataTbls, struct dbLoadOptions *options)
 /* Verify all of the alignment-related. */
 {
+int cnt = 0;
 if (gChromSizes == NULL)
     buildChromSizes();
 gbVerbEnter(1, "validating alignment tables: %s", gbSelectDesc(select));
 if (select->release->srcDb & GB_GENBANK)
+    {
     chkGenBankAlignTables(select, conn, metaDataTbls, options);
+    cnt++;
+    }
 if (select->release->srcDb & GB_REFSEQ)
+    {
     chkRefSeqAlignTables(select, conn, metaDataTbls, options);
+    cnt++;
+    }
 gbVerbLeave(1, "validated alignment tables: %s", gbSelectDesc(select));
+return cnt;
 }
 
 /*

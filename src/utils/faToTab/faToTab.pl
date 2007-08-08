@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-#	$Id: faToTab.pl,v 1.1 2006/06/22 22:44:39 hiram Exp $
+#	$Id: faToTab.pl,v 1.2 2007/08/07 16:27:05 hiram Exp $
 
 use strict;
 use warnings;
@@ -33,6 +33,7 @@ my $inputFasta = shift;
 open (FH,"<$inputFasta") or die "can not open $inputFasta: $!";
 
 my $excludeThisOne = 0;
+my $eol="";		# do not need a <CR> on the first one.
 
 while (my $line = <FH>) {
     chomp $line;
@@ -47,7 +48,7 @@ while (my $line = <FH>) {
 	    {
 	    $excludeThisOne = 0;
 	    }
-	if ($excludeThisOne == 0) { printf "\n%s\t", $line; }
+	if ($excludeThisOne == 0) { printf "%s%s\t", $eol, $line; $eol="\n"; }
     } else {
 	if ($excludeThisOne == 0) { printf "%s", $line; }
     }

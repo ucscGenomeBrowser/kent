@@ -12,7 +12,7 @@
 #include "hash.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.29 2007/06/18 23:42:41 angie Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.33 2007/08/05 00:33:25 kate Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -400,16 +400,198 @@ return matchingSettings;
 }
 
 bool trackDbIsComposite(struct trackDb *tdb)
-/* Determine if this is a composite track. This is currently defined
+/* Determine if this is a populated composite track. This is currently defined
  * as a top-level dummy track, with a list of subtracks of the same type */
 {
     return (tdb->subtracks && differentString(tdb->type, "wigMaf"));
 }
 
-bool trackDbIsSubtrack(struct trackDb *tdb)
-/* Determine if this is a subtrack. */
+bool trackDbHasCompositeSetting(struct trackDb *tdb)
+/* Determine if this has a trackDb setting indicating it is a composite */
 {
     return (trackDbSetting(tdb, "compositeTrack") != NULL);
 }
 
+void trackDbMakeCompositeHierarchy(struct trackDb **pTdbList)
+/* change the data structure around so the subtracks are linked */
+/* together hooked into the composite tracks and not a part of the */
+/* main trackDb list. */
+{
+struct hash *tdbHash = newHash(10);
+struct hashEl *hashElList, *el;
+struct trackDb *cur;
+struct trackDb *subTrackList = NULL;
+struct trackDb *newList = NULL;
+if (!pTdbList || !(*pTdbList))
+    return;
+/* Hash up the trackDbs that aren't a subTrack. */
+/* Put the subTracks all on a list. */
+while ((cur = slPopHead(pTdbList)) != NULL)
+    {
+    if (trackDbSetting(cur, "subTrack") != NULL)
+	slAddHead(&subTrackList, cur);
+    else
+	hashAdd(tdbHash, cur->tableName, cur);
+    }
+slReverse(&subTrackList);
+/* Go through each subTrack and add it to the ->subTracks list */
+/* of its main tdb in the hash. */
+while ((cur = slPopHead(&subTrackList)) != NULL)
+    {
+    char *mainTable = trackDbSetting(cur, "subTrack");
+    struct trackDb *mainTdb = hashMustFindVal(tdbHash, mainTable);
+    slAddHead(&(mainTdb->subtracks), cur);
+    }
+/* Finally, make the hash a list. */
+hashElList = hashElListHash(tdbHash);
+for (el = hashElList; el != NULL; el = el->next)
+    {
+    struct trackDb *elTdb = (struct trackDb *)el->val;
+    slAddHead(&newList, elTdb);
+    }
+/* Sort tracks, then subTracks. */
+slSort(&newList, trackDbCmp);
+for (cur = newList; cur != NULL; cur = cur->next)
+    {
+    if (cur->subtracks)
+	slSort(&(cur->subtracks), trackDbCmp);
+    }
+*pTdbList = newList;
+hashElFreeList(&hashElList);
+hashFree(&tdbHash);
+}
+
+void trackDbFillInCompositeSettings(struct trackDb **pTdbList)
+/* Add to the subtracks, the other settings in the track. */
+{
+struct trackDb *cur;
+if (!pTdbList || !(*pTdbList))
+    return;
+for (cur = *pTdbList; cur != NULL; cur = cur->next)
+    {
+    if (cur->subtracks)
+	{
+	struct hashEl *compSetHelList = hashElListHash(cur->settingsHash);
+	struct trackDb *subtrack; 
+	for (subtrack = cur->subtracks; subtrack != NULL; subtrack = subtrack->next)
+	    {
+	    struct hash *subSetHash = subtrack->settingsHash;
+	    struct hashEl *hel;
+	    for (hel = compSetHelList; hel != NULL; hel = hel->next)
+		{
+		if (!hashFindVal(subSetHash, hel->name))
+		    hashAdd(subSetHash, hel->name, cloneString((char *)hel->val));
+		}
+	    }
+	hashElFreeList(&compSetHelList);
+	}
+    }
+}
+
+void trackDbMakeComposites(struct trackDb **pTdbList)
+/* Within a list of trackDbs, force the trackDbs that are subTracks to */
+/* inherit the settings of the main track, and also create a list of */
+/* subTracks for the tdb->subTracks pointer. */
+{
+trackDbMakeCompositeHierarchy(pTdbList);
+trackDbFillInCompositeSettings(pTdbList);
+}
+
+struct superTrackInfo {
+    boolean isSuper;
+    boolean isShow;
+    char *parentName;
+    enum trackVisibility defaultVis;
+};
+
+static struct superTrackInfo *getSuperTrackInfo(struct trackDb *tdb)
+/* Get info from supertrack setting.  There are 2 forms:
+ * Parent:   'superTrack on [show]'
+ * Child:    'superTrack <parent> [vis]
+ * Return null if there is no such setting. */
+{
+char *setting = trackDbSetting(tdb, "superTrack");
+if (!setting)
+    return NULL;
+char *words[8];
+int wordCt = chopLine(cloneString(setting), words);
+if (wordCt < 1)
+    return NULL;
+struct superTrackInfo *stInfo;
+AllocVar(stInfo);
+if (sameString("on", words[0]))
+    {
+    /* parent */
+    stInfo->isSuper = TRUE;
+    if ((wordCt > 1) && sameString("show", words[1]))
+        stInfo->isShow = TRUE;
+    }
+else
+    {
+    /* child */
+    stInfo->parentName = cloneString(words[0]);
+    if (wordCt > 1)
+        stInfo->defaultVis = max(0, hTvFromStringNoAbort(words[1]));
+    }
+return stInfo;
+}
+
+char *trackDbGetSupertrackName(struct trackDb *tdb)
+/* Find name of supertrack if this track is a member */
+{
+char *ret = NULL;
+struct superTrackInfo *stInfo = getSuperTrackInfo(tdb);
+if (stInfo)
+    {
+    if (stInfo->parentName)
+        ret = cloneString(stInfo->parentName);
+    freeMem(stInfo);
+    }
+return ret;
+}
+
+void trackDbSuperMemberSettings(struct trackDb *tdb)
+/* Set fields in trackDb to indicate this is a member of a
+ * supertrack. */
+{
+struct superTrackInfo *stInfo = getSuperTrackInfo(tdb);
+tdb->parentName = cloneString(stInfo->parentName);
+tdb->visibility = stInfo->defaultVis;
+freeMem(stInfo);
+}
+
+void trackDbSuperSettings(struct trackDb *tdbList)
+/* Set trackDb from superTrack setting */
+{
+struct trackDb *tdb;
+struct hash *superHash = hashNew(0);
+struct superTrackInfo *stInfo;
+
+/* find supertracks, setup their settings */
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+    {
+    stInfo = getSuperTrackInfo(tdb);
+    if (!stInfo)
+        continue;
+    if (stInfo->isSuper)
+        {
+        tdb->isSuper = TRUE;
+        tdb->isShow = stInfo->isShow;
+        if (!hashLookup(superHash, tdb->tableName))
+            hashAdd(superHash, tdb->tableName, tdb);
+        }
+    freeMem(stInfo);
+    }
+/* adjust settings on supertrack members after verifying they have
+ * a supertrack configured in this trackDb */
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+    {
+    stInfo = getSuperTrackInfo(tdb);
+    if (!stInfo)
+        continue;
+    if (!stInfo->isSuper && hashLookup(superHash, stInfo->parentName))
+        trackDbSuperMemberSettings(tdb);
+    freeMem(stInfo);
+    }
+}
 

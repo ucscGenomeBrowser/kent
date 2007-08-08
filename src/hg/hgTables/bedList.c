@@ -21,7 +21,7 @@
 #include "bedCart.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: bedList.c,v 1.57 2007/05/22 23:03:30 galt Exp $";
+static char const rcsid[] = "$Id: bedList.c,v 1.58 2007/08/02 01:35:02 galt Exp $";
 
 boolean htiIsPsl(struct hTableInfo *hti)
 /* Return TRUE if table looks to be in psl format. */
@@ -180,7 +180,7 @@ else if (isPsl)
     if (tStrand == '-')
 	{
 	/* psl: if target strand is '-', flip the coords.
-	 * (this is the target part of pslRcBoth from src/lib/psl.c) */
+	 * (this is the target part of pslRc from src/lib/psl.c) */
 	int tSize = sqlUnsigned(row[10]);
 	for (i=0; i<blockCount; ++i)
 	    {

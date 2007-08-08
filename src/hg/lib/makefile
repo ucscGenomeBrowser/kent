@@ -70,7 +70,7 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     rnaSecStr.o tfbsConsFactors.o retroMrnaInfo.o \
     roughAli.o transMapInfo.o sage.o sageCounts.o sageExp.o sample.o \
     sqlProg.o tfbsCons.o tfbsConsSites.o \
-    sanger22extra.o sangerGene.o sargassoSeaXra.o \
+    sanger22extra.o sangerGene.o sangerGeneToWBGeneID.o  sargassoSeaXra.o \
     scopDes.o scoredRef.o sgdAbundance.o \
     sgdClone.o sgdDescription.o sgdOther.o simpleNucDiff.o simpleRepeat.o \
     snp.o snp125.o snpExceptions.o snpFasta.o snpMap.o snpTmp.o \

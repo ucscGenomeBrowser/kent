@@ -9,7 +9,7 @@
 #include "cda.h"
 #include "seqOut.h"
 
-static char const rcsid[] = "$Id: pslShow.c,v 1.5 2005/10/05 19:07:43 kent Exp $";
+static char const rcsid[] = "$Id: pslShow.c,v 1.6 2007/08/02 01:35:03 galt Exp $";
 
 static void pslShowAlignmentStranded(struct psl *psl, boolean isProt,
 	char *qName, bioSeq *qSeq, int qStart, int qEnd,
@@ -301,15 +301,13 @@ boolean needsSwap = (psl->strand[0] == '-' && psl->strand[1] == 0);
 if (needsSwap)
     {
     memcpy(origStrand, psl->strand, 2);
-    pslRcBoth(psl);
-    psl->strand[0] = '+';
-    psl->strand[1] = '-';
+    pslRc(psl);
     }
 pslShowAlignmentStranded(psl, isProt, qName, qSeq, qStart, qEnd,
     tName, tSeq, tStart, tEnd, f);
 if (needsSwap)
     {
-    pslRcBoth(psl);
+    pslRc(psl);
     memcpy(psl->strand, origStrand, 2);
     }
 return psl->blockCount;

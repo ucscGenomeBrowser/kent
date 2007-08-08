@@ -173,7 +173,8 @@ sed -e 's/^.*://' $1 \
 
 
 #########################################################################
-# MASK SEQUENCE WITH FILTERED TRF IN ADDITION TO RM (DONE 12/20/06 angie - REDONE 2/6/07)
+# MASK SEQUENCE WITH FILTERED TRF IN ADDITION TO RM (DONE 12/20/06 angie - REDONE 2/6/07 - REDONE 7/24/07)
+# new assembly in Feb, new RM lib in July
     ssh kolossus
     cd /cluster/data/ornAna1
     time twoBitMask ornAna1.rmsk.2bit -add bed/simpleRepeat/trfMask.bed ornAna1.2bit
@@ -186,15 +187,27 @@ sed -e 's/^.*://' $1 \
 
 
 #########################################################################
-# MAKE DOWNLOADABLE / GOLDENPATH FILES (DONE 12/21/06 angie - REDONE 2/6/07)
+# MAKE DOWNLOADABLE / GOLDENPATH FILES (DONE 12/21/06 angie - REDONE 2/6/07 - REDONE 7/24/07)
+# new assembly in Feb, new RM lib in July
     cd /cluster/data/ornAna1
-    ln -s bed/RepeatMasker.2007-02-05/ornAna1.fa.out .
+
+    # If rerunning, save the edited README.txt files aside...
+    mkdir tmpReadmes
+    foreach d (bigZips database)
+      mkdir -p tmpReadmes/$d
+      cp -p goldenPath/$d/README.txt tmpReadmes/$d/README.txt
+    end
+    rm -f ornAna1.fa.out
+
+    ln -s bed/RepeatMasker.2007-07-17/ornAna1.fa.out .
     makeDownloads.pl ornAna1 -verbose=2 \
       >& jkStuff/downloads.log & tail -f jkStuff/downloads.log
     # Edit README.txt files when done:
+    # If rerunning, use info in tmpReadmes/ files but update where appropriate.
 # *** Edit each README.txt to resolve any notes marked with "***":
 #     /cluster/data/ornAna1/goldenPath/database/README.txt
 #     /cluster/data/ornAna1/goldenPath/bigZips/README.txt
+    rm -rf tmpReadmes
 
 
 #########################################################################
@@ -1243,6 +1256,23 @@ chainOne $(path1)
 #tmp1 and tmp2 are the same
 
     # Whew!
+
+
+#########################################################################
+# WSSD AND SEGMENTAL DUPLICATIONS (DONE 8/3/07 angie)
+    ssh kkstore05
+    mkdir /cluster/data/ornAna1/bed/genomicSuperDups
+    cd /cluster/data/ornAna1/bed/genomicSuperDups
+    # Unpack file emailed from Ginger Cheng <ginger@gs.washington.edu>
+    # in Evan Eichler's lab:
+    tar xvzf platypusDUP_track.tar.gz
+
+    ssh hgwdev
+    cd /cluster/data/ornAna1/bed/genomicSuperDups
+    hgLoadBed ornAna1 wssdCoverage SmallContig_wssdGE10K_nogap.tab
+    awk '($3 - $2) >= 1000 && ($9 - $8) >= 1000 {print;}' genomicSuperDups \
+    | hgLoadBed ornAna1 genomicSuperDups stdin \
+      -tab -sqlTable=$HOME/kent/src/hg/lib/genomicSuperDups.sql
 
 
 #########################################################################

@@ -13,18 +13,18 @@ set db=""
 set dbTrunc=""
 set metatables="dbDb blatServers defaultDb gdbPdb genomeClade liftOverChain"
 
-if ( $#argv == 1 || $#argv == 3 ) then
-  set db=$argv[1]
-  set dbTrunc=`echo $db | sed -e "s/[0-9]*//"`
-else
+if ( $#argv < 1 || $#argv > 3 ) then
   # no command line args
   echo
   echo "  checks the metadata for a new assembly."
   echo
-  echo "    usage:  database, [machine1], [machine2]"
-  echo '        (defaults to dev and beta)'
+  echo "    usage:  database [machine1 machine2]"
+  echo '        (defaults to dev and beta, or use "RR".)'
   echo
   exit
+else
+  set db=$argv[1]
+  set dbTrunc=`echo $db | sed -e "s/[0-9]*//"`
 endif
 
 # set defaults
@@ -46,6 +46,13 @@ if ( $orgCheck == 0 ) then
 endif
 
 # set machines, if given on command line.
+if ( $#argv == 2 ) then
+  echo "\n  please use two machine names.\n"
+  echo "${0}:"
+  $0
+  exit 1
+endif
+
 if ( $#argv == 3 ) then
   set mach1=$argv[2]
   set mach2=$argv[3]
@@ -87,7 +94,7 @@ endif
 # set machines to RR where needed if hgw# format used
 set covered="hgwdev hgwbeta rr RR"
 
-echo $covered | grep -w "$mach1" > /dev/null
+echo $covered | grep -wq "$mach1"
 if ( $status ) then
   checkMachineName.csh $mach1
   if ( $status ) then
@@ -98,7 +105,7 @@ if ( $status ) then
   endif
 endif
  
-echo $covered | grep -w "$mach2" > /dev/null
+echo $covered | grep -wq "$mach2" 
 if ( $status ) then
   checkMachineName.csh $mach2
   if ( $status ) then
@@ -108,7 +115,6 @@ if ( $status ) then
     set host2="-h genome-centdb"
   endif
 endif
-
 
 # echo
 # echo "host1 = $host1"
@@ -131,8 +137,7 @@ set out2=`echo $centdb2 | sed -e "s/-h //"`
 echo "database = $db"
 echo
 
-
-# check blatServers
+# check dbDb
 set metatable="dbDb"
 
 hgsql $host1 -e 'SELECT * FROM dbDb WHERE name = "'$db'"' $centdb1 \
@@ -171,9 +176,11 @@ hgsql $host2 -e 'SELECT * FROM gdbPdb WHERE genomeDb = "'$db'"' $centdb2 \
 # check liftOverChain
 set metatable="liftOverChain"
 
-hgsql $host1 -e 'SELECT * FROM liftOverChain WHERE fromDb = "'$db'" or toDb = "'$db'"' $centdb1 | sort \
-   > $metatable.$db.$out1
-hgsql $host2 -e 'SELECT * FROM liftOverChain WHERE fromDb = "'$db'" or toDb = "'$db'"' $centdb2 | sort \
+hgsql $host1 -e 'SELECT * FROM liftOverChain WHERE fromDb = "'$db'" \
+  or toDb = "'$db'"' $centdb1 | sort \
+  > $metatable.$db.$out1
+hgsql $host2 -e 'SELECT * FROM liftOverChain WHERE fromDb = "'$db'" \
+  or toDb = "'$db'"' $centdb2 | sort \
   > $metatable.$db.$out2
 
 
@@ -202,12 +209,13 @@ hgsql $host2 -e 'SELECT * FROM genomeClade WHERE genome LIKE  "%'$genome'"' \
 set metatable=""
 
 # compare and  print results
-foreach metatable ( `echo $metatables` )
-  comm -23 $metatable.$db.$out1 $metatable.$db.$out2 > $metatable.$db.${out1}Only
-  comm -13 $metatable.$db.$out1 $metatable.$db.$out2 > $metatable.$db.${out2}Only
-  comm -12 $metatable.$db.$out1 $metatable.$db.$out2 > $metatable.$db.common
-  wc -l $metatable.$db.${out1}Only $metatable.$db.${out2}Only \
-    $metatable.$db.common | grep -v "total"
+foreach table ( `echo $metatables` )
+  comm -23 $table.$db.$out1 $table.$db.$out2 > $table.$db.${out1}Only
+  comm -13 $table.$db.$out1 $table.$db.$out2 > $table.$db.${out2}Only
+  comm -12 $table.$db.$out1 $table.$db.$out2 > $table.$db.common
+  wc -l $table.$db.${out1}Only $table.$db.${out2}Only $table.$db.common \
+    | gawk '{ printf("%3d %-45s\n", $1, $2) }' \
+    | grep -v "total"
   echo
 end
 

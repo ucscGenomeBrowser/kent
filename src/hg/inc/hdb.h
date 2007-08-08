@@ -462,6 +462,9 @@ struct trackDb *hCompositeTrackDbForSubtrack(struct trackDb *sTdb);
  * Note: if the composite trackDb is found and returned, then its subtracks 
  * member will contain a newly allocated tdb like sTdb (but not ==). */
 
+void hTrackDbLoadSuper(struct trackDb *tdb);
+/* Populate child trackDbs of this supertrack */
+
 struct hTableInfo *hFindTableInfo(char *chrom, char *rootName);
 /* Find table information.  Return NULL if no table. */
 

@@ -117,7 +117,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1375 2007/07/24 00:04:36 heather Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1387 2007/08/06 23:40:52 fanhsu Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -175,6 +175,8 @@ struct hash *hgFindMatches; /* The matches found by hgFind that should be highli
 char *chromName;		/* Name of chromosome sequence . */
 char *database;			/* Name of database we're using. */
 char *organism;			/* Name of organism we're working on. */
+char *browserName;              /* Test or public browser */
+char *organization;             /* UCSC or MGC */
 int winStart;			/* Start of window in sequence. */
 int winEnd;			/* End of window in sequence. */
 static char *position = NULL; 		/* Name of position. */
@@ -453,14 +455,12 @@ int height = tgFixedTotalHeightOptionalOverflow(tg, vis, tl.fontHeight+1, tl.fon
 return height;
 }
 
-void changeTrackVis(struct group *groupList, char *groupTarget, 
-        int changeVis, boolean ifVisible)
+void changeTrackVis(struct group *groupList, char *groupTarget, int changeVis)
 /* Change track visibilities. If groupTarget is 
  * NULL then set visibility for tracks in all groups.  Otherwise,
  * just set it for the given group.  If vis is -2, then visibility is
  * unchanged.  If -1 then set visibility to default, otherwise it should 
- * be tvHide, tvDense, etc. The ifVisible flag when set, causes only
- * visibility to change only for non-hidden tracks.
+ * be tvHide, tvDense, etc. 
  * If we are going back to default visibility, then reset the track
  * ordering also. */
 {
@@ -482,27 +482,62 @@ for (group = groupList; group != NULL; group = group->next)
 	for (tr = group->trackList; tr != NULL; tr = tr->next)
 	    {
 	    struct track *track = tr->track;
+            struct trackDb *tdb = track->tdb;
 	    if (changeVis == -1)
                 {
-	        track->visibility = track->tdb->visibility;
+                /* restore defaults */
+                if (tdb->parentName)
+                    {
+                    /* removing the supertrack parent's cart variable
+                     * assures it has default (hide) vis */
+                    cartRemove(cart, tdb->parentName);
+                    }
+                track->visibility = tdb->visibility;
+
                 /* set the track priority back to the default value */
                 safef(pname, sizeof(pname), "%s.priority",track->mapName);
                 cartRemove(cart, pname);
                 track->priority = track->defaultPriority;
                 if (track->defaultGroupName != NULL && 
-                        differentString(track->groupName, track->defaultGroupName))
+                        differentString(track->groupName, 
+                                track->defaultGroupName))
                     {
                     safef(gname, sizeof(gname), "%s.group",track->mapName);
                     cartRemove(cart, gname);
                     track->groupName = cloneString(track->defaultGroupName);
+		    }
+                }
+            else
+                {
+                /* change to specified visibility */
+                if (tdb->parent)
+                    {
+                    /* Leave supertrack members alone -- only change parent */
+                    struct trackDb *parentTdb = tdb->parent;
+                    if ((changeVis == tvHide && !parentTdb->isShow) ||
+                        (changeVis != tvHide && parentTdb->isShow))
+                        {
+                        /* remove if setting to default vis */
+                        cartRemove(cart, parentTdb->tableName);
+                        }
+                    else
+                        cartSetString(cart, parentTdb->tableName, 
+                                        changeVis == tvHide ? "hide" : "show");
+                    }
+                else 
+                    {
+                    /* regular track */
+                    if (changeVis == tdb->visibility)
+                        /* remove if setting to default vis */
+                        cartRemove(cart, track->mapName);
+                    else
+                        cartSetString(cart, track->mapName, 
+                                                hStringFromTv(changeVis));
+                    track->visibility = changeVis;
                     }
                 }
-            else if (track->visibility != tvHide || !ifVisible)
-                track->visibility = changeVis;
-	    cartSetString(cart, track->mapName, 
-	    	hStringFromTv(track->visibility));
-	    }
-	}
+            }
+        }
     }
 }
 
@@ -1049,6 +1084,8 @@ for ( ; sizeWanted > 0 && sizeWanted < BIGNUM; )
 	items = wikiTrackGetBedRange(tg->mapName, chromName, start, end);
     else if (sameWord(tg->mapName, "gvPos"))
 	items = loadGvAsBed(tg, chromName, start, end);
+    else if (sameWord(tg->mapName, "oreganno"))
+        items = loadOregannoAsBed(tg, chromName, start, end);
     else
 	items = hGetBedRange(tg->mapName, chromName, start, end, NULL);
     /* If we got something, or weren't able to search as big as we wanted to */
@@ -6667,11 +6704,11 @@ char *interProName(struct track *tg, void *item)
 {
 char condStr[255];
 char *desc;
-struct linkedFeatures *lf = item;
+struct bed *it = item;
 struct sqlConnection *conn;
 
 conn = hAllocConn();
-sprintf(condStr, "interProId='%s' limit 1", lf->name);
+sprintf(condStr, "interProId='%s' limit 1", it->name);
 desc = sqlGetField(conn, "proteome", "interProXref", "description", condStr);
 hFreeConn(&conn);
 return(desc);
@@ -9330,7 +9367,7 @@ return vis;
 
 enum trackVisibility limitVisibility(struct track *tg)
 /* Return default visibility limited by number of items and
- * by parent visibility if part of a supertrack. 
+ * by parent visibility if part of a coposite track.
  * This also sets tg->height. */
 {
 if (!tg->limitedVisSet)
@@ -11675,6 +11712,36 @@ tg->items = list;
 hFreeConn(&conn);
 }
 
+struct bed* loadOregannoAsBed (struct track *tg, char *chr, int start, int end)
+/* load oreganno with filters, for a range, as a bed list (for next item button) */
+{
+char *chromNameCopy = cloneString(chromName);
+int winStartCopy = winStart;
+int winEndCopy = winEnd;
+struct oreganno *el = NULL;
+struct bed *bed, *list = NULL;
+/* set globals and use loadOreganno */
+chromName = chr;
+winStart = start;
+winEnd = end;
+loadOreganno(tg);
+/* now walk through tg->items creating the bed list */
+for (el = tg->items; el != NULL; el = el->next)
+    {
+    AllocVar(bed);
+    bed->chromStart = el->chromStart;
+    bed->chromEnd = el->chromEnd;
+    bed->chrom = cloneString(el->chrom);
+    bed->name = cloneString(el->id);
+    slAddHead(&list, bed);
+    }
+/* reset globals */
+chromName = chromNameCopy;
+winStart = winStartCopy;
+winEnd = winEndCopy;
+return list;
+}
+
 char *gvName(struct track *tg, void *item)
 /* Get name to use for gv item. */
 {
@@ -11705,6 +11772,8 @@ void oregannoMethods (struct track *tg)
 /* load so can allow filtering on type */
 {
 tg->loadItems = loadOreganno;
+tg->labelNextItemButtonable = TRUE;
+tg->labelNextPrevItem = linkedFeaturesLabelNextPrevItem;
 }
 
 void omiciaMethods (struct track *tg)
@@ -12361,11 +12430,7 @@ slSort(&track->subtracks, trackPriCmp);
 }
 
 struct track *trackFromTrackDb(struct trackDb *tdb)
-/* Create a track based on the tdb. If a parent trackDb is
- * present, create a parent track.  This can be used to
- * create an arbitrary track hierarchy -- for now there will be just
- * two -- regular tracks and those with a parent, or 'super' track.
- */
+/* Create a track based on the tdb */
 {
 struct track *track = NULL;
 char *iatName = NULL;
@@ -12422,8 +12487,6 @@ track->labelNextItemButtonable = track->nextItemButtonable;
 iatName = trackDbSetting(tdb, "itemAttrTbl");
 if (iatName != NULL)
     track->itemAttrTbl = itemAttrTblNew(iatName);
-
-track->parent = trackFromTrackDb(tdb->parent);
 fillInFromType(track, tdb);
 return track;
 }
@@ -12855,6 +12918,7 @@ for (bl = browserLines; bl != NULL; bl = bl->next)
         {
 	char *command = words[1];
 	if (sameString(command, "hide") 
+            || sameString(command, "show")      /* for supertracks only */
             || sameString(command, "dense") 
             || sameString(command, "pack") 
             || sameString(command, "squish") 
@@ -12878,7 +12942,15 @@ for (bl = browserLines; bl != NULL; bl = bl->next)
                             else
                                 cartSetString(cart, tg->mapName, command);
                             }
-			}
+                        if (tg->tdb->parentName && 
+                                (toAll || sameString(s, tg->tdb->parentName)))
+                            {
+                            /* change vis of super track */
+                            cartSetString(cart, tg->tdb->parentName,
+                                            (sameString(command,"hide") ? 
+                                                "hide" : "show"));
+                            }
+                        }
 		    }
 		}
 	    }
@@ -12889,6 +12961,7 @@ for (bl = browserLines; bl != NULL; bl = bl->next)
 	    if (!hgIsChromRange(words[2])) 
 	        errAbort("browser position needs to be in chrN:123-456 format");
 	    hgParseChromRange(words[2], &chromName, &winStart, &winEnd);
+
             /*Fix a start window of -1 that is returned when a custom track position
               begins at 0
             */
@@ -13243,16 +13316,36 @@ for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
         subtrack->visibility = track->visibility;
 }
 
-void superTrackVis(struct track *track)
+void limitSuperTrackVis(struct track *track)
 /* Limit track visibility by supertrack parent */
 {
-char *show = cartUsualString(cart, track->parent->mapName, "show");
-if (sameString("hide", show))
+struct trackDb *parent = track->tdb->parent;
+if (!parent)
+    return;
+if (sameString("hide", cartUsualString(cart, parent->tableName,
+                                parent->isShow ? "show" : "hide")))
     track->visibility = tvHide;
 }
 
+void setSuperTrackHasVisibleMembers(struct track *track)
+/* Determine if any member tracks are visible -- currently 
+ * recording this in the parent's visibility setting */
+{
+if (track->tdb->parent)
+    track->tdb->parent->visibility = tvDense;
+}
+
+boolean superTrackHasVisibleMembers(struct track *track)
+/* Determine if any member tracks are visible -- currently 
+ * recording this in the parent's visibility setting */
+{
+if (!track->tdb->parent)
+    return FALSE;
+return (track->tdb->parent->visibility != tvHide);
+}
+
 struct track *getTrackList( struct group **pGroupList)
-/* Return list of all tracks. */
+/* Return list of all tracks. Shared by hgTracks and configure page */
 {
 struct track *track, *trackList = NULL;
 /* Register tracks that include some non-standard methods. */
@@ -13521,6 +13614,10 @@ registerTrackHandler("tfbsCons", tfbsConsMethods);
 registerTrackHandler("tfbsConsSites", tfbsConsSitesMethods);
 registerTrackHandler("pscreen", simpleBedTriangleMethods);
 registerTrackHandler("dless", dlessMethods);
+registerTrackHandler("jaxAllele", jaxAlleleMethods);
+registerTrackHandler("jaxPhenotype", jaxPhenotypeMethods);
+registerTrackHandler("jaxAlleleLift", jaxAlleleMethods);
+registerTrackHandler("jaxPhenotypeLift", jaxPhenotypeMethods);
 /* ENCODE related */
 registerTrackHandler("encodeGencodeGene", gencodeGeneMethods);
 registerTrackHandler("encodeGencodeGeneJun05", gencodeGeneMethods);
@@ -13533,8 +13630,6 @@ registerTrackHandler("encodeGencodeRaceFrags", gencodeRaceFragsMethods);
 registerTrackHandler("affyTxnPhase2", affyTxnPhase2Methods);
 registerTrackHandler("gvPos", gvMethods);
 registerTrackHandler("oreganno", oregannoMethods);
-registerTrackHandler("jaxAllele", jaxAlleleMethods);
-registerTrackHandler("jaxPhenotype", jaxPhenotypeMethods);
 registerTrackHandler("encodeDless", dlessMethods);
 
 /* transMap */
@@ -13569,7 +13664,7 @@ loadCustomTracks(&trackList);
 groupTracks(&trackList, pGroupList);
 
 if (cgiOptionalString( "hideTracks"))
-    changeTrackVis(groupList, NULL, tvHide, FALSE);
+    changeTrackVis(groupList, NULL, tvHide);
 
 /* Get visibility values if any from ui. */
 for (track = trackList; track != NULL; track = track->next)
@@ -13580,13 +13675,11 @@ for (track = trackList; track != NULL; track = track->next)
 	s = cgiOptionalString(track->mapName);
 	if (s != NULL)
             {
-	    cartSetString(cart, track->mapName, s);
+            cartSetString(cart, track->mapName, s);
             }
 	}
     if (s != NULL)
 	track->visibility = hTvFromString(s);
-    if (track->parent)
-        superTrackVis(track);
     if (isCompositeTrack(track))
         compositeTrackVis(track);
     }
@@ -13700,15 +13793,14 @@ if (!hideControls)
 if (measureTiming)
     uglyTime("Time before getTrackList");
 trackList = getTrackList(&groupList);
-
 if (measureTiming)
     uglyTime("getTrackList");
 
 /* Honor hideAll and visAll variables */
-if(hideAll || defaultTracks)
+if (hideAll || defaultTracks)
     {
     int vis = (hideAll ? tvHide : -1);
-    changeTrackVis(groupList, NULL, vis, FALSE);
+    changeTrackVis(groupList, NULL, vis);
     }
 
 /* Before loading items, deal with the next/prev item arrow buttons if pressed. */
@@ -13720,6 +13812,10 @@ else if (cgiVarExists("hgt.prevItem"))
 /* Tell tracks to load their items. */
 for (track = trackList; track != NULL; track = track->next)
     {
+    /* adjust track visibility based on supertrack just before load loop */
+    if (track->tdb->parent)
+        limitSuperTrackVis(track);
+
     /* remove cart priority variables if they are set  
        to the default values in the trackDb */
     if(!hTrackOnChrom(track->tdb, chromName)) 
@@ -13744,10 +13840,9 @@ for (track = trackList; track != NULL; track = track->next)
 /* Center everything from now on. */
 hPrintf("<CENTER>\n");
 
+
 if (!hideControls)
     {
-    char *browserName = (isPrivateHost ? "Test Browser" : "Genome Browser");
-    char *organization = (hIsMgcServer() ? "MGC/ORFeome" : "UCSC");
     hotLinks();
 
     /* Show title . */
@@ -13889,6 +13984,7 @@ if (!hideControls)
     hOnClickButton("document.customTrackForm.submit();return false;",
                         hasCustomTracks ? 
                             CT_MANAGE_BUTTON_LABEL : CT_ADD_BUTTON_LABEL);
+    
     hPrintf(" ");
     hButton("hgTracksConfigPage", "configure");
     hPrintf(" ");
@@ -13914,6 +14010,7 @@ if (showTrackControls)
 	   "Tracks with lots of items will automatically be displayed in "
 	   "more compact modes.</td></tr>\n");
     cg = startControlGrid(MAX_CONTROL_COLUMNS, "left");
+    struct hash *superHash = hashNew(0);
     for (group = groupList; group != NULL; group = group->next)
         {
 	if (group->trackList == NULL)
@@ -13957,80 +14054,64 @@ if (showTrackControls)
 	    controlGridEndCell(cg);
 	    }
 
-        /* Scan group track list to find super tracks, saving in a hash */
-        struct hash *superHash = hashNew(0);
+        /* Scan track list to determine which supertracks have visible member
+         * tracks */
 	for (tr = group->trackList; tr != NULL; tr = tr->next)
-	    {
+            {
             if (!isOpen)
                 break;
             track = tr->track;
-            if (track->parent)
-                {
-                struct track *parent = hashFindVal(superHash, track->parent->mapName);
-                if (!parent)
-                    {
-                    /* parent is not yet hashed, so add it, with modified label */
-                    parent = track->parent;
-                    char buf[24];
-                    safef(buf, sizeof buf, "%s...", parent->shortLabel);
-                    parent->shortLabel = cloneString(buf);
-                    parent->hasUi = TRUE;
-                    hashAdd(superHash, parent->mapName, parent);
-                    }
-                /* note whether a child track is visible */
-                if (track->visibility != tvHide)
-                    parent->visibility = tvDense;
-                }
+	    if (!track->tdb->parent)
+                continue;
+            if (hTvFromString(cartUsualString(cart, track->mapName,
+                                hStringFromTv(track->tdb->visibility))) != tvHide)
+                    setSuperTrackHasVisibleMembers(track);
             }
+        /* Display track controls */
 	for (tr = group->trackList; tr != NULL; tr = tr->next)
 	    {
             if (!isOpen)
                 break;
 	    track = tr->track;
-            if (track->parent)
+            struct trackDb *superTdb = track->tdb->parent;
+            /* avoid supertrack if it's already been displayed */
+            if (superTdb)
                 {
-                struct track *parent = hashFindVal(superHash, track->parent->mapName);
-                if (!parent)
-                    /* ignore members of supertrack except first */
+                if (hashLookup(superHash, superTdb->tableName))
                     continue;
-                /* display supertrack for first member */
-                track = track->parent;
+                else
+                    hashAdd(superHash, superTdb->tableName, superTdb);
                 }
 	    controlGridStartCell(cg);
 	    if (track->hasUi)
 		{
-		char *encodedMapName = cgiEncode(track->mapName);
+		char *encodedMapName = cgiEncode(superTdb ?
+                                        superTdb->tableName : track->mapName);
 		hPrintf("<A HREF=\"%s?%s=%u&c=%s&g=%s\">", hgTrackUiName(),
 		    cartSessionVarName(), cartSessionId(cart),
 		    chromName, encodedMapName);
 		freeMem(encodedMapName);
 		}
-	    hPrintf(" %s<BR> ", track->shortLabel);
+            if (superTdb)
+                hPrintf(" %s...", superTdb->shortLabel);
+            else
+                hPrintf(" %s", track->shortLabel);
+	    hPrintf("<BR> ");
 	    if (track->hasUi)
 		hPrintf("</A>");
 
 	    if (hTrackOnChrom(track->tdb, chromName)) 
 		{
-                struct track *parent = hashFindVal(superHash, track->mapName);
-                if (parent)
-                    {
-                    /* hide/show dropdown for supertrack when first member is
-                     * encountered in track list */
-                    boolean showSuper = sameString("show",
-                                        cartUsualString(cart, parent->mapName, "show"));
-                    hideShowDropDown(parent->mapName, showSuper, 
-                                     showSuper && (parent->visibility != tvHide) ? 
-                                                "normalText": "hiddenText");
-                    /* remove so we don't repeat display */
-                    hashRemove(superHash, parent->mapName);
-                    }
+                if (superTdb)
+                    superTrackDropDown(cart, superTdb,
+                                        superTrackHasVisibleMembers(track));
                 else
                     {
                     /* check for option of limiting visibility to one mode */
-                    char *onlyVisibility = trackDbSetting(track->tdb, "onlyVisibility");
                     hTvDropDownClassVisOnly(track->mapName, track->visibility,
-                                            track->canPack, (track->visibility == tvHide) ? 
-                                            "hiddenText" : "normalText", onlyVisibility );
+                                track->canPack, (track->visibility == tvHide) ? 
+                                "hiddenText" : "normalText", 
+                                trackDbSetting(track->tdb, "onlyVisibility"));
                     }
                 }
 	    else 
@@ -14749,6 +14830,13 @@ int main(int argc, char *argv[])
 enteredMainTime = clock1000();
 uglyTime(NULL);
 isPrivateHost = hIsPrivateHost();
+browserName = (isPrivateHost ? "Test Browser" : "Genome Browser");
+organization = (hIsMgcServer() ? "MGC/ORFeome" : "UCSC");
+
+/* change title if this is for GSID */
+browserName = (hIsGsidServer() ? "Sequence View" : browserName);
+organization = (hIsGsidServer() ? "GSID" : organization);
+
 /* Push very early error handling - this is just
  * for the benefit of the cgiVarExists, which 
  * somehow can't be moved effectively into doMiddle. */
