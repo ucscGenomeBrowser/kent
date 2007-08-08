@@ -40,10 +40,6 @@ errAbort(
   );
 }
 
-static struct optionSpec options[] = {
-   {NULL, 0},
-};
-
 struct ctgInfo 
     {
     struct ctgInfo *next; /* Next in singly linked list */
@@ -94,7 +90,6 @@ if (lineFileRow(lf, row))
     acc = cloneString(row[0]);
     chopSuffixAt(acc, '_');
     el->acc = acc;
-    printf("Acc: %s, ctg name: %s \n", el->acc, el->ctgName);
     el->start = sqlUnsigned(row[3]);
     el->end = sqlUnsigned(row[4]);  
     }
@@ -136,7 +131,7 @@ while ((hashEl = hashNext(&cookie)) != NULL)
    {
    el = (struct ctgInfo *) hashEl->val;
    ctgInfoFree(&el);
-   /*
+/*
    freez(&hashEl->name); */
    }
 freeHash(hash);
@@ -192,10 +187,7 @@ while (lineFileNextCharRow2(lf, chopper, row, ArraySize(row)))
         safef(el->line, sizeof(el->line), "%s\t%s\t%s\n", row[6], row[7], row[8]);
         }
        
-    printf("from AGP: name is %s and line is: \n %s \n", el->name, el->acc);
-    printf("rest of line is %s here\n", el->line);
     slAddHead(&list, el); 
-    printf("Loaded one line of agp \n");
     }
 lineFileClose(&lf);
 slReverse(&list);
@@ -214,7 +206,8 @@ struct agpInfo *el;
 
 if ((el = *pEl) == NULL) return;
 freeMem(el->name);
-freeMem(el->acc);
+if (el->acc != NULL)
+    freeMem(el->acc);
 freez(pEl);
 }
 
@@ -240,10 +233,8 @@ char *hashKey;
 struct lineFile *lf = lineFileOpen(ctgsFile, TRUE);
 while ((ctg = ctgInfoLoadOne(lf)) != NULL)
     {
-    printf("Loaded one line \n");
     /* Add this to a hash keyed by the accession */
     hashKey = createCtgInfoKey(ctg->acc, ctg->start, ctg->end);
-    printf("Created key %s here\n", hashKey);
     hashAdd(hash, hashKey, ctg);
     }
 lineFileClose(&lf);
@@ -256,10 +247,6 @@ struct agpInfo *readAgpFile(char *agpFile)
 struct agpInfo *list = NULL;
 
 list = agpInfoLoadAllByTab(agpFile);
-if (list == NULL)
-    printf("list is now NULL\n");
-else
-    printf("list is not NULL in readAgpFile\n");
 return list;
 }
 
@@ -280,12 +267,8 @@ int prevEnd = 0, newStart = 0, newEnd = 0, size = 0;
 
 safef(NARandom, sizeof(NARandom), "%s_NA", assembly);
 safef(UnRandom, sizeof(UnRandom), "%s_scaffold", assembly);
-if (agpList == NULL)
-    printf("agpList is now NULL\n"); 
 while((agpEl = (struct agpInfo*)slPopHead(&agpList)) != NULL)
     {
-    printf("From AGP list:\n");
-    printf("%s", agpEl->line);
     lineNum++;
     /* if the part number is 1 then this is the start of a new
      * scaffold so insert 50000 Ns here */
@@ -319,7 +302,6 @@ while((agpEl = (struct agpInfo*)slPopHead(&agpList)) != NULL)
         /* if it is not a gap line and the contig or accession is in the 
          * contigs hash, then add the correct contig name to the agp */
         char *ctgKey = createCtgInfoKey(agpEl->acc, agpEl->ctgStart, agpEl->ctgEnd);
-        printf("contig key is %s here\n", ctgKey);
         if ((ctgEl = hashFindVal(ctgsHash, ctgKey)) != NULL)
             {
             /* add contig name from FASTA to agp */
@@ -343,15 +325,13 @@ void agpAddCtgNamesAndGaps(char *ctgsFile, char *agpFile, char *outFile)
 /* file handle for output file */
 FILE *out = mustOpen(outFile, "w");
 /* hash of contig information */
-struct hash *ctgsHash;
-struct agpInfo *agpList;
+struct hash *ctgsHash = NULL;
+struct agpInfo *agpList = NULL;
 
 ctgsHash = readCtgsFile(ctgsFile);
 
 /* Then read in agp file and add to a list to keep in order */
 agpList = readAgpFile(agpFile);
-if (agpList != NULL)
-    printf("Agp list returned is not NULL \n");
 createRandomsAgp(ctgsHash, agpList, out);
 
 /* free hashes and associated dynamically allocated variables */
@@ -364,7 +344,6 @@ carefulClose(&out);
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-optionInit(&argc, argv, options);
 if (argc != 4)
     usage();
 agpAddCtgNamesAndGaps(argv[1], argv[2], argv[3]);
