@@ -13,7 +13,7 @@
 #include "hui.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: mafClick.c,v 1.44 2007/08/08 17:42:35 fanhsu Exp $";
+static char const rcsid[] = "$Id: mafClick.c,v 1.45 2007/08/08 22:31:01 fanhsu Exp $";
 
 #define ADDEXONCAPITAL
 
@@ -926,6 +926,7 @@ else
     char buffer[1024];
     int useTarg = FALSE;
     int useIrowChains = FALSE;
+    int itemPrinted;
     safef(option, sizeof(option), "%s.%s", tdb->tableName, MAF_CHAIN_VAR);
     if (cartCgiUsualBoolean(cart, option, FALSE) && 
 	trackDbSetting(tdb, "irows") != NULL)
@@ -1085,11 +1086,18 @@ else
             char *species;
             struct hashCookie hc = hashFirst(speciesOffHash);
             puts("<B>Components not displayed:</B> ");
+	    
+	    itemPrinted = 0;
             while ((species = hashNextName(&hc)) != NULL)
-                printf("%s ", species);
+                {
+		/* print a break every 6 items */
+		if (((itemPrinted % 6) == 0) && (itemPrinted >0))
+		    printf("<br>");
+		printf("%s ", species);
+		itemPrinted++;
+		}
             puts("<BR>");
             }
-
 
 	for (maf = subList; maf != NULL; maf = maf->next)
 	    {
