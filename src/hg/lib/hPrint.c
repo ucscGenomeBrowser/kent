@@ -122,11 +122,26 @@ if (!suppressHtml)
     cgiMakeCheckBoxJS(varName, checked, javascript);
 }
 
+void hDropListClassWithStyle(char *name, char *menu[], int menuSize, 
+                                char *checked, char *class, char *style)
+/* Make a drop-down list with names if not suppressed, 
+ * using specified class and style */
+{
+if (!suppressHtml)
+    cgiMakeDropListClassWithStyle(name, menu, menuSize, checked, class, style);
+}
+
+void hDropListClass(char *name, char *menu[], int menuSize, char *checked,
+                        char *class)
+/* Make a drop-down list with names if not suppressed, using specified class. */
+{
+hDropListClassWithStyle(name, menu, menuSize, checked, class, NULL);
+}
+
 void hDropList(char *name, char *menu[], int menuSize, char *checked)
 /* Make a drop-down list with names if not suppressed. */
 {
-if (!suppressHtml)
-    cgiMakeDropList(name, menu, menuSize, checked);
+hDropListClass(name, menu, menuSize, checked, NULL);
 }
 
 void hPrintComment(char *format, ...)

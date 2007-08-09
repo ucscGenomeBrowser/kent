@@ -142,6 +142,9 @@ enum trackVisibility hTvFromStringNoAbort(char *s);
 char *hStringFromTv(enum trackVisibility vis);
 /* Given enum representation convert to string. */
 
+/* Standard width for visibility dropdowns */
+#define TV_DROPDOWN_STYLE "width: 70px"
+
 void hTvDropDownClassVisOnly(char *varName, enum trackVisibility vis,
 	boolean canPack, char *class, char *visOnly);
 /* Make track visibility drop down for varName with style class,

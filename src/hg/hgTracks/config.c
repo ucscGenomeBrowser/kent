@@ -78,6 +78,7 @@ if (changeVis != -2)
 
 struct hash *superHash = hashNew(0);
 cgiMakeHiddenVar(configGroupTarget, "none");
+boolean isFirst = TRUE;
 for (group = groupList; group != NULL; group = group->next)
     {
     struct trackRef *tr;
@@ -141,12 +142,15 @@ for (group = groupList; group != NULL; group = group->next)
     hPrintf("</TR>\n");
 
     /* First group gets ruler. */
-    if (!showedRuler)
+    if (!showedRuler && isOpen && isFirst)
 	{
-	showedRuler = TRUE;
+        showedRuler = TRUE;
 	hPrintf("<TR>");
 	hPrintf("<TD>");
-	hPrintf("%s", RULER_TRACK_LABEL);
+        hPrintf("<A HREF=\"%s?%s=%u&c=%s&g=%s\">", hgTrackUiName(),
+                cartSessionVarName(), cartSessionId(cart),
+                chromName, RULER_TRACK_NAME);
+        hPrintf("%s</A>", RULER_TRACK_LABEL);
 	hPrintf("</TD>");
 	hPrintf("<TD>");
 	hTvDropDownClass("ruler", rulerMode, FALSE, rulerMode ? "normalText" : "hiddenText");
@@ -165,6 +169,7 @@ for (group = groupList; group != NULL; group = group->next)
             }
 	hPrintf("</TR>\n");
 	}
+    isFirst = FALSE;
     /* Scan track list to determine which supertracks have visible member
      * tracks, and to insert a track in the list for the supertrack */
     struct track *track;
@@ -220,7 +225,10 @@ for (group = groupList; group != NULL; group = group->next)
 	if (track->hasUi)
 	    hPrintf("</A>");
 	hPrintf("</TD>");
-	hPrintf("<TD>");
+        hPrintf("<TD NOWRAP>");
+        if (tdb->parent)
+            /* indent members of a supertrack */
+            hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;");
 
 	/* If track is not on this chrom print an informational
 	   message for the user. */

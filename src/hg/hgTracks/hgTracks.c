@@ -117,7 +117,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1387 2007/08/06 23:40:52 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1388 2007/08/09 21:48:27 kate Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -14011,6 +14011,7 @@ if (showTrackControls)
 	   "more compact modes.</td></tr>\n");
     cg = startControlGrid(MAX_CONTROL_COLUMNS, "left");
     struct hash *superHash = hashNew(0);
+    boolean isFirst = TRUE;
     for (group = groupList; group != NULL; group = group->next)
         {
 	if (group->trackList == NULL)
@@ -14039,8 +14040,8 @@ if (showTrackControls)
 	hPrintf("</th>\n");
 	controlGridEndRow(cg);
 
-	/* First group gets ruler. */
-	if (!showedRuler)
+	/* First group gets ruler, unless it's collapsed. */
+	if (!showedRuler && isOpen && isFirst)
 	    {
 	    showedRuler = TRUE;
 	    controlGridStartCell(cg);
@@ -14049,10 +14050,13 @@ if (showTrackControls)
 		    chromName, RULER_TRACK_NAME);
 	    hPrintf(" %s<BR> ", RULER_TRACK_LABEL);
             hPrintf("</A>");
-	    hDropList("ruler", rulerMenu, sizeof(rulerMenu)/sizeof(char *), 
-		      rulerMenu[rulerMode]);
+	    hDropListClassWithStyle("ruler", rulerMenu, 
+                    sizeof(rulerMenu)/sizeof(char *), rulerMenu[rulerMode],
+                    rulerMode == tvHide ? "hiddenText" : "normalText",
+                    TV_DROPDOWN_STYLE);
 	    controlGridEndCell(cg);
 	    }
+        isFirst = FALSE;
 
         /* Scan track list to determine which supertracks have visible member
          * tracks */

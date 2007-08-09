@@ -12,7 +12,7 @@
 #include "hgConfig.h"
 #include "chainCart.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.92 2007/08/05 00:33:25 kate Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.93 2007/08/09 21:48:26 kate Exp $";
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -139,8 +139,6 @@ char *hStringFromTv(enum trackVisibility vis)
 {
 return hTvStrings[vis];
 }
-
-#define TV_DROPDOWN_STYLE "width: 70px"
 
 void hTvDropDown(char *varName, enum trackVisibility vis, boolean canPack)
 /* Make track visibility drop down for varName 

@@ -60,6 +60,15 @@ void hCheckBoxJS(char *varName, boolean checked, char *javascript);
 void hDropList(char *name, char *menu[], int menuSize, char *checked);
 /* Make a drop-down list with names if not suppressed. */
 
+void hDropListClass(char *name, char *menu[], int menuSize, char *checked,
+                        char *class);
+/* Make a drop-down list with names if not suppressed, using specified class. */
+
+void hDropListClassWithStyle(char *name, char *menu[], int menuSize, 
+                                char *checked, char *class, char *style);
+/* Make a drop-down list with names if not suppressed, 
+ * using specified class and style */
+
 void hPrintComment(char *format, ...);
 /* Function to print output as a comment so it is not seen in the HTML
  * output but only in the HTML source. */
