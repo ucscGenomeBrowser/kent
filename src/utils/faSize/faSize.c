@@ -2,9 +2,16 @@
 #include "common.h"
 #include "fa.h"
 #include "dnautil.h"
-#include "cheapcgi.h"
+#include "options.h"
 
-static char const rcsid[] = "$Id: faSize.c,v 1.9 2007/03/10 01:07:07 hiram Exp $";
+static char const rcsid[] = "$Id: faSize.c,v 1.10 2007/08/09 16:10:41 markd Exp $";
+
+/* command line options */
+static struct optionSpec optionSpecs[] =
+{
+    {"detailed", OPTION_BOOLEAN},
+    {NULL, 0}
+};
 
 void usage()
 /* Print usage info and exit. */
@@ -143,7 +150,7 @@ unsigned long long uCount = 0;
 unsigned long long lCount = 0;
 struct lineFile *lf;
 struct faInfo *fiList = NULL, *fi;
-boolean detailed = cgiBoolean("detailed");
+boolean detailed = optionExists("detailed");
 ZeroVar(&seq);
 
 dnaUtilOpen();
@@ -212,7 +219,7 @@ if (!detailed)
 int main(int argc, char *argv[])
 /* Process command line . */
 {
-cgiSpoof(&argc, argv);
+optionInit(&argc, argv, optionSpecs);
 if (argc < 2)
     usage();
 faSize(argv+1, argc-1);
