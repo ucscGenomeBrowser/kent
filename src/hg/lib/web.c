@@ -13,7 +13,7 @@
 #include "hgColors.h"
 #include "wikiLink.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.135 2007/07/26 22:06:56 angie Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.136 2007/08/09 00:07:47 fanhsu Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -204,7 +204,8 @@ if (isGsid)
     printf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/gsidSubj\" class=\"topbar\">%s</A></TD>", "<FONT COLOR=\"#FFFFFF\">Subject View</FONT>");
 
     /* Sequence View */
-    printf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgGateway\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Sequence View</FONT></A></TD>");
+    printf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgTracks%s\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Sequence View</FONT></A></TD>", 
+	   uiState);
 
     /* Table View */
     printf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/gsidTable\" class=\"topbar\">%s</A></TD>", "<FONT COLOR=\"#FFFFFF\">Table View</FONT>");
