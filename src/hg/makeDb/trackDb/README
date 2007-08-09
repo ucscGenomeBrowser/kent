@@ -423,3 +423,32 @@ type bed 3
 
 ---------------------
 
+SUPER TRACKS
+================
+Tracks can be organized in configuration groupings called 'super tracks'.
+A 'super track' is just a container for a group of related tracks that
+can be made visible or hidden as a unit.  There is an overall
+description page displayed for the super track, and the super track
+has a track control with special visibilities (hide/show) on the
+hgTracks main page.  The tracks which are contained in the super track 
+(super track members) do not have track controls on the hgTracks
+main page.  To define super tracks and their members, use the
+'superTrack' setting as follows:
+
+ * Super track:   'superTrack on [show]'
+ * Member tracks: 'superTrack <super> [vis]
+
+The Super track entry is very limited -- just the
+track name, labels, group, priority, and the superTrack setting.  
+The optional 'show' field indicates that the default visibility 
+for the super track is not hidden.
+
+The Member track entry is a full trackDb entry -- either for a regular
+track or a composite.  The <super> field gives the track name of
+the super track for this member.   The optional 'vis' field 
+indicates the default visibility for this track _only_ when it's a
+member of a supertrack.  The normal visibility field applies
+when the track is not in a super track.  (Note that a track can be 
+configured to be viewable as a supertrack member or not -- it will
+only be part of a super track if the super track to which it refers
+is configured in the assembly trackDb).
