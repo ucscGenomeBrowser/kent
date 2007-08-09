@@ -2212,6 +2212,10 @@ _EOF_
     ssh hgwdev
     hgsql hgcentraltest -e 'update dbDb set defaultPos="chr2L:826001-851000" where name = "dm3";'
 
+#########################################################################
+# ORegAnno - Open Regulatory Annotations 
+# latest update Aug 3, 2007 
+# loaded by Belinda Giardine, in same manner as hg18 ORegAnno track
 
 #########################################################################
 #########################################################################

@@ -11677,12 +11677,24 @@ hgLoadSqlTab -oldTable hgFixed gvAttr ~/humPhen/kent/src/hg/lib/gv.sql gvAttrIPN
 
 ##########################################################################
 # ORegAnno: oreganno, oregannoAttr, oregannoLink
-# Belinda Giardine  April 2007 
+# Belinda Giardine  August 3, 2007
 # This has regulatory annotations from ORegAnno.
 # Get updated file from Obi Griffith 
 # Parse flat file into 3 tables, truncate tables, load.
 # Has other species but only Human and Fly has enough entries for now.
-# Found and fixed bug in parsing script with this load
+cd /cluster/store6/giardine/oreganno/20070803/
+~giardine/oreganno/parseOra ce4 < oreganno_UCSC_03Aug07.txt
+hgsql hg18
+        truncate table oreganno;
+        truncate table oregannoAttr;
+        truncate table oregannoLink;
+	quit;
+grep "^chr" oreganno.hg18.txt | sort -k1,1 -k2,2n > oreganno.bed
+hgLoadBed hg18 oreganno oreganno.bed -noSort -oldTable -tab
+hgLoadSqlTab -oldTable hg18 oregannoAttr
+~/humPhen/kent/src/hg/lib/oreganno.sql oregannoAttr.hg18.txt
+hgLoadSqlTab -oldTable hg18 oregannoLink
+~/humPhen/kent/src/hg/lib/oreganno.sql oregannoLink.hg18.txt
 
 ##########################################################################
 # LIFT ACEMBLY FROM HG17 TO HG18 (DONE, Fan, 9/28/06)
