@@ -356,8 +356,8 @@ origAssembly hg17
 
 track encodeRegulomeDnaseArray
 compositeTrack on
-shortLabel UW DNase-chip
-longLabel UW DNaseI Hypersensitivity by DNase-chip
+shortLabel UW DNase-array
+longLabel UW DNaseI Hypersensitivity by DNase-array
 group encodeChrom
 priority 66.5
 type bedGraph 4
@@ -378,14 +378,14 @@ origAssembly hg17
     track encodeRegulomeDnaseGM06990Sens
     subTrack encodeRegulomeDnaseArray
     shortLabel DnaseI Sens 
-    longLabel UW DNase-chip GM06990 Sensitivity 
+    longLabel UW DNase-array GM06990 Sensitivity 
     color 000,000,153
     priority 1
 
     track encodeRegulomeDnaseGM06990Sites
     subTrack encodeRegulomeDnaseArray
     shortLabel DnaseI HSs 
-    longLabel UW DNase-chip GM06990 HSs
+    longLabel UW DNase-array GM06990 HSs
     noInherit on
     visibility dense
     useScore 1 
