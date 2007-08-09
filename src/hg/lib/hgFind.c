@@ -31,7 +31,7 @@
 #include "hgConfig.h"
 #include "trix.h"
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.201 2007/07/12 19:51:24 angie Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.202 2007/08/09 22:54:15 angie Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -1128,7 +1128,7 @@ else
 	row = sqlNextRow(sr);
 	if (row != NULL)
 	    {
-	    *retChromName = chromPtr->name;
+	    *retChromName = cloneString(chromPtr->name);
 	    *retWinStart = atoi(row[0]);
 	    *retWinEnd = atoi(row[1]);
 	    foundIt = TRUE;
