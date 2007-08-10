@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.14 2007/08/06 23:49:40 hiram Exp $"
+#	"$Id: mm9.txt,v 1.15 2007/08/10 21:31:58 hiram Exp $"
 #
 
 #######################################################################
@@ -544,7 +544,7 @@ twoBitToFa ${outputTwoBit} stdout | faSize stdin > faSize.${DB}.rmskTrf.txt
     #	test it with some sequence
 
 ########################################################################
-##  CYTOBAND - ideogram track (DONE - 2007-07-19 - Hiram)
+##  CYTOBAND - ideogram track (DONE - 2007-08-09 - Hiram)
     ssh hgwdev
     mkdir /cluster/data/mm9/bed/cytoBand
     cd /cluster/data/mm9/bed/cytoBand
@@ -554,15 +554,21 @@ twoBitToFa ${outputTwoBit} stdout | faSize stdin > faSize.${DB}.rmskTrf.txt
     # Load the bed file
     hgLoadBed -noBin -sqlTable=$HOME/kent/src/hg/lib/cytoBand.sql \
 	mm9 cytoBand cytoBand.bed
-XXX doesn't work, the ideogram file is corrupted
+    ### doesn't work, the ideogram file is corrupted, use the one fetched below
     # Make cytoBandIdeo track for ideogram gif on hgTracks page.
     # For mouse cytoBandIdeo is just a replicate of the cytoBand track.
     hgsql -e "drop table cytoBandIdeo;" mm9
     hgsql mm9 -e "create table cytoBandIdeo (index(chrom(10),chromStart)) as select * from cytoBand;"
 
+    ## fetch updated ideogram.gz file that has been fixed by NCBI
+    NCBI=ftp://ftp.ncbi.nih.gov/genomes
+    MAPVIEW=MapView/Mus_musculus/sequence/BUILD.37.1/updates
+    wget  --dont-remove-listing --timestamping \
+        "${NCBI}/${MAPVIEW}/ideogram.gz" -O ideogram.gz
+    ## run through the createNcbiCytoBand.pl process above, and then load
 
 ##########################################################################
-## GENBANK alignments (WORKING - 2007-07-23 - Hiram)
+## GENBANK alignments (DONE - 2007-08-03 - Hiram)
     ## next time:  don't forget to make the 11.ooc file, see below
     ## generate a lift file that specifies segments separated by non-bridged
     ## gaps
@@ -1552,7 +1558,7 @@ while (my $line = <>) {
     rm seq.tab
 
 ############################################################################
-# BACEND SEQUENCE ALIGNMENTS (WORKING - 2007-08-03 - Hiram)
+# BACEND SEQUENCE ALIGNMENTS (DONE - 2007-08-06 - Hiram)
     ssh kkstore06
     mkdir /cluster/data/mm9/noMask
     cd /cluster/data/mm9/
@@ -1664,7 +1670,7 @@ rm -fr /scratch/tmp/${root1}_${root2}
     cp -p bacEnds.psl /cluster/data/mm9/bacends
 
 ############################################################################
-# BACEND PAIRS TRACK (DONE - 2006-02-22 - Hiram)
+# BACEND PAIRS TRACK (DONE - 2007-08-06 - Hiram)
 
     ssh kolossus
     cd /cluster/data/mm9/bacends
@@ -1782,3 +1788,518 @@ rm -fr /scratch/tmp/${root1}_${root2}
 
     featureBits mm9 bacEndPairsBad
 # 48850302 bases of 2620346127 (1.864%) in intersection
+
+#######################################################################
+## create random contigs for genscan and other alignment tasks
+## DONE - 2007-08-07 - Hiram
+    ssh kkstore06
+    mkdir randomContigs
+    for L in ?/lift/random.lft ??/lift/random.lft
+do
+    D=${L/\/lift*}
+    echo $L $D
+    ~/kent/src/hg/utils/lft2BitToFa.pl mm9.2bit ${L} \
+	> randomContigs/chr${D}_random.ctg.fa
+done
+    #
+    #	Verify these *.ctg.fa files have the same bases as the ordinary
+    #	chr*_random.fa files:
+    ## don't have these fasta files yet, extract them from the 2bit
+    grep random chrom.sizes | cut -f1 | sed -e "s/^chr//; s/_random//" \
+	| while read C
+do
+    echo "twoBitToFa -seq=chr${C}_random mm9.2bit ${C}/chr${C}_random.fa"
+    twoBitToFa -seq=chr${C}_random mm9.2bit ${C}/chr${C}_random.fa
+done
+    ## now we can measure them
+    faSize ?/chr?_random.fa ??/chr??_random.fa
+    #	70853964 bases (9033771 N's 61820193 real 26427973 upper
+    #	35392220 lower) in 13 sequences in 13 files
+
+    ## and our contig versions
+    faSize randomContigs/*.ctg.fa
+    #	62053964 bases (233771 N's 61820193 real 26427973 upper
+    #	35392220 lower) in 189 sequences in 13 files
+    ## note, same number of real, upper and lower, only different N's
+
+    ## it would be nice to have the actual chroms too
+    grep -v random chrom.sizes | cut -f1 | sed -e "s/^chr//" \
+	| while read C
+do
+    echo "twoBitToFa -seq=chr${C} mm9.2bit ${C}/chr${C}.fa"
+    twoBitToFa -seq=chr${C} mm9.2bit ${C}/chr${C}.fa
+done
+    # measure that result
+    faSize ?/chr?.fa ??/chr??.fa
+    #	2654911517 bases (96385738 N's 2558525779 real 1438609919
+    #	upper 1119915860 lower) in 22 sequences in 22 files
+    ## is this the amount of sequence specified in chrom.sizes ?
+    grep -v random chrom.sizes | ave -col=2 stdin | grep total
+    #	total 2654911517.000000
+    ## same number, nothing lost
+
+#########################################################################
+# GENSCAN PREDICTIONS (DONE - 2007-08-07 - 2007-08-10 - Hiram)
+    ssh kkstore06
+    #	Create a 2bit file with the full chrom sequences and the
+    #	random contigs, all hard masked
+    ## later it was found that chr16_random.ctg.fa should not be in
+    ##	this genscan run.  So, it was temporarily taken out of this directory
+    ## and this sequence was rerun to avoid it.
+    cat ?/chr?.fa ??/chr??.fa randomContigs/chr*.ctg.fa \
+	| maskOutFa stdin hard stdout \
+	    | faToTwoBit stdin mm9Chroms_RandomContigs.hard.2bit
+    #  with chr16_random removed:
+    #	2716961487 bases (1251923595 N's 1465037892 real 1465037892 upper 0
+    #	lower) in 210 sequences in 1 files
+
+    #	make sure it still has all the unmasked sequence in it: (incl 16)
+    twoBitToFa mm9Chroms_RandomContigs.hard.2bit stdout \
+	| faSize stdin
+    # 2716965481 bases (1251927589 N's 1465037892 real 1465037892 upper
+    #	0 lower) in 211 sequences in 1 files
+    twoBitToFa mm9.2bit stdout | faSize stdin
+    # 2725765481 bases (105419509 N's 2620345972 real 1465037892 upper
+    # 1155308080 lower) in 35 sequences in 1 files
+    #	note the upper bases are the same, the lowers have become N's
+    #	lower 1155308080 + upper 1465037892 = 2620345972 real
+    #	N's 1251927589 - N's 105419509  = 1146508080 ==
+    #		N's in gaps between contigs
+
+    #	And, make sure there aren't any sequences in this lot that have
+    #	become all N's with no sequence left in them.  This drives genscan nuts
+    twoBitToFa mm9Chroms_RandomContigs.hard.2bit stdout \
+	| faCount stdin > chroms_randoms.faCount
+    #	the lowest three are:
+    egrep -v "^#|^total" chroms_randoms.faCount \
+	| awk '{print $1,$2-$7}' | sort -k2,2nr | tail -3
+    #	NT_166474.1 75
+    #	NT_166461.1 66
+    #	NT_166481.1 39
+    #	NT_166325.1 0
+    ## This last one is the entire chr16_random and it is only 3,994 bases
+    ## long and is marked entirely by RepeatMasker as a line.  It needs
+    ## to be skipped during the run of genscan.  Go back to the 2bit creation
+    ## and do not include chr16_random
+
+    #	creating 4,000,000 sized chunks, the chroms stay together as
+    #	single pieces.  The contigs get grouped together into 4,000,000
+    #	sized fasta files.  You don't want to break these things up
+    #	because genscan will be doing its own internal 2.4 million
+    #	window on these pieces, and the gene names are going to be
+    #	constructed from the sequence name in these fasta files.  The
+    #	gene names are much better when they are this simple chrN.M
+    #	numbering scheme, or in the case of a contig: contig_name.M
+    #	where the M is a sequence number that genscan will assign to
+    #	each gene it discovers.
+    mkdir hardChunks
+    twoBitToFa mm9Chroms_RandomContigs.hard.2bit stdout \
+	| faSplit about stdin 4000000 hardChunks/c_
+    ssh kkr1u00
+    mkdir /iscratch/i/mus/mm9/hardChunks
+    cd /iscratch/i/mus/mm9/hardChunks
+    rsync -a --progress /cluster/data/mm9/hardChunks/ .
+    for R in 2 3 4 5 6 7 8
+do
+    rsync -a --progress ./ kkr${R}u00:/iscratch/i/mus/mm9/hardChunks/
+done
+
+    ssh hgwdev
+    mkdir /cluster/data/mm9/bed/genscan
+    cd /cluster/data/mm9/bed/genscan
+    # Check out hg3rdParty/genscanlinux to get latest genscan:
+    cvs co hg3rdParty/genscanlinux
+
+    # Run on small cluster (more mem than big cluster).
+    ssh kki
+    cd /cluster/data/mm9/bed/genscan
+    # Make 3 subdirectories for genscan to put their output files in
+    mkdir gtf pep subopt
+    # Generate a list file, genome.list, of all the hard-masked contigs that 
+    # *do not* consist of all-N's (which would cause genscan to blow up)
+    #	Since we split on gaps, we have no chunks like that.  You can
+    #	verify with faCount on the chunks.
+    ls -1Sr /iscratch/i/mus/mm9/hardChunks/c_*.fa > genome.list
+
+    ## for next time, this isn't a parasol safe method of operation.
+    ## if genscan is writing answers to gtf/ pep/ and subopt/ during
+    ##	its operation and it fails. parsol wouldn't be able to verify that
+    ##	it was complete merely by file existence check.  This should work
+    ##	in scratch/tmp entirely, then copy results back after it is done.
+    # Create template file, for gensub2.  For example (3-line file):
+    cat << '_EOF_' > template
+#LOOP
+/cluster/bin/x86_64/gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check out line pep/$(root1).pep} -subopt={check out line subopt/$(root1).bed} -exe=hg3rdParty/genscanlinux/genscan -par=hg3rdParty/genscanlinux/HumanIso.smat -tmp=/tmp -window=2400000
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+    gensub2 genome.list single template jobList
+    para create jobList
+    para try, check, push, check, ...
+# Completed: 35 of 36 jobs
+# CPU time in finished jobs:     279581s    4659.68m    77.66h    3.24d  0.009 y
+# IO & Wait Time:                  3390s      56.50m     0.94h    0.04d  0.000 y
+# Average job time:                8085s     134.75m     2.25h    0.09d
+# Longest finished job:           32422s     540.37m     9.01h    0.38d
+# Submission to last job:        122301s    2038.35m    33.97h    1.42d
+
+    #	There was a failed job, going to kolossus and running it again,
+    #	it takes a very long time, and fails with this cryptic error:
+    #	No overlap between a and b in mergeTwo
+    ssh kolossus
+    cd /cluster/data/mm9/bed/genscan
+    time /cluster/bin/x86_64/gsBig /iscratch/i/mus/mm9/hardChunks/c_06.fa \
+        gtf/c_06.gtf -trans=pep/c_06.pep -subopt=subopt/c_06.bed \
+        -exe=hg3rdParty/genscanlinux/genscan \
+        -par=hg3rdParty/genscanlinux/HumanIso.smat -tmp=/scratch/tmp \
+        -window=2400000
+    #	real    922m2.382s
+    #	run it with a reduced window size to see if it will complete
+    time nice -n +19 /cluster/bin/x86_64/gsBig \
+	/iscratch/i/mus/mm9/hardChunks/c_06.fa \
+        gtf/c_06.gtf -trans=pep/c_06.pep -subopt=subopt/c_06.bed \
+        -exe=hg3rdParty/genscanlinux/genscan \
+        -par=hg3rdParty/genscanlinux/HumanIso.smat -tmp=/scratch/tmp \
+        -window=2000000
+    #	real    648m24.682s
+    ## that one failed too, with an error:
+# /scratch/tmp/temp_gsBig_10943_chr7_38.genscan is not a GENSCAN output file
+    ## and the contents of that file said:
+# Insufficient memory error: results may be unreliable.
+# Try running program an a portion of sequence.
+    #	Let's try splitting up this chr7 on the gaps, which there are plenty
+    #	of in this hard masked sequence.  Ended up breaking the chr7 sequence
+    #	with the non bridged lift file.  See the lft2BitToFa.pl file in
+    #	the chr7_split directory.
+    #	on kkstore06
+    ssh kkstore06
+    mkdir /cluster/data/mm9/bed/genscan/chr7_split
+    cd /cluster/data/mm9/bed/genscan/chr7_split
+    ./lft2BitToFa.pl ../../../mm9.2bit *.lft > chr7.contigs.hard.fa
+
+    mkdir /cluster/data/mm9/bed/genscan/chr7_run
+    cd /cluster/data/mm9/bed/genscan/chr7_run
+    mkdir split
+    faSplit sequence ../chr7_split/chr7.contigs.hard.fa 100 split/chr7_
+
+    ## Now, on the small kluster
+    ssh kki
+    cd /cluster/data/mm9/bed/genscan/chr7_run
+    mkdir gtf pep subopt
+
+    # Create template file, for gensub2.  For example (3-line file):
+    cat << '_EOF_' > template
+#LOOP
+/cluster/bin/x86_64/gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check out line pep/$(root1).pep} -subopt={check out line subopt/$(root1).bed} -exe=../hg3rdParty/genscanlinux/genscan -par=../hg3rdParty/genscanlinux/HumanIso.smat -tmp=/scratch/tmp -window=2400000
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+    ls -1S split/chr7_*.fa > chr7.list
+    gensub2 chr7.list single template jobList
+    para create jobList
+    para try ... check ... push ... etc...
+# Completed: 15 of 15 jobs
+# CPU time in finished jobs:       4226s      70.43m     1.17h    0.05d  0.000 y
+# IO & Wait Time:                   215s       3.59m     0.06h    0.00d  0.000 y
+# Average job time:                 296s       4.93m     0.08h    0.00d
+# Longest finished job:             861s      14.35m     0.24h    0.01d
+# Submission to last job:           861s      14.35m     0.24h    0.01d
+    # lift these chr7 results into a single file,
+    #	fixup the gene names with the sed to remove the lift name effect
+    ssh kkstore06
+    cd /cluster/data/mm9/bed/genscan/chr7_run
+    cat gtf/chr7_*.gtf | liftUp -type=.gtf stdout \
+	../chr7_split/nonBridgedChr7.lft error stdin \
+	| sed -e "s/chr7\.\([0-9][0-9]*\)\./chr7.\1/g" > chr7.gtf
+    cat subopt/chr7_*.bed | liftUp -type=.bed stdout \
+	../chr7_split/nonBridgedChr7.lft error stdin \
+	| sed -e "s/chr7\.\([0-9][0-9]*\)\./chr7.\1/g" > chr7.subopt.bed
+    cat pep/chr7_*.pep | sed -e "s/chr7\.\([0-9][0-9]*\)\./chr7.\1/g" > chr7.pep
+    ## these results become the c_06 results in the main run
+    cp -p chr7.pep ../pep/c_06.pep
+    cp -p chr7.subopt.bed ../subopt/c_06.bed
+    cp -p chr7.gtf ../gtf/c_06.gtf
+
+    ## after the chr7 business above, back to the mainline processing
+    # cat and lift the results into single files
+    ssh kkstore06
+    cd /cluster/data/mm9/bed/genscan
+    cat gtf/c_*.gtf | liftUp -type=.gtf genscan.gtf \
+	../../jkStuff/mm9.contigs.lift carry stdin
+    cat subopt/c_*.bed | liftUp -type=.bed genscanSubopt.bed \
+	../../jkStuff/mm9.contigs.lift carry stdin
+    cat pep/c_*.pep > genscan.pep
+
+    # Load into the database as so:
+    ssh hgwdev
+    cd /cluster/data/mm9/bed/genscan
+    ldHgGene mm9 -gtf genscan genscan.gtf
+    #	Read 45189 transcripts in 324075 lines in 1 files
+    #	45189 groups 34 seqs 1 sources 1 feature types
+    #	45189 gene predictions
+
+    hgPepPred mm9 generic genscanPep genscan.pep
+    hgLoadBed mm9 genscanSubopt genscanSubopt.bed
+    #	Loaded 525904 elements of size 6
+
+    #	check the numbers
+    time nice -n +19 featureBits mm9 genscan
+    #	55293837 bases of 2620346127 (2.110%) in intersection
+    time nice -n +19 featureBits mm8 genscan
+    #	54455852 bases of 2567283971 (2.121%) in intersection
+    time nice -n +19 featureBits mm8 knownGene:cds
+    #	28459053 bases of 2567283971 (1.109%) in intersection
+    featureBits mm7 genscan
+    #	54864694 bases of 2583394090 (2.124%) in intersection
+    time nice -n +19 featureBits mm7 knownGene:cds
+    #	27531524 bases of 2583394090 (1.066%) in intersection
+
+    featureBits mm9 genscanSubopt
+    #	57044145 bases of 2620346127 (2.177%) in intersection
+    featureBits mm8 genscanSubopt
+    #	57048581 bases of 2567283971 (2.222%) in intersection
+    featureBits mm7 genscanSubopt
+    #	57512333 bases of 2583394090 (2.226%) in intersection
+    featureBits mm6 genscanSubopt
+    #	57856316 bases of 2597150411 (2.228%) in intersection
+    featureBits mm5 genscanSubopt
+    #	58474899 bases of 2615483787 (2.236%) in intersection
+    featureBits mm4 genscanSubopt
+    #	59601009 bases of 2627444668 (2.268%) in intersection
+    featureBits mm3 genscanSubopt
+    #	56085184 bases of 2505900260 (2.238%) in intersection
+
+#############################################################################
+# BLASTZ SELF (WORKING - 2007-08-07 - Hiram)
+#	using chain min score of 10,000 to cut down on volumn of data
+#  trying a two pass sequence, chroms with chroms, then randoms to chroms
+#  combine the two results for a final set
+    ssh kkstore06
+    cd /cluster/data/mm9
+    time nice -n +19 faToTwoBit ?/chr?.fa ??/chr??.fa mm9.chroms.2bit
+    time nice -n +19 faToTwoBit randomContigs/chr*.ctg.fa mm9.randomContigs.2bit
+
+    ssh kkr1u00
+    cd /iscratch/i/mus/mm9
+    cp -p /cluster/data/mm9/mm9.chroms.2bit .
+    cp -p /cluster/data/mm9/mm9.randomContigs.2bit .
+    twoBitInfo mm9.chroms.2bit mm9.chroms.sizes
+    twoBitInfo mm9.randomContigs.2bit mm9.randomContgs.sizes
+    for R in 2 3 4 5 6 7 8
+do
+    rsync -a --progress ./ kkr${R}u00:/iscratch/i/mus/mm9/
+done
+
+    ssh kkstore06
+    mkdir /cluster/data/mm9/bed/blastzSelf.2007-08-07
+    cd /cluster/data/mm9/bed/blastzSelf.2007-08-07
+
+    cat << '_EOF_' > DEF
+# mouse vs mouse
+BLASTZ_H=2000
+BLASTZ_M=200
+
+# TARGET: Mouse Mm8
+SEQ1_DIR=/iscratch/i/mus/mm9/mm9.chroms.2bit
+SEQ1_LEN=/iscratch/i/mus/mm9/mm9.chroms.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Mouse Mm8
+SEQ2_DIR=/iscratch/i/mus/mm9/mm9.chroms.2bit
+SEQ2_LEN=/iscratch/i/mus/mm9/mm9.chroms.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm9/bed/blastzSelf.2007-08-07
+TMPDIR=/scratch/tmp
+'_EOF_'
+    #	<< happy emacs
+
+    ## run this in a screen on kkstore06
+    cd /cluster/data/mm9/bed/blastzSelf.2007-08-07
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-chainMinScore=10000 -chainLinearGap=medium -bigClusterHub=kk \
+	-stop=load `pwd`/DEF > blastz.out 2>&1 &
+XXX - running - 2007-08-07
+    #	broke during the load step due to doBlastz script changes,
+    #	finished the load manually, then:
+    time /cluster/home/hiram/kent/src/utils/doBlastzChainNet.pl -verbose=2 \
+	-chainMinScore=10000 -chainLinearGap=medium -bigClusterHub=pk \
+	-continue=download `pwd`/DEF > download.out 2>&1 &
+
+    ssh kolossus
+    cd /cluster/data/mm9/bed/blastzSelf.2007-08-07
+    time HGDB_CONF=~/.hg.conf.read-only featureBits mm9 \
+	chainSelfLink >fb.mm9.chainSelfLink 2>&1
+    cat fb.mm9.chainSelfLink
+    #	362483673 bases of 2567283971 (14.119%) in intersection
+
+    cd /cluster/data/mm9/bed
+    ln -s blastzSelf.2007-08-07 blastz.mm9
+
+#############################################################################
+# PREPARE LINEAGE SPECIFIC REPEAT FILES FOR BLASTZ (DONE - 2007-08-07 - Hiram)
+    ssh kkr1u00
+    mkdir /iscratch/i/mus/mm9/rmsk
+    cd /cluster/data/mm9
+    cp -p */chr*.fa.out /iscratch/i/mus/mm9/rmsk
+    cd /iscratch/i/mus/mm9
+    for R in 2 3 4 5 6 7 8
+    do
+	rsync -a --progress /iscratch/i/mm9/ kkr${R}u00:/iscratch/i/mm9/
+    done
+    cd rmsk
+
+    ssh kki
+    mkdir /cluster/data/mm9/linSpecRep
+    cd /cluster/data/mm9/linSpecRep
+    ls -1S /iscratch/i/mus/mm9/rmsk > fa.list
+    
+    cat << '_EOF_' > mkLSR
+#!/bin/csh -fe
+pushd /iscratch/i/mus/mm9/rmsk
+rm -f $1_homo-sapiens_rattus_canis-familiaris_bos-taurus
+/cluster/bluearc/RepeatMasker070517/DateRepeats \
+    $1 -query mouse -comp human -comp rat -comp dog -comp cow
+popd
+/bin/cp -p \
+  /iscratch/i/mus/mm9/rmsk/$1_homo-sapiens_rattus_canis-familiaris_bos-taurus .
+rm -f /iscratch/i/mus/mm9/rmsk/$1_homo-sapiens_rattus_canis-familiaris_bos-taurus
+'_EOF_'
+    #	<< happy emacs
+    chmod +x mkLSR
+
+    cat << '_EOF_' > template
+#LOOP
+./mkLSR $(path1) {check out line+ $(path1)_homo-sapiens_rattus_canis-familiaris_bos-taurus}
+#ENDLOOP
+'_EOF_'
+    #	<< happy emacs
+
+    gensub2 fa.list single template jobList
+    para try ... check ... push ... etc...
+    para time
+# Completed: 35 of 35 jobs
+# CPU time in finished jobs:       1498s      24.96m     0.42h    0.02d  0.000 y
+# IO & Wait Time:                   193s       3.22m     0.05h    0.00d  0.000 y
+# Average job time:                  48s       0.81m     0.01h    0.00d
+# Longest finished job:             102s       1.70m     0.03h    0.00d
+# Submission to last job:          3399s      56.65m     0.94h    0.04d
+
+    ssh kkstore06
+    cd /cluster/data/mm9/linSpecRep
+    mkdir notInHuman notInRat notInDog notInCow notInRabbit
+    for F in chr*.out_homo-sapiens*
+    do
+	B=${F/.fa.out*/}
+	echo $B 
+        /cluster/bin/scripts/extractRepeats 1 ${F} > \
+		notInHuman/${B}.out.spec
+        /cluster/bin/scripts/extractRepeats 2 ${F} > \
+		notInRat/${B}.out.spec
+        /cluster/bin/scripts/extractRepeats 3 ${F} > \
+		notInDog/${B}.out.spec
+        /cluster/bin/scripts/extractRepeats 4 ${F} > \
+		notInCow/${B}.out.spec
+    done
+
+    #	the notInHuman, notInDog, and notInCow ended up being
+    #	identical.  Only the notInRat was different than them
+    #	To check identical
+    find . -name "*.out.spec" | \
+	while read FN; do echo `cat ${FN} | sum -r` ${FN}; done \
+	| sort -k1,1n | sort -t"/" -k3,3
+    #	Copy to iscratch for use in kluster runs
+    ssh kkr1u00
+    mkdir -p /iscratch/i/mus/mm9/linSpecRep/notInRat
+    mkdir -p /iscratch/i/mus/mm9/linSpecRep/notInOthers
+    cd /iscratch/i/mus/mm9/linSpecRep/notInRat
+    cp -p /cluster/data/mm9/linSpecRep/notInRat/* .
+    cd /iscratch/i/mus/mm9/linSpecRep/notInOthers
+    cp -p /cluster/data/mm9/linSpecRep/notInHuman/* .
+    #	copy this directory to the other Iservers
+    cd /iscratch/i/mus/mm9
+    for R in 2 3 4 5 6 7 8
+do
+    rsync -a --progress ./ kkr${R}u00:/iscratch/i/mus/mm9/
+done
+
+    #	and we can do the Iservers simply:
+    ssh kkr1u00
+    cd /iscratch/i/mm9
+    #	no longer need these two directories
+    rm -fr fa rmsk
+    rsync -a --progress /cluster/bluearc/scratch/hg/mm9/ .
+    for R in 2 3 4 5 6 7 8
+    do
+	rsync -a --progress /iscratch/i/mm9/ kkr${R}u00:/iscratch/i/mm9/
+    done
+
+    # We also need the nibs for blastz runs with lineage specific repeats
+    ssh kkstore06
+    mkdir /cluster/data/mm9/nib
+    cd /cluster/data/mm9
+    for FA in ?/chr*.fa ??/chr*.fa
+do
+    F=${FA/*\//}
+    F=${F/.fa/}
+    echo faToNib -softMask ${FA} nib/${F}.nib
+    faToNib -softMask ${FA} nib/${F}.nib
+done
+    #  copied to /cluster/bluearc/scratch/data/mm9/nib/
+    #  and everything else we will need for kluster runs into
+    #	/cluster/bluearc/scratch/data/mm9/
+    # Ask cluster-admin to sync /scratch/ filesystem to kluster nodes
+
+#########################################################################
+# BLASTZ RAT Rn4 (WORKING - 2007-08-09 - Hiram)
+    ssh kkstore06
+    mkdir /cluster/data/mm9/bed/blastzRn4.2007-08-09
+    cd /cluster/data/mm9/bed/blastzRn4.2007-08-09
+    #	Started this before the rsync to /scratch/data/mm9/ had completed,
+    #	hence the /cluster/bluearc/scratch/data/mm9/ location is used
+    #	here.
+
+    cat << '_EOF_' > DEF
+# mouse vs rat
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET: Mouse Mm9
+SEQ1_DIR=/cluster/bluearc/scratch/data/mm9/nib
+SEQ1_SMSK=/cluster/bluearc/scratch/data/mm9/notInRat
+SEQ1_LEN=/cluster/bluearc/scratch/data/mm9/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Rat Rn4 - single chunk big enough to run each chrom by itself
+SEQ2_DIR=/iscratch/i/rn4/nib
+SEQ2_SMSK=/iscratch/i/rn4/linSpecRep.notInMouse
+SEQ2_LEN=/iscratch/i/rn4/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm9/bed/blastzRn4.2007-08-09
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=kk -chainMinScore=3000 -chainLinearGap=medium \
+	`pwd`/DEF > blastz.out 2>&1 &
+XXX - running - 2007-08-09 12:50
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=kk -chainMinScore=3000 -chainLinearGap=medium \
+	-swap `pwd`/DEF > swap.out 2>&1 &
+
+    time nice -n +19 featureBits mm9 chainRn4Link
+    #	1770319811 bases of 2567283971 (68.957%) in intersection
+    time nice -n +19 featureBits rn4 chainMm8Link
+    #	1791093685 bases of 2571531505 (69.651%) in intersection
+
+    cd /cluster/data/mm9/bed
+    ln -s blastzRn4.2007-08-09 blastz.rn4
+    cd blastzRn4.2007-08-09
