@@ -14,21 +14,22 @@ xmlns="http://www.w3.org/TR/REC-html40">
   <o:Author>Jim Kent</o:Author>
   <o:LastAuthor>Soe</o:LastAuthor>
   <o:Revision>2</o:Revision>
-  <o:TotalTime>105</o:TotalTime>
-  <o:LastPrinted>2003-06-11T23:46:00Z</o:LastPrinted>
-  <o:Created>2006-12-31T22:04:00Z</o:Created>
-  <o:LastSaved>2006-12-31T22:04:00Z</o:LastSaved>
-  <o:Pages>9</o:Pages>
-  <o:Words>4223</o:Words>
-  <o:Characters>24072</o:Characters>
+  <o:TotalTime>106</o:TotalTime>
+  <o:LastPrinted>2003-06-11T22:46:00Z</o:LastPrinted>
+  <o:Created>2007-08-10T00:02:00Z</o:Created>
+  <o:LastSaved>2007-08-10T00:02:00Z</o:LastSaved>
+  <o:Pages>1</o:Pages>
+  <o:Words>4374</o:Words>
+  <o:Characters>24938</o:Characters>
   <o:Company> </o:Company>
-  <o:Lines>200</o:Lines>
-  <o:Paragraphs>56</o:Paragraphs>
-  <o:CharactersWithSpaces>28239</o:CharactersWithSpaces>
+  <o:Lines>207</o:Lines>
+  <o:Paragraphs>58</o:Paragraphs>
+  <o:CharactersWithSpaces>29254</o:CharactersWithSpaces>
   <o:Version>11.6568</o:Version>
  </o:DocumentProperties>
 </xml><![endif]--><!--[if gte mso 9]><xml>
  <w:WordDocument>
+  <w:SpellingState>Clean</w:SpellingState>
   <w:DisplayHorizontalDrawingGridEvery>0</w:DisplayHorizontalDrawingGridEvery>
   <w:DisplayVerticalDrawingGridEvery>0</w:DisplayVerticalDrawingGridEvery>
   <w:UseMarginsForDrawingGridOrigin/>
@@ -62,7 +63,6 @@ xmlns="http://www.w3.org/TR/REC-html40">
  @font-face
 	{font-family:Courier;
 	panose-1:2 7 4 9 2 2 5 2 4 4;
-	mso-font-alt:"Courier New";
 	mso-font-charset:0;
 	mso-generic-font-family:modern;
 	mso-font-format:other;
@@ -157,6 +157,9 @@ p.MsoDocumentMap, li.MsoDocumentMap, div.MsoDocumentMap
 	font-family:Tahoma;
 	mso-fareast-font-family:"Times New Roman";
 	mso-bidi-font-family:"Times New Roman";}
+span.SpellE
+	{mso-style-name:"";
+	mso-spl-e:yes;}
 @page Section1
 	{size:8.5in 11.0in;
 	margin:1.0in 1.25in .8in 1.25in;
@@ -271,34 +274,36 @@ inserts.<span style='mso-spacerun:yes'>  </span>The output of BLAT is
 flexible.<span style='mso-spacerun:yes'>  </span>By default it is a simple
 tab-delimited file which describes the alignment, but which does not include
 the sequence of the alignment itself.<span style='mso-spacerun:yes'> 
-</span>Optionally it can produce BLAST and WU-BLAST compatable output as well
-as a number of other formats.</p>
+</span>Optionally it can produce BLAST and WU-BLAST <span class=SpellE>compatable</span>
+output as well as a number of other formats.</p>
 
 <p class=MsoNormal><o:p>&nbsp;</o:p></p>
 
 <p class=MsoNormal>The main programs in the blat suite are:</p>
 
 <ul style='margin-top:0in' type=disc>
- <li class=MsoNormal style='mso-list:l5 level1 lfo4;tab-stops:list .5in'>gfServer
-     – a server that maintains an index of the genome in memory and uses the
-     index to quickly find regions with high levels of sequence similarity to a
-     query sequence.</li>
- <li class=MsoNormal style='mso-list:l5 level1 lfo4;tab-stops:list .5in'>gfClient
-     – a program that queries gfServer over the network, and then does a
-     detailed alignment of the query sequence with regions found by gfServer.</li>
+ <li class=MsoNormal style='mso-list:l5 level1 lfo4;tab-stops:list .5in'><span
+     class=SpellE>gfServer</span> – a server that maintains an index of the
+     genome in memory and uses the index to quickly find regions with high
+     levels of sequence similarity to a query sequence.</li>
+ <li class=MsoNormal style='mso-list:l5 level1 lfo4;tab-stops:list .5in'><span
+     class=SpellE>gfClient</span> – a program that queries <span class=SpellE>gfServer</span>
+     over the network, and then does a detailed alignment of the query sequence
+     with regions found by <span class=SpellE>gfServer</span>.</li>
  <li class=MsoNormal style='mso-list:l5 level1 lfo4;tab-stops:list .5in'>blat
      –combines client and server into a single program, first building the
      index, then using the index, and then exiting.<span
      style='mso-spacerun:yes'>  </span></li>
- <li class=MsoNormal style='mso-list:l5 level1 lfo4;tab-stops:list .5in'>webBlat
-     – a web based version of gfClient that presents the alignments in an
-     interactive fashion.</li>
+ <li class=MsoNormal style='mso-list:l5 level1 lfo4;tab-stops:list .5in'><span
+     class=SpellE>webBlat</span> – a web based version of <span class=SpellE>gfClient</span>
+     that presents the alignments in an interactive fashion.</li>
 </ul>
 
 <p class=MsoNormal>Building an index of the genome typically takes 10 or 15
 minutes. <span style='mso-spacerun:yes'> </span>Typically for interactive
-applications one uses gfServer to build a whole genome index.<span
-style='mso-spacerun:yes'>  </span>At that point gfClient or webBlat can align a
+applications one uses <span class=SpellE>gfServer</span> to build a whole
+genome index.<span style='mso-spacerun:yes'>  </span>At that point <span
+class=SpellE>gfClient</span> or <span class=SpellE>webBlat</span> can align a
 single query within few seconds.<span style='mso-spacerun:yes'>  </span>If one
 is aligning a lot of sequences in a batch mode then blat can be more efficient,
 particularly if run on a cluster of computers.<span style='mso-spacerun:yes'> 
@@ -310,28 +315,33 @@ large number of query sequences.</p>
 <p class=MsoNormal>Other programs in the blat suite are:</p>
 
 <ul style='margin-top:0in' type=disc>
- <li class=MsoNormal style='mso-list:l2 level1 lfo5;tab-stops:list .5in'>pslSort
-     – combines and sorts the output of multiple blat runs. <span
-     style='mso-spacerun:yes'> </span>(The blat default output format is .psl).
-     </li>
- <li class=MsoNormal style='mso-list:l2 level1 lfo5;tab-stops:list .5in'>pslReps
-     – selects the best alignments for a particular query sequence, using a
-     ‘near best in genome’ approach.</li>
- <li class=MsoNormal style='mso-list:l2 level1 lfo5;tab-stops:list .5in'>pslPretty
-     – converts alignments from the psl format, which is tab-delimited format
-     and does not include the bases themselves, to a more readable alignment
-     format. </li>
- <li class=MsoNormal style='mso-list:l2 level1 lfo5;tab-stops:list .5in'>faToTwoBit
-     – convert Fasta format sequence files to a dense randomly-accessable<span
-     style='mso-spacerun:yes'>  </span>.2bit format that gfClient can use.</li>
- <li class=MsoNormal style='mso-list:l2 level1 lfo5;tab-stops:list .5in'>twoBitToFa
-     – convert from the .2bit format back to fasta</li>
- <li class=MsoNormal style='mso-list:l2 level1 lfo5;tab-stops:list .5in'>faToNib
-     – convert from Fasta to a somewhat less dense randomly accessible format
-     that predates .2bit.<span style='mso-spacerun:yes'>  </span>Note each .nib
-     file can only contain a single sequence.</li>
- <li class=MsoNormal style='mso-list:l2 level1 lfo5;tab-stops:list .5in'>nibFrag
-     – convert portions of a nib file back to fasta.</li>
+ <li class=MsoNormal style='mso-list:l2 level1 lfo5;tab-stops:list .5in'><span
+     class=SpellE>pslSort</span> – combines and sorts the output of multiple
+     blat runs. <span style='mso-spacerun:yes'> </span>(The blat default output
+     format is .<span class=SpellE>psl</span>). </li>
+ <li class=MsoNormal style='mso-list:l2 level1 lfo5;tab-stops:list .5in'><span
+     class=SpellE>pslReps</span> – selects the best alignments for a particular
+     query sequence, using a ‘near best in genome’ approach.</li>
+ <li class=MsoNormal style='mso-list:l2 level1 lfo5;tab-stops:list .5in'><span
+     class=SpellE>pslPretty</span> – converts alignments from the <span
+     class=SpellE>psl</span> format, which is tab-delimited format and does not
+     include the bases themselves, to a more readable alignment format. </li>
+ <li class=MsoNormal style='mso-list:l2 level1 lfo5;tab-stops:list .5in'><span
+     class=SpellE>faToTwoBit</span> – convert Fasta format sequence files to a
+     dense randomly-<span class=SpellE>accessable</span><span
+     style='mso-spacerun:yes'>  </span>.2bit format that <span class=SpellE>gfClient</span>
+     can use.</li>
+ <li class=MsoNormal style='mso-list:l2 level1 lfo5;tab-stops:list .5in'><span
+     class=SpellE>twoBitToFa</span> – convert from the .2bit format back to
+     fasta</li>
+ <li class=MsoNormal style='mso-list:l2 level1 lfo5;tab-stops:list .5in'><span
+     class=SpellE>faToNib</span> – convert from Fasta to a somewhat less dense
+     randomly accessible format that predates .2bit.<span
+     style='mso-spacerun:yes'>  </span>Note each .nib file can only contain a
+     single sequence.</li>
+ <li class=MsoNormal style='mso-list:l2 level1 lfo5;tab-stops:list .5in'><span
+     class=SpellE>nibFrag</span> – convert portions of a nib file back to
+     fasta.</li>
 </ul>
 
 <p class=MsoNormal><o:p>&nbsp;</o:p></p>
@@ -343,8 +353,8 @@ which are not part of the BLAT suite:</p>
  <li class=MsoNormal style='mso-list:l3 level1 lfo6;tab-stops:list .5in'>In
      Silico PCR –<span style='mso-spacerun:yes'>  </span>given two primers
      quickly find the sequence between them.<span style='mso-spacerun:yes'> 
-     </span>Available from Kent Informatics. This includes webPCR, an interface
-     similar to webBlat.</li>
+     </span>Available from Kent Informatics. This includes <span class=SpellE>webPCR</span>,
+     an interface similar to <span class=SpellE>webBlat</span>.</li>
  <li class=MsoNormal style='mso-list:l3 level1 lfo6;tab-stops:list .5in'>The
      Genome Browser – display annotations as a series of tracks on top of the
      genome.<span style='mso-spacerun:yes'>  </span>Available from the
@@ -361,7 +371,7 @@ style='mso-spacerun:yes'>  </span>the<span style='mso-spacerun:yes'> 
 <p class=MsoNormal>The command line options of each of the programs is described
 below. Similar summaries of usage are printed when a command is run with no
 arguments.<span style='mso-spacerun:yes'>  </span>See the next section for info
-on installing webBlat.</p>
+on installing <span class=SpellE>webBlat</span>.</p>
 
 <p class=MsoNormal><o:p>&nbsp;</o:p></p>
 
@@ -380,25 +390,26 @@ mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times 
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>   </span>blat database query [-ooc=11.ooc] output.psl<o:p></o:p></span></p>
+style='mso-spacerun:yes'>   </span>blat database query [-<span class=SpellE>ooc</span>=11.ooc]
+<span class=SpellE>output.psl</span><o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'>where:<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>   </span>database is either a .fa file, a .nib file,
-or a list of .fa or .nib<o:p></o:p></span></p>
+style='mso-spacerun:yes'>   </span>database and query are each either a .<span
+class=SpellE>fa</span> , .nib or .2bit file,<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>   </span>files, query is similarly a .fa, .nib, or
-list of .fa or .nib files<o:p></o:p></span></p>
+style='mso-spacerun:yes'>   </span>or a list these files one file name per
+line.<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>   </span>-ooc=11.ooc tells the program to load
-over-occurring 11-mers from<o:p></o:p></span></p>
+style='mso-spacerun:yes'>   </span>-<span class=SpellE>ooc</span>=11.ooc tells
+the program to load over-occurring 11-mers from<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
@@ -412,7 +423,38 @@ but is not required<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>   </span>output.psl is where to put the output.<o:p></o:p></span></p>
+style='mso-spacerun:yes'>   </span><span class=SpellE>output.psl</span> is
+where to put the output.<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
+mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
+style='mso-spacerun:yes'>   </span><span class=SpellE>Subranges</span> of nib
+and .2bit files may specified using the syntax:<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
+mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
+style='mso-spacerun:yes'>      </span>/path/<span class=SpellE>file.nib:seqid:start</span>-end<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
+mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
+style='mso-spacerun:yes'>   </span>or<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
+mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
+style='mso-spacerun:yes'>      </span>/path/file.2bit:seqid:start-end<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
+mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
+style='mso-spacerun:yes'>   </span>or<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
+mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
+style='mso-spacerun:yes'>      </span>/path/<span class=SpellE>file.nib:start</span>-end<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
+mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
+style='mso-spacerun:yes'>   </span>With the second form, a sequence id of <span
+class=SpellE>file:start</span>-end will be used.<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'>options:<o:p></o:p></span></p>
@@ -424,21 +466,24 @@ style='mso-spacerun:yes'>   </span>-t=type<span style='mso-spacerun:yes'>    
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>                 </span>dna - DNA sequence<o:p></o:p></span></p>
+style='mso-spacerun:yes'>                 </span><span class=SpellE>dna</span>
+- DNA sequence<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>                </span><span
-style='mso-spacerun:yes'> </span>prot - protein sequence<o:p></o:p></span></p>
+style='mso-spacerun:yes'>                 </span><span class=SpellE>prot</span>
+- protein sequence<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>                 </span>dnax - DNA sequence translated
-in six frames to protein<o:p></o:p></span></p>
+style='mso-spacerun:yes'>  </span><span
+style='mso-spacerun:yes'>               </span><span class=SpellE>dnax</span> -
+DNA sequence translated in six frames to protein<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>               </span>The default is dna<o:p></o:p></span></p>
+style='mso-spacerun:yes'>               </span>The default is <span
+class=SpellE>dna</span><o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
@@ -447,50 +492,56 @@ style='mso-spacerun:yes'>   </span>-q=type<span style='mso-spacerun:yes'>    
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>                 </span>dna - DNA sequence<o:p></o:p></span></p>
+style='mso-spacerun:yes'>                 </span><span class=SpellE>dna</span>
+- DNA sequence<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>                 </span>rna - RNA sequence<o:p></o:p></span></p>
+style='mso-spacerun:yes'>                 </span><span class=SpellE>rna</span>
+- RNA sequence<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>        </span><span
-style='mso-spacerun:yes'>         </span>prot - protein sequence<o:p></o:p></span></p>
+style='mso-spacerun:yes'>                 </span><span class=SpellE>prot</span>
+- protein sequence<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>                 </span>dnax - DNA sequence translated
-in six frames to protein<o:p></o:p></span></p>
+style='mso-spacerun:yes'>                 </span><span class=SpellE>dnax</span>
+- DNA sequence translated in six frames to protein<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>                 </span>rnax - DNA sequence translated
-in three frames to protein<o:p></o:p></span></p>
+style='mso-spacerun:yes'>                 </span><span class=SpellE>rnax</span>
+- DNA sequence translated in three frames to protein<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>               </span>The default is dna<o:p></o:p></span></p>
+style='mso-spacerun:yes'>               </span>The default is <span
+class=SpellE>dna</span><o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>   </span>-prot<span style='mso-spacerun:yes'>      
-</span>Synonymous with -d=prot -q=prot<o:p></o:p></span></p>
+style='mso-spacerun:yes'>   </span>-<span class=SpellE>prot</span><span
+style='mso-spacerun:yes'>       </span>Synonymous with -t=<span class=SpellE>prot</span>
+-q=<span class=SpellE>prot</span><o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>   </span>-ooc=N.ooc<span style='mso-spacerun:yes'> 
-</span>Use overused tile file N.ooc.<span style='mso-spacerun:yes'>  </span>N
-should correspond to<o:p></o:p></span></p>
+style='mso-spacerun:yes'>   </span>-<span class=SpellE>ooc</span>=<span
+class=SpellE>N.ooc</span><span style='mso-spacerun:yes'>  </span>Use overused
+tile file <span class=SpellE>N.ooc</span>.<span style='mso-spacerun:yes'> 
+</span>N should correspond to <o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>               </span>the tileSize<o:p></o:p></span></p>
+style='mso-spacerun:yes'>               </span>the <span class=SpellE>tileSize</span><o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>   </span>-tileSize=N sets the size of match that
-triggers an alignment.<o:p></o:p></span></p>
+style='mso-spacerun:yes'>   </span>-<span class=SpellE>tileSize</span>=N sets
+the size of match that triggers an alignment.<span style='mso-spacerun:yes'> 
+</span><o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
@@ -498,28 +549,30 @@ style='mso-spacerun:yes'>               </span>Usually between 8 and 12<o:p></o:
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>               </span>Default is 11 for DNA and 5 for protein.<o:p></o:p></span></p>
+style='mso-spacerun:yes'>               </span>Default is 11 for DNA and 5 for
+protein.<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>   </span>-oneOff=N<span style='mso-spacerun:yes'>  
-</span>If set to 1 this allows one mismatch in tile and still<o:p></o:p></span></p>
+style='mso-spacerun:yes'>   </span>-<span class=SpellE>stepSize</span>=N spacing
+between tiles. Default is <span class=SpellE>tileSize</span>.<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
+mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
+style='mso-spacerun:yes'>   </span>-<span class=SpellE>oneOff</span>=N<span
+style='mso-spacerun:yes'>   </span>If set to 1 this allows one mismatch in tile
+and still<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
 style='mso-spacerun:yes'>               </span>triggers an alignments.<span
 style='mso-spacerun:yes'>  </span>Default is 0.<o:p></o:p></span></p>
 
-<span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;font-family:"Courier New";
-mso-fareast-font-family:"Times New Roman";mso-bidi-font-family:"Times New Roman";
-mso-ansi-language:EN-US;mso-fareast-language:EN-US;mso-bidi-language:AR-SA'><br
-clear=all style='page-break-before:always'>
-</span>
-
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>   </span>-minMatch=N sets the number of tile
-matches.<span style='mso-spacerun:yes'>  </span>Usually set from 2 to 4<o:p></o:p></span></p>
+style='mso-spacerun:yes'>   </span>-<span class=SpellE>minMatch</span>=N sets
+the number of tile matches.<span style='mso-spacerun:yes'>  </span>Usually set
+from 2 to 4<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
@@ -528,8 +581,9 @@ for protein.<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>   </span>-minScore=N sets minimum score.<span
-style='mso-spacerun:yes'>  </span>This is twice the matches minus the<o:p></o:p></span></p>
+style='mso-spacerun:yes'>   </span>-<span class=SpellE>minScore</span>=N sets
+minimum score.<span style='mso-spacerun:yes'>  </span>This is the matches minus
+the <o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
@@ -538,8 +592,9 @@ gap penalty.<span style='mso-spacerun:yes'>  </span>Default is 30<o:p></o:p></sp
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>   </span>-minIdentity=N Sets minimum sequence
-identity (in percent).<span style='mso-spacerun:yes'>  </span>Default is<o:p></o:p></span></p>
+style='mso-spacerun:yes'>   </span>-<span class=SpellE>minIdentity</span>=N
+Sets minimum sequence identity (in percent).<span style='mso-spacerun:yes'> 
+</span>Default is<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
@@ -552,50 +607,54 @@ style='mso-spacerun:yes'>               </span>protein searches.<o:p></o:p></spa
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>   </span>-maxGap=N<span style='mso-spacerun:yes'>  
-</span>sets the size of maximum gap between tiles in a clump.<span
-style='mso-spacerun:yes'>  </span>Usually<o:p></o:p></span></p>
+style='mso-spacerun:yes'>   </span>-<span class=SpellE>maxGap</span>=N<span
+style='mso-spacerun:yes'>   </span>sets the size of maximum gap between tiles
+in a clump.<span style='mso-spacerun:yes'>  </span>Usually<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
 style='mso-spacerun:yes'>               </span>set from 0 to 3.<span
-style='mso-spacerun:yes'>  </span>Default is 2. Only relevent for minMatch &gt;
-1.<o:p></o:p></span></p>
+style='mso-spacerun:yes'>  </span>Default is 2. Only <span class=SpellE>relevent</span>
+for <span class=SpellE>minMatch</span> &gt; 1.<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>   </span>-noHead<span style='mso-spacerun:yes'>    
-</span>suppress .psl header (so it's just a tab-separated file)<o:p></o:p></span></p>
+style='mso-spacerun:yes'>   </span>-<span class=SpellE>noHead</span><span
+style='mso-spacerun:yes'>     </span>suppress .<span class=SpellE>psl</span>
+header (so it's just a tab-separated file)<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>   </span>-makeOoc=N.ooc Make overused tile file<o:p></o:p></span></p>
+style='mso-spacerun:yes'>   </span>-<span class=SpellE>makeOoc</span>=<span
+class=SpellE>N.ooc</span> Make overused tile file. Target needs to be complete
+genome.<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>   </span>-repMatch=N sets the number of repetitions
-of a tile allowed before<o:p></o:p></span></p>
+style='mso-spacerun:yes'>   </span>-<span class=SpellE>repMatch</span>=N sets
+the number of repetitions of a tile allowed before<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
 style='mso-spacerun:yes'>               </span>it is marked as overused.<span
-style='mso-spacerun:yes'>  </span>Typically this is 256 for tileSize<o:p></o:p></span></p>
+style='mso-spacerun:yes'>  </span>Typically this is 256 for <span class=SpellE>tileSize</span><o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>             </span><span
-style='mso-spacerun:yes'>  </span>12, 1024 for tile size 11, 4096 for tile size
-10.<o:p></o:p></span></p>
+style='mso-spacerun:yes'>               </span>12, 1024 for tile size 11, 4096
+for tile size 10.<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
 style='mso-spacerun:yes'>               </span>Default is 1024.<span
-style='mso-spacerun:yes'>  </span>Typically only comes into play with makeOoc.<o:p></o:p></span></p>
+style='mso-spacerun:yes'>  </span>Typically only comes into play with <span
+class=SpellE>makeOoc</span>.<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>               </span>Also affected by stepSize. When
-stepSize is halved repMatch is<o:p></o:p></span></p>
+style='mso-spacerun:yes'>               </span>Also affected by <span
+class=SpellE>stepSize</span>. When <span class=SpellE>stepSize</span> is halved
+<span class=SpellE>repMatch</span> is<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
@@ -630,18 +689,20 @@ sequence<o:p></o:p></span></p>
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
 style='mso-spacerun:yes'>                 </span>out<span
-style='mso-spacerun:yes'>   </span>- mask according to database.out
-RepeatMasker .out file<o:p></o:p></span></p>
+style='mso-spacerun:yes'>   </span>- mask according to <span class=SpellE>database.out</span>
+<span class=SpellE>RepeatMasker</span> .out file<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>                 </span>file.out - mask database
-according to RepeatMasker file.out<o:p></o:p></span></p>
+style='mso-spacerun:yes'>                 </span><span class=SpellE>file.out</span>
+- mask database according to <span class=SpellE>RepeatMasker</span> <span
+class=SpellE>file.out</span><o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>   </span>-qMask=type Mask out repeats in query
-sequence.<span style='mso-spacerun:yes'>  </span>Similar to -mask above but<o:p></o:p></span></p>
+style='mso-spacerun:yes'>   </span>-<span class=SpellE>qMask</span>=type Mask
+out repeats in query sequence.<span style='mso-spacerun:yes'>  </span>Similar
+to -mask above but<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
@@ -650,19 +711,34 @@ sequence.<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>   </span>-minRepDivergence=NN - minimum percent
-divergence of repeats to allow<o:p></o:p></span></p>
+style='mso-spacerun:yes'>   </span>-repeats=type Type is same as mask types
+above.<span style='mso-spacerun:yes'>  </span>Repeat bases will not be<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
+mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
+style='mso-spacerun:yes'>               </span>masked in any way, but matches
+in repeat areas will be reported<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
+mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
+style='mso-spacerun:yes'>               </span>separately from matches in other
+areas in the <span class=SpellE>psl</span> output.<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
+mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
+style='mso-spacerun:yes'>   </span>-<span class=SpellE>minRepDivergence</span>=NN
+- minimum percent divergence of repeats to allow <o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
 style='mso-spacerun:yes'>               </span>them to be unmasked.<span
 style='mso-spacerun:yes'>  </span>Default is 15.<span
-style='mso-spacerun:yes'>  </span>Only relevant for<o:p></o:p></span></p>
+style='mso-spacerun:yes'>  </span>Only relevant for <o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>               </span>masking using RepeatMasker .out
-files.<o:p></o:p></span></p>
+style='mso-spacerun:yes'>               </span>masking using <span
+class=SpellE>RepeatMasker</span> .out files.<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
@@ -671,18 +747,34 @@ style='mso-spacerun:yes'>   </span>-dots=N<span style='mso-spacerun:yes'>    
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>   </span>-trimT<span style='mso-spacerun:yes'>     
-</span>Trim leading poly-T<o:p></o:p></span></p>
+style='mso-spacerun:yes'>   </span>-<span class=SpellE>trimT</span><span
+style='mso-spacerun:yes'>      </span>Trim leading poly-T<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>   </span>-noTrimA<span style='mso-spacerun:yes'>   
-</span>Don't trim trailing poly-A<o:p></o:p></span></p>
+style='mso-spacerun:yes'>   </span>-<span class=SpellE>noTrimA</span><span
+style='mso-spacerun:yes'>    </span>Don't trim trailing poly-A<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>   </span>-trimHardA<span style='mso-spacerun:yes'> 
-</span>Remove poly-A tail from qSize as well as alignments in psl output<o:p></o:p></span></p>
+style='mso-spacerun:yes'>   </span>-<span class=SpellE>trimHardA</span><span
+style='mso-spacerun:yes'>  </span>Remove poly-A tail from <span class=SpellE>qSize</span>
+as well as alignments in <o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
+mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
+style='mso-spacerun:yes'>               </span><span class=SpellE>psl</span>
+output<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
+mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
+style='mso-spacerun:yes'>   </span>-<span class=SpellE>fastMap</span><span
+style='mso-spacerun:yes'>    </span>Run for fast DNA/DNA remapping - not
+allowing <span class=SpellE>introns</span>, <o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
+mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
+style='mso-spacerun:yes'>               </span>requiring high %ID<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
@@ -692,28 +784,37 @@ is one of:<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>                   </span>psl - Default.<span
-style='mso-spacerun:yes'>  </span>Tab separated format without actual sequence<o:p></o:p></span></p>
+style='mso-spacerun:yes'>  </span><span
+style='mso-spacerun:yes'>                 </span><span class=SpellE>psl</span>
+- Default.<span style='mso-spacerun:yes'>  </span>Tab separated format, no
+sequence<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>                   </span>pslx - Tab separated format
-with sequence<o:p></o:p></span></p>
+style='mso-spacerun:yes'>                   </span><span class=SpellE>pslx</span>
+- Tab separated format with sequence<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>                   </span>axt - blastz-associated axt
+style='mso-spacerun:yes'>                   </span><span class=SpellE>axt</span>
+- <span class=SpellE>blastz</span>-associated <span class=SpellE>axt</span>
 format<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>                   </span>maf - multiz-associated maf
+style='mso-spacerun:yes'>                   </span><span class=SpellE>maf</span>
+- <span class=SpellE>multiz</span>-associated <span class=SpellE>maf</span>
 format<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>                   </span>wublast - similar to wublast
+style='mso-spacerun:yes'>                   </span>sim4 - similar to sim4
 format<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
+mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
+style='mso-spacerun:yes'>                   </span><span class=SpellE>wublast</span>
+- similar to <span class=SpellE>wublast</span> format<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
@@ -722,13 +823,37 @@ blast format<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
+style='mso-spacerun:yes'>                   </span>blast8- NCBI blast tabular
+format<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
+mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
+style='mso-spacerun:yes'>                   </span>blast9 - NCBI blast tabular
+format with comments<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
+mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
 style='mso-spacerun:yes'>   </span>-fine<span style='mso-spacerun:yes'>      
 </span>For high quality mRNAs look harder for small initial and<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>               </span>terminal exons.<span
-style='mso-spacerun:yes'>  </span>Not recommended for ESTs<o:p></o:p></span></p>
+style='mso-spacerun:yes'>               </span>terminal <span class=SpellE>exons</span>.<span
+style='mso-spacerun:yes'>  </span>Not recommended for <span class=SpellE>ESTs</span><o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
+mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
+style='mso-spacerun:yes'>   </span>-<span class=SpellE>maxIntron</span>=N<span
+style='mso-spacerun:yes'>  </span>Sets maximum <span class=SpellE>intron</span>
+size. Default is 750000<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
+mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
+style='mso-spacerun:yes'>   </span>-<span class=SpellE>extendThroughN</span> -
+Allows extension of alignment through large blocks of N's<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
+mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><o:p>&nbsp;</o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><o:p>&nbsp;</o:p></span></p>
@@ -738,54 +863,60 @@ common usage scenarios:</p>
 
 <p class=MsoNormal style='margin-right:-.25in'><o:p>&nbsp;</o:p></p>
 
-<p class=MsoNormal style='margin-right:-.25in'>1) Mapping ESTs to the genome
-within the same species</p>
+<p class=MsoNormal style='margin-right:-.25in'>1) Mapping <span class=SpellE>ESTs</span>
+to the genome within the same species</p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>    </span>-ooc=11.ooc<o:p></o:p></span></p>
+style='mso-spacerun:yes'>    </span>-<span class=SpellE>ooc</span>=11.ooc<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'>2) Mapping full length mRNAs to
 the genome in the same species</p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>    </span>-ooc=11.ooc -fine -q=rna<o:p></o:p></span></p>
+style='mso-spacerun:yes'>    </span>-<span class=SpellE>ooc</span>=11.ooc -fine
+-q=<span class=SpellE>rna</span><o:p></o:p></span></p>
 
-<p class=MsoNormal style='margin-right:-.25in'>3) Mapping ESTs to the genome
-across species</p>
+<p class=MsoNormal style='margin-right:-.25in'>3) Mapping <span class=SpellE>ESTs</span>
+to the genome across species</p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>    </span>-q=dnax -t=dnax<o:p></o:p></span></p>
+style='mso-spacerun:yes'>    </span>-q=<span class=SpellE>dnax</span> -t=<span
+class=SpellE>dnax</span><o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'>4) Mapping mRNA to the genome
 across species</p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>    </span>-q=rnax -t=dnax<o:p></o:p></span></p>
+style='mso-spacerun:yes'>    </span>-q=<span class=SpellE>rnax</span> -t=<span
+class=SpellE>dnax</span><o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'>5) Mapping proteins to the
 genome</p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>    </span>-q=prot -t=dnax<o:p></o:p></span></p>
+style='mso-spacerun:yes'>    </span>-q=<span class=SpellE>prot</span> -t=<span
+class=SpellE>dnax</span><o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'>6) Mapping DNA to DNA in the
 same species</p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>    </span>-ooc=11.ooc -fastMap<o:p></o:p></span></p>
+style='mso-spacerun:yes'>    </span>-<span class=SpellE>ooc</span>=11.ooc -<span
+class=SpellE>fastMap</span><o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'>7) Mapping DNA from one species
 to another species</p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>    </span>-q=dnax -t=dnax<o:p></o:p></span></p>
+style='mso-spacerun:yes'>    </span>-q=<span class=SpellE>dnax</span> -t=<span
+class=SpellE>dnax</span><o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
@@ -810,12 +941,16 @@ mso-bidi-font-size:10.0pt;font-family:"Times New Roman";mso-fareast-font-family:
 mso-bidi-language:AR-SA'><br clear=all style='page-break-before:always'>
 </span></b>
 
-<p class=MsoNormal style='margin-right:-.25in'><b style='mso-bidi-font-weight:
-normal'><span style='font-size:12.0pt;mso-bidi-font-size:10.0pt'>gfServer<o:p></o:p></span></b></p>
+<p class=MsoNormal style='margin-right:-.25in'><span class=SpellE><b
+style='mso-bidi-font-weight:normal'><span style='font-size:12.0pt;mso-bidi-font-size:
+10.0pt'>gfServer</span></b></span><b style='mso-bidi-font-weight:normal'><span
+style='font-size:12.0pt;mso-bidi-font-size:10.0pt'><o:p></o:p></span></b></p>
 
-<p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
-font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'>gfServer -
-Make a server to quickly find where DNA occurs in genome.<o:p></o:p></span></p>
+<p class=MsoNormal><span class=SpellE><span style='font-size:9.0pt;mso-bidi-font-size:
+10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'>gfServer</span></span><span
+style='font-size:9.0pt;mso-bidi-font-size:10.0pt;font-family:"Courier New";
+mso-bidi-font-family:"Times New Roman"'> - Make a server to quickly find where
+DNA occurs in genome.<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'>To set up a
@@ -823,7 +958,12 @@ server:<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>   </span>gfServer start host port file(s).nib<o:p></o:p></span></p>
+style='mso-spacerun:yes'>   </span><span class=SpellE>gfServer</span> start
+host port file(s)<o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
+font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
+style='mso-spacerun:yes'>   </span>Where the files are in .nib or .2bit format<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'>To remove a
@@ -831,7 +971,8 @@ server:<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>   </span>gfServer stop host port<o:p></o:p></span></p>
+style='mso-spacerun:yes'>   </span><span class=SpellE>gfServer</span> stop host
+port<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'>To query a
@@ -839,7 +980,8 @@ server with DNA sequence:<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>   </span>gfServer query host port probe.fa<o:p></o:p></span></p>
+style='mso-spacerun:yes'>   </span><span class=SpellE>gfServer</span> query
+host port <span class=SpellE>probe.fa</span><o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'>To query a
@@ -847,23 +989,27 @@ server with protein sequence:<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>   </span>gfServer protQuery host port probe.fa<o:p></o:p></span></p>
+style='mso-spacerun:yes'>   </span><span class=SpellE>gfServer</span> <span
+class=SpellE>protQuery</span> host port <span class=SpellE>probe.fa</span><o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'>To query a
-server with translated dna sequence:<o:p></o:p></span></p>
+server with translated <span class=SpellE>dna</span> sequence:<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>   </span>gfServer transQuery host port probe.fa<o:p></o:p></span></p>
+style='mso-spacerun:yes'>   </span><span class=SpellE>gfServer</span> <span
+class=SpellE>transQuery</span> host port <span class=SpellE>probe.fa</span><o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'>To process
-one probe fa file against a .nib format genome (not starting server):<o:p></o:p></span></p>
+one probe <span class=SpellE>fa</span> file against a .nib format genome (not
+starting server):<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>   </span>gfServer direct probe.fa file(s).nib<o:p></o:p></span></p>
+style='mso-spacerun:yes'>   </span><span class=SpellE>gfServer</span> direct <span
+class=SpellE>probe.fa</span> file(s).nib<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'>To figure out
@@ -871,7 +1017,8 @@ usage level<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>   </span>gfServer status host port<o:p></o:p></span></p>
+style='mso-spacerun:yes'>   </span><span class=SpellE>gfServer</span> status
+host port<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'>To get input
@@ -879,15 +1026,17 @@ file list<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>   </span>gfServer files host port<o:p></o:p></span></p>
+style='mso-spacerun:yes'>   </span><span class=SpellE>gfServer</span> files
+host port<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'>Options:<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>   </span>-tileSize=N size of n-mers to index.<span
-style='mso-spacerun:yes'>  </span>Default is 11 for nucleotides, 4 for<o:p></o:p></span></p>
+style='mso-spacerun:yes'>   </span>-<span class=SpellE>tileSize</span>=N size
+of n-<span class=SpellE>mers</span> to index.<span style='mso-spacerun:yes'> 
+</span>Default is 11 for nucleotides, 4 for<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
@@ -896,28 +1045,29 @@ nucleotides).<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>   </span>-stepSize=N spacing between tiles. Default
-is tileSize.<o:p></o:p></span></p>
+style='mso-spacerun:yes'>   </span>-<span class=SpellE>stepSize</span>=N
+spacing between tiles. Default is <span class=SpellE>tileSize</span>.<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>   </span>-minMatch=N Number of n-mer matches that
-trigger detailed alignment<o:p></o:p></span></p>
+style='mso-spacerun:yes'>   </span>-<span class=SpellE>minMatch</span>=N Number
+of n-<span class=SpellE>mer</span> matches that trigger detailed alignment<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
 style='mso-spacerun:yes'>               </span>Default is 2 for nucleotides, 3
-for protiens.<o:p></o:p></span></p>
+for <span class=SpellE>protiens</span>.<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>   </span>-maxGap=N<span style='mso-spacerun:yes'>  
-</span>Number of insertions or deletions allowed between n-mers.<o:p></o:p></span></p>
+style='mso-spacerun:yes'>   </span>-<span class=SpellE>maxGap</span>=N<span
+style='mso-spacerun:yes'>   </span>Number of insertions or deletions allowed
+between n-<span class=SpellE>mers</span>.<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
 style='mso-spacerun:yes'>               </span>Default is 2 for nucleotides, 0
-for protiens.<o:p></o:p></span></p>
+for <span class=SpellE>protiens</span>.<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
@@ -927,28 +1077,30 @@ style='mso-spacerun:yes'>  </span>Note: it is best<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>           </span>to run this on RepeatMasked data in
-this case.<o:p></o:p></span></p>
+style='mso-spacerun:yes'>           </span>to run this on <span class=SpellE>RepeatMasked</span>
+data in this case.<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>   </span>-log=logFile keep a log file that records
-server requests.<o:p></o:p></span></p>
+style='mso-spacerun:yes'>   </span>-log=<span class=SpellE>logFile</span> keep
+a log file that records server requests.<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>   </span>-seqLog<span style='mso-spacerun:yes'>   
-</span>Include sequences in log file (not logged with -syslog)<o:p></o:p></span></p>
+style='mso-spacerun:yes'>   </span>-<span class=SpellE>seqLog</span><span
+style='mso-spacerun:yes'>    </span>Include sequences in log file (not logged
+with -<span class=SpellE>syslog</span>)<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>   </span>-syslog<span style='mso-spacerun:yes'>   
-</span>Log to syslog<o:p></o:p></span></p>
+style='mso-spacerun:yes'>   </span>-<span class=SpellE>syslog</span><span
+style='mso-spacerun:yes'>    </span>Log to <span class=SpellE>syslog</span><o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>   </span>-logFacility=facility log to the specified
-syslog facility - default local0.<o:p></o:p></span></p>
+style='mso-spacerun:yes'>   </span>-<span class=SpellE>logFacility</span>=facility
+log to the specified <span class=SpellE>syslog</span> facility - default
+local0.<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
@@ -957,8 +1109,8 @@ style='mso-spacerun:yes'>   </span>-mask<span style='mso-spacerun:yes'>     
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'> </span><span style='mso-spacerun:yes'> 
-</span>-repMatch=N Number of occurrences of a tile (nmer) that trigger <o:p></o:p></span></p>
+style='mso-spacerun:yes'>   </span>-<span class=SpellE>repMatch</span>=N Number
+of occurrences of a tile (<span class=SpellE>nmer</span>) that trigger <o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
@@ -967,8 +1119,9 @@ is 1024.<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>   </span>-maxDnaHits=N Maximum number of hits for a
-dna query that are sent from the<o:p></o:p></span></p>
+style='mso-spacerun:yes'>   </span>-<span class=SpellE>maxDnaHits</span>=N
+Maximum number of hits for a <span class=SpellE>dna</span> query that are sent
+from the<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
@@ -976,8 +1129,8 @@ style='mso-spacerun:yes'>               </span>server. Default is 100.<o:p></o:p
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>   </span>-maxTransHits=N Maximum number of hits for a
-translated query that are <o:p></o:p></span></p>
+style='mso-spacerun:yes'>   </span>-<span class=SpellE>maxTransHits</span>=N Maximum
+number of hits for a translated query that are <o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
@@ -986,8 +1139,8 @@ style='mso-spacerun:yes'>               </span>sent from the server. Default is
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>   </span>-maxNtSize=N Maximum size of untranslated
-DNA query sequence<o:p></o:p></span></p>
+style='mso-spacerun:yes'>   </span>-<span class=SpellE>maxNtSize</span>=N
+Maximum size of <span class=SpellE>untranslated</span> DNA query sequence<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
@@ -995,8 +1148,8 @@ style='mso-spacerun:yes'>               </span>Default is 40000<o:p></o:p></span
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>   </span>-maxAsSize=N Maximum size of protein or translated
-DNA queries<o:p></o:p></span></p>
+style='mso-spacerun:yes'>   </span>-<span class=SpellE>maxAsSize</span>=N
+Maximum size of protein or translated DNA queries<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
@@ -1004,8 +1157,8 @@ style='mso-spacerun:yes'>               </span>Default is 8000<o:p></o:p></span>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>   </span>-canStop If set then a quit message will
-actually take down the<o:p></o:p></span></p>
+style='mso-spacerun:yes'>   </span>-<span class=SpellE>canStop</span> If set
+then a quit message will actually take down the<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
@@ -1014,37 +1167,43 @@ style='mso-spacerun:yes'>            </span>server<o:p></o:p></span></p>
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><o:p>&nbsp;</o:p></span></p>
 
-<p class=MsoNormal><b style='mso-bidi-font-weight:normal'><span
-style='font-size:12.0pt;mso-bidi-font-size:10.0pt'>gfClient<o:p></o:p></span></b></p>
+<p class=MsoNormal><span class=SpellE><b style='mso-bidi-font-weight:normal'><span
+style='font-size:12.0pt;mso-bidi-font-size:10.0pt'>gfClient</span></b></span><b
+style='mso-bidi-font-weight:normal'><span style='font-size:12.0pt;mso-bidi-font-size:
+10.0pt'><o:p></o:p></span></b></p>
 
-<p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
-font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'>gfClient - A
-client for the genomic finding program <o:p></o:p></span></p>
+<p class=MsoNormal><span class=SpellE><span style='font-size:9.0pt;mso-bidi-font-size:
+10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'>gfClient</span></span><span
+style='font-size:9.0pt;mso-bidi-font-size:10.0pt;font-family:"Courier New";
+mso-bidi-font-family:"Times New Roman"'> - A client for the genomic finding
+program <o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'>usage:<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>   </span>gfClient host port nibDir in.fa out.psl<o:p></o:p></span></p>
+style='mso-spacerun:yes'>   </span><span class=SpellE>gfClient</span> host port
+<span class=SpellE>nibDir</span> <span class=SpellE>in.fa</span> <span
+class=SpellE>out.psl</span><o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'>where<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>   </span>host is the name of the machine running the
-gfServer<o:p></o:p></span></p>
+style='mso-spacerun:yes'>   </span>host is the name of the machine running the <span
+class=SpellE>gfServer</span><o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>   </span>port is the same as you started the gfServer
-with<o:p></o:p></span></p>
+style='mso-spacerun:yes'>   </span>port is the same as you started the <span
+class=SpellE>gfServer</span> with<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>   </span>nibDir is the path of the nib files relative
-to the current dir<o:p></o:p></span></p>
+style='mso-spacerun:yes'>   </span><span class=SpellE>nibDir</span> is the path
+of the nib files relative to the current dir<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
@@ -1053,12 +1212,14 @@ well as the server)<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>   </span>in.fa a fasta format file.<span
-style='mso-spacerun:yes'>  </span>May contain multiple records<o:p></o:p></span></p>
+style='mso-spacerun:yes'>   </span><span class=SpellE>in.fa</span> a <span
+class=SpellE>fasta</span> format file.<span style='mso-spacerun:yes'> 
+</span>May contain multiple records<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>   </span>out.psl where to put the output<o:p></o:p></span></p>
+style='mso-spacerun:yes'>   </span><span class=SpellE>out.psl</span> where to
+put the output<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'>options:<o:p></o:p></span></p>
@@ -1070,20 +1231,23 @@ style='mso-spacerun:yes'>   </span>-t=type<span style='mso-spacerun:yes'>    
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>                 </span>dna - DNA sequence<o:p></o:p></span></p>
+style='mso-spacerun:yes'>                 </span><span class=SpellE>dna</span>
+- DNA sequence<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>                 </span>prot - protein sequence<o:p></o:p></span></p>
+style='mso-spacerun:yes'>                 </span><span class=SpellE>prot</span>
+- protein sequence<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>                 </span>dnax - DNA sequence translated
-in six frames to protein<o:p></o:p></span></p>
+style='mso-spacerun:yes'>                 </span><span class=SpellE>dnax</span>
+- DNA sequence translated in six frames to protein<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>               </span>The default is dna<o:p></o:p></span></p>
+style='mso-spacerun:yes'>               </span>The default is <span
+class=SpellE>dna</span><o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
@@ -1092,25 +1256,28 @@ style='mso-spacerun:yes'>   </span>-q=type<span style='mso-spacerun:yes'>    
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>                 </span>dna - DNA sequence<o:p></o:p></span></p>
+style='mso-spacerun:yes'>                 </span><span class=SpellE>dna</span>
+- DNA sequence<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>                 </span>rna - RNA sequence<o:p></o:p></span></p>
+style='mso-spacerun:yes'>                 </span><span class=SpellE>rna</span>
+- RNA sequence<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>                 </span>prot - protein sequence<o:p></o:p></span></p>
+style='mso-spacerun:yes'>                 </span><span class=SpellE>prot</span>
+- protein sequence<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>                 </span>dnax - DNA sequence translated
-in six frames to protein<o:p></o:p></span></p>
+style='mso-spacerun:yes'>                 </span><span class=SpellE>dnax</span>
+- DNA sequence translated in six frames to protein<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>                 </span>rnax - DNA sequence translated
-in three frames to protein<o:p></o:p></span></p>
+style='mso-spacerun:yes'>                 </span><span class=SpellE>rnax</span>
+- DNA sequence translated in three frames to protein<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
@@ -1119,13 +1286,15 @@ style='mso-spacerun:yes'>   </span>-dots=N<span style='mso-spacerun:yes'>  
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>   </span>-nohead<span style='mso-spacerun:yes'>  
-</span>Suppresses psl five line header<o:p></o:p></span></p>
+style='mso-spacerun:yes'>   </span>-<span class=SpellE>nohead</span><span
+style='mso-spacerun:yes'>   </span>Suppresses <span class=SpellE>psl</span>
+five line header<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>   </span>-minScore=N sets minimum score.<span
-style='mso-spacerun:yes'>  </span>This is twice the matches minus the <o:p></o:p></span></p>
+style='mso-spacerun:yes'>   </span>-<span class=SpellE>minScore</span>=N sets
+minimum score.<span style='mso-spacerun:yes'>  </span>This is twice the matches
+minus the <o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
@@ -1134,8 +1303,9 @@ gap penalty.<span style='mso-spacerun:yes'>  </span>Default is 30<o:p></o:p></sp
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>   </span>-minIdentity=N Sets minimum sequence
-identity (in percent).<span style='mso-spacerun:yes'>  </span>Default is<o:p></o:p></span></p>
+style='mso-spacerun:yes'>   </span>-<span class=SpellE>minIdentity</span>=N
+Sets minimum sequence identity (in percent).<span style='mso-spacerun:yes'> 
+</span>Default is<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
@@ -1144,8 +1314,7 @@ for protein or translated<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>         </span><span
-style='mso-spacerun:yes'>      </span>protein searches.<o:p></o:p></span></p>
+style='mso-spacerun:yes'>               </span>protein searches.<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><o:p>&nbsp;</o:p></span></p>
@@ -1158,28 +1327,30 @@ is one of:<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>                   </span>psl - Default.<span
-style='mso-spacerun:yes'>  </span>Tab separated format without actual sequence<o:p></o:p></span></p>
+style='mso-spacerun:yes'>                   </span><span class=SpellE>psl</span>
+- Default.<span style='mso-spacerun:yes'>  </span>Tab separated format without
+actual sequence<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>                   </span>pslx - Tab separated format
-with sequence<o:p></o:p></span></p>
+style='mso-spacerun:yes'>                   </span><span class=SpellE>pslx</span>
+- Tab separated format with sequence<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>                   </span>axt - blastz-associated axt
+style='mso-spacerun:yes'>                   </span><span class=SpellE>axt</span>
+- blastz-associated <span class=SpellE>axt</span> format<o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
+font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
+style='mso-spacerun:yes'>                   </span><span class=SpellE>maf</span>
+- <span class=SpellE>multiz</span>-associated <span class=SpellE>maf</span>
 format<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>                   </span>maf - multiz-associated maf
-format<o:p></o:p></span></p>
-
-<p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
-font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>                   </span>wublast - similar to wublast
-format<o:p></o:p></span></p>
+style='mso-spacerun:yes'>                   </span><span class=SpellE>wublast</span>
+- similar to <span class=SpellE>wublast</span> format<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
@@ -1188,8 +1359,8 @@ blast format<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>   </span>-maxIntron=N<span style='mso-spacerun:yes'> 
-</span>Sets maximum intron size. Default is 750000<o:p></o:p></span></p>
+style='mso-spacerun:yes'>   </span>-<span class=SpellE>maxIntron</span>=N<span
+style='mso-spacerun:yes'>  </span>Sets maximum intron size. Default is 750000<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><o:p>&nbsp;</o:p></span></p>
@@ -1197,70 +1368,83 @@ font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><o:p>&nbsp;</o
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><o:p>&nbsp;</o:p></span></p>
 
-<p class=MsoNormal><b style='mso-bidi-font-weight:normal'><span
+<p class=MsoNormal><span class=SpellE><b style='mso-bidi-font-weight:normal'><span
 style='font-size:12.0pt;mso-bidi-font-size:10.0pt;font-family:"Courier New";
-mso-bidi-font-family:"Times New Roman"'>webBlat<o:p></o:p></span></b></p>
+mso-bidi-font-family:"Times New Roman"'>webBlat</span></b></span><b
+style='mso-bidi-font-weight:normal'><span style='font-size:12.0pt;mso-bidi-font-size:
+10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><o:p></o:p></span></b></p>
 
-<p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
-font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'>webBlat
-generally is not run from the command line.<span style='mso-spacerun:yes'> 
-</span>See ‘Setting Up webBlat instructions below` for information on this
+<p class=MsoNormal><span class=SpellE><span style='font-size:9.0pt;mso-bidi-font-size:
+10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'>webBlat</span></span><span
+style='font-size:9.0pt;mso-bidi-font-size:10.0pt;font-family:"Courier New";
+mso-bidi-font-family:"Times New Roman"'> generally is not run from the command
+line.<span style='mso-spacerun:yes'>  </span>See ‘Setting Up <span
+class=SpellE>webBlat</span> instructions below` for information on this
 program.<o:p></o:p></span></p>
 
 <p class=MsoNormal><b style='mso-bidi-font-weight:normal'><span
 style='font-size:12.0pt;mso-bidi-font-size:10.0pt;font-family:"Courier New";
 mso-bidi-font-family:"Times New Roman"'><o:p>&nbsp;</o:p></span></b></p>
 
-<p class=MsoNormal><b style='mso-bidi-font-weight:normal'><span
+<p class=MsoNormal><span class=SpellE><b style='mso-bidi-font-weight:normal'><span
 style='font-size:12.0pt;mso-bidi-font-size:10.0pt;font-family:"Courier New";
-mso-bidi-font-family:"Times New Roman"'>faToTwoBit<o:p></o:p></span></b></p>
+mso-bidi-font-family:"Times New Roman"'>faToTwoBit</span></b></span><b
+style='mso-bidi-font-weight:normal'><span style='font-size:12.0pt;mso-bidi-font-size:
+10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><o:p></o:p></span></b></p>
 
-<p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
-font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'>faToTwoBit -
-Convert DNA from fasta to 2bit format<o:p></o:p></span></p>
+<p class=MsoNormal><span class=SpellE><span style='font-size:9.0pt;mso-bidi-font-size:
+10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'>faToTwoBit</span></span><span
+style='font-size:9.0pt;mso-bidi-font-size:10.0pt;font-family:"Courier New";
+mso-bidi-font-family:"Times New Roman"'> - Convert DNA from <span class=SpellE>fasta</span>
+to 2bit format<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'>usage:<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>   </span>faToTwoBit in.fa [in2.fa in3.fa ...]
-out.2bit<o:p></o:p></span></p>
+style='mso-spacerun:yes'>   </span><span class=SpellE>faToTwoBit</span> <span
+class=SpellE>in.fa</span> [in2.fa in3.fa ...] out.2bit<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'>options:<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>   </span>-noMask - Ignore lower-case masking in fa
-file.<o:p></o:p></span></p>
+style='mso-spacerun:yes'>   </span>-<span class=SpellE>noMask</span> - Ignore
+lower-case masking in <span class=SpellE>fa</span> file.<o:p></o:p></span></p>
 
 <p class=MsoNormal><b style='mso-bidi-font-weight:normal'><span
 style='font-size:12.0pt;mso-bidi-font-size:10.0pt;font-family:"Courier New";
 mso-bidi-font-family:"Times New Roman"'><o:p>&nbsp;</o:p></span></b></p>
 
-<p class=MsoNormal><b style='mso-bidi-font-weight:normal'><span
+<p class=MsoNormal><span class=SpellE><b style='mso-bidi-font-weight:normal'><span
 style='font-size:12.0pt;mso-bidi-font-size:10.0pt;font-family:"Courier New";
-mso-bidi-font-family:"Times New Roman"'>twoBitToFa<o:p></o:p></span></b></p>
+mso-bidi-font-family:"Times New Roman"'>twoBitToFa</span></b></span><b
+style='mso-bidi-font-weight:normal'><span style='font-size:12.0pt;mso-bidi-font-size:
+10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><o:p></o:p></span></b></p>
 
-<p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
-font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'>twoBitToFa -
-Convert all or part of .2bit file to fasta<o:p></o:p></span></p>
+<p class=MsoNormal><span class=SpellE><span style='font-size:9.0pt;mso-bidi-font-size:
+10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'>twoBitToFa</span></span><span
+style='font-size:9.0pt;mso-bidi-font-size:10.0pt;font-family:"Courier New";
+mso-bidi-font-family:"Times New Roman"'> - Convert all or part of .2bit file to
+<span class=SpellE>fasta</span><o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'>usage:<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>   </span>twoBitToFa input.2bit output.fa<o:p></o:p></span></p>
+style='mso-spacerun:yes'>   </span><span class=SpellE>twoBitToFa</span>
+input.2bit <span class=SpellE>output.fa</span><o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'>options:<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>   </span>-seq=name - restrict this to just one
-sequence<o:p></o:p></span></p>
+style='mso-spacerun:yes'>   </span>-<span class=SpellE>seq</span>=name -
+restrict this to just one sequence<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
@@ -1278,62 +1462,77 @@ mso-bidi-font-family:"Times New Roman"'><o:p></o:p></span></b></p>
 style='font-size:12.0pt;mso-bidi-font-size:10.0pt;font-family:"Courier New";
 mso-bidi-font-family:"Times New Roman"'><o:p>&nbsp;</o:p></span></b></p>
 
-<p class=MsoNormal><b style='mso-bidi-font-weight:normal'><span
+<p class=MsoNormal><span class=SpellE><b style='mso-bidi-font-weight:normal'><span
 style='font-size:12.0pt;mso-bidi-font-size:10.0pt;font-family:"Courier New";
-mso-bidi-font-family:"Times New Roman"'>faToNib<o:p></o:p></span></b></p>
+mso-bidi-font-family:"Times New Roman"'>faToNib</span></b></span><b
+style='mso-bidi-font-weight:normal'><span style='font-size:12.0pt;mso-bidi-font-size:
+10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><o:p></o:p></span></b></p>
 
-<p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
-font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'>faToNib -
-Convert from .fa to .nib format<o:p></o:p></span></p>
+<p class=MsoNormal><span class=SpellE><span style='font-size:9.0pt;mso-bidi-font-size:
+10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'>faToNib</span></span><span
+style='font-size:9.0pt;mso-bidi-font-size:10.0pt;font-family:"Courier New";
+mso-bidi-font-family:"Times New Roman"'> - Convert from .<span class=SpellE>fa</span>
+to .nib format<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'>usage:<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>   </span>faToNib in.fa out.nib<o:p></o:p></span></p>
+style='mso-spacerun:yes'>   </span><span class=SpellE>faToNib</span> <span
+class=SpellE>in.fa</span> <span class=SpellE>out.nib</span><o:p></o:p></span></p>
 
 <p class=MsoNormal><b style='mso-bidi-font-weight:normal'><span
 style='font-size:12.0pt;mso-bidi-font-size:10.0pt'><o:p>&nbsp;</o:p></span></b></p>
 
-<p class=MsoNormal><b style='mso-bidi-font-weight:normal'><span
-style='font-size:12.0pt;mso-bidi-font-size:10.0pt'>nibFrag<o:p></o:p></span></b></p>
+<p class=MsoNormal><span class=SpellE><b style='mso-bidi-font-weight:normal'><span
+style='font-size:12.0pt;mso-bidi-font-size:10.0pt'>nibFrag</span></b></span><b
+style='mso-bidi-font-weight:normal'><span style='font-size:12.0pt;mso-bidi-font-size:
+10.0pt'><o:p></o:p></span></b></p>
 
-<p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
-font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'>nibFrag -
-Extract part of a nib file as .fa<o:p></o:p></span></p>
+<p class=MsoNormal><span class=SpellE><span style='font-size:9.0pt;mso-bidi-font-size:
+10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'>nibFrag</span></span><span
+style='font-size:9.0pt;mso-bidi-font-size:10.0pt;font-family:"Courier New";
+mso-bidi-font-family:"Times New Roman"'> - Extract part of a nib file as .<span
+class=SpellE>fa</span><o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'>usage:<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>   </span>nibFrag file.nib start end strand out.fa<o:p></o:p></span></p>
+style='mso-spacerun:yes'>   </span><span class=SpellE>nibFrag</span> <span
+class=SpellE>file.nib</span> start end strand <span class=SpellE>out.fa</span><o:p></o:p></span></p>
 
 <p class=MsoNormal><b style='mso-bidi-font-weight:normal'><span
 style='font-size:12.0pt;mso-bidi-font-size:10.0pt'><o:p>&nbsp;</o:p></span></b></p>
 
-<p class=MsoNormal><b style='mso-bidi-font-weight:normal'><span
-style='font-size:12.0pt;mso-bidi-font-size:10.0pt'>pslPretty<o:p></o:p></span></b></p>
+<p class=MsoNormal><span class=SpellE><b style='mso-bidi-font-weight:normal'><span
+style='font-size:12.0pt;mso-bidi-font-size:10.0pt'>pslPretty</span></b></span><b
+style='mso-bidi-font-weight:normal'><span style='font-size:12.0pt;mso-bidi-font-size:
+10.0pt'><o:p></o:p></span></b></p>
 
-<p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
-font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'>pslPretty -
-Convert PSL to human readable output<o:p></o:p></span></p>
+<p class=MsoNormal><span class=SpellE><span style='font-size:9.0pt;mso-bidi-font-size:
+10.0pt;font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'>pslPretty</span></span><span
+style='font-size:9.0pt;mso-bidi-font-size:10.0pt;font-family:"Courier New";
+mso-bidi-font-family:"Times New Roman"'> - Convert PSL to human readable output<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'>usage:<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>   </span>pslPretty in.psl target.lst query.lst
-pretty.out<o:p></o:p></span></p>
+style='mso-spacerun:yes'>   </span><span class=SpellE>pslPretty</span> <span
+class=SpellE>in.psl</span> <span class=SpellE>target.lst</span> <span
+class=SpellE>query.lst</span> <span class=SpellE>pretty.out</span><o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'>options:<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>   </span>-axt - save in Scott Schwartz's axt format<o:p></o:p></span></p>
+style='mso-spacerun:yes'>   </span>-<span class=SpellE>axt</span> - save in
+Scott Schwartz's <span class=SpellE>axt</span> format<o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><span
@@ -1346,23 +1545,29 @@ style='mso-spacerun:yes'>   </span>-long - Don't abbreviate long inserts<o:p></o
 <p class=MsoNormal><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;
 font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'><o:p>&nbsp;</o:p></span></p>
 
-<p class=MsoNormal style='margin-right:-.25in'>It's a really good idea if the
-psl file is sorted by target if it contains multiple targets.<span
-style='mso-spacerun:yes'>  </span>Otherwise this will be very very slow.<span
-style='mso-spacerun:yes'>   </span>The target and query lists can either be fasta
-files, nib files, or a list of fasta and/or nib files one per line.<span
-style='mso-spacerun:yes'>  </span>Currently this only handles nucleotide based
-psl files.</p>
+<p class=MsoNormal style='margin-right:-.25in'>It's a really good idea if the <span
+class=SpellE>psl</span> file is sorted by target if it contains multiple
+targets.<span style='mso-spacerun:yes'>  </span>Otherwise this will be very <span
+class=SpellE>very</span> slow.<span style='mso-spacerun:yes'>   </span>The
+target and query lists can either be <span class=SpellE>fasta</span> files, nib
+files, or a list of <span class=SpellE>fasta</span> and/or nib files one per
+line.<span style='mso-spacerun:yes'>  </span>Currently this only handles
+nucleotide based <span class=SpellE>psl</span> files.</p>
 
 <p class=MsoNormal style='margin-right:-.25in'><o:p>&nbsp;</o:p></p>
 
-<p class=MsoNormal style='margin-right:-.25in'><b style='mso-bidi-font-weight:
-normal'><span style='font-size:12.0pt;mso-bidi-font-size:10.0pt'>pslSort<o:p></o:p></span></b></p>
+<p class=MsoNormal style='margin-right:-.25in'><span class=SpellE><b
+style='mso-bidi-font-weight:normal'><span style='font-size:12.0pt;mso-bidi-font-size:
+10.0pt'>pslSort</span></b></span><b style='mso-bidi-font-weight:normal'><span
+style='font-size:12.0pt;mso-bidi-font-size:10.0pt'><o:p></o:p></span></b></p>
 
-<p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
-mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-fareast-font-family:
-"Fang Song";mso-bidi-font-family:"Times New Roman"'>pslSort - merge and sort
-psCluster .psl output files<o:p></o:p></span></p>
+<p class=MsoNormal style='margin-right:-.25in'><span class=SpellE><span
+style='font-size:9.0pt;mso-bidi-font-size:10.0pt;font-family:"Courier New";
+mso-fareast-font-family:"Fang Song";mso-bidi-font-family:"Times New Roman"'>pslSort</span></span><span
+style='font-size:9.0pt;mso-bidi-font-size:10.0pt;font-family:"Courier New";
+mso-fareast-font-family:"Fang Song";mso-bidi-font-family:"Times New Roman"'> -
+merge and sort <span class=SpellE>psCluster</span> .<span class=SpellE>psl</span>
+output files<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-fareast-font-family:
@@ -1371,23 +1576,27 @@ mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-fareast-font-family:
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-fareast-font-family:
 "Fang Song";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>  </span>pslSort dirs[1|2] outFile tempDir inDir(s)<o:p></o:p></span></p>
+style='mso-spacerun:yes'>  </span><span class=SpellE>pslSort</span> <span
+class=SpellE>dirs</span>[1|2] <span class=SpellE>outFile</span> <span
+class=SpellE>tempDir</span> <span class=SpellE>inDir</span>(s)<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-fareast-font-family:
-"Fang Song";mso-bidi-font-family:"Times New Roman"'>This will sort all of the
-.psl files in the directories<o:p></o:p></span></p>
+"Fang Song";mso-bidi-font-family:"Times New Roman"'>This will sort all of the .<span
+class=SpellE>psl</span> files in the directories<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-right:-.25in'><span class=SpellE><span
+style='font-size:9.0pt;mso-bidi-font-size:10.0pt;font-family:"Courier New";
+mso-fareast-font-family:"Fang Song";mso-bidi-font-family:"Times New Roman"'>inDirs</span></span><span
+style='font-size:9.0pt;mso-bidi-font-size:10.0pt;font-family:"Courier New";
+mso-fareast-font-family:"Fang Song";mso-bidi-font-family:"Times New Roman"'> in
+two stages - first into temporary files in <span class=SpellE>tempDir</span><o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-fareast-font-family:
-"Fang Song";mso-bidi-font-family:"Times New Roman"'>inDirs in two stages -
-first into temporary files in tempDir<o:p></o:p></span></p>
-
-<p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
-mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-fareast-font-family:
-"Fang Song";mso-bidi-font-family:"Times New Roman"'>and second into
-outFile.<span style='mso-spacerun:yes'>  </span>The device on tempDir needs to
-have<o:p></o:p></span></p>
+"Fang Song";mso-bidi-font-family:"Times New Roman"'>and second into <span
+class=SpellE>outFile</span>.<span style='mso-spacerun:yes'>  </span>The device
+on <span class=SpellE>tempDir</span> needs to have<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-fareast-font-family:
@@ -1397,7 +1606,9 @@ mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-fareast-font-family:
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-fareast-font-family:
 "Fang Song";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>  </span>pslSort g2g[1|2] outFile tempDir inDir(s)<o:p></o:p></span></p>
+style='mso-spacerun:yes'>  </span><span class=SpellE>pslSort</span> g2g[1|2] <span
+class=SpellE>outFile</span> <span class=SpellE>tempDir</span> <span
+class=SpellE>inDir</span>(s)<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-fareast-font-family:
@@ -1415,13 +1626,13 @@ mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-fareast-font-family:
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-fareast-font-family:
-"Fang Song";mso-bidi-font-family:"Times New Roman"'>Adding 1 or 2 after the
-dirs or g2g will limit the program to<o:p></o:p></span></p>
+"Fang Song";mso-bidi-font-family:"Times New Roman"'>Adding 1 or 2 after the <span
+class=SpellE>dirs</span> or g2g will limit the program to<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-fareast-font-family:
 "Fang Song";mso-bidi-font-family:"Times New Roman"'>only the first or second
-pass repectively of the sort<o:p></o:p></span></p>
+pass <span class=SpellE>repectively</span> of the sort<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-fareast-font-family:
@@ -1443,38 +1654,43 @@ mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-fareast-font-family:
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-fareast-font-family:
-"Fang Song";mso-bidi-font-family:"Times New Roman"'>Note for huge files pslSort
-will run out of memory.<span style='mso-spacerun:yes'>  </span>The unix sort
+"Fang Song";mso-bidi-font-family:"Times New Roman"'>Note for huge files <span
+class=SpellE>pslSort</span> will run out of memory.<span
+style='mso-spacerun:yes'>  </span>The <span class=SpellE>unix</span> sort
 command<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-fareast-font-family:
 "Fang Song";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>  </span>sort –k 10 *.psl &gt; sorted.psl<o:p></o:p></span></p>
+style='mso-spacerun:yes'>  </span>sort –k 10 *.<span class=SpellE>psl</span>
+&gt; <span class=SpellE>sorted.psl</span><o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-fareast-font-family:
 "Fang Song";mso-bidi-font-family:"Times New Roman"'>may be preferable in these
-situations, though the psl header lines should<o:p></o:p></span></p>
+situations, though the <span class=SpellE>psl</span> header lines should<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-fareast-font-family:
 "Fang Song";mso-bidi-font-family:"Times New Roman"'>be removed or avoided with
-the –noHead option to blat.<o:p></o:p></span></p>
+the –<span class=SpellE>noHead</span> option to blat.<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><b style='mso-bidi-font-weight:
 normal'><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt;font-family:
 "Courier New";mso-fareast-font-family:"Fang Song";mso-bidi-font-family:"Times New Roman"'><o:p>&nbsp;</o:p></span></b></p>
 
-<p class=MsoNormal style='margin-right:-.25in'><b style='mso-bidi-font-weight:
-normal'><span style='font-size:12.0pt;mso-bidi-font-size:10.0pt'>pslReps</span></b><span
-style='font-size:9.0pt;mso-bidi-font-size:10.0pt;font-family:"Courier New";
-mso-fareast-font-family:"Fang Song";mso-bidi-font-family:"Times New Roman"'><o:p></o:p></span></p>
+<p class=MsoNormal style='margin-right:-.25in'><span class=SpellE><b
+style='mso-bidi-font-weight:normal'><span style='font-size:12.0pt;mso-bidi-font-size:
+10.0pt'>pslReps</span></b></span><span style='font-size:9.0pt;mso-bidi-font-size:
+10.0pt;font-family:"Courier New";mso-fareast-font-family:"Fang Song";
+mso-bidi-font-family:"Times New Roman"'><o:p></o:p></span></p>
 
-<p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
-mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-fareast-font-family:
-"Fang Song";mso-bidi-font-family:"Times New Roman"'>pslReps - analyse repeats
-and generate genome wide best<o:p></o:p></span></p>
+<p class=MsoNormal style='margin-right:-.25in'><span class=SpellE><span
+style='font-size:9.0pt;mso-bidi-font-size:10.0pt;font-family:"Courier New";
+mso-fareast-font-family:"Fang Song";mso-bidi-font-family:"Times New Roman"'>pslReps</span></span><span
+style='font-size:9.0pt;mso-bidi-font-size:10.0pt;font-family:"Courier New";
+mso-fareast-font-family:"Fang Song";mso-bidi-font-family:"Times New Roman"'> - <span
+class=SpellE>analyse</span> repeats and generate genome wide best<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-fareast-font-family:
@@ -1488,22 +1704,25 @@ mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-fareast-font-family:
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-fareast-font-family:
 "Fang Song";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>    </span>pslReps in.psl out.psl out.psr<o:p></o:p></span></p>
+style='mso-spacerun:yes'>    </span><span class=SpellE>pslReps</span> <span
+class=SpellE>in.psl</span> <span class=SpellE>out.psl</span> <span
+class=SpellE>out.psr</span><o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-fareast-font-family:
-"Fang Song";mso-bidi-font-family:"Times New Roman"'>where in.psl is an
-alignment file generated by psLayout and<o:p></o:p></span></p>
+"Fang Song";mso-bidi-font-family:"Times New Roman"'>where <span class=SpellE>in.psl</span>
+is an alignment file generated by <span class=SpellE>psLayout</span> and<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-fareast-font-family:
-"Fang Song";mso-bidi-font-family:"Times New Roman"'>sorted by pslSort, out.psl
-is the best alignment output<o:p></o:p></span></p>
+"Fang Song";mso-bidi-font-family:"Times New Roman"'>sorted by <span
+class=SpellE>pslSort</span>, <span class=SpellE>out.psl</span> is the best
+alignment output<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-fareast-font-family:
-"Fang Song";mso-bidi-font-family:"Times New Roman"'>and out.psr contains repeat
-info<o:p></o:p></span></p>
+"Fang Song";mso-bidi-font-family:"Times New Roman"'>and <span class=SpellE>out.psr</span>
+contains repeat info<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-fareast-font-family:
@@ -1512,19 +1731,20 @@ mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-fareast-font-family:
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-fareast-font-family:
 "Fang Song";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>    </span>-nohead don't add PSL header<o:p></o:p></span></p>
+style='mso-spacerun:yes'>    </span>-<span class=SpellE>nohead</span> don't add
+PSL header<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-fareast-font-family:
 "Fang Song";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>    </span>-ignoreSize Will not weigh in favor of
-larger alignments so much<o:p></o:p></span></p>
+style='mso-spacerun:yes'>    </span>-<span class=SpellE>ignoreSize</span> Will
+not weigh in favor of larger alignments so much<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-fareast-font-family:
 "Fang Song";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>    </span>-noIntrons Will not penalize for not having
-introns when calculating<o:p></o:p></span></p>
+style='mso-spacerun:yes'>    </span>-<span class=SpellE>noIntrons</span> Will
+not penalize for not having <span class=SpellE>introns</span> when calculating<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-fareast-font-family:
@@ -1534,25 +1754,28 @@ style='mso-spacerun:yes'>              </span>size factor<o:p></o:p></span></p>
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-fareast-font-family:
 "Fang Song";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>    </span>-singleHit<span style='mso-spacerun:yes'> 
-</span>Takes single best hit, not splitting into parts<o:p></o:p></span></p>
+style='mso-spacerun:yes'>    </span>-<span class=SpellE>singleHit</span><span
+style='mso-spacerun:yes'>  </span>Takes single best hit, not splitting into
+parts<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-fareast-font-family:
 "Fang Song";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>    </span>-minCover=0.N minimum coverage to
-output.<span style='mso-spacerun:yes'>  </span>Default is 0.<o:p></o:p></span></p>
+style='mso-spacerun:yes'>    </span>-<span class=SpellE>minCover</span>=0.N
+minimum coverage to output.<span style='mso-spacerun:yes'>  </span>Default is
+0.<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-fareast-font-family:
 "Fang Song";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>    </span>-ignoreNs Ignore 'N's when calculating
-minCover.<o:p></o:p></span></p>
+style='mso-spacerun:yes'>    </span>-<span class=SpellE>ignoreNs</span> Ignore
+'N's when calculating <span class=SpellE>minCover</span>.<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-fareast-font-family:
 "Fang Song";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>    </span>-minAli=0.N minimum alignment ratio<o:p></o:p></span></p>
+style='mso-spacerun:yes'>    </span>-<span class=SpellE>minAli</span>=0.N
+minimum alignment ratio<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-fareast-font-family:
@@ -1562,8 +1785,8 @@ style='mso-spacerun:yes'>               </span>default is 0.93<o:p></o:p></span>
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-fareast-font-family:
 "Fang Song";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>    </span>-nearTop=0.N how much can deviate from top
-and be taken<o:p></o:p></span></p>
+style='mso-spacerun:yes'>    </span>-<span class=SpellE>nearTop</span>=0.N how
+much can deviate from top and be taken<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-fareast-font-family:
@@ -1573,26 +1796,27 @@ style='mso-spacerun:yes'>               </span>default is 0.01<o:p></o:p></span>
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-fareast-font-family:
 "Fang Song";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>    </span>-minNearTopSize=N<span
+style='mso-spacerun:yes'>    </span>-<span class=SpellE>minNearTopSize</span>=N<span
 style='mso-spacerun:yes'>  </span>Minimum size of alignment that is near top<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-fareast-font-family:
 "Fang Song";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>               </span>for aligmnent to be kept.<span
-style='mso-spacerun:yes'>  </span>Default 30.<o:p></o:p></span></p>
+style='mso-spacerun:yes'>               </span>for <span class=SpellE>aligmnent</span>
+to be kept.<span style='mso-spacerun:yes'>  </span>Default 30.<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-fareast-font-family:
 "Fang Song";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>    </span>-coverQSizes=file Tab-separate file with
-effective query sizes.<o:p></o:p></span></p>
+style='mso-spacerun:yes'>    </span>-<span class=SpellE>coverQSizes</span>=file
+Tab-separate file with effective query sizes.<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-fareast-font-family:
 "Fang Song";mso-bidi-font-family:"Times New Roman"'><span
-style='mso-spacerun:yes'>                     </span>When used with -minCover,
-this allows polyAs<o:p></o:p></span></p>
+style='mso-spacerun:yes'>   </span><span
+style='mso-spacerun:yes'>                  </span>When used with -<span
+class=SpellE>minCover</span>, this allows <span class=SpellE>polyAs</span><o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><span style='font-size:9.0pt;
 mso-bidi-font-size:10.0pt;font-family:"Courier New";mso-fareast-font-family:
@@ -1602,7 +1826,8 @@ coverage calculation<o:p></o:p></span></p>
 
 <p class=MsoNormal style='margin-right:-.25in'><o:p>&nbsp;</o:p></p>
 
-<h3><span style='font-size:16.0pt;mso-bidi-font-size:10.0pt'>Setting Up webBlat<o:p></o:p></span></h3>
+<h3><span style='font-size:16.0pt;mso-bidi-font-size:10.0pt'>Setting Up <span
+class=SpellE>webBlat</span><o:p></o:p></span></h3>
 
 <p class=MsoNormal>INSTALLING WEBBLAT</p>
 
@@ -1614,20 +1839,24 @@ steps:</p>
 <p class=MsoNormal><span style='mso-spacerun:yes'> </span>1) Creating sequence
 databases.</p>
 
-<p class=MsoNormal><span style='mso-spacerun:yes'> </span>2) Running the
-gfServer program to create in-memory indexes of the databases.</p>
+<p class=MsoNormal><span style='mso-spacerun:yes'> </span>2) Running the <span
+class=SpellE>gfServer</span> program to create in-memory indexes of the
+databases.</p>
 
-<p class=MsoNormal><span style='mso-spacerun:yes'> </span>3) Editing the
-webBlat.cfg file to tell it what machine and port the gfServer(s)</p>
+<p class=MsoNormal><span style='mso-spacerun:yes'> </span>3) Editing the <span
+class=SpellE>webBlat.cfg</span> file to tell it what machine and port the <span
+class=SpellE>gfServer</span>(s)</p>
 
 <p class=MsoNormal><span style='mso-spacerun:yes'>    </span>are running on,
-and optionally customizing the webBlat appearance to users.</p>
+and optionally customizing the <span class=SpellE>webBlat</span> appearance to
+users.</p>
 
-<p class=MsoNormal><span style='mso-spacerun:yes'> </span>4) Copying the
-webBlat executable and webBlat.cfg to a directory where the web server can</p>
+<p class=MsoNormal><span style='mso-spacerun:yes'> </span>4) Copying the <span
+class=SpellE>webBlat</span> executable and <span class=SpellE>webBlat.cfg</span>
+to a directory where the web server can</p>
 
-<p class=MsoNormal><span style='mso-spacerun:yes'>    </span>execute webBlat as
-a CGI.</p>
+<p class=MsoNormal><span style='mso-spacerun:yes'>    </span>execute <span
+class=SpellE>webBlat</span> as a CGI.</p>
 
 <p class=MsoNormal><o:p>&nbsp;</o:p></p>
 
@@ -1635,8 +1864,8 @@ a CGI.</p>
 
 <p class=MsoNormal><o:p>&nbsp;</o:p></p>
 
-<p class=MsoNormal>You create databases with the program faToTwoBit. Typically
-you'll create</p>
+<p class=MsoNormal>You create databases with the program <span class=SpellE>faToTwoBit</span>.
+Typically you'll create</p>
 
 <p class=MsoNormal>a separate database for each genome you are indexing.<span
 style='mso-spacerun:yes'>  </span>Each database can</p>
@@ -1645,12 +1874,13 @@ style='mso-spacerun:yes'>  </span>Each database can</p>
 number of</p>
 
 <p class=MsoNormal>records.<span style='mso-spacerun:yes'>  </span>The
-databases for webPcr and webBlat are identical.</p>
+databases for <span class=SpellE>webPcr</span> and <span class=SpellE>webBlat</span>
+are identical.</p>
 
 <p class=MsoNormal><o:p>&nbsp;</o:p></p>
 
-<p class=MsoNormal>The input to faToTwoBit is one or more fasta format files
-each of which</p>
+<p class=MsoNormal>The input to <span class=SpellE>faToTwoBit</span> is one or
+more <span class=SpellE>fasta</span> format files each of which</p>
 
 <p class=MsoNormal>can contain multiple records.<span
 style='mso-spacerun:yes'>  </span>If the sequence contains repeat sequences,</p>
@@ -1659,13 +1889,13 @@ style='mso-spacerun:yes'>  </span>If the sequence contains repeat sequences,</p>
 sequences can</p>
 
 <p class=MsoNormal>be represented in lower case and the other sequence in upper
-case.<span style='mso-spacerun:yes'>  </span>The gfServer</p>
+case.<span style='mso-spacerun:yes'>  </span>The <span class=SpellE>gfServer</span></p>
 
 <p class=MsoNormal>program can be configured to ignore the repeat
 sequences.<span style='mso-spacerun:yes'>  </span>The output of</p>
 
-<p class=MsoNormal>faToTwoBit is a file which is designed for fast random
-access and efficient</p>
+<p class=MsoNormal><span class=SpellE>faToTwoBit</span> is a file which is
+designed for fast random access and efficient</p>
 
 <p class=MsoNormal>storage.<span style='mso-spacerun:yes'>  </span>The output
 files store four bases per byte.<span style='mso-spacerun:yes'>  </span>They
@@ -1684,15 +1914,19 @@ track of runs of</p>
 <p class=MsoNormal>Here's how a typical installation might create a mouse and a
 human genome database:</p>
 
-<p class=MsoNormal><span style='mso-spacerun:yes'>    </span>cd /data/genomes</p>
+<p class=MsoNormal><span style='mso-spacerun:yes'>    </span><span
+class=SpellE>cd</span> /data/genomes</p>
 
-<p class=MsoNormal><span style='mso-spacerun:yes'>    </span>mkdir twoBit</p>
+<p class=MsoNormal><span style='mso-spacerun:yes'>    </span><span
+class=SpellE>mkdir</span> <span class=SpellE>twoBit</span></p>
 
-<p class=MsoNormal><span style='mso-spacerun:yes'>    </span>faToTwoBit human/hg16/*.fa
+<p class=MsoNormal><span style='mso-spacerun:yes'>    </span><span
+class=SpellE>faToTwoBit</span> human/hg16/*.<span class=SpellE>fa</span>
 twoBit/hg16.2bit</p>
 
-<p class=MsoNormal><span style='mso-spacerun:yes'>    </span>faToTwoBit
-mouse/mm4/*.fa twoBit/mm4.2bit</p>
+<p class=MsoNormal><span style='mso-spacerun:yes'>    </span><span
+class=SpellE>faToTwoBit</span> mouse/mm4/*.<span class=SpellE>fa</span>
+twoBit/mm4.2bit</p>
 
 <p class=MsoNormal>There's no need to put all of the databases in the same
 directory, but it can</p>
@@ -1705,8 +1939,9 @@ directory, but it can</p>
 <p class=MsoNormal>The databases can also be in the .nib format which was used
 with blat and</p>
 
-<p class=MsoNormal>gfClient/gfServer until recently.<span
-style='mso-spacerun:yes'>  </span>The .nib format only packed 2 bases per</p>
+<p class=MsoNormal><span class=SpellE>gfClient/gfServer</span> until
+recently.<span style='mso-spacerun:yes'>  </span>The .nib format only packed 2
+bases per</p>
 
 <p class=MsoNormal>byte, and could only handle one record per nib file.<span
 style='mso-spacerun:yes'>  </span>Recent versions of blat</p>
@@ -1719,31 +1954,35 @@ style='mso-spacerun:yes'>  </span>Recent versions of blat</p>
 
 <p class=MsoNormal><o:p>&nbsp;</o:p></p>
 
-<p class=MsoNormal>The gfServer program creates an in-memory index of a
-nucleotide sequence database.<span style='mso-spacerun:yes'>  </span></p>
+<p class=MsoNormal>The <span class=SpellE>gfServer</span> program creates an
+in-memory index of a nucleotide sequence database.<span
+style='mso-spacerun:yes'>  </span></p>
 
-<p class=MsoNormal>The index can either be for translated or untranslated
-searches.<span style='mso-spacerun:yes'>  </span>Translated indexes</p>
+<p class=MsoNormal>The index can either be for translated or <span
+class=SpellE>untranslated</span> searches.<span style='mso-spacerun:yes'> 
+</span>Translated indexes</p>
 
 <p class=MsoNormal>enable protein-based blat queries and use approximately two
 bytes per unmasked base </p>
 
-<p class=MsoNormal>in the database.<span style='mso-spacerun:yes'> 
-</span>Untranslated indexes are used nucleotide-based blat queries as well</p>
+<p class=MsoNormal>in the database.<span style='mso-spacerun:yes'>  </span><span
+class=SpellE>Untranslated</span> indexes are used nucleotide-based blat queries
+as well</p>
 
-<p class=MsoNormal>as for In-silico PCR.<span style='mso-spacerun:yes'> 
-</span>An index for normal blat uses approximately 1/4 byte per base.<span
-style='mso-spacerun:yes'>  </span>For</p>
+<p class=MsoNormal>as for In-<span class=SpellE>silico</span> PCR.<span
+style='mso-spacerun:yes'>  </span>An index for normal blat uses approximately
+1/4 byte per base.<span style='mso-spacerun:yes'>  </span>For</p>
 
-<p class=MsoNormal>blat on smaller (primer-sized) queries or for In-silico PCR
-a more thorough index that</p>
+<p class=MsoNormal>blat on smaller (primer-sized) queries or for In-<span
+class=SpellE>silico</span> PCR a more thorough index that</p>
 
 <p class=MsoNormal>requires 1/2 byte per base is recommended.<span
-style='mso-spacerun:yes'>  </span>The gfServer is memory intensive but
-typically</p>
+style='mso-spacerun:yes'>  </span>The <span class=SpellE>gfServer</span> is
+memory intensive but typically</p>
 
-<p class=MsoNormal>doesn not require a lot of CPU power.<span
-style='mso-spacerun:yes'>  </span>Memory permitting multiple gfServers can be</p>
+<p class=MsoNormal><span class=SpellE>doesn</span> not require a lot of CPU
+power.<span style='mso-spacerun:yes'>  </span>Memory permitting multiple <span
+class=SpellE>gfServers</span> can be</p>
 
 <p class=MsoNormal>run on the same machine.<span style='mso-spacerun:yes'> 
 </span></p>
@@ -1752,30 +1991,34 @@ style='mso-spacerun:yes'>  </span>Memory permitting multiple gfServers can be</p
 
 <p class=MsoNormal>A typical installation might go:</p>
 
-<p class=MsoNormal><span style='mso-spacerun:yes'>    </span>ssh bigRamMachine</p>
+<p class=MsoNormal><span style='mso-spacerun:yes'>    </span><span
+class=SpellE>ssh</span> <span class=SpellE>bigRamMachine</span></p>
 
-<p class=MsoNormal><span style='mso-spacerun:yes'>  </span><span
-style='mso-spacerun:yes'>  </span>cd /data/genomes/twoBit</p>
+<p class=MsoNormal><span style='mso-spacerun:yes'>    </span><span
+class=SpellE>cd</span> /data/genomes/<span class=SpellE>twoBit</span></p>
 
-<p class=MsoNormal><span style='mso-spacerun:yes'>    </span>gfServer start
-bigRamMachine 17779 hg16.2bit &amp;</p>
+<p class=MsoNormal><span style='mso-spacerun:yes'>    </span><span
+class=SpellE>gfServer</span> start <span class=SpellE>bigRamMachine</span>
+17779 hg16.2bit &amp;</p>
 
-<p class=MsoNormal><span style='mso-spacerun:yes'>    </span>gfServer -trans
--mask start bigRamMachine 17778 hg16.2bit &amp;</p>
+<p class=MsoNormal><span style='mso-spacerun:yes'>    </span><span
+class=SpellE>gfServer</span> -trans -mask start <span class=SpellE>bigRamMachine</span>
+17778 hg16.2bit &amp;</p>
 
 <p class=MsoNormal>the -trans flag makes a translated index.<span
 style='mso-spacerun:yes'>   </span>It will take approximately</p>
 
-<p class=MsoNormal>15 minutes to build an untranslated index, and 45 minutes to
-build a</p>
+<p class=MsoNormal>15 minutes to build an <span class=SpellE>untranslated</span>
+index, and 45 minutes to build a</p>
 
 <p class=MsoNormal>translate index.<span style='mso-spacerun:yes'>  </span>To
-build an untranslated index to be shared with </p>
+build an <span class=SpellE>untranslated</span> index to be shared with </p>
 
-<p class=MsoNormal>In-silico PCR do</p>
+<p class=MsoNormal>In-<span class=SpellE>silico</span> PCR do</p>
 
-<p class=MsoNormal><span style='mso-spacerun:yes'>    </span>gfServer
--stepSize=5 bigRamMachine 17779 hg16.2bit &amp;</p>
+<p class=MsoNormal><span style='mso-spacerun:yes'>    </span><span
+class=SpellE>gfServer</span> -<span class=SpellE>stepSize</span>=5 <span
+class=SpellE>bigRamMachine</span> 17779 hg16.2bit &amp;</p>
 
 <p class=MsoNormal>This index will be slightly more sensitive, noticeably so
 for small query sequences,</p>
@@ -1788,33 +2031,37 @@ for small query sequences,</p>
 
 <p class=MsoNormal><o:p>&nbsp;</o:p></p>
 
-<p class=MsoNormal>The webBlat.cfg file tells the webBlat program where to look
-for gfServers and</p>
+<p class=MsoNormal>The <span class=SpellE>webBlat.cfg</span> file tells the <span
+class=SpellE>webBlat</span> program where to look for <span class=SpellE>gfServers</span>
+and</p>
 
 <p class=MsoNormal>for sequence.<span style='mso-spacerun:yes'>  </span>The
-basic format of the .cfg file is line oriented with the</p>
+basic format of the .<span class=SpellE>cfg</span> file is line oriented with
+the</p>
 
 <p class=MsoNormal>first word of the line being a command.<span
 style='mso-spacerun:yes'>  </span>Blank lines and lines starting with #</p>
 
-<p class=MsoNormal>are ignored.<span style='mso-spacerun:yes'>  </span>The
-webBlat.cfg and webPcr.cfg files are similar. The webBlat.cfg</p>
+<p class=MsoNormal>are ignored.<span style='mso-spacerun:yes'>  </span>The <span
+class=SpellE>webBlat.cfg</span> and <span class=SpellE>webPcr.cfg</span> files
+are similar. The <span class=SpellE>webBlat.cfg</span></p>
 
 <p class=MsoNormal>commands are:</p>
 
-<p class=MsoNormal><span style='mso-spacerun:yes'>   </span>gfServer<span
+<p class=MsoNormal><span style='mso-spacerun:yes'>   </span><span class=SpellE>gfServer</span><span
 style='mso-spacerun:yes'>  </span>-<span style='mso-spacerun:yes'> 
-</span>defines host and port a (untranslated) gfServer is running on, the </p>
+</span>defines host and port a (<span class=SpellE>untranslated</span>) <span
+class=SpellE>gfServer</span> is running on, the </p>
 
 <p class=MsoNormal><span style='mso-spacerun:yes'>   </span><span
 style='mso-tab-count:2'>                             </span>associated sequence
 directory, and the name of the database to display in</p>
 
-<p class=MsoNormal><span style='mso-spacerun:yes'>                </span>the
-webPcr web page.</p>
+<p class=MsoNormal><span style='mso-spacerun:yes'>                </span>the <span
+class=SpellE>webPcr</span> web page.</p>
 
-<p class=MsoNormal><span style='mso-spacerun:yes'>   </span>gfServerTrans -
-defines location of a translated server.</p>
+<p class=MsoNormal><span style='mso-spacerun:yes'>   </span><span class=SpellE>gfServerTrans</span>
+- defines location of a translated server.</p>
 
 <p class=MsoNormal><span style='mso-spacerun:yes'>   </span>background -
 defines the background image if any to display on web page</p>
@@ -1823,7 +2070,7 @@ defines the background image if any to display on web page</p>
 style='mso-spacerun:yes'>    </span>- defines company name to display on web
 page</p>
 
-<p class=MsoNormal><span style='mso-spacerun:yes'>   </span>tempDir<span
+<p class=MsoNormal><span style='mso-spacerun:yes'>   </span><span class=SpellE>tempDir</span><span
 style='mso-spacerun:yes'>    </span>- where to put temporary files.<span
 style='mso-spacerun:yes'>  </span>This path is relative to where the web</p>
 
@@ -1835,16 +2082,18 @@ remove files that haven't</p>
 accessed for 24 hours from this directory periodically, </p>
 
 <p class=MsoNormal><span style='mso-tab-count:2'>                                </span>via
-a cron job or similar mechanism.</p>
+a <span class=SpellE>cron</span> job or similar mechanism.</p>
 
 <p class=MsoNormal>The background and company commands are optional.<span
-style='mso-spacerun:yes'>  </span>The webBlat.cfg file must</p>
+style='mso-spacerun:yes'>  </span>The <span class=SpellE>webBlat.cfg</span>
+file must</p>
 
-<p class=MsoNormal>have at least one valid gfServer or gfServerTrans line, and
-a tempDir line.</p>
+<p class=MsoNormal>have at least one valid <span class=SpellE>gfServer</span>
+or <span class=SpellE>gfServerTrans</span> line, and a <span class=SpellE>tempDir</span>
+line.</p>
 
-<p class=MsoNormal>.<span style='mso-spacerun:yes'>  </span>Here is a
-webBlat.cfg file that you</p>
+<p class=MsoNormal>.<span style='mso-spacerun:yes'>  </span>Here is a <span
+class=SpellE>webBlat.cfg</span> file that you</p>
 
 <p class=MsoNormal>might find at a typical installation:</p>
 
@@ -1852,21 +2101,21 @@ webBlat.cfg file that you</p>
 
 <p class=MsoNormal>company Awesome Research Amalgamated</p>
 
-<p class=MsoNormal>background /images/dnaPaper.jpg</p>
+<p class=MsoNormal>background /images/<span class=SpellE>dnaPaper.jpg</span></p>
 
-<p class=MsoNormal>gfServer bigRamMachine 17778 /data/genomes/2bit/hg16.2bit
-Human Genome</p>
+<p class=MsoNormal><span class=SpellE>gfServer</span> <span class=SpellE>bigRamMachine</span>
+17778 /data/genomes/2bit/hg16.2bit Human Genome</p>
 
-<p class=MsoNormal>gfServer bigRamMachine 17779 /data/genomes/2bit/hg16.2bit
-Human Genome</p>
+<p class=MsoNormal><span class=SpellE>gfServer</span> <span class=SpellE>bigRamMachine</span>
+17779 /data/genomes/2bit/hg16.2bit Human Genome</p>
 
-<p class=MsoNormal>gfServer mouseServer 17780 /data/genomes/2bit/mm4.2bit Mouse
-Genome</p>
+<p class=MsoNormal><span class=SpellE>gfServer</span> <span class=SpellE>mouseServer</span>
+17780 /data/genomes/2bit/mm4.2bit Mouse Genome</p>
 
-<p class=MsoNormal>gfServer mouseServer 17781 /data/genomes/2bit/mm4.2bit Mouse
-Genome</p>
+<p class=MsoNormal><span class=SpellE>gfServer</span> <span class=SpellE>mouseServer</span>
+17781 /data/genomes/2bit/mm4.2bit Mouse Genome</p>
 
-<p class=MsoNormal>tempDir ../trash</p>
+<p class=MsoNormal><span class=SpellE>tempDir</span> ../trash</p>
 
 <p class=MsoNormal><o:p>&nbsp;</o:p></p>
 
@@ -1879,21 +2128,24 @@ server.<span style='mso-spacerun:yes'>  </span>On</p>
 
 <p class=MsoNormal>a typical Apache installation it might be:</p>
 
-<p class=MsoNormal><span style='mso-spacerun:yes'>     </span>ssh webServer</p>
+<p class=MsoNormal><span style='mso-spacerun:yes'>     </span><span
+class=SpellE>ssh</span> <span class=SpellE>webServer</span></p>
 
-<p class=MsoNormal><span style='mso-spacerun:yes'>     </span>cd kent/webBlat</p>
+<p class=MsoNormal><span style='mso-spacerun:yes'>     </span><span
+class=SpellE>cd</span> <span class=SpellE>kent/webBlat</span></p>
 
-<p class=MsoNormal><span style='mso-spacerun:yes'>     </span>cp webBlat
-webBlat.cfg /usr/local/apache/cgi-bin</p>
+<p class=MsoNormal><span style='mso-spacerun:yes'>     </span>cp <span
+class=SpellE>webBlat</span> <span class=SpellE>webBlat.cfg</span> /<span
+class=SpellE>usr/local/apache/cgi</span>-bin</p>
 
-<p class=MsoNormal><span style='mso-spacerun:yes'>     </span>mkdir
-/usr/local/apache/trash</p>
+<p class=MsoNormal><span style='mso-spacerun:yes'>     </span><span
+class=SpellE>mkdir</span> /<span class=SpellE>usr</span>/local/apache/trash</p>
 
-<p class=MsoNormal><span style='mso-spacerun:yes'>     </span>chmod 777
-/usr/local/apache/trash</p>
+<p class=MsoNormal><span style='mso-spacerun:yes'>     </span><span
+class=SpellE>chmod</span> 777 /<span class=SpellE>usr</span>/local/apache/trash</p>
 
-<p class=MsoNormal>assuming that you've put the executable and config file in
-kent/webBlat.</p>
+<p class=MsoNormal>assuming that you've put the executable and <span
+class=SpellE>config</span> file in <span class=SpellE>kent/webBlat</span>.</p>
 
 <p class=MsoNormal>The program will create some files in the trash
 directory.<span style='mso-spacerun:yes'>  </span>It is good to </p>
@@ -1903,20 +2155,21 @@ style='mso-spacerun:yes'>   </span>On Mac OS-X instead</p>
 
 <p class=MsoNormal>you might do:</p>
 
-<p class=MsoNormal><span style='mso-spacerun:yes'>     </span>cp webBlat
-webBlat.cfg /Library/WebServer/CGI-Executables</p>
+<p class=MsoNormal><span style='mso-spacerun:yes'>     </span>cp <span
+class=SpellE>webBlat</span> <span class=SpellE>webBlat.cfg</span> /Library/<span
+class=SpellE>WebServer</span>/CGI-Executables</p>
 
-<p class=MsoNormal><span style='mso-spacerun:yes'>     </span>mkdir
-/Library/WebServer/trash</p>
+<p class=MsoNormal><span style='mso-spacerun:yes'>     </span><span
+class=SpellE>mkdir</span> /Library/<span class=SpellE>WebServer</span>/trash</p>
 
-<p class=MsoNormal><span style='mso-spacerun:yes'>     </span>chmod 777
-/Library/WebServer/trash</p>
+<p class=MsoNormal><span style='mso-spacerun:yes'>     </span><span
+class=SpellE>chmod</span> 777 /Library/<span class=SpellE>WebServer</span>/trash</p>
 
 <p class=MsoNormal>Unless you are administering your own computer you will
 likely need to ask your </p>
 
-<p class=MsoNormal>local system administrators for help with this part of the
-webBlat installation.</p>
+<p class=MsoNormal>local system administrators for help with this part of the <span
+class=SpellE>webBlat</span> installation.</p>
 
 <p class=MsoNormal><o:p>&nbsp;</o:p></p>
 
@@ -1926,52 +2179,58 @@ webBlat installation.</p>
 style='font-size:12.0pt;mso-bidi-font-size:10.0pt'><o:p>&nbsp;</o:p></span></b></p>
 
 <p class=MsoNormal><b style='mso-bidi-font-weight:normal'><span
-style='font-size:12.0pt;mso-bidi-font-size:10.0pt'>.psl files<o:p></o:p></span></b></p>
+style='font-size:12.0pt;mso-bidi-font-size:10.0pt'>.<span class=SpellE>psl</span>
+files<o:p></o:p></span></b></p>
 
-<p class=MsoNormal>A .psl file describes a series of alignments in a dense
-easily parsed text format.<span style='mso-spacerun:yes'>  </span>It begins
-with a five line header which describes each field.<span
-style='mso-spacerun:yes'>  </span>Following this is one line for each alignment
-with a tab between each field.<span style='mso-spacerun:yes'>  </span>The
-fields are describe below in<span style='mso-spacerun:yes'>  </span>a format
-suitable for many relational databases.</p>
-
-<p class=MsoBodyTextIndent><span style='font-size:9.0pt;mso-bidi-font-size:
-10.0pt'><span style='mso-spacerun:yes'>    </span>matches int unsigned ,<span
-style='mso-spacerun:yes'>   </span><span style='mso-tab-count:1'>        </span>#
-Number of bases that match that aren't repeats<o:p></o:p></span></p>
+<p class=MsoNormal>A .<span class=SpellE>psl</span> file describes a series of
+alignments in a dense easily parsed text format.<span
+style='mso-spacerun:yes'>  </span>It begins with a five line header which
+describes each field.<span style='mso-spacerun:yes'>  </span>Following this is
+one line for each alignment with a tab between each field.<span
+style='mso-spacerun:yes'>  </span>The fields are describe below in<span
+style='mso-spacerun:yes'>  </span>a format suitable for many relational
+databases.</p>
 
 <p class=MsoBodyTextIndent><span style='font-size:9.0pt;mso-bidi-font-size:
-10.0pt'><span style='mso-spacerun:yes'>    </span>misMatches int unsigned ,<span
-style='mso-tab-count:1'>        </span># Number of bases that don't match<o:p></o:p></span></p>
+10.0pt'><span style='mso-spacerun:yes'>    </span>matches <span class=SpellE>int</span>
+unsigned ,<span style='mso-spacerun:yes'>   </span><span style='mso-tab-count:
+1'>        </span># Number of bases that match that aren't repeats<o:p></o:p></span></p>
 
 <p class=MsoBodyTextIndent><span style='font-size:9.0pt;mso-bidi-font-size:
-10.0pt'><span style='mso-spacerun:yes'>    </span>repMatches int unsigned , <span
-style='mso-tab-count:1'>       </span># Number of bases that match but are part
-of repeats<o:p></o:p></span></p>
+10.0pt'><span style='mso-spacerun:yes'>    </span><span class=SpellE>misMatches</span>
+<span class=SpellE>int</span> unsigned ,<span style='mso-tab-count:1'>        </span>#
+Number of bases that don't match<o:p></o:p></span></p>
 
 <p class=MsoBodyTextIndent><span style='font-size:9.0pt;mso-bidi-font-size:
-10.0pt'><span style='mso-spacerun:yes'>    </span>nCount int unsigned ,<span
-style='mso-spacerun:yes'>       </span><span style='mso-tab-count:1'>     </span>#
-Number of 'N' bases<o:p></o:p></span></p>
+10.0pt'><span style='mso-spacerun:yes'>    </span><span class=SpellE>repMatches</span>
+<span class=SpellE>int</span> unsigned , <span style='mso-tab-count:1'>       </span>#
+Number of bases that match but are part of repeats<o:p></o:p></span></p>
 
 <p class=MsoBodyTextIndent><span style='font-size:9.0pt;mso-bidi-font-size:
-10.0pt'><span style='mso-spacerun:yes'>    </span>qNumInsert int unsigned , <span
-style='mso-tab-count:1'>       </span># Number of inserts in query<o:p></o:p></span></p>
+10.0pt'><span style='mso-spacerun:yes'>    </span><span class=SpellE>nCount</span>
+<span class=SpellE>int</span> unsigned ,<span style='mso-spacerun:yes'>      
+</span><span style='mso-tab-count:1'>     </span># Number of 'N' bases<o:p></o:p></span></p>
 
 <p class=MsoBodyTextIndent><span style='font-size:9.0pt;mso-bidi-font-size:
-10.0pt'><span style='mso-spacerun:yes'>    </span>qBaseInsert int unsigned , <span
-style='mso-tab-count:1'>      </span># Number of bases inserted in query<o:p></o:p></span></p>
+10.0pt'><span style='mso-spacerun:yes'>    </span><span class=SpellE>qNumInsert</span>
+<span class=SpellE>int</span> unsigned , <span style='mso-tab-count:1'>       </span>#
+Number of inserts in query<o:p></o:p></span></p>
 
 <p class=MsoBodyTextIndent><span style='font-size:9.0pt;mso-bidi-font-size:
-10.0pt'><span style='mso-spacerun:yes'>    </span>tNumInsert int unsigned
-,<span style='mso-spacerun:yes'>  </span><span style='mso-tab-count:1'>      </span>#
-Number of inserts in target<o:p></o:p></span></p>
+10.0pt'><span style='mso-spacerun:yes'>    </span><span class=SpellE>qBaseInsert</span>
+<span class=SpellE>int</span> unsigned , <span style='mso-tab-count:1'>      </span>#
+Number of bases inserted in query<o:p></o:p></span></p>
 
 <p class=MsoBodyTextIndent><span style='font-size:9.0pt;mso-bidi-font-size:
-10.0pt'><span style='mso-spacerun:yes'>    </span>tBaseInsert int unsigned
-,<span style='mso-spacerun:yes'>  </span><span style='mso-tab-count:1'>     </span>#
-Number of bases inserted in target<o:p></o:p></span></p>
+10.0pt'><span style='mso-spacerun:yes'>    </span><span class=SpellE>tNumInsert</span>
+<span class=SpellE>int</span> unsigned ,<span style='mso-spacerun:yes'> 
+</span><span style='mso-tab-count:1'>      </span># Number of inserts in target<o:p></o:p></span></p>
+
+<p class=MsoBodyTextIndent><span style='font-size:9.0pt;mso-bidi-font-size:
+10.0pt'><span style='mso-spacerun:yes'>    </span><span class=SpellE>tBaseInsert</span>
+<span class=SpellE>int</span> unsigned ,<span style='mso-spacerun:yes'> 
+</span><span style='mso-tab-count:1'>     </span># Number of bases inserted in
+target<o:p></o:p></span></p>
 
 <p class=MsoBodyTextIndent><span style='font-size:9.0pt;mso-bidi-font-size:
 10.0pt'><span style='mso-spacerun:yes'>    </span>strand char(2) ,<span
@@ -1979,74 +2238,82 @@ style='mso-spacerun:yes'>            </span><span style='mso-tab-count:1'>     <
 + or - for query strand, optionally followed by + or – for target strand<o:p></o:p></span></p>
 
 <p class=MsoBodyTextIndent><span style='font-size:9.0pt;mso-bidi-font-size:
-10.0pt'><span style='mso-spacerun:yes'>    </span>qName varchar(255) ,<span
-style='mso-spacerun:yes'>       </span><span style='mso-tab-count:1'>      </span>#
-Query sequence name<o:p></o:p></span></p>
+10.0pt'><span style='mso-spacerun:yes'>    </span><span class=SpellE>qName</span>
+<span class=SpellE>varchar</span>(255) ,<span style='mso-spacerun:yes'>      
+</span><span style='mso-tab-count:1'>      </span># Query sequence name<o:p></o:p></span></p>
 
 <p class=MsoBodyTextIndent><span style='font-size:9.0pt;mso-bidi-font-size:
-10.0pt'><span style='mso-spacerun:yes'>    </span>qSize int unsigned ,<span
-style='mso-spacerun:yes'>        </span><span style='mso-tab-count:1'>     </span>#
-Query sequence size<o:p></o:p></span></p>
+10.0pt'><span style='mso-spacerun:yes'>    </span><span class=SpellE>qSize</span>
+<span class=SpellE>int</span> unsigned ,<span style='mso-spacerun:yes'>       
+</span><span style='mso-tab-count:1'>     </span># Query sequence size<o:p></o:p></span></p>
 
 <p class=MsoBodyTextIndent><span style='font-size:9.0pt;mso-bidi-font-size:
-10.0pt'><span style='mso-spacerun:yes'>    </span>qStart int unsigned ,<span
-style='mso-spacerun:yes'>     </span><span style='mso-tab-count:1'>       </span>#
-Alignment start position in query<o:p></o:p></span></p>
+10.0pt'><span style='mso-spacerun:yes'>    </span><span class=SpellE>qStart</span>
+<span class=SpellE>int</span> unsigned ,<span style='mso-spacerun:yes'>    
+</span><span style='mso-tab-count:1'>       </span># Alignment start position
+in query<o:p></o:p></span></p>
 
 <p class=MsoBodyTextIndent><span style='font-size:9.0pt;mso-bidi-font-size:
-10.0pt'><span style='mso-spacerun:yes'>    </span>qEnd int unsigned ,<span
-style='mso-spacerun:yes'>         </span><span style='mso-tab-count:1'>     </span>#
-Alignment end position in query<o:p></o:p></span></p>
+10.0pt'><span style='mso-spacerun:yes'>    </span><span class=SpellE>qEnd</span>
+<span class=SpellE>int</span> unsigned ,<span style='mso-spacerun:yes'>        
+</span><span style='mso-tab-count:1'>     </span># Alignment end position in
+query<o:p></o:p></span></p>
 
 <p class=MsoBodyTextIndent><span style='font-size:9.0pt;mso-bidi-font-size:
-10.0pt'><span style='mso-spacerun:yes'>    </span>tName varchar(255) ,<span
-style='mso-spacerun:yes'>       </span><span style='mso-tab-count:1'>      </span>#
-Target sequence name<o:p></o:p></span></p>
+10.0pt'><span style='mso-spacerun:yes'>    </span><span class=SpellE>tName</span>
+<span class=SpellE>varchar</span>(255) ,<span style='mso-spacerun:yes'>      
+</span><span style='mso-tab-count:1'>      </span># Target sequence name<o:p></o:p></span></p>
 
 <p class=MsoBodyTextIndent><span style='font-size:9.0pt;mso-bidi-font-size:
-10.0pt'><span style='mso-spacerun:yes'>    </span>tSize int unsigned ,<span
-style='mso-spacerun:yes'>        </span><span style='mso-tab-count:1'>     </span>#
-Target sequence size<o:p></o:p></span></p>
+10.0pt'><span style='mso-spacerun:yes'>    </span><span class=SpellE>tSize</span>
+<span class=SpellE>int</span> unsigned ,<span style='mso-spacerun:yes'>       
+</span><span style='mso-tab-count:1'>     </span># Target sequence size<o:p></o:p></span></p>
 
 <p class=MsoBodyTextIndent><span style='font-size:9.0pt;mso-bidi-font-size:
-10.0pt'><span style='mso-spacerun:yes'>    </span>tStart int unsigned ,<span
-style='mso-spacerun:yes'>       </span><span style='mso-tab-count:1'>     </span>#
-Alignment start position in target<o:p></o:p></span></p>
+10.0pt'><span style='mso-spacerun:yes'>  </span><span
+style='mso-spacerun:yes'>  </span><span class=SpellE>tStart</span> <span
+class=SpellE>int</span> unsigned ,<span style='mso-spacerun:yes'>       </span><span
+style='mso-tab-count:1'>     </span># Alignment start position in target<o:p></o:p></span></p>
 
 <p class=MsoBodyTextIndent><span style='font-size:9.0pt;mso-bidi-font-size:
-10.0pt'><span style='mso-spacerun:yes'>    </span>tEnd int unsigned ,<span
-style='mso-spacerun:yes'>         </span><span style='mso-tab-count:1'>     </span>#
-Alignment end position in target<o:p></o:p></span></p>
+10.0pt'><span style='mso-spacerun:yes'>    </span><span class=SpellE>tEnd</span>
+<span class=SpellE>int</span> unsigned ,<span style='mso-spacerun:yes'>        
+</span><span style='mso-tab-count:1'>     </span># Alignment end position in
+target<o:p></o:p></span></p>
 
 <p class=MsoBodyTextIndent><span style='font-size:9.0pt;mso-bidi-font-size:
-10.0pt'><span style='mso-spacerun:yes'>    </span>blockCount int unsigned ,<span
-style='mso-tab-count:1'>        </span># Number of blocks in alignment. A block
-contains no gaps.<o:p></o:p></span></p>
+10.0pt'><span style='mso-spacerun:yes'>    </span><span class=SpellE>blockCount</span>
+<span class=SpellE>int</span> unsigned ,<span style='mso-tab-count:1'>        </span>#
+Number of blocks in alignment. A block contains no gaps.<o:p></o:p></span></p>
 
 <p class=MsoBodyTextIndent><span style='font-size:9.0pt;mso-bidi-font-size:
-10.0pt'><span style='mso-spacerun:yes'>    </span>blockSizes longblob ,<span
-style='mso-spacerun:yes'>    </span><span style='mso-tab-count:1'>        </span>#
-Size of each block in a comma separated list<o:p></o:p></span></p>
+10.0pt'><span style='mso-spacerun:yes'>    </span><span class=SpellE>blockSizes</span>
+<span class=SpellE>longblob</span> ,<span style='mso-spacerun:yes'>    </span><span
+style='mso-tab-count:1'>        </span># Size of each block in a comma
+separated list<o:p></o:p></span></p>
 
 <p class=MsoBodyTextIndent><span style='font-size:9.0pt;mso-bidi-font-size:
-10.0pt'><span style='mso-spacerun:yes'>    </span>qStarts longblob ,<span
-style='mso-spacerun:yes'>  </span><span style='mso-tab-count:1'>             </span>#
-Start of each block in query in a comma separated list<o:p></o:p></span></p>
+10.0pt'><span style='mso-spacerun:yes'>    </span><span class=SpellE>qStarts</span>
+<span class=SpellE>longblob</span> ,<span style='mso-spacerun:yes'>  </span><span
+style='mso-tab-count:1'>             </span># Start of each block in query in a
+comma separated list<o:p></o:p></span></p>
 
 <p class=MsoBodyTextIndent><span style='font-size:9.0pt;mso-bidi-font-size:
-10.0pt'><span style='mso-spacerun:yes'>    </span>tStarts longblob ,<span
-style='mso-spacerun:yes'>  </span><span style='mso-tab-count:1'>             </span>#
-Start of each block in target in a comma separated list<o:p></o:p></span></p>
+10.0pt'><span style='mso-spacerun:yes'>    </span><span class=SpellE>tStarts</span>
+<span class=SpellE>longblob</span> ,<span style='mso-spacerun:yes'>  </span><span
+style='mso-tab-count:1'>             </span># Start of each block in target in
+a comma separated list<o:p></o:p></span></p>
 
-<p class=MsoNormal>In general the coordinates in psl files are “zero based half
-open.” The first base in a sequence is numbered zero rather than one. When
-representing a range the end coordinate is not included in the range. Thus the
-first 100 bases of a sequence are represented as 0-100, and the second 100 bases
-are represented as 100-200. There is a another little unusual feature in the
-.psl format. It has to do with how coordinates are handled on the negative
-strand. In the qStart/qEnd fields the coordinates are where it matches from the
-point of view of the forward strand (even when the match is on the reverse
-strand). However on the qStarts[] list, the coordinates are reversed. </p>
+<p class=MsoNormal>In general the coordinates in <span class=SpellE>psl</span>
+files are “zero based half open.” The first base in a sequence is numbered zero
+rather than one. When representing a range the end coordinate is not included
+in the range. Thus the first 100 bases of a sequence are represented as 0-100,
+and the second 100 bases are represented as 100-200. There is a another little
+unusual feature in the .<span class=SpellE>psl</span> format. It has to do with
+how coordinates are handled on the negative strand. In the <span class=SpellE>qStart/qEnd</span>
+fields the coordinates are where it matches from the point of view of the
+forward strand (even when the match is on the reverse strand). However on the <span
+class=SpellE>qStarts</span>[] list, the coordinates are reversed. </p>
 
 <p class=MsoNormal style='margin-right:-.25in'><o:p>&nbsp;</o:p></p>
 
@@ -2068,18 +2335,24 @@ style='mso-spacerun:yes'>    </span>----------<span
 style='mso-spacerun:yes'>      </span>minus strand alignment on query <o:p></o:p></span></p>
 
 <p class=MsoNormal>Plus strand:<br>
-<span style='font-family:Courier'><span style='mso-spacerun:yes'>    
-</span>qStart 12 qEnd 31 blockSizes 4,5 qStarts 12,26<br>
+<span style='font-family:Courier'><span style='mso-spacerun:yes'>     </span><span
+class=SpellE>qStart</span> 12 <span class=SpellE>qEnd</span> 31 <span
+class=SpellE>blockSizes</span> 4,5 <span class=SpellE>qStarts</span> 12,26<br>
 </span>Minus strand:<br>
-<span style='font-family:Courier'><span style='mso-spacerun:yes'>    
-</span>qStart 4 qEnd 26 blockSizes 10,8 qStarts 5,19 <o:p></o:p></span></p>
+<span style='font-family:Courier'><span style='mso-spacerun:yes'>     </span><span
+class=SpellE>qStart</span> 4 <span class=SpellE>qEnd</span> 26 <span
+class=SpellE>blockSizes</span> 10,8 <span class=SpellE>qStarts</span> 5,19 <o:p></o:p></span></p>
 
-<p class=MsoNormal>Essentially the minus strand blockSizes and qStarts are what
-you would get if you reverse complemented the query.However the qStart and qEnd
-are non-reversed. To get from one to the other:<br>
-<span style='font-family:Courier'><span style='mso-spacerun:yes'>    
-</span>qStart = qSize - revQEnd<br>
-<span style='mso-spacerun:yes'>     </span>qEnd = qSize - revQStart<br
+<p class=MsoNormal>Essentially the minus strand <span class=SpellE>blockSizes</span>
+and <span class=SpellE>qStarts</span> are what you would get if you reverse
+complemented the <span class=SpellE>query.However</span> the <span
+class=SpellE>qStart</span> and <span class=SpellE>qEnd</span> are non-reversed.
+To get from one to the other:<br>
+<span style='font-family:Courier'><span style='mso-spacerun:yes'>     </span><span
+class=SpellE>qStart</span> = <span class=SpellE>qSize</span> - <span
+class=SpellE>revQEnd</span><br>
+<span style='mso-spacerun:yes'>     </span><span class=SpellE>qEnd</span> = <span
+class=SpellE>qSize</span> - <span class=SpellE>revQStart</span><br
 style='mso-special-character:line-break'>
 <![if !supportLineBreakNewLine]><br style='mso-special-character:line-break'>
 <![endif]><o:p></o:p></span></p>
@@ -2107,8 +2380,8 @@ style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span
 
 <p class=MsoNormal style='margin-left:.5in;text-indent:-.25in;mso-list:l1 level1 lfo1;
 tab-stops:list .5in'><![if !supportLists]><span style='mso-list:Ignore'>3)<span
-style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><![endif]>sequenceCount
-– the number of sequences in the file</p>
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><![endif]><span
+class=SpellE>sequenceCount</span> – the number of sequences in the file</p>
 
 <p class=MsoNormal style='margin-left:.5in;text-indent:-.25in;mso-list:l1 level1 lfo1;
 tab-stops:list .5in'><![if !supportLists]><span style='mso-list:Ignore'>4)<span
@@ -2131,14 +2404,14 @@ three fields:</p>
 
 <p class=MsoNormal style='margin-left:.5in;text-indent:-.25in;mso-list:l0 level1 lfo2;
 tab-stops:list .5in'><![if !supportLists]><span style='mso-list:Ignore'>1)<span
-style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><![endif]>nameSize
-– a byte containing the length of the name field</p>
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><![endif]><span
+class=SpellE>nameSize</span> – a byte containing the length of the name field</p>
 
 <p class=MsoNormal style='margin-left:.5in;text-indent:-.25in;mso-list:l0 level1 lfo2;
 tab-stops:list .5in'><![if !supportLists]><span style='mso-list:Ignore'>2)<span
 style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><![endif]>name
-– this contains the sequence name itself, and is variable length depending on
-nameSize.</p>
+– this contains the sequence name itself, and is variable length depending on <span
+class=SpellE>nameSize</span>.</p>
 
 <p class=MsoNormal style='margin-left:.5in;text-indent:-.25in;mso-list:l0 level1 lfo2;
 tab-stops:list .5in'><![if !supportLists]><span style='mso-list:Ignore'>3)<span
@@ -2152,50 +2425,52 @@ style='mso-spacerun:yes'>  </span>These contain 9 fields:</p>
 
 <p class=MsoNormal style='margin-left:.5in;text-indent:-.25in;mso-list:l4 level1 lfo3;
 tab-stops:list .5in'><![if !supportLists]><span style='mso-list:Ignore'>1)<span
-style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><![endif]>dnaSize
-– number of bases of DNA in the sequence.</p>
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><![endif]><span
+class=SpellE>dnaSize</span> – number of bases of DNA in the sequence.</p>
 
 <p class=MsoNormal style='margin-left:.5in;text-indent:-.25in;mso-list:l4 level1 lfo3;
 tab-stops:list .5in'><![if !supportLists]><span style='mso-list:Ignore'>2)<span
-style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><![endif]>nBlockCount
-– the number of blocks of N’s in the file (representing unknown sequence).</p>
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><![endif]><span
+class=SpellE>nBlockCount</span> – the number of blocks of N’s in the file
+(representing unknown sequence).</p>
 
 <p class=MsoNormal style='margin-left:.5in;text-indent:-.25in;mso-list:l4 level1 lfo3;
 tab-stops:list .5in'><![if !supportLists]><span style='mso-list:Ignore'>3)<span
-style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><![endif]>nBlockStarts
-– a starting position for each block of N’s</p>
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><![endif]><span
+class=SpellE>nBlockStarts</span> – a starting position for each block of N’s</p>
 
 <p class=MsoNormal style='margin-left:.5in;text-indent:-.25in;mso-list:l4 level1 lfo3;
 tab-stops:list .5in'><![if !supportLists]><span style='mso-list:Ignore'>4)<span
-style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><![endif]>nBlockSizes
-– the size of each block of N’s</p>
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><![endif]><span
+class=SpellE>nBlockSizes</span> – the size of each block of N’s</p>
 
 <p class=MsoNormal style='margin-left:.5in;text-indent:-.25in;mso-list:l4 level1 lfo3;
 tab-stops:list .5in'><![if !supportLists]><span style='mso-list:Ignore'>5)<span
-style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><![endif]>maskBlockCount
-– the number of masked (lower case) blocks</p>
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><![endif]><span
+class=SpellE>maskBlockCount</span> – the number of masked (lower case) blocks</p>
 
 <p class=MsoNormal style='margin-left:.5in;text-indent:-.25in;mso-list:l4 level1 lfo3;
 tab-stops:list .5in'><![if !supportLists]><span style='mso-list:Ignore'>6)<span
-style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><![endif]>maskBlockStarts
-– starting position for each masked block</p>
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><![endif]><span
+class=SpellE>maskBlockStarts</span> – starting position for each masked block</p>
 
 <p class=MsoNormal style='margin-left:.5in;text-indent:-.25in;mso-list:l4 level1 lfo3;
 tab-stops:list .5in'><![if !supportLists]><span style='mso-list:Ignore'>7)<span
-style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><![endif]>maskBlockSizes
-– the size of each masked block</p>
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><![endif]><span
+class=SpellE>maskBlockSizes</span> – the size of each masked block</p>
 
 <p class=MsoNormal style='margin-left:.5in;text-indent:-.25in;mso-list:l4 level1 lfo3;
 tab-stops:list .5in'><![if !supportLists]><span style='mso-list:Ignore'>8)<span
-style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><![endif]>packedDna
-– the dna packed to two bits per base as so: 00 – T,<span
-style='mso-spacerun:yes'>  </span>01 – C,<span style='mso-spacerun:yes'> 
-</span>10 – A, 11 – G.<span style='mso-spacerun:yes'>  </span>The first base is
-in the most significant 2 bits byte, and the last base in the least significant
-2 bits, so that the sequence TCAG would be represented as 00011011.<span
-style='mso-spacerun:yes'>  </span>The packedDna field will be padded with 0
-bits as necessary<span style='mso-spacerun:yes'>  </span>so that it takes an
-even multiple of 32 bit in the file, as this improves i/o performance on some
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><![endif]><span
+class=SpellE>packedDna</span> – the <span class=SpellE>dna</span> packed to two
+bits per base as so: 00 – T,<span style='mso-spacerun:yes'>  </span>01 –
+C,<span style='mso-spacerun:yes'>  </span>10 – A, 11 – G.<span
+style='mso-spacerun:yes'>  </span>The first base is in the most significant 2
+bits byte, and the last base in the least significant 2 bits, so that the
+sequence TCAG would be represented as 00011011.<span style='mso-spacerun:yes'> 
+</span>The <span class=SpellE>packedDna</span> field will be padded with 0 bits
+as necessary<span style='mso-spacerun:yes'>  </span>so that it takes an even
+multiple of 32 bit in the file, as this improves i/o performance on some
 machines.</p>
 
 <p class=MsoNormal><o:p>&nbsp;</o:p></p>
@@ -2235,11 +2510,12 @@ masked. <span style='font-size:16.0pt;mso-bidi-font-size:10.0pt'><o:p></o:p></sp
 
 <h3><span style='font-size:16.0pt;mso-bidi-font-size:10.0pt'>Limits<o:p></o:p></span></h3>
 
-<p class=MsoNormal>The gfServer program requires approximately 1 byte for every
-3 bases in the genome it is indexing in DNA mode, and 1.5 bytes for each
-unmasked base in translated mode. The blat program requires approximately two
-bytes for each base in the genome in DNA mode, and three bytes for each base in
-translated mode. The other programs use relatively little memory.</p>
+<p class=MsoNormal>The <span class=SpellE>gfServer</span> program requires
+approximately 1 byte for every 3 bases in the genome it is indexing in DNA
+mode, and 1.5 bytes for each unmasked base in translated mode. The blat program
+requires approximately two bytes for each base in the genome in DNA mode, and
+three bytes for each base in translated mode. The other programs use relatively
+little memory.</p>
 
 <p class=MsoNormal><o:p>&nbsp;</o:p></p>
 
