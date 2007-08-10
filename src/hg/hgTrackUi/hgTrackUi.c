@@ -30,8 +30,9 @@
 #include "expRecord.h"
 
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
+#define MAX_SP_SIZE 3000
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.391 2007/08/08 23:20:38 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.392 2007/08/10 18:05:47 fanhsu Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1830,7 +1831,7 @@ char *speciesOrder = trackDbSetting(tdb, SPECIES_ORDER_VAR);
 char *speciesGroup = trackDbSetting(tdb, SPECIES_GROUP_VAR);
 char *speciesUseFile = trackDbSetting(tdb, SPECIES_USE_FILE);
 char *framesTable = trackDbSetting(tdb, "frames");
-char *species[100];
+char *species[MAX_SP_SIZE];
 char *groups[20];
 char sGroup[24];
 char *treeImage = NULL;
@@ -1839,7 +1840,7 @@ struct slName *speciesName, *speciesList = NULL;
 int group, prevGroup;
 int speciesCt = 0, groupCt = 1;
 int i;
-char option[100];
+char option[MAX_SP_SIZE];
 struct phyloTree *tree;
 struct consWiggle *consWig, *consWiggles = wigMafWiggles(tdb);
 
@@ -1922,7 +1923,7 @@ if (defaultOffSpecies)
     button = cgiOptionalString(buttonVar);
     if (isNotEmpty(button))
         {
-        char *words[100];
+        char *words[MAX_SP_SIZE];
         //char *setting = trackDbSetting(tdb, "speciesDefaultOff");
         int wordCt = chopLine(defaultOffSpecies, words);
         /* turn on all species */
