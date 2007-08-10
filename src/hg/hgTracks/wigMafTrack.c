@@ -17,9 +17,10 @@
 #include "mafFrames.h"
 #include "phyloTree.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.113 2007/07/17 18:03:02 braney Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.114 2007/08/10 18:23:12 fanhsu Exp $";
 
 #define GAP_ITEM_LABEL  "Gaps"
+#define MAX_SP_SIZE 249
 
 struct wigMafItem
 /* A maf track item -- 
@@ -114,9 +115,9 @@ struct wigMafItem *newSpeciesItems(struct track *track, int height)
 {
 struct dyString *order = dyStringNew(256);
 char option[64];
-char *species[100];
+char *species[MAX_SP_SIZE];
 char *groups[20];
-char *defaultOff[100];
+char *defaultOff[MAX_SP_SIZE];
 char sGroup[24];
 struct wigMafItem *mi = NULL, *miList = NULL;
 int group;
