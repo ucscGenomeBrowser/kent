@@ -13,7 +13,7 @@
 #include "hui.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: mafClick.c,v 1.45 2007/08/08 22:31:01 fanhsu Exp $";
+static char const rcsid[] = "$Id: mafClick.c,v 1.46 2007/08/10 21:31:48 fanhsu Exp $";
 
 #define ADDEXONCAPITAL
 
@@ -691,8 +691,61 @@ else
     }
 }
 
+static void blueCapWriteGsid(FILE *f, char *s, int size, char *r, boolean isProtein, int offset)
+/* Write capital letters in blue, with added logic specific for protein. */
+{
+boolean isBlue = FALSE;
+int step;
+int i;
+
+if (isProtein) 
+    step = 3;
+else 
+    step=1;
+for (i=0; i<size; i=i+step)
+    {
+      if (r!=NULL && s[i]==r[i])
+	fprintf(f, ".");
+      else
+	{
+	  char c = s[i];
+	  if (isupper(c))
+	    {
+	      if (!isBlue)
+		{
+		  fprintf(f, "<FONT COLOR=\"#0000FF\">");
+		  isBlue = TRUE;
+		}
+	    }
+	  else if (islower(c))
+	    {
+	      if (isBlue)
+		{
+		  fprintf(f, "</FONT>");
+		  isBlue = FALSE;
+		}
+	    }
+	  /* look up codon to get AA if it is protein */
+	  if (isProtein) 
+		{
+		if (c != '-')
+		    {
+		    c=lookupCodon(s+(long)(i-offset%3));
+		    /* bypass the first partial codon */
+		    if ((i == 0) && (c == 'X')) c= ' ';
+		    if ((i == (size-1)) && (c == 'X')) c= ' ';
+		    }
+		}
+	  fprintf(f, "%c", c);
+	}
+    }
+
+if (isBlue)
+    fprintf(f, "</FONT>");
+}
+
 void mafPrettyOutGsid(FILE *f, struct mafAli *maf, int lineSize, 
-	boolean onlyDiff, int blockNo)
+	boolean onlyDiff, int blockNo, boolean isProtein, int mafOrig)
 {
 int ii, ch;
 int srcChars = 0;
@@ -793,8 +846,9 @@ for (lineStart = 0; lineStart < maf->textSize; lineStart = lineEnd)
 
 	    updateSummaryLine(summaryLine, referenceText + lineStart, 
 				    mc->text + lineStart, size);
-	    blueCapWrite(f, mc->text + lineStart, size, 
-			 (onlyDiff && mc != maf->components) ? referenceText + lineStart : NULL);
+	    blueCapWriteGsid(f, mc->text + lineStart, size, 
+		(onlyDiff && mc != maf->components) ? referenceText + lineStart : NULL, isProtein, 
+		 mc->start-mafOrig);
 	    fprintf(f, "\n");
 	    }
 	else
@@ -927,6 +981,9 @@ else
     int useTarg = FALSE;
     int useIrowChains = FALSE;
     int itemPrinted;
+    int mafOrig;
+    char query[256];
+    
     safef(option, sizeof(option), "%s.%s", tdb->tableName, MAF_CHAIN_VAR);
     if (cartCgiUsualBoolean(cart, option, FALSE) && 
 	trackDbSetting(tdb, "irows") != NULL)
@@ -954,6 +1011,9 @@ else
     speciesOrder = cartUsualString(cart, option, NULL);
     if (speciesOrder == NULL)
 	speciesOrder = trackDbSetting(tdb, "speciesOrder");
+
+    safef(query, sizeof(query), "select chromStart from vax004AaMaf");
+    mafOrig = atoi(sqlNeedQuickString(conn, query));
 
     for (maf = mafList; maf != NULL; maf = maf->next)
         {
@@ -1105,7 +1165,14 @@ else
 	    printf("<B>Alignment block %d of %d in window, %d - %d, %d bps </B>\n",
 		++aliIx,realCount,maf->components->start + 1,maf->components->start + maf->components->size, 
 		maf->components->size);
-	    mafPrettyOutGsid(stdout, maf, 70,onlyDiff, aliIx);
+	    if (strstr(tdb->type, "wigMafProt"))
+		{
+		mafPrettyOutGsid(stdout, maf,210,onlyDiff, aliIx, 1, mafOrig);
+		}
+	    else
+		{
+	    	mafPrettyOutGsid(stdout, maf, 70,onlyDiff, aliIx, 0, mafOrig);
+		}
 	    }
 	mafAliFreeList(&subList);
 	}
