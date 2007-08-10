@@ -588,6 +588,15 @@ color 155,0,125
 type genePred acemblyPep acemblyMrna
 url http://www.ncbi.nih.gov/IEB/Research/Acembly/av.cgi?db=human&l=$$
 
+track sibGene
+shortLabel SIB Genes
+longLabel Swiss Institute of Bioinformatics Gene Predictions from mRNA and ESTs 
+group  genes
+priority 41.4
+visibility hide
+color 155,0,125
+type genePred
+
 track ECgene
 shortLabel ECgene Genes
 longLabel ECgene Gene Predictions with Alt-Splicing
@@ -985,6 +994,22 @@ group rna
 priority 73
 visibility hide
 type psl .
+
+track sibTxGraph
+shortLabel SIB Alt-Splicing
+longLabel Alternative Splicing Graph from Swiss Institute of Bioinformatics 
+group rna
+priority 74.5
+visibility hide
+type altGraphX
+
+track sibAltEvents
+shortLabel SIB Alt Events
+longLabel Alt-Splicing, Alternative Promoters, Alternative Poly-A etc from SIB
+group rna
+priority 74.6
+visibility hide
+type bed 6 .
 
 track cgapSage
 shortLabel CGAP SAGE
