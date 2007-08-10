@@ -117,7 +117,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1388 2007/08/09 21:48:27 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1389 2007/08/10 22:28:22 fanhsu Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -8582,6 +8582,10 @@ for (i=0; i<count; i++, text++, textPos++)
             if ((*text != ' ') && (toupper(*text) != toupper(match[i])))
                 clr = noMatchColor;
         }
+
+    /* This function is for protein display, so force inMotif to NULL to avoid motif highlighting */
+    inMotif = NULL;
+
     if(inMotif != NULL && textPos < textLength && inMotif[textPos])
 	{
 	vgBox(vg, x1+x, y, x2-x1, height, clr);
