@@ -11,5 +11,5 @@ CREATE TABLE hivGene (
     chromEnd int unsigned not null,	# End position in chromosome
     name varchar(255) not null,	# Name of item
               #Indices
-    PRIMARY KEY(bin)
+    PRIMARY KEY(name)
 );
