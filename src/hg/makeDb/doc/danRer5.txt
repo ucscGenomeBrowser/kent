@@ -14,6 +14,7 @@
 
 ###########################################################################
 # DOWNLOAD SEQUENCE (DONE, 2007-07-16, hartera)
+# MOVE FILES TO SEPARATE DIRECTORY (DONE, 2007-07-20, hartera)
      ssh kkstore06
      mkdir /cluster/store4/danRer5 
      ln -s /cluster/store4/danRer5 /cluster/data
@@ -28,4 +29,126 @@
       ftp://ftp.ensembl.org/pub/assembly/zebrafish/Zv7release/Zv7_scaffold.agp
      wget --timestamp \
       ftp://ftp.ensembl.org/pub/assembly/zebrafish/Zv7release/Zv7_scaffolds.fa
+     # move assembly files to a separate directory
+     mkdir Zv7release
+     mv *.agp *.fa README ./Zv7release/
 
+###########################################################################
+# CREATE AGP FILES FOR RANDOMS (chrNA and chrUn) (in progress, 2007-07-20,
+# hartera)
+    ssh kkstore06
+    mkdir /cluster/data/danRer5/Zv7release/randoms
+    cd /cluster/data/danRer5/Zv7release/randoms
+    # first find the contigs assigned to chromosomes:
+    awk '{print $6}' ../Zv7_chr.agp | sort | uniq > chromContigs.txt
+    # get list of all contigs:
+    awk '{print $6}' ../Zv7_scaffold.agp | sort | uniq > allContigs.txt
+    # find contigs not assigned to a chromosome
+    comm -23 allContigs.txt chromContigs.txt > contigsRandomsAndAccs.txt
+    # this includes accessions so get only those with Zv7_ in name
+    grep 'Zv7_' contigsRandomsAndAccs.txt > contigsRandoms.txt
+    # get a list of the scaffold names by removing the .[0-9]+ at the end
+    cp contigsRandoms.txt temp
+    perl -pi.bak -e 's/\.[0-9]+$//' temp
+    sort -k 1.12,1n temp | uniq > scaffoldsRandoms.txt
+    # make an AGP of the randoms scaffolds only
+    grep -w -f scaffoldsRandoms.txt ../Zv7_scaffold.agp > randomsScaffold.agp
+    # get the list of contigs from the agp
+    awk '{if ($6 !~ /100/) print $6}' randomsScaffold.agp | sort | uniq \
+        > randomContigs.list 
+    # extract the FASTA sequences for just these contigs
+    faSomeRecords ../Zv7_contigs.fa randomContigs.list Zv7contigs_random.fa
+    # remove excess part of the names for the contigs with accessions 
+    perl -pi.bak -e 's/^(>[A-Z]{2}[0-9]+\.[0-9]+)\s.+$/$1/' Zv7contigs_random.fa
+    # check that all the contigs from the list are in the FASTA file
+    grep '>' Zv7contigs_random.fa | sed -e 's/^>//' | sort uniq \
+         > Zv7contigs.list
+    wc -l *.list
+    # 19584 Zv7contigs.list
+    # 19646 randomContigs.list
+    :omm -13 Zv7contigs.list randomContigs.list > notFound
+    # (2007-08-06 - , hartera)
+    # These are present in the original, but there are several sequeunces for
+    # each accession since there are Ns in the sequence. Need to fix the names
+    # in the AGP to match each part of the sequence in the FASTA file.
+    # First, get the list of headers from the FASTA for all contigs
+    grep '>' ../Zv7_contigs.fa > contigs.headers
+    # remove ">"
+    perl -pi.bak -e 's/>//' contigs.headers
+    foreach a (`cat notFound`)
+        grep $a contigs.headers >> contigsHeaders.notFound
+    end
+    awk '{print $1}' contigsHeaders.notFound > contigsHeaders.notFound.accs
+    perl -pi.bak -e 's/_.+$//' contigsHeaders.notFound.accs
+    sort contigsHeaders.notFound.accs | uniq \
+         > contigsHeaders.notFound.accs.sort
+    sort notFound | uniq > notFound.sort
+    wc -l notFound.sort 
+    # 62 notFound.sort
+    wc -l contigsHeaders.notFound.accs.sort
+    # 62 contigsHeaders.notFound.accs.sort
+    comm -12 notFound.sort contigsHeaders.notFound.accs.sort | wc -l
+    # 62
+    # So all the not Found accessions are in the list of contig headers 
+    # accessions: contigsHeaders.notFound.accs.sort
+    # Then extract the names for the accession parts 
+    # e.g. BX649254.13_01364 zK228P6.01364 BX649254 1 32480
+    # and add them to the AGP file for the correct lines for these 
+    # components. The last 2 fields above are the start and end coordinates
+    # relative to the accession (BX649254.13 in this case). Also, add
+    # 50,000 Ns between scaffolds.
+    # Wrote program to do this: agpAddCtgNamesAndGaps.c
+    /cluster/home/hartera/bin/x86_64/agpAddCtgNamesAndGaps \
+            contigsHeaders.notFound randomsScaffold.agp \
+            randomsScafFixed.agp >& agpScafs.log
+    awk '{print $1}' randomsScaffold.agp | sort | uniq > scafs.lst.uniq
+    wc -l scafs.lst.uniq
+    # 4946 scafs.lst.uniq
+    wc -l *.agp
+    # 40052 randomsScafFixed.agp
+    # 35108 randomsScaffold.agp
+    # 35108 + 4946 = 40054 but there are 2 less gap rows since there are none
+    # at the ends of the random chromosomes. So the number of lines in the 
+    # AGP file is correct: 40052.
+    # get the list of contigs again for the randoms from the FASTA headers
+    # and check all of these are present in the AGP file and vice versa.
+    cp contigs.headers contigs.names
+    # remove excess part of the names for the contigs with accessions 
+    perl -pi.bak -e \
+         's/^([A-Z]{2}[0-9]+\.[0-9]+_?[0-9]*\.?[0-9]*)\s.+$/$1/' \
+         contigs.names
+    sort contigs.names | uniq > contigs.names.sort
+    awk '{print $6}' randomsScafFixed.agp | sort | uniq > contigsFromAgp.sort
+    wc -l contigs*.sort
+    # 60092 contigs.names.sort
+    # 20049 contigsFromAgp.sort
+    comm -13 contigs.names.sort contigsFromAgp.sort
+# CR293502.4
+# CR356227.33
+# CR854948.10
+# CR931788.11
+# CR954226.7
+# CT573234.3
+# CT573263.4
+# CT737182.2
+# CT997808.4
+# These accessions are not matched from the headers to the AGP file. 
+# e.g. CR293502.4
+# CR293502.4_00001 zK31A1.00001 CR293502 1 27131
+# CR293502.4_02478 zK31A1.02478 CR293502 27232 29631
+# CR293502.4_01210.0 zK31A1.01210.0 CR293502 119649 233137
+# The last 2 fields above are coordinates relative to the accession and should
+# match to fields 7 and 8 in the relevant lines of the AGP file but, in this
+# case, they do not.
+# in the AGP file:
+# Zv7_scaffold2558        1944730 1960624 49      D       CR293502.4      11237
+# 27131   +
+# Zv7_scaffold2558        1960625 1960724 50      N       100     fragment no
+# Zv7_scaffold2558        1960725 1963124 51      D       CR293502.4      27232
+# 29631   +
+# Zv7_scaffold2558        1963125 1963224 52      N       100     fragment no
+# Zv7_scaffold2558        1963225 1995007 53      D       CR293502.4      201355
+# 233137  -
+
+# E-mailed Tina Eyre (te3@sanger.ac.uk) and Ian Sealy (is1@sanger.ac.uk) at 
+# Sanger to ask them about these discrepancies and how to fix it (2007-08-09).
