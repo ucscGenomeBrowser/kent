@@ -12,7 +12,7 @@
 #include "ccdsLocationsJoin.h"
 #include "ccdsCommon.h"
 
-static char const rcsid[] = "$Id: ccdsMkTables.c,v 1.14 2007/03/02 18:47:04 markd Exp $";
+static char const rcsid[] = "$Id: ccdsMkTables.c,v 1.15 2007/08/11 04:55:10 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -51,12 +51,12 @@ errAbort(
   "\n"
   "Options:\n"
   "  -stat=statVal - only include CCDS with the specified status values,\n"
-  "   which are cases-insensitive.  This option maybe repeated.  Defaults to:\n"
+  "   which are case-insensitive.  This option maybe repeated.  Defaults to:\n"
   "      \"Public\",\n"
   "      \"Under review, update\",\n"
   "      \"Reviewed, update pending\",\n"
   "      \"Under review, withdrawal\",\n"
-  "      \"Reviewed, withdrawal pending\"\n"  
+  "      \"Reviewed, withdrawal pending\"\n"
   "  -loadDb - load tables into hgdb, bin column is added to genePred\n"
   "  -keep - keep tab file used to load database\n"
   "  -verbose=n\n"
@@ -249,17 +249,13 @@ static void dumpIgnoreTbl(struct hash* ignoreTbl)
 struct hashCookie cookie = hashFirst(ignoreTbl);
 struct hashEl *hel;
 while ((hel = hashNext(&cookie)) != NULL)
-    verbose(3, "ignore: %s\n", hel->name);
+    verbose(3, "ignore: %s: %s\n", hel->name, (char*)hel->val);
 }
 
-static struct hash* buildIgnoreTbl(struct sqlConnection *conn, struct genomeInfo *genome)
-/* Build table of CCDS ids to ignore.  This currently contains:
- *   - ones that have the interpretation_subtype of "Partial match".
- * This should be doable as part of the query, but MySQL 4.0 was very, very slow at it. */
+static void findPartialMatches(struct sqlConnection *conn, struct genomeInfo *genome,
+                               struct hash* ignoreTbl)
+/* find CCDS interpretation_subtype of "Partial match" */
 {
-struct hash* ignoreTbl = hashNew(20);
-
-// partial match
 static char select[4096];
 safef(select, sizeof(select),
       "SELECT "
@@ -279,8 +275,20 @@ safef(select, sizeof(select),
 struct sqlResult *sr = sqlGetResult(conn, select);
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)
-    hashStore(ignoreTbl, ccdsMkId(sqlUnsigned(row[0]), sqlUnsigned(row[1])));
+    {
+    struct hashEl *hel = hashStore(ignoreTbl, ccdsMkId(sqlUnsigned(row[0]), sqlUnsigned(row[1])));
+    hel->val = "partial_match";
+    }
 sqlFreeResult(&sr);
+}
+
+static struct hash* buildIgnoreTbl(struct sqlConnection *conn, struct genomeInfo *genome)
+/* Build table of CCDS ids to ignore.  This currently contains:
+ *   - ones that have the interpretation_subtype of "Partial match".
+ * This should be doable as part of the query, but MySQL 4.0 was very, very slow at it. */
+{
+struct hash* ignoreTbl = hashNew(20);
+findPartialMatches(conn, genome, ignoreTbl);
 if (verboseLevel() >= 3)
     dumpIgnoreTbl(ignoreTbl);
 return ignoreTbl;
