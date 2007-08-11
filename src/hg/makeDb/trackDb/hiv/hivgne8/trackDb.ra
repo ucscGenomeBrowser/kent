@@ -26,10 +26,68 @@ visibility hide
 color 12,12,120
 type bed 4
 
+track vax004Cons
+shortLabel Conservation
+longLabel VAX004 DNA Sequence Conservation
+group compGeno
+priority 24
+visibility full
+color 12,12,120
+maxHeightPixels 100:40:10
+autoScaleDefault Off
+graphTypeDefault Bar
+gridDefault OFF
+windowingFunction Mean
+altColor 128,128,128
+type wig 0 1
+
+track vax004AaCons
+shortLabel Protein Conservation
+longLabel VAX004 Protein Sequence Conservation
+group compGeno
+priority 25
+visibility hide
+color 12,12,120
+maxHeightPixels 100:40:10
+autoScaleDefault Off
+graphTypeDefault Bar
+gridDefault OFF
+windowingFunction Mean
+altColor 128,128,128
+type wig 0 1
+
+track vax004Maf
+shortLabel MSA
+longLabel DNA Multiple Sequence Alignment
+group compGeno
+priority 24.5
+visibility hide
+color 0, 10, 100
+altColor 0,90,10
+type wigMaf 0.0 1.0
+maxHeightPixels 100:50:10
+speciesCodonDefault hiv1
+itemFirstCharCase noChange
+speciesUseFile gsidTable.gsidSeqList
+
+track vax004AaMaf
+shortLabel Protein MSA
+longLabel Protein Multiple Sequence Alignment
+group compGeno
+priority 25.5
+visibility hide
+color 0, 10, 100
+altColor 0,90,10
+type wigMafProt 0.0 1.0
+maxHeightPixels 100:50:10
+speciesCodonDefault hiv1
+itemFirstCharCase noChange
+speciesUseFile gsidTable.gsidSeqList
+
 searchName hivGeneAcc
 searchTable hivGene
 searchMethod exact
-termRegex [A-Z0-9][A-Z0-9]+
+termRegex [A-Z0-9][A-Z0-9_\']+
 searchType bed
 searchPriority 4
 
