@@ -20,7 +20,7 @@
 #include "gsidTable.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidTable.c,v 1.20 2007/07/19 23:57:57 fanhsu Exp $";
+static char const rcsid[] = "$Id: gsidTable.c,v 1.21 2007/08/11 23:23:50 fanhsu Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "submit_filter", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -1179,6 +1179,7 @@ struct sqlResult *sr;
 char **row;
 char query[255];
 char *chp;
+int cnt;
 
 if (!outName) 
     {
@@ -1193,6 +1194,7 @@ if (!outName2)
     }
 FILE *outF = mustOpen(outName,"w");
 FILE *outF2= mustOpen(outName2,"w");
+cnt = 0;
 while (subjList)
     {
     fprintf(outF, "%s\n", subjList->fields[0]);
@@ -1204,6 +1206,9 @@ while (subjList)
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
     	{
+	/* A TEMP FIX TO LIMIT TOTAL NUMBER OF SEQUENCE TO NO MORE THAN 200, 
+	   UNTIL WIGMAF PROCESSING OF hgTracks IS FIXED */ 
+	if (cnt >= 200) break;
 	/* Remove "ss." from the front of the DNA sequence ID, 
 	   so that they could be used both for DNA and protein MSA maf display */
 	chp = strstr(row[0], "ss.");
@@ -1215,12 +1220,12 @@ while (subjList)
 	    {
 	    fprintf(outF2, "%s\t%s\n", row[0], subjList->fields[0]);
     	    }
+	cnt++;
 	}
     sqlFreeResult(&sr);
 
     subjList=subjList->next;
     }
-
 carefulClose(&outF);
 carefulClose(&outF2);
 
