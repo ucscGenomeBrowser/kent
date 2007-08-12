@@ -116,157 +116,19 @@ ARCHIVED_DBS = \
 	danRer1 
 
 update: #clean
-	@for D in *; do \
-            if [ -d "$$D" ]; then \
-		if test "$$D" != "zoo" ; then \
-		    if [ -e "$$D/makefile" ]; then \
-			( cd $$D && echo $$D && $(MAKE) ) ;\
-			x=$$? ; if [ $$x -ne 0 ]; then exit $$x; fi \
-		    fi; \
-                fi; \
-            fi; \
-	done
-	@for DB in $(DBS) x; do \
-	    if test "$$DB" != "x" ; then \
-		dbpath=`ls -1 -d */$$DB 2> /dev/null` ; \
-		if test -n "$$dbpath" ; then \
-		    org=`echo $$dbpath | sed -e 's/\/.*//'` ; \
-		    if test -f $$dbpath/visibility.ra ; then \
-			vis="-visibility=$$dbpath/visibility.ra" ; \
-		    else if test -f $$org/visibility.ra ; then \
-			vis="-visibility=$$org/visibility.ra" ; \
-		    else \
-			vis="" ; \
-                    fi ; fi ; \
-		    if test -f $$dbpath/priority.ra ; then \
-			pri="-priority=$$dbpath/priority.ra" ; \
-		    else if test -f $$org/priority.ra ; then \
-			pri="-priority=$$org/priority.ra" ; \
-		    else \
-			pri="" ; \
-                    fi ; fi ; \
-		fi ; \
-		cmd="hgTrackDb $$vis $$pri $$org $$DB trackDb_${USER} ../../lib/trackDb.sql ." ; \
-		echo $$cmd ;  $$cmd ; \
-		cmd="hgFindSpec $$org $$DB hgFindSpec_${USER} ../../lib/hgFindSpec.sql ." ; \
-		echo $$cmd ;  $$cmd ; \
-	    fi ; \
-	done
+	./loadTracks trackDb_${USER} hgFindSpec_${USER} ${DBS}
 
 alpha: clean
 	${CVS} -q up -d -P .
-	@for D in *; do \
-            if [ -d "$$D" ]; then \
-                if [ -e "$$D/makefile" ]; then \
-                    ( cd $$D && echo $$D && $(MAKE) ) ;\
-                    x=$$? ; if [ $$x -ne 0 ]; then exit $$x; fi \
-                fi; \
-            fi; \
-	done
-	@for DB in $(DBS) x; do \
-	    if test "$$DB" != "x" ; then \
-		dbpath=`ls -1 -d */$$DB 2> /dev/null` ; \
-		if test -n "$$dbpath" ; then \
-		    org=`echo $$dbpath | sed -e 's/\/.*//'` ; \
-		    if test -f $$dbpath/visibility.ra ; then \
-			vis="-visibility=$$dbpath/visibility.ra" ; \
-		    else if test -f $$org/visibility.ra ; then \
-			vis="-visibility=$$org/visibility.ra" ; \
-		    else \
-			vis="" ; \
-                    fi ; fi ; \
-		    if test -f $$dbpath/priority.ra ; then \
-			pri="-priority=$$dbpath/priority.ra" ; \
-		    else if test -f $$org/priority.ra ; then \
-			pri="-priority=$$org/priority.ra" ; \
-		    else \
-			pri="" ; \
-                    fi ; fi ; \
-		fi ; \
-		cmd="hgTrackDb -release=alpha $$vis $$pri $$org $$DB trackDb ../../lib/trackDb.sql ." ; \
-		echo $$cmd ;  $$cmd ; \
-		cmd="hgFindSpec $$org $$DB hgFindSpec ../../lib/hgFindSpec.sql ." ; \
-		echo $$cmd ;  $$cmd ; \
-		if test -f $$dbpath/description.html ; then \
-		    cp $$dbpath/description.html /gbdb/$$DB/html ; \
-		fi ; \
-	    fi ; \
-	done
-#cmd="../../encode/encodeTrackDb.csh ../../lib/trackDb.sql" ; echo $$cmd; $$cmd
+	./loadTracks -release=alpha trackDb hgFindSpec ${DBS}
 
 strict: clean
 	${CVS} -q up -d -P .
-	@for D in *; do \
-            if [ -d "$$D" ]; then \
-                if [ -e "$$D/makefile" ]; then \
-                    ( cd $$D && echo $$D && $(MAKE) ) ;\
-                    x=$$? ; if [ $$x -ne 0 ]; then exit $$x; fi \
-                fi; \
-            fi; \
-	done
-	@for DB in $(DBS) x; do \
-	    if test "$$DB" != "x" ; then \
-		dbpath=`ls -1 -d */$$DB 2> /dev/null` ; \
-		if test -n "$$dbpath" ; then \
-		    org=`echo $$dbpath | sed -e 's/\/.*//'` ; \
-		    if test -f $$dbpath/visibility.ra ; then \
-			vis="-visibility=$$dbpath/visibility.ra" ; \
-		    else if test -f $$org/visibility.ra ; then \
-			vis="-visibility=$$org/visibility.ra" ; \
-		    else \
-			vis="" ; \
-                    fi ; fi ; \
-		    if test -f $$dbpath/priority.ra ; then \
-			pri="-priority=$$dbpath/priority.ra" ; \
-		    else if test -f $$org/priority.ra ; then \
-			pri="-priority=$$org/priority.ra" ; \
-		    else \
-			pri="" ; \
-                    fi ; fi ; \
-		fi ; \
-		cmd="hgTrackDb -strict -release=beta $$vis $$pri $$org $$DB trackDb ../../lib/trackDb.sql ." ; \
-		echo $$cmd ;  $$cmd ; \
-		cmd="hgFindSpec -strict $$org $$DB hgFindSpec ../../lib/hgFindSpec.sql ." ; \
-		echo $$cmd ;  $$cmd ; \
-	    fi ; \
-	done
+	./loadTracks -strict -release=beta trackDb hgFindSpec ${DBS}
 
 archaea: clean
 	${CVS} -q up -d -P .
-	@for D in *; do \
-            if [ -d "$$D" ]; then \
-                if [ -e "$$D/makefile" ]; then \
-                    ( cd $$D && echo $$D && $(MAKE) ) ;\
-                    x=$$? ; if [ $$x -ne 0 ]; then exit $$x; fi \
-                fi; \
-            fi; \
-	done
-	@for DB in $(ARCH_DBS) x; do \
-	    if test "$$DB" != "x" ; then \
-		dbpath=`ls -1 -d */$$DB 2> /dev/null` ; \
-		if test -n "$$dbpath" ; then \
-		    org=`echo $$dbpath | sed -e 's/\/.*//'` ; \
-		    if test -f $$dbpath/visibility.ra ; then \
-			vis="-visibility=$$dbpath/visibility.ra" ; \
-		    else if test -f $$org/visibility.ra ; then \
-			vis="-visibility=$$org/visibility.ra" ; \
-		    else \
-			vis="" ; \
-                    fi ; fi ; \
-		    if test -f $$dbpath/priority.ra ; then \
-			pri="-priority=$$dbpath/priority.ra" ; \
-		    else if test -f $$org/priority.ra ; then \
-			pri="-priority=$$org/priority.ra" ; \
-		    else \
-			pri="" ; \
-                    fi ; fi ; \
-		fi; \
-		cmd="hgTrackDb -strict -release=alpha $$vis $$pri $$org $$DB trackDb ../../lib/trackDb.sql ." ; \
-		echo $$cmd ;  $$cmd ; \
-		cmd="hgFindSpec -strict $$org $$DB hgFindSpec ../../lib/hgFindSpec.sql ." ; \
-		echo $$cmd ;  $$cmd ; \
-	    fi ; \
-	done
+	./loadTracks -strict -release=alpha trackDb hgFindSpec ${ARCH_DBS}
 
 # this will fail if we are not in a beta checkout:
 checkbeta:
@@ -281,19 +143,7 @@ mgc:
 	ln -sf  human/hg17/exoniphyGene.html exoniphyGene.html
 	ln -sf  mgcTwinscan.html mgcTwinscanEst.html
 	ln -sf  mgcNScan.html mgcNScanEst.html
-	@for DB in $(MGC_DBS) x; do \
-	    if test "$$DB" != "x" ; then \
-		dbpath=`ls -1 -d */$$DB 2> /dev/null` ; \
-		if test -n "$$dbpath" ; then \
-		    org=`echo $$dbpath | sed -e 's/\/.*//'` ; \
-		    vis="" ; \
-		    cmd="hgTrackDb -strict -release=beta -raName=trackDbMgc.ra $$vis $$org $$DB trackDbMgc ../../lib/trackDb.sql ." ; \
-		    echo $$cmd ;  $$cmd ; \
-		    cmd="hgsql $$DB < grpMgc.sql" ; \
-		    echo $$cmd ; eval $$cmd ; \
-		fi ; \
-	    fi ; \
-	done
+	./loadTracks -strict -release=beta -raName=trackDbMgc.ra -grpSql=grpMgc.sql trackDbMgc hgFindSpecMgc ${MGC_DBS}
 
 # Get rid of symbolic links (created by lower-level makefiles):
 clean:

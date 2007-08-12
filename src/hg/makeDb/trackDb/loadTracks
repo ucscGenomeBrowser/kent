@@ -1,0 +1,82 @@
+#!/bin/bash -e
+usage='loadTracks [options] trackDb hgFindSpec db0 ...
+
+options:
+   -release=release
+   -strict
+   -raName=trackDb.ra  - base name of ra file
+   -grpSql=grp.sql - create a grp table using this sql file
+'
+
+release=''
+strict=''
+raName=''
+grpSql=''
+while [[ $1 == -* ]] ; do
+    case $1 in
+        -release=*)
+            release=$(echo $1 | sed 's/-release=//') ;;
+        -strict)
+            strict=yes;;
+        -raName=*)
+            raName=$(echo $1 | sed 's/-raName=//') ;;
+        -grpSql=*)
+            grpSql=$(echo $1 | sed 's/-grpSql=//') ;;
+        *)
+            echo "invalid option: $1" >&2
+            exit 1 ;;
+    esac
+    shift
+done
+
+if [ $# -lt 3 ] ; then
+    echo "wrong # args: $usage" >&2
+    exit 1
+fi
+
+trackDb="$1"; shift
+hgFindSpec="$1" ; shift
+dbs="$@"
+
+# load trackDb for a database
+loadDbTracks() {
+    local db="$1"
+    local dbpath=$(ls -1 -d */$db)
+    local org=$(echo $dbpath | sed -e 's/\/.*//')
+    local topts='' fopts=''
+    if [ -f $dbpath/visibility.ra ] ; then
+        topts="$topts -visibility=$dbpath/visibility.ra"
+    elif [ -f $org/visibility.ra ] ; then
+        topts="$topts -visibility=$org/visibility.ra"
+    fi
+    if [ -f $dbpath/priority.ra ] ; then
+        topts="$topts -priority=$dbpath/priority.ra"
+    elif [ -f $org/priority.ra ] ; then
+        topts="$topts -priority=$org/priority.ra"
+    fi
+    if [ -n "$release" ] ; then
+        topts="$topts -release=$release"
+    fi
+    if [ -n "$strict" ] ; then
+        topts="$topts -strict"
+        fopts="$fopts -strict"
+    fi
+    if [ -n "$raName" ] ; then
+        topts="$topts -raName=$raName"
+        fopts="$fopts -raName=$raName"
+    fi
+    (set -x ; hgTrackDb $topts $org $db $trackDb ../../lib/trackDb.sql .)
+    (set -x ; hgFindSpec $fopts $org $db $hgFindSpec ../../lib/hgFindSpec.sql .)
+    if [ -f $dbpath/description.html ] ; then
+        cp $dbpath/description.html /gbdb/$db/html
+    fi
+    if [ -n "$grpSql" ] ; then
+        hgsql $db < $grpSql
+    fi
+}
+
+# load for all specified databases
+for db in $dbs ; do
+    loadDbTracks $db
+done
+
