@@ -4,6 +4,7 @@
 #include "dystring.h"
 #include "linefile.h"
 #include "dnautil.h"
+#include "sqlNum.h"
 #include "blastParse.h"
 #include "verbose.h"
 
@@ -377,17 +378,17 @@ if (line[0] == '>' || startsWith("Query=", line) || startsWith("  Database:", li
 return TRUE;
 }
 
-double evalToDouble(char *s)
+static double evalToDouble(char *s)
 /* Convert string from e-val to floating point rep.
  * e-val is basically ascii floating point, but
  * small ones may be 'e-100' instead of 1.0e-100
  */
 {
-char buf[64];
 if (isdigit(s[0]))
     return atof(s);
 else
     {
+    char buf[64];
     safef(buf, sizeof(buf), "1.0%s", s);
     return atof(buf);
     }
@@ -410,7 +411,8 @@ if ((wordCount < 3) || (wordCount > 4)
     || !(sameString("Query:", words[0]) || sameString("Sbjct:", words[0])))
     bfSyntax(bf);
 
-/* special handling for broken output */
+/* special handling for broken output with no space between start and
+ * sequence */
 if (wordCount == 3)
     {
     char *p;
@@ -475,7 +477,7 @@ if (wordCount < 8 || !sameWord("Score", words[0])
     bfError(bf, "Expecting something like:\n"
              "Score = 8770 bits (4424), Expect = 0.0");
     }
-bb->bitScore = atoi(words[2]);
+bb->bitScore = atof(words[2]);
 bb->eVal = evalToDouble(words[7]);
 
 /* Process something like:
@@ -485,6 +487,10 @@ bb->eVal = evalToDouble(words[7]);
  *             or
  *   Identities = 10/19 (52%), Positives = 15/19 (78%), Frame = +2
  *     (wu-tblastn)
+ *             or
+ *   Identities = 256/400 (64%), Positives = 306/400 (76%)
+ *   Frame = +1 / -2
+ *     (tblastn)
  *
  * Handle weird cases where the is only a `Score' line, with no `Identities'
  * lines by skipping the alignment; they seem line small, junky alignments.
@@ -517,12 +523,13 @@ if ((wordCount >= 11) && sameWord("Frame", words[8]))
     {
     bb->qStrand = '+';
     bb->tStrand = words[10][0];
-    bb->frame = atoi(words[10]);
+    bb->tFrame = atoi(words[10]);
     }
 
 /* Process something like:
  *     Strand = Plus / Plus (blastn)
  *     Frame = +1           (tblastn)
+ *     Frame = +1 / -2      (tblastx)
  *     <blank line>         (blastp)
  * note that wu-tblastn puts frame on Identities line
  */
@@ -533,11 +540,21 @@ if ((wordCount >= 5) && sameWord("Strand", words[0]))
     bb->qStrand = getStrand(bf, words[2]);
     bb->tStrand = getStrand(bf, words[4]);
     }
+else if ((wordCount >= 5) && sameWord("Frame", words[0]) && (words[3][0] == '/'))
+    {
+    // Frame = +1 / -2      (tblastx)
+    bb->qStrand = (words[2][0] == '-') ? -1 : 1;
+    bb->tStrand = (words[4][0] == '-') ? -1 : 1;
+    bb->qFrame = atoi(words[2]);
+    bb->tFrame = atoi(words[4]);
+    }
 else if ((wordCount >= 3) && sameWord("Frame", words[0]))
     {
+    // Frame = +1           (tblastn)
     bb->qStrand = 1;
     bb->tStrand = (words[2][0] == '-') ? -1 : 1;
-    bb->frame = atoi(words[2]);
+    bb->qFrame = atoi(words[2]);
+    bb->tFrame = 1;
     }
 else if (wordCount == 0)
     {

@@ -6,7 +6,7 @@
 #include "blastParse.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: blastToPsl.c,v 1.19 2006/12/11 18:56:37 markd Exp $";
+static char const rcsid[] = "$Id: blastToPsl.c,v 1.20 2007/08/12 06:07:04 markd Exp $";
 
 double eVal = -1; /* default Expect value signifying no filtering */
 boolean pslxFmt = FALSE; /* output in pslx format */
@@ -18,13 +18,17 @@ struct block
     int qEnd;
     int tStart;          /* Target start/end position. */
     int tEnd;
-    int tSizeMult;       /* 3 for prot->dna, 1 for all others */
+    int qLetMult;        /* each letter counts as this many units */
+    int tLetMult;
+    int qSizeMult;       /* user to convert coordinates */
+    int tSizeMult;
     int alnStart;        /* start/end in alignment */
     int alnEnd;
 };
 
 /* Internally used bit flags */
-#define PROT_DNA_ALIGN 0x01
+#define TBLASTN 0x01
+#define TBLASTX 0x02
 
 /* score file header */
 static char *scoreHdr = "#strand\tqName\tqStart\tqEnd\ttName\ttStart\ttEnd\tbitScore\teVal\n";
@@ -37,7 +41,7 @@ static struct optionSpec optionSpecs[] = {
     {NULL, 0}
 };
 
-void usage()
+static void usage()
 /* Explain usage and exit. */
 {
 errAbort(
@@ -57,7 +61,7 @@ errAbort(
   );
 }
 
-char *wackAfterWhite(char *s)
+static char *wackAfterWhite(char *s)
 /* end string at first whitespare */
 {
 char *w = skipToSpaces(s);
@@ -66,7 +70,7 @@ if (w != NULL)
 return s;
 }
 
-struct psl* createPsl(struct blastBlock *bb, int pslSpace)
+static struct psl* createPsl(struct block *blk, struct blastBlock *bb, int pslSpace)
 /* create PSL for a blast block */
 {
 struct blastGappedAli *ba = bb->gappedAli;
@@ -79,13 +83,13 @@ strand[2] = '\0';
 /* white space in query or target name breaks some psl software (like pslOpen()),
  * so only keep up to first whitespace.
  */
-
-return pslNew(wackAfterWhite(ba->query->query), ba->query->queryBaseCount, 0, 0,
+int qSize = blk->qSizeMult*ba->query->queryBaseCount;
+return pslNew(wackAfterWhite(ba->query->query), qSize, 0, 0,
               wackAfterWhite(ba->targetName), ba->targetSize, 0, 0,
               strand, pslSpace, (pslxFmt ? PSL_XA_FORMAT : 0));
 }
 
-void makeUntranslated(struct psl* psl)
+static void makeUntranslated(struct psl* psl)
 /* convert a PSL so it is in the untranslated form produced by blat */
 {
 if (psl->strand[1] == '-')
@@ -107,20 +111,20 @@ if (psl->strand[1] == '-')
 psl->strand[1] = '\0';
 }
 
-void finishPsl(struct psl* psl, unsigned flags)
+static void finishPsl(struct psl* psl, unsigned flags)
 /* put finishing touches on a psl */
 {
-if ((flags & PROT_DNA_ALIGN) == 0)
+if ((flags & TBLASTN) == 0)
     makeUntranslated(psl);
-assert(((flags & PROT_DNA_ALIGN) != 0) == pslIsProtein(psl));
+assert(((flags & TBLASTN) != 0) == pslIsProtein(psl));
 }
 
-void addPslBlock(struct psl* psl, struct blastBlock *bb, struct block* blk,
-                 int* pslSpace)
+static void addPslBlock(struct psl* psl, struct blastBlock *bb, struct block* blk,
+                        int* pslSpace)
 /* add a block to a psl */
 {
 unsigned newIBlk = psl->blockCount;
-unsigned blkSize = blk->qEnd - blk->qStart;
+unsigned blkSize = blk->qSizeMult * (blk->qEnd - blk->qStart);
 if (newIBlk >= *pslSpace)
     pslGrow(psl, pslSpace);
 psl->qStarts[newIBlk] = blk->qStart;
@@ -130,7 +134,8 @@ psl->blockSizes[newIBlk] = blkSize;
 
 /* keep bounds current */
 psl->qStart = psl->qStarts[0];
-psl->qEnd = psl->qStarts[newIBlk] + psl->blockSizes[newIBlk];
+psl->qEnd = psl->qStarts[newIBlk]
+    + (blk->qSizeMult * psl->blockSizes[newIBlk]);
 if (psl->strand[0] == '-')
     reverseIntRange(&psl->qStart, &psl->qEnd, psl->qSize);
 psl->tStart = psl->tStarts[0];
@@ -147,7 +152,7 @@ if (pslxFmt)
 psl->blockCount++;
 }
 
-static boolean nextUngappedBlk(struct blastBlock* bb, struct block* blk)
+static boolean nextUngappedBlk(struct blastBlock* bb, struct block* blk, unsigned flags)
 /* Find the next ungapped block in a blast alignment, in [0..n) coords in mrna
  * space.  On first call, block should be zero, subsequence calls should be
  * parsed the result of the previous call.
@@ -179,9 +184,9 @@ while ((*qPtr != '\0') && (*tPtr != '\0')
        && ((*qPtr == '-') || (*tPtr == '-')))
     {
     if (*qPtr != '-')
-        blk->qStart++;
+        blk->qStart += blk->qLetMult;
     if (*tPtr != '-')
-        blk->tStart += blk->tSizeMult;
+        blk->tStart += blk->tLetMult;
     qPtr++;
     tPtr++;
     blk->alnStart++;
@@ -203,18 +208,19 @@ if ((*qPtr == '\0') || (*tPtr == '\0'))
 while ((*qPtr != '\0') && (*tPtr != '\0')
        && (*qPtr != '-') && (*tPtr != '-'))
     {
-    blk->qEnd++;
-    blk->tEnd += blk->tSizeMult;
+    blk->qEnd += blk->qLetMult;
+    blk->tEnd += blk->tLetMult;
     qPtr++;
     tPtr++;
     blk->alnEnd++;
     }
 
-assert((blk->tSizeMult * (blk->qEnd - blk->qStart)) == (blk->tEnd - blk->tStart));
+assert((blk->tSizeMult * (blk->qEnd - blk->qStart))
+       == (blk->qSizeMult * (blk->tEnd - blk->tStart)));
 return TRUE;
 }
 
-void countBlock(struct blastBlock* bb, struct block* blk, struct block* prevBlk, struct psl* psl)
+static void countBlock(struct blastBlock* bb, struct block* blk, struct block* prevBlk, struct psl* psl)
 /* update the PSL counts between for a block and previous insert. */
 {
 int blkSize, i;
@@ -252,18 +258,57 @@ for (i = 0; i < blkSize; i++, qPtr++, tPtr++)
     }
 }
 
-void processBlock(struct blastBlock *bb, unsigned flags, FILE* pslFh, FILE* scoreFh)
+static void outputPsl(struct blastBlock *bb, unsigned flags, struct psl *psl,
+                      FILE* pslFh, FILE* scoreFh)
+/* output a psl and optional score */
+{
+pslTabOut(psl, pslFh);
+if (scoreFh != NULL)
+    fprintf(scoreFh, "%s\t%s\t%d\t%d\t%s\t%d\t%d\t%g\t%g\n", psl->strand,
+            psl->qName, psl->qStart, psl->qEnd,
+            psl->tName, psl->tStart, psl->tEnd, bb->bitScore, bb->eVal);
+}
+
+static void initBlk(unsigned flags, struct block *blk)
+/* initialize a block object */
+{
+ZeroVar(blk);
+if (flags & TBLASTN)
+    {
+    blk->qLetMult = 1;
+    blk->qSizeMult = 1;
+    blk->tLetMult = 3;
+    blk->tSizeMult = 3;
+    }
+else if (flags & TBLASTX)
+    {
+    blk->qLetMult = 3;
+    blk->qSizeMult = 1;
+    blk->tLetMult = 3;
+    blk->tSizeMult = 1;
+    }
+else
+    {
+    blk->qLetMult = 1;
+    blk->qSizeMult = 1;
+    blk->tLetMult = 1;
+    blk->tSizeMult = 1;
+    }
+}
+
+static void processBlock(struct blastBlock *bb, unsigned flags,
+                         FILE* pslFh, FILE* scoreFh)
 /* process one alignment block  */
 {
 int pslSpace = 8;
-struct psl *psl = createPsl(bb, pslSpace);
 struct block blk, prevBlk;
-ZeroVar(&blk);
-ZeroVar(&prevBlk);
-blk.tSizeMult = (flags & PROT_DNA_ALIGN) ? 3 : 1;
+initBlk(flags, &blk);
+initBlk(flags, &prevBlk);
+
+struct psl *psl = createPsl(&blk, bb, pslSpace);
 
 /* fill in ungapped blocks */
-while (nextUngappedBlk(bb, &blk))
+while (nextUngappedBlk(bb, &blk, flags))
     {
     countBlock(bb, &blk, &prevBlk, psl);
     addPslBlock(psl, bb, &blk, &pslSpace);
@@ -272,12 +317,7 @@ while (nextUngappedBlk(bb, &blk))
 if (psl->blockCount > 0 && (bb->eVal <= eVal || eVal == -1))
     {
     finishPsl(psl, flags);
-    pslTabOut(psl, pslFh);
-    if (scoreFh != NULL)
-        fprintf(scoreFh, "%s\t%s\t%d\t%d\t%s\t%d\t%d\t%d\t%g\n", psl->strand,
-                psl->qName, psl->qStart, psl->qEnd,
-                psl->tName, psl->tStart, psl->tEnd, bb->bitScore, bb->eVal);
-                
+    outputPsl(bb, flags, psl, pslFh, scoreFh);
     }
 pslFree(&psl);
 }
@@ -294,7 +334,7 @@ for (ba = bq->gapped; ba != NULL; ba = ba->next)
     }
 }
 
-void blastToPsl(char *blastFile, char *pslFile, char* scoreFile)
+static void blastToPsl(char *blastFile, char *pslFile, char* scoreFile)
 /* process one query in */
 {
 struct blastFile *bf = blastFileOpenVerify(blastFile);
@@ -309,7 +349,13 @@ if (scoreFile != NULL)
     }
 
 if (strstr(bf->program, "TBLASTN") != NULL)
-    flags |= PROT_DNA_ALIGN;
+    flags |= TBLASTN;
+else if (strstr(bf->program, "TBLASTX") != NULL)
+    {
+    flags |= TBLASTX;
+    if (pslxFmt)
+        errAbort("-pslx not supported for TBLASTX alignments");
+    }
 
 while ((bq = blastFileNextQuery(bf)) != NULL)
     {
@@ -321,7 +367,6 @@ blastFileFree(&bf);
 carefulClose(&scoreFh);
 carefulClose(&pslFh);
 }
-
 
 int main(int argc, char *argv[])
 /* Process command line. */

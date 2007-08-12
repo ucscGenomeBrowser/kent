@@ -42,15 +42,15 @@ struct blastBlock
     {
     struct blastBlock *next;
     struct blastGappedAli *gappedAli;   /* gapped ali associated with block */
-    int bitScore;                       /* About 2 bits per aligning nucleotide. */
+    double bitScore;                    /* About 2 bits per aligning nucleotide. */
     double eVal;                        /* Expected number of alignments in database. */
     int matchCount;                     /* Number of matching nucleotides. */
     int totalCount;                     /* Total number of nucleotides. */
     int insertCount;                    /* Number of inserts. */
     BYTE qStrand;                       /* Query strand (+1 or -1) */
     BYTE tStrand;                       /* Target strand (+1 or -1) */
-    BYTE frame;                         /* Frame for tblastn, +/- 1, 2, 3, or
-                                         * 0 if none. */
+    BYTE qFrame;                        /* Frames for tblastn, +/- 1, 2, 3, or */
+    BYTE tFrame;                        /* 0 if none. */
     int qStart;                         /* Query start position. [0..n) */
     int tStart;                         /* Target start position. [0..n) */
     int qEnd;                           /* Query end position. */

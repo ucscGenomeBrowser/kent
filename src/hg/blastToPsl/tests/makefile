@@ -4,7 +4,7 @@ all:
 
 test:	protMrnaTest protDnaTest mrnaDnaTest mrnaDnaxTest \
 	blockBugTest identityBugTest protMrnaEval1Test protMrnaEval2Test \
-	longDbNameTest multiLineDescTest 
+	longDbNameTest multiLineDescTest tblastxTest
 
 #tblastnDbFirstTest megaBlastTest
 
@@ -65,6 +65,14 @@ multiLineDescTest: mkdirs
 	../blastToPsl input/multiLineDesc.blast output/$@.psl
 	pslCheck -verbose=0 output/$@.psl
 	diff -u expected/$@.psl output/$@.psl
+
+# tblastx
+tblastxTest: mkdirs
+	../blastToPsl -scores=output/$@.bscores input/tblastx.blast output/$@.psl
+	pslCheck -verbose=0 output/$@.psl
+	diff -u expected/$@.psl output/$@.psl
+	diff -u expected/$@.bscores output/$@.bscores
+
 
 # this test is currently disabled.  This file has Database: before Query= and
 # there are multiple queries for each Database:
