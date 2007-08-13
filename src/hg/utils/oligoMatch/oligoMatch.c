@@ -51,7 +51,7 @@ char *rOligo = cloneString(fOligo);
 char *rMatch = NULL, *fMatch = NULL;
 struct bed *bedList = NULL, *bed;
 char strand;
-int count = 0, maxCount = 1000000;
+int count = 0;
 
 tolowers(dna);
 if (oligoSize >= 2)
