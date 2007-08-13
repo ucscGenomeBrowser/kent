@@ -12,7 +12,7 @@ type wigMaf 0.0 1.0
 pairwiseHeight 10
 summary encodeTbaSummary
 speciesGroups primate placental mammal vertebrate
-sGroup_primate chimp baboon gibbon colobus_monkey vervet baboon macaque dusky_titi owl_monkey marmoset squirrel_monkey mouse_lemur galago
+sGroup_primate chimp baboon gibbon colobus_monkey vervet macaque dusky_titi owl_monkey marmoset squirrel_monkey mouse_lemur galago
 sGroup_placental rat mouse guinea_pig st_squirrel rabbit cow cat dog sbbat rfbat hedgehog armadillo elephant tenrec
 sGroup_mammal monodelphis platypus 
 sGroup_vertebrate chicken xenopus 
