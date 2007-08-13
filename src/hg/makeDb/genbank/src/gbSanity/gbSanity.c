@@ -39,7 +39,7 @@
 #include "../dbload/dbLoadOptions.h"
 #include <stdarg.h>
 
-static char const rcsid[] = "$Id: gbSanity.c,v 1.15 2007/08/03 04:58:19 markd Exp $";
+static char const rcsid[] = "$Id: gbSanity.c,v 1.16 2007/08/13 23:29:49 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -281,7 +281,7 @@ else
     }
 if (checkedSetCnt == 0)
     errAbort("Error: no alignment data was checked");
-verbose(1, "%d alignment sets checked", checkedSetCnt);
+verbose(1, "%d alignment sets checked\n", checkedSetCnt);
     
 gbIndexFree(&index);
 
