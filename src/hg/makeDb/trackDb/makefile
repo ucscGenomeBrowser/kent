@@ -88,26 +88,6 @@ MGC_DBS = \
 	xenTro1 xenTro2 \
 	bosTau2
 
-ARCH_DBS = \
-	pyrAer1 aerPer1\
-	sulSol1 sulfAcid1 sulfToko1 \
-	archFulg1 \
-	pyrFur2 pyrHor1 pyrAby1 therKoda1\
-	halMar1 haloHalo1 \
-	metMar1 methJann1 methTher1 methKand1\
-	metAce1 methBark1 methMaze1 methBurt1 \
-	therAcid1 therVolc1 ferrAcid1 picrTorr1 \
-	nanEqu1 natrPhar1 methStad1 methHung1\
-	vibrChol1\
-
-BACT_DBS = \
-	campJeju1 campJeju_RM1221_1 \
-	eschColi_CFT073_1 eschColi_K12_1 eschColi_O157H7EDL933_1 \
-	eschColi_O157H7_1 \
-	heliHepa1 heliPylo_26695_1 heliPylo_J99_1 \
-	vibrChol1 vibrChol_MO10_1 vibrChol_O395_1 vibrFisc_ES114_1 \
-	vibrPara1 vibrVuln_CMCP6_1 vibrVuln_YJ016_1
-
 GSID_DBS = \
 	hiv1 vax004 hivgne8
 
@@ -125,10 +105,6 @@ alpha: clean
 strict: clean
 	${CVS} -q up -d -P .
 	./loadTracks -strict -release=beta trackDb hgFindSpec ${DBS}
-
-archaea: clean
-	${CVS} -q up -d -P .
-	./loadTracks -strict -release=alpha trackDb hgFindSpec ${ARCH_DBS}
 
 # this will fail if we are not in a beta checkout:
 checkbeta:
