@@ -235,3 +235,11 @@ group x
 priority 1.1
 visibility hide
 type bed 6
+
+track oregannoOther
+shortLabel Non-Mouse ORegAnno
+longLabel Non-Mouse ORegAnno lifted from hg18
+group regulation
+priority 100
+visibility pack
+type bed 4 +
