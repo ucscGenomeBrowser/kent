@@ -599,7 +599,7 @@ void spreadAlignString(struct vGfx *vg, int x, int y, int width, int height,
 
 void spreadAlignStringProt(struct vGfx *vg, int x, int y, int width, int height,
                         Color color, MgFont *font, char *s,
-                        char *match, int count, bool dots, bool isCodon, int initialColorIndex);
+                        char *match, int count, bool dots, bool isCodon, int initialColorIndex, int mafOrigOffset);
 /* similar to spreadAlignString, but it is used for protein sequences. */
 
 void contigMethods(struct track *tg);
