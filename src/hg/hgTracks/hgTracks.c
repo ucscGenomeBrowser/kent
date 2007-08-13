@@ -117,7 +117,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1389 2007/08/10 22:28:22 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1390 2007/08/13 18:52:25 fanhsu Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -8468,7 +8468,7 @@ freez(&inMotif);
 
 void spreadAlignStringProt(struct vGfx *vg, int x, int y, int width, int height,
 		       Color color, MgFont *font, char *text, 
-		       char *match, int count, bool dots, bool isCodon, int seqStart)
+		       char *match, int count, bool dots, bool isCodon, int seqStart, int offset)
 /* Draw evenly spaced letters in string for protein sequence.  
  * For multiple alignments,
  * supply a non-NULL match string, and then matching letters will be colored
@@ -8600,7 +8600,7 @@ for (i=0; i<count; i++, text++, textPos++)
         if (cBuf[0] != ' ') 
 	    {
 	    /* display AA at the center of a codon */
-	    if (((seqStart + textPos) % 3) == 1)
+	    if (((seqStart + textPos) % 3) == offset)
 	    	{
 		/* display alternate background color */
             	if (((seqStart + textPos)/3 %2) == 0)
