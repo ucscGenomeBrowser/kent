@@ -208,7 +208,7 @@
 #include "omicia.h"
 #include "atomDb.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1334 2007/08/13 20:21:11 giardine Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1335 2007/08/13 22:43:51 fanhsu Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -3267,7 +3267,7 @@ if (wordCount > 0)
         {
 	genericMafClick(conn, tdb, item, start);
         }
-    else if (startsWith(type, "wigMafProt"))
+    else if (startsWith("wigMafProt", type))
         {
 	genericMafClick(conn, tdb, item, start);
         }
