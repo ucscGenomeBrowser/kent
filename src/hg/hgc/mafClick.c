@@ -13,7 +13,7 @@
 #include "hui.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: mafClick.c,v 1.46 2007/08/10 21:31:48 fanhsu Exp $";
+static char const rcsid[] = "$Id: mafClick.c,v 1.47 2007/08/13 00:57:42 fanhsu Exp $";
 
 #define ADDEXONCAPITAL
 
@@ -1012,7 +1012,7 @@ else
     if (speciesOrder == NULL)
 	speciesOrder = trackDbSetting(tdb, "speciesOrder");
 
-    safef(query, sizeof(query), "select chromStart from vax004AaMaf");
+    safef(query, sizeof(query), "select chromStart from %s", tdb->tableName);
     mafOrig = atoi(sqlNeedQuickString(conn, query));
 
     for (maf = mafList; maf != NULL; maf = maf->next)
