@@ -6,7 +6,7 @@
 #include "blastParse.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: blastToPsl.c,v 1.20 2007/08/12 06:07:04 markd Exp $";
+static char const rcsid[] = "$Id: blastToPsl.c,v 1.21 2007/08/13 15:59:40 markd Exp $";
 
 double eVal = -1; /* default Expect value signifying no filtering */
 boolean pslxFmt = FALSE; /* output in pslx format */
@@ -223,7 +223,7 @@ return TRUE;
 static void countBlock(struct blastBlock* bb, struct block* blk, struct block* prevBlk, struct psl* psl)
 /* update the PSL counts between for a block and previous insert. */
 {
-int blkSize, i;
+int i;
 char *qPtr, *tPtr;
 
 if (prevBlk->tEnd != 0)
@@ -243,11 +243,9 @@ if (prevBlk->tEnd != 0)
         }
     }
 
-/* use query size so prot->dna alignments work */
-blkSize = (blk->qEnd - blk->qStart);
 qPtr = bb->qSym + blk->alnStart;
 tPtr = bb->tSym + blk->alnStart;
-for (i = 0; i < blkSize; i++, qPtr++, tPtr++)
+for (i = 0; (*qPtr != '\0') && (*tPtr != '\0'); i++, qPtr++, tPtr++)
     {
     if ((*qPtr == 'N') || (*qPtr == 'X') || (*tPtr == 'N') || (*tPtr == 'X'))
         psl->repMatch++;
@@ -256,6 +254,7 @@ for (i = 0; i < blkSize; i++, qPtr++, tPtr++)
     else
         psl->misMatch++;
     }
+assert((*qPtr == '\0') && (*tPtr == '\0'));
 }
 
 static void outputPsl(struct blastBlock *bb, unsigned flags, struct psl *psl,

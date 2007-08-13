@@ -1,5 +1,8 @@
 include ../../../inc/common.mk
 
+#blastToPsl = valgrind --tool=memcheck ../blastToPsl
+blastToPsl = ../blastToPsl
+
 all:
 
 test:	protMrnaTest protDnaTest mrnaDnaTest mrnaDnaxTest \
@@ -9,66 +12,66 @@ test:	protMrnaTest protDnaTest mrnaDnaTest mrnaDnaxTest \
 #tblastnDbFirstTest megaBlastTest
 
 protMrnaTest: mkdirs
-	../blastToPsl -scores=output/$@.bscores input/kgProtMRna1.blast output/$@.psl
+	${blastToPsl} -scores=output/$@.bscores input/kgProtMRna1.blast output/$@.psl
 	pslCheck -verbose=0 output/$@.psl
 	diff -u expected/$@.psl output/$@.psl
 	diff -u expected/$@.bscores output/$@.bscores
 
 protDnaTest: mkdirs
-	../blastToPsl -scores=output/$@.bscores input/kgProtDna1.blast output/$@.psl
+	${blastToPsl} -scores=output/$@.bscores input/kgProtDna1.blast output/$@.psl
 	pslCheck -verbose=0 output/$@.psl
 	diff -u expected/$@.psl output/$@.psl
 	diff -u expected/$@.bscores output/$@.bscores
 
 mrnaDnaTest: mkdirs
-	../blastToPsl input/mrnaDna1.blast output/$@.psl
+	${blastToPsl} input/mrnaDna1.blast output/$@.psl
 	pslCheck -verbose=0 output/$@.psl
 	diff -u expected/$@.psl output/$@.psl
 
 mrnaDnaxTest: mkdirs
-	../blastToPsl -pslx input/mrnaDna1.blast output/$@.psl
+	${blastToPsl} -pslx input/mrnaDna1.blast output/$@.psl
 	pslCheck -verbose=0 output/$@.psl
 	diff -u expected/$@.psl output/$@.psl
 
 # test case that cause huge target block start.
 blockBugTest: mkdirs
-	../blastToPsl input/blockBug.blast output/$@.psl
+	${blastToPsl} input/blockBug.blast output/$@.psl
 	pslCheck -verbose=0 output/$@.psl
 	diff -u expected/$@.psl output/$@.psl
 
 # handle id
 identityBugTest: mkdirs
-	../blastToPsl input/identityBug.blast output/$@.psl
+	${blastToPsl} input/identityBug.blast output/$@.psl
 	pslCheck -verbose=0 output/$@.psl
 	diff -u expected/$@.psl output/$@.psl
 
 # test E-value threshold filter
 protMrnaEval1Test: mkdirs
-	../blastToPsl -eVal=1 -scores=output/$@.bscores input/kgProtMRna1.blast output/$@.psl
+	${blastToPsl} -eVal=1 -scores=output/$@.bscores input/kgProtMRna1.blast output/$@.psl
 	pslCheck -verbose=0 output/$@.psl
 	diff -u expected/$@.psl output/$@.psl
 	diff -u expected/$@.bscores output/$@.bscores
 
 protMrnaEval2Test: mkdirs
-	../blastToPsl -eVal=1e-10 -scores=output/$@.bscores input/kgProtMRna1.blast output/$@.psl
+	${blastToPsl} -eVal=1e-10 -scores=output/$@.bscores input/kgProtMRna1.blast output/$@.psl
 	pslCheck -verbose=0 output/$@.psl
 	diff -u expected/$@.psl output/$@.psl
 	diff -u expected/$@.bscores output/$@.bscores
 
 longDbNameTest: mkdirs
-	../blastToPsl input/longDbName.blast output/$@.psl
+	${blastToPsl} input/longDbName.blast output/$@.psl
 	pslCheck -verbose=0 output/$@.psl
 	diff -u expected/$@.psl output/$@.psl
 
 # multiline description broke parser
 multiLineDescTest: mkdirs
-	../blastToPsl input/multiLineDesc.blast output/$@.psl
+	${blastToPsl} input/multiLineDesc.blast output/$@.psl
 	pslCheck -verbose=0 output/$@.psl
 	diff -u expected/$@.psl output/$@.psl
 
 # tblastx
 tblastxTest: mkdirs
-	../blastToPsl -scores=output/$@.bscores input/tblastx.blast output/$@.psl
+	${blastToPsl} -scores=output/$@.bscores input/tblastx.blast output/$@.psl
 	pslCheck -verbose=0 output/$@.psl
 	diff -u expected/$@.psl output/$@.psl
 	diff -u expected/$@.bscores output/$@.bscores
@@ -77,7 +80,7 @@ tblastxTest: mkdirs
 # this test is currently disabled.  This file has Database: before Query= and
 # there are multiple queries for each Database:
 tblastnDbFirstTest: mkdirs
-	../blastToPsl input/tblastnDbFirst.blast output/$@.psl
+	${blastToPsl} input/tblastnDbFirst.blast output/$@.psl
 	pslCheck -verbose=0 output/$@.psl
 	diff -u expected/$@.psl output/$@.psl
 
@@ -86,7 +89,7 @@ tblastnDbFirstTest: mkdirs
 # Database: comes before Query= and there are multiple queries for each
 # Database:.
 megaBlastTest: mkdirs
-	../blastToPsl input/970.blast output/$@.psl
+	${blastToPsl} input/970.blast output/$@.psl
 	pslCheck -verbose=0 output/$@.psl
 	diff -u expected/$@.psl output/$@.psl
 
