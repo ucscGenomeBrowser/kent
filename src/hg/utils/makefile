@@ -1,6 +1,6 @@
 # Build all directories in utils
 # test comment
-# 	$Id: makefile,v 1.6 2007/08/13 16:56:01 hiram Exp $
+# 	$Id: makefile,v 1.7 2007/08/13 20:47:00 angie Exp $
 
 include ../../inc/common.mk
 
@@ -45,6 +45,7 @@ DIRS = \
 	chromGraphFromBin \
 	chromGraphToBin \
 	gapToLift \
+	oligoMatch \
 	safePush \
 	toDev64 \
 	twoBitMask
