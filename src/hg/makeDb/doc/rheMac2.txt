@@ -1313,3 +1313,45 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
 #Sorted
 #Saving bed.tab
 #Loading rheMac2
+
+##########################################################################
+# Hg 18 Reciprocal Best Nets  (8-13-07, kpollard)
+
+ssh kolossus
+cd /cluster/data/hg18/bed/blastz.rheMac2/axtChain
+mkdir rBestNet
+cp /cluster/data/rheMac2/chrom.sizes /cluster/bluearc/rheMac2/.
+cat > rbest.csh << 'EOF'
+    set swapChain = rheMac2ToHg18.swap.chain
+    echo "merge and swap $swapChain"
+    zcat /cluster/data/rheMac2/bed/liftOver/rheMac2ToHg18.over.chain.gz \ 
+         | chainSwap stdin stdout | chainMergeSort stdin > $swapChain
+    echo "split chain"
+    chainSplit swapChain/ $swapChain
+    echo "run netter"
+    chainPreNet $swapChain /cluster/bluearc/hg18/chrom.sizes \
+         /cluster/bluearc/rheMac2/chrom.sizes stdout | \
+         chainNet stdin -minSpace=1 /cluster/bluearc/hg18/chrom.sizes \
+         /cluster/bluearc/rheMac2/chrom.sizes stdout /dev/null | \
+         netSyntenic stdin rbest.noClass.net
+    echo "split net"
+    netSplit rbest.noClass.net rBestNet
+    echo "extract chains from net"
+    netChainSubset -verbose=0 rbest.noClass.net $swapChain stdout | \ 
+         chainMergeSort stdin | gzip -c > hg18.rheMac2.rbest.chain.gz
+    echo "split extracted chain"
+    chainSplit rBestChain/ hg18.rheMac2.rbest.chain.gz 
+    cd ..
+    mkdir axtRBestNet
+    echo "extract axts"
+    foreach f (axtChain/rBestNet/*.net)
+        echo $f:t:r
+        netToAxt $f axtChain/swapChain/$f:t:r.chain \
+            /san/sanvol1/scratch/hg18/hg18.2bit \
+            /cluster/bluearc/rheMac2/rheMac2.2bit stdout | \
+            axtSort stdin stdout | gzip -c \
+            > axtRBestNet/$f:t:r.hg18.rheMac2.net.axt.gz
+    end
+'EOF'
+csh rbest.csh >&! rbest.log &
+#Not yet loaded
