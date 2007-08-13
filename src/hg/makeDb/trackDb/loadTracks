@@ -65,13 +65,20 @@ loadDbTracks() {
         topts="$topts -raName=$raName"
         fopts="$fopts -raName=$raName"
     fi
-    (set -x ; hgTrackDb $topts $org $db $trackDb ../../lib/trackDb.sql .)
-    (set -x ; hgFindSpec $fopts $org $db $hgFindSpec ../../lib/hgFindSpec.sql .)
+    # don't use set -x, since the autoload scripts e-mail stderr.
+    local cmd="hgTrackDb $topts $org $db $trackDb ../../lib/trackDb.sql ."
+    echo $cmd
+    eval $cmd
+    cmd="hgFindSpec $fopts $org $db $hgFindSpec ../../lib/hgFindSpec.sql ."
+    echo $cmd
+    eval $cmd
     if [ -f $dbpath/description.html ] ; then
         cp $dbpath/description.html /gbdb/$db/html
     fi
     if [ -n "$grpSql" ] ; then
-        hgsql $db < $grpSql
+        cmd="hgsql $db < $grpSql"
+        echo $cmd
+        eval $cmd
     fi
 }
 
