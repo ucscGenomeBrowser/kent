@@ -7,7 +7,7 @@
 # rewritten in perl and extended to handle .2bit inputs and 
 # multi-record fasta for target as well as query by Angie Hinrichs.
 
-# $Id: blastz-run-ucsc,v 1.1 2006/10/09 20:44:33 angie Exp $
+# $Id: blastz-run-ucsc,v 1.2 2007/08/13 23:13:41 hiram Exp $
 
 use Getopt::Long;
 use strict;
@@ -309,12 +309,37 @@ sub parseBlastzSpec {
   return ($fname, $seq, $start, $end);
 }
 
+sub emptyLav {
+  my ($raw) = @_;
+  open (FH,">$raw") || &cleanDie("emptyLav: can not write to $raw $!\n");
+  print FH "#:lav\n";
+  print FH "d {\n";
+  print FH "  \"blastz target query B=0 H=2000 etc\"\n";
+  print FH "}\n";
+  print FH "m {\n";
+  print FH "  n 0\n";
+  print FH "}\n";
+  print FH "#:eof\n";
+  close (FH);
+}
+
 sub plainBlastz {
   # just run blastz -- target and query can have "[$start,$end]" specifiers
   # where $start is 1-based.  Put output in file name $raw.
   my ($target, $query, $options, $raw) = @_;
   my $blastz = $defVars{'BLASTZ'} || "blastz";
-  &run("$blastz $target $query $options > $raw");
+  #  these variables will be 1 if there is zero usable sequence
+  my $targetNoSequence =
+	`cat $target | faSize stdin | grep " 0 upper " | wc -l`;
+  chomp $targetNoSequence;
+  my $queryNoSequence =
+	`cat $query | faSize stdin | grep " 0 upper " | wc -l`;
+  chomp $queryNoSequence;
+  if ($targetNoSequence || $queryNoSequence) {
+    &emptyLav($raw);
+  } else {
+    &run("$blastz $target $query $options > $raw");
+  }
 }
 
 sub selectRpts {
