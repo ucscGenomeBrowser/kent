@@ -208,7 +208,7 @@
 #include "omicia.h"
 #include "atomDb.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1333 2007/08/10 21:30:47 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1334 2007/08/13 20:21:11 giardine Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -18198,12 +18198,21 @@ if ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 
+if (sameString(table, "oregannoOther"))
+    {
+    printf("<B>Attributes as described from other species</B><BR>\n");
+    }
 /* fetch and print the attributes */
 for (i=0; i < oregannoAttrSize; i++)
     {
     int used = 0;
+    char *tab;
+    if (sameString(table, "oregannoOther")) 
+        tab = cloneString("oregannoOtherAttr");
+    else 
+	tab = cloneString("oregannoAttr");
     /* names are quote safe, come from oregannoUi.c */
-    safef(query, sizeof(query), "select * from oregannoAttr where id = '%s' and attribute = '%s'", r->id, oregannoAttributes[i]);
+    safef(query, sizeof(query), "select * from %s where id = '%s' and attribute = '%s'", tab, r->id, oregannoAttributes[i]);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         {
@@ -18227,7 +18236,12 @@ for (i=0; i < oregannoAttrSize; i++)
         printf("%s ", attr.attrVal);
         printf("<BR>\n");
         }
-    safef(query, sizeof(query), "select * from oregannoLink where id = '%s' and attribute = '%s'", r->id, oregannoAttributes[i]);
+    freeMem(tab);
+    if (sameString(table, "oregannoOther"))
+        tab = cloneString("oregannoOtherLink");
+    else
+        tab = cloneString("oregannoLink");
+    safef(query, sizeof(query), "select * from %s where id = '%s' and attribute = '%s'", tab, r->id, oregannoAttributes[i]);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         {
@@ -18251,6 +18265,7 @@ for (i=0; i < oregannoAttrSize; i++)
         printOregannoLink(&link);
         printf("<BR>\n");
         }
+    freeMem(tab);
     }
 if (listStarted > 0)
     printf("</DD></DL>");
@@ -20028,6 +20043,12 @@ else if (sameString("gvPos", track))
     }
 else if (sameString("oreganno", track))
     {
+    doOreganno(tdb, item);
+    }
+else if (sameString("oregannoOther", track))
+    {
+    /* Regions from another species lifted and displayed in current */
+    /* same table structure, just different table name/track */
     doOreganno(tdb, item);
     }
 else if (sameString("allenBrainAli", track))
