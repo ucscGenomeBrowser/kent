@@ -11,16 +11,17 @@
 #include "maf.h"
 #include "scoredRef.h"
 #include "wiggle.h"
+#include "hCommon.h"
 #include "hgMaf.h"
 #include "mafTrack.h"
 #include "mafSummary.h"
 #include "mafFrames.h"
 #include "phyloTree.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.114 2007/08/10 18:23:12 fanhsu Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.115 2007/08/13 18:55:52 fanhsu Exp $";
 
 #define GAP_ITEM_LABEL  "Gaps"
-#define MAX_SP_SIZE 249
+#define MAX_SP_SIZE 300
 
 struct wigMafItem
 /* A maf track item -- 
@@ -114,7 +115,7 @@ struct wigMafItem *newSpeciesItems(struct track *track, int height)
 /* Make up item list for all species configured in track settings */
 {
 struct dyString *order = dyStringNew(256);
-char option[64];
+char option[MAX_SP_SIZE];
 char *species[MAX_SP_SIZE];
 char *groups[20];
 char *defaultOff[MAX_SP_SIZE];
@@ -1503,6 +1504,20 @@ char *defaultCodonSpecies = cartUsualString(cart, SPECIES_CODON_DEFAULT, NULL);
 char *codonTransMode = NULL;
 boolean startSub2 = FALSE;
 
+int mafOrig = 0;
+int mafOrigOffset = 0;
+char query[256];
+
+if (hIsGsidServer())
+    {
+    /* decide the value of mafOrigOffset to be used to display xxAaMaf tracks. */
+    struct sqlConnection *conn = hAllocConn();
+    safef(query, sizeof(query), "select chromStart from %s", track->mapName);
+    mafOrig = atoi(sqlNeedQuickString(conn, query));
+    mafOrigOffset = (mafOrig % 3) - 1;
+    hFreeConn(&conn);
+    }
+
 if (defaultCodonSpecies == NULL)
     defaultCodonSpecies = trackDbSetting(track->tdb, "speciesCodonDefault");
 
@@ -1761,7 +1776,6 @@ for (maf = mafList; maf != NULL; maf = maf->next)
 		    	mi->seqEndsSize++;
 		    }
 		}
-
             if (mc->text && ((mc->leftStatus == MAF_MISSING_STATUS))) 
 		{
                 char *p = seq;
@@ -1943,7 +1957,7 @@ tryagain:
         if (strstr(track->tdb->type, "wigMafProt"))
             {
             spreadAlignStringProt(vg, x, y, width, mi->height-1, color,
-                        font, &line[2], &selfLine[2], winBaseCount, dots, FALSE, seqStart);
+                        font, &line[2], &selfLine[2], winBaseCount, dots, FALSE, seqStart, mafOrigOffset);
             }
 	else
 	    {
