@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/makeDownloads.pl instead.
 
-# $Id: makeDownloads.pl,v 1.8 2007/07/26 19:16:47 hiram Exp $
+# $Id: makeDownloads.pl,v 1.9 2007/08/13 20:45:19 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -43,8 +43,8 @@ usage: $base db
 options:
 ";
   print STDERR $stepper->getOptionHelp();
-  print STDERR &HgAutomate::getCommonOptionHelpNoClusters($dbHost,
-							  $defaultWorkhorse);
+  print STDERR &HgAutomate::getCommonOptionHelp('dbHost' => $dbHost,
+					'workhorse' => $defaultWorkhorse);
   print STDERR "
 Automates generation of assembly download files for genome database \$db:
     compress: Create compressed download files, md5sum.txt and README.txt in

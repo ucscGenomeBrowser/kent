@@ -6,7 +6,7 @@
 # This script should probably be folded back into doBlastzChainNet.pl
 # eventually.
 
-# $Id: doRecipBest.pl,v 1.7 2007/03/22 15:06:43 kate Exp $
+# $Id: doRecipBest.pl,v 1.8 2007/08/13 20:45:18 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -32,7 +32,6 @@ my $stepper = new HgStepManager(
 				);
 
 # Option defaults:
-my $defaultWorkhorse = 'least loaded';
 my $dbHost = 'hgwdev';
 
 my $base = $0;
@@ -52,8 +51,8 @@ options:
                           $HgAutomate::clusterData/\$tDb/$HgAutomate::trackBuild/blastz.\$qDb
 _EOF_
   ;
-  print STDERR &HgAutomate::getCommonOptionHelpNoClusters($dbHost,
-							  $defaultWorkhorse);
+  print STDERR &HgAutomate::getCommonOptionHelp('dbHost' => $dbHost,
+						'workhorse' => '');
   print STDERR "
 Automates addition of reciprocal best chains/nets to regular chains/nets which
 have already been created using doBlastzChainNet.pl.  Steps:

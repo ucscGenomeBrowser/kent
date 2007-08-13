@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/updateIgtc instead.
 
-# $Id: updateIgtc.pl,v 1.2 2007/04/23 22:09:55 angie Exp $
+# $Id: updateIgtc.pl,v 1.3 2007/08/13 20:45:19 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -29,7 +29,6 @@ my $stepper = new HgStepManager(
 				);
 
 # Option defaults:
-my $defaultWorkhorse = 'n/a';
 my $dbHost = 'hgwdev';
 
 my $base = $0;
@@ -50,8 +49,7 @@ options:
                           (necessary when continuing at a later date).
 _EOF_
   ;
-  print STDERR &HgAutomate::getCommonOptionHelpNoClusters($dbHost,
-							  $defaultWorkhorse);
+  print STDERR &HgAutomate::getCommonOptionHelp('dbHost' => $dbHost);
   print STDERR "
 Automates the update of IGTC genetrap track (igtc) for db.  Steps:
     fetch: Get files from genetrap.org.

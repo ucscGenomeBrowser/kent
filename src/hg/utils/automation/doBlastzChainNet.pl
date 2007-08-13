@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/automation/doBlastzChainNet.pl instead.
 
-# $Id: doBlastzChainNet.pl,v 1.9 2007/07/09 21:06:15 angie Exp $
+# $Id: doBlastzChainNet.pl,v 1.10 2007/08/13 20:45:18 angie Exp $
 
 # to-do items:
 # - lots of testing
@@ -114,8 +114,11 @@ print STDERR <<_EOF_
     -syntenicNet          Perform optional syntenicNet step
 _EOF_
   ;
-print STDERR &HgAutomate::getCommonOptionHelp($dbHost, $workhorse,
-				   $bigClusterHub, $smallClusterHub);
+print STDERR &HgAutomate::getCommonOptionHelp('dbHost' => $dbHost,
+				      'workhorse' => $workhorse,
+				      'fileServer' => '',
+				      'bigClusterHub' => $bigClusterHub,
+				      'smallClusterHub' => $smallClusterHub);
 print STDERR "
 Automates UCSC's blastz/chain/net pipeline:
     1. Big cluster run of blastz.

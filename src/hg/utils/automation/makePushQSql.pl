@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/makePushQSql.pl instead.
 
-# $Id: makePushQSql.pl,v 1.7 2007/07/26 19:03:04 hiram Exp $
+# $Id: makePushQSql.pl,v 1.8 2007/08/13 20:45:19 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -30,7 +30,7 @@ sub usage {
 usage: $base db
 options:
 ";
-  print STDERR &HgAutomate::getCommonOptionHelpNoClusters($dbHost, $workhorse);
+  print STDERR &HgAutomate::getCommonOptionHelp('dbHost' => $dbHost);
   print STDERR "
 Prints (to stdout) SQL commands for creation of a new push queue for db
 and the addition of an Initial Release entry in the main push queue.

@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/automation/doSameSpeciesLiftOver.pl instead.
 
-# $Id: doSameSpeciesLiftOver.pl,v 1.3 2007/07/11 21:58:30 angie Exp $
+# $Id: doSameSpeciesLiftOver.pl,v 1.4 2007/08/13 20:45:19 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -33,9 +33,6 @@ my $stepper = new HgStepManager(
 				);
 
 # Option defaults:
-my $defaultBigClusterHub = 'most available';
-my $defaultSmallClusterHub = 'n/a';
-my $defaultWorkhorse = 'least loaded';
 my $dbHost = 'hgwdev';
 
 # This could be made into an option:
@@ -62,8 +59,9 @@ options:
                           Can be "none".
 _EOF_
   ;
-  print STDERR &HgAutomate::getCommonOptionHelp($dbHost, $defaultWorkhorse,
-			       $defaultBigClusterHub, $defaultSmallClusterHub);
+  print STDERR &HgAutomate::getCommonOptionHelp('dbHost' => $dbHost,
+						'workhorse' => '',
+						'bigClusterHub' => '');
   print STDERR "
 Automates UCSC's same-species liftOver (blat/chain/net) pipeline, based on
 Kate's suite of makeLo-* scripts:

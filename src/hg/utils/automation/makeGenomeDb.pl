@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/automation/makeGenomeDb.pl instead.
 
-# $Id: makeGenomeDb.pl,v 1.7 2007/05/14 23:05:25 angie Exp $
+# $Id: makeGenomeDb.pl,v 1.8 2007/08/13 20:45:19 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -39,8 +39,9 @@ usage: $base config.ra
 options:
 ";
   print STDERR $stepper->getOptionHelp();
-  print STDERR &HgAutomate::getCommonOptionHelpNoClusters($dbHost,
-							  "least loaded");
+  print STDERR &HgAutomate::getCommonOptionHelp('dbHost' => $dbHost,
+						'workhorse' => '',
+					        'fileServer' => '');
   print STDERR "
 Automates the first steps of building a genome database:
     seq:     Translates fasta into /cluster/data/\$db/\$db.unmasked.2bit .

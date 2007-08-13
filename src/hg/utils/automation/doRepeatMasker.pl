@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/doRepeatMasker.pl instead.
 
-# $Id: doRepeatMasker.pl,v 1.4 2007/07/10 00:58:25 angie Exp $
+# $Id: doRepeatMasker.pl,v 1.5 2007/08/13 20:45:19 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -41,9 +41,6 @@ my $stepper = new HgStepManager(
 				);
 
 # Option defaults:
-my $defaultBigClusterHub = 'most available';
-my $defaultSmallClusterHub = 'n/a';
-my $defaultWorkhorse = 'least loaded';
 my $dbHost = 'hgwdev';
 my $unmaskedSeq = "\$db.unmasked.2bit";
 my $defaultSpecies = 'scientificName from dbDb';
@@ -72,8 +69,9 @@ options:
     -customLib lib.fa     Use custom repeat library instead of RepeatMaskers\'s.
 _EOF_
   ;
-  print STDERR &HgAutomate::getCommonOptionHelp($dbHost, $defaultWorkhorse,
-			       $defaultBigClusterHub, $defaultSmallClusterHub);
+  print STDERR &HgAutomate::getCommonOptionHelp('dbHost' => $dbHost,
+						'workhorse' => '',
+						'bigClusterHub' => '');
   print STDERR "
 Automates UCSC's RepeatMasker process for genome database \$db.  Steps:
     cluster: Do a cluster run of RepeatMasker on 500kb sequence chunks.

@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/doTemplate.pl instead.
 
-# $Id: doTemplate.pl,v 1.1 2006/10/10 17:22:16 angie Exp $
+# $Id: doTemplate.pl,v 1.2 2007/08/13 20:45:19 angie Exp $
 
 # HOW TO USE THIS TEMPLATE:
 # 1. Global-replace doTemplate.pl with your actual script name.
@@ -35,9 +35,6 @@ my $stepper = new HgStepManager(
 				);
 
 # Option defaults:
-my $defaultBigClusterHub = 'most available';
-my $defaultSmallClusterHub = 'n/a';
-my $defaultWorkhorse = 'least loaded';
 my $dbHost = 'hgwdev';
 
 my $base = $0;
@@ -58,8 +55,11 @@ options:
                           (necessary when continuing at a later date).
 _EOF_
   ;
-  print STDERR &HgAutomate::getCommonOptionHelp($dbHost, $defaultWorkhorse,
-			       $defaultBigClusterHub, $defaultSmallClusterHub);
+  print STDERR &HgAutomate::getCommonOptionHelp('dbHost' => $dbHost,
+						'workhorse' => '',
+						'fileServer' => '',
+						'bigClusterHub' => '',
+						'smallClusterHub' => '');
   print STDERR "
 Automates UCSC's template.  db is just a template arg.  Steps:
     template: template

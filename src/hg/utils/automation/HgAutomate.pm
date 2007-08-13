@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/HgAutomate.pm instead.
 
-# $Id: HgAutomate.pm,v 1.3 2006/11/14 23:29:55 angie Exp $
+# $Id: HgAutomate.pm,v 1.4 2007/08/13 20:48:24 angie Exp $
 package HgAutomate;
 
 use warnings;
@@ -19,8 +19,7 @@ use Exporter;
 # treated as constants) exported by this module:
 @EXPORT_OK = (
     # Support for common command line options:
-    qw( getCommonOptionHelp getCommonOptionHelpNoClusters
-	processCommonOptions
+    qw( getCommonOptionHelp processCommonOptions
 	@commonOptionVars @commonOptionSpec
       ),
     # Some basic smarts about our compute infrastructure:
@@ -45,7 +44,7 @@ use Exporter;
 # for checking the validity of path+machine combos and for suggesting
 # appropriate storage and machines.
 
-use vars qw( %cluster %clusterFilesystem );
+use vars qw( %cluster %clusterFilesystem $defaultDbHost );
 
 %cluster = 
     ( 'pk' =>
@@ -53,7 +52,7 @@ use vars qw( %cluster %clusterFilesystem );
 	  'hostCount' => 394, },
       'kk' =>
         { 'enabled' => 1, 'gigaHz' => 0.8, 'ram' => 1,
-	  'hostCount' => 700, },
+	  'hostCount' => 600, },
       'kki' =>
         { 'enabled' => 1, 'gigaHz' => 2.2, 'ram' => 8,
 	  'hostCount' => 16, },
@@ -86,6 +85,8 @@ my @allClusters = (keys %cluster);
 	  distrHost => ['kkstore*'], distrCommand => '',
 	  inputFor => \@allClusters, outputFor => \@allClusters, },
     );
+
+$defaultDbHost = 'hgwdev';
 
 sub choosePermanentStorage {
   # Return the disk drive with the most available space.
@@ -392,43 +393,66 @@ my $defaultVerbose = 1;
 		     "help",
 		    );
 
+my %optionHelpText = ( 'workhorse' =>
+'    -workhorse machine    Use machine (default: %s) for compute or
+                          memory-intensive steps.
+',
+		       'fileServer' =>
+'    -fileServer mach      Use mach (default: fileServer of the build directory)
+                          for I/O-intensive steps.
+',
+		       'dbHost' =>
+'    -dbHost mach          Use mach (default: %s) as database server.
+',
+		       'bigClusterHub' =>
+'    -bigClusterHub mach   Use mach (default: %s) as parasol hub
+                          for cluster runs with very large job counts.
+',
+		       'smallClusterHub' =>
+'    -smallClusterHub mach Use mach (default: %s) as parasol hub
+                          for cluster runs with smallish job counts.
+',
+		       'debug' =>
+'    -debug                Don\'t actually run commands, just display them.
+',
+		       'verbose' =>
+'    -verbose num          Set verbose level to num (default %d).
+',
+		       'help' =>
+'    -help                 Show detailed help and exit.
+',
+		     );
+
+my %optionDefaultDefaults = ( 'workhorse' => 'least loaded',
+			      'dbHost' => $defaultDbHost,
+			      'bigClusterHub' => 'most available',
+			      'smallClusterHub' => 'most available',
+			      'verbose' => $defaultVerbose,
+			    );
+
+
 sub getCommonOptionHelp {
   # Return description of common options, given defaults, for usage message.
-  my ($dbHost, $workhorse, $bigClusterHub, $smallClusterHub) = @_;
-  confess "Must have exactly 4 arguments" if (scalar(@_) != 4);
-  my $help = <<_EOF_
-    -workhorse machine    Use machine (default: $workhorse) for compute or
-                          memory-intensive steps.
-    -fileServer mach      Use mach (default: fileServer of the build directory)
-                          for I/O-intensive steps.
-    -dbHost mach          Use mach (default: $dbHost) as database server.
-    -bigClusterHub mach   Use mach (default: $bigClusterHub) as parasol hub
-                          for cluster runs with very large job counts.
-    -smallClusterHub mach Use mach (default: $smallClusterHub) as parasol hub
-                          for cluster runs with smallish job counts.
-    -debug                Don't actually run commands, just display them.
-    -verbose num          Set verbose level to num (default $defaultVerbose).
-    -help                 Show detailed help and exit.
-_EOF_
-  ;
-  return $help;
-}
-
-sub getCommonOptionHelpNoClusters {
-  # Return description of common options (sans clusters), for usage message.
-  my ($dbHost, $workhorse) = @_;
-  confess "Must have exactly 2 arguments" if (scalar(@_) != 2);
-  my $help = <<_EOF_
-    -workhorse machine    Use machine (default: $workhorse) for compute or
-                          memory-intensive steps.
-    -fileServer mach      Use mach (default: fileServer of the build directory)
-                          for I/O-intensive steps.
-    -dbHost mach          Use mach (default: $dbHost) as database server.
-    -debug                Don't actually run commands, just display them.
-    -verbose num          Set verbose level to num (default $defaultVerbose).
-    -help                 Show detailed help and exit.
-_EOF_
-  ;
+  # Input is a hash of applicable options and default values (which can be
+  # empty, in which case %optionDefaultDefaults will be used).
+  # debug, verbose and help will be added if not specified.
+  my %optionSpec = @_;
+  my $help = "";
+  foreach my $opName (sort keys %optionSpec) {
+    if (exists $optionHelpText{$opName}) {
+      $help .= sprintf $optionHelpText{$opName},
+	($optionSpec{$opName} || $optionDefaultDefaults{$opName});
+    } else {
+      die "HgAutomate::getCommonOptionHelp: unrecognized option '$opName'.\n" .
+	"Supported values: " . join(", ", sort keys %optionHelpText) . ".\n";
+    }
+  }
+  $help .= $optionHelpText{'debug'} if (! exists $optionSpec{'debug'});
+  if (! exists $optionSpec{'verbose'}) {
+    $help .= sprintf $optionHelpText{'verbose'},
+      $optionDefaultDefaults{'verbose'};
+  }
+  $help .= $optionHelpText{'help'} if (! exists $optionSpec{'help'});
   return $help;
 }
 

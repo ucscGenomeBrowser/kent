@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/doWindowMasker.pl instead.
 
-# $Id: doWindowMasker.pl,v 1.5 2007/01/08 23:34:09 angie Exp $
+# $Id: doWindowMasker.pl,v 1.6 2007/08/13 20:45:19 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -55,7 +55,8 @@ options:
                           (necessary when continuing at a later date).
 _EOF_
   ;
-  print STDERR &HgAutomate::getCommonOptionHelpNoClusters($dbHost, $defaultWorkhorse);
+  print STDERR &HgAutomate::getCommonOptionHelp('dbHost' => $dbHost,
+					'workhorse' => $defaultWorkhorse);
   print STDERR "
 Automates UCSC's WindowMasker process for genome database \$db.  Steps:
     count: Do the first pass of WindowMasker: collecting the counts.

@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/simplePartition.pl instead.
 
-# $Id: simplePartition.pl,v 1.2 2007/02/12 21:56:38 angie Exp $
+# $Id: simplePartition.pl,v 1.3 2007/08/13 20:45:19 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -17,7 +17,6 @@ use vars @HgAutomate::commonOptionVars;
 
 # Option defaults:
 my $defaultWorkhorse = 'least loaded';
-my $dbHost = 'hgwdev';
 
 my $maxDirSize = 1000;
 
@@ -38,8 +37,8 @@ options:
 #                          (necessary when continuing at a later date).
 #_EOF_
 #  ;
-  print STDERR &HgAutomate::getCommonOptionHelpNoClusters($dbHost,
-							  $defaultWorkhorse);
+  print STDERR &HgAutomate::getCommonOptionHelp(
+					'workhorse' => $defaultWorkhorse);
   print STDERR "
 Given a .2bit file and a chunk size, create a directory structure with
 no more than $maxDirSize subdirectories per level.  The leaf directories each
@@ -76,7 +75,6 @@ sub checkOptions {
   &usage(1) if (!$ok);
   &usage(0, 1) if ($opt_help);
   &HgAutomate::processCommonOptions();
-  $dbHost = $opt_dbHost if ($opt_dbHost);
 }
 
 
