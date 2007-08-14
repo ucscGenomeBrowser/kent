@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/automation/doBlastzChainNet.pl instead.
 
-# $Id: doBlastzChainNet.pl,v 1.10 2007/08/13 20:45:18 angie Exp $
+# $Id: doBlastzChainNet.pl,v 1.11 2007/08/14 23:09:09 hiram Exp $
 
 # to-do items:
 # - lots of testing
@@ -52,6 +52,7 @@ use vars qw/
     $opt_tRepeats
     $opt_qRepeats
     $opt_readmeOnly
+    $opt_ignoreSelf
     $opt_syntenicNet
     /;
 
@@ -111,6 +112,7 @@ print STDERR <<_EOF_
                                   axtChain command.  (default: loose)
     -tRepeats table       Add -tRepeats=table to netClass (default: none)
     -qRepeats table       Add -qRepeats=table to netClass (default: none)
+    -ignoreSelf           Do not assume self alignments even if tDb == qDb
     -syntenicNet          Perform optional syntenicNet step
 _EOF_
   ;
@@ -275,6 +277,7 @@ sub checkOptions {
 		      "tRepeats=s",
 		      "qRepeats=s",
 		      "readmeOnly",
+		      "ignoreSelf",
                       "syntenicNet"
 		     );
   &usage(1) if (!$ok);
@@ -417,7 +420,7 @@ sub checkDef {
   }
   $tDb = &getDbFromPath('SEQ1_DIR');
   $qDb = &getDbFromPath('SEQ2_DIR');
-  $isSelf = ($tDb eq $qDb);
+  $isSelf = $opt_ignoreSelf ? 0 : ($tDb eq $qDb);
   # special split on SEQ2 for Self alignments
   $selfSplit = $defVars{'SEQ2_SELF'} || 0;
   $QDb = $isSelf ? 'Self' : ucfirst($qDb);
@@ -446,7 +449,8 @@ sub doPartition {
   my $paraHub = $bigClusterHub;
   my $runDir = "$buildDir/run.blastz";
   my $targetList = "$tDb.lst";
-  my $queryList = $isSelf ? $targetList : "$qDb.lst";
+  my $queryList = $isSelf ? $targetList :
+	($opt_ignoreSelf ? "$qDb.ignoreSelf.lst" : "$qDb.lst");
   if ($selfSplit) {
     $queryList = "$qDb.selfSplit.lst"
   }
@@ -499,7 +503,8 @@ sub doBlastzClusterRun {
   my $runDir = "$buildDir/run.blastz";
   my $targetList = "$tDb.lst";
   my $outRoot = $opt_blastzOutRoot ? "$opt_blastzOutRoot/psl" : '../psl';
-  my $queryList = $isSelf ? $targetList : "$qDb.lst";
+  my $queryList = $isSelf ? $targetList :
+	($opt_ignoreSelf ? "$qDb.ignoreSelf.lst" : "$qDb.lst");
   if ($selfSplit) {
     $queryList = "$qDb.selfSplit.lst"
   }
