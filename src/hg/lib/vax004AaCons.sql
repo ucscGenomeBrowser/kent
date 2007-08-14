@@ -4,7 +4,7 @@
 # automatic way.
 
 #VAX004 HIV-1 Protein Sequence Conservation
-CREATE TABLE wiggle (
+CREATE TABLE vax004AaCons (
     chrom varchar(255) not null,	# Reference sequence chromosome or scaffold
     chromStart int unsigned not null,	# Start position in chromosome
     chromEnd int unsigned not null,	# End position in chromosome

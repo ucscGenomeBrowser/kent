@@ -1,4 +1,4 @@
-table wiggle
+table vax004AaCons
 "VAX004 HIV-1 Protein Sequence Conservation"
     (
     string chrom;         "Reference sequence chromosome or scaffold"
