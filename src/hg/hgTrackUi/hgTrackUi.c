@@ -30,9 +30,9 @@
 #include "expRecord.h"
 
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
-#define MAX_SP_SIZE 3000
+#define MAX_SP_SIZE 2000
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.392 2007/08/10 18:05:47 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.393 2007/08/14 16:59:06 fanhsu Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
