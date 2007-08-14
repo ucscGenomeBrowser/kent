@@ -379,6 +379,59 @@ baseColorDefault genomicCodons
     priority 3
     color 255,0,0
 
+track caseControl
+compositeTrack on
+shortLabel Case Control
+longLabel Case Control Consortium
+group varRep
+visibility hide
+priority 430
+type chromGraph
+minMax 0,15
+linesAt 5,10
+
+    track cccBD
+    subTrack caseControl
+    shortLabel CCC Bipolar Dis
+    longLabel Case Control Consortium bipolar disorder trend -log10 P-value
+    priority 1
+
+    track cccCAD
+    subTrack caseControl
+    shortLabel CCC Coronary Art
+    longLabel Case Control Consortium coronary artery disease trend -log10 P-value
+    priority 2
+
+    track cccCD
+    subTrack caseControl
+    shortLabel CCC Crohns Dis
+    longLabel Case Control Consortium Crohn's disease trend -log10 P-value
+    priority 3
+
+    track cccHT
+    subTrack caseControl
+    shortLabel CCC Hypertension
+    longLabel Case Control Consortium hypertension trend -log10 P-value
+    priority 4
+
+    track cccRA
+    subTrack caseControl
+    shortLabel CCC Rheum Arth
+    longLabel Case Control Consortium rheumatoid arthritis trend -log10 P-value
+    priority 5
+
+    track cccT1D
+    subTrack caseControl
+    shortLabel CCC T1 Diabetes
+    longLabel Case Control Consortium type 1 diabetes trend -log10 P-value
+    priority 6
+
+    track cccT2D
+    subTrack caseControl
+    shortLabel CCC T2 Diabetes
+    longLabel Case Control Consortium type 2 diabetes trend -log10 P-value
+    priority 7
+
 searchTable augustusHints
 searchType genePred
 termRegex g[0-9]+\.t[0-9]+
