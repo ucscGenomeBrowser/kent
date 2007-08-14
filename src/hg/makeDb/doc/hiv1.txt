@@ -328,3 +328,142 @@ CREATE TABLE gsClinicRec (
     hgLoadPsl hiv1 vax004.psl
     rm vax004.psl
 
+# CREATE HIVGENE TRACK
+
+# copy and paste to create landMark.txt from the "Numbering Positions in HIV 
+# Relative to HXB2CG" page at HIV Sequence Database 
+
+    faToTab -type=protein landMark.txt landMark.tab
+    cut -f 1 landMark.tab |toLower stdin j1
+    cut -f 2 landMark.tab >j2
+    paste j1 j2 >hivGene.tab
+    rm j1 j2
+    tabToFa hivGene
+
+# BLAT against base genome
+    gfClient localhost 17778 /gbdb/hiv1/nib \
+    -out=psl -t=dnax -q=prot hivGene.fa hivGene.psl
+
+# load psl result to temp table, testPsl
+    pushd .
+    cp hivGene.psl ~
+    cd ~
+    hgLoadPsl hiv1 table=testPsl hivGene.psl
+    rm hivGene.psl
+    popd 
+
+# create .bed file
+    hgsql hiv1 -N -e \
+    'select "chr1", tStart, tEnd,  qName from testPsl where  (tEnd-tStart)/3/qSize>0.70' \
+    > hivGene.bed0
+    cat hivGene.bed0 |grep -v tat |grep -v rev|sed -e 's/env/ENV/' \
+    |sed -e 's/pol/POL/'|\
+    sed -e 's/gag/GAG/' >hivGene.bed1
+    cat hivGene.bed1 old.bed >hivGene.bed
+    rm *.bed1 *.bed0
+# load into track table hivGene
+    hgLoadBed hiv1 hivGene hivGene.bed
+    hgsql hiv1 -e 'drop table testPsl'
+
+# CREATE INTERPRO TRACK
+
+# get all HIV-1 domain sequences
+    getInterProFa interProXrefHiv1 interProHiv1.fa
+
+# BLAT against base genome
+    gfClient localhost 17778 /gbdb/hiv1/nib -out=psl -t=dnax -q=prot \
+    interProHiv1.fa interProHiv1.psl
+
+# load it into a temp table
+    hgLoadPsl hiv1 table=testPsl interProHiv1.psl
+
+# create bed file from this temp table
+    hgsql hiv1 -N -e \
+    'select "chr1", tStart, tEnd, qName from testPsl where (tEnd-tStart)/3/qSize>0.42' \
+    > interProHiv1.bed
+
+# load the bed file into the track table
+    hgLoadBed hiv1 interPro interProHiv1.bed
+
+# drop the temp table.
+    hgsql hiv1 -e 'drop table testPsl'
+
+# CREATE CONSERVATION TRACKS
+
+    mkdir -p /cluster/store12/medical/hiv/hiv1/conservation
+    cd /cluster/store12/medical/hiv/hiv1/conservation
+
+# create the .wig file and .fa file of the consensus sequence.
+    gsidMsa hiv1 vax004Msa HXB2 6348 vax004Cons.wig vax004Consensus.fa
+
+# encode and load the wig file
+    wigEncode vax004Cons.wig stdout vax004Cons.wib \
+    | hgLoadWiggle hiv1 vax004Cons stdin
+
+# copy .wib file to /gbdb
+    mkdir -p /gbdb/hiv1/wib
+    cp vax004Cons.wib /gbdb/hiv1/wib
+
+# do the same for protein conservation track
+
+    mkdir aa
+    cd aa
+
+# create .wig file
+    gsidAaMsa2 hiv1 vax004Msa HXB2 6348 vax004AaCons.wig vax004AaConsensus.fa
+
+# encode and load the .wib file   
+    wigEncode vax004AaCons.wig stdout vax004AaCons.wib \
+    | hgLoadWiggle hiv1 vax004AaCons stdin
+
+    cp vax004AaCons.wib /gbdb/hiv1/wib
+
+# CREATE MAF TRACKS
+
+    mkdir -p /cluster/store12/medical/hiv/hiv1/msa
+    cd /cluster/store12/medical/hiv/hiv1/msa
+
+# create a script file, doall
+
+    hgsql hiv1 -N -e \
+    'select id from dnaSeq where id like "%U%"'\
+    |sed -e 's/ss/do1 ss/g' >doall
+
+# create one line script file, do1, with the following line in it:
+
+    hgsql hiv1 -N -e  "select id, seq from vax004Msa where id='${1}'"
+
+    chmod +x do*
+
+# run the script to get the .tab file with all MSA sequences of VAX004
+    doall >hiv1.tab
+# convert .tab into .fa file
+    tabToFa hiv1
+
+# grab the base alignment sequence
+    echo ">hiv1" >hiv1.aln
+    hgsql hiv1 -N -e 'select seq from vax004Msa where id="HXB2"'  >> hiv1.aln
+
+# prepare an interium file, jjAll.mfa
+    cat hiv1.aln hiv1.fa >jjAll.mfa
+    echo = >>jjAll.mfa
+
+# Run xmfaToMafHiv1 to create a precursor file for the final .maf
+
+    xmfaToMafHiv1 jjAll.mfa j.out  org1=hiv1
+    cat j.out|sed -e 's/\./_/g'|sed -e 's/_chr/\.chr/g' >chr1.tmp
+
+    rm jjAll.mfa j.out
+
+    cat chr1.tmp |sed -e 's/ss_U/U/g' >chr1.maf
+
+# copy .maf to /gbdb.
+    mkdir -p  /gbdb/hiv1/vax004Maf 
+    cp chr1.maf /gbdb/hiv1/vax004Maf -p
+    echo before load
+    hgLoadMaf hiv1 vax004Maf
+
+# create another copy for protein MAF.
+    mkdir -p  /gbdb/hiv1/vax004AaMaf 
+    cp -p chr1.maf /gbdb/hiv1/vax004AaMaf
+    hgLoadMaf hiv1 vax004AaMaf
