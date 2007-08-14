@@ -48,4 +48,6 @@ hgsql $ensDb -N -B -e 'select distinct "'$version'", logic_name, t.biotype, g.ge
  
 [ $liftfile != "blank" ] && mv ensGene.gp ensGene.unlifted.gp && liftUp ensGene.gp $liftfile carry ensGene.unlifted.gp -extGenePred;
 [ $liftfile != "blank" && $pseudo == 1 ] && mv ensPseudo.gp ensPseudo.unlifted.gp && liftUp ensPseudo.gp $liftfile carry ensPseudo.unlifted.gp -extGenePred;
+genePredCheck ensGene.gp
+genePredCheck ensPseudo.gp
 echo "Finished Export"
