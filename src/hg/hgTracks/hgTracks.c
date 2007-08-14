@@ -118,7 +118,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1391 2007/08/14 06:37:36 hartera Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1392 2007/08/14 15:11:08 aamp Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -12472,7 +12472,6 @@ for (subTdb = tdb->subtracks; subTdb != NULL; subTdb = subTdb->next)
 	}
     if (handler != NULL)
 	handler(subtrack);
-
     if (trackDbSetting(subTdb, "noInherit") == NULL)
 	{
         if (!smart)
@@ -12583,6 +12582,57 @@ fillInFromType(track, tdb);
 return track;
 }
 
+void makeHgGenomeTrackVisible(struct track *track)
+/* This turns on a track clicked from hgGenome, even if it was previously */
+/* hidden manually and there are cart vars to support that. */
+{
+struct hashEl *hels;
+struct hashEl *hel;
+char prefix[64];
+/* First check if the click was from hgGenome.  If not, leave. */
+if (!cgiVarExists("hgGenomeClick"))
+    return;
+/* get the names of the tracks in the cart */
+safef(prefix, sizeof(prefix), "%s_", hggGraphPrefix);
+hels = cartFindPrefix(cart, prefix);
+/* loop through them and compare them to the track passed into this */
+/* function. */
+for (hel = hels; hel != NULL; hel = hel->next)
+    {
+    struct trackDb *subtrack;
+    char *table = hel->val;
+    while (*table != ':')
+	table++;
+    /* skip space too */
+    table += 2;
+    /* check non-subtrack. */
+    if (sameString(track->tdb->tableName, table))
+	{
+	track->visibility = tvFull;
+	track->tdb->visibility = tvFull;
+	cartSetString(cart, track->tdb->tableName, "full");
+	}
+    else if (track->tdb->subtracks != NULL)
+	{
+	for (subtrack = track->tdb->subtracks; subtrack != NULL; subtrack = subtrack->next)
+	    {
+	    if (sameString(subtrack->tableName, table))
+		{
+		char selName[64];
+		char selVal[2];
+		track->visibility = tvFull;
+		track->tdb->visibility = tvFull;
+		cartSetString(cart, track->tdb->tableName, "full");
+		subtrack->visibility = tvFull;
+		safef(selName, sizeof(selName), "%s_sel", table);
+		safef(selVal, sizeof(selVal), "%d", tvFull);
+		cartSetString(cart, selName, selVal);
+		}
+	    }
+	}
+    }
+hashElFreeList(&hels);
+} 
 
 void loadFromTrackDb(struct track **pTrackList)
 /* Load tracks from database, consulting handler list. */
@@ -12608,6 +12658,7 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
         if (handler != NULL)
             handler(track);
         }
+    makeHgGenomeTrackVisible(track);
     if (track->loadItems == NULL)
         warn("No load handler for %s; possible missing trackDb `type' or `subTrack' attribute", tdb->tableName);
     else if (track->drawItems == NULL)

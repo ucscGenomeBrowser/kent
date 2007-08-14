@@ -36,7 +36,7 @@ if (chrom != NULL)
     int base = gl->basesPerPixel*(x - chrom->x);
     int start = base-500000, end=base+500000;
     if (start<0) start=0;
-    printf("Location: ../cgi-bin/hgTracks?db=%s&%s&position=%s:%d-%d\r\n\r\n",
+    printf("Location: ../cgi-bin/hgTracks?db=%s&%s&position=%s:%d-%d&hgGenomeClick=image\r\n\r\n",
     	database, cartSidUrlString(cart), chrom->fullName, start+1, end);
     }
 else

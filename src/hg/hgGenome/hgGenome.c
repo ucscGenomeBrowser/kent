@@ -31,7 +31,7 @@
 #include "jsHelper.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: hgGenome.c,v 1.57 2007/07/13 22:56:40 angie Exp $";
+static char const rcsid[] = "$Id: hgGenome.c,v 1.58 2007/08/14 15:11:21 aamp Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -82,6 +82,25 @@ slReverse(&list);
 return list;
 }
 
+struct hash *hashUpChromGraphTdb(struct trackDb *tdbList)
+/* Just a simple hash of the tableNames in the trackDb list. */
+{
+struct hash *tdbHash = newHash(10);
+struct trackDb *cur;
+for (cur = tdbList; cur != NULL; cur = cur->next)
+    {
+    if (cur->subtracks)
+	{
+	struct trackDb *subtrack;
+	for (subtrack = cur->subtracks; subtrack != NULL; subtrack = subtrack->next)
+	    hashAdd(tdbHash, subtrack->tableName, subtrack);
+	}
+    else
+	hashAdd(tdbHash, cur->tableName, cur);
+    }
+return tdbHash;
+}
+
 struct genoGraph *getDbGraphs(struct sqlConnection *conn)
 /* Get graphs defined in database. */
 {
@@ -89,12 +108,14 @@ struct genoGraph *list = NULL, *gg;
 char *trackDbTable = hTrackDbName();
 struct sqlConnection *conn2 = hAllocConn();
 struct sqlResult *sr;
+struct trackDb *tdbList = NULL;
+struct hash *tdbHash = NULL;
 char **row;
 
 /* Get initial information from metaChromGraph table */
 if (sqlTableExists(conn, "metaChromGraph"))
     {
-    sr = sqlGetResult(conn, "select name,binaryFile from metaChromGraph");
+    sr = sqlGetResult(conn, "select name,binaryFile from metaChromGraph where binaryFile!='composite'");
     while ((row = sqlNextRow(sr)) != NULL)
         {
 	char *table = row[0], *binaryFile = row[1];
@@ -109,16 +130,15 @@ if (sqlTableExists(conn, "metaChromGraph"))
 
 /* Where possible fill in additional info from trackDb.  Also
  * add db: prefix to name. */
+tdbList = trackDbLoadWhere(conn, trackDbTable, "type='chromGraph'");
+trackDbMakeComposites(&tdbList);
+tdbHash = hashUpChromGraphTdb(tdbList);
 for (gg = list; gg != NULL; gg = gg->next)
     {
-    char query[512];
     char nameBuf[256];
-    safef(query, sizeof(query), 
-    	"select * from %s where tableName='%s'", trackDbTable, gg->name);
-    sr = sqlGetResult(conn, query);
-    if ((row = sqlNextRow(sr)) != NULL)
-        {
-	struct trackDb *tdb = trackDbLoad(row);
+    struct trackDb *tdb = hashFindVal(tdbHash, gg->name);
+    if (tdb != NULL)
+	{
 	struct chromGraphSettings *cgs = chromGraphSettingsGet(gg->name,
 		conn2, tdb, cart);
 	gg->shortLabel = tdb->shortLabel;
@@ -127,12 +147,12 @@ for (gg = list; gg != NULL; gg = gg->next)
 	}
     else
         gg->settings = chromGraphSettingsGet(gg->name, NULL, NULL, NULL);
-    sqlFreeResult(&sr);
-
     /* Add db: prefix to separate user and db name space. */
     safef(nameBuf, sizeof(nameBuf), "%s%s", hggDbTag, gg->name);
     gg->name = cloneString(nameBuf);
     }
+hashFree(&tdbHash);
+trackDbFreeList(&tdbList);
 hFreeConn(&conn2);
 slReverse(&list);
 return list;

@@ -35,6 +35,9 @@
 struct itemAttr;
 struct itemAttrTbl;
 
+/* A few hgGenome cart constant defaults copied from */
+#define hggPrefix "hgGenome_"
+#define hggGraphPrefix hggPrefix "graph"
 
 /* trackDb setting for expRatio tracks */
 #define EXP_COLOR_DENSE "expColorDense"
