@@ -18,7 +18,7 @@
 #include "mafFrames.h"
 #include "phyloTree.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.117 2007/08/14 20:42:29 braney Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.118 2007/08/14 22:46:17 braney Exp $";
 
 #define GAP_ITEM_LABEL  "Gaps"
 #define MAX_SP_SIZE 2000
@@ -532,6 +532,12 @@ else
         {
         /* no wiggle -- use mafs if close in */
         if (winBaseCount < MAF_SUMMARY_VIEW)
+#ifndef NOTYET
+           loadMafsToTrack(track);
+	AllocVar(miList);
+	miList->name = cloneString(track->shortLabel);
+	miList->height = tl.fontHeight;
+#else
 	    miList =  loadPairwiseItems(track);
 	
 	/* remove components that aren't selected */
@@ -570,6 +576,7 @@ else
 	/* label with the track name */
         miList->name = cloneString(track->shortLabel);
 	miList->next = NULL;
+#endif /* NOTYET */
         }
     else while (wigTrack)
         {
