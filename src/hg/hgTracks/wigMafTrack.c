@@ -18,7 +18,7 @@
 #include "mafFrames.h"
 #include "phyloTree.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.116 2007/08/14 16:57:06 fanhsu Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.117 2007/08/14 20:42:29 braney Exp $";
 
 #define GAP_ITEM_LABEL  "Gaps"
 #define MAX_SP_SIZE 2000
@@ -532,10 +532,44 @@ else
         {
         /* no wiggle -- use mafs if close in */
         if (winBaseCount < MAF_SUMMARY_VIEW)
-            loadMafsToTrack(track);
-        AllocVar(miList);
+	    miList =  loadPairwiseItems(track);
+	
+	/* remove components that aren't selected */
+	struct wigMafItem *mil = miList;
+	struct hash *nameHash = newHash(5);
+	for(;mil; mil = mil->next)
+	    hashStore(nameHash, mil->name);
+
+	struct mafAli *mafList = track->customPt;
+	struct mafComp *mc;
+
+	for(; mafList; mafList = mafList->next)
+	    {
+	    struct mafComp *prev = mafList->components;
+
+	    /* start after the master component */
+	    for(mc = mafList->components->next; mc; mc = mc->next)
+		{
+		char *ptr = strchr(mc->src, '.');
+		if (ptr)
+		    *ptr = 0;
+		char *ptr2 = hOrganism(mc->src);
+		*ptr2 = tolower(*ptr2);
+		if (!hashLookup(nameHash, ptr2))
+		    /* delete this component */
+		    prev->next = mc->next;
+		else
+		    {
+		    if (ptr)
+			*ptr = '.';
+		    prev = mc;
+		    }
+		}
+	    }
+
+	/* label with the track name */
         miList->name = cloneString(track->shortLabel);
-        miList->height = tl.fontHeight;
+	miList->next = NULL;
         }
     else while (wigTrack)
         {
