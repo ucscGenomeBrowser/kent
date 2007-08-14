@@ -68,6 +68,7 @@ type wigMaf 0.0 1.0
 maxHeightPixels 100:50:10
 speciesCodonDefault hiv1
 itemFirstCharCase noChange
+maxItems 2000
 speciesUseFile gsidTable.gsidSeqList
 
 track vax004AaMaf
@@ -82,6 +83,7 @@ type wigMafProt 0.0 1.0
 maxHeightPixels 100:50:10
 speciesCodonDefault hiv1
 itemFirstCharCase noChange
+maxItems 2000
 speciesUseFile gsidTable.gsidSeqList
 
 searchName hivGeneAcc
