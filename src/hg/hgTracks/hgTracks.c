@@ -108,6 +108,7 @@
 #include "hapmapTrack.h"
 #include "trashDir.h"
 #include "omicia.h"
+#include "nonCodingUi.h"
 
 #ifdef LOWELAB
 #include "loweLabTracks.h"
@@ -117,7 +118,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1390 2007/08/13 18:52:25 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1391 2007/08/14 06:37:36 hartera Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -4867,6 +4868,50 @@ tg->mapItemName = refGeneMapName;
 tg->itemColor = refGeneColor;
 }
 
+boolean filterNonCoding(struct track *tg, void *item)
+/* Returns TRUE if the item passes the filter */
+{
+char condStr[256];
+char *bioType;
+struct linkedFeatures *lf = item;
+int i = 0;
+struct sqlConnection *conn = hAllocConn();
+
+/* Find the biotype for this item */
+sprintf(condStr, "name='%s'", lf->name);
+bioType = sqlGetField(conn, database, "ensGeneNonCoding", "biotype", condStr);
+hFreeConn(&conn);
+
+/* check for this type in the array and use its index to find whether this
+   type is in the cart and checked for inclusion */
+for (i = 0; i < nonCodingTypeDataNameSize; i++)
+    {
+    cartCgiUsualBoolean(cart, nonCodingTypeIncludeStrings[i], TRUE);
+    if (!sameString(nonCodingTypeDataName[i], bioType))
+        {
+        continue;
+        }
+    return nonCodingTypeIncludeCart[i];
+    }
+return TRUE;
+}
+
+void loadEnsGeneNonCoding(struct track *tg)
+/* Load the ensGeneNonCoding items filtered according to types checked on 
+   the nonCodingUi */
+{
+int i = 0;
+/* update cart variables based on checkboxes */
+for (i = 0; i < nonCodingTypeIncludeCartSize; i++)
+    {
+    nonCodingTypeIncludeCart[i] = cartUsualBoolean(cart, nonCodingTypeIncludeStrings[i], nonCodingTypeIncludeDefault[i]);
+    }
+/* Convert genePred in window to linked feature */
+tg->items = lfFromGenePredInRange(tg, tg->mapName, chromName, winStart, winEnd);
+/* filter items on selected criteria if filter is available */
+filterItems(tg, filterNonCoding, "include");
+}
+
 char *ensGeneName(struct track *tg, void *item)
 /* Return abbreviated ensemble gene name. */
 {
@@ -4887,6 +4932,49 @@ void ensGeneMethods(struct track *tg)
 /* Make track of Ensembl predictions. */
 {
 tg->itemName = ensGeneName;
+}
+
+Color ensGeneNonCodingColor(struct track *tg, void *item, struct vGfx *vg)
+/* Return color to draw Ensembl non-coding gene/pseudogene in. */
+{
+char condStr[255];
+char *bioType;
+Color color = {MG_GRAY};  /* Set default to gray */
+struct rgbColor hAcaColor = {0, 128, 0}; /* darker green, per request by Weber */
+Color hColor;
+struct sqlConnection *conn;
+char *name;
+
+conn = hAllocConn();
+hColor = vgFindColorIx(vg, hAcaColor.r, hAcaColor.g, hAcaColor.b);
+name = tg->itemName(tg, item);
+sprintf(condStr, "name='%s'", name);
+bioType = sqlGetField(conn, database, "ensGeneNonCoding", "biotype", condStr);
+
+if (sameWord(bioType, "miRNA"))    color = MG_RED;
+if (sameWord(bioType, "misc_RNA")) color = MG_BLACK;
+if (sameWord(bioType, "snRNA"))    color = MG_BLUE;
+if (sameWord(bioType, "snoRNA"))   color = MG_MAGENTA;
+if (sameWord(bioType, "rRNA"))     color = MG_CYAN;
+if (sameWord(bioType, "scRNA"))    color = MG_YELLOW;
+if (sameWord(bioType, "Mt_tRNA"))  color = MG_GREEN;
+if (sameWord(bioType, "Mt_rRNA"))  color = hColor;
+
+/* Pseudogenes in the zebrafish will be coloured the default color 
+ * set in trackDb.ra. */
+if (sameWord(bioType, "pseudogene")) color = vgFindRgb(vg, &tg->color);
+
+hFreeConn(&conn);
+return(color);
+}
+
+void ensGeneNonCodingMethods(struct track *tg)
+/* Make track of Ensembl predictions. */
+{
+tg->itemName = ensGeneName;
+tg->items = lfFromGenePredInRange(tg, tg->mapName, chromName, winStart, winEnd);
+tg->itemColor = ensGeneNonCodingColor;
+tg->loadItems = loadEnsGeneNonCoding;
 }
 
 int cDnaReadDirectionForMrna(struct sqlConnection *conn, char *acc)
@@ -13488,7 +13576,7 @@ registerTrackHandler("flyBaseNoncoding", flyBaseGeneMethods);
 registerTrackHandler("sgdGene", sgdGeneMethods);
 registerTrackHandler("genieAlt", genieAltMethods);
 registerTrackHandler("ensGene", ensGeneMethods);
-registerTrackHandler("ensGeneNonCoding", ensGeneMethods);
+registerTrackHandler("ensGeneNonCoding", ensGeneNonCodingMethods);
 registerTrackHandler("ensEst", ensGeneMethods);
 registerTrackHandler("mrna", mrnaMethods);
 registerTrackHandler("intronEst", estMethods);
