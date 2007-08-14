@@ -3,9 +3,9 @@ HG_WARN=${HG_WARN_ERR}
 
 ensScripts = ensGeneToGenePred ensemblDbImport ensemblDownload ensemblGetAll ensemblSuperfamily ensemblVegaMap exportEnsembl geneCheckAndLoad hgLoadEnsembl loadEnsembl mkRandomGoldLift mkRandomNTLift
 
-all: ${ensScripts:%=${HOME}/bin/scripts/%}
+all: ${ensScripts:%=${BINDIR}/%}
 
-${HOME}/bin/scripts/%: %
+${BINDIR}/%: %
 	cp -f $< $@
 	chmod a+rx $@
 
