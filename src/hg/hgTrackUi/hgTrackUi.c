@@ -32,7 +32,7 @@
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 #define MAX_SP_SIZE 2000
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.393 2007/08/14 16:59:06 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.394 2007/08/14 18:17:14 fanhsu Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1849,6 +1849,9 @@ char buttonVar[64];
 char *button;
 char *form = "mainForm";
 int numberPerRow;
+boolean isWigMafProt = FALSE;
+
+if (strstr(tdb->type, "wigMafProt")) isWigMafProt = TRUE;
 
 puts("<TABLE><TR><TD>");
 
@@ -2054,16 +2057,29 @@ for (wmSpecies = wmSpeciesList, i = 0; wmSpecies != NULL;
     }
 puts("</TR></TABLE><BR>\n");
 
-puts("<B>Multiple alignment base-level:</B><BR>" );
+if (isWigMafProt) 
+    puts("<B>Multiple alignment amino acid-level:</B><BR>" );
+else 
+    puts("<B>Multiple alignment base-level:</B><BR>" );
 safef(option, sizeof option, "%s.%s", tdb->tableName, MAF_DOT_VAR);
 cgiMakeCheckBox(option, cartCgiUsualBoolean(cart, option, FALSE));
-puts("Display bases identical to reference as dots<BR>" );
+
+if (isWigMafProt) 
+    puts("Display amino acids identical to reference as dots<BR>" );
+else
+    puts("Display bases identical to reference as dots<BR>" );
+
 safef(option, sizeof option, "%s.%s", tdb->tableName, MAF_CHAIN_VAR);
 cgiMakeCheckBox(option, cartCgiUsualBoolean(cart, option, TRUE));
 if (trackDbSetting(tdb, "irows") != NULL)
     puts("Display chains between alignments<BR>");
 else
-    puts("Display unaligned bases with spanning chain as 'o's<BR>");
+    {
+    if (isWigMafProt) 
+	puts("Display unaligned amino acids with spanning chain as 'o's<BR>");
+    else
+	puts("Display unaligned bases with spanning chain as 'o's<BR>");
+    }
 safef(option, sizeof option, "%s.%s", tdb->tableName, "codons");
 if (framesTable)
     {
