@@ -18,10 +18,10 @@
 #include "mafFrames.h"
 #include "phyloTree.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.115 2007/08/13 18:55:52 fanhsu Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.116 2007/08/14 16:57:06 fanhsu Exp $";
 
 #define GAP_ITEM_LABEL  "Gaps"
-#define MAX_SP_SIZE 300
+#define MAX_SP_SIZE 2000
 
 struct wigMafItem
 /* A maf track item -- 
