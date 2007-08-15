@@ -27,12 +27,13 @@
 #include "dbRIP.h"
 #include "tfbsConsSites.h"
 #include "hapmapSnps.h"
+#include "nonCodingUi.h"
 #include "expRecord.h"
 
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 #define MAX_SP_SIZE 2000
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.394 2007/08/14 18:17:14 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.395 2007/08/15 15:54:17 hartera Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1346,6 +1347,28 @@ void gencodeUI(struct trackDb *tdb)
 geneIdConfig(tdb);
 }
 
+void ensemblNonCodingTypeConfig(struct trackDb *tdb)
+{
+int i = 0;
+
+printf("<BR><B>Non-coding RNA type:</B> ");
+printf("<BR>\n");
+
+for (i=0; i < nonCodingTypeLabelsSize; i++)
+    {
+    nonCodingTypeIncludeCart[i] = cartUsualBoolean(cart, nonCodingTypeIncludeStrings[i], nonCodingTypeIncludeDefault[i]);
+    cgiMakeCheckBox(nonCodingTypeIncludeStrings[i], nonCodingTypeIncludeCart[i]);
+    printf(" %s", nonCodingTypeLabels[i]);
+    }
+}
+
+void ensemblNonCodingUI(struct trackDb *tdb)
+/* Put up Ensembl Non-Coding genes-specific controls */
+{
+ensemblNonCodingTypeConfig(tdb);
+baseColorDrawOptDropDown(cart, tdb);
+}
+
 void oneMrnaFilterUi(struct controlGrid *cg, char *text, char *var)
 /* Print out user interface for one type of mrna filter. */
 {
@@ -2603,6 +2626,8 @@ else if (sameString(track, "hg17Kg"))
         hg17KgUI(tdb);
 else if (sameString(track, "pseudoGeneLink"))
         retroGeneUI(tdb);
+else if (sameString(track, "ensGeneNonCoding"))
+        ensemblNonCodingUI(tdb);
 else if (sameString(track, "all_mrna"))
     mrnaUi(tdb, FALSE);
 else if (sameString(track, "mrna"))
