@@ -208,7 +208,7 @@
 #include "omicia.h"
 #include "atomDb.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1335 2007/08/13 22:43:51 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1336 2007/08/15 14:23:39 kent Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -732,51 +732,72 @@ for (i=0; i<subCount; ++i)
 return s;
 }
 
+char *getIdInUrl(struct trackDb *tdb, char *itemName)
+/* If we have an idInUrlSql tag, look up itemName in that, else just
+ * return itemName. */
+{
+char *sql = trackDbSetting(tdb, "idInUrlSql");
+char *id = itemName;
+if (sql != NULL)
+    {
+    char buf[256];
+    safef(buf, sizeof(buf), sql, itemName);
+    struct sqlConnection *conn = hAllocConn();
+    id = sqlQuickString(conn, buf);
+    hFreeConn(&conn);
+    }
+return id;
+}
+
 void printCustomUrl(struct trackDb *tdb, char *itemName, boolean encode)
 /* Print custom URL. */
 {
 char *url = tdb->url;
 if (url != NULL && url[0] != 0)
     {
-    struct dyString *uUrl = NULL;
-    struct dyString *eUrl = NULL;
-    char startString[64], endString[64];
-    char *ins[7], *outs[7];
-    char *eItem = (encode ? cgiEncode(itemName) : cloneString(itemName));
+    char *idInUrl = getIdInUrl(tdb, itemName);
+    if (idInUrl != NULL)
+	{
+	struct dyString *uUrl = NULL;
+	struct dyString *eUrl = NULL;
+	char startString[64], endString[64];
+	char *ins[7], *outs[7];
+	char *eItem = (encode ? cgiEncode(idInUrl) : cloneString(idInUrl));
 
-    sprintf(startString, "%d", winStart);
-    sprintf(endString, "%d", winEnd);
-    ins[0] = "$$";
-    outs[0] = itemName;
-    ins[1] = "$T";
-    outs[1] = tdb->tableName;
-    ins[2] = "$S";
-    outs[2] = seqName;
-    ins[3] = "$[";
-    outs[3] = startString;
-    ins[4] = "$]";
-    outs[4] = endString;
-    ins[5] = "$s";
-    outs[5] = skipChr(seqName);
-    ins[6] = "$D";
-    outs[6] = database;
-    uUrl = subMulti(url, ArraySize(ins), ins, outs);
-    outs[0] = eItem;
-    eUrl = subMulti(url, ArraySize(ins), ins, outs);
-    printf("<B>%s </B>", trackDbSettingOrDefault(tdb, "urlLabel", "Outside Link:"));
-    printf("<A HREF=\"%s\" target=_blank>", eUrl->string);
-    
-    if (sameWord(tdb->tableName, "npredGene"))
-    	{
-   	printf("%s (%s)</A><BR>\n", itemName, "NCBI MapView");
+	sprintf(startString, "%d", winStart);
+	sprintf(endString, "%d", winEnd);
+	ins[0] = "$$";
+	outs[0] = idInUrl;
+	ins[1] = "$T";
+	outs[1] = tdb->tableName;
+	ins[2] = "$S";
+	outs[2] = seqName;
+	ins[3] = "$[";
+	outs[3] = startString;
+	ins[4] = "$]";
+	outs[4] = endString;
+	ins[5] = "$s";
+	outs[5] = skipChr(seqName);
+	ins[6] = "$D";
+	outs[6] = database;
+	uUrl = subMulti(url, ArraySize(ins), ins, outs);
+	outs[0] = eItem;
+	eUrl = subMulti(url, ArraySize(ins), ins, outs);
+	printf("<B>%s </B>", trackDbSettingOrDefault(tdb, "urlLabel", "Outside Link:"));
+	printf("<A HREF=\"%s\" target=_blank>", eUrl->string);
+	
+	if (sameWord(tdb->tableName, "npredGene"))
+	    {
+	    printf("%s (%s)</A><BR>\n", idInUrl, "NCBI MapView");
+	    }
+	else
+	    {
+	    printf("%s</A><BR>\n", idInUrl);
+	    }
+	freeMem(eItem);
+	freeDyString(&uUrl);
+	freeDyString(&eUrl);
 	}
-    else
-    	{
-    	printf("%s</A><BR>\n", itemName);
-	}
-    freeMem(eItem);
-    freeDyString(&uUrl);
-    freeDyString(&eUrl);
     }
 }
 
