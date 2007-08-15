@@ -20,7 +20,7 @@
 #include "gsidTable.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidTable.c,v 1.21 2007/08/11 23:23:50 fanhsu Exp $";
+static char const rcsid[] = "$Id: gsidTable.c,v 1.22 2007/08/15 05:40:09 fanhsu Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "submit_filter", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -1206,9 +1206,6 @@ while (subjList)
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
     	{
-	/* A TEMP FIX TO LIMIT TOTAL NUMBER OF SEQUENCE TO NO MORE THAN 200, 
-	   UNTIL WIGMAF PROCESSING OF hgTracks IS FIXED */ 
-	if (cnt >= 200) break;
 	/* Remove "ss." from the front of the DNA sequence ID, 
 	   so that they could be used both for DNA and protein MSA maf display */
 	chp = strstr(row[0], "ss.");
