@@ -282,6 +282,11 @@ Some settings used by various tracks:
       The string $$ will be replaced by the name of an item.   Examples:
       url http://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4&db=n&term=$$
       url http://www.ncbi.nih.gov/IEB/Research/Acembly/av.cgi?db=human&l=$$
+    o urlLabel - Works with url attribute.  Replaces generic "outside link:" label
+      with the given label.
+    o idInUrlSql - Works with url attribute.  A snippet of SQL with a %s in it somewhere.
+      The item name gets substituted in for the %s, and the SQL gets used in the current
+      database returning a single string, which is substituted into the url in place of $$.
     o maxItems - Maximum number of items to be displayed individually in full
       mode.  If there are more items than this they will be drawn on top of
       each other on the last line.  In packed mode this refers to the number
