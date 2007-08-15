@@ -19,6 +19,11 @@ $prevend = "";
 while ($line = <FILE>) {
     chomp($line);
     ($chr, $arm, $band, $iscntop, $iscnbot, $start, $end, $stain, $density, @rest) = split("\t",$line); 
+    # ignore bogus line at the beginning of each chrom
+    if (($start == 0) && ($end == 1)) {
+	$prevend=0;
+	next;
+    }
     # Make data 0-based
     if (($start > 0) && ($start > $prevend)) {
 	$start--;
