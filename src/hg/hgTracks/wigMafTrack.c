@@ -18,7 +18,7 @@
 #include "mafFrames.h"
 #include "phyloTree.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.118 2007/08/14 22:46:17 braney Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.119 2007/08/15 19:21:31 fanhsu Exp $";
 
 #define GAP_ITEM_LABEL  "Gaps"
 #define MAX_SP_SIZE 2000
@@ -1868,8 +1868,16 @@ for(offset=startSub2*2; (offset < alignLineLength) && (offset < winBaseCount + s
 	struct dyString *label = newDyString(20);
 	int haveRoomFor = (width/winBaseCount)/tl.mWidth;
 
-	dyStringPrintf(label, "%d",insertCounts[offset]);
-	
+	/* calculate number of AAs instead of bases if it is wigMafProt */
+	if (strstr(track->tdb->type, "wigMafProt"))
+	    {
+	    dyStringPrintf(label, "%d",insertCounts[offset]/3);
+	    }
+	else
+	    {
+	    dyStringPrintf(label, "%d",insertCounts[offset]);
+	    }
+	    
 	if (label->stringSize > haveRoomFor)
 	    {
 	    dyStringClear(label);
