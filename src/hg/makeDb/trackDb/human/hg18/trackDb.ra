@@ -1143,6 +1143,30 @@ spectrum on
 type netAlign mm8 chainMm8
 otherDb mm8
 
+track chainMm9
+shortLabel mm9 Chain
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+group compGeno
+priority 269
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+matrixHeader A, C, G, T
+type chain mm9
+otherDb mm9
+
+track netMm9
+shortLabel mm9 Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
+group compGeno
+priority 269.1
+visibility hide
+spectrum on
+type netAlign mm9 chainMm9
+otherDb mm9
+
 track cnp
 compositeTrack on
 shortLabel Structural Var
