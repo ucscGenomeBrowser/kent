@@ -24,6 +24,7 @@ priority 40
 visibility hide
 color 12,52,200
 selectSubject on
+maxItems 2000
 type psl
 
 track vax004Cons
