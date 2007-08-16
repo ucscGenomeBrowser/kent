@@ -23,7 +23,6 @@ class PipelineController < ApplicationController
   end
 
   def new
-    #@users = User.find(:all)
     @submission = Submission.new
   end
   
@@ -52,7 +51,7 @@ class PipelineController < ApplicationController
   end
   
   def delete
-    submissionDir=File.expand_path("#{RAILS_ROOT}/upload/#{@current_user.id}/#{@submission.id}/")
+    submissionDir=File.expand_path("#{ActiveRecord::Base.configurations['development']['upload']}/#{@current_user.id}/#{@submission.id}/")
     if File.exists?(submissionDir)
       Dir.entries(submissionDir).each { 
         |f| 
@@ -135,6 +134,7 @@ class PipelineController < ApplicationController
     msg += "sanitized filename=#{@filename}<br>"
     msg += "size=#{@upload.size}<br>"
     msg += "RAILS_ROOT=#{RAILS_ROOT}<br>"
+    msg += "upload path=#{ActiveRecord::Base.configurations['development']['upload']}<br>"
     msg += "path_to_file=#{path_to_file}<br>"
 
     # handle unzipping the archive
@@ -239,7 +239,7 @@ private
 
   def path_to_file
     # the expand_path method resolves this relative path to full absolute path
-    File.expand_path("#{RAILS_ROOT}/upload/#{@current_user.id}/#{@submission.id}/#{@filename}")
+    File.expand_path("#{ActiveRecord::Base.configurations['development']['upload']}/#{@current_user.id}/#{@submission.id}/#{@filename}")
   end
 
   # --- run process with timeout ---- (probably should move this to an application helper location)
