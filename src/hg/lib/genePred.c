@@ -12,7 +12,7 @@
 #include "rangeTree.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.94 2007/04/23 22:45:42 markd Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.95 2007/08/16 19:39:42 markd Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -68,9 +68,13 @@ ret->txEnd = sqlUnsigned(row[4]);
 ret->cdsStart = sqlUnsigned(row[5]);
 ret->cdsEnd = sqlUnsigned(row[6]);
 sqlUnsignedDynamicArray(row[8], &ret->exonStarts, &sizeOne);
-assert(sizeOne == ret->exonCount);
+if (sizeOne != ret->exonCount)
+    errAbort("genePred: %s number of exonStarts (%d) != number of exons (%d)",
+             ret->name, sizeOne, ret->exonCount);
 sqlUnsignedDynamicArray(row[9], &ret->exonEnds, &sizeOne);
-assert(sizeOne == ret->exonCount);
+if (sizeOne != ret->exonCount)
+    errAbort("genePred: %s number of exonEnds (%d) != number of exons (%d)",
+             ret->name, sizeOne, ret->exonCount);
 return ret;
 }
 
@@ -313,9 +317,13 @@ ret->txEnd = sqlUnsigned(row[4]);
 ret->cdsStart = sqlUnsigned(row[5]);
 ret->cdsEnd = sqlUnsigned(row[6]);
 sqlUnsignedDynamicArray(row[8], &ret->exonStarts, &sizeOne);
-assert(sizeOne == ret->exonCount);
+if (sizeOne != ret->exonCount)
+    errAbort("genePred: %s number of exonStarts (%d) != number of exons (%d)",
+             ret->name, sizeOne, ret->exonCount);
 sqlUnsignedDynamicArray(row[9], &ret->exonEnds, &sizeOne);
-assert(sizeOne == ret->exonCount);
+if (sizeOne != ret->exonCount)
+    errAbort("genePred: %s number of exonEnds (%d) != number of exons (%d)",
+             ret->name, sizeOne, ret->exonCount);
 
 iCol=GENEPRED_NUM_COLS;
 if (iCol < numCols)
@@ -341,7 +349,9 @@ if (iCol < numCols)
 if (iCol < numCols)
     {
     sqlSignedDynamicArray(row[iCol++], &ret->exonFrames, &sizeOne);
-    assert(sizeOne == ret->exonCount);
+    if (sizeOne != ret->exonCount)
+        errAbort("genePred: %s number of exonFrames (%d) != number of exons (%d)",
+                 ret->name, sizeOne, ret->exonCount);
     ret->optFields |= genePredExonFramesFld;
     }
 return ret;
