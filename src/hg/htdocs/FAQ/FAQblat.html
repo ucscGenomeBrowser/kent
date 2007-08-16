@@ -247,26 +247,24 @@
 			command line results and web-based results, depending
 			on the search being performed.
 			<P>
-			<em>faToNib</em>: 
+			<em>faToTwoBit</em>: 
 			<UL>
 			<LI>Use soft masking.
 			</UL>
 			<P>
-			<em>gfServer</em>: 
+			<em>gfServer</em> (<B>this is how the UCSC web-based blat servers are configured</B>):</BR>
 			<UL>
-			<LI>untranslated server:<BR>
-			&nbsp;&nbsp;&nbsp;<TT>gfServer start blatX portX -log=untrans.log *.2bit</TT>
-			<LI>translated server:<BR>
-    			&nbsp;&nbsp;&nbsp;<TT>gfServer start blatX portY -trans -mask -log=trans.log *.2bit</TT>
-			<LI>untranslated server plus PCR server (<B>this is 
-			how the UCSC web-based blat servers are configured</B>):</BR>
-    			&nbsp;&nbsp;&nbsp;<TT>gfServer start blatX portX -stepSize=5 -log=untrans.log *.2bit</TT>
-			<LI>For enabling DNA/DNA and DNA/RNA
-			matches, only the host, port and nib files are needed.
-			The same port may be used for both untranslated blat
-			and isPcr. You'll need a separate server on a separate
-			port to enable translated (protein-based) matches. 
-			</UL></P>
+			<LI>blat server (capable of PCR):</BR>
+    			&nbsp;&nbsp;&nbsp;<TT>gfServer start blatMachine portX -stepSize=5 -log=untrans.log database.2bit</TT>
+			<LI>translated blat server:<BR>
+    			&nbsp;&nbsp;&nbsp;<TT>gfServer start blatMachine portY -trans -mask -log=trans.log database.2bit</TT>
+			</UL>
+			For enabling DNA/DNA and DNA/RNA
+			matches, only the host, port and twoBit files are needed.
+			The same port is used for both untranslated blat (gfClient)
+			and PCR (webPcr). You'll need a separate blat server on a separate
+			port to enable translated blat (protein searches or translated searches in protein-space). 
+			</P>
 			<P>
 			<em>gfClient</em>: 
 			<UL>
@@ -275,16 +273,13 @@
 			low-scoring, generally spurious hits, but for 
 			interactive use it's sufficiently easy to ignore them 
 			(because results are sorted by score) and sometimes 
-			the low-scoring hits come in handy. The 
-			<em>-ooc</em> parameter is not set for
-			<em>gfClient</em>.
+			the low-scoring hits come in handy. 
 			</UL></P>
 			<P>
 			<em>standalone blat</em>: 
 			<UL>
-			<LI>untranslated:<BR>
-			&nbsp;&nbsp;&nbsp;<TT>blat -stepsize=5 -minScore=20 [-ooc=11.ooc] database.2bit query.fa output.psl </TT><br>
-			<em>-ooc</em> parameter is optional
+			<LI>blat search:<BR>
+			&nbsp;&nbsp;&nbsp;<TT>blat -stepsize=5 -minScore=0 -minIdentity=0 database.2bit query.fa output.psl </TT><br>
 			</UL></P>
 			<P>
 			For more information on the parameters available for
