@@ -73,7 +73,8 @@ loadDbTracks() {
     echo $cmd
     eval $cmd
     if [ -f $dbpath/description.html ] ; then
-        cp $dbpath/description.html /gbdb/$db/html
+        rm -f /gbdb/$db/html/description.html
+        cp -p $dbpath/description.html /gbdb/$db/html
     fi
     if [ -n "$grpSql" ] ; then
         cmd="hgsql $db < $grpSql"
