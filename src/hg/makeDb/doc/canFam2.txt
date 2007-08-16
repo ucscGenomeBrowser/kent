@@ -2151,6 +2151,12 @@ cd ../..
         # 35696
 
 ############################################################################
+# QA NOTE (2007-08-16 brooke):
+# rhesus nets on canFam2 were requested by Merck (see the following
+# thread: http://www.soe.ucsc.edu/pipermail/genome/2007-August/014414.html).
+# We may want to consider adding rhesus nets/chains to next dog release.
+
+############################################################################
 # BLASTZ BOSTAU2 (DONE - 2006-01-17 - 2006-01-18 - Hiram)
 
     ssh kk
