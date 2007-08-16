@@ -947,17 +947,19 @@ rsync -avzP --delete --max-delete=20 \
 </PRE>
 <LI>Create the protein databases
 <PRE>
+mysql&gt; create database proteins040115
 mysql&gt; create database proteins040315
 mysql&gt; create database proteins040515
 mysql&gt; create database proteins050415
 mysql&gt; create database proteins051015
 mysql&gt; create database proteins060115
+mysql&gt; create database proteins070202
 </PRE>
 <LI>Import the data from proteinDB/proteins*/database in a similar
 	fashion as listed above.
 <LI>Create symlinks for your MySQL database of:
 <PRE>
-	/var/lib/mysql/proteome -&gt; proteins060115
+	/var/lib/mysql/proteome -&gt; proteins070202
 </PRE>
 </OL>
 
@@ -973,11 +975,21 @@ rsync -avzP --delete --max-delete=20 \
   rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/uniProt/ \
   $WEBROOT/goldenPath/uniProt/
 </PRE>
-<LI>Create the UniProt database
+<LI>Create the UniProt databases
 <PRE>
-mysql&gt; create database uniProt
+mysql&gt; create database sp040115
+mysql&gt; create database sp040315
+mysql&gt; create database sp040515
+mysql&gt; create database sp050415
+mysql&gt; create database sp051015
+mysql&gt; create database sp060115
+mysql&gt; create database sp070202
 </PRE>
 <LI>Import the data in a similar fashion as listed above.
+<LI>Create symlinks for your MySQL database of:
+<PRE>
+	/var/lib/mysql/uniProt  -&gt; sp070202
+</PRE>
 </OL>
 
 <hr WIDTH="100%">
