@@ -1,4 +1,4 @@
-/* orfEnum - Enumerate all orfs in a cDNA.. */
+/* orfEnum - Enumerate all orfs in a cDNA according to a variety of ORF criteria. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -6,7 +6,7 @@
 #include "dnautil.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: orfEnum.c,v 1.5 2007/08/04 00:06:42 kent Exp $";
+static char const rcsid[] = "$Id: orfEnum.c,v 1.6 2007/08/16 16:56:02 kent Exp $";
 
 int minSize=24;
 boolean doAll = TRUE;
