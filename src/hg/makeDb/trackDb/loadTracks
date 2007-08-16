@@ -72,7 +72,7 @@ loadDbTracks() {
     cmd="hgFindSpec $fopts $org $db $hgFindSpec ../../lib/hgFindSpec.sql ."
     echo $cmd
     eval $cmd
-    if [ -f $dbpath/description.html ] ; then
+    if [ -z "$strict" -a -f $dbpath/description.html ] ; then
         rm -f /gbdb/$db/html/description.html
         cp -p $dbpath/description.html /gbdb/$db/html
     fi
