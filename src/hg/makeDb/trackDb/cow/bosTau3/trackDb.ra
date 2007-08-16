@@ -47,3 +47,12 @@ type psl est
 baseColorUseSequence genbank
 indelDoubleInsert on
 indelQueryInsert on
+
+track snp127
+shortLabel SNPs (127)
+longLabel Simple Nucleotide Polymorphisms (dbSNP build 127)
+group varRep
+priority 100
+visibility dense
+type bed 6 +
+
