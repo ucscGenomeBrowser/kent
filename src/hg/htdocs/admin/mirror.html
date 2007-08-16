@@ -964,7 +964,7 @@ mysql&gt; create database proteins070202
 </OL>
 
 <H4><a NAME="step11"></A>
-11. Create the UniProt database</H4>
+11. Create the UniProt databases</H4>
 
 <OL type="a">
 <LI>Please note <A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/swissProt/database/README.txt">usage rights</A> for the UniProt database.
@@ -975,7 +975,7 @@ rsync -avzP --delete --max-delete=20 \
   rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/uniProt/ \
   $WEBROOT/goldenPath/uniProt/
 </PRE>
-<LI>Create the UniProt databases
+<LI>Create the UniProt databases.
 <PRE>
 mysql&gt; create database sp040115
 mysql&gt; create database sp040315
