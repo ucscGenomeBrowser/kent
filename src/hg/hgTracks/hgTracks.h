@@ -354,6 +354,14 @@ void abbr(char *s, char *fluff);
 struct track *getTrackList(struct group **pGroupList);
 /* Return list of all tracks. */
 
+void groupTrackListAddSuper(struct cart *cart, struct group *group);
+/* Construct a new track list that includes supertracks, sort by priority,
+ * and determine if supertracks have visible members.
+ * Replace the group track list with this new list.
+ * Shared by hgTracks and configure page to expand track list,
+ * in contexts where no track display functions (which don't understand
+ * supertracks) are invoked.  */
+
 void removeTrackFromGroup(struct track *track);
 /* Remove track from group it is part of. */
 
@@ -990,6 +998,9 @@ void setSuperTrackHasVisibleMembers(struct track *track);
 
 boolean superTrackHasVisibleMembers(struct track *track);
 /* Determine if any member tracks are visible */
+
+int trackRefCmpPriority(const void *va, const void *vb);
+/* Compare based on priority. */
 
 #endif /* HGTRACKS_H */
 

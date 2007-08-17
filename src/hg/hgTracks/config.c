@@ -76,7 +76,6 @@ if (changeVis != -2)
     }
 #endif /* BOB_DOESNT_LIKE */
 
-struct hash *superHash = hashNew(0);
 cgiMakeHiddenVar(configGroupTarget, "none");
 boolean isFirst = TRUE;
 for (group = groupList; group != NULL; group = group->next)
@@ -141,8 +140,17 @@ for (group = groupList; group != NULL; group = group->next)
         }
     hPrintf("</TR>\n");
 
+    if (!isOpen)
+        {
+        /* finish group section here if it's collapsed */
+        hTableEnd();
+        hPrintf("<BR>");
+        isFirst = FALSE;
+        continue;
+        }
+
     /* First group gets ruler. */
-    if (!showedRuler && isOpen && isFirst)
+    if (!showedRuler && isFirst)
 	{
         showedRuler = TRUE;
 	hPrintf("<TR>");
@@ -172,43 +180,43 @@ for (group = groupList; group != NULL; group = group->next)
     isFirst = FALSE;
     /* Scan track list to determine which supertracks have visible member
      * tracks, and to insert a track in the list for the supertrack */
-    struct track *track;
-    struct trackRef *prevTr = NULL, *superTr = NULL;
-    struct trackDb *superTdb = NULL;
-    for (tr = group->trackList; tr != NULL; tr = tr->next)
+    groupTrackListAddSuper(cart, group);
+
+    if (!withPriorityOverride)
         {
-        if (!isOpen)
-            break;
-        track = tr->track;
-        superTdb = track->tdb->parent;
-        if (superTdb)
+        /* sort hierarchically by priority, considering supertracks */
+        struct trackRef *refList = NULL, *ref;
+        for (tr = group->trackList; tr != NULL; tr = tr->next)
             {
-            if (!hashLookup(superHash, superTdb->tableName))
+            struct track *track = tr->track;
+            if (track->tdb->parentName)
+                /* ignore supertrack member tracks till supertrack is found */
+                continue;
+            AllocVar(ref);
+            ref->track = track;
+            slAddTail(&refList, ref);
+            if (track->tdb->isSuper)
                 {
-                struct track *superTrack = trackFromTrackDb(superTdb);
-                superTrack->hasUi = TRUE;
-                AllocVar(superTr);
-                superTr->track = superTrack;
-                superTr->next = tr;
-                if (!prevTr)
-                    group->trackList = superTr;
-                else
-                    prevTr->next = superTr;
-                hashAdd(superHash, superTdb->tableName, superTdb);
+                struct trackRef *tr2;
+                for (tr2 = group->trackList; tr2 != NULL; tr2 = tr2->next)
+                    {
+                    char *parent = tr2->track->tdb->parentName;
+                    if (parent && sameString(parent, track->mapName))
+                        {
+                        AllocVar(ref);
+                        ref->track = tr2->track;
+                        slAddTail(&refList, ref);
+                        }
+                    }
                 }
-            /* note in supertrack if member track is visible */
-            if (hTvFromString(cartUsualString(cart, track->mapName,
-                            hStringFromTv(track->visibility))) != tvHide)
-                setSuperTrackHasVisibleMembers(track);
             }
-        prevTr = tr;
+        group->trackList = refList;
         }
+
     /* Loop through this group and display */
     for (tr = group->trackList; tr != NULL; tr = tr->next)
 	{
-        if (!isOpen)
-            break;
-	track = tr->track;
+	struct track *track = tr->track;
         struct trackDb *tdb = track->tdb;
 
 	hPrintf("<TR>");
@@ -219,8 +227,8 @@ for (group = groupList; group != NULL; group = group->next)
 	if (track->hasUi)
 	    hPrintf("<A HREF=\"%s?%s=%u&g=%s\">", hgTrackUiName(),
 		cartSessionVarName(), cartSessionId(cart), track->mapName);
-	hPrintf(" %s", track->shortLabel);
-        if (hashFindVal(superHash, track->mapName))
+        hPrintf(" %s", track->shortLabel);
+        if (track->tdb->isSuper)
             hPrintf("...");
 	if (track->hasUi)
 	    hPrintf("</A>");
@@ -261,8 +269,13 @@ for (group = groupList; group != NULL; group = group->next)
             hDoubleVar(pname, (double)track->priority, 4);
             hPrintf("</TD>");
             hPrintf("<TD>\n");
-            safef(gname, sizeof(gname), "%s.group",track->mapName);
-            printGroupListHtml(gname, groupList, track->groupName);
+            if (track->tdb->parentName)
+                hPrintf("&nbsp");
+            else
+                {
+                safef(gname, sizeof(gname), "%s.group",track->mapName);
+                printGroupListHtml(gname, groupList, track->groupName);
+                }
             hPrintf("</TD>");
             }
 	hPrintf("</TR>\n");

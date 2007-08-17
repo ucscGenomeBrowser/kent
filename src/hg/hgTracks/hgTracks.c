@@ -118,7 +118,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1392 2007/08/14 15:11:08 aamp Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1393 2007/08/17 03:55:23 kate Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -294,6 +294,24 @@ else if (dif == 0.0)
 else
    return 1;
 }
+
+int trackRefCmpPriority(const void *va, const void *vb)
+/* Compare based on priority. */
+{
+const struct trackRef *a = *((struct trackRef **)va);
+const struct trackRef *b = *((struct trackRef **)vb);
+float dif = a->track->group->priority - b->track->group->priority;
+
+if (dif == 0)
+    dif = a->track->priority - b->track->priority;
+if (dif < 0)
+   return -1;
+else if (dif == 0.0)
+   return 0;
+else
+   return 1;
+}
+
 
 int gCmpPriority(const void *va, const void *vb)
 /* Compare to sort based on priority. */
@@ -13299,6 +13317,42 @@ hPuts("</TR></TABLE>");
 hPuts("</TD></TR></TABLE>\n");
 }
 
+static void priorityOverride(struct cart *cart, struct track *track, 
+                                struct hash *groups)
+/* Use priority and group cart variables to change track settings from defaults */
+{
+int priority = 0;
+char *groupName = NULL;
+char cartVar[128];
+safef(cartVar, sizeof(cartVar), "%s.priority",track->mapName);
+priority = (float)cartUsualDouble(cart, cartVar, track->priority);
+/* remove cart variables that are the same as the trackDb settings */
+if (abs(priority - track->priority) < 0.00001)
+    cartRemove(cart, cartVar);
+else
+    track->defaultPriority = track->priority;
+track->priority = (float)cartUsualDouble(cart, cartVar, track->priority);
+
+char *groupTrack = track->mapName;
+if (track->tdb->parentName)
+    /* supertrack members must belong to same group as their supertrack */
+    {
+    groupTrack = track->tdb->parentName;
+    }
+safef(cartVar, sizeof(cartVar), "%s.group",groupTrack);
+groupName = cartUsualString(cart, cartVar, track->group->name);
+if (!track->tdb->parentName && sameString(groupName, track->group->name))
+    cartRemove(cart, cartVar);
+if (!groups)
+    return;
+struct group *group = hashFindVal(groups, groupName);
+if (group)
+    {
+    track->groupName = cloneString(groupName);
+    track->group = group;
+    }
+}
+
 static void groupTracks(struct track **pTrackList, struct group **pGroupList)
 /* Make up groups and assign tracks to groups. */
 {
@@ -13366,27 +13420,8 @@ slReverse(&list);  /* Postpone this til here so unknown will be last. */
 /* Read priority from cart, if user has overriden priority from trackDb */
 if (withPriorityOverride)
     for (track = *pTrackList; track != NULL; track = track->next)
-        {
-        int priority = 0;
-        char *groupName = NULL;
-        safef(cartVar, sizeof(cartVar), "%s.priority",track->mapName);
-        priority = (float)cartUsualDouble(cart, cartVar, track->priority);
-        /* remove cart variables that are the same as the trackDb settings */
-        if (abs(priority - track->priority) < 0.00001)
-            cartRemove(cart, cartVar);
-        else
-            track->defaultPriority = track->priority;
-        track->priority = (float)cartUsualDouble(cart, cartVar, track->priority);
-        safef(cartVar, sizeof(cartVar), "%s.group",track->mapName);
-        groupName = cartUsualString(cart, cartVar, track->group->name);
-        if (sameString(groupName, track->group->name))
-            cartRemove(cart, cartVar);
-        if (hashFindVal(hash, groupName)!=NULL)
-            {
-            track->groupName = cloneString(groupName);
-            track->group = hashFindVal(hash, groupName);
-            }
-        }
+        priorityOverride(cart, track, hash);
+
 /* Sort tracks by combined group/track priority, and
  * then add references to track to group. */
 slSort(pTrackList, tgCmpPriority);
@@ -13403,6 +13438,51 @@ for (group = list; group != NULL; group = group->next)
 slSort(&list, gCmpPriority);
 hashFree(&hash);
 *pGroupList = list;
+}
+
+void groupTrackListAddSuper(struct cart *cart, struct group *group)
+/* Construct a new track list that includes supertracks, sort by priority,
+ * and determine if supertracks have visible members.
+ * Replace the group track list with this new list.
+ * Shared by hgTracks and configure page to expand track list,
+ * in contexts where no track display functions (which don't understand
+ * supertracks) are invoked. */
+{
+struct trackRef *newList = NULL, *tr, *ref;
+struct hash *superHash = hashNew(8);
+
+if (!group || !group->trackList)
+    return;
+for (tr = group->trackList; tr != NULL; tr = tr->next)
+    {
+    struct track *track = tr->track;
+    AllocVar(ref);
+    ref->track = track;
+    slAddHead(&newList, ref);
+    if (track->tdb->parent)
+        {
+        if (hTvFromString(cartUsualString(cart, track->mapName,
+                        hStringFromTv(track->tdb->visibility))) != tvHide)
+            setSuperTrackHasVisibleMembers(track);
+        if (hashLookup(superHash, track->tdb->parentName))
+            /* ignore supertrack if it's already been handled */
+            continue;
+        /* create track and reference for the supertrack */
+        struct track *superTrack = trackFromTrackDb(track->tdb->parent);
+        superTrack->hasUi = TRUE;
+        superTrack->group = group;
+        superTrack->groupName = cloneString(group->name);
+        priorityOverride(cart, track, NULL);
+        AllocVar(ref);
+        ref->track = superTrack;
+        slAddHead(&newList, ref);
+        hashAdd(superHash, track->tdb->parentName, track->tdb->parent);
+        }
+    }
+slSort(&newList, trackRefCmpPriority);
+hashFree(&superHash);
+/* we could free the old track list here, but it's a trivial amount of mem */
+group->trackList = newList;
 }
 
 void topButton(char *var, char *label)
@@ -14153,7 +14233,6 @@ if (showTrackControls)
 	   "Tracks with lots of items will automatically be displayed in "
 	   "more compact modes.</td></tr>\n");
     cg = startControlGrid(MAX_CONTROL_COLUMNS, "left");
-    struct hash *superHash = hashNew(0);
     boolean isFirst = TRUE;
     for (group = groupList; group != NULL; group = group->next)
         {
@@ -14201,56 +14280,40 @@ if (showTrackControls)
 	    }
         isFirst = FALSE;
 
-        /* Scan track list to determine which supertracks have visible member
-         * tracks */
-	for (tr = group->trackList; tr != NULL; tr = tr->next)
-            {
-            if (!isOpen)
-                break;
-            track = tr->track;
-	    if (!track->tdb->parent)
-                continue;
-            if (hTvFromString(cartUsualString(cart, track->mapName,
-                                hStringFromTv(track->tdb->visibility))) != tvHide)
-                    setSuperTrackHasVisibleMembers(track);
-            }
+        /* Add supertracks to  track list, sort by priority and
+         * determine if they have visible member tracks */
+        if (isOpen)
+            groupTrackListAddSuper(cart, group);
+
         /* Display track controls */
 	for (tr = group->trackList; tr != NULL; tr = tr->next)
 	    {
+            struct track *track = tr->track;
             if (!isOpen)
                 break;
-	    track = tr->track;
-            struct trackDb *superTdb = track->tdb->parent;
-            /* avoid supertrack if it's already been displayed */
-            if (superTdb)
-                {
-                if (hashLookup(superHash, superTdb->tableName))
-                    continue;
-                else
-                    hashAdd(superHash, superTdb->tableName, superTdb);
-                }
+            if (track->tdb->parentName)
+                /* don't display supertrack members */
+                continue;
 	    controlGridStartCell(cg);
 	    if (track->hasUi)
 		{
-		char *encodedMapName = cgiEncode(superTdb ?
-                                        superTdb->tableName : track->mapName);
+		char *encodedMapName = cgiEncode(track->mapName);
 		hPrintf("<A HREF=\"%s?%s=%u&c=%s&g=%s\">", hgTrackUiName(),
 		    cartSessionVarName(), cartSessionId(cart),
 		    chromName, encodedMapName);
 		freeMem(encodedMapName);
 		}
-            if (superTdb)
-                hPrintf(" %s...", superTdb->shortLabel);
-            else
-                hPrintf(" %s", track->shortLabel);
+            hPrintf(" %s", track->shortLabel);
+            if (track->tdb->isSuper)
+                hPrintf("...");
 	    hPrintf("<BR> ");
 	    if (track->hasUi)
 		hPrintf("</A>");
 
 	    if (hTrackOnChrom(track->tdb, chromName)) 
 		{
-                if (superTdb)
-                    superTrackDropDown(cart, superTdb,
+                if (track->tdb->isSuper)
+                    superTrackDropDown(cart, track->tdb,
                                         superTrackHasVisibleMembers(track));
                 else
                     {
