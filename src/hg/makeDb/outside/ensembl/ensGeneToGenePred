@@ -1,55 +1,98 @@
-#!/bin/awk -f
-#ensGeneToGenePred - converts a mysql dump of ensembl exons to an extended genePred file. 
-#if the gene is single exon, set to frame to 0 to override bad data from ensembl
-BEGIN {OFS="\t";pname="first"}
-pname==$11 && $9 != "." {
-        eStart=eStart","$5; 
-        eEnd=eEnd","$6; 
-        cnt=cnt+1; 
-        txEnd=$6; 
-        frames=frames","$9
+#!/usr/bin/awk -f
+# ensGeneToGenePred [options] [exons] > genePred
+#
+# Converts a mysql dump of ensembl exons to an extended genePred file.  if
+# the gene is single exon, set to frame to 0 to override bad data from
+# ENSEMBL.
+#
+# options:
+#  -genePredExt - create extended genePred columns, including frames.
+#  -ignore filterFile - drop ENSEMBL transcript ids that are in this file.
+#   Empty lines and whose starting with # are ignored.  NOTE; -ignore was used
+#   rather than -f, because awk wanted to interpret this and an option to awk
+#   instead of putting it in ARGV
+#
+BEGIN {
+    FS = OFS="\t"
+    filterFile = ""
+    genePredExt = 0;
+    iArg = 1;
+    while ((iArg < ARGC) && (ARGV[iArg] ~ "^-.*")) {
+        if (ARGV[iArg] == "-ignore") {
+            if (iArg+1 >= ARGC) {
+                print "Error: -ignore requires an argument" >"/dev/stderr"
+                exit(1)
+            }
+            filterFile = ARGV[iArg+1]
+            ARGV[iArg++] = ""
+        } else if (ARGV[iArg] == "-genePredExt") {
+            genePredExt = 1
+        } else {
+            print "Error: invalid option:",ARGV[iArg] >"/dev/stderr"
+            exit(1)
+        }
+        ARGV[iArg++] = ""
+    }
+    if (filterFile) {
+        while ((getline < filterFile) > 0) {
+            $0 = gensub("[[:space:]]+", "", "g", $0);
+            if (!($0 ~ "^(#|$)")) {
+                ignore[$0] = 1
+            }
+        }
+        close(filterFile)
+    }
+    exonCnt = 0;
 }
-pname==$11 && $9 == "." {
-        eStart=eStart","$5; 
-        eEnd=eEnd","$6; 
-        cnt=cnt+1; 
-        txEnd=$6; 
-        frames=frames",-1"
+
+# prints current gene
+function prGene() {
+    if ((exonCnt == 1) && (cdsStart < cdsEnd)) {
+       frames = "0,";  # fix bogus fram on single-exon genes
+    }
+    if (genePredExt) {
+        print name, chr, strand, txStart, txEnd, cdsStart, cdsEnd, exonCnt, eStarts, eEnds, 0, name2, "cmpl", "cmpl", frames
+    } else {
+        print name, chr, strand, txStart, txEnd, cdsStart, cdsEnd, exonCnt, eStarts, eEnds
+    }
 }
-pname!=$11 && pname != "first" && cnt == 1{
-       frames = "0";
+
+ignore[$11] {
+    next;  # skip ignored gene
 }
-pname!=$11 && pname != "first" {
-        print pname, pChr, strand, txStart, txEnd, cdsStart, cdsEnd, cnt, eStart",", eEnd",", 0, name2, "cmpl", "cmpl", frames","; 
+
+# output gene being assemble if a hit a new gene
+($11 != name) && (name != "") {
+    prGene();
 }
-pname!=$11 && $9 != "." {
-        txStart=$5; 
-        txEnd=$6;
-        pname=$11;
-        pChr=$1;
-        cdsStart=$3; 
-        cdsEnd=$4; 
-        eStart=$5; 
-        eEnd=$6; 
-        name2=$10; 
-        frames=$9; 
-        cnt=1; 
-        strand=$8
+
+# new gene
+($11 != name) {
+    name = $11;
+    chr = $1;
+    strand = $8
+    txStart = $5; 
+    cdsStart = $3; 
+    cdsEnd = $4; 
+    name2 = $10;
+    eStarts = eEnds = frames = "";
+    exonCnt = 0;
 }
-pname!=$11 && $9 == "." {
-        txStart=$5; 
-        txEnd=$6;
-        pname=$11;
-        pChr=$1;
-        cdsStart=$3; 
-        cdsEnd=$4; 
-        eStart=$5; 
-        eEnd=$6; 
-        name2=$10; 
-        frames="-1"; 
-        cnt=1; 
-        strand=$8
+
+# accumulate gene
+{
+    txEnd = $6;
+    eStarts = eStarts $5 ","; 
+    eEnds = eEnds $6 ","; 
+    if ($9 != ".") {
+        frames = frames $9 ",";
+    } else {
+        frames = frames "-1,";
+    }
+    exonCnt++;
 }
 END {
-        print pname, pChr, strand, txStart, txEnd, cdsStart, cdsEnd, cnt, eStart",", eEnd",", 0, name2, "cmpl", "cmpl", frames","; 
+    if (name != "") {
+        prGene();
+    }
 }
