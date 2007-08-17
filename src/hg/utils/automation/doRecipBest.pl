@@ -6,7 +6,7 @@
 # This script should probably be folded back into doBlastzChainNet.pl
 # eventually.
 
-# $Id: doRecipBest.pl,v 1.8 2007/08/13 20:45:18 angie Exp $
+# $Id: doRecipBest.pl,v 1.9 2007/08/17 18:16:21 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -278,7 +278,7 @@ ln -s $runDir/*.rbest.*.gz .
 ln -s $runDir/md5sum.rbest.txt md5sum.txt
 ln -s $readme README.txt
 mkdir axtRBestNet
-ln -s $buildDir/axtRBestNet/$tDb.$qDb.net.axt.gz axtRBestNet/
+ln -s $buildDir/axtRBestNet/*.axt.gz axtRBestNet/
 _EOF_
   );
   $bossScript->execute();
