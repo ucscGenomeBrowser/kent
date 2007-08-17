@@ -1872,10 +1872,10 @@ chainOne $(path1)
 
 
 ##########################################################################
-# LIFTOVER TO BOSTAU3 (DONE 7/11/07 angie)
-    ssh kkstore02
-    mkdir /cluster/data/bosTau2/bed/blat.bosTau3.2007-07-10
-    cd /cluster/data/bosTau2/bed/blat.bosTau3.2007-07-10
+# LIFTOVER TO BOSTAU3 (DONE 8/17/07 angie)
+    ssh kolossus # machine on which script is run doesn't really matter
+    mkdir /cluster/data/bosTau2/bed/blat.bosTau3.2007-08-16
+    cd /cluster/data/bosTau2/bed/blat.bosTau3.2007-08-16
     doSameSpeciesLiftOver.pl bosTau2 bosTau3 >& do.log &
     tail -f do.log
 
