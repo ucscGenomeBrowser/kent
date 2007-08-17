@@ -118,7 +118,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1393 2007/08/17 03:55:23 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1394 2007/08/17 04:14:44 kate Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -13317,6 +13317,22 @@ hPuts("</TR></TABLE>");
 hPuts("</TD></TR></TABLE>\n");
 }
 
+static void setSuperTrackHasVisibleMembers(struct trackDb *tdb)
+/* Determine if any member tracks are visible -- currently 
+ * recording this in the parent's visibility setting */
+{
+tdb->visibility = tvDense;
+}
+
+static boolean superTrackHasVisibleMembers(struct trackDb *tdb)
+/* Determine if any member tracks are visible -- currently 
+ * recording this in the parent's visibility setting */
+{
+if (!tdb->isSuper)
+    return FALSE;
+return (tdb->visibility != tvHide);
+}
+
 static void priorityOverride(struct cart *cart, struct track *track, 
                                 struct hash *groups)
 /* Use priority and group cart variables to change track settings from defaults */
@@ -13463,7 +13479,7 @@ for (tr = group->trackList; tr != NULL; tr = tr->next)
         {
         if (hTvFromString(cartUsualString(cart, track->mapName,
                         hStringFromTv(track->tdb->visibility))) != tvHide)
-            setSuperTrackHasVisibleMembers(track);
+            setSuperTrackHasVisibleMembers(track->tdb->parent);
         if (hashLookup(superHash, track->tdb->parentName))
             /* ignore supertrack if it's already been handled */
             continue;
@@ -13548,23 +13564,6 @@ if (!parent)
 if (sameString("hide", cartUsualString(cart, parent->tableName,
                                 parent->isShow ? "show" : "hide")))
     track->visibility = tvHide;
-}
-
-void setSuperTrackHasVisibleMembers(struct track *track)
-/* Determine if any member tracks are visible -- currently 
- * recording this in the parent's visibility setting */
-{
-if (track->tdb->parent)
-    track->tdb->parent->visibility = tvDense;
-}
-
-boolean superTrackHasVisibleMembers(struct track *track)
-/* Determine if any member tracks are visible -- currently 
- * recording this in the parent's visibility setting */
-{
-if (!track->tdb->parent)
-    return FALSE;
-return (track->tdb->parent->visibility != tvHide);
 }
 
 struct track *getTrackList( struct group **pGroupList)
@@ -14314,7 +14313,7 @@ if (showTrackControls)
 		{
                 if (track->tdb->isSuper)
                     superTrackDropDown(cart, track->tdb,
-                                        superTrackHasVisibleMembers(track));
+                                        superTrackHasVisibleMembers(track->tdb));
                 else
                     {
                     /* check for option of limiting visibility to one mode */

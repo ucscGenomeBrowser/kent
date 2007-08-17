@@ -992,13 +992,6 @@ boolean ssFilesExist(char *ss);
 int maximumTrackHeight(struct track *tg);
 /* Return the maximum track height allowed in pixels. */
 
-void setSuperTrackHasVisibleMembers(struct track *track);
-/* Determine if any member tracks are visible -- currently 
- * recording this in the parent's visibility setting */
-
-boolean superTrackHasVisibleMembers(struct track *track);
-/* Determine if any member tracks are visible */
-
 int trackRefCmpPriority(const void *va, const void *vb);
 /* Compare based on priority. */
 

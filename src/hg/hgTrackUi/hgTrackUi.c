@@ -33,7 +33,7 @@
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 #define MAX_SP_SIZE 2000
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.395 2007/08/15 15:54:17 hartera Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.396 2007/08/17 04:14:44 kate Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2810,7 +2810,7 @@ if (tdb->isSuper)
     {
     /* This is a supertrack -- load its members and show hide/show dropdown */
     hTrackDbLoadSuper(tdb);
-    superTrackDropDown(cart, tdb, -1);
+    superTrackDropDown(cart, tdb, 1);
     }
 else
     {
