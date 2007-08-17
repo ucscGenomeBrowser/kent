@@ -66,6 +66,7 @@ DIRS = \
 	faFilter \
 	faFlyBaseToUcsc \
 	faFrag \
+	faGapLocs \
 	faGapSizes \
 	faNcbiToUcsc \
 	faNoise \
