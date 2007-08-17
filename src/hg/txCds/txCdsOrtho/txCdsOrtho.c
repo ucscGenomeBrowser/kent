@@ -7,7 +7,7 @@
 #include "sqlNum.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: txCdsOrtho.c,v 1.7 2007/04/30 23:14:58 kent Exp $";
+static char const rcsid[] = "$Id: txCdsOrtho.c,v 1.8 2007/08/17 14:43:31 kent Exp $";
 
 FILE *fRa = NULL;
 
@@ -24,7 +24,24 @@ errAbort(
   "           The first 'a' line in each maf record should have the transcript\n"
   "           name and the native sequence, the other 'a' lines should have\n"
   "           the database name and sequence for the other organism\n"
-  "    out.tab is the output\n"
+  "    out.tab is the output with the following columns\n"
+  "       geneName\n"
+  "       cdsStart\n"
+  "       cdsEnd\n"
+  "       otherSpecies\n"
+  "       atgDots\n"
+  "       atgDashes\n"
+  "       kozakDots\n"
+  "       kozakDashes\n"
+  "       stopDots\n"
+  "       stopDashes\n"
+  "       atgConserved\n"
+  "       kozakConserved\n"
+  "       stopConserved\n"
+  "       nativeAtg\n"
+  "       nativeKozak\n"
+  "       possibleSize\n"
+  "       orfSize\n"
   "options:\n"
   "   -ra=out.ra - Put out as ra as well as tab\n"
   );
