@@ -208,7 +208,7 @@
 #include "omicia.h"
 #include "atomDb.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1336 2007/08/15 14:23:39 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1337 2007/08/17 00:54:49 kent Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -16058,9 +16058,7 @@ printf("Jump to browser for %s</a><font size=-1> [%s:%d-%d] </font><br><br>\n", 
 if(cgiVarExists("agxPrintEdges"))
     printAltGraphXEdges(ag);
 printf("</center>\n");
-printTrackHtml(tdb);
 hFreeConn(&conn);
-// hFreeConn(&orthoConn);
 }
 
 
