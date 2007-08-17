@@ -225,7 +225,10 @@ for (group = groupList; group != NULL; group = group->next)
             /* indent members of a supertrack */
             hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;");
 	if (track->hasUi)
-	    hPrintf("<A HREF=\"%s?%s=%u&g=%s\">", hgTrackUiName(),
+	    hPrintf("<A %s%s%s HREF=\"%s?%s=%u&g=%s\">", 
+                tdb->parent ? "TITLE=\"Part of super track: " : "", 
+                tdb->parent ? tdb->parent->shortLabel : "",
+                tdb->parent ? "...\"" : "", hgTrackUiName(),
 		cartSessionVarName(), cartSessionId(cart), track->mapName);
         hPrintf(" %s", track->shortLabel);
         if (track->tdb->isSuper)
