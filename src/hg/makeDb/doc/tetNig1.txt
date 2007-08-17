@@ -2839,3 +2839,28 @@ TMPDIR=/scratch/tmp
     nice -n 19 featureBits -noRandom tetNig1 chainOryLat1Link \
 	>fb.tetNig1.oryLat1.txt 2>&1
     #	130327582 bases of 342403326 (38.063%) in intersection
+
+##########################################################################
+# N-SCAN gene predictions (nscanGene) - (2007-08-16 markd)
+    cd /cluster/data/tetNig1/bed/nscan/
+
+    # obtained NSCAN predictions from michael brent's group
+    # at WUSTL
+    wget http://mblab.wustl.edu/predictions/Tetraodon/tetNig1.gtf
+    wget http://mblab.wustl.edu/predictions/Tetraodon/tetNig1.prot.fa
+    bzip2 tetNig1.*
+
+    # load tracks.  Note that these have *utr features, rather than
+    # exon features.  currently ldHgGene creates separate genePred exons
+    # for these.
+    ldHgGene -bin -gtf -genePredExt tetNig1 nscanGene tetNig1.gtf.bz2
+
+    # load protein
+    hgPepPred tetNig1 generic nscanPep tetNig1.prot.fa.bz2
+    rm *.tab
+
+    # update trackDb; need a tetNig1-specific page to describe informants
+    tetraodon/tetNig1/nscanGene.html   (copy from mm8 and edit)
+    tetraodon/tetNig1/trackDb.ra
+
+
