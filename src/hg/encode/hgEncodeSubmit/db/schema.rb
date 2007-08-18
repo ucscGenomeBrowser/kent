@@ -2,7 +2,7 @@
 # migrations feature of ActiveRecord to incrementally modify your database, and
 # then regenerate this schema definition.
 
-ActiveRecord::Schema.define(:version => 12) do
+ActiveRecord::Schema.define(:version => 14) do
 
   create_table "categories", :force => true do |t|
     t.column "name", :string
@@ -24,6 +24,16 @@ ActiveRecord::Schema.define(:version => 12) do
     t.column "version",     :integer
   end
 
+  create_table "submission_archives", :force => true do |t|
+    t.column "file_name",     :string
+    t.column "file_size",     :string
+    t.column "file_date",     :datetime
+    t.column "submission_id", :integer
+    t.column "created_at",    :datetime
+    t.column "updated_at",    :datetime
+    t.column "archive_no",    :integer
+  end
+
   create_table "submission_files", :force => true do |t|
     t.column "file_name",     :string
     t.column "file_size",     :string
@@ -36,15 +46,13 @@ ActiveRecord::Schema.define(:version => 12) do
   end
 
   create_table "submissions", :force => true do |t|
-    t.column "name",       :string
-    t.column "user_id",    :integer
-    t.column "s_type",     :string
-    t.column "status",     :string
-    t.column "created_at", :datetime
-    t.column "updated_at", :datetime
-    t.column "file_name",  :string
-    t.column "file_size",  :string
-    t.column "file_date",  :datetime
+    t.column "name",          :string
+    t.column "user_id",       :integer
+    t.column "s_type",        :string
+    t.column "status",        :string
+    t.column "created_at",    :datetime
+    t.column "updated_at",    :datetime
+    t.column "archive_count", :integer,  :default => 0
   end
 
   create_table "users", :force => true do |t|

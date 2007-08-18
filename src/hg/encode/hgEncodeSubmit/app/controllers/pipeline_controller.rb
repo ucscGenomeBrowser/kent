@@ -99,22 +99,48 @@ class PipelineController < ApplicationController
       return
     end
 
+
+    msg = ""
+
     # make sure parent paths exist
     submissionDir = File.dirname(path_to_file)
     userDir = File.dirname(submissionDir)
     Dir.mkdir(userDir) unless File.exists?(userDir)
     Dir.mkdir(submissionDir) unless File.exists?(submissionDir)
 
-    msg = ""
-    # clean out directory (this will be handled more delicately later for re-uploading a submission)
-    Dir.entries(submissionDir).each { 
-      |f| 
-      #msg += "submissionDir: #{f} #{File.ftype(File.join(submissionDir,f))}<br>\n" 
-      fullName = File.join(submissionDir,f)
-      if File.ftype(fullName) == "file"
-        File.delete(fullName)
+    # make a temporary upload directory to unpack and merge from
+    uploadDir = submissionDir+"/upload"
+    if File.exists?(uploadDir)
+      cmd = "rm -fr #{uploadDir}"
+      exitCode = system(cmd)
+      unless exitCode 
+        msg += "command=[#{cmd}], exitCode = #{exitCode}<br>"  
+        flash[:notice] = msg 
+        return
       end
-    }
+    end
+    Dir.mkdir(uploadDir)
+
+
+    nextArchiveNo = @submission.archive_count+1
+
+    @filename = "#{"%03d" % nextArchiveNo}_#{@filename}"
+
+
+
+    #####  DEAD CODE  #####
+#    # clean out directory (this will be handled more delicately later for re-uploading a submission)
+#    Dir.entries(submissionDir).each { 
+#      |f| 
+#      #msg += "submissionDir: #{f} #{File.ftype(File.join(submissionDir,f))}<br>\n" 
+#      fullName = File.join(submissionDir,f)
+#      if File.ftype(fullName) == "file"
+#        File.delete(fullName)
+#      end
+#    }
+
+    # just in case, remove it it already exists (shouldn't happen)
+    File.delete(path_to_file) if File.exists?(path_to_file)
 
     unless @upurl.blank?
       File.open(path_to_file, "wb") { |f| f.write(@upload.read) }
@@ -125,7 +151,8 @@ class PipelineController < ApplicationController
         File.open(path_to_file, "wb") { |f| f.write(@upload.read) }
       end
     end
-    # save filename in the database
+
+    # dead code, just an example of using write_attribute: save filename in the database
     #write_attribute("file", path_to_file)
 
     #debugging
@@ -136,27 +163,20 @@ class PipelineController < ApplicationController
     msg += "RAILS_ROOT=#{RAILS_ROOT}<br>"
     msg += "upload path=#{ActiveRecord::Base.configurations['development']['upload']}<br>"
     msg += "path_to_file=#{path_to_file}<br>"
+    msg += "nextArchiveNo=#{nextArchiveNo}<br>"
+
 
     # handle unzipping the archive
     case @upload.content_type.chomp
     when "application/zip"
-      cmd = "unzip -j -o  #{path_to_file} -d #{submissionDir}"     # .zip 
+      cmd = "unzip -j -o  #{path_to_file} -d #{uploadDir}"     # .zip 
     when "application/x-tar"
       if ["gz", "GZ"].any? {|ext| @filename.ends_with?("." + ext) }
-        cmd = "tar --no-recursion -xzf #{path_to_file} -C #{submissionDir}"  # .gz  gzip
+        cmd = "tar --no-recursion -xzf #{path_to_file} -C #{uploadDir}"  # .gz  gzip
       else  
-        cmd = "tar --no-recursion -xjf #{path_to_file} -C #{submissionDir}"  # .bz2 bzip2
+        cmd = "tar --no-recursion -xjf #{path_to_file} -C #{uploadDir}"  # .bz2 bzip2
       end
     end
-
-
-    # -- dead code (assuming new fork/wait/kill works)
-    #exitCode = system(cmd)
-    #msg += "unzip exitCode = #{exitCode}<br>"  
-    #unless exitCode 
-    #  flash[:notice] = msg 
-    #  return
-    #end
 
     exitCode = run_with_timeout(cmd, 8)
     if exitCode >= 0
@@ -166,45 +186,58 @@ class PipelineController < ApplicationController
       return
     end 
 
-    # delete any dependent submissionFile records
-    # Site.find(@params['id']).destroy
-    @submission.submission_files.each do |c|
-      c.destroy
-    end
-
     # process the archive files
-    msg += "submissionDir:<br>\n" 
-    Dir.entries(submissionDir).each { 
+    msg += "uploadDir:<br>\n" 
+    Dir.entries(uploadDir).each { 
       |f| 
-      fullName = File.join(submissionDir,f)
+      fullName = File.join(uploadDir,f)
       if File.ftype(fullName) == "file"
-        if fullName == path_to_file
-          msg += "&nbsp;#{f} (archive)<br>\n" 
-        else
-          msg += "&nbsp;#{f}<br>\n"
-          unless ["bed", "idf", "adf", "sdrf" ].any? {|ext| f.downcase.ends_with?("." + ext) }
-            flash[:warning] = "unknown file type: #{f}"
-            return
-          end 
-          @submission_file = SubmissionFile.new
-	  @submission_file.file_name = f
-          @submission_file.file_size = File.size(fullName)
-          @submission_file.file_date = File.ctime(fullName)
-          @submission_file.submission_id = @submission.id 
-          @submission_file.sf_type = File.extname(f)
-          @submission_file.status = 'uploaded'
-          unless @submission_file.save
-            flash[:warning] = "error saving submission_file record for: #{f}"
-            return
-          end
+        msg += "&nbsp;#{f}<br>\n"
+        unless ["bed", "idf", "adf", "sdrf" ].any? {|ext| f.downcase.ends_with?("." + ext) }
+          flash[:warning] = "unknown file type: #{f}"
+          return
+        end 
+    
+        # delete any equivalent submissionFile records
+        old = SubmissionFile.find(:first, :conditions => ['submission_id = ? and file_name = ?', @submission.id, f])
+        old.destroy if old
+
+        @submission_file = SubmissionFile.new
+        @submission_file.file_name = f
+        @submission_file.file_size = File.size(fullName)
+        @submission_file.file_date = File.ctime(fullName)
+        @submission_file.submission_id = @submission.id 
+        @submission_file.sf_type = File.extname(f)
+        @submission_file.status = 'uploaded'
+        unless @submission_file.save
+          flash[:warning] = "error saving submission_file record for: #{f}"
+          return
         end
+    
+        toName = submissionDir + "/" + f    
+        # move file from temporary upload dir into parent dir
+        File.rename(fullName,toName);
+
       end
     }
 
-    @submission.file_name = @filename
-    @submission.file_size = @upload.size
-    @submission.file_date = Time.now    # TODO: add .utc to make UTC time?
+    # need to test for and delete any with same archive_no (just in case?)
+    old = SubmissionArchive.find(:first, :conditions => ['submission_id = ? and archive_no = ?', @submission.id, nextArchiveNo])
+    old.destroy if old
+    # add new submissionArchive record
+    @submission_archive = SubmissionArchive.new
+    @submission_archive.submission_id = @submission.id 
+    @submission_archive.archive_no = nextArchiveNo
+    @submission_archive.file_name = @filename
+    @submission_archive.file_size = @upload.size
+    @submission_archive.file_date = Time.now    # TODO: add .utc to make UTC time?
+    unless @submission_archive.save
+      flash[:warning] = "error saving submission_archive record for: #{@filename}"
+      return
+    end
+
     @submission.status = "uploaded"
+    @submission.archive_count = nextArchiveNo
 
     if @submission.save
       msg += "saved ok.<br>\n" 
@@ -212,6 +245,17 @@ class PipelineController < ApplicationController
       redirect_to :action => 'list'
     else
       flash[:warning] = "submission record save failed"
+    end
+
+    # cleanup: delete temporary upload subdirectory
+    if File.exists?(uploadDir)
+      cmd = "rm -fr #{uploadDir}"
+      exitCode = system(cmd)
+      unless exitCode 
+        msg += "command=[#{cmd}], exitCode = #{exitCode}<br>"  
+        flash[:notice] = msg 
+        return
+      end
     end
 
     #@upload.methods.each {|x| msg += "#{x.to_str}<br>"}
