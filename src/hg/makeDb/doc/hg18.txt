@@ -16638,6 +16638,15 @@ done
 	echo
     done
 
+    # renaming file directory -- kuhn 08-17-2007
+    cd /gbdb/hg18/wib
+    mv 070118 regPot070118
+    hgsql -e " update regPotential7X SET file = \
+      "/gbdb/hg18/wib/regPot070118/regPotential7X.wib" hg18
+    Query OK, 2341572 rows affected (31.59 sec)
+    Rows matched: 2341572  Changed: 2341572  Warnings: 0
+
+
 #############################################################################
 # SIB Transcriptome (in progress Aug 2007 - JK)
 

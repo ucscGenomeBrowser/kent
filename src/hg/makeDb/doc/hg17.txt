@@ -23942,3 +23942,13 @@ done
       -hBinCount=100 -hMinVal=0.0 -db=hg17 regPotential7X > histogram.data 2>&1
     #	real    3m3.829s
     #	73 % of the data values are zero
+
+
+    # renaming file directory -- kuhn 08-17-2007
+    cd /gbdb/hg17/wib
+    mv 061116 regPot061116
+    hgsql -e " update regPotential7X SET file = \
+      "/gbdb/hg17/wib/regPot061116/regPotential7X.wib" hg17
+    Query OK, 2366123 rows affected (31.46 sec)
+    Rows matched: 2366123  Changed: 2366123  Warnings: 0
+
