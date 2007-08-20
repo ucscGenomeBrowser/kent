@@ -208,7 +208,7 @@
 #include "omicia.h"
 #include "atomDb.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1338 2007/08/20 21:27:48 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1339 2007/08/20 21:31:58 hartera Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -7344,6 +7344,7 @@ dupe = cloneString(tdb->type);
 genericHeader(tdb, item);
 wordCount = chopLine(dupe, words);
 printEnsemblCustomUrl(tdb, itemForUrl, item == itemForUrl);
+sprintf(condStr, "name='%s'", item);
 
 /* if this is a non-coding gene track, then print the biotype and
    the external ID */
