@@ -208,7 +208,7 @@
 #include "omicia.h"
 #include "atomDb.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1337 2007/08/17 00:54:49 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1338 2007/08/20 21:27:48 hartera Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -7329,7 +7329,7 @@ freeMem(shortItemName);
 }
 
 void doEnsemblGene(struct trackDb *tdb, char *item, char *itemForUrl)
-/* Put up Ensembl Gene track info. */
+/* Put up Ensembl Gene track info or Ensembl NonCoding track info. */
 {
 char *dupe, *type, *words[16];
 int wordCount;
@@ -7344,9 +7344,32 @@ dupe = cloneString(tdb->type);
 genericHeader(tdb, item);
 wordCount = chopLine(dupe, words);
 printEnsemblCustomUrl(tdb, itemForUrl, item == itemForUrl);
-printCcdsForSrcDb(conn, item);
-printf("<BR>\n");
 
+/* if this is a non-coding gene track, then print the biotype and
+   the external ID */
+if (sameWord(tdb->tableName, "ensGeneNonCoding"))
+    {
+    struct sqlConnection *conn2 = hAllocConn();
+    char query[256];
+    struct sqlResult *sr = NULL;
+    char **row;
+    safef(query, sizeof(query), "select biotype, extGeneId from %s where %s",
+          tdb->tableName, condStr);
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) != NULL)
+        {
+        printf("<B>Gene Type:</B> %s<BR>\n", row[0]);
+        printf("<B>External Gene ID:</B> %s<BR>\n", row[1]);
+        }
+    sqlFreeResult(&sr);
+    hFreeConn(&conn2);
+    }
+else
+    {
+    /* print CCDS if this is not a non-coding gene */
+    printCcdsForSrcDb(conn, item);
+    printf("<BR>\n");
+    }
 
 /* skip the rest if this gene is not in ensGene */
 sprintf(condStr, "name='%s'", item);
