@@ -16675,7 +16675,7 @@ done
    hgLoadBed hg18 sibAltEvents foo.bed
 
 #########################################################################
-# BLASTZ MOUSE Mm9 (WORKING - 2007-08-09 - Hiram)
+# BLASTZ MOUSE Mm9 (DONE - 2007-08-20 - Hiram)
     ssh kkstore02
     mkdir /cluster/data/hg18/bed/blastzMm9.2007-08-09
     cd /cluster/data/hg18/bed/blastzMm9.2007-08-09
@@ -16690,14 +16690,14 @@ BLASTZ_ABRIDGE_REPEATS=1
 # TARGET: Human Hg18
 SEQ1_DIR=/cluster/bluearc/scratch/data/hg18/nib
 SEQ1_SMSK=/cluster/bluearc/scratch/data/hg18/linSpecRep/notInMouseRat
-SEQ1_LEN=/cluster/bluearc/scratch/data/hg18/chrom.sizes
+SEQ1_LEN=/cluster/data/hg18/chrom.sizes
 SEQ1_CHUNK=10000000
 SEQ1_LAP=0
 
 # QUERY: Mouse Mm9
 SEQ2_DIR=/cluster/bluearc/scratch/data/mm9/nib
 SEQ2_SMSK=/cluster/bluearc/scratch/data/mm9/notInOthers
-SEQ2_LEN=/cluster/bluearc/scratch/data/mm9/chrom.sizes
+SEQ2_LEN=/cluster/data/mm9/chrom.sizes
 SEQ2_CHUNK=10000000
 SEQ2_LAP=10000
 
@@ -16711,34 +16711,48 @@ TMPDIR=/scratch/tmp
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
 	`pwd`/DEF > blastz.out 2>&1 &
-XXX - running 2007-08-09 12:20
-    #	Started 2006-02-16 16:15
+    #	real    1480m54.483s
     #	failed due to pk node difficulties, finish the run.blastz
     #	manually
-# Completed: 3724 of 3724 jobs
-# CPU time in finished jobs:    5190293s   86504.89m  1441.75h   60.07d  0.165 y
-# IO & Wait Time:                259150s    4319.16m    71.99h    3.00d  0.008 y
-# Average job time:                1463s      24.39m     0.41h    0.02d
-# Longest finished job:           10621s     177.02m     2.95h    0.12d
-# Submission to last job:         74153s    1235.88m    20.60h    0.86d
+# Completed: 102120 of 102120 jobs
+# CPU time in finished jobs:    6908585s  115143.08m  1919.05h   79.96d  0.219 y
+# IO & Wait Time:              50958894s  849314.90m 14155.25h  589.80d  1.616 y
+# Average job time:                 567s       9.44m     0.16h    0.01d
+# Longest finished job:            3000s      50.00m     0.83h    0.03d
+# Submission to last job:        446177s    7436.28m   123.94h    5.16d
 
     #	continuing
-    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
-	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
-	-continue=cat `pwd`/DEF > cat.out 2>&1 &
-    #	Done 2006-02-17 15:02
-
-    #	Then to swap over to Hg18
-    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
-	-swap -bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
-	`pwd`/DEF > swap.out 2>&1 &
-    #	Started 2006-02-17 15:30
-
-    ssh hgwdev
-    time nice -n +19 featureBits mm9 chainHg18Link
-    #	984380268 bases of 2567283971 (38.343%) in intersection
-    time nice -n +19 featureBits hg18 chainMm8Link
+    time nice -n +19 ~/kent/src/hg/utils/automation/doBlastzChainNet.pl \
+	-verbose=2 -bigClusterHub=pk -chainMinScore=3000 \
+	-chainLinearGap=medium -continue=cat `pwd`/DEF > cat.out 2>&1 &
+    #	real    111m59.041s
+    cat /cluster/data/hg18/bed/blastzMm9.2007-08-09/fb.hg18.chainMm9Link.txt
+    #	1014323175 bases of 2881515245 (35.201%) in intersection
+    cat /cluster/data/hg18/bed/blastz.mm8/fb.hg18.chainMm8Link.txt
     #	994530182 bases of 2881515245 (34.514%) in intersection
 
-    cd /cluster/data/mm9/bed
+    cd /cluster/data/hg18/bed
     ln -s blastzMm9.2007-08-09 blastz.mm9
+
+    #	Then to swap over to Mm9   (also in mm9.txt)
+    mkdir /cluster/data/mm9/bed/blastz.hg18.swap
+    cd /cluster/data/mm9/bed/blastz.hg18.swap
+    time nice -n +19 ~/kent/src/hg/utils/automation/doBlastzChainNet.pl \
+	-verbose=2 -swap -bigClusterHub=pk -chainMinScore=3000 \
+	-chainLinearGap=medium \
+	/cluster/data/hg18/bed/blastz.mm9/DEF > swap.out 2>&1 &
+    #	real    67m21.146s
+    cat /cluster/data/mm9/bed/blastz.hg18.swap/fb.mm9.chainHg18Link.txt
+    #	1008812599 bases of 2620346127 (38.499%) in intersection
+    cat /cluster/data/mm8/bed/blastz.hg18/fb.mm8.chainHg18Link
+    #	984380268 bases of 2567283971 (38.343%) in intersection
+
+    cd /cluster/data/mm9/bed
+    ln -s blastz.hg18.swap blastz.hg18
+
+    ## make syntenic net  (DONE - 2007-08-20 - Hiram)
+    cd /cluster/data/hg18/bed/blastzMm9.2007-08-09
+    time nice -n +19 ~/kent/src/hg/utils/automation/doBlastzChainNet.pl \
+	-verbose=2 -bigClusterHub=pk -chainMinScore=3000 \
+	-syntenicNet -chainLinearGap=medium -continue=syntenicNet \
+	`pwd`/DEF > syntenic.out 2>&1 &
