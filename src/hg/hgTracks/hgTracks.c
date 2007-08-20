@@ -118,7 +118,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1395 2007/08/17 04:36:35 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1396 2007/08/20 23:18:36 kate Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -305,9 +305,16 @@ float dif = a->track->group->priority - b->track->group->priority;
 if (dif == 0)
     dif = a->track->priority - b->track->priority;
 if (dif < 0)
-   return -1;
-else if (dif == 0.0)
+    return -1;
+if (dif == 0.0)
+    {
+    /* assure super tracks appear ahead of their members if same pri */
+    if (a->track->tdb && a->track->tdb->isSuper)
+        return 0;
+    if (b->track->tdb && b->track->tdb->isSuper)
+        return 1;
    return 0;
+   }
 else
    return 1;
 }
@@ -508,7 +515,7 @@ for (group = groupList; group != NULL; group = group->next)
                 if (tdb->parentName)
                     {
                     /* removing the supertrack parent's cart variable
-                     * assures it has default (hide) vis */
+                     * assures it has default vis */
                     cartRemove(cart, tdb->parentName);
                     }
                 track->visibility = tdb->visibility;
@@ -13337,17 +13344,17 @@ static void priorityOverride(struct cart *cart, struct track *track,
                                 struct hash *groups)
 /* Use priority and group cart variables to change track settings from defaults */
 {
-int priority = 0;
 char *groupName = NULL;
 char cartVar[128];
 safef(cartVar, sizeof(cartVar), "%s.priority",track->mapName);
-priority = (float)cartUsualDouble(cart, cartVar, track->priority);
+float priority = (float)cartUsualDouble(cart, cartVar, track->defaultPriority);
 /* remove cart variables that are the same as the trackDb settings */
-if (abs(priority - track->priority) < 0.00001)
+if (abs(priority - track->defaultPriority) < 0.00001)
+    {
+    priority = track->defaultPriority;
     cartRemove(cart, cartVar);
-else
-    track->defaultPriority = track->priority;
-track->priority = (float)cartUsualDouble(cart, cartVar, track->priority);
+    }
+track->priority = priority;
 
 char *groupTrack = track->mapName;
 if (track->tdb->parentName)
