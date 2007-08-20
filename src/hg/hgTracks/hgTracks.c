@@ -118,7 +118,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1396 2007/08/20 23:18:36 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1397 2007/08/20 23:24:36 hartera Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -4985,9 +4985,9 @@ if (sameWord(bioType, "scRNA"))    color = MG_YELLOW;
 if (sameWord(bioType, "Mt_tRNA"))  color = MG_GREEN;
 if (sameWord(bioType, "Mt_rRNA"))  color = hColor;
 
-/* Pseudogenes in the zebrafish will be coloured the default color 
- * set in trackDb.ra. */
-if (sameWord(bioType, "pseudogene")) color = vgFindRgb(vg, &tg->color);
+/* Pseudogenes in the zebrafish will be coloured brown */
+if (sameWord(bioType, "pseudogene")) color = vgFindColorIx(vg, brownColor.r,
+    brownColor.g, brownColor.b);
 
 hFreeConn(&conn);
 return(color);
