@@ -17,7 +17,7 @@
 #include "genbank.h"
 #include "hgTracks.h"
 
-static char const rcsid[] = "$Id: cds.c,v 1.58 2007/07/06 22:15:30 angie Exp $";
+static char const rcsid[] = "$Id: cds.c,v 1.59 2007/08/21 00:12:22 angie Exp $";
 
 /* Definitions of cds colors for coding coloring display */
 #define CDS_ERROR   0
@@ -119,7 +119,7 @@ if (zoomed)
             sprintf(c,"%c",text[i]);
             thisX = round((double)(chromStart+i-winStart)*scale) + xOff;
             thisX2 = round((double)(chromStart+1+i-winStart)*scale) + xOff;
-            vgTextCentered(vg,thisX+(thisX2-thisX)/2.0,y,1,height,
+            vgTextCentered(vg, thisX, y, thisX2-thisX, height,
 			   whiteIndex(),font,c);
             }
         }
