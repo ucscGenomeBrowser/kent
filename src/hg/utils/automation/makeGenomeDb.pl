@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/automation/makeGenomeDb.pl instead.
 
-# $Id: makeGenomeDb.pl,v 1.9 2007/08/21 00:16:06 hiram Exp $
+# $Id: makeGenomeDb.pl,v 1.10 2007/08/21 23:44:40 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -419,7 +419,7 @@ _EOF_
   # Having made the unmasked .2bit, make chrom.sizes and chromInfo.tab:
   $bossScript->add(<<_EOF_
 
-twoBitInfo $db.unmasked.2bit chrom.sizes
+twoBitInfo $db.unmasked.2bit stdout | sort -k2nr > chrom.sizes
 
 rm -rf $HgAutomate::trackBuild/chromInfo
 mkdir $HgAutomate::trackBuild/chromInfo
