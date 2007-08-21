@@ -1339,6 +1339,7 @@ int chromSize = 0;
 int windowSize = 10000;
 int numWindows = 0;
 double *depth = NULL;
+bool *hit = NULL;
 int overlap = 0;
 unsigned long long grandTotalValues=0;
 struct slName *chr, *chromList = getChroms();
@@ -1357,7 +1358,10 @@ for (chr = chromList; chr != NULL; chr = chr->next)
     numWindows = ((chromSize+windowSize-1)/windowSize);
 
     if (numWindows>0)
-	depth = needMem(numWindows*sizeof(double));
+	{
+	AllocArray(depth, numWindows);
+	AllocArray(hit, numWindows);
+	}
 
     for(stats=statsList;stats;stats=stats->next)
 	{
@@ -1370,7 +1374,10 @@ for (chr = chromList; chr != NULL; chr = chr->next)
 	    {
 	    overlap = rangeIntersection(start, end, i*windowSize, (i+1)*windowSize);
 	    if (overlap > 0)
+		{
 		depth[i] += ((((double)overlap)/windowSize)*sumData);
+		hit[i] = TRUE;
+		}
 	    }
 	}
 
@@ -1385,14 +1392,18 @@ for (chr = chromList; chr != NULL; chr = chr->next)
     int i;
     for(i=0;i<numWindows;++i)
 	{
-	int midPoint = i*windowSize+(windowSize/2);
-	if (midPoint < chromSize)
+	if (hit[i])
 	    {
-	    dyStringPrintf(dy,"%s\t%d\t%f\n", 
-		chrom, i*windowSize+(windowSize/2), depth[i]);
+	    int midPoint = i*windowSize+(windowSize/2);
+	    if (midPoint < chromSize)
+		{
+		dyStringPrintf(dy,"%s\t%d\t%f\n", 
+		    chrom, i*windowSize+(windowSize/2), depth[i]);
+		}
 	    }
 	}
     freez(&depth);
+    freez(&hit);
     grandTotalValues+=totalValues;
     fflush(stdout);  /* so user can see progress */
     }
@@ -1411,7 +1422,7 @@ boolean isWig = FALSE, isPositional = FALSE, isMaf = FALSE, isBedGr = FALSE,
         isChromGraphCt = FALSE;
 struct hTableInfo *hti = NULL;
 
-cartWebStart(cart, "Table Import Complete ");
+cartWebStart(cart, "Table Import in Progress ");
 hPrintf("<FORM ACTION=\"../cgi-bin/hgGenome\">");
 cartSaveSession(cart);
 
