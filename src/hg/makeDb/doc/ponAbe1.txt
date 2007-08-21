@@ -1,0 +1,55 @@
+# for emacs: -*- mode: sh; -*-
+
+
+# This file describes browser build for the Orangutan
+# genome, July 2007
+#
+#	"$Id: ponAbe1.txt,v 1.1 2007/08/21 16:18:19 hiram Exp $"
+#
+######################################################################
+## DOWNLOAD SEQUENCE
+    ssh kkstore01
+    mkdir /cluster/store2/ponAbe1
+    ln -s /cluster/store2/ponAbe1 /cluster/data/ponAbe1
+    mkdir /cluster/data/ponAbe1/wustl
+    cd /cluster/data/ponAbe1/wustl
+    for F in supercontigs.agp.gz supercontigs.fa.gz contigs.fa.gz
+contigs.fa.qual.gz
+do
+    wget --timestamping \
+ftp://genome.wustl.edu/pub/organism/Primates/Pongo_pygmaeus_abelii/assembly/Pongo_pygmaeus_abelii-2.0.2/output/${F} \
+    -O ${F}
+done
+
+    ls -ogrt
+# -rw-rw-r--  1 824149580 Jul 10 17:22 contigs.fa.gz
+# -rw-rw-r--  1   9613417 Jul 10 17:23 supercontigs.agp.gz
+# -rw-rw-r--  1 724013642 Jul 10 17:23 contigs.fa.qual.gz
+# -rw-rw-r--  1 900117536 Jul 10 17:24 supercontigs.fa.gz
+
+#######################################################################
+## create config.ra and run makeGenomeDb.pl
+    ssh kkstore01
+    cd /cluster/data/ponAbe1
+
+    cat << '_EOF_' > ponAbe1.config.ra
+# Config parameters for makeGenomeDb.pl:
+db ponAbe1
+scientificName Pongo pygmaeus abelii
+commonName Orangutan
+assemblyDate Jul. 2007
+assemblyLabel WUSTL 2.0.2
+orderKey 31
+# mitoAcc gi:1743294
+mitoAcc X97707.1
+fastaFiles /cluster/data/ponAbe1/wustl/supercontigs.fa.gz
+agpFiles /cluster/data/ponAbe1/wustl/supercontigs.agp.gz
+# qualFiles /dev/null
+dbDbSpeciesDir orangutan
+'_EOF_'
+    # << happy emacs
+    time nice -n +19 ~/kent/src/hg/utils/automation/makeGenomeDb.pl \
+	-stop=agp ponAbe1.config.ra > makeGenomeDb.out 2>&1 &
+    #	real    24m24.468s
+
+
