@@ -1206,6 +1206,7 @@ int chromSize = 0;
 int windowSize = 10000;
 int numWindows = 0;
 double *depth = NULL;
+bool *hit = NULL;
 int overlap = 0;
 struct slName *chr, *chromList = getChroms();
 for (chr = chromList; chr != NULL; chr = chr->next)
@@ -1229,7 +1230,11 @@ for (chr = chromList; chr != NULL; chr = chr->next)
     numWindows = ((chromSize+windowSize-1)/windowSize);
 
     if (numWindows>0)
-	depth = needMem(numWindows*sizeof(double));
+        {
+        AllocArray(depth, numWindows);
+        AllocArray(hit, numWindows);
+        }
+
     for(bed=bedList;bed;bed=bed->next)
 	{
 	int i;
@@ -1241,6 +1246,7 @@ for (chr = chromList; chr != NULL; chr = chr->next)
 	    if (overlap > 0)
 		{
 		depth[i] += ((double)overlap)/windowSize;
+		hit[i] = TRUE;
 		}
 	    }
 	}
@@ -1248,11 +1254,14 @@ for (chr = chromList; chr != NULL; chr = chr->next)
     int i;
     for(i=0;i<numWindows;++i)
 	{
-	int midPoint = i*windowSize+(windowSize/2);
-	if (midPoint < chromSize)
+	if (hit[i])
 	    {
-	    dyStringPrintf(dy,"%s\t%d\t%f\n", 
-		chrom, i*windowSize+(windowSize/2), depth[i] > 0.0 ? 1.0 : 0.0);
+	    int midPoint = i*windowSize+(windowSize/2);
+	    if (midPoint < chromSize)
+		{
+		dyStringPrintf(dy,"%s\t%d\t%f\n", 
+		    chrom, i*windowSize+(windowSize/2), depth[i] > 0.0 ? 1.0 : 0.0);
+		}
 	    }
 	}
     freez(&depth);
@@ -1271,6 +1280,7 @@ int chromSize = 0;
 int windowSize = 10000;
 int numWindows = 0;
 double *depth = NULL;
+bool *hit = NULL;
 int overlap = 0;
 struct slName *chr, *chromList = getChroms();
 for (chr = chromList; chr != NULL; chr = chr->next)
@@ -1294,7 +1304,10 @@ for (chr = chromList; chr != NULL; chr = chr->next)
     numWindows = ((chromSize+windowSize-1)/windowSize);
 
     if (numWindows>0)
-	depth = needMem(numWindows*sizeof(double));
+        {
+        AllocArray(depth, numWindows);
+        AllocArray(hit, numWindows);
+        }
     for(bed=bedList;bed;bed=bed->next)
 	{
 	int i;
@@ -1309,6 +1322,7 @@ for (chr = chromList; chr != NULL; chr = chr->next)
 		    depth[i] += ((((double)overlap)/windowSize)*bed->expScores[0]);
 		else
     		    depth[i] += ((double)overlap)/windowSize;
+                hit[i] = TRUE;
 		}
 	    }
 	}
@@ -1316,11 +1330,14 @@ for (chr = chromList; chr != NULL; chr = chr->next)
     int i;
     for(i=0;i<numWindows;++i)
 	{
-	int midPoint = i*windowSize+(windowSize/2);
-	if (midPoint < chromSize)
+	if (hit[i])
 	    {
-	    dyStringPrintf(dy,"%s\t%d\t%f\n", 
-		chrom, i*windowSize+(windowSize/2), depth[i]);
+	    int midPoint = i*windowSize+(windowSize/2);
+	    if (midPoint < chromSize)
+		{
+		dyStringPrintf(dy,"%s\t%d\t%f\n", 
+		    chrom, i*windowSize+(windowSize/2), depth[i]);
+		}
 	    }
 	}
     freez(&depth);
