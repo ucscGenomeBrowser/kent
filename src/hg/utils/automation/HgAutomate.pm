@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/HgAutomate.pm instead.
 
-# $Id: HgAutomate.pm,v 1.5 2007/08/21 19:59:40 hiram Exp $
+# $Id: HgAutomate.pm,v 1.6 2007/08/21 23:54:19 hiram Exp $
 package HgAutomate;
 
 use warnings;
@@ -75,7 +75,7 @@ my @allClusters = (keys %cluster);
       'san' =>
         { root => '/san/sanvol1/scratch', clusterLocality => 0.5,
 	  distrHost => ['pk', 'kkstore*'], distrCommand => '',
-	  inputFor => ['pk'], outputFor => ['pk'], },
+	  inputFor => ['pk'], outputFor => ['pk', 'kk'], },
       'bluearc' =>
         { root => '/cluster/bluearc', clusterLocality => 0.1,
 	  distrHost => ['kkstore*'], distrCommand => '',
