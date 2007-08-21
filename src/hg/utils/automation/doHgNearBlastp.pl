@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/automation/doHgNearBlastp.pl instead.
 
-# $Id: doHgNearBlastp.pl,v 1.3 2007/06/05 05:04:33 angie Exp $
+# $Id: doHgNearBlastp.pl,v 1.4 2007/08/21 19:59:40 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -103,8 +103,8 @@ buildDir xxx
     in which scriptlets and results will be stored.
 
 scratchDir xxx
-  - Cluster-attached fast storage (usually under /san/sanvol1/scratch/... or
-    /panasas/store/...) where fasta will be split/formatted and used during
+  - Cluster-attached fast storage (usually under /san/sanvol1/scratch/...)
+    where fasta will be split/formatted and used during
     cluster blastp runs.
 
 
@@ -207,8 +207,8 @@ sub parseConfig {
       "what to do with: " . join(", ", sort keys %vars) . "\n";
   }
 
-  die "Sorry, this script can't rsync to $scratchDir -- please use san, " .
-    "bluearc or panasas for scratchDir in $config.\n"
+  die "Sorry, this script can't rsync to $scratchDir -- please use san or " .
+    "bluearc for scratchDir in $config.\n"
       if ($scratchDir =~ /^\/i?scratch\//);
 } # parseConfig
 

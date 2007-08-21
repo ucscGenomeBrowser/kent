@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/doRepeatMasker.pl instead.
 
-# $Id: doRepeatMasker.pl,v 1.5 2007/08/13 20:45:19 angie Exp $
+# $Id: doRepeatMasker.pl,v 1.6 2007/08/21 19:59:40 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -16,7 +16,7 @@ use HgRemoteScript;
 use HgStepManager;
 
 # Hardcoded command path:
-my $RepeatMaskerPath = "/cluster/bluearc/RepeatMasker";
+my $RepeatMaskerPath = "/scratch/data/RepeatMasker";
 my $RepeatMasker = "$RepeatMaskerPath/RepeatMasker";
 my $liftRMAlign = "/cluster/bin/scripts/liftRMAlign.pl";
 
