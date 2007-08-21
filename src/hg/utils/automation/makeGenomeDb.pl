@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/automation/makeGenomeDb.pl instead.
 
-# $Id: makeGenomeDb.pl,v 1.8 2007/08/13 20:45:19 angie Exp $
+# $Id: makeGenomeDb.pl,v 1.9 2007/08/21 00:16:06 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -281,7 +281,7 @@ sub getMito {
     $bossScript->add(<<_EOF_
 mkdir M
 wget -O $mitoFile \\
-  'http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Text&db=Nucleotide&uid=$mitoAcc&dopt=FASTA'
+  'http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?db=nuccore&qty=1&c_start=1&list_uids=$mitoAcc&uids=&dopt=fasta&dispmax=5&sendto=t&from=begin&to=end&'
 
 # Make sure there's exactly one fasta record:
 if (`grep '^>' $mitoFile | wc -l` != 1) then
