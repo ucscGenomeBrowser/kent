@@ -9,7 +9,7 @@
 #include "chromInfo.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: pslCheck.c,v 1.10 2007/03/30 00:24:06 markd Exp $";
+static char const rcsid[] = "$Id: pslCheck.c,v 1.11 2007/08/21 18:33:20 markd Exp $";
 
 /* command line options and values */
 static struct optionSpec optionSpecs[] =
@@ -17,22 +17,25 @@ static struct optionSpec optionSpecs[] =
     {"db", OPTION_STRING},
     {"prot", OPTION_BOOLEAN},
     {"quiet", OPTION_BOOLEAN},
+    {"noCountCheck", OPTION_BOOLEAN},
     {"targetSizes", OPTION_STRING},
     {"querySizes", OPTION_STRING},
     {"pass", OPTION_STRING},
     {"fail", OPTION_STRING},
     {NULL, 0}
 };
-char *db = NULL;
-int protCheck = FALSE;
-boolean quiet = FALSE;
-char *passFile = NULL;
-char *failFile = NULL;
-struct hash *targetSizes = NULL;
-struct hash *querySizes = NULL;
+static char *db = NULL;
+static boolean protCheck = FALSE;
+static boolean quiet = FALSE;
+static boolean noCountCheck = FALSE;
+static char *passFile = NULL;
+static char *failFile = NULL;
+static struct hash *targetSizes = NULL;
+static struct hash *querySizes = NULL;
 
 /* global count of alignments checked and errors */
 static int chkCount = 0;
+static int failCount = 0;
 static int errCount = 0;
 
 void usage()
@@ -46,6 +49,8 @@ errAbort(
   "   -db=db - get targetSizes from this database, and if file doesn't exist,\n"
   "    look for a table in this database.\n"
   "   -prot - confirm psls are protein psls\n"
+  "   -noCountCheck - don't validate that match/mismatch counts are match\n"
+  "    the total size of the alignment blocks\n"
   "   -pass=pslFile - write PSLs without errors to this file\n"
   "   -fail=pslFile - write PSLs with errors to this file\n"
   "   -targetSizes=sizesFile - tab file with columns of target and size.\n"
@@ -117,6 +122,28 @@ if (size != expectSz)
 return 0;    
 }
 
+static int checkCounts(struct psl *psl, char *pslDesc, int numErrs, FILE *errFh)
+/* check the match/mismatch counts */
+{
+unsigned matchCnts = (psl->match+psl->misMatch+psl->repMatch+psl->nCount);
+unsigned alnSize = 0;
+int iBlk;
+
+for (iBlk = 0; iBlk < psl->blockCount; iBlk++)
+    alnSize += psl->blockSizes[iBlk];
+
+if (alnSize != matchCnts)
+    {
+    if (numErrs == 0)
+        prPslDesc(psl, pslDesc, errFh);
+    fprintf(errFh, "alignment size (%d) doesn't match counts (%d)\n",
+            alnSize, matchCnts);
+    return 1;
+    }
+else
+    return 0;
+}
+
 static void checkPsl(struct lineFile *lf, char *tbl, struct psl *psl,
                      FILE *errFh, FILE *passFh, FILE *failFh)
 /* check a psl */
@@ -128,6 +155,8 @@ if (lf != NULL)
 else
     safef(pslDesc, sizeof(pslDesc), "%s", tbl);
 numErrs += pslCheck(pslDesc, errFh, psl);
+if (!noCountCheck)
+    numErrs = checkCounts(psl, pslDesc, numErrs, errFh);
 if (protCheck && !pslIsProtein(psl))
     {
     if (numErrs == 0)
@@ -145,6 +174,8 @@ if ((failFh != NULL) && (numErrs > 0))
     pslTabOut(psl, failFh);
 errCount += numErrs;
 chkCount++;
+if (numErrs > 0)
+    failCount++;
 }
 
 static void checkPslFile(char *fileName, FILE *errFh,
@@ -208,6 +239,7 @@ if (argc < 2)
     usage();
 db = optionVal("db", NULL);
 protCheck = optionExists("prot");
+noCountCheck = optionExists("noCountCheck");
 quiet = optionExists("quiet");
 passFile = optionVal("pass", NULL);
 failFile = optionVal("fail", NULL);
@@ -223,6 +255,6 @@ if (optionExists("querySizes"))
     querySizes = loadSizes(optionVal("querySizes", NULL));
 checkFilesTbls(conn, argc-1, argv+1);
 sqlDisconnect(&conn);
-verbose(1, "checked: %d failed: %d\n", chkCount, errCount);
+verbose(1, "checked: %d failed: %d errors: %d\n", chkCount, failCount, errCount);
 return ((errCount == 0) ? 0 : 1);
 }
