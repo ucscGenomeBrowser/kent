@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/doRepeatMasker.pl instead.
 
-# $Id: doRepeatMasker.pl,v 1.6 2007/08/21 19:59:40 hiram Exp $
+# $Id: doRepeatMasker.pl,v 1.7 2007/08/21 20:03:00 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -163,6 +163,9 @@ sub doCluster {
 
   # Script to do a dummy run of RepeatMasker, to test our invocation and
   # unpack library files before kicking off a large cluster run.
+  #  And now that RM is being run from local /scratch/data/RepeatMasker/
+  #  this is also done in the cluster run script so each node will have
+  #	its library initialized
   my $fh = &HgAutomate::mustOpen(">$runDir/dummyRun.csh");
   print $fh <<_EOF_
 #!/bin/csh -ef
@@ -187,6 +190,9 @@ set alignOut = \$finalOut:r.align
 # when done, to minimize I/O.
 set tmpDir = `mktemp -d -p /scratch/tmp doRepeatMasker.cluster.XXXXXX`
 pushd \$tmpDir
+
+# Initialize local library
+$RepeatMasker $repeatLib /dev/null
 
 foreach spec (`cat \$inLst`)
   # Remove path and .2bit filename to get just the seq:start-end spec:
