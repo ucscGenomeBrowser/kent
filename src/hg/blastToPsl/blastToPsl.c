@@ -6,7 +6,7 @@
 #include "blastParse.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: blastToPsl.c,v 1.21 2007/08/13 15:59:40 markd Exp $";
+static char const rcsid[] = "$Id: blastToPsl.c,v 1.22 2007/08/22 02:49:47 markd Exp $";
 
 double eVal = -1; /* default Expect value signifying no filtering */
 boolean pslxFmt = FALSE; /* output in pslx format */
@@ -22,13 +22,20 @@ struct block
     int tLetMult;
     int qSizeMult;       /* user to convert coordinates */
     int tSizeMult;
+    int countMult;       /* column count for match/mismatch */
     int alnStart;        /* start/end in alignment */
     int alnEnd;
 };
 
-/* Internally used bit flags */
-#define TBLASTN 0x01
-#define TBLASTX 0x02
+/* Bit set of flags */
+enum {
+    // blast algorithm
+    BLASTN   = 0x01,
+    BLASTP   = 0x02,
+    BLASTX   = 0x04,
+    TBLASTN  = 0x10,
+    TBLASTX  = 0x20
+};
 
 /* score file header */
 static char *scoreHdr = "#strand\tqName\tqStart\tqEnd\ttName\ttStart\ttEnd\tbitScore\teVal\n";
@@ -59,6 +66,12 @@ errAbort(
   "          an integer, double or 1e-10. Default is no filter.\n"
   "  -pslx - create PSLX output (includes sequences for blocks)\n" 
   );
+}
+
+static boolean isProteinSeqs(unsigned flags)
+/* do the flags indicate a protein sequences in alignments */
+{
+return (flags & (BLASTP|BLASTX|TBLASTN|TBLASTX)) != 0;
 }
 
 static char *wackAfterWhite(char *s)
@@ -116,7 +129,6 @@ static void finishPsl(struct psl* psl, unsigned flags)
 {
 if ((flags & TBLASTN) == 0)
     makeUntranslated(psl);
-assert(((flags & TBLASTN) != 0) == pslIsProtein(psl));
 }
 
 static void addPslBlock(struct psl* psl, struct blastBlock *bb, struct block* blk,
@@ -220,12 +232,10 @@ assert((blk->tSizeMult * (blk->qEnd - blk->qStart))
 return TRUE;
 }
 
-static void countBlock(struct blastBlock* bb, struct block* blk, struct block* prevBlk, struct psl* psl)
+static void countBlock(struct blastBlock* bb, struct block* blk, struct block* prevBlk, struct psl* psl,
+                       unsigned flags)
 /* update the PSL counts between for a block and previous insert. */
 {
-int i;
-char *qPtr, *tPtr;
-
 if (prevBlk->tEnd != 0)
     {
     /* count insert */
@@ -243,18 +253,20 @@ if (prevBlk->tEnd != 0)
         }
     }
 
-qPtr = bb->qSym + blk->alnStart;
-tPtr = bb->tSym + blk->alnStart;
-for (i = 0; (*qPtr != '\0') && (*tPtr != '\0'); i++, qPtr++, tPtr++)
+int i, alnLen = (blk->alnEnd - blk->alnStart);
+char *qPtr = bb->qSym + blk->alnStart;
+char *tPtr = bb->tSym + blk->alnStart;
+boolean isProt = isProteinSeqs(flags);
+for (i = 0; i < alnLen; i++, qPtr++, tPtr++)
     {
-    if ((*qPtr == 'N') || (*qPtr == 'X') || (*tPtr == 'N') || (*tPtr == 'X'))
-        psl->repMatch++;
+    if ((!isProt && ((*qPtr == 'N') || (*tPtr == 'N')))
+        || (isProt && ((*qPtr == 'X') || (*tPtr == 'X'))))
+        psl->repMatch += blk->countMult;
     else if (*qPtr == *tPtr)
-        psl->match++;
+        psl->match += blk->countMult;
     else
-        psl->misMatch++;
+        psl->misMatch += blk->countMult;
     }
-assert((*qPtr == '\0') && (*tPtr == '\0'));
 }
 
 static void outputPsl(struct blastBlock *bb, unsigned flags, struct psl *psl,
@@ -278,6 +290,7 @@ if (flags & TBLASTN)
     blk->qSizeMult = 1;
     blk->tLetMult = 3;
     blk->tSizeMult = 3;
+    blk->countMult = 1;
     }
 else if (flags & TBLASTX)
     {
@@ -285,6 +298,7 @@ else if (flags & TBLASTX)
     blk->qSizeMult = 1;
     blk->tLetMult = 3;
     blk->tSizeMult = 1;
+    blk->countMult = 3;
     }
 else
     {
@@ -292,6 +306,7 @@ else
     blk->qSizeMult = 1;
     blk->tLetMult = 1;
     blk->tSizeMult = 1;
+    blk->countMult = 1;
     }
 }
 
@@ -309,7 +324,7 @@ struct psl *psl = createPsl(&blk, bb, pslSpace);
 /* fill in ungapped blocks */
 while (nextUngappedBlk(bb, &blk, flags))
     {
-    countBlock(bb, &blk, &prevBlk, psl);
+    countBlock(bb, &blk, &prevBlk, psl, flags);
     addPslBlock(psl, bb, &blk, &pslSpace);
     prevBlk = blk;
     }
@@ -333,12 +348,29 @@ for (ba = bq->gapped; ba != NULL; ba = ba->next)
     }
 }
 
+static unsigned getBlastAlgo(struct blastFile *bf)
+/* determine blast algorithm */
+{
+if (sameString(bf->program, "BLASTN"))
+    return BLASTN;
+if (sameString(bf->program, "BLASTP"))
+    return BLASTP;
+if (sameString(bf->program, "BLASTX"))
+    return BLASTX;
+if (sameString(bf->program, "TBLASTN"))
+    return TBLASTN;
+if (sameString(bf->program, "TBLASTX"))
+    return TBLASTX;
+errAbort("unknown BLAST program \"%s\", please update blastToPsl.c",
+         bf->program);
+return 0;
+}
+
 static void blastToPsl(char *blastFile, char *pslFile, char* scoreFile)
 /* process one query in */
 {
 struct blastFile *bf = blastFileOpenVerify(blastFile);
 struct blastQuery *bq;
-unsigned flags = 0;
 FILE *pslFh = mustOpen(pslFile, "w");
 FILE *scoreFh = NULL;
 if (scoreFile != NULL)
@@ -346,15 +378,9 @@ if (scoreFile != NULL)
     scoreFh = mustOpen(scoreFile, "w");
     fputs(scoreHdr, scoreFh);
     }
-
-if (strstr(bf->program, "TBLASTN") != NULL)
-    flags |= TBLASTN;
-else if (strstr(bf->program, "TBLASTX") != NULL)
-    {
-    flags |= TBLASTX;
-    if (pslxFmt)
-        errAbort("-pslx not supported for TBLASTX alignments");
-    }
+unsigned flags = getBlastAlgo(bf);
+if ((flags & TBLASTX) & pslxFmt)
+    errAbort("-pslx not supported for TBLASTX alignments");
 
 while ((bq = blastFileNextQuery(bf)) != NULL)
     {
