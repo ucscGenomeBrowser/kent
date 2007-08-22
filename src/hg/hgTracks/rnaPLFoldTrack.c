@@ -388,7 +388,7 @@ void rnaPLFoldDrawLeftLabels(struct track *tg, int seqStart, int seqEnd,
 /* Draw left labels. */
 {
 char  label[16];
-int   yVisOffset  = ( vis == tvDense ? 0 : tg->heightPer + height/2 );
+int   yVisOffset  = 0 + tl.fontHeight; // ( vis == tvDense ? 0 : tg->heightPer + height/2 );
 
 safef(label, sizeof(label), tg->shortLabel);
 vgUnclip(vg);
