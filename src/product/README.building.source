@@ -95,5 +95,17 @@ Known problems:
 	to your MYSQLLIBS environment variable to satisify these SSL
 	library functions.
 
+4.  Build fails on Macintosh with an error:
+aliType.c:5: warning: `rcsid' defined but not used
+make: *** [aliType.o] Error 1
+
+    Something is unusual about the shell environment on the Mac.
+    To avoid this error, place an export statement in your $HOME/.bashrc
+    environment:
+    export OSTYPE
+    This causes the OSTYPE variable to be recognized during the
+    make and the conditional statements in src/inc/common.mk will
+    include the -Wno-unused-variable option in the build.
+
 ====================================================================
-This file last updated: $Date: 2007/03/19 23:15:30 $
+This file last updated: $Date: 2007/08/23 16:53:47 $
