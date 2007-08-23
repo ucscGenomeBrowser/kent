@@ -9,7 +9,7 @@ HG_INC=-I../inc -I../../inc -I../../../inc -I../../../../inc -I../../../../../in
 
 # Stronger warning checks, and warnings-->errors, for libraries and CGIs:
 ifeq (darwin,$(findstring darwin,${OSTYPE}))
-    HG_WARN_ERR = -DJK_WARN -Wall -Werror -Wno-unused-variable
+    HG_WARN_ERR = -DJK_WARN -Wall -Werror -Wno-unused-variable -Wno-long-double
 else
   ifeq (solaris,$(findstring solaris,${OSTYPE}))
     HG_WARN_ERR = -DJK_WARN -Wall
