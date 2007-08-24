@@ -3,7 +3,7 @@
 
 #define EXPR_DATA_SHADES 16
 #define DEFAULT_MAX_DEVIATION 0.7
-#define COLOR_SCALE 1.3
+#define COLOR_SCALE 2
 #define RED_SCALE 1.2
 
 #include "common.h"
@@ -28,7 +28,7 @@
 #include "hCytoBand.h"
 #include "hgChromGraph.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.9 2007/07/19 01:40:24 jzhu Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.10 2007/08/24 20:59:22 jzhu Exp $";
 
 /* Page drawing stuff. */
 
@@ -198,20 +198,6 @@ for(chrom = gl->chromList; chrom; chrom = chrom->next)
     if (cg== NULL)
 	continue;
 
-    /* lable , zero line */
-    y = (height - (0 - gMin)*gScale) + chromY+yOff ;
-    int width = 10;
-    if (! refOnList(gl->rightList, chrom))
-	/* left side */
-	x = chrom->x  -width;
-    else
-	/* right side */
-	x = chrom->x + chrom->size *pixelsPerBase;
-
-    vgBox(vg, x,  y , width, 1, color); 
- 
-    /* Handle first point as special case here, so don't
-     * have to test for first point in inner loop. */
     val = cg->val;
 
     /* within a boundary */
@@ -342,7 +328,7 @@ for(chrom = gl->chromList; chrom; chrom = chrom->next)
 
 void genomeGif(struct sqlConnection *conn, struct genoLay *gl,
 	       char *psOutput)
-/* Create genome GIF file and HTML that includes it. */
+/* Create genome GIF file and HT that includes it. */
 {
 struct vGfx *vg;
 struct tempName gifTn;
@@ -394,7 +380,7 @@ for (ref = ghList; ref != NULL; ref = ref->next)
        the space for the CrhomGraph is hardcoded here chromGraphOffset=10    
     */
     if ( sameString(tableName,"cnvLungBroadv2_ave100K") // || sameString(tableName,"cnvLungBroadv2") || sameString(tableName, "expBreastCancerUCSF") 
-	 || sameString(tableName, "CGHBreastCancerUCSF"))
+	 || sameString(tableName, "CGHBreastCancerUCSF") || sameString(tableName, "CGHBreastCancerStanford") )
 	{
 	char summaryTable[512];
 
@@ -662,7 +648,7 @@ hPrintf("</FORM>\n");
      * also all the source/color pairs that depend on the
      * configuration. */
     static char *regularVars[] = {
-      "clade", "org", "db", hghHeatmap, hghDataSet
+	"clade", "org", "db", hghHeatmap, hghDataSet
       };
     int regularCount = ArraySize(regularVars);
     jsCreateHiddenForm(cart, scriptName, regularVars, regularCount);

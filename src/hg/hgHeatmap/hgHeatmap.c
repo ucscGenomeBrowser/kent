@@ -22,7 +22,7 @@
 #include "microarray.h"
 #include "hgChromGraph.h"
 
-static char const rcsid[] = "$Id: hgHeatmap.c,v 1.11 2007/07/19 01:40:24 jzhu Exp $";
+static char const rcsid[] = "$Id: hgHeatmap.c,v 1.12 2007/08/24 20:59:22 jzhu Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -93,8 +93,8 @@ struct genoHeatmap *getDbHeatmaps(struct sqlConnection *conn, char *set)
 /* Get graphs defined in database. */
 {
 /* hardcoded for demo */
-int N=2;
-char *trackNames[2];
+int N =2;
+char *trackNames[N];
 
 if (!set)
     return NULL;
@@ -105,8 +105,8 @@ if ( sameString(set,"Broad Lung cancer 500K chip"))
     }
 else if (sameWord(set,"UCSF breast cancer"))
     {
-    trackNames[0]="CGHBreastCancerUCSF";
-    trackNames[1]= "expBreastCancerUCSF";
+    trackNames[0]= "CGHBreastCancerStanford";
+    trackNames[1]="CGHBreastCancerUCSF";
     }
 else
     return NULL;
@@ -318,7 +318,7 @@ for (ref = ghList; ref != NULL; ref = ref->next)
     
     /* hard coded */
     if ( sameString(name,"cnvLungBroadv2_ave100K") // || sameString(name,"cnvLungBroadv2")  || sameString(name, "expBreastCancerUCSF")
-	 || sameString(name, "CGHBreastCancerUCSF"))
+	 || sameString(name, "CGHBreastCancerUCSF") || sameString(name, "CGHBreastCancerStanford"))
 	totalHeight += chromGraphHeight();
     }
 

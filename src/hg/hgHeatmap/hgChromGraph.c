@@ -14,6 +14,8 @@ if (sameWord (tableName, "cnvLungBroadv2_summary"))
     return 0.4; 
 if (sameWord (tableName, "cnvLungBroadv2_ave100K_summary"))
     return 0.1;
+if (sameWord (tableName, "CGHBreastCancerStanford_summary"))
+    return 0.4;
 return 0.5;
 }
 
@@ -33,9 +35,9 @@ return 1000000;
 
 Color chromGraphColor(char* tableName)
 {
-if (sameWord (tableName, "cnvLungBroadv2_summary"))
+if (sameWord (tableName, "CGHBreastCancerUCSF_summary"))
     return MG_BLUE;
 if (sameWord (tableName, "cnvLungBroadv2_ave100K_summary"))
     return MG_BLACK;
-return MG_BLUE;
+return MG_BLACK;
 }
