@@ -2140,18 +2140,11 @@ identifier gvSrcId
     hgFixed.gv.srcId 
 
 #links between oreganno (regulatory annotation) and related tables
-identifier oregHg18Id
+identifier oregId
 "ORegAnno track identifier: links annotations to attributes and external links"
-    hg18.oreganno.id
-    hg18.oregannoAttr.id
-    hg18.oregannoLink.id
-
-#links between oreganno (regulatory annotation) and related tables
-identifier oregDm2Id
-"ORegAnno track identifier: links annotations to attributes and external links"
-    dm2.oreganno.id
-    dm2.oregannoAttr.id
-    dm2.oregannoLink.id
+    $hg,$dm.oreganno.id
+    $hg,$dm.oregannoAttr.id
+    $hg,$dm.oregannoLink.id
 
 # retroposon track, dbRIP_* and polyGenotype table link
 identifier dbRIPNameAlu fuzzy
