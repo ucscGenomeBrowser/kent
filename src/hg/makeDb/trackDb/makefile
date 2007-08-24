@@ -51,7 +51,7 @@ DBS = 	hg13 hg15 hg16 hg17 hg18\
 	fr1 fr2 \
 	braFlo1 \
 	cioSav1 \
-	danRer2 danRer3 danRer4 \
+	danRer2 danRer3 danRer4 danRer5 \
 	gasAcu1 \
 	dm1 dm2 dm3 \
 	dp2 dp3 \
