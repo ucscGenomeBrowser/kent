@@ -19,7 +19,7 @@ void writeOutFrames(FILE *htmlFrame, char *fileName, char *db, char *url, struct
 /** Write out frame for htmls. */
 {
 fprintf(htmlFrame, "<html><head><title>Bed Custom Track</title></head>\n"
-	"<frameset cols=\"18%,82%\">\n"
+	"<frameset cols=\"18%%,82%%\">\n"
 	"<frame name=\"_list\" src=\"./%s\">\n"
 	"<frame name=\"browser\" src=\"http://%s.ucsc.edu/cgi-bin/hgTracks?db=%s&position=%s:%d-%d&"
 	"hgt.customText=%s\">\n"
