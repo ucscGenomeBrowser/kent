@@ -587,6 +587,11 @@ visibility hide
 color 155,0,125
 type genePred acemblyPep acemblyMrna
 url http://www.ncbi.nih.gov/IEB/Research/Acembly/av.cgi?db=human&l=$$
+itemClassTbl acemblyClass
+geneClasses main putative
+gClass_main 128,0,125
+gClass_putative 200,0,125
+urlLabel Transcript ID:
 
 track sibGene
 shortLabel SIB Genes
