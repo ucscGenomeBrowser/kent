@@ -3,7 +3,7 @@ class PipelineController < ApplicationController
   require 'open-uri'
 
   before_filter :login_required
-  before_filter :check_user_is_owner, :except => [:new, :create, :list, :show_user ]
+  before_filter :check_user_is_owner, :except => [:new, :create, :list, :show_user, :show ]
   
   layout 'standard'
   
