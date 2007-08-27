@@ -34,40 +34,66 @@
      mv *.agp *.fa README ./Zv7release/
 
 ###########################################################################
-# CREATE AGP FILES FOR RANDOMS (chrNA and chrUn) (in progress, 2007-07-20,
-# hartera)
+# CREATE AGP FILES FOR RANDOMS (chrNA and chrUn) 
+# (2007-08-18, hartera)
     ssh kkstore06
     mkdir /cluster/data/danRer5/Zv7release/randoms
     cd /cluster/data/danRer5/Zv7release/randoms
     # first find the contigs assigned to chromosomes:
-    awk '{print $6}' ../Zv7_chr.agp | sort | uniq > chromContigs.txt
+    awk '{if ($5 !~ /N/) print $6}' ../Zv7_chr.agp | sort | uniq \
+        > chromContigs.txt
     # get list of all contigs:
-    awk '{print $6}' ../Zv7_scaffold.agp | sort | uniq > allContigs.txt
+    awk '{if ($5 !~ /N/) print $6}' ../Zv7_scaffold.agp | sort | uniq \
+        > allContigs.txt
     # find contigs not assigned to a chromosome
     comm -23 allContigs.txt chromContigs.txt > contigsRandomsAndAccs.txt
-    # this includes accessions so get only those with Zv7_ in name
-    grep 'Zv7_' contigsRandomsAndAccs.txt > contigsRandoms.txt
-    # get a list of the scaffold names by removing the .[0-9]+ at the end
-    cp contigsRandoms.txt temp
-    perl -pi.bak -e 's/\.[0-9]+$//' temp
-    sort -k 1.12,1n temp | uniq > scaffoldsRandoms.txt
+    # get all those that are in the Zv7_scaffold.agp and get a list of 
+    # scaffold names.
+    foreach c (`cat contigsRandomsAndAccs.txt`)
+        grep -w $c ../Zv7_scaffold.agp >> contigsRandomsScafs.agp
+    end
+    # check that all the contigs/clones names in contigsRandomsAndAccs.txt
+    # are also in contigsRandomsScafs.agp
+    awk '{if ($6 != 100) print $6}' contigsRandomsScafs.agp \
+        | sort | uniq > names.sort
+    wc -l names.sort contigsRandomsAndAccs.txt
+    # 19845 names.sort
+    # 19845 contigsRandomsAndAccs.txt 
+    comm -12 contigsRandomsAndAccs.txt names.sort | wc -l
+    # 19845
+    # get list of scaffolds names
+    awk '{print $1}' contigsRandomsScafs.agp | sort -k 1.7,1n | uniq \
+        > scaffoldsRandoms.txt
     # make an AGP of the randoms scaffolds only
     grep -w -f scaffoldsRandoms.txt ../Zv7_scaffold.agp > randomsScaffold.agp
+    # check that we have all the scaffolds to be selected
+    awk '{print $1}' randomsScaffold.agp | sort | uniq > names2.sort
+    sort scaffoldsRandoms.txt > scafsTmp.sort
+    wc -l scafsTmp.sort names2.sort
+    # 5010 scafsTmp.sort
+    # 5010 names2.sort
+    comm -12 scafsTmp.sort names2.sort | wc -l
+    # 5010
+    # all scaffolds are in the new AGP file that occur in scaffoldsRandoms.txt
     # get the list of contigs from the agp
-    awk '{if ($6 !~ /100/) print $6}' randomsScaffold.agp | sort | uniq \
+    awk '{if ($5 !~ /N/) print $6}' randomsScaffold.agp | sort | uniq \
         > randomContigs.list 
     # extract the FASTA sequences for just these contigs
     faSomeRecords ../Zv7_contigs.fa randomContigs.list Zv7contigs_random.fa
     # remove excess part of the names for the contigs with accessions 
     perl -pi.bak -e 's/^(>[A-Z]{2}[0-9]+\.[0-9]+)\s.+$/$1/' Zv7contigs_random.fa
     # check that all the contigs from the list are in the FASTA file
-    grep '>' Zv7contigs_random.fa | sed -e 's/^>//' | sort uniq \
+    grep '>' Zv7contigs_random.fa | sed -e 's/^>//' | sort | uniq \
          > Zv7contigs.list
     wc -l *.list
-    # 19584 Zv7contigs.list
-    # 19646 randomContigs.list
-    :omm -13 Zv7contigs.list randomContigs.list > notFound
-    # (2007-08-06 - , hartera)
+    # 19736 Zv7contigs.list
+    # 19845 randomContigs.list
+    
+    comm -13 Zv7contigs.list randomContigs.list > notFound
+    wc -l notFound
+    # 109 notFound
+    # (2007-08-06, hartera)
+    # RE-DONE (2007-08-18, hartera)
     # These are present in the original, but there are several sequeunces for
     # each accession since there are Ns in the sequence. Need to fix the names
     # in the AGP to match each part of the sequence in the FASTA file.
@@ -84,11 +110,11 @@
          > contigsHeaders.notFound.accs.sort
     sort notFound | uniq > notFound.sort
     wc -l notFound.sort 
-    # 62 notFound.sort
+    # 109 notFound.sort
     wc -l contigsHeaders.notFound.accs.sort
-    # 62 contigsHeaders.notFound.accs.sort
+    # 109 contigsHeaders.notFound.accs.sort
     comm -12 notFound.sort contigsHeaders.notFound.accs.sort | wc -l
-    # 62
+    # 109
     # So all the not Found accessions are in the list of contig headers 
     # accessions: contigsHeaders.notFound.accs.sort
     # Then extract the names for the accession parts 
@@ -103,13 +129,15 @@
             randomsScafFixed.agp >& agpScafs.log
     awk '{print $1}' randomsScaffold.agp | sort | uniq > scafs.lst.uniq
     wc -l scafs.lst.uniq
-    # 4946 scafs.lst.uniq
+    # 5010 scafs.lst.uniq
     wc -l *.agp
-    # 40052 randomsScafFixed.agp
-    # 35108 randomsScaffold.agp
-    # 35108 + 4946 = 40054 but there are 2 less gap rows since there are none
+    # 46688 contigsRandomsScafs.agp
+    # 40641 randomsScafFixed.agp
+    # 35633 randomsScaffold.agp
+
+    # 35633 + 5010 = 40643 but there are 2 less gap rows since there are none
     # at the ends of the random chromosomes. So the number of lines in the 
-    # AGP file is correct: 40052.
+    # AGP file is correct: 40641.
     # get the list of contigs again for the randoms from the FASTA headers
     # and check all of these are present in the AGP file and vice versa.
     cp contigs.headers contigs.names
@@ -121,10 +149,11 @@
     awk '{print $6}' randomsScafFixed.agp | sort | uniq > contigsFromAgp.sort
     wc -l contigs*.sort
     # 60092 contigs.names.sort
-    # 20049 contigsFromAgp.sort
+    # 20351 contigsFromAgp.sort
     comm -13 contigs.names.sort contigsFromAgp.sort
 # CR293502.4
 # CR356227.33
+# CR388165.16
 # CR854948.10
 # CR931788.11
 # CR954226.7
@@ -132,6 +161,7 @@
 # CT573263.4
 # CT737182.2
 # CT997808.4
+
 # These accessions are not matched from the headers to the AGP file. 
 # e.g. CR293502.4
 # CR293502.4_00001 zK31A1.00001 CR293502 1 27131
@@ -149,6 +179,793 @@
 # Zv7_scaffold2558        1963125 1963224 52      N       100     fragment no
 # Zv7_scaffold2558        1963225 1995007 53      D       CR293502.4      201355
 # 233137  -
-
+# Co-ordinates are relative to CR293502.4 in fields 7 and 8
+    grep CR293502.4 randomsScaffold.agp > CR293502.4.agp
 # E-mailed Tina Eyre (te3@sanger.ac.uk) and Ian Sealy (is1@sanger.ac.uk) at 
 # Sanger to ask them about these discrepancies and how to fix it (2007-08-09).
+# Received the Zv7_all_scaffolds.agp file on 2007-08-14 from Ian Sealy
+# (is1@sanger.ac.uk). This contains the unfinished clones and should not be
+# shared with the public. The contig/clone names match up to those for clone
+# name fragments in the Zv7_contigs.fa file.
+# Received Zv7_all_scaffolds.agp:
+    grep CR293502.4 ../Zv7_all_scaffolds.agp > CR293502.4.allScafs.agp 
+# Zv7_scaffold2558        1944730 1960624 49      U       CR293502.4_00001
+# 11237    27131   +       zK31A1.00001    15895   27131
+# Zv7_scaffold2558        1960725 1963124 51      U       CR293502.4_02478
+# 12400    +       zK31A1.02478    2400    2400
+# Zv7_scaffold2558        1963225 1995007 53      U       CR293502.4_01210.0
+# 81707    113489  -       zK31A1.01210.0  31783   113489
+   # Coordinates in fields 7 and 8 of this file are relative to the clone  
+   # fragment names in field 6.
+    foreach f (CR293502*.agp)
+      awk \
+      '{if ($5 !~ /N/) print "faFrag ", $6".fa", $7-1, $8, $6$7"-"$8".fa";}' \
+       $f >> faFrag${f}
+    end  
+    chmod +x faFrag*
+    awk '{print $6}' CR293502.4.allScafs.agp > ctgList.txt
+    foreach f (`cat ctgList.txt`)
+       echo $f > list
+       faSomeRecords ../Zv7_contigs.fa list ${f}.fa
+    end  
+    faFragCR293502.4.agp
+# Wrote 15895 bases to CR293502.411237-27131.fa
+# Wrote 2400 bases to CR293502.427232-29631.fa
+# Wrote 31783 bases to CR293502.4201355-233137.fa
+    faFragCR293502.4.allScafs.agp
+# Wrote 15895 bases to CR293502.4_0000111237-27131.fa
+# Wrote 2400 bases to CR293502.4_024781-2400.fa
+# Wrote 31783 bases to CR293502.4_01210.081707-113489.fa
+# When diff on each pair of files of the same size, the sequence is 
+# identical, only the headers are different.
+    
+     # Decided to base assembly on scaffolds not contigs (2007-08-22)
+
+##########################################################################
+# ALL CHROMS AGP (2007-08-18, hartera)
+    ssh kkstore06
+    cd /cluster/data/danRer5/Zv7release
+    awk '{if ($5 !~ /N/) print $6;}' Zv7_all_scaffolds.agp | sort | uniq \
+        > contigNamesFromAllScafs.sort
+    # compare to contig names from FASTA file
+    comm -13 contigNamesFromAllScafs.sort ./randoms/contigs.names.sort
+    # no difference: all contig names from AGP file are in the FASTA file
+    comm -23 contigNamesFromAllScafs.sort ./randoms/contigs.names.sort \
+         > notInAllScafs
+    wc -l notInAllScafs
+    # 3924 notInAllScafs
+    grep "Zv7_NA" notInAllScafs | wc -l
+    # 3924
+    # So the only ones not in FASTA file are the 3924 Zv7_NA contigs 
+    # get clone names without underscore and extension
+    # remove excess part of the names for the contigs with accessions
+    cp contigNamesFromAllScafs.sort contigNamesFromAllScafs2.sort 
+    perl -pi.bak -e \
+         's/^([A-Z]{2}[0-9]+\.[0-9]+)_?[0-9]*\.?[0-9]*$/$1/' \
+         contigNamesFromAllScafs2.sort
+    grep -v "Zv7_NA" contigNamesFromAllScafs2.sort \
+         | sort | uniq > contigNamesFromAllScafs2NoNAs.sort
+    # get list of contigs and clones in randoms only
+    awk '{if ($5 !~ /N/) print $6;}' ./randoms/randomsScaffold.agp \
+        | sort | uniq > randomsContigsNames.sort
+    # remove randoms scaffolds from the list of contigs/clones from 
+    # Zv7_all_scaffolds.agp
+    comm -13 randomsContigsNames.sort contigNamesFromAllScafs2NoNAs.sort \
+         > contigNamesFromAllScafs2NoRandoms.txt
+    sort contigNamesFromAllScafs2NoRandoms.txt | uniq \
+         > contigNamesFromAllScafs2NoRandoms.sort
+    # then get the compare this list to a list of clones/contigs 
+    # from Zv7_chr.agp
+    awk '{if ($5 !~ /N/) print $6;}' Zv7_chr.agp | sort | uniq \
+        > chromsAgpContigs.sort
+    comm -23 contigNamesFromAllScafs2NoRandoms.sort chromsAgpContigs.sort \
+         | wc -l
+    # 0
+    # So there are no new contigs in the Zv7_all_scaffolds.agp file that
+    # are not randoms or Zv7_NA.
+    # Try agpAddCtgNamesAndGaps.c on Zv7_chr.agp and see if all 
+    # clone fragments can be found in the FASTA file.
+    cp ./randoms/contigs.headers .
+    # get the names from the headers
+    awk '{print $1}' contigs.headers | sort | uniq > contigsNames.headers.sort
+    # get the contig/clone names from the Zv7_chr.agp file: sorted file is
+    # chromContigs.txt
+    comm -13 contigsNames.headers.sort ./randoms/chromContigs.txt \
+         > contigsInChromAgpOnly.txt
+    wc -l contigsInChromAgpOnly.txt
+    # 575 contigsInChromAgpOnly.txt
+    # Get FASTA file headers for just this set of contigs. These are ones
+    # with fragment that are named XXNNNN_NN e.g. BX511136.3_00285.0
+    grep -f contigsInChromAgpOnly.txt contigs.headers \
+         > contigsInChromAgpOnly.headers
+    /cluster/home/hartera/bin/x86_64/agpAddCtgNamesAndGaps \
+           contigsInChromAgpOnly.headers Zv7_chr.agp \
+           chrFixed.agp >& agpChroms.log
+    # check if all the contig/clone names in the AGP file have now been 
+    # found in the FASTA file.
+
+    sort contigs.names | uniq > contigs.names.sort
+    # get contig/clone names from fixed AGP file
+    awk '{if ($5 !~ /N/) print $6}' chrFixed.agp | sort | uniq \
+        > contigsFromChrFixedAgp.sort
+    # get list of names in the FASTA contig headers
+    cp ./randoms/contigs.names.sort .
+
+    wc -l contigs*.sort
+    # 60092 contigs.names.sort
+    # 39659 contigsFromChrFixedAgp.sort
+    comm -13 contigs.names.sort contigsFromChrFixedAgp.sort \
+         > notFoundInChrFixedAgp.txt
+    wc -l notFoundInChrFixedAgp.txt
+    # 334 notFoundInChrFixedAgp.txt
+    echo BX005112.16 > list
+    nice faSomeRecords Zv7_contigs.fa list BX005112.16_02613.fa
+    faSize BX005112.16_02613.fa 
+    # 171673 bases (0 N's 171673 real 171673 upper 0 lower) in 1 sequences in
+    # 1 files
+    grep BX005112.16 Zv7_chr.agp 
+# chr21   31909678        32080531        1296    D       BX005112.16     820
+# 171673   +
+# chr21   32080632        32084318        1298    D       BX005112.16     171774
+# 175460   +
+    grep BX005112.16 chrFixed.agp
+# chr21   1104388161      1104559014      1296    D       BX005112.16     820
+# 171673   +
+# chr21   1104559115      1104562801      1298    D       BX005112.16_02934
+# 171774   175460  +
+    grep BX005112.16 Zv7_all_scaffolds.agp
+# Zv7_scaffold2077        678529  849382  54      U       BX005112.16_02613
+# 820      171673  +       zK85G15.02613   170854  171673
+# Zv7_scaffold2077        849483  853169  56      U       BX005112.16_02934
+# 1 3687    +       zK85G15.02934   3687    3687
+    grep BX005112.16 contigs.headers
+# BX005112.16_02613 zK85G15.02613 BX005112 1 171673
+# BX005112.16_02934 zK85G15.02934 BX005112 171774 175460
+    echo BX005112.16 > list2
+
+    nice faSomeRecords Zv7_scaffolds.fa list2 BX005112.fa
+    # not found, these accedssions are not in the FASTA file.
+    # In order to create the chroms, need to extract the relevant coords from 
+    # the accessions to create the FASTA file.
+    # Now basing assembly on scaffolds instead of contigs so create
+    # AGP files for scaffolds.
+
+##########################################################################
+# CREATE A SCAFFOLDS AGP WITH SCAFFOLDS ONLY FOR RANDOMS 
+# (2007-08-22 and 2007-08-24, hartera) 
+# Make AGP using just the unmapped scaffolds and not making virtual 
+# chromosomes for unmapped scaffolds so that this is the same as the 
+# way Ensembl handles these. Therefore there will be 25 chromosomes, chrM, 
+# plus 5010 unmapped scaffolds.  
+    ssh kkstore06
+    # make agps and fasta directories
+    mkdir -p /cluster/data/danRer5/Zv7release/agps
+    mkdir -p /cluster/data/danRer5/Zv7release/fasta
+    # move assemmbly FASTA files to this directory
+    cd /cluster/data/danRer5/Zv7release
+    mv Zv7_*.fa ./fasta/
+    cd /cluster/data/danRer5/Zv7release/randoms
+    # get list of scaffolds for randoms - one for Un_random and one for 
+    # NA_random scaffolds.
+    awk '{if ($1 ~ /Zv7_scaffold/) print $1;}' randomsScaffold.agp \
+        | sort -k 1.7,1n | uniq > Un_randomScafs.list
+    awk '{if ($1 ~ /Zv7_NA/) print $1;}' randomsScaffold.agp \
+        | sort -k 1.7,1n | uniq > NA_randomScafs.list
+    wc -l *randomScafs.list
+    # 4844 NA_randomScafs.list
+    # 166 Un_randomScafs.list
+    # 5010 total
+
+    # get sequences for just these scaffolds
+    foreach f (NA Un)
+       faSomeRecords ../fasta/Zv7_scaffolds.fa ${f}_randomScafs.list \
+                     Zv7${f}_randomScafs.fa
+    end
+    # check that they are all there
+    foreach f (NA Un)
+       grep '>' Zv7${f}_randomScafs.fa > ${f}_Random.headers
+    end
+    wc -l *Random.headers
+    # 4844 NA_Random.headers
+    # 166 Un_Random.headers
+    # 5010 total
+    perl -pi.bak -e 's/>//' *Random.headers
+    foreach f (NA Un)
+       sort -k 1.7,1n ${f}_Random.headers | uniq > ${f}_Random.headers.sort
+    end 
+    comm -12 NA_Random.headers.sort NA_randomScafs.list | wc -l 
+    # 4844
+    comm -12 Un_Random.headers.sort Un_randomScafs.list | wc -l
+    # 166
+    # Total is 4844 + 166 = 5010 
+    # so all the sequences in the scaffolds lists are in the FASTA files.
+    
+    # Make an AGP from these scaffolds FASTA sequences with 50000 Ns 
+    # inserted between scaffolds.
+    foreach c (NA_random Un_random)
+        scaffoldFaToAgp -scaffoldGapSize=0 Zv7${c}Scafs.fa 
+    end
+    
+# scaffold gap size is 0, total scaffolds: 4844
+# chrom size is 117689868
+# writing Zv7NA_randomScafs.agp
+# writing Zv7NA_randomScafs.gap
+# writing Zv7NA_randomScafs.lft
+# scaffold gap size is 0, total scaffolds: 166
+# chrom size is 45800611
+# writing Zv7Un_randomScafs.agp
+# writing Zv7Un_randomScafs.gap
+# writing Zv7Un_randomScafs.lft
+   
+   # Create AGP with just the scaffolds
+ 
+   # sort NA by scaffold number:
+   # first remove gap lines:
+   grep -w -v "N" Zv7NA_randomScafs.agp > Zv7NA_randomScafsNoGaps.agp
+   grep -w -v "N" Zv7Un_randomScafs.agp > Zv7Un_randomScafsNoGaps.agp
+   sort -k 6.7n -k 6.8n -k 6.9,6.10n -k 6.10,6.11n \
+        Zv7NA_randomScafsNoGaps.agp > Zv7NA_randomScafsSorted.agp
+   foreach f (Zv7Un_randomScafsNoGaps.agp Zv7NA_randomScafsSorted.agp)
+      set g = $f:r
+      echo $g 
+      awk 'BEGIN {OFS="\t"} {print $6, $7, $8, "1", "W", $6, $7, $8, "+"}' \
+          $f > ${g}2.agp
+   end
+   wc -l Zv7*_randomScafs*agp
+   # 9687 Zv7NA_randomScafs.agp
+   # 4844 Zv7NA_randomScafsNoGaps.agp
+   # 4844 Zv7NA_randomScafsSorted.agp
+   # 4844 Zv7NA_randomScafsSorted2.agp
+   # 331 Zv7Un_randomScafs.agp
+   # 166 Zv7Un_randomScafsNoGaps.agp
+   # 166 Zv7Un_randomScafsNoGaps2.agp
+   # 4844 + 166 = 5010 -> total unmapped scaffolds
+   cat Zv7NA_randomScafsSorted2.agp Zv7Un_randomScafsNoGaps2.agp \
+       > Zv7AllRandomScafs.agp
+   wc -l Zv7AllRandomScafs.agp
+   # 5010 Zv7AllRandomScafs.agp
+   # move scaffolds AGP to agps directory:
+   mv Zv7AllRandomScafs.agp /cluster/data/danRer5/Zv7release/agps/
+   # move sequences to FASTA directory
+   mv Zv7*_randomScafs.fa \
+      /cluster/data/danRer5/Zv7release/fasta/
+
+#######################################################################
+# PROCESS CHROMOSME AGP AND SCAFFOLDS AGP TO CREATE A SCAFFOLDS TO 
+# CHROMOSOMES AGP FILE (DONE, 2007-08-24, hartera) 
+
+   # The Zv7_chr.agp file contains a mapping of contigs to chromsomes
+   # and the Zv7_scaffold.agp file contains a mapping of contigs to scaffolds.
+   # To build the Browser and assemble chromosomes, we need an AGP file
+   # that maps scaffolds to chromsomes. 
+   # A program, createScaffoldsAgp.c was written to create this AGP file. 
+   # in kent/src/hg/oneShot/createScaffoldsAgp/.
+   ssh kkstore06
+   cd /cluster/data/danRer5/Zv7release/agps
+   createScaffoldsAgp ../Zv7_scaffold.agp ../Zv7_chr.agp \
+                      Zv7ScafToChrom.agp >& createAgp.log
+   wc -l *.agp
+   # 5010 Zv7AllRandomScafs.agp
+   # 4943 Zv7ScafToChrom.agp
+   # 9953 total
+###########################################################################
+# CHECK AGP FILES AND FASTA CONTENTS AND SIZE CONSISTENCY 
+# (DONE, 2007-08-22, hartera)
+# 
+   # Check that all the scaffolds in AGPs are in the FASTA file and vice versa
+   # get list of scaffolds in AGP files: Zv7ScafToChrom.agp,
+   # chrNA_random.scaffolds.agp and chrUn_random.scaffolds.agp
+   ssh kkstor06
+   cd /cluster/data/danRer5/Zv7release/assembly/agps
+   
+   foreach f (*.agp)
+      awk '{if ($5 !~ /N/) print $6}' $f >> allScafsFromAgps.txt
+   end
+   sort allScafsFromAgps.txt | uniq > allScafsFromAgps.sort
+   grep '>' ../fasta/Zv7_scaffolds.fa | sed -e 's/>//' | sort | uniq \
+        > scafsHeaders.sort
+   wc -l *.sort
+   # 7494 allScafsFromAgps.sort
+   # 7494 scafsHeaders.sort
+   comm -12 allScafsFromAgps.sort scafsHeaders.sort | wc -l
+   # 7494
+   # 7494 are common to both files so they the AGP files contain all the
+   # scaffolds in the FASTA file and vice versa.
+   # create one AGP file for the assembly
+   cat Zv7ScafToChrom.agp Zv7AllRandomScafs.agp > Zv7ScafToChromAndRandom.agp
+
+   cd /cluster/data/danRer5/Zv7release/fasta
+   # make a scaffolds directory to work in 
+   mkdir scaffolds
+   cd scaffolds
+   faSize -detailed ../Zv7_scaffolds.fa > Zv7.scaffolds.sizes
+   # Check that these sizes correspond to the sizes in the scaffolds agp file
+   # use script compareSizes2.pl
+   cat << '_EOF_' > compareSizes2.pl
+#!/usr/bin/perl -w
+use strict;
+
+my ($file, $agp);
+
+$file = $ARGV[0];
+$agp = $ARGV[1];
+
+open(FILE, $file) || die "Can not open $file: $!\n";
+open(AGP, $agp) || die "Can not open $agp: $!\n";
+open(OUT, ">log.txt") || die "Can not create log.txt: $!\n";
+
+my ($l, @f, $name, $size, %scafsHash);
+while (<FILE>)
+{
+$l = $_;
+@f = split(/\t/, $l);
+
+$name = $f[0]; 
+$size = $f[1];
+$scafsHash{$name} = $size;
+}
+close FILE;
+
+while (<AGP>)
+{
+my ($line, @fi, $scaf, $end);
+$line = $_;
+
+if ($line =~ /Zv/)
+   {
+   @fi = split(/\t/, $line);
+   $scaf = $fi[5];
+   $end = $fi[7];
+
+   if (exists($scafsHash{$scaf}))
+      {
+      if ($scafsHash{$scaf} == $end)
+         {
+         print OUT "$scaf - ok\n";
+         }
+      else
+         {
+         print OUT "$scaf - different size to sequence\n";
+         }
+      }
+   else
+      {
+      print OUT "$scaf - does not exist in list of sizes\n";
+      }
+   }
+}
+close AGP;
+close OUT;
+'_EOF_'
+   # << happy emacs
+   chmod +x compareSizes2.pl
+   perl compareSizes2.pl Zv7.scaffolds.sizes \
+        ../../agps/Zv7ScafToChromAndRandom.agp 
+   grep different log.txt
+   grep not log.txt
+   # these are all consistent with the sequence sizes
+   # check that the co-ordinates in the agp files are consistent:
+   # field 2 is the start position, field 3 is the end and field 8 is the size
+   # so check that this is consistent.
+   cd /cluster/data/danRer5
+   awk '{if ($5 !~ /N/ && (($3-$2+1) != $8)) print $6;}' \
+       ../../agps/Zv7AllRandomScafs.agp > Zv7.scaffolds.coordCheck 
+   # this file is empty so they are ok. do the same for the contigs to
+   # chromsomes .agp file
+   awk '{if ($5 !~ /N/ && (($3-$2+1) != ($8-$7 +1))) print $6;}' \
+       ../../Zv7_chr.agp > Zv7.contigsToChroms.coordCheck
+   # this file is empty so ok
+   # in order to create the scaffolds to chroms AGP file with 
+   # createScaffoldsAgp, the coordinates were checked between the 
+   # Zv7_scaffold.agp and Zv7_chr.agp files.
+   cd ..
+   rm -r scaffolds
+ 
+#######################################################################
+# MAKE GENOME DB FROM CHROMOSOMES AND UNMAPPED SCAFFOLDS 
+# (DONE, 2007-08-24, hartera)
+   # Since there will be a mixture of chroms and unmapped scaffolds, the
+   # chroms must be built first being inputting the assembly sequence to 
+   # makeGenomeDb.pl
+   ssh kkstore06
+   cd /cluster/data/danRer5/Zv7release/
+   cd fasta
+   agpToFa -simpleMultiMixed ../agps/Zv7ScafToChrom.agp all \
+         Zv7_chromosomes.fa ./Zv7_scaffolds.fa
+   # check the chroms are all there
+   grep '>' Zv7_chromosomes.fa | sed -e 's/>//' > headers
+   # all chroms 1-25 are there
+   rm headers
+   # check agp and FASTA
+   checkAgpAndFa ../agps/Zv7ScafToChrom.agp Zv7_chromosomes.fa
+   # All AGP and FASTA entries agree - both files are valid
+   # cat together chromosomes FASTA and scaffolds FASTA:
+   cat Zv7_chromosomes.fa Zv7NA_randomScafs.fa Zv7Un_randomScafs.fa \
+       > Zv7ChromsAndRandomScafs.fa
+   # To find the gi number for chrM, go to http://www.ncbi.nih.gov/ and search
+   # Nucleotide for "Danio mitochondrion genome". 
+   # That shows gi number: 15079186, accession: NC_002333.2, 16596 bp
+   # also GI:8576324 and accession: AC024175
+   cd /cluster/data/danRer5/
+   cat << 'EOF' > danRer5.config.ra
+db danRer5
+clade vertebrate
+scientificName Danio rerio
+commonName Zebrafish
+assemblyDate Jul. 2007
+assemblyLabel Sanger Centre, Danio rerio Sequencing Project Zv7
+orderKey 449
+dbDbSpeciesDir zebrafish
+# NC_002333.2
+mitoAcc 15079186
+agpFiles /cluster/data/danRer5/Zv7release/agps/Zv7ScafToChromAndRandom.agp
+fastaFiles /cluster/data/danRer5/Zv7release/fasta/Zv7ChromsAndRandomScafs.fa 
+'EOF'    
+ # << keep emacs coloring happy
+   # corrected wget for mitochondron genome so:
+   # http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nuccore&rettype=fasta&id=15079186&retmode=text
+   # remove directories created
+   rm -r TemporaryTrackDbCheckout bed html jkStuff
+   rm dbDbInsert.sql 
+   ssh hgwdev
+   cd /cluster/data/danRer5/
+   hgsql -e 'delete from dbDb where name="danRer5";' hgcentraltest
+   
+   ssh kkstore06
+   cd /cluster/data/danRer5
+   # Run with -debug to see what it would do / check for issues:
+   makeGenomeDb.pl danRer5.config.ra -debug -verbose=3
+   makeGenomeDb.pl danRer5.config.ra >& makeGenomeDb.log & 
+   #PID: 32036: Fri Aug 24 15:00:13 PDT 2007
+
+   tail -f makeGenomeDb.log
+   
+   # Follow the directions at the end of the log after
+    #NOTES -- STUFF THAT YOU WILL HAVE TO DO --
+# Search for '***' notes in each file in and make corrections (sometimes the
+# files used for a previous assembly might make a better template):
+#  description.html /cluster/data/danRer5/html/{trackDb.ra,gap.html,gold.html}
+
+# Then cd ../.. (to trackDb/) and
+# - edit makefile to add danRer5 to DBS.
+# - (if necessary) cvs add zebrafish
+# - cvs add zebrafish/danRer5
+# - cvs add zebrafish/danRer5/*.{ra,html}
+# - cvs ci -m "Added danRer5 to DBS." makefile
+# - cvs ci -m "Initial descriptions for danRer5." zebrafish/danRer5
+# - (if necessary) cvs ci zebrafish
+# - Run make update DBS=danRer5 and make alpha when done.
+# - (optional) Clean up /cluster/data/danRer5/TemporaryTrackDbCheckout
+# - cvsup your ~/kent/src/hg/makeDb/trackDb and make future edits there.
+    # Then need to load in fragment gaps manually for gap table.
+
+##########################################################################
+# REBUILD GAP TABLE WITH FRAGMENT GAPS AS WELL AS CONTIG GAPS 
+# (DONE, 2007-08-24, hartera)
+# It is confusing not to display the fragment gaps in the gap track - 
+# these are gaps within contigs.
+    ssh kkstore06
+    cd /cluster/data/danRer5/Zv7release/
+    # need to use the contigs to chroms AGP
+    # also copy over the contigs to scaffolds AGP for the unmapped scaffolds
+    cp /cluster/data/danRer5/Zv7release/randoms/randomsScaffold.agp \
+       /cluster/data/danRer5/Zv7release/agps/   
+    mkdir /cluster/data/danRer5/gap 
+    awk '{if ($5 ~ /N/) print;}' Zv7_chr.agp \
+        > /cluster/data/danRer5/gap/chroms.gap
+    # 34449 gaps
+    awk '{if ($5 ~ /N/) print;}' ./agps/randomsScaffold.agp  \
+        > /cluster/data/danRer5/gap/randomScafs.gap
+    # 15278 gaps
+    cat chroms.gap randomScafs.gap > danRer5.gap
+    wc -l /cluster/data/danRer5/gap/*.gap
+    # 34449 /cluster/data/danRer5/gap/chroms.gap
+    # 15278 /cluster/data/danRer5/gap/randomScafs.gap
+    # 49727 /cluster/data/danRer5/gap/danRer5.gap
+
+    rm chroms.gap randomScafs.gap 
+    # 2459 is current count in table. 
+    ssh hgwdev
+    cd /cluster/data/danRer5/
+    hgLoadGap -unsplit danRer5 /cluster/data/danRer5/gap/danRer5.gap
+    hgsql -e 'select count(*) from gap;' danRer5
+    # 49727 
+    # So all the gaps were loaded. 
+
+       
+###########################################################################
+# REPEATMASKER RUN (in progress, 2007-08-25, hartera)
+    # Download the zebunc.ref unclassified repeats file for zebrafish 
+    # from RepBase:
+    ssh kkstore06
+    cd /cluster/data/danRer5/
+    gunzip repeatmaskerlibraries-20061006.tar.gz 
+    # no unclassified zebrafish repeats here
+    # Download zebunc.ref from
+    # http://www.girinst.org/server/RepBase/RepBase12.07.fasta/zebunc.ref
+    # last updated 21-Aug-2007 16:21 	451K
+    # copy the one used for danRer4 and see if it is any different
+    cp /cluster/bluearc/RepeatMasker060320/Libraries/zebunc.ref.txt \
+       zebuncref2006.txt
+    diff zebunc.ref zebuncref2006.txt
+    # no difference so check format is still correct for the current 
+    # version of RepeatMasker on pk /scratch/data/RepeatMasker/Libraries/
+    # format still looks the same.
+    ssh pk
+    mkdir /tmp/danRer5
+    cd /tmp/danRer5
+    faOneRecord /cluster/data/danRer5/Zv7release/fasta/Zv7_contigs.fa \
+                Zv7_scaffold1.1 > Zv7scaffold1.1.fa
+    # Run RepeatMasker on this to get it to create the danio library
+    /scratch/data/RepeatMasker/RepeatMasker -ali -s -species danio \
+                  Zv7scaffold1.1.fa
+    cp /cluster/bluearc/RepeatMasker060320/Libraries/zebunc.ref.format \
+       /scratch/data/RepeatMasker/Libraries/
+    # Add this to the specieslib created for danio
+    cd /scratch/data/RepeatMasker/Libraries/
+    cat zebunc.ref.format \
+       >> /scratch/data/RepeatMasker/Libraries/20061006/danio/specieslib 
+    grep '>' specieslib | wc -l
+    # 1184
+    # then the RepeatMasker script
+    ssh kkstore06
+    ## use screen for this
+    # crashed so restart on 8.25.07
+    cd /cluster/data/danRer5
+    time nice doRepeatMasker.pl -bigClusterHub=pk -species danio \
+         danRer5 >& repeatmask.log &
+    # PID: 16808 Sat Aug 25 11:37:35 PDT 2007
+    tail -f repeatmask.log
+    # 0.083u 0.073s 10:43:36.43 0.0%  0+0k 0+0io 3pf+0w
+    # 1 job crashed 4 times
+    # Batch failed after 4 tries on ./RMRun.csh
+    # /san/sanvol1/scratch/danRer5/RMPart/000/254/000254.lst.out
+    ssh pk 
+    ## use screen here
+    cd /cluster/data/danRer5/bed/RepeatMasker.2007-08-25/run.cluster/
+    # check jobList for failed job and try running on its own
+    nice ./RMRun.csh /san/sanvol1/scratch/danRer5/RMPart/000/254/000254.lst.out     # PID 15474 Start: Sun Aug 26 00:24:10 PDT 2007
+    # on screen 25974.pts-10.hgwdev. finished at 1.42am
+    # failed again:
+    # Got 1 lifts in /san/sanvol1/scratch/danRer5/RMPart/000/254/000254.lft
+    # Lifting chr3:16000000-16500000.fa.out
+    # invalid unsigned number: "*"
+    # [1]    Exit 255                      ./RMRun.csh
+    # /san/sanvol1/scratch/danRer5/RMPart/000/254/000254.lst.out
+    # Output is in 
+    # /scratch/tmp/doRepeatMasker.cluster.s15477/chr3:16000000-16500000.fa.out
+    # Checked in danRer4 RM run files and some of them have "*" at the end of 
+    # a line e.g. /cluster/data/danRer4/1/chr1_11/chr1_11_10.fa.out
+    # Also, the IDs in the current run do not run consecutively 
+    # e.g. 1,2,3,4,5,6,2,7,8 etc.
+    # E-mailed Angie to ask for advice   
+
+
+###########################################################################
+# SIMPLE REPEAT (TRF) TRACK (DONE, 2007-08-25 - 2007-08-27, hartera)
+   # TRF can be run in parallel with RepeatMasker on the file server
+   # since it doesn't require masked input sequence.
+   
+   ssh kolossus
+   ## use screen for this
+   mkdir /cluster/data/danRer5/bed/simpleRepeat
+   cd /cluster/data/danRer5/bed/simpleRepeat
+   time nice twoBitToFa ../../danRer5.unmasked.2bit stdout \
+        | trfBig -trf=/cluster/bin/i386/trf stdin /dev/null \
+                -bedAt=simpleRepeat.bed -tempDir=/scratch/tmp \
+        >& trf.log &
+   # PID: 4414 4415, Start: Sat Aug 25 17:33:32 PDT 2007
+    # finished at about 1.38am
+   tail -f trf.log 
+   # Crashed on kolossus so re-run as before on kki:
+   # Broken pipe                   twoBitToFa ../../danRer5.unmasked.2bit
+   # stdout |
+   #     12.260u 4.233s 8:05:02.78 0.0%  0+0k 0+0io 0pf+0w
+   #    Segmentation fault            trfBig -trf=/cluster/bin/i386/trf stdin
+   # /dev/null -bedAt=simpleRepeat.bed  ...
+   # This time split the sequence up and run on kki
+   ssh kkstore06
+   cd /cluster/data/danRer5/
+   mkdir splitNoMask
+   cd splitNoMask
+   twoBitToFa ../../danRer5.unmasked.2bit danRer5.unmasked.fa
+   faSplit byname danRer5.unmasked.fa .
+   rm danRer5.unmasked.fa
+    
+   # Copy the split sequences to iscratch dir on kkr1u00 
+   ssh kkr1u00
+   rm -r /iscratch/i/danRer5/splitNoMask
+   mkdir -p /iscratch/i/danRer5/splitNoMask
+   foreach s (/cluster/data/danRer5/splitNoMask/*.fa)
+      echo "Copying $s ..."
+      cp $s /iscratch/i/danRer5/splitNoMask/
+   end
+ 
+   # Count files transferred
+   foreach f (/iscratch/i/danRer5/splitNoMask/*.fa)
+      ls $f >> seq.lst
+   end
+   wc -l seq.lst 
+   # 5036 seq.lst
+   # correct: 25 chroms, 1 chrM, and 5010 unmapped scaffolds.
+   rm seq.lst
+ 
+   # rsync to cluster machines
+   foreach R (2 3 4 5 6 7 8)
+      rsync -a --progress /iscratch/i/danRer5/ kkr${R}u00:/iscratch/i/danRer5/
+   end
+    
+   ## use screen
+   ssh kki
+   mkdir -p /cluster/data/danRer5/bed/simpleRepeat
+   cd /cluster/data/danRer5/bed/simpleRepeat
+   mkdir trf
+cat << '_EOF_' > runTrf
+#!/bin/csh -fe
+#
+set path1 = $1
+set inputFN = $1:t
+set outpath = $2
+set outputFN = $2:t
+mkdir -p /tmp/$outputFN
+cp $path1 /tmp/$outputFN
+pushd .
+cd /tmp/$outputFN
+/cluster/bin/i386/trfBig -trf=/cluster/bin/i386/trf $inputFN /dev/null -bedAt=$outputFN -tempDir=/tmp
+popd
+rm -f $outpath
+cp -p /tmp/$outputFN/$outputFN $outpath
+rm -fr /tmp/$outputFN/*
+rmdir --ignore-fail-on-non-empty /tmp/$outputFN
+'_EOF_'
+ # << keep emacs coloring happy
+   chmod +x runTrf
+
+cat << '_EOF_' > gsub
+#LOOP
+./runTrf {check in line+ $(path1)}  {check out line trf/$(root1).bed}
+#ENDLOOP
+'_EOF_'
+   # << keep emacs coloring happy
+
+   foreach f (/iscratch/i/danRer5/splitNoMask/*.fa)
+      ls -1S $f >> genome.lst
+   end 
+   gensub2 genome.lst single gsub jobList
+   /parasol/bin/para create jobList
+   # 5036 jobs written to batch
+   /parasol/bin/para try, check, push, check etc...
+   /parasol/bin/para time
+# still crashing on one sequence: 
+# sh: line 1: 23369 Segmentation fault      /cluster/bin/i386/trf
+# /tmp/Zv7_scaffold2487.tf 2 7 7 80 10 50 2000 -m -d
+# can't open /tmp/Zv7_scaffold2487.tf.2.7.7.80.10.50.2000.mask
+# Completed: 5035 of 5036 jobs
+# Crashed: 1 jobs
+# CPU time in finished jobs:      31429s     523.82m     8.73h    0.36d  0.001 y
+# IO & Wait Time:                 12949s     215.81m     3.60h    0.15d  0.000 y
+# Average job time:                   9s       0.15m     0.00h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            3818s      63.63m     1.06h    0.04d
+# Submission to last job:          5013s      83.55m     1.39h    0.06d
+
+    # test this sequence 
+   ssh kkstore06
+   cd /cluster/data/danRer5/bed/simpleRepeat
+   mkdir noMaskSplit
+   mkdir run2
+   cd noMaskSplit
+   faSplit -minGapSize=100 -lift=scaf2487.lft gap \
+      /cluster/data/danRer5/splitNoMask/Zv7_scaffold2487.fa \
+      10000 scaf2487_
+    
+   ssh kkr1u00
+   mkdir /iscratch/i/danRer5/splitScaf2487/
+   cp /cluster/data/danRer5/bed/simpleRepeat/noMaskSplit/*.fa \
+      /iscratch/i/danRer5/splitScaf2487/
+   ls /iscratch/i/danRer5/splitScaf2487/*.fa | wc -l 
+   # 250
+   # rsync to all iServers
+   foreach R (2 3 4 5 6 7 8)
+      rsync -a --progress /iscratch/i/danRer5/ kkr${R}u00:/iscratch/i/danRer5/
+   end
+    
+   ssh kki
+   cd /cluster/data/danRer5/bed/simpleRepeat/run2
+   cp ../runTrf .
+   cp ../gsub .
+   mkdir trf
+   ls -1S /iscratch/i/danRer5/splitScaf2487/*.fa > genome.lst
+   gensub2 genome.lst single gsub jobList
+   /parasol/bin/para create jobList
+   # 250 jobs written to batch
+   /parasol/bin/para try, check, push, check etc...
+   /parasol/bin/para time
+# Completed: 249 of 250 jobs
+# Crashed: 1 jobs
+#CPU time in finished jobs:         73s       1.22m     0.02h    0.00d  0.000 y
+#IO & Wait Time:                   622s      10.36m     0.17h    0.01d  0.000 y
+#Average job time:                   3s       0.05m     0.00h    0.00d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:              23s       0.38m     0.01h    0.00d
+#Submission to last job:            63s       1.05m     0.02h    0.00d
+    
+   /parasol/bin/para problems >& problems 
+# trf/scaf2487_082.bed does not exist
+# stderr:
+# sh: line 1:  7469 Segmentation fault      /cluster/bin/i386/trf
+# /tmp/scaf2487_082.tf 2 7 7 80 10 50 2000 -m -d
+# can't open /tmp/scaf2487_082.tf.2.7.7.80.10.50.2000.mask
+   # Failed sequence looks fine - just A,C,G,T or N.
+   # Downloaded the latest version of trf (v4.0, previous was v3.21) 
+   # for both 64 bit and i386. Tried 64 bit version on the scaf2487_082.fa
+   # and it works fine. So now run on kolossu.
+   mv /cluster/data/danRer5/bed/simpleRepeat \
+      /cluster/data/danRer5/bed/OldsimpleRepeat
+   
+   # run on the pk cluster, too slow on kolossus using the 2bit sequence file.
+   ssh pk
+   mkdir -p /san/sanvol1/scratch/danRer5/splitNoMask
+   # copy the split sequence files to the san - 1 for each chorm and 1
+   # for each unmapped scaffold
+   foreach f (/cluster/data/danRer5/splitNoMask/*.fa)
+     cp $f /san/sanvol1/scratch/danRer5/splitNoMask
+   end
+   mkdir /cluster/data/danRer5/bed/simpleRepeat
+   cd /cluster/data/danRer5/bed/simpleRepeat
+   mkdir trf
+cat << '_EOF_' > runTrf
+#!/bin/csh -fe
+#
+set path1 = $1
+set inputFN = $1:t
+set outpath = $2
+set outputFN = $2:t
+mkdir -p /tmp/$outputFN
+cp $path1 /tmp/$outputFN
+pushd .
+cd /tmp/$outputFN
+/cluster/bin/i386/trfBig -trf=/cluster/bin/x86_64/trf $inputFN /dev/null -bedAt=$outputFN -tempDir=/tmp
+popd
+rm -f $outpath
+cp -p /tmp/$outputFN/$outputFN $outpath
+rm -fr /tmp/$outputFN/*
+rmdir --ignore-fail-on-non-empty /tmp/$outputFN
+'_EOF_'
+ # << keep emacs coloring happy
+   chmod +x runTrf
+
+cat << '_EOF_' > gsub
+#LOOP
+./runTrf {check in line+ $(path1)}  {check out line trf/$(root1).bed}
+#ENDLOOP
+'_EOF_'
+   # << keep emacs coloring happy
+
+   foreach f (/san/sanvol1/scratch/danRer5/splitNoMask/*.fa)
+      ls -1S $f >> genome.lst
+   end 
+   /parasol/bin/gensub2 genome.lst single gsub jobList
+   /parasol/bin/para create jobList
+   # 5036 jobs written to batch
+   /parasol/bin/para try, check, push, check etc...
+   /parasol/bin/para time
+# Completed: 5036 of 5036 jobs
+# CPU time in finished jobs:      45132s     752.20m    12.54h    0.52d  0.001 y
+# IO & Wait Time:                 16660s     277.67m     4.63h    0.19d  0.001 y
+# Average job time:                  12s       0.20m     0.00h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            5804s      96.73m     1.61h    0.07d
+# Submission to last job:          6042s     100.70m     1.68h    0.07d
+    
+   # (2007-08-27, hartera)
+   # the input to trf was the chromosomes and scaffolds so no liftUp needed.
+   # cat all the files together
+   cat ./trf/*.bed > simpleRepeat.bed
+   # load table
+   ssh hgwdev
+   cd /cluster/data/danRer5/bed/simpleRepeat
+   hgLoadBed danRer5 simpleRepeat simpleRepeat.bed \
+      -sqlTable=$HOME/kent/src/hg/lib/simpleRepeat.sql
+   # Loaded 966523 elements of size 16
+
