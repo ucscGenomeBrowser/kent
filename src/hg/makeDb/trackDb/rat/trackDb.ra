@@ -246,7 +246,7 @@ otherDb hg17
 release beta
 
 track chainMm9
-shortLabel mm9 Chain
+shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 279
@@ -260,7 +260,7 @@ type chain mm9
 otherDb mm9
 
 track netMm9
-shortLabel mm9 Net
+shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 279.1
@@ -270,7 +270,7 @@ type netAlign mm9 chainMm9
 otherDb mm9
 
 track chainMm8
-shortLabel $o_Organism Chain
+shortLabel mm8 Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 280
@@ -284,7 +284,7 @@ type chain mm8
 otherDb mm8
 
 track netMm8
-shortLabel $o_Organism Net
+shortLabel mm8 Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 280.1
