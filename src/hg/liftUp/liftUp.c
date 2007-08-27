@@ -19,7 +19,7 @@
 #include "xa.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: liftUp.c,v 1.45 2007/07/02 23:30:48 angie Exp $";
+static char const rcsid[] = "$Id: liftUp.c,v 1.46 2007/08/27 21:25:40 angie Exp $";
 
 boolean isPtoG = TRUE;  /* is protein to genome lift */
 boolean nohead = FALSE;	/* No header for psl files? */
@@ -258,10 +258,18 @@ for (i=0; i<sourceCount; ++i)
 	    errAbort("Expecting 14-17 words (found %d) line %d of %s", wordCount, lf->lineIx, lf->fileName);
 	if (wordCount >= 15)
 	    {
-	    int numId = sqlUnsigned(words[14]) + idOffset;
-	    if (numId > highestIdSoFar)
-		highestIdSoFar = numId;
-	    safef(idStr, sizeof(idStr), "%d", numId);
+	    if (words[14][0] == '*')
+	    	{
+		warn("Warning: 15th column has * (should be a numeric ID).\n");
+	    	idStr[0] = '\0';
+		}
+	    else
+	    	{
+	    	int numId = sqlUnsigned(words[14]) + idOffset;
+	    	if (numId > highestIdSoFar)
+		    highestIdSoFar = numId;
+	    	safef(idStr, sizeof(idStr), "%d", numId);
+		}
 	    }
 	else
 	    idStr[0] = '\0';
