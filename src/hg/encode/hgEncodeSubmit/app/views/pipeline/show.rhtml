@@ -5,7 +5,7 @@
 <strong>Type: </strong> <%= @submission.s_type -%><br/>
 <strong>Status: </strong> <%= @submission.status -%><br/>
 
-<strong>Date Posted: </strong> <%= distance_of_time_in_words_to_now(@submission.created_at) -%><br/>
+<strong>Date Posted: </strong> <%= distance_of_time_in_words_to_now(@submission.created_at) -%> ago<br/>
 <strong>Last Updated: </strong> <%= distance_of_time_in_words(@submission.updated_at, Time.now) -%> ago<br/>
 </p>
 <br>

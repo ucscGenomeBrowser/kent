@@ -242,7 +242,7 @@ class PipelineController < ApplicationController
     if @submission.save
       msg += "saved ok.<br>\n" 
       flash[:notice] = msg
-      redirect_to :action => 'list'
+      redirect_to :action => 'show', :id => @submission
     else
       flash[:warning] = "submission record save failed"
     end
