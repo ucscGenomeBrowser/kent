@@ -208,7 +208,7 @@ else
 
 if (allOneLine)
     {
-    long totalBases = 0, bStart=0, bEnd;
+    unsigned long totalBases = 0, bStart=0, bEnd;
     int chromCount = 0, chromIx=0;
     for (ref = gl->bottomList; ref != NULL; ref = ref->next)
         {
