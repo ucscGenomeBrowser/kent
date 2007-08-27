@@ -4,13 +4,13 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1" />
   <meta http-equiv="Content-Language" content="en-us" />
-  <title>ENCODE Pipeline</title>
+  <title><%= ActiveRecord::Base.configurations[RAILS_ENV]['title'] -%> Pipeline</title>
 <%= stylesheet_link_tag "style" %>
 </head>
 <body id="encode-pipeline">
 <div id="container">
   <div id="header">
-    <h1>ENCODE Submission Pipeline</h1>
+    <h1><%= ActiveRecord::Base.configurations[RAILS_ENV]['title'] -%> Submission Pipeline</h1>
   </div>
   <% if flash[:error] %><div id="error"><%= flash[:error] %></div><% end %>  
   <% if flash[:warning] %><div id="warning"><%= flash[:warning] %></div><% end %>  
