@@ -23,6 +23,7 @@ SCRIPT_FILES = \
 	doRepeatMasker.pl \
 	doWindowMasker.pl \
 	doSameSpeciesLiftOver.pl \
+	extractNestedRepeats.pl \
 	HgAutomate.pm \
 	HgRemoteScript.pm \
 	HgStepManager.pm \
