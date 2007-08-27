@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/doRepeatMasker.pl instead.
 
-# $Id: doRepeatMasker.pl,v 1.7 2007/08/21 20:03:00 hiram Exp $
+# $Id: doRepeatMasker.pl,v 1.8 2007/08/27 19:02:40 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -318,14 +318,16 @@ head -3 $db.fa.out > /tmp/rmskHead.txt
 tail +4 $db.fa.out \\
 | splitFileByColumn -col=5 stdin /cluster/data/$db -chromDirs \\
     -ending=.fa.out -head=/tmp/rmskHead.txt
+_EOF_
+    );
+  }
+  $bossScript->add(<<_EOF_
 
 # Use the ID column to join up fragments of interrupted repeats for the
 # Nested Repeats track.
 $Bin/extractNestedRepeats.pl $db.fa.out > $db.nestedRepeats.bed
-
 _EOF_
-    );
-  }
+  );
   $bossScript->execute();
 } # doCat
 
