@@ -616,8 +616,7 @@ fastaFiles /cluster/data/danRer5/Zv7release/fasta/Zv7ChromsAndRandomScafs.fa
    # Run with -debug to see what it would do / check for issues:
    makeGenomeDb.pl danRer5.config.ra -debug -verbose=3
    makeGenomeDb.pl danRer5.config.ra >& makeGenomeDb.log & 
-   #PID: 32036: Fri Aug 24 15:00:13 PDT 2007
-
+   # Took about 10 minutes.
    tail -f makeGenomeDb.log
    
    # Follow the directions at the end of the log after
@@ -637,8 +636,14 @@ fastaFiles /cluster/data/danRer5/Zv7release/fasta/Zv7ChromsAndRandomScafs.fa
 # - Run make update DBS=danRer5 and make alpha when done.
 # - (optional) Clean up /cluster/data/danRer5/TemporaryTrackDbCheckout
 # - cvsup your ~/kent/src/hg/makeDb/trackDb and make future edits there.
-    # Then need to load in fragment gaps manually for gap table.
-
+   # makeGenomeDb.pl creates the db for the genome, makes the hgcentraltest
+   # entries and loads the gold (scaffolds) and gap tables. Creates the GC
+   # percent, short match and restriction enzyme tracks. It also creates
+   # a danRer5 directory in the trackDb/zebrafish directory with a trackDb.ra 
+   # file and a template for the assembly descripton, and for the 
+   # gold and gap track tracks 
+   # Then need to load in fragment gaps manually for gap table.
+    
 ##########################################################################
 # REBUILD GAP TABLE WITH FRAGMENT GAPS AS WELL AS CONTIG GAPS 
 # (DONE, 2007-08-24, hartera)
@@ -671,7 +676,6 @@ fastaFiles /cluster/data/danRer5/Zv7release/fasta/Zv7ChromsAndRandomScafs.fa
     hgsql -e 'select count(*) from gap;' danRer5
     # 49727 
     # So all the gaps were loaded. 
-
        
 ###########################################################################
 # REPEATMASKER RUN (in progress, 2007-08-25, hartera)
