@@ -6,9 +6,9 @@
 #include "jksql.h"
 #include "genePred.h"
 
-static char const rcsid[] = "$Id: bigGene.c,v 1.1 2007/08/27 21:34:00 kent Exp $";
+static char const rcsid[] = "$Id: bigGene.c,v 1.2 2007/08/27 21:42:11 kent Exp $";
 
-char *db = "hg18";
+char *db = NULL;
 
 void usage()
 /* Explain usage and exit. */
@@ -16,7 +16,8 @@ void usage()
 errAbort(
   "bigGene - Find biggest gene in genome.\n"
   "usage:\n"
-  "   bigGene inputTable\n"
+  "   bigGene input\n"
+  "Where input is a file in genePred format, or a database table if using the -db option.\n"
   "options:\n"
   "   -db=database\n"
   "   -intron - calculate biggest intron instead of biggest gene\n"
@@ -30,7 +31,7 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-struct genePred *readAllGenes(char *database, char *table)
+struct genePred *readAllGenesFromDb(char *database, char *table)
 /* Read all genes from given database and table, return as a list. */
 {
 struct genePred *list = NULL;
@@ -69,7 +70,12 @@ return biggestSize;
 void bigGene(char *input)
 /* bigGene - Find biggest gene in genome.. */
 {
-struct genePred *biggest = NULL, *gp, *list = readAllGenes(db, input);
+struct genePred *list = NULL;
+if (db)
+    list = readAllGenesFromDb(db, input);
+else
+    list = genePredLoadAll(input);
+struct genePred *biggest = NULL, *gp;
 int biggestSize = 0;
 boolean doIntron = optionExists("intron");
 
@@ -87,7 +93,7 @@ for (gp = list; gp != NULL; gp = gp->next)
 	}
     }
 printf("biggest %s is %s, size %d\n", 
-	(doIntron ? "gene" : "intron"),
+	(doIntron ? "intron" : "gene"),
 	biggest->name, biggestSize);
 }
 
