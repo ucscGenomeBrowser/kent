@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/extractNestedRepeats.pl instead.
 
-# $Id: extractNestedRepeats.pl,v 1.2 2007/07/18 23:32:21 angie Exp $
+# $Id: extractNestedRepeats.pl,v 1.3 2007/08/27 19:43:46 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -135,6 +135,7 @@ my $prevChr;
 my $prevId = 0;
 my @groupedById = ();
 my $offset = 0;
+my $idProblems = 0;
 while (<>) {
   # Skip header lines:
   next if (/^(   SW.*|score.*|\s*)$/);
@@ -142,6 +143,15 @@ while (<>) {
   my @row = split;
   my ($chr, $start, $end, $strand, $repName, $repClassFam, $id) =
     ($row[4], $row[5], $row[6], $row[8], $row[9], $row[10], $row[14]);
+  if (! defined $id) {
+    warn "RepeatMasker bug?: Undefined id, line $. of input:\n$_\n";
+    $idProblems++;
+    next;
+  } elsif ($id !~ /^\d+$/) {
+    warn "RepeatMasker bug?: Non-numeric id \"$id\", line $. of input:\n$_\n";
+    $idProblems++;
+    next;
+  }
   $start--;
   $strand = '-' if ($strand eq 'C');
   # If we are starting a new chrom, or ID's have rolled over due to
@@ -160,3 +170,7 @@ while (<>) {
 }
 &writeGroups(\@groupedById, 0, $offset);
 
+if ($idProblems) {
+  die "At least one ID was missing (see warnings above) -- " .
+    "please report to Robert Hubley.  -continue at your disgression.\n";
+}
