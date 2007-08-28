@@ -9,6 +9,8 @@
   <td><%= link_to c.name, {:action => 'show', :id => c.id} -%></td>
   <td><%= c.s_type -%></td>
   <td><%= c.status -%></td>
+  <td><%= c.user.pi -%></td>
+  <td><%= c.updated_at.strftime("%Y-%m-%d") -%></td>
   </tr>
  <% end %>
  </table>
