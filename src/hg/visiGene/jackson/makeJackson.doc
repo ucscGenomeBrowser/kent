@@ -289,3 +289,21 @@ find /gbdb/visiGene/full/inSitu/Mouse/jax/ -name '*.jpg' -mtime -1 -maxdepth 1 |
 # 13000 pix were missing levels 5 and 6 for jax.  
 # Please see visiGene.txt make doc (2007-04-20)
 #################################################
+
+
+##############################################
+# Panasas is going away 2007-08-27
+#  so I have requested the following rsync
+#  to move it to a new location on sanvol1
+#  where we have lots of other original files
+##############################################
+
+please perform the following rsync as root to preserve data/ownerships:
+
+rsync -a
+ /cluster/panasas/home/store/galt/jacksonLab/
+ /san/sanvol1/scratch/visiGene/downloads/jackson/jacksonLab/
+
+
+
+
