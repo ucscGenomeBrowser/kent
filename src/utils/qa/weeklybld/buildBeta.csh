@@ -85,7 +85,7 @@ endif
 #endif
 #
 echo
-echo "Build libs, alpha, strict-track/zoo, table-descr  done."
+echo "Build libs, alpha, strict-track  done."
 #
 exit 0
 
