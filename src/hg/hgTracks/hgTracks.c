@@ -118,7 +118,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1398 2007/08/28 01:29:36 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1399 2007/08/28 23:53:07 kate Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -13406,6 +13406,7 @@ for (track = *pTrackList; track != NULL; track = track->next)
             }
         else
             {
+            /* get group */
             safef(cartVar, sizeof(cartVar), "%s.group",track->mapName);
             groupName = cloneString(
                     cartUsualString(cart, cartVar, track->defaultGroupName));
@@ -13415,6 +13416,18 @@ for (track = *pTrackList; track != NULL; track = track->next)
         track->groupName = cloneString(groupName);
         if (sameString(groupName, track->defaultGroupName))
             cartRemove(cart, cartVar);
+
+        /* get priority */
+        safef(cartVar, sizeof(cartVar), "%s.priority",track->mapName);
+        float priority = (float)cartUsualDouble(cart, cartVar, 
+                                                    track->defaultPriority);
+        /* remove cart variables that are the same as the trackDb settings */
+        if (abs(priority - track->defaultPriority) < 0.00001)
+            {
+            priority = track->defaultPriority;
+            cartRemove(cart, cartVar);
+            }
+        track->priority = priority;
         }
 
     /* assign group object to track */
@@ -13488,6 +13501,20 @@ for (tr = group->trackList; tr != NULL; tr = tr->next)
         superTrack->group = group;
         superTrack->groupName = cloneString(group->name);
         superTrack->defaultGroupName = cloneString(group->name);
+
+        /* handle track reordering */
+        char cartVar[128];
+        safef(cartVar, sizeof(cartVar), "%s.priority",track->tdb->parentName);
+        float priority = (float)cartUsualDouble(cart, cartVar, 
+                                        track->tdb->parent->priority);
+        /* remove cart variables that are the same as the trackDb settings */
+        if (abs(priority - track->tdb->parent->priority) < 0.00001)
+            {
+            priority = track->tdb->parent->priority;
+            cartRemove(cart, cartVar);
+            }
+        superTrack->priority = priority;
+
         AllocVar(ref);
         ref->track = superTrack;
         slAddHead(&newList, ref);
@@ -13889,36 +13916,9 @@ groupTracks(&trackList, pGroupList, vis);
 if (cgiOptionalString( "hideTracks"))
     changeTrackVis(groupList, NULL, tvHide);
 
-/* Get visibility values and priority if any from ui. */
-/* TODO: move this into changeTrackVis with -2 vis */
+/* Get visibility values if any from ui. */
 for (track = trackList; track != NULL; track = track->next)
     {
-    char cartVar[128];
-    safef(cartVar, sizeof(cartVar), "%s.priority",track->mapName);
-    float priority = (float)cartUsualDouble(cart, cartVar, 
-                track->defaultPriority);
-    /* remove cart variables that are the same as the trackDb settings */
-    if (abs(priority - track->defaultPriority) < 0.00001)
-        {
-        priority = track->defaultPriority;
-        cartRemove(cart, cartVar);
-        }
-    track->priority = priority;
-
-    if (track->tdb->parent)
-        {
-        safef(cartVar, sizeof(cartVar), "%s.priority",track->tdb->parentName);
-        float priority = (float)cartUsualDouble(cart, cartVar, 
-                                        track->tdb->parent->priority);
-        /* remove cart variables that are the same as the trackDb settings */
-        if (abs(priority - track->tdb->parent->priority) < 0.00001)
-            {
-            priority = track->tdb->parent->priority;
-            cartRemove(cart, cartVar);
-            }
-        track->tdb->parent->priority = priority;
-        }
-
     char *s = cartOptionalString(cart, track->mapName);
     if (cgiOptionalString( "hideTracks"))
 	{
