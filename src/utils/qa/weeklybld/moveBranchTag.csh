@@ -143,7 +143,8 @@ while ( $i <= $#files )
     endif
     # update 32bit sandbox on $BOX32 too
     echo "$cmd32"
-    ssh $BOX32 "$cmd32"
+    #old way: ssh $BOX32 "$cmd32"
+    ssh $BOX32 "/bin/tcsh -c '"$cmd32"'"
     set msg = "$msg $f $p --> $r\n"
     @ i++
 end

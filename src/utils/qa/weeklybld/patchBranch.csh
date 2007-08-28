@@ -145,7 +145,8 @@ while ( $i <= $#files )
     # update 32-bit sandbox on $BOX32 too
     set cmd32 = "cd /scratch/releaseBuild/v${BRANCHNN}_branch/kent/src/$f:h;cvs up $f:t"
     echo "$cmd32"
-    ssh $BOX32 "$cmd32"
+    #old way: ssh $BOX32 "$cmd32"
+    ssh $BOX32 "/bin/tcsh -c '"$cmd32"'"
     
     set msg = "$msg $f $p : patched-in $r\n"
     @ i++
