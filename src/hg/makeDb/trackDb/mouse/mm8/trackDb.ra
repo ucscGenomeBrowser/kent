@@ -22,7 +22,7 @@ longLabel Regions Assayed for SDD
 group map
 priority 29
 visibility hide
-type bed 4 .
+type bed 3 .
 
 track knownGene
 shortLabel Known Genes
