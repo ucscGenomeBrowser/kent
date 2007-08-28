@@ -125,7 +125,7 @@ for (group = groupList; group != NULL; group = group->next)
         hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
         hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
         hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
-        hPrintf(wrapWhiteFont(" Track Order: "));
+        hPrintf(wrapWhiteFont("Group Order: "));
         }
     hPrintf("</TH>\n");
     if (withPriorityOverride)
@@ -179,7 +179,8 @@ for (group = groupList; group != NULL; group = group->next)
 	}
     isFirst = FALSE;
     /* Scan track list to determine which supertracks have visible member
-     * tracks, and to insert a track in the list for the supertrack */
+     * tracks, and to insert a track in the list for the supertrack.
+     * Sort tracks and supertracks together by priority */
     groupTrackListAddSuper(cart, group);
 
     if (!withPriorityOverride)
@@ -272,6 +273,7 @@ for (group = groupList; group != NULL; group = group->next)
             hDoubleVar(pname, (double)track->priority, 4);
             hPrintf("</TD>");
             hPrintf("<TD>\n");
+            /* suppress group pull-down for supertrack members */
             if (track->tdb->parentName)
                 hPrintf("&nbsp");
             else
@@ -298,11 +300,12 @@ char *groupTarget = NULL;
 struct track *trackList =  NULL;
 struct track *ideoTrack = NULL;
 struct group *groupList = NULL;
+
 withPriorityOverride = cartUsualBoolean(cart, configPriorityOverride, FALSE);
 
 /* Get track list and group them. */
 ctList = customTracksParseCart(cart, &browserLines, &ctFileName);
-trackList = getTrackList(&groupList);
+trackList = getTrackList(&groupList, vis);
 
 /* The ideogram for some reason is considered a track.
  * We don't really want to process it as one though, so

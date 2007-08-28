@@ -351,8 +351,10 @@ void makeLoweShades(struct vGfx *vg);
 void abbr(char *s, char *fluff);
 /* Cut out fluff from s. */
 
-struct track *getTrackList(struct group **pGroupList);
-/* Return list of all tracks. */
+struct track *getTrackList(struct group **pGroupList, int vis);
+/* Return list of all tracks, organizing by groups. 
+ * If vis is -1, restore default groups to tracks. 
+ * Shared by hgTracks and configure page. */
 
 void groupTrackListAddSuper(struct cart *cart, struct group *group);
 /* Construct a new track list that includes supertracks, sort by priority,
