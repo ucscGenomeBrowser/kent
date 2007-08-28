@@ -539,11 +539,10 @@ identifier encodePseudogeneYale dependency
 
 identifier acemblyName dependency
 "Link together Acembly gene model structure and peptide."
-    $hg.acembly.name
-    $hg,!hg18,!hg17.acemblyPep.name unique minCheck=0.90
-    hg18,hg17.acemblyPep.name unique minCheck=0.63
-    $hg,!hg18.acemblyClass.name full unique
-    hg18.acemblyClass.name minCheck=0.99
+    $hg,$mm.acembly.name
+    $hg,!hg17,$mm.acemblyPep.name unique minCheck=0.90
+    hg17.acemblyPep.name unique minCheck=0.63
+    $hg,$mm.acemblyClass.name full unique
 
 identifier ECgeneName dependency
 "Link together EC gene predicted gene structure and peptide"
