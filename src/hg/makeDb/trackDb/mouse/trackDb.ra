@@ -102,6 +102,21 @@ visibility dense
 color 150,0,0
 type genePred ensPep
 
+track acembly
+shortLabel AceView Genes
+longLabel AceView Gene Models With Alt-Splicing
+group genes
+priority 41
+visibility hide
+color 155,0,125
+type genePred acemblyPep acemblyMrna
+url http://www.ncbi.nih.gov/IEB/Research/Acembly/av.cgi?db=mouse&l=$$
+itemClassTbl acemblyClass
+geneClasses main putative
+gClass_main 128,0,125
+gClass_putative 200,0,125
+urlLabel Transcript ID:
+
 track slamHuman
 shortLabel Slam Human
 longLabel SLAM Gene Predictions Using Human/Mouse Homology
