@@ -17,7 +17,7 @@
 #include "genbank.h"
 #include "hgTracks.h"
 
-static char const rcsid[] = "$Id: cds.c,v 1.59 2007/08/21 00:12:22 angie Exp $";
+static char const rcsid[] = "$Id: cds.c,v 1.60 2007/08/28 21:18:33 mhoechsm Exp $";
 
 /* Definitions of cds colors for coding coloring display */
 #define CDS_ERROR   0
@@ -67,7 +67,12 @@ static char const rcsid[] = "$Id: cds.c,v 1.59 2007/08/21 00:12:22 angie Exp $";
 #define CDS_POLY_A_G 210
 #define CDS_POLY_A_B 0
 
-#define CDS_NUM_COLORS 10
+#define CDS_ALT_START    10
+#define CDS_ALT_START_R  0 
+#define CDS_ALT_START_G  0 
+#define CDS_ALT_START_B  128
+
+#define CDS_NUM_COLORS 11
 
 /* Array of colors used in drawing codons/bases/differences: */
 Color cdsColor[CDS_NUM_COLORS];
@@ -366,9 +371,21 @@ else if (grayIx == -1)
     }
 else if (grayIx == -3)
     {
-    color = cdsColor[CDS_STOP];
+      color = cdsColor[CDS_STOP];
     sprintf(codon,"*");
     }
+#ifdef LOWELAB
+else if(grayIx == - 'V')
+   {
+   color = cdsColor[CDS_ALT_START];
+   sprintf(codon,"%c",'V');   
+   }
+else if(grayIx == - 'L')
+   {
+   color = cdsColor[CDS_ALT_START];
+   sprintf(codon,"%c",'V');   
+   }
+#endif
 else if (grayIx <= 26)
     {
     color = ixColor;
@@ -403,6 +420,17 @@ else
 
 if (codonChar == 'M' && foundStart != NULL && !(*foundStart))
     *foundStart = TRUE;
+
+#ifdef LOWELAB
+if(sameString(dna,"GTG"))
+   {
+     return -'V';
+   }
+if(sameString(dna,"TTG"))
+   {
+     return -'L';
+   }
+#endif
 
 if (codonChar == 0)
     {
@@ -669,6 +697,10 @@ cdsColor[CDS_QUERY_INSERTION_AT_END] = vgFindColorIx(vg, CDS_QUERY_INSERTION_AT_
 cdsColor[CDS_POLY_A] = vgFindColorIx(vg,CDS_POLY_A_R,
 					    CDS_POLY_A_G, 
 					    CDS_POLY_A_B);
+
+cdsColor[CDS_ALT_START] = vgFindColorIx(vg,CDS_ALT_START_R,
+					    CDS_ALT_START_G, 
+					    CDS_ALT_START_B);
 }
 
 
