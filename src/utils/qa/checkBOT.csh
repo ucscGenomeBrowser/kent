@@ -8,19 +8,33 @@
 ####################
 
 set worst=""
+set mode=""
 
-if ($#argv != 1) then
+if ($#argv < 1 || $#argv > 2 ) then
   echo
-  echo "  wrapper around bottleneck check"
+  echo "  wrapper around bottleneck check."
+  echo "  gives delay stats for IP address(es)."
   echo
-  echo '      usage:  ipAddress '
+  echo '      usage:  ipAddress [terse]'
+  echo '              (terse gives only data)'
   echo
-  echo '  (use "all" to get all IPs having delays)'
+  echo '      (use "all" to get all IPs having delays)'
   echo
   exit
 else
   set ip=$argv[1]
 endif
+
+if ($#argv == 2 ) then
+  set mode=$argv[2]
+  if ($mode !=  "terse" ) then
+    echo
+    echo '  sorry, the second argument can only be "terse"'
+    echo
+    exit 1
+  endif
+endif
+
 
 if ( "$HOST" != "hgwdev" ) then
  echo "\n error: you must run this script on dev!\n"
@@ -46,9 +60,12 @@ if ($ip == "all") then
 else
   /etc/init.d/bottleneck status | egrep "$ip|current"
 endif
-
-
 echo 
+
+if ($mode == "terse") then
+  exit 0
+endif
+
 echo "  hits    = total number of accesses since started tracking"
 echo "  time    = last seen hit was N seconds ago"
 echo "  max     = the most delay time slapped on this source IP"
