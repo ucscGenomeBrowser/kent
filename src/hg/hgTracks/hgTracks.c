@@ -118,7 +118,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1399 2007/08/28 23:53:07 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1400 2007/08/29 19:07:27 angie Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -9554,6 +9554,8 @@ switch (track->limitedVis)
 	    else
 		y = doMapItems(track, fontHeight, y);
 	    }
+	else
+	    y += trackPlusLabelHeight(track, fontHeight);
 	break;
     case tvDense:
 	if (isWithCenterLabels(track))
