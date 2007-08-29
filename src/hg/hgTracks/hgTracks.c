@@ -118,7 +118,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1400 2007/08/29 19:07:27 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1401 2007/08/29 19:37:53 angie Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -14280,8 +14280,8 @@ if (showTrackControls)
 	hPrintf("<TR>");
 	cg->rowOpen = TRUE;
         hPrintf("<th align=\"left\" colspan=%d BGCOLOR=#536ED3>", MAX_CONTROL_COLUMNS);
-	hPrintf("\n<A NAME=\"%s\"></A>",group->name);
-        hPrintf("<A HREF=\"%s?%s&%s=%s#%s\" class=\"bigBlue\"><IMG height=18 width=18 src=\"%s\" alt=\"%s\" class=\"bigBlue\"></A>&nbsp;&nbsp;",
+	hPrintf("\n<A NAME=\"%sGroup\"></A>",group->name);
+        hPrintf("<A HREF=\"%s?%s&%s=%s#%sGroup\" class=\"bigBlue\"><IMG height=18 width=18 src=\"%s\" alt=\"%s\" class=\"bigBlue\"></A>&nbsp;&nbsp;",
             hgTracksName(), cartSidUrlString(cart), 
             collapseGroupVar(group->name),
             otherState, group->name, indicatorImg, indicator);
