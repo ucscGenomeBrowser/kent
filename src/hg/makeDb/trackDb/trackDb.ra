@@ -584,7 +584,7 @@ longLabel Swiss Institute of Bioinformatics Gene Predictions from mRNA and ESTs
 group  genes
 priority 41.4
 visibility hide
-color 155,0,125
+color 195,90,0
 type genePred
 url http://www.isrec.isb-sib.ch/cgi-bin/tromer/tromer_quick_search.pl?query_str=$$
 urlLabel SIB link:
@@ -595,7 +595,7 @@ longLabel ECgene Gene Predictions with Alt-Splicing
 group genes
 priority 41.5
 visibility hide
-color 155, 0, 125
+color 155,0,125
 type genePred ECgenePep
 
 track ensEst
