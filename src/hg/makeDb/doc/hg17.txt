@@ -23952,3 +23952,14 @@ done
     Query OK, 2366123 rows affected (31.46 sec)
     Rows matched: 2366123  Changed: 2366123  Warnings: 0
 
+###########################################################################
+## Create gc5Base download raw data file (DONE - 2007-08-29 - Hiram)
+    ssh kkstore02
+    cd /cluster/data/hg17/bed/gc5Base
+    hgGcPercent -wigOut -doGaps -file=stdout -win=5 \
+	hg17 /cluster/data/hg17/hg17.2bit 2> /dev/null \
+	| gzip > hg17.gc5Base.txt.gz
+    ssh hgwdev
+    mkdir /usr/local/apache/htdocs/goldenPath/hg17/gc5Base
+    cd /usr/local/apache/htdocs/goldenPath/hg17/gc5Base
+    ln -s /cluster/data/hg17/bed/gc5Base/hg17.gc5Base.txt.gz .
