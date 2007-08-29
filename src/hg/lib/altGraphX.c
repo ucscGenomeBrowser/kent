@@ -10,7 +10,7 @@
 #include "geneGraph.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: altGraphX.c,v 1.32 2007/04/13 18:32:47 markd Exp $";
+static char const rcsid[] = "$Id: altGraphX.c,v 1.33 2007/08/29 19:00:18 kent Exp $";
 struct altGraphX *_agxSortable = NULL; /* used for sorting. */
 
 struct evidence *evidenceCommaIn(char **pS, struct evidence *ret)
@@ -27,7 +27,8 @@ if (ret == NULL)
     AllocVar(ret);
 ret->evCount = sqlSignedComma(&s);
 s = sqlEatChar(s, '{');
-AllocArray(ret->mrnaIds, ret->evCount);
+if (ret->evCount > 0)
+    AllocArray(ret->mrnaIds, ret->evCount);
 for (i=0; i<ret->evCount; ++i)
     {
     ret->mrnaIds[i] = sqlSignedComma(&s);
