@@ -10,7 +10,7 @@
 #include "geneGraph.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: altGraphX.c,v 1.33 2007/08/29 19:00:18 kent Exp $";
+static char const rcsid[] = "$Id: altGraphX.c,v 1.34 2007/08/29 19:15:22 kent Exp $";
 struct altGraphX *_agxSortable = NULL; /* used for sorting. */
 
 struct evidence *evidenceCommaIn(char **pS, struct evidence *ret)
@@ -533,7 +533,8 @@ agNew->evidence = NULL;
 for(ev = ag->evidence; ev != NULL; ev = ev->next)
     {
     evNew = CloneVar(ev);
-    evNew->mrnaIds = CloneArray(ev->mrnaIds, ev->evCount);
+    if (ev->evCount > 0)
+	evNew->mrnaIds = CloneArray(ev->mrnaIds, ev->evCount);
     slAddHead(&agNew->evidence, evNew);
     }
 slReverse(&agNew->evidence);
@@ -1340,7 +1341,8 @@ struct evidence *ev = slElementFromIx(ag->evidence, eIx);
 int *seen = NULL;
 int seenCount = 0,i;
 int conf = 0;
-AllocArray(seen, ev->evCount);
+if (ev->evCount > 0)
+    AllocArray(seen, ev->evCount);
 for(i=0; i<ev->evCount; i++)
     seen[i] = -1;
 for(i=0; i<ev->evCount; i++)
