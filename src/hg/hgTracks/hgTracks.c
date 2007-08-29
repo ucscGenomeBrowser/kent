@@ -118,7 +118,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1401 2007/08/29 19:37:53 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1402 2007/08/29 23:15:44 kate Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -13403,8 +13403,6 @@ for (track = *pTrackList; track != NULL; track = track->next)
             groupName = cloneString(
                     cartUsualString(cart, cartVar, track->tdb->parent->grp));
             track->tdb->parent->grp = cloneString(groupName);
-            if (sameString(groupName, track->tdb->parent->grp))
-                cartRemove(cart, cartVar);
             }
         else
             {
@@ -13922,10 +13920,10 @@ if (cgiOptionalString( "hideTracks"))
 for (track = trackList; track != NULL; track = track->next)
     {
     char *s = cartOptionalString(cart, track->mapName);
-    if (cgiOptionalString( "hideTracks"))
+    if (cgiOptionalString("hideTracks"))
 	{
 	s = cgiOptionalString(track->mapName);
-	if (s != NULL)
+	if (s != NULL && (hTvFromString(s) != track->tdb->visibility))
             {
             cartSetString(cart, track->mapName, s);
             }
