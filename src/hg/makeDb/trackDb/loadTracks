@@ -38,6 +38,18 @@ trackDb="$1"; shift
 hgFindSpec="$1" ; shift
 dbs="$@"
 
+# check if a database exists, print warning and return non-zero if it doesn't
+dbExists() {
+    local db="$1"
+    local dbChk=$(hgsql -Ne 'show databases like "'$db'"')
+    if [ -z "$dbChk" ] ; then
+        echo "Warning: database $db does not exist, skipping"
+        return 1
+    else
+        return 0
+    fi
+}
+
 # load trackDb for a database
 loadDbTracks() {
     local db="$1"
@@ -85,6 +97,8 @@ loadDbTracks() {
 
 # load for all specified databases
 for db in $dbs ; do
-    loadDbTracks $db
+    if dbExists $db ; then
+        loadDbTracks $db
+    fi
 done
 
