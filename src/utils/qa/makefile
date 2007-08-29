@@ -59,6 +59,7 @@ install:
 	cp -p --remove-destination getRRtables.csh         ${SCRIPTS}
 	cp -p --remove-destination getTablesize.csh        ${SCRIPTS}
 	cp -p --remove-destination getTableStatus.csh      ${SCRIPTS}
+	cp -p --remove-destination getTrackName.csh        ${SCRIPTS}
 	cp -p --remove-destination getSplit.csh            ${SCRIPTS}
 	cp -p --remove-destination getVersion.csh          ${SCRIPTS}
 	cp -p --remove-destination getYield.csh            ${SCRIPTS}
