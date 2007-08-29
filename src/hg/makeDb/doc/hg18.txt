@@ -16763,3 +16763,16 @@ TMPDIR=/scratch/tmp
 	-verbose=2 -bigClusterHub=pk -chainMinScore=3000 \
 	-syntenicNet -chainLinearGap=medium -continue=syntenicNet \
 	`pwd`/DEF > syntenic.out 2>&1 &
+    ##	real    25m47.767s
+
+###########################################################################
+## Create gc5Base download raw data file (DONE - 2007-08-29 - Hiram)
+    ssh kkstore02
+    cd /cluster/data/hg18/bed/gc5Base
+    hgGcPercent -wigOut -doGaps -file=stdout -win=5 \
+	hg18 /cluster/data/hg18/hg18.2bit 2> /dev/null \
+	| gzip > hg18.gc5Base.txt.gz
+    ssh hgwdev
+    mkdir /usr/local/apache/htdocs/goldenPath/hg18/gc5Base
+    cd /usr/local/apache/htdocs/goldenPath/hg18/gc5Base
+    ln -s /cluster/data/hg18/bed/gc5Base/hg18.gc5Base.txt.gz .
