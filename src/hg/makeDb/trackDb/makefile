@@ -25,8 +25,7 @@
 
 include ../../../inc/common.mk
 
-HGWDEV_DBS = hg13
-DBS = 	hg15 hg16 hg17 hg18\
+DBS = 	hg13 hg15 hg16 hg17 hg18\
 	panTro1 panTro2 \
 	ponAbe1 \
 	rheMac2 \
