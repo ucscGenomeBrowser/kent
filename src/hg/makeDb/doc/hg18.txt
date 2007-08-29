@@ -16655,7 +16655,7 @@ done
 
 
 #############################################################################
-# SIB Transcriptome (in progress Aug 2007 - JK)
+# SIB Transcriptome (DONE Aug 29, 2007 - JK)
 
    # Create working directory and download data from where Christian Iseli
    # (Christian.Iseli@licr.org) put it, and unpack.  The download takes about
@@ -16668,7 +16668,7 @@ done
    tar -zxvf txg.tar.gz
 
    # Load up sibGene table
-   zcat HTR.gtf.gz ldHgGene hg18 sibGene stdin
+   zcat HTR.gtf.gz | ldHgGene hg18 sibGene stdin
 
    # Do a little data cleanup and transformation and load splice graphs into database.
    sed 's/altGraphX/sibTxGraph/' ~/src/hg/lib/altGraphX.sql > sibTxGraph.sql
