@@ -11705,6 +11705,7 @@ hgLoadSqlTab -oldTable hg18 oregannoLink
 
 ##########################################################################
 # LIFT ACEMBLY FROM HG17 TO HG18 (DONE, Fan, 9/28/06)
+# OBSOLETED BY LOAD OF NEW DATA, SEE BELOW 8/28/07 angie
 
 # get acembly data from hg17
 
@@ -11730,6 +11731,7 @@ hgLoadSqlTab -oldTable hg18 oregannoLink
     hgsql hg18 -e 'drop table acemblyClass'
     hgsql hg18 < ~/src/hg/lib/acemblyClass.sql
     hgsql hg18 -e 'load data local infile "acemblyClass.tab" into table acemblyClass'
+
 
 ##########################################################################
 # LIFT RNAGENE FROM HG17 TO HG18 (DONE, Robert, 10/3/06)
@@ -16516,6 +16518,7 @@ hgLoadBed -tab -sqlTable=hapmapAllelesSummary.sql hg18 hapmapAllelesSummary hapm
 
   hgLoadBed -sqlTable=/cluster/home/fanhsu/src/hg/lib/wgRna.sql hg18 wgRna wgRna.tab
 
+
 #############################################################################
 # N-SCAN GENES track (2007-06-21 markd)
 # create a composite track with exists ab-inito and new PASA N-SCAN predictions
@@ -16648,7 +16651,7 @@ done
     # renaming file directory -- kuhn 08-17-2007
     cd /gbdb/hg18/wib
     mv 070118 regPot070118
-    hgsql -e " update regPotential7X SET file = \
+    hgsql -e " update regPotential7X SET file = " \
       "/gbdb/hg18/wib/regPot070118/regPotential7X.wib" hg18
     Query OK, 2341572 rows affected (31.59 sec)
     Rows matched: 2341572  Changed: 2341572  Warnings: 0
@@ -16765,6 +16768,95 @@ TMPDIR=/scratch/tmp
 	`pwd`/DEF > syntenic.out 2>&1 &
     ##	real    25m47.767s
 
+
+#########################################################################
+# LOAD ACEMBLY (DONE 8/28/07 angie)
+    ssh kkstore02
+    cd /cluster/data/hg18/bed/acembly
+    # Move aside liftOver run results
+    mkdir liftOver
+    mv a* g* h* j* u* liftOver
+    
+    wget --timestamping ftp://ftp.ncbi.nih.gov/repository/acedb/ncbi_36.human.genes/AceView.ncbi_36.genes_gff.tar.gz
+    wget --timestamping ftp://ftp.ncbi.nih.gov/repository/acedb/ncbi_36.human.genes/AceView.ncbi_36.good_proteins_fasta.tar.gz
+    tar xvzf AceView.ncbi_36.genes_gff.tar.gz
+    tar xvzf AceView.ncbi_36.good_proteins_fasta.tar.gz
+
+    cd AceView.ncbi_36.genes_gff
+    # If the result of this command is > 0, then some lines have end < start 
+    # and need to be fixed:
+    awk '$5 < $4 {print;}' *.gff | wc -l
+#0
+
+    # Filter out empty lines, lines where the product_id has a stray 
+    # newline before it, and $chr|Hs# IDs that don't appear liftable.
+    egrep -h -v '^(| ?product_id.*|..?\|Hs.*)$' *.gff \
+    | sed -e 's/^/chr/;' \
+      > acembly.gff
+
+    # Extract annotation classes from original gff:
+    egrep -h -v '^(| ?product_id.*|..?\|Hs.*)$' *.gff \
+    | perl -wpe 's/^.*Gene_type (\w+); transcript_id (\S+);.*/$2\t$1/; \
+                 s/Main$/main/ || s/Putative$/putative/ || \
+                   die "Unrecognized class/Gene_type:\n$_\n";' \
+    | sort -u \
+      > acemblyClass.tab
+
+    # Some gff transcript_id's end in -unspliced (no intron), but the 
+    # corresponding protein fasta IDs to not have that suffix.  We need
+    # them to match, so add where necessary.
+    # Use perl to make a perl script to add -unspliced to protein IDs 
+    # where necessary:
+    grep unspliced acemblyClass.tab | wc -l
+#70156
+    egrep -h -v '^(| ?product_id.*|..?\|Hs.*)$' *.gff \
+    | perl -wpe 's@^.*transcript_id (\S+)-unspliced;.*$@\$unsp{"$1"} = 1;@ \
+               || s/^.*\n$//;' \
+    | sort -u \
+      > ../addUnspliced.pl
+    wc -l ../addUnspliced.pl
+#70156 ../addUnspliced.pl
+    cat >> ../addUnspliced.pl <<'_EOF_'
+while (<>) {
+  if (/^>(\S+)$/) {
+    if ($unsp{$1}) {
+      s/^>(\S+)/>$1-unspliced/;
+    }
+  }
+  print;
+}
+'_EOF_'
+    # << emacs
+
+    # Add -unspliced suffix to protein IDs where necessary, and pare down 
+    # proteins to just the ones that we have transcripts for:
+    cd /cluster/data/hg18/bed/acembly/AceView.ncbi_36.good_proteins_fasta
+    awk '{print $1;}' ../AceView.ncbi_36.genes_gff/acemblyClass.tab \
+      > transcriptNames.txt
+    perl ../addUnspliced.pl *.fasta \
+    | faSomeRecords stdin transcriptNames.txt acemblyPep.fa
+    grep unspliced acemblyPep.fa | wc -l
+#55931
+    # Danielle Thierry-Mieg explained that noncoding genes are included so
+    # the number of proteins can be smaller than the number of transcripts.
+
+    # Load tables
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/acembly/AceView.ncbi_36.genes_gff
+    ldHgGene -gtf hg18 acembly acembly.gff
+#Read 258618 transcripts in 3451107 lines in 1 files
+#  258618 groups 24 seqs 1 sources 5 feature types
+#258618 gene predictions
+    hgLoadSqlTab hg18 acemblyClass ~/kent/src/hg/lib/acemblyClass.sql \
+      acemblyClass.tab
+    cd /cluster/data/hg18/bed/acembly/AceView.ncbi_36.good_proteins_fasta
+    hgPepPred hg18 generic acemblyPep acemblyPep.fa
+    rm acemblyPep.tab
+    runJoiner.csh hg18 acembly
+# hg18.acemblyPep.name - hits 210003 of 210003 ok
+# hg18.acemblyClass.name - hits 258618 of 258618 ok
+
+
 ###########################################################################
 ## Create gc5Base download raw data file (DONE - 2007-08-29 - Hiram)
     ssh kkstore02
@@ -16776,6 +16868,8 @@ TMPDIR=/scratch/tmp
     mkdir /usr/local/apache/htdocs/goldenPath/hg18/gc5Base
     cd /usr/local/apache/htdocs/goldenPath/hg18/gc5Base
     ln -s /cluster/data/hg18/bed/gc5Base/hg18.gc5Base.txt.gz .
+
+
 ###########################################################################
 # GENE BOUNDS (RNACLUSTER) (REBUILT 08-30-2007 Fan)
 # Create rnaCluster table (depends on {est,mrna}OrientInfo)
@@ -16796,4 +16890,6 @@ foreach f (/cluster/data/hg18/nib/chr*.nib)
     clusterRna -mrnaExclude=hg18.rage.libs hg18 /dev/null $out -chrom=$c
 end
 hgLoadBed hg18 rnaCluster chrom/*.bed
+
+
 ############################################################################
