@@ -144,6 +144,13 @@ origAssembly hg17
     longLabel Genome Institute of Singapore PET of PolyA+ RNA (5FU-stim HCT116)
     priority 3
     color 58,119,40
+    
+    track encodeGisRnaPetHes3
+    subTrack encodeGisRnaPet
+    shortLabel GIS RNA hES3
+    longLabel Genome Institute of Singapore PET of PolyA+ RNA (embryonic stem cell hES3)
+    priority 4
+    color 50,100,50
 
 searchTable encodeGisRnaPetHCT116
 searchMethod exact
