@@ -1,5 +1,6 @@
 # ENCODE tracks
 include trackDb.encode.ra
+include trackDb.instinct.ra
 
 track rgdQtl
 shortLabel RGD QTL
