@@ -55,6 +55,24 @@ type bed 12
     dataVersion Oct 2006
     origAassembly hg17
     priority 4
+    
+    track encodeGisChipPetHes3H3K4me3
+    subTrack encodeGisChipPetAll
+    shortLabel H3K4me3 hES3
+    longLabel Genome Institute of Singapore ChIP-PET: H3K4me3 Ab on ES hes-3 cells
+    color 150,50,50
+    dataVersion Aug 2007
+    origAassembly hg18
+    priority 5
+    
+    track encodeGisChipPetHes3H3K27me3
+    subTrack encodeGisChipPetAll
+    shortLabel H3K27me3 hES3
+    longLabel Genome Institute of Singapore ChIP-PET: H3K27me3 Ab on ES hes-3 cells
+    color 50,100,50
+    dataVersion Aug 2007
+    origAassembly hg18
+    priority 6
 
 # Sanger chip supertrack
 
