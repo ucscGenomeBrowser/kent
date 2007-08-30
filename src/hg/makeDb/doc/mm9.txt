@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.16 2007/08/15 18:55:11 hiram Exp $"
+#	"$Id: mm9.txt,v 1.17 2007/08/30 17:55:35 angie Exp $"
 #
 
 #######################################################################
@@ -2393,3 +2393,91 @@ TMPDIR=/scratch/tmp
     #	1788261968 bases of 2571531505 (69.541%) in intersection
     cat  /cluster/data/rn4/bed/blastz.mm8/fb.rn4.chainMm8Link.txt
     #	1791093685 bases of 2571531505 (69.651%) in intersection
+
+
+#########################################################################
+# LOAD ACEMBLY (DONE 8/28/07 angie)
+    ssh kkstore06
+    mkdir /cluster/data/mm9/bed/acembly
+    cd /cluster/data/mm9/bed/acembly
+    wget --timestamping ftp://ftp.ncbi.nih.gov/repository/acedb/ncbi_37.mouse.genes/AceView.mm_37.genes_gff.tar.gz
+    wget --timestamping ftp://ftp.ncbi.nih.gov/repository/acedb/ncbi_37.mouse.genes/AceView.mm_37.good_proteins_fasta.tar.gz
+    tar xvzf AceView.mm_37.genes_gff.tar.gz
+    tar xvzf AceView.mm_37.good_proteins_fasta.tar.gz
+
+    cd AceView.mm_37.genes_gff
+    # If the result of this command is > 0, then some lines have end < start 
+    # and need to be fixed:
+    awk '$5 < $4 {print;}' *.gff | wc -l
+#0
+
+    # Filter out empty lines, lines where the product_id has a stray 
+    # newline before it, and $chr|Mm# IDs that don't appear liftable.
+    egrep -h -v '^(| ?product_id.*|..?\|Mm.*)$' *.gff \
+    | sed -e 's/^/chr/;' \
+      > acembly.gff
+
+    # Extract annotation types from original gff:
+    egrep -h -v '^(| ?product_id.*|..?\|Mm.*)$' *.gff \
+    | perl -wpe 's/^.*Gene_type (\w+); transcript_id (\S+);.*/$2\t$1/; \
+                 s/Main$/main/ || s/Putative$/putative/ || \
+                   die "Unrecognized class:\n$_\n";' \
+    | sort -u \
+      > acemblyClass.tab
+
+    # Some gff transcript_id's end in -unspliced (no intron), but the 
+    # corresponding protein fasta IDs to not have that suffix.  We need
+    # them to match, so add where necessary.
+    # Use perl to make a perl script to add -unspliced to protein IDs 
+    # where necessary:
+    grep unspliced acemblyClass.tab | wc -l
+#41944
+    egrep -h -v '^(| ?product_id.*|..?\|Mm.*)$' *.gff \
+    | perl -wpe 's@^.*transcript_id (\S+)-unspliced;.*$@\$unsp{"$1"} = 1;@ \
+               || s/^.*\n$//;' \
+    | sort -u \
+      > ../addUnspliced.pl
+    wc -l ../addUnspliced.pl
+#41944 ../addUnspliced.pl
+    cat >> ../addUnspliced.pl <<'_EOF_'
+while (<>) {
+  if (/^>(\S+)$/) {
+    if ($unsp{$1}) {
+      s/^>(\S+)/>$1-unspliced/;
+    }
+  }
+  print;
+}
+'_EOF_'
+    # << emacs
+
+    # Add -unspliced suffix to protein IDs where necessary, and pare down 
+    # proteins to just the ones that we have transcripts for:
+    cd /cluster/data/mm9/bed/acembly/AceView.mm_37.good_proteins_fasta
+    awk '{print $1;}' ../AceView.mm_37.genes_gff/acemblyClass.tab \
+      > transcriptNames.txt
+    perl ../addUnspliced.pl *.fasta \
+    | faSomeRecords stdin transcriptNames.txt acemblyPep.fa
+    grep unspliced acemblyPep.fa | wc -l
+#34900
+    # Danielle Thierry-Mieg explained that noncoding genes are included so
+    # the number of proteins can be smaller than the number of transcripts.
+
+    # Load tables
+    ssh hgwdev
+    cd /cluster/data/mm9/bed/acembly/AceView.mm_37.genes_gff
+    ldHgGene -gtf mm9 acembly acembly.gff
+#Read 152177 transcripts in 2219900 lines in 1 files
+#  152177 groups 21 seqs 1 sources 5 feature types
+#152177 gene predictions
+    hgLoadSqlTab mm9 acemblyClass ~/kent/src/hg/lib/acemblyClass.sql \
+      acemblyClass.tab
+    cd /cluster/data/mm9/bed/acembly/AceView.mm_37.good_proteins_fasta
+    hgPepPred mm9 generic acemblyPep acemblyPep.fa
+    rm acemblyPep.tab
+    runJoiner.csh mm9 acembly
+# mm9.acemblyPep.name - hits 130002 of 130002 ok
+# mm9.acemblyClass.name - hits 152177 of 152177 ok
+
+
+#########################################################################
