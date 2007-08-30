@@ -331,9 +331,37 @@ Some settings used by various tracks:
     o scoreMin, scoreMax - sets the range used to color the track if 
         colored by score.  Allows use of the whole color range when data
         has scores with a smaller range than 0-1000.
+    o baseColorUseCds {genbank,given,none} - For genePred or psl+cds (such 
+      as genbank mRNA, EST etc) tracks.  Specifies where CDS coordinates 
+      can be found (if any) so that codons can be drawn when viewing a 
+      sufficiently small region.
+    o baseColorUseSequence {genbank,seq,none} - For genePred or psl tracks.
+      Specifies where item sequence can be found (if any) so that item 
+      sequence, or differences from genomic sequence, can be drawn when 
+      viewing a sufficiently small region.
+    o baseColorDefaults {genomicCodons,itemBases,itemCodons,diffBases,
+      diffCodons,none} - For tracks with CDS and/or sequence information.
+      Specifies the default drawing mode.  itemBases, itemCodons, diffBases
+      and diffCodons are applicable only if the track has sequence 
+      (baseColorUseSequence).  genomicCodons, itemCodons and diffCodons 
+      are applicable only if the track has CDS info (baseColorUseCds).
+    o indelDoubleInsert {on,off} - For psl tracks.  If on, then highlight
+      alignment gaps in both target and query using double lines (like 
+      chain tracks).
+    o indelPolyA {on,off} - For psl tracks that have sequence 
+      (baseColorUseSequence).  If on, then highlight an apparent valid
+      poly-a tail (a block of aaa's at the end of the item sequence, or 
+      ttt's at the start, that are not aligned to the genome) by drawing
+      a vertical green line.
+    o indelQueryInsert {on,off} - For psl tracks that have sequence 
+      (baseColorUseSequence).  If on, then highlight an insert in the 
+      query only (alignment gap in the target only) by drawing an 
+      orange vertical line.
 
-Note: We have a restriction on table names.   We currently do not handle
-table names in the format chrN_table_name.   The 2nd underscore is not allowed.
+Note: We have a restriction on table names: Track names (i.e. table
+names, but omitting any chr*_ prefix) should not contain any
+underscores.  We use underscores in track table names to find sequence
+name prefixes.
 
 
 COMPOSITE TRACKS
