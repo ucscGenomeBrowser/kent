@@ -609,34 +609,50 @@ return sizeMul * (psl->match + ( psl->repMatch>>1)) -
 		    <TD>
 	            <P>
 			<B><FONT COLOR="#006666">Question: </FONT></B><BR>
-			"How do I use blat for short sequences with maximum sensitivity?"
+			"How do I configure blat for short sequences with 
+		   	 maximum sensitivity?"
 			<P>
 			<B><FONT COLOR="#006666">Response:</FONT></B><BR> 
-			Here is a short guide for standalone blat and gfServer/gfClient:<br>
-			If a tile is not marked as overused, then here is the formula<br>
-			for the shortest guaranteed exact match:<br>
-			2 * stepSize + tileSize - 1<br>
-			With stepSize=5 and tileSize=11 you can find things<br>
-			as short as 2*5+11-1 = 20 bp.<br> 
-			stepSize can be from 1 to tileSize.<br>
-			tileSize can be from 6 to 15.<br>
-			Do not use -fastMap.<br>
-                        Do not use masking commandline options.<br>
-			Use a large value for repMatch, e.g. -repMatch=1000000 to reduce the chance of a tile being marked as over-used<br>
-			Do not use a .ooc file.<br>
+			Here are some guidelines for configuring standalone 
+			blat and gfServer/gfClient for these conditions:</P>
+		    	<P>
+			<UL>
+			<LI>
+			If a tile is not marked as overused, then use the				following  formula for the shortest guaranteed exact 				match:<BR> 
+		    	&nbsp;&nbsp;&nbsp;2 * <em>stepSize</em> + <em>tileSize</em> - 1<BR>
+			With <em>stepSize</em> set to 5 and <em>tileSize</em>
+			set to 11, you can find matches as short as 2*5+11-1 = 
+			20 bp using this formula. The 
+		 	<em>stepSize</em> parameter can range from 1 to 
+			<em>tileSize</em>. The <em>tileSize</em> parameter
+			can range from 6 to 15.
+			<LI>
+		 	Do not use <em>-fastMap</em>.
+                        <LI>
+			Do not use masking command-line options.
+			<LI>
+			Use a large value for <em>repMatch</em> (e.g. 
+			<em>-repMatch</em> = 1000000) 
+			to reduce the chance of a tile being marked as 
+			over-used.
+			<LI>
+			Do not use an <em>.ooc</em> file.
+			</UL>
 			<P>
+			The above changes will make BLAT more sensitive, but 
+			will also slow the speed and increase the memory usage. 
+			If necessary, you can process one chromosome
+			at a time to reduce the memory requirements. 
 			<P>
-			Note that these changes will make BLAT more sensitive, but also
-			make it slower and increase memory used.  You can do one chromosome
-			at a time to reduce memory requirements if needed. <br>
-			<P>
-			<P>
-			-minScore will not actually go less than 1 or greater than about qSize/2.<br>
-			Therefore use either <TT>pslReps</TT> or <TT>pslCDnaFilter</TT> program available in the Genome
-			Browser source code to filter for size/score/coverage/quality desired. <br>
+			The <em>-minScore</em> parameter cannot be set to less 
+			than 1 or greater than about <em>qSize</em>/2. 
+			Therefore, use either 
+			the <TT>pslReps</TT> or <TT>pslCDnaFilter</TT> program 
+			available in the Genome Browser source code to filter 
+			for the size, score, coverage, or quality desired. 
                         For information on obtaining the
 			source code, see our <A HREF="FAQlicense.html">FAQ</A> 
-			on source code licensing and downloads. 
+			on source code licensing and downloads. </P>
 		    </TD><TD WIDTH=15></TD>
 		</TR>
 	    </TABLE>
