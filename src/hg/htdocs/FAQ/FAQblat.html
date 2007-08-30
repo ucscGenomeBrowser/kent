@@ -618,11 +618,14 @@ return sizeMul * (psl->match + ( psl->repMatch>>1)) -
 		    	<P>
 			<UL>
 			<LI>
-			If a tile is not marked as overused, then use the				following  formula for the shortest guaranteed exact 				match:<BR> 
+			If a tile is not marked as overused, then use the
+			following  formula to find the shortest query size
+			that will guarantee a match:<BR> 
 		    	&nbsp;&nbsp;&nbsp;2 * <em>stepSize</em> + <em>tileSize</em> - 1<BR>
 			With <em>stepSize</em> set to 5 and <em>tileSize</em>
 			set to 11, you can find matches as short as 2*5+11-1 = 
-			20 bp using this formula. The 
+			20 bp using this formula, if the query matches the
+			target exactly. The 
 		 	<em>stepSize</em> parameter can range from 1 to 
 			<em>tileSize</em>. The <em>tileSize</em> parameter
 			can range from 6 to 15.
