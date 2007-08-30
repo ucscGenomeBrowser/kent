@@ -807,7 +807,7 @@ dataVersion ENCODE June & Oct 2005 Freezes
         shortLabel LI/UCSD ChIP
         longLabel Ludwig Institute/UC San Diego ChIP-chip
         group encodeChip
-        priority 50.0
+        priority 48
         chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 
 track encodeUcsdNgGif
