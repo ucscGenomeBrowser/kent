@@ -16776,3 +16776,24 @@ TMPDIR=/scratch/tmp
     mkdir /usr/local/apache/htdocs/goldenPath/hg18/gc5Base
     cd /usr/local/apache/htdocs/goldenPath/hg18/gc5Base
     ln -s /cluster/data/hg18/bed/gc5Base/hg18.gc5Base.txt.gz .
+###########################################################################
+# GENE BOUNDS (RNACLUSTER) (REBUILT 08-30-2007 Fan)
+# Create rnaCluster table (depends on {est,mrna}OrientInfo)
+
+cd /cluster/data/hg18/bed
+mv rnaCluster rnaCluster.old
+mkdir rnaCluster
+cd rnaCluster/
+mkdir chrom
+
+# Create a list of accessions that come from RAGE libraries and need to be excluded.
+~/kent/src/hg/geneBounds/clusterRna/generateRageAccList.csh hg18 rage.libs
+foreach f (/cluster/data/hg18/nib/chr*.nib)
+    set c = $f:t:r
+    set out = chrom/$c.bed
+    # Exclude accesions in the RAGE file
+    echo clusterRna -mrnaExclude=hg18.rage.libs hg18 /dev/null $out -chrom=$c
+    clusterRna -mrnaExclude=hg18.rage.libs hg18 /dev/null $out -chrom=$c
+end
+hgLoadBed hg18 rnaCluster chrom/*.bed
+############################################################################
