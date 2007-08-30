@@ -18,7 +18,7 @@ if ($#argv < 1 || $#argv > 2 ) then
   echo '      usage:  ipAddress [terse]'
   echo '              (terse gives only data)'
   echo
-  echo '      (use "all" to get all IPs having delays)'
+  echo '      (use ipAddress = "all" to get all IPs having delays)'
   echo
   exit
 else
