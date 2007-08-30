@@ -1,77 +1,214 @@
 <H2>Description</H2>
 <P>
 This track shows AceView gene models constructed from
-mRNA, EST and genomic evidence by Danielle and Jean Thierry-Mieg
-and Vahan Simonyan using the 
-<A HREF="http://www.ncbi.nih.gov/IEB/Research/Acembly/index.html"
+cDNA and genomic evidence by Danielle and Jean Thierry-Mieg
+using the 
+<A HREF="http://www.ncbi.nlm.nih.gov/IEB/Research/Acembly/"
 TARGET=_blank>Acembly</A> program.</P> 
+
+<P><A HREF="http://www.ncbi.nlm.nih.gov/IEB/Research/Acembly/"
+TARGET=_BLANK>AceView</A> is the only database which defines the genes
+genome-wide by using only, but exhaustively, the public experimental
+cDNA sequences from the same species.  Our analysis relies on the
+quality of the genome sequence and exploits sophisticated cDNA to
+genome co-alignment algorithms to provide a comprehensive and
+non-redundant representation of the GenBank, dbEST, GSS, Trace and
+RefSeq cDNA sequences. In a way, the AceView transcripts represent a
+fully annotated non-redundant &lsquo;nr&rsquo; view of the public
+RNAs, minus cloning artefacts, contaminations and bad quality
+sequences. AceView transcripts represent a 10 times compaction
+relative to the raw data, with minimal loss of sequence
+information.</P>
+
+<P>We coalesce 80% of the public RNA sequences (7.2 million entries in
+human, 3.2 million in mouse in the July 2007 releases) into AceView
+alternative transcripts and genes, thereby identifying twice as many
+genes as there are &quot;known genes&quot;: one quarter of the spliced genes
+appear non-coding, 32% are antisense to another spliced gene. The
+typical human gene produces on average 8 distinct alternatively
+spliced forms, from 3 promoters and with 3 non-overlapping terminal
+exons. It has on average 3 cassette exons and 4 internal donor or
+acceptor sites. More than 200,000 distinct good proteins are
+annotated. The 
+<A HREF="http://www.ncbi.nlm.nih.gov/IEB/Research/Acembly/" 
+TARGET=_BLANK>AceView site</A> 
+further proposes a
+thorough biological annotation, including association to diseases and
+tissue specificity of the alternative transcripts.</P>
+
+<P>AceView combines respect for the experimental data with extensive
+quality control. Evaluated in the Encode regions, AceView transcripts
+are close to indistinguishable from the manually curated Gencode
+reference genes (open both tracks in the genome browser, or read
+<A HREF="http://www.ncbi.nlm.nih.gov/sites/entrez?Db=pubmed&Cmd=ShowDetailView&TermToSearch=16925834&ordinalpos=3&itool=EntrezSystem2.PEntrez.Pubmed.Pubmed_ResultsPanel.Pubmed_RVDocSum"
+TARGET=_BLANK>Thierry-Mieg, Genome Biology, 2006</A>), 
+but over the entire genome, we have 3 times more transcripts than
+Havana/Vega and 6 times more than RefSeq.</P>
 
 <H2>Display Conventions and Configuration</H2>
 <P>
 This track follows the display conventions for 
-<A HREF="../goldenPath/help/hgTracksHelp.html#GeneDisplay">gene prediction 
-tracks</A>. Gene models that fall into the &quot;main&quot; prediction class
+<A HREF="../goldenPath/help/hgTracksHelp.html#GeneDisplay">gene 
+tracks</A>. Gene models that fall into the &quot;main&quot; class
 are displayed in <font color="#80007D">purple</font>; &quot;putative&quot; 
 genes are displayed in <font color="#C8007D" >pink</font>.</P>
+
+<P>The main genes includes the protein coding genes and all genes with
+at least one well-defined standard intron, i.e., an intron with a
+GT-AG or GC-AG boundary, supported by at least one clone matching
+exactly, with no ambiguous bases, 8 bases of the genome on each side
+of the intron.</P>
+
+<P>The putative genes have no standard intron and do not encode good
+proteins, yet are supported by more than six cDNA clones.</P>
+
 <P>
 The track description page offers the following filter and configuration
 options:
 <UL>
 <LI><B>Gene Class filter:</B> Select the <em>main</em> or <em>putative</em>
-option to filter the display by prediction class. 
+option to filter the display. 
 <LI><B>Color track by codons:</B> Select the <em>genomic codons</em> option
 to color and label each codon in a zoomed-in display to facilitate validation 
-and comparison of gene predictions. Click the &quot;Codon coloring help&quot; 
+and comparison to gene predictions. Click the &quot;Codon coloring help&quot; 
 link on the track description page for more information about this feature.
 </UL>
 </P>
 
+
 <H2>Methods</H2>
-<P>
-AceView attempts to find the best alignment of each mRNA/EST against the
-genome, and clusters the alignments into the least possible number of
-alternatively spliced transcripts. The reconstructed transcripts are then
-clustered into genes by simple transitive contact. To see the evidence that 
-supports each transcript, click the &quot;Outside Link&quot; on an individual 
-transcript's details page to access the NCBI AceView web site. </P>
-<P>
-Each AceView transcript model has a gene cluster designation
-(alternate name) that is categorized into a prediction class
-of either <font color="#80007D" >main</font> or 
-<font color="#C8007D" >putative</font>.</P>
-<P>
-<b>Prediction Class:</b> <font color="#80007D" >main</font> 
-<BR> Class of genes that includes the protein coding genes (defined
-here by CDS &gt; 100 amino acids) and all genes with at least one
-well-defined standard intron, i.e., an intron with a GT-AG or GC-AG
-boundary, supported by at least one clone matching exactly, with
-no ambiguous bases, and the 8 bases on either side of the intron 
-identical to the genome. Genes with a CDS smaller than 100 amino acids are
-included in this class if they meet one of the following conditions: they 
-have a NCBI RefSeq sequence (NM_#) or an OMIM identifier, or they encode a 
-protein with BlastP homology (&lt; 1e-3) to a cDNA-supported nematode AceView 
-protein.</P>
-<P>
-<b>Prediction Class:</b> <font color="#C8007D" >putative</font>
-<BR>Class of genes that have no standard intron and do not
-encode CDS of more than 100 amino acids, yet may be sufficiently useful to 
-justify not disregarding them completely. Putative genes may be of two
-types: either those supported by more than six cDNA clones or those that
-encode a putative protein with an interesting annotation. Examples include
-a PFAM motif, a BlastP hit to a species other than itself (&lt; 1e-3), 
-a transmembrane domain or other rare and meaningful domains
-identified by Psort2, or a highly probable localization in a cell
-compartment (excluding cytoplasm and nucleus).</P>
+<P>The millions of cDNA sequences available from the public databases
+(GenBank, dbEST, GSS, Traces, ...) are aligned cooperatively on the
+genome sequence, taking care to keep the paired 5' and 3' reads from
+single clones always associated in the same transcript. 
+Useful information about tissue, stage, publications, isolation
+procedure and so on is gathered. </P>
+
+<P>AceView alignments on the genome use knowledge on sequencing errors
+gained from analyzing sequencing traces and cooperative
+refinements. They are usually obtained over the entire length of the
+EST or mRNA, (average 98.8% aligned, 0.2% mismatches in mRNAs or 95.5%
+aligned, 1.4% mismatches in ESTs). </P>
+
+<P>Multiple alignments are evaluated and the sequences are stringently
+kept only in their best position genome-wide. Less than 1% of the
+mRNAs and less than 2% of the ESTs will ultimately be aligned in more
+than one gene, usually in the ~1% closely repeated genes. </P>
+
+<P>The cDNA sequences are then processed and cleaned: the vectors and
+poly A are clipped, the reads submitted on the wrong strand are
+flipped, the small insertion or deletion polymorphisms are
+identified.</P>
+
+<P>Eventual cDNA clone rearrangements or anomalous alignments are
+flagged and filtered (akin to manually) so as not to loose unique
+valuable information while avoiding pollution of the database with
+poorly supported anomalous data. </P>
+
+<P>Unfortunately, cDNA libraries are still far from saturation, so
+after we removed the 20% suspicious entries, a single good quality
+cDNA sequence, aligned with standard introns on the genome, is
+considered sufficient evidence for a given mRNA structure. That is
+because cDNA sequences are difficult to obtain, but they remain the
+cleanest and most reliable information to best define the molecular
+genes. Unspliced non-coding genes are however reported (in the
+putative class) only if they are supported by 6 accessions or
+more. Others belong to what we call &lsquo;the cloud&rsquo; (not displayed at
+UCSC). </P>
+
+<P>The cDNA sequences are clustered into a minimal number of
+alternative transcript variants, preferring partial transcripts to
+artificially extended ones. Sequences are concatenated by simple
+contact, but we avoid the combinatorics by allowing each cDNA
+accession to contribute to a single alternative variant, preferably
+one where it merges silently, without bringing any new sequence
+information. As a result, for instance, all shorter reads compatible
+with a full length mRNA will be absorbed in that transcript and won’t
+be available to allow for extensions on other incompatible
+transcripts. </P>
+
+<P>About 70% of the variants, clearly identified on our 
+<A HREF="http://www.ncbi.nlm.nih.gov/IEB/Research/Acembly/" 
+TARGET=_BLANK>site</A>, have
+their entire coding region supported by a single cDNA; the others may
+be illicit concatenations that could be split when more data become
+available. </P>
+
+<P>For each transcript, the consensus sequence of the cDNAs most
+compatible to the genome sequence is generated. Single base insertion,
+deletion, transition or transversion are shown graphically in the mRNA
+view, where frequent SNPs become evident.</P>
+
+<P>The main sequence of the transcript used in the annotation is that
+of the footprint of the transcript on the genome, which is of better
+quality than the mRNAs: this procedure corrects up to 2% sequencing
+errors. </P>
+
+<P>Putative protein coding regions are predicted from the mRNA
+sequence and annotated using BlastP, PFAM, Psort2, and comparison to
+AceView proteins from other species. Best proteins are scored (see the
+FAQ on our 
+<A HREF="http://www.ncbi.nlm.nih.gov/IEB/Research/Acembly/" 
+TARGET=_BLANK>site</A>) and transcripts are putatively proposed to be protein
+coding or non-coding. </P>
+
+<P>Expression, cDNA support, tissue specificity, sequences of
+alternative transcripts, introns and exons, alternative promoters,
+alternative exons and alternative polyadenylation sites are evaluated
+and annotated on the 
+<A HREF="http://www.ncbi.nlm.nih.gov/IEB/Research/Acembly/" 
+TARGET=_BLANK>web site</A>. </P>
+
+<P>The reconstructed alternative transcripts are then grouped into
+genes if they share at least one exact intron boundary or if they have
+substantial sequence overlap. </P>
+
+<P>Coding and non-coding genes are defined, genes in antisense are
+flagged. </P>
+
+<P>AceView genes are matched molecularly to Entrez genes and named
+according to the official nomenclature, or the Entrez Gene
+nomenclature. For novel genes not in Entrez, AceView creates new gene
+names that are maintained from release to release until the genes get
+an official or an Entrez gene name. </P>
+
+<P>Aiming for AceView to be a one-stop knowledgebase for systems
+biology, each gene is annotated in depth. Selected functional
+annotations are gathered from various sources, including expression
+data, protein interactions and GO annotations. In particular, possible
+disease associations are extracted directly from PubMed, in addition
+to OMIM and GAD, and the users can help refine those annotations.</P>
+
+<P>Finally, lists of the most closely related genes by function,
+pathway, protein complex, GO annotation, disease, cellular
+localization or all criteria taken together are proposed, in order to
+stimulate research and development.</P>
+
+<P>Please click the "Outside Link" on an individual transcript's
+details page to access the gene on the 
+<A HREF="http://www.ncbi.nlm.nih.gov/IEB/Research/Acembly/" 
+TARGET=_BLANK>NCBI AceView web site</A>.</P>
+
 
 <H2>Credits</H2>
 <P>
-Thanks to <A HREF="mailto:mieg@ncbi.nlm.nih.gov">Danielle and Jean 
-Thierry-Mieg</A> at NIH for providing this track.</P>
+Thanks to 
+<A HREF="mailto:&#109;&#105;&#101;g&#64;&#110;&#99;&#98;&#105;.
+&#110;&#108;&#109;.
+ni&#104;.
+&#103;&#111;&#118;">
+Danielle and Jean Thierry-Mieg</A> at NCBI for providing this track
+for human, worm and mouse.</P>
 
 <H2>References</H2>
 <P>
 Thierry-Mieg D, Thierry-Mieg J. 
-<A HREF="http://genomebiology.com/2006/7/S1/S12" 
-TARGET=_blank>AceView: a comprehensive cDNA-supported gene and transcripts 
+<A HREF="http://www.ncbi.nlm.nih.gov/sites/entrez?Db=pubmed&Cmd=ShowDetailView&TermToSearch=16925834&ordinalpos=3&itool=EntrezSystem2.PEntrez.Pubmed.Pubmed_ResultsPanel.Pubmed_RVDocSum"
+TARGET=_BLANK>AceView: a comprehensive cDNA-supported gene and transcripts 
 annotation</A>.
 <em>Genome Biol</em>. 2006;<B>7</B> Suppl 1:S12.1-14.</P>
+
+AceView web site:
+<A HREF="http://www.ncbi.nlm.nih.gov/IEB/Research/Acembly/" 
+TARGET=_BLANK>http://www.ncbi.nlm.nih.gov/IEB/Research/Acembly</A>
+
