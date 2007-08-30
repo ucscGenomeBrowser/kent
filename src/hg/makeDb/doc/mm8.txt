@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: mm8.txt,v 1.51 2007/08/29 20:49:06 kent Exp $"
+#	"$Id: mm8.txt,v 1.52 2007/08/30 05:45:45 angie Exp $"
 #
 
 #  NOTE:  this doc may have genePred loads that fail to include
@@ -7339,7 +7339,8 @@ set out = $3
     awk '($3 - $2) >= 1000 && ($9 - $8) >= 1000 {print;}' mm8_WGAC.tab \
     | hgLoadBed mm8 genomicSuperDups stdin \
       -tab -sqlTable=$HOME/kent/src/hg/lib/genomicSuperDups.sql
-
+    # 8/29/07 Gak!  Kayla found that the strand values were "+" and "_" -- fix:
+    hgsql mm8 -e 'update genomicSuperDups set strand = "-" where strand = "_";'
 
 
 #####################################################################

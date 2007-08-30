@@ -1273,6 +1273,8 @@ chainOne $(path1)
     awk '($3 - $2) >= 1000 && ($9 - $8) >= 1000 {print;}' genomicSuperDups \
     | hgLoadBed ornAna1 genomicSuperDups stdin \
       -tab -sqlTable=$HOME/kent/src/hg/lib/genomicSuperDups.sql
+    # 8/29/07 Gak!  Kayla found that the strand values were "+" and "_" -- fix:
+    hgsql ornAna1 -e 'update genomicSuperDups set strand = "-" where strand = "_";'
 
 
 #########################################################################
