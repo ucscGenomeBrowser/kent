@@ -634,3 +634,55 @@ hgLoadBed hg18 encodeYalePolIISites PolII_hg18-sites.bed
 # MORE ERRORS.  Clearly this submission wasn't quite meant to be just yet.
 # to be continued...
 
+##########################################################################
+# Genome Institute of Singapore PET data (2007-08-30 ting)
+# Submitted 8/22 by Atif Shahab and Chia-lin Wei
+# Three new PET datasets on human embryonic stem cell hES3.
+# One polyA-RNA dataset, and two ChIP-PET datasets of H3K4me3 and H3K27me3.
+# Build them as subtracks into existing GIS tracks: GIS-RNA-PET and GIS-CHIP-PET.
+
+    ssh hgwdev
+    cd /cluster/data/encode/GIS/
+    mkdir 2007-08-22
+    cd 2007-08-22
+    mkdir lab
+    cd lab
+    cp /var/ftp/encode/gis.tar.gz ./
+    gunzip gis.tar.gz
+    tar -xvf gis.tar
+    
+    # obtained 3 data files: H3K27me3.bed  H3K4me3.bed  polyA.bed
+    # These are mapped on hg17, first lift.
+    cd /cluster/data/encode/GIS/2007-08-22
+    liftOver lab/polyA.bed ../../convertHg18/hg17ToHg18.over.chain.gz \
+    	polyA-hg18.bed polyA-unmapped.bed
+    # 426301 lifted, 34 unmapped
+    
+    liftOver lab/H3K4me3.bed ../../convertHg18/hg17ToHg18.over.chain.gz \
+    	H3K4me3.bed H3K4me3-unmapped.bed
+    # 679752 lifted, 13 unmapped
+    
+    liftOver lab/H3K27me3.bed ../../convertHg18/hg17ToHg18.over.chain.gz \
+    	H3K27me3.bed H3K27me3-unmapped.bed
+    # 992509 lifted, 25 unmapped
+    
+    # GIS data are not scored. Based on Angie and Kate's previous work,
+    # scored BED can be made from item name. Use scoreGisBed.pl to do so.
+    scoreGisBed.pl polyA-hg18.bed 2 encodeGisRnaPetHes3.bed
+    scoreGisBed.pl H3K4me3-hg18.bed 1 encodeGisChipPetHes3H3K4me3.bed
+    scoreGisBed.pl H3K27me3-hg18.bed 1 encodeGisChipPetHes3H3K27me3.bed
+    
+    # load on hg18
+    hgLoadBed hg18 encodeGisRnaPetHes3 encodeGisRnaPetHes3.bed
+    # Loaded 426301 elements of size 12
+    
+    hgLoadBed hg18 encodeGisChipPetHes3H3K4me3 encodeGisChipPetHes3H3K4me3.bed
+    # Loaded 679752 elements of size 12
+    
+    hgLoadBed hg18 encodeGisChipPetHes3H3K27me3 encodeGisChipPetHes3H3K27me3.bed 
+    # Loaded 992509 elements of size 12
+    
+    # modified trackDb.encodeTxLevel.ra, trackDb.encodeChip.ra,
+    #          encodeGisChipPetAll.html, encodeGisRnaPet.html
+
+
