@@ -4,7 +4,11 @@
 #include "dystring.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: newProg.c,v 1.22 2007/05/31 16:47:54 hiram Exp $";
+static char const rcsid[] = "$Id: newProg.c,v 1.23 2007/08/30 00:55:56 kent Exp $";
+
+boolean jkhgap = FALSE;
+boolean cgi = FALSE;
+boolean cvs = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -18,27 +22,62 @@ errAbort(
   "\n"
   "Options:\n"
   "   -jkhgap - include jkhgap.a and mysql libraries as well as jkweb.a archives \n"
+  "   -cgi    - create shell of a CGI script for web\n"
   "   -cvs    - also check source into CVS, 'progName' must include full\n"
   "           - path in source repository starting with 'kent/'");
 }
 
-void makeC(char *name, char *description, char *progPath, boolean doCvs)
-/* makeC - make a new C source skeleton. */
-{
-FILE *f = mustOpen(progPath, "w");
+static struct optionSpec options[] = {
+   {"jkhgap", OPTION_BOOLEAN},
+   {"cgi", OPTION_BOOLEAN},
+   {"cvs", OPTION_BOOLEAN},
+   {NULL, 0},
+};
 
+void makeCgiBody(char *name, char *description, FILE *f)
+/* Create most of the C file for a CGI. */
+{
+fprintf(f,
+"/* Global Variables */\n"
+"struct cart *cart;             /* CGI and other variables */\n"
+"struct hash *oldVars = NULL;\n"
+"\n"
+);
+
+fprintf(f,
+"void doMiddle(struct cart *theCart)\n"
+"/* Set up globals and make web page */\n"
+"{\n"
+"cart = theCart;\n"
+"cartWebStart(cart, \"%s\");\n"
+"printf(\"Your code goes here....\");\n"
+"cartWebEnd();\n"
+"}\n"
+"\n"
+, description
+);
+
+fprintf(f, 
+"/* Null terminated list of CGI Variables we don't want to save\n"
+" * permanently. */\n"  
+"char *excludeVars[] = {\"Submit\", \"submit\", NULL,};\n"
+"\n"
+);
+
+fprintf(f, 
+"int main(int argc, char *argv[])\n"
+"/* Process command line. */\n"
+"{\n"
+"cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);\n"
+"return 0;\n"
+"}\n"
+);
+}
+
+void makeCommandLineBody(char *name, char *description, FILE *f)
+/* Create most of the C file for a command line. */
+{
 /* Make the usage routine. */
-fprintf(f, "/* %s - %s. */\n", name, description);
-fprintf(f, "#include \"common.h\"\n");
-fprintf(f, "#include \"linefile.h\"\n");
-fprintf(f, "#include \"hash.h\"\n");
-fprintf(f, "#include \"options.h\"\n");
-fprintf(f, "\n");
-if (doCvs)
-    {
-    fprintf(f, "static char const rcsid[] = \"$Id: newProg.c,v 1.22 2007/05/31 16:47:54 hiram Exp $\";\n");
-    fprintf(f, "\n");
-    }
 fprintf(f, "void usage()\n");
 fprintf(f, "/* Explain usage and exit. */\n");
 fprintf(f, "{\n");
@@ -78,6 +117,40 @@ fprintf(f, "}\n");
 fclose(f);
 }
 
+void makeC(char *name, char *description, char *progPath)
+/* makeC - make a new C source skeleton. */
+{
+FILE *f = mustOpen(progPath, "w");
+
+fprintf(f, "/* %s - %s. */\n", name, description);
+fprintf(f, "#include \"common.h\"\n");
+fprintf(f, "#include \"linefile.h\"\n");
+fprintf(f, "#include \"hash.h\"\n");
+fprintf(f, "#include \"options.h\"\n");
+if (jkhgap || cgi)
+    fprintf(f, "#include \"jksql.h\"\n");
+if (cgi)
+    {
+    fprintf(f, "#include \"htmshell.h\"\n");
+    fprintf(f, "#include \"web.h\"\n");
+    fprintf(f, "#include \"cheapcgi.h\"\n");
+    fprintf(f, "#include \"cart.h\"\n");
+    fprintf(f, "#include \"hui.h\"\n");
+    }
+fprintf(f, "\n");
+if (cvs)
+    {
+    fprintf(f, "static char const rcsid[] = \"$Id: newProg.c,v 1.23 2007/08/30 00:55:56 kent Exp $\";\n");
+    fprintf(f, "\n");
+    }
+
+if (cgi)
+    makeCgiBody(name, description, f);
+else
+    makeCommandLineBody(name, description, f);
+
+}
+
 void makeMakefile(char *progName, char *makeName)
 /* Make makefile. */
 {
@@ -102,7 +175,7 @@ else
     upLevel = cloneString("../../../../..");
     }
 
-if (optionExists("jkhgap"))
+if (jkhgap || cgi)
     {
     L = cloneString("L = $(MYSQLLIBS) -lm");
     myLibs = cloneString("MYLIBS =  $(MYLIBDIR)/jkhgap.a ${MYLIBDIR}/jkweb.a");
@@ -114,7 +187,6 @@ else
     }
 
 fprintf(f, 
-
 "include %s/inc/common.mk\n"
 "\n"
 "%s\n"
@@ -123,13 +195,33 @@ fprintf(f,
 "\n"
 "O = %s.o\n"
 "\n"
-"%s: $O ${MYLIBS}\n"
-"\t${CC} ${COPT} -o ${BINDIR}/%s $O ${MYLIBS} $L\n"
-"\t${STRIP} ${BINDIR}/%s${EXE}\n"
-"\n"
-"clean:\n"
-"\trm -f $O\n"
-, upLevel, L, upLevel, myLibs, progName, progName, progName, progName);
+, upLevel, L, upLevel, myLibs, progName);
+
+if (cgi)
+    {
+    fprintf(f, 
+    "A = %s\n"
+    "\n"
+    "include %s/inc/cgi_build_rules.mk\n"
+    "\n"
+    , progName, upLevel);
+    fprintf(f,
+    "compile: $O \n"
+    "\t${CC} $O ${MYLIBS} ${L}\n"
+    "\tmv ${AOUT} $A${EXE}\n"
+    "\n");
+    }
+else
+    {
+    fprintf(f, 
+    "%s: $O ${MYLIBS}\n"
+    "\t${CC} ${COPT} -o ${BINDIR}/%s $O ${MYLIBS} $L\n"
+    "\t${STRIP} ${BINDIR}/%s${EXE}\n"
+    "\n"
+    "clean:\n"
+    "\trm -f $O\n"
+    , progName, progName, progName);
+    }
 
 
 fclose(f);
@@ -142,9 +234,8 @@ char fileName[512];
 char dirName[512];
 char fileOnly[128];
 char command[512];
-boolean doCvs = optionExists("cvs");
 
-if (doCvs)
+if (cvs)
     {
     char *homeDir = getenv("HOME");
     if (homeDir == NULL)
@@ -158,14 +249,14 @@ else
 makeDir(dirName);
 splitPath(dirName, NULL, fileOnly, NULL);
 safef(fileName, sizeof(fileName), "%s/%s.c", dirName, fileOnly);
-makeC(fileOnly, description, fileName, doCvs);
+makeC(fileOnly, description, fileName);
 
 /* makefile is now constructed properly with ../.. paths */
 if (!setCurrentDir(dirName))
     errAbort("Couldn't change dir to %s", dirName);
 makeMakefile(fileOnly, "makefile");
 
-if (doCvs)
+if (cvs)
     {
     /* Set current directory.  Return FALSE if it fails. */
     printf("Adding %s to CVS\n", module);
@@ -191,7 +282,10 @@ int main(int argc, char *argv[])
 struct dyString *ds = newDyString(1024);
 int i;
 
-optionHash(&argc, argv);
+optionInit(&argc, argv, options);
+cgi = optionExists("cgi");
+cvs = optionExists("cvs");
+jkhgap = optionExists("jkhgap");
 if (argc < 3)
      usage();
 for (i=2; i<argc; ++i)
