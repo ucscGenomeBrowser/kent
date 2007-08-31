@@ -208,7 +208,7 @@
 #include "omicia.h"
 #include "atomDb.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1339 2007/08/20 21:31:58 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1340 2007/08/31 11:59:31 kent Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -16040,6 +16040,7 @@ freez(&image);
 if(differentString(tdb->tableName, "altGraphXPsb2004"))
     {
     struct altGraphX *copy = altGraphXClone(ag);
+    altGraphXVertPosSort(copy);
     altGraphXEnlargeExons(copy);
     printf("<br>Alt-Splicing drawn with exons enlarged.<br>\n");
     image = altGraphXMakeImage(tdb,copy);
