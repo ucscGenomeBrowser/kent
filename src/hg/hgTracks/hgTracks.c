@@ -118,7 +118,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1402 2007/08/29 23:15:44 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1403 2007/08/31 19:16:33 kate Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -13395,6 +13395,10 @@ for (track = *pTrackList; track != NULL; track = track->next)
         {
         char *groupName = NULL;
         char cartVar[128];
+        if (!track->defaultGroupName)
+            track->defaultGroupName = "";
+        if (!track->defaultPriority)
+            track->defaultPriority = 0;
         if (track->tdb->parent)
             {
             /* supertrack member must be in same group as its super */
