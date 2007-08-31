@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.17 2007/08/30 17:55:35 angie Exp $"
+#	"$Id: mm9.txt,v 1.18 2007/08/31 00:21:52 hiram Exp $"
 #
 
 #######################################################################
@@ -2173,6 +2173,8 @@ TMPDIR=/scratch/tmp
     cd /cluster/data/mm9/bed/blastzSelf.2007-08-07/randomsOnly
     cat << '_EOF_' > DEF
 # mouse vs mouse randoms
+PATH=/cluster/bin/penn/x86_64:/cluster/bin/penn:/cluster/bin/scripts:/cluster/bin/x86_64:/bin:/usr/bin
+
 BLASTZ_H=2000
 BLASTZ_M=200
 
@@ -2200,12 +2202,42 @@ TMPDIR=/scratch/tmp
 	-verbose=2 -ignoreSelf \
 	-chainMinScore=10000 -chainLinearGap=medium -bigClusterHub=kk \
 	-stop=net `pwd`/DEF > blastz.out 2>&1 &
-    #	real    122m55.512s
-    time nice -n +19 ~/kent/src/hg/utils/automation/doBlastzChainNet.pl \
-	-verbose=2 -ignoreSelf \
-	-chainMinScore=10000 -chainLinearGap=medium -bigClusterHub=kk \
-	-continue=cat -stop=net `pwd`/DEF > cat.out 2>&1 &
+    #	now swap the primary chroms back to the randoms
+    mkdir /cluster/data/mm9/bed/blastzSelf.2007-08-07/randomsSwap
+    cd /cluster/data/mm9/bed/blastzSelf.2007-08-07/randomsSwap
+    chainSwap ../randomsOnly/axtChain/mm9.mm9.all.chain.gz stdout \
+        | nice chainSort stdin stdout | nice gzip -c \
+        > mm9.mm9.all.chain.gz
 
+    #	And then combine all three sets together
+    mkdir /cluster/data/mm9/bed/blastzSelf.2007-08-07/allTogetherNow
+    cd /cluster/data/mm9/bed/blastzSelf.2007-08-07/allTogetherNow
+    chainSplit chain ../axtChain/mm9.mm9.all.chain.gz \
+        ../randomsOnly/axtChain/mm9.mm9.all.chain.gz \
+        ../randomsSwap/mm9.mm9.all.chain.gz
+    #	get them sorted by score correctly
+    mkdir chainSort
+for F in `(cd chain; ls *.chain)`
+do
+    echo $F
+    chainSort chain/$F chainSort/$F
+done
+    #	re-number the chains consistently
+    chainMergeSort chainSort/*.chain | nice gzip -c > mm9.mm9.all.chain.gz
+    rm -fr chain
+    mv chainSort chain
+    #  and for loading, split this consistently numbered set
+    rm -fr chain
+    time nice -n +19 chainSplit chain mm9.mm9.all.chain.gz
+    #	real    5m0.666s
+    ## using a manually fixed up netChains.csh script:
+    time nice -n +19 ./netChains.csh > netChains.out 2>&1
+    #	real    147m53.147s
+    ssh hgwdev
+    ## using a manually fixed up loadUp.csh script:
+    #		(from ../axtChain/loadUp.csh)
+    time nice -n +19 ./loadUp.csh > loadUp.out 2>&1 &
+XXX - running 2007-08-30 17:15 in screen on hgwdev
 
 #############################################################################
 # PREPARE LINEAGE SPECIFIC REPEAT FILES FOR BLASTZ (DONE - 2007-08-07 - Hiram)
@@ -2323,6 +2355,7 @@ done
 
 #########################################################################
 # BLASTZ RAT Rn4 (DONE - 2007-08-09 - 2007-08-15 - Hiram)
+#  re-run a second time with tighter parameters
     ssh kkstore06
     mkdir /cluster/data/mm9/bed/blastzRn4.2007-08-09
     cd /cluster/data/mm9/bed/blastzRn4.2007-08-09
@@ -2394,6 +2427,159 @@ TMPDIR=/scratch/tmp
     cat  /cluster/data/rn4/bed/blastz.mm8/fb.rn4.chainMm8Link.txt
     #	1791093685 bases of 2571531505 (69.651%) in intersection
 
+#########################################################################
+## multiple alignment preparation stats
+#	The following table will keep track of the pairwise alignments
+#	completed.  (The % NN.Nxx mean not done yet)
+#                         featureBits chainLink measures
+#                                           chainMm9Link   chain   linearGap
+#    distance                       on Mm9      on other   minScore
+#  1  0.1587 - rat rn4            (% 68.357)  (% 69.541)   3000     medium
+#  2  0.4677 - human hg18         (% 38.499)  (% 35.201)   3000     medium
+
+#  3  0.4686 - chimp panTro2      (% 37.5xx)  (% 33.6xx)   3000     medium
+#  4  0.4960 - macaque rheMac2    (% 34.7xx)  (% 33.1xx)   3000     medium
+#  5  0.5131 - rabbit oryCun1     (% 19.3xx)  (no swap )   3000     medium
+#  6  0.6142 - armadillo dasNov1  (% 16.8xx)  (no swap )   3000     medium
+#  7  0.6230 - dog canFam2        (% 32.2xx)  (% 34.2xx)   3000     medium
+#  8  0.6256 - elephant loxAfr1   (% 18.3xx)  (no swap )   3000     medium
+#  9  0.6344 - cow bosTau2        (% 26.8xx)  (% 24.2xx)   3000     medium
+# 10  0.7805 - tenrec echTel1     (% 11.4xx)  (no swap )   5000     loose
+# 11  1.0698 - opossum monDom4    (%  8.2xx)  (%  6.0xx)   5000     loose
+# 12  1.3425 - chicken galGal2    (%  2.5xx)  (%  5.4xx)   5000     loose
+# 13  1.7936 - frog xenTro2       (%  2.6xx)  (%  5.3xx)   5000     loose
+# 14  2.0157 - tetraodon tetNig1  (%  1.9xx)  (% 13.7xx)   5000     loose
+# 15  2.0562 - fugu fr1           (%  1.9xx)  (% 13.5xx)   5000     loose
+# 16  2.1059 - zebrafish danRer4  (%  2.1xx)  (%  3.5xx)   5000     loose
+
+##########################################################################
+## BLASTZ SWAP from Hg18 to Mm9 (DONE - 2007-08-15 - Hiram)
+    #	also in hg18.txt
+    cat /cluster/data/hg18/bed/blastzMm9.2007-08-09/fb.hg18.chainMm9Link.txt
+    #	1014323175 bases of 2881515245 (35.201%) in intersection
+
+    #	Then to swap over to Mm9
+    ssh kkstore06
+    mkdir /cluster/data/mm9/bed/blastz.hg18.swap
+    cd /cluster/data/mm9/bed/blastz.hg18.swap
+    time nice -n +19 ~/kent/src/hg/utils/automation/doBlastzChainNet.pl \
+	-verbose=2 -swap -bigClusterHub=pk -chainMinScore=3000 \
+	-chainLinearGap=medium \
+	/cluster/data/hg18/bed/blastz.mm9/DEF > swap.out 2>&1 &
+    #	real    67m21.146s
+    cat /cluster/data/mm9/bed/blastz.hg18.swap/fb.mm9.chainHg18Link.txt
+    #	1008812599 bases of 2620346127 (38.499%) in intersection
+    cat /cluster/data/mm8/bed/blastz.hg18/fb.mm8.chainHg18Link
+    #	984380268 bases of 2567283971 (38.343%) in intersection
+
+    cd /cluster/data/mm9/bed
+    ln -s blastz.hg18.swap blastz.hg18
+
+    ## make swapped syntenic net
+    cd /cluster/data/mm9/bed/blastz.hg18.swap
+    time nice -n +19 ~/kent/src/hg/utils/automation/doBlastzChainNet.pl \
+	-verbose=2 -bigClusterHub=pk -chainMinScore=3000 \
+	-swap -syntenicNet -chainLinearGap=medium -continue=syntenicNet \
+	/cluster/data/hg18/bed/blastz.mm9/DEF > syntenic.out 2>&1 &
+    ##	real    20m49.712s
+
+#########################################################################
+# BLASTZ RAT Rn4 (WORKING - 2007-08-30 - Hiram)
+#  re-run this second time with tighter parameters
+    ssh kkstore06
+    mkdir /cluster/data/mm9/bed/blastzRn4.2007-08-30
+    cd /cluster/data/mm9/bed/blastzRn4.2007-08-30
+    #	Started this before the rsync to /scratch/data/mm9/ had completed,
+    #	hence the /cluster/bluearc/scratch/data/mm9/ location is used
+    #	here.
+
+    cat << '_EOF_' > DEF
+# mouse vs rat
+# Specially tuned blastz parameters from Webb Miller
+
+BLASTZ_ABRIDGE_REPEATS=0
+BLASTZ_O=600
+BLASTZ_E=150
+BLASTZ_Y=15000
+BLASTZ_T=2
+BLASTZ_K=4500
+BLASTZ_Q=/cluster/data/blastz/human_chimp.v2.q
+
+# TARGET: Mouse Mm9
+SEQ1_DIR=/scratch/data/mm9/mm9.2bit
+SEQ1_LEN=/cluster/data/mm9/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Rat Rn4 - single chunk big enough to run each chrom by itself
+SEQ2_DIR=/scratch/hg/rn4/rn4.2bit
+SEQ2_LEN=/cluster/data/rn4/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm9/bed/blastzRn4.2007-08-30
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=medium \
+	-stop=net \
+	`pwd`/DEF > blastz.out 2>&1 &
+    #  this runs much faster than the usual blastz run
+    #	failed when it got to the kki run since /scratch/hg/rn4/ was not
+    #	complete on the Iservers.  Fixup that, then, continue:
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=medium \
+	-continue=chainMerge -stop=net \
+	`pwd`/DEF > chainMerge.out 2>&1 &
+    #	And then, kolossus had no /scratch/data/ directory, go there and
+    #	make this a symlink to /iscratch/data/
+    #	and run the axtChain/netChains.csh script manually on kolossus
+
+#########################################################################
+# BLASTZ/CHAIN/NET oryLat1 (WORKING - 2007-08-30 - Hiram)
+    ssh kkstore04
+    mkdir /cluster/data/mm9/bed/blastzOryLat1.2007-08-30
+    cd /cluster/data/mm9/bed/blastzOryLat1.2007-08-30
+
+    cat << '_EOF_' > DEF
+# mouse vs medaka
+
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: Mouse Mm9
+SEQ1_DIR=/scratch/data/mm9/mm9.2bit
+SEQ1_LEN=/cluster/data/mm9/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Medaka oryLat1 (40M chunks covers the largest chroms in one gulp)
+#       chrUn in Scaffolds for this alignment run
+SEQ2_DIR=/san/sanvol1/scratch/oryLat1/oryLat1.sdTrf.2bit
+SEQ2_LEN=/san/sanvol1/scratch/oryLat1/chrom.sizes
+SEQ2_CTGDIR=/san/sanvol1/scratch/oryLat1/oryLat1UnScaffolds.2bit
+SEQ2_CTGLEN=/san/sanvol1/scratch/oryLat1/oryLat1UnScaffolds.sizes
+SEQ2_LIFT=/san/sanvol1/scratch/oryLat1/chrUn.lift
+SEQ2_CHUNK=40000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm9/bed/blastzOryLat1.2007-08-30
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl DEF -chainMinScore=5000 \
+	-qRepeats=windowmaskerSdust -chainLinearGap=loose \
+	-bigClusterHub=kk -verbose=2 > do.log 2>&1 &
+XXX - running 2007-08-30 17:15 in a screen on kkstore04
 
 #########################################################################
 # LOAD ACEMBLY (DONE 8/28/07 angie)
@@ -2478,6 +2664,5 @@ while (<>) {
     runJoiner.csh mm9 acembly
 # mm9.acemblyPep.name - hits 130002 of 130002 ok
 # mm9.acemblyClass.name - hits 152177 of 152177 ok
-
 
 #########################################################################
