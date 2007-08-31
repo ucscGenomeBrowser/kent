@@ -9,7 +9,7 @@
 #include "customTrack.h"
 #include "customFactory.h"
 
-static char const rcsid[] = "$Id: refreshNamedSessionCustomTracks.c,v 1.5 2007/07/03 04:46:07 angie Exp $";
+static char const rcsid[] = "$Id: refreshNamedSessionCustomTracks.c,v 1.6 2007/08/31 22:42:58 angie Exp $";
 
 #define savedSessionTable "namedSessionDb"
 
@@ -36,13 +36,21 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-void scanSettingsForCT(char *userName, char *sessionName, char *contents,
-		       int *pLiveCount, int *pExpiredCount)
+char *scanSettingsForCT(char *userName, char *sessionName, char *contents,
+			int *pLiveCount, int *pExpiredCount)
 /* Parse the CGI-encoded session contents into {var,val} pairs and search
  * for custom tracks.  If found, refresh the custom track.  Parsing code 
- * taken from cartParseOverHash. */
+ * taken from cartParseOverHash. 
+ * If any nonexistent custom track files are found, return a SQL update
+ * command that will remove those from this session.  We can't just do 
+ * the update here because that messes up the caller's query. */
 {
-char *namePt = contents;
+int contentLength = strlen(contents);
+struct dyString *newContents = dyStringNew(contentLength+1);
+struct dyString *oneSetting = dyStringNew(contentLength / 4);
+char *updateIfAny = NULL;
+char *contentsToChop = cloneString(contents);
+char *namePt = contentsToChop;
 verbose(3, "Scanning %s %s\n", userName, sessionName);
 while (isNotEmpty(namePt))
     {
@@ -53,13 +61,32 @@ while (isNotEmpty(namePt))
     *dataPt++ = 0;
     nextNamePt = strchr(dataPt, '&');
     if (nextNamePt != NULL)
-         *nextNamePt++ = 0;
-    cgiDecode(dataPt, dataPt, strlen(dataPt));
+	*nextNamePt++ = 0;
+    dyStringClear(oneSetting);
+    dyStringPrintf(oneSetting, "%s=%s%s",
+		   namePt, dataPt, (nextNamePt ? "&" : ""));
     if (startsWith(CT_FILE_VAR_PREFIX, namePt))
 	{
 	boolean thisGotLiveCT = FALSE, thisGotExpiredCT = FALSE;
+	cgiDecode(dataPt, dataPt, strlen(dataPt));
 	verbose(3, "Found variable %s = %s\n", namePt, dataPt);
-	customFactoryTestExistence(dataPt, &thisGotLiveCT, &thisGotExpiredCT);
+	/* If the file does not exist, omit this setting from newContents so 
+	 * it doesn't get copied from session to session.  If it does exist,
+	 * leave it up to customFactoryTestExistence to parse the file for 
+	 * possible customTrash table references, some of which may exist 
+	 * and some not. */
+	if (! fileExists(dataPt))
+	    {
+	    verbose(3, "Removing %s from %s %s\n", oneSetting->string,
+		    userName, sessionName);
+	    thisGotExpiredCT = TRUE;
+	    }
+	else
+	    {
+	    dyStringAppend(newContents, oneSetting->string);
+	    customFactoryTestExistence(dataPt,
+				       &thisGotLiveCT, &thisGotExpiredCT);
+	    }
 	if (thisGotLiveCT && pLiveCount != NULL)
 	    (*pLiveCount)++;
 	if (thisGotExpiredCT && pExpiredCount != NULL)
@@ -75,8 +102,31 @@ while (isNotEmpty(namePt))
 	if (thisGotLiveCT)
 	    verbose(4, "Found live custom track: %s\n", dataPt);
 	}
+    else
+	dyStringAppend(newContents, oneSetting->string);
     namePt = nextNamePt;
     }
+if (newContents->stringSize != contentLength)
+    {
+    struct dyString *update = dyStringNew(contentLength*2);
+    if (newContents->stringSize > contentLength)
+	errAbort("Uh, why is newContents (%d) longer than original (%d)??",
+		 newContents->stringSize, contentLength);
+    dyStringPrintf(update, "UPDATE %s set contents='", savedSessionTable);
+    dyStringAppendN(update, newContents->string, newContents->stringSize);
+    dyStringPrintf(update, "', lastUse=now(), useCount=useCount+1 "
+		   "where userName=\"%s\" and sessionName=\"%s\";",
+		   userName, sessionName);
+    verbose(3, "Removing one or more dead CT file settings from %s %s "
+	    "(original length %d, now %d)\n", 
+	    userName, sessionName,
+	    contentLength, newContents->stringSize);
+    updateIfAny = dyStringCannibalize(&update);
+    }
+dyStringFree(&oneSetting);
+dyStringFree(&newContents);
+freeMem(contentsToChop);
+return updateIfAny;
 }
 
 void refreshNamedSessionCustomTracks(char *centralDbName)
@@ -84,6 +134,7 @@ void refreshNamedSessionCustomTracks(char *centralDbName)
  * tracks that are referenced by saved sessions. */
 {
 struct sqlConnection *conn = hConnectCentral();
+struct slPair *updateList = NULL, *update;
 char *actualDbName = sqlGetDatabase(conn);
 int liveCount=0, expiredCount=0;
 
@@ -100,13 +151,27 @@ if (sqlTableExists(conn, savedSessionTable))
     char **row = NULL;
     char query[512];
     safef(query, sizeof(query),
-	  "select userName,sessionName,contents from %s", savedSessionTable);
+	  "select userName,sessionName,contents from %s "
+	  "order by userName,sessionName", savedSessionTable);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
 	{
-	scanSettingsForCT(row[0], row[1], row[2], &liveCount, &expiredCount);
+	char *updateIfAny = scanSettingsForCT(row[0], row[1], row[2],
+					      &liveCount, &expiredCount);
+	if (updateIfAny)
+	    {
+	    AllocVar(update);
+	    update->name = updateIfAny;
+	    slAddHead(&updateList, update);
+	    }
 	}
     sqlFreeResult(&sr);
+    }
+
+/* Now that we're done reading from savedSessionTable, we can modify it: */
+for (update = updateList;  update != NULL;  update = update->next)
+    {
+    sqlUpdate(conn, update->name);
     }
 
 hDisconnectCentral(&conn);
