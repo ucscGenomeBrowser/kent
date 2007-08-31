@@ -16,7 +16,7 @@
 #include "customFactory.h"
 #include "hgSession.h"
 
-static char const rcsid[] = "$Id: hgSession.c,v 1.28 2007/06/08 19:15:46 angie Exp $";
+static char const rcsid[] = "$Id: hgSession.c,v 1.29 2007/08/31 22:44:57 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -597,7 +597,21 @@ if (helList != NULL)
 	{
 	char *db = hel->name + strlen(CT_FILE_VAR_PREFIX);
 	boolean thisGotLiveCT = FALSE, thisGotExpiredCT = FALSE;
-	customFactoryTestExistence(hel->val, &thisGotLiveCT, &thisGotExpiredCT);
+	/* If the file doesn't exist, just remove the cart variable so it 
+	 * doesn't get copied from session to session.  If it does exist,
+	 * leave it up to customFactoryTestExistence to parse the file for 
+	 * possible customTrash table references, some of which may exist 
+	 * and some not. */
+	if (!fileExists(hel->val))
+	    {
+	    cartRemove(cart, hel->name);
+	    thisGotExpiredCT = TRUE;
+	    }
+	else
+	    {
+	    customFactoryTestExistence(hel->val,
+				       &thisGotLiveCT, &thisGotExpiredCT);
+	    }
 	if (thisGotLiveCT)
 	    slNameAddHead(&liveDbList, db);
 	if (thisGotExpiredCT)
