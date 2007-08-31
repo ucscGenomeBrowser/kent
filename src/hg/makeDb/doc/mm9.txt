@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.19 2007/08/31 18:33:17 hiram Exp $"
+#	"$Id: mm9.txt,v 1.20 2007/08/31 22:40:17 hiram Exp $"
 #
 
 #######################################################################
@@ -2370,7 +2370,7 @@ done
 
 #########################################################################
 # BLASTZ RAT Rn4 (DONE - 2007-08-09 - 2007-08-15 - Hiram)
-#  re-run a second time with tighter parameters
+#  re-run a second time with tighter parameters, see below for second run
     ssh kkstore06
     mkdir /cluster/data/mm9/bed/blastzRn4.2007-08-09
     cd /cluster/data/mm9/bed/blastzRn4.2007-08-09
@@ -2704,5 +2704,90 @@ while (<>) {
     runJoiner.csh mm9 acembly
 # mm9.acemblyPep.name - hits 130002 of 130002 ok
 # mm9.acemblyClass.name - hits 152177 of 152177 ok
+
+#########################################################################
+# BLASTZ RAT Rn4 (WORKING - 2007-08-30 - Hiram)
+#  re-run this third time with a special matrix from Bob Harris/Webb Miller
+    cat /cluster/data/blastz/mouse_rat.q
+    A    C    G    T
+    56 -109  -45 -137
+  -109  100 -103  -45
+   -45 -103  100 -109
+  -137  -45 -109   56
+O=600 E=55
+
+    ssh kkstore06
+    mkdir /cluster/data/mm9/bed/blastzRn4.2007-08-31
+    cd /cluster/data/mm9/bed/blastzRn4.2007-08-31
+    #	Started this before the rsync to /scratch/data/mm9/ had completed,
+    #	hence the /cluster/bluearc/scratch/data/mm9/ location is used
+    #	here.
+
+    cat << '_EOF_' > DEF
+# mouse vs rat
+# Specially tuned blastz parameters from Webb Miller
+
+BLASTZ_ABRIDGE_REPEATS=0
+BLASTZ_O=600
+BLASTZ_E=55
+BLASTZ_Y=15000
+BLASTZ_T=2
+BLASTZ_K=4500
+BLASTZ_Q=/cluster/data/blastz/mouse_rat.q
+
+# TARGET: Mouse Mm9
+SEQ1_DIR=/scratch/data/mm9/mm9.2bit
+SEQ1_LEN=/cluster/data/mm9/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Rat Rn4 - single chunk big enough to run each chrom by itself
+SEQ2_DIR=/scratch/hg/rn4/rn4.2bit
+SEQ2_LEN=/cluster/data/rn4/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm9/bed/blastzRn4.2007-08-31
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    cd /cluster/data/mm9/bed/blastzRn4.2007-08-31
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=medium \
+	-stop=net `pwd`/DEF > blastz.out 2>&1 &
+XXX - running 2007-08-31 13:40
+    #  this runs much faster than the usual blastz run
+    #	failed when it got to the kki run since /scratch/hg/rn4/ was not
+    #	complete on the Iservers.  Fixup that, then, continue:
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=medium \
+	-continue=chainMerge -stop=net \
+	`pwd`/DEF > chainMerge.out 2>&1 &
+    #	And then, kolossus had no /scratch/data/ directory, go there and
+    #	make this a symlink to /iscratch/data/
+    #	and run the axtChain/netChains.csh script manually on kolossus
+
+#########################################################################
+# EXONIPHY MM9, lifted from hg18 (WORKING - 2007-08-31 - Hiram)
+#	needed for uscsGenes10 building
+
+XXX - Query to Adam to see how to make the hg18.mm9.syn.chain file.
+
+    # exoniphyMm9.gp is prepared as follows
+    ssh hgwdev
+    hgsql hg18 -e "select * from exoniphy" --skip-column-names > exoniphyHg18.gp
+    liftOver -genePred exoniphyHg18.gp /usr/data/hg18/dbDerived/netSynteny/hg18.mm9.syn.chain exoniphyMm9.gp unmapped
+    (where hg18.mm9.syn.chain representes the human/mouse syntenic net)
+
+    ssh hgwdev
+
+    cd /cluster/data/mm9/bed
+    mkdir exoniphy
+    cd exoniphy
+    hgLoadGenePred -genePredExt mm9 exoniphy exoniphyMm9.gp
+
 
 #########################################################################
