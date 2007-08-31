@@ -1,6 +1,6 @@
 # Build all directories in utils
 
-# 	$Id: makefile,v 1.130 2007/05/23 23:16:02 galt Exp $
+# 	$Id: makefile,v 1.131 2007/08/31 20:46:19 hiram Exp $
 
 BROWSER_BINS=cartReset das hgBlat makeDb/hgCgiData hgConvert \
         hgGateway hgGene hgGenome hgPcr hgSession hgTables hgTracks \
@@ -120,6 +120,7 @@ UTIL_DIRS = \
 	autoDtd \
 	autoSql \
 	autoXml \
+	bedOrBlocks \
 	bedIntersect \
 	bedItemOverlapCount \
 	bedSort \
@@ -250,6 +251,8 @@ UTIL_DIRS = \
 	sqlToXml \
 	test \
 	trfBig \
+	txCds \
+	txGraph \
 	utils \
 	uniqSize \
 	updateStsInfo \
