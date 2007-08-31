@@ -4,17 +4,16 @@
 # This file describes browser build for the Orangutan
 # genome, July 2007
 #
-#	"$Id: ponAbe1.txt,v 1.1 2007/08/21 16:18:19 hiram Exp $"
+#	"$Id: ponAbe1.txt,v 1.2 2007/08/31 18:34:13 hiram Exp $"
 #
 ######################################################################
-## DOWNLOAD SEQUENCE
+## DOWNLOAD SEQUENCE (DONE - 2007-08-17 - Hiram)
     ssh kkstore01
     mkdir /cluster/store2/ponAbe1
     ln -s /cluster/store2/ponAbe1 /cluster/data/ponAbe1
     mkdir /cluster/data/ponAbe1/wustl
     cd /cluster/data/ponAbe1/wustl
-    for F in supercontigs.agp.gz supercontigs.fa.gz contigs.fa.gz
-contigs.fa.qual.gz
+    for F in supercontigs.agp.gz supercontigs.fa.gz contigs.fa.gz contigs.fa.qual.gz
 do
     wget --timestamping \
 ftp://genome.wustl.edu/pub/organism/Primates/Pongo_pygmaeus_abelii/assembly/Pongo_pygmaeus_abelii-2.0.2/output/${F} \
@@ -28,7 +27,7 @@ done
 # -rw-rw-r--  1 900117536 Jul 10 17:24 supercontigs.fa.gz
 
 #######################################################################
-## create config.ra and run makeGenomeDb.pl
+## create config.ra and run makeGenomeDb.pl (DONE - 2007-08-21 - Hiram)
     ssh kkstore01
     cd /cluster/data/ponAbe1
 
@@ -51,5 +50,114 @@ dbDbSpeciesDir orangutan
     time nice -n +19 ~/kent/src/hg/utils/automation/makeGenomeDb.pl \
 	-stop=agp ponAbe1.config.ra > makeGenomeDb.out 2>&1 &
     #	real    24m24.468s
+    time nice -n +19 ~/kent/src/hg/utils/automation/makeGenomeDb.pl \
+	-continue=db ponAbe1.config.ra > db.continue.out 2>&1 &
+    ## says it needs a clade
+# add to the .ra file:
+clade mammal
+genomeCladePriority 11
+    ## and continue
+    time nice -n +19 ~/kent/src/hg/utils/automation/makeGenomeDb.pl \
+	-continue=dbDb ponAbe1.config.ra > dbDb.continue.out 2>&1 &
+    # add the trackDb files to the source tree and to the trackDb/makefile
 
+##########################################################################
+# fetch photograph (DONE - 2007-08-21 - Hiram)
+    mkdir /cluster/data/ponAbe1/photo
+    cd /cluster/data/ponAbe1/photo
+    wget --timestamping \
+	http://www.genome.gov/Images/press_photos/highres/84-300.jpg \
+	    -O nhgri.original.84-300.jpg
+    convert -geometry 300x200 -quality 80 nhgri.original.84-300.jpg \
+	Pongo_pygmaeus_abelii.jpg
+    # check this .jpg image into the source tree browser/images/ directory
+##########################################################################
+## Repeat masker (WORKING - 2007-08-21 - Hiram)
+    ssh kkstore01
+    ## use screen for this
+    mkdir /cluster/data/ponAbe1/bed/RepeatMasker
+    cd /cluster/data/ponAbe1/bed/RepeatMasker
+    time nice -n +19 ~/kent/src/hg/utils/automation/doRepeatMasker.pl \
+	-bigClusterHub=pk \
+	-buildDir=/cluster/data/ponAbe1/bed/RepeatMasker ponAbe1 > do.out 2>&1 &
+
+##############################################################################
+## simpleRepeat masking (WORKING - 2007-08-21 - Hiram)
+    ## create a kki kluster run
+    ssh kkr1u00
+    mkdir /iscratch/i/ponAbe1
+    cd /iscratch/i/ponAbe1
+    cp -p /cluster/data/ponAbe1/ponAbe1.unmasked.2bit .
+    cp -p /cluster/data/ponAbe1/chrom.sizes .
+    twoBitToFa ponAbe1.unmasked.2bit ponAbe1.unmasked.fa
+    mkdir split
+    #  split sequence into about 1000 files, each about 3,000,000 bases
+    faSplit about ponAbe1.unmasked.fa 3000000 split/s_
+
+    for R in 2 3 4 5 6 7 8
+do
+    rsync -a --progress /iscratch/i/ponAbe1/ kkr${R}u00:/iscratch/i/ponAbe1/
+done
+
+    ssh kki
+    mkdir /cluster/data/ponAbe1/bed/simpleRepeat/trf
+    cd /cluster/data/ponAbe1/bed/simpleRepeat/trf
+
+    cat << '_EOF_' > runTrf
+#!/bin/csh -fe 
+#
+set C = $1
+set GZ = /iscratch/i/mus/ponAbe1/$C.fa.gz
+mkdir -p /scratch/tmp/$C
+zcat $GZ > /scratch/tmp/$C/$C.fa
+pushd /scratch/tmp/$C
+/cluster/bin/i386/trfBig -trf=/cluster/bin/i386/trf $C.fa \
+	/dev/null -bedAt=$C.bed -tempDir=/scratch/tmp/$C
+popd
+rm -f $C.bed
+cp -p /scratch/tmp/$C/$C.bed .
+rm -fr /scratch/tmp/$C
+'_EOF_'
+    # << happy emacs
+    chmod +x runTrf
+
+    cat << '_EOF_' > template
+#LOOP
+./runTrf $(path1) {check out line $(root1).bed}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    cut -f1 /iscratch/i/mus/ponAbe1/chrom.sizes > chrom.lst
+    gensub2 chrom.lst single template jobList
+    para create jobList
+    para try ... check ... push ... etc ...
+    ## none of these jobs and any trouble, running line counts of these result
+    ## bed files with the previous failed run indicates there are identical
+# Completed: 35 of 35 jobs
+# CPU time in finished jobs:      14620s     243.66m     4.06h    0.17d  0.000 y
+# IO & Wait Time:                   272s       4.54m     0.08h    0.00d  0.000 y
+# Average job time:                 425s       7.09m     0.12h    0.00d
+# Longest finished job:            1386s      23.10m     0.39h    0.02d
+# Submission to last job:          1790s      29.83m     0.50h    0.02d
+
+    cat *.bed > ../simpleRepeat.bed
+    cd ..
+    awk '{if ($5 <= 12) print;}' simpleRepeat.bed > trfMask.bed
+
+    ssh hgwdev
+    cd /cluster/data/ponAbe1/bed/simpleRepeat
+    time nice -n +19 hgLoadBed ponAbe1 simpleRepeat \
+      simpleRepeat.bed -sqlTable=$HOME/kent/src/hg/lib/simpleRepeat.sql
+    #	Loaded 1167619 elements of size 16
+    #	real    0m33.312s
+
+    nice -n +19 featureBits ponAbe1 simpleRepeat
+    #	80054947 bases of 2620346158 (3.055%) in intersection
+
+    ## clean up the /iscratch/i/mus/ponAbe1/ directory
+    ## for downloads:
+    mkdir trfMaskChrom
+    cd trfMaskChrom
+    ln -s ../trf/chr*.bed .
 
