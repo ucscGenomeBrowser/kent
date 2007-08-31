@@ -1,6 +1,6 @@
 # Build all directories in utils
 # test comment
-# 	$Id: makefile,v 1.7 2007/08/13 20:47:00 angie Exp $
+# 	$Id: makefile,v 1.8 2007/08/31 20:45:47 hiram Exp $
 
 include ../../inc/common.mk
 
@@ -42,6 +42,7 @@ SCRIPT_FILES = \
 USE_DIRS = $(DIRS)
 
 DIRS = \
+	bedWeedOverlapping \
 	chromGraphFromBin \
 	chromGraphToBin \
 	gapToLift \
