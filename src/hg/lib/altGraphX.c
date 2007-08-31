@@ -10,7 +10,7 @@
 #include "geneGraph.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: altGraphX.c,v 1.34 2007/08/29 19:15:22 kent Exp $";
+static char const rcsid[] = "$Id: altGraphX.c,v 1.35 2007/08/31 11:58:42 kent Exp $";
 struct altGraphX *_agxSortable = NULL; /* used for sorting. */
 
 struct evidence *evidenceCommaIn(char **pS, struct evidence *ret)
@@ -1797,20 +1797,19 @@ return -1;
 }
 
 void altGraphXEnlargeExons(struct altGraphX *ag)
-/* Scale the exons up in size such that the smallest one
-   is no smaller than minIntronFact the largest intron. Method is
-   to extend the ends of exons, this makes the exons appear larger
-   but the coordinates will no longer be meaningful with respect to the
-   genome coordinates. */
+/* Scale the exons in size such that the largest exon and the largest intron are
+ * the same size.  The method is to extend the ends of exons. This makes the 
+ * exons appear larger, but the coordinates will no longer be meaningful with
+ * respect to the genome coordinates.  Exons with alternative left ends will be
+ * scaled according to just one of the left ends. */
 {
 bool **em = altGraphXCreateEdgeMatrix(ag);
 int i,j,k;
-int maxIntron=0;
+int maxIntron=1;
 int *vPos = ag->vPositions;
-int minExon = BIGNUM;
+int maxExon = 1;
 int increment = 0;
 double multFact = 1.2;
-double minIntronFact = .03;
 int vC = ag->vertexCount;
 int last = 0;
 /* Find largest intron and smallest exon. */
@@ -1821,14 +1820,14 @@ for(i=0; i<vC; i++)
 	if(em[i][j])
 	    {
 	    if(altGraphXEdgeVertexType(ag, i, j) == ggExon)
-		minExon = min(minExon, abs(vPos[i] - vPos[j]));
+		maxExon = max(maxExon, abs(vPos[i] - vPos[j]));
 	    else
 		maxIntron = max(maxIntron, abs(vPos[i] - vPos[j]));
 	    }
 	}
     }
 
-multFact = (minIntronFact*maxIntron)/minExon;
+multFact = (double)maxIntron/maxExon;
 /* Some genes already have small introns-
    have to avoid shrinking the exons. */
 if(multFact < 1)
