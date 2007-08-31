@@ -1,14 +1,38 @@
-include ../../../inc/common.mk
+include ../../inc/common.mk
 
 L = -lm
-MYLIBDIR = ../../../lib/${MACHTYPE}
+MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkweb.a
 
-O = txGraph.o
+all:
+	@for D in ${DIRS} x; do \
+	  if test "$$D" != "x" ; then \
+	    ( cd $$D && echo $$D && ${MAKE}  ) ;\
+	    x=$$? ; if [ $$x -ne 0 ]; then exit $$x ; fi \
+	    fi ;\
+	done
 
-txGraph: $O ${MYLIBS}
-	${CC} ${COPT} -o ${BINDIR}/txGraph $O ${MYLIBS} $L
-	${STRIP} ${BINDIR}/txGraph${EXE}
+DIRS = \
+    agxToTxg \
+    bedToTxEdges \
+    txAbFragFind \
+    txBedToGraph \
+    txOrtho \
+    txPslFilter \
+    txPslToBed \
+    txReadRa \
+    txWalk \
+    txgAddEvidence \
+    txgAnalyze \
+    txgGoodEdges \
+    txgToAgx \
+    txgToXml \
+    txgTrim
 
 clean:
-	rm -f $O
+	@for D in ${DIRS} x; do \
+	  if test "$$D" != "x" ; then \
+	    ( cd $$D && echo $$D && ${MAKE} clean ) ;\
+	    x=$$? ; if [ $$x -ne 0 ]; then exit $$x ; fi \
+	    fi ;\
+	done
