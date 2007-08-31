@@ -25,8 +25,7 @@ fi
 db="$1"
 
 echo "Warning: using tmp gbRoot until GenBank fully converted handling non-coding RNA" >&2
-#gbRoot=/cluster/data/genbank
-gbRoot=/cluster/store10/markd/genbank
+gbRoot=/cluster/data/genbank
 gbGetSeqs=${gbRoot}/bin/x86_64/gbGetSeqs
 
 # function to get alignments and metadata.
