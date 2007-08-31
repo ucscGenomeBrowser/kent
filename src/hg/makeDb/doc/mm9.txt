@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.18 2007/08/31 00:21:52 hiram Exp $"
+#	"$Id: mm9.txt,v 1.19 2007/08/31 18:33:17 hiram Exp $"
 #
 
 #######################################################################
@@ -2079,10 +2079,10 @@ done
     #	56085184 bases of 2505900260 (2.238%) in intersection
 
 #############################################################################
-# BLASTZ SELF (WORKING - 2007-08-07 - Hiram)
+# BLASTZ SELF (DONE - 2007-08-07 - 2007-08-31 - Hiram)
 #	using chain min score of 10,000 to cut down on volumn of data
 #  trying a two pass sequence, chroms with chroms, then randoms to chroms
-#  combine the two results for a final set
+#  swap the randoms, then combine the three results into a final set
     ssh kkstore06
     cd /cluster/data/mm9
     time nice -n +19 faToTwoBit ?/chr?.fa ??/chr??.fa mm9.chroms.2bit
@@ -2237,7 +2237,22 @@ done
     ## using a manually fixed up loadUp.csh script:
     #		(from ../axtChain/loadUp.csh)
     time nice -n +19 ./loadUp.csh > loadUp.out 2>&1 &
-XXX - running 2007-08-30 17:15 in screen on hgwdev
+    #	real    99m17.895s
+    time nice -n +19 featureBits mm9 chainSelfLink > fb.mm9.chainSelfLink 2>&1
+    #	real    30m3.402s
+    #	378849408 bases of 2620346127 (14.458%) in intersection
+    cat /cluster/data/mm8/bed/blastzSelf.2006-03-20/fb.mm8.chainSelfLink
+    #	362483673 bases of 2567283971 (14.119%) in intersection
+
+    # finish off the nets
+    time nice -n +19 netClass -verbose=0 -noAr noClass.net mm9 mm9 mm9.mm9.net
+    #	real    1m9.538s
+    # load nets (not needed for the RR, but useful on genome-test)
+    time nice -n +19 netFilter -minGap=10 mm9.mm9.net \
+	| hgLoadNet -verbose=0 mm9 netSelf stdin
+    #	real    0m40.709s
+
+    ## We don't deliver this track to the RR, so downloads are not necessary
 
 #############################################################################
 # PREPARE LINEAGE SPECIFIC REPEAT FILES FOR BLASTZ (DONE - 2007-08-07 - Hiram)
@@ -2540,7 +2555,7 @@ TMPDIR=/scratch/tmp
     #	and run the axtChain/netChains.csh script manually on kolossus
 
 #########################################################################
-# BLASTZ/CHAIN/NET oryLat1 (WORKING - 2007-08-30 - Hiram)
+# BLASTZ/CHAIN/NET oryLat1 (DONE - 2007-08-31 - Hiram)
     ssh kkstore04
     mkdir /cluster/data/mm9/bed/blastzOryLat1.2007-08-30
     cd /cluster/data/mm9/bed/blastzOryLat1.2007-08-30
@@ -2579,7 +2594,32 @@ TMPDIR=/scratch/tmp
     time nice -n +19 doBlastzChainNet.pl DEF -chainMinScore=5000 \
 	-qRepeats=windowmaskerSdust -chainLinearGap=loose \
 	-bigClusterHub=kk -verbose=2 > do.log 2>&1 &
-XXX - running 2007-08-30 17:15 in a screen on kkstore04
+    #	real    512m56.909s
+    #  had a single failed kk job, finished manually, then:
+    time nice -n +19 doBlastzChainNet.pl DEF -chainMinScore=5000 \
+	-qRepeats=windowmaskerSdust -chainLinearGap=loose \
+	-continue=cat -bigClusterHub=kk -verbose=2 > cat.log 2>&1 &
+    #	real    11m5.508s
+    ## typical failure:
+    #	HgStepManager: executing step 'net' Fri Aug 31 10:02:51 2007.
+    #	netChains: looks like previous stage was not successful (can't find [mm9.oryLat1.]all.chain[.gz]).
+    # continuing
+    time nice -n +19 doBlastzChainNet.pl DEF -chainMinScore=5000 \
+	-qRepeats=windowmaskerSdust -chainLinearGap=loose \
+	-continue=net -bigClusterHub=kk -verbose=2 > net.log 2>&1 &
+    #	real    21m33.501s
+    cat fb.mm9.chainOryLat1Link.txt
+    #	50650171 bases of 2620346127 (1.933%) in intersection
+
+    # and the swap
+    mkdir /cluster/data/oryLat1/bed/blastz.mm9.swap
+    cd /cluster/data/oryLat1/bed/blastz.mm9.swap
+    time nice -n +19 doBlastzChainNet.pl \
+	/cluster/data/mm9/bed/blastzOryLat1.2007-08-30/DEF \
+	-chainMinScore=5000 -qRepeats=windowmaskerSdust -chainLinearGap=loose \
+	-swap -bigClusterHub=kk -verbose=2 > swap.log 2>&1 &
+    cat fb.oryLat1.chainMm9Link.txt
+    #	45488232 bases of 700386597 (6.495%) in intersection
 
 #########################################################################
 # LOAD ACEMBLY (DONE 8/28/07 angie)
