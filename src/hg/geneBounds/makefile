@@ -22,6 +22,7 @@ DIRS = \
 	bedCons \
 	checkableBorf \
 	clusterGenes \
+	clusterPsl \
 	clusterRna \
 	dnaMotifFind \
 	eisenInput \
