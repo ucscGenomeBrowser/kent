@@ -68,7 +68,7 @@ itemClassTbl acemblyClass
 geneClasses main putative
 gClass_main 128,0,125
 gClass_putative 200,0,125
-urlLabel Transcript ID:
+urlLabel AceView Gene Summary:
 
 track ECgene
 shortLabel ECgene Genes

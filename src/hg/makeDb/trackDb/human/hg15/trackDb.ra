@@ -35,6 +35,7 @@ visibility dense
 color 155,0,125
 type genePred acemblyPep acemblyMrna
 url http://www.ncbi.nih.gov/IEB/Research/Acembly/av.cgi?db=hg15&l=$$
+urlLabel AceView Gene Summary:
 
 track vegaPseudoGene
 shortLabel Vega Pseudogenes
