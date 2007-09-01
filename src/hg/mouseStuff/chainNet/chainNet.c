@@ -9,11 +9,21 @@
 #include "chainBlock.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: chainNet.c,v 1.36 2006/06/07 19:25:57 angie Exp $";
+static char const rcsid[] = "$Id: chainNet.c,v 1.37 2007/09/01 02:37:14 markd Exp $";
 
 int minSpace = 25;	/* Minimum gap size to fill. */
 int minFill;		/* Minimum fill to record. */
 double minScore = 2000;	/* Minimum chain score to look at. */
+boolean inclHap = FALSE; /* include haplotype pseudochromosome queries */
+
+/* command line option specifications */
+static struct optionSpec optionSpecs[] = {
+    {"minSpace", OPTION_INT},
+    {"minFill", OPTION_INT},
+    {"minScore", OPTION_DOUBLE},
+    {"inclHap", OPTION_BOOLEAN},
+    {NULL, 0}
+};
 
 void usage()
 /* Explain usage and exit. */
@@ -33,6 +43,9 @@ errAbort(
   "   -minFill=N  - default half of minSpace\n"
   "   -minScore=N - minimum chain score to consider, default %.1lf\n"
   "   -verbose=N - Alter verbosity (default 1)\n"
+  "   -inclHap - include query sequences name in the form *_hap*. Normally\n"
+  "              these are excluded from nets as being haplotype\n"
+  "              pseudochromosomes\n"
   , minSpace, minScore);
 }
 
@@ -75,6 +88,11 @@ struct chrom
     };
 
 
+static boolean inclQuery(struct chain *chain)
+/* should this query be included? */
+{
+return inclHap || (stringIn("_hap", chain->qName) == NULL);
+}
 
 int gapCmpStart(const void *va, const void *vb)
 /* Compare to sort based on start. */
@@ -773,9 +791,14 @@ while ((chain = chainRead(lf)) != NULL)
         errAbort("%s is %d in %s but %d in %s", chain->tName, 
 		chain->tSize, chainFile,
 		tChrom->size, tSizes);
-    addChain(qChrom, tChrom, chain);
-    verbose(2, "%s has %d inserts, %s has %d\n", tChrom->name, 
-	    tChrom->spaces->n, qChrom->name, qChrom->spaces->n);
+    if (!inclQuery(chain))
+        verbose(2, "skipping chain on query %s\n", chain->qName);
+    else
+        {
+        addChain(qChrom, tChrom, chain);
+        verbose(2, "%s has %d inserts, %s has %d\n", tChrom->name, 
+                tChrom->spaces->n, qChrom->name, qChrom->spaces->n);
+        }
     }
 /* Build up other side of fills.  It's just for historical 
  * reasons this is not done during the main build up.   
@@ -808,12 +831,13 @@ if (verboseLevel() > 1)
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-optionHash(&argc, argv);
+optionInit(&argc, argv, optionSpecs);
 if (argc != 6)
     usage();
 minSpace = optionInt("minSpace", minSpace);
 minFill = optionInt("minFill", minSpace/2);
 minScore = optionInt("minScore", minScore);
+inclHap = optionExists("inclHap");
 chainNet(argv[1], argv[2], argv[3], argv[4], argv[5]);
 return 0;
 }

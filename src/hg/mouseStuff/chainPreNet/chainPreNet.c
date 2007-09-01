@@ -6,10 +6,19 @@
 #include "chainBlock.h"
 #include "bits.h"
 
-static char const rcsid[] = "$Id: chainPreNet.c,v 1.9 2006/06/06 21:49:56 angie Exp $";
+static char const rcsid[] = "$Id: chainPreNet.c,v 1.10 2007/09/01 02:37:14 markd Exp $";
+
+/* command line option specifications */
+static struct optionSpec optionSpecs[] = {
+    {"dots",    OPTION_INT},
+    {"pad",     OPTION_INT},
+    {"inclHap", OPTION_BOOLEAN},
+    {NULL, 0}
+};
 
 int dots = 0;  /* How often to put out a dot. */
 int pad = 1;   /* How much to pad around chain. */
+boolean inclHap = FALSE; /* include haplotype pseudochromosome queries */
 
 void usage()
 /* Explain usage and exit. */
@@ -21,7 +30,10 @@ errAbort(
   "options:\n"
   "   -dots=N - output a dot every so often\n"
   "   -pad=N - extra to pad around blocks to decrease trash\n"
-  "            (default %d)\n",
+  "            (default %d)\n"
+  "   -inclHap - include query sequences name in the form *_hap*. Normally\n"
+  "              these are excluded from nets as being haplotype\n"
+  "              pseudochromosomes\n",
   pad);
 }
 
@@ -79,6 +91,12 @@ if (s < 0) s = 0;
 e += pad;
 if (e > chrom->size) e = chrom->size;
 bitSetRange(chrom->bits, s, e-s);
+}
+
+static boolean inclQuery(struct chain *chain)
+/* should this query be included? */
+{
+return inclHap || (stringIn("_hap", chain->qName) == NULL);
 }
 
 boolean chainUsed(struct chain *chain, 
@@ -146,7 +164,7 @@ while ((chain = chainRead(lf)) != NULL)
     /* Output chain if necessary and then free it. */
     qChrom = hashMustFindVal(qHash, chain->qName);
     tChrom = hashMustFindVal(tHash, chain->tName);
-    if (chainUsed(chain, qChrom, tChrom))
+    if (chainUsed(chain, qChrom, tChrom) && inclQuery(chain))
 	{
 	chainWrite(chain, f);
 	}
@@ -157,9 +175,10 @@ while ((chain = chainRead(lf)) != NULL)
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-optionHash(&argc, argv);
+optionInit(&argc, argv, optionSpecs);
 dots = optionInt("dots", dots);
 pad = optionInt("pad", pad);
+inclHap = optionExists("inclHap");
 if (argc != 5)
     usage();
 chainPreNet(argv[1], argv[2], argv[3], argv[4]);
