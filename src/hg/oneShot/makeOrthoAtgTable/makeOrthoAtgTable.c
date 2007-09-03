@@ -6,7 +6,7 @@
 #include "jksql.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: makeOrthoAtgTable.c,v 1.3 2007/04/30 23:14:28 kent Exp $";
+static char const rcsid[] = "$Id: makeOrthoAtgTable.c,v 1.4 2007/09/03 15:33:18 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -80,9 +80,8 @@ while (lineFileRow(lf, row))
        }
     ++count;
     }
-char *dbName = cloneString(fileName);
-chopSuffix(dbName);
-
+char dbName[256];
+splitPath(fileName, NULL, dbName, NULL);
 
 struct sqlConnection *conn = hConnectCentral();
 char query[512];
@@ -92,7 +91,6 @@ safef(query, sizeof(query), "select scientificName from dbDb where name='%s'", d
 char *scientificName = sqlQuickString(conn, query);
 hDisconnectCentral(&conn);
 
-printf("%4.2f%%\t", 100.0 * atgCount/atgAli);
 printf("%s\t%s\t%s\t", organism, scientificName, dbName);
 printf("%4.2f%%\t", 100.0 * count/totalOrfs);
 printf("%4.2f%%\t", 100.0 * atgAli/nativeAtgCount);
@@ -108,7 +106,7 @@ void makeOrthoAtgTable(int totalOrfs, int fileCount, char *files[])
 /* makeOrthoAtgTable - Create a table that lists how often atg, kozak, stop is conserved based on output from txCdsOrtho.. */
 {
 int i;
-printf("%%startId\tspecies\tbinomial name\tdb\t%%genes\t%%startAli\t%%startId\t%%stopAli\t%%stopId\t%%orfCover\n");
+printf("species\tbinomial name\tdb\t%%genes\t%%startAli\t%%startId\t%%stopAli\t%%stopId\t%%orfCover\n");
 for (i=0; i<fileCount; ++i)
     analyzeOne(totalOrfs, files[i]);
 }
