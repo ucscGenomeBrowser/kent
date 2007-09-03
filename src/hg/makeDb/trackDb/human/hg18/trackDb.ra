@@ -314,7 +314,7 @@ type bed 6 .
 
 track knownGeneOld2
 shortLabel Old Known Genes
-longLabel Old UCSC Known Genes Based on UniProt, RefSeq, and GenBank mRNA
+longLabel Previous Version of  UCSC Known Genes
 group genes
 priority 34.1
 visibility hide
