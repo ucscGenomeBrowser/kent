@@ -33,7 +33,7 @@
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 #define MAX_SP_SIZE 2000
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.396 2007/08/17 04:14:44 kate Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.397 2007/09/03 19:32:11 hartera Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1261,7 +1261,6 @@ knownGeneIdConfig(tdb);
 knownGeneShowWhatUi(tdb);
 baseColorDrawOptDropDown(cart, tdb);
 }
-
 void geneIdConfig(struct trackDb *tdb)
 /* Put up gene ID track controls */
 {
@@ -1366,7 +1365,6 @@ void ensemblNonCodingUI(struct trackDb *tdb)
 /* Put up Ensembl Non-Coding genes-specific controls */
 {
 ensemblNonCodingTypeConfig(tdb);
-baseColorDrawOptDropDown(cart, tdb);
 }
 
 void oneMrnaFilterUi(struct controlGrid *cg, char *text, char *var)
