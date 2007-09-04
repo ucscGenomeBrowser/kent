@@ -9,7 +9,7 @@
 #include "customTrack.h"
 #include "customFactory.h"
 
-static char const rcsid[] = "$Id: refreshNamedSessionCustomTracks.c,v 1.6 2007/08/31 22:42:58 angie Exp $";
+static char const rcsid[] = "$Id: refreshNamedSessionCustomTracks.c,v 1.7 2007/09/04 20:21:42 angie Exp $";
 
 #define savedSessionTable "namedSessionDb"
 
@@ -33,7 +33,8 @@ errAbort(
 
 /* Options: */
 static struct optionSpec options[] = {
-   {NULL, 0},
+    {"hardcore", OPTION_BOOLEAN}, /* Intentionally omitted from usage(). */
+    {NULL, 0},
 };
 
 char *scanSettingsForCT(char *userName, char *sessionName, char *contents,
@@ -169,11 +170,11 @@ if (sqlTableExists(conn, savedSessionTable))
     }
 
 /* Now that we're done reading from savedSessionTable, we can modify it: */
-for (update = updateList;  update != NULL;  update = update->next)
+if (optionExists("hardcore"))
     {
-    sqlUpdate(conn, update->name);
+    for (update = updateList;  update != NULL;  update = update->next)
+	sqlUpdate(conn, update->name);
     }
-
 hDisconnectCentral(&conn);
 verbose(1, "Found %d live and %d expired custom tracks in %s.\n",
 	liveCount, expiredCount, centralDbName);
