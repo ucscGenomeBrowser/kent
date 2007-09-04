@@ -94,7 +94,7 @@ set pbDb2 mm4,rn3
 set pbDb3 hg16,hg17,hg18
 
 # Define databases that support family browser (gene sorter)
-set familyDb $hg,$mm,$ce,$sacCer,$dm
+set familyDb $hg,$mm,$rn,$ce,$sacCer,$dm
 
 # Define databases that support CCDS
 set ccdsDb hg18,hg17,mm8
