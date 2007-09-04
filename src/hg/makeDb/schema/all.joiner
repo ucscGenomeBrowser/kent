@@ -650,6 +650,17 @@ identifier mrnaBlastzName
 
 # Microarray stuff.
 
+identifier affyHumanExon
+"Affymetrix all human exon array probe id"
+    hgFixed.affyHumanExon.name
+    $hg.affyHumanExon.name
+
+identifier affyHumanExonSampleId
+"Sample IDs for Affymetrix all human exon array."
+    hgFixed.affyHumanExonExps.id
+    $hg.affyHumanExon.expIds comma full 
+    $hg.affyHumanExon.expScores comma indexOf full
+
 identifier gnfHumanAtlas2
 "Novartis GNF Human gene probe ID"
     hgFixed.gnfHumanAtlas2All.name
