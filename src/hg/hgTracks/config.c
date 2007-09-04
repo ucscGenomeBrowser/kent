@@ -77,7 +77,7 @@ if (changeVis != -2)
 #endif /* BOB_DOESNT_LIKE */
 
 cgiMakeHiddenVar(configGroupTarget, "none");
-boolean isFirst = TRUE;
+boolean isFirstNotCtGroup = TRUE;
 for (group = groupList; group != NULL; group = group->next)
     {
     struct trackRef *tr;
@@ -145,12 +145,14 @@ for (group = groupList; group != NULL; group = group->next)
         /* finish group section here if it's collapsed */
         hTableEnd();
         hPrintf("<BR>");
-        isFirst = FALSE;
+        if (differentString(group->name, "user"))
+            isFirstNotCtGroup = FALSE;
         continue;
         }
 
-    /* First group gets ruler. */
-    if (!showedRuler && isFirst)
+    /* First non-CT group gets ruler. */
+    if (!showedRuler && isFirstNotCtGroup && 
+                differentString(group->name, "user"))
 	{
         showedRuler = TRUE;
 	hPrintf("<TR>");
@@ -177,7 +179,8 @@ for (group = groupList; group != NULL; group = group->next)
             }
 	hPrintf("</TR>\n");
 	}
-    isFirst = FALSE;
+    if (differentString(group->name, "user"))
+        isFirstNotCtGroup = FALSE;
     /* Scan track list to determine which supertracks have visible member
      * tracks, and to insert a track in the list for the supertrack.
      * Sort tracks and supertracks together by priority */
