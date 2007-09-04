@@ -359,6 +359,7 @@ foreach my $db (@dbs) {
   my $sqlFile = "$db.tableDescriptions.sql";
   open(SQL, ">$sqlFile") || die "Can't open $sqlFile for writing";
   print SQL "use $db;\n";
+  print SQL "drop table if exists tableDescriptions;";
   open(F, "$kentSrc/hg/lib/tableDescriptions.sql")
     || die "Can't open $kentSrc/hg/lib/tableDescriptions.sql";
   while (<F>) {
@@ -419,7 +420,6 @@ foreach my $db (@dbs) {
   }
   close(SQL);
   if (! $noLoad) {
-    system("echo drop table tableDescriptions | hgsql $db");
     (! system("hgsql $db < $sqlFile")) || warn "hgsql error for $sqlFile";
     print "Loaded $db.tableDescriptions.\n";
     unlink($sqlFile);
