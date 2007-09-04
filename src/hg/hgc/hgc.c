@@ -208,7 +208,7 @@
 #include "omicia.h"
 #include "atomDb.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1340 2007/08/31 11:59:31 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1341 2007/09/04 23:28:07 kate Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -2351,7 +2351,7 @@ void printOrigAssembly(struct trackDb *tdb)
 /* If this annotation has been lifted, print the original
  * freeze, as indicated by the "origAssembly" trackDb setting */ 
 {
-char *origAssembly, *freeze, *composite;
+char *composite;
 struct trackDb *fullTdb = NULL;
 
 if ((composite = trackDbSetting(tdb, "subTrack")) != NULL)
@@ -2359,16 +2359,7 @@ if ((composite = trackDbSetting(tdb, "subTrack")) != NULL)
     fullTdb = hashFindVal(trackHash, composite);
 if (fullTdb == NULL)
     fullTdb = tdb;
-if ((origAssembly = trackDbSetting(fullTdb, "origAssembly")) != NULL)
-    {
-    if (differentString(origAssembly, database))
-        {
-        freeze = hFreezeFromDb(origAssembly);
-        if (freeze == NULL)
-            freeze = origAssembly;
-        printf("<B>Data coordinates converted via <A TARGET=_BLANK HREF=\"../goldenPath/help/hgTracksHelp.html#Liftover\">liftOver</A> from:</B> %s (%s)<BR>\n", freeze, origAssembly);
-        }
-    }
+trackDbPrintOrigAssembly(fullTdb, database);
 }
 
 void printTrackHtml(struct trackDb *tdb)

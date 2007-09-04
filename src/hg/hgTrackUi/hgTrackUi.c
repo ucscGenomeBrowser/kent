@@ -33,7 +33,7 @@
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 #define MAX_SP_SIZE 2000
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.397 2007/09/03 19:32:11 hartera Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.398 2007/09/04 23:28:06 kate Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2871,15 +2871,8 @@ else
         printf("<B>Data version:</B> %s<BR>\n", version);
 
    /* Print lift information from trackDb, if any */
-    char *origAssembly = trackDbSetting(tdb, "origAssembly");
-    if (origAssembly)
-        {
-        if (differentString(origAssembly, database))
-            {
-            char *freeze = hFreezeFromDb(origAssembly);
-            printf("<B>Data coordinates converted via <A TARGET=_BLANK HREF=\"../goldenPath/help/hgTracksHelp.html#Liftover\">liftOver</A> from:</B> %s %s%s%s<BR>\n", freeze ? freeze : "", freeze ? "(" : "", origAssembly, freeze ? ")":"");
-            }
-        }
+   trackDbPrintOrigAssembly(tdb, database);
+
     if (hTableOrSplitExists(tdb->tableName))
         {
         /* Print update time of the table (or one of the components if split) */
@@ -2890,7 +2883,6 @@ else
 	    printf("<B>Data last updated:</B> %s<BR>\n", date);
 	hFreeConn(&conn);
 	}
-
     }
 if (tdb->html != NULL && tdb->html[0] != 0)
     {

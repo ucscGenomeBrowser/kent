@@ -164,5 +164,8 @@ void trackDbMakeComposites(struct trackDb **pTdbList);
 /* inherit the settings of the main track, and also create a list of */
 /* subTracks for the tdb->subTracks pointer. */
 
+void trackDbPrintOrigAssembly(struct trackDb *tdb, char *database);
+/* Print lift information from trackDb, if any */
+
 #endif /* TRACKDB_H */
 

@@ -12,7 +12,7 @@
 #include "hash.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.33 2007/08/05 00:33:25 kate Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.34 2007/09/04 23:28:06 kate Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -595,3 +595,16 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     }
 }
 
+void trackDbPrintOrigAssembly(struct trackDb *tdb, char *database)
+/* Print lift information from trackDb, if any */
+{
+char *origAssembly = trackDbSetting(tdb, "origAssembly");
+if (origAssembly)
+    {
+    if (differentString(origAssembly, database))
+        {
+        char *freeze = hFreezeFromDb(origAssembly);
+        printf("<B>Data coordinates converted via <A TARGET=_BLANK HREF=\"../goldenPath/help/hgTracksHelp.html#Liftover\">liftOver</A> from:</B> %s %s%s%s<BR>\n", freeze ? freeze : "", freeze ? "(" : "", origAssembly, freeze ? ")":"");
+        }
+    }
+}
