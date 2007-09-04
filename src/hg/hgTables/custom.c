@@ -13,7 +13,7 @@
 #include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: custom.c,v 1.32 2007/03/22 20:33:02 hiram Exp $";
+static char const rcsid[] = "$Id: custom.c,v 1.33 2007/09/04 20:38:36 kate Exp $";
 
 struct customTrack *theCtList = NULL;	/* List of custom tracks. */
 struct slName *browserLines = NULL;	/* Browser lines in custom tracks. */
@@ -56,15 +56,17 @@ struct customTrack *ct;
 struct trackDb *tdb;
 char buf[256];
 
-AllocVar(ct);
-AllocVar(tdb);
+tdb = customTrackTdbDefault();
 tdb->tableName = customTrackTableFromLabel(ctName);
 tdb->shortLabel = ctName;
 tdb->longLabel = ctDesc;
 safef(buf, sizeof(buf), "bed %d .", fields);
 tdb->type = cloneString(buf);
+tdb->canPack = 0;
 tdb->visibility = visNum;
 tdb->url = ctUrl;
+
+AllocVar(ct);
 ct->tdb = tdb;
 ct->fieldCount = fields;
 ct->needsLift = FALSE;

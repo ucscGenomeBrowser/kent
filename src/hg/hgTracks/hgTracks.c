@@ -118,7 +118,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1398 2007/08/28 01:29:36 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1404 2007/09/04 20:38:36 kate Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -9554,6 +9554,8 @@ switch (track->limitedVis)
 	    else
 		y = doMapItems(track, fontHeight, y);
 	    }
+	else
+	    y += trackPlusLabelHeight(track, fontHeight);
 	break;
     case tvDense:
 	if (isWithCenterLabels(track))
@@ -12557,8 +12559,8 @@ if (!tdb)
 track = trackNew();
 track->mapName = cloneString(tdb->tableName);
 track->visibility = tdb->visibility;
-track->shortLabel = tdb->shortLabel;
-track->longLabel = tdb->longLabel;
+track->shortLabel = cloneString(tdb->shortLabel);
+track->longLabel = cloneString(tdb->longLabel);
 track->color.r = tdb->colorR;
 track->color.g = tdb->colorG;
 track->color.b = tdb->colorB;
@@ -12569,8 +12571,10 @@ track->lineHeight = tl.fontHeight+1;
 track->heightPer = track->lineHeight - 1;
 track->private = tdb->private;
 track->priority = tdb->priority;
+track->groupName = cloneString(tdb->grp);
+/* save default priority and group so we can reset it later */
 track->defaultPriority = tdb->priority;
-track->groupName = tdb->grp;
+track->defaultGroupName = cloneString(tdb->grp);
 track->canPack = tdb->canPack;
 if (tdb->useScore)
     {
@@ -12670,10 +12674,6 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
     track = trackFromTrackDb(tdb);
     track->hasUi = TRUE;
-    /* save default priority and group so we can reset it later */
-    track->defaultPriority = track->priority;
-    track->defaultGroupName = cloneString(track->groupName);
-
     if (slCount(tdb->subtracks) != 0)
         makeCompositeTrack(track, tdb);
     else
@@ -13361,9 +13361,7 @@ for (grp = grps; grp != NULL; grp = grp->next)
     if (withPriorityOverride)
         {
         safef(cartVar, sizeof(cartVar), "%s.priority",grp->name);
-        if (vis == -1)
-            priority = grp->priority;
-        else
+        if (vis != -1)
             priority = (float)cartUsualDouble(cart, cartVar, grp->priority);
 
         /* use default value if it's trivially different */
@@ -13401,11 +13399,10 @@ for (track = *pTrackList; track != NULL; track = track->next)
             groupName = cloneString(
                     cartUsualString(cart, cartVar, track->tdb->parent->grp));
             track->tdb->parent->grp = cloneString(groupName);
-            if (sameString(groupName, track->tdb->parent->grp))
-                cartRemove(cart, cartVar);
             }
         else
             {
+            /* get group */
             safef(cartVar, sizeof(cartVar), "%s.group",track->mapName);
             groupName = cloneString(
                     cartUsualString(cart, cartVar, track->defaultGroupName));
@@ -13415,6 +13412,18 @@ for (track = *pTrackList; track != NULL; track = track->next)
         track->groupName = cloneString(groupName);
         if (sameString(groupName, track->defaultGroupName))
             cartRemove(cart, cartVar);
+
+        /* get priority */
+        safef(cartVar, sizeof(cartVar), "%s.priority",track->mapName);
+        float priority = (float)cartUsualDouble(cart, cartVar, 
+                                                    track->defaultPriority);
+        /* remove cart variables that are the same as the trackDb settings */
+        if (abs(priority - track->defaultPriority) < 0.00001)
+            {
+            priority = track->defaultPriority;
+            cartRemove(cart, cartVar);
+            }
+        track->priority = priority;
         }
 
     /* assign group object to track */
@@ -13488,6 +13497,20 @@ for (tr = group->trackList; tr != NULL; tr = tr->next)
         superTrack->group = group;
         superTrack->groupName = cloneString(group->name);
         superTrack->defaultGroupName = cloneString(group->name);
+
+        /* handle track reordering */
+        char cartVar[128];
+        safef(cartVar, sizeof(cartVar), "%s.priority",track->tdb->parentName);
+        float priority = (float)cartUsualDouble(cart, cartVar, 
+                                        track->tdb->parent->priority);
+        /* remove cart variables that are the same as the trackDb settings */
+        if (abs(priority - track->tdb->parent->priority) < 0.00001)
+            {
+            priority = track->tdb->parent->priority;
+            cartRemove(cart, cartVar);
+            }
+        superTrack->priority = priority;
+
         AllocVar(ref);
         ref->track = superTrack;
         slAddHead(&newList, ref);
@@ -13889,41 +13912,14 @@ groupTracks(&trackList, pGroupList, vis);
 if (cgiOptionalString( "hideTracks"))
     changeTrackVis(groupList, NULL, tvHide);
 
-/* Get visibility values and priority if any from ui. */
-/* TODO: move this into changeTrackVis with -2 vis */
+/* Get visibility values if any from ui. */
 for (track = trackList; track != NULL; track = track->next)
     {
-    char cartVar[128];
-    safef(cartVar, sizeof(cartVar), "%s.priority",track->mapName);
-    float priority = (float)cartUsualDouble(cart, cartVar, 
-                track->defaultPriority);
-    /* remove cart variables that are the same as the trackDb settings */
-    if (abs(priority - track->defaultPriority) < 0.00001)
-        {
-        priority = track->defaultPriority;
-        cartRemove(cart, cartVar);
-        }
-    track->priority = priority;
-
-    if (track->tdb->parent)
-        {
-        safef(cartVar, sizeof(cartVar), "%s.priority",track->tdb->parentName);
-        float priority = (float)cartUsualDouble(cart, cartVar, 
-                                        track->tdb->parent->priority);
-        /* remove cart variables that are the same as the trackDb settings */
-        if (abs(priority - track->tdb->parent->priority) < 0.00001)
-            {
-            priority = track->tdb->parent->priority;
-            cartRemove(cart, cartVar);
-            }
-        track->tdb->parent->priority = priority;
-        }
-
     char *s = cartOptionalString(cart, track->mapName);
-    if (cgiOptionalString( "hideTracks"))
+    if (cgiOptionalString("hideTracks"))
 	{
 	s = cgiOptionalString(track->mapName);
-	if (s != NULL)
+	if (s != NULL && (hTvFromString(s) != track->tdb->visibility))
             {
             cartSetString(cart, track->mapName, s);
             }
@@ -14260,7 +14256,7 @@ if (showTrackControls)
 	   "Tracks with lots of items will automatically be displayed in "
 	   "more compact modes.</td></tr>\n");
     cg = startControlGrid(MAX_CONTROL_COLUMNS, "left");
-    boolean isFirst = TRUE;
+    boolean isFirstNotCtGroup = TRUE;
     for (group = groupList; group != NULL; group = group->next)
         {
 	if (group->trackList == NULL)
@@ -14278,8 +14274,8 @@ if (showTrackControls)
 	hPrintf("<TR>");
 	cg->rowOpen = TRUE;
         hPrintf("<th align=\"left\" colspan=%d BGCOLOR=#536ED3>", MAX_CONTROL_COLUMNS);
-	hPrintf("\n<A NAME=\"%s\"></A>",group->name);
-        hPrintf("<A HREF=\"%s?%s&%s=%s#%s\" class=\"bigBlue\"><IMG height=18 width=18 src=\"%s\" alt=\"%s\" class=\"bigBlue\"></A>&nbsp;&nbsp;",
+	hPrintf("\n<A NAME=\"%sGroup\"></A>",group->name);
+        hPrintf("<A HREF=\"%s?%s&%s=%s#%sGroup\" class=\"bigBlue\"><IMG height=18 width=18 src=\"%s\" alt=\"%s\" class=\"bigBlue\"></A>&nbsp;&nbsp;",
             hgTracksName(), cartSidUrlString(cart), 
             collapseGroupVar(group->name),
             otherState, group->name, indicatorImg, indicator);
@@ -14289,8 +14285,10 @@ if (showTrackControls)
 	hPrintf("</th>\n");
 	controlGridEndRow(cg);
 
-	/* First group gets ruler, unless it's collapsed. */
-	if (!showedRuler && isOpen && isFirst)
+	/* First track group that is not custom track group gets ruler, 
+         * unless it's collapsed. */
+	if (!showedRuler && isOpen && isFirstNotCtGroup && 
+                differentString(group->name, "user"))
 	    {
 	    showedRuler = TRUE;
 	    controlGridStartCell(cg);
@@ -14305,7 +14303,8 @@ if (showTrackControls)
                     TV_DROPDOWN_STYLE);
 	    controlGridEndCell(cg);
 	    }
-        isFirst = FALSE;
+        if (differentString(group->name, "user"))
+            isFirstNotCtGroup = FALSE;
 
         /* Add supertracks to  track list, sort by priority and
          * determine if they have visible member tracks */
