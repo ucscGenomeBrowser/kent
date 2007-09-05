@@ -17,3 +17,7 @@ Test cases:
         - NM_207331.2 - dups on chr5, chr5_h2_bhap1;  should keep 3 each
         - NM_001033523.1 - multiple alignments on chr5, chr5_h2_hap1, best is chr6
         - NM_002116.5 - chr6, chr6_qbl_hap2, chr6_cox_hap1; should keep all
+
+    o tandemGeneDup - hg18 - tandem duplicated genes were blat maybe joining two different
+        copies in an alignment
+        - BC029540
