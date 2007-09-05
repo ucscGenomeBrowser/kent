@@ -4,7 +4,7 @@
 # This file describes browser build for the Orangutan
 # genome, July 2007
 #
-#	"$Id: ponAbe1.txt,v 1.2 2007/08/31 18:34:13 hiram Exp $"
+#	"$Id: ponAbe1.txt,v 1.3 2007/09/05 22:15:42 hiram Exp $"
 #
 ######################################################################
 ## DOWNLOAD SEQUENCE (DONE - 2007-08-17 - Hiram)
@@ -82,7 +82,7 @@ genomeCladePriority 11
 	-buildDir=/cluster/data/ponAbe1/bed/RepeatMasker ponAbe1 > do.out 2>&1 &
 
 ##############################################################################
-## simpleRepeat masking (WORKING - 2007-08-21 - Hiram)
+## simpleRepeat masking (DONE - 2007-09-05 - Hiram)
     ## create a kki kluster run
     ssh kkr1u00
     mkdir /iscratch/i/ponAbe1
@@ -100,16 +100,16 @@ do
 done
 
     ssh kki
-    mkdir /cluster/data/ponAbe1/bed/simpleRepeat/trf
+    mkdir -p /cluster/data/ponAbe1/bed/simpleRepeat/trf
     cd /cluster/data/ponAbe1/bed/simpleRepeat/trf
 
     cat << '_EOF_' > runTrf
 #!/bin/csh -fe 
 #
-set C = $1
-set GZ = /iscratch/i/mus/ponAbe1/$C.fa.gz
+set C = $1:r
+set SRC = /iscratch/i/ponAbe1/split/$C.fa
 mkdir -p /scratch/tmp/$C
-zcat $GZ > /scratch/tmp/$C/$C.fa
+cp -p $SRC /scratch/tmp/$C/$C.fa
 pushd /scratch/tmp/$C
 /cluster/bin/i386/trfBig -trf=/cluster/bin/i386/trf $C.fa \
 	/dev/null -bedAt=$C.bed -tempDir=/scratch/tmp/$C
@@ -128,20 +128,18 @@ rm -fr /scratch/tmp/$C
 '_EOF_'
     # << happy emacs
 
-    cut -f1 /iscratch/i/mus/ponAbe1/chrom.sizes > chrom.lst
-    gensub2 chrom.lst single template jobList
+    ls /iscratch/i/ponAbe1/split > part.list
+    gensub2 part.list single template jobList
     para create jobList
     para try ... check ... push ... etc ...
-    ## none of these jobs and any trouble, running line counts of these result
-    ## bed files with the previous failed run indicates there are identical
-# Completed: 35 of 35 jobs
-# CPU time in finished jobs:      14620s     243.66m     4.06h    0.17d  0.000 y
-# IO & Wait Time:                   272s       4.54m     0.08h    0.00d  0.000 y
-# Average job time:                 425s       7.09m     0.12h    0.00d
-# Longest finished job:            1386s      23.10m     0.39h    0.02d
-# Submission to last job:          1790s      29.83m     0.50h    0.02d
+# Completed: 894 of 894 jobs
+# CPU time in finished jobs:      45858s     764.31m    12.74h    0.53d  0.001 y
+# IO & Wait Time:                 10652s     177.53m     2.96h    0.12d  0.000 y
+# Average job time:                  63s       1.05m     0.02h    0.00d
+# Longest finished job:             855s      14.25m     0.24h    0.01d
+# Submission to last job:          3742s      62.37m     1.04h    0.04d
 
-    cat *.bed > ../simpleRepeat.bed
+    cat s_*.bed > ../simpleRepeat.bed
     cd ..
     awk '{if ($5 <= 12) print;}' simpleRepeat.bed > trfMask.bed
 
@@ -149,15 +147,36 @@ rm -fr /scratch/tmp/$C
     cd /cluster/data/ponAbe1/bed/simpleRepeat
     time nice -n +19 hgLoadBed ponAbe1 simpleRepeat \
       simpleRepeat.bed -sqlTable=$HOME/kent/src/hg/lib/simpleRepeat.sql
-    #	Loaded 1167619 elements of size 16
-    #	real    0m33.312s
+    #	Loaded 1039128 elements of size 16
 
-    nice -n +19 featureBits ponAbe1 simpleRepeat
-    #	80054947 bases of 2620346158 (3.055%) in intersection
+    nice -n +19 featureBits ponAbe1 simpleRepeat \
+	> fb.simpleRepeat.ponAbe1.txt 2>&1 &
+    cat fb.simpleRepeat.ponAbe1.txt
+    #	119951362 bases of 3093799891 (3.877%) in intersection
 
-    ## clean up the /iscratch/i/mus/ponAbe1/ directory
-    ## for downloads:
-    mkdir trfMaskChrom
-    cd trfMaskChrom
-    ln -s ../trf/chr*.bed .
+    #	add the trfMask to the rmsk masked sequence to get our final
+    #	masked sequence
+    ssh kkstore01
+    cd /cluster/data/ponAbe1
+    time nice -n +19 cat bed/simpleRepeat/trfMask.bed \
+	| twoBitMask -add -type=.bed ponAbe1.rmsk.2bit stdin ponAbe1.2bit
+    #	measure it
+    time nice -n +19 twoBitToFa ponAbe1.2bit stdout \
+	| faSize stdin > faSize.ponAbe1.2bit.txt 2>&1
+    grep masked faSize.ponAbe1.2bit.txt
+    #	%48.60 masked total, %50.91 masked real
 
+    ## clean up the /iscratch/i/ponAbe1/ directory
+    ssh kkr1u00
+    cd /iscratch/i/ponAbe1
+    rm -fr *
+    for R in 2 3 4 5 6 7 8
+do
+    rsync -a --progress --delete --stats /iscratch/i/ponAbe1/ kkr${R}u00:/iscratch/i/ponAbe1/
+done
+    cd ..
+    rmdir ponAbe1
+    for R in 2 3 4 5 6 7 8
+do
+    ssh kkr${R}u00 rmdir /iscratch/i/ponAbe1
+done

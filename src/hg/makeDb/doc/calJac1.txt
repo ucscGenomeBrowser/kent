@@ -1,0 +1,178 @@
+# for emacs: -*- mode: sh; -*-
+
+
+# This file describes browser build for the Marmoset
+# genome, July 2007
+#
+#	"$Id: calJac1.txt,v 1.1 2007/09/05 22:15:42 hiram Exp $"
+#
+######################################################################
+## DOWNLOAD SEQUENCE (DONE - 2007-08-21 - Hiram)
+    ssh kkstore06
+    mkdir /cluster/store4/calJac1
+    ln -s /cluster/store4/calJac1 /cluster/data/calJac1
+    mkdir /cluster/data/calJac1/wustl
+    cd /cluster/data/calJac1/wustl
+    for F in supercontigs.agp.gz supercontigs.fa.gz contigs.fa.gz contigs.fa.qual.gz
+do
+    wget --timestamping \
+/pub/organism/Primates/Callithrix_jacchus/assembly/Callithrix_jacchus-2.0.2/output/${F} \
+    -O ${F}
+done
+    #	real    50m13.535s
+    ls -ogrt
+# -rw-rw-r--  1   6656649 Jun 19 17:03 supercontigs.agp.gz
+# -rw-rw-r--  1 521109271 Jun 19 17:03 contigs.fa.qual.gz
+# -rw-rw-r--  1 781437003 Jun 19 18:30 contigs.fa.gz
+# -rw-rw-r--  1 851641082 Aug 21 13:29 supercontigs.fa.gz
+
+##########################################################################
+# fetch photograph (DONE - 2007-08-21 - Hiram)
+    mkdir /cluster/data/calJac1/photo
+    cd /cluster/data/calJac1/photo
+    wget --timestamping \
+	http://www.genome.gov/Images/press_photos/highres/82-300.jpg \
+	    -O nhgri.original.82-300.jpg
+    convert -geometry 300x200 -quality 80 nhgri.original.82-300.jpg \
+	Callithrix_jacchus.jpg
+    # check this .jpg image into the source tree browser/images/ directory
+
+#######################################################################
+## create config.ra and run makeGenomeDb.pl 
+    ssh kkstore06
+    cd /cluster/data/calJac1
+
+    cat << '_EOF_' > calJac1.config.ra
+# Config parameters for makeGenomeDb.pl:
+db calJac1
+scientificName Callithrix jacchus
+commonName Marmoset
+assemblyDate Jun. 2007
+assemblyLabel WUSTL 2.0.2
+orderKey 40
+clade mammal
+genomeCladePriority 16
+mitoAcc none
+fastaFiles /cluster/data/calJac1/wustl/supercontigs.fa.gz
+agpFiles /cluster/data/calJac1/wustl/supercontigs.agp.gz
+# qualFiles /dev/null
+dbDbSpeciesDir marmoset
+'_EOF_'
+    # << happy emacs
+    time nice -n +19 ~/kent/src/hg/utils/automation/makeGenomeDb.pl \
+	-stop=agp calJac1.config.ra > makeGenomeDb.out 2>&1 &
+    #	real    24m24.468s
+    time nice -n +19 ~/kent/src/hg/utils/automation/makeGenomeDb.pl \
+	-continue=db calJac1.config.ra > db.continue.out 2>&1 &
+    # add the trackDb files to the source tree and to the trackDb/makefile
+
+##########################################################################
+## Repeat masker (WORKING - 2007-08-21 - Hiram)
+    ssh kkstore06
+    ## use screen for this
+    mkdir /cluster/data/calJac1/bed/RepeatMasker
+    cd /cluster/data/calJac1/bed/RepeatMasker
+    time nice -n +19 ~/kent/src/hg/utils/automation/doRepeatMasker.pl \
+	-bigClusterHub=kk \
+	-buildDir=/cluster/data/calJac1/bed/RepeatMasker calJac1 > do.out 2>&1 &
+
+##############################################################################
+## simpleRepeat masking (DONE - 2007-09-05 - Hiram)
+    ## create a kki kluster run
+    ssh kkr1u00
+    mkdir /iscratch/i/calJac1
+    cd /iscratch/i/calJac1
+    cp -p /cluster/data/calJac1/calJac1.unmasked.2bit .
+    cp -p /cluster/data/calJac1/chrom.sizes .
+    twoBitToFa calJac1.unmasked.2bit calJac1.unmasked.fa
+    mkdir split
+    #  split sequence into about 1000 files, each about 3,000,000 bases
+    time nice -n +19 faSplit about calJac1.unmasked.fa 3000000 split/cj1_
+
+    for R in 2 3 4 5 6 7 8
+do
+    rsync -a --progress /iscratch/i/calJac1/ kkr${R}u00:/iscratch/i/calJac1/
+done
+
+    ssh kki
+    mkdir -p /cluster/data/calJac1/bed/simpleRepeat/trf
+    cd /cluster/data/calJac1/bed/simpleRepeat/trf
+
+    cat << '_EOF_' > runTrf
+#!/bin/csh -fe 
+#
+set C = $1:r
+set SRC = /iscratch/i/calJac1/split/$C.fa
+mkdir -p /scratch/tmp/$C
+cp -p $SRC /scratch/tmp/$C/$C.fa
+pushd /scratch/tmp/$C
+/cluster/bin/i386/trfBig -trf=/cluster/bin/i386/trf $C.fa \
+	/dev/null -bedAt=$C.bed -tempDir=/scratch/tmp/$C
+popd
+rm -f $C.bed
+cp -p /scratch/tmp/$C/$C.bed .
+rm -fr /scratch/tmp/$C
+'_EOF_'
+    # << happy emacs
+    chmod +x runTrf
+
+    cat << '_EOF_' > template
+#LOOP
+./runTrf $(path1) {check out line $(root1).bed}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    ls /iscratch/i/calJac1/split > part.list
+    gensub2 part.list single template jobList
+    para create jobList
+    para try ... check ... push ... etc ...
+# Completed: 947 of 947 jobs
+# CPU time in finished jobs:      37242s     620.70m    10.35h    0.43d  0.001 y
+# IO & Wait Time:                  2842s      47.36m     0.79h    0.03d  0.000 y
+# Average job time:                  42s       0.71m     0.01h    0.00d
+# Longest finished job:            1318s      21.97m     0.37h    0.02d
+# Submission to last job:          3572s      59.53m     0.99h    0.04d
+
+    cat *.bed > ../simpleRepeat.bed
+    cd ..
+    awk '{if ($5 <= 12) print;}' simpleRepeat.bed > trfMask.bed
+
+    ssh hgwdev
+    cd /cluster/data/calJac1/bed/simpleRepeat
+    time nice -n +19 hgLoadBed calJac1 simpleRepeat \
+      simpleRepeat.bed -sqlTable=$HOME/kent/src/hg/lib/simpleRepeat.sql
+    #	Loaded 846105 elements of size 16
+    #	real    0m24.710s
+
+    nice -n +19 featureBits calJac1 simpleRepeat \
+	> fb.simpleRepeat.calJac1.txt 2>&1
+    cat fb.simpleRepeat.calJac1.txt
+    #	100489601 bases of 2929139385 (3.431%) in intersection
+
+    #	add the trfMask to the rmsk masked sequence to get our final
+    #	masked sequence
+    ssh kkstore06
+    cd /cluster/data/calJac1
+    time nice -n +19 cat bed/simpleRepeat/trfMask.bed \
+	| twoBitMask -add -type=.bed calJac1.rmsk.2bit stdin calJac1.2bit
+    #	measure it
+    time nice -n +19 twoBitToFa calJac1.2bit stdout \
+	| faSize stdin > faSize.calJac1.2bit.txt 2>&1
+    grep masked faSize.calJac1.2bit.txt
+    #	%45.93 masked total, %47.50 masked real
+
+    ## clean up the /iscratch/i/calJac1/ directory
+    ssh kkr1u00
+    cd /iscratch/i/calJac1
+    rm -fr *
+    for R in 2 3 4 5 6 7 8
+do
+    rsync -a --progress --delete --stats /iscratch/i/calJac1/ kkr${R}u00:/iscratch/i/calJac1/
+done
+    cd ..
+    rmdir calJac1
+    for R in 2 3 4 5 6 7 8
+do
+    ssh kkr${R}u00 rmdir /iscratch/i/calJac1
+done
