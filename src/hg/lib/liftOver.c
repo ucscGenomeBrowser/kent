@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: liftOver.c,v 1.35 2007/03/04 17:04:46 kent Exp $";
+static char const rcsid[] = "$Id: liftOver.c,v 1.36 2007/09/05 16:38:05 hiram Exp $";
 
 struct chromMap
 /* Remapping information for one (old) chromosome */
@@ -199,7 +199,7 @@ slSort(&chainsHit, chainCmpTarget);
 tStart = s;
 for (chain = chainsHit; chain != NULL; chain = chain->next)
     {
-    struct chain *subChain;
+    struct chain *subChain = NULL;
     int start=s, end=e;
     verbose(3,"hit chain %s:%d %s:%d-%d %c (%d)\n",
         chain->tName, chain->tStart,  chain->qName, chain->qStart, chain->qEnd,
