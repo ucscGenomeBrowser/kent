@@ -12,6 +12,7 @@
 #ifndef LINEFILE_H
 #include "linefile.h"
 #endif
+struct psl;
 
 struct genbankCds
 /* structure return information about parsed CDS */
@@ -36,6 +37,11 @@ boolean genbankParseCds(char *cdsStr, unsigned *cdsStart, unsigned *cdsEnd);
  * used for the CDS.  Incomplete CDS specifications will still return the
  * start or end.  cdsStart and cdsEnd are set to -1 on error.
  */
+
+struct genbankCds genbankCdsToGenome(struct genbankCds* cds, struct psl *psl);
+/* Convert set cdsStart/end from mrna to genomic coordinates using an
+ * alignment.  Returns a genbankCds object with genomic (positive strand)
+ * coordinates */
 
 boolean genbankIsRefSeqAcc(char *acc);
 /* determine if a accession appears to be from RefSeq */

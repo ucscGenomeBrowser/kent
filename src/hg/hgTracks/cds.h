@@ -35,7 +35,7 @@ struct simpleFeature *baseColorCodonsFromGenePred( char *chrom,
 
 void baseColorCodonsFromPsl(char *chromName, struct linkedFeatures *lf, 
         struct psl *psl, int sizeMul, boolean isXeno, int maxShade,
-        enum baseColorDrawOpt drawOpt);
+        enum baseColorDrawOpt drawOpt, struct track *tg);
 /* Given an lf and the psl from which the lf was constructed, 
  * set lf->codons to a list of simpleFeature elements, one per codon (or partial 
  * codon if the codon falls on a gap boundary.  sizeMul, isXeno and maxShade
@@ -96,5 +96,10 @@ void baseColorDrawRulerCodons(struct vGfx *vg, struct simpleFeature *sfList,
                 int winStart, int maxPixels, bool zoomedToText);
 /* Draw amino acid translation of genomic sequence based on a list
    of codons. Used for browser ruler in full mode*/
+
+void baseColorSetCdsBounds(struct linkedFeatures *lf, struct psl *psl,
+                           struct track *tg);
+/* set CDS bounds in linked features for a PSL.  Used when zoomed out too far
+ * for codon or base coloring, but still want to render CDS bounds */
 
 #endif /* CDS_H */

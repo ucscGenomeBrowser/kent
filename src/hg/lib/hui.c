@@ -5,6 +5,7 @@
 #include "cheapcgi.h"
 #include "htmshell.h"
 #include "jksql.h"
+#include "sqlNum.h"
 #include "cart.h"
 #include "hdb.h"
 #include "hui.h"
@@ -12,7 +13,7 @@
 #include "hgConfig.h"
 #include "chainCart.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.93 2007/08/09 21:48:26 kate Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.94 2007/09/05 04:30:58 markd Exp $";
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -626,11 +627,11 @@ char *setting = trackDbSetting(tdb, BASE_COLOR_USE_CDS);
 if (isNotEmpty(setting))
     {
     if (sameString(setting, "all") || sameString(setting, "given") ||
-	sameString(setting, "genbank"))
+	sameString(setting, "genbank") || startsWith("table", setting))
 	gotIt = TRUE;
     else if (! sameString(setting, "none"))
 	errAbort("trackDb for %s, setting %s: unrecognized value \"%s\".  "
-		 "must be one of {none,all,given,genbank}.",
+		 "must be one of {none,all,given,genbank,table}.",
 		 tdb->tableName, BASE_COLOR_USE_CDS, setting);
     }
 else if (startsWith("genePred", tdb->type))
@@ -646,11 +647,11 @@ char *setting = trackDbSetting(tdb, BASE_COLOR_USE_SEQUENCE);
 if (isNotEmpty(setting))
     {
     if (sameString(setting, "genbank") || sameString(setting, "seq") ||
-	sameString(setting, "ss"))
+	sameString(setting, "ss") || startsWith("extFile", setting))
 	gotIt = TRUE;
-    else if (! sameString(setting, "none"))
+    else if (sameString(setting, "none"))
 	errAbort("trackDb for %s, setting %s: unrecognized value \"%s\".  "
-		 "must be one of {none,genbank,seq}.",
+		 "must be one of {none,genbank,seq,extFile}.",
 		 tdb->tableName, BASE_COLOR_USE_SEQUENCE, setting);
     }
 return gotIt;
@@ -734,7 +735,7 @@ if (indelAppropriate(tdb))
     {
     boolean showDoubleInsert, showQueryInsert, showPolyA;
     char var[512];
-    indelEnabled(cart, tdb, &showDoubleInsert, &showQueryInsert, &showPolyA);
+    indelEnabled(cart, tdb, 0.0, &showDoubleInsert, &showQueryInsert, &showPolyA);
     printf("<P><B>Alignment Gap/Insertion Display Options</B><BR>\n");
     safef(var, sizeof(var), "%s_%s", INDEL_DOUBLE_INSERT, tdb->tableName);
     cgiMakeCheckBox(var, showDoubleInsert);
@@ -777,12 +778,25 @@ alreadySet = cartUsualBoolean(cart, optionStr, alreadySet);
 return alreadySet;
 }
 
-void indelEnabled(struct cart *cart, struct trackDb *tdb,
+void indelEnabled(struct cart *cart, struct trackDb *tdb, float basesPerPixel,
 		  boolean *retDoubleInsert, boolean *retQueryInsert,
 		  boolean *retPolyA)
-/* Query cart & trackDb to determine what indel display (if any) is enabled. */
+/* Query cart & trackDb to determine what indel display (if any) is enabled. Set
+ * basesPerPixel to 0.0 to disable check for zoom level.  */
 {
 boolean apropos = indelAppropriate(tdb);
+if (apropos && (basesPerPixel > 0.0))
+    {
+    // check indel max zoom
+    char *setting = trackDbSetting(tdb, "showIndelMaxZoom");
+    if (setting != NULL)
+        {
+        float showIndelMaxZoom = sqlFloat(trimSpaces(setting));
+        if ((basesPerPixel > showIndelMaxZoom) || (showIndelMaxZoom == 0.0))
+            apropos = FALSE;
+        }
+    }
+
 if (retDoubleInsert)
     *retDoubleInsert = apropos &&
 	tdbOrCartBoolean(cart, tdb, INDEL_DOUBLE_INSERT, "off");

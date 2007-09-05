@@ -476,9 +476,12 @@ void wiggleGridDropDown(char *var, char *curVal);
 
 /*** Control of base/codon coloring code: ***/
 
-/* Drawing modes: */
+/* Drawing modes: values <= baseColorDrawOff don't render at base or codon
+ * level */
 enum baseColorDrawOpt
     {
+    baseColorDrawCds = -1,        /* not a selection option, a fall back when
+                                   * zoomed out. */
     baseColorDrawOff = 0,
     baseColorDrawGenomicCodons = 1,
     baseColorDrawItemCodons = 2,
@@ -536,11 +539,11 @@ enum baseColorDrawOpt baseColorDrawOptEnabled(struct cart *cart,
 void indelShowOptions(struct cart *cart, struct trackDb *tdb);
 /* Make HTML inputs for indel display options if any are applicable. */
 
-void indelEnabled(struct cart *cart, struct trackDb *tdb,
+void indelEnabled(struct cart *cart, struct trackDb *tdb, float basesPerPixel,
 		  boolean *retDoubleInsert, boolean *retQueryInsert,
 		  boolean *retPolyA);
-/* Query cart & trackDb to determine what indel display (if any) is enabled. */
-
+/* Query cart & trackDb to determine what indel display (if any) is enabled. Set
+ * basesPerPixel to -1.0 to disable check for zoom level.  */
 
 /*** Some Stuff for the base position (ruler) controls ***/
 

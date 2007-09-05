@@ -330,6 +330,23 @@ char *hExtFileName(char *extFileTable, unsigned extFileId);
  * fails size check.  Please freeMem the result when you 
  * are done with it. */
 
+struct dnaSeq *hDnaSeqGet(struct sqlConnection *conn, char *acc, char *seqTbl, char *extFileTbl);
+/* Get a cDNA or DNA sequence from the specified seq and extFile tables.  If
+ * conn is NULL, one will be obtained from hAlloc. Return NULL if not
+ * found. */
+
+struct dnaSeq *hDnaSeqMustGet(struct sqlConnection *conn, char *acc, char *seqTbl, char *extFileTbl);
+/* Get a cDNA or DNA sequence from the specified seq and extFile tables.  If
+ * conn is NULL, one will be obtained from hAlloc. Abort if not found. */
+
+aaSeq *hPepSeqGet(struct sqlConnection *conn, char *acc, char *seqTbl, char *extFileTbl);
+/* Get a peptide sequence from the specified seq and extFile tables.  If conn
+ * is NULL, one will be obtained from hAlloc. Return NULL if not found. */
+
+aaSeq *hPepSeqMustGet(struct sqlConnection *conn, char *acc, char *seqTbl, char *extFileTbl);
+/* Get a peptide sequence from the specified seq and extFile tables.  If conn
+ * is NULL, one will be obtained from hAlloc. Abort if not found. */
+
 int hRnaSeqAndIdx(char *acc, struct dnaSeq **retSeq, HGID *retId, char *gbdate, struct sqlConnection *conn);
 /* Return sequence for RNA, it's database ID, and optionally genbank 
  * modification date. Return -1 if not found. */

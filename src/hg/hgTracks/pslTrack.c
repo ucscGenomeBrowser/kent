@@ -291,7 +291,7 @@ boolean rcTarget = (psl->strand[1] == '-');
 enum baseColorDrawOpt drawOpt = baseColorGetDrawOpt(tg);
 boolean indelShowDoubleInsert, indelShowQueryInsert, indelShowPolyA;
 
-indelEnabled(cart, (tg ? tg->tdb : NULL),
+indelEnabled(cart, (tg ? tg->tdb : NULL), basesPerPixel,
 	     &indelShowDoubleInsert, &indelShowQueryInsert, &indelShowPolyA);
 
 AllocVar(lf);
@@ -325,13 +325,17 @@ if (drawOpt == baseColorDrawItemCodons ||
     drawOpt == baseColorDrawGenomicCodons)
     {
     baseColorCodonsFromPsl(chromName, lf, psl, sizeMul, isXeno, maxShade,
-			   drawOpt);
+			   drawOpt, tg);
     lf->grayIx = lfCalcGrayIx(lf);
     }
 else
+    {
     linkedFeaturesBoundsAndGrays(lf);
+    if (drawOpt == baseColorDrawCds)
+        baseColorSetCdsBounds(lf, psl, tg);
+    }
 /* If we are drawing anything special, stash psl for use in drawing phase: */
-if (drawOpt != baseColorDrawOff || indelShowQueryInsert || indelShowPolyA)
+if (drawOpt > baseColorDrawOff || indelShowQueryInsert || indelShowPolyA)
     lf->original = pslClone(psl);
 lf->start = psl->tStart;	/* Correct for rounding errors... */
 lf->end = psl->tEnd;

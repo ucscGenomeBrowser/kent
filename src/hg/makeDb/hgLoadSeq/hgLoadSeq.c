@@ -8,7 +8,7 @@
 #include "fa.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgLoadSeq.c,v 1.12 2005/03/04 20:09:43 galt Exp $";
+static char const rcsid[] = "$Id: hgLoadSeq.c,v 1.13 2007/09/05 04:30:58 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -16,18 +16,22 @@ static struct optionSpec optionSpecs[] = {
     {"prefix", OPTION_STRING},
     {"replace", OPTION_BOOLEAN},
     {"test", OPTION_BOOLEAN},
+    {"seqTbl", OPTION_STRING},
+    {"extFileTbl", OPTION_STRING},
     {NULL, 0}
 };
 
 /* Command line options and defaults. */
+char *seqTbl = "seq";
+char *extFileTbl = "extFile";
 char *abbr = NULL;
 char *prefix = NULL;
 boolean test = FALSE;
 boolean replace = FALSE;
 
-char seqTable[] =
+char seqTableCreate[] =
 /* This keeps track of a sequence. */
-"create table seq ("
+"create table %s ("
   "id int unsigned not null primary key," /* Unique ID across all tables. */
   "acc varchar(128) not null ,"	          /* seq  ID. */
   "size int unsigned not null,"           /* Size of sequence in bases. */
@@ -120,7 +124,7 @@ return TRUE;
 void loadFa(char *faFile, struct sqlConnection *conn, FILE *seqTab)
 /* Add sequences in a fasta file to a seq table tab file */
 {
-HGID extFileId = test ? 0 : hgAddToExtFile(faFile, conn);
+HGID extFileId = test ? 0 : hgAddToExtFileTbl(faFile, conn, extFileTbl);
 struct lineFile *faLf = lineFileOpen(faFile, TRUE);
 unsigned count = 0;
 
@@ -151,11 +155,13 @@ if (!test)
     {
     hgSetDb(database);
     conn = hgStartUpdate();
-    sqlMaybeMakeTable(conn, "seq", seqTable);
+    char query[1024];
+    safef(query, sizeof(query), seqTableCreate, seqTbl);
+    sqlMaybeMakeTable(conn, seqTbl, query);
     }
 
-verbose(1, "Creating .tab file\n");
-seqTab = hgCreateTabFile(".", "seq");
+verbose(1, "Creating %s.tab file\n", seqTbl);
+seqTab = hgCreateTabFile(".", seqTbl);
 for (i=0; i<fileCount; ++i)
     {
     loadFa(fileNames[i], conn, seqTab);
@@ -165,8 +171,8 @@ if (!test)
     unsigned opts = SQL_TAB_FILE_WARN_ON_ERROR;
     if (replace)
         opts |= SQL_TAB_REPLACE;
-    verbose(1, "Updating seq table\n");
-    hgLoadTabFileOpts(conn, ".", "seq", opts, &seqTab);
+    verbose(1, "Updating %s table\n", seqTbl);
+    hgLoadTabFileOpts(conn, ".", seqTbl, opts, &seqTab);
     hgEndUpdate(&conn, "Add sequences");
     verbose(1, "All done\n");
     }
@@ -185,7 +191,9 @@ errAbort(
   "  -abbr=junk - remove junk from the start of each seq accession\n"
   "  -prefix=xxx - prepend \"xxx-\" to each seq accession\n"
   "  -replace - replace existing sequences with the same id\n"
-  "  -test - do not load databse table\n"
+  "  -seqTbl=tbl - use this table instead of seq\n"
+  "  -extFileTbl=tbl - use this table instead of extFile\n"
+  "  -test - do not load database table\n"
   );
 }
 
@@ -195,6 +203,11 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, optionSpecs);
 if (argc < 2)
     usage();
+if ((optionExists("seqTbl") && !optionExists("extFileTbl"))
+    || (!optionExists("seqTbl") && optionExists("extFileTbl")))
+    errAbort("must specified both or neither of -seqTbl and -extFileTbl");
+seqTbl = optionVal("seqTbl", seqTbl);
+extFileTbl = optionVal("extFileTbl", extFileTbl);
 abbr = optionVal("abbr", NULL);
 prefix = optionVal("prefix", NULL);
 replace = optionExists("replace");

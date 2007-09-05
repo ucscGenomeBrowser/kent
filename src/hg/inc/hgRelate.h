@@ -74,6 +74,10 @@ void hgRemoveTabFile(char *tmpDir, char *tableName);
 HGID hgGetMaxId(struct sqlConnection *conn, char *tableName);
 /* get the maximum value of the id column in a table or zero if empry  */
 
+int hgAddToExtFileTbl(char *path, struct sqlConnection *conn, char *extFileTbl);
+/* Add entry to the specified extFile table.  Delete it if it already exists.
+ * Returns extFile id. */
+
 int hgAddToExtFile(char *path, struct sqlConnection *conn);
 /* Add entry to ext file table.  Delete it if it already exists. 
  * Returns extFile id. */

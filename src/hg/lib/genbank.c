@@ -1,11 +1,12 @@
 /* genbank.c - Various functions for dealing with genbank data */
 #include "common.h"
 #include "hash.h"
+#include "psl.h"
 #include "linefile.h"
 #include "genbank.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: genbank.c,v 1.8 2007/02/24 20:04:57 kent Exp $";
+static char const rcsid[] = "$Id: genbank.c,v 1.9 2007/09/05 04:30:57 markd Exp $";
 
 static char *JOIN_PREFIX = "join(";
 static char *COMPLEMENT_PREFIX = "complement(";
@@ -196,5 +197,81 @@ while (lineFileRowTab(lf, row))
 	}
     }
 lineFileClose(&lf);
+}
+
+struct genbankCds genbankCdsToGenome(struct genbankCds* cds, struct psl *psl)
+/* Convert set cdsStart/end from mrna to genomic coordinates using an
+ * alignment.  Returns a genbankCds object with genomic (positive strand)
+ * coordinates */
+{
+int rnaCdsStart = cds->start,  rnaCdsEnd = cds->end;
+int iBlk;
+struct genbankCds genomeCds;
+ZeroVar(&genomeCds);
+genomeCds.start = genomeCds.end = -1;
+char geneStrand = (psl->strand[1] == '\0') ? psl->strand[0]
+    : ((psl->strand[0] != psl->strand[1]) ? '-' : '+');
+
+if (psl->strand[0] == '-')
+    reverseIntRange(&rnaCdsStart, &rnaCdsEnd, psl->qSize);
+
+/* find query block or gap containing start and map to target */
+for (iBlk = 0; (iBlk < psl->blockCount) && (genomeCds.start < 0); iBlk++)
+    {
+    if (rnaCdsStart < psl->qStarts[iBlk])
+        {
+        /* in gap before block, set to start of block */
+        genomeCds.start = psl->tStarts[iBlk];
+        if (geneStrand == '+')
+            genomeCds.startComplete = FALSE;
+        else
+            genomeCds.endComplete = FALSE;
+        }
+    else if (rnaCdsStart < (psl->qStarts[iBlk] + psl->blockSizes[iBlk]))
+        {
+        /* in this block, map to target */
+        genomeCds.start = psl->tStarts[iBlk] + (rnaCdsStart - psl->qStarts[iBlk]);
+        }
+    }
+if (genomeCds.start < 0)
+    {
+    /* after last block, set after end of that block */
+    genomeCds.start = psl->tStarts[iBlk-1] + psl->blockSizes[iBlk-1];
+    }
+
+/* find query block or gap containing end and map to target */
+for (iBlk = 0; (iBlk < psl->blockCount) && (genomeCds.end < 0); iBlk++)
+    {
+    if (rnaCdsEnd <= psl->qStarts[iBlk])
+        {
+        /* in gap before block, set to start of gap */
+        if (iBlk == 0)
+            genomeCds.end = psl->tStarts[0] - 1;  /* end of gene */
+        else
+            genomeCds.end = psl->tStarts[iBlk-1] + psl->blockSizes[iBlk-1];
+        if (geneStrand == '+')
+            genomeCds.endComplete = FALSE;
+        else
+            genomeCds.startComplete = FALSE;
+        }
+    else if (rnaCdsEnd <= (psl->qStarts[iBlk] + psl->blockSizes[iBlk]))
+        {
+        /* in this block, map to target */
+        genomeCds.end = psl->tStarts[iBlk] + (rnaCdsEnd - psl->qStarts[iBlk]);
+        }
+    }
+if (genomeCds.end < 0)
+    {
+    /* after last block, set to end of that block */
+    genomeCds.end = psl->tStarts[iBlk-1] + psl->blockSizes[iBlk-1];
+    if (geneStrand == '+')
+        genomeCds.endComplete = FALSE;
+    else
+        genomeCds.startComplete = FALSE;
+    }
+
+if (psl->strand[1] == '-')
+    reverseIntRange(&genomeCds.start, &genomeCds.end, psl->tSize);
+return genomeCds;
 }
 

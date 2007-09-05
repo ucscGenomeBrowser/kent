@@ -303,6 +303,7 @@ extern int insideWidth;		/* Width of area to draw tracks in in pixels. */
 extern int insideX;			/* Start of area to draw track in in pixels. */
 extern int seqBaseCount;  /* Number of bases in sequence. */
 extern int winBaseCount;  /* Number of bases in window. */
+extern float basesPerPixel;       /* bases covered by a pixel; a measure of zoom */
 extern boolean zoomedToBaseLevel; /* TRUE if zoomed so we can draw bases. */
 extern boolean zoomedToCodonLevel; /* TRUE if zoomed so we can print codon text in genePreds*/
 extern boolean zoomedToCdsColorLevel; /* TRUE if zoomed so we cancolor each codon*/

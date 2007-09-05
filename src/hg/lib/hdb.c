@@ -35,7 +35,7 @@
 #include "customTrack.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.330 2007/08/05 00:33:25 kate Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.331 2007/09/05 04:30:57 markd Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -1273,7 +1273,7 @@ struct largeSeqFile
 {
     struct largeSeqFile *next;  /* Next in list. */
     char *path;                 /* Path name for file. */
-    unsigned seqTblSet;         /* extFile or gbExtFile */
+    char *extTable;             /* external file table */
     char *db;                   /* database this is associated with */
     HGID id;                    /* Id in extFile table. */
     int fd;                     /* File handle. */
@@ -1282,17 +1282,16 @@ struct largeSeqFile
 static struct largeSeqFile *largeFileList;  /* List of open large files. */
 
 
-static struct largeSeqFile *largeFileHandle(struct sqlConnection *conn, HGID extId, int seqTblSet)
+static struct largeSeqFile *largeFileHandle(struct sqlConnection *conn, HGID extId, char *extTable)
 /* Return handle to large external file. */
 {
 struct largeSeqFile *lsf;
-char *extTable = (seqTblSet == GBSEQ_TBL_SET) ? "gbExtFile" : "extFile";
 char *db = sqlGetDatabase(conn); 
 
 /* Search for it on existing list and return it if found. */
 for (lsf = largeFileList; lsf != NULL; lsf = lsf->next)
     {
-    if ((lsf->id == extId) && (lsf->seqTblSet == seqTblSet) && sameString(lsf->db, db))
+    if ((lsf->id == extId) && sameString(lsf->db, db) && sameString(lsf->extTable, extTable))
         return lsf;
     }
 
@@ -1301,7 +1300,7 @@ for (lsf = largeFileList; lsf != NULL; lsf = lsf->next)
     struct largeSeqFile *lsf;
     AllocVar(lsf);
     lsf->path = hExtFileNameC(conn, extTable, extId);
-    lsf->seqTblSet = seqTblSet;
+    lsf->extTable = cloneString(extTable);
     lsf->db = cloneString(db);
     lsf->id = extId;
     if ((lsf->fd = open(lsf->path, O_RDONLY)) < 0)
@@ -1322,6 +1321,80 @@ if (lseek(fd, offset, SEEK_SET) < 0)
 if (read(fd, buf, size) < size)
     errnoAbort("Couldn't read %s: error reading %lld bytes at %lld in %s", acc, (long long)size, (long long)offset, fileName);
 return buf;
+}
+
+static bioSeq *seqGet(struct sqlConnection *conn, char *acc, boolean isDna, char *seqTbl, char *extFileTbl)
+/* Return sequence from the specified seq and extFile tables.  If conn is
+ * NULL, one will be obtained from hAlloc. Return NULL if not found. */
+{
+boolean needConn = (conn == NULL);
+if (needConn)
+    conn = hAllocConn();
+/* look up sequence */
+char query[256];
+safef(query, sizeof(query),
+      "select extFile,file_offset,file_size from %s where acc = '%s'",
+      seqTbl, acc);
+struct sqlResult *sr = sqlMustGetResult(conn, query);
+char **row = sqlNextRow(sr);
+if (row == NULL)
+    {
+    sqlFreeResult(&sr);
+    if (needConn)
+        hFreeConn(&conn);
+    return NULL;
+    }
+/* look up extFile */ 
+HGID extId = sqlUnsigned(row[0]);
+off_t offset = sqlLongLong(row[1]);
+size_t size = sqlUnsigned(row[2]);
+sqlFreeResult(&sr);
+
+struct largeSeqFile *lsf = largeFileHandle(conn, extId, extFileTbl);
+char *buf = readOpenFileSection(lsf->fd, offset, size, lsf->path, acc);
+if (needConn)
+    hFreeConn(&conn);
+return faSeqFromMemText(buf, isDna);
+}
+
+static bioSeq *seqMustGet(struct sqlConnection *conn, char *acc, boolean isDna, char *seqTbl, char *extFileTbl)
+/* Return sequence from the specified seq and extFile tables.  If conn is
+ * NULL, one will be obtained from hAlloc. Return Abort if not found. */
+{
+bioSeq *seq = seqGet(conn, acc, isDna, seqTbl, extFileTbl);
+if (seq == NULL)
+    errAbort("can't find \"%s\" in seq table %s.%s",
+             acc, sqlGetDatabase(conn), seqTbl);
+return seq;
+}
+
+struct dnaSeq *hDnaSeqGet(struct sqlConnection *conn, char *acc, char *seqTbl, char *extFileTbl)
+/* Get a cDNA or DNA sequence from the specified seq and extFile tables.  If
+ * conn is NULL, one will be obtained from hAlloc. Return NULL if not
+ * found. */
+{
+return seqGet(conn, acc, TRUE, seqTbl, extFileTbl);
+}
+
+struct dnaSeq *hDnaSeqMustGet(struct sqlConnection *conn, char *acc, char *seqTbl, char *extFileTbl)
+/* Get a cDNA or DNA sequence from the specified seq and extFile tables.  If
+ * conn is NULL, one will be obtained from hAlloc. Abort if not found. */
+{
+return seqMustGet(conn, acc, TRUE, seqTbl, extFileTbl);
+}
+
+aaSeq *hPepSeqGet(struct sqlConnection *conn, char *acc, char *seqTbl, char *extFileTbl)
+/* Get a peptide sequence from the specified seq and extFile tables.  If conn
+ * is NULL, one will be obtained from hAlloc. Return NULL if not found. */
+{
+return seqGet(conn, acc, FALSE, seqTbl, extFileTbl);
+}
+
+aaSeq *hPepSeqMustGet(struct sqlConnection *conn, char *acc, char *seqTbl, char *extFileTbl)
+/* Get a peptide sequence from the specified seq and extFile tables.  If conn
+ * is NULL, one will be obtained from hAlloc. Abort if not found. */
+{
+return seqMustGet(conn, acc, FALSE, seqTbl, extFileTbl);
 }
 
 static char* getSeqAndId(struct sqlConnection *conn, char *acc, HGID *retId, char *gbDate)
@@ -1380,7 +1453,8 @@ if (gbDate != NULL)
     
 sqlFreeResult(&sr);
 
-lsf = largeFileHandle(conn, extId, seqTblSet);
+char *extTable = (seqTblSet == GBSEQ_TBL_SET) ? "gbExtFile" : "extFile";
+lsf = largeFileHandle(conn, extId, extTable);
 buf = readOpenFileSection(lsf->fd, offset, size, lsf->path, acc);
 return buf; 
 }

@@ -10,7 +10,7 @@ table ensGeneXref
    int transcript_id;		"transcript  ID"
    string transcript_name;	"transcript  name"
    int[5] transcript_version;	"transcript  version"
-   int[5] translation_name;	"translation name"
+   string translation_name;	"translation name"
    int translation_id;		"translation ID"
    int[5] translation_version;	"translation version"
    string external_db;		"external database"

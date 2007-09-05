@@ -14,11 +14,11 @@
 #include "hgRelate.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgRelate.c,v 1.20 2006/01/12 21:37:11 heather Exp $";
+static char const rcsid[] = "$Id: hgRelate.c,v 1.21 2007/09/05 04:30:58 markd Exp $";
 
 static char extFileCreate[] =
 /* This keeps track of external files and directories. */
-"create table extFile ("
+"create table %s ("
   "id int unsigned not null primary key,"  /* Unique ID across all tables. */
   "name varchar(64) not null,"	  /* Symbolic name of file.  */
   "path varchar(255) not null,"   /* Full path. Ends in '/' if a dir. */
@@ -248,21 +248,21 @@ if (remove(path) == -1)
 }
 
 
-int hgAddToExtFile(char *path, struct sqlConnection *conn)
-/* Add entry to ext file table.  Delete it if it already exists. 
+int hgAddToExtFileTbl(char *path, struct sqlConnection *conn, char *extFileTbl)
+/* Add entry to the specified extFile table.  Delete it if it already exists.
  * Returns extFile id. */
 {
-static boolean initialized = FALSE;
 char root[128], ext[64], name[256];
 struct dyString *dy = newDyString(1024);
 long long size = fileSize(path);
 HGID id = hgNextId();
 
 /* create table if it doesn't exist */
-if (!initialized)
+if (!sqlTableExists(conn, extFileTbl))
     {
-    sqlMaybeMakeTable(conn, "extFile", extFileCreate);
-    initialized = TRUE;
+    char query[1024];
+    safef(query, sizeof(query), extFileCreate, extFileTbl);
+    sqlMaybeMakeTable(conn, extFileTbl, query);
     }
 
 /* Construct file name without the directory. */
@@ -270,15 +270,22 @@ splitPath(path, NULL, root, ext);
 safef(name, sizeof(name), "%s%s", root, ext);
 
 /* Delete it from database. */
-dyStringPrintf(dy, "delete from extFile where path = '%s'", path);
+dyStringPrintf(dy, "delete from %s where path = '%s'", extFileTbl, path);
 sqlUpdate(conn, dy->string);
 
 /* Add it to table. */
 dyStringClear(dy);
-dyStringPrintf(dy, "INSERT into extFile (id, name, path, size) VALUES(%u,'%s','%s',%lld)", id, name, path, size);
+dyStringPrintf(dy, "INSERT into %s (id, name, path, size) VALUES(%u,'%s','%s',%lld)",
+               extFileTbl, id, name, path, size);
 sqlUpdate(conn, dy->string);
 
 dyStringFree(&dy);
 return id;
 }
 
+int hgAddToExtFile(char *path, struct sqlConnection *conn)
+/* Add entry to ext file table.  Delete it if it already exists. 
+ * Returns extFile id. */
+{
+return hgAddToExtFileTbl(path, conn, "extFile");
+}

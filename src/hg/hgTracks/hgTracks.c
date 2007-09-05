@@ -118,7 +118,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1404 2007/09/04 20:38:36 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1405 2007/09/05 04:30:56 markd Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -190,6 +190,7 @@ int insideX;			/* Start of area to draw track in in pixels. */
 int insideWidth;		/* Width of area to draw tracks in in pixels. */
 int leftLabelX;			/* Start of area to draw left labels on. */
 int leftLabelWidth;		/* Width of area to draw left labels on. */
+float basesPerPixel = 0;       /* bases covered by a pixel; a measure of zoom */
 boolean zoomedToBaseLevel; 	/* TRUE if zoomed so we can draw bases. */
 boolean zoomedToCodonLevel; /* TRUE if zoomed so we can print codons text in genePreds*/
 boolean zoomedToCdsColorLevel; /* TRUE if zoomed so we can color each codon*/
@@ -1777,7 +1778,7 @@ if (((vis == tvFull) || (vis == tvPack)) && (tg->subType == lfNoIntronLines))
     hideLine = TRUE;
     hideArrows = FALSE;
     }
-indelEnabled(cart, tg->tdb, &indelShowDoubleInsert, &indelShowQueryInsert,
+indelEnabled(cart, tg->tdb, basesPerPixel, &indelShowDoubleInsert, &indelShowQueryInsert,
 	     &indelShowPolyA);
 if (indelShowDoubleInsert && !hideLine)
     {
@@ -1794,7 +1795,7 @@ if (indelShowDoubleInsert && !hideLine)
 if (vis != tvDense)
     {
     drawOpt = baseColorDrawSetup(vg, tg, lf, &mrnaSeq, &psl);
-    if (drawOpt != baseColorDrawOff)
+    if (drawOpt > baseColorDrawOff)
 	exonArrows = FALSE;
     }
 if ((tg->tdb != NULL) && (vis != tvDense))
@@ -1854,7 +1855,7 @@ for (sf = components; sf != NULL; sf = sf->next)
     /* Draw "tall" portion of exon (or codon) */
     if (e > s)
 	{
-        if (drawOpt != baseColorDrawOff &&
+        if (drawOpt > baseColorDrawOff &&
             e + 6 >= winStart && s - 6 < winEnd &&
 	    (e-s <= 3 || psl != NULL)) 
                 baseColorDrawItem(tg, lf, sf->grayIx, vg, xOff, y, 
@@ -3186,7 +3187,7 @@ int sizeMul = 1;
 enum baseColorDrawOpt drawOpt = baseColorGetDrawOpt(tg);
 boolean indelShowDoubleInsert, indelShowQueryInsert, indelShowPolyA;
 
-indelEnabled(cart, (tg ? tg->tdb : NULL),
+indelEnabled(cart, (tg ? tg->tdb : NULL), basesPerPixel,
 	     &indelShowDoubleInsert, &indelShowQueryInsert, &indelShowPolyA);
 
 parseSs(ss, &pslFileName, &faFileName);
@@ -3206,7 +3207,7 @@ while ((psl = pslNext(f)) != NULL)
 	sprintf(buf2, "%s %s", ss, psl->qName);
 	lf->extra = cloneString(buf2);
 	slAddHead(&lfList, lf);
-	if (drawOpt != baseColorDrawOff ||
+	if (drawOpt > baseColorDrawOff ||
 	    indelShowQueryInsert || indelShowPolyA)
 	    lf->original = psl;
 	else
@@ -3333,7 +3334,7 @@ while ((gp = genePredReaderNext(gpr)) != NULL)
         lf->extra = cloneString(gp->name2);
     lf->orientation = orientFromChar(gp->strand[0]);
 
-    if (drawOpt != baseColorDrawOff && gp->cdsStart != gp->cdsEnd)
+    if (drawOpt > baseColorDrawOff && gp->cdsStart != gp->cdsEnd)
         lf->codons = baseColorCodonsFromGenePred(chrom, lf, gp, NULL,
                 (gp->optFields >= genePredExonFramesFld),
 		(drawOpt != baseColorDrawDiffCodons));
@@ -4751,7 +4752,7 @@ char cMode[64];
 int colorMode;
 char *blastRef;
 
-if (baseColorGetDrawOpt(tg) != baseColorDrawOff)
+if (baseColorGetDrawOpt(tg) > baseColorDrawOff)
     return tg->ixColor;
 
 safef(cMode, sizeof(cMode), "%s.cmode", tg->tdb->tableName);
@@ -14009,6 +14010,7 @@ boolean showTrackControls = cartUsualBoolean(cart, "trackControlsOnMain", TRUE);
 long thisTime = 0, lastTime = 0;
 char *clearButtonJavascript;
 
+basesPerPixel = ((float)winBaseCount) / ((float)insideWidth);
 zoomedToBaseLevel = (winBaseCount <= insideWidth / tl.mWidth);
 zoomedToCodonLevel = (ceil(winBaseCount/3) * tl.mWidth) <= insideWidth;
 zoomedToCdsColorLevel = (winBaseCount <= insideWidth*3);

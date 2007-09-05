@@ -16,8 +16,9 @@
 #include "cds.h"
 #include "genbank.h"
 #include "hgTracks.h"
+#include "cdsSpec.h"
 
-static char const rcsid[] = "$Id: cds.c,v 1.60 2007/08/28 21:18:33 mhoechsm Exp $";
+static char const rcsid[] = "$Id: cds.c,v 1.61 2007/09/05 04:30:55 markd Exp $";
 
 /* Definitions of cds colors for coding coloring display */
 #define CDS_ERROR   0
@@ -476,9 +477,8 @@ else
 }
 
 
-static void getMrnaCds(char *acc, struct genbankCds* cds)
-
-/* Get cds start and stop from genbank, if available. Otherwise it
+static void getGenbankCds(char *acc, struct genbankCds* cds)
+/* Get cds start and stop from genbank tables, if available. Otherwise it
  * does nothing */
 {
 static boolean first = TRUE, haveGbCdnaInfo = FALSE;
@@ -496,6 +496,47 @@ if (haveGbCdnaInfo)
     if (cdsStr != NULL)
         genbankCdsParse(cdsStr, cds);
     hFreeConn(&conn);
+    }
+}
+
+static void getCdsFromTbl(char *acc, char *baseColorSetting, struct genbankCds* cds)
+/* Get CDS from a specified table, doing nothing if not found */
+{
+char *p = skipToSpaces(baseColorSetting);
+char *cdsSpecTbl = skipLeadingSpaces(p);
+if (*cdsSpecTbl == '\0')
+    errAbort("%s table requires a table name as an argument", BASE_COLOR_USE_CDS);
+struct sqlConnection *conn = hAllocConn();
+struct cdsSpec *cdsSpec
+    = sqlQueryObjs(conn, (sqlLoadFunc)cdsSpecLoad, sqlQuerySingle,
+                   "SELECT * FROM %s WHERE acc=\"%s\"", cdsSpecTbl, acc);
+hFreeConn(&conn);
+if (cdsSpec != NULL)
+    genbankCdsParse(cdsSpec->cds, cds);
+cdsSpecFree(&cdsSpec);
+}
+
+static void getPslCds(struct psl *psl, struct track *tg, struct genbankCds *cds)
+/* get CDS defintion for a PSL */
+{
+ZeroVar(cds);
+
+if (pslIsProtein(psl))
+    {
+    cds->start=0;
+    cds->end=psl->qSize*3;
+    cds->startComplete = TRUE;
+    cds->endComplete = TRUE; 
+    }
+else 
+    {
+    char *setting = trackDbSetting(tg->tdb, BASE_COLOR_USE_CDS);
+    if (startsWith("table", setting))
+        {
+        getCdsFromTbl(psl->qName, setting, cds);
+        }
+    else
+        getGenbankCds(psl->qName, cds);
     }
 }
 
@@ -523,27 +564,14 @@ static struct simpleFeature *splitPslByCodon(char *chrom,
                                              psl *psl, int sizeMul, boolean 
                                              isXeno, int maxShade, 
                                              enum baseColorDrawOpt drawOpt,
-					     boolean colorStopStart)
+					     boolean colorStopStart,
+                                             struct track *tg)
 {
 struct simpleFeature *sfList = NULL;
 unsigned *retGaps = NULL;
 boolean extraInfo = (drawOpt != baseColorDrawGenomicCodons);
 struct genbankCds cds;
-
-if (pslIsProtein(psl))
-    {
-    cds.start=0;
-    cds.end=psl->qSize*3;
-    cds.startComplete = TRUE;
-    cds.endComplete = TRUE; 
-    cds.complement = (psl->strand[1] == '-');   
-    }
-else
-    {
-    /*get CDS from genBank*/
-    memset(&cds, 0, sizeof(cds));
-    getMrnaCds(psl->qName, &cds);
-    }
+getPslCds(psl, tg, &cds);
 
 /* if cds not in genbank or not parsable - revert to normal*/
 /* if showing bases we don't want to have thin bars ala genePred format */
@@ -575,7 +603,7 @@ return(sfList);
 void baseColorCodonsFromPsl(char *chromName, struct linkedFeatures *lf, 
 			    struct psl *psl, int sizeMul, boolean
                             isXeno, int maxShade,
-			    enum baseColorDrawOpt drawOpt)
+			    enum baseColorDrawOpt drawOpt, struct track *tg)
 /*divide a pslX record into a linkedFeature, where each simple feature
  * is a 3-base codon (or a partial codon if on a boundary). Uses
  * GenBank to get the CDS start/stop of the psl record and also grabs
@@ -586,7 +614,7 @@ void baseColorCodonsFromPsl(char *chromName, struct linkedFeatures *lf,
 boolean colorStopStart = (drawOpt != baseColorDrawDiffCodons);
 struct simpleFeature *sfList = splitPslByCodon(chromName, lf, psl, sizeMul,
                                                isXeno, maxShade, drawOpt,
-					       colorStopStart);
+					       colorStopStart, tg);
 slReverse(&sfList);
 lf->codons = sfList;
 }
@@ -597,27 +625,30 @@ enum baseColorDrawOpt baseColorGetDrawOpt(struct track *tg)
  * in trackDb/cart, and gate with zoom level. */
 {
 enum baseColorDrawOpt ret = baseColorDrawOff;
-boolean showDiffBasesAllScales = FALSE;
 
 if (cart == NULL || tg == NULL || tg->tdb == NULL)
     return ret ;
 
 ret = baseColorDrawOptEnabled(cart, tg->tdb);
-showDiffBasesAllScales =
+boolean showDiffBasesAllScales =
     (trackDbSetting(tg->tdb, "showDiffBasesAllScales") != NULL);
+boolean showCdsAllScales =
+    (trackDbSetting(tg->tdb, "showCdsAllScales") != NULL);
+enum baseColorDrawOpt zoomOutDefault
+    = showCdsAllScales ? baseColorDrawCds : baseColorDrawOff;
 
 /* Gate with zooming constraints: */
 if (!zoomedToCdsColorLevel && (ret == baseColorDrawGenomicCodons ||
-			       ret == baseColorDrawItemCodons))
-    ret = baseColorDrawOff;
+                               ret == baseColorDrawItemCodons))
+    ret = zoomOutDefault;
 if (!zoomedToBaseLevel && (ret == baseColorDrawItemBases))
-    ret = baseColorDrawOff;
+    ret = zoomOutDefault;
 if (!(zoomedToCdsColorLevel || showDiffBasesAllScales) &&
     ret == baseColorDrawDiffCodons)
-    ret = baseColorDrawOff;
+    ret = zoomOutDefault;
 if (!(zoomedToBaseLevel || showDiffBasesAllScales) &&
     ret == baseColorDrawDiffBases)
-    ret = baseColorDrawOff;
+    ret = zoomOutDefault;
 
 return ret;
 }
@@ -653,6 +684,23 @@ else
     return cloneDnaSeq(userSeq);
 }
 
+static struct dnaSeq *maybeGetExtFileSeq(char *seqSource, char *name)
+/* look up sequence name in seq and extFile tables specified in seqSource */
+{
+/* seqSource is: extFile seqTbl extFileTbl */
+static struct dyString *buf = NULL;
+if (buf == NULL)
+    buf = dyStringNew(0);
+dyStringClear(buf);
+dyStringAppend(buf, seqSource);
+char *words[3];
+int nwords = chopByWhite(buf->string, words, ArraySize(words));
+if ((nwords != ArraySize(words)) || !sameString(words[0], "extFile"))
+    errAbort("invalid %s track setting: %s", BASE_COLOR_USE_SEQUENCE,
+             seqSource);
+return hDnaSeqGet(NULL, name, words[1], words[2]);
+}
+
 static struct dnaSeq *maybeGetSeqUpper(char *name, char *tableName,
 				       struct trackDb *tdb)
 /* Look up the sequence in genbank tables (hGenBankGetMrna also searches 
@@ -665,6 +713,8 @@ if (sameString(tableName,"refGene"))
     mrnaSeq = hGenBankGetMrna(name, "refMrna");
 else if (sameString(seqSource, "ss"))
     mrnaSeq = maybeGetUserSeq(name);
+else if (startsWith("extFile", seqSource))
+    mrnaSeq = maybeGetExtFileSeq(seqSource, name);
 else
     mrnaSeq = hGenBankGetMrna(name, NULL);
 
@@ -1169,7 +1219,7 @@ if(mrnaS >= 0)
 	else
 	    drawScaledBox(vg, s, e, scale, xOff, y, heightPer, color);
 	}
-    else
+    else if (drawOpt != baseColorDrawCds)
         errAbort("Unknown drawOpt: %d<br>\n", drawOpt);
 
     dyStringFree(&dyMrnaSeq);
@@ -1282,12 +1332,23 @@ void baseColorOverdrawDiff(struct track *tg,  struct linkedFeatures *lf,
  * genomic.  This tests drawing mode and zoom level but assumes that lf itself 
  * has been drawn already and we're not in dense mode etc. */
 {
-if (drawOpt == baseColorDrawDiffCodons && !zoomedToCdsColorLevel)
+boolean enabled = TRUE;
+
+// check max zoom
+char *setting = trackDbSetting(tg->tdb, "showDiffBasesMaxZoom");
+if (setting != NULL)
+    {
+    float showDiffBasesMaxZoom = sqlFloat(trimSpaces(setting));
+    if ((basesPerPixel > showDiffBasesMaxZoom) || (showDiffBasesMaxZoom == 0.0))
+        enabled = FALSE;
+    }
+
+if (drawOpt == baseColorDrawDiffCodons && !zoomedToCdsColorLevel && enabled)
     {
     drawCdsDiffCodonsOnly(tg, lf, vg, xOff, y, scale,
 			  heightPer, mrnaSeq, psl, winStart);
     }
-if (drawOpt == baseColorDrawDiffBases && !zoomedToBaseLevel)
+if (drawOpt == baseColorDrawDiffBases && !zoomedToBaseLevel && enabled)
     {
     drawCdsDiffBaseTickmarksOnly(tg, lf, vg, xOff, y, scale,
 				 heightPer, mrnaSeq, psl, winStart);
@@ -1438,10 +1499,10 @@ enum baseColorDrawOpt baseColorDrawSetup(struct vGfx *vg, struct track *tg,
 enum baseColorDrawOpt drawOpt = baseColorGetDrawOpt(tg);
 boolean indelShowDoubleInsert, indelShowQueryInsert, indelShowPolyA;
 
-indelEnabled(cart, (tg ? tg->tdb : NULL),
+indelEnabled(cart, (tg ? tg->tdb : NULL), basesPerPixel,
 	     &indelShowDoubleInsert, &indelShowQueryInsert, &indelShowPolyA);
 
-if (drawOpt == baseColorDrawOff && !(indelShowQueryInsert || indelShowPolyA))
+if (drawOpt <= baseColorDrawOff && !(indelShowQueryInsert || indelShowPolyA))
     return drawOpt;
 
 /* allocate colors for coding coloring */
@@ -1452,7 +1513,7 @@ if (!cdsColorsMade)
     }
    
 /* If we are using item sequence, fetch alignment and sequence: */
-if ((drawOpt != baseColorDrawOff && startsWith("psl", tg->tdb->type)) ||
+if ((drawOpt > baseColorDrawOff && startsWith("psl", tg->tdb->type)) ||
     indelShowQueryInsert || indelShowPolyA)
     {
     *retPsl = (struct psl *)(lf->original);
@@ -1525,3 +1586,20 @@ if (pMrnaSeq != NULL)
     dnaSeqFree(pMrnaSeq);
 }
 
+void baseColorSetCdsBounds(struct linkedFeatures *lf, struct psl *psl,
+                           struct track *tg)
+/* set CDS bounds in linked features for a PSL.  Used when zoomed out too far
+ * for codon or base coloring, but still want to render CDS bounds */
+{
+struct genbankCds cds;
+getPslCds(psl, tg, &cds);
+if (cds.start < cds.end)
+    {
+    struct genbankCds genomeCds = genbankCdsToGenome(&cds, psl);
+    if (genomeCds.start < genomeCds.end)
+        {
+        lf->tallStart = genomeCds.start;
+        lf->tallEnd = genomeCds.end;
+        }
+    }
+}

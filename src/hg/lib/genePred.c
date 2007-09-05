@@ -12,7 +12,7 @@
 #include "rangeTree.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.95 2007/08/16 19:39:42 markd Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.96 2007/09/05 04:30:57 markd Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -849,87 +849,22 @@ static void mapCdsToGenome(struct psl *psl, struct genbankCds* cds,
                            struct genePred* gene)
 /* Convert set cdsStart/end from mrna to genomic coordinates. */
 {
-int rnaCdsStart = cds->start,  rnaCdsEnd = cds->end;
-int cdsStart = -1, cdsEnd = -1;
-int iBlk;
-
-if (psl->strand[0] == '-')
-    reverseIntRange(&rnaCdsStart, &rnaCdsEnd, psl->qSize);
-
-
-/* find query block or gap containing start and map to target */
-for (iBlk = 0; (iBlk < psl->blockCount) && (cdsStart < 0); iBlk++)
+struct genbankCds genomeCds = genbankCdsToGenome(cds, psl);
+if (genomeCds.start < genomeCds.end)
     {
-    if (rnaCdsStart < psl->qStarts[iBlk])
-        {
-        /* in gap before block, set to start of block */
-        cdsStart = psl->tStarts[iBlk];
-        if (gene->strand[0] == '+')
-            cds->startComplete = FALSE;
-        else
-            cds->endComplete = FALSE;
-        }
-    else if (rnaCdsStart < (psl->qStarts[iBlk] + psl->blockSizes[iBlk]))
-        {
-        /* in this block, map to target */
-        cdsStart = psl->tStarts[iBlk] + (rnaCdsStart - psl->qStarts[iBlk]);
-        }
-    }
-if (cdsStart < 0)
-    {
-    /* after last block, set after end of that block */
-    cdsStart = psl->tStarts[iBlk-1] + psl->blockSizes[iBlk-1];
-    }
-
-/* find query block or gap containing end and map to target */
-for (iBlk = 0; (iBlk < psl->blockCount) && (cdsEnd < 0); iBlk++)
-    {
-    if (rnaCdsEnd <= psl->qStarts[iBlk])
-        {
-        /* in gap before block, set to start of gap */
-        if (iBlk == 0)
-            cdsEnd = psl->tStarts[0] - 1;  /* end of gene */
-        else
-            cdsEnd = psl->tStarts[iBlk-1] + psl->blockSizes[iBlk-1];
-        if (gene->strand[0] == '+')
-            cds->endComplete = FALSE;
-        else
-            cds->startComplete = FALSE;
-        }
-    else if (rnaCdsEnd <= (psl->qStarts[iBlk] + psl->blockSizes[iBlk]))
-        {
-        /* in this block, map to target */
-        cdsEnd = psl->tStarts[iBlk] + (rnaCdsEnd - psl->qStarts[iBlk]);
-        }
-    }
-if (cdsEnd < 0)
-    {
-    /* after last block, set to end of that block */
-    cdsEnd = psl->tStarts[iBlk-1] + psl->blockSizes[iBlk-1];
-    if (gene->strand[0] == '+')
-        cds->endComplete = FALSE;
-    else
-        cds->startComplete = FALSE;
-    }
-
-if (psl->strand[1] == '-')
-    reverseIntRange(&cdsStart, &cdsEnd, psl->tSize);
-
-if (cdsStart < cdsEnd)
-    {
-    gene->cdsStart = cdsStart;
-    gene->cdsEnd = cdsEnd;
+    gene->cdsStart = genomeCds.start;
+    gene->cdsEnd = genomeCds.end;
     if (gene->optFields & genePredCdsStatFld)
         {
         if (gene->strand[0] == '+')
             {
-            gene->cdsStartStat = (cds->startComplete) ? cdsComplete : cdsIncomplete;
-            gene->cdsEndStat = (cds->endComplete) ? cdsComplete : cdsIncomplete;;
+            gene->cdsStartStat = (genomeCds.startComplete) ? cdsComplete : cdsIncomplete;
+            gene->cdsEndStat = (genomeCds.endComplete) ? cdsComplete : cdsIncomplete;;
             }
         else
             {
-            gene->cdsStartStat = (cds->endComplete) ? cdsComplete : cdsIncomplete;;
-            gene->cdsEndStat = (cds->startComplete) ? cdsComplete : cdsIncomplete;
+            gene->cdsStartStat = (genomeCds.endComplete) ? cdsComplete : cdsIncomplete;;
+            gene->cdsEndStat = (genomeCds.startComplete) ? cdsComplete : cdsIncomplete;
             }
         }
     }

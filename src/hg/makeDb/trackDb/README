@@ -331,14 +331,18 @@ Some settings used by various tracks:
     o scoreMin, scoreMax - sets the range used to color the track if 
         colored by score.  Allows use of the whole color range when data
         has scores with a smaller range than 0-1000.
-    o baseColorUseCds {genbank,given,none} - For genePred or psl+cds (such 
-      as genbank mRNA, EST etc) tracks.  Specifies where CDS coordinates 
-      can be found (if any) so that codons can be drawn when viewing a 
-      sufficiently small region.
-    o baseColorUseSequence {genbank,seq,none} - For genePred or psl tracks.
-      Specifies where item sequence can be found (if any) so that item 
-      sequence, or differences from genomic sequence, can be drawn when 
-      viewing a sufficiently small region.
+    o baseColorUseCds {genbank,given,table,none} - For genePred or psl+cds
+      (such as genbank mRNA, EST etc) tracks.  Specifies where CDS coordinates
+      can be found (if any) so that codons can be drawn when viewing a
+      sufficiently small region.  If `table' is specified, an additional
+      parameter of a table name, in cdsSpec format, is required.
+    o baseColorUseSequence {genbank,seq,extFile,none} - For genePred or psl
+      tracks.  Specifies where item sequence can be found (if any) so that
+      item sequence, or differences from genomic sequence, can be drawn when
+      viewing a sufficiently small region.  If `extFile' is specified, two
+      additional parameters are required, the name of the seq table followed
+      by the name of the extFile table to use in looking up the sequence.
+      These tables are loaded by hgLoadSeq.
     o baseColorDefaults {genomicCodons,itemBases,itemCodons,diffBases,
       diffCodons,none} - For tracks with CDS and/or sequence information.
       Specifies the default drawing mode.  itemBases, itemCodons, diffBases
@@ -357,6 +361,16 @@ Some settings used by various tracks:
       (baseColorUseSequence).  If on, then highlight an insert in the 
       query only (alignment gap in the target only) by drawing an 
       orange vertical line.
+    o showDiffBasesAllScales . - show bases differences for PSL tracks at all
+      zoom levels.
+    o showDiffBasesMaxZoom basesPerPixel - only show bases or codon zoomed
+      difference annotations for PSL tracks at if currently zoomed at no more
+      than basesPerPixel (a float). showDiffBasesAllScales should also be
+      set to make this useful.
+    o showIndelMaxZoom basesPerPixel - only show PSL annotations if currently
+      zoomed at no more than basesPerPixel (a float).  Setting to 0.0 disables
+      showing indels.
+    o showCdsAllScales . - show CDS for PSL tracks at all zoom levels.
 
 Note: We have a restriction on table names: Track names (i.e. table
 names, but omitting any chr*_ prefix) should not contain any
