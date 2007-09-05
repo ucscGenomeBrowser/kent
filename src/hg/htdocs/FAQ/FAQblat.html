@@ -618,17 +618,16 @@ return sizeMul * (psl->match + ( psl->repMatch>>1)) -
 		    	<P>
 			<UL>
 			<LI>
-			If a tile is not marked as overused, then use the
-			following  formula to find the shortest query size
-			that will guarantee a match:<BR> 
+			The formula to find the shortest query size that will
+			guarantee a match (if matching tiles are not marked as
+			overused) is:<BR> 
 		    	&nbsp;&nbsp;&nbsp;2 * <em>stepSize</em> + <em>tileSize</em> - 1<BR>
-			With <em>stepSize</em> set to 5 and <em>tileSize</em>
-			set to 11, you can find matches as short as 2*5+11-1 = 
-			20 bp using this formula, if the query matches the
-			target exactly. The 
-		 	<em>stepSize</em> parameter can range from 1 to 
-			<em>tileSize</em>. The <em>tileSize</em> parameter
-			can range from 6 to 15.
+			For example, with <em>stepSize</em> set to 5 and
+			<em>tileSize</em> set to 11, matches of query size 
+			2*5+11-1 = 20 bp will be found, if the query matches
+			the target exactly. The <em>stepSize</em> parameter can
+			range from 1 to <em>tileSize</em>. The <em>tileSize</em>
+			parameter can range from 6 to 15.
 			<LI>
 		 	Do not use <em>-fastMap</em>.
                         <LI>
@@ -644,16 +643,16 @@ return sizeMul * (psl->match + ( psl->repMatch>>1)) -
 			<P>
 			The above changes will make BLAT more sensitive, but 
 			will also slow the speed and increase the memory usage. 
-			If necessary, you can process one chromosome
+			It may be necessary to process one chromosome
 			at a time to reduce the memory requirements. 
 			<P>
-			Blat will accept <em>-minScore</em> parameter values in 
-			the range of 1 to approximately <em>qSize</em>/2. 
-			Therefore, use either 
-			the <TT>pslReps</TT> or <TT>pslCDnaFilter</TT> program 
-			available in the Genome Browser source code to filter 
-			for the size, score, coverage, or quality desired. 
-                        For information on obtaining the
+			A note on filtering output: increasing the
+			<em>-minScore</em> parameter value beyond one-half of
+			the query size has no further effect.  Therefore, use
+			either the <TT>pslReps</TT> or <TT>pslCDnaFilter</TT>
+			program available in the Genome Browser source code to
+			filter for the size, score, coverage, or quality
+			desired.  For information on obtaining the
 			source code, see our <A HREF="FAQlicense.html">FAQ</A> 
 			on source code licensing and downloads. </P>
 		    </TD><TD WIDTH=15></TD>
