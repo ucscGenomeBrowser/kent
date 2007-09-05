@@ -12,7 +12,7 @@
 #include "hui.h"
 #include "vGfx.h"
 
-static char const rcsid[] = "$Id: cgiPicture.c,v 1.1 2007/09/05 22:06:18 kent Exp $";
+static char const rcsid[] = "$Id: cgiPicture.c,v 1.2 2007/09/05 22:36:10 kent Exp $";
 
 /* Global Variables */
 struct cart *cart;             /* CGI and other variables */
@@ -68,6 +68,7 @@ void doMiddle(struct cart *theCart)
 cart = theCart;
 cartWebStart(cart, "Simple CGI that makes an image.");
 printf("<FORM ACTION=\"../cgi-bin/cgiPicture\">");
+cartSaveSession(cart);
 
 /* Put up some web controls. */
 cgiMakeDropList(shapeVar, shapes, ArraySize(shapes), 
@@ -80,6 +81,7 @@ printf(" Green: ");
 cgiMakeIntVar(greenVar, cartUsualInt(cart, greenVar, 200), 3 );
 printf(" Blue: ");
 cgiMakeIntVar(blueVar, cartUsualInt(cart, blueVar, 200), 3 );
+printf("<BR>");
 
 
 /* Create and draw image to temp file and write out URL of temp file. */
