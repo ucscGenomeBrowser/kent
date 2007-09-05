@@ -251,5 +251,8 @@ double axtIdWithGaps(struct axt *axt);
 double axtCoverage(struct axt *axt, int qSize, int tSize);
 /* Return % of q and t covered. */
 
+void axtOutPretty(struct axt *axt, int lineSize, FILE *f);
+/* Output axt in pretty format. */
+
 #endif /* AXT_H */
 

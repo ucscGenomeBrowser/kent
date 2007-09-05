@@ -20,7 +20,7 @@
 #include "dnautil.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: axt.c,v 1.47 2006/06/18 23:11:58 kate Exp $";
+static char const rcsid[] = "$Id: axt.c,v 1.48 2007/09/05 23:03:22 kent Exp $";
 
 void axtFree(struct axt **pEl)
 /* Free an axt. */
@@ -944,3 +944,42 @@ double cov = axt->tEnd - axt->tStart + axt->qEnd - axt->qStart;
 return cov/(qSize+tSize);
 }
 
+void axtOutPretty(struct axt *axt, int lineSize, FILE *f)
+/* Output axt in pretty format. */
+{
+char *q = axt->qSym;
+char *t = axt->tSym;
+int size = axt->symCount;
+int oneSize, sizeLeft = size;
+int i;
+
+fprintf(f, ">%s:%d%c%d %s:%d-%d %d\n", 
+	axt->qName, axt->qStart, axt->qStrand, axt->qEnd,
+	axt->tName, axt->tStart, axt->tEnd, axt->score);
+while (sizeLeft > 0)
+    {
+    oneSize = sizeLeft;
+    if (oneSize > lineSize)
+        oneSize = lineSize;
+    mustWrite(f, q, oneSize);
+    fputc('\n', f);
+
+    for (i=0; i<oneSize; ++i)
+        {
+	if (toupper(q[i]) == toupper(t[i]) && isalpha(q[i]))
+	    fputc('|', f);
+	else
+	    fputc(' ', f);
+	}
+    fputc('\n', f);
+
+    if (oneSize > lineSize)
+        oneSize = lineSize;
+    mustWrite(f, t, oneSize);
+    fputc('\n', f);
+    fputc('\n', f);
+    sizeLeft -= oneSize;
+    q += oneSize;
+    t += oneSize;
+    }
+}
