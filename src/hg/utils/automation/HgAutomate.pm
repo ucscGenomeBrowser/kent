@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/HgAutomate.pm instead.
 
-# $Id: HgAutomate.pm,v 1.6 2007/08/21 23:54:19 hiram Exp $
+# $Id: HgAutomate.pm,v 1.7 2007/09/05 17:31:57 hiram Exp $
 package HgAutomate;
 
 use warnings;
@@ -610,7 +610,7 @@ sub nfsNoodge {
   confess "undef input" if (! defined $file);
   return if ($main::opt_debug);
   for (my $i=0;  $i < 5;  $i++) {
-    last if (system("ls $file >& /dev/null") == 0);
+    last if ( -s $file );
     sleep(2);
   }
 }
