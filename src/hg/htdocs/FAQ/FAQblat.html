@@ -629,9 +629,7 @@ return sizeMul * (psl->match + ( psl->repMatch>>1)) -
 			range from 1 to <em>tileSize</em>. The <em>tileSize</em>
 			parameter can range from 6 to 15.
 			<LI>
-		 	Do not use <em>-fastMap</em>.
-                        <LI>
-			Do not use masking command-line options.
+		 	Use <em>-fine</em>.
 			<LI>
 			Use a large value for <em>repMatch</em> (e.g. 
 			<em>-repMatch</em> = 1000000) 
@@ -639,6 +637,10 @@ return sizeMul * (psl->match + ( psl->repMatch>>1)) -
 			over-used.
 			<LI>
 			Do not use an <em>.ooc</em> file.
+			<LI>
+		 	Do not use <em>-fastMap</em>.
+                        <LI>
+			Do not use masking command-line options.
 			</UL>
 			<P>
 			The above changes will make BLAT more sensitive, but 
