@@ -3,8 +3,8 @@
 
 #define EXPR_DATA_SHADES 16
 #define DEFAULT_MAX_DEVIATION 0.7
-#define COLOR_SCALE 2
-#define RED_SCALE 1.2
+#define COLOR_SCALE 1
+#define RED_SCALE 1
 
 #include "common.h"
 #include "hgHeatmap.h"
@@ -28,7 +28,7 @@
 #include "hCytoBand.h"
 #include "hgChromGraph.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.10 2007/08/24 20:59:22 jzhu Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.11 2007/09/05 08:15:24 jzhu Exp $";
 
 /* Page drawing stuff. */
 
@@ -379,8 +379,7 @@ for (ref = ghList; ref != NULL; ref = ref->next)
        also draw summary ChromGraph when the tableName is cnvBroadLungv2 
        the space for the CrhomGraph is hardcoded here chromGraphOffset=10    
     */
-    if ( sameString(tableName,"cnvLungBroadv2_ave100K") // || sameString(tableName,"cnvLungBroadv2") || sameString(tableName, "expBreastCancerUCSF") 
-	 || sameString(tableName, "CGHBreastCancerUCSF") || sameString(tableName, "CGHBreastCancerStanford") )
+    if ( sameString(tableName,"cnvLungBroadv2_ave100K") /* || sameString(tableName,"cnvLungBroadv2") || sameString(tableName, "expBreastCancerUCSF") */ || sameString(tableName, "CGHBreastCancerUCSF") || sameString(tableName, "CGHBreastCancerStanford") )
 	{
 	char summaryTable[512];
 
@@ -429,11 +428,12 @@ if (sameWord(varName, hghHeatmap))
     }
 else if ( sameWord(varName,hghDataSet))
     {
-    totalCount =2;
+    totalCount =3;
     AllocArray(menu, totalCount);
     AllocArray(values, totalCount);
-    menu[0]=values[0] ="UCSF breast cancer";
-    menu[1]=values[1] ="Broad Lung cancer 500K chip";
+    menu[0]=values[0] ="ISPY";
+    menu[1]=values[1] ="UCSF breast cancer";
+    menu[2]=values[2] ="Broad Lung cancer 500K chip";
     }
 cgiMakeDropListFull(varName, menu, values, totalCount, curVal, js);
 freez(&menu);

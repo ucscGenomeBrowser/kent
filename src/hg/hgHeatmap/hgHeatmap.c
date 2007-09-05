@@ -22,7 +22,7 @@
 #include "microarray.h"
 #include "hgChromGraph.h"
 
-static char const rcsid[] = "$Id: hgHeatmap.c,v 1.12 2007/08/24 20:59:22 jzhu Exp $";
+static char const rcsid[] = "$Id: hgHeatmap.c,v 1.13 2007/09/05 08:15:24 jzhu Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -93,8 +93,8 @@ struct genoHeatmap *getDbHeatmaps(struct sqlConnection *conn, char *set)
 /* Get graphs defined in database. */
 {
 /* hardcoded for demo */
-int N =2;
-char *trackNames[N];
+int N =3;
+char *trackNames[2];
 
 if (!set)
     return NULL;
@@ -102,11 +102,19 @@ if ( sameString(set,"Broad Lung cancer 500K chip"))
     {
     trackNames[0] = "cnvLungBroadv2_ave100K";
     trackNames[1]= "cnvLungBroadv2";
+    trackNames[2]= "";
     }
 else if (sameWord(set,"UCSF breast cancer"))
     {
     trackNames[0]= "CGHBreastCancerStanford";
     trackNames[1]="CGHBreastCancerUCSF";
+    trackNames[0]="";
+    }
+else if (sameWord(set,"ISPY"))
+    {
+    trackNames[0]="ispyMipCGH";
+    trackNames[1]= "CGHBreastCancerStanford";
+    trackNames[2]="CGHBreastCancerUCSF";
     }
 else
     return NULL;
@@ -118,6 +126,8 @@ int i;
 for (i=0; i<N; i++)
     {
     trackName = trackNames[i];
+    if (trackName == "")
+	continue;
     struct trackDb *tdb;
     tdb = hMaybeTrackInfo(conn, trackName);
     if (!tdb)
@@ -369,6 +379,7 @@ tl.picWidth = cartUsualInt(cart, hghImageWidth, hgHeatmapDefaultPixWidth);
 /* Get list of chromosomes and lay them out. */
 chromList = genoLayDbChroms(conn, FALSE);
 oneRowHeight = selectedHeatmapHeight();
+
 return genoLayNew(chromList, tl.font, tl.picWidth, oneRowHeight,
 		   minLeftLabelWidth, minRightLabelWidth, chromLayout());
 }
