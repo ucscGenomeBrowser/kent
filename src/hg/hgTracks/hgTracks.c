@@ -118,7 +118,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1406 2007/09/05 18:05:28 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1407 2007/09/05 19:35:04 kate Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -13373,13 +13373,8 @@ for (grp = grps; grp != NULL; grp = grp->next)
         safef(cartVar, sizeof(cartVar), "%s.priority",grp->name);
         if (vis != -1)
             priority = (float)cartUsualDouble(cart, cartVar, grp->priority);
-
-        /* use default value if it's trivially different */
-        if (abs(priority - grp->priority) < 0.00001)
-            {
-            priority = grp->priority;
+        if (priority == grp->priority)
             cartRemove(cart, cartVar);
-            }
         }
     /* create group object; add to list and hash */
     AllocVar(group);
@@ -13439,11 +13434,8 @@ for (track = *pTrackList; track != NULL; track = track->next)
         float priority = (float)cartUsualDouble(cart, cartVar, 
                                                     track->defaultPriority);
         /* remove cart variables that are the same as the trackDb settings */
-        if (abs(priority - track->defaultPriority) < 0.00001)
-            {
-            priority = track->defaultPriority;
+        if (priority == track->defaultPriority)
             cartRemove(cart, cartVar);
-            }
         track->priority = priority;
         }
 
@@ -13525,11 +13517,8 @@ for (tr = group->trackList; tr != NULL; tr = tr->next)
         float priority = (float)cartUsualDouble(cart, cartVar, 
                                         track->tdb->parent->priority);
         /* remove cart variables that are the same as the trackDb settings */
-        if (abs(priority - track->tdb->parent->priority) < 0.00001)
-            {
-            priority = track->tdb->parent->priority;
+        if (priority == track->tdb->parent->priority)
             cartRemove(cart, cartVar);
-            }
         superTrack->priority = priority;
 
         AllocVar(ref);
