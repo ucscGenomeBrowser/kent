@@ -6,7 +6,7 @@
 #include "genbank.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: genbank.c,v 1.9 2007/09/05 04:30:57 markd Exp $";
+static char const rcsid[] = "$Id: genbank.c,v 1.10 2007/09/05 23:33:39 markd Exp $";
 
 static char *JOIN_PREFIX = "join(";
 static char *COMPLEMENT_PREFIX = "complement(";
@@ -212,8 +212,16 @@ genomeCds.start = genomeCds.end = -1;
 char geneStrand = (psl->strand[1] == '\0') ? psl->strand[0]
     : ((psl->strand[0] != psl->strand[1]) ? '-' : '+');
 
+/* use start/end completeness from CDS specification, and adjust if unaligned */
+boolean startComplete = cds->startComplete, endComplete = cds->endComplete;
+
 if (psl->strand[0] == '-')
+    {
+    // swap CDS
     reverseIntRange(&rnaCdsStart, &rnaCdsEnd, psl->qSize);
+    startComplete = cds->endComplete;
+    endComplete = cds->startComplete;
+    }
 
 /* find query block or gap containing start and map to target */
 for (iBlk = 0; (iBlk < psl->blockCount) && (genomeCds.start < 0); iBlk++)
@@ -222,10 +230,7 @@ for (iBlk = 0; (iBlk < psl->blockCount) && (genomeCds.start < 0); iBlk++)
         {
         /* in gap before block, set to start of block */
         genomeCds.start = psl->tStarts[iBlk];
-        if (geneStrand == '+')
-            genomeCds.startComplete = FALSE;
-        else
-            genomeCds.endComplete = FALSE;
+        startComplete = FALSE;
         }
     else if (rnaCdsStart < (psl->qStarts[iBlk] + psl->blockSizes[iBlk]))
         {
@@ -237,6 +242,7 @@ if (genomeCds.start < 0)
     {
     /* after last block, set after end of that block */
     genomeCds.start = psl->tStarts[iBlk-1] + psl->blockSizes[iBlk-1];
+    startComplete = FALSE;
     }
 
 /* find query block or gap containing end and map to target */
@@ -249,10 +255,7 @@ for (iBlk = 0; (iBlk < psl->blockCount) && (genomeCds.end < 0); iBlk++)
             genomeCds.end = psl->tStarts[0] - 1;  /* end of gene */
         else
             genomeCds.end = psl->tStarts[iBlk-1] + psl->blockSizes[iBlk-1];
-        if (geneStrand == '+')
-            genomeCds.endComplete = FALSE;
-        else
-            genomeCds.startComplete = FALSE;
+        endComplete = FALSE;
         }
     else if (rnaCdsEnd <= (psl->qStarts[iBlk] + psl->blockSizes[iBlk]))
         {
@@ -264,12 +267,19 @@ if (genomeCds.end < 0)
     {
     /* after last block, set to end of that block */
     genomeCds.end = psl->tStarts[iBlk-1] + psl->blockSizes[iBlk-1];
-    if (geneStrand == '+')
-        genomeCds.endComplete = FALSE;
-    else
-        genomeCds.startComplete = FALSE;
+    endComplete = FALSE;
     }
 
+if (geneStrand == '+')
+    {
+    genomeCds.startComplete = startComplete;
+    genomeCds.endComplete = endComplete;
+    }
+else
+    {
+    genomeCds.startComplete = endComplete;
+    genomeCds.endComplete = startComplete;
+    }
 if (psl->strand[1] == '-')
     reverseIntRange(&genomeCds.start, &genomeCds.end, psl->tSize);
 return genomeCds;
