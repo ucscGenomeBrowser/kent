@@ -2996,10 +2996,9 @@ printf "./runPsLayout.sh %s %s %s {check out line+ psl/%s/%s/%s.psl}\n",
         -sqlTable=/cluster/home/kent/src/hg/lib/recombRate.sql \
 	    hg18 recombRate recombRate.bed
 	   
-
-
 ###########################################################################
-# FISH CLONES (WORKING - 2006-01-13 - Hiram)
+# FISH CLONES (DONE - 2006-01-13 - 2006-02-07 - Hiram)
+#  **** RE-LOAD fishClones after bacEnds update - see below 2007-09-04 ****
 # The STS Marker, Coverage, and BAC End Pairs tracks must be completed prior to 
 # creating this track  (and why is this ?)
 
@@ -3010,7 +3009,7 @@ printf "./runPsLayout.sh %s %s %s {check out line+ psl/%s/%s/%s.psl}\n",
 # Download information from NCBI
         # point browser at:
 #   http://www.ncbi.nlm.nih.gov/genome/cyto/cytobac.cgi?CHR=all&VERBOSE=ctg
-        # change "Sequence tag:" to "placed on contig"
+# change "Sequence tag:" to "placed on contig"
         # change "Show details on sequence-tag" to "yes"
         # change "Download or Display" to "Download table for UNIX"
         # press Submit - save as
@@ -10193,7 +10192,7 @@ BASE=/cluster/data/hg18/bed/blastz.galGal3.2006-05-22
     md5sum *.zip *.2bit README.txt > md5sum.txt
 
 #########################################################################
-# UPDATE BACENDS track (WORKING - 2006-06-16 - Hiram)
+# UPDATE BACENDS track (DONE - 2006-06-16 - Hiram)
 #	An attempt to recover some of the missing clones from the
 #	bacEnds track.  It turns out the perl processing script wasn't
 #	properly catagorizing all the clone ends, thus a lot of them
@@ -13493,7 +13492,7 @@ TMPDIR=/scratch/tmp
     #	42875664 bases of 393312790 (10.901%) in intersection
 
 ############################################################################
-##  BLASTZ mm8 test with WindowMasker sequence (WORKING - 2007-01-30 - Hiram)
+##  BLASTZ mm8 test with WindowMasker sequence (DONE - 2007-01-30 - Hiram)
     ssh kkstore04
     mkdir /cluster/data/hg18/bed/blastz.mm8.2007-01-30
     cd /cluster/data/hg18/bed/blastz.mm8.2007-01-30
@@ -16891,5 +16890,43 @@ foreach f (/cluster/data/hg18/nib/chr*.nib)
 end
 hgLoadBed hg18 rnaCluster chrom/*.bed
 
+
+###########################################################################
+# RE-LOAD FISH CLONES after bacEnds update (DONE - 2007-09-04 - Hiram)
+# The bacEnds processing results are used here
+
+    ssh hgwdev
+    mkdir /cluster/data/hg18/bed/fishClones.2007-08-29
+    cd /cluster/data/hg18/bed/fishClones.2007-08-29
+    ln -s ../fishClones/cl_acc_gi_len .
+    ln -s ../fishClones/fhcrc.sts .
+
+    #	have to be on hgwdev for this since it is going to read from the db
+    time nice -n +19 fishClones -verbose=2 -fhcrc=fhcrc.sts -noBin hg18 \
+	/cluster/data/ncbi/fishClones/fishClones.2006-01/fixed.hbrc.txt \
+	/cluster/data/ncbi/fishClones/fishClones.2006-01/clac.out \
+         ./cl_acc_gi_len \
+         /cluster/data/hg18/bed/bacends/bacEnds.lifted.psl \
+            fishClones > fishClones.out 2>&1
+    #	real    0m53.783s
+# Reading Fish Clones file /cluster/data/ncbi/fishClones/fishClones.2006-01/fixed.hbrc.txt
+#	reading fishInfo file /cluster/data/ncbi/fishClones/fishClones.2006-01/fixed.hbrc.txt
+# Reading Clone/Acc (clac.out) file /cluster/data/ncbi/fishClones/fishClones.2006-01/clac.out
+# Reading BAC Ends file ./cl_acc_gi_len
+# Reading BAC Ends psl file /cluster/data/hg18/bed/bacends/bacEnds.lifted.psl
+# Reading additional STS Marker links fhcrc.sts
+# Determining good positions
+#	findClonePos: determining positions of fish clones
+# Writing output file
+# ERROR: at line # 177, no cytoband info for chrX:104048913-104206974
+# RP11-79L11
+# ERROR: at line # 178, no cytoband info for chrX:104048913-104206974
+# RP11-79L11
+
+    # Load the track
+    hgLoadBed -notItemRgb -noBin -tab \
+        -sqlTable=$HOME/kent/src/hg/lib/fishClones.sql \
+	hg18 fishClones fishClones.bed
+    #	Loaded 9788 elements of size 16
 
 ############################################################################
