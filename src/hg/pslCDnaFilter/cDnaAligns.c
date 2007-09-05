@@ -46,8 +46,10 @@ for (iBlk = 0; iBlk < aln->psl->blockCount; iBlk++)
     }
 if (aln->cdna->opts & cDnaIgnoreNs)
     alnSize -= aln->psl->nCount;
-if (totAlnSize != (aln->psl->match+aln->psl->misMatch+aln->psl->repMatch+aln->psl->nCount))
-    cDnaAlignVerb(1, aln, "Warning: total alignment size doesn't match counts");
+unsigned matchCnts = (aln->psl->match+aln->psl->misMatch+aln->psl->repMatch+aln->psl->nCount);
+if (totAlnSize != matchCnts)
+    cDnaAlignVerb(1, aln, "Warning: total alignment size (%d) doesn't match counts (%d)",
+                  totAlnSize, matchCnts);
 return ((float)alnSize)/((float)(aln->cdna->adjQEnd - aln->cdna->adjQStart));
 }
 
