@@ -118,7 +118,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1405 2007/09/05 04:30:56 markd Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1406 2007/09/05 18:05:28 kate Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -3249,7 +3249,6 @@ struct track *userPslTg()
 {
 struct track *tg = linkedFeaturesTg();
 struct trackDb *tdb;
-AllocVar(tdb);
 tg->mapName = "hgUserPsl";
 tg->canPack = TRUE;
 tg->visibility = tvPack;
@@ -3258,12 +3257,19 @@ tg->shortLabel = "Blat Sequence";
 tg->loadItems = loadUserPsl;
 tg->mapItemName = lfMapNameFromExtra;
 tg->priority = 100;
+tg->defaultPriority = tg->priority;
 tg->groupName = "map";
-tdb->tableName = tg->mapName;
-tdb->shortLabel = tg->shortLabel;
-tdb->longLabel = tg->longLabel;
-tdb->type = cloneString("psl");
+tg->defaultGroupName = cloneString(tg->groupName);
 tg->exonArrows = TRUE;
+
+/* better to create the tdb first, then use trackFromTrackDb */
+AllocVar(tdb);
+tdb->tableName = cloneString(tg->mapName);
+tdb->shortLabel = cloneString(tg->shortLabel);
+tdb->longLabel = cloneString(tg->longLabel);
+tdb->grp = cloneString(tg->groupName);
+tdb->priority = tg->priority;
+tdb->type = cloneString("psl");
 trackDbPolish(tdb);
 addUserSeqBaseAndIndelSettings(tdb);
 tg->tdb = tdb;
@@ -5706,7 +5712,6 @@ if (oligoSize >= 30)
 touppers(medOligo);
 
 bedMethods(tg);
-AllocVar(tdb);
 tg->mapName = "oligoMatch";
 tg->canPack = TRUE;
 tg->visibility = tvHide;
@@ -5719,12 +5724,16 @@ tg->loadItems = oligoMatchLoad;
 tg->itemName = oligoMatchName;
 tg->mapItemName = oligoMatchName;
 tg->priority = 99;
-tg->defaultPriority = 99;
+tg->defaultPriority = tg->priority;
 tg->groupName = "map";
-tg->defaultGroupName = "map";
-tdb->tableName = tg->mapName;
-tdb->shortLabel = tg->shortLabel;
-tdb->longLabel = tg->longLabel;
+tg->defaultGroupName = cloneString(tg->groupName);
+
+AllocVar(tdb);
+tdb->tableName = cloneString(tg->mapName);
+tdb->shortLabel = cloneString(tg->shortLabel);
+tdb->longLabel = cloneString(tg->longLabel);
+tdb->grp = cloneString(tg->groupName);
+tdb->priority = tg->priority;
 trackDbPolish(tdb);
 tg->tdb = tdb;
 return tg;
@@ -13392,6 +13401,17 @@ for (track = *pTrackList; track != NULL; track = track->next)
         {
         char *groupName = NULL;
         char cartVar[128];
+
+        /* belt and suspenders -- accomodate inconsistent track/trackDb
+         * creation.  Note -- with code cleanup, these default variables 
+         * could be retired, and the tdb versions used as defaults */
+        if (!track->defaultGroupName)
+            {
+            if (track->tdb && track->tdb->grp)
+                track->defaultGroupName = cloneString(track->tdb->grp);
+            else
+                track->defaultGroupName = "other";
+            }
         if (track->tdb->parent)
             {
             /* supertrack member must be in same group as its super */
