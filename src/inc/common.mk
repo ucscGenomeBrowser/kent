@@ -14,7 +14,7 @@ else
   ifeq (solaris,$(findstring solaris,${OSTYPE}))
     HG_WARN_ERR = -DJK_WARN -Wall
   else
-    HG_WARN_ERR = -DJK_WARN -Wall 
+    HG_WARN_ERR = -DJK_WARN -Wall -Werror
   endif
 endif
 # Apply the stronger checks to all code on our development machine:
