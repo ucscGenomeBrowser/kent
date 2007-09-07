@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/HgAutomate.pm instead.
 
-# $Id: HgAutomate.pm,v 1.7 2007/09/05 17:31:57 hiram Exp $
+# $Id: HgAutomate.pm,v 1.8 2007/09/07 17:35:19 hiram Exp $
 package HgAutomate;
 
 use warnings;
@@ -611,7 +611,7 @@ sub nfsNoodge {
   return if ($main::opt_debug);
   for (my $i=0;  $i < 5;  $i++) {
     last if ( -s $file );
-    sleep(2);
+    sleep(4);
   }
 }
 
