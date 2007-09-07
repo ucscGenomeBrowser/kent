@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.20 2007/08/31 22:40:17 hiram Exp $"
+#	"$Id: mm9.txt,v 1.21 2007/09/07 18:43:36 hiram Exp $"
 #
 
 #######################################################################
@@ -2758,6 +2758,7 @@ TMPDIR=/scratch/tmp
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=medium \
 	-stop=net `pwd`/DEF > blastz.out 2>&1 &
+    #	real    243m51.078s
 XXX - running 2007-08-31 13:40
     #  this runs much faster than the usual blastz run
     #	failed when it got to the kki run since /scratch/hg/rn4/ was not
@@ -2770,24 +2771,592 @@ XXX - running 2007-08-31 13:40
     #	make this a symlink to /iscratch/data/
     #	and run the axtChain/netChains.csh script manually on kolossus
 
-#########################################################################
-# EXONIPHY MM9, lifted from hg18 (WORKING - 2007-08-31 - Hiram)
-#	needed for uscsGenes10 building
+    #	need syntenic net for the multiz
+    cd /cluster/data/mm9/bed/blastzRn4.2007-08-31
+    gzip axtChain/mm9.rn4.net
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=medium \
+	-syntenicNet -continue=syntenicNet `pwd`/DEF > synNet.out 2>&1 &
+    #	real    37m39.746s
 
-XXX - Query to Adam to see how to make the hg18.mm9.syn.chain file.
+#########################################################################
+# EXONIPHY MM9, lifted from hg18 (DONE - 2007-09-05 - Hiram)
+#	needed for uscsGenes10 building
+    # create a syntenic liftOver chain file
+    ssh kolossus
+    cd /cluster/data/hg18/bed/blastz.mm9/axtChain
+    time nice -n +19 netFilter -syn hg18.mm9.net.gz \
+	| netChainSubset -verbose=0 stdin hg18.mm9.all.chain.gz stdout \
+	| chainStitchId stdin stdout | gzip -c > hg18.mm9.syn.chain.gz
+    #	real    5m55.575s
+    #	slightly smaller than the ordinary liftOver chain file:
+# -rw-rw-r--  1  77849682 Aug 14 16:49 hg18.mm9.over.chain.gz
+# -rw-rw-r--  1  73972671 Sep  5 15:27 hg18.mm9.syn.chain.gz
 
     # exoniphyMm9.gp is prepared as follows
     ssh hgwdev
-    hgsql hg18 -e "select * from exoniphy" --skip-column-names > exoniphyHg18.gp
-    liftOver -genePred exoniphyHg18.gp /usr/data/hg18/dbDerived/netSynteny/hg18.mm9.syn.chain exoniphyMm9.gp unmapped
-    (where hg18.mm9.syn.chain representes the human/mouse syntenic net)
+    mkdir /cluster/data/mm9/bed/exoniphy
+    cd /cluster/data/mm9/bed/exoniphy
+    hgsql hg18 -e "select * from exoniphy" -N > exoniphyHg18.gp
+    time nice -n +19 liftOver -genePred exoniphyHg18.gp \
+	/cluster/data/hg18/bed/blastz.mm9/axtChain/hg18.mm9.syn.chain.gz \
+	    exoniphyMm9.gp unmapped
+    #	real    52m0.335s
+    wc -l *
+    #	178162 exoniphyHg18.gp
+    #	172859 exoniphyMm9.gp
+    #	 10606 unmapped
 
     ssh hgwdev
+    cd /cluster/data/mm9/bed/exoniphy
+    nice -n +19 hgLoadGenePred -genePredExt mm9 exoniphy exoniphyMm9.gp
+    nice -n +19 featureBits mm9 exoniphy
+    #	25931742 bases of 2620346127 (0.990%) in intersection
+    nice -n +19 featureBits mm8 exoniphy
+    #	25952211 bases of 2567283971 (1.011%) in intersection
 
-    cd /cluster/data/mm9/bed
-    mkdir exoniphy
-    cd exoniphy
-    hgLoadGenePred -genePredExt mm9 exoniphy exoniphyMm9.gp
+#########################################################################
+# BLASTZ canFam2 (DONE - 2006-02-18 - Hiram)
+    ssh kkstore06
+    # establish a screen to control this job
+    screen
+    mkdir /cluster/data/mm9/bed/blastzCanFam2.2007-09-04
+    cd /cluster/data/mm9/bed/blastzCanFam2.2007-09-04
 
+    cat << '_EOF_' > DEF
+# mouse vs dog
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET: Mouse Mm9
+SEQ1_DIR=/scratch/data/mm9/nib
+SEQ1_SMSK=/scratch/data/mm9/notInOthers
+SEQ1_LEN=/cluster/data/mm9/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Dog CanFam2
+SEQ2_DIR=/scratch/hg/canFam2/nib
+SEQ2_SMSK=/san/sanvol1/scratch/canFam2/linSpecRep.notInMouse
+SEQ2_LEN=/san/sanvol1/scratch/canFam2/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm9/bed/blastzCanFam2.2007-09-04
+TMPDIR=/scratch/tmp
+'_EOF_'
+    #	<< happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	`pwd`/DEF > blastz.out 2>&1 &
+    #	real    871m24.249s
+    cat fb.mm9.chainCanFam2Link.txt
+    #	848004408 bases of 2620346127 (32.362%) in intersection
+
+    mkdir /cluster/data/canFam2/bed/blastz.mm9.swap
+    cd /cluster/data/canFam2/bed/blastz.mm9.swap
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl \
+	/cluster/data/mm9/bed/blastzCanFam2.2007-09-04/DEF \
+	-verbose=2 -bigClusterHub=pk -chainMinScore=3000 \
+	-chainLinearGap=medium -swap > swap.out 2>&1 &
+    #	real    57m59.126s
+    cat fb.canFam2.chainMm9Link.txt
+    #	832145360 bases of 2384996543 (34.891%) in intersection
+
+    #	need syntenic net for the multiz
+    cd /cluster/data/mm9/bed/blastzCanFam2.2007-09-04
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-syntenicNet -continue=syntenicNet `pwd`/DEF > synNet.out 2>&1 &
+    #	real    19m1.302s
+
+#########################################################################
+# BLASTZ/CHAIN/NET RHEMAC2 (DONE - 2007-09-05 - Hiram)
+    # Won't put this in Conservation -- special request for ancestor recon.
+    ssh kkstore06
+    #	use a screen to control this job
+    screen
+    mkdir /cluster/data/mm9/bed/blastz.rheMac2.2007-09-05
+    cd /cluster/data/mm9/bed/blastz.rheMac2.2007-09-05
+
+    cat << '_EOF_' > DEF
+# Mouse vs. macacque
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET: Mouse Mm9
+SEQ1_DIR=/scratch/data/mm9/nib
+SEQ1_SMSK=/scratch/data/mm9/notInOthers
+SEQ1_LEN=/cluster/data/mm9/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Macacque (rheMac2)
+SEQ2_DIR=/san/sanvol1/scratch/rheMac2/nib
+SEQ2_SMSK=/cluster/bluearc/rheMac2/linSpecRep/notInRodent
+SEQ2_LEN=/cluster/data/rheMac2/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm9/bed/blastz.rheMac2.2007-09-05
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+      -bigClusterHub=kk -chainMinScore=3000 -chainLinearGap=medium \
+      -syntenicNet `pwd`/DEF > do.log 2>&1 &
+    #	real    1017m13.247s
+    # some kk kluster difficulties, fixup and complete manually
+# Completed: 87616 of 87616 jobs
+# CPU time in finished jobs:   26547195s  442453.25m  7374.22h  307.26d  0.842 y
+# IO & Wait Time:               3384143s   56402.38m   940.04h   39.17d  0.107 y
+# Average job time:                 342s       5.69m     0.09h    0.00d
+# Longest finished job:            3159s      52.65m     0.88h    0.04d
+# Submission to last job:         65814s    1096.90m    18.28h    0.76d
+    #	then, continuing
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+      -bigClusterHub=kk -chainMinScore=3000 -chainLinearGap=medium \
+      -continue=cat -syntenicNet `pwd`/DEF > cat.log 2>&1 &
+    #	real    255m52.382s
+    cat fb.mm9.chainRheMac2Link.txt
+    #	998017006 bases of 2620346127 (38.087%) in intersection
+    mkdir /cluster/data/rheMac2/bed/blastz.mm9.swap
+    cd /cluster/data/rheMac2/bed/blastz.mm9.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/mm9/bed/blastz.rheMac2.2007-09-05/DEF \
+	-bigClusterHub=kk -chainMinScore=3000 -chainLinearGap=medium \
+	-swap -syntenicNet > swap.log 2>&1 &
+
+
+#########################################################################
+# BLASTZ/CHAIN/NET Orangutan ponAbe1 (WORKING - 2007-09-05 - Hiram)
+    ssh kkstore01
+    #	use a screen to control this job
+    screen
+    mkdir /cluster/data/mm9/bed/blastzPonAbe1.2007-09-05
+    cd /cluster/data/mm9/bed/blastzPonAbe1.2007-09-05
+
+    #	next time, have SEQ2_CHUNK at 30000000 and SEQ2_LIMIT at 100
+    #	this caused over 500,000 pk jobs, that is too many
+    cat << '_EOF_' > DEF
+# mouse vs orangutan
+BLASTZ_M=50
+
+# TARGET: Mouse Mm9
+SEQ1_DIR=/scratch/data/mm9/mm9.2bit
+SEQ1_LEN=/cluster/data/mm9/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Orangutan ponAbe1
+SEQ2_DIR=/scratch/data/ponAbe1/ponAbe1.2bit
+SEQ2_LEN=/cluster/data/ponAbe1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm9/bed/blastzPonAbe1.2007-09-05
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-stop=load -chainMinScore=3000 \
+	-chainLinearGap=medium -bigClusterHub=pk > do.log 2>&1 &
+    #	real    897m58.156s
+    #	some pk kluster difficulties, fixup and complete manually
+Completed: 511290 of 511290 jobs
+CPU time in finished jobs:   11448015s  190800.24m  3180.00h  132.50d  0.363 y
+IO & Wait Time:               1852197s   30869.96m   514.50h   21.44d  0.059 y
+Average job time:                  26s       0.43m     0.01h    0.00d
+Longest running job:                0s       0.00m     0.00h    0.00d
+Longest finished job:             349s       5.82m     0.10h    0.00d
+Submission to last job:         54771s     912.85m    15.21h    0.63d
+    #	then, continuing
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-continue=cat -stop=load -chainMinScore=3000 \
+	-chainLinearGap=medium -bigClusterHub=pk > cat.log 2>&1 &
+XXX - running 2007-09-06 10:20
+
+#########################################################################
+# BLASTZ/CHAIN/NET Marmoset calJac1 (WORKING - 2007-09-06 - Hiram)
+    ssh kkstore06
+    #	use a screen to control this job
+    screen
+    mkdir /cluster/data/mm9/bed/blastzCalJac1.2007-09-06
+    cd /cluster/data/mm9/bed/blastzCalJac1.2007-09-06
+
+    #	next time, try SEQ2_CHUNK at 40000000, SEQ2_LIMIT at 75
+    #	this created 285,570 kluster jobs, that is too many
+    cat << '_EOF_' > DEF
+# mouse vs marmoset
+BLASTZ_M=50
+
+# TARGET: Mouse Mm9
+SEQ1_DIR=/scratch/data/mm9/mm9.2bit
+SEQ1_LEN=/cluster/data/mm9/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Marmoset calJac1
+SEQ2_DIR=/scratch/data/calJac1/calJac1.2bit
+SEQ2_LEN=/cluster/data/calJac1/chrom.sizes
+SEQ2_CHUNK=30000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm9/bed/blastzCalJac1.2007-09-06
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-stop=load -chainMinScore=3000 \
+	-chainLinearGap=medium -bigClusterHub=pk > do.log 2>&1 &
+    #	real    897m58.156s
+    #	some pk kluster difficulties, fixup and complete manually
+Completed: 511290 of 511290 jobs
+CPU time in finished jobs:   11448015s  190800.24m  3180.00h  132.50d  0.363 y
+IO & Wait Time:               1852197s   30869.96m   514.50h   21.44d  0.059 y
+Average job time:                  26s       0.43m     0.01h    0.00d
+Longest running job:                0s       0.00m     0.00h    0.00d
+Longest finished job:             349s       5.82m     0.10h    0.00d
+Submission to last job:         54771s     912.85m    15.21h    0.63d
+    #	then, continuing
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-continue=cat -stop=load -chainMinScore=3000 \
+	-chainLinearGap=medium -bigClusterHub=pk > cat.log 2>&1 &
+    #	real    669m34.473s
+    cat fb.mm9.chainCalJac1Link.txt
+    #	863961573 bases of 2620346127 (32.971%) in intersection
+
+#########################################################################
+# BLASTZ/CHAIN/NET Fugu fr2 (WORKING - 2007-09-06 - Hiram)
+    ssh kkstore02
+    #	use a screen to control this job
+    screen
+    mkdir /cluster/data/mm9/bed/blastzFr2.2007-09-06
+    cd /cluster/data/mm9/bed/blastzFr2.2007-09-06
+
+    cat << '_EOF_' > DEF
+# mouse vs medaka
+
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: Mouse Mm9
+SEQ1_DIR=/scratch/data/mm9/mm9.2bit
+SEQ1_LEN=/cluster/data/mm9/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Fugu fr2
+#       Align to the scaffolds, results lifed up to chrUn.sdTrf coordinates
+SEQ2_DIR=/san/sanvol1/scratch/fr2/fr2.2bit
+SEQ2_LEN=/san/sanvol1/scratch/fr2/chrom.sizes
+SEQ2_CTGDIR=/san/sanvol1/scratch/fr2/fr2.scaffolds.2bit
+SEQ2_CTGLEN=/san/sanvol1/scratch/fr2/fr2.scaffolds.sizes
+SEQ2_LIFT=/san/sanvol1/scratch/fr2/liftAll.lft
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=30
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm9/bed/blastzFr2.2007-09-06
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl DEF -chainMinScore=5000 \
+	-qRepeats=windowmaskerSdust -chainLinearGap=loose \
+	-bigClusterHub=kk -verbose=2 > do.log 2>&1 &
+    #	real    156m55.151s
+    # fixup broken kluster jobs, complete manually
+# Completed: 70395 of 70395 jobs
+# CPU time in finished jobs:    4339015s   72316.91m  1205.28h   50.22d  0.138 y
+# IO & Wait Time:                486414s    8106.90m   135.12h    5.63d  0.015 y
+# Average job time:                  69s       1.14m     0.02h    0.00d
+# Longest finished job:            1098s      18.30m     0.30h    0.01d
+# Submission to last job:         18352s     305.87m     5.10h    0.21d
+    # and then continuing
+    time nice -n +19 doBlastzChainNet.pl DEF -chainMinScore=5000 \
+	-qRepeats=windowmaskerSdust -chainLinearGap=loose \
+	-continue=cat -bigClusterHub=kk -verbose=2 > cat.log 2>&1 &
+XXX - running 2007-09-06 16:00
+
+#########################################################################
+# BLASTZ/CHAIN/NET Tetraodon tetNig1 (WORKING - 2007-09-06 - Hiram)
+    ssh kkstore01
+    #	use a screen to control this job
+    screen
+    mkdir /cluster/data/mm9/bed/blastzTetNig1.2007-09-06
+    cd /cluster/data/mm9/bed/blastzTetNig1.2007-09-06
+
+    cat << '_EOF_' > DEF
+# mouse vs tetraodon
+
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: Mouse Mm9
+SEQ1_DIR=/scratch/data/mm9/mm9.2bit
+SEQ1_LEN=/cluster/data/mm9/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Tetraodon tetNig1
+#       Align to the scaffolds, results lifed up to chrUn.sdTrf coordinates
+SEQ2_DIR=/san/sanvol1/scratch/tetNig1/tetNig1.sdTrf.2bit
+SEQ2_LEN=/san/sanvol1/scratch/tetNig1/chrom.sizes
+SEQ2_CTGDIR=/san/sanvol1/scratch/tetNig1/tetNig1.randomContigs.sdTrf.2bit
+SEQ2_CTGLEN=/san/sanvol1/scratch/tetNig1/tetNig1.randomContigs.sdTrf.sizes
+SEQ2_LIFT=/san/sanvol1/scratch/tetNig1/tetNig1.randomContigs.lift
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=30
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm9/bed/blastzTetNig1.2007-09-06
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl DEF -chainMinScore=5000 \
+	-qRepeats=windowmaskerSdust -chainLinearGap=loose \
+	-bigClusterHub=kk -verbose=2 > do.log 2>&1 &
+XXX - running 2007-09-06 16:00
+
+#########################################################################
+# BLASTZ/CHAIN/NET Stickleback gasAcu1 (WORKING - 2007-09-06 - Hiram)
+    ssh kkstore01
+    #	use a screen to control this job
+    screen
+    mkdir /cluster/data/mm9/bed/blastzGasAcu1.2007-09-06
+    cd /cluster/data/mm9/bed/blastzGasAcu1.2007-09-06
+
+    cat << '_EOF_' > DEF
+# mouse vs stickleback
+
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: Mouse Mm9
+SEQ1_DIR=/scratch/data/mm9/mm9.2bit
+SEQ1_LEN=/cluster/data/mm9/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: stickleback gasAcu1
+SEQ2_DIR=/san/sanvol1/scratch/gasAcu1/gasAcu1.sdTrf.2bit
+SEQ2_LEN=/san/sanvol1/scratch/gasAcu1/gasAcu1.sdTrf.sizes
+SEQ2_CTGDIR=/san/sanvol1/scratch/gasAcu1/gasAcu1.randomContigs.sdTrf.2bit
+SEQ2_CTGLEN=/san/sanvol1/scratch/gasAcu1/gasAcu1.randomContigs.sdTrf.sizes
+SEQ2_LIFT=/san/sanvol1/scratch/gasAcu1/chrUn.extraCloneGap.lift
+SEQ2_CHUNK=35000000
+SEQ2_LIMIT=30
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm9/bed/blastzGasAcu1.2007-09-06
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl DEF -chainMinScore=5000 \
+	-qRepeats=windowmaskerSdust -chainLinearGap=loose \
+	-bigClusterHub=kk -verbose=2 > do.log 2>&1 &
+XXX - running 2007-09-06 16:00
+
+#########################################################################
+## 4-Way Multiz (DONE - 2007-09-07 - Hiram)
+    ssh hgwdev
+    mkdir /cluster/data/mm9/bed/multiz4way
+    cd /cluster/data/mm9/bed/multiz4way
+
+    ln -s ../multiz30way/mm9.guess.30way.nh ./30way.nh
+
+leave mm9 rn4, canFam2 and hg18
+    /cluster/bin/phast/tree_doctor \
+	--prune panTro2,ponAbe1,rheMac2,calJac1,otoGar1,tupBel1,cavPor2,oryCun1,sorAra1,eriEur1,felCat3,equCab1,bosTau3,dasNov1,loxAfr1,echTel1,monDom4,ornAna1,galGal3,anoCar1,xenTro2,tetNig1,fr2,gasAcu1,oryLat1,danRer4  30way.nh
+
+    # this leaves us with:
+    
+    cat << '_EOF_' > 4way.nh
+((hg18:0.126901,
+	(rn4:0.084383,mm9:0.076274):0.249544):0.019763,canFam2:0.187963);
+'_EOF_'
+    # << happy emacs
+
+    #	Use this specification in the phyloGif tool:
+    #	http://genome.ucsc.edu/cgi-bin/phyloGif
+    #	to obtain a gif image for htdocs/images/phylo/mm9_4way.gif
+
+    /cluster/bin/phast/all_dists 4way.nh > 4way.distances.txt
+    #	Use this output to create the table below
+    grep -y mm9 4way.distances.txt | sort -k3,3n
+#
+#	If you can fill in all the numbers in this table, you are ready for
+#	the multiple alignment procedure
+#
+#                         featureBits chainLink measures
+#                                        chainOryLat1Link   chain    linearGap
+#    distance                      on mm9    on other   minScore
+#  1  0.160657 - rat rn4       (% 65.380) (% xx.xxx)       5000     medium
+#  2  0.452719 - human hg18    (% 38.499) (% 35.201)       3000     medium
+#  3  0.533544 - dog canFam2   (% 32.362) (% 34.891)       3000     medium
+
+    #	using the syntenic nets
+    cd /cluster/data/mm9/bed/multiz4way
+    mkdir mafLinks
+    mkdir mafLinks/rn4
+    cd mafLinks/rn4
+    ln -s ../../../blastzRn4.2007-08-31/mafSynNet/*.maf.gz .
+    mkdir ../hg18
+    cd ../hg18
+    ln -s ../../../blastz.hg18/mafSynNet/*.maf.gz .
+    mkdir ../canFam2
+    cd ../canFam2
+    ln -s ../../../blastz.canFam2/mafSynNet/*.maf.gz .
+
+    #	Copy MAFs to some appropriate NFS server for kluster run
+    mkdir /san/sanvol1/scratch/mm9/multiz4way
+    cd /san/sanvol1/scratch/mm9/multiz4way
+    time nice -n +19 rsync -a --copy-links --progress \
+	/cluster/data/mm9/bed/multiz4way/mafLinks/ .
+    #	1 minute to copy 2.4 Gb
+
+    #	determine what is the newest version of multiz and use that
+    mkdir penn
+    cp -p /cluster/bin/penn/multiz.v11.2007-03-19/multiz-tba/multiz penn
+    cp -p /cluster/bin/penn/multiz.v11.2007-03-19/multiz-tba/maf_project penn
+    cp -p /cluster/bin/penn/multiz.v11.2007-03-19/multiz-tba/autoMZ penn
+
+    # the autoMultiz cluster run
+    ssh pk
+    cd /cluster/data/mm9/bed/multiz4way
+
+    # create species list and stripped down tree for autoMZ
+    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+	4way.nh > tmp.nh
+    echo `cat tmp.nh` > tree-commas.nh
+    echo `cat tree-commas.nh` | sed 's/ //g; s/,/ /g' > tree.nh
+    sed 's/[()]//g; s/,/ /g' tree.nh > species.lst
+
+    mkdir run maf
+    cd run
+
+    #	NOTE: you need to set the db and multiz dirname properly in this script
+    cat > autoMultiz << '_EOF_'
+#!/bin/csh -ef
+set db = mm9
+set c = $1
+set maf = $2
+set binDir = /san/sanvol1/scratch/$db/multiz4way/penn
+set tmp = /scratch/tmp/$db/multiz.$c
+set pairs = /san/sanvol1/scratch/$db/multiz4way
+rm -fr $tmp
+mkdir -p $tmp
+cp ../{tree.nh,species.lst} $tmp
+pushd $tmp
+foreach s (`cat species.lst`)
+    set in = $pairs/$s/$c.maf
+    set out = $db.$s.sing.maf
+    if ($s == $db) then
+	continue
+    endif
+    if (-e $in.gz) then
+	zcat $in.gz > $out
+    else if (-e $in) then
+	cp $in $out
+    else
+	echo "##maf version=1 scoring=autoMZ" > $out
+    endif
+end
+set path = ($binDir $path); rehash
+$binDir/autoMZ + T=$tmp E=$db "`cat tree.nh`" $db.*.sing.maf $c.maf
+popd
+cp $tmp/$c.maf $maf
+rm -fr $tmp
+'_EOF_'
+    # << happy emacs
+    chmod +x autoMultiz
+
+cat  << '_EOF_' > template
+#LOOP
+./autoMultiz $(root1) {check out line+ /cluster/data/mm9/bed/multiz4way/maf/$(root1).maf}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    awk '{print $1}' /cluster/data/mm9/chrom.sizes > chrom.lst
+    gensub2 chrom.lst single template jobList
+    para create jobList
+    # 35 jobs
+    para try ... check ... push ... etc ...
+XXXX - running 2007-09-07 10:11
+# Completed: 35 of 35 jobs
+# CPU time in finished jobs:      27901s     465.02m     7.75h    0.32d  0.001 y
+# IO & Wait Time:                   562s       9.37m     0.16h    0.01d  0.000 y
+# Average job time:                 813s      13.55m     0.23h    0.01d
+# Longest finished job:            2222s      37.03m     0.62h    0.03d
+# Submission to last job:          2222s      37.03m     0.62h    0.03d
+
+    #	combine results into a single file for loading and gbdb reference
+    ssh kkstore06
+    cd /cluster/data/mm9/bed/multiz4way
+    time nice -n +19 catDir maf > multiz4way.maf
+    #	real    2m43.409s
+
+    #	makes a 6.5 Gb file:
+    #	-rw-rw-r--  1 6883356263 Sep  7 11:00 multiz4way.maf
+
+    #	Create per-chrom individual maf files for downloads
+    #	NOT NECESSARY HERE - DONE LATER WITH THE ANNOTATED MAFS
+    ssh kkstore04
+    cd /cluster/data/mm9/bed/multiz4way
+    mkdir mafDownloads
+    time for M in maf/chr*.maf
+    do
+	B=`basename $M`
+	cp -p ${M} mafDownloads/${B}
+	gzip mafDownloads/${B}
+	echo ${B} done
+    done
+    #	real    5m9.273
+
+    #	deliver to downloads *!* NOT NECESSARY HERE - DONE LATER WITH
+    #		THE ANNOTATED MAFS
+    ssh hgwdev
+    ln -s /cluster/data/mm9/bed/multiz4way/mafDownloads \
+	/usr/local/apache/htdocs/goldenPath/mm9/multiz4way
+
+    # Load into database
+    ssh hgwdev
+    cd /cluster/data/mm9/bed/multiz4way
+    mkdir /gbdb/mm9/multiz4way
+    ln -s /cluster/data/mm9/bed/multiz4way/multiz4way.maf \
+	/gbdb/mm9/multiz4way
+    time nice -n +19 hgLoadMaf mm9 multiz4way
+    #	Loaded 5072051 mafs in 1 files from /gbdb/mm9/multiz4way
+    #	real    2m33.680s
+
+    time nice -n +19 hgLoadMafSummary -minSize=10000 -mergeGap=500 \
+	-maxSize=50000 mm9 multiz4waySummary multiz4way.maf
+    #	Created 1330454 summary blocks from 9893113 components
+    #	and 5068764 mafs from multiz4way.maf
+    #	real    3m27.620s
+
+    #	Create tree image for details page
+    #	You can get a better image from the phyloGif tool:
+    #	http://genome.ucsc.edu/cgi-bin/phyloGif
+    # with mm9 on top:
+(((mouse_mm9:0.076274,rat_rn4:0.084383):0.249544,human_hg18:0.126901):0.019763,
+dog_canFam2:0.187963);
 
 #########################################################################
