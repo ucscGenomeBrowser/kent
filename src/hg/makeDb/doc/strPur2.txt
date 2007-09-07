@@ -1,4 +1,4 @@
-# $Id: strPur2.txt,v 1.1 2007/06/14 13:27:03 heather Exp $
+# $Id: strPur2.txt,v 1.2 2007/09/07 18:04:24 hartera Exp $
 # $Source: /projects/compbio/cvsroot/kent/src/hg/makeDb/doc/strPur2.txt,v $
 
 # Strongylocentrus purpuratus -- Spur 2.1 assembly September, 2006
@@ -255,7 +255,7 @@ $ nice ~/kent/src/hg/utils/automation/makeGenomeDb.pl -continue dbDb
 -workhorse kkstore06 ./strPur2.config.ra >> makeGenomeDb.log5 2>&1
 
 ########################################################################################
-# REPEATMASKER (COMLETED 2007/Mar/22 Kord)
+# REPEATMASKER (COMPLETED 2007/Mar/22 Kord)
 
 # verify the species name
 $ /cluster/bluearc/RepeatMasker/util/queryRepeatDatabase.pl -species
@@ -321,7 +321,9 @@ $ nice ~/kent/src/hg/utils/automation/doRepeatMasker.pl -continue cat strPur2
 # Converage
 $ ssh hgwdev
 $ featureBits strPur2 rmsk
-115258247 bases of 810038660 (14.229%) in intersection
+#115258247 bases of 810038660 (14.229%) in intersection
+featureBits strPur2 rmsk simpleRepeat
+#21752322 bases of 810038660 (2.685%) in intersection
 
 
 ########################################################################################
@@ -423,11 +425,11 @@ mysql> select * from blatServers where ( db='strpur2' or db='strpur 2');
 
 ########################################################################################
 # MAKE DOWNLOADABLE / GOLDENPATH FILES (STARTED 2007/MAY/17 Kord)
+# Completed 2007/Aug/20
 $ cd /cluster/data/strPur2
 $ ln -s /cluster/data/strPur2/bed/RepeatMasker.2007-03-22/strPur2.fa.out 
 $ ~/kent/src/hg/utils/automation/makeDownloads.pl strPur2 -verbose 2 > jkStuff/downloads.log &
 
-# *** TODO ***
 #	Edit these files
 #     	/cluster/data/strPur2/goldenPath/database/README.txt
 #     	/cluster/data/strPur2/goldenPath/bigZips/README.txt
@@ -558,6 +560,13 @@ ssh hgwdev
 cd /cluster/data/genbank
 nice ./bin/gbDbLoadStep -drop -initalLoad strPur2
 
+featureBits strPur2 all_mrna
+# 917364 bases of 810038660 (0.113%) in intersection
+featureBits strPur1 all_mrna
+# 941460 bases of 835421305 (0.113%) in intersection
+featureBits strPur2 xenoMrna
+# 9299478 bases of 810038660 (1.148%) in intersection
+
 # Done by Heather: enable daily alignment and update of hgwdev
 cd ~/kent/src/hg/makeDb/genbank
 cvsup
@@ -568,3 +577,749 @@ cvs commit
 make etc-update 
 
 
+########################################################################################
+# QUALITY SCORES 
+# (STARTED 2007/June/15)
+# (COMPLETED 2007/June/15)
+#
+ssh kkstore06 
+cd /cluster/home/kord/strPur2/fixup
+qaToQac ./strPur2.contigs.fa.qual strPur2.contigs.fa.qac
+qacAgpLift strPur2.agp  strPur2.contigs.fa.qac strPur2.contigs.fa.lifted.qac > qacAgpLift.log 2>&1 &
+head qacAgpLift.log 
+# Read 220581 qacs from strPur2.contigs.fa.qac
+# Got 114222 chroms in strPur2.agp
+#    Scaffold3648 size=1000
+#    Scaffold9299 size=1184
+
+mkdir /cluster/data/strPur2/bed/quality
+qacToWig -fixed strPur2.contigs.fa.lifted.qac stdout | wigEncode stdin /cluster/data/strPur2/bed/quality/strPur2.{wig,wib} 2>&1 > qual.wig.log &
+# Made 1 .wig files in stdout
+# Converted stdin, upper limit 90.00, lower limit 0.00
+
+ssh hgwdev
+cd /cluster/data/strPur2/bed/quality
+ln -s `pwd`/strPur2.wib /gbdb/strPur2/wib
+hgLoadWiggle strPur2 quality strPur2.wig
+
+# This error is generated on the test-genome.ucsc.edu browser when the quality
+# track is active:
+# wigSetItemData: can't open file '/gbdb/strPur2/wib//cluster/data/strPur2/bed/quality/strPur2.wib' (No such file or directory)
+#
+
+# Updating the file column in strPur2 with the correct path fixed it:
+ssh hgwdev
+hgsql strPur2
+
+mysql> SELECT file FROM quality WHERE
+file="/gbdb/strPur2/wib//cluster/data/strPur2/bed/quality/strPur2.wib" LIMIT
+10;
++-----------------------------------------------------------------+
+| file                                                            |
++-----------------------------------------------------------------+
+| /gbdb/strPur2/wib//cluster/data/strPur2/bed/quality/strPur2.wib |
+| /gbdb/strPur2/wib//cluster/data/strPur2/bed/quality/strPur2.wib |
+| /gbdb/strPur2/wib//cluster/data/strPur2/bed/quality/strPur2.wib |
+| /gbdb/strPur2/wib//cluster/data/strPur2/bed/quality/strPur2.wib |
+| /gbdb/strPur2/wib//cluster/data/strPur2/bed/quality/strPur2.wib |
+| /gbdb/strPur2/wib//cluster/data/strPur2/bed/quality/strPur2.wib |
+| /gbdb/strPur2/wib//cluster/data/strPur2/bed/quality/strPur2.wib |
+| /gbdb/strPur2/wib//cluster/data/strPur2/bed/quality/strPur2.wib |
+| /gbdb/strPur2/wib//cluster/data/strPur2/bed/quality/strPur2.wib |
+| /gbdb/strPur2/wib//cluster/data/strPur2/bed/quality/strPur2.wib |
++-----------------------------------------------------------------+
+10 rows in set (0.01 sec)
+
+mysql> UPDATE quality
+    -> SET file="/gbdb/strPur2/wib/strPur2.wib" WHERE
+file="/gbdb/strPur2/wib//cluster/data/strPur2/bed/quality/strPur2.wib";
+Query OK, 937749 rows affected (9.19 sec)
+Rows matched: 937749  Changed: 937749  Warnings: 0
+
+mysql> SELECT file FROM quality WHERE
+file="/gbdb/strPur2/wib//cluster/data/strPur2/bed/quality/strPur2.wib" LIMIT
+10;
+Empty set (1.05 sec)
+
+mysql> SELECT file FROM quality WHERE file="/gbdb/strPur2/wib/strPur2.wib"
+LIMIT 10;
++-------------------------------+
+| file                          |
++-------------------------------+
+| /gbdb/strPur2/wib/strPur2.wib |
+| /gbdb/strPur2/wib/strPur2.wib |
+| /gbdb/strPur2/wib/strPur2.wib |
+| /gbdb/strPur2/wib/strPur2.wib |
+| /gbdb/strPur2/wib/strPur2.wib |
+| /gbdb/strPur2/wib/strPur2.wib |
+| /gbdb/strPur2/wib/strPur2.wib |
+| /gbdb/strPur2/wib/strPur2.wib |
+| /gbdb/strPur2/wib/strPur2.wib |
+| /gbdb/strPur2/wib/strPur2.wib |
++-------------------------------+
+10 rows in set (0.00 sec)
+
+###########################################################################
+# GENSCAN 
+# (STARTED 2007/Jun/15 Kord)
+# (COMPLETED 2007/Jun/20 Kord)
+
+ssh hgwdev
+mkdir /cluster/data/strPur2/bed/genscan
+cd /cluster/data/strPur2/bed/genscan
+
+# need to be a member of the genecats group to access this source
+mkdir gtf pep subopt
+cvs co hg3rdParty/genscanlinux
+
+# generate hard-masked sequence
+ssh kkstore06
+cd /cluster/data/strPur2/bed/genscan
+zcat /cluster/data/strPur2/goldenPath/bigZips/strPur2.fa.gz | maskOutFa stdin hard strPur2.hardmask.fa
+
+# split into 2Mb files
+mkdir split
+cd split
+faSplit about ../strPur2.hardmask.fa 2000000 split &
+
+# generate file list and check that no files are completely masked
+# bash syntax
+for f in `find ./split -name "*fa"`; 
+do 
+	egrep '[ACGT]' $f > /dev/null; 
+	if [ $? == 0 ]; then  
+		echo $f >> genome.list
+	fi
+done
+wc -l genome.list 
+# 431 genome.list
+
+# run on the small cluster (kkr1u00-kkr8u00)
+ssh kki
+cd /cluster/data/strPur2/bed/genscan
+cat << '_EOF_' > gsub
+#LOOP
+/cluster/bin/x86_64/gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check out line pep/$(root1).pep} -subopt={check out line subopt/$(root1).bed} -exe=hg3rdParty/genscanlinux/genscan -par=hg3rdParty/genscanlinux/HumanIso.smat -tmp=/tmp -window=2400000
+#ENDLOOP
+'_EOF_'
+
+/parasol/bin/gensub2 genome.list single gsub jobList
+
+para create jobList
+#Checking input files
+#.....................
+#431 jobs written to batch
+
+para try
+#431 jobs in batch
+#0 jobs (including everybody's) in Parasol queue.
+#Checking finished jobs
+#updated job database on disk
+#Pushed Jobs: 10
+
+para check
+#431 jobs in batch
+#10 jobs (including everybody's) in Parasol queue.
+#Checking finished jobs
+#unsubmitted jobs: 421
+#running: 10
+#total jobs in batch: 431
+
+para push
+#431 jobs in batch
+#10 jobs (including everybody's) in Parasol queue.
+#Checking finished jobs
+#.....................
+#updated job database on disk
+#Pushed Jobs: 421
+
+parasol list batches
+#user     run   wait   done crash pri max batch
+#kord       12    419      0     0  10  -1 /cluster/store4/strPur2/bed/genscan/
+
+para time
+#431 jobs in batch
+#0 jobs (including everybody's) in Parasol queue.
+#Checking finished jobs
+#Completed: 431 of 431 jobs
+#CPU time in finished jobs:      20032s     333.87m     5.56h    0.23d  0.001 y
+#IO & Wait Time:                  1963s      32.72m     0.55h    0.02d  0.000 y
+#Average job time:                  51s       0.85m     0.01h    0.00d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:              77s       1.28m     0.02h    0.00d
+#Submission to last job:          1870s      31.17m     0.52h    0.02d
+
+# Concatenate
+ssh kkstore06
+cd /cluster/data/strPur2/bed/genscan
+cat gtf/*.gtf > genscan.gtf
+cat pep/*.pep > genscan.pep
+cat subopt/*.bed > genscanSubopt.bed
+
+# Load into the database
+ssh hgwdev
+cd /cluster/data/strPur2/bed/genscan
+ldHgGene -gtf strPur2 genscan genscan.gtf
+# Reading genscan.gtf
+# Read 69740 transcripts in 295620 lines in 1 files
+#  69740 groups 37568 seqs 1 sources 1 feature types
+# 69740 gene predictions
+
+hgPepPred strPur2 generic genscanPep genscan.pep
+hgLoadBed strPur2 genscanSubopt genscanSubopt.bed
+
+featureBits strPur2 genscan
+# 67907435 bases of 810038660 (8.383%) in intersection
+featureBits strPur2 genscanSubopt
+# 42880032 bases of 810038660 (5.294%) in intersection
+# Should be zero intersection with rmsk
+featureBits strPur2 genscan rmsk
+# 3050 bases of 810038660 (0.000%) in intersection
+
+
+
+
+###########################################################################
+# BLASTZ/CHAIN/NET HG18
+# Started 2007/Aug/14 kord
+# Completed 2007/Aug/15 kord
+ssh hgwdev
+cd /cluster/data/strPur2/bed
+mkdir blastz.hg18.2007-08-15
+ln -s blastz.hg18.2007-08-15 blastz.hg18
+cd blastz.hg18
+cp /cluster/data/strPur2/{strPur2.2bit,chrom.sizes} .
+cp /san/sanVol1/scratch/strPur1/blastz.hg18/HoxD55.q .
+
+    cat << "_EOF_" > DEF
+# Sea urchin vs. Human
+
+export
+PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/cluster/home/angie/schwartzbin:/parasol/bin
+
+BASE=/cluster/data/strPur2/bed/blastz.hg18.2007-08-15
+
+BLASTZ=blastz.v7.x86_64
+# settings from strPur1
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_Q=$BASE/HoxD55.q
+BLASTZ_ABRIDGE_REPEATS=0
+
+# TARGET - Human hg18
+SEQ1_DIR=/scratch/hg/hg18/nib
+SEQ1_LEN=/scratch/hg/hg18/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY - Sea urchin
+SEQ2_DIR=/san/sanVol1/scratch/strPur2/strPur2.2bit
+SEQ2_LEN=/san/sanVol1/scratch/strPur2/chrom.sizes
+SEQ2_LIMIT=5000
+SEQ2_CHUNK=5000000
+SEQ2_LAP=0
+
+TMPDIR=/scratch/tmp
+_EOF_
+
+ssh hgwdev
+cd /cluster/data/strPur2/bed/blastz.hg18
+screen -L
+doBlastzChainNet.pl -bigCluster pk -smallCluster pk DEF >run.log 2>&1 &
+tail -f run.log
+cd run.blastz
+parasol list batches
+#user     run   wait   done crash pri max batch
+#kord      394  64297    514     0  10  -1
+#/cluster/store4/strPur2/bed/blastz.hg18.2007-08-15/run.blastz/
+para check
+#65205 jobs in batch
+#64397 jobs (including everybody's) in Parasol queue.
+#Checking finished jobs
+#................
+#queued and waiting: 64002
+#running: 394
+#ranOk: 809
+#total jobs in batch: 65205
+
+para time
+# 65205 jobs in batch
+# 56 jobs (including everybody's) in Parasol queue.
+# Checking finished jobs
+# Completed: 65205 of 65205 jobs
+# CPU time in finished jobs:    6291713s  104861.88m  1747.70h   72.82d  0.200 y
+# IO & Wait Time:                620160s   10336.00m   172.27h    7.18d  0.020 y
+# Average job time:                 106s       1.77m     0.03h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            1458s      24.30m     0.41h    0.02d
+# Submission to last job:         18746s     312.43m     5.21h    0.22d
+
+cat fb.hg18.chainStrPur2Link.txt
+#110298296 bases of 2881515245 (3.828%) in intersection
+
+featureBits -chrom=chr1 hg18 chainStrPur2Link
+#7948016 bases of 224999719 (3.532%) in intersection
+
+ssh hgwdev
+cd /cluster/data/strPur2/bed/blastz.hg18.2007-08-15
+cp -r axtChain/* /cluster/data/hg18/bed/blastz.strPur2/axtChain/
+doRecipBest.pl hg18 strPur2 >rbest.log 2>&1 &
+
+ssh hgwdev
+cd /cluster/store4/strPur2/bed
+mkdir /cluster/store4/strPur2/bed/blastz.hg18.2007-08-15.swap
+cd /cluster/store4/strPur2/bed/blastz.hg18.2007-08-15.swap
+doBlastzChainNet.pl /cluster/store4/strPur2/bed/blastz.hg18.2007-08-15/DEF -swap >swap.log 2>&1 &
+
+# fix symbolic links 
+cd /usr/local/apache/htdocs/goldenPath/currentGenomes/Homo_sapiens/vsStrPur2/reciprocalBest/
+ln -s /cluster/data/hg18/bed/blastz.strPur2/axtRBestNet/*.axt.gz axtRBestNet/
+
+cd /cluster/home/kord/kent/src/hg/makeDb/trackDb
+make update DB=strPur2
+
+###########################################################################
+# BLASTZ/CHAIN/NET Ciona Intestinalis (ci2) 
+# Started 2007/Aug/20 kord
+ssh hgwdev
+cd /cluster/data/strPur2/bed
+mkdir blastz.ci2.2007-08-27
+ln -s blastz.ci2.2007-08-27 blastz.ci2            
+cd blastz.ci2
+
+    cat << "_EOF_" > DEF
+# S. purpuratus vs. C. intestinalis
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+BLASTZ_ABRIDGE_REPEATS=0
+
+BASE=/cluster/data/strPur2/bed/blastz.ci2
+
+# TARGET/REFERENCE - Sea urchin
+SEQ1_DIR=/san/sanvol1/scratch/strPur2/strPur2.2bit
+SEQ1_LEN=/san/sanvol1/scratch/strPur2/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY - Sea squirt
+SEQ2_DIR=/san/sanvol1/scratch/ci2/ci2.2bit
+SEQ2_LEN=/cluster/data/ci2/chrom.sizes
+SEQ2_CHUNK=5000000
+SEQ2_LAP=10000
+
+TMPDIR=/scratch/tmp
+
+_EOF_
+
+ssh hgwdev
+cd /cluster/data/strPur2/bed/blastz.ci2
+screen
+# start screen log to screen.log
+<C-a H>
+nohup doBlastzChainNet.pl -bigCluster pk -smallCluster pk DEF >run.log 2>&1
+tail -f run.log
+
+ssh pk 'parasol list batches'
+#user     run   wait   done crash pri max batch
+...
+kord      379 133901 155205    16  10  -1 /cluster/store4/strPur2/bed/blastz.ci2.2007-08-25/run.blastz/
+
+nohup doBlastzChainNet.pl -continue load -bigCluster pk -smallCluster pk DEF >run2.log 2>&1
+
+ssh pk 'cd /cluster/store4/strPur2/bed/blastz.ci2/run.blastz;para time'
+# 289484 jobs in batch
+# 6 jobs (including everybody's) in Parasol queue.
+# Checking finished jobs
+# Completed: 289484 of 289484 jobs
+# CPU time in finished jobs:   26465295s  441088.24m  7351.47h  306.31d  0.839 y
+# IO & Wait Time:               2333019s   38883.66m   648.06h   27.00d  0.074 y
+# Average job time:                  99s       1.66m     0.03h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            6847s     114.12m     1.90h    0.08d
+# Submission to last job:         75148s    1252.47m    20.87h    0.87d
+
+# Doesn't look too good...
+cat fb.strPur2.chainCi2Link.txt
+# 0 bases of 810038660 (0.000%) in intersection
+
+cd /cluster/home/kord/kent/src/hg/makeDb/trackDb
+vi urchin/strPur2/trackDb.ra
+make update DB=strPur2
+
+# trying hg18 v. strPur2 settings
+cd /cluster/data/strPur2/bed
+mkdir blastz.ci2.2007-08-28
+rm blastz.ci2
+ln -s blastz.ci2.2007-08-28 blastz.ci2
+cd blastz.ci2
+
+    cat << "_EOF_" > DEF
+# using hg18 v. strPur2 settings
+# S. purpuratus vs. C. intestinalis
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+BLASTZ_ABRIDGE_REPEATS=0
+
+BASE=/cluster/data/strPur2/bed/blastz.ci2
+
+# TARGET/REFERENCE - Sea urchin
+SEQ1_DIR=/san/sanvol1/scratch/strPur2/strPur2.2bit
+SEQ1_LEN=/san/sanvol1/scratch/strPur2/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY - Sea squirt
+SEQ2_DIR=/san/sanvol1/scratch/ci2/ci2.2bit
+SEQ2_LEN=/cluster/data/ci2/chrom.sizes
+SEQ2_LIMIT=5000
+SEQ2_CHUNK=5000000
+SEQ2_LAP=0
+
+TMPDIR=/scratch/tmp
+
+_EOF_
+
+ssh hgwdev
+cd /cluster/data/strPur2/bed/blastz.ci2
+screen
+# start screen log to screen.log
+<C-a H>
+nohup doBlastzChainNet.pl -bigCluster pk -smallCluster pk DEF >run.log 2>&1 &
+tail -f run.log
+# detach screen
+<C-a C-d>
+
+date; ssh pk 'parasol list batches'
+# Tue Aug 28 19:16:14 PDT 2007
+# user     run   wait   done crash pri max batch
+# ...
+# kord      386 159876     52     0  10  -1 /cluster/store4/strPur2/bed/blastz.ci2.2007-08-28/run.blastz/
+
+#CPU time in finished jobs:   25269725s  421162.09m  7019.37h  292.47d  0.801 y
+#IO & Wait Time:                986070s   16434.50m   273.91h   11.41d  0.031 y
+#Average job time:                 164s       2.73m     0.05h    0.00d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:             376s       6.27m     0.10h    0.00d
+#Submission to last job:         67884s    1131.40m    18.86h    0.79d
+
+# an error occurred:
+#HgStepManager: executing step 'chainMerge' Wed Aug 29 14:14:24 2007.
+# ssh -x kolossus nice 'chainMergeSort
+# /cluster/data/strPur2/bed/blastz.ci2/axtChain/run/chain/*.chain | nice gzip
+# -c > /cluster/data/strPur2/bed/blastz.ci2/axtChain/strPur2.ci2.all.chain.gz'
+#bash: /bin/nice: Argument list too long
+
+# so, trying to run the command by hand:
+ssh kolossus
+cd /cluster/data/strPur2/bed/blastz.ci2/axtChain/
+screen
+# start screen log
+<C-a> H
+nice chainMergeSort /cluster/data/strPur2/bed/blastz.ci2/axtChain/run/chain/*.chain | \
+nice gzip -c > /cluster/data/strPur2/bed/blastz.ci2/axtChain/strPur2.ci2.all.chain.gz
+#bash: /bin/nice: Argument list too long
+# trying it without nice
+chainMergeSort /cluster/data/strPur2/bed/blastz.ci2/axtChain/run/chain/*.chain | \
+nice gzip -c > /cluster/data/strPur2/bed/blastz.ci2/axtChain/strPur2.ci2.all.chain.gz
+# bash: /cluster/bin/x86_64/chainMergeSort: Argument list too long
+
+# trying it with tcsh rather then bash
+nice chainMergeSort /cluster/data/strPur2/bed/blastz.ci2/axtChain/run/chain/*.chain | \
+nice gzip -c > /cluster/data/strPur2/bed/blastz.ci2/axtChain/strPur2.ci2.all.chain.gz
+# /cluster/bin/x86_64/chainMergeSort: Argument list too long.
+
+# Running from a list of files instead
+find /cluster/data/strPur2/bed/blastz.ci2/axtChain/run/chain -name "*.chain" | wc -l
+# 3817
+find /cluster/data/strPur2/bed/blastz.ci2/axtChain/run/chain -name "*.chain" | sort > chain.lst
+nice chainMergeSort -inputList=/cluster/data/strPur2/bed/blastz.ci2/axtChain/chain.lst | \
+nice gzip -c > /cluster/data/strPur2/bed/blastz.ci2/axtChain/strPur2.ci2.all.chain.gz
+
+# clearing out previous files
+mv /cluster/data/strPur2/bed/blastz.ci2/axtNet /cluster/data/strPur2/bed/blastz.ci2/axtNet.old
+mv /cluster/data/strPur2/bed/blastz.ci2/axtChain/strPur2.ci2.net.gz /cluster/data/strPur2/bed/blastz.ci2/axtChain/strPur2.ci2.net.gz.old
+mv /cluster/data/strPur2/bed/blastz.ci2/mafNet /cluster/data/strPur2/bed/blastz.ci2/mafNet.old
+mv /cluster/data/strPur2/bed/blastz.ci2/axtChain/noClass.net /cluster/data/strPur2/bed/blastz.ci2/axtChain/noClass.net.old
+
+# continuing with the net step
+nohup doBlastzChainNet.pl -continue net -bigCluster pk -smallCluster pk DEF
+>run4.log 2>&1
+
+tail -f run4.log
+# download failed
+#mkdir /usr/local/apache/htdocs/goldenPath/strPur2/vsCi2
+#mkdir: cannot create directory
+# `/usr/local/apache/htdocs/goldenPath/strPur2/vsCi2': File exists
+#Command failed:
+#ssh -x hgwdev nice
+#/cluster/data/strPur2/bed/blastz.ci2/axtChain/installDownloads.csh
+
+nohup doBlastzChainNet.pl -continue download -bigCluster pk -smallCluster pk DEF >run6.log 2>&1
+
+cd /cluster/home/kord/kent/src/hg/makeDb/trackDb
+make update DB=strPur2
+
+# check for the tables
+hgsql strPur2
+> show tables;
+#| chainCi2                   |
+#| chainCi2Link               |
+#...
+#| netCi2                     |
+#
+
+cat fb.strPur2.chainCi2Link.txt
+# 40755914 bases of 810038660 (5.031%) in intersection
+
+
+###########################################################################
+# HUMAN (hg18) PROTEINS TRACK
+# Started 2007/Aug/24 kord
+# Completed 2007/Sep/07
+
+ssh kkstore06
+bash # if not already in bash
+
+# split up the genome
+mkdir /cluster/data/strPur2/blastDb
+cd /cluster/data/strPur2
+# From makeGenomeDb settings
+# fastaFiles /cluster/data/strPur2/fixup/strPur2.contigs-AGPlist.fa.gz
+zcat fixup/strPur2.contigs-AGPlist.fa.gz > temp.fa
+faSplit sequence temp.fa 500 blastDb/
+rm temp.fa
+cd blastDb
+# create blast databases
+for i in *.fa
+do 
+	/cluster/bluearc/blast229/formatdb -i $i -p F
+done
+rm *.fa
+
+# copy these to the scratch
+mkdir -p /san/sanvol1/scratch/strPur2/blastDb
+cd /cluster/data/strPur2/blastDb
+for i in nhr nin nsq;
+do
+	echo $i
+	cp *.$i /san/sanvol1/scratch/strPur2/blastDb
+done
+
+mkdir -p /cluster/data/strPur2/bed/tblastn.hg18KG
+cd  /cluster/data/strPur2/bed/tblastn.hg18KG
+echo /san/sanvol1/scratch/strPur2/blastDb/*.nsq | xargs ls -1S | \
+sed "s/\.nsq//" > query.lst
+wc -l query.lst
+# 497 query.lst
+
+# for 50,000 jobs (per braney) and 498 queries we need to split at N lines
+calc `wc /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl | \
+awk "{print \\\$1}"`/\(50000/`wc query.lst | \
+awk "{print \\\$1}"`\)
+# 36727/(50000/497) = 365.066380
+
+# split hg18KG.psl in to files of 365 lines
+mkdir -p /cluster/bluearc/strPur2/bed/tblastn.hg18KG/kgfa
+split -l 365 /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl \
+/cluster/bluearc/strPur2/bed/tblastn.hg18KG/kgfa/kg
+ln -s /cluster/bluearc/strPur2/bed/tblastn.hg18KG/kgfa kgfa
+cd kgfa
+for i in *; do
+	nice pslxToFa $i $i.fa;
+	rm $i;
+done
+cd ..
+
+# create a directory for each hg18KG file
+ls -1S kgfa/*.fa > kg.lst
+mkdir -p /cluster/bluearc/strPur2/bed/tblastn.hg18KG/blastOut
+ln -s /cluster/bluearc/strPur2/bed/tblastn.hg18KG/blastOut
+for i in `cat kg.lst`;do
+	mkdir blastOut/`basename $i .fa`
+done
+
+tcsh
+cd /cluster/data/strPur2/bed/tblastn.hg18KG/
+cat << '_EOF_' > blastGsub
+#LOOP
+blastSome $(path1) {check in line $(path2)} {check out exists blastOut/$(root2)/q.$(root1).psl }
+#ENDLOOP
+_EOF_
+
+# blastall alignment matrix set based on max. intron size. 
+# From Science 2006 Vol 314 p941-952 : 
+# "The average gene length was 7.7kb with and average primary transcript 
+# length of 8.9kb. A broad distribution of all exon lengths peaked at around 
+# 100 to 115 nucleotides, whereas that for introns at around 750 nucleotides."
+# BLOSUM80 was used for strPur1
+# BLOSUM62 is recommended on the NCBI blast man page for queries >80:
+# http://www.ncbi.nlm.nih.gov/blast/html/sub_matrix.html
+
+# use the same blastSome as felCat3
+# replace BLOSUM80 with BLOSUM62
+cat /cluster/data/felCat3/bed/tblastn.hg18KG/blastSome | sed 's/BLOSUM80/BLOSUM62/' > blastSome
+chmod +x blastSome
+
+gensub2 query.lst kg.lst blastGsub blastSpec
+exit # back to bash
+
+ssh pk
+cd /cluster/data/strPur2/bed/tblastn.hg18KG/
+para create blastSpec
+# 50197 jobs written to batch
+para try
+para check
+
+parasol list batches
+# user     run   wait   done crash pri max batch
+# adk         4      0      8    18  10  -1 /san/sanvol1/scratch/adk/hmm/release_0.5/4state/
+# adk         8      0     10    11  10  -1 /san/sanvol1/scratch/adk/hmm/release_0.5/5state/
+# kord      370  42310 246804    22  10  -1 /cluster/store4/strPur2/bed/blastz.ci2.2007-08-25/run.blastz/
+# kord       10      0      0     0  10  -1 /cluster/store4/strPur2/bed/tblastn.hg18KG/
+
+para time
+#50197 jobs in batch
+#41285 jobs (including everybody's) in Parasol queue.
+#Checking finished jobs
+#Completed: 10 of 50197 jobs
+#CPU time in finished jobs:       2691s      44.84m     0.75h    0.03d  0.000 y
+#IO & Wait Time:                   103s       1.72m     0.03h    0.00d  0.000 y
+#Average job time:                 279s       4.66m     0.08h    0.00d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:             311s       5.18m     0.09h    0.00d
+#Submission to last job:           311s       5.18m     0.09h    0.00d
+
+para push
+parasol list batches
+#user     run   wait   done crash pri max batch
+...
+kord      101 50086     10     0  10  -1 /cluster/store4/strPur2/bed/tblastn.hg18KG/
+...
+
+para time
+#50197 jobs in batch
+#0 jobs (including everybody's) in Parasol queue.
+#Checking finished jobs
+#Completed: 50197 of 50197 jobs
+#CPU time in finished jobs:    7606393s  126773.21m  2112.89h   88.04d  0.241 y
+#IO & Wait Time:                352189s    5869.82m    97.83h    4.08d  0.011 y
+#Average job time:                 159s       2.64m     0.04h    0.00d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:             356s       5.93m     0.10h    0.00d
+#Submission to last job:        741350s   12355.83m   205.93h    8.58d
+
+ls -l error.log 
+#-rw-rw-r--  1 kord protein 0 Sep  4 12:33 error.log
+
+ssh kkstore06
+cd /cluster/data/strPur2/bed/tblastn.hg18KG
+mkdir chainRun
+cd chainRun
+tcsh
+cat << '_EOF_' > chainGsub
+#LOOP
+chainOne $(path1)
+#ENDLOOP
+'_EOF_'
+
+cat << '_EOF_' > chainOne
+(cd $1; cat q.*.psl | simpleChain -prot -outPsl -maxGap=75000 stdin /cluster/bluearc/strPur2/bed/tblastn.hg18KG/blastOut/c.`basename $1`.psl)
+'_EOF_'
+
+exit
+chmod +x chainOne
+ls -1dS /cluster/bluearc/strPur2/bed/tblastn.hg18KG/blastOut/kg?? > chain.lst
+gensub2 chain.lst single chainGsub chainSpec
+
+# do the cluster run for chaining
+ssh kk
+cd /cluster/data/strPur2/bed/tblastn.hg18KG/chainRun/
+para create chainSpec
+#Checking input files
+#101 jobs written to batch
+para maxNode 30
+#Told hub to set maxNode 30
+para try
+#101 jobs in batch
+#0 jobs (including everybody's) in Parasol queue.
+#Checking finished jobs
+#updated job database on disk
+#Pushed Jobs: 10
+
+parasol list batches
+#user     run   wait   done crash pri max batch
+#kord       10      0      0    10  10  30 /cluster/store4/strPur2/bed/tblastn.hg18KG/chainRun/
+
+ssh pk
+para push
+parasol list batches
+#user     run   wait   done crash pri max batch
+#kord       24     58      0     0  10  -1 /cluster/store4/strPur2/bed/tblastn.hg18KG/chainRun/
+
+ssh kkstore06
+cd /cluster/data/strPur2/bed/tblastn.hg18KG/blastOut
+bash # if using another shell
+for i in kg??
+ do
+       cat c.$i.psl | awk "(\$13 - \$12)/\$11 > 0.6 {print}" > c60.$i.psl
+       sort -rn c60.$i.psl | pslUniq stdin u.$i.psl
+       awk "((\$1 / \$11) ) > 0.60 { print   }" c60.$i.psl > m60.$i.psl
+       echo $i
+done
+sort -T /tmp -k 14,14 -k 16,16n -k 17,17n u.*.psl m60* | \
+uniq > /cluster/data/strPur2/bed/tblastn.hg18KG/blastHg18KG.psl
+
+# the annotation is with the genbank accession rather then Scaffold#
+head -2 blastHg18KG.psl 
+#58      50      0       0       0       0       1       3       ++ BC031427        271 33      212     AAGJ02000008    10343   4311    8474    5 16,14,28,26,24, 33,49,67,151,188 ,       4311,4362,6950,8273,8402,
+#58      50      0       0       0       0       1       3       ++ NM_012399       270 33      212     AAGJ02000008    10343   4311    8474    5 16,14,28,26,24, 33,49,67,151,188 ,       4311,4362,6950,8273,8402,
+
+# build the hash
+cd /cluster/data/strPur2/fixup
+egrep W strPur2.agp | awk '{print $6 "\t" $1}' > strPur2.agp.hash
+
+# replace the genbank accession with the Scaffold#
+ssh kolossus
+cd /cluster/data/strPur2/bed/tblastn.hg18KG/
+mv blastHg18KG.psl blastHg18KG.psl.gb
+nice /cluster/home/kord/bin/replaceStringWithHash.pl \
+/cluster/data/strPur2/fixup/strPur2.agp.hash blastHg18KG.psl.gb > blastHg18KG.psl
+
+# verify the replace didn't mess up any other fields and was complete
+cat blastHg18KG.psl.gb | sed 's/AAGJ[0-9]*//g'  > blastHg18KG.psl.outg 
+cat blastHg18KG.psl | sed 's/Scaffold[0-9]*//g'  > blastHg18KG.psl.outs
+diff -s -q blastHg18KG.psl.outs blastHg18KG.psl.outg 
+# Files blastHg18KG.psl.outs and blastHg18KG.psl.outg are identical
+
+pslCheck blastHg18KG.psl 
+#checked: 20636 failed: 0 errors: 0
+
+ssh hgwdev
+cd /cluster/data/strPur2/bed/tblastn.hg18KG/
+hgLoadPsl strPur2 blastHg18KG.psl Processing blastHg18KG.psl
+
+nice featureBits strPur2 refGene:cds blastHg18KG -enrichment
+#refGene:cds 0.070%, blastHg18KG 0.706%, both 0.001%, cover 1.71%, enrich 2.43x
+
+nice featureBits strPur2 genscan:cds blastHg18KG -enrichment
+#genscan:cds 8.383%, blastHg18KG 0.706%, both 0.117%, cover 1.39%, enrich 1.97x
+
+cd kent/src/hg/makeDb/trackDb
+make update DBS=strPur2
+
+ssh kkstore06
+rm -rf /cluster/data/strPur2/bed/tblastn.hg18KG/blastOut
+rm -rf /cluster/bluarc/strPur2/bed/tblastn.hg18KG/blastOut
+
+
+
+#####################################################################
+#####################################################################
