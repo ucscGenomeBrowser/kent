@@ -4,7 +4,7 @@
 #include "dystring.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: newProg.c,v 1.23 2007/08/30 00:55:56 kent Exp $";
+static char const rcsid[] = "$Id: newProg.c,v 1.24 2007/09/07 18:17:35 kent Exp $";
 
 boolean jkhgap = FALSE;
 boolean cgi = FALSE;
@@ -68,6 +68,7 @@ fprintf(f,
 "int main(int argc, char *argv[])\n"
 "/* Process command line. */\n"
 "{\n"
+"cgiSpoof(&argc, argv);\n"
 "cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);\n"
 "return 0;\n"
 "}\n"
@@ -140,7 +141,7 @@ if (cgi)
 fprintf(f, "\n");
 if (cvs)
     {
-    fprintf(f, "static char const rcsid[] = \"$Id: newProg.c,v 1.23 2007/08/30 00:55:56 kent Exp $\";\n");
+    fprintf(f, "static char const rcsid[] = \"$Id: newProg.c,v 1.24 2007/09/07 18:17:35 kent Exp $\";\n");
     fprintf(f, "\n");
     }
 
