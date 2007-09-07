@@ -18,7 +18,9 @@
 #include "cheapcgi.h"
 #include "asParse.h"
 
-static char const rcsid[] = "$Id: autoSql.c,v 1.31 2007/02/11 20:47:55 kent Exp $";
+static char const rcsid[] = "$Id: autoSql.c,v 1.32 2007/09/07 17:30:01 fanhsu Exp $";
+
+boolean withNull = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -27,11 +29,15 @@ errAbort("autoSql - create SQL and C code for permanently storing\n"
          "a structure in database and loading it back into memory\n"
 	 "based on a specification file\n"
 	 "usage:\n"
-	 "    autoSql specFile outRoot {optional: -dbLink} \n"
+	 "    autoSql specFile outRoot {optional: -dbLink -withNull} \n"
 	 "This will create outRoot.sql outRoot.c and outRoot.h based\n"
 	 "on the contents of specFile. The -dbLink flag optionally\n"
-	 "generates code to execute queries and updates of the table.\n");
+	 "generates code to execute queries and updates of the table.\n"
+	 "The -withNull flag optionally generates code and .sql to \n"
+	 "enable applications to accept and load data into objects \n"
+	 "with potential 'missing data' (NULL in SQL) situations.\n");
 }
+
 
 void sqlSymDef(struct asColumn *col, FILE *f)
 /* print symbolic column definition for sql */
@@ -44,7 +50,14 @@ for (val = col->values; val != NULL; val = val->next)
     if (val->next != NULL)
         fputs(", ", f);
     }
-fprintf(f, ") not null");
+if (withNull)
+    {
+    fprintf(f, ") ");
+    }
+else
+    {
+    fprintf(f, ") not null");
+    }
 }
 
 void sqlColumn(struct asColumn *col, FILE *f)
@@ -52,14 +65,30 @@ void sqlColumn(struct asColumn *col, FILE *f)
 {
 struct asTypeInfo *lt = col->lowType;
 fprintf(f, "    %s ", col->name);
-if ((lt->type == t_enum) || (lt->type == t_set))
-    sqlSymDef(col, f);
-else if (col->isList || col->isArray)
-    fprintf(f, "longblob not null");
-else if (lt->type == t_char)
-    fprintf(f, "char(%d) not null", col->fixedSize ? col->fixedSize : 1);
+
+if (!withNull)
+    {
+    if ((lt->type == t_enum) || (lt->type == t_set))
+    	sqlSymDef(col, f);
+    else if (col->isList || col->isArray)
+    	fprintf(f, "longblob not null");
+    else if (lt->type == t_char)
+    	fprintf(f, "char(%d) not null", col->fixedSize ? col->fixedSize : 1);
+    else
+    	fprintf(f, "%s not null", lt->sqlName);
+    }
 else
-    fprintf(f, "%s not null", lt->sqlName);
+    {
+    if ((lt->type == t_enum) || (lt->type == t_set))
+    	sqlSymDef(col, f);
+    else if (col->isList || col->isArray)
+    	fprintf(f, "longblob");
+    else if (lt->type == t_char)
+    	fprintf(f, "char(%d)", col->fixedSize ? col->fixedSize : 1);
+    else
+    	fprintf(f, "%s", lt->sqlName);
+    }
+
 fputc(',', f);
 fprintf(f, "\t# %s\n", col->comment);
 }
@@ -160,8 +189,20 @@ void cOtherColumn(struct asColumn *col, FILE *f)
 /* Print out other types of column in C. */
 {
 fprintf(f, "    %s", col->lowType->cName);
-if (!col->lowType->stringy)
-    fputc(' ',f);
+if (!withNull)
+    {
+    if (!col->lowType->stringy)
+    	fputc(' ',f);
+    }
+else
+    {
+    if (!col->lowType->stringy)
+	{
+    	fputc(' ',f);
+    	fputc('*',f);
+	}
+    }
+
 if (col->isList && !col->fixedSize)
     fputc('*', f);
 fprintf(f, "%s", col->name);
@@ -245,12 +286,33 @@ if (obType != NULL)
 	}
     }
 else if ((lt->type == t_enum) || (lt->type == t_set))
-    fprintf(f, "%sret->%s = sql%sComma(&s, values_%s, &valhash_%s);\n", indent,
+    {
+    if (!withNull)
+	{
+    	fprintf(f, "%sret->%s = sql%sComma(&s, values_%s, &valhash_%s);\n", indent,
             col->name, lt->nummyName,  col->name,  col->name);
+    	}
+    else
+	{
+    	fprintf(f, "%sret->%s = needMem(sizeof(*(ret->%s)));\n", indent, col->name, col->name);
+    	fprintf(f, "%s*(ret->%s) = sql%sComma(&s, values_%s, &valhash_%s);\n", indent,
+            col->name, lt->nummyName,  col->name,  col->name);
+    	}
+    }
 else if (lt->stringy)
     fprintf(f, "%sret->%s%s = sqlStringComma(&s);\n", indent, col->name, arrayRef);
 else if (lt->isUnsigned)
-    fprintf(f, "%sret->%s%s = sqlUnsignedComma(&s);\n", indent, col->name, arrayRef);
+    {
+    if (!withNull)
+	{
+    	fprintf(f, "%sret->%s%s = sqlUnsignedComma(&s);\n", indent, col->name, arrayRef);
+    	}
+    else
+	{
+    	fprintf(f, "%sret->%s = needMem(sizeof(unsigned));\n", indent, col->name);
+    	fprintf(f, "%s*(ret->%s%s) = sqlUnsignedComma(&s);\n", indent, col->name, arrayRef);
+    	}
+    }
 else if (lt->type == t_char)
     {
     if (col->fixedSize > 0)
@@ -264,7 +326,17 @@ else if (lt->type == t_char)
 		indent, col->name, col->name);
     }
 else
-    fprintf(f, "%sret->%s%s = sql%sComma(&s);\n", indent, col->name, arrayRef, lt->nummyName);
+    {
+    if (!withNull)
+	{
+    	fprintf(f, "%sret->%s%s = sql%sComma(&s);\n", indent, col->name, arrayRef, lt->nummyName);
+    	}
+    else
+	{
+    	fprintf(f, "%sret->%s = needMem(sizeof(*(ret->%s)));\n", indent, col->name, col->name);
+    	fprintf(f, "%s*(ret->%s%s) = sql%sComma(&s);\n", indent, col->name, arrayRef, lt->nummyName);
+	}
+    }
 }
 
 
@@ -358,7 +430,23 @@ if (col->isSizeLink == isSizeLink)
 	switch (type)
 	    {
 	    case t_float:
-		fprintf(f, "ret->%s = sqlFloat(row[%d]);\n", col->name, colIx);
+		if (!withNull)
+		    {
+		    fprintf(f, "ret->%s = sqlFloat(row[%d]);\n", col->name, colIx);
+		    }
+		else
+		    {
+		    fprintf(f, "if (row[%d] != NULL)\n", colIx);
+		    fprintf(f, "    {\n");
+		    fprintf(f, "    ret->%s = needMem(sizeof(float));\n", col->name);
+		    fprintf(f, "    *(ret->%s) = sqlFloat(row[%d]);\n", col->name, colIx);
+		    fprintf(f, "    }\n");
+		    fprintf(f, "else\n");
+		    fprintf(f, "    {\n");
+		    fprintf(f, "    ret->%s = NULL;\n", col->name);
+		    fprintf(f, "    }\n");
+		    }
+
 		break;
 	    case t_double:
 		fprintf(f, "ret->%s = sqlDouble(row[%d]);\n", col->name, colIx);
@@ -405,8 +493,25 @@ if (col->isSizeLink == isSizeLink)
 		}
 	    default:
 	        {
-		fprintf(f, "ret->%s = sql%s(row[%d]);\n", 
-		    col->name, lt->nummyName, colIx);
+		if (!withNull)
+		    {
+		    fprintf(f, "ret->%s = sql%s(row[%d]);\n", 
+		    	col->name, lt->nummyName, colIx);
+		    }
+		else
+		    {
+		    fprintf(f, "if (row[%d] != NULL)\n", colIx);
+		    fprintf(f, "    {\n");
+		    fprintf(f, "    ret->%s = needMem(sizeof(*(ret->%s)));\n", col->name, col->name);
+		    fprintf(f, "    *(ret->%s) = sql%s(row[%d]);\n", 
+		    	col->name, lt->nummyName, colIx);
+		    fprintf(f, "    }\n");
+		    fprintf(f, "else\n");
+		    fprintf(f, "    {\n");
+		    fprintf(f, "    ret->%s = NULL;\n", col->name);
+		    fprintf(f, "    }\n");
+		    }
+
 		break;
 		}
 	    }
@@ -529,12 +634,26 @@ struct asColumn *col;
 boolean isSizeLink;
 int tfIx;
 
+if (!withNull)
+    {
+    fprintf(hFile, "void %sStaticLoad(char **row, struct %s *ret);\n", tableName, tableName);
+    }
+else
+    {
+    fprintf(hFile, "void %sStaticLoadWithNull(char **row, struct %s *ret);\n", tableName, tableName);
+    }
 
-fprintf(hFile, "void %sStaticLoad(char **row, struct %s *ret);\n", tableName, tableName);
 fprintf(hFile, "/* Load a row from %s table into ret.  The contents of ret will\n", tableName);
 fprintf(hFile, " * be replaced at the next call to this function. */\n\n");
 
-fprintf(f, "void %sStaticLoad(char **row, struct %s *ret)\n", tableName, tableName);
+if (!withNull)
+    {
+    fprintf(f, "void %sStaticLoad(char **row, struct %s *ret)\n", tableName, tableName);
+    }
+else
+    {
+    fprintf(f, "void %sStaticLoadWithNull(char **row, struct %s *ret)\n", tableName, tableName);
+    }
 fprintf(f, "/* Load a row from %s table into ret.  The contents of ret will\n", tableName);
 fprintf(f, " * be replaced at the next call to this function. */\n");
 fprintf(f, "{\n");
@@ -560,11 +679,27 @@ struct asColumn *col;
 boolean isSizeLink;
 int tfIx;
 
-fprintf(hFile, "struct %s *%sLoad(char **row);\n", tableName, tableName);
+if (!withNull)
+    {
+    fprintf(hFile, "struct %s *%sLoad(char **row);\n", tableName, tableName);
+    }
+else
+    {
+    fprintf(hFile, "struct %s *%sLoadWithNull(char **row);\n", tableName, tableName);
+    }
+
 fprintf(hFile, "/* Load a %s from row fetched with select * from %s\n", tableName, tableName);
 fprintf(hFile, " * from database.  Dispose of this with %sFree(). */\n\n", tableName);
 
-fprintf(f, "struct %s *%sLoad(char **row)\n", tableName, tableName);
+if (!withNull)
+    {
+    fprintf(f, "struct %s *%sLoad(char **row)\n", tableName, tableName);
+    }
+else
+    {
+    fprintf(f, "struct %s *%sLoadWithNull(char **row)\n", tableName, tableName);
+    }
+
 fprintf(f, "/* Load a %s from row fetched with select * from %s\n", tableName, tableName);
 fprintf(f, " * from database.  Dispose of this with %sFree(). */\n", tableName);
 fprintf(f, "{\n");
@@ -602,7 +737,15 @@ fprintf(f, "char *row[%d];\n", slCount(table->columnList));
 fprintf(f, "\n");
 fprintf(f, "while (lineFileRow(lf, row))\n");
 fprintf(f, "    {\n");
-fprintf(f, "    el = %sLoad(row);\n", tableName);
+if (!withNull)
+    {
+    fprintf(f, "    el = %sLoad(row);\n", tableName);
+    }
+else
+    {
+    fprintf(f, "    el = %sLoadWithNull(row);\n", tableName);
+    }
+
 fprintf(f, "    slAddHead(&list, el);\n");
 fprintf(f, "    }\n");
 fprintf(f, "lineFileClose(&lf);\n");
@@ -634,7 +777,14 @@ fprintf(f, "char *row[%d];\n", slCount(table->columnList));
 fprintf(f, "\n");
 fprintf(f, "while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))\n");
 fprintf(f, "    {\n");
-fprintf(f, "    el = %sLoad(row);\n", tableName);
+if (!withNull)
+    {
+    fprintf(f, "    el = %sLoad(row);\n", tableName);
+    }
+else
+    {
+    fprintf(f, "    el = %sLoadWithNull(row);\n", tableName);
+    }
 fprintf(f, "    slAddHead(&list, el);\n");
 fprintf(f, "    }\n");
 fprintf(f, "lineFileClose(&lf);\n");
@@ -672,7 +822,15 @@ fprintf(f, "\n");
 fprintf(f, "sr = sqlGetResult(conn, query);\n");
 fprintf(f, "while ((row = sqlNextRow(sr)) != NULL)\n");
 fprintf(f, "    {\n");
-fprintf(f, "    el = %sLoad(row);\n", tableName);
+if (!withNull)
+    {
+    fprintf(f, "    el = %sLoad(row);\n", tableName);
+    }
+else
+    {
+    fprintf(f, "    el = %sLoadWithNull(row);\n", tableName);
+    }
+
 fprintf(f, "    slAddHead(&list, el);\n");
 fprintf(f, "    }\n");
 fprintf(f, "slReverse(&list);\n");
@@ -1258,8 +1416,25 @@ else
     {
     if (mightNeedQuotes)
         fprintf(f, "if (sep == ',') fputc('\"',f);\n");
-    fprintf(f, "fprintf(f, \"%s\", el->%s);\n", outString, 
+    if (!withNull)
+	{
+    	fprintf(f, "fprintf(f, \"%s\", el->%s);\n", outString, 
             col->name);
+	}
+    else
+	{
+    	if (! ((lt->type == t_string) || (lt->type == t_lstring)) )
+	    {
+	    fprintf(f, "fprintf(f, \"%s\", *(el->%s));\n", outString, 
+            	col->name);
+	    }
+	else
+	    {
+	    fprintf(f, "fprintf(f, \"%s\", el->%s);\n", outString, 
+            	col->name);
+	    }
+	}
+
     if (mightNeedQuotes)
         fprintf(f, "if (sep == ',') fputc('\"',f);\n");
     fprintf(f, "fputc(%s,f);\n", lineEnd);
@@ -1418,6 +1593,7 @@ char defineName[256];
 boolean doDbLoadAndSave = FALSE;
 cgiSpoof(&argc, argv);
 doDbLoadAndSave = cgiBoolean("dbLink");
+withNull = cgiBoolean("withNull");
 if (argc != 3)
     usage();
 
