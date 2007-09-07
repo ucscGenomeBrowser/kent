@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.21 2007/09/07 18:43:36 hiram Exp $"
+#	"$Id: mm9.txt,v 1.22 2007/09/07 23:29:57 hiram Exp $"
 #
 
 #######################################################################
@@ -2926,6 +2926,9 @@ BASE=/cluster/data/mm9/bed/blastz.rheMac2.2007-09-05
 	/cluster/data/mm9/bed/blastz.rheMac2.2007-09-05/DEF \
 	-bigClusterHub=kk -chainMinScore=3000 -chainLinearGap=medium \
 	-swap -syntenicNet > swap.log 2>&1 &
+    #	real    178m31.911s
+    cat fb.rheMac2.chainMm9Link.txt
+    #	1094006509 bases of 2646704109 (41.335%) in intersection
 
 
 #########################################################################
@@ -2976,10 +2979,32 @@ Submission to last job:         54771s     912.85m    15.21h    0.63d
     time nice -n +19 doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
 	-continue=cat -stop=load -chainMinScore=3000 \
 	-chainLinearGap=medium -bigClusterHub=pk > cat.log 2>&1 &
-XXX - running 2007-09-06 10:20
+    #	ran into trouble on the kki chain run with stuff missing
+    #	from the Iservers /scratch/data/ - rsync them up and get
+    #	the run done manually
+# Completed: 24 of 24 jobs
+# CPU time in finished jobs:      17718s     295.30m     4.92h    0.21d  0.001 y
+# IO & Wait Time:                   203s       3.38m     0.06h    0.00d  0.000 y
+# Average job time:                 747s      12.45m     0.21h    0.01d
+# Longest finished job:            3673s      61.22m     1.02h    0.04d
+# Submission to last job:          3886s      64.77m     1.08h    0.04d
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-continue=chainMerge -stop=load -chainMinScore=3000 \
+	-chainLinearGap=medium -bigClusterHub=pk > chainMerge.log 2>&1 &
+    #	real    55m27.522s
+    cat fb.mm9.chainPonAbe1Link.txt
+    #	913843325 bases of 2620346127 (34.875%) in intersection
+
+    mkdir /cluster/data/ponAbe1/bed/blastz.mm9.swap
+    cd /cluster/data/ponAbe1/bed/blastz.mm9.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/mm9/bed/blastzPonAbe1.2007-09-05/DEF \
+	-stop=load -chainMinScore=3000 \
+	-swap -chainLinearGap=medium -bigClusterHub=pk > swap.log 2>&1 &
+XXX - running - 2007-09-07 15:25
 
 #########################################################################
-# BLASTZ/CHAIN/NET Marmoset calJac1 (WORKING - 2007-09-06 - Hiram)
+# BLASTZ/CHAIN/NET Marmoset calJac1 (DONE - 2007-09-06 - 2007-09-07 - Hiram)
     ssh kkstore06
     #	use a screen to control this job
     screen
@@ -3015,13 +3040,12 @@ TMPDIR=/scratch/tmp
 	-chainLinearGap=medium -bigClusterHub=pk > do.log 2>&1 &
     #	real    897m58.156s
     #	some pk kluster difficulties, fixup and complete manually
-Completed: 511290 of 511290 jobs
-CPU time in finished jobs:   11448015s  190800.24m  3180.00h  132.50d  0.363 y
-IO & Wait Time:               1852197s   30869.96m   514.50h   21.44d  0.059 y
-Average job time:                  26s       0.43m     0.01h    0.00d
-Longest running job:                0s       0.00m     0.00h    0.00d
-Longest finished job:             349s       5.82m     0.10h    0.00d
-Submission to last job:         54771s     912.85m    15.21h    0.63d
+# Completed: 511290 of 511290 jobs
+# CPU time in finished jobs:   11448015s  190800.24m  3180.00h  132.50d  0.363 y
+# IO & Wait Time:               1852197s   30869.96m   514.50h   21.44d  0.059 y
+# Average job time:                  26s       0.43m     0.01h    0.00d
+# Longest finished job:             349s       5.82m     0.10h    0.00d
+# Submission to last job:         54771s     912.85m    15.21h    0.63d
     #	then, continuing
     time nice -n +19 doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
 	-continue=cat -stop=load -chainMinScore=3000 \
@@ -3030,8 +3054,18 @@ Submission to last job:         54771s     912.85m    15.21h    0.63d
     cat fb.mm9.chainCalJac1Link.txt
     #	863961573 bases of 2620346127 (32.971%) in intersection
 
+    mkdir /cluster/data/calJac1/bed/blastz.mm9.swap
+    cd /cluster/data/calJac1/bed/blastz.mm9.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/mm9/bed/blastzCalJac1.2007-09-06/DEF \
+	-stop=load -chainMinScore=3000 \
+	-swap -chainLinearGap=medium -bigClusterHub=pk > swap.log 2>&1 &
+    #	real    217m10.835s
+    cat fb.calJac1.chainMm9Link.txt
+    #	887586922 bases of 2929139385 (30.302%) in intersection
+
 #########################################################################
-# BLASTZ/CHAIN/NET Fugu fr2 (WORKING - 2007-09-06 - Hiram)
+# BLASTZ/CHAIN/NET Fugu fr2 (DONE - 2007-09-06 - 2007-09-07 - Hiram)
     ssh kkstore02
     #	use a screen to control this job
     screen
@@ -3084,10 +3118,30 @@ TMPDIR=/scratch/tmp
     time nice -n +19 doBlastzChainNet.pl DEF -chainMinScore=5000 \
 	-qRepeats=windowmaskerSdust -chainLinearGap=loose \
 	-continue=cat -bigClusterHub=kk -verbose=2 > cat.log 2>&1 &
-XXX - running 2007-09-06 16:00
+    #	real    5m43.977s
+
+    #	Still, the typical failure
+# HgStepManager: executing step 'net' Thu Sep  6 16:04:56 2007.
+# netChains: looks like previous stage was not successful (can't find [mm9.fr2.]all.chain[.gz]).
+    time nice -n +19 doBlastzChainNet.pl DEF -chainMinScore=5000 \
+	-qRepeats=windowmaskerSdust -chainLinearGap=loose \
+	-continue=net -bigClusterHub=kk -verbose=2 > net.log 2>&1 &
+    #	real    178m15.798s
+     cat fb.mm9.chainFr2Link.txt
+    #	47018710 bases of 2620346127 (1.794%) in intersection
+
+    mkdir /cluster/data/fr2/bed/blastz.mm9.swap
+    cd /cluster/data/fr2/bed/blastz.mm9.swap
+    time nice -n +19 doBlastzChainNet.pl -chainMinScore=5000 \
+	/cluster/data/mm9/bed/blastzFr2.2007-09-06/DEF \
+	-qRepeats=windowmaskerSdust -chainLinearGap=loose \
+	-swap -bigClusterHub=kk -verbose=2 > swap.log 2>&1 &
+    #	real    15m32.368s
+    cat fb.fr2.chainMm9Link.txt
+    #	42413565 bases of 393312790 (10.784%) in intersection
 
 #########################################################################
-# BLASTZ/CHAIN/NET Tetraodon tetNig1 (WORKING - 2007-09-06 - Hiram)
+# BLASTZ/CHAIN/NET Tetraodon tetNig1 (DONE - 2007-09-06 - 2007-09-07 - Hiram)
     ssh kkstore01
     #	use a screen to control this job
     screen
@@ -3128,10 +3182,30 @@ TMPDIR=/scratch/tmp
     time nice -n +19 doBlastzChainNet.pl DEF -chainMinScore=5000 \
 	-qRepeats=windowmaskerSdust -chainLinearGap=loose \
 	-bigClusterHub=kk -verbose=2 > do.log 2>&1 &
-XXX - running 2007-09-06 16:00
+    #	real    535m2.474s
+    #	Typical failure
+# HgStepManager: executing step 'net' Fri Sep  7 01:13:06 2007.
+# netChains: looks like previous stage was not successful (can't find [mm9.tetNig1.]all.chain[.gz]).
+    # continuing
+    time nice -n +19 doBlastzChainNet.pl DEF -chainMinScore=5000 \
+	-qRepeats=windowmaskerSdust -chainLinearGap=loose \
+	-continue=net -bigClusterHub=kk -verbose=2 > net.log 2>&1 &
+    cat fb.mm9.chainTetNig1Link.txt
+    #	46206292 bases of 2620346127 (1.763%) in intersection
+
+    mkdir /cluster/data/tetNig1/bed/blastz.mm9.swap
+    cd /cluster/data/tetNig1/bed/blastz.mm9.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/mm9/bed/blastzTetNig1.2007-09-06/DEF \
+	-chainMinScore=5000 \
+	-qRepeats=windowmaskerSdust -chainLinearGap=loose \
+	-swap -bigClusterHub=kk > swap.log 2>&1 &
+    #	real    19m58.885s
+    cat fb.tetNig1.chainMm9Link.txt
+    #	42256263 bases of 342403326 (12.341%) in intersection
 
 #########################################################################
-# BLASTZ/CHAIN/NET Stickleback gasAcu1 (WORKING - 2007-09-06 - Hiram)
+# BLASTZ/CHAIN/NET Stickleback gasAcu1 (DONE - 2007-09-06 - 2007-09-07 - Hiram)
     ssh kkstore01
     #	use a screen to control this job
     screen
@@ -3171,7 +3245,38 @@ TMPDIR=/scratch/tmp
     time nice -n +19 doBlastzChainNet.pl DEF -chainMinScore=5000 \
 	-qRepeats=windowmaskerSdust -chainLinearGap=loose \
 	-bigClusterHub=kk -verbose=2 > do.log 2>&1 &
-XXX - running 2007-09-06 16:00
+# Completed: 52725 of 52725 jobs
+# CPU time in finished jobs:    4110432s   68507.19m  1141.79h   47.57d  0.130 y
+# IO & Wait Time:                413069s    6884.49m   114.74h    4.78d  0.013 y
+# Average job time:                  86s       1.43m     0.02h    0.00d
+# Longest finished job:            1140s      19.00m     0.32h    0.01d
+# Submission to last job:         71194s    1186.57m    19.78h    0.82d
+    #	had some jobs fail on the kk run, finish manually, then continuing:
+    time nice -n +19 doBlastzChainNet.pl DEF -chainMinScore=5000 \
+	-qRepeats=windowmaskerSdust -chainLinearGap=loose \
+	-continue=cat -bigClusterHub=kk -verbose=2 > cat.log 2>&1 &
+    #	real    120m36.209s
+    # failed kki chain job due to san outage on kkr7u00, finished manually:
+# Completed: 24 of 24 jobs
+# CPU time in finished jobs:       1807s      30.12m     0.50h    0.02d  0.000 y
+# IO & Wait Time:                   258s       4.29m     0.07h    0.00d  0.000 y
+# Average job time:                  86s       1.43m     0.02h    0.00d
+# Longest finished job:             257s       4.28m     0.07h    0.00d
+# Submission to last job:          9851s     164.18m     2.74h    0.11d
+    #	continuing
+    time nice -n +19 doBlastzChainNet.pl DEF -chainMinScore=5000 -verbose=2 \
+	-qRepeats=windowmaskerSdust -chainLinearGap=loose \
+	-continue=chainMerge -bigClusterHub=kk > chainMerge.log 2>&1 &
+    #	real    21m7.089s
+    cat fb.mm9.chainGasAcu1Link.txt
+    #	48448585 bases of 2620346127 (1.849%) in intersection
+
+    mkdir /cluster/data/gasAcu1/bed/blastz.mm9.swap
+    cd /cluster/data/gasAcu1/bed/blastz.mm9.swap
+    time nice -n +19 doBlastzChainNet.pl -chainMinScore=5000 \
+	/cluster/data/mm9/bed/blastzGasAcu1.2007-09-06/DEF \
+	-qRepeats=windowmaskerSdust -chainLinearGap=loose \
+	-swap -bigClusterHub=kk -verbose=2 > swap.log 2>&1 &
 
 #########################################################################
 ## 4-Way Multiz (DONE - 2007-09-07 - Hiram)
