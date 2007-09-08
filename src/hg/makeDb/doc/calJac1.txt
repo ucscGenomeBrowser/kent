@@ -4,7 +4,7 @@
 # This file describes browser build for the Marmoset
 # genome, July 2007
 #
-#	"$Id: calJac1.txt,v 1.1 2007/09/05 22:15:42 hiram Exp $"
+#	"$Id: calJac1.txt,v 1.2 2007/09/08 00:03:05 hiram Exp $"
 #
 ######################################################################
 ## DOWNLOAD SEQUENCE (DONE - 2007-08-21 - Hiram)
@@ -176,3 +176,16 @@ done
 do
     ssh kkr${R}u00 rmdir /iscratch/i/calJac1
 done
+
+############################################################################
+#  BLATSERVERS ENTRY (DONE - 2007-09-06 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("calJac1", "blat13", "17786", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("calJac1", "blat13", "17787", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
