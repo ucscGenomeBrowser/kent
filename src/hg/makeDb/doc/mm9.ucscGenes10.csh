@@ -17,7 +17,7 @@ set gbDir = $dir/gb
 set scratchDir = /san/sanvol1/scratch/$db
 
 # Other Databases
-set tempDb = tmpFoo2
+set tempDb = mm9UCGenes
 set xdb = hg18
 set Xdb = Hg18
 set ydb = canFam2
@@ -252,9 +252,6 @@ cd ..
 cd $dir
 rm -r $xdb/chains $xdb/nets
 
-endif
-############################# skipping to here ########################
-
 # Get exonophy. Takes about 4 seconds.
 hgsql -N $db -e "select chrom, txStart, txEnd, name, id, strand from exoniphy order by chrom, txStart;" \
     > exoniphy.bed
@@ -331,16 +328,14 @@ cd ..
 # Run rna/transcript blat on cluster.  This is a little i/o heavy, so use
 # maxNode=50, or optimize i/o somehow.
 ssh $cpuFarm "cd $dir/blat/rna; para make -maxNode=50 spec"
-#Completed: 390 of 390 jobs
-#CPU time in finished jobs:      19127s     318.78m     5.31h    0.22d  0.001 y
-#IO & Wait Time:                 14795s     246.58m     4.11h    0.17d  0.000 y
-#Average job time:                  87s       1.45m     0.02h    0.00d
-#Longest running job:                0s       0.00m     0.00h    0.00d
-#Longest finished job:             581s       9.68m     0.16h    0.01d
-#Submission to last job:           843s      14.05m     0.23h    0.01d
+# Completed: 388 of 388 jobs
+# CPU time in finished jobs:      12248s     204.13m     3.40h    0.14d  0.000 y
+# IO & Wait Time:                 19749s     329.15m     5.49h    0.23d  0.001 y
+# Average job time:                  82s       1.37m     0.02h    0.00d
+# Longest finished job:             198s       3.30m     0.06h    0.00d
+# Submission to last job:           675s      11.25m     0.19h    0.01d
 
-exit $status
-################################# skipping ###########################
+##  exit $status this was the second step
 
 # Set up blat jobs for proteins vs. translated txWalk transcripts
 mkdir -p blat/protein/raw
@@ -355,12 +350,14 @@ cd ..
 
 # Run protein/transcript blat job on cluster
 ssh $cpuFarm "cd $dir/blat/protein; para make spec;"
-#CPU time in finished jobs:      13571s     226.18m     3.77h    0.16d  0.000 y
-#IO & Wait Time:                  5645s      94.08m     1.57h    0.07d  0.000 y
-#Average job time:                  49s       0.82m     0.01h    0.00d
-#Longest running job:                0s       0.00m     0.00h    0.00d
-#Longest finished job:             137s       2.28m     0.04h    0.00d
-#Submission to last job:           137s       2.28m     0.04h    0.00d
+# Completed: 388 of 388 jobs
+# CPU time in finished jobs:      10522s     175.36m     2.92h    0.12d  0.000 y
+# IO & Wait Time:                 19111s     318.52m     5.31h    0.22d  0.001 y
+# Average job time:                  76s       1.27m     0.02h    0.00d
+# Longest finished job:             239s       3.98m     0.07h    0.00d
+# Submission to last job:           239s       3.98m     0.07h    0.00d
+
+##  exit $status this was the third step
 
 # Sort and select best alignments. Remove raw files for space. Takes 22
 # seconds. Use pslReps not pslCdnaFilter because need -noIntrons flag,
@@ -384,10 +381,13 @@ cd ..
 # Takes 1 hour.
 echo $db $xdb $ydb $zdb > ourOrgs.txt
 foreach c (`awk '{print $1;}' /cluster/data/$db/chrom.sizes`)
+    if (-s txWalk/$c.bed ) then
+	if (! -s txWalk/$c.maf ) then
     mafFrags $db $multiz txWalk/$c.bed stdout -bed12 -meFirst \
        | mafSpeciesSubset stdin ourOrgs.txt txWalk/$c.maf -keepFirst
+	endif
+    endif
 end
-
 
 # Create and populate directory with various CDS evidence
 mkdir -p cdsEvidence
@@ -396,7 +396,7 @@ txCdsEvFromRna refSeq.fa cds.tab blat/rna/refSeq.psl txWalk.fa \
 	cdsEvidence/refSeqTx.tce -refStatus=refSeqStatus.tab \
 	-unmapped=cdsEvidence/refSeqTx.unmapped -exceptions=exceptions.tab
 txCdsEvFromRna mrna.fa cds.tab blat/rna/mrna.psl txWalk.fa \
-	cdsEvidence/mrnaTx.tce -mgcStatus=mgcStatus.tab \
+	cdsEvidence/mrnaTx.tce -mgcStatus=gb/mgcStatus.tab \
 	-unmapped=cdsEvidence/mrna.unmapped
 txCdsEvFromProtein refPep.fa blat/protein/refSeq.psl txWalk.fa \
 	cdsEvidence/refSeqProt.tce -refStatus=refPepStatus.tab \
@@ -501,7 +501,10 @@ txBedToGraph ucscGenes.bed ucscGenes ucscGenes.txg
 txgAnalyze ucscGenes.txg /cluster/data/$db/$db.2bit stdout | sort | uniq > ucscSplice.bed
 
 echo "MUST WORK THIS UP INTO AN ACTUAL DB LOAD HERE !  WHEN NOT tempDb"
-exit 255
+exit $status
+endif
+############################# skipping to here ########################
+
 
 #####################################################################################
 # Now the gene set is built.  Time to start loading it into the database,
@@ -603,6 +606,8 @@ hgLoadNetDist /cluster/data/$db/p2p/wanker/humanWanker.pathLengths $db humanWank
     -sqlRemap="select distinct locusLinkID, kgID from refLink, kgXref where refLink.mrnaAcc = kgXref.mRNA"
 endif
 
+exit $status
+############################# skipping ########################
 
 # Run nice Perl script to make all protein blast runs for
 # Gene Sorter and Known Genes details page.  Takes about
