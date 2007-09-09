@@ -40,7 +40,7 @@ if (chrom != NULL)
     end=131500000;
     }
     printf("Location: ../cgi-bin/hgTracks?db=%s&%s&position=%s:%d-%d\r\n\r\n",
-	   database, cartSidUrlString(cart), chrom->fullName, start+1, end);
+	   theDatabase, cartSidUrlString(cart), chrom->fullName, start+1, end);
     }
 else
     {

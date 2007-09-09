@@ -39,14 +39,14 @@
 /*** External vars declared in hgHeatmap.c ***/
 extern struct cart *cart;
 extern struct hash *oldCart;
-extern char *database;
-extern char *genome;
-extern struct bed *ggUserList;	/* List of user graphs */
-extern struct bed *ggDbList;	/* List of graphs in database. */
+extern char *theDatabase;	/* Name of the selected database - hg15, mm3, or the like. */
+extern char *theGenome;	/* Name of the selected genome - mouse, human, etc. */
+extern char *thbeDataset;      /* Name of the selected dataset - UCSF breast cancer etc. */
+//extern struct bed *ggUserList;	/* List of user graphs */
+//extern struct bed *ggDbList;	/* List of graphs in database. */
 extern struct trackLayout tl;	/* Dimensions of things, fonts, etc. */
-extern struct slRef *ghList;	/* List of active genome graphs */
-extern struct hash *ghHash;	/* Hash of active genome graphs */
-extern struct hash *ghOrder;	/* Hash of orders for data */
+extern struct slRef *ghList;	/* List of active heatmaps */
+extern struct hash *ghHash;	/* Hash of active heatmaps */
 
 /*** Name prefixes to separate user from db graphs. */
 #define hghUserTag "user: "
@@ -58,11 +58,14 @@ struct genoHeatmap
 /* A genomic heatmap */
     {
     void *next;			/* Next in list. */
-    char *name;                 /* Graph name. */
+    char *name;                 /* Graph name. tableName in database */
     char *shortLabel;           /* Short label. */
     char *longLabel;            /* Long label. */
     int expCount;		/* number of experiments */
     char *database;             /* database */
+    struct slName *sampleList;  /* List of names of samples, sampleList position matches sampleOrder hash */
+    struct hash *sampleOrder;	/* Hash of orders for samples */
+    int *expIdOrder;            /* ordering of expIds for display of bed15 format */
     struct trackDb *tDb;	/* the track database */
     };
 
@@ -107,11 +110,13 @@ struct genoLay *ggLayout(struct sqlConnection *conn);
 struct genoHeatmap *getUserHeatmaps();
 /* Get list of all user graphs */
 
-int* addChromOrder(char* heatmap, char* chromName);
-/* Add the ChromOrder of a specific heatmap and chromosome combo to 
-   the ghOrder hash */
+void setSampleOrder(struct genoHeatmap* gh, char* posStr);
+/* Set the sampleOrder and sampleList of a specific heatmap to posStr; posStr is a cvs format string
+   if posStr is null, then check the configuration file 
+   if the setting is not set in the configuration file, then the orders are set to default in sampleList and sampleOrder
+*/
 
-int* getChromOrder(char* heatmap, char* chromName);
+int *getBedOrder(struct genoHeatmap* gh);
 /* Return the ChromOrder of a specific heatmap and chromosome combo to 
    the ghOrder hash 
    return an array for reordering the experiments in a chromosome 

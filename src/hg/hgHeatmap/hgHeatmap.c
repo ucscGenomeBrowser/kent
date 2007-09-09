@@ -22,20 +22,20 @@
 #include "microarray.h"
 #include "hgChromGraph.h"
 
-static char const rcsid[] = "$Id: hgHeatmap.c,v 1.13 2007/09/05 08:15:24 jzhu Exp $";
+static char const rcsid[] = "$Id: hgHeatmap.c,v 1.14 2007/09/09 20:02:26 jzhu Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
 struct hash *oldVars;	/* Old cart hash. */
-char *database;		/* Name of genome database - hg15, mm3, or the like. */
-char *genome;		/* Name of genome - mouse, human, etc. */
-char *dataset;          /* Name of dataset - UCSF breast cancer etc. */
+char *theDatabase;	/* Name of the selected database - hg15, mm3, or the like. */
+char *theGenome;	/* Name of the selected genome - mouse, human, etc. */
+char *theDataset;      /* Name of the selected dataset - UCSF breast cancer etc. */
 struct trackLayout tl;  /* Dimensions of things, fonts, etc. */
-struct bed *ggUserList;	/* List of user graphs */
-struct bed *ggDbList;	/* List of graphs in database. */
-struct slRef *ghList;	/* List of active genome graphs */
-struct hash *ghHash;	/* Hash of active genome graphs */
-struct hash *ghOrder;	/* Hash of orders for data */
+//struct bed *ggUserList;	/* List of user graphs */
+//struct bed *ggDbList;	/* List of graphs in database. */
+struct slRef *ghList;	/* List of active heatmaps */
+struct hash *ghHash;	/* Hash of active heatmaps */
+
 
 void usage()
 /* Explain usage and exit. */
@@ -58,22 +58,21 @@ struct customTrack *ct, *ctList = customTracksParseCart(cart, NULL, NULL);
 
 for (ct = ctList; ct != NULL; ct = ct->next)
     {
-
     struct trackDb *tdb = ct->tdb;
-     
+    
     if(sameString(tdb->type, "array"))
         {
         char *pS = trackDbSetting(tdb, "expNames");
         /* set pSc (probably a library routine that does this) */
         int pSc = 0;
         for (pSc = 0; pS && *pS; ++pS)
-        {
+	{
             if(*pS == ',')
                 {
                 ++pSc;
                 }
-        }
-
+	    }
+	
         AllocVar(gh);
         gh->name = ct->dbTableName;
         gh->shortLabel = tdb->shortLabel;
@@ -137,12 +136,13 @@ for (i=0; i<N; i++)
     gh->name = tdb->tableName;
     gh->shortLabel = tdb->shortLabel;
     gh->longLabel = tdb->longLabel;
+    gh->database= theDatabase;
     gh->tDb = tdb;
+    
     /*microarray specific settings*/
-    struct microarrayGroups *maGs = maGetTrackGroupings(database, tdb);
+    struct microarrayGroups *maGs = maGetTrackGroupings(gh->database, gh->tDb);
     struct maGrouping *allA= maGs->allArrays;
     gh->expCount = allA->size;
-    gh->database= database;
 
     slAddHead(&list,gh);
     }
@@ -169,10 +169,8 @@ void getGenoHeatmaps(struct sqlConnection *conn, char* set)
 /* Set up ghList and ghHash with all available genome graphs */
 {
 struct genoHeatmap *dbList = getDbHeatmaps(conn,set);
-struct genoHeatmap *userList = NULL;
+struct genoHeatmap *userList = getUserHeatmaps();
 
-if (sameString(dataset,"UCSF breast cancer"))
-    userList = getUserHeatmaps();
 struct genoHeatmap *gh;
 struct slRef *ref, *refList = NULL;
 
@@ -191,103 +189,106 @@ for (ref = ghList; ref != NULL; ref = ref->next)
     gh = ref->val;
     hashAdd(ghHash, gh->name, gh);
     }
-ghOrder = hashNew(0);
 }
 
-/* Add the ChromOrder of a specific heatmap and chromosome combo to 
-   the ghOrder hash 
+void setSampleOrder(struct genoHeatmap* gh, char* posStr)
+/* Set the sampleOrder and sampleList of a specific heatmap to posStr; posStr is a cvs format string
+   if posStr is null, then check the configuration file 
+   if the setting is not set in the configuration file, then the orders are set to default in sampleList and sampleOrder
 */
-int* addChromOrder(char* heatmap, char* chromName)
 {
-const char* orderSuffix ="_order";
+if (gh->sampleOrder)
+    freeHash(&gh->sampleOrder);
+gh->sampleOrder = hashNew(0);
+if (gh->sampleList)
+    slFreeList(gh->sampleList);
+gh->sampleList = slNameNew("");
+if (gh->expIdOrder)
+    freeMem(gh->expIdOrder);
+AllocArray(gh->expIdOrder, gh->expCount);
 
-char* orderKey;
-AllocArray(orderKey, strlen(heatmap) + strlen(chromName) + strlen(orderSuffix) + 2);
-/* could use safef */
-strcpy(orderKey, heatmap);
-strcat(orderKey, "_");
-strcat(orderKey, chromName);
-strcat(orderKey, orderSuffix);
-struct hashEl *e = hashLookup(ghOrder, orderKey);
+char *pS = NULL;
 
-if (e)
-    {
-    return e->val;
-    }
-
-char* trackOrderName;
-
-AllocArray(trackOrderName, strlen(chromName) + strlen(orderSuffix) + 1);
-/* could use safef */
-strcpy(trackOrderName, chromName);
-strcat(trackOrderName, orderSuffix);
-
-e = hashLookup(ghHash, heatmap);
-
-struct genoHeatmap *gh = e->val;
-struct trackDb *tdb = gh->tDb;
-char *pS;
-
-if (tdb)
-    pS = trackDbSetting(tdb, trackOrderName);
+if (posStr)
+    pS = posStr;
 else
-    pS = NULL;
-
-int orderCount = experimentCount(heatmap);
-int* chromOrder;
-AllocArray(chromOrder, orderCount);
-
-int i;
-for(i = 0; i < orderCount; ++i)
     {
-    if (pS && *pS)
-	{
-	int order = sqlSignedComma(&pS);
-	if (order >= 0 && order < orderCount)
-	    {
-	    chromOrder[order] = i;
-	    }
-	}
+    struct trackDb *tdb = gh->tDb; 
+    char* trackOrderName="order";
+    
+    if (tdb)
+	pS = trackDbSetting(tdb, trackOrderName);
     else
-	{
-	chromOrder[i] = i;
-	}
+	pS= NULL;
     }
 
-hashAdd(ghOrder, orderKey, chromOrder);
+int orderCount = gh->expCount;
+int expId; // bed15 format expId 
 
-return chromOrder;
+if (pS)
+    {
+    char* sample;
+    gh->sampleList = slNameListFromComma(pS);
+   
+    /*microarray specific settings*/
+    struct microarrayGroups *maGs = maGetTrackGroupings(gh->database, gh->tDb);
+    struct maGrouping *allA= maGs->allArrays;
+
+    int counter=0;    
+    struct slName *sl;
+    for(sl=gh->sampleList; sl !=NULL; sl=sl->next)
+	{
+	sample = sl->name;
+	hashAdd(gh->sampleOrder, sample, &counter);
+	int i;
+	expId = -1;
+	for (i=0; i< allA->size; i++)
+	    {
+	    if (sameString(allA->names[i],sl->name))
+		{
+		expId = allA->expIds[i];
+		gh->expIdOrder[expId]=counter;
+		break;
+		}
+	    }
+	if (expId == -1)
+	    errAbort("heatmap %s setSampleOrder: sampleName %s is not found in microarray.ra\n", gh->name, sl->name);
+	counter++;
+	}
+    if (counter != orderCount)
+	errAbort("heatmap %s setSampleOrder: number of samples does not match expCount\n", gh->name);
+    }
+else
+    {
+    int i;
+    char sample[512];
+    for (i=0; i<orderCount;i++)
+	{
+	expId = i;
+	safef(sample, sizeof(sample), "%d", expId);
+	slNameAddHead(&gh->sampleList, sample);
+	gh->expIdOrder[expId]=i;
+	hashAdd(gh->sampleOrder, sample, &i); 
+	}
+    slReverse(&gh->sampleList);
+    }
+return ;
 }
 
-/* Return the ChromOrder of a specific heatmap and chromosome combo to 
-   the ghOrder hash 
-   return an array for reordering the experiments in a chromosome 
+/* Return the recording of  expIds in bed15 file
 */
-int* getChromOrder(char* heatmap, char* chromName)
+int *getBedOrder(struct genoHeatmap* gh)
 {
-const char *orderSuffix = "_order";
-
-char* orderKey;
-AllocArray(orderKey, strlen(heatmap) + strlen(chromName) + strlen(orderSuffix) + 2);
-/* could use safef */
-strcpy(orderKey, heatmap);
-strcat(orderKey, "_");
-strcat(orderKey, chromName);
-strcat(orderKey, orderSuffix);
-
-
-struct hashEl *e = hashLookup(ghOrder, orderKey);
-
-if (e)
+if (gh->expIdOrder == NULL)
     {
-    return e->val;
+    /* need to add code to get from the cgivariables*/
+    char *posStr = NULL;
+    setSampleOrder(gh, posStr);
     }
-
-return addChromOrder(heatmap, chromName);
+return gh->expIdOrder;
 }
 
 /* Routines to fetch cart variables. */
-
 int experimentHeight()
 /* Return height of an individual experiment */
 {
@@ -416,7 +417,6 @@ cartWarnCatcher(dispatchPage, cart, cartEarlyWarningHandler);
 cartCheckout(&cart);
 }
 
-
 void dispatchLocation()
 /* When this is called no output has been written at all.  We
  * look at command variables in cart and figure out if we just
@@ -426,14 +426,14 @@ void dispatchLocation()
  * then we call hghDoUsualHttp. */
 {
 struct sqlConnection *conn = NULL;
-getDbAndGenome(cart, &database, &genome,oldVars);
-hSetDb(database);
-cartSetString(cart, "db", database); /* Some custom tracks code needs this */
-dataset = cartOptionalString(cart, hghDataSet);  
+getDbAndGenome(cart, &theDatabase, &theGenome,oldVars);
+hSetDb(theDatabase);
+cartSetString(cart, "db", theDatabase); /* Some custom tracks code needs this */
+theDataset = cartOptionalString(cart, hghDataSet);  
 conn = hAllocConn();
-if (!dataset)
-    dataset = "UCSF breast cancer"; /* hard coded*/
-getGenoHeatmaps(conn, dataset);
+if (!theDataset)
+    theDataset = "UCSF breast cancer"; /* hard coded*/
+getGenoHeatmaps(conn, theDataset);
 
 /* Handle cases that just want a HTTP Location line: */
 if (cartVarExists(cart, hghClickX))

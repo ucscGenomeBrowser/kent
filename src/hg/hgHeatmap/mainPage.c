@@ -28,7 +28,7 @@
 #include "hCytoBand.h"
 #include "hgChromGraph.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.11 2007/09/05 08:15:24 jzhu Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.12 2007/09/09 20:02:26 jzhu Exp $";
 
 /* Page drawing stuff. */
 
@@ -57,7 +57,6 @@ query[0] = '\0';
 safef(query, sizeof(query),
      "select * from %s where chrom = \"%s\" \n",
     accessTname, chromName);
-
 struct sqlConnection *conn;
 
 if (sameWord(database, CUSTOM_TRASH))
@@ -250,10 +249,18 @@ void drawChromHeatmaps(struct vGfx *vg, char* database,
 /* Draw chromosome graph on all chromosomes in layout at given
  * y offset and height. */
 {
-struct genoLayChrom *chrom=NULL;
-struct bed *gh=NULL, *nb=NULL;
-double pixelsPerBase = 1.0/gl->basesPerPixel;
+struct hashEl *el = hashLookup(ghHash, chromHeatmap);
+struct genoHeatmap *gh;
+if (el)
+    gh = el->val;
+else
+    errAbort("no heatmap %s\n", chromHeatmap);
+int *chromOrder = getBedOrder(gh);
 
+struct genoLayChrom *chrom=NULL;
+struct bed *ghBed=NULL, *nb=NULL;
+
+double pixelsPerBase = 1.0/gl->basesPerPixel;
 double md = maxDeviation(chromHeatmap);
 double colorScale = COLOR_SCALE / md;
 double val;
@@ -270,21 +277,20 @@ static struct rgbColor green = {0, 255, 0};
 vgMakeColorGradient(vg, &black, &red, EXPR_DATA_SHADES, shadesOfRed);
 vgMakeColorGradient(vg, &black, &green, EXPR_DATA_SHADES, shadesOfGreen);
 
+
 for(chrom = gl->chromList; chrom; chrom = chrom->next)
     {
-    gh = getChromHeatmap(database, chromHeatmap, chrom->fullName);
-   
+    ghBed = getChromHeatmap(database, chromHeatmap, chrom->fullName);
+    
     int chromX = chrom->x, chromY = chrom->y;
 
     vgSetClip(vg, chromX, chromY+yOff, chrom->width, heatmapHeight(chromHeatmap));
     vgBox(vg, chromX, chromY+yOff , chrom->width, heatmapHeight(chromHeatmap), MG_GRAY);
 
-    for(nb = gh; nb; nb = nb->next)
+    for(nb = ghBed; nb; nb = nb->next)
 	{
 	start = nb->chromStart;
 	end = nb->chromEnd;
-
-	int *chromOrder = getChromOrder(chromHeatmap, chrom->fullName);
 
 	int i;
 	for(i = 0; i < nb->expCount; ++i)
@@ -321,7 +327,7 @@ for(chrom = gl->chromList; chrom; chrom = chrom->next)
 
 	    }
       	}
-    bedFreeList(&gh);
+    bedFreeList(&ghBed);
     vgUnclip(vg);
     }
 }
@@ -356,7 +362,7 @@ hMakeGrayShades(vg, shadesOfGray, maxShade);
 
 /* Draw the labels and then the chromosomes. */
 genoLayDrawChromLabels(gl, vg, MG_BLACK);
-genoLayDrawBandedChroms(gl, vg, database, conn, 
+genoLayDrawBandedChroms(gl, vg, theDatabase, conn, 
 	shadesOfGray, maxShade, MG_BLACK);
 
 struct genoHeatmap *gh= NULL;
@@ -456,9 +462,11 @@ addThresholdHeatmapCarries(dy);
 return dy;
 }
 
+
+
 static char *onChangeClade()
-/* Return javascript executed when they change clade. */
 {
+/* Return javascript executed when they change clade. */
 struct dyString *dy = onChangeStart();
 jsDropDownCarryOver(dy, "clade");
 dyStringAppend(dy, " document.hiddenForm.org.value=0;");
@@ -545,7 +553,7 @@ void handlePostscript(struct sqlConnection *conn)
 struct tempName psTn;
 char *pdfFile = NULL;
 trashDirFile(&psTn, "hgh", "hgh", ".eps");
-cartWebStart(cart, "%s Genome Heatmaps", genome);
+cartWebStart(cart, "%s Genome Heatmaps", theGenome);
 printf("<H1>PostScript/PDF Output</H1>\n");
 printf("PostScript images can be printed at high resolution "
        "and edited by many drawing programs such as Adobe "
@@ -577,7 +585,7 @@ void mainPage(struct sqlConnection *conn)
 {
 char *scriptName = "/cgi-bin/hgHeatmap";
 
-cartWebStart(cart, "%s Genome Heatmaps", genome);
+cartWebStart(cart, "%s Genome Heatmaps", theGenome);
 
 /* Start form and save session var. */
 hPrintf("<FORM ACTION=\"..%s\" NAME=\"mainForm\" METHOD=GET>\n", scriptName);
@@ -594,22 +602,16 @@ char *jsOther = onChangeOther();
 hPrintf("<TABLE>");
 if (gotClade)
     {
-//    hPrintf("<TR><TD><B>clade:</B>\n");
-    hPrintf("<TR><TD>\n");
-    printCladeListHtml(hGenome(database), onChangeClade());
-    htmlNbSpaces(3);
-//    hPrintf("<B>genome:</B>\n");
-    hPrintf("\n");
-    printGenomeListForCladeHtml(database, onChangeOrg());
+    printCladeListHtml(hGenome(theDatabase), onChangeClade());
+    printGenomeListForCladeHtml(theDatabase, onChangeOrg());
     }
 else
     {
-    hPrintf("<TR><TD><B>genome:</B>\n");
-    printGenomeListHtml(database, onChangeOrg());
+    printGenomeListHtml(theDatabase, onChangeOrg());
     }
 htmlNbSpaces(3);
 hPrintf("<B>assembly:</B>\n");
-printAssemblyListHtml(database, jsOther);
+printAssemblyListHtml(theDatabase, jsOther);
 
 /* Show data set selector. */
 htmlNbSpaces(3);
@@ -653,7 +655,6 @@ hPrintf("</FORM>\n");
     int regularCount = ArraySize(regularVars);
     jsCreateHiddenForm(cart, scriptName, regularVars, regularCount);
     }
-
 
 /*
 webNewSection("Using Genome Heatmaps");
