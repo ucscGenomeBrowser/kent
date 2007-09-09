@@ -22,7 +22,7 @@
 #include "microarray.h"
 #include "hgChromGraph.h"
 
-static char const rcsid[] = "$Id: hgHeatmap.c,v 1.14 2007/09/09 20:02:26 jzhu Exp $";
+static char const rcsid[] = "$Id: hgHeatmap.c,v 1.15 2007/09/09 21:42:39 jzhu Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -209,7 +209,7 @@ AllocArray(gh->expIdOrder, gh->expCount);
 
 char *pS = NULL;
 
-if (posStr)
+if (!sameString(posStr,""))
     pS = posStr;
 else
     {
@@ -281,8 +281,11 @@ int *getBedOrder(struct genoHeatmap* gh)
 {
 if (gh->expIdOrder == NULL)
     {
-    /* need to add code to get from the cgivariables*/
-    char *posStr = NULL;
+    /* get the ordering information from cart */
+    char varName[512];
+    char *tableName = gh->name;
+    safef(varName, sizeof (varName),"%s_%s", hghOrder,tableName);
+    char *posStr = cartUsualString(cart,varName, "");
     setSampleOrder(gh, posStr);
     }
 return gh->expIdOrder;
@@ -428,7 +431,7 @@ void dispatchLocation()
 struct sqlConnection *conn = NULL;
 getDbAndGenome(cart, &theDatabase, &theGenome,oldVars);
 hSetDb(theDatabase);
-cartSetString(cart, "db", theDatabase); /* Some custom tracks code needs this */
+cartSetString(cart, "db", theDatabase); /* custom tracks needs this */
 theDataset = cartOptionalString(cart, hghDataSet);  
 conn = hAllocConn();
 if (!theDataset)

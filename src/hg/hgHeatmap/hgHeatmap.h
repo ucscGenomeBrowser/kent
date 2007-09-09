@@ -25,6 +25,8 @@
 #define hghMaxGapToFill hghPrefix "maxGapToFill"
 #define hghImageWidth hghPrefix "imageWidth"
 
+#define hghOrder hghPrefix "order"
+
 /*** Command variables. ***/
 #define hghConfigure hghDo "Configure"
 #define hghConfigureOne hghDo "ConfigureOne"
@@ -42,8 +44,6 @@ extern struct hash *oldCart;
 extern char *theDatabase;	/* Name of the selected database - hg15, mm3, or the like. */
 extern char *theGenome;	/* Name of the selected genome - mouse, human, etc. */
 extern char *thbeDataset;      /* Name of the selected dataset - UCSF breast cancer etc. */
-//extern struct bed *ggUserList;	/* List of user graphs */
-//extern struct bed *ggDbList;	/* List of graphs in database. */
 extern struct trackLayout tl;	/* Dimensions of things, fonts, etc. */
 extern struct slRef *ghList;	/* List of active heatmaps */
 extern struct hash *ghHash;	/* Hash of active heatmaps */

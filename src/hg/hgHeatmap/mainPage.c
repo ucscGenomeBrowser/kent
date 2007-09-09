@@ -28,7 +28,7 @@
 #include "hCytoBand.h"
 #include "hgChromGraph.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.12 2007/09/09 20:02:26 jzhu Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.13 2007/09/09 21:42:39 jzhu Exp $";
 
 /* Page drawing stuff. */
 
@@ -640,25 +640,35 @@ boolean result = renderGraphic(conn, NULL);
 hPrintf("</TD></TR></TABLE>\n");
 if (result)
     /* Write a little click-on-help */
-    hPrintf("<i>Click on a chromosome to open Genome Browser at that position.</i>");
-
+    hPrintf("<i>Click on a chromosome to open Genome Browser at that position.</i><BR>");
+if (result)
+    /* test code for reordering for ispy table */ 
+    {
+    hPrintf("<BR>This is a test: ispyMipCGH sample order, format: csv.<BR>");
+    char varName[512];
+    char *tableName = "ispyMipCGH";
+    safef(varName, sizeof (varName),"%s_%s", hghOrder,tableName);
+    char *text = cartUsualString(cart, varName, "");
+    cgiMakeTextArea(varName,text, 5 ,50);
+    cgiMakeSubmitButton();
+    }
 hPrintf("</FORM>\n");
 
 /* Hidden form - fo the benefit of javascript. */
-    {
-    /* Copy over both the regular, non-changing variables, and
-     * also all the source/color pairs that depend on the
-     * configuration. */
-    static char *regularVars[] = {
-	"clade", "org", "db", hghHeatmap, hghDataSet
-      };
-    int regularCount = ArraySize(regularVars);
-    jsCreateHiddenForm(cart, scriptName, regularVars, regularCount);
-    }
+{
+/* Copy over both the regular, non-changing variables, and
+ * also all the source/color pairs that depend on the
+ * configuration. */
+static char *regularVars[] = {
+    "clade", "org", "db", hghHeatmap, hghDataSet
+};
+int regularCount = ArraySize(regularVars);
+jsCreateHiddenForm(cart, scriptName, regularVars, regularCount);
+}
 
 /*
-webNewSection("Using Genome Heatmaps");
-printMainHelp();
+  webNewSection("Using Genome Heatmaps");
+  printMainHelp();
 */
 cartWebEnd();
 }
