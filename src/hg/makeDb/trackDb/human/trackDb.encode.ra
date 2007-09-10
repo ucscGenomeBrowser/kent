@@ -22,6 +22,7 @@ origAssembly hg16
 dataVersion ENCODE June 2005 Freeze
 
 track encodeGencodeGeneMar07
+superTrack encodeGencodeSuper dense
 compositeTrack on
 shortLabel Gencode Genes Mar07
 longLabel Gencode Gene Annotations (March 2007)
@@ -85,6 +86,7 @@ origAssembly hg17
     priority 5
 
 track encodeGencodeGeneOct05
+superTrack encodeGencodeSuper
 compositeTrack on
 shortLabel Gencode Genes Oct05
 longLabel Gencode Gene Annotations (October 2005)
@@ -144,6 +146,7 @@ type bed 6 +
 origAssembly hg17
 
 track encodeGencodeRaceFrags
+superTrack encodeGencodeSuper dense
 compositeTrack on
 shortLabel Gencode RACEfrags
 longLabel 5' RACE-Array experiments on Gencode loci
@@ -268,6 +271,7 @@ origAssembly hg17
     priority 16
 
 track encodeEgaspFull
+superTrack encodeEgaspSuper dense
 compositeTrack on
 shortLabel EGASP Full
 longLabel ENCODE Gene Prediction Workshop (EGASP) All ENCODE Regions
@@ -416,6 +420,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 19
 
 track encodeEgaspPartial
+superTrack encodeEgaspSuper dense
 compositeTrack on
 shortLabel EGASP Partial
 longLabel ENCODE Gene Prediction Workshop (EGASP) for Partial ENCODE Regions
@@ -488,6 +493,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 8
 
 track encodeEgaspUpdate
+superTrack encodeEgaspSuper dense
 compositeTrack on
 shortLabel EGASP Update
 longLabel ENCODE Gene Prediction Workshop (EGASP) Updates
@@ -946,6 +952,7 @@ origAssembly hg16
 dataVersion ENCODE June 2005 Freeze
 
 track encodeYaleMASPlacRNATransMap
+superTrack encodeYaleRnaSuper dense
 compositeTrack on
 shortLabel Yale MAS RNA 
 longLabel Yale Maskless Array Synthesizer, RNA Transcript Map
@@ -1010,6 +1017,7 @@ dataVersion ENCODE June 2005 Freeze
     altColor 200,50,50
 
 track encodeYaleMASPlacRNATars
+superTrack encodeYaleRnaSuper dense
 compositeTrack on
 shortLabel Yale MAS TAR
 longLabel Yale Maskless Array Synthesizer, RNA Transcriptionally Active Regions
@@ -2546,7 +2554,7 @@ compositeTrack on
 subGroup1 factor Factor H3K9K14ac2=H3K9K14ac2 H4Kac4=H4Kac4 Pol2=Pol2 actd=p63_ActD mactd=p63_mActD
 subGroup2 time Timepoint 0h=0hrs 2h=2hrs 8h=8hrs 32h=32hrs
 group encodeChip
-priority 43.8
+priority 43.9
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type bed 3 .
@@ -2563,7 +2571,7 @@ compositeTrack on
 subGroup1 factor Factor H3K9K14ac2=H3K9K14ac2 H4Kac4=H4Kac4 Pol2=Pol2 actd=p63_ActD mactd=p63_mActD
 subGroup2 time Timepoint 0h=0hrs 2h=2hrs 8h=8hrs 32h=32hrs
 group encodeChip
-priority 43.9
+priority 43.8
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type bed 3 .
@@ -3511,6 +3519,7 @@ origAssembly hg17
     priority 3
 
 track encodeUvaDnaRep
+superTrack encodeUvaDnaRepSuper dense
 compositeTrack on
 shortLabel UVa DNA Rep
 longLabel University of Virginia Temporal Profiling of DNA Replication 
@@ -3555,6 +3564,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 5
 
 track encodeUvaDnaRepSeg
+superTrack encodeUvaDnaRepSuper dense
 compositeTrack on
 shortLabel UVa DNA Rep Seg
 longLabel University of Virginia DNA Replication Temporal Segmentation
@@ -3595,6 +3605,7 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 4
 
 track encodeUvaDnaRepOrigins
+superTrack encodeUvaDnaRepSuper dense
 compositeTrack on
 shortLabel UVa DNA Rep Ori
 longLabel University of Virginia DNA Replication Origins
@@ -3642,6 +3653,7 @@ origAssembly hg17
     priority 4
 
 track encodeUvaDnaRepTr50
+superTrack encodeUvaDnaRepSuper dense
 shortLabel UVa DNA Rep TR50
 longLabel University of Virginia DNA Smoothed Timing at 50% Replication
 group encodeChrom
