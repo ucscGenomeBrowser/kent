@@ -34,7 +34,7 @@ type genePred
 cdsDrawDefault genomic\ codons
 baseColorUseCds given
 baseColorDefault genomicCodons
-itemClassTbl gencodeGeneClassMar07
+itemClassTbl encodeGencodeGeneClassMar07
 geneClasses Artifact Known Novel_CDS Novel_Transcript Putative TEC Polymorphic Processed_pseudogene Unprocessed_pseudogene
 gClass_Known 33,91,51
 gClass_Novel_CDS 33,91,51
@@ -97,7 +97,7 @@ type genePred
 cdsDrawDefault genomic\ codons
 baseColorUseCds given
 baseColorDefault genomicCodons
-itemClassTbl gencodeGeneClassOct05
+itemClassTbl encodeGencodeGeneClassOct05
 geneClasses Artifact Known Novel_CDS Novel_transcript Novel_transcript_gencode_conf Putative Putative_gencode_conf TEC Processed_pseudogene Unprocessed_pseudogene
 gClass_Known 33,91,51
 gClass_Novel_CDS 33,91,51
