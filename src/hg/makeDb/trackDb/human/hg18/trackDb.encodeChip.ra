@@ -36,13 +36,13 @@ dataVersion ENCODE June 2005 Freeze, ENCODE Oct 2005 Freeze, Oct 2006, Aug 2007
     longLabel Genome Institute of Singapore ChIP-PET: STAT1 Ab on gIF treated HeLa cells
     color 67,79,35
     dataVersion ENCODE Oct 2005 Freeze
-    origAassembly hg17
+    origAssembly hg17
     priority 2
 
     track encodeGisChipPetStat1NoGif
     subTrack encodeGisChipPetAll
     shortLabel STAT1 HeLa -gIF
-    origAassembly hg17
+    origAssembly hg17
     longLabel Genome Institute of Singapore ChIP-PET: STAT1 Ab on untreated HeLa cells
     color 125,140,35
     dataVersion ENCODE Oct 2005 Freeze
@@ -54,7 +54,7 @@ dataVersion ENCODE June 2005 Freeze, ENCODE Oct 2005 Freeze, Oct 2006, Aug 2007
     longLabel Genome Institute of Singapore ChIP-PET: c-Myc Ab on P493 B cells
     color 158,35,135
     dataVersion Oct 2006
-    origAassembly hg17
+    origAssembly hg17
     priority 4
     
     track encodeGisChipPetHes3H3K4me3
@@ -63,7 +63,7 @@ dataVersion ENCODE June 2005 Freeze, ENCODE Oct 2005 Freeze, Oct 2006, Aug 2007
     longLabel Genome Institute of Singapore ChIP-PET: H3K4me3 Ab on ES hes-3 cells
     color 150,50,50
     dataVersion Aug 2007
-    origAassembly hg18
+    origAssembly hg18
     priority 5
     
     track encodeGisChipPetHes3H3K27me3
@@ -72,7 +72,7 @@ dataVersion ENCODE June 2005 Freeze, ENCODE Oct 2005 Freeze, Oct 2006, Aug 2007
     longLabel Genome Institute of Singapore ChIP-PET: H3K27me3 Ab on ES hes-3 cells
     color 50,100,50
     dataVersion Aug 2007
-    origAassembly hg18
+    origAssembly hg18
     priority 6
 
 # Sanger chip supertrack
