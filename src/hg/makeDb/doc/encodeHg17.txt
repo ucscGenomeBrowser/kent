@@ -1402,6 +1402,8 @@ cat > load.csh << 'EOF'
 # Update 2007-03-28 (Kate). Received from Julien Lagarde (jlagarde@imim.es)
 # Julien requested 5 subtracks: reference genes, putative, polymorphic,
 # pseudogenes, polyA features. Track update (DONE, 2007-04-14, hartera)
+# Renamed the gencodeGeneClassOct05 table to encodeGencodeGeneClassOct05
+# (DONE, 2007-09-09, hartera)
     cd /cluster/data/encode
     mkdir -p Gencode/2005-10-07/lab
     cd Gencode/2005-10-07/lab
@@ -1452,6 +1454,13 @@ cat > load.csh << 'EOF'
         #  2961
     echo "LOAD DATA LOCAL INFILE 'gencodeGeneClassOct.tab' into table gencodeGeneClassOct" | hgsql hg17
 
+    # Rename the gencodeGeneClassOct05 table so that is has the prefix
+    # "encode" in line with all other ENCODE tables. (20007-09-09, hartera)
+    hgsql -e \
+   'alter table gencodeGeneClassOct05 rename encodeGencodeGeneClassOct05;' hg17
+    # Make the change in trackDb/human/trackDb.encode.ra so that the
+    # itemClassTbl is encodeGencodeGeneClassOct05 for Gencode Genes Oct05.
+
     ######################################################################
     # Update 2007-03-28 from Julien Lagarde <jlagarde@imim.es>(Kate)
     # Track update with five subtracks (in progress, 2007-04-10, hartera).
@@ -1462,7 +1471,9 @@ cat > load.csh << 'EOF'
     # Gencode polyA features: "polyA_signal", "polyA_site", "pseudo_polyA"
     # cut -f2 *chr_coords_hg17.gff | sort | uniq shows all the types.
     # New description sent 2007-04-12, ucsc_description2.html
-    # Update finished 2004-04-14, hartera.
+    # Update finished 2007-04-14, hartera.
+    # Renamed the gencodeGeneClassMar07 table to encodeGencodeGeneClassMar07
+    # (DONE, 2007-09-09, hartera)
     cd /cluster/data/encode/Gencode
     mkdir -p 2007-03-28/lab
     ln -s 2007-03-28 latest
@@ -1533,7 +1544,18 @@ cat > load.csh << 'EOF'
        ~/kent/src/hg/makeDb/trackDb/human/encodeGencodeGeneMar07.html 
 
     # E-mailed Julien Lagarde on 2007-04-13 to ask if a Gencode Introns
-    # track update is also required.
+    # track update is also required. E-mail from Julien on 2007-04-16 states
+    # that the old Gencode Introns track represented RT-PCR verification of 
+    # individual exon junctions. This information has now integrated into gene
+    # objects by HAVANA annotators so the Introns track is now obsolete -
+    # this is also stated in the track description.
+
+    # Rename the gencodeGeneClassMar07 table so that is has the prefix
+    # "encode" in line with all other ENCODE tables. (20007-09-09, hartera)
+    hgsql -e \
+   'alter table gencodeGeneClassMar07 rename encodeGencodeGeneClassMar07;' hg17
+    # Make the change in trackDb/human/trackDb.encode.ra so that the
+    # itemClassTbl is encodeGencodeGeneClassMar07 for Gencode Genes Mar07.
 
 ##########################################################################
 # NHGRI DNaseI HS (2005-10-24 kate)
@@ -2294,7 +2316,7 @@ cat > loadSig.csh << 'EOF'
     # reasons for the slight discrepancy. The arrays were newer so there were 
     # more features than the hela in the past.
     # Only P-Value and Signal data loaded because hits data was updated on
-    # March 20, 2007.
+    # 2007-03-20.
 
 # New data submitted 2007-01-30 by guoneng.zhong@yale.edu
 # 7 datasets
