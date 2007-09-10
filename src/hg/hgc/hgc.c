@@ -208,7 +208,7 @@
 #include "omicia.h"
 #include "atomDb.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1341 2007/09/04 23:28:07 kate Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1342 2007/09/10 22:24:56 kate Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -2354,12 +2354,15 @@ void printOrigAssembly(struct trackDb *tdb)
 char *composite;
 struct trackDb *fullTdb = NULL;
 
-if ((composite = trackDbSetting(tdb, "subTrack")) != NULL)
+if (!trackDbOrigAssembly(tdb))
+    {
     /* look in composite's settings */
-    fullTdb = hashFindVal(trackHash, composite);
-if (fullTdb == NULL)
-    fullTdb = tdb;
-trackDbPrintOrigAssembly(fullTdb, database);
+    if ((composite = trackDbSetting(tdb, "subTrack")) != NULL)
+        fullTdb = hashFindVal(trackHash, composite);
+    if (fullTdb != NULL)
+        tdb = fullTdb;
+    }
+trackDbPrintOrigAssembly(tdb, database);
 }
 
 void printTrackHtml(struct trackDb *tdb)

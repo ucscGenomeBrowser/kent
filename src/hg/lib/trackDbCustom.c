@@ -12,7 +12,7 @@
 #include "hash.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.34 2007/09/04 23:28:06 kate Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.35 2007/09/10 22:24:56 kate Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -595,10 +595,16 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     }
 }
 
+char *trackDbOrigAssembly(struct trackDb *tdb)
+/* return setting from trackDb, if any */
+{
+return (trackDbSetting(tdb, "origAssembly"));
+}
+
 void trackDbPrintOrigAssembly(struct trackDb *tdb, char *database)
 /* Print lift information from trackDb, if any */
 {
-char *origAssembly = trackDbSetting(tdb, "origAssembly");
+char *origAssembly = trackDbOrigAssembly(tdb);
 if (origAssembly)
     {
     if (differentString(origAssembly, database))
@@ -608,3 +614,4 @@ if (origAssembly)
         }
     }
 }
+
