@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.22 2007/09/07 23:29:57 hiram Exp $"
+#	"$Id: mm9.txt,v 1.23 2007/09/10 23:21:40 hiram Exp $"
 #
 
 #######################################################################
@@ -3463,5 +3463,425 @@ XXXX - running 2007-09-07 10:11
     # with mm9 on top:
 (((mouse_mm9:0.076274,rat_rn4:0.084383):0.249544,human_hg18:0.126901):0.019763,
 dog_canFam2:0.187963);
+
+#########################################################################
+### GNF ATLAS 2 - required for UCSC Gene/Gene Sorter build
+#	(DONE - 2007-09-10 - Hiram)
+    # Align probes from GNF1M chip.
+    ssh pk
+    mkdir -p /cluster/data/mm9/bed/geneAtlas2/run/psl
+    cd /cluster/data/mm9/bed/geneAtlas2/run
+
+    cut -f1 /cluster/data/mm9/chrom.sizes > genome.list
+
+    ls -1 /cluster/bluearc/geneAtlas2/gnf1m.fa > probe.list
+
+    cat << '_EOF_' > template
+#LOOP
+blat -fine -ooc=/scratch/data/mm9/11.ooc /scratch/data/mm9/nib/$(path1).nib $(path2) {check out line+ psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+    gensub2 genome.list probe.list template jobList
+    para create jobList
+    para try ... check ... push ... etc.
+    para time
+# Completed: 35 of 35 jobs
+# CPU time in finished jobs:      14865s     247.75m     4.13h    0.17d  0.000 y
+# IO & Wait Time:                   160s       2.66m     0.04h    0.00d  0.000 y
+# Average job time:                 429s       7.15m     0.12h    0.00d
+# Longest finished job:            1151s      19.18m     0.32h    0.01d
+# Submission to last job:          1166s      19.43m     0.32h    0.01d
+
+    # Do sort, best in genome filter, and convert to chromosome coordinates
+    # to create gnf1h.psl.
+    pslSort dirs raw.psl tmp psl
+    pslReps -minCover=0.3 -minAli=0.95 -nearTop=0.005 raw.psl \
+	../affyGnf1m.psl /dev/null
+
+    # Load probes and alignments from GNF1H into database.
+    ssh hgwdev
+    cd /cluster/data/mm9/bed/geneAtlas2
+#    ln -s /projects/compbio/data/microarray/geneAtlas2/mouse/gnf1m.fa /gbdb/hgFixed/affyProbes
+    hgLoadPsl mm9 affyGnf1m.psl
+    hgLoadSeq mm9 /gbdb/hgFixed/affyProbes/gnf1m.fa
+    #	31309 sequences
+
+    # Load up track
+    hgMapMicroarray gnfAtlas2.bed hgFixed.gnfMouseAtlas2MedianRatio \
+    	affyGnf1m.psl
+    #Loaded 34863 rows of expression data from hgFixed.gnfMouseAtlas2MedianRatio
+    #	Mapped 30117,  multiply-mapped 1723, missed 882, unmapped 4746
+
+    # Note that the unmapped 5000 records are from all-N sequences.
+    hgLoadBed mm9 gnfAtlas2 gnfAtlas2.bed
+    #	Loaded 31840 elements of size 15
+    featureBits mm9 gnfAtlas2
+    #	12921627 bases of 2620346127 (0.493%) in intersection
+    featureBits mm8 gnfAtlas2
+    #	12858280 bases of 2567283971 (0.501%) in intersection
+
+    #	during the build of UCSC genes, this sequence takes place:
+    hgMapToGene mm9 affyGnf1m knownGene knownToGnf1m
+    hgExpDistance mm9 hgFixed.gnfMouseAtlas2MedianRatio \
+	hgFixed.gnfMouseAtlas2MedianExps gnfAtlas2Distance -lookup=knownToGnf1m
+    #	this hgExpDistance command takes some time, maybe an hour or so ?
+    #	Have 34863 elements in hgFixed.gnfMouseAtlas2MedianRatio
+    #	Got 31145 unique elements in hgFixed.gnfMouseAtlas2MedianRatio
+    hgMapToGene mm9 gnfAtlas2 knownGene knownToGnfAtlas2 '-type=bed 12'
+
+############################################################################
+### affyU74 TRACK - needed for the Gene Sorter (DONE - 2007-09-10 - Hiram)
+#                              
+# MAKE THE affyU74 TRACK using Affy consensus sequences instead of 
+# target sequences. Recalculate alignments and load data
+#
+#	The affy data has previously been loaded to iscratch in:
+#	/iscratch/i/affy
+# It originates from:
+# /projects/compbio/data/microarray/affyGnfMouse/sequences/
+
+    # Run cluster job to do alignments
+    ssh kk
+    mkdir -p /cluster/data/mm9/bed/affyU74/run/psl
+    cd /cluster/data/mm9/bed/affyU74/run
+    cut -f1 /cluster/data/mm9/chrom.sizes > genome.list
+    ls -1 /iscratch/i/affy/U74*consensus.fa > affy.list
+    cat << '_EOF_' > template
+#LOOP
+blat -fine -mask=lower -minIdentity=95 -ooc=/scratch/data/mm9/11.ooc /scratch/data/mm9/nib/$(path1).nib {check in line+ $(path2)} {check out line+ psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    gensub2 genome.list affy.list template jobList
+    para create jobList
+    para try ... check ... push ... etc.
+    para time
+# Completed: 105 of 105 jobs
+# CPU time in finished jobs:       5891s      98.18m     1.64h    0.07d  0.000 y
+# IO & Wait Time:                   738s      12.31m     0.21h    0.01d  0.000 y
+# Average job time:                  63s       1.05m     0.02h    0.00d
+# Longest finished job:             199s       3.32m     0.06h    0.00d
+# Submission to last job:           215s       3.58m     0.06h    0.00d
+
+# Do sort, best in genome filter, and convert to chromosome coordinates
+# to create affyU74.psl.
+    pslSort dirs raw.psl tmp psl
+
+# change filter parameters for these sequences. only use alignments that
+# cover 30% of sequence and have at least minAli = 0.95.
+# minAli = 0.97 too high. low minCover as a lot of n's in these sequences
+#pslReps -minCover=0.3 -sizeMatters -minAli=0.95 -nearTop=0.005 raw.psl contig.psl /dev/null
+    pslReps -minCover=0.3 -sizeMatters -minAli=0.95 -nearTop=0.005 raw.psl \
+	../all_affyU74.psl /dev/null
+    #	Processed 40512 alignments
+
+# Sort by chromosome and load into database.
+    ssh hgwdev
+    cd /cluster/data/mm9/bed/affyU74
+    pslSortAcc nohead chrom temp all_affyU74.psl
+    #	Processed 30609 lines into 1 temp files
+    cat chrom/*.psl > affyU74.psl
+
+# shorten qName to "xxxx_at" instead of "U74Xv2:xxxx_at;"
+# and reload data into table
+
+    mv affyU74.psl affyU74.psl.orig
+
+    cut -f 1-9 affyU74.psl.orig >j1.tmp
+    cut -f 10 affyU74.psl.orig | sed -e 's/:/\t/' | cut -f 2 > j2.tmp
+    cut -f 11-21 affyU74.psl.orig >j3.tmp
+    paste j1.tmp j2.tmp j3.tmp >affyU74.psl
+
+    hgLoadPsl mm9 affyU74.psl
+    rm -rf chrom temp run j?.tmp
+
+    #	creating the gene sorter tables runs the following:
+    hgMapToGene mm9 affyU74  knownGene knownToU74
+
+############################################################################
+##   MAKE THE affyGnfU74 TRACKs (DONE 3/8/06, Fan)
+# Make bed files and load consensus sequences for Affy U74 chip set.
+
+    #This needs to be done after affyU74 is already made.
+    ssh hgwdev
+    mkdir -p /cluster/data/mm9/bed/affyGnf
+    cd /cluster/data/mm9/bed/affyGnf
+#	may need to build this command in src/hg/affyGnf
+~/src/hg/affyGnf/affyPslAndAtlasToBed ../affyU74/affyU74.psl \
+	/projects/compbio/data/microarray/affyGnfMouse/data/data_public_U74 \
+	affyGnfU74A.bed affyGnfU74A.exp -newType -chip=U74Av2
+# 89 experiments
+# 10043 rows of expression data
+# 30609 records in ../affyU74/affyU74.psl
+# 10309 records written to affyGnfU74A.bed
+
+~/src/hg/affyGnf/affyPslAndAtlasToBed ../affyU74/affyU74.psl \
+	/projects/compbio/data/microarray/affyGnfMouse/data/U74B_b.txt \
+	affyGnfU74B.bed affyGnfU74B.exp -newType -chip=U74Bv2
+# 20 experiments
+# 12477 rows of expression data
+# 30609 records in ../affyU74/affyU74.psl
+# 11324 records written to affyGnfU74B.bed
+
+~/src/hg/affyGnf/affyPslAndAtlasToBed ../affyU74/affyU74.psl \
+	/projects/compbio/data/microarray/affyGnfMouse/data/U74C_b.txt \
+	affyGnfU74C.bed affyGnfU74C.exp -newType -chip=U74Cv2
+# 20 experiments
+# 11934 rows of expression data
+# 30609 records in ../affyU74/affyU74.psl
+# 7773 records written to affyGnfU74C.bed
+
+# edit 3 .bed files to shorten qName to "xxxx_at" instead of "U74Xv2:xxxx_at;"
+#   (these files do not appear to have these long names in them to begin with)
+    mkdir sav
+    mv *.bed sav
+    sed -e "s/U74Av2://" sav/affyGnfU74A.bed > affyGnfU74A.bed
+    sed -e "s/U74Bv2://" sav/affyGnfU74B.bed > affyGnfU74B.bed
+    sed -e "s/U74Cv2://" sav/affyGnfU74C.bed > affyGnfU74C.bed
+
+    # and reload data into table
+    hgLoadBed mm9 affyGnfU74A affyGnfU74A.bed
+    #	Loaded 10309 elements of size 15
+    hgLoadBed mm9 affyGnfU74B affyGnfU74B.bed
+    #	Loaded 11324 elements of size 15
+    hgLoadBed mm9 affyGnfU74C affyGnfU74C.bed
+    #	Loaded 7773 elements of size 15
+
+    # Add in sequence data for U74 tracks.
+    #	This business is already in gbdb - 2007-00-10 - Hiram
+    #	You do not need to repeat this symlink sequence
+    # Copy consensus sequence to /gbdb if it isn't already
+    #    mkdir -p /gbdb/hgFixed/affyProbes
+    cd /gbdb/hgFixed/affyProbes
+    # fix broken symlinks after directory structure changed
+    # /projects/compbiodata ----> /projects/compbio/data
+    rm U74*
+    # make correct symlinks (hartera, 2005-05-03)
+    ln -s /projects/compbio/data/microarray/affyGnfMouse/sequences/U74Av2_consensus.fa .
+    ln -s /projects/compbio/data/microarray/affyGnfMouse/sequences/U74Bv2_consensus.fa .
+    ln -s /projects/compbio/data/microarray/affyGnfMouse/sequences/U74Cv2_consensus.fa .
+
+    # used perl -pi.bak -e 's/;/ /' <file> to remove ";" after probe name
+    # ASSUMED THIS IS ALREADY DONE LAST TIME FOR MM4.
+    # reload sequences with prefix removed so acc matches name used in
+    # other dependent tables
+                                                    
+    hgLoadSeq -abbr=U74Av2: mm9 /gbdb/hgFixed/affyProbes/U74Av2_consensus.fa
+    #	12422 sequences
+    hgLoadSeq -abbr=U74Bv2: mm9 /gbdb/hgFixed/affyProbes/U74Bv2_consensus.fa
+    #	12411 sequences
+    hgLoadSeq -abbr=U74Cv2: mm9 /gbdb/hgFixed/affyProbes/U74Cv2_consensus.fa
+    #	11868 sequences
+
+    #	building the gene sorter runs the following commands
+    hgExpDistance mm9 affyGnfU74A affyGnfU74AExps affyGnfU74ADistance \
+	-lookup=knownToU74
+    #	real    7m6.223s
+    #	Have 9636 elements in affyGnfU74A
+    #	Got 15902 unique elements in affyGnfU74A
+    hgExpDistance mm9 affyGnfU74B affyGnfU74BExps affyGnfU74BDistance \
+	-lookup=knownToU74
+    #	real    2m12.727s
+    #	Have 11025 elements in affyGnfU74B
+    #	Got 10442 unique elements in affyGnfU74B
+    hgExpDistance mm9 affyGnfU74C affyGnfU74CExps affyGnfU74CDistance \
+	-lookup=knownToU74
+    #	real    0m29.270s
+    #	Have 7487 elements in affyGnfU74C
+    #	Got 3259 unique elements in affyGnfU74C
+
+##########################################################################
+# BUILD NIBB IMAGE PROGES (DONE - 2007-09-10 - Hiram)
+    ssh pk
+    mkdir -p /cluster/data/mm9/bed/nibbPics/run
+    cd /cluster/data/mm9/bed/nibbPics
+    cp -p /cluster/data/xenTro1/bed/nibbPics/nibbImageProbes.fa .
+    cd run
+    mkdir psl
+    ls -1 /scratch/data/mm9/nib/*.nib > genome.list
+    echo ../nibbImageProbes.fa > probe.list
+
+# Create parasol gensub file file
+cat << '_EOF_' > template
+#LOOP
+blatz -rna -minScore=6000 -out=psl $(path1) $(path2) psl/$(root1)_$(root2).psl
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+# Create parasol batch
+    gensub2 genome.list probe.list template jobList
+    para create jobList
+    para try ... check ... push ... etc... time
+# Completed: 35 of 35 jobs
+# CPU time in finished jobs:       9983s     166.39m     2.77h    0.12d  0.000 y
+# IO & Wait Time:                   146s       2.43m     0.04h    0.00d  0.000 y
+# Average job time:                 289s       4.82m     0.08h    0.00d
+# Longest finished job:             729s      12.15m     0.20h    0.01d
+# Submission to last job:           729s      12.15m     0.20h    0.01d
+
+# Make sort and filter
+    catDir psl | sort -k 10 \
+        | pslReps stdin stdout /dev/null -nohead -minAli=0.60 \
+		-nearTop=0.001 -minCover=0.10 -minNearTopSize=80 \
+	| sort -k 14,14 -k 16,16n \
+	| sed 's#/scratch/data/mm9/nib/chr#chr#' \
+	| sed 's/.nib//' > ../nibbImageProbes.psl
+
+# Make bed file and copy in stuff
+    ssh hgwdev
+    cd /cluster/data/mm9/bed/nibbPics
+
+# Load into database
+    ln -s /cluster/data/xenTro1/bed/nibbPics/nibbImageProbes.fa \
+	/gbdb/mm9/nibbImageProbes.fa
+    hgLoadSeq mm9 /gbdb/mm9/nibbImageProbes.fa
+    hgLoadPsl mm9 nibbImageProbes.psl
+
+#########################################################################
+# Creating visiGene tables for gene sorter business
+#	(DONE - 2007-09-10 - Hiram)
+    #	This businesss has cumulative effects on the visiGene database
+    #	for safety purposes, backup the visiGene database
+    ssh hgwdev
+    mkdir -p /cluster/data/mm9/bed/vgProbes/visiGene.bak
+    cd /cluster/data/mm9/bed/vgProbes/visiGene.bak
+    hgsqldump --all -c --tab=. visiGene
+
+    cd /cluster/data/mm9/bed/vgProbes
+    mkdir working
+    cd /cluster/data/mm9/bed/vgProbes
+    cp -p ~/kent/src/hg/visiGene/vgProbeTrack/*.sql .
+    #	this SEQ appears to find nothing new ?
+    vgProbeTrack SEQ working mm9
+rc = 0 = count of primers for mrna search for taxon 10090
+rc = 0 = count of primers for genome search for taxon 10090
+bac list read done.
+found seq for 0 bacEndPairs
+rc = 0 = count of refSeq mrna for mm9
+rc = 0 = count of genRef mrna for mm9
+rc = 0 = count of genbank mrna for mm9
+rc = 0 = count of flatRef mrna for mm9
+rc = 0 = count of flatAll mrna for mm9
+rc = 0 = count of linkRef mrna for mm9
+rc = 0 = count of linkAll mrna for mm9
+rc = 0 = count of kgAlRef mrna for mm9
+rc = 0 = count of kgAlAll mrna for mm9
+
+    #	and then, this creates the vgProbes table in mm9
+    vgProbeTrack ALI working mm9 -sqlPath=..
+    hgsql -e "select count(*) from vgProbes;" mm9
+    #	24924
+    hgsql -e "select count(*) from vgProbes;" mm8
+    #	24615
+
+    #	this appears to build working/vgPrbExt.fa and it loaded some sequences
+    vgProbeTrack EXT working mm9
+    vgProbeTrack SELFMAP working mm9 -sqlPath=..
+
+    vgProbeTrack -sqlPath=.. REMAP working mm9 nibb nibbImageProbes \
+	/gbdb/mm9/nibbImageProbes.fa
+
+    hgsql -e "select count(*) from vgAllProbes;" mm9
+    #	24610
+    hgsql -e "select count(*) from vgAllProbes;" mm8
+    #	25994
+
+    #	Then, during the gene sorter build, it does:
+    knownToVisiGene mm9
+    vgGetText visiGene.text mm7 mm8 mm9 hg17 hg18
+    #	probe has 26611 rows
+    #	gene has 20413 rows
+    #	imageProbe has 125765 rows
+    wc -l visiGene.text
+    #	124186 visiGene.text
+    #	compare to existing:
+    wc -l /usr/local/apache/cgi-bin/visiGeneData/visiGene.text
+    #	124186 /usr/local/apache/cgi-bin/visiGeneData/visiGene.text
+
+
+#########################################################################
+# MOUSE AFFYMETRIX MOE430 TRACK (DONE - 2007-09-10 - Hiram)
+#    mkdir -p /projects/compbio/data/microarray/affyMouse
+    # Download MOE430A and MOE430B consensus sequences from Affymetrix web site
+    # http://www.affymetrix.com/support/technical/byproduct.affx?product=moe430
+#    unzip MOE430*_consensus.zip
+
+    # check for duplicate probes: there are none, all have unique names
+    # check for duplicate probes: 100 from 136745_at to 1367551_a_at
+    # remove "consensus:" and ";" from FASTA headers to shorten probeset
+    # names for database
+
+#    sed -e 's/consensus://' MOE430A_consensus | sed -e 's/;/ /' > MOE430_all.fa
+#    sed -e 's/consensus://' MOE430B_consensus | sed -e 's/;/ /' >> MOE430_all.fa
+ 
+#    cp /projects/compbio/data/microarray/affyMouse/MOE430_all.fa \
+#       /cluster/bluearc/affy/
+
+    # THE ABOVE WAS ALREADY TBD)
+
+    # Set up cluster job to align MOE430 consensus sequences to mm9
+
+    ssh kk
+    mkdir /cluster/data/mm9/bed/affyMOE430
+    cd /cluster/data/mm9/bed/affyMOE430
+
+    ls -1 /iscratch/i/affy/MOE430_all.fa > probe.list
+    cut -f1 /cluster/data/mm9/chrom.sizes > genome.list
+
+    cat << '_EOF_' > template
+#LOOP
+blat -fine -mask=lower -minIdentity=95 -ooc=/scratch/data/mm9/11.ooc /scratch/data/mm9/nib/$(path1).nib {check in line+ $(path2)} {check out line+ psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+    gensub2 genome.list probe.list template jobList
+    mkdir psl
+    para create jobList
+    # Do the job with usual para try/check/push/time etc.
+# Completed: 35 of 35 jobs
+# CPU time in finished jobs:       9093s     151.55m     2.53h    0.11d  0.000 y
+# IO & Wait Time:                   217s       3.62m     0.06h    0.00d  0.000 y
+# Average job time:                 266s       4.43m     0.07h    0.00d
+# Longest finished job:             602s      10.03m     0.17h    0.01d
+# Submission to last job:           602s      10.03m     0.17h    0.01d
+
+    # Do sort, best in genome filter, and convert to chromosome coordinates
+    # to create affyRAE230.psl
+    pslSort dirs raw.psl tmp psl
+
+    # only use alignments that cover 30% of sequence and have at least
+    # 95% identity in aligned region. 
+    # low minCover as a lot of n's in these sequences
+    pslReps -minCover=0.3 -sizeMatters -minAli=0.95 -nearTop=0.005 \
+	raw.psl affyMOE430.psl /dev/null
+
+    # Load alignments and sequences into database
+    ssh hgwdev
+    cd /cluster/data/mm9/bed/affyMOE430
+    # shorten names in psl file
+    sed -e 's/MOE430//' affyMOE430.psl > affyMOE430.psl.bak
+    mv affyMOE430.psl.bak affyMOE430.psl
+
+    # load track into database
+
+    hgLoadPsl mm9 affyMOE430.psl
+ 
+    # Add consensus sequences for MOE430
+    # Copy sequences to gbdb is they are not there already
+#    mkdir -p /gbdb/hgFixed/affyProbes
+#    ln -s /projects/compbio/data/microarray/affyMouse/MOE430_all.fa \ 
+#       /gbdb/hgFixed/affyProbes
+
+    hgLoadSeq -abbr=MOE430 mm9 /gbdb/hgFixed/affyProbes/MOE430_all.fa
+    
+    # Clean up
+    rm batch.bak raw.psl 
+
+    #	and then, during the gene sorter build, it does:
+    hgMapToGene mm9 affyMOE430 knownGene knownToMOE430
+    hgMapToGene mm9 affyMOE430 -prefix=A: knownGene knownToMOE430A
 
 #########################################################################
