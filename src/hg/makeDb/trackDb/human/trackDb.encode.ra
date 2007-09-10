@@ -2338,7 +2338,7 @@ dataVersion ENCODE Oct 2005 Freeze
     release alpha
     subTrack encodeAffyChIpHl60PvalStrict
     subGroups factor=actd time=0h
-    shortLabel Affy p63 ActD ME-180
+    shortLabel Affy p63 ME-180+
     longLabel Affymetrix ChIP-chip (p63, actinomycin-D treated ME-180) Strict P-Value
     color 0,0,200
     priority 13
@@ -2511,7 +2511,7 @@ dataVersion ENCODE Oct 2005 Freeze
     release alpha
     subTrack encodeAffyChIpHl60SignalStrict
     subGroups factor=actd time=0h
-    shortLabel Affy p63-ActD ME-180
+    shortLabel Affy p63 ME-180+
     longLabel Affymetrix ChIP-chip (p63, actinomycin-D treated ME-180) Strict Signal
     color 0,0,200
     priority 13
@@ -2520,7 +2520,7 @@ dataVersion ENCODE Oct 2005 Freeze
     release beta
     subTrack encodeAffyChIpHl60SignalStrict
     subGroups factor=actd time=0h
-    shortLabel Affy p63 ActD ME-180
+    shortLabel Affy p63-ActD
     longLabel Affymetrix ChIP-chip (actinomycin-D treated p63 HL-60) Strict Signal
     color 0,0,200
     priority 13
@@ -2678,7 +2678,7 @@ dataVersion ENCODE Oct 2005 Freeze
     release alpha
     subTrack encodeAffyChIpHl60SitesStrict
     subGroups factor=actd time=0h
-    shortLabel Affy p63 ActD ME-180
+    shortLabel Affy p63 ME-180+
     longLabel Affymetrix ChIP-chip (p63, actinomycin-D treated ME-180) Strict Sites
     color 0,0,200
     priority 13
