@@ -2863,4 +2863,22 @@ TMPDIR=/scratch/tmp
     tetraodon/tetNig1/nscanGene.html   (copy from mm8 and edit)
     tetraodon/tetNig1/trackDb.ra
 
+##############################################################################
+# SWAP mm9 alignments to tetNig1 (DONE - 2007-09-07 - Hiram)
+    #	the original was done at:
+    cd /cluster/data/mm9/bed/blastzTetNig1.2007-09-06
+    cat fb.mm9.chainTetNig1Link.txt
+    #	46206292 bases of 2620346127 (1.763%) in intersection
 
+    mkdir /cluster/data/tetNig1/bed/blastz.mm9.swap
+    cd /cluster/data/tetNig1/bed/blastz.mm9.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/mm9/bed/blastzTetNig1.2007-09-06/DEF \
+	-chainMinScore=5000 \
+	-qRepeats=windowmaskerSdust -chainLinearGap=loose \
+	-swap -bigClusterHub=kk > swap.log 2>&1 &
+    #	real    19m58.885s
+    cat fb.tetNig1.chainMm9Link.txt
+    #	42256263 bases of 342403326 (12.341%) in intersection
+
+##############################################################################
