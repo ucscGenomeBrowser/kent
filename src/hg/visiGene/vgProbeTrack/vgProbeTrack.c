@@ -1,4 +1,5 @@
-/* vgProbeTrack - build vgPrb permanent id table in visiGene database. 
+/* vgProbeTrack - build vgPrb% permanent id tables in visiGene database, 
+ *   also updates $db.vg{All}Probes tables
  *
  *   This finds sequence for all probes, using the best method available,
  *   which can be given in probe.seq, using the primers to
@@ -33,7 +34,8 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "vgProbeTrack - build vgPrb table in visiGene database\n"
+  "vgProbeTrack - build permanent-Id vgPrb* tables in visiGene database\n"
+  " and update assembly-specific tables vgProbes and vgAllProbes\n"
   "usage:\n"
   "   vgProbeTrack <COMMAND> {workingDir db} {optional params}\n"
   "\n"
