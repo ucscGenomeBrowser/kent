@@ -11,7 +11,7 @@
 #include "dystring.h"
 #include "values.h"
 
-static char const rcsid[] = "$Id: atomString.c,v 1.4 2007/06/10 21:52:42 braney Exp $";
+static char const rcsid[] = "$Id: atomString.c,v 1.5 2007/09/11 15:19:57 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -24,19 +24,22 @@ errAbort(
   "   in.atom        list of atoms to string\n"
   "   in.seq         list of sequence (atom orderings)\n"
   "   in.base        lists of baseAtoms for each atom\n"
-  "   out.atom       list of atoms to string\n"
+  "   out.atom       list of strung atoms\n"
   "   out.base       lists of baseAtoms for each atom\n"
   "options:\n"
   "   -minLen=N       minimum size of atom to consider\n"
+  "   -ignoreStrand   clump things together without regarding strand\n"
   );
 }
 
 static struct optionSpec options[] = {
    {"minLen", OPTION_INT},
+   {"ignoreStrand", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
 int minLen = 1;
+boolean  ignoreStrand = FALSE;
 boolean noOverlap = FALSE;
 char *stringsFile = NULL;
 
@@ -171,13 +174,13 @@ for( instance = atom->instances; instance;  instance = instance->next)
     if (thisPrev == NULL)
 	return NULL;
 
+    if (atom->numInstances != thisPrev->numInstances)
+	return NULL;
     //printf("insam thisPrev %s %d\n",thisPrev->name,thisPrev->stringNum);
    // if (thisPrev->stringNum)
 //	return NULL;
 
     //printf("insamprev numInstances %d %d\n",atom->numInstances,thisPrev->numInstances);
-    if (atom->numInstances != thisPrev->numInstances)
-	return NULL;
 
     //printf("inSamePrev %s\n",thisPrev->name);
     if (firstTime)
@@ -203,14 +206,17 @@ if (checkNext)
 struct instance *strInt = atom->instances;
 struct instance *atomInt = prevAtom->instances;
 
-for(; strInt; atomInt = atomInt->next,strInt = strInt->next)
-    if (strInt->strand != atomInt->strand)
-	{
-	//printf("strand not matching\n");
+if (!ignoreStrand)
+    {
+    for(; strInt; atomInt = atomInt->next,strInt = strInt->next)
+	if (strInt->strand != atomInt->strand)
+	    {
+	    printf("strand not matching\n");
+	    return NULL;
+	    }
+    if ((strInt != NULL ) || (atomInt != NULL))
 	return NULL;
-	}
-if ((strInt != NULL ) || (atomInt != NULL))
-    return NULL;
+    }
 
 
 //printf("returning prev %s\n",prevAtom->name);
@@ -249,6 +255,7 @@ for( instance = atom->instances; instance;  instance = instance->next)
 	if (nextAtom != thisNext)
 	    return NULL;
 	
+	//printf("nextAtom is sam\n");
 	}
     }
 
@@ -261,17 +268,21 @@ if (checkPrev)
 	return NULL;
     }
 
+//printf("got here\n");
 struct instance *strInt = atom->instances;
 struct instance *atomInt = nextAtom->instances;
 
-for(; strInt; atomInt = atomInt->next,strInt = strInt->next)
-    if (strInt->strand != atomInt->strand)
-	{
-	//printf("strand not matching\n");
+if (!ignoreStrand)
+    {
+    for(; strInt; atomInt = atomInt->next,strInt = strInt->next)
+	if (strInt->strand != atomInt->strand)
+	    {
+	    //printf("strand not matching\n");
+	    return NULL;
+	    }
+    if ((strInt != NULL ) || (atomInt != NULL))
 	return NULL;
-	}
-if ((strInt != NULL ) || (atomInt != NULL))
-    return NULL;
+    }
 
 //printf("returning next %s\n",nextAtom->name);
 return nextAtom;
@@ -357,7 +368,7 @@ for(; nextAtom;
     lastAtom = nextAtom, nextAtom = instancesSameNext(nextAtom, TRUE))
     {
     nextAtom->stringNum = string->num;
-    slAddHead(&string->baseAtoms, nextAtom->baseAtoms);
+    slAddTail(&string->baseAtoms, nextAtom->baseAtoms);
     //printf("joining %s %s\n",atom->name, nextAtom->name);
     }
 
@@ -391,7 +402,7 @@ void clumpNeighbors(struct atom *atom, struct atomString *string)
 clumpNextNeighbors(atom, string);
 clumpPrevNeighbors(atom, string);
 
-slReverse(&string->baseAtoms);
+//slReverse(&string->baseAtoms);
 }
 
 
@@ -404,173 +415,12 @@ for(atom = atoms; atom; atom = atom->next)
     if (atom->stringNum == 0)
 	{
 	struct atomString *string = getNewString(strings, atom);
+	verbose(2,"clumping neighbors of %s\n",atom->name);
 	clumpNeighbors(atom, string);
 	}
     }
 }
 
-#ifdef NOTNOW
-for(; data < last; )
-    {
-    struct atom *atom = (*data)->atom;
-    struct atom *startAtom = atom;
-    struct atom *nextAtom = NULL;
-
-    if (atom->stringNum != 0)
-	errAbort("atom already has a string");
-
-    data++;
-
-    if (instancesSameNext(atom))
-	{
-	nextAtom = getNextAtom(atom->instances);
-
-	if (nextAtom == NULL)
-	    {
-	    /* don't start a new string */
-	    continue;
-	    }
-	}
-
-    struct atomString *string = getNewString(strings, atom);
-
-    if (nextAtom == NULL)
-	continue;
-    
-    int count = 0;
-    struct instance *instance;
-    for( instance = atom->instances; instance;  instance = instance->next)
-	{
-	if (instance->strand == '+')
-	    instanceStarts[count++] = instance->start;
-	else
-	    instanceStarts[count++] = instance->end;
-	}
-
-    for(;;) 
-	{
-	struct atom *firstNextAtom = NULL;
-
-	for( instance = atom->instances; instance;  instance = instance->next)
-	    {
-	    struct instance *nextInSeq ;
-	    struct atom *nextAtom = NULL;
-	    
-	    if (instance->atom == NULL)
-		break;
-
-	    if (instance->strand == '+')
-		nextInSeq = *(instance->seqPos + 1);
-	    else
-		nextInSeq = *(instance->seqPos - 1);
-
-	    if (nextInSeq == NULL)
-		{
-		//printf("nextInSeq is null\n");
-		break;
-		}
-	    else
-		{
-
-		nextAtom = nextInSeq->atom;
-
-		if (nextAtom->stringNum)
-		    {
-		    //printf("next atom has string num %d\n",nextAtom->stringNum);
-		    break;
-		    }
-		}
-
-	    if (firstNextAtom == NULL)
-		{
-		firstNextAtom = nextAtom;
-		if ((nextAtom != NULL) && (firstNextAtom->numInstances != atom->numInstances))
-		    {
-		    //printf("numInstances not the same\n");
-		    break;
-		    }
-		}
-	    else if (nextAtom != firstNextAtom)
-		{
-		//printf("next not same as first\n");
-		break;
-		}
-	    }
-	if (instance != NULL)
-	    {
-	    //printf("instance is not NULL\n");
-	    break;
-	    }
-
-
-	//printf("looking for prev\n");
-	struct atom *firstPrevAtom = NULL;
-//	if (firstNextAtom == NULL)
-//	    firstNextAtom = atom;
-	for( instance = firstNextAtom->instances; instance;  instance = instance->next)
-	    {
-	    struct instance *prevInSeq;
-
-	    if (instance->atom == NULL)
-		break;
-
-	    if (instance->strand == '+')
-		prevInSeq = *(instance->seqPos - 1);
-	    else
-		prevInSeq = *(instance->seqPos + 1);
-
-	    if (prevInSeq == NULL)
-		break;
-
-	    struct atom *prevAtom = prevInSeq->atom;
-
-	    if (firstPrevAtom == NULL)
-		firstPrevAtom = prevAtom;
-	    else if (prevAtom != firstPrevAtom)
-		break;
-	    }
-
-	if (instance != NULL)
-	    break;
-
-	firstNextAtom->stringNum = string->num;
-
-	atom = (*data)->atom;
-	slAddHead(&string->baseAtoms, atom->baseAtoms);
-	data++;
-	}
-
-    count = 0;
-    for( instance = atom->instances;  instance; instance = instance->next)
-	{
-	struct instance *newInt;
-	int length;
-
-	AllocVar(newInt);
-	*newInt = *instance;
-	slAddHead(&string->instances, newInt);
-	if (instance->strand == '+') 
-	    newInt->start = instanceStarts[count];
-	else
-	    newInt->end = instanceStarts[count];
-
-	count++;
-	length = newInt->end - newInt->start;
-
-	if (length < string->length)
-	    {
-	    string->length = length;
-	    if (length < 1)
-		errAbort("length below one: %s %d",startAtom->name,length);
-	    }
-	}
-
-    string->count = count;
-    slReverse(&string->instances);
-    slReverse(&string->baseAtoms);
-    }
-}
-#endif
 
 struct atom *getAtoms(char *atomsName, struct hash *atomHash)
 {
@@ -643,7 +493,10 @@ while( (wordsRead = lineFileChopNext(lf, bigWords, sizeof(bigWords)/sizeof(char 
 	*ptr++ = 0;
 	instance->start = atoi(start) - 1;
 	instance->end = atoi(ptr);
-	instance->strand = *bigWords[1];
+	//if (ignoreStrand)
+	    //instance->strand = '+';
+	//else
+	    instance->strand = *bigWords[1];
 	
 	}
     }
@@ -964,6 +817,7 @@ if (argc != 6)
     usage();
 
 minLen = optionInt("minLen", minLen);
+ignoreStrand = optionExists("ignoreStrand");
 
 atomString(argv[1],argv[2], argv[3], argv[4], argv[5]);
 return 0;
