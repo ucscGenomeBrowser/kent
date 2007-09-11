@@ -1593,6 +1593,7 @@ autoScale Off
 subGroup1 celltype Cell_Type hela=HeLaS3 gm=GM06990 k562=K562
 subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF1 pol2=Pol2 pol2n=Pol2-N h4kac4=H4Kac4 h3k27me3=H3K27me3 baf47=BAF47 stat1=STAT1 p65c=P65-C p65n=P65-N smarca4=SMARCA4 smarca6=SMARCA6 nrsf=NRSF
 dataVersion ENCODE Oct 2005 Freeze, Nov 2006, Jan 2007
+origAssembly hg17
 
     track encodeYaleChipSignalBaf155
     subTrack encodeYaleChipSig
