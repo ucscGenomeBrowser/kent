@@ -18,7 +18,7 @@
 #include "hgTracks.h"
 #include "cdsSpec.h"
 
-static char const rcsid[] = "$Id: cds.c,v 1.61 2007/09/05 04:30:55 markd Exp $";
+static char const rcsid[] = "$Id: cds.c,v 1.62 2007/09/11 23:51:47 markd Exp $";
 
 /* Definitions of cds colors for coding coloring display */
 #define CDS_ERROR   0
@@ -278,12 +278,22 @@ else   /*negative strand*/
 }
 
 
-static void drawVertLine(struct vGfx *vg, int chromStart, int xOff, int y,
+static void drawVertLine(struct linkedFeatures *lf, struct vGfx *vg,
+                         int chromStart, int xOff, int y,
 			 int height, double scale, Color color)
 /* Draw a 1-pixel wide vertical line at the given chromosomal coord. */
 {
 int thisX = round((double)(chromStart-winStart)*scale) + xOff;
-vgLine(vg, thisX, y, thisX, y+height, color);
+int thisY = y;
+int thisHeight = height;
+if ((chromStart < lf->tallStart) || (chromStart >= lf->tallEnd))
+    {
+    /* adjust for UTR. WARNING: this duplicates shortOff & shortHeight
+     * calculations in linkedFeaturesDrawAt */
+    thisY += height/4;
+    thisHeight = height - height/2;
+    }
+vgLine(vg, thisX, thisY, thisX, thisY+thisHeight, color);
 }
 
 
@@ -315,7 +325,7 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
 		{
 		if (mrnaSeq->dna[mrnaS+i] != genoSeq->dna[i])
 		    {
-		    drawVertLine(vg, s+i, xOff, y+1, heightPer-2, scale,
+		    drawVertLine(lf, vg, s+i, xOff, y+1, heightPer-2, scale,
 				 cdsColor[CDS_STOP]);
 		    }
 		}
@@ -1394,7 +1404,7 @@ if (indelShowPolyA && mrnaSeq)
 	    if (polyTSize > 0 && (polyTSize + 3) >= psl->qStarts[0])
 		{
 		s = psl->tStarts[0];
-		drawVertLine(vg, s, xOff, y, heightPer-1, scale,
+		drawVertLine(lf, vg, s, xOff, y, heightPer-1, scale,
 			     cdsColor[CDS_POLY_A]);
 		gotPolyAStart = TRUE;
 		}
@@ -1413,7 +1423,7 @@ if (indelShowPolyA && mrnaSeq)
 	    if (polyTSize > 0 && (polyTSize + 3) >= rcQStart)
 		{
 		s = psl->tStart;
-		drawVertLine(vg, s, xOff, y, heightPer-1, scale,
+		drawVertLine(lf, vg, s, xOff, y, heightPer-1, scale,
 			     cdsColor[CDS_POLY_A]);
 		gotPolyAEnd = TRUE;
 		}
@@ -1429,7 +1439,7 @@ if (indelShowPolyA && mrnaSeq)
 		  (psl->qStarts[lastBlk] + psl->blockSizes[lastBlk]))))
 		{
 		s = psl->tStarts[lastBlk] + psl->blockSizes[lastBlk];
-		drawVertLine(vg, s, xOff, y, heightPer-1, scale,
+		drawVertLine(lf, vg, s, xOff, y, heightPer-1, scale,
 			     cdsColor[CDS_POLY_A]);
 		gotPolyAEnd = TRUE;
 		}
@@ -1445,7 +1455,7 @@ if (indelShowQInsert)
 	 * unless it's polyA. */
 	s = (psl->strand[1] == '-') ? (psl->tSize - psl->tStarts[0]) :
 				      psl->tStarts[0];
-	drawVertLine(vg, s, xOff, y, heightPer-1, scale,
+	drawVertLine(lf, vg, s, xOff, y, heightPer-1, scale,
 		     cdsColor[CDS_QUERY_INSERTION_AT_END]);
 	}
     for (i = 1;  i < psl->blockCount;  i++)
@@ -1463,7 +1473,7 @@ if (indelShowQInsert)
 		/* Insert in query only -- draw vertical orange line. */
 		s = (psl->strand[1] == '-') ? (psl->tSize - psl->tStarts[i]) :
 					      psl->tStarts[i];
-		drawVertLine(vg, s, xOff, y, heightPer-1, scale,
+		drawVertLine(lf, vg, s, xOff, y, heightPer-1, scale,
 			     cdsColor[CDS_QUERY_INSERTION]);
 		}
 	    }
@@ -1481,7 +1491,7 @@ if (indelShowQInsert)
 	s = (psl->strand[1] == '-') ?
 	    (psl->tSize - (psl->tStarts[lastBlk] + psl->blockSizes[lastBlk])) :
 	    (psl->tStarts[lastBlk] + psl->blockSizes[lastBlk]);
-	drawVertLine(vg, s, xOff, y, heightPer-1, scale,
+	drawVertLine(lf, vg, s, xOff, y, heightPer-1, scale,
 		     cdsColor[CDS_QUERY_INSERTION_AT_END]);
 	}
     }
