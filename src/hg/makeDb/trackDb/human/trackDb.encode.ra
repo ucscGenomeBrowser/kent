@@ -28,7 +28,7 @@ shortLabel Gencode Genes Mar07
 longLabel Gencode Gene Annotations (March 2007)
 dataVersion Mar 2007
 group encodeGenes
-priority 10.5
+priority 10.4
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type genePred
@@ -146,13 +146,13 @@ type bed 6 +
 origAssembly hg17
 
 track encodeGencodeRaceFrags
-superTrack encodeGencodeSuper dense
+superTrack encodeGencodeSuper
 compositeTrack on
 shortLabel Gencode RACEfrags
 longLabel 5' RACE-Array experiments on Gencode loci
 dataVersion Mar 2007
 group encodeGenes
-priority 11
+priority 10.5
 chromosomes chr1,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type genePred
