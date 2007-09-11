@@ -135,6 +135,7 @@ origAssembly hg17
     priority 3
 
 track encodeGencodeIntronOct05
+superTrack encodeGencodeSuper
 shortLabel Gencode Introns Oct05
 longLabel Gencode Intron Validation (October 2005) 
 dataVersion ENCODE Oct 2005 Freeze
