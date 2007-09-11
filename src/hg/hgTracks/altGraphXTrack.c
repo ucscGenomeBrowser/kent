@@ -355,6 +355,5 @@ tg->freeItems = altGraphXFreeItems;
 tg->itemHeight = altGraphXItemHeight;
 tg->totalHeight = altGraphXCalcHeight;
 tg->itemName = altGraphXItemName;
-tg->mapsSelf = TRUE;
 tg->mapItem = altGraphXMapItem;
 }
