@@ -421,7 +421,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 19
 
 track encodeEgaspPartial
-superTrack encodeEgaspSuper dense
+superTrack encodeEgaspSuper
 compositeTrack on
 shortLabel EGASP Partial
 longLabel ENCODE Gene Prediction Workshop (EGASP) for Partial ENCODE Regions
