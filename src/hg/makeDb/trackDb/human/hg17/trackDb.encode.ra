@@ -354,6 +354,7 @@ priority 47.0
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX,chrY
 useScore 1
 type bed 12
+dataVersion ENCODE June 2005 Freeze, ENCODE Oct 2005 Freeze, Oct 2006
 
     track encodeGisChipPet
     subTrack encodeGisChipPetAll
@@ -2085,6 +2086,7 @@ maxLimit 20
 viewLimits 0:10
 subGroup1 celltype Cell_Type hela=HeLaS3 gm=GM06990 k562=K562
 subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF1 pol2=Pol2 pol2n=Pol2-N h4kac4=H4Kac4 h3k27me3=H3K27me3 baf47=BAF47 stat1=STAT1 p65c=P65-C p65n=P65-N smarca4=SMARCA4 smarca6=SMARCA6 nrsf=NRSF
+dataVersion ENCODE Oct 2005 Freeze, Nov 2006, Jan 2007
     
     track encodeYaleChipPvalBaf155
     subTrack encodeYaleChipPval
@@ -2292,6 +2294,7 @@ viewLimits 0:2
 autoScale Off
 subGroup1 celltype Cell_Type hela=HeLaS3 gm=GM06990 k562=K562
 subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF1 pol2=Pol2 pol2n=Pol2-N h4kac4=H4Kac4 h3k27me3=H3K27me3 baf47=BAF47 stat1=STAT1 p65c=P65-C p65n=P65-N smarca4=SMARCA4 smarca6=SMARCA6 nrsf=NRSF
+dataVersion ENCODE Oct 2005 Freeze, Nov 2006, Jan 2007
 
     track encodeYaleChipSignalBaf155
     subTrack encodeYaleChipSig
@@ -2762,6 +2765,7 @@ visibility hide
 color 120,30,50
 altColor 50,0,0
 type bed 5
+dataVersion ENCODE Oct 2005 Freeze, Oct 2006
 
     track encodeUtexStageStat1HelaTags
     subTrack encodeUtexStage
