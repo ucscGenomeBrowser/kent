@@ -2622,4 +2622,22 @@ TMPDIR=/scratch/tmp
     stickleback/gasAcu1/nscanGene.html    
     stickleback/gasAcu1/trackDb.ra
 
+#########################################################################
+# BLASTZ SWAP from Mouse Mm9 (DONE - 2007-09-07 - Hiram)
 
+    #	the original
+    cd /cluster/data/mm9/bed/blastzGasAcu1.2007-09-06
+    cat fb.mm9.chainGasAcu1Link.txt
+    #	48448585 bases of 2620346127 (1.849%) in intersection
+
+    #	and the swap
+    mkdir /cluster/data/gasAcu1/bed/blastz.mm9.swap
+    cd /cluster/data/gasAcu1/bed/blastz.mm9.swap
+    time nice -n +19 doBlastzChainNet.pl -chainMinScore=5000 \
+	/cluster/data/mm9/bed/blastzGasAcu1.2007-09-06/DEF \
+	-qRepeats=windowmaskerSdust -chainLinearGap=loose \
+	-swap -bigClusterHub=kk -verbose=2 > swap.log 2>&1 &
+    cat fb.gasAcu1.chainMm9Link.txt
+    #	43730193 bases of 446627861 (9.791%) in intersection
+
+#########################################################################
