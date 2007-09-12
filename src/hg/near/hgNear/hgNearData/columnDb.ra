@@ -94,6 +94,20 @@ visibility off
 type lookup knownToHInv name value
 search prefix
 
+name geneCategory
+shortLabel Gene Category
+longLabel High Level Gene Category - Coding, Antisense, etc.
+priority 2.6001 
+visibility off
+type lookup kgTxInfo name category
+
+name cdsScore
+shortLabel CDS Score
+longLabel Coding potential score from txCdsPredict
+priority 2.6002
+visibility off
+type float kgTxInfo name cdsScore 
+
 name visigene
 shortLabel VisiGene
 longLabel UCSC VisiGene In Situ Image Browser
