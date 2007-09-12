@@ -8,7 +8,7 @@
 #include "hgGene.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: domains.c,v 1.18 2007/04/05 00:13:22 fanhsu Exp $";
+static char const rcsid[] = "$Id: domains.c,v 1.19 2007/09/12 17:38:56 hiram Exp $";
 
 static boolean domainsExists(struct section *section, 
 	struct sqlConnection *conn, char *geneId)
@@ -90,7 +90,7 @@ if (kgVersion == KG_III)
 	    description = sqlQuickString(conn, query);
 	    if (description == NULL)
 	    	description = cloneString("n/a");
-	    hPrintf("<A HREF=\"http://www.sanger.ac.uk/cgi-bin/Pfam/getacc?%s\" TARGET=_blank>", 
+	    hPrintf("<A HREF=\"http://pfam.sanger.ac.uk/family?acc=%s\" TARGET=_blank>", 
 	    	    el->name);
 	    hPrintf("%s</A> - %s<BR>\n", el->name, description);
 	    freez(&description);
@@ -137,7 +137,7 @@ else
 	    description = sqlQuickString(conn, query);
 	    if (description == NULL)
 	    	description = cloneString("n/a");
-		hPrintf("<A HREF=\"http://www.sanger.ac.uk/cgi-bin/Pfam/getacc?%s\" TARGET=_blank>", 
+		hPrintf("<A HREF=\"http://pfam.sanger.ac.uk/family?acc=%s\" TARGET=_blank>", 
 	    	        el->name);
 	    hPrintf("%s</A> - %s<BR>\n", el->name, description);
 	    freez(&description);
