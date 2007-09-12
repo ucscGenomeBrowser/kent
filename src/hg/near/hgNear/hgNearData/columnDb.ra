@@ -259,7 +259,7 @@ name intronSize
 type intronSize knownGene
 visibility off
 shortLabel Intron Size
-longLabel Size of biggest (or optionally smallest or first) intron
+longLabel Size of biggest (or optionally smallest) intron
 priority 7.81
 
 name humanOrthologs
