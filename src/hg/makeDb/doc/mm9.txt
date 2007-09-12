@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.23 2007/09/10 23:21:40 hiram Exp $"
+#	"$Id: mm9.txt,v 1.24 2007/09/12 19:40:30 hiram Exp $"
 #
 
 #######################################################################
@@ -2706,7 +2706,7 @@ while (<>) {
 # mm9.acemblyClass.name - hits 152177 of 152177 ok
 
 #########################################################################
-# BLASTZ RAT Rn4 (WORKING - 2007-08-30 - Hiram)
+# BLASTZ RAT Rn4 (DONE - 2007-08-30 - 2007-09-11 - Hiram)
 #  re-run this third time with a special matrix from Bob Harris/Webb Miller
     cat /cluster/data/blastz/mouse_rat.q
     A    C    G    T
@@ -2759,25 +2759,25 @@ TMPDIR=/scratch/tmp
 	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=medium \
 	-stop=net `pwd`/DEF > blastz.out 2>&1 &
     #	real    243m51.078s
-XXX - running 2007-08-31 13:40
-    #  this runs much faster than the usual blastz run
-    #	failed when it got to the kki run since /scratch/hg/rn4/ was not
-    #	complete on the Iservers.  Fixup that, then, continue:
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=medium \
-	-continue=chainMerge -stop=net \
-	`pwd`/DEF > chainMerge.out 2>&1 &
-    #	And then, kolossus had no /scratch/data/ directory, go there and
-    #	make this a symlink to /iscratch/data/
-    #	and run the axtChain/netChains.csh script manually on kolossus
+	-continue=download -stop=download `pwd`/DEF > download.out 2>&1 &
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=medium \
+	-continue=cleanup -syntenicNet `pwd`/DEF > syntenicNet.out 2>&1 &
+    cat fb.mm9.chainRn4Link.txt
+    #	1713186474 bases of 2620346127 (65.380%) in intersection
 
-    #	need syntenic net for the multiz
-    cd /cluster/data/mm9/bed/blastzRn4.2007-08-31
-    gzip axtChain/mm9.rn4.net
+    #	and the swap
+    mkdir /cluster/data/rn4/bed/blastz.mm9.swap
+    cd /cluster/data/rn4/bed/blastz.mm9.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/mm9/bed/blastzRn4.2007-08-31/DEF \
 	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=medium \
-	-syntenicNet -continue=syntenicNet `pwd`/DEF > synNet.out 2>&1 &
-    #	real    37m39.746s
+	-swap -syntenicNet > swap.out 2>&1 &
+    #	real    314m59.840s
+    cat  fb.rn4.chainMm9Link.txt
+    #	1711034941 bases of 2571531505 (66.538%) in intersection
 
 #########################################################################
 # EXONIPHY MM9, lifted from hg18 (DONE - 2007-09-05 - Hiram)
@@ -3277,6 +3277,58 @@ TMPDIR=/scratch/tmp
 	/cluster/data/mm9/bed/blastzGasAcu1.2007-09-06/DEF \
 	-qRepeats=windowmaskerSdust -chainLinearGap=loose \
 	-swap -bigClusterHub=kk -verbose=2 > swap.log 2>&1 &
+    cat fb.gasAcu1.chainMm9Link.txt
+    #	43730193 bases of 446627861 (9.791%) in intersection
+
+
+#########################################################################
+# BLASTZ Zebrafish danRer5 (WORKING - 2007-09-11 - Hiram)
+    ssh kkstore06
+    screen	# use screen to manage this job
+    mkdir /cluster/data/mm9/bed/blastzDanRer5.2007-09-11
+    cd /cluster/data/mm9/bed/blastzDanRer5.2007-09-11
+
+    cat << '_EOF_' > DEF
+# Mouse (mm9) vs zebrafish (danRer5)
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_M=50
+
+# TARGET: Mouse Mm9
+SEQ1_DIR=/scratch/data/mm9/mm9.2bit
+SEQ1_LEN=/cluster/data/mm9/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY - zebrafish (danRer5)
+SEQ2_DIR=/scratch/data/danRer5/danRer5.2bit
+SEQ2_LEN=/cluster/data/danRer5/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm9/bed/blastzDanRer5.2007-09-11
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl DEF -chainMinScore=5000 \
+	-chainLinearGap=loose -bigClusterHub=pk -verbose=2 > do.log 2>&1 &
+    #	real    222m47.787s
+    cat fb.mm9.chainDanRer5Link.txt
+    #	48497464 bases of 2620346127 (1.851%) in intersection
+
+    mkdir /cluster/data/danRer5/bed/blastz.mm9.swap
+    cd /cluster/data/danRer5/bed/blastz.mm9.swap
+    time nice -n +19 $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
+	-chainMinScore=5000 \
+	/cluster/data/mm9/bed/blastzDanRer5.2007-09-11/DEF \
+	-swap -chainLinearGap=loose -bigClusterHub=pk -verbose=2 \
+	> swap.log 2>&1 &
+    #	real    9m47.163s
+    cat fb.danRer5.chainMm9Link.txt
+    #	34017483 bases of 1435609608 (2.370%) in intersection
 
 #########################################################################
 ## 4-Way Multiz (DONE - 2007-09-07 - Hiram)
@@ -3404,7 +3456,6 @@ cat  << '_EOF_' > template
     para create jobList
     # 35 jobs
     para try ... check ... push ... etc ...
-XXXX - running 2007-09-07 10:11
 # Completed: 35 of 35 jobs
 # CPU time in finished jobs:      27901s     465.02m     7.75h    0.32d  0.001 y
 # IO & Wait Time:                   562s       9.37m     0.16h    0.01d  0.000 y
@@ -3779,15 +3830,18 @@ rc = 0 = count of kgAlAll mrna for mm9
 
     #	this appears to build working/vgPrbExt.fa and it loaded some sequences
     vgProbeTrack EXT working mm9
+    #	this copies over all the items from vgProbes to start vgAllProbes
     vgProbeTrack SELFMAP working mm9 -sqlPath=..
-
+    #	this adds frog alignments to vgAllProbes
     vgProbeTrack -sqlPath=.. REMAP working mm9 nibb nibbImageProbes \
 	/gbdb/mm9/nibbImageProbes.fa
-
     hgsql -e "select count(*) from vgAllProbes;" mm9
-    #	24610
+    #	26289
     hgsql -e "select count(*) from vgAllProbes;" mm8
     #	25994
+
+    #	finally, gathering together all alignments used and updates seq table
+    vgProbeTrack EXTALL working mm9
 
     #	Then, during the gene sorter build, it does:
     knownToVisiGene mm9
@@ -3800,7 +3854,6 @@ rc = 0 = count of kgAlAll mrna for mm9
     #	compare to existing:
     wc -l /usr/local/apache/cgi-bin/visiGeneData/visiGene.text
     #	124186 /usr/local/apache/cgi-bin/visiGeneData/visiGene.text
-
 
 #########################################################################
 # MOUSE AFFYMETRIX MOE430 TRACK (DONE - 2007-09-10 - Hiram)
@@ -3883,5 +3936,320 @@ blat -fine -mask=lower -minIdentity=95 -ooc=/scratch/data/mm9/11.ooc /scratch/da
     #	and then, during the gene sorter build, it does:
     hgMapToGene mm9 affyMOE430 knownGene knownToMOE430
     hgMapToGene mm9 affyMOE430 -prefix=A: knownGene knownToMOE430A
+
+#########################################################################
+#  creating UCSC genes track (WORKING - 2007-08-31 - Hiram)
+    #  working on the script mm9.ucscGenes10.csh in src/hg/makeDb/doc
+    #	The tracks created above were done as they were encountered
+    #	in working through that script.   Worked through that script
+    #	approximately one kluster run at a time, using a large if (1 == 0)
+    #	statement to skip over business that had been successfully completed.
+    #	After it reached the point where it had begun to load the tables
+    #	into the tempDb and started to fail at the missing tables affyGnf1m
+    #	the successfully loaded tables in tempDb were moved to mm9 and
+    #	the track began to function.  Then, working through the affy
+    #	alignments above, and completing the loading of the knownTo tables
+    #	for the gene sorter as they were completed.  Now continuing below
+    #	with the rest of the steps manually since it is not necessary to
+    #	use the tempDb and its /gbdb/ directory.  Everything is not taking
+    #	place in the mm9 database.
+
+#########################################################################
+# running the blastP operation to the other genomes for the gene sorter
+#	(DONE - 2007-09-10 - Hiram)
+    mkdir /cluster/data/mm9/bed/ucsc.10/hgNearBlastp
+    cd /cluster/data/mm9/bed/ucsc.10/hgNearBlastp
+
+    cat << '_EOF_' > config.ra
+# Latest human vs. other Gene Sorter orgs:
+# mouse, rat, zebrafish, worm, yeast, fly
+
+targetGenesetPrefix known
+targetDb mm9
+queryDbs hg18 rn4 danRer4 dm2 ce4 sacCer1
+
+mm9Fa /cluster/data/mm9/bed/ucsc.10/ucscGenes.faa
+hg18Fa /cluster/data/hg18/bed/blastp/known.faa
+rn4Fa /cluster/data/rn4/bed/blastp/known.faa
+danRer4Fa /cluster/data/danRer4/bed/blastp/ensembl.faa
+dm2Fa /cluster/data/dm2/bed/flybase4.2/flybasePep.fa
+ce4Fa /cluster/data/ce4/bed/hgNearBlastp/070731/ce4.sangerPep.faa
+sacCer1Fa /cluster/data/sacCer1/bed/blastp/sgdPep.faa
+
+buildDir /cluster/data/mm9/bed/ucsc.10/hgNearBlastp
+scratchDir /san/sanvol1/scratch/mm9/jkgHgNearBlastp
+'_EOF_'
+    # << happy emacs
+    #	takes about an hour
+    time nice -n +19 doHgNearBlastp.pl config.ra > do.log 2>&1 &
+
+#########################################################################
+# fixup the blastP tables to remove non-syntenic hits
+#	(DONE - 2007-09-11 - Hiram)
+# Remove non-syntenic hits for human and rat
+# Takes a few minutes
+    cd /cluster/data/mm9/bed/ucsc.10
+    synBlastp.csh mm9 rn4
+# old number of unique query values: 31610
+# old number of unique target values 7072
+# new number of unique query values: 13973
+# new number of unique target values 6888
+    synBlastp.csh mm9 hg18
+# old number of unique query values: 38136
+# old number of unique target values 17214
+# new number of unique query values: 0
+# new number of unique target values 0
+
+    # Make reciprocal best subset for the blastp pairs that are too
+    # Far for synteny to help
+    cd /cluster/data/mm9/bed/ucsc.10/hgNearBlastp
+    # Us vs. others
+foreach otherDb (danRer4 dm2 ce4 sacCer1)
+    set aToB = run.mm9.$otherDb
+    set bToA = run.$otherDb.mm9
+    cat $aToB/out/*.tab > $aToB/all.tab
+    cat $bToA/out/*.tab > $bToA/all.tab
+    blastRecipBest $aToB/all.tab $bToA/all.tab \
+	$aToB/recipBest.tab $bToA/recipBest.tab
+    hgLoadBlastTab mm9 drBlastTab $aToB/recipBest.tab
+    hgLoadBlastTab $otherDb tfBlastTab $bToA/recipBest.tab
+end
+    # Clean up
+    cat run.mm9.mm9/out/*.tab | gzip -c > run.mm9.mm9/all.tab.gz
+    cat run.mm9.hg18/out/*.tab | gzip -c > run.mm9.hg18/all.tab.gz
+    cat run.hg18.mm9/out/*.tab | gzip -c > run.hg18.mm9/all.tab.gz
+    cat run.mm9.rn4/out/*.tab | gzip -c > run.mm9.rn4/all.tab.gz
+    cat run.rn4.mm9/out/*.tab | gzip -c > run.rn4.mm9/all.tab.gz
+    gzip run.*/all.tab
+    rm -r run.*/out
+
+#########################################################################
+# MAKE FOLDUTR TABLES  (DONE - 2007-09-11 - Hiram)
+# First set up directory structure and extract UTR sequence on hgwdev
+    ssh hgwdev
+    mkdir /cluster/data/mm9/bed/ucsc.10/rnaStruct
+    cd /cluster/data/mm9/bed/ucsc.10/rnaStruct
+    mkdir -p utr3/split utr5/split utr3/fold utr5/fold
+    utrFa mm9 knownGene utr3 utr3/utr.fa
+    utrFa mm9 knownGene utr5 utr5/utr.fa
+
+    # Split up files and make files that define job.
+    faSplit sequence utr3/utr.fa 10000 utr3/split/s
+    faSplit sequence utr5/utr.fa 10000 utr5/split/s
+    ls -1 utr3/split > utr3/in.lst
+    ls -1 utr5/split > utr5/in.lst
+    cd utr3
+    cat > template << '_EOF_'
+#LOOP
+rnaFoldBig split/$(path1) fold
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+    gensub2 in.lst single template jobList
+    cp -p template ../utr5
+    cd ../utr5
+    gensub2 in.lst single template jobList
+
+    ssh pk
+    cd /cluster/data/mm9/bed/ucsc.10/rnaStruct/utr3
+    para make jobList
+# Completed: 9750 of 9750 jobs
+# CPU time in finished jobs:     389532s    6492.20m   108.20h    4.51d  0.012 y
+# IO & Wait Time:                 28309s     471.81m     7.86h    0.33d  0.001 y
+# Average job time:                  43s       0.71m     0.01h    0.00d
+# Longest finished job:            3189s      53.15m     0.89h    0.04d
+# Submission to last job:          4059s      67.65m     1.13h    0.05d
+
+    cd ../utr5
+    para make jobList
+# Completed: 9253 of 9253 jobs
+# CPU time in finished jobs:      14448s     240.80m     4.01h    0.17d  0.000 y
+# IO & Wait Time:                 39118s     651.96m    10.87h    0.45d  0.001 y
+# Average job time:                   6s       0.10m     0.00h    0.00d
+# Longest finished job:             236s       3.93m     0.07h    0.00d
+# Submission to last job:           434s       7.23m     0.12h    0.01d
+
+    # Load database
+    ssh hgwdev
+    cd /cluster/data/mm9/bed/ucsc.10/rnaStruct/utr5
+    hgLoadRnaFold mm9 foldUtr5 fold
+    cd ../utr3
+    hgLoadRnaFold -warnEmpty mm9 foldUtr3 fold
+    #	only one is empty: uc009gyo.1
+    # Seems to be a problem in
+    # RNAfold, so not easy for us to fix. Consequence is not too bad, just a
+    # few 3' UTRs will be missing annotation.  (in this case, only one)
+
+    # Clean up
+    tar cvzf ./fold.tgz ./fold
+    rm -r split fold err batch.bak
+    cd ../utr5
+    tar cvzf ./fold.tgz ./fold
+    rm -r split fold err batch.bak
+#########################################################################
+# Make pfam run.  Actual cluster run is about 6 hours.
+#	(DONE - 2007-09-12 - Hiram)
+# First get pfam global HMMs into /san/sanvol1/pfam somehow.
+    ssh pk
+    mkdir /san/sanvol1/scratch/mm9/ucscGenes
+    cd /san/sanvol1/scratch/mm9/ucscGenes
+    mkdir splitProt
+    faSplit sequence /cluster/data/mm9/bed/ucsc.10/ucscGenes.faa \
+	10000 splitProt/
+    mkdir pfam
+    cd pfam
+    mkdir out
+    ls -1 ../splitProt > gene.list
+    cat << '_EOF_' > doPfam
+#!/bin/csh -ef
+/san/sanvol1/pfam/hmmpfam -E 0.1 /san/sanvol1/pfam/Pfam_fs $1 \
+	> /scratch/tmp/mm9.$2
+mv /scratch/tmp/mm9.$2 $3
+'_EOF_'
+    # << happy emacs
+    chmod a+x doPfam
+    cat << '_EOF_' > template
+#LOOP
+doPfam ../splitProt/$(path1) $(root1).pf {check out line out/$(root1).pf}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+    gensub2 gene.list single template jobList
+    para create jobList
+    para try ... check ... push ... etc... time
+    #	after some kluster difficulties
+# Completed: 9666 of 9666 jobs
+# CPU time in finished jobs:    3503017s   58383.62m   973.06h   40.54d  0.111 y
+# IO & Wait Time:                     0s       0.00m     0.00h    0.00d  0.000 y
+# Average job time:                 356s       5.93m     0.10h    0.00d
+# Longest finished job:            3188s      53.13m     0.89h    0.04d
+# Submission to last job:         58364s     972.73m    16.21h    0.68d
+
+    # Make up pfamDesc.tab by converting pfam to a ra file first
+    cat << '_EOF_' > makePfamRa.awk
+/^NAME/ {print}
+/^ACC/ {print}
+/^DESC/ {print; printf("\n");}
+'_EOF_'
+    # << happy emacs
+
+    awk -f makePfamRa.awk  /cluster/store12/pfam/Pfam_fs > pfamDesc.ra
+    raToTab -cols=ACC,NAME,DESC pfamDesc.ra stdout | \
+   awk -F '\t' '{
+printf("%s\t%s\t%s\n", gensub(/\.[0-9]+/, "", "g", $1), $2, $3);
+}' > pfamDesc.tab
+
+    # Convert output to tab-separated file. 
+    #	will need to build the program hmmPfamToTab in
+    #	/src/hg/protein/hmmPfamToTab
+    cd /cluster/data/mm9/bed/ucsc.10
+    catDir /san/sanvol1/scratch/mm9/ucscGenes/pfam/out \
+	| hmmPfamToTab -eValCol stdin ucscPfam.tab
+
+    # Convert output to knownToPfam table
+    awk '{printf("%s\t%s\n", $2, gensub(/\.[0-9]+/, "", "g", $1));}' \
+	/san/sanvol1/scratch/mm9/ucscGenes/pfam/pfamDesc.tab > sub.foo
+    cut -f 1,4 ucscPfam.tab | subColumn 2 stdin sub.foo knownToPfam.tab
+    hgLoadSqlTab mm9 knownToPfam ~/kent/src/hg/lib/knownTo.sql \
+	knownToPfam.tab
+    cut -f 1-4 ucscPfam.tab > load.ucscPfam.tab
+    hgLoadSqlTab mm9 ucscPfam ~/kent/src/hg/lib/ucscPfam.sql load.ucscPfam.tab
+    cp -p /san/sanvol1/scratch/mm9/ucscGenes/pfam/pfamDesc.tab .
+    hgLoadSqlTab mm9 pfamDesc ~/kent/src/hg/lib/pfamDesc.sql pfamDesc.tab
+
+#########################################################################
+# Do scop run. Takes about 6 hours (DONE - 2007-09-12 - Hiram)
+# First get pfam global HMMs into /san/sanvol1/scop somehow.
+    ssh pk
+    mkdir /san/sanvol1/scratch/mm9/ucscGenes/scop
+    cd /san/sanvol1/scratch/mm9/ucscGenes/scop
+    mkdir out
+    ls -1 ../splitProt > gene.list
+    cat << '_EOF_' > doScop
+#!/bin/tcsh -ef
+/san/sanvol1/pfam/hmmpfam -E 0.1 /san/sanvol1/scop/scop.hmm $1 \
+	> /scratch/tmp/mm9.$2
+mv /scratch/tmp/mm9.$2 $3
+'_EOF_'
+    chmod a+x doScop
+    cat << '_EOF_' > template
+#LOOP
+doScop ../splitProt/$(path1) $(root1).pf {check out line out/$(root1).pf}
+#ENDLOOP
+'_EOF_'
+    gensub2 gene.list single template jobList
+ssh pk "cd /san/sanvol1/scratch/$db/ucscGenes/scop; para make"
+
+#########################################################################
+# Building PROTEOME BROWSER TABLES (DONE - 2007-09-12 - Hiram)
+
+# These are instructions for building tables 
+# needed for the Proteome Browser. 
+ 
+# DON'T START THESE UNTIL TABLES FOR KNOWN GENES AND kgProtMap table
+# ARE REBUILT.  
+# This build is based on proteins DBs dated 070202.
+
+# Create the working directory
+
+    ssh hgwdev
+    mkdir /cluster/data/mm9/bed/ucsc.10/pb
+    cd /cluster/data/mm9/bed/ucsc.10/pb
+
+    # Build the pepMwAa table
+
+    hgsql proteins070202 -N -e \
+"select info.acc, molWeight, aaSize from sp070202.info, sp070202.accToTaxon where accToTaxon.taxon=10090 and accToTaxon.acc = info.acc" > pepMwAa.tab
+
+    hgLoadSqlTab mm9 pepMwAa ~/kent/src/hg/lib/pepMwAa.sql ./pepMwAa.tab
+
+    o Build the pepPi table
+
+    hgsql proteins070202 -e \
+    "select info.acc from sp070202.info, sp070202.accToTaxon where accToTaxon.taxon=10090 and accToTaxon.acc = info.acc" > protAcc.list
+
+    hgsql mm9 -N \
+-e 'select proteinID from knownGene where proteinID like "%-%"' \
+	| sort -u >> protAcc.list
+
+    pbCalPi protAcc.list sp070202 pepPi.tab
+    hgLoadSqlTab mm9 pepPi ~/kent/src/hg/lib/pepPi.sql ./pepPi.tab
+
+    # Calculate and load pep distributions
+
+    pbCalDist sp070202 proteins070202 10090 mm9 
+    hgLoadSqlTab mm9 pepExonCntDist ~/kent/src/hg/lib/pepExonCntDist.sql \
+	./pepExonCntDist.tab
+    hgLoadSqlTab mm9 pepCCntDist ~/kent/src/hg/lib/pepCCntDist.sql \
+	./pepCCntDist.tab
+    hgLoadSqlTab mm9 pepHydroDist ~/kent/src/hg/lib/pepHydroDist.sql \
+	./pepHydroDist.tab
+    hgLoadSqlTab mm9 pepMolWtDist ~/kent/src/hg/lib/pepMolWtDist.sql \
+	./pepMolWtDist.tab
+    hgLoadSqlTab mm9 pepResDist ~/kent/src/hg/lib/pepResDist.sql \
+	./pepResDist.tab
+    hgLoadSqlTab mm9 pepIPCntDist ~/kent/src/hg/lib/pepIPCntDist.sql \
+	./pepIPCntDist.tab
+    hgLoadSqlTab mm9 pepPiDist ~/kent/src/hg/lib/pepPiDist.sql ./pepPiDist.tab
+
+
+# Calculate frequency distributions
+
+    pbCalResStd sp070202 10090 mm9
+
+# Create pbAnomLimit and pbResAvgStd tables
+
+    hgLoadSqlTab mm9 pbAnomLimit ~/kent/src/hg/lib/pbAnomLimit.sql \
+	./pbAnomLimit.tab
+    hgLoadSqlTab mm9 pbResAvgStd ~/kent/src/hg/lib/pbResAvgStd.sql \
+	./pbResAvgStd.tab
+
+    hgsql -N -e select * from pbStamp;" mm8 > pbStamp.tab
+    hgLoadSqlTab mm9 pbStamp ~/kent/src/hg/lib/pbStamp.sql \
+	./pbStamp.tab
+
+    #	Turn on protein and gene sorter
+    hgsql -e 'update dbDb set hgNearOk=1,hgPbOk=1 where name="mm9";' \
+	hgcentraltest
 
 #########################################################################
