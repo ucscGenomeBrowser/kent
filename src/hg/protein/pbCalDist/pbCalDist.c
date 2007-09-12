@@ -206,9 +206,9 @@ while (row2 != NULL)
 	    }
 	}
     
-    /* count exons, using coding exons from kgProtMap table */
+    /* count exons, using coding exons from kgProtMap2 (KG-III) table */
     safef(cond_str, sizeof(cond_str), "qName='%s'", accession);
-    answer2 = sqlGetField(conn, database, "kgProtMap", "blockCount", cond_str);
+    answer2 = sqlGetField(conn, database, "kgProtMap2", "blockCount", cond_str);
 
     if (answer2 != NULL)
 	{
