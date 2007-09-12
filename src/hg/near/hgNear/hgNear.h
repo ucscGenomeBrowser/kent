@@ -646,6 +646,9 @@ void setupColumnPfam(struct column *col, char *parameters);
 void setupColumnFlyBdgp(struct column *col, char *parameters);
 /* Set up Bdgp gene column. */
 
+void setupColumnIntronSize(struct column *col, char *parameters);
+/* Set up a intronSize type column. */
+
 void setupColumnXyz(struct column *col, char *parameters);
 /* Set up a xyz type column. */
 

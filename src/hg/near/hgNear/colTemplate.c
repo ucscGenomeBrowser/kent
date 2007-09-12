@@ -17,21 +17,7 @@
 boolean xyzExists(struct column *col, struct sqlConnection *conn)
 /* This returns true if all tables this depends on exists. */
 {
-char *dupe = cloneString(col->tablesUsed);
-char *s = dupe;
-char *table;
-boolean ok = TRUE;
-
-while ((table = nextWord(&s)) != NULL)
-    {
-    if (!sqlTableExists(conn, table))
-        {
-	ok = FALSE;
-	break;
-	}
-    }
-freez(&dupe);
-return ok;
+return sqlTableExists(conn, col->table);
 }
 
 char *xyzCellVal(struct column *col, struct genePos *gp, 
