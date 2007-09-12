@@ -205,6 +205,16 @@ speciesDefaultOff
 #treeImage phylo/syn_6way.jpg
 speciesCodonDefault hg18
 
+track consIndelsHg18Mm8CanFam2
+shortLabel Cons Indels MmCf
+longLabel Indel-based Conservation for human hg18, mouse mm8 and dog canFam2
+group compGeno
+priority 105
+visibility hide
+useScore 1
+color 0, 60, 120
+type bed 5 .
+
 track stsMap
 shortLabel STS Markers
 longLabel STS Markers on Genetic (blue) and Radiation Hybrid (black) Maps
