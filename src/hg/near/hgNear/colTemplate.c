@@ -34,12 +34,9 @@ static void xyzCellPrint(struct column *col, struct genePos *gp,
 	struct sqlConnection *conn)
 /* Print cell in xyz table. */
 {
-/* See whether configured to print in italics as a simple example of a real cellPrint. */
-char *italicsVarName = configVarName(col, "italics");
-boolean doItalics = cartUsualBoolean(cart, italicsVarName, TRUE);
 char *string = xyzCellVal(col, gp, conn);
 hPrintf("<TD>");
-if (doItalics)
+if (col->xyzItalics)
     hPrintf("<I>%s</I>", naForNull(string));
 else
     hPrintf("%s", naForNull(string));
@@ -96,7 +93,7 @@ advFilterRemakeTextVar(col, "term", 20);
 
 static struct genePos *xyzAdvFilter(struct column *col, 
 	struct sqlConnection *conn, struct genePos *list)
-/* Do advanced filter on position. */
+/* Do advanced filter on xyz type column. */
 {
 char *term = advFilterVal(col, "term");
 if (term != NULL)
@@ -123,6 +120,10 @@ return list;
 void setupColumnXyz(struct column *col, char *parameters)
 /* Set up a xyz type column. */
 {
+/* Read configuration variables and store in column. */
+char *varName = configVarName(col, "italics");
+col->xyzItalics = cartUsualBoolean(cart, varName, TRUE);
+
 col->table = cloneString(nextWord(&parameters));  // Assume have a table parameter first
 col->keyField = cloneString(nextWord(&parameters));  // Then key field
 col->valField = cloneString(nextWord(&parameters));  // Then value field
