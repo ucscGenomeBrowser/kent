@@ -7,7 +7,7 @@ A = hgNear
 
 O = $A.o advFilter.o afiAli.o association.o colTemplate.o configure.o \
 	customColumn.o examples.o expRatio.o flyBase.o getSeq.o \
-	go.o knownGene.o order.o pfam.o search.o userSettings.o
+	go.o intronSize.o knownGene.o order.o pfam.o search.o userSettings.o
 
 include ../../../inc/cgi_build_rules.mk
 

@@ -156,6 +156,12 @@ struct column
    /* Pfam uses this. */
    char *protDb; /* Which protein database pfam tables are in. */
 
+   /* intronSize uses this */
+   char *whichIntron;	/* max/min/first ? */
+
+   /* xzy users this. */
+   boolean xyzItalics;	/* Draw template table italics. */
+
    /* Custom columns use this. */
    struct hash *customIdHash;	/* Hash filled with custom data, keyed by gene ID. */
    };
@@ -646,8 +652,8 @@ void setupColumnPfam(struct column *col, char *parameters);
 void setupColumnFlyBdgp(struct column *col, char *parameters);
 /* Set up Bdgp gene column. */
 
-//void setupColumnIntronSize(struct column *col, char *parameters);
-///* Set up a intronSize type column. */
+void setupColumnIntronSize(struct column *col, char *parameters);
+/* Set up a intronSize type column. */
 
 void setupColumnXyz(struct column *col, char *parameters);
 /* Set up a xyz type column. */

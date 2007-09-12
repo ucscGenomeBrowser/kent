@@ -255,6 +255,13 @@ priority 7.8
 visibility off
 type float knownGene name exonCount
 
+name intronSize
+type intronSize knownGene
+visibility off
+shortLabel Intron Size
+longLabel Size of biggest (or optionally smallest or first) intron
+priority 7.81
+
 name humanOrthologs
 shortLabel Human
 longLabel Human Ortholog (Best Blastp Hit to UCSC Known Genes)
