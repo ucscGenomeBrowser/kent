@@ -8,8 +8,12 @@
   <%= text_field 'submission', 'name'  %></p>
   
   <p><label for="submission_s_type">Type</label><br/>
-  <%= text_field 'submission', 's_type'  %></p>
-  
+  <select id="submission_s_type" name="submission[s_type]">
+  <% @submissionTypesArray.each do |t| %>
+  <option value="<%= t[0] -%>"<%= (t[0]==@submission.s_type ? " selected" : "") -%>><%= t[1]["shortLabel"] -%></option>
+  <% end %>
+  </select></p>
+ 
   <p><label for="submission_status">Status:</label>
   <%= @submission.status %></p>
   

@@ -9,21 +9,26 @@ class PipelineController < ApplicationController
   
   def list
     @submissions = Submission.find(:all)
+    @submissionTypes = getSubmissionTypes
   end
   
   def show_user
     @user = User.find(current_user.id)
     @submissions = @user.submissions
+    @submissionTypes = getSubmissionTypes
     render :action => 'list'
     # not now using show_user.rhtml
   end
   
   def show
     @submission = Submission.find(params[:id])
+    @submissionTypes = getSubmissionTypes
   end
 
   def new
     @submission = Submission.new
+    @submissionTypes = getSubmissionTypes
+    @submissionTypesArray = @submissionTypes.to_a.sort_by { |x| x[1]["displayOrder"] }
   end
   
   def create
@@ -39,6 +44,8 @@ class PipelineController < ApplicationController
   
   def edit
     @submission = Submission.find(params[:id])
+    @submissionTypes = getSubmissionTypes
+    @submissionTypesArray = @submissionTypes.to_a.sort_by { |x| x[1]["displayOrder"] }
   end
   
   def update
@@ -284,6 +291,10 @@ private
   def path_to_file
     # the expand_path method resolves this relative path to full absolute path
     File.expand_path("#{ActiveRecord::Base.configurations[RAILS_ENV]['upload']}/#{@current_user.id}/#{@submission.id}/#{@filename}")
+  end
+
+  def getSubmissionTypes
+    open("#{RAILS_ROOT}/config/submissionTypes.yml") { |f| YAML.load(f.read) }
   end
 
   # --- run process with timeout ---- (probably should move this to an application helper location)

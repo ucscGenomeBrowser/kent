@@ -13,11 +13,22 @@
     if we ever have a "types" table
   <p><label for="submission_category">Category</label><br/>
   <%= collection_select(:submission, :category_id, @categories, :id, :name) %></p>
-<%
-=end %>
-  
+
+  <p><label for="submission_s_type">Type</label><br/>
+  <%= collection_select(:submission, :s_type, @submissionTypesColl, :id, :name) %></p>
+
   <p><label for="submission_s_type">Type</label><br/>
   <%= text_field 'submission', 's_type'  %></p>
+
+<%
+=end %>
+
+  <p><label for="submission_s_type">Type</label><br/>
+  <select id="submission_s_type" name="submission[s_type]">
+  <% @submissionTypesArray.each do |t| %>
+  <option value="<%= t[0] -%>"><%= t[1]["shortLabel"] -%></option>
+  <% end %>
+  </select></p>
   
   <%= submit_tag "Create" %>
 <%= end_form_tag %>
