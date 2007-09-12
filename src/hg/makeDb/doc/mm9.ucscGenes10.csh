@@ -32,7 +32,7 @@ set wormDb = ce4
 set yeastDb = sacCer1
 
 # Database to rebuild visiGene text from
-set vgTextDbs = (mm7 mm8 hg17 hg18)
+set vgTextDbs = (mm7 mm8 mm9 hg17 hg18)
 
 # Proteins in various species
 set tempFa = $dir/ucscGenes.faa
@@ -61,9 +61,6 @@ set cpuFarm = pk
 # Create initial dir
 mkdir -p $dir
 cd $dir
-
-######################### skipping business already done ###################
-if (1 == 0) then
 
 # Get Genbank info
 mkdir -p $gbDir
@@ -382,10 +379,8 @@ cd ..
 echo $db $xdb $ydb $zdb > ourOrgs.txt
 foreach c (`awk '{print $1;}' /cluster/data/$db/chrom.sizes`)
     if (-s txWalk/$c.bed ) then
-	if (! -s txWalk/$c.maf ) then
-    mafFrags $db $multiz txWalk/$c.bed stdout -bed12 -meFirst \
-       | mafSpeciesSubset stdin ourOrgs.txt txWalk/$c.maf -keepFirst
-	endif
+	mafFrags $db $multiz txWalk/$c.bed stdout -bed12 -meFirst \
+	   | mafSpeciesSubset stdin ourOrgs.txt txWalk/$c.maf -keepFirst
     endif
 end
 
@@ -502,9 +497,6 @@ txgAnalyze ucscGenes.txg /cluster/data/$db/$db.2bit stdout | sort | uniq > ucscS
 
 echo "MUST WORK THIS UP INTO AN ACTUAL DB LOAD HERE !  WHEN NOT tempDb"
 exit $status
-endif
-############################# skipping to here ########################
-
 
 #####################################################################################
 # Now the gene set is built.  Time to start loading it into the database,
@@ -606,9 +598,6 @@ hgLoadNetDist /cluster/data/$db/p2p/wanker/humanWanker.pathLengths $db humanWank
     -sqlRemap="select distinct locusLinkID, kgID from refLink, kgXref where refLink.mrnaAcc = kgXref.mRNA"
 endif
 
-exit $status
-############################# skipping ########################
-
 # Run nice Perl script to make all protein blast runs for
 # Gene Sorter and Known Genes details page.  Takes about
 # 45 minutes to run.
@@ -619,10 +608,10 @@ cat << _EOF_ > config.ra
 # mouse, rat, zebrafish, worm, yeast, fly
 
 targetGenesetPrefix known
-targetDb $tempDb
+targetDb $db
 queryDbs $xdb $ratDb $fishDb $flyDb $wormDb $yeastDb
 
-tmpFoo2Fa $tempFa
+${db}Fa $tempFa
 ${xdb}Fa $xdbFa
 ${ratDb}Fa $ratFa
 ${fishDb}Fa $fishFa
@@ -634,6 +623,7 @@ buildDir $dir/hgNearBlastp
 scratchDir $scratchDir/jkgHgNearBlastp
 _EOF_
 doHgNearBlastp.pl config.ra |& tee do.log 
+
 
 # Remove non-syntenic hits for mouse and rat
 # Takes a few minutes
