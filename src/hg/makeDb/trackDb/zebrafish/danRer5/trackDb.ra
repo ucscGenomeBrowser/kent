@@ -50,3 +50,11 @@ indelDoubleInsert on
 indelQueryInsert on
 maxItems 300
 
+track affyZebrafishConsensus
+shortLabel Affy Zebrafish
+longLabel Alignments of Affymetrix Consensus Sequences from Zebrafish Chip
+group regulation
+priority 89
+visibility hide
+type psl .
+
