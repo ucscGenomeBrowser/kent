@@ -2223,7 +2223,7 @@ track encodeAffyChIpHl60PvalStrict
 release beta
 superTrack encodeAffyChipSuper dense
 shortLabel Affy Strict pVal
-longLabel Affymetrix ChIP-chip (retinoic acid-treated HL-60 cells) Strict P-Value
+longLabel Affymetrix ChIP-chip (HL-60 and ME-180 cells) Strict P-Value
 compositeTrack on
 subGroup1 factor Factor H3K9K14ac2=H3K9K14ac2 H4Kac4=H4Kac4 Pol2=Pol2 actd=p63_ActD mactd=p63_mActD
 subGroup2 time Timepoint 0h=0hrs 2h=2hrs 8h=8hrs 32h=32hrs
@@ -2348,8 +2348,8 @@ dataVersion ENCODE Oct 2005 Freeze
     release beta
     subTrack encodeAffyChIpHl60PvalStrict
     subGroups factor=actd time=0h
-    shortLabel Affy p63-ActD
-    longLabel Affymetrix ChIP-chip (actinomycin-D treated p63 HL-60) Strict P-Value
+    shortLabel Affy p63 ME-180+
+    longLabel Affymetrix ChIP-chip (p63, actinomycin-D treated ME-180) Strict P-Value
     color 0,0,200
     priority 13
 
@@ -2366,8 +2366,8 @@ dataVersion ENCODE Oct 2005 Freeze
     release beta
     subTrack encodeAffyChIpHl60PvalStrict
     subGroups factor=mactd time=0h
-    shortLabel Affy p63
-    longLabel Affymetrix ChIP-chip (p63, HL-60) Strict P-Value
+    shortLabel Affy p63 ME-180
+    longLabel Affymetrix ChIP-chip (p63, ME-180) Strict P-Value
     color 0,0,200
     priority 14
 
@@ -2396,7 +2396,7 @@ track encodeAffyChIpHl60SignalStrict
 superTrack encodeAffyChipSuper dense
 release beta
 shortLabel Affy Strict Sig
-longLabel Affymetrix ChIP-chip (retinoic acid-treated HL-60 cells) Strict Signal
+longLabel Affymetrix ChIP-chip (HL-60 and ME-180 cells) Strict Signal
 compositeTrack on
 subGroup1 factor Factor H3K9K14ac2=H3K9ac2 H4Kac4=H4Kac4 Pol2=Pol2 actd=p63_ActD mactd=p63_mActD
 subGroup2 time Timepoint 0h=0hrs 2h=2hrs 8h=8hrs 32h=32hrs
@@ -2521,8 +2521,8 @@ dataVersion ENCODE Oct 2005 Freeze
     release beta
     subTrack encodeAffyChIpHl60SignalStrict
     subGroups factor=actd time=0h
-    shortLabel Affy p63-ActD
-    longLabel Affymetrix ChIP-chip (actinomycin-D treated p63 HL-60) Strict Signal
+    shortLabel Affy p63 ME-180+
+    longLabel Affymetrix ChIP-chip (p63, actinomycin-D treated ME-180) Strict Signal
     color 0,0,200
     priority 13
 
@@ -2540,8 +2540,8 @@ dataVersion ENCODE Oct 2005 Freeze
     release beta
     subTrack encodeAffyChIpHl60SignalStrict
     subGroups factor=mactd time=0h
-    shortLabel Affy p63
-    longLabel Affymetrix ChIP-chip (p63, HL-60) Strict Signal
+    shortLabel Affy p63 ME-180
+    longLabel Affymetrix ChIP-chip (p63, ME-180) Strict Signal
     color 225,0,0
     color 0,0,200
     priority 14
@@ -2567,7 +2567,7 @@ track encodeAffyChIpHl60SitesStrict
 superTrack encodeAffyChipSuper dense
 release beta
 shortLabel Affy Strict Sites
-longLabel Affymetrix ChIP-chip (retinoic acid-treated HL-60 cells) Strict Sites
+longLabel Affymetrix ChIP-chip (HL-60 and ME-180 cells) Strict Sites
 compositeTrack on
 subGroup1 factor Factor H3K9K14ac2=H3K9K14ac2 H4Kac4=H4Kac4 Pol2=Pol2 actd=p63_ActD mactd=p63_mActD
 subGroup2 time Timepoint 0h=0hrs 2h=2hrs 8h=8hrs 32h=32hrs
@@ -2688,8 +2688,8 @@ dataVersion ENCODE Oct 2005 Freeze
     release beta
     subTrack encodeAffyChIpHl60SitesStrict
     subGroups factor=actd time=0h
-    shortLabel Affy p63-ActD
-    longLabel Affymetrix ChIP-chip (actinomycin-D treated p63 HL-60) Strict Sites
+    shortLabel Affy p63 ME-180+
+    longLabel Affymetrix ChIP-chip (p63, actinomycin-D treated ME-180) Strict Sites
     color 0,0,200
     priority 13
 
@@ -2706,8 +2706,8 @@ dataVersion ENCODE Oct 2005 Freeze
     release beta
     subTrack encodeAffyChIpHl60SitesStrict
     subGroups factor=mactd time=0h
-    shortLabel Affy p63
-    longLabel Affymetrix ChIP-chip (p63, HL-60) Strict Sites
+    shortLabel Affy p63 ME-180
+    longLabel Affymetrix ChIP-chip (p63, ME-180) Strict Sites
     color 0,0,200
     priority 14
 
