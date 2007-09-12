@@ -973,3 +973,24 @@ cat << '_EOF_' > gsub
       -sqlTable=$HOME/kent/src/hg/lib/simpleRepeat.sql
    # Loaded 966523 elements of size 16
 
+########################################################################
+# BLASTZ Swap Mouse mm9 (DONE - 2007-09-12 - Hiram)
+    ssh kkstore06
+    # the original
+    cd /cluster/data/mm9/bed/blastzDanRer5.2007-09-11
+    cat fb.mm9.chainDanRer5Link.txt
+    #	48497464 bases of 2620346127 (1.851%) in intersection
+
+    #	the swap
+    mkdir /cluster/data/danRer5/bed/blastz.mm9.swap
+    cd /cluster/data/danRer5/bed/blastz.mm9.swap
+    time nice -n +19 $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
+	-chainMinScore=5000 \
+	/cluster/data/mm9/bed/blastzDanRer5.2007-09-11/DEF \
+	-swap -chainLinearGap=loose -bigClusterHub=pk -verbose=2 \
+	> swap.log 2>&1 &
+    #	real    9m47.163s
+    cat fb.danRer5.chainMm9Link.txt
+    #	34017483 bases of 1435609608 (2.370%) in intersection
+
+########################################################################
