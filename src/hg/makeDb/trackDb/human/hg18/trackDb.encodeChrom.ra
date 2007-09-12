@@ -222,7 +222,18 @@ subGroup1 group Group raw=DNase-chip_Raw pval=DNase-chip_Pval mpss=MPSS
     subGroups group=mpss
     priority 16
 
+# U Washington supertrack
+
+        track encodeUwDnaseSuper
+        superTrack on
+        shortLabel UW DNase
+        longLabel UW DNaseI Hypersensitivity
+        group encodeChrom
+        priority 66.05
+        chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+
 track encodeUWRegulomeBase
+superTrack encodeUwDnaseSuper dense
 compositeTrack on
 shortLabel UW DNase-QCP
 longLabel UW DNaseI Sensitivity by QCP
@@ -355,6 +366,7 @@ origAssembly hg17
     priority 16
 
 track encodeRegulomeDnaseArray
+superTrack encodeUwDnaseSuper dense
 compositeTrack on
 shortLabel UW DNase-array
 longLabel UW DNaseI Hypersensitivity by DNase-array
@@ -392,3 +404,12 @@ origAssembly hg17
     type bed5FloatScore
     priority 2
 
+# supertrack for UVa
+
+        track encodeUvaDnaRepSuper
+        superTrack on
+        shortLabel UVa DNA Rep
+        longLabel University of Virginia DNA Replication Timing and Origins
+        group encodeChrom
+        priority 64.0
+        chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
