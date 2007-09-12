@@ -28,6 +28,7 @@ clean:
 DIRS = \
 	blastRecipBest \
 	gadPos \
+	hmmPfamToTab \
 	kgAliasM \
 	kgAliasP \
 	kgAliasKgXref \
@@ -50,6 +51,7 @@ DIRS = \
 	pbHgnc \
 	pfamXref \
 	rmKGPepMrna \
+	scopCollapse \
 	spOrganism \
 	spTest \
 	spToDb \
