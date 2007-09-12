@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.24 2007/09/12 19:40:30 hiram Exp $"
+#	"$Id: mm9.txt,v 1.25 2007/09/12 20:55:56 hiram Exp $"
 #
 
 #######################################################################
@@ -4140,8 +4140,6 @@ printf("%s\t%s\t%s\n", gensub(/\.[0-9]+/, "", "g", $1), $2, $3);
 }' > pfamDesc.tab
 
     # Convert output to tab-separated file. 
-    #	will need to build the program hmmPfamToTab in
-    #	/src/hg/protein/hmmPfamToTab
     cd /cluster/data/mm9/bed/ucsc.10
     catDir /san/sanvol1/scratch/mm9/ucscGenes/pfam/out \
 	| hmmPfamToTab -eValCol stdin ucscPfam.tab
@@ -4158,7 +4156,7 @@ printf("%s\t%s\t%s\n", gensub(/\.[0-9]+/, "", "g", $1), $2, $3);
     hgLoadSqlTab mm9 pfamDesc ~/kent/src/hg/lib/pfamDesc.sql pfamDesc.tab
 
 #########################################################################
-# Do scop run. Takes about 6 hours (DONE - 2007-09-12 - Hiram)
+# Do scop run. Takes about 3.5 hours (DONE - 2007-09-12 - Hiram)
 # First get pfam global HMMs into /san/sanvol1/scop somehow.
     ssh pk
     mkdir /san/sanvol1/scratch/mm9/ucscGenes/scop
@@ -4178,7 +4176,53 @@ doScop ../splitProt/$(path1) $(root1).pf {check out line out/$(root1).pf}
 #ENDLOOP
 '_EOF_'
     gensub2 gene.list single template jobList
-ssh pk "cd /san/sanvol1/scratch/$db/ucscGenes/scop; para make"
+    para create jobList
+    para try ... check ... push ... etc... time
+# Completed: 9666 of 9666 jobs
+# CPU time in finished jobs:    3514379s   58572.99m   976.22h   40.68d  0.111 y
+# IO & Wait Time:                 18017s     300.28m     5.00h    0.21d  0.001 y
+# Average job time:                 365s       6.09m     0.10h    0.00d
+# Longest finished job:            6475s     107.92m     1.80h    0.07d
+# Submission to last job:         12148s     202.47m     3.37h    0.14d
+
+
+    # Convert scop output to tab-separated files
+    ssh hgwdev
+    cd /cluster/data/mm9/bed/ucsc.10
+    catDir /san/sanvol1/scratch/mm9/ucscGenes/scop/out | \
+	hmmPfamToTab -eValCol -scoreCol stdin scopPlusScore.tab
+    scopCollapse scopPlusScore.tab /cluster/store12/scop/model.tab \
+	ucscScop.tab scopDesc.tab knownToSuper.tab
+    hgLoadSqlTab mm9 knownToSuper ~/kent/src/hg/lib/knownToSuper.sql \
+	knownToSuper.tab
+
+    hgLoadSqlTab mm9 ucscScop ~/kent/src/hg/lib/ucscScop.sql ucscScop.tab
+    hgLoadSqlTab mm9 scopDesc ~/kent/src/hg/lib/scopDesc.sql scopDesc.tab
+
+    # Regenerate ccdsKgMap table
+    #/cluster/data/genbank/bin/x86_64/mkCcdsGeneMap  -db=$db -loadDb ccdsGene knownGene ccdsKgMap
+    /cluster/data/genbank/bin/x86_64/mkCcdsGeneMap  -db=mm9 -loadDb \
+	mm9.ccdsGene knownGene ccdsKgMap
+
+    # Map old to new mapping - maybe next time, this is first genes on mm9
+    # hgsql mm9 -N -e 'select * from knownGene' > knownGene_1.gp
+    # genePredToBed knownGene_1.gp >knownGene_1.bed
+    # cat refSeq/*.bed mrna/*.bed | txGeneExplainUpdate1 knownGene_1.bed \
+    #	ucscGenes.bed stdin abWalk.bed kg2ToKg3.bed
+    # hgLoadSqlTab $tempDb kg1ToKg2 ~/kent/src/hg/lib/kg2ToKg3.sql kg2ToKg3.bed
+
+    # Build kgSpAlias table, which combines content of both kgAlias and kgProtAlias tables.
+
+    hgsql mm9 -N -e \
+    'select kgXref.kgID, spID, alias from kgXref, kgAlias where kgXref.kgID=kgAlias.kgID' >j.tmp
+         
+    hgsql mm9 -N -e \
+    'select kgXref.kgID, spID, alias from kgXref, kgProtAlias where kgXref.kgID=kgProtAlias.kgID'\
+    >>j.tmp
+    sort -u j.tmp > kgSpAlias.tab
+    rm j.tmp
+
+    hgLoadSqlTab mm9 kgSpAlias ~/kent/src/hg/lib/kgSpAlias.sql ./kgSpAlias.tab
 
 #########################################################################
 # Building PROTEOME BROWSER TABLES (DONE - 2007-09-12 - Hiram)
