@@ -20,7 +20,7 @@
 #include "hgNear.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.173 2007/07/27 19:31:12 angie Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.174 2007/09/12 19:28:15 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", idPosVarName, NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -1396,6 +1396,8 @@ else if (sameString(type, "pfam"))
     setupColumnPfam(col, s);
 else if (sameString(type, "flyBdgp"))
     setupColumnFlyBdgp(col, s); 
+else if (sameString(type, "xyz"))
+    setupColumnXyz(col, s);
 else if (sameString(type, "custom"))
     setupColumnCustom(col, s);
 else

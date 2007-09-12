@@ -646,6 +646,9 @@ void setupColumnPfam(struct column *col, char *parameters);
 void setupColumnFlyBdgp(struct column *col, char *parameters);
 /* Set up Bdgp gene column. */
 
+void setupColumnXyz(struct column *col, char *parameters);
+/* Set up a xyz type column. */
+
 void associationSimilarityMethods(struct order *ord, char *parameters);
 /* Fill in associationSimilarity methods. */
 
