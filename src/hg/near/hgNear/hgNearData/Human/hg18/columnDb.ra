@@ -26,9 +26,9 @@ priority 12.2
 itemUrl http://www.hprd.org/protein/%s
 itemUrlQuery select value from knownToHprd where name='%s'
 
-name knownIntronSize
-type intronSize knownGene
-visibility off
-shortLabel Intron Size
-longLabel Size of first (or optionally largest) intron
-priority 1000
+#name knownIntronSize
+#type intronSize knownGene
+#visibility off
+#shortLabel Intron Size
+#longLabel Size of first (or optionally largest) intron
+#priority 1000
