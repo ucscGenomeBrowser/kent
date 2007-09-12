@@ -9,7 +9,7 @@
 #include "spDb.h"
 #include "ccdsGeneMap.h"
 
-static char const rcsid[] = "$Id: synonym.c,v 1.3 2007/09/05 18:47:13 fanhsu Exp $";
+static char const rcsid[] = "$Id: synonym.c,v 1.4 2007/09/12 22:39:49 fanhsu Exp $";
 
 static void printOurMrnaUrl(FILE *f, char *accession)
 /* Print URL for Entrez browser on a nucleotide. */
@@ -223,12 +223,17 @@ if (refSeqAcc[0] != 0)
     }
 else if (mrnaAcc[0] != 0)
     {
-    /* skip NR_XXXXXs */
-    if (strstr(mrnaAcc, "NR_")==NULL)
-    	{
-    	hPrintf("<B>Representative mRNA: </B> <A HREF=\"");
+    safef(condStr, sizeof(condStr), "acc = '%s'", mrnaAcc);
+    if (sqlGetField(conn, database, "gbCdnaInfo", "acc", condStr) != NULL)
+        {
+    	hPrintf("<B>Representative RNA: </B> <A HREF=\"");
     	printOurMrnaUrl(stdout, mrnaAcc);
     	hPrintf("\">%s</A><BR>\n", mrnaAcc);
+    	}
+    else
+    /* do not show URL link if it is not found in gbCdnaInfo */
+    	{
+    	hPrintf("<B>Representative RNA: %s </B>", mrnaAcc);
     	}
     }
 if (protAcc != NULL)
