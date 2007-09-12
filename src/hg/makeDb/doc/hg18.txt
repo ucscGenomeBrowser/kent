@@ -6090,6 +6090,11 @@ cd /cluster/data/hg18/bed/geneSorter
 hgMapToGene hg18 affyU133Plus2 knownGene knownToU133Plus2
 #	row count changed to 34745  
 
+# Make knownToCdsSnp table (DONE Sept 12, 2007, jk)
+  ssh hgwdev
+  hgMapToGene hg18 snp126 knownGene knownToCdsSnp -all -cds
+# approx. 5 minutes running time
+
 # UPDATE GO DATABASE 
 # Download the terms and make the database.
 ssh hgwdev
