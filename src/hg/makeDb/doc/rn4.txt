@@ -4606,3 +4606,20 @@ TMPDIR=/scratch/tmp
     nice featureBits -chrom=chr1 rn4 chainBosTau3Link
     # 61426292 bases of 243058842 (25.272%) in intersection
 
+#########################################################################
+# BLASTZ Mouse mm9 swap (DONE - 2007-09-11 - Hiram)
+    # the original
+    ssh kkstore06
+    cd  /cluster/data/mm9/bed/blastz.rn4
+    cat fb.mm9.chainRn4Link.txt
+    #	1713186474 bases of 2620346127 (65.380%) in intersection
+
+    #	and the swap
+    mkdir /cluster/data/rn4/bed/blastz.mm9.swap
+    cd /cluster/data/rn4/bed/blastz.mm9.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/mm9/bed/blastzRn4.2007-08-31/DEF \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=medium \
+	-swap -syntenicNet > swap.out 2>&1 &
+
+#########################################################################
