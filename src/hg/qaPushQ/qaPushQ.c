@@ -29,7 +29,7 @@
 #include "dbDb.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.99 2007/06/12 02:15:26 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.100 2007/09/12 22:42:57 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -567,7 +567,7 @@ if (isNew)
     replaceInStr(html, sizeof(html), "<!lockbutton>", ""); 
     replaceInStr(html, sizeof(html), "<!sizesbutton>", "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input TYPE=SUBMIT NAME=\"showSizes\" VALUE=\"Show Sizes\">"); 
     replaceInStr(html, sizeof(html), "<!refreshlink>", ""); 
-    replaceInStr(html, sizeof(html), "<!transferlink>", ""); 
+    replaceInStr(html, sizeof(html), "<!transferbutton>", ""); 
     
     safef(tempLink, sizeof(tempLink), "<a href=\"/cgi-bin/qaPushQ?cb=%s\">CANCEL</a>&nbsp;&nbsp;",newRandState); 
     replaceInStr(html, sizeof(html), "<!cancellink>", tempLink ); 
@@ -615,10 +615,10 @@ else
 		); 
 	    }
 	    
-	replaceInStr(html, sizeof(html), "<!lockbutton>", 
-	    "<input TYPE=SUBMIT NAME=\"lockbutton\" VALUE=\"Cancel\" >&nbsp;&nbsp;"); 
+	replaceInStr(html, sizeof(html), "<!lockbutton>", ""); 
     	
-	replaceInStr(html, sizeof(html), "<!cancellink>", ""); 
+	replaceInStr(html, sizeof(html), "<!cancellink>",  
+	    "<input TYPE=SUBMIT NAME=\"cancelbutton\" VALUE=\"Cancel\" >&nbsp;&nbsp;"); 
 	
 	replaceInStr(html, sizeof(html), "<!refreshlink>", ""); 
 	
@@ -659,7 +659,7 @@ else
 	    ki->qid,newRandState); 
 	replaceInStr(html, sizeof(html), "<!refreshlink>", tempLink ); 
 	
-	replaceInStr(html, sizeof(html), "<!transferlink>", "");
+	replaceInStr(html, sizeof(html), "<!transferbutton>", "");
 	replaceInStr(html, sizeof(html), "<!sizesbutton>", "");
 	if (sameString(ki->lockUser,""))
 	    {
@@ -1490,6 +1490,7 @@ char *pushbutton   = cgiUsualString("pushbutton"  ,"");
 char *clonebutton  = cgiUsualString("clonebutton" ,"");
 char *bouncebutton = cgiUsualString("bouncebutton","");
 char *lockbutton   = cgiUsualString("lockbutton"  ,"");
+char *cancelbutton   = cgiUsualString("cancelbutton"  ,"");
 char *showSizes    = cgiUsualString("showSizes"   ,"");
 char *transfer     = cgiUsualString("transfer"   ,"");
 
@@ -1529,7 +1530,7 @@ if (!isNew)
 
     /* check lock status */
 
-    if (sameString(lockbutton,"Cancel"))  /* user cancelled */
+    if (sameString(cancelbutton,"Cancel"))  /* user cancelled */
 	{  /* unlock record */
 	safef(q->lockUser, sizeof(q->lockUser), "%s", "");
 	safef(q->lockDateTime, sizeof(q->lockDateTime), "%s", "");
