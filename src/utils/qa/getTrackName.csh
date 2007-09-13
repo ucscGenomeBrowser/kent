@@ -49,30 +49,33 @@ if ( "$dbs" != $db ) then
 endif
 
 #find the shortLabel and group for this table
- set subTrack=`hgsql -Ne "SELECT shortLabel FROM trackDb WHERE tableName LIKE '$tableName'" $db`
- if ( "" == "$subTrack" ) then
-  echo " ERROR: could not find the $tableName table in the $db database\n"
+set subTrack=`hgsql -Ne "SELECT shortLabel FROM trackDb WHERE tableName LIKE '$tableName'" $db`
+if ( "" == "$subTrack" ) then
+  echo "\n ERROR: could not find the $tableName table in the $db database\n"
   exit 1
- else
-  echo " Track name for $tableName table is: $subTrack"
+else
+  echo " $tableName"
+  echo
+  echo " name:   $subTrack"
   set grp=`hgsql -Ne "SELECT grp FROM trackDb WHERE tableName LIKE '$tableName'" $db`
- endif
+endif
 
 #find out if this table is a sub-track
- set parentTableName=`hgsql -Ne "SELECT settings FROM trackDb WHERE tableName LIKE '$tableName' AND settings like '%subTrack%'" \
- $db | grep subTrack | sed -e "s/\\n//" | awk '{print $2}'`
+set parentTableName=`hgsql -Ne "SELECT settings FROM trackDb WHERE tableName \
+  LIKE '$tableName' AND settings like '%subTrack%'" $db \
+  | grep subTrack | sed -e "s/\\n//" | awk '{print $2}'`
 
- if ( "" != $parentTableName ) then
+if ( "" != $parentTableName ) then
   #get the Short Label for the parent track
-  set parentTrack=`hgsql -Ne "SELECT shortLabel FROM trackDb WHERE tableName LIKE '$parentTableName'" $db`
-  echo " Parent Track name for $tableName table is: $parentTrack"
- endif
+  set parentTrack=`hgsql -Ne "SELECT shortLabel FROM trackDb WHERE tableName \
+    LIKE '$parentTableName'" $db`
+  echo " parent: $parentTrack"
+endif
 
 
 #report about the group that this track is in
  set grpName=`hgsql -Ne "SELECT label FROM grp WHERE name LIKE '$grp'" $db`
- echo
- echo " And it is in this group: $grpName\n"
+ echo " group:  $grpName\n"
 
  set parentTrack=''
  set parentTableName=''
