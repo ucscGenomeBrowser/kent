@@ -9,11 +9,12 @@
 <strong>Last Updated: </strong> <%= distance_of_time_in_words(@submission.updated_at, Time.now) -%> ago<br/>
 </p>
 <br>
-<table>
+<table CELLSPACING=10 CELLPADDING=10>
   <td><%= link_to 'Edit', {:action => 'edit', :id => @submission.id} -%></td>
   <td><%= link_to 'Delete', {:action => 'delete', :id => @submission.id},
     :confirm => "Are you sure you want to delete this item?"%></td>
   <td><%= link_to 'Upload', {:action => 'upload', :id => @submission.id} -%></td>
+  <td><%= link_to 'Validate', {:action => 'validate', :id => @submission.id} -%></td>
 </table>
 
 <h3> Submission Files</h3>

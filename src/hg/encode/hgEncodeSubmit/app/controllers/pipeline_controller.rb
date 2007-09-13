@@ -269,6 +269,79 @@ class PipelineController < ApplicationController
     flash[:notice] = msg
 
   end
+
+
+  def validate
+    @submission = Submission.find(params[:id])
+    @submissionTypes = getSubmissionTypes
+    msg = ""
+    # make sure status is uploaded
+    if @submission.status == "new"
+      msg += "Nothing uploaded yet"
+      flash[:notice] = msg
+      redirect_to :action => 'show', :id => @submission
+      return
+    end
+
+    # make sure parent paths exist
+    submissionDir = path_to_file
+    userDir = File.dirname(submissionDir)
+    unless File.exists?(userDir) and File.exists?(submissionDir)
+      msg += "Unexpected error, userDir and submissionDir do not exist!"
+      flash[:warning] = msg
+      redirect_to :action => 'show', :id => @submission
+      return
+    end
+
+    # make up an error output file
+    @filename = "stderr_file"
+    errFile = path_to_file
+
+    # run the validator
+    cmd = ""
+    cmd += @submissionTypes[@submission.s_type]["validator"]
+    cmd += " "
+    cmd += @submissionTypes[@submission.s_type]["typeParams"]
+    cmd += " "
+    cmd += submissionDir
+    cmd += " 2>"
+    cmd += errFile
+
+    msg += cmd
+
+    exitCode = run_with_timeout(cmd, 30)
+    if exitCode >= 0
+      msg += "<br>validate exitCode = #{exitCode}<br>" 
+      if exitCode == 0
+        if @submission.status != "validated"
+          @submission.status = "validated"
+          unless @submission.save
+            flash[:warning] = "submission record save failed"
+          end
+        end
+      else
+
+        errText = File.open(errFile, "rb") { |f| f.read }
+	flash[:warning] = "error:<br>" + errText
+        
+        if @submission.status != "invalid"
+          @submission.status = "invalid"
+          unless @submission.save
+            flash[:warning] = "submission record save failed"
+          end
+        end
+      end
+    else
+      flash[:warning] = "validate timeout exceeded<br>"  
+      redirect_to :action => 'show', :id => @submission
+      return
+    end 
+
+    flash[:notice] = msg
+    redirect_to :action => 'show', :id => @submission
+
+  end
+
   
 private
   def check_user_is_owner
