@@ -2,7 +2,6 @@ class Submission < ActiveRecord::Base
 
   belongs_to :user
   has_many :submission_archives, :dependent => :destroy
-  has_many :submission_files, :dependent => :destroy
 
   validates_presence_of :name
   validates_presence_of :s_type

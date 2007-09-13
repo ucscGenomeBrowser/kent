@@ -1,6 +1,7 @@
 class SubmissionArchive < ActiveRecord::Base
 
   belongs_to :submission
+  has_many :submission_files, :dependent => :destroy
 
   validates_presence_of :file_name
   validates_presence_of :file_size

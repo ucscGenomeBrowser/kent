@@ -17,32 +17,33 @@
   <td><%= link_to 'Validate', {:action => 'validate', :id => @submission.id} -%></td>
 </table>
 
-<h3> Submission Files</h3>
-
-<table CELLSPACING=10 CELLPADDING=10>
-<% @submission.submission_files.each do |c| %>
-  <tr>
-  <td><%= link_to c.file_name, :action => 'show_file', :id => c.id -%></td>
-  <td><%= c.status -%></td>
-  <td align=right><%= c.file_size -%></td>
-  <td><%= c.file_date -%></td>
-  </tr>
-<% end %>
-</table>
-
-<hr />
 
 <h3> Submission Archive Files</h3>
 
-<table CELLSPACING=10 CELLPADDING=10>
-<% @submission.submission_archives.each do |c| %>
+<% @submission.submission_archives.each do |a| %>
+  <table CELLSPACING=10 CELLPADDING=10>
   <tr>
-  <td><%= c.file_name -%></td>
-  <td align=right><%= c.file_size -%></td>
-  <td><%= c.file_date -%></td>
+  <td><%= a.file_name -%></td>
+  <td align=right><%= a.file_size -%></td>
+  <td><%= a.file_date -%></td>
+  </tr>
+  </table>
+
+
+<table CELLSPACING=10 CELLPADDING=10>
+<% a.submission_files.each do |f| %>
+  <tr>
+  <td>&nbsp;</td>
+  <td><%= link_to f.file_name, :action => 'show_file', :id => f.id -%></td>
+  <td><%= f.status -%></td>
+  <td align=right><%= f.file_size -%></td>
+  <td><%= f.file_date -%></td>
   </tr>
 <% end %>
 </table>
+
+
+<% end %>
 
 <hr />
 

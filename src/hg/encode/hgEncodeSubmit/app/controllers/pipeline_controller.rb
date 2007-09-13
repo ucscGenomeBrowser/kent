@@ -191,7 +191,24 @@ class PipelineController < ApplicationController
     else
       flash[:warning] = "unzip timeout exceeded<br>"  
       return
-    end 
+    end
+ 
+    # need to test for and delete any with same archive_no (just in case?)
+    # moved this up here just to get the @submission_archive.id set
+    old = SubmissionArchive.find(:first, :conditions => ['submission_id = ? and archive_no = ?', @submission.id, nextArchiveNo])
+    old.destroy if old
+    # add new submissionArchive record
+    @submission_archive = SubmissionArchive.new
+    @submission_archive.submission_id = @submission.id 
+    @submission_archive.archive_no = nextArchiveNo
+    @submission_archive.file_name = @filename
+    @submission_archive.file_size = @upload.size
+    @submission_archive.file_date = Time.now    # TODO: add .utc to make UTC time?
+    unless @submission_archive.save
+      flash[:warning] = "error saving submission_archive record for: #{@filename}"
+      return
+    end
+
 
     # process the archive files
     msg += "uploadDir:<br>\n" 
@@ -206,14 +223,16 @@ class PipelineController < ApplicationController
         end 
     
         # delete any equivalent submissionFile records
-        old = SubmissionFile.find(:first, :conditions => ['submission_id = ? and file_name = ?', @submission.id, f])
-        old.destroy if old
+	@submission.submission_archives.each do |c|
+          old = SubmissionFile.find(:first, :conditions => ['submission_archive_id = ? and file_name = ?', c.id, f])
+          old.destroy if old
+        end
 
         @submission_file = SubmissionFile.new
         @submission_file.file_name = f
         @submission_file.file_size = File.size(fullName)
         @submission_file.file_date = File.ctime(fullName)
-        @submission_file.submission_id = @submission.id 
+        @submission_file.submission_archive_id = @submission_archive.id 
         @submission_file.sf_type = File.extname(f)
         @submission_file.status = 'uploaded'
         unless @submission_file.save
@@ -227,21 +246,6 @@ class PipelineController < ApplicationController
 
       end
     }
-
-    # need to test for and delete any with same archive_no (just in case?)
-    old = SubmissionArchive.find(:first, :conditions => ['submission_id = ? and archive_no = ?', @submission.id, nextArchiveNo])
-    old.destroy if old
-    # add new submissionArchive record
-    @submission_archive = SubmissionArchive.new
-    @submission_archive.submission_id = @submission.id 
-    @submission_archive.archive_no = nextArchiveNo
-    @submission_archive.file_name = @filename
-    @submission_archive.file_size = @upload.size
-    @submission_archive.file_date = Time.now    # TODO: add .utc to make UTC time?
-    unless @submission_archive.save
-      flash[:warning] = "error saving submission_archive record for: #{@filename}"
-      return
-    end
 
     @submission.status = "uploaded"
     @submission.archive_count = nextArchiveNo
