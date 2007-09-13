@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/HgAutomate.pm instead.
 
-# $Id: HgAutomate.pm,v 1.8 2007/09/07 17:35:19 hiram Exp $
+# $Id: HgAutomate.pm,v 1.9 2007/09/13 22:32:19 hiram Exp $
 package HgAutomate;
 
 use warnings;
@@ -12,6 +12,7 @@ use strict;
 use Carp;
 use vars qw(@ISA @EXPORT_OK);
 use Exporter;
+use File::Basename;
 
 @ISA = qw(Exporter);
 
@@ -602,6 +603,8 @@ sub mustOpen {
 }
 
 sub nfsNoodge {
+  # the touch of the directory causes NFS to refresh its directory
+  # information and thus pick up status change to the file.
   # sometimes localhost can't see the newly created file immediately,
   # so insert some artificial delay in order to prevent the next step
   # from dieing on lack of file:
@@ -609,9 +612,11 @@ sub nfsNoodge {
   confess "Must have exactly 1 argument" if (scalar(@_) != 1);
   confess "undef input" if (! defined $file);
   return if ($main::opt_debug);
+  my $dir = dirname($file);
   for (my $i=0;  $i < 5;  $i++) {
-    last if ( -s $file );
+    `touch $dir`;
     sleep(4);
+    last if ( -s $file );
   }
 }
 
