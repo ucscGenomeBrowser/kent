@@ -63,7 +63,7 @@ endif
 #find out if this table is a sub-track
 set parentTableName=`hgsql -Ne "SELECT settings FROM trackDb WHERE tableName \
   LIKE '$tableName' AND settings like '%subTrack%'" $db \
-  | grep subTrack | sed -e "s/\\n//" | awk '{print $2}'`
+  | sed -e "s/\\n/\n/g" | grep subTrack | awk '{print $2}'`
 
 if ( "" != $parentTableName ) then
   #get the Short Label for the parent track
