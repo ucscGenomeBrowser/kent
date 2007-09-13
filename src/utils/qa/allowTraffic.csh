@@ -79,7 +79,7 @@ set startTime=`date +%s`
 set endTime=`echo $startTime $duration | awk '{print $1+$2*60}'`
 
 echo
-while ( $now < $endTime )
+while ( `date +%s` < $endTime )
   foreach address ( $ip )
     /usr/local/bin/bottleneck -host=genome-bottle set $address 0 \
       | egrep .
@@ -87,6 +87,5 @@ while ( $now < $endTime )
   end
   echo
   sleep 30
-  set now=`date +%s`
 end
 
