@@ -248,6 +248,7 @@ if ( "true" == $list ) then
     echo $machine2 "total" "=" $mach2Tot megabytes \
       | awk '{printf("%7s %5s %1s %8s %9s\n", $1, $2, $3, $4, $5)}'
   endif
+  echo "(total includes index)"
   echo
 endif 
 
