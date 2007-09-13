@@ -508,17 +508,17 @@ hgsqladmin create $tempDb
 hgsqldump $db chromInfo | hgsql $tempDb
 hgsqldump $db trackDb_$user | hgsql $tempDb
 
-# Load in isoforms, canonical, and gene sequence tables
-hgLoadSqlTab $tempDb knownIsoforms ~/kent/src/hg/lib/knownIsoforms.sql isoforms.tab
-hgLoadSqlTab $tempDb knownCanonical ~/kent/src/hg/lib/knownCanonical.sql canonical.tab
-hgPepPred $tempDb generic knownGenePep ucscGenes.faa
-hgPepPred $tempDb generic knownGeneMrna ucscGenes.fa
-
 # Make up knownGenes table, adding uniProt ID. Load into database. Takes 3
 # seconds.
 txGeneFromBed ucscGenes.bed ucscGenes.picks ucscGenes.faa uniProt.fa refPep.fa ucscGenes.gp
 hgLoadSqlTab $tempDb knownGene ~/kent/src/hg/lib/knownGene.sql ucscGenes.gp
 hgLoadBed $tempDb knownAlt ucscSplice.bed
+
+# Load in isoforms, canonical, and gene sequence tables
+hgLoadSqlTab $tempDb knownIsoforms ~/kent/src/hg/lib/knownIsoforms.sql isoforms.tab
+hgLoadSqlTab $tempDb knownCanonical ~/kent/src/hg/lib/knownCanonical.sql canonical.tab
+hgPepPred $tempDb generic knownGenePep ucscGenes.faa
+hgPepPred $tempDb generic knownGeneMrna ucscGenes.fa
 
 # Make up kgXref table.  Takes about 3 minutes.
 txGeneXref $db $spDb ucscGenes.gp ucscGenes.info ucscGenes.picks ucscGenes.ev ucscGenes.xref
