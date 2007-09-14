@@ -9,7 +9,7 @@
 #include "obscure.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.81 2007/05/22 22:25:37 galt Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.82 2007/09/14 18:40:20 hiram Exp $";
 
 /*	Routines that are not strictly part of the wigDataStream object,
 	but they are used to do things with the object.
@@ -478,10 +478,18 @@ static void showResolution(double resolution, FILE *fh)
 if (resolution > 0.0)
     fprintf (fh, "#\tThis data has been compressed with a minor "
 	"loss in resolution.\n" );
-    fprintf (fh, "#\t(Worst case: %g)  The original source data \n",
+    fprintf (fh, "#\t(Worst case: %g)  The original source data\n",
 	resolution);
     fprintf (fh, "#\t(before querying and compression) is available at \n"
 	"#\t\thttp://hgdownload.cse.ucsc.edu/downloads.html\n");
+}
+
+static void showResolutionNoDownloads(double resolution, FILE *fh)
+{
+if (resolution > 0.0)
+    fprintf (fh, "#\tThis data has been compressed with a minor "
+	"loss in resolution.\n" );
+    fprintf (fh, "#\t(Worst case: %g)\n", resolution);
 }
 
 static void showConstraints(struct wiggleDataStream *wds, FILE *fh)
@@ -2141,7 +2149,10 @@ if (wds->ascii)
 			freeMem(dateStamp);
 			}
 		    showConstraints(wds, fh);
-		    showResolution(worstCaseResolution, fh);
+		    if (wds->tblName && startsWith("gc5", wds->tblName))
+			showResolutionNoDownloads(worstCaseResolution, fh);
+		    else
+			showResolution(worstCaseResolution, fh);
 		    fprintf (fh, "variableStep chrom=%s span=%u\n",
 			chrom, span);
 		    }
