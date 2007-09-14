@@ -50,7 +50,19 @@ class PipelineController < ApplicationController
   
   def update
     @submission = Submission.find(params[:id])
+    old_s_type = @submission.s_type
     if @submission.update_attributes(params[:submission])
+      if old_s_type != @submission.s_type
+        if @submission.submission_archives.length == 0
+	  @submission.status = "new"
+	else
+	  @submission.status = "uploaded"
+	end
+	unless @submission.save
+	  flash[:warning] = "submission record save failed"
+	  return false
+	end
+      end
       redirect_to :action => 'show', :id => @submission
     else
       render :action => 'edit'
@@ -304,6 +316,17 @@ class PipelineController < ApplicationController
         return
       end
     end
+
+    if @submission.submission_archives.length == 0
+      @submission.status = "new"
+    else
+      @submission.status = "uploaded"
+    end
+    unless @submission.save
+      flash[:warning] = "submission record save failed"
+      return false
+    end
+
     msg = "Cleaned out upload dir and re-expanded all archives"
     if flash[:notice]
       flash[:notice] += "<br>"+msg
@@ -454,7 +477,11 @@ private
       end
     end
 
-    @submission.status = "uploaded"
+    if @submission.submission_archives.length == 0
+      @submission.status = "new"
+    else
+      @submission.status = "uploaded"
+    end
 
     unless @submission.save
       flash[:warning] = "submission record save failed"
