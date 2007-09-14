@@ -32,15 +32,10 @@ if (chrom != NULL)
     {
     int base = gl->basesPerPixel*(x - chrom->x);
     int start = base-CLICKSPAN, end=base+CLICKSPAN;
-    if (start<0) start=0;
-    /* demo code to direct to the Myc region */
-    if ( sameWord(chrom->fullName,"chr8") && (start > 70000000) )
-    {
-    start = 127300000;
-    end=131500000;
-    }
+    if (start<0) 
+	start=0;
     printf("Location: ../cgi-bin/hgTracks?db=%s&%s&position=%s:%d-%d\r\n\r\n",
-	   theDatabase, cartSidUrlString(cart), chrom->fullName, start+1, end);
+	   database, cartSidUrlString(cart), chrom->fullName, start+1, end);
     }
 else
     {

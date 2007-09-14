@@ -22,17 +22,15 @@
 #include "microarray.h"
 #include "hgChromGraph.h"
 
-static char const rcsid[] = "$Id: hgHeatmap.c,v 1.15 2007/09/09 21:42:39 jzhu Exp $";
+static char const rcsid[] = "$Id: hgHeatmap.c,v 1.16 2007/09/14 07:05:23 jzhu Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
 struct hash *oldVars;	/* Old cart hash. */
-char *theDatabase;	/* Name of the selected database - hg15, mm3, or the like. */
-char *theGenome;	/* Name of the selected genome - mouse, human, etc. */
+char *database;	/* Name of the selected database - hg15, mm3, or the like. */
+char *genome;	/* Name of the selected genome - mouse, human, etc. */
 char *theDataset;      /* Name of the selected dataset - UCSF breast cancer etc. */
 struct trackLayout tl;  /* Dimensions of things, fonts, etc. */
-//struct bed *ggUserList;	/* List of user graphs */
-//struct bed *ggDbList;	/* List of graphs in database. */
 struct slRef *ghList;	/* List of active heatmaps */
 struct hash *ghHash;	/* Hash of active heatmaps */
 
@@ -92,25 +90,29 @@ struct genoHeatmap *getDbHeatmaps(struct sqlConnection *conn, char *set)
 /* Get graphs defined in database. */
 {
 /* hardcoded for demo */
-int N =3;
-char *trackNames[2];
+int N;
+char **trackNames;
 
 if (!set)
     return NULL;
 if ( sameString(set,"Broad Lung cancer 500K chip"))
     {
+    N =2;
+    AllocArray(trackNames, N);
     trackNames[0] = "cnvLungBroadv2_ave100K";
     trackNames[1]= "cnvLungBroadv2";
-    trackNames[2]= "";
     }
 else if (sameWord(set,"UCSF breast cancer"))
     {
+    N=2;
+    AllocArray(trackNames, N);
     trackNames[0]= "CGHBreastCancerStanford";
     trackNames[1]="CGHBreastCancerUCSF";
-    trackNames[0]="";
     }
 else if (sameWord(set,"ISPY"))
     {
+    N=3;
+    AllocArray(trackNames, N);
     trackNames[0]="ispyMipCGH";
     trackNames[1]= "CGHBreastCancerStanford";
     trackNames[2]="CGHBreastCancerUCSF";
@@ -125,10 +127,7 @@ int i;
 for (i=0; i<N; i++)
     {
     trackName = trackNames[i];
-    if (trackName == "")
-	continue;
-    struct trackDb *tdb;
-    tdb = hMaybeTrackInfo(conn, trackName);
+    struct trackDb *tdb = hMaybeTrackInfo(conn, trackName);
     if (!tdb)
 	continue;
     AllocVar(gh);
@@ -136,7 +135,7 @@ for (i=0; i<N; i++)
     gh->name = tdb->tableName;
     gh->shortLabel = tdb->shortLabel;
     gh->longLabel = tdb->longLabel;
-    gh->database= theDatabase;
+    gh->database= database;
     gh->tDb = tdb;
     
     /*microarray specific settings*/
@@ -192,7 +191,7 @@ for (ref = ghList; ref != NULL; ref = ref->next)
 }
 
 void setSampleOrder(struct genoHeatmap* gh, char* posStr)
-/* Set the sampleOrder and sampleList of a specific heatmap to posStr; posStr is a cvs format string
+/* Set the sampleOrder and sampleList of a specific heatmap to posStr; posStr is a csv format string
    if posStr is null, then check the configuration file 
    if the setting is not set in the configuration file, then the orders are set to default in sampleList and sampleOrder
 */
@@ -318,7 +317,6 @@ int selectedHeatmapHeight()
 struct genoHeatmap *gh= NULL;
 struct slRef *ref= NULL;
 char *name;
-char *database;
 
 int totalHeight=0;
 int spacing =1;
@@ -326,7 +324,6 @@ for (ref = ghList; ref != NULL; ref = ref->next)
     {
     gh= ref->val;
     name = gh->name;
-    database = gh->database;
     totalHeight += experimentCount(name) * experimentHeight();
     totalHeight += spacing;
     
@@ -429,9 +426,9 @@ void dispatchLocation()
  * then we call hghDoUsualHttp. */
 {
 struct sqlConnection *conn = NULL;
-getDbAndGenome(cart, &theDatabase, &theGenome,oldVars);
-hSetDb(theDatabase);
-cartSetString(cart, "db", theDatabase); /* custom tracks needs this */
+getDbAndGenome(cart, &database, &genome,oldVars);
+hSetDb(database);
+cartSetString(cart, "db", database); /* custom tracks needs this */
 theDataset = cartOptionalString(cart, hghDataSet);  
 conn = hAllocConn();
 if (!theDataset)

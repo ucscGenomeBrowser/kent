@@ -41,9 +41,9 @@
 /*** External vars declared in hgHeatmap.c ***/
 extern struct cart *cart;
 extern struct hash *oldCart;
-extern char *theDatabase;	/* Name of the selected database - hg15, mm3, or the like. */
-extern char *theGenome;	/* Name of the selected genome - mouse, human, etc. */
-extern char *thbeDataset;      /* Name of the selected dataset - UCSF breast cancer etc. */
+extern char *database;	/* Name of the selected database - hg15, mm3, or the like. */
+extern char *genome;	/* Name of the selected genome - mouse, human, etc. */
+extern char *theDataset;      /* Name of the selected dataset - UCSF breast cancer etc. */
 extern struct trackLayout tl;	/* Dimensions of things, fonts, etc. */
 extern struct slRef *ghList;	/* List of active heatmaps */
 extern struct hash *ghHash;	/* Hash of active heatmaps */
@@ -111,7 +111,7 @@ struct genoHeatmap *getUserHeatmaps();
 /* Get list of all user graphs */
 
 void setSampleOrder(struct genoHeatmap* gh, char* posStr);
-/* Set the sampleOrder and sampleList of a specific heatmap to posStr; posStr is a cvs format string
+/* Set the sampleOrder and sampleList of a specific heatmap to posStr; posStr is a comma separated string
    if posStr is null, then check the configuration file 
    if the setting is not set in the configuration file, then the orders are set to default in sampleList and sampleOrder
 */

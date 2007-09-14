@@ -28,7 +28,7 @@
 #include "hCytoBand.h"
 #include "hgChromGraph.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.13 2007/09/09 21:42:39 jzhu Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.14 2007/09/14 07:05:23 jzhu Exp $";
 
 /* Page drawing stuff. */
 
@@ -362,7 +362,7 @@ hMakeGrayShades(vg, shadesOfGray, maxShade);
 
 /* Draw the labels and then the chromosomes. */
 genoLayDrawChromLabels(gl, vg, MG_BLACK);
-genoLayDrawBandedChroms(gl, vg, theDatabase, conn, 
+genoLayDrawBandedChroms(gl, vg, database, conn, 
 	shadesOfGray, maxShade, MG_BLACK);
 
 struct genoHeatmap *gh= NULL;
@@ -553,7 +553,7 @@ void handlePostscript(struct sqlConnection *conn)
 struct tempName psTn;
 char *pdfFile = NULL;
 trashDirFile(&psTn, "hgh", "hgh", ".eps");
-cartWebStart(cart, "%s Genome Heatmaps", theGenome);
+cartWebStart(cart, "%s Genome Heatmaps", genome);
 printf("<H1>PostScript/PDF Output</H1>\n");
 printf("PostScript images can be printed at high resolution "
        "and edited by many drawing programs such as Adobe "
@@ -585,7 +585,7 @@ void mainPage(struct sqlConnection *conn)
 {
 char *scriptName = "/cgi-bin/hgHeatmap";
 
-cartWebStart(cart, "%s Genome Heatmaps", theGenome);
+cartWebStart(cart, "%s Genome Heatmaps", genome);
 
 /* Start form and save session var. */
 hPrintf("<FORM ACTION=\"..%s\" NAME=\"mainForm\" METHOD=GET>\n", scriptName);
@@ -602,16 +602,16 @@ char *jsOther = onChangeOther();
 hPrintf("<TABLE>");
 if (gotClade)
     {
-    printCladeListHtml(hGenome(theDatabase), onChangeClade());
-    printGenomeListForCladeHtml(theDatabase, onChangeOrg());
+    printCladeListHtml(hGenome(database), onChangeClade());
+    printGenomeListForCladeHtml(database, onChangeOrg());
     }
 else
     {
-    printGenomeListHtml(theDatabase, onChangeOrg());
+    printGenomeListHtml(database, onChangeOrg());
     }
 htmlNbSpaces(3);
 hPrintf("<B>assembly:</B>\n");
-printAssemblyListHtml(theDatabase, jsOther);
+printAssemblyListHtml(database, jsOther);
 
 /* Show data set selector. */
 htmlNbSpaces(3);
