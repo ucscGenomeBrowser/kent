@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/makePushQSql.pl instead.
 
-# $Id: makePushQSql.pl,v 1.9 2007/09/14 22:50:54 angie Exp $
+# $Id: makePushQSql.pl,v 1.10 2007/09/14 23:09:34 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -182,8 +182,11 @@ sub getGenbankEntry {
     );
   my @genbankRequiredTables = qw(
     author cds cell description development estOrientInfo gbCdnaInfo
-    gbExtFile gbLoaded gbMiscDiff gbSeq gbStatus geneName imageClone keyword
+    gbExtFile gbLoaded gbSeq gbStatus geneName imageClone keyword
     library mrnaClone mrnaOrientInfo organism productName sex source tissue
+    );
+  my @genbankHelpfulTables = qw(
+    gbMiscDiff
     );
   my @genbankTablesInDb = ();
   foreach my $t (@genbankTrackTables) {
@@ -199,6 +202,11 @@ sub getGenbankEntry {
 	delete $allTables->{$t};
       } else {
 	die "\n$db does not have required genbank table $t\n\n";
+      }
+    }
+    foreach my $t (@genbankHelpfulTables) {
+      if (! defined $allTables->{$t}) {
+	&HgAutomate::verbose(1, "$db does not have $t\n");
       }
     }
   }
