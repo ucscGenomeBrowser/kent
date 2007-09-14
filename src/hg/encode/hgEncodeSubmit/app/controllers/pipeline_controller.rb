@@ -190,6 +190,8 @@ class PipelineController < ApplicationController
     #@upload.methods.each {|x| msg += "#{x.to_str}<br>"}
     flash[:notice] = msg
 
+  rescue OpenURI::HTTPError => err
+    flash[:warning] = "HTTP Error: " + err.message
   end
 
 
