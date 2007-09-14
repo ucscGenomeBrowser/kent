@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/makePushQSql.pl instead.
 
-# $Id: makePushQSql.pl,v 1.8 2007/08/13 20:45:19 angie Exp $
+# $Id: makePushQSql.pl,v 1.9 2007/09/14 22:50:54 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -15,6 +15,7 @@ use HgRemoteScript;
 
 # Option variable names:
 use vars @HgAutomate::commonOptionVars;
+use vars '$opt_noGenbank';
 
 # Option defaults:
 my $dbHost = 'hgwdev';
@@ -31,6 +32,7 @@ usage: $base db
 options:
 ";
   print STDERR &HgAutomate::getCommonOptionHelp('dbHost' => $dbHost);
+  print STDERR "    -noGenbank		  Add this if db does not have GenBank tables.\n";
   print STDERR "
 Prints (to stdout) SQL commands for creation of a new push queue for db
 and the addition of an Initial Release entry in the main push queue.
@@ -53,6 +55,7 @@ my %noPush = ( 'bacEndPairsBad' => 1,
 sub checkOptions {
   # Make sure command line options are valid/supported.
   my $ok = GetOptions(@HgAutomate::commonOptionSpec,
+		      'noGenbank',
 		     );
   &usage(1) if (!$ok);
   &usage(0, 1) if ($opt_help);
@@ -402,7 +405,7 @@ sub getEntries {
   my $allTables = &getAllTables();
 
   push @entries, &getInfrastructureEntry($allTables);
-  push @entries, &getGenbankEntry($allTables);
+  push @entries, &getGenbankEntry($allTables) unless $opt_noGenbank;
   push @entries, @{&getTrackEntries($allTables)};
 
   return (\@entries, $allTables);
