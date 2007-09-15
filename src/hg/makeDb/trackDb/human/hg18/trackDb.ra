@@ -1363,6 +1363,97 @@ spectrum on
 urlLabel Transfac matrix link:
 url http://www.gene-regulation.com/cgi-bin/pub/databases/transfac/getTF.cgi?AC=$$
 
+        track gwEncodeUcsdNgTaf1IMR90Super
+        superTrack on
+        group regulation
+        shortLabel LI/UCSD TAF1
+        longLabel Ludwig Institute NimbleGen ChIP-chip: TAF1 antibody, IMR90 cells
+        priority 95
+
+track gwEncodeUcsdNgTaf1IMR90Signal
+superTrack gwEncodeUcsdNgTaf1IMR90Super dense
+group regulation
+shortLabel LI TAF1 Sig
+longLabel Ludwig Institute NimbleGen ChIP-chip Signal: TAF1 antibody, IMR90 cells
+maxHeightPixels 128:16:16
+type wig -5.61 6.47
+spanList 50
+viewLimits -1:2
+windowingFunction mean
+autoScale off
+origAssembly hg16
+dataVersion ENCODE June 2005 Freeze
+priority 95.1
+
+track gwEncodeUcsdNgTaf1IMR90Sites
+superTrack gwEncodeUcsdNgTaf1IMR90Super dense
+compositeTrack on
+shortLabel LI TAF1 Sites
+longLabel Ludwig Institute NimbleGen ChIP-chip Sites: TAF1 antibody, IMR90 cells
+group regulation
+type bed 3
+origAssembly hg16
+dataVersion ENCODE June 2005 Freeze
+priority 95.2
+
+    track gwEncodeUcsdNgTaf1IMR90KnownSites
+    subTrack gwEncodeUcsdNgTaf1IMR90Sites
+    shortLabel TAF1 Known Sites
+    longLabel Ludwig Institute TAF1 Sites Matching to Known Transcripts
+    color 0,0,200
+    priority 1
+
+    track gwEncodeUcsdNgTaf1IMR90NovelSites
+    subTrack gwEncodeUcsdNgTaf1IMR90Sites
+    shortLabel TAF1 Novel Sites
+    longLabel Ludwig Institute TAF1 Sites Matching No Known Transcripts
+    color 0,200,0
+    priority 2
+
+track gwEncodeUcsdValChip
+superTrack gwEncodeUcsdNgTaf1IMR90Super
+compositeTrack on
+shortLabel LI TAF1 Valid
+longLabel Ludwig Institute ChIP-chip Validation: TAF1 in IMR90 cells
+group regulation
+type bedGraph 4
+maxHeightPixels 128:16:16
+minLimit -8
+maxLimit 8
+viewLimits -1:3
+windowingFunction mean
+autoScale off
+origAssembly hg16
+dataVersion ENCODE June 2005 Freeze
+priority 95.3
+
+    track gwEncodeUcsdValChipH3ac
+    subTrack gwEncodeUcsdValChip
+    shortLabel LI Val H3ac
+    longLabel Ludwig Institute ChIP-chip Validation: H3ac antibody, IMR90 cells
+    priority 1
+
+    track gwEncodeUcsdValChipH3K4me
+    subTrack gwEncodeUcsdValChip
+    shortLabel LI Val H3K4m2
+    longLabel Ludwig Institute ChIP-chip Validation: H3K4me2 antibody, IMR90 cells
+    priority 2
+    color 0,63,135
+
+    track gwEncodeUcsdValChipRnap
+    subTrack gwEncodeUcsdValChip
+    shortLabel LI Val Pol2
+    longLabel Ludwig Institute ChIP-chip Validation: Pol2 8WG16 antibody, IMR90 cells
+    priority 3
+    color 109,51,43
+
+    track gwEncodeUcsdValChipTaf
+    subTrack gwEncodeUcsdValChip
+    shortLabel LI Val TAF1
+    longLabel Ludwig Institute ChIP-chip Validation: TAF1 antibody, IMR90 cells
+    priority 4
+    color 58,119,40
+
 track uc16
 shortLabel Ultra Conserved
 longLabel Ultraconserved Elements (200 bp 100% ID in Rat/Mouse/Human)
