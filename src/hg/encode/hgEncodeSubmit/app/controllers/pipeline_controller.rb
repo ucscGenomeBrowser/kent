@@ -110,6 +110,10 @@ class PipelineController < ApplicationController
       "application/x-tar" => ["tar.gz", "TAR.GZ", "tar.bz2", "TAR.BZ2"]
     }
     extensions = extensionsByMIME[@upload.content_type.chomp]
+    unless extensions
+      flash[:warning] = "invalid content_type=#{@upload.content_type.chomp}"
+      return
+    end
     unless extensions && extensions.any? {|ext| @filename.ends_with?("." + ext) }
       flash[:warning] = "File name <strong>#{@filename}</strong> is invalid. " +
         "Only a compressed archive file (zip,bz2,gz) is allowed"
