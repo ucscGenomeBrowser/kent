@@ -39,7 +39,7 @@
 <% a.submission_files.each do |f| %>
   <tr>
   <td>&nbsp;</td>
-  <td><%= link_to f.file_name, :action => 'show_file', :id => f.id -%></td>
+  <td><%= f.file_name -%></td>
   <td align=right><%= f.file_size -%></td>
   <td><%= f.file_date -%></td>
   </tr>
