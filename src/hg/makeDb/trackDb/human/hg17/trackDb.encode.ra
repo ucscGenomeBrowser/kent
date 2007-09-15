@@ -1831,6 +1831,50 @@ dataVersion Dec 2006, March 2007, May 2007
     color 51,43,109
     priority 30
 
+track encodeUcsdNgValChip
+superTrack encodeUcsdChipSuper dense
+compositeTrack on
+shortLabel LI Ng Validation
+longLabel Ludwig Institute ChIP-chip Validation: IMR90 cells
+group encodeChip
+priority 52.0
+visibility hide
+type bedGraph 4
+maxHeightPixels 128:16:16
+minLimit -8
+maxLimit 8
+viewLimits -1:3
+windowingFunction mean
+autoScale off
+origAssembly hg16
+dataVersion ENCODE June 2005 Freeze
+
+    track encodeUcsdNgValChipH3ac
+    subTrack encodeUcsdNgValChip
+    shortLabel LI Ng Val H3ac
+    longLabel Ludwig Institute ChIP-chip Validation: H3ac antibody, IMR90 cells
+    priority 1
+
+    track encodeUcsdNgValChipH3K4me
+    subTrack encodeUcsdNgValChip
+    shortLabel LI Ng Val H3K4m2
+    longLabel Ludwig Institute ChIP-chip Validation: H3K4me2 antibody, IMR90 cells
+    priority 2
+    color 0,63,135
+
+    track encodeUcsdNgValChipRnap
+    subTrack encodeUcsdNgValChip
+    shortLabel LI Ng Val Pol2
+    longLabel Ludwig Institute ChIP-chip Validation: Pol2 8WG16 antibody, IMR90 cells
+    priority 3
+    color 109,51,43
+
+    track encodeUcsdNgValChipTaf
+    subTrack encodeUcsdNgValChip
+    shortLabel LI Ng Val TAF1
+    longLabel Ludwig Institute ChIP-chip Validation: TAF1 antibody, IMR90 cells
+    priority 4
+    color 58,119,40
 
 track encodeUppsalaChip
 compositeTrack on
