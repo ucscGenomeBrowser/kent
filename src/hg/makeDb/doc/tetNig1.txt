@@ -2882,3 +2882,44 @@ TMPDIR=/scratch/tmp
     #	42256263 bases of 342403326 (12.341%) in intersection
 
 ##############################################################################
+# SWAP DANRER5 BLASTZ RESULT TO GET DANRER5 CHAINS, NETS,
+# AXTNET, MAFNET AND ALIGNMENT DOWNLOADS (DONE, 2007-09-17, hartera)
+    
+    ssh kkstore04
+    mkdir /cluster/data/tetNig1/bed/blastz.swap.danRer5
+    cd /cluster/data/tetNig1/bed/blastz.swap.danRer5
+    # blastz parameters used to align oryLat1 as query to danRer5 as target:
+    # BLASTZ_H=2500
+    # BLASTZ_M=50
+    # BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+    # Results for tetNig1 blastz on danRer5 are in:
+    # /cluster/data/danRer5/bed/blastz.tetNig1.2007-09-16
+    time nice /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+        -bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+        -qRepeats=windowmaskerSdust -swap \ 
+        /cluster/data/danRer5/bed/blastz.tetNig1.2007-09-16/DEF \
+         >& swap.log &
+    # 0.141u 0.097s 12:30.60 0.0%     0+0k 0+0io 7pf+0w 
+    cat \ 
+  /cluster/data/tetNig1/bed/blastz.danRer5.swap/fb.tetNig1.chainDanRer5Link.txt
+    # 70448527 bases of 342403326 (20.575%) in intersection 
+    # look at coverage of mrna CDS, there is no native RefSeqs 
+    # track for tetraodon. 
+    featureBits tetNig1 all_mrna chainDanRer5Link -enrichment
+# all_mrna 3.104%, chainDanRer5Link 20.575%, both 1.382%, cover 44.53%, enrich
+# 2.16x
+
+    featureBits tetNig1 all_mrna chainDanRer4Link -enrichment
+# all_mrna 3.104%, chainDanRer4Link 24.083%, both 1.522%, cover 49.02%, enrich
+# 2.04x
+    featureBits tetNig1 all_mrna netDanRer5 -enrichment
+# all_mrna 3.104%, netDanRer5 70.075%, both 2.400%, cover 77.31%, enrich 1.10x
+    featureBits tetNig1 all_mrna netDanRer4 -enrichment
+# all_mrna 3.104%, netDanRer4 69.480%, both 2.445%, cover 78.78%, enrich 1.13x
+
+    # clean up a little 
+    ssh kkstore04
+    cd /cluster/data/tetNig1/bed
+    mv ./blastz.swap.danRer5/swap.log ./blastz.danRer5.swap
+    rm -r blastz.swap.danRer5
+    ln -s blastz.danRer5.swap blastz.danRer5
