@@ -69,4 +69,8 @@ else
   echo "\n  files match: $file1 $file2\n"
 endif
 
+# remove files a year old
+set lastYear=`getMonthLastYear.csh go | sed "s/-//"`
+rm -f $outpath/gbdb*${lastYear}*
+
 exit
