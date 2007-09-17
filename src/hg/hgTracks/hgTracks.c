@@ -118,7 +118,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1407 2007/09/05 19:35:04 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1408 2007/09/17 03:44:08 kate Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -13095,7 +13095,6 @@ for (bl = browserLines; bl != NULL; bl = bl->next)
         {
 	char *command = words[1];
 	if (sameString(command, "hide") 
-            || sameString(command, "show")      /* for supertracks only */
             || sameString(command, "dense") 
             || sameString(command, "pack") 
             || sameString(command, "squish") 
@@ -13118,13 +13117,10 @@ for (bl = browserLines; bl != NULL; bl = bl->next)
                                 cartRemove(cart, tg->mapName);
                             else
                                 cartSetString(cart, tg->mapName, command);
-                            }
-                        if (tg->tdb->parentName && 
-                                (toAll || sameString(s, tg->tdb->parentName)))
-                            {
-                            /* change vis of super track */
-                            cartSetString(cart, tg->tdb->parentName,
-                                            (sameString(command,"hide") ? 
+                            /* hide or show supertrack enclosing this track */
+                            if (tg->tdb->parentName)
+                                cartSetString(cart, tg->tdb->parentName,
+                                            (sameString(command, "hide") ? 
                                                 "hide" : "show"));
                             }
                         }
