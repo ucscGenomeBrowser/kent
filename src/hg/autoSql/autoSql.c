@@ -18,7 +18,7 @@
 #include "cheapcgi.h"
 #include "asParse.h"
 
-static char const rcsid[] = "$Id: autoSql.c,v 1.32 2007/09/07 17:30:01 fanhsu Exp $";
+static char const rcsid[] = "$Id: autoSql.c,v 1.33 2007/09/17 21:13:21 fanhsu Exp $";
 
 boolean withNull = FALSE;
 
@@ -440,10 +440,6 @@ if (col->isSizeLink == isSizeLink)
 		    fprintf(f, "    {\n");
 		    fprintf(f, "    ret->%s = needMem(sizeof(float));\n", col->name);
 		    fprintf(f, "    *(ret->%s) = sqlFloat(row[%d]);\n", col->name, colIx);
-		    fprintf(f, "    }\n");
-		    fprintf(f, "else\n");
-		    fprintf(f, "    {\n");
-		    fprintf(f, "    ret->%s = NULL;\n", col->name);
 		    fprintf(f, "    }\n");
 		    }
 
@@ -918,8 +914,20 @@ for (col = table->columnList; col != NULL; col = col->next)
 	    outString = lt->outFormat;
 	    break;
 	}
-
-    sprintf(colInsertBuff, " el->%s", colName);
+    
+    switch(type)
+	{
+	case t_char:
+	case t_string:
+    	    sprintf(colInsertBuff, " el->%s", colName);
+	    break;
+	default:
+    	    if (withNull)
+		sprintf(colInsertBuff, " *(el->%s)", colName);
+	    else
+    	    	sprintf(colInsertBuff, " el->%s", colName);
+	    break;
+	}
 
     /* it gets pretty ugly here as we have to handle arrays of objects.. */
     if(col->isArray || col->isList || type == t_object || type == t_simple)
@@ -1077,7 +1085,10 @@ for (col = table->columnList; col != NULL; col = col->next)
 	    break;
 	default:
 	    outString = lt->outFormat;
-	    sprintf(colInsertBuff, "el->%s ", colName);
+    	    if (withNull)
+		sprintf(colInsertBuff, " *(el->%s)", colName);
+	    else
+    	    	sprintf(colInsertBuff, " el->%s", colName);
 	    break;
 	}
     if(col->isArray || col->isList || type == t_object || type == t_simple)
