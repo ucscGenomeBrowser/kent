@@ -353,6 +353,8 @@ awk -f ../../varStepToBed.awk ../../../BU/orchid/2005-06-09/t0 > encodeBu_ORChID
 liftOver -bedPlus=3 encodeBu_ORChID1.hg16.wig /gbdb/hg16/liftOver/hg16ToHg18.over.chain.gz encodeBu_ORChID1.hg18.wig encodeBu_ORChID1.hg18.unmapped
 bedSort encodeBu_ORChID1.hg18.wig tmp; mv tmp encodeBu_ORChID1.hg18.wig
 wigEncode encodeBu_ORChID1.hg18.wig encodeBu_ORChID1.tab encodeBu_ORChID1.wib
+# NOTE: this track was replaced with newer data -- the lift was
+# never used.
 
 # Encode hapmap coverage
 
@@ -685,4 +687,8 @@ hgLoadBed hg18 encodeYalePolIISites PolII_hg18-sites.bed
     # modified trackDb.encodeTxLevel.ra, trackDb.encodeChip.ra,
     #          encodeGisChipPetAll.html, encodeGisRnaPet.html
 
-
+###########
+# Promote UCSD genome-wide Chip tracks:
+# UCSD TAF1 IMR90 Chip/chip to Regulation group
+# (2007-09-14 kate)
+# See hg18.txt
