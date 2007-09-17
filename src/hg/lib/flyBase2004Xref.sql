@@ -14,7 +14,7 @@ CREATE TABLE flyBase2004Xref (
     fban varchar(255) not null,	# FlyBase FBan acc
     type varchar(255) not null,	# Annotation type (for noncoding only)
               #Indices
-    PRIMARY KEY(name(11)),
+    PRIMARY KEY(name(16)),
     INDEX(symbol(16)),
     INDEX(fbtr(11)),
     INDEX(fbgn(11)),
