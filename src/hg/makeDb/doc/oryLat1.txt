@@ -9,7 +9,7 @@
 #	Data release policy: http://medaka.utgenome.org/#policy
 #	Ensembl: http://www.ensembl.org/Oryzias_latipes/index.html
 #
-#	"$Id: oryLat1.txt,v 1.32 2007/09/17 20:26:36 hartera Exp $"
+#	"$Id: oryLat1.txt,v 1.33 2007/09/17 20:29:21 hartera Exp $"
 #
 
 ##########################################################################
@@ -3466,8 +3466,8 @@ done
     medaka/oryLat1/trackDb.ra
 
 ##########################################################################
-# SWAP DANRER5 BLASTZ RESULT TO GET DANRER5 vs ORYLAT1 CHAINS, NETS,
-# DOWNLOADS AND SYNTENIC NETS (DONE, 2007-09-11 - 2007-09-12, hartera)
+# SWAP DANRER5 BLASTZ RESULT TO GET DANRER5 CHAINS, NETS,
+# DOWNLOADS ON ORYLAT1 (DONE, 2007-09-11 - 2007-09-12, hartera)
 # CLEAN UP AND MAKE blastz.danRer5 LINK TO BLASTZ DIRECTORY 
 # (DONE, 2007-09-17, hartera) 
     ssh hgwdev
