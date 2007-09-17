@@ -9,6 +9,13 @@ color 150,100,30
 altColor 230,170,40
 type bed 3 +
 
+track ctgPos2
+shortLabel Contigs
+longLabel Assembly Contigs
+group map
+priority 10.1
+visibility hide
+
 # Local declaration so that local gap.html is picked up.
 track gap
 shortLabel Gap
@@ -74,6 +81,30 @@ indelDoubleInsert on
 indelQueryInsert on
 maxItems 300
 
+track affyConsensusAndTargetZonWildType
+compositeTrack on
+shortLabel Wild Type Array
+longLabel Zon Lab Expression data for Wild Type Zebrafish
+group regulation
+priority 80
+visibility hide
+type expRatio
+expScale 2.0
+expStep 0.2
+groupings affyZonWildTypeGroups
+    
+    track affyZonWildType
+    subTrack affyConsensusAndTargetZonWildType
+    shortLabel WT Array Cons
+    longLabel Zon Lab Expression data for Wild Type Zebrafish (Affymetrix Zebrafish Consensus Sequences)
+    priority 1
+   
+    track affyTargetZonWildType
+    subTrack affyConsensusAndTargetZonWildType
+    shortLabel WT Array Targ
+    longLabel Zon Lab Expression data for Wild Type Zebrafish (Affymetrix Zebrafish Target Sequences)
+    priority 2
+
 track affyZebrafish
 compositeTrack on
 shortLabel Affy Zebrafish
@@ -95,3 +126,12 @@ type psl .
     longLabel Alignments of Affymetrix Target Sequences from Zebrafish Chip
     priority 1
 
+track rmsk
+shortLabel RepeatMasker
+longLabel Repeating Elements by RepeatMasker
+group varRep
+priority 149.1
+visibility dense
+spectrum on
+type rmsk
+canPack off
