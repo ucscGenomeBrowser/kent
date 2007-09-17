@@ -1,0 +1,92 @@
+# Genome-wide ENCODE tracks
+
+        track gwEncodeUcsdNgTaf1Super
+        superTrack on
+        group regulation
+        shortLabel LI/UCSD TAF1
+        longLabel Ludwig Institute/UC San Diego TAF1 Binding in Fibroblasts
+        priority 95
+
+track gwEncodeUcsdNgTaf1Signal
+superTrack gwEncodeUcsdNgTaf1Super dense
+group regulation
+shortLabel LI TAF1 Signal
+longLabel Ludwig Institute NimbleGen ChIP-chip Signal: TAF1 antibody, IMR90 cells
+maxHeightPixels 128:16:16
+type wig -5.61 6.47
+spanList 50
+viewLimits -1:2
+windowingFunction mean
+autoScale off
+origAssembly hg16
+dataVersion ENCODE June 2005 Freeze
+priority 95.1
+
+track gwEncodeUcsdNgTaf1Sites
+superTrack gwEncodeUcsdNgTaf1Super dense
+compositeTrack on
+shortLabel LI TAF1 Sites
+longLabel Ludwig Institute NimbleGen ChIP-chip Sites: TAF1 antibody, IMR90 cells
+group regulation
+type bed 3
+origAssembly hg16
+dataVersion ENCODE June 2005 Freeze
+priority 95.2
+
+    track gwEncodeUcsdNgTaf1KnownSites
+    subTrack gwEncodeUcsdNgTaf1Sites
+    shortLabel TAF1 Known Sites
+    longLabel Ludwig Institute TAF1 Sites Matching to Known Transcripts
+    color 0,0,200
+    priority 1
+
+    track gwEncodeUcsdNgTaf1NovelSites
+    subTrack gwEncodeUcsdNgTaf1Sites
+    shortLabel TAF1 Novel Sites
+    longLabel Ludwig Institute TAF1 Sites Matching No Known Transcripts
+    color 0,200,0
+    priority 2
+
+track gwEncodeUcsdNgTaf1Valid
+superTrack gwEncodeUcsdNgTaf1Super
+compositeTrack on
+shortLabel LI TAF1 Valid
+longLabel Ludwig Institute ChIP-chip Validation: TAF1 in IMR90 cells
+group regulation
+type bedGraph 4
+maxHeightPixels 128:16:16
+minLimit -8
+maxLimit 8
+viewLimits -1:3
+windowingFunction mean
+autoScale off
+origAssembly hg16
+dataVersion ENCODE June 2005 Freeze
+priority 95.3
+
+    track gwEncodeUcsdNgTaf1ValidH3ac
+    subTrack gwEncodeUcsdNgTaf1Valid
+    shortLabel LI Valid H3ac
+    longLabel Ludwig Institute ChIP-chip Validation: H3ac antibody, IMR90 cells
+    priority 1
+
+    track gwEncodeUcsdNgTaf1ValidH3K4me
+    subTrack gwEncodeUcsdNgTaf1Valid
+    shortLabel LI Valid H3K4m2
+    longLabel Ludwig Institute ChIP-chip Validation: H3K4me2 antibody, IMR90 cells
+    priority 2
+    color 0,63,135
+
+    track gwEncodeUcsdNgTaf1ValidRnap
+    subTrack gwEncodeUcsdNgTaf1Valid
+    shortLabel LI Valid Pol2
+    longLabel Ludwig Institute ChIP-chip Validation: Pol2 8WG16 antibody, IMR90 cells
+    priority 3
+    color 109,51,43
+
+    track gwEncodeUcsdNgTaf1ValidTaf
+    subTrack gwEncodeUcsdNgTaf1Valid
+    shortLabel LI Valid TAF1
+    longLabel Ludwig Institute ChIP-chip Validation: TAF1 antibody, IMR90 cells
+    priority 4
+    color 58,119,40
