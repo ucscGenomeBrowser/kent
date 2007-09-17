@@ -9,7 +9,7 @@
 #	Data release policy: http://medaka.utgenome.org/#policy
 #	Ensembl: http://www.ensembl.org/Oryzias_latipes/index.html
 #
-#	"$Id: oryLat1.txt,v 1.30 2007/06/06 04:56:05 markd Exp $"
+#	"$Id: oryLat1.txt,v 1.31 2007/09/17 04:17:48 hartera Exp $"
 #
 
 ##########################################################################
@@ -3465,4 +3465,50 @@ done
     medaka/oryLat1/nscanGene.html    
     medaka/oryLat1/trackDb.ra
 
+##########################################################################
+# SWAP DANRER5 BLASTZ RESULT TO GET DANRER5 vs ORYLAT1 CHAINS, NETS,
+# DOWNLOADS AND SYNTENIC NETS (DONE, 2007-09-11 - 2007-09-12, hartera)
+    
+    ssh hgwdev
+    mkdir /cluster/data/oryLat1/bed/blastz.swap.danRer5
+    cd /cluster/data/oryLat1/bed/blastz.swap.danRer5
+    # blastz parameters used to align oryLat1 as query to danRer5 as target:
+    # BLASTZ_H=2500
+    # BLASTZ_M=50
+    # BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+        -bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+        -qRepeats=windowmaskerSdust -swap \ 
+        /cluster/data/danRer5/bed/blastz.oryLat1.2007-09-10/DEF \
+         >& swap.log &
+    # PID: 18612 Start: about 08:40
+    # 0.070u 0.027s 3:30.52 0.0%      0+0k 0+0io 0pf+0w
+    # netChains: looks like previous stage was not successful (can't find
+    # [oryLat1.danRer5.]all.chain[.gz]).
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+        -bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+        -qRepeats=windowmaskerSdust -swap -continue net \
+        /cluster/data/danRer5/bed/blastz.oryLat1.2007-09-10/DEF \
+         >& swap2.log &
+    # 0.153u 0.109s 31:55.61 0.0%     0+0k 0+0io 0pf+0w
+  
+    cat \
+  /cluster/data/oryLat1/bed/blastz.danRer5.swap/fb.oryLat1.chainDanRer5Link.txt
+    # 130699035 bases of 700386597 (18.661%) in intersection
+    # look at coverage of ensGene CDS, there is no native RefSeqs 
+    # track for medaka. oryLat1 ensGene has 18477 genes and 23087 transcripts.
+    featureBits oryLat1 ensGene:cds chainDanRer5Link -enrichment
+# ensGene:cds 4.125%, chainDanRer5Link 18.661%, both 3.582%, cover 86.85%,
+# enrich 4.65x
+    featureBits oryLat1 ensGene:cds chainDanRer4Link -enrichment
+# ensGene:cds 4.125%, chainDanRer4Link 22.275%, both 3.552%, cover 86.12%,
+# enrich 3.87x
+    featureBits oryLat1 ensGene:cds netDanRer5 -enrichment
+# ensGene:cds 4.125%, netDanRer5 72.605%, both 3.981%, cover 96.52%, enrich
+# 1.33x
+    featureBits oryLat1 ensGene:cds netDanRer4 -enrichment
+# ensGene:cds 4.125%, netDanRer4 73.914%, both 3.948%, cover 95.72%, enrich
+# 1.30x
 
+    cd /cluster/data/danRer5/bed
+    ln -s blastz.swap.danRer5 blastz.danRer5
