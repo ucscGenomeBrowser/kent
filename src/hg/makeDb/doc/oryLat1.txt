@@ -9,7 +9,7 @@
 #	Data release policy: http://medaka.utgenome.org/#policy
 #	Ensembl: http://www.ensembl.org/Oryzias_latipes/index.html
 #
-#	"$Id: oryLat1.txt,v 1.33 2007/09/17 20:29:21 hartera Exp $"
+#	"$Id: oryLat1.txt,v 1.34 2007/09/17 22:01:21 hartera Exp $"
 #
 
 ##########################################################################
@@ -3466,8 +3466,8 @@ done
     medaka/oryLat1/trackDb.ra
 
 ##########################################################################
-# SWAP DANRER5 BLASTZ RESULT TO GET DANRER5 CHAINS, NETS,
-# DOWNLOADS ON ORYLAT1 (DONE, 2007-09-11 - 2007-09-12, hartera)
+# SWAP DANRER5 BLASTZ RESULT TO GET DANRER5 CHAINS, NETS, AXTNET, MAFNET 
+# AND ALIGNMENT DOWNLOADS ON ORYLAT1 (DONE, 2007-09-11 - 2007-09-12, hartera)
 # CLEAN UP AND MAKE blastz.danRer5 LINK TO BLASTZ DIRECTORY 
 # (DONE, 2007-09-17, hartera) 
     ssh hgwdev
@@ -3512,7 +3512,7 @@ done
 
     # clean up a little (2007-09-17, hartera)
     ssh kkstore04
-    cd /cluster/data/danRer5/bed
+    cd /cluster/data/oryLat1/bed
     mv ./blastz.swap.danRer5/swap.log ./blastz.danRer5.swap
     rm -r blastz.swap.danRer5
     ln -s blastz.danRer5.swap blastz.danRer5
