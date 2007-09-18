@@ -8,6 +8,8 @@ options:
    -grpSql=grp.sql - create a grp table using this sql file
 '
 
+UNAME_N=`uname -n`
+UNAME_N=${UNAME_N/.cse.ucsc.edu/}
 release=''
 strict=''
 raName=''
@@ -85,7 +87,17 @@ loadDbTracks() {
     echo $cmd
     eval $cmd
     if [ -z "$strict" -a -f $dbpath/description.html ] ; then
-        cp -p $dbpath/description.html /gbdb/$db/html
+	if [ "X${UNAME_N}Y" = "XhgwdevY" ]; then
+	    if [ ! -L /gbdb/$db/html -a -d /cluster/data/$db/html ]; then
+		rm /gbdb/$db/html/description.html
+		rmdir /gbdb/$db/html
+		ln -s /cluster/data/$db/html /gbdb/$db/html
+	    fi
+	    if [ -f /gbdb/$db/html/description.html ]; then
+		rm -f /gbdb/$db/html/description.html
+	    fi
+	fi
+        cp -p $dbpath/description.html /gbdb/$db/html/description.html
     fi
     if [ -n "$grpSql" ] ; then
         cmd="hgsql $db < $grpSql"
