@@ -57,6 +57,7 @@
 #include "jgiGene.h"
 #include "lowelabPfamHit.h"
 #include "lowelabArkinOperonScore.h"
+#include "lowelabTIGROperonScore.h"
 #include "sargassoSeaXra.h"
 #include "codeBlastScore.h"
 #include "codeBlast.h"
@@ -86,7 +87,7 @@
 #include "memalloc.h"
 #include "rnaHybridization.h"
 
-static char const rcsid[] = "$Id: lowelab.c,v 1.25 2007/08/01 01:14:16 mhoechsm Exp $";
+static char const rcsid[] = "$Id: lowelab.c,v 1.26 2007/09/18 10:56:43 pchan Exp $";
 
 extern char *uniprotFormat;
 
@@ -1346,9 +1347,9 @@ printTrackHtml(tdb);
 hFreeConn(&conn);
 }
 
-void doTigrOperons(struct trackDb *tdb, char *opName)
+/*void doTigrOperons(struct trackDb *tdb, char *opName)*/
 /* track handler for the TIGR operon predictions */
-{
+/*{
 char *track = tdb->tableName;
 struct tigrOperon *op;
 char query[512];
@@ -1367,9 +1368,9 @@ if (wordCount > 1)
 if (num < 3) num = 3;
 genericBedClick(conn, tdb, opName, start, num);
 sprintf(query, "select * from %sInfo where name = '%s'", track, opName);
-sr = sqlGetResult(conn, query);
+sr = sqlGetResult(conn, query);*/
 /* Make the operon table like on the TIGR web page. */
-if ((row = sqlNextRow(sr)) != NULL)
+/*if ((row = sqlNextRow(sr)) != NULL)
     {
     int i,j;
     char *infos[30];
@@ -1403,12 +1404,13 @@ if ((row = sqlNextRow(sr)) != NULL)
 	}
     printf("</TABLE>\n</P>\n");
     }
-printTrackHtml(tdb);
+printTrackHtml(tdb);*/
 /* clean up */
-sqlFreeResult(&sr);
+/*sqlFreeResult(&sr);
 hFreeConn(&conn);
 tigrOperonFree(&op);
 }
+*/
 
 void doTigrCmrGene(struct trackDb *tdb, char *tigrName)
 /* Handle the TIRG CMR gene track. */
@@ -1592,6 +1594,99 @@ void doPfamHit(struct trackDb *tdb, char *hitName)
   hFreeConn(&conn);
   printTrackHtml(tdb);
   lowelabPfamHitsFree(&pfamHit);
+}
+
+void doTigrOperons(struct trackDb *tdb, char *tigrOperonName)
+/* Handle the TIGR operons track. */
+{
+    char *track = tdb->tableName;
+    struct bed *tigrOperon;
+    struct lowelabTIGROperonScore *tigrOperonScore;
+    char query[512];
+    struct sqlConnection *conn = hAllocConn();
+    struct sqlResult *sr;
+    char *dupe, *words[16];
+    char **row;
+    int wordCount;
+    int rowOffset;
+    int bedSize = 0;
+
+    genericHeader(tdb, tigrOperonName);
+
+    dupe = cloneString(tdb->type);
+    wordCount = chopLine(dupe, words);
+    if (wordCount > 1)
+        bedSize = atoi(words[1]);
+    if (bedSize < 3) bedSize = 3;
+
+    rowOffset = hOffsetPastBin(seqName, track);
+    sprintf(query, "select * from %s where name = '%s'", track, tigrOperonName);
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+    {
+        tigrOperon = bedLoadN(row+rowOffset, bedSize);
+        printf("<B>Operon name: </B> %s<BR>\n",tigrOperonName);
+        
+        printf("<BR><B>Position:</B> "
+               "<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
+               hgTracksPathAndSettings(), database, tigrOperon->chrom, tigrOperon->chromStart + 1, tigrOperon->chromEnd);
+        printf("%s:%d-%d</A><BR>\n", tigrOperon->chrom, tigrOperon->chromStart + 1, tigrOperon->chromEnd);
+        printf("<B>Strand:</B> %s<BR>\n", tigrOperon->strand);
+        printf("<B>Genomic size: </B> %d nt<BR>\n", (tigrOperon->chromEnd - tigrOperon->chromStart));
+        if (tigrOperon->next != NULL)
+            printf("<hr>\n");
+    }
+    sqlFreeResult(&sr);
+
+    printf("<br><B>OperonDB predicted gene pairs</B><br>\n");
+	
+    /* Print table */
+    printf("<table style=\"width: 50%%;\" bgcolor=\"#%s\" border=\"0\" cellpadding=\"1\" cellspacing=\"0\">", HG_COL_BORDER);
+    printf("<tbody><tr><td>\n");
+    printf("<table style=\"width: 100%%; text-align: left;\" bgcolor=\"%s\" border=\"1\" cellpadding=\"2\" cellspacing=\"2\">\n", HG_COL_INSIDE);
+    printf("<tbody>\n");
+
+    /* Print table column heading */
+    printf("<tr style=\"vertical-align: top;\">\n");
+    printf("<td width=\"25%%\"><b>Gene 1</b></td>\n");
+    printf("<td width=\"25%%\"><b>Gene 2</b></td>\n");
+    printf("<td width=\"25%%\"><b>Confidence</b></td>\n");
+    printf("<td width=\"25%%\"><b>Number of Conserved Genomes</b></td>\n"); 
+    printf("</tr>\n");
+
+    sprintf(query, "select * from lowelabTIGROperonScore where name = '%s'", tigrOperonName);
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+    {
+        tigrOperonScore = lowelabTIGROperonScoreLoad(row);
+        printf("<tr style=\"vertical-align: top;\">\n");
+       
+        printf("<td>%s</td>\n", tigrOperonScore->gene1);
+        printf("<td>%s</td>\n", tigrOperonScore->gene2);
+        printf("<td style=\"text-align: right;\">%d</td>\n", tigrOperonScore->confidence);
+        printf("<td style=\"text-align: right;\"><A HREF=\"%s\">%d</A></td>\n", tigrOperonScore->ortholog_link, tigrOperonScore->ortholog);
+
+        printf("</tr>\n");
+        
+        tigrOperonScore = tigrOperonScore->next;
+    }
+    sqlFreeResult(&sr);
+
+    /* Close table */
+    printf("</tbody>\n");
+    printf("</table>\n");
+    printf("</td></tr></tbody>\n");
+    printf("</table>\n");
+
+    printf("<br>Note:\n");
+    printf("<br>Confidence - an estimation of the lower boundary of the probability that the two corresponding genes are located in the same operon\n");
+    printf("<br>Number of Conserved Genomes - number of other genomes that have the same pair of genes located in the same directon (a set of consecutive genes on the same DNA strand)\n");
+
+    bedFree(&tigrOperon);
+    lowelabTIGROperonScoreFree(&tigrOperonScore);
+
+    hFreeConn(&conn);
+    printTrackHtml(tdb);
 }
 
 void doArkinOperons(struct trackDb *tdb, char *arkinOperonName)
@@ -2516,7 +2611,8 @@ else if (sameWord(track, "lowelabPfamHits"))
     {
     doPfamHit(tdb,item);
     }
-else if (sameWord(track, "tigrOperons"))
+/*else if (sameWord(track, "tigrOperons"))*/
+else if (sameWord(track, "lowelabTIGROperons"))
     {
     doTigrOperons(tdb,item);
     }
