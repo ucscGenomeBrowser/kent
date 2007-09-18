@@ -208,7 +208,7 @@
 #include "omicia.h"
 #include "atomDb.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1342 2007/09/10 22:24:56 kate Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1343 2007/09/18 18:38:46 braney Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -1069,8 +1069,8 @@ sr = sqlGetResult(sc, query);
 printf("<B>Atom %s instances ('*' marks item you clicked on)</B><BR>\n",item);
 printf("<PRE>\n");
 //printf("Ins#\tSpecies\t\tChrom\tStart\tEnd\tStrand\n");
-printf( "  #\t%-10s\t%-10s\t%-15s\t%-15s\t%-15s\t%s\n",
-    "species","chrom", "          start", "          end", "          length", "strand");
+printf( "  #\t%-10s\t%-10s\t%-15s\t%-15s\t%-15s\t%s\t%s\t%s\n",
+    "species","chrom", "          start", "          end", "          length", "strand","    fivePrime","threePrime");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     atomStaticLoad(row, &ret);
@@ -1081,13 +1081,27 @@ while ((row = sqlNextRow(sr)) != NULL)
 	printf("* ");
     else
 	printf("  ");
-    printf( "%d\t%-10s\t%-10s\t%15d\t%15d\t%15d\t\t%c\n",ret.instance,
-	ret.species,ret.chrom, ret.start + 1, ret.end, ret.end - ret.start + 1, ret.strand[0]);
+    printf( "%d\t%-10s\t%-10s\t%15d\t%15d\t%15d\t\t%c\t\t%s\t%s\n",ret.instance,
+	ret.species,ret.chrom, ret.start + 1, ret.end, ret.end - ret.start + 1, ret.strand[0],ret.fivePrime,ret.threePrime);
     }
 printf("</A>");
 sqlFreeResult(&sr);
-printf("<TABLE>");
 
+#if 0
+//struct tempName launchFile;
+char *fileName = "../trash/braney.launch";
+FILE *launchF;
+//trashDirFile(&launchFile, "braney", "launch", ".txt");
+//printf("writing %s\n",fileName);
+launchF = mustOpen(fileName, "w");
+fprintf(launchF, "%s\n", item);
+fclose(launchF);
+#endif
+
+if (!sameString("atom992", table))
+    return;
+
+printf("<TABLE>");
 printf("<THEAD>");
 printf("<TBODY>");
 printf("<TR><TH>");
@@ -1103,6 +1117,8 @@ printf("Gap UPGMA Trees<BR>\n");
 printf("<IMG src=http://hgwdev.cse.ucsc.edu/~braney/gap992Trees/%s.tt.png><BR>",item);
 printf("<TD><IMG src=http://hgwdev.cse.ucsc.edu/~braney/gap992Trees/%s.gt.png><BR>",item);
 printf("</TABLE>");
+
+return;
 
 char buffer[4096];
 struct mafFile *mf;
