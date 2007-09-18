@@ -1,5 +1,0 @@
-track name=regulatory	description="TeleGene(tm) Regulatory Regions"
-chr22	TeleGene	enhancer	1000000	1001000	500	+	.	touch1
-chr22	TeleGene	promoter	1010000	1010100	900	+	.	touch1
-chr22	TeleGene	promoter	1020000	1020000	800	-	.	touch2
-
