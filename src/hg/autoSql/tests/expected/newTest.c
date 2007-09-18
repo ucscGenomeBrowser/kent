@@ -199,7 +199,7 @@ ptsArray = sqlShortArrayToString(el->pts, el->ptCount);
 difsArray = sqlUbyteArrayToString(el->difs, el->difCount);
 valsArray = sqlStringArrayToString(el->vals, el->valCount);
 dyStringPrintf(update, "insert into %s values ( %u,'%s','%s','%s',%d,'%s',%d,'%s', NULL ,%d,'%s')", 
-	tableName, el->id ,  shortName,  longName,  aliasesArray , el->ptCount ,  ptsArray , el->difCount ,  difsArray , el->valCount ,  valsArray );
+	tableName,  el->id,  shortName,  longName,  aliasesArray ,  el->ptCount,  ptsArray ,  el->difCount,  difsArray ,  el->valCount,  valsArray );
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 freez(&shortName);
