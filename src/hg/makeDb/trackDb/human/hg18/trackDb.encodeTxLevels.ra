@@ -2,7 +2,6 @@
 
 # Affy RNA supertrack
         track encodeAffyRnaSuper
-        release alpha
         superTrack on
         shortLabel Affy RNA
         longLabel Affymetrix PolyA+ RNA 
@@ -187,7 +186,6 @@ searchPriority 50
 
 # Yale RNA supertrack
         track encodeYaleRnaSuper
-        release alpha
         superTrack on
         shortLabel Yale RNA
         longLabel Yale RNA (Neutrophil, Placenta and NB4 cells)
