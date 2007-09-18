@@ -16935,6 +16935,117 @@ hgLoadBed hg18 rnaCluster chrom/*.bed
     #	Loaded 9788 elements of size 16
 
 ############################################################################
+# INDEL-BASED CONSERVATION TRACK (DONE, 2007-09-03 - 2007-09-17, hartera)
+# Data from the Gerton Lunter (gerton.lunter@anat.ox.ac.uk), MRC 
+# Functional Genetics Unit, University of Oxford, United Kingdom.
+# Data is from the paper:
+# Lunter G, Ponting CP and Hein J Genome-wide identification of human
+# functional DNA using a neutral indel model. PLoS Comput Biol. 2006
+# Jan;2(1):e5.
+    ssh kkstore02 
+    mkdir -p /cluster/data/hg18/bed/consIndels/data
+    cd /cluster/data/hg18/bed/consIndels
+    # Add a README.indels with the e-mail from Gerton Lunter
+    # get the data
+    wget --timestamping \
+         http://wwwfgu.anat.ox.ac.uk/~gerton/igs-hg18mm8cf2.zip
+    # 38 Mb zip file in GFF format. This contains data for hg18
+    # comparing it to mm8 and cf2 (canFam2).
+    unzip igs-hg18mm8cf2.zip     
+    mv *.gff ./data/
+    foreach f (./data/*.gff)
+       set r = $f:r
+       echo $r
+       grep -v "track" $f > ${r}NoHeader.gff
+    end
+  
+    # strip off the end of the name e.g. IGS0001.1:p=.74; FDR 0.27
+    # so that the name displayed is short - IGS0001.1. The score field
+    # is used to determine colouring and this is calculated from FDR 
+    ssh kkstore02 
+    cd /cluster/data/hg18/bed/consIndels
+    perl -pi.bak -e \
+'s/(IGS[0-9a-z]+\.[0-9XY]+):p=?<?\.[0-9]+;\sFDR\s[0-9]+\.[0-9]+/$1/'  \
+    ./data/igs*NoHeader.gff
+    # check this looks ok then clean up
+    rm *.bak
+    # makes sense to store this as a BED5 table in order to use the score
+    # for display.
+    foreach f (./data/*NoHeader.gff)
+       awk 'BEGIN {FS="\t"} {OFS="\t"} {print $1,$4,$5,$9,$6}' $f \
+       >> consIndelsHg18Mm8CanFam2.bed
+    end
+ 
+    # load data
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/consIndels
+    hgsql -e 'drop table consIndelsHg18Mm8CanFam2;' hg18
+    hgLoadBed hg18 consIndelsHg18Mm8CanFam2 consIndelsHg18Mm8CanFam2.bed
+    # Loaded 2603017 elements of size 5
+    
+    # Get the IDs, posterior probabilities (p) for the segment being neutral, 
+    # and the FDR from the original GFFs for a separate table. Some items 
+    # have p<.001. Can not do Table Browser queries restricting 
+    # p to <, =, or > a specified value unless all values are floats.
+    # Contacted the data contributor, Gerton Lunter, and he said it would be 
+    # ok to change all p<.001 to p=0.0005
+    ssh kkstore02
+    cd /cluster/data/hg18/bed/consIndels/
+    foreach c (`cat /cluster/data/hg18/chrom.lst`)
+       echo $c
+       foreach f (./data/igs.chr${c}.gff)
+          echo $f
+          awk 'BEGIN {FS="\t"} {if ($9 ~ /IGS/) print $9;}' $f \
+              | sed -e 's/:/\t/' \
+              | sed -e 's/p=\./0\./' | sed -e 's/p<\.001/0\.0005/' \
+              | sed -e 's/;\sFDR/\t/' >> consIndelsHg18Mm8CanFam2Conf.txt
+       end
+    end
+    # there are no GFF files for the haplotype chroms
+    
+    # Create a table definition for the table of identifier,  posterior 
+    # probability and false discovery rate (FDR).
+    cat << 'EOF' > $HOME/kent/src/hg/lib/itemConf.as
+table itemConf
+"Probability and false discovery rate (FDR) for an element in a track."
+   (
+   string id;  "Identifier of element"
+   float probability; "Probability associated with element"
+   float fdr; "False Discovery Rate (FDR) associated with element"
+   )
+'EOF'
+    cd $HOME/kent/src/hg/lib
+    autoSql itemConf.as itemConf
+    mv itemConf.h ../inc/
+    # commit ../inc/itemConf.h, itemConf.c, itemConf.as and 
+    # itemConf.sql to CVS. Add itemConf.o to src/hg/lib/makefile
+   
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/consIndels
+    hgLoadSqlTab hg18 consIndelsHg18Mm8CanFam2Conf \
+         $HOME/kent/src/hg/lib/itemConf.sql \
+         consIndelsHg18Mm8CanFam2Conf.txt
+    # check that all itesm are in this table.
+    hgsql -N -e 'select distinct(name) from consIndelsHg18Mm8CanFam2;' hg18 \
+         | sort > consIndels.names.sort
+    hgsql -N -e 'select distinct(id) from consIndelsHg18Mm8CanFam2Conf;' hg18 \
+         | sort > consIndels.idsfromConf.sort
+    wc -l *.sort
+    # 2603017 consIndels.idsfromConf.sort 
+    # 2603017 consIndels.names.sort
+    comm -12 consIndels.names.sort consIndels.idsfromConf.sort | wc -l
+    # 2603017
+    # so all element IDs are in both tables.
+    # cleanup
+    rm ./data/*.bak *.sort
+   
+    # add trackDb/human/hg18/trackDb.ra entry and add description that
+    # was written by the data contributor. Add code to hgc.c to display
+    # the posterior probability and the FDR on the details page for
+    # track elements. Gerton Lunter provided a description for the data
+    # on 2007-09-12.
+
+############################################################################
 # Promote UCSD genome-wide ENCODE Chip tracks:
 # UCSD TAF1 IMR90 Chip/chip to Regulation group
 # (2007-09-14 kate)
