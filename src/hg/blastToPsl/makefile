@@ -9,13 +9,9 @@ O = $A.o
 
 all: ${BINDIR}/blastToPsl ${BINDIR}/pslUniq
 
-${BINDIR}/blastToPsl: blastToPsl
-	cp -f blastToPsl $(BINDIR)
-	${STRIP} $(BINDIR)/blastToPsl${EXE}
-
-${BINDIR}/pslUniq: pslUniq
-	cp -f pslUniq $(BINDIR)
-	${STRIP} $(BINDIR)/pslUniq${EXE}
+${BINDIR}/%: %
+	cp -f $< $@${EXE}
+	${STRIP} $@${EXE}
 
 blastToPsl: ${O} ${MYLIBS}
 	${CC} -o blastToPsl ${O} ${MYLIBS} ${L} 
