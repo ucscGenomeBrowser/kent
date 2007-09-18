@@ -3811,6 +3811,9 @@ TMPDIR=/scratch/tmp
 
     # NOTE: updateStsInfo creates new stsInfo2.bed, all.primers, 
     #   all.STS.fa, stsAlias.bed files 
+#### XXX - FOR NEXT TIME: need to fix something here for the
+#### XXX - broken symbol AFM067XA9 which has over 6,000 aliases.
+#### XXX - This isn't right
     updateStsInfo -verbose=1 -gb=UniSTS.acc stsInfo2.bed.prev all.STS.fa.prev \
 	UniSTS.sts UniSTS.aliases UniSTS.convert.fa new
 # 5610    MFD330  1000006 (0) not in dbSTS anymore
