@@ -2328,6 +2328,7 @@ dataVersion ENCODE Oct 2005 Freeze
     longLabel Affymetrix ChIP-chip (p63, ME-180) Strict P-Value
     color 0,0,200
     priority 14
+
 track encodeAffyChIpHl60SignalStrict
 superTrack encodeAffyChipSuper dense
 shortLabel Affy Strict Sig
