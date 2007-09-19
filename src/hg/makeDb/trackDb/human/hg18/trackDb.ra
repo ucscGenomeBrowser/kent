@@ -2154,9 +2154,6 @@ origAssembly hg17
     priority 4
     color 50,100,50
 
-
-
-
 track encodeGisChipPetAll
 compositeTrack on
 shortLabel GIS ChIP-PET
@@ -2222,4 +2219,9 @@ dataVersion ENCODE June 2005 Freeze, ENCODE Oct 2005 Freeze, Oct 2006, Aug 2007
     origAssembly hg18
     priority 6
 
-
+searchTable consIndelsHg18Mm8CanFam2
+searchType bed
+searchMethod exact
+shortCircuit 1
+termRegex IGS.+
+searchPriority 10
