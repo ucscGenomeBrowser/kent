@@ -152,3 +152,40 @@ shortCircuit 1
 termRegex (AC|AL|BX|CR|CT|Zv7_scaffold)[0-9\.]+
 query select chrom,chromStart,chromEnd,contig from %s where contig like '%s'
 searchPriority 5
+
+searchTable affyZebrafishConsensus
+searchMethod exact
+searchType psl
+termRegex Zebrafish:.+
+searchPriority 15
+termPrefix Zebrafish:
+                                                                                
+searchName affyZebrafishConsAbbrev
+searchTable affyZebrafishConsensus
+searchMethod exact
+searchType psl
+termRegex [Dr][[:alnum:]_\.]+.*_at
+searchPriority 15
+                                                                                
+searchName affyZebrafishTargFuzzy
+searchTable affyZebrafishTarget
+searchMethod fuzzy
+searchType psl
+termRegex [Dr][[:alnum:]_\.]+.*_at
+searchPriority 15
+                                                                                
+searchName affyZebrafishTargExact
+searchTable affyZebrafishTarget
+searchMethod exact
+searchType psl
+termRegex tg:[Dr][[:alnum:]_\.]+.*_at
+searchPriority 15
+
+searchName affyZebrafishTargLong
+searchTable affyZebrafishTarget
+searchMethod fuzzy
+searchType psl
+termRegex Zebrafish:.+
+termPrefix Zebrafish:
+searchPriority 15
+
