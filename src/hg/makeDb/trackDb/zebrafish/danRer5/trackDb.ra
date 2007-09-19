@@ -81,6 +81,16 @@ indelDoubleInsert on
 indelQueryInsert on
 maxItems 300
 
+track ensGene
+shortLabel Ensembl Genes
+longLabel Ensembl v46 Gene Predictions (Protein-Coding Genes)
+group genes
+priority 32.8
+visibility pack
+color 150,0,0
+type genePred ensPep
+ensArchive aug2007
+
 track affyConsensusAndTargetZonWildType
 compositeTrack on
 shortLabel Wild Type Array
@@ -135,3 +145,10 @@ visibility dense
 spectrum on
 type rmsk
 canPack off
+
+searchTable ctgPos2
+searchMethod exact
+shortCircuit 1
+termRegex (AC|AL|BX|CR|CT|Zv7_scaffold)[0-9\.]+
+query select chrom,chromStart,chromEnd,contig from %s where contig like '%s'
+searchPriority 5
