@@ -13,10 +13,10 @@ set update=""
 set year=""
 set month=""
 set day=""
-set mice="mm8 mm7 mm6"
+set mice="mm9 mm8 mm7"
+set extFileId_mm9=""
 set extFileId_mm8=""
 set extFileId_mm7=""
-set extFileId_mm6=""
 set pwd=""
 set urlbeta="http://hgwbeta.cse.ucsc.edu/cgi-bin/hgTracks?igtc=pack"
 set urldev="http://hgwdev.cse.ucsc.edu/cgi-bin/hgTracks?igtc=pack"
@@ -24,7 +24,7 @@ set urldev="http://hgwdev.cse.ucsc.edu/cgi-bin/hgTracks?igtc=pack"
 if ($#argv != 1 ) then
   echo
   echo "  runs test suite for IGTC update on mice."
-  echo "  hard-coded to run on mm6, mm7, and mm8."
+  echo "  hard-coded to run on mm7, mm8, and mm9."
   echo
   echo "    usage: date"
   echo '    ("date" of associated fasta files -- format = yyyy-mm-dd)'
@@ -42,7 +42,7 @@ set day=`echo $update | awk -F- '{print $3}'`
 if ( 0 == 0 ) then  ##  not-run block
 
 # make sure they have entered something close to correct (kludge warning!)
-if ( $year < 2007 || $year > 2020 || $month > 12 || $day > 31 ) then
+if ( $year != `date +%Y` || $month > 12 || $day > 31 ) then
   echo "\nERROR: the 'date' format is incorrect"
   $0
   exit 1
@@ -218,6 +218,10 @@ echo "for this month's file (genetrap.$update.fasta):"
 #end
 
 ### So, I'll just do them one-by-one for now...
+set extFileId_mm9=`hgsql -Ne "SELECT id FROM extFile WHERE name LIKE \
+  'genetrap.$update%'" mm9`
+echo "extFile.id_mm9 = $extFileId_mm9"
+
 set extFileId_mm8=`hgsql -Ne "SELECT id FROM extFile WHERE name LIKE \
   'genetrap.$update%'" mm8`
 echo "extFile.id_mm8 = $extFileId_mm8"
@@ -225,10 +229,6 @@ echo "extFile.id_mm8 = $extFileId_mm8"
 set extFileId_mm7=`hgsql -Ne "SELECT id FROM extFile WHERE name LIKE \
   'genetrap.$update%'" mm7`
 echo "extFile.id_mm7 = $extFileId_mm7"
-
-set extFileId_mm6=`hgsql -Ne "SELECT id FROM extFile WHERE name LIKE \
-  'genetrap.$update%'" mm6`
-echo "extFile.id_mm6 = $extFileId_mm6"
 
 
 # compare counts with file counts
@@ -239,6 +239,12 @@ echo "(if the values aren't equal per assembly, this needs investigation)\n"
 
 ### ??? can't get the loop to work with $mice variable ??? ###
 # So, just do it one-by-one for now...
+echo "compare count from mm9.seq table:"
+hgsql -Ne 'SELECT COUNT(*) FROM seq WHERE extFile = "'$extFileId_mm9'"' mm9
+echo "to the count from mm9 genetrap.$update.fasta file:"
+grep '>' /gbdb/mm9/igtc/genetrap.$update.fasta | wc -l
+echo
+
 echo "compare count from mm8.seq table:"
 hgsql -Ne 'SELECT COUNT(*) FROM seq WHERE extFile = "'$extFileId_mm8'"' mm8
 echo "to the count from mm8 genetrap.$update.fasta file:"
@@ -251,12 +257,6 @@ echo "to the count from mm7 genetrap.$update.fasta file:"
 grep '>' /gbdb/mm7/igtc/genetrap.$update.fasta | wc -l
 echo
 
-echo "compare count from mm6.seq table:"
-hgsql -Ne 'SELECT COUNT(*) FROM seq WHERE extFile = "'$extFileId_mm6'"' mm6
-echo "to the count from mm6 genetrap.$update.fasta file:"
-grep '>' /gbdb/mm6/igtc/genetrap.$update.fasta | wc -l
-echo
-
 
 # get the new rows from tables on dev
 echo "\n\n----------------------"
@@ -266,6 +266,11 @@ echo "(these will need to be moved to beta)\n"
 
 ### ??? can't get the loop to work with $mice variable ??? ###
 # So, just do it one-by-one for now...
+hgsql -Ne "SELECT * FROM seq WHERE extFile = '$extFileId_mm9'" mm9 \
+  > mm9.seq.$update
+hgsql -Ne "SELECT * FROM extFile WHERE path LIKE '%genetrap.$update.fasta'" \
+  mm9 > mm9.extFile.$update
+
 hgsql -Ne "SELECT * FROM seq WHERE extFile = '$extFileId_mm8'" mm8 \
   > mm8.seq.$update
 hgsql -Ne "SELECT * FROM extFile WHERE path LIKE '%genetrap.$update.fasta'" \
@@ -275,11 +280,6 @@ hgsql -Ne "SELECT * FROM seq WHERE extFile = '$extFileId_mm7'" mm7 \
   > mm7.seq.$update
 hgsql -Ne "SELECT * FROM extFile WHERE path LIKE '%genetrap.$update.fasta'" \
   mm7 > mm7.extFile.$update
-
-hgsql -Ne "SELECT * FROM seq WHERE extFile = '$extFileId_mm6'" mm6 \
-  > mm6.seq.$update
-hgsql -Ne "SELECT * FROM extFile WHERE path LIKE '%genetrap.$update.fasta'" \
-  mm6 > mm6.extFile.$update
 
 
 echo "The files are here:"
@@ -362,12 +362,12 @@ end
 # Need to find the seq.id for last month's data
 # (get from beta, as dev might not have it anymore)
 
+set extFileIdOld_mm9=`hgsql -h hgwbeta -Ne 'SELECT id FROM extFile \
+  WHERE name LIKE "genetrap.'$lastMonth%'"' mm9`
 set extFileIdOld_mm8=`hgsql -h hgwbeta -Ne 'SELECT id FROM extFile \
   WHERE name LIKE "genetrap.'$lastMonth%'"' mm8`
 set extFileIdOld_mm7=`hgsql -h hgwbeta -Ne 'SELECT id FROM extFile \
   WHERE name LIKE "genetrap.'$lastMonth%'"' mm7`
-set extFileIdOld_mm6=`hgsql -h hgwbeta -Ne 'SELECT id FROM extFile \
-  WHERE name LIKE "genetrap.'$lastMonth%'"' mm6`
 
 # setup deletion of the rows from tables on dev and beta
 # commands needed to delete the rows from the extFile and seq tables on DEV and BETA
@@ -378,12 +378,12 @@ foreach mouse ( $mice )
     '"'genetrap.$lastMonth.fasta'"' \' $mouse 
 end
 
+echo 'hgsql -e ' "'"DELETE FROM mm9.seq WHERE extFile = \
+    '"'$extFileIdOld_mm9'"' \' mm9 
 echo 'hgsql -e ' "'"DELETE FROM mm8.seq WHERE extFile = \
-    '"'$extFileIdOld_mm8'"' \' mm8 
+    '"'$extFileIdOld_mm8'"' \' mm8
 echo 'hgsql -e ' "'"DELETE FROM mm7.seq WHERE extFile = \
     '"'$extFileIdOld_mm7'"' \' mm7
-echo 'hgsql -e ' "'"DELETE FROM mm6.seq WHERE extFile = \
-    '"'$extFileIdOld_mm6'"' \' mm6
 
 echo
 foreach mouse ( $mice )
@@ -391,12 +391,12 @@ foreach mouse ( $mice )
     '"'genetrap.$lastMonth.fasta'"' \' $mouse
 end
 
+echo 'hgsql -h hgwbeta -e ' "'"DELETE FROM mm9.seq WHERE extFile = \
+    '"'$extFileIdOld_mm9'"' \' mm9 
 echo 'hgsql -h hgwbeta -e ' "'"DELETE FROM mm8.seq WHERE extFile = \
-    '"'$extFileIdOld_mm8'"' \' mm8 
+    '"'$extFileIdOld_mm8'"' \' mm8
 echo 'hgsql -h hgwbeta -e ' "'"DELETE FROM mm7.seq WHERE extFile = \
     '"'$extFileIdOld_mm7'"' \' mm7
-echo 'hgsql -h hgwbeta -e ' "'"DELETE FROM mm6.seq WHERE extFile = \
-    '"'$extFileIdOld_mm6'"' \' mm6
 
 
 # is everything in seq?
@@ -417,15 +417,15 @@ echo " These should be lost using DELETE commands below)."
 echo
 
 echo "dev"
+hgsql -Ne 'SELECT COUNT(*) FROM seq WHERE extFile = "'$extFileIdOld_mm9'"' mm9
 hgsql -Ne 'SELECT COUNT(*) FROM seq WHERE extFile = "'$extFileIdOld_mm8'"' mm8
 hgsql -Ne 'SELECT COUNT(*) FROM seq WHERE extFile = "'$extFileIdOld_mm7'"' mm7
-hgsql -Ne 'SELECT COUNT(*) FROM seq WHERE extFile = "'$extFileIdOld_mm6'"' mm6
 wc -l *devOnly | grep -v total
 echo
 echo "beta"
+hgsql -h hgwbeta -Ne 'SELECT COUNT(*) FROM seq WHERE extFile = "'$extFileIdOld_mm9'"' mm9
 hgsql -h hgwbeta -Ne 'SELECT COUNT(*) FROM seq WHERE extFile = "'$extFileIdOld_mm8'"' mm8
 hgsql -h hgwbeta -Ne 'SELECT COUNT(*) FROM seq WHERE extFile = "'$extFileIdOld_mm7'"' mm7
-hgsql -h hgwbeta -Ne 'SELECT COUNT(*) FROM seq WHERE extFile = "'$extFileIdOld_mm6'"' mm6
 
 
 # load rows into tables on beta
@@ -476,26 +476,26 @@ echo
 
 echo " - check for drops of old seq items"
 echo "dev"
+echo 'hgsql -Ne' "'" 'SELECT COUNT(*) FROM seq WHERE extFile = "'$extFileIdOld_mm9'"' \' mm9
 echo 'hgsql -Ne' "'" 'SELECT COUNT(*) FROM seq WHERE extFile = "'$extFileIdOld_mm8'"' \' mm8
 echo 'hgsql -Ne' "'" 'SELECT COUNT(*) FROM seq WHERE extFile = "'$extFileIdOld_mm7'"' \' mm7
-echo 'hgsql -Ne' "'" 'SELECT COUNT(*) FROM seq WHERE extFile = "'$extFileIdOld_mm6'"' \' mm6
 echo
 echo "beta"
+echo 'hgsql -Ne' "'" 'SELECT COUNT(*) FROM seq WHERE extFile = "'$extFileIdOld_mm9'"' \' mm9
 echo 'hgsql -Ne' "'" 'SELECT COUNT(*) FROM seq WHERE extFile = "'$extFileIdOld_mm8'"' \' mm8
 echo 'hgsql -Ne' "'" 'SELECT COUNT(*) FROM seq WHERE extFile = "'$extFileIdOld_mm7'"' \' mm7
-echo 'hgsql -Ne' "'" 'SELECT COUNT(*) FROM seq WHERE extFile = "'$extFileIdOld_mm6'"' \' mm6
 echo
 
 echo " - check for new seq items"
 echo "dev"
+echo 'hgsql -Ne' "'" 'SELECT COUNT(*) FROM seq WHERE extFile = "'$extFileId_mm9'"' \' mm9
 echo 'hgsql -Ne' "'" 'SELECT COUNT(*) FROM seq WHERE extFile = "'$extFileId_mm8'"' \' mm8
 echo 'hgsql -Ne' "'" 'SELECT COUNT(*) FROM seq WHERE extFile = "'$extFileId_mm7'"' \' mm7
-echo 'hgsql -Ne' "'" 'SELECT COUNT(*) FROM seq WHERE extFile = "'$extFileId_mm6'"' \' mm6
 echo
 echo "beta"
+echo 'hgsql -h hgwbeta -Ne' "'" 'SELECT COUNT(*) FROM seq WHERE extFile = "'$extFileId_mm9'"' \' mm9
 echo 'hgsql -h hgwbeta -Ne' "'" 'SELECT COUNT(*) FROM seq WHERE extFile = "'$extFileId_mm8'"' \' mm8
 echo 'hgsql -h hgwbeta -Ne' "'" 'SELECT COUNT(*) FROM seq WHERE extFile = "'$extFileId_mm7'"' \' mm7
-echo 'hgsql -h hgwbeta -Ne' "'" 'SELECT COUNT(*) FROM seq WHERE extFile = "'$extFileId_mm6'"' \' mm6
 echo
 
 
