@@ -2900,6 +2900,8 @@ TMPDIR=/scratch/tmp
         /cluster/data/danRer5/bed/blastz.tetNig1.2007-09-16/DEF \
          >& swap.log &
     # 0.141u 0.097s 12:30.60 0.0%     0+0k 0+0io 7pf+0w 
+    
+    ssh hgwdev
     cat \ 
   /cluster/data/tetNig1/bed/blastz.danRer5.swap/fb.tetNig1.chainDanRer5Link.txt
     # 70448527 bases of 342403326 (20.575%) in intersection 
