@@ -2888,7 +2888,7 @@ TMPDIR=/scratch/tmp
     ssh kkstore04
     mkdir /cluster/data/tetNig1/bed/blastz.swap.danRer5
     cd /cluster/data/tetNig1/bed/blastz.swap.danRer5
-    # blastz parameters used to align oryLat1 as query to danRer5 as target:
+    # blastz parameters used to align tetNig1 as query to danRer5 as target:
     # BLASTZ_H=2500
     # BLASTZ_M=50
     # BLASTZ_Q=/cluster/data/blastz/HoxD55.q
@@ -2908,7 +2908,6 @@ TMPDIR=/scratch/tmp
     featureBits tetNig1 all_mrna chainDanRer5Link -enrichment
 # all_mrna 3.104%, chainDanRer5Link 20.575%, both 1.382%, cover 44.53%, enrich
 # 2.16x
-
     featureBits tetNig1 all_mrna chainDanRer4Link -enrichment
 # all_mrna 3.104%, chainDanRer4Link 24.083%, both 1.522%, cover 49.02%, enrich
 # 2.04x
