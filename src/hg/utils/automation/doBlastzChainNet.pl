@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/automation/doBlastzChainNet.pl instead.
 
-# $Id: doBlastzChainNet.pl,v 1.12 2007/08/21 19:59:40 hiram Exp $
+# $Id: doBlastzChainNet.pl,v 1.13 2007/09/19 18:48:44 angie Exp $
 
 # to-do items:
 # - lots of testing
@@ -457,7 +457,6 @@ sub doPartition {
   my $tPartDir = '-lstDir tParts';
   my $qPartDir = '-lstDir qParts';
   my $outRoot = $opt_blastzOutRoot ? "$opt_blastzOutRoot/psl" : '../psl';
-  my $mkOutRoot = $opt_blastzOutRoot ? "mkdir -p $opt_blastzOutRoot;" : "";
 
   my $seq1Dir = $defVars{'SEQ1_CTGDIR'} || $defVars{'SEQ1_DIR'};
   my $seq2Dir = $defVars{'SEQ2_CTGDIR'} || $defVars{'SEQ2_DIR'};
@@ -491,9 +490,9 @@ $partitionQueryCmd
 _EOF_
     );
   $bossScript->execute();
-  &HgAutomate::nfsNoodge("$outRoot");
-#*** If blastzOutRoot is used, this probably should not be done by $fileServer:
-  &HgAutomate::run("ssh -x $fileServer " .
+  my $mkOutRootHost = $opt_blastzOutRoot ? $paraHub : $fileServer;
+  my $mkOutRoot =     $opt_blastzOutRoot ? "mkdir -p $opt_blastzOutRoot;" : "";
+  &HgAutomate::run("ssh -x $mkOutRootHost " .
 		   "'(cd $runDir; $mkOutRoot csh -ef xdir.sh)'");
 }
 
