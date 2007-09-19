@@ -1,0 +1,175 @@
+# for emacs: -*- mode: sh; -*-
+
+
+# This file describes browser build for the Orangutan
+# genome, July 31 2007
+#
+#	"$Id: ponAbe2.txt,v 1.1 2007/09/19 21:45:46 hiram Exp $"
+#
+######################################################################
+## DOWNLOAD SEQUENCE (DONE - 2007-09-06 - Hiram)
+    ssh kkstore02
+    mkdir /cluster/store5/ponAbe2
+    ln -s /cluster/store5/ponAbe2 /cluster/data/ponAbe2
+    mkdir /cluster/data/ponAbe2/wustl
+    cd /cluster/data/ponAbe2/wustl
+    # LaDeana Hillier provided us with a private copy before it got to the
+    # public site
+    wget --timestamping \
+"http://genome.wustl.edu/pub/user/lhillier/private/P_abelii/orang_070731.tar.gz"
+
+    tar xvzf orang_070731.tar.gz
+    #	creates a directory FINAL_070731
+    ls -ogrt
+# drwxrwsr-x  2      4096 Sep  6 03:29 FINAL_070731
+# -rw-rw-r--  1 906641840 Sep  6 05:01 orang_070731.tar.gz
+
+    # chrX.agp and chr20.agp had blank lines at the end, remove those manually
+
+#######################################################################
+## create config.ra and run makeGenomeDb.pl (DONE - 2007-09-12 - Hiram)
+    ssh kkstore02
+    cd /cluster/data/ponAbe2
+
+    cat << '_EOF_' > ponAbe2.config.ra
+# Config parameters for makeGenomeDb.pl:
+db ponAbe2
+scientificName Pongo pygmaeus abelii
+commonName Orangutan
+assemblyDate Jul. 2007
+assemblyLabel WUSTL 3.0
+orderKey 31
+# clade already on in ponAbe1
+# clade mammal
+# genomeCladePriority 11
+# mitoAcc gi:1743294
+mitoAcc X97707.1
+fastaFiles /cluster/data/ponAbe2/wustl/FINAL_070731/chr*.fa
+agpFiles /cluster/data/ponAbe2/wustl/FINAL_070731/chr*.agp
+# qualFiles /dev/null
+dbDbSpeciesDir orangutan
+'_EOF_'
+    # << happy emacs
+    time nice -n +19 ~/kent/src/hg/utils/automation/makeGenomeDb.pl \
+	ponAbe2.config.ra > makeGenomeDb.out 2>&1 &
+    #	real    19m49.887s
+    # failed in the makeDb due to chrM vs. AGP confusion.  Fixed the code,
+    #	and ran the jkStuff/makeDb.csh manually.  Then continuing:
+    time nice -n +19 ~/kent/src/hg/utils/automation/makeGenomeDb.pl \
+	-continue=dbDb -stop=dbDb ponAbe2.config.ra > dbDb.out 2>&1 &
+    #	no need to run the trackDb business since we can simply
+    #	copy the ponAbe1 directory in the source tree
+
+##########################################################################
+## Repeat masker (DONE - 2007-09-15 - Hiram)
+    ssh kkstore02
+    ## use screen for this
+    mkdir /cluster/data/ponAbe2/bed/RepeatMasker
+    cd /cluster/data/ponAbe2/bed/RepeatMasker
+    time nice -n +19 ~/kent/src/hg/utils/automation/doRepeatMasker.pl \
+	-bigClusterHub=pk \
+	-buildDir=/cluster/data/ponAbe2/bed/RepeatMasker ponAbe2 > do.out 2>&1 &
+    #	real    1831m46.301s
+
+##############################################################################
+## simpleRepeat masking (DONE - 2007-09-19 - Hiram)
+    ## create a kki kluster run
+    ssh kkr1u00
+    mkdir /iscratch/i/ponAbe2
+    cd /iscratch/i/ponAbe2
+    cp -p /cluster/data/ponAbe2/ponAbe2.unmasked.2bit .
+    cp -p /cluster/data/ponAbe2/chrom.sizes .
+    twoBitToFa ponAbe2.unmasked.2bit ponAbe2.unmasked.fa
+    mkdir split
+    #  split sequence into individual chrom sequences
+    faSplit sequence ponAbe2.unmasked.fa 100 split/s_
+    rm ponAbe2.unmasked.fa ponAbe2.unmasked.2bit
+
+    for R in 2 3 4 5 6 7 8
+do
+    rsync -a --progress /iscratch/i/ponAbe2/ kkr${R}u00:/iscratch/i/ponAbe2/
+done
+
+    ssh kki
+    mkdir -p /cluster/data/ponAbe2/bed/simpleRepeat/trf
+    cd /cluster/data/ponAbe2/bed/simpleRepeat/trf
+
+    cat << '_EOF_' > runTrf
+#!/bin/csh -fe 
+#
+set C = $1:r
+set SRC = /iscratch/i/ponAbe2/split/$C.fa
+mkdir -p /scratch/tmp/$C
+cp -p $SRC /scratch/tmp/$C/$C.fa
+pushd /scratch/tmp/$C
+/cluster/bin/x86_64/trfBig -trf=/cluster/bin/x86_64/trf $C.fa \
+	/dev/null -bedAt=$C.bed -tempDir=/scratch/tmp/$C
+popd
+rm -f $C.bed
+cp -p /scratch/tmp/$C/$C.bed .
+rm -fr /scratch/tmp/$C
+'_EOF_'
+    # << happy emacs
+    chmod +x runTrf
+
+    cat << '_EOF_' > template
+#LOOP
+./runTrf $(path1) {check out line $(root1).bed}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    ls /iscratch/i/ponAbe2/split > part.list
+    gensub2 part.list single template jobList
+    para create jobList
+    para try ... check ... push ... etc ...
+# Completed: 55 of 55 jobs
+# CPU time in finished jobs:      57854s     964.23m    16.07h    0.67d  0.002 y
+# IO & Wait Time:                   473s       7.88m     0.13h    0.01d  0.000 y
+# Average job time:                1060s      17.67m     0.29h    0.01d
+# Longest finished job:           32538s     542.30m     9.04h    0.38d
+# Submission to last job:         32538s     542.30m     9.04h    0.38d
+
+    ssh kkstore02
+    cd /cluster/data/ponAbe2/bed/simpleRepeat/trf
+    cat s_*.bed > ../simpleRepeat.bed
+    cd ..
+    awk '{if ($5 <= 12) print;}' simpleRepeat.bed > trfMask.bed
+
+    ssh hgwdev
+    cd /cluster/data/ponAbe2/bed/simpleRepeat
+    time nice -n +19 hgLoadBed ponAbe2 simpleRepeat \
+      simpleRepeat.bed -sqlTable=$HOME/kent/src/hg/lib/simpleRepeat.sql
+    #	Loaded 1036457 elements of size 16
+
+    nice -n +19 featureBits ponAbe2 simpleRepeat \
+	> fb.simpleRepeat.ponAbe2.txt 2>&1 &
+    cat fb.simpleRepeat.ponAbe2.txt
+    #	120386097 bases of 3093572278 (3.891%) in intersection
+
+    #	add the trfMask to the rmsk masked sequence to get our final
+    #	masked sequence
+    ssh kkstore02
+    cd /cluster/data/ponAbe2
+    time nice -n +19 cat bed/simpleRepeat/trfMask.bed \
+	| twoBitMask -add -type=.bed ponAbe2.rmsk.2bit stdin ponAbe2.2bit
+    #	can safely ignore the warning about >= 13 fields
+    #	measure it
+    time nice -n +19 twoBitToFa ponAbe2.2bit stdout \
+	| faSize stdin > faSize.ponAbe2.2bit.txt 2>&1
+    grep masked faSize.ponAbe2.2bit.txt
+    #	%45.68 masked total, %50.89 masked real
+
+    ## clean up the /iscratch/i/ponAbe2/ directory
+    ssh kkr1u00
+    cd /iscratch/i/ponAbe2
+    rm -fr *
+    for R in 2 3 4 5 6 7 8
+do
+    rsync -a --progress --delete --stats /iscratch/i/ponAbe2/ kkr${R}u00:/iscratch/i/ponAbe2/
+    ssh kkr${R}u00 rmdir /iscratch/i/ponAbe2
+done
+    cd ..
+    rmdir ponAbe2
+
+############################################################################
