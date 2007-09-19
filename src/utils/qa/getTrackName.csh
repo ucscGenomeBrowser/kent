@@ -16,6 +16,7 @@ set tableName=""
 set parentTableName=""
 set parentTrack=""
 set subTrack=""
+set superTrack=""
 set grp=""
 set grpName=""
 
@@ -49,7 +50,8 @@ if ( "$dbs" != $db ) then
 endif
 
 #find the shortLabel and group for this table
-set subTrack=`hgsql -Ne "SELECT shortLabel FROM trackDb WHERE tableName LIKE '$tableName'" $db`
+set subTrack=`hgsql -Ne "SELECT shortLabel FROM trackDb WHERE tableName \
+  LIKE '$tableName'" $db`
 if ( "" == "$subTrack" ) then
   echo "\n ERROR: could not find the $tableName table in the $db database\n"
   exit 1
@@ -57,7 +59,8 @@ else
   echo " $tableName"
   echo
   echo " name:   $subTrack"
-  set grp=`hgsql -Ne "SELECT grp FROM trackDb WHERE tableName LIKE '$tableName'" $db`
+  set grp=`hgsql -Ne "SELECT grp FROM trackDb WHERE tableName \
+    LIKE '$tableName'" $db`
 endif
 
 #find out if this table is a sub-track
