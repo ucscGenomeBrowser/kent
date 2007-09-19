@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.119 2007/06/19 20:45:58 donnak Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.120 2007/09/19 22:15:07 angie Exp $";
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
 /* Sort track by shortLabel. */
@@ -550,6 +550,21 @@ hPrintf("<TABLE BORDER=0>\n");
     selGroup = showGroupField(hgtaGroup, onChangeGroupOrTrack(), conn, TRUE);
     nbSpaces(3);
     curTrack = showTrackField(selGroup, hgtaTrack, onChangeGroupOrTrack());
+    nbSpaces(3);
+    boolean hasCustomTracks = FALSE;
+    struct trackDb *t;
+    for (t = fullTrackList;  t != NULL;  t = t->next)
+	{
+	if (isCustomTrack(t->tableName))
+	    {
+	    hasCustomTracks = TRUE;
+	    break;
+	    }
+	}
+    hOnClickButton("document.customTrackForm.submit();return false;",
+		   hasCustomTracks ? 
+                            CT_MANAGE_BUTTON_LABEL : CT_ADD_BUTTON_LABEL);
+    
     hPrintf("</TD></TR>\n");
     }
 
@@ -569,8 +584,6 @@ hPrintf("<TABLE BORDER=0>\n");
     if (isCustomTrack(curTable))
 	{
 	isChromGraphCt = isChromGraph(curTrack);
-	cgiMakeButton(hgtaDoRemoveCustomTrack, "remove custom track");
-        hPrintf(" ");
 	}
     cgiMakeButton(hgtaDoSchema, "describe table schema");
     hPrintf("</TD></TR>\n");
@@ -862,6 +875,11 @@ hPrintf("</FORM>\n");
       hgtaRange, hgtaOutputType, hgtaOutFileName};
     jsCreateHiddenForm(cart, getScriptName(), saveVars, ArraySize(saveVars));
     }
+
+/* Hidden form for jumping to custom tracks CGI. */
+hPrintf("<FORM ACTION='%s' NAME='customTrackForm'>", hgCustomName());
+cartSaveSession(cart);
+hPrintf("</FORM>\n");
 
 webNewSection("<A NAME=\"Help\"></A>Using the Table Browser\n");
 printMainHelp();
