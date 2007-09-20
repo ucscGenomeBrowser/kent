@@ -55,6 +55,59 @@ color 200,0,0
 type bed 4
 url http://geneticassociationdb.nih.gov/cgi-bin/tableview.cgi?table=allview&cond=gene=
 
+track caseControl
+compositeTrack on
+shortLabel Case Control
+longLabel Case Control Consortium
+group phenDis
+visibility hide
+priority 50.2
+type chromGraph
+minMax 0,15
+linesAt 5,10
+
+    track cccTrendPvalBd
+    subTrack caseControl
+    shortLabel CCC Bipolar Dis
+    longLabel Case Control Consortium bipolar disorder trend -log10 P-value
+    priority 1
+
+    track cccTrendPvalCad
+    subTrack caseControl
+    shortLabel CCC Coronary Art
+    longLabel Case Control Consortium coronary artery disease trend -log10 P-value
+    priority 2
+
+    track cccTrendPvalCd
+    subTrack caseControl
+    shortLabel CCC Crohns Dis
+    longLabel Case Control Consortium Crohn's disease trend -log10 P-value
+    priority 3
+
+    track cccTrendPvalHt
+    subTrack caseControl
+    shortLabel CCC Hypertension
+    longLabel Case Control Consortium hypertension trend -log10 P-value
+    priority 4
+
+    track cccTrendPvalRa
+    subTrack caseControl
+    shortLabel CCC Rheum Arth
+    longLabel Case Control Consortium rheumatoid arthritis trend -log10 P-value
+    priority 5
+
+    track cccTrendPvalT1d
+    subTrack caseControl
+    shortLabel CCC T1 Diabetes
+    longLabel Case Control Consortium type 1 diabetes trend -log10 P-value
+    priority 6
+
+    track cccTrendPvalT2d
+    subTrack caseControl
+    shortLabel CCC T2 Diabetes
+    longLabel Case Control Consortium type 2 diabetes trend -log10 P-value
+    priority 7
+
 track xenoRefGene
 shortLabel Other RefSeq
 longLabel Non-$Organism RefSeq Genes
@@ -356,6 +409,18 @@ expDrawExons on
 groupings affyRatioGroups
 expTable affyExps
 # (expTable is obselete)
+
+track humanNormal
+shortLabel Human Normal
+longLabel Expression from Normal Human Tissue
+group regulation
+priority 87
+visibility hide
+type expRatio
+expScale 3.0
+expStep 0.5
+groupings humanNormalGroups
+expTable humanNormalExps
 
 track cghNci60
 shortLabel CGH NCI60
