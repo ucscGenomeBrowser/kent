@@ -15,7 +15,7 @@
 #include "chain.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: featureBits.c,v 1.47 2007/05/16 19:26:21 kuhn Exp $";
+static char const rcsid[] = "$Id: featureBits.c,v 1.48 2007/09/20 18:44:23 kuhn Exp $";
 
 static struct optionSpec optionSpecs[] =
 /* command line option specifications */
@@ -78,7 +78,7 @@ errAbort(
   "   -faMerge          For fa output merge overlapping features.\n"
   "   -minSize=N        Minimum size to output (default 1)\n"
   "   -chrom=chrN       Restrict to one chromosome\n"
-  "   -chromSize=sizefile      read chrom sizes from file instead of database.\n"
+  "   -chromSize=sizefile       Read chrom sizes from file instead of database.\n"
   "   -or               Or tables together instead of anding them\n"
   "   -not              Output negation of resulting bit set.\n"
   "   -countGaps        Count gaps in denominator\n"
@@ -91,13 +91,13 @@ errAbort(
   "   -bin=output.bin   Put bin counts in output file\n"
   "   -binSize=N        Bin size for generating counts in bin file (default 500000)\n"
   "   -binOverlap=N     Bin overlap for generating counts in bin file (default 250000)\n"
-
-  "   -bedRegionIn=input.bed   Read in a bed file for bin counts in specific regions and write to bedRegionsOut\n"
-  "   -bedRegionOut=output.bed Write a bed file of bin counts in specific regions from bedRegionIn\n"
-
+  "   -bedRegionIn=input.bed    Read in a bed file for bin counts in specific regions \n"
+  "                     and write to bedRegionsOut\n"
+  "   -bedRegionOut=output.bed  Write a bed file of bin counts in specific regions \n"
+  "                     from bedRegionIn\n"
   "   -enrichment       Calculates coverage and enrichment assuming first table\n"
   "                     is reference gene track and second track something else\n"
-  "   '-where=some sql pattern'  restrict to features matching some sql pattern\n"
+  "   '-where=some sql pattern'  Restrict to features matching some sql pattern\n"
   "You can include a '!' before a table name to negate it.\n"
   "Some table names can be followed by modifiers such as:\n"
   "    :exon:N          Break into exons and add N to each end of each exon\n"
