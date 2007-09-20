@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/extractNestedRepeats.pl instead.
 
-# $Id: extractNestedRepeats.pl,v 1.3 2007/08/27 19:43:46 angie Exp $
+# $Id: extractNestedRepeats.pl,v 1.4 2007/09/20 00:33:33 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -99,7 +99,16 @@ sub writeGroups {
 	if ($warnSkipped);
       next;
     }
-    my @fragmentRefs = @{$groupedRef->[$id]};
+    # Merge overlapping blocks, remove completely-contained blocks:
+    my @fragmentRefs;
+    my $prevBlkEnd;
+    foreach my $fRef (@{$groupedRef->[$id]}) {
+      $fRef->[1] = $prevBlkEnd
+	if (defined $prevBlkEnd && $prevBlkEnd > $fRef->[1]);
+      next unless ($fRef->[2] > $fRef->[1]);
+      push @fragmentRefs, $fRef;
+      $prevBlkEnd = $fRef->[2];
+    }
     if (@fragmentRefs > 1) {
       my $chrom = $fragmentRefs[0]->[0];
       my $chromStart = $fragmentRefs[0]->[1];
