@@ -1461,6 +1461,7 @@ longLabel Nested Repeats from RepeatMasker ID
 group varRep
 priority 149.11
 visibility hide
+useScore 1
 type bed 12 +
 
 track rmskCensor
