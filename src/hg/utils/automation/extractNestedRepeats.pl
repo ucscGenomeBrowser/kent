@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/extractNestedRepeats.pl instead.
 
-# $Id: extractNestedRepeats.pl,v 1.4 2007/09/20 00:33:33 angie Exp $
+# $Id: extractNestedRepeats.pl,v 1.5 2007/09/20 07:42:30 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -102,11 +102,13 @@ sub writeGroups {
     # Merge overlapping blocks, remove completely-contained blocks:
     my @fragmentRefs;
     my $prevBlkEnd;
+    my $totalScore = 0;
     foreach my $fRef (@{$groupedRef->[$id]}) {
       $fRef->[1] = $prevBlkEnd
 	if (defined $prevBlkEnd && $prevBlkEnd > $fRef->[1]);
       next unless ($fRef->[2] > $fRef->[1]);
       push @fragmentRefs, $fRef;
+      $totalScore += $fRef->[6];
       $prevBlkEnd = $fRef->[2];
     }
     if (@fragmentRefs > 1) {
@@ -114,8 +116,9 @@ sub writeGroups {
       my $chromStart = $fragmentRefs[0]->[1];
       my $chromEnd = $fragmentRefs[-1]->[2];
       my ($name, $class, $family) = &mostCommonName(\@fragmentRefs);
-      # Could we do something useful with the BED score field?
-      my $score = 1000;
+      # Average the scores, to assign a shade similar to the fragments in
+      # the main RepeatMasker track:
+      my $score = int(0.5 + $totalScore / scalar(@fragmentRefs));
       my ($strand, $blkStrands) = &getStrands(\@fragmentRefs);
       my $blkCount = @fragmentRefs;
       my ($blkSizes, $blkStarts) = ('', '');
@@ -150,8 +153,10 @@ while (<>) {
   next if (/^(   SW.*|score.*|\s*)$/);
   chomp;
   my @row = split;
-  my ($chr, $start, $end, $strand, $repName, $repClassFam, $id) =
-    ($row[4], $row[5], $row[6], $row[8], $row[9], $row[10], $row[14]);
+  my ($chr, $start, $end, $strand, $repName, $repClassFam, $id,
+      $percDiv, $percDel, $percIns) =
+    ($row[4], $row[5], $row[6], $row[8], $row[9], $row[10], $row[14],
+     $row[1], $row[2], $row[3]);
   if (! defined $id) {
     warn "RepeatMasker bug?: Undefined id, line $. of input:\n$_\n";
     $idProblems++;
@@ -172,8 +177,18 @@ while (<>) {
     @groupedById = ();
     $offset = $id;
   }
+  # Calc 0-1000 BED score to match the shading in hgTracks/rmskTrack.c.
+  # rmskTrack.s maps the whole grayscale dynamic range to percId 500-1000.
+  # "percId" should really be called "milliId", but I'll stick with the
+  # rmskTrack.c variable name.
+  # (actually, the 10*$percX --> milliX step is performed in hgLoadOut):
+  my $percId = 1000 - 10*$percDiv - 10*$percDel - 10*$percIns;
+  # Map 500-1000 Id score dynamic range onto 0-1000 bed score range:
+  $percId = 500 if ($percId < 500);
+  $percId = 1000 if ($percId > 1000);
+  my $bedScore = ($percId - 500) * 2;
   push @{$groupedById[$id-$offset]},
-    [$chr, $start, $end, $strand, $repName, $repClassFam];
+    [$chr, $start, $end, $strand, $repName, $repClassFam, $bedScore];
   $prevId = $id;
   $prevChr = $chr;
 }
