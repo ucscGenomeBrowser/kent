@@ -8,9 +8,9 @@
 #include "genePred.h"
 #include "genePredReader.h"
 
-static char const rcsid[] = "$Id: genePredToGtf.c,v 1.9 2006/06/07 17:06:57 acs Exp $";
+static char const rcsid[] = "$Id: genePredToGtf.c,v 1.10 2007/09/20 21:54:14 markd Exp $";
 
-void usage()
+static void usage()
 /* Explain usage and exit. */
 {
 errAbort(
@@ -20,21 +20,30 @@ errAbort(
   "If database is 'file' then track is interpreted as a file\n"
   "rather than a table in database.\n"
   "options:\n"
-  "   -utr   Add UTRs to the output\n"
-  "   -order Order by chrom, txStart\n"
+  "   -utr - Add 5UTR and 3UTR features\n"
+  "   -stopBetweenCdsUtr - put the stop_codon feature between the CDS\n"
+  "    and 3'UTR.  To support broken programs that don't follow the spec\n"
+  "    which puts it in the 3'UTR.\n"
+  "   -honorCdsStat - use cdsStartStat/cdsEndStat when defining start/end\n"
+  "    codon records\n"
   "   -source=src set source name to uses\n"
-  "Note: use refFlat table to include geneName\n"
+  "Note: use refFlat or extended genePred table to include geneName\n"
   );
 }
 
 static struct optionSpec options[] = {
    {"utr", OPTION_BOOLEAN},
-   {"order", OPTION_BOOLEAN},
+   {"stopBetweenCdsUtr", OPTION_BOOLEAN},
+   {"honorCdsStat", OPTION_BOOLEAN},
    {"source", OPTION_STRING},
    {NULL, 0}
 };
+static boolean utr = FALSE;
+static boolean stopBetweenCdsUtr = FALSE;
+static boolean honorCdsStat = FALSE;
+static char *source = NULL;
 
-char *findUniqueName(struct hash *dupeHash, char *root)
+static char *findUniqueName(struct hash *dupeHash, char *root)
 /* If root name is already in hash, return root_1, root_2
  * or something like that. */
 {
@@ -55,10 +64,11 @@ else
 }
 
 static void writeGtfLine(FILE *f, char *source, char *name, char *geneName,
-	char *chrom, char *strand, char *type, 
+	char *chrom, char strand, char *type, 
 	int start, int end, int exonIx, int frame)
 /* Write a single exon to GTF file */
 {
+assert(start <= end);
 /* convert frame to phase */
 char phase = (frame < 0) ? '.' : (frame == 0) ? '0'
     : (frame == 1) ? '2' : '1';
@@ -68,7 +78,7 @@ fprintf(f, "%s\t", type);
 fprintf(f, "%d\t", start+1);
 fprintf(f, "%d\t", end);
 fprintf(f, ".\t");	/* Score. */
-fprintf(f, "%s\t", strand);
+fprintf(f, "%c\t", strand);
 fprintf(f, "%c\t", phase);
 fprintf(f, "gene_id \"%s\"; ", name);
 fprintf(f, "transcript_id \"%s\"; ", name);
@@ -82,16 +92,19 @@ fprintf(f, "\n");
 struct codonCoords
 /* coordinates of a codon */
 {
+    int start, end;     /* full range of codon, might be spliced */
     int start1, end1;   /* first part of codon */
     int iExon1;         /* exon containing first part */
     int start2, end2;   /* second part of codon if spliced, or 0,0 */
     int iExon2;         /* exon containing second part */
 };
+static struct codonCoords zeroCodonCoords = {0, 0, 0, 0, 0, 0, 0, 0};
 
-void writeCodon(FILE *f, char *source, char *name, char *geneName,
-                char *chrom, char *strand, char *type, 
-                struct codonCoords *codon)
-/* write the location of a codon to the GTF  */
+
+static void writeCodon(FILE *f, char *source, char *name, char *geneName,
+                       char *chrom, char strand, char *type, 
+                       struct codonCoords *codon)
+/* write the location of a codon to the GTF, if it is non-zero.  */
 {
 if (codon->start1 < codon->end1)
     {
@@ -105,13 +118,48 @@ if (codon->start1 < codon->end1)
     }
 }
 
-void getStartStopCoords(struct genePred *gp, struct codonCoords *start,
-                        struct codonCoords *end)
+static boolean inBounds(struct genePred *gp, int start, int end, int iExon)
+/* test if a base range is in bounds of an exon or empty. */
+{
+return (start >= end)
+    || ((gp->exonStarts[iExon] <= start) && (end <= gp->exonEnds[iExon]));
+}
+
+static struct codonCoords mkCodonCoords(struct genePred *gp, int iExon, int start)
+/* Build a codonCoords struct starting at the specified location.  Make
+ * sure bounds are in exon; might be out of bounds if gappy genePred */
+{
+struct codonCoords codon = zeroCodonCoords;
+codon.start1 = start;
+codon.end1 = codon.start1 + 3;
+codon.iExon1 = iExon;
+if (codon.end1 > gp->exonEnds[iExon])
+    {
+    if (iExon == gp->exonCount-1)
+        return zeroCodonCoords;
+    else
+        {
+        codon.end1 = gp->exonEnds[iExon];
+        codon.start2 = gp->exonStarts[iExon+1];
+        codon.end2 = codon.start2 + (3 - (codon.end1 - codon.start1));
+        codon.iExon2 = iExon+1;
+        }
+    }
+if (!(inBounds(gp, codon.start1, codon.end1, codon.iExon1)
+      && inBounds(gp, codon.start2, codon.end2, codon.iExon2)))
+    return zeroCodonCoords;
+codon.start = codon.start1;
+codon.end = (codon.start2 < codon.end2) ? codon.end2 : codon.end1;
+return codon;
+}
+
+static void getStartStopCoords(struct genePred *gp, struct codonCoords *firstCodon,
+                               struct codonCoords *lastCodon)
 /* get the coordinates of the start and stop codons */
 {
 int i;
-ZeroVar(start);
-ZeroVar(end);
+*firstCodon = zeroCodonCoords;
+*lastCodon = zeroCodonCoords;
 
 /* find the exons containing the first and last codons in gene */
 for (i=0; i<gp->exonCount; ++i)
@@ -119,40 +167,63 @@ for (i=0; i<gp->exonCount; ++i)
     if ((gp->exonStarts[i] <= gp->cdsStart) && (gp->cdsStart < gp->exonEnds[i]))
         {
         /* exon contains CDS start */
-        start->start1 = gp->cdsStart;
-        start->end1 = start->start1 + 3;
-        start->iExon1 = i;
-        if (start->end1 >= gp->exonEnds[i])
-            {
-            start->end1 = gp->exonEnds[i];
-            start->start2 = gp->exonStarts[i+1];
-            start->end2 = start->start2 + (3 - (start->end1 - start->start1));
-            start->iExon2 = i;
-            }
+        *firstCodon = mkCodonCoords(gp, i, gp->cdsStart);
         }
     if ((gp->exonStarts[i] < gp->cdsEnd) && (gp->cdsEnd <= gp->exonEnds[i]))
         {
         /* exon contains CDS end */
-        end->start1 = gp->cdsEnd - 3;
-        end->end1 = gp->cdsEnd;
-        end->iExon1 = i;
-        if (end->end1 >= gp->exonEnds[i])
+        int first = gp->cdsEnd-3;  // back up to start of codon
+        if (first < gp->exonStarts[i])
             {
-            end->end1 = gp->exonEnds[i];
-            end->start2 = gp->exonStarts[i+1];
-            end->end2 = end->start2 + (3 - (end->end1 - end->start1));
-            end->iExon2 = i;
+            if (i > 0)
+                {
+                int off = gp->exonStarts[i]-first;
+                *lastCodon = mkCodonCoords(gp, i-1, gp->exonEnds[i-1]-off);
+                }
             }
+        else
+            *lastCodon = mkCodonCoords(gp, i, first);
         }
     }
 
-/* if we have cds status, use it to determine if we have start/end */
-if (gp->optFields & genePredCdsStatFld)
+if (honorCdsStat && (gp->optFields & genePredCdsStatFld))
     {
     if (gp->cdsStartStat != cdsComplete)
-        ZeroVar(start);
+        *firstCodon = zeroCodonCoords;
     if (gp->cdsEndStat != cdsComplete)
-        ZeroVar(end);
+        *lastCodon = zeroCodonCoords;
+    }
+}
+
+static void writeFeatures(struct genePred *gp, int i, char *source, char *name,
+                          char *chrom, char strand, char *geneName,
+                          int firstUtrEnd, int cdsStart, int cdsEnd, int lastUtrStart,
+                          FILE *f)
+/* write exons CDS/UTR features */
+{
+int exonStart = gp->exonStarts[i];
+int exonEnd = gp->exonEnds[i];
+if (utr && (exonStart < firstUtrEnd))
+    {
+    int end = min(exonEnd, firstUtrEnd);
+    writeGtfLine(f, source, name, geneName, chrom, strand,
+                 ((strand == '+') ? "5UTR" : "3UTR"),
+                 exonStart, end, i, -1);
+    }
+if ((cdsStart < exonEnd) && (cdsEnd > exonStart))
+        {
+        int start = max(exonStart, cdsStart);
+        int end = min(exonEnd, cdsEnd);
+        int frame = (gp->optFields & genePredExonFramesFld) ? gp->exonFrames[i] : -1;
+        writeGtfLine(f, source, name, geneName, chrom, strand, "CDS",
+                     start, end, i, frame);
+        }
+if (utr && (exonEnd > lastUtrStart))
+    {
+    int start = max(lastUtrStart, exonStart);
+    writeGtfLine(f, source, name, geneName, chrom, strand,
+                 ((strand == '+') ? "3UTR" : "5UTR"),
+                 start, exonEnd, i, -1);
     }
 }
 
@@ -164,54 +235,45 @@ int i;
 char *name = findUniqueName(dupeHash, gp->name);
 char *geneName = gp->name2;
 char *chrom = gp->chrom;
-char *strand = gp->strand;
+char strand = gp->strand[0];
+struct codonCoords firstCodon, lastCodon;
+getStartStopCoords(gp, &firstCodon, &lastCodon);
+
+// figure out bounds of CDS and UTR regions
+int firstUtrEnd = gp->cdsStart;
+int cdsStart = (strand == '+') ? gp->cdsStart : firstCodon.end;
+int cdsEnd = (strand == '+') ? lastCodon.start : gp->cdsEnd;
+int lastUtrStart = gp->cdsEnd;
+
+if (stopBetweenCdsUtr)
+    {
+    if (strand == '+')
+        lastUtrStart = lastCodon.end;
+    else
+        firstUtrEnd = firstCodon.start;
+    }
 
 for (i=0; i<gp->exonCount; ++i)
     {
-    int start = gp->exonStarts[i];
-    int end = gp->exonEnds[i];
-    int exonStart = start;
-    int exonEnd = end;
-    int frame = (gp->optFields & genePredExonFramesFld) ? gp->exonFrames[i] : -1;
-
-    writeGtfLine(f, source, name, geneName, chrom, strand, "exon", start, end, i, -1);
-    if (start < gp->cdsStart) start = gp->cdsStart;
-    if (end > gp->cdsEnd) end = gp->cdsEnd;
-    if (optionExists("utr"))
-	{
-	if (start < end)
-	    {
-	    if (start > exonStart)
-		writeGtfLine(f, source, name, geneName, chrom, strand, "UTR", exonStart, start, i, -1);
-	    writeGtfLine(f, source, name, geneName, chrom, strand, "CDS", start, end, i, frame);
-	    if (end < exonEnd)
-		writeGtfLine(f, source, name, geneName, chrom, strand, "UTR", end, exonEnd, i, -1);
-	    }
-	else 
-	    writeGtfLine(f, source, name, geneName, chrom, strand, "UTR", exonStart, exonEnd, i, -1);
-	}
-    else if (start < end)
-	writeGtfLine(f, source, name, geneName, chrom, strand, "CDS", start, end, i, frame);
+    writeGtfLine(f, source, name, geneName, chrom, strand, "exon", 
+             gp->exonStarts[i], gp->exonEnds[i], i, -1);
+    if (gp->cdsStart < gp->cdsEnd)
+        writeFeatures(gp, i,source, name, chrom, strand, geneName, 
+                      firstUtrEnd, cdsStart, cdsEnd, lastUtrStart, f);
     }
-
-if (gp->cdsStart < gp->cdsEnd)
+if (gp->strand[0] == '+')
     {
-    struct codonCoords start, end;
-    getStartStopCoords(gp, &start, &end);
-    if (gp->strand[0] == '+')
-        {
-        writeCodon(f, source, name, geneName, chrom, strand, "start_codon", 
-                   &start);
-        writeCodon(f, source, name, geneName, chrom, strand, "stop_codon",
-                   &end);
-        }
-    else
-        {
-        writeCodon(f, source, name, geneName, chrom, strand, "start_codon",
-                   &end);
-        writeCodon(f, source, name, geneName, chrom, strand, "stop_codon",
-                   &start);
-        }
+    writeCodon(f, source, name, geneName, chrom, strand, "start_codon", 
+               &firstCodon);
+    writeCodon(f, source, name, geneName, chrom, strand, "stop_codon",
+               &lastCodon);
+    }
+else
+    {
+    writeCodon(f, source, name, geneName, chrom, strand, "start_codon",
+               &lastCodon);
+    writeCodon(f, source, name, geneName, chrom, strand, "stop_codon",
+               &firstCodon);
     }
 }
 
@@ -221,7 +283,6 @@ void genePredToGtf(char *database, char *table, char *gtfOut)
 FILE *f = mustOpen(gtfOut, "w");
 struct hash *dupeHash = newHash(16);
 struct genePred *gpList = NULL, *gp = NULL;
-char *source = optionVal("source", table);
 
 if (sameString(database, "file"))
     {
@@ -246,6 +307,12 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 4)
     usage();
+utr = optionExists("utr");
+stopBetweenCdsUtr = optionExists("stopBetweenCdsUtr");
+if (stopBetweenCdsUtr)
+    utr = TRUE;
+honorCdsStat = optionExists("honorCdsStat");
+source = optionVal("source", argv[2]);
 genePredToGtf(argv[1], argv[2], argv[3]);
 return 0;
 }

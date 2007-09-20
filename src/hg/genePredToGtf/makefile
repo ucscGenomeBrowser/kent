@@ -9,3 +9,10 @@ O = genePredToGtf.o
 genePredToGtf: $O $(MYLIBS) makefile
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/genePredToGtf $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/genePredToGtf${EXE}
+
+test:
+	cd tests && ${MAKE} test
+
+clean:
+	rm -f $O $B
+	cd tests && ${MAKE} clean
