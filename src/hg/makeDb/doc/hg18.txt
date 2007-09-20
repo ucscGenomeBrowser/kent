@@ -17061,3 +17061,44 @@ table itemConf
     hgsql hg18 -e "alter table encodeUcsdNgValChipH3ac rename to wgEncodeUcsdNgTaf1ValidH3ac"
     hgsql hg18 -e "alter table encodeUcsdNgValChipRnap rename to wgEncodeUcsdNgTaf1ValidRnap"
     hgsql hg18 -e "alter table encodeUcsdNgValChipTaf rename to wgEncodeUcsdNgTaf1ValidTaf"
+
+##########################################################
+# Case Control Consortium  (DONE 2007-09-20 (Andy)
+
+ssh hgwdev
+bash
+mkdir /cluster/data/hg17/bed/caseControl
+cd /cluster/data/hg17/bed/caseControl
+wget ftp://ftp.sanger.ac.uk/pub/WTCCC/summary_stats/summary_stats_auto_all.zip
+unzip summary_stats_auto_all.zip
+cd basic/
+for disease in BD CAD CD HT RA T1D T2D; do
+    echo $disease
+    jkDisease=${disease:0:1}`echo ${disease:1} | tr [[:upper:]] [[:lower:]]`
+    for f in *${disease}*.txt; do 
+       tail +2 $f | awk '{if ($21 == "1") print;}' | \ 
+         cut -f1,15 >> ../chromGraphs/cccTrendPval${jkDisease}.cg
+    done
+done
+cd ../chromGraphs/
+mkdir hg17 hg18
+for f in *.cg; do    
+    table=${f%.cg};
+    echo $table
+    hgLoadChromGraph -idTable=affy500k -minusLog10 -pathPrefix=/gbdb/hg17/chromGraph \
+       hg17 $table $f 2> ${table}.hg17.errors
+    mv ${table}.cgb hg17/
+    hgLoadChromGraph -idTable=affy500k -minusLog10 -pathPrefix=/gbdb/hg18/chromGraph \
+       hg18 $table $f 2> ${table}.hg18.errors
+    mv ${table}.cgb hg18/
+done
+pushd /gbdb/hg18/chromGraph
+ln -s /cluster/data/hg17/bed/caseControl/chromGraphs/hg18/*.cgb .
+popd
+pushd /gbdb/hg17/chromGraph
+ln -s /cluster/data/hg17/bed/caseControl/chromGraphs/hg17/*.cgb .
+popd
+# Add the hack row into metaChromGraph for the composite tracks.
+hgsql hg17 -e 'insert into metaChromGraph (name, minVal, maxVal, binaryFile) values ("caseControl", 0, 0, "composite")'
+hgsql hg18 -e 'insert into metaChromGraph (name, minVal, maxVal, binaryFile) values ("caseControl", 0, 0, "composite")'
+
