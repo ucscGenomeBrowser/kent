@@ -17,6 +17,7 @@ set parentTableName=""
 set parentTrack=""
 set subTrack=""
 set superTrack=""
+set superLabel=""
 set grp=""
 set grpName=""
 
@@ -68,13 +69,29 @@ set parentTableName=`hgsql -Ne "SELECT settings FROM trackDb WHERE tableName \
   LIKE '$tableName' AND settings like '%subTrack%'" $db \
   | sed -e "s/\\n/\n/g" | grep subTrack | awk '{print $2}'`
 
-if ( "" != $parentTableName ) then
+if ( "" != "$parentTableName" ) then
   #get the Short Label for the parent track
   set parentTrack=`hgsql -Ne "SELECT shortLabel FROM trackDb WHERE tableName \
     LIKE '$parentTableName'" $db`
   echo " parent: $parentTrack"
+  
+  # get the superTrack, if any
+  set superTrack=`hgsql -Ne 'SELECT settings FROM trackDb \
+    WHERE tableName = "'$parentTableName'"' $db | sed "s/\\n/\n/g" \
+    | grep superTrack | awk '{print $2}'`
+else
+  # get the superTrack, if any (if not composite)
+  set superTrack=`hgsql -Ne 'SELECT settings FROM trackDb \
+    WHERE tableName = "'$tableName'"' $db | sed "s/\\n/\n/g" \
+    | grep superTrack | awk '{print $2}'`
 endif
 
+# output supertrack info
+set superLabel=`hgsql -Ne 'SELECT shortLabel FROM trackDb \
+  WHERE tableName = "'$superTrack'"' $db`
+if ( "" != "$superLabel" ) then
+  echo " super:  ${superLabel}..."
+endif
 
 #report about the group that this track is in
  set grpName=`hgsql -Ne "SELECT label FROM grp WHERE name LIKE '$grp'" $db`
