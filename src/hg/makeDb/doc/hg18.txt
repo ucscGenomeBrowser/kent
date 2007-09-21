@@ -17062,6 +17062,22 @@ table itemConf
     hgsql hg18 -e "alter table encodeUcsdNgValChipRnap rename to wgEncodeUcsdNgTaf1ValidRnap"
     hgsql hg18 -e "alter table encodeUcsdNgValChipTaf rename to wgEncodeUcsdNgTaf1ValidTaf"
 
+############################################################################
+# Promote GIS genome-wide ENCODE tracks:
+# GIS PET RNA and GIS ChIP-PET to Regulation group
+# (2007-09-20 kate)
+
+    hgsql hg18 -e "alter table encodeGisChipPet rename to wgEncodeGisChipPet"
+    hgsql hg18 -e "alter table encodeGisChipPetHes3H3K27me3 rename to wgEncodeGisChipPetHes3H3K27me3"
+    hgsql hg18 -e "alter table encodeGisChipPetHes3H3K4me3 rename to wgEncodeGisChipPetHes3H3K4me3"
+    hgsql hg18 -e "alter table encodeGisChipPetMycP493 rename to wgEncodeGisChipPetMycP493"
+    hgsql hg18 -e "alter table encodeGisChipPetStat1Gif rename to wgEncodeGisChipPetStat1Gif"
+    hgsql hg18 -e "alter table encodeGisChipPetStat1NoGif rename to wgEncodeGisChipPetStat1NoGif"
+    hgsql hg18 -e "alter table encodeGisRnaPetHCT116 rename to wgEncodeGisRnaPetHCT116"
+    hgsql hg18 -e "alter table encodeGisRnaPetHes3 rename to wgEncodeGisRnaPetHes3"
+    hgsql hg18 -e "alter table encodeGisRnaPetMCF7 rename to wgEncodeGisRnaPetMCF7"
+    hgsql hg18 -e "alter table encodeGisRnaPetMCF7Estr rename to wgEncodeGisRnaPetMCF7Estr"
+
 ##########################################################
 # Case Control Consortium  (DONE 2007-09-20 (Andy)
 
