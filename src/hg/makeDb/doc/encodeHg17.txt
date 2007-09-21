@@ -69,8 +69,7 @@ exit
     # terms of use
     cp /usr/local/apache/htdocs/goldenPath/hg16/encode/alignments/README.txt .
 
-
-!##########################################################################
+###########################################################################
 ###########################################################################
 # Tracks lifted from hg16
 
@@ -987,33 +986,350 @@ cat > load.csh << 'EOF'
 ##########################################################################
 # UCSD/LI Chip/Chip on Nimblegen and PCR platforms (2006-12-04)
 # from Keith Ching <keching@ucsd.edu)
-
-# New data submitted 2007-03-01 
+    # New data submitted 2007-03-01 
+    # New data submitted 2007-05-23
+    # New data submitted 2007-05-29
+    # Mar07 data resubmitted 2007-08-28
+    # Aug07 data submitted 2007-08-28
+    # NOTE: some of this data is resubmissions of existing tracks
+    # in slightly different formats.  For hg17, I will load two new
+    # tracks -- one for Nimblegen platform, the other for PCR platform.
+    # For hg18, the older tracks will be merged in, with duplicate
+    # datasets removed.
+    # Working... 2007-08-10 (kate)
 
     ssh kkstore03
     cd /cluster/data/encode/UCSD
     mkdir 2006-12-04/lab
     cd 2006-12-04/lab
-    # files: encode.{nimblegen,pcr}.wig.gz, encode_{nimblegen,pcr}_desc.html
-    # Nimblegen data: 6 histones, Pol2, TAF1, p300 in HeLa
-    # PCR data: CTCF, 2 histones, TAF1 in HeLa, U937, GM, and IMR90
-    # candidates for merging into existing tracks: LI Ng gIF, LI Chip Various
-    # (asking submitters 2006-12-20 kate)
-    # Adding 2006-12-04 data (hartera, 2007-05-02)
-    
+# files: encode.{nimblegen,pcr}.wig.gz, encode_{nimblegen,pcr}_desc.html
+# Nimblegen data (9 tracks): 6 histones, Pol2, TAF1, p300 in HeLa
+# PCR data (8 tracks): CTCF, 2 histones, TAF1 in HeLa, U937, GM, and IMR90
+# All data submitted on hg17, although the PCR array is hg16.
+# The Ng data was overlap-clipped by the submitter to 38bp regions,
+# starting at the beginning of the first 50mer (later submissions were
+# clipped starting at the 6th base of the first 50mer).
+
+# candidates for merging into existing tracks: LI Ng gIF, LI Chip Various
+# (asking submitters 2006-12-20 kate)
+/cluster/data/encode/bin/scripts/splitTracks.pl lab/encode.nimblegen.wig
+# total lines read: 3466350, track declarations: 9, data lines: 3466341
+cat > load.ng.csh << 'EOF'
+foreach f (t0 t1 t2 t3 t4 t5 t6 t7 t8)
+set ab = `sed -n '/track/s/.*name=\(.*\)_0 description.*/\1/p' $f`
+    set d = HeLa$ab
+    mv $f $d.wig
+    set table = encodeUcsdLiNg$d
+    echo $table
+    grep '^chr' $d.wig | hgLoadBed -onServer -bedGraph=4 hg17 $table stdin
+    checkTableCoords hg17 $table
+    end
+    'EOF'
+    csh load.ng.csh >&! load.ng.log &
+#Loaded 385149 elements of size 4
+#encodeUcsdLiNgHeLaH3
+#encodeUcsdLiNgHeLaH3ac
+#encodeUcsdLiNgHeLaH4ac
+#encodeUcsdLiNgHeLaH3K4me1
+#encodeUcsdLiNgHeLaH3K4me2
+#encodeUcsdLiNgHeLaH3K4me3
+#encodeUcsdLiNgHeLaTAF1
+#encodeUcsdLiNgHeLaRNAPII
+#encodeUcsdLiNgHeLap300
+
+    /cluster/data/encode/bin/scripts/splitTracks.pl lab/encode.pcr.wig
+# total lines read: 196240, track declarations: 8, data lines: 196232
+    cat > load.pcr.csh << 'EOF'
+foreach f (t0 t1 t2 t3 t4 t5 t6 t7)
+    set ab = `sed -n '/track/s/.*name=\([^_][^_]*\).*/\1/p' $f`
+    set cell = `sed -n "/track/s/.*name=.*_\(.*\) description.*/\1/p" $f`
+    set d = ${cell}${ab}
+    mv $f $d.wig
+    set table = encodeUcsdLiPcr$d
+    echo $table
+    grep '^chr' $d.wig | hgLoadBed -onServer -bedGraph=4 hg17 $table stdin
+    checkTableCoords hg17 $table
+    end
+'EOF'
+    csh load.pcr.csh >&! load.pcr.log &
+    # Loaded 24529 elements of size 4
+    # encodeUcsdLiPcrGM06990CTCF
+    # encodeUcsdLiPcrHeLaCTCF
+    # encodeUcsdLiPcrU937CTCF
+    # encodeUcsdLiPcrGM06990H3K4me1
+    # encodeUcsdLiPcrGM06990H3K4me3
+    # encodeUcsdLiPcrHeLaH3K4me3
+    # encodeUcsdLiPcrIMR90H3K4me3
+    # encodeUcsdLiPcrGM06990TAF1
+
+    # New data submitted 2007-03-01 
     # Data includes various cell lines and antibodies using both PCR and 
     # Nimblegen and there are no gamma interferon treatments. 
-    # New data submitted 2007-03-01 
-    # Nimblegen data: 3 histones, Pol2, TAF2, CTCF in GM06990
-    #                 4 histones, CTCF in HeLa
-    # PCR data: 4 histones in HeLa, H3K4me2 in GM06990
+    # Nimblegen data (11 tracks): 3 histones, Pol2, TAF2, CTCF in GM06990
+    #                             4 histones, CTCF in HeLa
+    # PCR data (20 tracks): histones, CTCF, TAFII, p300 in GM, K562, HeLa, IMR90, Tonsil
+    # NOTE: PCR data submitted in hg16 coords
+    # NOTE: For PCR data there are 4 tracks with the same label (TAF2/p250)
+    # and 3 tracks with another (p300_C).  The name generator was confused by underscore
+    # in antibody name. 
+    # This data was resubmitted on 8/28 (see below)
     cd /cluster/data/encode/UCSD
     mkdir -p 2007-03-01/lab
     cd 2007-03-01/lab
+    # load data from FTP site
+    cd ..
+    /cluster/data/encode/bin/scripts/splitTracks.pl lab/nimblegen.wig
+    # total lines read: 4236650, track declarations: 11, data lines: 4236639
+cat > load.ng.csh << 'EOF'
+    foreach f (t0 t1 t2 t3 t4 t5 t6 t7 t8 t9 t10)
+        set ab = `sed -n '/track/s/.*name=\([^_()][^_()]*\).*/\1/p' $f`
+        set cell = `sed -n "/track/s/.*name=.*_\(.*\)_Chromatin description.*/\1/p" $f`
+        set d = ${cell}${ab}
+        mv $f $d.wig
+        set table = encodeUcsdLiNg$d
+        echo $table
+        grep '^chr' $d.wig | hgLoadBed -onServer -bedGraph=4 hg17 $table stdin
+        checkTableCoords hg17 $table
+    end
+'EOF'
+    csh load.ng.csh >&! load.ng.log &
+    # Loaded 385149 elements of size 4
+    # encodeUcsdLiNgGM06990TAFII
+    # encodeUcsdLiNgGM06990H3K4me3
+    # encodeUcsdLiNgGM06990H3K27Ac
+    # encodeUcsdLiNgGM06990RNAPII
+    # encodeUcsdLiNgGM06990CTCF
+    # encodeUcsdLiNgGM06990H3K18Ac
+    # encodeUcsdLiNgHeLaCTCF
+    # encodeUcsdLiNgHeLaH3K18Ac
+    # encodeUcsdLiNgHeLaH3K27Ac
+    # encodeUcsdLiNgHeLaH3K9Ac
+    # encodeUcsdLiNgHeLaH3K27me3
 
     # New data submitted 2007-05-23
-    #  PCR data:  Histones, TAF2, Pol2, CTCF in GM and K562
-    
+    #  PCR data (7 tracks):  Histones, TAF2, Pol2, CTCF in GM and K562
+    #  NOTE: submitted in hg16 coords
+    # Lifted and reloaded 2007-09-05 (kate)
+    mkdir -p 2007-05-23/lab
+    cd 2007-05-23/lab
+    cp /var/ftp/encode/ucsc.zip .
+    unzip ucsc.zip
+    wc -l *.wig
+  # 24538 ave_H3K18Ac_GM.rst.wig
+  # 24538 ave_H3K27Ac_GM.rst.wig
+  # 24538 ave_H3K9Ac_GM.rst.wig
+  # 24538 ave_H3K9Ac_K562.rst.wig
+  # 24538 ave_RNAPII_GM.rst.wig
+  # 24538 ave_TAF250_GM.rst.wig
+  # 24538 ave_ctcf_gm.rst.wig
+
+    cd ..
+cat > load.pcr.csh << 'EOF'
+    foreach f (lab/*.wig)
+        set ab = `sed -n '/track/s/.*name=\([^_][^_]*\).*/\1/p' $f`
+        set cell = `sed -n "/track/s/.*name=.*_\(.*\) description.*/\1/p" $f`
+        set d = ${cell}${ab}
+        set table = encodeUcsdLiPcr$d
+        echo $table
+        grep '^chr' $f | liftOver stdin \
+                /cluster/data/hg16/bed/liftOver/hg16ToHg17.over.chain.gz \
+                $d.hg17.bedGraph $d.unmapped
+        hgLoadBed -onServer -bedGraph=4 hg17 $table $d.hg17.bedGraph
+        checkTableCoords hg17 $table
+    end
+'EOF'
+    csh load.pcr.csh >&! load.pcr.log &
+    # Loaded 24528 elements of size 4
+    # NOTE: dropped 9 elements on chrX
+    # encodeUcsdLiPcrGMH3K18Ac
+    # encodeUcsdLiPcrGMH3K27Ac
+    # encodeUcsdLiPcrGMH3K9Ac
+    # encodeUcsdLiPcrK562H3K9Ac
+    # encodeUcsdLiPcrGMRNAPII
+    # encodeUcsdLiPcrGMTAF250
+    # encodeUcsdLiPcrgmctcf
+
+    # rename for consistency
+    hgsql hg17 -e "alter table encodeUcsdLiPcrgmctcf rename to encodeUcsdLiPcrGMCTCF"
+
+    # New data submitted 2007-05-29
+    # Nimblegen data (10 tracks): TAF, histones in GM and K562
+    mkdir -p 2007-05-29/lab
+    cd 2007-05-29/lab
+    # load data from FTP site
+    cd ..
+cat > load.ng.csh << 'EOF'
+    foreach f (lab/*.wig)
+        set ab = `sed -n '/track/s/.*name=\([^_()][^_()]*\).*/\1/p' $f`
+        set cell = `sed -n "/track/s/.*name=.*_\(.*\)_Chromatin description.*/\1/p" $f`
+        set d = ${cell}${ab}
+        mv $f $d.wig
+        set table = encodeUcsdLiNg$d
+        echo $table
+        grep '^chr' $d.wig | hgLoadBed -onServer -bedGraph=4 hg17 $table stdin
+        checkTableCoords hg17 $table
+    end
+'EOF'
+    csh load.ng.csh >&! load.ng.log &
+    # Loaded 385149 elements of size 4
+    # encodeUcsdLiNgK562TAFII
+    # encodeUcsdLiNgK562H3K4me1
+    # encodeUcsdLiNgK562H3K27Ac
+    # encodeUcsdLiNgK562H3K18Ac
+    # encodeUcsdLiNgK562H3K4me3
+    # encodeUcsdLiNgK562H3K4me2
+    # encodeUcsdLiNgK562H3K9Ac
+    # encodeUcsdLiNgGM06990H3K4me1
+    # encodeUcsdLiNgGM06990H3K9Ac
+    # encodeUcsdLiNgGM06990H3K4me2
+
+    # Mar07 data resubmitted 2007-08-28
+    # 20 sets of PCR data, submitted in hg16 coords
+    # Loaded 2007-09-04 (kate)
+    mkdir -p 2007-08-28-Mar/lab
+    cd 2007-08-28-Mar/lab
+    mv /var/ftp/encode/UCSC200702.zip .
+    unzip UCSC200702.zip
+    wc -l *.wig
+   #24538 ave_CTCF_K562.rst.wig
+   #24538 ave_H2AZ_HeLa.rst.wig
+   #24538 ave_H3K18Ac_K562.rst.wig
+   #24538 ave_H3K27Ac_HeLa.rst.wig
+   #24538 ave_H3K27Ac_K562.rst.wig
+   #24538 ave_H3K4me1_IMR90.rst.wig
+   #24538 ave_H3K4me1_K562.rst.wig
+   #24538 ave_H3K4me2_GM06990.rst.wig
+   #24538 ave_H3K4me2_K562.rst.wig
+   #24538 ave_H3K4me3_K562.rst.wig
+   #24538 ave_H4K20me1_HeLa.rst.wig
+   #24538 ave_H4K20me2_HeLa.rst.wig
+   #24538 ave_H4K20me3_HeLa.rst.wig
+   #24538 ave_TAF250_GM06990.rst.wig
+   #24538 ave_TAF250_HeLa.rst.wig
+   #24538 ave_TAF250_K562.rst.wig
+   #24538 ave_TAF250_Tonsil.rst.wig
+   #24538 ave_p300_GM06990.rst.wig
+   #24538 ave_p300_IMR90.rst.wig
+   #24538 ave_p300_K562.rst.wig
+    cd ..
+    # confirmed that no datasets below will overwrite previously
+    # loaded tables (no resubmissions).  See oldtables.txt and tables.txt
+cat > load.pcr.csh << 'EOF'
+    foreach f (lab/*.wig)
+        set ab = `sed -n '/track/s/.*name=\([^_][^_]*\).*/\1/p' $f`
+        set cell = `sed -n "/track/s/.*name=.*_\(.*\) description.*/\1/p" $f`
+        set d = ${cell}${ab}
+        set table = encodeUcsdLiPcr$d
+        echo $table
+        grep '^chr' $f | liftOver stdin \
+                /cluster/data/hg16/bed/liftOver/hg16ToHg17.over.chain.gz \
+                $d.hg17.bedGraph $d.unmapped
+        hgLoadBed -onServer -bedGraph=4 hg17 $table $d.hg17.bedGraph
+        checkTableCoords hg17 $table
+    end
+'EOF'
+    csh load.pcr.csh >&! load.pcr.log &
+    # Loaded 24528 elements of size 4
+    # NOTE: 9 elements on chrX dropped by lift
+        # encodeUcsdLiPcrK562CTCF
+        # encodeUcsdLiPcrHeLaH2AZ
+        # encodeUcsdLiPcrK562H3K18Ac
+        # encodeUcsdLiPcrHeLaH3K27Ac
+        # encodeUcsdLiPcrK562H3K27Ac
+        # encodeUcsdLiPcrIMR90H3K4me1
+        # encodeUcsdLiPcrK562H3K4me1
+        # encodeUcsdLiPcrGM06990H3K4me2
+        # encodeUcsdLiPcrK562H3K4me2
+        # encodeUcsdLiPcrK562H3K4me3
+        # encodeUcsdLiPcrHeLaH4K20me1
+        # encodeUcsdLiPcrHeLaH4K20me2
+        # encodeUcsdLiPcrHeLaH4K20me3
+        # encodeUcsdLiPcrGM06990TAF250
+        # encodeUcsdLiPcrHeLaTAF250
+        # encodeUcsdLiPcrK562TAF250
+        # encodeUcsdLiPcrTonsilTAF250
+        # encodeUcsdLiPcrGM06990p300
+        # encodeUcsdLiPcrIMR90p300
+        # encodeUcsdLiPcrK562p300
+
+    # Aug07 data submitted 2007-08-28
+    # Loaded 2007-09-05 (kate)
+    # PCR data: 4 datasets (YY1 and p300 in HeLa, H4Ac in K562, CTCF in IMR90)
+    # Submitted in hg16 coordinates
+    mkdir -p 2007-08-28/lab
+    cd 2007-08-28/lab
+    mv /var/ftp/encode/encode200708.zip
+    unzip encode200708.zip
+  # 24538 ave_CTCF_IMR90.rst.wig
+  # 24538 ave_H4Ac_K562.rst.wig
+  # 24538 ave_YY1_HeLa.rst.wig
+  # 24538 ave_p300_HeLa.rst.wig
+  # 61 encode_pcr_desc.html
+
+    cd ..
+cat > load.pcr.csh << 'EOF'
+    foreach f (lab/*.wig)
+        set ab = `sed -n '/track/s/.*name=\([^_][^_]*\).*/\1/p' $f`
+        set cell = `sed -n "/track/s/.*name=.*_\(.*\) description.*/\1/p" $f`
+        set d = ${cell}${ab}
+        set table = encodeUcsdLiPcr$d
+        echo $table
+        grep '^chr' $f | liftOver stdin \
+                /cluster/data/hg16/bed/liftOver/hg16ToHg17.over.chain.gz \
+                $d.hg17.bedGraph $d.unmapped
+        hgLoadBed -onServer -bedGraph=4 hg17 $table $d.hg17.bedGraph
+        checkTableCoords hg17 $table
+    end
+'EOF'
+    csh load.pcr.csh >&! load.pcr.log &
+    # Loaded 24528 elements of size 4
+    # encodeUcsdLiPcrIMR90CTCF
+    # encodeUcsdLiPcrK562H4Ac
+    # encodeUcsdLiPcrHeLaYY1
+    # encodeUcsdLiPcrHeLap300
+
+    # data distribution for 2007 PCR data
+     grep ^chr *12-04/lab/*pcr*wig *Mar/*.hg17.bedGraph *5-23/*.hg17.bedGraph *-08-28/*.hg17.bedGraph | awk '{print $4}' | sort -nr | head
+    # 102.5771
+    # 38.3034
+    # 27.3306
+    # 26.7377
+    # 24.0476
+
+     grep ^chr *12-04/lab/*pcr*wig *Mar/*.hg17.bedGraph *5-23/*.hg17.bedGraph *-08-28/*.hg17.bedGraph | awk '{print $4}' | sort -nr | grep -v ^102 | textHistogram stdin -real -binSize=.2 -maxBinCount=50
+     large values truncated: need 191 bins or larger binSize than 0.2
+
+    0.000000 ***************************** 153175
+    0.200000 ***** 27298
+    0.400000 **** 18398
+    0.600000 ************ 64313
+    0.800000 ************************************************************ 313021
+    1.000000 ************************************************* 257011
+    1.200000 ************ 63866
+    1.400000 **** 22781
+    1.600000 ** 9400
+    1.800000 * 6465
+    2.000000 * 3904
+    2.200000 * 4096
+    2.400000  2151
+    2.600000  1658
+    2.800000  1313
+
+     grep ^chr *12-04/lab/*nimb*wig *-03-01/*.wig *5-29 | awk '{print $4}' | sort -nr | head
+     #4.48
+     #4.440
+     #4.40
+     #4.319
+
+     # NOTE: multiple submissions for the same experiment were provided:
+     # CTCF in GM: 12/06, 5/07
+     # TAF1 in GM: 12/06, 3/07, 5/07
+     # Asked Keith Ching  -- he says keep only the 5/7 versions
+
+     hgsql hg17 -e "drop table encodeUcsdLiPcrGM06990CTCF"
+     hgsql hg17 -e "drop table encodeUcsdLiPcrGM06990TAF1"
+     hgsql hg17 -e "drop table encodeUcsdLiPcrGM06990TAF250"
+
 ##########################################################################
 # UT-Austin (Vishy Iyer lab) Chip/chip  (2005-10-10 kate)
     cd /cluster/data/encode
