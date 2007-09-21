@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/automation/doBlastzChainNet.pl instead.
 
-# $Id: doBlastzChainNet.pl,v 1.13 2007/09/19 18:48:44 angie Exp $
+# $Id: doBlastzChainNet.pl,v 1.14 2007/09/21 20:20:17 hiram Exp $
 
 # to-do items:
 # - lots of testing
@@ -531,6 +531,7 @@ sub doBlastzClusterRun {
 		     '{check out exists ' .
 		     $outRoot . '/$(file1)/$(file1)_$(file2).psl }');
   &HgAutomate::makeGsub($runDir, $templateCmd);
+  `touch "$runDir/para_hub_$paraHub"`;
   my $whatItDoes = "It sets up and performs the big cluster blastz run.";
   my $bossScript = new HgRemoteScript("$runDir/doClusterRun.csh", $paraHub,
 				      $runDir, $whatItDoes, $DEF);
@@ -568,6 +569,7 @@ sub doCatRun {
   &HgAutomate::mustMkdir($runDir);
   &HgAutomate::makeGsub($runDir,
       "./cat.csh \$(path1) {check out exists ../pslParts/\$(file1).psl.gz}");
+  `touch "$runDir/para_hub_$paraHub"`;
 
   my $outRoot = $opt_blastzOutRoot ? "$opt_blastzOutRoot/psl" : '../psl';
 
@@ -659,6 +661,7 @@ sub doChainRun {
   &HgAutomate::mustMkdir($runDir);
   &HgAutomate::makeGsub($runDir,
 	       "chain.csh \$(file1) {check out line+ chain/\$(file1).chain}");
+  `touch "$runDir/para_hub_$paraHub"`;
 
   my $seq1Dir = $defVars{'SEQ1_CTGDIR'} || $defVars{'SEQ1_DIR'};
   my $seq2Dir = $defVars{'SEQ2_CTGDIR'} || $defVars{'SEQ2_DIR'};
@@ -1367,6 +1370,9 @@ rm -fr $outRoot/
 $rootCanal
 rm -fr $buildDir/axtChain/run/chain/
 rm -f  $buildDir/axtChain/noClass.net
+rm -f  $buildDir/run.blastz/batch.bak
+rm -f  $buildDir/run.cat/batch.bak
+rm -f  $buildDir/axtChain/run/batch.bak
 _EOF_
     );
   if ($splitRef) {
