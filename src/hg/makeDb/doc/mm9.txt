@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.26 2007/09/18 03:24:45 angie Exp $"
+#	"$Id: mm9.txt,v 1.27 2007/09/21 22:23:48 kate Exp $"
 #
 
 #######################################################################
@@ -3304,6 +3304,56 @@ TMPDIR=/scratch/tmp
     #	real    9m47.163s
     cat fb.danRer5.chainMm9Link.txt
     #	34017483 bases of 1435609608 (2.370%) in intersection
+
+#########################################################################
+# BLASTZ/CHAIN/NET Guinea Pig cavPor2 (2007-09-19 kate)
+    ssh kkstore06
+    mkdir /cluster/data/mm9/bed/blastzCavPor2.2007-09-19
+    cd /cluster/data/mm9/bed/blastzCavPor2.2007-09-19
+
+    cat << '_EOF_' > DEF
+# mouse vs guinea pig
+BLASTZ_M=50
+
+# TARGET: Mouse Mm9
+SEQ1_DIR=/scratch/data/mm9/mm9.2bit
+SEQ1_LEN=/cluster/data/mm9/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Guinea pig cavPor2
+SEQ2_DIR=/san/sanvol1/scratch/cavPor2/cavPor2.2bit
+SEQ2_LEN=/san/sanvol1/scratch/cavPor2/chrom.sizes
+
+# chunking similar to cat (similar number of scaffolds)
+SEQ2_CHUNK=30000000
+SEQ2_LIMIT=500
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm9/bed/blastzCavPor2.2007-09-19
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    doBlastzChainNet.pl `pwd`/DEF \
+	-chainMinScore=3000 -chainLinearGap=medium \
+        -bigClusterHub=pk >& do.log  &
+
+    # load nets manually -- automated loading fails as classification info 
+    #  not available (no database)
+    ssh hgwdev
+    cd /cluster/data/mm9/bed/blastz.cavPor2/axtChain
+    netFilter -minGap=10 noClass.net | hgLoadNet -warn mm9 netCavPor2 stdin
+    netFilter -minGap=10 mm9.cavPor2.rbest.net.gz |  \
+        hgLoadNet -warn mm9 netRBestCavPor2 stdin
+
+    doBlastzChainNet.pl `pwd`/DEF \
+	-chainMinScore=3000 -chainLinearGap=medium \
+        -continue=download >& do2.log &
+
+    # reciprocal best net mafs for multiz
+    ~/kent/src/hg/utils/automation/doRecipBest.pl mm9 cavPor2 >&! rbest.log &
+
 
 #########################################################################
 ## 4-Way Multiz (DONE - 2007-09-07 - Hiram)
