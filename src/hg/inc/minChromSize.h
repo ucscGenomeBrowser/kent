@@ -1,5 +1,5 @@
 /* minChromSize - routines to calculate the minimum size of
- * all chromosomes needed to cover available annotatins. 
+ * all chromosomes needed to cover available annotations. 
  * Generally this is helpful when constructing binKeepers
  * for random access to annotations. */
 
