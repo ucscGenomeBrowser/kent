@@ -34,6 +34,45 @@ hgsql hg18 -e "DELETE FROM grp where name='encode'"
     cp encodeRegions.bed ~/browser/ENCODE/build35_regions.bed
     # cvs add, install in /usr/local/apache/htdocs/ENCODE
 
+##########################################################################
+# DOWNLOADS (2007-09-21 kate)
+
+    ssh hgwdev
+    cd /usr/local/apache/htdocs/goldenPath/hg18
+    mkdir -p encode
+    cd encode
+    # release terms
+    cp ../../hg17/encode/README.txt .
+    # annotation database
+    # request admin set up automated database dump
+    mkdir database
+    # auxiliary data files
+    mkdir datafiles 
+    # sequences
+    cd /cluster/data/encode/convertHg18
+    hgsql hg18 -N -e \
+      "SELECT name, chrom, chromStart, chromEnd FROM encodeRegions ORDER BY name">regions.txt 
+
+    ssh kolossus
+    cd /cluster/data/encode/convertHg18
+    mkdir regions
+    cd regions
+    /cluster/data/encode/bin/scripts/encodeSequences.pl -upper \
+        ../regions.txt /iscratch/i/hg18/nib  > hg18.fa
+    /cluster/data/encode/bin/scripts/encodeSequences.pl -masked \
+        ../regions.txt /iscratch/i/hg18/nib  > hg18.msk.fa
+    faSize -detailed hg18.fa > hg18_count.txt
+    gzip *.fa
+    md5sum *.fa.gz > md5sum.txt
+    # copy regions/README.txt from hg17 and edit
+
+    ssh hgwdev
+    cd /usr/local/apache/htdocs/goldenPath/hg18/encode
+    ln -s /cluster/data/encode/convertHg18/regions .
+    cp ../../hg17/encode/regions/README.txt regions
+    # edit README
+
+
 #############################################################################
 # MSA alignments (kate)
 #  Submittted by Elliott Margulies, 2007-05-11
