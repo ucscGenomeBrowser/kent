@@ -17,7 +17,7 @@
 #include "errabort.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: htmshell.c,v 1.33 2007/04/26 22:21:32 galt Exp $";
+static char const rcsid[] = "$Id: htmshell.c,v 1.34 2007/09/21 23:59:25 hiram Exp $";
 
 jmp_buf htmlRecover;
 
@@ -208,6 +208,19 @@ printf("%s", htmlWarnStartPattern());
 htmlVaParagraph(format,args);
 printf("%s", htmlWarnEndPattern());
 htmlHorizontalLine();
+
+{
+char *ip = getenv("REMOTE_ADDR");
+time_t nowTime = time(NULL);
+struct tm *tm;
+tm = localtime(&nowTime);
+char *ascTime = asctime(tm);
+char timeStamp[128];
+size_t len = strlen(ascTime);
+if (len > 3) ascTime[len-2] = (char)0;
+safef(timeStamp, sizeof timeStamp, "[%s] [client %s] ", ascTime, ip);
+fputs(timeStamp, stderr);
+}
 
 /* write warning/error message to stderr so they get logged. */
 vfprintf(stderr, format, argscp);
