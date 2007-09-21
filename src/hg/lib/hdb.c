@@ -35,7 +35,7 @@
 #include "customTrack.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.331 2007/09/05 04:30:57 markd Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.332 2007/09/21 23:31:01 angie Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -2753,13 +2753,19 @@ if (fitFields(hash, "chrom", "chromStart", "chromEnd", retChrom, retStart, retEn
     fitField(hash, "span", retSpan);
     }
 /* Look for psl-style names. */
-else if (fitFields(hash, "tName", "tStart", "tEnd", retChrom, retStart, retEnd))
+else if (fitFields(hash, "tName", "tStart", "tEnd", retChrom, retStart, retEnd)
+	 && fitField(hash, "qName", retName))
     {
-    fitField(hash, "qName", retName);
     fitField(hash, "strand", retStrand);
     fitField(hash, "blockCount", retCount);
     fitField(hash, "tStarts", retStarts);
     fitField(hash, "blockSizes", retEndsSizes);
+    }
+/* Look for altGraphX names. */
+else if (fitFields(hash, "tName", "tStart", "tEnd", retChrom, retStart, retEnd)
+	 && fitField(hash, "name", retName))
+    {
+    fitField(hash, "strand", retStrand);
     }
 /* Look for gene prediction names. */
 else if (fitFields(hash, "chrom", "txStart", "txEnd", retChrom, retStart, retEnd))
