@@ -1118,8 +1118,8 @@ _EOF_
 
 
 ###########################################################################
-# BLASTZ/CHAIN/NET APIMEL3 (DONE 12/11/06)
-    ssh kkstore04
+# BLASTZ/CHAIN/NET APIMEL3 (DONE 7/5/07 except for loading of netApiMel3)
+    ssh kkstore05
     mkdir /cluster/data/dm3/bed/blastz.apiMel3.2006-12-11
     cd /cluster/data/dm3/bed/blastz.apiMel3.2006-12-11    
     cat <<_EOF_ > DEF
@@ -1156,6 +1156,12 @@ _EOF_
 #flyBaseLiftGene 22.721%, chainApiMel3Link 17.865%, both 8.790%, cover 38.68%, enrich 2.17x
     rm -f /cluster/data/dm3/bed/blastz.apiMel3
     ln -s blastz.apiMel3.2006-12-11 /cluster/data/dm3/bed/blastz.apiMel3
+    # 7/5/07: continue to make download files.
+    doBlastzChainNet.pl DEF -chainMinScore 3000 \
+      -bigClusterHub pk -smallClusterHub pk \
+      -blastzOutRoot /cluster/bluearc/dm3apiMel3 \
+      -continue download >>& do.log &
+    tail -f do.log
 
 
 ###########################################################################
@@ -1651,6 +1657,7 @@ zcat `ls -1 /san/sanvol1/scratch/dm3/phastCons/POSTPROBS/$chr.*.pp.gz \
 
 #########################################################################
 # FLYBASE 5.1 ANNOTATIONS (DONE 4/6/07 angie)
+# OBSOLETED -- see FLYBASE 5.3 ANNOTATIONS BELOW
     ssh kkstore05
     mkdir /cluster/data/dm3/bed/flybase5.1
     cd /cluster/data/dm3/bed/flybase5.1
@@ -1772,53 +1779,45 @@ zcat `ls -1 /san/sanvol1/scratch/dm3/phastCons/POSTPROBS/$chr.*.pp.gz \
 
 
 #########################################################################
-# CHROMOSOME BANDS (DONE 4/5/07 angie)
+# CHROMOSOME BANDS (DONE (5.1) 4/5/07 angie - REDONE (5.3) 9/18/07)
     ssh hgwdev
-    cd /cluster/data/dm3/bed/flybase5.1
-    grep chromosome_band dmel-all-r5.1.gff \
+    cd /cluster/data/dm3/bed/flybase5.3
+    grep chromosome_band dmel-all-r5.3.gff \
     | perl -wpe 'chomp; @w = split; \
                  $w[3]--; $w[3] = 0 if ($w[3] < 0); \
                  $w[8] =~ s/^.*Name=band-(\w+);$/$1/; \
+                 if ($w[8] !~ /^\d+[A-Z]\d+$/) { s/^.*$//; next; } \
                  if ($w[4] <= 0) { s/^.*$//; } else { \
-                 s/^.*$/chr$w[0]\t$w[3]\t$w[4]\t$w[8]\t\n/; }' \
+                 s/^.*$/chr$w[0]\t$w[3]\t$w[4]\t$w[8]\tn\/a\n/; }' \
       > cytoBand.txt
     hgLoadSqlTab dm3 cytoBand ~/kent/src/hg/lib/cytoBand.sql cytoBand.txt
-    # Find and edit the items that are off the end of their chroms:
-    checkTableCoords -verbose=2 dm3 cytoBand
-#dm3.cytoBand item 20F4 chrX:22415596-22775017: chromEnd > chromSize 22422827
-#dm3.cytoBand item 102F8 chr4:1083991-1408233: chromEnd > chromSize 1351857
-#dm3.cytoBand item 100E3 chr3R:27858996-27922768: chromEnd > chromSize 27905053
-#dm3.cytoBand item 100F1 chr3R:27922768-28010702: chromEnd > chromSize 27905053
-#dm3.cytoBand item 100F2 chr3R:28010702-28134757: chromEnd > chromSize 27905053
-#dm3.cytoBand item 100F3 chr3R:28134757-28234649: chromEnd > chromSize 27905053
-#dm3.cytoBand item 100F4 chr3R:28234649-28310627: chromEnd > chromSize 27905053
-#dm3.cytoBand item 100F5 chr3R:28310627-28686604: chromEnd > chromSize 27905053
-#dm3.cytoBand item 60F5 chr2R:20989308-21321410: chromEnd > chromSize 21146708
-    # Reload and now it is clean:
-    hgLoadSqlTab dm3 cytoBand ~/kent/src/hg/lib/cytoBand.sql cytoBand.txt
+    # Remove the items that are off the end of their chroms:
+    perl -wpe 's/^(\w+)\t(\d+)$/ \
+      delete from cytoBand where chrom="$1" and chromStart >= $2; \
+      update cytoBand set chromEnd = $2 where chrom="$1" and chromEnd > $2;/' \
+      ../../chrom.sizes \
+    | hgsql dm3
     checkTableCoords -verbose=2 dm3 cytoBand
 
-    # Normally we would just create cytoBandIdeo by select * from cytoBand --
-    # but that gives too high of a resolution for any bands to be visible!  
-    # So make a boiled-down cytoBandIdeo that just has {number, letter} 
-    # instead of {number, letter, number}.
-    perl -we 'while (<>) { \
-                chomp; @w=split(" "); \
-                if ($w[3] =~ /(\d+[A-Z]+)\d+/) { \
-                  $b = $1; \
-                } else { die "doh!" } \
-                if (! defined $lastB) { \
-                  $start = $w[1]; \
-                } elsif ($lastB ne $b) { \
-                  print "$chrom\t$start\t$end\t$lastB\t\n"; \
-                  $start = $w[1]; \
-                } \
-                ($chrom, $end, $lastB) = ($w[0], $w[2], $b); \
-              } \
-              print "$chrom\t$start\t$end\t$lastB\t\n";' cytoBand.txt \
+    # As of 5.3, the GFF now includes what we need to make cytoBandIdeo
+    # directly:
+    grep chromosome_band dmel-all-r5.3.gff \
+    | perl -wpe 'chomp; @w = split; \
+                 $w[3]--; $w[3] = 0 if ($w[3] < 0); \
+                 $w[8] =~ s/^.*Name=band-(\w+);$/$1/; \
+                 if ($w[8] !~ /^\d+[A-Z]$/) { s/^.*$//; next; } \
+                 if ($w[4] <= 0) { s/^.*$//; } else { \
+                 s/^.*$/chr$w[0]\t$w[3]\t$w[4]\t$w[8]\tn\/a\n/; }' \
       > cytoBandIdeo.txt
     hgLoadSqlTab dm3 cytoBandIdeo ~/kent/src/hg/lib/cytoBandIdeo.sql \
       cytoBandIdeo.txt
+    # Remove the items that are off the end of their chroms:
+    perl -wpe 's/^(\w+)\t(\d+)$/ \
+      delete from cytoBandIdeo where chrom="$1" and chromStart >= $2; \
+      update cytoBandIdeo set chromEnd = $2 where chrom="$1" and chromEnd > $2;/' \
+      ../../chrom.sizes \
+    | hgsql dm3
+    checkTableCoords -verbose=2 dm3 cytoBandIdeo
 
 
 #########################################################################
@@ -1839,8 +1838,10 @@ ftp://ftp.flybase.net/releases/FB2006_01/dmel_r5.1/chado-xml/chado_dmel_genes.xm
 
 
 #########################################################################
-# MAP UNIPROT IDS TO CG*-R* IDS (DONE 4/5/07 angie - REDONE 6/18/07)
+# MAP UNIPROT IDS TO CG*-R* IDS
+# FlyBase 5.1 history: (DONE 4/5/07 angie - REDONE 6/18/07)
 # Redone 6/18/07 after folding in DHGP's chr*Het heterochromatin annotations.
+# FlyBase 5.3 history: (DONE 9/20/07 angie)
     # In dm2, I combined three sources: specific transcript mappings 
     # from uniProt.description, less specific gene mappings from 
     # uniProt.description, and fbUniProt mappings extracted from 
@@ -1894,10 +1895,24 @@ ftp://ftp.flybase.net/releases/FB2006_01/dmel_r5.1/chado-xml/chado_dmel_genes.xm
     cp /cluster/data/dm2/bed/uniProtToFlyBase/vagueDescription.pl .
     ./vagueDescription.pl uniProt.description.txt | sort \
       > uniProtMappingVague.txt
-    # Write a perl script, combineMappings.pl, to add any additional mappings
-    # available from acode to the UniProt mappings.  (dm2 version.)
-    /cluster/data/dm2/bed/uniProtToFlyBase/combineMappings.pl transcriptIds.txt \
-      uniProtMapping.txt uniProtMappingVague.txt /dev/null \
+    # acode is no longer available, but UniProt mappings can be gleaned from
+    # FlyBase GFF3.  
+    perl -we 'while (<>) { chomp; @w = split; \
+        next unless ($w[8] && $w[1] eq "FlyBase" && $w[2] eq "gene" && \
+                     $w[8] =~ /FlyBase_Annotation_IDs:(CG\d+)/); \
+        $cg = $1; \
+        while ($w[8] =~ s/^.*?UniProt\/[-\w]+:(\w+)//) { \
+          print "$cg\t$1\n"; \
+        } \
+      }' ../flybase5.3/dmel-all-r5.3.gff \
+      > flyBaseCgToUniProt.txt
+    # Using dm2 perl script, combineMappings.pl, to add any additional mappings
+    # available from acode to the UniProt mappings.  Since the second arg
+    # is vague-gene and third arg is vague-transcript, feed both vague-gene
+    # files in as the second input:
+    cat uniProtMappingVague.txt flyBaseCgToUniProt.txt \
+    | /cluster/data/dm2/bed/uniProtToFlyBase/combineMappings.pl transcriptIds.txt \
+      uniProtMapping.txt - /dev/null \
       > flyBaseToUniProt.txt
     # Make a 2-column version for loading:
     awk '{print $1 "\t" $2;}' flyBaseToUniProt.txt > flyBaseToUniProtLoad.txt
@@ -1913,13 +1928,16 @@ ftp://ftp.flybase.net/releases/FB2006_01/dmel_r5.1/chado-xml/chado_dmel_genes.xm
 #########################################################################
 # HGNEAR TABLES
 
-# HGNEAR PROTEIN BLAST TABLES (DONE (except for dmBlastTab in other dbs -- leave those with dm2) 4/6/07 - REDONE 6/18/07)
+# HGNEAR PROTEIN BLAST TABLES 
+# FlyBase 5.1 history: (dm3.* DONE 4/6/07 - dm3.* REDONE 6/18/07,
+# *.dmBlastTab DONE 7/18/07)
 # Redone 6/18/07 after folding in DHGP's chr*Het heterochromatin annotations.
+# FlyBase 5.3 history: (DONE 9/18/07)
     ssh hgwdev
     mkdir /cluster/data/dm3/bed/hgNearBlastp
     cd /cluster/data/dm3/bed/hgNearBlastp
-    mkdir 070618
-    cd 070618
+    mkdir 070918
+    cd 070918
     # Get the proteins used by the other hgNear organisms:
     pepPredToFa hg18 knownGenePep hg18.known.faa
     pepPredToFa mm8 knownGenePep mm8.known.faa
@@ -1943,15 +1961,15 @@ targetDb dm3
 queryDbs hg18 mm8 rn4 danRer3 ce2 sacCer1
 recipBest hg18 mm8 rn4 danRer3 ce2 sacCer1
 
-dm3Fa     /cluster/data/dm3/bed/hgNearBlastp/070618/dm3.flyBasePep.faa
-hg18Fa    /cluster/data/dm3/bed/hgNearBlastp/070618/hg18.known.faa
-mm8Fa     /cluster/data/dm3/bed/hgNearBlastp/070618/mm8.known.faa
-rn4Fa     /cluster/data/dm3/bed/hgNearBlastp/070618/rn4.known.faa
-danRer3Fa /cluster/data/dm3/bed/hgNearBlastp/070618/danRer3.ensPep.faa
-ce2Fa     /cluster/data/dm3/bed/hgNearBlastp/070618/ce2.sangerPep.faa
-sacCer1Fa /cluster/data/dm3/bed/hgNearBlastp/070618/sacCer1.sgdPep.faa
+dm3Fa     /cluster/data/dm3/bed/hgNearBlastp/070918/dm3.flyBasePep.faa
+hg18Fa    /cluster/data/dm3/bed/hgNearBlastp/070918/hg18.known.faa
+mm8Fa     /cluster/data/dm3/bed/hgNearBlastp/070918/mm8.known.faa
+rn4Fa     /cluster/data/dm3/bed/hgNearBlastp/070918/rn4.known.faa
+danRer3Fa /cluster/data/dm3/bed/hgNearBlastp/070918/danRer3.ensPep.faa
+ce2Fa     /cluster/data/dm3/bed/hgNearBlastp/070918/ce2.sangerPep.faa
+sacCer1Fa /cluster/data/dm3/bed/hgNearBlastp/070918/sacCer1.sgdPep.faa
 
-buildDir /cluster/data/dm3/bed/hgNearBlastp/070618
+buildDir /cluster/data/dm3/bed/hgNearBlastp/070918
 scratchDir /san/sanvol1/scratch/dm3HgNearBlastp
 _EOF_
     # Run with -noLoad so we can eyeball files, manually load dm3 tables now,
@@ -1962,38 +1980,46 @@ _EOF_
     # output of doHgNearBlastp.pl:
 # *** -noLoad was specified -- you can run this script manually to load dm3 tables:
         run.dm3.dm3/loadPairwise.csh
-#Loading database with 778403 rows
+#Loading database with 839077 rows
 # *** -noLoad was specified -- you can run these scripts manually to load dm3 tables:
         run.dm3.hg18/loadPairwise.csh
-#Loading database with 5894 rows
+#Loading database with 5916 rows
         run.dm3.mm8/loadPairwise.csh
-#Loading database with 5614 rows
+#Loading database with 5634 rows
         run.dm3.rn4/loadPairwise.csh
-#Loading database with 3046 rows
+#Loading database with 3051 rows
         run.dm3.danRer3/loadPairwise.csh
-#Loading database with 5306 rows
+#Loading database with 5318 rows
         run.dm3.ce2/loadPairwise.csh
-#Loading database with 4587 rows
+#Loading database with 4602 rows
         run.dm3.sacCer1/loadPairwise.csh
 #Loading database with 2199 rows
 
-#TODO when dm3 hgNear tables have been pushed and other dbs can be updated:
+     # 7/18/07,9/18/07: dm3 is on RR, so time to load*.dmBlastTab:
 # *** -noLoad was specified -- you can run these scripts manually to load dmBlastTab in query databases:
         run.hg18.dm3/loadPairwise.csh
+#Loading database with 5916 rows
         run.mm8.dm3/loadPairwise.csh
+#Loading database with 5634 rows
         run.rn4.dm3/loadPairwise.csh
+#Loading database with 3051 rows
         run.danRer3.dm3/loadPairwise.csh
+#Loading database with 5306 rows
         run.ce2.dm3/loadPairwise.csh
+#Loading database with 4602 rows
         run.sacCer1.dm3/loadPairwise.csh
+#Loading database with 2199 rows
 
 
-# CLUSTER GENES AND MAP TO OTHER DATA (DONE 4/5/07 angie - REDONE 6/18/07)
+# CLUSTER GENES AND MAP TO OTHER DATA
+# FlyBase 5.1 history: (DONE 4/5/07 angie - REDONE 6/18/07)
 # Redone 6/18/07 after folding in DHGP's chr*Het heterochromatin annotations.
+# FlyBase 5.3 history: (DONE 9/20/07 angie)
     ssh hgwdev
     # First we have to add a proteinId column to flyBaseGene.
     hgClusterGenes dm3 flyBaseGene flyBaseIsoforms flyBaseCanonical \
       -protAccQuery='select name,alias from flyBaseToUniProt'
-#Got 14067 clusters, from 20284 genes in 15 chromosomes
+#Got 13930 clusters, from 20731 genes in 15 chromosomes
     # Create table that maps between flyBase genes and RefSeq
     hgMapToGene dm3 refGene flyBaseGene flyBaseToRefSeq
     # Create table that maps between known genes and Pfam domains
@@ -2007,12 +2033,11 @@ _EOF_
     nice hgExpDistance dm3 hgFixed.arbFlyLifeMedianRatio dummyArg \
       arbExpDistance -lookup=flyBaseToCG
 
-    # Make sure that GO database is up to date.
-    See README in /cluster/store1/geneOntology.
 
-
-# MAKE A DESCRIPTION TABLE FOR HGNEAR KNOWNDETAILS (DONE 4/5/07 angie - REDONE 6/18/07)
+# MAKE A DESCRIPTION TABLE FOR HGNEAR KNOWNDETAILS
+# FlyBase 5.1 history: (DONE 4/5/07 angie - REDONE 6/18/07)
 # Redone 6/18/07 after folding in DHGP's chr*Het heterochromatin annotations.
+# FlyBase 5.3 history: (DONE 9/20/07 angie)
     # hgNear's knownDetails column type expects a single table that links 
     # transcript ID with uniProt description, so whip one up here:
     # (used by hgGene too though hgGene could join on the fly)
@@ -2025,8 +2050,10 @@ _EOF_
     hgsql dm3 -e 'create index name on flyBaseToDescription(name(12))'
 
 
-# FLYP2P (DONE 4/5/07 angie - REDONE 6/18/07)
+# FLYP2P
+# FlyBase 5.1 history: (DONE 4/5/07 angie - REDONE 6/18/07)
 # Redone 6/18/07 after folding in DHGP's chr*Het heterochromatin annotations.
+# FlyBase 5.3 history: (hgLoadNetDist REDONE 9/18/07 angie)
     # See hg/near/makeNear.doc...
     mkdir /cluster/data/dm3/bed/p2p
     cd /cluster/data/dm3/bed/p2p
@@ -2036,7 +2063,7 @@ _EOF_
     ssh -x kolossus hgNetDist /cluster/data/dm3/bed/p2p/{flyP2P.raw.txt,tmp.tab}
     hgLoadNetDist tmp.tab dm3 flyP2P \
       -sqlRemap='select fbgn,name from flyBase2004Xref'
-#hgLoadNetDist 238 id-remapping misses!  see missing.tab
+#hgLoadNetDist 386 id-remapping misses, see missing.tab
     # That's OK, some genes were in dm1 but are not in dm3 (flybase 3 vs. 5)
 
 
@@ -2069,6 +2096,7 @@ _EOF_
 
 #########################################################################
 # "FLYBASE 5.1" DHGP HETEROCHROMATIN ANNOTATIONS (DONE 6/18/07 angie)
+# OBSOLETED by load of FlyBase 5.3 genes 9/18/07.
 # These heterochromatin annotations have just been published in Science
 # http://www.sciencemag.org/cgi/content/full/316/5831/1586
 # -- future updates will be from FlyBase, but for now the GFF is in the
@@ -2216,6 +2244,148 @@ _EOF_
 # ORegAnno - Open Regulatory Annotations 
 # latest update Aug 3, 2007 
 # loaded by Belinda Giardine, in same manner as hg18 ORegAnno track
+
+
+#########################################################################
+# FLYBASE 5.3 ANNOTATIONS (DONE 9/17/07 angie)
+    ssh kkstore05
+    mkdir /cluster/data/dm3/bed/flybase5.3
+    cd /cluster/data/dm3/bed/flybase5.3
+    wget ftp://flybase.net/genomes/Drosophila_melanogaster/dmel_r5.3_FB2007_02/gff/dmel-all-r5.3.gff.gz
+    gunzip dmel-all-r5.3.gff.gz
+    # What data sources are represented in this file?
+    grep -v '^#' dmel-all-r5.3.gff | awk '{print $2 "\t" $3;}' | sort | uniq -c
+    # excerpt (many other sources, including blastx:... , sim4:... and 
+    # tblastx:...; also various other types for source "FlyBase" and "."):
+  69531 FlyBase CDS
+  68426 FlyBase exon
+  15185 FlyBase gene
+  20738 FlyBase mRNA
+     90 FlyBase miRNA
+    105 FlyBase ncRNA
+     94 FlyBase pseudogene
+    164 FlyBase rRNA
+     47 FlyBase snRNA
+    249 FlyBase snoRNA
+    314 FlyBase tRNA
+   5385 FlyBase transposable_element
+  38724 FlyBase transposable_element_insertion_site
+    # Same types as 5.1, good.
+
+    # What keywords are defined in the 9th field?  
+    grep -v '^#' dmel-all-r5.3.gff \
+    | awk '{print $9;}' \
+    | perl -wpe 'while (s/(\w+)=//) {print "$1\n";} s/^.*\n$//;' \
+    | sort | uniq -c
+  17505 Alias
+ 412018 Dbxref
+6571566 ID
+6530043 Name
+4008974 Parent
+3048194 Target
+  16921 cyto_range
+    # Comparable to 5.1, good.
+
+    cp ../flybase5.1/extractGenes.pl .
+    # Mods to 5.1 script:
+    # - so many new keywords, just say which ones we're ignoring instead
+    #   of die-ing if we don't recognize a new one.
+    # - protein line: Parent --> Derives_from.
+    # - some ncRNA's have CG-*, not CR-*, IDs:
+    time ./extractGenes.pl dmel-all-r5.3.gff
+#Noncoding FBtr0113460 has CG ID (CG33294-RB)
+#Noncoding FBtr0113490 has CG ID (CG34647-RA)
+#Noncoding FBtr0113491 has CG ID (CG34648-RA)
+#Noncoding FBtr0113492 has CG ID (CG34649-RA)
+#Keywords that have been ignored in one or more line types:
+#CDS: ID
+#CDS: Name
+#exon: Dbxref
+#exon: ID
+#exon: Name
+#gene: Alias
+#gene: Ontology_term
+#gene: cyto_range
+#gene: gbunit
+#mRNA: Alias
+#mRNA: Name
+#mRNA: score
+#mRNA: score_text
+#noncoding: Alias
+#noncoding: score
+#noncoding: score_text
+#protein: Alias
+#protein: Dbxref
+#protein: Name
+#protein: derived_isoelectric_point
+#protein: derived_molecular_weight
+#71.391u 1.296s 1:12.75 99.9%    0+0k 0+0io 0pf+0w
+    mv flyBaseGene.src=FlyBase.gtf flyBaseGene.gtf
+
+    # Get predicted proteins (for main annotations only)
+    wget ftp://flybase.net/genomes/Drosophila_melanogaster/dmel_r5.3_FB2007_02/fasta/dmel-all-translation-r5.3.fasta.gz
+    # Use the FBgn IDs in headers to retrieve CG-R's to match flyBaseGene:
+    zcat dmel-all-translation-r5.3.fasta.gz \
+    | perl -we 'open(X, "flyBase2004Xref.tab") || die; \
+                while (<X>) { \
+                  @w = split("\t"); \
+                  $fbtr2cgr{$w[3]} = $w[0]; \
+                } \
+                while (<>) { \
+                  if (/^>.*parent=FBgn\d+,(FBtr\d+)/) { \
+                    $cgr = $fbtr2cgr{$1}; \
+                    if ($cgr) { \
+                      s/^>.*/>$cgr/; \
+                    } else { die; } \
+                  } \
+                  print; \
+                } \
+               ' \
+      > flyBasePep.fa
+
+    ssh hgwdev
+    cd /cluster/data/dm3/bed/flybase5.3
+    # Protein-coding genes:
+    ldHgGene -gtf dm3 flyBaseGene flyBase*.gtf
+#  20738 groups 14 seqs 1 sources 2 feature types
+    hgPepPred dm3 generic flyBasePep flyBasePep.fa
+    # Noncoding genes:
+    hgLoadBed dm3 flyBaseNoncoding flyBaseNoncoding.bed
+#Loaded 1063 elements of size 12
+    # Cross-referencing info for both coding and noncoding:
+    hgLoadSqlTab dm3 flyBase2004Xref ~/kent/src/hg/lib/flyBase2004Xref.sql \
+      flyBase2004Xref.tab
+
+    # Make sure there are no joinerCheck errors amongst those 3 tables
+    # at this point, because if left here they can spread via doHgNearBlastp.
+    # Since this is an update of those tables to a new FlyBase version,
+    # and other hgNear tables already exist with the old version's set of 
+    # IDs, ignore errors for missing CG items in tables that will be 
+    # rebuilt in the hgNear process.:
+    runJoiner.csh dm3 flyBasePep
+
+    # See if there are still large regions where refGene has genes but
+    # flybase doesn't:
+    featureBits dm3 refGene \!flyBaseGene -minSize=1000 -bed=stdout
+#335940 bases of 162367812 (0.207%) in intersection
+    # Spot-checked... some transcripts removed here and there, looks OK.
+
+    # add upstream* downloadable files
+    ssh hgwdev
+    mkdir /cluster/data/dm3/bed/flybase5.3/bigZips
+    cd /cluster/data/dm3/bed/flybase5.3/bigZips
+    foreach size (1000 2000 5000)
+      echo upstream$size
+      nice featureBits dm3 flyBaseGene:upstream:$size -fa=stdout \
+      | nice gzip -c > upstream$size.fa.gz
+    end
+    nice md5sum *.gz > md5sum.txt
+    ln -s /cluster/data/dm3/bed/flybase5.3/bigZips/*.gz \
+      /usr/local/apache/htdocs/goldenPath/dm3/bigZips/
+    # When updating, edit out the old upstream* sums from md5sum.txt, then:
+    cat md5sum.txt \
+      >> /usr/local/apache/htdocs/goldenPath/dm3/bigZips/md5sum.txt
+
 
 #########################################################################
 #########################################################################
