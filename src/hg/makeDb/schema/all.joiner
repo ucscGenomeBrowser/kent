@@ -34,7 +34,7 @@ set monDom monDom1,monDom4
 set bosTau bosTau1,bosTau2,bosTau3
 set rheMac rheMac1,rheMac2
 set snp125 dbSnpHumanBuild125
-set strPur strPur1
+set strPur strPur1,strPur2
 set felCat felCat3
 set gasAcu gasAcu1
 set oryLat oryLat1
