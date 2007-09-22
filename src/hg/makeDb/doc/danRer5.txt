@@ -1563,13 +1563,16 @@ close INFO;
     cd /cluster/data/danRer5/bed
     ln -s blastz.oryLat1.2007-09-10 blastz.oryLat1
     cd /cluster/data/danRer5/bed/blastz.oryLat1.2007-09-10
-# use parameters for tetNig1 in danRer4.txt. Using scaffolds makes this run
+# Use Blastz parameters as for tetNig1 in danRer4.txt. Using scaffolds makes this run
 # slower so it is best to have the scaffolds in the query. Use HoxD55.q 
 # matrix as medaka is quite distant from zebrafish. Blastz uses 
 # lineage-specfic repeats but there are none for these two species.
 # Use soft-masked scaffolds for oryLat1 (and dynamic masking) and also use 
 # windowMasker plus SDust repeats since there are no species-specific
-# RepeatMasker repeats for medaka.
+# RepeatMasker repeats for medaka. The random scaffolds were used in Blastz
+# separately (oryLat1UnScaffolds.2bit) rather than as an artificial unordered
+# chromosome to avoid getting Blastz alignments across non-contiguous
+# scaffolds. 
 cat << '_EOF_' > DEF
 # zebrafish (danRer5) vs. Medaka (oryLat1)
 BLASTZ=blastz.v7.x86_64
@@ -2203,16 +2206,19 @@ line+ /san/sanvol1/scratch/danRer5/affy/pslTarget/$(root1)_$(root2).psl}\n#ENDLO
     # No lineage-specific repeats for this species pair. 
     # Tetraodon also has no species-specific repeats in the RepeatMasker
     # library so run this using dynamic masking.
-    # The tetraodon 2bit file of chroms and scaffolds 
-    # (tetNig1ChromsRandomScafs.2bit) - this contains sequences for chroms
-    # and for scaffolds of random chroms.
+    # The tetraodon 2bit file of scaffolds was used 
+    # (tetNig1.randomContigs.sdTrf.2bit) - this contains sequences for 
+    # scaffolds from randoms. These were used for Blastz rather than the 
+    # random chroms so that alignments do not occur across non-contiguous 
+    # scaffolds.
+    ## use screen to run
     ssh kkstore06
     mkdir /cluster/data/danRer5/bed/blastz.tetNig1.2007-09-16
     cd /cluster/data/danRer5/bed
     ln -s blastz.tetNig1.2007-09-16 blastz.tetNig1
     cd /cluster/data/danRer5/bed/blastz.tetNig1.2007-09-16
 
-# use parameters for tetNig1 in danRer4.txt. Using scaffolds makes this run
+# Use Blastz parameters for tetNig1 in danRer4.txt. Using scaffolds makes this run
 # slower so it is best to have the scaffolds in the query. Use HoxD55.q 
 # matrix as tetraodon is quite distant from zebrafish. Blastz uses 
 # lineage-specfic repeats but there are none for these two species.
@@ -2256,8 +2262,8 @@ TMPDIR=/scratch/tmp
         -qRepeats=windowmaskerSdust \
         -blastzOutRoot /san/sanvol1/scratch/danRer5TetNig1 \
         `pwd`/DEF >& doBlastz.log &
-   # PID: 11386 Start: Sun Sep 16 21:11:12 PDT 2007 Finished about 02:18
    # Took about 5 hours 7 minutes to run.
+
    featureBits danRer5 refGene:cds chainTetNig1Link -enrichment
 # refGene:cds 1.019%, chainTetNig1Link 6.359%, both 0.866%, cover 84.94%,
 # enrich 13.36x  
@@ -2273,3 +2279,110 @@ TMPDIR=/scratch/tmp
 
    ## DO BLASTZ SWAP TO CREATE THE DANRER5 CHAINS, NETS, AXTNET, MAFNET AND
     # ALIGNMENT DOWNLOAD FOR DANRER5 ON TETNIG1 - documented in tetNig1.txt
+
+###########################################################################
+# BLASTZ FOR FUGU (fr2) (DONE, 2007-09-18 - 2007-09-19, hartera)
+# CREATE CHAIN AND NET TRACKS, AXTNET, MAFNET AND ALIGNMENT DOWNLOADS
+    # No lineage-specific repeats for this species pair. 
+    # Fugu also has no species-specific repeats in the RepeatMasker
+    # library so run this using dynamic masking.
+    # Usee the Fugu 2bit file of scaffolds (fr2.scaffolds.2bit) - this 
+    # contains sequences for all the scaffolds of chrUn. The whole assembly
+    # is unmapped, unordered scaffolds. The individual scaffolds were    
+    # used for Blastz rather than the random chroms so that alignments do not 
+    # occur across non-contiguous scaffolds.
+
+    ## use screen to run
+    ssh kkstore06
+    mkdir /cluster/data/danRer5/bed/blastz.fr2.2007-09-18
+    cd /cluster/data/danRer5/bed
+    ln -s blastz.fr2.2007-09-18 blastz.fr2
+    cd /cluster/data/danRer5/bed/blastz.fr2.2007-09-18
+
+# Use Blastz parameters for fr1 in danRer4.txt. Using scaffolds makes this run
+# slower so it is best to have the scaffolds in the query. Use HoxD55.q 
+# matrix as Fugu is quite distant from zebrafish. Blastz uses 
+# lineage-specfic repeats but there are none for these two species.
+# Use soft-masked scaffolds for fr2 (and dynamic masking) and also use 
+# windowMasker plus SDust repeats since there are no species-specific
+# RepeatMasker repeats for Fugu. Fugu is about 400.5 Mb of scaffolds plus
+# chrM which is about 16.4 kb.
+
+cat << '_EOF_' > DEF
+# zebrafish (danRer5) vs. Fugu (fr2)
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/cluster/home/angie/schwartzbin:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+BLASTZ_H=2500
+BLASTZ_M=50
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET - zebrafish (danRer5)
+SEQ1_DIR=/san/sanvol1/scratch/danRer5/danRer5.2bit
+SEQ1_LEN=/cluster/data/danRer5/chrom.sizes
+SEQ1_LIMIT=30
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY - Fugu (fr2)
+# soft-masked chroms and random scaffolds in 2bit format
+SEQ2_DIR=/san/sanvol1/scratch/fr2/fr2.2bit
+SEQ2_LEN=/san/sanvol1/scratch/fr2/chrom.sizes
+SEQ2_CTGDIR=/san/sanvol1/scratch/fr2/fr2.scaffolds.2bit
+SEQ2_CTGLEN=/san/sanvol1/scratch/fr2/fr2.scaffolds.sizes
+SEQ2_LIFT=/san/sanvol1/scratch/fr2/liftAll.lft
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=30
+SEQ2_LAP=0
+
+BASE=/cluster/data/danRer5/bed/blastz.fr2.2007-09-18
+TMPDIR=/scratch/tmp
+'_EOF_'
+   # << this line keeps emacs coloring happy
+   chmod +x DEF
+   mkdir /san/sanvol1/scratch/danRer5Fr2
+   time nice /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+        -bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+        -qRepeats=windowmaskerSdust \
+        -blastzOutRoot /san/sanvol1/scratch/danRer5Fr2 \
+        `pwd`/DEF >& doBlastz.log &
+   # Took about 6 hours and 50 minutes to run.
+   cat fb.danRer5.chainFr2Link.txt
+   # 104476108 bases of 1435609608 (7.277%) in intersection
+   # Compare coverage to refGene CDS: 
+   featureBits danRer5 refGene:cds chainFr2Link -enrichment
+# refGene:cds 1.019%, chainFr2Link 7.277%, both 0.886%, cover 86.93%, 
+# enrich 11.95x   
+   featureBits danRer4 refGene:cds chainFr2Link -enrichment
+# refGene:cds 0.955%, chainFr2Link 8.543%, both 0.810%, cover 84.73%, 
+# enrich 9.92x   
+   featureBits danRer5 refGene:cds netFr2 -enrichment
+# refGene:cds 1.019%, netFr2 64.210%, both 0.968%, cover 94.95%, enrich 1.48x
+   featureBits danRer4 refGene:cds netFr2 -enrichment
+# refGene:cds 0.955%, netFr2 62.980%, both 0.885%, cover 92.68%, enrich 1.47x 
+
+   ## DO BLASTZ SWAP TO CREATE THE DANRER5 CHAINS, NETS, AXTNET, MAFNET AND
+    # ALIGNMENT DOWNLOAD FOR DANRER5 ON FR2 -document in fr2.txt
+
+###########################################################################
+# CREATE LIFTOVER FROM danRer5 TO danRer4 
+# (DONE 2007-09-19 AND 2007-09-21, hartera)
+    ssh kkstore06
+    mkdir /cluster/data/danRer5/bed/blat.danRer4
+    cd /cluster/data/danRer5/bed/blat.danRer4
+
+    time nice doSameSpeciesLiftOver.pl danRer5 danRer4 \
+        -bigClusterHub pk \
+        -ooc /san/sanvol1/scratch/danRer5/danRer5_11.ooc \
+	-buildDir /cluster/data/danRer5/bed/blat.danRer4 >& do.log &
+    # 0.401u 0.253s 8:09:03.62 0.0%   0+0k 0+0io 11pf+0w
+    # Remove symbolic link to liftOver chains and copy over the file
+    rm ../liftOver/danRer5ToDanRer4.over.chain.gz
+    cp -p danRer5ToDanRer4.over.chain.gz ../liftOver
+
+    # a link in /usr/local/apache/htdocs/goldenPath/danRer5/liftOver has 
+    # already been made to this file and md5sum.txt needs to be updated
+    ssh hgwdev
+    cd /usr/local/apache/htdocs/goldenPath/danRer5/liftOver
+    md5sum *.gz > md5sum.txt
+ 
