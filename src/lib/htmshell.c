@@ -17,7 +17,7 @@
 #include "errabort.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: htmshell.c,v 1.34 2007/09/21 23:59:25 hiram Exp $";
+static char const rcsid[] = "$Id: htmshell.c,v 1.35 2007/09/22 03:29:56 hiram Exp $";
 
 jmp_buf htmlRecover;
 
@@ -218,7 +218,10 @@ char *ascTime = asctime(tm);
 char timeStamp[128];
 size_t len = strlen(ascTime);
 if (len > 3) ascTime[len-2] = (char)0;
-safef(timeStamp, sizeof timeStamp, "[%s] [client %s] ", ascTime, ip);
+if (ip)
+    safef(timeStamp, sizeof timeStamp, "[%s] [client %s] ", ascTime, ip);
+else
+    safef(timeStamp, sizeof timeStamp, "[%s] [client unknown] ", ascTime);
 fputs(timeStamp, stderr);
 }
 
