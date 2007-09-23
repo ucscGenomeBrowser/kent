@@ -9,7 +9,7 @@
 #       Data release policy: http://medaka.utgenome.org/#policy
 #       Ensembl: http://www.ensembl.org/Oryzias_latipes/index.html
 #
-#       "$Id: fr2.txt,v 1.17 2007/04/14 00:11:22 hiram Exp $"
+#       "$Id: fr2.txt,v 1.18 2007/09/23 01:48:54 hartera Exp $"
 #
 
 ##########################################################################
@@ -1635,3 +1635,49 @@ plot "mostCons.histo.txt" using 2:3 title " # of elements" with boxes, \
     ssh hgwdev
     cd /usr/local/apache/htdocs/goldenPath/fr2/liftOver
     ln -s /cluster/data/fr2/bed/liftOver/fr1ToFr2.over.chain.gz .
+
+##############################################################################
+# SWAP DANRER5 BLASTZ RESULT TO CREATE DANRER5 CHAINS AND NETS TRACKS, 
+# AXTNET, MAFNET AND ALIGNMENT DOWNLOADS 
+# (DONE, 2007-09-19 and 2007-09-22, hartera)
+    
+    ssh kkstore02
+    mkdir /cluster/data/fr2/bed/blastz.swap.danRer5
+    cd /cluster/data/fr2/bed/blastz.swap.danRer5
+    # blastz parameters used to align fr2 as query to danRer5 as target:
+    # BLASTZ_H=2500
+    # BLASTZ_M=50
+    # BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+    # Results for fr2 blastz on danRer5 are in:
+    # /cluster/data/danRer5/bed/blastz.fr2.2007-09-18
+    time nice /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+        -bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+        -qRepeats=windowmaskerSdust -swap \ 
+        /cluster/data/danRer5/bed/blastz.fr2.2007-09-18/DEF \
+         >& swap.log &
+    # 0.139u 0.098s 14:09.59 0.0%     0+0k 0+0io 0pf+0w
+
+    ssh hgwdev
+    cat \ 
+  /cluster/data/fr2/bed/blastz.danRer5.swap/fb.fr2.chainDanRer5Link.txt
+    # 78259559 bases of 393312790 (19.898%) in intersection
+    # look at coverage of ensGene CDS, there is no native RefSeqs 
+    # track for fugu, fr2.
+    featureBits fr2 ensGene:cds chainDanRer5Link -enrichment
+# ensGene:cds 8.216%, chainDanRer5Link 19.898%, both 7.130%, cover 86.78%,
+# enrich 4.36x 
+    featureBits fr2 ensGene:cds chainDanRer4Link -enrichment
+# ensGene:cds 8.216%, chainDanRer4Link 20.585%, both 7.030%, cover 85.56%,
+# enrich 4.16x 
+    featureBits fr2 ensGene:cds netDanRer5 -enrichment
+# ensGene:cds 8.216%, netDanRer5 66.051%, both 7.845%, cover 95.48%, 
+# enrich 1.45x
+    featureBits fr2 ensGene:cds netDanRer4 -enrichment
+# ensGene:cds 8.216%, netDanRer4 65.374%, both 7.766%, cover 94.51%, 
+# enrich 1.45x
+    # clean up a little (2007-09-22, hartera) 
+    ssh kkstore02
+    cd /cluster/data/fr2/bed
+    mv ./blastz.swap.danRer5/swap.log ./blastz.danRer5.swap
+    rm -r blastz.swap.danRer5
+    ln -s blastz.danRer5.swap blastz.danRer5
