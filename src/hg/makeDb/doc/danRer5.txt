@@ -567,6 +567,8 @@ close OUT;
 # (DONE, 2007-08-24, hartera)
 # CHANGE dbDb ENTRY MADE BY SCRIPT TO DISPLAY SAME DEFAULT POSITION 
 # AS FOR DANRER4, GENE vdac2 (DONE, 2007-09-10, hartera)
+# CHANGE dbDb ENTRY SO THAT THE FULL NAME OF THE SANGER INSTITUTE IS GIVEN
+# IN THE SOURCENAME FIELD (DONE, 2007-09-22, hartera)
    # Since there will be a mixture of chroms and unmapped scaffolds, the
    # chroms must be built first being inputting the assembly sequence to 
    # makeGenomeDb.pl
@@ -654,6 +656,15 @@ fastaFiles /cluster/data/danRer5/Zv7release/fasta/Zv7ChromsAndRandomScafs.fa
    hgsql -h genome-testdb -e \
       'update dbDb set defaultPos = "chr13:14,786,820-14,801,993" \
        where name = "danRer5";' hgcentraltest
+
+   # (2007-09-22, hartera), Change the source name for danRer5 to give 
+   # Sanger's full name and use similar format to other genome assembly
+   # entries in dbDb.
+   hgsql -h genome-testdb -e \
+      'update dbDb set sourceName = "Wellcome Trust Sanger Institute, Zv7
+assembly" where name = "danRer5";' \
+      hgcentraltest
+
 
 ##########################################################################
 # REBUILD GAP TABLE WITH FRAGMENT GAPS AS WELL AS CONTIG GAPS 
