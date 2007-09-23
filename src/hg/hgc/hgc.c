@@ -208,7 +208,7 @@
 #include "omicia.h"
 #include "atomDb.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1343 2007/09/18 18:38:46 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1344 2007/09/23 01:38:10 hartera Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -19110,6 +19110,41 @@ sqlFreeResult(&sr);
 //hFreeConn
 }
 
+void doConsIndels(struct trackDb *tdb, char *item) 
+/* Display details about items in the Indel-based Conservation track. */
+{
+struct dyString *dy = dyStringNew(1024);
+struct sqlConnection *conn = hAllocConn();
+struct itemConf *cf;
+char confTable[128];
+
+/* create name for confidence table containing posterior probability and
+   false discovery rate (FDR). */
+safef(confTable, sizeof(confTable), "%sConf", tdb->tableName);
+
+if (sqlTableExists(conn, confTable))
+    {
+    /* print the posterior probability and FDR if available */
+    struct sqlResult *sr;
+    char query[256], **row;
+    
+    safef(query, sizeof(query),
+    	"select * from %s where id = '%s'", confTable, item);
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+        cf = itemConfLoad(row);
+        dyStringPrintf(dy, "<B>Posterior Probability:</B> %.4g<BR>\n", cf->probability);
+        dyStringPrintf(dy, "<B>False Discovery Rate (FDR):</B> %.2f<BR>\n", cf->fdr);
+        itemConfFree(&cf);
+        }
+    sqlFreeResult(&sr);
+    }
+hFreeConn(&conn);
+genericClickHandlerPlus(tdb, item, NULL, dy->string);
+dyStringFree(&dy);
+}
+
 struct trackDb *tdbForTableArg()
 /* get trackDb for track passed in table arg */
 {
@@ -20129,7 +20164,10 @@ else if ( sameString("expRatioUCSFDemo", track) || sameString("cnvLungBroadv2", 
     {
     doUCSFDemo(tdb, item);
     }
-
+else if (startsWith("consIndels", track))
+    {
+    doConsIndels(tdb,item);
+    }
 /* Lowe Lab Stuff */
 #ifdef LOWELAB
 else if (loweLabClick(track, item, tdb))
