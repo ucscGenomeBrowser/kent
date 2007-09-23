@@ -207,8 +207,9 @@
 #include "wikiTrack.h"
 #include "omicia.h"
 #include "atomDb.h"
+#include "itemConf.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1344 2007/09/23 01:38:10 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1345 2007/09/23 01:42:55 hartera Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -19143,6 +19144,7 @@ if (sqlTableExists(conn, confTable))
 hFreeConn(&conn);
 genericClickHandlerPlus(tdb, item, NULL, dy->string);
 dyStringFree(&dy);
+itemConfFree(&cf);
 }
 
 struct trackDb *tdbForTableArg()
