@@ -7,7 +7,7 @@
 #include "options.h"
 #include "nib.h"
 
-static char const rcsid[] = "$Id: faCmp.c,v 1.5 2007/03/13 12:21:00 baertsch Exp $";
+static char const rcsid[] = "$Id: faCmp.c,v 1.6 2007/09/24 22:18:30 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -20,11 +20,21 @@ errAbort(
   "    -softMask - use the soft masking information during the compare\n"
   "                Differences will be noted if the masking is different.\n"
   "    -sortName - sort input files by name before comparing\n"
+  "    -peptide - read as peptide sequences\n"
   "default:\n"
   "    no masking information is used during compare.  It is as if both\n"
   "    sequences were not masked.\n"
   );
 }
+/* command line options and values */
+static struct optionSpec optionSpecs[] =
+{
+    {"sortMask", OPTION_BOOLEAN},
+    {"sortName", OPTION_BOOLEAN},
+    {"peptide", OPTION_BOOLEAN},
+    {NULL, 0}
+};
+
 
 int faSortByName(const void *va, const void *vb)    
 /* used for slSorting dnaSeq */
@@ -44,14 +54,23 @@ int bCount = 0;
 struct dnaSeq *a, *b;
 DNA *aDna, *bDna;
 int size, i;
+int errCount = 0;
 
-if ( NIB_MASK_MIXED & options ) {
-	aList = faReadAllMixed(aFile);
-	bList = faReadAllMixed(bFile);
-} else {
-	aList = faReadAllDna(aFile);
-	bList = faReadAllDna(bFile);
-}
+if (optionExists("peptide"))
+    {
+    aList = faReadAllPep(aFile);
+    bList = faReadAllPep(bFile);
+    }
+else if (NIB_MASK_MIXED & options)
+    {
+    aList = faReadAllMixed(aFile);
+    bList = faReadAllMixed(bFile);
+    }
+else
+    {
+    aList = faReadAllDna(aFile);
+    bList = faReadAllDna(bFile);
+    }
 aCount = slCount(aList);
 bCount = slCount(bList);
 if ( optionExists("sortName") )
@@ -68,26 +87,37 @@ for (a = aList, b = bList; a != NULL && b != NULL; a = a->next, b = b->next)
     {
     verbose(2, "comparing %s to %s\n",a->name, b->name);
     if (a->size != b->size)
-        errAbort("%s in %s has %d bases.  %s in %s has %d bases",
+        {
+        fprintf(stderr, "%s in %s has %d bases.  %s in %s has %d bases\n",
 		a->name, aFile, a->size, b->name, bFile, b->size);
+        errCount++;
+        continue;
+        }
     aDna = a->dna;
     bDna = b->dna;
     size = a->size;
     for (i=0; i<size; ++i)
         {
 	if (aDna[i] != bDna[i])
-	    errAbort("%s in %s differs from %s at %s at base %d (%c != %c)",
-	    	a->name, aFile, b->name, bFile, i, aDna[i], bDna[i]);
+            {
+	    fprintf(stderr, "%s in %s differs from %s at %s at base %d (%c != %c)\n",
+                    a->name, aFile, b->name, bFile, i, aDna[i], bDna[i]);
+            errCount++;
+            break;
+            }
 	}
     }
-printf("%s and %s are the same\n", aFile, bFile);
+if (errCount == 0)
+    fprintf(stderr, "%s and %s are the same\n", aFile, bFile);
+else
+    errAbort("%s and %s have %d sequences that differ", aFile, bFile, errCount);
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 int options = 0;
-optionHash(&argc, argv);
+optionInit(&argc, argv, optionSpecs);
 if ( optionExists("softMask") )
     options |= NIB_MASK_MIXED;
 if (argc != 3)
