@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: mm8.txt,v 1.52 2007/08/30 05:45:45 angie Exp $"
+#	"$Id: mm8.txt,v 1.53 2007/09/24 22:10:17 hiram Exp $"
 #
 
 #  NOTE:  this doc may have genePred loads that fail to include
@@ -5137,7 +5137,7 @@ Loading database with 14470 rows^M
 # END OF HGNEAR STUFF
 
 #########################################################################
-# BLASTZ panTro2 after chr9 re-masked (WORKING - 2006-03-28 - Hiram)
+# BLASTZ panTro2 after chr9 re-masked (DONE - 2006-03-30 - Hiram)
     ssh pk
     mkdir /cluster/data/mm8/bed/blastzPanTro2.2006-03-28
     cd /cluster/data/mm8/bed
@@ -5521,7 +5521,7 @@ TMPDIR=/scratch/tmp
     #	997368618 bases of 2866216770 (34.797%) in intersection
 
 ########################################################################
-# BLASTZ/CHAIN/NET XENTRO2 (WORKING - 2006-04-20 - Hiram)
+# BLASTZ/CHAIN/NET XENTRO2 (DONE - 2006-04-20 - Hiram)
     ssh kk
     mkdir /cluster/data/mm8/bed/blastz.xenTro2.2006-04-20
     cd /cluster/data/mm8/bed
@@ -7874,7 +7874,7 @@ synBlastp.csh mm8 rn4
    ./bin/gbDbLoadStep -reload -srcDb=genbank -type=mrna mm8
 
 ##########################################################################
-## WindowMasker (WORKING - 2007-01-29 - Hiram)
+## WindowMasker (DONE - 2007-01-30 - Hiram)
     ssh kolossus
     mkdir /cluster/data/mm8/bed/WindowMasker.2007-01-29
     cd /cluster/data/mm8/bed/WindowMasker.2007-01-29
