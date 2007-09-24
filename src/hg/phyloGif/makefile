@@ -12,11 +12,13 @@ O = ${A}.o
 
 include ../../inc/cgi_build_rules.mk
 
+my:: compile
+	cp ${CGI_BIN}-${USER}/$A ${BINDIR}/
+
 compile: $O
 	${CC} $O ${MYLIBS} ${L}
 	mv ${AOUT} $A${EXE}
 	chmod a+rx $A${EXE}
-	cp $A${EXE} ${BINDIR}/
 
 test: compile
 	${BINDIR}/phyloGif -phyloGif_tree=17way.nh > test.gif
