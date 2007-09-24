@@ -4634,14 +4634,15 @@ TMPDIR=/scratch/tmp
               open(LINK, ">rgdQtlLink.txt") || die; \
               while (<>) { \
                 chomp; my @w = split("\t"); \
-                next unless ($w[1] =~ /^rat/ && $w[15] =~ /^\d+,\d+$/); \
+                next unless ($w[1] =~ /^rat/ && $w[15]); \
                 $w[5] =~ s/^/chr/; \
-                $w[15] =~ s/^\d+,(\d+)/$1/ || die "parse start pos"; \
-                $w[16] =~ s/^\d+,(\d+)/$1/ || die "parse end pos"; \
+                $w[15] =~ s/^([-\d]+).*$/$1/ || die "parse start pos"; \
+                $w[16] =~ s/^(\d+).*$/$1/ || die "parse end pos"; \
                 if ($w[15] > $w[16]) { \
                   $tmp = $w[15];  $w[15] = $w[16];  $w[16] = $tmp; \
                 } \
                 $w[15]--; \
+                $w[15] = 0 if ($w[15] < 0); \
                 print BED "$w[5]\t$w[15]\t$w[16]\t$w[2]\n"; \
                 print LINK "$w[0]\t$w[2]\t$w[3]\n"; \
               } \
