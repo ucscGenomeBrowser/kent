@@ -4622,4 +4622,42 @@ TMPDIR=/scratch/tmp
 	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=medium \
 	-swap -syntenicNet > swap.out 2>&1 &
 
+
+#########################################################################
+# RGD QTL (DONE 9/24/07 angie)
+    ssh kkstore04
+    mkdir /cluster/data/rn4/bed/rgdQtl
+    cd /cluster/data/rn4/bed/rgdQtl
+    wget ftp://rgd.mcw.edu:21/pub/data_release/QTLS
+    # Make bed4 and rgdQtlLink:
+    perl -we 'open(BED, ">rgdQtl.bed") || die; \
+              open(LINK, ">rgdQtlLink.txt") || die; \
+              while (<>) { \
+                chomp; my @w = split("\t"); \
+                next unless ($w[1] =~ /^rat/ && $w[15] =~ /^\d+,\d+$/); \
+                $w[5] =~ s/^/chr/; \
+                $w[15] =~ s/^\d+,(\d+)/$1/ || die "parse start pos"; \
+                $w[16] =~ s/^\d+,(\d+)/$1/ || die "parse end pos"; \
+                if ($w[15] > $w[16]) { \
+                  $tmp = $w[15];  $w[15] = $w[16];  $w[16] = $tmp; \
+                } \
+                $w[15]--; \
+                print BED "$w[5]\t$w[15]\t$w[16]\t$w[2]\n"; \
+                print LINK "$w[0]\t$w[2]\t$w[3]\n"; \
+              } \
+              close(BED);  close(LINK);' \
+      QTLS
+    ssh hgwdev
+    cd /cluster/data/rn4/bed/rgdQtl
+    hgLoadBed rn4 rgdQtl rgdQtl.bed
+    hgLoadSqlTab rn4 rgdQtlLink ~/kent/src/hg/lib/rgdQtlLink.sql rgdQtlLink.txt
+    # Fix coords > chromSize:
+    perl -wpe 's/^(\w+)\t(\d+)$/ \
+      delete from rgdQtl where chrom="$1" and chromStart >= $2; \
+      update rgdQtl set chromEnd = $2 where chrom="$1" and chromEnd > $2;/' \
+      ../../chrom.sizes \
+    | hgsql rn4
+    checkTableCoords -verbose=2 rn4 rgdQtl
+
+
 #########################################################################
