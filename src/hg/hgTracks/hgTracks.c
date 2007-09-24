@@ -118,7 +118,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1408 2007/09/17 03:44:08 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1409 2007/09/24 20:36:09 angie Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -4426,6 +4426,8 @@ if (color)
 	/* get description from rgdQtlLink table */
 	sprintf(cond_str, "name='%s'", tg->itemName(tg, bed));
         s  = sqlGetField(conn, database, "rgdQtlLink", "description", cond_str);
+	if (s == NULL)
+	    s = bed->name;
 
 	/* chop off text starting from " (human)" */
 	chp = strstr(s, " (human)");
