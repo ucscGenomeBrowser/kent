@@ -17,7 +17,7 @@
 #include "errabort.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: htmshell.c,v 1.36 2007/09/24 16:48:35 hiram Exp $";
+static char const rcsid[] = "$Id: htmshell.c,v 1.37 2007/09/24 17:49:39 galt Exp $";
 
 jmp_buf htmlRecover;
 
@@ -212,6 +212,7 @@ htmlHorizontalLine();
 {
 char *ip = getenv("REMOTE_ADDR");
 char *cgiBinary = getenv("SCRIPT_FILENAME");
+char *requestUri = getenv("REQUEST_URI");
 char *cgiFileName = NULL;
 time_t nowTime = time(NULL);
 struct tm *tm;
@@ -224,10 +225,12 @@ if (cgiBinary)
 else
     cgiFileName = cloneString("cgi-bin");
 if (len > 3) ascTime[len-2] = (char)0;
+if (!requestUri)
+    requestUri = "REQUEST_URI blank";
 if (ip)
-    safef(timeStamp, sizeof timeStamp, "[%s] [%s] [client %s] ", ascTime, cgiFileName, ip);
+    safef(timeStamp, sizeof timeStamp, "[%s] [%s] [client %s] [%s] ", ascTime, cgiFileName, ip, requestUri);
 else
-    safef(timeStamp, sizeof timeStamp, "[%s] [%s] [client unknown] ", ascTime, cgiFileName);
+    safef(timeStamp, sizeof timeStamp, "[%s] [%s] [client unknown] [%s] ", ascTime, cgiFileName, requestUri);
 fputs(timeStamp, stderr);
 }
 
