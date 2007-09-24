@@ -4,7 +4,7 @@
 # This file describes browser build for the Orangutan
 # genome, July 31 2007
 #
-#	"$Id: ponAbe2.txt,v 1.1 2007/09/19 21:45:46 hiram Exp $"
+#	"$Id: ponAbe2.txt,v 1.2 2007/09/24 22:09:30 hiram Exp $"
 #
 ######################################################################
 ## DOWNLOAD SEQUENCE (DONE - 2007-09-06 - Hiram)
@@ -173,3 +173,130 @@ done
     rmdir ponAbe2
 
 ############################################################################
+#  BLATSERVERS ENTRY (DONE - 2007-09-19 - Hiram)
+#	Replaced the ponAbe1 blat server with this sequence
+
+    ssh hgwdev
+    hgsql -e 'update blatServers set db="ponAbe2" where db="ponAbe1"' \
+	hgcentraltest
+
+    #	Do not need to do this insert, just the update above
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("ponAbe2", "blat13", "17784", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("ponAbe2", "blat13", "17785", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence, i.e. the GABRA3 protein from Hg18
+    #	to establish the defaultPos next:
+
+############################################################################
+    #	Reset default position to GABRA3 gene location (like Hg18)
+    hgsql -e \
+'update dbDb set defaultPos="chrX:152299762-152501081" where name="ponAbe2";' \
+	hgcentraltest
+
+############################################################################
+# SWAP BLASTZ Mouse Mm9 (DONE - 2007-09-20 - Hiram)
+    # the original
+    ssh kkstore02
+    screen  # control with a screen
+    cd /cluster/data/mm9/bed/blastzPonAbe2.2007-09-19
+    cat fb.mm9.chainPonAbe2Link.txt
+    #	914561309 bases of 2620346127 (34.902%) in intersection
+
+    #	And, for the swap
+    mkdir /cluster/data/ponAbe2/bed/blastz.mm9.swap
+    cd /cluster/data/ponAbe2/bed/blastz.mm9.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/mm9/bed/blastzPonAbe2.2007-09-19/DEF \
+	-chainMinScore=3000 -swap -chainLinearGap=medium \
+	-bigClusterHub=pk > swap.log 2>&1 &
+    #	real    102m23.209s
+    cat fb.ponAbe2.chainMm9Link.txt
+    #	948458190 bases of 3093572278 (30.659%) in intersection
+
+############################################################################
+# GENBANK AUTO UPDATE (DONE - 2007-02-20 - Hiram)
+    #	Create a lift file as per the procedures for Chimp from the AGP:
+    ssh kolossus
+    cd /cluster/data/ponAbe2
+    cat ponAbe2.agp | /cluster/bin/scripts/agpToLift -revStrand \
+	> jkStuff/genbank.lft
+    # MAKE 11.OOC FILE FOR BLAT
+    blat ponAbe2.2bit \
+	 /dev/null /dev/null -tileSize=11 -makeOoc=11.ooc -repMatch=1024
+    #	Wrote 36396 overused 11-mers to 11.ooc
+    # copy that over to /iscratch/i/ponAbe2/ and get that directory copied
+    #	to all the Iservers
+
+    # align with latest genbank process.
+    ssh hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+    # edit etc/genbank.conf to add ponAbe2 just after panTro2
+    # ponAbe2
+# Orangutan
+ponAbe2.serverGenome = /cluster/data/ponAbe2/ponAbe2.2bit
+ponAbe2.clusterGenome = /iscratch/i/ponAbe2/ponAbe2.2bit
+ponAbe2.ooc = /iscratch/i/ponAbe2/11.ooc
+ponAbe2.align.unplacedChroms = chrUn,chr*_random
+ponAbe2.lift = /cluster/data/ponAbe2/jkStuff/genbank.lft
+ponAbe2.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+ponAbe2.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+ponAbe2.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+ponAbe2.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+ponAbe2.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+ponAbe2.genbank.est.xeno.pslCDnaFilter    = ${ordered.genbank.est.xeno.pslCDnaFilter}
+ponAbe2.downloadDir = ponAbe2
+ponAbe2.genbank.est.xeno.load = no
+ponAbe2.refseq.mrna.native.load  = yes
+ponAbe2.refseq.mrna.xeno.load = yes
+ponAbe2.refseq.mrna.xeno.loadDesc  = yes
+
+    cvs ci -m "Added ponAbe2." etc/genbank.conf
+    # update /cluster/data/genbank/:
+    make etc-update
+
+    # Edit src/lib/gbGenome.c to add new species.  With these two lines:
+    #	static char *ponAbeNames[] = {"Pongo pygmaeus abelii", NULL};
+    #	{"ponAbe", ponAbeNames},
+
+    cvs ci -m "Added Pongo pygmaeus abelii (Orangutan)." src/lib/gbGenome.c
+    make install-server
+
+    ssh kkstore02
+    screen  # control this business with a screen since it takes a while
+    cd /cluster/data/genbank
+
+    # This is a call to a script that will push our jobs out to the cluster
+    # since it's a big job.  
+    time nice -n +19 bin/gbAlignStep -initial ponAbe2 &
+    # logFile: var/build/logs/2007.09.20-16:34:38.ponAbe2.initalign.log
+    #	kk kluster difficulties, finish the parasol run manually, then
+    time nice -n +19 bin/gbAlignStep -continue=finish -initial ponAbe2 &
+    #	var/build/logs/2007.09.21-20:10:48.ponAbe2.initalign.log
+    #	real    61m12.655s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad ponAbe2
+    #	logFile: var/dbload/hgwdev/logs/2007.09.22-10:40:27.dbload.log
+    #	real    16m22.221s
+XXX - running 2007-09-22 10:40
+
+    # enable daily alignment and update of hgwdev (DONE - 2007-02-20 - Hiram)
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+    # add ponAbe2 to:
+        etc/align.dbs
+        etc/hgwdev.dbs
+    cvs ci -m "Added ponAbe2." etc/align.dbs etc/hgwdev.dbs
+    make etc-update
+
+###   (2007-05-16 markd)
+    # modify genbank to not load native RefSeq, since there are none.
+    # remove empty files and rerun gbDbLoadStep
+    ponAbe2.refseq.mrna.native.load = no
+    nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad ponAbe2
+#########################################################################
