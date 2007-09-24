@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.27 2007/09/21 22:23:48 kate Exp $"
+#	"$Id: mm9.txt,v 1.28 2007/09/24 22:08:51 hiram Exp $"
 #
 
 #######################################################################
@@ -2499,7 +2499,7 @@ TMPDIR=/scratch/tmp
     ##	real    20m49.712s
 
 #########################################################################
-# BLASTZ RAT Rn4 (WORKING - 2007-08-30 - Hiram)
+# BLASTZ RAT Rn4 (DONE - 2007-08-30 - Hiram)
 #  re-run this second time with tighter parameters
     ssh kkstore06
     mkdir /cluster/data/mm9/bed/blastzRn4.2007-08-30
@@ -2851,9 +2851,12 @@ TMPDIR=/scratch/tmp
     # Won't put this in Conservation -- special request for ancestor recon.
     ssh kkstore06
     #	use a screen to control this job
+    # XXX note for next time, naming convention is different here than all the
+    # others, and there is a missing TMPDIR in the DEF file
     screen
     mkdir /cluster/data/mm9/bed/blastz.rheMac2.2007-09-05
     cd /cluster/data/mm9/bed/blastz.rheMac2.2007-09-05
+
 
     cat << '_EOF_' > DEF
 # Mouse vs. macacque
@@ -2907,7 +2910,7 @@ BASE=/cluster/data/mm9/bed/blastz.rheMac2.2007-09-05
 
 
 #########################################################################
-# BLASTZ/CHAIN/NET Orangutan ponAbe1 (WORKING - 2007-09-05 - Hiram)
+# BLASTZ/CHAIN/NET Orangutan ponAbe1 (DONE - 2007-09-05 - Hiram)
     ssh kkstore01
     #	use a screen to control this job
     screen
@@ -2976,7 +2979,6 @@ Submission to last job:         54771s     912.85m    15.21h    0.63d
 	/cluster/data/mm9/bed/blastzPonAbe1.2007-09-05/DEF \
 	-stop=load -chainMinScore=3000 \
 	-swap -chainLinearGap=medium -bigClusterHub=pk > swap.log 2>&1 &
-XXX - running - 2007-09-07 15:25
 
 #########################################################################
 # BLASTZ/CHAIN/NET Marmoset calJac1 (DONE - 2007-09-06 - 2007-09-07 - Hiram)
@@ -3257,7 +3259,8 @@ TMPDIR=/scratch/tmp
 
 
 #########################################################################
-# BLASTZ Zebrafish danRer5 (WORKING - 2007-09-11 - Hiram)
+# BLASTZ Zebrafish danRer5 (DONE - 2007-09-11 - 2007-09-12 - Hiram)
+#	re-run a second time with BLASTZ_Q, see below
     ssh kkstore06
     screen	# use screen to manage this job
     mkdir /cluster/data/mm9/bed/blastzDanRer5.2007-09-11
@@ -3304,6 +3307,58 @@ TMPDIR=/scratch/tmp
     #	real    9m47.163s
     cat fb.danRer5.chainMm9Link.txt
     #	34017483 bases of 1435609608 (2.370%) in intersection
+
+#########################################################################
+# BLASTZ Zebrafish danRer5 (DONE - 2007-09-13 - Hiram)
+#	second time, forgot to include BLASTZ_Q the first time
+    ssh kkstore06
+    screen	# use screen to manage this job
+    mkdir /cluster/data/mm9/bed/blastzDanRer5.2007-09-13
+    cd /cluster/data/mm9/bed/blastzDanRer5.2007-09-13
+
+    #	This is the wrong way overlap, but it seems to work
+    cat << '_EOF_' > DEF
+# Mouse (mm9) vs zebrafish (danRer5)
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: Mouse Mm9
+SEQ1_DIR=/scratch/data/mm9/mm9.2bit
+SEQ1_LEN=/cluster/data/mm9/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY - zebrafish (danRer5)
+SEQ2_DIR=/scratch/data/danRer5/danRer5.2bit
+SEQ2_LEN=/cluster/data/danRer5/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm9/bed/blastzDanRer5.2007-09-13
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl DEF -chainMinScore=5000 \
+	-chainLinearGap=loose -bigClusterHub=pk -verbose=2 > do.log 2>&1 &
+    #	real    369m16.947s
+    cat fb.mm9.chainDanRer5Link.txt
+    #	84513268 bases of 2620346127 (3.225%) in intersection
+
+    mkdir /cluster/data/danRer5/bed/blastz.mm9.swap
+    cd /cluster/data/danRer5/bed/blastz.mm9.swap
+    time nice -n +19 $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
+	-chainMinScore=5000 \
+	/cluster/data/mm9/bed/blastzDanRer5.2007-09-13/DEF \
+	-swap -chainLinearGap=loose -bigClusterHub=pk -verbose=2 \
+	> swap.log 2>&1 &
+    #	real    21m44.784s
+    cat fb.danRer5.chainMm9Link.txt
+    #	66400782 bases of 1435609608 (4.625%) in intersection
 
 #########################################################################
 # BLASTZ/CHAIN/NET Guinea Pig cavPor2 (2007-09-19 kate)
@@ -3881,6 +3936,110 @@ rc = 0 = count of kgAlAll mrna for mm9
     #	124186 /usr/local/apache/cgi-bin/visiGeneData/visiGene.text
 
 #########################################################################
+# Create Allen Brain Atlas mapping. (WORKING - 2007-09-24 - Hiram)
+
+# Set up directory
+    ssh kkstore06
+    mkdir /cluster/data/mm9/bed/allenBrain
+    cd /cluster/data/mm9/bed/allenBrain
+
+# In /san/sanvol1/visiGene/offline/allenBrain/probesAndData/
+#  allen20051021.tab (converted from spreadsheet mailed by Susan Sunkin <SusanS@alleninstitute.org>)
+#  probeSeq.20051027.fasta (also from Susan).
+
+# Create a list of probe sequences filling ones missing from probeSeq.20050127.fa
+# with some NCBI and TIGR files, and some downloaded one at a time.
+     allenCollectSeq \
+/san/sanvol1/visiGene/offline/allenBrain/probesAndData/allen20051021.tab \
+/san/sanvol1/visiGene/offline/allenBrain/probesAndData/probeSeq.20051027.fasta \
+/cluster/data/mm7/bed/ncbiXm/ncbiNm.fa /cluster/data/mm7/bed/ncbiXm/ncbiXm.fa \
+/cluster/data/mm6/bed/tigrMgiTc/tigrMgiTc.fa \
+~/kent/src/hg/makeDb/outside/allenBrain/allenCollectSeq/extra.fa \
+allenBrainProbes.fa allenBrainProbes.tab missing.tab allenBrainUrl.tab
+# 18463 sequences in /cluster/data/mm7/bed/ncbiXm/ncbiNm.fa
+# 8386 sequences in /cluster/data/mm7/bed/ncbiXm/ncbiXm.fa
+# 161499 sequences in /cluster/data/mm6/bed/tigrMgiTc/tigrMgiTc.fa
+# 16 sequences in /cluster/home/hiram/kent/src/hg/makeDb/outside/allenBrain/allenCollectSeq/extra.fa
+# 11522 sequences in /san/sanvol1/visiGene/offline/allenBrain/probesAndData/probeSeq.20051027.fasta
+# 11100 (92.6%) hitProbe
+# 486 (4.1%) hitNm
+# 17 (0.1%) hitXm
+# 345 (2.9%) hitTc
+# 15 (0.1%) hitExtra
+# 23 (0.2%) hitNone
+    
+# Set up a blat run to align the probes.
+    mkdir split
+    faSplit sequence allenBrainProbes.fa 200 split/rp
+    mkdir run
+    ssh pk
+    cd /cluster/data/mm9/bed/allenBrain/run
+    ls -1 ../split/*.fa > probe.list
+    ls -1 /scratch/data/mm9/nib/*.nib > genome.list
+    mkdir psl
+    cat << '_EOF_' > template
+#LOOP
+runBlat $(path1) $(path2) $(root1) $(root2) {check out line+ psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+    cat << '_EOF_' > runBlat
+#!/bin/csh -ef
+set ooc = /scratch/data/mm9/11.ooc
+set tmpDir = /scratch/tmp/mm9
+set workDir = $tmpDir/$3_$4
+set pslOut = $3_$4.psl
+mkdir -p $tmpDir
+mkdir $workDir
+blat -ooc=$ooc $1 $2 $workDir/$pslOut
+mv $workDir/$pslOut psl/$pslOut
+rmdir $workDir
+rmdir --ignore-fail-on-non-empty $tmpDir
+'_EOF_'
+    # << happy emacs
+    chmod +x runBlat
+
+    gensub2 genome.list probe.list template jobList
+    para create jobList
+    para try ... check ... push ... etc.
+# Completed: 6825 of 6825 jobs
+# CPU time in finished jobs:      27456s     457.60m     7.63h    0.32d  0.001 y
+# IO & Wait Time:                 21901s     365.02m     6.08h    0.25d  0.001 y
+# Average job time:                   7s       0.12m     0.00h    0.00d
+# Longest finished job:              32s       0.53m     0.01h    0.00d
+# Submission to last job:           485s       8.08m     0.13h    0.01d
+
+# Then do sorting and near-best-in-genome step on file server
+    ssh kkstore06
+    cd /cluster/data/mm9/bed/allenBrain/run
+    pslSort dirs raw.psl tmp psl
+    pslReps raw.psl ../best.psl -nohead -minCover=0.20 -minAli=0.96 -nearTop=0.001 /dev/null
+    sort -k 14,14 -k 16,16n ../best.psl > ../allenBrainAli.psl
+
+# Clean up big files no longer needed
+   rm raw.psl batch.bak
+   rm -r psl
+   rm -r ../split
+
+# Load up database
+   ssh hgwdev
+   cd /cluster/data/mm9/bed/allenBrain
+
+# Make a new table that contains the URLs for the allen brain genes
+# Make this one first since all.joiner considers it the master table.
+   hgsql mm9 < ~/kent/src/hg/lib/allenBrainUrl.sql
+   hgsql mm9 -e 'load data local infile "allenBrainUrl.tab" into table allenBrainUrl;'
+
+# Make probe alignment table, and load sequence.
+   hgLoadPsl mm9 allenBrainAli.psl
+   mkdir /gbdb/mm9/allenBrain
+   ln -s /cluster/data/mm9/bed/allenBrain/allenBrainProbes.fa /gbdb/mm9/allenBrain/allenBrainProbes.fa
+   hgLoadSeq mm9 /gbdb/mm9/allenBrain/allenBrainProbes.fa
+
+# Make mapping between known genes and allenBrain	
+   hgMapToGene mm9 allenBrainAli -type=psl knownGene knownToAllenBrain 
+
+#########################################################################
 # MOUSE AFFYMETRIX MOE430 TRACK (DONE - 2007-09-10 - Hiram)
 #    mkdir -p /projects/compbio/data/microarray/affyMouse
     # Download MOE430A and MOE430B consensus sequences from Affymetrix web site
@@ -3979,6 +4138,26 @@ blat -fine -mask=lower -minIdentity=95 -ooc=/scratch/data/mm9/11.ooc /scratch/da
     #	use the tempDb and its /gbdb/ directory.  Everything is not taking
     #	place in the mm9 database.
 
+    # example script to transfer appropriate tables from one DB to another
+    # while saving the first set too
+
+hgsql -N -e "show tables;" mm9UCGenes | \
+egrep -v "allenBrainAli|allenBrainUrl|extFile|knownToEnsembl|vgProbes|vgAllProbe
+s|^seq$|trackDb|history|chromInfo" | while read T
+do
+    echo -n "=== table ${T}: "
+    C1=`hgsql -N -e "select count(*) from ${T}" mm9`
+    C2=`hgsql -N -e "select count(*) from ${T}" mm9UCGenes 2> /dev/null`
+    D=`echo "${C1}" "${C2}" | awk '{printf "%d", $2-$1}'`
+    echo "${C1} - ${C2} - ${D}"
+    echo "rename table mm9.${T} to mm9UCGenes.${T}_try0"
+    echo "rename table mm9UCGenes.${T} to mm9.${T}"
+    hgsql -e "rename table mm9.${T} to mm9UCGenes.${T}_try0" mysql
+    hgsql -e "rename table mm9UCGenes.${T} to mm9.${T}" mysql
+done
+    #	The egrep -v knocks out tables that are redundant, should be the same
+    #	in both DBs
+
 #########################################################################
 # running the blastP operation to the other genomes for the gene sorter
 #	(DONE - 2007-09-10 - Hiram)
@@ -4049,8 +4228,68 @@ end
     rm -r run.*/out
 
 #########################################################################
+#  Update blast tabs after UCSC genes rebuild (WORKING - 2007-09-24 - Hiram)
+    sh hgwdev
+    mkdir -p /cluster/data/mm9/bed/hgNearBlastp/070924
+    cd /cluster/data/mm9/bed/hgNearBlastp/070924
+    # Get the proteins used by all hgNear organisms:
+    pepPredToFa hg18 knownGenePep hg18.known.faa
+    pepPredToFa mm9 knownGenePep mm9.known.faa
+    pepPredToFa rn4 knownGenePep rn4.known.faa
+    pepPredToFa danRer4 ensPep danRer4.ensPep.faa
+    pepPredToFa dm3 flyBasePep dm3.flyBasePep.faa
+    pepPredToFa ce4 sangerPep ce4.sangerPep.faa
+    pepPredToFa sacCer1 sgdPep sacCer1.sgdPep.faa
+
+    cat << '_EOF_' > config.ra
+# Latest human vs. other Gene Sorter orgs:
+# mouse, rat, zebrafish, worm, yeast, fly
+
+targetGenesetPrefix known
+targetDb mm9
+queryDbs hg18 rn4 danRer4 dm3 ce4 sacCer1
+recipBest         danRer4 dm3 ce4 sacCer1
+
+mm9Fa     /cluster/data/mm9/bed/hgNearBlastp/070924/mm9.known.faa
+hg18Fa    /cluster/data/mm9/bed/hgNearBlastp/070924/hg18.known.faa
+rn4Fa     /cluster/data/mm9/bed/hgNearBlastp/070924/rn4.known.faa
+danRer4Fa /cluster/data/mm9/bed/hgNearBlastp/070924/danRer4.ensPep.faa
+dm3Fa     /cluster/data/mm9/bed/hgNearBlastp/070924/dm3.flyBasePep.faa
+ce4Fa     /cluster/data/mm9/bed/hgNearBlastp/070924/ce4.sangerPep.faa
+sacCer1Fa /cluster/data/mm9/bed/hgNearBlastp/070924/sacCer1.sgdPep.faa
+
+buildDir /cluster/data/mm9/bed/hgNearBlastp/070924
+scratchDir /san/sanvol1/scratch/mm9HgNearBlastp
+'_EOF_'
+    # << happy emacs
+
+    # Run with -noLoad so we can eyeball files, manually load mm9 tables now,
+    # and after release of mm9 Gene Sorter on the RR, overload other 
+    # databases' mmBlastTab tables.
+    time nice -n +19 doHgNearBlastp.pl -noLoad config.ra > do.log 2>&1 &
+    tail -f do.log
+XXX - running - 2007-09-24
+
+Follow instructions at end of do.log, piecewise:
+  - first execute all of the run.mm9.* load scripts
+  - then execute the run.hg18.mm9 and run.rn4.mm9 scripts
+  - then run Galt's script (this is why we load hg18 and rn4 early):
+    synBlastp.csh mm9 hg18
+    synBlastp.csh mm9 rn4
+  - After mm9 hgNear/Gene Sorter is enabled on the RR:
+    - run the remaining run.*.mm9 load scripts
+    - then modify each $queryDb's hgGeneData/$org/$queryDb/otherOrg.ra
+      to specify mm9 for mouse
+    - then do a push request for $queryDbs.mmBlastTab and hgGeneData
+
+#########################################################################
 # MAKE FOLDUTR TABLES  (DONE - 2007-09-11 - Hiram)
 # First set up directory structure and extract UTR sequence on hgwdev
+#	Beware running this on pk since the program RNAfold which is used
+#	during this process is only found on /cluster/bin/i386/
+#	And there is no way for this cluster setup to verify success
+#	of that program since it is hidden away in rnaFoldBig
+#	Need to fix rnaFoldBig to recognize RNAfold missing ...
     ssh hgwdev
     mkdir /cluster/data/mm9/bed/ucsc.10/rnaStruct
     cd /cluster/data/mm9/bed/ucsc.10/rnaStruct
@@ -4075,29 +4314,29 @@ rnaFoldBig split/$(path1) fold
     cd ../utr5
     gensub2 in.lst single template jobList
 
-    ssh pk
+    ssh kk
     cd /cluster/data/mm9/bed/ucsc.10/rnaStruct/utr3
     para make jobList
 # Completed: 9750 of 9750 jobs
-# CPU time in finished jobs:     389532s    6492.20m   108.20h    4.51d  0.012 y
-# IO & Wait Time:                 28309s     471.81m     7.86h    0.33d  0.001 y
+# CPU time in finished jobs:     377924s    6298.73m   104.98h    4.37d  0.012 y
+# IO & Wait Time:                 38985s     649.75m    10.83h    0.45d  0.001 y
 # Average job time:                  43s       0.71m     0.01h    0.00d
-# Longest finished job:            3189s      53.15m     0.89h    0.04d
-# Submission to last job:          4059s      67.65m     1.13h    0.05d
-
+# Longest finished job:            3432s      57.20m     0.95h    0.04d
+# Submission to last job:         11280s     188.00m     3.13h    0.13d
     cd ../utr5
     para make jobList
 # Completed: 9253 of 9253 jobs
-# CPU time in finished jobs:      14448s     240.80m     4.01h    0.17d  0.000 y
-# IO & Wait Time:                 39118s     651.96m    10.87h    0.45d  0.001 y
-# Average job time:                   6s       0.10m     0.00h    0.00d
-# Longest finished job:             236s       3.93m     0.07h    0.00d
-# Submission to last job:           434s       7.23m     0.12h    0.01d
+# CPU time in finished jobs:      44949s     749.16m    12.49h    0.52d  0.001 y
+# IO & Wait Time:                 51547s     859.11m    14.32h    0.60d  0.002 y
+# Average job time:                  10s       0.17m     0.00h    0.00d
+# Longest finished job:            1100s      18.33m     0.31h    0.01d
+# Submission to last job:          1398s      23.30m     0.39h    0.02d
 
     # Load database
     ssh hgwdev
     cd /cluster/data/mm9/bed/ucsc.10/rnaStruct/utr5
     hgLoadRnaFold mm9 foldUtr5 fold
+    #	Parsed 35796 files
     cd ../utr3
     hgLoadRnaFold -warnEmpty mm9 foldUtr3 fold
     #	only one is empty: uc009gyo.1
@@ -4143,12 +4382,13 @@ doPfam ../splitProt/$(path1) $(root1).pf {check out line out/$(root1).pf}
     para create jobList
     para try ... check ... push ... etc... time
     #	after some kluster difficulties
-# Completed: 9666 of 9666 jobs
-# CPU time in finished jobs:    3503017s   58383.62m   973.06h   40.54d  0.111 y
-# IO & Wait Time:                     0s       0.00m     0.00h    0.00d  0.000 y
-# Average job time:                 356s       5.93m     0.10h    0.00d
-# Longest finished job:            3188s      53.13m     0.89h    0.04d
-# Submission to last job:         58364s     972.73m    16.21h    0.68d
+Completed: 9666 of 9666 jobs
+CPU time in finished jobs:    3535078s   58917.96m   981.97h   40.92d  0.112 y
+IO & Wait Time:                     0s       0.00m     0.00h    0.00d  0.000 y
+Average job time:                 287s       4.78m     0.08h    0.00d
+Longest running job:                0s       0.00m     0.00h    0.00d
+Longest finished job:            3430s      57.17m     0.95h    0.04d
+Submission to last job:         79051s    1317.52m    21.96h    0.91d
 
     # Make up pfamDesc.tab by converting pfam to a ra file first
     cat << '_EOF_' > makePfamRa.awk
@@ -4203,12 +4443,13 @@ doScop ../splitProt/$(path1) $(root1).pf {check out line out/$(root1).pf}
     gensub2 gene.list single template jobList
     para create jobList
     para try ... check ... push ... etc... time
+XXX - running 2007-09-21 11:52
 # Completed: 9666 of 9666 jobs
-# CPU time in finished jobs:    3514379s   58572.99m   976.22h   40.68d  0.111 y
-# IO & Wait Time:                 18017s     300.28m     5.00h    0.21d  0.001 y
-# Average job time:                 365s       6.09m     0.10h    0.00d
-# Longest finished job:            6475s     107.92m     1.80h    0.07d
-# Submission to last job:         12148s     202.47m     3.37h    0.14d
+# CPU time in finished jobs:    3532425s   58873.76m   981.23h   40.88d  0.112 y
+# IO & Wait Time:                     0s       0.00m     0.00h    0.00d  0.000 y
+# Average job time:                 347s       5.78m     0.10h    0.00d
+# Longest finished job:            6512s     108.53m     1.81h    0.08d
+# Submission to last job:         12348s     205.80m     3.43h    0.14d
 
 
     # Convert scop output to tab-separated files
@@ -4224,10 +4465,10 @@ doScop ../splitProt/$(path1) $(root1).pf {check out line out/$(root1).pf}
     hgLoadSqlTab mm9 ucscScop ~/kent/src/hg/lib/ucscScop.sql ucscScop.tab
     hgLoadSqlTab mm9 scopDesc ~/kent/src/hg/lib/scopDesc.sql scopDesc.tab
 
+    # XXX - ccds is not yet available for Mm9 according to Mark
     # Regenerate ccdsKgMap table
-    #/cluster/data/genbank/bin/x86_64/mkCcdsGeneMap  -db=$db -loadDb ccdsGene knownGene ccdsKgMap
-    /cluster/data/genbank/bin/x86_64/mkCcdsGeneMap  -db=mm9 -loadDb \
-	mm9.ccdsGene knownGene ccdsKgMap
+    # /cluster/data/genbank/bin/x86_64/mkCcdsGeneMap  -db=mm9 -loadDb \
+    #	mm9.ccdsGene knownGene ccdsKgMap
 
     # Map old to new mapping - maybe next time, this is first genes on mm9
     # hgsql mm9 -N -e 'select * from knownGene' > knownGene_1.gp
@@ -4255,7 +4496,7 @@ doScop ../splitProt/$(path1) $(root1).pf {check out line out/$(root1).pf}
 # These are instructions for building tables 
 # needed for the Proteome Browser. 
  
-# DON'T START THESE UNTIL TABLES FOR KNOWN GENES AND kgProtMap table
+# DON'T START THESE UNTIL TABLES FOR KNOWN GENES AND kgProtMap2 table
 # ARE REBUILT.  
 # This build is based on proteins DBs dated 070202.
 
@@ -4272,7 +4513,7 @@ doScop ../splitProt/$(path1) $(root1).pf {check out line out/$(root1).pf}
 
     hgLoadSqlTab mm9 pepMwAa ~/kent/src/hg/lib/pepMwAa.sql ./pepMwAa.tab
 
-    o Build the pepPi table
+    # Build the pepPi table
 
     hgsql proteins070202 -e \
     "select info.acc from sp070202.info, sp070202.accToTaxon where accToTaxon.taxon=10090 and accToTaxon.acc = info.acc" > protAcc.list
@@ -4313,12 +4554,291 @@ doScop ../splitProt/$(path1) $(root1).pf {check out line out/$(root1).pf}
     hgLoadSqlTab mm9 pbResAvgStd ~/kent/src/hg/lib/pbResAvgStd.sql \
 	./pbResAvgStd.tab
 
-    hgsql -N -e select * from pbStamp;" mm8 > pbStamp.tab
+    hgsql -N -e "select * from pbStamp;" mm8 > pbStamp.tab
     hgLoadSqlTab mm9 pbStamp ~/kent/src/hg/lib/pbStamp.sql \
 	./pbStamp.tab
 
     #	Turn on protein and gene sorter
     hgsql -e 'update dbDb set hgNearOk=1,hgPbOk=1 where name="mm9";' \
 	hgcentraltest
+
+
+#########################################################################
+# BLASTZ/CHAIN/NET Orangutan ponAbe2 (DONE - 2007-09-21 - Hiram)
+    ssh kkstore02
+    #	use a screen to control this job
+    screen
+    mkdir /cluster/data/mm9/bed/blastzPonAbe2.2007-09-19
+    cd /cluster/data/mm9/bed/blastzPonAbe2.2007-09-19
+
+    cat << '_EOF_' > DEF
+# mouse vs orangutan
+BLASTZ_M=50
+
+# TARGET: Mouse Mm9
+SEQ1_DIR=/scratch/data/mm9/mm9.2bit
+SEQ1_LEN=/cluster/data/mm9/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=0
+
+# QUERY: Orangutan ponAbe2
+SEQ2_DIR=/cluster/bluearc/scratch/data/ponAbe2/ponAbe2.2bit
+SEQ2_LEN=/cluster/data/ponAbe2/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=10000
+
+BASE=/cluster/data/mm9/bed/blastzPonAbe2.2007-09-19
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-stop=load -chainMinScore=3000 \
+	-chainLinearGap=medium -bigClusterHub=pk > do.log 2>&1 &
+    #	real    62m34.156s
+    #	some pk kluster difficulties, fixup and complete manually
+# Completed: 104880 of 104880 jobs
+# CPU time in finished jobs:    7142978s  119049.64m  1984.16h   82.67d  0.227 y
+# IO & Wait Time:                556393s    9273.21m   154.55h    6.44d  0.018 y
+# Average job time:                  73s       1.22m     0.02h    0.00d
+# Longest finished job:             507s       8.45m     0.14h    0.01d
+# Submission to last job:         65973s    1099.55m    18.33h    0.76d
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-continue=cat -chainMinScore=3000 \
+	-chainLinearGap=medium -bigClusterHub=pk > cat.log 2>&1 &
+    #	real    166m20.442s
+    cat fb.mm9.chainPonAbe2Link.txt
+    #	914561309 bases of 2620346127 (34.902%) in intersection
+
+    #	And, for the swap
+    mkdir /cluster/data/ponAbe2/bed/blastz.mm9.swap
+    cd /cluster/data/ponAbe2/bed/blastz.mm9.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/mm9/bed/blastzPonAbe2.2007-09-19/DEF \
+	-chainMinScore=3000 -swap -chainLinearGap=medium \
+	-bigClusterHub=pk > swap.log 2>&1 &
+    #	real    102m23.209s
+    cat fb.ponAbe2.chainMm9Link.txt
+    #	948458190 bases of 3093572278 (30.659%) in intersection
+
+########################################################################
+# BLASTZ/CHAIN/NET Frog X. tropicalis xenTro2 (WORKING - 2007-09-19 - Hiram)
+    ssh kkstore04
+    screen # use screen to manage this job
+    # XXX note for next time, missing the TMPDIR in the DEF file
+    mkdir /cluster/data/mm9/bed/blastzXenTro2.2007-09-19
+    cd /cluster/data/mm9/bed/blastzXenTro2.2007-09-19
+
+    cat << '_EOF_' > DEF
+# Mouse (mm9) vs frog (xenTro2)
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+BLASTZ_M=50
+
+# TARGET: Mouse Mm9
+SEQ1_DIR=/scratch/data/mm9/mm9.2bit
+SEQ1_LEN=/cluster/data/mm9/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=0
+
+# QUERY: Frog xenTro2 - single chunk big enough to run two of the
+#               largest scaffolds in one job
+SEQ2_DIR=/scratch/hg/xenTro2/xenTro2.2bit
+SEQ2_LEN=/cluster/data/xenTro2/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=50
+SEQ2_LAP=10000
+
+BASE=/cluster/data/mm9/bed/blastzXenTro2.2007-09-19
+'_EOF_'
+    # << emacs
+
+    time nice -n +19 doBlastzChainNet.pl DEF -chainMinScore=5000 \
+	-chainLinearGap=loose -bigClusterHub=kk -verbose=2 > do.log 2>&1 &
+    #	real    1050m55.259s
+    # after kk difficulties, finishing the first kluster run manually
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=kk -chainMinScore=5000 -chainLinearGap=loose \
+	`pwd`/DEF > blastz.out 2>&1 &
+# Completed: 126539 of 126540 jobs
+# Crashed: 1 jobs
+# CPU time in finished jobs:   15750656s  262510.93m  4375.18h  182.30d  0.499 y
+# IO & Wait Time:                843281s   14054.69m   234.24h    9.76d  0.027 y
+# Average job time:                 131s       2.19m     0.04h    0.00d
+# Longest finished job:            2039s      33.98m     0.57h    0.02d
+# Submission to last job:         79275s    1321.25m    22.02h    0.92d
+
+    #	A single job kept having trouble, finished it on kolossus:
+    ssh kolossus
+    cd /cluster/data/mm9/bed/blastzXenTro2.2007-09-19/run.blastz
+time nice -n +19 /cluster/bin/scripts/blastz-run-ucsc -outFormat psl \
+/scratch/data/mm9/mm9.2bit:chr2:80000000-90000000 qParts/part008.lst ../DEF \
+../psl/mm9.2bit:chr2:80000000-90000000/mm9.2bit:chr2:80000000-90000000_part008.lst.psl
+    #	continuing after that
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	-continue=cat -bigClusterHub=kk -chainMinScore=5000 \
+	-chainLinearGap=loose `pwd`/DEF > cat.out 2>&1 &
+    #	real    62m17.627s
+    cat fb.mm9.chainXenTro2Link.txt
+    #	82054987 bases of 2620346127 (3.131%) in intersection
+
+    #	Then to swap over to xenTro2
+    mkdir /cluster/data/xenTro2/bed/blastz.mm9.swap
+    cd /cluster/data/xenTro2/bed/blastz.mm9.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	-swap -bigClusterHub=kk -chainMinScore=5000 \
+	/cluster/data/mm9/bed/blastzXenTro2.2007-09-19/DEF \
+	-chainLinearGap=loose > swap.out 2>&1 &
+
+    ssh hgwdev
+    cd /cluster/data/mm9/bed/blastz.xenTro2.2007-09-19
+    time nice -n +19 featureBits mm9 chainXenTro2Link \
+	> fb.mm9.chainXenTro2Link 2>&1 &
+    #	68050843 bases of 2567283971 (2.651%) in intersection
+    cd /cluster/data/xenTro2/bed/blastz.mm9.swap
+    time nice -n +19 featureBits xenTro2 chainMm8Link \
+	> fb.xenTro2.chainMm8Link 2>&1
+    #	72840135 bases of 1359412157 (5.358%) in intersection
+
+#########################################################################
+## BLASTZ Lizard anoCar1 - (DONE - 2007-09-21 - Hiram)
+    ssh kkstore04
+    mkdir /cluster/data/mm9/bed/blastzAnoCar1.2007-09-19
+    cd /cluster/data/mm9/bed/blastzAnoCar1.2007-09-19
+
+    cat << '_EOF_' > DEF
+# Mouse (mm9) vs lizard (anoCar1)
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+BLASTZ_M=50
+
+# TARGET: Mouse Mm9
+SEQ1_DIR=/scratch/data/mm9/mm9.2bit
+SEQ1_LEN=/cluster/data/mm9/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=0
+
+# QUERY: Lizard AnoCar1 - largest chunk big enough for largest scaffold
+SEQ2_DIR=/san/sanvol1/scratch/anoCar1/anoCar1.2bit
+SEQ2_LEN=/cluster/data/anoCar1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=30
+SEQ2_LAP=10000
+
+BASE=/cluster/data/mm9/bed/blastzAnoCar1.2007-09-19
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl DEF -chainMinScore=5000 \
+	-qRepeats=windowmaskerSdust \
+	-chainLinearGap=loose -bigClusterHub=kk -verbose=2 > do.log 2>&1 &
+    #	real    911m49.918s
+    # after kk difficulties, finishing the first kluster run manually
+# Completed: 86355 of 86355 jobs
+# CPU time in finished jobs:   11171051s  186184.18m  3103.07h  129.29d  0.354 y
+# IO & Wait Time:                662082s   11034.70m   183.91h    7.66d  0.021 y
+# Average job time:                 137s       2.28m     0.04h    0.00d
+# Longest finished job:            1467s      24.45m     0.41h    0.02d
+# Submission to last job:         62938s    1048.97m    17.48h    0.73d
+    #	continuing
+    time nice -n +19 ~/kent/src/hg/utils/automation/doBlastzChainNet.pl \
+	DEF -chainMinScore=5000 \
+	-continue=cat -qRepeats=windowmaskerSdust \
+	-chainLinearGap=loose -bigClusterHub=kk -verbose=2 > cat.log 2>&1 &
+    #	real    31m44.652s
+    cat  fb.mm9.chainAnoCar1Link.txt
+    #	89239796 bases of 2620346127 (3.406%) in intersection
+
+    #	and for the swap
+    mkdir /cluster/data/anoCar1/bed/blastz.mm9.swap
+    cd /cluster/data/anoCar1/bed/blastz.mm9.swap
+    time nice -n +19 ~/kent/src/hg/utils/automation/doBlastzChainNet.pl \
+	/cluster/data/mm9/bed/blastzAnoCar1.2007-09-19/DEF -chainMinScore=5000 \
+	-swap -qRepeats=windowmaskerSdust \
+	-chainLinearGap=loose -bigClusterHub=kk -verbose=2 > swap.log 2>&1 &
+    #	real    29m12.291s
+    cat fb.anoCar1.chainMm9Link.txt
+    #	85923556 bases of 1741478929 (4.934%) in intersection
+
+#########################################################################
+# BLASTZ Chicken galGal3 (WORKING - 2007-09-21 - Hiram)
+    ssh kkstore03
+    screen # use screen to control this job
+    mkdir /cluster/data/mm9/bed/blastzGalGal3.2007-09-21
+    cd /cluster/data/mm9/bed/blastzGalGal3.2007-09-21
+
+    cat << '_EOF_' > DEF
+# mouse vs chicken
+
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET: Mouse Mm9
+SEQ1_DIR=/scratch/data/mm9/nib
+SEQ1_SMSK=/scratch/data/mm9/notInOthers
+SEQ1_LEN=/cluster/data/mm9/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Chicken galGal3 - single chunk big enough to run entire chrom
+SEQ2_DIR=/scratch/hg/galGal3/nib
+SEQ2_LEN=/cluster/data/galGal3/chrom.sizes
+SEQ2_SMSK=/san/sanvol1/galGal3/linSpecRep
+SEQ2_CHUNK=200000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm9/bed/blastzGalGal3.2007-09-21
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl DEF -chainMinScore=5000 \
+	-chainLinearGap=loose -bigClusterHub=kk -verbose=2 > do.log 2>&1 &
+XXX - running - 2007-09-21 14:30
+
+#########################################################################
+# BLASTZ Platypus ornAna1 - (WORKING - 2007-09-21 - Hiram)
+    ssh kkstore05
+    mkdir /cluster/data/mm9/bed/blastzOrnAna1.2007-09-21
+    cd /cluster/data/mm9/bed/blastzOrnAna1.2007-09-21
+
+    cat << '_EOF_' > DEF
+# mouse vs. platypus
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+BLASTZ_M=50
+
+# TARGET: Mouse Mm9
+SEQ1_DIR=/scratch/data/mm9/mm9.2bit
+SEQ1_LEN=/cluster/data/mm9/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=0
+
+# QUERY: ornAna1
+SEQ2_DIR=/iscratch/i/ornAna1/ornAna1.2bit
+SEQ2_LEN=/cluster/data/ornAna1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=300
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm9/bed/blastzOrnAna1.2007-09-21
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << emacs
+
+    time nice -n +19 doBlastzChainNet.pl DEF -chainMinScore=5000 \
+	-chainLinearGap=loose -bigClusterHub=kk -verbose=2 > do.log 2>&1 &
+    #	real    992m24.729s
 
 #########################################################################
