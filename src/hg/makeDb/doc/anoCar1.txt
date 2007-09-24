@@ -812,3 +812,24 @@ TMPDIR=/scratch/tmp
     ln -s blastz.ornAna1.swap /cluster/data/anoCar1/bed/blastz.ornAna1
 
 
+############################################################################
+# SWAP Mouse Mm9 chain/net (DONE - 2007-09-21 - hiram)
+    ssh kkstore04
+    screen # control this sequence with screen
+    #	the original
+    cd /cluster/data/mm9/bed/blastzAnoCar1.2007-09-19
+    cat  fb.mm9.chainAnoCar1Link.txt
+    #	89239796 bases of 2620346127 (3.406%) in intersection
+
+    #	and for the swap
+    mkdir /cluster/data/anoCar1/bed/blastz.mm9.swap
+    cd /cluster/data/anoCar1/bed/blastz.mm9.swap
+    time nice -n +19 ~/kent/src/hg/utils/automation/doBlastzChainNet.pl \
+	/cluster/data/mm9/bed/blastzAnoCar1.2007-09-19/DEF -chainMinScore=5000 \
+	-swap -qRepeats=windowmaskerSdust \
+	-chainLinearGap=loose -bigClusterHub=kk -verbose=2 > swap.log 2>&1 &
+    #	real    29m12.291s
+    cat fb.anoCar1.chainMm9Link.txt
+    #	85923556 bases of 1741478929 (4.934%) in intersection
+
+#########################################################################
