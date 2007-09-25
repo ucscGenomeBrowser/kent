@@ -9781,6 +9781,9 @@ exonWalk:cds          31207765 27951670  1.00%  89.57%  90.24% 90.24% 90.24%
 ####################################################################
 # LOAD ENSEMBL GENES (DONE, 2006-05-02, Fan)
 # ADDED STABLE URL TO TRACKDB (DONE, 2006-05-29, hartera)
+# ADDED RELEASE ALPHA AND RELEASE BETA VERSIONS OF TRACK ENTRY IN 
+# trackDb.ra SO THAT CORRECT ENSEMBL BUILD VERSION DISPLAYED AND LINKED TO
+# AS DIFFERENT ENSEMBL BUILDS ON RR AND HGWDEV (DONE, 2007-09-25, hartera)
     mkdir /cluster/data/hg18/bed/ensembl
     cd /cluster/data/hg18/bed/ensembl
     # Get the ensembl protein data from 
@@ -9842,6 +9845,25 @@ exonWalk:cds          31207765 27951670  1.00%  89.57%  90.24% 90.24% 90.24%
     # (2006-05-29, hartera)
     # Changed url line for ensGene entry to:
     # url http://apr2006.archive.ensembl.org/perl/transview?transcript=$$
+    
+    # (2007-09-25, hartera)
+    # Created a release beta version of this track in human/hg18/trackDb.ra
+    # with the ensArchive setting set to apr2006 to create the correct URL
+    # as above and add the correct version (version 38) in the label:
+track ensGene
+release beta
+shortLabel Ensembl Genes
+longLabel Ensembl (Build 38) Gene Predictions
+group genes
+priority 40
+visibility hide
+color 150,0,0
+type genePred ensPep
+ensArchive apr2006
+    # A separate trackDb entry (release alpha) was made for the updated
+    # track on hgwdev which is Build 46 (aug2007). This means that the 
+    # correct version will be displayed and the correct links made on both
+    # the RR and hgwdev.
 
 # Create knownToEnsembl column
     hgMapToGene hg17 ensGene knownGene knownToEnsembl
