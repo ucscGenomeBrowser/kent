@@ -84,26 +84,32 @@ extract expression data from R objects
    - This tutorial describes process for Agilent data, but procedure
      is identical for any R object.
 
-1) Enter directory where ISPY R objects are stored (*.Rda)
+1) cd /data/ISPY/
 
-2) Start R (at command prompt, simply type 'R')
+2) mkdir I-SPY_data_tab
+   (where tab-delimited extracted data will reside, at least temporarily)
+
+3) cd I-SPY_data_dump, 
+   (where R objects are stored)
+
+4) Start R (at command prompt, simply type 'R')
    Note: All R commands will be in single-quotes (')
 
-3) Load the data. This R object stored expression data in a variable 
+5) Load the data. This R object stored expression data in a variable 
    called 'dataMatrix':
          'load("DataMatrix_ISPY173Agilent_25June07.Rda")'
 
-4) Write out the table to file "agilent.tab":
+6) Write out 'dataMatrix' to tab-delimited data files:
 
    a) For rows = Agilent probes:
-         'write.table(dataMatrix, file = "agilent.tab", sep = "\t")'
+         'write.table(dataMatrix, file = "../I-SPY_data_tab/DataMatrix_ISPY173Agilent_25June07.tab", sep = "\t")'
 
    b) For rows = experiment IDs, note use of transpose t() operator: 
-         'write.table(t(dataMatrix), file = "agilent.tab", sep = "\t")'
+         'write.table(t(dataMatrix), file = "../I-SPY_data_tab/DataMatrix_ISPY173Agilent_25June07_tranpose.tab", sep = "\t")'
+
 
 That's it!
-
-- Zack 
+Zack Sanborn
 9/25/07
 
 ==================================================================
