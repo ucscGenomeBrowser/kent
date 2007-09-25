@@ -22,7 +22,7 @@
 #include "microarray.h"
 #include "hgChromGraph.h"
 
-static char const rcsid[] = "$Id: hgHeatmap.c,v 1.17 2007/09/25 00:04:56 jzhu Exp $";
+static char const rcsid[] = "$Id: hgHeatmap.c,v 1.18 2007/09/25 18:55:01 jzhu Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -78,8 +78,8 @@ for (ct = ctList; ct != NULL; ct = ct->next)
         gh->expCount = pSc;
         gh->tDb = tdb;
 	gh->database = CUSTOM_TRASH;
+	setBedOrder(gh);
         slAddHead(&list, gh);
-	getBedOrder(gh);
         }
     }
 
@@ -143,8 +143,8 @@ for (i=0; i<N; i++)
     struct microarrayGroups *maGs = maGetTrackGroupings(gh->database, gh->tDb);
     struct maGrouping *allA= maGs->allArrays;
     gh->expCount = allA->size;
+    setBedOrder(gh);
     slAddHead(&list,gh);
-    getBedOrder(gh);
     }
 return list;
 }
@@ -191,8 +191,89 @@ for (ref = ghList; ref != NULL; ref = ref->next)
     }
 }
 
+void setPersonOrder (struct genoHeatmap* gh, char* personStr)
+/* Set the sampleOrder and sampleList of a specific heatmap to personStr; 
+   personStr is a csv format string of personids
+   if posStr is null, set to default 
+*/
+{
+if (gh->sampleOrder)
+    freeHash(&gh->sampleOrder);
+gh->sampleOrder = hashNew(0);
+if (gh->sampleList)
+    slFreeList(gh->sampleList);
+gh->sampleList = slNameNew("");
+if (gh->expIdOrder)
+    freeMem(gh->expIdOrder);
+AllocArray(gh->expIdOrder, gh->expCount);
+/* set expIdOrder to default , i.e. an array of -1s, -1 indicates to the drawing code that the sample will not be drawn in heatmap */
+int i;
+for (i=0; i< gh->expCount; i++)
+    gh->expIdOrder[i]= -1;
+
+char *pS = personStr;
+int expId; // bed15 format expId 
+
+if (!sameString(pS,""))
+    {
+    char* person, *sample;
+    struct slName *sl, *slSample=NULL, *slPerson = slNameListFromComma(pS);
+    struct sqlConnection *conn = sqlConnect("ispy"); /*hard code for ISPY */
+    char *labTable = "labTrack"; /*hard code for ISPY */
+    char *key = "ispyId"; /*hard code for ISPY */
+
+    /* get the sampleIds of each person from database */ 
+    char query[512];
+    struct sqlResult *sr;
+    char **row;
+    for (sl= slPerson; sl!= NULL; sl=sl->next)
+	{
+	person =sl->name;
+	safef(query, sizeof(query),"select * from %s where %s = %s ", labTable, key, person);
+	sr = sqlGetResult(conn, query);
+	while ((row = sqlNextRow(sr)) != NULL)
+	    {
+	    sample = row[1];
+	    slNameAddHead(&(slSample),sample);
+	    }
+	}
+    slReverse(&(slSample));
+    sqlFreeResult(&sr);
+
+    /*microarray specific settings*/
+    struct microarrayGroups *maGs = maGetTrackGroupings(gh->database, gh->tDb);
+    struct maGrouping *allA= maGs->allArrays;
+    
+    int counter=0;    
+    for(sl=slSample; sl !=NULL; sl=sl->next)
+	{
+	sample = sl->name;
+	int i;
+	expId = -1;
+	for (i=0; i< allA->size; i++)
+	    {
+	    if (sameString(allA->names[i],sample))
+		{
+		expId = allA->expIds[i];
+		gh->expIdOrder[expId]=counter;
+		break;
+		}
+	    }
+	if (expId == -1)
+	    continue;
+	hashAdd(gh->sampleOrder, sample, &counter);
+	slNameAddHead(&(gh->sampleList),sample);
+	counter++;
+	}
+    slReverse(&(gh->sampleList));
+    }
+else
+    defaultOrder(gh);
+}
+
 void setSampleOrder(struct genoHeatmap* gh, char* posStr)
-/* Set the sampleOrder and sampleList of a specific heatmap to posStr; posStr is a csv format string
+/* Set the sampleOrder and sampleList of a specific heatmap to posStr; 
+   posStr is a comma separated string of sample ids.
    if posStr is null, then check the configuration file 
    if the setting is not set in the configuration file, then the orders are set to default in sampleList and sampleOrder
 */
@@ -211,7 +292,7 @@ int i;
 for (i=0; i< gh->expCount; i++)
     gh->expIdOrder[i]= -1;
 
-char *pS = NULL;
+char *pS;
 
 if (!sameString(posStr,""))
     pS = posStr;
@@ -223,13 +304,12 @@ else
     if (tdb)
 	pS = trackDbSetting(tdb, trackOrderName);
     else
-	pS= NULL;
+	pS= "";
     }
 
-int orderCount = gh->expCount;
 int expId; // bed15 format expId 
 
-if (pS)
+if (!sameString(pS,""))
     {
     char* sample;
     gh->sampleList = slNameListFromComma(pS);
@@ -262,36 +342,65 @@ if (pS)
 	}
     }
 else
-    {
-    int i;
-    char sample[512];
-    for (i=0; i<orderCount;i++)
-	{
-	expId = i;
-	safef(sample, sizeof(sample), "%d", expId);
-	slNameAddHead(&gh->sampleList, sample);
-	gh->expIdOrder[expId]=i;
-	hashAdd(gh->sampleOrder, sample, &i); 
-	}
-    slReverse(&gh->sampleList);
-    }
-return ;
+    defaultOrder(gh);
 }
 
-/* Return the recording of  expIds in bed15 file
+/* reset the default order of samples to be displayed */ 
+void defaultOrder(struct genoHeatmap* gh)
+{
+if (gh->sampleOrder)
+    freeHash(&gh->sampleOrder);
+gh->sampleOrder = hashNew(0);
+if (gh->sampleList)
+    slFreeList(gh->sampleList);
+gh->sampleList = slNameNew("");
+if (gh->expIdOrder)
+    freeMem(gh->expIdOrder);
+AllocArray(gh->expIdOrder, gh->expCount);
+/* set expIdOrder to default , i.e. an array of -1s, -1 indicates to the drawing code that the sample will not be drawn in heatmap */
+int i;
+for (i=0; i< gh->expCount; i++)
+    gh->expIdOrder[i]= -1;
+
+int expId;
+char sample[512];
+for (i=0; i<gh->expCount;i++)
+    {
+    expId = i;
+    safef(sample, sizeof(sample), "%d", expId);
+    slNameAddHead(&gh->sampleList, sample);
+    gh->expIdOrder[expId]=i;
+    hashAdd(gh->sampleOrder, sample, &i); 
+    }
+slReverse(&gh->sampleList);
+}
+
+
+/* Return an array for reordering the experiments
+   If the order has not been set, then use function setBedOrder to set 
 */
 int *getBedOrder(struct genoHeatmap* gh)
 {
 if (gh->expIdOrder == NULL)
-    {
-    /* get the ordering information from cart */
-    char varName[512];
-    char *tableName = gh->name;
-    safef(varName, sizeof (varName),"%s_%s", hghOrder,tableName);
-    char *posStr = cartUsualString(cart,varName, "");
-    setSampleOrder(gh, posStr);
-    }
+    setBedOrder(gh);
 return gh->expIdOrder;
+}
+
+/* Set the ordering of samples in display 
+*/
+void setBedOrder(struct genoHeatmap* gh)
+{
+/* get the ordering information from cart variable hghOrder*/
+char varName[512];
+char *tableName = gh->name;
+
+//safef(varName, sizeof (varName),"%s_%s", hghSampleOrder,tableName);
+//char *pStr = cartUsualString(cart,varName, "");
+//setSampleOrder(gh, pStr);
+
+safef(varName, sizeof (varName),"%s_%s", hghPersonOrder,tableName);
+char *pStr = cartUsualString(cart,varName, "");
+setPersonOrder(gh, pStr);
 }
 
 /* Routines to fetch cart variables. */

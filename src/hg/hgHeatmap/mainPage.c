@@ -28,7 +28,7 @@
 #include "hCytoBand.h"
 #include "hgChromGraph.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.15 2007/09/25 00:04:56 jzhu Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.16 2007/09/25 18:55:01 jzhu Exp $";
 
 /* Page drawing stuff. */
 
@@ -646,10 +646,10 @@ if (result)
 if (result)
     /* test code for reordering for ispy table */ 
     {
-    hPrintf("<BR>This is a test: ispyMipCGH sample order, format: csv.<BR>");
+    hPrintf("<BR>This is a test: ispyMipCGH patient order, format: csv.<BR>");
     char varName[512];
     char *tableName = "ispyMipCGH";
-    safef(varName, sizeof (varName),"%s_%s", hghOrder,tableName);
+    safef(varName, sizeof (varName),"%s_%s", hghPersonOrder,tableName);
     char *text = cartUsualString(cart, varName, "");
     cgiMakeTextArea(varName,text, 5 ,50);
     cgiMakeSubmitButton();
