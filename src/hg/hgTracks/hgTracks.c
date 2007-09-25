@@ -118,7 +118,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1409 2007/09/24 20:36:09 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1410 2007/09/25 19:18:38 angie Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -14639,7 +14639,9 @@ if (NULL != hgp && NULL != hgp->tableList && NULL != hgp->tableList->name)
     char *parent = hGetParent(trackName);
     if (parent)
         trackName = cloneString(parent);
-    cartSetString(cart, trackName, hTrackOpenVis(trackName));
+    char *vis = cartOptionalString(cart, trackName);
+    if (vis == NULL || differentString(vis, "full"))
+	cartSetString(cart, trackName, hTrackOpenVis(trackName));
     }
 
 /* After position is found set up hash of matches that should
