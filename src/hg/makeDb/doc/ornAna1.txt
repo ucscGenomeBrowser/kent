@@ -1259,7 +1259,7 @@ chainOne $(path1)
 
 
 #########################################################################
-# WSSD AND SEGMENTAL DUPLICATIONS (DONE 8/3/07 angie)
+# WSSD AND SEGMENTAL DUPLICATIONS (DONE 8/3/07 angie - WSSD UPDATED 9/12/07)
     ssh kkstore05
     mkdir /cluster/data/ornAna1/bed/genomicSuperDups
     cd /cluster/data/ornAna1/bed/genomicSuperDups
@@ -1269,7 +1269,12 @@ chainOne $(path1)
 
     ssh hgwdev
     cd /cluster/data/ornAna1/bed/genomicSuperDups
-    hgLoadBed ornAna1 wssdCoverage SmallContig_wssdGE10K_nogap.tab
+    # 9/12/07: Ginger sent new WSSD file, and said we can filter out 
+    # single-base items.
+    awk '($3 - $2) > 1 {print;}' SmallContig_wssdGE10K_nogap.tab \
+    | sed -e 's/^chr_Ultra/Ultra/' \
+    | hgLoadBed ornAna1 wssdCoverage stdin
+
     awk '($3 - $2) >= 1000 && ($9 - $8) >= 1000 {print;}' genomicSuperDups \
     | hgLoadBed ornAna1 genomicSuperDups stdin \
       -tab -sqlTable=$HOME/kent/src/hg/lib/genomicSuperDups.sql
