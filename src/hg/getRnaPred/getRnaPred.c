@@ -10,7 +10,7 @@
 #include "dnautil.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: getRnaPred.c,v 1.19 2007/09/24 22:36:04 markd Exp $";
+static char const rcsid[] = "$Id: getRnaPred.c,v 1.20 2007/09/25 16:40:05 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -270,7 +270,7 @@ for (ir = offset, ip = 0; ir < cdsBuf->stringSize; ir += 3, ip++)
     }
 cdsBuf->string[ip] = '\0';
   
-faWriteNext(faFh, name, cdsBuf->string+offset, strlen(cdsBuf->string+offset));
+faWriteNext(faFh, name, cdsBuf->string, strlen(cdsBuf->string));
 }
 
 void processGenePred(struct genePred *gp, struct dyString *dnaBuf, 
