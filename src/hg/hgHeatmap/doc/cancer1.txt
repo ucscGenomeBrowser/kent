@@ -25,7 +25,7 @@ the bed file is at: /data/ISPY/koeiCGH08152007/ 2007-05-16_MIP_ISPY_log2copysum_
 Load table ispyMipCGH in database hg17
 hgLoadBed database ispyMipCGH 2007-05-16_MIP_ISPY_log2copysum_segment_means.bed
 
-add the following to makeDb/trackDb/human/hg17/trackDb.instinct.ra file
+add the following track information to makeDb/trackDb/human/hg17/trackDb.instinct.ra file
 
 track ispyMipCGH
 shortLabel ispy CGH by MIP
@@ -41,7 +41,7 @@ order 230370,231387,231480,234843,235159,236841,237515,237951,238045,238177,2383
 
 do make DBS=hg17
 
-add the following to /makeDb/hgCgiData/Human/microarrayGroups.ra
+add the following to makeDb/hgCgiData/Human/microarrayGroups.ra
 name ispyMipCGHGroups
 type groupings
 all ispyMipCGHAll
@@ -74,5 +74,6 @@ do cd ../ then make
   # Creating table definition for ispyMipCGH
   # Saving bed.tab
   # Loading hg18
-
   
+add #include trackDb.instinct.ra in hg18/trackDb.ra file 
+add track information to hg18/trackDb.instinct.ra file  
