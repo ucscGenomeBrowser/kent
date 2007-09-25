@@ -1255,36 +1255,157 @@ danRer5.perChromTables = no
 ###########################################################################
 # ENSEMBL GENES TRACK FOR PROTEIN-CODING GENES FROM 
 # ENSEMBL VERSION 46 (AUG 2007) (DONE, 2007-09-05, markd)
+# Compare peptides translated from genome to those downloaded from
+# BioMart for these transcripts and LOAD ensPep TABLE WITH PEPTIDE 
+# SEQUENCES FOR THE PROTEIN-CODING ENSEMBL GENES 
+# (DONE, 2007-09-24 - 2007-09-25, hartera)
    # Used the programs created by Robert Baertsch to download Ensembl  
    # genes from Ensembl's ftp site, load it into the danRer5 database.
+  
    ssh hgwdev
    mkdir /cluster/data/danRer5/bed/ensembl46
    cd /cluster/data/danRer5/bed/ensembl46
+   
+   # Download Ensembl genes from ftp site and create tracks in browser:
    # current version is danio_rerio core_46_7
-   # Usage of download program: ensemblDownload species version outdir
-   ensemblDownload danio_rerio core_46_7 danio_rerio_core_46_7
-   hgLoadEnsembl danio_rerio core_46_7 danio_rerio_core_46_7
+   hgLoadEnsembl danio_rerio core_46_7 danRer5
 
-   # download Ensembl files:
-   ensemblDownload danio_rerio core_46_7 danio_rerio_core_46_7
-   # import database for Ensembl data:
-   ensemblDbImport danio_rerio core_46_7 danio_rerio_core_46_7
-   # creates appropriate load files in current directory:
-   ensemblExport danio_rerio core_46_7 danRer5
-
-+ genePredCheck -db=danRer5 ensGene.gp
+   # these problems were detected, add to problem.ids file:
+   genePredCheck -db=danRer5 ensGene.gp
 Error: ensGene.gp:2720: ENSDART00000019661 exonFrame on non-CDS exon 14
 Error: ensGene.gp:3874: ENSDART00000027605 exonFrame on non-CDS exon 0
 Error: ensGene.gp:9416: ENSDART00000062681 exonFrame on non-CDS exon 12
 checked: 31743 failed: 3
 
-   # Add these failed ones to ens.filter
-   # drop Ensembl transript ids in the ens.filter file:
-   ensemblExport -f ens.filter danio_rerio core_46_7 danRer5
-   # load tab files created by exportEnsembl into danRer5 database:
-   ensemblLoad danio_rerio core_46_7 danRer5
-   # Download Ensembl genes from ftp site and create tracks in browser:
    hgLoadEnsembl -f problem.ids danio_rerio core_46_7 danRer5
+
+   # hgLoadEnsembl creates the ensGene, ensGeneXref, ensGtp and ensInfo 
+   # tables but no ensPep peptide sequence table.
+
+   # Compare the peptides as translated from the genomic sequence of the 
+   # CDS for each transcript and the peptides for the transcripts downloaded
+   # from BioMart (2007-09-23 - 2007-09-24, hartera)
+   ssh kkstore06
+   mkdir /cluster/data/danRer5/bed/ensembl46/peptides
+
+   ssh hgwdev
+   cd /cluster/data/danRer5/bed/ensembl46/peptides
+   hgsql -N -e 'select distinct(name) from ensGene;' danRer5 | sort \
+         > ensGene.txIds.sort
+
+   # First get peptides from the genome translation of the genes defined in 
+   # ensGene. This does not work for the mitochondrial genome. The ability 
+   # to deal with vertebrate mitochondrial genetic code for translation 
+   # of genes on chrM was added (markd).
+   getRnaPred -peptides -genePredExt danRer5 ensGene all ensGeneTablePep.fa
+   # Took about 10 minutes
+   
+   # Then download the peptide sequences from BioMart and compare 
+   # differences may include selenocysteines and translationnal frameshifts
+
+   # Get the ensembl peptide sequences from
+   # http://www.ensembl.org/biomart/martview
+   # Follow this sequence:
+   # 1) Choose the Ensembl Genes 46 as the database and then 
+   # Danio Rerio genes (ZFISH7) as the dataset.
+   # 2) Click on the Attributes link in the left panel. Select sequences.
+   # 3) Expand the SEQUENCES section and choose Peptide as type of sequence 
+   # to export and then expand the Header Information section and select 
+   # Ensembl Gene ID from Gene Attributes and Ensembl Transcript ID 
+   # and Ensembl Peptide ID from Transcript Attributes 
+   # 4) Click on the Filters link in the left panel and expand the GENE
+   # section. Select the Gene type box and then select protein_coding as 
+   # these are the only genes with an associated protein sequence.
+   # 5) Click on the Results link in the top black menu bar and 
+   # choose FASTA for the output and export all results to
+   # Compressed file (.gz). Select unique results only.
+   # save the file as ensembl46Pep.fasta.gz and move to
+   # /cluster/data/danRer5/bed/ensembl46
+ 
+   ssh kkstore06
+   cd /cluster/data/danRer5/bed/ensembl46/peptides
+   # unzip the Enseml peptides file downloaded from BioMart
+   gunzip ensembl46Pep.fasta.gz
+   grep '>' ensembl46Pep.fasta | wc -l
+   # 31743
+   grep '>' ensembl46Pep.fasta > headers
+   awk 'BEGIN {FS="|"} {print $1;}' headers | sort | uniq \
+       > pepBioMart.txIds.sort
+   perl -pi.bak -e 's/>//' pepBioMart.txIds.sort
+   # compare list of transcript IDs from the ensGene table to those for the
+   # downloaded peptides from BioMart.
+   comm -13 ensGene.txIds.sort pepBioMart.txIds.sort
+   # from the BioMart peptide download there were 3 extra:
+# ENSDART00000019661
+# ENSDART00000027605
+# ENSDART00000062681
+   # These were the problem IDs that were removed from the set - see above.
+   comm -23 ensGene.txIds.sort pepBioMart.txIds.sort
+   # no difference
+   # change headers so that they only have the Ensembl transcript ID.
+   awk 'BEGIN{FS="|"} {if ($1 ~ /ENSDART/) print $1; else print;}' \
+       ensembl46Pep.fasta > ensembl46PepTxIdsOnly.fasta
+   # use faCmp (~/kent/src/utils/faCmp/faCmp.c) to compare the two files.
+   # it requires the same number of sequences in both files. 
+   # Use faFilter to remove the ones not in ensGeneTablePep.fa 
+   faFilter -v -name=ENSDART00000019661 ensembl46PepTxIdsOnly.fasta tmp1.fa
+   faFilter -v -name=ENSDART00000027605 tmp1.fa tmp2.fa
+   faFilter -v -name=ENSDART00000062681 \
+            tmp2.fa ensembl46PepTxIdsOnlyFilt.fasta
+   grep '>' ensembl46PepTxIdsOnlyFilt.fasta | wc -l
+   # 31740
+   rm tmp*
+   # faCmp assumed that DNA sequences were being compared. An option was 
+   # added so that protein sequences could be compared (markd added this).
+   faCmp -sortName -peptide \
+         ensGeneTablePep.fa ensembl46PepTxIdsOnlyFilt.fasta \
+         >& ensTablevsBioMartFasta.diff
+# ENSDART00000038434 in ensGeneTablePep.fa differs from ENSDART00000038434 at
+# ensembl46PepTxIdsOnlyFilt.fasta at base 114 (X != V)
+# ENSDART00000046903 in ensGeneTablePep.fa differs from ENSDART00000046903 at
+# ensembl46PepTxIdsOnlyFilt.fasta at base 71 (X != T)
+# ENSDART00000047515 in ensGeneTablePep.fa differs from ENSDART00000047515 at
+# ensembl46PepTxIdsOnlyFilt.fasta at base 149 (X != L)
+# ENSDART00000049170 in ensGeneTablePep.fa differs from ENSDART00000049170 at
+# ensembl46PepTxIdsOnlyFilt.fasta at base 172 (X != S)
+# ENSDART00000080260 in ensGeneTablePep.fa differs from ENSDART00000080260 at
+# ensembl46PepTxIdsOnlyFilt.fasta at base 353 (X != G)
+# ENSDART00000081978 in ensGeneTablePep.fa differs from ENSDART00000081978 at
+# ensembl46PepTxIdsOnlyFilt.fasta at base 21 (X != R)
+# ENSDART00000082954 in ensGeneTablePep.fa differs from ENSDART00000082954 at
+# ensembl46PepTxIdsOnlyFilt.fasta at base 747 (X != A)
+# ENSDART00000083022 in ensGeneTablePep.fa differs from ENSDART00000083022 at
+# ensembl46PepTxIdsOnlyFilt.fasta at base 344 (X != L)
+# ENSDART00000105255 in ensGeneTablePep.fa differs from ENSDART00000105255 at
+# ensembl46PepTxIdsOnlyFilt.fasta at base 427 (X != A)
+
+# There are differences in just 9 of the protein sequences where we have an 
+# "X" because there is an "N" in the genome sequence in the codon for the
+# amino acid whereas Ensembl used transcript evidence to predict the 
+# missing base. Since there are so few differences, then the predicted 
+# translation from the genome is good enough without loading an ensPep table.
+   # Load anyway for completeness since there are some differences. Use 
+   # "generic" as the type for loading using hgPepPred, not "ensembl" since
+   # all the IDs were removed from the header line but the transcript ID.
+   # If type "ensembl" is defined, it expects at least 3 IDs separated by "|".
+
+   ssh hgwdev
+   cd /cluster/data/danRer5/bed/ensembl46/peptides
+   # load the BioMart downloaded Ensembl 46 peptide sequences into database:
+   hgPepPred danRer5 generic ensPep ensembl46PepTxIdsOnlyFilt.fasta
+   hgsql -e 'select count(*) from ensPep;' danRer5
+   # 31740
+   # All the sequences were loaded. 
+   # Added a zebrafish/danRer5/trackDb.ra entry for ensGene with the
+   # archive setting, aug2007, so that URLs for Ensembl Genes point to the 
+   # correct archive. Added the Esnembl version number to the longlabel and
+   # as a dataVersion setting (Ensembl Relese 46).
+
+   # clean up
+   ssh kkstore06
+   cd /cluster/data/danRer5/bed/ensembl46/peptides
+   rm tmp*.fa headers ensPep.tab ensembl46PepTxIdsOnly.fasta *.bak
+   rm pepBioMart.txIds.sort ensGene.txIds.sort 
 
 ###########################################################################
 # MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR danRer5 (DONE, 2006-09-11, hartera)
@@ -2376,7 +2497,7 @@ TMPDIR=/scratch/tmp
     # ALIGNMENT DOWNLOAD FOR DANRER5 ON FR2 -document in fr2.txt
 
 ###########################################################################
-# CREATE LIFTOVER FROM danRer5 TO danRer4 
+# CREATE LIFTOVER CHAINS FROM danRer5 TO danRer4 
 # (DONE 2007-09-19 AND 2007-09-21, hartera)
     ssh kkstore06
     mkdir /cluster/data/danRer5/bed/blat.danRer4
