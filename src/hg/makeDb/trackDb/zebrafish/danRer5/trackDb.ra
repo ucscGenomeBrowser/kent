@@ -90,6 +90,7 @@ visibility pack
 color 150,0,0
 type genePred ensPep
 ensArchive aug2007
+dataVersion Ensembl Release 46
 
 track affyConsensusAndTargetZonWildType
 compositeTrack on
