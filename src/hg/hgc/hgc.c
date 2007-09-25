@@ -209,7 +209,7 @@
 #include "atomDb.h"
 #include "itemConf.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1345 2007/09/23 01:42:55 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1346 2007/09/25 20:47:28 angie Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -7562,6 +7562,7 @@ void printRgdQtlCustomUrl(struct trackDb *tdb, char *itemName, boolean encode)
 {
 char *url = tdb->url;
 char *qtlId;
+boolean gotId = FALSE;
 
 if (url != NULL && url[0] != 0)
     {
@@ -7571,7 +7572,7 @@ if (url != NULL && url[0] != 0)
     char **row;
     char *chrom, *chromStart, *chromEnd;
 
-    printf("<H3>%s QTL %s: ", organism, itemName);
+    printf("<B>%s QTL %s: ", organism, itemName);
     sprintf(query, "select description from rgdQtlLink where name='%s';", itemName);
     sr = sqlMustGetResult(conn, query);
     row = sqlNextRow(sr);
@@ -7580,24 +7581,25 @@ if (url != NULL && url[0] != 0)
         printf("%s", row[0]);
         }
     sqlFreeResult(&sr);
-    printf("</H3>\n");
+    printf("</B><BR>\n");
  
     sprintf(query, "select id from rgdQtlLink where name='%s';", itemName);
     sr = sqlMustGetResult(conn, query);
-    row = sqlNextRow(sr);
-    if (row != NULL)
+    while ((row = sqlNextRow(sr)) != NULL)
         {
 	qtlId = row[0];
-        printf("<B>RGD QTL Report: ");
-        printf("<A HREF=\"%s%s\" target=_blank>", url, qtlId);
-        printf("RGD:%s</B></A>\n", qtlId);
-        } 
+	printf(gotId ? ", \n\t" : "<B>RGD QTL Report:</B> ");
+        printf("<B><A HREF=\"%s%s\" target=_blank>", url, qtlId);
+        printf("RGD:%s</A></B>", qtlId);
+	gotId = TRUE;
+        }
+    if (gotId)
+	printf("\n<BR>\n");
     sqlFreeResult(&sr);
    
     sprintf(query, "select chrom, chromStart, chromEnd from rgdQtl where name='%s';", itemName);
     sr = sqlMustGetResult(conn, query);
-    row = sqlNextRow(sr);
-    if (row != NULL)
+    while ((row = sqlNextRow(sr)) != NULL)
         {
 	chrom      = row[0];
         chromStart = row[1];
