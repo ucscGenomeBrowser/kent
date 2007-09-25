@@ -24,3 +24,23 @@ Build  table ispyMipCGH in database hg17
 hgLoadBed database ispyMipCGH 2007-05-16_MIP_ISPY_log2copysum_segment_means.bed
 
 ===================================================================
+
+###################################
+# Converting ispyMipCGH to hg18
+  cd /data/ISPY/
+  mkdir DataHg18
+  cd DataHg18
+  liftOver ../koeiCGH08152007/2007-05-16_MIP_ISPY_log2copysum_segment_means.bed \
+    /gbdb/hg17/liftOver/hg17ToHg18.over.chain.gz koei_MIP_CGH_hg18.bed unmapped.bed
+  
+  # all 21162 items mapped.
+  
+  hgLoadBed hg18 ispyMipCGH koei_MIP_CGH_hg18.bed 
+  # Reading koei_MIP_CGH_hg18.bed
+  # Loaded 21162 elements of size 15
+  # Sorted
+  # Creating table definition for ispyMipCGH
+  # Saving bed.tab
+  # Loading hg18
+
+  
