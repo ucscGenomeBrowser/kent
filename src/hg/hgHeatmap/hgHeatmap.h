@@ -74,8 +74,8 @@ struct genoHeatmap
 int selectedHeatmapHeight();
 /* Return height of user selected heatmaps from the web interface. */
 
-int heatmapHeight(char* heatmap);
-/* Return height of heatmap. */
+int heatmapHeight(struct genoHeatmap *gh);
+/* Return height of heatmap. This is only for those experiments that will be displayed. */
 
 char *heatmapName();
 /* Return name of heatmap */
@@ -89,7 +89,7 @@ struct slName* heatmapNames();
 int experimentHeight();
 /* Return height of an experiment */
 
-int experimentCount(char* heatmap);
+int experimentCount(struct genoHeatmap *gh);
 /* Return the number of experiments */
 
 #define betweenRowPad 3

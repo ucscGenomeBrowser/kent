@@ -28,7 +28,7 @@
 #include "hCytoBand.h"
 #include "hgChromGraph.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.14 2007/09/14 07:05:23 jzhu Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.15 2007/09/25 00:04:56 jzhu Exp $";
 
 /* Page drawing stuff. */
 
@@ -284,8 +284,8 @@ for(chrom = gl->chromList; chrom; chrom = chrom->next)
     
     int chromX = chrom->x, chromY = chrom->y;
 
-    vgSetClip(vg, chromX, chromY+yOff, chrom->width, heatmapHeight(chromHeatmap));
-    vgBox(vg, chromX, chromY+yOff , chrom->width, heatmapHeight(chromHeatmap), MG_GRAY);
+    vgSetClip(vg, chromX, chromY+yOff, chrom->width, heatmapHeight(gh));
+    vgBox(vg, chromX, chromY+yOff , chrom->width, heatmapHeight(gh), MG_GRAY);
 
     for(nb = ghBed; nb; nb = nb->next)
 	{
@@ -298,7 +298,9 @@ for(chrom = gl->chromList; chrom; chrom = chrom->next)
 	    val = nb->expScores[i];
 	    valId = nb->expIds[i];
 	    int orderId = chromOrder[valId];
-	      
+	    if (orderId == -1)
+		continue;
+
 	    if(val > 0)
 		{
 		absVal = val * RED_SCALE;
@@ -370,7 +372,7 @@ struct slRef *ref= NULL;
 char *db, *tableName;
 
 /* Draw chromosome heatmaps. */
- int totalYOff = 0;
+int totalYOff = 0;
 for (ref = ghList; ref != NULL; ref = ref->next)
     {
     gh= ref->val;
@@ -379,7 +381,7 @@ for (ref = ghList; ref != NULL; ref = ref->next)
 
     drawChromHeatmaps(vg, db, gl, tableName, 
 		       totalYOff + yOffset, TRUE, TRUE, TRUE);
-    totalYOff += heatmapHeight(tableName) + spacing;
+    totalYOff += heatmapHeight(gh) + spacing;
 
     /* hard-code for demo.
        also draw summary ChromGraph when the tableName is cnvBroadLungv2 

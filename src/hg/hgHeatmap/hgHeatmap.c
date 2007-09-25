@@ -22,7 +22,7 @@
 #include "microarray.h"
 #include "hgChromGraph.h"
 
-static char const rcsid[] = "$Id: hgHeatmap.c,v 1.16 2007/09/14 07:05:23 jzhu Exp $";
+static char const rcsid[] = "$Id: hgHeatmap.c,v 1.17 2007/09/25 00:04:56 jzhu Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -79,6 +79,7 @@ for (ct = ctList; ct != NULL; ct = ct->next)
         gh->tDb = tdb;
 	gh->database = CUSTOM_TRASH;
         slAddHead(&list, gh);
+	getBedOrder(gh);
         }
     }
 
@@ -142,8 +143,8 @@ for (i=0; i<N; i++)
     struct microarrayGroups *maGs = maGetTrackGroupings(gh->database, gh->tDb);
     struct maGrouping *allA= maGs->allArrays;
     gh->expCount = allA->size;
-
     slAddHead(&list,gh);
+    getBedOrder(gh);
     }
 return list;
 }
@@ -205,6 +206,10 @@ gh->sampleList = slNameNew("");
 if (gh->expIdOrder)
     freeMem(gh->expIdOrder);
 AllocArray(gh->expIdOrder, gh->expCount);
+/* set expIdOrder to default , i.e. an array of -1s, -1 indicates to the drawing code that the sample will not be drawn in heatmap */
+int i;
+for (i=0; i< gh->expCount; i++)
+    gh->expIdOrder[i]= -1;
 
 char *pS = NULL;
 
@@ -238,12 +243,13 @@ if (pS)
     for(sl=gh->sampleList; sl !=NULL; sl=sl->next)
 	{
 	sample = sl->name;
+
 	hashAdd(gh->sampleOrder, sample, &counter);
 	int i;
 	expId = -1;
 	for (i=0; i< allA->size; i++)
 	    {
-	    if (sameString(allA->names[i],sl->name))
+	    if (sameString(allA->names[i],sample))
 		{
 		expId = allA->expIds[i];
 		gh->expIdOrder[expId]=counter;
@@ -254,8 +260,6 @@ if (pS)
 	    errAbort("heatmap %s setSampleOrder: sampleName %s is not found in microarray.ra\n", gh->name, sl->name);
 	counter++;
 	}
-    if (counter != orderCount)
-	errAbort("heatmap %s setSampleOrder: number of samples does not match expCount\n", gh->name);
     }
 else
     {
@@ -324,15 +328,16 @@ for (ref = ghList; ref != NULL; ref = ref->next)
     {
     gh= ref->val;
     name = gh->name;
-    totalHeight += experimentCount(name) * experimentHeight();
+    totalHeight += heatmapHeight(gh);
     totalHeight += spacing;
     
     /* hard coded */
-    if ( sameString(name,"cnvLungBroadv2_ave100K") // || sameString(name,"cnvLungBroadv2")  || sameString(name, "expBreastCancerUCSF")
-	 || sameString(name, "CGHBreastCancerUCSF") || sameString(name, "CGHBreastCancerStanford"))
+    if ( sameString(name,"cnvLungBroadv2_ave100K") || sameString(name, "CGHBreastCancerUCSF") || sameString(name, "CGHBreastCancerStanford"))
+	{
 	totalHeight += chromGraphHeight();
+	totalHeight += spacing;
+	}
     }
-
 
 totalHeight += betweenRowPad;
 
@@ -340,24 +345,28 @@ return totalHeight;
 }
 
 
-int heatmapHeight(char* heatmap)
+int heatmapHeight(struct genoHeatmap *gh)
 /* Return height of the heatmap. */
 {
-if (heatmap == NULL)
+if (gh == NULL)
     return 0;
-return experimentCount(heatmap) * experimentHeight();
+if (gh->sampleList == NULL)
+    return experimentCount(gh) * experimentHeight();
+
+/* height of experiments that will be displayed */
+struct slName *sl;
+int count =0;
+for (sl= gh->sampleList; sl!=NULL; sl= sl->next)
+    count++;
+return count * experimentHeight();
 }
 
-int experimentCount(char* heatmap)
+int experimentCount(struct genoHeatmap *gh)
 /* Return number of experiments */
 {
-struct hashEl *el = hashLookup(ghHash, heatmap);
-if (el)
-    {
-    struct genoHeatmap *gh = el->val;
-    return gh->expCount;
-    }
-return 0;
+if (gh== NULL)
+    return 0;
+return gh->expCount;
 }
 
 char *chromLayout()
