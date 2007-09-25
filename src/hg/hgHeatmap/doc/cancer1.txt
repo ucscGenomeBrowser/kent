@@ -75,5 +75,5 @@ do cd ../ then make
   # Saving bed.tab
   # Loading hg18
   
-add #include trackDb.instinct.ra in hg18/trackDb.ra file 
-add track information to hg18/trackDb.instinct.ra file  
+ add #include trackDb.instinct.ra in hg18/trackDb.ra file 
+ add track information to hg18/trackDb.instinct.ra file  
