@@ -123,7 +123,7 @@ else
   endif
 endif
 if ($currDir != "") then
-  echo " * the $db $tableName track is located here: \
+  echo " * trackDb: \
     `echo $currDir | sed 's^.*makeDb^~^'`/trackDb$encode.ra"
 endif
 echo
@@ -159,7 +159,7 @@ else
   endif
 endif
 if ($currDir != "") then
-  echo " * the $db $tableName.html file is located here: \
+  echo " * html file: \
     `echo $currDir | sed 's^.*makeDb^~^'`/$tableName.html"
 endif
 echo
