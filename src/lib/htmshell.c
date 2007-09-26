@@ -17,7 +17,7 @@
 #include "errabort.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: htmshell.c,v 1.40 2007/09/26 20:28:16 galt Exp $";
+static char const rcsid[] = "$Id: htmshell.c,v 1.41 2007/09/26 23:34:02 hiram Exp $";
 
 jmp_buf htmlRecover;
 
@@ -222,16 +222,12 @@ size_t len = strlen(ascTime);
 if (cgiBinary)
     cgiFileName = basename(cgiBinary);
 else
-    cgiFileName = cloneString("cgi-bin");
-if (len > 3) ascTime[len-2] = (char)0;
-if (requestUri)
-    requestUri = cloneStringZ(requestUri,16384);   /* avoiding long url attacks */
-else 
-    requestUri = cloneString("none");
+    cgiFileName = "cgi-bin";
+if (len > 3) ascTime[len-2] = '\0';
 if (!ip)
     ip = "unknown";
-fprintf(stderr, "[%s] [%s] [client %s] [%s] ", ascTime, cgiFileName, ip, requestUri);
-freez(&requestUri);
+fprintf(stderr, "[%s] [%s] [client %s] [%.1024s] ", ascTime, cgiFileName, ip,
+	requestUri);
 }
 
 /* write warning/error message to stderr so they get logged. */
