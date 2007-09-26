@@ -17,7 +17,7 @@
 #include "errabort.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: htmshell.c,v 1.37 2007/09/24 17:49:39 galt Exp $";
+static char const rcsid[] = "$Id: htmshell.c,v 1.38 2007/09/26 17:11:14 angie Exp $";
 
 jmp_buf htmlRecover;
 
@@ -218,7 +218,7 @@ time_t nowTime = time(NULL);
 struct tm *tm;
 tm = localtime(&nowTime);
 char *ascTime = asctime(tm);
-char timeStamp[128];
+char timeStamp[16384];
 size_t len = strlen(ascTime);
 if (cgiBinary)
     cgiFileName = basename(cgiBinary);
