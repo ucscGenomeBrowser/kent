@@ -2,7 +2,7 @@
 
 ################################
 #  
-#  08-04-2006
+#  09-26-2007
 #  Ann Zweig
 #
 #  find out which level in the trackDb directory
@@ -16,9 +16,9 @@ set db=""
 set tableName=""
 set currDir=""
 set dbs=""
-set status=""
 set encode=""
 set split=""
+set partName=""
 
 if ( $#argv != 2 ) then
   echo
@@ -67,17 +67,17 @@ if ($status) then
   # look for ref to composite main entries which have no tables
   find ../../ -name "trackDb*ra" | xargs grep -wq "subTrack.$tableName" 
   if ($status) then
-    echo "  no such database/table combination: $db $tableName"
+    echo " ERROR: No such database/table combination: $db $tableName"
     echo "  and no composite track by that name.\n"
     exit
   else
-    echo "  composite track. no table by this name: $tableName"
+    echo "  Composite track. No single table by this name: $tableName"
     echo
   endif
 else
   find ../../ -name "trackDb*ra" | xargs grep -xq "track.$tableName" 
   if ($status) then
-    echo "  this is a composite subtrack table"
+    echo "  This is a composite subtrack table"
     echo
   endif
 endif
@@ -87,10 +87,11 @@ grep -wq track.$tableName trackDb.ra >& /dev/null
 if (! $status ) then
   # the track is mentioned in the assembly-level trackDb.ra file
 else
-  grep -wq track.$tableName trackDb.encode.ra >& /dev/null
+  # see if it's in another assembly-level trackDb*
+  set partName=`grep -wH track.$tableName trackDb.*.ra`
   if (! $status ) then
-    # the track is mentioned in the assembly-level trackDb.encode.ra file
-    set encode=".encode"
+    # the track is mentioned in an assembly-level trackDb.*.ra file
+    set encode=`echo $partName | sed "s/trackDb//" | sed "s/.ra:track $tableName//"`
   else 
     # the track is not at the assembly-level, go up to the organism level
     cd ..
@@ -99,10 +100,11 @@ else
     if (! $status ) then
       # the track is mentioned in the organism-level trackDb.ra file
     else
-      grep -wq track.$tableName trackDb.encode.ra >& /dev/null
+      # see if it's in another organism-level trackDb.*.ra
+      set partName=`grep -wH track.$tableName trackDb.*.ra`
       if (! $status ) then
-        # the track is mentioned in the organism-level trackDb.encode.ra file
-        set encode=".encode"
+        # the track is mentioned in an organism-level trackDb.*.ra file
+        set encode=`echo $partName | sed "s/trackDb//" | sed "s/.ra:track $tableName//"`
       else
         # the track is not at the organism level, go up to the top level
         cd ..
