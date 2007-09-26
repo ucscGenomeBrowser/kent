@@ -17,7 +17,7 @@
 #include "errabort.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: htmshell.c,v 1.38 2007/09/26 17:11:14 angie Exp $";
+static char const rcsid[] = "$Id: htmshell.c,v 1.39 2007/09/26 18:02:47 galt Exp $";
 
 jmp_buf htmlRecover;
 
@@ -218,7 +218,6 @@ time_t nowTime = time(NULL);
 struct tm *tm;
 tm = localtime(&nowTime);
 char *ascTime = asctime(tm);
-char timeStamp[16384];
 size_t len = strlen(ascTime);
 if (cgiBinary)
     cgiFileName = basename(cgiBinary);
@@ -226,18 +225,21 @@ else
     cgiFileName = cloneString("cgi-bin");
 if (len > 3) ascTime[len-2] = (char)0;
 if (!requestUri)
-    requestUri = "REQUEST_URI blank";
-if (ip)
-    safef(timeStamp, sizeof timeStamp, "[%s] [%s] [client %s] [%s] ", ascTime, cgiFileName, ip, requestUri);
+    requestUri = cloneString("REQUEST_URI blank");
 else
-    safef(timeStamp, sizeof timeStamp, "[%s] [%s] [client unknown] [%s] ", ascTime, cgiFileName, requestUri);
-fputs(timeStamp, stderr);
+    requestUri = cloneStringZ(requestUri,16384);   /* avoiding long url attacks */
+if (ip)
+    fprintf(stderr, "[%s] [%s] [client %s] [%s] ", ascTime, cgiFileName, ip, requestUri);
+else
+    fprintf(stderr, "[%s] [%s] [client unknown] [%s] ", ascTime, cgiFileName, requestUri);
+freez(&requestUri);
 }
 
 /* write warning/error message to stderr so they get logged. */
 vfprintf(stderr, format, argscp);
 va_end(argscp);
 fputc('\n', stderr);
+fflush(stderr);
 }
 
 void htmlAbort()
