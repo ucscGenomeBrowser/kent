@@ -29,7 +29,9 @@ else
 endif
 
 if ($#argv == 3 ) then
-  set limit=$argv[3]
+  set limit='-chrom='$argv[3]
+else
+  set limit=''
 endif
 
 if ( "$HOST" != "hgwdev" ) then
@@ -66,20 +68,13 @@ hgsql -Ne "SELECT $chr, $start, $end FROM $table" $db > blockBedFile.bed
 # make negative of table (block file) as bed file
 # and make negative of gap track
 # then intersect them
-if ( "" != $limit ) then
-  featureBits $db blockBedFile.bed -not -chrom=$limit -bed=$table.not.bed \
-    >& /dev/null
-  featureBits $db gap    -not -chrom=$limit -bed=gap.not.bed \
-    >& /dev/null
-  featureBits $db $table.not.bed gap.not.bed -chrom=$limit \
-    -bed=$table.holes.bed >& /dev/null
-else
-  featureBits $db blockBedFile.bed -not -bed=$table.not.bed >& /dev/null
-  featureBits $db gap    -not -bed=gap.not.bed    >& /dev/null
-  featureBits $db $table.not.bed gap.not.bed \
-    -bed=$table.holes.bed >& /dev/null
-endif
-
+featureBits $db blockBedFile.bed -not $limit -bed=$table.not.bed \
+  >& /dev/null
+featureBits $db gap    -not $limit -bed=gap.not.bed \
+  >& /dev/null
+featureBits $db $table.not.bed gap.not.bed $limit \
+  -bed=$table.holes.bed >& /dev/null
+# save coords and size and sort for biggest
 cat $table.holes.bed | awk '{print $1, $2, $3, $3-$2}' | sort -k4,4nr \
   > $table.holes.sort
 
