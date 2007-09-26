@@ -21,7 +21,7 @@
 #include "botDelay.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgBlat.c,v 1.116 2007/09/26 20:28:06 galt Exp $";
+static char const rcsid[] = "$Id: hgBlat.c,v 1.117 2007/09/26 20:32:55 galt Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -202,8 +202,6 @@ boolean pslOut = startsWith("psl", output);
 boolean isStraightNuc = (qType == gftRna || qType == gftDna);
 int  minThreshold = (isStraightNuc ? minMatchShown : 0);
 
-fprintf(stderr,"galt hgBlat showAliPlaces got here 1\n");fflush(stderr);//debug
-
 sprintf(uiState, "%s=%u", cartSessionVarName(), cartSessionId(cart));
 
 /* If user has hidden BLAT track, add a setting that will unhide the 
@@ -220,14 +218,8 @@ while ((psl = pslNext(lf)) != NULL)
 	slAddHead(&pslList, psl);
     }
 lineFileClose(&lf);
-
-fprintf(stderr,"galt hgBlat showAliPlaces got here 25\n");fflush(stderr);//debug
-
 if (pslList == NULL)
     errAbort("Sorry, no matches found");
-
-fprintf(stderr,"galt hgBlat showAliPlaces got here 26\n");fflush(stderr);//debug
-
 
 if (sameString(sort, "query,start"))
     {
@@ -253,9 +245,6 @@ else
     {
     slSort(&pslList, pslCmpQueryScore);
     }
-
-fprintf(stderr,"galt hgBlat showAliPlaces got here 50\n");fflush(stderr);//debug
-
 if(feelingLucky)
     {
     /* If we found something jump browser to there. */
@@ -304,9 +293,6 @@ else
     printf("</TT></PRE>");
     }
 pslFreeList(&pslList);
-
-fprintf(stderr,"galt hgBlat showAliPlaces got here 100\n");fflush(stderr);//debug
-
 
 }
 
@@ -441,29 +427,18 @@ enum gfType qType, tType;
 struct hash *tFileCache = gfFileCacheNew();
 boolean feelingLucky = cgiBoolean("Lucky");
 
-fprintf(stderr,"galt hgBlat blatSeq got here 1\n");fflush(stderr);//debug
-
 getDbAndGenome(cart, &db, &genome, oldVars);
 if(!feelingLucky)
     cartWebStart(cart, "%s BLAT Results", organism);
-
-fprintf(stderr,"galt hgBlat blatSeq got here 2\n");fflush(stderr);//debug
-
 /* Load user sequence and figure out if it is DNA or protein. */
 if (sameWord(type, "DNA"))
     {
-
-fprintf(stderr,"galt hgBlat blatSeq got here 3\n");fflush(stderr);//debug
-
     seqList = faSeqListFromMemText(seqLetters, TRUE);
     uToT(seqList);
     isTx = FALSE;
     }
 else if (sameWord(type, "translated RNA") || sameWord(type, "translated DNA"))
     {
-
-fprintf(stderr,"galt hgBlat blatSeq got here 4\n");fflush(stderr);//debug
-
     seqList = faSeqListFromMemText(seqLetters, TRUE);
     uToT(seqList);
     isTx = TRUE;
@@ -472,25 +447,16 @@ fprintf(stderr,"galt hgBlat blatSeq got here 4\n");fflush(stderr);//debug
     }
 else if (sameWord(type, "protein"))
     {
-
-fprintf(stderr,"galt hgBlat blatSeq got here 5\n");fflush(stderr);//debug
-
     seqList = faSeqListFromMemText(seqLetters, FALSE);
     isTx = TRUE;
     qIsProt = TRUE;
     }
 else 
     {
-
-fprintf(stderr,"galt hgBlat blatSeq got here 6\n");fflush(stderr);//debug
-
     seqList = faSeqListFromMemTextRaw(seqLetters);
     isTx = !seqIsDna(seqList);
     if (!isTx)
 	{
-
-fprintf(stderr,"galt hgBlat blatSeq got here 7\n");fflush(stderr);//debug
-
 	for (seq = seqList; seq != NULL; seq = seq->next)
 	    {
 	    seq->size = dnaFilteredSize(seq->dna);
@@ -501,9 +467,6 @@ fprintf(stderr,"galt hgBlat blatSeq got here 7\n");fflush(stderr);//debug
 	}
     else
 	{
-
-fprintf(stderr,"galt hgBlat blatSeq got here 8\n");fflush(stderr);//debug
-
 	for (seq = seqList; seq != NULL; seq = seq->next)
 	    {
 	    seq->size = aaFilteredSize(seq->dna);
@@ -513,18 +476,12 @@ fprintf(stderr,"galt hgBlat blatSeq got here 8\n");fflush(stderr);//debug
 	qIsProt = TRUE;
 	}
     }
-
-fprintf(stderr,"galt hgBlat blatSeq got here 9\n");fflush(stderr);//debug
-
 if (seqList != NULL && seqList->name[0] == 0)
     {
     freeMem(seqList->name);
     seqList->name = cloneString("YourSeq");
     }
 trimUniq(seqList);
-
-
-fprintf(stderr,"galt hgBlat blatSeq got here 10\n");fflush(stderr);//debug
 
 /* If feeling lucky only do the first on. */
 if(feelingLucky && seqList != NULL)
@@ -541,18 +498,12 @@ maxSeqCount = 25;
 trashDirFile(&faTn, "hgSs", "hgSs", ".fa");
 faWriteAll(faTn.forCgi, seqList);
 
-
-fprintf(stderr,"galt hgBlat blatSeq got here 11\n");fflush(stderr);//debug
-
 /* Create a temporary .psl file with the alignments against genome. */
 trashDirFile(&pslTn, "hgSs", "hgSs", ".pslx");
 f = mustOpen(pslTn.forCgi, "w");
 gvo = gfOutputPsl(0, qIsProt, FALSE, f, FALSE, TRUE);
 serve = findServer(db, isTx);
 /* Write header for extended (possibly protein) psl file. */
-
-fprintf(stderr,"galt hgBlat blatSeq got here 12\n");fflush(stderr);//debug
-
 if (isTx)
     {
     if (isTxTx)
@@ -572,9 +523,6 @@ else
     tType = gftDna;
     }
 pslxWriteHead(f, qType, tType);
-
-
-fprintf(stderr,"galt hgBlat blatSeq got here 13\n");fflush(stderr);//debug
 
 /* Loop through each sequence. */
 for (seq = seqList; seq != NULL; seq = seq->next)
@@ -635,27 +583,12 @@ for (seq = seqList; seq != NULL; seq = seq->next)
 	}
     gfOutputQuery(gvo, f);
     }
-
-fprintf(stderr,"galt hgBlat blatSeq got here 14\n");fflush(stderr);//debug
-
 carefulClose(&f);
-
-fprintf(stderr,"galt hgBlat blatSeq got here 15\n");fflush(stderr);//debug
-
 showAliPlaces(pslTn.forCgi, faTn.forCgi, serve->db, qType, tType, 
 	      organism, feelingLucky);
-
-fprintf(stderr,"galt hgBlat blatSeq got here 16\n");fflush(stderr);//debug
-
 if(!feelingLucky)
     cartWebEnd();
-
-fprintf(stderr,"galt hgBlat blatSeq got here 17\n");fflush(stderr);//debug
-
 gfFileCacheFree(&tFileCache);
-
-fprintf(stderr,"galt hgBlat blatSeq got here 18\n");fflush(stderr);//debug
-
 }
 
 void askForSeq(char *organism, char *db)
@@ -786,12 +719,7 @@ boolean clearUserSeq = cgiBoolean("Clear");
 cart = theCart;
 dnaUtilOpen();
 
-fprintf(stderr,"galt hgBlat doMiddle got here 1\n");fflush(stderr);//debug
-
 getDbAndGenome(cart, &db, &organism, oldVars);
-
-fprintf(stderr,"galt hgBlat doMiddle got here 1\n");fflush(stderr);//debug
-
 
 /* Get sequence - from userSeq variable, or if 
  * that is empty from a file. */
@@ -807,23 +735,14 @@ if (isEmpty(userSeq))
     }
 if (isEmpty(userSeq) || orgChange)
     {
-
-fprintf(stderr,"galt hgBlat doMiddle got here 2\n");fflush(stderr);//debug
-
     cartWebStart(theCart, "%s BLAT Search", organism);
     askForSeq(organism,db);
     cartWebEnd();
     }
 else 
     {
-
-fprintf(stderr,"galt hgBlat doMiddle got here 3\n");fflush(stderr);//debug
-
     blatSeq(skipLeadingSpaces(userSeq), organism);
     }
-
-fprintf(stderr,"galt hgBlat doMiddle got here 4\n");fflush(stderr);//debug
-
 }
 
 /* Null terminated list of CGI Variables we don't want to save
@@ -836,8 +755,6 @@ int main(int argc, char *argv[])
 oldVars = hashNew(10);
 cgiSpoof(&argc, argv);
 
-fprintf(stderr,"galt hgBlat main got here 1\n");fflush(stderr);//debug
-
 /* org has precedence over db when changeInfo='orgChange' */
 orgChange = sameOk(cgiOptionalString("changeInfo"),"orgChange");
 if (orgChange)
@@ -846,9 +763,7 @@ if (orgChange)
     }
 
 htmlSetBackground(hBackgroundImage());
-fprintf(stderr,"galt hgBlat main got here 2\n");fflush(stderr);//debug
 cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);
-fprintf(stderr,"galt hgBlat main got here 3\n");fflush(stderr);//debug
 return 0;
 }
 
