@@ -28,7 +28,7 @@
 #include "hCytoBand.h"
 #include "hgChromGraph.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.16 2007/09/25 18:55:01 jzhu Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.17 2007/09/26 23:07:06 jzhu Exp $";
 
 /* Page drawing stuff. */
 
@@ -668,9 +668,5 @@ int regularCount = ArraySize(regularVars);
 jsCreateHiddenForm(cart, scriptName, regularVars, regularCount);
 }
 
-/*
-  webNewSection("Using Genome Heatmaps");
-  printMainHelp();
-*/
 cartWebEnd();
 }

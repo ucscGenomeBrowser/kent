@@ -22,7 +22,7 @@
 #include "microarray.h"
 #include "hgChromGraph.h"
 
-static char const rcsid[] = "$Id: hgHeatmap.c,v 1.19 2007/09/26 16:21:17 jzhu Exp $";
+static char const rcsid[] = "$Id: hgHeatmap.c,v 1.20 2007/09/26 23:07:06 jzhu Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -464,11 +464,7 @@ if (gh->sampleList == NULL)
     return experimentCount(gh) * experimentHeight();
 
 /* height of experiments that will be displayed */
-struct slName *sl;
-int count =0;
-for (sl= gh->sampleList; sl!=NULL; sl= sl->next)
-    count++;
-return count * experimentHeight();
+return slCount(gh->sampleList) * experimentHeight();
 }
 
 int experimentCount(struct genoHeatmap *gh)

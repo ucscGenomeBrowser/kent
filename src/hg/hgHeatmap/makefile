@@ -7,7 +7,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
 A = hgHeatmap
 
-O = clickOnImage.o configure.o hgHeatmap.o mainPage.o usage.o hgChromGraph.o
+O = clickOnImage.o configure.o hgHeatmap.o mainPage.o hgChromGraph.o
 
 include ../../inc/cgi_build_rules.mk
 
