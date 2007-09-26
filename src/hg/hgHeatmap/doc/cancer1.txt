@@ -114,11 +114,12 @@ Zack Sanborn
 
 ==================================================================
 probe information - agilent Whole Genome Array 44K (Jing , Sept 25, 2007)
-
+makde track ispyAgiExp (Jing, Sept 26, 2007)
 
 1) download file '014850_D_AA_20070820.txt' from agilent website (http://www.chem.agilent.com/scripts/generic.asp?lpage=58802&indcol=N&prodcol=Y)
 
    notes: Update on the agilent array probes, I downloaded an annotation file (for human genome, whole 4x44K array) from agilent website in which there are the genomic coordinates for ucsc hg18, ncbi build 36.  The 44K array seems to be the one used in the ISPY trial, at least it has the same probe ids.  In this file, Agilent maps 41,000 probed to the human genome sequence.  ~31,000 probes are in the ISPY agilent gene expression data release I got from NCBI. 
+   notes: Got confirmation from Agilent the file "014850_D_AA_20070820.txt" is mapped to NCBI build 36, hg18
 
    cd /data/ISPY/I-SPY_data_tab/
    download file from website
