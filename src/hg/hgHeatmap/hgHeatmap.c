@@ -22,7 +22,7 @@
 #include "microarray.h"
 #include "hgChromGraph.h"
 
-static char const rcsid[] = "$Id: hgHeatmap.c,v 1.18 2007/09/25 18:55:01 jzhu Exp $";
+static char const rcsid[] = "$Id: hgHeatmap.c,v 1.19 2007/09/26 16:21:17 jzhu Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -112,11 +112,12 @@ else if (sameWord(set,"UCSF breast cancer"))
     }
 else if (sameWord(set,"ISPY"))
     {
-    N=3;
+    N=4;
     AllocArray(trackNames, N);
     trackNames[0]="ispyMipCGH";
-    trackNames[1]= "CGHBreastCancerStanford";
-    trackNames[2]="CGHBreastCancerUCSF";
+    trackNames[1]="ispyAgiExp";
+    trackNames[2]= "CGHBreastCancerStanford";
+    trackNames[3]="CGHBreastCancerUCSF";
     }
 else
     return NULL;
