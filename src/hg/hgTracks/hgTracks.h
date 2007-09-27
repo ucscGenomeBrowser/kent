@@ -48,7 +48,7 @@ struct track
     {
     struct track *next;   /* Next on list. */
     char *mapName;             /* Database track name. Name on image map etc. */
-    enum trackVisibility visibility; /* How much of this to see if possible. */
+    enum trackVisibility visibility; /* How much of this want to see. */
     enum trackVisibility limitedVis; /* How much of this actually see. */
     boolean limitedVisSet;	     /* Is limited visibility set? */
 
@@ -71,7 +71,7 @@ struct track
     void *items;               /* Some type of slList of items. */
 
     char *(*itemName)(struct track *tg, void *item);
-    /* Return name of one of a member of items above to display on left side. */
+    /* Return name of one of an item to display on left side. */
 
     char *(*mapItemName)(struct track *tg, void *item);
     /* Return name to associate on map. */
