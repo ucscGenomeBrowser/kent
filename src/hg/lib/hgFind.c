@@ -31,7 +31,7 @@
 #include "hgConfig.h"
 #include "trix.h"
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.203 2007/09/25 19:36:14 angie Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.204 2007/09/27 22:25:17 angie Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -1308,7 +1308,7 @@ static char *carefulTrackOpenVis(char *trackName)
 /* If track is already in full mode, return full; otherwise, return
  * hTrackOpenVis. */
 {
-char *vis = cartOptionalString(cart, trackName);
+char *vis = cart ? cartOptionalString(cart, trackName) : NULL;
 if (vis && sameString(vis, "full"))
     return "full";
 else
