@@ -9,7 +9,7 @@
 #include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.8 2007/06/18 16:20:33 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.9 2007/09/27 00:04:48 hiram Exp $";
 
 
 static void wikiTrackMapItem(struct track *tg, void *item,
@@ -193,10 +193,12 @@ if (wikiTrackEnabled(NULL))
     tg->defaultGroupName = cloneString("map");
     tg->exonArrows = TRUE;
     tg->labelNextItemButtonable = TRUE;
-    tdb->tableName = tg->mapName;
-    tdb->shortLabel = tg->shortLabel;
-    tdb->longLabel = tg->longLabel;
+    tdb->tableName = cloneString(tg->mapName);
+    tdb->shortLabel = cloneString(tg->shortLabel);
+    tdb->longLabel = cloneString(tg->longLabel);
     tdb->useScore = 1;
+    tdb->grp = cloneString(tg->groupName);
+    tdb->priority = tg->priority;
     trackDbPolish(tdb);
     tg->tdb = tdb;
 
