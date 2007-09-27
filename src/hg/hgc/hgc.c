@@ -209,7 +209,7 @@
 #include "atomDb.h"
 #include "itemConf.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1347 2007/09/27 21:28:24 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1348 2007/09/27 23:25:25 hartera Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -19158,7 +19158,6 @@ if (sqlTableExists(conn, confTable))
 hFreeConn(&conn);
 genericClickHandlerPlus(tdb, item, NULL, dy->string);
 dyStringFree(&dy);
-itemConfFree(&cf);
 }
 
 struct trackDb *tdbForTableArg()
