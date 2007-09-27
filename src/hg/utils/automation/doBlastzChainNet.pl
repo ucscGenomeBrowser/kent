@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/automation/doBlastzChainNet.pl instead.
 
-# $Id: doBlastzChainNet.pl,v 1.14 2007/09/21 20:20:17 hiram Exp $
+# $Id: doBlastzChainNet.pl,v 1.15 2007/09/27 23:01:30 hiram Exp $
 
 # to-do items:
 # - lots of testing
@@ -54,6 +54,7 @@ use vars qw/
     $opt_readmeOnly
     $opt_ignoreSelf
     $opt_syntenicNet
+    $opt_noDbNameCheck
     /;
 
 # Specify the steps supported with -continue / -stop:
@@ -114,6 +115,7 @@ print STDERR <<_EOF_
     -qRepeats table       Add -qRepeats=table to netClass (default: none)
     -ignoreSelf           Do not assume self alignments even if tDb == qDb
     -syntenicNet          Perform optional syntenicNet step
+    -noDbNameCheck        ignore Db name format
 _EOF_
   ;
 print STDERR &HgAutomate::getCommonOptionHelp('dbHost' => $dbHost,
@@ -278,7 +280,8 @@ sub checkOptions {
 		      "qRepeats=s",
 		      "readmeOnly",
 		      "ignoreSelf",
-                      "syntenicNet"
+                      "syntenicNet",
+                      "noDbNameCheck"
 		     );
   &usage(1) if (!$ok);
   &usage(0, 1) if ($opt_help);
@@ -397,7 +400,8 @@ sub getDbFromPath {
   my ($var) = @_;
   my $val = $defVars{$var};
   my $db;
-  if ($val =~ m@^/\S+/($oldDbFormat|$newDbFormat)((\.2bit)|(/(\S+)?))?$@) {
+  if ($opt_noDbNameCheck ||
+	$val =~ m@^/\S+/($oldDbFormat|$newDbFormat)((\.2bit)|(/(\S+)?))?$@) {
     $db = $1;
   } else {
     die "Error: $DEF variable $var=$val must be a full path with " .
