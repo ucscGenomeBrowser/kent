@@ -27,8 +27,10 @@
 #include "cytoBand.h"
 #include "hCytoBand.h"
 #include "hgChromGraph.h"
+#include "ispyFeatures.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.18 2007/09/27 00:15:43 jzhu Exp $";
+
+static char const rcsid[] = "$Id: mainPage.c,v 1.19 2007/09/27 23:00:12 jsanborn Exp $";
 
 /* Page drawing stuff. */
 
@@ -335,7 +337,7 @@ for(chrom = gl->chromList; chrom; chrom = chrom->next)
 }
 
 void genomeGif(struct sqlConnection *conn, struct genoLay *gl,
-	       char *psOutput)
+           char *psOutput)
 /* Create genome GIF file and HT that includes it. */
 {
 struct vGfx *vg;
@@ -398,6 +400,27 @@ for (ref = ghList; ref != NULL; ref = ref->next)
 	}
     }
 vgClose(&vg);
+
+struct sqlConnection *ispyConn = hAllocOrConnect("ispy");
+struct expId *ids = AllocA(struct expId);
+ids->name = cloneString("1199");
+struct expId *id = AllocA(struct expId);
+id->name = cloneString("1201");
+
+ids->next = id;
+
+struct column *colList = getColumns(ispyConn);
+struct column *col;
+for (col = colList; col != NULL; col = col->next)
+{
+    for (id = ids; id != NULL; id = id->next)
+    {
+        if (col->on)
+            hPrintf("<BR>%s for %s = %s", col->name, id->name, col->cellVal(col, id, ispyConn));    
+        
+    }
+}
+
 }
 
 void graphDropdown(struct sqlConnection *conn, char *varName, char *curVal, char *js)
@@ -633,6 +656,8 @@ hPrintf("</TABLE>");
 
 
 cgiMakeButton(hghConfigure, "configure");
+cgiMakeButton(hghConfigureFeature, "configure features");
+
 hPrintf("<BR>");
 
 hPrintf("<TABLE CELLPADDING=2><TR><TD>\n");

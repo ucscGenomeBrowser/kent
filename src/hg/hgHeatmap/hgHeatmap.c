@@ -21,8 +21,11 @@
 #include "web.h"
 #include "microarray.h"
 #include "hgChromGraph.h"
+#include "ra.h"
+#include "ispyFeatures.h"
 
-static char const rcsid[] = "$Id: hgHeatmap.c,v 1.21 2007/09/27 00:15:43 jzhu Exp $";
+
+static char const rcsid[] = "$Id: hgHeatmap.c,v 1.22 2007/09/27 23:00:12 jsanborn Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -504,10 +507,28 @@ void dispatchPage()
 /* Look at command variables in cart and figure out which
  * page to draw. */
 {
+
 struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *ispyConn = hAllocOrConnect("ispy");
+
+struct column *colList = getColumns(ispyConn);
+
+ struct column *pt;
+  for (pt = colList; pt != NULL; pt = pt->next)
+    {
+      if (pt->on)
+	hPrintf("col %s is ON\n", pt->name);
+      else
+	hPrintf("col %s is OFF", pt->name);
+    }
+
 if (cartVarExists(cart, hghConfigure))
     {
     configurePage();
+    }
+else if (cartVarExists(cart, hghConfigureFeature))
+    {
+    doConfigure(ispyConn, colList, NULL);
     }
 else
     {
@@ -517,6 +538,7 @@ else
     else
 	mainPage(conn);
     }
+ 
 cartRemovePrefix(cart, hghDo);
 }
 

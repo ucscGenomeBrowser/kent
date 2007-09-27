@@ -7,9 +7,13 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
 A = hgHeatmap
 
-O = clickOnImage.o configure.o hgHeatmap.o mainPage.o hgChromGraph.o
+O = hgHeatmap.o clickOnImage.o configure.o ispyFeatures.o configureFeatures.o userSettings.o mainPage.o hgChromGraph.o
 
 include ../../inc/cgi_build_rules.mk
+
+my::
+	rsync -ar --exclude=CVS/ --delete hgHeatmapData ${CGI_BIN}-${USER}/
+	chmod -R a+rX ${CGI_BIN}-${USER}/hgHeatmapData
 
 compile: $O 
 	${CC} $O ${MYLIBS} ${L}

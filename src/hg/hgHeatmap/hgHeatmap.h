@@ -31,6 +31,7 @@
 /*** Command variables. ***/
 #define hghConfigure hghDo "Configure"
 #define hghConfigureOne hghDo "ConfigureOne"
+#define hghConfigureFeature hghDo "ConfigureFeature"
 #define hghBrowse hghDo "Browse"
 #define hghUpload hghDo "Upload"
 #define hghSubmitUpload hghDo "SubmitUpload"
@@ -69,6 +70,7 @@ struct genoHeatmap
     int *expIdOrder;            /* ordering of expIds for display of bed15 format */
     struct trackDb *tDb;	/* the track database */
     };
+
 
 /*** Routines from hgHeatmap.h ***/
 
