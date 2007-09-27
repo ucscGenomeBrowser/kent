@@ -9,7 +9,7 @@
 #include "portable.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.110 2007/09/26 20:54:53 galt Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.111 2007/09/27 03:00:33 galt Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -24,7 +24,7 @@ static char *cloneStringZExt(char *s, int size, int copySize)
 {
 char *d = needMem(copySize+1);
 memcpy(d, s, min(size,copySize));
-d[size] = 0;
+d[copySize] = 0;
 return d;
 }
 
