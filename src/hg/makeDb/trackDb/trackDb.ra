@@ -381,12 +381,23 @@ url http://rgd.mcw.edu/generalSearch/RgdSearch.jsp?quickSearch=1&searchKeyword=
 
 track rgdQtl
 shortLabel RGD QTL
-longLabel Quantitative Trait Locus (from RGD)
+longLabel $Organism Quantitative Trait Locus from RGD
 group map
 priority 4.5
 visibility hide
 color 12,12,120
 type bed 4 .
+url http://rgd.mcw.edu/objectSearch/qtlReport.jsp?rgd_id=
+
+track rgdRatQtl
+shortLabel RGD Rat QTL
+longLabel $o_Organism Quantitative Trait Locus from RGD Coarsely Mapped to $Organism
+group map
+priority 4.501
+visibility hide
+color 12,100,100
+type bed 4 .
+otherDb rn4
 url http://rgd.mcw.edu/objectSearch/qtlReport.jsp?rgd_id=
 
 track xenoRefGene
@@ -1456,8 +1467,8 @@ type rmsk
 canPack off
 
 track nestedRepeats
-shortLabel Nested Repeats
-longLabel Nested Repeats from RepeatMasker ID
+shortLabel Interrupted Rpts
+longLabel Fragments of Interrupted Repeats Joined by RepeatMasker ID
 group varRep
 priority 149.11
 visibility hide
@@ -3639,6 +3650,11 @@ termRegex [[:alnum:]_]+\.[0-9]+\.[0-9]+
 searchPriority 50
 
 searchTable rgdQtl
+searchType bed
+searchMethod fuzzy
+searchPriority 50
+
+searchTable rgdRatQtl
 searchType bed
 searchMethod fuzzy
 searchPriority 50
