@@ -30,8 +30,6 @@ endif
 
 if ($#argv == 3 ) then
   set limit='-chrom='$argv[3]
-else
-  set limit=''
 endif
 
 if ( "$HOST" != "hgwdev" ) then
@@ -90,6 +88,19 @@ echo "chrom chromStart chromEnd size" \
   | awk '{ printf("%13s %14s %14s %12s \n", $1, $2, $3, $4) }'
 head -20 $table.holes.sort \
   | awk '{ printf("%13s %14s %14s %12s \n", $1, $2, $3, $4) }'
+echo
+
+echo
+# make links for three biggest
+set url1="http://genome-test.cse.ucsc.edu/cgi-bin/hgTracks?db=$db&position="
+set url2="&$table=pack&gap=dense"
+set bigThree=`head -3 $table.holes.sort \
+  | awk '{print $1 ":" $2-300 "-" $3+300}'` 
+echo "links to the three biggest voids in ${table}:"
+echo " (with 300 bp padding on each end)"
+foreach item ( $bigThree )
+  echo "$url1$item$url2"
+end
 echo
 
 # clean up
