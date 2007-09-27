@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/automation/makeGenomeDb.pl instead.
 
-# $Id: makeGenomeDb.pl,v 1.11 2007/08/24 22:27:58 hartera Exp $
+# $Id: makeGenomeDb.pl,v 1.12 2007/09/27 00:07:57 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -662,6 +662,7 @@ _EOF_
 
 # Add fake chrM_{gap,gold} to make featureBits happy.
 set mSize = `faSize $topDir/M/chrM.fa | grep bases | awk '{print \$1;}'`
+hgsql $db -e 'drop table chrM_gap,chrM_gold;'
 hgsql $db -e \\
     'create table chrM_gap select * from ${defaultChrom}_gap where 0; \\
      create table chrM_gold select * from ${defaultChrom}_gold where 0; \\
