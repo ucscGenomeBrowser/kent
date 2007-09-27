@@ -209,7 +209,7 @@
 #include "atomDb.h"
 #include "itemConf.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1346 2007/09/25 20:47:28 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1347 2007/09/27 21:28:24 angie Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -7557,62 +7557,6 @@ if (hTableExists("ensemblXref3"))
 printTrackHtml(tdb);
 }
 
-void printRgdQtlCustomUrl(struct trackDb *tdb, char *itemName, boolean encode)
-/* Print RGD QTL URL. */
-{
-char *url = tdb->url;
-char *qtlId;
-boolean gotId = FALSE;
-
-if (url != NULL && url[0] != 0)
-    {
-    struct sqlConnection *conn = hAllocConn();
-    char query[256];
-    struct sqlResult *sr;
-    char **row;
-    char *chrom, *chromStart, *chromEnd;
-
-    printf("<B>%s QTL %s: ", organism, itemName);
-    sprintf(query, "select description from rgdQtlLink where name='%s';", itemName);
-    sr = sqlMustGetResult(conn, query);
-    row = sqlNextRow(sr);
-    if (row != NULL)
-        {
-        printf("%s", row[0]);
-        }
-    sqlFreeResult(&sr);
-    printf("</B><BR>\n");
- 
-    sprintf(query, "select id from rgdQtlLink where name='%s';", itemName);
-    sr = sqlMustGetResult(conn, query);
-    while ((row = sqlNextRow(sr)) != NULL)
-        {
-	qtlId = row[0];
-	printf(gotId ? ", \n\t" : "<B>RGD QTL Report:</B> ");
-        printf("<B><A HREF=\"%s%s\" target=_blank>", url, qtlId);
-        printf("RGD:%s</A></B>", qtlId);
-	gotId = TRUE;
-        }
-    if (gotId)
-	printf("\n<BR>\n");
-    sqlFreeResult(&sr);
-   
-    sprintf(query, "select chrom, chromStart, chromEnd from rgdQtl where name='%s';", itemName);
-    sr = sqlMustGetResult(conn, query);
-    while ((row = sqlNextRow(sr)) != NULL)
-        {
-	chrom      = row[0];
-        chromStart = row[1];
-	chromEnd   = row[2];
-	printf("<HR>");
-	printPosOnChrom(chrom, atoi(chromStart), atoi(chromEnd), NULL, FALSE, itemName);
-        } 
-    sqlFreeResult(&sr);
-   
-    hFreeConn(&conn);
-    }
-}
-
 void doOmimAv(struct trackDb *tdb, char *avName)
 /* Process click on an OMIM AV. */
 {
@@ -7706,14 +7650,82 @@ printTrackHtml(tdb);
 hFreeConn(&conn);
 }
 
-void doRgdQtl(struct trackDb *tdb, char *item, char *itemForUrl)
+void doRgdQtl(struct trackDb *tdb, char *item)
 /* Put up RGD QTL info. */
 {
-if (itemForUrl == NULL)
-    itemForUrl = item;
+struct sqlConnection *conn = hAllocConn();
+char query[256];
+struct sqlResult *sr;
+char **row;
+char *otherDb = trackDbSetting(tdb, "otherDb");
+char *qtlOrg;
+if (sameString(tdb->tableName, "rgdQtl"))
+    qtlOrg = organism;
+else if (isNotEmpty(otherDb))
+    qtlOrg = hOrganism(otherDb);
+else
+    qtlOrg = "";
 
 genericHeader(tdb, item);
-printRgdQtlCustomUrl(tdb, itemForUrl, item == itemForUrl);
+printf("<B>%s QTL %s: ", qtlOrg, item);
+safef(query, sizeof(query),
+      "select description from %sLink where name='%s';",
+      tdb->tableName, item);
+sr = sqlMustGetResult(conn, query);
+if ((row = sqlNextRow(sr)) != NULL)
+    printf("%s", row[0]);
+sqlFreeResult(&sr);
+printf("</B><BR>\n");
+ 
+if (isNotEmpty(tdb->url))
+    {
+    boolean gotId = FALSE;
+    safef(query, sizeof(query), "select id from %sLink where name='%s';",
+	  tdb->tableName, item);
+    sr = sqlMustGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+	char *qtlId = row[0];
+	printf(gotId ? ", \n\t" : "<B>RGD QTL Report:</B> ");
+        printf("<B><A HREF=\"%s%s\" target=_blank>", tdb->url, qtlId);
+        printf("RGD:%s</A></B>", qtlId);
+	gotId = TRUE;
+        }
+    if (gotId)
+	printf("\n<BR>\n");
+    sqlFreeResult(&sr);
+    }
+
+int start=cartInt(cart, "o"), end=cartInt(cart, "t");
+struct bed *selectedPos=NULL, *otherPosList=NULL, *bed=NULL;
+safef(query, sizeof(query),
+      "select chrom, chromStart, chromEnd from %s where name='%s' "
+      "order by (chromEnd-chromStart);",
+      tdb->tableName, item);
+sr = sqlMustGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    bed = bedLoad3(row);
+    if (selectedPos == NULL && sameString(bed->chrom, seqName) &&
+	bed->chromStart == start && bed->chromEnd == end)
+	selectedPos = bed;
+    else
+	slAddHead(&otherPosList, bed);
+    }
+sqlFreeResult(&sr);
+if (selectedPos)
+    printPosOnChrom(seqName, start, end, NULL, FALSE, item);
+
+if (otherPosList)
+    printf("<BR>%s QTL %s is also mapped to these locations "
+	   "(largest genomic size first):</BR>\n", qtlOrg, item);
+for (bed = otherPosList;  bed != NULL;  bed = bed->next)
+    {
+    printf("<HR>");
+    printPosOnChrom(bed->chrom, bed->chromStart, bed->chromEnd,
+		    NULL, FALSE, item);
+    }
+hFreeConn(&conn);
 printTrackHtml(tdb);
 }
 
@@ -19383,9 +19395,9 @@ else if (sameWord(track, "gad"))
     {
     doGad(tdb, item, NULL);
     }
-else if (sameWord(track, "rgdQtl"))
+else if (sameWord(track, "rgdQtl") || sameWord(track, "rgdRatQtl"))
     {
-    doRgdQtl(tdb, item, NULL);
+    doRgdQtl(tdb, item);
     }
 else if (sameWord(track, "superfamily"))
     {
