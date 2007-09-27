@@ -28,7 +28,7 @@
 #include "hCytoBand.h"
 #include "hgChromGraph.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.17 2007/09/26 23:07:06 jzhu Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.18 2007/09/27 00:15:43 jzhu Exp $";
 
 /* Page drawing stuff. */
 
@@ -648,8 +648,7 @@ if (result)
     {
     hPrintf("<BR>This is a test: ispyMipCGH patient order, format: csv.<BR>");
     char varName[512];
-    char *tableName = "ispyMipCGH";
-    safef(varName, sizeof (varName),"%s_%s", hghPersonOrder,tableName);
+    safef(varName, sizeof (varName),"%s", hghPersonOrder);
     char *text = cartUsualString(cart, varName, "");
     cgiMakeTextArea(varName,text, 5 ,50);
     cgiMakeSubmitButton();

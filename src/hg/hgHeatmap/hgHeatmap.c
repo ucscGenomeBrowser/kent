@@ -22,7 +22,7 @@
 #include "microarray.h"
 #include "hgChromGraph.h"
 
-static char const rcsid[] = "$Id: hgHeatmap.c,v 1.20 2007/09/26 23:07:06 jzhu Exp $";
+static char const rcsid[] = "$Id: hgHeatmap.c,v 1.21 2007/09/27 00:15:43 jzhu Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -206,8 +206,9 @@ if (gh->sampleList)
 gh->sampleList = slNameNew("");
 if (gh->expIdOrder)
     freeMem(gh->expIdOrder);
-AllocArray(gh->expIdOrder, gh->expCount);
+
 /* set expIdOrder to default , i.e. an array of -1s, -1 indicates to the drawing code that the sample will not be drawn in heatmap */
+AllocArray(gh->expIdOrder, gh->expCount);
 int i;
 for (i=0; i< gh->expCount; i++)
     gh->expIdOrder[i]= -1;
@@ -393,13 +394,12 @@ void setBedOrder(struct genoHeatmap* gh)
 {
 /* get the ordering information from cart variable hghOrder*/
 char varName[512];
-char *tableName = gh->name;
 
 //safef(varName, sizeof (varName),"%s_%s", hghSampleOrder,tableName);
 //char *pStr = cartUsualString(cart,varName, "");
 //setSampleOrder(gh, pStr);
 
-safef(varName, sizeof (varName),"%s_%s", hghPersonOrder,tableName);
+safef(varName, sizeof (varName),"%s", hghPersonOrder);
 char *pStr = cartUsualString(cart,varName, "");
 setPersonOrder(gh, pStr);
 }
