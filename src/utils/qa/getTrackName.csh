@@ -16,6 +16,7 @@ set tableName=""
 set parentTableName=""
 set parentTrack=""
 set subTrack=""
+set superName=""
 set superTrack=""
 set superLabel=""
 set grp=""
@@ -33,6 +34,7 @@ if ( $#argv != 2 ) then
 else
   set db=$argv[1]
   set tableName=$argv[2]
+  set superName=$tableName
 endif
 echo
 
@@ -57,7 +59,7 @@ if ( "" == "$subTrack" ) then
   echo "\n ERROR: could not find the $tableName table in the $db database\n"
   exit 1
 else
-  echo " $tableName"
+  echo " table:  $tableName"
   echo
   echo " name:   $subTrack"
   set grp=`hgsql -Ne "SELECT grp FROM trackDb WHERE tableName \
@@ -75,20 +77,18 @@ if ( "" != "$parentTableName" ) then
     LIKE '$parentTableName'" $db`
   echo " parent: $parentTrack"
   
-  # get the superTrack, if any
-  set superTrack=`hgsql -Ne 'SELECT settings FROM trackDb \
-    WHERE tableName = "'$parentTableName'"' $db | sed "s/\\n/\n/g" \
-    | grep superTrack | awk '{print $2}'`
-else
-  # get the superTrack, if any (if not composite)
-  set superTrack=`hgsql -Ne 'SELECT settings FROM trackDb \
-    WHERE tableName = "'$tableName'"' $db | sed "s/\\n/\n/g" \
-    | grep superTrack | awk '{print $2}'`
+  # reset the superName to use the parent to find superTrack
+  set superName=$parentTableName
 endif
 
-# output supertrack info
+# get the superTrack and superLabel, if any 
+set superTrack=`hgsql -Ne 'SELECT settings FROM trackDb \
+  WHERE tableName = "'$superName'"' $db | sed "s/\\n/\n/g" \
+  | grep superTrack | awk '{print $2}'`
 set superLabel=`hgsql -Ne 'SELECT shortLabel FROM trackDb \
   WHERE tableName = "'$superTrack'"' $db`
+
+# output supertrack info
 if ( "" != "$superLabel" ) then
   echo " super:  ${superLabel}..."
 endif
@@ -97,9 +97,4 @@ endif
  set grpName=`hgsql -Ne "SELECT label FROM grp WHERE name LIKE '$grp'" $db`
  echo " group:  $grpName\n"
 
- set parentTrack=''
- set parentTableName=''
- set subTrack=''
- set grp=''
- set grpName=''
 exit 0
