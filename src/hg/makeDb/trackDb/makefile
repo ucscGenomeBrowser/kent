@@ -26,6 +26,7 @@
 include ../../../inc/common.mk
 
 DBS = 	hg13 hg15 hg16 hg17 hg18\
+	venter1 \
 	panTro1 panTro2 \
 	ponAbe1 ponAbe2 \
 	rheMac2 \
