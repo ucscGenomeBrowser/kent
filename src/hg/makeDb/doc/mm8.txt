@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: mm8.txt,v 1.53 2007/09/24 22:10:17 hiram Exp $"
+#	"$Id: mm8.txt,v 1.54 2007/09/27 18:05:32 angie Exp $"
 #
 
 #  NOTE:  this doc may have genePred loads that fail to include
@@ -7458,11 +7458,11 @@ set out = $3
 
 
 ############################################################################
-# JAX TRACKS (DONE 10/20/06 angie - UPDATED 7/18/07)
+# JAX TRACKS (DONE 10/20/06 angie - UPDATED 7/18/07, 9/27/07)
     ssh kkstore04
-    mkdir /cluster/data/mm8/bed/jax/2007_07
-    cd /cluster/data/mm8/bed/jax/2007_07
-    wget ftp://ftp.informatics.jax.org/pub/gbrowse/July2007/\*
+    mkdir /cluster/data/mm8/bed/jax/2007_09
+    cd /cluster/data/mm8/bed/jax/2007_09
+    wget ftp://ftp.informatics.jax.org/pub/gbrowse/\*
     wget ftp://ftp.informatics.jax.org/pub/reports/MGI_PhenotypicAllele.rpt
 
     # Jax Rep Transcript track
@@ -7471,9 +7471,7 @@ set out = $3
     # -- aliases ~ MGI:\d+
     # Use simple perl script to uniquify transcript names and make alias.tab.
     # Inspired by the mm6 version, but format has changed.
-    cp ../2006_10/parseRepTranscript.pl .
-    # Edit to accomodate latest format tweaks.
-    parseRepTranscript.pl SEQ_RepTransGenomic_rpt.gff \
+    ../2007_07/parseRepTranscript.pl SEQ_RepTransGenomic_rpt.gff \
       > jaxRepTranscript.gff
 
     # Jax Allele track
@@ -7481,7 +7479,7 @@ set out = $3
     # -- bed12Source -- add type from filename
     # -- names like NM_011283_Rp1h<tm1Jnz>, XM_129721_Slc9a2<tm1Ges>
     # -- Info: name, mgiID, source {"Gene trapped", ...}
-    cp ../2006_10/parseAllele.pl .
+    cp ../2007_07/parseAllele.pl .
     # Edit to accomodate latest format tweaks.
     rm -f jaxAllele.bed jaxAlleleInfo.tab fixJaxAllele.sql
     foreach f (AL*.gff)
@@ -7496,10 +7494,7 @@ set out = $3
       >> jaxAllele.bed
     end
     # This round's formatting inconsistencies:
-#source not given for NM_021879_p<In(7p_7Sox6)100H>
-#source not given for NM_001025560_Sox6<In(7p_7Sox6)100H>
 #source not given for NM_015770_a<jIs(17_In2)1Gso>
-#source not given for NM_010230_Fmn1<ld-Is(17_In2)1Gso>
 #source not given for NM_029931_Mllt3<T(4Mllt3_9Mll)1Thr>
 #source not given for NM_009521_Wnt3<In(11Trp53_11Wnt3)8Brd>
 #source not given for NM_011640_Trp53<In(11Trp53_11Wnt3)8Brd>
@@ -7566,14 +7561,14 @@ set out = $3
     cp /dev/null MP_0003012_no_phenotypic_analysis
     # Wrote a script to extract the phenotype-allele relationships --
     # it uses the filenames to map MP:* codes to our phenotype names.
-    chmod a+x parsePhenotypicAllele.pl
-    parsePhenotypicAllele.pl MGI_PhenotypicAllele.rpt > jaxAllelePheno.tab
+    ../2007_07/parsePhenotypicAllele.pl MGI_PhenotypicAllele.rpt \
+      > jaxAllelePheno.tab
     # The file "err" has messages about missing data (no gene name in 
     # PhenotypicAllele.rpt, or gene/mgiId not found in jaxAlleleInfo).
 
     # Load tables
     ssh hgwdev
-    cd /cluster/data/mm8/bed/jax/2007_07
+    cd /cluster/data/mm8/bed/jax/2007_09
     # jaxRepTranscript
     ldHgGene mm8 jaxRepTranscript jaxRepTranscript.gff
     hgsql mm8 < fixJaxRepTranscript.sql
@@ -7606,16 +7601,12 @@ set out = $3
 #mm8.jaxQTL item Tswt chr18:134822025-134822132: chromEnd > chromSize 90736837
 #mm8.jaxQTL item Ath13 chr14:164794113-164794369: chromEnd > chromSize 123978870
 #mm8.jaxQTL item Dob7 chr11:131434708-131434798: chromEnd > chromSize 121798632
-    # Manually truncate items that run off the ends of chroms:
-    hgsql mm8 -e 'update jaxQTL set chromEnd = 90736837 \
-      where chrom = "chr18" and chromEnd > 90736837; \
-      delete from jaxQTL where chrom = "chr18" and chromStart > 90736837;'
-    hgsql mm8 -e 'update jaxQTL set chromEnd = 123978870 \
-      where chrom = "chr14" and chromEnd > 123978870; \
-      delete from jaxQTL where chrom = "chr14" and chromStart > 123978870;'
-    hgsql mm8 -e 'update jaxQTL set chromEnd = 121798632 \
-      where chrom = "chr11" and chromEnd > 121798632; \
-      delete from jaxQTL where chrom = "chr11" and chromStart > 121798632;'
+    # Fix coords > chromSize:
+    perl -wpe 's/^(\w+)\t(\d+)$/ \
+      delete from jaxQTL where chrom="$1" and chromStart >= $2; \
+      update jaxQTL set chromEnd = $2 where chrom="$1" and chromEnd > $2;/' \
+      ../../../chrom.sizes \
+    | hgsql mm8
     checkTableCoords -verbose=2 mm8 jaxQTL
     # phenotype-allele relationships
     hgLoadSqlTab mm8 jaxAllelePheno \
@@ -7624,12 +7615,6 @@ set out = $3
     # Check joiner:
     runJoiner.csh mm8 jaxAllele
     runJoiner.csh mm8 jaxPhenotype
-
-    # 8/1/07 -- oops, jaxRepTranscriptAlias.alias had numeric values while
-    # hgc expects MGI:numeric.  Here's a quick fix:
-    hgsql mm8 -e 'update jaxRepTranscriptAlias set alias = concat("MGI:", alias) where alias rlike "^[0-9]";'
-    # and I also edited parseRepTranscript.pl so I won't make that mistake
-    # next time.
 
 
 ##########################################################################
