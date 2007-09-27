@@ -311,5 +311,7 @@ void cgiTableFieldWithMsg(char *text, char *msg);
 void cgiParagraph(char *text);
 /* Make text paragraph */
 
+void logCgiToStderr();
+/* Log useful CGI info to stderr */
 
 #endif /* CHEAPCGI_H */

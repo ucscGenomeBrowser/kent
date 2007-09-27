@@ -17,7 +17,7 @@
 #include "errabort.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: htmshell.c,v 1.42 2007/09/27 20:02:14 galt Exp $";
+static char const rcsid[] = "$Id: htmshell.c,v 1.43 2007/09/27 23:15:11 galt Exp $";
 
 jmp_buf htmlRecover;
 
@@ -209,27 +209,8 @@ htmlVaParagraph(format,args);
 printf("%s", htmlWarnEndPattern());
 htmlHorizontalLine();
 
-{
-char *ip = getenv("REMOTE_ADDR");
-char *cgiBinary = getenv("SCRIPT_FILENAME");
-char *requestUri = getenv("REQUEST_URI");
-char *hgsid = cgiOptionalString("hgsid");
-char *cgiFileName = NULL;
-time_t nowTime = time(NULL);
-struct tm *tm;
-tm = localtime(&nowTime);
-char *ascTime = asctime(tm);
-size_t len = strlen(ascTime);
-if (cgiBinary)
-    cgiFileName = basename(cgiBinary);
-else
-    cgiFileName = "cgi-bin";
-if (len > 3) ascTime[len-2] = '\0';
-if (!ip)
-    ip = "unknown";
-fprintf(stderr, "[%s] [%s] [client %s] [hgsid=%.24s] [%.1024s] ", ascTime, cgiFileName, ip,
-	hgsid, requestUri);
-}
+/* Log useful CGI info to stderr */
+logCgiToStderr();
 
 /* write warning/error message to stderr so they get logged. */
 vfprintf(stderr, format, argscp);
