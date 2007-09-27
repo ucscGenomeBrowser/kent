@@ -21,7 +21,7 @@
 #include "botDelay.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgBlat.c,v 1.117 2007/09/26 20:32:55 galt Exp $";
+static char const rcsid[] = "$Id: hgBlat.c,v 1.118 2007/09/27 23:12:57 galt Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -219,7 +219,10 @@ while ((psl = pslNext(lf)) != NULL)
     }
 lineFileClose(&lf);
 if (pslList == NULL)
-    errAbort("Sorry, no matches found");
+    {
+    puts("<table><tr><td><hr>Sorry, no matches found<hr><td></tr></table>");
+    return;
+    }
 
 if (sameString(sort, "query,start"))
     {
