@@ -731,3 +731,106 @@ hgLoadBed hg18 encodeYalePolIISites PolII_hg18-sites.bed
 # UCSD TAF1 IMR90 Chip/chip to Regulation group
 # (2007-09-14 kate)
 # See hg18.txt
+
+######################################################
+# Add strand information for encodeGencodeRace data
+# ENCODE 5RACE data do not contain strand information. This
+# information is very important, and can be derived from 
+# available GENCODE and 5RACE data.
+# There are two relatively simple strategies to derive strand
+# information. However, there are several exceptions to either
+# strategy. Therefore I will combine these two strategies in
+# this one script. 
+# Strategy 1: a RACE primer should extend from 3' end of a transcript
+#             towards 5' end. Therefore, if any RACE frag from
+#             this primer extends towards the right of the primer
+#             location, it means the gene goes from right to left,
+#             i.e. on - strand. Therefore, the primer should be
+#             on the + strand, and the corresponding RACEfrag should
+#             be on the - strand (same as gene). By the same token,
+#             if a RACEfrag extends toward left, it indicates that
+#             the primer is on - strand, while the gene and RACEfrag
+#             are on + strand.
+#             The only case that such relationship can not be determined
+#             is when the RACEfrag contains only one exon, and the
+#             primer locates in that exon. It is not sure if the 
+#             RACEfrag extends to the right or left. 
+#             This strategy leaves 3 primers undetermined.
+# 
+# Strategy 2: RACE primers should be designed based on GENCODE
+#             exons. Therefore, the orientation of the primer can be 
+#             determined by its overlapping GENCODE exon. In this case,
+#             the primer is on the opposite strand of the GENCODE exon,
+#             and any RACEfrag from this primer should be on the opposite
+#             strand of the primer. 
+#             There exist several exceptions, where the primer is 
+#             located outside of exons. It is probably ok if instead 
+#             look at the nearest exon if it doesn't overlap with any.
+#             This strategy leaves 37 primers undetermined.
+# Combining 1 and 2 all primers are determined for their orientation.
+# 
+# Instead of working on the original gff files, I decide to work on
+# data files after hg18 migration. These files are genePred formatted.
+# Working folder is 
+# /cluster/store6/encode/GencodeRACEfrags/2007-04-11/strand
+
+  ssh hdwdev
+  cd /cluster/data/encode/GencodeRACEfrags/latest/
+  mkdir strand
+  cd strand
+  cp /cluster/data/encode/convertHg18/genePred/*Race*.tab ./
+  cp /cluster/data/encode/convertHg18/genePred/encodeGencodeGeneKnownMar07.tab ./
+  
+  ./addRacePrimerStrand.pl encodeGencodeRaceFragsPrimer.tab encodeGencodeGeneKnownMar07.tab
+  csh load.csh > & ! load.log
+  
+  # encodeGencodeRaceFragsBrain
+  # Reading encodeGencodeRaceFragsBrain.tab
+  # 269 gene predictions
+  # encodeGencodeRaceFragsColon
+  # Reading encodeGencodeRaceFragsColon.tab
+  # 269 gene predictions
+  # encodeGencodeRaceFragsGM06990
+  # Reading encodeGencodeRaceFragsGM06990.tab
+  # 236 gene predictions
+  # encodeGencodeRaceFragsHL60
+  # Reading encodeGencodeRaceFragsHL60.tab
+  # 236 gene predictions
+  # encodeGencodeRaceFragsHeart
+  # Reading encodeGencodeRaceFragsHeart.tab
+  # 261 gene predictions
+  # encodeGencodeRaceFragsHela
+  # Reading encodeGencodeRaceFragsHela.tab
+  # 168 gene predictions
+  # encodeGencodeRaceFragsKidney
+  # Reading encodeGencodeRaceFragsKidney.tab
+  # 293 gene predictions
+  # encodeGencodeRaceFragsLiver
+  # Reading encodeGencodeRaceFragsLiver.tab
+  # 243 gene predictions
+  # encodeGencodeRaceFragsLung
+  # Reading encodeGencodeRaceFragsLung.tab
+  # 290 gene predictions
+  # encodeGencodeRaceFragsMuscle
+  # Reading encodeGencodeRaceFragsMuscle.tab
+  # 238 gene predictions
+  # encodeGencodeRaceFragsPlacenta
+  # Reading encodeGencodeRaceFragsPlacenta.tab
+  # 275 gene predictions
+  # encodeGencodeRaceFragsPrimer
+  # Reading encodeGencodeRaceFragsPrimer.tab
+  # 365 gene predictions
+  # encodeGencodeRaceFragsSmallIntest
+  # Reading encodeGencodeRaceFragsSmallIntest.tab
+  # 277 gene predictions
+  # encodeGencodeRaceFragsSpleen
+  # Reading encodeGencodeRaceFragsSpleen.tab
+  # 275 gene predictions
+  # encodeGencodeRaceFragsStomach
+  # Reading encodeGencodeRaceFragsStomach.tab
+  # 300 gene predictions
+  # encodeGencodeRaceFragsTestis
+  # Reading encodeGencodeRaceFragsTestis.tab
+  # 292 gene predictions
+
+  # Strand information is added for primers and all RACEfrags.
