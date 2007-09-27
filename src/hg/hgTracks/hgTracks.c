@@ -118,7 +118,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1410 2007/09/25 19:18:38 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1411 2007/09/27 00:04:20 hiram Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -13403,7 +13403,7 @@ for (track = *pTrackList; track != NULL; track = track->next)
             if (track->tdb && track->tdb->grp)
                 track->defaultGroupName = cloneString(track->tdb->grp);
             else
-                track->defaultGroupName = "other";
+                track->defaultGroupName = cloneString("other");
             }
         if (track->tdb->parent)
             {
