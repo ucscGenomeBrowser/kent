@@ -17,7 +17,7 @@
 #include "errabort.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: htmshell.c,v 1.41 2007/09/26 23:34:02 hiram Exp $";
+static char const rcsid[] = "$Id: htmshell.c,v 1.42 2007/09/27 20:02:14 galt Exp $";
 
 jmp_buf htmlRecover;
 
@@ -213,6 +213,7 @@ htmlHorizontalLine();
 char *ip = getenv("REMOTE_ADDR");
 char *cgiBinary = getenv("SCRIPT_FILENAME");
 char *requestUri = getenv("REQUEST_URI");
+char *hgsid = cgiOptionalString("hgsid");
 char *cgiFileName = NULL;
 time_t nowTime = time(NULL);
 struct tm *tm;
@@ -226,8 +227,8 @@ else
 if (len > 3) ascTime[len-2] = '\0';
 if (!ip)
     ip = "unknown";
-fprintf(stderr, "[%s] [%s] [client %s] [%.1024s] ", ascTime, cgiFileName, ip,
-	requestUri);
+fprintf(stderr, "[%s] [%s] [client %s] [hgsid=%.24s] [%.1024s] ", ascTime, cgiFileName, ip,
+	hgsid, requestUri);
 }
 
 /* write warning/error message to stderr so they get logged. */
@@ -427,6 +428,7 @@ void htmlImage(char *fileName, int width, int height)
 {
 printf("<P ALIGN=\"CENTER\"><IMG SRC=\"%s\" WIDTH=\"%d\" HEIGHT=\"%d\" ALIGN=\"BOTTOM\" BORDER=\"0\"></P>", fileName, width, height);
 }
+
 
 void htmErrOnlyShell(void (*doMiddle)())
 /* Wrap error recovery around call to doMiddle. */
