@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/makePushQSql.pl instead.
 
-# $Id: makePushQSql.pl,v 1.10 2007/09/14 23:09:34 angie Exp $
+# $Id: makePushQSql.pl,v 1.11 2007/09/28 20:24:53 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -130,15 +130,19 @@ sub getInfrastructureEntry {
   $entry{'priority'} = 0;
 
   # Look for the usual set of files on $dbHost:
-  my @gbdbFiles = ("$db.2bit", qw( html/description.html liftOver/* ));
-  my @goldenPathFiles = qw( bigZips/* database/* chromosomes/* liftOver/* );
+  my $SameSpecies = ucfirst($db);  $SameSpecies =~ s/\d+$//;
+  my @gbdbFiles = ("$db.2bit", 'html/description.html',
+		   "liftOver/${db}To$SameSpecies*");
+  my @goldenPathFiles = (qw( bigZips/* database/* chromosomes/* ),
+			 "liftOver/${db}To$SameSpecies*");
   my @files = ();
   foreach my $root (@gbdbFiles) {
     my $f = "$HgAutomate::gbdb/$db/$root";
     if (&HgAutomate::machineHasFile($dbHost, $f)) {
       push @files, $f;
     } else {
-      &HgAutomate::verbose(1, "$dbHost does not have $f\n");
+      &HgAutomate::verbose(1, "$dbHost does not have $f\n")
+	unless $f =~ /${db}To$SameSpecies/; # no big deal to not have this yet!
     }
   }
   foreach my $root (@goldenPathFiles) {
@@ -158,6 +162,7 @@ sub getInfrastructureEntry {
     if (defined $allTables->{$t}) {
       $entry{'tables'} .= "$t ";
       delete $allTables->{$t};
+      &HgAutomate::verbose(3, "Deleted $t\n");
     } else {
       &HgAutomate::verbose(1, "$db does not have $t\n");
     }
@@ -193,6 +198,7 @@ sub getGenbankEntry {
     if (defined $allTables->{$t}) {
       push @genbankTablesInDb, $t;
       delete $allTables->{$t};
+      &HgAutomate::verbose(3, "Deleted $t\n");
     }
   }
   if (scalar(@genbankTablesInDb) > 0) {
@@ -305,6 +311,7 @@ sub getTrackEntries {
   # For each table, if it is a track table then make an entry for it and
   # remove it from $allTables.
   foreach my $table (sort keys %{$allTables}) {
+    next if (! defined $allTables->{$table}); # catch prior deletions
     my $track = $table;
     $track =~ s/^$prefixPattern// if ($prefixPattern);
     my $tdb = $trackDb->{$track};
@@ -327,15 +334,22 @@ sub getTrackEntries {
 	}
 	# Lump in nets with chains, when we find them.
 	if (defined $allTables->{$net}) {
+	  &HgAutomate::verbose(2, "Lumping $net in with $table\n");
 	  $entry{'tables'} .= " $net";
 	  $entry{'shortLabel'} .= " and Net";
 	  if ($net =~ /^net(\w+)/) {
 	    my $ODb = $1;
-	    my $downloads = "$HgAutomate::goldenPath/$db/vs$ODb/*";
-	    if (&HgAutomate::machineHasFile($dbHost, $downloads)) {
-	      $entry{'files'} = $downloads;
-	    } else {
-	      &HgAutomate::verbose(1, "$dbHost does not have $downloads\n");
+	    my $over = "${db}To$ODb.over.chain.gz";
+	    foreach my $downloads
+	      ("$HgAutomate::goldenPath/$db/vs$ODb/*",
+	       "$HgAutomate::goldenPath/$db/liftOver/$over",
+	       "$HgAutomate::gbdb/$db/liftOver/$over") {
+	      if (&HgAutomate::machineHasFile($dbHost, $downloads)) {
+		$entry{'files'} .= $downloads . '\r\n';
+	      } else {
+		&HgAutomate::verbose(0, "$dbHost does not have " .
+				     "chain/net download $downloads !\n");
+	      }
 	    }
 	  }
 	}
@@ -352,8 +366,12 @@ sub getTrackEntries {
       if ($type =~ /^netAlign\s+(\w+)/) {
 	my $oDb = $1;
 	my $ODb = ucfirst($oDb);
-	my $chainTrack = $prefixPattern ? "${prefixPattern}chain$ODb" :
-	  "chain$ODb";
+	my $chainTrack = "chain$ODb";
+	if ($prefixPattern) {
+	  my $unEscPrefix = $prefixPattern;
+	  $unEscPrefix =~ s/\\//g;
+	  $chainTrack = "${unEscPrefix}chain$ODb";
+	}
 	if (! defined $trackEntries{$chainTrack}) {
 	  my $downloads = "$HgAutomate::goldenPath/$db/vs$ODb/*";
 	  if (&HgAutomate::machineHasFile($dbHost, $downloads)) {
@@ -362,7 +380,7 @@ sub getTrackEntries {
 	    &HgAutomate::verbose(1, "$dbHost does not have $downloads\n");
 	  }
 	  &HgAutomate::verbose(1, "Found net table $table that was not " .
-			       "already lumped in with a chain entry...?\n");
+		       "already lumped in with chain entry $chainTrack...?\n");
 	} else {
 	  # This net has already been included in the corresponding Chain
 	  # track entry, and removed from the hash, so skip to the next table.
@@ -373,6 +391,7 @@ sub getTrackEntries {
       foreach my $t (split(" ", $entry{'tables'})) {
 	delete $allTables->{$t};
       }
+      &HgAutomate::verbose(3, "Deleted $entry{tables}\n");
       $trackEntries{$track} = \%entry;
     }
   }
@@ -392,6 +411,7 @@ sub getTrackEntries {
       if ($otherDb && $otherDb eq $db && defined $trackEntries{$otherTrack}) {
 	$trackEntries{$otherTrack}->{'tables'} .= " $table";
 	delete $allTables->{$table};
+&HgAutomate::verbose(3, "Deleted $table\n");
 	last;
       }
     }
@@ -523,11 +543,13 @@ sub reportStragglers {
   my ($stragglers) = @_;
   my @names = sort (keys %{$stragglers});
   if (scalar(@names) > 0) {
-    print STDERR "\nCould not tell which tracks to assign these tables to:\n";
+    &HgAutomate::verbose(0, "
+Could not tell (from trackDb, all.joiner and hardcoded lists of supporting
+and genbank tables) which tracks to assign these tables to:\n");
     foreach my $t (@names) {
-      print STDERR "  $t\n";
+      &HgAutomate::verbose(0, "  $t\n");
     }
-    print STDERR "\n";
+    &HgAutomate::verbose(0, "\n");
   }
 } # reportStragglers
 
