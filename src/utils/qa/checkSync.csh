@@ -93,7 +93,6 @@ foreach machine ( $mach1 $mach2 )
     endif
   else
     # db is either not active, or not an assembly.  must use status dumps.
-    echo " not real time.  using STATUS dumps."
     cp `getRRdumpfile.csh $db $machine` $machine.tmp
   endif
   
