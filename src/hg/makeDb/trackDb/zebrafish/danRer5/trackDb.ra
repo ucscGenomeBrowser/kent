@@ -135,7 +135,7 @@ type psl .
     subTrack affyZebrafish
     shortLabel Affy Zfish Targ
     longLabel Alignments of Affymetrix Target Sequences from Zebrafish Chip
-    priority 1
+    priority 2 
 
 track rmsk
 shortLabel RepeatMasker
