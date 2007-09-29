@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.30 2007/09/25 23:42:25 hiram Exp $"
+#	"$Id: mm9.txt,v 1.31 2007/09/29 06:15:41 hiram Exp $"
 #
 
 #######################################################################
@@ -4695,6 +4695,7 @@ time nice -n +19 /cluster/bin/scripts/blastz-run-ucsc -outFormat psl \
 	-swap -bigClusterHub=kk -chainMinScore=5000 \
 	/cluster/data/mm9/bed/blastzXenTro2.2007-09-19/DEF \
 	-chainLinearGap=loose > swap.out 2>&1 &
+    #	real    47m53.428s
 
     ssh hgwdev
     cd /cluster/data/mm9/bed/blastz.xenTro2.2007-09-19
@@ -5013,7 +5014,19 @@ TMPDIR=/scratch/tmp
 
     time nice -n +19 doBlastzChainNet.pl -chainMinScore=3000 -verbose=2 \
 	DEF -bigClusterHub=pk -chainLinearGap=medium > do.log 2>&1 &
-XXX - running - 2007-09-25 11:00
+    #	real    733m40.065s
+    cat fb.mm9.chainBosTau3Link.txt
+    #	690515959 bases of 2620346127 (26.352%) in intersection
+
+    #	and for the swap
+    mkdir /cluster/data/bosTau3/bed/blastz.mm9.swap
+    cd /cluster/data/bosTau3/bed/blastz.mm9.swap
+    time nice -n +19 doBlastzChainNet.pl -chainMinScore=3000 -verbose=2 \
+	/cluster/data/mm9/bed/blastzBosTau3.2007-09-25/DEF \
+	-swap -bigClusterHub=pk -chainLinearGap=medium > swap.log 2>&1 &
+    #	real    100m20.707s
+    cat fb.bosTau3.chainMm9Link.txt
+    #	707779988 bases of 2731807384 (25.909%) in intersection
 
 #########################################################################
 # Blastz Opossum monDom4 (WORKING - 2007-09-25 - Hiram)
@@ -5051,7 +5064,27 @@ TMPDIR=/scratch/tmp
 
     time nice -n +19 doBlastzChainNet.pl DEF -chainMinScore=5000 \
 	-chainLinearGap=loose -bigClusterHub=pk -verbose=2 > do.log 2>&1 &
-XXX - running - 2007-09-25 11:35
+    #	real    811m19.320s
+    # problem on kki run, monDom4 wasn't distributed on the Iservers to
+    #	/scratch/hg/monDom4/ - straighten that up, and finish that run, then
+    #	continuing
+    time nice -n +19 doBlastzChainNet.pl DEF -chainMinScore=5000 \
+	-continue=chainMerge -chainLinearGap=loose \
+	-bigClusterHub=pk -verbose=2 > chainMerge.log 2>&1 &
+    #	real    158m9.287s
+    cat fb.mm9.chainMonDom4Link.txt
+    #	255535025 bases of 2620346127 (9.752%) in intersection
+
+    #	and for the swap
+    mkdir /cluster/data/monDom4/bed/blastz.mm9.swap
+    cd /cluster/data/monDom4/bed/blastz.mm9.swap
+    time nice -n +19 doBlastzChainNet.pl -chainMinScore=5000 -verbose=2 \
+	/cluster/data/mm9/bed/blastzMonDom4.2007-09-25/DEF \
+	-swap -chainLinearGap=loose \
+	-bigClusterHub=pk > swap.log 2>&1 &
+    #	real    59m19.005s
+    cat  fb.monDom4.chainMm9Link.txt
+    #	254018516 bases of 3501643220 (7.254%) in intersection
 
 #########################################################################
 # Blastz Tenrec echTel1 (WORKING - 2007-09-25 - Hiram)
@@ -5083,6 +5116,309 @@ TMPDIR=/scratch/tmp
 
     time nice -n +19 doBlastzChainNet.pl -verbose=2 -chainMinScore=3000 \
 	-bigClusterHub=kk -chainLinearGap=medium DEF > do.log 2>&1 &
-XXX - running 2007-09-25 14:55
+    #	real    2721m33.204s
+    cat fb.mm9.chainEchTel1Link.txt
+    #	291920039 bases of 2620346127 (11.141%) in intersection
+
+    #	and for the swap
+    mkdir /cluster/data/echTel1/bed/blastz.mm9.swap
+    cd /cluster/data/echTel1/bed/blastz.mm9.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 -chainMinScore=3000 \
+	/cluster/data/mm9/bed/blastzEchTel1.2007-09-25/DEF \
+	-swap -bigClusterHub=kk -chainLinearGap=medium > swap.log 2>&1 &
+    #	real    520m9.198s
+    cat  fb.echTel1.chainMm9Link.txt
+    #	298656963 bases of 2111581369 (14.144%) in intersection
+
+#########################################################################
+# Blastz Tree Shrew tupBel1 (WORKING - 2007-09-27 - Hiram)
+    ssh kkstore05
+    screen # use screen to control this job
+    mkdir /cluster/data/mm9/bed/blastzTupBel1.2007-09-27
+    cd /cluster/data/mm9/bed/blastzTupBel1.2007-09-27
+
+    cat << '_EOF_' > DEF
+# Mouse vs. Tree Shrew
+BLASTZ_M=50
+
+# TARGET: Mouse Mm9
+SEQ1_DIR=/scratch/data/mm9/mm9.2bit
+SEQ1_LEN=/cluster/data/mm9/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY:  Tree shrew tupBel1
+SEQ2_DIR=/san/sanvol1/scratch/tupBel1/tupBel1.2bit
+SEQ2_LEN=/cluster/data/tupBel1/chrom.sizes
+SEQ2_CHUNK=30000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm9/bed/blastzTupBel1.2007-09-27
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 -chainMinScore=3000 \
+	-stop=chainMerge -bigClusterHub=pk -chainLinearGap=medium DEF \
+	> chainMerge.log 2>&1 &
+    #	real    1262m32.699s
+    #	the load should fail due to missing repeat masker tables in tupBel1
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 -chainMinScore=3000 \
+	-continue=net -stop=load -bigClusterHub=pk -chainLinearGap=medium DEF \
+	> net.log 2>&1 &
+    #	real    69m41.901s
+    #	and indeed it did,  The chains are loaded:
+    ssh hgwdev
+    cd /cluster/data/mm9/bed/blastzTupBel1.2007-09-27
+    time nice -n +19 featureBits mm9 chainTupBel1Link \
+	> fb.mm9.chainTupBel1Link.txt 2>&1 &
+
+
+#########################################################################
+# Blastz Bush Baby otoGar1 (WORKING - 2007-09-27 - Hiram)
+    ssh kkstore05
+    screen # use screen to control this job
+    mkdir /cluster/data/mm9/bed/blastzOtoGar1.2007-09-27
+    cd /cluster/data/mm9/bed/blastzOtoGar1.2007-09-27
+
+    cat << '_EOF_' > DEF
+# Mouse vs. Tree Shrew
+BLASTZ_M=50
+
+# TARGET: Mouse Mm9
+SEQ1_DIR=/scratch/data/mm9/mm9.2bit
+SEQ1_LEN=/cluster/data/mm9/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY:  Bush baby otoGar1
+SEQ2_DIR=/san/sanvol1/scratch/otoGar1/otoGar1.2bit
+SEQ2_LEN=/cluster/data/otoGar1/chrom.sizes
+SEQ2_CHUNK=30000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm9/bed/blastzOtoGar1.2007-09-27
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 -chainMinScore=3000 \
+	-stop=chainMerge -bigClusterHub=pk -chainLinearGap=medium DEF \
+	> chainMerge.log 2>&1 &
+    #	real    873m23.531s
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 -chainMinScore=3000 \
+	-continue=net -stop=load -bigClusterHub=pk -chainLinearGap=medium DEF \
+	> net.log 2>&1 &
+    #	real    67m7.172s
+    cat fb.mm9.chainOtoGar1Link.txt
+    #	601932945 bases of 2620346127 (22.972%) in intersection
+
+#########################################################################
+# Blastz Armadillo dasNov1 (WORKING - 2007-09-27 - Hiram)
+    ssh kkstore04
+    screen # use screen to control this job
+    mkdir /cluster/data/mm9/bed/blastzDasNov1.2007-09-27
+    cd /cluster/data/mm9/bed/blastzDasNov1.2007-09-27
+
+    cat << '_EOF_' > DEF
+# Mouse vs. Armadillo
+BLASTZ_M=50
+
+# TARGET: Mouse Mm9
+SEQ1_DIR=/scratch/data/mm9/mm9.2bit
+SEQ1_LEN=/cluster/data/mm9/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Armadillo dasNov1
+SEQ2_DIR=/scratch/hg/dasNov1/dasNov1.2bit
+SEQ2_LEN=/cluster/data/dasNov1/chrom.sizes
+SEQ2_CHUNK=30000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm9/bed/blastzDasNov1.2007-09-27
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 -chainMinScore=3000 \
+	-stop=chainMerge -bigClusterHub=kk -chainLinearGap=medium DEF \
+	> chainMerge.log 2>&1 &
+XXX - running 2007-09-27 11:40
+
+#########################################################################
+# Blastz Rabbit oryCun1 (WORKING - 2007-09-28 - Hiram)
+    ssh kkstore04
+    screen # use screen to control this job
+    mkdir /cluster/data/mm9/bed/blastzOryCun1.2007-09-28
+    cd /cluster/data/mm9/bed/blastzOryCun1.2007-09-28
+
+    cat << '_EOF_' > DEF
+# Mouse vs. Rabbit
+BLASTZ_M=50
+
+# TARGET: Mouse Mm9
+SEQ1_DIR=/scratch/data/mm9/mm9.2bit
+SEQ1_LEN=/cluster/data/mm9/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Rabbit oryCun1
+SEQ2_DIR=/scratch/hg/oryCun1/oryCun1.2bit
+SEQ2_LEN=/cluster/data/oryCun1/chrom.sizes
+SEQ2_CHUNK=30000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm9/bed/blastzOryCun1.2007-09-28
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 -chainMinScore=3000 \
+	-stop=chainMerge -bigClusterHub=pk -chainLinearGap=medium DEF \
+	> chainMerge.log 2>&1 &
+XXX - running 2007-09-28 11:40
+
+#########################################################################
+# Blastz Cat felCat3 (WORKING - 2007-09-28 - Hiram)
+    ssh kkstore05
+    screen # use screen to control this job
+    mkdir /cluster/data/mm9/bed/blastzFelCat3.2007-09-28
+    cd /cluster/data/mm9/bed/blastzFelCat3.2007-09-28
+
+    cat << '_EOF_' > DEF
+# Mouse vs. Cat
+BLASTZ_M=50
+
+# TARGET: Mouse Mm9
+SEQ1_DIR=/scratch/data/mm9/mm9.2bit
+SEQ1_LEN=/cluster/data/mm9/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Cat felCat3
+SEQ2_DIR=/san/sanvol1/scratch/felCat3/felCat3.2bit
+SEQ2_LEN=/cluster/data/felCat3/chrom.sizes
+SEQ2_CHUNK=30000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm9/bed/blastzFelCat3.2007-09-28
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 -chainMinScore=3000 \
+	-stop=chainMerge -bigClusterHub=pk -chainLinearGap=medium DEF \
+	> chainMerge.log 2>&1 &
+XXX - running 2007-09-28 11:47
+
+#########################################################################
+# Blastz Elephant loxAfr1 (WORKING - 2007-09-28 - Hiram)
+    ssh kkstore04
+    screen # use screen to control this job
+    mkdir /cluster/data/mm9/bed/blastzLoxAfr1.2007-09-28
+    cd /cluster/data/mm9/bed/blastzLoxAfr1.2007-09-28
+
+    cat << '_EOF_' > DEF
+# Mouse vs. Elephant
+BLASTZ_M=50
+
+# TARGET: Mouse Mm9
+SEQ1_DIR=/scratch/data/mm9/mm9.2bit
+SEQ1_LEN=/cluster/data/mm9/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Elephant loxAfr1
+SEQ2_DIR=/scratch/hg/loxAfr1/loxAfr1.2bit
+SEQ2_LEN=/cluster/data/loxAfr1/chrom.sizes
+SEQ2_CHUNK=30000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm9/bed/blastzLoxAfr1.2007-09-28
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 -chainMinScore=3000 \
+	-stop=chainMerge -bigClusterHub=kk -chainLinearGap=medium DEF \
+	> chainMerge.log 2>&1 &
+XXX - the next job killed the kk hub, dasNov1 went down too
+XXX - running 2007-09-28 22:50
+
+#########################################################################
+# Blastz Hedgehog loxAfr1 (WORKING - 2007-09-28 - Hiram)
+    ssh kkstore05
+    screen # use screen to control this job
+    mkdir /cluster/data/mm9/bed/blastzEriEur1.2007-09-28
+    cd /cluster/data/mm9/bed/blastzEriEur1.2007-09-28
+
+    cat << '_EOF_' > DEF
+# Mouse vs. Hedgehog
+BLASTZ_M=50
+
+# TARGET: Mouse Mm9
+SEQ1_DIR=/scratch/data/mm9/mm9.2bit
+SEQ1_LEN=/cluster/data/mm9/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Hedgehog eriEur1
+SEQ2_DIR=/san/sanvol1/scratch/eriEur1/eriEur1.2bit
+SEQ2_LEN=/cluster/data/eriEur1/chrom.sizes
+SEQ2_CHUNK=30000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm9/bed/blastzEriEur1.2007-09-28
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 -chainMinScore=3000 \
+	-stop=chainMerge -bigClusterHub=kk -chainLinearGap=medium DEF \
+	> chainMerge.log 2>&1 &
+XXX - this killed the kk kluster hub
+XXX - running 2007-09-28 23:09
+
+#########################################################################
+# Blastz Shrew sorAra1 (WORKING - 2007-09-28 - Hiram)
+    ssh kkstore05
+    screen # use screen to control this job
+    mkdir /cluster/data/mm9/bed/blastzSorAra1.2007-09-28
+    cd /cluster/data/mm9/bed/blastzSorAra1.2007-09-28
+
+    cat << '_EOF_' > DEF
+# Mouse vs. Shrew
+BLASTZ_M=50
+
+# TARGET: Mouse Mm9
+SEQ1_DIR=/scratch/data/mm9/mm9.2bit
+SEQ1_LEN=/cluster/data/mm9/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Shrew sorAra1
+SEQ2_DIR=/san/sanvol1/scratch/sorAra1/sorAra1.2bit
+SEQ2_LEN=/cluster/data/sorAra1/chrom.sizes
+SEQ2_CHUNK=30000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm9/bed/blastzSorAra1.2007-09-28
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 -chainMinScore=3000 \
+	-stop=chainMerge -bigClusterHub=pk -chainLinearGap=medium DEF \
+	> chainMerge.log 2>&1 &
+XXX - running 2007-09-28 23:09
 
 #########################################################################
