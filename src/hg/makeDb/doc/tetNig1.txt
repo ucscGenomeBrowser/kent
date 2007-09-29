@@ -2905,8 +2905,8 @@ TMPDIR=/scratch/tmp
     cat \ 
   /cluster/data/tetNig1/bed/blastz.danRer5.swap/fb.tetNig1.chainDanRer5Link.txt
     # 70448527 bases of 342403326 (20.575%) in intersection 
-    # look at coverage of mrna CDS, there is no native RefSeqs 
-    # track for tetraodon. 
+    # look at coverage of mrna, there is no native RefSeqs 
+    # track for tetraodon, tetNig1.
     featureBits tetNig1 all_mrna chainDanRer5Link -enrichment
 # all_mrna 3.104%, chainDanRer5Link 20.575%, both 1.382%, cover 44.53%, enrich
 # 2.16x
