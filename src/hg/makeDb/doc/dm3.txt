@@ -2386,6 +2386,27 @@ _EOF_
     cat md5sum.txt \
       >> /usr/local/apache/htdocs/goldenPath/dm3/bigZips/md5sum.txt
 
+#############################################################################
+# N-SCAN GENES track ( markd)
+# create a composite track with exists ab-inito and new PASA N-SCAN predictions
+
+    # download predictions
+    cd /cluster/data/dm3/bed/nscan
+    wget -nv http://mblab.wustl.edu/predictions/Drosophila/dm3/dm3.gtf
+    wget -nv http://mblab.wustl.edu/predictions/Drosophila/dm3/dm3.prot.fa
+    wget -nv http://mblab.wustl.edu/predictions/Drosophila/dm3/readme.txt
+
+    bzip2 dm3.*
+    chmod a-w *
+
+    ldHgGene -gtf -genePredExt dm3 nscanPasaGene dm3.gtf.bz2
+    hgPepPred dm3 generic nscanPasaPep  dm3.prot.fa.bz2
+    rm *.tab
+
+    # update trackDb; need a dm3-specific page to describe informants and PASA
+    # make sure termRegex matches naming
+    drosophila/dm3/nscanPasaGene.html
+    drosophila/dm3/dm3/trackDb.ra
 
 #########################################################################
 #########################################################################
