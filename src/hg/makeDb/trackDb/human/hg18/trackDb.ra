@@ -422,6 +422,17 @@ baseColorDefault genomicCodons
     color 84,119,34
     priority 2
 
+searchTable nscanGene
+searchType genePred
+termRegex (chr)?.*\.[0-9]+\.[0-9]+\.[a-z]+
+searchPriority 50
+
+searchTable nscanPasaGene
+searchType genePred
+termRegex (chr)?.*\.[0-9a-z]+\.[0-9]+\.[a-z]+
+searchPriority 50
+
+
 track phastConsElements
 shortLabel Most Conserved
 longLabel PhastCons Conserved Elements, Hu/Chimp/Mouse/Rat/Dog/Chick/Fugu/Zfish

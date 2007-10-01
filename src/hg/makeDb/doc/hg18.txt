@@ -17230,6 +17230,26 @@ hgsql hg18 -e 'insert into metaChromGraph (name, minVal, maxVal, binaryFile) val
 
 
 #############################################################################
+# N-SCAN GENES partial reload (2007-09-26 markd)
+# reload nscanPasaGene to get fixed names and to fix search criteria
+
+    # download pasa predictions
+    cd /cluster/data/hg18/bed/nscan/pasa2
+    wget http://mblab.wustl.edu/predictions/human/hg18_PASA/hg18.pasa.gtf
+    wget http://mblab.wustl.edu/predictions/human/hg18_PASA/hg18.prot.fa
+    bzip2 hg18.*
+    chmod a-w hg18.*
+
+    ldHgGene -gtf -genePredExt hg18 nscanPasaGene hg18.pasa.gtf.bz2
+    hgPepPred hg18 generic nscanPasaPep  hg18.prot.fa.bz2
+    rm *.tab
+
+    # update trackDb to add correct termRegex entries
+    human/hg18/trackDb.ra
+
+    # push nscanPasaGene nscanPasaPep and trackDb
+
+#############################################################################
 # Blastz hg18 to J. Craig Venter chrom attempt (DONE - 2007-09-27 - Hiram)
     ssh kkstore06
     screen # use a screen to control this job
@@ -17280,3 +17300,4 @@ TMPDIR=/scratch/tmp
     #	 chroms.
 
 ###########################################################################
+
