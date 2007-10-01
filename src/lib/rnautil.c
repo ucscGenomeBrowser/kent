@@ -173,7 +173,9 @@ void markCompensatoryMutations(char *s, char *ref, int *pairList, int *markList)
  * 2: pairing, no substitutions 
  * 3: pairing, single substitution (one of: CG<->TG, GC<->GT, TA<->TG, AT<->GT)
  * 4: pairing, double substitution (i.e. a compensatory change)
- * 5: annoated as pairing but dinucleotide cannot pair 
+ * 5: annoated as pairing but dinucleotide cannot pair, single substitution
+ * 6: annoated as pairing but dinucleotide cannot pair, doubble substitution
+ * 7: annoated as pairing but dinucleotide cannot pair, involves indel ('-' substitution)
  */
 {
 int i, size = strlen(s);
@@ -189,6 +191,11 @@ for (i = 0; i < size; i++)
 	if (s[i] == '.' || s[pairList[i]] == '.') /* treat missing data as possible pair partner */
 	    markList[i] = 2;
 	else if (!rnaPair(s[i], s[pairList[i]]))
+	  if (s[i] == '-' || s[pairList[i]] == '-')
+	    markList[i] = 7;
+	  else if (toupper( s[i] ) != toupper( ref[i] ) && toupper( s[pairList[i]] ) != toupper( ref[pairList[i]] ) )
+	    markList[i] = 6;
+	  else
 	    markList[i] = 5;
 	else if (toupper( s[i] ) != toupper( ref[i] ) && toupper( s[pairList[i]] ) != toupper( ref[pairList[i]] ) )
 	    markList[i] = 4;
