@@ -1634,13 +1634,13 @@ identifier rgdEstId external=RGD
 
 identifier rgdQtlId external=RGD
 "RGD QTL ID"
-    $rn,!rn4,$hg.rgdQtl.name
-    $rn,!rn4,$hg.rgdQtlLink.name minCheck=0.89
+    $rn,$hg.rgdQtl.name
+    $rn,$hg.rgdQtlLink.name minCheck=0.89
 
-identifier rgdQtlIdRn4DupeOK external=RGD
-"RGD QTL ID"
-    rn4.rgdQtl.name dupeOk
-    rn4.rgdQtlLink.name minCheck=0.89
+identifier rgdRatQtlId external=RGD
+"RGD Rat QTL ID mapped to other organism"
+    $hg.rgdRatQtl.name dupeOk
+    $hg.rgdRatQtlLink.name minCheck=0.89
 
 identifier rgdSslpId external=RGD
 "RGD SSLP ID"
