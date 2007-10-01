@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.31 2007/09/29 06:15:41 hiram Exp $"
+#	"$Id: mm9.txt,v 1.32 2007/10/01 22:22:52 hiram Exp $"
 #
 
 #######################################################################
@@ -3041,6 +3041,12 @@ TMPDIR=/scratch/tmp
     cat fb.calJac1.chainMm9Link.txt
     #	887586922 bases of 2929139385 (30.302%) in intersection
 
+    #	run the syntenic nets
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 DEF \
+	-continue=download -chainMinScore=3000 \
+	-syntenicNet -chainLinearGap=medium -bigClusterHub=pk \
+	> syntenicNet.log 2>&1 &
+
 #########################################################################
 # BLASTZ/CHAIN/NET Fugu fr2 (DONE - 2007-09-06 - 2007-09-07 - Hiram)
     ssh kkstore02
@@ -4565,6 +4571,87 @@ doScop ../splitProt/$(path1) $(root1).pf {check out line out/$(root1).pf}
     hgsql -e 'update dbDb set hgNearOk=1,hgPbOk=1 where name="mm9";' \
 	hgcentraltest
 
+############################################################################
+# SGP GENES (DONE - 2007-10-01 - Hiram)
+    ssh kkstore06
+    mkdir  /cluster/data/mm9/bed/sgp
+    cd  /cluster/data/mm9/bed/sgp
+
+    #   They don't do chrM  (we could just let that on fail ...)
+    for C in `awk '{print $1}' /cluster/data/mm9/chrom.sizes | grep -v chrM`
+    do
+        wget --timestamping \
+"http://genome.imim.es/genepredictions/M.musculus/mmJul2007/SGP/humangp200603/${C}.gtf" \
+        -O "${C}.gtf"
+    done
+
+    ssh hgwdev
+    cd /cluster/data/mm9/bed/sgp
+    ldHgGene -gtf -genePredExt mm9 sgpGene chr*.gtf
+    #	Read 35983 transcripts in 290486 lines in 34 files
+    #	35983 groups 32 seqs 1 sources 3 feature types
+    #	35983 gene predictions
+
+    featureBits mm9 -enrichment refGene:CDS sgpGene
+    #	refGene:CDS 1.165%, sgpGene 1.439%, both 1.005%, cover 86.28%,
+    #	enrich 59.96x
+    featureBits mm8 -enrichment refGene:CDS sgpGene
+    #	refGene:CDS 1.186%, sgpGene 1.455%, both 1.025%, cover 86.47%,
+    #	enrich 59.42x
+    featureBits mm9 -enrichment knownGene:CDS sgpGene
+    #	knownGene:CDS 1.278%, sgpGene 1.439%, both 1.080%, cover 84.53%,
+    #	enrich 58.74x
+    featureBits mm8 -enrichment knownGene:CDS sgpGene
+    #	knownGene:CDS 1.109%, sgpGene 1.455%, both 0.931%, cover 83.98%,
+    #	enrich 57.71x
+
+#####################################################################
+# LOAD GENEID GENES (DONE - 2007-10-01 - Hiram)
+    ssh kkstore06
+    mkdir -p /cluster/data/mm9/bed/geneid/download
+    cd /cluster/data/mm9/bed/geneid/download
+
+    bash
+    awk '{print $1}' ../../../chrom.sizes | while read C
+    do
+      echo $C
+      wget --timestamping \
+"http://genome.imim.es/genepredictions/M.musculus/mmJul2007/geneid_v1.2/${C}.gtf" \
+	-O ${C}.gtf
+      wget --timestamping \
+"http://genome.imim.es/genepredictions/M.musculus/mmJul2007/geneid_v1.2/${C}.prot" \
+	-O ${C}.prot
+    done
+    exit
+
+    # Add missing .1 to protein id's
+
+    foreach f (*.prot)
+      perl -wpe 's/^(>chr\w+)$/$1.1/' $f > $f:r-fixed.prot
+    end
+    ssh hgwdev
+    cd /cluster/data/mm9/bed/geneid
+    ldHgGene -genePredExt -gtf mm9 geneid download/*.gtf
+# Read 36708 transcripts in 287399 lines in 35 files
+# 36708 groups 34 seqs 1 sources 3 feature types
+# 36708 gene predictions
+
+    #	the chr16_random file is empty, do not attempt to use it
+    hgPepPred mm9 generic geneidPep \
+	`ls download/*-fixed.prot | grep -v chr16_random`
+    featureBits mm9 -enrichment refGene geneid
+# refGene 1.975%, geneid 1.590%, both 0.956%, cover 48.39%, enrich 30.44x
+    featureBits mm8 -enrichment refGene geneid
+# refGene 2.010%, geneid 1.592%, both 0.974%, cover 48.44%, enrich 30.43x
+    featureBits mm7 -enrichment refGene geneid
+# refGene 2.002%, geneid 1.579%, both 0.952%, cover 47.57%, enrich 30.12x
+
+    featureBits mm9 -enrichment knownGene geneid
+# knownGene 2.686%, geneid 1.590%, both 1.047%, cover 38.97%, enrich 24.52x
+    featureBits mm8 -enrichment knownGene geneid
+# knownGene 2.130%, geneid 1.592%, both 0.900%, cover 42.23%, enrich 26.53x
+    featureBits mm7 -enrichment knownGene geneid
+# knownGene 2.058%, geneid 1.579%, both 0.859%, cover 41.72%, enrich 26.42x
 
 #########################################################################
 # BLASTZ/CHAIN/NET Orangutan ponAbe2 (DONE - 2007-09-21 - Hiram)
@@ -4845,7 +4932,7 @@ TMPDIR=/scratch/tmp
     #	84990797 bases of 1042591351 (8.152%) in intersection
 
 #########################################################################
-# BLASTZ Platypus ornAna1 - (WORKING - 2007-09-21 - Hiram)
+# BLASTZ Platypus ornAna1 - (DONE - 2007-09-21 - 2007-09-25 - Hiram)
     ssh kkstore05
     mkdir /cluster/data/mm9/bed/blastzOrnAna1.2007-09-21
     cd /cluster/data/mm9/bed/blastzOrnAna1.2007-09-21
@@ -4893,7 +4980,7 @@ TMPDIR=/scratch/tmp
     #	135570580 bases of 1842236818 (7.359%) in intersection
 
 #########################################################################
-# Blastz Chimp panTro2 - (WORKING - 2007-09-24 - Hiram)
+# Blastz Chimp panTro2 - (DONE - 2007-09-24 - 2007-09-25 - Hiram)
     ssh kkstore04
     mkdir /cluster/data/mm9/bed/blastzPanTro2.2007-09-24
     cd /cluster/data/mm9/bed/blastzPanTro2.2007-09-24
@@ -4939,8 +5026,14 @@ TMPDIR=/scratch/tmp
     cat fb.panTro2.chainMm9Link.txt
     #	997050630 bases of 2909485072 (34.269%) in intersection
 
+    #	create syntenic maf nets:
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-syntenicNet -continue=syntenicNet DEF > syntenicNet.out 2>&1 &
+XXX - running 2007-10-01 15:15
+
 #########################################################################
-# Blastz Horse equCab1 - (WORKING - 2007-09-24 - Hiram)
+# Blastz Horse equCab1 - (DONE - 2007-09-24 - 2007-09-25 - Hiram)
     ssh kkstore05
     mkdir /cluster/data/mm9/bed/blastzEquCab1.2007-09-24
     cd /cluster/data/mm9/bed/blastzEquCab1.2007-09-24
@@ -4984,8 +5077,14 @@ TMPDIR=/scratch/tmp
      cat fb.equCab1.chainMm9Link.txt
     #	901367656 bases of 2421923695 (37.217%) in intersection
 
+    #	create the syntenic maf nets
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-continue=syntenicNet -syntenicNet DEF > syntenicNet.out 2>&1 &
+    #	real 22m51.080s
+
 #########################################################################
-# Blastz Cow bosTau3 (WORKING - 2007-09-25 - Hiram)
+# Blastz Cow bosTau3 (DONE - 2007-09-25 - Hiram)
     ssh kkstore05
     screen # use a screen to control this job
     mkdir /cluster/data/mm9/bed/blastzBosTau3.2007-09-25
@@ -5028,8 +5127,14 @@ TMPDIR=/scratch/tmp
     cat fb.bosTau3.chainMm9Link.txt
     #	707779988 bases of 2731807384 (25.909%) in intersection
 
+    #	create the syntenic maf nets
+    time nice -n +19 doBlastzChainNet.pl -chainMinScore=3000 -verbose=2 \
+	-syntenicNet -continue=syntenicNet \
+	DEF -bigClusterHub=pk -chainLinearGap=medium > syntenicNet.log 2>&1 &
+    #	real 16m28.741s
+
 #########################################################################
-# Blastz Opossum monDom4 (WORKING - 2007-09-25 - Hiram)
+# Blastz Opossum monDom4 (DONE - 2007-09-25 - 2007-09-27 - Hiram)
     ssh kkstore04
     screen # use screen to manage this job
     mkdir /cluster/data/mm9/bed/blastzMonDom4.2007-09-25
@@ -5087,7 +5192,7 @@ TMPDIR=/scratch/tmp
     #	254018516 bases of 3501643220 (7.254%) in intersection
 
 #########################################################################
-# Blastz Tenrec echTel1 (WORKING - 2007-09-25 - Hiram)
+# Blastz Tenrec echTel1 (DONE - 2007-09-25 - 2007-09-27 - Hiram)
     ssh kkstore02
     screen # use a screen to control this job
     mkdir /cluster/data/mm9/bed/blastzEchTel1.2007-09-25
@@ -5130,8 +5235,14 @@ TMPDIR=/scratch/tmp
     cat  fb.echTel1.chainMm9Link.txt
     #	298656963 bases of 2111581369 (14.144%) in intersection
 
+    #	create syntenic maf nets
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 -chainMinScore=3000 \
+	DEF -continue=syntenicNet -bigClusterHub=kk \
+	-syntenicNet -chainLinearGap=medium > syntenicNet.log 2>&1 &
+    #	real 3m4.285s
+
 #########################################################################
-# Blastz Tree Shrew tupBel1 (WORKING - 2007-09-27 - Hiram)
+# Blastz Tree Shrew tupBel1 (DONE - 2007-09-27 - 2007-10-01 - Hiram)
     ssh kkstore05
     screen # use screen to control this job
     mkdir /cluster/data/mm9/bed/blastzTupBel1.2007-09-27
@@ -5168,15 +5279,26 @@ TMPDIR=/scratch/tmp
 	-continue=net -stop=load -bigClusterHub=pk -chainLinearGap=medium DEF \
 	> net.log 2>&1 &
     #	real    69m41.901s
-    #	and indeed it did,  The chains are loaded:
+    #	and indeed it did,  Loading the net track
     ssh hgwdev
+    cd /cluster/data/mm9/bed/blastzTupBel1.2007-09-27/axtChain
+    cp -p noClass.net mm9.tupBel1.net
+    time nice -n +19 netFilter -minGap=10 mm9.tupBel1.net \
+	| hgLoadNet -warn mm9 netTupBel1 stdin
     cd /cluster/data/mm9/bed/blastzTupBel1.2007-09-27
     time nice -n +19 featureBits mm9 chainTupBel1Link \
 	> fb.mm9.chainTupBel1Link.txt 2>&1 &
+    cat fb.mm9.chainTupBel1Link.txt
+    #	552865662 bases of 2620346127 (21.099%) in intersection
 
+    #	and, to finish it all off, with syntenic net
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 -chainMinScore=3000 \
+	-continue=download -bigClusterHub=pk \
+	-syntenicNet -chainLinearGap=medium DEF > syntenicNet.log 2>&1 &
+    #	real    14m42.816s
 
 #########################################################################
-# Blastz Bush Baby otoGar1 (WORKING - 2007-09-27 - Hiram)
+# Blastz Bush Baby otoGar1 (DONE - 2007-09-27 - 2007-09-28 - Hiram)
     ssh kkstore05
     screen # use screen to control this job
     mkdir /cluster/data/mm9/bed/blastzOtoGar1.2007-09-27
@@ -5215,6 +5337,12 @@ TMPDIR=/scratch/tmp
     cat fb.mm9.chainOtoGar1Link.txt
     #	601932945 bases of 2620346127 (22.972%) in intersection
 
+    #	and run the syntenicNet and cleanup
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 -chainMinScore=3000 \
+	-continue=download -bigClusterHub=pk -chainLinearGap=medium DEF \
+	-syntenicNet > syntenicNet.log 2>&1 &
+    #	real 13m57.573s
+
 #########################################################################
 # Blastz Armadillo dasNov1 (WORKING - 2007-09-27 - Hiram)
     ssh kkstore04
@@ -5245,12 +5373,12 @@ TMPDIR=/scratch/tmp
     # << happy emacs
 
     time nice -n +19 doBlastzChainNet.pl -verbose=2 -chainMinScore=3000 \
-	-stop=chainMerge -bigClusterHub=kk -chainLinearGap=medium DEF \
-	> chainMerge.log 2>&1 &
-XXX - running 2007-09-27 11:40
+	-stop=load -bigClusterHub=pk -chainLinearGap=medium DEF \
+	> load.log 2>&1 &
+XXX - running 2007-09-29 17:27
 
 #########################################################################
-# Blastz Rabbit oryCun1 (WORKING - 2007-09-28 - Hiram)
+# Blastz Rabbit oryCun1 (DONE - 2007-09-28 - 2007-09-29 - Hiram)
     ssh kkstore04
     screen # use screen to control this job
     mkdir /cluster/data/mm9/bed/blastzOryCun1.2007-09-28
@@ -5281,10 +5409,20 @@ TMPDIR=/scratch/tmp
     time nice -n +19 doBlastzChainNet.pl -verbose=2 -chainMinScore=3000 \
 	-stop=chainMerge -bigClusterHub=pk -chainLinearGap=medium DEF \
 	> chainMerge.log 2>&1 &
-XXX - running 2007-09-28 11:40
+    #	real    2126m59.162s
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 -chainMinScore=3000 \
+	-continue=net -stop=load -bigClusterHub=pk -chainLinearGap=medium DEF \
+	> load.log 2>&1 &
+    #	real    53m28.279s
+    cat fb.mm9.chainOryCun1Link.txt
+    #	496428446 bases of 2620346127 (18.945%) in intersection
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 -chainMinScore=3000 \
+	-continue=download -bigClusterHub=pk -chainLinearGap=medium DEF \
+	-syntenicNet > syntenicNet.log 2>&1 &
+    #	real 9m27.321s
 
 #########################################################################
-# Blastz Cat felCat3 (WORKING - 2007-09-28 - Hiram)
+# Blastz Cat felCat3 (DONE - 2007-09-28 - 2007-09-29 - Hiram)
     ssh kkstore05
     screen # use screen to control this job
     mkdir /cluster/data/mm9/bed/blastzFelCat3.2007-09-28
@@ -5315,7 +5453,17 @@ TMPDIR=/scratch/tmp
     time nice -n +19 doBlastzChainNet.pl -verbose=2 -chainMinScore=3000 \
 	-stop=chainMerge -bigClusterHub=pk -chainLinearGap=medium DEF \
 	> chainMerge.log 2>&1 &
-XXX - running 2007-09-28 11:47
+    #	real    1597m21.032s
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 -chainMinScore=3000 \
+	-continue=net -stop=load -bigClusterHub=pk -chainLinearGap=medium DEF \
+	> load.log 2>&1 &
+    #	real    39m30.078s
+    cat fb.mm9.chainFelCat3Link.txt
+    #	499894253 bases of 2620346127 (19.077%) in intersection
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 -chainMinScore=3000 \
+	-continue=download -bigClusterHub=pk -chainLinearGap=medium DEF \
+	-syntenicNet > syntenicNet.log 2>&1 &
+    #	real 9m42.624s
 
 #########################################################################
 # Blastz Elephant loxAfr1 (WORKING - 2007-09-28 - Hiram)
@@ -5347,13 +5495,12 @@ TMPDIR=/scratch/tmp
     # << happy emacs
 
     time nice -n +19 doBlastzChainNet.pl -verbose=2 -chainMinScore=3000 \
-	-stop=chainMerge -bigClusterHub=kk -chainLinearGap=medium DEF \
-	> chainMerge.log 2>&1 &
-XXX - the next job killed the kk hub, dasNov1 went down too
+	-stop=load -bigClusterHub=pk -chainLinearGap=medium DEF \
+	> load.log 2>&1 &
 XXX - running 2007-09-28 22:50
 
 #########################################################################
-# Blastz Hedgehog loxAfr1 (WORKING - 2007-09-28 - Hiram)
+# Blastz Hedgehog eriEur1 (WORKING - 2007-09-28 - Hiram)
     ssh kkstore05
     screen # use screen to control this job
     mkdir /cluster/data/mm9/bed/blastzEriEur1.2007-09-28
@@ -5382,13 +5529,12 @@ TMPDIR=/scratch/tmp
     # << happy emacs
 
     time nice -n +19 doBlastzChainNet.pl -verbose=2 -chainMinScore=3000 \
-	-stop=chainMerge -bigClusterHub=kk -chainLinearGap=medium DEF \
-	> chainMerge.log 2>&1 &
-XXX - this killed the kk kluster hub
-XXX - running 2007-09-28 23:09
+	-stop=load -bigClusterHub=pk -chainLinearGap=medium DEF \
+	> load.log 2>&1 &
+XXX - running 2007-09-29 17:33
 
 #########################################################################
-# Blastz Shrew sorAra1 (WORKING - 2007-09-28 - Hiram)
+# Blastz Shrew sorAra1 (DONE - 2007-09-28 - 2007-10-01 - Hiram)
     ssh kkstore05
     screen # use screen to control this job
     mkdir /cluster/data/mm9/bed/blastzSorAra1.2007-09-28
@@ -5418,7 +5564,30 @@ TMPDIR=/scratch/tmp
 
     time nice -n +19 doBlastzChainNet.pl -verbose=2 -chainMinScore=3000 \
 	-stop=chainMerge -bigClusterHub=pk -chainLinearGap=medium DEF \
-	> chainMerge.log 2>&1 &
-XXX - running 2007-09-28 23:09
+	>chainMerge chainMerge.log 2>&1 &
+    #	real    2478m57.242s
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 -chainMinScore=3000 \
+	-continue=net -stop=load -bigClusterHub=pk -chainLinearGap=medium DEF \
+	> load.log 2>&1 &
+    #	real    15m55.272s
+    #	as expected, fails during load since there is no sorAra1 database
+    #	load nets without class
+    ssh hgwdev
+    cd /cluster/data/mm9/bed/blastzSorAra1.2007-09-28/axtChain
+    cp -p noClass.net mm9.sorAra1.net
+    time nice -n +19 netFilter -minGap=10 mm9.sorAra1.net \
+	| hgLoadNet -warn mm9 netSorAra1 stdin
+    cd /cluster/data/mm9/bed/blastzSorAra1.2007-09-28
+    time nice -n +19 featureBits mm9 chainSorAra1Link \
+	> fb.mm9.chainSorAra1Link.txt 2>&1
+    cat fb.mm9.chainSorAra1Link.txt
+    #	250412778 bases of 2620346127 (9.556%) in intersection
+
+    #	and, to finish it all off, with syntenic net
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 -chainMinScore=3000 \
+	-continue=download -bigClusterHub=pk \
+	-syntenicNet -chainLinearGap=medium DEF > syntenicNet.log 2>&1 &
+    #	real    3m49.961s
 
 #########################################################################
