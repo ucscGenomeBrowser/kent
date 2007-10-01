@@ -4624,7 +4624,7 @@ TMPDIR=/scratch/tmp
 
 
 #########################################################################
-# RGD QTL (DONE 9/24/07 angie)
+# RGD QTL (DONE 9/24/07 angie -- RELOADED 9/26/07)
     ssh kkstore04
     mkdir /cluster/data/rn4/bed/rgdQtl
     cd /cluster/data/rn4/bed/rgdQtl
@@ -4650,6 +4650,9 @@ TMPDIR=/scratch/tmp
       QTLS
     ssh hgwdev
     cd /cluster/data/rn4/bed/rgdQtl
+    # 9/26/07: RGD said that the duplicate Gluco13 was supposed to be 
+    # Gluco13 + Gluco31.  Edited rgdQtl.bed to change Gluco13 -> 31 for 
+    # the chr15 copy, and rgdQtlLink.txt for id 631516.
     hgLoadBed rn4 rgdQtl rgdQtl.bed
     hgLoadSqlTab rn4 rgdQtlLink ~/kent/src/hg/lib/rgdQtlLink.sql rgdQtlLink.txt
     # Fix coords > chromSize:
@@ -4659,6 +4662,7 @@ TMPDIR=/scratch/tmp
       ../../chrom.sizes \
     | hgsql rn4
     checkTableCoords -verbose=2 rn4 rgdQtl
+    runJoiner.csh rn4 rgdQtl
 
 
 #########################################################################
