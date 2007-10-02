@@ -2409,5 +2409,40 @@ _EOF_
     drosophila/dm3/dm3/trackDb.ra
 
 #########################################################################
+
+
+##########################################################################
+# EVOFOLD (Done, 10.02.2007) Jakob Skou Pedersen
+# RNA secondary structure predictions lifted from dm2 and filtered
+  ssh -C hgwdev
+  mkdir -p /cluster/data/dm3/bed/evofold
+  cd /cluster/data/dm3/bed/evofold
+  echo "select chrom, chromStart, chromEnd, name, score, strand, size, secStr, conf from evofold;" | hgsql dm2 | sed -e 1d > foldsDm2.bed
+  liftOver -minMatch=1.0 foldsDm2.bed /cluster/data/dm2/bed/liftOver/dm2ToDm3.over.chain.gz tmp.bed unmapped.bed
+  # remove elements which are wrong size after lifting
+  awk '$3-$2 == $7' tmp.bed | sort -k4,4 > rawFoldsDm3.bed
+
+  # structure filters
+  # first, remove pairs that can't form in human 
+  cut -f 1-6 rawFoldsDm3.bed > tmp.bed
+  # sequenceForBed can be found and compiled from here: $HOME/kent/src/hg/altSplice/altSplice/
+  nice /cluster/home/sugnet/bin/i386/sequenceForBed -db=dm3 -bedIn=tmp.bed -fastaOut=tmp.fa 
+  cat tmp.fa | sed -e 's/\.[+-]\.chr.*$//' \
+             | sed -e '/^>/s/$/\t/' | tr -d '\n' | sed -e 's/>/\n/g' | sed -e '1d' -e '$s/$/\n/' | sort -k1,1 > foldsDm3Seq.tab
+  join -1 4 -2 1 -o "1.4 1.8 2.2" rawFoldsDm3.bed foldsDm3Seq.tab | sed -e 's/  */\t/g' | sort -k1,1 \
+	     | /cluster/home/jsp/scripts/tabFoldFilter.py > cleanFolds.tab
+  join -1 4 -2 1 -o "1.1 1.2 1.3 1.4 1.5 1.6 1.7 2.2 1.9" rawFoldsDm3.bed cleanFolds.tab | sed -e 's/  */\t/g' > tmp1.bed
+  # second, remove poor predictions 
+  # scripts can be found in cvs tree at: cvsroot/jsp/scripts/. They use a few modules which can be found at: cvsroot/jsp/py_modules
+  cat tmp1.bed | /cluster/home/jsp/scripts/bedRnassFilter.py --dangling --minAvrStemSize=3 | /cluster/home/jsp/scripts/bedRnassFilter.sh 1 3 \
+	       | /cluster/home/jsp/scripts/roundListFloats.py -c9 > foldsDm3.bed
+  # clean up
+  rm tmp.bed tmp1.bed foldsDm2.bed foldsDm3Seq.tab rawFoldsDm3.bed tmp.fa cleanFolds.tab
+  # comment: all the above filtering did not remove any
+  # predictions... apparently dm2 and dm3 are quite similar.
+
+  # upload
+  hgLoadBed -notItemRgb -sqlTable=$HOME/kent/src/hg/lib/evofold.sql dm3 evofold foldsDm3.bed
+
 #########################################################################
 #########################################################################
