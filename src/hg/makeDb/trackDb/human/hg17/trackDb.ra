@@ -2415,6 +2415,13 @@ searchDescription Retrotransposon Insertion Polymorphisms in Humans
 searchPriority 6
 padding 400
 
+searchTable consIndelsHg17Mm5CanFam1
+searchType bed
+searchMethod exact
+shortCircuit 1
+termRegex IGS.+
+searchPriority 50
+
 track hars
 shortLabel Human Accelerated
 longLabel Human Accelerated Regions
