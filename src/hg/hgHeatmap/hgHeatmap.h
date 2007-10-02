@@ -58,7 +58,7 @@ extern struct hash *ghHash;	/* Hash of active heatmaps */
 
 struct genoHeatmap
 /* A genomic heatmap */
-    {
+{
     void *next;			/* Next in list. */
     char *name;                 /* Graph name. tableName in database */
     char *shortLabel;           /* Short label. */
@@ -69,7 +69,7 @@ struct genoHeatmap
     struct hash *sampleOrder;	/* Hash of orders for samples */
     int *expIdOrder;            /* ordering of expIds for display of bed15 format */
     struct trackDb *tDb;	/* the track database */
-    };
+};
 
 
 /*** Routines from hgHeatmap.h ***/
@@ -107,6 +107,9 @@ char *chromLayout();
 void getGenoHeatmaps(struct sqlConnection *conn, char *dataset);
 /* Set up ggList and ggHash with all available genome heatmaps */
 
+struct genoLay *featureLayout(struct sqlConnection *conn, struct genoLay *gl);
+/* Layout Feature Sorter based on previously layed out heatmaps */
+
 struct genoLay *ggLayout(struct sqlConnection *conn);
 /* Figure out how to lay out image. */
 
@@ -115,16 +118,18 @@ struct genoHeatmap *getUserHeatmaps();
 
 void setSampleOrder(struct genoHeatmap* gh, char* posStr);
 /* Set the sampleOrder and sampleList of a specific heatmap to posStr; 
-   posStr is a comma separated string of sample ids.
-   if posStr is null, then check the configuration file 
-   if the setting is not set in the configuration file, then the orders are set to default in sampleList and sampleOrder
-*/
+ * posStr is a comma separated string of sample ids.
+ * if posStr is null, then check the configuration file 
+ * if the setting is not set in the configuration file, then the orders 
+ * are set to default in sampleList and sampleOrder */
+
+struct slName* getPersonOrder();
+/* Makes a single-linked name list from CGI variable for patient order */
 
 void setPersonOrder (struct genoHeatmap* gh, char* personStr);
 /* Set the sampleOrder and sampleList of a specific heatmap to personStr; 
-   personStr is a csv format string of personids
-   if posStr is null, set to default 
-*/
+ * personStr is a csv format string of personids
+ * if posStr is null, set to default */
 
 void defaultOrder(struct genoHeatmap* gh);
 /* reset the default order of samples to be displayed */ 
@@ -134,8 +139,7 @@ void setBedOrder(struct genoHeatmap* gh);
 
 int *getBedOrder(struct genoHeatmap* gh);
 /* Return an array for reordering the experiments
-   If the order has not been set, then use function setBedOrder to set
-*/
+ * If the order has not been set, then use function setBedOrder to set */
 
 void hghDoUsualHttp();
 /* Wrap html page dispatcher with code that writes out

@@ -25,7 +25,7 @@
 #include "ispyFeatures.h"
 
 
-static char const rcsid[] = "$Id: hgHeatmap.c,v 1.22 2007/09/27 23:00:12 jsanborn Exp $";
+static char const rcsid[] = "$Id: hgHeatmap.c,v 1.23 2007/10/02 22:32:42 jsanborn Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -42,11 +42,11 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "hgHeatmap - Full genome (as opposed to chromosome) view of data\n"
-  "This is a cgi script, but it takes the following parameters:\n"
-  "   db=<genome database>\n"
-  "   hght_table=on where table is name of bed table\n"
-  );
+	 "hgHeatmap - Full genome (as opposed to chromosome) view of data\n"
+	 "This is a cgi script, but it takes the following parameters:\n"
+	 "   db=<genome database>\n"
+	 "   hght_table=on where table is name of bed table\n"
+	 );
 }
 
 /* ---- Get list of graphs. ---- */
@@ -67,7 +67,7 @@ for (ct = ctList; ct != NULL; ct = ct->next)
         /* set pSc (probably a library routine that does this) */
         int pSc = 0;
         for (pSc = 0; pS && *pS; ++pS)
-	{
+	    {
             if(*pS == ',')
                 {
                 ++pSc;
@@ -195,6 +195,17 @@ for (ref = ghList; ref != NULL; ref = ref->next)
     }
 }
 
+struct slName* getPersonOrder()
+/* Makes a single-linked name list from CGI variable for patient order */
+{
+char varName[512];
+safef(varName, sizeof (varName),"%s", hghPersonOrder);
+char *pStr = cartUsualString(cart,varName, "");
+
+return slNameListFromComma(pStr);
+}
+
+
 void setPersonOrder (struct genoHeatmap* gh, char* personStr)
 /* Set the sampleOrder and sampleList of a specific heatmap to personStr; 
    personStr is a csv format string of personids
@@ -219,61 +230,72 @@ for (i=0; i< gh->expCount; i++)
 char *pS = personStr;
 int expId; // bed15 format expId 
 
-if (!sameString(pS,""))
-    {
-    char* person, *sample;
-    struct slName *sl, *slSample=NULL, *slPerson = slNameListFromComma(pS);
-    struct sqlConnection *conn = sqlConnect("ispy"); /*hard code for ISPY */
-    char *labTable = "labTrack"; /*hard code for ISPY */
-    char *key = "ispyId"; /*hard code for ISPY */
+/* get the sampleIds of each person from database */ 
+struct sqlConnection *conn = sqlConnect("ispy"); /*hard code for ISPY */
+char *labTable = "labTrack"; /*hard code for ISPY */
+char *key = "ispyId"; /*hard code for ISPY */
 
-    /* get the sampleIds of each person from database */ 
-    char query[512];
-    struct sqlResult *sr;
-    char **row;
-    for (sl= slPerson; sl!= NULL; sl=sl->next)
-	{
-	person =sl->name;
-	safef(query, sizeof(query),"select * from %s where %s = %s ", labTable, key, person);
-	sr = sqlGetResult(conn, query);
-	while ((row = sqlNextRow(sr)) != NULL)
-	    {
-	    sample = row[1];
-	    slNameAddHead(&(slSample),sample);
-	    }
-	}
-    slReverse(&(slSample));
-    sqlFreeResult(&sr);
+char query[512];
+struct sqlResult *sr;
+char **row;
+char* person, *sample;
 
-    /*microarray specific settings*/
-    struct microarrayGroups *maGs = maGetTrackGroupings(gh->database, gh->tDb);
-    struct maGrouping *allA= maGs->allArrays;
-    
-    int counter=0;    
-    for(sl=slSample; sl !=NULL; sl=sl->next)
-	{
-	sample = sl->name;
-	int i;
-	expId = -1;
-	for (i=0; i< allA->size; i++)
-	    {
-	    if (sameString(allA->names[i],sample))
-		{
-		expId = allA->expIds[i];
-		gh->expIdOrder[expId]=counter;
-		break;
-		}
-	    }
-	if (expId == -1)
-	    continue;
-	hashAdd(gh->sampleOrder, sample, &counter);
-	slNameAddHead(&(gh->sampleList),sample);
-	counter++;
-	}
-    slReverse(&(gh->sampleList));
+struct slName *sl, *slSample=NULL, *slPerson=NULL;
+if (sameString(pS,""))
+/* If person string is blank, get all distinct ispy id's from database */
+    { 
+    safef(query, sizeof(query),"select distinct %s from %s ", key, labTable);
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+        person = row[0];
+    	slNameAddHead(&(slPerson),person);
+    	}
     }
 else
-    defaultOrder(gh);
+    slPerson = slNameListFromComma(pS);
+    
+
+for (sl= slPerson; sl!= NULL; sl=sl->next)
+    {
+    person =sl->name;
+    safef(query, sizeof(query),"select * from %s where %s = %s ", labTable, key, person);
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+        sample = row[1];
+        slNameAddHead(&(slSample),sample);
+        }
+    }
+slReverse(&(slSample));
+sqlFreeResult(&sr);
+
+/*microarray specific settings*/
+struct microarrayGroups *maGs = maGetTrackGroupings(gh->database, gh->tDb);
+struct maGrouping *allA= maGs->allArrays;
+
+int counter = 0;    
+for(sl=slSample; sl !=NULL; sl=sl->next)
+{
+sample = sl->name;
+int i;
+expId = -1;
+for (i=0; i< allA->size; i++)
+    {
+    if (sameString(allA->names[i],sample))
+	{
+	expId = allA->expIds[i];
+	gh->expIdOrder[expId]=counter;        
+	break;
+	}
+    }
+if (expId == -1)
+    continue;
+hashAdd(gh->sampleOrder, sample, (void *) counter);
+slNameAddHead(&(gh->sampleList),sample);
+counter++;
+}
+slReverse(&(gh->sampleList));
 }
 
 void setSampleOrder(struct genoHeatmap* gh, char* posStr)
@@ -318,18 +340,18 @@ if (!sameString(pS,""))
     {
     char* sample;
     gh->sampleList = slNameListFromComma(pS);
-   
+    
     /*microarray specific settings*/
     struct microarrayGroups *maGs = maGetTrackGroupings(gh->database, gh->tDb);
     struct maGrouping *allA= maGs->allArrays;
-
+    
     int counter=0;    
     struct slName *sl;
     for(sl=gh->sampleList; sl !=NULL; sl=sl->next)
 	{
 	sample = sl->name;
-
-	hashAdd(gh->sampleOrder, sample, &counter);
+	
+	hashAdd(gh->sampleOrder, sample, (void *) counter);
 	int i;
 	expId = -1;
 	for (i=0; i< allA->size; i++)
@@ -375,7 +397,7 @@ for (i=0; i<gh->expCount;i++)
     safef(sample, sizeof(sample), "%d", expId);
     slNameAddHead(&gh->sampleList, sample);
     gh->expIdOrder[expId]=i;
-    hashAdd(gh->sampleOrder, sample, &i); 
+    hashAdd(gh->sampleOrder, sample, (void *) i); 
     }
 slReverse(&gh->sampleList);
 }
@@ -484,6 +506,55 @@ char *chromLayout()
 return cartUsualString(cart, hghChromLayout, layAllOneLine); //layTwoPerLine);
 }
 
+struct genoLay *featureLayout(struct sqlConnection *conn, struct genoLay *gl)
+/* Layout Feature Sorter based on previously layed out heatmaps */
+{
+struct genoLay *fs = AllocA(struct genoLay);
+fs->picWidth = 100;  /* TODO: make into CGI variable like hghImageWidth */
+fs->picHeight = gl->picHeight;    
+fs->margin = gl->margin;    
+fs->lineHeight = gl->lineHeight;
+fs->spaceWidth = gl->spaceWidth;
+
+struct column *col, *colList = getColumns(conn);
+int numVis = 0;
+for (col = colList; col != NULL; col = col->next)
+    {
+    if (col->on)
+        numVis++;
+    }
+
+if (numVis > 0)
+    fs->pixelsPerBase = ((double) fs->picWidth) / ((double) numVis);
+else
+    fs->pixelsPerBase = 0.0;
+
+struct genoLayChrom *features = AllocA(struct genoLayChrom);
+features->next = NULL;
+features->fullName = cloneString("fs");
+features->shortName = cloneString("fs");
+features->size = numVis;
+
+struct genoLayChrom *chrom = gl->chromList;
+features->y = chrom->y;
+int tmp, maxX = 0;
+for ( ; chrom != NULL; chrom = chrom->next)
+    {
+    tmp = chrom->x + chrom->width;
+    if (tmp > maxX)
+        maxX = tmp;
+    }
+features->x = maxX;
+features->width = fs->picWidth;
+features->height = fs->picHeight;
+
+fs->chromList = features;
+
+return fs;
+}
+
+
+
 struct genoLay *ggLayout(struct sqlConnection *conn)
 /* Figure out how to lay out image. */
 {
@@ -513,14 +584,7 @@ struct sqlConnection *ispyConn = hAllocOrConnect("ispy");
 
 struct column *colList = getColumns(ispyConn);
 
- struct column *pt;
-  for (pt = colList; pt != NULL; pt = pt->next)
-    {
-      if (pt->on)
-	hPrintf("col %s is ON\n", pt->name);
-      else
-	hPrintf("col %s is OFF", pt->name);
-    }
+
 
 if (cartVarExists(cart, hghConfigure))
     {
@@ -538,7 +602,7 @@ else
     else
 	mainPage(conn);
     }
- 
+
 cartRemovePrefix(cart, hghDo);
 }
 

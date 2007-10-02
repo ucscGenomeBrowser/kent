@@ -30,7 +30,7 @@
 #include "ispyFeatures.h"
 
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.19 2007/09/27 23:00:12 jsanborn Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.20 2007/10/02 22:32:43 jsanborn Exp $";
 
 /* Page drawing stuff. */
 
@@ -285,7 +285,7 @@ for(chrom = gl->chromList; chrom; chrom = chrom->next)
     ghBed = getChromHeatmap(database, chromHeatmap, chrom->fullName);
     
     int chromX = chrom->x, chromY = chrom->y;
-
+    
     vgSetClip(vg, chromX, chromY+yOff, chrom->width, heatmapHeight(gh));
     vgBox(vg, chromX, chromY+yOff , chrom->width, heatmapHeight(gh), MG_GRAY);
 
@@ -336,6 +336,117 @@ for(chrom = gl->chromList; chrom; chrom = chrom->next)
     }
 }
 
+
+void drawFeatures(struct vGfx *vg, char *chromHeatmap, 
+           struct sqlConnection *conn, struct genoLay *fs, int yOff)
+/* Draw features to right of chromosomes in layout at given
+ * y offset and height. */
+{
+struct hashEl *el = hashLookup(ghHash, chromHeatmap);
+struct genoHeatmap *gh;
+if (el)
+    gh = el->val;
+else
+    errAbort("no heatmap %s\n", chromHeatmap);
+
+struct genoLayChrom *chrom=NULL;
+    
+double pixelsPerBase = fs->pixelsPerBase;
+double colorScale = 0.0; 
+double val;
+double absVal, avgVal, minVal, maxVal;
+int valId,start = 0;
+
+Color valCol;
+Color shadesOfRed[EXPR_DATA_SHADES];
+Color shadesOfGreen[EXPR_DATA_SHADES];
+static struct rgbColor black = {0, 0, 0};
+static struct rgbColor red = {255, 0, 0};
+static struct rgbColor green = {0, 255, 0};
+vgMakeColorGradient(vg, &black, &red, EXPR_DATA_SHADES, shadesOfRed);
+vgMakeColorGradient(vg, &black, &green, EXPR_DATA_SHADES, shadesOfGreen);
+
+struct slName *id = NULL;
+struct column *col, *colList = getColumns(conn);
+
+for(chrom = fs->chromList; chrom; chrom = chrom->next)
+    {    
+    int chromX = chrom->x, chromY = chrom->y;
+    
+    vgSetClip(vg, chromX, chromY+yOff, chrom->width, chrom->height);
+    vgBox(vg, chromX, chromY+yOff , chrom->width, chrom->height, MG_WHITE);
+    
+    start = 0;
+    for (col = colList; col != NULL; col = col->next)
+	{
+        if (col->on)
+	    {
+	    avgVal = 1.0;
+	    if (col->cellAvgVal(col, conn) != NULL)
+		avgVal = atof(col->cellAvgVal(col, conn));
+	    
+	    minVal = 0.0;
+	    if (col->cellMinVal(col, conn) != NULL)
+		minVal = atof(col->cellMinVal(col, conn));
+	    
+	    maxVal = 10.0;
+	    if (col->cellMaxVal(col, conn) != NULL)
+		maxVal = atof(col->cellMaxVal(col, conn));
+	    
+	    if (maxVal - avgVal > avgVal - minVal)
+		colorScale = COLOR_SCALE / (maxVal - avgVal); 
+	    else
+		colorScale = COLOR_SCALE / (avgVal - minVal); 
+	    
+	    struct slName *sl = NULL;
+	    for (sl = gh->sampleList; sl ; sl = sl->next)
+		{
+		el = hashLookup(gh->sampleOrder, sl->name);
+		if (!el) 
+		    continue;
+                
+		int orderId = (int) el->val;
+		valId = atoi(sl->name);
+		
+		id = slNameNew(getId(conn, valId));
+		
+		char *cellVal = col->cellVal(col, id, conn);
+	        valCol = MG_GRAY;            
+		if (cellVal)
+		    {
+		    val = atof(cellVal) - avgVal;
+		    
+		    absVal = fabs(val);
+		    
+		    int colorIndex = (int)(absVal * (EXPR_DATA_SHADES-1.0) * colorScale);
+		    
+		    /* Clip color index to fit inside of array, since we may have brightened it. */
+		    if (colorIndex < 0) colorIndex = 0;
+		    if (colorIndex >= EXPR_DATA_SHADES)
+			colorIndex = EXPR_DATA_SHADES-1;
+		    
+		    if(val > 0.0)
+			valCol = shadesOfRed[colorIndex];
+		    else
+			valCol = shadesOfGreen[colorIndex];
+		    }
+                
+        	int w = pixelsPerBase;
+        	int h = experimentHeight();
+        	int x = pixelsPerBase * start + chromX;
+        	int y = chromY + yOff + orderId * h;
+		
+        	vgBox(vg, x, y, w, h, valCol);
+		freez(&id);
+		}
+	    start++;
+	    }
+	}
+    vgUnclip(vg);
+    }
+}
+
+
 void genomeGif(struct sqlConnection *conn, struct genoLay *gl,
            char *psOutput)
 /* Create genome GIF file and HT that includes it. */
@@ -347,18 +458,21 @@ int maxShade = ArraySize(shadesOfGray)-1;
 int spacing = 1;
 int yOffset = 2*spacing;
 
+struct sqlConnection *ispyConn = hAllocOrConnect("ispy");
+struct genoLay *fs = featureLayout(ispyConn, gl);
+
 if (psOutput)
     {
-    vg = vgOpenPostScript(gl->picWidth, gl->picHeight, psOutput);
+    vg = vgOpenPostScript(gl->picWidth + fs->picWidth, gl->picHeight, psOutput);
     }
 else
     {
     /* Create gif file and make reference to it in html. */
     trashDirFile(&gifTn, "hgh", "ideo", ".gif");
-    vg = vgOpenGif(gl->picWidth, gl->picHeight, gifTn.forCgi);
-
+    vg = vgOpenGif(gl->picWidth + fs->picWidth, gl->picHeight, gifTn.forCgi);
+    
     hPrintf("<INPUT TYPE=IMAGE SRC=\"%s\" BORDER=1 WIDTH=%d HEIGHT=%d NAME=\"%s\">",
-		gifTn.forHtml, gl->picWidth, gl->picHeight, hghClick);
+	    gifTn.forHtml, gl->picWidth + fs->picWidth, gl->picHeight, hghClick);
     }
 
 /* Get our grayscale. */
@@ -367,7 +481,7 @@ hMakeGrayShades(vg, shadesOfGray, maxShade);
 /* Draw the labels and then the chromosomes. */
 genoLayDrawChromLabels(gl, vg, MG_BLACK);
 genoLayDrawBandedChroms(gl, vg, database, conn, 
-	shadesOfGray, maxShade, MG_BLACK);
+			shadesOfGray, maxShade, MG_BLACK);
 
 struct genoHeatmap *gh= NULL;
 struct slRef *ref= NULL;
@@ -380,11 +494,13 @@ for (ref = ghList; ref != NULL; ref = ref->next)
     gh= ref->val;
     db = gh->database;
     tableName = gh->name;
-
+    
     drawChromHeatmaps(vg, db, gl, tableName, 
 		       totalYOff + yOffset, TRUE, TRUE, TRUE);
+    drawFeatures(vg, tableName, ispyConn, fs, totalYOff + yOffset);  
+    
     totalYOff += heatmapHeight(gh) + spacing;
-
+    
     /* hard-code for demo.
        also draw summary ChromGraph when the tableName is cnvBroadLungv2 
        the space for the CrhomGraph is hardcoded here chromGraphOffset=10    
@@ -392,7 +508,7 @@ for (ref = ghList; ref != NULL; ref = ref->next)
     if ( sameString(tableName,"cnvLungBroadv2_ave100K") /* || sameString(tableName,"cnvLungBroadv2") || sameString(tableName, "expBreastCancerUCSF") */ || sameString(tableName, "CGHBreastCancerUCSF") || sameString(tableName, "CGHBreastCancerStanford") )
 	{
 	char summaryTable[512];
-
+	
 	safef(summaryTable, sizeof(summaryTable),  "%s_summary", tableName);
 	drawChromGraphSimple (vg, db, gl, summaryTable, 
 			      totalYOff + yOffset,  TRUE, TRUE, TRUE);
@@ -400,27 +516,6 @@ for (ref = ghList; ref != NULL; ref = ref->next)
 	}
     }
 vgClose(&vg);
-
-struct sqlConnection *ispyConn = hAllocOrConnect("ispy");
-struct expId *ids = AllocA(struct expId);
-ids->name = cloneString("1199");
-struct expId *id = AllocA(struct expId);
-id->name = cloneString("1201");
-
-ids->next = id;
-
-struct column *colList = getColumns(ispyConn);
-struct column *col;
-for (col = colList; col != NULL; col = col->next)
-{
-    for (id = ids; id != NULL; id = id->next)
-    {
-        if (col->on)
-            hPrintf("<BR>%s for %s = %s", col->name, id->name, col->cellVal(col, id, ispyConn));    
-        
-    }
-}
-
 }
 
 void graphDropdown(struct sqlConnection *conn, char *varName, char *curVal, char *js)

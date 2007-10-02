@@ -17,35 +17,35 @@
 #include "ispyFeatures.h"
 #include "userSettings.h"
 
-static char const rcsid[] = "$Id: configureFeatures.c,v 1.1 2007/09/27 22:55:52 jsanborn Exp $";
+static char const rcsid[] = "$Id: configureFeatures.c,v 1.2 2007/10/02 22:32:42 jsanborn Exp $";
 
 void makeTitle(char *title, char *helpName)
-     /* Make title bar. */
+/* Make title bar. */
 {
-  hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#"HG_COL_HOTLINKS"\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"2\"><TR>\n");
-  hPrintf("<TD ALIGN=LEFT><A HREF=\"../index.html\">%s</A></TD>", "Home");
-  hPrintf("<TD ALIGN=CENTER><FONT COLOR=\"#FFFFFF\" SIZE=4>%s</FONT></TD>", title);
-  hPrintf("<TD ALIGN=Right><A HREF=\"../goldenPath/help/%s\">%s</A></TD>", 
-	  helpName, "Help");
-  hPrintf("</TR></TABLE>");
+hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#"HG_COL_HOTLINKS"\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"2\"><TR>\n");
+hPrintf("<TD ALIGN=LEFT><A HREF=\"../index.html\">%s</A></TD>", "Home");
+hPrintf("<TD ALIGN=CENTER><FONT COLOR=\"#FFFFFF\" SIZE=4>%s</FONT></TD>", title);
+hPrintf("<TD ALIGN=Right><A HREF=\"../goldenPath/help/%s\">%s</A></TD>", 
+	helpName, "Help");
+hPrintf("</TR></TABLE>");
 }
 
 void controlPanelStart()
-     /* Put up start of tables around a control panel. */
+/* Put up start of tables around a control panel. */
 {
-  hPrintf("<TABLE WIDTH=\"100%%\" BORDER=0 CELLSPACING=0 CELLPADDING=4><TR><TD ALIGN=CENTER>");
-  hPrintf("<TABLE BORDER=1 CELLSPACING=0 CELLPADDING=0 BGCOLOR=\"#"HG_COL_BORDER"\"><TR><TD>");
-  hPrintf("<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=2 BGCOLOR=\""HG_COL_INSIDE"\"><TR><TD>\n");
-  hPrintf("<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=1><TR><TD>");
+hPrintf("<TABLE WIDTH=\"100%%\" BORDER=0 CELLSPACING=0 CELLPADDING=4><TR><TD ALIGN=CENTER>");
+hPrintf("<TABLE BORDER=1 CELLSPACING=0 CELLPADDING=0 BGCOLOR=\"#"HG_COL_BORDER"\"><TR><TD>");
+hPrintf("<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=2 BGCOLOR=\""HG_COL_INSIDE"\"><TR><TD>\n");
+hPrintf("<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=1><TR><TD>");
 }
 
 void controlPanelEnd()
-     /* Put up end of tables around a control panel. */
+/* Put up end of tables around a control panel. */
 {
-  hPrintf("</TD></TR></TABLE>");
-  hPrintf("</TD></TR></TABLE>");
-  hPrintf("</TD></TR></TABLE>");
-  hPrintf("</TD></TR></TABLE>");
+hPrintf("</TD></TR></TABLE>");
+hPrintf("</TD></TR></TABLE>");
+hPrintf("</TD></TR></TABLE>");
+hPrintf("</TD></TR></TABLE>");
 }
 
 char *configVarName(struct column *col, char *varName)
@@ -89,17 +89,17 @@ hPrintf("</TR>");
 for (col = colList; col != NULL; col = col->next)
     {
     hPrintf("<TR>");
-
+    
     /* Do small label. */
     hPrintf("<TD>%s</TD>", col->shortLabel);
-
+    
     /* Do on/off dropdown. */
     hPrintf("<TD>");
     safef(varName, sizeof(varName), "%s%s.vis", colConfigPrefix, col->name);
     isVis = cartUsualBoolean(cart, varName, col->on);
     cgiMakeCheckBox(varName, isVis);
     hPrintf("</TD>");
-
+    
     /* Do left/right button */
     hPrintf("<TD ALIGN=CENTER>");
     safef(varName, sizeof(varName), "heat.do.up.%s", col->name);
@@ -115,16 +115,16 @@ for (col = colList; col != NULL; col = col->next)
 	hPrintf("SRC=\"../images/down.gif\">");
 	}
     hPrintf("</TD>");
-
+    
     /* Do long label. */
     hPrintf("<TD>%s</TD>", col->longLabel);
-
+    
     /* Do configuration controls. */
     if (col->configControls != NULL)
          col->configControls(col);
     else
-         hPrintf("<TD>n/a</TD>");
-
+	hPrintf("<TD>n/a</TD>");
+    
     hPrintf("</TR>\n");
     }
 hPrintf("</TABLE>\n");
@@ -201,8 +201,8 @@ struct userSettings *colUserSettings()
 /* Return userSettings object for columns. */
 {
 struct userSettings *us = userSettingsNew(cart, 
-	"Current Column Configuration",
-	savedCurrentConfName, colSaveSettingsPrefix);
+					  "Current Column Configuration",
+					  savedCurrentConfName, colSaveSettingsPrefix);
 userSettingsCapturePrefix(us, colConfigPrefix);
 userSettingsCaptureVar(us, colOrderVar);
 return us;
@@ -212,7 +212,7 @@ return us;
 static void configControlPanel()
 /* Put up configuration control panel. */
 {
-  //struct userSettings *us = colUserSettings();
+//struct userSettings *us = colUserSettings();
 controlPanelStart();
 hPrintf("<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=1>\n");
 hPrintf("<TR><TD ALIGN=LEFT>");
