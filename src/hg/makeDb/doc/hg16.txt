@@ -2741,6 +2741,8 @@ end
 #	32255 gene predictions
     hgPepPred hg16 generic geneidPep download/*-fixed.prot
 
+# QA NOTE: [ASZ 2007-10-02] sudo mytouch hg16 geneidPep 200404021400.00
+
 
 # HUMAN/MOUSE/RAT ALIGMNMENT USING HUMOR(MULTIZ) (IN PROGRESS 2003-0829 kate)
 # Multiple alignment with Mm3, Rn3
