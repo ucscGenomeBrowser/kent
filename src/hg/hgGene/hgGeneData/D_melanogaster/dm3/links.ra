@@ -9,6 +9,15 @@ name family
 tables flyBaseGene
 idSql select name from flyBaseGene where name = '%s'
 
+name tbSchema
+shortLabel Table Schema
+tables flyBaseGene
+idSql select 'this is a necessary placeholder %s'
+url ../cgi-bin/hgTables?hgta_group=%s&hgta_track=%s&hgta_table=%s&hgta_doSchema=describe+table+schema
+hgsid on
+dbInUrl on
+priority 5
+
 name flyBase
 shortLabel FlyBase
 tables flyBase2004Xref
