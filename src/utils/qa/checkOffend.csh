@@ -28,7 +28,7 @@ endif
 set chr=""
 set end=""
 
-set chr=`getChromFieldName.csh $track $db`
+set chr=`getChromFieldName.csh $db $track`
 if ($status) then
   exit 1
 endif
