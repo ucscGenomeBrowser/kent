@@ -110,3 +110,19 @@ visibility hide
 spectrum on
 type netAlign rn4 chainRn4Test
 otherDb rn4
+
+track knownGene
+shortLabel UCSC Genes
+longLabel UCSC Gene Predictions Based on RefSeq, UniProt, GenBank, and Comparative Genomics
+group genes
+priority 34
+visibility pack
+color 12,12,120
+type genePred knownGenePep knownGeneMrna
+idXref kgAlias kgID alias
+hgGene on
+hgsid on
+directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s
+baseColorUseCds given
+baseColorDefault genomicCodons
+
