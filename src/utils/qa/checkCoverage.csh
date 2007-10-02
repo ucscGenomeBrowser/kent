@@ -86,6 +86,8 @@ echo "largest missing non-gap regions are here:"
 echo
 echo "chrom chromStart chromEnd size" \
   | awk '{ printf("%13s %14s %14s %12s \n", $1, $2, $3, $4) }'
+echo "----- ---------- -------- ----" \
+  | awk '{ printf("%13s %14s %14s %12s \n", $1, $2, $3, $4) }'
 head -20 $table.holes.sort \
   | awk '{ printf("%13s %14s %14s %12s \n", $1, $2, $3, $4) }'
 echo
