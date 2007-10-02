@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/makeDownloads.pl instead.
 
-# $Id: makeDownloads.pl,v 1.9 2007/08/13 20:45:19 angie Exp $
+# $Id: makeDownloads.pl,v 1.10 2007/10/02 00:31:55 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -126,8 +126,7 @@ sub compressChromFiles {
   my @chromOutFiles = ();
   my @chromTrfFiles = ();
   my $problems = 0;
-  my $agpFudge = 0;
-  my $rmFudge = 0;
+  my ($agpFudge, $rmFudge, $trfFudge) = (0, 0, 0);
   foreach my $chrRoot (sort keys %chromRoots) {
     foreach my $chr (@{$chromRoots{$chrRoot}}) {
       my $agpFile = "$chrRoot/$chr.agp";
@@ -153,6 +152,8 @@ sub compressChromFiles {
       }
       if (-e "$trfRunDir/$trfFile") {
 	push @chromTrfFiles, $trfFile;
+      } elsif ($trfFile =~ /chrM\.bed$/) {
+	$trfFudge++;
       } else {
 	warn "Missing TRF $trfFile\n";
 	$problems++;
@@ -165,7 +166,7 @@ sub compressChromFiles {
   }
   if (((scalar(@chromAgpFiles) + $agpFudge) != scalar(@chroms)) ||
       ((scalar(@chromOutFiles) + $rmFudge) != scalar(@chroms)) ||
-      (scalar(@chromTrfFiles) != scalar(@chroms))) {
+      ((scalar(@chromTrfFiles) + $trfFudge) != scalar(@chroms))) {
     die "Sorry, can't find the expected set of per-chromosome files.";
   }
   $bossScript->add(<<_EOF_
