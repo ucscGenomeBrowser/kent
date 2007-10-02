@@ -143,7 +143,7 @@ track netRn4
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
-priority 209
+priority 208.1
 visibility hide 
 spectrum on
 type netAlign rn4 chainRn4
