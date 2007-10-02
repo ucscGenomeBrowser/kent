@@ -481,6 +481,16 @@ autoScaleDefault Off
 pairwise netBlastz
 speciesOrder panTro1 monkey 
 
+track consIndelsHg18Mm8CanFam2
+shortLabel Cons Indels MmCf
+longLabel Indel-based Conservation for human hg17, mouse mm5 and dog canFam1
+group compGeno
+priority 109.29
+visibility hide
+useScore 1
+color 0, 60, 120
+type bed 5 .
+
 track uc16
 shortLabel Ultra Conserved
 longLabel Ultraconserved Elements (200 bp 100% ID in rat/mouse/human)
