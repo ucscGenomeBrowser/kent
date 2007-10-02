@@ -4,7 +4,7 @@
 # This file describes browser build for the Orangutan
 # genome, July 31 2007
 #
-#	"$Id: ponAbe2.txt,v 1.2 2007/09/24 22:09:30 hiram Exp $"
+#	"$Id: ponAbe2.txt,v 1.3 2007/10/02 01:25:34 angie Exp $"
 #
 ######################################################################
 ## DOWNLOAD SEQUENCE (DONE - 2007-09-06 - Hiram)
@@ -299,4 +299,37 @@ XXX - running 2007-09-22 10:40
     # remove empty files and rerun gbDbLoadStep
     ponAbe2.refseq.mrna.native.load = no
     nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad ponAbe2
+#########################################################################
+
+
+#########################################################################
+# MAKE DOWNLOADABLE / GOLDENPATH FILES (SCRIPT DONE 10/1/07 angie -- README EDITS TODO)
+    cd /cluster/data/ponAbe2
+    # Thought this was done in most chrom-based assemblies:
+    ssh -x kkstore02 splitFileByColumn \
+      `pwd`/bed/simpleRepeat/trfMask.bed `pwd`/bed/simpleRepeat/trfMaskChrom
+    # And these aren't quite where expected, so make some symbolic links:
+    foreach c (5_h2_hap1 \
+               6_cox_hap1 6_qbl_hap2 6_cox_hap1_random 6_qbl_hap2_random)
+      set cOldBase = `echo $c | sed -e 's/_random$//;'`
+      set cNewBase = `echo $c | sed -e 's/_.*//;'`
+      ln -s `pwd`/$cOldBase/chr$c.agp $cNewBase/chr$c.agp
+      ln -s `pwd`/$cOldBase/chr$c.fa.out $cNewBase/chr$c.fa.out
+    end
+
+    ln -s bed/RepeatMasker/ponAbe2.fa.out .
+    makeDownloads.pl ponAbe2 -verbose=2 \
+      >& jkStuff/downloads.log & tail -f jkStuff/downloads.log
+
+#TODO:
+# *** Edit each README.txt to resolve any notes marked with "***":
+#     /cluster/data/ponAbe2/goldenPath/database/README.txt
+#     /cluster/data/ponAbe2/goldenPath/bigZips/README.txt
+#     /cluster/data/ponAbe2/goldenPath/chromosomes/README.txt
+#     (The htdocs/goldenPath/ponAbe2/*/README.txt "files" are just links to those.)
+# *** If you have to make any edits that would always apply to future
+#     assemblies from the same sequencing center, please edit them into
+#     ~/kent/src/hg/utils/automation/makeDownloads.pl (or ask Angie for help).
+
+
 #########################################################################
