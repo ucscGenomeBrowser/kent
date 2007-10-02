@@ -23,6 +23,7 @@ if ( $#argv < 1 || $#argv > 4 ) then
   echo "  checks on table match for an entire db between two nodes in realTime."
   echo "  optionally reports if update times do not match."
   echo "  ignores genbank tables."
+  echo "  not in real time for non-assembly databases."
   echo
   echo "    usage:  database [machine1 machine2] [times]"
   echo "              defaults to beta and hgw1"
