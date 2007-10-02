@@ -383,7 +383,7 @@ track rgdQtl
 shortLabel RGD QTL
 longLabel $Organism Quantitative Trait Locus from RGD
 group phenDis
-priority 4.5
+priority 150
 visibility hide
 color 12,12,120
 type bed 4 .
@@ -393,7 +393,7 @@ track rgdRatQtl
 shortLabel RGD Rat QTL
 longLabel $o_Organism Quantitative Trait Locus from RGD Coarsely Mapped to $Organism
 group phenDis
-priority 4.501
+priority 150.001
 visibility hide
 color 12,100,100
 type bed 4 .

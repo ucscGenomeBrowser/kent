@@ -6,7 +6,7 @@ track rgdQtl
 shortLabel RGD QTL
 longLabel Quantitative Trait Locus (from RGD)
 group phenDis
-priority 4.5
+priority 150
 visibility hide
 color 12,12,120
 type bed 4 .
