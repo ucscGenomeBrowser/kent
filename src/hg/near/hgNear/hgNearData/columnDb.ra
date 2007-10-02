@@ -327,7 +327,7 @@ type pfam knownToPfam
 queryFull select name,description from knownToPfam,proteome.pfamDesc where pfamDesc.pfamAC = knownToPfam.value
 queryOne select distinct description,value from proteome.pfamDesc,knownToPfam where knownToPfam.name = '%s' and knownToPfam.value = pfamDesc.pfamAC
 invQueryOne select name from knownToPfam,proteome.pfamDesc where description = '%s' and pfamDesc.pfamAc = knownToPfam.value
-itemUrl http://www.sanger.ac.uk/cgi-bin/Pfam/getacc?%s
+itemUrl  http://pfam.sanger.ac.uk/family?acc=%s
 protDb proteome
 
 name superfamily
