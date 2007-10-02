@@ -382,7 +382,7 @@ url http://rgd.mcw.edu/generalSearch/RgdSearch.jsp?quickSearch=1&searchKeyword=
 track rgdQtl
 shortLabel RGD QTL
 longLabel $Organism Quantitative Trait Locus from RGD
-group map
+group phenDis
 priority 4.5
 visibility hide
 color 12,12,120
@@ -392,7 +392,7 @@ url http://rgd.mcw.edu/objectSearch/qtlReport.jsp?rgd_id=
 track rgdRatQtl
 shortLabel RGD Rat QTL
 longLabel $o_Organism Quantitative Trait Locus from RGD Coarsely Mapped to $Organism
-group map
+group phenDis
 priority 4.501
 visibility hide
 color 12,100,100
