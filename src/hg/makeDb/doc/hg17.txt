@@ -23963,3 +23963,124 @@ done
     mkdir /usr/local/apache/htdocs/goldenPath/hg17/gc5Base
     cd /usr/local/apache/htdocs/goldenPath/hg17/gc5Base
     ln -s /cluster/data/hg17/bed/gc5Base/hg17.gc5Base.txt.gz .
+
+############################################################################
+# INDEL-BASED CONSERVATION TRACK (DONE, 2007-10-02 - 2007-10-03, hartera)
+# Data from the Gerton Lunter (gerton.lunter@anat.ox.ac.uk), MRC 
+# Functional Genetics Unit, University of Oxford, United Kingdom.
+# Data is from the paper:
+# Lunter G, Ponting CP and Hein J Genome-wide identification of human
+# functional DNA using a neutral indel model. PLoS Comput Biol. 2006
+# Jan;2(1):e5.
+    ssh kkstore02 
+    mkdir -p /cluster/data/hg17/bed/consIndels/data
+    cd /cluster/data/hg17/bed/consIndels/
+    # Add a README.indels with the e-mail from Gerton Lunter, copy over 
+    # from hg18 condIndels
+    cp /cluster/data/hg18/bed/consIndels/README.indels .
+    # get the data
+    cd data
+    wget --timestamping \
+         http://wwwfgu.anat.ox.ac.uk/~gerton/IPS/IPSs.zip
+    # 15 Mb zip file in GFF format. This contains data for hg17
+    # comparing it to mm5 (NCBI Build 33) and 
+    # canFam1 (Broad Institute, July 2004). The chr*.mm5.GFF data is old
+    # data that can be removed.
+    unzip IPSs.zip    
+    cd /cluster/data/hg17/bed/consIndels
+    rm ./data/*mm5.GFF
+    foreach f (./data/*.GFF)
+       set r = $f:r
+       echo $r
+       grep -v "track" $f > ${r}NoHeader.gff
+    end
+  
+    # strip off the end of the name e.g. IGS0001:p=.26
+    # so that the name displayed is short - IGS0001.1. The score field
+    # is used to determine colouring and this is calculated from FDR 
+    ssh kkstore02 
+    cd /cluster/data/hg18/bed/consIndels
+    perl -pi.bak -e \
+         's/(IGS[0-9a-z]+\.?[0-9XY]*):p=?<?\.[0-9]+/$1/'  \
+         ./data/chr*NoHeader.gff
+    # check this looks ok then clean up
+    rm *.bak
+    # makes sense to store this as a BED5 table in order to use the score
+    # for display.
+    foreach f (./data/*NoHeader.gff)
+       awk 'BEGIN {FS="\t"} {OFS="\t"} {print $1,$4,$5,$9,$6}' $f \
+       >> consIndelsHg17Mm5CanFam1.bed
+    end
+ 
+    # load data
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/consIndels
+    hgLoadBed hg17 consIndelsHg17Mm5CanFam1 consIndelsHg17Mm5CanFam1.bed
+    # Loaded 593298 elements of size 5
+    
+    # Get the IDs, posterior probabilities (p) for the segment being neutral, 
+    # and the FDR from the original GFFs for a separate table. Some items 
+    # have p<.001. Can not do Table Browser queries restricting 
+    # p to <, =, or > a specified value unless all values are floats.
+    # Contacted the data contributor, Gerton Lunter, and he said it would be 
+    # ok to change all p<.001 to p=0.0005
+    ssh kkstore02
+    
+    cd /cluster/data/hg17/bed/consIndels/
+    awk '{if ($1 !~ /random/) print $1;}' /cluster/data/hg17/chrom.sizes \
+        | sed -e 's/chr//' | sort -n > chrom.lst
+    grep -v 'hap' chrom.lst > tmp2
+    tail +4 tmp2 > tmp3
+    echo "X\nY\n" >> chrom.lst
+    rm tmp2 tmp3 
+    # chrom.lst has a list of chroms 1-22, then X and Y
+    foreach c (`cat chrom.lst`)
+       echo $c
+       foreach f (./data/chr${c}.GFF)
+          echo $f
+          awk 'BEGIN {FS="\t"} {OFS="\t"}{if ($9 ~ /IGS/) print $9,$6;}' $f \
+              | sed -e 's/:/\t/' \
+              | sed -e 's/p=\./0\./' | sed -e 's/p<\.001/0\.0005/' \
+              >> consIndelsConf.txt
+       end
+    end
+    # Add the FDR. 
+    # For this set, there is no false discovery rate (FDR) field but it 
+    # can be related to the score. If score is 999 then FDR is 1% (0.01) and
+    # if score is 500 then FDR is 10% (0.10). Score is in column 6.
+    # there are no GFF files for the haplotype chroms
+   
+    awk 'BEGIN {FS="\t"} {OFS="\t"} {if ($3 ~ /500/) print $1, $2, "0.10"; else if ($3 ~ /999/) print $1, $2, "0.01";}' consIndelsConf.txt > consIndelsHg17Mm5CanFam1Conf.txt 
+
+    # Create a table definition for the table of identifier,  posterior 
+    # probability and false discovery rate (FDR). Already created for hg18
+    # track (see hg18.txt). It is $HOME/kent/src/hg/lib/itemConf.as.
+   
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/consIndels
+    hgLoadSqlTab hg17 consIndelsHg17Mm5CanFam1Conf \
+         $HOME/kent/src/hg/lib/itemConf.sql \
+         consIndelsHg17Mm5CanFam1Conf.txt
+    # check that all itesm are in this table.
+    hgsql -N -e 'select distinct(name) from consIndelsHg17Mm5CanFam1;' hg17 \
+         | sort > consIndels.names.sort
+    hgsql -N -e 'select distinct(id) from consIndelsHg17Mm5CanFam1Conf;' hg17 \
+         | sort > consIndels.idsfromConf.sort
+    wc -l *.sort
+    # 593298 consIndels.idsfromConf.sort
+    # 593298 consIndels.names.sort
+
+    comm -12 consIndels.names.sort consIndels.idsfromConf.sort | wc -l
+    # 593298
+    # so all element IDs are in both tables.
+    # cleanup
+    rm ./data/*.bak *.sort
+    
+    # add trackDb/human/hg17/trackDb.ra entry and add description that
+    # was written by the data contributor. Add code to hgc.c to display
+    # the posterior probability and the FDR on the details page for
+    # track elements. Gerton Lunter provided a description for the data
+    # on 2007-09-12.
+    cd ~/kent/src/hg/makeDb/trackDb/human/hg17
+    cp ../hg18/consIndelsHg18Mm8CanFam2.html consIndelsHg17Mm5CanFam1.html
+    # check this is correct and add trackDb.ra track entry and search.  
