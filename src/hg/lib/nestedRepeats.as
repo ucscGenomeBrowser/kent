@@ -5,7 +5,7 @@ table nestedRepeats
     uint   chromStart; "Start position in chromosome"
     uint   chromEnd;   "End position in chromosome"
     string name;       "Name of item"
-    uint   score;      "for BED compatibility -- No meaning for nestedRepeats"
+    uint   score;      "Average of fragment identity scores, transformed into 0..1000 range for shading."
     char[1] strand;    "+, -, or . for mixed (some fragments +, some -)"
     uint thickStart;   "for BED compatibility -- same as chromStart"
     uint thickEnd;     "for BED compatibility -- same as chromEnd"
