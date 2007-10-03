@@ -9876,6 +9876,7 @@ ensArchive apr2006
 
 
 # SGP GENES (DONE 5/3/06 Fan)
+# See below for: SGP GENES Update (DONE - 2007-10-02 - Hiram)
     ssh hgwdev 
     mkdir /cluster/data/hg18/bed/sgp
     cd /cluster/data/hg18/bed/sgp
@@ -17312,5 +17313,80 @@ TMPDIR=/scratch/tmp
     # load track db (ra and contrastGene.html are global
     # request push of contrastGene
 
+
+###########################################################################
+# SGP GENES Update (DONE - 2007-10-02 - Hiram)
+    ssh kkstore02 
+    mkdir /cluster/data/hg18/bed/sgp.2007-10-02
+    cd /cluster/data/hg18/bed/sgp.2007-10-02
+    SITE="genome.imim.es/genepredictions/H.sapiens/golden_path_200603_x_mm9"
+    for C in `cut -f1 ../../chrom.sizes`
+do
+    wget --timestamping "http://${SITE}/SGP/${C}.gtf" -O ${C}.gtf
+    wget --timestamping "http://${SITE}/SGP/${C}.prot" -O ${C}.prot
+done
+
+    #	before reloading the table, measure the previous set:
+    nice -n +19 featureBits -enrichment hg18 refGene:CDS sgpGene
+# refGene:CDS 1.123%, sgpGene 1.272%, both 0.964%, cover 85.83%, enrich 67.47x
+    nice -n +19 featureBits -enrichment hg18 knownGene:CDS sgpGene
+# knownGene:CDS 1.185%, sgpGene 1.272%, both 0.989%, cover 83.43%, enrich 65.58x
+
+    #	now reload the table
+    ldHgGene -gtf -genePredExt hg18 sgpGene chr*.gtf
+    #	Read 34023 transcripts in 288520 lines in 49 files
+    #	34023 groups 46 seqs 1 sources 3 feature types
+    #	34023 gene predictions
+
+    #	and now measure this new set
+    nice -n +19 featureBits -enrichment hg18 refGene:CDS sgpGene
+# refGene:CDS 1.123%, sgpGene 1.270%, both 0.964%, cover 85.84%, enrich 67.59x
+    nice -n +19 featureBits -enrichment hg18 knownGene:CDS sgpGene
+# knownGene:CDS 1.185%, sgpGene 1.270%, both 0.988%, cover 83.41%, enrich 65.68x
+
+###########################################################################
+# Blastz Orangutan ponAbe2 (WORKING - 2007-10-02 - Hiram)
+    ssh kkstore02
+    screen # use screen to control this job
+    mkdir /cluster/data/hg18/bed/blastzPonAbe2.2007-10-02
+    cd /cluster/data/hg18/bed/blastzPonAbe2.2007-10-02
+
+    cat << '_EOF_' > DEF
+# Human vs orangutan
+BLASTZ_M=50
+
+# TARGET: Human Hg18
+SEQ1_DIR=/cluster/bluearc/scratch/data/hg18/nib
+SEQ1_LEN=/cluster/data/hg18/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Orangutan ponAbe2
+SEQ2_DIR=/cluster/bluearc/scratch/data/ponAbe2/ponAbe2.2bit
+SEQ2_LEN=/cluster/data/ponAbe2/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/hg18/bed/blastzPonAbe2.2007-10-02
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-chainMinScore=3000 -chainLinearGap=medium \
+	-bigClusterHub=pk > blastz.log 2>&1 &
+    #	real    388m20.443s
+# Completed: 126960 of 126960 jobs
+# CPU time in finished jobs:    7068824s  117813.73m  1963.56h   81.82d  0.224 y
+# IO & Wait Time:                517624s    8627.07m   143.78h    5.99d  0.016 y
+# Average job time:                  60s       1.00m     0.02h    0.00d
+# Longest finished job:            4940s      82.33m     1.37h    0.06d
+# Submission to last job:         62056s    1034.27m    17.24h    0.72d
+
+    # some jobs failed (because they were done but parasol didn't realize that)
+    #	after recovery, continuing:
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-chainMinScore=3000 -chainLinearGap=medium \
+	-continue=cat -bigClusterHub=pk > cat.log 2>&1 &
 
 ###########################################################################
