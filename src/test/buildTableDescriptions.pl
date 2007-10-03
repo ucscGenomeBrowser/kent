@@ -274,6 +274,8 @@ sub matchAutoSqlByFields {
     return $tASRef->{"genePred"};
   } elsif ($fields eq $tASRef->{"lfs"}->{fields}) {
     return $tASRef->{"lfs"};
+  } elsif ($fields eq $tASRef->{"genericNameValue"}->{fields}) {
+    return $tASRef->{"genericNameValue"};
   } else {
     for (my $n=12;  $n >= 3;  $n--) {
       if ($fields eq $tASRef->{"bed$n"}->{fields}) {
