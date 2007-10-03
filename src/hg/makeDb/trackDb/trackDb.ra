@@ -655,6 +655,20 @@ color 0,100,100
 altColor 0,50,50
 type genePred 
 
+track contrastGene
+shortLabel CONTRAST
+longLabel CONTRAST Gene Predictions
+group genes
+priority 45.2
+visibility hide
+color 34,34,139
+type bed 14 .
+
+searchTable contractGene
+searchType bed
+termRegex CONTRAST\..+
+searchPriority 50
+
 track genomeScan
 shortLabel NCBI GenomeScan
 longLabel $Organism GenomeScan Models from NCBI

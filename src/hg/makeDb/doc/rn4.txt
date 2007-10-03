@@ -4665,4 +4665,19 @@ TMPDIR=/scratch/tmp
     runJoiner.csh rn4 rgdQtl
 
 
+#############################################################################
+# CONTRAST GENES (2007-10-02 markd)
+# recieved predictions from Sam Gross <ssgross@stanford.edu>
+
+    cd /cluster/data/rn4/bed/contrastGene/
+    wget http://www.stanford.edu/~ssgross/contrast.rn4.bed
+    # this is a custom track, not a pure BED
+    tail +2 contrast.rn4.bed | hgLoadBed -tab rn4 contrastGene stdin
+
+    # verify 
+    # load track db (ra and contrastGene.html are global
+    # request push of contrastGene
+
+
+###########################################################################
 #########################################################################

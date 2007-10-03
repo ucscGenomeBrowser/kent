@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: mm8.txt,v 1.54 2007/09/27 18:05:32 angie Exp $"
+#	"$Id: mm8.txt,v 1.55 2007/10/03 00:01:44 markd Exp $"
 #
 
 #  NOTE:  this doc may have genePred loads that fail to include
@@ -8450,3 +8450,17 @@ hgLoadBed -sqlTable=cgapSage.sql -tab mm8 cgapSage final.bed
 
 
 #############################################################################
+# CONTRAST GENES (2007-10-02 markd)
+# recieved predictions from Sam Gross <ssgross@stanford.edu>
+
+    cd /cluster/data/mm8/bed/contrastGene/
+    wget http://www.stanford.edu/~ssgross/contrast.mm8.bed
+    # this is a custom track, not a pure BED
+    tail +2 contrast.mm8.bed | hgLoadBed -tab mm8 contrastGene stdin
+
+    # verify 
+    # load track db (ra and contrastGene.html are global
+    # request push of contrastGene
+
+
+###########################################################################

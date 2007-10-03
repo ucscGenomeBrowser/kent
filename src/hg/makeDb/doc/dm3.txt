@@ -2444,5 +2444,20 @@ _EOF_
   # upload
   hgLoadBed -notItemRgb -sqlTable=$HOME/kent/src/hg/lib/evofold.sql dm3 evofold foldsDm3.bed
 
+#############################################################################
+# CONTRAST GENES (2007-10-02 markd)
+# recieved predictions from Sam Gross <ssgross@stanford.edu>
+
+    cd /cluster/data/dm3/bed/contrastGene/
+    wget http://www.stanford.edu/~ssgross/contrast.dm3.bed
+    # this is a custom track, not a pure BED
+    tail +2 contrast.dm3.bed | hgLoadBed -tab dm3 contrastGene stdin
+
+    # verify 
+    # load track db (ra and contrastGene.html are global
+    # request push of contrastGene
+
+
+###########################################################################
 #########################################################################
 #########################################################################

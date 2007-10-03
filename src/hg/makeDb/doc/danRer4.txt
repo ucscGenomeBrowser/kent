@@ -10262,3 +10262,18 @@ KEY `chainId` ( `chainId` )
     cd /usr/local/apache/htdocs/goldenPath/danRer4/liftOver
     ln -s /cluster/data/danRer5/bed/liftOver/danRer4ToDanRer5.over.chain.gz .
 
+#############################################################################
+# CONTRAST GENES (2007-10-02 markd)
+# recieved predictions from Sam Gross <ssgross@stanford.edu>
+
+    cd /cluster/data/danRer4/bed/contrastGene/
+    wget http://www.stanford.edu/~ssgross/contrast.danRer4.bed
+    # this is a custom track, not a pure BED
+    tail +2 contrast.danRer4.bed | hgLoadBed -tab danRer4 contrastGene stdin
+
+    # verify 
+    # load track db (ra and contrastGene.html are global
+    # request push of contrastGene
+
+
+###########################################################################
