@@ -170,8 +170,10 @@ hPrintf(
 " If left blank the axis will be labeled at the 1/3 and 2/3 point. </LI>"
 "<LI><B>draw connecting lines:</B> Lines connecting data points separated by "
 " no more than this number of bases are drawn.  </LI>"
-"<LI><B>file name or URL:</B> The controls here let you select which file on your "
-" computer to upload, or enter the URL at which your upload file can be found.</LI>");
+"<LI><B>file name or URL:</B> Specifies the source of the uploaded data --"
+" either a file on your local computer or a URL at which the data file can be"
+" found. If entries are made in both fields, the file name will take"
+" precedence. </LI>");
 cartWebEnd();
 }
 
