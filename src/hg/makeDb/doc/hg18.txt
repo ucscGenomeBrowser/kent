@@ -17231,6 +17231,145 @@ hgsql hg18 -e 'insert into metaChromGraph (name, minVal, maxVal, binaryFile) val
 
 
 #############################################################################
+# RGD RAT QTL MAPPED TO HUMAN (DONE 9/26/07 angie)
+#====== Begin work that was discarded because its output was too voluminous
+#       to be very useful IMHO.  Keeping it in the doc as a lesson learned.
+#       See below for what I ended up loading.
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/rgdQtl
+    genePredToPsl -bedFormat rn4 /cluster/data/rn4/bed/rgdQtl/rgdQtl.bed \
+      rn4.rgdQtl.psl
+    time ssh -x kolossus pslMap `pwd`/rn4.rgdQtl.psl \
+      -chainMapFile /cluster/data/hg18/bed/liftOver/hg18ToRn4.over.chain.gz \
+      `pwd`/hg18.rgdRatQtl.psl
+#0.011u 0.006s 10:58.56 0.0%     0+0k 0+0io 0pf+0w
+    # That created an 11G monstrosity of a file that dwarfs the original 
+    # input.  Linecount increased 3 orders of magnitude, filesize increased
+    # 5 orders of magnitude.
+    wc -l rn4.rgdQtl.psl 
+#1067 rn4.rgdQtl.psl
+    ssh -x kkstore02 wc -l `pwd`/hg18.rgdRatQtl.psl 
+#1228306 /cluster/store11/gs.19/build36/bed/rgdQtl/hg18.rgdRatQtl.psl
+
+    # Let's see what liftOver does...
+    time ssh -x kolossus \
+      liftOver -minMatch=0.5 -multiple \
+        /cluster/data/rn4/bed/rgdQtl/rgdQtl.bed \
+        /cluster/data/rn4/bed/liftOver/rn4ToHg18.over.chain.gz \
+        `pwd`/hg18.rgdRatQtl.lo.{bed,unmapped}
+#0.014u 0.004s 0:59.27 0.0%      0+0k 0+0io 0pf+0w
+    wc -l hg18.rgdRatQtl.lo.{bed,unmapped}
+# 1214366 hg18.rgdRatQtl.lo.bed
+#      14 hg18.rgdRatQtl.lo.unmapped
+    # Still got 1M lines... ugh.  Mapped all over the place, of course.
+#====== end discarded work.
+
+    # Use a stringently filtered version of over.chain to do the mapping,
+    # so we only pick up large chunks (targeting >10,000bases) of these 
+    # enormous regions (up to 235M in rn4).
+    ssh kolossus
+    cd /cluster/data/hg18/bed/rgdQtl
+    # rn4ToHg18 was built before doBlastz included chainStitchId in the
+    # pipe to create over.chain.  Run it here, to repair any chain breaks:
+    chainStitchId /cluster/data/rn4/bed/liftOver/rn4ToHg18.over.chain.gz \
+      rn4ToHg18Stitch.over.chain
+
+    # I looked at the summed scores from chainStitchId vs. the length
+    # spanned by the stitched chains, and arbitrarily picked what I
+    # think is a sweet spot for mapping very large ranges: at scores
+    # near 500000, chains seem to span 40-60k bases.  Pretty much all
+    # of the rat and human chromosomes (except human randoms) have at
+    # least some chains with scores >= 500000.  So I'll filter the
+    # stitched chains to keep those with score >= 500000.
+    chainFilter rn4ToHg18Stitch.over.chain -minScore=500000 \
+      > rn4ToHg18Coarse.over.chain
+    # I tried liftOver with -minMatch=0.5, 0.33, 0.25 and 0.2.  These are the
+    # wc -l stats for each run -- not surprisingly, many more matches with
+    # lower minMatch:
+#0.5:
+# 1256 hg18.rgdRatQtl.coarse.lo.bed
+#  998 hg18.rgdRatQtl.coarse.lo.unmapped
+#0.33:
+#  6748 hg18.rgdRatQtl.coarse.lo.bed
+#    92 hg18.rgdRatQtl.coarse.lo.unmapped
+#0.25:
+#  9609 hg18.rgdRatQtl.coarse.lo.bed
+#    36 hg18.rgdRatQtl.coarse.lo.unmapped
+#0.2:
+# 10529 hg18.rgdRatQtl.coarse.lo.bed
+#    30 hg18.rgdRatQtl.coarse.lo.unmapped
+    # I spot-checked by viewing a rat QTL and hg18 chains in rn4, and
+    # eyeballing whether the net track looked like there were solid 
+    # matches for large regions.  With minMatch=0.25, most mappings
+    # and unmapped looked pretty reasonable, but I still saw a few
+    # (like Alc4) where a nice long chain was not being used, so I
+    # kicked it down to 0.2 and checked again -- looks good.
+    time liftOver -minMatch=0.2 -multiple \
+      /cluster/data/rn4/bed/rgdQtl/rgdQtl.bed rn4ToHg18Coarse.over.chain \
+      hg18.rgdRatQtl.coarse.lo.{bed,unmapped}
+#100.476u 10.925s 1:52.31 99.1%  0+0k 0+0io 0pf+0w
+   wc -l hg18.rgdRatQtl.coarse.lo.{bed,unmapped}
+# see above.
+
+    # Many of the records are completely contained within other records 
+    # for the same QTL (inversions I suppose) -- they don't really tell 
+    # us anything new about the murky QTL region, so merge them in. 
+    perl -we \
+      'while (<>) { \
+         chomp; ($chrom, $start, $end, $name) = split; \
+         push @{$item2coords{"$chrom.$name"}}, [$start, $end]; \
+       } \
+       foreach $item (keys %item2coords) { \
+         @sortedCoords = sort { $a->[0] <=> $b->[0] } @{$item2coords{$item}}; \
+         ($chrom, $name) = split(/\./, $item); \
+         ($mergeStart, $mergeEnd) = @{shift @sortedCoords}; \
+         foreach $rangeRef (@sortedCoords) { \
+           ($rangeStart, $rangeEnd) = @{$rangeRef}; \
+           next if ($rangeEnd <= $mergeEnd); \
+           if ($rangeStart > $mergeEnd) { \
+             print "$chrom\t$mergeStart\t$mergeEnd\t$name\n"; \
+             ($mergeStart, $mergeEnd) = ($rangeStart, $rangeEnd); \
+           } else { \
+             $mergeEnd = $rangeEnd; \
+           } \
+         } \
+         print "$chrom\t$mergeStart\t$mergeEnd\t$name\n" if ($mergeEnd); \
+       } \
+      ' hg18.rgdRatQtl.coarse.lo.bed \
+      | sort -k1,1 -k2n,2n -k4,4r \
+      > hg18.rgdRatQtl.coarse.lo.pruned.bed
+
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/rgdQtl
+    hgLoadBed hg18 rgdRatQtl hg18.rgdRatQtl.coarse.lo.pruned.bed
+    # Just use rn4's non-positional associated info:
+    sed -e 's/rgdQtlLink/rgdRatQtlLink/' ~/kent/src/hg/lib/rgdQtlLink.sql \
+      > rgdRatQtlLink.sql
+    hgLoadSqlTab hg18 rgdRatQtlLink rgdRatQtlLink.sql \
+      /cluster/data/rn4/bed/rgdQtl/rgdQtlLink.txt
+    # Make sure there aren't any illegal coords:
+    checkTableCoords -verbose=2 hg18 rgdRatQtl
+    runJoiner.csh hg18 rgdRatQtl
+
+#====== more discarded work 10/2/07:
+    ssh kolossus
+    cd /cluster/data/hg18/bed/rgdQtl
+    # Try pslMap with the same filtered chains:
+    time pslMap -swapMap rn4.rgdQtl.psl \
+      -chainMapFile rn4ToHg18Coarse.over.chain \
+      hg18.rgdRatQtl.coarse.pm.psl
+#444.915u 29.914s 11:20.08 69.8% 0+0k 0+0io 0pf+0w
+    wc -l hg18.rgdRatQtl.coarse.pm.psl
+#10755 hg18.rgdRatQtl.coarse.pm.psl
+    # Again, linecount is comparable to liftOver, but the block-by-block
+    # detail from pslMap creates an enormous file (10GB) even with the 
+    # filtered chains.
+    # Recover 21G of disk space:
+    rm hg18.rgdRatQtl.psl hg18.rgdRatQtl.coarse.pm.psl
+#====== end discarded work.
+
+
+#############################################################################
 # N-SCAN GENES partial reload (2007-09-26 markd)
 # reload nscanPasaGene to get fixed names and to fix search criteria
 
