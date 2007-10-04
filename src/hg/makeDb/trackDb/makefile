@@ -87,7 +87,7 @@ MGC_DBS = \
 	hg16 hg17 hg18\
 	mm5 mm6 mm7 mm8 \
 	rn3 rn4 \
-	danRer2 danRer3 danRer4 \
+	danRer2 danRer3 danRer4 danRer5 \
 	xenTro1 xenTro2 \
 	bosTau2
 
