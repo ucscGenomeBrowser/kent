@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: mm8.txt,v 1.55 2007/10/03 00:01:44 markd Exp $"
+#	"$Id: mm8.txt,v 1.56 2007/10/04 18:58:08 hiram Exp $"
 #
 
 #  NOTE:  this doc may have genePred loads that fail to include
@@ -8462,5 +8462,22 @@ hgLoadBed -sqlTable=cgapSage.sql -tab mm8 cgapSage final.bed
     # load track db (ra and contrastGene.html are global
     # request push of contrastGene
 
+###########################################################################
+#  loading affy mouse Exon probes and transcripts (DONE - 2007-10-04 - Hiram)
+    # data was supplied from Venu Valmeekam Venu_Valmeekam@affymetrix.com
+    #	dropped via FTP to genome-test
+    ssh hgwdev
+    mkdir /cluster/data/mm8/bed/affyMoEx1
+    cd /cluster/data/mm8/bed/affyMoEx1
+    # the files received:
+# -rw-r--r--  1  8909954 Oct  3 10:48 transcript_cluster_mm.bed.gz
+# -rw-r--r--  1 39499797 Oct  3 10:51 probe_mm.bed.gz
+    # loading:
+    hgLoadBed mm8 affyMoEx1Probe probe_mm.bed.gz
+    #	Loaded 4549897 elements of size 4
+    hgLoadBed -tmpDir=/scratch/tmp mm8 affyMoEx1Transcript \
+	transcript_cluster_mm.bed.gz
+    # Loaded 270140 elements of size 12
+    # working on description pages for these with Venu.
 
 ###########################################################################

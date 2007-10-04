@@ -4678,6 +4678,22 @@ TMPDIR=/scratch/tmp
     # load track db (ra and contrastGene.html are global
     # request push of contrastGene
 
+###########################################################################
+#  loading affy mouse Exon probes and transcripts (DONE - 2007-10-04 - Hiram)
+    # data was supplied from Venu Valmeekam Venu_Valmeekam@affymetrix.com
+    #	dropped via FTP to genome-test
+    ssh hgwdev
+    mkdir /cluster/data/rn4/bed/affyRaEx1
+    cd /cluster/data/rn4/bed/affyRaEx1
+    # the files received:
+# -rw-r--r--  1 10151819 Oct  3 10:53 transcript_cluster_rn.bed.gz
+# -rw-r--r--  1 35697797 Oct  3 10:54 probe_rn.bed.gz
+    # loading:
+    hgLoadBed rn4 affyRaEx1Probe probe_rn.bed.gz
+    #	Loaded 4025442 elements of size 4
+    hgLoadBed -tmpDir=/scratch/tmp rn4 affyRaEx1Transcript \
+	transcript_cluster_rn.bed.gz
+    #	Loaded 360668 elements of size 12
+    # working on description pages for these with Venu.
 
 ###########################################################################
-#########################################################################
