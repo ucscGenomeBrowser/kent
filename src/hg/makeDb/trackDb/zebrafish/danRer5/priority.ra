@@ -1,0 +1,17 @@
+track chainOryLat1 
+priority 110
+
+track netOryLat1 
+priority 110.1
+
+track chainFr2 
+priority 120
+
+track netFr2 
+priority 120.1
+
+track chainTetNig1 
+priority 130
+
+track netTetNig1 
+priority 130.1
