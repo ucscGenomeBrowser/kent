@@ -5,7 +5,7 @@
 #include "options.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: compilerError.c,v 1.1 2007/10/04 20:00:54 jzhu Exp $";
+static char const rcsid[] = "$Id: compilerError.c,v 1.2 2007/10/04 20:07:19 jzhu Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -26,15 +26,15 @@ static struct optionSpec options[] = {
 void compilerError()
 /* compilerError - demonstrate cancer1 compiler problem. */
 {
-struct hash *hash;
+struct hash *hash =newHash(1);
 char *name ="jing";
-int value =0;
+int value = 1;
 hashAdd(hash, name, (void *) value );
 
 struct hashEl *el;
 el = hashLookup(hash,name);
 int retVal = (int) el->val;
-printf("%d",retVal);
+printf("%d\n",retVal);
 }
 
 int main(int argc, char *argv[])
