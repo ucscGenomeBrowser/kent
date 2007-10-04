@@ -109,9 +109,9 @@ linesAt 5,10
     priority 7
 
 
-track bipolar
+track nimhBipolar
 compositeTrack on
-shortLabel Bipolar
+shortLabel NIMH Bipolar
 longLabel NIMH Bipolar Disease
 group phenDis
 visibility hide
@@ -121,13 +121,13 @@ minMax 0,5
 linesAt 1,3
 
     track nimhBipolarUs
-    subTrack bipolar
+    subTrack nimhBipolar
     shortLabel NIMH Bipolar Us
     longLabel NIMH Bipolar disorder (US) -log10 P-value
     priority 1
 
     track nimhBipolarDe
-    subTrack bipolar
+    subTrack nimhBipolar
     shortLabel NIMH Bipolar De
     longLabel NIMH Bipolar disorder (German) -log10 P-value
     priority 2
