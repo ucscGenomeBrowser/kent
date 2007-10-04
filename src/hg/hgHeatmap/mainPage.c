@@ -30,7 +30,7 @@
 #include "ispyFeatures.h"
 
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.25 2007/10/04 17:35:19 jsanborn Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.26 2007/10/04 23:07:27 jzhu Exp $";
 
 /* Page drawing stuff. */
 
@@ -354,17 +354,24 @@ struct genoLayChrom *chrom=NULL;
 double pixelsPerBase = fs->pixelsPerBase;
 double colorScale = 0.0; 
 double val;
-double absVal, avgVal, minVal, maxVal;
+//double absVal, avgVal, minVal, maxVal;
+double absVal,  minVal, maxVal;
 int start = 0;
 
 Color valCol;
 Color shadesOfRed[EXPR_DATA_SHADES];
 Color shadesOfGreen[EXPR_DATA_SHADES];
+Color shadesOfYellow[EXPR_DATA_SHADES];
+Color shadesOfBlue[EXPR_DATA_SHADES];
 static struct rgbColor black = {0, 0, 0};
 static struct rgbColor red = {255, 0, 0};
 static struct rgbColor green = {0, 255, 0};
+static struct rgbColor lightyellow = {200, 200, 0};
+static struct rgbColor lightblue = {0, 0, 200};
 vgMakeColorGradient(vg, &black, &red, EXPR_DATA_SHADES, shadesOfRed);
 vgMakeColorGradient(vg, &black, &green, EXPR_DATA_SHADES, shadesOfGreen);
+vgMakeColorGradient(vg, &black, &lightblue, EXPR_DATA_SHADES, shadesOfBlue);
+vgMakeColorGradient(vg, &black, &lightyellow, EXPR_DATA_SHADES, shadesOfYellow);
 
 struct slName *id = NULL;
 struct column *col, *colList = getColumns(conn);
@@ -381,10 +388,11 @@ for(chrom = fs->chromList; chrom; chrom = chrom->next)
 	{
         if (col->on)
 	    {
+	    /*
 	    avgVal = 1.0;
 	    if (col->cellAvgVal(col, conn) != NULL)
 		avgVal = atof(col->cellAvgVal(col, conn));
-	    
+	    */
 	    minVal = 0.0;
 	    if (col->cellMinVal(col, conn) != NULL)
 		minVal = atof(col->cellMinVal(col, conn));
@@ -392,12 +400,15 @@ for(chrom = fs->chromList; chrom; chrom = chrom->next)
 	    maxVal = 10.0;
 	    if (col->cellMaxVal(col, conn) != NULL)
 		maxVal = atof(col->cellMaxVal(col, conn));
-	    
+	    /*
 	    if (maxVal - avgVal > avgVal - minVal)
 		colorScale = COLOR_SCALE / (maxVal - avgVal); 
 	    else
 		colorScale = COLOR_SCALE / (avgVal - minVal); 
+	    */
+	    colorScale = COLOR_SCALE / (maxVal - minVal); 
 	    
+
 	    struct slName *sl = NULL;
 	    for (sl = gh->sampleList; sl ; sl = sl->next)
 		{
@@ -411,9 +422,10 @@ for(chrom = fs->chromList; chrom; chrom = chrom->next)
 	        valCol = MG_GRAY;            
 		if (cellVal)
 		    {
-		    val = atof(cellVal) - avgVal;
-		    
-		    absVal = fabs(val);
+//		    val = atof(cellVal) - avgVal;
+		    val = atof(cellVal);
+		    absVal= val;
+//		    absVal = fabs(val);
 		    
 		    int colorIndex = (int)(absVal * (EXPR_DATA_SHADES-1.0) * colorScale);
 		    
@@ -423,7 +435,7 @@ for(chrom = fs->chromList; chrom; chrom = chrom->next)
 			colorIndex = EXPR_DATA_SHADES-1;
 		    
 		    if(val > 0.0)
-			valCol = shadesOfRed[colorIndex];
+			valCol = shadesOfYellow[colorIndex];
 		    else
 			valCol = shadesOfGreen[colorIndex];
 		    }
