@@ -12,7 +12,7 @@
 #include "localmem.h"
 #include "ra.h"
 
-static char const rcsid[] = "$Id: ra.c,v 1.11 2007/03/28 17:13:55 kent Exp $";
+static char const rcsid[] = "$Id: ra.c,v 1.12 2007/10/04 23:40:20 kate Exp $";
 
 struct hash *raNextRecord(struct lineFile *lf)
 /* Return a hash containing next record.   
@@ -51,7 +51,7 @@ for (;;)
    if (hash == NULL)
        hash = newHash(7);
    key = nextWord(&line);
-   val = skipLeadingSpaces(line);
+   val = trimSpaces(line);
    if (line == NULL)
        line = "";
    val = lmCloneString(hash->lm, val);
