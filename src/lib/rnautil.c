@@ -173,9 +173,9 @@ void markCompensatoryMutations(char *s, char *ref, int *pairList, int *markList)
  * 2: pairing, no substitutions 
  * 3: pairing, single substitution (one of: CG<->TG, GC<->GT, TA<->TG, AT<->GT)
  * 4: pairing, double substitution (i.e. a compensatory change)
- * 5: annoated as pairing but dinucleotide cannot pair, single substitution
- * 6: annoated as pairing but dinucleotide cannot pair, doubble substitution
- * 7: annoated as pairing but dinucleotide cannot pair, involves indel ('-' substitution)
+ * 5: annotated as pairing but dinucleotide cannot pair, single substitution
+ * 6: annotated as pairing but dinucleotide cannot pair, doubble substitution
+ * 7: annotated as pairing but dinucleotide cannot pair, involves indel ('-' substitution)
  */
 {
 int i, size = strlen(s);
