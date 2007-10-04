@@ -25,7 +25,7 @@
 #include "ispyFeatures.h"
 
 
-static char const rcsid[] = "$Id: hgHeatmap.c,v 1.24 2007/10/04 16:20:42 jzhu Exp $";
+static char const rcsid[] = "$Id: hgHeatmap.c,v 1.25 2007/10/04 17:30:23 jsanborn Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -291,7 +291,7 @@ for (i=0; i< allA->size; i++)
     }
 if (expId == -1)
     continue;
-hashAdd(gh->sampleOrder, sample, &counter);
+hashAdd(gh->sampleOrder, sample, (void *) counter);
 slNameAddHead(&(gh->sampleList),sample);
 counter++;
 }
@@ -351,7 +351,7 @@ if (!sameString(pS,""))
 	{
 	sample = sl->name;
 	
-	hashAdd(gh->sampleOrder, sample, &counter);
+	hashAdd(gh->sampleOrder, sample, (void *) counter);
 	int i;
 	expId = -1;
 	for (i=0; i< allA->size; i++)
@@ -397,7 +397,7 @@ for (i=0; i<gh->expCount;i++)
     safef(sample, sizeof(sample), "%d", expId);
     slNameAddHead(&gh->sampleList, sample);
     gh->expIdOrder[expId]=i;
-    hashAdd(gh->sampleOrder, sample, &i); 
+    hashAdd(gh->sampleOrder, sample, (void *) i); 
     }
 slReverse(&gh->sampleList);
 }
