@@ -118,7 +118,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1412 2007/09/27 03:42:49 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1413 2007/10/04 20:45:14 kuhn Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -6924,7 +6924,7 @@ char *chromPrefixes[] = { "chr", "Group",
 			  NULL };
 
 char *scaffoldPrefixes[] = { "scaffold_", "contig_", "SCAFFOLD", "Scaffold", 
-			     "Contig", "SuperCont", "super_", "scaffold",
+			     "Contig", "SuperCont", "super_", "scaffold", "Zv7_",
 			     NULL };
 
 char *maybeSkipPrefix(char *name, char *prefixes[])
