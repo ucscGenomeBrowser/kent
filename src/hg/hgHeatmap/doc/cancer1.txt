@@ -137,7 +137,7 @@ makde track ispyAgiExp (Jing, Sept 26, 2007)
    join -t $'\t' -1 4 -2 1 agilentWholeGenome44K.bed DataMatrix_ISPY173Agilent_25June07.tab > ispyAgilentGeneExp.txt
 
    note:   only apply to intersection of the two files
-	   use 'join -t $'\t' -1 4 -2 1 agilentWholeGenome44K.bed DataMatrix_ISPY173Agilent_25June07.tab > ispyAgilentGeneExp.txt' to find out which on does not have probe information.
+	   use 'join -t $'\t' -1 4 -2 1 agilentWholeGenome44K.bed DataMatrix_ISPY173Agilent_25June07.tab > ispyAgilentGeneExp.txt' to find out which one does not have probe information.
 	   14 probes in DataMarix is not in agilent annotation file
 
 4) make bed file

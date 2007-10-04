@@ -30,7 +30,7 @@
 #include "ispyFeatures.h"
 
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.22 2007/10/04 16:38:48 jzhu Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.23 2007/10/04 16:51:22 jzhu Exp $";
 
 /* Page drawing stuff. */
 
@@ -399,13 +399,17 @@ for(chrom = fs->chromList; chrom; chrom = chrom->next)
 		colorScale = COLOR_SCALE / (avgVal - minVal); 
 	    
 	    struct slName *sl = NULL;
+	    int count =0;
 	    for (sl = gh->sampleList; sl ; sl = sl->next)
 		{
-		el = hashLookup(gh->sampleOrder, sl->name);
-		if (!el) 
-		    continue;
+//		el = hashLookup(gh->sampleOrder, sl->name);
+//		if (!el) 
+//		    continue;
                 
-		int orderId = *((int *)(el->val));
+//		int orderId = *((int *)(el->val));
+		int orderId = count;
+		count++;
+
 //		valId = atoi(sl->name);
 //		id = slNameNew(getId(conn, valId));
 		id = slNameNew(getId(conn, sl->name));
