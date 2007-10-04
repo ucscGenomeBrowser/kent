@@ -135,7 +135,7 @@ hPrintf("%s",
 webNewSection("Using the upload page");
 hPrintf(
 "To upload a file in any of the supported formats, "
-"locate the file or on your computer using the controls next to <B>file name</B>, "
+"locate the file on your computer using the controls next to <B>file name</B>, "
 "or supply a <B>URL</B> to the data, "
 "and then submit. The other controls on this form are optional, though "
 "filling them out will sometimes enhance the display. In general "
