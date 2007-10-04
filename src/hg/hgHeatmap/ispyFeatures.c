@@ -20,7 +20,7 @@ char *getId(struct sqlConnection *conn, char *sampleName)
 /* get ISPY ID from sample (or experiment) Id */
 {
 char query[512];
-safef(query, sizeof(query), "select ispyId from labTrack2 where trackId = '%s' ", sampleName);
+safef(query, sizeof(query), "select ispyId from labTrack where trackId = '%s' ", sampleName);
 return sqlQuickString(conn, query);
 }
 
