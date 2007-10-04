@@ -12,7 +12,7 @@
 #include "errabort.h"
 #include "mime.h"
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.93 2007/09/27 23:15:11 galt Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.94 2007/10/04 00:36:24 galt Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -1363,6 +1363,10 @@ else
 if (len > 3) ascTime[len-2] = '\0';
 if (!ip)
     ip = "unknown";
+if (!hgsid)
+    hgsid = "unknown";
+if (!requestUri)
+    requestUri = "unknown";
 fprintf(stderr, "[%s] [%s] [client %s] [hgsid=%.24s] [%.1024s] ", ascTime, cgiFileName, ip,
 	hgsid, requestUri);
 }
