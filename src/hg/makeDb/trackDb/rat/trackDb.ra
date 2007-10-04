@@ -442,3 +442,19 @@ searchType psl
 shortCircuit 1
 termRegex [A-Z0-9]+[[:alnum:]_]+.*_at
 searchPriority 15
+
+track affyRaEx1Probe
+shortLabel Affy Exon Probe
+longLabel Affymetrix Rat Exon array version 1.0 probe locations
+group regulation
+priority 87
+visibility hide
+type bed 4 .
+
+track affyRaEx1Transcript
+shortLabel Affy Exon Transcript
+longLabel Affymetrix Rat Exon array version 1.0 transcripts
+group regulation
+priority 88
+visibility hide
+type bed 12 .
