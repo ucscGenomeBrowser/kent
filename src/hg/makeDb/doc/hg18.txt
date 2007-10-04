@@ -17530,7 +17530,7 @@ TMPDIR=/scratch/tmp
 ##############################################################
 # NIMH Bipolar Genome Graphs built-in  (DONE 2007-10-04 Galt)
 ssh hgwdev
-mkdir /cluster/data/hg17/bed/bipolar
+mkdir /cluster/data/hg17/bed/nimhBipolar
 # I registered and downloaded :
 wget http://mapgenetics.nimh.nih.gov/BP_POOLING/german_data_share.csv.zip \
 --user=galt --password=mypassword
@@ -17564,10 +17564,10 @@ hgLoadChromGraph -idTable=snpArrayIllumina550 -minusLog10
 mv nimhBipolarDe.cgb hg18/
 
 pushd /gbdb/hg17/chromGraph
-ln -s /cluster/data/hg17/bed/bipolar/chromGraphs/hg17/*.cgb .
+ln -s /cluster/data/hg17/bed/nimhBipolar/chromGraphs/hg17/*.cgb .
 popd
 pushd /gbdb/hg18/chromGraph
-ln -s /cluster/data/hg17/bed/bipolar/chromGraphs/hg18/*.cgb .
+ln -s /cluster/data/hg17/bed/nimhBipolar/chromGraphs/hg18/*.cgb .
 popd
 
 # Add the hack row into metaChromGraph for the composite tracks.
