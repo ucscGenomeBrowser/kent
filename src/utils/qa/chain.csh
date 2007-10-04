@@ -390,6 +390,20 @@ else
 endif
 
 # -------------------------------------------------
+# find the correct paramaters for the $matrix variable:
+
+
+echo
+echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
+echo  "Find the correct paramaters for the $matrix variable"
+echo  "which appears in the chain$OtherOrg download file."
+echo  "Compare this to the chain description page."
+echo
+
+grep -A7 "The blastz scoring" /data/apache/htdocs/goldenPath/$db/vs$Org/README.txt
+
+
+# -------------------------------------------------
 # to push to beta:
 
 echo
