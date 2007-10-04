@@ -71,6 +71,7 @@ install:
 	cp -p --remove-destination joinerBatchKeys.csh     ${SCRIPTS}
 	cp -p --remove-destination joinerBatchTimes.csh    ${SCRIPTS}
 	cp -p --remove-destination knownGene.csh           ${SCRIPTS}
+	cp -p --remove-destination makeFilledBlockBed.csh  ${SCRIPTS}
 	cp -p --remove-destination net.csh                 ${SCRIPTS}
 	cp -p --remove-destination proteins.csh            ${SCRIPTS}
 	cp -p --remove-destination realTime.csh            ${SCRIPTS}
