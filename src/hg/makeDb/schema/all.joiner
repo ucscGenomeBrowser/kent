@@ -610,7 +610,7 @@ identifier vegaName
 identifier vegaGeneName typeOf=vegaName dependency
 "Link together VEGA predicted gene structure and peptide"
     $gbd.vegaGene.name
-    $gbd,$danRer.vegaPep.name full unique
+    $gbd,!danRer5.vegaPep.name full unique
     danRer5.vegaPep.name unique minCheck=0.72
 
 identifier vegaZfishName
