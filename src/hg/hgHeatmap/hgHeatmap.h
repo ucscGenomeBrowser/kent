@@ -66,7 +66,8 @@ struct genoHeatmap
     int expCount;		/* number of experiments */
     char *database;             /* database */
     struct slName *sampleList;  /* List of names of samples, sampleList position matches sampleOrder hash */
-    struct hash *sampleOrder;	/* Hash of orders for samples */
+    struct hash *sampleOrder;	/* Hash of orders for samples, 
+				   keyed on sampleName, values are sample positions (interger) */
     int *expIdOrder;            /* ordering of expIds for display of bed15 format */
     struct trackDb *tDb;	/* the track database */
 };

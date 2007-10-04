@@ -30,7 +30,7 @@
 #include "ispyFeatures.h"
 
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.21 2007/10/04 16:20:42 jzhu Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.22 2007/10/04 16:38:48 jzhu Exp $";
 
 /* Page drawing stuff. */
 
@@ -355,7 +355,7 @@ double pixelsPerBase = fs->pixelsPerBase;
 double colorScale = 0.0; 
 double val;
 double absVal, avgVal, minVal, maxVal;
-int valId,start = 0;
+int start = 0;
 
 Color valCol;
 Color shadesOfRed[EXPR_DATA_SHADES];
@@ -406,10 +406,10 @@ for(chrom = fs->chromList; chrom; chrom = chrom->next)
 		    continue;
                 
 		int orderId = *((int *)(el->val));
-		valId = atoi(sl->name);
-		
-		id = slNameNew(getId(conn, valId));
-		
+//		valId = atoi(sl->name);
+//		id = slNameNew(getId(conn, valId));
+		id = slNameNew(getId(conn, sl->name));
+
 		char *cellVal = col->cellVal(col, id, conn);
 	        valCol = MG_GRAY;            
 		if (cellVal)

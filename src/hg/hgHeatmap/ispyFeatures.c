@@ -16,11 +16,11 @@
 #include "hPrint.h"
 
 
-char *getId(struct sqlConnection *conn, int sampleId)
+char *getId(struct sqlConnection *conn, char *sampleName)
 /* get ISPY ID from sample (or experiment) Id */
 {
 char query[512];
-safef(query, sizeof(query), "select ispyId from labTrack where trackId = %d ", sampleId);
+safef(query, sizeof(query), "select ispyId from labTrack2 where trackId = '%s' ", sampleName);
 return sqlQuickString(conn, query);
 }
 

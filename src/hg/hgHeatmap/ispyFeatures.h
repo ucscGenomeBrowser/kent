@@ -79,8 +79,8 @@ struct column
     
 };
 
-char *getId(struct sqlConnection *conn, int sampleId);
-/* get ISPY ID from sample (or experiment) Id */
+char *getId(struct sqlConnection *conn, char *sampleName);
+/* get ISPY ID from sampleId (i.e. sampleName */
 
 void setupColumnType(struct column *col);
 /* Set up methods and column-specific variables based on
