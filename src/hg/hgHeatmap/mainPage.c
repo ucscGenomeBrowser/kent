@@ -30,7 +30,7 @@
 #include "ispyFeatures.h"
 
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.20 2007/10/02 22:32:43 jsanborn Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.21 2007/10/04 16:20:42 jzhu Exp $";
 
 /* Page drawing stuff. */
 
@@ -405,7 +405,7 @@ for(chrom = fs->chromList; chrom; chrom = chrom->next)
 		if (!el) 
 		    continue;
                 
-		int orderId = (int) el->val;
+		int orderId = *((int *)(el->val));
 		valId = atoi(sl->name);
 		
 		id = slNameNew(getId(conn, valId));
