@@ -108,6 +108,31 @@ linesAt 5,10
     longLabel Case Control Consortium type 2 diabetes trend -log10 P-value
     priority 7
 
+
+track bipolar
+compositeTrack on
+shortLabel Bipolar
+longLabel NIMH Bipolar Disease
+group phenDis
+visibility hide
+priority 50.3
+type chromGraph
+minMax 0,5
+linesAt 1,3
+
+    track nimhBipolarUs
+    subTrack bipolar
+    shortLabel NIMH Bipolar Us
+    longLabel NIMH Bipolar disorder (US) -log10 P-value
+    priority 1
+
+    track nimhBipolarDe
+    subTrack bipolar
+    shortLabel NIMH Bipolar De
+    longLabel NIMH Bipolar disorder (German) -log10 P-value
+    priority 2
+
+
 track xenoRefGene
 shortLabel Other RefSeq
 longLabel Non-$Organism RefSeq Genes

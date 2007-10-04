@@ -17527,5 +17527,55 @@ TMPDIR=/scratch/tmp
     time nice -n +19 doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
 	-chainMinScore=3000 -chainLinearGap=medium \
 	-continue=cat -bigClusterHub=pk > cat.log 2>&1 &
+##############################################################
+# NIMH Bipolar Genome Graphs built-in  (DONE 2007-10-04 Galt)
+ssh hgwdev
+mkdir /cluster/data/hg17/bed/bipolar
+# I registered and downloaded :
+wget http://mapgenetics.nimh.nih.gov/BP_POOLING/german_data_share.csv.zip \
+--user=galt --password=mypassword
+wget http://mapgenetics.nimh.nih.gov/BP_POOLING/nimh_data_share.csv.zip \
+--user=galt --password=mypassword
+unzip german_data_share.csv.zip
+unzip nimh_data_share.csv.zip
+mkdir chromGraphs
+tail +2 nimh_data_share.csv  | tr -d '"' | gawk -F ',' '{print $1 "\t" $9}' \
+ > chromGraphs/nimhBipolarUs.cgt
+tail +2 german_data_share.csv | tr -d '"' | gawk -F ',' '{print $1 "\t" $9}' \
+ > chromGraphs/nimhBipolarDe.cgt
+cd chromGraphs/
+mkdir hg17 hg18
+
+hgLoadChromGraph -idTable=snpArrayIllumina550 -minusLog10
+-pathPrefix=/gbdb/hg17/chromGraph hg17 nimhBipolarUs nimhBipolarUs.cgt \
+ >& nimhBipolarUs.hg17.errors
+mv nimhBipolarUs.cgb hg17/
+hgLoadChromGraph -idTable=snpArrayIllumina550 -minusLog10
+-pathPrefix=/gbdb/hg17/chromGraph hg17 nimhBipolarDe nimhBipolarDe.cgt \
+ >& nimhBipolarDe.hg17.errors
+mv nimhBipolarDe.cgb hg17/
+hgLoadChromGraph -idTable=snpArrayIllumina550 -minusLog10
+-pathPrefix=/gbdb/hg18/chromGraph hg18 nimhBipolarUs nimhBipolarUs.cgt \
+ >& nimhBipolarUs.hg18.errors
+mv nimhBipolarUs.cgb hg18/
+hgLoadChromGraph -idTable=snpArrayIllumina550 -minusLog10
+-pathPrefix=/gbdb/hg18/chromGraph hg18 nimhBipolarDe nimhBipolarDe.cgt \
+ >& nimhBipolarDe.hg18.errors
+mv nimhBipolarDe.cgb hg18/
+
+pushd /gbdb/hg17/chromGraph
+ln -s /cluster/data/hg17/bed/bipolar/chromGraphs/hg17/*.cgb .
+popd
+pushd /gbdb/hg18/chromGraph
+ln -s /cluster/data/hg17/bed/bipolar/chromGraphs/hg18/*.cgb .
+popd
+
+# Add the hack row into metaChromGraph for the composite tracks.
+hgsql hg17 -e 'insert into metaChromGraph (name, minVal, maxVal, binaryFile)
+values ("bipolar", 0, 0, "composite")'
+hgsql hg18 -e 'insert into metaChromGraph (name, minVal, maxVal, binaryFile)
+values ("bipolar", 0, 0, "composite")'
+
+#Add composite track info to src/hg/makeDb/trackDb/human/trackDb.ra:
 
 ###########################################################################

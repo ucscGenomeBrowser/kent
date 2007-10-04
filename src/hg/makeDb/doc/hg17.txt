@@ -24084,3 +24084,9 @@ done
     cd ~/kent/src/hg/makeDb/trackDb/human/hg17
     cp ../hg18/consIndelsHg18Mm8CanFam2.html consIndelsHg17Mm5CanFam1.html
     # check this is correct and add trackDb.ra track entry and search.  
+
+##############################################################
+# NIMH Bipolar Genome Graphs built-in (DONE 2007-10-04 Galt)
+#
+#  See hg18.txt for details.
+#############################################################
