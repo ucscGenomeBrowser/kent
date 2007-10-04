@@ -13,13 +13,6 @@ idSql select refLink.omimId from kgXref,refLink where kgID = '%s' and kgXref.ref
 url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=OMIM&term=%s&doptcmdl=Detailed&tool=genome.ucsc.edu
 priority 10
 
-name geneLynx
-shortLabel GeneLynx
-tables kgXref
-idSql select geneSymbol from kgXref where kgID = '%s'
-url http://www.genelynx.org/cgi-bin/linklist?tableitem=GLID_NAME.name&IDlist=%s&dir=1
-priority 10
-
 name geneCards
 shortLabel GeneCards
 tables kgXref
