@@ -135,6 +135,7 @@
 #include "stsInfoMouseNew.h"
 #include "vegaInfo.h"
 #include "vegaInfoZfish.h"
+#include "ensInfo.h"
 #include "scoredRef.h"
 #include "blastTab.h"
 #include "hdb.h"
@@ -209,7 +210,7 @@
 #include "atomDb.h"
 #include "itemConf.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1348 2007/09/27 23:25:25 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1349 2007/10/04 04:29:04 hartera Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -2062,7 +2063,14 @@ for (gp = gpList; gp != NULL; gp = gp->next)
     printPos(gp->chrom, gp->txStart, gp->txEnd, gp->strand, FALSE, NULL);
     if (gp->name2 != NULL && strlen(trimSpaces(gp->name2))> 0)
         {
-        printf("<b>Alternate Name:</b> %s<br>\n",gp->name2);
+        /* in Ensembl gene info downloaded from ftp site, sometimes the
+           name2 field is populated with "noXref" because there is 
+           no alternate name. Replace this with "none" */
+        printf("<b>Alternate Name:");
+        if (sameString(gp->name2, "noXref"))
+           printf("</b> none<br>\n");
+        else
+           printf("</b> %s<br>\n",gp->name2);
         }
     if (gp->exonFrames != NULL) 
         {
@@ -7383,6 +7391,31 @@ else
     printf("<BR>\n");
     }
 
+if (hTableExists("ensInfo"))
+    {
+    struct sqlResult *sr;
+    char query[256], **row;
+    struct ensInfo *info = NULL;
+    
+    safef(query, sizeof(query),
+    	"select * from ensInfo where name = '%s'", item);
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+        info = ensInfoLoad(row);
+        /* no need to print otherId field, this is the same as name 2 in 
+           the ensGene table and it is printed by showGenePos() */
+        /* convert the status to lower case */
+        tolowers(info->status);
+        printf("<B>Ensembl Gene Type:</B> %s %s<BR>\n", info->status, 
+                info->class);
+        printf("<B>Ensembl Gene:</B> %s<BR>\n", info->geneId);
+        printf("<B>Ensembl Gene Description:</B> %s<BR>\n", info->geneDesc);
+        ensInfoFree(&info);
+        }
+    sqlFreeResult(&sr);
+    }
+
 /* skip the rest if this gene is not in ensGene */
 sprintf(condStr, "name='%s'", item);
 if (sqlGetField(conn, database, tdb->tableName, "name", condStr) != NULL)
@@ -7401,7 +7434,6 @@ if (sqlGetField(conn, database, tdb->tableName, "name", condStr) != NULL)
 	    }
         }
     }
-
 safef(geneCheck, sizeof(geneCheck), "%sChk", tdb->tableName);
 if (hTableExists(geneCheck))
     {
