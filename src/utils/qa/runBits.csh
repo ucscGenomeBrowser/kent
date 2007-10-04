@@ -13,24 +13,22 @@
 set db=""
 set chrom=""
 set split=""
-set trackname=""
+set track=""
 
-if ( $#argv == 0 || $#argv > 2) then
+if ( $#argv != 2 ) then
   # no command line args
   echo
-  echo "  runs featureBits and checks for overlap with unbridged gaps"
+  echo "  runs featureBits and checks for overlap with unbridged gaps."
   echo
   echo "    usage:  database trackname"
   echo
   exit
 else
   set db=$argv[1]
-  set trackname=$argv[2]
+  set track=`echo $argv[2] | sed -e "s/chr.*_//"`
 endif
 
-set track=`echo $trackname | sed -e "s/chrN_//"`
 set split=`getSplit.csh $db gap hgwdev` 
-
 
 # ------------------------------------------------
 # featureBits
@@ -44,20 +42,16 @@ if ($status) then
   exit
 endif
 
-echo
 echo "featureBits -countGaps $db $track gap"
 rm -f file
-featureBits -countGaps $db $track gap -bed=gapFile
+featureBits -countGaps $db $track gap -bed=$db.gapFile
 
-if ( -z gapFile ) then
+if ( -z $db.gapFile ) then
   echo
-  rm gapFile
-  rm -f $db.unbridgedGap.bed
-  rm -f $track.bed
+  rm -f $db.gapFile
   rm -f $db.chromlist
   exit
 endif
-rm gapFile
 
 echo "check for overlap to unbridged gaps:"
 rm -f $db.unbridgedGap.bed
@@ -113,5 +107,6 @@ echo
 rm -f $db.unbridgedGap.bed
 rm -f $track.bed
 rm -f $db.chromlist
+rm -f $db.gapFile
 
 
