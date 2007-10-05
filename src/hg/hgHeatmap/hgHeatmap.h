@@ -124,9 +124,6 @@ void setSampleOrder(struct genoHeatmap* gh, char* posStr);
  * if the setting is not set in the configuration file, then the orders 
  * are set to default in sampleList and sampleOrder */
 
-struct slName* getPersonOrder();
-/* Makes a single-linked name list from CGI variable for patient order */
-
 void setPersonOrder (struct genoHeatmap* gh, char* personStr);
 /* Set the sampleOrder and sampleList of a specific heatmap to personStr; 
  * personStr is a csv format string of personids

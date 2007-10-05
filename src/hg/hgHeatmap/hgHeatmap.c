@@ -25,7 +25,7 @@
 #include "ispyFeatures.h"
 
 
-static char const rcsid[] = "$Id: hgHeatmap.c,v 1.26 2007/10/04 17:35:18 jsanborn Exp $";
+static char const rcsid[] = "$Id: hgHeatmap.c,v 1.27 2007/10/05 00:54:48 jzhu Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -195,23 +195,21 @@ for (ref = ghList; ref != NULL; ref = ref->next)
     }
 }
 
-struct slName* getPersonOrder()
-/* Makes a single-linked name list from CGI variable for patient order */
-{
-char varName[512];
-safef(varName, sizeof (varName),"%s", hghPersonOrder);
-char *pStr = cartUsualString(cart,varName, "");
-
-return slNameListFromComma(pStr);
-}
-
-
 void setPersonOrder (struct genoHeatmap* gh, char* personStr)
 /* Set the sampleOrder and sampleList of a specific heatmap to personStr; 
    personStr is a csv format string of personids
    if posStr is null, set to default 
 */
 {
+char *pS = personStr;
+if (sameString(pS,""))
+    {
+    defaultOrder(gh);
+    return;
+    }
+
+struct slName *slPerson = slNameListFromComma(pS);
+
 if (gh->sampleOrder)
     freeHash(&gh->sampleOrder);
 gh->sampleOrder = hashNew(0);
@@ -220,42 +218,35 @@ if (gh->sampleList)
 gh->sampleList = slNameNew("");
 if (gh->expIdOrder)
     freeMem(gh->expIdOrder);
-
 /* set expIdOrder to default , i.e. an array of -1s, -1 indicates to the drawing code that the sample will not be drawn in heatmap */
 AllocArray(gh->expIdOrder, gh->expCount);
 int i;
 for (i=0; i< gh->expCount; i++)
     gh->expIdOrder[i]= -1;
 
-char *pS = personStr;
-int expId; // bed15 format expId 
-
 /* get the sampleIds of each person from database */ 
-struct sqlConnection *conn = sqlConnect("ispy"); /*hard code for ISPY */
-char *labTable = "labTrack"; /*hard code for ISPY */
-char *key = "ispyId"; /*hard code for ISPY */
+struct trackDb *tdb = gh->tDb; 
+struct sqlConnection *conn = sqlConnect(trackDbSetting(tdb, "patDb")); 
+char *labTable = NULL;
+char *key = NULL;
+if (conn)
+    {
+    labTable = trackDbSetting(tdb, "patTable");
+    key = trackDbSetting(tdb, "patKey");
+    }
+
+if ((labTable == NULL) || (key == NULL))
+{
+defaultOrder(gh);
+return;
+}
 
 char query[512];
 struct sqlResult *sr;
 char **row;
 char* person, *sample;
 
-struct slName *sl, *slSample=NULL, *slPerson=NULL;
-if (sameString(pS,""))
-/* If person string is blank, get all distinct ispy id's from database */
-    { 
-    safef(query, sizeof(query),"select distinct %s from %s ", key, labTable);
-    sr = sqlGetResult(conn, query);
-    while ((row = sqlNextRow(sr)) != NULL)
-        {
-        person = row[0];
-    	slNameAddHead(&(slPerson),person);
-    	}
-    }
-else
-    slPerson = slNameListFromComma(pS);
-    
-
+struct slName *sl, *slSample=NULL;
 for (sl= slPerson; sl!= NULL; sl=sl->next)
     {
     person =sl->name;
@@ -275,10 +266,10 @@ struct microarrayGroups *maGs = maGetTrackGroupings(gh->database, gh->tDb);
 struct maGrouping *allA= maGs->allArrays;
 
 int counter = 0;    
+int expId; // bed15 format expId 
 for(sl=slSample; sl !=NULL; sl=sl->next)
 {
 sample = sl->name;
-int i;
 expId = -1;
 for (i=0; i< allA->size; i++)
     {
@@ -390,11 +381,14 @@ for (i=0; i< gh->expCount; i++)
     gh->expIdOrder[i]= -1;
 
 int expId;
-char sample[512];
-for (i=0; i<gh->expCount;i++)
+char *sample;
+struct microarrayGroups *maGs = maGetTrackGroupings(gh->database, gh->tDb);
+struct maGrouping *allA= maGs->allArrays;
+
+for (i=0; i< allA->size; i++)
     {
-    expId = i;
-    safef(sample, sizeof(sample), "%d", expId);
+    sample = allA->names[i];
+    expId = allA->expIds[i];
     slNameAddHead(&gh->sampleList, sample);
     gh->expIdOrder[expId]=i;
     hashAddInt(gh->sampleOrder, sample, i); 
@@ -415,15 +409,10 @@ return gh->expIdOrder;
 
 /* Set the ordering of samples in display 
 */
-void setBedOrder(struct genoHeatmap* gh)
+void setBedOrder(struct genoHeatmap *gh)
 {
 /* get the ordering information from cart variable hghOrder*/
 char varName[512];
-
-//safef(varName, sizeof (varName),"%s_%s", hghSampleOrder,tableName);
-//char *pStr = cartUsualString(cart,varName, "");
-//setSampleOrder(gh, pStr);
-
 safef(varName, sizeof (varName),"%s", hghPersonOrder);
 char *pStr = cartUsualString(cart,varName, "");
 setPersonOrder(gh, pStr);

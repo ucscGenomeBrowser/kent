@@ -30,7 +30,7 @@
 #include "ispyFeatures.h"
 
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.26 2007/10/04 23:07:27 jzhu Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.27 2007/10/05 00:54:48 jzhu Exp $";
 
 /* Page drawing stuff. */
 
@@ -354,7 +354,6 @@ struct genoLayChrom *chrom=NULL;
 double pixelsPerBase = fs->pixelsPerBase;
 double colorScale = 0.0; 
 double val;
-//double absVal, avgVal, minVal, maxVal;
 double absVal,  minVal, maxVal;
 int start = 0;
 
@@ -388,11 +387,6 @@ for(chrom = fs->chromList; chrom; chrom = chrom->next)
 	{
         if (col->on)
 	    {
-	    /*
-	    avgVal = 1.0;
-	    if (col->cellAvgVal(col, conn) != NULL)
-		avgVal = atof(col->cellAvgVal(col, conn));
-	    */
 	    minVal = 0.0;
 	    if (col->cellMinVal(col, conn) != NULL)
 		minVal = atof(col->cellMinVal(col, conn));
@@ -400,12 +394,7 @@ for(chrom = fs->chromList; chrom; chrom = chrom->next)
 	    maxVal = 10.0;
 	    if (col->cellMaxVal(col, conn) != NULL)
 		maxVal = atof(col->cellMaxVal(col, conn));
-	    /*
-	    if (maxVal - avgVal > avgVal - minVal)
-		colorScale = COLOR_SCALE / (maxVal - avgVal); 
-	    else
-		colorScale = COLOR_SCALE / (avgVal - minVal); 
-	    */
+
 	    colorScale = COLOR_SCALE / (maxVal - minVal); 
 	    
 
@@ -422,10 +411,8 @@ for(chrom = fs->chromList; chrom; chrom = chrom->next)
 	        valCol = MG_GRAY;            
 		if (cellVal)
 		    {
-//		    val = atof(cellVal) - avgVal;
 		    val = atof(cellVal);
-		    absVal= val;
-//		    absVal = fabs(val);
+		    absVal = fabs(val);
 		    
 		    int colorIndex = (int)(absVal * (EXPR_DATA_SHADES-1.0) * colorScale);
 		    
@@ -579,7 +566,6 @@ static void addThresholdHeatmapCarries(struct dyString *dy)
 /* Add javascript that carries over threshold and graph vars
  * to new form. */
 {
-//jsDropDownCarryOver(dy, hghHeatmap);
 jsDropDownCarryOver(dy, hghDataSet);
 }
 
@@ -751,8 +737,7 @@ graphDropdown (conn, hghDataSet, curVal, jsOther);
 /* Show data. */
 htmlNbSpaces(3);
 hPrintf("<B>data:</B>\n");
-// char *curVal = heatmapName();
-graphDropdown(conn, hghHeatmap, "",""); // curVal, jsOther);
+graphDropdown(conn, hghHeatmap, "","");
 
 hPrintf("</TD></TR>\n");
 hPrintf("</TABLE>");
