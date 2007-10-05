@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.33 2007/10/03 19:13:02 hiram Exp $"
+#	"$Id: mm9.txt,v 1.34 2007/10/05 16:13:34 fanhsu Exp $"
 #
 
 #######################################################################
@@ -5885,3 +5885,25 @@ doSplit.csh $(path1) {check out line+ $(path1).done}
 # Longest running job:                0s       0.00m     0.00h    0.00d
 # Longest finished job:            1081s      18.02m     0.30h    0.01d
 # Submission to last job:          1391s      23.18m     0.39h    0.02d
+#############################################################################
+#  BUILD miRNA TRACK (DONE - 2007-10-05 - Fan)
+    #   updated data from: Michel.Weber@ibcg.biotoul.fr
+    #   notify them when done.
+    ssh hgwdev
+    cd /cluster/data/mm9/bed
+    mkdir miRNA-2007-10-05
+    cd miRNA-2007-10-05
+    # save the miRNAtrack-mm9.txt file from email
+
+    cat miRNAtrack-mm9.txt|sed -e 's/ /\t/g' > miRNA.tab
+
+    hgLoadBed mm9 miRNA miRNA.tab
+
+# check previous release track before update
+    featureBits mm8 miRNA
+    #33398 bases of 2567283971 (0.001%) in intersection
+
+    featureBits mm9 miRNA
+    #39718 bases of 2620346127 (0.002%) in intersection
+
+#############################################################################
