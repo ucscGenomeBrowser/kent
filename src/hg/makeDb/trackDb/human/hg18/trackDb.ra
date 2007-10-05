@@ -1335,6 +1335,17 @@ spectrum on
 urlLabel Transfac matrix link:
 url http://www.gene-regulation.com/cgi-bin/pub/databases/transfac/getTF.cgi?AC=$$
 
+track targetScanS
+shortLabel T-ScanS miRNA
+longLabel TargetScanS miRNA Regulatory Sites
+group regulation
+priority 101
+visibility hide
+color 0,96,0
+type bed 6 .
+urlLabel TargetScan link:
+url http://www.targetscan.org/cgi-bin/targetscan/vert_40/view_gene.cgi?taxid=9606&gs=$$&showcnc=1&shownc=1
+
 track uc16
 shortLabel Ultra Conserved
 longLabel Ultraconserved Elements (200 bp 100% ID in Rat/Mouse/Human)
