@@ -111,6 +111,30 @@ spectrum on
 type netAlign rn4 chainRn4Test
 otherDb rn4
 
+track multiz4way
+shortLabel 4-way Multiz
+longLabel 4-Way Multiz Alignment & Conservation 
+group compGeno
+priority 104.2
+visibility pack
+color 0, 10, 100
+altColor 0,90,10
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+# wiggle phastCons4way
+# spanList 1
+pairwiseHeight 12
+yLineOnOff Off
+# frames multiz4wayFrames
+# irows on
+autoScaleDefault Off
+windowingFunction mean
+summary multiz4waySummary
+speciesCodonDefault mm9
+speciesGroups mammal
+sGroup_mammal rn4 hg18 canFam2
+treeImage phylo/mm9_4way.gif
+
 track knownGene
 shortLabel UCSC Genes
 longLabel UCSC Gene Predictions Based on RefSeq, UniProt, GenBank, and Comparative Genomics
@@ -126,3 +150,31 @@ directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_t
 baseColorUseCds given
 baseColorDefault genomicCodons
 
+track multiz30way
+shortLabel 30-way Multiz
+longLabel 30-Way Multiz Alignment & Conservation 
+group compGeno
+priority 104.2
+visibility pack
+color 0, 10, 100
+altColor 0,90,10
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+# wiggle phastCons30way
+# spanList 1
+pairwiseHeight 12
+yLineOnOff Off
+# frames multiz30wayFrames
+# irows on
+autoScaleDefault Off
+windowingFunction mean
+summary multiz30waySummary
+speciesCodonDefault mm9
+speciesGroups mammal
+speciesGroups Primate Placental_Mammal Vertebrate
+sGroup_Primate panTro2 rheMac2 otoGar1
+sGroup_Placental_Mammal tupBel1 mm8 rn4 ponAbe2 calJac1 cavPor2 oryCun1 sorAra1 eriEur1 canFam2 felCat3 equCab1 bosTau3 dasNov1 loxAfr1 echTel1
+sGroup_Vertebrate monDom4 ornAna1 anoCar1 galGal3 xenTro2 danRer4 tetNig1 fr2 gasAcu1 oryLat1
+speciesDefaultOff panTro2 rn4 otoGar1 felCat3 loxAfr1 bosTau3 echTel1 danRer4 fr2 tetNig1 oryLat1 tupBel1 cavPor2 oryCun1 sorAra1 eriEur1
+itemFirstCharCase noChange
+treeImage phylo/mm9_30way.gif
