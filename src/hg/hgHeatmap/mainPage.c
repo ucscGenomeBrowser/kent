@@ -30,7 +30,7 @@
 #include "ispyFeatures.h"
 
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.27 2007/10/05 00:54:48 jzhu Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.28 2007/10/05 01:28:11 jzhu Exp $";
 
 /* Page drawing stuff. */
 
@@ -454,8 +454,16 @@ int maxShade = ArraySize(shadesOfGray)-1;
 int spacing = 1;
 int yOffset = 2*spacing;
 
-struct sqlConnection *ispyConn = hAllocOrConnect("ispy");
-struct genoLay *fs = featureLayout(ispyConn, gl);
+struct sqlConnection *ispyConn = NULL; 
+
+if ( sqlDatabaseExists("ispy"))
+    ispyConn = hAllocOrConnect("ispy");
+
+struct genoLay *fs = NULL;
+if (ispyConn)
+    fs = featureLayout(ispyConn, gl);
+else
+    fs = gl;
 
 if (psOutput)
     {
@@ -493,7 +501,8 @@ for (ref = ghList; ref != NULL; ref = ref->next)
     
     drawChromHeatmaps(vg, db, gl, tableName, 
 		       totalYOff + yOffset, TRUE, TRUE, TRUE);
-    drawFeatures(vg, tableName, ispyConn, fs, totalYOff + yOffset);  
+    if (ispyConn)
+	drawFeatures(vg, tableName, ispyConn, fs, totalYOff + yOffset);  
     
     totalYOff += heatmapHeight(gh) + spacing;
     

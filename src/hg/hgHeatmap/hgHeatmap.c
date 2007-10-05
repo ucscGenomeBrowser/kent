@@ -25,7 +25,7 @@
 #include "ispyFeatures.h"
 
 
-static char const rcsid[] = "$Id: hgHeatmap.c,v 1.27 2007/10/05 00:54:48 jzhu Exp $";
+static char const rcsid[] = "$Id: hgHeatmap.c,v 1.28 2007/10/05 01:28:11 jzhu Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -226,21 +226,17 @@ for (i=0; i< gh->expCount; i++)
 
 /* get the sampleIds of each person from database */ 
 struct trackDb *tdb = gh->tDb; 
-struct sqlConnection *conn = sqlConnect(trackDbSetting(tdb, "patDb")); 
-char *labTable = NULL;
-char *key = NULL;
-if (conn)
-    {
-    labTable = trackDbSetting(tdb, "patTable");
-    key = trackDbSetting(tdb, "patKey");
-    }
+char *labTable = trackDbSetting(tdb, "patTable");
+char *key = trackDbSetting(tdb, "patKey");
+char *db = trackDbSetting(tdb, "patDb");
 
 if ((labTable == NULL) || (key == NULL))
-{
-defaultOrder(gh);
-return;
-}
+    defaultOrder(gh); return;
 
+if ( !sqlDatabaseExists(db))
+    defaultOrder(gh); return;
+
+struct sqlConnection *conn = sqlConnect(db); 
 char query[512];
 struct sqlResult *sr;
 char **row;
@@ -569,17 +565,20 @@ void dispatchPage()
 {
 
 struct sqlConnection *conn = hAllocConn();
-struct sqlConnection *ispyConn = hAllocOrConnect("ispy");
+struct sqlConnection *ispyConn = NULL;
+struct column *colList = NULL;
 
-struct column *colList = getColumns(ispyConn);
-
-
+if ( sqlDatabaseExists("ispy"))
+{
+ispyConn = hAllocOrConnect("ispy");
+colList = getColumns(ispyConn);
+}
 
 if (cartVarExists(cart, hghConfigure))
     {
     configurePage();
     }
-else if (cartVarExists(cart, hghConfigureFeature))
+else if (cartVarExists(cart, hghConfigureFeature) && (ispyConn))
     {
     doConfigure(ispyConn, colList, NULL);
     }
