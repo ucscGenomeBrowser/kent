@@ -4,7 +4,7 @@ name num
 shortLabel #
 longLabel Item Number in Displayed List/Select Gene
 priority 1
-visibility on
+visibility off
 type num
 
 name ispyOutcomeT1T2

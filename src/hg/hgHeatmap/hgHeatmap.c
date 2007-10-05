@@ -25,7 +25,7 @@
 #include "ispyFeatures.h"
 
 
-static char const rcsid[] = "$Id: hgHeatmap.c,v 1.28 2007/10/05 01:28:11 jzhu Exp $";
+static char const rcsid[] = "$Id: hgHeatmap.c,v 1.29 2007/10/05 17:39:42 jzhu Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -414,7 +414,6 @@ char *pStr = cartUsualString(cart,varName, "");
 setPersonOrder(gh, pStr);
 }
 
-/* Routines to fetch cart variables. */
 int experimentHeight()
 /* Return height of an individual experiment */
 {

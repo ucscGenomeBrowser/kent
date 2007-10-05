@@ -15,6 +15,10 @@ my::
 	rsync -ar --exclude=CVS/ --delete hgHeatmapData ${CGI_BIN}-${USER}/
 	chmod -R a+rX ${CGI_BIN}-${USER}/hgHeatmapData
 
+alpha::
+	rsync -ar --exclude=CVS/ --delete hgHeatmapData ${CGI_BIN}/
+	chmod -R a+rX ${CGI_BIN}/hgHeatmapData
+
 compile: $O 
 	${CC} $O ${MYLIBS} ${L}
 	mv ${AOUT} $A${EXE}
