@@ -35,7 +35,7 @@
 #include "customTrack.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.332 2007/09/21 23:31:01 angie Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.333 2007/10/05 22:17:14 angie Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -2766,6 +2766,11 @@ else if (fitFields(hash, "tName", "tStart", "tEnd", retChrom, retStart, retEnd)
 	 && fitField(hash, "name", retName))
     {
     fitField(hash, "strand", retStrand);
+    }
+/* Look for chainLink names. */
+else if (fitFields(hash, "tName", "tStart", "tEnd", retChrom, retStart, retEnd)
+	 && fitField(hash, "chainId", retName))
+    {
     }
 /* Look for gene prediction names. */
 else if (fitFields(hash, "chrom", "txStart", "txEnd", retChrom, retStart, retEnd))
