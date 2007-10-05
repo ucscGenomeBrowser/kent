@@ -7,6 +7,7 @@
 #
 ####################
 
+set split=""
 set db=""
 set table=""
 set chr=""
@@ -16,6 +17,7 @@ set send=""
 if ($#argv != 3 ) then
   echo
   echo "  make bed file of large blocks, ignoring intron/exons"
+  echo "  will take split tables without the chrN_ prefix."
   echo
   echo "      usage:  database table outfile.bed"
   echo
@@ -27,12 +29,23 @@ else
   set outfile=$argv[3]
 endif
 
+# get the chrom name for this table
+set split=`getSplit.csh $db $table hgwdev`
+if ( $split == "unsplit" ) then
+  set split=""
+else
+  set split=${split}_
+endif
+set chr=`getChromFieldName.csh $db ${split}$table`
+
+# echo "chr = $chr"
+# echo "split = $split"
+
 # find the correct names for starts and ends
-set chr=`getChromFieldName.csh $db $table`
 if ( $chr == "chrom" ) then
-  set start=`hgsql -Ne "DESC $table" $db | awk '{print $1}' \
+  set start=`hgsql -Ne "DESC $split$table" $db | awk '{print $1}' \
     | egrep "txStart|chromStart" | head -1 | awk '{print $1}'`
-  set end=`hgsql -Ne "DESC $table" $db | awk '{print $1}' \
+  set end=`hgsql -Ne "DESC $split$table" $db | awk '{print $1}' \
     | egrep "txEnd|chromEnd" | head -1 | awk '{print $1}'`
 else 
   if ( $chr == "tName" ) then
@@ -43,6 +56,9 @@ else
       set start="genoStart"
       set end="genoEnd"
     endif
+  else
+    echo "\nThere is no chrom field called chrom , tName or genoName.\n"
+    exit 1
   endif
 endif
 
@@ -51,6 +67,17 @@ endif
 # echo $chr $start $end
 
 # make bed file of large blocks, ignoring intron/exons
-hgsql -Ne "SELECT $chr, $start, $end FROM $table" $db > $outfile
+rm -f $outfile
+if ( $split == "" ) then
+    hgsql -Ne "SELECT $chr, $start, $end FROM $table" $db > $outfile
+else
+  if (! -e $db.chromlist ) then
+    getChromlist.csh $db > /dev/null
+  endif
+  foreach chrom (`cat $db.chromlist`)
+    hgsql -Ne "SELECT $chr, $start, $end FROM ${chrom}_$table" $db >> $outfile
+  end
+endif
 
+rm -f $db.chromlist
 exit
