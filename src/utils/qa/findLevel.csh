@@ -83,12 +83,12 @@ else
 endif
 
 # check for entry in trackDb.ra, starting at assembly level
-grep -wq '^track.$tableName' trackDb.ra >& /dev/null
+grep -wq track.$tableName trackDb.ra >& /dev/null
 if (! $status ) then
   # the track is mentioned in the assembly-level trackDb.ra file
 else
   # see if it's in another assembly-level trackDb*
-  set partName=`grep -wH '^track.$tableName' trackDb.*.ra >& /dev/null`
+  set partName=`grep -wH track.$tableName trackDb.*.ra`
   if (! $status ) then
     # the track is mentioned in an assembly-level trackDb.*.ra file
     set encode=`echo $partName | sed "s/trackDb//" | sed "s/.ra:track $tableName//"`
@@ -96,12 +96,12 @@ else
     # the track is not at the assembly-level, go up to the organism level
     cd ..
     set currDir=`pwd`
-    grep -wq '^track.$tableName' trackDb.ra >& /dev/null
+    grep -wq track.$tableName trackDb.ra >& /dev/null
     if (! $status ) then
       # the track is mentioned in the organism-level trackDb.ra file
     else
       # see if it's in another organism-level trackDb.*.ra
-      set partName=`grep -wH '^track.$tableName' trackDb.*.ra >& /dev/null`
+      set partName=`grep -wH track.$tableName trackDb.*.ra`
       if (! $status ) then
         # the track is mentioned in an organism-level trackDb.*.ra file
         set encode=`echo $partName | sed "s/trackDb//" | sed "s/.ra:track $tableName//"`
