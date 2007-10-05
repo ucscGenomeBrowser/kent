@@ -16,6 +16,9 @@ set tableName=""
 set parentTableName=""
 set parentTrack=""
 set subTrack=""
+set superName=""
+set superTrack=""
+set superLabel=""
 set grp=""
 set grpName=""
 
@@ -31,6 +34,7 @@ if ( $#argv != 2 ) then
 else
   set db=$argv[1]
   set tableName=$argv[2]
+  set superName=$tableName
 endif
 echo
 
@@ -49,15 +53,17 @@ if ( "$dbs" != $db ) then
 endif
 
 #find the shortLabel and group for this table
-set subTrack=`hgsql -Ne "SELECT shortLabel FROM trackDb WHERE tableName LIKE '$tableName'" $db`
+set subTrack=`hgsql -Ne "SELECT shortLabel FROM trackDb WHERE tableName \
+  LIKE '$tableName'" $db`
 if ( "" == "$subTrack" ) then
   echo "\n ERROR: could not find the $tableName table in the $db database\n"
   exit 1
 else
-  echo " $tableName"
+  echo " table:  $tableName"
   echo
   echo " name:   $subTrack"
-  set grp=`hgsql -Ne "SELECT grp FROM trackDb WHERE tableName LIKE '$tableName'" $db`
+  set grp=`hgsql -Ne "SELECT grp FROM trackDb WHERE tableName \
+    LIKE '$tableName'" $db`
 endif
 
 #find out if this table is a sub-track
@@ -65,21 +71,30 @@ set parentTableName=`hgsql -Ne "SELECT settings FROM trackDb WHERE tableName \
   LIKE '$tableName' AND settings like '%subTrack%'" $db \
   | sed -e "s/\\n/\n/g" | grep subTrack | awk '{print $2}'`
 
-if ( "" != $parentTableName ) then
+if ( "" != "$parentTableName" ) then
   #get the Short Label for the parent track
   set parentTrack=`hgsql -Ne "SELECT shortLabel FROM trackDb WHERE tableName \
     LIKE '$parentTableName'" $db`
   echo " parent: $parentTrack"
+  
+  # reset the superName to use the parent to find superTrack
+  set superName=$parentTableName
 endif
 
+# get the superTrack and superLabel, if any 
+set superTrack=`hgsql -Ne 'SELECT settings FROM trackDb \
+  WHERE tableName = "'$superName'"' $db | sed "s/\\n/\n/g" \
+  | grep superTrack | awk '{print $2}'`
+set superLabel=`hgsql -Ne 'SELECT shortLabel FROM trackDb \
+  WHERE tableName = "'$superTrack'"' $db`
+
+# output supertrack info
+if ( "" != "$superLabel" ) then
+  echo " super:  ${superLabel}..."
+endif
 
 #report about the group that this track is in
  set grpName=`hgsql -Ne "SELECT label FROM grp WHERE name LIKE '$grp'" $db`
  echo " group:  $grpName\n"
 
- set parentTrack=''
- set parentTableName=''
- set subTrack=''
- set grp=''
- set grpName=''
 exit 0

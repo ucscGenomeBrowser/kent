@@ -97,6 +97,14 @@ bedList = bedLoadAll(file);
 for(bed = bedList; bed != NULL; bed = bed->next)
     {
     gp = bedToGenePred(bed);
+    /* pslxFileOpen gaks if strand is not + or -.  bedToGenePred returns
+     * the bed strand, which might be empty (for #fields < 6) or ".".
+     * If so, fake out the strand to + in order to get readable PSL. */
+    if (! (sameString(gp->strand, "+") || sameString(gp->strand, "-")))
+	{
+	gp->strand[0] = '+';
+	gp->strand[1] = '\0';
+	}
     slAddHead(&gpList, gp);
     }
 slReverse(&gpList);

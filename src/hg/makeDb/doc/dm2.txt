@@ -5704,4 +5704,25 @@ chainOne $(path1)
     checkTableCoords -verbose=2 dm2 cytoBandIdeo
 
 
+
+#########################################################################
+# EvoFold track (done, 10.02.2007, Jakob Skou Pedersen)
+#
+# EvoFold predictions were made based on the drosophila subset (12
+# species) of the 15-way multiz insect alignment. The data generation
+# process will change in the future and is therefore not described in
+# detail here. Instead we start with the final set of predictions
+# supplied by me.
+
+  ssh hgwdev
+  mkdir -p /cluster/data/dm2/bed/evofold
+  cd /cluster/data/dm2/bed/evofold
+  cp /cluster/home/jsp/projects/flies/finalDataSets/finalPredAll.bed foldsDm2.bed
+  # The folds_hg17.bed is a 9-column bed file: column 1-6 provide
+  # standard bed information, column 7 is element length, column 8 is
+  # the RNA secondary structure in parentheses format, and column nine
+  # is a commaseparated list of position specific confidence scores
+  # (floats).
+  hgLoadBed -notItemRgb -sqlTable=/cluster/home/jsp/prog/kent/src/hg/lib/evofold.sql dm2 evofold foldsDm2.bed
+
 #########################################################################

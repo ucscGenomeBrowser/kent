@@ -28,21 +28,10 @@ endif
 set chr=""
 set end=""
 
-set chr=`hgsql -N -e "DESC $track" $db | gawk '{print $1}' | egrep -w "chrom"`
+set chr=`getChromFieldName.csh $db $track`
 if ($status) then
-  set chr=`hgsql -N -e "DESC $track" $db | gawk '{print $1}' | egrep -w "tName"`
-  if ($status) then
-    set chr=`hgsql -N -e "DESC $track" $db | gawk '{print $1}' \
-          | egrep -w "genoName"`
-    if ($status) then
-      echo '\n  '$db.$track' has no "chrom", "tName" or "genoName" fields.\n'
-      echo ${0}:
-      $0
-      exit 1 
-    endif 
-  endif 
-endif 
-
+  exit 1
+endif
 
 set end=`hgsql -N -e "DESC $track" $db | gawk '{print $1}' | egrep -w "chromEnd"`
 if ($status) then

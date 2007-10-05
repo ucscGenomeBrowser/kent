@@ -31,7 +31,7 @@
 #include "hgConfig.h"
 #include "trix.h"
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.202 2007/08/09 22:54:15 angie Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.204 2007/09/27 22:25:17 angie Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -1304,6 +1304,17 @@ else
     safef(tableName, tnSize, "all_%s", base);
 }
 
+static char *carefulTrackOpenVis(char *trackName)
+/* If track is already in full mode, return full; otherwise, return
+ * hTrackOpenVis. */
+{
+char *vis = cart ? cartOptionalString(cart, trackName) : NULL;
+if (vis && sameString(vis, "full"))
+    return "full";
+else
+    return hTrackOpenVis(trackName);
+}
+
 static boolean findMrnaPos(char *acc,  struct hgPositions *hgp)
 /* Find MRNA or EST position(s) from accession number.
  * Look to see if it's an mRNA or EST.  Fill in hgp and return
@@ -1371,7 +1382,7 @@ else
 	    pos->browserName = cloneString(psl->qName);
 	    dyStringPrintf(dy, "<A HREF=\"%s%cposition=%s&%s=%s",
 	        hgAppName, hgAppCombiner, hgPosBrowserRange(pos, NULL),
-		tableName, hTrackOpenVis(tableName));
+		tableName, carefulTrackOpenVis(tableName));
 	    if (ui != NULL)
 	        dyStringPrintf(dy, "&%s", ui);
 	    dyStringPrintf(dy, "%s\">",
@@ -2397,7 +2408,7 @@ if (useWeb)
 
 for (table = hgp->tableList; table != NULL; table = table->next)
     {
-    char *vis = hTrackOpenVis(table->name);
+    char *vis = carefulTrackOpenVis(table->name);
     char *parent = hGetParent(table->name);
     if (table->posList != NULL)
 	{

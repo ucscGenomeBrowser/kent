@@ -33,6 +33,7 @@
 #define hggLabelVals hggPrefix "labelVals"
 #define hggMaxGapToFill hggPrefix "maxGapToFill"
 #define hggUploadFile hggPrefix "uploadFile"
+#define hggUploadUrl hggPrefix "uploadUrl"
 #define hggUploadRa hggPrefix "uploadRa"
 #define hggImageWidth hggPrefix "imageWidth"
 #define hggRegionPad hggPrefix "regionPad"

@@ -123,6 +123,7 @@ char *taxon;
 char *database;
 char *exonCnt;
 int interProCount;
+char *kgId;
 
 if (argc != 5) usage();
 
@@ -207,7 +208,9 @@ while (row2 != NULL)
 	}
     
     /* count exons, using coding exons from kgProtMap2 (KG-III) table */
-    safef(cond_str, sizeof(cond_str), "qName='%s'", accession);
+    safef(cond_str, sizeof(cond_str), "spID='%s'", accession);
+    kgId = sqlGetField(conn, database, "kgXref", "kgID", cond_str);
+    safef(cond_str, sizeof(cond_str), "qName='%s'", kgId);
     answer2 = sqlGetField(conn, database, "kgProtMap2", "blockCount", cond_str);
 
     if (answer2 != NULL)

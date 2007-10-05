@@ -1,5 +1,6 @@
 #include trackDb.encode.ra
 #include trackDb.wgEncode.ra
+#include trackDb.instinct.ra
 
 track clonePos
 priority 14
@@ -20,14 +21,26 @@ color 0,90,100
 type genePred geneidPep
 
 track ensGene
+release alpha
 shortLabel Ensembl Genes
-longLabel Ensembl (Build 43) Gene Predictions
+longLabel Ensembl (Build 46) Gene Predictions
 group genes
 priority 40
 visibility hide
 color 150,0,0
 type genePred ensPep
-#ensArchive dec2006
+ensArchive aug2007
+
+track ensGene
+release beta
+shortLabel Ensembl Genes
+longLabel Ensembl (Build 38) Gene Predictions
+group genes
+priority 40
+visibility hide
+color 150,0,0
+type genePred ensPep
+ensArchive apr2006
 
 track exoniphy
 shortLabel Exoniphy
@@ -369,59 +382,6 @@ baseColorDefault genomicCodons
     priority 3
     color 255,0,0
 
-track caseControl
-compositeTrack on
-shortLabel Case Control
-longLabel Case Control Consortium
-group varRep
-visibility hide
-priority 430
-type chromGraph
-minMax 0,15
-linesAt 5,10
-
-    track cccBD
-    subTrack caseControl
-    shortLabel CCC Bipolar Dis
-    longLabel Case Control Consortium bipolar disorder trend -log10 P-value
-    priority 1
-
-    track cccCAD
-    subTrack caseControl
-    shortLabel CCC Coronary Art
-    longLabel Case Control Consortium coronary artery disease trend -log10 P-value
-    priority 2
-
-    track cccCD
-    subTrack caseControl
-    shortLabel CCC Crohns Dis
-    longLabel Case Control Consortium Crohn's disease trend -log10 P-value
-    priority 3
-
-    track cccHT
-    subTrack caseControl
-    shortLabel CCC Hypertension
-    longLabel Case Control Consortium hypertension trend -log10 P-value
-    priority 4
-
-    track cccRA
-    subTrack caseControl
-    shortLabel CCC Rheum Arth
-    longLabel Case Control Consortium rheumatoid arthritis trend -log10 P-value
-    priority 5
-
-    track cccT1D
-    subTrack caseControl
-    shortLabel CCC T1 Diabetes
-    longLabel Case Control Consortium type 1 diabetes trend -log10 P-value
-    priority 6
-
-    track cccT2D
-    subTrack caseControl
-    shortLabel CCC T2 Diabetes
-    longLabel Case Control Consortium type 2 diabetes trend -log10 P-value
-    priority 7
-
 searchTable augustusHints
 searchType genePred
 termRegex g[0-9]+\.t[0-9]+
@@ -461,6 +421,17 @@ baseColorDefault genomicCodons
     longLabel N-SCAN Gene Predictions
     color 84,119,34
     priority 2
+
+searchTable nscanGene
+searchType genePred
+termRegex (chr)?.*\.[0-9]+\.[0-9]+\.[a-z]+
+searchPriority 50
+
+searchTable nscanPasaGene
+searchType genePred
+termRegex (chr)?.*\.[0-9a-z]+\.[0-9]+\.[a-z]+
+searchPriority 50
+
 
 track phastConsElements
 shortLabel Most Conserved
@@ -2114,112 +2085,9 @@ padding 250
 semiShortCircuit 1
 
 
-track encodeGisRnaPet
-compositeTrack on
-shortLabel GIS PET RNA
-dataVersion ENCODE Oct 2005 Freeze
-longLabel Genome Institute of Singapore PET of PolyA+ RNA
-group regulation
-# NOTE: genome-wide, except randoms and chrY
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX,chrM
-priority 600
-visibility hide
-itemRgb on
-type bed 12
-origAssembly hg17
-
-    track encodeGisRnaPetMCF7
-    subTrack encodeGisRnaPet
-    shortLabel GIS RNA MCF7
-    longLabel Genome Institute of Singapore PET of PolyA+ RNA (log phase MCF7)
-    priority 1
-
-    track encodeGisRnaPetMCF7Estr
-    subTrack encodeGisRnaPet
-    shortLabel GIS RNA MCF7 Est
-    longLabel Genome Institute of Singapore PET of PolyA+ RNA (estrogen-stim MCF7)
-    priority 2
-
-    track encodeGisRnaPetHCT116
-    subTrack encodeGisRnaPet
-    shortLabel GIS RNA HCT116
-    longLabel Genome Institute of Singapore PET of PolyA+ RNA (5FU-stim HCT116)
-    priority 3
-    color 58,119,40
-    
-    track encodeGisRnaPetHes3
-    subTrack encodeGisRnaPet
-    shortLabel GIS RNA hES3
-    longLabel Genome Institute of Singapore PET of PolyA+ RNA (embryonic stem cell hES3)
-    priority 4
-    color 50,100,50
-
-
-
-
-track encodeGisChipPetAll
-compositeTrack on
-shortLabel GIS ChIP-PET
-longLabel Genome Institute of Singapore ChIP-PET
-group regulation
-priority 601
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX,chrY
-useScore 1
-type bed 12
-dataVersion ENCODE June 2005 Freeze, ENCODE Oct 2005 Freeze, Oct 2006, Aug 2007
-
-    track encodeGisChipPet
-    subTrack encodeGisChipPetAll
-    shortLabel p53 HCT116 +5FU
-    longLabel Genome Institute of Singapore ChIP-PET: p53 Ab on 5FU treated HCT116 cells
-    color 158,35,135
-    origAssembly hg16
-    dataVersion ENCODE June 2005 Freeze
-    priority 1
-
-    track encodeGisChipPetStat1Gif
-    subTrack encodeGisChipPetAll
-    shortLabel STAT1 HeLa +gIF
-    longLabel Genome Institute of Singapore ChIP-PET: STAT1 Ab on gIF treated HeLa cells
-    color 67,79,35
-    dataVersion ENCODE Oct 2005 Freeze
-    origAssembly hg17
-    priority 2
-
-    track encodeGisChipPetStat1NoGif
-    subTrack encodeGisChipPetAll
-    shortLabel STAT1 HeLa -gIF
-    origAssembly hg17
-    longLabel Genome Institute of Singapore ChIP-PET: STAT1 Ab on untreated HeLa cells
-    color 125,140,35
-    dataVersion ENCODE Oct 2005 Freeze
-    priority 3
-
-    track encodeGisChipPetMycP493
-    subTrack encodeGisChipPetAll
-    shortLabel cMyc P493
-    longLabel Genome Institute of Singapore ChIP-PET: c-Myc Ab on P493 B cells
-    color 158,35,135
-    dataVersion Oct 2006
-    origAssembly hg17
-    priority 4
-    
-    track encodeGisChipPetHes3H3K4me3
-    subTrack encodeGisChipPetAll
-    shortLabel H3K4me3 hES3
-    longLabel Genome Institute of Singapore ChIP-PET: H3K4me3 Ab on ES hes-3 cells
-    color 150,50,50
-    dataVersion Aug 2007
-    origAssembly hg18
-    priority 5
-    
-    track encodeGisChipPetHes3H3K27me3
-    subTrack encodeGisChipPetAll
-    shortLabel H3K27me3 hES3
-    longLabel Genome Institute of Singapore ChIP-PET: H3K27me3 Ab on ES hes-3 cells
-    color 50,100,50
-    dataVersion Aug 2007
-    origAssembly hg18
-    priority 6
-
-
+searchTable consIndelsHg18Mm8CanFam2
+searchType bed
+searchMethod exact
+shortCircuit 1
+termRegex IGS.+
+searchPriority 10

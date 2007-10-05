@@ -11,6 +11,7 @@ install:
 	cp -p --remove-destination chainNetTrio.csh        ${SCRIPTS}
 	cp -p --remove-destination checkAllStaticLinks.csh ${SCRIPTS}
 	cp -p --remove-destination checkBOT.csh            ${SCRIPTS}
+	cp -p --remove-destination checkCoverage.csh       ${SCRIPTS}
 	cp -p --remove-destination checkEncodeRegions.csh  ${SCRIPTS}
 	cp -p --remove-destination checkGbdbDiffs.csh      ${SCRIPTS}
 	cp -p --remove-destination checkHitter.csh         ${SCRIPTS}
@@ -47,6 +48,7 @@ install:
 	cp -p --remove-destination genbankRun.csh          ${SCRIPTS}
 	cp -p --remove-destination generic_range_check.csh ${SCRIPTS} 
 	cp -p --remove-destination getAssemblies.csh       ${SCRIPTS}
+	cp -p --remove-destination getChromFieldName.csh   ${SCRIPTS}
 	cp -p --remove-destination getChromlist.csh        ${SCRIPTS}
 	cp -p --remove-destination getConservation.csh     ${SCRIPTS}
 	cp -p --remove-destination getDbSize.csh           ${SCRIPTS}
@@ -65,6 +67,7 @@ install:
 	cp -p --remove-destination getSplit.csh            ${SCRIPTS}
 	cp -p --remove-destination getVersion.csh          ${SCRIPTS}
 	cp -p --remove-destination getYield.csh            ${SCRIPTS}
+	cp -p --remove-destination igtc.csh                ${SCRIPTS}
 	cp -p --remove-destination joinerBatchKeys.csh     ${SCRIPTS}
 	cp -p --remove-destination joinerBatchTimes.csh    ${SCRIPTS}
 	cp -p --remove-destination knownGene.csh           ${SCRIPTS}

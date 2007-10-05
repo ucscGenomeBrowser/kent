@@ -11,9 +11,6 @@
 
 set machine="hgw1"
 set today=""
-set year=""
-set yearMonth=""
-set lastyear=""
 set dropdir=""
 set dirs=""
 set diffs=0
@@ -69,23 +66,11 @@ set dirPath="/usr/local/apache/htdocs/qa/test-results/trackDb"
 set urlPath="http://hgwdev.cse.ucsc.edu/qa/test-results/trackDb"
 
 # remove dirs from same month last year
-set year=`date +%Y`
-set yearMonth=`date +%Y-%m`
-set lastyear=`echo $year | awk '{print $1-1}'`
-set dropdir=`echo $yearMonth | sed -e "s/$year/$lastyear/"`
-
-# echo "year      $year"
-# echo "lastyear  $lastyear"
-# echo "today     $today"
-# echo "yearMonth $yearMonth"
-# echo "dropdir   $dropdir"
-
-cd $dirPath 
+set dropdir=`getMonthLastYear.csh go`
 set dirs=`ls -l | grep $dropdir | grep ^d | awk '{print $9}'`
 foreach dir ( $dirs )
-  rm -r $dir
+  rm -r $dirPath/$dir
 end
-cd -
 
 # make new dir for today's output
 mkdir -p $dirPath/$today

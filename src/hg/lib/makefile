@@ -31,7 +31,7 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     encodeHapMapAlleleFreq.o encodeIndels.o \
     encodeRegionInfo.o encodeRegionInfoCustom.o encodeRna.o \
     encodeStanfordPromoters.o encodeStanfordPromotersAverage.o \
-    ensFace.o ensPhusionBlast.o ensXRefZfish.o \
+    ensFace.o ensInfo.o ensPhusionBlast.o ensXRefZfish.o \
     est3.o estOrientInfo.o \
     estPair.o exoFish.o expData.o expRecord.o exprBed.o \
     fbTables.o featureBits.o findKGAlias.o findKGProtAlias.o fishClones.o \
@@ -50,7 +50,7 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     hgFindSpec.o hgFindSpecCustom.o \
     hgGene.o hgMaf.o hgRelate.o hgSeq.o hPrint.o \
     HInv.o hui.o humanParalog.o \
-    imageClone.o isochores.o ispyTables.o itemAttr.o jalview.o \
+    imageClone.o isochores.o ispyTables.o itemAttr.o itemConf.o jalview.o \
     jaxOrtholog.o jaxQTL.o jaxQTL3.o jksql.o joiner.o jsHelper.o kg1ToKg2.o \
     jgiGene.o \
     kgAlias.o kgColor.o kgProtAlias.o kgXref.o knownInfo.o knownMore.o knownToSuper.o \

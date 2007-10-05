@@ -10,6 +10,7 @@
 ################################
 
 set db=""
+set active=""
 set mach1="hgwbeta"
 set mach2="hgw1"
 set url1=""
@@ -22,6 +23,7 @@ if ( $#argv < 1 || $#argv > 4 ) then
   echo "  checks on table match for an entire db between two nodes in realTime."
   echo "  optionally reports if update times do not match."
   echo "  ignores genbank tables."
+  echo "  not in real time for non-assembly databases."
   echo
   echo "    usage:  database [machine1 machine2] [times]"
   echo "              defaults to beta and hgw1"
@@ -71,20 +73,30 @@ if ( $#argv == 4 ) then
   endif
 endif
 
-# for stripping out genbank
+# get tablenames for stripping out genbank
 cat /cluster/data/genbank/etc/genbank.tbls | sed -e 's/^^//; s/.$//' \
   > genbank.local
 echo gbLoaded >> genbank.local
 
+# 
+set active=`hgsql -h hgwbeta -Ne "SELECT name FROM dbDb where active = 1" hgcentralbeta \
+  | grep $db`
 foreach machine ( $mach1 $mach2 )
-  # get the full table status
-  getTableStatus.csh $db $machine > $machine.tmp
-  if ( $status ) then
-    cat $machine.tmp
-    rm $machine.tmp
-    exit 1
+  # check if db is for active assembly on beta
+  # (if not, can't do real-time check)
+  if ( $db == $active ) then
+    # get the full table status in real time
+    getTableStatus.csh $db $machine > $machine.tmp
+    if ( $status ) then
+      cat $machine.tmp
+      rm $machine.tmp
+      exit 1
+    endif
+  else
+    # db is either not active, or not an assembly.  must use status dumps.
+    cp `getRRdumpfile.csh $db $machine` $machine.tmp
   endif
-
+  
   # drop header lines from file and grab appropriate fields
   if ( 1 == $times) then
     # find mysql version before grabbing STATUS fields
@@ -103,10 +115,10 @@ foreach machine ( $mach1 $mach2 )
       | awk '{print $1}' >& $machine.status
   endif
   rm $machine.tmp
-
+  
   # strip genbank
   cat $machine.status | egrep -v -f genbank.local | grep -v gbDelete_tmp \
-     > $machine.out
+    > $machine.out
   rm -f $machine.status
 end
 

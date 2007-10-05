@@ -1,27 +1,31 @@
 <H2>Description</H2>
 <P>
 This track shows regions that co-precipitate with antibodies against
-each of 5 factors in all ENCODE regions, in retinoic-acid stimulated
-HL-60 cells harvested after 0, 2, 8, and 32 hours.  
-Median of the transformed P-value (-10 log[10] P) across
-processed replicate data is displayed as 
-separate subtracks for each antibody:
+each of 4 factors in all ENCODE regions, in retinoic-acid stimulated
+<A HREF="http://www.atcc.org/common/catalog/numSearch/numResults.cfm?atccNum=CCL-240">
+HL-60</A>
+(leukemia) cells harvested after 0, 2, 8, and 32 hours, and in a fifth
+factor tested in 
+<A HREF="http://www.atcc.org/common/catalog/numSearch/numResults.cfm?atccNum=HTB-33">
+ME-180</A> cervical carcinoma cells.
+
+Clustered sites are shown in separate subtracks for each antibody:
 <UL>
 <LI>H4Kac4 (HisH4) - Histone H4 tetra-acetylated lysine</LI>
 <LI>H3K9K14ac2 (H3K9K14D) - Histone H3 K9 K14 Di-Acetylated</LI>
 <LI>Pol2 - RNA Polymerase II (8WG16 ab against pre-initiation complex form)</LI>
-<LI>p63_ActD - p63 with actinomycin D treatment </LI>
-<LI>p63_mActD - p63 without actinomycin D treatment </LI>
+<LI>p63_ActD - p63, in actinomycin-D treated ME-180 cells </LI>
+<LI>p63_mActD - p63 in untreated ME-180 cells</LI>
 </UL>
-Retinoic acid-stimulated HL-60 cells were harvested and
+Retinoic acid-stimulated HL-60 cells and ME-180 cells (actinomycin-D treated
+or untreated) were harvested and
 whole cell extracts (control) were made. An antibody was used to
 immunoprecipitate bound chromatin fragments (treatment). DNA was
 purified from these samples and hybridized to Affymetrix ENCODE
 oligonucleotide tiling arrays, which have 25-mer probes tiled
 every 22 bp on average in the non-repetitive ENCODE regions.</P>
 <P>
-Only the median of the transformed P-value (-10 log[10] P) is displayed; 
-data for all biological replicates 
+Data for all biological replicates 
 can be downloaded from Affymetrix in 
 <A HREF="http://transcriptome.affymetrix.com/download/ENCODE/affy_june1/wig/ChIP/" 
 TARGET=_BLANK>wiggle</A>,
@@ -29,7 +33,7 @@ TARGET=_BLANK>wiggle</A>,
 TARGET=_BLANK>cel</A>, and
 <A HREF="http://transcriptome.affymetrix.com/download/ENCODE/affy_june1/soft/ChIP/" 
 TARGET=_BLANK>soft</A> formats.</P>
-
+<P>
 <H2>Display Conventions and Configuration</H2>
 <P>
 The subtracks within this composite annotation track
@@ -115,3 +119,10 @@ Williams, A. J., <I>et al</I>.
 transcription factor binding sites along human chromosomes 21 and 22 points 
 to widespread regulation of noncoding RNAs</A>. 
 <I>Cell</I> <B>116</B>(4), 499-509 (2004).</P>
+<P>
+Yang A, Zhu Z, Kapranov P, McKeon F, Church GM, Gingeras TR, Struhl K.
+<A HREF="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=pubmed&cmd=Retrieve&dopt=AbstractPlus&list_uids=17188034" TARGET=_blank>
+Relationships between p63 binding, DNA sequence, transcription
+activity, and biological function in human cells</A>. 
+<I>Mol. Cell.</I> <B>24</B>(4), 593-602 (2006). </P>
+

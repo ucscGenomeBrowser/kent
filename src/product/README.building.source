@@ -99,7 +99,10 @@ Known problems:
 aliType.c:5: warning: `rcsid' defined but not used
 make: *** [aliType.o] Error 1
 
-    Something is unusual about the shell environment on the Mac.
+    The OSTYPE environment variable needs to be set to "darwin".  If your
+    shell is bash, it is a shell local variable instead of an environment
+    variable as with tcsh.
+
     To avoid this error, place an export statement in your $HOME/.bashrc
     environment:
     export OSTYPE
@@ -108,4 +111,4 @@ make: *** [aliType.o] Error 1
     include the -Wno-unused-variable option in the build.
 
 ====================================================================
-This file last updated: $Date: 2007/08/23 16:53:47 $
+This file last updated: $Date: 2007/09/19 23:01:47 $

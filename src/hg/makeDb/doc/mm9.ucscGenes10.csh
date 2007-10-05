@@ -51,7 +51,10 @@ set multiz = multiz4way
 set taxon = 10090
 
 # Previous gene set
-set oldGeneBed = /dev/null
+set oldGeneBed = /cluster/data/mm9/bed/ucsc.10_try0/ucscGenes.bed
+
+# set oldGeneBed = /dev/null
+#	next time would be the previous ucscGenes.bed
 
 # Machines
 set dbHost = hgwdev
@@ -127,28 +130,40 @@ endif
 foreach c (`awk '{print $1;}' /cluster/data/$db/chrom.sizes`)
     if (-s refSeq/$c.psl) then
 	txPslToBed refSeq/$c.psl -noFixStrand -cds=cds.tab /cluster/data/$db/$db.2bit refSeq/$c.bed -unusual=refSeq/$c.unusual
+    else
+	echo "creating empty refSeq/$c.bed"
+	touch refSeq/$c.bed
+    endif
+    if (-s mrna/$c.psl) then
 	txPslToBed mrna/$c.psl -cds=cds.tab /cluster/data/$db/$db.2bit \
 		stdout -unusual=mrna/$c.unusual \
 	    | fgrep -v -w -f /cluster/data/genbank/data/exceptions/invitrogenFullLength.acc \
 	    | bedWeedOverlapping antibody.bed maxOverlap=0.5 stdin mrna/$c.bed
+    else
+	echo "creating empty mrna/$c.bed"
+	touch mrna/$c.bed
+    endif
+    if (-s est/$c.psl) then
 	txPslToBed est/$c.psl /cluster/data/$db/$db.2bit stdout \
 	    | bedWeedOverlapping antibody.bed maxOverlap=0.3 stdin est/$c.bed
+    else
+	echo "creating empty est/$c.bed"
+	touch est/$c.bed
     endif
 end
+
+#  seven minutes to this point
 
 # Create mrna splicing graphs.  Takes 10 seconds.
 mkdir -p bedToGraph
 foreach c (`awk '{print $1;}' /cluster/data/$db/chrom.sizes`)
-    if (-s refSeq/$c.bed) then
-	txBedToGraph -prefix=$c. refSeq/$c.bed refSeq mrna/$c.bed mrna bedToGraph/$c.txg
-    endif
+    txBedToGraph -prefix=$c. refSeq/$c.bed refSeq mrna/$c.bed mrna \
+	bedToGraph/$c.txg
 end
 
 # Create est splicing graphs.  Takes 6 minutes.
 foreach c (`awk '{print $1;}' /cluster/data/$db/chrom.sizes`)
-    if (-s est/$c.bed) then
-	txBedToGraph -prefix=e$c. est/$c.bed est est/$c.txg
-    endif
+    txBedToGraph -prefix=e$c. est/$c.bed est est/$c.txg
 end
 
 
@@ -164,9 +179,7 @@ end
 # Make evidence file for EST graph edges supported by at least 2 
 # ests.  Takes about 30 seconds.
 foreach c (`awk '{print $1;}' /cluster/data/$db/chrom.sizes`)
-    if (-s est/$c.txg) then
-	txgGoodEdges est/$c.txg  trim.weights 2 est est/$c.edges
-    endif
+    txgGoodEdges est/$c.txg  trim.weights 2 est est/$c.edges
 end
 
 # Setup other species dir
@@ -186,10 +199,8 @@ end
 # Create other species splicing graphs.  Takes a minute and a half.
 rm -f other.txg
 foreach c (`awk '{print $1;}' /cluster/data/$xdb/chrom.sizes`)
-    if (-s refSeq/$c.bed) then
-	echo $c
-	txBedToGraph refSeq/$c.bed refSeq mrna/$c.bed mrna est/$c.bed est stdout >> other.txg
-    endif
+    echo $c
+    txBedToGraph refSeq/$c.bed refSeq mrna/$c.bed mrna est/$c.bed est stdout >> other.txg
 end
 
 # Clean up all but final other.txg
@@ -212,25 +223,51 @@ end
 cd $dir
 mkdir -p txOrtho/edges
 cd txOrtho
+echo '#LOOP' > template
+echo './runTxOrtho $(path1) '"$xdb $db" >> template
+echo '#ENDLOOP' >> template
+    
+cat << '_EOF_' > runTxOrtho
+#!/bin/csh -ef
+set inAgx = ../bedToGraph/$1.txg
+set inChain = ../$2/chains/$1.chain
+set inNet = ../$2/nets/$1.net
+set otherTxg = ../$2/other.txg
+set tmpDir = /scratch/tmp/$3
+set workDir = $tmpDir/${1}_${2}
+mkdir -p $tmpDir
+mkdir $workDir
+txOrtho $inAgx $inChain $inNet $otherTxg $workDir/$1.edges
+mv $workDir/$1.edges edges/$1.edges
+rmdir $workDir
+rmdir --ignore-fail-on-non-empty $tmpDir
+'_EOF_'
+    #	<< happy emacs
+    chmod +x runTxOrtho
+    touch toDoList
 cd $dir/bedToGraph
-echo "#\!/bin/tcsh -ef" > ../txOrtho/spec
 foreach f (*.txg)
     set c=$f:r
-    echo txOrtho ../bedToGraph/$f ../$xdb/chains/$c.chain ../$xdb/nets/$c.net ../$xdb/other.txg edges/$c.edges >> ../txOrtho/spec
+    if ( -s $f ) then
+	echo $c >> ../txOrtho/toDoList
+    else
+	echo "warning creating empty $c.edges result"
+	touch ../txOrtho/edges/$c.edges
+    endif
 end
 cd ..
 
 # Do txOrtho parasol run on iServer (high RAM) cluster
-ssh $ramFarm "cd $dir/txOrtho; para make spec"
-#Completed: 49 of 49 jobs
-#CPU time in finished jobs:       1916s      31.93m     0.53h    0.02d  0.000 y
-#IO & Wait Time:                   540s       9.00m     0.15h    0.01d  0.000 y
-#Average job time:                  50s       0.84m     0.01h    0.00d
-#Longest running job:                0s       0.00m     0.00h    0.00d
-#Longest finished job:             235s       3.92m     0.07h    0.00d
-#Submission to last job:           235s       3.92m     0.07h    0.00d
-
-#### exit 0 - this was a firstSection 
+ssh $ramFarm "cd $dir/txOrtho; gensub2 toDoList single template jobList"
+ssh $ramFarm "cd $dir/txOrtho; para make jobList"
+ssh $ramFarm "cd $dir/txOrtho; para time > run.time"
+cat txOrtho/run.time
+# Completed: 34 of 34 jobs
+# CPU time in finished jobs:       1838s      30.63m     0.51h    0.02d  0.000 y
+# IO & Wait Time:                   828s      13.80m     0.23h    0.01d  0.000 y
+# Average job time:                  78s       1.31m     0.02h    0.00d
+# Longest finished job:             183s       3.05m     0.05h    0.00d
+# Submission to last job:           193s       3.22m     0.05h    0.00d
 
 # Filter out some duplicate edges. These are legitimate from txOrtho's point
 # of view, since they represent two different mouse edges both supporting
@@ -239,9 +276,7 @@ ssh $ramFarm "cd $dir/txOrtho; para make spec"
 cd txOrtho
 mkdir -p uniqEdges
 foreach c (`awk '{print $1;}' /cluster/data/$db/chrom.sizes`)
-    if (-s edges/$c.edges) then
-	cut -f 1-9 edges/$c.edges | sort | uniq > uniqEdges/$c.edges
-    endif
+    cut -f 1-9 edges/$c.edges | sort | uniq > uniqEdges/$c.edges
 end
 cd ..
 
@@ -258,12 +293,10 @@ bedToTxEdges exoniphy.bed exoniphy.edges
 # Takes 36 seconds.
 mkdir -p graphWithEvidence
 foreach c (`awk '{print $1;}' /cluster/data/$db/chrom.sizes`)
-    if (-s bedToGraph/$c.txg && -s txOrtho/uniqEdges/$c.edges && -s est/$c.edges) then
-	echo adding evidence for $c
+    echo adding evidence for $c
     txgAddEvidence -chrom=$c bedToGraph/$c.txg exoniphy.edges exoniphy stdout \
 	   | txgAddEvidence stdin txOrtho/uniqEdges/$c.edges txOrtho stdout \
 	   | txgAddEvidence stdin est/$c.edges est graphWithEvidence/$c.txg
-    endif
 end
 
 # Do  txWalk  - takes 32 seconds (mostly loading the mrnaSize.tab again and
@@ -275,11 +308,9 @@ else
     set sef = 0.75
 endif
 foreach c (`awk '{print $1;}' /cluster/data/$db/chrom.sizes`)
-    if (-s graphWithEvidence/$c.txg) then
-	txWalk graphWithEvidence/$c.txg trim.weights 3 txWalk/$c.bed \
-	    -evidence=txWalk/$c.ev -sizes=mrnaSize.tab -defrag=0.25 \
-		-singleExonFactor=$sef
-    endif
+    txWalk graphWithEvidence/$c.txg trim.weights 3 txWalk/$c.bed \
+	-evidence=txWalk/$c.ev -sizes=mrnaSize.tab -defrag=0.25 \
+	    -singleExonFactor=$sef
 end
 
 # Make a file that lists the various categories of alt-splicing we see.
@@ -296,9 +327,7 @@ txgAnalyze txWalk.txg /cluster/data/$db/$db.2bit stdout | sort | uniq > altSplic
 #	takes about 2 minutes or more
 rm -f txWalk.fa
 foreach c (`awk '{print $1;}' /cluster/data/$db/chrom.sizes`)
-    if (-s txWalk/$c.bed) then
-	sequenceForBed -db=$db -bedIn=txWalk/$c.bed -fastaOut=stdout -upCase -keepName >> txWalk.fa
-    endif
+    sequenceForBed -db=$db -bedIn=txWalk/$c.bed -fastaOut=stdout -upCase -keepName >> txWalk.fa
 end
 rm -rf txFaSplit
 mkdir -p txFaSplit
@@ -311,50 +340,91 @@ hgsql -N $spDb -e \
   | awk '{print ">" $1;print $2}' >uniProt.fa
 hgsql -N $spDb -e "select i.acc,i.isCurated from info i,accToTaxon x where x.taxon=$taxon and i.acc=x.acc" > uniCurated.tab
 
-# Set up blat jobs for mrna vs. txWalk transcripts
+echo "continuing after first kki job"
+echo "preparing $cpuFarm job"
+
 mkdir -p blat/rna/raw
+echo '#LOOP' > blat/rna/template
+echo './runTxBlats $(path1) '"$db"' $(root1) {check out line+ raw/ref_$(root1).psl}' >> blat/rna/template
+echo '#ENDLOOP' >> blat/rna/template
+ 
+cat << '_EOF_' > blat/rna/runTxBlats
+#!/bin/csh -ef
+set ooc = /cluster/data/$2/11.ooc
+set target = ../../txFaSplit/$1
+set out1 = raw/mrna_$3.psl
+set out2 = raw/ref_$3.psl
+set tmpDir = /scratch/tmp/$2
+set workDir = $tmpDir/$3
+mkdir -p $tmpDir
+mkdir $workDir
+blat -ooc=$ooc -minIdentity=95 $target ../../mrna.fa $workDir/mrna_$3.psl
+blat -ooc=$ooc -minIdentity=97 $target ../../refSeq.fa $workDir/ref_$3.psl
+mv $workDir/mrna_$3.psl raw/mrna_$3.psl
+mv $workDir/ref_$3.psl raw/ref_$3.psl
+rmdir $workDir
+rmdir --ignore-fail-on-non-empty $tmpDir
+'_EOF_'
+    #	<< happy emacs
+chmod +x blat/rna/runTxBlats
 cd txFaSplit
-echo #\!/bin/tcsh -ef > ../blat/rna/spec
-foreach f (*.fa)
-    set c=$f:r
-    echo blat -ooc=/cluster/data/$db/11.ooc -minIdentity=95 ../../txFaSplit/$f ../../mrna.fa raw/mrna_$c.psl >> ../blat/rna/spec
-    echo blat -ooc=/cluster/data/$db/11.ooc -minIdentity=97 ../../txFaSplit/$f ../../refSeq.fa raw/ref_$c.psl >> ../blat/rna/spec
-end
+ls -1 *.fa > ../blat/rna/toDoList
 cd ..
 
-# Run rna/transcript blat on cluster.  This is a little i/o heavy, so use
-# maxNode=50, or optimize i/o somehow.
-ssh $cpuFarm "cd $dir/blat/rna; para make -maxNode=50 spec"
-# Completed: 388 of 388 jobs
-# CPU time in finished jobs:      12248s     204.13m     3.40h    0.14d  0.000 y
-# IO & Wait Time:                 19749s     329.15m     5.49h    0.23d  0.001 y
-# Average job time:                  82s       1.37m     0.02h    0.00d
-# Longest finished job:             198s       3.30m     0.06h    0.00d
-# Submission to last job:           675s      11.25m     0.19h    0.01d
+ssh $cpuFarm "cd $dir/blat/rna; gensub2 toDoList single template jobList"
 
-##  exit $status this was the second step
+ssh $cpuFarm "cd $dir/blat/rna; para make jobList"
+ssh $cpuFarm "cd $dir/blat/rna; para time > run.time"
+cat blat/rna/run.time
+
+# Completed: 194 of 194 jobs
+# CPU time in finished jobs:      12342s     205.70m     3.43h    0.14d  0.000 y
+# IO & Wait Time:                 14850s     247.50m     4.12h    0.17d  0.000 y
+# Average job time:                 140s       2.34m     0.04h    0.00d
+# Longest finished job:             227s       3.78m     0.06h    0.00d
+# Submission to last job:           685s      11.42m     0.19h    0.01d
 
 # Set up blat jobs for proteins vs. translated txWalk transcripts
 mkdir -p blat/protein/raw
+echo '#LOOP' > blat/protein/template
+echo './runTxBlats $(path1) '"$db"' $(root1) {check out line+ raw/ref_$(root1).psl}' >> blat/protein/template
+echo '#ENDLOOP' >> blat/protein/template
+
+cat << '_EOF_' > blat/protein/runTxBlats
+#!/bin/csh -ef
+set ooc = /cluster/data/$2/11.ooc
+set target = ../../txFaSplit/$1
+set out1 = uni_$3.psl
+set out2 = ref_$3.psl
+set tmpDir = /scratch/tmp/$2
+set workDir = $tmpDir/$3
+mkdir -p $tmpDir
+mkdir $workDir
+blat -t=dnax -q=prot -minIdentity=90 $target ../../uniProt.fa $workDir/$out1
+blat -t=dnax -q=prot -minIdentity=90 $target ../../refPep.fa $workDir/$out2
+mv $workDir/$out1 raw/$out1
+mv $workDir/$out2 raw/$out2
+rmdir $workDir
+rmdir --ignore-fail-on-non-empty $tmpDir
+'_EOF_'
+    #	<< happy emacs
+chmod +x blat/protein/runTxBlats
 cd txFaSplit
-echo #\!/bin/tcsh -ef > ../blat/protein/spec
-foreach f (*.fa)
-    set c=$f:r
-    echo blat -t=dnax -q=prot -minIdentity=90 ../../txFaSplit/$f ../../uniProt.fa raw/uni_$c.psl >> ../blat/protein/spec
-    echo blat -t=dnax -q=prot -minIdentity=90 ../../txFaSplit/$f ../../refPep.fa raw/ref_$c.psl >> ../blat/protein/spec
-end
+ls -1 *.fa > ../blat/protein/toDoList
 cd ..
 
 # Run protein/transcript blat job on cluster
-ssh $cpuFarm "cd $dir/blat/protein; para make spec;"
-# Completed: 388 of 388 jobs
-# CPU time in finished jobs:      10522s     175.36m     2.92h    0.12d  0.000 y
-# IO & Wait Time:                 19111s     318.52m     5.31h    0.22d  0.001 y
-# Average job time:                  76s       1.27m     0.02h    0.00d
-# Longest finished job:             239s       3.98m     0.07h    0.00d
-# Submission to last job:           239s       3.98m     0.07h    0.00d
-
-##  exit $status this was the third step
+ssh $cpuFarm "cd $dir/blat/protein; gensub2 toDoList single template jobList"
+ssh $cpuFarm "cd $dir/blat/protein; para make jobList"
+ssh $cpuFarm "cd $dir/blat/protein; para time > run.time"
+cat blat/protein/run.time
+# Completed: 194 of 194 jobs
+# CPU time in finished jobs:      10448s     174.13m     2.90h    0.12d  0.000 y
+# IO & Wait Time:                  2977s      49.62m     0.83h    0.03d  0.000 y
+# Average job time:                  69s       1.15m     0.02h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:             100s       1.67m     0.03h    0.00d
+# Submission to last job:           103s       1.72m     0.03h    0.00d
 
 # Sort and select best alignments. Remove raw files for space. Takes 22
 # seconds. Use pslReps not pslCdnaFilter because need -noIntrons flag,
@@ -546,6 +616,7 @@ hgLoadPsl $tempDb ucscProtMap.psl -table=kgProtMap2
 # tracks display will work including the position search.  The genes details
 # page, gene sorter, and proteome browser still need more tables.
 mkdir index
+
 mkdir /gbdb/$tempDb
 cd index
 hgKgGetText $tempDb knownGene.text -summaryTable=$db.refSeqSummary
@@ -817,7 +888,6 @@ hgLoadSqlTab $tempDb kg1ToKg2 ~/kent/src/hg/lib/kg2ToKg3.sql kg2ToKg3.bed
     rm j.tmp
 
     hgLoadSqlTab $tempDb kgSpAlias ~/kent/src/hg/lib/kgSpAlias.sql ./kgSpAlias.tab
-    exit
 
 # RE-BUILD HG18 PROTEOME BROWSER TABLES (DONE, Fan, 4/2/07). 
 

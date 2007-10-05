@@ -2,7 +2,6 @@
 
 # supertrack for Gencode
         track encodeGencodeSuper
-        release alpha
         superTrack on
         shortLabel Gencode Genes
         longLabel Gencode Gene Annotation
@@ -12,7 +11,6 @@
 
 # supertrack for EGASP
         track encodeEgaspSuper
-        release alpha
         superTrack on
         group encodeGenes
         shortLabel EGASP 

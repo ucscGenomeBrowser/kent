@@ -5978,6 +5978,10 @@ EOF
     rm genePred.tab
     gzip *
 
+# QA NOTE: [ASZ, 2007-10-01] mytouch to ECGenePep table 200401301000.00
+# contents were fine.  passed -keys rule.
+
+
 # MULTIZ HUMAN/MOUSE/RAT/CHIMP (kpollard, 12/16/03)
 #  chimp added to human/mouse/rat (HUMOR) alignment described above
 #  for now, human referenced and no new BLASTZ runs

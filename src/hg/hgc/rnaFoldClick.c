@@ -15,7 +15,7 @@
 #include "rnaSecStr.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: rnaFoldClick.c,v 1.5 2005/03/28 23:54:08 jsp Exp $";
+static char const rcsid[] = "$Id: rnaFoldClick.c,v 1.6 2007/10/01 15:04:45 jsp Exp $";
 
 /* Taken from hgc.c (should probably be in hgc.h)*/
 #define RED 0xFF0000
@@ -25,6 +25,8 @@ static char const rcsid[] = "$Id: rnaFoldClick.c,v 1.5 2005/03/28 23:54:08 jsp E
 #define CYAN 0x00FFFF
 #define GRAY 0xcccccc
 #define LTGRAY 0x999999
+#define ORANGE 0xDD6600
+#define MAGENTA 0xFF00FF
 
 #define LTPURPLE 0x9966CC
 #define SCORE_SHADES_COUNT 10
@@ -136,14 +138,16 @@ void defineMafSubstColors(int **p2mafColors)
  * markCompensatoryMutations function.*/
 {
 int *mafColors;
-AllocArray(*p2mafColors, 6);
+AllocArray(*p2mafColors, 8);
 mafColors = *p2mafColors;
 mafColors[0]    = LTGRAY;   /* not pairing */
 mafColors[1]    = LTPURPLE; /* not pairing, substitution */
 mafColors[2]    = BLACK;    /* compatible with pairing */
 mafColors[3]    = BLUE;     /* compatible with pairing, single substitution  */
 mafColors[4]    = GREEN;    /* compensatory change */
-mafColors[5]    = RED;      /* not compatible with fold */
+mafColors[5]    = RED;      /* not compatible with fold, single subs */
+mafColors[6]    = ORANGE;   /* not compatible with fold, double subs */
+mafColors[7]    = MAGENTA;  /* not compatible with fold, involves indel */
 }
 
 void htmlPrintMafAndFold(FILE *f, struct mafAli *maf, char *fold, double *scores, int lineSize)
@@ -260,12 +264,14 @@ int colorFormat[] = {0,1,2,3,4,5,6,7,8,9};
 int colors[]      = {0x999999,0x888888,0x777777,0x666666,0x555555,0x444444,0x333333,0x222222,0x111111,0x000000};
 fprintf(f, "<h3> Color legend </h3>");
 fprintf(f, "<TABLE BORDER=0>");
-fprintf(f, "<TR> <TD> <FONT COLOR=\"%06X\">GRAY:       </TD> <TD> Not part of annotated pair, no substitution. <BR>        </TD> </TR>", LTGRAY);
-fprintf(f, "<TR> <TD> <FONT COLOR=\"%06X\">LT. PURPLE: </TD> <TD> Not part of annotated pair, substitution. <BR>           </TD> </TR>", LTPURPLE);
-fprintf(f, "<TR> <TD> <FONT COLOR=\"%06X\">BLACK:      </TD> <TD> Compatible with annotated pair, no substitutions.<BR>    </TD> </TR>", BLACK);
-fprintf(f, "<TR> <TD> <FONT COLOR=\"%06X\">BLUE:       </TD> <TD> Compatible with annotated pair, single substitution.<BR> </TD> </TR>", BLUE);
-fprintf(f, "<TR> <TD> <FONT COLOR=\"%06X\">GREEN:      </TD> <TD> Compatible with annotated pair, double substitution.<BR> </TD> </TR>", GREEN);
-fprintf(f, "<TR> <TD> <FONT COLOR=\"%06X\">RED:        </TD> <TD> Not compatible with annotated pair. <BR>                 </TD> </TR>", RED);
+fprintf(f, "<TR> <TD> <FONT COLOR=\"%06X\">GRAY:       </TD> <TD> Not part of annotated pair, no substitution. <BR>             </TD> </TR>", LTGRAY);
+fprintf(f, "<TR> <TD> <FONT COLOR=\"%06X\">LT. PURPLE: </TD> <TD> Not part of annotated pair, substitution. <BR>                </TD> </TR>", LTPURPLE);
+fprintf(f, "<TR> <TD> <FONT COLOR=\"%06X\">BLACK:      </TD> <TD> Compatible with annotated pair, no substitutions.<BR>         </TD> </TR>", BLACK);
+fprintf(f, "<TR> <TD> <FONT COLOR=\"%06X\">BLUE:       </TD> <TD> Compatible with annotated pair, single substitution.<BR>      </TD> </TR>", BLUE);
+fprintf(f, "<TR> <TD> <FONT COLOR=\"%06X\">GREEN:      </TD> <TD> Compatible with annotated pair, double substitution.<BR>      </TD> </TR>", GREEN);
+fprintf(f, "<TR> <TD> <FONT COLOR=\"%06X\">RED:        </TD> <TD> Not compatible with annotated pair, single substitution. <BR> </TD> </TR>", RED);
+fprintf(f, "<TR> <TD> <FONT COLOR=\"%06X\">ORANGE:     </TD> <TD> Not compatible with annotated pair, double substitution. <BR> </TD> </TR>", ORANGE);
+fprintf(f, "<TR> <TD> <FONT COLOR=\"%06X\">MAGENTA:    </TD> <TD> Not compatible with annotated pair, involves gap. <BR>        </TD> </TR>", MAGENTA);
 fprintf(f, "</TABLE>");
 /* Score legend */
 fprintf(f, "<BR>SCORE:   min ");
@@ -281,6 +287,37 @@ maf = hgMafFrag(database, mafTrack, item->chrom, item->chromStart, item->chromEn
 return maf;
 }
 
+void mafSortBySpeciesOrder(struct mafAli *maf, char *speciesOrder)
+/* Sort maf components by species. Excised from mafClick.c. */
+{
+int speciesCt;
+char *species[256];
+struct mafComp **newOrder, *mcThis;
+int i;
+int mcCount;
+   
+mcCount = 0;
+speciesCt = chopLine(cloneString(speciesOrder), species);
+newOrder = needMem((speciesCt + 1) * sizeof (struct mafComp *));
+newOrder[mcCount++] = maf->components;
+   
+for (i = 0; i < speciesCt; i++)
+  {
+    if ((mcThis = mafMayFindCompSpecies(maf, species[i], '.')) == NULL)
+	continue;
+    newOrder[mcCount++] = mcThis;
+  }
+   
+maf->components = NULL;
+for (i = 0; i < mcCount; i++)
+  {
+    newOrder[i]->next = 0;
+    slAddHead(&maf->components, newOrder[i]);
+  }
+   
+slReverse(&maf->components);
+}
+
 void doRnaSecStr(struct trackDb *tdb, char *itemName)
 /* Handle click on rnaSecStr type elements. */
 {
@@ -294,6 +331,8 @@ int  rowOffset = 0;
 char *mafTrack = trackDbRequiredSetting(tdb, "mafTrack");
 int start = cartInt(cart, "o");
 struct mafAli *maf;
+char option[128];
+char *speciesOrder = NULL;
 
 /* print header */
 genericHeader(tdb, itemName);
@@ -307,6 +346,14 @@ sr   = hExtendedChromQuery(conn, table, seqName, extraWhere,  FALSE, NULL, &rowO
 row  = sqlNextRow(sr);
 item = rnaSecStrLoad(row + rowOffset);
 maf  = mafFromRnaSecStrItem(mafTrack, item);
+
+/* order maf by species */
+safef(option, sizeof(option), "%s.speciesOrder", tdb->tableName);
+speciesOrder = cartUsualString(cart, option, NULL);
+if (speciesOrder == NULL)
+  speciesOrder = trackDbSetting(tdb, "speciesOrder");
+if (speciesOrder)
+  mafSortBySpeciesOrder(maf, speciesOrder);
 
 mafAndFoldHeader(stdout);
 htmlPrintMafAndFold(stdout, maf, item->secStr, item->conf, 100);

@@ -2,7 +2,6 @@
 
 # Affy supertrack
         track encodeAffyChipSuper
-        release alpha
         superTrack on
         shortLabel Affy ChIP
         longLabel Affymetrix ChIP-chip
@@ -78,7 +77,6 @@
 # Sanger chip supertrack
 
         track encodeSangerChipSuper
-        release alpha
         superTrack on
         shortLabel Sanger ChIP-chip
         longLabel Sanger ChIP-chip (histones H3,H4 ab in GM06990, K562, HeLa, HFL-1, MOLT4, and PTR8 cells) 
@@ -700,7 +698,6 @@ origAssembly hg17
 # Stanford supertrack
 
         track encodeStanfordChipSuper
-        release alpha
         superTrack on
         shortLabel Stanf ChIP
         longLabel Stanford ChIP-chip
@@ -711,7 +708,6 @@ origAssembly hg17
 # Davis supertrack
 
         track encodeUcDavisChipSuper
-        release alpha
         superTrack on
         shortLabel UC Davis ChIP
         longLabel UC Davis ChIP-chip NimbleGen (E2F1, c-Myc, TAF, POLII)
@@ -821,7 +817,6 @@ dataVersion ENCODE June & Oct 2005 Freezes
 # UCSD supertrack
 
         track encodeUcsdChipSuper
-        release alpha
         superTrack on
         shortLabel LI/UCSD ChIP
         longLabel Ludwig Institute/UC San Diego ChIP-chip
@@ -1013,7 +1008,6 @@ dataVersion ENCODE June & Oct 2005 Freezes
 # UT-Austin supertrack
 
         track encodeUtexChipSuper
-        release alpha
         superTrack on
         shortLabel UT-Austin ChIP
         longLabel University of Texas, Austin ChIP-chip and STAGE
@@ -1065,7 +1059,6 @@ dataVersion ENCODE Oct 2005 Freeze, Oct 2006
 
 # Uppsala supertrack
         track encodeUppsalaChipSuper
-        release alpha
         superTrack on
         shortLabel Uppsala ChIP
         longLabel Uppsala University, Sweden ChIP-chip
@@ -1192,7 +1185,6 @@ origAssembly hg17
 
 # Yale supertrack
         track encodeYaleChipSuper
-        release alpha
         superTrack on
         shortLabel Yale ChIP
         longLabel Yale ChIP-chip

@@ -10,7 +10,7 @@
 #include "dnautil.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: getRnaPred.c,v 1.18 2006/07/31 21:38:07 markd Exp $";
+static char const rcsid[] = "$Id: getRnaPred.c,v 1.20 2007/09/25 16:40:05 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -261,8 +261,16 @@ if (gp->exonFrames != NULL)
 
 /* just overwrite the buffer with the peptide, which will stop at end of DNA
  * if no stop codon. Buffer size must allow for stop codon. */
-dnaTranslateSome(cdsBuf->string+offset, cdsBuf->string+offset, ((cdsBuf->stringSize+2)/3)+1);
-faWriteNext(faFh, name, cdsBuf->string+offset, strlen(cdsBuf->string+offset));
+int ir, ip;
+boolean isChrM = sameString(gp->chrom, "chrM");
+for (ir = offset, ip = 0; ir < cdsBuf->stringSize; ir += 3, ip++)
+    {
+    cdsBuf->string[ip] = (isChrM ? lookupMitoCodon(cdsBuf->string+ir)
+                          : lookupCodon(cdsBuf->string+ir));
+    }
+cdsBuf->string[ip] = '\0';
+  
+faWriteNext(faFh, name, cdsBuf->string, strlen(cdsBuf->string));
 }
 
 void processGenePred(struct genePred *gp, struct dyString *dnaBuf, 

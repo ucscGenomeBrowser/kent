@@ -8,7 +8,7 @@
 #include "maf.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: mafsInRegion.c,v 1.4 2006/09/01 18:33:13 kate Exp $";
+static char const rcsid[] = "$Id: mafsInRegion.c,v 1.5 2007/09/20 03:24:14 lowec Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -34,7 +34,7 @@ char *scoring = NULL;
 struct hash *loadRegions(char *file)
 /* load regions into a hash of lists by chrom */
 {
-struct bed *bed = NULL, *bedList = NULL, *nextBed = NULL;
+struct bed *bed = NULL, *bedList = NULL, *nextBed = NULL, *temp = NULL;
 struct hash *regionHash = newHash(6);
 struct bed *regions;
 
@@ -42,18 +42,19 @@ regions = bedLoadNAll(file, outDir ? 4 : 3);
 /* order by chrom, start */
 slSort(&regions, bedCmp);
 verbose(2, "found %d regions\n", slCount(regions));
+bedList = regions;
 for (bed = regions; bed != NULL; bed = nextBed)
     {
     verbose(3, "region %s:%d-%d\n", bed->chrom, bed->chromStart+1, bed->chromEnd);
     nextBed = bed->next;
-    if ((bedList = hashFindVal(regionHash, bed->chrom)) == NULL)
-        {
-        verbose(3, "adding %s to hash\n", bed->chrom);
-        hashAdd(regionHash, bed->chrom, cloneBed(bed));
-        }
-    else
-        slAddTail(&bedList, cloneBed(bed));
-    freeMem(bed);
+    if ((bed->next == NULL) || (differentString(bed->chrom,bed->next->chrom)))
+	{
+	temp = bed->next;
+	bed->next = NULL;
+	hashAdd(regionHash, bed->chrom, bedList);
+	verbose(2, "just added %d regions on %s\n", slCount(bedList), bed->chrom);
+	bedList = temp;
+	}
     }
 return regionHash;
 }

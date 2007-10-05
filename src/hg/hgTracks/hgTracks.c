@@ -118,7 +118,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1408 2007/09/17 03:44:08 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1412 2007/09/27 03:42:49 angie Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -4391,70 +4391,68 @@ void rgdQtlDrawAt(struct track *tg, void *item,
 /* Draw a single rgdQtl item at position. */
 {
 struct bed *bed = item;
-struct sqlConnection *conn = hAllocConn();
-char cond_str[256];
-char *chp;
-
-int heightPer = tg->heightPer;
-int x1 = round((double)((int)bed->chromStart-winStart)*scale) + xOff;
-int x2 = round((double)((int)bed->chromEnd-winStart)*scale) + xOff;
-int x3, x4;
-int w, w2;
 struct trackDb *tdb = tg->tdb;
-int scoreMin = atoi(trackDbSettingOrDefault(tdb, "scoreMin", "0"));
-int scoreMax = atoi(trackDbSettingOrDefault(tdb, "scoreMax", "1000"));
-char *directUrl = trackDbSetting(tdb, "directUrl");
-boolean withHgsid = (trackDbSetting(tdb, "hgsid") != NULL);
 
 if (tg->itemColor != NULL)
     color = tg->itemColor(tg, bed, vg);
-else
+else if (tg->colorShades)
     {
-    if (tg->colorShades)
-	color = tg->colorShades[grayInRange(bed->score, scoreMin, scoreMax)];
+    int scoreMin = atoi(trackDbSettingOrDefault(tdb, "scoreMin", "0"));
+    int scoreMax = atoi(trackDbSettingOrDefault(tdb, "scoreMax", "1000"));
+    color = tg->colorShades[grayInRange(bed->score, scoreMin, scoreMax)];
     }
-w = x2-x1;
-if (w < 1)
-    w = 1;
 if (color)
     {
+    int heightPer = tg->heightPer;
+    int x1 = round((double)((int)bed->chromStart-winStart)*scale) + xOff;
+    int x2 = round((double)((int)bed->chromEnd-winStart)*scale) + xOff;
+    int w = x2-x1;
+    if (w < 1)
+	w = 1;
     vgBox(vg, x1, y, w, heightPer, color);
     if (tg->drawName && vis != tvSquish)
 	{
-	char *s;
-	
 	/* get description from rgdQtlLink table */
-	sprintf(cond_str, "name='%s'", tg->itemName(tg, bed));
-        s  = sqlGetField(conn, database, "rgdQtlLink", "description", cond_str);
-
+	struct sqlConnection *conn = hAllocConn();
+	char cond_str[256];
+	char linkTable[256];
+	safef(linkTable, sizeof(linkTable), "%sLink", tg->mapName);
+	safef(cond_str, sizeof(cond_str), "name='%s'", tg->itemName(tg, bed));
+        char *s = sqlGetField(conn, database, linkTable, "description",
+			      cond_str);
+	hFreeConn(&conn);
+	if (s == NULL)
+	    s = bed->name;
 	/* chop off text starting from " (human)" */
-	chp = strstr(s, " (human)");
+	char *chp = strstr(s, " (human)");
 	if (chp != NULL) *chp = '\0';
-	
-	x3 = x1;
-	x4 = x2;
-	
 	/* adjust range of text display to fit within the display window */
+	int x3=x1, x4=x2;
 	if (x3 < xOff) x3 = xOff;
 	if (x4 > (insideWidth + xOff)) x4 = insideWidth + xOff;
-	w2 = x4 - x3;
-	if (w2 > mgFontStringWidth(font, s))
+	int w2 = x4 - x3;
+	/* calculate how many characters we can squeeze into box */
+	int boxWidth = w2 / mgFontCharWidth(font, 'm');
+	int textWidth = strlen(s);
+	if (boxWidth > 4)
 	    {
 	    Color textColor = vgContrastingColor(vg, color);
-	    vgTextCentered(vg, x3, y, w2, heightPer, textColor, font, s);
-	    }
-	else if (w2 > mgFontStringWidth(font, s)/2)
-	    {
-	    /* sqeez in the text for shorter QTL range */
-	    Color textColor = vgContrastingColor(vg, color);
-	    vgText(vg, x3+1, y+heightPer/2-2, textColor, font, s);
+	    char *truncS = cloneString(s);
+	    if (boxWidth < textWidth)
+		strcpy(truncS+boxWidth-3, "...");
+	    vgTextCentered(vg, x3, y, w2, heightPer, textColor, font, truncS);
+	    freeMem(truncS);
 	    }
 	/* enable mouse over */
-	mapBoxHgcOrHgGene(bed->chromStart, bed->chromEnd, x1, y, x2 - x1, heightPer,
-		tg->mapName, tg->mapItemName(tg, bed), s, directUrl, withHgsid);
+	char *directUrl = trackDbSetting(tdb, "directUrl");
+	boolean withHgsid = (trackDbSetting(tdb, "hgsid") != NULL);
+	mapBoxHgcOrHgGene(bed->chromStart, bed->chromEnd, x1, y, x2 - x1,
+			  heightPer, tg->mapName, tg->mapItemName(tg, bed), 
+			  s, directUrl, withHgsid);
 	}
     }
-hFreeConn(&conn);
+else
+    errAbort("No color for track %s in rgdQtlDrawAt.", tg->mapName);
 }
 
 void rgdQtlMethods(struct track *tg)
@@ -13401,7 +13399,7 @@ for (track = *pTrackList; track != NULL; track = track->next)
             if (track->tdb && track->tdb->grp)
                 track->defaultGroupName = cloneString(track->tdb->grp);
             else
-                track->defaultGroupName = "other";
+                track->defaultGroupName = cloneString("other");
             }
         if (track->tdb->parent)
             {
@@ -13702,6 +13700,7 @@ registerTrackHandler("hg17Kg", hg17KgMethods);
 registerTrackHandler("superfamily", superfamilyMethods);
 registerTrackHandler("gad", gadMethods);
 registerTrackHandler("rgdQtl", rgdQtlMethods);
+registerTrackHandler("rgdRatQtl", rgdQtlMethods);
 registerTrackHandler("refGene", refGeneMethods);
 registerTrackHandler("blastMm6", blastMethods);
 registerTrackHandler("blastDm1FB", blastMethods);
@@ -14637,7 +14636,9 @@ if (NULL != hgp && NULL != hgp->tableList && NULL != hgp->tableList->name)
     char *parent = hGetParent(trackName);
     if (parent)
         trackName = cloneString(parent);
-    cartSetString(cart, trackName, hTrackOpenVis(trackName));
+    char *vis = cartOptionalString(cart, trackName);
+    if (vis == NULL || differentString(vis, "full"))
+	cartSetString(cart, trackName, hTrackOpenVis(trackName));
     }
 
 /* After position is found set up hash of matches that should

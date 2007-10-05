@@ -22,7 +22,7 @@
 
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: bedList.c,v 1.1 2007/06/05 23:48:09 galt Exp $";
+static char const rcsid[] = "$Id: bedList.c,v 1.2 2007/09/24 23:24:43 galt Exp $";
 
 boolean htiIsPsl(struct hTableInfo *hti)
 /* Return TRUE if table looks to be in psl format. */
@@ -99,21 +99,24 @@ if (hti == NULL)
 int fieldCount = 3;
 dyStringPrintf(fields, "%s,%s", hti->startField, hti->endField);
 
-if (startsWith("bedGraph", curTrack->type))
+if (curTrack) /* some tables from all tables list have no curTrack */
     {
-    char fullTableName[256];
-    ++fieldCount;
-    if (hti->isSplit)
-	safef(fullTableName,sizeof(fullTableName),"%s_%s", chrom, hti->rootName);
-    else
-	safef(fullTableName,sizeof(fullTableName),"%s", hti->rootName);
-    char *bedGraphField = getBedGraphField(hti->rootName,curTrack->type);
-    dyStringPrintf(fields, ",%s", bedGraphField);
-    }
-else if (isMafTable(database, curTrack, curTable))
-    {
-    ++fieldCount;
-    dyStringPrintf(fields, ",%s", "score");
+    if (startsWith("bedGraph", curTrack->type))
+	{
+	char fullTableName[256];
+	++fieldCount;
+	if (hti->isSplit)
+	    safef(fullTableName,sizeof(fullTableName),"%s_%s", chrom, hti->rootName);
+	else
+	    safef(fullTableName,sizeof(fullTableName),"%s", hti->rootName);
+	char *bedGraphField = getBedGraphField(hti->rootName,curTrack->type);
+	dyStringPrintf(fields, ",%s", bedGraphField);
+	}
+    else if (isMafTable(database, curTrack, curTable))
+	{
+	++fieldCount;
+	dyStringPrintf(fields, ",%s", "score");
+	}
     }
 *retFieldCount = fieldCount;
 *retFields = dyStringCannibalize(&fields);

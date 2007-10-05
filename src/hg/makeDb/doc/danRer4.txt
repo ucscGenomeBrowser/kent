@@ -7219,6 +7219,8 @@ BASE=/cluster/data/danRer4/bed/blastz.galGal3.2006-05-30
 # VALUES FROM NORMALISATION TO GET THE ABSOLUTE VALUES AND
 # RELOADING INTO hgFixed (see hgFixed.txt for details).
 # (DONE, 2007-01-08, hartera)
+# RE-ORDERED DISPLAY IN TRACK - see ZON LAB WILD TYPE MICROARRAY DATA section
+# in danRer3.txt make doc. (DONE, hartera, 2007-04-09)
 # Array data is for whole embryos of five wild type zebrafish strains. 
 # Data is in hgFixed (see hgFixed.doc) - from Len Zon's lab at Children's 
 # Hospital Boston. Contact: adibiase@enders.tch.harvard.edu
@@ -7269,7 +7271,17 @@ BASE=/cluster/data/danRer4/bed/blastz.galGal3.2006-05-30
     # It also defines the labels for the track controls for showing 
     # All Arrays, Arrays Grouped By Replicate Means or
     # Arrays Grouped By Replicate Medians. This is in the description field.
-    
+    # RE-ORDERED DISPLAY IN TRACK - see danRer3.txt make doc 
+    # (hartera, 2007-04-09)
+    # 14 somites and 15 somites should come before 36 hpf
+    # 14-19 somites stage is 16-19h.
+    # from hgFixed.zebrafishZonWTAllExps
+    # for AB, 0-8 should go after 14, 
+    # for TL, 16-22 should go after 24
+    # for TU, 25-27 should go after 32
+    # re-order accordingly in the config file:
+    # ~/kent/src/hg/makeDb/hgCgiData/Zebrafish/microarrayGroups.ra
+
 ###########################################################################
 # HUMAN ORTHOLOGS ADDED TO AFFY ZEBRAFISH TRACK DETAILS
 # (DONE, 2006-06-08, hartera)
@@ -10223,4 +10235,30 @@ KEY `id` ( `id` )
 KEY `bin` ( `bin` ) ,
 KEY `chainId` ( `chainId` )
 ) TYPE = MYISAM ;
+
+###########################################################################
+# CREATE LIFTOVER FROM danRer4 TO danRer5 
+# (DONE, 2007-09-21 - 2007-09-22, hartera)
+    ssh kkstore04
+    mkdir /cluster/data/danRer4/bed/blat.danRer5
+    cd /cluster/data/danRer4/bed/blat.danRer5
+    time nice doSameSpeciesLiftOver.pl danRer4 danRer5 \
+        -bigClusterHub pk \
+        -ooc /san/sanvol1/scratch/danRer4/danRer4_11.ooc \
+	-buildDir=/cluster/data/danRer4/bed/blat.danRer5 >& do.log &
+    # 0.337u 0.208s 4:58:26.59 0.0%   0+0k 0+0io 28pf+0w
+    # Remove symbolic link to liftOver chains and copy over the file
+    rm ../liftOver/danRer4ToDanRer5.over.chain.gz
+    cp -p danRer4ToDanRer5.over.chain.gz ../liftOver
+    
+    # a link in /usr/local/apache/htdocs/goldenPath/danRer5/liftOver has 
+    # already been made to this file and md5sum.txt needs to be updated
+    ssh hgwdev 
+    cd /usr/local/apache/htdocs/goldenPath/danRer4/liftOver
+    md5sum *.gz > md5sum.txt
+
+    md5sum *.gz > ../../goldenPath/liftOver/md5sum.txt
+    ssh hgwdev
+    cd /usr/local/apache/htdocs/goldenPath/danRer4/liftOver
+    ln -s /cluster/data/danRer5/bed/liftOver/danRer4ToDanRer5.over.chain.gz .
 

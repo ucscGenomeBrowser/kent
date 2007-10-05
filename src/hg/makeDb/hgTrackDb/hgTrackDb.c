@@ -11,7 +11,7 @@
 #include "portable.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgTrackDb.c,v 1.30 2007/05/02 00:20:00 kate Exp $";
+static char const rcsid[] = "$Id: hgTrackDb.c,v 1.31 2007/09/19 21:15:15 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -92,6 +92,10 @@ if (strict)
             if (trackDbSetting(td, "compositeTrack"))
                 {
                 slAddHead(&compositeList, td);
+                }
+            else if (sameOk("on", trackDbSetting(td, "superTrack")))
+                {
+                slAddHead(&strictList, td);
                 }
             else
                 {

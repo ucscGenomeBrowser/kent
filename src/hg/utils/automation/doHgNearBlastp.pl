@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/automation/doHgNearBlastp.pl instead.
 
-# $Id: doHgNearBlastp.pl,v 1.4 2007/08/21 19:59:40 hiram Exp $
+# $Id: doHgNearBlastp.pl,v 1.5 2007/10/02 05:10:56 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -108,13 +108,20 @@ scratchDir xxx
     cluster blastp runs.
 
 
-Optional setting:
+Optional settings:
 
 recipBest xxx yyy zzz ...
   - space-separated list of query databases for which we are to find
     reciprocal-best blast hits.  Even if -targetOnly or -queryOnly is
     specified, we will still do alignments in both directions if recipBest
     is specified.
+
+targetAbbrev yz
+  - yz is a two-letter abbreviation for the target organism, e.g. mm for
+    mouse.  It is used to name the yzBlastTab tables in each queryDb.
+    Normally the abbreviation is distilled from targetDb, but if targetDb
+    is a temporary database with a name that bears no resemblance to the
+    real genome database name, then this overrides.
 " if ($detailed);
   print STDERR "\n";
   exit $status;
@@ -150,7 +157,8 @@ sub checkOptions {
   }
 } # checkOptions
 
-my ($buildDir, $scratchDir, $tGenesetPrefix, $tDb, @qDbs, %dbToFasta, %recipBest);
+my ($buildDir, $scratchDir, $tGenesetPrefix, $tDb, @qDbs, %dbToFasta,
+    %recipBest, $targetAbbrev);
 sub parseConfig {
   # Parse config.ra file, make sure it contains the required variables.
   my ($config) = @_;
@@ -195,11 +203,18 @@ sub parseConfig {
   my $recipBests = $vars{'recipBest'};
   if ($recipBests) {
     foreach my $r (split(/\s+/, $recipBests)) {
-      die "Error: recipBest item \"$r\" is not in queryDbs.\n"
+      die "Error: $config recipBest item \"$r\" is not in queryDbs.\n"
 	if (scalar(grep(/^$r$/, @qDbs)) == 0);
       $recipBest{$r} = 1;
     }
     delete $vars{'recipBest'};
+  }
+  $targetAbbrev = $vars{'targetAbbrev'};
+  if ($targetAbbrev) {
+    die "Error: $config targetAbbrev must consist of two lower-case letters " .
+      "(Genus species --> gs)"
+      if ($targetAbbrev !~ /^[a-z]{2}$/);
+    delete $vars{'targetAbbrev'};
   }
   # Bogus/misspelled variables.
   if (scalar(keys %vars) > 0) {
@@ -312,6 +327,7 @@ sub dbToPrefix {
   # Condense database name to a 2-character prefix for the *BlastTab table.
   my ($db) = @_;
   my $prefix;
+  return $targetAbbrev if ($targetAbbrev && $db eq $tDb);
   if ($db =~ /^(\w\w)\d+$/) {
     $prefix = $1;
   } elsif ($db =~ /^(\w)\w\w(\w)\w\w\d+$/) {

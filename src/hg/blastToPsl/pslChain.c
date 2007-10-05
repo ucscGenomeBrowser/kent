@@ -14,7 +14,7 @@
 #include "portable.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: pslChain.c,v 1.6 2005/01/10 00:32:53 kent Exp $";
+static char const rcsid[] = "$Id: pslChain.c,v 1.7 2007/09/18 23:00:58 markd Exp $";
 
 struct score
 {
@@ -41,7 +41,8 @@ errAbort(
   "   pslChain in.psl in.score tNibDir qNibDir scoreMatrix out.psl out.score\n"
   "options:\n"
   "   -minScore=N  Minimum score for chain, default %d\n"
-  "   -details=fileName Output some additional chain details\n"
+  "   -details=fileName Output some additional chain details\n",
+  minScore
   );
 }
 
@@ -144,9 +145,6 @@ for (b = *pBoxList; b != NULL; b = next)
     next = b->next;
     if (last != NULL)
 	{
-	int bSize = b->qEnd - b->qStart;
-	int lSize = last->qEnd - last->qStart;
-
 	if (b->qStart > last->qStart)
 	    {
 	    if (last->qEnd > b->qStart)
@@ -221,7 +219,7 @@ for (i=0; i<size; ++i)
     {
     if (q[i] != t[i])
 	misMatches++;
-    score += matrix[q[i]][t[i]];
+    score += matrix[(int)q[i]][(int)t[i]];
     }
 if (pMisMatches)
     *pMisMatches = misMatches;
@@ -257,8 +255,8 @@ score = bestScore = rScore = scoreBlock(rqStart, rtStart, overlap, matrix, NULL)
 lScore = scoreBlock(lqStart, ltStart, overlap, matrix, NULL);
 for (i=0; i<overlap; ++i)
     {
-    score += matrix[lqStart[i]][ltStart[i]];
-    score -= matrix[rqStart[i]][rtStart[i]];
+    score += matrix[(int)lqStart[i]][(int)ltStart[i]];
+    score -= matrix[(int)rqStart[i]][(int)rtStart[i]];
     if (score > bestScore)
 	{
 	bestScore = score;
@@ -378,7 +376,7 @@ if (gapFileName != NULL)
     AllocArray(gapInitQGap,tableSize);
     AllocArray(gapInitTGap,tableSize);
     AllocArray(gapInitBothGap,tableSize);
-    while (count = lineFileChopNext(lf, words, tableSize+1))
+    while ((count = lineFileChopNext(lf, words, tableSize+1)) != 0)
         {
         if (sameString(words[0],"smallSize"))
             {
@@ -479,7 +477,7 @@ else
     // uglyf("bLastPos %d, blastPosVal %f, bLastSlope %f\n", aid.bLastPos, aid.bLastPosVal, aid.bLastSlope);
 }
 
-int gapCost(int dq, int dt)
+int gapCost(int dq, int dt, void *gapData)
 /* Figure out gap costs. */
 {
     
@@ -528,7 +526,7 @@ else
 static int connCount = 0;
 static int overlapCount = 0;
 
-int connectCost(struct cBlock *a, struct cBlock *b)
+int connectCost(struct cBlock *a, struct cBlock *b, void *gapData)
 /* Calculate connection cost - including gap score
  * and overlap adjustments if any. */
 {
@@ -560,7 +558,7 @@ if (dq < 0 || dt < 0)
        }
    }
 ++connCount;
-return overlapAdjustment + gapCost(dq, dt);
+return overlapAdjustment + gapCost(dq, dt, gapData);
 // return 400 * pow(dt+dq, scoreData.gapPower) + overlapAdjustment;
 }
 
@@ -745,9 +743,7 @@ void chainPair(struct seqPair *sp,
 /* Chain up blocks and output. */
 {
 struct chain *chainList, *chain, *next;
-struct cBlock *b;
 long startTime, dt;
-int misMatch;
 
 uglyf("chainPair %s\n", sp->name);
 
@@ -780,7 +776,8 @@ for (b = sp->blockList; b != NULL; b = b->next)
 /* Get chain list and clean it up a little. */
 startTime = clock1000();
 chainList = chainBlocks(sp->qName, qSeq->size, sp->qStrand, 
-	sp->tName, tSeq->size, &sp->blockList, connectCost, gapCost, details);
+                        sp->tName, tSeq->size, &sp->blockList,
+                        connectCost, gapCost, NULL, details);
 dt = clock1000() - startTime;
 for (chain = chainList; chain != NULL; chain = chain->next)
     {
@@ -812,7 +809,6 @@ struct hash *scoreHash = newHash(8);
 struct score *score;
 struct dyString *ds = newDyString(1024);
 char *words[8];
-int wordCount;
 
 while (lineFileRow(lf, words))
     {
@@ -1018,13 +1014,11 @@ FILE *f = mustOpen(chainOut, "w");
 FILE *scoreFile = mustOpen(scoreOut, "w");
 char *qName = "",  *tName = "";
 struct dnaSeq *qSeq = NULL, *tSeq = NULL;
-char qStrand = 0, tStrand = 0;
-struct chain *chainList = NULL, *chain;
+char tStrand = 0;
+struct chain *chainList = NULL;
 FILE *details = NULL;
-struct lineFile *lf = NULL;
 struct dnaSeq *seq, *seqList = NULL;
 struct hash *faHash = newHash(0);
-char comment[1024];
 struct lineFile *faF;
 struct axtScoreScheme *ss;  /* Scoring scheme. */
 int size;

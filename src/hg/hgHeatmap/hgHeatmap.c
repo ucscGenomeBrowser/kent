@@ -21,8 +21,11 @@
 #include "web.h"
 #include "microarray.h"
 #include "hgChromGraph.h"
+#include "ra.h"
+#include "ispyFeatures.h"
 
-static char const rcsid[] = "$Id: hgHeatmap.c,v 1.16 2007/09/14 07:05:23 jzhu Exp $";
+
+static char const rcsid[] = "$Id: hgHeatmap.c,v 1.22 2007/09/27 23:00:12 jsanborn Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -78,6 +81,7 @@ for (ct = ctList; ct != NULL; ct = ct->next)
         gh->expCount = pSc;
         gh->tDb = tdb;
 	gh->database = CUSTOM_TRASH;
+	setBedOrder(gh);
         slAddHead(&list, gh);
         }
     }
@@ -111,11 +115,12 @@ else if (sameWord(set,"UCSF breast cancer"))
     }
 else if (sameWord(set,"ISPY"))
     {
-    N=3;
+    N=4;
     AllocArray(trackNames, N);
     trackNames[0]="ispyMipCGH";
-    trackNames[1]= "CGHBreastCancerStanford";
-    trackNames[2]="CGHBreastCancerUCSF";
+    trackNames[1]="ispyAgiExp";
+    trackNames[2]= "CGHBreastCancerStanford";
+    trackNames[3]="CGHBreastCancerUCSF";
     }
 else
     return NULL;
@@ -142,7 +147,7 @@ for (i=0; i<N; i++)
     struct microarrayGroups *maGs = maGetTrackGroupings(gh->database, gh->tDb);
     struct maGrouping *allA= maGs->allArrays;
     gh->expCount = allA->size;
-
+    setBedOrder(gh);
     slAddHead(&list,gh);
     }
 return list;
@@ -190,8 +195,90 @@ for (ref = ghList; ref != NULL; ref = ref->next)
     }
 }
 
+void setPersonOrder (struct genoHeatmap* gh, char* personStr)
+/* Set the sampleOrder and sampleList of a specific heatmap to personStr; 
+   personStr is a csv format string of personids
+   if posStr is null, set to default 
+*/
+{
+if (gh->sampleOrder)
+    freeHash(&gh->sampleOrder);
+gh->sampleOrder = hashNew(0);
+if (gh->sampleList)
+    slFreeList(gh->sampleList);
+gh->sampleList = slNameNew("");
+if (gh->expIdOrder)
+    freeMem(gh->expIdOrder);
+
+/* set expIdOrder to default , i.e. an array of -1s, -1 indicates to the drawing code that the sample will not be drawn in heatmap */
+AllocArray(gh->expIdOrder, gh->expCount);
+int i;
+for (i=0; i< gh->expCount; i++)
+    gh->expIdOrder[i]= -1;
+
+char *pS = personStr;
+int expId; // bed15 format expId 
+
+if (!sameString(pS,""))
+    {
+    char* person, *sample;
+    struct slName *sl, *slSample=NULL, *slPerson = slNameListFromComma(pS);
+    struct sqlConnection *conn = sqlConnect("ispy"); /*hard code for ISPY */
+    char *labTable = "labTrack"; /*hard code for ISPY */
+    char *key = "ispyId"; /*hard code for ISPY */
+
+    /* get the sampleIds of each person from database */ 
+    char query[512];
+    struct sqlResult *sr;
+    char **row;
+    for (sl= slPerson; sl!= NULL; sl=sl->next)
+	{
+	person =sl->name;
+	safef(query, sizeof(query),"select * from %s where %s = %s ", labTable, key, person);
+	sr = sqlGetResult(conn, query);
+	while ((row = sqlNextRow(sr)) != NULL)
+	    {
+	    sample = row[1];
+	    slNameAddHead(&(slSample),sample);
+	    }
+	}
+    slReverse(&(slSample));
+    sqlFreeResult(&sr);
+
+    /*microarray specific settings*/
+    struct microarrayGroups *maGs = maGetTrackGroupings(gh->database, gh->tDb);
+    struct maGrouping *allA= maGs->allArrays;
+    
+    int counter=0;    
+    for(sl=slSample; sl !=NULL; sl=sl->next)
+	{
+	sample = sl->name;
+	int i;
+	expId = -1;
+	for (i=0; i< allA->size; i++)
+	    {
+	    if (sameString(allA->names[i],sample))
+		{
+		expId = allA->expIds[i];
+		gh->expIdOrder[expId]=counter;
+		break;
+		}
+	    }
+	if (expId == -1)
+	    continue;
+	hashAdd(gh->sampleOrder, sample, &counter);
+	slNameAddHead(&(gh->sampleList),sample);
+	counter++;
+	}
+    slReverse(&(gh->sampleList));
+    }
+else
+    defaultOrder(gh);
+}
+
 void setSampleOrder(struct genoHeatmap* gh, char* posStr)
-/* Set the sampleOrder and sampleList of a specific heatmap to posStr; posStr is a csv format string
+/* Set the sampleOrder and sampleList of a specific heatmap to posStr; 
+   posStr is a comma separated string of sample ids.
    if posStr is null, then check the configuration file 
    if the setting is not set in the configuration file, then the orders are set to default in sampleList and sampleOrder
 */
@@ -205,8 +292,12 @@ gh->sampleList = slNameNew("");
 if (gh->expIdOrder)
     freeMem(gh->expIdOrder);
 AllocArray(gh->expIdOrder, gh->expCount);
+/* set expIdOrder to default , i.e. an array of -1s, -1 indicates to the drawing code that the sample will not be drawn in heatmap */
+int i;
+for (i=0; i< gh->expCount; i++)
+    gh->expIdOrder[i]= -1;
 
-char *pS = NULL;
+char *pS;
 
 if (!sameString(posStr,""))
     pS = posStr;
@@ -218,13 +309,12 @@ else
     if (tdb)
 	pS = trackDbSetting(tdb, trackOrderName);
     else
-	pS= NULL;
+	pS= "";
     }
 
-int orderCount = gh->expCount;
 int expId; // bed15 format expId 
 
-if (pS)
+if (!sameString(pS,""))
     {
     char* sample;
     gh->sampleList = slNameListFromComma(pS);
@@ -238,12 +328,13 @@ if (pS)
     for(sl=gh->sampleList; sl !=NULL; sl=sl->next)
 	{
 	sample = sl->name;
+
 	hashAdd(gh->sampleOrder, sample, &counter);
 	int i;
 	expId = -1;
 	for (i=0; i< allA->size; i++)
 	    {
-	    if (sameString(allA->names[i],sl->name))
+	    if (sameString(allA->names[i],sample))
 		{
 		expId = allA->expIds[i];
 		gh->expIdOrder[expId]=counter;
@@ -254,40 +345,66 @@ if (pS)
 	    errAbort("heatmap %s setSampleOrder: sampleName %s is not found in microarray.ra\n", gh->name, sl->name);
 	counter++;
 	}
-    if (counter != orderCount)
-	errAbort("heatmap %s setSampleOrder: number of samples does not match expCount\n", gh->name);
     }
 else
-    {
-    int i;
-    char sample[512];
-    for (i=0; i<orderCount;i++)
-	{
-	expId = i;
-	safef(sample, sizeof(sample), "%d", expId);
-	slNameAddHead(&gh->sampleList, sample);
-	gh->expIdOrder[expId]=i;
-	hashAdd(gh->sampleOrder, sample, &i); 
-	}
-    slReverse(&gh->sampleList);
-    }
-return ;
+    defaultOrder(gh);
 }
 
-/* Return the recording of  expIds in bed15 file
+/* reset the default order of samples to be displayed */ 
+void defaultOrder(struct genoHeatmap* gh)
+{
+if (gh->sampleOrder)
+    freeHash(&gh->sampleOrder);
+gh->sampleOrder = hashNew(0);
+if (gh->sampleList)
+    slFreeList(gh->sampleList);
+gh->sampleList = slNameNew("");
+if (gh->expIdOrder)
+    freeMem(gh->expIdOrder);
+AllocArray(gh->expIdOrder, gh->expCount);
+/* set expIdOrder to default , i.e. an array of -1s, -1 indicates to the drawing code that the sample will not be drawn in heatmap */
+int i;
+for (i=0; i< gh->expCount; i++)
+    gh->expIdOrder[i]= -1;
+
+int expId;
+char sample[512];
+for (i=0; i<gh->expCount;i++)
+    {
+    expId = i;
+    safef(sample, sizeof(sample), "%d", expId);
+    slNameAddHead(&gh->sampleList, sample);
+    gh->expIdOrder[expId]=i;
+    hashAdd(gh->sampleOrder, sample, &i); 
+    }
+slReverse(&gh->sampleList);
+}
+
+
+/* Return an array for reordering the experiments
+   If the order has not been set, then use function setBedOrder to set 
 */
 int *getBedOrder(struct genoHeatmap* gh)
 {
 if (gh->expIdOrder == NULL)
-    {
-    /* get the ordering information from cart */
-    char varName[512];
-    char *tableName = gh->name;
-    safef(varName, sizeof (varName),"%s_%s", hghOrder,tableName);
-    char *posStr = cartUsualString(cart,varName, "");
-    setSampleOrder(gh, posStr);
-    }
+    setBedOrder(gh);
 return gh->expIdOrder;
+}
+
+/* Set the ordering of samples in display 
+*/
+void setBedOrder(struct genoHeatmap* gh)
+{
+/* get the ordering information from cart variable hghOrder*/
+char varName[512];
+
+//safef(varName, sizeof (varName),"%s_%s", hghSampleOrder,tableName);
+//char *pStr = cartUsualString(cart,varName, "");
+//setSampleOrder(gh, pStr);
+
+safef(varName, sizeof (varName),"%s", hghPersonOrder);
+char *pStr = cartUsualString(cart,varName, "");
+setPersonOrder(gh, pStr);
 }
 
 /* Routines to fetch cart variables. */
@@ -324,15 +441,16 @@ for (ref = ghList; ref != NULL; ref = ref->next)
     {
     gh= ref->val;
     name = gh->name;
-    totalHeight += experimentCount(name) * experimentHeight();
+    totalHeight += heatmapHeight(gh);
     totalHeight += spacing;
     
     /* hard coded */
-    if ( sameString(name,"cnvLungBroadv2_ave100K") // || sameString(name,"cnvLungBroadv2")  || sameString(name, "expBreastCancerUCSF")
-	 || sameString(name, "CGHBreastCancerUCSF") || sameString(name, "CGHBreastCancerStanford"))
+    if ( sameString(name,"cnvLungBroadv2_ave100K") || sameString(name, "CGHBreastCancerUCSF") || sameString(name, "CGHBreastCancerStanford"))
+	{
 	totalHeight += chromGraphHeight();
+	totalHeight += spacing;
+	}
     }
-
 
 totalHeight += betweenRowPad;
 
@@ -340,24 +458,24 @@ return totalHeight;
 }
 
 
-int heatmapHeight(char* heatmap)
+int heatmapHeight(struct genoHeatmap *gh)
 /* Return height of the heatmap. */
 {
-if (heatmap == NULL)
+if (gh == NULL)
     return 0;
-return experimentCount(heatmap) * experimentHeight();
+if (gh->sampleList == NULL)
+    return experimentCount(gh) * experimentHeight();
+
+/* height of experiments that will be displayed */
+return slCount(gh->sampleList) * experimentHeight();
 }
 
-int experimentCount(char* heatmap)
+int experimentCount(struct genoHeatmap *gh)
 /* Return number of experiments */
 {
-struct hashEl *el = hashLookup(ghHash, heatmap);
-if (el)
-    {
-    struct genoHeatmap *gh = el->val;
-    return gh->expCount;
-    }
-return 0;
+if (gh== NULL)
+    return 0;
+return gh->expCount;
 }
 
 char *chromLayout()
@@ -389,10 +507,28 @@ void dispatchPage()
 /* Look at command variables in cart and figure out which
  * page to draw. */
 {
+
 struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *ispyConn = hAllocOrConnect("ispy");
+
+struct column *colList = getColumns(ispyConn);
+
+ struct column *pt;
+  for (pt = colList; pt != NULL; pt = pt->next)
+    {
+      if (pt->on)
+	hPrintf("col %s is ON\n", pt->name);
+      else
+	hPrintf("col %s is OFF", pt->name);
+    }
+
 if (cartVarExists(cart, hghConfigure))
     {
     configurePage();
+    }
+else if (cartVarExists(cart, hghConfigureFeature))
+    {
+    doConfigure(ispyConn, colList, NULL);
     }
 else
     {
@@ -402,6 +538,7 @@ else
     else
 	mainPage(conn);
     }
+ 
 cartRemovePrefix(cart, hghDo);
 }
 

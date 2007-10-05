@@ -90,9 +90,15 @@ hPrintf("<BR>\n");
 hPrintf("draw connecting lines between markers separated by up to ");
 cartMakeIntVar(cart, hggMaxGapToFill, 25000000, 8);
 hPrintf(" bases.<BR>");
+hPrintf("<BR>\n");
 hPrintf("file name: <INPUT TYPE=FILE NAME=\"%s\" VALUE=\"%s\">", hggUploadFile,
 	oldFileName);
-hPrintf(" ");
+hPrintf("<BR>\n");
+hPrintf("&nbsp;or<BR>\n");
+hPrintf("URL: ");
+cartMakeTextVar(cart, hggUploadUrl, "", 32);
+hPrintf("<BR>\n");
+hPrintf("<BR>\n");
 cgiMakeButton(hggSubmitUpload, "submit");
 hPrintf("</FORM>\n");
 hPrintf("<i>Note: If you are uploading more than one data set please give them ");
@@ -129,7 +135,8 @@ hPrintf("%s",
 webNewSection("Using the upload page");
 hPrintf(
 "To upload a file in any of the supported formats, "
-"locate the file on your computer using the controls next to <B>file name</B>, "
+"locate the file or on your computer using the controls next to <B>file name</B>, "
+"or supply a <B>URL</B> to the data, "
 "and then submit. The other controls on this form are optional, though "
 "filling them out will sometimes enhance the display. In general "
 "the controls that default to <i>best guess</i> can be left alone, "
@@ -163,8 +170,8 @@ hPrintf(
 " If left blank the axis will be labeled at the 1/3 and 2/3 point. </LI>"
 "<LI><B>draw connecting lines:</B> Lines connecting data points separated by "
 " no more than this number of bases are drawn.  </LI>"
-"<LI><B>file name:</B> The controls here let you select which file on your "
-" computer to upload.</LI>");
+"<LI><B>file name or URL:</B> The controls here let you select which file on your "
+" computer to upload, or enter the URL at which your upload file can be found.</LI>");
 cartWebEnd();
 }
 
@@ -210,7 +217,11 @@ updateCustomTracks(trackList);
 void submitUpload(struct sqlConnection *conn)
 /* Called when they've submitted from uploads page */
 {
-char *rawText = cartUsualString(cart, hggUploadFile, NULL);
+char *urlText = cartUsualString(cart, hggUploadUrl, NULL);
+char *fileText = cartUsualString(cart, hggUploadFile, NULL);
+char *rawText = urlText;
+if (isNotEmpty(fileText))
+  rawText = fileText; 
 int rawTextSize = strlen(rawText);
 struct errCatch *errCatch = errCatchNew();
 cartWebStart(cart, "Data Upload Complete (%d bytes)", rawTextSize);

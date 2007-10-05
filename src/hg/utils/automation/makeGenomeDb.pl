@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/automation/makeGenomeDb.pl instead.
 
-# $Id: makeGenomeDb.pl,v 1.11 2007/08/24 22:27:58 hartera Exp $
+# $Id: makeGenomeDb.pl,v 1.13 2007/10/02 05:20:58 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -655,6 +655,7 @@ _EOF_
     # smallest bin that starts at 0.  The smallest bin is 128k bases, which
     # should always cover the entire mitochondrial genome (typically ~16k).
     my $bin = 585;
+    my $mitoGold = ($mitoAcc =~ /^\d+$/) ? "gi|$mitoAcc" : $mitoAcc;
     if ($chromBased || $opt_debug) {
       my $defaultChrom = `head -1 $topDir/chrom.sizes | cut -f 1`;
       chomp $defaultChrom;
@@ -662,11 +663,12 @@ _EOF_
 
 # Add fake chrM_{gap,gold} to make featureBits happy.
 set mSize = `faSize $topDir/M/chrM.fa | grep bases | awk '{print \$1;}'`
+hgsql $db -e 'drop table chrM_gap,chrM_gold;'
 hgsql $db -e \\
     'create table chrM_gap select * from ${defaultChrom}_gap where 0; \\
      create table chrM_gold select * from ${defaultChrom}_gold where 0; \\
      insert into chrM_gold \\
-       values($bin,"chrM",0,'\$mSize',1,"F","gi|$mitoAcc",0,'\$mSize',"+");'
+       values($bin,"chrM",0,'\$mSize',1,"F","$mitoGold",0,'\$mSize',"+");'
 _EOF_
       );
     } else {
@@ -676,7 +678,7 @@ _EOF_
 set mSize = `faSize $topDir/M/chrM.fa | grep bases | awk '{print \$1;}'`
 hgsql $db -e \\
     'insert into gold \\
-        values($bin,"chrM",0,'\$mSize',1,"F","gi|$mitoAcc",0,'\$mSize',"+");'
+        values($bin,"chrM",0,'\$mSize',1,"F","$mitoGold",0,'\$mSize',"+");'
 _EOF_
       );
     }

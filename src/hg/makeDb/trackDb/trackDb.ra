@@ -381,13 +381,24 @@ url http://rgd.mcw.edu/generalSearch/RgdSearch.jsp?quickSearch=1&searchKeyword=
 
 track rgdQtl
 shortLabel RGD QTL
-longLabel Quantitative Trait Locus (from RGD)
-group map
+longLabel $Organism Quantitative Trait Locus from RGD
+group phenDis
 priority 4.5
 visibility hide
 color 12,12,120
 type bed 4 .
-url http://rgd.mcw.edu/generalSearch/RgdSearch.jsp?quickSearch=1&searchKeyword=
+url http://rgd.mcw.edu/objectSearch/qtlReport.jsp?rgd_id=
+
+track rgdRatQtl
+shortLabel RGD Rat QTL
+longLabel $o_Organism Quantitative Trait Locus from RGD Coarsely Mapped to $Organism
+group phenDis
+priority 4.501
+visibility hide
+color 12,100,100
+type bed 4 .
+otherDb rn4
+url http://rgd.mcw.edu/objectSearch/qtlReport.jsp?rgd_id=
 
 track xenoRefGene
 shortLabel Other RefSeq
@@ -1456,11 +1467,12 @@ type rmsk
 canPack off
 
 track nestedRepeats
-shortLabel Nested Repeats
-longLabel Nested Repeats from RepeatMasker ID
+shortLabel Interrupted Rpts
+longLabel Fragments of Interrupted Repeats Joined by RepeatMasker ID
 group varRep
 priority 149.11
 visibility hide
+useScore 1
 type bed 12 +
 
 track rmskCensor
@@ -2809,8 +2821,30 @@ spectrum on
 type netAlign panTro2 chainPanTro2
 otherDb panTro2
 
-track chainPonAbe1
+track chainPonAbe2
 shortLabel $o_Organism Chain
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+group compGeno
+priority 241
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type chain ponAbe2
+otherDb ponAbe2
+
+track netPonAbe2
+shortLabel $o_Organism Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
+group compGeno
+priority 241.1
+visibility hide
+spectrum on
+type netAlign ponAbe2 chainPonAbe2
+otherDb ponAbe2
+
+track chainPonAbe1
+shortLabel $o_db Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 241
@@ -2822,7 +2856,7 @@ type chain ponAbe1
 otherDb ponAbe1
 
 track netPonAbe1
-shortLabel $o_Organism Net
+shortLabel $o_db Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 241.1
@@ -2970,6 +3004,29 @@ visibility hide
 spectrum on
 type netAlign equCab1 chainEquCab1
 otherDb equCab1
+
+track chainCi2
+shortLabel $o_Organism Chain
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+group compGeno
+priority 209
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type chain ci2
+otherDb ci2
+
+track netCi2
+shortLabel $o_Organism Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
+group compGeno
+priority 209.1
+visibility hide
+spectrum on
+type netAlign ci2 chainCi2 
+otherDb ci2
+
 
 track blastSacCer1SG
 shortLabel Yeast Proteins
@@ -3616,6 +3673,11 @@ termRegex [[:alnum:]_]+\.[0-9]+\.[0-9]+
 searchPriority 50
 
 searchTable rgdQtl
+searchType bed
+searchMethod fuzzy
+searchPriority 50
+
+searchTable rgdRatQtl
 searchType bed
 searchMethod fuzzy
 searchPriority 50

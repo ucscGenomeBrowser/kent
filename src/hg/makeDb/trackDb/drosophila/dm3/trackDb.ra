@@ -87,6 +87,17 @@ color 0,100,180
 type bed
 otherDb dm2
 
+track evofold
+shortLabel EvoFold
+longLabel EvoFold predictions of RNA secondary structure (id_strand_score)
+group genes
+priority 63
+visibility hide
+color 20,90,0
+type bed 6 +
+mafTrack multiz15way
+speciesOrder droSim1 droSec1 droYak2 droEre2 droAna3 dp4 droPer1 droWil1 droVir3 droMoj3 droGri2 anoGam1 apiMel2 triCas2
+
 searchTable bacEndPairs
 searchMethod exact
 searchType bed
@@ -121,4 +132,20 @@ visibility hide
 exonArrows off
 showTopScorers 200
 type bed 5 .
+
+track nscanPasaGene
+shortLabel N-SCAN
+longLabel N-SCAN PASA-EST Gene Predictions
+color 34,139,34
+group genes
+priority 45.1
+visibility hide
+type genePred nscanPasaPep
+baseColorUseCds given
+baseColorDefault genomicCodons
+
+searchTable nscanPasaGene
+searchType genePred
+termRegex (chr)?.*\.[0-9a-z]+\.[0-9]+\.[a-z]+
+searchPriority 50
 

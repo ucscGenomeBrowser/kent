@@ -35,7 +35,7 @@
 #include "customTrack.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.331 2007/09/05 04:30:57 markd Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.334 2007/10/05 23:13:04 angie Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -2752,10 +2752,12 @@ if (fitFields(hash, "chrom", "chromStart", "chromEnd", retChrom, retStart, retEn
 	fitField(hash, "lfSizes", retEndsSizes);
     fitField(hash, "span", retSpan);
     }
-/* Look for psl-style names. */
+/* Look for names of psl and psl-like (chain, chainLink, net, altGraphX,
+   some older types). */
 else if (fitFields(hash, "tName", "tStart", "tEnd", retChrom, retStart, retEnd))
     {
-    fitField(hash, "qName", retName);
+    fitField(hash, "qName", retName) ||
+	fitField(hash, "name", retName) || fitField(hash, "chainId", retName);
     fitField(hash, "strand", retStrand);
     fitField(hash, "blockCount", retCount);
     fitField(hash, "tStarts", retStarts);

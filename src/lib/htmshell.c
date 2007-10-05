@@ -17,7 +17,7 @@
 #include "errabort.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: htmshell.c,v 1.33 2007/04/26 22:21:32 galt Exp $";
+static char const rcsid[] = "$Id: htmshell.c,v 1.43 2007/09/27 23:15:11 galt Exp $";
 
 jmp_buf htmlRecover;
 
@@ -209,10 +209,14 @@ htmlVaParagraph(format,args);
 printf("%s", htmlWarnEndPattern());
 htmlHorizontalLine();
 
+/* Log useful CGI info to stderr */
+logCgiToStderr();
+
 /* write warning/error message to stderr so they get logged. */
 vfprintf(stderr, format, argscp);
 va_end(argscp);
 fputc('\n', stderr);
+fflush(stderr);
 }
 
 void htmlAbort()
@@ -405,6 +409,7 @@ void htmlImage(char *fileName, int width, int height)
 {
 printf("<P ALIGN=\"CENTER\"><IMG SRC=\"%s\" WIDTH=\"%d\" HEIGHT=\"%d\" ALIGN=\"BOTTOM\" BORDER=\"0\"></P>", fileName, width, height);
 }
+
 
 void htmErrOnlyShell(void (*doMiddle)())
 /* Wrap error recovery around call to doMiddle. */

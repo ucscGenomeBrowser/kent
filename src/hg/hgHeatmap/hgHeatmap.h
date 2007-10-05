@@ -25,11 +25,13 @@
 #define hghMaxGapToFill hghPrefix "maxGapToFill"
 #define hghImageWidth hghPrefix "imageWidth"
 
-#define hghOrder hghPrefix "order"
+#define hghSampleOrder hghPrefix "sampleOrder"
+#define hghPersonOrder hghPrefix "personOrder"
 
 /*** Command variables. ***/
 #define hghConfigure hghDo "Configure"
 #define hghConfigureOne hghDo "ConfigureOne"
+#define hghConfigureFeature hghDo "ConfigureFeature"
 #define hghBrowse hghDo "Browse"
 #define hghUpload hghDo "Upload"
 #define hghSubmitUpload hghDo "SubmitUpload"
@@ -69,13 +71,14 @@ struct genoHeatmap
     struct trackDb *tDb;	/* the track database */
     };
 
+
 /*** Routines from hgHeatmap.h ***/
 
 int selectedHeatmapHeight();
 /* Return height of user selected heatmaps from the web interface. */
 
-int heatmapHeight(char* heatmap);
-/* Return height of heatmap. */
+int heatmapHeight(struct genoHeatmap *gh);
+/* Return height of heatmap. This is only for those experiments that will be displayed. */
 
 char *heatmapName();
 /* Return name of heatmap */
@@ -89,7 +92,7 @@ struct slName* heatmapNames();
 int experimentHeight();
 /* Return height of an experiment */
 
-int experimentCount(char* heatmap);
+int experimentCount(struct genoHeatmap *gh);
 /* Return the number of experiments */
 
 #define betweenRowPad 3
@@ -111,15 +114,27 @@ struct genoHeatmap *getUserHeatmaps();
 /* Get list of all user graphs */
 
 void setSampleOrder(struct genoHeatmap* gh, char* posStr);
-/* Set the sampleOrder and sampleList of a specific heatmap to posStr; posStr is a comma separated string
+/* Set the sampleOrder and sampleList of a specific heatmap to posStr; 
+   posStr is a comma separated string of sample ids.
    if posStr is null, then check the configuration file 
    if the setting is not set in the configuration file, then the orders are set to default in sampleList and sampleOrder
 */
 
+void setPersonOrder (struct genoHeatmap* gh, char* personStr);
+/* Set the sampleOrder and sampleList of a specific heatmap to personStr; 
+   personStr is a csv format string of personids
+   if posStr is null, set to default 
+*/
+
+void defaultOrder(struct genoHeatmap* gh);
+/* reset the default order of samples to be displayed */ 
+
+void setBedOrder(struct genoHeatmap* gh);
+/* Set the ordering of samples in display */
+
 int *getBedOrder(struct genoHeatmap* gh);
-/* Return the ChromOrder of a specific heatmap and chromosome combo to 
-   the ghOrder hash 
-   return an array for reordering the experiments in a chromosome 
+/* Return an array for reordering the experiments
+   If the order has not been set, then use function setBedOrder to set
 */
 
 void hghDoUsualHttp();

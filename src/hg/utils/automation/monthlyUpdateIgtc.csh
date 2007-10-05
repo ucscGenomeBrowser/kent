@@ -3,10 +3,10 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/monthlyUpdateIgtc instead.
 
-# $Id: monthlyUpdateIgtc.csh,v 1.1 2007/02/28 23:41:17 angie Exp $
+# $Id: monthlyUpdateIgtc.csh,v 1.2 2007/09/19 19:31:07 angie Exp $
 
 set updateOne = $HOME/kent/src/hg/utils/automation/updateIgtc.pl
-set dbs = (mm6 mm7 mm8)
+set dbs = (mm7 mm8 mm9)
 
 foreach db ($dbs)
   # Do a -debug run to make a run directory:

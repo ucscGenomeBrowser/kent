@@ -27,8 +27,10 @@
 #include "cytoBand.h"
 #include "hCytoBand.h"
 #include "hgChromGraph.h"
+#include "ispyFeatures.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.14 2007/09/14 07:05:23 jzhu Exp $";
+
+static char const rcsid[] = "$Id: mainPage.c,v 1.19 2007/09/27 23:00:12 jsanborn Exp $";
 
 /* Page drawing stuff. */
 
@@ -284,8 +286,8 @@ for(chrom = gl->chromList; chrom; chrom = chrom->next)
     
     int chromX = chrom->x, chromY = chrom->y;
 
-    vgSetClip(vg, chromX, chromY+yOff, chrom->width, heatmapHeight(chromHeatmap));
-    vgBox(vg, chromX, chromY+yOff , chrom->width, heatmapHeight(chromHeatmap), MG_GRAY);
+    vgSetClip(vg, chromX, chromY+yOff, chrom->width, heatmapHeight(gh));
+    vgBox(vg, chromX, chromY+yOff , chrom->width, heatmapHeight(gh), MG_GRAY);
 
     for(nb = ghBed; nb; nb = nb->next)
 	{
@@ -298,7 +300,9 @@ for(chrom = gl->chromList; chrom; chrom = chrom->next)
 	    val = nb->expScores[i];
 	    valId = nb->expIds[i];
 	    int orderId = chromOrder[valId];
-	      
+	    if (orderId == -1)
+		continue;
+
 	    if(val > 0)
 		{
 		absVal = val * RED_SCALE;
@@ -333,7 +337,7 @@ for(chrom = gl->chromList; chrom; chrom = chrom->next)
 }
 
 void genomeGif(struct sqlConnection *conn, struct genoLay *gl,
-	       char *psOutput)
+           char *psOutput)
 /* Create genome GIF file and HT that includes it. */
 {
 struct vGfx *vg;
@@ -370,7 +374,7 @@ struct slRef *ref= NULL;
 char *db, *tableName;
 
 /* Draw chromosome heatmaps. */
- int totalYOff = 0;
+int totalYOff = 0;
 for (ref = ghList; ref != NULL; ref = ref->next)
     {
     gh= ref->val;
@@ -379,7 +383,7 @@ for (ref = ghList; ref != NULL; ref = ref->next)
 
     drawChromHeatmaps(vg, db, gl, tableName, 
 		       totalYOff + yOffset, TRUE, TRUE, TRUE);
-    totalYOff += heatmapHeight(tableName) + spacing;
+    totalYOff += heatmapHeight(gh) + spacing;
 
     /* hard-code for demo.
        also draw summary ChromGraph when the tableName is cnvBroadLungv2 
@@ -396,6 +400,27 @@ for (ref = ghList; ref != NULL; ref = ref->next)
 	}
     }
 vgClose(&vg);
+
+struct sqlConnection *ispyConn = hAllocOrConnect("ispy");
+struct expId *ids = AllocA(struct expId);
+ids->name = cloneString("1199");
+struct expId *id = AllocA(struct expId);
+id->name = cloneString("1201");
+
+ids->next = id;
+
+struct column *colList = getColumns(ispyConn);
+struct column *col;
+for (col = colList; col != NULL; col = col->next)
+{
+    for (id = ids; id != NULL; id = id->next)
+    {
+        if (col->on)
+            hPrintf("<BR>%s for %s = %s", col->name, id->name, col->cellVal(col, id, ispyConn));    
+        
+    }
+}
+
 }
 
 void graphDropdown(struct sqlConnection *conn, char *varName, char *curVal, char *js)
@@ -631,6 +656,8 @@ hPrintf("</TABLE>");
 
 
 cgiMakeButton(hghConfigure, "configure");
+cgiMakeButton(hghConfigureFeature, "configure features");
+
 hPrintf("<BR>");
 
 hPrintf("<TABLE CELLPADDING=2><TR><TD>\n");
@@ -644,10 +671,9 @@ if (result)
 if (result)
     /* test code for reordering for ispy table */ 
     {
-    hPrintf("<BR>This is a test: ispyMipCGH sample order, format: csv.<BR>");
+    hPrintf("<BR>This is a test: ispyMipCGH patient order, format: csv.<BR>");
     char varName[512];
-    char *tableName = "ispyMipCGH";
-    safef(varName, sizeof (varName),"%s_%s", hghOrder,tableName);
+    safef(varName, sizeof (varName),"%s", hghPersonOrder);
     char *text = cartUsualString(cart, varName, "");
     cgiMakeTextArea(varName,text, 5 ,50);
     cgiMakeSubmitButton();
@@ -666,9 +692,5 @@ int regularCount = ArraySize(regularVars);
 jsCreateHiddenForm(cart, scriptName, regularVars, regularCount);
 }
 
-/*
-  webNewSection("Using Genome Heatmaps");
-  printMainHelp();
-*/
 cartWebEnd();
 }

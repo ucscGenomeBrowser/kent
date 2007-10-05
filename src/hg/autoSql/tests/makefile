@@ -82,6 +82,7 @@ symColsTest: testSymCols.o output/symTest.o
 	${DIFF} expected/symColsTest.tab output/symColsTest.tab
 	${DIFF} expected/symColsTest.tab output/symColsTestComma.tab
 	${DIFF} expected/symColsTest.tab output/symColsTestDb.tab
+	rm testSymCols
 
 testSymCols.o: output/symTest.c
 

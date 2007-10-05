@@ -32,10 +32,6 @@ else
 endif
 
 
-# set today
-set today=`date +%Y-%m-%d`
-# set today="2005-01-23"
-
 # find same month last year
 set year=`date +%Y`
 set yearMonth=`date +%Y-%m`
@@ -45,7 +41,6 @@ set lastYearMonth=`echo $yearMonth | sed -e "s/$year/$lastyear/"`
 
 # echo "year      $year"
 # echo "lastyear  $lastyear"
-# echo "today     $today"
 # echo "yearMonth $yearMonth"
 
 echo $lastYearMonth

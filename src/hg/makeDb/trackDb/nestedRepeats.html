@@ -1,6 +1,7 @@
 <H2>Description</H2>
 <P>
-This track shows nested repeats extracted from the output of the 
+This track shows joined fragments of interrupted repeats 
+extracted from the output of the 
 <A HREF="http://www.repeatmasker.org/"
 TARGET=_blank>RepeatMasker</A> program, which screens DNA sequences 
 for interspersed repeats and low complexity DNA sequences using 
@@ -12,7 +13,8 @@ RepBase is described in Jurka, J. (2000) in the References section below.
 </P>
 <P>
 The detailed annotations from RepeatMasker are in the RepeatMasker
-track.  This track shows joined fragments of repeats which have been
+track.  This track shows fragments of original repeat insertions 
+which have been
 interrupted by insertions of younger repeats or through local
 rearrangements.  The fragments are joined using the ID column of
 RepeatMasker output.
@@ -20,12 +22,20 @@ RepeatMasker output.
 
 <H2>Display Conventions and Configuration</H2>
 <P>
-In pack or full mode, each nested repeat is displayed as boxes
+In pack or full mode, each interrupted repeat is displayed as boxes
 (fragments) joined by horizontal lines, labeled with the repeat name.
 If all fragments are on the same strand, then arrows are added to the
 horizontal line to indicate strand.  In dense or squish mode, labels 
 and arrows are omitted, and in dense mode, all items are collapsed to 
 fit on a single row.
+</P>
+<P>
+Items are shaded according to the average identity score of their
+fragments.  Usually, the shade of an item is similar to the shades of
+its fragments, unless some fragments are much more diverged than
+others.  The score displayed above is the average identity score,
+clipped to a range of 50% - 100%, and then mapped to the range
+0 - 1000 for shading in the browser.
 </P>
 
 <H2>Methods</H2>

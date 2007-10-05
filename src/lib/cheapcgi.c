@@ -12,7 +12,7 @@
 #include "errabort.h"
 #include "mime.h"
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.92 2007/07/20 20:39:08 kate Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.93 2007/09/27 23:15:11 galt Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -1342,3 +1342,29 @@ for(i=0; i<argc; i++)
 freez(&argv);
 return spoof;
 }
+
+void logCgiToStderr()
+/* Log useful CGI info to stderr */
+{
+char *ip = getenv("REMOTE_ADDR");
+char *cgiBinary = getenv("SCRIPT_FILENAME");
+char *requestUri = getenv("REQUEST_URI");
+char *hgsid = cgiOptionalString("hgsid");
+char *cgiFileName = NULL;
+time_t nowTime = time(NULL);
+struct tm *tm;
+tm = localtime(&nowTime);
+char *ascTime = asctime(tm);
+size_t len = strlen(ascTime);
+if (cgiBinary)
+    cgiFileName = basename(cgiBinary);
+else
+    cgiFileName = "cgi-bin";
+if (len > 3) ascTime[len-2] = '\0';
+if (!ip)
+    ip = "unknown";
+fprintf(stderr, "[%s] [%s] [client %s] [hgsid=%.24s] [%.1024s] ", ascTime, cgiFileName, ip,
+	hgsid, requestUri);
+}
+
+

@@ -18,7 +18,7 @@ set sacCer sacCer1
 set panTro panTro1,panTro2
 set galGal galGal2,galGal3
 set ci ci1,ci2
-set danRer danRer1,danRer2,danRer3,danRer4
+set danRer danRer1,danRer2,danRer3,danRer4,danRer5
 set canFam canFam1,canFam2
 set droYak droYak1,droYak2
 set droMoj droMoj1,droMoj2
@@ -34,7 +34,7 @@ set monDom monDom1,monDom4
 set bosTau bosTau1,bosTau2,bosTau3
 set rheMac rheMac1,rheMac2
 set snp125 dbSnpHumanBuild125
-set strPur strPur1
+set strPur strPur1,strPur2
 set felCat felCat3
 set gasAcu gasAcu1
 set oryLat oryLat1
@@ -78,7 +78,7 @@ databasesChecked $gbd,$otherDb,$snp125
 databasesIgnored mysql,lost+found,$proteinDb,$zooDb,sc1,hgcentraltest,hgcentralbeta,test,sp040915,sp040515,sp040315,sp040115,proteins040915,proteins040515,proteins040315
 
 # Define various non-self chains
-set chainDest Hg15,Hg16,Hg17,Hg18,Pt0,Mm2,Mm3,Mm4,Mm5,Mm6,Mm7,Mm8,Mm9,Rn2,Rn3,Rn4,Cb1,Dm1,Dm2,Dm3,Dp1,Dp2,Dp3,PanTro1,PanTro2,GalGal2,GalGal3,Fr1,Fr2,DanRer1,DanRer2,DanRer3,DanRer4,CanFam1,CanFam2,DroYak1,DroYak2,DroAna1,DroAna2,DroMoj1,DroMoj2,DroVir1,DroVir2,DroEre1,DroSec1,DroSim1,DroGri1,DroPer1,AnoGam1,ApiMel1,ApiMel2,TetNig1,XenTro1,XenTro2,MonDom1,MonDom2,MonDom4,RheMac1,RheMac2,BosTau1,BosTau2,BosTau3,FelCat3,GasAcu1,OryLat1,EquCab1,AnoCar1,Ce1,Ce2,Ce4,OrnAna1,CaePb1,CaeRem2,Cb3,PriPac1
+set chainDest Hg15,Hg16,Hg17,Hg18,Pt0,Mm2,Mm3,Mm4,Mm5,Mm6,Mm7,Mm8,Mm9,Rn2,Rn3,Rn4,Cb1,Dm1,Dm2,Dm3,Dp1,Dp2,Dp3,PanTro1,PanTro2,GalGal2,GalGal3,Fr1,Fr2,DanRer1,DanRer2,DanRer3,DanRer4,DanRer5,CanFam1,CanFam2,DroYak1,DroYak2,DroAna1,DroAna2,DroMoj1,DroMoj2,DroVir1,DroVir2,DroEre1,DroSec1,DroSim1,DroGri1,DroPer1,AnoGam1,ApiMel1,ApiMel2,TetNig1,XenTro1,XenTro2,MonDom1,MonDom2,MonDom4,RheMac1,RheMac2,BosTau1,BosTau2,BosTau3,FelCat3,GasAcu1,OryLat1,EquCab1,AnoCar1,Ce1,Ce2,Ce4,OrnAna1,CaePb1,CaeRem2,Cb3,PriPac1,StrPur1,StrPur2
 
 # Define databases that support known genes
 set kgDb $hg,$mm,$rn
@@ -618,19 +618,19 @@ identifier vegaZfishName
 
 identifier vegaGeneZfishName typeOf=vegaZfishName dependency
 "Link together Zebrafish VEGA predicted gene structure additional information"
-    danRer4.vegaGene.name
-    danRer4.vegaInfoZfish.transcriptId minCheck=0.99
-    danRer4.vegaToCloneId.transcriptId minCheck=0.99
+    $danRer.vegaGene.name
+    $danRer.vegaInfoZfish.transcriptId minCheck=0.99
+    $danRer.vegaToCloneId.transcriptId minCheck=0.99
 
 identifier vegaPseudoZfishName typeOf=vegaZfishName
 "Link together VEGA pseudogene and other info."
-    danRer4.vegaPseudoGene.name
+    $danRer.vegaPseudoGene.name
 
 identifier vegaPseudoGeneZfishName typeOf=vegaPseudoZfishName dependency
 "Link together Zebrafish VEGA predicted gene structure additional information"
-    danRer4.vegaPseudoGene.name
-    danRer4.vegaInfoZfish.transcriptId minCheck=0.005
-    danRer4.vegaToCloneId.transcriptId minCheck=0.005
+    $danRer.vegaPseudoGene.name
+    $danRer.vegaInfoZfish.transcriptId minCheck=0.004
+    $danRer.vegaToCloneId.transcriptId minCheck=0.004
 
 identifier vegaPseudogeneName typeOf=vegaName
 "Link together VEGA pseudogene and other info."
@@ -1634,8 +1634,13 @@ identifier rgdEstId external=RGD
 
 identifier rgdQtlId external=RGD
 "RGD QTL ID"
-    $rn,hg17.rgdQtl.name
-    $rn,hg17.rgdQtlLink.name minCheck=0.89
+    $rn,$hg.rgdQtl.name
+    $rn,$hg.rgdQtlLink.name minCheck=0.89
+
+identifier rgdRatQtlId external=RGD
+"RGD Rat QTL ID mapped to other organism"
+    $hg.rgdRatQtl.name dupeOk
+    $hg.rgdRatQtlLink.name minCheck=0.89
 
 identifier rgdSslpId external=RGD
 "RGD SSLP ID"
@@ -1682,6 +1687,7 @@ identifier ensemblTranscriptId external=Ensembl dependency
     $gbd,!mm4.ensPep.name chopAfter=. minCheck=0.96
     mm4.ensPep.name chopAfter=. minCheck=0.94
     $gbd.ensTranscript.transcript_name chopAfter=. minCheck=0.20
+    $gbd.ensInfo.name
     $kgDb,!rn2.knownToEnsembl.value chopAfter=.
     $gbd.sfDescription.name chopAfter=.
     mm3.superfamily.name chopAfter=.
@@ -2036,6 +2042,7 @@ identifier blastHg18KGPep04Id
      galGal3.blastHg18KG.qName
      xenTro2.blastHg18KG.qName
      danRer4.blastHg18KG.qName
+     danRer5.blastHg18KG.qName
      canFam2.blastHg18KG.qName
      felCat3.blastHg18KG.qName
      dm2.blastHg18KG.qName
@@ -2043,6 +2050,7 @@ identifier blastHg18KGPep04Id
      mm8.blastHg18KG.qName
      ce4.blastHg18KG.qName
      strPur1.blastHg18KG.qName
+     strPur2.blastHg18KG.qName
      bosTau2.blastHg18KG.qName
      oryLat1.blastHg18KG.qName
      ornAna1.blastHg18KG.qName
@@ -2059,6 +2067,7 @@ identifier blastHg18KGRef04Id
      galGal3.blastHg18KG.qName
      xenTro2.blastHg18KG.qName
      danRer4.blastHg18KG.qName
+     danRer5.blastHg18KG.qName
      canFam2.blastHg18KG.qName
      felCat3.blastHg18KG.qName
      dm2.blastHg18KG.qName
@@ -2066,6 +2075,7 @@ identifier blastHg18KGRef04Id
      mm8.blastHg18KG.qName
      ce4.blastHg18KG.qName
      strPur1.blastHg18KG.qName
+     strPur2.blastHg18KG.qName
      bosTau2.blastHg18KG.qName
      oryLat1.blastHg18KG.qName
      ornAna1.blastHg18KG.qName
