@@ -25,7 +25,7 @@
 #include "ispyFeatures.h"
 
 
-static char const rcsid[] = "$Id: hgHeatmap.c,v 1.29 2007/10/05 17:39:42 jzhu Exp $";
+static char const rcsid[] = "$Id: hgHeatmap.c,v 1.30 2007/10/05 18:25:10 jzhu Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -230,11 +230,16 @@ char *labTable = trackDbSetting(tdb, "patTable");
 char *key = trackDbSetting(tdb, "patKey");
 char *db = trackDbSetting(tdb, "patDb");
 
-if ((labTable == NULL) || (key == NULL))
-    defaultOrder(gh); return;
-
-if ( !sqlDatabaseExists(db))
-    defaultOrder(gh); return;
+if ((labTable == NULL) || (key == NULL) || (db==NULL))
+    {
+    defaultOrder(gh); 
+    return;
+    }
+if ( !sqlDatabaseExists(db) )
+    {
+    defaultOrder(gh); 
+    return;
+    }
 
 struct sqlConnection *conn = sqlConnect(db); 
 char query[512];
