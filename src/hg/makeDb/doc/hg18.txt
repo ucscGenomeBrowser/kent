@@ -17579,3 +17579,20 @@ values ("bipolar", 0, 0, "composite")'
 #Add composite track info to src/hg/makeDb/trackDb/human/trackDb.ra:
 
 ###########################################################################
+# RE-BUILD WGRNA TRACK (DONE, 2007-10-05, Fan)
+
+  ssh hgwdev
+  cd /cluster/data/hg18/bed
+
+  mkdir wgRna-2007-10-05
+  cd wgRna-2007-10-05
+
+# Received the data file, wgtrack_oct2007.txt (saved from wgtrack_oct2007.doc)
+# from Michel Weber's email
+# (Michel.Weber@ibcg.biotoul.fr)
+# and place it under cd /cluster/data/hg18/bed/wgRna-2007-10-05.
+
+  cat wg_track_oct2007.txt|sed -e 's/ /\t/g' > wgRna.tab
+
+  hgLoadBed -sqlTable=/cluster/home/fanhsu/src/hg/lib/wgRna.sql hg18 wgRna wgRna.tab
+#############################################################################
