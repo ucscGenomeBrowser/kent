@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.35 2007/10/05 20:17:55 archanat Exp $"
+#	"$Id: mm9.txt,v 1.36 2007/10/06 00:29:28 hiram Exp $"
 #
 
 #######################################################################
@@ -3979,31 +3979,11 @@ rc = 0 = count of kgAlAll mrna for mm9
     mkdir /cluster/data/mm9/bed/allenBrain
     cd /cluster/data/mm9/bed/allenBrain
 
-# In /san/sanvol1/visiGene/offline/allenBrain/probesAndData/
-#  allen20051021.tab (converted from spreadsheet mailed by Susan Sunkin <SusanS@alleninstitute.org>)
-#  probeSeq.20051027.fasta (also from Susan).
+    # find most recent update of allProbes.fa to use for these alignments
 
-# Create a list of probe sequences filling ones missing from probeSeq.20050127.fa
-# with some NCBI and TIGR files, and some downloaded one at a time.
-     allenCollectSeq \
-/san/sanvol1/visiGene/offline/allenBrain/probesAndData/allen20051021.tab \
-/san/sanvol1/visiGene/offline/allenBrain/probesAndData/probeSeq.20051027.fasta \
-/cluster/data/mm7/bed/ncbiXm/ncbiNm.fa /cluster/data/mm7/bed/ncbiXm/ncbiXm.fa \
-/cluster/data/mm6/bed/tigrMgiTc/tigrMgiTc.fa \
-~/kent/src/hg/makeDb/outside/allenBrain/allenCollectSeq/extra.fa \
-allenBrainProbes.fa allenBrainProbes.tab missing.tab allenBrainUrl.tab
-# 18463 sequences in /cluster/data/mm7/bed/ncbiXm/ncbiNm.fa
-# 8386 sequences in /cluster/data/mm7/bed/ncbiXm/ncbiXm.fa
-# 161499 sequences in /cluster/data/mm6/bed/tigrMgiTc/tigrMgiTc.fa
-# 16 sequences in /cluster/home/hiram/kent/src/hg/makeDb/outside/allenBrain/allenCollectSeq/extra.fa
-# 11522 sequences in /san/sanvol1/visiGene/offline/allenBrain/probesAndData/probeSeq.20051027.fasta
-# 11100 (92.6%) hitProbe
-# 486 (4.1%) hitNm
-# 17 (0.1%) hitXm
-# 345 (2.9%) hitTc
-# 15 (0.1%) hitExtra
-# 23 (0.2%) hitNone
-    
+    cp -p /cluster/data/mm6/bed/allenBrain/allProbes.fa ./allenBrainProbes.fa
+    cp -p /cluster/data/mm6/bed/allenBrain/allenBrainUrl.tab .
+
 # Set up a blat run to align the probes.
     mkdir split
     faSplit sequence allenBrainProbes.fa 200 split/rp
@@ -4038,19 +4018,21 @@ rmdir --ignore-fail-on-non-empty $tmpDir
     gensub2 genome.list probe.list template jobList
     para create jobList
     para try ... check ... push ... etc.
-# Completed: 6825 of 6825 jobs
-# CPU time in finished jobs:      27456s     457.60m     7.63h    0.32d  0.001 y
-# IO & Wait Time:                 21901s     365.02m     6.08h    0.25d  0.001 y
-# Average job time:                   7s       0.12m     0.00h    0.00d
-# Longest finished job:              32s       0.53m     0.01h    0.00d
-# Submission to last job:           485s       8.08m     0.13h    0.01d
+# Completed: 6790 of 6790 jobs
+# CPU time in finished jobs:      28129s     468.81m     7.81h    0.33d  0.001 y
+# IO & Wait Time:                 23014s     383.57m     6.39h    0.27d  0.001 y
+# Average job time:                   8s       0.13m     0.00h    0.00d
+# Longest finished job:              29s       0.48m     0.01h    0.00d
+# Submission to last job:           363s       6.05m     0.10h    0.00d
 
 # Then do sorting and near-best-in-genome step on file server
     ssh kkstore06
     cd /cluster/data/mm9/bed/allenBrain/run
     pslSort dirs raw.psl tmp psl
-    pslReps raw.psl ../best.psl -nohead -minCover=0.20 -minAli=0.96 -nearTop=0.001 /dev/null
-    sort -k 14,14 -k 16,16n ../best.psl > ../allenBrainAli.psl
+    pslReps raw.psl ../best.psl -nohead -minCover=0.20 -minAli=0.96 \
+	-nearTop=0.001 /dev/null
+    #	Processed 63183 alignments
+    sort -k14,14 -k16,16n ../best.psl > ../allenBrainAli.psl
 
 # Clean up big files no longer needed
    rm raw.psl batch.bak
@@ -4064,13 +4046,15 @@ rmdir --ignore-fail-on-non-empty $tmpDir
 # Make a new table that contains the URLs for the allen brain genes
 # Make this one first since all.joiner considers it the master table.
    hgsql mm9 < ~/kent/src/hg/lib/allenBrainUrl.sql
-   hgsql mm9 -e 'load data local infile "allenBrainUrl.tab" into table allenBrainUrl;'
+   hgsql mm9 -e \
+	'load data local infile "allenBrainUrl.tab" into table allenBrainUrl;'
 
 # Make probe alignment table, and load sequence.
    hgLoadPsl mm9 allenBrainAli.psl
    mkdir /gbdb/mm9/allenBrain
-   ln -s /cluster/data/mm9/bed/allenBrain/allenBrainProbes.fa /gbdb/mm9/allenBrain/allenBrainProbes.fa
-   hgLoadSeq mm9 /gbdb/mm9/allenBrain/allenBrainProbes.fa
+   ln -s /cluster/data/mm9/bed/allenBrain/allenBrainProbes.fa \
+	/gbdb/mm9/allenBrain/allenBrainProbes.fa
+   hgLoadSeq -replace mm9 /gbdb/mm9/allenBrain/allenBrainProbes.fa
 
 # Make mapping between known genes and allenBrain	
    hgMapToGene mm9 allenBrainAli -type=psl knownGene knownToAllenBrain 
@@ -5764,7 +5748,7 @@ TMPDIR=/scratch/tmp
         Rabbit_oryCun1:0.208548):0.014587,
 
 ((((((Human_hg18:0.005873,Chimp_panTro2:0.007668):0.013037,
-   Orangutan_ponAbe1:0.02):0.013037,Rhesus_rheMac2:0.031973):0.0365,
+   Orangutan_ponAbe2:0.02):0.013037,Rhesus_rheMac2:0.031973):0.0365,
         Marmoset_calJac1:0.07):0.0365,Bushbaby_otoGar1:0.151185):0.015682,
            TreeShrew_tupBel1:0.162844):0.006272):0.019763,
 
@@ -5793,6 +5777,15 @@ Zebrafish_danRer5:0.730028):0.174596);
         | sed -e "s/[ \t]*//g; /^[ \t]$/d; /^$/d" | sort -u \
         | sed -e "s/.*_//; s/:.*//" | sort > species.list
     #	verify that has 30 db names in it
+    # create a stripped down nh file for use in autoMZ run
+    echo \
+`sed 's/[a-zA-Z0-9]*_//g; s/:0.[0-9]*//g; s/[,;]/ /g' mm9OnTop.fullNames.nh \
+	| sed -e "s/  / /g"` > tree.30.nh
+    #	that looks like, as a single line:
+(((((((( (((mm9 rn4) cavPor2) oryCun1) ((((((hg18 panTro2) ponAbe2) rheMac2)
+calJac1) otoGar1) tupBel1)) ((sorAra1 eriEur1) (((canFam2 felCat3) equCab1)
+bosTau3))) (dasNov1 (loxAfr1 echTel1))) monDom4) ornAna1) (galGal3 anoCar1))
+xenTro2) (((tetNig1 fr2) (gasAcu1 oryLat1)) danRer5))
 
     # verify all blastz's exists
     cat << '_EOF_' > listMafs.csh
@@ -5889,6 +5882,114 @@ doSplit.csh $(path1) {check out line+ $(path1).done}
 # Longest running job:                0s       0.00m     0.00h    0.00d
 # Longest finished job:            1081s      18.02m     0.30h    0.01d
 # Submission to last job:          1391s      23.18m     0.39h    0.02d
+
+    # ready for the multiz run
+    ssh pk
+    cd /cluster/data/mm9/bed/multiz30way
+    mkdir -p maf run
+    cd run
+    mkdir penn
+    # use latest penn utilities
+    P=/cluster/bin/penn/multiz.v11.2007-03-19/multiz-tba
+    cp -p $P/{autoMZ,multiz,maf_project} penn
+
+    # list chrom chunks, any db dir will do; better would be for the
+    # splitter to generate this file
+    # We temporarily use __ instead of . to delimit chunk in filename
+    # so we can use $(root) to get basename
+    find /san/sanvol1/scratch/mm9/splitStrictMafNet -type f \
+	| while read F; do basename $F; done \
+	| sed -e 's/.maf.gz//' -e 's/\./__/' | sort -u > chromChunks.lst
+	sort -u > chromChunks.list
+    wc -l chromChunks.list
+        # 75
+
+cat > autoMultiz.csh << '_EOF_'
+#!/bin/csh -ef
+
+    set db = mm9
+    set c = $1
+    set maf = $2
+    set run = `pwd`
+    set tmp = /scratch/tmp/$db/multiz.$c
+    set pairs = /san/sanvol1/scratch/$db/splitStrictMafNet
+    rm -fr $tmp
+    mkdir -p $tmp
+    cp ../tree.30.nh ../species.list $tmp
+    pushd $tmp
+    foreach s (`cat species.list`)
+        set c2 = `echo $c | sed 's/__/./'`
+        set in = $pairs/$s/$c2.maf
+        set out = $db.$s.sing.maf
+        if ($s == mm9) then
+            continue
+        endif
+        if (-e $in.gz) then
+            zcat $in.gz > $out
+        else if (-e $in) then
+            cp $in $out
+        else
+            echo "##maf version=1 scoring=autoMZ" > $out
+        endif
+    end
+    set path = ($run/penn $path); rehash
+    $run/penn/autoMZ + T=$tmp E=$db "`cat tree.30.nh`" $db.*.sing.maf $c.maf
+    popd
+    cp $tmp/$c.maf $maf
+    rm -fr $tmp
+'_EOF_'
+# << happy emacs
+    chmod +x autoMultiz.csh
+
+cat  << '_EOF_' > template
+#LOOP
+./autoMultiz.csh $(root1) {check out line+ /cluster/data/mm9/bed/multiz30way/maf/$(root1).maf}
+#ENDLOOP
+'_EOF_'
+    # << emacs
+    gensub2 chromChunks.list single template jobList
+    para create jobList
+    # 75 jobs
+    #	three of these jobs failed with memory allocation error:
+# maf_project.v12: Ran out of memory trying to allocate 64.
+# autoMZ.v1: command 'maf_project /scratch/tmp/mm9/multiz.chr10__1/_MZ_16482_lef
+# t.maf19 mm9 > /scratch/tmp/mm9/multiz.chr10__1/_MZ_16482_U1' failed
+    # the 73 jobs run time:
+# Completed: 72 of 75 jobs
+# CPU time in finished jobs:     501143s    8352.38m   139.21h    5.80d  0.016 y
+# IO & Wait Time:                 22628s     377.14m     6.29h    0.26d  0.001 y
+# Average job time:                7275s     121.24m     2.02h    0.08d
+# Longest finished job:           15957s     265.95m     4.43h    0.18d
+# Submission to last job:         16473s     274.55m     4.58h    0.19d
+    #	performed a para recover on the jobList and used the kki kluster
+    #	to run the last three jobs:
+# Completed: 3 of 3 jobs
+# CPU time in finished jobs:      50762s     846.03m    14.10h    0.59d  0.002 y
+# IO & Wait Time:                  1795s      29.92m     0.50h    0.02d  0.000 y
+# Average job time:               17519s     291.98m     4.87h    0.20d
+# Longest finished job:           17887s     298.12m     4.97h    0.21d
+# Submission to last job:         17887s     298.12m     4.97h    0.21d
+
+    # load tables for a look
+    ssh hgwdev
+    mkdir -p /gbdb/mm9/multiz30way/maf
+    ln -s /cluster/data/mm9/bed/multiz30way/maf/*.maf \
+                /gbdb/mm9/multiz30way/maf
+    cd /cluster/data/mm9/bed/multiz30way
+    # this generates a large 1 Gb multiz30way.tab file in the directory
+    #	where it is running.  Might be better to run this over in scratch.
+    cat << '_EOF_' > loadMaf.csh
+#!/bin/csh -fex
+date
+hgLoadMaf -pathPrefix=/gbdb/mm9/multiz30way/maf mm9 multiz30way
+
+ # load summary table
+ cat maf/*.maf |  nice hgLoadMafSummary mm9 -minSize=30000 -mergeGap=1500 \
+	 -maxSize=200000  multiz30waySummary stdin
+'_EOF_'
+     time nice -n +19 ./loadMaf.csh > loadMaf.log 2>&1
+    #	Loaded 15881850 mafs in 75 files from /gbdb/mm9/multiz30way/ma
+
 #############################################################################
 #  BUILD miRNA TRACK (DONE - 2007-10-05 - Fan)
     #   updated data from: Michel.Weber@ibcg.biotoul.fr
