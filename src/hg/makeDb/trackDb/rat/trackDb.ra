@@ -443,18 +443,26 @@ shortCircuit 1
 termRegex [A-Z0-9]+[[:alnum:]_]+.*_at
 searchPriority 15
 
-track affyRaEx1Probe
-shortLabel Affy Exon Probe
-longLabel Affymetrix Rat Exon array version 1.0 probe locations
+track affyRatExon
+compositeTrack on
+shortLabel Affy Exon
+longLabel Affymetrix Rat Exon array version 1.0 probes and transcripts
 group regulation
 priority 87
 visibility hide
-type bed 4 .
+type bed 6 +
 
-track affyRaEx1Transcript
-shortLabel Affy Exon Transcript
-longLabel Affymetrix Rat Exon array version 1.0 transcripts
-group regulation
-priority 88
-visibility hide
-type bed 12 .
+    track affyRaEx1Probe
+    subTrack affyRatExon
+    shortLabel Affy Exon Probe
+    longLabel Affymetrix Rat Exon array version 1.0 probe locations
+    priority 1
+    color 255,0,0
+    useScore 1
+
+    track affyRaEx1Transcript
+    subTrack affyRatExon
+    shortLabel Affy Exon Transcript
+    longLabel Affymetrix Rat Exon array version 1.0 transcripts
+    priority 2
+    color 0,0,255
