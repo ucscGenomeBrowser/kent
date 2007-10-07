@@ -81,6 +81,8 @@ while( (wordsRead = lineFileChopNext(lf, bigWords, sizeof(bigWords)/sizeof(char 
 	    needGenome = FALSE;
 	    elements = needMem((elementsLeft + 2) * sizeof(struct element *));
 	    }
+	else 
+	    break;
 
 	verbose(2, "adding genome %s with %d elements\n",genome->name, elementsLeft);
 	}
@@ -127,7 +129,7 @@ while( (wordsRead = lineFileChopNext(lf, bigWords, sizeof(bigWords)/sizeof(char 
 	    element->genome = genome;
 	    element->species = genome->name;
 	    element->name = cloneString(bigWords[ii]);
-	    if (parents)
+	    if (parents && !sameString(bigWords[ii+1], "0"))
 		{
 		if (addStartStop)
 		    element->parent = parents[atoi(bigWords[ii+1]) ];
@@ -550,6 +552,8 @@ return parent->edges[parent->numEdges -1 ] = child;
 struct element *eleAddEdge(struct element *parent, struct element *child)
 /* add an edge to an element */
 {
+//if (parent->numEdges == 2)
+    //errAbort("adding a third edge");
 return newEdge(parent, child);
 }
 
@@ -620,7 +624,20 @@ struct element *e;
 int ii;
 
 for(ii=0, e = g->elements; e ; ii++, e= e->next)
+    {
+    int jj;
+    if(e->genome != g)
+	errAbort("element genome not equal to host genome");
+    for(jj=0; jj < e->numEdges; jj++)
+	assert(e->edges[jj]->parent == e);
+    //assert(e->numEdges < 3);
+    //if ((e->parent == NULL) && g->node->parent)
+	//errAbort("more mess");
+    //if (e->parent)// && e->genome->node)
+	//if (e->genome->node->parent->priv != e->parent->genome)
+	    //errAbort("parent mess");
     e->count = ii;
+    }
 
 for(ii=0; ii < node->numEdges; ii++)
     assignElemNums(node->edges[ii]);
