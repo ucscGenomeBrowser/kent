@@ -210,7 +210,7 @@
 #include "atomDb.h"
 #include "itemConf.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1349 2007/10/04 04:29:04 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1350 2007/10/08 23:46:53 hiram Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -3249,7 +3249,18 @@ if (wordCount > 0)
         headerItem = NULL;
     }
 genericHeader(tdb, headerItem);
-printCustomUrl(tdb, itemForUrl, item == itemForUrl);
+/* special case targetScanS table on hg18 */
+if (sameWord("hg18", database) && startsWith("targetScanS", tdb->tableName))
+    {
+    char *stripItem = cloneString(item);
+    char *stripFrom = stringIn(":mi", stripItem);
+    if (stripFrom)
+	*stripFrom = '\0';
+    printCustomUrl(tdb, stripItem, item == itemForUrl);
+    freeMem(stripItem);
+    }
+else
+    printCustomUrl(tdb, itemForUrl, item == itemForUrl);
 if (plus != NULL)
     {
     printf(plus);
