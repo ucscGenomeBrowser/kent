@@ -33,7 +33,7 @@
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 #define MAX_SP_SIZE 2000
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.400 2007/09/20 23:09:07 kate Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.401 2007/10/08 21:05:27 kate Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2855,7 +2855,7 @@ else
 	    tableName = "all_mrna";
         printf(SCHEMA_LINK, database, tdb->grp, tableName, tableName);
         }
-    else if (tdb->subtracks != NULL)
+    else if (tdb->subtracks != NULL && !tdb->isSuper)
 	{
 	/* handle multi-word subTrack settings: */
 	char *words[2];
