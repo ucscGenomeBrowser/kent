@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: mm8.txt,v 1.56 2007/10/04 18:58:08 hiram Exp $"
+#	"$Id: mm8.txt,v 1.57 2007/10/08 22:49:32 hiram Exp $"
 #
 
 #  NOTE:  this doc may have genePred loads that fail to include
@@ -8471,13 +8471,17 @@ hgLoadBed -sqlTable=cgapSage.sql -tab mm8 cgapSage final.bed
     cd /cluster/data/mm8/bed/affyMoEx1
     # the files received:
 # -rw-r--r--  1  8909954 Oct  3 10:48 transcript_cluster_mm.bed.gz
-# -rw-r--r--  1 39499797 Oct  3 10:51 probe_mm.bed.gz
+# -rw-r--r--  1 48178714 Oct  4 13:35 probe_mm_score.bed.gz
     # loading:
-    hgLoadBed mm8 affyMoEx1Probe probe_mm.bed.gz
-    #	Loaded 4549897 elements of size 4
+    hgLoadBed -tmpDir=/scratch/tmp mm8 affyMoEx1Probe probe_mm_score.bed.gz
+    #	Loaded 4549897 elements of size 6
     hgLoadBed -tmpDir=/scratch/tmp mm8 affyMoEx1Transcript \
 	transcript_cluster_mm.bed.gz
     # Loaded 270140 elements of size 12
     # working on description pages for these with Venu.
+
+    #	I manually set the scores in the affyMoEx1Transcript track to
+    #	1000 so it would work OK (not color) with the useScore 1 so that
+    #	the affyMoEx1Probe would color itself on the score
 
 ###########################################################################

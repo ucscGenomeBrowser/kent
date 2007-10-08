@@ -4687,13 +4687,17 @@ TMPDIR=/scratch/tmp
     cd /cluster/data/rn4/bed/affyRaEx1
     # the files received:
 # -rw-r--r--  1 10151819 Oct  3 10:53 transcript_cluster_rn.bed.gz
-# -rw-r--r--  1 35697797 Oct  3 10:54 probe_rn.bed.gz
+# -rw-r--r--  1 42240033 Oct  4 13:32 probe_rn_score.bed.gz
     # loading:
-    hgLoadBed rn4 affyRaEx1Probe probe_rn.bed.gz
-    #	Loaded 4025442 elements of size 4
+    hgLoadBed -tmpDir=/scratch/tmp rn4 affyRaEx1Probe probe_rn_score.bed.gz
+    #	Loaded 4025442 elements of size 6
     hgLoadBed -tmpDir=/scratch/tmp rn4 affyRaEx1Transcript \
 	transcript_cluster_rn.bed.gz
     #	Loaded 360668 elements of size 12
     # working on description pages for these with Venu.
+
+    #	I manually set the scores in the affyRaEx1Transcript track to
+    #	1000 so it would work OK (not color) with the useScore 1 so that
+    #	the affyRaEx1Probe would color itself on the score
 
 ###########################################################################
