@@ -25,7 +25,7 @@
 #include "ispyFeatures.h"
 #include "sortFeatures.h"
 
-static char const rcsid[] = "$Id: hgHeatmap.c,v 1.34 2007/10/08 05:37:19 jsanborn Exp $";
+static char const rcsid[] = "$Id: hgHeatmap.c,v 1.35 2007/10/08 20:12:21 jsanborn Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -36,7 +36,7 @@ char *theDataset;      /* Name of the selected dataset - UCSF breast cancer etc.
 struct trackLayout tl;  /* Dimensions of things, fonts, etc. */
 struct slRef *ghList;	/* List of active heatmaps */
 struct hash *ghHash;	/* Hash of active heatmaps */
-
+struct hash *columnHash;  /* Hash of feature column list */
 
 void usage()
 /* Explain usage and exit. */
@@ -585,7 +585,7 @@ void dispatchPage()
 /* Look at command variables in cart and figure out which
  * page to draw. */
 {
-
+char *var = NULL; 
 struct sqlConnection *conn = hAllocConn();
 struct sqlConnection *ispyConn = NULL;
 struct column *colList = NULL;
@@ -595,6 +595,7 @@ if ( sqlDatabaseExists("ispy"))
 ispyConn = hAllocOrConnect("ispy");
 colList = getColumns(ispyConn);
 }
+
 
 if (cartVarExists(cart, hghSortPatients) && (ispyConn))                                         
     {
@@ -609,6 +610,14 @@ else if (cartVarExists(cart, hghConfigureFeature) && (ispyConn))
     {
     doConfigure(ispyConn, colList, NULL);
     }
+else if ( ((var = cartFindFirstLike(cart, "hgHeatmap_do.up.*")) != NULL) && (ispyConn))
+    {
+    doConfigure(ispyConn, colList, var);
+    }
+else if ( ((var = cartFindFirstLike(cart, "hgHeatmap_do.down.*")) != NULL) && (ispyConn))
+    {
+    doConfigure(ispyConn, colList, var);
+    }        
 else
     {
     /* Default case - start fancy web page. */
@@ -619,6 +628,7 @@ else
     }
 
 cartRemovePrefix(cart, hghDo);
+
 }
 
 void hghDoUsualHttp()
