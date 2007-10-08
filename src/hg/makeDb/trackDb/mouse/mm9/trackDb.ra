@@ -146,11 +146,11 @@ autoScaleDefault Off
 windowingFunction mean
 summary multiz30waySummary
 speciesCodonDefault mm9
-speciesGroups mammal
-speciesGroups Primate Placental_Mammal Vertebrate
-sGroup_Primate panTro2 rheMac2 otoGar1
-sGroup_Placental_Mammal tupBel1 rn4 ponAbe2 calJac1 cavPor2 oryCun1 sorAra1 eriEur1 canFam2 felCat3 equCab1 bosTau3 dasNov1 loxAfr1 echTel1
-sGroup_Vertebrate monDom4 ornAna1 anoCar1 galGal3 xenTro2 danRer5 tetNig1 fr2 gasAcu1 oryLat1
-speciesDefaultOff panTro2 rn4 otoGar1 felCat3 loxAfr1 bosTau3 echTel1 danRer5 fr2 tetNig1 oryLat1 tupBel1 cavPor2 oryCun1 sorAra1 eriEur1
+speciesGroups Gliers Primates Placental_Mammal Vertebrate
+sGroup_Gliers rn4 cavPor2 oryCun1
+sGroup_Primates hg18 panTro2 rheMac2 ponAbe2 calJac1 otoGar1
+sGroup_Placental_Mammal tupBel1 sorAra1 eriEur1 canFam2 felCat3 equCab1 bosTau3 dasNov1 loxAfr1 echTel1
+sGroup_Vertebrate monDom4 ornAna1 galGal3 anoCar1 xenTro2 gasAcu1 danRer5 tetNig1 fr2 oryLat1
+speciesDefaultOff rheMac2 calJac1 panTro2 cavPor2 tupBel1 otoGar1 dasNov1 oryCun1 felCat3 loxAfr1 bosTau3 eriEur1 sorAra1 echTel1 ornAna1 anoCar1 xenTro2 danRer5 tetNig1 fr2 oryLat1
 itemFirstCharCase noChange
 treeImage phylo/mm9_30way.gif
