@@ -14,8 +14,6 @@
 #define colInfoVarName "heat.do.colInfo"/* Display column info. */
 
 
-
-
 struct column
 /* A column in the big table. The central data structure for
  * hgNear. */
@@ -36,6 +34,8 @@ struct column
     char *itemUrlQuery;/* SQL query. Does lookup from cellVal
 			* to the desired value to use in itemUrl in
 			* place of cellVal */
+
+    int cellSortDirection; /* Sort direction for column (1, 0, -1) */
     
     struct hash *settings;/* Settings from ra file. */
 
@@ -78,6 +78,9 @@ struct column
     char *valField;/* Value field in associated table. */
     
 };
+
+char *configVarName(struct column *col, char *varName);
+/* Return variable name for configuration. */
 
 char *getId(struct sqlConnection *conn, char *sampleName);
 /* get ISPY ID from sampleId (i.e. sampleName */

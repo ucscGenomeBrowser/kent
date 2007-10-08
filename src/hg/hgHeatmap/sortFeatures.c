@@ -15,8 +15,9 @@
 #include "ispyFeatures.h"
 #include "sortFeatures.h"
 
+#define NULL_FEATURE_VAL 1000.0
 
-struct sortNode *newSortNode(char *name, int val)
+struct sortNode *newSortNode(char *name, double val)
 {
 struct sortNode *node = AllocA(struct sortNode);
 
@@ -28,7 +29,7 @@ node->name = cloneString(name);
 return node;
 }
 
-struct sortNode *findChildWithVal(struct sortNode *parent, int val)
+struct sortNode *findChildWithVal(struct sortNode *parent, double val)
 {
 struct sortList *child, *children = parent->children;
 
@@ -43,10 +44,9 @@ return NULL;
 }
 
 
-struct sortNode *addChild(struct sortNode *parent, char* name, int val)
+struct sortNode *addChild(struct sortNode *parent, char* name, double val, int sortType)
 /* Add a sortNode below the parent's level of the tree */
 {
-//hPrintf("addChild: %s, %d<BR>", name, val);
 if (parent == NULL)
     return NULL;
 
@@ -70,12 +70,11 @@ struct sortList *nextChild = NULL;
 for (child = children; child; child = child->next)
     {
     node = child->node;
-//    hPrintf("comparing %s vs. %s: %d vs. %d<BR>", node->name, name, node->val, val);
     
-    if (node->val <= val)
+    if (sortType * node->val <= sortType * val)
 	prevChild = child;
 
-    if (node->val > val)
+    if (sortType * node->val > sortType * val)
 	{
 	nextChild = child;
 	break;
@@ -127,10 +126,16 @@ if (patientStr == NULL)
     return NULL;
 
 struct slName *pa, *patients = slNameListFromComma(patientStr);
-struct column *col = NULL;
+struct column *lastCol, *col = NULL;
 
 struct sortNode *root = newSortNode(NULL, 0);
 struct sortNode *child, *parent;
+
+for (col = colList; col; col = col->next)
+{
+if ((col->on) && (col->cellSortDirection))
+    lastCol = col;
+}
 
 for (pa = patients; pa; pa = pa->next)
     {
@@ -138,20 +143,20 @@ for (pa = patients; pa; pa = pa->next)
     parent = root;
     for (col = colList; col; col = col->next)
 	{
-	if (!col->on)
+	if (!col->on || (col->cellSortDirection == 0))
 	    continue;
 
-	int val = 1000;
+	double val = NULL_FEATURE_VAL;
 	char* cellVal = col->cellVal(col, pa, conn);
 	if (cellVal)
-	    val = atoi(cellVal);
+	    val = atof(cellVal);
 
 	child = NULL;
-	if (col->next != NULL) /* Not last column */
+	if (!sameString(col->name, lastCol->name))
 	    child = findChildWithVal(parent, val);
 	    
 	if (child == NULL)
-	    child = addChild(parent, pa->name, val);
+	    child = addChild(parent, pa->name, val, col->cellSortDirection);
 
 	parent = child;
 	}   

@@ -24,11 +24,6 @@ safef(query, sizeof(query), "select ispyId from labTrack where trackId = '%s' ",
 return sqlQuickString(conn, query);
 }
 
-
-/* Global Variables */
-struct hash *columnHash;  /* Hash of active columns keyed by name. */
-
-
 char *lookupItemUrlVal(struct column *col, char *sVal,
                        struct sqlConnection *conn)
 {
@@ -293,6 +288,17 @@ safef(query, sizeof(query), "select avg(%s) from %s", col->valField, col->table)
 return sqlQuickString(conn, query);
 }
 
+static void cellLookupConfigControls(struct column *col)
+{
+hPrintf("<TD>");
+char *name = configVarName(col, "sortType");
+char *curVal = cartUsualString(cart, name, "unsorted");
+static char *choices[3] = {"ascending", "unsorted", "descending"};
+hPrintf("sort: ");
+cgiMakeDropList(name, choices, ArraySize(choices), curVal);    
+hPrintf("</TD>");
+}
+
 void setupColumnLookup(struct column *col, char *parameters)
 /* Set up column that just looks up one field in a table
  * keyed by the geneId. */
@@ -308,6 +314,17 @@ col->cellVal = cellLookupVal;
 col->cellAvgVal = cellLookupAvgVal;
 col->cellMinVal = cellLookupMinVal;
 col->cellMaxVal = cellLookupMaxVal;
+
+char *val = cartUsualString(cart, configVarName(col, "sortType"), "unsorted");                      
+if (sameString(val, "ascending"))
+    col->cellSortDirection = 1;
+else if (sameString(val, "descending"))
+    col->cellSortDirection = -1;
+else
+    col->cellSortDirection = 0;
+
+col->configControls = cellLookupConfigControls;
+
 
 if (isNotEmpty(xrefLookup))
     {

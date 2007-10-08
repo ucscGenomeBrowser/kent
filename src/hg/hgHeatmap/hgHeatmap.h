@@ -41,6 +41,7 @@
 #define hghClickX hghClick ".x"
 #define hghClickY hghClick ".y"
 
+
 /*** External vars declared in hgHeatmap.c ***/
 extern struct cart *cart;
 extern struct hash *oldCart;
@@ -73,6 +74,7 @@ struct genoHeatmap
     struct trackDb *tDb;	/* the track database */
 };
 
+extern struct hash *columnHash;           /* Hash of active columns keyed by name. */
 
 /*** Routines from hgHeatmap.h ***/
 

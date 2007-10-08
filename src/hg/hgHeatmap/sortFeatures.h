@@ -22,7 +22,7 @@ struct sortNode
     struct sortNode *parent;
 
     char *name;
-    int val;
+    double val;
 };
 
 char *sortPatients(struct sqlConnection *conn, struct column *colList, char *patientStr);
