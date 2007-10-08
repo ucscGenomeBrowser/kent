@@ -1163,21 +1163,22 @@ compositeTrack on
 shortLabel Affy Exon
 longLabel Affymetrix Mouse Exon array version 1.0 probes and transcripts
 group regulation
-priority 87
 visibility hide
-type bed 6 +
+priority 87
+type bed 12 .
 
     track affyMoEx1Probe
     subTrack affyMouseExon
     shortLabel Affy Exon Probe
     longLabel Affymetrix Mouse Exon array version 1.0 probe locations
     priority 1
-    color 255,0,0
+    noInherit on
+    type bed 6 .
     useScore 1
+    exonArrows off
 
     track affyMoEx1Transcript
     subTrack affyMouseExon
     shortLabel Affy Exon Transcript
     longLabel Affymetrix Mouse Exon array version 1.0 transcripts
     priority 2
-    color 0,0,255
