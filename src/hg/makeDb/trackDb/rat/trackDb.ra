@@ -451,6 +451,7 @@ group regulation
 visibility hide
 priority 87
 type bed 12 .
+noScoreFilter .
 
     track affyRaEx1Probe
     subTrack affyRatExon
