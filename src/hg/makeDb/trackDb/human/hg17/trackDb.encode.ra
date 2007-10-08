@@ -718,7 +718,7 @@ minLimit 0
 maxLimit 49.45
 viewLimits 0:2
 autoScale Off
-subGroup1 datatype Data_Type hit=Hit center=Peak_Center
+subGroup1 datatype Data_Type hit=Hit peak=Peak_Center
 subGroup2 celltype Cell_Type gm06990=GM06990 hela=HeLa  k562=K562
 subGroup3 factor Factor h3k4me1=H3K4me1 h3k4me2=H3K4me2 h3k4me3=H3K4me3 h3ac=H3ac h4ac=H4ac
 dataVersion ENCODE Oct 2005 Freeze
