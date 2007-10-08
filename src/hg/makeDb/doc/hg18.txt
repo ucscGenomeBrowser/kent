@@ -1020,7 +1020,7 @@ hg18.downloadDir = hg18
     mkdir -p /cluster/data/hg18/bed/cpgIsland
     cd /cluster/data/hg18/bed/cpgIsland
 
-    # Build software from Asif Chinwalla (achinwal@watson.wustl.edu)
+    # Build software from Asif Chinwalla (achinwal at watson.wustl.edu)
     cvs co hg3rdParty/cpgIslands
     cd hg3rdParty/cpgIslands
     make
@@ -3024,7 +3024,7 @@ printf "./runPsLayout.sh %s %s %s {check out line+ psl/%s/%s/%s.psl}\n",
 	/cluster/data/hg18/bed/fishClones/seq_clone.pmd > fixed.hbrc.txt \
 	    2> dbg
     #	the seq_clone.pmd file was obtained via email from Wonhee Jang
-    #	jang@ncbi.nlm.nih.gov - I have asked for clarification where
+    #	jang at ncbi.nlm.nih.gov - I have asked for clarification where
     #	such a file can be fetched without resorting to email.
 
 # Get current clone/accession information
@@ -6275,7 +6275,7 @@ BASE=/cluster/data/hg18/bed/blastz.rn4.2006-02-17
   cd wgRna-2006-02-22
 
 # Received the data file, wg_hg18_track.txt, from Michel Weber's email
-# (Michel.Weber@ibcg.biotoul.fr)
+# (Michel.Weber at ibcg.biotoul.fr)
 # and place it under cd /cluster/data/hg18/bed/wgRna-2006-02-22.
 
   cp -p wg_hg18_track.txt wgRna.tab
@@ -6292,7 +6292,7 @@ BASE=/cluster/data/hg18/bed/blastz.rn4.2006-02-17
   cd wgRna-2006-05-12
 
 # Received the data file, wgtrack_hg18_12may2006.txt, from Michel Weber's email
-# (Michel.Weber@ibcg.biotoul.fr)
+# (Michel.Weber at ibcg.biotoul.fr)
 # and place it under cd /cluster/data/hg18/bed/wgRna-2006-05-12.
 
   cp -p wgtrack_hg18_12may2006.txt wgRna.tab
@@ -9207,7 +9207,7 @@ BASE=/cluster/data/hg18/bed/blastz.xenTro2.2006-04-20
     mkdir -p /cluster/data/hg18/bed/firstEF
     cd /cluster/data/hg18/bed/firstEF 
 
-# receive the file firstEFMar05New.bed.gz from email (ramana.davuluri@osumc.edu) into this subdirectory
+# receive the file firstEFMar05New.bed.gz from email (ramana.davuluri at osumc.edu) into this subdirectory
 
     cat << '_EOF_' > sedScript
 s/chr23/chrX/g
@@ -10149,7 +10149,7 @@ BASE=/cluster/data/hg18/bed/blastz.galGal3.2006-05-22
 
 #########################################################################
 # REGULATORY POTENTIAL (DONE - 2006-06-09 - Hiram)
-    #	download data from "James Taylor" <james@bx.psu.edu>
+    #	download data from "James Taylor" <james at bx.psu.edu>
     ssh kkstore02
     mkdir /cluster/data/hg18/bed/regPotential7X
     cd /cluster/data/hg18/bed/regPotential7X
@@ -11220,7 +11220,7 @@ mysql> alter table snp126orthoPanTro2RheMac2 add index chrom (chrom, bin);
 
 ############################################################################
 # SEGMENTAL DUPLICATIONS (DONE 7/14/06 angie)
-    # File emailed from Xinwei She <xws@u.washington.edu>
+    # File emailed from Xinwei She <xws at u.washington.edu>
     mkdir /cluster/data/hg18/bed/genomicSuperDups
     cd /cluster/data/hg18/bed/genomicSuperDups
     # The sed command is necessary to fix "_" used as strand.
@@ -11363,7 +11363,7 @@ gzip illumina.bed
 
 ##########################################################################
 # More new SNP Array data from Affymetrix  (Heather May 2007)
-# Source: Venu_Valmeekam@affymetrix.com
+# Source: Venu_Valmeekam at affymetrix.com
 # This is the 6.0 array, announced mid-May
 # It contains 2 components: single-base substitutions and copy-number probes
 # Single-base substitutions are based on snp127
@@ -11402,7 +11402,7 @@ gzip illumina.bed
 ##########################################################################
 # New Illumina Array data (Heather April 2007)
 # HumanHap300v3, HumanHap550v3, HumanHap650v3
-# Data from Luana Galver (lgalver@illumina.com)  
+# Data from Luana Galver (lgalver at illumina.com)  
 # Based on dbSNP build 126
 
     ssh hgwdev
@@ -11789,7 +11789,7 @@ hgLoadBed hg18 rnaGene rnaGenes.bed -oldTable -tab -noBin
 # USING A WHOLE GENOME TILING ARRAY (DONE, 2006-10-12 - 2006-10-13, hartera)
 # Data is from the paper: Bertone et al. Science 24 December 2004:
 # Vol. 306. no. 5705, pp. 2242 - 2246. From Mark Gerstein's lab at Yale.
-# Contact at Yale: Joel S. Rozowsky, joel.rozowsky@yale.edu
+# Contact at Yale: Joel S. Rozowsky, joel.rozowsky at yale.edu
 # The data consist of Transcriptionally Active Regions (TARs or TransFrags) 
 # found using Affymetrix genome tiling arrays. The data is from the lab
 # of Mark Gerstein at Yale.
@@ -11995,7 +11995,7 @@ TMPDIR=/scratch/tmp
 
 ##############################################################################
 # MAKE tfbsConsSites and tfbsConsFactors for TFBS conserved track (DONE weirauch 11/19/06)
-# Questions?  weirauch@soe.ucsc.edu or braney@soe.ucsc.edu
+# Questions?  weirauch at soe.ucsc.edu or braney at soe.ucsc.edu
 
 ssh hgwdev
 mkdir /cluster/data/hg18/bed/tfbsCons
@@ -12003,7 +12003,7 @@ cd /cluster/data/hg18/bed/tfbsCons
 
 # Define all parameters in 'PARAMS.txt'
 # Define all chromosomes in 'CHROMS.txt'
-# Get tfbsConsUtils.tar.gz from Matt Weirauch with Perl scripts  weirauch@soe.ucsc.edu
+# Get tfbsConsUtils.tar.gz from Matt Weirauch with Perl scripts  weirauch at soe.ucsc.edu
 set tarfile=/cluster/data/hg18/bed/tfbsCons/tfbsConsUtils.tar.gz
 tar zxf $tarfile
 
@@ -12777,7 +12777,7 @@ rmdir --ignore-fail-on-non-empty /scratch/tmp/$contig
 ##############################################################################
 # LongSAGE                                  (2006-10-20 markd)
 # Load LongSAGE composite tag with genomo mappings of tag clusters
-# obtained from "Martin Hirst" <mhirst@bcgsc.ca>
+# obtained from "Martin Hirst" <mhirst at bcgsc.ca>
 
     ftp ftp2.bcgsc.ca
     user: ucsc
@@ -12857,7 +12857,7 @@ rmdir --ignore-fail-on-non-empty /scratch/tmp/$contig
 ####################################################################
 # EXONIPHY (2006-12-05 acs)
 
-    # predictions provided by Brona Brejova in Siepel Lab (bb248@cornell.edu).
+    # predictions provided by Brona Brejova in Siepel Lab (bb248 at cornell.edu).
     # stored in /cluster/data/hg18/bed/exoniphy/exoniphy.gff
 
     ldHgGene -genePredExt -gtf hg18 exoniphy exoniphy.gff
@@ -12951,7 +12951,7 @@ hgLoadBed hg18 cnpRedon cnpRedon.bed
    ln -s /cluster/store12/gad061211 /cluster/data/gad
 
 # Receive "GAD-Hg18DATA.txt" from GAD/NIA 
-# contact person: Shenoy, Narmada, shenoyn@grc.nia.nih.gov  
+# contact person: Shenoy, Narmada, shenoyn at grc.nia.nih.gov  
    
    hgsql hg18 -e 'drop table gadAll'
    hgsql hg18 <~/src/hg/lib/gadAll.sql
@@ -13746,7 +13746,7 @@ chainOne $(path1)
 
 # Received the data file, wg_feb2007.txt (saved from wg_feb2007.doc) 
 # from Michel Weber's email
-# (Michel.Weber@ibcg.biotoul.fr)
+# (Michel.Weber at ibcg.biotoul.fr)
 # and place it under cd /cluster/data/hg18/bed/wgRna-2007-02-07.
 
 # The record of hsa-mir-770 was found missing the strand info.
@@ -13767,7 +13767,7 @@ chainOne $(path1)
 
 # Received the data file, wg_feb2007_corrected.txt (saved from wg_feb2007_corrected.doc) 
 # from Michel Weber's email
-# (Michel.Weber@ibcg.biotoul.fr)
+# (Michel.Weber at ibcg.biotoul.fr)
 # and place it under cd /cluster/data/hg18/bed/wgRna-2007-02-12.
 
 # The record of hsa-mir-770 was found missing the strand info.
@@ -14511,7 +14511,7 @@ cat > loadMaf.csh << 'EOF'
 
 
 ########################################################################
-# ANNOTATE 28-WAY ALIGNMENT WITH QUALITY DATA (2007-06-11 rico@bx.psu.edu)
+# ANNOTATE 28-WAY ALIGNMENT WITH QUALITY DATA (2007-06-11 rico at bx.psu.edu)
 #
 # The basic idea here is to create a qac file which has quality data for each
 # (chromosome/scaffold/etc) and then index the qac file.  Once this is done,
@@ -15831,7 +15831,7 @@ cat > downloads4.csh << 'EOF'
 # EPONINE-TSS (TRANSCRIPTON START SITE) PREDICTION 
 # (DONE, 2007-03-08, hartera)
 # The Eponine software is version 2 and has not changed in several years
-# (contact: Thomas Down at Sanger, td2@sanger.ac.uk). The version downloaded
+# (contact: Thomas Down at Sanger, td2 at sanger.ac.uk). The version downloaded
 # for hg16 should be the same as the current version but download again just
 # to check. The application includes the TSS model file: eponine-tss2.xml 
 
@@ -16129,7 +16129,7 @@ hgLoadBed -sqlTable=switchDbTss.sql hg18 switchDbTss hg18.bed
 # ADD KG TO TREEFAM LINKS (DONE, 2007-04-13 Fan)
 
 # Generate ucscToEnsembl.txt and send it to TreeFam
-# zhongzhongchen [chenzhzh@genomics.org.cn]
+# zhongzhongchen [chenzhzh at genomics.org.cn]
 
     hgsql hg18 -N -e 'select * from knownToEnsembl' >ucscToEnsembl.txt
 
@@ -16541,7 +16541,7 @@ hgLoadBed -tab -sqlTable=hapmapAllelesSummary.sql hg18 hapmapAllelesSummary hapm
 
 # Received the data file, wg_may2007.txt (saved from wg_may2007.doc)
 # from Michel Weber's email
-# (Michel.Weber@ibcg.biotoul.fr)
+# (Michel.Weber at ibcg.biotoul.fr)
 # and place it under cd /cluster/data/hg18/bed/wgRna-2007-05-31.
 
   cat wg_may2007.txt|sed -e 's/ /\t/g' > wgRna.tab
@@ -16616,7 +16616,7 @@ hgLoadBed hg18 encodeStanfordNRSFControl hg18.control.bed -tab
 
 #########################################################################
 # REGULATORY POTENTIAL UPDATE (DONE - 2007-08-01 - Hiram)
-    #	download data from "James Taylor" <james@bx.psu.edu>
+    #	download data from "James Taylor" <james at bx.psu.edu>
     ssh kkstore02
     mkdir /cluster/data/hg18/bed/regPotential7X.update
     cd /cluster/data/hg18/bed/regPotential7X.update
@@ -16690,7 +16690,7 @@ done
 # SIB Transcriptome (DONE Aug 29, 2007 - JK)
 
    # Create working directory and download data from where Christian Iseli
-   # (Christian.Iseli@licr.org) put it, and unpack.  The download takes about
+   # (Christian.Iseli at licr.org) put it, and unpack.  The download takes about
    # ten minutes (161M file).
    cd /cluster/data/hg18/bed
    mkdir sibTranscriptome
@@ -16961,7 +16961,7 @@ hgLoadBed hg18 rnaCluster chrom/*.bed
 
 ############################################################################
 # INDEL-BASED CONSERVATION TRACK (DONE, 2007-09-03 - 2007-09-17, hartera)
-# Data from the Gerton Lunter (gerton.lunter@anat.ox.ac.uk), MRC 
+# Data from the Gerton Lunter (gerton.lunter at anat.ox.ac.uk), MRC 
 # Functional Genetics Unit, University of Oxford, United Kingdom.
 # Data is from the paper:
 # Lunter G, Ponting CP and Hein J Genome-wide identification of human
@@ -17441,7 +17441,7 @@ TMPDIR=/scratch/tmp
 
 #############################################################################
 # CONTRAST GENES (2007-10-02 markd)
-# recieved predictions from Sam Gross <ssgross@stanford.edu>
+# recieved predictions from Sam Gross <ssgross at stanford.edu>
 
     cd /cluster/data/hg18/bed/contrastGene/
     wget http://www.stanford.edu/~ssgross/contrast.hg18.bed
@@ -17484,7 +17484,7 @@ done
 # knownGene:CDS 1.185%, sgpGene 1.270%, both 0.988%, cover 83.41%, enrich 65.68x
 
 ###########################################################################
-# Blastz Orangutan ponAbe2 (WORKING - 2007-10-02 - Hiram)
+# Blastz Orangutan ponAbe2 (DONE - 2007-10-02 - 2007-10-05 - Hiram)
     ssh kkstore02
     screen # use screen to control this job
     mkdir /cluster/data/hg18/bed/blastzPonAbe2.2007-10-02
@@ -17527,6 +17527,18 @@ TMPDIR=/scratch/tmp
     time nice -n +19 doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
 	-chainMinScore=3000 -chainLinearGap=medium \
 	-continue=cat -bigClusterHub=pk > cat.log 2>&1 &
+    #	real    390m56.934s
+
+    mkdir /cluster/data/ponAbe2/bed/blastz.hg18.swap
+    cd /cluster/data/ponAbe2/bed/blastz.hg18.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/hg18/bed/blastzPonAbe2.2007-10-02/DEF \
+	-chainMinScore=3000 -chainLinearGap=medium \
+	-swap -bigClusterHub=pk > swap.log 2>&1 &
+    #	real    123m9.197s
+    cat fb.ponAbe2.chainHg18Link.txt
+    #	2824501297 bases of 3093572278 (91.302%) in intersection
+
 ##############################################################
 # NIMH Bipolar Genome Graphs built-in  (DONE 2007-10-04 Galt)
 ssh hgwdev
@@ -17579,6 +17591,33 @@ values ("bipolar", 0, 0, "composite")'
 #Add composite track info to src/hg/makeDb/trackDb/human/trackDb.ra:
 
 ###########################################################################
+# Build targetScanS track - (DONE - 2007-10-05 - Hiram)
+#       requested by: George Bell gbell at wi.mit.edu
+    ssh hgwdev 
+    mkdir -p /cluster/data/hg18/bed/targetScanS
+    cd /cluster/data/hg18/bed/targetScanS
+
+    for C in `cut -f1 ../../chrom.sizes | sed -e "s/chr//"`
+do
+    wget --timestamping \
+    "http://jura.wi.mit.edu/targetscan/vert_40/ucsc/NR/hg18ConsChr${C}.bed" \
+	-O hg18ConsChr${C}.bed
+    if [ ! -s "hg18ConsChr${C}.bed" ]; then
+	rm -f "hg18ConsChr${C}.bed"
+    fi
+done
+
+    # Remove the browser/track lines from these custom track files
+    #	and load into the hg18.targetScanS table
+
+    egrep -h -v "^browser|^track" hg*.bed | \
+	hgLoadBed hg18 targetScanS -tmpDir=/scratch/tmp stdin
+
+
+    # Create/edit/check in targetScans.html and trackDb.ra under
+    # kent/src/hg/makeDb/trackDb/human/hg18
+
+###########################################################################
 # RE-BUILD WGRNA TRACK (DONE, 2007-10-05, Fan)
 
   ssh hgwdev
@@ -17589,7 +17628,7 @@ values ("bipolar", 0, 0, "composite")'
 
 # Received the data file, wgtrack_oct2007.txt (saved from wgtrack_oct2007.doc)
 # from Michel Weber's email
-# (Michel.Weber@ibcg.biotoul.fr)
+# (Michel.Weber at ibcg.biotoul.fr)
 # and place it under cd /cluster/data/hg18/bed/wgRna-2007-10-05.
 
   cat wg_track_oct2007.txt|sed -e 's/ /\t/g' > wgRna.tab
