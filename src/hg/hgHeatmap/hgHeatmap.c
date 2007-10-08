@@ -25,7 +25,7 @@
 #include "ispyFeatures.h"
 #include "sortFeatures.h"
 
-static char const rcsid[] = "$Id: hgHeatmap.c,v 1.31 2007/10/08 04:59:24 jsanborn Exp $";
+static char const rcsid[] = "$Id: hgHeatmap.c,v 1.32 2007/10/08 05:02:32 jsanborn Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -226,9 +226,9 @@ for (i=0; i< gh->expCount; i++)
 
 /* get the sampleIds of each person from database */ 
 struct trackDb *tdb = gh->tDb; 
-char *labTable = "labTrack"; // trackDbSetting(tdb, "patTable");
-char *key = "ispyId"; //trackDbSetting(tdb, "patKey");
-char *db = "ispy"; // trackDbSetting(tdb, "patDb");
+char *labTable = trackDbSetting(tdb, "patTable");
+char *key = trackDbSetting(tdb, "patKey");
+char *db = trackDbSetting(tdb, "patDb");
 
 if ((labTable == NULL) || (key == NULL) || (db==NULL))
     {
