@@ -25,7 +25,7 @@
 #include "ispyFeatures.h"
 #include "sortFeatures.h"
 
-static char const rcsid[] = "$Id: hgHeatmap.c,v 1.33 2007/10/08 05:36:06 jsanborn Exp $";
+static char const rcsid[] = "$Id: hgHeatmap.c,v 1.34 2007/10/08 05:37:19 jsanborn Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -433,7 +433,6 @@ if (sameString(pStr,""))
 
 /* sort patients and set CGI variable*/
 char *sortStr = sortPatients(conn, colList, pStr);
-hPrintf("sortStr = %s<BR>", sortStr);
 cartSetString(cart, hghPersonOrder, sortStr);
 }
 
