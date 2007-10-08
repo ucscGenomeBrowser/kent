@@ -25,7 +25,7 @@
 #include "ispyFeatures.h"
 #include "sortFeatures.h"
 
-static char const rcsid[] = "$Id: hgHeatmap.c,v 1.35 2007/10/08 20:12:21 jsanborn Exp $";
+static char const rcsid[] = "$Id: hgHeatmap.c,v 1.36 2007/10/08 20:36:18 jsanborn Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -601,6 +601,11 @@ if (cartVarExists(cart, hghSortPatients) && (ispyConn))
     {
     sortPersonOrder(ispyConn, colList);
     }
+
+theDataset = cartOptionalString(cart, hghDataSet);
+if (!theDataset)
+    theDataset = "UCSF breast cancer"; /* hard coded*/
+getGenoHeatmaps(conn, theDataset);       
    
 if (cartVarExists(cart, hghConfigure))
     {
@@ -628,7 +633,6 @@ else
     }
 
 cartRemovePrefix(cart, hghDo);
-
 }
 
 void hghDoUsualHttp()
@@ -655,11 +659,11 @@ struct sqlConnection *conn = NULL;
 getDbAndGenome(cart, &database, &genome,oldVars);
 hSetDb(database);
 cartSetString(cart, "db", database); /* custom tracks needs this */
-theDataset = cartOptionalString(cart, hghDataSet);  
-conn = hAllocConn();
-if (!theDataset)
-    theDataset = "UCSF breast cancer"; /* hard coded*/
-getGenoHeatmaps(conn, theDataset);
+//theDataset = cartOptionalString(cart, hghDataSet);  
+//conn = hAllocConn();
+//if (!theDataset)
+//   theDataset = "UCSF breast cancer"; /* hard coded*/
+//getGenoHeatmaps(conn, theDataset);
 
 /* Handle cases that just want a HTTP Location line: */
 if (cartVarExists(cart, hghClickX))
