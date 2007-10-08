@@ -662,7 +662,7 @@ group genes
 priority 45.2
 visibility hide
 color 34,34,139
-type bed 14 .
+type coloredExon
 
 searchTable contractGene
 searchType bed
