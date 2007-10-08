@@ -25,7 +25,7 @@
 #include "ispyFeatures.h"
 #include "sortFeatures.h"
 
-static char const rcsid[] = "$Id: hgHeatmap.c,v 1.32 2007/10/08 05:02:32 jsanborn Exp $";
+static char const rcsid[] = "$Id: hgHeatmap.c,v 1.33 2007/10/08 05:36:06 jsanborn Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -428,9 +428,13 @@ char varName[512];
 safef(varName, sizeof (varName),"%s", hghPersonOrder);
 char *pStr = cartUsualString(cart,varName, "");
 
+if (sameString(pStr,""))
+    return;
+
 /* sort patients and set CGI variable*/
-pStr = sortPatients(conn, colList, pStr);
-hPrintf("%s<BR>", pStr);
+char *sortStr = sortPatients(conn, colList, pStr);
+hPrintf("sortStr = %s<BR>", sortStr);
+cartSetString(cart, hghPersonOrder, sortStr);
 }
 
 
@@ -593,6 +597,11 @@ ispyConn = hAllocOrConnect("ispy");
 colList = getColumns(ispyConn);
 }
 
+if (cartVarExists(cart, hghSortPatients) && (ispyConn))                                         
+    {
+    sortPersonOrder(ispyConn, colList);
+    }
+   
 if (cartVarExists(cart, hghConfigure))
     {
     configurePage();
@@ -600,10 +609,6 @@ if (cartVarExists(cart, hghConfigure))
 else if (cartVarExists(cart, hghConfigureFeature) && (ispyConn))
     {
     doConfigure(ispyConn, colList, NULL);
-    }
-else if (cartVarExists(cart, hghSortPatients) && (ispyConn))
-    {
-    sortPersonOrder(ispyConn, colList);
     }
 else
     {

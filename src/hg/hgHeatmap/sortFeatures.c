@@ -73,9 +73,8 @@ for (child = children; child; child = child->next)
 //    hPrintf("comparing %s vs. %s: %d vs. %d<BR>", node->name, name, node->val, val);
     
     if (node->val <= val)
-	{
 	prevChild = child;
-	}
+
     if (node->val > val)
 	{
 	nextChild = child;
@@ -85,14 +84,12 @@ for (child = children; child; child = child->next)
 
 if (prevChild != NULL)
     {
-//    hPrintf("put in middle/end<BR>");
     nextChild = prevChild->next;
     prevChild->next = newChild;
     newChild->next = nextChild;
     }
 else
     {
-//    hPrintf("put at beginning<BR>");
     nextChild = children;
     newChild->next = nextChild;
     parent->children = newChild;
@@ -110,7 +107,6 @@ struct sortList *child, *children = node->children;
 
 if (children == NULL)
     {
-//    hPrintf("%s,", node->name, node->val);
     dyStringAppend(dy, node->name);
     dyStringAppend(dy, ",");
     return dy;
@@ -130,8 +126,6 @@ char *sortPatients(struct sqlConnection *conn, struct column *colList, char *pat
 if (patientStr == NULL)
     return NULL;
 
-hPrintf("%s<BR>", patientStr);
-
 struct slName *pa, *patients = slNameListFromComma(patientStr);
 struct column *col = NULL;
 
@@ -140,7 +134,6 @@ struct sortNode *child, *parent;
 
 for (pa = patients; pa; pa = pa->next)
     {
-    hPrintf("pa: %s<BR>", pa->name);
     child = NULL;
     parent = root;
     for (col = colList; col; col = col->next)
@@ -152,8 +145,6 @@ for (pa = patients; pa; pa = pa->next)
 	char* cellVal = col->cellVal(col, pa, conn);
 	if (cellVal)
 	    val = atoi(cellVal);
-
-	hPrintf("%s: %d<BR>", col->name, val);
 
 	child = NULL;
 	if (col->next != NULL) /* Not last column */
