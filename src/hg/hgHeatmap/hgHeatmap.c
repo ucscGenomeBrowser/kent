@@ -23,9 +23,9 @@
 #include "hgChromGraph.h"
 #include "ra.h"
 #include "ispyFeatures.h"
+#include "sortFeatures.h"
 
-
-static char const rcsid[] = "$Id: hgHeatmap.c,v 1.30 2007/10/05 18:25:10 jzhu Exp $";
+static char const rcsid[] = "$Id: hgHeatmap.c,v 1.31 2007/10/08 04:59:24 jsanborn Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -226,9 +226,9 @@ for (i=0; i< gh->expCount; i++)
 
 /* get the sampleIds of each person from database */ 
 struct trackDb *tdb = gh->tDb; 
-char *labTable = trackDbSetting(tdb, "patTable");
-char *key = trackDbSetting(tdb, "patKey");
-char *db = trackDbSetting(tdb, "patDb");
+char *labTable = "labTrack"; // trackDbSetting(tdb, "patTable");
+char *key = "ispyId"; //trackDbSetting(tdb, "patKey");
+char *db = "ispy"; // trackDbSetting(tdb, "patDb");
 
 if ((labTable == NULL) || (key == NULL) || (db==NULL))
     {
@@ -394,6 +394,7 @@ for (i=0; i< allA->size; i++)
     gh->expIdOrder[expId]=i;
     hashAddInt(gh->sampleOrder, sample, i); 
     }
+
 slReverse(&gh->sampleList);
 }
 
@@ -416,8 +417,22 @@ void setBedOrder(struct genoHeatmap *gh)
 char varName[512];
 safef(varName, sizeof (varName),"%s", hghPersonOrder);
 char *pStr = cartUsualString(cart,varName, "");
+
 setPersonOrder(gh, pStr);
 }
+
+void sortPersonOrder(struct sqlConnection *conn, struct column *colList)
+{
+/* get the ordering information from cart variable hghOrder*/
+char varName[512];
+safef(varName, sizeof (varName),"%s", hghPersonOrder);
+char *pStr = cartUsualString(cart,varName, "");
+
+/* sort patients and set CGI variable*/
+pStr = sortPatients(conn, colList, pStr);
+hPrintf("%s<BR>", pStr);
+}
+
 
 int experimentHeight()
 /* Return height of an individual experiment */
@@ -585,6 +600,10 @@ if (cartVarExists(cart, hghConfigure))
 else if (cartVarExists(cart, hghConfigureFeature) && (ispyConn))
     {
     doConfigure(ispyConn, colList, NULL);
+    }
+else if (cartVarExists(cart, hghSortPatients) && (ispyConn))
+    {
+    sortPersonOrder(ispyConn, colList);
     }
 else
     {

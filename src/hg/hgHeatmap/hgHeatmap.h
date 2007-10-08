@@ -32,6 +32,7 @@
 #define hghConfigure hghDo "Configure"
 #define hghConfigureOne hghDo "ConfigureOne"
 #define hghConfigureFeature hghDo "ConfigureFeature"
+#define hghSortPatients hghDo "SortPatients"
 #define hghBrowse hghDo "Browse"
 #define hghUpload hghDo "Upload"
 #define hghSubmitUpload hghDo "SubmitUpload"

@@ -30,7 +30,7 @@
 #include "ispyFeatures.h"
 
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.28 2007/10/05 01:28:11 jzhu Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.29 2007/10/08 04:59:24 jsanborn Exp $";
 
 /* Page drawing stuff. */
 
@@ -755,6 +755,7 @@ hPrintf("</TABLE>");
 
 cgiMakeButton(hghConfigure, "configure");
 cgiMakeButton(hghConfigureFeature, "configure features");
+cgiMakeButton(hghSortPatients, "sort patients");
 
 hPrintf("<BR>");
 
