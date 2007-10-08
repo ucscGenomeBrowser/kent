@@ -17,7 +17,7 @@
 #include "ispyFeatures.h"
 #include "userSettings.h"
 
-static char const rcsid[] = "$Id: configureFeatures.c,v 1.2 2007/10/02 22:32:42 jsanborn Exp $";
+static char const rcsid[] = "$Id: configureFeatures.c,v 1.3 2007/10/08 20:10:49 jsanborn Exp $";
 
 void makeTitle(char *title, char *helpName)
 /* Make title bar. */
@@ -102,17 +102,17 @@ for (col = colList; col != NULL; col = col->next)
     
     /* Do left/right button */
     hPrintf("<TD ALIGN=CENTER>");
-    safef(varName, sizeof(varName), "heat.do.up.%s", col->name);
+    safef(varName, sizeof(varName), "%s.up.%s", hghDo, col->name);
     if (col != colList)
 	{
 	hPrintf("<INPUT NAME=\"%s\" TYPE=\"IMAGE\" VALUE=\"up\" ", varName);
-	hPrintf("SRC=\"../images/up.gif\">");
+	hPrintf("SRC=\"../icons/up.gif\">");
 	}
-    safef(varName, sizeof(varName), "heat.do.down.%s", col->name);
+    safef(varName, sizeof(varName), "%s.down.%s", hghDo, col->name);
     if (col->next != NULL)
 	{
 	hPrintf("<INPUT NAME=\"%s\" TYPE=\"IMAGE\" VALUE=\"down\" ", varName);
-	hPrintf("SRC=\"../images/down.gif\">");
+	hPrintf("SRC=\"../icons/down.gif\">");
 	}
     hPrintf("</TD>");
     
@@ -148,14 +148,14 @@ static void bumpColList(char *bumpHow, struct column **pColList)
 char *dupe = cloneString(bumpHow);
 char *words[4], *upDown, *colName;
 
-if (chopString(dupe, ".", words, ArraySize(words)) < 4)
+if (chopString(dupe, ".", words, ArraySize(words)) < 3)
     {
     warn("Strange bumpHow value %s in bumpColList", bumpHow);
     cartRemove(cart, bumpHow);
     noWarnAbort();
     }
-upDown = words[2];
-colName = words[3];
+upDown = words[1];
+colName = words[2];
 
 if (sameString(upDown, "up"))
     {
@@ -193,7 +193,7 @@ else
 	}
     }
 freez(&dupe);
-//slSort(pColList, columnCmpPriority);
+slSort(pColList, columnCmpPriority);
 savePriorities(*pColList);
 }
 
@@ -277,7 +277,7 @@ void doSaveCurrentColumns(struct sqlConnection *conn, struct column *colList)
 struct userSettings *us = colUserSettings();
 if (userSettingsProcessForm(us))
     {
-//    refinePriorities(columnHash);
+    refinePriorities(columnHash);
     slSort(&colList, columnCmpPriority);
     doConfigure(conn, colList, NULL);
     }
