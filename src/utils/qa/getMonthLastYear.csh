@@ -10,7 +10,6 @@
 #######################
 
 set go=""
-set today=""
 set year=""
 set yearMonth=""
 set lastyear=""
