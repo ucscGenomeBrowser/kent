@@ -21,7 +21,7 @@ priority 5
 name flyBase
 shortLabel FlyBase
 tables flyBase2004Xref
-idSql select fbgn from flyBase2004Xref where name = '%s'
+idSql select fbtr from flyBase2004Xref where name = '%s'
 url http://flybase.net/.bin/fbidq.html?%s
 priority 10
 
