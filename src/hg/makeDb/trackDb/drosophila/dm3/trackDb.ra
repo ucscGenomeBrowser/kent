@@ -65,6 +65,7 @@ priority 35
 visibility pack
 color 30,130,210
 type bed 12 .
+noScoreFilter .
 symbolTable flyBase2004Xref
 
 track flyBaseLiftGene
