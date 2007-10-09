@@ -4,7 +4,7 @@
 #include "hash.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: textHistogram.c,v 1.24 2005/11/30 02:42:58 kate Exp $";
+static char const rcsid[] = "$Id: textHistogram.c,v 1.25 2007/10/09 00:26:41 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -19,7 +19,7 @@ static struct optionSpec optionSpecs[] = {
     {"autoscale", OPTION_INT},
     {"autoScale", OPTION_INT},
     {"skip", OPTION_INT},
-    {"pValues", OPTION_BOOLEAN},
+    {"probValues", OPTION_BOOLEAN},
     {"freq", OPTION_BOOLEAN},
     {NULL, 0}
 };
@@ -33,7 +33,7 @@ int minVal = 0;
 double minValR = 0.0;
 boolean doLog = FALSE;
 boolean noStar = FALSE;
-boolean pValues = FALSE;
+boolean probValues = FALSE;
 int col = 0;
 int aveCol = -1;
 boolean real = FALSE;
@@ -59,7 +59,7 @@ errAbort(
   "             will be output in place of counts of primary column.\n"
   "   -real - Data input are real values (default is integer)\n"
   "   -autoScale=N - autoscale to N # of bins\n"
-  "   -pValues - show p-Values as well as counts (sets -noStar too)\n"
+  "   -probValues - show prob-Values (density and cum.distr.) (sets -noStar too)\n"
   "   -freq - show frequences instead of counts\n"
   "   -skip=N - skip N lines before starting, default 0\n"
   );
@@ -261,7 +261,7 @@ if (verboseLevel()>1)
     end = maxBinCount;
     }
 
-if (pValues || freq)
+if (probValues || freq)
     {
     totalCounts = 0;
     for (i=begin; i<end; ++i)
@@ -279,8 +279,8 @@ if (doLog)
 if (verboseLevel()>1)
     {
     if (noStar) {
-	if (pValues)
-	    printf("# bin\tValue\t\tp-Value\t\tlog2(p-Value)\tCPD\t1-CPD\n");
+	if (probValues)
+	    printf("# bin\tValue\t\tprob-Value\t\tlog2(prob-Value)\tCPD\t1-CPD\n");
 	else
 	    printf("# bin  Value	ascii graph\n");
     } else
@@ -334,7 +334,7 @@ for (i=begin; i<=end; ++i)
 	    printf("%02d\t", i);
 	if (real)
 	    {
-	    if (pValues)
+	    if (probValues)
 		{
 		if (verboseLevel()>1)
 		    printf("%g:%g", binStartR, binStartR+binSizeR);
@@ -348,7 +348,7 @@ for (i=begin; i<=end; ++i)
 	    {
 	    printf("%d\t%f", binStart, ct);
 	    }
-	if (pValues)
+	if (probValues)
 	    {
 	    if (ct > 0)
 		{
@@ -397,18 +397,18 @@ maxBinCount = optionInt("maxBinCount", 25);
 minValStr = optionVal("minVal", "0");
 doLog = optionExists("log");
 noStar = optionExists("noStar");
-pValues = optionExists("pValues");
+probValues = optionExists("probValues");
 col = optionInt("col", 1) - 1;
 aveCol = optionInt("aveCol", 0) - 1;
 real = optionExists("real");
 autoscale = optionInt("autoscale", 0);
 if (autoscale == 0)
     autoscale = optionInt("autoScale", 0);
-freq = optionExists("freq");
+freq = optionExists("freq") && !probValues;  /* freq and probValues don't currently work right together */
 skip = optionInt("skip", 0);
 
-/*	pValues turns on noStar too	*/
-if (pValues) noStar = TRUE;
+/*	probValues turns on noStar too	*/
+if (probValues) noStar = TRUE;
 
 if (real)
     {
@@ -451,7 +451,7 @@ if (autoscale > 0)
     verbose(2, "#\tautoscaling to %d bins\n", autoscale);
 else
     verbose(2, "#\tautoscale: not selected\n");
-verbose(2, "#\tshow p-Values: %s\n", pValues ? "YES" : "NO" );
+verbose(2, "#\tshow prob-Values: %s\n", probValues ? "YES" : "NO" );
 
 /*	to autoscale stdin we would need to keep all the data read in
  *	during the min,max scan and reuse that data for the histogram
