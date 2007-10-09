@@ -17642,4 +17642,38 @@ done
   cat wg_track_oct2007.txt|sed -e 's/ /\t/g' > wgRna.tab
 
   hgLoadBed -sqlTable=/cluster/home/fanhsu/src/hg/lib/wgRna.sql hg18 wgRna wgRna.tab
+
 #############################################################################
+# BLASTZ calJac1 - Marmoset  (IN PROGRESS 2007-10-09 kate)
+
+    ssh kkstore02
+    mkdir /cluster/data/hg18/bed/blastz.calJac1.2007-10-07
+    cd /cluster/data/hg18/bed/blastz.calJac1.2007-10-07
+
+    cat << '_EOF_' > DEF
+# human vs. marmoset
+
+# dynamic masking param
+BLASTZ_M=50
+
+# TARGET: Human Hg18
+SEQ1_DIR=/scratch/hg/hg18/nib
+SEQ1_LEN=/cluster/data/hg18/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Marmoset (calJac1)
+SEQ2_DIR=/san/sanvol1/scratch/calJac1/calJac1.2bit
+SEQ2_LEN=/san/sanvol1/scratch/calJac1/chrom.sizes
+SEQ2_LIMIT=500
+SEQ2_CHUNK=30000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/hg18/bed/blastz.calJac1.2007-10-07
+'_EOF_'
+    # << happy emacs
+
+    doBlastzChainNet.pl DEF \
+      -bigClusterHub pk \
+      -chainMinScore=3000 -chainLinearGap=medium >& do.log &
+    tail -f do.log
