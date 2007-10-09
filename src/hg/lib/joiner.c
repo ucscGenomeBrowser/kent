@@ -1068,14 +1068,25 @@ for (jf = js->fieldList; jf != NULL; jf = jf->next)
 return NULL;
 }
 
-static boolean tableExists(char *database, char *table)
-/* Return TRUE if database and table exist. */
+static boolean tableExists(char *database, char *table, char *splitPrefix)
+/* Return TRUE if database and table exist.  If splitPrefix is given,
+ * check for existence with and without it. */
 {
 struct sqlConnection *conn = sqlMayConnect(database);
 boolean exists;
+char t2[1024];
 if (conn == NULL)
     return FALSE;
-exists = sqlTableExists(conn, table);
+if (isNotEmpty(splitPrefix))
+    safef(t2, sizeof(t2), "%s%s", splitPrefix, table);
+else
+    safef(t2, sizeof(t2), "%s", table);
+exists = sqlTableWildExists(conn, t2);
+if (!exists && isNotEmpty(splitPrefix))
+    {
+    safef(t2, sizeof(t2), "%s", table);
+    exists = sqlTableExists(conn, t2);
+    }
 sqlDisconnect(&conn);
 return exists;
 }
@@ -1151,7 +1162,7 @@ struct slRef *chainList, *chainEl;
 /* Return list of self, children, and parents (but not siblings) */
 
 #ifdef SCREWS_UP_SPLITS
-if (!tableExists(database, table))
+if (!tableExists(database, table, NULL))
     errAbort("%s.%s - table doesn't exist", database, table);
 #endif
 
@@ -1173,7 +1184,8 @@ for (js = joiner->jsList; js != NULL; js = js->next)
 			if (!sameString(database, db->name) 
 				|| !sameString(table, jf->table))
 			    {
-			    if (tableExists(db->name, jf->table))
+			    if (tableExists(db->name, jf->table,
+					    jf->splitPrefix))
 				{
 				jp = joinerToField(database, jfBase, 
 					db->name, jf, jsChain); 
