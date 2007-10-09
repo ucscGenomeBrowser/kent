@@ -953,8 +953,6 @@ identifier chain[${chainDest}]Id
 "Link together chain info"
     $gbd.chain[].id $split
     $gbd.chain[]Link.chainId $split full
-    $gbd.chain[].id
-    $gbd.chain[]Link.chainId full
     $gbd.net[].chainId exclude=0
     $gbd.netRxBest[].chainId exclude=0
     $gbd.net[]NonGap.chainId exclude=0
@@ -2564,6 +2562,9 @@ tablesIgnored $gbd
     phastConsElements15way
     phastCons17way
     phastConsElements17way
+    jaxQTL
+    jaxQTLAsIs
+    jaxQTLPadded
 
 tablesIgnored $kgDb
     pbAaDist_
