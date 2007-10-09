@@ -18,10 +18,18 @@ longLabel BDGP Accession
 priority 2.3
 visibility off
 type acc
-itemUrl http://flybase.net/cgi-bin/uniq.html?species=Dmel&field=SYN&db=fbtr&context=%s&caller=genejump
+
+name flyBaseTxId
+shortLabel FlyBase Tx
+longLabel FlyBase Transcript ID
+priority 2.35
+visibility off
+type lookup flyBase2004Xref name fbtr
+itemUrl http://flybase.net/cgi-bin/uniq.html?species=Dmel&cs=yes&db=fbgn&context=%s&caller=genejump
+#itemUrl http://flybase.net/cgi-bin/uniq.html?species=Dmel&field=SYN&db=fbtr&context=%s&caller=genejump
 
 name flyBaseId
-shortLabel FlyBase
+shortLabel FlyBase Gene
 longLabel FlyBase Gene ID
 visibility hide
 priority 2.4
