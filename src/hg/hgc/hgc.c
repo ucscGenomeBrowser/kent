@@ -210,7 +210,7 @@
 #include "atomDb.h"
 #include "itemConf.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1350 2007/10/08 23:46:53 hiram Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1351 2007/10/09 23:45:35 kate Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -2397,7 +2397,7 @@ void printTrackHtml(struct trackDb *tdb)
 {
 char *tableName;
 
-if (! isCustomTrack(tdb->tableName))
+if (!isCustomTrack(tdb->tableName))
     {
     printTBSchemaLink(tdb);
     printDataVersion(tdb);
@@ -3695,6 +3695,14 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
 	(fbUnderstandTrack(track) && !dnaIgnoreTrack(track)))
 	{
 	char *visString = cartOptionalString(cart, track);
+
+        /* determine if track is really visible -- if it's in a supertrack
+         * the supertrack visibility affects the track visibility */
+        char *supertrack = NULL;
+        if (visString && differentString(visString, "hide") && 
+            (supertrack = trackDbGetSupertrackName(tdb)) != NULL)
+                visString = cartOptionalString(cart, supertrack);
+
 	char buf[128];
 	if (visString != NULL && sameString(visString, "hide"))
 	    {
