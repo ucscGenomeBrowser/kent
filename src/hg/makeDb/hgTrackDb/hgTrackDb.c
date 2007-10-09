@@ -11,7 +11,7 @@
 #include "portable.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgTrackDb.c,v 1.31 2007/09/19 21:15:15 kate Exp $";
+static char const rcsid[] = "$Id: hgTrackDb.c,v 1.32 2007/10/09 23:37:36 galt Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -265,6 +265,145 @@ else
     }
 }
 
+struct subGroupData
+/* composite group definitions */
+{
+int numSubGroups;        /* count of subGroups */
+struct hash *nameHash;   /* hash of subGroup names */
+struct hash *values[10]; /* array of value hash pointers in order */
+};
+
+static void checkSubGroups(struct trackDb *tdList)
+/* check integrity of subGroup clauses */
+{
+struct hash *compositeHash = newHash(8);
+
+/* process all composite tracks */
+struct trackDb *td, *tdNext;
+for (td = tdList; td != NULL; td = tdNext)
+    {
+    tdNext = td->next;
+    if (trackDbSetting(td, "compositeTrack"))
+	{
+	int i = 0;
+	struct subGroupData *sgd;
+        char subGroupName[256];
+        AllocVar(sgd);
+	sgd->nameHash = newHash(3);
+	while(i<10)
+	    {
+	    safef(subGroupName, sizeof(subGroupName), "subGroup%d", i+1);
+	    char *sgSetting = trackDbSetting(td, subGroupName);
+	    if (!sgSetting)
+		break;
+            sgSetting = cloneString(sgSetting);
+	    char *sgWord = sgSetting;
+	    char *sgName = nextWord(&sgWord);
+	    nextWord(&sgWord);  /* skip word not used */
+	    hashAddInt(sgd->nameHash, sgName, i);
+	    sgd->values[i] = newHash(3);
+	    char *sgKeyVal;
+            while((sgKeyVal = nextWord(&sgWord)))
+		{
+		char *sgVal = strchr(sgKeyVal,'=');
+		if (!sgVal)
+		    {
+		    verbose(1,"keyval pair missing equals sign in %s: %s\n", td->tableName, sgKeyVal);
+		    break;
+		    }
+		*sgVal++ = 0;
+		hashAdd(sgd->values[i], sgKeyVal, cloneString(sgVal));
+		}
+	    ++i;
+	    }
+	sgd->numSubGroups = i;
+	hashAdd(compositeHash, td->tableName, sgd);
+
+	}
+    }
+
+/* now verify subtracks */
+for (td = tdList; td != NULL; td = tdNext)
+    {
+
+    tdNext = td->next;
+    if (!trackDbSetting(td, "compositeTrack")
+     && !sameOk("on", trackDbSetting(td, "superTrack")))
+	{
+	char *trackName = trackDbSetting(td, "subTrack");
+	if (trackName)
+	    {
+	    char *words[2];
+	    chopLine(cloneString(trackName), words);
+	    trackName = words[0];
+
+	    struct subGroupData *sgd = hashFindVal(compositeHash, trackName);
+	    if (!sgd)
+		{
+		verbose(1,"parent %s missing for subtrack %s\n", trackName, td->tableName);
+		continue;
+		}
+	    char *subGroups = trackDbSetting(td, "subGroups");
+	    if (subGroups && (sgd->numSubGroups == 0))
+		{
+		verbose(1,"parent %s missing subGroups for subtrack %s subGroups=[%s]\n", 
+			trackName, td->tableName, subGroups);
+		continue;
+		}
+	    if (!subGroups && (sgd->numSubGroups > 0))
+		{
+		verbose(1,"parent %s : subtrack %s is missing subGroups\n", trackName, td->tableName);
+		continue;
+		}
+	    if (!subGroups && (sgd->numSubGroups == 0))
+		{
+		continue; /* nothing to do */
+		}
+	    subGroups = cloneString(subGroups);
+	    char *sgWord = subGroups;
+	    int i = 0, lastI = -1, numSubGroups = 0;
+	    boolean inOrder = TRUE;
+	    while (sgWord)
+		{
+		char *sgKeyVal = nextWord(&sgWord);
+		char *sgVal = strchr(sgKeyVal,'=');
+		if (!sgVal)
+		    {
+		    verbose(1,"keyval pair missing equals sign in %s: %s\n", td->tableName, sgKeyVal);
+		    break;
+		    }
+		*sgVal++ = 0;
+		i = hashIntValDefault(sgd->nameHash, sgKeyVal, -1);
+		if (i == -1)
+		    {
+		    verbose(1,"%s: subGroup name not found: %s\n", td->tableName, sgKeyVal);
+		    }
+		else if (!hashLookup(sgd->values[i], sgVal))
+		    {
+		    verbose(1,"%s: value not found in parent composite : %s=%s\n", td->tableName, sgKeyVal, sgVal);
+		    }
+		++numSubGroups; 
+		if (i < lastI)
+		    inOrder = FALSE;
+		lastI = i;	    
+		}
+	    if (numSubGroups != sgd->numSubGroups)
+		{
+		verbose(1,"%s: found %d values but parent composite has %d\n", td->tableName, numSubGroups, sgd->numSubGroups);
+		}
+	    if (!inOrder)
+		{
+		verbose(2,"%s: found groups in a different order than the parent composite\n", td->tableName);
+		}
+
+	    }
+	}
+    }
+
+
+}
+
+
 void hgTrackDb(char *org, char *database, char *trackDbName, char *sqlFile, char *hgRoot,
                char *visibilityRa, char *priorityRa, boolean strict)
 /* hgTrackDb - Create trackDb table from text files. */
@@ -291,6 +430,9 @@ if (visibilityRa != NULL)
 if (priorityRa != NULL)
     trackDbOverridePriority(uniqHash, priorityRa);
 slSort(&tdList, trackDbCmp);
+
+checkSubGroups(tdList); 
+
 printf("Loaded %d track descriptions total\n", slCount(tdList));
 
 /* Write to tab-separated file. */
