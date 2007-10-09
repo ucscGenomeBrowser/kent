@@ -61,7 +61,7 @@ track flyBaseNoncoding
 shortLabel FB Noncoding
 longLabel FlyBase Noncoding Genes
 group genes
-priority 35
+priority 34.1
 visibility pack
 color 30,130,210
 type bed 12 .
@@ -73,7 +73,7 @@ shortLabel FlyBase 4.2 Genes
 longLabel $o_Organism ($o_date/$o_db) FlyBase 4.2 Genes Mapped to Release 5 ($date/$db)
 group genes
 priority 45.5
-visibility dense
+visibility hide
 color 0,100,180
 type genePred flyBaseLiftGenePep
 otherDb dm2
