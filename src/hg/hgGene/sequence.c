@@ -15,7 +15,7 @@
 #include "hCommon.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: sequence.c,v 1.21 2007/04/09 03:11:25 kent Exp $";
+static char const rcsid[] = "$Id: sequence.c,v 1.22 2007/10/09 20:03:25 angie Exp $";
 
 static void printGenomicAnchor(char *table, char *itemName,
 	char *chrom, int start, int end)
@@ -184,6 +184,7 @@ char *table = genomeSetting("knownGene");
 struct sqlResult *sr;
 char **row;
 char query[256];
+boolean hasBin = hIsBinned(table);
 
 hPrintf("<TT><PRE>");
 safef(query, sizeof(query), 
@@ -193,7 +194,7 @@ safef(query, sizeof(query),
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     {
-    struct genePred *gene = genePredLoad(row);
+    struct genePred *gene = genePredLoad(row+hasBin);
     struct bed *bed = bedFromGenePred(gene);
     struct dnaSeq *seq = hSeqForBed(bed);
     hPrintf(">%s (%s predicted mRNA)\n", geneId, geneName);
