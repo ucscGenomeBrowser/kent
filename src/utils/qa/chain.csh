@@ -390,13 +390,13 @@ else
 endif
 
 # -------------------------------------------------
-# find the correct paramaters for the $matrix variable:
+# find the correct paramaters for the matrix variable:
 
 
 echo
 echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
-echo  "Find the correct paramaters for the $matrix variable"
-echo  "which appears in the chain$OtherOrg download file."
+echo  "Find the correct paramaters for the matrix variable"
+echo  "which appears in the chain-OtherOrg download file."
 echo  "Compare this to the chain description page."
 echo
 
