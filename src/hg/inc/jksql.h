@@ -166,6 +166,10 @@ int sqlTableSizeIfExists(struct sqlConnection *sc, char *table);
 boolean sqlTablesExist(struct sqlConnection *conn, char *tables);
 /* Check all tables in space delimited string exist. */
 
+boolean sqlTableWildExists(struct sqlConnection *sc, char *table);
+/* Return TRUE if table (which can include SQL wildcards) exists. 
+ * A bit slower than sqlTableExists. */
+
 char *sqlQuickQuery(struct sqlConnection *sc, char *query, char *buf, int bufSize);
 /* Does query and returns first field in first row.  Meant
  * for cases where you are just looking up one small thing.  
