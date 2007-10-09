@@ -3814,6 +3814,14 @@ TMPDIR=/scratch/tmp
 #### XXX - FOR NEXT TIME: need to fix something here for the
 #### XXX - broken symbol AFM067XA9 which has over 6,000 aliases.
 #### XXX - This isn't right
+#### hand-editted the record for AFM067XA9.  KUHN/ARCHANA 10-08-2007
+#### preserving the list of otherNames that showed up stsInfo2.otherNames for 
+####    trueName=AFM067XA9  
+#### cp hg18.AFM067XA9.otherNames /cluster/data/hg18/bed/sts
+#### preserving the list of stsMarkers that showed up in stsAlias.alias
+####    in excess of those in the above file (10 k total)
+#### cp hg18.AFM067XA9.dropped.aliases /cluster/data/hg18/bed/sts
+
     updateStsInfo -verbose=1 -gb=UniSTS.acc stsInfo2.bed.prev all.STS.fa.prev \
 	UniSTS.sts UniSTS.aliases UniSTS.convert.fa new
 # 5610    MFD330  1000006 (0) not in dbSTS anymore
