@@ -11,7 +11,7 @@
 #  Runs through the checks on Known Genes.  
 #  Requires KG java run in Trackchecking first.
 #  -----------
-#  run KGGeneCheck.java on dev: (need to run HGGeneCheck now -- in CVS)
+#  run HGGeneCheck.java on dev 
 #  /cluster/home/heather/TrackChecking/KGGeneCheck.java
 # 
 ###############################################
@@ -19,6 +19,7 @@
 set db=""
 set oldDb=""
 set trackName="kg"
+set table="knownGene"
 
 
 if ($#argv == 0 || $#argv > 2) then
@@ -50,61 +51,48 @@ set curr_dir=$cwd
 #  get sets of KG, FB(GS), PB tables:
 # also prints list and update times.
 
-/cluster/home/kuhn/bin/findKgTableSet.csh $db 
+#####  /cluster/home/kuhn/bin/findKgTableSet.csh $db 
 
 echo
 echo "the following tables are in the overall KG list, but not in this assembly:"
-comm -23 kgTables kgTablesAll
+comm -23 kgTables kgTables$db
 echo  
 
 echo
 echo "the following tables are in the overall GS list, but not in this assembly:"
-comm -23 fbTables fbTablesAll
+comm -23 fbTables fbTables$db
 echo  
 
 echo
 echo "the following tables are in the overall PB list, but not in this assembly:"
-comm -23 pbTables pbTablesAll
+comm -23 pbTables pbTables$db
 echo  
+
 
 # --------------------------------------------
 #  run KGGeneCheck.java on dev:
 
-# cd /cluster/home/heather/TrackChecking/
-# source javaenv
-# java KGGeneCheck $db > $db.$trackName &
-# cd curr_dir
+#### echo
+#### echo " --------------------------------------------"
+####
+#### echo "server hgwdev.cse.ucsc.edu /
+#### machine hgwdev.cse.ucsc.edu /
+#### quick false /
+#### dbSpec $db /
+#### table all /
+#### zoomCount 4" > $db.props
+###
+#### echo "run KGGeneCheck: \
+####   nohup nice HGGeneCheck $db.props > & $db.KGrobot.out & "
+#### echo
+echo " --------------------------------------------"
+
 
 # --------------------------------------------
-# with all new tables on dev, check their update times relative to beta:
-
-# now done with kgFindTableSet.csh above
-
-# echo
-# echo "update times ($trackName):"
-# echo
-# rm -f differentTablesAll
-#   echo "Table \n============= \n"."dev \n"."beta \n"
-#   echo
-# foreach table (`cat {$trackName}TablesAll`)
-#   echo $table
-#   echo "============="
-#   set dev=`hgsql -N -e 'SHOW TABLE STATUS LIKE "'$table'"' $db | awk '{print $13, $14}'`
-#   set beta=`hgsql -h hgwbeta -N -e 'SHOW TABLE STATUS LIKE "'$table'"' $db | awk '{print $13, $14}'`
-#   echo "."$dev
-#   echo "."$beta
-# 
-#   if ("$dev" != "$beta") then
-#     echo $table >> differentTablesAll
-#     echo $table " does not match"
-#   endif
-#   echo
-# end
-# echo
-
 
 echo
 echo "compare new genes to old set (uniq):"
+echo "not useful for first releasse of KG3-type track"
 if ($db != $oldDb) then
   echo "  comparing to table in $oldDb on beta"
   echo
@@ -144,6 +132,7 @@ echo
 # --------------------------------------------
 # check strand:
 
+echo "-------------------------------------------------"
 echo
 echo "counting strands:"
 set totKG=`hgsql -N -e  'SELECT COUNT(*) FROM knownGene' $db`
@@ -162,10 +151,10 @@ echo "rows  = $totKG"
 echo
 
 
-
 # -------------------------------------------------
 # look for start and end order:
 
+echo "-------------------------------------------------"
 echo
 echo "look for start and end order:"
 rm -f txFile
@@ -187,21 +176,22 @@ echo "negative txStart:   "$var6
 echo "negative cdsStart:  "$var7
 echo
 
-# echo
-# echo "check if browser show no 5', 3'-UTR where predicted:"
-# echo "no 5'-UTR:"
-# hgsql e "SELECT name, chrom, txStart, txEnd FROM knownGene \
-#          WHERE txStart = cdsStart LIMIT 3" $db
-# echo
-# echo "no 3'-UTR:"
-# hgsql e "SELECT name, chrom, txStart, txEnd FROM knownGene \
-#          WHERE txEnd = cdsEnd LIMIT 3" $db
-# echo:
+echo "-------------------------------------------------"
+echo
+echo "check if browser show no 5', 3'-UTR where predicted:"
+echo "no 5'-UTR:"
+hgsql -e "SELECT name, chrom, txStart, txEnd FROM knownGene \
+         WHERE txStart = cdsStart LIMIT 3" $db
+echo
+echo "no 3'-UTR:"
+hgsql -e "SELECT name, chrom, txStart, txEnd FROM knownGene \
+         WHERE txEnd = cdsEnd LIMIT 3" $db
 
 
 # -------------------------------------------------
 # check ends:
 
+echo "-------------------------------------------------"
 # looking for off the end of each chrom (look for all positive values)
 # looking for off-end of each chrom (look for all positive values)
 
@@ -209,27 +199,15 @@ echo
 echo "looking for off the end of each chrom \
        (look for all positive values):"
 
-# echo "transcription coords"
-# echo "printing tx to file"
-# print tx to file:
-hgsql -e "SELECT chromInfo.chrom, chromInfo.size - MAX(knownGene.txEnd) \
-    AS dist_from_end FROM chromInfo, knownGene \
-    WHERE chromInfo.chrom = knownGene.chrom \
-    GROUP BY chromInfo.chrom" $db > $db.KG.tx.offEnd
-# echo
-
-
-echo "lines from $db.KG.tx.offEnd > 0:"
-awk '{if($2<0) {print $2} }' $db.KG.tx.offEnd
-echo "expect blank or check file $db.KG.tx.offEnd"
+checkOffend.csh $db $table
 echo
-
 
 
 # -------------------------------------------------
 # check to see if there are genes on all chroms.
 
 
+echo "-------------------------------------------------"
 echo " check to see if there are genes on all chroms:"
 echo
 hgsql -N -e "SELECT ci.chrom, COUNT(*) AS genes \
@@ -244,29 +222,38 @@ hgsql -N -e "SELECT ci.chrom, COUNT(*) AS genes \
 echo
 
 
+
+echo "-------------------------------------------------"
+echo " check coverage: "
+echo
+checkCoverage.csh $db $table
+
+echo
+runBits.csh $db $knownGene
+echo
+
 # -------------------------------------------------
 # check exon sizes:
-
-
-# edit the list /cluster/home/heather/jdbc/data/tablelist
-echo
-echo "knownGene" > /cluster/home/heather/jdbc/data/KG
-
-# and run /cluster/home/heather/jdbc/ExonSize.java:
-cd /cluster/home/heather/jdbc/
-source javaenv
-java ExonSize $db data/KG | egrep -v "items found|-----|Querying" > $curr_dir/$db.exonExtremes
-cd $curr_dir 
-
-echo
-echo "number of very large or negative exons:"
-grep "exon" $db.exonExtremes | wc -l
-# echo "five lines are kruft (filtered above now with grep -v"
-echo
-echo "example of very large or negative exons:"
-head -5 $db.exonExtremes
-echo
-
+# 
+# 
+# # edit the list /cluster/home/heather/jdbc/data/tablelist
+# echo
+# echo "knownGene" > /cluster/home/heather/jdbc/data/KG
+# 
+# # and run /cluster/home/heather/jdbc/ExonSize.java:
+# cd /cluster/home/heather/jdbc/
+# source javaenv
+# java ExonSize $db data/KG | egrep -v "items found|-----|Querying" > $curr_dir/$db.exonExtremes
+# cd $curr_dir 
+# 
+# echo
+# echo "number of very large or negative exons:"
+# grep "exon" $db.exonExtremes | wc -l
+# # echo "five lines are kruft (filtered above now with grep -v"
+# echo
+# echo "example of very large or negative exons:"
+# head -5 $db.exonExtremes
+# echo
 
 # -------------------------------------------------
 # count exons
@@ -297,26 +284,35 @@ echo "diff: "$diff
 echo
 
 
+# ------------------------------------
 
-# delete lines with single hit "   1[tab]" 
-# -- and count lines remaining (genes used more than once):
 
-echo
-sort  $db.KG.name.sort | uniq -c | sort -nr > $db.KG.name.uniq.most
 
-echo "number of genes that align more than once:"
-sed -e "/  1 /d" $db.KG.name.uniq.most | wc -l
-echo
+# todo: get list of genes and their geneSymbol and count up how
+# many have the same name.  look at outliers.  what follows here doesn't
+# work anymore as KG.name is now a unique field.
+# todo: analyze knownCanonical clusters
 
-echo "gene occurance profile"
-echo
-textHistogram -col=1 $db.KG.name.uniq.most
-rm file
 
-echo
-echo "genes that align the most times:"
-head $db.KG.name.uniq.most
-echo
+# # delete lines with single hit "   1[tab]" 
+# # -- and count lines remaining (genes used more than once):
+# 
+# echo
+# sort  $db.KG.name.sort | uniq -c | sort -nr > $db.KG.name.uniq.most
+# 
+# echo "number of genes that align more than once:"
+# sed -e "/  1 /d" $db.KG.name.uniq.most | wc -l
+# echo
+# 
+# echo "gene occurance profile"
+# echo
+# textHistogram -col=1 $db.KG.name.uniq.most
+# rm file
+# 
+# echo
+# echo "genes that align the most times:"
+# head $db.KG.name.uniq.most
+# echo
 
 
 
@@ -328,6 +324,7 @@ echo
 # look for same number of rows in kgXref, knownGenePep, knownGeneMrna
 
 echo
+echo "-------------------------------------------------"
 echo "look for same number of rows in kgXref, knownGenePep, knownGeneMrna:"
 echo "kgXref"
 set xrefNum=`hgsql -N -e "SELECT COUNT(*) FROM kgXref" $db`
@@ -339,7 +336,7 @@ echo $kgPep
 echo "knownGeneMrna"
 set kgMrna=`hgsql -N -e "SELECT COUNT(*) FROM knownGeneMrna" $db`
 echo $kgMrna
-echo "should match uniqs in KG:"
+echo "should match uniqs in KG, except for fewer Peps, now that we include non-coding:"
 wc -l $db.KG.name.uniq
 echo
 
@@ -348,6 +345,7 @@ if ($xrefNum != $kgPep) then
   hgsql -e "SELECT kgID, COUNT(*) as number FROM kgXref GROUP BY kgID \
     ORDER BY number DESC LIMIT 5 " $db
 endif
+echo "should be no dupes anymore"
 
 # -------------------------------------------------
 # check that names in knownGene match names in knownGenePep, knownGeneMrna
@@ -364,12 +362,14 @@ hgsql -N -e "SELECT kgID FROM kgProtAlias" $db | sort  | uniq > $db.kgProtAlias.
 
 
 
+echo "-------------------------------------------------"
 echo "check that names in knownGene match names in knownGenePep, knownGeneMrna:"
 diff $db.KG.name.uniq $db.KGpep.name.uniq | wc -l
 diff $db.KG.name.uniq $db.KGrna.name.uniq | wc -l
-echo "expect zero"
+echo "expect zero. upper number is number of genes without pep"
 echo
 
+echo "-------------------------------------------------"
 echo "check that names in knownGene match kgID in kgXref and kgProtAlias:"
 # diff $db.KG.name.uniq $db.kgXref.kgID.uniq | wc -l
 # diff $db.KG.name.uniq $db.kgProtAlias.kgID.uniq | wc -l
@@ -379,7 +379,7 @@ comm -23 $db.KG.name.uniq $db.kgXref.kgID.uniq | wc -l
 echo "uniq to kgXref.kgID: (not in KG.name):"
 comm -13 $db.KG.name.uniq $db.kgXref.kgID.uniq | wc -l
 
-echo "uniq to KG.name (not in kgProtAlis.kgID):"
+echo "uniq to KG.name (not in kgProtAlias.kgID):"
 comm -23 $db.KG.name.uniq $db.kgProtAlias.kgID.uniq | wc -l
 echo "uniq to kgProtAlias.kgID: (not in KG.name):"
 comm -13 $db.KG.name.uniq $db.kgProtAlias.kgID.uniq | wc -l
@@ -388,11 +388,20 @@ echo "expect zero"
 echo "as of KGII, duplicate kgXref.kgID are ok.  will be corrected in KGIII."
 echo
 
+echo "number of non-coding genes in kgTxInfo:"
+hgsql -e ' SELECT category, COUNT(*) AS number FROM kgTxInfo GROUP BY category \
+  ORDER BY number DESC' $db
+echo "total non-coding:"
+hgsql -e 'SELECT COUNT(*) FROM kgTxInfo WHERE category NOT LIKE "coding"' $db
+
+
+
 # -------------------------------------------------
 # knownGenePep, knownGeneMrna -- check numbers of entries vs old version
 # knownGenePep, knownGeneMrna -- check min and max lengths of seq column
 
 echo
+echo "-------------------------------------------------"
 echo "knownGenePep, knownGeneMrna -- check numbers of entries vs old version:"
 if ($db != $oldDb) then
   echo "  comparing to table in $oldDb on beta"
@@ -429,96 +438,9 @@ echo "----"
 echo "sometimes the same on dev as beta:  no new proteins at extremes "
 echo
 
-# -------------------------------------------------
-# spMrna -- check for unique spID 
-
-echo
-echo "spMrna -- check for unique spID:"
-set idnum=`hgsql -N -e "SELECT spID FROM spMrna" $db | sort -u | wc -l`
-set idtot=`hgsql -N -e "SELECT COUNT(*) FROM spMrna" $db`
-set diff = `expr $idtot - $idnum`
-echo "  dupes = $diff"
-echo "dupes ok as of KG2."
-echo
-
-# -------------------------------------------------
-# spMrna -- no mrnaID like NM%
-
-echo
-echo "spMrna -- now includes this many NM_ in spMrna.mrnaID field"
-hgsql -e 'SELECT COUNT(*) FROM spMrna WHERE mrnaID LIKE "NM%"' $db
-echo
-
-
-# -------------------------------------------------
-# spMrna --  can search on spMrna.spID
-# -- make a java robot for this (uses hgGene).
-
-echo
-echo "spMrna --  can search on spMrna.spID"
-hgsql -e "SELECT spID FROM spMrna limit 5" $db
-echo
-echo "manual check:  type some into Position box"
-echo
-
-# -------------------------------------------------
-# dupSpMrna -- all values of dupSpMrna.mrnaID should also be in spMrna.mrnaID 
-# make sorted file of dupSpMrna.mrnaID 
-# make sorted file of spMrna.mrnaID 
-# diff 'em
-# look for all diffs to be in one direction:
-
-
-echo
-echo "dupSpMrna -- all values of dupSpMrna.mrnaID used to be in spMrna.mrnaID."
-echo "             reporting the number of dupSpMrna.mrnaID not in spMrna.mrnaID."
-hgsql -N -e "SELECT mrnaID FROM dupSpMrna" $db | sort -u > $db.dupSp.uniq
-hgsql -N -e "SELECT mrnaID FROM spMrna" $db | sort -u > $db.spMrna.uniq
-comm -23 $db.dupSp.uniq $db.spMrna.uniq > $db.sp.diff
-set dupCheck=`wc -l $db.sp.diff | awk '{print $1}'`
-set spTot=`wc -l $db.dupSp.uniq | awk '{print $1}'`
-if ($dupCheck == 0) then
-  echo "  all dupSpMrna.mrnaID are in spMrna.mrnaID."
-else
-  echo
-  echo "  $dupCheck dupSpMrna.mrnaID out of $spTot are not in spMrna.mrnaID."
-  echo "  see $db.sp.diff for list.  sample: \n"
-  head $db.sp.diff
-endif
-echo
-
-echo "find out if any in diff list are in =other= column of spMrna "
-hgsql -N -e "SELECT spID FROM spMrna" $db | sort -u > $db.spMrna.spID.uniq
-comm -23 $db.sp.diff $db.spMrna.spID.uniq > $db.spMrna.leftOvers2
-echo "this many are not:"
-wc -l *leftOvers2
-echo "expect zero"
-
-
-# -------------------------------------------------
-# kgXref -- contains rows from knownGeneLink.  
-# These have kgXref.kgID= kgXref.refseq
-# compare to knownGeneLink.name
-
-echo
-echo "kgXref -- contains rows from knownGeneLink."
-echo "  These have kgXref.kgID = kgXref.refseq"
-hgsql -N -e "SELECT COUNT(*) FROM kgXref WHERE kgXref.kgID = kgXref.refseq" $db
-hgsql -N -e "SELECT kgID FROM kgXref WHERE kgID = refseq" $db | sort | uniq > $db.kgXref.maybeLink
-hgsql -N -e "SELECT name FROM knownGeneLink" $db > $db.knownGeneLink.name
-comm -12 $db.kgXref.maybeLink  $db.knownGeneLink.name | wc -l
-echo "expect knownGeneLink to be empty since KG2 "
-echo "   -- DNA-based refSeqs are already in the build."
-echo "   Push empty table to keep code happy."
-echo "   didn't do it for hg18 and no evidence of problems." 
-echo "   will also not do it for mm8 and see."
-echo
-
-
-# -------------------------------------------------
+echo  "-------------------------------------------------"
 # kgXref -- mrna generally equals kgID
 
-echo
 echo "kgXref -- mrna generally equals kgID"
 echo "count:"
 hgsql -N -e "SELECT COUNT(*) FROM kgXref" $db
@@ -528,12 +450,10 @@ echo "expect zero"
 echo
 
 
-# -------------------------------------------------
+echo  "-------------------------------------------------"
 # kgXref -- empty fields
 # should give zero (no empty fields):
 
-
-echo
 echo "refseq column can be empty (protAcc is, too, then)"
 hgsql -N -e 'SELECT COUNT(*) FROM kgXref WHERE refseq = "" ' $db
 hgsql -N -e 'SELECT COUNT(*) FROM kgXref WHERE refseq = "" AND protAcc = "" ' $db
@@ -545,6 +465,7 @@ echo
 # check all tables for null + zero entries:
 
 echo
+echo  "-------------------------------------------------"
 echo "check all tables for null + zero entries:"
 foreach table (`cat kgTablesAll`)
   hgsql -N -e "DESC $table" $db | gawk '{print $1}' > ${table}Cols
@@ -584,6 +505,8 @@ echo
 
 
 echo
+echo  "-------------------------------------------------"
+echo "check all tables for null + zero entries:"
 echo "some, but not all  of protAcc column will be empty:"
 echo "kgXref.protAcc empty:"
 hgsql -N -e 'SELECT COUNT(*) FROM kgXref WHERE protAcc = "" ' $db
@@ -593,22 +516,10 @@ echo
 
 
 # -------------------------------------------------
-# kgXref -- spID are generally equal to spDisplayID
-
-echo
-echo "kgXref -- spID are equal to spDisplayID if protein is in TrEMBL"
-echo "match:"
-hgsql -N -e "SELECT COUNT(*) FROM kgXref WHERE spID = spDisplayID" $db
-echo "do not match:"
-hgsql -N -e "SELECT COUNT(*) FROM kgXref WHERE spID != spDisplayID" $db
-echo
-
-
-# -------------------------------------------------
 # kgXref -- can have duplicate values in spID
 
 
-echo
+echo  "-------------------------------------------------"
 echo "kgXref -- can have duplicate values in spID"
 set tot=`hgsql -N -e "SELECT COUNT(*) FROM kgXref" $db` 
 hgsql -N -e "SELECT spID FROM kgXref" $db | sort | uniq > $db.kgXref.spID.uniq
@@ -624,6 +535,7 @@ echo
 # kgXref -- can position-search on spID:   
 #   make a java robot
 
+echo  "-------------------------------------------------"
 echo "kgXref -- can position-search on spID:"
 echo "check manually"
 hgsql -N -e "SELECT spID FROM kgXref ORDER BY spID DESC limit 2" $db
@@ -633,7 +545,7 @@ echo
 # -------------------------------------------------
 # kgAlias -- check kgAlias.alias for uniq.  search position box with some
 
-echo
+echo  "-------------------------------------------------"
 echo "kgAlias -- check kgAlias.alias for uniq.  search position box with some."
 echo
 echo "kgAlias count:"
@@ -651,7 +563,7 @@ echo
 # -------------------------------------------------
 # kgAlias -- uniq IDs from KG can have one or more matches
 
-echo
+echo  "-------------------------------------------------"
 echo "kgAlias -- uniq IDs from KG can have one or more matches"
 hgsql -N -e "SELECT name FROM knownGene" $db | sort | uniq > $db.KG.name.uniq
 wc -l  $db.KG.name.uniq
@@ -668,6 +580,7 @@ echo
 # kgAlias -- kgAlias uniq count should be less than KG.uniq
 
 echo
+echo  "-------------------------------------------------"
 echo "kgAlias -- kgAlias uniq count should be less than or equal to KG.uniq"
 hgsql -N -e "SELECT kgID FROM kgAlias" $db | sort | uniq | wc -l
 hgsql -N -e "SELECT name FROM knownGene" $db | sort | uniq | wc -l
@@ -682,6 +595,7 @@ echo
 # kgAlias -- expect multiple rows with same kgID value
 
 echo
+echo  "-------------------------------------------------"
 echo "kgAlias -- expect multiple rows with same kgID value"
 set tot=`hgsql -N -e "SELECT COUNT(*) FROM kgAlias" $db`
 set uniq=`hgsql -N -e "SELECT kgID FROM kgAlias" $db | sort | uniq | wc -l`
@@ -692,54 +606,11 @@ echo "dupes = "$diff
 echo
 
 # -------------------------------------------------
-# mrnaRefseq --  table has only two columns, mrna and refesq.
-#              check uniq
-
-
-echo
-echo "mrnaRefseq --  table has only two columns, mrna and refesq:"
-echo "total mrnaRefseq:"
-hgsql -N -e "SELECT COUNT(*) FROM mrnaRefseq" $db
-echo "total uniq mrnaRefseq.mrna:"
-hgsql -N -e "SELECT mrna FROM mrnaRefseq" $db | sort -n | uniq |  wc -l 
-echo "total uniq mrnaRefseq.refseq:"
-hgsql -N -e "SELECT refseq FROM mrnaRefseq" $db | sort -n | uniq | wc -l
-echo
-
-# -------------------------------------------------
-# mrnaRefseq --  generate list of uniq mrnaAcc values in refGene that are
-#                not in mrnaRefseq. These are "DNA-based"
-
-
-echo
-echo "FORMERLY: check that all DNA-based genes are in refGene.name"
-echo "NOW: find refGenes that have been updated since mrnRefseq was built."
-echo "(KG no longer has a separate DNA leg or knownGeneLink table.
-echo "  -- DNA-based refseqs are already in the build)"
-hgsql -N -e "SELECT name FROM refGene" $db | sort | uniq \
-   > $db.refGene.name.uniq 
-wc -l $db.refGene.name.uniq
-hgsql -N -e "SELECT refseq FROM mrnaRefseq" $db | sort | uniq \
-   > $db.mrnaRefseq.refseq.uniq
-echo "refGene.name and mrnaRefseq.refseq have in common:"
-comm -12 $db.refGene.name.uniq  $db.mrnaRefseq.refseq.uniq | wc -l 
-
-comm -23 $db.refGene.name.uniq  $db.mrnaRefseq.refseq.uniq \
-   > refGene.notin.mrnaRefseq
-echo 'refGene.name not in mrnaRefseq.refseq (new refseq since KG build):'
-comm -23 $db.refGene.name.uniq  $db.mrnaRefseq.refseq.uniq | wc -l
-
-echo "this value should be small"
-echo "  -- check some:"
-comm -23 $db.refGene.name.uniq  $db.mrnaRefseq.refseq.uniq | head -3 
-echo
-
-
-# -------------------------------------------------
 # cgapAlias -- check that at least some cgapAlias.alias 
 #    entries are in knownGene.name
 
 echo
+echo  "-------------------------------------------------"
 echo "cgapAlias -- check that at least some cgapAlias.alias \
   entries are in knownGene.name"
 hgsql -N -e "SELECT name FROM knownGene" $db | sort | uniq > $db.KG.name.uniq
@@ -759,6 +630,7 @@ echo
 #  automate this w/ httpunit.  
 
 echo
+echo  "-------------------------------------------------"
 echo "keggPathway, keggMapDesc -- validate"
 echo
 hgsql -e "SELECT * FROM keggPathway limit 5" $db > $db.kegg
@@ -786,6 +658,7 @@ echo
 #  (sorted but not uniqed)
 
 echo
+echo  "-------------------------------------------------"
 echo "checking for KG position sorting:"
 hgsql -N -e "SELECT chrom FROM chromInfo" $db > $db.chroms
 foreach chrom (`cat $db.chroms`)
@@ -823,6 +696,7 @@ echo "-------------------------------------------------"
 # for all tables in list: (csh version):
 
 echo 
+echo  "-------------------------------------------------"
 echo "compare description of all tables with previous"
 if ($db != $oldDb) then
   echo "  comparing to table in $oldDb on beta"
@@ -836,23 +710,6 @@ foreach table (`cat kgTablesAll`)
   echo
 end
 echo
-
-# ------------
-# "check for one missing knownGeneLink:"
-# deprecated.  knownGeneLlink is now empty but pushed.
-
-# echo
-# echo "check for one missing knownGeneLink:"
-# hgsql -N -e "SELECT name FROM knownGeneLink" $db \
-#    | sort > $db.dev.kgLink.sort
-# hgsql -h hgwbeta -N -e "SELECT name FROM knownGeneLink" $db \
-#    | sort > $db.beta.kgLink.sort
-# echo "count and display records deleted from old version"
-# comm -13 $db.dev.kgLink.sort $db.beta.kgLink.sort | wc -l
-# comm -13 $db.dev.kgLink.sort $db.beta.kgLink.sort | head -3
-# echo "some will be found anyway because they are in mrnaRefseq.kgID"
-# echo "   but the mRNA on the details page will not be the same."
-# echo
 
 # find a way to count "<" and ">" lines in a file  
 # "sed effort below didn't work
@@ -871,6 +728,7 @@ echo
 
 
 echo
+echo  "-------------------------------------------------"
 echo "check rowcounts against beta"
 echo "old version, beta,  listed first"
 if ($db != $oldDb) then
@@ -940,6 +798,7 @@ echo
 #  check bioCyc tables:
 
 echo
+echo  "-------------------------------------------------"
 echo  check bioCyc tables, if available:
 echo
 set biocyc=`cat {$trackName}TablesAll | grep "bioCyc" | wc -l`

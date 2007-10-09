@@ -25,6 +25,7 @@ if ($#argv < 1 ||  $#argv > 2 ) then
 else
   set db=$argv[1]
 endif
+set url1="http://hgwdev.cse.ucsc.edu/cgi-bin/hgTracks?db=$db"
 
 if ($#argv == 2 ) then
   set betaDb=$argv[2]
@@ -55,6 +56,9 @@ echo
 
 
 echo "check update times against beta:"
+if ( $betaDb != "" ) then
+  echo "\n note: time comparison against other db is irrelevant.|n"
+endif
 
 ~/bin/updateTimes.csh $db $tablelist 
 
@@ -175,9 +179,8 @@ echo
 
 
 
-# -------------------------------------------------
+echo "-------------------------------------------------"
 # make list of dupes:
-
 
 echo
 echo "make list of dupes"
@@ -192,43 +195,24 @@ echo
 echo "most common duplicated knownIsoforms.clusterID:"
 head $db.knIsoforms.clusterID.dupes 
 echo
-
-
-echo
+# make links for the three biggest:
 echo "see $db.knIsoforms.mostCommon and check that each \
          clusterID refers to a set of overlapping transcripts \
          in the Browser:"
-head $db.knIsoforms.clusterID.dupes \
-      | awk '{print $2}' > $db.knIsoforms.clusterID.mostDupes
-# rm -f $db.knIsoforms.mostCommon 
+foreach cluster ( `head -3 $db.knIsoforms.clusterID.dupes | awk '{print $2}'` )
+  set pos=`hgsql -Ne 'SELECT chrom, chromStart, chromEnd FROM knownCanonical \
+    WHERE clusterId = "'$cluster'"' $db | sed "s/\t/:/" | sed "s/\t/-/"`
+  echo "$url1&position=$pos"
+end
+
 echo
 echo "check these coordinate blocks manually in GB and click-through to GS."
 echo "the number of transcripts in the window might not match the number \
      expected because the canonical may be smaller than one of the isoforms. \
      zoom out a little to get them all"
-
-echo "  example. largest clusters:"
-foreach clusterID (`head -3 $db.knIsoforms.clusterID.mostDupes`)
-   hgsql -t -e "SELECT name, chrom, MIN(txStart), MAX(txEnd), alignId, \
-      clusterID \
-      FROM knownIsoforms i , knownGene k \
-      WHERE clusterID = $clusterID AND transcript = name \
-      GROUP BY clusterID" $db >> $db.knIsoforms.mostCommon 
-end
 echo
 
-# hgsql -t -e "SELECT clusterID, transcript, chrom, MIN(chromStart), \
-#     MAX(chromEnd) \
-#     FROM knownCanonical \
-#     WHERE clusterID = $clusterID \
-#     GROUP BY clusterID" $db >> $db.knIsoforms.mostCommon 
-
-echo "  three transcripts and maximum range for each of the largest clusters"
-echo "      (from knownCanonical):"
-head -15 $db.knIsoforms.mostCommon 
-echo
- 
-# -------------------------------------------------
+echo "-------------------------------------------------"
 # check for dupes in knownIsoforms
 
 echo
@@ -282,7 +266,7 @@ echo
 # echo 
 
 
-# -------------------------------------------------
+echo "-------------------------------------------------"
 # get one record from each table:
 
 echo "get one record from each table:"
@@ -307,7 +291,7 @@ foreach table (`cat $db.knownTo`)
   endif
   set kgNames=`hgsql -N -e  'SELECT name FROM knownGene' $db \
       | sort | uniq | wc -l`
-  echo "uniq names:"
+  echo "number of uniq names in the tables"
   echo "beta       = "$old
   echo "this table = "$this
   echo "knownGene  = "$kgNames
