@@ -35,7 +35,7 @@
 #include "customTrack.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.334 2007/10/05 23:13:04 angie Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.335 2007/10/09 21:21:29 angie Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -2756,8 +2756,11 @@ if (fitFields(hash, "chrom", "chromStart", "chromEnd", retChrom, retStart, retEn
    some older types). */
 else if (fitFields(hash, "tName", "tStart", "tEnd", retChrom, retStart, retEnd))
     {
-    fitField(hash, "qName", retName) ||
-	fitField(hash, "name", retName) || fitField(hash, "chainId", retName);
+    if (!fitField(hash, "qName", retName))
+	{
+	if (!fitField(hash, "name", retName))
+	    fitField(hash, "chainId", retName);
+	}
     fitField(hash, "strand", retStrand);
     fitField(hash, "blockCount", retCount);
     fitField(hash, "tStarts", retStarts);
