@@ -1,6 +1,6 @@
 # Build all directories in utils
 # test comment
-# 	$Id: makefile,v 1.8 2007/08/31 20:45:47 hiram Exp $
+# 	$Id: makefile,v 1.9 2007/10/10 17:21:13 angie Exp $
 
 include ../../inc/common.mk
 
@@ -36,7 +36,8 @@ clean:
 	- find . -name \*.o -print | xargs rm
 
 SCRIPT_FILES = \
-	dumpDb.pl
+	dumpDb.pl \
+	mergeOverlapBed4.pl
 
 # List of directories to build
 USE_DIRS = $(DIRS)
