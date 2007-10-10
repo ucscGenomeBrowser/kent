@@ -210,7 +210,7 @@
 #include "atomDb.h"
 #include "itemConf.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1352 2007/10/10 04:55:02 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1353 2007/10/10 05:38:09 angie Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -13821,10 +13821,11 @@ void doJaxQTL(struct trackDb *tdb, char *item)
 {
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
-char query[256];
+char query[512];
 char **row;
 int start = cartInt(cart, "o");
-struct jaxQTL *jaxQTL;
+boolean isBed4 = startsWith("bed 4", tdb->type);
+boolean hasBin = hIsBinned(tdb->tableName);
 
 genericHeader(tdb, item);
 safef(query, sizeof(query),
@@ -13833,17 +13834,50 @@ safef(query, sizeof(query),
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     {
-    jaxQTL = jaxQTLLoad(row);
-    printCustomUrl(tdb, jaxQTL->mgiID, FALSE);
-    printf("<B>QTL:</B> %s<BR>\n", jaxQTL->name);
-    printf("<B>Description:</B> %s <BR>\n", jaxQTL->description);
-    if (jaxQTL->cMscore != 0.0)
+    char *itemForUrl=NULL, *name=NULL, *description=NULL, *marker=NULL;
+    float cMscore = 0.0;
+    struct bed *bed = bedLoadN(row+hasBin, 4);
+    if (isBed4)
+	{
+	char *oDb = trackDbSetting(tdb, "otherDb");
+	char *oTable = trackDbSetting(tdb, "otherDbTable");
+	itemForUrl = name = bed->name;
+	if (isNotEmpty(oDb) && isNotEmpty(oTable))
+	    {
+	    struct sqlConnection *conn2 = hAllocConn();
+	    char buf[1024];
+	    safef(query, sizeof(query),
+		  "select description from %s.%s where name = '%s'",
+		  oDb, oTable, name);
+	    description = 
+		cloneString(sqlQuickQuery(conn2, query, buf, sizeof(buf)-1));
+	    safef(query, sizeof(query),
+		  "select mgiID from %s.%s where name = '%s'",
+		  oDb, oTable, name);
+	    itemForUrl = 
+		cloneString(sqlQuickQuery(conn2, query, buf, sizeof(buf)-1));
+	    }
+	}
+    else
+	{
+	struct jaxQTL *jaxQTL = jaxQTLLoad(row);
+	itemForUrl = jaxQTL->mgiID;
+	name = jaxQTL->name;
+	description = jaxQTL->description;
+	cMscore = jaxQTL->cMscore;
+	marker = jaxQTL->marker;
+	}
+    printCustomUrl(tdb, itemForUrl, FALSE);
+    printf("<B>QTL:</B> %s<BR>\n", name);
+    if (isNotEmpty(description))
+	printf("<B>Description:</B> %s <BR>\n", description);
+    if (cMscore != 0.0)
 	printf("<B>cM position of marker associated with peak LOD score:</B> "
-	       "%3.1f<BR>\n", jaxQTL->cMscore);
-    if (isNotEmpty(jaxQTL->marker))
+	       "%3.1f<BR>\n", cMscore);
+    if (isNotEmpty(marker))
 	printf("<B>MIT SSLP marker with highest correlation:</B> %s<BR>",
-	       jaxQTL->marker);
-    bedPrintPos((struct bed *)jaxQTL, 3);
+	       marker);
+    bedPrintPos(bed, 3);
     }
 printTrackHtml(tdb);
 
@@ -20012,7 +20046,7 @@ else if (sameWord(track, "jaxQTL3"))
     {
     doJaxQTL3(tdb, item);
     }
-else if (startsWith("jaxQTL", track) && startsWith("bed 6", tdb->type))
+else if (startsWith("jaxQTL", track))
     {
     doJaxQTL(tdb, item);
     }
