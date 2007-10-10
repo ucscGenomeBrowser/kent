@@ -169,3 +169,30 @@ _EOF_
     for f in *; do g=${f%.fa}; faToNib -softMask $f ../nib/${g}.nib; done
     cd ../
     rm apiMel3.masked.fa tmp trfMask.bed 
+
+
+#########################################################################
+# MAKE DOWNLOADABLE / GOLDENPATH FILES (DONE 10/5/07 angie)
+    ssh kkstore04
+    cd /cluster/data/apiMel3
+    # Put files in the usual chrom-based assembly locations:
+    zcat bed/simpleRepeat/trf.bed.gz \
+    | awk '{if ($5 <= 12) print;}' \
+    | splitFileByColumn stdin -ending=.bed bed/simpleRepeat/trfMaskChrom
+    splitFileByColumn -chromDirs downloads/apiMel3.agp .
+    head -3 rmsk/rmsk.out > /tmp/rmskHeader
+    tail +4 rmsk/rmsk.out \
+    | sort -k5,5 \
+    | splitFileByColumn -chromDirs -head=/tmp/rmskHeader -col=5 \
+      -ending=.fa.out stdin .
+    mkdir jkStuff
+
+    makeDownloads.pl apiMel3 -verbose=2 \
+      >& jkStuff/downloads.log & tail -f jkStuff/downloads.log
+    # Edited the README's -- instructions at the end of downloads.log.
+#     /cluster/data/apiMel3/goldenPath/database/README.txt
+#     /cluster/data/apiMel3/goldenPath/bigZips/README.txt
+#     /cluster/data/apiMel3/goldenPath/chromosomes/README.txt
+
+
+#########################################################################
