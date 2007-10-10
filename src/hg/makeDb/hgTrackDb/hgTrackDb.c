@@ -11,7 +11,7 @@
 #include "portable.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgTrackDb.c,v 1.32 2007/10/09 23:37:36 galt Exp $";
+static char const rcsid[] = "$Id: hgTrackDb.c,v 1.33 2007/10/10 01:01:20 galt Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -389,7 +389,7 @@ for (td = tdList; td != NULL; td = tdNext)
 		}
 	    if (numSubGroups != sgd->numSubGroups)
 		{
-		verbose(1,"%s: found %d values but parent composite has %d\n", td->tableName, numSubGroups, sgd->numSubGroups);
+		verbose(2,"%s: found %d values but parent composite has %d\n", td->tableName, numSubGroups, sgd->numSubGroups);
 		}
 	    if (!inOrder)
 		{
