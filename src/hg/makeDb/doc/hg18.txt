@@ -17322,6 +17322,7 @@ hgsql hg18 -e 'insert into metaChromGraph (name, minVal, maxVal, binaryFile) val
     # Many of the records are completely contained within other records 
     # for the same QTL (inversions I suppose) -- they don't really tell 
     # us anything new about the murky QTL region, so merge them in. 
+# NOTE FOR NEXT TIME: instead of the perl+sort, use mergeOverlapBed4.pl.
     perl -we \
       'while (<>) { \
          chomp; ($chrom, $start, $end, $name) = split; \
@@ -17600,7 +17601,7 @@ values ("bipolar", 0, 0, "composite")'
 
 
 ############################################################################
-# MGI MOUSE QTL MAPPED TO HUMAN (DONE 10/8/07 angie)
+# MGI MOUSE QTL MAPPED TO HUMAN (DONE 10/10/07 angie)
     # Use a stringently filtered version of over.chain to do the mapping,
     # so we only pick up large chunks (targeting >10,000bases) of the 
     # large fuzzy QTL regions.  
