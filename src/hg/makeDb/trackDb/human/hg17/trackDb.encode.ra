@@ -1240,7 +1240,7 @@ viewLimits .1:6.5
 windowingFunction mean
 autoScale off
 subGroup1 factor Factor ctcf=CTCF h2az=H2AZ h3k4me1=H3K4me1 h3k4me2=H3K4me2 h3k4me3=H3K4me3 h3k9ac=H3K9Ac h3k18ac=H3K18Ac h3k27ac=H3K27Ac h4ac=H4ac h4k20me1=H4K20me1 h4k20me2=H4K20me2 h4k20me3=H4K20me3 p300=p300 pol2=Pol2 taf1=TAF1 yy1=YY1
-subGroup2 celltype Cell_Type gm=GM06990 hela=HeLa imr90=IMR90 tonsil=Tonsil u937=U937
+subGroup2 celltype Cell_Type gm=GM06990 hela=HeLa imr90=IMR90 tonsil=Tonsil u937=U937 k562=K562
 origAssembly hg16
 dataVersion Dec 2006, March 2007, May 2007, Aug 2007
 
