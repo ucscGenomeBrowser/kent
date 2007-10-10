@@ -862,6 +862,32 @@ visibility hide
 color 150,0,150
 type bed 4 +
 
+track jaxQtlMapped
+compositeTrack on
+shortLabel MGI Mouse QTL
+longLabel MGI Mouse Quantitative Trait Loci Coarsely Mapped to $Organism
+group phenDis
+visibility hide
+priority 151
+type bed 4 .
+otherDb mm8
+url http://www.informatics.jax.org/javawi2/servlet/WIFetch?page=searchTool&query=$$&selectedQuery=Genes+and+Markers
+urlLabel MGI QTL Search: 
+
+    track jaxQTLAsIs
+    subTrack jaxQtlMapped
+    shortLabel MGI Mouse QTL
+    longLabel MGI Mouse QTLs Coarsely Mapped to $Organism
+    color 200,100,0
+    priority 1
+
+    track jaxQTLPadded
+    subTrack jaxQtlMapped
+    shortLabel MGI Mouse QTL Padded
+    longLabel MGI Mouse QTL Peak-Score Markers Padded to 100k and Coarsely Mapped to $Organism
+    color 200,100,0
+    priority 2
+
 track hapmapLdHotspot
 compositeTrack on
 shortLabel HapMap LD Hotspots
