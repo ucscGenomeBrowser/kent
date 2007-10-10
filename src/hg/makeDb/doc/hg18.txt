@@ -17598,6 +17598,119 @@ values ("bipolar", 0, 0, "composite")'
 
 #Add composite track info to src/hg/makeDb/trackDb/human/trackDb.ra:
 
+
+############################################################################
+# MGI MOUSE QTL MAPPED TO HUMAN (DONE 10/8/07 angie)
+    # Use a stringently filtered version of over.chain to do the mapping,
+    # so we only pick up large chunks (targeting >10,000bases) of the 
+    # large fuzzy QTL regions.  
+    # Of the MGI QTLs, some are large as expected, but most are tiny --
+    # they have only the peak STS marker coords, no indication of the 
+    # range.  Jim suggested padding those out to 100k.  So I will process
+    # these in two batches, and make subtracks -- one for original, one 
+    # for our modified set.
+    ssh kolossus
+    mkdir /cluster/data/hg18/bed/jaxQTL
+    cd /cluster/data/hg18/bed/jaxQTL
+    # mm8ToHg18 was built before doBlastz included chainStitchId in the
+    # pipe to create over.chain.  Run it here, to repair any chain breaks:
+    chainStitchId /cluster/data/mm8/bed/liftOver/mm8ToHg18.over.chain.gz \
+      /scratch/tmp/mm8ToHg18Stitch.over.chain
+    # For rn4->hg18 (rgdRatQtl above), I eyeballed scores vs. spans of
+    # stitched chains, to try to find a score threshold over which almost
+    # all spans were at least 10 or 20k, most >50k.  For mm8->hg18, the
+    # correspondence is not quite so smooth, and in order to keep all spans
+    # >= 100k, the score threshold would have to be 170k (compared to
+    # 500k for rn4-hg18) and would pick up a lot of short chains.
+    # So this time I'll try filtering directly by span instead of score
+    # (but add a reasonable minScore to kick out some outliers).
+    chainFilter /scratch/tmp/mm8ToHg18Stitch.over.chain \
+      -tMinSize=20000 -qMinSize=20000 -minScore=10000\
+      > mm8ToHg18Coarse.over.chain
+
+    # Separate the mm8 jaxQtl's by size and reduce to bed4:
+    awk 'BEGIN{OFS="\t";} \
+         ($3-$2) < 1000 {s = $2 > 50000 ? $2-50000 : 0; \
+                         print $1, s, $3+50000, $4;}' \
+      /cluster/data/mm8/bed/jax/2007_09/jaxQtl.bed \
+      > mm8.jaxQtl.padded.bed
+    cp /dev/null tmp.bed
+    foreach chr (`awk '{print $1;}' /cluster/data/mm8/chrom.sizes`)
+      set size = `awk '$1 == "'$chr'" {print $2;}' /cluster/data/mm8/chrom.sizes`
+      awk 'BEGIN{OFS="\t";} \
+           $1 == "'$chr'" && $3 > '$size' {$3 = '$size';} \
+           $1 == "'$chr'" && $3 > $2 {print;}' \
+      mm8.jaxQtl.padded.bed >> tmp.bed
+    end
+    mv tmp.bed mm8.jaxQtl.padded.bed
+    awk 'BEGIN{OFS="\t";}  ($3-$2) > 100000 {print $1, $2, $3, $4;}' \
+      /cluster/data/mm8/bed/jax/2007_09/jaxQtl.bed \
+      > mm8.jaxQtl.asIs.bed
+    # Make sure we didn't miss any between those two size ranges (except for
+    # the 4 markers whose coords are completely off the end of mm8 chroms):
+    wc -l mm8.*.bed
+#   73 mm8.jaxQtl.asIs.bed
+# 1468 mm8.jaxQtl.padded.bed
+# 1541 total
+    wc -l /cluster/data/mm8/bed/jax/2007_09/jaxQtl.bed
+#1545 /cluster/data/mm8/bed/jax/2007_09/jaxQtl.bed
+
+    # Try liftOver with various -minMatch settings.  Compare the number
+    # mapped and unmapped; eyeball some of the unmapped in mm8, see if
+    # the hg18 Nets are truly weak there.
+    foreach minMatch (0.1 0.2 0.25 0.33)
+      time liftOver -minMatch=$minMatch -multiple \
+        mm8.jaxQtl.asIs.bed mm8ToHg18Coarse.over.chain \
+        hg18.jaxQTL.asIs.$minMatch.{bed,unmapped}
+      time liftOver -minMatch=$minMatch -multiple \
+        mm8.jaxQtl.padded.bed mm8ToHg18Coarse.over.chain \
+        hg18.jaxQTL.padded.$minMatch.{bed,unmapped}
+      wc -l hg18.jaxQTL.*.$minMatch.{bed,unmapped}
+      echo ""
+    end
+#typical time: 23s for asIs, 45s for padded
+#  757 hg18.jaxQTL.asIs.0.1.bed
+# 1471 hg18.jaxQTL.padded.0.1.bed
+#    0 hg18.jaxQTL.asIs.0.1.unmapped
+#   54 hg18.jaxQTL.padded.0.1.unmapped
+#  634 hg18.jaxQTL.asIs.0.2.bed
+# 1429 hg18.jaxQTL.padded.0.2.bed
+#    0 hg18.jaxQTL.asIs.0.2.unmapped
+#  128 hg18.jaxQTL.padded.0.2.unmapped
+#  532 hg18.jaxQTL.asIs.0.25.bed
+# 1345 hg18.jaxQTL.padded.0.25.bed
+#    2 hg18.jaxQTL.asIs.0.25.unmapped
+#  282 hg18.jaxQTL.padded.0.25.unmapped
+#  362 hg18.jaxQTL.asIs.0.33.bed
+# 1146 hg18.jaxQTL.padded.0.33.bed
+#    8 hg18.jaxQTL.asIs.0.33.unmapped
+#  670 hg18.jaxQTL.padded.0.33.unmapped
+    # I eyeballed the 0.1 .bed and .unmapped files, and they look
+    # pretty good, esp. for mapped... we could probably get away with
+    # 0.2 for the asIs but 0.1 looks OK.
+
+    # Many of the records are completely contained within other records 
+    # for the same QTL (inversions I suppose) -- they don't really tell 
+    # us anything new about the murky QTL region, so merge them in. 
+    mergeOverlapBed4.pl hg18.jaxQTL.asIs.0.1.bed \
+      > hg18.jaxQTL.asIs.0.1.pruned.bed
+    mergeOverlapBed4.pl hg18.jaxQTL.padded.0.1.bed \
+      > hg18.jaxQTL.padded.0.1.pruned.bed
+    wc -l hg18.jaxQTL.*.pruned.bed
+#  398 hg18.jaxQTL.asIs.0.1.pruned.bed
+# 1463 hg18.jaxQTL.padded.0.1.pruned.bed
+
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/jaxQTL  
+    hgLoadBed hg18 jaxQTLAsIs hg18.jaxQTL.asIs.0.1.pruned.bed
+    hgLoadBed hg18 jaxQTLPadded hg18.jaxQTL.padded.0.1.pruned.bed
+  # Make sure there aren't any illegal coords:
+    checkTableCoords -verbose=2 hg18 jaxQTLAsIs
+    checkTableCoords -verbose=2 hg18 jaxQTLPadded
+    runJoiner.csh hg18 jaxQTLAsIs
+    runJoiner.csh hg18 jaxQTLPadded
+
+
 ###########################################################################
 # Build targetScanS track - (DONE - 2007-10-05 - Hiram)
 #       requested by: George Bell gbell at wi.mit.edu
