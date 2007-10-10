@@ -486,7 +486,7 @@ origAssembly hg17
     track encodeSangerChipHitH3K4me2K562
     subTrack encodeSangerChipHits
     shortLabel SI H3K4me2 K562
-    subGroups datatype=hit celltype=k562 factor=h3K4me2
+    subGroups datatype=hit celltype=k562 factor=h3k4me2
     longLabel Sanger Institute ChIP-chip Hits (H3K4me2 ab, K562 cells)
     priority 6
     color 10,10,10
@@ -494,7 +494,7 @@ origAssembly hg17
     track encodeSangerChipHitH3K4me3K562
     subTrack encodeSangerChipHits
     shortLabel SI H3K4me3 K562
-    subGroups datatype=hit celltype=k562 factor=h3K4me3
+    subGroups datatype=hit celltype=k562 factor=h3k4me3
     longLabel Sanger Institute ChIP-chip Hits (H3K4me3 ab, K562 cells)
     priority 7
     color 10,10,10
@@ -608,7 +608,7 @@ origAssembly hg17
     track encodeSangerChipCenterH3K4me2K562
     subTrack encodeSangerChipHits
     shortLabel SI H3K4me2 K562
-    subGroups datatype=peak celltype=k562 factor=h3K4me2
+    subGroups datatype=peak celltype=k562 factor=h3k4me2
     longLabel Sanger Institute ChIP-chip Peak Centers (H3K4me2 ab, K562 cells)
     noInherit on
     type bed 3 .
@@ -618,7 +618,7 @@ origAssembly hg17
     track encodeSangerChipCenterH3K4me3K562
     subTrack encodeSangerChipHits
     shortLabel SI H3K4me3 K562
-    subGroups datatype=peak celltype=k562 factor=h3K4me3
+    subGroups datatype=peak celltype=k562 factor=h3k4me3
     longLabel Sanger Institute ChIP-chip Peak Centers (H3K4me3 ab, K562 cells)
     noInherit on
     type bed 3 .
