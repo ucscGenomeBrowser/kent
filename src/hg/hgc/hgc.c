@@ -210,7 +210,7 @@
 #include "atomDb.h"
 #include "itemConf.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1351 2007/10/09 23:45:35 kate Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1352 2007/10/10 04:55:02 angie Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -20012,7 +20012,7 @@ else if (sameWord(track, "jaxQTL3"))
     {
     doJaxQTL3(tdb, item);
     }
-else if (startsWith("jaxQTL", track))
+else if (startsWith("jaxQTL", track) && startsWith("bed 6", tdb->type))
     {
     doJaxQTL(tdb, item);
     }
