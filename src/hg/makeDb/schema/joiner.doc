@@ -113,7 +113,8 @@ Field Line Attributes:
   splitPrefix - used to lump together tables that share a common prefix
                 into a single logical table.
      value: Prefix string that may include SQL wildcard characters.  A
-            popular one at UCSC is "chr%_".
+            popular one at UCSC is "chr%\_" (the underscore is escaped
+            because we want a literal match for _, not the SQL wildcard).
   splitSuffix - used to lump together tables that share a common suffix
                 into a single logical table.  May be used with splitPrefix.
      value: Suffix string that may include SQL wildcard characters.  
