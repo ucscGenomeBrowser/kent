@@ -705,6 +705,17 @@ identifier affyZonWildType
     $danRer.ensToAffyZonWildType.name
     $danRer.affyZonWildType.name
     $danRer.affyZebrafish.qName
+    danRer5.affyZebrafishConsensus.qName
+
+identifier affyZonWildTypeDanRer5
+"Affymetrix Zebrafish chip Zon Lab data probe ID Consensus"
+    danRer5.affyZonWildType.name dupeOk
+    danRer5.affyZebrafishConsensus.qName
+
+identifier affyTargetZonWildTypeDanRer5
+"Affymetrix Zebrafish chip Zon Lab data probe ID Target"
+    danRer5.affyTargetZonWildType.name dupeOk
+    danRer5.affyZebrafishTarget.qName
 
 identifier affyU95
 "Affymetrix Human U95 chip identifiers"
@@ -2612,7 +2623,6 @@ tablesIgnored $danRer
     chr%_gold
     ctgPos2
     wz_ests
-    affyZebrafish
 
 tablesIgnored $canFam
     chr%_gold
