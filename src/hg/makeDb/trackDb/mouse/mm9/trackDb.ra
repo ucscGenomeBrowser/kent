@@ -126,6 +126,15 @@ directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_t
 baseColorUseCds given
 baseColorDefault genomicCodons
 
+track knownAlt
+shortLabel Alt Events
+longLabel Alternative Splicing, Alternative Promoter and Similar Events in UCSC Genes
+group genes
+priority 34.2
+visibility hide
+color 90,0,150
+type bed 6 .
+
 track multiz30way
 shortLabel 30-way Multiz
 longLabel 30-Way Multiz Alignment & Conservation 
