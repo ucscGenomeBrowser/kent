@@ -2,7 +2,7 @@ name affyZonWildTypeGroups
 type groupings
 all affyZonWildTypeAll
 combine affyZonWildTypeMeanReplicates,affyZonWildTypeMedianReplicates,
-combine.default affyZonWildTypeMeanReplicates
+combine.default affyZonWildTypeMedianReplicates
 
 name affyZonWildTypeAll
 type all
