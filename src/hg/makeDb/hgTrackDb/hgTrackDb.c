@@ -11,7 +11,7 @@
 #include "portable.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgTrackDb.c,v 1.33 2007/10/10 01:01:20 galt Exp $";
+static char const rcsid[] = "$Id: hgTrackDb.c,v 1.34 2007/10/11 01:14:50 galt Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -302,19 +302,17 @@ for (td = tdList; td != NULL; td = tdNext)
 	    nextWord(&sgWord);  /* skip word not used */
 	    hashAddInt(sgd->nameHash, sgName, i);
 	    sgd->values[i] = newHash(3);
-	    char *sgKeyVal;
-            while((sgKeyVal = nextWord(&sgWord)))
+	    struct slPair *slPair, *slPairList = slPairFromString(sgWord);
+            for (slPair = slPairList; slPair; slPair = slPair->next)
 		{
-		char *sgVal = strchr(sgKeyVal,'=');
-		if (!sgVal)
-		    {
-		    verbose(1,"keyval pair missing equals sign in %s: %s\n", td->tableName, sgKeyVal);
-		    break;
-		    }
-		*sgVal++ = 0;
-		hashAdd(sgd->values[i], sgKeyVal, cloneString(sgVal));
+		hashAdd(sgd->values[i], slPair->name, slPair->val);
 		}
 	    ++i;
+	    if (i > 10)
+		{
+		verbose(1,"composite parent %s has more than 10 subGroup clauses, unexpected error\n", td->tableName);
+		break;
+		}
 	    }
 	sgd->numSubGroups = i;
 	hashAdd(compositeHash, td->tableName, sgd);
@@ -359,28 +357,19 @@ for (td = tdList; td != NULL; td = tdNext)
 		{
 		continue; /* nothing to do */
 		}
-	    subGroups = cloneString(subGroups);
-	    char *sgWord = subGroups;
 	    int i = 0, lastI = -1, numSubGroups = 0;
 	    boolean inOrder = TRUE;
-	    while (sgWord)
+	    struct slPair *slPair, *slPairList = slPairFromString(subGroups);
+            for (slPair = slPairList; slPair; slPair = slPair->next)
 		{
-		char *sgKeyVal = nextWord(&sgWord);
-		char *sgVal = strchr(sgKeyVal,'=');
-		if (!sgVal)
-		    {
-		    verbose(1,"keyval pair missing equals sign in %s: %s\n", td->tableName, sgKeyVal);
-		    break;
-		    }
-		*sgVal++ = 0;
-		i = hashIntValDefault(sgd->nameHash, sgKeyVal, -1);
+		i = hashIntValDefault(sgd->nameHash, slPair->name, -1);
 		if (i == -1)
 		    {
-		    verbose(1,"%s: subGroup name not found: %s\n", td->tableName, sgKeyVal);
+		    verbose(1,"%s: subGroup name not found: %s\n", td->tableName, (char *)slPair->name);
 		    }
-		else if (!hashLookup(sgd->values[i], sgVal))
+		else if (sgd->values[i] && !hashLookup(sgd->values[i], slPair->val))
 		    {
-		    verbose(1,"%s: value not found in parent composite : %s=%s\n", td->tableName, sgKeyVal, sgVal);
+		    verbose(1,"%s: value not found in parent composite : %s=%s\n", td->tableName, slPair->name, (char *)slPair->val);
 		    }
 		++numSubGroups; 
 		if (i < lastI)
