@@ -126,7 +126,7 @@ if (patientStr == NULL)
     return NULL;
 
 struct slName *pa, *patients = slNameListFromComma(patientStr);
-struct column *lastCol, *col = NULL;
+struct column *lastCol=NULL, *col = NULL;
 
 struct sortNode *root = newSortNode(NULL, 0);
 struct sortNode *child, *parent;
@@ -136,6 +136,9 @@ for (col = colList; col; col = col->next)
 if ((col->on) && (col->cellSortDirection))
     lastCol = col;
 }
+
+if (lastCol == NULL) // no column is selected to sort
+    return NULL;
 
 for (pa = patients; pa; pa = pa->next)
     {

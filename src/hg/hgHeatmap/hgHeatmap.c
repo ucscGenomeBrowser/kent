@@ -25,7 +25,7 @@
 #include "ispyFeatures.h"
 #include "sortFeatures.h"
 
-static char const rcsid[] = "$Id: hgHeatmap.c,v 1.36 2007/10/08 20:36:18 jsanborn Exp $";
+static char const rcsid[] = "$Id: hgHeatmap.c,v 1.37 2007/10/11 05:28:12 jzhu Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -418,6 +418,15 @@ char varName[512];
 safef(varName, sizeof (varName),"%s", hghPersonOrder);
 char *pStr = cartUsualString(cart,varName, "");
 
+
+if (sameString(pStr,""))
+    {
+    char str[10000];
+    /* hard coded for ispy */
+    safef(str, sizeof(str),"%s", "1001,1002,1003,1004,1005,1007,1008,1009,1010,1011,1012,1013,1015,1016,1017,1018,1019,1021,1022,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040,1041,1042,1043,1044,1045,1046,1047,1048,1049,1050,1051,1053,1054,1055,1056,1057,1058,1059,1060,1061,1062,1063,1064,1065,1066,1067,1068,1069,1070,1071,1072,1073,1074,1075,1077,1078,1081,1082,1083,1084,1085,1086,1087,1088,1089,1090,1091,1092,1093,1094,1095,1096,1097,1098,1099,1100,1101,1102,1103,1104,1106,1107,1109,1110,1111,1112,1113,1114,1115,1116,1117,1118,1120,1121,1122,1123,1124,1125,1126,1127,1128,1129,1130,1132,1134,1135,1136,1137,1138,1139,1140,1141,1142,1143,1144,1145,1146,1147,1148,1149,1150,1151,1152,1154,1155,1156,1157,1158,1159,1160,1161,1162,1163,1164,1165,1166,1167,1168,1169,1170,1171,1172,1173,1174,1175,1176,1177,1179,1180,1181,1182,1183,1184,1185,1187,1188,1189,1191,1192,1193,1194,1196,1197,1198,1199,1200,1201,1202,1203,1204,1205,1206,1207,1208,1209,1210,1211,1212,1213,1214,1215,1216,1217,1218,1219,1220,1221,1222,1223,1224,1225,1226,1227,1228,1229,1230,1231,1232,1233,1234,1235,1236,1237,1238,1239");
+    cartSetString(cart, varName, str);
+    }
+  
 setPersonOrder(gh, pStr);
 }
 
@@ -591,21 +600,10 @@ struct sqlConnection *ispyConn = NULL;
 struct column *colList = NULL;
 
 if ( sqlDatabaseExists("ispy"))
-{
-ispyConn = hAllocOrConnect("ispy");
-colList = getColumns(ispyConn);
-}
-
-
-if (cartVarExists(cart, hghSortPatients) && (ispyConn))                                         
     {
-    sortPersonOrder(ispyConn, colList);
+    ispyConn = hAllocOrConnect("ispy");
+    colList = getColumns(ispyConn);
     }
-
-theDataset = cartOptionalString(cart, hghDataSet);
-if (!theDataset)
-    theDataset = "UCSF breast cancer"; /* hard coded*/
-getGenoHeatmaps(conn, theDataset);       
    
 if (cartVarExists(cart, hghConfigure))
     {
@@ -623,13 +621,23 @@ else if ( ((var = cartFindFirstLike(cart, "hgHeatmap_do.down.*")) != NULL) && (i
     {
     doConfigure(ispyConn, colList, var);
     }        
+/* 
+   else if (cartVarExists(cart, hghSortPatients) && (ispyConn))                                         
+    {
+    sortPersonOrder(ispyConn, colList);
+    }
+*/
 else
     {
+    theDataset = cartOptionalString(cart, hghDataSet);
+    getGenoHeatmaps(conn, theDataset);   
+    sortPersonOrder(ispyConn, colList);
+
     /* Default case - start fancy web page. */
     if (cgiVarExists(hghPsOutput))
-    	handlePostscript(conn);
+        handlePostscript(conn);
     else
-	mainPage(conn);
+        mainPage(conn);
     }
 
 cartRemovePrefix(cart, hghDo);
@@ -659,11 +667,6 @@ struct sqlConnection *conn = NULL;
 getDbAndGenome(cart, &database, &genome,oldVars);
 hSetDb(database);
 cartSetString(cart, "db", database); /* custom tracks needs this */
-//theDataset = cartOptionalString(cart, hghDataSet);  
-//conn = hAllocConn();
-//if (!theDataset)
-//   theDataset = "UCSF breast cancer"; /* hard coded*/
-//getGenoHeatmaps(conn, theDataset);
 
 /* Handle cases that just want a HTTP Location line: */
 if (cartVarExists(cart, hghClickX))

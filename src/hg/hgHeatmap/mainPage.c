@@ -30,7 +30,7 @@
 #include "ispyFeatures.h"
 
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.29 2007/10/08 04:59:24 jsanborn Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.30 2007/10/11 05:28:12 jzhu Exp $";
 
 /* Page drawing stuff. */
 
@@ -774,6 +774,7 @@ if (result)
     char varName[512];
     safef(varName, sizeof (varName),"%s", hghPersonOrder);
     char *text = cartUsualString(cart, varName, "");
+    
     cgiMakeTextArea(varName,text, 5 ,50);
     cgiMakeSubmitButton();
     }
