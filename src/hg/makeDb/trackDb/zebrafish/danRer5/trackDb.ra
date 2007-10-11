@@ -107,13 +107,13 @@ groupings affyZonWildTypeGroups
     track affyZonWildType
     subTrack affyConsensusAndTargetZonWildType
     shortLabel WT Array Cons
-    longLabel Zon Lab Expression data for Wild Type Zebrafish (Affymetrix Zebrafish Consensus Sequences)
+    longLabel Zon Lab Expression for Wild Type Zebrafish (Consensus Sequences)
     priority 1
    
     track affyTargetZonWildType
     subTrack affyConsensusAndTargetZonWildType
     shortLabel WT Array Targ
-    longLabel Zon Lab Expression data for Wild Type Zebrafish (Affymetrix Zebrafish Target Sequences)
+    longLabel Zon Lab Expression for Wild Type Zebrafish (Target Sequences)
     priority 2
 
 track affyZebrafish
