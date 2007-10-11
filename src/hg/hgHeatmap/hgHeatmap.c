@@ -25,7 +25,7 @@
 #include "ispyFeatures.h"
 #include "sortFeatures.h"
 
-static char const rcsid[] = "$Id: hgHeatmap.c,v 1.37 2007/10/11 05:28:12 jzhu Exp $";
+static char const rcsid[] = "$Id: hgHeatmap.c,v 1.38 2007/10/11 21:01:43 jzhu Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -81,7 +81,6 @@ for (ct = ctList; ct != NULL; ct = ct->next)
         gh->expCount = pSc;
         gh->tDb = tdb;
 	gh->database = CUSTOM_TRASH;
-	setBedOrder(gh);
         slAddHead(&list, gh);
         }
     }
@@ -147,7 +146,6 @@ for (i=0; i<N; i++)
     struct microarrayGroups *maGs = maGetTrackGroupings(gh->database, gh->tDb);
     struct maGrouping *allA= maGs->allArrays;
     gh->expCount = allA->size;
-    setBedOrder(gh);
     slAddHead(&list,gh);
     }
 return list;
@@ -195,20 +193,18 @@ for (ref = ghList; ref != NULL; ref = ref->next)
     }
 }
 
-void setPersonOrder (struct genoHeatmap* gh, char* personStr)
-/* Set the sampleOrder and sampleList of a specific heatmap to personStr; 
-   personStr is a csv format string of personids
-   if posStr is null, set to default 
-*/
+void setPersonOrder (struct genoHeatmap* gh, struct slName *personList)
+/* Set the sampleOrder and sampleList of a specific heatmap to patientList; 
+ * patientList is a list of patient names
+ * if patientList is null, set to default */
 {
-char *pS = personStr;
-if (sameString(pS,""))
+if (personList == NULL)
     {
     defaultOrder(gh);
     return;
     }
 
-struct slName *slPerson = slNameListFromComma(pS);
+struct slName *slPerson = personList;
 
 if (gh->sampleOrder)
     freeHash(&gh->sampleOrder);
@@ -269,24 +265,24 @@ struct maGrouping *allA= maGs->allArrays;
 int counter = 0;    
 int expId; // bed15 format expId 
 for(sl=slSample; sl !=NULL; sl=sl->next)
-{
-sample = sl->name;
-expId = -1;
-for (i=0; i< allA->size; i++)
     {
-    if (sameString(allA->names[i],sample))
+    sample = sl->name;
+    expId = -1;
+    for (i=0; i< allA->size; i++)
 	{
-	expId = allA->expIds[i];
-	gh->expIdOrder[expId]=counter;        
-	break;
+	if (sameString(allA->names[i],sample))
+	    {
+	    expId = allA->expIds[i];
+	    gh->expIdOrder[expId]=counter;        
+	    break;
+	    }
 	}
+    if (expId == -1)
+	continue;
+    hashAddInt(gh->sampleOrder, sample, counter);
+    slNameAddHead(&(gh->sampleList),sample);
+    counter++;
     }
-if (expId == -1)
-    continue;
-hashAddInt(gh->sampleOrder, sample, counter);
-slNameAddHead(&(gh->sampleList),sample);
-counter++;
-}
 slReverse(&(gh->sampleList));
 }
 
@@ -402,47 +398,57 @@ slReverse(&gh->sampleList);
 /* Return an array for reordering the experiments
    If the order has not been set, then use function setBedOrder to set 
 */
-int *getBedOrder(struct genoHeatmap* gh)
+int *getBedOrder(struct genoHeatmap *gh)
 {
 if (gh->expIdOrder == NULL)
-    setBedOrder(gh);
+    sortPersonOrder(gh);
 return gh->expIdOrder;
 }
 
-/* Set the ordering of samples in display 
+/* Sort and set the sample orders according to feature configuration 
 */
-void setBedOrder(struct genoHeatmap *gh)
+void sortPersonOrder(struct genoHeatmap *gh)
 {
-/* get the ordering information from cart variable hghOrder*/
-char varName[512];
-safef(varName, sizeof (varName),"%s", hghPersonOrder);
-char *pStr = cartUsualString(cart,varName, "");
+/* get all patient ids */
+struct trackDb *tdb = gh->tDb; 
+char *labTable = trackDbSetting(tdb, "patTable");
+char *key = trackDbSetting(tdb, "patKey");
+char *db = trackDbSetting(tdb, "patDb");
 
-
-if (sameString(pStr,""))
+if ((labTable == NULL) || (key == NULL) || (db==NULL))
     {
-    char str[10000];
-    /* hard coded for ispy */
-    safef(str, sizeof(str),"%s", "1001,1002,1003,1004,1005,1007,1008,1009,1010,1011,1012,1013,1015,1016,1017,1018,1019,1021,1022,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040,1041,1042,1043,1044,1045,1046,1047,1048,1049,1050,1051,1053,1054,1055,1056,1057,1058,1059,1060,1061,1062,1063,1064,1065,1066,1067,1068,1069,1070,1071,1072,1073,1074,1075,1077,1078,1081,1082,1083,1084,1085,1086,1087,1088,1089,1090,1091,1092,1093,1094,1095,1096,1097,1098,1099,1100,1101,1102,1103,1104,1106,1107,1109,1110,1111,1112,1113,1114,1115,1116,1117,1118,1120,1121,1122,1123,1124,1125,1126,1127,1128,1129,1130,1132,1134,1135,1136,1137,1138,1139,1140,1141,1142,1143,1144,1145,1146,1147,1148,1149,1150,1151,1152,1154,1155,1156,1157,1158,1159,1160,1161,1162,1163,1164,1165,1166,1167,1168,1169,1170,1171,1172,1173,1174,1175,1176,1177,1179,1180,1181,1182,1183,1184,1185,1187,1188,1189,1191,1192,1193,1194,1196,1197,1198,1199,1200,1201,1202,1203,1204,1205,1206,1207,1208,1209,1210,1211,1212,1213,1214,1215,1216,1217,1218,1219,1220,1221,1222,1223,1224,1225,1226,1227,1228,1229,1230,1231,1232,1233,1234,1235,1236,1237,1238,1239");
-    cartSetString(cart, varName, str);
-    }
-  
-setPersonOrder(gh, pStr);
-}
-
-void sortPersonOrder(struct sqlConnection *conn, struct column *colList)
-{
-/* get the ordering information from cart variable hghOrder*/
-char varName[512];
-safef(varName, sizeof (varName),"%s", hghPersonOrder);
-char *pStr = cartUsualString(cart,varName, "");
-
-if (sameString(pStr,""))
+    defaultOrder(gh); 
     return;
+    }
+if ( !sqlDatabaseExists(db) )
+    {
+    defaultOrder(gh); 
+    return;
+    }
 
-/* sort patients and set CGI variable*/
-char *sortStr = sortPatients(conn, colList, pStr);
-cartSetString(cart, hghPersonOrder, sortStr);
+struct sqlConnection *conn = sqlConnect(db); 
+char query[512];
+struct sqlResult *sr;
+char **row;
+char *person;
+struct slName *patientList=NULL;
+
+safef(query, sizeof(query),"select DISTINCT %s from %s ", key, labTable );
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    person = row[0];
+    slNameAddHead(&(patientList),person);
+    }
+
+/* get colList */
+struct column *colList = getColumns(conn);
+
+/* sort patients */
+struct slName *sortList = sortPatients(conn, colList, patientList);
+
+/* set ordering in gh */
+setPersonOrder(gh, sortList);
 }
 
 
@@ -621,17 +627,10 @@ else if ( ((var = cartFindFirstLike(cart, "hgHeatmap_do.down.*")) != NULL) && (i
     {
     doConfigure(ispyConn, colList, var);
     }        
-/* 
-   else if (cartVarExists(cart, hghSortPatients) && (ispyConn))                                         
-    {
-    sortPersonOrder(ispyConn, colList);
-    }
-*/
 else
     {
     theDataset = cartOptionalString(cart, hghDataSet);
-    getGenoHeatmaps(conn, theDataset);   
-    sortPersonOrder(ispyConn, colList);
+    getGenoHeatmaps(conn, theDataset);
 
     /* Default case - start fancy web page. */
     if (cgiVarExists(hghPsOutput))

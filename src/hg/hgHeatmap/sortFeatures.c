@@ -119,13 +119,12 @@ for (child = children; child; child = child->next)
 return dy;
 }
 
-char *sortPatients(struct sqlConnection *conn, struct column *colList, char *patientStr)
-/* Sort a comma-separated set of patients based on active columns */
+struct slName *sortPatients(struct sqlConnection *conn, struct column *colList, struct slName *patientList)
+/* Sort a list of patients based on active columns */
 {
-if (patientStr == NULL)
+if (patientList == NULL)
     return NULL;
 
-struct slName *pa, *patients = slNameListFromComma(patientStr);
 struct column *lastCol=NULL, *col = NULL;
 
 struct sortNode *root = newSortNode(NULL, 0);
@@ -140,7 +139,8 @@ if ((col->on) && (col->cellSortDirection))
 if (lastCol == NULL) // no column is selected to sort
     return NULL;
 
-for (pa = patients; pa; pa = pa->next)
+struct slName *pa=NULL;
+for (pa = patientList; pa; pa = pa->next)
     {
     child = NULL;
     parent = root;
@@ -168,7 +168,9 @@ for (pa = patients; pa; pa = pa->next)
 struct dyString *dy = AllocA(struct dyString);
 printSortedNodes(dy, root);
 
-return dy->string;
+struct slName *sortList = slNameListFromComma(dy->string);
+return sortList;
+
 }
 
  

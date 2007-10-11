@@ -25,8 +25,8 @@ struct sortNode
     double val;
 };
 
-char *sortPatients(struct sqlConnection *conn, struct column *colList, char *patientStr);
-/* Sort a comma-separated set of patients based on active columns */ 
+struct slName *sortPatients(struct sqlConnection *conn, struct column *colList, struct slName *patientList);
+/* Sort a list of patients based on active columns */ 
 
 
 #endif /* SORTFEATURES_H */

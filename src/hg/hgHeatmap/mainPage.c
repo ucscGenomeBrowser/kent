@@ -30,7 +30,7 @@
 #include "ispyFeatures.h"
 
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.30 2007/10/11 05:28:12 jzhu Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.31 2007/10/11 21:01:43 jzhu Exp $";
 
 /* Page drawing stuff. */
 
@@ -755,7 +755,6 @@ hPrintf("</TABLE>");
 
 cgiMakeButton(hghConfigure, "configure");
 cgiMakeButton(hghConfigureFeature, "configure features");
-cgiMakeButton(hghSortPatients, "sort patients");
 
 hPrintf("<BR>");
 
@@ -767,17 +766,7 @@ hPrintf("</TD></TR></TABLE>\n");
 if (result)
     /* Write a little click-on-help */
     hPrintf("<i>Click on a chromosome to open Genome Browser at that position.</i><BR>");
-if (result)
-    /* test code for reordering for ispy table */ 
-    {
-    hPrintf("<BR>This is a test: ispyMipCGH patient order, format: csv.<BR>");
-    char varName[512];
-    safef(varName, sizeof (varName),"%s", hghPersonOrder);
-    char *text = cartUsualString(cart, varName, "");
-    
-    cgiMakeTextArea(varName,text, 5 ,50);
-    cgiMakeSubmitButton();
-    }
+
 hPrintf("</FORM>\n");
 
 /* Hidden form - fo the benefit of javascript. */

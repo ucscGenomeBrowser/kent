@@ -25,14 +25,10 @@
 #define hghMaxGapToFill hghPrefix "maxGapToFill"
 #define hghImageWidth hghPrefix "imageWidth"
 
-#define hghSampleOrder hghPrefix "sampleOrder"
-#define hghPersonOrder hghPrefix "personOrder"
-
 /*** Command variables. ***/
 #define hghConfigure hghDo "Configure"
 #define hghConfigureOne hghDo "ConfigureOne"
 #define hghConfigureFeature hghDo "ConfigureFeature"
-#define hghSortPatients hghDo "SortPatients"
 #define hghBrowse hghDo "Browse"
 #define hghUpload hghDo "Upload"
 #define hghSubmitUpload hghDo "SubmitUpload"
@@ -127,18 +123,13 @@ void setSampleOrder(struct genoHeatmap* gh, char* posStr);
  * if the setting is not set in the configuration file, then the orders 
  * are set to default in sampleList and sampleOrder */
 
-void setPersonOrder (struct genoHeatmap* gh, char* personStr);
-/* Set the sampleOrder and sampleList of a specific heatmap to personStr; 
- * personStr is a csv format string of personids
- * if posStr is null, set to default */
+void sortPersonOrder (struct genoHeatmap *gh);
+/*  Sort and set the sample orders according to feature configuration */
 
-void defaultOrder(struct genoHeatmap* gh);
+void defaultOrder(struct genoHeatmap *gh);
 /* reset the default order of samples to be displayed */ 
 
-void setBedOrder(struct genoHeatmap* gh);
-/* Set the ordering of samples in display */
-
-int *getBedOrder(struct genoHeatmap* gh);
+int *getBedOrder(struct genoHeatmap *gh);
 /* Return an array for reordering the experiments
  * If the order has not been set, then use function setBedOrder to set */
 
