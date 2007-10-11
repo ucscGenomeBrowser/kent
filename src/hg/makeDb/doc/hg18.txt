@@ -17719,6 +17719,8 @@ values ("bipolar", 0, 0, "composite")'
     mkdir -p /cluster/data/hg18/bed/targetScanS
     cd /cluster/data/hg18/bed/targetScanS
 
+    #	the don't supply them all, but we don't know which ones they
+    #	don't.  So, ask for them all, and remove the files that are empty.
     for C in `cut -f1 ../../chrom.sizes | sed -e "s/chr//"`
 do
     wget --timestamping \
@@ -17734,7 +17736,7 @@ done
 
     egrep -h -v "^browser|^track" hg*.bed | \
 	hgLoadBed hg18 targetScanS -tmpDir=/scratch/tmp stdin
-
+    #	Loaded 50802 elements of size 6
 
     # Create/edit/check in targetScans.html and trackDb.ra under
     # kent/src/hg/makeDb/trackDb/human/hg18
