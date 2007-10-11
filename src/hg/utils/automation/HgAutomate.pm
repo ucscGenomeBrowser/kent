@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/HgAutomate.pm instead.
 
-# $Id: HgAutomate.pm,v 1.9 2007/09/13 22:32:19 hiram Exp $
+# $Id: HgAutomate.pm,v 1.10 2007/10/11 20:57:38 angie Exp $
 package HgAutomate;
 
 use warnings;
@@ -25,7 +25,8 @@ use File::Basename;
       ),
     # Some basic smarts about our compute infrastructure:
     qw( choosePermanentStorage
-	chooseWorkhorse chooseFileServer chooseClusterByBandwidth
+	chooseWorkhorse chooseFileServer
+	chooseClusterByBandwidth chooseSmallClusterByBandwidth
 	chooseFilesystemsForCluster checkClusterPath
       ),
     # General-purpose utility routines:
@@ -36,7 +37,7 @@ use File::Basename;
     # Hardcoded paths/commands/constants:
     qw( $gensub2 $para $paraRun $centralDbSql $cvs
 	$clusterData $trackBuild $goldenPath $gbdb
-	$splitThreshold
+	$splitThreshold $setMachtype
       ),
 );
 
@@ -301,12 +302,14 @@ sub chooseClusterByBandwidth {
   # Note: this does not take I/O into account, so it's best to call this
   # before distributing inputs instead of after (unless they have been
   # distributed somewhere that is fast for all clusters like /scratch).
+  my $onlySmallFast = shift;
   confess "Too many arguments" if (shift);
   my $maxOomph;
   my $bestCluster;
   foreach my $paraHub (keys %cluster) {
     my $clusterInfo = $cluster{$paraHub};
     next if (! $clusterInfo->{'enabled'});
+    next if ($onlySmallFast && $clusterInfo->{'gigaHz'} < 2.0);
     my @machInfo = `ssh -x $paraHub parasol list machines | grep -v dead`;
     my $idleCount = 0;
     my $busyCount = 0;
@@ -337,6 +340,14 @@ sub chooseClusterByBandwidth {
   &verbose(2, "chooseClusterByBandwidth: $bestCluster " .
 	   "($maxOomph Gop/s est)\n");
   return $bestCluster;
+}
+
+sub chooseSmallClusterByBandwidth {
+  # Choose small cluster (fast nodes) by apparent available bandwidth.
+  # Note: this does not take I/O into account, so it's best to call this
+  # before distributing inputs instead of after (unless they have been
+  # distributed somewhere that is fast for all clusters like /scratch).
+  return chooseClusterByBandwidth(1);
 }
 
 sub chooseFilesystemsForCluster {
@@ -464,7 +475,7 @@ sub processCommonOptions {
 # Hardcoded paths/command sequences:
 use vars qw( 	$gensub2 $para $paraRun $centralDbSql $cvs
 		$clusterData $trackBuild $goldenPath $gbdb
-		$splitThreshold
+		$splitThreshold $setMachtype
 	   );
 use vars qw( $gensub2 $para $paraRun $clusterData $trackBuild
 	     $goldenPath $gbdb $centralDbSql $splitThreshold );
@@ -488,6 +499,7 @@ $gbdb = '/gbdb';
 # per-seq files, or use set of multi-seq files).
 $splitThreshold = 100;
 
+$setMachtype = "setenv MACHTYPE `uname -m | sed -e 's/i686/i386/;'`";
 
 #########################################################################
 # General utility subroutines:
