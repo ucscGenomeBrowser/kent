@@ -1342,9 +1342,10 @@ group regulation
 priority 101
 visibility hide
 color 0,96,0
+scoreFilterMax 100
 type bed 6 .
 urlLabel TargetScan link:
-url http://www.targetscan.org/cgi-bin/targetscan/vert_40/view_gene.cgi?taxid=9606&gs=$$&showcnc=1&shownc=1
+url http://www.targetscan.org/cgi-bin/vert_40/view_gene.cgi?gs=$P&taxid=9606&showcnc=1&shownc=0#$p
 
 track uc16
 shortLabel Ultra Conserved
