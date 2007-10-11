@@ -2415,7 +2415,7 @@ searchDescription Retrotransposon Insertion Polymorphisms in Humans
 searchPriority 6
 padding 400
 
-searchTable consIndelsHg17Mm5CanFam1
+searchTable consIndelsHgMmCanFam
 searchType bed
 searchMethod exact
 shortCircuit 1

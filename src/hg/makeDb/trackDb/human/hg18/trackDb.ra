@@ -2096,7 +2096,7 @@ searchPriority 14
 padding 250
 semiShortCircuit 1
 
-searchTable consIndelsHg18Mm8CanFam2
+searchTable consIndelsHgMmCanFam
 searchType bed
 searchMethod exact
 shortCircuit 1
