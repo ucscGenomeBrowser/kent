@@ -42,8 +42,11 @@ TABLE onStudy
 	string HistologicGradeOS;		"Combined Histologic Grade - On-study (According to SBR/Elston Classification)"
 	int ER_TS;		"Estrogen Receptor Status - Total Score Total Score = ER_PS+ ER_IS Considered Allred Score; 3 is positive"
 	int PgR_TS;		"Progesterone Receptor Status - Total Score Total Score = PgR_PgS+ PgR_IS Considered Allred Score; 3 is positive"
+	string ERpos;		"Estrogen Receptor Status (Allred Score or Community determined)"
+	string PgRpos;		"Progesterone Receptor Status (Allred Score or Community determined)"
 	string Her2CommunityPos;		"Her2 Summary as measured in the Community"
 	string Her2CommunityMethod;		"Her2 Summary method as measured in the Community"
+	string pCR;		"pathological complete response"
 	)
 
 TABLE postSurgery
