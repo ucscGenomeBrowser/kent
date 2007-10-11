@@ -481,7 +481,7 @@ autoScaleDefault Off
 pairwise netBlastz
 speciesOrder panTro1 monkey 
 
-track consIndelsHg17Mm5CanFam1
+track consIndelsHgMmCanFam
 shortLabel Cons Indels MmCf
 longLabel Indel-based Conservation for human hg17, mouse mm5 and dog canFam1
 group compGeno

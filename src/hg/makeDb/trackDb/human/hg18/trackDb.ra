@@ -219,7 +219,7 @@ speciesDefaultOff
 #treeImage phylo/syn_6way.jpg
 speciesCodonDefault hg18
 
-track consIndelsHg18Mm8CanFam2
+track consIndelsHgMmCanFam
 shortLabel Cons Indels MmCf
 longLabel Indel-based Conservation for human hg18, mouse mm8 and dog canFam2
 group compGeno
