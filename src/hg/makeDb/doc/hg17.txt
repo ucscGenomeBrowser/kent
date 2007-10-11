@@ -23762,7 +23762,6 @@ bash
 cd /san/sanVol1/scratch/andy
 mkdir transcriptome
 cd transcriptome/
-cd /cluster/data/hg17
 cp /var/ftp/encode/Affy_transcriptome_phase3.tar .
 tar xfv Affy_transcriptome_phase3.tar 
 find . -name '*.bz2' -exec bunzip2 '{}' \;
@@ -24090,3 +24089,8 @@ done
 #
 #  See hg18.txt for details.
 #############################################################
+
+#############################################################
+# CCC Genome Graphs (DONE 2007-Sept Andy)
+# 
+# See hg18 make doc.
