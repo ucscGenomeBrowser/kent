@@ -9,7 +9,7 @@
 #include "portable.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.112 2007/09/27 03:09:42 galt Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.113 2007/10/11 01:14:12 galt Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -836,6 +836,31 @@ struct slPair *el = slPairFind(list, name);
 if (el == NULL)
     return NULL;
 return el->val;
+}
+
+struct slPair *slPairFromString(char *s)
+/* Return slPair list parsed from list in string s 
+ * name1=val1 name2=val2 ...
+ * Returns NULL if parse error */
+{
+struct slPair *list = NULL;
+char *name;
+char *ss = cloneString(s);
+char *word = ss;
+while((name = nextWord(&word)))
+    {
+    char *val = strchr(name,'=');
+    if (!val)
+	{
+	warn("missing equals sign in name=value pair: [%s]\n", name);
+	return NULL;
+	}
+    *val++ = 0;
+    slPairAdd(&list, name, cloneString(val));
+    }
+freez(&ss);
+slReverse(&list);
+return list;
 }
 
 

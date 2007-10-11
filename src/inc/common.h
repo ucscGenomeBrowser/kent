@@ -581,6 +581,10 @@ struct slPair *slPairFind(struct slPair *list, char *name);
 void *slPairFindVal(struct slPair *list, char *name);
 /* Return value associated with name in list, or NULL if not found. */
 
+struct slPair *slPairFromString(char *s);
+/* Return slPair list parsed from list in string s 
+ * name1=val1 name2=val2 ...
+ * Returns NULL if parse error */
 
 void gentleFree(void *pt);
 /* check pointer for NULL before freeing. 
