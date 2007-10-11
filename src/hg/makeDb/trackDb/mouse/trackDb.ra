@@ -1207,3 +1207,5 @@ noScoreFilter .
     shortLabel Affy Exon Transcript
     longLabel Affymetrix Mouse Exon array version 1.0 transcripts
     priority 2
+    url https://www.affymetrix.com/LinkServlet?probeset=$$
+    urlLabel Netaffx Link:
