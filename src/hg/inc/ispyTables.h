@@ -5,6 +5,10 @@
 #ifndef ISPYTABLES_H
 #define ISPYTABLES_H
 
+#ifndef JKSQL_H
+#include "jksql.h"
+#endif
+
 #define PATIENT_NUM_COLS 3
 
 struct patient
@@ -35,6 +39,31 @@ struct patient *patientLoadAllByChar(char *fileName, char chopper);
 #define patientLoadAllByTab(a) patientLoadAllByChar(a, '\t');
 /* Load all patient from tab separated file.
  * Dispose of this with patientFreeList(). */
+
+struct patient *patientLoadByQuery(struct sqlConnection *conn, char *query);
+/* Load all patient from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with patientFreeList(). */
+
+void patientSaveToDb(struct sqlConnection *conn, struct patient *el, char *tableName, int updateSize);
+/* Save patient as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
+ * For example "autosql's features include" --> "autosql\'s features include" 
+ * If worried about this use patientSaveToDbEscaped() */
+
+void patientSaveToDbEscaped(struct sqlConnection *conn, struct patient *el, char *tableName, int updateSize);
+/* Save patient as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size.
+ * of a string that would contain the entire query. Automatically 
+ * escapes all simple strings (not arrays of string) but may be slower than patientSaveToDb().
+ * For example automatically copies and converts: 
+ * "autosql's features include" --> "autosql\'s features include" 
+ * before inserting into database. */ 
 
 struct patient *patientCommaIn(char **pS, struct patient *ret);
 /* Create a patient out of a comma separated string. 
@@ -93,6 +122,31 @@ struct patientInfo *patientInfoLoadAllByChar(char *fileName, char chopper);
 /* Load all patientInfo from tab separated file.
  * Dispose of this with patientInfoFreeList(). */
 
+struct patientInfo *patientInfoLoadByQuery(struct sqlConnection *conn, char *query);
+/* Load all patientInfo from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with patientInfoFreeList(). */
+
+void patientInfoSaveToDb(struct sqlConnection *conn, struct patientInfo *el, char *tableName, int updateSize);
+/* Save patientInfo as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
+ * For example "autosql's features include" --> "autosql\'s features include" 
+ * If worried about this use patientInfoSaveToDbEscaped() */
+
+void patientInfoSaveToDbEscaped(struct sqlConnection *conn, struct patientInfo *el, char *tableName, int updateSize);
+/* Save patientInfo as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size.
+ * of a string that would contain the entire query. Automatically 
+ * escapes all simple strings (not arrays of string) but may be slower than patientInfoSaveToDb().
+ * For example automatically copies and converts: 
+ * "autosql's features include" --> "autosql\'s features include" 
+ * before inserting into database. */ 
+
 struct patientInfo *patientInfoCommaIn(char **pS, struct patientInfo *ret);
 /* Create a patientInfo out of a comma separated string. 
  * This will fill in ret if non-null, otherwise will
@@ -149,6 +203,31 @@ struct chemo *chemoLoadAllByChar(char *fileName, char chopper);
 /* Load all chemo from tab separated file.
  * Dispose of this with chemoFreeList(). */
 
+struct chemo *chemoLoadByQuery(struct sqlConnection *conn, char *query);
+/* Load all chemo from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with chemoFreeList(). */
+
+void chemoSaveToDb(struct sqlConnection *conn, struct chemo *el, char *tableName, int updateSize);
+/* Save chemo as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
+ * For example "autosql's features include" --> "autosql\'s features include" 
+ * If worried about this use chemoSaveToDbEscaped() */
+
+void chemoSaveToDbEscaped(struct sqlConnection *conn, struct chemo *el, char *tableName, int updateSize);
+/* Save chemo as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size.
+ * of a string that would contain the entire query. Automatically 
+ * escapes all simple strings (not arrays of string) but may be slower than chemoSaveToDb().
+ * For example automatically copies and converts: 
+ * "autosql's features include" --> "autosql\'s features include" 
+ * before inserting into database. */ 
+
 struct chemo *chemoCommaIn(char **pS, struct chemo *ret);
 /* Create a chemo out of a comma separated string. 
  * This will fill in ret if non-null, otherwise will
@@ -170,7 +249,7 @@ void chemoOutput(struct chemo *el, FILE *f, char sep, char lastSep);
 #define chemoCommaOut(el,f) chemoOutput(el,f,',',',');
 /* Print out chemo as a comma separated list including final comma. */
 
-#define ONSTUDY_NUM_COLS 10
+#define ONSTUDY_NUM_COLS 13
 
 struct onStudy
 /* Table onStudy */
@@ -184,8 +263,11 @@ struct onStudy
     char *HistologicGradeOS;	/* Combined Histologic Grade - On-study (According to SBR/Elston Classification) */
     int *ER_TS;	/* Estrogen Receptor Status - Total Score Total Score = ER_PS+ ER_IS Considered Allred Score; 3 is positive */
     int *PgR_TS;	/* Progesterone Receptor Status - Total Score Total Score = PgR_PgS+ PgR_IS Considered Allred Score; 3 is positive */
+    char *ERpos;	/* Estrogen Receptor Status (Allred Score or Community determined) */
+    char *PgRpos;	/* Progesterone Receptor Status (Allred Score or Community determined) */
     char *Her2CommunityPos;	/* Her2 Summary as measured in the Community */
     char *Her2CommunityMethod;	/* Her2 Summary method as measured in the Community */
+    char *pCR;	/* pathological complete response */
     };
 
 void onStudyStaticLoadWithNull(char **row, struct onStudy *ret);
@@ -207,6 +289,31 @@ struct onStudy *onStudyLoadAllByChar(char *fileName, char chopper);
 #define onStudyLoadAllByTab(a) onStudyLoadAllByChar(a, '\t');
 /* Load all onStudy from tab separated file.
  * Dispose of this with onStudyFreeList(). */
+
+struct onStudy *onStudyLoadByQuery(struct sqlConnection *conn, char *query);
+/* Load all onStudy from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with onStudyFreeList(). */
+
+void onStudySaveToDb(struct sqlConnection *conn, struct onStudy *el, char *tableName, int updateSize);
+/* Save onStudy as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
+ * For example "autosql's features include" --> "autosql\'s features include" 
+ * If worried about this use onStudySaveToDbEscaped() */
+
+void onStudySaveToDbEscaped(struct sqlConnection *conn, struct onStudy *el, char *tableName, int updateSize);
+/* Save onStudy as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size.
+ * of a string that would contain the entire query. Automatically 
+ * escapes all simple strings (not arrays of string) but may be slower than onStudySaveToDb().
+ * For example automatically copies and converts: 
+ * "autosql's features include" --> "autosql\'s features include" 
+ * before inserting into database. */ 
 
 struct onStudy *onStudyCommaIn(char **pS, struct onStudy *ret);
 /* Create a onStudy out of a comma separated string. 
@@ -270,6 +377,31 @@ struct postSurgery *postSurgeryLoadAllByChar(char *fileName, char chopper);
 /* Load all postSurgery from tab separated file.
  * Dispose of this with postSurgeryFreeList(). */
 
+struct postSurgery *postSurgeryLoadByQuery(struct sqlConnection *conn, char *query);
+/* Load all postSurgery from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with postSurgeryFreeList(). */
+
+void postSurgerySaveToDb(struct sqlConnection *conn, struct postSurgery *el, char *tableName, int updateSize);
+/* Save postSurgery as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
+ * For example "autosql's features include" --> "autosql\'s features include" 
+ * If worried about this use postSurgerySaveToDbEscaped() */
+
+void postSurgerySaveToDbEscaped(struct sqlConnection *conn, struct postSurgery *el, char *tableName, int updateSize);
+/* Save postSurgery as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size.
+ * of a string that would contain the entire query. Automatically 
+ * escapes all simple strings (not arrays of string) but may be slower than postSurgerySaveToDb().
+ * For example automatically copies and converts: 
+ * "autosql's features include" --> "autosql\'s features include" 
+ * before inserting into database. */ 
+
 struct postSurgery *postSurgeryCommaIn(char **pS, struct postSurgery *ret);
 /* Create a postSurgery out of a comma separated string. 
  * This will fill in ret if non-null, otherwise will
@@ -327,6 +459,31 @@ struct followUp *followUpLoadAllByChar(char *fileName, char chopper);
 #define followUpLoadAllByTab(a) followUpLoadAllByChar(a, '\t');
 /* Load all followUp from tab separated file.
  * Dispose of this with followUpFreeList(). */
+
+struct followUp *followUpLoadByQuery(struct sqlConnection *conn, char *query);
+/* Load all followUp from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with followUpFreeList(). */
+
+void followUpSaveToDb(struct sqlConnection *conn, struct followUp *el, char *tableName, int updateSize);
+/* Save followUp as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
+ * For example "autosql's features include" --> "autosql\'s features include" 
+ * If worried about this use followUpSaveToDbEscaped() */
+
+void followUpSaveToDbEscaped(struct sqlConnection *conn, struct followUp *el, char *tableName, int updateSize);
+/* Save followUp as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size.
+ * of a string that would contain the entire query. Automatically 
+ * escapes all simple strings (not arrays of string) but may be slower than followUpSaveToDb().
+ * For example automatically copies and converts: 
+ * "autosql's features include" --> "autosql\'s features include" 
+ * before inserting into database. */ 
 
 struct followUp *followUpCommaIn(char **pS, struct followUp *ret);
 /* Create a followUp out of a comma separated string. 
@@ -386,6 +543,31 @@ struct respEval *respEvalLoadAllByChar(char *fileName, char chopper);
 #define respEvalLoadAllByTab(a) respEvalLoadAllByChar(a, '\t');
 /* Load all respEval from tab separated file.
  * Dispose of this with respEvalFreeList(). */
+
+struct respEval *respEvalLoadByQuery(struct sqlConnection *conn, char *query);
+/* Load all respEval from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with respEvalFreeList(). */
+
+void respEvalSaveToDb(struct sqlConnection *conn, struct respEval *el, char *tableName, int updateSize);
+/* Save respEval as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
+ * For example "autosql's features include" --> "autosql\'s features include" 
+ * If worried about this use respEvalSaveToDbEscaped() */
+
+void respEvalSaveToDbEscaped(struct sqlConnection *conn, struct respEval *el, char *tableName, int updateSize);
+/* Save respEval as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size.
+ * of a string that would contain the entire query. Automatically 
+ * escapes all simple strings (not arrays of string) but may be slower than respEvalSaveToDb().
+ * For example automatically copies and converts: 
+ * "autosql's features include" --> "autosql\'s features include" 
+ * before inserting into database. */ 
 
 struct respEval *respEvalCommaIn(char **pS, struct respEval *ret);
 /* Create a respEval out of a comma separated string. 
@@ -456,6 +638,31 @@ struct mr *mrLoadAllByChar(char *fileName, char chopper);
 /* Load all mr from tab separated file.
  * Dispose of this with mrFreeList(). */
 
+struct mr *mrLoadByQuery(struct sqlConnection *conn, char *query);
+/* Load all mr from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with mrFreeList(). */
+
+void mrSaveToDb(struct sqlConnection *conn, struct mr *el, char *tableName, int updateSize);
+/* Save mr as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
+ * For example "autosql's features include" --> "autosql\'s features include" 
+ * If worried about this use mrSaveToDbEscaped() */
+
+void mrSaveToDbEscaped(struct sqlConnection *conn, struct mr *el, char *tableName, int updateSize);
+/* Save mr as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size.
+ * of a string that would contain the entire query. Automatically 
+ * escapes all simple strings (not arrays of string) but may be slower than mrSaveToDb().
+ * For example automatically copies and converts: 
+ * "autosql's features include" --> "autosql\'s features include" 
+ * before inserting into database. */ 
+
 struct mr *mrCommaIn(char **pS, struct mr *ret);
 /* Create a mr out of a comma separated string. 
  * This will fill in ret if non-null, otherwise will
@@ -509,6 +716,31 @@ struct cdna *cdnaLoadAllByChar(char *fileName, char chopper);
 #define cdnaLoadAllByTab(a) cdnaLoadAllByChar(a, '\t');
 /* Load all cdna from tab separated file.
  * Dispose of this with cdnaFreeList(). */
+
+struct cdna *cdnaLoadByQuery(struct sqlConnection *conn, char *query);
+/* Load all cdna from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with cdnaFreeList(). */
+
+void cdnaSaveToDb(struct sqlConnection *conn, struct cdna *el, char *tableName, int updateSize);
+/* Save cdna as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
+ * For example "autosql's features include" --> "autosql\'s features include" 
+ * If worried about this use cdnaSaveToDbEscaped() */
+
+void cdnaSaveToDbEscaped(struct sqlConnection *conn, struct cdna *el, char *tableName, int updateSize);
+/* Save cdna as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size.
+ * of a string that would contain the entire query. Automatically 
+ * escapes all simple strings (not arrays of string) but may be slower than cdnaSaveToDb().
+ * For example automatically copies and converts: 
+ * "autosql's features include" --> "autosql\'s features include" 
+ * before inserting into database. */ 
 
 struct cdna *cdnaCommaIn(char **pS, struct cdna *ret);
 /* Create a cdna out of a comma separated string. 
@@ -564,6 +796,31 @@ struct agi *agiLoadAllByChar(char *fileName, char chopper);
 /* Load all agi from tab separated file.
  * Dispose of this with agiFreeList(). */
 
+struct agi *agiLoadByQuery(struct sqlConnection *conn, char *query);
+/* Load all agi from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with agiFreeList(). */
+
+void agiSaveToDb(struct sqlConnection *conn, struct agi *el, char *tableName, int updateSize);
+/* Save agi as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
+ * For example "autosql's features include" --> "autosql\'s features include" 
+ * If worried about this use agiSaveToDbEscaped() */
+
+void agiSaveToDbEscaped(struct sqlConnection *conn, struct agi *el, char *tableName, int updateSize);
+/* Save agi as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size.
+ * of a string that would contain the entire query. Automatically 
+ * escapes all simple strings (not arrays of string) but may be slower than agiSaveToDb().
+ * For example automatically copies and converts: 
+ * "autosql's features include" --> "autosql\'s features include" 
+ * before inserting into database. */ 
+
 struct agi *agiCommaIn(char **pS, struct agi *ret);
 /* Create a agi out of a comma separated string. 
  * This will fill in ret if non-null, otherwise will
@@ -617,6 +874,31 @@ struct ihc *ihcLoadAllByChar(char *fileName, char chopper);
 #define ihcLoadAllByTab(a) ihcLoadAllByChar(a, '\t');
 /* Load all ihc from tab separated file.
  * Dispose of this with ihcFreeList(). */
+
+struct ihc *ihcLoadByQuery(struct sqlConnection *conn, char *query);
+/* Load all ihc from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with ihcFreeList(). */
+
+void ihcSaveToDb(struct sqlConnection *conn, struct ihc *el, char *tableName, int updateSize);
+/* Save ihc as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
+ * For example "autosql's features include" --> "autosql\'s features include" 
+ * If worried about this use ihcSaveToDbEscaped() */
+
+void ihcSaveToDbEscaped(struct sqlConnection *conn, struct ihc *el, char *tableName, int updateSize);
+/* Save ihc as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size.
+ * of a string that would contain the entire query. Automatically 
+ * escapes all simple strings (not arrays of string) but may be slower than ihcSaveToDb().
+ * For example automatically copies and converts: 
+ * "autosql's features include" --> "autosql\'s features include" 
+ * before inserting into database. */ 
 
 struct ihc *ihcCommaIn(char **pS, struct ihc *ret);
 /* Create a ihc out of a comma separated string. 
@@ -672,6 +954,31 @@ struct fish *fishLoadAllByChar(char *fileName, char chopper);
 /* Load all fish from tab separated file.
  * Dispose of this with fishFreeList(). */
 
+struct fish *fishLoadByQuery(struct sqlConnection *conn, char *query);
+/* Load all fish from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with fishFreeList(). */
+
+void fishSaveToDb(struct sqlConnection *conn, struct fish *el, char *tableName, int updateSize);
+/* Save fish as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
+ * For example "autosql's features include" --> "autosql\'s features include" 
+ * If worried about this use fishSaveToDbEscaped() */
+
+void fishSaveToDbEscaped(struct sqlConnection *conn, struct fish *el, char *tableName, int updateSize);
+/* Save fish as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size.
+ * of a string that would contain the entire query. Automatically 
+ * escapes all simple strings (not arrays of string) but may be slower than fishSaveToDb().
+ * For example automatically copies and converts: 
+ * "autosql's features include" --> "autosql\'s features include" 
+ * before inserting into database. */ 
+
 struct fish *fishCommaIn(char **pS, struct fish *ret);
 /* Create a fish out of a comma separated string. 
  * This will fill in ret if non-null, otherwise will
@@ -725,6 +1032,31 @@ struct labTrack *labTrackLoadAllByChar(char *fileName, char chopper);
 #define labTrackLoadAllByTab(a) labTrackLoadAllByChar(a, '\t');
 /* Load all labTrack from tab separated file.
  * Dispose of this with labTrackFreeList(). */
+
+struct labTrack *labTrackLoadByQuery(struct sqlConnection *conn, char *query);
+/* Load all labTrack from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with labTrackFreeList(). */
+
+void labTrackSaveToDb(struct sqlConnection *conn, struct labTrack *el, char *tableName, int updateSize);
+/* Save labTrack as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
+ * For example "autosql's features include" --> "autosql\'s features include" 
+ * If worried about this use labTrackSaveToDbEscaped() */
+
+void labTrackSaveToDbEscaped(struct sqlConnection *conn, struct labTrack *el, char *tableName, int updateSize);
+/* Save labTrack as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size.
+ * of a string that would contain the entire query. Automatically 
+ * escapes all simple strings (not arrays of string) but may be slower than labTrackSaveToDb().
+ * For example automatically copies and converts: 
+ * "autosql's features include" --> "autosql\'s features include" 
+ * before inserting into database. */ 
 
 struct labTrack *labTrackCommaIn(char **pS, struct labTrack *ret);
 /* Create a labTrack out of a comma separated string. 
