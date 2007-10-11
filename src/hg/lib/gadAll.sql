@@ -4,6 +4,7 @@ CREATE TABLE gadAll (
 	broadPhen	varchar(255), #	Broad Phenotype
 	diseaseClass	varchar(20),  #	Disease Class
 	diseaseClassCode varchar(20), # Disease Class
+	meshTerm        blob,         # MeSH Disease Terms
 	chromosome	varchar(20),  #	Chromosome
 	band		varchar(20),  #	Chr-Band
 	geneSymbol	varchar(40),  #	Gene
@@ -16,8 +17,9 @@ CREATE TABLE gadAll (
 	alleleFunEffect	varchar(255), #	Allele Functional Effects
 	polymClass	varchar(40),  #	Polymophism Class
 	geneName	varchar(255), #	Gene Name
+	refSeq 		varchar(255), #	RefSeq ID
 	population	varchar(255), #	Population
-	comment		varchar(255), #	Comments
+	meshGeoloc	varchar(255), # MeSH Geolocation
 	submitter	varchar(255), #	Submitter
 	locusNum 	varchar(40),  #	Locus Number
 	unigene		varchar(20),  #	Unigene
@@ -27,7 +29,7 @@ CREATE TABLE gadAll (
 	title		varchar(255), #	Title
 	rsId		varchar(20),  #	rs Number
 	omimId		varchar(20),  #	OMIM ID
-	index4		varchar(40),  #	INDEX4
+	gadQ		varchar(255), #	GAD/CDC
 	gadCdc		varchar(255), #	GAD/CDC
 	year		varchar(10),  #	Year
 	conclusion	blob, 	      #	Conclusion
@@ -40,9 +42,9 @@ CREATE TABLE gadAll (
 	giGeneC		varchar(255), #	GI Gene C
 	giAlleleGeneC	varchar(255), #	GI Allele of Gene C
 	giAssociation	varchar(255), #	GI Association?
-	giEnvFactor	varchar(255), #	GI combine Env. Factor
-	giGIToDisease	varchar(255), #	GI relevant to Disease
-
-	KEY(id)
+	giEnv		varchar(255), # GI combine Env. Factor
+	giDis		varchar(255), # GI relevant to Disease
+	KEY(id),
+	KEY(geneSymbol)
 );
 	    
