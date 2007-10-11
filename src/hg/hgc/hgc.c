@@ -210,7 +210,7 @@
 #include "atomDb.h"
 #include "itemConf.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1354 2007/10/11 19:48:50 hiram Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1355 2007/10/11 21:56:48 hiram Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -765,7 +765,6 @@ if (url != NULL && url[0] != 0)
 	char startString[64], endString[64];
 	char *ins[9], *outs[9];
 	char *eItem = (encode ? cgiEncode(idInUrl) : cloneString(idInUrl));
-	int arraySize = ArraySize(ins) - 2;
 
 	sprintf(startString, "%d", winStart);
 	sprintf(endString, "%d", winEnd);
@@ -783,21 +782,23 @@ if (url != NULL && url[0] != 0)
 	outs[5] = skipChr(seqName);
 	ins[6] = "$D";
 	outs[6] = database;
+	ins[7] = "$P";  /* for an item name of the form:  prefix:suffix */
+	ins[8] = "$p";	/* the P is the prefix, the p is the suffix */
 	if (stringIn(":", idInUrl)) {
 	    char *itemClone = cloneString(idInUrl);
 	    char *suffix = stringIn(":", itemClone);
 	    char *suffixClone = cloneString(suffix);
 	    char *nextColon = stringIn(":", suffixClone+1);
-	    if (nextColon)
-		*nextColon = '\0';
-	    *suffix = '\0';
-	    ins[7] = "$P";
+	    if (nextColon)	/* terminate suffixClone suffix */
+		*nextColon = '\0';	/* when next colon is present */
+	    *suffix = '\0';   /* terminate itemClone prefix */
 	    outs[7] = itemClone;
-	    ins[8] = "$p";
 	    outs[8] = suffixClone;
-	    arraySize = ArraySize(ins);
 	    /* small memory leak here for these cloned strings */
 	    /* not important for a one-time operation in a CGI that will exit */
+	} else {
+	    outs[7] = idInUrl;	/* otherwise, these are not expected */
+	    outs[8] = idInUrl;	/* to be used */
 	}
 	uUrl = subMulti(url, ArraySize(ins), ins, outs);
 	outs[0] = eItem;
