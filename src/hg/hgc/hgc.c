@@ -210,7 +210,7 @@
 #include "atomDb.h"
 #include "itemConf.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1353 2007/10/10 05:38:09 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1354 2007/10/11 19:48:50 hiram Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -763,8 +763,9 @@ if (url != NULL && url[0] != 0)
 	struct dyString *uUrl = NULL;
 	struct dyString *eUrl = NULL;
 	char startString[64], endString[64];
-	char *ins[7], *outs[7];
+	char *ins[9], *outs[9];
 	char *eItem = (encode ? cgiEncode(idInUrl) : cloneString(idInUrl));
+	int arraySize = ArraySize(ins) - 2;
 
 	sprintf(startString, "%d", winStart);
 	sprintf(endString, "%d", winEnd);
@@ -782,10 +783,27 @@ if (url != NULL && url[0] != 0)
 	outs[5] = skipChr(seqName);
 	ins[6] = "$D";
 	outs[6] = database;
+	if (stringIn(":", idInUrl)) {
+	    char *itemClone = cloneString(idInUrl);
+	    char *suffix = stringIn(":", itemClone);
+	    char *suffixClone = cloneString(suffix);
+	    char *nextColon = stringIn(":", suffixClone+1);
+	    if (nextColon)
+		*nextColon = '\0';
+	    *suffix = '\0';
+	    ins[7] = "$P";
+	    outs[7] = itemClone;
+	    ins[8] = "$p";
+	    outs[8] = suffixClone;
+	    arraySize = ArraySize(ins);
+	    /* small memory leak here for these cloned strings */
+	    /* not important for a one-time operation in a CGI that will exit */
+	}
 	uUrl = subMulti(url, ArraySize(ins), ins, outs);
 	outs[0] = eItem;
 	eUrl = subMulti(url, ArraySize(ins), ins, outs);
-	printf("<B>%s </B>", trackDbSettingOrDefault(tdb, "urlLabel", "Outside Link:"));
+	printf("<B>%s </B>",
+		trackDbSettingOrDefault(tdb, "urlLabel", "Outside Link:"));
 	printf("<A HREF=\"%s\" target=_blank>", eUrl->string);
 	
 	if (sameWord(tdb->tableName, "npredGene"))
@@ -3249,18 +3267,7 @@ if (wordCount > 0)
         headerItem = NULL;
     }
 genericHeader(tdb, headerItem);
-/* special case targetScanS table on hg18 */
-if (sameWord("hg18", database) && startsWith("targetScanS", tdb->tableName))
-    {
-    char *stripItem = cloneString(item);
-    char *stripFrom = stringIn(":mi", stripItem);
-    if (stripFrom)
-	*stripFrom = '\0';
-    printCustomUrl(tdb, stripItem, item == itemForUrl);
-    freeMem(stripItem);
-    }
-else
-    printCustomUrl(tdb, itemForUrl, item == itemForUrl);
+printCustomUrl(tdb, itemForUrl, item == itemForUrl);
 if (plus != NULL)
     {
     printf(plus);
