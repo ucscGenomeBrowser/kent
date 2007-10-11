@@ -17,107 +17,50 @@
 
 #define NULL_FEATURE_VAL 1000.0
 
-struct sortNode *newSortNode(char *name, double val)
+struct sortNode *newSortNode(char *name)
 {
 struct sortNode *node = AllocA(struct sortNode);
 
-node->children = NULL;
-node->parent = NULL;
-node->val = val;
 node->name = cloneString(name);
+node->list = NULL;
 
 return node;
 }
 
-struct sortNode *findChildWithVal(struct sortNode *parent, double val)
+void printSortedNodes(struct dyString *dy, struct sortNode *nodes)
 {
-struct sortList *child, *children = parent->children;
-
-for (child = children; child; child = child->next)
-    {
-    struct sortNode *node = child->node;
-    if (node->val == val)
-	return node;
-    }
-
-return NULL;
-}
-
-
-struct sortNode *addChild(struct sortNode *parent, char* name, double val, int sortType)
-/* Add a sortNode below the parent's level of the tree */
-{
-if (parent == NULL)
-    return NULL;
-
 struct sortNode *node = NULL;
-
-struct sortList *child, *children = parent->children;
-
-struct sortList *newChild = AllocA(struct sortList);
-node = newSortNode(name, val);
-node->parent = parent;
-newChild->node = node;    
-
-if (children == NULL)
-    {
-    parent->children = newChild;
-    return newChild->node;
-    }
-
-struct sortList *prevChild = NULL;
-struct sortList *nextChild = NULL; 
-for (child = children; child; child = child->next)
-    {
-    node = child->node;
-    
-    if (sortType * node->val <= sortType * val)
-	prevChild = child;
-
-    if (sortType * node->val > sortType * val)
-	{
-	nextChild = child;
-	break;
-	}
-    }
-
-if (prevChild != NULL)
-    {
-    nextChild = prevChild->next;
-    prevChild->next = newChild;
-    newChild->next = nextChild;
-    }
-else
-    {
-    nextChild = children;
-    newChild->next = nextChild;
-    parent->children = newChild;
-    }
-
-return newChild->node;
-}
-
-struct dyString *printSortedNodes(struct dyString *dy, struct sortNode *node)
-{
-if (node == NULL)
-    return dy;
-
-struct sortList *child, *children = node->children;
-
-if (children == NULL)
+for (node = nodes; node; node = node->next)
     {
     dyStringAppend(dy, node->name);
     dyStringAppend(dy, ",");
-    return dy;
     }
-
-for (child = children; child; child = child->next)
-    {
-    dy = printSortedNodes(dy, child->node);
-    }
-
-return dy;
 }
+
+int sortNodeCmp(const void *va, const void *vb)
+/* Sort function to compare two sortNodes progressively.  This sort checks
+ * the first members of each sortNode's sortLists to start the search.  In
+ * the event of a tie, the next member of each sortList is used in an 
+ * attempt to break the tie.  This continues until either a tie-breaker is
+ * found or the sortList is exhausted */
+{
+const struct sortNode *a = *((struct sortNode **)va);
+const struct sortNode *b = *((struct sortNode **)vb);
+
+struct sortList *slA = NULL, *slB = NULL;
+for (slA = a->list, slB = b->list; slA && slB; slA = slA->next, slB = slB->next)
+{
+int sortDir = slA->sortDirection;
+if (slA->val > slB->val)
+    return sortDir;
+
+if (slA->val < slB->val)
+    return -1 * sortDir;
+} 
+
+return 0; /* No tie breaker found, lists must be equal */ 
+}
+
 
 struct slName *sortPatients(struct sqlConnection *conn, struct column *colList, struct slName *patientList)
 /* Sort a list of patients based on active columns */
@@ -125,25 +68,13 @@ struct slName *sortPatients(struct sqlConnection *conn, struct column *colList, 
 if (patientList == NULL)
     return NULL;
 
-struct column *lastCol=NULL, *col = NULL;
-
-struct sortNode *root = newSortNode(NULL, 0);
-struct sortNode *child, *parent;
-
-for (col = colList; col; col = col->next)
-{
-if ((col->on) && (col->cellSortDirection))
-    lastCol = col;
-}
-
-if (lastCol == NULL) // no column is selected to sort
-    return NULL;
-
+struct column *col = NULL;
+struct sortNode *nodes = NULL;
 struct slName *pa=NULL;
 for (pa = patientList; pa; pa = pa->next)
     {
-    child = NULL;
-    parent = root;
+    struct sortNode *node = newSortNode(pa->name);
+    
     for (col = colList; col; col = col->next)
 	{
 	if (!col->on || (col->cellSortDirection == 0))
@@ -153,20 +84,23 @@ for (pa = patientList; pa; pa = pa->next)
 	char* cellVal = col->cellVal(col, pa, conn);
 	if (cellVal)
 	    val = atof(cellVal);
+	
+	struct sortList *sl = AllocA(struct sortList);
+	sl->val = val;
+	sl->sortDirection = col->cellSortDirection;
 
-	child = NULL;
-	if (!sameString(col->name, lastCol->name))
-	    child = findChildWithVal(parent, val);
-	    
-	if (child == NULL)
-	    child = addChild(parent, pa->name, val, col->cellSortDirection);
-
-	parent = child;
-	}   
+	slAddHead(&node->list, sl);
+	}
+    slReverse(&node->list);
+    slAddHead(&nodes, node);
     }
 
+slReverse(&nodes);
+
+slSort(&nodes, sortNodeCmp);
+
 struct dyString *dy = AllocA(struct dyString);
-printSortedNodes(dy, root);
+printSortedNodes(dy, nodes);
 
 struct slName *sortList = slNameListFromComma(dy->string);
 return sortList;

@@ -25,7 +25,7 @@
 #include "ispyFeatures.h"
 #include "sortFeatures.h"
 
-static char const rcsid[] = "$Id: hgHeatmap.c,v 1.38 2007/10/11 21:01:43 jzhu Exp $";
+static char const rcsid[] = "$Id: hgHeatmap.c,v 1.39 2007/10/11 22:51:37 jsanborn Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -252,10 +252,10 @@ for (sl= slPerson; sl!= NULL; sl=sl->next)
     while ((row = sqlNextRow(sr)) != NULL)
         {
         sample = row[1];
-        slNameAddHead(&(slSample),sample);
+        slNameAddHead(&slSample,sample);
         }
     }
-slReverse(&(slSample));
+slReverse(&slSample);
 sqlFreeResult(&sr);
 
 /*microarray specific settings*/
@@ -283,7 +283,8 @@ for(sl=slSample; sl !=NULL; sl=sl->next)
     slNameAddHead(&(gh->sampleList),sample);
     counter++;
     }
-slReverse(&(gh->sampleList));
+
+slReverse(&gh->sampleList);
 }
 
 void setSampleOrder(struct genoHeatmap* gh, char* posStr)

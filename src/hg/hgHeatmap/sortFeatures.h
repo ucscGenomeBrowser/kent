@@ -10,7 +10,8 @@ struct sortList
 /* List of sortNodes */
 {
     struct sortList *next;
-    struct sortNode *node;
+    double val;
+    int sortDirection;
 };
 
 
@@ -18,11 +19,9 @@ struct sortNode
 /* A node in the sorted tree. The central data structure for
  * sortFeatures. */
 {
-    struct sortList *children;
-    struct sortNode *parent;
-
+    struct sortNode *next;
     char *name;
-    double val;
+    struct sortList *list;
 };
 
 struct slName *sortPatients(struct sqlConnection *conn, struct column *colList, struct slName *patientList);
