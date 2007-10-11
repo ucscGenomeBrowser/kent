@@ -33,7 +33,7 @@
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 #define MAX_SP_SIZE 2000
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.402 2007/10/11 05:08:32 kent Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.403 2007/10/11 20:03:04 hiram Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2747,17 +2747,23 @@ else if (tdb->type != NULL)
 	/* if bed has score then show optional filter based on score */
 	else if (sameWord(words[0], "bed") && wordCount == 3)
 	    {
-	    /* Note: jaxQTL3 is a bed 8 format track because of thickStart/thickStart, 
-	      	     but there is no valid score.
-	             Similarly, the score field for wgRna track is no long used either.
-		     It originally was usd to depict different RNA types.  But the new 
-		     wgRna table has a new field 'type', which is used to store RNA type info
-		     and from which to determine the display color of each entry.
+	    /* Note: jaxQTL3 is a bed 8 format track because of 
+	     thickStart/thickStart, but there is no valid score.
+	     Similarly, the score field for wgRna track is no long used either.
+	     It originally was usd to depict different RNA types.  But the new 
+	     wgRna table has a new field 'type', which is used to store RNA 
+	     type info and from which to determine the display color of each entry.
 	    */
 	    if ((atoi(words[1])>4) && !trackDbSetting(tdb, "noScoreFilter") &&
 		!sameString(track, "jaxQTL3") && !sameString(track, "wgRna") &&
 		!startsWith("encodeGencodeIntron", track))
-		scoreUi(tdb, 1000);
+		{
+		if (trackDbSetting(tdb, "scoreFilterMax"))
+		    scoreUi(tdb,
+			sqlUnsigned(trackDbSetting(tdb, "scoreFilterMax")));
+		else
+		    scoreUi(tdb, 1000);
+		}
 	    }
         else if (sameWord(words[0], "bed5FloatScore") || 
                 sameWord(words[0], "bed5FloatScoreWithFdr"))
