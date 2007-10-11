@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/automation/makeGenomeDb.pl instead.
 
-# $Id: makeGenomeDb.pl,v 1.13 2007/10/02 05:20:58 angie Exp $
+# $Id: makeGenomeDb.pl,v 1.14 2007/10/11 20:54:32 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -392,10 +392,10 @@ if (\$diffLittleCount == 0) then
   \$acat $agpFiles > \$agpTmp
   \$fcat $fastaFiles \\
   | agpToFa -simpleMultiMixed \$agpTmp all stdout stdin \\
-  | faToTwoBit stdin $chrM $db.unmasked.2bit
+  | faToTwoBit -noMask stdin $chrM $db.unmasked.2bit
   rm -f \$agpTmp
 else if (\$diffBigCount == 0) then
-  faToTwoBit $fastaFiles $chrM $db.unmasked.2bit
+  faToTwoBit -noMask $fastaFiles $chrM $db.unmasked.2bit
 else
   echo "Error: IDs in fastaFiles ($fastaFiles)"
   echo "do not perfectly match IDs in either the first or sixth columns of"
@@ -412,7 +412,7 @@ _EOF_
   } else {
     # No AGP -- just make an unmasked 2bit.
     $bossScript->add(<<_EOF_
-faToTwoBit $fastaFiles $chrM $db.unmasked.2bit
+faToTwoBit -noMask $fastaFiles $chrM $db.unmasked.2bit
 _EOF_
     );
   }
