@@ -1336,8 +1336,8 @@ urlLabel Transfac matrix link:
 url http://www.gene-regulation.com/cgi-bin/pub/databases/transfac/getTF.cgi?AC=$$
 
 track targetScanS
-shortLabel T-ScanS miRNA
-longLabel TargetScanS miRNA Regulatory Sites
+shortLabel TS miRNA sites
+longLabel TargetScan miRNA Regulatory Sites
 group regulation
 priority 101
 visibility hide
