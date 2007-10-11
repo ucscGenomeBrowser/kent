@@ -33,7 +33,7 @@
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 #define MAX_SP_SIZE 2000
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.401 2007/10/08 21:05:27 kate Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.402 2007/10/11 05:08:32 kent Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1450,7 +1450,6 @@ char option[256];
 char *scoreValString = trackDbSetting(tdb, "scoreFilter");
 int scoreSetting;
 int scoreVal = 0;
-char tempScore[256];
 char *words[2];
 
 /* filter top-scoring N items in track */
@@ -1465,8 +1464,7 @@ if (scoreValString != NULL)
 printf("<p><b>Show only items with score at or above:</b> ");
 snprintf(option, sizeof(option), "%s.scoreFilter", tdb->tableName);
 scoreSetting = cartUsualInt(cart,  option,  scoreVal);
-safef(tempScore, sizeof(tempScore), "%d",scoreSetting);
-cgiMakeTextVar( option, tempScore, 11);
+cgiMakeIntVar(option, scoreSetting, 11);
 printf("&nbsp;&nbsp;(range: 0&nbsp;to&nbsp;%d)", maxScore);
 
 if (scoreCtString != NULL)
