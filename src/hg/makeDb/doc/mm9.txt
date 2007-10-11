@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.37 2007/10/11 21:23:46 hiram Exp $"
+#	"$Id: mm9.txt,v 1.38 2007/10/11 23:30:49 hiram Exp $"
 #
 
 #######################################################################
@@ -4298,7 +4298,7 @@ Follow instructions at end of do.log, piecewise:
   - then run Galt's script (this is why we load hg18 and rn4 early):
     synBlastp.csh mm9 hg18
     synBlastp.csh mm9 rn4
-XXX - ready to run the following: 2007-09-25 10:30
+  -- The following was performed 2007-10-11
   - After mm9 hgNear/Gene Sorter is enabled on the RR:
     - run the remaining run.*.mm9 load scripts
     - then modify each $queryDb's hgGeneData/$org/$queryDb/otherOrg.ra
