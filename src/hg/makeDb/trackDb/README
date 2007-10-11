@@ -247,6 +247,7 @@ priority     -    a decimal number            - used to order this track
 chromosomes  -    comma separated list        - only these chroms have data
                                               - for this track, this track is
                                               - not shown on other chroms
+scoreFilterMax -  integer                     - for score column trackUi filter
 
 The shortLabel and longLabel fields may have the following
 variables, which will be substituted:
@@ -282,6 +283,16 @@ Some settings used by various tracks:
       The string $$ will be replaced by the name of an item.   Examples:
       url http://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4&db=n&term=$$
       url http://www.ncbi.nih.gov/IEB/Research/Acembly/av.cgi?db=human&l=$$
+      Additional replacement item strings can be:
+	$T - database table name
+	$S - chromomosome name (scaffold name on scaffold assemblies)
+	$[ - chromStart location (zero relative)
+	$] - chromEnd location
+	$s - chromomosome name without chr prefix
+			(or without scaffold_/Scaffold_ on scaffold assemblies)
+	$D - database name
+	$P - item name portion before first : in name
+	$p - item name portion after first : in name up to next colon
     o urlLabel - Works with url attribute.  Replaces generic "outside link:" label
       with the given label.
     o idInUrlSql - Works with url attribute.  A snippet of SQL with a %s in it somewhere.
