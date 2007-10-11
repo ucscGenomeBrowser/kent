@@ -118,7 +118,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1413 2007/10/04 20:45:14 kuhn Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1414 2007/10/11 05:01:13 kent Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -4941,28 +4941,6 @@ tg->items = lfFromGenePredInRange(tg, tg->mapName, chromName, winStart, winEnd);
 filterItems(tg, filterNonCoding, "include");
 }
 
-char *ensGeneName(struct track *tg, void *item)
-/* Return abbreviated ensemble gene name. */
-{
-struct linkedFeatures *lf = item;
-char *full = lf->name;
-static char abbrev[32];
-
-strncpy(abbrev, full, sizeof(abbrev));
-/*abbr(abbrev, "SEPT20T.");
-abbr(abbrev, "T000000");
-abbr(abbrev, "T00000");
-abbr(abbrev, "T0000");
-*/
-return abbrev;
-}
-
-void ensGeneMethods(struct track *tg)
-/* Make track of Ensembl predictions. */
-{
-tg->itemName = ensGeneName;
-}
-
 Color ensGeneNonCodingColor(struct track *tg, void *item, struct vGfx *vg)
 /* Return color to draw Ensembl non-coding gene/pseudogene in. */
 {
@@ -5000,7 +4978,6 @@ return(color);
 void ensGeneNonCodingMethods(struct track *tg)
 /* Make track of Ensembl predictions. */
 {
-tg->itemName = ensGeneName;
 tg->items = lfFromGenePredInRange(tg, tg->mapName, chromName, winStart, winEnd);
 tg->itemColor = ensGeneNonCodingColor;
 tg->loadItems = loadEnsGeneNonCoding;
@@ -13734,9 +13711,7 @@ registerTrackHandler("flyBaseGene", flyBaseGeneMethods);
 registerTrackHandler("flyBaseNoncoding", flyBaseGeneMethods);
 registerTrackHandler("sgdGene", sgdGeneMethods);
 registerTrackHandler("genieAlt", genieAltMethods);
-registerTrackHandler("ensGene", ensGeneMethods);
 registerTrackHandler("ensGeneNonCoding", ensGeneNonCodingMethods);
-registerTrackHandler("ensEst", ensGeneMethods);
 registerTrackHandler("mrna", mrnaMethods);
 registerTrackHandler("intronEst", estMethods);
 registerTrackHandler("est", estMethods);
