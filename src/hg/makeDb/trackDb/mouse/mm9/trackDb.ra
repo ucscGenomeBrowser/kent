@@ -135,6 +135,15 @@ visibility hide
 color 90,0,150
 type bed 6 .
 
+track exoniphy 
+shortLabel Exoniphy 
+longLabel Exoniphy Mouse/Rat/Human/Dog 
+group genes 
+priority 50.9 
+visibility hide 
+color 173,17,162 
+type genePred 
+
 track multiz30way
 shortLabel 30-way Multiz
 longLabel 30-Way Multiz Alignment & Conservation 
