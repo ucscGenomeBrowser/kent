@@ -2687,6 +2687,13 @@ tablesIgnored $hg
     celeraCoverage
     celeraDupPositive
     celeraOverlay
+    cccTrendPvalBd
+    cccTrendPvalCad
+    cccTrendPvalCd
+    cccTrendPvalHt
+    cccTrendPvalRa
+    cccTrendPvalT1d
+    cccTrendPvalT2d
     cnpFosmid
     cnpIafrate
     cnpIafrate2
@@ -2710,6 +2717,8 @@ tablesIgnored $hg
     genomicSuperDups
     haplotype
     kg2ToKg3
+    nimhBipolarUs
+    nimhBipolarDe
     perlegen
     promoterStanford
     pseudoYale
