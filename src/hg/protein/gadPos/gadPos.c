@@ -42,7 +42,7 @@ conn4 = hAllocConn();
 conn5 = hAllocConn();
 	
 /* loop over all gene symbols in GAD */	
-sprintf(query2,"select distinct geneSymbol from %s.gadAll", gdb);
+sprintf(query2,"select distinct geneSymbol from %s.gadAll where association='Y'", gdb);
 sr2 = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
 while (row2 != NULL)
