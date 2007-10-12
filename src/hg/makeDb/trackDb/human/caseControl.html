@@ -1,7 +1,8 @@
 <H2>Description</H2>
 <P>
-This track displays the trend p-values (-log<sub>10</sub>) of the seven diseases reported by the 
-Case Control Consortium in their Nature paper.  Those diseases are:
+This track displays the trend p-values (-log<sub>10</sub>) of the seven 
+diseases reported by The Wellcome Trust Case Control Consortium (see 
+References below).  The diseases studied are:
 <UL>
 <LI>Bipolar disorder</LI>
 <LI>Coronary artery disease</LI>
@@ -13,23 +14,28 @@ Case Control Consortium in their Nature paper.  Those diseases are:
 </UL></P>
 
 <H2>Methods</H2>
+
 <P>
-Reported trend p-values are taken for each of the Affy 500k probes on the genome, 
-then logged and multiplied by -1 for visualization purposes.  Most of chromosome X data is
-omitted because of the difference in statistical power and the difference in 
-control sets used.  The genotypic p-value is not used for this track, because the
-trend p-value captures the majority of the associated signals anyway.
+Reported p-values were taken for each of the Illumina550 probes on the genome.
+For visualization purposes, these p-values were logged and negated.</P>
+<P>
+Most of the data for chromosome X is omitted from this track 
+because of the difference in statistical power and the difference in 
+control sets used.  
+The trend p-value captures the majority of the associated signals, therefore
+it was used to create this track instead of the genotypic p-value.
 </P>
 <P>
-For the complete dataset, visit <A HREF="http://www.wtccc.org.uk/" TARGET=_blank>The Wellcome
+For the complete dataset, visit 
+<A HREF="http://www.wtccc.org.uk/" TARGET=_blank>The Wellcome
 Trust Case Control Consortium Web Site</A>.
 </P>
 
 <H2>References</H2>
 <P>
-When making use of these data, please cite: 
+When making use of these data, please cite:</P> 
 <P>
-Wellcome Trust Case Control Consortium.
+The Wellcome Trust Case Control Consortium.
 <A HREF="http://www.nature.com/nature/journal/v447/n7145/abs/nature05911.html"
 TARGET=_blank>Genome-wide association study of 14,000 cases of seven common diseases and 3,000 shared controls</A>.
-<em>Nature.</em> 2007 Jun 7;447(7145):661-678.</P>
+<em>Nature.</em> 2007 Jun 7;447(7145):661-78.</P>
