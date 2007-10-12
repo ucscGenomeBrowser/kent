@@ -17,7 +17,7 @@
 #include "liftOver.h"
 #include "liftOverChain.h"
 
-static char const rcsid[] = "$Id: hgLiftOver.c,v 1.54 2007/07/17 01:14:46 angie Exp $";
+static char const rcsid[] = "$Id: hgLiftOver.c,v 1.55 2007/10/12 22:11:00 angie Exp $";
 
 /* CGI Variables */
 #define HGLFT_USERDATA_VAR "hglft_userData"     /* typed/pasted in data */
@@ -110,7 +110,7 @@ cgiTableFieldEnd();
 cgiSimpleTableFieldStart();
 dbDbFreeList(&dbList);
 dbList = hGetLiftOverToDatabases(chain->fromDb);
-printSomeGenomeListHtmlNamed(HGLFT_TOORG_VAR, chain->toDb, dbList, onChange);
+printLiftOverGenomeList(HGLFT_TOORG_VAR, chain->toDb, dbList, onChange);
 cgiTableFieldEnd();
 
 cgiSimpleTableFieldStart();
@@ -274,9 +274,6 @@ char *chainToOrg = hArchiveOrganism(chain->toDb);
 int fromRank = hashIntValDefault(dbRank, chain->fromDb, 0);  /* values up to approx. #assemblies */
 int toRank = hashIntValDefault(dbRank, chain->toDb, 0);
 int maxRank = hashIntVal(dbRank, "maxRank"); 
-
-if (fromRank == 0 || toRank == 0) /* not an active db in dbDb or archiveDbDb. */
-    return -1;    /*  toOrg and toDb lists would not display properly */
 
 if (sameOk(fromOrg,chainFromOrg) &&
     sameOk(fromDb,chain->fromDb) && 
