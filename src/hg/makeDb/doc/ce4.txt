@@ -3,7 +3,7 @@
 # Caenorhabditis elegans
 #	Washington University School of Medicine GSC and Sanger Institute WS170
 
-#  $Id: ce4.txt,v 1.27 2007/08/02 19:18:42 hiram Exp $
+#  $Id: ce4.txt,v 1.28 2007/10/12 00:08:03 angie Exp $
 
 
 #########################################################################
@@ -16,6 +16,7 @@
     cd WS170
     wget --timestamping -m -np -nd \
 	"ftp://ftp.sanger.ac.uk/pub/wormbase/WS170/CHROMOSOMES/"
+
 
 #########################################################################
 ## Translate Sanger/Wormbase chrom names into UCSC names
@@ -3353,3 +3354,16 @@ scratchDir /san/sanvol1/scratch/ce4HgNearBlastp
     # and later overload other databases' dmBlastTab tables.
     doHgNearBlastp.pl -noLoad config.ra > do.log 2>&1 &
     # watch progress in do.log
+
+
+#########################################################################
+# CE4->CE5 LIFTOVER (DONE 10/11/07 angie)
+    ssh kkstore02
+    cd /cluster/data/ce4
+    doSameSpeciesLiftOver.pl ce4 ce5 -debug
+    cd bed/blat.ce5.2007-10-11
+    doSameSpeciesLiftOver.pl ce4 ce5 -verbose 3 >& do.log &
+    tail -f do.log
+
+
+#########################################################################
