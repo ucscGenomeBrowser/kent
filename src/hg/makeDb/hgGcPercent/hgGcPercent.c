@@ -11,7 +11,7 @@
 #include "twoBit.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: hgGcPercent.c,v 1.25 2006/08/18 22:15:17 angie Exp $";
+static char const rcsid[] = "$Id: hgGcPercent.c,v 1.26 2007/10/12 06:27:17 daryl Exp $";
 
 /* Command line switches. */
 int winSize = 20000;            /* window size */
@@ -210,7 +210,7 @@ int start = 0, end = 0;
 int chromSize;
 FILE *nf = NULL;
 struct dnaSeq *seq = NULL;
-struct bed *bed;
+struct bed *bed = NULL;
     
 nibOpenVerify(nibFile, &nf, &chromSize);
 seq = nibLdPart(nibFile, nf, chromSize, 0, chromSize);
@@ -227,9 +227,11 @@ if ((bedRegionInName != NULL))
 	    DNA *subSeqDNA = NULL;
 	    if (bed->chromEnd > chromSize)
 		bed->chromEnd = chromSize;
-	    subSeqDNA = cloneStringZ(seq->dna + bed->chromStart, bed->chromEnd - bed->chromStart);
+	    subSeqDNA = cloneStringZ(seq->dna + bed->chromStart, 
+				     bed->chromEnd - bed->chromStart);
 	    subSeq = newDnaSeq(subSeqDNA, bed->chromEnd - bed->chromStart, NULL);
-	    writeBedLineCountFromSeq(subSeq, chrom, bed->chromStart, bed->chromEnd, f);
+	    writeBedLineCountFromSeq(subSeq, chrom, bed->chromStart, bed->chromEnd, 
+				     bedRegionOutFile);
 	    freeDnaSeq(&subSeq);
 	    }
 	}
@@ -254,43 +256,71 @@ if (!noDots)
 }
 
 
-void makeGcTabFromTwoBit(char *twoBitFileName, FILE *f)
+void makeGcTabFromTwoBit(char *twoBitFileName, FILE *f, struct bed *bedRegions)
 /* Scan through all sequenes in .2bit file and write out GC percentage info. */
 {
 struct slName *twoBitNames = twoBitSeqNames(twoBitFileName);
 struct slName *el = NULL;
 struct twoBitFile *tbf = twoBitOpen(twoBitFileName);
+struct bed *bed = NULL;
 
-for (el = twoBitNames; el != NULL; el = el->next)
-    {
-    int start = 0, end = 0;
-    int chromSize = twoBitSeqSize(tbf, el->name);
-    char *chrom = el->name;
-    struct dnaSeq *seq = NULL;
-
-    if (chr)
+if ((bedRegionInName != NULL))
+    for (bed=bedRegions; bed!=NULL; bed=bed->next)
 	{
-	verbose(2, "#\tchecking name: %s =? %s\n", chrom, chr);
-	if (! sameString(chrom, chr))
-	    continue;
+	for (el = twoBitNames; el != NULL; el = el->next)
+	    {
+	    int chromSize = twoBitSeqSize(tbf, el->name);
+	    char *chrom = el->name;
+	    struct dnaSeq *seq = NULL;
+	    
+	    if (chr)
+		{
+		verbose(2, "#\tchecking name: %s =? %s\n", chrom, chr);
+		if (! sameString(chrom, chr))
+		    continue;
+		}
+	    verbose(2, "#\tProcessing twoBit sequence %s\n", chrom);
+	    if (bed->chromEnd > chromSize)
+		bed->chromEnd = chromSize;
+	    seq = twoBitReadSeqFrag(tbf, chrom, bed->chromStart, bed->chromEnd);
+	    writeBedLineCountFromSeq(seq, chrom, bed->chromStart, bed->chromEnd, 
+				     bedRegionOutFile);
+	    freeDnaSeq(&seq);
+	    }
 	}
-    verbose(2, "#\tProcessing twoBit sequence %s\n", chrom);
-    seq = twoBitReadSeqFrag(tbf, chrom, 0, chromSize);
-    for (start=0, end=0;  start < chromSize && end < chromSize;  
-	 start = end - overlap)
+else
 	{
-	struct dnaSeq *subSeq = NULL;
-	DNA *subSeqDNA = NULL;
-	end = start + winSize;
-	if (end > chromSize)
-	    end = chromSize;
-	subSeqDNA = cloneStringZ(seq->dna + start, end - start);
-	subSeq = newDnaSeq(subSeqDNA, end - start, NULL);
-	makeGcLineFromSeq(subSeq, chrom, start, end, f);
-	freeDnaSeq(&subSeq);
+	for (el = twoBitNames; el != NULL; el = el->next)
+	    {
+	    int start = 0, end = 0;
+	    int chromSize = twoBitSeqSize(tbf, el->name);
+	    char *chrom = el->name;
+	    struct dnaSeq *seq = NULL;
+	    
+	    if (chr)
+		{
+		verbose(2, "#\tchecking name: %s =? %s\n", chrom, chr);
+		if (! sameString(chrom, chr))
+		    continue;
+		}
+	    verbose(2, "#\tProcessing twoBit sequence %s\n", chrom);
+	    seq = twoBitReadSeqFrag(tbf, chrom, 0, chromSize);
+	    for (start=0, end=0;  start < chromSize && end < chromSize;  
+		 start = end - overlap)
+		{
+		struct dnaSeq *subSeq = NULL;
+		DNA *subSeqDNA = NULL;
+		end = start + winSize;
+		if (end > chromSize)
+		    end = chromSize;
+		subSeqDNA = cloneStringZ(seq->dna + start, end - start);
+		subSeq = newDnaSeq(subSeqDNA, end - start, NULL);
+		makeGcLineFromSeq(subSeq, chrom, start, end, f);
+		freeDnaSeq(&subSeq);
+		}
+	    freeDnaSeq(&seq);
+	    }
 	}
-    freeDnaSeq(&seq);
-    }
 if (!noDots)
     verbose(1, "\n");
 }
@@ -332,7 +362,7 @@ else
 if (fileExists(twoBitFile))
     {
     verbose(1, "#\tUsing twoBit: %s\n", twoBitFile);
-    makeGcTabFromTwoBit(twoBitFile, tabFile);
+    makeGcTabFromTwoBit(twoBitFile, tabFile, bedRegionList);
     }  
 else
     {
@@ -352,7 +382,7 @@ else
 		continue;
 	    }
 	verbose(1, "#\tProcessing %s\n", nibEl->name);
-	makeGcTabFromNib(nibEl->name, chrom, bedRegionOutFile, bedRegionList);
+	makeGcTabFromNib(nibEl->name, chrom, tabFile, bedRegionList);
 	gotNib = TRUE;
         }
     slFreeList(&nibList);
