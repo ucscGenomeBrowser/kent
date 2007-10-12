@@ -395,8 +395,10 @@ endif
 
 echo
 echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
-echo  "Find the correct paramaters for the matrix variable"
+echo  "Find the correct parameters for the matrix variable"
 echo  "which appears in the chain-OtherOrg download file."
+echo  "(Note that sometimes, the variable appears only in the"
+echo  "*other* download file -- check it if this is empty.)"
 echo  "Compare this to the chain description page."
 echo
 
