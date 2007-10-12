@@ -17711,6 +17711,10 @@ values ("bipolar", 0, 0, "composite")'
     runJoiner.csh hg18 jaxQTLAsIs
     runJoiner.csh hg18 jaxQTLPadded
 
+# Tables renamed   kuhn 10-12-2007
+# jaxQTLAsIs   to  jaxQtlAsIs
+# jaxQTLPadded to  jaxQtlPadded
+
 
 ###########################################################################
 # Build targetScanS track - (DONE - 2007-10-05 - Hiram)

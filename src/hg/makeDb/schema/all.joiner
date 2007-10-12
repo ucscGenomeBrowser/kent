@@ -2574,8 +2574,8 @@ tablesIgnored $gbd
     phastCons17way
     phastConsElements17way
     jaxQTL
-    jaxQTLAsIs
-    jaxQTLPadded
+    jaxQtlAsIs
+    jaxQtlPadded
 
 tablesIgnored $kgDb
     pbAaDist_
