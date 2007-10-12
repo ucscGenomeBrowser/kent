@@ -13,7 +13,7 @@
 #include "hgColors.h"
 #include "wikiLink.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.136 2007/08/09 00:07:47 fanhsu Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.137 2007/10/12 22:09:39 angie Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -601,7 +601,8 @@ cgiMakeDropListFull(cladeCgiName, labels, clades, numClades,
 		    defaultLabel, onChangeText);
 }
 
-void printSomeGenomeListHtmlNamed(char *customOrgCgiName, char *db, struct dbDb *dbList, char *onChangeText)
+static void printSomeGenomeListHtmlNamedMaybeCheck(char *customOrgCgiName,
+	 char *db, struct dbDb *dbList, char *onChangeText, boolean doCheck)
 /* Prints to stdout the HTML to render a dropdown list 
  * containing a list of the possible genomes to choose from.
  * param db - a database whose genome will be the default genome.
@@ -619,7 +620,8 @@ char *cgiName;
 
 for (cur = dbList; cur != NULL; cur = cur->next)
     {
-    if (!hashFindVal(hash, cur->genome) && haveDatabase(cur->name))
+    if (!hashFindVal(hash, cur->genome) &&
+	(!doCheck || haveDatabase(cur->name)))
         {
         hashAdd(hash, cur->genome, cur);
         orgList[numGenomes] = cur->genome;
@@ -634,6 +636,32 @@ cgiName = (customOrgCgiName != NULL) ? customOrgCgiName : orgCgiName;
 cgiMakeDropListFull(cgiName, orgList, values, numGenomes, 
                     selGenome, onChangeText);
 hashFree(&hash);
+}
+
+void printSomeGenomeListHtmlNamed(char *customOrgCgiName, char *db, struct dbDb *dbList, char *onChangeText)
+/* Prints to stdout the HTML to render a dropdown list 
+ * containing a list of the possible genomes to choose from.
+ * param db - a database whose genome will be the default genome.
+ *                       If NULL, no default selection.  
+ * param onChangeText - Optional (can be NULL) text to pass in 
+ *                              any onChange javascript. */
+{
+return printSomeGenomeListHtmlNamedMaybeCheck(customOrgCgiName, db, dbList,
+					      onChangeText, TRUE);
+}
+
+void printLiftOverGenomeList(char *customOrgCgiName, char *db,
+			     struct dbDb *dbList, char *onChangeText)
+/* Prints to stdout the HTML to render a dropdown list 
+ * containing a list of the possible genomes to choose from.
+ * Databases in dbList do not have to exist.
+ * param db - a database whose genome will be the default genome.
+ *                       If NULL, no default selection.  
+ * param onChangeText - Optional (can be NULL) text to pass in 
+ *                              any onChange javascript. */
+{
+return printSomeGenomeListHtmlNamedMaybeCheck(customOrgCgiName, db, dbList,
+					      onChangeText, FALSE);
 }
 
 void printSomeGenomeListHtml(char *db, struct dbDb *dbList, char *onChangeText)
