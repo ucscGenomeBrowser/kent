@@ -82,9 +82,6 @@ struct column
 char *configVarName(struct column *col, char *varName);
 /* Return variable name for configuration. */
 
-char *getId(struct sqlConnection *conn, char *sampleName);
-/* get ISPY ID from sampleId (i.e. sampleName */
-
 void setupColumnType(struct column *col);
 /* Set up methods and column-specific variables based on
  * track type. */

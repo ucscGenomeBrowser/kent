@@ -7,27 +7,6 @@
 #visibility off
 #type num
 
-name ClinRespT1_T2
-shortLabel I-SPY T1 to T2 Outcome
-longLabel I-SPY T1 to T2 Outcome
-priority 1.2
-visibility on
-type lookup respEval ispyId ClinRespT1_T2
-
-name ClinRespT1_T3
-shortLabel I-SPY T1 to T3 Outcome
-longLabel I-SPY T1 to T3 Outcome
-priority 1.3
-visibility on
-type lookup respEval ispyId ClinRespT1_T3
-
-name ClinRespT1_T4
-shortLabel I-SPY T1 to T4 Outcome
-longLabel I-SPY T1 to T4 Outcome
-priority 1.4
-visibility on
-type lookup respEval ispyId ClinRespT1_T4
-
 name ER_TS
 shortLabel ER Status
 longLabel Estrogen Receptor Status
@@ -35,14 +14,7 @@ priority 1.1
 visibility on
 type lookup onStudy ispyId ER_TS  
 
-name Her2CommunityPos
-shortLabel HER2 Status
-longLabel HER2 Community Positive
-priority 1.2
-visibility on
-type lookup onStudy ispyId Her2CommunityPos    
-
-name erPos 
+name ErPos 
 shortLabel ER Pos
 longLabel Estrogen Receptor Positive
 priority 1.11
@@ -62,6 +34,36 @@ longLabel pCR
 priority 1.13
 visibility on
 type lookup onStudy ispyId pCR
+
+name Her2CommunityPos
+shortLabel HER2 Status
+longLabel HER2 Community Positive
+priority 1.14
+visibility on
+type lookup onStudy ispyId Her2CommunityPos    
+
+name ClinRespT1_T2
+shortLabel I-SPY T1 to T2 Outcome
+longLabel I-SPY T1 to T2 Outcome
+priority 1.2
+visibility on
+type lookup respEval ispyId ClinRespT1_T2
+
+name ClinRespT1_T3
+shortLabel I-SPY T1 to T3 Outcome
+longLabel I-SPY T1 to T3 Outcome
+priority 1.21
+visibility on
+type lookup respEval ispyId ClinRespT1_T3
+max 4
+
+name ClinRespT1_T4
+shortLabel I-SPY T1 to T4 Outcome
+longLabel I-SPY T1 to T4 Outcome
+priority 1.22
+visibility on
+type lookup respEval ispyId ClinRespT1_T4
+max 4
 
 name ChemoCat
 shortLabel Chemo Category
@@ -112,7 +114,13 @@ priority 2.6
 visibility on
 type lookup mr ispyId LD_T3_T4_PERCT
 
-
+name TumorSize
+shortLabel TumorSizeClinical
+longLabel Size of Primary Tumor (cm)
+priority 3
+visibility on
+type lookup respEval ispyId TSizeClinical 
+max 25
 
 
 

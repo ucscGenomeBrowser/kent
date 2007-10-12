@@ -25,7 +25,7 @@
 #include "ispyFeatures.h"
 #include "sortFeatures.h"
 
-static char const rcsid[] = "$Id: hgHeatmap.c,v 1.39 2007/10/11 22:51:37 jsanborn Exp $";
+static char const rcsid[] = "$Id: hgHeatmap.c,v 1.40 2007/10/12 20:12:20 jzhu Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -226,34 +226,44 @@ char *labTable = trackDbSetting(tdb, "patTable");
 char *key = trackDbSetting(tdb, "patKey");
 char *db = trackDbSetting(tdb, "patDb");
 
-if ((labTable == NULL) || (key == NULL) || (db==NULL))
-    {
-    defaultOrder(gh); 
-    return;
-    }
-if ( !sqlDatabaseExists(db) )
+if ((labTable == NULL) || (key == NULL) || (db==NULL) ||  !sqlDatabaseExists(db) )
     {
     defaultOrder(gh); 
     return;
     }
 
 struct sqlConnection *conn = sqlConnect(db); 
-char query[512];
+struct dyString *patStr= newDyString(10000);
+struct dyString *query=newDyString(20000);
 struct sqlResult *sr;
 char **row;
 char* person, *sample;
 
+/* contruct a sinlge query to get smapleIds according to the order of pateint id, 
+   in order to speed up the database access */
 struct slName *sl, *slSample=NULL;
+int N = slCount(slPerson), counter =0;
 for (sl= slPerson; sl!= NULL; sl=sl->next)
     {
     person =sl->name;
-    safef(query, sizeof(query),"select * from %s where %s = %s ", labTable, key, person);
-    sr = sqlGetResult(conn, query);
-    while ((row = sqlNextRow(sr)) != NULL)
-        {
-        sample = row[1];
-        slNameAddHead(&slSample,sample);
-        }
+    dyStringAppend(patStr, "\'");
+    dyStringAppend(patStr, person);
+    dyStringAppend(patStr, "\',");
+    counter++;
+    if (counter+1 == N)
+	break;
+    }
+person =sl->name;
+dyStringAppend(patStr, "\'");
+dyStringAppend(patStr, person);
+dyStringAppend(patStr, "\'");
+dyStringPrintf(query, "select * from %s where %s in (%s) order by FIELD(%s, %s) ", labTable, key, patStr->string,key,patStr->string);
+
+sr = sqlGetResult(conn, query->string);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    sample = row[1];
+    slNameAddHead(&(slSample),sample);
     }
 slReverse(&slSample);
 sqlFreeResult(&sr);
@@ -262,7 +272,7 @@ sqlFreeResult(&sr);
 struct microarrayGroups *maGs = maGetTrackGroupings(gh->database, gh->tDb);
 struct maGrouping *allA= maGs->allArrays;
 
-int counter = 0;    
+counter = 0;    
 int expId; // bed15 format expId 
 for(sl=slSample; sl !=NULL; sl=sl->next)
     {
@@ -441,6 +451,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     person = row[0];
     slNameAddHead(&(patientList),person);
     }
+sqlFreeResult(&sr);
 
 /* get colList */
 struct column *colList = getColumns(conn);
@@ -533,11 +544,12 @@ struct genoLay *featureLayout(struct sqlConnection *conn, struct genoLay *gl)
 /* Layout Feature Sorter based on previously layed out heatmaps */
 {
 struct genoLay *fs = AllocA(struct genoLay);
-fs->picWidth = 100;  /* TODO: make into CGI variable like hghImageWidth */
-fs->picHeight = gl->picHeight;    
+fs->picWidth = cartUsualInt(cart, hghFeatureWidth, 100);
+fs->picHeight = gl->picHeight + 100 ; //TODO adjust to the col->name    
 fs->margin = gl->margin;    
 fs->lineHeight = gl->lineHeight;
 fs->spaceWidth = gl->spaceWidth;
+fs->font = gl->font;
 
 struct column *col, *colList = getColumns(conn);
 int numVis = 0;
@@ -630,9 +642,6 @@ else if ( ((var = cartFindFirstLike(cart, "hgHeatmap_do.down.*")) != NULL) && (i
     }        
 else
     {
-    theDataset = cartOptionalString(cart, hghDataSet);
-    getGenoHeatmaps(conn, theDataset);
-
     /* Default case - start fancy web page. */
     if (cgiVarExists(hghPsOutput))
         handlePostscript(conn);
@@ -663,10 +672,12 @@ void dispatchLocation()
  * another intermediate page.  If we need to do more than that
  * then we call hghDoUsualHttp. */
 {
-struct sqlConnection *conn = NULL;
 getDbAndGenome(cart, &database, &genome,oldVars);
 hSetDb(database);
 cartSetString(cart, "db", database); /* custom tracks needs this */
+struct sqlConnection *conn = sqlConnect(database);
+theDataset = cartOptionalString(cart, hghDataSet);
+getGenoHeatmaps(conn, theDataset);
 
 /* Handle cases that just want a HTTP Location line: */
 if (cartVarExists(cart, hghClickX))

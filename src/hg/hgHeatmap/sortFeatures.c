@@ -104,7 +104,6 @@ printSortedNodes(dy, nodes);
 
 struct slName *sortList = slNameListFromComma(dy->string);
 return sortList;
-
 }
 
  

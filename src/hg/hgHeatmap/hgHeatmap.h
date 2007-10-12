@@ -24,6 +24,7 @@
 #define hghLabelVals hghPrefix "labelVals"
 #define hghMaxGapToFill hghPrefix "maxGapToFill"
 #define hghImageWidth hghPrefix "imageWidth"
+#define hghFeatureWidth hghPrefix "featureWidth"
 
 /*** Command variables. ***/
 #define hghConfigure hghDo "Configure"
@@ -100,6 +101,7 @@ int experimentCount(struct genoHeatmap *gh);
 #define layOnePerLine "one per line"
 #define layAllOneLine "all in one line"
 #define hgHeatmapDefaultPixWidth 925
+#define hgFeatureDefaultPixWidth 100
 
 char *chromLayout();
 /* Return one of above strings specifying layout. */

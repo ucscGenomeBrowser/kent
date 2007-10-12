@@ -30,7 +30,7 @@
 #include "ispyFeatures.h"
 
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.31 2007/10/11 21:01:43 jzhu Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.32 2007/10/12 20:12:20 jzhu Exp $";
 
 /* Page drawing stuff. */
 
@@ -336,9 +336,83 @@ for(chrom = gl->chromList; chrom; chrom = chrom->next)
     }
 }
 
+char *getId(struct sqlConnection *conn, char *table, char *key, char *sample)
+/* get ISPY ID from sample (or experiment) Id */
+{
+char query[512];
+char *value ="trackId";
+safef(query, sizeof(query), "select %s from %s where %s = '%s' ", key, table, value, sample);
+return sqlQuickString(conn, query);
+}
 
-void drawFeatures(struct vGfx *vg, char *chromHeatmap, 
-           struct sqlConnection *conn, struct genoLay *fs, int yOff)
+#define CLIP(p,limit) if (p < 0) p = 0; if (p >= (limit)) p = (limit)-1;
+static void verticalTextCentered(struct vGfx *vg, int x, int y,
+    int width, int height, int colorIx, MgFont *font, char *string)
+/* Draw a vertical line of text in middle of the box.
+ *	The string will read from bottom to top
+ */
+{
+/*	don't let this run wild	*/
+CLIP(width, vg->width);
+CLIP(height, vg->height);
+
+if ((width > 0) && (height > 0))
+    {
+    struct vGfx *vgHoriz;
+    int i, j;
+    /*	reversed meanings of width and height here since this is going
+     *	to rotate 90 degrees
+    struct memGfx *mgHoriz;
+    mgHoriz = mgNew(height, width);
+    mgTextCentered(mgHoriz, 0, 0, height, width, colorIx, font, string);
+     */
+    vgHoriz = vgOpenGif(height, width, "/dev/null");
+    vgTextCentered(vgHoriz, 0, 0, height, width, colorIx, font, string);
+    /*	now, blit from the horizontal to the vertical, rotate -90 (CCW) */
+    for (i = 0; i < height; ++i)	/* xSrc -> yDest */
+	{
+	int yDest = height - i;
+	for (j = 0; j < width; ++j)	/* ySrc -> xDest */
+	    {
+	    vgDot(vg,j+x,yDest+y, vgGetDot(vgHoriz, i, j));
+	    /*vgDot(vg,j+x,yDest+y, ((int)mgGetDot(mgHoriz,i,j)));*/
+	    }
+	}
+    vgClose(&vgHoriz);
+    /*mgFree(&mgHoriz);*/
+    }
+}
+
+void drawFeatureLable(struct genoLay *fs, struct vGfx *vg, int color)
+/* Draw feature labels in image */
+{
+/* set up connection to table with both patient and sample information */
+struct sqlConnection *conn = sqlConnect("ispy");
+struct column *col, *colList = getColumns(conn);
+
+double pixelsPerBase = fs->pixelsPerBase;
+struct genoLayChrom *chrom=NULL;
+for(chrom = fs->chromList; chrom; chrom = chrom->next)
+    {    
+    int chromX = chrom->x, chromY = chrom->y;
+      
+    int start = 0;
+    for (col = colList; col != NULL; col = col->next)
+	{
+        if (col->on)
+	    {
+	    int x = pixelsPerBase * start + chromX;
+	    int w = pixelsPerBase;
+	    int y = chromY+selectedHeatmapHeight() + 10; //TODO
+	    verticalTextCentered(vg, x, y, w, 100, color, fs->font, col->name); //TODO
+	    start++;
+	    }
+	}
+    break;
+    }
+}
+
+void drawFeatures(struct vGfx *vg, char *chromHeatmap, struct genoLay *fs, int yOff)
 /* Draw features to right of chromosomes in layout at given
  * y offset and height. */
 {
@@ -348,6 +422,16 @@ if (el)
     gh = el->val;
 else
     errAbort("no heatmap %s\n", chromHeatmap);
+
+/* set up connection to table with both patient and sample information */
+struct trackDb *tdb = gh->tDb;
+char *labTable = trackDbSetting(tdb, "patTable");
+char *key = trackDbSetting(tdb, "patKey");
+char *db = trackDbSetting(tdb, "patDb");
+if ((labTable == NULL) || (key == NULL) || (db==NULL) 
+    || !sqlDatabaseExists(db) )
+    return;
+struct sqlConnection *conn = sqlConnect(db);
 
 struct genoLayChrom *chrom=NULL;
     
@@ -405,11 +489,11 @@ for(chrom = fs->chromList; chrom; chrom = chrom->next)
 		if (orderId == -1) 
 		    continue;
                 
-		id = slNameNew(getId(conn, sl->name));
+		id = slNameNew(getId(conn, labTable, key, sl->name));
 
 		char *cellVal = col->cellVal(col, id, conn);
 	        valCol = MG_GRAY;            
-		if (cellVal)
+		if ((cellVal) && ( atof(cellVal) <= maxVal))
 		    {
 		    val = atof(cellVal);
 		    absVal = fabs(val);
@@ -473,10 +557,10 @@ else
     {
     /* Create gif file and make reference to it in html. */
     trashDirFile(&gifTn, "hgh", "ideo", ".gif");
-    vg = vgOpenGif(gl->picWidth + fs->picWidth, gl->picHeight, gifTn.forCgi);
+    vg = vgOpenGif(gl->picWidth + fs->picWidth, fs->picHeight, gifTn.forCgi);
     
     hPrintf("<INPUT TYPE=IMAGE SRC=\"%s\" BORDER=1 WIDTH=%d HEIGHT=%d NAME=\"%s\">",
-	    gifTn.forHtml, gl->picWidth + fs->picWidth, gl->picHeight, hghClick);
+	    gifTn.forHtml, gl->picWidth + fs->picWidth, fs->picHeight, hghClick);
     }
 
 /* Get our grayscale. */
@@ -501,13 +585,12 @@ for (ref = ghList; ref != NULL; ref = ref->next)
     
     drawChromHeatmaps(vg, db, gl, tableName, 
 		       totalYOff + yOffset, TRUE, TRUE, TRUE);
-    if (ispyConn)
-	drawFeatures(vg, tableName, ispyConn, fs, totalYOff + yOffset);  
+    drawFeatures(vg, tableName, fs, totalYOff + yOffset);  
     
     totalYOff += heatmapHeight(gh) + spacing;
     
     /* hard-code for demo.
-       also draw summary ChromGraph when the tableName is cnvBroadLungv2 
+f       also draw summary ChromGraph when the tableName is cnvBroadLungv2 
        the space for the CrhomGraph is hardcoded here chromGraphOffset=10    
     */
     if ( sameString(tableName,"cnvLungBroadv2_ave100K") /* || sameString(tableName,"cnvLungBroadv2") || sameString(tableName, "expBreastCancerUCSF") */ || sameString(tableName, "CGHBreastCancerUCSF") || sameString(tableName, "CGHBreastCancerStanford") )
@@ -520,6 +603,8 @@ for (ref = ghList; ref != NULL; ref = ref->next)
 	totalYOff += chromGraphHeight() + spacing;
 	}
     }
+if (ispyConn)
+    drawFeatureLable(fs,vg, MG_BLACK);
 vgClose(&vg);
 }
 

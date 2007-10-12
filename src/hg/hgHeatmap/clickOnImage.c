@@ -11,11 +11,11 @@
 struct genoLayChrom *genoLayChromAt(struct genoLay *gl, int x, int y)
 /* Return chromosome if any at x,y */
 {
-struct genoLayChrom *chrom;
+struct genoLayChrom *chrom =NULL;
 for (chrom = gl->chromList; chrom != NULL; chrom = chrom->next)
     {
     if (chrom->x <= x && x < chrom->x + chrom->width
-       && chrom->y <= y && y < chrom->y + chrom->height)
+	&& chrom->y <= y && y < chrom->y + chrom->height)
        break;
     }
 return chrom;
