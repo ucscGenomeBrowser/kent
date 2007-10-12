@@ -2222,7 +2222,7 @@ dataVersion Mar 2007
     priority 12
 
 track rgdQtl
-shortLabel RGD QTL
+shortLabel RGD Human QTL
 longLabel $Organism Quantitative Trait Locus from RGD
 group phenDis
 priority 150
