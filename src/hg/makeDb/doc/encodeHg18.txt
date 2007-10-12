@@ -733,7 +733,7 @@ hgLoadBed hg18 encodeYalePolIISites PolII_hg18-sites.bed
 # See hg18.txt
 
 ######################################################
-# Add strand information for encodeGencodeRace data
+# Add strand information for encodeGencodeRace data - ting 09-27-2007
 # ENCODE 5RACE data do not contain strand information. This
 # information is very important, and can be derived from 
 # available GENCODE and 5RACE data.
