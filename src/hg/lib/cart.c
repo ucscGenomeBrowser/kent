@@ -18,7 +18,7 @@
 #include "customFactory.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.76 2007/08/08 19:01:11 fanhsu Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.77 2007/10/12 23:21:57 galt Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -972,6 +972,8 @@ int hguid = getCookieId(cookieName);
 int hgsid = getSessionId();
 struct cart *cart = cartNew(hguid, hgsid, exclude, oldVars);
 cartExclude(cart, sessionVar);
+if (sameOk(cfgOption("signalsHandler"), "on"))  /* most cgis call this routine */
+    initSigHandlers();
 return cart;
 }
 

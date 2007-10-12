@@ -17,6 +17,10 @@
 #include "hash.h"
 #endif 
 
+
+void initSigHandlers();
+/* set handler for various terminal signals for logging purposes */
+
 struct cgiVar
 /* Info on one cgi variable. */
     {

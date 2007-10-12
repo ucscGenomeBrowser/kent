@@ -11,8 +11,9 @@
 #include "linefile.h"
 #include "errabort.h"
 #include "mime.h"
+#include <signal.h>
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.94 2007/10/04 00:36:24 galt Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.95 2007/10/12 23:22:41 galt Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -465,6 +466,46 @@ popAbortHandler();
 return ok;
 }
 
+
+
+static void catchSignal(int sigNum)
+/* handler for various terminal signals for logging purposes */
+{
+char *sig = NULL;
+switch (sigNum)
+    {
+    case SIGABRT:
+      sig = "SIGABRT";
+      break;
+    case SIGSEGV:
+      sig = "SIGSEGV";
+      break;
+    case SIGFPE:
+      sig = "SIGFPE";
+      break;
+    case SIGBUS:
+      sig = "SIGBUS";
+      break;
+    }
+    logCgiToStderr();
+    fprintf(stderr, "Received signal %s\n", sig);
+    raise(SIGKILL); 
+}
+
+void initSigHandlers()
+/* set handler for various terminal signals for logging purposes */
+{
+if (cgiIsOnWeb())
+    {
+    signal(SIGABRT, catchSignal);
+    signal(SIGSEGV, catchSignal);
+    signal(SIGFPE, catchSignal);
+    signal(SIGBUS, catchSignal);
+    }
+}
+
+
+
 static void initCgiInput() 
 /* Initialize CGI input stuff.  After this CGI vars are
  * stored in an internal hash/list regardless of how they
@@ -474,6 +515,7 @@ char* s;
 
 if (inputString != NULL)
     return;
+
 _cgiFindInput(NULL);
 
 /* check to see if the input is a multipart form */
