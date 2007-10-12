@@ -258,6 +258,9 @@ return sqlQuickString(conn, query);
 char *cellLookupMinVal(struct column *col, struct sqlConnection *conn)
 /* Get minimum value of column in database */
 {
+char *min = cloneString(hashFindVal(col->settings, "min"));
+if (min)
+    return min;
 char query[512];
 safef(query, sizeof(query), "select min(%s) from %s", col->valField, col->table);
 return sqlQuickString(conn, query);
