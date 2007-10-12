@@ -95,6 +95,11 @@ echo "(be sure to click all the way out to IGTC website)"
 foreach mouse ( $mice )
   echo " \n\ncheck these in $mouse browser on hgwdev (or use links below):"
   head -3 $mouse.igtc.qName.devOnly
+  set sample=`head -3 $mouse.igtc.qName.devOnly`
+  foreach item ( $sample )
+    set url6="&db=$mouse&position=$item"
+    echo "$urldev$url6"
+  end
   tail -3 $mouse.igtc.qName.devOnly
 end
 
@@ -110,7 +115,7 @@ echo "\n\n----------------------"
 echo "check a few of the deleted items from the igtc table"
 echo "(make sure they have also been dropped from IGTC website)"
 foreach mouse ( $mice )
-  echo " \n\ncheck these in $mouse browser on hgwbeta:"
+  echo " \n\ncheck these in $mouse browser on hgwbeta (or use links below):"
   head -3 $mouse.igtc.qName.betaOnly 
   set sample=`head -3 $mouse.igtc.qName.betaOnly`
   foreach item ( $sample )
@@ -150,6 +155,7 @@ end
 
 
 echo "\n\n----------------------"
+# I think that this is not working properly -- it is miscalculating single hits
 echo "find items not in all assemblies.  do they simply not blat ? "
 echo "number in two assemblies:" `cat allThree.sort | awk '$1 == 2 {print;}' \
   | wc -l`
@@ -243,8 +249,7 @@ end
 echo "\n\n----------------------"
 echo "Creating a file with the new rows from the extFile and seq tables \
   on dev"
-echo "(these will need to be moved to beta)\n"
-
+echo "(these rows will need to be moved to the approriate table on beta)\n"
 
 foreach i ( $counter )
   hgsql -Ne "SELECT * FROM seq WHERE extFile = '$extFileId[$i]'" $mice[$i] \
