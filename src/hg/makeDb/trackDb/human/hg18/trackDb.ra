@@ -1345,7 +1345,7 @@ color 0,96,0
 scoreFilterMax 100
 type bed 6 .
 urlLabel TargetScan link:
-url http://eorsa.wi.mit.edu/cgi-bin/targetscan/vert_40/view_gene.cgi?gs=$P&taxid=9606&members=$p&showcnc=1
+url http://www.targetscan.org/cgi-bin/targetscan/vert_40/view_gene.cgi?gs=$P&taxid=9606&members=$p&showcnc=1
 
 track uc16
 shortLabel Ultra Conserved
