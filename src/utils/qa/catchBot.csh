@@ -17,12 +17,14 @@ if ($#argv < 1 || $#argv > 2) then
   # not enough command line args
   echo
   echo "  script to catch bots."
-  echo "  monitors the IP addresses of most common users "
+  echo "  monitors the IP addresses of most common users."
   echo "    and squawks when someone gets too high."
-  echo "  now also checks the last hour."
+  echo "  also checks the last hour."
   echo
-  echo "    usage:  threshhold (number of hits from single source), "
-  echo "            [report size] (defaults to 5)"
+  echo "    usage:  threshhold [report size] "
+  echo "      where threshhold is number of hits from single source"
+  echo "      report size is number of highest hitters listed (defaults to 5)"
+  echo "            
   echo
   exit
 else
