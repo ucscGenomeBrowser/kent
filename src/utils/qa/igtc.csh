@@ -17,12 +17,6 @@ set counter=( 1 2 3 )
 set init=( 0 0 0 )
 set mice=( mm9 mm8 mm7 )
 set extFileId=($init)
-set extFileIdOld=($init)
-
-foreach i ( $counter )
-  echo "i = $i"
-  echo "extFileId_i = $extFileId[$i]"
-end
 
 set urlbeta="http://hgwbeta.cse.ucsc.edu/cgi-bin/hgTracks?igtc=pack"
 set urldev="http://hgwdev.cse.ucsc.edu/cgi-bin/hgTracks?igtc=pack"
@@ -85,14 +79,14 @@ echo
 echo "\n\n----------------------"
 echo "run Joiner Check"
 # runs on all assemblies
-### joinerCheck -keys -identifier=igtcName ~/kent/src/hg/makeDb/schema/all.joiner
+joinerCheck -keys -identifier=igtcName ~/kent/src/hg/makeDb/schema/all.joiner
 
 
 echo "\n\n----------------------"
 echo "compare new (dev) and old (beta) tables"
 echo
 foreach mouse ( $mice )
-  ### compareWholeColumn.csh $mouse igtc qName
+  compareWholeColumn.csh $mouse igtc qName
 end
 
 echo "\n\n----------------------"
@@ -233,9 +227,7 @@ echo "Sanity check: compare counts in seq table (on dev) with what's \
   in the file"
 echo "(if the values aren't equal per assembly, this needs investigation)\n"
 
-### ??? can't get the loop to work with $mice variable ??? ###
-# So, just do it one-by-one for now...
-echo "compare count from seq tables:"
+echo "compare count from seq tables"
 echo "to the count from genetrap.$update.fasta file:"
 
 foreach i ( $counter )
@@ -255,10 +247,10 @@ echo "(these will need to be moved to beta)\n"
 
 
 foreach i ( $counter )
-###  hgsql -Ne "SELECT * FROM seq WHERE extFile = '$extFileId[$i]'" $mice[$i] \
-###    > $mice[$i].seq.$update
-###  hgsql -Ne "SELECT * FROM extFile WHERE path LIKE '%genetrap.$update.fasta'" \
-###    $mice[$i] > $mice[$i].extFile.$update
+  hgsql -Ne "SELECT * FROM seq WHERE extFile = '$extFileId[$i]'" $mice[$i] \
+    > $mice[$i].seq.$update
+  hgsql -Ne "SELECT * FROM extFile WHERE path LIKE '%genetrap.$update.fasta'" \
+    $mice[$i] > $mice[$i].extFile.$update
 end
 
 echo "The files are here:"
@@ -351,6 +343,7 @@ echo
 # (get from beta, as dev might not have it anymore)
 
 echo "remove old rows:"
+set extFileIdOld=( $init )
 foreach i ( $counter )
   set extFileIdOld[$i]=`hgsql -h hgwbeta -Ne 'SELECT id FROM extFile \
     WHERE name LIKE "genetrap.'$lastMonth%'"' $mice[$i]`
@@ -448,7 +441,6 @@ foreach mouse ( $mice )
   set url2="&db=$mouse&position=$first"
   echo "$urlbeta$url2"
 end
-echo
 foreach mouse ( $mice )
   set url3="&db=$mouse&position=$last"
   echo "$urlbeta$url3"
