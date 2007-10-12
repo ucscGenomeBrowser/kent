@@ -22,7 +22,7 @@ if ($#argv < 2 || $#argv > 3 ) then
   echo
   echo '      usage:  ipAddress time [endOfRange]'
   echo
-  echo '              (ipAddress accepts file of ipAddresses)'
+  echo '              (ipAddress also accepts file of ipAddresses)'
   echo '              (time in minutes to keep IP alive)'
   echo '              (endOfRange value should be last field of IP)'
   echo
