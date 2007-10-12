@@ -13,11 +13,17 @@ set update=""
 set year=""
 set month=""
 set day=""
-set mice="mm9 mm8 mm7"
-set extFileId_mm9=""
-set extFileId_mm8=""
-set extFileId_mm7=""
-set pwd=""
+set counter=( 1 2 3 )
+set init=( 0 0 0 )
+set mice=( mm9 mm8 mm7 )
+set extFileId=($init)
+set extFileIdOld=($init)
+
+foreach i ( $counter )
+  echo "i = $i"
+  echo "extFileId_i = $extFileId[$i]"
+end
+
 set urlbeta="http://hgwbeta.cse.ucsc.edu/cgi-bin/hgTracks?igtc=pack"
 set urldev="http://hgwdev.cse.ucsc.edu/cgi-bin/hgTracks?igtc=pack"
 
@@ -42,7 +48,7 @@ set day=`echo $update | awk -F- '{print $3}'`
 if ( 0 == 0 ) then  ##  not-run block
 
 # make sure they have entered something close to correct (kludge warning!)
-if ( $year != `date +%Y` || $month > 12 || $day > 31 ) then
+if ( $year < 2007 || $year > 2020 || $month > 12 || $day > 31 ) then
   echo "\nERROR: the 'date' format is incorrect"
   $0
   exit 1
@@ -54,37 +60,40 @@ if ( "$HOST" != "hgwdev" ) then
   exit 1
 endif
 
-set pwd=`pwd`
-
 # Explain what we're QAing
 echo "\nRunning on these mouse assemblies:"
 echo "  $mice"
 echo "\nAnd on these files:"
-foreach mouse ( $mice )
-  echo "  /gbdb/$mouse/igtc/genetrap.$update.fasta"
-end
 
 # make sure the files exist
 foreach mouse ( $mice )
+  set err=0
   if (! -e /gbdb/$mouse/igtc/genetrap.$update.fasta) then
-    echo "\nERROR: can't find the file: \
-      /gbdb/$mouse/igtc/genetrap.$update.fasta\n"
-    exit 1
+    echo "ERROR: can't find the file: \
+      /gbdb/$mouse/igtc/genetrap.$update.fasta"
+    set err=1
+  else
+    echo "  /gbdb/$mouse/igtc/genetrap.$update.fasta"
   endif
 end 
+if ( $err == 1 ) then
+  echo "\n Error.  Quitting \n"
+  exit 1
+endif
+echo
 
 echo "\n\n----------------------"
 echo "run Joiner Check"
-joinerCheck -keys -identifier=igtcName ~/kent/src/hg/makeDb/schema/all.joiner
+# runs on all assemblies
+### joinerCheck -keys -identifier=igtcName ~/kent/src/hg/makeDb/schema/all.joiner
 
 
 echo "\n\n----------------------"
 echo "compare new (dev) and old (beta) tables"
 echo
 foreach mouse ( $mice )
-  compareWholeColumn.csh $mouse igtc qName
+  ### compareWholeColumn.csh $mouse igtc qName
 end
-
 
 echo "\n\n----------------------"
 echo "check a few of the new additions to the igtc table"
@@ -103,7 +112,6 @@ foreach mouse ( $mice )
     | sort
 end
 
-
 echo "\n\n----------------------"
 echo "check a few of the deleted items from the igtc table"
 echo "(make sure they have also been dropped from IGTC website)"
@@ -115,9 +123,10 @@ foreach mouse ( $mice )
     set url5="&db=$mouse&position=$item"
     echo "$urlbeta$url5"
   end
+  echo
+  echo "bottom of list:"
   tail -3 $mouse.igtc.qName.betaOnly
 end
-
 
 echo "\n\n----------------------"
 echo "check out a few new alignments that hit on all 3 assemblies"
@@ -131,6 +140,7 @@ sort allThree | uniq -c > allThree.sort
 cat allThree.sort | awk '$1 == 3 {print;}' | head -2
 cat allThree.sort | awk '$1 == 3 {print;}' | tail -2
 echo
+
 
 set first=`cat allThree.sort | awk '$1 == 3 {print $2;}' | head -1`
 set last=`cat allThree.sort | awk '$1 == 3 {print $2;}' | tail -1`
@@ -199,37 +209,23 @@ foreach mouse ( $mice )
   echo
   echo "$mouse.extFile on hgwdev:"
   hgsql -e 'SELECT * FROM extFile WHERE name LIKE "genetrap%"' $mouse
-  echo "\n$mouse.extFile on hgwbeta:"
-  hgsql -h hgwbeta -e 'SELECT * FROM extFile WHERE name LIKE "genetrap%"' \
+  echo "             hgwbeta:"
+  hgsql -h hgwbeta -Ne 'SELECT * FROM extFile WHERE name LIKE "genetrap%"' \
      $mouse
   echo
 end
 
 # get the extFile.id value for this month's entry
 echo "\n\n----------------------"
-echo "You will need to know the id field from the extFile table entry"
+echo "Confirm that these match the new ids in the tables above"
 echo "for this month's file (genetrap.$update.fasta):"
+echo
 
-### ??? can't get the loop to work with $mice variable ??? ###
-#foreach mouse ( $mice )
-#  set extFileId_${mouse}=`hgsql -Ne "SELECT id FROM extFile WHERE name \
-#    LIKE 'genetrap.$update.fasta'" $mouse`
-#  echo "$mouse.extFile.id = $extFileId_$mouse"
-#end
-
-### So, I'll just do them one-by-one for now...
-set extFileId_mm9=`hgsql -Ne "SELECT id FROM extFile WHERE name LIKE \
-  'genetrap.$update%'" mm9`
-echo "extFile.id_mm9 = $extFileId_mm9"
-
-set extFileId_mm8=`hgsql -Ne "SELECT id FROM extFile WHERE name LIKE \
-  'genetrap.$update%'" mm8`
-echo "extFile.id_mm8 = $extFileId_mm8"
-
-set extFileId_mm7=`hgsql -Ne "SELECT id FROM extFile WHERE name LIKE \
-  'genetrap.$update%'" mm7`
-echo "extFile.id_mm7 = $extFileId_mm7"
-
+foreach i ( $counter )
+  set extFileId[$i]=`hgsql -Ne "SELECT id FROM extFile WHERE name \
+    LIKE 'genetrap.$update.fasta'" $mice[$i]`
+  echo "$mice[$i].extFileId = $extFileId[$i]"
+end
 
 # compare counts with file counts
 echo "\n\n----------------------"
@@ -239,23 +235,16 @@ echo "(if the values aren't equal per assembly, this needs investigation)\n"
 
 ### ??? can't get the loop to work with $mice variable ??? ###
 # So, just do it one-by-one for now...
-echo "compare count from mm9.seq table:"
-hgsql -Ne 'SELECT COUNT(*) FROM seq WHERE extFile = "'$extFileId_mm9'"' mm9
-echo "to the count from mm9 genetrap.$update.fasta file:"
-grep '>' /gbdb/mm9/igtc/genetrap.$update.fasta | wc -l
-echo
+echo "compare count from seq tables:"
+echo "to the count from genetrap.$update.fasta file:"
 
-echo "compare count from mm8.seq table:"
-hgsql -Ne 'SELECT COUNT(*) FROM seq WHERE extFile = "'$extFileId_mm8'"' mm8
-echo "to the count from mm8 genetrap.$update.fasta file:"
-grep '>' /gbdb/mm8/igtc/genetrap.$update.fasta | wc -l
+foreach i ( $counter )
+  echo $mice[$i]
+  hgsql -Ne 'SELECT COUNT(*) FROM seq \
+    WHERE extFile = "'$extFileId[$i]'"' $mice[$i]
+  echo "  "`grep '>' /gbdb/$mice[$i]/igtc/genetrap.$update.fasta | wc -l`
 echo
-
-echo "compare count from mm7.seq table:"
-hgsql -Ne 'SELECT COUNT(*) FROM seq WHERE extFile = "'$extFileId_mm7'"' mm7
-echo "to the count from mm7 genetrap.$update.fasta file:"
-grep '>' /gbdb/mm7/igtc/genetrap.$update.fasta | wc -l
-echo
+end
 
 
 # get the new rows from tables on dev
@@ -264,28 +253,18 @@ echo "Creating a file with the new rows from the extFile and seq tables \
   on dev"
 echo "(these will need to be moved to beta)\n"
 
-### ??? can't get the loop to work with $mice variable ??? ###
-# So, just do it one-by-one for now...
-hgsql -Ne "SELECT * FROM seq WHERE extFile = '$extFileId_mm9'" mm9 \
-  > mm9.seq.$update
-hgsql -Ne "SELECT * FROM extFile WHERE path LIKE '%genetrap.$update.fasta'" \
-  mm9 > mm9.extFile.$update
 
-hgsql -Ne "SELECT * FROM seq WHERE extFile = '$extFileId_mm8'" mm8 \
-  > mm8.seq.$update
-hgsql -Ne "SELECT * FROM extFile WHERE path LIKE '%genetrap.$update.fasta'" \
-  mm8 > mm8.extFile.$update
-
-hgsql -Ne "SELECT * FROM seq WHERE extFile = '$extFileId_mm7'" mm7 \
-  > mm7.seq.$update
-hgsql -Ne "SELECT * FROM extFile WHERE path LIKE '%genetrap.$update.fasta'" \
-  mm7 > mm7.extFile.$update
-
+foreach i ( $counter )
+###  hgsql -Ne "SELECT * FROM seq WHERE extFile = '$extFileId[$i]'" $mice[$i] \
+###    > $mice[$i].seq.$update
+###  hgsql -Ne "SELECT * FROM extFile WHERE path LIKE '%genetrap.$update.fasta'" \
+###    $mice[$i] > $mice[$i].extFile.$update
+end
 
 echo "The files are here:"
-foreach mouse ( $mice)
-  echo "$mouse.seq.$update"
-  echo "$mouse.extFile.$update"
+foreach i ( $counter )
+  echo "$mice[$i].seq.$update"
+  echo "$mice[$i].extFile.$update"
 end
 
 endif ##  not-run block
@@ -297,111 +276,110 @@ echo "Here are the commands needed to delete the rows from the extFile \
   and seq tables on DEV and BETA\n"
 echo "(these are last month's data)"
 
-# subtract one from the $month variable (so that it's last month's date)
-
-set oldMonth=""
-set oldYear=""
-if ( $month == 01 ) then
-  set oldMonth=12
-  set oldYear=`echo $year | awk '{print $1-1}'`
-else
-  set oldMonth=`echo $month | awk '{print $1-1}'`
-  if ( $oldMonth < 10 ) then
-    set oldMonth='0'$oldMonth
-  endif
-  set oldYear=$year
-endif
-
-set lastMonth=$oldYear-$oldMonth-$day
+# get last month's date 
+set lastMonth="`getLastMonth.csh go`-01"
+set oldMonth=`echo $lastMonth | awk -F- '{print $2}'`
+set oldYear=`echo $lastMonth | awk -F- '{print $1}'`
 echo "lastMonth = $lastMonth"
 
 echo
-echo "save existing tables"
+echo "save existing tables:"
+
+foreach table ( extFile seq )
+  foreach mouse ( $mice )
+    echo 'hgsql -e ' "'"CREATE TABLE $table$oldYear${oldMonth}01 \
+      SELECT \* FROM extFile"'" $mouse  
+  end
+end
+echo
+foreach table ( extFile seq )
+  foreach mouse ( $mice )
+    echo 'hgsql -h hgwbeta -e ' "'"CREATE TABLE $table$oldYear${oldMonth}01 \
+      SELECT \* FROM extFile"'" $mouse  
+  end
+end
 echo
 
-foreach mouse ( $mice )
-  echo 'hgsql -e ' "'"CREATE TABLE extFile$oldYear${oldMonth}01 \
-    SELECT \* FROM extFile"'" $mouse  
-end
-foreach mouse ( $mice )
-  echo 'hgsql -e ' "'"CREATE TABLE seq$oldYear${oldMonth}01 \
-    SELECT \* FROM seq"'" $mouse  
-end
-echo
-foreach mouse ( $mice )
-  echo 'hgsql -h hgwbeta -e ' "'"CREATE TABLE extFile$oldYear${oldMonth}01 \
-    SELECT \* FROM extFile"'" $mouse  
-end
-foreach mouse ( $mice )
-  echo 'hgsql -h hgwbeta -e ' "'"CREATE TABLE seq$oldYear${oldMonth}01 \
-    SELECT \* FROM seq"'" $mouse  
-end
-echo
 
 echo check:
-
-foreach mouse ( $mice )
-  echo 'hgsql -e ' "'"SHOW TABLES LIKE \"extFile%\" "'" \
-    $mouse
-end
-foreach mouse ( $mice )
-  echo 'hgsql -e ' "'"SHOW TABLES LIKE \"seq%\" "'" \
-    $mouse
+foreach table ( extFile seq )
+  foreach mouse ( $mice )
+    echo 'hgsql -e ' "'"SHOW TABLES LIKE \"$table%\" "'" \
+      $mouse
+  end
 end
 echo
-foreach mouse ( $mice )
-  echo 'hgsql -h hgwbeta -e ' "'"SHOW TABLES LIKE \"extFile%\" "'" \
-    $mouse
+foreach table ( extFile seq )
+  foreach mouse ( $mice )
+    echo 'hgsql -h hgwbeta -e ' "'"SHOW TABLES LIKE \"$table%\" "'" \
+      $mouse
+  end
 end
-foreach mouse ( $mice )
-  echo 'hgsql -h hgwbeta -e ' "'"SHOW TABLES LIKE \" seq%\" "'" \
-    $mouse
+
+echo
+echo "drop previous month backup tables:"
+
+set lastLastMonth="`getLastMonth.csh $oldYear-$oldMonth`"
+set oldOldMonth=`echo $lastLastMonth | awk -F- '{print $2}'`
+set oldOldYear=`echo $lastLastMonth | awk -F- '{print $1}'`
+# echo "lastMonth = $lastMonth"
+# echo "oldMonth = $oldMonth"
+# echo "oldYear = $oldYear"
+# echo
+# echo "lastLastMonth = $lastLastMonth"
+# echo "oldOldMonth = $oldOldMonth"
+# echo "oldOldYear = $oldOldYear"
+
+foreach table ( extFile seq )
+  foreach mouse ( $mice )
+    echo 'hgsql -e ' "'"DROP TABLE $table$oldOldYear${oldOldMonth}01"'" \
+      $mouse
+  end
 end
+echo
+foreach table ( extFile seq )
+  foreach mouse ( $mice )
+    echo 'hgsql -h hgwbeta -e ' \
+      "'"DROP TABLE $table$oldOldYear${oldOldMonth}01"'" \
+      $mouse
+  end
+end
+echo
 
 
 # Need to find the seq.id for last month's data
 # (get from beta, as dev might not have it anymore)
 
-set extFileIdOld_mm9=`hgsql -h hgwbeta -Ne 'SELECT id FROM extFile \
-  WHERE name LIKE "genetrap.'$lastMonth%'"' mm9`
-set extFileIdOld_mm8=`hgsql -h hgwbeta -Ne 'SELECT id FROM extFile \
-  WHERE name LIKE "genetrap.'$lastMonth%'"' mm8`
-set extFileIdOld_mm7=`hgsql -h hgwbeta -Ne 'SELECT id FROM extFile \
-  WHERE name LIKE "genetrap.'$lastMonth%'"' mm7`
-
-# setup deletion of the rows from tables on dev and beta
-# commands needed to delete the rows from the extFile and seq tables on DEV and BETA
-echo
+echo "remove old rows:"
+foreach i ( $counter )
+  set extFileIdOld[$i]=`hgsql -h hgwbeta -Ne 'SELECT id FROM extFile \
+    WHERE name LIKE "genetrap.'$lastMonth%'"' $mice[$i]`
+end
 
 foreach mouse ( $mice )
   echo 'hgsql -e ' "'"DELETE FROM $mouse.extFile WHERE name LIKE \
     '"'genetrap.$lastMonth.fasta'"' \' $mouse 
 end
-
-echo 'hgsql -e ' "'"DELETE FROM mm9.seq WHERE extFile = \
-    '"'$extFileIdOld_mm9'"' \' mm9 
-echo 'hgsql -e ' "'"DELETE FROM mm8.seq WHERE extFile = \
-    '"'$extFileIdOld_mm8'"' \' mm8
-echo 'hgsql -e ' "'"DELETE FROM mm7.seq WHERE extFile = \
-    '"'$extFileIdOld_mm7'"' \' mm7
+foreach i ( $counter )
+  echo 'hgsql -e ' "'"DELETE FROM $mice[$i].seq WHERE extFile = \
+      $extFileIdOld[$i]\' $mice[$i]
+end
 
 echo
 foreach mouse ( $mice )
   echo 'hgsql -h hgwbeta -e ' "'"DELETE FROM $mouse.extFile WHERE name LIKE \
-    '"'genetrap.$lastMonth.fasta'"' \' $mouse
+    '"'genetrap.$lastMonth.fasta'"' \' $mouse 
 end
-
-echo 'hgsql -h hgwbeta -e ' "'"DELETE FROM mm9.seq WHERE extFile = \
-    '"'$extFileIdOld_mm9'"' \' mm9 
-echo 'hgsql -h hgwbeta -e ' "'"DELETE FROM mm8.seq WHERE extFile = \
-    '"'$extFileIdOld_mm8'"' \' mm8
-echo 'hgsql -h hgwbeta -e ' "'"DELETE FROM mm7.seq WHERE extFile = \
-    '"'$extFileIdOld_mm7'"' \' mm7
-
+foreach i ( $counter )
+  echo 'hgsql -h hgwbeta -e ' "'"DELETE FROM $mice[$i].seq WHERE extFile = \
+      $extFileIdOld[$i]\' $mice[$i]
+end
+echo
 
 # is everything in seq?
 echo "\n\n----------------------"
 echo "Check that all igtc entries actually have an entry in seq:"
+echo "This may duplicate some of joinerCheck."
 echo "Look for zero in the devOnly files."
 echo
 
@@ -413,24 +391,28 @@ end
 echo "\n\n----------------------"
 echo "How many items in seq still have old extFile number?"
 echo "Should be more than the number in devOnly because some were not used"
-echo " These should be lost using DELETE commands below)."
+echo "These should be lost using DELETE commands below)."
 echo
 
 echo "dev"
-hgsql -Ne 'SELECT COUNT(*) FROM seq WHERE extFile = "'$extFileIdOld_mm9'"' mm9
-hgsql -Ne 'SELECT COUNT(*) FROM seq WHERE extFile = "'$extFileIdOld_mm8'"' mm8
-hgsql -Ne 'SELECT COUNT(*) FROM seq WHERE extFile = "'$extFileIdOld_mm7'"' mm7
+foreach i ( $counter )
+  echo "$mice[$i] seq"
+  hgsql -Ne 'SELECT COUNT(*) FROM seq WHERE extFile = "'$extFileIdOld[$i]'"' \
+    $mice[$i]
+end
 wc -l *devOnly | grep -v total
 echo
 echo "beta"
-hgsql -h hgwbeta -Ne 'SELECT COUNT(*) FROM seq WHERE extFile = "'$extFileIdOld_mm9'"' mm9
-hgsql -h hgwbeta -Ne 'SELECT COUNT(*) FROM seq WHERE extFile = "'$extFileIdOld_mm8'"' mm8
-hgsql -h hgwbeta -Ne 'SELECT COUNT(*) FROM seq WHERE extFile = "'$extFileIdOld_mm7'"' mm7
+foreach i ( $counter )
+  hgsql -h hgwbeta -Ne 'SELECT COUNT(*) FROM seq \
+    WHERE extFile = "'$extFileIdOld[$i]'"' $mice[$i]
+end
+wc -l *betaOnly | grep -v total
 
 
 # load rows into tables on beta
 echo "\n\n----------------------"
-echo "Here are the commands needed to load the rows into extFile \
+echo "Here are the commands needed to load the new rows into extFile \
   and seq tables on BETA:\n"
 
 foreach mouse ( $mice )
@@ -462,7 +444,6 @@ end
 
 echo
 echo " - check that these new ones are ok on beta:"
-echo
 foreach mouse ( $mice )
   set url2="&db=$mouse&position=$first"
   echo "$urlbeta$url2"
@@ -474,30 +455,27 @@ foreach mouse ( $mice )
 end
 echo
 
-echo " - check for drops of old seq items"
-echo "dev"
-echo 'hgsql -Ne' "'" 'SELECT COUNT(*) FROM seq WHERE extFile = "'$extFileIdOld_mm9'"' \' mm9
-echo 'hgsql -Ne' "'" 'SELECT COUNT(*) FROM seq WHERE extFile = "'$extFileIdOld_mm8'"' \' mm8
-echo 'hgsql -Ne' "'" 'SELECT COUNT(*) FROM seq WHERE extFile = "'$extFileIdOld_mm7'"' \' mm7
-echo
-echo "beta"
-echo 'hgsql -Ne' "'" 'SELECT COUNT(*) FROM seq WHERE extFile = "'$extFileIdOld_mm9'"' \' mm9
-echo 'hgsql -Ne' "'" 'SELECT COUNT(*) FROM seq WHERE extFile = "'$extFileIdOld_mm8'"' \' mm8
-echo 'hgsql -Ne' "'" 'SELECT COUNT(*) FROM seq WHERE extFile = "'$extFileIdOld_mm7'"' \' mm7
+echo " - check for drops of old seq items:"
+foreach i ( $counter )
+  echo 'hgsql -Ne' "'" 'SELECT COUNT(*) FROM seq WHERE extFile = "'$extFileIdOld[$i]'"' \' $mice[$i]
+end
+
+foreach i ( $counter )
+  echo 'hgsql -h hgwbeta -Ne' "'" \
+    'SELECT COUNT(*) FROM seq WHERE extFile = "'$extFileIdOld[$i]'"' \' \
+    $mice[$i]
+end
 echo
 
-echo " - check for new seq items"
-echo "dev"
-echo 'hgsql -Ne' "'" 'SELECT COUNT(*) FROM seq WHERE extFile = "'$extFileId_mm9'"' \' mm9
-echo 'hgsql -Ne' "'" 'SELECT COUNT(*) FROM seq WHERE extFile = "'$extFileId_mm8'"' \' mm8
-echo 'hgsql -Ne' "'" 'SELECT COUNT(*) FROM seq WHERE extFile = "'$extFileId_mm7'"' \' mm7
+echo " - check for new seq items:"
+foreach i ( $counter)
+  echo 'hgsql -Ne' "'" 'SELECT COUNT(*) FROM seq WHERE extFile = "'$extFileId[$i]'"' \' $mice[$i]
+end
+foreach i ( $counter)
+  echo 'hgsql -hgwbeta -Ne' "'" 'SELECT COUNT(*) FROM seq WHERE extFile = "'$extFileId[$i]'"' \' $mice[$i]
+end
 echo
-echo "beta"
-echo 'hgsql -h hgwbeta -Ne' "'" 'SELECT COUNT(*) FROM seq WHERE extFile = "'$extFileId_mm9'"' \' mm9
-echo 'hgsql -h hgwbeta -Ne' "'" 'SELECT COUNT(*) FROM seq WHERE extFile = "'$extFileId_mm8'"' \' mm8
-echo 'hgsql -h hgwbeta -Ne' "'" 'SELECT COUNT(*) FROM seq WHERE extFile = "'$extFileId_mm7'"' \' mm7
 echo
-
 
 echo "\nthe end.\n"
 
