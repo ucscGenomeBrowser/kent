@@ -875,14 +875,14 @@ otherDbTable jaxQTL
 url http://www.informatics.jax.org/searches/accession_report.cgi?id=$$
 urlLabel MGI QTL Detail: 
 
-    track jaxQTLAsIs
+    track jaxQtlAsIs
     subTrack jaxQtlMapped
     shortLabel MGI Mouse QTL
     longLabel MGI Mouse QTLs Coarsely Mapped to $Organism
     color 200,100,0
     priority 1
 
-    track jaxQTLPadded
+    track jaxQtlPadded
     subTrack jaxQtlMapped
     shortLabel MGI Mouse QTL Padded
     longLabel MGI Mouse QTL Peak-Score Markers Padded to 100k and Coarsely Mapped to $Organism
@@ -2487,14 +2487,14 @@ termRegex (rs[1-9][0-9]*)
 searchPriority 13
 padding 250
 
-searchTable jaxQTLAsIs
+searchTable jaxQtlAsIs
 searchMethod exact
 searchType bed
 semiShortCircuit 1
 termRegex [a-z0-9]+
 searchPriority 50
 
-searchTable jaxQTLPadded
+searchTable jaxQtlPadded
 searchMethod exact
 searchType bed
 semiShortCircuit 1
