@@ -437,7 +437,7 @@ end
 
 echo " - ask for drop of old files from hgnfs1:"
 foreach mouse ( $mice )
-  echo "     /gbdb/$mouse/igtc/genetrap.$oldMonth.fasta"
+  echo "     /gbdb/$mouse/igtc/genetrap.$lastMonth.fasta"
 end
 
 echo
