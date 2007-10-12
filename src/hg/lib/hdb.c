@@ -35,7 +35,7 @@
 #include "customTrack.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.335 2007/10/09 21:21:29 angie Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.336 2007/10/12 22:10:30 angie Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -2438,8 +2438,8 @@ dyStringFree(&ds);
 return db;
 }
 
-struct dbDb *hDbDbList()
-/* Return list of databases that are actually online. 
+static struct dbDb *hDbDbListMaybeCheck(boolean doCheck)
+/* Return list of databases in dbDb.  If doCheck, check database existence.
  * The list includes the name, description, and where to
  * find the nib-formatted DNA files. Free this with dbDbFree. */
 {
@@ -2453,7 +2453,7 @@ sr = sqlGetResult(conn, "select * from dbDb order by orderKey,name desc");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     db = dbDbLoad(row);
-    if (hashLookup(hash, db->name))
+    if (!doCheck || hashLookup(hash, db->name))
         {
 	slAddHead(&dbList, db);
 	}
@@ -2465,6 +2465,22 @@ hashFree(&hash);
 hDisconnectCentral(&conn);
 slReverse(&dbList);
 return dbList;
+}
+
+struct dbDb *hDbDbList()
+/* Return list of databases that are actually online. 
+ * The list includes the name, description, and where to
+ * find the nib-formatted DNA files. Free this with dbDbFree. */
+{
+return hDbDbListMaybeCheck(TRUE);
+}
+
+static struct dbDb *hDbDbListDeadOrAlive()
+/* Return list of databases named in dbDb whether they exist or not.
+ * The list includes the name, description, and where to
+ * find the nib-formatted DNA files. Free this with dbDbFree. */
+{
+return hDbDbListMaybeCheck(FALSE);
 }
 
 struct dbDb *archiveDbDbLoad(char **row)
@@ -3932,7 +3948,7 @@ struct hash *dbNameHash = newHash(3);
 int rank = 0;
 
 /* Get list of all current and archived databases */
-regDb = hDbDbList();
+regDb = hDbDbListDeadOrAlive();
 archDb = hArchiveDbDbList();
 allDbList = slCat(regDb, archDb);
 
@@ -3973,7 +3989,7 @@ for (chain = chainList; chain != NULL; chain = chain->next)
     }
 
 /* Get list of all current and archived databases */
-regDb = hDbDbList();
+regDb = hDbDbListDeadOrAlive();
 archDb = hArchiveDbDbList();
 allDbList = slCat(regDb, archDb);
 
@@ -4017,7 +4033,7 @@ for (chain = chainList; chain != NULL; chain = chain->next)
 	hashAdd(hash, chain->toDb, chain->toDb);
 
 /* Get list of all current databases */
-allDbList = slCat(hDbDbList(),hArchiveDbDbList());
+allDbList = slCat(hDbDbListDeadOrAlive(),hArchiveDbDbList());
 
 /* Create a new dbDb list of all entries in the liftOver hash */
 for (dbDb = allDbList; dbDb != NULL; dbDb = nextDbDb)
