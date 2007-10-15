@@ -210,7 +210,7 @@
 #include "atomDb.h"
 #include "itemConf.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1355 2007/10/11 21:56:48 hiram Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1356 2007/10/15 17:04:07 hiram Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -787,7 +787,7 @@ if (url != NULL && url[0] != 0)
 	if (stringIn(":", idInUrl)) {
 	    char *itemClone = cloneString(idInUrl);
 	    char *suffix = stringIn(":", itemClone);
-	    char *suffixClone = cloneString(suffix);
+	    char *suffixClone = cloneString(suffix+1); /* +1 skip the : */
 	    char *nextColon = stringIn(":", suffixClone+1);
 	    if (nextColon)	/* terminate suffixClone suffix */
 		*nextColon = '\0';	/* when next colon is present */
