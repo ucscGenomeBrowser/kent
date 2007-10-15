@@ -22,6 +22,7 @@ SCRIPT_FILES = \
 	doRecipBest.pl \
 	doRepeatMasker.pl \
 	doWindowMasker.pl \
+	doSimpleRepeat.pl \
 	doSameSpeciesLiftOver.pl \
 	extractNestedRepeats.pl \
 	HgAutomate.pm \
