@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.38 2007/10/11 23:30:49 hiram Exp $"
+#	"$Id: mm9.txt,v 1.39 2007/10/15 23:42:08 hiram Exp $"
 #
 
 #######################################################################
@@ -5889,6 +5889,7 @@ doSplit.csh $(path1) {check out line+ $(path1).done}
     # ready for the multiz run
     ssh pk
     cd /cluster/data/mm9/bed/multiz30way
+    #	actually, the result directory here should be maf.split instead of maf
     mkdir -p maf run
     cd run
     mkdir penn
@@ -5973,6 +5974,23 @@ cat  << '_EOF_' > template
 # Longest finished job:           17887s     298.12m     4.97h    0.21d
 # Submission to last job:         17887s     298.12m     4.97h    0.21d
 
+    # put the split maf results back together into single chroms
+    ssh kkstore06
+    cd /cluster/data/mm9/bed/multiz30way
+    # here is where the result directory maf should have already been maf.split
+    mv maf maf.split
+    mkdir maf
+    # going to sort out the redundant header garbage to leave a cleaner maf
+    for C in `ls maf.split | sed -e "s#__.*##" | sort -u`
+do
+    echo ${C}
+    head -q -n 1 maf.split/${C}__*.maf | sort -u > maf/${C}.maf
+    grep -h "^#" maf.split/${C}__*.maf | egrep -v "maf version=1|eof maf" | \
+	sed -e "s#_MZ_[^ ]* # #g; s#__[0-9]##g" | sort -u >> maf/${C}.maf
+    grep -h -v "^#" maf.split/${C}__*.maf >> maf/${C}.maf
+    tail -q -n 1 maf.split/${C}__*.maf | sort -u >> maf/${C}.maf
+done
+
     # load tables for a look
     ssh hgwdev
     mkdir -p /gbdb/mm9/multiz30way/maf
@@ -5980,18 +5998,109 @@ cat  << '_EOF_' > template
                 /gbdb/mm9/multiz30way/maf
     cd /cluster/data/mm9/bed/multiz30way
     # this generates a large 1 Gb multiz30way.tab file in the directory
-    #	where it is running.  Might be better to run this over in scratch.
-    cat << '_EOF_' > loadMaf.csh
-#!/bin/csh -fex
-date
-hgLoadMaf -pathPrefix=/gbdb/mm9/multiz30way/maf mm9 multiz30way
+    #	where it is running.  Best to run this over in scratch.
+    cd /scratch/tmp
+    time nice -n +19 hgLoadMaf \
+	-pathPrefix=/gbdb/mm9/multiz30way/maf mm9 multiz30way
+    #	real    11m38.695s
+    #	Loaded 15881850 mafs in 34 files from /gbdb/mm9/multiz30way/maf
 
- # load summary table
- cat maf/*.maf |  nice hgLoadMafSummary mm9 -minSize=30000 -mergeGap=1500 \
+    # load summary table
+    time nice -n +19 cat /gbdb/mm9/multiz30way/maf/*.maf \
+	| hgLoadMafSummary mm9 -minSize=30000 -mergeGap=1500 \
 	 -maxSize=200000  multiz30waySummary stdin
+    #	Created 5648546 summary blocks from 154642836 components and 15872991
+    #	mafs from stdin
+    #	real    19m44.355s
+
+    # Gap Annotation
+    # prepare bed files with gap info
+    ssh kkstore06
+    mkdir /cluster/data/mm9/bed/multiz30way/anno
+    cd /cluster/data/mm9/bed/multiz30way/anno
+    mkdir maf run
+
+    for DB in `cat ../species.list`
+do
+    CDIR="/cluster/data/${DB}"
+    if [ ! -f ${CDIR}/${DB}.N.bed ]; then
+	echo "creating ${DB}.N.bed"
+	echo twoBitInfo -nBed ${CDIR}/${DB}.2bit ${CDIR}/${DB}.N.bed
+    else
+	ls -og ${CDIR}/${DB}.N.bed
+    fi
+done
+
+    cd run
+    rm -f nBeds sizes
+    for DB in `grep -v mm9 ../../species.list`
+do
+    echo "${DB} "
+    ln -s  /cluster/data/${DB}/${DB}.N.bed ${DB}.bed
+    echo ${DB}.bed  >> nBeds
+    ln -s  /cluster/data/${DB}/chrom.sizes ${DB}.len
+    echo ${DB}.len  >> sizes
+done
+
+    ssh kki
+    cd /cluster/data/mm9/bed/multiz30way/anno/run
+
+    cat << '_EOF_' > doAnno.csh
+#!/bin/csh -ef
+    set dir = /cluster/data/mm9/bed/multiz30way
+    set c = $1
+    cat $dir/maf/${c}.maf | \
+        nice mafAddIRows -nBeds=nBeds stdin /cluster/data/mm9/mm9.2bit $2
 '_EOF_'
-     time nice -n +19 ./loadMaf.csh > loadMaf.log 2>&1
-    #	Loaded 15881850 mafs in 75 files from /gbdb/mm9/multiz30way/ma
+    # << happy emacs
+    chmod +x doAnno.csh
+
+    cat << '_EOF_' > template
+#LOOP
+./doAnno.csh $(root1) {check out line+ /cluster/data/mm9/bed/multiz30way/anno/maf/$(root1).maf}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    #	there is no 16_random maf file
+    cut -f1 /cluster/data/mm9/chrom.sizes | grep -v 16_random > chrom.list
+    gensub2 chrom.list single template jobList
+    para create jobList
+    para try
+#	Crashed: 1 jobs
+# CPU time in finished jobs:      18129s     302.15m     5.04h    0.21d  0.001 y
+# IO & Wait Time:                 10273s     171.22m     2.85h    0.12d  0.000 y
+# Average job time:                 861s      14.34m     0.24h    0.01d
+# Longest finished job:            4376s      72.93m     1.22h    0.05d
+    #	one job was too large for this memory:
+    # job: ./doAnno.csh chr1 /cluster/data/mm9/bed/multiz30way/anno/maf/chr1.maf
+    # needLargeMem: Out of memory - request size 1129396 bytes, errno: 12
+    #	going to hgwdev for this one:
+    ssh hgwdev
+    cd /cluster/data/mm9/bed/multiz30way/anno/run
+    time ./doAnno.csh chr1 ../maf/chr1.maf
+    #	real    17m34.550s
+
+    ssh hgwdev
+    cd /cluster/data/mm9/bed/multiz30way/anno
+    mkdir -p /gbdb/mm9/multiz30way/anno/maf
+    ln -s /cluster/data/mm9/bed/multiz30way/anno/maf/*.maf \
+                /gbdb/mm9/multiz30way/anno/maf
+    cd /scratch/tmp
+    time nice -n +19 hgLoadMaf -pathPrefix=/gbdb/mm9/multiz30way/anno/maf \
+                mm9 multiz30wayAnno
+    #	Loaded 16799995 mafs in 34 files from /gbdb/mm9/multiz30way/anno/maf
+    #	real    18m12.171s
+
+    cat /cluster/data/mm9/chrom.sizes | \
+	awk '{if ($2 > 1000000) { print $1 }}' |
+	while read C
+do
+    echo /gbdb/mm9/multiz30way/anno/maf/$C.maf
+done | xargs cat | \
+        hgLoadMafSummary mm9 -minSize=30000 -mergeGap=1500 \
+            -maxSize=200000  multiz30wayAnnoSummary stdin
+
 
 #############################################################################
 #  BUILD miRNA TRACK (DONE - 2007-10-05 - Fan)
