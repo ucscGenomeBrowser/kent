@@ -459,8 +459,6 @@ private
         submission_file.file_size = File.size(fullName)
         submission_file.file_date = File.ctime(fullName)
         submission_file.submission_archive_id = archive.id 
-        submission_file.sf_type = File.extname(f)
-        submission_file.status = 'uploaded'
         unless submission_file.save
           flash[:warning] = "error saving submission_file record for: #{f}"
           return false

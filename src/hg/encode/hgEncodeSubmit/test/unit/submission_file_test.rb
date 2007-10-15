@@ -16,8 +16,6 @@ class SubmissionFileTest < Test::Unit::TestCase
     f.file_size = 32158
     f.file_date = Time.now
     f.submission_id = submissions('one').id
-    f.sf_type = "adr"
-    f.status = "uploaded"
     assert f.save
   end
 
@@ -26,8 +24,6 @@ class SubmissionFileTest < Test::Unit::TestCase
     f.file_size = 32158
     f.file_date = Time.now
     f.submission_id = submissions('one').id
-    f.sf_type = "adr"
-    f.status = "uploaded"
     assert !f.save
   end
 
@@ -36,8 +32,6 @@ class SubmissionFileTest < Test::Unit::TestCase
     f.file_name = "Test1.adr"
     f.file_date = Time.now
     f.submission_id = submissions('one').id
-    f.sf_type = "adr"
-    f.status = "uploaded"
     assert !f.save
   end
 
@@ -46,8 +40,6 @@ class SubmissionFileTest < Test::Unit::TestCase
     f.file_name = "Test1.adr"
     f.file_size = 32158
     f.submission_id = submissions('one').id
-    f.sf_type = "adr"
-    f.status = "uploaded"
     assert !f.save
   end
 
@@ -56,28 +48,6 @@ class SubmissionFileTest < Test::Unit::TestCase
     f.file_name = "Test1.adr"
     f.file_size = 32158
     f.file_date = Time.now
-    f.sf_type = "adr"
-    f.status = "uploaded"
-    assert !f.save
-  end
-
-  def test_create_fail_no_status
-    f = SubmissionFile.new
-    f.file_name = "Test1.adr"
-    f.file_size = 32158
-    f.file_date = Time.now
-    f.submission_id = submissions('one').id
-    f.sf_type = "adr"
-    assert !f.save
-  end
-
-  def test_create_fail_no_sftype
-    f = SubmissionFile.new
-    f.file_name = "Test1.adr"
-    f.file_size = 32158
-    f.file_date = Time.now
-    f.submission_id = submissions('one').id
-    f.status = "uploaded"
     assert !f.save
   end
 
