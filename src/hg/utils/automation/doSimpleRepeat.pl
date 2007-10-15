@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/doSimpleRepeat.pl instead.
 
-# $Id: doSimpleRepeat.pl,v 1.1 2007/10/15 19:49:45 angie Exp $
+# $Id: doSimpleRepeat.pl,v 1.2 2007/10/15 21:10:28 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -133,7 +133,7 @@ sub doCluster {
     @okOut = grep !/$okIn[0]/, @okOut;
   }
   my $clusterSeqDir = "$okIn[0]/$db";
-  my $clusterSeq = "$clusterSeqDir/$db.unmasked.2bit";
+  my $clusterSeq = "$clusterSeqDir/$db.doSimp.2bit";
   my $partDir .= "$okOut[0]/$db/TrfPart";
 
   # Cluster job script:
@@ -359,8 +359,18 @@ $unmaskedSeq = $opt_unmaskedSeq ? $opt_unmaskedSeq :
   "$HgAutomate::clusterData/$db/$db.unmasked.2bit";
 
 if (! -e $unmaskedSeq) {
-  die "Error: required file $unmaskedSeq does not exist. (use -unmaskedSeq <file> ?)\n";
+  die $opt_unmaskedSeq ? "Error: -unmaskedSeq $unmaskedSeq does not exist.\n" :
+    "Error: required file $unmaskedSeq does not exist. " .
+      "(use -unmaskedSeq <file> ?)\n";
 }
+die "Error: -unmaskedSeq filename must end in .2bit (got $unmaskedSeq).\n"
+  if ($unmaskedSeq !~ /\.2bit$/);
+if ($unmaskedSeq !~ /^\//) {
+  my $pwd = `pwd`;
+  chomp $pwd;
+  $unmaskedSeq = "$pwd/$unmaskedSeq";
+}
+
 my $pipe = &HgAutomate::mustOpen("twoBitInfo $unmaskedSeq stdout |");
 my $seqCount = 0;
 my $genomeSize = 0;
@@ -376,6 +386,8 @@ while (<$pipe>) {
   }
 }
 close($pipe);
+die "Could not open pipe from twoBitInfo $unmaskedSeq"
+  unless ($genomeSize > 0 && $seqCount > 0);
 
 $chromBased = ($seqCount <= $HgAutomate::splitThreshold);
 $useCluster = ($genomeSize > $singleRunSize);
