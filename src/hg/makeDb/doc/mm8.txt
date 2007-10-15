@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: mm8.txt,v 1.57 2007/10/08 22:49:32 hiram Exp $"
+#	"$Id: mm8.txt,v 1.58 2007/10/15 21:39:22 angie Exp $"
 #
 
 #  NOTE:  this doc may have genePred loads that fail to include
@@ -7592,6 +7592,9 @@ set out = $3
       ~/kent/src/hg/lib/genericAlias.sql > jaxPhenotypeAlias.sql
     hgLoadSqlTab mm8 jaxPhenotypeAlias \
       jaxPhenotypeAlias.sql jaxPhenotypeAlias.tab
+### NOTE FOR NEXT TIME ###
+### Call the table jaxQtl instead of jaxQTL -- QA doesn't like jaxQTL.
+### Use -sqlTable=$HOME/kent/src/hg/lib/jaxQtl.sql .
     # jaxQTL
     hgLoadBed -tab -notItemRgb -noBin \
       -sqlTable=$HOME/kent/src/hg/lib/jaxQTL.sql \

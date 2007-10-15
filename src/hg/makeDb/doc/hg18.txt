@@ -17610,6 +17610,8 @@ values ("bipolar", 0, 0, "composite")'
     # range.  Jim suggested padding those out to 100k.  So I will process
     # these in two batches, and make subtracks -- one for original, one 
     # for our modified set.
+### NOTE FOR NEXT TIME ###
+### Use jaxQtl instead of jaxQTL throughout.
     ssh kolossus
     mkdir /cluster/data/hg18/bed/jaxQTL
     cd /cluster/data/hg18/bed/jaxQTL
@@ -17703,6 +17705,8 @@ values ("bipolar", 0, 0, "composite")'
 
     ssh hgwdev
     cd /cluster/data/hg18/bed/jaxQTL  
+### NOTE FOR NEXT TIME ###
+### Call the tables jaxQtl* instead of jaxQTL* -- QA doesn't like jaxQTL.
     hgLoadBed hg18 jaxQTLAsIs hg18.jaxQTL.asIs.0.1.pruned.bed
     hgLoadBed hg18 jaxQTLPadded hg18.jaxQTL.padded.0.1.pruned.bed
   # Make sure there aren't any illegal coords:
