@@ -15,7 +15,7 @@
 #include "hgConfig.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.103 2007/10/09 06:54:52 angie Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.104 2007/10/15 21:21:34 angie Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -752,7 +752,6 @@ struct sqlResult *sr;
 safef(query, sizeof(query), "show tables like '%s'", table);
 if ((sr = sqlUseOrStore(sc,query,mysql_use_result, FALSE)) == NULL)
     return FALSE;
-while (sqlNextRow(sr) != NULL) {};	/* Just discard. */
 sqlFreeResult(&sr);
 return TRUE;
 }
