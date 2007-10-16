@@ -1833,13 +1833,55 @@ dataVersion Dec 2006, March 2007, May 2007
     color 51,43,109
     priority 30
 
+track encodeUcsdNgChip
+compositeTrack on
+shortLabel LI Ng TAF1 IMR90
+longLabel Ludwig Institute NimbleGen ChIP-chip: TAF1 antibody, IMR90 cells
+group encodeChip
+priority 51.0
+chromosomes chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr1,chr20,chr21,chr22,chr2,chr3,chr4,chr5,chr6,chr6_hla_hap1,chr7,chr8,chr9,chrX,chrY,chr4_random
+visibility hide
+maxHeightPixels 128:16:16
+type wig -5.61 6.47
+spanList 50
+viewLimits -1:2
+windowingFunction mean
+autoScale off
+origAssembly hg16
+dataVersion ENCODE June 2005 Freeze
+
+    track encodeUcsdNgChipSignal
+    subTrack encodeUcsdNgChip
+    shortLabel LI Ng TAF1 IMR90
+    longLabel Ludwig Institute NimbleGen ChIP-chip: TAF1 antibody, IMR90 cells 
+    priority 1
+
+    track encodeUcsdNgChipKnownSites
+    subTrack encodeUcsdNgChip
+    shortLabel TAF1 Known Sites
+    longLabel Ludwig Institute TAF1 Sites Matching to Known Transcripts
+    noInherit on
+    visibility hide
+    type bed 3
+    color 0,0,200
+    priority 2
+
+    track encodeUcsdNgChipNovelSites
+    subTrack encodeUcsdNgChip
+    shortLabel TAF1 Novel Sites
+    longLabel Ludwig Institute TAF1 Sites Matching No Known Transcripts
+    noInherit on
+    visibility hide
+    type bed 3
+    color 0,200,0
+    priority 3
+
 track encodeUcsdNgValChip
-superTrack encodeUcsdChipSuper dense
 compositeTrack on
 shortLabel LI Ng Validation
 longLabel Ludwig Institute ChIP-chip Validation: IMR90 cells
 group encodeChip
-priority 52.0
+priority 51.1
 visibility hide
 type bedGraph 4
 maxHeightPixels 128:16:16
