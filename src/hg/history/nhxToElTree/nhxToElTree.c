@@ -8,7 +8,7 @@
 #include "element.h"
 #include "chromColors.h"
 
-static char const rcsid[] = "$Id: nhxToElTree.c,v 1.3 2007/07/28 21:22:19 braney Exp $";
+static char const rcsid[] = "$Id: nhxToElTree.c,v 1.4 2007/10/16 19:14:21 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -24,15 +24,20 @@ errAbort(
   "   out.eltree     element tree with single element at root\n"
   "options:\n"
   "   -prune         prune dead branches\n"
+  "   -lost          add genomes for losses\n"
   );
 }
 
 static struct optionSpec options[] = {
    {"prune", OPTION_BOOLEAN},
+   {"lost", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
 boolean doPrune = FALSE;
+boolean addLost = FALSE;
+
+static int dupCount = 0;
 
 struct reconPriv
 {
@@ -105,7 +110,7 @@ if (tree->numEdges == 0)
     }
 
 assert( tree->numEdges == 2);
-assert(tree->ident->name == NULL);
+//assert(tree->ident->name == NULL);
 
 struct slName *myChildren = NULL;
 for(ii=0; ii < tree->numEdges ; ii++)
@@ -120,10 +125,16 @@ for(; name; name = name->next)
     }
 
 buf[strlen(buf) - 1] = 0;
-g->name = cloneString(buf);
+if (tree->ident->name)
+    g->name = tree->ident->name;
+else
+    {
+    g->name = cloneString(buf);
+    tree->ident->name = g->name;
+    }
+
 gp->number = *lowNumber;
 *lowNumber = *lowNumber + 1;
-tree->ident->name = g->name;
 
 slCat(childList, myChildren);
 }
@@ -303,6 +314,18 @@ if (gp->number < pp->number)
 
 	phyloAddEdge(n, tree);
 
+#if 0
+	if (addLost)
+	    {
+	    struct phyloTree *lossNode;
+
+	    lossNode = tree;
+	    fprintf(stderr,"adding lost node below %s\n",n->ident->name);
+	    AllocVar(lossNode);
+	    phyloAddEdge(n, lossNode);
+	    }
+#endif
+
 	checkBranch(n, tree);
 	}
 
@@ -342,7 +365,6 @@ if (reconParent->isDup)
 	{
 	struct phyloTree *t;
 	struct genome *g;
-	static int dupCount = 0;
 	char buffer[1024];
 
 	safef(buffer, sizeof(buffer), "dup.%d",++dupCount);
@@ -490,8 +512,16 @@ if (gp == NULL)
     g->priv = gp;
     }
 
-if (tree->isDup)
-    return gp->species = setGenomePath(tree->edges[0]);
+if (g->node->isDup)
+    {
+    char buffer[4096];
+
+    gp->species = setGenomePath(g->node->edges[0]);
+    safef(buffer, sizeof(buffer), "pre-%s",gp->species);
+    g->name = cloneString(buffer);
+    tree->ident->name = g->name;
+    return gp->species;
+    }
 
 gp->species = g->name;
 
@@ -561,6 +591,78 @@ for(ii=0; ii < tree->numEdges; ii++)
     fillGenomeHash(tree->edges[ii], speciesHash);
 }
 
+void addNewNode(struct phyloTree *parent, int edge)
+{
+struct phyloTree *child = parent->edges[edge];
+struct phyloTree *newNode;
+struct genome *g;
+struct genomePriv *gp;
+struct genome *cg = child->priv;
+struct genomePriv *cgp = cg->priv;
+char buffer[4096];
+
+safef(buffer, sizeof(buffer), "pre-%s",child->ident->name);
+
+AllocVar(g);
+AllocVar(gp);
+g->priv = gp;
+gp->species = cgp->species;
+g->name = cloneString(buffer);
+AllocVar(newNode);
+g->node = newNode;
+newNode->isDup = TRUE;
+newNode->priv = g;
+AllocVar(newNode->ident);
+newNode->ident->name = g->name;
+
+newNode->parent = parent;
+parent->edges[edge] = newNode;
+phyloAddEdge(newNode, child);
+}
+
+void findLost(struct phyloTree *tree)
+{
+if (!tree->isDup && (tree->numEdges == 1))
+    {
+    struct genome *g = tree->priv;
+    struct genome *tg = tree->edges[0]->priv;
+    struct genomePriv *tgp = tg->priv;
+
+    assert(!g->node->isDup);
+    assert(g->node->numEdges == 2);
+
+    int edge;
+    for(edge=0; edge < g->node->numEdges; edge++)
+	{
+	struct genome *cg = g->node->edges[edge]->priv;
+	struct genomePriv *cgp = cg->priv;
+
+	if (cgp->species != tgp->species)
+	    {
+	    struct phyloTree *parent = tree;
+	    struct phyloTree *lost;
+	    char buffer[4096];
+
+	    if (!g->node->edges[edge]->isDup)
+		{
+		addNewNode(g->node, edge);
+		cg = g->node->edges[edge]->priv;
+		}
+	    AllocVar(lost);
+	    AllocVar(lost->ident);
+	    lost->priv = cg;
+	    safef(buffer, sizeof(buffer), ".loss");
+	    lost->ident->name = cloneString(buffer);
+	    phyloAddEdge(parent, lost);
+	    }
+	}
+    }
+
+int ii;
+for(ii=0; ii < tree->numEdges; ii++)
+    findLost(tree->edges[ii]);
+}
+
 void nhxToElTree(char *speciesTreeName, char *reconTreeName, char *outFile)
 {
 struct phyloTree *speciesTree = phyloOpenTree(speciesTreeName);
@@ -614,6 +716,8 @@ assignDups(reconTree, tree);
 //printf("reconTree tree with dups referenced\n");
 //phyloPrintTree(reconTree, f);
 checkTree(reconTree);
+if (addLost)
+    findLost(reconTree);
 
 addElements(reconTree);
 
@@ -623,6 +727,7 @@ tree = findTop(speciesTree);
 
 if (doPrune)
     pruneDead(tree);
+
 
 //printf("element tree\n");
 outElementTrees(f, tree);
@@ -636,6 +741,7 @@ if (argc != 4)
     usage();
 
 doPrune = optionExists("prune");
+addLost = optionExists("lost");
 
 nhxToElTree(argv[1], argv[2], argv[3]);
 return 0;
