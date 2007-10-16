@@ -11,7 +11,7 @@
 #include "dystring.h"
 #include "math.h"
 
-static char const rcsid[] = "$Id: gapDist.c,v 1.1 2007/06/29 20:08:17 braney Exp $";
+static char const rcsid[] = "$Id: gapDist.c,v 1.2 2007/10/16 19:13:09 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -24,15 +24,18 @@ errAbort(
   "   in.gap         list of gaps\n"
   "   out.dist       distance matrix\n"
   "options:\n"
+  "   -chanceSwap=percent   chance that a row will be replaced by another row\n"
   );
 }
 
 static struct optionSpec options[] = {
+   {"chanceSwap", OPTION_INT},
    {NULL, 0},
 };
 
 char *bigWords[10*10*1024];
 
+int chanceSwap = 0;
 
 char **getNameAndNumber(char *inGapName, int *number)
 {
@@ -107,32 +110,47 @@ while( (wordsRead = lineFileChopNext(lf, bigWords, sizeof(bigWords)/sizeof(char 
 	    needAtom = TRUE;
 	    for(ii=0; ii < number; ii++)
 		for(jj=0; jj < number; jj++)
-		    if ((ii != jj) && (dists[ii] == dists[jj]))
+		    {
+		    int chance = rand() % 100;
+		    boolean beDiff = chance <  chanceSwap;
+
+		    if (beDiff || (dists[ii] != dists[jj]))
 			distMatrix[ii*number+jj]++;
+		    }
 	    }
 	}
     }
 
 int ii, jj;
 FILE *f = mustOpen(outDistName, "w");
-int max = 0;
 
-for(ii=0; ii < number; ii++)
-    for(jj=0; jj < number; jj++)
-	if (distMatrix[ii*number+jj] > max)
-	    max = distMatrix[ii*number+jj];
+/*
+for(jj=0; jj < number; jj++)
+    {
+    double byRand = 1 + 0.3 * ((double)rand() / RAND_MAX) ;
+    //printf("byRand %g\n",byRand);
 
-max *= 2;
+    for(ii=0; ii < number; ii++)
+	{
+	distMatrix[ii*number+jj] *= byRand;
+	distMatrix[jj*number+ii] *= byRand;
+	}
+    }
+    */
+
 fprintf(f, "%d\n",number);
 for(ii=0; ii < number; ii++)
     {
     fprintf(f, "%s ",species[ii]);
     for(jj=0; jj < number; jj++)
 	{
+	fprintf(f, "%d ", distMatrix[ii*number+jj]);
+	/*
 	if (distMatrix[ii*number+jj] != 0)
 	    fprintf(f, "%d ",max - distMatrix[ii*number+jj]);
 	else
 	    fprintf(f, "%d ",0);
+	    */
 	}
     fprintf(f, "\n");
     }
@@ -142,9 +160,11 @@ for(ii=0; ii < number; ii++)
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+srand(getpid());
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
+chanceSwap = optionInt("chanceSwap", 0);
 
 gapDist(argv[1],argv[2]);
 return 0;
