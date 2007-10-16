@@ -210,7 +210,7 @@
 #include "atomDb.h"
 #include "itemConf.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1357 2007/10/16 17:47:55 hiram Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1358 2007/10/16 18:16:09 hartera Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -751,10 +751,18 @@ if (sql != NULL)
 return id;
 }
 
-void printCustomUrl(struct trackDb *tdb, char *itemName, boolean encode)
-/* Print custom URL. */
+void printCustomUrlWithLabel(struct trackDb *tdb, char *itemName, char *urlSetting, boolean encode)
+/* Print custom URL specified in trackDb settings. */
 {
-char *url = tdb->url;
+char *url;
+char urlLabelSetting[10];
+
+/* check the url setting prefix and get the correct url setting from trackDb */
+if (sameWord(urlSetting, "url"))
+    url = tdb->url;
+else
+    url = trackDbSetting(tdb, urlSetting);
+
 if (url != NULL && url[0] != 0)
     {
     char *idInUrl = getIdInUrl(tdb, itemName);
@@ -803,9 +811,12 @@ if (url != NULL && url[0] != 0)
 	uUrl = subMulti(url, ArraySize(ins), ins, outs);
 	outs[0] = eItem;
 	eUrl = subMulti(url, ArraySize(ins), ins, outs);
-	printf("<B>%s </B>",
-		trackDbSettingOrDefault(tdb, "urlLabel", "Outside Link:"));
-	printf("<A HREF=\"%s\" target=_blank>", eUrl->string);
+        /* create the url label setting for trackDb from the url 
+           setting prefix */
+        safef(urlLabelSetting, sizeof(urlLabelSetting), "%sLabel", urlSetting);
+	printf("<B>%s </B>", 
+               trackDbSettingOrDefault(tdb, urlLabelSetting, "Outside Link:"));
+        printf("<A HREF=\"%s\" target=_blank>", eUrl->string);
 	
 	if (sameWord(tdb->tableName, "npredGene"))
 	    {
@@ -822,58 +833,20 @@ if (url != NULL && url[0] != 0)
     }
 }
 
-void printCustomUrlWithLabel(struct trackDb *tdb, char *itemName, 
-			     char *urlLabel, char *url, boolean encode)
-/* Print custom URL with specific URL label. */
+void printCustomUrl(struct trackDb *tdb, char *itemName, boolean encode)
+/* Wrapper to call printCustomUrlWithLabel using the url setting in trackDb */
 {
-char *name = NULL;
-if (url != NULL && url[0] != 0)
-    {
-    struct dyString *uUrl = NULL;
-    struct dyString *eUrl = NULL;
-    char startString[64], endString[64];
-    char *ins[7], *outs[7];
-    char *eItem = (encode ? cgiEncode(itemName) : cloneString(itemName));
+char urlSetting[10];
+safef(urlSetting, sizeof(urlSetting), "url");
 
-    sprintf(startString, "%d", winStart);
-    sprintf(endString, "%d", winEnd);
-    ins[0] = "$$";
-    outs[0] = itemName;
-    ins[1] = "$T";
-    outs[1] = tdb->tableName;
-    ins[2] = "$S";
-    outs[2] = seqName;
-    ins[3] = "$[";
-    outs[3] = startString;
-    ins[4] = "$]";
-    outs[4] = endString;
-    ins[5] = "$s";
-    outs[5] = skipChr(seqName);
-    ins[6] = "$D";
-    outs[6] = database;
-    uUrl = subMulti(url, ArraySize(ins), ins, outs);
-    outs[0] = eItem;
-    eUrl = subMulti(url, ArraySize(ins), ins, outs);
-    
-    printf("<B>%s </B>", urlLabel);
-    printf("<A HREF=\"%s\" target=_blank>", eUrl->string);
-    
-    if (sameWord(tdb->tableName, "npredGene"))
-    	{
-   	printf("%s (%s)</A><BR>\n", itemName, "NCBI MapView");
-	}
-    else
-    	{
-        name = (trackDbSetting(tdb, "urlName"));
-        if ((name != NULL) && (sameString(name, "gene")))
-            printf("%s</A><BR>\n", itemName);
-        else    
-            printf("%s</A><BR>\n", uUrl->string);
-	}
-    freeMem(eItem);
-    freeDyString(&uUrl);
-    freeDyString(&eUrl);
-    }
+printCustomUrlWithLabel(tdb, itemName, urlSetting, encode);
+}
+
+void printOtherCustomUrl(struct trackDb *tdb, char *itemName, char* urlSetting, boolean encode)
+/* Wrapper to call printCustomUrlWithLabel to use another url setting other than url in trackDb e.g. url2, this allows the use of multiple urls for a track
+ to be set in trackDb. */
+{
+printCustomUrlWithLabel(tdb, itemName, urlSetting, encode);
 }
 
 void genericSampleClick(struct sqlConnection *conn, struct trackDb *tdb, 
@@ -2528,9 +2501,13 @@ char query[256];
 char *res = NULL;
 boolean exists = FALSE;
 
-safef(query, sizeof(query), "select fileName from chromInfo where chrom = '%s'", chrom);
-res = sqlQuickQuery(conn, query, seqFile, 512);
-sqlDisconnect(&conn);
+/* if the database exists, check for the chromInfo file */
+if (sqlDatabaseExists(db))
+    {
+    safef(query, sizeof(query), "select fileName from chromInfo where chrom = '%s'", chrom);
+    res = sqlQuickQuery(conn, query, seqFile, 512);
+    sqlDisconnect(&conn);
+    }
 
 /* if there is not table or no information in the table or if the table */
 /* exists but the file can not be opened return false, otherwise sequence */
@@ -2687,11 +2664,17 @@ if (sqlDatabaseExists(otherDb) && chromSeqFileExists(otherDb, chain->qName))
         printf("Zoom so that browser window covers 1,000,000 bases or less "
            "and return here to see alignment details.<BR>\n");
         }
+    if (!sameWord(otherDb, "seq") && (hDbIsActive(otherDb)))
+        {
+        chainToOtherBrowser(chain, otherDb, otherOrg);
+        }
     }
-if (! sameWord(otherDb, "seq") && (hDbIsActive(otherDb)))
+/*
+if (!sameWord(otherDb, "seq") && (hDbIsActive(otherDb)))
     {
     chainToOtherBrowser(chain, otherDb, otherOrg);
     }
+*/
 chainFree(&chain);
 }
 
@@ -2837,8 +2820,7 @@ if (net->chainId != 0)
     chain = chainDbLoad(conn, database, chainTrack, seqName, net->chainId);
     if (chain != NULL)
         {
-        if (hDbIsActive(otherDb))
-	    chainToOtherBrowser(chain, otherDb, otherOrgBrowser);
+	chainToOtherBrowser(chain, otherDb, otherOrgBrowser);
 	chainFree(&chain);
 	}
     htmlHorizontalLine();
@@ -5086,15 +5068,6 @@ hFreeConn(&conn);
 hFreeConn(&conn2);
 }
 
-void printZfinCustomUrl (struct trackDb *tdb, char *itemName, boolean encode)
-/* print out a custom url for a ZFIN ID using url defined in trackDb */
-{
-char *url = tdb->url;
-
-if (url != NULL && url[0] != 0)
-    printCustomUrlWithLabel(tdb, itemName, "ZFIN ID:", url, encode);
-}
-
 void doZfishRHmap(struct trackDb *tdb, char *itemName) 
 /* Put up Radiation Hybrid map information for Zebrafish */
 {
@@ -5132,7 +5105,7 @@ if (rhMapInfoExists)
             if (!sameString(rhInfo->zfinId, ""))
                 {
                 printf("<H3>");
-                printZfinCustomUrl(tdb, rhInfo->zfinId, TRUE);
+                printCustomUrl(tdb, rhInfo->zfinId, TRUE);
                 printf("</H3>\n");
                 }
             printf("<P><HR ALIGN=\"CENTER\"></P>\n<TABLE>\n");
@@ -9102,7 +9075,6 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 int start = cartInt(cart, "o");
-char *url2 = trackDbSetting(tdb, "url2");
 
 headerItem = cloneString(geneName);
 genericHeader(tdb, headerItem);
@@ -9116,7 +9088,7 @@ if ((sameString(tdb->tableName, "encodePseudogeneConsensus")) ||
         {
         name2 = cloneString(row[0]);
         }
-    printCustomUrlWithLabel(tdb, name2, "Yale Pseudogene Link:", url2, TRUE);
+    printOtherCustomUrl(tdb, name2, "url2", TRUE);
     }
 genericGenePredClick(conn, tdb, geneName, start, NULL, NULL);
 printTrackHtml(tdb);
@@ -13938,9 +13910,7 @@ sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     {
     ncRna = ncRnaLoad(row);
-    printCustomUrlWithLabel(tdb, item, 
-			    "Ensembl Non-Coding Gene: ", 
-			    "http://www.ensembl.org/Homo_sapiens/geneview?gene=$$", TRUE);
+    printCustomUrl(tdb, item, TRUE);
     printf("<B>Type:</B> %s<BR>", ncRna->type);
     if (ncRna->extGeneId != NULL)
     if (!sameWord(ncRna->extGeneId, ""))
@@ -13979,30 +13949,22 @@ if ((row = sqlNextRow(sr)) != NULL)
     /* disply appropriate RNA type and URL */
     if (sameWord(wgRna->type, "HAcaBox"))
     	{
-	printCustomUrlWithLabel(tdb, item, 
-			"Laboratoire de Biologie Moléculaire Eucaryote: ", 
-			"http://www-snorna.biotoul.fr/plus.php?id=$$", TRUE);
-    	printf("<B>RNA Type:</B> H/ACA Box snoRNA\n");
+	printCustomUrl(tdb, item, TRUE); 
+        printf("<B>RNA Type:</B> H/ACA Box snoRNA\n");
 	}
     if (sameWord(wgRna->type, "CDBox"))
     	{
-	printCustomUrlWithLabel(tdb, item, 
-			"Laboratoire de Biologie Moléculaire Eucaryote: ", 
-			"http://www-snorna.biotoul.fr/plus.php?id=$$", TRUE);
-    	printf("<B>RNA Type:</B> CD Box snoRNA\n");
+	printCustomUrl(tdb, item, TRUE);
+        printf("<B>RNA Type:</B> CD Box snoRNA\n");
 	}
     if (sameWord(wgRna->type, "scaRna"))
     	{
-	printCustomUrlWithLabel(tdb, item, 
-			"Laboratoire de Biologie Moléculaire Eucaryote: ", 
-			"http://www-snorna.biotoul.fr/plus.php?id=$$", TRUE);
-    	printf("<B>RNA Type:</B> small Cajal body-specific RNA\n");
+	printCustomUrl(tdb, item, TRUE);
+        printf("<B>RNA Type:</B> small Cajal body-specific RNA\n");
 	}
     if (sameWord(wgRna->type, "miRna"))
     	{
-	printCustomUrlWithLabel(tdb, item, 
-			"The miRNA Registry: ", 
-    			"http://microrna.sanger.ac.uk/cgi-bin/sequences/mirna_entry.pl?id=$$", TRUE);
+	printOtherCustomUrl(tdb, item, "url2", TRUE);
 	printf("<B>RNA Type:</B> microRNA\n");
 	}
     printf("<BR>");
