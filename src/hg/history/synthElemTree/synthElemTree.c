@@ -7,7 +7,7 @@
 #include "phyloTree.h"
 #include "element.h"
 
-static char const rcsid[] = "$Id: synthElemTree.c,v 1.9 2006/05/17 15:17:53 braney Exp $";
+static char const rcsid[] = "$Id: synthElemTree.c,v 1.10 2007/10/16 19:15:25 braney Exp $";
 
 int generation = 0;
 
@@ -29,8 +29,10 @@ errAbort(
   "   -MaxGenomes     max number of genomes to generate\n"
   "   -SpeciesWt      divided by total weight to get probablity a node will speciate\n"
   "   -DupWt          divided by total weight to get probablity a node will have a duplication\n"
+  "   -DupMax         maximum number of elements in a dup (default NumElements)\n"
   "   -DelWt          divided by total weight to get probablity a node will have a deletion\n"
   "   -InverseWt      divided by total weight to get probablity a node will have an inversion\n"
+  "   -InverseMax     maximum number of elements in a inversion (default NumElements)\n"
   "   -NoWt           divided by total weight to get probablity a node will just clock branch length\n"
   "   -history=file   put rearrangement history in file \n"
   );
@@ -46,6 +48,8 @@ static struct optionSpec options[] = {
     {"SpeciesWt", OPTION_INT},
     {"DelWt", OPTION_INT},
     {"DupWt", OPTION_INT},
+    {"DupMax", OPTION_INT},
+    {"InverseMax", OPTION_INT},
     {"NoWt", OPTION_INT},
     {"InverseWt", OPTION_INT},
     {"history", OPTION_STRING},
@@ -61,6 +65,8 @@ int MaxGeneration = 40000;
 int MaxGenomes = 50;
 int SpeciesWt = 0;
 int DupWt = 0;
+int DupMax = 0;
+int InverseMax = 0;
 int DelWt = 0;
 int NoWt = 0;
 int InverseWt = 0;
@@ -170,10 +176,10 @@ boolean checkInf(struct element *e1, struct element *e2, struct element *e3, str
 char *ptr1, *ptr2, *ptr3, *ptr4;
 
 verbose(2,"check4\n");
-if (ptr1 = checkAfter(e1))
-    if (ptr2 = checkBefore(e2))
-	if (ptr3 = checkAfter(e3))
-	    if (ptr4 = checkBefore(e4))
+if ((ptr1 = checkAfter(e1)))
+    if ((ptr2 = checkBefore(e2)))
+	if ((ptr3 = checkAfter(e3)))
+	    if ((ptr4 = checkBefore(e4)))
 		{
 		verbose(2,"check %s %s %s %s\n",ptr1,ptr2,ptr3,ptr4);
 		hashAdd(InfHash, ptr1, NULL);
@@ -197,12 +203,12 @@ boolean checkInf6(struct element *e1, struct element *e2, struct element *e3, st
 char *ptr1, *ptr2, *ptr3, *ptr4, *ptr5, *ptr6;
 
 verbose(2,"check6\n");
-if (ptr1 = checkAfter(e1))
-    if (ptr2 = checkBefore(e2))
-	if (ptr3 = checkAfter(e3))
-	    if (ptr4 = checkBefore(e4))
-		if (ptr5 = checkAfter(e5))
-		    if (ptr6 = checkBefore(e6))
+if ((ptr1 = checkAfter(e1)))
+    if ((ptr2 = checkBefore(e2)))
+	if ((ptr3 = checkAfter(e3)))
+	    if ((ptr4 = checkBefore(e4)))
+		if ((ptr5 = checkAfter(e5)))
+		    if ((ptr6 = checkBefore(e6)))
 		{
 		verbose(2,"check %s %s %s %s %s %s\n",ptr1,ptr2,ptr3,ptr4, ptr5,ptr6);
 		hashAdd(InfHash, ptr1, NULL);
@@ -269,13 +275,21 @@ return g1;
 boolean invert(struct genome **list, struct genome *g, FILE *hf)
 {
 struct genome *g1;
-struct phyloTree *t1;
-struct element *p, *afterStart, *pEnd, *prev, *start;
+struct element *p, *afterStart,  *prev, *start;
 struct element *e1 , *e2, *e3, *e4;
 int ii;
-char buffer[512];
 int r = 1 + random() % (slCount(g->elements) - 2);
 int n = 1 + random() % (slCount(g->elements)  - r - 1  ) ;
+int max = slCount(g->elements);
+
+if (InverseMax)
+    max = InverseMax;
+
+r = 1 + random() % (slCount(g->elements) - 2);
+n = 1 + random() % (max   - 1  ) ;
+
+if (r + n >= slCount(g->elements) - 1)
+    n = slCount(g->elements) - r - 2;
 
 if (hf)
     fprintf(hf, "%d I %s %d %d\n",generation,g->name, r, r + n);
@@ -379,21 +393,37 @@ boolean duplicate(struct genome **list, struct genome *g, FILE *hf)
 {
 int ii;
 struct genome *g1;
-struct phyloTree *t1;
 struct element *p, *end, *e1, *e2, *e3, *e4, *e5, *e6;
-char buffer[512];
-int r = 1 + random() % (slCount(g->elements) - 3);
-int n = 1 + random() % (slCount(g->elements) - 2 - r  ) ;
-int t = random() % (slCount(g->elements) - 2);
-int didIt = 0;
+int r;
+int n;
+int t;
 struct element *eList;
-int count;
+//int count;
+int max = slCount(g->elements);
+
+if (DupMax)
+    max = DupMax;
+
+if (slCount(g->elements) == 3)
+    r = 1;
+else
+    r = 1 + random() % (slCount(g->elements) - 3);
+n = 1 + random() % (max - 2 ) ;
+t = random() % (slCount(g->elements) - 2);
+
+
+if (r + n >= slCount(g->elements) - 1)
+    n = slCount(g->elements) - r - 2;
 
 //for (count = 0; (count < 100) && (t >= r - 2) && ( t < r + n + 2); count++)
+/*
 for (count = 0; (count < 100) && (t >= r - 1) && ( t < r + n + 1); count++)
     t = 1 + random() % (slCount(g->elements) - 2);
 if (count == 100)
     return FALSE;
+    */
+if (n <= 0) n = 1;
+//printf("duplicating starting at %d, num %d, t %d\n",r,n,t);
 
 if (hf)
     fprintf(hf, "%d D %s %d %d %d\n",generation,g->name, r, r + n, t);
@@ -478,12 +508,9 @@ return TRUE;
 boolean delete(struct genome **list, struct genome *g, FILE *hf)
 {
 struct genome *g1;
-struct phyloTree *t1;
 struct element *p, *del;
-char buffer[512];
 int r;
 int n;
-int didIt = 0;
 int ii;
 
 if (slCount(g->elements) == 2)
@@ -554,13 +581,13 @@ slReverse(&g1->elements);
 }
 
 
+
 void synthElemTree(char *outFile, char *historyFile)
 {
 boolean firstTime = TRUE;
 FILE *f = mustOpen(outFile,"w");
 FILE *hf = NULL;
 struct phyloTree *root = NULL;
-struct phyloTree *uroot = NULL;
 struct phyloTree *node = NULL;
 struct genome *g;
 int ii;
@@ -605,7 +632,6 @@ node->ident->name = g->name = cloneString("U");
 
 for (; generation < MaxGeneration ;generation++)
     {
-    struct genome *prevGenome = NULL;
     struct genome *nextG = NULL;
     struct genome *nextList = NULL;
     int weight = SpeciesWt + NoWt + DupWt + InverseWt + DelWt;
@@ -613,7 +639,6 @@ for (; generation < MaxGeneration ;generation++)
     for(g = gList ; g;   g = nextG)
 	{
 	int r = random() % weight;
-	struct genome *newG = NULL;
 	struct phyloTree *node = g->node;
 	boolean didIt = TRUE;
 
@@ -687,6 +712,8 @@ MaxGenomes = optionInt( "MaxGenomes", 0);
 SpeciesWt = optionInt( "SpeciesWt", 0);
 DelWt = optionInt( "DelWt", 0);
 DupWt = optionInt( "DupWt", 0);
+DupMax = optionInt( "DupMax", 0);
+InverseMax = optionInt( "InverseMax", 0);
 NoWt = optionInt( "NoWt", 0);
 seed = optionInt( "seed", seed);
 Trace = optionExists("trace");
@@ -699,7 +726,7 @@ if (InfSites)
 if (0 == SpeciesWt + DupWt + InverseWt + DelWt)
     errAbort("must specify at least one weight");
 
-printf("using seed: %ld\n",seed);
+verbose(1,"using seed: %ld\n",seed);
 srandom(seed);
 synthElemTree(argv[1], historyFile);
 return 0;
