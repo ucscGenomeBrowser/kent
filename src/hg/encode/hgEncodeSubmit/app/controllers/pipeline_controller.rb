@@ -75,8 +75,11 @@ class PipelineController < ApplicationController
       Dir.entries(submissionDir).each { 
         |f| 
         fullName = File.join(submissionDir,f)
-        if File.ftype(fullName) == "file"
-          File.delete(fullName)
+        cmd = "rm -fr #{fullName}"
+        exitCode = system(cmd)
+        unless exitCode 
+          flash[:warning] = "error cleaning up temporary upload subdirectory: <br>command=[#{cmd}], exitCode = #{exitCode}<br>"  
+          return false
         end
       }
       Dir.delete(submissionDir)
@@ -300,13 +303,17 @@ class PipelineController < ApplicationController
     # clean out directory (this will be handled more delicately later for re-uploading a submission)
     Dir.entries(submissionDir).each do 
       |f| 
-
       fullName = File.join(submissionDir,f)
-      if File.ftype(fullName) == "file"
-        unless keepers[f]
-          # debug
-          #msg += "submissionDir: #{f} #{File.ftype(fullName)}<br>\n" 
-          File.delete(fullName)
+      unless keepers[f] or (f == ".") or (f == "..")
+        
+        # debug
+        #msg += "submissionDir: #{f} #{File.ftype(fullName)}<br>\n" 
+        cmd = "rm -fr #{fullName}"
+        exitCode = system(cmd)
+        unless exitCode 
+          flash[:warning] = "error cleaning up temporary upload subdirectory: <br>command=[#{cmd}], exitCode = #{exitCode}<br>"  
+	  redirect_to :action => 'show', :id => @submission
+          return false
         end
       end
     end
@@ -330,6 +337,7 @@ class PipelineController < ApplicationController
     end
     unless @submission.save
       flash[:warning] = "submission record save failed"
+      redirect_to :action => 'show', :id => @submission
       return false
     end
 
@@ -420,12 +428,12 @@ private
     @filename = archive.file_name
     # handle unzipping the archive
     if ["zip", "ZIP"].any? {|ext| @filename.ends_with?("." + ext) }
-      cmd = "unzip -j -o  #{path_to_file} -d #{uploadDir}"     # .zip 
+      cmd = "unzip -o  #{path_to_file} -d #{uploadDir}"     # .zip 
     else
       if ["gz", "GZ"].any? {|ext| @filename.ends_with?("." + ext) }
-        cmd = "tar --no-recursion -xzf #{path_to_file} -C #{uploadDir}"  # .gz  gzip
+        cmd = "tar -xzf #{path_to_file} -C #{uploadDir}"  # .gz  gzip
       else  
-        cmd = "tar --no-recursion -xjf #{path_to_file} -C #{uploadDir}"  # .bz2 bzip2
+        cmd = "tar -xjf #{path_to_file} -C #{uploadDir}"  # .bz2 bzip2
       end
     end
 
@@ -435,41 +443,7 @@ private
       return false
     end
  
-
-    # process the archive files
-    #msg += "uploadDir:<br>\n" 
-    Dir.entries(uploadDir).each do
-      |f| 
-      fullName = File.join(uploadDir,f)
-      if File.ftype(fullName) == "file"
-        #msg += "&nbsp;#{f}<br>\n"
-        #unless ["bed", "idf", "adf", "sdrf" ].any? {|ext| f.downcase.ends_with?("." + ext) }
-        #  flash[:warning] = "unknown file type: #{f}"
-        #  return false
-        #end 
-    
-        # delete any equivalent submissionFile records
-	@submission.submission_archives.each do |c|
-          old = SubmissionFile.find(:first, :conditions => ['submission_archive_id = ? and file_name = ?', c.id, f])
-          old.destroy if old
-        end
-
-        submission_file = SubmissionFile.new
-        submission_file.file_name = f
-        submission_file.file_size = File.size(fullName)
-        submission_file.file_date = File.ctime(fullName)
-        submission_file.submission_archive_id = archive.id 
-        unless submission_file.save
-          flash[:warning] = "error saving submission_file record for: #{f}"
-          return false
-        end
-    
-        toName = submissionDir + "/" + f    
-        # move file from temporary upload dir into parent dir
-        File.rename(fullName,toName);
-
-      end
-    end
+    process_archive(archive.id, submissionDir, uploadDir, "")
 
     # cleanup: delete temporary upload subdirectory
     if File.exists?(uploadDir)
@@ -496,5 +470,64 @@ private
 
   end
 
+  def my_join(path,name)
+    if (path == "") 
+      return name
+    end
+    if (name == "") 
+      return path
+    end
+    return File.join(path,name)
+  end
+
+  def process_archive(archive_id, submissionDir, uploadDir, relativePath)
+    # process the archive files
+    #msg += "uploadDir:<br>\n" 
+    fullPath = my_join(uploadDir,relativePath)
+    Dir.entries(fullPath).each do
+      |f| 
+      fullName = my_join(fullPath,f)
+      if (File.ftype(fullName) == "directory")
+        if (f != ".") and (f != "..")
+          process_archive(archive_id, submissionDir, uploadDir, my_join(relativePath,f))
+        end
+      else 
+        if File.ftype(fullName) == "file"
+          #msg += "&nbsp;#{f}<br>\n"
+          #unless ["bed", "idf", "adf", "sdrf" ].any? {|ext| f.downcase.ends_with?("." + ext) }
+          #  flash[:warning] = "unknown file type: #{f}"
+          #  return false
+          #end 
+   
+	  relName = my_join(relativePath,f)
+ 
+          # delete any equivalent submissionFile records
+  	  @submission.submission_archives.each do |c|
+            old = SubmissionFile.find(:first, :conditions => ['submission_archive_id = ? and file_name = ?', c.id, relName])
+            old.destroy if old
+          end
+
+          submission_file = SubmissionFile.new
+          submission_file.file_name = relName
+          submission_file.file_size = File.size(fullName)
+          submission_file.file_date = File.ctime(fullName)
+          submission_file.submission_archive_id = archive_id 
+          unless submission_file.save
+            flash[:warning] = "error saving submission_file record for: #{f}"
+            return false
+          end
+    
+          parentDir = my_join(submissionDir, relativePath)
+          toName = my_join(parentDir, f)    
+          # move file from temporary upload dir into parent dir
+	  unless File.exists?(parentDir)
+	    Dir.mkdir(parentDir)
+	  end
+          File.rename(fullName,toName);
+
+        end
+      end
+    end
+  end
 
 end
