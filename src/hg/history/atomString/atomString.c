@@ -11,7 +11,7 @@
 #include "dystring.h"
 #include "values.h"
 
-static char const rcsid[] = "$Id: atomString.c,v 1.5 2007/09/11 15:19:57 braney Exp $";
+static char const rcsid[] = "$Id: atomString.c,v 1.6 2007/10/16 18:55:37 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -211,7 +211,7 @@ if (!ignoreStrand)
     for(; strInt; atomInt = atomInt->next,strInt = strInt->next)
 	if (strInt->strand != atomInt->strand)
 	    {
-	    printf("strand not matching\n");
+	    //printf("strand not matching\n");
 	    return NULL;
 	    }
     if ((strInt != NULL ) || (atomInt != NULL))
