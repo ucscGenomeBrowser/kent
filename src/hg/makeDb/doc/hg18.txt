@@ -11415,7 +11415,16 @@ gzip illumina.bed
     mysql> delete from snpArrayAffy6SV where chrom = "chr0";
     mysql> update snpArrayAffy6SV set chromStart = chromStart - 1;
 
-
+##########################################################################
+# Venu from Affy requested to remove about 25,000 items from
+# snpArrayAffy6 track.
+#
+# Imported the list into the table, snpArrayAffy6Remove, in hg18.
+#
+# Issued a simple MySQL command to delete records in snpArrayAffy6 
+# that having ids in snpArrayAffy6Remove (sorry did not write down it).
+# 
+# This was done 10/8/07. Fan.
 ##########################################################################
 # New Illumina Array data (Heather April 2007)
 # HumanHap300v3, HumanHap550v3, HumanHap650v3
