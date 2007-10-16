@@ -12,7 +12,7 @@
 #include "maf.h"
 #include "twoBit.h"
 
-static char const rcsid[] = "$Id: atomToMaf.c,v 1.2 2007/06/20 23:04:47 braney Exp $";
+static char const rcsid[] = "$Id: atomToMaf.c,v 1.3 2007/10/16 19:02:21 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -32,6 +32,7 @@ errAbort(
   "   -base=filename  name of file containing atoms with base atoms\n"
   "   -dups           output only dup'ed atoms\n"
   "   -mega=atoms     the mega-atom file for sequence names\n"
+  "   -atomName=name  the name of the atom in mega (if not base)\n"
   );
 }
 
@@ -40,6 +41,7 @@ static struct optionSpec options[] = {
    {"base", OPTION_STRING},
    {"dups", OPTION_BOOLEAN},
    {"mega", OPTION_STRING},
+   {"atomName", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -47,6 +49,7 @@ char *baseName = NULL;
 int minLen = 1;
 boolean justDups = FALSE;
 char *megaName = NULL;
+char *atomName = NULL;
 
 struct nameList
 {
@@ -303,6 +306,8 @@ for(; atoms; atoms = atoms->next)
 	if ((aliList == NULL) && (noSpecies || sameString(species, instance->species)))
 	    {
 	    struct mafComp *firstComp = NULL;
+	    struct hash *hash = hashMustFindVal(sizeHash, instance->species);
+	    int size = hashIntVal(hash, instance->chrom);
 
 	    AllocVar(ali);
 	    slAddHead(&aliList, ali);
@@ -316,7 +321,10 @@ for(; atoms; atoms = atoms->next)
 	    //printf("firstComp %s\n",buffer);
 	    firstComp->src = cloneString(buffer);
 	    firstComp->strand = instance->strand;
-	    firstComp->start = instance->start;
+	    if (instance->strand == '+')
+		firstComp->start = instance->start;
+	    else
+		firstComp->start = size - instance->end;
 	    firstComp->size = instance->end - instance->start;
 	    }
 	}
@@ -334,6 +342,9 @@ for(; atoms; atoms = atoms->next)
 		first = FALSE;
 	    else
 		{
+		struct hash *hash = hashMustFindVal(sizeHash, instance->species);
+		int size = hashIntVal(hash, instance->chrom);
+
 		AllocVar(comp);
 		slAddHead(&ali->components, comp);
 
@@ -343,7 +354,10 @@ for(; atoms; atoms = atoms->next)
 //		printf("later Comp %s\n",buffer);
 		comp->src = cloneString(buffer);
 		comp->strand = instance->strand;
-		comp->start = instance->start;
+		if (instance->strand == '+')
+		    comp->start = instance->start;
+		else
+		    comp->start = size - instance->end;
 		comp->size = instance->end - instance->start;
 		}
 	    }
@@ -379,9 +393,16 @@ for(; twoBits; twoBits = twoBits->next)
 		{
 		struct dnaSeq *seq;
 		int size = hashIntVal(hash, seqName);
+		int start = comp->start;
+		int end = comp->start + comp->size;
 
-		seq = twoBitReadSeqFrag(bitFile, seqName, 
-		    comp->start, comp->start + comp->size);
+		if (comp->strand == '-')
+		    {
+		    start = size - end;
+		    end = size - comp->start;
+		    }
+
+		seq = twoBitReadSeqFrag(bitFile, seqName, start, end);
 		comp->text = seq->dna;
 		if (comp->strand == '-')
 		    reverseComplement(comp->text, strlen(comp->text));
@@ -517,27 +538,34 @@ struct hash *atomHash = newHash(20);
 struct atom *atoms = getAtoms(inAtomName, atomHash);
 struct hash *sizeHash = getSizeHashes(sizeFile);
 struct twoBits *twoBits = get2BitNames(seqFile);
+struct hash *megaHash = NULL;
+
+if (megaName != NULL)
+    {
+    megaHash = newHash(20);
+    getAtoms(megaName, megaHash);
+    }
 
 if (baseName == NULL)
     {
     FILE *f = mustOpen(outMafName, "w");
+    struct atom *megaAtom = NULL;
 
     slReverse(&atoms);
 
-    outAtomList(f, species, atoms, twoBits, sizeHash, NULL);
+    if (atomName && megaName)
+	{
+	printf("trying  to get mega and got \n");
+	megaAtom = hashMustFindVal(megaHash, atomName);
+	}
+
+    outAtomList(f, species, atoms, twoBits, sizeHash, megaAtom);
     }
 else
     {
     struct hash *baseHash = getBaseHash(baseName);
     struct hashCookie cook = hashFirst(baseHash);
     struct hashEl *hashEl;
-    struct hash *megaHash = NULL;
-
-    if (megaName != NULL)
-	{
-	megaHash = newHash(20);
-	getAtoms(megaName, megaHash);
-	}
 
     while((hashEl = hashNext(&cook)) != NULL)
 	{
@@ -564,7 +592,9 @@ else
 
 	    verbose(2, "opened %s\n",buffer);
 	    if (megaName)
+		{
 		megaAtom = hashMustFindVal(megaHash, hashEl->name);
+		}
 
 	    outAtomList(f, species, atomList, twoBits, sizeHash, megaAtom);
 	    fclose(f);
@@ -583,6 +613,7 @@ if (argc != 6)
 minLen = optionInt("minLen", minLen);
 baseName = optionVal("base", NULL);
 megaName = optionVal("mega", NULL);
+atomName =  optionVal("atomName", NULL);
 justDups = optionExists("dups");
 
 atomToMaf(argv[1],argv[2],argv[3],argv[4],argv[5]);
