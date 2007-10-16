@@ -15,7 +15,7 @@
 #include "hgConfig.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.104 2007/10/15 21:21:34 angie Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.105 2007/10/16 18:06:01 angie Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -748,12 +748,14 @@ boolean sqlTableWildExists(struct sqlConnection *sc, char *table)
 {
 char query[512];
 struct sqlResult *sr;
+char **row;
+boolean exists;
 
 safef(query, sizeof(query), "show tables like '%s'", table);
-if ((sr = sqlUseOrStore(sc,query,mysql_use_result, FALSE)) == NULL)
-    return FALSE;
+sr = sqlGetResult(sc, query);
+exists = ((row = sqlNextRow(sr)) != NULL);
 sqlFreeResult(&sr);
-return TRUE;
+return exists;
 }
 
 struct sqlResult *sqlGetResult(struct sqlConnection *sc, char *query)

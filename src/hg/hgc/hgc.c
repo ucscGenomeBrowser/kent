@@ -210,7 +210,7 @@
 #include "atomDb.h"
 #include "itemConf.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1356 2007/10/15 17:04:07 hiram Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1357 2007/10/16 17:47:55 hiram Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -13644,6 +13644,16 @@ struct snp snp125ToSnp(struct snp125 *snp125)
 {
 struct snp snp;
 //AllocVar(snp);
+snp.exception = NULL;
+snp.source = NULL;
+snp.locType = NULL;
+snp.func = NULL;
+snp.avHetSE = 0.0;
+snp.avHet = 0.0;
+snp.valid = NULL;
+snp.class = NULL;
+snp.molType = NULL;
+snp.next = NULL;
 snp.chrom=cloneString(snp125->chrom);
 snp.chromStart=snp125->chromStart;
 snp.chromEnd=snp125->chromEnd;
