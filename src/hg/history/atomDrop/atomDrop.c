@@ -11,7 +11,7 @@
 #include "dystring.h"
 #include "math.h"
 
-static char const rcsid[] = "$Id: atomDrop.c,v 1.3 2007/06/20 22:59:00 braney Exp $";
+static char const rcsid[] = "$Id: atomDrop.c,v 1.4 2007/10/16 18:44:18 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -26,7 +26,9 @@ errAbort(
   "options:\n"
   "   -minLen=N       minimum size of atom to consider\n"
   "   -justSort       just sort the atoms and output in sort order\n"
+  "   -justDups       just drop the atoms with dups\n"
   "   -percent        percent to drop (default 5)\n"
+  "   -dupScore       use score that encourages dups\n"
   );
 }
 
@@ -34,12 +36,16 @@ static struct optionSpec options[] = {
    {"percent", OPTION_INT},
    {"minLen", OPTION_INT},
    {"justSort", OPTION_BOOLEAN},
+   {"justDups", OPTION_BOOLEAN},
+   {"dupScore", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
 int maxGap = 100000;
 int minLen = 1;
 boolean justSort = FALSE;
+boolean justDups = FALSE;
+boolean dupScore = FALSE;
 boolean noOverlap = FALSE;
 char *stringsFile = NULL;
 int dropPercent = 5;
@@ -206,11 +212,21 @@ const struct atom *a = *((struct atom **)va);
 const struct atom *b = *((struct atom **)vb);
 double aMult = (a->numSpeciesDuped + 1);
 double bMult = (b->numSpeciesDuped + 1);
+double aScore;
+double bScore;
 
 //double aScore = aMult * pow( a->length, a->numSpecies);
 //double bScore = bMult * pow( b->length, b->numSpecies);
-double aScore = log(a->numInstances) * aMult * (double)a->length * (double)a->numSpecies* (double)a->numSpecies;
-double bScore = log(b->numInstances) * bMult * (double)b->length * (double)b->numSpecies* (double)b->numSpecies;
+if (dupScore)
+    {
+    aScore = log(a->numInstances) * aMult * (double)a->length * (double)a->numSpecies* (double)a->numSpecies;
+    bScore = log(b->numInstances) * bMult * (double)b->length * (double)b->numSpecies* (double)b->numSpecies;
+    }
+else
+    {
+    aScore = (1 + log((double)a->length)) * (double)a->numSpecies* (double)a->numSpecies;
+    bScore = (1 + log((double)b->length)) * (double)b->numSpecies* (double)b->numSpecies;
+    }
 
 if (aScore - bScore > 0)
     return 1;
@@ -313,20 +329,30 @@ for(; atoms; atoms = atoms->next)
 	{
 	boolean same = FALSE;
 
+	printf("looking at %s  instance %d\n",atoms->name, instance->num);
 	if (lastSpecies && sameString(instance->species, lastSpecies))
 	    same = TRUE;
 
 	if (same)
 	    dups++;
+	printf("dups %d lastSpecies %s same %d\n",dups,lastSpecies,same);
 	if (lastSpecies && !same)
 	    {
 	    if (dups >= 1)
+		{
+		printf("species duped\n");
 		atoms->numSpeciesDuped++;
+		}
 
 	    dups = 0;
 	    count++;
 	    }
 	lastSpecies = instance->species;
+	}
+    if (dups >= 1)
+	{
+	printf("out species duped\n");
+	atoms->numSpeciesDuped++;
 	}
     atoms->numSpecies = count + 1;
     }
@@ -341,28 +367,48 @@ int count = 0;
 
 calcNumSpecies(atoms);
 
-slSort(&atoms, atomScoreCmp);
-
-if (!justSort)
+if (justDups)
     {
+    struct atom *prev = NULL;
+
     for(atom = atoms; atom ; atom = atom->next)
-	count++;
-
-    count *= dropPercent;
-    count /= 100;
-    count++;
-
-    for(atom = atoms; count-- ; atom = atom->next)
-	;
-    slSort(&atom, atomNameCmp);
-    }
-else
-    {
-    slReverse(&atoms);
+	{
+	if (atom->numSpeciesDuped)
+	    {
+	    if (prev == NULL)
+		atoms = atom->next;
+	    else
+		prev->next = atom->next;
+	    }
+	else
+	    prev = atom;
+	}
     atom = atoms;
     }
+else 
+    {
+    slSort(&atoms, atomScoreCmp);
+    if (!justSort)
+	{
+	for(atom = atoms; atom ; atom = atom->next)
+	    count++;
 
-FILE *f = fopen(outAtomName, "w");
+	count *= dropPercent;
+	count /= 100;
+	count++;
+
+	for(atom = atoms; count-- ; atom = atom->next)
+	    ;
+	slSort(&atom, atomNameCmp);
+	}
+    else
+	{
+	slReverse(&atoms);
+	atom = atoms;
+	}
+    }
+
+FILE *f = mustOpen(outAtomName, "w");
 
 for(; atom; atom = atom->next)
     {
@@ -394,6 +440,8 @@ if (argc != 3)
 dropPercent = optionInt("percent", dropPercent);
 minLen = optionInt("minLen", minLen);
 justSort = optionExists("justSort");
+justDups = optionExists("justDups");
+dupScore = optionExists("dupScore");
 
 atomDrop(argv[1],argv[2]);
 return 0;
