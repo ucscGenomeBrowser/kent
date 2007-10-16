@@ -140,6 +140,27 @@ while( (wordsRead = lineFileChopNext(lf, bigWords, sizeof(bigWords)/sizeof(char 
 		    errAbort("parent is null %s",bigWords[ii+1]);
 
 		newEdge(element->parent, element);
+
+		if ((ptr = strchr(bigWords[ii+1], '*')) == NULL)
+		    {
+		    struct element *parent = element->parent;
+
+		    if (parent->edges[0] != element)
+			{
+			assert (parent->numEdges > 1);
+			int jj;
+
+			for(jj=0; jj < parent->numEdges; jj++)
+			    if (parent->edges[jj] == element)
+				break;
+				
+			assert(jj < parent->numEdges);
+
+			struct element *swap = parent->edges[0];
+			parent->edges[0] = element;
+			parent->edges[jj] = swap;
+			}
+		    }
 		}
 	    else
 		{
@@ -655,9 +676,23 @@ fprintf(f, ">%s %d %d %g\n",g->name, slCount(g->elements), node->numEdges, node-
 
 for(e = g->elements, ii = 0; e; e = e->next, ii++)
     {
+    struct element *parent = e->parent;
+    int jj = 0;
+
     if (e->isFlipped)
 	fprintf(f, "-");
-    fprintf(f,"%s.%s %d ",e->name,e->version, (e->parent) ? e->parent->count + 1 : 0 );
+    if ((parent) && (parent->numEdges > 1))
+	{
+	for(jj=0; jj < parent->numEdges; jj++)
+	    if (parent->edges[jj] == e)
+		break;
+	assert(jj < parent->numEdges);
+	}
+
+    if (parent && (node->parent->numEdges == 1) && (jj != 0))
+	fprintf(f,"%s.%s %d* ",e->name,e->version, (e->parent) ? e->parent->count + 1 : 0);
+    else
+	fprintf(f,"%s.%s %d ",e->name,e->version, (e->parent) ? e->parent->count + 1 : 0 );
     if (((ii + 1) % 8) == 0)
 	fprintf(f,"\n");
     }
