@@ -12,7 +12,7 @@
 #include "values.h"
 #include "atom.h"
 
-static char const rcsid[] = "$Id: atomToSeq.c,v 1.1 2007/06/10 22:37:54 braney Exp $";
+static char const rcsid[] = "$Id: atomToSeq.c,v 1.2 2007/10/16 19:03:39 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -27,17 +27,21 @@ errAbort(
   "   out.seq        list of sequence (atom orderings)\n"
   "options:\n"
   "   -minLen=N       minimum size of atom to consider\n"
+  "   -overlap        allow blocks to overlap with just a warning\n"
+  "   -cover=100.atom output a set of atoms with 100% coverage\n"
   );
 }
 
 static struct optionSpec options[] = {
+   {"overlap", OPTION_BOOLEAN},
    {"minLen", OPTION_INT},
+   {"cover", OPTION_STRING},
    {NULL, 0},
 };
 
 extern int minLen;
 
-
+boolean allowOverlap = FALSE;
 
 struct seqBlock
 {
@@ -70,16 +74,33 @@ return a->start - b->start;
 
 void validateSI(struct speciesInfo *si)
 {
-struct seqBlock *sb;
+struct seqBlock *sb, *lastSb = NULL;
 int lastEnd = 0;
+
 si->min = si->blockList->start;
 
 for(sb=si->blockList; sb ;  sb = sb->next)
     {
+    if (lastEnd > sb->start) 
+	{
+
+	int overlap=0;
+
+	overlap = lastEnd - sb->start;
+	if (overlap > .2 * (sb->end - sb->start))
+	    {
+	    warn("dropping: count %d instance %d atom %d with instance %d atom %d\n",overlap,sb->instanceNum, sb->atomNum,lastSb->instanceNum, lastSb->atomNum);
+	    lastSb->next = sb->next;
+	    continue;
+	    }
+	if (allowOverlap)
+	    warn("overlapping blocks:  lastEnd %d start %d",lastEnd,sb->start);
+	else
+	    errAbort("overlapping blocks:  lastEnd %d start %d",lastEnd,sb->start);
+	}
     si->count++;
-    if (lastEnd > sb->start)
-	errAbort("overlapping blocks:  lastEnd %d start %d",lastEnd,sb->start);
     lastEnd = sb->end;
+    lastSb = sb;
     }
 si->max = lastEnd;
 }
@@ -141,7 +162,7 @@ for(si = speciesList; si ; si = si->next)
     int atomNum = 0;
     int count = 0;
 
-    printf("build sequence for %s\n",si->name);
+    verbose(2,"build sequence for %s\n",si->name);
     while( (wordsRead = lineFileChopNext(lf, words, sizeof(words)/sizeof(char *)) ))
 	{
 	if (wordsRead == 0)
@@ -200,15 +221,15 @@ for(si = speciesList; si ; si = si->next)
     if (si->blockList == NULL)
 	continue;
 
-    printf("sorting sequence for %s\n",si->name);
+    verbose(2,"sorting sequence for %s\n",si->name);
     slSort(&si->blockList, blockCmp);
 
     validateSI(si);
 
-    printf("outputting sequence for %s\n",si->name);
+    verbose(2,"outputting sequence for %s\n",si->name);
     outputSI(f, si);
 
-    printf("clearing sequence for %s\n",si->name);
+    verbose(2,"clearing sequence for %s\n",si->name);
     for(sb = si->blockList; sb ; sb = nextSb)
 	{
 	nextSb = sb->next;
@@ -225,6 +246,8 @@ if (argc != 4)
     usage();
 
 minLen = optionInt("minLen", minLen);
+allowOverlap = optionExists("overlap");
+coverFile = option
 
 atomToSeq(argv[1],argv[2], argv[3]);
 return 0;
