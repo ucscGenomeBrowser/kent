@@ -13,7 +13,7 @@
 #include "atom.h"
 #include "bits.h"
 
-static char const rcsid[] = "$Id: atomBest.c,v 1.1 2007/06/20 23:11:38 braney Exp $";
+static char const rcsid[] = "$Id: atomBest.c,v 1.2 2007/10/16 18:43:27 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -28,15 +28,18 @@ errAbort(
   "   in.atom        list of atoms to string\n"
   "options:\n"
   "   -minLen=N       minimum size of atom to consider\n"
+  "   -dupScore       use scoring that encourages dups\n"
   );
 }
 
 static struct optionSpec options[] = {
    {"minLen", OPTION_INT},
+   {"dupScore", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
 extern int minLen;
+boolean dupScore = FALSE;
 
 struct score
 {
@@ -109,8 +112,12 @@ double scoreAtom(struct atom *a)
 int numSpecies, numDuped;
 getStats(a, &numSpecies, &numDuped);
 double aMult = (numDuped + 1);
+double aScore;
 
-double aScore = (1 + log(a->numInstances)) * aMult * (double)a->length * (double)numSpecies* (double)numSpecies;
+if (dupScore)
+    aScore = (1 + log(a->numInstances)) * aMult * (double)a->length * (double)numSpecies* (double)numSpecies;
+else
+    aScore =  (1 + log((double)a->length)) * (double)numSpecies* (double)numSpecies;
 
 return aScore;
 }
@@ -244,7 +251,10 @@ for(;;)
 //	printf("%d %g\n",atomScores[ii].index,atomScores[ii].score);
 
     if (checkAtom(speciesHash, atomList[atomScores[0].index]))
+	{
+	verbose(2, "grabbed atom from %d\n",atomScores[0].index);
 	printAtom(f, atomList[atomScores[0].index]);
+	}
     freeAtom(&atomList[atomScores[0].index]);
 
     fflush(f);
@@ -261,6 +271,7 @@ if (argc < 4)
     usage();
 
 minLen = optionInt("minLen", minLen);
+dupScore = optionExists("dupScore");
 
 atomBest(argv[1], argv[2], &argv[3], argc - 3);
 return 0;
