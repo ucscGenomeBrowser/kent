@@ -92,7 +92,7 @@ MGC_DBS = \
 	bosTau2
 
 GSID_DBS = \
-	hiv1 vax004 hivgne8
+	hiv1 vax004 hivgne8 hivmn hivmn1
 
 ARCHIVED_DBS = \
 	rheMac1 \
