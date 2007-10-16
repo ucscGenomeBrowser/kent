@@ -12,7 +12,7 @@
 #include "hash.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.35 2007/09/10 22:24:56 kate Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.36 2007/10/16 09:49:45 aamp Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -410,91 +410,6 @@ bool trackDbHasCompositeSetting(struct trackDb *tdb)
 /* Determine if this has a trackDb setting indicating it is a composite */
 {
     return (trackDbSetting(tdb, "compositeTrack") != NULL);
-}
-
-void trackDbMakeCompositeHierarchy(struct trackDb **pTdbList)
-/* change the data structure around so the subtracks are linked */
-/* together hooked into the composite tracks and not a part of the */
-/* main trackDb list. */
-{
-struct hash *tdbHash = newHash(10);
-struct hashEl *hashElList, *el;
-struct trackDb *cur;
-struct trackDb *subTrackList = NULL;
-struct trackDb *newList = NULL;
-if (!pTdbList || !(*pTdbList))
-    return;
-/* Hash up the trackDbs that aren't a subTrack. */
-/* Put the subTracks all on a list. */
-while ((cur = slPopHead(pTdbList)) != NULL)
-    {
-    if (trackDbSetting(cur, "subTrack") != NULL)
-	slAddHead(&subTrackList, cur);
-    else
-	hashAdd(tdbHash, cur->tableName, cur);
-    }
-slReverse(&subTrackList);
-/* Go through each subTrack and add it to the ->subTracks list */
-/* of its main tdb in the hash. */
-while ((cur = slPopHead(&subTrackList)) != NULL)
-    {
-    char *mainTable = trackDbSetting(cur, "subTrack");
-    struct trackDb *mainTdb = hashMustFindVal(tdbHash, mainTable);
-    slAddHead(&(mainTdb->subtracks), cur);
-    }
-/* Finally, make the hash a list. */
-hashElList = hashElListHash(tdbHash);
-for (el = hashElList; el != NULL; el = el->next)
-    {
-    struct trackDb *elTdb = (struct trackDb *)el->val;
-    slAddHead(&newList, elTdb);
-    }
-/* Sort tracks, then subTracks. */
-slSort(&newList, trackDbCmp);
-for (cur = newList; cur != NULL; cur = cur->next)
-    {
-    if (cur->subtracks)
-	slSort(&(cur->subtracks), trackDbCmp);
-    }
-*pTdbList = newList;
-hashElFreeList(&hashElList);
-hashFree(&tdbHash);
-}
-
-void trackDbFillInCompositeSettings(struct trackDb **pTdbList)
-/* Add to the subtracks, the other settings in the track. */
-{
-struct trackDb *cur;
-if (!pTdbList || !(*pTdbList))
-    return;
-for (cur = *pTdbList; cur != NULL; cur = cur->next)
-    {
-    if (cur->subtracks)
-	{
-	struct hashEl *compSetHelList = hashElListHash(cur->settingsHash);
-	struct trackDb *subtrack; 
-	for (subtrack = cur->subtracks; subtrack != NULL; subtrack = subtrack->next)
-	    {
-	    struct hash *subSetHash = subtrack->settingsHash;
-	    struct hashEl *hel;
-	    for (hel = compSetHelList; hel != NULL; hel = hel->next)
-		{
-		if (!hashFindVal(subSetHash, hel->name))
-		    hashAdd(subSetHash, hel->name, cloneString((char *)hel->val));
-		}
-	    }
-	hashElFreeList(&compSetHelList);
-	}
-    }
-}
-
-void trackDbMakeComposites(struct trackDb **pTdbList)
-/* Within a list of trackDbs, force the trackDbs that are subTracks to */
-/* inherit the settings of the main track, and also create a list of */
-/* subTracks for the tdb->subTracks pointer. */
-{
-trackDbMakeCompositeHierarchy(pTdbList);
-trackDbFillInCompositeSettings(pTdbList);
 }
 
 struct superTrackInfo {
