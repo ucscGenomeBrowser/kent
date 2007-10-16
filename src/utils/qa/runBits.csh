@@ -53,7 +53,7 @@ if ( -z $db.gapFile ) then
   exit
 endif
 
-echo "check for overlap to unbridged gaps:"
+echo "check for overlap (including introns) to unbridged gaps:"
 rm -f $db.unbridgedGap.bed
 # create file of unbridged gaps
 if ( $split == "unsplit" ) then
