@@ -3403,7 +3403,7 @@ maxHeightPixels 100:25:11
 autoScaleDefault Off
 windowingFunction mean
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-dataVersion ENCODE Oct 2005 Freeze
+dataVersion ENCODE Oct 2005 Freeze, June 2007
 
     track encodeTbaPhastCons
     subTrack encodeTbaCons
@@ -3438,6 +3438,7 @@ dataVersion ENCODE Oct 2005 Freeze
     subTrack encodeTbaCons
     shortLabel TBA SCONE Cons New
     longLabel TBA SCONE Conservation 2007 Update
+    dataVersion June 2007
     color 100,90,160
     priority 5
 
@@ -3451,7 +3452,7 @@ visibility hide
 exonArrows off
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 type bed 5 .
-dataVersion ENCODE Oct 2005 Freeze
+dataVersion ENCODE Oct 2005 Freeze, June 2007
 
     track encodeTbaPhastConsEl
     subTrack encodeTbaElements
@@ -3486,6 +3487,7 @@ dataVersion ENCODE Oct 2005 Freeze
     subTrack encodeTbaElements
     shortLabel TBA SCONE New
     longLabel TBA SCONE Conserved Elements 2007 Update
+    dataVersion June 2007
     color 100,90,160
     priority 5
 
