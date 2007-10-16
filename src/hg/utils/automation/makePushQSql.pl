@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/makePushQSql.pl instead.
 
-# $Id: makePushQSql.pl,v 1.11 2007/09/28 20:24:53 angie Exp $
+# $Id: makePushQSql.pl,v 1.12 2007/10/16 00:02:14 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -46,7 +46,7 @@ push queue guidance when in doubt.
 
 # Globals:
 my ($db);
-my ($sql, $prefixPattern, @wigTables);
+my ($sql, $prefixPattern, @wigTables, @netODbs);
 my %noPush = ( 'bacEndPairsBad' => 1,
 	       'bacEndPairsLong' => 1,
 	       'genscanSubopt' => 1,
@@ -211,7 +211,10 @@ sub getGenbankEntry {
       }
     }
     foreach my $t (@genbankHelpfulTables) {
-      if (! defined $allTables->{$t}) {
+      if (defined $allTables->{$t}) {
+	push @genbankTablesInDb, $t;
+	delete $allTables->{$t};
+      } else {
 	&HgAutomate::verbose(1, "$db does not have $t\n");
       }
     }
@@ -351,6 +354,8 @@ sub getTrackEntries {
 				     "chain/net download $downloads !\n");
 	      }
 	    }
+	    my $oDb = $ODb;  $oDb =~ s/^(\w)/\l$1/;
+	    push @netODbs, $oDb;
 	  }
 	}
       }
@@ -599,9 +604,21 @@ _EOF_
      qapushq does not already have a table named $db.)  Then use the Push
      Queue web interface to check the contents of all entries.
  *** If you haven't already, please add $db to makeDb/schema/all.joiner !
-
+     It should be in both \$gbd and \$chainDest.
 _EOF_
   );
+  if (@netODbs) {
+    &HgAutomate::verbose(1, <<_EOF_
+ *** When $db is on the RR (congrats!), please doBlastz -swap if you haven't
+     already, and make pushQ entries for the chains/nets to $db in these
+     other dbs:
+_EOF_
+    );
+    foreach my $oDb (@netODbs) {
+      &HgAutomate::verbose(1, "       $oDb\n");
+    }
+  }
+  &HgAutomate::verbose(1, "\n");
 }
 
 
