@@ -7,7 +7,7 @@
 #include "element.h"
 #include "psGfx.h"
 
-static char const rcsid[] = "$Id: printTree.c,v 1.2 2006/03/03 21:43:27 braney Exp $";
+static char const rcsid[] = "$Id: printTree.c,v 1.3 2007/10/16 19:14:59 braney Exp $";
 
 int psSize = 5*72;
 int labelStep = 1;
@@ -35,7 +35,6 @@ int currY = 0;
 void treeOut(struct phyloTree *node, struct psGfx *ps, int depth)
 {
 struct genome *g = node->priv;
-struct element *e;
 int ii;
 char buffer[512];
 
@@ -60,7 +59,7 @@ for(ii=0; ii < node->numEdges; ii++)
 
 void printTree(char *treeFile, char *psFile)
 {
-struct phyloTree *node = eleReadTree(treeFile);
+struct phyloTree *node = eleReadTree(treeFile, FALSE);
 struct psGfx *ps = psOpen(psFile, psSize, psSize, psSize, psSize, margin);
 
 treeOut(node, ps, 0);
