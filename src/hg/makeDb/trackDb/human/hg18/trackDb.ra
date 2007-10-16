@@ -1272,15 +1272,6 @@ visibility hide
 type bed 8 +
 url http://www.ensembl.org/Homo_sapiens/geneview?gene=$$
 
-track wgRna
-shortLabel sno/miRNA
-longLabel C/D and H/ACA snoRNAs, scaRNAs and microRNAs from snoRNABase and miRBase
-group genes
-priority 63.5
-visibility hide
-color 200,80,0
-type bed 8 +
-
 searchTable wgRna
 searchTable ncRna
 searchMethod fuzzy

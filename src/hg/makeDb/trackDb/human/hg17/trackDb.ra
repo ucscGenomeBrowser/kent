@@ -189,15 +189,6 @@ color 20,90,0
 type bed 6 +
 mafTrack multiz17way
 
-track wgRna
-shortLabel sno/miRNA
-longLabel C/D and H/ACA Box snoRNAs, scaRNAs, and microRNAs from Weber and Griffiths-Jones
-group genes
-priority 63.5
-visibility hide
-color 200,80,0
-type bed 8 +
-
 track targetScanS
 shortLabel T-ScanS miRNA
 longLabel TargetScanS miRNA Regulatory Sites
@@ -1902,11 +1893,6 @@ searchMethod exact
 searchType bed
 searchPriority 10
 termRegex uc\.[0-9]+
-
-searchTable wgRna
-searchMethod fuzzy
-searchType bed
-searchPriority 10
 
 searchTable ux16
 searchMethod exact
