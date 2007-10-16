@@ -10,7 +10,7 @@
 #include "element.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: atomToBed.c,v 1.3 2007/06/22 20:23:00 braney Exp $";
+static char const rcsid[] = "$Id: atomToBed.c,v 1.4 2007/10/16 19:01:32 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -25,16 +25,18 @@ errAbort(
   "   out.bed        name of file to output bed\n"
   "options:\n"
   "   -minLen=N       minimum size of atom to consider\n"
+  "   -instance       add instance number to name\n"
   );
 }
 
 static struct optionSpec options[] = {
    {"minLen", OPTION_INT},
+   {"instance", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
 int minLen = 1;
-
+boolean addInstance = FALSE;
 
 struct instance;
 
@@ -261,13 +263,20 @@ for(; atoms; atoms = atoms->next)
 	    }
 	}
 
+    int instanceNum = 0;
     for(instances = atoms->instances; instances; instances = instances->next)
 	{
+	instanceNum++;
 	if (sameString(species, instances->species))
 	    {
-	    fprintf(f, "%s %d %d %s %d %c\n",
-		instances->chrom, instances->start, instances->end,
-		atoms->name, scoreBits, instances->strand);
+	    if (!addInstance)
+		fprintf(f, "%s %d %d %s %d %c\n",
+		    instances->chrom, instances->start, instances->end,
+		    atoms->name, scoreBits, instances->strand);
+	    else
+		fprintf(f, "%s %d %d %s.%d %d %c\n",
+		    instances->chrom, instances->start, instances->end,
+		    atoms->name, instanceNum, scoreBits, instances->strand);
 	    }
 	}
     }
@@ -281,6 +290,7 @@ if (argc != 4)
     usage();
 
 minLen = optionInt("minLen", minLen);
+addInstance = optionExists("instance");
 
 atomToBed(argv[1],argv[2],argv[3]);
 return 0;
