@@ -12,7 +12,7 @@
 #include "values.h"
 #include "atom.h"
 
-static char const rcsid[] = "$Id: atomFillGaps.c,v 1.1 2007/06/10 21:50:01 braney Exp $";
+static char const rcsid[] = "$Id: atomFillGaps.c,v 1.2 2007/10/16 18:54:24 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -27,15 +27,18 @@ errAbort(
   "   out.atom       list of atoms with gaps filled\n"
   "options:\n"
   "   -minLen=N       minimum size of atom to consider\n"
+  "   -padOut         pad out edges instead of adding new atoms\n"
   );
 }
 
 static struct optionSpec options[] = {
+   {"padOut", OPTION_BOOLEAN},
    {"minLen", OPTION_INT},
    {NULL, 0},
 };
 
 extern int minLen;
+boolean padOut= FALSE;
 
 struct species
 {
@@ -63,6 +66,7 @@ int start, end;
 char strand;
 char *atomName;
 int instanceNum;
+struct instance *instance;
 };
 
 struct species *getSpeciesRanges(char *bedName, struct hash *hash)
@@ -121,6 +125,7 @@ int outputSI( FILE *f, int *atomNum, struct speciesInfo *si,
 struct seqBlock *sb = si->blockList;
 struct species *range = hashMustFindVal(speciesRangeHash, si->name);
 int current = range->chromStart;
+struct instance *lastInstance = NULL;
 char *chrom = sb->chrom;
 int added = 0;
 
@@ -129,23 +134,57 @@ for(; sb ; sb = sb->next)
     if (current < sb->start)
 	{
 	added += sb->start - current;
-	*atomNum = *atomNum + 1;
-	fprintf(f, ">%d %d %d\n",*atomNum,sb->start - current, 1);
-	fprintf(f,"%s.%s:%d-%d %c\n", si->name,sb->chrom,current+1,sb->start,'+');
+	if (!padOut)
+	    {
+	    *atomNum = *atomNum + 1;
+	    fprintf(f, ">%d %d %d\n",*atomNum,sb->start - current, 1);
+	    fprintf(f,"%s.%s:%d-%d %c\n", si->name,sb->chrom,current+1,sb->start,'+');
+	    }
+	else
+	    {
+	    int dif = sb->start - current;
+	    int wid = sb->end - sb->start;
+
+	    if (dif)
+		{
+		if (lastInstance == NULL)
+		    {
+		    sb->instance->start -= dif;
+		    }
+		else
+		    {
+		    int half = dif / 2;
+		    lastInstance->end += half;
+		    sb->instance->start -= (dif - half);
+		    }
+		verbose(5,"%d %d\n",wid,dif);
+		}
+	    }
 	}
     current = sb->end;
+    lastInstance = sb->instance;
     }
 
 if (current < range->chromEnd)
     {
     added += range->chromEnd - current;
     *atomNum = *atomNum + 1;
-    fprintf(f, ">%d %d %d\n",*atomNum,range->chromEnd - current, 1);
-    fprintf(f,"%s.%s:%d-%d %c\n", si->name,chrom,current+1,range->chromEnd,'+');
+    if (!padOut)
+	{
+	fprintf(f, ">%d %d %d\n",*atomNum,range->chromEnd - current, 1);
+	fprintf(f,"%s.%s:%d-%d %c\n", si->name,chrom,current+1,range->chromEnd,'+');
+	}
+    else
+	{
+	int dif = range->chromEnd - current;
+	if (lastInstance)
+	    lastInstance->end += dif;
+	}
     }
 
-verbose(2, "Species %s: percent lineage specific %g\n",
-    si->name,100.0*added/(range->chromEnd- range->chromStart));
+if (!padOut)
+    verbose(2, "Species %s: percent lineage specific %g\n",
+	si->name,100.0*added/(range->chromEnd- range->chromStart));
 
 return added;
 }
@@ -153,7 +192,8 @@ return added;
 void atomFillGaps(char *bedName, char *inAtomName, char *outAtomName)
 {
 struct hash *atomHash = newHash(20);
-struct atom *atoms = getAtoms(inAtomName, atomHash);
+struct atom *atomList = getAtoms(inAtomName, atomHash);
+struct atom *atoms = atomList;
 struct hash *speciesHash = newHash(0);
 struct hash *speciesRangeHash = newHash(0);
 struct species *speciesList = getSpeciesRanges(bedName, speciesRangeHash);
@@ -161,8 +201,8 @@ FILE *f = mustOpen(outAtomName, "w");
 int maxNum = 0;
 speciesList = NULL;
 
-slReverse(&atoms);
-for(; atoms; atoms = atoms->next)
+slReverse(&atomList);
+for(atoms = atomList; atoms; atoms = atoms->next)
     {
     struct instance *instance = atoms->instances;
     int instanceNum = 0;
@@ -170,8 +210,9 @@ for(; atoms; atoms = atoms->next)
 
     maxNum = maxNum > atomNum ? maxNum : atomNum;
 
-    fprintf(f, ">%s %d %d\n",atoms->name, 
-	    atoms->length, atoms->numInstances);
+    if (!padOut)
+	fprintf(f, ">%s %d %d\n",atoms->name, 
+		atoms->length, atoms->numInstances);
 
     for(; instance; instance = instance->next)
 	{
@@ -185,11 +226,13 @@ for(; atoms; atoms = atoms->next)
 	sb->strand = instance->strand;
 	sb->atomName = atoms->name;
 	sb->instanceNum = instanceNum++;
+	sb->instance = instance;
 
 	slAddHead(&si->blockList, sb);
 
-	fprintf(f,"%s.%s:%d-%d %c\n",instance->species,instance->chrom,
-	    instance->start+1, instance->end, instance->strand); 
+	if (!padOut)
+	    fprintf(f,"%s.%s:%d-%d %c\n",instance->species,instance->chrom,
+		instance->start+1, instance->end, instance->strand); 
 	}
     }
 
@@ -215,6 +258,38 @@ verbose(2, "Percent lineage specific: %g (%d/%d)\n",
     100.0*linSize / totalSize, linSize,totalSize);
 verbose(2, "Average size %g\n",(double)linSize/(maxNum - oldMax));
 
+if (padOut)
+    {
+    for(atoms = atomList; atoms; atoms = atoms->next)
+	{
+	struct instance *instance;
+	int max = 0;
+
+	for( instance = atoms->instances;  instance; instance = instance->next)
+	    {
+	    int dist = instance->end - instance->start;
+
+	    if (dist > max) 
+		max = dist;
+	    }
+
+	atoms->length = max;
+	} 
+
+    for(atoms = atomList; atoms; atoms = atoms->next)
+	{
+	struct instance *instance;
+
+	fprintf(f,">%s %d %d\n",atoms->name,atoms->length, atoms->numInstances);
+
+	for( instance = atoms->instances;  instance; instance = instance->next)
+	    {
+	    fprintf(f,"%s.%s:%d-%d %c\n",instance->species,instance->chrom,
+		instance->start+1, instance->end, instance->strand); 
+	    }
+	} 
+    }
+
 }
 
 int main(int argc, char *argv[])
@@ -225,6 +300,7 @@ if (argc != 4)
     usage();
 
 minLen = optionInt("minLen", minLen);
+padOut = optionExists("padOut");
 
 atomFillGaps(argv[1],argv[2],argv[3]);
 return 0;
