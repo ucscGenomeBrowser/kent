@@ -8,7 +8,7 @@
 #include "element.h"
 #include "chromColors.h"
 
-static char const rcsid[] = "$Id: tubeTree.c,v 1.4 2007/04/24 18:31:14 braney Exp $";
+static char const rcsid[] = "$Id: tubeTree.c,v 1.5 2007/10/16 19:15:50 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -125,14 +125,19 @@ if ((tree->numEdges != 1) || (tree->parent == NULL))//drawName)
     {
     fprintf(gfx->f, "%f setlinewidth\n", 1.0);
     psSetColor(gfx, 255, 255, 255);
-    psFillEllipse(gfx, gp->x, gp->y, gp->xmaj, gp->ymaj);
+    psFillEllipse(gfx, gp->x, gp->y, gp->xmaj, gp->ymaj, 0, 360);
     psSetColor(gfx, 127, 127, 127);
     psDrawEllipse(gfx, gp->x, gp->y, gp->xmaj, gp->ymaj, 0, 360);
     }
 
 if (drawName)
     {
-    psTextAt(gfx,  gp->x + gp->xmaj + 50, gp->y - 4, g->name);
+    double size = genomeWidth/5;
+
+    if (size < 20) 
+	size = 20;
+    psTimesFont(gfx, size);
+    psTextAt(gfx,  gp->x + 30, gp->y - gp->ymaj - genomeWidth/20, g->name);
     }
 }
 
@@ -173,11 +178,10 @@ if (gp && ((tree->parent == NULL) ||  (tree->numEdges == 2)))
     struct genome *lg, *rg;
     struct genomePriv *lgp, *rgp;
 
-
-if (tree->parent != NULL)
-    fprintf(gfx->f, "%f setlinewidth\n", 2.0);
-else
-    fprintf(gfx->f, "%f setlinewidth\n", 1.0);
+    //if (tree->parent != NULL)
+	fprintf(gfx->f, "%f setlinewidth\n", 2.0);
+    //else
+	//fprintf(gfx->f, "%f setlinewidth\n", 1.0);
 
     psSetColor(gfx, 127, 127, 127);
 
@@ -189,7 +193,8 @@ else
     psDrawLine(gfx, gp->x, gp->y + gp->ymaj , lgp->x, lgp->y + lgp->ymaj);
     psDrawLine(gfx, gp->x, gp->y - gp->ymaj , lgp->x, lgp->y - lgp->ymaj);
 
-    if (tree->parent != NULL)
+    //if (tree->parent != NULL)
+    if (right != NULL)
 	{
 	while (right->numEdges == 1)
 	    right = right->edges[0];
@@ -420,6 +425,8 @@ int ii;
 
 count = countElems(g, elementName, eTable);
 
+if (gp == NULL)
+    errAbort("genomePriv is NULL in drawElementTree");
 if (count) // && (gp != NULL))
     {
     double incY = (gp->ymaj * 2 - 2*genomeWidth / 5) / (count + 0);
@@ -431,7 +438,8 @@ if (count) // && (gp != NULL))
 	y = gp->y;
 
     psSetColor(gfx, 0, 0, 0);
-    for(ii=count-1; ii >= 0; ii--)
+    for(ii=0; ii < count; ii++)
+    //for(ii=count-1; ii >= 0; ii--)
 	{
 	struct elementPriv *ep;
 	struct element *p;
@@ -448,11 +456,22 @@ if (count) // && (gp != NULL))
 	y += incY;
 
 	if (tree->numEdges != 1)
-	    psFillEllipse(gfx, ep->x, ep->y, genomeWidth/20, genomeWidth/20);
+	    psFillEllipse(gfx, ep->x, ep->y, genomeWidth/20, genomeWidth/20, 0, 360);
 	if (tree->numEdges == 0)
 	    {
+	    psSetColor(gfx, 255,255,255);
+	    psMoveTo(gfx, ep->x + gp->xmaj - genomeWidth/3 + genomeWidth/30, ep->y - genomeWidth/10);
+	    psLineTo(gfx, 400 + ep->x + gp->xmaj - genomeWidth/3 + genomeWidth/30, ep->y - genomeWidth/10);
+	    psLineTo(gfx, 400 + ep->x + gp->xmaj - genomeWidth/3 + genomeWidth/30, ep->y + genomeWidth/10);
+	    psLineTo(gfx, ep->x + gp->xmaj - genomeWidth/3 + genomeWidth/30, ep->y + genomeWidth/10);
+	    fprintf(gfx->f, "fill\n");
 	    psSetColor(gfx, 0, 0, 0);
-	    psTextAt(gfx, ep->x + gp->xmaj - genomeWidth/3 + 15, ep->y - 4, e->version);
+	    double size = genomeWidth/5;
+
+	    if (size < 15) 
+		size = 15;
+	    psTimesFont(gfx, size);
+	    psTextAt(gfx, ep->x + gp->xmaj - genomeWidth/3 + genomeWidth/30 + 15, ep->y - genomeWidth/10, e->version);
 	    }
 
 	if (e->parent)
@@ -475,7 +494,7 @@ if (count) // && (gp != NULL))
 	    psDrawLine(gfx, ep->x, ep->y, pep->x, pep->y);
 	    }
 	if ((tree->numEdges != 1) || (tree->parent == NULL))
-	    psFillEllipse(gfx, ep->x, ep->y, genomeWidth/20, genomeWidth/20);
+	    psFillEllipse(gfx, ep->x, ep->y, genomeWidth/20, genomeWidth/20, 0, 360);
 	}
     }
 
@@ -560,7 +579,12 @@ int ii;
 if (tree->parent != NULL)
     {
     for(e = g->elements; e;  e = e->next)
-	e->count = e->parent->count;
+	{
+	if (e->parent != NULL)
+	    e->count = e->parent->count;
+	else
+	    e->count = 0;
+	}
     slSort(&g->elements, elemComp);
     }
 
@@ -585,39 +609,50 @@ int height = 500;
 struct psGfx *gfx = psOpen(outFile, width, height, 500.0, 500.0, 100.0);
 struct genomePriv *gp;
 struct genome *g;
-int count;
+int elemCount, genomeCount;
 struct phyloTree *subTree;
 
-count = countElements(tree, elementName);
+elemCount = countElements(tree, elementName);
+genomeCount = phyloCountLeaves(tree);
 
 //genomeWidth =  width / (50/10.0 );
 //genomeWidth =  width / (count/10.0 );
-genomeWidth =  700 / (count/3.0 );
+genomeWidth =  (1000 - elemCount * 20) / genomeCount;
 genomeSpacing = genomeWidth / 5.0;
 genomeWidth -= genomeSpacing;
 //genomeWidth -= count * 4;
 
 psClipRect(gfx, -100.0, -2500.0, 3000.0, 3000.0);
-fprintf(gfx->f, "%d %d translate\n", 20, 20);
+//fprintf(gfx->f, "%d %d translate\n", 20, 20);
 
-startX = 600;
+startX = 400;
 startY = genomeSpacing - 600;
 
 setLeavePos(tree, elementName);
 
-subTree = tree;
-if (tree->numEdges == 1)
-    {
+int dupCount = 0;
 
-    AllocVar(gp);
-    gp->x = -50;
-    gp->y =  0;
-    gp->xmaj = genomeWidth / 3;
-    gp->ymaj = genomeWidth / 2;
-    g = tree->priv;
-    g->priv = gp;
+subTree = tree;
+if (subTree->numEdges == 1)
+    {
     for( ; subTree->numEdges == 1;  subTree = subTree->edges[0])
-	;
+	dupCount++;
+
+    int dupDist = 100 / dupCount;
+
+    dupCount = 0;
+    subTree = tree;
+    for( ; subTree->numEdges == 1;  subTree = subTree->edges[0])
+	{
+	g = subTree->priv;
+	AllocVar(gp);
+	gp->x = dupCount++ * dupDist;
+	gp->y =  0;
+	gp->xmaj = genomeWidth / 3;
+	gp->ymaj = genomeWidth / 2 + countElems(g, elementName, NULL) * 10;
+	g = subTree->priv;
+	g->priv = gp;
+	}
     }
 
 g = subTree->priv;
@@ -629,12 +664,13 @@ gp->ymaj = genomeWidth/2 + countElems(g, elementName, NULL) * 10;
 //gp->ymaj = genomeWidth / 2;
 g->priv = gp;
 fillInPos(subTree, elementName);
-fillInDupNodes(tree, elementName);
+fillInDupNodes(subTree, elementName);
 
 drawSpeciesTree(gfx, tree);
 
 drawElementTree(gfx, tree, elementName);
 
+fprintf(gfx->f, "showpage\n");
 psClose(&gfx);
 }
 
