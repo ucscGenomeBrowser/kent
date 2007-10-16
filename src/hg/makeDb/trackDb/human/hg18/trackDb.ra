@@ -1270,6 +1270,7 @@ priority 63.5
 color 150,0,0
 visibility hide
 type bed 8 +
+urlLabel Ensembl Non-Coding Gene:
 url http://www.ensembl.org/Homo_sapiens/geneview?gene=$$
 
 searchTable wgRna
