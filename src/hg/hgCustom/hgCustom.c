@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.116 2007/07/13 22:56:40 angie Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.117 2007/10/16 22:48:24 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -922,9 +922,37 @@ char *err = NULL, *warn = NULL;
 char *selectedTable = NULL;
 struct customTrack *ct = NULL;
 boolean ctUpdated = FALSE;
+char *initialDb = NULL; 
 
 cart = theCart;
+initialDb = cloneString(cartString(cart, "db"));
 getDbAndGenome(cart, &database, &organism, oldVars);
+
+if (sameString(initialDb, "0"))
+    {
+    /* when an organism is selected from the custom track management page,
+     * set the database to be the default only if it has custom tracks.
+     * Otherwise, pick an assembly for that organism that does have custom tracks. */
+    struct dbDb *dbDb, *dbDbs = getCustomTrackDatabases();
+    char *dbWithCts = NULL;
+    for (dbDb = dbDbs; dbDb != NULL; dbDb = dbDb->next)
+        {
+        if (sameString(database, dbDb->name))
+            break;
+        if (sameString(organism, dbDb->organism))
+            {
+            if (!dbWithCts)
+                dbWithCts = cloneString(dbDb->name);
+            }
+        }
+    if (dbWithCts)
+        /* set the database for the selected organism to an assembly that 
+         * has custom tracks */
+        {
+        database = dbWithCts;
+        cartSetString(cart, "db", database);
+        }
+    }
 hSetDb(database);
 
 if (cartVarExists(cart, hgCtDoAdd))
@@ -1064,7 +1092,7 @@ else
     if (ctUpdated || ctConfigUpdate(ctFileName))
         customTracksSaveCart(cart, ctList);
     warn = dyStringCannibalize(&dsWarn);
-    if (ctList || cartVarExists(cart, hgCtDoDelete))
+    if (!initialDb || ctList || cartVarExists(cart, hgCtDoDelete))
         doManageCustom(warn);
     else
         doAddCustom(NULL);
