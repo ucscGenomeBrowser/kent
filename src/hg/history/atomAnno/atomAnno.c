@@ -11,7 +11,7 @@
 #include "dystring.h"
 #include "values.h"
 
-static char const rcsid[] = "$Id: atomAnno.c,v 1.1 2007/06/10 21:47:40 braney Exp $";
+static char const rcsid[] = "$Id: atomAnno.c,v 1.2 2007/10/16 18:41:23 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -261,12 +261,11 @@ for(; atoms; atoms = atoms->next)
 	{
 	struct instance *nextInSeq = NULL;
 	struct instance *prevInSeq = NULL;
-	char *nextName, *prevName;
+	char nextName[4096], prevName[4096];
 
 	if (instance->seqPos == NULL)
 	    {
-	    nextName = "tan";
-	    prevName = "tan";
+	    errAbort("seqPos is NULL");
 	    }
 	else
 	    {
@@ -281,14 +280,29 @@ for(; atoms; atoms = atoms->next)
 		prevInSeq = *(instance->seqPos + 1);
 		}
 	    if (nextInSeq == NULL)
-		nextName = "null";
+		strcpy(nextName ,"null");
 	    else
-		nextName = nextInSeq->atom->name;
+		{
+		if (nextInSeq->strand == '-')
+		    safef(nextName, sizeof nextName, "-%s.%d",
+			nextInSeq->atom->name, nextInSeq->num);
+		else
+		    safef(nextName, sizeof nextName, "%s.%d",
+			nextInSeq->atom->name, nextInSeq->num);
+		}
 
 	    if (prevInSeq == NULL)
-		prevName = "null";
+		strcpy(prevName ,"null");
 	    else
-		prevName = prevInSeq->atom->name;
+		{
+		if (prevInSeq->strand == '-')
+		    safef(prevName, sizeof prevName, "-%s.%d",
+			prevInSeq->atom->name, prevInSeq->num);
+		else
+		    safef(prevName, sizeof prevName, "%s.%d",
+			prevInSeq->atom->name, prevInSeq->num);
+		}
+
 	    }
 
 	fprintf(outF,"%s.%s:%d-%d %c %s %s\n",instance->species,instance->chrom,
