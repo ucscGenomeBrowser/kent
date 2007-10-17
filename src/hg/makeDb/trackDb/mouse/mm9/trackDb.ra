@@ -144,6 +144,18 @@ visibility hide
 color 173,17,162 
 type genePred 
 
+track miRNA
+shortLabel miRNA
+longLabel MicroRNAs from miRBase
+group genes
+priority 63
+visibility hide
+useScore 1
+color 255,64,64
+type bed 6 .
+url http://microrna.sanger.ac.uk/cgi-bin/sequences/mirna_entry.pl?id=$$
+urlLabel miRBase:
+
 track multiz30way
 shortLabel 30-way Multiz
 longLabel 30-Way Multiz Alignment & Conservation 
