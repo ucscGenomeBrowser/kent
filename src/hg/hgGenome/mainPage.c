@@ -30,7 +30,7 @@
 #include "hgGenome.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.20 2007/06/05 23:48:09 galt Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.21 2007/10/17 00:20:24 galt Exp $";
 
 
 static char *allColors[] = {
@@ -531,6 +531,14 @@ cartWebStart(cart, "%s Genome Graphs", genome);
 hPrintf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=GET>\n", scriptName);
 cartSaveSession(cart);
 
+/* notify if appears to be non-chrom based assembly */
+int count = sqlQuickNum(conn, "select count(*) from chromInfo");
+if (count > 500)
+    {
+    graphRows = 0;
+    graphCols = 0;
+    }
+
 /* Write some javascript functions */
 jsWriteFunctions();
 saveOnChangeOtherFunction(graphRows, graphCols);
@@ -560,54 +568,70 @@ char *jsOther = onChangeOther(graphRows, graphCols);
     hPrintf("</TABLE>");
     }
 
-/* Draw graph controls. */
-hPrintf("<TABLE>");
-for (i=0; i<graphRows; ++i)
+if (count > 500)  /* non-chrom assembly */
     {
-    hPrintf("<TR>");
-    hPrintf("<TD><B>graph</B></TD>");
-    for (j=0; j<graphCols; ++j)
-	{
-	char *varName = graphVarName(i,j);
-	char *curVal = cartUsualString(cart, varName, "");
-	if (curVal[0] != 0)
-	    ++realCount;
-	hPrintf("<TD>");
-	graphDropdown(conn, varName, curVal, jsOther);
-	hPrintf(" <B>in</B> ");
-	colorDropdown(i, j, jsOther);
-	if (j != graphCols-1) hPrintf(",");
-	hPrintf("</TD>");
-	}
-    hPrintf("</TR>");
+    warn("Sorry, can only do genome layout on assemblies mapped to chromosomes. "
+	"This one has %d contigs. Please select another organism or assembly.", count);
+    /* dummy hidden variable to make javascript happy */
+    hPrintf("<INPUT TYPE=\"HIDDEN\" NAME=\"%s\" SIZE=\"%d\" VALUE=\"%g\"",
+	    hggThreshold, 3, cartUsualDouble(cart, hggThreshold, defaultThreshold));
+    hPrintf(" onchange=\"changeOther();\" "
+	"onkeypress=\"return submitOnEnter(event,document.mainForm);\">");
     }
-hPrintf("</TABLE>");
-cgiMakeButton(hggUpload, "upload");
-hPrintf(" ");
-cgiMakeButton(hggImport, "import");
-hPrintf(" ");
-cgiMakeButton(hggConfigure, "configure");
-hPrintf(" ");
-cgiMakeOptionalButton(hggCorrelate, "correlate", realCount < 2);
-hPrintf(" <B>significance threshold:</B>");
-hPrintf("<INPUT TYPE=\"TEXT\" NAME=\"%s\" SIZE=\"%d\" VALUE=\"%g\"",
-	hggThreshold, 3, cartUsualDouble(cart, hggThreshold, defaultThreshold));
-hPrintf(" onchange=\"changeOther();\" onkeypress=\"return submitOnEnter(event,document.mainForm);\">");
-hPrintf(" ");
-cgiMakeOptionalButton(hggBrowse, "browse regions", realCount == 0);
-hPrintf(" ");
-cgiMakeOptionalButton(hggSort, "sort genes", 
-	realCount == 0 || !hgNearOk(database));
-hPrintf("<BR>");
+else
+    {
 
-hPrintf("<TABLE CELLPADDING=2><TR><TD>\n");
+    /* Draw graph controls. */
+    hPrintf("<TABLE>");
+    for (i=0; i<graphRows; ++i)
+	{
+	hPrintf("<TR>");
+	hPrintf("<TD><B>graph</B></TD>");
+	for (j=0; j<graphCols; ++j)
+	    {
+	    char *varName = graphVarName(i,j);
+	    char *curVal = cartUsualString(cart, varName, "");
+	    if (curVal[0] != 0)
+		++realCount;
+	    hPrintf("<TD>");
+	    graphDropdown(conn, varName, curVal, jsOther);
+	    hPrintf(" <B>in</B> ");
+	    colorDropdown(i, j, jsOther);
+	    if (j != graphCols-1) hPrintf(",");
+	    hPrintf("</TD>");
+	    }
+	hPrintf("</TR>");
+	}
+    hPrintf("</TABLE>");
+    cgiMakeButton(hggUpload, "upload");
+    hPrintf(" ");
+    cgiMakeButton(hggImport, "import");
+    hPrintf(" ");
+    cgiMakeButton(hggConfigure, "configure");
+    hPrintf(" ");
+    cgiMakeOptionalButton(hggCorrelate, "correlate", realCount < 2);
+    hPrintf(" <B>significance threshold:</B>");
+    hPrintf("<INPUT TYPE=\"TEXT\" NAME=\"%s\" SIZE=\"%d\" VALUE=\"%g\"",
+	    hggThreshold, 3, cartUsualDouble(cart, hggThreshold, defaultThreshold));
+    hPrintf(" onchange=\"changeOther();\" onkeypress=\"return submitOnEnter(event,document.mainForm);\">");
+    hPrintf(" ");
+    cgiMakeOptionalButton(hggBrowse, "browse regions", realCount == 0);
+    hPrintf(" ");
+    cgiMakeOptionalButton(hggSort, "sort genes", 
+	    realCount == 0 || !hgNearOk(database));
+    hPrintf("<BR>");
 
-boolean result = renderGraphic(conn, NULL);
+    hPrintf("<TABLE CELLPADDING=2><TR><TD>\n");
 
-hPrintf("</TD></TR></TABLE>\n");
-if (result)
-    /* Write a little click-on-help */
-    hPrintf("<i>Click on a chromosome to open Genome Browser at that position.</i>");
+    boolean result = renderGraphic(conn, NULL);
+
+    hPrintf("</TD></TR></TABLE>\n");
+    if (result)
+	/* Write a little click-on-help */
+	hPrintf("<i>Click on a chromosome to open Genome Browser at that position.</i>");
+
+
+    }  /* end else non-chrom assembly */
 
 hPrintf("</FORM>\n");
 
