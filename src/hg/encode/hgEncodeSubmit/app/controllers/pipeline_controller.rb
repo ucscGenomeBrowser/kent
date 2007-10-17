@@ -25,6 +25,14 @@ class PipelineController < ApplicationController
     @submissionTypes = getSubmissionTypes
   end
 
+  def valid_status
+    @submission = Submission.find(params[:id])
+    # get error output file
+    @filename = "stderr_file"
+    errFile = path_to_file
+    @errText = File.open(errFile, "rb") { |f| f.read }
+  end
+
   def new
     @submission = Submission.new
     @submissionTypes = getSubmissionTypes

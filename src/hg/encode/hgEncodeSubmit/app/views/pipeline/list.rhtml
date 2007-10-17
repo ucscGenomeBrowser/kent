@@ -8,7 +8,18 @@
   <tr>
   <td><%= link_to c.name, {:action => 'show', :id => c.id} -%></td>
   <td><%= @submissionTypes[c.s_type]["shortLabel"] -%></td>
-  <td><%= c.status -%></td>
+
+  <td> 
+  <%= 
+  if c.status == "invalid"
+    link_to c.status, {:action => 'valid_status', :id => c.id}
+  else
+    c.status 
+  end
+  -%>
+  </td>
+
+
   <td><%= c.user.pi -%></td>
   <td><%= c.updated_at.strftime("%Y-%m-%d") -%></td>
   </tr>
