@@ -17109,6 +17109,8 @@ table itemConf
 # (2007-09-14 kate)
 
     hgsql hg18 -e "alter table encodeUcsdNgChipSignal rename to wgEncodeUcsdNgTaf1Signal"
+    hgsql hg18 -e "update wgEncodeUcsdNgTaf1Signal set file='/gbdb/hg18/encode/wib/wgEncodeUcsdNgTaf1Signal.wib'"
+
     hgsql hg18 -e "alter table encodeUcsdNgChipKnownSites rename to wgEncodeUcsdNgTaf1KnownSites"
     hgsql hg18 -e "alter table encodeUcsdNgChipNovelSites rename to wgEncodeUcsdNgTaf1NovelSites"
 
