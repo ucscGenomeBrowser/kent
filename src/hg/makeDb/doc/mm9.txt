@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.39 2007/10/15 23:42:08 hiram Exp $"
+#	"$Id: mm9.txt,v 1.40 2007/10/17 21:57:54 fanhsu Exp $"
 #
 
 #######################################################################
@@ -6115,6 +6115,9 @@ done | xargs cat | \
     cat miRNAtrack-mm9.txt|sed -e 's/ /\t/g' > miRNA.tab
 
     hgLoadBed mm9 miRNA miRNA.tab
+
+# Add the miRNA section to makeDb/trackDb/mouse/mm9/trackDb.ra
+    vi ~/src/hg/makeDb/trackDb/mouse/mm9/trackDb.ra
 
 # check previous release track before update
     featureBits mm8 miRNA
