@@ -23,14 +23,21 @@ class PipelineController < ApplicationController
   def show
     @submission = Submission.find(params[:id])
     @submissionTypes = getSubmissionTypes
+    @errText = getErrText
   end
 
   def valid_status
     @submission = Submission.find(params[:id])
-    # get error output file
-    @filename = "stderr_file"
-    errFile = path_to_file
-    @errText = File.open(errFile, "rb") { |f| f.read }
+    @errText = getErrText
+  end
+
+  def begin_loading
+    @submission = Submission.find(params[:id])
+    if @submission.status == "validated"
+      @submission.status = "schedule loading"
+      @submission.save
+    end
+    redirect_to :action => 'list'
   end
 
   def new
@@ -536,6 +543,13 @@ private
         end
       end
     end
+  end
+
+  def getErrText
+    # get error output file
+    @filename = "stderr_file"
+    errFile = path_to_file
+    return File.open(errFile, "rb") { |f| f.read }
   end
 
 end
