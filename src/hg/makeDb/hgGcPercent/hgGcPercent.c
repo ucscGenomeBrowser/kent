@@ -11,7 +11,7 @@
 #include "twoBit.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: hgGcPercent.c,v 1.26 2007/10/12 06:27:17 daryl Exp $";
+static char const rcsid[] = "$Id: hgGcPercent.c,v 1.27 2007/10/18 23:27:15 daryl Exp $";
 
 /* Command line switches. */
 int winSize = 20000;            /* window size */
@@ -279,7 +279,9 @@ if ((bedRegionInName != NULL))
 		if (! sameString(chrom, chr))
 		    continue;
 		}
-	    verbose(2, "#\tProcessing twoBit sequence %s\n", chrom);
+	    if (! sameString(chrom, bed->chrom))
+		continue;
+	    verbose(2, "#\tProcessing twoBit sequence %s for bed item %s:%d-%d\n", chrom, bed->chrom, bed->chromStart, bed->chromEnd);
 	    if (bed->chromEnd > chromSize)
 		bed->chromEnd = chromSize;
 	    seq = twoBitReadSeqFrag(tbf, chrom, bed->chromStart, bed->chromEnd);
