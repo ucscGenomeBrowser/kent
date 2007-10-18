@@ -15,7 +15,7 @@
 #include "hgTables.h"
 
 
-static char const rcsid[] = "$Id: joining.c,v 1.46 2007/04/05 22:26:50 kent Exp $";
+static char const rcsid[] = "$Id: joining.c,v 1.47 2007/10/18 20:09:14 angie Exp $";
 
 struct joinedRow
 /* A row that is joinable.  Allocated in joinableResult->lm. */
@@ -1110,7 +1110,7 @@ boolean doJoin = joinRequired(database, table,
 			      fieldList, &dtfList, &filterTables);
 struct region *region;
 struct bed *bedList = NULL;
-struct hash *idHash = identifierHash();
+struct hash *idHash = (sameString(table, curTable)) ? identifierHash() : NULL;
 
 if (! doJoin)
     {
