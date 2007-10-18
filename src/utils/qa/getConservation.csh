@@ -25,9 +25,11 @@ if ($#argv < 1 || $#argv > 2 ) then
   echo
   echo "  get the assemblies that use a particular db in the Conservation track."
   echo
-  echo "    usage:  db [machine] OR all [machine] - defaults to beta"
+  echo "    usage:  db|all [hgwdev|hgwbeta] "
+  echo
   echo '             where "all" prints species list for all tracks in all dbs.'
   echo "             does not work on RR machines."
+  echo "             defaults to beta"
   echo
   exit
 endif
