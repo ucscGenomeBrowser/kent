@@ -23569,7 +23569,7 @@ hgLoadBed hg17 chimpParalogy chimpParalogy.bed -tab -sqlTable=chimpParalogy.sql
     # << emacs
 
 #####################################################
-# Vista Enhancers (galt 2007-02-23 working)
+# Vista Enhancers (galt 2007-02-23 done)
 #
 # Vista from Lawrence-Berkeley has assayed
 # 301 human conserved non-coding intra- and inter-
