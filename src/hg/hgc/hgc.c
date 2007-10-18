@@ -210,7 +210,7 @@
 #include "atomDb.h"
 #include "itemConf.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1357 2007/10/16 17:47:55 hiram Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1357.2.1 2007/10/18 19:02:25 aamp Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -3243,6 +3243,31 @@ hFreeConn(&conn);
 /* printTrackHtml is done in genericClickHandlerPlus. */
 }
 
+void doColoredExon(struct trackDb *tdb, char *item)
+/* Print information for coloredExon type tracks. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char query[256];
+char **row;
+genericHeader(tdb, item);
+safef(query, sizeof(query), "select chrom,chromStart,chromEnd,name,score,strand from %s where name='%s'", tdb->tableName, item);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct bed *itemBed = bedLoad6(row);
+    bedPrintPos(itemBed, 6);
+    bedFree(&itemBed);
+    }
+else
+    {
+    hPrintf("Could not find info for %s<BR>\n", item);
+    }
+sqlFreeResult(&sr);
+printTrackHtml(tdb);
+hFreeConn(&conn);
+}
+
 void genericClickHandlerPlus(
         struct trackDb *tdb, char *item, char *itemForUrl, char *plus)
 /* Put up generic track info, with additional text appended after item. */
@@ -3337,6 +3362,10 @@ if (wordCount > 0)
     else if (sameString(type, "expRatio"))
         {
 	doExpRatio(tdb, item, NULL);
+	}
+    else if (sameString(type, "coloredExon"))
+	{
+	doColoredExon(tdb, item);
 	}
     else if (sameString(type, "wig"))
         {
@@ -19006,13 +19035,6 @@ if (startsWith("psl", tdb->type))
     }
 else
     warn("Unsupported type \"%s\" for IGTC (expecting psl).", tdb->type);
-printTrackHtml(tdb);
-}
-
-void doColoredExon(struct trackDb *tdb, char *item)
-/* Print information for coloredExon type tracks. */
-{
-genericHeader(tdb, item);
 printTrackHtml(tdb);
 }
 
