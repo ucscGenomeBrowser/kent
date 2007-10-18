@@ -3468,21 +3468,13 @@ dataVersion ENCODE Oct 2005 Freeze, June 2007
     color 120,80,120
     priority 3
 
-    track encodeTbaSconeCons
+    track encodeTbaSconeConsUpdate
     subTrack encodeTbaCons
     shortLabel TBA SCONE Cons
     longLabel TBA SCONE Conservation
     color 100,90,160
-    priority 4
-
-    track encodeTbaSconeConsUpdate
-    release alpha
-    subTrack encodeTbaCons
-    shortLabel TBA SCONE Cons New
-    longLabel TBA SCONE Conservation 2007 Update
     dataVersion June 2007
-    color 100,90,160
-    priority 5
+    priority 4
 
 track encodeTbaElements
 compositeTrack on
@@ -3517,21 +3509,13 @@ dataVersion ENCODE Oct 2005 Freeze, June 2007
     color 120,80,120
     priority 3
 
-    track encodeTbaSconeEl
+    track encodeTbaSconeElUpdate
     subTrack encodeTbaElements
     shortLabel TBA SCONE
     longLabel TBA SCONE Conserved Elements
     color 100,90,160
-    priority 4
-
-    track encodeTbaSconeElUpdate
-    release alpha
-    subTrack encodeTbaElements
-    shortLabel TBA SCONE New
-    longLabel TBA SCONE Conserved Elements 2007 Update
     dataVersion June 2007
-    color 100,90,160
-    priority 5
+    priority 4
 
 track encodeMlaganAlign
 shortLabel MLAGAN Alignment
