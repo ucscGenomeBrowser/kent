@@ -170,8 +170,8 @@ maxHeightPixels 100:40:11
 # spanList 1
 pairwiseHeight 12
 yLineOnOff Off
-# frames multiz30wayFrames
-# irows on
+frames multiz30wayFrames
+irows on
 autoScaleDefault Off
 windowingFunction mean
 summary multiz30waySummary
