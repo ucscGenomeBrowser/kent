@@ -17862,7 +17862,7 @@ BASE=/cluster/data/hg18/bed/blastz.calJac1.2007-10-07
    rm j18.tmp
 
 #########################################################################
-# BLASTZ Zebrafish danRer5 (WORKING - 2007-10-17 - Hiram)
+# BLASTZ Zebrafish danRer5 (DONE - 2007-10-18 - Hiram)
     ssh kkstore02
     mkdir /cluster/data/hg18/bed/blastzDanRer5.2007-10-17
     cd /cluster/data/hg18/bed/blastzDanRer5.2007-10-17
@@ -17895,20 +17895,19 @@ TMPDIR=/scratch/tmp
 
     time nice -n +19 doBlastzChainNet.pl DEF -chainMinScore=5000 \
 	-chainLinearGap=loose -bigClusterHub=pk -verbose=2 > do.log 2>&1 &
-XXX - running - 2007-10-17 10:17
-    #	real    369m16.947s
+    #	real    369m20.490s
     cat fb.hg18.chainDanRer5Link.txt
-    #	84513268 bases of 2620346127 (3.225%) in intersection
+    #	73923439 bases of 2881515245 (2.565%) in intersection
 
     mkdir /cluster/data/danRer5/bed/blastz.hg18.swap
     cd /cluster/data/danRer5/bed/blastz.hg18.swap
-    time nice -n +19 $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
+    time nice -n +19 doBlastzChainNet.pl \
 	-chainMinScore=5000 \
-	/cluster/data/hg18/bed/blastzDanRer5.2007-09-13/DEF \
+	/cluster/data/hg18/bed/blastzDanRer5.2007-10-17/DEF \
 	-swap -chainLinearGap=loose -bigClusterHub=pk -verbose=2 \
 	> swap.log 2>&1 &
-    #	real    21m44.784s
+    #	real    11m35.536s
     cat fb.danRer5.chainHg18Link.txt
-    #	66400782 bases of 1435609608 (4.625%) in intersection
+    #	74166352 bases of 1435609608 (5.166%) in intersection
 
 #########################################################################
