@@ -17911,3 +17911,15 @@ TMPDIR=/scratch/tmp
     #	74166352 bases of 1435609608 (5.166%) in intersection
 
 #########################################################################
+#  Vista Enhancers (2007-10-18, conodera)
+# see also /projects/compbiousr/wet/browser/vista_enhancer/17Oct2007/Makefile
+#
+# download data file from the vista browser (coordinates are for hg17)
+# http://enhancer.lbl.gov/cgi-bin/imagedb.pl?show=1;search.result=yes;form=search;search.form=no;action=search;search.sequence=1
+# save as enhancerbrowser.datadownload.txt
+
+# liftOver hg17 file
+liftOver vista_enhancer.hg17.bed $(MAPCHAIN) vista_enhancer.hg18.bed vista_enhancer.hg17ToHg18.unMapped
+hgLoadBed hg18 vistaEnhancers vista_enhancer.hg18.bed
+
+#########################################################################
