@@ -31,6 +31,11 @@ class PipelineController < ApplicationController
     @errText = getErrText
   end
 
+  def load_status
+    @submission = Submission.find(params[:id])
+    @errText = getLoadErrText
+  end
+
   def begin_loading
     @submission = Submission.find(params[:id])
     if @submission.status == "validated"
@@ -240,7 +245,7 @@ class PipelineController < ApplicationController
     end
 
     # make up an error output file
-    @filename = "stderr_file"
+    @filename = "validate_error"
     errFile = path_to_file
 
     # run the validator
@@ -309,7 +314,8 @@ class PipelineController < ApplicationController
       keepers[a.file_name] = "keep"
     end
     # keep other special files
-    keepers["stderr_file"] = "keep"
+    keepers["validate_error"] = "keep"
+    keepers["load_error"] = "keep"
 
     msg = ""
     # make sure parent paths exist
@@ -547,7 +553,14 @@ private
 
   def getErrText
     # get error output file
-    @filename = "stderr_file"
+    @filename = "validate_error"
+    errFile = path_to_file
+    return File.open(errFile, "rb") { |f| f.read }
+  end
+
+  def getLoadErrText
+    # get error output file
+    @filename = "load_error"
     errFile = path_to_file
     return File.open(errFile, "rb") { |f| f.read }
   end
