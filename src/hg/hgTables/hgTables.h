@@ -523,8 +523,8 @@ void doSubtrackMergeSubmit(struct sqlConnection *conn);
 char *identifierFileName();
 /* File name identifiers are in, or NULL if no such file. */
 
-struct hash *identifierHash();
-/* Return hash full of identifiers. */
+struct hash *identifierHash(char *table);
+/* Return hash full of identifiers from the given table (or NULL). */
 
 char *getIdField(char *db, struct trackDb *track, char *table, 
 	struct hTableInfo *hti);

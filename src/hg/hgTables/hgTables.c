@@ -26,7 +26,7 @@
 #include "bedCart.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.156 2007/07/17 01:14:46 angie Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.157 2007/10/21 04:11:27 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -882,7 +882,9 @@ if (hti != NULL && hti->nameField[0] != 0)
 else if (track != NULL)
     {
     struct hTableInfo *trackHti = maybeGetHti(db, track->tableName);
-    if (hti != NULL && trackHti != NULL && trackHti->nameField[0] != 0)
+    if (trackHti != NULL && isCustomTrack(table))
+	idField = cloneString(trackHti->nameField);
+    else if (hti != NULL && trackHti != NULL && trackHti->nameField[0] != 0)
         {
 	struct joinerPair *jp, *jpList;
 	jpList = joinerRelate(allJoiner, db, track->tableName);
@@ -903,7 +905,7 @@ else if (track != NULL)
     }
 /* If we haven't found the answer but this looks like a non-positional table,
  * use the first field. */
-if (idField == NULL && (hti == NULL || !hti->isPos))
+if (idField == NULL && !isCustomTrack(table) && (hti == NULL || !hti->isPos))
     {
     struct sqlConnection *conn = hAllocOrConnect(db);
     struct slName *fieldList = sqlListFields(conn, table);
@@ -1021,7 +1023,7 @@ else
  * and add identifier column to end of result set. */
 if (idField != NULL)
     {
-    idHash = identifierHash();
+    idHash = identifierHash(table);
     if (idHash != NULL)
 	{
 	dyStringAppendC(fieldSpec, ',');
@@ -1129,7 +1131,7 @@ else
  * and add identifier column to end of result set. */
 if (idField != NULL)
     {
-    idHash = identifierHash();
+    idHash = identifierHash(table);
     if (idHash != NULL)
 	{
 	dyStringAppendC(fieldSpec, ',');
