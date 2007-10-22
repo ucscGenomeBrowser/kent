@@ -210,7 +210,7 @@
 #include "atomDb.h"
 #include "itemConf.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1359 2007/10/16 23:58:51 aamp Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1360 2007/10/22 18:40:58 fanhsu Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -3808,7 +3808,7 @@ puts("<H3>Further Details and Ideas</H3>");
 puts("<P>Copying and pasting the web page output to a text editor such as Word "
      "will retain upper case but lose colors and other formatting. That's still "
      "useful because other web tools such as "
-     "<A HREF=\"http://www.ncbi.nlm.nih.gov/blast/index.nojs.cgi\" TARGET=_BLANK>NCBI Blast</A> "
+     "<A HREF=\"http://www.ncbi.nlm.nih.gov/blast\" TARGET=_BLANK>NCBI Blast</A> "
      "can be set to ignore lower case.  To fully capture formatting such as color "
      "and underlining, view the output as \"source\" in your web browser, or download "
      "it, or copy the output page into an html editor.</P>");
