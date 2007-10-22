@@ -210,7 +210,7 @@
 #include "atomDb.h"
 #include "itemConf.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1362 2007/10/22 22:42:22 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1363 2007/10/22 23:19:39 ann Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -3781,7 +3781,42 @@ printf("</TABLE>\n");
 printf("</FORM>\n");
 if (hIsGsidServer())
 {
-printf("GSID description goes here\n");
+printf("<H3>Coloring Information and Examples</H3>\n");
+puts("The color values range from 0 (darkest) to 255 (lightest) and are additive.\n");
+puts("The examples below show a few ways to highlight individual tracks, "
+     "and their interplay. It's good to keep it simple at first. It's easy "
+     "to make pretty but completely cryptic displays with this feature.");
+puts(
+     "<UL>"
+     "<LI>To put exons from Genes in upper case red text, check the "
+     "appropriate box in the Toggle Case column and set the color to pure "
+     "red, RGB (255,0,0). Upon submitting, any Gene within the "
+     "designated chromosomal interval will now appear in red capital letters.\n"
+     "<LI>To see the overlap between Genes and InterPro Domains try "
+     "setting the Genes/Regions to red (255,0,0) and InterPro to green (0,255,0). "
+     "Places where the Genes and InterPro Domains overlap will be painted yellow "
+     "(255,255,0).\n"
+     "<LI>To get a level-of-coverage effect for tracks like Genes with "
+     "multiple overlapping items, initially select a darker color such as deep "
+     "green, RGB (0,64,0). Nucleotides covered by a single Gene will appear dark "
+     "green, while regions covered with more Genes get progressively brighter &mdash; "
+     "saturating at 4 Genes."
+     "<LI>Another track can be used to mask unwanted features. Setting the "
+     "InterPro track to RGB (255,255,255) will white-out Genes within InterPro "
+     "domains. "
+     "</UL>");
+puts("<H3>Further Details and Ideas</H3>");
+puts("<P>Copying and pasting the web page output to a text editor such as Word "
+     "will retain upper case but lose colors and other formatting. That's still "
+     "useful because other web tools such as "
+     "<A HREF=\"http://www.ncbi.nlm.nih.gov/blast\" TARGET=_BLANK>NCBI Blast</A> "
+     "can be set to ignore lower case.  To fully capture formatting such as color "
+     "and underlining, view the output as \"source\" in your web browser, or download "
+     "it, or copy the output page into an html editor.</P>");
+puts("<P>The default line width of 60 characters is standard, but if you have "
+     "a reasonable sized monitor it's useful to set this higher - to 125 characters "
+     "or more.  You can see more DNA at once this way, and fewer line breaks help "
+     "in finding DNA strings using the web browser search function.</P>");
 }
 else
 {
