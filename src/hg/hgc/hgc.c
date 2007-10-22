@@ -210,7 +210,7 @@
 #include "atomDb.h"
 #include "itemConf.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1361 2007/10/22 19:26:30 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1362 2007/10/22 22:42:22 fanhsu Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -3779,6 +3779,12 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     }
 printf("</TABLE>\n");
 printf("</FORM>\n");
+if (hIsGsidServer())
+{
+printf("GSID description goes here\n");
+}
+else
+{
 printf("<H3>Coloring Information and Examples</H3>\n");
 puts("The color values range from 0 (darkest) to 255 (lightest) and are additive.\n");
 puts("The examples below show a few ways to highlight individual tracks, "
@@ -3820,6 +3826,7 @@ puts("<P>Be careful about requesting complex formatting for a very large "
      "chromosomal region.  After all the html tags are added to the output page, "
      "the file size may exceed size limits that your browser, clipboard, and "
      "other software can safely display.  The tool will format 10Mbp and more though.</P>");
+}
 trackDbFreeList(&tdbList);
 }
 
