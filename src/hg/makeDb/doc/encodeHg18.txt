@@ -834,3 +834,21 @@ hgLoadBed hg18 encodeYalePolIISites PolII_hg18-sites.bed
   # 292 gene predictions
 
   # Strand information is added for primers and all RACEfrags.
+
+######################################################
+# LIFT NHGRI DIPs from hg17 (2007-10-22 kate)
+
+    sh hgwdev
+    cd /cluster/data/encode/NHGRI/mullikin/hg17
+    hgsql hg18 < encodeIndels.sql
+    zcat encodeIndels.bed.gz | tail +2 | \
+        liftOver -bedPlus=8 stdin /gbdb/hg17/liftOver/hg17ToHg18.over.chain.gz \
+                encodeIndels.hg18.bed encodeIndels.hg18.unmapped
+        # lost 670 items (of 11452 total)
+        # This is high -- nearly 6%, and losses were in all regions,
+        # not just chrX.
+    hgLoadBed hg18 encodeIndels -tab -sqlTable=encodeIndels.sql \
+                encodeIndels.hg18.bed
+
+    # change group name to merge in variation
+    hgsql hg18 -e "update grp set name='encodeCompAndVar' where name='encodeCompGeno'"
