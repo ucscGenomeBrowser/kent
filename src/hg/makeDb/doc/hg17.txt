@@ -23609,7 +23609,9 @@ url http://enhancer-test.lbl.gov/cgi-bin/imagedb.pl?form=presentation&show=1&exp
 ###
 # UPDATES (2007-10-18, conodera)
 # see also /projects/compbiousr/wet/browser/vista_enhancer/17Oct2007/Makefile
-#
+
+cd /projects/compbiousr/wet/browser/vista_enhancer/
+
 # download data file from the vista browser (coordinates are for hg17)
 # http://enhancer.lbl.gov/cgi-bin/imagedb.pl?show=1;search.result=yes;form=search;search.form=no;action=search;search.sequence=1
 # save as enhancerbrowser.datadownload.txt

@@ -17918,8 +17918,10 @@ TMPDIR=/scratch/tmp
 # http://enhancer.lbl.gov/cgi-bin/imagedb.pl?show=1;search.result=yes;form=search;search.form=no;action=search;search.sequence=1
 # save as enhancerbrowser.datadownload.txt
 
+cd /projects/compbiousr/wet/browser/vista_enhancer/
+
 # liftOver hg17 file
-liftOver vista_enhancer.hg17.bed $(MAPCHAIN) vista_enhancer.hg18.bed vista_enhancer.hg17ToHg18.unMapped
+liftOver vista_enhancer.hg17.bed /cluster/data/hg17/bed/liftOver/hg17ToHg18.over.chain.gz vista_enhancer.hg18.bed vista_enhancer.hg17ToHg18.unMapped
 hgLoadBed hg18 vistaEnhancers vista_enhancer.hg18.bed
 
 #########################################################################
