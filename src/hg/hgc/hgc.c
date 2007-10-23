@@ -210,7 +210,7 @@
 #include "atomDb.h"
 #include "itemConf.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1363 2007/10/22 23:19:39 ann Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1364 2007/10/23 15:16:16 ann Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -3788,7 +3788,7 @@ puts("The examples below show a few ways to highlight individual tracks, "
      "to make pretty but completely cryptic displays with this feature.");
 puts(
      "<UL>"
-     "<LI>To put exons from Genes in upper case red text, check the "
+     "<LI>To put Genes in upper case red text, check the "
      "appropriate box in the Toggle Case column and set the color to pure "
      "red, RGB (255,0,0). Upon submitting, any Gene within the "
      "designated chromosomal interval will now appear in red capital letters.\n"
@@ -3838,7 +3838,7 @@ puts(
      "<LI>To get a level-of-coverage effect for tracks like Spliced Ests with "
      "multiple overlapping items, initially select a darker color such as deep "
      "green, RGB (0,64,0). Nucleotides covered by a single EST will appear dark "
-     "green, while regions covered with more ESTs get progressively brighter -- "
+     "green, while regions covered with more ESTs get progressively brighter &mdash; "
      "saturating at 4 ESTs."
      "<LI>Another track can be used to mask unwanted features. Setting the "
      "RepeatMasker track to RGB (255,255,255) will white-out Genscan predictions "
