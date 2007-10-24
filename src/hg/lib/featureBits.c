@@ -11,8 +11,9 @@
 #include "genePred.h"
 #include "rmskOut.h"
 #include "featureBits.h"
+#include "fa.h"
 
-static char const rcsid[] = "$Id: featureBits.c,v 1.28 2006/03/09 18:26:57 angie Exp $";
+static char const rcsid[] = "$Id: featureBits.c,v 1.29 2007/10/24 21:01:41 daryl Exp $";
 
 /* By default, clip features to the search range.  It's important to clip 
  * when featureBits output will be used to populate Bits etc.  But allow 
@@ -756,5 +757,55 @@ for (fb=fbList;  fb != NULL;  fb=fb->next)
     slAddHead(&bedList, bed);
     }
 return(bedList);
+}
+
+void bitsToBed(Bits *bits, char *chrom, int chromSize, FILE *bed, FILE *fa, 
+	int minSize)
+/* Write out runs of bits of at least minSize as items in a bed file. */
+{
+int i;
+boolean thisBit, lastBit = FALSE;
+int start = 0;
+int id = 0;
+
+for (i=0; i<chromSize; ++i)
+    {
+    thisBit = bitReadOne(bits, i);
+    if (thisBit)
+	{
+	if (!lastBit)
+	    start = i;
+	}
+    else
+        {
+	if (lastBit && i-start >= minSize)
+	    {
+	    if (bed)
+		fprintf(bed, "%s\t%d\t%d\t%s.%d\n", chrom, start, i, chrom, ++id);
+	    if (fa)
+	        {
+		char name[256];
+		struct dnaSeq *seq = hDnaFromSeq(chrom, start, i, dnaLower);
+		sprintf(name, "%s:%d-%d", chrom, start, i);
+		faWriteNext(fa, name, seq->dna, seq->size);
+		freeDnaSeq(&seq);
+		}
+	    }
+	}
+    lastBit = thisBit;
+    }
+if (lastBit && i-start >= minSize)
+    {
+    if (bed)
+	fprintf(bed, "%s\t%d\t%d\t%s.%d\n", chrom, start, i, chrom, ++id);
+    if (fa)
+	{
+	char name[256];
+	struct dnaSeq *seq = hDnaFromSeq(chrom, start, i, dnaLower);
+	sprintf(name, "%s:%d-%d", chrom, start, i);
+	faWriteNext(fa, name, seq->dna, seq->size);
+	freeDnaSeq(&seq);
+	}
+    }
 }
 
