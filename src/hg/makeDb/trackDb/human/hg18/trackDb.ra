@@ -1339,6 +1339,81 @@ type bed 6 .
 urlLabel TargetScan link:
 url http://www.targetscan.org/cgi-bin/targetscan/vert_40/view_gene.cgi?gs=$P&taxid=9606&members=$p&showcnc=1
 
+# Uppsala University, Sweden ChIP-chip supertrack
+        track uppsalaChip
+        superTrack on
+        shortLabel Uppsala ChIP
+        longLabel Uppsala University ChIP-chip
+        group regulation
+        priority 150
+    
+track uppsalaChipSignal
+superTrack uppsalaChip dense
+compositeTrack on
+shortLabel UU ChIP Signal
+longLabel Uppsala University ChIP-chip Signal
+group regulation
+priority 150.1
+visibility hide
+type wig -1.9 4.23
+spanList 1
+maxHeightPixels 128:16:16
+windowingFunction maximum
+viewLimits .5:1.5
+autoScale off
+origAssembly hg16
+
+    track uppsalaChipH3acSignal
+    subTrack uppsalaChipSignal
+    shortLabel UU H3ac Signal
+    longLabel Uppsala University ChIP-chip Signal (H3ac)
+    color 150,50,50
+    priority 1
+
+    track uppsalaChipUsf1Signal
+    subTrack uppsalaChipSignal
+    shortLabel UU Usf1 Signal
+    longLabel Uppsala University ChIP-chip Signal (Usf1)
+    color 50,50,150
+    priority 2
+
+    track uppsalaChipUsf2Signal
+    subTrack uppsalaChipSignal
+    shortLabel UU Usf2 Signal
+    longLabel Uppsala University ChIP-chip Signal (Usf2)
+    color 50,150,50
+    priority 3
+
+track uppsalaChipSites
+superTrack uppsalaChip dense
+compositeTrack on
+shortLabel UU ChIP Sites
+longLabel Uppsala University ChIP-chip Sites
+group regulation
+priority 150.2
+type bed 3
+
+    track uppsalaChipH3acSites
+    subTrack uppsalaChipSites
+    shortLabel UU H3ac Sites
+    longLabel Uppsala University ChIP-chip Sites (H3ac)
+    color 150,50,50
+    priority 1
+
+    track uppsalaChipUsf1Sites
+    subTrack uppsalaChipSites
+    shortLabel UU Usf1 Sites
+    longLabel Uppsala University ChIP-chip Sites (Usf1)
+    color 50,50,150
+    priority 2
+
+    track uppsalaChipUsf2Sites
+    subTrack uppsalaChipSites
+    shortLabel UU Usf2 Sites
+    longLabel Uppsala University ChIP-chip Sites (Usf2)
+    color 50,150,50
+    priority 3
+
 track uc16
 shortLabel Ultra Conserved
 longLabel Ultraconserved Elements (200 bp 100% ID in Rat/Mouse/Human)
