@@ -1340,7 +1340,7 @@ urlLabel TargetScan link:
 url http://www.targetscan.org/cgi-bin/targetscan/vert_40/view_gene.cgi?gs=$P&taxid=9606&members=$p&showcnc=1
 
 # Uppsala University, Sweden ChIP-chip supertrack
-        track uppsalaChip
+        track uppsalaChipSuper
         superTrack on
         shortLabel Uppsala ChIP
         longLabel Uppsala University ChIP-chip
@@ -1348,7 +1348,7 @@ url http://www.targetscan.org/cgi-bin/targetscan/vert_40/view_gene.cgi?gs=$P&tax
         priority 150
     
 track uppsalaChipSignal
-superTrack uppsalaChip dense
+superTrack uppsalaChipSuper dense
 compositeTrack on
 shortLabel UU ChIP Signal
 longLabel Uppsala University ChIP-chip Signal
@@ -1385,7 +1385,7 @@ origAssembly hg16
     priority 3
 
 track uppsalaChipSites
-superTrack uppsalaChip dense
+superTrack uppsalaChipSuper dense
 compositeTrack on
 shortLabel UU ChIP Sites
 longLabel Uppsala University ChIP-chip Sites
