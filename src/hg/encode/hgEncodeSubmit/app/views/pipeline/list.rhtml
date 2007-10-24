@@ -1,7 +1,7 @@
 <% if @submissions.blank? %>
-  <p>There are no submissions currently in the system.</p>
+  <p>There are no submissions currently.</p>
 <% else %>
-  <p>These are the submissions in our system</p>
+  <p><%= @title -%></p>
 
  <table id="submissions" cellpadding=10 cellspacing=10>
  <% @submissions.each do |c| %>

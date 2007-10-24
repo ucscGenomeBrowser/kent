@@ -10,12 +10,14 @@ class PipelineController < ApplicationController
   def list
     @submissions = Submission.find(:all)
     @submissionTypes = getSubmissionTypes
+    @title = "These are the submissions in our system"
   end
   
   def show_user
     @user = User.find(current_user.id)
     @submissions = @user.submissions
     @submissionTypes = getSubmissionTypes
+    @title = "These are your submissions"
     render :action => 'list'
     # not now using show_user.rhtml
   end
@@ -556,6 +558,8 @@ private
     @filename = "validate_error"
     errFile = path_to_file
     return File.open(errFile, "rb") { |f| f.read }
+  rescue
+    return ""
   end
 
   def getLoadErrText
@@ -563,6 +567,8 @@ private
     @filename = "load_error"
     errFile = path_to_file
     return File.open(errFile, "rb") { |f| f.read }
+  rescue
+    return ""
   end
 
 end
