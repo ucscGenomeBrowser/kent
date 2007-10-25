@@ -210,7 +210,7 @@
 #include "atomDb.h"
 #include "itemConf.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1365 2007/10/25 15:48:48 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1366 2007/10/25 22:46:14 fanhsu Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -7897,7 +7897,7 @@ if (url != NULL && url[0] != 0)
    
     /* List disease classes associated with the gene */
     safef(query, sizeof(query), 
-    "select diseaseClass from gadAll where geneSymbol='%s' and association = 'Y' order by diseaseClass", 
+    "select distinct diseaseClass from gadAll where geneSymbol='%s' and association = 'Y' order by diseaseClass", 
     itemName);
     sr = sqlMustGetResult(conn, query);
     row = sqlNextRow(sr);
