@@ -51,7 +51,7 @@
                 <LI><A HREF="#download24">RepeatMasker version differences - UCSC vs. Repeatmasker website</A>
                 <LI><A HREF="#download18">Obtaining promoter sequence</A>
                 <LI><A HREF="#download19">Data from Evolutionary Conservation Score tracks</A>
-                <LI><A HREF="#download20">Minus strand coordinates - axtBest files</A>
+                <LI><A HREF="#download20">Minus strand coordinates - axtNet files</A>
                 <LI><A HREF="#download21">Mapping UCSC STS marker IDS to those of other groups</A>
                 <LI><A HREF="#download22">deCODE map data</A>
                 <LI><A HREF="#download29">Direct MySQL access to data</A>
@@ -1601,7 +1601,7 @@
 	        <!--cheap trick to get background on row to be continuous-->
 	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
 		    <TR><TD ALIGN="left">
-	   	    <FONT SIZE="4"><b>&nbsp; Minus strand coordinates - axtBest files</b></FONT></TD> 
+	   	    <FONT SIZE="4"><b>&nbsp; Minus strand coordinates - axtNet
 		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="../images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
 	            </TD></TR>
   	        </TABLE>                
@@ -1613,8 +1613,8 @@
 		    <TD>
 	            <P>
 			<B><FONT COLOR="#006666">Question: </FONT></B><BR>
-			"I downloaded the axtBest alignments between the latest human and mouse assemblies. 
-			I found that some of the alignments listed in the axtBest 
+			"I downloaded the axtNet alignments between the latest human and mouse assemblies. 
+			I found that some of the alignments listed in the axtNet
 			files do not agree with what is shown in the browser." 
 			<P>
 			<B><FONT COLOR="#006666">Response:</FONT></B><BR>
@@ -1622,13 +1622,15 @@
 			are handled differently from how they are handled in the Genome Browser. To convert 
 			axt minus strand coordinates to Genome Browser coordinates, use:
 			<PRE>
-      	start = chromSize - axtEnd
-      	end = chromSize - axtStart
-			</PRE>
+      	start = chromSize + 1 - axtEnd
+      	end = chromSize + 1 - axtStart</PRE>
+			See an explanation of coordinate transforms in the <a
+			href="http://genomewiki.ucsc.edu/index.php/Coordinate_Transforms"
+			target=blank>genomeWiki</a>.
 		    </TD><TD WIDTH=15></TD>
 		</TR>
 	    </TABLE>
-	    </TD></TR>
+	    <br></TD></TR>
 	</TABLE>
 	</TD></TR>
     </TABLE>
