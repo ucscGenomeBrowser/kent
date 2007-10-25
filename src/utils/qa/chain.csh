@@ -45,7 +45,6 @@ echo "track: $track"
 echo "Org: $Org"
 echo
 
-
 # ------------------------------------------------
 # check for priority values for all chains on this assembly:
 
@@ -397,12 +396,10 @@ echo
 echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
 echo  "Find the correct parameters for the matrix variable"
 echo  "which appears in the chain-OtherOrg download file."
-echo  "(Note that sometimes, the variable appears only in the"
-echo  "*other* download file -- check it if this is empty.)"
 echo  "Compare this to the chain description page."
 echo
 
-grep -A7 "The blastz scoring" /data/apache/htdocs/goldenPath/$db/vs$Org/README.txt
+getMatrixLines.csh $db $otherDb
 
 
 # -------------------------------------------------
