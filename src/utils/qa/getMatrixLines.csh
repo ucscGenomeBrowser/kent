@@ -58,7 +58,7 @@ set matrix=`echo $matrix | sed -e "s/\z//"`
 if ( "$matrix" != "" ) then
   # line1 is for the 'matrixHeader' line
   # remove the first part of the line
-  set line1=`echo $matrix | sed -e "s/^The.*was: //"`
+  set line1=`echo $matrix | sed -e "s/^The.*: //"`
   
   # remove everything after the "A C G T"
   set line1=`echo $line1 | sed -e "s/.A.*//"`
@@ -69,7 +69,7 @@ if ( "$matrix" != "" ) then
 
   # line2 is for the 'matrix 16' line
   # remove the first part of the line and the "A C G T A"
-  set line2=`echo $matrix | sed -e "s/^The.*was: //" | sed -e "s/A C G T A //"`
+  set line2=`echo $matrix | sed -e "s/^The.*: //" | sed -e "s/A C G T A //"`
 
   # remove all of the interspersed letters
   set line2=`echo $line2 | sed -e "s/C//" | sed -e "s/G//" | sed -e "s/T//"`
