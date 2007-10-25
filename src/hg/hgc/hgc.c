@@ -210,7 +210,7 @@
 #include "atomDb.h"
 #include "itemConf.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1364 2007/10/23 15:16:16 ann Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1365 2007/10/25 15:48:48 fanhsu Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -7845,6 +7845,7 @@ char **row;
 char *chrom, *chromStart, *chromEnd;
 struct dyString *currentCgiUrl;
 char *upperDisease;
+char *diseaseClass;
 
 char *url = tdb->url;
 
@@ -7893,8 +7894,31 @@ if (url != NULL && url[0] != 0)
 	row = sqlNextRow(sr);
         }
     sqlFreeResult(&sr);
+   
+    /* List disease classes associated with the gene */
+    safef(query, sizeof(query), 
+    "select diseaseClass from gadAll where geneSymbol='%s' and association = 'Y' order by diseaseClass", 
+    itemName);
+    sr = sqlMustGetResult(conn, query);
+    row = sqlNextRow(sr);
     
-    /* First list diseases associated with the gene */
+    if (row != NULL) 
+    	{
+	diseaseClass = row[0];
+	printf("<BR><B>Disease Class:  </B>");
+	printf("%s", diseaseClass);
+        row = sqlNextRow(sr);
+    	}
+	
+    while (row != NULL)
+        {
+	diseaseClass = row[0];
+	printf(", %s", diseaseClass);
+        row = sqlNextRow(sr);
+	}
+    sqlFreeResult(&sr);
+
+    /* List diseases associated with the gene */
     safef(query, sizeof(query), 
     "select distinct broadPhen from gadAll where geneSymbol='%s' and association = 'Y' order by broadPhen;", 
     itemName);
