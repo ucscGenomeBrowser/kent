@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.42 2007/10/23 00:09:21 hiram Exp $"
+#	"$Id: mm9.txt,v 1.43 2007/10/25 01:17:31 markd Exp $"
 #
 
 #######################################################################
@@ -6505,3 +6505,33 @@ rm -fr $tmp
     #39718 bases of 2620346127 (0.002%) in intersection
 
 #############################################################################
+# N-SCAN gene predictions (nscanGene) - (2006-08-30 markd)
+
+    # obtained NSCAN predictions from michael brent's group
+    # at WUSTL
+    cd /cluster/data/mm9/bed/nscan/
+    wget http://mblab.wustl.edu/predictions/mouse/mm9/mm9.gtf
+    wget http://mblab.wustl.edu/predictions/mouse/mm9/mm9.prot.fa
+    wget http://mblab.wustl.edu/predictions/mouse/mm9/readme.txt
+    bzip2 mm9.*
+    chmod a-w *
+
+    mv ardor.wustl.edu/jeltje/mm9/chr_ptx .
+    rm -rf ardor.wustl.edu
+    rm chr_*/index.html*
+    gzip chr_*/*
+    chmod a-w chr_*/*.gz
+
+    # load track
+    ldHgGene -bin -gtf -genePredExt mm9 nscanGene mm9.gtf.bz2
+    hgPepPred mm9 generic nscanPep  mm9.prot.fa.bz2
+    rm *.tab
+
+    # update trackDb; need a mm9-specific page to describe informants
+    mouse/mm9/nscanGene.html   (copy from hg18 and edit)
+    mouse/mm9/trackDb.ra
+    # changed search regex to
+        termRegex chr[0-9a-zA-Z_].*\.[0-9]+\.[0-9]
+
+
+##########################################################################

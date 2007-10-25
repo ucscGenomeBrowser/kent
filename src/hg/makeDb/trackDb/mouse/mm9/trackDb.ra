@@ -184,3 +184,19 @@ sGroup_Vertebrate monDom4 ornAna1 galGal3 anoCar1 xenTro2 gasAcu1 danRer5 tetNig
 speciesDefaultOff rheMac2 calJac1 panTro2 cavPor2 tupBel1 otoGar1 dasNov1 oryCun1 felCat3 loxAfr1 bosTau3 eriEur1 sorAra1 echTel1 ornAna1 anoCar1 xenTro2 danRer5 tetNig1 fr2 oryLat1
 itemFirstCharCase noChange
 treeImage phylo/mm9_30way.gif
+
+track nscanGene
+shortLabel N-SCAN
+longLabel N-SCAN Gene Predictions
+group genes
+priority 45.1
+visibility hide
+color 34,139,34
+type genePred nscanPep
+baseColorUseCds given
+baseColorDefault genomicCodons
+
+searchTable nscanGene
+searchType genePred
+termRegex chr[0-9a-zA-Z_].*\.[0-9]+\.[0-9]+\.[a-z]+
+searchPriority 50
