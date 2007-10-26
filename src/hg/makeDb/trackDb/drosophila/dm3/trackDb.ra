@@ -96,6 +96,7 @@ priority 63
 visibility hide
 color 20,90,0
 type bed 6 +
+# please note that this track uses the insect multiz15way
 mafTrack multiz15way
 speciesOrder droSim1 droSec1 droYak2 droEre2 droAna3 dp4 droPer1 droWil1 droVir3 droMoj3 droGri2 anoGam1 apiMel2 triCas2
 
