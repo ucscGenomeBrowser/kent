@@ -382,6 +382,11 @@ gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check 
     rm md5sum.txt
     md5sum *.gz > md5sum.txt
     # check that vsMm7 README.txt is correct.
+
+# QA NOTE on bigZips above (10/26/07 rhead): a user found that rmsk.out.gz was
+# corrupted. It had been gzipped twice.  Gunzipped the file
+# /cluster/store9/loxAfr1/bigZips/rmsk.out.gz, then renamed it with the .gz
+# extension.  Also updated the md5sum.txt file.
  
 # SWAP DM1-DROANA1 BLASTZ (DONE 11/4/04 angie)
     ssh kkstore01
