@@ -19,6 +19,8 @@ set dbs=""
 set encode=""
 set split=""
 set partName=""
+set matches=""
+set match=""
 
 if ( $#argv != 2 ) then
   echo
@@ -83,35 +85,37 @@ else
 endif
 
 # check for entry in trackDb.ra, starting at assembly level
-grep -wq track.$tableName trackDb.ra >& /dev/null
-if (! $status ) then
+set matches=`grep -ws "track.$tableName" trackDb.ra`
+set match=`echo $matches | grep -v "^#"`
+if ( "$match" != '' ) then
   # the track is mentioned in the assembly-level trackDb.ra file
 else
   # see if it's in another assembly-level trackDb*
-  set partName=`grep -wH track.$tableName trackDb.*.ra`
-  if (! $status ) then
+  set partName=`grep -wHs track.$tableName trackDb.*.ra`
+  if ( "$partName" != '' ) then
     # the track is mentioned in an assembly-level trackDb.*.ra file
-    set encode=`echo $partName | sed "s/trackDb//" | sed "s/.ra:track $tableName//"`
+    set encode=`echo $partName | sed -e "s/trackDb//" | sed -e "s/.ra:track $tableName//"`
   else 
     # the track is not at the assembly-level, go up to the organism level
     cd ..
     set currDir=`pwd`
-    grep -wq track.$tableName trackDb.ra >& /dev/null
-    if (! $status ) then
+    set matches=`grep -ws track.$tableName trackDb.ra`
+    set match=`echo $matches | grep -v "^#"`
+    if ( "$match" != '' ) then
       # the track is mentioned in the organism-level trackDb.ra file
     else
       # see if it's in another organism-level trackDb.*.ra
-      set partName=`grep -wH track.$tableName trackDb.*.ra`
-      if (! $status ) then
+      set partName=`grep -wHs track.$tableName trackDb.*.ra`
+      if ( "$partName" != '' ) then
         # the track is mentioned in an organism-level trackDb.*.ra file
-        set encode=`echo $partName | sed "s/trackDb//" | sed "s/.ra:track $tableName//"`
+        set encode=`echo $partName | sed -e "s/trackDb//" | sed -e "s/.ra:track $tableName//"`
       else
         # the track is not at the organism level, go up to the top level
         cd ..
         set currDir=`pwd`
-        grep -wq track.$tableName trackDb.ra >& /dev/null
-       
-        if (! $status ) then
+        set matches=`grep -ws track.$tableName trackDb.ra`
+        set match=`echo $matches | grep -v "^#"`
+        if ( "$match" != '' ) then
           # the track is mentioned in the top-level trackDb.ra file
         else 
            # the track is not at the top level either - it does not exist
@@ -124,10 +128,9 @@ else
 endif
 if ($currDir != "") then
   echo " * trackDb: \
-    `echo $currDir | sed 's^.*makeDb^~^'`/trackDb$encode.ra"
+    `echo $currDir | sed -e 's^.*makeDb^~^'`/trackDb$encode.ra"
 endif
 echo
-
 
 ###########################################
 # now, find the level of the associated .html file
