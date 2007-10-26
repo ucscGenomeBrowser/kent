@@ -118,7 +118,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1414 2007/10/11 05:01:13 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1415 2007/10/26 02:25:31 fanhsu Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -4232,7 +4232,7 @@ char *diseaseClassCode;
 int i=0;
 conn = hAllocConn();
 
-sprintf(query, "select distinct diseaseClassCode from gadAll where geneSymbol='%s';", item->name);
+sprintf(query, "select distinct diseaseClassCode from gadAll where geneSymbol='%s' and association = 'Y' ", item->name);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 
@@ -4281,7 +4281,7 @@ int i=0;
 
 conn = hAllocConn();
 
-sprintf(query, "select distinct broadPhen from gadAll where geneSymbol='%s';", item->name);
+sprintf(query, "select distinct broadPhen from gadAll where geneSymbol='%s' and association = 'Y'", item->name);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 
