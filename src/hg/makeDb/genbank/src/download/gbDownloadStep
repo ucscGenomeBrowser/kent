@@ -20,7 +20,7 @@ my $usage =
     . "  -warnOnCheckError - issue a warning instead of an error if check of existing file\n"
     . "   against ftp site fails.\n";
 #
-# $Id: gbDownloadStep,v 1.11 2007/02/25 02:44:05 markd Exp $
+# $Id: gbDownloadStep,v 1.12 2007/10/29 03:20:27 markd Exp $
 #
 
 use strict;
@@ -236,6 +236,7 @@ if (!($main::genbankUpd || $main::refseqUpd)) {
 if ($#ARGV >= 0) {
     die("Wrong # args: $usage");
 }
+checkOnBuildServer();
 
 beginTask("build", "download");
 ftpInit($FTP_HOST);

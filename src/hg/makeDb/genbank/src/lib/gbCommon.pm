@@ -28,7 +28,8 @@ BEGIN {
                            findConf getConf getConfNo getDbConfUndef getDbConf
                            getDbConfNo splitSpaceList
                            getHgConf setupHgConf callMysql runMysqlDump runMysql
-                           getDownloadTimeFile getDownloadDir getRelDownloadDir);
+                           getDownloadTimeFile getDownloadDir getRelDownloadDir
+                           checkOnBuildServer);
     
     # make stdout/stderr always line buffered
     STDOUT->autoflush(1);
@@ -948,6 +949,16 @@ sub getDownloadTimeFile($$) {
     return dirname(getDownloadDir($downloadRootDir, $db)) . "/download.time";
 }
 
+# if build.server is server in conf file, check that this is the correct host
+sub checkOnBuildServer() {
+    my $bldServer = findConf("build.server");
+    if (defined($bldServer)) {
+        if ($gbCommon::hostName ne $bldServer) {
+            gbError("this script must be run on configured build.server ("
+                    . $bldServer . "), not on " . $gbCommon::hostName);
+        }
+    }
+}
 
 # perl requires a true value at the end
 1;
