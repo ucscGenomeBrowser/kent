@@ -13,7 +13,7 @@
 #include "hui.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: mafClick.c,v 1.48 2007/10/25 19:11:25 fanhsu Exp $";
+static char const rcsid[] = "$Id: mafClick.c,v 1.49 2007/10/29 23:07:07 fanhsu Exp $";
 
 #define ADDEXONCAPITAL
 
@@ -548,7 +548,7 @@ else
 	if (speciesOrder)
 	    {
 	    int speciesCt;
-	    char *species[256];
+	    char *species[2048];
 	    struct mafComp **newOrder, *mcThis;
 	    int i;
 
@@ -1057,7 +1057,7 @@ else
 	if (speciesOrder)
 	    {
 	    int speciesCt;
-	    char *species[256];
+	    char *species[2048];
 	    struct mafComp **newOrder, *mcThis;
 	    int i;
 
