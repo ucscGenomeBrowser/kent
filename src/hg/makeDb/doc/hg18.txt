@@ -17315,6 +17315,7 @@ hgsql hg18 -e 'insert into metaChromGraph (name, minVal, maxVal, binaryFile) val
     # of the rat and human chromosomes (except human randoms) have at
     # least some chains with scores >= 500000.  So I'll filter the
     # stitched chains to keep those with score >= 500000.
+# NOTE FOR NEXT TIME: consider filtering by length (see jaxQtl below).
     chainFilter rn4ToHg18Stitch.over.chain -minScore=500000 \
       > rn4ToHg18Coarse.over.chain
     # I tried liftOver with -minMatch=0.5, 0.33, 0.25 and 0.2.  These are the
@@ -17348,7 +17349,10 @@ hgsql hg18 -e 'insert into metaChromGraph (name, minVal, maxVal, binaryFile) val
     # Many of the records are completely contained within other records 
     # for the same QTL (inversions I suppose) -- they don't really tell 
     # us anything new about the murky QTL region, so merge them in. 
-# NOTE FOR NEXT TIME: instead of the perl+sort, use mergeOverlapBed4.pl.
+# NOTE FOR NEXT TIME: instead of the perl+sort, use something like this:
+#    liftOverMerge -mergeGap=10000 hg18.rgdRatQtl.coarse.lo.bed stdout \
+#    | mergeOverlapBed4.pl - > hg18.rgdRatQtl.coarse.lo.pruned.bed
+# liftOverMerge joins items separated by small (a relative term) gaps.
     perl -we \
       'while (<>) { \
          chomp; ($chrom, $start, $end, $name) = split; \
@@ -17721,6 +17725,10 @@ values ("bipolar", 0, 0, "composite")'
     # Many of the records are completely contained within other records 
     # for the same QTL (inversions I suppose) -- they don't really tell 
     # us anything new about the murky QTL region, so merge them in. 
+# NOTE FOR NEXT TIME: try this:
+#    liftOverMerge -mergeGap=10000 hg18.jaxQTL.asIs.0.1.bed stdout \
+#    | mergeOverlapBed4.pl - > hg18.jaxQTL.asIs.0.1.pruned.bed
+# liftOverMerge joins items separated by small (a relative term) gaps.
     mergeOverlapBed4.pl hg18.jaxQTL.asIs.0.1.bed \
       > hg18.jaxQTL.asIs.0.1.pruned.bed
     mergeOverlapBed4.pl hg18.jaxQTL.padded.0.1.bed \
@@ -17860,6 +17868,442 @@ BASE=/cluster/data/hg18/bed/blastz.calJac1.2007-10-07
 
    hgLoadBed hg18 gad hg18.gad.tab
    rm j18.tmp
+
+
+#########################################################################
+# HAPMAP LD (DONE 10/26/07 angie)
+    # Based on Daryl's hg17 work.  Data version here is release #22,
+    # March 2007 (2007-03).
+
+    # hapmap.org offers ld_data downloads that look like the output of 
+    # makeDcc -- but only for older versions.  To get LD for the latest
+    # release (and for hg18 coords), compute LD from genotype as Daryl did.
+
+############################# unphased ##############################
+    ssh kolossus
+    mkdir -p /san/sanvol1/scratch/hg18/bed/hapmapLd/genotypes_2007-03/run.Haploview
+    cd /san/sanvol1/scratch/hg18/bed/hapmapLd/genotypes_2007-03
+    # wget all genotype data:
+    wget ftp://ftp.hapmap.org/pub/hapmap/public/00README.releasenotes_rel22
+    wget ftp://ftp.hapmap.org/pub/hapmap/public/genotypes/2007-03/fwd_strand/non-redundant/genotypes_chr\*.txt.gz
+    # Use latest Haploview to compute LD scores:
+    wget http://www.broad.mit.edu/mpg/haploview/downloads/Haploview.jar
+
+    # Haploview cluster run on whole-chrom genotype files was a bust.
+    # Even on kki nodes, with java memory maxed out, 47 of 120 jobs crashed
+    # and one was still running after 5.5 days so I killed it.
+
+    # Meanwhile, Daryl suggested using the phased data instead.  It is 
+    # not yet available for all chrom/pops, but start with what's there
+    # to iron out the flow.
+
+    # New approach to unphased -> LD -- split, run Haploview, merge.
+    ssh pk
+    # Note: although the genotypes_ files are *mostly* sorted by position,
+    # they're not completely sorted!  That can cause splitGenotype.pl to
+    # screw up (as well as other downstream stuff), so sort them on the way 
+    # into splitGenotype.
+    mkdir /san/sanvol1/scratch/hg18/bed/hapmapLd/run.splitUnphased
+    cd /san/sanvol1/scratch/hg18/bed/hapmapLd/run.splitUnphased
+    cat > runSplit.csh <<'_EOF_'
+#!/bin/csh -ef
+
+set f = $1
+set base = $f:t:r:r
+set scriptBin = ~/kent/src/hg/snp/hapmapLd
+
+set tmpDir = `mktemp -d -p /scratch/tmp runSplit.XXXXXX`
+zcat $f \
+| sort -k4n,4n \
+| $scriptBin/splitGenotype.pl -suffix .txt.gz \
+  10000000 250000 $tmpDir/$base
+mv $tmpDir/$base.* ../splitUnphased/$base/
+rmdir $tmpDir
+'_EOF_'
+    # << emacs
+    chmod a+x runSplit.csh
+    cp /dev/null jobList
+    foreach f (../genotypes_2007-03/genotypes_chr*.txt.gz)
+      mkdir -p ../splitUnphased/$f:t:r:r
+      echo ./runSplit.csh $f >> jobList
+    end
+    para make jobList
+    para time
+#Completed: 120 of 120 jobs
+#CPU time in finished jobs:        826s      13.77m     0.23h    0.01d  0.000 y
+#IO & Wait Time:                   457s       7.61m     0.13h    0.01d  0.000 y
+#Average job time:                  11s       0.18m     0.00h    0.00d
+#Longest finished job:              22s       0.37m     0.01h    0.00d
+#Submission to last job:            29s       0.48m     0.01h    0.00d
+
+    # Run Haploview on split files.
+    ssh pk
+    mkdir /san/sanvol1/scratch/hg18/bed/hapmapLd/run.HaploviewSplitUnphased
+    cd /san/sanvol1/scratch/hg18/bed/hapmapLd/run.HaploviewSplitUnphased
+    set scriptBin = ~/kent/src/hg/snp/hapmapLd
+    set hvPath = /san/sanvol1/scratch/hg18/bed/hapmapLd/Haploview.jar
+    # Latest installed java on the cluster nodes (not on the para hub machine):
+    set javaPath = /usr/java/jre1.5.0_12/bin/java
+    set javaMemSize = 1500M
+    find /san/sanvol1/scratch/hg18/bed/hapmapLd/splitUnphased \
+      -name \*.txt.gz -ls \
+    | awk '{print $7, $11;}' | sort -nr > filesBySize
+    cp /dev/null jobList
+    foreach f (`awk '{print $2;}' filesBySize`)
+      echo $scriptBin/runHaploview.csh $f $javaPath $hvPath $javaMemSize \
+        >> jobList
+    end
+    para make jobList
+    para time
+#Completed: 1493 of 1493 jobs
+#CPU time in finished jobs:     582015s    9700.25m   161.67h    6.74d  0.018 y
+#IO & Wait Time:                  6558s     109.30m     1.82h    0.08d  0.000 y
+#Average job time:                 394s       6.57m     0.11h    0.00d
+#Longest finished job:            1711s      28.52m     0.48h    0.02d
+#Submission to last job:          1740s      29.00m     0.48h    0.02d
+
+    # Merge Haploview results.
+    ssh pk
+    mkdir /san/sanvol1/scratch/hg18/bed/hapmapLd/run.mergeSplitHapLD
+    cd /san/sanvol1/scratch/hg18/bed/hapmapLd/run.mergeSplitHapLD
+    cat > runMerge.csh <<'_EOF_'
+#!/bin/csh -ef
+
+set mapFile = $1
+set outFile = $2
+
+set scriptBin = ~/kent/src/hg/snp/hapmapLd
+
+set tmpOut = `mktemp -p /scratch/tmp runMerge.XXXXXX`
+$scriptBin/mergeHaploviewLD.pl $mapFile $tmpOut
+mv $tmpOut $outFile
+'_EOF_'
+    # << emacs
+    chmod a+x runMerge.csh
+    mkdir ../mergedUnphasedLD
+    cp /dev/null jobList
+    foreach f (`ls -1S ../splitUnphased/genotypes_chr*/genotypes_chr*.map`)
+      set base = $f:t:r
+      echo ./runMerge.csh $f ../mergedUnphasedLD/$base.txt.LD.gz >> jobList
+    end
+    para make jobList
+    para time
+#Completed: 120 of 120 jobs
+#CPU time in finished jobs:      16035s     267.25m     4.45h    0.19d  0.001 y
+#IO & Wait Time:                 17282s     288.03m     4.80h    0.20d  0.001 y
+#Average job time:                 278s       4.63m     0.08h    0.00d
+#Longest finished job:             737s      12.28m     0.20h    0.01d
+#Submission to last job:           738s      12.30m     0.20h    0.01d
+
+    # Compare results of unsplit run with split/merge:
+    ssh kolossus
+    cd /san/sanvol1/scratch/hg18/bed/hapmapLd
+    # Compare SNP pairs:
+    zcat genotypes_2007-03/genotypes_chr9_JPT_r22_nr.b36_fwd.txt.LD.gz \
+    | awk '{print $1, $2;}' > /tmp/1
+    zcat mergedUnphasedLD/genotypes_chr9_JPT_r22_nr.b36_fwd.txt.LD.gz \
+    | awk '{print $1, $2;}' > /tmp/2
+    wc -l /tmp/1 /tmp/2
+#  32514982 /tmp/1
+#  32514982 /tmp/2
+    cmp /tmp/1 /tmp/2
+    # Compare entire files:
+    zcat genotypes_2007-03/genotypes_chr9_JPT_r22_nr.b36_fwd.txt.LD.gz > /tmp/1
+    zcat mergedUnphasedLD/genotypes_chr9_JPT_r22_nr.b36_fwd.txt.LD.gz > /tmp/2
+    head /tmp/1 /tmp/2
+    cmp /tmp/1 /tmp/2
+    # Woohoo!
+
+############################# phased ##############################
+    # For this build, Daryl suggested using the phased data (output of
+    # Jonathan Marchini's PHASE program) instead of raw genotype data
+    ssh kolossus
+    mkdir -p /san/sanvol1/scratch/hg18/bed/hapmapLd/phased_2007-08_rel22
+    cd /san/sanvol1/scratch/hg18/bed/hapmapLd
+    cd /san/sanvol1/scratch/hg18/bed/hapmapLd/phased_2007-08_rel22
+    wget ftp://ftp.hapmap.org/pub/hapmap/public/phasing/2007-08_rel22/phased/\*.gz
+    # Downstream stuff depends on the inputs being sorted by position -- check:
+    cd /san/sanvol1/scratch/hg18/bed/hapmapLd
+    foreach f (phased_2007-08_rel22/*_legend.txt.gz)
+      echo $f
+      zcat $f | tail +2 | awk '{print $2;}' > /tmp/1
+      sort -n /tmp/1 > /tmp/2
+      cmp /tmp/1 /tmp/2
+    end
+    rm -f /tmp/1 /tmp/2
+
+    # kki cluster run -- need lots of memory!  more than pk's 2G hard limit.
+    ssh kki
+    mkdir /san/sanvol1/scratch/hg18/bed/hapmapLd/run.HaploviewPhased
+    cd /san/sanvol1/scratch/hg18/bed/hapmapLd/run.HaploviewPhased
+    set scriptBin = $HOME/kent/src/hg/snp/hapmapLd
+    set hv = $scriptBin/runHaploviewPhased.csh
+    set phaseDir = /san/sanvol1/scratch/hg18/bed/hapmapLd/phased_2007-08_rel22
+    set hvPath = /san/sanvol1/scratch/hg18/bed/hapmapLd/Haploview.jar
+    # Latest installed java on the cluster nodes (not on the para hub machine):
+    set javaPath = /usr/java/jre1.5.0_12/bin/java
+    set javaMemSize = 4G
+    # Sort by size (descending) to kick off the biggest jobs first:
+    cp /dev/null jobList
+    foreach f (`ls -1S $phaseDir/genotypes_chr*.phase.gz`)
+      echo $hv $f:r:r $javaPath $hvPath $javaMemSize >> jobList
+    end
+    para make jobList
+    para time
+#Completed: 50 of 64 jobs
+#Crashed: 14 jobs
+#CPU time in finished jobs:     293583s    4893.04m    81.55h    3.40d  0.009 y
+#IO & Wait Time:                   756s      12.61m     0.21h    0.01d  0.000 y
+#Average job time:                5887s      98.11m     1.64h    0.07d
+#Longest finished job:           15601s     260.02m     4.33h    0.18d
+#Submission to last job:         22771s     379.52m     6.33h    0.26d
+    # The 14 jobs that crashed are for the .phase files that include some 
+    # '?' characters in addition to the '0' and '1'.  The DCC put those 
+    # ?'s there to indicate putative buggy PHASE output values.  
+    # Unfortunately, Haploview barfs if it doesn't see a 0 or 1.
+
+    # Workaround: Remove the .phase columns and legend rows for all 
+    # SNPs that have a ? in any row of the .phase file, then run
+    # Haploview.
+    ssh kolossus
+    cd /san/sanvol1/scratch/hg18/bed/hapmapLd
+    set scriptBin = ~/kent/src/hg/snp/hapmapLd
+    mkdir phased_deQuestioned
+    cp /dev/null deQ.log
+    foreach f ( \
+        phased_2007-08_rel22/genotypes_chr2_CEU_r22_nr.b36_fwd.phase.gz \
+        phased_2007-08_rel22/genotypes_chr6_YRI_r22_nr.b36_fwd.phase.gz \
+        phased_2007-08_rel22/genotypes_chr1_CEU_r22_nr.b36_fwd.phase.gz \
+        phased_2007-08_rel22/genotypes_chr6_CEU_r22_nr.b36_fwd.phase.gz \
+        phased_2007-08_rel22/genotypes_chr5_CEU_r22_nr.b36_fwd.phase.gz \
+        phased_2007-08_rel22/genotypes_chr4_CEU_r22_nr.b36_fwd.phase.gz \
+        phased_2007-08_rel22/genotypes_chr8_CEU_r22_nr.b36_fwd.phase.gz \
+        phased_2007-08_rel22/genotypes_chr7_CEU_r22_nr.b36_fwd.phase.gz \
+        phased_2007-08_rel22/genotypes_chr10_CEU_r22_nr.b36_fwd.phase.gz \
+        phased_2007-08_rel22/genotypes_chr9_CEU_r22_nr.b36_fwd.phase.gz \
+        phased_2007-08_rel22/genotypes_chr14_CEU_r22_nr.b36_fwd.phase.gz \
+        phased_2007-08_rel22/genotypes_chr16_CEU_r22_nr.b36_fwd.phase.gz \
+        phased_2007-08_rel22/genotypes_chr20_CEU_r22_nr.b36_fwd.phase.gz \
+        phased_2007-08_rel22/genotypes_chr21_CEU_r22_nr.b36_fwd.phase.gz )
+      $scriptBin/deQuestionPhase.pl $f:r:r phased_deQuestioned >>& deQ.log
+    end
+    # ~11 minutes for the 14 files.
+    # Check again that the files are sorted by position.
+    foreach f (phased_deQuestioned/*_legend.txt.gz)
+      echo $f
+      zcat $f | tail +2 | awk '{print $2;}' > /tmp/1
+      sort -n /tmp/1 > /tmp/2
+      cmp /tmp/1 /tmp/2
+    end
+    rm -f /tmp/1 /tmp/2
+
+    # Would it be worth the trouble to write a split script for the 
+    # PHASE format files?  Not this time around.
+    ssh kki
+    mkdir /san/sanvol1/scratch/hg18/bed/hapmapLd/run.HaploviewPhasedDeQ
+    cd /san/sanvol1/scratch/hg18/bed/hapmapLd/run.HaploviewPhasedDeQ
+    set scriptBin = $HOME/kent/src/hg/snp/hapmapLd
+    set hv = $scriptBin/runHaploviewPhased.csh
+    set phaseDir = /san/sanvol1/scratch/hg18/bed/hapmapLd/phased_deQuestioned
+    set hvPath = /san/sanvol1/scratch/hg18/bed/hapmapLd/Haploview.jar
+    # Latest installed java on the cluster nodes (not on the para hub machine):
+    set javaPath = /usr/java/jre1.5.0_12/bin/java
+    set javaMemSize = 4G
+    # Sort by size (descending) to kick off the biggest jobs first:
+    cp /dev/null jobList
+    foreach f (`ls -1S $phaseDir/genotypes_chr*.phase.gz`)
+      echo $hv $f:r:r $javaPath $hvPath $javaMemSize >> jobList
+    end
+    para make jobList
+    para time
+#CPU time in finished jobs:     101992s    1699.87m    28.33h    1.18d  0.003 y
+#IO & Wait Time:                   175s       2.92m     0.05h    0.00d  0.000 y
+#Average job time:                7298s     121.63m     2.03h    0.08d
+#Longest finished job:           12352s     205.87m     3.43h    0.14d
+#Submission to last job:         12352s     205.87m     3.43h    0.14d
+
+    # Our software assumes that LD scores are given for consecutive SNPs
+    # without gaps in between, so scores in the encoded lists can be
+    # associated with other SNPs just by their position in the list.
+    # Make sure that's the case!  I suspect this also depends on the
+    # inputs to Haploview being sorted by position -- checked those above.
+    ssh kolossus
+    cd /san/sanvol1/scratch/hg18/bed/hapmapLd
+    cp /dev/null checkLD.log
+    foreach f ( mergedUnphasedLD/*.LD.gz phased_2007-08_rel22/*.LD.gz \
+                phased_deQuestioned/*.LD.gz )
+      echo $f >> checkLD.log 
+      $scriptBin/checkLDSnpOrder.pl $f >>& checkLD.log 
+      echo "" >> checkLD.log 
+      date
+    end
+    # Takes a long time (~4 minutes for 184 files -> 11-12 hours) --
+    # left to run overnight.
+
+    # Cluster run to translate Haploview .LD output into the DCC's
+    # ld_data downloads format, and in turn into our bed4+ format.
+    ssh pk
+    mkdir /san/sanvol1/scratch/hg18/bed/hapmapLd/{dcc,bed}{Phased,Unphased}
+    mkdir /san/sanvol1/scratch/hg18/bed/hapmapLd/run.formatUnphased
+    cd /san/sanvol1/scratch/hg18/bed/hapmapLd/run.formatUnphased
+    cat > runFormatsUnphased.csh <<'_EOF_'
+#!/bin/csh -ef
+
+set base = $1
+
+set db = hg18
+set scriptBin = ~/kent/src/hg/snp/hapmapLd
+set hapDir    = /san/sanvol1/scratch/$db/bed/hapmapLd
+set unphDir   = $hapDir/genotypes_2007-03
+set unphLDDir   = $hapDir/mergedUnphasedLD
+set dccOut = `echo $base | sed -e 's/^genotypes_/ld_/; s/$/.txt.gz/;'`
+set chr = `echo $base | perl -wpe 's/^.*_(chr[0-9MXY]+)_.*/$1/'`
+set pop = `echo $base | perl -wpe 's/^.*_chr[0-9MXY]+_([A-Z+]+)_.*/$1/'`
+set bedOut = $db.${pop}_$chr.bed.gz
+
+$scriptBin/makeDccAndLdBed.pl \
+  $unphDir/$base.txt.gz $unphLDDir/$base.txt.LD.gz \
+  $hapDir/dccUnphased/$dccOut $hapDir/bedUnphased/$bedOut
+'_EOF_'
+    # << emacs
+    chmod a+x runFormatsUnphased.csh
+    cp /dev/null jobList
+    foreach f (`ls -1S ../mergedUnphasedLD/genotypes_chr*.txt.LD.gz`)
+      echo ./runFormatsUnphased.csh $f:t:r:r:r >> jobList
+    end
+    para make jobList
+    para time
+#Completed: 120 of 120 jobs
+#CPU time in finished jobs:     101968s    1699.46m    28.32h    1.18d  0.003 y
+#IO & Wait Time:                     0s       0.00m     0.00h    0.00d  0.000 y
+#Average job time:                 847s      14.11m     0.24h    0.01d
+#Longest finished job:            2276s      37.93m     0.63h    0.03d
+#Submission to last job:          2276s      37.93m     0.63h    0.03d
+
+    mkdir /san/sanvol1/scratch/hg18/bed/hapmapLd/run.formatPhased
+    cd /san/sanvol1/scratch/hg18/bed/hapmapLd/run.formatPhased
+    cat > runFormatsPhased.csh <<'_EOF_'
+#!/bin/csh -ef
+
+set basePath = $1
+set base = $basePath:t
+
+set db = hg18
+set scriptBin = ~/kent/src/hg/snp/hapmapLd
+set hapDir    = /san/sanvol1/scratch/$db/bed/hapmapLd
+set dccOut = `echo $base | sed -e 's/^genotypes_/ld_/; s/$/.txt.gz/;'`
+set chr    = `echo $base | perl -wpe 's/^.*_(chr[0-9MXY]+)_.*/$1/'`
+set pop    = `echo $base | perl -wpe 's/^.*_chr[0-9MXY]+_([A-Z+]+)_.*/$1/'`
+set bedOut = $db.${pop}_$chr.bed.gz
+
+$scriptBin/makeDccAndLdBed.pl ${basePath}_legend.txt.gz $basePath.LD.gz \
+   $hapDir/dccPhased/$dccOut $hapDir/bedPhased/$bedOut
+'_EOF_'
+    # << emacs
+    chmod a+x runFormatsPhased.csh
+    cp /dev/null jobList
+    foreach f (`ls -1S ../phased_2007-08_rel22/genotypes_chr*.LD.gz \
+                       ../phased_deQuestioned/genotypes_chr*.LD.gz`)
+      echo ./runFormatsPhased.csh $f:r:r >> jobList
+    end
+    para make jobList
+    para time
+#Completed: 64 of 64 jobs
+#CPU time in finished jobs:      62248s    1037.46m    17.29h    0.72d  0.002 y
+#IO & Wait Time:                     0s       0.00m     0.00h    0.00d  0.000 y
+#Average job time:                 970s      16.16m     0.27h    0.01d
+#Longest finished job:            2168s      36.13m     0.60h    0.03d
+#Submission to last job:          2168s      36.13m     0.60h    0.03d
+
+
+    # Create empty tables, then load one pop_chr at a time in order
+    # to avoid thrashing.
+    # hg17 took about half an hour to an hour per population on hgwdev.
+    # Load on kolossus, then ask cluster-admin to rsync to hgwdev.
+    ssh kolossus
+    cd /san/sanvol1/scratch/hg18/bed/hapmapLd
+    cat > loadOne.csh <<'_EOF_'
+#!/bin/csh -ef
+
+set tableBase = $1
+set Pop = $2
+set bedDir = $3
+
+set table = $tableBase$Pop
+hgsql hg18 -e "drop table if exists $table;"
+sed "s/hapmapLd2/$table/" $HOME/kent/src/hg/lib/hapmapLd2.sql \
+| hgsql hg18
+
+set pop = `echo $Pop | perl -wpe 's/ChbJpt/JPT+CHB/; tr/a-z/A-Z/;'`
+foreach c (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X Y)
+  set bed = $bedDir/hg18.${pop}_chr$c.bed.gz
+  if (-e $bed) then
+    echo $bed
+    hgLoadBed -noSort -oldTable hg18 $table $bed
+  else
+    echo "\n$bed does not exist\n"
+  endif
+  echo ""
+end
+echo -n "\nDone with $table.    "; date
+'_EOF_'
+    # << emacs
+    chmod a+x loadOne.csh
+    # phased:
+    cp /dev/null loadPhased.log
+    foreach Pop (Ceu ChbJpt Yri)
+      ./loadOne.csh hapmapLdPh $Pop bedPhased >>& loadPhased.log
+    end
+    # ~16 minutes for all phased on kolossus
+    # unphased:
+    cp /dev/null loadUnphased.log
+    foreach Pop (Ceu Chb ChbJpt Jpt Yri)
+      ./loadOne.csh hapmapLd $Pop bedUnphased >>& loadUnphased.log
+    end
+    # ~21 minutes -- got segfaults for empty gzipped chrY files, debug later.
+    rm -f bed.tab
+
+    # Repeat hg17 sanity checks on the unphased results.
+    ssh pk
+    mkdir /san/sanvol1/scratch/hg18/bed/hapmapLd/run.maxDist
+    cd /san/sanvol1/scratch/hg18/bed/hapmapLd/run.maxDist
+    # Find the largest distance between any paired SNPs in DCC ld_* files.
+    # Should be 249999 or less.  Also count the number of unique starting
+    # coords.  We can compare those to the SNP counts in checkLD.log.
+    cat > runMaxDist.csh <<'_EOF_'
+#!/bin/csh -ef
+
+set dccIn = $1
+set out = $dccIn:r:r.check
+
+echo -n "$dccIn:t    " > $out
+zcat $dccIn \
+| awk '{if ($2-$1>max) max=$2-$1} \
+       {if (prevStart && $1 != prevStart) count++; prevStart = $1;} \
+       END {print max "\t" count; \
+            if (max > 249999) print "ERROR: maxDistance too large!";}' \
+  >> $out
+'_EOF_'
+    # << emacs
+    chmod a+x runMaxDist.csh
+    cp /dev/null jobList
+    foreach f (../dccUnphased/ld_*.txt.gz)
+      echo ./runMaxDist.csh $f >> jobList
+    end
+    para make jobList
+    para time
+#Completed: 120 of 120 jobs
+#CPU time in finished jobs:      12274s     204.56m     3.41h    0.14d  0.000 y
+#IO & Wait Time:                  4137s      68.96m     1.15h    0.05d  0.000 y
+#Average job time:                 137s       2.28m     0.04h    0.00d
+#Longest finished job:             365s       6.08m     0.10h    0.00d
+#Submission to last job:           365s       6.08m     0.10h    0.00d
+    cd ..
+    cat dccUnphased/*.check > maxDist.txt
+    grep -B1 ERROR maxDist.txt
+
+    # Other cleanup? probably the splitUnphased dir. any other intermediates?
+
 
 #########################################################################
 # BLASTZ Zebrafish danRer5 (DONE - 2007-10-18 - Hiram)
