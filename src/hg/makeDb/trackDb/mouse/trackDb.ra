@@ -303,6 +303,16 @@ priority 86
 visibility hide
 type psl .
 
+track phastConsElements30way
+shortLabel Most Conserved
+longLabel PhastCons Conserved Elements
+group compGeno
+priority 105
+visibility hide
+exonArrows off
+showTopScorers 200
+type bed 5 .
+
 track phastConsElements17way
 shortLabel Most Conserved
 longLabel PhastCons Conserved Elements
