@@ -15,7 +15,7 @@
 #include "chain.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: featureBits.c,v 1.49 2007/10/24 21:01:18 daryl Exp $";
+static char const rcsid[] = "$Id: featureBits.c,v 1.50 2007/10/30 05:56:32 daryl Exp $";
 
 static struct optionSpec optionSpecs[] =
 /* command line option specifications */
@@ -822,7 +822,7 @@ if (!faIndependent)
 	    slAddHead(&bedRegionList, bed);
 	    }
 	lineFileClose(&lf);
-	slReverse(bedRegionList);
+	slReverse(&bedRegionList);
 	}
     for (cInfo = chromInfoList; cInfo != NULL; cInfo = cInfo->next)
 	{

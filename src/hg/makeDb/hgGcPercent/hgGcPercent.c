@@ -11,7 +11,7 @@
 #include "twoBit.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: hgGcPercent.c,v 1.27 2007/10/18 23:27:15 daryl Exp $";
+static char const rcsid[] = "$Id: hgGcPercent.c,v 1.28 2007/10/30 05:56:32 daryl Exp $";
 
 /* Command line switches. */
 int winSize = 20000;            /* window size */
@@ -355,7 +355,7 @@ if (bedRegionInName)
 	slAddHead(&bedRegionList, bed);
 	}
     lineFileClose(&lf);
-    slReverse(bedRegionList);
+    slReverse(&bedRegionList);
     }
 if (twoBitIsFile(nibDir))
     safef(twoBitFile, sizeof(twoBitFile), "%s", nibDir);
