@@ -15,6 +15,7 @@
 #include "snp125Ui.h"
 #include "spaceSaver.h"
 #include "ld.h"
+#include "ld2.h"
 #include "hash.h"
 #include "ldUi.h"
 #include "gfxPoly.h"
@@ -59,7 +60,7 @@ void drawDiamond(struct vGfx *vg,
 
 void mapDiamondUi(int xl, int yl, int xt, int yt, 
 			 int xr, int yr, int xb, int yb, 
-			 char *name, char *shortLabel);
+			 char *name, char *shortLabel, char *trackName);
 /* Print out image map rectangle that invokes hgTrackUi. */
 
 Color getOutlineColor(struct track *tg, int itemCount);
@@ -160,7 +161,7 @@ struct ldStats
 /* collect stats for drawing LD values in dense mode */
 {
     struct ldStats *next;
-    char           *name;      /* chromStart as a string */
+    unsigned        chromStart;
     unsigned        n;         /* count of snps with valid LD values */
     unsigned        sumValues; /* sum of valid LD values */
 };

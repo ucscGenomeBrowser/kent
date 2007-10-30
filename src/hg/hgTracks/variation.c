@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.124 2007/04/25 22:21:07 heather Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.125 2007/10/30 01:19:16 angie Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -1131,10 +1131,7 @@ static struct rgbColor blue  = {  0,   0, 255};
 struct dyString *dsLdPos = newDyString(32);
 char *ldPos = NULL;
 
-if (startsWith("hapmapLd", tg->mapName))
-    dyStringPrintf(dsLdPos, "hapmapLd_pos");
-else
-    dyStringPrintf(dsLdPos, "%s_pos", tg->mapName);
+dyStringPrintf(dsLdPos, "%s_pos", tg->tdb->tableName);
 ldPos = cartUsualString(cart, dsLdPos->string, ldPosDefault);
 ldHighLodLowDprime = vgFindColorIx(vg, 255, 224, 224); /* pink */
 ldHighDprimeLowLod = vgFindColorIx(vg, 192, 192, 240); /* blue */
@@ -1185,24 +1182,23 @@ bedLoadLdItemByQuery(tg, table, NULL, loader);
 void ldLoadItems(struct track *tg)
 /* loadItems loads up items for the chromosome range indicated.   */
 {
-int count = 0;
-
-bedLoadLdItem(tg, tg->mapName, (ItemLoader)ldLoad);
-count = slCount((struct sList *)(tg->items));
+if (tg->tdb && sameString(tg->tdb->type, "ld2"))
+    bedLoadLdItem(tg, tg->mapName, (ItemLoader)ld2Load);
+else
+    bedLoadLdItem(tg, tg->mapName, (ItemLoader)ldLoad);
 tg->canPack = FALSE;
 }
 
 void mapDiamondUi(int xl, int yl, int xt, int yt, 
 		  int xr, int yr, int xb, int yb, 
-		  char *name, char *shortLabel)
+		  char *name, char *shortLabel, char *trackName)
 /* Print out image map rectangle that invokes hgTrackUi. */
 {
 hPrintf("<AREA SHAPE=POLY COORDS=\"%d,%d,%d,%d,%d,%d,%d,%d\" ", 
 	xl, yl, xt, yt, xr, yr, xb, yb);
-/* change 'hapmapLd' to use parent composite table name */
 /* move this to hgTracks when finished */
-hPrintf("HREF=\"%s?%s=%u&c=%s&g=hapmapLd&i=%s\"", hgTrackUiName(), 
-	cartSessionVarName(), cartSessionId(cart), chromName, name);
+hPrintf("HREF=\"%s?%s=%u&c=%s&g=%s&i=%s\"", hgTrackUiName(), 
+	cartSessionVarName(), cartSessionId(cart), chromName, trackName, name);
 mapStatusMessage("%s controls", shortLabel);
 hPrintf(">\n");
 }
@@ -1210,19 +1206,12 @@ hPrintf(">\n");
 void mapTrackBackground(struct track *tg, int xOff, int yOff)
 /* Print out image map rectangle that invokes hgTrackUi. */
 {
-struct dyString *name = newDyString(32);
-
-if (startsWith("hapmapLd", tg->mapName))
-    dyStringPrintf(name, "hapmapLd");
-else
-    dyStringPrintf(name, "%s", tg->mapName);
 hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", 
 	xOff, yOff, xOff+insideWidth, yOff+tg->height);
-/* change 'hapmapLd' to use parent composite table name */
 /* move this to hgTracks when finished */
 hPrintf("HREF=\"%s?%s=%u&c=%s&g=%s&i=%s\"", hgTrackUiName(), 
 	cartSessionVarName(), cartSessionId(cart), chromName, 
-	name->string, name->string);
+	tg->tdb->tableName, tg->tdb->tableName);
 mapStatusMessage("%s controls", tg->mapName);
 hPrintf(">\n");
 }
@@ -1314,7 +1303,8 @@ return; /* mapDiamondUI is working well, but there is a bug with
 	   AREA=POLY on the Mac browsers, so this will be 
 	   postponed for now by not using this code */
 if (drawMap && xt-xl>5 && xb-xl>5)
-    mapDiamondUi(xl, yl, xt, yt, xr, yr, xb, yb, name, tg->mapName);
+    mapDiamondUi(xl, yl, xt, yt, xr, yr, xb, yb, name, tg->mapName,
+		 tg->tdb->tableName);
 }
 
 Color getOutlineColor(struct track *tg, int itemCount)
@@ -1323,10 +1313,7 @@ Color getOutlineColor(struct track *tg, int itemCount)
 struct dyString *dsLdOut = newDyString(32);
 char *outColor = NULL;
 
-if(startsWith("hapmapLd", tg->mapName))
-    dyStringPrintf(dsLdOut, "hapmapLd_out");
-else
-    dyStringPrintf(dsLdOut, "%s_out", tg->mapName);
+dyStringPrintf(dsLdOut, "%s_out", tg->tdb->tableName);
 outColor = cartUsualString(cart, dsLdOut->string, ldOutDefault);
 if (winEnd-winStart > 100000)
     return 0;
@@ -1432,10 +1419,10 @@ stats = hashFindVal(ldHash, name);
 if (!stats)
     {
     AllocVar(stats);
-    stats->name      = name;
-    stats->n         = incrementN;
-    stats->sumValues = indexValue;
-    hashAddSaveName(ldHash, name, stats, &stats->name);
+    stats->chromStart = a;
+    stats->n          = incrementN;
+    stats->sumValues  = indexValue;
+    hashAdd(ldHash, name, stats);
     }
 else
     {
@@ -1453,7 +1440,7 @@ char  colorChar = ldIndexIntToChar(colorInt);
 Color shade     = (d->n > 0) ? colorLookup[(int)colorChar] : ldHighDprimeLowLod;
 int   w         = 3; /* width of box */
 int   w2        = w/2;
-int   x         = round((atoi(d->name)-winStart)*scale) + xOff - w2;
+int   x         = round((d->chromStart-winStart)*scale) + xOff - w2;
 int   x1=x-w2, x2=x1+w, y2=y1+tg->heightPer-1;
 
 vgBox(vg, x1, y1, w, tg->heightPer, shade);
@@ -1468,15 +1455,42 @@ if (outlineColor!=0)
 
 void ldDrawDenseValueHash(struct vGfx *vg, struct track *tg, int xOff, int yOff, 
 			  double scale, Color outlineColor, struct hash *ldHash)
-/* Draw all dense LD values */
+/* Draw dynamically computed dense LD values */
 {
 struct hashEl *hashEl, *stats=hashElListHash(ldHash);
-Color yellow = vgFindRgb(vg, &undefinedYellowColor);
-
-vgBox(vg, insideX, yOff, insideWidth, tg->height-1, yellow);
 for (hashEl=stats; hashEl!=NULL; hashEl=hashEl->next)
     ldDrawDenseValue(vg, tg, xOff, yOff, scale, outlineColor, hashEl->val);
 hashElFreeList(&stats);
+}
+
+void ldDrawDense(struct vGfx *vg, struct track *tg, int xOff, int yOff, 
+		 double scale, Color outlineColor,
+		 boolean isLod, boolean isRsquared)
+/* Draw precomputed dense LD values from ld2 table. */
+{
+static struct ldStats lds;
+struct ld2 *dPtr;
+for (dPtr = tg->items;  dPtr != NULL;  dPtr = dPtr->next)
+    {
+    lds.chromStart = dPtr->chromStart;
+    if (isLod)
+	lds.sumValues = ldIndexCharToInt(dPtr->avgLod);
+    else if (isRsquared)
+	lds.sumValues = ldIndexCharToInt(dPtr->avgRsquared);
+    else
+	lds.sumValues = ldIndexCharToInt(dPtr->avgDprime);
+    lds.n = (lds.sumValues < 0) ? 0 : 1;
+    if (dPtr->next != NULL && dPtr->tInt >= 'c' && dPtr->tInt <= 'h')
+	{
+	/* Use tInt to color the spaces between SNPs. */
+	Color shade = shadesOfGray[(int)(dPtr->tInt - 'a')];
+	int x1 = round((dPtr->chromEnd-winStart)*scale) + xOff;
+	int x2 = round((dPtr->next->chromStart-winStart)*scale) + xOff;
+	int w  = x2 - x1;
+	vgBox(vg, x1, yOff, w, tg->heightPer-1, shade);
+	}
+    ldDrawDenseValue(vg, tg, xOff, yOff, scale, outlineColor, &lds);
+    }
 }
 
 void ldDrawLeftLabels(struct track *tg, int seqStart, int seqEnd,
@@ -1485,25 +1499,14 @@ void ldDrawLeftLabels(struct track *tg, int seqStart, int seqEnd,
 	Color color, enum trackVisibility vis)
 /* Draw left labels. */
 {
-char  label[16];
-char *ldVal = cartUsualString(cart, "hapmapLd_val", ldValDefault);
-char *pop         = tg->mapName;
+char  label[17];
+char  var[512];
+char *ldVal;
+char *pop         = cloneString(tg->mapName);
 int   yVisOffset  = ( vis == tvDense ? 0 : tg->heightPer + height/2 );
-struct dyString *dsLdVal = newDyString(32);
-if (!startsWith("hapmapLd", tg->mapName))
-    {
-    dyStringPrintf(dsLdVal, "%s_val", tg->mapName);
-    ldVal = cartUsualString(cart, dsLdVal->string, ldValDefault);
-    }
-if (startsWith("hapmapLd", pop) && strlen(tg->mapName)>8)
-    {
-    pop += 8;
-    if (sameString(tg->mapName, "hapmapLdChbJpt"))
-	pop = cloneString("Jpt+Chb");
-    }
-else
-    pop = "";
 
+safef(var, sizeof(var), "%s_val", tg->mapName);
+ldVal = cartUsualString(cart, var, ldValDefault);
 if (sameString(ldVal, "lod"))
     ldVal = cloneString("LOD");
 else if (sameString(ldVal, "rsquared"))
@@ -1513,9 +1516,20 @@ else if (sameString(ldVal, "dprime"))
 else
     errAbort("%s values are not recognized", ldVal);
 
-safef(label, sizeof(label), "LD %s %s", pop, ldVal);
+char *ptr = strstr(pop, "ChbJpt");
+if (ptr != NULL)
+    safef(label, sizeof(label), "LD JPT+CHB %s", ldVal);
+else if ((ptr = strstr(pop, "Ceu")) || (ptr = strstr(pop, "Chb")) ||
+	 (ptr = strstr(pop, "Jpt")) || (ptr = strstr(pop, "Yri")))
+    {
+    ptr[3] = '\0';
+    safef(label, sizeof(label), "LD %s %s", ptr, ldVal);
+    toUpperN(label, sizeof(label));
+    }
+else
+    safef(label, sizeof(label), "%s %s", tg->tdb->shortLabel, ldVal);
 
-toUpperN(label, sizeof(label));
+
 vgUnclip(vg);
 vgSetClip(vg, leftLabelX, yOff+yVisOffset, leftLabelWidth, tg->heightPer);
 vgTextRight(vg, leftLabelX, yOff+yVisOffset, leftLabelWidth, tg->heightPer, color, font, label);
@@ -1536,7 +1550,11 @@ vgSetClip(vg, insideX, yOff, insideWidth, tg->height);
    keep track of the current data, and a second pointer (sPtr) to
    retrieve the second coordinate.
  * The length of each of the three value vectors (rsquared, dprime,
-   and lod) is the same and is stored in the score field.
+   and lod) is the same and is stored in the ldCount field.
+ * These fields are used *if* the table has them:
+   * The average dprime, rsquared and lod for markers both before and
+     after this marker are stored in the avg{Dprime,Rsquared,Lod} fields.
+   * The T-int measure of LD info content between markers is in the tInt field.
  * The ascii values are mapped to colors in the colorLookup[] array.
  * The four points of each diamond are calculated from the chromosomal 
    coordinates of four SNPs:
@@ -1553,7 +1571,7 @@ void ldDrawItems(struct track *tg, int seqStart, int seqEnd,
 		 MgFont *font, Color color, enum trackVisibility vis)
 /* Draw item list, one per track. */
 {
-struct ld   *dPtr      = NULL, *sPtr = NULL; /* pointers to 5' and 3' ends */
+struct ld2  *dPtr = NULL, *sPtr = NULL; /* pointers to 5' and 3' ends */
 boolean      isLod     = FALSE, isRsquared = FALSE, isDprime = FALSE;
 double       scale     = scaleForPixels(insideWidth);
 int          itemCount = slCount((struct slList *)tg->items);
@@ -1566,20 +1584,25 @@ char        *ldVal     = NULL;
 boolean      ldTrm;
 struct dyString *dsLdVal = newDyString(32);
 struct dyString *dsLdTrm = newDyString(32);
+boolean dynamicDense = FALSE;
 
-if(startsWith("hapmapLd",tg->mapName))
-    {
-    dyStringPrintf(dsLdVal, "hapmapLd_val");
-    dyStringPrintf(dsLdTrm, "hapmapLd_trm");
-    }
-else
-    {
-    dyStringPrintf(dsLdVal, "%s_val", tg->mapName);
-    dyStringPrintf(dsLdTrm, "%s_trm", tg->mapName);
-    }
+dyStringPrintf(dsLdVal, "%s_val", tg->tdb->tableName);
+dyStringPrintf(dsLdTrm, "%s_trm", tg->tdb->tableName);
 ldVal = cartUsualString( cart, dsLdVal->string, ldValDefault);
 ldTrm = cartUsualBoolean(cart, dsLdTrm->string, ldTrmDefault);
-if ( vis==tvDense || ( tg->limitedVisSet && tg->limitedVis==tvDense ) )
+if (tg->limitedVisSet)
+    vis = tg->limitedVis;
+if (vis != tvDense && vis != tvFull)
+    errAbort("Visibility '%s'(%d) is not supported for the LD track yet.",
+	     hStringFromTv(vis), vis);
+if (vis == tvDense)
+    {
+    if (tg->tdb && sameString(tg->tdb->type, "ld2"))
+	dynamicDense = FALSE;
+    else
+	dynamicDense = TRUE;
+    }
+if (vis == tvDense)
     vgBox(vg, insideX, yOff, insideWidth, tg->height-1, yellow);
 mapTrackBackground(tg, xOff, yOff);
 if (tg->items==NULL)
@@ -1597,6 +1620,13 @@ else
 /* initialize arrays to convert from ascii encoding to color values */
 initColorLookup(tg, vg, isDprime);
 
+/* If this is an ld2 table with precomputed averages, skip the big loop. */
+if (!dynamicDense && vis == tvDense)
+    {
+    ldDrawDense(vg, tg, xOff, yOff, scale, outlineColor, isLod, isRsquared);
+    return;
+    }
+
 /* Loop through all items to get values and initial coordinates (a and b) */
 for (dPtr=tg->items; dPtr!=NULL && dPtr->next!=NULL; dPtr=dPtr->next)
     {
@@ -1612,28 +1642,26 @@ for (dPtr=tg->items; dPtr!=NULL && dPtr->next!=NULL; dPtr=dPtr->next)
     else if (isDprime)
 	ldVal = dPtr->dprime;
     /* Loop through all items again to get end coordinates (c and d): used to be 'drawNecklace' */
-    for ( sPtr=dPtr; i<dPtr->score && sPtr!=NULL && sPtr->next!=NULL; sPtr=sPtr->next )
+    for ( sPtr=dPtr; i<dPtr->ldCount && sPtr!=NULL && sPtr->next!=NULL; sPtr=sPtr->next )
 	{
 	c = sPtr->chromStart;
 	d = sPtr->next->chromStart;
 	if (notInWindow(a, b, c, d, ldTrm)) /* Check to see if this diamond needs to be drawn, or if it is out of the window */
 	    {
 	    if ((c-b)/2 >= winEnd-winStart || (ldTrm&&d>=winEnd) || (!ldTrm&&c>=winEnd+(winEnd-winStart)))
-		i = dPtr->score;
+		i = dPtr->ldCount;
 	    continue;
 	    }
 	if ( d-a > 250000 ) /* Check to see if we are trying to reach across a window that is too wide (centromere) */
 	    continue;
 	shade = colorLookup[(int)ldVal[i]];
-	if ( vis==tvFull && ( !tg->limitedVisSet || ( tg->limitedVisSet && tg->limitedVis==tvFull ) ) )
+	if (vis == tvFull)
 	    ldDrawDiamond(vg, tg, width, xOff, yOff, a, b, c, d, shade, outlineColor, scale, drawMap, dPtr->name, vis, ldTrm);
-	else if ( vis==tvDense || ( tg->limitedVisSet && tg->limitedVis==tvDense ) )
+	else if (dynamicDense)
 	    {
 	    ldAddToDenseValueHash(ldHash, a, ldVal[i]);
 	    ldAddToDenseValueHash(ldHash, d, ldVal[i]);
 	    }
-	else
-	    errAbort("Visibility '%s' is not supported for the LD track yet.", hStringFromTv(vis));
 	i++;
 	}
     /* reached end of chromosome, so sPtr->next is null; draw last diamond in list */
@@ -1646,15 +1674,13 @@ for (dPtr=tg->items; dPtr!=NULL && dPtr->next!=NULL; dPtr=dPtr->next)
 	if (notInWindow(a, b, c, d, ldTrm)) /* Check to see if this diamond needs to be drawn, or if it is out of the window */
 	    continue;
 	shade = colorLookup[(int)ldVal[i]];
-	if ( vis==tvFull && ( !tg->limitedVisSet || ( tg->limitedVisSet && tg->limitedVis==tvFull ) ) )
+	if (vis == tvFull)
 	    ldDrawDiamond(vg, tg, width, xOff, yOff, a, b, c, d, shade, outlineColor, scale, drawMap, dPtr->name, vis, ldTrm);
-	else if ( vis==tvDense || ( tg->limitedVisSet && tg->limitedVis==tvDense ) )
+	else if (dynamicDense)
 	    {
 	    ldAddToDenseValueHash(ldHash, a, ldVal[i]);
 	    ldAddToDenseValueHash(ldHash, d, ldVal[i]);
 	    }
-	else
-	    errAbort("Visibility '%s' is not supported for the LD track yet.", hStringFromTv(vis));
 	}
     }
 /* starting at last snp on chromosome, so dPtr->next is null; draw this diamond */
@@ -1671,25 +1697,26 @@ if (dPtr->next==NULL)
 	else if (isDprime)
 	    ldVal = dPtr->dprime;
 	shade = colorLookup[(int)ldVal[0]];
-	if ( vis==tvFull && ( !tg->limitedVisSet || ( tg->limitedVisSet && tg->limitedVis==tvFull ) ) )
+	if (vis == tvFull)
 	    ldDrawDiamond(vg, tg, width, xOff, yOff, a, b, a, b, shade, outlineColor, scale, drawMap, dPtr->name, vis, ldTrm);
-	else if ( vis==tvDense || ( tg->limitedVisSet && tg->limitedVis==tvDense ) )
+	else if (dynamicDense)
 	    {
 	    ldAddToDenseValueHash(ldHash, a, ldVal[0]);
 	    ldAddToDenseValueHash(ldHash, b, ldVal[0]);
 	    }
-	else
-	    errAbort("Visibility '%s' is not supported for the LD track yet.", hStringFromTv(vis));
 	}
     }
-if ( vis==tvDense || ( tg->limitedVisSet && tg->limitedVis==tvDense ) )
+if (dynamicDense)
     ldDrawDenseValueHash(vg, tg, xOff, yOff, scale, outlineColor, ldHash);
 }
 
 void ldFreeItems(struct track *tg)
 /* Free item list. */
 {
-ldFreeList((struct ld**)&tg->items);
+if (tg->tdb && sameString(tg->tdb->type, "ld2"))
+    ld2FreeList((struct ld2**)&tg->items);
+else
+    ldFreeList((struct ld**)&tg->items);
 }
 
 void ldMethods(struct track *tg)
