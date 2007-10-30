@@ -18,7 +18,7 @@
 #include "hgTracks.h"
 #include "cdsSpec.h"
 
-static char const rcsid[] = "$Id: cds.c,v 1.62 2007/09/11 23:51:47 markd Exp $";
+static char const rcsid[] = "$Id: cds.c,v 1.63 2007/10/30 00:41:29 markd Exp $";
 
 /* Definitions of cds colors for coding coloring display */
 #define CDS_ERROR   0
@@ -541,7 +541,7 @@ if (pslIsProtein(psl))
 else 
     {
     char *setting = trackDbSetting(tg->tdb, BASE_COLOR_USE_CDS);
-    if (startsWith("table", setting))
+    if ((setting != NULL) && startsWith("table", setting))
         {
         getCdsFromTbl(psl->qName, setting, cds);
         }
