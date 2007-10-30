@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.45 2007/10/30 17:02:38 hiram Exp $"
+#	"$Id: mm9.txt,v 1.46 2007/10/30 23:45:53 hiram Exp $"
 #
 
 #######################################################################
@@ -6407,13 +6407,7 @@ rm -fr $tmp
     cd all
     cp ../../chrY.starting-tree.mod all.mod
 
-    # non-informative option for closest relatives (exclude regions with only these aligning),
-    # and till Adam fixes the problem, also exclude all species removed from tree (below)
-    echo "ponAbe2,panTro2,rheMac2" > all.non-inf
-    cd ../run.cons
-
     #	root1 == chrom name, file1 == ss file name without .ss suffix
-    cd all
     # Create template file for "all" run
     cat << '_EOF_' > template
 #LOOP
@@ -6445,11 +6439,11 @@ rm -fr $tmp
     ssh hgwdev
     cd /cluster/data/mm9/bed/multiz30way/cons/all
     time nice -n +19 hgLoadBed mm9 phastConsElements30way mostConserved.bed
-    #	Loaded 2679649 elements of size 5
-    #	real    1m5.023s
+    #	Loaded 2782368 elements of size 5
+    #	real    1m15.673s
     # compare with previous tracks
-    hgsql mm9 -s -N -e "select count(*) from phastConsElements17way"
-    #	2679649
+    hgsql mm9 -s -N -e "select count(*) from phastConsElements30way"
+    #	2782368
     hgsql mm8 -s -N -e "select count(*) from phastConsElements17way"
     #	1883370
 
@@ -6536,13 +6530,12 @@ done | xargs cat \
     #	create plot of histogram:
 
     cat << '_EOF_' | gnuplot > histo.png
-set terminal png small color \
-        x000000 xffffff xc000ff x66ff66 xffff00 x00ffff xff0000
+set terminal png small color x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
 set size 1.4, 0.8
 set key left box
 set grid noxtics
 set grid ytics
-set title " Mouse Mm8 Histogram phastCons30way track"
+set title " Mouse Mm9 Histogram phastCons30way track"
 set xlabel " phastCons30way score"
 set ylabel " Relative Frequency"
 set y2label " Cumulative Relative Frequency (CRF)"
@@ -6623,7 +6616,7 @@ set size 1.4, 0.8
 set key left box
 set grid noxtics
 set grid ytics
-set title " Mouse Mm8 Histogram phastCons30wayEuarch track"
+set title " Mouse Mm9 Histogram phastCons30wayEuarch track"
 set xlabel " phastCons30wayEuarch score"
 set ylabel " Relative Frequency"
 set y2label " Cumulative Relative Frequency (CRF)"
@@ -6697,13 +6690,12 @@ done | xargs cat \
     #	create plot of histogram:
 
     cat << '_EOF_' | gnuplot > histo.png
-set terminal png small color \
-        x000000 xffffff xc000ff x66ff66 xffff00 x00ffff xff0000
+set terminal png small color x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
 set size 1.4, 0.8
 set key left box
 set grid noxtics
 set grid ytics
-set title " Mouse Mm8 Histogram phastCons30wayPlacental track"
+set title " Mouse Mm9 Histogram phastCons30wayPlacental track"
 set xlabel " phastCons30wayPlacental score"
 set ylabel " Relative Frequency"
 set y2label " Cumulative Relative Frequency (CRF)"
