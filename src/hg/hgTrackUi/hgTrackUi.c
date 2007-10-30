@@ -33,7 +33,7 @@
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 #define MAX_SP_SIZE 2000
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.403 2007/10/11 20:03:04 hiram Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.404 2007/10/30 01:15:23 angie Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -396,124 +396,84 @@ for (snpLocType=0; snpLocType<snpLocTypeCartSize; snpLocType++)
 void ldUi(struct trackDb *tdb)
 /* Put up UI snp data. */
 {
-struct dyString *dsLdVal = newDyString(32);
-struct dyString *dsLdPos = newDyString(32);
-struct dyString *dsLdOut = newDyString(32);
-struct dyString *dsLdTrm = newDyString(32);
-struct dyString *dsLdInv = newDyString(32);
-char    *ldVal;
-char    *ldPos;
-char    *ldOut;
-boolean  ldTrm;
-boolean  ldInv;
-/* these subTrack-specific variables are needed for special case composite tracks */
-boolean  hapmapLdCeu_inv    = cartUsualBoolean(cart, "hapmapLdCeu_inv", ldInvDefault);
-boolean  hapmapLdChb_inv    = cartUsualBoolean(cart, "hapmapLdChb_inv", ldInvDefault);
-boolean  hapmapLdChbJpt_inv = cartUsualBoolean(cart, "hapmapLdChbJpt_inv", ldInvDefault);
-boolean  hapmapLdJpt_inv    = cartUsualBoolean(cart, "hapmapLdJpt_inv", ldInvDefault);
-boolean  hapmapLdYri_inv    = cartUsualBoolean(cart, "hapmapLdYri_inv", ldInvDefault);
-if (startsWith("hapmapLd",tdb->tableName))
-    {
-    dyStringPrintf(dsLdVal, "hapmapLd_val");
-    dyStringPrintf(dsLdPos, "hapmapLd_pos");
-    dyStringPrintf(dsLdOut, "hapmapLd_out");
-    dyStringPrintf(dsLdTrm, "hapmapLd_trm");
-    dyStringPrintf(dsLdInv, "hapmapLd_inv");
-    }
-else
-    {
-    dyStringPrintf(dsLdVal, "%s_val", tdb->tableName);
-    dyStringPrintf(dsLdPos, "%s_pos", tdb->tableName);
-    dyStringPrintf(dsLdOut, "%s_out", tdb->tableName);
-    dyStringPrintf(dsLdTrm, "%s_trm", tdb->tableName);
-    dyStringPrintf(dsLdInv, "%s_inv", tdb->tableName);
-    }
-ldVal = cartUsualString(cart,  dsLdVal->string, ldValDefault);
-ldPos = cartUsualString(cart,  dsLdPos->string, ldPosDefault);
-ldOut = cartUsualString(cart,  dsLdOut->string, ldOutDefault);
-ldTrm = cartUsualBoolean(cart, dsLdTrm->string, ldTrmDefault);
-ldInv = cartUsualBoolean(cart, dsLdInv->string, ldInvDefault);
+char var[512];
+char *val;
 
 /* It would be nice to add a 'reset' button to reset the ld variables to their defaults. */
 
 printf("<BR><B>LD Values:</B><BR>&nbsp;&nbsp;\n");
 
-cgiMakeRadioButton(dsLdVal->string, "rsquared", sameString("rsquared", ldVal));
+safef(var, sizeof(var), "%s_val", tdb->tableName);
+val = cartUsualString(cart,  var, ldValDefault);
+cgiMakeRadioButton(var, "rsquared", sameString("rsquared", val));
 printf("&nbsp;r<sup>2</sup>&nbsp;&nbsp;");
-cgiMakeRadioButton(dsLdVal->string, "dprime",   sameString("dprime",   ldVal));
+cgiMakeRadioButton(var, "dprime",   sameString("dprime",   val));
 printf("&nbsp;D'&nbsp;&nbsp;");
-cgiMakeRadioButton(dsLdVal->string, "lod",      sameString("lod",      ldVal));
+cgiMakeRadioButton(var, "lod",      sameString("lod",      val));
 printf("&nbsp;LOD<BR>");
 
 printf("<BR><B>Track Geometry:</B><BR>&nbsp;&nbsp;\n");
 
-cgiMakeCheckBox(dsLdTrm->string, ldTrm); 
+safef(var, sizeof(var), "%s_trm", tdb->tableName);
+cgiMakeCheckBox(var, cartUsualBoolean(cart, var, ldTrmDefault)); 
 printf("&nbsp;Trim to triangle<BR>\n");
 
-if (startsWith("hapmapLd", tdb->tableName))
+if (trackDbIsComposite(tdb))
     {
+    struct trackDb *subTdb;
     printf("<BR>&nbsp;&nbsp;&nbsp;");
-    if (hTableExists("hapmapLdYri"))
+    slSort(&(tdb->subtracks), trackDbCmp);
+    for (subTdb = tdb->subtracks;  subTdb != NULL;  subTdb = subTdb->next)
 	{
-	cgiMakeCheckBox("hapmapLdYri_inv", hapmapLdYri_inv); 
-	printf("&nbsp;Invert display for the YRI sample - Yoruba in Ibadan, Nigeria <BR>&nbsp;&nbsp;\n");
-	}
-    if (hTableExists("hapmapLdCeu"))
-	{
-	cgiMakeCheckBox("hapmapLdCeu_inv", hapmapLdCeu_inv); 
-	printf("&nbsp;Invert display for the CEU sample - CEPH (Utah residents with ancestry from northern and western Europe) <BR>&nbsp;&nbsp;\n");
-	}
-    if (hTableExists("hapmapLdChb"))
-	{
-	cgiMakeCheckBox("hapmapLdChb_inv", hapmapLdChb_inv); 
-	printf("&nbsp;Invert display for the CHB sample - Han Chinese in Beijing, China <BR>&nbsp;&nbsp;\n");
-	}
-    if (hTableExists("hapmapLdJpt"))
-	{
-	cgiMakeCheckBox("hapmapLdJpt_inv", hapmapLdJpt_inv); 
-	printf("&nbsp;Invert display for the JPT sample - Japanese in Tokyo, Japan <BR>&nbsp;&nbsp;\n");
-	}
-    if (hTableExists("hapmapLdChbJpt"))
-	{
-	cgiMakeCheckBox("hapmapLdChbJpt_inv", hapmapLdChbJpt_inv); 
-	printf("&nbsp;Invert display for the combined JPT+CHB sample - Japanese in Tokyo, Japan and Han Chinese in Beijing, China <BR>&nbsp;&nbsp;\n");
+	if (hTableExists(subTdb->tableName))
+	    {
+	    safef(var, sizeof(var), "%s_inv", subTdb->tableName);
+	    cgiMakeCheckBox(var, cartUsualBoolean(cart, var, ldInvDefault)); 
+	    printf("&nbsp;Invert display for %s<BR>&nbsp;&nbsp;\n",
+		   subTdb->longLabel);
+	    }
 	}
     }
 else 
     {
-	printf("&nbsp;&nbsp;&nbsp;");
-	cgiMakeCheckBox(dsLdInv->string, ldInv); 
-	printf("&nbsp;Invert the display<BR>&nbsp;&nbsp;\n");
+    safef(var, sizeof(var), "%s_inv", tdb->tableName);
+    printf("&nbsp;&nbsp;&nbsp;");
+    cgiMakeCheckBox(var, cartUsualBoolean(cart, var, ldInvDefault)); 
+    printf("&nbsp;Invert the display<BR>&nbsp;&nbsp;\n");
     }
 printf("<BR><B>Colors:</B>\n");
 
+safef(var, sizeof(var), "%s_pos", tdb->tableName);
+val = cartUsualString(cart, var, ldPosDefault);
 printf("<TABLE>\n ");
 printf("<TR>\n  <TD>&nbsp;&nbsp;LD values&nbsp;&nbsp;</TD>\n  <TD>- ");
-radioButton(dsLdPos->string, ldPos, "red");
+radioButton(var, val, "red");
 printf("</TD>\n  <TD>");
-radioButton(dsLdPos->string, ldPos, "green");
+radioButton(var, val, "green");
 printf("</TD>\n  <TD>");
-radioButton(dsLdPos->string, ldPos, "blue");
+radioButton(var, val, "blue");
 printf("</TD>\n </TR>\n ");
 
+safef(var, sizeof(var), "%s_out", tdb->tableName);
+val = cartUsualString(cart, var, ldOutDefault);
 printf("<TR>\n  <TD>&nbsp;&nbsp;Outlines&nbsp;&nbsp;</TD>\n  <TD>- ");
-radioButton(dsLdOut->string, ldOut, "red");
+radioButton(var, val, "red");
 printf("</TD>\n  <TD>");
-radioButton(dsLdOut->string, ldOut, "green");
+radioButton(var, val, "green");
 printf("</TD>\n  <TD>");
-radioButton(dsLdOut->string, ldOut, "blue");
+radioButton(var, val, "blue");
 printf("</TD>\n  <TD>");
-radioButton(dsLdOut->string, ldOut, "yellow");
+radioButton(var, val, "yellow");
 printf("</TD>\n  <TD>");
-radioButton(dsLdOut->string, ldOut, "black");
+radioButton(var, val, "black");
 printf("</TD>\n  <TD>");
-radioButton(dsLdOut->string, ldOut, "white");
+radioButton(var, val, "white");
 printf("</TD>\n  <TD>");
-radioButton(dsLdOut->string, ldOut, "none");
+radioButton(var, val, "none");
 printf("</TD>\n </TR>\n ");
 printf("</TABLE>\n");
 
-if (startsWith("hapmapLd", tdb->tableName))
+if (trackDbIsComposite(tdb))
     printf("<BR><B>Populations:</B>\n");
 }
 
@@ -2594,9 +2554,9 @@ else if (sameString(track, "snp126"))
 	snp125Ui(tdb);
 else if (sameString(track, "snp127"))
 	snp125Ui(tdb);
-else if (sameString(track, "rertyHumanDiversityLd"))
-        ldUi(tdb);
-else if (sameString(track, "hapmapLd"))
+else if (sameString(track, "rertyHumanDiversityLd") ||
+	 startsWith("hapmapLd", track) ||
+	 sameString(tdb->type, "ld2"))
         ldUi(tdb);
 else if (sameString(track, "cbr_waba"))
         cbrWabaUi(tdb);
