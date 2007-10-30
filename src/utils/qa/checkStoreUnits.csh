@@ -42,6 +42,8 @@ df -h | egrep "store|bluearc|home|data|bin" \
   | sed -e "s/10.1.1.3:\/bluearc/                 /" \
   | sed -e "s/\/dev\/sdc1/         /" \
   | sed -e "s/\/dev\/sdd1/         /" \
+  | sed -e "s/\/dev\/dm-8/         /" \
+  | sed -e "s/\/dev\/dm-9/         /" \
   | egrep % | sort -k4 -r >> storefile
 set fullunit=`awk '$4 == "100%" || $4 == "99%" || $4 == "98%" {print $5}' \
   storefile`
