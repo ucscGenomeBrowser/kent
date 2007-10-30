@@ -118,7 +118,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1416 2007/10/26 20:51:51 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1417 2007/10/30 00:08:40 fanhsu Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -9786,6 +9786,8 @@ if (withLeftLabels)
 	y += rulerHeight;
 	if (zoomedToBaseLevel || rulerCds)
 	    {		    
+	    /* disable complement toggle for HIV because HIV is single stranded RNA */
+	    if (!hIsGsidServer())
 	    drawComplementArrow(vg,leftLabelX, y,
 				leftLabelWidth-1, baseHeight, font);
 	    if (zoomedToBaseLevel)				    
