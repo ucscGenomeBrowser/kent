@@ -10,7 +10,7 @@
 #include "hui.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: configure.c,v 1.15 2007/02/05 22:19:56 ann Exp $";
+static char const rcsid[] = "$Id: configure.c,v 1.16 2007/10/30 10:07:55 aamp Exp $";
 
 void makeNumMenu(char *varName, int minVal, int maxVal, int defaultVal)
 /* Make a drop down menu with a limited number of numerical choices. */
@@ -89,7 +89,7 @@ hPrintf("</TD></TR></TABLE>\n");
 hPrintf("</TD>\n");
 hPrintf("</FORM>\n");
 
-webNewSection("Configure Individual Graphs");
+webNewSection("Configure Graphs");
 hPrintf("Click on the hyperlink by the graph name to configure it.");
 hTableStart();
 hPrintf("<TR><TH>name</TH>");
@@ -98,13 +98,17 @@ struct slRef *ref;
 for (ref = ggList; ref != NULL; ref = ref->next)
     {
     struct genoGraph *gg = ref->val;
-    hPrintf("<TR><TD><A HREF=\"../cgi-bin/hgGenome?%s&%s=on&g=%s\">",
-        cartSidUrlString(cart), hggConfigureOne, gg->name);
-    hPrintf("%s", gg->shortLabel);
-    hPrintf("</A></TD>", gg->shortLabel);
-    hPrintf("<TD>%s</TD></TR>\n", gg->longLabel);
+    /* Only show custom graphs, stand-alone DB graphs, and composite */
+    /* graphs.  Don't show subGraphs part of a composite. */
+    if (gg->isSubGraph == FALSE)
+	{
+	hPrintf("<TR><TD><A HREF=\"../cgi-bin/hgGenome?%s&%s=on&g=%s\">",
+		cartSidUrlString(cart), hggConfigureOne, gg->name);
+	hPrintf("%s", gg->shortLabel);
+	hPrintf("</A></TD>", gg->shortLabel);
+	hPrintf("<TD>%s</TD></TR>\n", gg->longLabel);
+	}
     }
-#define hggConfigureOne hggDo "ConfigureOne"
 hTableEnd();
 cartWebEnd();
 }

@@ -30,7 +30,7 @@
 #include "hgGenome.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.21 2007/10/17 00:20:24 galt Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.22 2007/10/30 10:07:55 aamp Exp $";
 
 
 static char *allColors[] = {
@@ -348,10 +348,16 @@ vgClose(&vg);
 void graphDropdown(struct sqlConnection *conn, char *varName, char *curVal, char *js)
 /* Make a drop-down with available chrom graphs */
 {
-int totalCount = 1 + slCount(ggList);
+int totalCount = 1;
 char **menu, **values;
 int i = 0;
 struct slRef *ref;
+for (ref = ggList; ref != NULL; ref = ref->next)
+    {
+    struct genoGraph *gg = ref->val;
+    if (gg->isComposite == FALSE)
+	totalCount++;
+    }
 
 AllocArray(menu, totalCount);
 AllocArray(values, totalCount);
@@ -359,11 +365,14 @@ menu[0] = "-- nothing --";
 values[0] = "";
 
 for (ref = ggList; ref != NULL; ref = ref->next)
-    {
+    {    
     struct genoGraph *gg = ref->val;
-    ++i;
-    menu[i] = gg->shortLabel;
-    values[i] = gg->name;
+    if (gg->isComposite == FALSE)
+	{
+	++i;
+	menu[i] = gg->shortLabel;
+	values[i] = gg->name;
+	}
     }
 cgiMakeDropListFull(varName, menu, values, totalCount, curVal, js);
 freez(&menu);

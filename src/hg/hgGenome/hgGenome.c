@@ -31,7 +31,7 @@
 #include "jsHelper.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: hgGenome.c,v 1.59 2007/10/16 09:49:51 aamp Exp $";
+static char const rcsid[] = "$Id: hgGenome.c,v 1.60 2007/10/30 10:07:55 aamp Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -41,6 +41,7 @@ char *genome;		/* Name of genome - mouse, human, etc. */
 struct trackLayout tl;  /* Dimensions of things, fonts, etc. */
 struct genoGraph *ggUserList;	/* List of user graphs */
 struct genoGraph *ggDbList;	/* List of graphs in database. */
+struct genoGraph *ggCompList;   /* List of composite genome graphs (DB only). */
 struct slRef *ggList; /* List of active genome graphs */
 struct hash *ggHash;	  /* Hash of active genome graphs */
 boolean withLabels;	/* Draw labels? */
@@ -75,6 +76,8 @@ for (ct = ctList; ct != NULL; ct = ct->next)
 	gg->longLabel = tdb->longLabel;
 	gg->binFileName = trackDbRequiredSetting(tdb, "binaryFile");
 	gg->settings = chromGraphSettingsGet(gg->name, NULL, tdb, cart);
+	gg->isSubGraph = FALSE;
+	gg->isComposite = FALSE;
 	slAddHead(&list, gg);
 	}
     }
@@ -82,8 +85,43 @@ slReverse(&list);
 return list;
 }
 
+struct genoGraph *getCompGraphs(struct sqlConnection *conn)
+/* Get graphs defined in database that are part of a composite. */
+{
+struct genoGraph *list = NULL, *gg;
+struct sqlConnection *conn2 = hAllocConn();
+struct slName *compositeGGList = NULL, *comp;
+
+/* Get initial information from metaChromGraph table */
+if (sqlTableExists(conn, "metaChromGraph"))
+    compositeGGList = sqlQuickList(conn, "select name from metaChromGraph where binaryFile='composite'");
+
+/* Build a hash of genoGraphs out of composite trackDbs and fill in from cart. */
+for (comp = compositeGGList; comp != NULL; comp = comp->next)
+    {
+    struct trackDb *tdb = hTrackDbForTrack(comp->name);
+    if (tdb)
+	{
+	struct chromGraphSettings *cgs = chromGraphSettingsGet(comp->name, conn2, tdb, cart);
+	AllocVar(gg);
+	gg->name = cloneString(comp->name);
+	gg->shortLabel = tdb->shortLabel;
+	gg->longLabel = tdb->longLabel;
+	gg->settings = cgs;
+	gg->isSubGraph = FALSE;
+	gg->isComposite = TRUE;
+	slAddHead(&list, gg);
+	}
+    }
+
+hFreeConn(&conn2);
+slReverse(&list);
+return list;
+}
+
 struct genoGraph *getDbGraphs(struct sqlConnection *conn)
-/* Get graphs defined in database. */
+/* Get graphs defined in database. Also use the composite settings if */
+/* it's a subGraph. */
 {
 struct genoGraph *list = NULL, *gg;
 struct sqlConnection *conn2 = hAllocConn();
@@ -104,26 +142,31 @@ if (sqlTableExists(conn, "metaChromGraph"))
 	}
     sqlFreeResult(&sr);
     }
+slReverse(&list);
 
-/* Where possible fill in additional info from trackDb.  Also
- * add db: prefix to name. */
+/* Where possible fill in additional info from trackDb. */
 for (gg = list; gg != NULL; gg = gg->next)
     {
-    char nameBuf[256];
     struct trackDb *tdb = hTrackDbForTrack(gg->name);
+    struct trackDb *compTdb = hCompositeTrackDbForSubtrack(tdb);
+    gg->isSubGraph = (compTdb != NULL) ? TRUE : FALSE;
+    gg->isComposite = FALSE;
     if (tdb != NULL)
 	{
-	struct chromGraphSettings *cgs = chromGraphSettingsGet(gg->name,
-		conn2, tdb, cart);
+	struct chromGraphSettings *cgs = NULL;
+	if (compTdb == NULL)
+	    cgs = chromGraphSettingsGet(gg->name, conn2, tdb, cart);	
+	else
+	    cgs = chromGraphSettingsGet(compTdb->tableName, conn2, compTdb, cart);	
 	gg->shortLabel = tdb->shortLabel;
 	gg->longLabel = tdb->longLabel;
 	gg->settings = cgs;
 	}
     else
+	{
+	/* If we're here then there's an entry in metaChromGraph but not trackDb */
         gg->settings = chromGraphSettingsGet(gg->name, NULL, NULL, NULL);
-    /* Add db: prefix to separate user and db name space. */
-    safef(nameBuf, sizeof(nameBuf), "%s%s", hggDbTag, gg->name);
-    gg->name = cloneString(nameBuf);
+	}
     }
 hFreeConn(&conn2);
 slReverse(&list);
@@ -134,18 +177,20 @@ void getGenoGraphs(struct sqlConnection *conn)
 /* Set up ggList and ggHash with all available genome graphs */
 {
 struct genoGraph *userList = getUserGraphs();
+struct genoGraph *compList = getCompGraphs(conn);
 struct genoGraph *dbList = getDbGraphs(conn);
 struct genoGraph *gg;
 struct slRef *ref, *refList = NULL;
 
 /* Buld up ggList from user and db lists. */
+for (gg = compList; gg != NULL; gg = gg->next)
+    refAdd(&refList, gg);
 for (gg = userList; gg != NULL; gg = gg->next)
     refAdd(&refList, gg);
 for (gg = dbList; gg != NULL; gg = gg->next)
     refAdd(&refList, gg);
 slReverse(&refList);
 ggList = refList;
-
 /* Buld up ggHash from ggList. */
 ggHash = hashNew(0);
 for (ref = ggList; ref != NULL; ref = ref->next)
