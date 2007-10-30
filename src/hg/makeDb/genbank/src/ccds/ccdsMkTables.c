@@ -5,6 +5,7 @@
 #include "genePred.h"
 #include "jksql.h"
 #include "hdb.h"
+#include "dystring.h"
 #include "hash.h"
 #include "binRange.h"
 #include "ccdsInfo.h"
@@ -12,7 +13,7 @@
 #include "ccdsLocationsJoin.h"
 #include "ccdsCommon.h"
 
-static char const rcsid[] = "$Id: ccdsMkTables.c,v 1.15 2007/08/11 04:55:10 markd Exp $";
+static char const rcsid[] = "$Id: ccdsMkTables.c,v 1.16 2007/10/30 23:06:30 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -80,6 +81,7 @@ static struct genomeInfo genomeInfoTbl[] =
     {"hg17",  9606, 35, 1},
     {"hg18",  9606, 36, 2},
     {"mm8",  10090, 36, 1},
+    {"mm9",  10090, 37, 1},
     {NULL,       0,  0, 0}
 };
 
@@ -101,8 +103,16 @@ for (i = 0;  genomeInfoTbl[i].db != NULL; i++)
     if (sameString(genomeInfoTbl[i].db, hgDb))
         return &(genomeInfoTbl[i]);
     }
-errAbort("don't know how to load ccds into %s, supported databases: hg17",
-         hgDb);
+
+/* not found, generate error string with databases */
+struct dyString *msg = dyStringNew(0);
+for (i = 0;  genomeInfoTbl[i].db != NULL; i++)
+    {
+    dyStringAppend(msg, " ");
+    dyStringAppend(msg, genomeInfoTbl[i].db);
+    }
+errAbort("don't know how to load ccds into %s, must update code to add new databases. Supported databases are:%s",
+         hgDb, msg->string);
 return NULL;
 }
 
