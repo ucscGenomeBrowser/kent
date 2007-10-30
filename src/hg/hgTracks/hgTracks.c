@@ -118,7 +118,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1417 2007/10/30 00:08:40 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1418 2007/10/30 01:24:44 angie Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -12359,6 +12359,10 @@ else if (sameWord(type, "altGraphX"))
 else if (sameWord(type, "rmsk"))
     {
     repeatMethods(track);
+    }
+else if (sameWord(type, "ld2"))
+    {
+    ldMethods(track);
     }
 }
 
