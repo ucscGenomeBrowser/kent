@@ -39,6 +39,10 @@ endif
 
 # find the correct names for starts and ends
 set chr=`getChromFieldName.csh $db $table`
+if ( $status ) then
+  echo "\n error.  Quitting.\n"
+  exit 1
+endif
 if ( $chr == "chrom" ) then
   set start=`hgsql -Ne "DESC $table" $db | awk '{print $1}' \
     | egrep "txStart|chromStart" | head -1 | awk '{print $1}'`
