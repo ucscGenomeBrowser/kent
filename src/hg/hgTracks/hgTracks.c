@@ -118,7 +118,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1418 2007/10/30 01:24:44 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1419 2007/10/30 10:09:02 aamp Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -12620,10 +12620,6 @@ for (hel = hels; hel != NULL; hel = hel->next)
     {
     struct trackDb *subtrack;
     char *table = hel->val;
-    while (*table != ':')
-	table++;
-    /* skip space too */
-    table += 2;
     /* check non-subtrack. */
     if (sameString(track->tdb->tableName, table))
 	{
