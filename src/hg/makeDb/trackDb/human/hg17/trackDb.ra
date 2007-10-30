@@ -1350,7 +1350,7 @@ type bed 4 +
 
     track hapmapLdChbJpt
     subTrack hapmapLd off
-    shortLabel LD C+J
+    shortLabel LD JPT+CHB
     longLabel Linkage Disequilibrium for the Han Chinese and Japanese from Tokyo (JPT+CHB)
     priority 5
 
