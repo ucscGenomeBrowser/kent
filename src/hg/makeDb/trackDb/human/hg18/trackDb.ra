@@ -326,31 +326,31 @@ type bed 4 +
 
     track hapmapLdYri
     subTrack hapmapLd off
-    shortLabel LD YRI Unph
+    shortLabel Unphased YRI
     longLabel Linkage Disequilibrium for the Yoruba (YRI) -- Unphased
     priority 1
 
     track hapmapLdCeu
     subTrack hapmapLd
-    shortLabel LD CEU Unph
+    shortLabel Unphased CEU
     longLabel Linkage Disequilibrium for the CEPH (CEU) -- Unphased
     priority 2
 
     track hapmapLdChb
     subTrack hapmapLd off
-    shortLabel LD CHB Unph
+    shortLabel Unphased CHB
     longLabel Linkage Disequilibrium for the Han Chinese (CHB) -- Unphased
     priority 3
 
     track hapmapLdJpt
     subTrack hapmapLd off
-    shortLabel LD JPT Unph
+    shortLabel Unphased JPT
     longLabel Linkage Disequilibrium for the Japanese from Tokyo (JPT) -- Unphased
     priority 4
 
     track hapmapLdChbJpt
     subTrack hapmapLd off
-    shortLabel LD C+J Unph
+    shortLabel Unph JPT+CHB
     longLabel Linkage Disequilibrium for the Han Chinese and Japanese from Tokyo (JPT+CHB) -- Unphased
     priority 5
 
@@ -368,31 +368,31 @@ type ld2
 
     track hapmapLdPhYri
     subTrack hapmapLdPh off
-    shortLabel LD YRI Phased
+    shortLabel Phased YRI
     longLabel Linkage Disequilibrium for the Yoruba (YRI) -- Phased
     priority 1
 
     track hapmapLdPhCeu
     subTrack hapmapLdPh
-    shortLabel LD CEU Phased
+    shortLabel Phased CEU
     longLabel Linkage Disequilibrium for the CEPH (CEU) -- Phased
     priority 2
 
     track hapmapLdPhChb
     subTrack hapmapLdPh off
-    shortLabel LD CHB Phased
+    shortLabel Phased CHB
     longLabel Linkage Disequilibrium for the Han Chinese (CHB) -- Phased
     priority 3
 
     track hapmapLdPhJpt
     subTrack hapmapLdPh off
-    shortLabel LD JPT Phased
+    shortLabel Phased JPT
     longLabel Linkage Disequilibrium for the Japanese from Tokyo (JPT) -- Phased
     priority 4
 
     track hapmapLdPhChbJpt
     subTrack hapmapLdPh off
-    shortLabel LD C+J Phased
+    shortLabel Ph JPT+CHB
     longLabel Linkage Disequilibrium for the Han Chinese and Japanese from Tokyo (JPT+CHB) -- Phased
     priority 5
 
