@@ -18306,6 +18306,115 @@ zcat $dccIn \
 
 
 #########################################################################
+# University of Uppsala, Sweden Chip-chip  (2007-10-18 kate)
+# 3 datasets (Usf1, Usf2, H3ac) -- wiggle and bed for each, in hg16 coords
+# Submitted by Adam Ameur
+
+    ssh kkstore02
+    cd /cluster/data/hg18/bed
+    mkdir uppsalaChip
+    cd uppsalaChip
+    foreach f (H3ac Usf1 Usf2)
+        #wget -nd  http://www.lcb.uu.se/~mada/UUtracks_hg16/${f}_hg16.wig.gz
+        wget -nd  http://www.lcb.uu.se/~mada/UUtracks_hg16/${f}_hg16.bed
+    end
+    wget -nd  http://www.lcb.uu.se/~mada/UUtracks_hg16/UCSCdescription.html
+
+    # lift to hg18
+    foreach f (lab/*hg16.bed)
+        set b = `echo $f:t | sed 's/_.*//'`
+        echo $b
+        tail +2 $f | \
+            liftOver stdin \
+                /cluster/data/hg16/bed/liftOver/hg16ToHg18.over.chain.gz \
+                    $b.bed $b.bed.unmapped
+    end
+
+    ssh kolossus
+    cd /cluster/data/hg18/bed
+    cd uppsalaChip
+
+    # remove duplicate regions resulting from liftOver
+    cat > trimDups.awk << 'EOF'
+BEGIN {chr=""; start="";}
+{
+if (!(($1 == chr) && ($2 == start)))
+    print;
+    chr = $1;
+    start = $2;
+}
+'EOF'
+
+    # process in 2 unix pipelines, so as not to overload machine
+    cat > load.csh << 'EOF'
+foreach f (lab/*hg16.wig.gz)
+    set b = `echo $f:t | sed 's/_.*//'`
+    echo $b
+    date
+    nice zcat $f | tail +2 | \
+        nice varStepToBedGraph.pl stdin | \
+        nice liftOver stdin \
+            /cluster/data/hg16/bed/liftOver/hg16ToHg18.over.chain.gz \
+            $b.wigBed $b.wigBed.unmapped
+        nice bedSort $b.wigBed stdout | \
+        nice awk -f trimDups.awk | \
+        nice wigEncode stdin $b.wig $b.wib
+    date
+end
+'EOF'
+    csh load.csh >&! load.log &
+    # approx. 50 minutes to process the 3 datasets
+
+    # load bed and wiggles into database
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/uppsalaChip
+    cat > load2.csh << 'EOF'
+foreach f (*.wig)
+    set b = $f:r
+    echo $b
+    date
+    set table = uppsalaChip${b}Sites
+    hgLoadBed hg18 $table $b.bed
+    set table = uppsalaChip${b}Signal
+    ln -s /cluster/data/hg18/bed/uppsalaChip/$b.wib /gbdb/hg18/wib/uppsalaChip${b}Signal.wib
+    hgLoadWiggle hg18 $table $f
+    date
+end
+'EOF'
+    csh load2.csh >&! load2.log  &
+    # just a few minutes runtime
+
+    # somehow 2 beds were left out above (lifted files were missing)
+cat > loadBed.csh << 'EOF'
+foreach f (*.bed)
+    set b = $f:r
+    echo $b
+    hgLoadBed hg18 uppsalaChip${b}Sites $f
+end
+'EOF'
+    csh loadBed.csh >& loadBed.log &
+
+    # data distribution
+     textHistogram H3ac.wigBed -minVal=-2 -real -col=4 -binSize=.5
+     -2.000000  611
+     -1.500000  5711
+     -1.000000 * 391229
+     -0.500000 ************************************************************ 21240336
+     0.000000 ******************************************************* 19325712
+     0.500000 ** 689267
+     1.000000  99083
+     1.500000  24453
+     2.000000  4635
+     2.500000  635
+     3.000000  49
+     3.500000  3
+     <minVal or >=4.000000  562
+
+
+
+
+#########################################################################
+
 # BLASTZ Zebrafish danRer5 (DONE - 2007-10-18 - Hiram)
     ssh kkstore02
     mkdir /cluster/data/hg18/bed/blastzDanRer5.2007-10-17
