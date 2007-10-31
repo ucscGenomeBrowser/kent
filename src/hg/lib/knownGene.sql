@@ -10,7 +10,7 @@ CREATE TABLE knownGene (
   exonCount int(10) unsigned NOT NULL default '0', # Number of exons
   exonStarts longblob NOT NULL,			# Exon start positions
   exonEnds longblob NOT NULL,			# Exon end positions
-  proteinID varchar(40) NOT NULL default '',	# SWISS-PROT protein ID
+  proteinID varchar(40) NOT NULL default '',	# UniProt display ID for Known Genes, UniProt accession or RefSeq protein ID for UCSC Genes
   alignID varchar(255) NOT NULL default '',	# Unique identifier for each alignment	
   KEY name (name),
   KEY chrom (chrom(16),txStart),
