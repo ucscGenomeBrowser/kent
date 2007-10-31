@@ -1720,6 +1720,67 @@ type wig
     color 25,150,25
     priority 6
 
+track mkar2
+shortLabel McDonald-Kreitman AR 3
+longLabel Recent selection in human non-coding regions using a McDonald-Kreitman test
+compositeTrack on
+group x
+priority 206
+visibility hide
+type wig
+
+    track divdbChimpNI
+    subTrack mkar2
+    shortLabel NI chimp
+    longLabel Neutrality index, chimp divergence, dbSNP
+    color 0,0,250
+    priority 1
+
+    track divdbChimpPVal
+    subTrack mkar2
+    shortLabel -log(p-value) chimp
+    longLabel Negative log of p-value, chi-square test, chimp divergence, dbSNP
+    priority 2
+
+    track divhapChimpNI
+    subTrack mkar2
+    shortLabel NI chimp
+    longLabel Neutrality index, chimp divergence, HapMap
+    color 0,0,250
+    priority 3
+
+    track divhapChimpPVal
+    subTrack mkar2
+    shortLabel -log(p-value) chimp
+    longLabel Negative log of p-value, chi-square test, chimp divergence, HapMap
+    priority 4
+
+    track divdbRhesusNI
+    subTrack mkar2
+    shortLabel NI rhesus
+    longLabel Neutrality index, rhesus divergence, dbSNP
+    color 0,0,250
+    priority 5
+
+    track divdbRhesusPVal
+    subTrack mkar2
+    shortLabel -log(p-value) rhesus
+    longLabel Negative log of p-value, chi-square test, rhesus divergence, dbSNP
+    priority 6
+
+    track divhapRhesusNI
+    subTrack mkar2
+    shortLabel NI rhesus
+    longLabel Neutrality index, rhesus divergence, HapMap
+    color 0,0,250
+    priority 7
+
+    track divhapRhesusPVal
+    subTrack mkar2
+    shortLabel -log(p-value) rhesus
+    longLabel Negative log of p-value, chi-square test, rhesus divergence, HapMap
+    priority 8
+
 
 track vsigMaf
 shortLabel VSIG MAF
