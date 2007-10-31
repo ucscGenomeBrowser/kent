@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.125 2007/10/30 01:19:16 angie Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.126 2007/10/31 00:28:56 angie Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -1502,8 +1502,16 @@ void ldDrawLeftLabels(struct track *tg, int seqStart, int seqEnd,
 char  label[17];
 char  var[512];
 char *ldVal;
-char *pop         = cloneString(tg->mapName);
-int   yVisOffset  = ( vis == tvDense ? 0 : tg->heightPer + height/2 );
+int   yVisOffset;
+if (vis == tvDense)
+    {
+    if (withCenterLabels && !trackDbIsComposite(tg->tdb))
+	yVisOffset = tg->heightPer;
+    else
+	yVisOffset = 0;
+    }
+else
+    yVisOffset = tg->heightPer + height/2;
 
 safef(var, sizeof(var), "%s_val", tg->mapName);
 ldVal = cartUsualString(cart, var, ldValDefault);
@@ -1516,19 +1524,24 @@ else if (sameString(ldVal, "dprime"))
 else
     errAbort("%s values are not recognized", ldVal);
 
-char *ptr = strstr(pop, "ChbJpt");
-if (ptr != NULL)
-    safef(label, sizeof(label), "LD JPT+CHB %s", ldVal);
-else if ((ptr = strstr(pop, "Ceu")) || (ptr = strstr(pop, "Chb")) ||
-	 (ptr = strstr(pop, "Jpt")) || (ptr = strstr(pop, "Yri")))
-    {
-    ptr[3] = '\0';
-    safef(label, sizeof(label), "LD %s %s", ptr, ldVal);
-    toUpperN(label, sizeof(label));
-    }
+if (isNotEmpty(tg->shortLabel) && strlen(tg->shortLabel) <= 12)
+    safef(label, sizeof(label), "%s %s", tg->shortLabel, ldVal);
 else
-    safef(label, sizeof(label), "%s %s", tg->tdb->shortLabel, ldVal);
-
+    {
+    char *pop = cloneString(tg->mapName);
+    char *ptr = strstr(pop, "ChbJpt");
+    if (ptr != NULL)
+	safef(label, sizeof(label), "LD JPT+CHB %s", ldVal);
+    else if ((ptr = strstr(pop, "Ceu")) || (ptr = strstr(pop, "Chb")) ||
+	     (ptr = strstr(pop, "Jpt")) || (ptr = strstr(pop, "Yri")))
+	{
+	ptr[3] = '\0';
+	safef(label, sizeof(label), "LD %s %s", ptr, ldVal);
+	toUpperN(label, sizeof(label));
+	}
+    else
+	safef(label, sizeof(label), "LD %s", ldVal);
+    }
 
 vgUnclip(vg);
 vgSetClip(vg, leftLabelX, yOff+yVisOffset, leftLabelWidth, tg->heightPer);
