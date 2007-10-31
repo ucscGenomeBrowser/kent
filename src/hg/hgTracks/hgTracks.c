@@ -118,7 +118,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1419 2007/10/30 10:09:02 aamp Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1420 2007/10/31 16:55:11 giardine Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -11438,12 +11438,49 @@ else
     return gvColorByType(tg, item, vg);
 }
 
+Color oregannoColor(struct track *tg, void *item, struct vGfx *vg) 
+/* color items by type for ORegAnno track */
+{
+struct oreganno *el = item;
+struct oregannoAttr *details = NULL;
+struct sqlConnection *conn = hAllocConn();
+char *escId = NULL; 
+char query[256];
+Color itemColor = MG_BLACK;
+if (el->id != NULL)
+    escId = sqlEscapeString(el->id);
+else
+    escId = sqlEscapeString(el->name);
+
+safef(query, sizeof(query), "select * from oregannoAttr where attribute = 'type' and id = '%s'", escId);
+details = oregannoAttrLoadByQuery(conn, query);
+/* ORegAnno colors 666600 (Dark Green), CCCC66 (Tan), CC0033 (Red),
+                   CCFF99 (Background Green)                        */
+if (sameString(details->attrVal, "REGULATORY POLYMORPHISM"))
+    itemColor = vgFindColorIx(vg, 204, 0, 51); /* red */
+else if (sameString(details->attrVal, "TRANSCRIPTION FACTOR BINDING SITE"))
+    itemColor = vgFindColorIx(vg, 165, 165, 65);  /* tan, darkened some */
+else if (sameString(details->attrVal, "REGULATORY REGION"))
+    itemColor = vgFindColorIx(vg, 102, 102, 0);  /* dark green */
+oregannoAttrFreeList(&details);
+hFreeConn(&conn);
+freeMem(escId);
+return itemColor;
+}
+
 Color omiciaColor(struct track *tg, void *item, struct vGfx *vg)
 /* color by confidence score */
 {
 struct bed *el = item;  
 if (sameString(tg->mapName, "omiciaHand"))
     return vgFindColorIx(vg, 0, 0, 0);
+else if (el->score < 200) 
+    return MG_BLACK;
+else if (el->score < 600)
+    return vgFindColorIx(vg, 230, 130, 0); /* orange */
+else
+    return MG_GREEN;
+/*
 else if (el->score <= 100) 
     return vgFindColorIx(vg, 0, 10, 0); //10.8
 else if (el->score <= 125)
@@ -11470,8 +11507,9 @@ else if (el->score <= 1600)
     return vgFindColorIx(vg, 0, 172, 0); //172.8
 else if (el->score <= 2050)
     return vgFindColorIx(vg, 0, 221, 0); //221.4
-else  /*2350*/
+else  
     return vgFindColorIx(vg, 0, 253, 0); //253.8
+*/
 }
 
 boolean gvFilterAccuracy(struct gv *el)
@@ -11877,6 +11915,8 @@ void oregannoMethods (struct track *tg)
 /* load so can allow filtering on type */
 {
 tg->loadItems = loadOreganno;
+tg->itemColor = oregannoColor;
+tg->itemNameColor = oregannoColor;
 tg->labelNextItemButtonable = TRUE;
 tg->labelNextPrevItem = linkedFeaturesLabelNextPrevItem;
 }
