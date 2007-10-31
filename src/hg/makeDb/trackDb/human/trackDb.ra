@@ -45,7 +45,6 @@ visibility dense
 type bed 3 +
 
 track gad
-release alpha
 shortLabel GAD
 longLabel Genetic Association Studies of Complex Diseases and Disorders
 group phenDis
