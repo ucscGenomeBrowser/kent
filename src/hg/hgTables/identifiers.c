@@ -13,7 +13,7 @@
 #include "trashDir.h"
 #include "web.h"
 
-static char const rcsid[] = "$Id: identifiers.c,v 1.15 2007/06/20 00:33:38 angie Exp $";
+static char const rcsid[] = "$Id: identifiers.c,v 1.16 2007/10/21 04:11:28 angie Exp $";
 
 
 static boolean forCurTable()
@@ -66,7 +66,6 @@ static void explainIdentifiers(struct sqlConnection *conn, char *idField)
  * some examples. */
 {
 char *xrefTable = NULL, *aliasField = NULL;
-struct slName *exampleList = NULL, *ex;
 getXrefInfo(&xrefTable, NULL, &aliasField);
 hPrintf("The items must be values of the <B>%s</B> field of the currently "
 	"selected table, <B>%s</B>",
@@ -78,17 +77,21 @@ else
     hPrintf(".\n");
 hPrintf("(The \"describe table schema\" button shows more information about "
 	"the table fields.)\n");
-hPrintf("Some example values:<BR>\n");
-exampleList = getExamples(curTable, idField, 3);
-for (ex = exampleList;  ex != NULL;  ex = ex->next)
-    hPrintf("<TT>%s</TT><BR>\n", ex->name);
-if (aliasField != NULL)
+if (!isCustomTrack(curTable))
     {
-    exampleList = getExamples(xrefTable, aliasField, 3);
+    struct slName *exampleList = NULL, *ex;
+    hPrintf("Some example values:<BR>\n");
+    exampleList = getExamples(curTable, idField, 3);
     for (ex = exampleList;  ex != NULL;  ex = ex->next)
 	hPrintf("<TT>%s</TT><BR>\n", ex->name);
+    if (aliasField != NULL)
+	{
+	exampleList = getExamples(xrefTable, aliasField, 3);
+	for (ex = exampleList;  ex != NULL;  ex = ex->next)
+	    hPrintf("<TT>%s</TT><BR>\n", ex->name);
+	}
+    hPrintf("\n");
     }
-hPrintf("\n");
 }
 
 void doPasteIdentifiers(struct sqlConnection *conn)
@@ -197,11 +200,18 @@ static struct hash *getAllPossibleIds(struct sqlConnection *conn,
  * so that we can check the validity of pasted/uploaded identifiers. */
 {
 struct hash *matchHash = hashNew(20);
-struct slName *tableList = strchr(curTable, '.') ? slNameNew(curTable) : 
-    hSplitTableNames(curTable);
+struct slName *tableList;
 struct hTableInfo *hti = hFindTableInfoDb(database, NULL, curTable);
 char *idField = NULL;
 char *xrefTable = NULL, *xrefIdField = NULL, *aliasField = NULL;
+if (isCustomTrack(curTable))
+    /* Currently we don't check whether these are valid CT item
+     * names or not.  matchHash is empty for CTs. */
+    tableList = NULL;
+else if (strchr(curTable, '.'))
+    tableList = slNameNew(curTable);
+else
+    tableList = hSplitTableNames(curTable);
 idField = getIdField(database, curTrack, curTable, hti);
 if (idField != NULL)
     addPrimaryIdsToHash(conn, matchHash, idField, tableList);
@@ -220,7 +230,6 @@ return matchHash;
 void doPastedIdentifiers(struct sqlConnection *conn)
 /* Process submit in past identifiers page. */
 {
-struct hashEl *hel = NULL;
 char *idText = trimSpaces(cartString(cart, hgtaPastedIdentifiers));
 htmlOpen("Table Browser (Input Identifiers)");
 if (isNotEmpty(idText))
@@ -255,16 +264,34 @@ if (isNotEmpty(idText))
 	{
 	while ((word = nextWord(&line)) != NULL)
 	    {
+	    struct slName *matchList = NULL, *match;
 	    totalTerms++;
-	    if ((hel = hashLookup(matchHash, word)) != NULL)
+	    if (isCustomTrack(curTable))
+		{
+		/* Currently we don't check whether these are valid CT item
+		 * names or not.  matchHash is empty for CTs. */
+		matchList = slNameNew(word);
+		}
+	    else
+		{
+		/* Support multiple alias->id mappings: */
+		struct hashEl *hel = hashLookup(matchHash, word);
+		if (hel != NULL)
+		    {
+		    matchList = slNameNew((char *)hel->val);
+		    while ((hel = hashLookupNext(hel)) != NULL)
+			{
+			match = slNameNew((char *)hel->val);
+			slAddHead(&matchList, match);
+			}
+		    }
+		}
+	    if (matchList != NULL)
 		{
 		foundTerms++;
-		mustWrite(f, (char *)hel->val, strlen((char *)hel->val));
-		mustWrite(f, "\n", 1);
-		/* Support multiple alias->id mappings: */
-		while ((hel = hashLookupNext(hel)) != NULL)
+		for (match = matchList;  match != NULL;  match = match->next)
 		    {
-		    mustWrite(f, (char *)hel->val, strlen((char *)hel->val));
+		    mustWrite(f, match->name, strlen(match->name));
 		    mustWrite(f, "\n", 1);
 		    }
 		}
@@ -286,10 +313,11 @@ if (isNotEmpty(idText))
 	{
 	char *xrefTable, *aliasField;
 	getXrefInfo(&xrefTable, NULL, &aliasField);
-	warn("Note: some of the identifiers (e.g. %s) have no match in "
+	warn("Note: %d of the %d given identifiers (e.g. %s) have no match in "
 	     "table %s, field %s%s%s%s%s.  "
 	     "Try the \"describe table schema\" button for more "
 	     "information about the table and field.",
+	     (totalTerms - foundTerms), totalTerms,
 	     exampleMiss, curTable, idField,
 	     (xrefTable ? " or in alias table " : ""),
 	     (xrefTable ? xrefTable : ""),
@@ -325,9 +353,12 @@ else
     }
 }
 
-struct hash *identifierHash()
-/* Return hash full of identifiers. */
+struct hash *identifierHash(char *table)
+/* Return hash full of identifiers from the given table (or NULL). */
 {
+if (table && !(sameString(table, curTable) ||
+	       sameString(connectingTableForTrack(table), curTable)))
+    return NULL;
 char *fileName = identifierFileName();
 if (fileName == NULL)
     return NULL;

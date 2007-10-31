@@ -91,6 +91,7 @@ struct mgcDb mgcDb;
 mgcDb.name = "MGC";
 mgcDb.title = "Mammalian Gene Collection";
 mgcDb.server = "mgc";
+mgcDb.organism = NULL;
 /* NOTE: mgc server likes first letter of organism capitalized */
 if (startsWith("hg", database))
     mgcDb.organism = "Hs";

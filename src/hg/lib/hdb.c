@@ -35,7 +35,7 @@
 #include "customTrack.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.336 2007/10/12 22:10:30 angie Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.337 2007/10/23 15:59:13 aamp Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -1947,10 +1947,10 @@ while ((row = sqlNextRow(sr)) != NULL)
 	}
     slAddHead(&bedList, bedItem);
     }
+
 dyStringFree(&query);
-sqlFreeResult(&sr);
-hFreeOrDisconnect(&conn);
 slReverse(&bedList);
+hFreeOrDisconnect(&conn);
 return(bedList);
 }
 
@@ -1963,6 +1963,23 @@ struct bed *hGetBedRange(char *table, char *chrom, int chromStart,
 {
 return(hGetBedRangeDb(hGetDb(), table, chrom, chromStart, chromEnd,
 		      sqlConstraints));
+}
+
+struct bed *hGetFullBedDb(char *db, char *table)
+/* Return a genome-wide bed list of the table. */
+/* WARNING: This isn't designed for CGI use. It's a looped call to */
+/* hGetBedRange() which has its own warning. */
+{
+struct slName *chromList = hChromList(db);
+struct slName *chrom;
+struct bed *list = NULL;
+for (chrom = chromList; chrom != NULL; chrom = chrom->next)
+    {
+    struct bed *bedList = hGetBedRangeDb(db, table, chrom->name, 0, 0, NULL);
+    list = slCat(list, bedList);
+    }
+slFreeList(&chromList);
+return list;
 }
 
 char *hPdbFromGdb(char *genomeDb)
@@ -4352,13 +4369,21 @@ struct sqlConnection *conn = sqlConnect(db);
 struct sqlResult *sr;
 char **row;
 struct hash *hash = newHash(0);
-
 sr = sqlGetResult(conn, "select chrom,size from chromInfo");
 while ((row = sqlNextRow(sr)) != NULL)
     hashAddInt(hash, row[0], sqlUnsigned(row[1]));
 sqlFreeResult(&sr);
 sqlDisconnect(&conn);
 return hash;
+}
+
+struct slName *hChromList(char *db)
+/* Get the list of chrom names from the database's chromInfo table. */
+{
+struct sqlConnection *conn = hAllocOrConnect(db);
+struct slName *list = sqlQuickList(conn, "select chrom from chromInfo");
+hFreeOrDisconnect(&conn);
+return list;
 }
 
 char *hgDirForOrg(char *org)

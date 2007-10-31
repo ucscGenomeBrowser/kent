@@ -62,7 +62,7 @@ Alignment step, runs:
  - gbAlignFinish - Process PSL files and install in data directory";
 
 #
-# $Id: gbAlignStep,v 1.16 2007/02/25 02:44:05 markd Exp $
+# $Id: gbAlignStep,v 1.17 2007/10/29 03:20:27 markd Exp $
 #
 use strict;
 use warnings;
@@ -211,8 +211,9 @@ my $alignDone = "$localWorkDir/align.done";
 # usually have enough space, so we use a tmp dir in the gbRoot
 if (!defined($main::ENV{TMPDIR})) {
     $main::ENV{TMPDIR} = "tmp";
-    makeDir("tmp");
+    makeDir($main::ENV{TMPDIR});
 }
+checkOnBuildServer();
 
 # begin
 if ($initialBuild) {

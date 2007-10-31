@@ -419,6 +419,11 @@ struct bed *hGetBedRangeDb(char *db, char *table, char *chrom, int chromStart,
  * in the given range in table.  If chromEnd is 0, omit the range (whole chrom).
  * WARNING: this does not use the bin column and maybe slower than you would like.*/
 
+struct bed *hGetFullBedDb(char *db, char *table);
+/* Return a genome-wide bed list of the table. */
+/* WARNING: This isn't designed for CGI use. It's a looped call to */
+/* hGetBedRange() which has its own warning. */
+
 struct hash *hCtgPosHash();
 /* Return hash of ctgPos from current database keyed by contig name. */
 
@@ -796,6 +801,9 @@ char *sqlGetField(struct sqlConnection *connIn,
 
 struct hash *hChromSizeHash(char *db);
 /* Get hash of chromosome sizes for database.  Just hashFree it when done. */
+
+struct slName *hChromList(char *db);
+/* Get the list of chrom names from the database's chromInfo table. */
 
 struct mafAli *mafLoadInRegion(struct sqlConnection *conn, char *table,
 	char *chrom, int start, int end);

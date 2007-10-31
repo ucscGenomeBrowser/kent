@@ -1,14 +1,29 @@
 <% if @submissions.blank? %>
-  <p>There are no submissions currently in the system.</p>
+  <p>There are no submissions currently.</p>
 <% else %>
-  <p>These are the submissions in our system</p>
+  <p><%= @title -%></p>
 
  <table id="submissions" cellpadding=10 cellspacing=10>
  <% @submissions.each do |c| %>
   <tr>
   <td><%= link_to c.name, {:action => 'show', :id => c.id} -%></td>
   <td><%= @submissionTypes[c.s_type]["shortLabel"] -%></td>
-  <td><%= c.status -%></td>
+
+  <td> 
+  <%= 
+  if c.status == "invalid"
+    link_to c.status, {:action => 'valid_status', :id => c.id}
+  else
+    if c.status == "load failed"
+      	link_to c.status, {:action => 'load_status', :id => c.id}
+    else
+      	c.status 
+    end
+  end
+  -%>
+  </td>
+
+
   <td><%= c.user.pi -%></td>
   <td><%= c.updated_at.strftime("%Y-%m-%d") -%></td>
   </tr>

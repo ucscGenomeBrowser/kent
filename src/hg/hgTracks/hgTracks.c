@@ -118,7 +118,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1414 2007/10/11 05:01:13 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1419 2007/10/30 10:09:02 aamp Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -4232,7 +4232,7 @@ char *diseaseClassCode;
 int i=0;
 conn = hAllocConn();
 
-sprintf(query, "select distinct diseaseClassCode from gadAll where geneSymbol='%s';", item->name);
+sprintf(query, "select distinct diseaseClassCode from gadAll where geneSymbol='%s' and association = 'Y' order by diseaseClassCode", item->name);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 
@@ -4281,7 +4281,7 @@ int i=0;
 
 conn = hAllocConn();
 
-sprintf(query, "select distinct broadPhen from gadAll where geneSymbol='%s';", item->name);
+sprintf(query, "select distinct broadPhen from gadAll where geneSymbol='%s' and association = 'Y' order by broadPhen", item->name);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 
@@ -9786,6 +9786,8 @@ if (withLeftLabels)
 	y += rulerHeight;
 	if (zoomedToBaseLevel || rulerCds)
 	    {		    
+	    /* disable complement toggle for HIV because HIV is single stranded RNA */
+	    if (!hIsGsidServer())
 	    drawComplementArrow(vg,leftLabelX, y,
 				leftLabelWidth-1, baseHeight, font);
 	    if (zoomedToBaseLevel)				    
@@ -12358,6 +12360,10 @@ else if (sameWord(type, "rmsk"))
     {
     repeatMethods(track);
     }
+else if (sameWord(type, "ld2"))
+    {
+    ldMethods(track);
+    }
 }
 
 static void compositeLoad(struct track *track)
@@ -12614,10 +12620,6 @@ for (hel = hels; hel != NULL; hel = hel->next)
     {
     struct trackDb *subtrack;
     char *table = hel->val;
-    while (*table != ':')
-	table++;
-    /* skip space too */
-    table += 2;
     /* check non-subtrack. */
     if (sameString(track->tdb->tableName, table))
 	{

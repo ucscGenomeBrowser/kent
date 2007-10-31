@@ -95,5 +95,9 @@ struct bed *fbToBedOne(struct featureBits *fb);
 struct bed *fbToBed(struct featureBits *fbList);
 /* Translate a list of featureBits items into (scoreless) bed 6. */
 
+void bitsToBed(Bits *bits, char *chrom, int chromSize, FILE *bed, FILE *fa, 
+	       int minSize);
+/* Write out runs of bits of at least minSize as items in a bed file. */
+
 #endif /* FEATUREBITS_H */
 

@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.39 2007/10/15 23:42:08 hiram Exp $"
+#	"$Id: mm9.txt,v 1.44 2007/10/25 18:38:56 hiram Exp $"
 #
 
 #######################################################################
@@ -6100,6 +6100,443 @@ do
 done | xargs cat | \
         hgLoadMafSummary mm9 -minSize=30000 -mergeGap=1500 \
             -maxSize=200000  multiz30wayAnnoSummary stdin
+    #	Created 5648546 summary blocks from 154642836 components and 16790208
+    #	mafs from stdin
+
+#############################################################################
+## Annotate 30-way multiple alignment with gene annotations
+##		(WORKING - 2007-10-18 - Hiram)
+    # Gene frames
+    ## survey all genomes to see what type of gene track to use
+    ssh hgwdev
+    mkdir /cluster/data/mm9/bed/multiz30way/frames
+    cd /cluster/data/mm9/bed/multiz30way/frames
+    #	dbs: eriEur1, cavPor2, sorAra1 do not exist, can not look at them
+    cat << '_EOF_' > showGenes.csh
+#!/bin/csh -fe
+foreach db (`egrep -v "sorAra1|eriEur1|cavPor2"  ../species.list`)
+    echo -n "${db}: "
+    echo -n "Tables: "
+    set tables = `hgsql $db -N -e "show tables like '%Gene%'"`
+    foreach table ($tables)
+	if ($table == "ensGene" || $table == "refGene" || $table == "mgcGenes" || \
+	    $table == "knownGene") then
+		set count = `hgsql $db -N -e "select count(*) from $table"`
+		echo -n "${table}: ${count}, "
+	endif
+    end
+    set orgName = `hgsql hgcentraltest -N -e \
+	    "select scientificName from dbDb where name='$db'"`
+    set orgId = `hgsql mm9 -N -e \
+	    "select id from organism where name='$orgName'"`
+    if ($orgId == "") then
+	echo "Mrnas: 0"
+    else
+	set count = `hgsql mm9 -N -e "select count(*) from gbCdnaInfo where organism=$orgId"`
+	echo "Mrnas: ${count}"
+    endif
+end
+'_EOF_'
+    # << happy emacs
+    chmod +x ./showGenes.csh
+    #	given this output, manually sorted for this display:
+# hg18: Tables: ensGene: 43569, knownGene: 56722, mgcGenes: 29028, refGene: 25902, Mrnas: 208990
+# mm9: Tables: knownGene: 49409, mgcGenes: 22947, refGene: 21004, Mrnas: 5092390
+# rn4: Tables: ensGene: 33745, knownGene: 8202, mgcGenes: 5400, refGene: 14333, Mrnas: 34471
+# canFam2: Tables: ensGene: 25568, refGene: 833, Mrnas: 1708
+# danRer5: Tables: ensGene: 31740, mgcGenes: 13037, refGene: 12879, Mrnas: 33184
+# fr2: Tables: ensGene: 22102, Mrnas: 1098
+# gasAcu1: Tables: ensGene: 28840, Mrnas: 2326
+# monDom4: Tables: ensGene: 33878, refGene: 163, Mrnas: 398
+# ornAna1: Tables: ensGene: 25981, refGene: 3, Mrnas: 141
+# oryLat1: Tables: ensGene: 23087, Mrnas: 980
+# panTro2: Tables: ensGene: 32852, refGene: 26160, Mrnas: 1277
+# rheMac2: Tables: ensGene: 38561, refGene: 412, Mrnas: 3169
+# bosTau3: Tables: mgcGenes: 9617, refGene: 10287, Mrnas: 26808
+# equCab1: Tables: refGene: 304, Mrnas: 1396
+# felCat3: Tables: refGene: 401, Mrnas: 882
+# galGal3: Tables: refGene: 4210, Mrnas: 31217
+# xenTro2: Tables: mgcGenes: 6255, refGene: 7086, Mrnas: 19155
+# anoCar1: Tables: Mrnas: 12
+# calJac1: Tables: Mrnas: 949
+# dasNov1: Tables: Mrnas: 18
+# echTel1: Tables: Mrnas: 0
+# loxAfr1: Tables: Mrnas: 12
+# oryCun1: Tables: Mrnas: 3786
+# otoGar1: Tables: Mrnas: 0
+# ponAbe2: Tables: Mrnas: 2
+# tetNig1: Tables: Mrnas: 99495
+# tupBel1: Tables: Mrnas: 47
+
+    #	use knownGene for hg18, mm9
+    #	use ensGene for rn4, canFam2, danRer5, fr2, gasAcu1, monDom4, ornAna1,
+    #		oryLat1, panTro2, rheMac2
+    #	use refGene for bosTau3, xenTro2
+    #	use Mrnas for galGal3, tetNig1
+    #	barely can use Mrnas for equCab1, felCat3, anoCar1, dasNov1,
+    #	loxAfr1, oryCun1, ponAbe2
+    #	no annotations for calJac1, echTel1, otoGar1, sorAra1, eriEur1, cavPor2
+    #		tupBel1
+
+    mkdir genes
+    # knownGene
+    for DB in hg18 mm9
+do
+    hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from knownGene" ${DB} \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /scratch/tmp/${DB}.tmp.gz
+    mv /scratch/tmp/${DB}.tmp.gz genes/$DB.gp.gz
+    echo "${DB} done"
+done
+    # ensGene
+    for DB in rn4 canFam2 danRer5 fr2 gasAcu1 monDom4 \
+	ornAna1 oryLat1 panTro2 rheMac2
+do
+    hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from ensGene" ${DB} \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /scratch/tmp/${DB}.tmp.gz
+    mv /scratch/tmp/${DB}.tmp.gz genes/$DB.gp.gz
+    echo "${DB} done"
+done
+    # refGene
+    for DB in bosTau3 xenTro2
+do
+    hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from refGene" ${DB} \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /scratch/tmp/${DB}.tmp.gz
+    mv /scratch/tmp/${DB}.tmp.gz genes/$DB.gp.gz
+    echo "${DB} done"
+done
+    # and finally, using the mrna tables
+
+    #	use Mrnas for galGal3 tetNig1 equCab1 felCat3 anoCar1 dasNov1
+    #	loxAfr1 oryCun1 ponAbe2
+    for DB in galGal3 tetNig1 equCab1 felCat3 anoCar1 dasNov1 \
+	loxAfr1 oryCun1 ponAbe2
+do
+tmpExt=`mktemp temp.XXXXXX`
+tmpMrnaCds=${DB}.mrna-cds.${tmpExt}
+tmpMrna=${DB}.mrna.${tmpExt}
+tmpCds=${DB}.cds.${tmpExt}
+hgsql -N -e 'select all_mrna.qName,cds.name,all_mrna.* \
+	   from all_mrna,gbCdnaInfo,cds \
+	   where (all_mrna.qName = gbCdnaInfo.acc) and \
+	     (gbCdnaInfo.cds != 0) and (gbCdnaInfo.cds = cds.id)' \
+$DB > ${tmpMrnaCds}
+cut -f 1-2  ${tmpMrnaCds} > ${tmpCds}
+cut -f 4-100  ${tmpMrnaCds} > ${tmpMrna}
+mrnaToGene -cdsFile=${tmpCds} -smallInsertSize=8 -quiet ${tmpMrna} stdout | \
+genePredSingleCover stdin stdout | gzip -2c > /scratch/tmp/$DB.tmp.gz
+rm ${tmpMrnaCds} ${tmpMrna} ${tmpCds}
+mv /scratch/tmp/$DB.tmp.gz genes/$DB.gp.gz
+rm -f $tmpExt
+echo "${DB} done"
+done
+
+    ssh kkstore06
+    cd /cluster/data/mm9/bed/multiz30way/frames
+    # leaving out calJac1, echTel1, otoGar1, sorAra1, eriEur1, cavPor2
+    #		tupBel1 since no gene preds there
+    time (cat  ../maf/*.maf | nice -n +19 genePredToMafFrames mm9 stdin stdout rn4 genes/rn4.gp.gz hg18 genes/hg18.gp.gz rheMac2 genes/rheMac2.gp.gz ponAbe2 genes/ponAbe2.gp.gz panTro2 genes/panTro2.gp.gz equCab1 genes/equCab1.gp.gz dasNov1 genes/dasNov1.gp.gz oryCun1 genes/oryCun1.gp.gz felCat3 genes/felCat3.gp.gz canFam2 genes/canFam2.gp.gz loxAfr1 genes/loxAfr1.gp.gz bosTau3 genes/bosTau3.gp.gz monDom4 genes/monDom4.gp.gz ornAna1 genes/ornAna1.gp.gz galGal3 genes/galGal3.gp.gz anoCar1 genes/anoCar1.gp.gz xenTro2 genes/xenTro2.gp.gz gasAcu1 genes/gasAcu1.gp.gz danRer5 genes/danRer5.gp.gz tetNig1 genes/tetNig1.gp.gz fr2 genes/fr2.gp.gz oryLat1 genes/oryLat1.gp.gz | gzip > multiz30way.mafFrames.gz) > frames.log 2>&1
+    # see what it looks like in terms of number of annotations per DB:
+    zcat multiz30way.mafFrames.gz | cut -f4 | sort | uniq -c | sort -n
+     67 loxAfr1
+     79 dasNov1
+    116 ponAbe2
+    491 anoCar1
+   1807 tetNig1
+   2429 felCat3
+   4892 equCab1
+   9156 oryCun1
+  85568 bosTau3
+ 118192 galGal3
+ 129442 xenTro2
+ 208239 rn4
+ 224420 rheMac2
+ 226866 panTro2
+ 228563 hg18
+ 243074 canFam2
+ 329523 danRer5
+ 334418 ornAna1
+ 347708 oryLat1
+ 369267 monDom4
+ 374016 gasAcu1
+ 380839 fr2
+
+    #	load the resulting file
+    ssh hgwdev
+    cd /cluster/data/mm9/bed/multiz30way/frames
+    time nice -n +19 hgLoadMafFrames mm9 multiz30wayFrames \
+	multiz30way.mafFrames.gz
+    #	real    1m1.893s
+
+    #	enable the trackDb entries:
+# frames multiz30wayFrames
+# irows on
+
+#############################################################################
+# phastCons 30-way (WORKING - 2007-10-16 - Hiram)
+
+    # split 30way mafs into 10M chunks and generate sufficient statistics 
+    # files for # phastCons
+    ssh kki
+    mkdir /cluster/data/mm9/bed/multiz30way/msa.split
+    cd /cluster/data/mm9/bed/multiz30way/msa.split
+    mkdir -p /san/sanvol1/scratch/mm9/multiz30way/cons/ss
+
+    cat << '_EOF_' > doSplit.csh
+#!/bin/csh -ef
+    set MAFS = /cluster/data/mm9/bed/multiz30way/maf
+    set WINDOWS = /san/sanvol1/scratch/mm9/multiz30way/cons/ss
+    pushd $WINDOWS
+    set c = $1
+    rm -fr $c
+    mkdir $c
+    twoBitToFa -seq=$c /scratch/data/mm9/mm9.2bit /scratch/tmp/mm9.$c.fa
+    # need to truncate odd-ball scaffold/chrom names that include dots
+    # as phastCons utils can't handle them
+    set CLEAN_MAF = /scratch/tmp/$c.clean.maf.$$
+    perl -wpe 's/^s ([^.]+\.[^. ]+)\.\S+/s $1/' $MAFS/$c.maf > $CLEAN_MAF
+    /cluster/bin/phast/$MACHTYPE/msa_split $CLEAN_MAF -i MAF \
+        -M /scratch/tmp/mm9.$c.fa \
+        -o SS -r $c/$c -w 10000000,0 -I 1000 -B 5000
+    rm -f $CLEAN_MAF /scratch/tmp/mm9.$c.fa
+    popd
+    date >> $c.done
+'_EOF_'
+    # << happy emacs
+    chmod +x doSplit.csh
+
+    cat << '_EOF_' > template
+#LOOP
+doSplit.csh $(root1) {check out line+ $(root1).done}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    #	do the easy ones first to see some immediate results
+    ls -1S -r ../maf | sed -e "s/.maf//" > maf.list
+
+    gensub2 maf.list single template jobList
+    para create jobList
+    para try ... check ... etc
+-
+    # completed shorter jobs in a few hours, there is a problem of swapping
+    # going on here, two of these jobs on a single node can consume all of its
+    # memory and then some.  Three jobs failed to complete, finish them up
+    # manually on hgwdev, the processes grow to over 8 Gb in memory for chr1,
+    # chr11 and chr2
+
+    # Estimate phastCons parameters
+
+    time nice -n +19 /cluster/bin/phast.2007-05-04/phyloFit -i SS \
+/san/sanvol1/scratch/mm9/multiz30way/cons/ss/chrY/chrY.1-10000000.ss \
+--tree "(((((((((((mm9,rn4),cavPor2),oryCun1),((((((hg18,panTro2),ponAbe2),rheMac2),calJac1),otoGar1),tupBel1)),((sorAra1,eriEur1),(((canFam2,felCat3),equCab1),bosTau3))),(dasNov1,(loxAfr1,echTel1))),monDom4),ornAna1),(galGal3,anoCar1)),xenTro2),(((tetNig1,fr2),(gasAcu1,oryLat1)),danRer5))" \
+    --out-root starting-tree
+    #	real    107m46.703s
+    #	Tried this on chr13 too:
+    #	real    4619m42.984s
+    #	that is almost 77 hours on hgwdev == 3.2 days
+
+    # add up the C and G:
+    grep BACKGROUND starting-tree.mod | awk '{printf "%0.3f\n", $3 + $4;}'
+    #	0.400
+    #	This 0.400 is used in the --gc argument below
+    #	got 0.404 with chrM.starting-tree.mod
+
+    # Run phastCons
+    #	This job is I/O intensive in its output files, thus it is all
+    #	working over in /scratch/tmp/
+    ssh pk
+    mkdir -p /cluster/data/mm9/bed/multiz30way/cons/run.cons
+    cd /cluster/data/mm9/bed/multiz30way/cons/run.cons
+
+    #	there are going to be several different phastCons runs using
+    #	this same script.  They trigger off of the current working directory
+    #	$cwd:t which is the "grp" in this script.  It is one of:
+    #	all gliers placentals
+
+    cat << '_EOF_' > doPhast.csh
+#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast.2007-05-04
+set c = $1
+set f = $2
+set len = $3
+set cov = $4
+set rho = $5
+set grp = $cwd:t
+set tmp = /scratch/tmp/$f
+set cons = /cluster/data/mm9/bed/multiz30way/cons
+mkdir -p $tmp
+set san = /san/sanvol1/scratch/mm9/multiz30way/cons
+cp -p $cons/$grp/$grp.mod .
+cp -p $san/ss/$c/$f.ss $cons/$grp/$grp.mod $tmp
+pushd $tmp > /dev/null
+$PHASTBIN/phastCons $f.ss $grp.mod \
+--rho $rho --expected-length $len --target-coverage $cov --quiet \
+--seqname $c --idpref $c --most-conserved $f.bed --score > $f.pp
+popd > /dev/null
+mkdir -p $san/$grp/pp/$c $san/$grp/bed/$c
+sleep 4
+touch $san/$grp/pp/$c $san/$grp/bed/$c
+rm -f $san/$grp/pp/$c/$f.pp
+rm -f $san/$grp/bed/$c/$f.bed
+mv $tmp/$f.pp $san/$grp/pp/$c
+mv $tmp/$f.bed $san/$grp/bed/$c
+rm -fr $tmp
+'_EOF_'
+    # << happy emacs
+    chmod a+x doPhast.csh
+
+    cat << '_EOF_' > template
+#LOOP
+../doPhast.csh $(root1) $(file1) 45 .3 .31 {check out line+ /san/sanvol1/scratch/mm9/multiz30way/cons/all/bed/$(root1)/$(file1).bed}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    # Create parasol batch and run it
+    pushd /san/sanvol1/scratch/mm9/multiz30way/cons
+    ls -1 ss/chr*/chr*.ss | sed 's/.ss$//' > \
+        /cluster/data/mm9/bed/multiz30way/cons/run.cons/ss.list
+    popd
+
+    # run for all species
+    cd ..
+    mkdir -p all run.cons/all
+    cd all
+    cp ../../chrY.starting-tree.mod all.mod
+
+    # non-informative option for closest relatives (exclude regions with only these aligning),
+    # and till Adam fixes the problem, also exclude all species removed from tree (below)
+    echo "ponAbe2,panTro2,rheMac2" > all.non-inf
+    cd ../run.cons
+
+    #	root1 == chrom name, file1 == ss file name without .ss suffix
+    cd all
+    # Create template file for "all" run
+    cat << '_EOF_' > template
+#LOOP
+../doPhast.csh $(root1) $(file1) 45 .3 .31 {check out line+ /san/sanvol1/scratch/mm9/multiz30way/cons/all/bed/$(root1)/$(file1).bed}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+    gensub2 ../ss.list single template jobList
+    para create jobList
+    para try ... check ... push ... etc.
+# Completed: 294 of 294 jobs
+# CPU time in finished jobs:      25724s     428.73m     7.15h    0.30d  0.001 y
+# IO & Wait Time:                  8951s     149.19m     2.49h    0.10d  0.000 y
+# Average job time:                 118s       1.97m     0.03h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:             226s       3.77m     0.06h    0.00d
+# Submission to last job:           582s       9.70m     0.16h    0.01d
+
+    # create Most Conserved track
+    ssh kolossus
+    cd /san/sanvol1/scratch/mm9/multiz30way/cons/all
+    cat bed/*/chr*.bed | sort -k1,1 -k2,2n | \
+        awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' | \
+            /cluster/bin/scripts/lodToBedScore /dev/stdin > mostConserved.bed
+    #	~ 1 minute
+    cp -p mostConserved.bed /cluster/data/mm9/bed/multiz30way/cons/all
+
+    # load into database
+    ssh hgwdev
+    cd /cluster/data/mm9/bed/multiz30way/cons/all
+    time nice -n +19 hgLoadBed mm9 phastConsElements30way mostConserved.bed
+    #	Loaded 2679649 elements of size 5
+    #	real    1m5.023s
+    # compare with previous tracks
+    hgsql mm9 -s -N -e "select count(*) from phastConsElements17way"
+    #	2679649
+    hgsql mm8 -s -N -e "select count(*) from phastConsElements17way"
+    #	1883370
+
+    # Try for 5% overall cov, and 70% CDS cov 
+    #	--rho .31 --expected-length 45 --target-coverage .3
+    #	chrY mod tree
+    featureBits mm9 -enrichment refGene:cds phastConsElements30way
+    #	refGene:cds 1.167%, phastConsElements30way 4.789%,
+    #	both 0.582%, cover 49.90%, enrich 10.42x
+    featureBits mm9 -enrichment knownGene:cds phastConsElements30way
+    #	knownGene:cds 1.278%, phastConsElements30way 4.789%,
+    #	both 0.627%, cover 49.03%, enrich 10.24x
+    #	--rho .31 --expected-length 45 --target-coverage .3 elim non-autho
+    #	chr13 mod tree
+    featureBits mm9 -enrichment refGene:cds mostConserved.bed
+    #	refGene:cds 1.167%, mostConserved.bed 4.128%,
+    #	both 0.614%, cover 52.59%, enrich 12.74x
+    #	--rho .31 --expected-length 45 --target-coverage .3 elim non-autho
+    #	28-way mod tree adjusted to 30-way
+    featureBits mm9 -enrichment refGene:cds mostConserved.bed
+    #	refGene:cds 1.167%, mostConserved.bed 5.841%, both 0.862%, cover
+    #	73.90%, enrich 12.65x
+
+    featureBits mm8 -enrichment refGene:cds phastConsElements17way
+    #	refGene:cds 1.188%, phastConsElements17way 5.398%,
+    #	both 0.832%, cover 70.05%, enrich 12.98x
+    featureBits mm8 -enrichment knownGene:cds phastConsElements17way
+    #	knownGene:cds 1.109%, phastConsElements17way 5.398%,
+    #	both 0.776%, cover 69.99%, enrich 12.97x
+
+
+    # Create merged posterier probability file and wiggle track data files
+    # currently doesn't matter where this is performed, the san is the same
+    # network distance from all machines.
+    cd /san/sanvol1/scratch/mm9/multiz30way/cons/all
+    # sort by chromName, chromStart so that items are in numerical order 
+    #  for wigEncode
+cat > listPp.csh << 'EOF'
+    foreach d (pp/chr*/)
+        ls $d/*.pp | sort -n -t\. -k2
+    end
+'EOF'
+    for D in pp/chr*
+do
+    ls $D/*.pp | sort -n -t\. -k2
+done | xargs cat \
+	| wigEncode -noOverlap stdin phastCons30way.wig phastCons30way.wib
+# Converted stdin, upper limit 1.00, lower limit 0.00
+
+    # Load gbdb and database with wiggle.
+    ssh hgwdev
+    cd /cluster/data/mm9/bed/multiz30way
+    ln -s `pwd`/phastCons30way.wib /gbdb/mm9/wib/phastCons30way.wib
+    time nice -n +19 hgLoadWiggle mm9 phastCons30way phastCons30way.wig
+    #	real    0m42.728s
+
+    #  Create histogram to get an overview of all the data
+    ssh hgwdev
+    cd /cluster/data/mm9/bed/multiz30way
+    time nice -n +19 hgWiggle -doHistogram \
+	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+	    -db=mm9 phastCons30way > histogram.data 2>&1
+    #	real    28m24.388s
+
+    #	create plot of histogram:
+
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small color \
+        x000000 xffffff xc000ff x66ff66 xffff00 x00ffff xff0000
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Mouse Mm8 Histogram phastCons30way track"
+set xlabel " phastCons30way score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.02]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #	<< happy emacs
+
+    display histo.png &
 
 
 #############################################################################
@@ -6116,11 +6553,122 @@ done | xargs cat | \
 
     hgLoadBed mm9 miRNA miRNA.tab
 
+# Add the miRNA section to makeDb/trackDb/mouse/mm9/trackDb.ra
+    vi ~/src/hg/makeDb/trackDb/mouse/mm9/trackDb.ra
+
 # check previous release track before update
     featureBits mm8 miRNA
     #33398 bases of 2567283971 (0.001%) in intersection
 
     featureBits mm9 miRNA
     #39718 bases of 2620346127 (0.002%) in intersection
+
+#############################################################################
+# N-SCAN gene predictions (nscanGene) - (2006-08-30 markd)
+
+    # obtained NSCAN predictions from michael brent's group
+    # at WUSTL
+    cd /cluster/data/mm9/bed/nscan/
+    wget http://mblab.wustl.edu/predictions/mouse/mm9/mm9.gtf
+    wget http://mblab.wustl.edu/predictions/mouse/mm9/mm9.prot.fa
+    wget http://mblab.wustl.edu/predictions/mouse/mm9/readme.txt
+    bzip2 mm9.*
+    chmod a-w *
+
+    mv ardor.wustl.edu/jeltje/mm9/chr_ptx .
+    rm -rf ardor.wustl.edu
+    rm chr_*/index.html*
+    gzip chr_*/*
+    chmod a-w chr_*/*.gz
+
+    # load track
+    ldHgGene -bin -gtf -genePredExt mm9 nscanGene mm9.gtf.bz2
+    hgPepPred mm9 generic nscanPep  mm9.prot.fa.bz2
+    rm *.tab
+
+    # update trackDb; need a mm9-specific page to describe informants
+    mouse/mm9/nscanGene.html   (copy from hg18 and edit)
+    mouse/mm9/trackDb.ra
+    # changed search regex to
+        termRegex chr[0-9a-zA-Z_].*\.[0-9]+\.[0-9]
+
+#########################################################################
+# CPGISLANDS (DONE - 2007-10-25 - Hiram)
+    ssh hgwdev
+    mkdir /cluster/data/mm9/bed/cpgIsland
+    cd /cluster/data/mm9/bed/cpgIsland
+
+    # Build software from Asif Chinwalla (achinwal@watson.wustl.edu)
+    cvs co hg3rdParty/cpgIslands
+    cd hg3rdParty/cpgIslands
+    make
+    #	gcc readseq.c cpg_lh.c -o cpglh.exe
+    cd ../..
+    ln -s hg3rdParty/cpgIslands/cpglh.exe .
+    
+    # cpglh.exe requires hard-masked (N) .fa's.  
+    #	make the hard masked sequences from these soft masked sequences
+    ssh kkstore06
+    time for CHR in ?/chr?.fa ??/chr??.fa ?/chr?_random.fa ??/chr??_random.fa
+    do
+	echo "maskOutFa ${CHR} hard ${CHR}.masked"
+	nice -n +19 maskOutFa ${CHR} hard ${CHR}.masked
+    done
+    #	about 2 minutes
+
+    # There may be warnings about "bad character" for IUPAC ambiguous 
+    # characters like R, S, etc.  Ignore the warnings.  
+    cd /cluster/data/mm9/bed/cpgIsland
+    time for F in ../../*/chr*.fa.masked
+    do
+	FA=${F/*\/}
+	C=${FA/.fa.masked/}
+	echo "./cpglh.exe ${FA} > ${C}.cpg"
+	nice -n +19 ./cpglh.exe ${F} > ${C}.cpg
+    done > cpglh.out 2>&1 &
+    #	about 3 minutes
+
+    #	Several chroms have 0 results:
+    #	-rw-rw-r--  1     0 Oct 25 11:11 chr16_random.cpg
+    #	-rw-rw-r--  1     0 Oct 25 11:12 chr3_random.cpg
+    #	-rw-rw-r--  1     0 Oct 25 11:12 chr5_random.cpg
+    #	-rw-rw-r--  1     0 Oct 25 11:13 chr7_random.cpg
+    #	-rw-rw-r--  1     0 Oct 25 11:13 chrM.cpg
+    #	-rw-rw-r--  1     0 Oct 25 11:13 chrX_random.cpg
+    #	-rw-rw-r--  1     0 Oct 25 11:13 chrY.cpg
+
+    # Transform cpglh output to bed +
+    cat << '_EOF_' > filter.awk
+{
+$2 = $2 - 1;
+width = $3 - $2;
+printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
+       $1, $2, $3, $5,$6, width,
+       $6, width*$7*0.01, 100.0*2*$6/width, $7, $9);
+}
+'_EOF_'
+    #	<< happy emacs
+    awk -f filter.awk chr*.cpg | sort -k1,1 -k2,2n > cpgIsland.bed
+
+    ssh hgwdev
+    cd /cluster/data/mm9/bed/cpgIsland
+    hgLoadBed mm9 cpgIslandExt -tab \
+      -sqlTable=$HOME/kent/src/hg/lib/cpgIslandExt.sql cpgIsland.bed
+    #	Reading cpgIsland.bed
+    #	Loaded 15963 elements of size 10
+    featureBits mm9 cpgIslandExt
+    #	10496250 bases of 2620346127 (0.401%) in intersection
+    featureBits mm8 cpgIslandExt
+    #	10456823 bases of 2567283971 (0.407%) in intersection
+    featureBits mm7 cpgIslandExt
+    #	10439328 bases of 2583394090 (0.404%) in intersection
+    featureBits mm6 cpgIslandExt
+    #	10432360 bases of 2597150411 (0.402%) in intersection
+    featureBits mm5 cpgIslandExt
+    #	10422989 bases of 2615483787 (0.399%) in intersection
+    featureBits mm4 cpgIsland
+    #	11109692 bases of 2627444668 (0.423%) in intersection
+    featureBits mm3 cpgIsland
+    #	10102968 bases of 2505900260 (0.403%) in intersection
 
 #############################################################################

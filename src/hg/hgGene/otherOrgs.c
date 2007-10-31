@@ -10,7 +10,7 @@
 #include "axt.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: otherOrgs.c,v 1.20 2007/04/19 23:08:07 angie Exp $";
+static char const rcsid[] = "$Id: otherOrgs.c,v 1.21 2007/10/25 21:34:06 rhead Exp $";
 
 struct otherOrg
 /* Links involving another organism. */
@@ -299,7 +299,7 @@ hPrintf(
 	"more distant species reciprocal-best BLASTP hits are used. "
 	"Note that the absence of an ortholog in the table below may "
 	"reflect incomplete annotations in the other species rather than "
-	"a true absense of the orthologous gene.");
+	"a true absence of the orthologous gene.");
 webPrintLinkTableStart();
 for (otherOrg = otherOrgList; otherOrg != NULL; otherOrg = otherOrg->next)
     webPrintLabelCell(otherOrg->shortLabel);

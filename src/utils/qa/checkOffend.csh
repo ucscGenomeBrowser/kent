@@ -58,9 +58,10 @@ hgsql -e "SELECT chromInfo.chrom, chromInfo.size, MAX($track.$end) \
      WHERE chromInfo.chrom = $track.$chr \
      GROUP BY chromInfo.chrom" $db > $db.$track.tx.offEnd
 
-head -1 $db.$track.tx.offEnd.2
+head -1 $db.$track.tx.offEnd
 awk '{if($2<$3) {print $1, $2, $3} }' $db.$track.tx.offEnd
 echo "expect blank. any chrom with annotations off the end would be printed."
-echo "results are in $db.$track.tx.offEnd.\n"
+echo
 
+rm $db.$track.tx.offEnd
 

@@ -13,7 +13,7 @@
 #include "hui.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: mafClick.c,v 1.47 2007/08/13 00:57:42 fanhsu Exp $";
+static char const rcsid[] = "$Id: mafClick.c,v 1.49 2007/10/29 23:07:07 fanhsu Exp $";
 
 #define ADDEXONCAPITAL
 
@@ -548,7 +548,7 @@ else
 	if (speciesOrder)
 	    {
 	    int speciesCt;
-	    char *species[256];
+	    char *species[2048];
 	    struct mafComp **newOrder, *mcThis;
 	    int i;
 
@@ -658,7 +658,7 @@ else
 	printf("<TT><PRE>");
 
         /* notify if species removed from alignment */
-        if (speciesOffHash)
+        if ((speciesOffHash) && !hIsGsidServer()) 
             {
             char *species;
             struct hashCookie hc = hashFirst(speciesOffHash);
@@ -1057,7 +1057,7 @@ else
 	if (speciesOrder)
 	    {
 	    int speciesCt;
-	    char *species[256];
+	    char *species[2048];
 	    struct mafComp **newOrder, *mcThis;
 	    int i;
 
@@ -1141,7 +1141,7 @@ else
 	printf("<TT><PRE>");
 
         /* notify if species removed from alignment */
-        if (speciesOffHash)
+        if ((speciesOffHash) && !hIsGsidServer()) 
             {
             char *species;
             struct hashCookie hc = hashFirst(speciesOffHash);

@@ -221,7 +221,8 @@ return; /* mapDiamondUI is working well, but there is a bug with
 	   AREA=POLY on the Mac browsers, so this will be 
 	   postponed for now by not using this code */
 if (drawMap && xt-xl>5 && xb-xl>5)
-    mapDiamondUi(xl, yl, xt, yt, xr, yr, xb, yb, name, tg->mapName);
+    mapDiamondUi(xl, yl, xt, yt, xr, yr, xb, yb, name, tg->mapName,
+		 tg->tdb->tableName);
 }
 
 void rnaPLFoldAddToDenseValueHash(struct hash *rnaPLFoldHash, unsigned a, char rnaPLFoldVal)

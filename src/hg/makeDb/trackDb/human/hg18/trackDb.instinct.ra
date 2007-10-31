@@ -11,6 +11,7 @@ groupings ispyMipCGHGroups
 patDb ispy
 patTable labTrack
 patKey ispyId
+aliasTable probeAliases
 
 track ispyAgiExp
 shortLabel ispy gene expression by agilent
@@ -25,3 +26,4 @@ groupings ispyAgiExpGroups
 patDb ispy
 patTable labTrack
 patKey ispyId
+aliasTable probeAliases

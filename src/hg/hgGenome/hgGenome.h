@@ -142,8 +142,8 @@ extern struct hash *ggHash;	  /* Hash of active genome graphs */
 extern boolean withLabels;	/* Draw labels? */
 
 /*** Name prefixes to separate user from db graphs. */
-#define hggUserTag "user: "
-#define hggDbTag "db: "
+#define hggUserTag "user_"
+#define hggDbTag ""
 
 /*** Info on a single graph. ***/
 
@@ -158,6 +158,8 @@ struct genoGraph
     struct chromGraphSettings *settings;  /* Display settings */
     boolean didRefine;		/* Set to true after refined */
     struct chromGraphBin *cgb;  /* Binary data handle. */
+    boolean isSubGraph;         /* Set to TRUE if the graph is part of a composite. */
+    boolean isComposite;        /* Set to TRUE if this just has composite settings. */
     };
 
 

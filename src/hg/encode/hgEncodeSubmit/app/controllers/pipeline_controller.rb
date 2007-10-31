@@ -10,12 +10,14 @@ class PipelineController < ApplicationController
   def list
     @submissions = Submission.find(:all)
     @submissionTypes = getSubmissionTypes
+    @title = "These are the submissions in our system"
   end
   
   def show_user
     @user = User.find(current_user.id)
     @submissions = @user.submissions
     @submissionTypes = getSubmissionTypes
+    @title = "These are your submissions"
     render :action => 'list'
     # not now using show_user.rhtml
   end
@@ -23,6 +25,26 @@ class PipelineController < ApplicationController
   def show
     @submission = Submission.find(params[:id])
     @submissionTypes = getSubmissionTypes
+    @errText = getErrText
+  end
+
+  def valid_status
+    @submission = Submission.find(params[:id])
+    @errText = getErrText
+  end
+
+  def load_status
+    @submission = Submission.find(params[:id])
+    @errText = getLoadErrText
+  end
+
+  def begin_loading
+    @submission = Submission.find(params[:id])
+    if @submission.status == "validated"
+      @submission.status = "schedule loading"
+      @submission.save
+    end
+    redirect_to :action => 'list'
   end
 
   def new
@@ -225,7 +247,7 @@ class PipelineController < ApplicationController
     end
 
     # make up an error output file
-    @filename = "stderr_file"
+    @filename = "validate_error"
     errFile = path_to_file
 
     # run the validator
@@ -294,7 +316,8 @@ class PipelineController < ApplicationController
       keepers[a.file_name] = "keep"
     end
     # keep other special files
-    keepers["stderr_file"] = "keep"
+    keepers["validate_error"] = "keep"
+    keepers["load_error"] = "keep"
 
     msg = ""
     # make sure parent paths exist
@@ -528,6 +551,24 @@ private
         end
       end
     end
+  end
+
+  def getErrText
+    # get error output file
+    @filename = "validate_error"
+    errFile = path_to_file
+    return File.open(errFile, "rb") { |f| f.read }
+  rescue
+    return ""
+  end
+
+  def getLoadErrText
+    # get error output file
+    @filename = "load_error"
+    errFile = path_to_file
+    return File.open(errFile, "rb") { |f| f.read }
+  rescue
+    return ""
   end
 
 end

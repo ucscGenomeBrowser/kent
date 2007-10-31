@@ -42,8 +42,7 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     geneGraph.o genePred.o genePredReader.o genoLay.o genomicDups.o \
     genomicSuperDups.o ggCluster.o ggDbIo.o ggDump.o ggGraph.o ggMrnaAli.o \
     ggTypes.o glDbRep.o goa.o goaPart.o growthCondition.o grp.o \
-    hapmapAllelesOrtho.o \
-    hapmapAllelesSummary.o \
+    hapmapAllelesOrtho.o hapmapAllelesSummary.o \
     hapmapSnps.o hapmapSnpsCombined.o \
     hCommon.o \
     hCytoBand.o hdb.o hgColors.o hgConfig.o hgExp.o hgFind.o \
@@ -54,7 +53,7 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     jaxOrtholog.o jaxQTL.o jaxQTL3.o jksql.o joiner.o jsHelper.o kg1ToKg2.o \
     jgiGene.o \
     kgAlias.o kgColor.o kgProtAlias.o kgXref.o knownInfo.o knownMore.o knownToSuper.o \
-    ld.o ldUi.o lfs.o liftOver.o liftOverChain.o liftUp.o \
+    ld.o ld2.o lfs.o liftOver.o liftOverChain.o liftUp.o \
     llaInfo.o mafFrames.o mafSummary.o mapSts.o \
     mcnBreakpoints.o metaChromGraph.o microarray.o \
     minChromSize.o minGeneInfo.o mrnaMisMatch.o \

@@ -15,7 +15,7 @@
 #include "hgTables.h"
 
 
-static char const rcsid[] = "$Id: joining.c,v 1.46 2007/04/05 22:26:50 kent Exp $";
+static char const rcsid[] = "$Id: joining.c,v 1.48 2007/10/21 04:11:28 angie Exp $";
 
 struct joinedRow
 /* A row that is joinable.  Allocated in joinableResult->lm. */
@@ -677,7 +677,7 @@ struct hash *idHash = NULL;
 struct hTableInfo *hti = getHti(tj->database, tj->table);
 char *idField = getIdField(tj->database, curTrack, tj->table, hti);
 if (idField != NULL)
-    idHash = identifierHash();
+    idHash = identifierHash(tj->table);
 tjLoadSome(regionList, joined, 0, 0, 
 	idField, idHash, NULL, NULL, tj, 
 	isPositional(tj->database, tj->table), TRUE);
@@ -1110,7 +1110,7 @@ boolean doJoin = joinRequired(database, table,
 			      fieldList, &dtfList, &filterTables);
 struct region *region;
 struct bed *bedList = NULL;
-struct hash *idHash = identifierHash();
+struct hash *idHash = identifierHash(table);
 
 if (! doJoin)
     {

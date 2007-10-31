@@ -66,7 +66,7 @@ exclusiveSet $gbd
 set otherDb uniProt,go,hgFixed,proteome,visiGene
 
 # Define protein databases (currently not checked)
-set proteinDb proteins051015, proteins050415,  proteins050315, proteins050201,proteins041115,proteins0111,proteins0305,proteins031112,proteins040115,proteins040115,proteins0405,proteins070403,proteins072003,proteins092903,proteins1129
+set proteinDb proteins070202,proteins060115,proteins050415,proteins051015,proteins050415,proteins050315,proteins050201,proteins041115,proteins040515,proteins040315,proteins0111,proteins0305,proteins031112,proteins040115,proteins040115,proteins0405,proteins070403,proteins072003,proteins092903,proteins1129
 
 # Define zoo databases (currently not checked)
 set zooDb zooBaboon3,zooCat3,zooChicken3,zooChimp3,zooCow3,zooDog3,zooFugu3,zooHuman3,zooMouse3,zooPig3,zooRat3,zooTetra3,zooZebrafish3
@@ -75,7 +75,7 @@ set zooDb zooBaboon3,zooCat3,zooChicken3,zooChimp3,zooCow3,zooDog3,zooFugu3,zooH
 # Set up list of databases we ignore and those we check.  Program
 # will complain about other databases.
 databasesChecked $gbd,$otherDb,$snp125
-databasesIgnored mysql,lost+found,$proteinDb,$zooDb,sc1,hgcentraltest,hgcentralbeta,test,sp040915,sp040515,sp040315,sp040115,proteins040915,proteins040515,proteins040315
+databasesIgnored mysql,lost+found,$proteinDb,$zooDb,sc1,hgcentraltest,hgcentralbeta,test,sp070202,sp060115,sp051015,sp050415,sp040915,sp040515,sp040315,sp040115,qapushq,mysql-save,hgcentralangie,go070111,go060330
 
 # Define various non-self chains
 set chainDest Hg15,Hg16,Hg17,Hg18,Pt0,Mm2,Mm3,Mm4,Mm5,Mm6,Mm7,Mm8,Mm9,Rn2,Rn3,Rn4,Cb1,Dm1,Dm2,Dm3,Dp1,Dp2,Dp3,PanTro1,PanTro2,GalGal2,GalGal3,Fr1,Fr2,DanRer1,DanRer2,DanRer3,DanRer4,DanRer5,CanFam1,CanFam2,DroYak1,DroYak2,DroAna1,DroAna2,DroMoj1,DroMoj2,DroVir1,DroVir2,DroEre1,DroSec1,DroSim1,DroGri1,DroPer1,DroWil1,AnoGam1,ApiMel1,ApiMel2,TetNig1,XenTro1,XenTro2,MonDom1,MonDom2,MonDom4,RheMac1,RheMac2,BosTau1,BosTau2,BosTau3,FelCat3,GasAcu1,OryLat1,EquCab1,AnoCar1,Ce1,Ce2,Ce4,OrnAna1,CaePb1,CaeRem2,Cb3,PriPac1,StrPur1,StrPur2,Ci1,Ci2
@@ -1114,7 +1114,6 @@ identifier nativeMrnaAccession typeOf=mrnaAccession
     $mm.dupSpMrna.mrnaID minCheck=0.10
     $mm.dupSpMrna.dupMrnaID minCheck=0.10
     hg17.spMrna.mrnaID minCheck=0.30
-    hg18.spMrna.mrnaID minCheck=0.20
     hg17.dupSpMrna.mrnaID minCheck=0.20
     hg17.dupSpMrna.dupMrnaID minCheck=0.20
     hg18.dupSpMrna.mrnaID minCheck=0.20
@@ -1133,12 +1132,13 @@ identifier refSeqId typeOf=mrnaAccession
     $gbd.refLink.mrnaAcc 
     $gbd.refSeqStatus.mrnaAcc minCheck=0.10
     $kgDb.kgXref.refseq exclude= minCheck=0.50
-    $kgDb,!hg16,!hg17,!hg18,!mm5,!mm6,!mm8,!mm9.knownToRefSeq.value minCheck=0.98
-    hg18,mm5,mm6,mm8,mm9.knownToRefSeq.value minCheck=0.96
+    $kgDb,!hg16,!hg17,!hg18,!mm5,!mm6,!mm7,!mm8,!mm9.knownToRefSeq.value minCheck=0.98
+    hg18,mm5,mm6,mm7,mm8,mm9.knownToRefSeq.value minCheck=0.96
     hg16,hg17.knownToRefSeq.value minCheck=0.95
     $kgDb.refSeqKg.refseq minCheck=0.60
     $ccdsDb,!hg18.ccdsInfo.mrnaAcc chopAfter=. minCheck=0.40
-    $gbd,!rn2,!rn3.mrnaRefseq.refseq minCheck=0.25
+    $gbd,!mm5,!rn2,!rn3.mrnaRefseq.refseq minCheck=0.25
+    mm5.mrnaRefseq.refseq minCheck=0.22
     rn2,rn3.mrnaRefseq.refseq minCheck=0.03
     $gbd,!hg15,!bosTau1,!bosTau2,!bosTau3,!canFam1,!canFam2,!droSim1,!droYak1,!droYak2,!panTro1,!rheMac1,!rheMac2,!dp2,!dp3.mrnaOrientInfo.name minCheck=0.0
 # The rule above should only apply to mrnaOrientInfo entries from refSeq (not
@@ -1224,7 +1224,6 @@ identifier knownGeneId dependency
     $kgDb.knownBlastTab.target
     $kgDb.knownCanonical.transcript 
     $kgDb.knownGeneMrna.name full
-    $kgDb.knownGenePep.name full
     $kgDb.knownGeneLink.name
     $kgDb.knownIsoforms.transcript full
     $kgDb.knownToCdsSnp.name
@@ -1245,6 +1244,8 @@ identifier knownGeneId dependency
     $kgDb.pPsiBlast.kgId2
     $kgDb.knownToVisiGene.name
     $ccdsDb.ccdsKgMap.geneId
+    $kgDb2.knownGenePep.name full
+    $kgDb3.knownGenePep.name
     $kgDb3.knownCanonical.protein exclude=
     $kgDb3.kgProtMap2.qName 
     $kgDb3.kgColor.kgID full
@@ -1884,8 +1885,8 @@ identifier locusLinkId external=LocusLink
 "NCBI LocusLink ID"
     $gbd.refLink.locusLinkId dupeOk
     $gbd.keggPathway.locusID minCheck=0.98
-    $kgDb,!hg16,!mm5.knownToLocusLink.value minCheck=0.98
-    hg16,mm5.knownToLocusLink.value minCheck=0.97
+    $kgDb,!hg16,!mm6,!mm5.knownToLocusLink.value minCheck=0.98
+    hg16,mm6,mm5.knownToLocusLink.value minCheck=0.96
 
 identifier omimId external=OMIM
 "Online Mendelian Inheritance in Man (OMIM) ID"

@@ -102,7 +102,7 @@ acc yes
 
 name LOVD
 label LOVD
-url http://www.dmd.nl/nmdb/search.php?select_db=%s
+url http://www.dmd.nl/nmdb/variants.php?select_db=%s
 acc yes
 
 name PubMed2

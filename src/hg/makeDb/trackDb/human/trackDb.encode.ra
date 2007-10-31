@@ -628,6 +628,7 @@ baseColorDefault genomicCodons
     urlName gene
     urlLabel Vega Genes Link:
     url http://vega.sanger.ac.uk/Homo_sapiens/geneview?transcript=$$
+    url2Label Yale Pseudogene Link:
     url2 http://www.pseudogene.org/cgi-bin/search-results.cgi?tax_id=9606&set_search=25&criterion0=pgene_by_acc&operator0=%3D&sort=0&output=html&searchValue0_0=$$
     priority 1
 
@@ -644,7 +645,8 @@ baseColorDefault genomicCodons
     shortLabel Yale Pseudogenes
     longLabel Yale Pseudogene Predictions
     urlName gene
-    url2 http://www.pseudogene.org/cgi-bin/search-results.cgi?tax_id=9606&set_search=25&criterion0=pgene_by_acc&operator0=%3D&sort=1&output=html&searchValue0_0=$$
+    urlLabel Yale Pseudogene Link:
+    url http://www.pseudogene.org/cgi-bin/search-results.cgi?tax_id=9606&set_search=25&criterion0=pgene_by_acc&operator0=%3D&sort=1&output=html&searchValue0_0=$$
     priority 3
 
     track encodePseudogeneUcsc
@@ -3540,6 +3542,7 @@ itemRgb on
 type bed 9 + 
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 dataVersion ENCODE June 2005 Freeze
+origAssembly hg17
 
 track encodeHapMapCov
 compositeTrack on

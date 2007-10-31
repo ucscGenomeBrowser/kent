@@ -35,7 +35,7 @@
 #include "hgText.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.169 2007/07/13 22:56:41 angie Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.170 2007/10/31 18:03:44 angie Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -1106,7 +1106,6 @@ char *posOrKeys;
 
 webStart(cart, "Table Browser: %s %s: Choose a table",
 	 hOrganism(database), freezeName);
-handleDbChange();
 
 printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=\"%s\">\n\n",
        hgTextName(), httpFormMethod);

@@ -18,6 +18,11 @@
 
   <td><%= link_to 'Re-Expand All', {:action => 'reexpand_all', :id => @submission.id} -%></td>
 
+<% if @submission.status == "validated" -%> 
+  <td><%= link_to 'Schedule Loading', {:action => 'begin_loading', :id => @submission.id},
+    :confirm => "Are you sure your submission is ready to schedule for loading?" -%></td>
+<% end %>
+
 </table>
 
 
@@ -46,9 +51,14 @@
 <% end %>
 </table>
 
-
 <% end %>
 
 <hr />
+
+<% if @submission.status == "invalid" -%> 
+  <h3>validate error:<br>
+    <%= @errText -%>
+  </h3><br>
+<% end %>
 
 <%= link_to 'Back', {:action => 'list'} %>

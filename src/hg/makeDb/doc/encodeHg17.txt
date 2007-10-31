@@ -1062,6 +1062,12 @@ foreach f (t0 t1 t2 t3 t4 t5 t6 t7)
     # encodeUcsdLiPcrIMR90H3K4me3
     # encodeUcsdLiPcrGM06990TAF1
 
+    # NOTE: GM/CTCF data was also submitted in May.
+    # Keith Ching advises dropping this version of the data and
+    # keeping May.
+
+    hgsql hg17 -e "drop table encodeUcsdLiPcrGM06990CTCF"
+
     # New data submitted 2007-03-01 
     # Data includes various cell lines and antibodies using both PCR and 
     # Nimblegen and there are no gamma interferon treatments. 
@@ -1251,6 +1257,12 @@ cat > load.pcr.csh << 'EOF'
         # encodeUcsdLiPcrGM06990p300
         # encodeUcsdLiPcrIMR90p300
         # encodeUcsdLiPcrK562p300
+
+    # NOTE: GM/TAF data was also in the May submission.
+    # Keith Ching advises dropping the March submission and
+    # keeping the May
+
+    hgsql hg17 -e "drop table encodeUcsdLiPcrGM06990TAF250"
 
     # Aug07 data submitted 2007-08-28
     # Loaded 2007-09-05 (kate)

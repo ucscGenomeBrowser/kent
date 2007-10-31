@@ -1768,6 +1768,10 @@ priority 63.5
 visibility hide
 color 200,80,0
 type bed 8 +
+urlLabel Laboratoire de Biologie Moléculaire Eucaryote:
+url http://www-snorna.biotoul.fr/plus.php?id=$$
+url2Label The miRNA Registry:
+url2 http://microrna.sanger.ac.uk/cgi-bin/sequences/mirna_entry.pl?id=$$
 
 track affyHumanExon
 shortLabel Affy All Exon
@@ -2234,11 +2238,13 @@ url http://rgd.mcw.edu/objectSearch/qtlReport.jsp?rgd_id=
 # in priority.ra 
 #
 # track chainDanRer4
+# track chainDanRer5
 # track chainAnoCar1
 # track chainCanFam2
 # track chainOryLat1
 # track chainGasAcu1
 # track netDanRer4
+# track netDanRer5
 # track netAnoCar1
 # track netCanFam2
 # track netOryLat1

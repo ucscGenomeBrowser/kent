@@ -20208,6 +20208,13 @@ doPhast.csh $(root1) $(file1) 14 .008 .28
     # about 23 minutes for above
         # GOT HERE ON REDO
         # NOTE: remember to flip /gbdb link from cons.old to cons
+    #foreach chr (`awk '{print $1}' /cluster/data/hg17/chrom.sizes`)
+      #echo $chr
+      set chr = chr22
+      cat `ls -1 pp/$chr/$chr.*.pp | sort -t\. -k2,2n` \
+        | nice wigEncode stdin phastCons17wayNewChr22.wig phastCons17wayNewChr22.wib
+    #end
+    date
 
     cp -p phastCons17way.wi? /cluster/data/hg17/bed/multiz17way/cons
 
@@ -23562,7 +23569,7 @@ hgLoadBed hg17 chimpParalogy chimpParalogy.bed -tab -sqlTable=chimpParalogy.sql
     # << emacs
 
 #####################################################
-# Vista Enhancers (galt 2007-02-23 working)
+# Vista Enhancers (galt 2007-02-23 done)
 #
 # Vista from Lawrence-Berkeley has assayed
 # 301 human conserved non-coding intra- and inter-
@@ -23598,6 +23605,31 @@ color 50,70,120
 type bed 5 .
 useScore 1
 url http://enhancer-test.lbl.gov/cgi-bin/imagedb.pl?form=presentation&show=1&experiment_id=$$
+
+###
+# UPDATES (2007-10-18, conodera)
+# see also /projects/compbiousr/wet/browser/vista_enhancer/17Oct2007/Makefile
+
+cd /projects/compbiousr/wet/browser/vista_enhancer/
+
+# download data file from the vista browser (coordinates are for hg17)
+# http://enhancer.lbl.gov/cgi-bin/imagedb.pl?show=1;search.result=yes;form=search;search.form=no;action=search;search.sequence=1
+# save as enhancerbrowser.datadownload.txt
+
+# give elements with positive label a score of 900, 
+# give elements with negative label a score of 200.
+# print to 5-field bed file
+vista_enhancer.hg17.txt: enhancerbrowser.datadownload.txt
+        grep ">" $< \
+        | sed -e 's/>//' \
+        | tr :- '       ' \
+        | sed -e 's/positive/900/'\
+        | sed -e 's/negative/200/' \
+        | awk '{print $$1"\t"$$2"\t"$$3"\telement_"$$6"\t"$$8}' \
+        > $@; \
+hgLoadBed hg17 vistaEnhancers vista_enhancer.hg17.txt;
+# loaded 446 elements of length 5
+
 
 #########################################################################
 # EPONINE-TSS (TRANSCRIPTON START SITE) PREDICTION 
@@ -23859,6 +23891,89 @@ done
    # gzip .over files
    gzip over/*.over
    # removed ~1.3 G data 
+
+#############################################################################
+# Duke DNaseI HS (2007-06-26 kate)
+#
+#  Submitted by Terry Furey <terry.furey@duke.edu>
+#  in collaboration with Greg Crawford
+# Resubmitted 9/26/07 from FTP site
+
+    ssh kkstore02
+    cd /cluster/data/hg17/bed
+    mkdir -p dukeDnase/2007-09-26/lab
+    cd dukeDnase/2007-09-26/lab
+    #wget -nd http://faculty.genome.duke.edu/~tsfurey/forUCSC/dukeDnaseHs.tgz
+
+    # download 19GB archive from Duke site, password protected,
+    # user=ucsc, password=dnase1, expires 10/5/07
+
+    sftp ucsc@sftp.igsp.duke.edu
+    get dukeDnaseHsCd4_hg17.tar.gz
+    gunzip dukeDnaseHsCd4_hg17.tar.gz
+    # strangely, this is double-zipped
+    mv dukeDnaseHsCd4_hg17.tar dukeDnaseHsCd4_hg17.tar.gz
+    tar xvfz dukeDnaseHsCd4_hg17.tar.gz
+    tar xvf dukeDnaseHsCd4Wiggle.tar
+    # wiggle files: chr*.out
+    cd ..
+    mkdir downloads
+
+    # truncate precision
+cat > truncate.awk << 'EOF'
+/^[\-0-9]/ {printf("%.4f\n", $1)}
+!/^[\-0-9]/ {print}
+'EOF'
+
+cat > trim.csh << 'EOF'
+    foreach f (lab/browser/chr*.out)
+        set b = `echo $f:t:r | sed 's/Wiggle//'`
+        echo $b
+        set out = downloads/$b.wigFix.gz
+        nice awk -f truncate.awk $f | nice gzip -c > $out
+    end
+'EOF'
+
+    csh trim.csh >&! trim.log &
+
+    # create wiggle
+    nice zcat downloads/*.gz | nice wigEncode stdin \
+        dukeDnaseCd4Signal.wig dukeDnaseCd4Signal.wib >&! wigencode.log &
+    #  upper limit 26.48, lower limit -0.68
+
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/dukeDnase/2007-09-26
+    ln -s /cluster/data/hg17/bed/dukeDnase/2007-09-26/dukeDnaseCd4Signal.wib \
+            /gbdb/hg17/wib
+    nice hgLoadWiggle hg17 dukeDnaseCd4Signal -pathPrefix=/gbdb/hg17/wib \
+                dukeDnaseCd4Signal.wig
+
+    # NOTES: TO LIFT TO HG18 (Andy's procedure)
+    # 1. fixStepToBedGraph.pl
+    # 2. liftOver
+    # 3. wigBedToStep
+    # 4. wigEncode
+        
+    # single bed file
+    # NOTE: bed file is missing scores -- Terry will resubmit
+    hgLoadBed hg17 dukeDnaseCd4Sites lab/browser/dukeDnaseHsCd4.bed
+    # Loaded 94925 elements of size 4
+
+    # wiggle (scores)
+    #foreach f (lab/browser/*.wib)
+        #set c = `echo $f:t | sed 's/_.*//'`
+        #ln -s /cluster/data/hg17/bed/dukeDnase/lab/browser/${c}_dukeDnaseHsCd4Wiggle.wib /gbdb/hg17/dukeDnaseHs/${c}_Duke_dnaseHs_CD4.wib
+    #end
+    #hgLoadWiggle hg17 dukeDnaseHsCd4Scores -pathPrefix=/gbdb/hg17/dukeDnaseHs \
+        #lab/browser/*.wig
+    #hgWiggle -db=hg17 -doStats dukeDnaseHsCd4Score
+       # data range is -.679 to 16.7
+
+    # bed (sites)
+    #hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/bed5FloatScore.sql hg17 \
+        #bed5FloatScore lab/browser/dukeDnaseHsCd4.bed
+    #hgsql hg17 -e "ALTER TABLE bed5FloatScore RENAME TO dukeDnaseHsCd4Sites"
+    #checkTableCoords hg17 dukeDnaseHsCd4Sites
 
 
 ###########################################################################

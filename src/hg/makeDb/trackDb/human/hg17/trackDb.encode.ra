@@ -1232,7 +1232,7 @@ compositeTrack on
 shortLabel LI PCR ChIP
 longLabel Ludwig Institute/UCSD PCR ChIP-chip 
 group encodeChip
-priority 51.1
+priority 51.3
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 type bedGraph 4
 maxHeightPixels 128:16:16
@@ -1563,7 +1563,7 @@ compositeTrack on
 shortLabel LI Ng ChIP
 longLabel Ludwig Institute/UCSD NimbleGen ChIP-chip 
 group encodeChip
-priority 51.2
+priority 51.4
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 type bedGraph 4
 maxHeightPixels 128:16:16
@@ -3468,21 +3468,13 @@ dataVersion ENCODE Oct 2005 Freeze, June 2007
     color 120,80,120
     priority 3
 
-    track encodeTbaSconeCons
+    track encodeTbaSconeConsUpdate
     subTrack encodeTbaCons
     shortLabel TBA SCONE Cons
     longLabel TBA SCONE Conservation
     color 100,90,160
-    priority 4
-
-    track encodeTbaSconeConsUpdate
-    release alpha
-    subTrack encodeTbaCons
-    shortLabel TBA SCONE Cons New
-    longLabel TBA SCONE Conservation 2007 Update
     dataVersion June 2007
-    color 100,90,160
-    priority 5
+    priority 4
 
 track encodeTbaElements
 compositeTrack on
@@ -3517,21 +3509,13 @@ dataVersion ENCODE Oct 2005 Freeze, June 2007
     color 120,80,120
     priority 3
 
-    track encodeTbaSconeEl
+    track encodeTbaSconeElUpdate
     subTrack encodeTbaElements
     shortLabel TBA SCONE
     longLabel TBA SCONE Conserved Elements
     color 100,90,160
-    priority 4
-
-    track encodeTbaSconeElUpdate
-    release alpha
-    subTrack encodeTbaElements
-    shortLabel TBA SCONE New
-    longLabel TBA SCONE Conserved Elements 2007 Update
     dataVersion June 2007
-    color 100,90,160
-    priority 5
+    priority 4
 
 track encodeMlaganAlign
 shortLabel MLAGAN Alignment

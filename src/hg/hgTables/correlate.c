@@ -22,7 +22,7 @@
 #include "bedGraph.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: correlate.c,v 1.63 2007/06/21 22:01:16 kate Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.64 2007/10/16 17:31:51 hiram Exp $";
 
 #define MAX_POINTS_STR	"300,000,000"
 #define MAX_POINTS	300000000
@@ -525,7 +525,7 @@ static struct trackDb *showGroupTrackRowLimited(char *groupVar,
     Returns selected track */
 {
 struct trackDb *track2, *trackList;
-struct grp *selGroup, *groupList;
+struct grp *selGroup, *groupList = NULL;
 char *table2;
 
 trackList = getLimitedTrackList(&groupList);

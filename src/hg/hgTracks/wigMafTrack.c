@@ -18,7 +18,7 @@
 #include "mafFrames.h"
 #include "phyloTree.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.119 2007/08/15 19:21:31 fanhsu Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.120 2007/10/18 18:39:05 fanhsu Exp $";
 
 #define GAP_ITEM_LABEL  "Gaps"
 #define MAX_SP_SIZE 2000
@@ -1556,6 +1556,9 @@ if (hIsGsidServer())
     safef(query, sizeof(query), "select chromStart from %s", track->mapName);
     mafOrig = atoi(sqlNeedQuickString(conn, query));
     mafOrigOffset = (mafOrig % 3) - 1;
+    /* offset has to be non-negative */
+    if (mafOrigOffset < 0) mafOrigOffset = mafOrigOffset +3;
+
     hFreeConn(&conn);
     }
 
