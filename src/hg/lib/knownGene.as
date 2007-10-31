@@ -11,7 +11,7 @@ uint    cdsEnd;             "Coding region end"
 uint    exonCount;          "Number of exons"
 uint[exonCount] exonStarts; "Exon start positions"
 uint[exonCount] exonEnds;   "Exon end positions"
-string  proteinID;          "UniProt display ID for Known Genes and UniProt access or RefSeq protein ID for UCSC Genes" 
+string  proteinID;          "UniProt display ID for Known Genes,  UniProt accession or RefSeq protein ID for UCSC Genes" 
 string  alignID;            "Unique identifier for each (known gene, alignment position) pair"
 )
 
