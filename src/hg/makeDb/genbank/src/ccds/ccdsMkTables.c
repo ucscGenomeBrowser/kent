@@ -13,7 +13,7 @@
 #include "ccdsLocationsJoin.h"
 #include "ccdsCommon.h"
 
-static char const rcsid[] = "$Id: ccdsMkTables.c,v 1.16 2007/10/30 23:06:30 markd Exp $";
+static char const rcsid[] = "$Id: ccdsMkTables.c,v 1.17 2007/10/31 04:06:08 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -266,6 +266,7 @@ static void findPartialMatches(struct sqlConnection *conn, struct genomeInfo *ge
                                struct hash* ignoreTbl)
 /* find CCDS interpretation_subtype of "Partial match" */
 {
+verbose(2, "begin findPartialMatches\n");
 static char select[4096];
 safef(select, sizeof(select),
       "SELECT "
@@ -284,12 +285,15 @@ safef(select, sizeof(select),
 
 struct sqlResult *sr = sqlGetResult(conn, select);
 char **row;
+int cnt = 0;
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct hashEl *hel = hashStore(ignoreTbl, ccdsMkId(sqlUnsigned(row[0]), sqlUnsigned(row[1])));
     hel->val = "partial_match";
+    cnt++;
     }
 sqlFreeResult(&sr);
+verbose(2, "end   findPartialMatches: %d partial matches found\n", cnt);
 }
 
 static struct hash* buildIgnoreTbl(struct sqlConnection *conn, struct genomeInfo *genome)
@@ -328,12 +332,13 @@ safef(select, sizeof(select),
 return select;
 }
 
-static void processCcdsInfoRow(char **row, struct ccdsInfo **ccdsInfoList,
-                               struct hash* ignoreTbl, struct hash *gotCcds)
+static boolean processCcdsInfoRow(char **row, struct ccdsInfo **ccdsInfoList,
+                                  struct hash* ignoreTbl, struct hash *gotCcds)
 /* Process a row from ccdsInfoSelect and add to the list of ccdsInfo rows.
- * Buffering the rows is necessary since there maybe multiple versions of 
- * an accession returned.  While only one accession will be alive, we can't filter
- * on Accessions.alive due to the update time lag between RefSeq and CCDS.
+ * Buffering the rows is necessary since there maybe multiple versions of an
+ * accession returned.  While only one accession will be alive, we can't
+ * filter on Accessions.alive due to the update time lag between RefSeq and
+ * CCDS.  Returns True if processed, False if ignored.
  */
 {
 int ccdsId = sqlSigned(row[0]);
@@ -361,7 +366,10 @@ if (!ccdsIsIgnored(ignoreTbl, ccdsId, ccdsVersion))
         }
     slSafeAddHead(ccdsInfoList, ci);
     gotCcdsSaveSrcDb(gotCcds, ccdsId, ccdsVersion, srcDb);
+    return TRUE;
     }
+else
+    return FALSE;
 }
 
 static int lenLessVer(char *acc)
@@ -408,12 +416,18 @@ static void createCcdsInfo(struct sqlConnection *conn, char *ccdsInfoFile,
                            struct hash *gotCcds)
 /* create ccdsInfo table file */
 {
+verbose(2, "begin createCcdsInfo\n");
 char *query = mkCcdsInfoSelect(genome, conn);
 struct sqlResult *sr = sqlGetResult(conn, query);
 struct ccdsInfo *ccdsInfoList = NULL, *ci;
 char **row;
+int cnt = 0, ignoreCnt = 0;
 while ((row = sqlNextRow(sr)) != NULL)
-    processCcdsInfoRow(row, &ccdsInfoList, ignoreTbl, gotCcds);
+    {
+    if (!processCcdsInfoRow(row, &ccdsInfoList, ignoreTbl, gotCcds))
+        ignoreCnt++;
+    cnt++;
+    }
 sqlFreeResult(&sr);
 
 ccdsFilterDupAccessions(&ccdsInfoList);
@@ -423,6 +437,8 @@ for (ci = ccdsInfoList; ci != NULL; ci = ci->next)
     ccdsInfoTabOut(ci, fh);
 carefulClose(&fh);
 ccdsInfoFreeList(&ccdsInfoList);
+verbose(2, "end   createCcdsInfo: %d processed, %d ignored, %d kept\n",
+        cnt, ignoreCnt, cnt-ignoreCnt);
 }
 
 static char *mkCcdsGeneSelect(struct genomeInfo *genome, struct sqlConnection *conn)
@@ -490,14 +506,20 @@ static struct ccdsLocationsJoin *loadLocations(struct sqlConnection *conn, struc
 /* load all exon locations into a list, sort by ccds id, and then
  * chrom and start */
 {
+verbose(2, "begin loadLocations\n");
 char *query = mkCcdsGeneSelect(genome, conn);
 struct sqlResult *sr = sqlGetResult(conn, query);
 struct ccdsLocationsJoin *locs = NULL;
 char **row;
+int cnt = 0;
 while ((row = sqlNextRow(sr)) != NULL)
+    {
     locationProcessRow(row, &locs, ignoreTbl, gotCcds);
+    cnt++;
+    }
 sqlFreeResult(&sr);
 slSort(&locs, ccdsLocationsJoinCmp);
+verbose(2, "end   loadLocations: %d exons\n", cnt);
 return locs;
 }
 
@@ -579,19 +601,31 @@ ccdsLocationsJoinFreeList(&locs);
 return gp;
 }
 
+static struct genePred *buildCcdsGene(struct ccdsLocationsJoin **locsList)
+/* build sorted list of CCDS genes from exon locations */
+{
+verbose(2, "begin buildCcdsGene\n");
+struct genePred *genes = NULL, *gp;
+int cnt = 0;
+while ((gp = nextCcdsGenePred(locsList)) != NULL)
+    {
+    slAddHead(&genes, gp);
+    cnt++;
+    }
+slSort(&genes, genePredCmp);
+
+verbose(2, "end   buildCcdsGene: %d CCDS genes\n", cnt);
+return genes;
+}
+
 static void createCcdsGene(struct sqlConnection *conn, char *ccdsGeneFile,
                            struct genomeInfo *genome, struct hash* ignoreTbl,
                            struct hash *gotCcds)
 /* create the ccdsGene tab file from the ccds database */
 {
 struct ccdsLocationsJoin *locs = loadLocations(conn, genome, ignoreTbl, gotCcds);
-struct genePred *genes = NULL, *gp;
+struct genePred *gp, *genes = buildCcdsGene(&locs);
 FILE *genesFh;
-
-while ((gp = nextCcdsGenePred(&locs)) != NULL)
-    slAddHead(&genes, gp);
-
-slSort(&genes, genePredCmp);
 
 genesFh = mustOpen(ccdsGeneFile, "w");
 for (gp = genes; gp != NULL; gp = gp->next)
