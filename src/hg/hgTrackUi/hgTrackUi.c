@@ -33,7 +33,7 @@
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 #define MAX_SP_SIZE 2000
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.404 2007/10/30 01:15:23 angie Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.405 2007/10/31 18:41:28 angie Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -472,6 +472,14 @@ printf("</TD>\n  <TD>");
 radioButton(var, val, "none");
 printf("</TD>\n </TR>\n ");
 printf("</TABLE>\n");
+
+if (tdb->type && sameString(tdb->type, "ld2"))
+    {
+    safef(var, sizeof(var), "%s_gap", tdb->tableName);
+    printf("&nbsp;&nbsp;");
+    cgiMakeCheckBox(var, cartUsualBoolean(cart, var, ldGapDefault));
+    printf("&nbsp;In dense mode, shade gaps between markers by T-int<BR>\n");
+    }
 
 if (trackDbIsComposite(tdb))
     printf("<BR><B>Populations:</B>\n");

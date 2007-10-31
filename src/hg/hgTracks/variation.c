@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.126 2007/10/31 00:28:56 angie Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.127 2007/10/31 18:41:28 angie Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -1470,6 +1470,9 @@ void ldDrawDense(struct vGfx *vg, struct track *tg, int xOff, int yOff,
 {
 static struct ldStats lds;
 struct ld2 *dPtr;
+char var[512];
+safef(var, sizeof(var), "%s_gap", tg->tdb->tableName);
+boolean useTInt = cartUsualBoolean(cart, var, ldGapDefault);
 for (dPtr = tg->items;  dPtr != NULL;  dPtr = dPtr->next)
     {
     lds.chromStart = dPtr->chromStart;
@@ -1480,7 +1483,8 @@ for (dPtr = tg->items;  dPtr != NULL;  dPtr = dPtr->next)
     else
 	lds.sumValues = ldIndexCharToInt(dPtr->avgDprime);
     lds.n = (lds.sumValues < 0) ? 0 : 1;
-    if (dPtr->next != NULL && dPtr->tInt >= 'c' && dPtr->tInt <= 'h')
+    if (useTInt &&
+	dPtr->next != NULL && dPtr->tInt >= 'c' && dPtr->tInt <= 'h')
 	{
 	/* Use tInt to color the spaces between SNPs. */
 	Color shade = shadesOfGray[(int)(dPtr->tInt - 'a')];

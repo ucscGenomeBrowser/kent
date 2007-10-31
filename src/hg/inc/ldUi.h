@@ -10,6 +10,7 @@
 #define ldOutDefault  "black"
 #define ldTrmDefault  TRUE
 #define ldInvDefault  FALSE
+#define ldGapDefault  FALSE
 
 #endif /* LDUI_H */
 
