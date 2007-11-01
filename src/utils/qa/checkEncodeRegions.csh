@@ -64,7 +64,7 @@ foreach tbl ($tables)
   # make sure it's an encode table
   echo $tbl | egrep -q '^encode'
   if ( $status  ) then
-   echo "\n ERROR: $tbl is not an ENCODE table"
+   echo "\n ERROR: $tbl is not an ENCODE table\n"
    exit 1
   endif
 
@@ -72,6 +72,12 @@ foreach tbl ($tables)
   set exists=`hgsql -Ne "SHOW TABLES LIKE '"$tbl"'" $db`
   if ( $exists == "" ) then
     echo "\n ERROR: The $tbl table does not exist in the $db database\n"
+    exit 1
+  endif
+
+  # script doesn't work for encodeRegions table -- print error and exit.
+  if ( $tbl == "encodeRegions" ) then
+    echo "\n ERROR: This script doesn't work for the encodeRegions table!\n"
     exit 1
   endif
 
