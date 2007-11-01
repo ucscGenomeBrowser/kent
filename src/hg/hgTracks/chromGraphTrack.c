@@ -25,6 +25,7 @@ int lastPos = -maxGapToFill-1;
 double minVal = cgs->minVal;
 double yScale = (height-1)/(cgs->maxVal - minVal);
 double xScale = scaleForPixels(width);
+char *encodedTrack = cgiEncode(tg->mapName);
 
 /* Draw background lines in full mode. */
 if (vis == tvFull && cgs->linesAtCount != 0)
@@ -119,10 +120,13 @@ else
     }
 
 /* Do map box */
+
+
 hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", xOff, yOff, xOff+width,
 	yOff+height);
-hPrintf("HREF=\"../cgi-bin/hgTrackUi?%s&c=%s&g=%s\">\n",
-	cartSidUrlString(cart), chromName, tg->mapName);
+hPrintf("HREF=\"%s&o=%d&t=%d&g=%s&c=%s&l=%d&r=%d&db=%s&pix=%d\" ", 
+	    hgcNameAndSettings(), winStart, winEnd, encodedTrack, chromName, winStart, winEnd, 
+	    database, tl.picWidth);
 }
 
 static void cgDrawItems(struct track *tg, int seqStart, int seqEnd,

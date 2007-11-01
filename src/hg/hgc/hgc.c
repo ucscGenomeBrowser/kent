@@ -210,7 +210,7 @@
 #include "atomDb.h"
 #include "itemConf.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1366 2007/10/25 22:46:14 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1367 2007/11/01 20:50:24 aamp Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -3250,6 +3250,13 @@ printTrackHtml(tdb);
 hFreeConn(&conn);
 }
 
+void doChromGraph(struct trackDb *tdb)
+/* Print information for coloredExon type tracks. */
+{
+genericHeader(tdb, NULL);
+printTrackHtml(tdb);
+}
+
 void genericClickHandlerPlus(
         struct trackDb *tdb, char *item, char *itemForUrl, char *plus)
 /* Put up generic track info, with additional text appended after item. */
@@ -3348,6 +3355,10 @@ if (wordCount > 0)
     else if (sameString(type, "coloredExon"))
 	{
 	doColoredExon(tdb, item);
+	}
+    else if (sameString(type, "chromGraph"))
+	{
+	doChromGraph(tdb);
 	}
     else if (sameString(type, "wig"))
         {
