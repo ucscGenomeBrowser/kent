@@ -871,7 +871,7 @@ priority 151
 type bed 4 .
 otherDb mm8
 otherDbTable jaxQTL
-url http://www.informatics.jax.org/javawi2/servlet/WIFetch?page=searchTool&query=$$&selectedQuery=Genes+and+Markers
+url http://www.informatics.jax.org/searches/accession_report.cgi?id=$$
 urlLabel MGI QTL Detail: 
 
     track jaxQtlAsIs
