@@ -67,7 +67,7 @@ set urlPath="http://hgwdev.cse.ucsc.edu/qa/test-results/trackDb"
 
 # remove dirs from same month last year
 set dropdir=`getMonthLastYear.csh go`
-set dirs=`ls -l | grep $dropdir | grep ^d | awk '{print $9}'`
+set dirs=`ls -l $dirPath | grep $dropdir | grep ^d | awk '{print $9}'`
 foreach dir ( $dirs )
   rm -r $dirPath/$dir
 end
