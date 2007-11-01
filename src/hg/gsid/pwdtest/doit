@@ -1,0 +1,2 @@
+/usr/local/apache/cgi-bin-signup/pwdtest $1
+
