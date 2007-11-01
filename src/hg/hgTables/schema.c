@@ -20,7 +20,7 @@
 #include "hgMaf.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: schema.c,v 1.45 2007/05/22 23:03:30 galt Exp $";
+static char const rcsid[] = "$Id: schema.c,v 1.46 2007/11/01 17:31:13 fanhsu Exp $";
 
 static char *nbForNothing(char *val)
 /* substitute &nbsp; for empty strings to keep table formating sane */
@@ -176,10 +176,18 @@ static void explainCoordSystem()
  * reduce the frequency with which they find this "bug" on their own and 
  * we have to explain it on the genome list. */
 {
-puts("<P><I>Note: all start coordinates in our database are 0-based, not \n"
+if (!hIsGsidServer())
+    {
+    puts("<P><I>Note: all start coordinates in our database are 0-based, not \n"
      "1-based.  See explanation \n"
      "<A HREF=\"http://genome.ucsc.edu/FAQ/FAQtracks#tracks1\">"
      "here</A>.</I></P>");
+    }
+else
+    {
+    puts("<P><I>Note: all start coordinates in our database are 0-based, not \n"
+     "1-based.\n</I></P>");
+    }
 }
 
 static void stripHtmlTags(char *text)
