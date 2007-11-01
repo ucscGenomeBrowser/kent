@@ -93,6 +93,7 @@ strip::  compile
 	${STRIP} wigEncode
 	chmod g+w $A${EXE} wigEncode
 	chmod a+rx $A${EXE} wigEncode
+	rm -f hgWiggle
 
 install::  strip
 	@if [ ! -d "${DESTDIR}${CGI_BIN}/loader" ]; then \
