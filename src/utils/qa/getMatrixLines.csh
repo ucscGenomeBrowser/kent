@@ -37,8 +37,10 @@ endif
 set Db1=`echo $db1 | perl -wpe '$_ = ucfirst($_)'`
 set Db2=`echo $db2 | perl -wpe '$_ = ucfirst($_)'`
 
-set out1=`grep -sA7 "The blastz scoring" /data/apache/htdocs/goldenPath/$db1/vs$Db2/README.txt`
-set out2=`grep -sA7 "The blastz scoring" /data/apache/htdocs/goldenPath/$db2/vs$Db1/README.txt`
+set out1=`grep -sA7 "The blastz scoring" /data/apache/htdocs/goldenPath/$db1/vs$Db2/README.txt \
+  | tail -6`
+set out2=`grep -sA7 "The blastz scoring" /data/apache/htdocs/goldenPath/$db2/vs$Db1/README.txt \
+  | tail -6`
 
 if ( "$out1" != "") then
   set matrix="$out1"
@@ -46,8 +48,8 @@ else
   if ( "$out2" != "") then
     set matrix="$out2"
   else
-    echo ' \nERROR: can't find a $matrix variable for this pair\n'
-    exit 0
+    echo ' \nERROR: cannot find a $matrix variable for this pair\n'
+    exit 1
   endif
 endif
 
@@ -57,22 +59,20 @@ set matrix=`echo $matrix | sed -e "s/\z//"`
 
 if ( "$matrix" != "" ) then
   # line1 is for the 'matrixHeader' line
-  # remove the first part of the line
-  set line1=`echo $matrix | sed -e "s/^The.*: //"`
   
   # remove everything after the "A C G T"
-  set line1=`echo $line1 | sed -e "s/.A.*//"`
+  set line1=`echo $matrix | sed -e "s/.A.*//"`
   
   # Add the word 'matrixHeader' to the start of the line, and commas after that
   set line1=`echo $line1 | sed -e "s/ /, /g" | sed -e "s/^/matrixHeader /"`
   echo "\n$line1"
 
   # line2 is for the 'matrix 16' line
-  # remove the first part of the line and the "A C G T A"
-  set line2=`echo $matrix | sed -e "s/^The.*: //" | sed -e "s/A C G T A //"`
+  # remove the "A C G T A"
+  set line2=`echo $matrix | sed -e "s/A C G T A //"`
 
   # remove all of the interspersed letters
-  set line2=`echo $line2 | sed -e "s/C//" | sed -e "s/G//" | sed -e "s/T//"`
+  set line2=`echo $line2 | sed -e "s/[CGT]//g"`
 
   # add the words 'matrix 16' to the start of the line, and commas after that
   set line2=`echo $line2 | sed -e "s/ /,/g" | sed -e "s/^/matrix 16 /"`
