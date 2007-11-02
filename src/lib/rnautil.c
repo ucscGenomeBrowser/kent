@@ -84,7 +84,7 @@ void mkPairPartnerSymbols(int *pairList, char *pairSymbols, int size)
 {
 /* Make a symbol string indicating pairing partner */
 int i;
-char symbols[] = "abcdefghiklmnopqrstuvwxyzABCDEFGHIKLMNOPQRSTUVWXYZ1234567890!@#$%^&*=+{}|[]\\;'<>"; /* length 80 */
+char symbols[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*=+{}|[]\\;'"; /* length 80 */
 int  symbolMax = strlen(symbols);
 int index;
 for (i = 0, index = 0; i < size; i++)
