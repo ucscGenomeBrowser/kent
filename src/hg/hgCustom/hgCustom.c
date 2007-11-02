@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.117 2007/10/16 22:48:24 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.118 2007/11/02 23:47:56 fanhsu Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -83,7 +83,25 @@ cgiMakeOnClickButton(javascript, "&nbsp;Clear&nbsp;");
 void addIntro()
 /* display overview and help message for "add" screen */
 {
-puts(" Data must be formatted in\n"
+if (hIsGsidServer())
+  {
+  puts(" Data must be formatted in\n"
+  " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#BED'>BED</A>,\n"
+  " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#GFF'>GFF</A>,\n"
+  " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#GTF'>GTF</A>,\n"
+  " <A TARGET=_BLANK HREF='../goldenPath/help/wiggle.html'>WIG</A>\n"
+  " or <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#PSL'>PSL</A>\n"
+  " formats. To configure the display, set\n"
+  " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#TRACK'>track</A>\n"
+  " and"
+  " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#BROWSER'>browser</A>\n"
+  " line attributes as described in the \n"
+  " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html'>User's Guide</A>.\n"
+  );
+  }
+else
+  {
+  puts(" Data must be formatted in\n"
   " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#BED'>BED</A>,\n"
   " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#GFF'>GFF</A>,\n"
   " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#GTF'>GTF</A>,\n"
@@ -99,7 +117,8 @@ puts(" Data must be formatted in\n"
   " <A HREF='../goldenPath/customTracks/custTracks.html'>here</A>.\n"
   " Examples are\n"
   " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#EXAMPLE1'>here</A>.\n"
-);
+  );
+  }
 }
 
 void addCustomForm(struct customTrack *ct, char *err)
