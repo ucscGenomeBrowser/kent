@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.46 2007/10/30 23:45:53 hiram Exp $"
+#	"$Id: mm9.txt,v 1.47 2007/11/02 21:37:33 hiram Exp $"
 #
 
 #######################################################################
@@ -6086,9 +6086,12 @@ done
     mkdir -p /gbdb/mm9/multiz30way/anno/maf
     ln -s /cluster/data/mm9/bed/multiz30way/anno/maf/*.maf \
                 /gbdb/mm9/multiz30way/anno/maf
+    #	by loading this into the table multiz30way, it will replace the
+    #	previously loaded table with the unannotated mafs
+    #	huge temp files are made, do them on local disk
     cd /scratch/tmp
     time nice -n +19 hgLoadMaf -pathPrefix=/gbdb/mm9/multiz30way/anno/maf \
-                mm9 multiz30wayAnno
+                mm9 multiz30way
     #	Loaded 16799995 mafs in 34 files from /gbdb/mm9/multiz30way/anno/maf
     #	real    18m12.171s
 
@@ -6099,9 +6102,12 @@ do
     echo /gbdb/mm9/multiz30way/anno/maf/$C.maf
 done | xargs cat | \
         hgLoadMafSummary mm9 -minSize=30000 -mergeGap=1500 \
-            -maxSize=200000  multiz30wayAnnoSummary stdin
+            -maxSize=200000  multiz30waySummary stdin
     #	Created 5648546 summary blocks from 154642836 components and 16790208
     #	mafs from stdin
+    #	by loading this into the table multiz30waySummary, it will replace
+    #	the previously loaded table with the unannotated mafs
+    #	real    30m26.542s
 
 #############################################################################
 ## Annotate 30-way multiple alignment with gene annotations
@@ -6369,12 +6375,24 @@ set tmp = /scratch/tmp/$f
 set cons = /cluster/data/mm9/bed/multiz30way/cons
 mkdir -p $tmp
 set san = /san/sanvol1/scratch/mm9/multiz30way/cons
-cp -p $cons/$grp/$grp.mod .
-cp -p $san/ss/$c/$f.ss $cons/$grp/$grp.mod $tmp
+if (-s $cons/$grp/$grp.non-inf) then
+  cp -p $cons/$grp/$grp.mod $cons/$grp/$grp.non-inf .
+  cp -p $san/ss/$c/$f.ss $cons/$grp/$grp.mod $cons/$grp/$grp.non-inf $tmp
+else
+  cp -p $cons/$grp/$grp.mod .
+  cp -p $san/ss/$c/$f.ss $cons/$grp/$grp.mod $tmp
+endif
 pushd $tmp > /dev/null
-$PHASTBIN/phastCons $f.ss $grp.mod \
---rho $rho --expected-length $len --target-coverage $cov --quiet \
---seqname $c --idpref $c --most-conserved $f.bed --score > $f.pp
+if (-s $grp.non-inf) then
+  $PHASTBIN/phastCons $f.ss $grp.mod \
+    --rho $rho --expected-length $len --target-coverage $cov --quiet \
+    --not-informative `cat $grp.non-inf` \
+    --seqname $c --idpref $c --most-conserved $f.bed --score > $f.pp
+else
+  $PHASTBIN/phastCons $f.ss $grp.mod \
+    --rho $rho --expected-length $len --target-coverage $cov --quiet \
+    --seqname $c --idpref $c --most-conserved $f.bed --score > $f.pp
+endif
 popd > /dev/null
 mkdir -p $san/$grp/pp/$c $san/$grp/bed/$c
 sleep 4
@@ -6561,6 +6579,10 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     /cluster/bin/phast.new/tree_doctor ../../mm9.30way.mod \
 	--prune-all-but=mm9,rn4,cavPor2,oryCun1,hg18,panTro2,ponAbe2,rheMac2,calJac1,otoGar1,tupBel1 \
 	> euarchontoglires.mod
+    #	and place the removed ones in the non-inf file so phastCons will
+    #	truly ignore them:
+    echo "sorAra1,eriEur1,canFam2,felCat3,equCab1,bosTau3,dasNov1,loxAfr1,echTel1,monDom4,ornAna1,galGal3,anoCar1,xenTro2,tetNig1,fr2,gasAcu1,oryLat1,danRer5" \
+        > euarchontoglires.non-inf
 
     cd ../run.cons/euarchontoglires
     #	root1 == chrom name, file1 == ss file name without .ss suffix
@@ -6579,16 +6601,25 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     #	chr7_random/chr7_random.1-362490.bed
     #	chrY_random/chrY_random.50000001-58682461.bed
 
-    # Create merged posterier probability file and wiggle track data files
+    #	Create the downloads .pp files, from which the phastCons wiggle data
+    #	is calculated
     # currently doesn't matter where this is performed, the san is the same
     # network distance from all machines.
-    cd /san/sanvol1/scratch/mm9/multiz30way/cons/euarchontoglires
     # sort by chromName, chromStart so that items are in numerical order 
     #  for wigEncode
+    cd /san/sanvol1/scratch/mm9/multiz30way/cons/euarchontoglires
+    mkdir downloads
     for D in pp/chr*
 do
-    ls $D/*.pp | sort -n -t\. -k2
-done | xargs cat \
+    C=${D/pp\//}
+    ls $D/*.pp | sort -n -t\. -k2 | xargs cat | gzip -c \
+	> downloads/${C}.euarchontoglires.pp.data.gz
+    echo $D $C done
+done
+
+    # Create merged posterier probability file and wiggle track data files
+    cd /san/sanvol1/scratch/mm9/multiz30way/cons/euarchontoglires
+    ls downloads/chr*.data.gz | xargs zcat \
  | wigEncode -noOverlap stdin phastCons30wayEuarch.wig phastCons30wayEuarch.wib
 # Converted stdin, upper limit 1.00, lower limit 0.00
 
@@ -6641,6 +6672,10 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     /cluster/bin/phast.new/tree_doctor ../../mm9.30way.mod \
 	--prune-all-but=mm9,rn4,cavPor2,oryCun1,hg18,panTro2,ponAbe2,rheMac2,calJac1,otoGar1,tupBel1,sorAra1,eriEur1,canFam2,felCat3,equCab1,bosTau3,dasNov1,loxAfr1,echTel1 \
 	> placental.mod
+    #	and place the removed ones in the non-inf file so phastCons will
+    #	truly ignore them:
+    echo "monDom4,ornAna1,galGal3,anoCar1,xenTro2,tetNig1,fr2,gasAcu1,oryLat1,danRer5" \
+        > placental.non-inf
 
     cd ../run.cons/placental
     #	root1 == chrom name, file1 == ss file name without .ss suffix
@@ -6657,16 +6692,25 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     #	One of these jobs fails to produce any output:
     #	chr5_random/chr5_random.1-357350.bed
 
-    # Create merged posterier probability file and wiggle track data files
+    #	Create the downloads .pp files, from which the phastCons wiggle data
+    #	is calculated
     # currently doesn't matter where this is performed, the san is the same
     # network distance from all machines.
-    cd /san/sanvol1/scratch/mm9/multiz30way/cons/placental
     # sort by chromName, chromStart so that items are in numerical order 
     #  for wigEncode
+    cd /san/sanvol1/scratch/mm9/multiz30way/cons/placental
+    mkdir downloads
     for D in pp/chr*
 do
-    ls $D/*.pp | sort -n -t\. -k2
-done | xargs cat \
+    C=${D/pp\//}
+    ls $D/*.pp | sort -n -t\. -k2 | xargs cat | gzip -c \
+	> downloads/${C}.placental.pp.data.gz
+    echo $D $C done
+done
+
+    # Create merged posterier probability file and wiggle track data files
+    cd /san/sanvol1/scratch/mm9/multiz30way/cons/placental
+    ls downloads/chr*.data.gz | xargs zcat \
  | wigEncode -noOverlap stdin phastCons30wayPlacental.wig \
 	phastCons30wayPlacental.wib
 # Converted stdin, upper limit 1.00, lower limit 0.00
@@ -6710,6 +6754,21 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
 
     display histo.png &
 
+#############################################################################
+## Downloads for 30way Conservation (DONE - 2007-11-01 - Hiram)
+    ssh kkstore06
+    mkdir /cluster/data/mm9/bed/multiz30way/downloads/phastCons30wayScores
+    cd /cluster/data/mm9/bed/multiz30way/downloads/phastCons30wayScores
+    mkdir placental euarchontoglires all
+    cd all
+    cp -p \
+/san/sanvol1/scratch/mm9/multiz30way/cons/all/phastCons30wayScores/*.data.gz .
+    cd ../placental
+    cp -p \
+/san/sanvol1/scratch/mm9/multiz30way/cons/placental/downloads/*.data.gz .
+    cd ../euarchontoglires
+    cp -p \
+/san/sanvol1/scratch/mm9/multiz30way/cons/euarchontoglires/downloads/*.data.gz .
 
 #############################################################################
 #  BUILD miRNA TRACK (DONE - 2007-10-05 - Fan)
