@@ -2300,3 +2300,36 @@ end
     # 104418042 bases of 1042591351 (10.015%) in intersection
     
 ###########################################################################
+# ENSEMBL GENES (DONE 11/2/07 angie)
+    ssh hgwdev
+    mkdir /cluster/data/galGal3/bed/ensembl
+    cd /cluster/data/galGal3/bed/ensembl
+    # Go to www.ensembl.org and click around their evolving interface 
+    # to get the following types of data:
+    # 1. a tab-separated file that relates Ensembl gene, transcript and
+    #    protein IDs.  Save as ensGtp.txt.gz  
+    # 2. peptide fasta with only transcript IDs in header -> ensPep.fa.gz
+    
+    # They have started dumping GTF files so we can download that directly:
+    # wget
+    # 'ftp://ftp.ensembl.org/pub/current_gallus_gallus/data/gtf/*'
+    # -- but I forgot to do that and just grabbed the GTF from Ensembl
+    # BioMart along with the GTP and Pep.
+
+    # Add "chr" to chrom names in the gene data gtf file to make 
+    # it compatible with our software.  Also change MT --> M.
+    zcat ensembl.gff.gz | sed -e 's/^MT/M/; s/^/chr/;' > ensGene.gtf
+    ldHgGene -gtf -genePredExt galGal3 ensGene ensGene.gtf
+    nice featureBits galGal3 ensGene
+#30850267 bases of 1042591351 (2.959%) in intersection
+
+    # strip header line:
+    zcat ensGtp.txt.gz | tail +2 \
+    | hgLoadSqlTab galGal3 ensGtp ~/kent/src/hg/lib/ensGtp.sql \
+      /dev/stdin -notOnServer
+
+    zcat ensPep.fa.gz | sed -e 's/^>.*ENSGALT/>ENSGALT/' \
+    | hgPepPred galGal3 generic ensPep stdin
+
+
+###########################################################################
