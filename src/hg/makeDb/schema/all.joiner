@@ -66,7 +66,7 @@ exclusiveSet $gbd
 set otherDb uniProt,go,hgFixed,proteome,visiGene
 
 # Define protein databases (currently not checked)
-set proteinDb proteins070202,proteins060115,proteins050415,proteins051015,proteins050415,proteins050315,proteins050201,proteins041115,proteins040515,proteins040315,proteins0111,proteins0305,proteins031112,proteins040115,proteins040115,proteins0405,proteins070403,proteins072003,proteins092903,proteins1129
+set proteinDb proteins070202,proteins060115,proteins050415,proteins051015,proteins050415,proteins050315,proteins050201,proteins041115,proteins040515,proteins040315,proteins0111,proteins0305,proteins031112,proteins040115,proteins0405,proteins070403,proteins072003,proteins092903,proteins1129
 
 # Define zoo databases (currently not checked)
 set zooDb zooBaboon3,zooCat3,zooChicken3,zooChimp3,zooCow3,zooDog3,zooFugu3,zooHuman3,zooMouse3,zooPig3,zooRat3,zooTetra3,zooZebrafish3
@@ -1268,8 +1268,8 @@ identifier knownIsoformCluster
 # known relationship for both KG2 and KG3, but doesn't work across dbs.
 identifier knownXref
 "Swissprot IDs"
-    $kgDb.kgXref.spID dupeOk
     proteome.spXref2.accession
+    $kgDb.kgXref.spID 
 
 identifier ccdsGeneId 
 "CCDS Gene ID"
