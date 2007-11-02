@@ -226,59 +226,61 @@ type bed 5 .
 # showTopScorers 200
 # type bed 5 .
 
-track nucleosome20Mer
-shortLabel 20-Mer
-longLabel non-unique and almost repetitive 20-mer starts
-group map
-priority 110.0
-visibility hide
-type bed 3
-compositeTrack on
+# disable nucleosome tracks until a final data set is ready. 2007-11-02
 
-	track nucleosome20MerSense
-	subTrack nucleosome20Mer
-	shortLabel 20-mer mask +
-	longLabel non-unique and almost repetitive 20-mer starts, sense strand
-	priority 1
-	color 33,128,255 
-
-	track nucleosome20MerAntisense
-	subTrack nucleosome20Mer
-	shortLabel 20-mer mask -
-	longLabel non-unique and almost repetitive 20-mer starts, antisense strand
-	priority 2
-	color 255,128,33
-
-track nucleosome
-shortLabel Nucleosome
-longLabel Nucleosome predictions from SOLiD core alignments
-group map
-priority 120.0
-visibility hide
-type bed 12
-itemRgb on
-compositeTrack on
-
-	track nucleosomeFragmentsSense
-	subTrack nucleosome
-	shortLabel fragments +
-	longLabel mononucleosomal fragments, sense strand reads
-	priority 1
-
-	track nucleosomeFragmentsAntisense
-	subTrack nucleosome
-	shortLabel fragments -
-	longLabel mononucleosomal fragments, antisense strand reads
-	priority 2
-
-	track nucleosomeDNAsense
-	subTrack nucleosome
-	shortLabel genomic DNA +
-	longLabel sheared genomic DNA displayed as mononucleosomal fragments, sense strand reads
-	priority 3
-
-	track nucleosomeDNAantisense
-	subTrack nucleosome
-	shortLabel genomic DNA -
-	longLabel sheared genomic DNA displayed as mononucleosomal fragments, antisense strand reads
-	priority 4
+# track nucleosome20Mer
+# shortLabel 20-Mer
+# longLabel non-unique and almost repetitive 20-mer starts
+# group map
+# priority 110.0
+# visibility hide
+# type bed 3
+# compositeTrack on
+# 
+# 	track nucleosome20MerSense
+# 	subTrack nucleosome20Mer
+#	shortLabel 20-mer mask +
+#	longLabel non-unique and almost repetitive 20-mer starts, sense strand
+#	priority 1
+#	color 33,128,255 
+#
+#	track nucleosome20MerAntisense
+#	subTrack nucleosome20Mer
+#	shortLabel 20-mer mask -
+#	longLabel non-unique and almost repetitive 20-mer starts, antisense strand
+#	priority 2
+#	color 255,128,33
+#
+#track nucleosome
+#shortLabel Nucleosome
+#longLabel Nucleosome predictions from SOLiD core alignments
+#group map
+#priority 120.0
+#visibility hide
+#type bed 12
+#itemRgb on
+#compositeTrack on
+#
+#	track nucleosomeFragmentsSense
+#	subTrack nucleosome
+#	shortLabel fragments +
+#	longLabel mononucleosomal fragments, sense strand reads
+#	priority 1
+#
+#	track nucleosomeFragmentsAntisense
+#	subTrack nucleosome
+#	shortLabel fragments -
+#	longLabel mononucleosomal fragments, antisense strand reads
+#	priority 2
+#
+#	track nucleosomeDNAsense
+#	subTrack nucleosome
+#	shortLabel genomic DNA +
+#	longLabel sheared genomic DNA displayed as mononucleosomal fragments, sense strand reads
+#	priority 3
+#
+#	track nucleosomeDNAantisense
+#	subTrack nucleosome
+#	shortLabel genomic DNA -
+#	longLabel sheared genomic DNA displayed as mononucleosomal fragments, antisense strand reads
+#	priority 4
