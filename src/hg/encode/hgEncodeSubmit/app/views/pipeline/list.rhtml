@@ -7,7 +7,7 @@
  <% @submissions.each do |c| %>
   <tr>
   <td><%= link_to c.name, {:action => 'show', :id => c.id} -%></td>
-  <td><%= @submissionTypes[c.s_type]["shortLabel"] -%></td>
+  <td><%= c.submission_type.short_label -%></td>
 
   <td> 
   <%= 

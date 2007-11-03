@@ -9,14 +9,14 @@ class PipelineController < ApplicationController
   
   def list
     @submissions = Submission.find(:all)
-    @submissionTypes = getSubmissionTypes
+    #@submissionTypes = getSubmissionTypes
     @title = "These are the submissions in our system"
   end
   
   def show_user
     @user = User.find(current_user.id)
     @submissions = @user.submissions
-    @submissionTypes = getSubmissionTypes
+    #@submissionTypes = getSubmissionTypes
     @title = "These are your submissions"
     render :action => 'list'
     # not now using show_user.rhtml
@@ -24,7 +24,7 @@ class PipelineController < ApplicationController
   
   def show
     @submission = Submission.find(params[:id])
-    @submissionTypes = getSubmissionTypes
+    #@submissionTypes = getSubmissionTypes
     @errText = getErrText
   end
 
@@ -50,7 +50,7 @@ class PipelineController < ApplicationController
   def new
     @submission = Submission.new
     @submissionTypes = getSubmissionTypes
-    @submissionTypesArray = @submissionTypes.to_a.sort_by { |x| x[1]["displayOrder"] }
+    #@submissionTypesArray = @submissionTypes.to_a.sort_by { |x| x[1]["displayOrder"] }
   end
   
   def create
@@ -67,14 +67,14 @@ class PipelineController < ApplicationController
   def edit
     @submission = Submission.find(params[:id])
     @submissionTypes = getSubmissionTypes
-    @submissionTypesArray = @submissionTypes.to_a.sort_by { |x| x[1]["displayOrder"] }
+    #@submissionTypesArray = @submissionTypes.to_a.sort_by { |x| x[1]["displayOrder"] }
   end
   
   def update
     @submission = Submission.find(params[:id])
-    old_s_type = @submission.s_type
+    old_submission_type_id = @submission.submission_type_id
     if @submission.update_attributes(params[:submission])
-      if old_s_type != @submission.s_type
+      if old_submission_type_id != @submission.submission_type_id
         if @submission.submission_archives.length == 0
 	  @submission.status = "new"
 	else
@@ -252,9 +252,9 @@ class PipelineController < ApplicationController
 
     # run the validator
     cmd = ""
-    cmd += @submissionTypes[@submission.s_type]["validator"]
+    cmd += @submission.submission_type.validator
     cmd += " "
-    cmd += @submissionTypes[@submission.s_type]["typeParams"]
+    cmd += @submission.submission_type.type_params
     cmd += " "
     cmd += submissionDir
     cmd += " 2>"
@@ -403,7 +403,8 @@ private
 
   # --- read submission types from config file into hash -------
   def getSubmissionTypes
-    open("#{RAILS_ROOT}/config/submissionTypes.yml") { |f| YAML.load(f.read) }
+    #open("#{RAILS_ROOT}/config/submissionTypes.yml") { |f| YAML.load(f.read) }
+    SubmissionType.find(:all, :conditions => ['display_order != 0'], :order => "display_order")
   end
 
   # --- run process with timeout ---- (probably should move this to an application helper location)

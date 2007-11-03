@@ -14,19 +14,19 @@
   <p><label for="submission_category">Category</label><br/>
   <%= collection_select(:submission, :category_id, @categories, :id, :name) %></p>
 
-  <p><label for="submission_s_type">Type</label><br/>
-  <%= collection_select(:submission, :s_type, @submissionTypesColl, :id, :name) %></p>
+  <p><label for="submission_submission_type_id">Type</label><br/>
+  <%= collection_select(:submission, :submission_type_id, @submissionTypesColl, :id, :name) %></p>
 
-  <p><label for="submission_s_type">Type</label><br/>
-  <%= text_field 'submission', 's_type'  %></p>
+  <p><label for="submission_submission_type_id">Type</label><br/>
+  <%= text_field 'submission', 'submission_type_id'  %></p>
 
 <%
 =end %>
 
-  <p><label for="submission_s_type">Type</label><br/>
-  <select id="submission_s_type" name="submission[s_type]">
-  <% @submissionTypesArray.each do |t| %>
-  <option value="<%= t[0] -%>"><%= t[1]["shortLabel"] -%></option>
+  <p><label for="submission_submission_type_id">Type</label><br/>
+  <select id="submission_submission_type_id" name="submission[submission_type_id]">
+  <% @submissionTypes.each do |t| %>
+  <option value="<%= t.id -%>"><%= t.short_label -%></option>
   <% end %>
   </select></p>
   

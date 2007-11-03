@@ -7,10 +7,10 @@
   <p><label for="submission_name">Name</label><br/>
   <%= text_field 'submission', 'name'  %></p>
   
-  <p><label for="submission_s_type">Type</label><br/>
-  <select id="submission_s_type" name="submission[s_type]">
-  <% @submissionTypesArray.each do |t| %>
-  <option value="<%= t[0] -%>"<%= (t[0]==@submission.s_type ? " selected" : "") -%>><%= t[1]["shortLabel"] -%></option>
+  <p><label for="submission_submission_type_id">Type</label><br/>
+  <select id="submission_submission_type_id" name="submission[submission_type_id]">
+  <% @submissionTypes.each do |t| %>
+  <option value="<%= t.id -%>"<%= (t.id==@submission.submission_type_id ? " selected" : "") -%>><%= t.short_label -%></option>
   <% end %>
   </select></p>
  

@@ -1,10 +1,11 @@
 class Submission < ActiveRecord::Base
 
   belongs_to :user
+  belongs_to :submission_type
   has_many :submission_archives, :dependent => :destroy
 
   validates_presence_of :name
-  validates_presence_of :s_type
+  validates_presence_of :submission_type_id
   validates_presence_of :status
   validates_presence_of :user_id
 
