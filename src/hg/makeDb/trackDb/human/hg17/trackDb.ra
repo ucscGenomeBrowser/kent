@@ -312,7 +312,7 @@ type bed 5 .
 
 track dukeDnaseCd4Signal
 superTrack dukeDnaseSuper dense
-shortLabel Duke DNaseI Sig
+shortLabel Duke DNase Sig
 longLabel Duke DNaseI Hypersensitivity Signal in CD4+ T-cells
 group regulation
 priority 100.1
@@ -325,7 +325,7 @@ spanList 1
 
 track dukeDnaseCd4Sites
 superTrack dukeDnaseSuper dense
-shortLabel Duke DNaseI Sites
+shortLabel Duke DNase Sites
 longLabel Duke DNaseI Hypersensitive Sites in CD4+ T-cells
 group regulation
 priority 100.2
