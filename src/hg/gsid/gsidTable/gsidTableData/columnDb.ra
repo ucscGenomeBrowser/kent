@@ -3,7 +3,7 @@
 #  the name must also be the fieldname in the table
 #
 name subjId
-shortLabel Subject
+shortLabel subject
 longLabel GSID identification number
 priority 1
 visibility on
