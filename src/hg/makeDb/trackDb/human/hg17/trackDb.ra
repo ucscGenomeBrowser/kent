@@ -303,6 +303,35 @@ visibility hide
 color 100,30,150
 type bed 5 .
 
+            track dukeDnaseSuper
+            shortLabel Duke DNaseI HS
+            longLabel Duke DNaseI Hypersensitivity in CD4+ T-cells
+            superTrack on 
+            group regulation
+            priority 100.1
+
+track dukeDnaseCd4Signal
+superTrack dukeDnaseSuper dense
+shortLabel Duke DNaseI Sig
+longLabel Duke DNaseI Hypersensitivity Signal in CD4+ T-cells
+group regulation
+priority 100.1
+type wig -.66 25.74
+viewLimits 0 .1
+maxHeightPixels 64:24:16
+autoScale off
+windowingFunction mean
+spanList 1
+
+track dukeDnaseCd4Sites
+superTrack dukeDnaseSuper dense
+shortLabel Duke DNaseI Sites
+longLabel Duke DNaseI Hypersensitive Sites in CD4+ T-cells
+group regulation
+priority 100.2
+type bed 5 +
+useScore 1
+
 track multiz17way
 release beta
 wiggle phastCons17way
