@@ -23898,17 +23898,87 @@ done
 #  Submitted by Terry Furey <terry.furey@duke.edu>
 #  in collaboration with Greg Crawford
 # Resubmitted 9/26/07 from FTP site
+# Resubmitted 10/25/07 from FTP site
 
     ssh kkstore02
     cd /cluster/data/hg17/bed
+
+    # download 19GB archive from Duke site, password protected,
+    # user=ucsc, password=dnase
+    mkdir -p dukeDnase/2007-10-25/lab
+    cd dukeDnase/2007-10-25/lab
+
+    sftp ucsc@sftp.igsp.duke.edu
+    mget *
+    # dukeDnaseHsCd4.bed
+    # dukeDnaseHsCd4Wiggle.tgz
+
+    # unpack and load wiggle (signal) data
+    nice tar xvfz dukeDnaseHsCd4Wiggle.tgz
+    # packaged as chr*_dukeDnaseHsCd4Wiggle.out
+    # fixedStep 1 files
+
+    # create wiggle and load into database
+    cd ..
+    cat lab/chr*.out | nice wigEncode stdin \
+        dukeDnaseCd4Signal.wig dukeDnaseCd4Signal.wib >&! wigencode.log &
+        # upper limit 25.74, lower limit -0.66
+
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/dukeDnase/2007-10-25
+    rm -f /gbdb/hg17/wib/dukeDnaseCd4Signal.wib
+    ln -s /cluster/data/hg17/bed/dukeDnase/2007-10-25/dukeDnaseCd4Signal.wib \
+            /gbdb/hg17/wib
+    nice hgLoadWiggle hg17 dukeDnaseCd4Signal -pathPrefix=/gbdb/hg17/wib \
+                dukeDnaseCd4Signal.wig
+
+    # load bed file (sites)
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/dukeDnase/2007-10-25/
+    set table = dukeDnaseCd4Sites
+    sed "s/bed5FloatScore/$table/" ~/kent/src/hg/lib/bed5FloatScore.sql > \
+            $table.sql
+    hgsql hg17 -e "DROP TABLE IF EXISTS $table"
+    hgsql hg17 < $table.sql
+    hgLoadBed -sqlTable=$table.sql hg17 $table lab/dukeDnaseHsCd4.bed
+        # Loaded 95723 elements of size 6
+        # min value:  0.000103164
+        # max value: 25.7442
+    #textHistogram -col=5 lab/dukeDnaseHsCd4.bed -binSize=50 
+    300 ******************************** 11789
+    350 ************************************************************ 22253
+    400 ********************************************* 16854
+    450 ********************************* 12333
+    500 ************************* 9179
+    550 ********************* 7870
+    600 ************* 4987
+    650 ********* 3271
+    700 ******** 2789
+    750 ****** 2153
+    800 **** 1303
+    850 ** 567
+    900 * 219
+    950  85
+    1000  71
+
+    # GOT HERE
+
+    # cleanup
+    mkdir downloads
+    foreach f (lab/chr*.out)
+        set c = `echo $f | sed 's/_.*//'`
+        echo $c
+        #gzip -c $f > ../${c}_dukeDnaseCd4Signal.wigFix.gz
+        #rm -f $f
+    end
+    #rm -f lab
+
+    # OLDER DATA
     mkdir -p dukeDnase/2007-09-26/lab
     cd dukeDnase/2007-09-26/lab
     #wget -nd http://faculty.genome.duke.edu/~tsfurey/forUCSC/dukeDnaseHs.tgz
-
-    # download 19GB archive from Duke site, password protected,
+    # download from Duke site, password protected,
     # user=ucsc, password=dnase1, expires 10/5/07
-
-    sftp ucsc@sftp.igsp.duke.edu
     get dukeDnaseHsCd4_hg17.tar.gz
     gunzip dukeDnaseHsCd4_hg17.tar.gz
     # strangely, this is double-zipped
@@ -23947,34 +24017,6 @@ cat > trim.csh << 'EOF'
             /gbdb/hg17/wib
     nice hgLoadWiggle hg17 dukeDnaseCd4Signal -pathPrefix=/gbdb/hg17/wib \
                 dukeDnaseCd4Signal.wig
-
-    # NOTES: TO LIFT TO HG18 (Andy's procedure)
-    # 1. fixStepToBedGraph.pl
-    # 2. liftOver
-    # 3. wigBedToStep
-    # 4. wigEncode
-        
-    # single bed file
-    # NOTE: bed file is missing scores -- Terry will resubmit
-    hgLoadBed hg17 dukeDnaseCd4Sites lab/browser/dukeDnaseHsCd4.bed
-    # Loaded 94925 elements of size 4
-
-    # wiggle (scores)
-    #foreach f (lab/browser/*.wib)
-        #set c = `echo $f:t | sed 's/_.*//'`
-        #ln -s /cluster/data/hg17/bed/dukeDnase/lab/browser/${c}_dukeDnaseHsCd4Wiggle.wib /gbdb/hg17/dukeDnaseHs/${c}_Duke_dnaseHs_CD4.wib
-    #end
-    #hgLoadWiggle hg17 dukeDnaseHsCd4Scores -pathPrefix=/gbdb/hg17/dukeDnaseHs \
-        #lab/browser/*.wig
-    #hgWiggle -db=hg17 -doStats dukeDnaseHsCd4Score
-       # data range is -.679 to 16.7
-
-    # bed (sites)
-    #hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/bed5FloatScore.sql hg17 \
-        #bed5FloatScore lab/browser/dukeDnaseHsCd4.bed
-    #hgsql hg17 -e "ALTER TABLE bed5FloatScore RENAME TO dukeDnaseHsCd4Sites"
-    #checkTableCoords hg17 dukeDnaseHsCd4Sites
-
 
 ###########################################################################
 # Stanford ChIP-seq
