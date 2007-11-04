@@ -47,6 +47,15 @@ class PipelineController < ApplicationController
     redirect_to :action => 'list'
   end
 
+  def begin_validating
+    @submission = Submission.find(params[:id])
+    if @submission.status == "uploaded"
+      @submission.status = "schedule validating"
+      @submission.save
+    end
+    redirect_to :action => 'list'
+  end
+
   def new
     @submission = Submission.new
     @submissionTypes = getSubmissionTypes
@@ -224,6 +233,9 @@ class PipelineController < ApplicationController
   end
 
 
+
+
+  # This is the older method, see begin_validating above
   def validate
     @submission = Submission.find(params[:id])
     @submissionTypes = getSubmissionTypes

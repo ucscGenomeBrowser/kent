@@ -16,7 +16,7 @@
 #include <signal.h>
 #include <sys/wait.h>
 
-static char const rcsid[] = "$Id: hgEncodeScheduler.c,v 1.2 2007/11/04 00:17:20 galt Exp $";
+static char const rcsid[] = "$Id: hgEncodeScheduler.c,v 1.3 2007/11/04 23:16:59 galt Exp $";
 
 char *db = NULL;
 char *dir = NULL;
@@ -104,6 +104,32 @@ while (*buf != 0)
 *args = NULL;
 }
 
+void getSubmissionTypeData(struct sqlConnection *conn, int submission,
+ char **validator, char **typeParams, int *timeOut)
+/* return data from submission_type record */
+{
+char query[256];
+safef(query,sizeof(query),"select t.validator, t.type_params, t.time_out"
+    " from submissions s, submission_types t"
+    " where s.submission_type_id = t.id" 
+    " and s.id = '%d'", 
+    submission);
+struct sqlResult *rs;
+char **row = NULL;
+rs = sqlGetResult(conn, query);
+if ((row=sqlNextRow(rs)))
+    {
+    *validator = cloneString(row[0]);
+    *typeParams = cloneString(row[1]);
+    *timeOut = sqlUnsigned(row[2]);
+    }
+else
+    {
+    errAbort("submission %d not found!\n", submission);
+    }
+sqlFreeResult(&rs);
+}
+
 void getRunningData(struct sqlConnection *conn, int submission,
  int *pid, char **jobType, int *startTime, int *timeOut, char **commandLine)
 /* return data from submission record */
@@ -131,28 +157,22 @@ else
 sqlFreeResult(&rs);
 }
 
-char *getPathToErrorFile(struct sqlConnection *conn, int submission)
+char *getPathToErrorFile(struct sqlConnection *conn, int submission, char *jobType)
 /* return path to load_error or validate_error file */
 {
 char query[256];
-int pid = 0;
-char *jobType = NULL;
-int startTime = 0;
-int timeOut = 0;
-char *commandLine = NULL;
-char submissionPath[256];
-getRunningData(conn, submission, &pid, &jobType, &startTime, &timeOut, &commandLine);
 safef(query, sizeof(query), "select user_id from submissions where id=%d", 
     submission);
 int user = sqlQuickNum(conn, query);
+char submissionPath[256];
 safef(submissionPath, sizeof(submissionPath), "%s/%d/%d/%s_error", dir, user, submission, jobType);
 return cloneString(submissionPath);
 }
 
-void updateErrorFile(struct sqlConnection *conn, int submission, char *message)
+void updateErrorFile(struct sqlConnection *conn, int submission, char *jobType, char *message)
 /* remove a process from running, update submission load_error or validate_error file */
 {
-char *submissionPath = getPathToErrorFile(conn, submission);
+char *submissionPath = getPathToErrorFile(conn, submission, jobType);
 
 //uglyf("\n  submssionPath=%s\n", submissionPath);
 
@@ -180,7 +200,7 @@ else
     if (sameString(jobType,"load"))
 	jobStatus = "load failed";
     else
-	jobStatus = "validate failed";
+	jobStatus = "invalid";
     }
 safef(query, sizeof(query), "delete from running where submission=%d", 
     submission);
@@ -192,11 +212,8 @@ sqlUpdate(conn, query);
 }
 
 
-void startBackgroundProcess(char *commandLine, int submission, char *jobType, int timeOut)
-/* start background process 
- *  return pid of child or -1 for failure
- *  make it a child of "init" so we won't leave zombies
- */
+void startBackgroundProcess(int submission)
+/* start background job process for submission */
 {
 int xpid = fork();
 if ( xpid < 0 )
@@ -205,6 +222,37 @@ if ( xpid < 0 )
     }
 if (xpid > 0)
     return;  /* return to start any remaining ready jobs */
+
+
+/* get job info */
+struct sqlConnection *conn = sqlConnect(db);
+char *jobType;
+int timeOut = 60;   // debug restore: 3600;  // seconds
+char commandLine[256];
+char query[256];
+safef(query, sizeof(query), "select status from submissions where id = %d", submission);
+char *status = sqlQuickString(conn, query);
+if (sameOk(status, "schedule loading"))
+    jobType = "load";
+else
+    jobType = "validate";
+char *submissionPath = getPathToErrorFile(conn, submission, jobType);
+if (sameString(jobType,"load"))
+    {
+    safef(commandLine, sizeof(commandLine), "/bin/sleep 20");
+    }
+else
+    {
+    char *validator;
+    char *typeParams;
+    char *submissionDir = cloneStringZ(submissionPath, strrchr(submissionPath,'/')-submissionPath);
+     //uglyf("submissionDir=[%s]\n",submissionDir);
+    getSubmissionTypeData(conn, submission, &validator, &typeParams, &timeOut);
+    safef(commandLine, sizeof(commandLine), "%s %s %s", validator, typeParams, submissionDir);
+     //uglyf("commandLine=[%s]\n",commandLine);
+    }
+updateErrorFile(conn, submission, jobType, ""); // clear out job_error file
+sqlDisconnect(&conn);
 
 signal(SIGCLD, SIG_DFL);  /* will be waiting for child */
 int pid = fork();
@@ -215,8 +263,27 @@ if ( pid < 0 )
 if ( pid == 0 )
     {
     /* Child process */ 
+    //int tmpstdin[2], tmpstdout[2],tmpstderr[2];
+
+    //dup2(tmpstdin[0], STDIN_FILENO);
+    //dup2(tmpstdout[1], STDOUT_FILENO);
+    //close(tmpstdin[0]);
+    //close(tmpstdout[1]);
+
+    ///* Redirect stderr to /dev/null */
+    //tmpstderr[0] = open("/dev/null", O_WRONLY | O_NOCTTY);
+
+    int f = open(submissionPath, O_WRONLY | O_NOCTTY);
+    dup2(f, STDERR_FILENO);
+    close(f);
+
     char *args[64];
-    parse(commandLine, args, sizeof(args));
+    // parse(commandLine, args, sizeof(args));
+    args[0] = "sh";
+    args[1] = "-c";
+    args[2] = commandLine;
+    args[3] = 0;
+    
     execvp(*args, args);  
     perror(*args);  /* only get here if exec fails */
     exit(1);
@@ -233,12 +300,11 @@ else
     else
 	jobStatus = "validating";
     safef(query, sizeof(query), "insert into running values (%d, %d, '%s', %d, %d, '%s')", 
-	pid, submission, jobType, (int)now, timeOut, commandLine);
+	pid, submission, jobType, (int)now, timeOut, sqlEscapeString(commandLine));
     sqlUpdate(conn, query);
     safef(query, sizeof(query), "update submissions set status = '%s' where id=%d", 
 	jobStatus, submission);
     sqlUpdate(conn, query);
-    updateErrorFile(conn, submission, ""); // clear out job_error file
     sqlDisconnect(&conn);
     /* wait for child to finish */
     int status;
@@ -256,9 +322,7 @@ void hgEncodeScheduler()
 /* do encode pipeline scheduling and cleanup */
 {
 char query[256];
-char commandLine[256];
 int readyId = 0;
-int timeOut = 1;   // debug restore: 60;  // minutes
 
 signal(SIGCLD, SIG_IGN);  /* won't be waiting for child */
 
@@ -272,10 +336,13 @@ initRunning(conn);
 
 struct slInt *e, *list = NULL;
 safef(query,sizeof(query),"select count(*) from running");
-if (sqlQuickNum(conn,query) < 10) // only allow max 10 loaders at once 
+if (sqlQuickNum(conn,query) < 10) // only allow max 10 jobs at once 
     {
     /* start loading any submissions that are ready */
-    safef(query,sizeof(query),"select id from submissions where status = 'schedule loading'");
+    safef(query,sizeof(query),"select id from submissions"
+	" where status = 'schedule loading'"
+	" or status = 'schedule validating'"
+	);
     struct sqlResult *rs;
     char **row = NULL;
     rs = sqlGetResult(conn, query);
@@ -295,9 +362,7 @@ for(e=list; e; e = e->next)
     uglyf("ready submission id: %d\n", readyId);
 
     // run the child
-    safef(commandLine, sizeof(commandLine), "/bin/sleep 10");
-
-    startBackgroundProcess(commandLine, readyId, "load", timeOut*60);
+    startBackgroundProcess(readyId);
 
     if (e->next)
     	sleep(1);
@@ -324,7 +389,7 @@ while((submission = sqlQuickNum(conn,query)))
     char message[256];
     safef(message, sizeof(message), "load timed out age = %d minutes\n", age);
     // save status in result file in build area
-    updateErrorFile(conn, submission, message);
+    updateErrorFile(conn, submission, jobType, message);
 
     /* kill old job timedout, set status in db */
 

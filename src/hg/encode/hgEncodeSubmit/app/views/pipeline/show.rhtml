@@ -14,14 +14,18 @@
   <td><%= link_to 'Delete', {:action => 'delete', :id => @submission.id},
     :confirm => "Are you sure you want to delete this submission?" -%></td>
   <td><%= link_to 'Upload', {:action => 'upload', :id => @submission.id} -%></td>
-  <td><%= link_to 'Validate', {:action => 'validate', :id => @submission.id} -%></td>
 
   <td><%= link_to 'Re-Expand All', {:action => 'reexpand_all', :id => @submission.id} -%></td>
 
-<% if @submission.status == "validated" -%> 
-  <td><%= link_to 'Schedule Loading', {:action => 'begin_loading', :id => @submission.id},
-    :confirm => "Are you sure your submission is ready to schedule for loading?" -%></td>
-<% end %>
+  <% if @submission.status == "uploaded" -%> 
+    <td><%= link_to 'Schedule Validating', {:action => 'begin_validating', :id => @submission.id},
+      :confirm => "Are you sure your submission is ready to schedule for validating?" -%></td>
+  <% end %>
+
+  <% if @submission.status == "validated" -%> 
+    <td><%= link_to 'Schedule Loading', {:action => 'begin_loading', :id => @submission.id},
+      :confirm => "Are you sure your submission is ready to schedule for loading?" -%></td>
+  <% end %>
 
 </table>
 
