@@ -235,6 +235,9 @@ void controlPanelStart();
 void controlPanelEnd();
 /* Put up end of tables around a control panel. */
 
+void hotLinks();
+/* Make top bar */
+
 void makeTitle(char *title, char *helpName);
 /* Make title bar. */
 
