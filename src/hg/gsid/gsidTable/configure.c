@@ -8,7 +8,7 @@
 
 #include "gsidTable.h"
 
-static char const rcsid[] = "$Id: configure.c,v 1.2 2007/03/21 21:31:19 galt Exp $";
+static char const rcsid[] = "$Id: configure.c,v 1.3 2007/11/04 01:50:44 fanhsu Exp $";
 
 char *configVarName(struct column *col, char *varName)
 /* Return variable name for configuration. */
@@ -154,7 +154,8 @@ void doConfigure(struct sqlConnection *conn, struct column *colList) //, char *b
 //if (bumpVar)
 //    bumpColList(bumpVar, &colList);
 hPrintf("<FORM ACTION=\"../cgi-bin/gsidTable\" METHOD=POST>\n");
-makeTitle("Configure Table View", "gsidTableHelp.html#Configure");
+//makeTitle("Configure Table View", "gsidTableHelp.html#Configure");
+hotLinks();
 configControlPanel();
 cartSaveSession(cart);
 
