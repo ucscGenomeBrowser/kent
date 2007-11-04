@@ -317,7 +317,7 @@ longLabel Duke DNaseI Hypersensitivity Signal in CD4+ T-cells
 group regulation
 priority 100.1
 type wig -.66 25.74
-viewLimits 0 .1
+viewLimits 0:.1
 maxHeightPixels 64:24:16
 autoScale off
 windowingFunction mean
