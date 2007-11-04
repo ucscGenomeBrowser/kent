@@ -20,7 +20,7 @@
 #include "gsidTable.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidTable.c,v 1.23 2007/11/04 01:35:08 fanhsu Exp $";
+static char const rcsid[] = "$Id: gsidTable.c,v 1.24 2007/11/04 01:55:01 fanhsu Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "submit_filter", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -112,8 +112,9 @@ void makeTitle(char *title, char *helpName)
 hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#"HG_COL_HOTLINKS"\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"2\"><TR>\n");
 hPrintf("<TD ALIGN=LEFT><A HREF=\"/index.html\">%s</A></TD>", wrapWhiteFont("Home"));
 hPrintf("<TD ALIGN=CENTER><FONT COLOR=\"#FFFFFF\" SIZE=4>%s</FONT></TD>", title);
-hPrintf("<TD ALIGN=Right><A HREF=\"../goldenPath/help/%s\">%s</A></TD>",
-        helpName, wrapWhiteFont("Help"));
+hPrintf("<TD ALIGN=Right>", wrapWhiteFont(""));
+//hPrintf("<TD ALIGN=Right><A HREF=\"../goldenPath/help/%s\">%s</A></TD>",
+//        helpName, wrapWhiteFont("Help"));
 hPrintf("</TR></TABLE>");
 }
 
