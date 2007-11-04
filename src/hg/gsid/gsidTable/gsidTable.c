@@ -20,7 +20,7 @@
 #include "gsidTable.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidTable.c,v 1.22 2007/08/15 05:40:09 fanhsu Exp $";
+static char const rcsid[] = "$Id: gsidTable.c,v 1.23 2007/11/04 01:35:08 fanhsu Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "submit_filter", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -245,7 +245,28 @@ for (si = subjList; si != NULL; si = si->next)
 hPrintf("</PRE></TT>");
 }
 
+void hotLinks()
+/* Put up the hot links bar. */
+{
+hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#000000\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>\n");
+hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#2636D1\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"2\"><TR>\n");
 
+/* Home */
+hPrintf("<TD ALIGN=CENTER><A HREF=\"/index.html\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Home</FONT></A></TD>");
+//, orgEnc);
+
+/* Blat */
+hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgBlat?command=start\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Blat</FONT></A></TD>");
+
+/* Subject View */
+hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/gsidSubj\" class=\"topbar\">%s</A></TD>", "<FONT COLOR=\"#FFFFFF\">Subject View</FONT>");
+
+/* Sequence View */
+hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgGateway?db=%s\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Sequence View</FONT></A></TD>", database);
+
+hPuts("</TR></TABLE>");
+hPuts("</TD></TR></TABLE>\n");
+}
 
 void doMainDisplay(struct sqlConnection *conn,
         struct column *colList, struct subjInfo *subjList)
@@ -253,10 +274,10 @@ void doMainDisplay(struct sqlConnection *conn,
  * a big table. */
 {
 char buf[128];
-//safef(buf, sizeof(buf), "GSID %s Table View", genome);
 safef(buf, sizeof(buf), "GSID %s Table View", genome);
 hPrintf("<FORM ACTION=\"../cgi-bin/gsidTable\" NAME=\"mainForm\" METHOD=GET>\n");
-makeTitle(buf, "gsidTableHelp.html");
+//makeTitle(buf, "gsidTableHelp.html");
+hotLinks();
 cartSaveSession(cart);
 mainControlPanel();
 if (subjList != NULL)
