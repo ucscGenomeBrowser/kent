@@ -16,7 +16,7 @@
 #include <signal.h>
 #include <sys/wait.h>
 
-static char const rcsid[] = "$Id: hgEncodeScheduler.c,v 1.1 2007/10/26 22:10:43 galt Exp $";
+static char const rcsid[] = "$Id: hgEncodeScheduler.c,v 1.2 2007/11/04 00:17:20 galt Exp $";
 
 char *db = NULL;
 char *dir = NULL;
@@ -42,7 +42,9 @@ char sql[512] =
 "create table running ("
 "  pid int(10) unsigned,"
 "  submission int(10) unsigned,"
+"  jobType varchar(255),"
 "  startTime int(10),"
+"  timeOut int(10),"
 "  commandLine varchar(255)"
 ")";
 
@@ -103,7 +105,7 @@ while (*buf != 0)
 }
 
 void getRunningData(struct sqlConnection *conn, int submission,
- int *pid, int *startTime, char **commandLine)
+ int *pid, char **jobType, int *startTime, int *timeOut, char **commandLine)
 /* return data from submission record */
 {
 char query[256];
@@ -117,8 +119,10 @@ if ((row=sqlNextRow(rs)))
     {
     *pid = sqlUnsigned(row[0]);
     //submission = sqlUnsigned(row[1]);
-    *startTime  = sqlUnsigned(row[2]);
-    *commandLine = cloneString(row[3]);
+    *jobType = cloneString(row[2]);
+    *startTime = sqlUnsigned(row[3]);
+    *timeOut = sqlUnsigned(row[4]);
+    *commandLine = cloneString(row[5]);
     }
 else
     {
@@ -127,26 +131,28 @@ else
 sqlFreeResult(&rs);
 }
 
-char *getPathToLoadErrorFile(struct sqlConnection *conn, int submission)
-/* return path to load_error file */
+char *getPathToErrorFile(struct sqlConnection *conn, int submission)
+/* return path to load_error or validate_error file */
 {
 char query[256];
 int pid = 0;
+char *jobType = NULL;
 int startTime = 0;
+int timeOut = 0;
 char *commandLine = NULL;
 char submissionPath[256];
-getRunningData(conn, submission, &pid, &startTime, &commandLine);
+getRunningData(conn, submission, &pid, &jobType, &startTime, &timeOut, &commandLine);
 safef(query, sizeof(query), "select user_id from submissions where id=%d", 
     submission);
 int user = sqlQuickNum(conn, query);
-safef(submissionPath, sizeof(submissionPath), "%s/%d/%d/load_error", dir, user, submission);
+safef(submissionPath, sizeof(submissionPath), "%s/%d/%d/%s_error", dir, user, submission, jobType);
 return cloneString(submissionPath);
 }
 
-void updateLoadErrorFile(struct sqlConnection *conn, int submission, char *message)
-/* remove a process from running, update submission load_error file */
+void updateErrorFile(struct sqlConnection *conn, int submission, char *message)
+/* remove a process from running, update submission load_error or validate_error file */
 {
-char *submissionPath = getPathToLoadErrorFile(conn, submission);
+char *submissionPath = getPathToErrorFile(conn, submission);
 
 //uglyf("\n  submssionPath=%s\n", submissionPath);
 
@@ -156,27 +162,37 @@ carefulClose(&f);
 
 }
 
-void removeProcess(struct sqlConnection *conn, int submission, int status)
+void removeProcess(struct sqlConnection *conn, int submission, char *jobType, int status)
 /* remove a process from running, update submission status */
 {
 char query[256];
 
-char *loadStatus = NULL;
+char *jobStatus = NULL;
 if (status==0)
-    loadStatus = "loaded";
+    {
+    if (sameString(jobType,"load"))
+	jobStatus = "loaded";
+    else
+	jobStatus = "validated";
+    }
 else
-    loadStatus = "load failed";
+    {
+    if (sameString(jobType,"load"))
+	jobStatus = "load failed";
+    else
+	jobStatus = "validate failed";
+    }
 safef(query, sizeof(query), "delete from running where submission=%d", 
     submission);
 sqlUpdate(conn, query);
 safef(query, sizeof(query), "update submissions set status = '%s' where id=%d", 
-    loadStatus, submission);
+    jobStatus, submission);
 sqlUpdate(conn, query);
 
 }
 
 
-void startBackgroundProcess(char *commandLine, int submission)
+void startBackgroundProcess(char *commandLine, int submission, char *jobType, int timeOut)
 /* start background process 
  *  return pid of child or -1 for failure
  *  make it a child of "init" so we won't leave zombies
@@ -211,20 +227,25 @@ else
     struct sqlConnection *conn = sqlConnect(db);
     char query[256];
     time_t now = time(NULL);
-    safef(query, sizeof(query), "insert into running values (%d, %d, %d, '%s')", 
-	pid, submission, (int)now, commandLine);
+    char *jobStatus = NULL;
+    if (sameString(jobType,"load"))
+	jobStatus = "loading";
+    else
+	jobStatus = "validating";
+    safef(query, sizeof(query), "insert into running values (%d, %d, '%s', %d, %d, '%s')", 
+	pid, submission, jobType, (int)now, timeOut, commandLine);
     sqlUpdate(conn, query);
-    safef(query, sizeof(query), "update submissions set status = 'loading' where id=%d", 
-	submission);
+    safef(query, sizeof(query), "update submissions set status = '%s' where id=%d", 
+	jobStatus, submission);
     sqlUpdate(conn, query);
-    updateLoadErrorFile(conn, submission, ""); // clear out load_error file
+    updateErrorFile(conn, submission, ""); // clear out job_error file
     sqlDisconnect(&conn);
     /* wait for child to finish */
     int status;
     while (wait(&status) != pid)
 	/* do nothing */ ;
     conn = sqlConnect(db);
-    removeProcess(conn, submission, status);
+    removeProcess(conn, submission, jobType, status);
     sqlDisconnect(&conn);
     exit(0);
     }
@@ -274,9 +295,9 @@ for(e=list; e; e = e->next)
     uglyf("ready submission id: %d\n", readyId);
 
     // run the child
-    safef(commandLine, sizeof(commandLine), "/bin/sleep 130");
+    safef(commandLine, sizeof(commandLine), "/bin/sleep 10");
 
-    startBackgroundProcess(commandLine, readyId);
+    startBackgroundProcess(commandLine, readyId, "load", timeOut*60);
 
     if (e->next)
     	sleep(1);
@@ -285,24 +306,25 @@ conn = sqlConnect(db);
 
 /* scan for old jobs that have timed out */
 safef(query,sizeof(query),"select submission from running"
-    " where unix_timestamp() - startTime > %d", 
-    timeOut * 60);
+    " where unix_timestamp() - startTime > timeOut");
 int submission = 0;
 while((submission = sqlQuickNum(conn,query)))
     {
     uglyf("found timed-out submission id : %d\n", submission);
 
     int pid = 0;
+    char *jobType = NULL;
     int startTime = 0;
+    int timeOut = 0;
     char *commandLine = NULL;
-    getRunningData(conn, submission, &pid, &startTime, &commandLine);
+    getRunningData(conn, submission, &pid, &jobType, &startTime, &timeOut, &commandLine);
 
     time_t now = time(NULL);
     int age = ((int) now - startTime)/60;
     char message[256];
     safef(message, sizeof(message), "load timed out age = %d minutes\n", age);
     // save status in result file in build area
-    updateLoadErrorFile(conn, submission, message);
+    updateErrorFile(conn, submission, message);
 
     /* kill old job timedout, set status in db */
 
@@ -315,7 +337,7 @@ while((submission = sqlQuickNum(conn,query)))
       // but what if the parent has died for some reason,
       // we would not want to leave orphan records around 
       // indefinitely.  Doing a redundant removeProcess() is harmless.
-    removeProcess(conn, submission, 1);
+    removeProcess(conn, submission, jobType, 1);
 
     // TODO are there any times when automatic retry should be done? up to what limit?
        // note we could add a "retries" column to the running table?
