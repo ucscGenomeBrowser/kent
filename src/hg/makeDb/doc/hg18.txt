@@ -11740,13 +11740,14 @@ hgLoadSqlTab -oldTable hgFixed gvAttr ~/humPhen/kent/src/hg/lib/gv.sql gvAttrIPN
 
 ##########################################################################
 # ORegAnno: oreganno, oregannoAttr, oregannoLink
-# Belinda Giardine  August 3, 2007
+# Belinda Giardine  August 3, 2007, updated Oct 26, 2007
 # This has regulatory annotations from ORegAnno.
-# Get updated file from Obi Griffith 
+# Get updated file from ORegAnno wiki page
+#    http://www.bcgsc.ca/wiki/display/oreganno/DataFiles
 # Parse flat file into 3 tables, truncate tables, load.
-# Has other species but only Human and Fly has enough entries for now.
-cd /cluster/store6/giardine/oreganno/20070803/
-~giardine/oreganno/parseOra ce4 < oreganno_UCSC_03Aug07.txt
+# Has other species but only Human, Fly, sacSer1 has enough entries for now.
+cd /cluster/store6/giardine/oreganno/20071026/
+~giardine/oreganno/parseOra hg18 < oreganno_UCSC_25Oct07.txt
 hgsql hg18
         truncate table oreganno;
         truncate table oregannoAttr;

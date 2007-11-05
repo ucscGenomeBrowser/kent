@@ -1395,3 +1395,9 @@ _EOF_
 # reloaded due to xenos track being dropped confusing joinerCheck
 
 nice bin/gbDbLoadStep -drop -initialLoad sacCer1
+
+#########################################################################
+# ORegAnno - Open Regulatory Annotations
+# latest update Oct 26, 2007
+# loaded by Belinda Giardine, in same manner as hg18 ORegAnno track
+
