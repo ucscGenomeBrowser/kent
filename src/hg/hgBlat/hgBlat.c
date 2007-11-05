@@ -21,7 +21,7 @@
 #include "botDelay.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgBlat.c,v 1.119 2007/11/05 18:15:50 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgBlat.c,v 1.120 2007/11/05 18:28:01 fanhsu Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -709,8 +709,7 @@ printf("%s",
 "website for details.</P>\n"
 "\n"
 "<P>For more information on the graphical version of BLAT, click the Help \n"
-"button on the top menu bar or see the Genome Browser \n"
-"<A HREF=\"../FAQ/FAQblat.html\">FAQ</A>. </P> \n");
+"button on the top menu bar. </P> \n");
 }
 else
 {
