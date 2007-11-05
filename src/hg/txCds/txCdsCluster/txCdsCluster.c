@@ -168,8 +168,8 @@ void flipBed(struct bed *bed, int chromSize)
 {
 int bedSize = bed->chromEnd - bed->chromStart;
 bed->strand[0] = (bed->strand[0] == '+' ? '-' : '+');
-reverseIntRange(&bed->chromStart, &bed->chromEnd, chromSize);
-reverseIntRange(&bed->thickStart, &bed->thickEnd, chromSize);
+reverseUnsignedRange(&bed->chromStart, &bed->chromEnd, chromSize);
+reverseUnsignedRange(&bed->thickStart, &bed->thickEnd, chromSize);
 
 /* Convert blockSizes for moment to hold ends. */
 int i, blockCount = bed->blockCount;
