@@ -21,7 +21,7 @@
 #include "botDelay.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgBlat.c,v 1.118 2007/09/27 23:12:57 galt Exp $";
+static char const rcsid[] = "$Id: hgBlat.c,v 1.119 2007/11/05 18:15:50 fanhsu Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -689,6 +689,31 @@ printf(
 "blat on land vertebrates.",
    minMatchShown
 );
+if (hIsGsidServer())
+{
+printf("%s",
+"\n</P><P>BLAT is not BLAST.  DNA BLAT works by keeping an index of the entire genome\n"
+"in memory.  The index consists of all non-overlapping 11-mers except for\n"
+"those heavily involved in repeats.  The index takes up a bit less than\n"
+"a gigabyte of RAM.  The genome itself is not kept in memory, allowing\n"
+"BLAT to deliver high performance on a reasonably priced Linux box.\n"
+"The index is used to find areas of probable homology, which are then\n"
+"loaded into memory for a detailed alignment. Protein BLAT works in a similar\n"
+"manner, except with 4-mers rather than 11-mers.  The protein index takes a little\n"
+"more than 2 gigabytes.</P>\n"
+"<P>BLAT was written by <A HREF=\"mailto:kent@soe.ucsc.edu\">Jim Kent</A>.\n"
+"Sources and executables to run batch jobs on your own server are available free\n"
+"for academic, personal, and non-profit purposes.  Non-exclusive commercial\n"
+"licenses are also available. See the \n"
+"<A HREF=\"http://www.kentinformatics.com\" TARGET=_blank>Kent Informatics</A>\n"
+"website for details.</P>\n"
+"\n"
+"<P>For more information on the graphical version of BLAT, click the Help \n"
+"button on the top menu bar or see the Genome Browser \n"
+"<A HREF=\"../FAQ/FAQblat.html\">FAQ</A>. </P> \n");
+}
+else
+{
 printf("%s",
 "\n</P><P>BLAT is not BLAST.  DNA BLAT works by keeping an index of the entire genome\n"
 "in memory.  The index consists of all non-overlapping 11-mers except for\n"
@@ -710,6 +735,7 @@ printf("%s",
 "<P>For more information on the graphical version of BLAT, click the Help \n"
 "button on the top menu bar or see the Genome Browser \n"
 "<A HREF=\"../FAQ/FAQblat.html\">FAQ</A>. </P> \n");
+}
 }
 
 void doMiddle(struct cart *theCart)
