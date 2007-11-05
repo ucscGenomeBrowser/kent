@@ -20,7 +20,7 @@
 #include "gsidTable.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidTable.c,v 1.24 2007/11/04 01:55:01 fanhsu Exp $";
+static char const rcsid[] = "$Id: gsidTable.c,v 1.25 2007/11/05 01:42:15 fanhsu Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "submit_filter", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -265,6 +265,8 @@ hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/gsidSubj\" class=\"topbar\">%s</A
 /* Sequence View */
 hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgGateway?db=%s\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Sequence View</FONT></A></TD>", database);
 
+/* Help */
+hPrintf("<TD ALIGN=CENTER><A HREF=\"/goldenPath/help/gsidTutorial.html#TableView\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Help</FONT></A></TD>");
 hPuts("</TR></TABLE>");
 hPuts("</TD></TR></TABLE>\n");
 }
