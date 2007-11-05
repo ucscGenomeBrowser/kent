@@ -8,7 +8,7 @@
 #include "obscure.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgLoadSqlTab.c,v 1.4 2007/03/07 01:47:32 angie Exp $";
+static char const rcsid[] = "$Id: hgLoadSqlTab.c,v 1.5 2007/11/05 23:34:57 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -92,7 +92,11 @@ verbose(1, "Scanning through %d files\n", inCount);
 for (i=0;  i < inCount;  i++)
     {
     verbose(2, "Loading file %s into table %s\n", inNames[i], table);
-    sqlLoadTabFile(conn, inNames[i], table, loadOptions);
+    if (sameString("stdin", inNames[i]))
+	sqlLoadTabFile(conn, "/dev/stdin", table,
+		       (loadOptions & ~SQL_TAB_FILE_ON_SERVER));
+    else
+	sqlLoadTabFile(conn, inNames[i], table, loadOptions);
     }
 if (oldTable)
     safef(comment, sizeof(comment),
