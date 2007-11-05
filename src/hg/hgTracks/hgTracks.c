@@ -118,7 +118,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1420 2007/10/31 16:55:11 giardine Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1421 2007/11/05 14:12:47 fanhsu Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -13341,7 +13341,14 @@ if (wikiLinkEnabled())
 	   "&hgS_doMainPage=1\" class=\"topbar\">Session</A></TD>",
 	   cartSessionVarName(), cartSessionId(cart));
     }
-hPrintf("<TD ALIGN=CENTER><A HREF=\"../goldenPath/help/hgTracksHelp.html\" TARGET=_blank class=\"topbar\">%s</A></TD>\n", "Help");
+if (hIsGsidServer())
+    {
+    hPrintf("<TD ALIGN=CENTER><A HREF=\"/goldenPath/help/gsidTutorial.html#SequenceView\" TARGET=_blank class=\"topbar\">%s</A></TD>\n", "Help");
+    }
+else
+    {
+    hPrintf("<TD ALIGN=CENTER><A HREF=\"../goldenPath/help/hgTracksHelp.html\" TARGET=_blank class=\"topbar\">%s</A></TD>\n", "Help");
+    }
 hPuts("</TR></TABLE>");
 hPuts("</TD></TR></TABLE>\n");
 }
