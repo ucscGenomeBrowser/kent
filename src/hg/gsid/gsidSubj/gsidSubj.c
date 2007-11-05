@@ -18,7 +18,7 @@
 #include "gsidSubj.h"
 //#include "ccdsGeneMap.h"
 
-static char const rcsid[] = "$Id: gsidSubj.c,v 1.5 2007/07/13 22:56:39 angie Exp $";
+static char const rcsid[] = "$Id: gsidSubj.c,v 1.6 2007/11/05 01:50:02 fanhsu Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -211,7 +211,7 @@ hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgGateway?db=%s\" class=\"topbar\
 hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/gsidTable\" class=\"topbar\">%s</A></TD>", "<FONT COLOR=\"#FFFFFF\">Table View</FONT>");
 
 /* Help */
-hPrintf("<TD ALIGN=CENTER><A HREF=\"../goldenPath/help/hgTracksHelp.html\" TARGET=_blank class=\"topbar\"><FONT COLOR=\"#FFFFFF\"%s</FONT></A></TD>\n", "Help");
+hPrintf("<TD ALIGN=CENTER><A HREF=\"/goldenPath/help/gsidTutorial.html#SubjectView\" class=\"topbar\">%s</A></TD>", "<FONT COLOR=\"#FFFFFF\">Help</FONT>");
 
 hPuts("</TR></TABLE>");
 hPuts("</TD></TR></TABLE>\n");
