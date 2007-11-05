@@ -19,7 +19,7 @@
 #include "portable.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: gbGetSeqs.c,v 1.16 2007/03/17 17:45:05 markd Exp $";
+static char const rcsid[] = "$Id: gbGetSeqs.c,v 1.17 2007/11/05 18:49:06 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -286,8 +286,8 @@ for (update = select->release->updates; update != NULL; update = update->next)
         }
     }
 
-// FIXME: current restriction that peps can't be checked
-if (!gPep)
+// FIXME: current restriction: peps and intronPsl can't be checked
+if (! (gPep || sameString(gGetWhat, "intronPsl")))
     checkExtract(select);
 
 gbReleaseUnload(select->release);
