@@ -59,8 +59,8 @@ while(i < l)
 	++i;	    
 	c1 = line[i++];
 	c2 = line[i++];
-	toupper(c1);
-	toupper(c2);
+	c1 = toupper(c1);
+	c2 = toupper(c2);
 	if (isdigit(c1))
 	    c1 -= 48;
 	else
