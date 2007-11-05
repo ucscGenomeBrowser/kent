@@ -1,16 +1,18 @@
 <H2>Description</H2>
 <P>
 This track shows multiple alignments of 30 vertebrate
-species and two measures of evolutionary conservation --
-conservation across all 30 species and an alternative 
+species and three measures of evolutionary conservation --
+conservation across all 30 species, an alternative 
+measurement restricted to the euarchontoglires subset
+(10 species plus mouse) of the alignment, and a
 measurement restricted to the placental mammal subset 
 (19 species plus mouse) of the alignment.
-These two measurements produce the same results in 
-regions where only mammals appear in the alignment. 
-For other regions, the non-mammalian species can either 
+These three measurements produce the same results in 
+regions where only euarchontoglires appear in the alignment. 
+For other regions, the non-euarchontoglires species can either 
 boost the scores (if conserved) or decrease them (if non-conserved).
-The mammalian conservation helps to identify sequences that are under 
-different evolutionary pressures in mammalian and non-mammalian vertebrates.
+The placental mammal conservation helps to identify sequences that are under 
+different evolutionary pressures in mammals and non-mammal vertebrates.
 </P>
 <P>
 The multiple alignments were generated using multiz and 
@@ -29,14 +31,14 @@ TARGET=_blank>Mm9 multiple alignment</A> page.
 The species aligned for this track include the reptile, amphibian, 
 bird, and fish clades, as well as marsupial, monotreme (platypus), 
 and placental mammals. Compared to the previous 17-vertebrate alignment,
-this track includes 11 new species and 6 species with updated
-sequence assemblies (<B>Table 1</B>). The new species consist of five 
-high-coverage (5-8.5X) assemblies (horse, platypus, 
+this track includes 13 new species and 4 species with updated
+sequence assemblies (<B>Table 1</B>). The new species consist of seven 
+high-coverage (5-8.5X) assemblies (orangutan, marmoset, horse, platypus, 
 lizard, and two teleost fish: stickleback and medaka)
 and six low-coverage (2X) genome assemblies from mammalian species selected for 
 sampling by NHGRI (bushbaby, tree shrew, guinea pig, 
 hedgehog, common shrew, and cat).
-The chimp, cow, chicken, frog, fugu, and zebrafish assemblies in this 
+The cow, chicken, fugu, and zebrafish assemblies in this 
 track have been updated from those used in the previous 17-species alignment.
 </P>
 <P>
@@ -48,9 +50,9 @@ and Ns displayed at base level (see <EM>Gap Annotation</EM>, below). </P>
 <P>
 <BLOCKQUOTE><TABLE BORDER=1 CELLPADDING=4 BORDERCOLOR="#aaaaaa">
 <TR ALIGN=left><TH>Organism</TH><TH>Species</TH><TH>Release date</TH><TH>UCSC version</TH></TR>
-<TR ALIGN=left><TD>Human</TD><TD>Homo sapiens</TD><TD>
-    Mar 2006</TD><TD> <A HREF="../cgi-bin/hgGateway?db=hg18"
-    TARGET=_blank>hg18</A></TD></TR>
+<TR ALIGN=left><TD>Mouse</TD><TD>Mus musculus</TD><TD>
+    Jul 2007</TD><TD> <A HREF="../cgi-bin/hgGateway?db=mm9"
+    TARGET=_blank>mm9</A></TD></TR>
 <TR ALIGN=left><TD>Armadillo</TD><TD>Dasypus novemcinctus</TD><TD>May 2005</TD>
     <TD> dasNov1</TD></TR>
 <TR ALIGN=left><TD>Bushbaby</TD><TD>Otolemur garnetti</TD><TD>Dec 2006</TD>
@@ -64,8 +66,9 @@ and Ns displayed at base level (see <EM>Gap Annotation</EM>, below). </P>
 <TR ALIGN=left><TD>Chimpanzee</TD><TD>Pan troglodytes</TD><TD>
     Mar 2006</TD><TD> <A HREF="../cgi-bin/hgGateway?db=panTro2"
     TARGET=_blank>panTro2</A></TD></TR>
-<TR ALIGN=left><TD>Cow</TD><TD>Bos taurus</TD><TD>Aug 2006</TD>
-    <TD>bosTau3</TD></TR>
+<TR ALIGN=left><TD>Cow</TD><TD>Bos taurus</TD><TD>
+    Aug 2006</TD><TD> <A HREF="../cgi-bin/hgGateway?db=bosTau3"
+    TARGET=_blank>bosTau3</A></TD></TR>
 <TR ALIGN=left><TD>Dog</TD><TD>Canis familiaris</TD><TD>
     May 2005</TD><TD> <A HREF="../cgi-bin/hgGateway?db=canFam2"
     TARGET=_blank>canFam2</A></TD></TR>
@@ -82,20 +85,24 @@ and Ns displayed at base level (see <EM>Gap Annotation</EM>, below). </P>
 <TR ALIGN=left><TD>Hedgehog</TD><TD>Erinaceus europaeus</TD><TD>June 2006</TD>
     <TD> eriEur1</TD></TR>
 <TR ALIGN=left><TD>Horse</TD><TD>Equus caballus</TD><TD>
-    Feb 2007</TD><TD> <A HREF="../cgi-bin/hgGateway?db=equCab1"
+    Jan 2007</TD><TD> <A HREF="../cgi-bin/hgGateway?db=equCab1"
     TARGET=_blank>equCab1</A></TD></TR>
+<TR ALIGN=left><TD>Human</TD><TD>Homo sapiens</TD><TD>
+    Mar 2006</TD><TD> <A HREF="../cgi-bin/hgGateway?db=hg18"
+    TARGET=_blank>hg18</A></TD></TR>
 <TR ALIGN=left><TD>Lizard</TD><TD>Anolis carolinensis</TD><TD>
     Feb 2007</TD><TD> <A HREF="../cgi-bin/hgGateway?db=anoCar1"
     TARGET=_blank>anoCar1</A></TD></TR>
+<TR ALIGN=left><TD>Marmoset</TD><TD>Callithrix jacchus</TD><TD>June 2007</TD>
+    <TD>calJac1</TD></TR>
 <TR ALIGN=left><TD>Medaka</TD><TD>Oryzias latipes</TD><TD>
     Apr 2006</TD><TD> <A HREF="../cgi-bin/hgGateway?db=oryLat1"
     TARGET=_blank>oryLat1</A></TD></TR>
-<TR ALIGN=left><TD>Mouse</TD><TD>Mus musculus</TD><TD>
-    Jul 2007</TD><TD> <A HREF="../cgi-bin/hgGateway?db=mm9"
-    TARGET=_blank>mm9</A></TD></TR>
 <TR ALIGN=left><TD>Opossum</TD><TD>Monodelphis domestica</TD><TD>
     Jan 2006</TD><TD> <A HREF="../cgi-bin/hgGateway?db=monDom4"
     TARGET=_blank>monDom4</A></TD></TR>
+<TR ALIGN=left><TD>Orangutan</TD><TD>Pongo pygmaeus abelii</TD><TD>
+    July 2007</TD><TD>ponAbe2</TD></TR>
 <TR ALIGN=left><TD>Platypus</TD><TD>Ornithorhychus anatinus</TD><TD>
     Mar 2007</TD><TD> <A HREF="../cgi-bin/hgGateway?db=ornAna1"
     TARGET=_blank>ornAna1</A></TD></TR>
@@ -120,8 +127,8 @@ and Ns displayed at base level (see <EM>Gap Annotation</EM>, below). </P>
 <TR ALIGN=left><TD>Tree shrew</TD><TD>Tupaia belangeri</TD><TD>Dec 2006</TD>
     <TD> tupBel1</TD></TR>
 <TR ALIGN=left><TD>Zebrafish</TD><TD>Danio rerio</TD><TD>
-    Mar 2006</TD><TD> <A HREF="../cgi-bin/hgGateway?db=danRer4"
-    TARGET=_blank>danRer4</A></TD></TR>
+    July 2007</TD><TD> <A HREF="../cgi-bin/hgGateway?db=danRer5"
+    TARGET=_blank>danRer5</A></TD></TR>
 </TABLE><BR>
 <B>Table 1.</B> <EM>Genome assemblies included in the 30-way Conservation 
 track.</EM>
@@ -245,15 +252,14 @@ species-specific reading frames for gene translation.
 
 <BLOCKQUOTE><TABLE BORDER=1 CELLPADDING=4 BORDERCOLOR="#aaaaaa">
 <TR ALIGN=left><TD><B>Gene Track</B></TD><TD><B>Species</B></TD></TR>
-<TR ALIGN=left><TD>Known Genes</TD><TD>human, mouse, rat</TD></TR>
-<TR ALIGN=left><TD>RefSeq Genes</TD><TD>chimp</TD></TR>
-<TR ALIGN=left><TD>Ensembl Genes</TD><TD>rhesus, opossum, zebrafish, fugu, 
-stickleback</TD></TR>
-<TR ALIGN=left><TD>mRNAs</TD><TD>rabbit, dog, cow, horse, chicken, frog, 
-tetraodon</TD></TR>
-<TR ALIGN=left><TD>None</TD><TD>bushbaby, tree shrew, guinea pig, rabbit, 
-shrew, hedgehog,<BR> cat, armadillo, elephant, tenrec, platypus, lizard, 
-medaka</TD></TR>
+<TR ALIGN=left><TD>Known Genes</TD><TD>human, mouse</TD></TR>
+<TR ALIGN=left><TD>Ensembl Genes</TD><TD>rat, rhesus, chimp, dog, opossum, platypus,
+zebrafish, fugu, stickleback, medaka</TD></TR>
+<TR ALIGN=left><TD>RefSeq Genes</TD><TD>cow, frog</TD></TR>
+<TR ALIGN=left><TD>mRNAs</TD><TD>orangutan, elephant, rabbit, cat, horse,
+chicken, lizard, armadillo, tetraodon</TD></TR>
+<TR ALIGN=left><TD>None</TD><TD>marmoset, bushbaby, tree shrew, guinea pig,
+shrew, hedgehog, tenrec</TD></TR>
 </TABLE>
 <B>Table 2.</B> <EM>Gene tracks used for codon translation.</EM>
 </BLOCKQUOTE></P>
