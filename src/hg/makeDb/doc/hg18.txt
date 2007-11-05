@@ -17756,11 +17756,23 @@ values ("bipolar", 0, 0, "composite")'
 
 
 ###########################################################################
-# Build targetScanS track - (DONE - 2007-10-05 - Hiram)
+# Build targetScanS track - (DONE - 2007-10-05 - 2007-10-31 - Hiram)
 #       requested by: George Bell gbell at wi.mit.edu
     ssh hgwdev 
     mkdir -p /cluster/data/hg18/bed/targetScanS
     cd /cluster/data/hg18/bed/targetScanS
+
+    wget --timestamping \
+	http://jura.wi.mit.edu/targetscan/vert_40/ucsc/hg18/hg18ConsChrALL.bed
+
+    hgLoadBed hg18 targetScanS -tmpDir=/scratch/tmp hg18ConsChrALL.bed
+    #	Loaded 50764 elements of size 6
+    featureBits hg18 targetScanS
+    #	313293 bases of 2881515245 (0.011%) in intersection
+
+
+    ################################
+    # previous attempts listed below
 
     #	the don't supply them all, but we don't know which ones they
     #	don't.  So, ask for them all, and remove the files that are empty.
@@ -17780,6 +17792,8 @@ done
     egrep -h -v "^browser|^track" hg*.bed | \
 	hgLoadBed hg18 targetScanS -tmpDir=/scratch/tmp stdin
     #	Loaded 50802 elements of size 6
+    featureBits hg18 targetScanS
+    #	312951 bases of 2881515245 (0.011%) in intersection
 
     # Create/edit/check in targetScans.html and trackDb.ra under
     # kent/src/hg/makeDb/trackDb/human/hg18
