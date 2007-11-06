@@ -166,7 +166,7 @@ color 0, 10, 100
 altColor 0,90,10
 type wigMaf 0.0 1.0
 maxHeightPixels 100:40:11
-wiggle phastCons30wayEuarch Euarch Euarchontoglires phastCons30wayPlacental Mammal Placental_Mammal phastCons30way Vertebrate Vertebrate
+wiggle phastCons30wayPlacental Mammal Placental_Mammal phastCons30wayEuarch Euarch Euarchontoglires phastCons30way Vertebrate Vertebrate
 spanList 1
 pairwiseHeight 12
 yLineOnOff Off
@@ -176,14 +176,46 @@ autoScaleDefault Off
 windowingFunction mean
 summary multiz30waySummary
 speciesCodonDefault mm9
-speciesGroups Gliers Primates Placental_Mammal Vertebrate
-sGroup_Gliers rn4 cavPor2 oryCun1
+speciesGroups Glires Primates Placental_Mammal Vertebrate
+sGroup_Glires rn4 cavPor2 oryCun1
 sGroup_Primates hg18 panTro2 rheMac2 ponAbe2 calJac1 otoGar1
 sGroup_Placental_Mammal tupBel1 sorAra1 eriEur1 canFam2 felCat3 equCab1 bosTau3 dasNov1 loxAfr1 echTel1
 sGroup_Vertebrate monDom4 ornAna1 galGal3 anoCar1 xenTro2 gasAcu1 danRer5 tetNig1 fr2 oryLat1
 speciesDefaultOff rheMac2 calJac1 panTro2 cavPor2 tupBel1 otoGar1 dasNov1 oryCun1 felCat3 loxAfr1 bosTau3 eriEur1 sorAra1 echTel1 ornAna1 anoCar1 xenTro2 danRer5 tetNig1 fr2 oryLat1
 itemFirstCharCase noChange
 treeImage phylo/mm9_30way.gif
+
+track mostConserved30way
+compositeTrack on
+shortLabel Most Conserved
+longLabel PhastCons Conserved Elements, 30-way Vertebrate Multiz Alignment
+group compGeno
+priority 103.4
+visibility hide
+exonArrows off
+showTopScorers 200
+type bed 5 .
+
+    track phastConsElements30wayPlacental
+    subTrack mostConserved30way
+    shortLabel Mammal
+    longLabel PhastCons Placental Mammal Conserved Elements, 30-way Multiz Alignment
+    color 100,50,170
+    priority 1
+
+    track phastConsElements30wayEuarch
+    subTrack mostConserved30way
+    shortLabel Euarch
+    longLabel PhastCons Euarchontoglires Conserved Elements, 30-way Multiz Alignment
+    color 100,50,170
+    priority 2
+
+    track phastConsElements30way
+    subTrack mostConserved30way
+    shortLabel Vertebrate
+    longLabel PhastCons Vertebrate Conserved Elements, 30-way Multiz Alignment
+    color 170,100,50
+    priority 3
 
 track nscanGene
 shortLabel N-SCAN
