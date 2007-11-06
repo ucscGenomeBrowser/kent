@@ -1345,6 +1345,7 @@ visibility hide
 color 20,90,0
 type bed 6 +
 mafTrack multiz17way
+origAssembly hg17
 
 track ncRna
 shortLabel Ensembl Noncoding

@@ -100,6 +100,17 @@ visibility hide
 color 0,100,100
 type genePred twinscanPep
 
+track evofold
+shortLabel EvoFold
+longLabel EvoFold Predictions of RNA Secondary Structure 
+group genes
+priority 63
+visibility hide
+color 20,90,0
+type bed 6 +
+mafTrack mzPt1Mm3Rn3Gg2_pHMM
+origAssembly hg17
+
 track uniGene_2
 shortLabel UniGene
 longLabel UniGene Hs 162 Alignments and SAGEmap Info
