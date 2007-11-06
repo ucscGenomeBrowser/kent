@@ -16,7 +16,7 @@
 #include "customFactory.h"
 #include "hgSession.h"
 
-static char const rcsid[] = "$Id: hgSession.c,v 1.29 2007/08/31 22:44:57 angie Exp $";
+static char const rcsid[] = "$Id: hgSession.c,v 1.30 2007/11/06 04:33:00 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -184,7 +184,8 @@ char *getUrlEmailLink(char *url)
 {
 struct dyString *dy = dyStringNew(1024);
 dyStringPrintf(dy, "<A HREF=\"mailto:?subject=UCSC browser session&"
-	       "body=This is my new favorite UCSC browser session:%%20");
+	       "body=Here is a UCSC browser session I%%27d like to share with "
+	       "you:%%20");
 addUrlLink(dy, url, TRUE);
 dyStringPrintf(dy, "\">Email</A>\n");
 return dyStringCannibalize(&dy);
@@ -227,25 +228,18 @@ while ((row = sqlNextRow(sr)) != NULL)
     char buf[512];
     printf("<TR><TD>&nbsp;&nbsp;&nbsp;</TD><TD>");
     htmlTextOut(sessionName);
-    printf("</TD><TD>");
+    printf("</TD><TD>&nbsp;");
     safef(buf, sizeof(buf), "%s%s", hgsLoadPrefix, encSessionName);
     cgiMakeButton(buf, "load as current session");
-    printf("</TD><TD>");
+    printf("</TD><TD>&nbsp;");
     safef(buf, sizeof(buf), "%s%s", hgsDeletePrefix, encSessionName);
     cgiMakeButton(buf, "delete");
-    printf("</TD><TD>");
-    if (shared)
-	{
-	safef(buf, sizeof(buf), "%s%s", hgsUnsharePrefix, encSessionName);
-	cgiMakeButton(buf, "don't share");
-	}
-    else
-	{
-	safef(buf, sizeof(buf), "%s%s", hgsSharePrefix, encSessionName);
-	cgiMakeButton(buf, "share");
-	}
+    printf("</TD><TD>&nbsp;");
+    safef(buf, sizeof(buf), "%s%s", hgsSharePrefix, encSessionName);
+    cgiMakeCheckBoxJS(buf, shared, "onchange=\"document.mainForm.submit();\"");
+    printf("share with others\n");
     link = getSessionLink(userName, encSessionName);
-    printf("</TD><TD>%s</TD>\n", link);
+    printf("</TD><TD>&nbsp;&nbsp;&nbsp;%s</TD>\n", link);
     freez(&link);
     link = getSessionEmailLink(userName, encSessionName);
     printf("<TD>%s</TD></TR>\n", link);
@@ -389,8 +383,8 @@ else if (savedSessionsSupported)
     printf("<P>If you <A HREF=\"%s\">sign in</A>, "
 	   "you will also have the option to save named sessions.\n",
 	   wikiLinkUserLoginUrl(cartSessionId(cart)));
-showLoadingOptions(userName, savedSessionsSupported);
 showSavingOptions(userName);
+showLoadingOptions(userName, savedSessionsSupported);
 printf("</FORM>\n");
 }
 
@@ -689,45 +683,48 @@ char *doUpdateSessions()
  * were in the cart. */
 {
 struct dyString *dyMessage = dyStringNew(1024);
-struct hashEl *helList = NULL, *hel = NULL;
+struct hashEl *cartHelList = NULL, *hel = NULL;
 struct sqlConnection *conn = hConnectCentral();
 char *userName = wikiLinkUserName();
 char *encUserName = cgiEncodeFull(userName);
 boolean didSomething = FALSE;
 char query[512];
 
-helList = cartFindPrefix(cart, hgsUnsharePrefix);
-for (hel = helList;  hel != NULL;  hel = hel->next)
+cartHelList = cartFindPrefix(cart, hgsSharePrefix);
+if (cartHelList != NULL)
     {
-    char *encSessionName = hel->name + strlen(hgsUnsharePrefix);
-    char *sessionName = cgiDecodeClone(encSessionName);
-    safef(query, sizeof(query), "UPDATE %s SET shared = 0 "
-	  "WHERE userName = '%s' AND sessionName = '%s';",
-	  namedSessionTable, encUserName, encSessionName);
-    sqlUpdate(conn, query);
-    sessionTouchLastUse(conn, encUserName, encSessionName);
-    dyStringPrintf(dyMessage,
-		   "Marked session <B>%s</B> as unshared.<BR>\n",
-		   htmlEncode(sessionName));
-    didSomething = TRUE;
+    struct hash *sharedHash = hashNew(0);
+    char **row;
+    struct sqlResult *sr;
+    safef(query, sizeof(query),
+	  "select sessionName,shared from %s where userName = '%s'",
+	  namedSessionTable, encUserName);
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+	hashAddInt(sharedHash, row[0], atoi(row[1]));
+    sqlFreeResult(&sr);
+    for (hel = cartHelList;  hel != NULL;  hel = hel->next)
+	{
+	char *encSessionName = hel->name + strlen(hgsSharePrefix);
+	char *sessionName = cgiDecodeClone(encSessionName);
+	boolean alreadyShared = hashIntVal(sharedHash, encSessionName);
+	boolean shared  = cartUsualBoolean(cart, hel->name, TRUE);
+	if (shared != alreadyShared)
+	    {
+	    safef(query, sizeof(query), "UPDATE %s SET shared = %d "
+		  "WHERE userName = '%s' AND sessionName = '%s';",
+		  namedSessionTable, shared, encUserName, encSessionName);
+	    sqlUpdate(conn, query);
+	    sessionTouchLastUse(conn, encUserName, encSessionName);
+	    dyStringPrintf(dyMessage,
+			   "Marked session <B>%s</B> as %s.<BR>\n",
+			   htmlEncode(sessionName),
+			   (shared ? "shared" : "unshared"));
+	    didSomething = TRUE;
+	    }
+	}
+    hashFree(&sharedHash);
     }
-
-helList = cartFindPrefix(cart, hgsSharePrefix);
-for (hel = helList;  hel != NULL;  hel = hel->next)
-    {
-    char *encSessionName = hel->name + strlen(hgsSharePrefix);
-    char *sessionName = cgiDecodeClone(encSessionName);
-    safef(query, sizeof(query), "UPDATE %s SET shared = 1 "
-	  "WHERE userName = '%s' AND sessionName = '%s';",
-	  namedSessionTable, encUserName, encSessionName);
-    sqlUpdate(conn, query);
-    sessionTouchLastUse(conn, encUserName, encSessionName);
-    dyStringPrintf(dyMessage,
-		   "Marked session <B>%s</B> as shared.<BR>\n",
-		   htmlEncode(sessionName));
-    didSomething = TRUE;
-    }
-
 hel = cartFindPrefix(cart, hgsLoadPrefix);
 if (hel != NULL)
     {
@@ -736,15 +733,17 @@ if (hel != NULL)
     char wildStr[256];
     safef(wildStr, sizeof(wildStr), "%s*", hgsLoadPrefix);
     dyStringPrintf(dyMessage,
-		   "Loaded settings from session <B>%s</B>.<BR>\n",
-		   htmlEncode(sessionName));
+		   "Loaded settings from session <B>%s</B>. %s %s<BR>\n",
+		   htmlEncode(sessionName),
+		   getSessionLink(userName, encSessionName),
+		   getSessionEmailLink(userName, encSessionName));
     cartLoadUserSession(conn, userName, sessionName, cart, NULL, wildStr);
     checkForCustomTracks(dyMessage);
     didSomething = TRUE;
     }
 
-helList = cartFindPrefix(cart, hgsDeletePrefix);
-for (hel = helList;  hel != NULL;  hel = hel->next)
+cartHelList = cartFindPrefix(cart, hgsDeletePrefix);
+for (hel = cartHelList;  hel != NULL;  hel = hel->next)
     {
     char *encSessionName = hel->name + strlen(hgsDeletePrefix);
     char *sessionName = cgiDecodeClone(encSessionName);
@@ -776,10 +775,13 @@ struct sqlConnection *conn = hConnectCentral();
 struct dyString *dyMessage = dyStringNew(1024);
 char *otherUser = trimSpaces(cartString(cart, hgsOtherUserName));
 char *sessionName = trimSpaces(cartString(cart, hgsOtherUserSessionName));
+char *encSessionName = cgiEncodeFull(sessionName);
 
 dyStringPrintf(dyMessage,
-      "Loaded settings from user <B>%s</B>'s session <B>%s</B>.",
-      otherUser, htmlEncode(sessionName));
+       "Loaded settings from user <B>%s</B>'s session <B>%s</B>. %s %s",
+	       otherUser, htmlEncode(sessionName),
+	       getSessionLink(otherUser, encSessionName),
+	       getSessionEmailLink(otherUser, encSessionName));
 cartLoadUserSession(conn, otherUser, sessionName, cart, NULL, actionVar);
 checkForCustomTracks(dyMessage);
 hDisconnectCentral(&conn);
@@ -824,6 +826,9 @@ else
     char *settings = trimSpaces(cartString(cart, hgsLoadLocalFileName));
     dyStringPrintf(dyMessage, "Loaded settings from local file (%lu bytes).",
 		   (unsigned long)strlen(settings));
+    dyStringPrintf(dyMessage, " <A HREF=\"http://%s%s?%s=%u\">Browser</A>",
+		   cgiServerName(), destAppScriptName(),
+		   cartSessionVarName(), cartSessionId(cart));
     lf = lineFileOnString("settingsFromFile", TRUE, cloneString(settings));
     }
 cartLoadSettings(lf, cart, NULL, actionVar);
