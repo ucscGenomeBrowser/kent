@@ -1111,3 +1111,6 @@ Error: danRer1: gene danRer1.refFlat:1854 NM_131267 chr7: NM_131267 geneName "ir
   genePredCheck -db=danRer5 mgcGenes
   Error: mgcGenes:4961: BC117652 no exonFrame on CDS exon 0
   checked: 12662 failed: 1
+
+- RefSeq details pages incorrectly has `CDS:' completeness from 
+  comment section, when it is, in fact mRNA completeness/
