@@ -2,6 +2,9 @@ class PipelineController < ApplicationController
 
   require 'open-uri'
 
+  #Process.wait
+  #Process.waitpid2(0, Process::WNOHANG | Process::WUNTRACED)
+
   before_filter :login_required
   before_filter :check_user_is_owner, :except => [:new, :create, :list, :show_user, :show, :delete_archive ]
   
@@ -14,6 +17,10 @@ class PipelineController < ApplicationController
   end
   
   def show_user
+
+    #debug add a delay to simulate busyness.  is the db locked?
+    #exitCode = system("sleep 20")
+
     @user = User.find(current_user.id)
     @submissions = @user.submissions
     #@submissionTypes = getSubmissionTypes
@@ -25,7 +32,24 @@ class PipelineController < ApplicationController
   def show
     @submission = Submission.find(params[:id])
     #@submissionTypes = getSubmissionTypes
-    @errText = getErrText
+    if @submission.status == "invalid"
+      @errText = getErrText
+    else
+      if @submission.status == "load failed"
+        @errText = getLoadErrText
+      else
+	if @submission.status == "upload failed"
+	  @errText = getUploadErrText
+	else
+	  @errText = ""
+    	end
+      end
+    end
+    if @submission.status.starts_with?("schedule expanding ")
+      if process_uploaded_archive
+        # ok
+      end
+    end
   end
 
   def valid_status
@@ -36,6 +60,11 @@ class PipelineController < ApplicationController
   def load_status
     @submission = Submission.find(params[:id])
     @errText = getLoadErrText
+  end
+
+  def upload_status
+    @submission = Submission.find(params[:id])
+    @errText = getUploadErrText
   end
 
   def begin_loading
@@ -122,6 +151,57 @@ class PipelineController < ApplicationController
   def upload
     @submission = Submission.find(params[:id])
     return unless request.post?
+    @upurl = params[:upload_url]
+    if @upurl == "http://"
+      @upurl = ""
+    end
+    return if @upurl.blank?
+    
+    @filename = sanitize_filename(@upurl)
+    extensions = ["zip", "ZIP", "tar.gz", "TAR.GZ", "tar.bz2", "TAR.BZ2"]
+    unless extensions.any? {|ext| @filename.ends_with?("." + ext) }
+      flash[:warning] = "File name <strong>#{@filename}</strong> is invalid. " +
+        "Only a compressed archive file (zip,bz2,gz) is allowed"
+      return
+    end
+
+    msg = ""
+
+    # make sure parent paths exist
+    submissionDir = File.dirname(path_to_file)
+    userDir = File.dirname(submissionDir)
+    Dir.mkdir(userDir) unless File.exists?(userDir)
+    Dir.mkdir(submissionDir) unless File.exists?(submissionDir)
+
+    nextArchiveNo = @submission.archive_count+1
+
+    @filename = "#{"%03d" % nextArchiveNo}_#{@filename}"
+
+    #debugging
+    msg += "sanitized filename=#{@filename}<br>"
+    msg += "RAILS_ROOT=#{RAILS_ROOT}<br>"
+    msg += "upload path=#{ActiveRecord::Base.configurations[RAILS_ENV]['upload']}<br>"
+    msg += "path_to_file=#{path_to_file}<br>"
+    msg += "nextArchiveNo=#{nextArchiveNo}<br>"
+
+    # just in case, remove it it already exists (shouldn't happen)
+    File.delete(path_to_file) if File.exists?(path_to_file)
+
+    @submission.status = "schedule uploading #{@upurl}"
+
+    unless @submission.save
+      flash[:warning] = "submission record save failed"
+      return
+    end
+
+    flash[:notice] = msg
+    redirect_to :action => 'show', :id => @submission
+
+  end
+
+  def uploadOld
+    @submission = Submission.find(params[:id])
+    return unless request.post?
     @upload = params[:upload_file]
     @upurl = params[:upload_url]
     if @upurl == "http://"
@@ -169,24 +249,6 @@ class PipelineController < ApplicationController
 
     @filename = "#{"%03d" % nextArchiveNo}_#{@filename}"
 
-
-    # just in case, remove it it already exists (shouldn't happen)
-    File.delete(path_to_file) if File.exists?(path_to_file)
-
-    unless @upurl.blank?
-      File.open(path_to_file, "wb") { |f| f.write(@upload.read) }
-    else
-      if @upload.instance_of?(Tempfile)
-        FileUtils.copy(@upload.local_path, path_to_file)
-      else
-        File.open(path_to_file, "wb") { |f| f.write(@upload.read) }
-      end
-    end
-
-    # dead code, just an example of using write_attribute: save filename in the database
-    #write_attribute("file", path_to_file)
-
-
     #debugging
     msg += "content_type=#{@upload.content_type}<br>"
     msg += "original_filename=#{@upload.original_filename}<br>" if @upurl.blank?
@@ -197,36 +259,47 @@ class PipelineController < ApplicationController
     msg += "path_to_file=#{path_to_file}<br>"
     msg += "nextArchiveNo=#{nextArchiveNo}<br>"
 
+    # just in case, remove it it already exists (shouldn't happen)
+    File.delete(path_to_file) if File.exists?(path_to_file)
 
-    # need to test for and delete any with same archive_no (just in case?)
-    # moved this up here just to get the @submission_archive.id set
-    old = SubmissionArchive.find(:first, :conditions => ['submission_id = ? and archive_no = ?', @submission.id, nextArchiveNo])
-    old.destroy if old
-    # add new submissionArchive record
-    submission_archive = SubmissionArchive.new
-    submission_archive.submission_id = @submission.id 
-    submission_archive.archive_no = nextArchiveNo
-    submission_archive.file_name = @filename
-    submission_archive.file_size = @upload.size
-    submission_archive.file_date = Time.now    # TODO: add .utc to make UTC time?
-    unless submission_archive.save
-      flash[:warning] = "error saving submission_archive record for: #{@filename}"
-      return
-    end
-
-    @submission.archive_count = nextArchiveNo
+    @submission.status = "uploading #{@filename}"
 
     unless @submission.save
       flash[:warning] = "submission record save failed"
       return
     end
 
-    if expand_archive(submission_archive)
-      redirect_to :action => 'show', :id => @submission
-    end
 
-    #@upload.methods.each {|x| msg += "#{x.to_str}<br>"}
-    flash[:notice] = msg
+    # fork here
+    pid = Process.fork
+    # if parent
+
+    if pid
+      msg += "child pid=#{pid}<br>"
+
+      flash[:notice] = msg
+      redirect_to :action => 'show', :id => @submission
+      return
+
+    else
+
+      # if child
+
+      unless @upurl.blank?
+        File.open(path_to_file, "wb") { |f| f.write(@upload.read) }
+      else
+        if @upload.instance_of?(Tempfile)
+          FileUtils.copy(@upload.local_path, path_to_file)
+        else
+          File.open(path_to_file, "wb") { |f| f.write(@upload.read) }
+        end
+      end
+
+      exit!(0)	
+       # exit ? or return?
+
+    end
+   
 
   rescue OpenURI::HTTPError => err
     flash[:warning] = "HTTP Error: " + err.message
@@ -236,6 +309,7 @@ class PipelineController < ApplicationController
 
 
   # This is the older method, see begin_validating above
+  #  (this will be phased out and removed probably)
   def validate
     @submission = Submission.find(params[:id])
     @submissionTypes = getSubmissionTypes
@@ -566,6 +640,57 @@ private
     end
   end
 
+ def process_uploaded_archive
+
+    @filename = @submission.status.gsub(/^schedule expanding /,'')
+
+    # make sure parent paths exist
+    submissionDir = File.dirname(path_to_file)
+    userDir = File.dirname(submissionDir)
+    Dir.mkdir(userDir) unless File.exists?(userDir)
+    Dir.mkdir(submissionDir) unless File.exists?(submissionDir)
+
+    nextArchiveNo = @submission.archive_count+1
+
+    @filename = "#{"%03d" % nextArchiveNo}_#{@filename}"
+
+
+    # dead code, just an example of using write_attribute: save filename in the database
+    #write_attribute("file", path_to_file)
+
+    # need to test for and delete any with same archive_no (just in case?)
+    # moved this up here just to get the @submission_archive.id set
+    old = SubmissionArchive.find(:first, :conditions => ['submission_id = ? and archive_no = ?', @submission.id, nextArchiveNo])
+    old.destroy if old
+    # add new submissionArchive record
+    submission_archive = SubmissionArchive.new
+    submission_archive.submission_id = @submission.id 
+    submission_archive.archive_no = nextArchiveNo
+    submission_archive.file_name = @filename
+    submission_archive.file_size = File.size(path_to_file)
+    submission_archive.file_date = Time.now    # TODO: add .utc to make UTC time?
+    unless submission_archive.save
+      flash[:warning] += "error saving submission_archive record for: #{@filename}"
+      return false
+    end
+
+    @submission.archive_count = nextArchiveNo
+
+    unless @submission.save
+      flash[:warning] += "submission record save failed"
+      return false
+    end
+
+    unless expand_archive(submission_archive)
+      return false
+    end
+    #redirect_to :action => 'show', :id => @submission
+
+    #@upload.methods.each {|x| msg += "#{x.to_str}<br>"}
+    return true
+
+  end
+
   def getErrText
     # get error output file
     @filename = "validate_error"
@@ -578,6 +703,15 @@ private
   def getLoadErrText
     # get error output file
     @filename = "load_error"
+    errFile = path_to_file
+    return File.open(errFile, "rb") { |f| f.read }
+  rescue
+    return ""
+  end
+
+  def getUploadErrText
+    # get error output file
+    @filename = "upload_error"
     errFile = path_to_file
     return File.open(errFile, "rb") { |f| f.read }
   rescue

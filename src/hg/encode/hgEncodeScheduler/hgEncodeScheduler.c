@@ -16,7 +16,7 @@
 #include <signal.h>
 #include <sys/wait.h>
 
-static char const rcsid[] = "$Id: hgEncodeScheduler.c,v 1.3 2007/11/04 23:16:59 galt Exp $";
+static char const rcsid[] = "$Id: hgEncodeScheduler.c,v 1.4 2007/11/07 07:22:53 galt Exp $";
 
 char *db = NULL;
 char *dir = NULL;
@@ -182,7 +182,7 @@ carefulClose(&f);
 
 }
 
-void removeProcess(struct sqlConnection *conn, int submission, char *jobType, int status)
+void removeProcess(struct sqlConnection *conn, int submission, char *jobType, int status, char *extra)
 /* remove a process from running, update submission status */
 {
 char query[256];
@@ -192,15 +192,27 @@ if (status==0)
     {
     if (sameString(jobType,"load"))
 	jobStatus = "loaded";
-    else
+    else if (sameString(jobType,"validate"))
 	jobStatus = "validated";
+    else if (sameString(jobType,"upload"))
+	{
+	char temp[256];
+	safef(temp, sizeof(temp), "schedule expanding %s", extra);
+	jobStatus = cloneString(temp);
+	}
+    else
+	errAbort("unexpected jobType=[%s]", jobType);
     }
 else
     {
     if (sameString(jobType,"load"))
 	jobStatus = "load failed";
-    else
+    else if (sameString(jobType,"validate"))
 	jobStatus = "invalid";
+    else if (sameString(jobType,"upload"))
+	jobStatus = "upload failed";
+    else
+	errAbort("unexpected jobType=[%s]", jobType);
     }
 safef(query, sizeof(query), "delete from running where submission=%d", 
     submission);
@@ -226,7 +238,7 @@ if (xpid > 0)
 
 /* get job info */
 struct sqlConnection *conn = sqlConnect(db);
-char *jobType;
+char *jobType=NULL;
 int timeOut = 60;   // debug restore: 3600;  // seconds
 char commandLine[256];
 char query[256];
@@ -234,14 +246,15 @@ safef(query, sizeof(query), "select status from submissions where id = %d", subm
 char *status = sqlQuickString(conn, query);
 if (sameOk(status, "schedule loading"))
     jobType = "load";
-else
+else if (sameOk(status, "schedule validating"))
     jobType = "validate";
-char *submissionPath = getPathToErrorFile(conn, submission, jobType);
-if (sameString(jobType,"load"))
-    {
-    safef(commandLine, sizeof(commandLine), "/bin/sleep 20");
-    }
+else if (startsWith("schedule uploading ", status))
+    jobType = "upload";
 else
+    errAbort("unexpected jobType=[%s]", jobType);
+char *submissionPath = getPathToErrorFile(conn, submission, jobType);
+char *plainName = NULL;
+if (sameString(jobType,"validate"))
     {
     char *validator;
     char *typeParams;
@@ -250,6 +263,29 @@ else
     getSubmissionTypeData(conn, submission, &validator, &typeParams, &timeOut);
     safef(commandLine, sizeof(commandLine), "%s %s %s", validator, typeParams, submissionDir);
      //uglyf("commandLine=[%s]\n",commandLine);
+    }
+else if (sameString(jobType,"load"))
+    {
+    safef(commandLine, sizeof(commandLine), "/bin/sleep 20");
+    }
+else if (sameString(jobType,"upload"))
+    {
+    char *url = cloneString(status+strlen("schedule uploading "));
+     uglyf("url=[%s]\n",url);
+    char *submissionDir = cloneStringZ(submissionPath, strrchr(submissionPath,'/')-submissionPath);
+     uglyf("submissionDir=[%s]\n",submissionDir);
+
+    char query[256];
+    safef(query, sizeof(query), "select archive_count from submissions where id=%d", submission);
+    int nextArchiveNo = sqlQuickNum(conn, query) + 1;
+
+    plainName = strrchr(url,'/')+1;
+    char filename[256];
+    safef(filename, sizeof(filename), "%03d_%s", nextArchiveNo, plainName);
+     uglyf("filename=[%s]\n",filename);
+
+    safef(commandLine, sizeof(commandLine), "wget -nv -O %s/%s '%s'", submissionDir, filename, url);
+     uglyf("commandLine=[%s]\n",commandLine);
     }
 updateErrorFile(conn, submission, jobType, ""); // clear out job_error file
 sqlDisconnect(&conn);
@@ -297,8 +333,12 @@ else
     char *jobStatus = NULL;
     if (sameString(jobType,"load"))
 	jobStatus = "loading";
-    else
+    else if (sameString(jobType,"validate"))
 	jobStatus = "validating";
+    else if (sameString(jobType,"upload"))
+	jobStatus = "uploading";
+    else
+	errAbort("unexpected jobType=[%s]", jobType);
     safef(query, sizeof(query), "insert into running values (%d, %d, '%s', %d, %d, '%s')", 
 	pid, submission, jobType, (int)now, timeOut, sqlEscapeString(commandLine));
     sqlUpdate(conn, query);
@@ -311,7 +351,7 @@ else
     while (wait(&status) != pid)
 	/* do nothing */ ;
     conn = sqlConnect(db);
-    removeProcess(conn, submission, jobType, status);
+    removeProcess(conn, submission, jobType, status, plainName);
     sqlDisconnect(&conn);
     exit(0);
     }
@@ -340,8 +380,9 @@ if (sqlQuickNum(conn,query) < 10) // only allow max 10 jobs at once
     {
     /* start loading any submissions that are ready */
     safef(query,sizeof(query),"select id from submissions"
-	" where status = 'schedule loading'"
-	" or status = 'schedule validating'"
+	" where status = 'schedule validating'"
+	" or status = 'schedule loading'"
+	" or status like 'schedule uploading %%'"
 	);
     struct sqlResult *rs;
     char **row = NULL;
@@ -402,7 +443,7 @@ while((submission = sqlQuickNum(conn,query)))
       // but what if the parent has died for some reason,
       // we would not want to leave orphan records around 
       // indefinitely.  Doing a redundant removeProcess() is harmless.
-    removeProcess(conn, submission, jobType, 1);
+    removeProcess(conn, submission, jobType, 1, NULL);
 
     // TODO are there any times when automatic retry should be done? up to what limit?
        // note we could add a "retries" column to the running table?

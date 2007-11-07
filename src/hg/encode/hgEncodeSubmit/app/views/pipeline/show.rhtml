@@ -3,7 +3,17 @@
 <p>
 <strong>Name: <%= @submission.name -%> </strong><br/>
 <strong>Type: </strong> <%= @submission.submission_type.short_label -%><br/>
-<strong>Status: </strong> <%= @submission.status -%><br/>
+<strong>Status: </strong> <%= 
+  if @submission.status.starts_with?("schedule uploading ")
+    "schedule uploading"
+  else
+    if @submission.status.starts_with?("schedule expanding ")
+      "schedule expanding"
+    else
+      @submission.status
+    end
+  end
+-%><br/>
 
 <strong>Date Posted: </strong> <%= distance_of_time_in_words_to_now(@submission.created_at) -%> ago<br/>
 <strong>Last Updated: </strong> <%= distance_of_time_in_words(@submission.updated_at, Time.now) -%> ago<br/>
@@ -59,7 +69,7 @@
 
 <hr />
 
-<% if @submission.status == "invalid" -%> 
+<% if @errText != "" -%> 
   <h3>validate error:<br>
     <%= @errText -%>
   </h3><br>
