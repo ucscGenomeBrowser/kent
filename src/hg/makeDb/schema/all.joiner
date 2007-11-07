@@ -2502,6 +2502,7 @@ tablesIgnored go
 tablesIgnored visiGene
     vgPrbAli
     vgPrbAliAll
+    tableDescriptions
 
 tablesIgnored hgFixed
     omimTitle
@@ -2637,6 +2638,18 @@ tablesIgnored $danRer
     chr%_gold
     ctgPos2
     wz_ests
+
+tablesIgnored $caePb
+    chr%_gold
+    ctgPos2
+
+tablesIgnored $caeRem
+    chr%_gold
+    ctgPos2
+
+tablesIgnored $priPac
+    chr%_gold
+    ctgPos2
 
 tablesIgnored $canFam
     chr%_gold
@@ -2830,6 +2843,8 @@ tablesIgnored $sacCer
 tablesIgnored $tetNig
     gaze
     ecoresHg17
+    cytokines
+    hoxGenes
 
 tablesIgnored $felCat
     gap
