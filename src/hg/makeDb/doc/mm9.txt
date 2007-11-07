@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.48 2007/11/07 14:34:18 rico Exp $"
+#	"$Id: mm9.txt,v 1.49 2007/11/07 23:07:11 hiram Exp $"
 #
 
 #######################################################################
@@ -6532,9 +6532,10 @@ done | xargs cat \
 
     # Load gbdb and database with wiggle.
     ssh hgwdev
-    cd /cluster/data/mm9/bed/multiz30way
-    ln -s `pwd`/phastCons30way.wib /gbdb/mm9/wib/phastCons30way.wib
-    time nice -n +19 hgLoadWiggle mm9 phastCons30way phastCons30way.wig
+    cd /cluster/data/mm9/bed/multiz30way/cons/all
+    ln -s `pwd`/phastCons30way.wib /gbdb/mm9/multiz30way/phastCons30way.wib
+    time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/mm9/multiz30way mm9 \
+	phastCons30way phastCons30way.wig
     #	real    0m42.728s
 
     #  Create histogram to get an overview of all the data
@@ -6600,6 +6601,33 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     #	chr5_random/chr5_random.1-357350.bed
     #	chr7_random/chr7_random.1-362490.bed
     #	chrY_random/chrY_random.50000001-58682461.bed
+# Completed: 291 of 294 jobs
+# Crashed: 3 jobs
+# CPU time in finished jobs:      17184s     286.40m     4.77h    0.20d  0.001 y
+# IO & Wait Time:                 30139s     502.31m     8.37h    0.35d  0.001 y
+# Average job time:                 163s       2.71m     0.05h    0.00d
+# Longest finished job:             296s       4.93m     0.08h    0.00d
+# Submission to last job:          2775s      46.25m     0.77h    0.03d
+
+    # create Most Conserved track
+    ssh kolossus
+    cd /san/sanvol1/scratch/mm9/multiz30way/cons/euarchontoglires
+    cat bed/*/chr*.bed | sort -k1,1 -k2,2n | \
+        awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' | \
+            /cluster/bin/scripts/lodToBedScore /dev/stdin > mostConserved.bed
+    #	~ 1 minute
+    cp -p mostConserved.bed /cluster/data/mm9/bed/multiz30way/cons/euarchontoglires
+
+    # load into database
+    ssh hgwdev
+    cd /cluster/data/mm9/bed/multiz30way/cons/euarchontoglires
+    time nice -n +19 hgLoadBed mm9 phastConsElements30wayEuarch \
+	mostConserved.bed
+    #	Loaded 1021674 elements of size 5
+    #	real    0m23.402s
+    # verify coverage
+    featureBits mm9 phastConsElements30wayEuarch
+    #	103492546 bases of 2620346127 (3.950%) in intersection
 
     #	Create the downloads .pp files, from which the phastCons wiggle data
     #	is calculated
@@ -6627,9 +6655,10 @@ done
     ssh hgwdev
     cd /cluster/data/mm9/bed/multiz30way/cons/euarchontoglires
     cp -p /san/sanvol1/scratch/mm9/multiz30way/cons/euarchontoglires/*.wi? .
-    ln -s `pwd`/phastCons30wayEuarch.wib /gbdb/mm9/wib/phastCons30wayEuarch.wib
-    time nice -n +19 hgLoadWiggle mm9 phastCons30wayEuarch \
-	phastCons30wayEuarch.wig
+    ln -s `pwd`/phastCons30wayEuarch.wib \
+	/gbdb/mm9/multiz30way/phastCons30wayEuarch.wib
+    time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/mm9/multiz30way mm9 \
+	phastCons30wayEuarch phastCons30wayEuarch.wig
     #	real    0m44.161s
 
     #  Create histogram to get an overview of all the data
@@ -6691,6 +6720,33 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     para try ... check ... push ... etc.
     #	One of these jobs fails to produce any output:
     #	chr5_random/chr5_random.1-357350.bed
+# Completed: 293 of 294 jobs
+# Crashed: 1 jobs
+# CPU time in finished jobs:      21121s     352.01m     5.87h    0.24d  0.001 y
+# IO & Wait Time:                 33985s     566.42m     9.44h    0.39d  0.001 y
+# Average job time:                 188s       3.13m     0.05h    0.00d
+# Longest finished job:             324s       5.40m     0.09h    0.00d
+# Submission to last job:          3511s      58.52m     0.98h    0.04d
+
+    # create Most Conserved track
+    ssh kolossus
+    cd /san/sanvol1/scratch/mm9/multiz30way/cons/placental
+    cat bed/*/chr*.bed | sort -k1,1 -k2,2n | \
+        awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' | \
+            /cluster/bin/scripts/lodToBedScore /dev/stdin > mostConserved.bed
+    #	~ 1 minute
+    cp -p mostConserved.bed /cluster/data/mm9/bed/multiz30way/cons/placental
+
+    # load into database
+    ssh hgwdev
+    cd /cluster/data/mm9/bed/multiz30way/cons/placental
+    time nice -n +19 hgLoadBed mm9 phastConsElements30wayPlacental \
+	mostConserved.bed
+    #	Loaded 1990870 elements of size 5
+    #	real    0m48.084s
+    # verify coverage
+    featureBits mm9 phastConsElements30wayPlacental
+    #	111626429 bases of 2620346127 (4.260%) in intersection
 
     #	Create the downloads .pp files, from which the phastCons wiggle data
     #	is calculated
@@ -6720,9 +6776,9 @@ done
     cd /cluster/data/mm9/bed/multiz30way/cons/placental
     cp -p /san/sanvol1/scratch/mm9/multiz30way/cons/placental/*.wi? .
     ln -s `pwd`/phastCons30wayPlacental.wib \
-	/gbdb/mm9/wib/phastCons30wayPlacental.wib
-    time nice -n +19 hgLoadWiggle mm9 phastCons30wayPlacental \
-	phastCons30wayPlacental.wig
+	/gbdb/mm9/multiz30way/phastCons30wayPlacental.wib
+    time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/mm9/multiz30way mm9 \
+	phastCons30wayPlacental phastCons30wayPlacental.wig
     #	real    0m44.585s
 
     #  Create histogram to get an overview of all the data
@@ -6770,7 +6826,103 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     cp -p \
 /san/sanvol1/scratch/mm9/multiz30way/cons/euarchontoglires/downloads/*.data.gz .
 
-#############################################################################
+    # upstream mafs (mafFrags takes a while)
+    ssh kkstore06
+    cd /cluster/data/mm9/bed/multiz30way/downloads/multiz30way/maf
+    cat << '_EOF_' > mafFrags.csh
+#!/bin/csh -fe
+date
+foreach i (1000 2000 5000)
+    echo "making upstream$i.maf"
+    featureBits mm9 refGene:upstream:${i} -fa=/dev/null -bed=stdout \
+	| sed -e "s/_up_${i}_/\t/" \
+	| awk -F '\t' \
+	    '{printf("%s\t%s\t%s\t%s\t0\t%s\n", $1, $2, $3, $4, $6)}' \
+	| sort -k1,1 -k2,2n \
+	| mafFrags mm9 multiz30way stdin upstream${i}.maf \
+	   -orgs=/cluster/data/mm9/bed/multiz30way/species.list
+end
+date
+'_EOF_'
+    # << happy emacs
+    chmod +x ./mafFrags.csh
+
+    time nice -n +19 ./mafFrags.csh > mafFrags.log 2>&1 &
+    #	real    29m40.513s
+    md5sum up*.gz >> md5sum.txt
+
+    ssh kkstore06
+    mkdir /cluster/data/mm9/bed/multiz30way/downloads/multiz30way/maf_qual
+    cp -p ../../../qual/maf/*.maf .
+    time nice -n +19 gzip *.maf
+    #	real    77m3.592s
+    time nice -n +19 md5sum *.gz > md5sum.txt
+    #	real    4m52.044s
+
+    mkdir /cluster/data/mm9/bed/multiz30way/downloads/multiz30way/maf
+    cp -p ../../../anno/maf/*.maf .
+    time nice -n +19 gzip *.maf
+    #	real    86m2.341s
+    time nice -n +19 md5sum *.gz > md5sum.txt
+    #	real    4m30.087s
+
+    #	create syn.net files for downloads for those organisms which
+    #	used the mafSynNet in the multiz30way
+    ssh kkstore06
+    cd /cluster/data/mm9/bed
+    for DB in rn4 hg18 rheMac2 ponAbe2 panTro2 equCab1 canFam2 bosTau3
+    do
+	cd /cluster/data/mm9/bed/blastz.${DB}/axtChain
+	time nice -n +19 netFilter -syn mm9.${DB}.net.gz \
+	    | gzip -c > mm9.${DB}.syn.net.gz
+	ls -og mm9.${DB}.syn.net.gz
+	md5sum mm9.${DB}.syn.net.gz >> md5sum.txt
+    done
+    for DB in calJac1 cavPor2 tupBel1 otoGar1 dasNov1 oryCun1 felCat3 \
+	loxAfr1 eriEur1 sorAra1 echTel1
+    do
+	cd /cluster/data/mm9/bed/blastz.${DB}/axtChain
+	ls -l mm9.${DB}.rbest.net.gz
+	md5sum mm9.${DB}.rbest.net.gz >> md5sum.txt
+	md5sum mm9.${DB}.rbest.chain.gz >> md5sum.txt
+	grep rbest md5sum.txt
+    done
+
+    #	create symlinks to make everything show up
+    ssh hgwdev
+    cd /usr/local/apache/htdocs/goldenPath/mm9
+    for DB in ?n4 ?g18 ?heMac2 ?onAbe2 ?anTro2 ?quCab1 ?anFam2 ?osTau3
+do
+    ls -Lld /cluster/data/mm9/bed/blastz.${DB}/axtChain/mm9.${DB}.syn.net.gz
+    ln -s /cluster/data/mm9/bed/blastz.${DB}/axtChain/mm9.${DB}.syn.net.gz \
+	vs${DB}/
+    ls -Lld vs${DB}/mm9.*.syn.net.gz
+done
+    for DB in ?alJac1 ?avPor2 ?upBel1 ?toGar1 ?asNov1 ?ryCun1 ?elCat3 \
+	?oxAfr1 ?riEur1 ?orAra1 ?chTel1
+do
+    ls -Lld /cluster/data/mm9/bed/blastz.${DB}/axtChain/mm9.${DB}.rbest.net.gz
+    ln -s /cluster/data/mm9/bed/blastz.${DB}/axtChain/mm9.${DB}.rbest.net.gz \
+	vs${DB}/
+    ls -Lld vs${DB}/mm9.${DB}.rbest.net.gz
+    grep rbest vs${DB}/md5sum.txt
+done
+    for DB in ?alJac1 ?avPor2 ?upBel1 ?toGar1 ?asNov1 ?ryCun1 ?elCat3 \
+	?oxAfr1 ?riEur1 ?orAra1 ?chTel1
+do
+    ls -Lld /cluster/data/mm9/bed/blastz.${DB}/axtChain/mm9.${DB}.rbest.net.gz
+    ln -s /cluster/data/mm9/bed/blastz.${DB}/axtChain/mm9.${DB}.rbest.net.gz \
+	vs${DB}/
+    ls -Lld vs${DB}/mm9.${DB}.rbest.net.gz
+    ls -Lld /cluster/data/mm9/bed/blastz.${DB}/axtChain/mm9.${DB}.rbest.chain.gz
+    ln -s /cluster/data/mm9/bed/blastz.${DB}/axtChain/mm9.${DB}.rbest.chain.gz \
+	vs${DB}/
+    ls -Lld vs${DB}/mm9.${DB}.rbest.chain.gz
+    grep rbest vs${DB}/md5sum.txt
+done
+
+###########################################################################t
+#
 #  BUILD miRNA TRACK (DONE - 2007-10-05 - Fan)
     #   updated data from: Michel.Weber@ibcg.biotoul.fr
     #   notify them when done.
@@ -6903,6 +7055,16 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     #	10102968 bases of 2505900260 (0.403%) in intersection
 
 #############################################################################
+# LIFTOVER (DROPUNDER) TO MM8 (DONE - 2007-11-05 - Hiram)
+    ssh kkstore06
+    screen	# use a screen to control this job
+    # -debug run to create run dir, preview scripts...
+    doSameSpeciesLiftOver.pl -debug mm9 mm8 \
+      -ooc /san/sanvol1/scratch/mm9/11.ooc
+    # Real run:
+    cd /cluster/data/mm9/bed/blat.mm8.2007-11-05
+    time nice -n +19 doSameSpeciesLiftOver.pl mm9 mm8 \
+      -ooc /san/sanvol1/scratch/mm9/11.ooc > do.log 2>&1 &
 
 ########################################################################
 # ANNOTATE 30-WAY ALIGNMENT WITH QUALITY DATA (2007-11-07 rico at bx.psu.edu)
@@ -7115,5 +7277,4 @@ do
     mafAddQRows species.lst $maf ${OUTPUT_DIR}/$file
 done
 'EOF'
-
 ################################################################################
