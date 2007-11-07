@@ -2647,6 +2647,7 @@ tablesIgnored $priPac
 
 tablesIgnored $canFam
     chr%_gold
+    genomicSuperDups
 
 tablesIgnored $droYak
     chr%_gold
