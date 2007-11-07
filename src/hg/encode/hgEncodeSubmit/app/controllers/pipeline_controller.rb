@@ -599,7 +599,12 @@ private
       fullName = my_join(fullPath,f)
       if (File.ftype(fullName) == "directory")
         if (f != ".") and (f != "..")
-          process_archive(archive_id, submissionDir, uploadDir, my_join(relativePath,f))
+          newRelativePath = my_join(relativePath,f)
+          newDir = my_join(submissionDir, newRelativePath)
+	  unless File.exists?(newDir)
+	    Dir.mkdir(newDir)
+	  end
+          process_archive(archive_id, submissionDir, uploadDir, newRelativePath)
         end
       else 
         if File.ftype(fullName) == "file"
@@ -630,9 +635,6 @@ private
           parentDir = my_join(submissionDir, relativePath)
           toName = my_join(parentDir, f)    
           # move file from temporary upload dir into parent dir
-	  unless File.exists?(parentDir)
-	    Dir.mkdir(parentDir)
-	  end
           File.rename(fullName,toName);
 
         end
@@ -655,7 +657,7 @@ private
     @filename = "#{"%03d" % nextArchiveNo}_#{@filename}"
 
 
-    # dead code, just an example of using write_attribute: save filename in the database
+    # dead code, just an example of using write_attribute:
     #write_attribute("file", path_to_file)
 
     # need to test for and delete any with same archive_no (just in case?)
@@ -682,6 +684,9 @@ private
     end
 
     unless expand_archive(submission_archive)
+      @submission.archive_count = nextArchiveNo - 1
+      @submissions.status = "expand failed"
+      @submission.save
       return false
     end
     #redirect_to :action => 'show', :id => @submission
