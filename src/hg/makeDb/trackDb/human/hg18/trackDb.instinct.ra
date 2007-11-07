@@ -26,4 +26,26 @@ groupings ispyAgiExpGroups
 patDb ispy
 patTable labTrack
 patKey ispyId
-aliasTable probeAliases
+aliasTable probeAliases2
+
+track mskccCGH
+shortLabel TCGA GBM mskccCGH
+longLabel TCGA GBM mskcc CGH array 244A 
+group x
+visibility hide
+type expRatio
+expScale 0.5
+expStep 0.1
+groupings mskccCGHGroups
+patDb tcga1
+
+track harvardCGH
+shortLabel TCGA GBM harvardCGH
+longLabel TCGA GBM harvard CGH array 244A 
+group x
+visibility hide
+type expRatio
+expScale 0.5
+expStep 0.1
+groupings harvardCGHGroups
+patDb tcga1
