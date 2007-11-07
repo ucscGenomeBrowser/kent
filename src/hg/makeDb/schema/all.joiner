@@ -2657,10 +2657,22 @@ tablesIgnored $droMult
     intronEst
     rmsk
 
+tablesIgnored $anoCar
+    gap
+    gold
+    rmsk
+
 tablesIgnored $anoGam
     chr%_gold
     anoEstNcl
 
+tablesIgnored $bosTau
+    gap
+    gold
+    intronEst
+    rmsk
+    contigOrient
+    gbMiscDiff
 tablesIgnored $apiMel
     gap
     gold
@@ -2668,6 +2680,7 @@ tablesIgnored $apiMel
     rmsk
     brhInparalog
     modelRefGene
+    scaffolds
 
 tablesIgnored $hg
     acescan
