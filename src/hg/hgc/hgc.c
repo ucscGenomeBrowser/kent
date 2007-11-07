@@ -210,7 +210,7 @@
 #include "atomDb.h"
 #include "itemConf.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1368 2007/11/06 20:45:12 aamp Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1369 2007/11/07 05:07:54 hartera Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -2794,7 +2794,7 @@ if (net->chainId != 0)
     /* server (or in other cases) if there is a database with a chromInfo */
     /* table, the sequences are available and there is an entry added to */
     /* dbDb for the otherDb. */
-    if ((sqlDatabaseExists(otherDb)) && (chromSeqFileExists(otherDb, net->qName)))
+    if (chromSeqFileExists(otherDb, net->qName))
         {
         if (netWinSize < 1000000)
 	    {
@@ -2820,7 +2820,9 @@ if (net->chainId != 0)
     chain = chainDbLoad(conn, database, chainTrack, seqName, net->chainId);
     if (chain != NULL)
         {
-	chainToOtherBrowser(chain, otherDb, otherOrgBrowser);
+         /* print link to browser for otherDb only if otherDb is active */
+        if (hDbIsActive(otherDb))
+	    chainToOtherBrowser(chain, otherDb, otherOrgBrowser);
 	chainFree(&chain);
 	}
     htmlHorizontalLine();
