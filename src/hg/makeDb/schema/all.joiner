@@ -33,7 +33,6 @@ set xenTro xenTro1,xenTro2
 set monDom monDom1,monDom4
 set bosTau bosTau1,bosTau2,bosTau3
 set rheMac rheMac1,rheMac2
-set snp125 dbSnpHumanBuild125
 set strPur strPur1,strPur2
 set felCat felCat3
 set gasAcu gasAcu1
@@ -75,7 +74,7 @@ set zooDb zooBaboon3,zooCat3,zooChicken3,zooChimp3,zooCow3,zooDog3,zooFugu3,zooH
 
 # Set up list of databases we ignore and those we check.  Program
 # will complain about other databases.
-databasesChecked $gbd,$otherDb,$snp125
+databasesChecked $gbd,$otherDb
 databasesIgnored mysql,lost+found,$proteinDb,$zooDb,sc1,hgcentraltest,hgcentralbeta,test,sp070202,sp060115,sp051015,sp050415,sp040915,sp040515,sp040315,sp040115,qapushq,mysql-save,hgcentralangie,go070111,go060330
 
 # Define various non-self chains
@@ -1840,11 +1839,6 @@ identifier hapmapLdSnpId external=dbSNP fuzzy
     $hg.hapmapLdChb.name unique
     $hg.hapmapLdJpt.name unique
     $hg.hapmapLdYri.name unique
-
-identifier dbSnpMapInfo external=dbSNP
-"SNPMapInfo"
-    $snp125.ContigLoc.snp_id dupeOk
-    $snp125.SNPMapInfo.snp_id
 
 identifier snpAnnotations125
 "SNP annotations"
