@@ -925,3 +925,20 @@ hgLoadBed hg18 encodeYalePolIISites PolII_hg18-sites.bed
 
     # change group name to merge in variation
     hgsql hg18 -e "update grp set name='encodeCompAndVar' where name='encodeCompGeno'"
+
+
+#########################################################
+# 2007-11-08 (ASZ)
+# These wig files were shown to not match their corresponding database table 
+# Dropped them from the hgdownload server:
+#/goldenPath/hg18/encode/wig/encodeUppsalaChipH3acBut0h.wigBed.gz
+#/goldenPath/hg18/encode/wig/encodeUppsalaChipH3acBut12h.wigBed.gz 
+#/goldenPath/hg18/encode/wig/encodeUppsalaChipH4acBut0h.wigBed.gz
+#/goldenPath/hg18/encode/wig/encodeUppsalaChipH4acBut12h.wigBed.gz
+#/goldenPath/hg18/encode/wig/encodeYaleAffyNB4RARNATransMap.wigBed.gz
+#/goldenPath/hg18/encode/wig/encodeYaleAffyNB4TPARNATransMap.wigBed.gz
+#/goldenPath/hg18/encode/wig/encodeYaleAffyNB4UntrRNATransMap.wigBed.gz
+#/goldenPath/hg18/encode/wig/encodeYaleAffyNeutRNATransMap.wigBed.gz
+#/goldenPath/hg18/encode/wig/encodeYaleAffyPlacRNATransMap.wigBed.gz
+
+
