@@ -79,6 +79,7 @@ static void gapSanityCheck(struct agpGap *gapList)
 int prevEnd = 0;
 int prevStart = 0;
 char *prevChr = NULL;
+char *prevType = NULL;
 struct agpGap *gap;
 
 for (gap = gapList; gap; gap = gap->next)
@@ -91,10 +92,10 @@ for (gap = gapList; gap; gap = gap->next)
 	verbose(1, "WARNING: gap chromEnd > chromSize(%d) "
 	    "at %s:%d-%d\n", chrSize, gap->chrom,
 		gap->chromStart, gap->chromEnd);
-    if (gap->chromEnd == chrSize)
-	verbose(1, "WARNING: gap at end of chromosome "
-	    "at %s:%d-%d\n", gap->chrom,
-		gap->chromStart, gap->chromEnd);
+    if (gap->chromEnd == chrSize && differentString(gap->type, "telomere"))
+	verbose(1, "WARNING: gap at end of chromosome not telomere "
+	    "at %s:%d-%d, type: %s\n", gap->chrom,
+		gap->chromStart, gap->chromEnd, gap->type);
     if (gap->chromStart >= gap->chromEnd)
 	verbose(1, "WARNING: gap chromStart >= chromEnd at %s:%d-%d\n",
 	    gap->chrom, gap->chromStart, gap->chromEnd);
@@ -103,14 +104,15 @@ for (gap = gapList; gap; gap = gap->next)
 	if (sameWord(prevChr, gap->chrom) &&
 		(prevEnd >= gap->chromStart))
 	    verbose(1,"WARNING: overlapping gap at "
-		"%s:%d-%d and %s:%d-%d\n",
-		    gap->chrom, prevStart, prevEnd, gap->chrom,
-			gap->chromStart, gap->chromEnd);
+		"%s:%d-%d(%s) and %s:%d-%d(%s)\n",
+		    gap->chrom, prevStart, prevEnd, prevType, gap->chrom,
+			gap->chromStart, gap->chromEnd, gap->type);
 	}
     else
 	{
 	prevStart = gap->chromStart;
 	prevEnd = gap->chromEnd;
+	prevType = gap->type;
 	}
     if (isNotEmpty(prevChr))
 	{
