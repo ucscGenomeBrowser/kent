@@ -105,6 +105,7 @@ end
 
 echo "\n\n----------------------"
 echo "here's a list of the types of items being deleted from the igtc table"
+echo "expect blank if the items are not deleted from the table"
 foreach mouse ( $mice )
   echo "from $mouse"
   cat $mouse.igtc.qName.betaOnly | awk -F"_" '{print $NF}' | sort | uniq -c \
@@ -114,6 +115,7 @@ end
 echo "\n\n----------------------"
 echo "check a few of the deleted items from the igtc table"
 echo "(make sure they have also been dropped from IGTC website)"
+echo "expect blank if the items are not deleted from the table"
 foreach mouse ( $mice )
   echo " \n\ncheck these in $mouse browser on hgwbeta (or use links below):"
   head -3 $mouse.igtc.qName.betaOnly 
