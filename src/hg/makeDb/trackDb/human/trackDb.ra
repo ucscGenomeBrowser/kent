@@ -662,25 +662,25 @@ maxHeightPixels 100:30:10
 canPack off
 type wig 0 1000
 
-    track affyTxnPhase3HeLatop_strand
+    track affyTxnPhase3HeLaTopStrand
     shortLabel HeLa + sRNA
     subTrack affyTxnPhase3S
     longLabel Affymetrix Hela Plus Strand Short RNA (Whole Cell) Signal
     priority 1
 
-    track affyTxnPhase3HeLabottom_strand
+    track affyTxnPhase3HeLaBottomStrand
     shortLabel HeLa - sRNA
     subTrack affyTxnPhase3S
     longLabel Affymetrix Hela Minus Strand Short RNA (Whole Cell) Signal
     priority 2
 
-    track affyTxnPhase3HepG2top_strand
+    track affyTxnPhase3HepG2TopStrand
     shortLabel HepG2 + sRNA
     subTrack affyTxnPhase3S
     longLabel Affymetrix HepG2 Plus Strand Short RNA (Whole Cell) Signal
     priority 3
 
-    track affyTxnPhase3HepG2bottom_strand
+    track affyTxnPhase3HepG2BottomStrand
     shortLabel HepG2 - sRNA
     subTrack affyTxnPhase3S
     longLabel Affymetrix HepG2 Minus Strand Short RNA (Whole Cell) Signal
