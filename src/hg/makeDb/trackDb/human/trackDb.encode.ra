@@ -1291,6 +1291,7 @@ group encodeTxLevels
 visibility hide
 chromosomes chr21,chr22
 defaultViewLimits 0:150
+maxHeightPixels 100:30:10
 autoScale Off
 type wig 0 1000
 
