@@ -1,4 +1,4 @@
-#!/cluster/home/genbank/tcl/tcl8.5a4/unix/tclsh
+#!/usr/bin/env tclsh
 set usage {extFileTool cmd
     Tool for running various extFile management tools.
 
