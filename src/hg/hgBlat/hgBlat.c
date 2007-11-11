@@ -21,7 +21,7 @@
 #include "botDelay.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgBlat.c,v 1.120 2007/11/05 18:28:01 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgBlat.c,v 1.121 2007/11/11 07:35:04 donnak Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -681,7 +681,7 @@ printf("</FORM>\n");
 webNewSection("About BLAT");
 printf( 
 "<P>BLAT on DNA is designed to\n"
-"quickly find sequences of 95%% and greater similarity of length 40 bases or\n"
+"quickly find sequences of 95%% and greater similarity of length 25 bases or\n"
 "more.  It may miss more divergent or shorter sequence alignments.  It will find\n"
 "perfect sequence matches of 33 bases, and sometimes find them down to %d bases.\n"
 "BLAT on proteins finds sequences of 80%% and greater similarity of length 20 amino\n"
