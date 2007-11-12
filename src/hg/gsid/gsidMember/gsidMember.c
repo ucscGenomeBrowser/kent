@@ -25,7 +25,7 @@
 #include "paypalSignEncrypt.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidMember.c,v 1.27 2007/05/22 22:19:26 galt Exp $";
+static char const rcsid[] = "$Id: gsidMember.c,v 1.28 2007/11/12 00:08:54 fanhsu Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "debug", "fixMembers", "update", "gsidM_password", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -419,7 +419,9 @@ if (!sameString("Completed",paymentStatus))
  *  email field has been stored in the invoice field */
 dyStringClear(dy);
 dyStringPrintf(dy,"update members set "
-"activated='Y',"
+//!!!"activated='Y',"
+//P means paied but not activated until GA
+"activated='P',"
 "amountPaid='%s',"
 "datePaid='%s',"
 "expireDate='%s'"
@@ -960,7 +962,20 @@ if (sameString(status,"Completed"))
     "<p>\n"
     "<CENTER><H1>Thanks For Joining GSID HIV VAC</H1></CENTER>\n"
     "<br>\n"
-    "Your account is now activated and ready to use.<br>\n"
+    );
+
+/* Replace the following statement with temporary Beta release message */
+//    "Your account is now activated and ready to use.<br>\n"
+
+    hPrintf(" We received your payment.  Your account is now created.  \n");
+    hPrintf("<br><br><B>At the moment, the system is available only to our authorized Beta test users.</B>");
+    hPrintf(" We will notify you as soon as our Beta test phase is completed. ");
+    hPrintf(" Upon its official release,");
+    hPrintf(" we will activate your account to enable you to log in.<br>");
+
+    hPrintf(
+
+
     "<br>\n"
     "Thank you for your payment. "
     "Your transaction has been completed, and a receipt for your purchase has been emailed to you.<br>\n"
