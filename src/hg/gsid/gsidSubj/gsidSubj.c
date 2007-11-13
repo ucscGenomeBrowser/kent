@@ -16,9 +16,8 @@
 #include "hgColors.h"
 #include "hPrint.h"
 #include "gsidSubj.h"
-//#include "ccdsGeneMap.h"
 
-static char const rcsid[] = "$Id: gsidSubj.c,v 1.6 2007/11/05 01:50:02 fanhsu Exp $";
+static char const rcsid[] = "$Id: gsidSubj.c,v 1.7 2007/11/13 17:29:46 fanhsu Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -255,8 +254,9 @@ else
     sqlFreeResult(&sr);
     if (row != NULL)
     	{
-    	printf("<input type=\"text\" name=\"hgs_subj\" value=\"%s\">\n", curSubjId);
-    	cgiMakeButton("submit", "Go!");
+    	printf("&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspsearch for another subject:&nbsp");
+    	printf("<input type=\"text\" name=\"hgs_subj\" value=\"\">\n");
+	cgiMakeButton("submit", "Go!");
     	printSections(sectionList, conn, curSubjId);
     	}
     else
