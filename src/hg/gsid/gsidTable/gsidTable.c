@@ -20,7 +20,7 @@
 #include "gsidTable.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidTable.c,v 1.25 2007/11/05 01:42:15 fanhsu Exp $";
+static char const rcsid[] = "$Id: gsidTable.c,v 1.26 2007/11/13 17:40:22 fanhsu Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "submit_filter", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -1462,7 +1462,7 @@ if (cgiVarExists("submit_filter"))
 		, cgiString(redirectName));
     	    cartRemove(cart, redirectName);
 	    }
-	htmStartWithHead(stdout, head->string, "GSID Table View v"CGI_VERSION);
+	htmStartWithHead(stdout, head->string, "GSID Table View");
 	if (!subjList) /* if everything has been filtered out, we'll have to go back */
 	    {
 	    hPrintf("No subject(s) found with the filtering conditions specified.<br>");
@@ -1476,7 +1476,7 @@ if (cgiVarExists("submit_filter"))
 	}
     }
 
-htmStart(stdout, "GSID Table View v"CGI_VERSION);
+htmStart(stdout, "GSID Table View");
 cartWarnCatcher(doMiddle, cart, htmlVaWarn);
 cartCheckout(&cart);
 htmlEnd();
