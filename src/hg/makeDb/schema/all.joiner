@@ -2724,6 +2724,10 @@ tablesIgnored $hg
     affyTxnPhase3HeLatop_strand
     affyTxnPhase3HepG2bottom_strand
     affyTxnPhase3HepG2top_strand
+    affyTxnPhase3HeLabottomStrand
+    affyTxnPhase3HeLatopStrand
+    affyTxnPhase3HepG2bottomStrand
+    affyTxnPhase3HepG2topStrand
     zoom1_affyTranscriptome
     zoom2_affyTranscriptome
     chimpDels
