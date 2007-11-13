@@ -17858,8 +17858,6 @@ BASE=/cluster/data/hg18/bed/blastz.calJac1.2007-10-07
     tail -f do2.log
 
 
-
-
 #########################################################
 # RE-BUILD GAD TRACK (Done, 10/17/06, Fan)
 
@@ -18493,3 +18491,60 @@ liftOver vista_enhancer.hg17.bed /cluster/data/hg17/bed/liftOver/hg17ToHg18.over
 hgLoadBed hg18 vistaEnhancers vista_enhancer.hg18.bed
 
 #########################################################################
+# Blastz Marmoset calJac1 (DONE - 2007-11-09 - Hiram)
+##	this is not necessary - already done by Kate in October
+    ssh kkstore06
+    screen # use screen to control this job
+    mkdir /cluster/data/hg18/bed/blastzCalJac1.2007-11-09
+    cd /cluster/data/hg18/bed/blastzCalJac1.2007-11-09
+
+    cat << '_EOF_' > DEF
+# Human vs marmoset
+BLASTZ_M=50
+
+# TARGET: Human Hg18
+SEQ1_DIR=/cluster/bluearc/scratch/data/hg18/nib
+SEQ1_LEN=/cluster/data/hg18/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Marmoset calJac1
+SEQ2_DIR=/cluster/bluearc/scratch/data/calJac1/calJac1.2bit
+SEQ2_LEN=/cluster/data/calJac1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/hg18/bed/blastzCalJac1.2007-11-09
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-chainMinScore=3000 -chainLinearGap=medium \
+	-bigClusterHub=pk > blastz.log 2>&1 &
+XXX - running - 2007-11-09 14:37
+    #	real    388m20.443s
+# Completed: 126960 of 126960 jobs
+# CPU time in finished jobs:    7068824s  117813.73m  1963.56h   81.82d  0.224 y
+# IO & Wait Time:                517624s    8627.07m   143.78h    5.99d  0.016 y
+# Average job time:                  60s       1.00m     0.02h    0.00d
+# Longest finished job:            4940s      82.33m     1.37h    0.06d
+# Submission to last job:         62056s    1034.27m    17.24h    0.72d
+
+    # some jobs failed (because they were done but parasol didn't realize that)
+    #	after recovery, continuing:
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-chainMinScore=3000 -chainLinearGap=medium \
+	-continue=cat -bigClusterHub=pk > cat.log 2>&1 &
+    #	real    390m56.934s
+
+    mkdir /cluster/data/calJac1/bed/blastz.hg18.swap
+    cd /cluster/data/calJac1/bed/blastz.hg18.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/hg18/bed/blastzCalJac1.2007-11-09/DEF \
+	-chainMinScore=3000 -chainLinearGap=medium \
+	-swap -bigClusterHub=pk > swap.log 2>&1 &
+    #	real    123m9.197s
+    cat fb.calJac1.chainHg18Link.txt
+    #	2824501297 bases of 3093572278 (91.302%) in intersection
+###########################################################################
