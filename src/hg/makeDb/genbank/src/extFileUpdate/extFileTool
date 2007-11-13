@@ -4,6 +4,7 @@ set usage {extFileTool cmd
 
     cmd is one of:
        - update - run update and generated extFile dumps
+       - dump - generate extFile dumps
 }
 
 proc report {stat msg} {
@@ -33,6 +34,15 @@ proc extFileUpdate {dbs logFh} {
     foreach db $dbs {
         puts $logFh "==== begin $db ===="
         exec bin/x86_64/extFileUpdate $db >&@$logFh
+        dumpExtFile $db
+        puts $logFh "==== end $db ===="
+        flush $logFh
+    }
+}
+
+proc extFileDump {dbs logFh} {
+    foreach db $dbs {
+        puts $logFh "==== begin $db ===="
         dumpExtFile $db
         puts $logFh "==== end $db ===="
         flush $logFh
@@ -72,6 +82,9 @@ if {[catch {
     switch $cmd {
         update {
             extFileUpdate $dbs $logFh
+        }
+        dump {
+            extFileDump $dbs $logFh
         }
         default {
             error "unknown command: $cmd\n$usage"
