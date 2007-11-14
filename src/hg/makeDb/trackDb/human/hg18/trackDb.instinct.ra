@@ -8,7 +8,7 @@ type expRatio
 expScale 1.5
 expStep 0.2
 groupings ispyMipCGHGroups
-patDb ispy
+patDb ispy1
 patId trackId
 patTable labTrack
 patKey ispyId
@@ -24,7 +24,7 @@ type expRatio
 expScale 2.0
 expStep 0.2
 groupings ispyAgiExpGroups
-patDb ispy
+patDb ispy1
 patId trackId
 patTable labTrack
 patKey ispyId
