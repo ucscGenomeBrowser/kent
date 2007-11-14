@@ -9,9 +9,10 @@ expScale 1.5
 expStep 0.2
 groupings ispyMipCGHGroups
 patDb ispy
+patId trackId
 patTable labTrack
 patKey ispyId
-aliasTable probeAliases2
+aliasTable probeAliases
 
 track ispyAgiExp
 shortLabel ispy gene expression by agilent
@@ -24,9 +25,10 @@ expScale 2.0
 expStep 0.2
 groupings ispyAgiExpGroups
 patDb ispy
+patId trackId
 patTable labTrack
 patKey ispyId
-aliasTable probeAliases2
+aliasTable probeAliases
 
 track mskccCGH
 shortLabel TCGA GBM mskccCGH
@@ -37,6 +39,9 @@ type expRatio
 expScale 0.4
 expStep 0.05
 groupings mskccCGHGroups
+patTable sampleInfo
+patId sampleId
+patKey subjId 
 patDb tcga1
 
 track harvardCGH
@@ -48,4 +53,7 @@ type expRatio
 expScale 1.0
 expStep 0.1
 groupings harvardCGHGroups
+patTable sampleInfo
+patId sampleId
+patKey subjId 
 patDb tcga1
