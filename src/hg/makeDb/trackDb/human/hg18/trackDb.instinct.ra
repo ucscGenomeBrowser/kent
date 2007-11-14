@@ -57,3 +57,17 @@ patTable sampleInfo
 patId sampleId
 patKey subjId 
 patDb tcga1
+
+track uncAgiExp
+shortLabel TCGA GBM uncAgiExp
+longLabel TCGA GBM unc Agilent Expression array 4x44k
+group x
+visibility hide
+type expRatio
+expScale 1.0
+expStep 0.1  
+groupings uncAgiExpGroups
+patTable sampleInfo
+patId sampleId
+patKey subjId
+patDb tcga1
