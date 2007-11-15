@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "net.h"
 
-static char const rcsid[] = "$Id: clinical.c,v 1.3 2007/04/17 16:41:21 fanhsu Exp $";
+static char const rcsid[] = "$Id: clinical.c,v 1.4 2007/11/15 18:42:57 fanhsu Exp $";
 
 static boolean clinicalExists(struct section *section, 
 	struct sqlConnection *conn, char *subjId)
@@ -36,7 +36,7 @@ char *specimenId, *labCode, *daysCollection, *hivQuan, *cd4Count;
 printf("<TABLE BGCOLOR=#222222 CELLSPACING=1 CELLPADDING=3><TR>\n");
 
 printf("<TR>\n");
-printf("<TD align=center BGCOLOR=\"#8686D1\"><FONT COLOR=\"#FFFFFF\"><B>Days<BR>since infection</B></FONT></TD>\n");
+printf("<TD align=left BGCOLOR=\"#8686D1\"><FONT COLOR=\"#FFFFFF\"><B>Estimated Study <BR>Day of Infection*</B></FONT></TD>\n");
 printf("<TD align=center BGCOLOR=\"#8686D1\"><FONT COLOR=\"#FFFFFF\"><B>HIV-1 RNA<BR>copies/mL</B></FONT></TD>\n");
 printf("<TD align=center BGCOLOR=\"#8686D1\"><FONT COLOR=\"#FFFFFF\"><B>CD4<BR>absolute count</B></FONT></TD>\n");
 printf("</TR>\n");
@@ -60,7 +60,16 @@ while (row != NULL)
     printf("<TR>");
     printf("<TD align=right BGCOLOR=\"#D9F8E4\">%s</TD>\n", daysCollection);
     printf("<TD align=right BGCOLOR=\"#D9F8E4\">%s</TD>\n", hivQuan);
-    printf("<TD align=right BGCOLOR=\"#D9F8E4\">%s</TD>\n", cd4Count);
+    //printf("<TD align=right BGCOLOR=\"#D9F8E4\">%s</TD>\n", cd4Count);
+    if (sameWord(cd4Count, "0"))
+	{
+    	printf("<TD align=right BGCOLOR=\"#D9F8E4\">N/A</TD>\n");
+    	}
+    else
+	{
+    	printf("<TD align=right BGCOLOR=\"#D9F8E4\">%s</TD>\n", cd4Count);
+    	}
+
     printf("</TR>");
     
     row = sqlNextRow(sr);
@@ -68,6 +77,9 @@ while (row != NULL)
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 printf("</TR></TABLE>");
+printf("<br>* Estimated Study Day of Infection (ESDI), ");
+printf("click <a href=\"http://www.gsid.org/gsidhivdatabrowser/intro.html/ESDI\"> here </a>");
+printf(" for further explanation.\n");
 return;
 }
 
