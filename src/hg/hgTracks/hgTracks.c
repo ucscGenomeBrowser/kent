@@ -98,6 +98,7 @@
 #include "hgConfig.h"
 #include "gv.h"
 #include "gvUi.h"
+#include "protVar.h"
 #include "oreganno.h"
 #include "oregannoUi.h"
 #include "bed12Source.h"
@@ -118,7 +119,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1423 2007/11/13 20:23:16 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1424 2007/11/15 16:44:16 giardine Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -11712,6 +11713,27 @@ for (el = tg->items; el != NULL; el = el->next)
 hFreeConn(&conn);
 }
 
+void loadProtVar(struct track *tg)
+/* Load UniProt Variants with labels */
+{
+struct protVarPos *list = NULL, *el;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+int rowOffset;
+
+sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = protVarPosLoad(row);
+    slAddHead(&list, el);
+    }
+slReverse(&list);
+sqlFreeResult(&sr);
+tg->items = list;
+hFreeConn(&conn);
+}
+
 void loadGV(struct track *tg)
 /* Load human mutation with filter */
 {
@@ -11724,6 +11746,11 @@ char **row;
 int rowOffset;
 enum trackVisibility vis = tg->visibility;
 
+if (!cartVarExists(cart, "gvDisclaimer")) 
+   {
+   /* display disclaimer and add flag to cart, program exits from here */
+   gvDisclaimer();
+   }
 /* load as linked list once, outside of loop */
 srcList = gvSrcLoadByQuery(conn, "select * from hgFixed.gvSrc");
 /* load part need from gv table, outside of loop (load in hash?) */
@@ -11885,6 +11912,21 @@ winEnd = winEndCopy;
 return list;
 }
 
+char *protVarName(struct track *tg, void *item)
+/* Get name to use for gv item. */
+{
+struct protVarPos *el = item;
+return el->label;
+}
+
+char *protVarMapName (struct track *tg, void *item)
+/* return id for item */
+{
+struct protVarPos *el = item;
+return el->name;
+}
+
+
 char *gvName(struct track *tg, void *item)
 /* Get name to use for gv item. */
 {
@@ -11907,6 +11949,16 @@ tg->itemColor = gvColor;
 tg->itemNameColor = gvColor;
 tg->itemName = gvName;
 tg->mapItemName = gvPosMapName;
+tg->labelNextItemButtonable = TRUE;
+tg->labelNextPrevItem = linkedFeaturesLabelNextPrevItem;
+}
+
+void protVarMethods (struct track *tg)
+/* name vs id, next items */
+{
+tg->loadItems = loadProtVar;
+tg->itemName = protVarName;
+tg->mapItemName = protVarMapName;
 tg->labelNextItemButtonable = TRUE;
 tg->labelNextPrevItem = linkedFeaturesLabelNextPrevItem;
 }
@@ -13908,6 +13960,7 @@ registerTrackHandler("encodeGencodeIntronOct05", gencodeIntronMethods);
 registerTrackHandler("encodeGencodeRaceFrags", gencodeRaceFragsMethods);
 registerTrackHandler("affyTxnPhase2", affyTxnPhase2Methods);
 registerTrackHandler("gvPos", gvMethods);
+registerTrackHandler("protVarPos", protVarMethods);
 registerTrackHandler("oreganno", oregannoMethods);
 registerTrackHandler("encodeDless", dlessMethods);
 
