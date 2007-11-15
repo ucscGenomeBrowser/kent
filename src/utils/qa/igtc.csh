@@ -287,14 +287,14 @@ echo "save existing tables:"
 foreach table ( extFile seq )
   foreach mouse ( $mice )
     echo 'hgsql -e ' "'"CREATE TABLE $table$oldYear${oldMonth}01 \
-      SELECT \* FROM extFile"'" $mouse  
+      SELECT \* FROM $table"'" $mouse  
   end
 end
 echo
 foreach table ( extFile seq )
   foreach mouse ( $mice )
     echo 'hgsql -h hgwbeta -e ' "'"CREATE TABLE $table$oldYear${oldMonth}01 \
-      SELECT \* FROM extFile"'" $mouse  
+      SELECT \* FROM $table"'" $mouse  
   end
 end
 echo
