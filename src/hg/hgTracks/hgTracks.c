@@ -119,7 +119,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1424 2007/11/15 16:44:16 giardine Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1425 2007/11/15 19:54:49 angie Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -12189,6 +12189,8 @@ else if (sameString(source, "SIGTR"))
     color = vgFindColorIx(vg, 0x99, 0x66, 0x00); /* brown */
 else if (sameString(source, "TIGEM"))
     color = vgFindColorIx(vg, 0xcc, 0x00, 0x00); /* red */
+else if (sameString(source, "TIGM"))
+    color = vgFindColorIx(vg, 0xaa, 0x00, 0x66); /* Juneberry (per D.S.) */
 return color;
 }
 
