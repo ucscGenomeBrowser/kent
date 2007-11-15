@@ -317,7 +317,7 @@ compositeTrack on
 shortLabel HapMap LD Unph.
 longLabel HapMap Linkage Disequilibrium - Phase II - from unphased genotypes
 group varRep
-priority 144.49
+priority 144.492
 visibility hide
 canPack off
 chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX
@@ -359,7 +359,7 @@ compositeTrack on
 shortLabel HapMap LD Phased
 longLabel HapMap Linkage Disequilibrium - Phase II - from phased genotypes
 group varRep
-priority 144.48
+priority 144.491
 visibility hide
 canPack off
 chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22
