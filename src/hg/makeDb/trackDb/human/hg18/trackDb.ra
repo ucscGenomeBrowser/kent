@@ -327,31 +327,31 @@ type ld2
     track hapmapLdYri
     subTrack hapmapLd off
     shortLabel Unphased YRI
-    longLabel Linkage Disequilibrium for the Yoruba (YRI) -- Unphased
+    longLabel Linkage Disequilibrium for the Yoruba (YRI) from unphased genotypes
     priority 1
 
     track hapmapLdCeu
     subTrack hapmapLd
     shortLabel Unphased CEU
-    longLabel Linkage Disequilibrium for the CEPH (CEU) -- Unphased
+    longLabel Linkage Disequilibrium for the CEPH (CEU) from unphased genotypes
     priority 2
 
     track hapmapLdChb
     subTrack hapmapLd off
     shortLabel Unphased CHB
-    longLabel Linkage Disequilibrium for the Han Chinese (CHB) -- Unphased
+    longLabel Linkage Disequilibrium for the Han Chinese (CHB) from unphased genotypes
     priority 3
 
     track hapmapLdJpt
     subTrack hapmapLd off
     shortLabel Unphased JPT
-    longLabel Linkage Disequilibrium for the Japanese from Tokyo (JPT) -- Unphased
+    longLabel Linkage Disequilibrium for the Japanese from Tokyo (JPT) from unphased genotypes
     priority 4
 
     track hapmapLdChbJpt
     subTrack hapmapLd off
     shortLabel Unph JPT+CHB
-    longLabel Linkage Disequilibrium for the Han Chinese and Japanese from Tokyo (JPT+CHB) -- Unphased
+    longLabel Linkage Disequilibrium for the Han Chinese and Japanese from Tokyo (JPT+CHB) from unphased genotypes
     priority 5
 
 track hapmapLdPh
@@ -369,31 +369,31 @@ type ld2
     track hapmapLdPhYri
     subTrack hapmapLdPh off
     shortLabel Phased YRI
-    longLabel Linkage Disequilibrium for the Yoruba (YRI) -- Phased
+    longLabel Linkage Disequilibrium for the Yoruba (YRI) from phased genotypes
     priority 1
 
     track hapmapLdPhCeu
     subTrack hapmapLdPh
     shortLabel Phased CEU
-    longLabel Linkage Disequilibrium for the CEPH (CEU) -- Phased
+    longLabel Linkage Disequilibrium for the CEPH (CEU) from phased genotypes
     priority 2
 
     track hapmapLdPhChb
     subTrack hapmapLdPh off
     shortLabel Phased CHB
-    longLabel Linkage Disequilibrium for the Han Chinese (CHB) -- Phased
+    longLabel Linkage Disequilibrium for the Han Chinese (CHB) from phased genotypes
     priority 3
 
     track hapmapLdPhJpt
     subTrack hapmapLdPh off
     shortLabel Phased JPT
-    longLabel Linkage Disequilibrium for the Japanese from Tokyo (JPT) -- Phased
+    longLabel Linkage Disequilibrium for the Japanese from Tokyo (JPT) from phased genotypes
     priority 4
 
     track hapmapLdPhChbJpt
     subTrack hapmapLdPh off
     shortLabel Ph JPT+CHB
-    longLabel Linkage Disequilibrium for the Han Chinese and Japanese from Tokyo (JPT+CHB) -- Phased
+    longLabel Linkage Disequilibrium for the Han Chinese and Japanese from Tokyo (JPT+CHB) from phased genotypes
     priority 5
 
 track knownGene
