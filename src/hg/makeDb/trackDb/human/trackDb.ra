@@ -840,11 +840,20 @@ priority 100
 visibility hide
 type bed 4 .
 
+track protVarPos
+shortLabel UniProt Variants
+longLabel UniProt Variants
+group varRep
+priority 144.8
+visibility hide
+color 0,200,0
+type bed 4 +
+
 track gvPos
 release alpha
 shortLabel Locus Variants
-longLabel Compilation of $Organism Disease Variants and Other Mutations
-group phenDis
+longLabel Compilation of $Organism Variants from LSDBs
+group varRep
 priority 144.7
 visibility hide
 color 150,0,150
@@ -854,8 +863,8 @@ track gvPos
 release beta
 html gvPosOld
 shortLabel Locus Variants
-longLabel Compilation of $Organism Disease Variants and Other Mutations
-group phenDis
+longLabel Compilation of $Organism Variants from LSDBs
+group varRep
 priority 144.7
 visibility hide
 color 150,0,150
