@@ -20,7 +20,7 @@
 #include "gsidTable.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidTable.c,v 1.26 2007/11/13 17:40:22 fanhsu Exp $";
+static char const rcsid[] = "$Id: gsidTable.c,v 1.27 2007/11/16 07:04:27 fanhsu Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "submit_filter", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -285,6 +285,11 @@ cartSaveSession(cart);
 mainControlPanel();
 if (subjList != NULL)
     bigTable(conn, colList,subjList);
+printf("<br>* Estimated Study Day of Infection (ESDI), ");
+printf("click <a href=\"http://www.gsid.org/gsidhivdatabrowser/intro.html/ESDI\"> here </a>");
+printf(" for further explanation.\n");
+
+
 hPrintf("</FORM>\n");
 }
 
