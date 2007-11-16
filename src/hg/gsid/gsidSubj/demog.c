@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "net.h"
 
-static char const rcsid[] = "$Id: demog.c,v 1.4 2007/03/14 16:48:29 fanhsu Exp $";
+static char const rcsid[] = "$Id: demog.c,v 1.5 2007/11/16 22:21:13 fanhsu Exp $";
 
 static boolean demogExists(struct section *section, 
 	struct sqlConnection *conn, char *subjId)
@@ -53,6 +53,11 @@ if (row != NULL)
     weight     = row[5];
     comment    = row[6];
     
+    printf("<TR>");
+    printf("<TD>");
+    printf("<B>subject ID:</B> %s%s", subjId, GSBLANKS);
+    printf("</TD>");
+    printf("</TR>");
     printf("<TR>");
     printf("<TD>");
     printf("<B>gender:</B> %s%s", gender, GSBLANKS);
