@@ -168,6 +168,9 @@ struct genoGraph
 int regionPad();
 /* Number of bases to pad regions by. */
 
+char *getThresholdName();
+/* Return threshold name. */
+
 double getThreshold();
 /* Return user-set threshold */
 

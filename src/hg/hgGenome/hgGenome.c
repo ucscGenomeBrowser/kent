@@ -31,7 +31,7 @@
 #include "jsHelper.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: hgGenome.c,v 1.60 2007/10/30 10:07:55 aamp Exp $";
+static char const rcsid[] = "$Id: hgGenome.c,v 1.61 2007/11/16 14:52:55 aamp Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -255,10 +255,18 @@ return minLabelWidth;
 
 /* Routines to fetch cart variables. */
 
+char *getThresholdName()
+/* Return threshold name. */
+{
+static char buf[32];
+safef(buf, sizeof(buf), "%s_%s", hggThreshold, database);
+return buf;
+}
+
 double getThreshold()
 /* Return user-set threshold */
 {
-return cartUsualDouble(cart, hggThreshold, defaultThreshold);
+return cartUsualDouble(cart, getThresholdName(), defaultThreshold);
 }
 
 boolean getYellowMissing()
@@ -304,7 +312,7 @@ char *graphVarName(int row, int col)
  * static buffer. */
 {
 static char buf[32];
-safef(buf, sizeof(buf), "%s_%d_%d", hggGraphPrefix, row+1, col+1);
+safef(buf, sizeof(buf), "%s_%s_%d_%d", hggGraphPrefix, database, row+1, col+1);
 return buf;
 }
 
@@ -313,7 +321,7 @@ char *graphColorVarName(int row, int col)
  * static buffer. */
 {
 static char buf[32];
-safef(buf, sizeof(buf), "%s_%d_%d", hggGraphColorPrefix, row+1, col+1);
+safef(buf, sizeof(buf), "%s_%s_%d_%d", hggGraphColorPrefix, database, row+1, col+1);
 return buf;
 }
 
