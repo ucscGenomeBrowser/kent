@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "net.h"
 
-static char const rcsid[] = "$Id: clinical.c,v 1.5 2007/11/17 20:04:31 fanhsu Exp $";
+static char const rcsid[] = "$Id: clinical.c,v 1.6 2007/11/17 20:16:48 fanhsu Exp $";
 
 static boolean clinicalExists(struct section *section, 
 	struct sqlConnection *conn, char *subjId)
@@ -60,14 +60,21 @@ while (row != NULL)
     printf("<TR>");
     printf("<TD align=right BGCOLOR=\"#D9F8E4\">%s</TD>\n", daysCollection);
     //printf("<TD align=right BGCOLOR=\"#D9F8E4\">%s</TD>\n", cd4Count);
-    if (sameWord(hivQuan, "200"))
+    if (sameWord(hivQuan, "1000000"))
 	{
-    	printf("<TD align=right BGCOLOR=\"#D9F8E4\">&lt;&nbsp;400</TD>\n");
+    	printf("<TD align=right BGCOLOR=\"#D9F8E4\">&gt;&nbsp;1000000</TD>\n");
     	}
     else
-	{
-        printf("<TD align=right BGCOLOR=\"#D9F8E4\">%s</TD>\n", hivQuan);
-    	}
+        { 
+        if (sameWord(hivQuan, "200"))
+	    {
+    	    printf("<TD align=right BGCOLOR=\"#D9F8E4\">&lt;&nbsp;400</TD>\n");
+    	    }
+    	else
+	    {
+            printf("<TD align=right BGCOLOR=\"#D9F8E4\">%s</TD>\n", hivQuan);
+    	    }
+	}
     
     if (sameWord(cd4Count, "0"))
 	{
