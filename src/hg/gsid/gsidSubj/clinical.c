@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "net.h"
 
-static char const rcsid[] = "$Id: clinical.c,v 1.4 2007/11/15 18:42:57 fanhsu Exp $";
+static char const rcsid[] = "$Id: clinical.c,v 1.5 2007/11/17 20:04:31 fanhsu Exp $";
 
 static boolean clinicalExists(struct section *section, 
 	struct sqlConnection *conn, char *subjId)
@@ -38,7 +38,7 @@ printf("<TABLE BGCOLOR=#222222 CELLSPACING=1 CELLPADDING=3><TR>\n");
 printf("<TR>\n");
 printf("<TD align=left BGCOLOR=\"#8686D1\"><FONT COLOR=\"#FFFFFF\"><B>Estimated Study <BR>Day of Infection*</B></FONT></TD>\n");
 printf("<TD align=center BGCOLOR=\"#8686D1\"><FONT COLOR=\"#FFFFFF\"><B>HIV-1 RNA<BR>copies/mL</B></FONT></TD>\n");
-printf("<TD align=center BGCOLOR=\"#8686D1\"><FONT COLOR=\"#FFFFFF\"><B>CD4<BR>absolute count</B></FONT></TD>\n");
+printf("<TD align=center BGCOLOR=\"#8686D1\"><FONT COLOR=\"#FFFFFF\"><B>CD4<BR>cells/microliter</B></FONT></TD>\n");
 printf("</TR>\n");
 
 /* complex query to ensure date is correctly sorted */
@@ -59,8 +59,16 @@ while (row != NULL)
     
     printf("<TR>");
     printf("<TD align=right BGCOLOR=\"#D9F8E4\">%s</TD>\n", daysCollection);
-    printf("<TD align=right BGCOLOR=\"#D9F8E4\">%s</TD>\n", hivQuan);
     //printf("<TD align=right BGCOLOR=\"#D9F8E4\">%s</TD>\n", cd4Count);
+    if (sameWord(hivQuan, "200"))
+	{
+    	printf("<TD align=right BGCOLOR=\"#D9F8E4\">&lt;&nbsp;400</TD>\n");
+    	}
+    else
+	{
+        printf("<TD align=right BGCOLOR=\"#D9F8E4\">%s</TD>\n", hivQuan);
+    	}
+    
     if (sameWord(cd4Count, "0"))
 	{
     	printf("<TD align=right BGCOLOR=\"#D9F8E4\">N/A</TD>\n");
