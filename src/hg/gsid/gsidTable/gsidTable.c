@@ -20,7 +20,7 @@
 #include "gsidTable.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidTable.c,v 1.28 2007/11/17 17:37:00 fanhsu Exp $";
+static char const rcsid[] = "$Id: gsidTable.c,v 1.29 2007/11/17 22:16:45 fanhsu Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "submit_filter", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -810,7 +810,8 @@ safef(query, sizeof(query), col->query, si->fields[0]);
 answer = sqlQuickString(conn, query);
 if (answer == NULL) 
     {
-    return(cloneString("N/A"));
+    //return(cloneString("N/A"));
+    return(cloneString("-1"));
     }
 else 
     {
@@ -838,9 +839,46 @@ void integerCellPrint(struct column *col, struct subjInfo *si,
         struct sqlConnection *conn)
 /* Print value including favorite hyperlink in debug column. */
 {
+boolean special;
+special = FALSE;
 char *s = col->cellVal(col, si, conn);
 hPrintf("<TD align=right>");
-hPrintf("%s", s);
+if (sameWord(col->name, "cd4Count"))
+    {
+    if (sameWord(s, "-1") || sameWord(s, "0"))
+	{
+	printf("N/A");
+	special = TRUE;
+	}
+    }
+if (sameWord(col->name, "hivQuan"))
+    {
+    if (sameWord(s, "-1"))
+	{
+	printf("N/A");
+	special = TRUE;
+	}
+    }
+if (sameWord(col->name, "hivQuan"))
+    {
+    if (sameWord(s, "1000000"))
+	{
+	printf("&gt; 1000000");
+	special = TRUE;
+	}
+    }
+if (sameWord(col->name, "hivQuan"))
+    {
+    if (sameWord(s, "200"))
+	{
+	printf("&lt; 400");
+	special = TRUE;
+	}
+    }
+if (!special)
+    {
+    hPrintf("%s", s);
+    }
 hPrintf("</TD>");
 freeMem(s);
 }
