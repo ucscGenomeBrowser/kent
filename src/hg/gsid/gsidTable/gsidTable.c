@@ -20,7 +20,7 @@
 #include "gsidTable.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidTable.c,v 1.27 2007/11/16 07:04:27 fanhsu Exp $";
+static char const rcsid[] = "$Id: gsidTable.c,v 1.28 2007/11/17 17:37:00 fanhsu Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "submit_filter", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -805,8 +805,17 @@ char *queryCellVal(struct column *col, struct subjInfo *si,
 /* return query lookup on subj id */
 {
 char query[256];
+char *answer;
 safef(query, sizeof(query), col->query, si->fields[0]);
-return sqlQuickString(conn, query);
+answer = sqlQuickString(conn, query);
+if (answer == NULL) 
+    {
+    return(cloneString("N/A"));
+    }
+else 
+    {
+    return answer;
+    }
 }
 
 char *stringCellVal(struct column *col, struct subjInfo *si,
@@ -824,8 +833,6 @@ void setupColumnString(struct column *col, char *parameters)
 {
 col->cellVal = stringCellVal;
 }
-
-
 
 void integerCellPrint(struct column *col, struct subjInfo *si,
         struct sqlConnection *conn)
