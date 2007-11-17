@@ -21,7 +21,7 @@ filterDropDown on
 #(not in main table gsidSubjInfo)
 name hivQuan
 shortLabel HIV-1 RNA
-longLabel HIV Quantity - viral load in HIV-1 RNA cells/microliter
+longLabel HIV Quantity - viral load in HIV-1 RNA cells/mL
 priority 3
 visibility on
 type integer
@@ -31,7 +31,7 @@ query select hivQuan from gsidClinicRecWithSeq where subjId='%s';
 #(not in main table gsidSubjInfo)
 name cd4Count
 shortLabel CD4
-longLabel CD4 Count
+longLabel CD4 Count in cells/microliter
 priority 4
 visibility on
 type integer
