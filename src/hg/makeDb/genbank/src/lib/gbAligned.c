@@ -11,7 +11,7 @@
 #include "errabort.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: gbAligned.c,v 1.2 2003/08/02 02:40:09 genbank Exp $";
+static char const rcsid[] = "$Id: gbAligned.c,v 1.3 2007/11/17 22:33:36 markd Exp $";
 
 /* column indices in alidx files */
 #define ALIDX_ACC_COL         0
@@ -132,11 +132,19 @@ if (processed == NULL)
     else
         return;  /* ignored */
     }
-aligned = gbEntryGetAligned(entry, select->update, version);
+boolean created;
+aligned = gbEntryGetAligned(entry, select->update, version, &created);
 
-/* record org category based on file, not entry */
-aligned->alignOrgCat = select->orgCats;
-gbAlignedCount(aligned, gbParseUnsigned(lf, row[ALIDX_NUM_ALIGNS_COL]));
+/* Entry was not created, it means this accver has already been entered.  This
+ * happens when the the accver occurs more than one time in the same update.
+ * Don't enter again, as this throws the counts off.
+ */
+if (created)
+    {
+    /* record org category based on file select, not entry */
+    aligned->alignOrgCat = select->orgCats;
+    gbAlignedCount(aligned, gbParseUnsigned(lf, row[ALIDX_NUM_ALIGNS_COL]));
+    }
 }
 
 static void parseIndex(struct gbSelect* select, unsigned orgCat)
