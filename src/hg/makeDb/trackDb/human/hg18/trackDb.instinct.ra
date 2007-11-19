@@ -32,6 +32,22 @@ patKey ispyId
 aliasTable probeAliases
 setsTable genesets
 
+track ispyAgiExpT1
+shortLabel ispy gene expression TP= T1 by agilent
+longLabel ispy gene expression time point=T1 measured on agilent whole genome array 44K
+group x
+priority 920
+visibility hide
+type expRatio
+expScale 2.0
+expStep 0.2
+groupings ispyAgiExpT1Groups
+patDb ispy1
+patId trackId
+patTable labTrack
+patKey ispyId
+aliasTable probeAliases
+
 track mskccCGH
 shortLabel TCGA GBM mskccCGH
 longLabel TCGA GBM mskcc CGH array 244A 
