@@ -35,7 +35,3 @@ echo "\n   details in \
   http://hgwdev.cse.ucsc.edu/qa/test-results/metadata/details\n" \
   >> $outPath/$db
 cat $outPath/$db 
-cat $outPath/$db \
-  | mail -s "metadataAday for today" $USER@soe.ucsc.edu
-
-
