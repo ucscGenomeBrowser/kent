@@ -9882,8 +9882,8 @@ ensArchive apr2006
     # correct version will be displayed and the correct links made on both
     # the RR and hgwdev.
 
-# Create knownToEnsembl column
-    hgMapToGene hg17 ensGene knownGene knownToEnsembl
+# Create knownToEnsembl column (updated 2007-11-15 - Jim Kent)
+    hgMapToGene hg18 ensGene knownGene knownToEnsembl
 
 # QA NOTE [ASZ: 9-11-2006]: mytouch on ensGtp and ensPep.  This is because 
 # ensGene was updated later than they were.  Ensembl treats hap chroms 
