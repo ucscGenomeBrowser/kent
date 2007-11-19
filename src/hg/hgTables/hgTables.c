@@ -25,8 +25,9 @@
 #include "joiner.h"
 #include "bedCart.h"
 #include "hgMaf.h"
+#include "gvUi.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.157 2007/10/21 04:11:27 angie Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.158 2007/11/19 16:39:17 giardine Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -1379,6 +1380,8 @@ sqlFreeResult(&sr);
 removeMetaData();
 }
 
+void dispatch(struct sqlConnection *conn);
+
 void doTopSubmit(struct sqlConnection *conn)
 /* Respond to submit button on top level page.
  * This basically just dispatches based on output type. */
@@ -1401,6 +1404,23 @@ else
     cTdb = hCompositeTrackDbForSubtrack(track);
     if (cTdb)
 	track = cTdb;
+    }
+if (sameString(track->tableName, "gvPos") &&
+    !cartVarExists(cart, "gvDisclaimer"))
+    {
+    /* display disclaimer and add flag to cart, program exits from here */
+    htmlSetBackground(hBackgroundImage());
+    htmlStart("Table Browser");
+    gvDisclaimer();
+    }
+else if (sameString(track->tableName, "gvPos") &&
+         sameString(cartString(cart, "gvDisclaimer"), "Disagree"))
+    {
+    cartRemove(cart, "gvDisclaimer");
+    cartRemove(cart, hgtaDoTopSubmit);
+    cartSetString(cart, hgtaDoMainPage, "return to table browser");
+    dispatch(conn);
+    return;
     }
 if (sameString(output, outPrimaryTable))
     {
