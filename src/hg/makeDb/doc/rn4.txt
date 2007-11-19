@@ -678,6 +678,8 @@ cd ../..
     blat rn4.2bit /dev/null /dev/null \
       -tileSize=11 -makeOoc=/cluster/bluearc/rn4/11.ooc -repMatch=1024
 #Wrote 25608 overused 11-mers to /cluster/bluearc/rn4/11.ooc
+    #	and for use in other contexts:
+    cp -p /cluster/bluearc/rn4/11.ooc /cluster/data/rn4
 
 
 # GENBANK AUTO UPDATE (DONE 2/10/06 angie)
@@ -4700,4 +4702,42 @@ TMPDIR=/scratch/tmp
     #	1000 so it would work OK (not color) with the useScore 1 so that
     #	the affyRaEx1Probe would color itself on the score
 
+#########################################################################
+# EXONIPHY Rn4, lifted from hg18 (DONE - 2007-11-19 - Hiram)
+#	needed for uscsGenes10 building
+    # create a syntenic liftOver chain file
+    ssh kolossus
+    cd /cluster/data/hg18/bed/blastz.rn4/axtChain
+    time nice -n +19 netFilter -syn hg18.rn4.net.gz \
+	| netChainSubset -verbose=0 stdin hg18.rn4.all.chain.gz stdout \
+	| chainStitchId stdin stdout | gzip -c > hg18.rn4.syn.chain.gz
+    #	real    5m10.947s
+    #	slightly smaller than the ordinary liftOver chain file:
+# -rw-rw-r--  1  73768012 Feb 17  2006 hg18.rn4.over.chain.gz
+# -rw-rw-r--  1  69198780 Nov 19 14:13 hg18.rn4.syn.chain.gz
+
+    # exoniphyRn4.gp is prepared as follows
+    ssh hgwdev
+    mkdir /cluster/data/rn4/bed/exoniphy
+    cd /cluster/data/rn4/bed/exoniphy
+    hgsql hg18 -N -e "select * from exoniphy" > exoniphyHg18.gp
+    time nice -n +19 liftOver -genePred exoniphyHg18.gp \
+	/cluster/data/hg18/bed/blastz.rn4/axtChain/hg18.rn4.syn.chain.gz \
+	    exoniphyRn4.gp unmapped
+    #	real    32m0.405s
+
+    wc -l *
+    #	178162 exoniphyHg18.gp
+    #	166859 exoniphyRn4.gp
+    #	 22606 unmapped
+
+    ssh hgwdev
+    cd /cluster/data/rn4/bed/exoniphy
+    nice -n +19 hgLoadGenePred -genePredExt rn4 exoniphy exoniphyRn4.gp
+    nice -n +19 featureBits rn4 exoniphy
+    #	24959589 bases of 2571531505 (0.971%) in intersection
+    nice -n +19 featureBits mm9 exoniphy
+    #	25931742 bases of 2620346127 (0.990%) in intersection
+    nice -n +19 featureBits mm8 exoniphy
+    #	25952211 bases of 2567283971 (1.011%) in intersection
 ###########################################################################
