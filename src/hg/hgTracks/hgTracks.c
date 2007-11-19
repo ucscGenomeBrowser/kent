@@ -119,7 +119,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1427 2007/11/19 14:55:42 giardine Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1428 2007/11/19 16:38:49 giardine Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -11747,18 +11747,18 @@ int rowOffset;
 enum trackVisibility vis = tg->visibility;
 
 if (!cartVarExists(cart, "gvDisclaimer")) 
-   {
-   /* display disclaimer and add flag to cart, program exits from here */
-   gvDisclaimer();
-   }
+    {
+    /* display disclaimer and add flag to cart, program exits from here */
+    gvDisclaimer();
+    }
 else if (sameString("Disagree", cartString(cart, "gvDisclaimer")))
-   {
-   /* hide track, remove from cart so will get option again later */
-   tg->visibility = tvHide;
-   cartRemove(cart, "gvDisclaimer");
-   cartSetString(cart, "gvPos", "hide");
-   return;
-   }
+    {
+    /* hide track, remove from cart so will get option again later */
+    tg->visibility = tvHide;
+    cartRemove(cart, "gvDisclaimer");
+    cartSetString(cart, "gvPos", "hide");
+    return;
+    }
 /* load as linked list once, outside of loop */
 srcList = gvSrcLoadByQuery(conn, "select * from hgFixed.gvSrc");
 /* load part need from gv table, outside of loop (load in hash?) */
