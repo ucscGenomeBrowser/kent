@@ -16,7 +16,7 @@
 #include <signal.h>
 #include <sys/wait.h>
 
-static char const rcsid[] = "$Id: hgEncodeScheduler.c,v 1.4 2007/11/07 07:22:53 galt Exp $";
+static char const rcsid[] = "$Id: hgEncodeScheduler.c,v 1.5 2007/11/19 23:21:43 galt Exp $";
 
 char *db = NULL;
 char *dir = NULL;
@@ -315,7 +315,7 @@ if ( pid == 0 )
 
     char *args[64];
     // parse(commandLine, args, sizeof(args));
-    args[0] = "sh";
+    args[0] = "/bin/sh";
     args[1] = "-c";
     args[2] = commandLine;
     args[3] = 0;
