@@ -13,6 +13,7 @@ patId trackId
 patTable labTrack
 patKey ispyId
 aliasTable probeAliases
+setsTable genesets
 
 track ispyAgiExp
 shortLabel ispy gene expression by agilent
@@ -29,6 +30,7 @@ patId trackId
 patTable labTrack
 patKey ispyId
 aliasTable probeAliases
+setsTable genesets
 
 track mskccCGH
 shortLabel TCGA GBM mskccCGH
@@ -43,6 +45,8 @@ patTable sampleInfo
 patId sampleId
 patKey subjId 
 patDb tcga1
+aliasTable mskccCGHProbes
+setsTable genesets
 
 track harvardCGH
 shortLabel TCGA GBM harvardCGH
@@ -57,6 +61,8 @@ patTable sampleInfo
 patId sampleId
 patKey subjId 
 patDb tcga1
+aliasTable harvardCGHProbes
+setsTable genesets
 
 track uncAgiExp
 shortLabel TCGA GBM uncAgiExp
@@ -71,3 +77,7 @@ patTable sampleInfo
 patId sampleId
 patKey subjId
 patDb tcga1
+aliasTable uncAgiExpProbes
+setTable genesets
+
+
