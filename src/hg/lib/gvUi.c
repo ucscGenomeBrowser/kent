@@ -334,9 +334,13 @@ for (cv = cvList; cv != NULL; cv = cv->next)
     {
     cgiContinueHiddenVar(cv->name);
     }
-cgiMakeButtonWithMsg("gvDisclaimer", "OK", NULL);
+cgiMakeButtonWithMsg("gvDisclaimer", "Agree", NULL);
+printf("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+cgiMakeButtonWithMsg("gvDisclaimer", "Disagree", NULL);
 printf("</FORM>\n");
 printf("</td></tr></table></td></tr></table></td></tr></table>");
 cartHtmlEnd();
 exit(0);
 }
+
+
