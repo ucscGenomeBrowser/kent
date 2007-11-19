@@ -2,22 +2,7 @@
 # migrations feature of ActiveRecord to incrementally modify your database, and
 # then regenerate this schema definition.
 
-ActiveRecord::Schema.define(:version => 20) do
-
-  create_table "categories", :force => true do |t|
-    t.column "name", :string
-  end
-
-  create_table "classifieds", :force => true do |t|
-    t.column "title",       :string
-    t.column "price",       :float
-    t.column "location",    :string
-    t.column "description", :text
-    t.column "email",       :string
-    t.column "created_at",  :datetime
-    t.column "updated_at",  :datetime
-    t.column "category_id", :integer
-  end
+ActiveRecord::Schema.define(:version => 22) do
 
   create_table "plugin_schema_info", :id => false, :force => true do |t|
     t.column "plugin_name", :string
@@ -27,7 +12,9 @@ ActiveRecord::Schema.define(:version => 20) do
   create_table "running", :id => false, :force => true do |t|
     t.column "pid",         :integer, :limit => 10
     t.column "submission",  :integer, :limit => 10
-    t.column "startTime",   :string,  :limit => 10
+    t.column "jobType",     :string
+    t.column "startTime",   :integer, :limit => 10
+    t.column "timeOut",     :integer, :limit => 10
     t.column "commandLine", :string
   end
 

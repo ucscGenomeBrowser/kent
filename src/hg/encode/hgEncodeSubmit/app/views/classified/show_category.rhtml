@@ -1,6 +1,0 @@
-<h1><%= @category.name -%></h1>
-<ul>
-<% @category.classifieds.each do |c| %>
-  <li><%= link_to c.title, :action => 'show', :id => c.id -%></li>
-<% end %>
-</ul>
