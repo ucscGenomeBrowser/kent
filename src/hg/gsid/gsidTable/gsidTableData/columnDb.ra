@@ -38,12 +38,13 @@ type integer
 #query select cd4Count from gsidClinicRec where subjId='%s' order by daysCollection desc limit 1;
 query select cd4Count from gsidClinicRecWithSeq where subjId='%s';
 
-name daysInfectF
+name esdi
 shortLabel ESDI*
 longLabel Estimated Study Day of Infection
 priority 6
 visibility on
 type integer
+query select daysCollection from gsidClinicRecWithSeq where subjId='%s';
 
 name gender
 shortLabel sex
