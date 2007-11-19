@@ -25,7 +25,7 @@
 #include "paypalSignEncrypt.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidMember.c,v 1.29 2007/11/19 01:41:07 fanhsu Exp $";
+static char const rcsid[] = "$Id: gsidMember.c,v 1.30 2007/11/19 19:30:11 galt Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "debug", "fixMembers", "update", "gsidM_password", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -1269,6 +1269,6 @@ cgiSpoof(&argc, argv);
 htmlSetStyle(htmlStyleUndecoratedLink);
 htmlSetBgColor(HG_CL_OUTSIDE);
 oldCart = hashNew(10);
-cartHtmlShell("GSID Member v"CGI_VERSION, doMiddle, hUserCookie(), excludeVars, oldCart);
+cartHtmlShell("GSID Member", doMiddle, hUserCookie(), excludeVars, oldCart);
 return 0;
 }
