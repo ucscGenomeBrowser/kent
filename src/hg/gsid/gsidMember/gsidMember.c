@@ -25,7 +25,7 @@
 #include "paypalSignEncrypt.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidMember.c,v 1.28 2007/11/12 00:08:54 fanhsu Exp $";
+static char const rcsid[] = "$Id: gsidMember.c,v 1.29 2007/11/19 01:41:07 fanhsu Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "debug", "fixMembers", "update", "gsidM_password", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -489,7 +489,7 @@ void lostPasswordPage(struct sqlConnection *conn)
 /* draw the lost password page */
 {
 hPrintf(
-"<h2>HIV VAC</h2>"
+"<h2>GSID HIV Data Browser</h2>"
 "<p align=\"left\">"
 "</p>"
 "<font color=red>%s</font>"
@@ -551,7 +551,7 @@ int result = system(cmd);
 if (result == -1)
     {
     hPrintf(
-    "<h2>HIV VAC</h2>"
+    "<h2>GSID HIV Data Browser</h2>"
     "<p align=\"left\">"
     "</p>"
     "<h3>Error emailing password to: %s</h3>"
@@ -562,7 +562,7 @@ if (result == -1)
 else
     {
     hPrintf(
-    "<h2>HIV VAC</h2>"
+    "<h2>GSID HIV Data Browser</h2>"
     "<p align=\"left\">"
     "</p>"
     "<h3>Password has been emailed to: %s</h3>"
@@ -578,7 +578,7 @@ void changePasswordPage(struct sqlConnection *conn)
 /* change password page */
 {
 hPrintf(
-"<h2>HIV VAC</h2>"
+"<h2>GSID HIV Data Browser</h2>"
 "<p align=\"left\">"
 "</p>"
 "<font color=red>%s</font>"
@@ -671,7 +671,7 @@ sqlUpdate(conn, query);
 
 hPrintf
     (
-    "<h2>HIV VAC</h2>"
+    "<h2>GSID HIV Data Browser</h2>"
     "<p align=\"left\">"
     "</p>"
     "<h3>Password has been changed.</h3>"
@@ -692,13 +692,13 @@ void signupPage(struct sqlConnection *conn)
 /* draw the signup page */
 {
 hPrintf(
-"<h2>HIV VAC</h2>\n"
+"<h2>GSID HIV Data Browser</h2>\n"
 "<p align=\"left\">"
 "</p>"
 "GSID provides access to data from the 2003 VaxGen AIDSVAX phase III trials on a yearly access-fee basis.<br>\n"
 "Academic and non-profit researchers get a substantial discount. <br>\n"
 "<br>\n"
-"If you are already a member, click <a href=https://%s/>here</a> to access HIVVAC.<br>\n"
+"If you are already a member, click <a href=https://%s/>here</a> to access GSID HIV Data Browser.<br>\n"
 "To view your existing account, click <a href=\"gsidMember?gsidMember.do.displayAccountPage=1\">here</a>.<br>\n"
 "To change your password, click <a href=\"gsidMember?gsidMember.do.changePasswordPage=1\">here</a>.<br>\n"
 "Lost your password? Click <a href=\"gsidMember?gsidMember.do.lostPasswordPage=1\">here</a>.<br>\n"
@@ -934,7 +934,7 @@ sqlUpdate(conn, query);
 
 
 hPrintf(
-"<h2>HIV VAC</h2>\n"
+"<h2>GSID HIV Data Browser</h2>\n"
 "<p align=\"left\">\n"
 "</p>\n"
 "<h3>User %s successfully added.</h3>\n"
@@ -960,7 +960,7 @@ if (sameString(status,"Completed"))
     {
     hPrintf(
     "<p>\n"
-    "<CENTER><H1>Thanks For Joining GSID HIV VAC</H1></CENTER>\n"
+    "<CENTER><H1>Thanks For signing up for GSID HIV Data Browser</H1></CENTER>\n"
     "<br>\n"
     );
 
@@ -983,7 +983,7 @@ if (sameString(status,"Completed"))
     "<br>\n"
     "<br>\n"
     "<big>\n"
-    "Go to <a href=\"/\">GSID HIV VAC</A>\n"
+    "Go to <a href=\"/\">GSID HIV Data Browser</A>\n"
     "</big>\n"
     "<br>\n"
     "<br>\n"
@@ -994,7 +994,7 @@ else
     {
     hPrintf(
     "<p>\n"
-    "<CENTER><H1>Thanks For Joining GSID HIV VAC</H1></CENTER>\n"
+    "<CENTER><H1>Thanks For signing up for GSID HIV Data Browser</H1></CENTER>\n"
     "<br>\n"
     "Thank you for your payment. "
     "However, your account is not activated yet (status=%s).<br>\n"
@@ -1004,7 +1004,7 @@ else
     "<br>\n"
     "<br>\n"
     "<big>\n"
-    "When your transaction is completed, you may go to <a href=\"/\">GSID HIV VAC</A>\n"
+    "When your transaction is completed, you may go to <a href=\"/\">GSID HIV Data Browser</A>\n"
     "</big>\n"
     "<br>\n"
     "<br>\n"
@@ -1019,12 +1019,12 @@ void paypalCancel()
 {
 hPrintf(
 "<p>\n"
-"<CENTER><H1>GSID HIV VAC - Payment Cancelled</H1></CENTER>\n"
+"<CENTER><H1>GSID HIV Data Browser - Payment Cancelled</H1></CENTER>\n"
 "<br>\n"
 "Because you cancelled your PayPal payment, your account has not been activated.<br>\n"
 "<br>\n"
 "<big>\n"
-"Go to <a href=\"/hiv-signup-html/\">GSID HIV VAC</A> to sign up.\n"
+"Go to <a href=\"/hiv-signup-html/\">GSID HIV Data Browser</A> to sign up.\n"
 "</big>\n"
 "<br>\n"
 "<br>\n"
@@ -1040,7 +1040,7 @@ char *email = cartUsualString(cart, "gsidM_email", "");
 /* for password security, use cgi hash instead of cart */
 char *password = cgiUsualString("gsidM_password", ""); 
 hPrintf(
-"<h2>HIV VAC</h2>"
+"<h2>GSID HIV Data Browser</h2>"
 "<p align=\"left\">"
 "</p>"
 "<font color=red>%s</font>"
@@ -1130,7 +1130,7 @@ if (checkPwd(password,m->password))
     freez(&currentDate);
 
     hPrintf("Return to <a href=\"gsidMember\">signup</A>.<br>\n");
-    hPrintf("Go to <a href=\"/\">GSID HIV VAC</A>.<br>\n");
+    hPrintf("Go to <a href=\"/\">GSID HIV Data Browser</A>.<br>\n");
     }
 else
     {
@@ -1203,7 +1203,7 @@ else if (cartVarExists(cart, "fixMembers"))
     upgradeMembersTable(conn);
     updatePasswordsFile(conn);
     hPrintf(
-    "<h2>HIV VAC</h2>"
+    "<h2>GSID HIV Data Browser</h2>"
     "<p align=\"left\">"
     "</p>"
     "<h3>Successfully updated the members table to store hashed passwords.</h3>"
@@ -1215,7 +1215,7 @@ else if (cartVarExists(cart, "update"))
     {
     updatePasswordsFile(conn);
     hPrintf(
-    "<h2>HIV VAC</h2>"
+    "<h2>GSID HIV Data Browser</h2>"
     "<p align=\"left\">"
     "</p>"
     "<h3>Successfully updated the authentication file.</h3>"
