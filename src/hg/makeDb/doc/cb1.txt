@@ -916,3 +916,22 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
     cd /cluster/store5/worm/cb1/bed/blastzCe2/axtChrom
     gzip chrUn.axt
      
+
+#######################################################################
+# redo genbank alignments, as update was never enabled. (2007-11-15 markd)
+
+    cd kent/src/hg/makeDb/genbank
+    # edit etc/genbank.conf and add
+    cb1.refseq.mrna.xeno.load = yes
+    cvs commit etc
+    make etc-update
+
+    # do alignment
+    ssh genbank
+    cd /cluster/data/genbank
+    ((nice ./bin/gbAlignStep -initial cb1)|&mail markd&)
+
+    # the next day..
+    ssh hgwdev
+    cd /cluster/data/genbank
+    ((nice ./bin/gbDbLoadStep -drop -initialLoad cb1)|&mail markd&)
