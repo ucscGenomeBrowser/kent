@@ -47,6 +47,7 @@ patId trackId
 patTable labTrack
 patKey ispyId
 aliasTable probeAliases
+setsTable genesets
 
 track mskccCGH
 shortLabel TCGA GBM mskccCGH
@@ -94,6 +95,6 @@ patId sampleId
 patKey subjId
 patDb tcga1
 aliasTable uncAgiExpProbes
-setTable genesets
+setsTable genesets
 
 
