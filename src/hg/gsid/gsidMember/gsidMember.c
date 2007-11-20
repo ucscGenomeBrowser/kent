@@ -25,7 +25,7 @@
 #include "paypalSignEncrypt.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidMember.c,v 1.30 2007/11/19 19:30:11 galt Exp $";
+static char const rcsid[] = "$Id: gsidMember.c,v 1.31 2007/11/20 00:45:39 fanhsu Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "debug", "fixMembers", "update", "gsidM_password", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -400,7 +400,7 @@ if (!sameString("Completed",paymentStatus))
     /* send payer an email confirming */
     char cmd[256];
     safef(cmd,sizeof(cmd), 
-    "echo \"We received your payment through PayPal. However your account is not yet activated.\nPayment status is %s %s. When your payment status is completed your account will be activated and you will receive another email.  Thank you.\" | mail -s \"Payment received for GSID HIV access.\" %s"
+    "echo \"We received your payment through PayPal. However your account is not yet activated.\nPayment status is %s %s. When your payment status is completed your account will be activated and you will receive another email.  Thank you.\" | mail -s \"Payment received for GSID HIV Data Browser access.\" %s"
     , paymentStatus
     , cgiUsualString("payment_reason","") 
     , email);
@@ -443,7 +443,7 @@ updatePasswordsFile(conn);
 /* send payer an email confirming */
 char cmd[256];
 safef(cmd,sizeof(cmd), 
-"echo \"We received your payment through Paypal. Your account is now activated.\nPlease go to http://%s/ to access the site. \" | mail -s \"Payment received for GSID HIV access.\" %s"
+"echo \"We received your payment through Paypal. Your account is now activated.\nPlease go to http://%s/ to access the site. \" | mail -s \"Payment received for GSID HIV Data Browser access.\" %s"
 , getenv("HTTP_HOST"), email);
 int result = system(cmd);
 if (result == -1)
@@ -1269,6 +1269,6 @@ cgiSpoof(&argc, argv);
 htmlSetStyle(htmlStyleUndecoratedLink);
 htmlSetBgColor(HG_CL_OUTSIDE);
 oldCart = hashNew(10);
-cartHtmlShell("GSID Member", doMiddle, hUserCookie(), excludeVars, oldCart);
+cartHtmlShell("GSID HIV Data Browser Signup", doMiddle, hUserCookie(), excludeVars, oldCart);
 return 0;
 }
