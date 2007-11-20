@@ -2085,7 +2085,7 @@ track wgEncodeYalePolIISignal
 superTrack wgEncodeYaleChipSeqSuper dense
 shortLabel PolII Signal
 longLabel Yale PolII whole-genome ChIP-seq signal
-group regulation
+group encodeChip
 priority 70.01
 type wig 1 1260
 viewLimits 0:150
@@ -2096,7 +2096,7 @@ track wgEncodeYalePolIISites
 superTrack wgEncodeYaleChipSeqSuper dense
 shortLabel PolII Sites
 longLabel Yale PolII whole-genome ChIP-seq sites
-group regulatio
+group encodeChip
 priority 70.02
 type bed 4 .
 visibility hide
@@ -2105,7 +2105,7 @@ track wgEncodeYaleStat1Signal
 superTrack wgEncodeYaleChipSeqSuper dense
 shortLabel STAT1 Signal
 longLabel Yale STAT1 whole-genome ChIP-seq signal
-group regulation
+group encodeChip
 priority 70.03
 type wig 1 2197
 viewLimits 0:150
@@ -2116,7 +2116,7 @@ track wgEncodeYaleStat1Sites
 superTrack wgEncodeYaleChipSeqSuper dense
 shortLabel STAT1 Sites
 longLabel Yale STAT1 whole-genome ChIP-seq sites
-group regulatio
+group encodeChip
 priority 70.04
 type bed 4 .
 visibility hide
