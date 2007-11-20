@@ -20,7 +20,7 @@
 #include "gsidTable.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidTable.c,v 1.29 2007/11/17 22:16:45 fanhsu Exp $";
+static char const rcsid[] = "$Id: gsidTable.c,v 1.30 2007/11/20 03:52:43 fanhsu Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "submit_filter", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -852,6 +852,14 @@ if (sameWord(col->name, "cd4Count"))
 	}
     }
 if (sameWord(col->name, "hivQuan"))
+    {
+    if (sameWord(s, "-1"))
+	{
+	printf("N/A");
+	special = TRUE;
+	}
+    }
+if (sameWord(col->name, "esdi"))
     {
     if (sameWord(s, "-1"))
 	{
