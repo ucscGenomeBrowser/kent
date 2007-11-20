@@ -89,6 +89,17 @@ foreach mouse ( $mice )
   compareWholeColumn.csh $mouse igtc qName
 end
 
+
+echo "\n\n----------------------"
+echo "check for number from all contributing labs."
+foreach mouse ( $mice )
+  echo
+  echo $mouse
+  cat $mouse.igtc.qName.dev | awk -F_ '{print $NF}' | sort | uniq -c | sort -nr
+  echo
+end
+
+
 echo "\n\n----------------------"
 echo "check a few of the new additions to the igtc table"
 echo "(be sure to click all the way out to IGTC website)"
