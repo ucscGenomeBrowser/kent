@@ -4,7 +4,7 @@
 #include "dystring.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: newProg.c,v 1.24 2007/09/07 18:17:35 kent Exp $";
+static char const rcsid[] = "$Id: newProg.c,v 1.25 2007/11/20 18:40:27 angie Exp $";
 
 boolean jkhgap = FALSE;
 boolean cgi = FALSE;
@@ -139,11 +139,8 @@ if (cgi)
     fprintf(f, "#include \"hui.h\"\n");
     }
 fprintf(f, "\n");
-if (cvs)
-    {
-    fprintf(f, "static char const rcsid[] = \"$Id: newProg.c,v 1.24 2007/09/07 18:17:35 kent Exp $\";\n");
-    fprintf(f, "\n");
-    }
+fprintf(f, "static char const rcsid[] = \"$Id: newProg.c,v 1.25 2007/11/20 18:40:27 angie Exp $\";\n");
+fprintf(f, "\n");
 
 if (cgi)
     makeCgiBody(name, description, f);
