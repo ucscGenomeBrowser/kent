@@ -1,11 +1,11 @@
-class Submission < ActiveRecord::Base
+class Project < ActiveRecord::Base
 
   belongs_to :user
-  belongs_to :submission_type
-  has_many :submission_archives, :dependent => :destroy
+  belongs_to :project_type
+  has_many :project_archives, :dependent => :destroy
 
   validates_presence_of :name
-  validates_presence_of :submission_type_id
+  validates_presence_of :project_type_id
   validates_presence_of :status
   validates_presence_of :user_id
 

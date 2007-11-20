@@ -1,6 +1,6 @@
-class SubmissionType < ActiveRecord::Base
+class ProjectType < ActiveRecord::Base
 
-  #has_many :submission_archives
+  #has_many :Project_archives
 
   validates_presence_of :name
   validates_presence_of :short_label

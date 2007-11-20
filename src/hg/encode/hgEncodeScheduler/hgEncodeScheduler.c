@@ -1,6 +1,6 @@
 /* hgEncodeScheduler - a chron job that runs ENCODE pipeline load jobs 
  *   that are ready for scheduling.  It reads the encpipeline database
- *   looking for submissions with status == "shedule loading".
+ *   looking for projects with status == "shedule loading".
  *   It starts the load job, records the process id, changes the status
  *   to "loading" and looks for old processes.  If those have timed out,
  *   it kills them and sets the status to "load failed" (and possibly
@@ -16,7 +16,7 @@
 #include <signal.h>
 #include <sys/wait.h>
 
-static char const rcsid[] = "$Id: hgEncodeScheduler.c,v 1.5 2007/11/19 23:21:43 galt Exp $";
+static char const rcsid[] = "$Id: hgEncodeScheduler.c,v 1.6 2007/11/20 00:43:43 galt Exp $";
 
 char *db = NULL;
 char *dir = NULL;
@@ -41,7 +41,7 @@ void initRunning(struct sqlConnection *conn)
 char sql[512] = 
 "create table running ("
 "  pid int(10) unsigned,"
-"  submission int(10) unsigned,"
+"  project int(10) unsigned,"
 "  jobType varchar(255),"
 "  startTime int(10),"
 "  timeOut int(10),"
@@ -104,16 +104,16 @@ while (*buf != 0)
 *args = NULL;
 }
 
-void getSubmissionTypeData(struct sqlConnection *conn, int submission,
+void getProjectTypeData(struct sqlConnection *conn, int project,
  char **validator, char **typeParams, int *timeOut)
-/* return data from submission_type record */
+/* return data from project_type record */
 {
 char query[256];
 safef(query,sizeof(query),"select t.validator, t.type_params, t.time_out"
-    " from submissions s, submission_types t"
-    " where s.submission_type_id = t.id" 
+    " from projects s, project_types t"
+    " where s.project_type_id = t.id" 
     " and s.id = '%d'", 
-    submission);
+    project);
 struct sqlResult *rs;
 char **row = NULL;
 rs = sqlGetResult(conn, query);
@@ -125,26 +125,26 @@ if ((row=sqlNextRow(rs)))
     }
 else
     {
-    errAbort("submission %d not found!\n", submission);
+    errAbort("project %d not found!\n", project);
     }
 sqlFreeResult(&rs);
 }
 
-void getRunningData(struct sqlConnection *conn, int submission,
+void getRunningData(struct sqlConnection *conn, int project,
  int *pid, char **jobType, int *startTime, int *timeOut, char **commandLine)
-/* return data from submission record */
+/* return data from project record */
 {
 char query[256];
 safef(query,sizeof(query),"select * from running"
-    " where submission = '%d'", 
-    submission);
+    " where project = '%d'", 
+    project);
 struct sqlResult *rs;
 char **row = NULL;
 rs = sqlGetResult(conn, query);
 if ((row=sqlNextRow(rs)))
     {
     *pid = sqlUnsigned(row[0]);
-    //submission = sqlUnsigned(row[1]);
+    //project = sqlUnsigned(row[1]);
     *jobType = cloneString(row[2]);
     *startTime = sqlUnsigned(row[3]);
     *timeOut = sqlUnsigned(row[4]);
@@ -152,38 +152,38 @@ if ((row=sqlNextRow(rs)))
     }
 else
     {
-    errAbort("submission %d not found!\n", submission);
+    errAbort("project %d not found!\n", project);
     }
 sqlFreeResult(&rs);
 }
 
-char *getPathToErrorFile(struct sqlConnection *conn, int submission, char *jobType)
+char *getPathToErrorFile(struct sqlConnection *conn, int project, char *jobType)
 /* return path to load_error or validate_error file */
 {
 char query[256];
-safef(query, sizeof(query), "select user_id from submissions where id=%d", 
-    submission);
+safef(query, sizeof(query), "select user_id from projects where id=%d", 
+    project);
 int user = sqlQuickNum(conn, query);
-char submissionPath[256];
-safef(submissionPath, sizeof(submissionPath), "%s/%d/%d/%s_error", dir, user, submission, jobType);
-return cloneString(submissionPath);
+char projectPath[256];
+safef(projectPath, sizeof(projectPath), "%s/%d/%d/%s_error", dir, user, project, jobType);
+return cloneString(projectPath);
 }
 
-void updateErrorFile(struct sqlConnection *conn, int submission, char *jobType, char *message)
-/* remove a process from running, update submission load_error or validate_error file */
+void updateErrorFile(struct sqlConnection *conn, int project, char *jobType, char *message)
+/* remove a process from running, update project load_error or validate_error file */
 {
-char *submissionPath = getPathToErrorFile(conn, submission, jobType);
+char *projectPath = getPathToErrorFile(conn, project, jobType);
 
-//uglyf("\n  submssionPath=%s\n", submissionPath);
+//uglyf("\n  submssionPath=%s\n", projectPath);
 
-FILE *f = fopen(submissionPath,"w");
+FILE *f = fopen(projectPath,"w");
 fprintf(f, "%s", message);
 carefulClose(&f);
 
 }
 
-void removeProcess(struct sqlConnection *conn, int submission, char *jobType, int status, char *extra)
-/* remove a process from running, update submission status */
+void removeProcess(struct sqlConnection *conn, int project, char *jobType, int status, char *extra)
+/* remove a process from running, update project status */
 {
 char query[256];
 
@@ -214,18 +214,18 @@ else
     else
 	errAbort("unexpected jobType=[%s]", jobType);
     }
-safef(query, sizeof(query), "delete from running where submission=%d", 
-    submission);
+safef(query, sizeof(query), "delete from running where project=%d", 
+    project);
 sqlUpdate(conn, query);
-safef(query, sizeof(query), "update submissions set status = '%s' where id=%d", 
-    jobStatus, submission);
+safef(query, sizeof(query), "update projects set status = '%s' where id=%d", 
+    jobStatus, project);
 sqlUpdate(conn, query);
 
 }
 
 
-void startBackgroundProcess(int submission)
-/* start background job process for submission */
+void startBackgroundProcess(int project)
+/* start background job process for project */
 {
 int xpid = fork();
 if ( xpid < 0 )
@@ -242,7 +242,7 @@ char *jobType=NULL;
 int timeOut = 60;   // debug restore: 3600;  // seconds
 char commandLine[256];
 char query[256];
-safef(query, sizeof(query), "select status from submissions where id = %d", submission);
+safef(query, sizeof(query), "select status from projects where id = %d", project);
 char *status = sqlQuickString(conn, query);
 if (sameOk(status, "schedule loading"))
     jobType = "load";
@@ -252,16 +252,16 @@ else if (startsWith("schedule uploading ", status))
     jobType = "upload";
 else
     errAbort("unexpected jobType=[%s]", jobType);
-char *submissionPath = getPathToErrorFile(conn, submission, jobType);
+char *projectPath = getPathToErrorFile(conn, project, jobType);
 char *plainName = NULL;
 if (sameString(jobType,"validate"))
     {
     char *validator;
     char *typeParams;
-    char *submissionDir = cloneStringZ(submissionPath, strrchr(submissionPath,'/')-submissionPath);
-     //uglyf("submissionDir=[%s]\n",submissionDir);
-    getSubmissionTypeData(conn, submission, &validator, &typeParams, &timeOut);
-    safef(commandLine, sizeof(commandLine), "%s %s %s", validator, typeParams, submissionDir);
+    char *projectDir = cloneStringZ(projectPath, strrchr(projectPath,'/')-projectPath);
+     //uglyf("projectDir=[%s]\n",projectDir);
+    getProjectTypeData(conn, project, &validator, &typeParams, &timeOut);
+    safef(commandLine, sizeof(commandLine), "%s %s %s", validator, typeParams, projectDir);
      //uglyf("commandLine=[%s]\n",commandLine);
     }
 else if (sameString(jobType,"load"))
@@ -272,11 +272,11 @@ else if (sameString(jobType,"upload"))
     {
     char *url = cloneString(status+strlen("schedule uploading "));
      uglyf("url=[%s]\n",url);
-    char *submissionDir = cloneStringZ(submissionPath, strrchr(submissionPath,'/')-submissionPath);
-     uglyf("submissionDir=[%s]\n",submissionDir);
+    char *projectDir = cloneStringZ(projectPath, strrchr(projectPath,'/')-projectPath);
+     uglyf("projectDir=[%s]\n",projectDir);
 
     char query[256];
-    safef(query, sizeof(query), "select archive_count from submissions where id=%d", submission);
+    safef(query, sizeof(query), "select archive_count from projects where id=%d", project);
     int nextArchiveNo = sqlQuickNum(conn, query) + 1;
 
     plainName = strrchr(url,'/')+1;
@@ -284,10 +284,10 @@ else if (sameString(jobType,"upload"))
     safef(filename, sizeof(filename), "%03d_%s", nextArchiveNo, plainName);
      uglyf("filename=[%s]\n",filename);
 
-    safef(commandLine, sizeof(commandLine), "wget -nv -O %s/%s '%s'", submissionDir, filename, url);
+    safef(commandLine, sizeof(commandLine), "wget -nv -O %s/%s '%s'", projectDir, filename, url);
      uglyf("commandLine=[%s]\n",commandLine);
     }
-updateErrorFile(conn, submission, jobType, ""); // clear out job_error file
+updateErrorFile(conn, project, jobType, ""); // clear out job_error file
 sqlDisconnect(&conn);
 
 signal(SIGCLD, SIG_DFL);  /* will be waiting for child */
@@ -309,7 +309,7 @@ if ( pid == 0 )
     ///* Redirect stderr to /dev/null */
     //tmpstderr[0] = open("/dev/null", O_WRONLY | O_NOCTTY);
 
-    int f = open(submissionPath, O_WRONLY | O_NOCTTY);
+    int f = open(projectPath, O_WRONLY | O_NOCTTY);
     dup2(f, STDERR_FILENO);
     close(f);
 
@@ -340,10 +340,10 @@ else
     else
 	errAbort("unexpected jobType=[%s]", jobType);
     safef(query, sizeof(query), "insert into running values (%d, %d, '%s', %d, %d, '%s')", 
-	pid, submission, jobType, (int)now, timeOut, sqlEscapeString(commandLine));
+	pid, project, jobType, (int)now, timeOut, sqlEscapeString(commandLine));
     sqlUpdate(conn, query);
-    safef(query, sizeof(query), "update submissions set status = '%s' where id=%d", 
-	jobStatus, submission);
+    safef(query, sizeof(query), "update projects set status = '%s' where id=%d", 
+	jobStatus, project);
     sqlUpdate(conn, query);
     sqlDisconnect(&conn);
     /* wait for child to finish */
@@ -351,7 +351,7 @@ else
     while (wait(&status) != pid)
 	/* do nothing */ ;
     conn = sqlConnect(db);
-    removeProcess(conn, submission, jobType, status, plainName);
+    removeProcess(conn, project, jobType, status, plainName);
     sqlDisconnect(&conn);
     exit(0);
     }
@@ -378,8 +378,8 @@ struct slInt *e, *list = NULL;
 safef(query,sizeof(query),"select count(*) from running");
 if (sqlQuickNum(conn,query) < 10) // only allow max 10 jobs at once 
     {
-    /* start loading any submissions that are ready */
-    safef(query,sizeof(query),"select id from submissions"
+    /* start loading any projects that are ready */
+    safef(query,sizeof(query),"select id from projects"
 	" where status = 'schedule validating'"
 	" or status = 'schedule loading'"
 	" or status like 'schedule uploading %%'"
@@ -389,9 +389,9 @@ if (sqlQuickNum(conn,query) < 10) // only allow max 10 jobs at once
     rs = sqlGetResult(conn, query);
     while((row=sqlNextRow(rs)))
 	{
-    	int submission = sqlUnsigned(row[0]);
-	// note: consider paranoid check for job already in "running" with the submissionid?
-	slAddHead(&list, slIntNew(submission));
+    	int project = sqlUnsigned(row[0]);
+	// note: consider paranoid check for job already in "running" with the projectid?
+	slAddHead(&list, slIntNew(project));
 	}
     sqlFreeResult(&rs);
     }
@@ -400,7 +400,7 @@ sqlDisconnect(&conn);  /* don't want the child to inherit an open connection */
 for(e=list; e; e = e->next)
     {
     readyId = e->val;
-    uglyf("ready submission id: %d\n", readyId);
+    uglyf("ready project id: %d\n", readyId);
 
     // run the child
     startBackgroundProcess(readyId);
@@ -411,26 +411,26 @@ for(e=list; e; e = e->next)
 conn = sqlConnect(db);
 
 /* scan for old jobs that have timed out */
-safef(query,sizeof(query),"select submission from running"
+safef(query,sizeof(query),"select project from running"
     " where unix_timestamp() - startTime > timeOut");
-int submission = 0;
-while((submission = sqlQuickNum(conn,query)))
+int project = 0;
+while((project = sqlQuickNum(conn,query)))
     {
-    uglyf("found timed-out submission id : %d\n", submission);
+    uglyf("found timed-out project id : %d\n", project);
 
     int pid = 0;
     char *jobType = NULL;
     int startTime = 0;
     int timeOut = 0;
     char *commandLine = NULL;
-    getRunningData(conn, submission, &pid, &jobType, &startTime, &timeOut, &commandLine);
+    getRunningData(conn, project, &pid, &jobType, &startTime, &timeOut, &commandLine);
 
     time_t now = time(NULL);
     int age = ((int) now - startTime)/60;
     char message[256];
     safef(message, sizeof(message), "load timed out age = %d minutes\n", age);
     // save status in result file in build area
-    updateErrorFile(conn, submission, jobType, message);
+    updateErrorFile(conn, project, jobType, message);
 
     /* kill old job timedout, set status in db */
 
@@ -443,7 +443,7 @@ while((submission = sqlQuickNum(conn,query)))
       // but what if the parent has died for some reason,
       // we would not want to leave orphan records around 
       // indefinitely.  Doing a redundant removeProcess() is harmless.
-    removeProcess(conn, submission, jobType, 1, NULL);
+    removeProcess(conn, project, jobType, 1, NULL);
 
     // TODO are there any times when automatic retry should be done? up to what limit?
        // note we could add a "retries" column to the running table?
