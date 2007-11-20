@@ -25,7 +25,7 @@
 #include "paypalSignEncrypt.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidMember.c,v 1.32 2007/11/20 17:35:05 ann Exp $";
+static char const rcsid[] = "$Id: gsidMember.c,v 1.33 2007/11/20 17:50:19 ann Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "debug", "fixMembers", "update", "gsidM_password", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -695,7 +695,7 @@ hPrintf(
 "<h2>GSID HIV Data Browser</h2>\n"
 "<p align=\"left\">"
 "</p>"
-"GSID provides access to data from the 2003 VaxGen HIV phase III clinical trials on a yearly access-fee basis.<br>\n"
+"GSID provides access to data from the 2003 VaxGen HIV vaccine phase III clinical trials on a yearly access-fee basis.<br>\n"
 "Academic and non-profit researchers get a substantial discount. <br>\n"
 "<br>\n"
 "If you are already a member, click <a href=https://%s/>here</a> to access GSID HIV Data Browser.<br>\n"
