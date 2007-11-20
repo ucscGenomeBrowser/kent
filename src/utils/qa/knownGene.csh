@@ -822,6 +822,16 @@ echo
 echo "add support for check previous assembly as parameter if not a rebuild"
 
 # -------------------------------------------------
+echo "-------------------------------------------------"
+echo "check for different types of knownAlt"
+echo
+hgsql -e "SELECT DISTINCT name, COUNT(*) AS number FROM knownAlt \
+  GROUP BY name ORDER BY number DESC" $db
+echo
+ # maybe get a link for each type?
+
+
+
 # -------------------------------------------------
 # 
 # further development:
