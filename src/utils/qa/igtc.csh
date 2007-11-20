@@ -93,12 +93,37 @@ end
 echo "\n\n----------------------"
 echo "check for number from all contributing labs."
 foreach mouse ( $mice )
+  # count up for each source
   echo
   echo $mouse
-  cat $mouse.igtc.qName.dev | awk -F_ '{print $NF}' | sort | uniq -c | sort -nr
+  cat $mouse.igtc.qName.dev | awk -F_ '{print $NF}' | sort | uniq -c \
+    > $mouse.dev.out
   echo
-end
+  cat $mouse.igtc.qName.beta | awk -F_ '{print $NF}' | sort | uniq -c \
+    > $mouse.beta.out
+  # make sure the lists are the same and add zero record if missing
+  set outList=`cat $mouse.dev.out $mouse.beta.out | awk '{print $2}' | sort -u`
+  foreach source ( $outList)
+    foreach mach ( dev beta )
+      grep -q  $source $mouse.$mach.out
+      if ( $status ) then
+        echo "0 $source" >> $mouse.$mach.out
+      endif
+    end
+  end
+  sort -k2,2  $mouse.dev.out > $mouse.dev.out2
+  sort -k2,2  $mouse.beta.out > $mouse.beta.out2
 
+  echo "source hgwdev hgwbeta" \
+    | awk '{printf("%-6s %6s %6s\n", $1, $2, $3)}'
+  echo "------ ------ -------" \
+    | awk '{printf("%-6s %6s %6s\n", $1, $2, $3)}'
+  join -j2 $mouse.dev.out2 $mouse.beta.out2 \
+    | awk '{printf("%-6s %6s %6s\n", $1, $2, $3)}'
+  echo
+  rm -f $mouse.*.out
+  rm -f $mouse.*.out2
+end
 
 echo "\n\n----------------------"
 echo "check a few of the new additions to the igtc table"
