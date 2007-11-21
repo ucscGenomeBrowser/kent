@@ -4,7 +4,7 @@
 # This file describes browser build for the Marmoset
 # genome, July 2007
 #
-#	"$Id: calJac1.txt,v 1.3 2007/11/20 16:25:57 hiram Exp $"
+#	"$Id: calJac1.txt,v 1.4 2007/11/21 20:18:29 hiram Exp $"
 #
 ######################################################################
 ## DOWNLOAD SEQUENCE (DONE - 2007-08-21 - Hiram)
@@ -67,7 +67,7 @@ dbDbSpeciesDir marmoset
     # add the trackDb files to the source tree and to the trackDb/makefile
 
 ##########################################################################
-## Repeat masker (WORKING - 2007-08-21 - Hiram)
+## Repeat masker (DONE - 2007-08-21 - Hiram)
     ssh kkstore06
     ## use screen for this
     mkdir /cluster/data/calJac1/bed/RepeatMasker
@@ -316,7 +316,7 @@ runGsBig /iscratch/i/calJac1/hardChunks $(file1) {check out line gtf/$(root1).gt
     #	55293837 bases of 2620346127 (2.110%) in intersection
 
 ############################################################################
-# GENBANK AUTO UPDATE (DONE - 2007-02-20 - Hiram)
+# GENBANK AUTO UPDATE (DONE - 2007-11-21 - Hiram)
     #	Create a lift file as per the procedures for Chimp from the AGP:
     ssh kolossus
     cd /cluster/data/calJac1
@@ -366,22 +366,17 @@ calJac1.refseq.mrna.xeno.loadDesc  = yes
     # This is a call to a script that will push our jobs out to the cluster
     # since it's a big job.  
     time nice -n +19 bin/gbAlignStep -initial calJac1 &
-    # logFile: var/build/logs/2007.11.09-15:43:44.calJac1.initalign.log
-XXXX - running 2007-11-09 15:43
-
-    #	kk kluster difficulties, finish the parasol run manually, then
-    time nice -n +19 bin/gbAlignStep -continue=finish -initial calJac1 &
-    #	var/build/logs/2007.09.21-20:10:48.calJac1.initalign.log
-    #	real    61m12.655s
+    # logFile: var/build/logs/2007.11.20-11:31:54.calJac1.initalign.log
+    #	real    607m38.957s
 
     # load database when finished
     ssh hgwdev
     cd /cluster/data/genbank
     time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad calJac1
-    #	logFile: var/dbload/hgwdev/logs/2007.09.22-10:40:27.dbload.log
-    #	real    16m22.221s
+    #	logFile: var/dbload/hgwdev/logs/2007.11.21-09:30:23.dbload.log
+    #	real    88m19.420s
 
-    # enable daily alignment and update of hgwdev (DONE - 2007-11-09 - Hiram)
+    # enable daily alignment and update of hgwdev (DONE - 2007-11-21 - Hiram)
     cd ~/kent/src/hg/makeDb/genbank
     cvsup
     # add calJac1 to:
@@ -392,6 +387,8 @@ XXXX - running 2007-11-09 15:43
 
 #########################################################################
 # Blastz Platypus ornAna1 (DONE - 2007-11-14 - Hiram)
+#	this was done a second time, see ornAna1.txt for the second run
+#	since this run produced a null result for some unknown reason.
     ssh kkstore06
     screen # use screen to control this job
     mkdir /cluster/data/calJac1/bed/blastzOrnAna1.2007-11-14
@@ -447,16 +444,6 @@ TMPDIR=/scratch/tmp
     #	real    31m45.069s
     cat fb.calJac1.chainOrnAna1Link.txt
     #	0 bases of 2929139385 (0.000%) in intersection
-XXXX something went wrong, there are not results !
+XXXX something went wrong, there are no results !  Everything is empty
 
-
-    mkdir /cluster/data/calJac1/bed/blastz.calJac1.swap
-    cd /cluster/data/calJac1/bed/blastz.calJac1.swap
-    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-	/cluster/data/calJac1/bed/blastzOrnAna1.2007-11-14/DEF \
-	-chainMinScore=3000 -chainLinearGap=medium \
-	-swap -bigClusterHub=pk > swap.log 2>&1 &
-    #	real    123m9.197s
-    cat fb.calJac1.chainHg18Link.txt
-    #	2824501297 bases of 3093572278 (91.302%) in intersection
 ###########################################################################
