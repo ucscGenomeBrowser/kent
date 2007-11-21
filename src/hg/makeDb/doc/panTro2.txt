@@ -2,7 +2,7 @@
 
 # This file describes browser build for the panTro2 chimp genome: Feb 2006
 #
-#	"$Id: panTro2.txt,v 1.9 2007/06/11 17:20:51 kate Exp $"
+#	"$Id: panTro2.txt,v 1.10 2007/11/21 20:20:35 hiram Exp $"
 #
 
 #  NOTE:  this doc may have genePred loads that fail to include
@@ -3069,4 +3069,110 @@ doBlastzChainNet.pl DEF -chainMinScore=3000 -chainLinearGap=medium \
     time nice -n 19 featureBits panTro2 chainEquCab1Link \
 	> fb.panTro2.chainEquCab1Link.txt 2>&1
     # 1636782924 bases of 2909485072 (56.257%) in intersection
+
 #########################################################################
+# Blastz Marmoset calJac1 (DONE - 2007-11-15 - Hiram)
+    ssh kkstore04
+    screen # use screen to control this job
+    mkdir /cluster/data/panTro2/bed/blastzCalJac1.2007-11-13
+    cd /cluster/data/panTro2/bed/blastzCalJac1.2007-11-13
+
+    cat << '_EOF_' > DEF
+# Chimp vs marmoset
+BLASTZ_M=50
+
+# TARGET: Chimp PanTro2
+SEQ1_DIR=/scratch/hg/panTro2/panTro2.2bit
+SEQ1_LEN=/cluster/data/panTro2/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Marmoset calJac1
+SEQ2_DIR=/cluster/bluearc/scratch/data/calJac1/calJac1.2bit
+SEQ2_LEN=/cluster/data/calJac1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/panTro2/bed/blastzCalJac1.2007-11-13
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-chainMinScore=3000 -chainLinearGap=medium \
+	-bigClusterHub=pk > blastz.log 2>&1 &
+    #	real    1039m19.171s
+    cat fb.panTro2.chainCalJac1Link.txt
+    #	2220169777 bases of 2909485072 (76.308%) in intersection
+
+    mkdir /cluster/data/calJac1/bed/blastz.panTro2.swap
+    cd /cluster/data/calJac1/bed/blastz.panTro2.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/panTro2/bed/blastzCalJac1.2007-11-13/DEF \
+	-chainMinScore=3000 -chainLinearGap=medium \
+	-swap -bigClusterHub=pk > swap.log 2>&1 &
+    #	real    320m14.293s
+    cat fb.calJac1.chainPanTro2Link.txt
+    #	2264115411 bases of 2929139385 (77.296%) in intersection
+
+###########################################################################
+# Blastz Orangutan ponAbe2 (DONE - 2007-11-16 - Hiram)
+    ssh kkstore04
+    screen # use screen to control this job
+    mkdir /cluster/data/panTro2/bed/blastzPonAbe2.2007-11-13
+    cd /cluster/data/panTro2/bed/blastzPonAbe2.2007-11-13
+
+    cat << '_EOF_' > DEF
+# Chimp vs marmoset
+BLASTZ_M=50
+
+# TARGET: Chimp PanTro2
+SEQ1_DIR=/scratch/hg/panTro2/panTro2.2bit
+SEQ1_LEN=/cluster/data/panTro2/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Orangutan ponAbe2
+SEQ2_DIR=/cluster/bluearc/scratch/data/ponAbe2/ponAbe2.2bit
+SEQ2_LEN=/cluster/data/ponAbe2/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/panTro2/bed/blastzPonAbe2.2007-11-13
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-chainMinScore=3000 -chainLinearGap=medium \
+	-bigClusterHub=kk > blastz.log 2>&1 &
+    #	real    388m20.443s
+# Completed: 129160 of 129168 jobs
+# Crashed: 8 jobs
+# CPU time in finished jobs:   23694314s  394905.23m  6581.75h  274.24d  0.751 y
+# IO & Wait Time:               2536376s   42272.93m   704.55h   29.36d  0.080 y
+# Average job time:                 203s       3.38m     0.06h    0.00d
+# Longest finished job:            5665s      94.42m     1.57h    0.07d
+# Submission to last job:        170709s    2845.15m    47.42h    1.98d
+
+    # some jobs failed due to memory limits on kk nodes
+    #	finished them manually on kolossus and hgwdev, then continuing
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-chainMinScore=3000 -chainLinearGap=medium \
+	-continue=cat -bigClusterHub=kk > cat.log 2>&1 &
+    #	real    754m45.014s
+    cat fb.panTro2.chainPonAbe2Link.txt
+    #	2648603020 bases of 2909485072 (91.033%) in intersection
+
+    mkdir /cluster/data/ponAbe2/bed/blastz.panTro2.swap
+    cd /cluster/data/ponAbe2/bed/blastz.panTro2.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/panTro2/bed/blastzPonAbe2.2007-11-13/DEF \
+	-chainMinScore=3000 -chainLinearGap=medium \
+	-swap -bigClusterHub=kk > swap.log 2>&1 &
+    #	real    160m51.639s
+    cat fb.ponAbe2.chainPanTro2Link.txt
+    #	2766615040 bases of 3093572278 (89.431%) in intersection
+    #	real    2597m24.771s
+
+###########################################################################
