@@ -455,7 +455,6 @@ cat blat/protein/run.time | sed -e "s/^/# /"
 # Submission to last job:           109s       1.82m     0.03h    0.00d
 
 #################################### step-wise step 4 to here
-endif
 
 cd $dir
 
@@ -604,6 +603,10 @@ txgAnalyze ucscGenes.txg /cluster/data/$db/$db.2bit stdout | sort | uniq > ucscS
 echo "MUST WORK THIS UP INTO AN ACTUAL DB LOAD HERE !  WHEN NOT tempDb"
 exit $status
 
+#################################### step-wise start step 6 here, loading
+endif
+cd $dir
+
 #####################################################################################
 # Now the gene set is built.  Time to start loading it into the database,
 # and generating all the many tables that go on top of known Genes.
@@ -667,6 +670,7 @@ hgMapToGene $db -tempDb=$tempDb gnfAtlas2 knownGene knownToGnfAtlas2 '-type=bed 
 hgsql --skip-column-names -e "select mrnaAcc,locusLinkId from refLink" $db > refToLl.txt
 hgMapToGene $db -tempDb=$tempDb refGene knownGene knownToLocusLink -lookup=refToLl.txt
 hgMapToGene $db -tempDb=$tempDb refGene knownGene knownToRefSeq
+
 if ($db =~ hg*) then
     hgMapToGene $db -tempDb=$tempDb affyGnf1h knownGene knownToGnf1h
     hgMapToGene $db -tempDb=$tempDb HInvGeneMrna knownGene knownToHInv
@@ -679,6 +683,15 @@ if ($db =~ hg*) then
 	hgFixed.gnfHumanAtlas2MedianExps gnfAtlas2Distance \
 	-lookup=knownToGnfAtlas2
 endif
+if ($db =~ rn*) then
+    hgMapToGene $db -tempDb=$tempDb gnfAtlas2 knownGene knownToGnfAtlas2 '-type=bed 12'
+    hgMapToGene $db -tempDb=$tempDb affyU34A  knownGene knownToU34A
+    hgMapToGene $db -tempDb=$tempDb affyRAE230  knownGene knownToRAE230
+    hgExpDistance $tempDb hgFixed.gnfRatAtlas2MedianRatio \
+	hgFixed.gnfRatAtlas2MedianExps gnfAtlas2Distance \
+	-lookup=knownToGnfAtlas2
+endif
+
 if ($db =~ mm*) then
     hgMapToGene $db -tempDb=$tempDb affyGnf1m knownGene knownToGnf1m
     hgMapToGene $db -tempDb=$tempDb gnfAtlas2 knownGene knownToGnfAtlas2 '-type=bed 12'
@@ -691,6 +704,9 @@ if ($db =~ mm*) then
     hgExpDistance $tempDb hgFixed.gnfMouseAtlas2MedianRatio \
 	    hgFixed.gnfMouseAtlas2MedianExps gnfAtlas2Distance -lookup=knownToGnf1m
 endif
+
+#################################### step-wise step 5 to here
+exit $status
 
 # do not yet have visiGene for Rat
 exit 255
