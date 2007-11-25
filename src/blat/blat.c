@@ -18,7 +18,7 @@
 #include "trans3.h"
 #include "gfClientLib.h"
 
-static char const rcsid[] = "$Id: blat.c,v 1.111 2006/12/01 18:30:43 kent Exp $";
+static char const rcsid[] = "$Id: blat.c,v 1.112 2007/11/25 17:17:55 kent Exp $";
 
 /* Variables shared with other modules.  Set in this module, read only
  * elsewhere. */
@@ -298,7 +298,7 @@ return qMaskBits;
 void searchOneMaskTrim(struct dnaSeq *seq, boolean isProt,
 		       struct genoFind *gf, FILE *outFile,
 		       struct hash *maskHash,
-		       unsigned long *retTotalSize, int *retCount)
+		       long long *retTotalSize, int *retCount)
 /* Search a single sequence against a single genoFind index. */
 {
 boolean maskQuery = (qMask != NULL);
@@ -320,7 +320,7 @@ void searchOneIndex(int fileCount, char *files[], struct genoFind *gf, char *out
 int i;
 char *fileName;
 int count = 0; 
-unsigned long totalSize = 0;
+long long totalSize = 0;
 
 gfOutputHead(gvo, outFile);
 for (i=0; i<fileCount; ++i)
@@ -385,7 +385,7 @@ for (i=0; i<fileCount; ++i)
     }
 carefulClose(&outFile);
 if (showStatus)
-    printf("Searched %lu bases in %d sequences\n", totalSize, count);
+    printf("Searched %lld bases in %d sequences\n", totalSize, count);
 }
 
 struct trans3 *seqListToTrans3List(struct dnaSeq *seqList, aaSeq *transLists[3], struct hash **retHash)
