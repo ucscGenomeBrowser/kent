@@ -13,7 +13,7 @@ hgBedsToBedExps: $O ${MYLIBS}
 clean:
 	rm -f $O
 
-testAll:
-	cd test/first; hgBedsToBedExps in.cfg out.bed out.exps
-	cd test/first; diff expected.exps out.exps
-	cd test/first; diff expected.bed out.bed
+test:
+	cd tests/first; hgBedsToBedExps -verbose=0 in.cfg out.bed out.exps
+	cd tests/first; diff expected.exps out.exps
+	cd tests/first; diff expected.bed out.bed
