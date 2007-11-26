@@ -39,6 +39,9 @@ struct rbTree *rbTreeNew(int (*compare)(void *, void *));
 void rbTreeFree(struct rbTree **pTree);
 /* Frees space used by the red-black tree pointed to by t. */
 
+void rbTreeFreeList(struct rbTree **pList);
+/* Free up a list of rbTrees. */
+
 struct rbTree *rbTreeNewDetailed(int (*compare)(void *, void *), struct lm *lm, 
 	struct rbTreeNode *stack[128]);
 /* Allocate rbTree on an existing local memory & stack.  This is for cases

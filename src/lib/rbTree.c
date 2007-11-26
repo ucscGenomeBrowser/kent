@@ -9,7 +9,7 @@
 #include "localmem.h"
 #include "rbTree.h"
 
-static char const rcsid[] = "$Id: rbTree.c,v 1.10 2007/02/24 15:59:29 kent Exp $";
+static char const rcsid[] = "$Id: rbTree.c,v 1.11 2007/11/26 02:09:52 kent Exp $";
 
 
 static struct rbTreeNode *restructure(struct rbTree *t, int tos, 
@@ -117,6 +117,16 @@ if (tree != NULL)
     }
 }
 
+void rbTreeFreeList(struct rbTree **pList)
+/* Free up a list of rbTrees. */
+{
+struct rbTree *tree, *next;
+for (tree = *pList; tree != NULL; tree = next)
+    {
+    next = tree->next;
+    rbTreeFree(&tree);
+    }
+}
 
 void *rbTreeAdd(struct rbTree *t, void *item)
 /* rbTreeAdd() - Inserts an item into the red-black tree pointed to by t,
