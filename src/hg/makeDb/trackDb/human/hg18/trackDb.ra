@@ -336,18 +336,6 @@ type ld2
     longLabel Linkage Disequilibrium for the CEPH (CEU) from unphased genotypes
     priority 2
 
-    track hapmapLdChb
-    subTrack hapmapLd off
-    shortLabel Unphased CHB
-    longLabel Linkage Disequilibrium for the Han Chinese (CHB) from unphased genotypes
-    priority 3
-
-    track hapmapLdJpt
-    subTrack hapmapLd off
-    shortLabel Unphased JPT
-    longLabel Linkage Disequilibrium for the Japanese from Tokyo (JPT) from unphased genotypes
-    priority 4
-
     track hapmapLdChbJpt
     subTrack hapmapLd off
     shortLabel Unph JPT+CHB
