@@ -17,3 +17,55 @@ priority 11
 group map
 visibility dense
 type bed 3 +
+
+track multiz8way
+shortLabel 8-way Multiz
+longLabel 8-Way Multiz Alignment & Conservation 
+group compGeno
+priority 104.2
+visibility pack
+color 0, 10, 100
+altColor 0,90,10
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+wiggle phastCons8wayPlacental Mammal Placental_Mammal phastCons8way Vertebrate Vertebrate
+spanList 1
+pairwiseHeight 12
+yLineOnOff Off
+frames multiz8wayFrames
+irows on
+autoScaleDefault Off
+windowingFunction mean
+summary multiz8waySummary
+speciesCodonDefault ponAbe2
+speciesGroups Placental_Mammal Vertebrate
+sGroup_Primates ponAbe2 hg18 panTro2 rheMac2 calJac1
+sGroup_Vertebrate monDom4 ornAna1
+speciesDefaultOff rheMac2 calJac1 panTro2 ornAna1
+itemFirstCharCase noChange
+treeImage phylo/ponAbe2_8way.gif
+
+track mostConserved8way
+compositeTrack on
+shortLabel Most Conserved
+longLabel PhastCons Conserved Elements, 8-way Vertebrate Multiz Alignment
+group compGeno
+priority 103.4
+visibility hide
+exonArrows off
+showTopScorers 200
+type bed 5 .
+
+    track phastConsElements8wayPlacental
+    subTrack mostConserved8way
+    shortLabel Mammal
+    longLabel PhastCons Placental Mammal Conserved Elements, 8-way Multiz Alignment
+    color 100,50,170
+    priority 1
+
+    track phastConsElements8way
+    subTrack mostConserved8way
+    shortLabel Vertebrate
+    longLabel PhastCons Vertebrate Conserved Elements, 8-way Multiz Alignment
+    color 170,100,50
+    priority 2
