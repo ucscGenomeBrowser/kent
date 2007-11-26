@@ -44,19 +44,22 @@ if (w < 1)
 vgBox(vg, x1, y, w, heightPer, color);
 
 /* Draw text to the right */
-int x = x2 + tl.mWidth/2;
-int i;
-for (i=0; i<track->sourceCount; ++i)
+if (vis == tvFull || vis == tvPack)
     {
-    char *label = track->sources[i]->name;
-    int w = mgFontStringWidth(font, label);
-    float score = bed->expScores[i];
-    if (score > 0.0)
+    int x = x2 + tl.mWidth/2;
+    int i;
+    for (i=0; i<track->sourceCount; ++i)
 	{
-	int grayIx = grayInRange(score*100, 0, 100);
-	int color = shadesOfGray[grayIx];
-	vgTextCentered(vg, x, y, w, heightPer, color, font, label);
-	x += mgFontStringWidth(font, label);
+	char *label = track->sources[i]->name;
+	int w = mgFontStringWidth(font, label);
+	float score = bed->expScores[i];
+	if (score > 0.0)
+	    {
+	    int grayIx = grayInRange(score*100, 0, 100);
+	    int color = shadesOfGray[grayIx];
+	    vgTextCentered(vg, x, y, w, heightPer, color, font, label);
+	    x += mgFontStringWidth(font, label);
+	    }
 	}
     }
 }
