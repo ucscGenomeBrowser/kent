@@ -210,8 +210,9 @@
 #include "omicia.h"
 #include "atomDb.h"
 #include "itemConf.h"
+#include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1370 2007/11/15 16:42:15 giardine Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1371 2007/11/26 22:45:57 hartera Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -2490,40 +2491,6 @@ if (subChain != NULL && otherOrg != NULL)
     printf("Open %s browser</A> at position corresponding to the part of chain that is in this window.<BR>\n", otherOrg);
     }
 chainFree(&toFree);
-}
-
-boolean chromSeqFileExists(char *db, char *chrom)
-/* check whether chromInfo exists for a database, find the path of the */
-/* sequence file for this chromosome and check if the file exists. */
-{
-char seqFile[512];
-struct sqlConnection *conn = sqlConnect(db);
-char query[256];
-char *res = NULL;
-boolean exists = FALSE;
-
-/* if the database exists, check for the chromInfo file */
-if (sqlDatabaseExists(db))
-    {
-    safef(query, sizeof(query), "select fileName from chromInfo where chrom = '%s'", chrom);
-    res = sqlQuickQuery(conn, query, seqFile, 512);
-    sqlDisconnect(&conn);
-    }
-
-/* if there is not table or no information in the table or if the table */
-/* exists but the file can not be opened return false, otherwise sequence */
-/* file exists and return true */
-if (res != NULL)
-    {
-    /* chromInfo table exists so check that sequence file can be opened */
-    FILE *f = fopen(seqFile, "rb");
-    if (f != NULL)
-        {
-        exists = TRUE;
-        fclose(f);
-        }
-    }
-return exists;
 }
 
 void genericChainClick(struct sqlConnection *conn, struct trackDb *tdb, 
