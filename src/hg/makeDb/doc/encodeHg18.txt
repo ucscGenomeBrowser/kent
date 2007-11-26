@@ -717,7 +717,7 @@ cd /usr/local/apache/htdocs/goldenPath/hg18/encode
 ln -s /cluster/data/encode/Affy/2007-07-12/processed/download/*.gz .
 
 ###########################################################################
-# Yale Pol II Chip (NOT DONE Andy 08-02-2007)
+# Yale Pol II Chip (Chip-seq) (DONE Andy 11-07-2007)
 
 cd /cluster/data/encode/yale
 mkdir 2007-07-17
@@ -747,6 +747,51 @@ hgLoadBed hg18 encodeYalePolIISites PolII_hg18-sites.bed
 
 # MORE ERRORS.  Clearly this submission wasn't quite meant to be just yet.
 # to be continued...
+
+# continued... made a "resub" dir and copied the resubmitted zipfile there.
+cd /cluste/data/2007-07-17/resub   
+unzip Yale_jul17_v2.zip
+cd PolII/
+trimObBedLines PolII_hg18-signal.wig > ../../processed/wgEncodeYalePolIISignal.wigBed
+pushd ../../processed/
+wigEncode wgEncodeYalePolIISignal.wigBed wgEncodeYalePolIISignal.wig wgEncodeYalePolIISignal.wib
+gzip wgEncodeYalePolIISignal.wigBed
+cd ../../../hg18.wib
+ln -s ../yale/2007-07-17/processed/wgEncodeYalePolIISignal.wib
+cd /gbdb/hg18/encode/wib
+ln -s /cluster/data/encode/hg18.wib/wgEncodeYalePolIISignal.wib 
+cd /usr/local/apache/htdocs/goldenPath/hg18/encode/wig
+ln -s /cluster/data/encode/yale/2007-07-17/processed/wgEncodeYalePolIISignal.wigBed.gz 
+popd
+hgLoadWiggle -pathPrefix=/gbdb/hg18/encode/wib hg18 wgEncodeYalePolIISignal wgEncodeYalePolIISignal.wig
+
+#########################################################################
+# YALE STAT1 (more ChIP-seq) (DONE, Andy 2007-11-20)
+
+cd /cluster/data/encode/yale
+mkdir 2007-08-08
+cd 2007-08-08/
+cp /var/ftp/encode/Yale_aug8.zip .
+unzip Yale_aug8.zip
+cd STAT1/
+trimObBedLines hg18 STAT1_hg18-signal.wig wgEncodeYaleStat1Signal.wigBed
+trimObBedLines hg18 STAT1_hg18-sites.bed wgEncodeYaleStat1Sites.bed
+gzip wgEncodeYaleStat1Signal.wigBed
+wigEncode wgEncodeYaleStat1Signal.wigBed.gz wgEncodeYaleStat1Signal.{wig,wib}
+cd ../
+mkdir lab processed
+mv readme_aug8.txt STAT1 lab/
+rm Yale_aug8.zip 
+mv lab/STAT1/wgEncodeYaleStat1Si* processed/
+pushd ../../hg18.wib/
+ln -s ../yale/2007-08-08/processed/wgEncodeYaleStat1Signal.wib
+cd /gbdb/hg18/encode/wib
+ln -s /cluster/data/encode/hg18.wib/wgEncodeYaleStat1Signal.wib 
+popd
+cd processed/
+hgLoadWiggle -pathPrefix=/gbdb/hg18/encode/wib hg18 wgEncodeYaleStat1Signal wgEncodeYaleStat1Signal.wig
+hgLoadBed hg18 wgEncodeYaleStat1Sites wgEncodeYaleStat1Sites.bed 
+
 
 ##########################################################################
 # Genome Institute of Singapore PET data (2007-08-30 ting)
