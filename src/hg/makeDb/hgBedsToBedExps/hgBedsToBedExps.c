@@ -8,7 +8,7 @@
 #include "bedGraph.h"
 #include "rangeTree.h"
 
-static char const rcsid[] = "$Id: hgBedsToBedExps.c,v 1.1 2007/11/26 00:18:44 kent Exp $";
+static char const rcsid[] = "$Id: hgBedsToBedExps.c,v 1.2 2007/11/26 15:50:44 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -214,7 +214,7 @@ for (ref = list; ref != NULL; ref = ref->next)
     fprintf(f, "%d\t%d\t", range->start, range->end);
     fprintf(f, "0\t");  /* itemRgb */
     fprintf(f, "1\t");  /* block count */
-    fprintf(f, "0\t%d\t", range->end - range->start);
+    fprintf(f, "%d\t0\t", range->end - range->start);
     fprintf(f, "%d\t", sourceCount);
     for (i=0; i<sourceCount; ++i)
         fprintf(f, "%d,", i);
@@ -273,7 +273,6 @@ chromElList = hashElListHash(chromHash);
 for (chromEl = chromElList; chromEl != NULL; chromEl = chromEl->next)
     {
     chromTree = chromEl->val;
-    uglyf("Got %d items on %s\n", chromTree->n, chromEl->name);
     outputFactorOnChrom(chromEl->name, chromTree, factor, sourceHash->elCount, f);
     }
 slFreeList(&chromElList);
