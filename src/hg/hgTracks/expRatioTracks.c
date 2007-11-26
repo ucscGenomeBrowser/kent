@@ -9,8 +9,6 @@
 #include "cheapcgi.h"
 #include "expRecord.h"
 #include "microarray.h"
-
-#include "hash.h"
 #include "spaceSaver.h"
 
 struct simpleClinical 

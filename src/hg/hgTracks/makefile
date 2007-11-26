@@ -10,7 +10,7 @@ A = hgTracks
 O = $A.o altGraphXTrack.o bedGraph.o chainTrack.o \
 	cgapSageTrack.o chromGraphTrack.o config.o contigTrack.o \
 	coverageTrack.o cytoBandTrack.o cutterTrack.o \
-        expRatioTracks.o goldTrack.o loweLabTracks.o \
+        expRatioTracks.o factorSource.o goldTrack.o loweLabTracks.o \
 	mafTrack.o netTrack.o pslTrack.o rmskTrack.o \
 	sampleTracks.o switchGear.o wabaTrack.o wigTrack.o cds.o \
 	wigMafTrack.o encode.o variation.o transcriptome.o\

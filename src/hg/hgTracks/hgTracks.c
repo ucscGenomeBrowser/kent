@@ -119,7 +119,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1428 2007/11/19 16:38:49 giardine Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1429 2007/11/26 02:11:23 kent Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -373,6 +373,12 @@ for (item = tg->items; item != NULL; item = item->next)
 	    end = insideWidth;
 	else
 	    end = round((baseEnd - winStart)*scale);
+	if (tg->itemRightPixels && withLabels)
+	    {
+	    end += tg->itemRightPixels(tg, item);
+	    if (end > insideWidth)
+	        end = insideWidth;
+	    }
 	if (start < 0) start = 0;
 	if (spaceSaverAddOverflow(ss, start, end, item, allowOverflow) == NULL)
 	    break;
@@ -12465,6 +12471,10 @@ else if (sameWord(type, "rmsk"))
 else if (sameWord(type, "ld2"))
     {
     ldMethods(track);
+    }
+else if (sameWord(type, "factorSource"))
+    {
+    factorSourceMethods(track);
     }
 }
 
