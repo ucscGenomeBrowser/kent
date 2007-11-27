@@ -4,7 +4,7 @@
 # This file describes browser build for the Orangutan
 # genome, July 31 2007
 #
-#	"$Id: ponAbe2.txt,v 1.5 2007/11/27 17:43:55 hiram Exp $"
+#	"$Id: ponAbe2.txt,v 1.6 2007/11/27 23:14:44 hiram Exp $"
 #
 ######################################################################
 ## DOWNLOAD SEQUENCE (DONE - 2007-09-06 - Hiram)
@@ -660,7 +660,7 @@ TMPDIR=/scratch/tmp
     #	2253236255 bases of 2929139385 (76.925%) in intersection
 
 #########################################################################
-## 8-Way Multiz (WORKING - 2007-11-26 - Hiram)
+## 8-Way Multiz (DONE - 2007-11-27 - Hiram)
 ##
     ssh hgwdev
     mkdir /cluster/data/ponAbe2/bed/multiz8way
@@ -911,18 +911,16 @@ cat > autoMultiz.csh << '_EOF_'
     # << emacs
     gensub2 chromChunks.list single template jobList
     para create jobList
-    # 104 jobs
-XXX - running 2007-11-26 15:00
-    # the 73 jobs run time:
-# Completed: 72 of 75 jobs
-# CPU time in finished jobs:     501143s    8352.38m   139.21h    5.80d  0.016 y
-# IO & Wait Time:                 22628s     377.14m     6.29h    0.26d  0.001 y
-# Average job time:                7275s     121.24m     2.02h    0.08d
-# Longest finished job:           15957s     265.95m     4.43h    0.18d
-# Submission to last job:         16473s     274.55m     4.58h    0.19d
+    # the 104 jobs run time:
+# Completed: 104 of 104 jobs
+# CPU time in finished jobs:     174748s    2912.47m    48.54h    2.02d  0.006 y
+# IO & Wait Time:                  2952s      49.20m     0.82h    0.03d  0.000 y
+# Average job time:                1709s      28.48m     0.47h    0.02d
+# Longest finished job:            3340s      55.67m     0.93h    0.04d
+# Submission to last job:          4413s      73.55m     1.23h    0.05d
 
     # put the split maf results back together into single chroms
-    ssh kkstore06
+    ssh kkstore02
     cd /cluster/data/ponAbe2/bed/multiz8way
     # here is where the result directory maf should have already been maf.split
     mv maf maf.split
@@ -943,30 +941,30 @@ done
     mkdir -p /gbdb/ponAbe2/multiz8way/maf
     ln -s /cluster/data/ponAbe2/bed/multiz8way/maf/*.maf \
                 /gbdb/ponAbe2/multiz8way/maf
-    cd /cluster/data/ponAbe2/bed/multiz8way
     # this generates a large 1 Gb multiz8way.tab file in the directory
     #	where it is running.  Best to run this over in scratch.
     cd /scratch/tmp
     time nice -n +19 hgLoadMaf \
 	-pathPrefix=/gbdb/ponAbe2/multiz8way/maf ponAbe2 multiz8way
-    #	real    11m38.695s
-    #	Loaded 15881850 mafs in 34 files from /gbdb/ponAbe2/multiz8way/maf
+    #	real    6m37.534s
+    #	Loaded 6981959 mafs in 55 files from /gbdb/ponAbe2/multiz8way/maf
 
     # load summary table
     time nice -n +19 cat /gbdb/ponAbe2/multiz8way/maf/*.maf \
 	| hgLoadMafSummary ponAbe2 -minSize=30000 -mergeGap=1500 \
 	 -maxSize=200000  multiz8waySummary stdin
-    #	Created 5648546 summary blocks from 154642836 components and 15872991
-    #	mafs from stdin
-    #	real    19m44.355s
+    #	Created 1417364 summary blocks from 29928557 components
+    #	and 6981421 mafs from stdin
+    #	real    21m35.057s
 
     # Gap Annotation
     # prepare bed files with gap info
-    ssh kkstore06
+    ssh kkstore02
     mkdir /cluster/data/ponAbe2/bed/multiz8way/anno
     cd /cluster/data/ponAbe2/bed/multiz8way/anno
     mkdir maf run
 
+    #	these actually already all exist from previous multiple alignments
     for DB in `cat ../species.list`
 do
     CDIR="/cluster/data/${DB}"
@@ -1009,24 +1007,16 @@ done
 '_EOF_'
     # << happy emacs
 
-    #	there is no 16_random maf file
-    cut -f1 /cluster/data/ponAbe2/chrom.sizes | grep -v 16_random > chrom.list
+    cut -f1 /cluster/data/ponAbe2/chrom.sizes > chrom.list
     gensub2 chrom.list single template jobList
     para create jobList
-    para try
-#	Crashed: 1 jobs
-# CPU time in finished jobs:      18129s     302.15m     5.04h    0.21d  0.001 y
-# IO & Wait Time:                 10273s     171.22m     2.85h    0.12d  0.000 y
-# Average job time:                 861s      14.34m     0.24h    0.01d
-# Longest finished job:            4376s      72.93m     1.22h    0.05d
-    #	one job was too large for this memory:
-    # job: ./doAnno.csh chr1 /cluster/data/mm9/bed/multiz8way/anno/maf/chr1.maf
-    # needLargeMem: Out of memory - request size 1129396 bytes, errno: 12
-    #	going to hgwdev for this one:
-    ssh hgwdev
-    cd /cluster/data/ponAbe2/bed/multiz8way/anno/run
-    time ./doAnno.csh chr1 ../maf/chr1.maf
-    #	real    17m34.550s
+    para try ... check ... push ... etc.
+# Completed: 55 of 55 jobs
+# CPU time in finished jobs:       2278s      37.97m     0.63h    0.03d  0.000 y
+# IO & Wait Time:                  9909s     165.15m     2.75h    0.11d  0.000 y
+# Average job time:                 222s       3.69m     0.06h    0.00d
+# Longest finished job:            3340s      55.67m     0.93h    0.04d
+# Submission to last job:          3897s      64.95m     1.08h    0.05d
 
     ssh hgwdev
     cd /cluster/data/ponAbe2/bed/multiz8way/anno
@@ -1039,8 +1029,8 @@ done
     cd /scratch/tmp
     time nice -n +19 hgLoadMaf -pathPrefix=/gbdb/ponAbe2/multiz8way/anno/maf \
                 ponAbe2 multiz8way
-    #	Loaded 16799995 mafs in 34 files from /gbdb/ponAbe2/multiz8way/anno/maf
-    #	real    18m12.171s
+    #	Loaded 7331265 mafs in 55 files from /gbdb/ponAbe2/multiz8way/anno/maf
+    #	real    8m31.092s
 
     cat /cluster/data/ponAbe2/chrom.sizes | \
 	awk '{if ($2 > 1000000) { print $1 }}' |
@@ -1050,11 +1040,116 @@ do
 done | xargs cat | \
         hgLoadMafSummary ponAbe2 -minSize=30000 -mergeGap=1500 \
             -maxSize=200000  multiz8waySummary stdin
-    #	Created 5648546 summary blocks from 154642836 components and 16790208
+    #	Created 1417364 summary blocks from 29928557 components and 7330669
     #	mafs from stdin
     #	by loading this into the table multiz8waySummary, it will replace
     #	the previously loaded table with the unannotated mafs
-    #	real    30m26.542s
+    #	remove the multiz8way*.tab files in this /scratch/tmp directory
+    rm multiz8way*
+
+#############################################################################
+## Annotate 8-way multiple alignment with gene annotations
+##		(WORKING - 2007-10-18 - Hiram)
+    # Gene frames
+    ## survey all genomes to see what type of gene track to use
+    ssh hgwdev
+    mkdir /cluster/data/ponAbe2/bed/multiz8way/frames
+    cd /cluster/data/ponAbe2/bed/multiz8way/frames
+    #	dbs: eriEur1, cavPor2, sorAra1 do not exist, can not look at them
+    cat << '_EOF_' > showGenes.csh
+#!/bin/csh -fe
+foreach db (`cat ../species.list`)
+    echo -n "${db}: "
+    echo -n "Tables: "
+    set tables = `hgsql $db -N -e "show tables like '%Gene%'"`
+    foreach table ($tables)
+	if ($table == "ensGene" || $table == "refGene" || $table == "mgcGenes" || \
+	    $table == "knownGene") then
+		set count = `hgsql $db -N -e "select count(*) from $table"`
+		echo -n "${table}: ${count}, "
+	endif
+    end
+    set orgName = `hgsql hgcentraltest -N -e \
+	    "select scientificName from dbDb where name='$db'"`
+    set orgId = `hgsql ponAbe2 -N -e \
+	    "select id from organism where name='$orgName'"`
+    if ($orgId == "") then
+	echo "Mrnas: 0"
+    else
+	set count = `hgsql ponAbe2 -N -e "select count(*) from gbCdnaInfo where organism=$orgId"`
+	echo "Mrnas: ${count}"
+    endif
+end
+'_EOF_'
+    # << happy emacs
+    chmod +x ./showGenes.csh
+    #	given this output, manually sorted for this display:
+# hg18: Tables: ensGene: 43569, knownGene: 56722, mgcGenes: 29037,
+#	refGene: 25902, Mrnas: 209126
+# mm9: Tables: knownGene: 49409, mgcGenes: 22950, refGene: 21146, Mrnas: 242485
+# monDom4: Tables: ensGene: 33878, refGene: 163, Mrnas: 398
+# ornAna1: Tables: ensGene: 25981, refGene: 3, Mrnas: 141
+# panTro2: Tables: ensGene: 32852, refGene: 26179, Mrnas: 1297
+# rheMac2: Tables: ensGene: 38561, refGene: 426, Mrnas: 3202
+# calJac1: Tables: Mrnas: 952
+# ponAbe2: Tables: Mrnas: 2
+
+    #	from this information, conclusions:
+    #	use knownGene for hg18, mm9
+    #	use ensGene for monDom4, ornAna1, panTro2, rheMac2
+    #	no annotations for calJac1, ponAbe2
+
+    mkdir genes
+    # knownGene
+    for DB in hg18 mm9
+do
+    hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from knownGene" ${DB} \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /scratch/tmp/${DB}.tmp.gz
+    mv /scratch/tmp/${DB}.tmp.gz genes/$DB.gp.gz
+    echo "${DB} done"
+done
+    # ensGene
+    for DB in monDom4 ornAna1 panTro2 rheMac2
+do
+    hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from ensGene" ${DB} \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /scratch/tmp/${DB}.tmp.gz
+    mv /scratch/tmp/${DB}.tmp.gz genes/$DB.gp.gz
+    echo "${DB} done"
+done
+    ls -og genes
+# -rw-rw-r--  1 2008806 Nov 27 14:37 hg18.gp.gz
+# -rw-rw-r--  1 1965274 Nov 27 14:37 mm9.gp.gz
+# -rw-rw-r--  1 1751726 Nov 27 14:37 monDom4.gp.gz
+# -rw-rw-r--  1 1232719 Nov 27 14:37 ornAna1.gp.gz
+# -rw-rw-r--  1 1980696 Nov 27 14:37 panTro2.gp.gz
+# -rw-rw-r--  1 1935916 Nov 27 14:37 rheMac2.gp.gz
+
+
+    ssh kkstore02
+    cd /cluster/data/ponAbe2/bed/multiz8way/frames
+    # leaving out calJac1 ponAbe2
+    time (cat  ../maf/*.maf | nice -n +19 genePredToMafFrames ponAbe2 stdin stdout hg18 genes/hg18.gp.gz mm9 genes/mm9.gp.gz rheMac2 genes/rheMac2.gp.gz panTro2 genes/panTro2.gp.gz monDom4 genes/monDom4.gp.gz ornAna1 genes/ornAna1.gp.gz | gzip > multiz8way.mafFrames.gz) > frames.log 2>&1
+    # see what it looks like in terms of number of annotations per DB:
+    zcat multiz8way.mafFrames.gz | cut -f4 | sort | uniq -c | sort -n
+# 219627 hg18
+# 221459 panTro2
+# 230108 rheMac2
+# 238734 mm9
+# 412384 ornAna1
+# 459521 monDom4
+
+    #	load the resulting file
+    ssh hgwdev
+    cd /cluster/data/ponAbe2/bed/multiz8way/frames
+    time nice -n +19 hgLoadMafFrames ponAbe2 multiz8wayFrames \
+	multiz8way.mafFrames.gz
+    #	real    0m45.837s
+
+    #	enable the trackDb entries:
+# frames multiz8wayFrames
+# irows on
 
 ###########################################################################
 # BLASTZ SWAP Human Hg18 (DONE - 2007-10-05 - Hiram)
