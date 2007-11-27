@@ -713,3 +713,22 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
 
 
 ##########################################################################
+# MAKE SCAFFOLDS TRACK (DONE 11/14/07 angie)
+    ssh hgwdev
+    mkdir /cluster/data/bosTau3/bed/scaffolds
+    cd /cluster/data/bosTau3/bed/scaffolds
+    # bosTau3's chrUn.* scaffolds are separate, so make this track only 
+    # for the assembled chroms.
+    perl -wpe 'if (/ChrUn/) {s/^.*\n$//; next;} \
+           m/(Chr\w+)\.(\d+)\t(\d+)\t(\d+)\t([+N-])/ || die; \
+           ($chr, $scafNum, $start, $end, $strand) = ($1, $2, $3, $4, $5); \
+           $scafName = "$chr.$scafNum"; \
+           $chr =~ s/^C/c/; $chr =~ s/chr30/chrX/; \
+           $start--;  $strand =~ s/N/+/; \
+           s/^.*$/$chr\t$start\t$end\t$scafName\t0\t$strand/;' \
+        ../../baylor/Btau3.1.scaffolds.chr \
+      > scaffolds.bed
+    hgLoadBed bosTau3 scaffold scaffolds.bed
+
+
+##########################################################################
