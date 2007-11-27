@@ -12,7 +12,7 @@
 #include "hash.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.36 2007/10/16 09:49:45 aamp Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.37 2007/11/27 01:57:18 kent Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -129,7 +129,7 @@ char *s = firstWordInLine(t);
 boolean canPack = (sameString("psl", s) || sameString("chain", s) || 
                    sameString("bed", s) || sameString("genePred", s) || 
                    sameString("expRatio", s) || sameString("wigMaf", s) ||
-		   sameString("bed5FloatScore", s) || 
+		   sameString("factorSource", s) || sameString("bed5FloatScore", s) || 
 		   sameString("bed6FloatScore", s) || sameString("altGraphX", s));
 freeMem(t);
 return canPack;
