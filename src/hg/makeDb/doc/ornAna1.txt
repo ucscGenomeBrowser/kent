@@ -1282,4 +1282,74 @@ chainOne $(path1)
     hgsql ornAna1 -e 'update genomicSuperDups set strand = "-" where strand = "_";'
 
 
-#########################################################################
+###########################################################################
+# Blastz Platypus ornAna1 (WORKING - 2007-11-20 - Hiram)
+#	This is a second attempt after a blastz of Platypus query to
+#	Marmoset target produced no results for some unknown reason.
+    ssh kkstore05
+    screen # use screen to control this job
+    mkdir /cluster/data/ornAna1/bed/blastzCalJac1.2007-11-20
+    cd /cluster/data/ornAna1/bed/blastzCalJac1.2007-11-20
+
+    #	this chunking will produce 542,178 jobs
+    cat << '_EOF_' > DEF
+# Platypus vs Marmoset
+BLASTZ_M=50
+BLASTZ_K=2200
+BLASTZ_L=6000
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+BLASTZ_Y=3400
+
+# Target: Platypus ornAna1, largest chrom 59,581,953, 201,523 sequences
+SEQ1_DIR=/cluster/bluearc/scratch/data/ornAna1/ornAna1.2bit
+SEQ1_LEN=/cluster/data/ornAna1/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LIMIT=300
+SEQ1_LAP=10000
+
+# QUERY: Marmoset calJac1, largest contig 2,551,648, 49,724 contigs
+SEQ2_DIR=/cluster/bluearc/scratch/data/calJac1/calJac1.2bit
+SEQ2_LEN=/cluster/data/calJac1/chrom.sizes
+SEQ2_CHUNK=5000000
+SEQ2_LIMIT=500
+SEQ2_LAP=0
+
+BASE=/cluster/data/ornAna1/bed/blastzCalJac1.2007-11-20
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-stop=blastz \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	-bigClusterHub=pk > blastz.log 2>&1 &
+XXX - running - 2007-11-20
+# Completed: 899536 of 900180 jobs
+# Crashed: 644 jobs
+# CPU time in finished jobs:  131663141s 2194385.68m 36573.09h 1523.88d  4.175 y
+# IO & Wait Time:              12592457s  209874.29m  3497.90h  145.75d  0.399 y
+# Average job time:                 160s       2.67m     0.04h    0.00d
+# Longest finished job:            1795s      29.92m     0.50h    0.02d
+# Submission to last job:        440290s    7338.17m   122.30h    5.10d
+    #	despite the '644 jobs' crashed, they are actually done and all results
+    #	are complete
+
+    #	continuing:
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	-continue=cat -bigClusterHub=pk > cat.log 2>&1 &
+    #	real    31m45.069s
+    cat fb.ornAna1.chainCalJac1Link.txt
+    #	0 bases of 2929139385 (0.000%) in intersection
+XXXX something went wrong, there are no results !  Everything is empty
+
+    mkdir /cluster/data/calJac1/bed/blastz.ornAna1.swap
+    cd /cluster/data/calJac1/bed/blastz.ornAna1.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/ornAna1/bed/blastzCalJac1.2007-11-20/DEF \
+	-chainMinScore=3000 -chainLinearGap=medium \
+	-swap -bigClusterHub=pk > swap.log 2>&1 &
+    #	real    123m9.197s
+    cat fb.calJac1.chainOrnAna1Link.txt
+    #	2824501297 bases of 3093572278 (91.302%) in intersection
+###########################################################################
