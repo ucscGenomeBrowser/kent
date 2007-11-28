@@ -5,7 +5,7 @@ group x
 priority 920
 visibility hide
 type expRatio
-expScale 1.5
+expScale 1.0
 expStep 0.2
 groupings ispyMipCGHGroups
 patDb ispy1
@@ -48,6 +48,25 @@ patTable labTrack
 patKey ispyId
 aliasTable probeAliases
 setsTable genesets
+
+track ISPYproteomics
+shortLabel ispy proteomics
+longLabel ispy proteomics
+group x
+priority 920
+visibility hide
+type expRatio
+expScale 5.0
+expStep 0.2
+groupings ISPYproteomicsGroups
+patDb ispy1
+patId trackId
+patTable proteomicsTrack
+patKey ispyId
+aliasTable probeAliases
+setsTable genesets
+
+#TCGA
 
 track mskccCGH
 shortLabel TCGA GBM mskccCGH
@@ -97,4 +116,23 @@ patDb tcga1
 aliasTable uncAgiExpProbes
 setsTable genesets
 
+track broadAffyExp
+shortLabel TCGA GBM broadAffyExp
+longLabel TCGA GBM Broad Affymetrix Expression array U133A
+group x
+visibility hide
+type expRatio
+expScale 3.0
+expStep 0.2
+groupings broadAffyExpGroups
+patTable sampleInfo
+patId sampleId
+patKey subjId
+patDb tcga1
 
+track CaMPScoreExternal
+shortLabel CaMPScoreExternal 
+longLabel CaMPScoreExternal Science 2007 volelstein
+group x
+visibility hide
+type bed
