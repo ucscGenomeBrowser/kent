@@ -2559,3 +2559,69 @@ TMPDIR=/scratch/tmp
     doBlastzChainNet.pl DEF \
       -bigClusterHub=pk  -chainMinScore=5000 -chainLinearGap=loose \
       >& blastz.out 2>&1 &
+
+#########################################################################
+# Blastz Marmoset calJac1 (WORKING - 2007-11-28 - Hiram)
+    ssh kkstore04
+    screen # use screen to control this job
+    #	managing disk space on full filesystem
+    mkdir -p /cluster/store8/canFam2/bed/blastzCalJac1.2007-11-28
+    ln -s /cluster/store8/canFam2/bed/blastzCalJac1.2007-11-28 \
+	/cluster/data/canFam2/bed
+    cd /cluster/data/canFam2/bed/blastzCalJac1.2007-11-28
+
+    cat << '_EOF_' > DEF
+# Dog vs. Marmoset
+BLASTZ_M=50
+
+# TARGET: Dog MonDom4
+SEQ1_DIR=/scratch/data/canFam2/nib
+SEQ1_LEN=/cluster/data/canFam2/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Marmoset calJac1, largest contig 2,551,648, 49,724 contigs
+SEQ2_DIR=/scratch/data/calJac1/calJac1.2bit
+SEQ2_LEN=/cluster/data/calJac1/chrom.sizes
+SEQ2_CHUNK=2000000
+SEQ2_LIMIT=200
+SEQ2_LAP=0
+
+BASE=/cluster/data/canFam2/bed/blastzCalJac1.2007-11-28
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl `pwd`/DEF -chainMinScore=3000 \
+	-chainLinearGap=medium -bigClusterHub=kk -verbose=2 \
+	> do.log 2>&1 &
+XXX - running 2007-11-28 15:09
+    #	real 2581m49.853s
+# Completed: 651480 of 651480 jobs
+# CPU time in finished jobs:   25871528s  431192.14m  7186.54h  299.44d  0.820 y
+# IO & Wait Time:               2695828s   44930.46m   748.84h   31.20d  0.085 y
+# Average job time:                  44s       0.73m     0.01h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            1804s      30.07m     0.50h    0.02d
+# Submission to last job:        146641s    2444.02m    40.73h    1.70d
+    time nice -n +19 doBlastzChainNet.pl `pwd`/DEF -chainMinScore=3000 \
+	-continue=chainRun -stop=download \
+	-chainLinearGap=medium -bigClusterHub=kk -verbose=2 \
+	> chainRun.log 2>&1 &
+    #	real    1810m38.601s
+
+    cat fb.canFam2.chainCalJac1Link.txt
+    #	386915334 bases of 3501643220 (11.050%) in intersection
+
+    mkdir /cluster/data/calJac1/bed/blastz.canFam2.swap
+    cd /cluster/data/calJac1/bed/blastz.canFam2.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/canFam2/bed/blastzCalJac1.2007-11-28/DEF \
+	-chainMinScore=3000 -chainLinearGap=medium \
+	-swap -bigClusterHub=kk > swap.log 2>&1 &
+    #	real    498m24.344s
+
+    cat fb.calJac1.chainCanFam2Link.txt
+
+###########################################################################
