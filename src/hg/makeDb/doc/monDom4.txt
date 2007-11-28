@@ -3292,19 +3292,31 @@ TMPDIR=/scratch/tmp
 	-continue=chainRun -stop=download \
 	-chainLinearGap=loose -bigClusterHub=pk -verbose=2 \
 	> chainRun.log 2>&1 &
+    #	real    1810m38.601s
     # the 10 chaining jobs on kki take about 35 hours for the longest job
-XXX - running - 2007-11-26 15:00
+# Completed: 10 of 10 jobs
+# CPU time in finished jobs:     369079s    6151.32m   102.52h    4.27d  0.012 y
+# IO & Wait Time:                   385s       6.41m     0.11h    0.00d  0.000 y
+# Average job time:               36946s     615.77m    10.26h    0.43d
+# Longest finished job:          103069s    1717.82m    28.63h    1.19d
+# Submission to last job:        103069s    1717.82m    28.63h    1.19d
 
     cat fb.monDom4.chainCalJac1Link.txt
-    #	0 bases of 2929139385 (0.000%) in intersection
+    #	386915334 bases of 3501643220 (11.050%) in intersection
+
+    time nice -n +19 doBlastzChainNet.pl `pwd`/DEF -chainMinScore=5000 \
+	-continue=cleanup \
+	-chainLinearGap=loose -bigClusterHub=pk -verbose=2 \
+	> cleanup.log 2>&1 &
 
     mkdir /cluster/data/calJac1/bed/blastz.monDom4.swap
     cd /cluster/data/calJac1/bed/blastz.monDom4.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
 	/cluster/data/monDom4/bed/blastzCalJac1.2007-11-24/DEF \
-	-chainMinScore=3000 -chainLinearGap=medium \
+	-chainMinScore=5000 -chainLinearGap=loose \
 	-swap -bigClusterHub=pk > swap.log 2>&1 &
-    #	real    123m9.197s
-    cat fb.calJac1.chainMonDom4Link.txt
-    #	2824501297 bases of 3093572278 (91.302%) in intersection
+    #	real    498m24.344s
+    #	this failed during the load because the chainLink table became
+    #	too large.
+
 ###########################################################################
