@@ -1832,13 +1832,14 @@ identifier hapmapSnpId
     $hg.hapmapSnpsYRI.name
     $hg.hapmapAllelesChimp.name
     $hg.hapmapAllelesMacaque.name
-
-identifier hapmapLdSnpId external=dbSNP fuzzy
-"HapMap dbSNP ID"
     $hg.hapmapLdCeu.name unique
     $hg.hapmapLdChb.name unique
+    $hg.hapmapLdChbJpt.name unique
     $hg.hapmapLdJpt.name unique
     $hg.hapmapLdYri.name unique
+    $hg.hapmapLdPhCeu.name unique
+    $hg.hapmapLdPhChbJpt.name unique
+    $hg.hapmapLdPhYri.name unique
 
 identifier snpAnnotations125
 "SNP annotations"
