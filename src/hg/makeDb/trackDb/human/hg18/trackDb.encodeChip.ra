@@ -2073,11 +2073,11 @@ urlLabel Yale DART Link:
     color 200,50,50
     priority 2
 
-# WG Yale ChIP-seq
+# WG Yale ChIP-seq supertrack
     track wgEncodeYaleChipSeqSuper
     superTrack on
     shortLabel Yale WG ChIP-seq
-    longLabel Whole-Genome Yale ChIP-seq Tracks
+    longLabel Whole-Genome Yale ChIP-seq 
     group encodeChip
     priority 70.0
      
