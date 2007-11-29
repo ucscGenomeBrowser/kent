@@ -40,6 +40,7 @@
 				<LI><A HREF="../goldenPath/help/axt.html">axt format</A>
                 		<LI><A HREF="#format7">.2bit format</A>
                 		<LI><A HREF="#format8">.nib format</A>
+                		<LI><A HREF="#format9">genePred table format</A>
 				</UL>
 				<P>
 				<A HREF="index.html">Return to FAQ Table of Contents</A>
@@ -892,4 +893,105 @@ The most significant bit in a nibble is set if the base is masked. </P>
     </TD><TD WIDTH=15></TD></TR>
 </TABLE>
 </BODY></HTML>
+
+<!--Content Table------------------------------------------------------------>
+<A NAME="format9"></A>
+    <!--outer table is for border purposes-->        
+    <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+        <TR><TD>            
+        <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+	    <TR><TD>                
+  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
+	        <TR><TD>                
+	        <!--cheap trick to get background on row to be continuous-->
+	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
+		    <TR><TD ALIGN="left">
+	   	    <FONT SIZE="4"><b>&nbsp; genePred table format</b></FONT></TD> 
+		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="../images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+	            </TD></TR>
+  	        </TABLE>                
+	        </TD></TR>
+  	    </TABLE>                
+   	    <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
+	        <TR><TH HEIGHT=10></TH></TR>
+                <TR><TD WIDTH=10>&nbsp;</TD>
+		    <TD>
+	            <P>
+<P>
+
+genePred is a table format commonly used for gene prediction tracks in the
+Genome Browser. Variations of the genePred format are listed below.
+
+<H4><A name=GenePredictions></A>Gene Predictions</H4>
+The following definition is used for gene prediction tables. In 
+alternative-splicing situations, each transcript has a row in this table.
+<PRE>table genePred
+"A gene prediction."
+    (
+    string  name;               "Name of gene"
+    string  chrom;              "Chromosome name"
+    char[1] strand;             "+ or - for strand"
+    uint    txStart;            "Transcription start position"
+    uint    txEnd;              "Transcription end position"
+    uint    cdsStart;           "Coding region start"
+    uint    cdsEnd;             "Coding region end"
+    uint    exonCount;          "Number of exons"
+    uint[exonCount] exonStarts; "Exon start positions"
+    uint[exonCount] exonEnds;   "Exon end positions"
+    )
+</PRE>
+
+<H4><A name=GenePredExt></A>Gene Predictions (Extended)</H4>
+The following definition is used for extended gene prediction tables. In 
+alternative-splicing situations, each transcript has a row in this table.
+The refGene table is an example of the genePredExt format.
+<PRE>table genePredExt
+"A gene prediction with some additional info."
+    (
+    string name;        	"Name of gene (usually transcript_id from GTF)"
+    string chrom;       	"Chromosome name"
+    char[1] strand;     	"+ or - for strand"
+    uint txStart;       	"Transcription start position"
+    uint txEnd;         	"Transcription end position"
+    uint cdsStart;      	"Coding region start"
+    uint cdsEnd;        	"Coding region end"
+    uint exonCount;     	"Number of exons"
+    uint[exonCount] exonStarts; "Exon start positions"
+    uint[exonCount] exonEnds;   "Exon end positions"
+    uint id;            	"Unique identifier"
+    string name2;       	"Alternate name (e.g. gene_id from GTF)"
+    string cdsStartStat; 	"enum('none','unk','incmpl','cmpl')"
+    string cdsEndStat;   	"enum('none','unk','incmpl','cmpl')"
+    lstring exonFrames; 	"Exon frame offsets {0,1,2}"
+    )
+</PRE>
+
+<H4><A name=RefFlat></A>Gene Predictions and RefSeq Genes with Gene Names</H4>
+A version of genePred that associates the gene name with the gene prediction 
+information. In alternative-splicing situations, each transcript has a row in
+this table.
+<PRE>table refFlat
+"A gene prediction with additional geneName field."
+    (
+    string  geneName;           "Name of gene as it appears in Genome Browser."
+    string  name;               "Name of gene"
+    string  chrom;              "Chromosome name"
+    char[1] strand;             "+ or - for strand"
+    uint    txStart;            "Transcription start position"
+    uint    txEnd;              "Transcription end position"
+    uint    cdsStart;           "Coding region start"
+    uint    cdsEnd;             "Coding region end"
+    uint    exonCount;          "Number of exons"
+    uint[exonCount] exonStarts; "Exon start positions"
+    uint[exonCount] exonEnds;   "Exon end positions"
+    )
+</PRE>
+</UL></P>
+			    </TD><TD WIDTH=15></TD></TR>
+	    		</TABLE><BR>
+		     </TD></TR>
+		</TABLE>
+     	     </TD></TR>
+    	</TABLE>
+	<BR>
 
