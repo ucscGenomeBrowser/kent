@@ -36,6 +36,11 @@ endif
 # get a copy of the statistics file from the hgw1 server
 scp -q qateam@hgw1:/usr/local/apache/htdocs/admin/stats/Report.html $fileName
 
+# stop if you can't find the Report
+if ( $status ) then
+  exit 1
+endif
+
 # delete the parts we do not need to display
 # delete everything from the start of the file to (but not including) <div class="browsum">
 set lineNum=`cat $fileName | grep -n '<div class="browsum">'`
