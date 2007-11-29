@@ -34,7 +34,7 @@ if ( "$HOST" != "hgwdev" ) then
 endif
 
 # get a copy of the statistics file from the hgw1 server
-scp qateam@hgw1:/usr/local/apache/htdocs/admin/stats/Report.html $fileName
+scp -q qateam@hgw1:/usr/local/apache/htdocs/admin/stats/Report.html $fileName
 
 # delete the parts we do not need to display
 # delete everything from the start of the file to (but not including) <div class="browsum">
