@@ -4,7 +4,7 @@
 # This file describes browser build for the Orangutan
 # genome, July 31 2007
 #
-#	"$Id: ponAbe2.txt,v 1.6 2007/11/27 23:14:44 hiram Exp $"
+#	"$Id: ponAbe2.txt,v 1.7 2007/11/30 22:25:03 hiram Exp $"
 #
 ######################################################################
 ## DOWNLOAD SEQUENCE (DONE - 2007-09-06 - Hiram)
@@ -1049,7 +1049,7 @@ done | xargs cat | \
 
 #############################################################################
 ## Annotate 8-way multiple alignment with gene annotations
-##		(WORKING - 2007-10-18 - Hiram)
+##		(WORKING - 2007-11-27 - Hiram)
     # Gene frames
     ## survey all genomes to see what type of gene track to use
     ssh hgwdev
@@ -1150,6 +1150,534 @@ done
     #	enable the trackDb entries:
 # frames multiz8wayFrames
 # irows on
+
+#############################################################################
+# phastCons 8-way (WORKING - 2007-10-16 - Hiram)
+
+    # split 8way mafs into 10M chunks and generate sufficient statistics 
+    # files for # phastCons
+    ssh kki
+    mkdir /cluster/data/ponAbe2/bed/multiz8way/msa.split
+    cd /cluster/data/ponAbe2/bed/multiz8way/msa.split
+    mkdir -p /san/sanvol1/scratch/ponAbe2/multiz8way/cons/ss
+
+    cat << '_EOF_' > doSplit.csh
+#!/bin/csh -ef
+set MAFS = /cluster/data/ponAbe2/bed/multiz8way/maf
+set WINDOWS = /san/sanvol1/scratch/ponAbe2/multiz8way/cons/ss
+pushd $WINDOWS
+set c = $1
+rm -fr $c
+mkdir $c
+twoBitToFa -seq=$c /scratch/data/ponAbe2/ponAbe2.2bit /scratch/tmp/ponAbe2.$c.fa
+# need to truncate odd-ball scaffold/chrom names that include dots
+# as phastCons utils can't handle them
+set CLEAN_MAF = /scratch/tmp/$c.clean.maf.$$
+perl -wpe 's/^s ([^.]+\.[^. ]+)\.\S+/s $1/' $MAFS/$c.maf > $CLEAN_MAF
+/cluster/bin/phast/$MACHTYPE/msa_split $CLEAN_MAF -i MAF \
+    -M /scratch/tmp/ponAbe2.$c.fa \
+    -o SS -r $c/$c -w 10000000,0 -I 1000 -B 5000
+rm -f $CLEAN_MAF /scratch/tmp/ponAbe2.$c.fa
+popd
+date >> $c.done
+'_EOF_'
+    # << happy emacs
+    chmod +x doSplit.csh
+
+    cat << '_EOF_' > template
+#LOOP
+doSplit.csh $(root1) {check out line+ $(root1).done}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    #	do the easy ones first to see some immediate results
+    ls -1S -r ../maf | sed -e "s/.maf//" > maf.list
+
+    gensub2 maf.list single template jobList
+    para create jobList
+    para try ... check ... etc
+    #	push these with a -maxPush number that would put a single job on
+    #	each iserver, you don't want two jobs at a time on each iserver,
+    #	they consume too much memory and cause swapping to the point where
+    #	they slow to a crawl and take hours to finish.
+-
+    # Estimate phastCons parameters
+
+    time nice -n +19 /cluster/bin/phast.2007-05-04/phyloFit -i SS \
+/san/sanvol1/scratch/ponAbe2/multiz8way/cons/ss/chrY/chrY.1-10000000.ss \
+--tree "(((((((((((ponAbe2,rn4),cavPor2),oryCun1),((((((hg18,panTro2),ponAbe2),rheMac2),calJac1),otoGar1),tupBel1)),((sorAra1,eriEur1),(((canFam2,felCat3),equCab1),bosTau3))),(dasNov1,(loxAfr1,echTel1))),monDom4),ornAna1),(galGal3,anoCar1)),xenTro2),(((tetNig1,fr2),(gasAcu1,oryLat1)),danRer5))" \
+    --out-root starting-tree
+    #	real    107m46.703s
+    #	Tried this on chr13 too:
+    #	real    4619m42.984s
+    #	that is almost 77 hours on hgwdev == 3.2 days
+
+    # add up the C and G:
+    grep BACKGROUND starting-tree.mod | awk '{printf "%0.3f\n", $3 + $4;}'
+    #	0.400
+    #	This 0.400 is used in the --gc argument below
+    #	got 0.404 with chrM.starting-tree.mod
+
+    # Run phastCons
+    #	This job is I/O intensive in its output files, thus it is all
+    #	working over in /scratch/tmp/
+    ssh pk
+    mkdir -p /cluster/data/ponAbe2/bed/multiz8way/cons/run.cons
+    cd /cluster/data/ponAbe2/bed/multiz8way/cons/run.cons
+
+    #	there are going to be several different phastCons runs using
+    #	this same script.  They trigger off of the current working directory
+    #	$cwd:t which is the "grp" in this script.  It is one of:
+    #	all gliers placentals
+
+    cat << '_EOF_' > doPhast.csh
+#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast.2007-05-04
+set c = $1
+set f = $2
+set len = $3
+set cov = $4
+set rho = $5
+set grp = $cwd:t
+set tmp = /scratch/tmp/$f
+set cons = /cluster/data/ponAbe2/bed/multiz8way/cons
+mkdir -p $tmp
+set san = /san/sanvol1/scratch/ponAbe2/multiz8way/cons
+if (-s $cons/$grp/$grp.non-inf) then
+  cp -p $cons/$grp/$grp.mod $cons/$grp/$grp.non-inf .
+  cp -p $san/ss/$c/$f.ss $cons/$grp/$grp.mod $cons/$grp/$grp.non-inf $tmp
+else
+  cp -p $cons/$grp/$grp.mod .
+  cp -p $san/ss/$c/$f.ss $cons/$grp/$grp.mod $tmp
+endif
+pushd $tmp > /dev/null
+if (-s $grp.non-inf) then
+  $PHASTBIN/phastCons $f.ss $grp.mod \
+    --rho $rho --expected-length $len --target-coverage $cov --quiet \
+    --not-informative `cat $grp.non-inf` \
+    --seqname $c --idpref $c --most-conserved $f.bed --score > $f.pp
+else
+  $PHASTBIN/phastCons $f.ss $grp.mod \
+    --rho $rho --expected-length $len --target-coverage $cov --quiet \
+    --seqname $c --idpref $c --most-conserved $f.bed --score > $f.pp
+endif
+popd > /dev/null
+mkdir -p $san/$grp/pp/$c $san/$grp/bed/$c
+sleep 4
+touch $san/$grp/pp/$c $san/$grp/bed/$c
+rm -f $san/$grp/pp/$c/$f.pp
+rm -f $san/$grp/bed/$c/$f.bed
+mv $tmp/$f.pp $san/$grp/pp/$c
+mv $tmp/$f.bed $san/$grp/bed/$c
+rm -fr $tmp
+'_EOF_'
+    # << happy emacs
+    chmod a+x doPhast.csh
+
+    cat << '_EOF_' > template
+#LOOP
+../doPhast.csh $(root1) $(file1) 45 .3 .31 {check out line+ /san/sanvol1/scratch/ponAbe2/multiz8way/cons/all/bed/$(root1)/$(file1).bed}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    # Create parasol batch and run it
+    pushd /san/sanvol1/scratch/ponAbe2/multiz8way/cons
+    ls -1 ss/chr*/chr*.ss | sed 's/.ss$//' > \
+        /cluster/data/ponAbe2/bed/multiz8way/cons/run.cons/ss.list
+    popd
+
+    # run for all species
+    cd ..
+    mkdir -p all run.cons/all
+    cd all
+    cp ../../chrY.starting-tree.mod all.mod
+
+    #	root1 == chrom name, file1 == ss file name without .ss suffix
+    # Create template file for "all" run
+    cat << '_EOF_' > template
+#LOOP
+../doPhast.csh $(root1) $(file1) 45 .3 .31 {check out line+ /san/sanvol1/scratch/ponAbe2/multiz8way/cons/all/bed/$(root1)/$(file1).bed}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+    gensub2 ../ss.list single template jobList
+    para create jobList
+    para try ... check ... push ... etc.
+# Completed: 294 of 294 jobs
+# CPU time in finished jobs:      25724s     428.73m     7.15h    0.30d  0.001 y
+# IO & Wait Time:                  8951s     149.19m     2.49h    0.10d  0.000 y
+# Average job time:                 118s       1.97m     0.03h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:             226s       3.77m     0.06h    0.00d
+# Submission to last job:           582s       9.70m     0.16h    0.01d
+
+    # create Most Conserved track
+    ssh kolossus
+    cd /san/sanvol1/scratch/ponAbe2/multiz8way/cons/all
+    cat bed/*/chr*.bed | sort -k1,1 -k2,2n | \
+        awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' | \
+            /cluster/bin/scripts/lodToBedScore /dev/stdin > mostConserved.bed
+    #	~ 1 minute
+    cp -p mostConserved.bed /cluster/data/ponAbe2/bed/multiz8way/cons/all
+
+    # load into database
+    ssh hgwdev
+    cd /cluster/data/ponAbe2/bed/multiz8way/cons/all
+    time nice -n +19 hgLoadBed ponAbe2 phastConsElements8way mostConserved.bed
+    #	Loaded 2782368 elements of size 5
+    #	real    1m15.673s
+    # compare with previous tracks
+    hgsql ponAbe2 -s -N -e "select count(*) from phastConsElements8way"
+    #	2782368
+    hgsql mm8 -s -N -e "select count(*) from phastConsElements17way"
+    #	1883370
+
+    # Try for 5% overall cov, and 70% CDS cov 
+    #	--rho .31 --expected-length 45 --target-coverage .3
+    #	chrY mod tree
+    featureBits ponAbe2 -enrichment refGene:cds phastConsElements8way
+    #	refGene:cds 1.167%, phastConsElements8way 4.789%,
+    #	both 0.582%, cover 49.90%, enrich 10.42x
+    featureBits ponAbe2 -enrichment knownGene:cds phastConsElements8way
+    #	knownGene:cds 1.278%, phastConsElements8way 4.789%,
+    #	both 0.627%, cover 49.03%, enrich 10.24x
+    #	--rho .31 --expected-length 45 --target-coverage .3 elim non-autho
+    #	chr13 mod tree
+    featureBits ponAbe2 -enrichment refGene:cds mostConserved.bed
+    #	refGene:cds 1.167%, mostConserved.bed 4.128%,
+    #	both 0.614%, cover 52.59%, enrich 12.74x
+    #	--rho .31 --expected-length 45 --target-coverage .3 elim non-autho
+    #	28-way mod tree adjusted to 8-way
+    featureBits ponAbe2 -enrichment refGene:cds mostConserved.bed
+    #	refGene:cds 1.167%, mostConserved.bed 5.841%, both 0.862%, cover
+    #	73.90%, enrich 12.65x
+
+    featureBits mm8 -enrichment refGene:cds phastConsElements17way
+    #	refGene:cds 1.188%, phastConsElements17way 5.398%,
+    #	both 0.832%, cover 70.05%, enrich 12.98x
+    featureBits mm8 -enrichment knownGene:cds phastConsElements17way
+    #	knownGene:cds 1.109%, phastConsElements17way 5.398%,
+    #	both 0.776%, cover 69.99%, enrich 12.97x
+
+    # Create merged posterier probability file and wiggle track data files
+    # currently doesn't matter where this is performed, the san is the same
+    # network distance from all machines.
+    cd /san/sanvol1/scratch/ponAbe2/multiz8way/cons/all
+    cat << '_EOF_' > gzipAscii.sh
+#!/bin/sh
+
+TOP=`pwd`
+export TOP
+
+mkdir -p phastCons8wayScores
+
+for D in pp/chr*
+do
+    C=${D/pp\/}
+    out=phastCons8wayScores/${C}.data.gz
+    echo "${D} > ${C}.data.gz"
+    ls $D/*.pp | sort -n -t\. -k2 | xargs cat | \
+	gzip > ${out}
+done
+'_EOF_'
+    #	<< happy emacs
+    chmod +x gzipAscii.sh
+    time nice -n +19 ./gzipAscii.sh
+
+    # Create merged posterier probability file and wiggle track data files
+    # currently doesn't matter where this is performed, the san is the same
+    # network distance from all machines.
+    cd /san/sanvol1/scratch/ponAbe2/multiz8way/cons/all
+    # sort by chromName, chromStart so that items are in numerical order 
+    #  for wigEncode
+    for D in pp/chr*
+do
+    ls $D/*.pp | sort -n -t\. -k2
+done | xargs cat \
+	| wigEncode -noOverlap stdin phastCons8way.wig phastCons8way.wib
+# Converted stdin, upper limit 1.00, lower limit 0.00
+
+    # Load gbdb and database with wiggle.
+    ssh hgwdev
+    cd /cluster/data/ponAbe2/bed/multiz8way/cons/all
+    ln -s `pwd`/phastCons8way.wib /gbdb/ponAbe2/multiz8way/phastCons8way.wib
+    time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/ponAbe2/multiz8way ponAbe2 \
+	phastCons8way phastCons8way.wig
+    #	real    0m42.728s
+
+    #  Create histogram to get an overview of all the data
+    ssh hgwdev
+    cd /cluster/data/ponAbe2/bed/multiz8way
+    time nice -n +19 hgWiggle -doHistogram \
+	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+	    -db=ponAbe2 phastCons8way > histogram.data 2>&1
+    #	real    28m24.388s
+
+    #	create plot of histogram:
+
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small color x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Mouse PonAbe2 Histogram phastCons8way track"
+set xlabel " phastCons8way score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.02]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #	<< happy emacs
+
+    display histo.png &
+
+    ### Create a phastCons data set for Euarchontoglires
+
+    # setup euarchontoglires-only run
+    ssh pk
+    cd /cluster/data/ponAbe2/bed/multiz8way/cons
+    mkdir euarchontoglires run.cons/euarchontoglires
+    cd euarchontoglires
+    # euarchontoglires-only: exclude all but these for phastCons tree:
+    /cluster/bin/phast.new/tree_doctor ../../ponAbe2.8way.mod \
+	--prune-all-but=ponAbe2,rn4,cavPor2,oryCun1,hg18,panTro2,ponAbe2,rheMac2,calJac1,otoGar1,tupBel1 \
+	> euarchontoglires.mod
+    #	and place the removed ones in the non-inf file so phastCons will
+    #	truly ignore them:
+    echo "sorAra1,eriEur1,canFam2,felCat3,equCab1,bosTau3,dasNov1,loxAfr1,echTel1,monDom4,ornAna1,galGal3,anoCar1,xenTro2,tetNig1,fr2,gasAcu1,oryLat1,danRer5" \
+        > euarchontoglires.non-inf
+
+    cd ../run.cons/euarchontoglires
+    #	root1 == chrom name, file1 == ss file name without .ss suffix
+    # Create template file for "all" run
+    cat << '_EOF_' > template
+#LOOP
+../doPhast.csh $(root1) $(file1) 45 .3 .31 {check out line+ /san/sanvol1/scratch/ponAbe2/multiz8way/cons/euarchontoglires/bed/$(root1)/$(file1).bed}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+    gensub2 ../ss.list single template jobList
+    para create jobList
+    para try ... check ... push ... etc.
+    #	Three of these jobs fail to produce any output:
+    #	chr5_random/chr5_random.1-357350.bed
+    #	chr7_random/chr7_random.1-362490.bed
+    #	chrY_random/chrY_random.50000001-58682461.bed
+# Completed: 291 of 294 jobs
+# Crashed: 3 jobs
+# CPU time in finished jobs:      17184s     286.40m     4.77h    0.20d  0.001 y
+# IO & Wait Time:                 30139s     502.31m     8.37h    0.35d  0.001 y
+# Average job time:                 163s       2.71m     0.05h    0.00d
+# Longest finished job:             296s       4.93m     0.08h    0.00d
+# Submission to last job:          2775s      46.25m     0.77h    0.03d
+
+    # create Most Conserved track
+    ssh kolossus
+    cd /san/sanvol1/scratch/ponAbe2/multiz8way/cons/euarchontoglires
+    cat bed/*/chr*.bed | sort -k1,1 -k2,2n | \
+        awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' | \
+            /cluster/bin/scripts/lodToBedScore /dev/stdin > mostConserved.bed
+    #	~ 1 minute
+    cp -p mostConserved.bed /cluster/data/ponAbe2/bed/multiz8way/cons/euarchontoglires
+
+    # load into database
+    ssh hgwdev
+    cd /cluster/data/ponAbe2/bed/multiz8way/cons/euarchontoglires
+    time nice -n +19 hgLoadBed ponAbe2 phastConsElements8wayEuarch \
+	mostConserved.bed
+    #	Loaded 1021674 elements of size 5
+    #	real    0m23.402s
+    # verify coverage
+    featureBits ponAbe2 phastConsElements8wayEuarch
+    #	103492546 bases of 2620346127 (3.950%) in intersection
+
+    #	Create the downloads .pp files, from which the phastCons wiggle data
+    #	is calculated
+    # currently doesn't matter where this is performed, the san is the same
+    # network distance from all machines.
+    # sort by chromName, chromStart so that items are in numerical order 
+    #  for wigEncode
+    cd /san/sanvol1/scratch/ponAbe2/multiz8way/cons/euarchontoglires
+    mkdir downloads
+    for D in pp/chr*
+do
+    C=${D/pp\//}
+    ls $D/*.pp | sort -n -t\. -k2 | xargs cat | gzip -c \
+	> downloads/${C}.euarchontoglires.pp.data.gz
+    echo $D $C done
+done
+
+    # Create merged posterier probability file and wiggle track data files
+    cd /san/sanvol1/scratch/ponAbe2/multiz8way/cons/euarchontoglires
+    ls downloads/chr*.data.gz | xargs zcat \
+ | wigEncode -noOverlap stdin phastCons8wayEuarch.wig phastCons8wayEuarch.wib
+# Converted stdin, upper limit 1.00, lower limit 0.00
+
+    ## load table with wiggle data
+    ssh hgwdev
+    cd /cluster/data/ponAbe2/bed/multiz8way/cons/euarchontoglires
+    cp -p /san/sanvol1/scratch/ponAbe2/multiz8way/cons/euarchontoglires/*.wi? .
+    ln -s `pwd`/phastCons8wayEuarch.wib \
+	/gbdb/ponAbe2/multiz8way/phastCons8wayEuarch.wib
+    time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/ponAbe2/multiz8way ponAbe2 \
+	phastCons8wayEuarch phastCons8wayEuarch.wig
+    #	real    0m44.161s
+
+    #  Create histogram to get an overview of all the data
+    time nice -n +19 hgWiggle -doHistogram \
+	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+	    -db=ponAbe2 phastCons8wayEuarch > histogram.data 2>&1
+    #	real    3m22.364s
+
+    #	create plot of histogram:
+
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small color \
+        x000000 xffffff xc000ff x66ff66 xffff00 x00ffff xff0000
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Mouse PonAbe2 Histogram phastCons8wayEuarch track"
+set xlabel " phastCons8wayEuarch score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.02]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #	<< happy emacs
+
+    display histo.png &
+
+    ### Create a phastCons data set for Placentals
+    # setup placental-only run
+    ssh pk
+    cd /cluster/data/ponAbe2/bed/multiz8way/cons
+    mkdir placental run.cons/placental
+    cd placental
+    # placental-only: exclude all but these for phastCons tree:
+    /cluster/bin/phast.new/tree_doctor ../../ponAbe2.8way.mod \
+	--prune-all-but=ponAbe2,rn4,cavPor2,oryCun1,hg18,panTro2,ponAbe2,rheMac2,calJac1,otoGar1,tupBel1,sorAra1,eriEur1,canFam2,felCat3,equCab1,bosTau3,dasNov1,loxAfr1,echTel1 \
+	> placental.mod
+    #	and place the removed ones in the non-inf file so phastCons will
+    #	truly ignore them:
+    echo "monDom4,ornAna1,galGal3,anoCar1,xenTro2,tetNig1,fr2,gasAcu1,oryLat1,danRer5" \
+        > placental.non-inf
+
+    cd ../run.cons/placental
+    #	root1 == chrom name, file1 == ss file name without .ss suffix
+    # Create template file for "all" run
+    cat << '_EOF_' > template
+#LOOP
+../doPhast.csh $(root1) $(file1) 45 .3 .31 {check out line+ /san/sanvol1/scratch/ponAbe2/multiz8way/cons/placental/bed/$(root1)/$(file1).bed}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+    gensub2 ../ss.list single template jobList
+    para create jobList
+    para try ... check ... push ... etc.
+    #	One of these jobs fails to produce any output:
+    #	chr5_random/chr5_random.1-357350.bed
+# Completed: 293 of 294 jobs
+# Crashed: 1 jobs
+# CPU time in finished jobs:      21121s     352.01m     5.87h    0.24d  0.001 y
+# IO & Wait Time:                 33985s     566.42m     9.44h    0.39d  0.001 y
+# Average job time:                 188s       3.13m     0.05h    0.00d
+# Longest finished job:             324s       5.40m     0.09h    0.00d
+# Submission to last job:          3511s      58.52m     0.98h    0.04d
+
+    # create Most Conserved track
+    ssh kolossus
+    cd /san/sanvol1/scratch/ponAbe2/multiz8way/cons/placental
+    cat bed/*/chr*.bed | sort -k1,1 -k2,2n | \
+        awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' | \
+            /cluster/bin/scripts/lodToBedScore /dev/stdin > mostConserved.bed
+    #	~ 1 minute
+    cp -p mostConserved.bed /cluster/data/ponAbe2/bed/multiz8way/cons/placental
+
+    # load into database
+    ssh hgwdev
+    cd /cluster/data/ponAbe2/bed/multiz8way/cons/placental
+    time nice -n +19 hgLoadBed ponAbe2 phastConsElements8wayPlacental \
+	mostConserved.bed
+    #	Loaded 1990870 elements of size 5
+    #	real    0m48.084s
+    # verify coverage
+    featureBits ponAbe2 phastConsElements8wayPlacental
+    #	111626429 bases of 2620346127 (4.260%) in intersection
+
+    #	Create the downloads .pp files, from which the phastCons wiggle data
+    #	is calculated
+    # currently doesn't matter where this is performed, the san is the same
+    # network distance from all machines.
+    # sort by chromName, chromStart so that items are in numerical order 
+    #  for wigEncode
+    cd /san/sanvol1/scratch/ponAbe2/multiz8way/cons/placental
+    mkdir downloads
+    for D in pp/chr*
+do
+    C=${D/pp\//}
+    ls $D/*.pp | sort -n -t\. -k2 | xargs cat | gzip -c \
+	> downloads/${C}.placental.pp.data.gz
+    echo $D $C done
+done
+
+    # Create merged posterier probability file and wiggle track data files
+    cd /san/sanvol1/scratch/ponAbe2/multiz8way/cons/placental
+    ls downloads/chr*.data.gz | xargs zcat \
+ | wigEncode -noOverlap stdin phastCons8wayPlacental.wig \
+	phastCons8wayPlacental.wib
+# Converted stdin, upper limit 1.00, lower limit 0.00
+
+    ## load table with wiggle data
+    ssh hgwdev
+    cd /cluster/data/ponAbe2/bed/multiz8way/cons/placental
+    cp -p /san/sanvol1/scratch/ponAbe2/multiz8way/cons/placental/*.wi? .
+    ln -s `pwd`/phastCons8wayPlacental.wib \
+	/gbdb/ponAbe2/multiz8way/phastCons8wayPlacental.wib
+    time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/ponAbe2/multiz8way ponAbe2 \
+	phastCons8wayPlacental phastCons8wayPlacental.wig
+    #	real    0m44.585s
+
+    #  Create histogram to get an overview of all the data
+    time nice -n +19 hgWiggle -doHistogram \
+	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+	    -db=ponAbe2 phastCons8wayPlacental > histogram.data 2>&1
+    #	real    28m24.388s
+
+    #	create plot of histogram:
+
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small color x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Mouse PonAbe2 Histogram phastCons8wayPlacental track"
+set xlabel " phastCons8wayPlacental score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.02]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #	<< happy emacs
+
+    display histo.png &
 
 ###########################################################################
 # BLASTZ SWAP Human Hg18 (DONE - 2007-10-05 - Hiram)
