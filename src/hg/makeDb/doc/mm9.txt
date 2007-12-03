@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.49 2007/11/07 23:07:11 hiram Exp $"
+#	"$Id: mm9.txt,v 1.50 2007/12/03 23:32:09 angie Exp $"
 #
 
 #######################################################################
@@ -7277,4 +7277,14 @@ do
     mafAddQRows species.lst $maf ${OUTPUT_DIR}/$file
 done
 'EOF'
-################################################################################
+
+# << emacs
+#########################################################################
+### IGTC (Int'l GeneTrap Consortium) (DONE - 2007-10-01 - angie)
+### Doug Stryke <stryke@cgl.ucsf.edu> in Tom Ferrin's lab
+
+### NOTE -- the igtc track is automatically updated on hgwdev by the
+### scripts monthlyUpdateIgtc.csh and updateIgtc.pl in
+### kent/src/hg/utils/automation/ .
+
+#########################################################################
