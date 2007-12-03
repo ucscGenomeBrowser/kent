@@ -13,7 +13,7 @@
 #include "hgColors.h"
 #include "wikiLink.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.140 2007/11/28 20:21:38 angie Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.141 2007/12/03 22:50:43 fanhsu Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -325,6 +325,12 @@ else
     if (endsWith(scriptName, "hgGenome"))
 	{
 	printf("       <A HREF=\"../cgi-bin/hgGenome%s&hgGenome_doPsOutput=on\" class=\"topbar\">\n",
+	       uiState);
+	puts("           PDF/PS</A> &nbsp;&nbsp;&nbsp;");
+	}
+    if (endsWith(scriptName, "hgHeatmap"))
+	{
+	printf("       <A HREF=\"../cgi-bin/hgHeatmap%s&hgHeatmap_doPsOutput=on\" class=\"topbar\">\n",
 	       uiState);
 	puts("           PDF/PS</A> &nbsp;&nbsp;&nbsp;");
 	}
