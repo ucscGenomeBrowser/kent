@@ -27,22 +27,22 @@ visibility pack
 color 0, 10, 100
 altColor 0,90,10
 type wigMaf 0.0 1.0
-# maxHeightPixels 100:40:11
-# wiggle phastCons8wayPlacental Mammal Placental_Mammal phastCons8way Vertebrate Vertebrate
-# spanList 1
+maxHeightPixels 100:40:11
+wiggle phastCons8wayPrimates Primates Primates phastCons8way Vertebrate Vertebrate
+spanList 1
+autoScaleDefault Off
+windowingFunction mean
 pairwiseHeight 12
-# yLineOnOff Off
+yLineOnOff Off
 frames multiz8wayFrames
 irows on
-# autoScaleDefault Off
-# windowingFunction mean
 summary multiz8waySummary
 speciesCodonDefault ponAbe2
-speciesGroups Placental_Mammal Vertebrate
-sGroup_Placental_Mammal ponAbe2 hg18 panTro2 rheMac2 calJac1
+speciesGroups Primates Vertebrate
+sGroup_Primates ponAbe2 hg18 panTro2 rheMac2 calJac1
 sGroup_Vertebrate monDom4 ornAna1
-speciesDefaultOff rheMac2 calJac1 panTro2 ornAna1
-# itemFirstCharCase noChange
+# speciesDefaultOff rheMac2 calJac1 panTro2 ornAna1
+itemFirstCharCase noChange
 treeImage phylo/ponAbe2_8way.gif
 
 track mostConserved8way
@@ -56,10 +56,10 @@ exonArrows off
 showTopScorers 200
 type bed 5 .
 
-    track phastConsElements8wayPlacental
+    track phastConsElements8wayPrimates
     subTrack mostConserved8way
-    shortLabel Mammal
-    longLabel PhastCons Placental Mammal Conserved Elements, 8-way Multiz Alignment
+    shortLabel Primates
+    longLabel PhastCons Primates Conserved Elements, 8-way Multiz Alignment
     color 100,50,170
     priority 1
 
