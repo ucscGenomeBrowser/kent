@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.127 2007/10/31 18:41:28 angie Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.128 2007/12/04 01:01:19 angie Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -1435,6 +1435,8 @@ void ldDrawDenseValue(struct vGfx *vg, struct track *tg, int xOff, int y1,
 		      double scale, Color outlineColor, struct ldStats *d)
 /* Draw single dense LD value */
 {
+if (d->chromStart < winStart)
+    return;
 int   colorInt  = (d->n > 0) ? round(d->sumValues/d->n) : -100;
 char  colorChar = ldIndexIntToChar(colorInt);
 Color shade     = (d->n > 0) ? colorLookup[(int)colorChar] : ldHighDprimeLowLod;
@@ -1484,11 +1486,14 @@ for (dPtr = tg->items;  dPtr != NULL;  dPtr = dPtr->next)
 	lds.sumValues = ldIndexCharToInt(dPtr->avgDprime);
     lds.n = (lds.sumValues < 0) ? 0 : 1;
     if (useTInt &&
-	dPtr->next != NULL && dPtr->tInt >= 'c' && dPtr->tInt <= 'h')
+	dPtr->tInt >= 'c' && dPtr->tInt <= 'h' &&
+	dPtr->next != NULL && dPtr->next->chromStart > winStart)
 	{
 	/* Use tInt to color the spaces between SNPs. */
 	Color shade = shadesOfGray[(int)(dPtr->tInt - 'a')];
-	int x1 = round((dPtr->chromEnd-winStart)*scale) + xOff;
+	/* Clip to winStart here to avoid unsigned subtraction underflow: */
+	int e1 = (dPtr->chromEnd < winStart) ? winStart : dPtr->chromEnd;
+	int x1 = round((e1-winStart)*scale) + xOff;
 	int x2 = round((dPtr->next->chromStart-winStart)*scale) + xOff;
 	int w  = x2 - x1;
 	vgBox(vg, x1, yOff, w, tg->heightPer-1, shade);
