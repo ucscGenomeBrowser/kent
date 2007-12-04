@@ -17205,11 +17205,9 @@ mkdir hg17 hg18
 for f in *.cg; do    
     table=${f%.cg};
     echo $table
-    hgLoadChromGraph -idTable=affy500k -minusLog10 -pathPrefix=/gbdb/hg17/chromGraph \
-       hg17 $table $f 2> ${table}.hg17.errors
+    hgLoadChromGraph -idTable=affy500k -minusLog10 -pathPrefix=/gbdb/hg17/chromGraph hg17 $table $f 2> ${table}.hg17.errors
     mv ${table}.cgb hg17/
-    hgLoadChromGraph -idTable=affy500k -minusLog10 -pathPrefix=/gbdb/hg18/chromGraph \
-       hg18 $table $f 2> ${table}.hg18.errors
+    hgLoadChromGraph -idTable=affy500k -minusLog10 -pathPrefix=/gbdb/hg18/chromGraph hg18 $table $f 2> ${table}.hg18.errors
     mv ${table}.cgb hg18/
 done
 pushd /gbdb/hg18/chromGraph
@@ -18574,6 +18572,62 @@ hgLoadEnsembl -l randHap.lift -f problem.ids -p homo_sapiens core_45_36g hg18>&l
 # stuff
 
 #########################################################################
+# AFFY TRANSCRIPTOME PHASE 3 (2007-11-06, Andy)
+
+ssh hgwdev
+bash
+cd /san/sanVol1/scratch/andy/transcriptome
+mkdir splits
+cd originalWigs/
+for f in *.wigVar; do 
+   table=${f%.wigVar};
+   mkdir ../splits/$table
+   grep -v "^track" $f | splitWig stdin 1000000 ../splits/${table}/split
+   echo Done with $table
+done
+# Done with cluster run
+ssh kolossus
+cd /san/sanVol1/scratch/andy/transcriptome/lift/bed
+for tab in *; do
+   for split in ${tab}/*; do
+      cat $split >> ${tab}.bed   
+   done
+   echo done catting $tab
+done
+# Split into chrom beds (with a cluster run)
+for f in `ls -1 hg18.bed`; do
+     tab=${f%.bed};
+     for c in `cut -f1 chrom.sizes`; do
+        cfile=hg18.bed.chromSplit/${tab}.${c}.bed;
+        outFile=hg18.wigVar/${tab}.wigVar;
+        if [ -e $cfile ]; then
+            echo variableStep chrom=${c} span=1 >> $outFile;
+            bedSort $cfile stdout | awk 'BEGIN{FS="\t"}{print $2+1, $4;}' | awk -f noDupe.awk >> $outFile;
+            echo Added $cfile to $outFile >> the.log;
+        fi;
+     done;
+     echo DONE with $tab >> the.log;
+     wigEncode $outFile hg18.wigVar/${tab}.wig hg18.wigVar/${tab}.wib >> the.log;
+     gzip $outFile
+done
+cd hg18.wigVar/
+mkdir -p /cluster/data/hg18/bed/affyTxnPhase3/wib
+for f in *.wib; do
+   echo copying $f...;
+   cp $f /cluster/data/hg18/bed/affyTxnPhase3/wib/;
+done
+pushd /gbdb/hg18/wib
+ln -s /cluster/data/hg18/bed/affyTxnPhase3/wib/* .
+popd
+mkdir -p /cluster/data/hg18/bed/affyTxnPhase3/downloads
+cp *.wigVar.gz /cluster/data/hg18/bed/affyTxnPhase3/downloads
+mkdir -p /usr/local/apache/htdocs/goldenPath/hg18/affyTxnPhase3
+pushd /usr/local/apache/htdocs/goldenPath/hg18/affyTxnPhase3
+ln -s /cluster/data/hg18/bed/affyTxnPhase3/downloads/* .
+for f in *Strand*; do mv $f sRNA.$f; done
+for f in affyTxnPhase3*; do mv $f lRNA.$f; done
+
+#########################################################################
 # Blastz Marmoset calJac1 (DONE - 2007-11-09 - Hiram)
 ##	this is not necessary - already done by Kate in October
     ssh kkstore06
@@ -18616,3 +18670,4 @@ TMPDIR=/scratch/tmp
     #	2236493373 bases of 2881515245 (77.615%) in intersection
 
 ###########################################################################
+
