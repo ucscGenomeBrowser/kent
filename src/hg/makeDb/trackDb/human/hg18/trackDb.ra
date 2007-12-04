@@ -339,7 +339,7 @@ type ld2
     track hapmapLdChbJpt
     subTrack hapmapLd off
     shortLabel Unph JPT+CHB
-    longLabel Linkage Disequilibrium for the Han Chinese and Japanese from Tokyo (JPT+CHB) from unphased genotypes
+    longLabel LD for the Han Chinese + Japanese from Tokyo (JPT+CHB) from unphased genotypes
     priority 5
 
 track hapmapLdPh
@@ -381,7 +381,7 @@ type ld2
     track hapmapLdPhChbJpt
     subTrack hapmapLdPh off
     shortLabel Ph JPT+CHB
-    longLabel Linkage Disequilibrium for the Han Chinese and Japanese from Tokyo (JPT+CHB) from phased genotypes
+    longLabel LD for the Han Chinese + Japanese from Tokyo (JPT+CHB) from phased genotypes
     priority 5
 
 track knownGene
