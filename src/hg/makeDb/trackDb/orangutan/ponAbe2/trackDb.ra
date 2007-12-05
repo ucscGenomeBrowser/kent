@@ -39,7 +39,7 @@ irows on
 summary multiz8waySummary
 speciesCodonDefault ponAbe2
 speciesGroups Primates Vertebrate
-sGroup_Primates ponAbe2 hg18 panTro2 rheMac2 calJac1
+sGroup_Primates hg18 panTro2 rheMac2 calJac1
 sGroup_Vertebrate monDom4 ornAna1
 # speciesDefaultOff rheMac2 calJac1 panTro2 ornAna1
 itemFirstCharCase noChange
