@@ -157,10 +157,10 @@ url http://microrna.sanger.ac.uk/cgi-bin/sequences/mirna_entry.pl?id=$$
 urlLabel miRBase:
 
 track multiz30way
-shortLabel 30-way Multiz
+shortLabel Conservation
 longLabel 30-Way Multiz Alignment & Conservation 
 group compGeno
-priority 104.2
+priority 103.2
 visibility pack
 color 0, 10, 100
 altColor 0,90,10
