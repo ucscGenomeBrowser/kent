@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.119 2007/11/16 00:33:38 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.120 2007/12/05 00:19:17 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -409,7 +409,7 @@ void showCustomTrackList(struct customTrack *ctList, int numCts)
 /* print table of custom tracks with controls */
 {
 struct customTrack *ct;
-char buf[64];
+char buf[256];
 char *pos = NULL;
 char *dataUrl;
 
