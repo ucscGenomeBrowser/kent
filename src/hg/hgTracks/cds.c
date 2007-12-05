@@ -18,7 +18,7 @@
 #include "hgTracks.h"
 #include "cdsSpec.h"
 
-static char const rcsid[] = "$Id: cds.c,v 1.63 2007/10/30 00:41:29 markd Exp $";
+static char const rcsid[] = "$Id: cds.c,v 1.64 2007/12/05 21:01:20 mhoechsm Exp $";
 
 /* Definitions of cds colors for coding coloring display */
 #define CDS_ERROR   0
@@ -394,7 +394,7 @@ else if(grayIx == - 'V')
 else if(grayIx == - 'L')
    {
    color = cdsColor[CDS_ALT_START];
-   sprintf(codon,"%c",'V');   
+   sprintf(codon,"%c",'L');   
    }
 #endif
 else if (grayIx <= 26)
@@ -437,7 +437,7 @@ if(sameString(dna,"GTG"))
    {
      return -'V';
    }
-if(sameString(dna,"TTG"))
+if(sameString(dna,"TTG") || sameString(dna,"CTG"))
    {
      return -'L';
    }
