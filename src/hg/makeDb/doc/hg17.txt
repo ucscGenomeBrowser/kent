@@ -23961,62 +23961,6 @@ done
     950  85
     1000  71
 
-    # GOT HERE
-
-    # cleanup
-    mkdir downloads
-    foreach f (lab/chr*.out)
-        set c = `echo $f | sed 's/_.*//'`
-        echo $c
-        #gzip -c $f > ../${c}_dukeDnaseCd4Signal.wigFix.gz
-        #rm -f $f
-    end
-    #rm -f lab
-
-    # OLDER DATA
-    mkdir -p dukeDnase/2007-09-26/lab
-    cd dukeDnase/2007-09-26/lab
-    #wget -nd http://faculty.genome.duke.edu/~tsfurey/forUCSC/dukeDnaseHs.tgz
-    # download from Duke site, password protected,
-    # user=ucsc, password=dnase1, expires 10/5/07
-    get dukeDnaseHsCd4_hg17.tar.gz
-    gunzip dukeDnaseHsCd4_hg17.tar.gz
-    # strangely, this is double-zipped
-    mv dukeDnaseHsCd4_hg17.tar dukeDnaseHsCd4_hg17.tar.gz
-    tar xvfz dukeDnaseHsCd4_hg17.tar.gz
-    tar xvf dukeDnaseHsCd4Wiggle.tar
-    # wiggle files: chr*.out
-    cd ..
-    mkdir downloads
-
-    # truncate precision
-cat > truncate.awk << 'EOF'
-/^[\-0-9]/ {printf("%.4f\n", $1)}
-!/^[\-0-9]/ {print}
-'EOF'
-
-cat > trim.csh << 'EOF'
-    foreach f (lab/browser/chr*.out)
-        set b = `echo $f:t:r | sed 's/Wiggle//'`
-        echo $b
-        set out = downloads/$b.wigFix.gz
-        nice awk -f truncate.awk $f | nice gzip -c > $out
-    end
-'EOF'
-
-    csh trim.csh >&! trim.log &
-
-    # create wiggle
-    nice zcat downloads/*.gz | nice wigEncode stdin \
-        dukeDnaseCd4Signal.wig dukeDnaseCd4Signal.wib >&! wigencode.log &
-    #  upper limit 26.48, lower limit -0.68
-
-    ssh hgwdev
-    cd /cluster/data/hg17/bed/dukeDnase/2007-09-26
-    ln -s /cluster/data/hg17/bed/dukeDnase/2007-09-26/dukeDnaseCd4Signal.wib \
-            /gbdb/hg17/wib
-    nice hgLoadWiggle hg17 dukeDnaseCd4Signal -pathPrefix=/gbdb/hg17/wib \
-                dukeDnaseCd4Signal.wig
 
 ###########################################################################
 # Stanford ChIP-seq
