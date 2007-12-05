@@ -89,6 +89,6 @@ while ( `date +%s` < $endTime )
   end
   echo "--------------------"
   echo
-  sleep 5 
+  sleep 2 
 end
 
