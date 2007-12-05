@@ -18,7 +18,7 @@
 #include "hgTracks.h"
 #include "cdsSpec.h"
 
-static char const rcsid[] = "$Id: cds.c,v 1.64 2007/12/05 21:01:20 mhoechsm Exp $";
+static char const rcsid[] = "$Id: cds.c,v 1.65 2007/12/05 23:10:34 mhoechsm Exp $";
 
 /* Definitions of cds colors for coding coloring display */
 #define CDS_ERROR   0
@@ -437,7 +437,7 @@ if(sameString(dna,"GTG"))
    {
      return -'V';
    }
-if(sameString(dna,"TTG") || sameString(dna,"CTG"))
+if(sameString(dna,"TTG"))
    {
      return -'L';
    }
