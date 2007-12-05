@@ -320,7 +320,7 @@ type wig -.66 25.74
 viewLimits 0:.1
 maxHeightPixels 64:24:16
 autoScale off
-windowingFunction mean
+windowingFunction maximum
 spanList 1
 
 track dukeDnaseCd4Sites
