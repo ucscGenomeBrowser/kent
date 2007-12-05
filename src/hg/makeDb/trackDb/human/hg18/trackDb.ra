@@ -234,7 +234,7 @@ shortLabel STS Markers
 longLabel STS Markers on Genetic (blue) and Radiation Hybrid (black) Maps
 group map
 priority 4
-visibility dense
+visibility hide
 altColor 128,128,255,
 type bed 5 +
 

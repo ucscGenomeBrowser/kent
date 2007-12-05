@@ -2,8 +2,8 @@ track ispyMipCGH
 shortLabel ispy CGH by MIP
 longLabel Koei(Gray lab) CGH by MIP (~20K) 
 group x
-priority 920
-visibility hide
+priority 41
+visibility dense
 type expRatio
 expScale 1.0
 expStep 0.2
@@ -36,8 +36,8 @@ track ispyAgiExpT1
 shortLabel ispy gene expression TP= T1 by agilent
 longLabel ispy gene expression time point=T1 measured on agilent whole genome array 44K
 group x
-priority 920
-visibility hide
+priority 42
+visibility dense
 type expRatio
 expScale 2.0
 expStep 0.2
@@ -53,8 +53,8 @@ track ISPYproteomics
 shortLabel ispy proteomics
 longLabel ispy proteomics
 group x
-priority 920
-visibility hide
+priority 43
+visibility dense
 type expRatio
 expScale 5.0
 expStep 0.2
@@ -93,6 +93,23 @@ type expRatio
 expScale 1.0
 expStep 0.1
 groupings harvardCGHGroups
+patTable sampleInfo
+patId sampleId
+patKey subjId 
+patDb tcga1
+aliasTable harvardCGHProbes
+setsTable genesets
+
+
+track harvardCGH_downSample
+shortLabel TCGA GBM harvardCGH
+longLabel TCGA GBM harvard CGH array 244A 
+group x
+visibility hide
+type expRatio
+expScale 1.0
+expStep 0.1
+groupings harvardCGH_downSampleGroups
 patTable sampleInfo
 patId sampleId
 patKey subjId 
