@@ -986,4 +986,47 @@ hgLoadBed hg18 wgEncodeYaleStat1Sites wgEncodeYaleStat1Sites.bed
 #/goldenPath/hg18/encode/wig/encodeYaleAffyNeutRNATransMap.wigBed.gz
 #/goldenPath/hg18/encode/wig/encodeYaleAffyPlacRNATransMap.wigBed.gz
 
+#########################################################
+# Yale RACE (2007-11-15 galt)
+#
+cd /cluster/data/encode/yale/
+mkdir race
+cd race
+mkdir 2007-11-15
+ln -s 2007-11-15/ latest
+cd latest
+mkdir lab
+cd lab
+
+wget http://homes.gersteinlab.org/people/jiangdu/race_seq/race_desc.html
+wget http://homes.gersteinlab.org/people/jiangdu/race_seq/conserved_transcripts-til-20070402.bed
+
+tail +5 conserved_transcripts-til-20070402.bed | gawk '{print$1}' | sort -u | head
+chr11
+chr21
+chr22
+
+cp race_desc.html ${HOME}/kent/src/hg/makeDb/trackDb/human/hg18/encodeYaleRace.html
+cvs add ${HOME}/kent/src/hg/makeDb/trackDb/human/hg18/encodeYaleRace.html
+
+tail +5 conserved_transcripts-til-20070402.bed | hgLoadBed hg18 encodeYaleRace stdin
+
+vi trackDb.encodeTxLevels.ra
+---
+track encodeYaleRace
+superTrack encodeYaleRnaSuper dense
+shortLabel Yale RACE
+longLabel Yale RACE 420 primarily novel TARs in ENCODE regions
+group encodeTxLevels
+priority 32.0
+chromosomes chr11,chr21,chr22
+visibility hide
+type bed 12 .
+dataVersion ENCODE Nov 2007 
+origAssembly hg18
+---
+
+vi ${HOME}/kent/src/hg/makeDb/trackDb/human/hg18/encodeYaleRnaSuper.html
+#edit to add the new RACE track to the Credits section
+
 

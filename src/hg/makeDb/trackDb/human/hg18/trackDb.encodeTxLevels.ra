@@ -362,3 +362,16 @@ subGroup1 celltype Cell_Type neutro=Neutrophil plac=Placenta nb4=NB4 hela=HeLa
     priority 19
     color 50,150,50
     subGroups celltype=hela
+
+track encodeYaleRace
+superTrack encodeYaleRnaSuper dense
+shortLabel Yale RACE
+longLabel Yale RACE 420 primarily novel TARs in ENCODE regions
+group encodeTxLevels
+priority 32.0
+chromosomes chr11,chr21,chr22
+visibility hide
+type bed 12 .
+dataVersion ENCODE Nov 2007 
+origAssembly hg18
+
