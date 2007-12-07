@@ -145,7 +145,7 @@ mv makeGenomeDb.log makeGenomeDb.log.1
 /cluster/home/angie/kent/src/utils/makeGenomeDb.pl bosTau3.config.ra > & makeGenomeDb.log &
 
 #########################################################################
-# REPEATMASKER (DONE Oct 5, 2006 heather)
+# REPEATMASKER (DONE Oct 5, REDONE Oct 16, 2006 heather)
     ssh kkstore05
     cd /cluster/data/bosTau3/bed
     # Run -debug to create the dir structure and preview the scripts:
@@ -164,6 +164,8 @@ mv makeGenomeDb.log makeGenomeDb.log.1
     # 1291561904 bases of 2812203870 (45.927%) in intersection
 
     # Oct 16
+    #    October 6 2006 (open-3-1-6) version of RepeatMasker
+    #CC   RELEASE 20061006;                                            *
     featureBits bosTau3 rmsk
     # 1270629763 bases of 2731807384 (46.512%) in intersection
 
@@ -729,6 +731,26 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
         ../../baylor/Btau3.1.scaffolds.chr \
       > scaffolds.bed
     hgLoadBed bosTau3 scaffold scaffolds.bed
+
+
+##########################################################################
+# MAKE PER-CHROM FASTA DOWNLOADS (DONE 12/7/07 angie)
+    ssh kkstore05
+    mkdir /cluster/data/bosTau3/goldenPath/chromosomes
+    cd /cluster/data/bosTau3/goldenPath/chromosomes
+    awk '$1 ~ /^chrUn/ {print $1;}' ../../chrom.sizes > scafs.lst
+    awk '$1 !~ /^chrUn/ {print $1;}' ../../chrom.sizes > chroms.lst
+    foreach chr (`cat chroms.lst`)
+      twoBitToFa ../../bosTau3.2bit stdout -seq=$chr \
+      | gzip -c > $chr.fa.gz
+    end
+    twoBitToFa ../../bosTau3.2bit stdout -seqList=scafs.lst \
+    | gzip -c > chrUn.scaffolds.fa.gz
+    rm chroms.lst scafs.lst
+    md5sum *.gz > md5sum.txt
+    # Make README.txt
+    ssh hgwdev ln -s /cluster/data/bosTau3/goldenPath/chromosomes \
+      /usr/local/apache/htdocs/goldenPath/bosTau3/chromosomes
 
 
 ##########################################################################
