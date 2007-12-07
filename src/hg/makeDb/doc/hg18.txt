@@ -10088,6 +10088,7 @@ cat > netRBestCov.csh << 'EOF'
         echo ""
     end
 'EOF'
+    # << emacs
     csh netRBestCov.csh >&! netRBestCov.log &
 
 
@@ -10491,6 +10492,7 @@ foreach file (rs_ch*.fas.gz)
     zcat $file >> rsAll.fas
 end
 '_EOF_' 
+# << emacs
 # snpCleanSeq strips the header and skips duplicates
 /cluster/home/heather/kent/src/hg/snp/snpLoad/snpCleanSeq rsAll.fas snp.fa
 rm rsAll.fas
@@ -11267,7 +11269,7 @@ foreach f (/cluster/data/hg18/nib/chr*.nib)
     # Exclude accesions in the RAGE file
     echo clusterRna -mrnaExclude=hg18.rage.libs hg18 /dev/null $out -chrom=$c
     clusterRna -mrnaExclude=hg18.rage.libs hg18 /dev/null $out -chrom=$c
-end
+ end
 hgLoadBed hg18 rnaCluster chrom/*.bed
 ############################################################################
 
@@ -11656,7 +11658,6 @@ select distinct attrType from gvLink;
 hgLoadSqlTab -oldTable hgFixed gvAttr ~/humPhen/kent/src/hg/lib/gv.sql gvAttrIPNMDBcommonName.txt
 
 
-    # << emacs
 ##########################################################################
 #  hars 1 to 202  Sol 09/10/2006
 
@@ -17895,6 +17896,10 @@ BASE=/cluster/data/hg18/bed/blastz.calJac1.2007-10-07
     # release (and for hg18 coords), compute LD from genotype as Daryl did.
 
 ############################# unphased ##############################
+#*** NOTE FOR NEXT TIME: don't bother with individual CHB and JPT subsets,
+#*** {CEU, CHB+JPT, YRI} is what we display.
+#*** Actually, if there is a next time, we'll probably just start with 
+#*** phased and ignore unphased.
     ssh kolossus
     mkdir -p /san/sanvol1/scratch/hg18/bed/hapmapLd/genotypes_2007-03/run.Haploview
     cd /san/sanvol1/scratch/hg18/bed/hapmapLd/genotypes_2007-03
@@ -18407,6 +18412,7 @@ foreach f (*.bed)
     hgLoadBed hg18 uppsalaChip${b}Sites $f
 end
 'EOF'
+    # << emacs
     csh loadBed.csh >& loadBed.log &
 
     # data distribution
@@ -18668,6 +18674,41 @@ TMPDIR=/scratch/tmp
 # Submission to last job:         20572s     342.87m     5.71h    0.24d
     cat fb.hg18.chainCalJac1Link.txt
     #	2236493373 bases of 2881515245 (77.615%) in intersection
+
+###########################################################################
+# LIFT RM ALIGN FILES, MAKE PER-CHROM DOWNLOADS (DONE 12/7/07 angie)
+# Lifting of .align files is now automated by doRepeatMasker.pl, but we
+# got a user request for .align files from this pre-automation db.
+    ssh kkstore02
+    cd /cluster/data/hg18
+    mkdir downloads/RMalign
+    foreach c (?{,?} ?{,?}_*hap?)
+      echo linking/lifting to contigs of $c:t
+      foreach ctgdir ($c/N[TC]_??????)
+        set nt = $ctgdir:t
+	if (! -f $ctgdir/$nt.fa.align) then
+          pushd $ctgdir
+          liftRMAlign.pl $nt.lft > $nt.fa.align
+          popd
+        endif
+        ln -s $nt/$nt.fa.align $c/
+      end
+      set chr = chr$c:t
+      if (-e $c/lift/ordered.lft && ! -z $c/lift/ordered.lft) then
+        echo lifting contigs to chr$c
+        liftRMAlign.pl $c/lift/ordered.lft \
+        | gzip -c > downloads/RMalign/$chr.fa.align.gz
+      endif
+      if (-e $c/lift/random.lft && ! -z $c/lift/random.lft) then
+        echo lifting contigs to chr${c}_random
+        liftRMAlign.pl $c/lift/random.lft \
+        | gzip -c > downloads/RMalign/${chr}_random.fa.align.gz
+      endif
+    end
+    md5sum downloads/RMalign/*.gz > downloads/RMalign/md5sum.txt
+    ssh hgwdev ln -s /cluster/data/hg18/downloads/RMalign \
+      /usr/local/apache/htdocs/goldenPath/hg18/
+
 
 ###########################################################################
 
