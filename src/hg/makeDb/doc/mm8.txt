@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: mm8.txt,v 1.58 2007/10/15 21:39:22 angie Exp $"
+#	"$Id: mm8.txt,v 1.59 2007/12/08 00:28:39 angie Exp $"
 #
 
 #  NOTE:  this doc may have genePred loads that fail to include
@@ -8486,5 +8486,48 @@ hgLoadBed -sqlTable=cgapSage.sql -tab mm8 cgapSage final.bed
     #	I manually set the scores in the affyMoEx1Transcript track to
     #	1000 so it would work OK (not color) with the useScore 1 so that
     #	the affyMoEx1Probe would color itself on the score
+
+###########################################################################
+# LIFT RM ALIGN FILES, MAKE PER-CHROM DOWNLOADS (DONE 12/7/07 angie)
+# Lifting of .align files is now automated by doRepeatMasker.pl, but we
+# got a user request for .align files from this pre-automation db.
+    ssh kkstore04
+    cd /cluster/data/mm8
+    mkdir downloads/RMalign
+    foreach c (?{,?})
+      echo linking/lifting to contigs of $c:t
+      foreach ctgdir ($c/chr$c{,_random}_?{,?})
+        set ctg = $ctgdir:t
+        if (! -f $ctgdir/$ctg.fa.align) then
+          pushd $ctgdir
+          liftRMAlign.pl $ctg.lft > $ctg.fa.align
+          popd
+        endif
+        ln -s $ctg/$ctg.fa.align $c/
+      end
+      set chr = chr$c:t
+      if (-e $c/lift/ordered.lft && ! -z $c/lift/ordered.lft) then
+        echo lifting contigs to chr$c
+        liftRMAlign.pl $c/lift/ordered.lft \
+        | gzip -c > downloads/RMalign/$chr.fa.align.gz
+      endif
+      if (-e $c/lift/random.lft && ! -z $c/lift/random.lft) then
+        echo lifting contigs to chr${c}_random
+        liftRMAlign.pl $c/lift/random.lft \
+        | gzip -c > downloads/RMalign/${chr}_random.fa.align.gz
+      endif
+    end
+    # Got some messages like these for chunks that fall entirely
+    # within gaps (e.g. centromere, huge unbridged...)
+FYI Couldn't open chr1_1_00.fa.align: No such file or directory
+...
+FYI Couldn't open chr1_1_05.fa.align: No such file or directory
+FYI Couldn't open chr1_17_02.fa.align: No such file or directory
+...
+
+    md5sum downloads/RMalign/*.gz > downloads/RMalign/md5sum.txt
+    ssh hgwdev ln -s /cluster/data/mm8/downloads/RMalign \
+      /usr/local/apache/htdocs/goldenPath/mm8/
+
 
 ###########################################################################
