@@ -1133,8 +1133,8 @@ identifier refSeqId typeOf=mrnaAccession
     $gbd.refSeqStatus.mrnaAcc minCheck=0.10
     $kgDb.kgXref.refseq exclude= minCheck=0.50
     $kgDb,!hg16,!hg17,!hg18,!mm5,!mm6,!mm7,!mm8,!mm9.knownToRefSeq.value minCheck=0.98
-    hg18,mm5,mm6,mm7,mm8,mm9.knownToRefSeq.value minCheck=0.96
-    hg16,hg17.knownToRefSeq.value minCheck=0.95
+    hg18,mm6,mm7,mm8,mm9.knownToRefSeq.value minCheck=0.96
+    hg16,hg17,mm5.knownToRefSeq.value minCheck=0.95
     $kgDb.refSeqKg.refseq minCheck=0.60
     $ccdsDb,!hg18.ccdsInfo.mrnaAcc chopAfter=. minCheck=0.40
     $gbd,!mm5,!rn2,!rn3.mrnaRefseq.refseq minCheck=0.25
