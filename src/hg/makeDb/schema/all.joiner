@@ -1893,8 +1893,8 @@ identifier locusLinkId external=LocusLink
 "NCBI LocusLink ID"
     $gbd.refLink.locusLinkId dupeOk
     $gbd.keggPathway.locusID minCheck=0.98
-    $kgDb,!hg16,!mm6,!mm5.knownToLocusLink.value minCheck=0.98
-    hg16,mm6,mm5.knownToLocusLink.value minCheck=0.96
+    $kgDb,!hg16,!mm8,!mm6,!mm5.knownToLocusLink.value minCheck=0.98
+    hg16,mm6,mm5,mm8.knownToLocusLink.value minCheck=0.96
 
 identifier omimId external=OMIM
 "Online Mendelian Inheritance in Man (OMIM) ID"
