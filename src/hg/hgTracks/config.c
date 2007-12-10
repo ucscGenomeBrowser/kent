@@ -366,38 +366,52 @@ hCheckBox("guidelines", cartUsualBoolean(cart, "guidelines", TRUE));
 hPrintf("</TD><TD>");
 hPrintf("Show light blue vertical guidelines");
 hPrintf("</TD></TR>\n");
+
 hPrintf("<TR><TD>");
 hCheckBox("leftLabels", cartUsualBoolean(cart, "leftLabels", TRUE));
 hPrintf("</TD><TD>");
 hPrintf("Display labels to the left of items in tracks");
 hPrintf("</TD></TR>\n");
+
 hPrintf("<TR><TD>");
 hCheckBox("centerLabels", cartUsualBoolean(cart, "centerLabels", TRUE));
 hPrintf("</TD><TD>");
 hPrintf("Display description above each track");
 hPrintf("</TD></TR>\n");
+
 hPrintf("<TR><TD>");
 hCheckBox("trackControlsOnMain", cartUsualBoolean(cart, "trackControlsOnMain", TRUE));
 hPrintf("</TD><TD>");
 hPrintf("Show track controls under main graphic");
 hPrintf("</TD></TR>\n");
+
 hPrintf("<TR><TD>");
 hCheckBox("nextItemArrows", cartUsualBoolean(cart, "nextItemArrows", FALSE));
 hPrintf("</TD><TD>");
 hPrintf("Next/previous item navigation");
 hPrintf("</TD></TR>\n");
+
 hPrintf("<TR><TD>");
 hCheckBox("nextExonArrows", cartUsualBoolean(cart, "nextExonArrows", FALSE));
 hPrintf("</TD><TD>");
 hPrintf("Next/previous exon navigation");
 hPrintf("</TD></TR>\n");
+
 hPrintf("<TR><TD>");
 char *javascript="onClick=\"document.mainForm.hgTracksConfigPage.value='configure';document.mainForm.submit();\"";
+hCheckBoxJS("fastConfigureMode",
+	cartUsualBoolean(cart, "fastConfigureMode" , FALSE), javascript);
+hPrintf("</TD><TD>");
+hPrintf("Fast configure mode (goto browser configure after track configure)");
+hPrintf("</TD></TR>\n");
+
+hPrintf("<TR><TD>");
 hCheckBoxJS(configPriorityOverride,
 	cartUsualBoolean(cart, configPriorityOverride , FALSE), javascript);
 hPrintf("</TD><TD>");
 hPrintf("Enable track re-ordering");
 hPrintf("</TD></TR>\n");
+
 hTableEnd();
 
 char buf[128];
