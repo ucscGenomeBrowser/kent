@@ -1576,7 +1576,7 @@ identifier flyBase2004IdDm external=FlyBase
     $dm,!dm1.arbExpDistance.query
     $dm,!dm1.arbExpDistance.target
     $dm,!dm1.ceBlastTab.query
-    $dm,!dm1.drBlastTab.query minCheck=0.99
+    $dm,!dm1.drBlastTab.query minCheck=0.97
     $dm,!dm1.hgBlastTab.query minCheck=0.99
     $dm,!dm1.mmBlastTab.query
     $dm,!dm1.rnBlastTab.query
