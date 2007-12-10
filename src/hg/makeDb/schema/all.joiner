@@ -1832,14 +1832,14 @@ identifier hapmapSnpId
     $hg.hapmapSnpsYRI.name
     $hg.hapmapAllelesChimp.name
     $hg.hapmapAllelesMacaque.name
-    $hg.hapmapLdCeu.name unique
-    $hg.hapmapLdChb.name unique
-    $hg.hapmapLdChbJpt.name unique
-    $hg.hapmapLdJpt.name unique
-    $hg.hapmapLdYri.name unique
-    $hg.hapmapLdPhCeu.name unique
-    $hg.hapmapLdPhChbJpt.name unique
-    $hg.hapmapLdPhYri.name unique
+    $hg,!hg17.hapmapLdCeu.name unique
+    $hg,!hg17.hapmapLdChb.name unique
+    $hg,!hg17.hapmapLdChbJpt.name unique
+    $hg,!hg17.hapmapLdJpt.name unique
+    $hg,!hg17.hapmapLdYri.name unique
+    $hg,!hg17.hapmapLdPhCeu.name unique
+    $hg,!hg17.hapmapLdPhChbJpt.name unique
+    $hg,!hg17.hapmapLdPhYri.name unique
 
 identifier snpAnnotations125
 "SNP annotations"
