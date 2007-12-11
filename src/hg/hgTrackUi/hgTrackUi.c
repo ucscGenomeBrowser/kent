@@ -33,7 +33,7 @@
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 #define MAX_SP_SIZE 2000
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.407 2007/12/10 22:36:54 kate Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.408 2007/12/11 21:35:08 angie Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -172,17 +172,16 @@ void snp125Ui(struct trackDb *tdb)
  * variables to their defaults. */
 int i = 0;
 char *autoSubmit = "onchange=\"document.snp125UiForm.submit();\"";
-struct sqlConnection *conn = hAllocConn();
+char *orthoTable = trackDbSetting(tdb, "chimpMacaqueOrthoTable");
 
-if (sqlTableExists(conn,"snp126orthoPanTro2RheMac2"))
+if (isNotEmpty(orthoTable) && hTableExists(orthoTable))
     {
     snp125ExtendedNames = cartUsualBoolean(cart, "snp125ExtendedNames", FALSE);
-    printf("<BR><B>Include Chimp (panTro2) state and observed human alleles in name: </B>&nbsp;");
+    printf("<BR><B>Include Chimp state and observed human alleles in name: </B>&nbsp;");
     cgiMakeCheckBox("snp125ExtendedNames",snp125ExtendedNames);
     printf("<BR>(If enabled, chimp allele is displayed first, then '>', then human alleles). </B>&nbsp;");
     printf("<BR>");
     }
-hFreeConn(&conn);
 
 snp125AvHetCutoff = atof(cartUsualString(cart, "snp125AvHetCutoff", "0"));
 printf("<BR><B>Minimum <A HREF=\"#AvHet\">Average Heterozygosity</A>:</B>&nbsp;");
@@ -2562,11 +2561,9 @@ else if (sameString(track, "snpMap"))
         snpMapUi(tdb);
 else if (sameString(track, "snp"))
         snpUi(tdb);
-else if (sameString(track, "snp125"))
-	snp125Ui(tdb);
-else if (sameString(track, "snp126"))
-	snp125Ui(tdb);
-else if (sameString(track, "snp127"))
+else if (startsWith("snp", track) && strlen(track) >= 6 &&
+	 isdigit(track[3]) && isdigit(track[4]) && isdigit(track[5]) &&
+	 atoi(track+3) >= 125)
 	snp125Ui(tdb);
 else if (sameString(track, "rertyHumanDiversityLd") ||
 	 startsWith("hapmapLd", track) ||
