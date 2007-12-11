@@ -1416,7 +1416,7 @@ track snp128
 shortLabel SNPs (128)
 longLabel Simple Nucleotide Polymorphisms (dbSNP build 128) 
 group varRep
-priority 100
+priority 100.096
 visibility dense 
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP: 
@@ -1426,7 +1426,7 @@ track snp127
 shortLabel SNPs (127)
 longLabel Simple Nucleotide Polymorphisms (dbSNP build 127) 
 group varRep
-priority 100
+priority 100.097
 visibility dense 
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP: 
@@ -1436,7 +1436,7 @@ track snp126
 shortLabel SNPs (126)
 longLabel Simple Nucleotide Polymorphisms (dbSNP build 126) 
 group varRep
-priority 100
+priority 100.098
 visibility dense 
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP: 
@@ -1446,7 +1446,7 @@ track snp125
 shortLabel SNPs 
 longLabel Simple Nucleotide Polymorphisms (dbSNP build 125) 
 group varRep
-priority 100
+priority 100.099
 visibility dense 
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP: 
