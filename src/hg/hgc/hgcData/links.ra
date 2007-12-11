@@ -800,6 +800,36 @@ url http://bioinf.uta.fi/cgi-bin/fetch_idbase.cgi?gene=NCF2;view=full;mut=%s
 acc yes
 needsEncoded yes
 
+name NRASbase
+label NRASbase
+url http://bioinf.uta.fi/cgi-bin/fetch_idbase.cgi?gene=NRAS;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name MAPBPIPbase
+label MAPBPIPbase
+url http://bioinf.uta.fi/cgi-bin/fetch_idbase.cgi?gene=MAPBPIP;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name BLMbase
+label BLMbase
+url http://bioinf.uta.fi/cgi-bin/fetch_idbase.cgi?gene=BLM;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name CD79Bbase
+label CD79Bbase
+url http://bioinf.uta.fi/cgi-bin/fetch_idbase.cgi?gene=CD79B;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name UNC93B1base
+label UNC93B1base
+url http://bioinf.uta.fi/cgi-bin/fetch_idbase.cgi?gene=UNC93B1;view=full;mut=%s
+acc yes
+needsEncoded yes
+
 name RettBASE
 label RettBASE
 url http://mecp2.chw.edu.au/cgi-bin/mecp2/search/process-search.cgi?display=simple&submit=Display&sys_name=%s
