@@ -2,7 +2,7 @@
 #include "snp125Ui.h"
 #include "common.h"
 
-static char const rcsid[] = "$Id: snp125Ui.c,v 1.26 2007/01/04 22:57:52 heather Exp $";
+static char const rcsid[] = "$Id: snp125Ui.c,v 1.27 2007/12/11 21:00:37 angie Exp $";
 
 boolean snp125ExtendedNames = TRUE;
 
@@ -362,6 +362,33 @@ char *snp125FuncCart[] = {
     "red",   // splice-site
     "blue", // cds-reference
 };
+
+/* NCBI has added some new, more specific function types that map onto 
+ * pre-existing simpler function classes.  This mapping is an array of 
+ * arrays, each of which has the simpler type (from snp125FuncDataName
+ * above) followed by more specific subtypes, if any.  All arrays are
+ * NULL-terminated.  Types that do not appear in snp125FuncDataName are
+ * mapped onto unknown. */
+static char *unknownSyn[] =
+    {"unknown",		"coding", "cds-reference", "coding-synonymy-unknown",
+     NULL};
+static char *locusSyn[] =
+    {"locus",		"gene-segment", "near-gene-3", "near-gene-5", NULL};
+static char *nonsynonSyn[] =
+    {"coding-nonsynon",	"nonsense", "missense", "frameshift", NULL};
+static char *untranslatedSyn[] =
+    {"untranslated",	"untranslated-3", "untranslated-5", NULL};
+static char *spliceSyn[] =
+    {"splice-site",	"splice-3", "splice-5", NULL};
+char **snp125FuncDataSynonyms[] = {
+    unknownSyn,
+    locusSyn,
+    nonsynonSyn,
+    untranslatedSyn,
+    spliceSyn,
+    NULL
+};
+
 char *snp125FuncIncludeStrings[] = {
     "snp125FuncUnknownInclude",
     "snp125FuncLocusInclude",

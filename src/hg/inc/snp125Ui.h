@@ -104,6 +104,7 @@ extern char *snp125FuncStrings[];
 extern char *snp125FuncDataName[];
 extern char *snp125FuncDefault[];
 extern char *snp125FuncCart[];
+extern char **snp125FuncDataSynonyms[];
 extern char *snp125FuncIncludeStrings[];
 extern boolean snp125FuncIncludeDefault[];
 extern boolean snp125FuncIncludeCart[];
