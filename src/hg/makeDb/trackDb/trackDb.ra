@@ -3449,7 +3449,7 @@ searchType bed
 semiShortCircuit 1
 termRegex (rs[0-9]{3}[0-9]+|SNP_A-[0-9]+(_[0-9]+)?)
 dontCheck ([0-9]+|rs[0-9][0-9]?[0-9]?)
-searchPriority 12
+searchPriority 12.999
 padding 250
 
 searchName snpShort
@@ -3459,7 +3459,7 @@ searchType bed
 semiShortCircuit 1
 termRegex (rs[0-9]{3}[0-9]+|SNP_A-[0-9]+(_[0-9]+)?)
 dontCheck ([0-9]+|rs[0-9][0-9]?[0-9]?)
-searchPriority 12
+searchPriority 12.998
 padding 250
 
 searchName snp125Short
@@ -3469,17 +3469,7 @@ searchType bed
 semiShortCircuit 1
 termRegex (rs[0-9]{3}[0-9]+)
 dontCheck ([0-9]+|rs[0-9][0-9]?[0-9]?)
-searchPriority 12
-padding 250
-
-searchName snp127Short
-searchTable snp127
-searchMethod exact
-searchType bed
-semiShortCircuit 1
-termRegex (rs[0-9]{3}[0-9]+)
-dontCheck ([0-9]+|rs[0-9][0-9]?[0-9]?)
-searchPriority 12
+searchPriority 12.997
 padding 250
 
 searchName snp126Short
@@ -3489,7 +3479,27 @@ searchType bed
 semiShortCircuit 1
 termRegex (rs[0-9]{3}[0-9]+)
 dontCheck ([0-9]+|rs[0-9][0-9]?[0-9]?)
-searchPriority 12
+searchPriority 12.996
+padding 250
+
+searchName snp127Short
+searchTable snp127
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex (rs[0-9]{3}[0-9]+)
+dontCheck ([0-9]+|rs[0-9][0-9]?[0-9]?)
+searchPriority 12.995
+padding 250
+
+searchName snp128Short
+searchTable snp128
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex (rs[0-9]{3}[0-9]+)
+dontCheck ([0-9]+|rs[0-9][0-9]?[0-9]?)
+searchPriority 12.994
 padding 250
 
 searchTable ensGene
@@ -3672,7 +3682,7 @@ searchType bed
 semiShortCircuit 1
 termRegex ([0-9]+|rs[0-9][0-9]?[0-9]?)
 dontCheck (rs[0-9]{3}[0-9]+|SNP_A-[0-9]+(_[0-9]+)?)
-searchPriority 16
+searchPriority 16.999
 padding 250
 
 searchName snpLong
@@ -3682,7 +3692,7 @@ searchType bed
 semiShortCircuit 1
 termRegex ([0-9]+|rs[0-9][0-9]?[0-9]?)
 dontCheck (rs[0-9]{3}[0-9]+|SNP_A-[0-9]+(_[0-9]+)?)
-searchPriority 16
+searchPriority 16.998
 padding 250
 
 searchName snp125Long
@@ -3692,17 +3702,7 @@ searchType bed
 semiShortCircuit 1
 termRegex ([0-9]+|rs[0-9][0-9]?[0-9]?)
 dontCheck (rs[0-9]{3}[0-9]+)
-searchPriority 16
-padding 250
-
-searchName snp127Long
-searchTable snp127
-searchMethod exact
-searchType bed
-semiShortCircuit 1
-termRegex ([0-9]+|rs[0-9][0-9]?[0-9]?)
-dontCheck (rs[0-9]{3}[0-9]+)
-searchPriority 16
+searchPriority 16.997
 padding 250
 
 searchName snp126Long
@@ -3712,7 +3712,27 @@ searchType bed
 semiShortCircuit 1
 termRegex ([0-9]+|rs[0-9][0-9]?[0-9]?)
 dontCheck (rs[0-9]{3}[0-9]+)
-searchPriority 16
+searchPriority 16.996
+padding 250
+
+searchName snp127Long
+searchTable snp127
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex ([0-9]+|rs[0-9][0-9]?[0-9]?)
+dontCheck (rs[0-9]{3}[0-9]+)
+searchPriority 16.995
+padding 250
+
+searchName snp128Long
+searchTable snp128
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex ([0-9]+|rs[0-9][0-9]?[0-9]?)
+dontCheck (rs[0-9]{3}[0-9]+)
+searchPriority 16.994
 padding 250
 
 searchTable genieAlt
