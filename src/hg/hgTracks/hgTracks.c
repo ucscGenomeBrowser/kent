@@ -119,7 +119,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1429 2007/11/26 02:11:23 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1430 2007/12/11 21:14:01 angie Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -13728,6 +13728,7 @@ registerTrackHandler("snp", snpMethods);
 registerTrackHandler("snp125", snp125Methods);
 registerTrackHandler("snp126", snp125Methods);
 registerTrackHandler("snp127", snp125Methods);
+registerTrackHandler("snp128", snp125Methods);
 registerTrackHandler("ld", ldMethods);
 registerTrackHandler("cnpSharp", cnpSharpMethods);
 registerTrackHandler("cnpSharp2", cnpSharp2Methods);
