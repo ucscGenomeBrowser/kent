@@ -212,7 +212,7 @@
 #include "itemConf.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1371 2007/11/26 22:45:57 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1372 2007/12/11 08:33:15 angie Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -12222,7 +12222,7 @@ if (hTableExists("knownGene") && hTableExists("refLink") &&
 	{
 	printf("<BR><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
 	printf("geneId=%s\" TARGET=_blank>Entrez Gene for ", row[0]);
-	printf("%s</A>\n", row[1]);
+	printf("%s</A><BR>\n", row[1]);
 	}
     sqlFreeResult(&sr);
     hFreeConn(&conn);
@@ -12411,18 +12411,36 @@ if (hTableExists("lsSnpFunction"))
 hFreeConn(&conn);
 }
 
-off_t getSnpOffset(struct snp snp)
+off_t getSnpOffset(struct trackDb *tdb, struct snp *snp)
 /* do a lookup in snpSeq for the offset */
 {
+char *snpSeqSetting = trackDbSetting(tdb, "snpSeq");
+char snpSeqTable[128];
 char query[256];
 char **row;
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = NULL;
 long offset = 0;
 
-if (!hTableExists("snpSeq"))
-    return -1;
-safef(query, sizeof(query), "select file_offset from snpSeq where acc='%s'", snp.name);
+if (isNotEmpty(snpSeqSetting))
+    {
+    if (hTableExists(snpSeqSetting))
+	safecpy(snpSeqTable, sizeof(snpSeqTable), snpSeqSetting);
+    else
+	return -1;
+    }
+else
+    {
+    safef(snpSeqTable, sizeof(snpSeqTable), "%sSeq", tdb->tableName);
+    if (!hTableExists(snpSeqTable))
+	{
+	safecpy(snpSeqTable, sizeof(snpSeqTable), "snpSeq");
+	if (!hTableExists(snpSeqTable))
+	    return -1;
+	}
+    }
+safef(query, sizeof(query), "select file_offset from %s where acc='%s'",
+      snpSeqTable, snp->name);
 sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row == NULL)
@@ -12434,24 +12452,26 @@ return offset;
 }
 
 
-char *getSnpSeqFile()
-/* find location of snp.fa */
+char *getSnpSeqFile(struct trackDb *tdb)
+/* find location of snp.fa and test existence. */
 {
-char query[256];
-char **row;
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr = NULL;
-char *fileName = NULL;
-
-safef(query, sizeof(query), "select path from extFile where name='snp.fa'");
-sr = sqlGetResult(conn, query);
-row = sqlNextRow(sr);
-if (row == NULL)
-   return NULL;
-fileName = cloneString(row[0]);
-sqlFreeResult(&sr);
-hFreeConn(&conn);
-return fileName;
+char *seqFile = trackDbSetting(tdb, "snpSeqFile");
+if (isNotEmpty(seqFile))
+    {
+    if (fileExists(seqFile))
+	return cloneString(seqFile);
+    else
+	return NULL;
+    }
+char seqFileBuf[512];
+safef(seqFileBuf, sizeof(seqFileBuf), "/gbdb/%s/snp/%s.fa",
+      database, tdb->tableName);
+if (fileExists(seqFileBuf))
+    return cloneString(seqFileBuf);
+safef(seqFileBuf, sizeof(seqFileBuf), "/gbdb/%s/snp/snp.fa", database);
+if (fileExists(seqFileBuf))
+    return cloneString(seqFileBuf);
+return NULL;
 }
 
 
@@ -12491,13 +12511,12 @@ axtFree(&axt);
 hPrintf("</PRE></TT>");
 }
 
-void printSnpAlignment2(struct snp snp)
+void printSnpAlignment(struct trackDb *tdb, struct snp *snp)
 /* Get flanking sequences from table; align and print */
 {
 char *fileName = NULL;
 char *variation = NULL;
 char *strand = NULL;
-char nibFile[HDB_MAX_PATH_STRING];
 
 char *line;
 struct lineFile *lf = NULL;
@@ -12532,11 +12551,11 @@ int skipCount = 0;
 
 off_t offset = 0;
 
-fileName = getSnpSeqFile();
+fileName = getSnpSeqFile(tdb);
 if (!fileName)
     return;
 
-offset = getSnpOffset(snp);
+offset = getSnpOffset(tdb, snp);
 if (offset == -1) 
     return;
 
@@ -12591,23 +12610,22 @@ if (len3 > maxFlank)
     }
 
 /* get coords */
-strand  = cloneString(snp.strand);
+strand  = cloneString(snp->strand);
 if (sameString(strand,"+") || sameString(strand,"?"))
     {
-    start = snp.chromStart - len5;
-    end = snp.chromEnd + len3;
+    start = snp->chromStart - len5;
+    end = snp->chromEnd + len3;
     }
 else 
     {
-    start = snp.chromStart - len3;
-    end = snp.chromEnd + len5;
+    start = snp->chromStart - len3;
+    end = snp->chromEnd + len5;
     }
 if (start < 0) start = 0;
-if (end > hChromSize(snp.chrom)) end = hChromSize(snp.chrom);
+if (end > hChromSize(snp->chrom)) end = hChromSize(snp->chrom);
 
 /* do the lookup */
-hNibForChrom(snp.chrom, nibFile);
-seqNib = hFetchSeqMixed(nibFile, snp.chrom, start, end);
+seqNib = hChromSeqMixed(snp->chrom, start, end);
 if (seqNib == NULL)
     {
     warn("Couldn't get sequences");
@@ -12616,7 +12634,7 @@ if (seqNib == NULL)
 if (sameString(strand,"-"))
     reverseComplement(seqNib->dna, seqNib->size);
 
-printf("\n<BR><BR><B>Alignment between the SNP's flanking sequences and the Genomic sequence:</B>");
+printf("\n<BR><B>Alignment between the SNP's flanking sequences and the Genomic sequence:</B>");
 
 printf("<PRE><B>Genomic Sequence:</B><BR>");
 writeSeqWithBreaks(stdout, seqNib->dna, seqNib->size, displayLength);
@@ -12652,195 +12670,6 @@ if (seqDbSnp == NULL)
 seqDbSnp->size = strlen(seqDbSnp->dna);
 
 generateAlignment(seqNib, seqDbSnp, displayLength);
-}
-
-
-void printSnpAlignment(struct snp snp)
-/* Fetch flanking sequences from dbSnp html page and from nib file; align and print */
-{
-char                  url[128];
-char                 *line;
-char                 *lineEnd;
-char                  query[256];
-char                **row;
-char                 *strand;
-char                 *nibFile;
-struct htmlPage      *page         = NULL;
-struct lineFile      *lf           = NULL;
-struct sqlResult     *sr           = NULL;
-struct dyString      *seqDbSnp5    = newDyString(512);
-struct dyString      *seqDbSnpO    = newDyString(64);
-struct dyString      *seqDbSnp3    = newDyString(512);
-struct dyString      *seqDbSnpTemp = newDyString(512);
-struct dnaSeq        *dnaSeqDbSnp5 = NULL;
-struct dnaSeq        *dnaSeqDbSnpO = NULL;
-struct dnaSeq        *dnaSeqDbSnp3 = NULL;
-struct dnaSeq        *seqDbSnp     = NULL;
-struct dnaSeq        *seqNib       = NULL;
-struct sqlConnection *conn         = hAllocConn();
-int                   seqDbSnp5len = 0;
-int                   seqDbSnp3len = 0;
-int                   start;
-int                   end;
-boolean               haveSeq      = FALSE;
-boolean               haveObserved = FALSE;
-boolean               merged       = FALSE;
-
-/* get details page for snp from NCBI/dbSnp */
-safef(url, sizeof(url), "http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?rs=%s",snp.name);
-page = htmlPageGet(url);
-lf = lineFileOnString("web page", TRUE, page->htmlText);
-
-/*  process page to extract flanks */
-while (lineFileNext(lf,&line,NULL) && !haveSeq)
-    if ((line=stringIn("allelePos",line))!=NULL && 
-	(line=stringIn("totalLen", line))!=NULL && 
-	(line=stringIn("courier",  line))!=NULL && 
-	(line=stringIn("> ",  line))!=NULL)
-	{
-	dyStringAppend(seqDbSnp5,line+2);
-	while (!haveObserved && lineFileNext(lf,&line,NULL))
-	    if(!startsWith("</FONT",line)) /* get 5' flank */
-		dyStringAppend(seqDbSnp5,line);
-	    else
-		{ /* get observed */
-		line=stringIn("green",line)+7;
-		while(!startsWith("</FONT",line) && line!=NULL)
-		    dyStringAppendN(seqDbSnpO,line++,1);
-		haveObserved=TRUE;
-		}
-	while (lineFileNext(lf,&line,NULL) && !haveSeq)
-	    {
-	    if(startsWith("<FONT",line)) /* get start position for 3' flank */
-		{
-		line=stringIn("courier",line);
-		line=stringIn("> ",line)+2;
-		}
-	    if(!startsWith("</FONT",line)) /* get 3' flank */
-		dyStringAppend(seqDbSnp3,line);
-	    else
-		haveSeq=TRUE;
-	    }
-	}
-if (haveSeq==FALSE)
-    {
-    lineFileClose(&lf);
-    page = htmlPageGet(url);
-    lf = lineFileOnString("web page", TRUE, page->htmlText);
-    while (lineFileNext(lf,&line,NULL))
-	if ((line=stringIn("id was merged into ", line))!=NULL && 
-	    (line=stringIn(">rs", line))!=NULL && line++ && 
-	    (lineEnd=stringIn("</a>",line))!=NULL)
-	    {
-	    lineEnd[0]='\0';
-	    printf("<BR>%s was merged into %s.&nbsp;&nbsp;%s is an invalid rsId.<BR>", snp.name, line, snp.name);
-	    merged=TRUE;
-	    }
-    if (merged==FALSE)
-	printf("<BR>Alignments between %s and the genome are not possible as the flanking sequences were not found at dbSnp.<BR>\n",snp.name);
-    return;
-    }
-
-stripChar(seqDbSnp5->string,' ');
-stripChar(seqDbSnpO->string,' ');
-stripChar(seqDbSnp3->string,' ');
-seqDbSnp5len=strlen(seqDbSnp5->string);/* spaces made the string size incorrect */
-seqDbSnp3len=strlen(seqDbSnp3->string);
-
-if (seqDbSnp5len==0||seqDbSnp3len==0)
-    {
-    printf("<BR>Zero length flanking sequences<BR>");
-    printf("5': %s<BR>", seqDbSnp5->string);
-    printf("3': %s<BR>", seqDbSnp3->string);
-    return;
-    }
-dyStringAppend(seqDbSnpTemp,seqDbSnp5->string);
-dyStringAppend(seqDbSnpTemp,seqDbSnpO->string);
-dyStringAppend(seqDbSnpTemp,seqDbSnp3->string);
-dnaSeqDbSnp5 = newDnaSeq(seqDbSnp5->string,strlen(seqDbSnp5->string),"dbSNP seq 5");
-dnaSeqDbSnpO = newDnaSeq(seqDbSnpO->string,strlen(seqDbSnpO->string),"dbSNP seq O");
-dnaSeqDbSnp3 = newDnaSeq(seqDbSnp3->string,strlen(seqDbSnp3->string),"dbSNP seq 3");
-seqDbSnp = newDnaSeq(seqDbSnpTemp->string,strlen(seqDbSnpTemp->string),"dbSNP seq");
-if (seqDbSnp==NULL)
-    return;
-seqDbSnp->size=strlen(seqDbSnp->dna);
-
-/* get nib sequence */
-/* get filename */
-safef(query, sizeof(query), "select * from chromInfo where chrom='%s'", snp.chrom);
-sr      = sqlGetResult(conn, query);
-row     = sqlNextRow(sr);
-nibFile = cloneString(row[2]);
-
-/* get coords */
-strand  = cloneString(snp.strand);
-if (sameString(strand,"+") || sameString(strand,"?"))
-    {
-    start   = snp.chromStart - seqDbSnp5len;
-    end     = snp.chromEnd   + seqDbSnp3len;
-    }
-else 
-    {
-    start   = snp.chromStart - seqDbSnp3len;
-    end     = snp.chromEnd   + seqDbSnp5len;
-    }
-
-/* do the lookup */
-seqNib  = hFetchSeqMixed(nibFile, snp.chrom, start, end);
-if (sameString(strand,"-"))
-    reverseComplement(seqNib->dna, seqNib->size);
-
-printf("\n<BR><B>Alignment between the SNP's flanking sequences and the Genomic sequence:</B>");
-printf("<PRE><B>Genomic Sequence:</B><BR>");
-writeSeqWithBreaks(stdout, seqNib->dna, seqNib->size, 60);
-printf("</PRE>\n");
-printf("\n<PRE><B>dbSNP Sequence (Flanking sequences and observed alleles):</B><BR>");
-printf("(Uses ");
-printf("<A HREF=\" http://www.chem.qmul.ac.uk/iubmb/misc/naseq.html#tab1 \"" );
-printf("TARGET=_BLANK>IUPAC ambiguity codes</A>");
-printf(")\n");
-writeSeqWithBreaks(stdout, dnaSeqDbSnp5->dna, dnaSeqDbSnp5->size, 60);
-writeSeqWithBreaks(stdout, dnaSeqDbSnpO->dna, dnaSeqDbSnpO->size, 60);
-writeSeqWithBreaks(stdout, dnaSeqDbSnp3->dna, dnaSeqDbSnp3->size, 60);
-printf("</PRE>\n");
-
-freeDyString(&seqDbSnp5);
-freeDyString(&seqDbSnpO);
-freeDyString(&seqDbSnp3);
-
-if (seqNib != NULL && seqDbSnp != NULL)
-    {
-    int matchScore = 100;
-    int misMatchScore = 100;
-    int gapOpenPenalty = 400;  
-    int gapExtendPenalty = 50; 
-    struct axtScoreScheme *ss = axtScoreSchemeSimpleDna(matchScore, misMatchScore, gapOpenPenalty, gapExtendPenalty);
-    struct axt *axt = axtAffine(seqNib, seqDbSnp, ss), *axtBlock=axt;
-
-    hPrintf("<TT><PRE>");
-    if (axt == NULL)
-	printf("%s and %s don't align\n", seqNib->name, seqDbSnp->name);
-    else
-	{
-	axtBlock=axt;
-	while (axtBlock !=NULL)
-	    {
-	    printf("ID (including gaps) %3.1f%%, coverage (of both) %3.1f%%, score %d\n",
-		   axtIdWithGaps(axtBlock)*100, 
-		   axtCoverage(axtBlock, seqNib->size, seqDbSnp->size)*100, 
-		   axtBlock->score);
-	    printf("Alignment between genome (%s; %d bp) and ", seqNib->name, seqNib->size);
-	    printf("flanking sequence (%s; %d bp)\n", seqDbSnp->name, seqDbSnp->size);
-	    printf("\n");
-	    axtPrintTraditional(axtBlock, 60, ss, stdout);
-	    axtBlock=axtBlock->next;
-	    }
-	axtFree(&axt);
-	hPrintf("</PRE></TT>");
-	}
-    }
-else
-    warn("Couldn't get sequences, database out of sync?");
 }
 
 void doSnp(struct trackDb *tdb, char *itemName)
@@ -13492,70 +13321,66 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
-void printSnpOrthoSummary(char *rsId, char *observed)
+void printSnpOrthoSummary(struct trackDb *tdb, char *rsId, char *observed)
 /* helper function for printSnp125Info */
 {
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr;
-char **row;
-char query[256];
-int count = 0;
-
-if (sameString("hg18", database) && hTableExists("snp126orthoPanTro2RheMac2"))
+char *orthoTable = trackDbSetting(tdb, "chimpMacaqueOrthoTable");
+if (isNotEmpty(orthoTable) && hTableExists(orthoTable))
     {
+    struct sqlConnection *conn = hAllocConn();
+    struct sqlResult *sr;
+    char **row;
+    char query[512];
     safef(query, sizeof(query),
-          "select count(*) from snp126orthoPanTro2RheMac2 where name='%s'", rsId);
-    count = sqlQuickNum(conn, query);
-    if (count != 1) return;
-    
+          "select count(*) from %s where name='%s'", orthoTable, rsId);
+    if (sqlQuickNum(conn, query) != 1)
+	return;
     safef(query, sizeof(query),
-          "select chimpAllele from snp126orthoPanTro2RheMac2 where name='%s'", rsId);
+          "select chimpAllele from %s where name='%s'", orthoTable, rsId);
     sr = sqlGetResult(conn, query);
     row = sqlNextRow(sr);
-    printf("<B>Summary: </B>%s>%s (chimp allele displayed first, then '>', then human alleles)<br>\n", row[0], observed);
+    printf("<B>Summary: </B>%s>%s (chimp allele displayed first, "
+	   "then '>', then human alleles)<br>\n", row[0], observed);
     sqlFreeResult(&sr);
+    hFreeConn(&conn);
     }
 }
 
-void printSnpOrthos(char *rsId)
+void printSnpOrthos(struct trackDb *tdb, char *rsId)
 /* helper function for printSnp125Info */
 {
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr;
-char **row;
-char   query[256];
-int count = 0;
-
-if (sameString("hg18", database) && hTableExists("snp126orthoPanTro2RheMac2"))
+char *orthoTable = trackDbSetting(tdb, "chimpMacaqueOrthoTable");
+if (isNotEmpty(orthoTable) && hTableExists(orthoTable))
     {
+    struct sqlConnection *conn = hAllocConn();
+    struct sqlResult *sr;
+    char **row;
+    char query[512];
     safef(query, sizeof(query),
-          "select count(*) from snp126orthoPanTro2RheMac2 where name='%s'", rsId);
-    count = sqlQuickNum(conn, query);
-    if (count != 1) return;
-    
+          "select count(*) from %s where name='%s'", orthoTable, rsId);
+    if (sqlQuickNum(conn, query) != 1)
+	return;
     safef(query, sizeof(query),
-          "select chimpAllele, chimpStrand, macaqueAllele, macaqueStrand "
-	  "from snp126orthoPanTro2RheMac2 where name='%s'", rsId);
+          "select chimpAllele, macaqueAllele from %s where name='%s'",
+	  orthoTable, rsId);
     sr = sqlGetResult(conn, query);
     row = sqlNextRow(sr);
-
     printf("<BR><B>Chimp Allele: </B>%s\n", row[0]);
-    // printf("<BR><B>Chimp Strand = </B>%s\n", row[1]);
-    printf("<BR><B>Macaque Allele: </B>%s\n", row[2]);
-    // printf("<BR><B>Macaque Strand = </B>%s\n", row[3]);
+    printf("<BR><B>Macaque Allele: </B>%s\n", row[1]);
     printf("<BR>\n");
     sqlFreeResult(&sr);
+    hFreeConn(&conn);
     }
 }
 
 
-void printSnp125Info(struct snp125 snp)
+void printSnp125Info(struct trackDb *tdb, struct snp125 snp)
 /* print info on a snp125 */
 {
 int alleleLen = strlen(snp.refUCSC);
 char refUCSCRevComp[1024];
 
-printSnpOrthoSummary(snp.name, snp.observed);
+printSnpOrthoSummary(tdb, snp.name, snp.observed);
 if (sameString(snp.strand,"-"))
     {
     safef(refUCSCRevComp, ArraySize(refUCSCRevComp), "%s", snp.refUCSC);
@@ -13584,7 +13409,7 @@ if (!sameString(snp.class, "insertion"))
     }
 
 
-printSnpOrthos(snp.name);
+printSnpOrthos(tdb, snp.name);
 printf("<BR><B><A HREF=\"#LocType\">Location Type</A>: </B>%s\n",          snp.locType);
 printf("<BR><B><A HREF=\"#Class\">Class</A>: </B>%s\n",     snp.class);
 printf("<BR><B><A HREF=\"#Valid\">Validation</A>: </B>%s\n", snp.valid);
@@ -13596,261 +13421,127 @@ printf("<BR><B><A HREF=\"#Weight\">Weight</A>: </B>%d",             snp.weight);
 printf("<BR>\n");
 }   
     
-void writeSnp125Exception(char *itemName)
+void writeSnpExceptionWithVersion(char *table, char *itemName, int version)
+/* Print out exceptions, if any, for this snp. */
 {
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr;
-char **row;
-char   query[256];
-int    start = cartInt(cart, "o");
-struct snp125Exceptions el;
-int count = 0;
-struct slName *exceptionList = NULL;
-struct slName *slNameElement = NULL;
-
-safef(query, sizeof(query), 
-      "select count(*) from snp125Exceptions where chrom='%s' and chromStart=%d and name='%s'", 
-      seqName, start, itemName);
-count = sqlQuickNum(conn, query);
-if (count == 0) return;
-
-printf("<BR><BR><B>Annotations:</B>\n");
-
-safef(query, sizeof(query), 
-      "select * from snp125Exceptions where chrom='%s' and chromStart=%d and name='%s'", 
-      seqName, start, itemName);
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr))!=NULL)
+char exceptionsTable[128];
+char excDescTable[128];
+safef(exceptionsTable, sizeof(exceptionsTable), "%sExceptions", table);
+safef(excDescTable, sizeof(excDescTable), "%sExceptionDesc", table);
+if (hTableExists(exceptionsTable) && hTableExists(excDescTable))
     {
-    snp125ExceptionsStaticLoad(row, &el);
-    slNameElement = slNameNew(cloneString(el.exception));
-    slAddHead(&exceptionList, slNameElement);
-    }
-sqlFreeResult(&sr);
-
-for (slNameElement = exceptionList; slNameElement != NULL; slNameElement = slNameElement->next)
-    {
+    struct sqlConnection *conn = hAllocConn();
+    struct sqlResult *sr;
+    char **row;
+    char   query[1024];
+    int    start = cartInt(cart, "o");
+    int count = 0;
     safef(query, sizeof(query), 
-      "select description from snp125ExceptionDesc where exception = '%s'", slNameElement->name);
+	  "select description from %s, %s "
+	  "where chrom = \"%s\" and chromStart = %d and name = \"%s\" "
+	  "and %s.exception = %s.exception",
+	  excDescTable, exceptionsTable, seqName, start, itemName,
+	  excDescTable, exceptionsTable);
     sr = sqlGetResult(conn, query);
-    row = sqlNextRow(sr);
-    if (row != NULL)
-        printf("<BR>%s\n", row[0]);
+    while ((row = sqlNextRow(sr))!=NULL)
+	{
+	if (count == 0)
+	    printf("<BR><B>Annotations:</B><BR>\n");
+	printf("%s<BR>\n", row[0]);
+	count++;
+	}
     sqlFreeResult(&sr);
+    hFreeConn(&conn);
     }
-hFreeConn(&conn);
 }
 
-void writeSnpExceptionWithVersion(char *itemName, int version)
+struct snp *snp125ToSnp(struct snp125 *snp125)
+/* Copy over the bed6 plus observed fields. */
 {
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr;
-char **row;
-char   query[256];
-int    start = cartInt(cart, "o");
-struct snp125Exceptions el;
-int count = 0;
-struct slName *exceptionList = NULL;
-struct slName *slNameElement = NULL;
-
-safef(query, sizeof(query), 
-      "select count(*) from snp%dExceptions where chrom='%s' and chromStart=%d and name='%s'", 
-      version, seqName, start, itemName);
-count = sqlQuickNum(conn, query);
-if (count == 0) return;
-
-printf("<BR><BR><B>Annotations:</B>\n");
-
-safef(query, sizeof(query), 
-      "select * from snp%dExceptions where chrom='%s' and chromStart=%d and name='%s'", 
-      version, seqName, start, itemName);
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr))!=NULL)
-    {
-    snp125ExceptionsStaticLoad(row, &el);
-    slNameElement = slNameNew(cloneString(el.exception));
-    slAddHead(&exceptionList, slNameElement);
-    }
-sqlFreeResult(&sr);
-
-for (slNameElement = exceptionList; slNameElement != NULL; slNameElement = slNameElement->next)
-    {
-    safef(query, sizeof(query), 
-      "select description from snp%dExceptionDesc where exception = '%s'", version, slNameElement->name);
-    sr = sqlGetResult(conn, query);
-    row = sqlNextRow(sr);
-    if (row != NULL)
-        printf("<BR>%s\n", row[0]);
-    sqlFreeResult(&sr);
-    }
-printf("<BR>\n");
-hFreeConn(&conn);
-}
-
-struct snp snp125ToSnp(struct snp125 *snp125)
-{
-struct snp snp;
-//AllocVar(snp);
-snp.exception = NULL;
-snp.source = NULL;
-snp.locType = NULL;
-snp.func = NULL;
-snp.avHetSE = 0.0;
-snp.avHet = 0.0;
-snp.valid = NULL;
-snp.class = NULL;
-snp.molType = NULL;
-snp.next = NULL;
-snp.chrom=cloneString(snp125->chrom);
-snp.chromStart=snp125->chromStart;
-snp.chromEnd=snp125->chromEnd;
-snp.name=cloneString(snp125->name);
-snp.score=snp125->score;
-snp.observed=cloneString(snp125->observed);
+struct snp *snp;
+AllocVar(snp);
+snp->chrom = cloneString(snp125->chrom);
+snp->chromStart = snp125->chromStart;
+snp->chromEnd = snp125->chromEnd;
+snp->name = cloneString(snp125->name);
+snp->score = snp125->score;
 if (sameString(snp125->strand, "+"))
-    snp.strand[0] = '+';
+    snp->strand[0] = '+';
 else if (sameString(snp125->strand, "-"))
-    snp.strand[0] = '-';
+    snp->strand[0] = '-';
 else
-    snp.strand[0] = '?';
-snp.strand[1] = '\0';
+    snp->strand[0] = '?';
+snp->strand[1] = '\0';
+snp->observed = cloneString(snp125->observed);
 return snp;
 }
 
 void checkForHapmap(struct trackDb *tdb, char *itemName)
 {
 struct sqlConnection *conn = hAllocConn();
-char query[256];
-int count = 0;
-
-if (!hTableExists("hapmapAllelesSummary")) return;
-safef(query, sizeof(query), "select count(*) from hapmapAllelesSummary where name = '%s'", itemName);
-count = sqlQuickNum(conn, query);
-if (count != 1) return;
-printf("<BR><B><A HREF=\"%s&hapmapSnps=dense\"> HapMap SNP</A> </B>", hgTracksPathAndSettings());
-
+char query[512];
+if (!hTableExists("hapmapAllelesSummary"))
+    return;
+safef(query, sizeof(query),
+      "select count(*) from hapmapAllelesSummary where name = '%s'", itemName);
+if (sqlQuickNum(conn, query) != 1)
+    return;
+printf("<BR><B><A HREF=\"%s&hapmapSnps=dense\"> HapMap SNP</A> </B><BR>\n",
+       hgTracksPathAndSettings());
 hFreeConn(&conn);
 }
-
-void doSnp125(struct trackDb *tdb, char *itemName)
-/* Process SNP details. */
-{
-char   *group = tdb->tableName;
-struct snp125 snp;
-struct snp snpAlign;
-int    start = cartInt(cart, "o");
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr;
-char **row;
-char   query[256];
-int    rowOffset=hOffsetPastBin(seqName, group);
-int    snpCount=0;
-boolean multipleAlignment = FALSE;
-
-cartWebStart(cart, "dbSNP build 125");
-printf("<H2>dbSNP build 125 %s</H2>\n", itemName);
-safef(query, sizeof(query), "select * from %s where chrom='%s' and "
-      "chromStart=%d and name='%s'", group, seqName, start, itemName);
-sr = sqlGetResult(conn, query);
-row = sqlNextRow(sr);
-snp125StaticLoad(row+rowOffset, &snp);
-bedPrintPos((struct bed *)&snp, 3);
-snpAlign=snp125ToSnp(&snp);
-printf("<BR>\n");
-printSnp125Info(snp);
-printf("<BR>\n");
-printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
-printf("type=rs&rs=%s\" TARGET=_blank>dbSNP</A>\n", itemName);
-doSnpEntrezGeneLink(tdb, itemName);
-
-if (hTableExists("snp125Exceptions") && hTableExists("snp125ExceptionDesc"))
-    writeSnp125Exception(itemName);
-
-sqlFreeResult(&sr);
-ZeroVar(query);
-safef(query, sizeof(query), "select * from %s where name='%s'", group, itemName);
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    snp125StaticLoad(row+rowOffset, &snp);
-    if (snp.chromStart!=start || differentString(snp.chrom,seqName))
-	{
-	multipleAlignment = TRUE;
-	printf("<BR>");
-	if (snpCount==0)
-	    printf("<BR><B>This SNP maps to these additional locations:</B><BR>");
-	snpCount++;
-	bedPrintPos((struct bed *)&snp, 3);
-	}
-    }
-sqlFreeResult(&sr);
-checkForHapmap(tdb, itemName);
-printSnpAlignment2(snpAlign);
-printTrackHtml(tdb);
-hFreeConn(&conn);
-}
-
 
 void doSnpWithVersion(struct trackDb *tdb, char *itemName, int version)
 /* Process SNP details. */
 {
-char   *group = tdb->tableName;
+char   *table = tdb->tableName;
 struct snp125 snp;
-struct snp snpAlign;
+struct snp *snpAlign;
 int    start = cartInt(cart, "o");
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
-char   query[256];
-int    rowOffset=hOffsetPastBin(seqName, group);
+char   query[512];
+int    rowOffset=hOffsetPastBin(seqName, table);
 int    snpCount=0;
-char title[64];
-char tableName1[64];
-char tableName2[64];
-boolean multipleAlignment = FALSE;
 
-safef(title, sizeof(title), "dbSNP build %d", version);
-cartWebStart(cart, title);
+genericHeader(tdb, NULL);
 printf("<H2>dbSNP build %d %s</H2>\n", version, itemName);
 safef(query, sizeof(query), "select * from %s where chrom='%s' and "
-      "chromStart=%d and name='%s'", group, seqName, start, itemName);
+      "chromStart=%d and name='%s'", table, seqName, start, itemName);
 sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
 snp125StaticLoad(row+rowOffset, &snp);
+printCustomUrl(tdb, itemName, FALSE);
 bedPrintPos((struct bed *)&snp, 3);
-snpAlign=snp125ToSnp(&snp);
+
+snpAlign = snp125ToSnp(&snp);
 printf("<BR>\n");
-printSnp125Info(snp);
-printf("<BR>\n");
-printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
-printf("type=rs&rs=%s\" TARGET=_blank>dbSNP</A>\n", itemName);
+printSnp125Info(tdb, snp);
 doSnpEntrezGeneLink(tdb, itemName);
-
-safef(tableName1, sizeof(tableName1), "snp%dExceptions", version);
-safef(tableName2, sizeof(tableName2), "snp%dExceptionDesc", version);
-if (hTableExists(tableName1) && hTableExists(tableName2))
-    writeSnpExceptionWithVersion(itemName, version);
-
 sqlFreeResult(&sr);
-ZeroVar(query);
-safef(query, sizeof(query), "select * from %s where name='%s'", group, itemName);
+
+writeSnpExceptionWithVersion(table, itemName, version);
+
+safef(query, sizeof(query), "select * from %s where name='%s'",
+      table, itemName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     snp125StaticLoad(row+rowOffset, &snp);
-    if (snp.chromStart!=start || differentString(snp.chrom,seqName))
+    if (snp.chromStart != start || differentString(snp.chrom, seqName))
 	{
-	multipleAlignment = TRUE;
-	printf("<BR>");
 	if (snpCount==0)
-	    printf("<BR><B>This SNP maps to these additional locations:</B><BR>");
+	    printf("<BR><B>This SNP maps to these additional locations:"
+		   "</B><BR><BR>");
 	snpCount++;
 	bedPrintPos((struct bed *)&snp, 3);
+	printf("<BR>");
 	}
     }
 sqlFreeResult(&sr);
 checkForHapmap(tdb, itemName);
-printSnpAlignment2(snpAlign);
+printSnpAlignment(tdb, snpAlign);
 printTrackHtml(tdb);
 hFreeConn(&conn);
 }
@@ -19995,17 +19686,12 @@ else if (sameWord(track, "snp"))
     {
     doSnp(tdb, item);
     }
-else if (sameWord(track, "snp125"))
+else if (startsWith("snp", track) && strlen(track) >= 6 &&
+	 isdigit(track[3]) && isdigit(track[4]) && isdigit(track[5]) &&
+	 atoi(track+3) >= 125)
     {
-    doSnp125(tdb, item);
-    }
-else if (sameWord(track, "snp126"))
-    {
-    doSnpWithVersion(tdb, item, 126);
-    }
-else if (sameWord(track, "snp127"))
-    {
-    doSnpWithVersion(tdb, item, 127);
+    int version = atoi(track+3);
+    doSnpWithVersion(tdb, item, version);
     }
 else if (sameWord(track, "cnpIafrate"))
     {
