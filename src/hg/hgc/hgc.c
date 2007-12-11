@@ -212,7 +212,7 @@
 #include "itemConf.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1372 2007/12/11 08:33:15 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1373 2007/12/11 14:01:36 giardine Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -18537,7 +18537,7 @@ while ((row = sqlNextRow(sr)) != NULL)
             if (sameString(link->attrType, "srcLink"))
                 {
                 char *copy = cgiEncode(url);
-                safef(url, sizeof(url), "http://globin.bx.psu.edu/cgi-bin/phencode-test/link-disclaimer?src=%s&link=%s", link->raKey, copy);
+                safef(url, sizeof(url), "http://phencode.bx.psu.edu/cgi-bin/phencode/link-disclaimer?src=%s&link=%s", link->raKey, copy);
                 }
             if (sameString(link->displayVal, ""))
                 printf("<B>%s</B> - <A HREF=\"%s\" TARGET=_blank>%s</A><BR>\n", label, url, link->acc);
