@@ -4,7 +4,7 @@
 # This file describes browser build for the Marmoset
 # genome, July 2007
 #
-#	"$Id: calJac1.txt,v 1.4 2007/11/21 20:18:29 hiram Exp $"
+#	"$Id: calJac1.txt,v 1.5 2007/12/11 19:55:18 hiram Exp $"
 #
 ######################################################################
 ## DOWNLOAD SEQUENCE (DONE - 2007-08-21 - Hiram)
@@ -373,8 +373,8 @@ calJac1.refseq.mrna.xeno.loadDesc  = yes
     ssh hgwdev
     cd /cluster/data/genbank
     time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad calJac1
-    #	logFile: var/dbload/hgwdev/logs/2007.11.21-09:30:23.dbload.log
-    #	real    88m19.420s
+    #	logFile: var/dbload/hgwdev/logs/2007.11.25-10:26:23.dbload.log
+    #	real    26m30.926s
 
     # enable daily alignment and update of hgwdev (DONE - 2007-11-21 - Hiram)
     cd ~/kent/src/hg/makeDb/genbank
