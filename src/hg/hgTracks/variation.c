@@ -3,7 +3,9 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.128 2007/12/04 01:01:19 angie Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.129 2007/12/11 21:03:45 angie Exp $";
+
+struct hash *snp125FuncCartHash = NULL;
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -286,7 +288,8 @@ struct slList        *snpItemList   = tg->items; /* list of SNPs */
 struct slList        *snpItem       = snpItemList;
 struct slList        *orthoItemList = NULL;      /* list of orthologous state info */
 struct slList        *orthoItem     = orthoItemList;
-char                 *orthoTable    = cloneString("snp126orthoPanTro2RheMac2"); /* could be a trackDb option */
+char                 *orthoTable    = trackDbSetting(tg->tdb,
+						     "chimpMacaqueOrthoTable");
 struct sqlResult     *sr            = NULL;
 int                   cmp           = 0;
 struct dyString      *extra         = newDyString(256);
@@ -347,14 +350,11 @@ Color snp125ExtendedColor(struct track *tg, void *item, struct vGfx *vg)
 return ((struct snp125Extended *)item)->color;
 }
 
-int snp125ExtendedColorCmp(const void *va, const void *vb)
-/* Compare to sort based on color -- black first, red last */
+int snp125ExtendedColorCmpRaw(const Color ca, const char *aName,
+			      const Color cb, const char *bName)
+/* Compare to sort based on color -- black first, red last.  This is not 
+ * a slSort Cmp function, just a comparator of the values. */
 {
-const struct snp125Extended *a = *((struct snp125Extended **)va);
-const struct snp125Extended *b = *((struct snp125Extended **)vb);
-const Color ca = a->color;
-const Color cb = b->color;
-
 /* order is important here */
 if (ca==cb)
     return 0;
@@ -378,8 +378,19 @@ if (ca==MG_BLACK)
     return 1;
 if (cb==MG_BLACK)
     return -1;
-hPrintComment("SNP track: colors %d (%s) and %d (%s) not known", ca, a->name, cb, b->name);
+hPrintComment("SNP track: colors %d (%s) and %d (%s) not known", ca, aName, cb, bName);
 return 0;
+}
+
+int snp125ExtendedColorCmp(const void *va, const void *vb)
+/* Compare to sort based on color -- black first, red last */
+{
+const struct snp125Extended *a = *((struct snp125Extended **)va);
+const struct snp125Extended *b = *((struct snp125Extended **)vb);
+const Color ca = a->color;
+const Color cb = b->color;
+
+return snp125ExtendedColorCmpRaw(ca, a->name, cb, b->name);
 }
 
 void sortSnp125ExtendedByColor(struct track *tg)
@@ -426,11 +437,26 @@ for (i=0; i < snp125ValidCartSize; i++)
     snp125ValidCart[i] = cartUsualString(cart, snp125ValidStrings[i], snp125ValidDefault[i]);
     snp125ValidIncludeCart[i] = cartUsualBoolean(cart, snp125ValidIncludeStrings[i], snp125ValidIncludeDefault[i]);
     }
+snp125FuncCartHash = hashNew(0);
 for (i=0; i < snp125FuncCartSize; i++)
     {
     snp125FuncCart[i] = cartUsualString(cart, snp125FuncStrings[i], snp125FuncDefault[i]);
+    /* There are many function types, some of which are mapped onto
+     * simpler types in snp125Ui.c.  First store the indexes of
+     * selected colors of simpler types that we present as coloring
+     * choices; then map the more detailed function types' indexes
+     * onto the simpler types' indexes. */
+    hashAddInt(snp125FuncCartHash, snp125FuncDataName[i],
+	       stringArrayIx(snp125FuncCart[i],
+			     snp125ColorLabel, snp125ColorLabelSize));
     snp125FuncIncludeCart[i] = cartUsualBoolean(cart, snp125FuncIncludeStrings[i], snp125FuncIncludeDefault[i]);
     }
+int j, k;
+for (j = 0;  snp125FuncDataSynonyms[j] != NULL;  j++)
+    for (k = 1;  snp125FuncDataSynonyms[j][k] != NULL;  k++)
+	hashAddInt(snp125FuncCartHash, snp125FuncDataSynonyms[j][k],
+		   hashIntVal(snp125FuncCartHash,
+			      snp125FuncDataSynonyms[j][0]));
 for (i=0; i < snp125LocTypeCartSize; i++)
     {
     snp125LocTypeCart[i] = cartUsualString(cart, snp125LocTypeStrings[i], snp125LocTypeDefault[i]);
@@ -545,51 +571,6 @@ filterSnpItems(tg, snpFuncFilterItem);
 filterSnpItems(tg, snpLocTypeFilterItem);
 }
 
-void loadSnp125(struct track *tg)
-/* Load up snp125 from database table to track items. */
-{
-int i = 0;
-
-snp125AvHetCutoff = atof(cartUsualString(cart, "snp125AvHetCutoff", "0.0"));
-snp125WeightCutoff = atoi(cartUsualString(cart, "snp125WeightCutoff", "3"));
-
-for (i=0; i < snp125MolTypeCartSize; i++)
-    {
-    snp125MolTypeCart[i] = cartUsualString(cart, snp125MolTypeStrings[i], snp125MolTypeDefault[i]);
-    snp125MolTypeIncludeCart[i] = cartUsualBoolean(cart, snp125MolTypeIncludeStrings[i], snp125MolTypeIncludeDefault[i]);
-    }
-for (i=0; i < snp125ClassCartSize; i++)
-    {
-    snp125ClassCart[i] = cartUsualString(cart, snp125ClassStrings[i], snp125ClassDefault[i]);
-    snp125ClassIncludeCart[i] = cartUsualBoolean(cart, snp125ClassIncludeStrings[i], snp125ClassIncludeDefault[i]);
-    }
-for (i=0; i < snp125ValidCartSize; i++)
-    {
-    snp125ValidCart[i] = cartUsualString(cart, snp125ValidStrings[i], snp125ValidDefault[i]);
-    snp125ValidIncludeCart[i] = cartUsualBoolean(cart, snp125ValidIncludeStrings[i], snp125ValidIncludeDefault[i]);
-    }
-for (i=0; i < snp125FuncCartSize; i++)
-    {
-    snp125FuncCart[i] = cartUsualString(cart, snp125FuncStrings[i], snp125FuncDefault[i]);
-    snp125FuncIncludeCart[i] = cartUsualBoolean(cart, snp125FuncIncludeStrings[i], snp125FuncIncludeDefault[i]);
-    }
-for (i=0; i < snp125LocTypeCartSize; i++)
-    {
-    snp125LocTypeCart[i] = cartUsualString(cart, snp125LocTypeStrings[i], snp125LocTypeDefault[i]);
-    snp125LocTypeIncludeCart[i] = cartUsualBoolean(cart, snp125LocTypeIncludeStrings[i], snp125LocTypeIncludeDefault[i]);
-    }
-
-bedLoadItem(tg, tg->mapName, (ItemLoader)snp125Load);
-
-filterSnpItems(tg, snp125AvHetFilterItem);
-filterSnpItems(tg, snp125WeightFilterItem);
-filterSnpItems(tg, snp125MolTypeFilterItem);
-filterSnpItems(tg, snp125ClassFilterItem);
-filterSnpItems(tg, snp125ValidFilterItem);
-filterSnpItems(tg, snp125FuncFilterItem);
-filterSnpItems(tg, snp125LocTypeFilterItem);
-}
-
 void freeSnpMap(struct track *tg)
 /* Free up snpMap items. */
 {
@@ -639,15 +620,13 @@ Color snp125Color(struct track *tg, void *item, struct vGfx *vg)
 struct snp125 *el = item;
 enum   snp125ColorEnum thisSnpColor = snp125ColorBlack;
 char  *snpColorSource = cartUsualString(cart, snp125ColorSourceDataName[0], snp125ColorSourceDefault[0]);
-char  *validString = NULL;
-char  *funcString = NULL;
 int    snpValid = 0;
-int    snpFunc = 0;
 int    index1 = 0;
 int    index2 = 0;
 
-index1 = stringArrayIx(snpColorSource, snp125ColorSourceLabels, snp125ColorSourceLabelsSize);
-switch (stringArrayIx(snpColorSource, snp125ColorSourceLabels, snp125ColorSourceLabelsSize))
+index1 = stringArrayIx(snpColorSource,
+		       snp125ColorSourceLabels, snp125ColorSourceLabelsSize);
+switch (index1)
     {
     case snp125ColorSourceMolType:
 	index2 = stringArrayIx(el->molType,snp125MolTypeDataName,snp125MolTypeDataNameSize);
@@ -663,17 +642,27 @@ switch (stringArrayIx(snpColorSource, snp125ColorSourceLabels, snp125ColorSource
 	break;
 	/* valid is a set */
     case snp125ColorSourceValid:
-	validString = cloneString(el->valid);
 	for (snpValid=0; snpValid<snp125ValidCartSize; snpValid++)
-	    if (containsStringNoCase(validString, snp125ValidDataName[snpValid]))
+	    if (containsStringNoCase(el->valid, snp125ValidDataName[snpValid]))
 		thisSnpColor = (enum snp125ColorEnum) stringArrayIx(snp125ValidCart[snpValid],snp125ColorLabel,snp125ColorLabelSize);
 	break;
 	/* func is a set */
     case snp125ColorSourceFunc:
-        funcString = cloneString(el->func);
-	for (snpFunc=0; snpFunc<snp125FuncCartSize; snpFunc++)
-	    if (containsStringNoCase(funcString, snp125FuncDataName[snpFunc]))
-	        thisSnpColor = (enum snp125ColorEnum) stringArrayIx(snp125FuncCart[snpFunc],snp125ColorLabel,snp125ColorLabelSize);
+	{
+	char *words[128];
+	int wordCount, i;
+	char funcString[4096];
+	safecpy(funcString, sizeof(funcString), el->func);
+	wordCount = chopCommas(funcString, words);
+	for (i = 0;  i < wordCount;  i++)
+	    {
+	    enum snp125ColorEnum wordColor = (enum snp125ColorEnum)
+		hashIntVal(snp125FuncCartHash, words[i]);
+	    if (snp125ExtendedColorCmpRaw(wordColor, "wordColor",
+					  thisSnpColor, "thisSnpColor") < 0)
+		thisSnpColor = wordColor;
+	    }
+	}
 	break;
     case snp125ColorSourceLocType:
 	index2 = stringArrayIx(el->locType,snp125LocTypeDataName,snp125LocTypeDataNameSize);
@@ -1017,17 +1006,15 @@ tg->itemNameColor = snpColor;
 
 void snp125Methods(struct track *tg)
 {
-struct sqlConnection *conn = hAllocConn();
-
+char *orthoTable = trackDbSetting(tg->tdb, "chimpMacaqueOrthoTable");
 tg->drawItems     = snpDrawItems;
 tg->drawItemAt    = snp125DrawItemAt;
 tg->freeItems     = freeSnp125;
 tg->loadItems     = loadSnp125Extended;
 tg->itemNameColor = snp125ExtendedColor;
 tg->itemColor     = snp125ExtendedColor;
-if (sqlTableExists(conn,"snp126orthoPanTro2RheMac2"))
+if (isNotEmpty(orthoTable) && hTableExists(orthoTable))
     tg->itemName  = snp125ExtendedName;
-hFreeConn(&conn);
 }
 
 char *perlegenName(struct track *tg, void *item)
