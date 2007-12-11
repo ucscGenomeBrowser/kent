@@ -102,6 +102,10 @@ void hSetDbConnect(char* host, char *db, char *user, char *password);
 void hSetDbConnect2(char* host, char *db, char *user, char *password);
 /* set the connection information for the database */
 
+boolean hArchiveDbExists(char *database);
+/* Function to check if this is a valid db name in the dbDbArch table 
+   of archived databases. */
+
 boolean hDbExists(char *database);
 /* Function to check if this is a valid db name */
 
@@ -451,6 +455,9 @@ struct dbDb *hArchiveDbDbList();
 /* Return list of databases in archive central dbDb.
  * Free this with dbDbFree. */
 
+int hDbDbCmpOrderKey(const void *va, const void *vb);
+/* Compare to sort based on order key */
+
 struct sqlConnection *hMaybeConnectArchiveCentral();
 /* Connect to central database for archives.
  * Free this up with hDisconnectCentralArchive(). */
@@ -724,7 +731,6 @@ boolean hIsBlatIndexedDatabase(char *db);
 
 struct blatServerTable *hFindBlatServer(char *db, boolean isTrans);
 /* return the blat server information corresponding to the database */
-
 
 char *hDefaultPos(char *database);
 /* param database - The database within which to look up this position.
