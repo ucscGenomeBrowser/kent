@@ -24195,3 +24195,27 @@ done
 # CCC Genome Graphs (DONE 2007-Sept Andy)
 # 
 # See hg18 make doc.
+
+###############################################################
+# Affy Transcriptome Phase 3 chrY fix (DONE 2007-12-10, Andy)
+
+ssh kkstore05
+cd /cluster/store12/hg17/bed/affyTxnPhase3/raw
+zcat sRNA.affyTxnPhase3HeLaBottomStrand.wig.gz | grep -n chrY
+#256994657:variableStep chrom=chrY span=1
+zcat sRNA.affyTxnPhase3HeLaBottomStrand.wig.gz | head -n256994656 | gzip -c >tmp.wig.gz
+mv tmp.wig.gz sRNA.affyTxnPhase3HeLaBottomStrand.wig.gz
+zcat sRNA.affyTxnPhase3HeLaTopStrand.wig.gz | grep -n chrY 
+256994657:variableStep chrom=chrY span=1
+zcat sRNA.affyTxnPhase3HeLaTopStrand.wig.gz | head -n256994656 | gzip -c > tmp.wig.gz
+mv tmp.wig.gz sRNA.affyTxnPhase3HeLaTopStrand.wig.gz
+ssh kolossus
+cd /cluster/store12/hg17/bed/affyTxnPhase3/raw
+wigEncode sRNA.affyTxnPhase3HeLaBottomStrand.wig.gz affyTxnPhase3HeLaBottomStrand.{wig,wib}
+wigEncode sRNA.affyTxnPhase3HeLaTopStrand.wig.gz affyTxnPhase3HeLaTopStrand.{wig,wib}
+mv *.wig /cluster/data/hg17/bed/affyTxnPhase3/wig/
+mv *.wib /cluster/data/hg17/bed/affyTxnPhase3/wib/
+ssh hgwdev
+cd /cluster/data/hg17/bed/affyTxnPhase3/wig
+hgLoadWiggle hg17 affyTxnPhase3HeLaTopStrand{,.wig}
+hgLoadWiggle hg17 affyTxnPhase3HeLaBottomStrand{,.wig}
