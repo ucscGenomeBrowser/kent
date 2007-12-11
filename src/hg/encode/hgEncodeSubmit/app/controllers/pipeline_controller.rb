@@ -152,12 +152,30 @@ class PipelineController < ApplicationController
     @project = Project.find(params[:id])
     return unless request.post?
     @upurl = params[:upload_url]
+    @upload = params[:upload_file]
     if @upurl == "http://"
       @upurl = ""
     end
-    return if @upurl.blank?
+    return if @upload.blank? && @upurl.blank?
+    #raise @upload.inspect
+    #flash[:notice] = "#{@upload.inspect}"
     
-    @filename = sanitize_filename(@upurl)
+    unless @upurl.blank?
+      @filename = sanitize_filename(@upurl)
+      @upload = open(@upurl)
+    else
+      @filename = sanitize_filename(@upload.original_filename)
+      extensionsByMIME = {
+        "application/zip" => ["zip", "ZIP"],
+        "application/x-tar" => ["tar.gz", "TAR.GZ", "tar.bz2", "TAR.BZ2"]
+      }
+      extensions = extensionsByMIME[@upload.content_type.chomp]
+      unless extensions
+        flash[:warning] = "invalid content_type=#{@upload.content_type.chomp}"
+        return
+      end
+    end
+
     extensions = ["zip", "ZIP", "tar.gz", "TAR.GZ", "tar.bz2", "TAR.BZ2"]
     unless extensions.any? {|ext| @filename.ends_with?("." + ext) }
       flash[:warning] = "File name <strong>#{@filename}</strong> is invalid. " +
@@ -175,6 +193,7 @@ class PipelineController < ApplicationController
 
     nextArchiveNo = @project.archive_count+1
 
+    plainName = @filename
     @filename = "#{"%03d" % nextArchiveNo}_#{@filename}"
 
     #debugging
@@ -188,6 +207,15 @@ class PipelineController < ApplicationController
     File.delete(path_to_file) if File.exists?(path_to_file)
 
     @project.status = "schedule uploading #{@upurl}"
+
+    unless @upload.blank?
+      if @upload.instance_of?(Tempfile)
+        FileUtils.copy(@upload.local_path, path_to_file)
+      else
+        File.open(path_to_file, "wb") { |f| f.write(@upload.read) }
+      end
+      @project.status = "schedule expanding #{plainName}"
+    end
 
     unless @project.save
       flash[:warning] = "project record save failed"
