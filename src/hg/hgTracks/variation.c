@@ -3,9 +3,10 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.129 2007/12/11 21:03:45 angie Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.130 2007/12/11 23:18:17 angie Exp $";
 
-struct hash *snp125FuncCartHash = NULL;
+struct hash *snp125FuncCartColorHash = NULL;
+struct hash *snp125FuncCartNameHash = NULL;
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -200,13 +201,30 @@ boolean snp125FuncFilterItem(struct track *tg, void *item)
 /* Return TRUE if item passes filter. */
 {
 struct snp125 *el = item;
-int i;
-
-for (i=0; i<snp125FuncLabelsSize; i++)
+char *words[128];
+int wordCount, i;
+char funcString[4096];
+safecpy(funcString, sizeof(funcString), el->func);
+wordCount = chopCommas(funcString, words);
+for (i = 0;  i < wordCount;  i++)
     {
-    if (!containsStringNoCase(el->func, snp125FuncDataName[i])) 
-	continue;
-    return snp125FuncIncludeCart[i];
+    char *simpleFunc = (char *)hashMustFindVal(snp125FuncCartNameHash,
+					       words[i]);
+    if (sameString(simpleFunc, "ignore"))
+	{
+	/* Defer to other listed functions.  If there aren't any,
+	 * treat as unknown. */
+	if (wordCount-i > 1)
+	    continue;
+	else
+	    simpleFunc = snp125FuncDataName[0];
+	}
+    int snpFunc = stringArrayIx(simpleFunc,
+				snp125FuncDataName, snp125FuncDataNameSize);
+    if (snpFunc < 0)
+	errAbort("Unrecognized function %s", simpleFunc);
+    if (! snp125FuncIncludeCart[snpFunc])
+	return FALSE;
     }
 return TRUE;
 }
@@ -295,7 +313,7 @@ int                   cmp           = 0;
 struct dyString      *extra         = newDyString(256);
 
 /* if orthologous info is not available, don't add it! */
-if(!sqlTableExists(conn,orthoTable))
+if(isEmpty(orthoTable) || !sqlTableExists(conn, orthoTable))
     {
     hFreeConn(&conn);
     return;
@@ -437,26 +455,38 @@ for (i=0; i < snp125ValidCartSize; i++)
     snp125ValidCart[i] = cartUsualString(cart, snp125ValidStrings[i], snp125ValidDefault[i]);
     snp125ValidIncludeCart[i] = cartUsualBoolean(cart, snp125ValidIncludeStrings[i], snp125ValidIncludeDefault[i]);
     }
-snp125FuncCartHash = hashNew(0);
+snp125FuncCartColorHash = hashNew(0);
+snp125FuncCartNameHash = hashNew(0);
 for (i=0; i < snp125FuncCartSize; i++)
     {
     snp125FuncCart[i] = cartUsualString(cart, snp125FuncStrings[i], snp125FuncDefault[i]);
     /* There are many function types, some of which are mapped onto
      * simpler types in snp125Ui.c.  First store the indexes of
      * selected colors of simpler types that we present as coloring
-     * choices; then map the more detailed function types' indexes
-     * onto the simpler types' indexes. */
-    hashAddInt(snp125FuncCartHash, snp125FuncDataName[i],
+     * choices; then (below) map the more detailed function types'
+     * indexes onto the simpler types' indexes. */
+    hashAddInt(snp125FuncCartColorHash, snp125FuncDataName[i],
 	       stringArrayIx(snp125FuncCart[i],
 			     snp125ColorLabel, snp125ColorLabelSize));
+    /* Similarly, map names.  Self-mapping here, others below. */
+    hashAdd(snp125FuncCartNameHash, snp125FuncDataName[i],
+	    snp125FuncDataName[i]);
     snp125FuncIncludeCart[i] = cartUsualBoolean(cart, snp125FuncIncludeStrings[i], snp125FuncIncludeDefault[i]);
     }
 int j, k;
 for (j = 0;  snp125FuncDataSynonyms[j] != NULL;  j++)
+    {
+    char *funcNoIgnore = snp125FuncDataSynonyms[j][0];
+    if (sameString(funcNoIgnore, "ignore"))
+	funcNoIgnore = snp125FuncDataName[0];
     for (k = 1;  snp125FuncDataSynonyms[j][k] != NULL;  k++)
-	hashAddInt(snp125FuncCartHash, snp125FuncDataSynonyms[j][k],
-		   hashIntVal(snp125FuncCartHash,
-			      snp125FuncDataSynonyms[j][0]));
+	{
+	hashAddInt(snp125FuncCartColorHash, snp125FuncDataSynonyms[j][k],
+		   hashIntVal(snp125FuncCartColorHash, funcNoIgnore));
+	hashAdd(snp125FuncCartNameHash, snp125FuncDataSynonyms[j][k],
+		snp125FuncDataSynonyms[j][0]);
+	}
+    }
 for (i=0; i < snp125LocTypeCartSize; i++)
     {
     snp125LocTypeCart[i] = cartUsualString(cart, snp125LocTypeStrings[i], snp125LocTypeDefault[i]);
@@ -657,7 +687,7 @@ switch (index1)
 	for (i = 0;  i < wordCount;  i++)
 	    {
 	    enum snp125ColorEnum wordColor = (enum snp125ColorEnum)
-		hashIntVal(snp125FuncCartHash, words[i]);
+		hashIntVal(snp125FuncCartColorHash, words[i]);
 	    if (snp125ExtendedColorCmpRaw(wordColor, "wordColor",
 					  thisSnpColor, "thisSnpColor") < 0)
 		thisSnpColor = wordColor;
