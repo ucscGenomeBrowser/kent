@@ -301,7 +301,7 @@ printf("promote accuracy, nevertheless there may be errors in the original\n");
 printf("data and/or the compilation process.  <b>By using these data, you\n");
 printf("agree and acknowledge that the information is not guaranteed to be\n");
 printf("accurate.</b>  If you do find any errors, please report them to the\n");
-printf("addresses listed on the <a href=\"http://globin.bx.psu.edu/phencode/contact.html\">Contact us</a> page.\n");
+printf("addresses listed on the <a href=\"http://phencode.bx.psu.edu/phencode/contact.html\">Contact us</a> page.\n");
 printf("<p>");
 printf("<b>Disclaimer</b>\n");
 printf("<p>\n");
