@@ -2,7 +2,7 @@
 #include "snp125Ui.h"
 #include "common.h"
 
-static char const rcsid[] = "$Id: snp125Ui.c,v 1.27 2007/12/11 21:00:37 angie Exp $";
+static char const rcsid[] = "$Id: snp125Ui.c,v 1.28 2007/12/11 23:15:01 angie Exp $";
 
 boolean snp125ExtendedNames = TRUE;
 
@@ -368,10 +368,7 @@ char *snp125FuncCart[] = {
  * arrays, each of which has the simpler type (from snp125FuncDataName
  * above) followed by more specific subtypes, if any.  All arrays are
  * NULL-terminated.  Types that do not appear in snp125FuncDataName are
- * mapped onto unknown. */
-static char *unknownSyn[] =
-    {"unknown",		"coding", "cds-reference", "coding-synonymy-unknown",
-     NULL};
+ * mapped onto ignore. */
 static char *locusSyn[] =
     {"locus",		"gene-segment", "near-gene-3", "near-gene-5", NULL};
 static char *nonsynonSyn[] =
@@ -380,12 +377,15 @@ static char *untranslatedSyn[] =
     {"untranslated",	"untranslated-3", "untranslated-5", NULL};
 static char *spliceSyn[] =
     {"splice-site",	"splice-3", "splice-5", NULL};
+static char *ignoreSyn[] =
+    {"ignore",		"coding", "cds-reference", "coding-synonymy-unknown",
+     NULL};
 char **snp125FuncDataSynonyms[] = {
-    unknownSyn,
     locusSyn,
     nonsynonSyn,
     untranslatedSyn,
     spliceSyn,
+    ignoreSyn,
     NULL
 };
 
