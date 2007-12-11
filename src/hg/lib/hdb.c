@@ -35,7 +35,7 @@
 #include "customTrack.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.338 2007/11/20 00:35:45 hartera Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.339 2007/12/11 00:30:50 hartera Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -2140,8 +2140,6 @@ hDisconnectCentral(&conn);
 return ok;
 }
 
-
-
 char *hArchiveOrCentralDbDbOptionalField(char *database, char *field, boolean archive)
 /* Look up field in dbDb table keyed by database,
  * Return NULL if database doesn't exist. 
@@ -2580,6 +2578,17 @@ if (conn)
     slReverse(&dbList);
     }
 return dbList;
+}
+
+int hDbDbCmpOrderKey(const void *va, const void *vb)
+/* Compare to sort based on order key */
+{
+const struct dbDb *a = *((struct dbDb **)va);
+const struct dbDb *b = *((struct dbDb **)vb);
+
+if (b->orderKey > a->orderKey) return -1;
+else if (b->orderKey < a->orderKey) return 1;
+else return 0; 
 }
 
 struct slName *hDbList()
@@ -4047,7 +4056,11 @@ for (dbDb = allDbList; dbDb != NULL; dbDb = nextDbDb)
 hashFree(&hash);
 hashFree(&dbNameHash);
 liftOverChainFreeList(&chainList);
-slReverse(&liftOverDbList);
+
+/* sort by orderKey so that assemblies always appear from most recent */
+/* to the oldest assemblies in the dropdown menu for fromDbs */
+slSort(&liftOverDbList, hDbDbCmpOrderKey);
+
 return liftOverDbList;
 }
 
@@ -4087,7 +4100,10 @@ for (dbDb = allDbList; dbDb != NULL; dbDb = nextDbDb)
     }
 hashFree(&hash);
 liftOverChainFreeList(&chainList);
-slReverse(&liftOverDbList);
+
+/* sort by orderKey so that assemblies always appear from most recent */
+/* to the oldest assemblies in the dropdown menu for toDbs */
+slSort(&liftOverDbList, hDbDbCmpOrderKey);
 return liftOverDbList;
 }
 
