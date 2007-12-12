@@ -18710,5 +18710,35 @@ TMPDIR=/scratch/tmp
       /usr/local/apache/htdocs/goldenPath/hg18/
 
 
-###########################################################################
 
+#########################################################################
+# ADD LINKS TO GENETESTS ON hgGene DETAILS PAGE (DONE 12/12/07 Fan)
+
+    ssh hgwdev
+    cd /cluster/store11/gs.19/build36/bed
+    mkdir geneTests
+    cd geneTests
+
+# paste the 3 cols gene list from GeneTest web site into file geneTests.lis
+
+    cut -f 1 geneTests.lis >j1
+    cut -f 2 geneTests.lis >j2
+    cut -f 3 geneTests.lis >j3
+
+    cat j1 j2 j3 |sort -u >geneTests.tab
+    rm j1 j2 j3
+
+    hgsql hg18 -e 'drop table geneTests'
+    hgsql hg18 < ~/src/hg/lib/geneTests.sql
+    hgsql hg18 -e 'load data local infile "geneTests.tab" into table geneTests
+ignore 1 lines'
+
+# the list is independent of hg18, so load it into hg17 too.
+
+    hgsql hg17 -e 'drop table geneTests'
+    hgsql hg17 < ~/src/hg/lib/geneTests.sql
+
+    hgsql hg17 -e 'load data local infile "geneTests.tab" into table geneTests
+ignore 1 lines'
+
+###########################################################################
