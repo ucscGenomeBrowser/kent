@@ -341,7 +341,7 @@ printf("</TR>\n");
 /* CCDS databases */
 printf("<TR>\n");
 printf("<TH>CCDS database");
-printf("<TD> <A HREF=\"http://www.ncbi.nlm.nih.gov/CCDS/CcdsBrowse.cgi?REQUEST=CCDS&DATA=%s\" TARGET=_blank>%s</A>",
+printf("<TD> <A HREF=\"http://www.ncbi.nlm.nih.gov/CCDS/CcdsBrowse.cgi?REQUEST=CCDS&BUILDS=ALLBUILDS&DATA=%s\" TARGET=_blank>%s</A>",
        ccdsId, ccdsId);
 printf("</TR>\n");
 
