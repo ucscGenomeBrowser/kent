@@ -28,7 +28,7 @@ color 0, 10, 100
 altColor 0,90,10
 type wigMaf 0.0 1.0
 maxHeightPixels 100:40:11
-wiggle phastCons8wayPrimates Primates Primates phastCons8way Vertebrate Vertebrate
+wiggle phastCons8way
 spanList 1
 autoScaleDefault Off
 windowingFunction mean
@@ -40,32 +40,18 @@ summary multiz8waySummary
 speciesCodonDefault ponAbe2
 speciesGroups Primates Vertebrate
 sGroup_Primates hg18 panTro2 rheMac2 calJac1
-sGroup_Vertebrate monDom4 ornAna1
+sGroup_Vertebrate mm9 monDom4 ornAna1
 # speciesDefaultOff rheMac2 calJac1 panTro2 ornAna1
 itemFirstCharCase noChange
 treeImage phylo/ponAbe2_8way.gif
 
-track mostConserved8way
-compositeTrack on
+track phastConsElements8way
 shortLabel Most Conserved
 longLabel PhastCons Conserved Elements, 8-way Vertebrate Multiz Alignment
+color 170,100,50
 group compGeno
 priority 103.4
 visibility hide
 exonArrows off
 showTopScorers 200
 type bed 5 .
-
-    track phastConsElements8wayPrimates
-    subTrack mostConserved8way
-    shortLabel Primates
-    longLabel PhastCons Primates Conserved Elements, 8-way Multiz Alignment
-    color 100,50,170
-    priority 1
-
-    track phastConsElements8way
-    subTrack mostConserved8way
-    shortLabel Vertebrate
-    longLabel PhastCons Vertebrate Conserved Elements, 8-way Multiz Alignment
-    color 170,100,50
-    priority 2
