@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/automation/doBlastzChainNet.pl instead.
 
-# $Id: doBlastzChainNet.pl,v 1.15 2007/09/27 23:01:30 hiram Exp $
+# $Id: doBlastzChainNet.pl,v 1.16 2007/12/12 00:34:06 hiram Exp $
 
 # to-do items:
 # - lots of testing
@@ -752,9 +752,11 @@ sub postProcessChains {
     die "postProcessChains: looks like previous stage was not successful " .
       "(can't find $successFile).\n";
   }
-  &HgAutomate::run("ssh -x $workhorse nice " .
-       "'chainMergeSort $runDir/run/chain/*.chain " .
-       "| nice gzip -c > $runDir/$chain'");
+  my $cmd="ssh -x $workhorse nice ";
+  $cmd .= "'find $runDir/run/chain -name \"*.chain\" ";
+  $cmd .= "| chainMergeSort -inputList=stdin ";
+  $cmd .= "| nice gzip -c > $runDir/$chain'";
+  &HgAutomate::run($cmd);
   if ($splitRef) {
     &HgAutomate::run("ssh -x $fileServer nice " .
 	 "chainSplit $runDir/chain $runDir/$chain");
