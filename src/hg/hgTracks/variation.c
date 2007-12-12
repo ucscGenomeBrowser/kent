@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.130 2007/12/11 23:18:17 angie Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.131 2007/12/12 19:42:09 angie Exp $";
 
 struct hash *snp125FuncCartColorHash = NULL;
 struct hash *snp125FuncCartNameHash = NULL;
@@ -644,6 +644,30 @@ switch (thisSnpColor)
     }
 }
 
+Color snp125ColorToMg(enum snpColorEnum thisSnpColor)
+/* Translate full range of snpColorEnum into memgfx MG_<COLOR>. */
+{
+switch (thisSnpColor)
+    {
+    case snp125ColorRed:
+ 	return MG_RED;
+ 	break;
+    case snp125ColorGreen:
+        return MG_GREEN;
+ 	break;
+    case snp125ColorBlue:
+ 	return MG_BLUE;
+ 	break;
+    case snp125ColorGray:
+        return MG_GRAY;
+	break;
+    case snp125ColorBlack:
+    default:
+ 	return MG_BLACK;
+ 	break;
+    }
+}
+
 Color snp125Color(struct track *tg, void *item, struct vGfx *vg)
 /* Return color of snp track item. */
 {
@@ -688,8 +712,14 @@ switch (index1)
 	    {
 	    enum snp125ColorEnum wordColor = (enum snp125ColorEnum)
 		hashIntVal(snp125FuncCartColorHash, words[i]);
-	    if (snp125ExtendedColorCmpRaw(wordColor, "wordColor",
-					  thisSnpColor, "thisSnpColor") < 0)
+	    char *simpleFunc = (char *)hashMustFindVal(snp125FuncCartNameHash,
+						       words[i]);
+	    if (sameString(simpleFunc, "ignore"))
+		continue;
+	    /* This sorting function is a reverse-sort, so use it backwards: */
+	    if (snp125ExtendedColorCmpRaw(
+			snp125ColorToMg(wordColor), "wordColor",
+			snp125ColorToMg(thisSnpColor), "thisSnpColor") > 0)
 		thisSnpColor = wordColor;
 	    }
 	}
@@ -704,25 +734,7 @@ switch (index1)
 	thisSnpColor = snp125ColorBlack;
 	break;
     }
-switch (thisSnpColor)
-    {
-    case snp125ColorRed:
- 	return MG_RED;
- 	break;
-    case snp125ColorGreen:
-        return MG_GREEN;
- 	break;
-    case snp125ColorBlue:
- 	return MG_BLUE;
- 	break;
-    case snp125ColorGray:
-        return MG_GRAY;
-	break;
-    case snp125ColorBlack:
-    default:
- 	return MG_BLACK;
- 	break;
-    }
+return snp125ColorToMg(thisSnpColor);
 }
 
 Color snpColor(struct track *tg, void *item, struct vGfx *vg)
