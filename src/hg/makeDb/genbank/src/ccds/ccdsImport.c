@@ -13,7 +13,7 @@
 extern char *createTablesSql;
 extern char *createKeysSql;
 
-static char const rcsid[] = "$Id: ccdsImport.c,v 1.7 2007/02/07 18:10:08 markd Exp $";
+static char const rcsid[] = "$Id: ccdsImport.c,v 1.8 2007/12/12 18:47:56 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -133,11 +133,10 @@ assert(fi == NULL); /* should have reached end of list */
 }
 
 static int readLogical(FILE *fh, char *dumpFile, struct dyString *rowBuf)
-/* read a line into rowBuf, handling quotes and escapes. Mark end of columns
+/* read a line into rowBuf, handling escapes. Mark end of columns
  * with zero bytes in the rowBuf.  Can't save pointers until the whole line is
  * read as it rowBuf might resize */
 {
-boolean inQuotes = FALSE;
 char prevChar = '\0';  /* used to find escapes */
 int colCnt = 0;
 int c;
@@ -147,7 +146,7 @@ int c;
 dyStringClear(rowBuf);
 while ((c = getc_unlocked(fh)) != EOF)
     {
-    if ((c == '\n') && !inQuotes && (prevChar != '\\'))
+    if ((c == '\n') && (prevChar != '\\'))
         break;  /* reached end of line */
     else if (prevChar == '\\')
         {
@@ -158,19 +157,15 @@ while ((c = getc_unlocked(fh)) != EOF)
         }
     else if (c == '\\')
         prevChar = c; /* escape next */
-    else if ((c == '\t') && !inQuotes)
+    else if ((c == '\t'))
         {
         colCnt++;
         dyStringAppendC(rowBuf, '\0');
         }
-    else if (c == '"')
-        inQuotes = !inQuotes;
     else
         dyStringAppendC(rowBuf, c);
     prevChar = c;
     }
-if (inQuotes)
-    errAbort("EOF in quoted string in %s", dumpFile);
 if (rowBuf->stringSize > 0)
     {
     /* got at least on column, so count and flag last */
@@ -194,9 +189,7 @@ for (i = 0; i < colCnt; i++)
 }
 
 static int readRow(FILE *fh, char *dumpFile, struct dyString *rowBuf, char **row, int maxCols)
-/* read and parse a row, this handles quoted columns, including those with
- * with newlines.  Quotes are removed and the next line is read if a newline
- * is in the quotes. */
+/* read and parse a row, this handles escaped values. */
 {
 int colCnt = readLogical(fh, dumpFile, rowBuf);
 if (colCnt > 0)
