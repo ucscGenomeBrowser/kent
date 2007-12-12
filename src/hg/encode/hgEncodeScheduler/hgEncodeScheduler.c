@@ -16,7 +16,7 @@
 #include <signal.h>
 #include <sys/wait.h>
 
-static char const rcsid[] = "$Id: hgEncodeScheduler.c,v 1.6 2007/11/20 00:43:43 galt Exp $";
+static char const rcsid[] = "$Id: hgEncodeScheduler.c,v 1.7 2007/12/12 19:59:40 galt Exp $";
 
 char *db = NULL;
 char *dir = NULL;
@@ -309,19 +309,25 @@ if ( pid == 0 )
     ///* Redirect stderr to /dev/null */
     //tmpstderr[0] = open("/dev/null", O_WRONLY | O_NOCTTY);
 
+    //uglyf("commandLine=[%s]\n",commandLine);
+
     int f = open(projectPath, O_WRONLY | O_NOCTTY);
     dup2(f, STDERR_FILENO);
+    //dup2(f, STDOUT_FILENO);  //debug
     close(f);
 
     char *args[64];
     // parse(commandLine, args, sizeof(args));
-    args[0] = "/bin/sh";
+    args[0] = getenv("SHELL");
     args[1] = "-c";
     args[2] = commandLine;
     args[3] = 0;
     
-    execvp(*args, args);  
-    perror(*args);  /* only get here if exec fails */
+    //execvp(*args, args);  
+    execv(*args, args);  
+    /* only get here if exec itself fails */
+    //perror(*args);  
+    errnoAbort("%s %s %s", args[0], args[1], args[2]);
     exit(1);
     } 
 else
@@ -401,7 +407,7 @@ for(e=list; e; e = e->next)
     {
     readyId = e->val;
     uglyf("ready project id: %d\n", readyId);
-
+    
     // run the child
     startBackgroundProcess(readyId);
 
