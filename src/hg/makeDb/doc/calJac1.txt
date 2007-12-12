@@ -4,7 +4,7 @@
 # This file describes browser build for the Marmoset
 # genome, July 2007
 #
-#	"$Id: calJac1.txt,v 1.5 2007/12/11 19:55:18 hiram Exp $"
+#	"$Id: calJac1.txt,v 1.6 2007/12/12 18:17:28 markd Exp $"
 #
 ######################################################################
 ## DOWNLOAD SEQUENCE (DONE - 2007-08-21 - Hiram)
@@ -188,6 +188,18 @@ done
 	VALUES ("calJac1", "blat13", "17787", "0", "1");' \
 	    hgcentraltest
     #	test it with some sequence
+
+############################################################################
+##  BLASTZ swap from hg18 alignments (2007-11-11 - markd)
+    ssh hgwdev
+    mkdir /cluster/data/calJac1/bed/blastz.hg18.swap
+    cd /cluster/data/calJac1/bed/blastz.hg18.swap
+    ln -s blastz.hg18.swap ../blastz.hg18
+    /cluster/bin/scripts/doBlastzChainNet.pl \
+        -swap /cluster/data/hg18/bed/blastz.calJac1.2007-10-07/DEF >& swap.out&
+
+    # fb.calJac1.chainHg18Link.txt:
+    #   2426684781 bases of 2929139385 (82.846%) in intersection
 
 #########################################################################
 ## genscan run (DONE - 2007-11-08 - Hiram)
@@ -447,3 +459,4 @@ TMPDIR=/scratch/tmp
 XXXX something went wrong, there are no results !  Everything is empty
 
 ###########################################################################
+
