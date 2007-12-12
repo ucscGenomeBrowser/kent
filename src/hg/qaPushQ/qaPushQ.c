@@ -29,7 +29,7 @@
 #include "dbDb.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.100 2007/09/12 22:42:57 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.101 2007/12/12 20:43:30 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -3249,23 +3249,11 @@ if (isEncode)
 
 ZeroVar(&dbDbTemp);
 
-centraldb = "hgcentral";
 
-/*
-chost     = cfgOption("db.host"    );
-cuser     = cfgOption("db.user"    );
-cpassword = cfgOption("db.password");
-
-if (sameString(utsName.nodename,"hgwdev"))
-    {
-    chost     = cfgOption("central.host"    );
-    cuser     = cfgOption("central.user"    );
-    cpassword = cfgOption("central.password");
-    }
-*/
-chost     = cfgOption("archivecentral.host"    );
-cuser     = cfgOption("archivecentral.user"    );
-cpassword = cfgOption("archivecentral.password");
+chost     = cfgOption("rrcentral.host"    );
+cuser     = cfgOption("rrcentral.user"    );
+cpassword = cfgOption("rrcentral.password");
+centraldb = cfgOption("rrcentral.db");
 
 webStart(NULL, "Track and Table Releases");
 
