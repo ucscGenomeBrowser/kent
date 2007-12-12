@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: mm8.txt,v 1.59 2007/12/08 00:28:39 angie Exp $"
+#	"$Id: mm8.txt,v 1.60 2007/12/12 19:24:12 markd Exp $"
 #
 
 #  NOTE:  this doc may have genePred loads that fail to include
@@ -8530,4 +8530,27 @@ FYI Couldn't open chr1_17_02.fa.align: No such file or directory
       /usr/local/apache/htdocs/goldenPath/mm8/
 
 
-###########################################################################
+############################################################################
+# Reload CCDS (2007-12-12 markd)
+    # import ccds database as described in ccds.txt
+    set db=mm8
+    # create and load ccdsGene and ccdsInfo tables from imported database
+    /cluster/data/genbank/bin/x86_64/ccdsMkTables -loadDb ccds ${db} ccdsInfo ccdsGene
+
+    # ccdsKgMap
+    /cluster/data/genbank/bin/x86_64/mkCcdsGeneMap -db=${db} -loadDb ccdsGene knownGene ccdsKgMap
+
+    # build initial version of ccdsMgcMap table, updated by nightly genbank update
+    /cluster/data/genbank/bin/x86_64/mkCcdsGeneMap -db=${db} -loadDb ccdsGene mgcGenes ccdsMgcMap
+
+    checkTableCoords ${db} -verbose=2 ccdsGene
+    # update all.jointer to include ${db} in ccdsDb
+    joinerCheck -database=${db} -identifier=ccdsGeneId ~/compbio/genbank/kent/src/hg/makeDb/schema/all.joiner
+    # request push of 
+        ccdsGene
+        ccdsInfo
+        ccdsKgMap
+        ccdsMgcMap
+    # << emacs
+
+############################################################################

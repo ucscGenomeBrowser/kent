@@ -18742,3 +18742,25 @@ ignore 1 lines'
 ignore 1 lines'
 
 ###########################################################################
+# Reload CCDS (2007-12-12 markd)
+    # import ccds database as described in ccds.txt
+    set db=hg18
+    # create and load ccdsGene and ccdsInfo tables from imported database
+    /cluster/data/genbank/bin/x86_64/ccdsMkTables -loadDb ccds ${db} ccdsInfo ccdsGene
+
+    # ccdsKgMap
+    /cluster/data/genbank/bin/x86_64/mkCcdsGeneMap -db=${db} -loadDb ccdsGene knownGene ccdsKgMap
+
+    # build initial version of ccdsMgcMap table, updated by nightly genbank update
+    /cluster/data/genbank/bin/x86_64/mkCcdsGeneMap -db=${db} -loadDb ccdsGene mgcGenes ccdsMgcMap
+
+    checkTableCoords ${db} -verbose=2 ccdsGene
+    # update all.jointer to include ${db} in ccdsDb
+    joinerCheck -database=${db} -identifier=ccdsGeneId ~/compbio/genbank/kent/src/hg/makeDb/schema/all.joiner
+    # request push of 
+        ccdsGene
+        ccdsInfo
+        ccdsKgMap
+        ccdsMgcMap
+    # << emacs
+############################################################################

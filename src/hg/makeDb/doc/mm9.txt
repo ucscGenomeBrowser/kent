@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.50 2007/12/03 23:32:09 angie Exp $"
+#	"$Id: mm9.txt,v 1.51 2007/12/12 19:24:12 markd Exp $"
 #
 
 #######################################################################
@@ -7286,5 +7286,21 @@ done
 ### NOTE -- the igtc track is automatically updated on hgwdev by the
 ### scripts monthlyUpdateIgtc.csh and updateIgtc.pl in
 ### kent/src/hg/utils/automation/ .
+
+#########################################################################
+# Load CCDS (2007-12-12 markd)
+    # import ccds database as described in ccds.txt
+    set db=mm9
+    # create and load ccdsGene and ccdsInfo tables from imported database
+    /cluster/data/genbank/bin/x86_64/ccdsMkTables -loadDb ccds ${db} ccdsInfo ccdsGene
+
+    # ccdsKgMap
+    /cluster/data/genbank/bin/x86_64/mkCcdsGeneMap -db=${db} -loadDb ccdsGene knownGene ccdsKgMap
+
+    # build initial version of ccdsMgcMap table, updated by nightly genbank update
+    /cluster/data/genbank/bin/x86_64/mkCcdsGeneMap -db=${db} -loadDb ccdsGene mgcGenes ccdsMgcMap
+
+    checkTableCoords ${db} -verbose=2 ccdsGene
+    joinerCheck -database=${db} -identifier=ccdsGeneId ~/compbio/genbank/kent/src/hg/makeDb/schema/all.joiner
 
 #########################################################################
