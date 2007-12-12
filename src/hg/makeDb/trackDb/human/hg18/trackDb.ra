@@ -1764,6 +1764,17 @@ urlLabel dbSNP:
 chimpMacaqueOrthoTable snp128orthoPanTro2RheMac2
 type bed 6 +
 
+track snp127
+shortLabel SNPs (127)
+longLabel Simple Nucleotide Polymorphisms (dbSNP build 127)
+group varRep
+priority 100.097
+visibility dense 
+url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP: 
+snpSeq snp127Seq
+type bed 6 +
+
 track snp126
 shortLabel SNPs (126)
 longLabel Simple Nucleotide Polymorphisms (dbSNP build 126)
