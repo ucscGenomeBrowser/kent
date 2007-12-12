@@ -1356,6 +1356,18 @@ cat > rbest.csh << 'EOF'
 csh rbest.csh >&! rbest.log &
 #Not yet loaded
 
+############################################################################
+##  BLASTZ swap from monDom4 alignments (2007-11-11 - markd)
+    ssh hgwdev
+    mkdir /cluster/data/rheMac2/bed/blastz.monDom4.swap
+    cd /cluster/data/rheMac2/bed/blastz.monDom4.swap
+    ln -s blastz.monDom4.swap ../blastz.monDom4
+    /cluster/bin/scripts/doBlastzChainNet.pl \
+        -swap /cluster/data/monDom4/bed/blastz.rheMac2/DEF >& swap.out&
+
+    # fb.rheMac2.chainMonDom4Link.txt:
+    # 611785347 bases of 2646704109 (23.115%) in intersection
+
 #########################################################################
 # Blastz Marmoset calJac1 (DONE - 2007-11-15 - Hiram)
     ssh kkstore01
