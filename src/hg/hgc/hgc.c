@@ -212,7 +212,7 @@
 #include "itemConf.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1373 2007/12/11 14:01:36 giardine Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1374 2007/12/12 19:47:47 angie Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -13437,14 +13437,18 @@ if (hTableExists(exceptionsTable) && hTableExists(excDescTable))
     int    start = cartInt(cart, "o");
     int count = 0;
     safef(query, sizeof(query), 
-	  "select description from %s, %s "
+	  "select description, %s.exception from %s, %s "
 	  "where chrom = \"%s\" and chromStart = %d and name = \"%s\" "
 	  "and %s.exception = %s.exception",
-	  excDescTable, exceptionsTable, seqName, start, itemName,
-	  excDescTable, exceptionsTable);
+	  excDescTable, excDescTable, exceptionsTable,
+	  seqName, start, itemName, excDescTable, exceptionsTable);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr))!=NULL)
 	{
+	/* Don't bother reporting MultipleAlignments here -- right after
+	 * this, we have a whole section about the other mappings. */
+	if (sameString(row[1], "MultipleAlignments"))
+	    continue;
 	if (count == 0)
 	    printf("<BR><B>Annotations:</B><BR>\n");
 	printf("%s<BR>\n", row[0]);
