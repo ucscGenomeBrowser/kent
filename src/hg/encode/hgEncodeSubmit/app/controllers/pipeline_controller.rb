@@ -73,7 +73,7 @@ class PipelineController < ApplicationController
       @project.status = "schedule loading"
       @project.save
     end
-    redirect_to :action => 'list'
+    redirect_to :action => 'show_user'
   end
 
   def begin_validating
@@ -82,7 +82,7 @@ class PipelineController < ApplicationController
       @project.status = "schedule validating"
       @project.save
     end
-    redirect_to :action => 'list'
+    redirect_to :action => 'show_user'
   end
 
   def new
@@ -96,7 +96,7 @@ class PipelineController < ApplicationController
     @project.user_id = @current_user.id 
     @project.status = 'new'
     if @project.save
-      redirect_to :action => 'list'
+      redirect_to :action => 'show_user'
     else
       render :action => 'new'
     end
@@ -145,7 +145,7 @@ class PipelineController < ApplicationController
       Dir.delete(projectDir)
     end
     Project.find(params[:id]).destroy
-    redirect_to :action => 'list'
+    redirect_to :action => 'show_user'
   end
  
   def upload
@@ -205,6 +205,13 @@ class PipelineController < ApplicationController
 
     # just in case, remove it it already exists (shouldn't happen)
     File.delete(path_to_file) if File.exists?(path_to_file)
+
+    @project.project_archives.last.status = @project.status
+    unless @project.project_archives.last.save
+      flash[:warning] = "project_archive record status save failed"
+      return
+    end
+
 
     @project.status = "schedule uploading #{@upurl}"
 
@@ -495,7 +502,7 @@ private
     @project = Project.find(params[:id])
     unless @project.user_id == @current_user.id
       flash[:warning] = "That project does not belong to you."
-      redirect_to :action => 'list'
+      redirect_to :action => 'show_user'
       return false
     end
     return true
@@ -699,6 +706,7 @@ private
     project_archive.file_name = @filename
     project_archive.file_size = File.size(path_to_file)
     project_archive.file_date = Time.now    # TODO: add .utc to make UTC time?
+    project_archive.status = "uploaded"
     unless project_archive.save
       flash[:warning] += "error saving project_archive record for: #{@filename}"
       return false

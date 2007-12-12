@@ -50,20 +50,20 @@
   <td><%= a.file_date -%></td>
   <td><%= link_to 'Delete', {:action => 'delete_archive', :id => a.id},
     :confirm => "Are you sure you want to delete this archive?" -%></td>
+  <td><%= a.status -%></td>
   </tr>
   </table>
 
-
-<table CELLSPACING=10 CELLPADDING=10>
-<% a.project_files.each do |f| %>
-  <tr>
-  <td>&nbsp;</td>
-  <td><%= f.file_name -%></td>
-  <td align=right><%= f.file_size -%></td>
-  <td><%= f.file_date -%></td>
-  </tr>
-<% end %>
-</table>
+  <table CELLSPACING=10 CELLPADDING=10>
+  <% a.project_files.each do |f| %>
+    <tr>
+      <td>&nbsp;</td>
+      <td><%= f.file_name -%></td>
+      <td align=right><%= f.file_size -%></td>
+      <td><%= f.file_date -%></td>
+    </tr>
+  <% end %>
+  </table>
 
 <% end %>
 
