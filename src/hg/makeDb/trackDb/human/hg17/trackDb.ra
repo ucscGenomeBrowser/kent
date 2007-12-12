@@ -610,6 +610,7 @@ speciesDefaultOff panTro1 rheMac2 bosTau2 echTel1 danRer3 fr1
 treeImage phylo/hg17_17way.gif
 
 track phastConsElements17way
+release beta 
 shortLabel Most Conserved
 longLabel PhastCons Conserved Elements, Vertebrate Multiz Alignment
 group compGeno
@@ -621,6 +622,7 @@ type bed 5 .
 release beta
 
 track consElements
+release alpha
 shortLabel Most Conserved
 longLabel PhastCons Conserved Elements, Vertebrate Multiz Alignment
 compositeTrack on
@@ -633,18 +635,21 @@ type bed 5 .
 release alpha
 
     track phastConsElements17way
+    release alpha
     subTrack consElements
     shortLabel Vertebrate Cons
     longLabel PhastCons Vertebrate Conserved Elements (5.1%, len=14,cov=.2,rho=2.8)
     priority 1
 
     track phastConsElementsPlacental_14_008_28
+    release alpha
     subTrack consElements
     shortLabel Mammal Cons
     longLabel PhastCons Placental Mammal Conserved Elements (3.8%, len=14,cov=.008, rho=2.8)
     priority 2
 
     track phastConsElementsPlacental
+    release alpha
     subTrack consElements
     shortLabel Mammal Cons 5%
     longLabel PhastCons Placental Mammal Conserved Elements (5.2%, len=14,cov=.2, rho=2.8)
