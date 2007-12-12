@@ -3167,6 +3167,21 @@ TMPDIR=/scratch/tmp
       -bigClusterHub=pk  -chainMinScore=5000 -chainLinearGap=loose \
       >& blastz.out 2>&1 &
 
+############################################################################
+##  BLASTZ swap from canFam2 alignments (2007-11-10 - markd)
+    # /cluster/data/canFam2/bed/blastz.monDom4/DEF1 has incorrect BASE, so
+    # create DEF.fixed
+    ssh hgwdev
+    mkdir /cluster/data/monDom4/bed/blastz.canFam2.swap
+    cd /cluster/data/monDom4/bed/blastz.canFam2.swap
+    ln -s blastz.canFam2.swap ../blastz.canFam2
+
+    (time /cluster/bin/scripts/doBlastzChainNet.pl \
+        -swap /cluster/data/canFam2/bed/blastz.monDom4/DEF.fixed) >& swap.out&
+
+    nice -n +19 featureBits monDom4 chainCanFam2Link
+    # 325604035 bases of 3501643220 (9.299%) in intersection
+
 ##############################################################################
 # Blastz Orangutan ponAbe2 (DONE - 2007-11-26 - Hiram)
     ssh kkstore04
