@@ -2,7 +2,7 @@
 # migrations feature of ActiveRecord to incrementally modify your database, and
 # then regenerate this schema definition.
 
-ActiveRecord::Schema.define(:version => 23) do
+ActiveRecord::Schema.define(:version => 24) do
 
   create_table "plugin_schema_info", :id => false, :force => true do |t|
     t.column "plugin_name", :string
@@ -17,6 +17,7 @@ ActiveRecord::Schema.define(:version => 23) do
     t.column "created_at", :datetime
     t.column "updated_at", :datetime
     t.column "archive_no", :integer
+    t.column "status",     :string
   end
 
   create_table "project_files", :force => true do |t|
@@ -51,7 +52,7 @@ ActiveRecord::Schema.define(:version => 23) do
 
   create_table "running", :id => false, :force => true do |t|
     t.column "pid",         :integer, :limit => 10
-    t.column "submission",  :integer, :limit => 10
+    t.column "project",     :integer, :limit => 10
     t.column "jobType",     :string
     t.column "startTime",   :integer, :limit => 10
     t.column "timeOut",     :integer, :limit => 10

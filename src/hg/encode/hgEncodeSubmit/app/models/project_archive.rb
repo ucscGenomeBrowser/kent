@@ -7,6 +7,7 @@ class ProjectArchive < ActiveRecord::Base
   validates_presence_of :file_size
   validates_presence_of :file_date
   validates_presence_of :project_id
+  validates_presence_of :status
 
   protected
     def validate
