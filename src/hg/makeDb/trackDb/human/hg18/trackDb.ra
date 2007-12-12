@@ -1689,6 +1689,232 @@ type bed 3
     color 50,150,50
     priority 3
 
+# AFFY TRANSCRIPTOME SUPERTRACK
+        track affyTxnPhase3Super
+        superTrack on
+        shortLabel Affy Txn
+        longLabel Affy Transcriptome Phase 3
+        group regulation
+        priority 98.1
+
+track affyTxnPhase3FragsL
+superTrack affyTxnPhase3Super dense
+compositeTrack on
+shortLabel Affy Tx lRNA Reg
+longLabel Affymetrix Transcriptome Phase 3 Long RNA Fragments
+group regulation
+priority 98.11
+origAssembly hg17
+type bed 3 .
+
+    track affyTxnPhase3FragsHDF
+    subTrack affyTxnPhase3FragsL
+    shortLabel HDF lRNA
+    longLabel Affymetrix HDF Long RNA (Cytosolic) Fragments
+    priority 1
+
+    track affyTxnPhase3FragsHeLaCyto
+    subTrack affyTxnPhase3FragsL
+    shortLabel HeLa Cyto lRNA
+    longLabel Affymetrix HeLa Long RNA (Cytosolic) Fragments
+    priority 2
+
+    track affyTxnPhase3FragsHeLaNuclear
+    subTrack affyTxnPhase3FragsL
+    shortLabel HeLa Nucl lRNA
+    longLabel Affymetrix HeLa Long RNA (Nuclear) Fragments
+    priority 3
+
+    track affyTxnPhase3FragsHepG2Cyto
+    subTrack affyTxnPhase3FragsL
+    shortLabel HepG2 Cyto lRNA
+    longLabel Affymetrix HepG2 Long RNA (Cytosolic) Fragments
+    priority 4
+
+    track affyTxnPhase3FragsHepG2Nuclear
+    subTrack affyTxnPhase3FragsL
+    shortLabel HepG2 Nucl lRNA
+    longLabel Affymetrix HepG2 Long RNA (Nuclear) Fragments
+    priority 5
+
+    track affyTxnPhase3FragsJurkat
+    subTrack affyTxnPhase3FragsL
+    shortLabel Jurkat lRNA
+    longLabel Affymetrix Jurkat Long RNA (Cytosolic) Fragments
+    priority 6
+
+    track affyTxnPhase3FragsNCCIT
+    subTrack affyTxnPhase3FragsL
+    shortLabel NCCIT lRNA
+    longLabel Affymetrix NCCIT Long RNA (Cytosolic) Fragments
+    priority 7
+
+    track affyTxnPhase3FragsPC3
+    subTrack affyTxnPhase3FragsL
+    shortLabel PC3 lRNA
+    longLabel Affymetrix PC3 Long RNA (Cytosolic) Fragments
+    priority 8
+
+    track affyTxnPhase3FragsSK_N_AS
+    subTrack affyTxnPhase3FragsL
+    shortLabel SK-N-AS lRNA
+    longLabel Affymetrix SK-N-AS Long RNA (Cytosolic) Fragments
+    priority 9
+
+    track affyTxnPhase3FragsU87MG
+    subTrack affyTxnPhase3FragsL
+    shortLabel U87MG lRNA
+    longLabel Affymetrix U87MG Long RNA (Cytosolic) Fragments
+    priority 10
+
+track affyTxnPhase3L
+superTrack affyTxnPhase3Super dense
+compositeTrack on
+shortLabel Affy Tx lRNA Sig
+longLabel Affymetrix Transcriptome Phase 3 Long RNA Signal
+group regulation
+defaultViewLimits 0:150
+autoScaleDefault Off
+group regulation
+priority 98.2
+origAssembly hg17
+maxHeightPixels 100:30:10
+canPack off
+type wig 0 1000
+
+    track affyTxnPhase3HDF
+    shortLabel HDF lRNA
+    subTrack affyTxnPhase3L
+    longLabel Affymetrix HDF Long RNA (Cytosolic) Signal
+    priority 1
+
+    track affyTxnPhase3HeLaCyto
+    shortLabel HeLa Cyto lRNA
+    subTrack affyTxnPhase3L
+    longLabel Affymetrix HeLa Long RNA (Cytosolic) Signal
+    priority 2
+
+    track affyTxnPhase3HeLaNuclear
+    shortLabel HeLa Nucl lRNA
+    subTrack affyTxnPhase3L
+    longLabel Affymetrix HeLa Long RNA (Nuclear) Signal
+    priority 3
+
+    track affyTxnPhase3HepG2Cyto
+    shortLabel HepG2 Cyto lRNA
+    subTrack affyTxnPhase3L
+    longLabel Affymetrix HepG2 Long RNA (Cytosolic) Signal
+    priority 4
+
+    track affyTxnPhase3HepG2Nuclear
+    shortLabel HepG2 Nucl lRNA
+    subTrack affyTxnPhase3L
+    longLabel Affymetrix HepG2 Long RNA (Nuclear) Signal
+    priority 5
+
+    track affyTxnPhase3Jurkat
+    shortLabel Jurkat lRNA
+    subTrack affyTxnPhase3L
+    longLabel Affymetrix Jurkat Long RNA (Cytosolic) Signal
+    priority 6
+
+    track affyTxnPhase3NCCIT
+    shortLabel NCCIT lRNA
+    subTrack affyTxnPhase3L
+    longLabel Affymetrix NCCIT Long RNA (Cytosolic) Signal
+    priority 7
+
+    track affyTxnPhase3PC3
+    shortLabel PC3 lRNA
+    subTrack affyTxnPhase3L
+    longLabel Affymetrix PC3 Long RNA (Cytosolic) Signal
+    priority 8
+
+    track affyTxnPhase3SK_N_AS
+    shortLabel SK-N-AS lRNA
+    subTrack affyTxnPhase3L
+    longLabel Affymetrix SK-N-AS Long RNA (Cytosolic) Signal
+    priority 9
+
+    track affyTxnPhase3U87MG
+    shortLabel U87MG lRNA
+    subTrack affyTxnPhase3L
+    longLabel Affymetrix U87MG Long RNA (Cytosolic) Signal
+    priority 10
+
+track affyTxnPhase3FragsS
+superTrack affyTxnPhase3Super dense
+compositeTrack on
+shortLabel Affy Tx sRNA Reg
+longLabel Affymetrix Transcriptome Phase 3 Short RNA Fragments
+group regulation
+priority 98.3
+origAssembly hg17
+type bed 3 .
+
+    track affyTxnPhase3FragsHeLaTopStrand
+    subTrack affyTxnPhase3FragsS
+    shortLabel HeLa + sRNA
+    longLabel Affymetrix HeLa Plus Strand Short RNA (Whole Cell) Fragments
+    priority 1
+
+    track affyTxnPhase3FragsHeLaBottomStrand
+    subTrack affyTxnPhase3FragsS
+    shortLabel HeLa - sRNA
+    longLabel Affymetrix HeLa Minus Strand Short RNA (Whole Cell) Fragments
+    priority 2
+
+    track affyTxnPhase3FragsHepG2TopStrand
+    subTrack affyTxnPhase3FragsS
+    shortLabel HepG2 + sRNA
+    longLabel Affymetrix HepG2 Plus Strand Short RNA (Whole Cell) Fragments
+    priority 3
+
+    track affyTxnPhase3FragsHepG2BottomStrand
+    subTrack affyTxnPhase3FragsS
+    shortLabel HepG2 - sRNA
+    longLabel Affymetrix HepG2 Minus Strand Short RNA (Whole Cell) Fragments
+    priority 4
+
+track affyTxnPhase3S
+compositeTrack on
+superTrack affyTxnPhase3Super dense
+shortLabel Affy Tx sRNA Sig
+longLabel Affymetrix Transcriptome Phase 3 Short RNA Signal
+group regulation
+defaultViewLimits 0:150
+autoScaleDefault Off
+group regulation
+priority 98.4
+origAssembly hg17
+maxHeightPixels 100:30:10
+canPack off
+type wig 0 1000
+
+    track affyTxnPhase3HeLaTopStrand
+    shortLabel HeLa + sRNA
+    subTrack affyTxnPhase3S
+    longLabel Affymetrix Hela Plus Strand Short RNA (Whole Cell) Signal
+    priority 1
+
+    track affyTxnPhase3HeLaBottomStrand
+    shortLabel HeLa - sRNA
+    subTrack affyTxnPhase3S
+    longLabel Affymetrix Hela Minus Strand Short RNA (Whole Cell) Signal
+    priority 2
+
+    track affyTxnPhase3HepG2TopStrand
+    shortLabel HepG2 + sRNA
+    subTrack affyTxnPhase3S
+    longLabel Affymetrix HepG2 Plus Strand Short RNA (Whole Cell) Signal
+    priority 3
+
+    track affyTxnPhase3HepG2BottomStrand
+    shortLabel HepG2 - sRNA
+    subTrack affyTxnPhase3S
+    longLabel Affymetrix HepG2 Minus Strand Short RNA (Whole Cell) Signal
+    priority 4
+
 track uc16
 shortLabel Ultra Conserved
 longLabel Ultraconserved Elements (200 bp 100% ID in Rat/Mouse/Human)
