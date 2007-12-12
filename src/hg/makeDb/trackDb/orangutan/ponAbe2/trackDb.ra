@@ -19,10 +19,10 @@ visibility dense
 type bed 3 +
 
 track multiz8way
-shortLabel 8-way Multiz
+shortLabel Conservation
 longLabel 8-Way Multiz Alignment & Conservation 
 group compGeno
-priority 104.2
+priority 103.4
 visibility pack
 color 0, 10, 100
 altColor 0,90,10
@@ -50,7 +50,7 @@ shortLabel Most Conserved
 longLabel PhastCons Conserved Elements, 8-way Vertebrate Multiz Alignment
 color 170,100,50
 group compGeno
-priority 103.4
+priority 104.2
 visibility hide
 exonArrows off
 showTopScorers 200
