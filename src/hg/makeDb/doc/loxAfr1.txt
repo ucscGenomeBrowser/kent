@@ -983,10 +983,22 @@ chain.csh {check in exists $(path1).gz} {check out line+ chain/$(root1).chain}
 
 ############################################################################
 ## create missing hg18 nets     (DONE 2006-05-12 markd)
-## hg18 chains exist, but are documented in not in this file.
+## hg18 chains exist, but are not documented in this file.
    # create the net filee
     ssh hgwdev
     cd /cluster/data/loxAfr1/bed/blastz.hg18.swap/axtChain
     nice netClass -verbose=0 -noAr noClass.net loxAfr1 hg18 loxAfr1.hg18.net 
     nice gzip loxAfr1.hg18.net
+
+############################################################################
+##  BLASTZ swap from mm9 alignments (2007-11-11 - markd)
+    ssh hgwdev
+    mkdir /cluster/data/loxAfr1/bed/blastz.mm9.swap
+    cd /cluster/data/loxAfr1/bed/blastz.mm9.swap
+    ln -s blastz.mm9.swap ../blastz.mm9
+    /cluster/bin/scripts/doBlastzChainNet.pl \
+        -swap /cluster/data/mm9/bed/blastz.loxAfr1/DEF >& swap.out&
+
+    # fb.loxAfr1.chainMm9Link.txt:
+    #   468255296 bases of 2295548473 (20.398%) in intersection
 

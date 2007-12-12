@@ -783,3 +783,17 @@ chain.csh {check in exists $(path1).gz} {check out line+ chain/$(root1).chain}
         -continue=chainMerge \
 	-bigClusterHub=pk \
 	`pwd`/DEF >& blastz.out &
+
+
+############################################################################
+##  BLASTZ swap from mm9 alignments (2007-11-11 - markd)
+    ssh hgwdev
+    mkdir /cluster/data/dasNov1/bed/blastz.mm9.swap
+    cd /cluster/data/dasNov1/bed/blastz.mm9.swap
+    ln -s blastz.mm9.swap ../blastz.mm9
+    /cluster/bin/scripts/doBlastzChainNet.pl \
+        -swap /cluster/data/mm9/bed/blastz.dasNov1/DEF >& swap.out&
+
+    nice +19 featureBits dasNov1 chainMm9Link
+    # 438318232 bases of 2146362222 (20.421%) in intersection
+

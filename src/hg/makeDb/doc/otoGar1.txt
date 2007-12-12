@@ -103,3 +103,15 @@ twoBitToFa ../otoGar1/otoGar1.unmasked.2bit \
     mkdir -p $d/otoGar1/bigZips
     ln -s $bd/bigZips/{*.gz,md5sum.txt,README.txt} $d/otoGar1/bigZips
    
+############################################################################
+##  BLASTZ swap from mm9 alignments (2007-11-11 - markd)
+    ssh hgwdev
+    mkdir /cluster/data/otoGar1/bed/blastz.mm9.swap
+    cd /cluster/data/otoGar1/bed/blastz.mm9.swap
+    ln -s blastz.mm9.swap ../blastz.mm9
+    /cluster/bin/scripts/doBlastzChainNet.pl \
+        -swap /cluster/data/mm9/bed/blastz.otoGar1/DEF >& swap.out&
+
+    # fb.otoGar1.chainMm9Link.txt:
+    #   592429209 bases of 1969052059 (30.087%) in intersection
+

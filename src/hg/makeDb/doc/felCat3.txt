@@ -1287,3 +1287,14 @@ chmod +x getIrows.sh
     rm -r /san/sanvol1/scratch/felCat3/multiz4way/phastCons
 
 
+############################################################################
+##  BLASTZ swap from mm9 alignments (2007-11-10  - markd)
+    ssh hgwdev
+    mkdir /cluster/data/felCat3/bed/blastz.mm9.swap
+    cd /cluster/data/felCat3/bed/blastz.mm9.swap
+    ln -s blastz.mm9.swap ../blastz.mm9
+    /cluster/bin/scripts/doBlastzChainNet.pl \
+        -swap /cluster/data/mm9/bed/blastz.felCat3/DEF >& swap.out&
+
+    nice +19 featureBits felCat3 chainMm9Link
+    # 486766552 bases of 1642698377 (29.632%) in intersection

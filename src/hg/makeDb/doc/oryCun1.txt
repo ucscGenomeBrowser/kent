@@ -1019,3 +1019,14 @@ chain.csh {check in exists $(path1).gz} {check out line+ chain/$(root1).chain}
     ~/kent/src/hg/utils/automation/doRecipBest.pl hg18 oryCun1 >&! rbest.log &
     # 1.25 hrs
 
+############################################################################
+##  BLASTZ swap from mm9 alignments (2007-11-11 - markd)
+    ssh hgwdev
+    mkdir /cluster/data/oryCun1/bed/blastz.mm9.swap
+    cd /cluster/data/oryCun1/bed/blastz.mm9.swap
+    ln -s blastz.mm9.swap ../blastz.mm9
+    /cluster/bin/scripts/doBlastzChainNet.pl \
+        -swap /cluster/data/mm9/bed/blastz.oryCun1/DEF >& swap.out&
+
+    # fb.oryCun1.chainMm9Link.txt:
+    #   500397488 bases of 2076044328 (24.103%) in intersection

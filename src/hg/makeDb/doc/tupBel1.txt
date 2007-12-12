@@ -23,3 +23,32 @@
     mkdir -p $d/tupBel1/bigZips
     ln -s $bd/bigZips/{*.gz,md5sum.txt,README.txt} $d/tupBel1/bigZips
    
+############################################################################
+##  BLASTZ swap from mm9 alignments (2007-11-11 - markd)
+# ERROR:  chainMm9Link failed, build not complete
+    ssh hgwdev
+    mkdir /cluster/data/tupBel1/bed/blastz.mm9.swap
+    cd /cluster/data/tupBel1/bed/blastz.mm9.swap
+    ln -s blastz.mm9.swap ../blastz.mm9
+    /cluster/bin/scripts/doBlastzChainNet.pl \
+        -swap /cluster/data/mm9/bed/blastz.tupBel1/DEF >& swap.out&
+
+    # GOT ERROR:
+    load data local infile 'link.tab' into table chainMm9Link
+    mySQL error 1114: The table 'chainMm9Link' is full
+
+    # fb.tupBel1.chainMm9Link.txt:
+    #   
+
+############################################################################
+##  BLASTZ swap from hg18 alignments (2007-11-11 - markd)
+    ssh hgwdev
+    mkdir /cluster/data/tupBel1/bed/blastz.hg18.swap
+    cd /cluster/data/tupBel1/bed/blastz.hg18.swap
+    ln -s blastz.hg18.swap ../blastz.hg18
+    /cluster/bin/scripts/doBlastzChainNet.pl \
+        -swap /cluster/data/hg18/bed/blastz.tupBel1/DEF >& swap.out&
+# crashed: could be out of memory
+
+    # fb.tupBel1.chainHg18Link.txt:
+    #   
