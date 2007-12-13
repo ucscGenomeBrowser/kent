@@ -18742,6 +18742,33 @@ ignore 1 lines'
 ignore 1 lines'
 
 ###########################################################################
+# ADD SeattleSNPs PGA GENES ON hgGene DETAILS PAGE. (DONE, Fan, 12/13/07).
+
+    cd /cluster/store12/snp
+    mkdir pga
+    cd pga
+
+# download data from SeattleSNPs
+
+    wget --timestamping http://pga.gs.washington.edu/data.tar.gz
+    gzip -d *.gz
+    tar -xvf *.tar
+
+# create SeattleSNPs PGA gene list
+
+    cut -f 1 FinishedGenes.txt >j1
+    cut -f 2 FinishedGenes.txt >j2
+    cat j1 j2 |sort -u >pga.tab
+    rm j1 j2
+
+# load the data into the pga table.
+
+    hgsql hg18 -e 'drop table pga'
+    hgsql hg18 < ~/src/hg/lib/pga.sql
+
+    hgsql hg18 -e 'load data local infile "pga.tab" into table pga'
+    
+###########################################################################
 # Reload CCDS (2007-12-12 markd)
     # import ccds database as described in ccds.txt
     set db=hg18
@@ -18762,5 +18789,4 @@ ignore 1 lines'
         ccdsInfo
         ccdsKgMap
         ccdsMgcMap
-    # << emacs
 ############################################################################
