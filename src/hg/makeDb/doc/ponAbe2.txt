@@ -4,7 +4,7 @@
 # This file describes browser build for the Orangutan
 # genome, July 31 2007
 #
-#	"$Id: ponAbe2.txt,v 1.8 2007/12/12 23:46:09 hiram Exp $"
+#	"$Id: ponAbe2.txt,v 1.9 2007/12/13 00:00:58 hiram Exp $"
 #
 ######################################################################
 ## DOWNLOAD SEQUENCE (DONE - 2007-09-06 - Hiram)
@@ -1794,5 +1794,25 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     #	real    223m38.325s
     cat fb.ponAbe2.chainMonDom4Link.txt
     #	406409435 bases of 3093572278 (13.137%) in intersection
+
+###########################################################################
+## PUSHQ entry creation (DONE - 2007-12-12 - Hiram)
+    ssh hgwdev
+    mkdir /cluster/data/ponAbe2/pushQ
+    cd /cluster/data/ponAbe2/pushQ
+    #	had to touch
+    #	goldenPath/ponAbe2/liftOver/ponAbe2ToPonAbe1.over.chain.gz
+    #	to get it to pass that check.  (there isn't any ponAbe1 release)
+    /cluster/bin/scripts/makePushQSql.pl -noGenbank ponAbe2 \
+	> ponAbe2.sql 2> stderr.out
+    ## check the stderr.out for anything that needs to be fixed
+    ## copy ponAbe2.sql to hgwbeta:/tmp
+    scp ponAbe2.sql hgwbeta:/tmp
+    ## then on hgwbeta
+    ssh hgwbeta
+    cd /tmp
+    ### XXX remember to set the pushQ id number in the
+    #	last statement in this SQL file
+    hgsql qapushq < ponAbe2.sql
 
 ###########################################################################
