@@ -14,6 +14,7 @@
     end
   end
 -%><br/>
+<strong>Active: </strong> <%= @project.archives_active -%><br/>
 
 <strong>Date Posted: </strong> <%= distance_of_time_in_words_to_now(@project.created_at) -%> ago<br/>
 <strong>Last Updated: </strong> <%= distance_of_time_in_words(@project.updated_at, Time.now) -%> ago<br/>
@@ -48,9 +49,33 @@
   <td><%= a.file_name -%></td>
   <td align=right><%= a.file_size -%></td>
   <td><%= a.file_date -%></td>
-  <td><%= link_to 'Delete', {:action => 'delete_archive', :id => a.id},
+
+
+
+  <% 
+  n = a.archive_no-1
+  c = @project.archives_active[n..n]
+  if c == "1" -%> 
+    <td><%= link_to 'Delete', {:action => 'delete_archive', :id => a.id},
     :confirm => "Are you sure you want to delete this archive?" -%></td>
-  <td><%= a.status -%></td>
+  <% else %>
+    <td><%= link_to 'Un-Delete', {:action => 'delete_archive', :id => a.id},
+    :confirm => "Are you sure you want to un-delete this archive?" -%></td>
+  <% end %>
+
+  <td><%= 
+  if a.status.starts_with?("schedule uploading ")
+    "schedule uploading"
+  else
+    if a.status.starts_with?("schedule expanding ")
+      "schedule expanding"
+    else
+      a.status
+    end
+  end
+  -%></td>
+
+  <td><%= a.archives_active -%></td>
   </tr>
   </table>
 

@@ -95,9 +95,11 @@ class PipelineController < ApplicationController
     @project = Project.new(params[:project])
     @project.user_id = @current_user.id 
     @project.status = 'new'
+    @project.archives_active = ""
     if @project.save
       redirect_to :action => 'show_user'
     else
+      @projectTypes = getProjectTypes
       render :action => 'new'
     end
   end
@@ -134,12 +136,15 @@ class PipelineController < ApplicationController
     if File.exists?(projectDir)
       Dir.entries(projectDir).each { 
         |f| 
-        fullName = File.join(projectDir,f)
-        cmd = "rm -fr #{fullName}"
-        exitCode = system(cmd)
-        unless exitCode 
-          flash[:warning] = "error cleaning up temporary upload subdirectory: <br>command=[#{cmd}], exitCode = #{exitCode}<br>"  
-          return false
+        unless (f == ".") or (f == "..")
+          fullName = File.join(projectDir,f)
+          cmd = "rm -fr #{fullName}"
+          exitCode = system(cmd)
+          unless exitCode 
+            flash[:warning] = "error cleaning up temporary upload subdirectory: <br>command=[#{cmd}], exitCode = #{exitCode}<br>"  
+	    redirect_to :action => 'show_user'
+            return
+          end
         end
       }
       Dir.delete(projectDir)
@@ -167,7 +172,8 @@ class PipelineController < ApplicationController
       @filename = sanitize_filename(@upload.original_filename)
       extensionsByMIME = {
         "application/zip" => ["zip", "ZIP"],
-        "application/x-tar" => ["tar.gz", "TAR.GZ", "tar.bz2", "TAR.BZ2"]
+        "application/x-tar" => ["tar.gz", "TAR.GZ", "tar.bz2", "TAR.BZ2"],
+        "application/gzip" => ["tar.gz", "TAR.GZ"]
       }
       extensions = extensionsByMIME[@upload.content_type.chomp]
       unless extensions
@@ -205,11 +211,14 @@ class PipelineController < ApplicationController
 
     # just in case, remove it it already exists (shouldn't happen)
     File.delete(path_to_file) if File.exists?(path_to_file)
-
-    @project.project_archives.last.status = @project.status
-    unless @project.project_archives.last.save
-      flash[:warning] = "project_archive record status save failed"
-      return
+    
+    if @project.project_archives.last
+      @project.project_archives.last.status = @project.status
+      @project.project_archives.last.archives_active = @project.archives_active
+      unless @project.project_archives.last.save
+        flash[:warning] = "project_archive record status save failed"
+        return
+      end
     end
 
 
@@ -420,11 +429,28 @@ class PipelineController < ApplicationController
     archive = ProjectArchive.find(params[:id])
     params[:id] = archive.project_id
     unless check_user_is_owner
+      redirect_to :action => 'show', :id => @project
       return
     end
     msg = ""
-    archive.destroy
-    msg += "Archive deleted"
+    @project = Project.find(params[:id])
+    n = archive.archive_no-1
+    c = @project.archives_active[n..n]
+    if c == "1"
+      c = "0"
+    else
+      c = "1"
+    end
+    @project.archives_active[n..n] = c
+
+    unless @project.save
+      flash[:warning] = "project record save failed"
+      redirect_to :action => 'show', :id => @project
+      return false
+    end
+
+    #old way: archive.destroy  #we do not delete, just mark
+    msg += "Archive deleted" 
     flash[:notice] = msg
     reexpand_all 
   end
@@ -439,12 +465,13 @@ class PipelineController < ApplicationController
     # keep other special files
     keepers["validate_error"] = "keep"
     keepers["load_error"] = "keep"
+    keepers["upload_error"] = "keep"
 
     msg = ""
     # make sure parent paths exist
     projectDir = path_to_file
 
-    # clean out directory (this will be handled more delicately later for re-uploading a project)
+    # clean out directory
     Dir.entries(projectDir).each do 
       |f| 
       fullName = File.join(projectDir,f)
@@ -467,17 +494,23 @@ class PipelineController < ApplicationController
         f.destroy
       end
     end
- 
+
+    found = false 
     @project.project_archives.each do |a|
-      unless expand_archive(a)
-        return
+      n = a.archive_no-1
+      c = @project.archives_active[n..n]
+      if c == "1"
+        found = true
+        unless expand_archive(a)
+          return
+        end
       end
     end
 
-    if @project.project_archives.length == 0
-      @project.status = "new"
-    else
+    if found 
       @project.status = "uploaded"
+    else
+      @project.status = "new"
     end
     unless @project.save
       flash[:warning] = "project record save failed"
@@ -706,16 +739,18 @@ private
     project_archive.file_name = @filename
     project_archive.file_size = File.size(path_to_file)
     project_archive.file_date = Time.now    # TODO: add .utc to make UTC time?
-    project_archive.status = "uploaded"
+    project_archive.status = "see current"
+    project_archive.archives_active = ""
     unless project_archive.save
-      flash[:warning] += "error saving project_archive record for: #{@filename}"
+      flash[:warning] = "error saving project_archive record for: #{@filename}"
       return false
     end
 
     @project.archive_count = nextArchiveNo
+    @project.archives_active += "1"
 
     unless @project.save
-      flash[:warning] += "project record save failed"
+      flash[:warning] = "project record save failed"
       return false
     end
 

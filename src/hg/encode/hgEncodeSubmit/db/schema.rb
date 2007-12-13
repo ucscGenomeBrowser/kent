@@ -2,7 +2,7 @@
 # migrations feature of ActiveRecord to incrementally modify your database, and
 # then regenerate this schema definition.
 
-ActiveRecord::Schema.define(:version => 24) do
+ActiveRecord::Schema.define(:version => 29) do
 
   create_table "plugin_schema_info", :id => false, :force => true do |t|
     t.column "plugin_name", :string
@@ -10,14 +10,15 @@ ActiveRecord::Schema.define(:version => 24) do
   end
 
   create_table "project_archives", :force => true do |t|
-    t.column "file_name",  :string
-    t.column "file_size",  :string
-    t.column "file_date",  :datetime
-    t.column "project_id", :integer
-    t.column "created_at", :datetime
-    t.column "updated_at", :datetime
-    t.column "archive_no", :integer
-    t.column "status",     :string
+    t.column "file_name",       :string
+    t.column "file_size",       :string
+    t.column "file_date",       :datetime
+    t.column "project_id",      :integer
+    t.column "created_at",      :datetime
+    t.column "updated_at",      :datetime
+    t.column "archive_no",      :integer
+    t.column "status",          :string
+    t.column "archives_active", :text
   end
 
   create_table "project_files", :force => true do |t|
@@ -48,6 +49,7 @@ ActiveRecord::Schema.define(:version => 24) do
     t.column "updated_at",      :datetime
     t.column "archive_count",   :integer,  :default => 0
     t.column "project_type_id", :integer
+    t.column "archives_active", :text
   end
 
   create_table "running", :id => false, :force => true do |t|
