@@ -20,6 +20,13 @@ idSql select geneTests.geneSymbol from kgXref, geneTests where kgID = '%s' and k
 url http://www.genetests.org/query?gene=%s
 priority 10
 
+name pga
+shortLabel SeattleSNPs PGA
+tables pga kgXref
+idSql select pga.geneSymbol from kgXref, pga where kgID = '%s' and kgXref.geneSymbol = pga.geneSymbol
+url http://gvs.gs.washington.edu/GVS/PopStatsServlet?searchBy=Gene+Hugo&target=%s
+priority 10
+
 name geneCards
 shortLabel GeneCards
 tables kgXref
