@@ -3332,6 +3332,66 @@ TMPDIR=/scratch/tmp
 	-swap -bigClusterHub=pk > swap.log 2>&1 &
     #	real    498m24.344s
     #	this failed during the load because the chainLink table became
-    #	too large.
+    #	too large.  These were loaded manually with an sql statement to
+    #	start the table definition, then a load data local infile using
+    #	the .tab files left over from the failed load.  Note the extra
+    #	definitions on the chainMonDom4Link table
+CREATE TABLE chainMonDom4 (
+  bin smallint(5) unsigned NOT NULL default '0',
+    score double not null,	# score of chain
+    tName varchar(255) not null,	# Target sequence name
+    tSize int unsigned not null,	# Target sequence size
+    tStart int unsigned not null,	# Alignment start position in target
+    tEnd int unsigned not null,	# Alignment end position in target
+    qName varchar(255) not null,	# Query sequence name
+    qSize int unsigned not null,	# Query sequence size
+    qStrand char(1) not null,	# Query strand
+    qStart int unsigned not null,	# Alignment start position in query
+    qEnd int unsigned not null,	# Alignment end position in query
+    id int unsigned not null,	# chain id
+              #Indices
+  KEY tName (tName(16),bin),
+  KEY id (id)
+) TYPE=MyISAM;
+
+    time nice -n +19 hgsql -e \
+	"load data local infile \"chain.tab\" into table chainMonDom4;" calJac1
+    #	real    8m10.273s
+
+CREATE TABLE chainMonDom4Link (
+  bin smallint(5) unsigned NOT NULL default 0,
+  tName varchar(255) NOT NULL default '',
+  tStart int(10) unsigned NOT NULL default 0,
+  tEnd int(10) unsigned NOT NULL default 0,
+  qStart int(10) unsigned NOT NULL default 0,
+  chainId int(10) unsigned NOT NULL default 0,
+  KEY tName (tName(16),bin),
+  KEY chainId (chainId)
+) ENGINE=MyISAM max_rows=160000000 avg_row_length=55 pack_keys=1 CHARSET=latin1;
+
+    time nice -n +19 hgsql -e \
+      "load data local infile \"link.tab\" into table chainMonDom4Link;" calJac1
+    #	this one took a number of hours
+
+    #	finish the nets and load
+    time nice -n +19 netClass -verbose=0 -noAr noClass.net \
+	calJac1 monDom4 calJac1.monDom4.net
+    #	real    4m18.898s
+    time nice -n +19 netFilter -minGap=10 calJac1.monDom4.net \
+	| hgLoadNet -verbose=0 calJac1 netMonDom4 stdin
+    #	real    0m54.559s
+    cd /cluster/data/calJac1/bed/blastz.monDom4.swap
+    time nice -n +19 featureBits calJac1 chainMonDom4Link \
+	> fb.calJac1.chainMonDom4Link.txt 2>&1
+    #	real    25m7.373s
+    cat fb.calJac1.chainMonDom4Link.txt
+    #	391248654 bases of 2929139385 (13.357%) in intersection
+
+    #	continuing
+    cd /cluster/data/calJac1/bed/blastz.monDom4.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/monDom4/bed/blastzCalJac1.2007-11-24/DEF \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	-continue=download -swap -bigClusterHub=pk > download.log 2>&1 &
 
 ###########################################################################
