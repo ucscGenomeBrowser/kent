@@ -13,7 +13,7 @@
 #include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: custom.c,v 1.34 2007/10/21 04:11:27 angie Exp $";
+static char const rcsid[] = "$Id: custom.c,v 1.35 2007/12/14 04:16:27 angie Exp $";
 
 struct customTrack *theCtList = NULL;	/* List of custom tracks. */
 struct slName *browserLines = NULL;	/* Browser lines in custom tracks. */
@@ -637,7 +637,7 @@ else
     fieldCount = ct->fieldCount;
     bf = bedFilterForCustomTrack(name);
     if (ct->fieldCount > 3)
-	idHash = identifierHash(name);
+	idHash = identifierHash(database, name);
 
     /* Grab filtered beds for each region. */
     for (region = regionList; region != NULL; region = region->next)

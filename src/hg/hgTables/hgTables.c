@@ -27,7 +27,7 @@
 #include "hgMaf.h"
 #include "gvUi.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.159 2007/11/27 00:45:41 angie Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.160 2007/12/14 04:16:27 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -1024,7 +1024,7 @@ else
  * and add identifier column to end of result set. */
 if (idField != NULL)
     {
-    idHash = identifierHash(table);
+    idHash = identifierHash(db, table);
     if (idHash != NULL)
 	{
 	dyStringAppendC(fieldSpec, ',');
@@ -1132,7 +1132,7 @@ else
  * and add identifier column to end of result set. */
 if (idField != NULL)
     {
-    idHash = identifierHash(table);
+    idHash = identifierHash(db, table);
     if (idHash != NULL)
 	{
 	dyStringAppendC(fieldSpec, ',');

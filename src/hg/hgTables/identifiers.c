@@ -13,7 +13,7 @@
 #include "trashDir.h"
 #include "web.h"
 
-static char const rcsid[] = "$Id: identifiers.c,v 1.16 2007/10/21 04:11:28 angie Exp $";
+static char const rcsid[] = "$Id: identifiers.c,v 1.17 2007/12/14 04:16:27 angie Exp $";
 
 
 static boolean forCurTable()
@@ -353,11 +353,16 @@ else
     }
 }
 
-struct hash *identifierHash(char *table)
+struct hash *identifierHash(char *db, char *table)
 /* Return hash full of identifiers from the given table (or NULL). */
 {
-if (table && !(sameString(table, curTable) ||
-	       sameString(connectingTableForTrack(table), curTable)))
+char dbDotTable[2048];
+if (!sameString(db, database))
+    safef(dbDotTable, sizeof(dbDotTable), "%s.%s", db, table);
+else
+    safecpy(dbDotTable, sizeof(dbDotTable), table);
+if (! (sameString(dbDotTable, curTable) ||
+       sameString(connectingTableForTrack(dbDotTable), curTable)) )
     return NULL;
 char *fileName = identifierFileName();
 if (fileName == NULL)
