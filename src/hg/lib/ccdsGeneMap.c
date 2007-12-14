@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "ccdsGeneMap.h"
 
-static char const rcsid[] = "$Id: ccdsGeneMap.c,v 1.1 2005/04/09 02:41:45 markd Exp $";
+static char const rcsid[] = "$Id: ccdsGeneMap.c,v 1.2 2007/12/14 22:44:18 markd Exp $";
 
 void ccdsGeneMapStaticLoad(char **row, struct ccdsGeneMap *ret)
 /* Load a row from ccdsGeneMap table into ret.  The contents of ret will
@@ -167,17 +167,18 @@ return cloneString(sql);
 }
 
 struct ccdsGeneMap *ccdsGeneMapSelectByCcds(struct sqlConnection *conn, char *mapTable,
-                                            char *ccdsId, float minSimilarity)
+                                            char *ccdsId, char *chrom, float minSimilarity)
 /* select ccdsGeneMap records by ccds and minimum CDS similarity from the
- * specified table. */
+ * specified table. Chrom is required since the same CCDS id is mapped twice in the PAR.
+ */
 {
 struct ccdsGeneMap *ccdsGeneList = NULL;
 char query[128];
 struct sqlResult *sr = NULL;
 char **row = NULL;
 
-safef(query, sizeof(query), "select * from %s where ccdsId='%s' and cdsSimilarity >= %f",
-      mapTable, ccdsId, minSimilarity);
+safef(query, sizeof(query), "select * from %s where (ccdsId='%s') and (chrom='%s') and (cdsSimilarity >= %f)",
+      mapTable, ccdsId, chrom, minSimilarity);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     slSafeAddHead(&ccdsGeneList, ccdsGeneMapLoad(row));

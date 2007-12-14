@@ -66,7 +66,7 @@ char *ccdsGeneMapGetCreateSql(char *table);
 /* Get SQL command to create ccdsGeneMap table. Result should be freed. */
 
 struct ccdsGeneMap *ccdsGeneMapSelectByCcds(struct sqlConnection *conn, char *mapTable,
-                                            char *ccdsId, float minSimilarity);
+                                            char *ccdsId, char *chrom, float minSimilarity);
 /* select ccdsGeneMap records by ccds and minimum CDS similarity from the
  * specified table. */
 

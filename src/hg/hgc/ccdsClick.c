@@ -128,7 +128,8 @@ static struct ccdsGeneMap *ccdsGetGenes(struct sqlConnection *conn, char *mapTab
 {
 struct ccdsGeneMap *ccdsGenes = NULL, *bestCcdsGenes = NULL, *ccdsGene;
 
-ccdsGenes = ccdsGeneMapSelectByCcds(conn, mapTable, ccdsId, 0.0);
+/* filter by chrom due to PAR */
+ccdsGenes = ccdsGeneMapSelectByCcds(conn, mapTable, ccdsId, seqName, 0.0);
 if (ccdsGenes == NULL)
     return NULL;
 
@@ -255,8 +256,8 @@ for (ccdsKg = ccdsKgs; ccdsKg != NULL; ccdsKg = ccdsKg->next)
     printf("<TR>");
     if (ccdsKg == ccdsKgs)
         printf("<TH ROWSPAN=%d>%s", slCount(ccdsKgs),
-               (havePb ? "UCSC Known Genes/<br>Proteome Browser"
-                : "UCSC Known Genes"));
+               (havePb ? "UCSC Genes/<br>Proteome Browser"
+                : "UCSC Genes"));
     printf("<TD><A HREF=\"");
     printCcdsHgGeneUrl(conn, ccdsId, ccdsKg->geneId);
     printf("\" TARGET=_blank>%s</A>", ccdsKg->geneId);
