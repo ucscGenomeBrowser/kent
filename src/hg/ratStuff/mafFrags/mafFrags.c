@@ -11,7 +11,7 @@
 #include "hgMaf.h"
 
 
-static char const rcsid[] = "$Id: mafFrags.c,v 1.5 2007/03/13 22:27:24 kent Exp $";
+static char const rcsid[] = "$Id: mafFrags.c,v 1.6 2007/12/14 23:00:12 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -167,6 +167,16 @@ if (optionExists("orgs"))
     char *buf;
     readInGulp(orgFile, &buf, NULL);
     orgList = stringToSlNames(buf);
+
+    /* Ensure that org list starts with database. */
+    struct slName *me = slNameFind(orgList, database);
+    if (me == NULL)
+        errAbort("Need to have reference database '%s' in %s", database, orgFile);
+    if (me != orgList)
+        {
+	slRemoveEl(&orgList, me);
+	slAddHead(&orgList, me);
+	}
     }
 mafWriteStart(f, "zero");
 
