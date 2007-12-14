@@ -175,9 +175,11 @@ void qaStatusSoftError(struct qaStatus *qs, char *format, ...)
 /* Add error message for something less than a crash. */
 {
 struct dyString *dy = dyStringNew(0);
-va_list args;
+va_list args, args2;
 va_start(args, format);
-vaWarn(format, args);
+/* args can't be reused, so vaWarn needs its own va_list: */
+va_start(args2, format);
+vaWarn(format, args2);
 if (qs->errMessage)
     {
     dyStringAppend(dy, qs->errMessage);
@@ -185,6 +187,7 @@ if (qs->errMessage)
     }
 dyStringVaPrintf(dy, format, args);
 va_end(args);
+va_end(args2);
 freez(&qs->errMessage);
 qs->errMessage = cloneString(dy->string);
 dyStringFree(&dy);
