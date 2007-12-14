@@ -1292,6 +1292,7 @@ chainOne $(path1)
     cd /cluster/data/ornAna1/bed/blastzCalJac1.2007-11-20
 
     #	this chunking will produce 542,178 jobs
+    #	This takes way too long, even on pk, 23 days
     cat << '_EOF_' > DEF
 # Platypus vs Marmoset
 BLASTZ_M=50
@@ -1323,33 +1324,38 @@ TMPDIR=/scratch/tmp
 	-stop=blastz \
 	-chainMinScore=5000 -chainLinearGap=loose \
 	-bigClusterHub=pk > blastz.log 2>&1 &
-XXX - running - 2007-11-20
-# Completed: 899536 of 900180 jobs
-# Crashed: 644 jobs
-# CPU time in finished jobs:  131663141s 2194385.68m 36573.09h 1523.88d  4.175 y
-# IO & Wait Time:              12592457s  209874.29m  3497.90h  145.75d  0.399 y
-# Average job time:                 160s       2.67m     0.04h    0.00d
-# Longest finished job:            1795s      29.92m     0.50h    0.02d
-# Submission to last job:        440290s    7338.17m   122.30h    5.10d
-    #	despite the '644 jobs' crashed, they are actually done and all results
-    #	are complete
-
-    #	continuing:
-    time nice -n +19 doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+    #	real    5494m4.009s
+Completed: 541845 of 542178 jobs
+Crashed: 333 jobs
+CPU time in finished jobs:  575423244s 9590387.40m 159839.79h 6659.99d 18.247 y
+IO & Wait Time:               8698684s  144978.06m  2416.30h  100.68d  0.276 y
+Average job time:                1078s      17.97m     0.30h    0.01d
+Longest finished job:            2887s      48.12m     0.80h    0.03d
+Submission to last job:       1991620s   33193.67m   553.23h   23.05d
+    #	the crashes are tracking errors
+    #	continuing after verifying that all result files are present
+    #	testing some changes to the script
+    time nice -n +19 $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
+	-verbose=2 `pwd`/DEF \
+	-continue=cat \
 	-chainMinScore=5000 -chainLinearGap=loose \
-	-continue=cat -bigClusterHub=pk > cat.log 2>&1 &
-    #	real    31m45.069s
-    cat fb.ornAna1.chainCalJac1Link.txt
-    #	0 bases of 2929139385 (0.000%) in intersection
-XXXX something went wrong, there are no results !  Everything is empty
+	-bigClusterHub=pk > cat.log 2>&1 &
+    #	real    142m40.246s
 
     mkdir /cluster/data/calJac1/bed/blastz.ornAna1.swap
     cd /cluster/data/calJac1/bed/blastz.ornAna1.swap
-    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+    time nice -n +19 $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
+	-verbose=2 \
 	/cluster/data/ornAna1/bed/blastzCalJac1.2007-11-20/DEF \
-	-chainMinScore=3000 -chainLinearGap=medium \
+	-chainMinScore=5000 -chainLinearGap=loose \
 	-swap -bigClusterHub=pk > swap.log 2>&1 &
-    #	real    123m9.197s
+    #	real    40m3.380s
     cat fb.calJac1.chainOrnAna1Link.txt
-    #	2824501297 bases of 3093572278 (91.302%) in intersection
+    #	211526899 bases of 2929139385 (7.221%) in intersection
+    time nice -n +19 $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
+	-verbose=2 \
+	/cluster/data/ornAna1/bed/blastzCalJac1.2007-11-20/DEF \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	-continue=cleanup -swap -bigClusterHub=pk > cleanup.log 2>&1 &
+
 ###########################################################################
