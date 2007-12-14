@@ -4,7 +4,7 @@
 # This file describes browser build for the Marmoset
 # genome, July 2007
 #
-#	"$Id: calJac1.txt,v 1.6 2007/12/12 18:17:28 markd Exp $"
+#	"$Id: calJac1.txt,v 1.7 2007/12/14 00:08:31 hiram Exp $"
 #
 ######################################################################
 ## DOWNLOAD SEQUENCE (DONE - 2007-08-21 - Hiram)
@@ -456,7 +456,10 @@ TMPDIR=/scratch/tmp
     #	real    31m45.069s
     cat fb.calJac1.chainOrnAna1Link.txt
     #	0 bases of 2929139385 (0.000%) in intersection
-XXXX something went wrong, there are no results !  Everything is empty
+    #	This error was fixed in the script.  It failed on a command in one of
+    #	the ssh scripts that happened to run under the bash shell which did
+    #	not detect the error in a set of piped commands.  It was a shell
+    #	wild-card expansion problem, changed to a 'find' to avoid that.
 
 ###########################################################################
 
