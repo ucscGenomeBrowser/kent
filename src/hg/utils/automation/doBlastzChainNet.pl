@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/automation/doBlastzChainNet.pl instead.
 
-# $Id: doBlastzChainNet.pl,v 1.16 2007/12/12 00:34:06 hiram Exp $
+# $Id: doBlastzChainNet.pl,v 1.17 2007/12/14 00:10:36 hiram Exp $
 
 # to-do items:
 # - lots of testing
@@ -260,11 +260,11 @@ sub enforceClusterNoNo {
       join (' or ', @clusterNoNo) . " so please choose a different " .
       "$desc instead of $dir .\n\n";
   }
-  my $fileServer = `$getFileServer $dir/`;
-  if (scalar(grep /^$fileServer$/, @fileServerNoNo)) {
+  my $testFileServer = `$getFileServer $dir/`;
+  if (scalar(grep /^$testFileServer$/, @fileServerNoNo)) {
     die "\ncluster outputs are forbidden to go to fileservers " .
       join (' or ', @fileServerNoNo) . " so please choose a different " .
-      "$desc instead of $dir (which is hosted on $fileServer).\n\n";
+      "$desc instead of $dir (which is hosted on $testFileServer).\n\n";
   }
 }
 
@@ -1007,7 +1007,7 @@ sub makeDownloads {
   # compressed already).
   my $runDir = "$buildDir/axtChain";
   if (-e "$runDir/$tDb.$qDb.net") {
-    &HgAutomate::run("ssh -x $workhorse nice " .
+    &HgAutomate::run("ssh -x $fileServer nice " .
 	 "gzip $runDir/$tDb.$qDb.net");
   }
   # Make an md5sum.txt file.
@@ -1504,15 +1504,7 @@ if (! -e "$buildDir/DEF") {
   &HgAutomate::run("cp $DEF $buildDir/DEF");
 }
 
-$fileServer = $opt_fileServer ? $opt_fileServer :
-              $opt_swap ? `$getFileServer $swapDir/` :
-                          `$getFileServer $buildDir/`;
-chomp $fileServer;
-if (scalar(grep /^$fileServer$/, @fileServerNoLogin)) {
-  print STDERR "Logins are not allowed on fileServer $fileServer; will use " .
-    "workhorse $workhorse instead of fileServer for I/O-intensive steps.\n";
-  $fileServer = $workhorse;
-}
+$fileServer = &HgAutomate::chooseFileServer($opt_swap ? $swapDir : $buildDir);
 
 # When running -swap, swapGlobals() happens at the end of the chainMerge step.
 # However, if we also use -continue with some step later than chainMerge, we
