@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "net.h"
 
-static char const rcsid[] = "$Id: clinical.c,v 1.6 2007/11/17 20:16:48 fanhsu Exp $";
+static char const rcsid[] = "$Id: clinical.c,v 1.7 2007/12/15 17:14:55 fanhsu Exp $";
 
 static boolean clinicalExists(struct section *section, 
 	struct sqlConnection *conn, char *subjId)
@@ -36,7 +36,7 @@ char *specimenId, *labCode, *daysCollection, *hivQuan, *cd4Count;
 printf("<TABLE BGCOLOR=#222222 CELLSPACING=1 CELLPADDING=3><TR>\n");
 
 printf("<TR>\n");
-printf("<TD align=left BGCOLOR=\"#8686D1\"><FONT COLOR=\"#FFFFFF\"><B>Estimated Study <BR>Day of Infection*</B></FONT></TD>\n");
+printf("<TD align=left BGCOLOR=\"#8686D1\"><FONT COLOR=\"#FFFFFF\"><B>Days After Estimated<BR>Infection (DAEI)*</B></FONT></TD>\n");
 printf("<TD align=center BGCOLOR=\"#8686D1\"><FONT COLOR=\"#FFFFFF\"><B>HIV-1 RNA<BR>copies/mL</B></FONT></TD>\n");
 printf("<TD align=center BGCOLOR=\"#8686D1\"><FONT COLOR=\"#FFFFFF\"><B>CD4<BR>cells/microliter</B></FONT></TD>\n");
 printf("</TR>\n");
@@ -94,6 +94,9 @@ hFreeConn(&conn);
 printf("</TR></TABLE>");
 printf("<br>* Estimated Study Day of Infection (ESDI), ");
 printf("click <a href=\"http://www.gsid.org/gsidhivdatabrowser/intro.html/ESDI\"> here </a>");
+printf(" for further explanation.\n");
+printf("<br>* Days After Estimated Infection (DAEI), ");
+printf("click <a href=\"http://www.gsid.org/methods_and_conventions.html\"> here </a>");
 printf(" for further explanation.\n");
 return;
 }
