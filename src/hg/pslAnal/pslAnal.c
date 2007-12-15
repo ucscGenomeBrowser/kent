@@ -505,40 +505,25 @@ int countStdSplice(struct psl *psl, DNA *seq, struct pslInfo *pi)
    Return the number of introns that do */
 {
 int count=0, i;
+int tStart = (psl->strand[1] == '-') ? (psl->tSize - psl->tEnd): psl->tStart;
 
 for (i=1; i<psl->blockCount; ++i)
     {
-    int iStart, iEnd;
     pi->splice[i] = 0;
-    /*    if ((psl->qStarts[i-1] + blockSize == psl->qStarts[i]) && 
-	(psl->tStarts[i] - (psl->tStarts[i-1] + psl->blockSizes[i-1]) > 30))
-	{*/
-	iStart = psl->tStarts[i-1] + psl->blockSizes[i-1] - psl->tStart;
-	iEnd = psl->tStarts[i] - psl->tStart;
-	if (abs(iEnd - iStart) > 15)
-	  {
-	    /*if (psl->strand[0] == '+')
-	      {*/
-		if ((seq[iStart] == 'g' && seq[iStart+1] == 't' && seq[iEnd-2] == 'a' && seq[iEnd-1] == 'g') ||
-		    (seq[iStart] == 'g' && seq[iStart+1] == 'c' && seq[iEnd-2] == 'a' && seq[iEnd-1] == 'g'))
-		  {
-		    count++;
-		    pi->splice[i] = 1;
-		    if  (abs(iEnd - iStart) <= 30)
-		      pi->introns++;
-		  }
-		/* }
-	    else 
-	      {
-		if ((seq[iStart] == 'c' && seq[iStart+1] == 't' && seq[iEnd-2] == 'a' && seq[iEnd-1] == 'c') ||
-		    (seq[iStart] == 'c' && seq[iStart+1] == 't' && seq[iEnd-2] == 'g' && seq[iEnd-1] == 'c'))
-		  {
-		    count++;
-		    pi->splice[i] = 1;
-		  }
-		  }*/
-	  }
-	/*}*/
+   
+    int iStart = psl->tStarts[i-1] + psl->blockSizes[i-1] - tStart;
+    int iEnd = psl->tStarts[i] - tStart;
+    if (abs(iEnd - iStart) > 15)
+      {
+            if ((seq[iStart] == 'g' && seq[iStart+1] == 't' && seq[iEnd-2] == 'a' && seq[iEnd-1] == 'g') ||
+                (seq[iStart] == 'g' && seq[iStart+1] == 'c' && seq[iEnd-2] == 'a' && seq[iEnd-1] == 'g'))
+              {
+                count++;
+                pi->splice[i] = 1;
+                if  (abs(iEnd - iStart) <= 30)
+                  pi->introns++;
+              }
+      }
     }
 return(count);
 }
