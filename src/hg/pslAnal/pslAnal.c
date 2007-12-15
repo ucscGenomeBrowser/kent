@@ -580,12 +580,14 @@ if (haveSnp)
         snp125StaticLoad(row+rowOff, &snp);
 	/* Check if this is a snp, not a indel */
         if (sameString(snp.class, "snp"))
+          {
 	  /* Check if the snp has been validated*/
 	  if (differentString(snp.valid, "no-information"))
 	    ret = 2;
 	  else
 	    if (ret < 2)
 	      ret = 1;	
+          }
         }
     sqlFreeResult(&sr);
     }
