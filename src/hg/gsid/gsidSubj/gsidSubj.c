@@ -15,9 +15,10 @@
 #include "genePred.h"
 #include "hgColors.h"
 #include "hPrint.h"
+#include "gsid.h"
 #include "gsidSubj.h"
 
-static char const rcsid[] = "$Id: gsidSubj.c,v 1.9 2007/11/15 17:54:49 fanhsu Exp $";
+static char const rcsid[] = "$Id: gsidSubj.c,v 1.10 2007/12/15 17:16:28 fanhsu Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
