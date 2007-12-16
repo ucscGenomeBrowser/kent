@@ -20,7 +20,7 @@
 #include "gsidTable.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidTable.c,v 1.31 2007/12/15 18:11:11 fanhsu Exp $";
+static char const rcsid[] = "$Id: gsidTable.c,v 1.32 2007/12/16 23:21:36 fanhsu Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "submit_filter", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -218,7 +218,7 @@ for (col = colList; col != NULL; col = col->next)
 	    first = FALSE;
 	else
 	    hPrintf("\t");
-        hPrintf("%s", col->name);
+        hPrintf("%s", col->shortLabel);
 	}
     }
 hPrintf("\n");
@@ -229,6 +229,7 @@ for (si = subjList; si != NULL; si = si->next)
         {
         if (col->on)
             {
+	    boolean special;
             char *val = col->cellVal(col, si, conn);
             if (first)
                 first = FALSE;
@@ -237,8 +238,63 @@ for (si = subjList; si != NULL; si = si->next)
             if (val == NULL)
                 hPrintf("n/a", val);
             else
-                hPrintf("%s", val);
-            freez(&val);
+		{
+		special = FALSE;
+		if (sameWord(col->name, "cd4Count"))
+    		    {
+    		    if (sameWord(val, "-1") || sameWord(val, "0"))
+			{
+			hPrintf("N/A");
+			special = TRUE;
+			}
+    		    }
+		if (sameWord(col->name, "hivQuan"))
+    		    {
+    		    if (sameWord(val, "-1"))
+			{
+			hPrintf("N/A");
+			special = TRUE;
+			}
+    		    }
+		if (sameWord(col->name, "DAEI"))
+    		    {
+    		    if (sameWord(val, "-1"))
+			{
+			hPrintf("N/A");
+			special = TRUE;
+			}
+    		    }
+		if (sameWord(col->name, "esdi"))
+    		    {
+    		    if (sameWord(val, "-1"))
+			{
+			hPrintf("N/A");
+			special = TRUE;
+			}
+    		    }
+		if (sameWord(col->name, "hivQuan"))
+    		    {
+    		    if (sameWord(val, "1000000"))
+			{
+			hPrintf("&gt; 1000000");
+			special = TRUE;
+			}
+    		    }
+		if (sameWord(col->name, "hivQuan"))
+    		    {
+    		    if (sameWord(val, "200"))
+			{
+			hPrintf("&lt; 400");
+			special = TRUE;
+			}
+    		    }
+
+		if (!special)
+    		    {
+    		    hPrintf("%s", val);
+    		    }
+		}
+	    freez(&val);
             }
         }
     hPrintf("\n");
@@ -855,6 +911,14 @@ if (sameWord(col->name, "cd4Count"))
 	}
     }
 if (sameWord(col->name, "hivQuan"))
+    {
+    if (sameWord(s, "-1"))
+	{
+	printf("N/A");
+	special = TRUE;
+	}
+    }
+if (sameWord(col->name, "DAEI"))
     {
     if (sameWord(s, "-1"))
 	{
