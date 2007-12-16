@@ -55,7 +55,7 @@ type integer
 query select  daysInfectF from gsidSubjInfo where subjId='%s';
 
 name gender
-shortLabel sex
+shortLabel gender
 longLabel Gender at birth
 priority 7
 visibility on
