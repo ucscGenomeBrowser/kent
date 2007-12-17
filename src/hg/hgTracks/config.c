@@ -402,7 +402,7 @@ char *javascript="onClick=\"document.mainForm.hgTracksConfigPage.value='configur
 hCheckBoxJS("fastConfigureMode",
 	cartUsualBoolean(cart, "fastConfigureMode" , FALSE), javascript);
 hPrintf("</TD><TD>");
-hPrintf("Fast configure mode (goto browser configure after track configure)");
+hPrintf("Fast configure mode (return to this page after track configure)");
 hPrintf("</TD></TR>\n");
 
 hPrintf("<TR><TD>");
