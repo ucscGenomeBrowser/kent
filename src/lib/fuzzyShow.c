@@ -12,7 +12,7 @@
 #include "cda.h"
 #include "seqOut.h"
 
-static char const rcsid[] = "$Id: fuzzyShow.c,v 1.23 2007/03/27 23:21:25 angie Exp $";
+static char const rcsid[] = "$Id: fuzzyShow.c,v 1.24 2007/12/17 22:59:31 galt Exp $";
 
 static void ffShNeedle(FILE *f, DNA *needle, int needleSize,
 		       int needleNumOffset, char *colorFlags,
@@ -30,7 +30,7 @@ long i;
 
 zeroBytes(colorFlags, needleSize);
 zeroBytes(accentFlags, needleSize);
-fprintf(f, "<TT><PRE>\n");
+fprintf(f, "<PRE><TT>\n");
 if (aliList != NULL)
     {
     for (leftAli = aliList; leftAli->left != NULL; leftAli = leftAli->left)
@@ -231,7 +231,7 @@ if (showHaystack)
     fprintf(f, "<H4><A NAME=genomic></A>Genomic %s %s:</H4>\n", 
     	haystackName,
 	(rcHaystack ? "(reverse strand)" : ""));
-    fprintf(f, "<TT><PRE>\n");
+    fprintf(f, "<PRE><TT>\n");
     zeroBytes(colorFlags, haySize);
     for (ali = leftAli; ali != NULL; ali = ali->right)
 	{
@@ -290,7 +290,7 @@ if (showHaystack)
 if (showSideBySide)
     {
     fprintf(f, "<H4><A NAME=ali></A>Side by Side Alignment</H4>\n");
-    fprintf(f, "<TT><PRE>\n");
+    fprintf(f, "<PRE><TT>\n");
     lastAli = NULL;
     charsInLine = 0;
     bafInit(&baf, needle, needleNumOffset, FALSE, 
