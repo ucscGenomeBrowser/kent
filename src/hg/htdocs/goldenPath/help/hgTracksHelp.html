@@ -878,13 +878,15 @@ Browser FAQ.
 	<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
 	<TR><TD WIDTH=10>&nbsp;</TD><TD>
 <P>
-This section previously included an alphabetical listing of annotation tracks 
-available on various assemblies of the Genome Browser. This list is no longer
-maintained, but may still be viewed <A HREF="trackDescriptions.html">here</A>.
-Detailed information about individual annotation tracks, including display
+Detailed information about an individual annotation track, including display
 characteristics, configuration information, and associated database tables, 
-may be obtained from the track description pages accessed via the Genome Browser
-tracks page. For a more information on configuring and using the tracks 
+may be obtained from the track description page accessed by clicking the 
+mini-button to the left of the displayed track in the Genome Browser.
+Click the &quot;View table schema&quot; link on the track description page to
+display additional information about the primary database table underlying the
+track. Table schema information may also be accessed via the &quot;describe 
+table schema&quot; button in the <A HREF="#TableBrowser">Table Browser</A>. For 
+more information on configuring and using the tracks 
 displayed in the Genome Browser track window, see the section 
 <A HREF="#FineTuning">Interpreting and Fine-tuning the Genome Browser display</A>.</P>
 
@@ -909,7 +911,7 @@ displayed in the Genome Browser track window, see the section
 	To quickly toggle between <I>full</I> and <I>dense</I> or <I>pack</I> display modes, click on 
 	the track's center label.</TD></TR>  
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	Only the most recent assemblies are fully active. Older assemblies are <A HREF="http://genome-archive.cse.ucsc.edu/" TARGET=_blank>archived</A>.</TD></TR>  
+	Only the most recent assemblies are fully active. Older assemblies may be <A HREF="http://genome-archive.cse.ucsc.edu/" TARGET=_blank>archived</A>.</TD></TR>  
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	Not all tracks appear in all assemblies. Only a basic set of tracks 
 	appears initially in a new assembly.</TD></TR>  
@@ -1481,10 +1483,9 @@ table is represented by 2 files:
 	</TD></TR>
 </TABLE> 
 <P>
-The <A HREF="../gbdDescriptions.html"
-TARGET=_blank>Description of the annotation database</A> link on the Downloads page 
-points to a document containing a full
-description of all the tables in the annotation database.
+Schema descriptions for all tables in the genome annotation database may be
+viewed by using the &quot;describe table schema&quot; button in the 
+<A HREF="#TableBrowser">Table Browser</A>. 
 <P>
 <I>Cross-species alignments</I> directories, such as the <I>vsMm4</I> 
 and <em>humorMm3Rn3</em> directories in the hg16 assembly, contain pairwise
