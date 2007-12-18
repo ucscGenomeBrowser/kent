@@ -83,6 +83,8 @@ fold v1.edit4.ChrUr.chrm.fasta |sed -e 's/ChrUr/chrUr/' > ../Ur/chrUr.fa
 mv v1.edit4.chrome.ctgs.agp.corr v1.edit4.chrome.ctgs.corr.agp
 mv v1.edit4.chrome.scfs.agp.corr v1.edit4.chrome.scfs.corr.agp
 
+#*** NOTE FOR NEXT TIME *** use makeGenomeDb.pl instead of the following
+#                           several sections:
 
 # Check that IDs in .fa match IDs in .qual
 
@@ -200,6 +202,8 @@ hgGoldGapGl -noGl rheMac2 /cluster/data/rheMac2/downloads/v1.edit4.final.fix2.ag
 # REPEATMASKER 
 # using the split scaffold fa files generated earlier
 
+#*** NOTE FOR NEXT TIME *** use doRepeatMasker.pl instead.
+
 # note the version of RepeatMasker in use; will want this for download README
   cat /cluster/bluearc/RepeatMasker/Libraries/version
 # RM database version 20060120
@@ -277,6 +281,10 @@ note: 997 records dropped due to repStart > repEnd
 # SIMPLE REPEATS (DONE Jan 30, 2006 Robert)
 # put the results throughout the scaffold 0/0/0 directories,
 # same as RepeatMasker, to avoid too many files in the same directory
+# *** BUG: FILTERING WAS NOT DONE --> OVERMASKING ***
+
+#*** NOTE FOR NEXT TIME *** use doSimpleRepeat.pl instead.
+
   ssh kkstore01
   cd /cluster/data/rheMac2
   mkdir bed
@@ -455,6 +463,7 @@ WARNING: negative rEnd: -939 chrX:153527918-153528288 L1M4
 |      131 |
 +----------+
 
+  # DOH -- THIS MASKS TOO MUCH!  SHOULD HAVE USED FILTERED TRF!
   /cluster/bin/i386/maskOutFa -softAdd rheMac2.softmask.fa bed/simpleRepeat/simpleRepeat.bed rheMac2.softmask2.fa
 
   # hard masking (Ns instead of lower case) for download files
@@ -466,6 +475,9 @@ WARNING: negative rEnd: -939 chrX:153527918-153528288 L1M4
 # DOWNLOAD FILES
 # REMAKE SOME BIGZIPS DOWNLOADS IN SAME FORMAT AS FOR OTHER ASSEMBLIES 
 # WITH ONE FILE PER CHROMOSOME (DONE, 2006-06-12, hartera)
+
+#*** NOTE FOR NEXT TIME *** use makeDownloads.pl instead.
+
   ssh hgwdev
   cd /cluster/data/rheMac2
   cp rheMac2.softmask.fa /usr/local/apache/htdocs/goldenPath/rheMac2/bigZips
