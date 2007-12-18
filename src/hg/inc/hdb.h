@@ -189,6 +189,9 @@ struct sqlConnection *hConnectCentral();
  * not specific to a particular genome lives.  Free this up
  * with hDisconnectCentral(). */
 
+struct sqlConnection *hConnectTcga();
+/* connect to tcga database */
+
 void hDisconnectCentral(struct sqlConnection **pConn);
 /* Put back connection for reuse. */
 
