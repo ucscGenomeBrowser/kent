@@ -35,7 +35,7 @@
 #include "customTrack.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.339 2007/12/11 00:30:50 hartera Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.340 2007/12/18 23:23:43 fanhsu Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -51,7 +51,7 @@ static struct sqlConnCache *hdbCc2 = NULL;  /* cache for second database connect
 static struct sqlConnCache *centralCc = NULL;
 static struct sqlConnCache *centralArchiveCc = NULL;
 static struct sqlConnCache *cartCc = NULL;  /* cache for cart; normally same as centralCc */
-                                               
+static struct sqlConnCache *tcgaCc = NULL;  /* cache for TCGA DB connection */
 
 static char *hdbHost = NULL;
 static char *hdbName = NULL;
@@ -652,6 +652,28 @@ if (conn == NULL)
     }
 return(conn);
 }
+
+struct sqlConnection *hConnectTcga()
+/* Connect to tcga database where user info and other info
+ * not specific to a particular genome lives.  Free this up
+ * with hDisconnectCentral(). */
+{
+struct sqlConnection *conn = NULL;
+if (tcgaCc == NULL)
+    tcgaCc = getCentralCcFromCfg("tcgaDb");
+
+if (tcgaCc == NULL)
+    {
+    errAbort("problem encountered trying to connect to tcga DB");
+    }
+conn = sqlMayAllocConnection(tcgaCc, FALSE);
+if (conn == NULL)
+    {
+    errAbort("Could not connect to tcga DB");
+    }
+return(conn);
+}
+
 
 void hDisconnectCentral(struct sqlConnection **pConn)
 /* Put back connection for reuse. */
