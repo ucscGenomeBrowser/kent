@@ -10,7 +10,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.1 2007/12/17 19:13:36 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.2 2007/12/18 00:28:48 kate Exp $
 
 use warnings;
 use strict;
@@ -25,6 +25,7 @@ sub usage {
 # Global constants
 our $encodeConfigDir = '../config'; # change to /gbdb/encode before deployment
 our $fieldConfigFile = $encodeConfigDir . "/fields.ra";
+our $vocabConfigFile = $encodeConfigDir . "/cv.ra";
 our $trackFile = 'trackDb.ra';
 our $loadFile = 'load.csh';
 
@@ -32,6 +33,7 @@ our $loadFile = 'load.csh';
 our $submitDir;
 our $opt_verbose = 1;
 
+############################################################################
 sub newestFile {
   # Get the most recently modified file from a list
     my @files = @_;
@@ -48,11 +50,63 @@ sub newestFile {
     return $newestFile;
 }
 
+sub getPif {
+    # Read info from Project Information File.  Verify required fields
+    # are present and that the project is marked active.
+    my %pif = ();
+    my $pifFile = &newestFile(glob "*.PIF");
+    &HgAutomate::verbose(1, "Using newest PIF file: $pifFile\n");
+    open(IN, $pifFile) || die "ERROR: Can't open PIF file: $pifFile\n";
+    while (my $line = <IN>) {
+        # ignore empty lines and comments
+        next if $line =~ /^$/;
+        next if $line =~ /^\s*#/;
+        chomp $line;
+        my ($key, $val) = split(/\t/, $line);
+        $pif{$key} = $val;
+    }
+    close(IN);
+    # Validate fields
+    if (!defined($pif{'project'})) { die "ERROR: project not defined\n"; }
+    if (!defined($pif{'tracks'})) { die "ERROR: tracks not defined for project\n"};
+    if ($pif{'active'} !~ "yes") { die "ERROR: project not yet active\n"; }
+    return %pif;
+}
+
+sub readRaFile {
+    # Read records from a .ra file into a hash of hashes and return it.
+    my ($file, $type) = @_;
+    open(IN, $file) ||
+        die "ERROR: Can't open file: $fieldConfigFile\n";
+    my @lines = <IN>;
+    my %ra = ();
+    my $raKey = undef;
+    foreach my $line (@lines) {
+        if ($line =~ /^$/) {
+            $raKey = undef;
+            next;
+        }
+        $line =~ s/^\s+//;
+        next if $line =~ /^#/;
+        $line =~ s/\s+$//;
+        if ($line =~ m/^$type\s+(.*)/) {
+            $raKey = $1;
+        } else {
+            if (!defined($raKey)) { 
+                die "ERROR: missing $type before $line\n";
+            }
+            my ($key, $val) = split('\s+', $line, 2);
+            $ra{$raKey}->{$key} = $val;
+        }
+    }
+    close(IN);
+    return %ra;
+}
+
 ############################################################################
 # Main
 
 my $line;
-my %pif = ();
 my @ddfHeader;
 my %ddfFields = ();
 
@@ -63,43 +117,15 @@ $submitDir = $ARGV[0];
 chdir $submitDir;
 
 # Locate project information (PIF) file and verify that project is
-#  reaady for submission
-my $pifFile = &newestFile(glob "*.PIF");
-&HgAutomate::verbose(1, "Using newest PIF file: $pifFile\n");
-open(IN, $pifFile) || die "ERROR: Can't open PIF file: $pifFile\n";
-while ($line = <IN>) {
-    # ignore empty lines and comments
-    next if $line =~ /^$/;
-    next if $line =~ /^\s*#/;
-    chomp $line;
-    my ($key, $val) = split(/\t/, $line);
-    $pif{$key} = $val;
-}
-close(IN);
+#  ready for submission
+my %pif = &getPif();
 
-# Validate PIF
-if (!defined($pif{'project'})) { die "ERROR: project not defined\n"; }
-if (!defined($pif{'tracks'})) 
-                        { die "ERROR: tracks not defined for project\n"};
-if ($pif{'active'} !~ "yes") { die "ERROR: project not yet active\n"; }
+# Gather fields defined for DDF file. File is in 
+# ra format:  field <name>, required <true|false>
+my %fields = &readRaFile($fieldConfigFile, "field");
 
-# Get list of fields defined for DDF format
-# File is in .ra format:  field <name>, required <true|false>
-open(IN, $fieldConfigFile) || die "ERROR: Can't open config file: $fieldConfigFile\n";
-my @lines = <IN>;
-my @fields;
-my $i = 0;
-foreach $line (@lines) {
-    # ignore empty lines and comments
-    next if $line =~ /^$/;
-    next if $line =~ /^\s*#/;
-    chomp $line;
-    my ($key, $val) = split(/\t/, $line);
-    my %field = ();
-    $field{$key} = $val;
-    $fields[1] = \%field;
-}
-close(IN);
+# Gather controlled vocabulary from ra file
+my %cv = &readRaFile($vocabConfigFile, "term");
 
 # Validate DDF
 my $ddfFile = &newestFile(glob "*.DDF");
