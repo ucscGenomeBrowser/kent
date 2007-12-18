@@ -1,6 +1,6 @@
 # Build all directories in utils
 
-# 	$Id: makefile,v 1.135 2007/10/03 16:51:32 hiram Exp $
+# 	$Id: makefile,v 1.136 2007/12/18 05:37:01 angie Exp $
 
 BROWSER_BINS=cartReset das hgBlat makeDb/hgCgiData hgConvert \
         hgGateway hgGene hgGenome hgPcr hgSession hgTables hgTracks \
@@ -244,8 +244,7 @@ UTIL_DIRS = \
 	semiNorm \
 	sim4big \
 	snpException \
-	snp/snpMask \
-	snp/snpValid \
+	snp \
 	spideyToPsl \
 	splitFa \
 	splitFaIntoContigs \
