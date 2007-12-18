@@ -5,7 +5,7 @@
 #include "options.h"
 #include "chainBlock.h"
 
-static char const rcsid[] = "$Id: chainFilter.c,v 1.13 2005/06/23 00:46:01 markd Exp $";
+static char const rcsid[] = "$Id: chainFilter.c,v 1.14 2007/12/18 23:44:21 lowec Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -40,6 +40,8 @@ errAbort(
   "   -minGapless=N - pass those with minimum gapless block of at least N\n"
   "   -qMinGap=N     - pass those with minimum gap size of at least N\n"
   "   -tMinGap=N     - pass those with minimum gap size of at least N\n"
+  "   -qMaxGap=N     - pass those with maximum gap size no larger than N\n"
+  "   -tMaxGap=N     - pass those with maximum gap size no larger than N\n"
   "   -qMinSize=N    - minimum size of spanned query region\n"
   "   -qMaxSize=N    - maximum size of spanned query region\n"
   "   -tMinSize=N    - minimum size of spanned target region\n"
@@ -74,6 +76,8 @@ struct optionSpec options[] = {
    {"zeroGap", OPTION_BOOLEAN},
    {"minGapless", OPTION_INT},
    {"qMinGap", OPTION_INT},
+   {"qMaxGap", OPTION_INT},
+   {"tMaxGap", OPTION_INT},
    {"qMinSize", OPTION_INT},
    {"qMaxSize", OPTION_INT},
    {"tMinSize", OPTION_INT},
@@ -206,6 +210,8 @@ int tOverlapEnd = optionInt("tOverlapEnd", BIGNUM);
 int minGapless = optionInt("minGapless", 0);
 int qMinGap = optionInt("qMinGap", 0);
 int tMinGap = optionInt("tMinGap", 0);
+int qMaxGap = optionInt("qMaxGap", 0);
+int tMaxGap = optionInt("tMaxGap", 0);
 int qMinSize = optionInt("qMinSize", 0);
 int qMaxSize = optionInt("qMaxSize", BIGNUM);
 int tMinSize = optionInt("tMinSize", 0);
@@ -271,6 +277,16 @@ for (i=0; i<inCount; ++i)
 	if (tMinGap != 0)
 	    {
 	    if (!(tCalcMaxGap(chain) >= tMinGap))
+	        writeIt = FALSE;
+	    }
+	if (qMaxGap != 0)
+	    {
+	    if (qCalcMaxGap(chain) > qMaxGap)
+	        writeIt = FALSE;
+	    }
+	if (tMaxGap != 0)
+	    {
+	    if (tCalcMaxGap(chain) > tMaxGap)
 	        writeIt = FALSE;
 	    }
 	if (noRandom)
