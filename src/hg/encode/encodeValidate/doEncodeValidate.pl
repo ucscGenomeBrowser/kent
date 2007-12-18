@@ -10,7 +10,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.2 2007/12/18 00:28:48 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.3 2007/12/18 05:20:34 kate Exp $
 
 use warnings;
 use strict;
@@ -32,6 +32,66 @@ our $loadFile = 'load.csh';
 # Global variables
 our $submitDir;
 our $opt_verbose = 1;
+
+############################################################################
+# Validators -- extend when adding new metadata fields
+
+# standard (required or optional for all projects)
+sub validateFileName {
+    my ($val) = @_;
+    -e $val || die "File Name \'$val\' does not exist\n";
+}
+
+sub validatePart {
+    my ($val) = @_;
+    $val >= 0 && $val < 100 || die "Part must be 0-100\n";
+}
+
+sub validateDatasetName {
+    my ($val) = @_;
+}
+
+sub validateAssemblyREF {
+    my ($val) = @_;
+    $val =~ /hg1[78]/ || die "Assembly REF must be 'hg17' or 'hg18\'\n";
+}
+
+sub validateDataTypeREF {
+    my ($val) = @_;
+}
+
+sub validateRawDataAccREF {
+# No validation
+}
+
+sub validateDataVersion {
+# No validation
+}
+
+# project-specific
+sub validateCellSourceREF {
+    my ($val) = @_;
+}
+
+# dispatch table
+our %validators = (
+    File_Name => \&validateFileName,
+    Part => \&validatePart,
+    Dataset_Name => \&validateDatasetName,
+    Assembly_REF => \&validateAssemblyREF,
+    Data_Type_REF => \&validateDataTypeREF,
+    Raw_Data_Acc_REF => \&validateRawDataAccREF,
+    Data_Version => \&validateDataVersion,
+    Cell_Source_REF => \&validateCellSourceREF,
+    );
+
+sub validateField {
+    # validate value for type of field
+    my ($type, $val) = @_;
+    $type =~ s/ /_/g;
+    &HgAutomate::verbose(1, "Validating $type : $val\n");
+    $validators{$type}->($val);
+}
 
 ############################################################################
 sub newestFile {
@@ -67,17 +127,16 @@ sub getPif {
     }
     close(IN);
     # Validate fields
-    if (!defined($pif{'project'})) { die "ERROR: project not defined\n"; }
-    if (!defined($pif{'tracks'})) { die "ERROR: tracks not defined for project\n"};
-    if ($pif{'active'} !~ "yes") { die "ERROR: project not yet active\n"; }
+    defined($pif{'project'}) || die "ERROR: project not defined\n"; 
+    defined($pif{'tracks'}) || die "ERROR: tracks not defined for project\n";
+    $pif{'active'} =~ "yes" || die "ERROR: project not yet active\n";
     return %pif;
 }
 
 sub readRaFile {
     # Read records from a .ra file into a hash of hashes and return it.
     my ($file, $type) = @_;
-    open(IN, $file) ||
-        die "ERROR: Can't open file: $fieldConfigFile\n";
+    open(IN, $file) || die "ERROR: Can't open file: $fieldConfigFile\n";
     my @lines = <IN>;
     my %ra = ();
     my $raKey = undef;
@@ -92,9 +151,7 @@ sub readRaFile {
         if ($line =~ m/^$type\s+(.*)/) {
             $raKey = $1;
         } else {
-            if (!defined($raKey)) { 
-                die "ERROR: missing $type before $line\n";
-            }
+            defined($raKey) || die "ERROR: missing $type before $line\n";
             my ($key, $val) = split('\s+', $line, 2);
             $ra{$raKey}->{$key} = $val;
         }
@@ -124,24 +181,56 @@ my %pif = &getPif();
 # ra format:  field <name>, required <true|false>
 my %fields = &readRaFile($fieldConfigFile, "field");
 
-# Gather controlled vocabulary from ra file
-my %cv = &readRaFile($vocabConfigFile, "term");
+# Add required fields for this -- the variables in the PIF file
+foreach my $variable ($pif{'variables'}) {
+    $variable =~ s/_/ /g;
+    $fields{$variable}->{'required'} = 'yes';
+}
 
-# Validate DDF
+# Open dataset descriptor file (DDF)
 my $ddfFile = &newestFile(glob "*.DDF");
 &HgAutomate::verbose(1, "Using newest DDF file: $ddfFile\n");
 open(IN, $ddfFile) || die "ERROR: Can't open DDF file: $ddfFile\n";
 
-# Get DDF header containing column names
+# Get header containing column names
 while ($line = <IN>) {
     # ignore empty lines and comments
-    next if $line =~ /^$/;
+    next if $line =~ /^\s*$/;
     next if $line =~ /^\s*#/;
     # remove trailing whitespace and newline
     $line =~ s/\s*$//;
     @ddfHeader = split(/\t/, $line);
     last;
 }
+
+# Validate DDF header -- assure field is recognized
+foreach my $field (@ddfHeader) {
+    defined($fields{$field}) ||  die "ERROR: Header \'$field\' is unknown\n"; 
+    delete($fields{$field});
+}
+
+# Check that all required fields are present in DDF header -- any
+# not yet deleted that are marked required but have not been found in header
+foreach my $field (keys %fields) {
+    $fields{$field}->{'required'} =~ "yes" && 
+        die "ERROR: DDF Header is missing required field \'$field\'\n"; 
+}
+
+# Process lines in DDF file
+while ($line = <IN>) {
+    $line =~ s/^ +//;
+    $line =~ s/ +$//;
+    next if $line =~ /^\s*#/;
+    next if $line =~ /^\s*$/;
+    my @fields = split('\t', $line);
+    for (my $i=0; $i < @ddfHeader; $i++) {
+        &validateField($ddfHeader[$i], $fields[$i]);
+    }
+}
+
+# Gather controlled vocabulary from ra file
+my %cv = &readRaFile($vocabConfigFile, "term");
+
 close(IN);
 
 exit 0;
