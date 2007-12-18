@@ -4,6 +4,11 @@ L = ${MYSQLLIBS} -lm
 MYLIBDIR = ../../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
+A = snpNcbiToUcsc
+${A}: ${A}.o ${MYLIBS}
+	${CC} ${COPT} -o ${BINDIR}/${A} ${A}.o ${MYLIBS} $L
+	${STRIP} ${BINDIR}/${A}${EXE}
+
 O = affyLookup.o cnpLookup.o fetchSeq.o \
     hapmap1.o hapmap2.o hapmapLookup.o hapmapMixed.o \
     hapmapOrtho.o hapmapSummary.o hapmapValidate.o \
