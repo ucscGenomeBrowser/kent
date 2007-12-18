@@ -10,7 +10,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.3 2007/12/18 05:20:34 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.4 2007/12/18 06:14:12 kate Exp $
 
 use warnings;
 use strict;
@@ -68,9 +68,15 @@ sub validateDataVersion {
 # No validation
 }
 
+our %terms;
+
 # project-specific
-sub validateCellSourceREF {
+sub validateCellLineREF {
     my ($val) = @_;
+    if (!%terms) {
+        &loadControlledVocab;
+    }
+    defined($terms{'Cell Line'}{$val}) || die "ERROR: \'$val\' is not a known cell line\n";
 }
 
 # dispatch table
@@ -82,7 +88,7 @@ our %validators = (
     Data_Type_REF => \&validateDataTypeREF,
     Raw_Data_Acc_REF => \&validateRawDataAccREF,
     Data_Version => \&validateDataVersion,
-    Cell_Source_REF => \&validateCellSourceREF,
+    Cell_Line_REF => \&validateCellLineREF,
     );
 
 sub validateField {
@@ -94,6 +100,15 @@ sub validateField {
 }
 
 ############################################################################
+sub loadControlledVocab {
+    %terms = ();
+    my %termRa = &readRaFile($vocabConfigFile, "term");
+    foreach my $term (keys %termRa) {
+        my $type = $termRa{$term}->{'type'};
+        $terms{$type}->{$term} = $termRa{$term};
+    }
+}
+
 sub newestFile {
   # Get the most recently modified file from a list
     my @files = @_;
@@ -136,8 +151,8 @@ sub getPif {
 sub readRaFile {
     # Read records from a .ra file into a hash of hashes and return it.
     my ($file, $type) = @_;
-    open(IN, $file) || die "ERROR: Can't open file: $fieldConfigFile\n";
-    my @lines = <IN>;
+    open(RA, $file) || die "ERROR: Can't open file: $fieldConfigFile\n";
+    my @lines = <RA>;
     my %ra = ();
     my $raKey = undef;
     foreach my $line (@lines) {
@@ -156,7 +171,7 @@ sub readRaFile {
             $ra{$raKey}->{$key} = $val;
         }
     }
-    close(IN);
+    close(RA);
     return %ra;
 }
 
@@ -227,10 +242,6 @@ while ($line = <IN>) {
         &validateField($ddfHeader[$i], $fields[$i]);
     }
 }
-
-# Gather controlled vocabulary from ra file
-my %cv = &readRaFile($vocabConfigFile, "term");
-
 close(IN);
 
 exit 0;
