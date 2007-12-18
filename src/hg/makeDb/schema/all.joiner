@@ -2779,6 +2779,7 @@ tablesIgnored $hg
     nimhBipolarUs
     nimhBipolarDe
     perlegen
+    pga
     promoterStanford
     pseudoYale
     recombRate
