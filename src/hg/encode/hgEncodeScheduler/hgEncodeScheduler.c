@@ -16,7 +16,7 @@
 #include <signal.h>
 #include <sys/wait.h>
 
-static char const rcsid[] = "$Id: hgEncodeScheduler.c,v 1.7 2007/12/12 19:59:40 galt Exp $";
+static char const rcsid[] = "$Id: hgEncodeScheduler.c,v 1.8 2007/12/19 20:49:47 galt Exp $";
 
 char *db = NULL;
 char *dir = NULL;
@@ -109,18 +109,24 @@ void getProjectTypeData(struct sqlConnection *conn, int project,
 /* return data from project_type record */
 {
 char query[256];
+
 safef(query,sizeof(query),"select t.validator, t.type_params, t.time_out"
-    " from projects s, project_types t"
-    " where s.project_type_id = t.id" 
-    " and s.id = '%d'", 
+    " from projects p, project_types t"
+    " where p.project_type_id = t.id" 
+    " and p.id = '%d'", 
     project);
+
 struct sqlResult *rs;
 char **row = NULL;
+
 rs = sqlGetResult(conn, query);
 if ((row=sqlNextRow(rs)))
     {
+    if (row[0] == NULL) errAbort("project_types.validator cannot be NULL");
     *validator = cloneString(row[0]);
+    if (row[1] == NULL) errAbort("project_types.type_params cannot be NULL");
     *typeParams = cloneString(row[1]);
+    if (row[2] == NULL) errAbort("project_types.time_out cannot be NULL");
     *timeOut = sqlUnsigned(row[2]);
     }
 else
@@ -299,15 +305,6 @@ if ( pid < 0 )
 if ( pid == 0 )
     {
     /* Child process */ 
-    //int tmpstdin[2], tmpstdout[2],tmpstderr[2];
-
-    //dup2(tmpstdin[0], STDIN_FILENO);
-    //dup2(tmpstdout[1], STDOUT_FILENO);
-    //close(tmpstdin[0]);
-    //close(tmpstdout[1]);
-
-    ///* Redirect stderr to /dev/null */
-    //tmpstderr[0] = open("/dev/null", O_WRONLY | O_NOCTTY);
 
     //uglyf("commandLine=[%s]\n",commandLine);
 
