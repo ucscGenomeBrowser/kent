@@ -10,7 +10,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.5 2007/12/19 18:20:52 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.6 2007/12/19 19:22:11 galt Exp $
 
 use warnings;
 use strict;
@@ -19,7 +19,7 @@ use HgAutomate;
 use File::stat;
 
 sub usage {
-    die "usage: encodeValidate.pl <project submission dir>\n";
+    die "usage: encodeValidate.pl <submission type> <project submission dir>\n";
 }
 
 # Global constants
@@ -270,8 +270,9 @@ my %ddfHeader = ();
 my %datasets = ();
 
 # Change dir to submission directory obtained from command-line
-if (scalar(@ARGV) < 1) { usage(); }
-$submitDir = $ARGV[0];
+if (scalar(@ARGV) < 2) { usage(); }
+my $submitType = $ARGV[0];	# currently not used
+$submitDir = $ARGV[1];
 &HgAutomate::verbose(1, "Validating submission in directory \'$submitDir\'\n");
 chdir $submitDir;
 
