@@ -19184,3 +19184,56 @@ ignore 1 lines'
 #0.015u 0.000s 2:29.71 0.0%      0+0k 0+0io 0pf+0w
 
 ############################################################################
+#  BLASTZ SELF chain minScore=2000 (DONE - 2007-12-19 - Hiram)
+    ssh kkstore02
+    screen # use screen to manage this job
+    mkdir /cluster/data/hg18/bed/blastzSelf.2007-12-17
+    cd /cluster/data/hg18/bed/blastzSelf.2007-12-17
+
+    cat << '_EOF_' > DEF
+# human vs human
+BLASTZ_M=400
+
+# TARGET: Human Hg18
+SEQ1_DIR=/san/sanvol1/scratch/hg18/selfNib
+SEQ1_LEN=/san/sanvol1/scratch/hg18/self.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_IN_CONTIGS=0
+
+# QUERY: Human Hg18
+SEQ2_DIR=/san/sanvol1/scratch/hg18/selfNib
+SEQ2_LEN=/san/sanvol1/scratch/hg18/self.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_IN_CONTIGS=0
+
+BASE=/cluster/data/hg18/bed/blastzSelf.2006-01-17
+TMPDIR=/scratch/tmp
+'_EOF_'
+    #	happy emacs
+
+    cd /cluster/data/hg18/bed/blastzSelf.2007-12-17
+    time nice -n +19 $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
+	`pwd`/DEF -verbose=2 -chainMinScore=2000 -chainLinearGap=medium \
+	-stop=net -smallClusterHub=memk -bigClusterHub=pk > do.log 2>&1 &
+    #	real    640m37.637s
+    ## crafted a special loadUp.csh to avoid haplotypes and randoms,
+    #	and load with normScore
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/blastzSelf.2007-12-17/axtChain
+    time nice -n +19 ./loadUp.csh >loadUp.out 2>&1
+    #	real    24m51.669s
+    cd /cluster/data/hg18/bed/blastzSelf.2007-12-17
+    time nice -n +19 featureBits hg18 chainSelf2KLink \
+	-noRandom -noHap > fb.hg18.chainSelf2KLink.txt 2>&1 &
+    #	real    11m30.010s
+    cat fb.hg18.chainSelf2KLink.txt
+    #	346885376 bases of 2858034764 (12.137%) in intersection
+
+    time nice -n +19 $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
+	`pwd`/DEF -verbose=2 -chainMinScore=2000 -chainLinearGap=medium \
+	-continue=download \
+	-stop=download -smallClusterHub=memk -bigClusterHub=pk \
+	> download.log 2>&1 &
+############################################################################
