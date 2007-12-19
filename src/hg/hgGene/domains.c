@@ -8,7 +8,7 @@
 #include "hgGene.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: domains.c,v 1.20 2007/12/19 17:57:48 fanhsu Exp $";
+static char const rcsid[] = "$Id: domains.c,v 1.21 2007/12/19 22:23:18 fanhsu Exp $";
 
 static boolean domainsExists(struct section *section, 
 	struct sqlConnection *conn, char *geneId)
@@ -21,8 +21,8 @@ return swissProtAcc != NULL;
 void modBaseAnchor(char *swissProtAcc)
 /* Print out anchor to modBase. */
 {
-//hPrintf("<A HREF=\"http://salilab.org/modbase-cgi/model_search.cgi?searchkw=name&kword=%s\" TARGET=_blank>", swissProtAcc);
-hPrintf("<A HREF=\"http://xylophone.compbio.ucsf.edu/modbase-cgi/model_search.cgi?searchkw=name&kword=%s\" TARGET=_blank>", swissProtAcc);
+hPrintf("<A HREF=\"http://salilab.org/modbase-cgi/model_search.cgi?searchkw=name&kword=%s\" TARGET=_blank>", swissProtAcc);
+//hPrintf("<A HREF=\"http://xylophone.compbio.ucsf.edu/modbase-cgi/model_search.cgi?searchkw=name&kword=%s\" TARGET=_blank>", swissProtAcc);
 }
 
 static void domainsPrint(struct section *section, 
@@ -197,8 +197,6 @@ doSamT02(swissProtAcc, database);
     hPrintf("%s", swissProtAcc);
     hPrintf("</A></B><BR>\n");
 
-    /* temporarily disabled until Modbase upgrade is settled */
-    /*
     hPrintf("<TABLE><TR>");
     hPrintf("<TD>");
     modBaseAnchor(swissProtAcc);
@@ -224,7 +222,6 @@ doSamT02(swissProtAcc, database);
 	    "be asked to log onto ModBase the first time you click on the "
 	    "pictures. It is simplest after logging in to just click on "
 	    "the picture again to get to the specific info on that model.</I>");
-    */
     }
 
 }
