@@ -2,9 +2,6 @@
 
 include ../../../inc/common.mk
 
-boo:
-	echo hello
-
 install: scripts
 
 scripts:
