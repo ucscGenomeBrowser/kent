@@ -2,6 +2,7 @@
 
 include ../../../inc/common.mk
 
+install:
 scripts:
 	@for F in ${SCRIPT_FILES}; do \
 	    chmod +x $$F; \
