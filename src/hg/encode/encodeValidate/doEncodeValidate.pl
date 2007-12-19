@@ -10,7 +10,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.6 2007/12/19 19:22:11 galt Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.7 2007/12/19 22:53:01 kate Exp $
 
 use warnings;
 use strict;
@@ -28,7 +28,8 @@ our $encodeConfigDir = '../config'; # change to /gbdb/encode before deployment
 our $fieldConfigFile = $encodeConfigDir . "/fields.ra";
 our $vocabConfigFile = $encodeConfigDir . "/cv.ra";
 our $trackFile = 'trackDb.ra';
-our $loadFile = 'load.csh';
+our $loadScript = 'load.sh';
+our $loadRa = 'load.ra';
 
 # Global variables
 our $submitDir;
@@ -60,18 +61,18 @@ sub validateFileName {
     for (my $i=0; $i < @files; $i++) {
         my $file = $files[$i];
         my $part = $i + 1;
-        defined($file) || die "Dataset missing part \'$part\'\n";
+        defined($file) || die "ERROR: Dataset missing part \'$part\'\n";
         -e $file || die "ERROR: File \'$file\' does not exist\n";
         -s $file || die "ERROR: File \'$file\' is empty\n";
         -r $file || die "ERROR: File \'$file\' is not readable \n";
-        &checkDataFormat($pif{'tracks'}->{$track}, $file);
+        &checkDataFormat($pif{'trackHash'}->{$track}, $file);
     }
     print "    Files: ", join (' ', @files), "\n";
 }
 
 sub validatePart {
     my ($val) = @_;
-    $val >= 0 && $val < 100 || die "Part must be 0-100\n";
+    $val >= 0 && $val < 100 || die "ERROR: Part \'$val\' is invalid (must be 0-100)\n";
 }
 
 sub validateDatasetName {
@@ -80,7 +81,7 @@ sub validateDatasetName {
 
 sub validateAssemblyREF {
     my ($val) = @_;
-    $val =~ /hg1[78]/ || die "Assembly REF must be 'hg17' or 'hg18\'\n";
+    $val =~ /hg1[78]/ || die "ERROR: Assembly REF \'$val\' is invalid (must be 'hg17' or 'hg18\')\n";
 }
 
 sub validateDataTypeREF {
@@ -101,7 +102,7 @@ sub validateCellLineREF {
     if (!%terms) {
         &loadControlledVocab;
     }
-    defined($terms{'Cell Line'}{$val}) || die "ERROR: \'$val\' is not a known cell line\n";
+    defined($terms{'Cell Line'}{$val}) || die "ERROR: Cell line \'$val\' is not known \n";
 }
 
 ############################################################################
@@ -194,8 +195,8 @@ sub getPif {
     # are present and that the project is marked active.
     my %pif = ();
     my $pifFile = &newestFile(glob "*.PIF");
-    &HgAutomate::verbose(1, "Using newest PIF file: $pifFile\n");
-    open(PIF, $pifFile) || die "ERROR: Can't open PIF file: $pifFile\n";
+    &HgAutomate::verbose(1, "Using newest PIF file \'$pifFile\'\n");
+    open(PIF, $pifFile) || die "ERROR: Can't open PIF file \'$pifFile\'\n";
     while (my $line = <PIF>) {
         # strip leading and trailing spaces
         $line =~ s/^ +//;
@@ -210,9 +211,11 @@ sub getPif {
     }
     close(PIF);
     # Validate fields
-    defined($pif{'project'}) || die "ERROR: project not defined\n"; 
-    defined($pif{'tracks'}) || die "ERROR: tracks not defined for project\n";
-    $pif{'active'} =~ "yes" || die "ERROR: project not yet active\n";
+    defined($pif{'project'}) || die "ERROR: Project not defined\n"; 
+    defined($pif{'tracks'}) || 
+        die "ERROR: Tracks not defined for project \'$pif{'project'}\'\n";
+    $pif{'active'} =~ "yes" || 
+        die "ERROR: Project \'$pif{'project'}\' not yet active\n";
 
     # Reformat fields in more convenient form
     my @tracks = split(' ', $pif{'tracks'});
@@ -221,21 +224,26 @@ sub getPif {
         my ($trackName, $trackType) = split(':', $track);
         $tracks{$trackName} = $trackType;
     }
-    $pif{'tracks'} = \%tracks;
+    $pif{'trackHash'} = \%tracks;
 
     my @variables = split (' ', $pif{'variables'});
     my %variables;
+    my $i = 0;
     foreach my $variable (@variables) {
+        # replace underscore with space
+        $variable =~ s/_/ /g;
+        $variables[$i++] = $variable;
         $variables{$variable} = 1;
     }
-    $pif{'variables'} = \%variables;
+    $pif{'variableHash'} = \%variables;
+    $pif{'variableArray'} = \@variables;
     return %pif;
 }
 
 sub readRaFile {
     # Read records from a .ra file into a hash of hashes and return it.
     my ($file, $type) = @_;
-    open(RA, $file) || die "ERROR: Can't open file: $fieldConfigFile\n";
+    open(RA, $file) || die "ERROR: Can't open RA file \'$fieldConfigFile\'\n";
     my @lines = <RA>;
     my %ra = ();
     my $raKey = undef;
@@ -251,7 +259,7 @@ sub readRaFile {
         if ($line =~ m/^$type\s+(.*)/) {
             $raKey = $1;
         } else {
-            defined($raKey) || die "ERROR: missing $type before $line\n";
+            defined($raKey) || die "ERROR: Missing $type before $line\n";
             my ($key, $val) = split('\s+', $line, 2);
             $ra{$raKey}->{$key} = $val;
         }
@@ -285,15 +293,14 @@ chdir $submitDir;
 my %fields = &readRaFile($fieldConfigFile, "field");
 
 # Add required fields for this -- the variables in the PIF file
-foreach my $variable (keys %{$pif{'variables'}}) {
-    $variable =~ s/_/ /g;
+foreach my $variable (keys %{$pif{'variableHash'}}) {
     $fields{$variable}->{'required'} = 'yes';
 }
 
 # Open dataset descriptor file (DDF)
 my $ddfFile = &newestFile(glob "*.DDF");
-&HgAutomate::verbose(1, "Using newest DDF file: $ddfFile\n");
-open(IN, $ddfFile) || die "ERROR: Can't open DDF file: $ddfFile\n";
+&HgAutomate::verbose(1, "Using newest DDF file \'$ddfFile\'\n");
+open(IN, $ddfFile) || die "ERROR: Can't open DDF file \'$ddfFile\'\n";
 
 # Get header containing column names
 while ($line = <IN>) {
@@ -321,7 +328,7 @@ foreach my $field (@ddfHeader) {
 # not yet deleted that are marked required but have not been found in header
 foreach my $field (keys %fields) {
     $fields{$field}->{'required'} eq "yes" && 
-        die "ERROR: DDF Header is missing required field \'$field\'\n"; 
+        die "ERROR: DDF header is missing required field \'$field\'\n"; 
 }
 
 # Process lines in DDF file.  Create dataset hash with one entry per dataset.
@@ -355,7 +362,7 @@ while ($line = <IN>) {
                 die "ERROR: Dataset \'$dataset\' has differing \'$ddfHeader[$i]\' values\n";
         }
         !defined($datasets{$dataset}->[$fileField]->[$offset]) ||
-            die "ERROR: dataset \'$dataset\' part \'$part\' has multiple files\n";
+            die "ERROR: Dataset \'$dataset\' part \'$part\' has multiple files\n";
         $datasets{$dataset}->[$fileField]->[$offset] = $filename;
     } else {
         # add dataset
@@ -367,16 +374,29 @@ while ($line = <IN>) {
 }
 close(IN);
 
-# Validate files and metadata fields in all datasets.  Create load script
-# and trackDb.
-#open(LOADER, $loadFile);
-#open(TRACKDB, $trackFile);
+# Validate files and metadata fields in all datasets.  Create .ra file
+# for loader 
+open(LOADER_RA, ">$loadRa") || 
+        die "SYS ERROR: Can't write \'$loadRa\' file\n";
+
 foreach $dataset (keys %datasets) {
-    my $dataType = $datasets{$dataset}->[$ddfHeader{'Data Type REF'}];
+    my $datasetRef = $datasets{$dataset};
+    my $dataType = $datasetRef->[$ddfHeader{'Data Type REF'}];
     &HgAutomate::verbose(1, "Dataset: $dataset\tTrack: $dataType\n");
     for ($i=0; $i < @ddfHeader; $i++) {
-        &validateField($ddfHeader[$i], $datasets{$dataset}->[$i], $dataType);
+        &validateField($ddfHeader[$i], $datasetRef->[$i], $dataType);
     }
+    my $tableName = "wgEncode" . $dataType;
+    my @variables = @{$pif{'variableArray'}};
+    for (my $i = 0; $i < @variables; $i++) {
+        $tableName = $tableName . $datasetRef->[$ddfHeader{$variables[$i]}];
+    }
+    print LOADER_RA "tablename $tableName\n";
+    print LOADER_RA "type $pif{'trackHash'}->{$dataType}\n";
+    print LOADER_RA "assembly $datasetRef->[$ddfHeader{'Assembly REF'}]\n";
+    print LOADER_RA "files @{$datasetRef->[$ddfHeader{'File Name'}]}\n";
+    print LOADER_RA "\n";
 }
+close(LOADER_RA);
 
 exit 0;
