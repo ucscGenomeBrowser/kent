@@ -10,7 +10,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.4 2007/12/18 06:14:12 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.5 2007/12/19 18:20:52 kate Exp $
 
 use warnings;
 use strict;
@@ -23,6 +23,7 @@ sub usage {
 }
 
 # Global constants
+our $loaderPath = "/usr/local/apache/cgi-bin/loader";
 our $encodeConfigDir = '../config'; # change to /gbdb/encode before deployment
 our $fieldConfigFile = $encodeConfigDir . "/fields.ra";
 our $vocabConfigFile = $encodeConfigDir . "/cv.ra";
@@ -32,14 +33,40 @@ our $loadFile = 'load.csh';
 # Global variables
 our $submitDir;
 our $opt_verbose = 1;
+our %terms;             # controlled vocabulary
+our %pif;               # project information
 
 ############################################################################
 # Validators -- extend when adding new metadata fields
 
-# standard (required or optional for all projects)
+# dispatch table
+our %validators = (
+    File_Name => \&validateFileName,
+    Part => \&validatePart,
+    Dataset_Name => \&validateDatasetName,
+    Assembly_REF => \&validateAssemblyREF,
+    Data_Type_REF => \&validateDataTypeREF,
+    Raw_Data_Acc_REF => \&validateRawDataAccREF,
+    Data_Version => \&validateDataVersion,
+    Cell_Line_REF => \&validateCellLineREF,
+    );
+
+# standard validators (required or optional for all projects)
 sub validateFileName {
-    my ($val) = @_;
-    -e $val || die "File Name \'$val\' does not exist\n";
+    # Validate array of filenames, ordered by part
+    # Check files exist and are of correct data format
+    my ($files, $track) = @_;
+    my @files = @{$files};
+    for (my $i=0; $i < @files; $i++) {
+        my $file = $files[$i];
+        my $part = $i + 1;
+        defined($file) || die "Dataset missing part \'$part\'\n";
+        -e $file || die "ERROR: File \'$file\' does not exist\n";
+        -s $file || die "ERROR: File \'$file\' is empty\n";
+        -r $file || die "ERROR: File \'$file\' is not readable \n";
+        &checkDataFormat($pif{'tracks'}->{$track}, $file);
+    }
+    print "    Files: ", join (' ', @files), "\n";
 }
 
 sub validatePart {
@@ -68,9 +95,7 @@ sub validateDataVersion {
 # No validation
 }
 
-our %terms;
-
-# project-specific
+# project-specific validators
 sub validateCellLineREF {
     my ($val) = @_;
     if (!%terms) {
@@ -79,27 +104,66 @@ sub validateCellLineREF {
     defined($terms{'Cell Line'}{$val}) || die "ERROR: \'$val\' is not a known cell line\n";
 }
 
+############################################################################
+# Format checkers - extend when adding new data format
+
 # dispatch table
-our %validators = (
-    File_Name => \&validateFileName,
-    Part => \&validatePart,
-    Dataset_Name => \&validateDatasetName,
-    Assembly_REF => \&validateAssemblyREF,
-    Data_Type_REF => \&validateDataTypeREF,
-    Raw_Data_Acc_REF => \&validateRawDataAccREF,
-    Data_Version => \&validateDataVersion,
-    Cell_Line_REF => \&validateCellLineREF,
+our %formatCheckers = (
+    wig => \&validateWig,
+    bed => \&validateBed,
     );
 
-sub validateField {
-    # validate value for type of field
-    my ($type, $val) = @_;
-    $type =~ s/ /_/g;
-    &HgAutomate::verbose(1, "Validating $type : $val\n");
-    $validators{$type}->($val);
+sub validateWig {
+    my ($file) = @_;
+    my $err = system (
+        "head -10 $file | $loaderPath/wigEncode stdin /dev/null /dev/null >validateWig.out 2>&1");
+    if ($err) {
+        print STDERR  "ERROR: File '\$file\' failed wiggle validation.\n";
+        open(ERR, "validateWig.out") || die "\n";
+        my @err = <ERR>;
+        die "@err\n";
+    } else {
+        print "Passed\n";
+    }
+}
+
+sub validateBed {
+    my ($file, $type) = @_;
+    my $err = system (
+        "head -10 $file | egrep -v '^track|browser' | $loaderPath/hgLoadBed -noLoad hg18 testTable stdin >validateBed.out 2>&1");
+    if ($err) {
+        print STDERR  "ERROR: File '\$file\' failed bed validation.\n";
+        open(ERR, "validateBed.out") || die "\n";
+        my @err = <ERR>;
+        die "@err\n";
+    } else {
+        print "Passed\n";
+    }
 }
 
 ############################################################################
+# Misc subroutines
+
+sub validateField {
+    # validate value for type of field
+    my ($type, $val, $arg) = @_;
+    $type =~ s/ /_/g;
+    &HgAutomate::verbose(2, "Validating $type : $val\n");
+    $validators{$type}->($val, $arg);
+}
+
+sub checkDataFormat {
+    # validate file type
+    my ($format, $file) = @_;
+    &HgAutomate::verbose(1, "Checking data format for $file : $format\n");
+    my $type = "";
+    if ($format =~ m/(bed)(\d+)/) {
+        $format = $1;
+        $type = $2;
+    }
+    $formatCheckers{$format}->($file, $type);
+}
+
 sub loadControlledVocab {
     %terms = ();
     my %termRa = &readRaFile($vocabConfigFile, "term");
@@ -131,20 +195,40 @@ sub getPif {
     my %pif = ();
     my $pifFile = &newestFile(glob "*.PIF");
     &HgAutomate::verbose(1, "Using newest PIF file: $pifFile\n");
-    open(IN, $pifFile) || die "ERROR: Can't open PIF file: $pifFile\n";
-    while (my $line = <IN>) {
+    open(PIF, $pifFile) || die "ERROR: Can't open PIF file: $pifFile\n";
+    while (my $line = <PIF>) {
+        # strip leading and trailing spaces
+        $line =~ s/^ +//;
+        $line =~ s/ +$//;
         # ignore empty lines and comments
         next if $line =~ /^$/;
-        next if $line =~ /^\s*#/;
+        next if $line =~ /^#/;
         chomp $line;
         my ($key, $val) = split(/\t/, $line);
         $pif{$key} = $val;
+        HgAutomate::verbose(1, "PIF field: $key = $val\n");
     }
-    close(IN);
+    close(PIF);
     # Validate fields
     defined($pif{'project'}) || die "ERROR: project not defined\n"; 
     defined($pif{'tracks'}) || die "ERROR: tracks not defined for project\n";
     $pif{'active'} =~ "yes" || die "ERROR: project not yet active\n";
+
+    # Reformat fields in more convenient form
+    my @tracks = split(' ', $pif{'tracks'});
+    my %tracks = ();
+    foreach my $track (@tracks) {
+        my ($trackName, $trackType) = split(':', $track);
+        $tracks{$trackName} = $trackType;
+    }
+    $pif{'tracks'} = \%tracks;
+
+    my @variables = split (' ', $pif{'variables'});
+    my %variables;
+    foreach my $variable (@variables) {
+        $variables{$variable} = 1;
+    }
+    $pif{'variables'} = \%variables;
     return %pif;
 }
 
@@ -156,13 +240,14 @@ sub readRaFile {
     my %ra = ();
     my $raKey = undef;
     foreach my $line (@lines) {
+        $line =~ s/^\s+//;
+        $line =~ s/\s+$//;
         if ($line =~ /^$/) {
             $raKey = undef;
             next;
         }
-        $line =~ s/^\s+//;
         next if $line =~ /^#/;
-        $line =~ s/\s+$//;
+        chomp $line;
         if ($line =~ m/^$type\s+(.*)/) {
             $raKey = $1;
         } else {
@@ -179,8 +264,10 @@ sub readRaFile {
 # Main
 
 my $line;
+my $i;
 my @ddfHeader;
-my %ddfFields = ();
+my %ddfHeader = ();
+my %datasets = ();
 
 # Change dir to submission directory obtained from command-line
 if (scalar(@ARGV) < 1) { usage(); }
@@ -190,14 +277,14 @@ chdir $submitDir;
 
 # Locate project information (PIF) file and verify that project is
 #  ready for submission
-my %pif = &getPif();
+%pif = &getPif();
 
 # Gather fields defined for DDF file. File is in 
 # ra format:  field <name>, required <true|false>
 my %fields = &readRaFile($fieldConfigFile, "field");
 
 # Add required fields for this -- the variables in the PIF file
-foreach my $variable ($pif{'variables'}) {
+foreach my $variable (keys %{$pif{'variables'}}) {
     $variable =~ s/_/ /g;
     $fields{$variable}->{'required'} = 'yes';
 }
@@ -209,39 +296,86 @@ open(IN, $ddfFile) || die "ERROR: Can't open DDF file: $ddfFile\n";
 
 # Get header containing column names
 while ($line = <IN>) {
+    # remove leading and trailing spaces and newline
+    $line =~ s/^ *//;
+    $line =~ s/ *$//;
     # ignore empty lines and comments
-    next if $line =~ /^\s*$/;
-    next if $line =~ /^\s*#/;
-    # remove trailing whitespace and newline
-    $line =~ s/\s*$//;
+    next if $line =~ /^$/;
+    next if $line =~ /^#/;
+    chomp $line;
     @ddfHeader = split(/\t/, $line);
+    for ($i=0; $i < @ddfHeader; $i++) {
+        $ddfHeader{$ddfHeader[$i]} = $i;
+    }
     last;
 }
 
 # Validate DDF header -- assure field is recognized
 foreach my $field (@ddfHeader) {
-    defined($fields{$field}) ||  die "ERROR: Header \'$field\' is unknown\n"; 
+    defined($fields{$field}) || die "ERROR: Header \'$field\' is unknown\n"; 
     delete($fields{$field});
 }
 
 # Check that all required fields are present in DDF header -- any
 # not yet deleted that are marked required but have not been found in header
 foreach my $field (keys %fields) {
-    $fields{$field}->{'required'} =~ "yes" && 
+    $fields{$field}->{'required'} eq "yes" && 
         die "ERROR: DDF Header is missing required field \'$field\'\n"; 
 }
 
-# Process lines in DDF file
+# Process lines in DDF file.  Create dataset hash with one entry per dataset.
+# The entry contains an array of fields that are the same as the DDF fields,
+# except when multiple files comprise one data set (multiple Parts).
+# In this case, all files are included in the File Name field, 
+my $dataset;
 while ($line = <IN>) {
     $line =~ s/^ +//;
     $line =~ s/ +$//;
-    next if $line =~ /^\s*#/;
-    next if $line =~ /^\s*$/;
+    next if $line =~ /^#/;
+    next if $line =~ /^$/;
+    chomp $line;
     my @fields = split('\t', $line);
-    for (my $i=0; $i < @ddfHeader; $i++) {
-        &validateField($ddfHeader[$i], $fields[$i]);
+    my $fileField = $ddfHeader{'File Name'};
+    my $filename = $fields[$fileField];
+    my $partField = $ddfHeader{'Part'};
+    my $part = 1;
+    if (defined($partField)) {
+        validateField('Part', $fields[$partField]);
+        $part =  $fields[$partField];
+    }
+    $dataset = $fields[$ddfHeader{'Dataset Name'}];
+    my $offset = $part - 1;
+    if (defined($datasets{$dataset})) {
+        # add file to dataset, checking all fields with non-empty values 
+        # are identical (except 'Part', which must differ)
+        for ($i=0; $i < @fields; $i++) {
+            next if ($i == $fileField || $i == $partField);
+            $fields[$i] =~ $datasets{$dataset}->[$i] ||
+                die "ERROR: Dataset \'$dataset\' has differing \'$ddfHeader[$i]\' values\n";
+        }
+        !defined($datasets{$dataset}->[$fileField]->[$offset]) ||
+            die "ERROR: dataset \'$dataset\' part \'$part\' has multiple files\n";
+        $datasets{$dataset}->[$fileField]->[$offset] = $filename;
+    } else {
+        # add dataset
+        my @filenames;
+        $filenames[$offset] = $filename;
+        $fields[$fileField] = \@filenames;
+        $datasets{$dataset} = \@fields;
     }
 }
 close(IN);
+
+# Validate files and metadata fields in all datasets.  Create load script
+# and trackDb.
+#open(LOADER, $loadFile);
+#open(TRACKDB, $trackFile);
+foreach $dataset (keys %datasets) {
+    my $dataType = $datasets{$dataset}->[$ddfHeader{'Data Type REF'}];
+    &HgAutomate::verbose(1, "Dataset: $dataset\tTrack: $dataType\n");
+    for ($i=0; $i < @ddfHeader; $i++) {
+        &validateField($ddfHeader[$i], $datasets{$dataset}->[$i], $dataType);
+    }
+}
 
 exit 0;
