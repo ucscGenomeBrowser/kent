@@ -222,9 +222,10 @@ class PipelineController < ApplicationController
     end
 
 
-    @project.status = "schedule uploading #{@upurl}"
 
-    unless @upload.blank?
+    unless @upurl.blank?
+      @project.status = "schedule uploading #{@upurl}"
+    else
       if @upload.instance_of?(Tempfile)
         FileUtils.copy(@upload.local_path, path_to_file)
       else
