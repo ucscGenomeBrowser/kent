@@ -2,7 +2,11 @@
 
 include ../../../inc/common.mk
 
-install:
+boo:
+	echo hello
+
+install: scripts
+
 scripts:
 	@for F in ${SCRIPT_FILES}; do \
 	    chmod +x $$F; \
