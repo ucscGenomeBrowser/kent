@@ -24242,4 +24242,10 @@ hgLoadWiggle hg17 affyTxnPhase3HeLaBottomStrand{,.wig}
         ccdsKgMap
         ccdsMgcMap
     # << emacs
+
+############################################################################
+# ADD LINKS TO GENETESTS ON hgGene DETAILS PAGE (DONE 12/12/07 Fan)
+
+See hg18.txt for details.
+
 ############################################################################
