@@ -4,7 +4,7 @@
 # This file describes browser build for the Orangutan
 # genome, July 31 2007
 #
-#	"$Id: ponAbe2.txt,v 1.10 2007/12/14 00:09:10 hiram Exp $"
+#	"$Id: ponAbe2.txt,v 1.11 2007/12/20 23:34:24 hiram Exp $"
 #
 ######################################################################
 ## DOWNLOAD SEQUENCE (DONE - 2007-09-06 - Hiram)
@@ -1851,34 +1851,33 @@ TMPDIR=/scratch/tmp
     time nice -n +19 $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
 	`pwd`/DEF -chainMinScore=5000 \
 	-chainLinearGap=loose -bigClusterHub=kk -verbose=2 > do.log 2>&1 &
-XXX - running 2007-12-13
-    #	real    2585m50.826s
-    # some of the jobs got confused during kk parasol hub reboots, where they
-    # think they aren't done, but they actually are.  A 'para recover' finds
-    # nothing to re-run, all the result files are present.
-# Completed: 263242 of 263488 jobs
-# Crashed: 246 jobs
-# CPU time in finished jobs:   48351127s  805852.12m 13430.87h  559.62d  1.533 y
-# IO & Wait Time:               7609407s  126823.45m  2113.72h   88.07d  0.241 y
-# Average job time:                 213s       3.54m     0.06h    0.00d
-# Longest finished job:            2146s      35.77m     0.60h    0.02d
-# Submission to last job:        259048s    4317.47m    71.96h    3.00d
-
-    #	after verifying all jobs are actually finished, continuing:
-    time nice -n +19 doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
-	-chainMinScore=5000 -chainLinearGap=loose \
-	-continue=cat -bigClusterHub=kk > cat.log 2>&1 &
-    #	real    53m18.757s
+    #	real    407m0.026s
+    #	some of the jobs failed due to out of memory on kk nodes
+    #	did a para recover and ran the last set of jobs on pk
+    #	then, continuing and testing the new memk kluster:
+    time nice -n +19 $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
+	-continue=cat `pwd`/DEF -chainMinScore=5000 -smallClusterHub=memk \
+	-chainLinearGap=loose -bigClusterHub=kk -verbose=2 > cat.log 2>&1 &
+    #	failed when it came to the kolossus run because kkr1u00 was out
+    #	which provides some filesystems to kolossus.  Got that fixed
+    #	and finished the netChains.csh script manually. 
+    #	real    6m2.271s
+    #	Then, continuing:
+    time nice -n +19 $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
+	-continue=load `pwd`/DEF -chainMinScore=5000 -smallClusterHub=memk \
+	-chainLinearGap=loose -bigClusterHub=kk -verbose=2 > load.log 2>&1 &
+    #	real    4m21.364s
     cat fb.ponAbe2.chainGalGal3Link.txt
-    #	214557704 bases of 3093572278 (6.936%) in intersection
+    #	134448942 bases of 3093572278 (4.346%) in intersection
 
     mkdir /cluster/data/galGal3/bed/blastz.ponAbe2.swap
     cd /cluster/data/galGal3/bed/blastz.ponAbe2.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-	/cluster/data/ponAbe2/bed/blastzGalGal3.2007-12-13/DEF \
-	-chainMinScore=5000 -chainLinearGap=loose \
+    time nice -n +19 $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
+	-verbose=2 /cluster/data/ponAbe2/bed/blastzGalGal3.2007-12-13/DEF \
+	-chainMinScore=5000 -chainLinearGap=loose -smallClusterHub=memk \
 	-swap -bigClusterHub=kk > swap.log 2>&1 &
-    #	real    120m20.860s
+XXX - running 2007-12-20 15:33
     cat fb.galGal3.chainPonAbe2Link.txt
     #	201368027 bases of 1842236818 (10.931%) in intersection
 
