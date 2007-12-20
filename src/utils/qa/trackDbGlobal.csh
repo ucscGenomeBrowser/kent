@@ -92,8 +92,8 @@ foreach db ( $dbs )
      WHERE name = "'$db'"' hgcentral`
   if ( 0 == $active ) then
     set comment="staged"
-    set archived=`hgsql -h genome-centdb -N -e 'SELECT active FROM dbDb \
-       WHERE name = "'$db'"' hgcentarchive`
+    set archived=`hgsql -h genome-centdb -N -e 'SELECT active FROM dbDbArch \
+       WHERE name = "'$db'"' hgcentral`
     if ( 1 == $archived ) then
       set comment="archived"
     endif
