@@ -11,6 +11,62 @@
 #include "vGfx.h"
 #include "chromGraph.h"
 
+Color colorFromAscii(struct vGfx *vg, char *asciiColor)
+/* Get color index for a named color. */
+/* Copy/pasted from hgGenome/mainPage.c ... should be in a library */
+/* somewhere! */
+{
+if (sameWord("red", asciiColor))
+    return MG_RED;
+else if (sameWord("blue", asciiColor))
+    return MG_BLUE;
+else if (sameWord("yellow", asciiColor))
+    return vgFindColorIx(vg, 220, 220, 0);
+else if (sameWord("purple", asciiColor))
+    return vgFindColorIx(vg, 150, 0, 200);
+else if (sameWord("orange", asciiColor))
+    return vgFindColorIx(vg, 230, 120, 0);
+else if (sameWord("green", asciiColor))
+    return vgFindColorIx(vg, 0, 180, 0);
+else if (sameWord("gray", asciiColor))
+    return MG_GRAY;
+else
+    return MG_BLACK;
+}
+
+static Color cgColorLikeHgGenome(struct track *tg, struct vGfx *vg)
+/* Search the cart variables and use the colors corresponding to the hgGenome */
+/* graph. */
+{
+Color ret;
+struct hashEl *matchingCartSettings = NULL;
+struct hashEl *el;
+char cartGenomeWildStr[256];
+char *graphCartVarName = NULL;
+char *colorCartVarSetting = "black";
+safef(cartGenomeWildStr, sizeof(cartGenomeWildStr), "hgGenome_graph_%s_*", database);
+/* for ex. hgGenome_graph_hg18_1_1 */
+matchingCartSettings = cartFindLike(cart, cartGenomeWildStr);
+for (el = matchingCartSettings; el != NULL; el = el->next)
+    {
+    char *val = (char *)el->val;
+    if (val && sameString(val, tg->mapName))
+	{
+	graphCartVarName = el->name;
+	break;
+	}
+    }
+if (graphCartVarName)
+    {
+    char *colorCartVarName = replaceChars(graphCartVarName, "_graph_", "_graphColor_");
+    colorCartVarSetting = cartUsualString(cart, colorCartVarName, "black");
+    freeMem(colorCartVarName);
+    }
+hashElFreeList(&matchingCartSettings);
+ret = colorFromAscii(vg, colorCartVarSetting);
+return ret;
+}
+
 static void cgDrawEither(struct track *tg, int seqStart, int seqEnd,
         struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis,
@@ -26,6 +82,7 @@ double minVal = cgs->minVal;
 double yScale = (height-1)/(cgs->maxVal - minVal);
 double xScale = scaleForPixels(width);
 char *encodedTrack = cgiEncode(tg->mapName);
+Color myColor = cgColorLikeHgGenome(tg, vg);
 
 /* Draw background lines in full mode. */
 if (vis == tvFull && cgs->linesAtCount != 0)
@@ -58,10 +115,10 @@ if (binFileName)
 		    if (pos - lastPos <= maxGapToFill)
 			{
 			if (llastX != lastX || llastY != lastY || lastX != x || lastY != y)
-			    vgLine(vg, lastX, lastY, x, y, color);
+			    vgLine(vg, lastX, lastY, x, y, myColor);
 			}
 		    else
-			vgDot(vg, x, y, color);
+			vgDot(vg, x, y, myColor);
 		    }
 		llastX = lastX;
 		llastY = lastY;
@@ -102,10 +159,10 @@ else
 	    if (pos - lastPos <= maxGapToFill)
 		{
 		if (llastX != lastX || llastY != lastY || lastX != x || lastY != y)
-		    vgLine(vg, lastX, lastY, x, y, color);
+		    vgLine(vg, lastX, lastY, x, y, myColor);
 		}
 	    else
-		vgDot(vg, x, y, color);
+		vgDot(vg, x, y, myColor);
 	    }
 	llastX = lastX;
 	llastY = lastY;
