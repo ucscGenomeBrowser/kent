@@ -8,7 +8,7 @@
 #include "hgGene.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: domains.c,v 1.21 2007/12/19 22:23:18 fanhsu Exp $";
+static char const rcsid[] = "$Id: domains.c,v 1.22 2007/12/20 00:05:48 fanhsu Exp $";
 
 static boolean domainsExists(struct section *section, 
 	struct sqlConnection *conn, char *geneId)
@@ -21,8 +21,8 @@ return swissProtAcc != NULL;
 void modBaseAnchor(char *swissProtAcc)
 /* Print out anchor to modBase. */
 {
-hPrintf("<A HREF=\"http://salilab.org/modbase-cgi/model_search.cgi?searchkw=name&kword=%s\" TARGET=_blank>", swissProtAcc);
-//hPrintf("<A HREF=\"http://xylophone.compbio.ucsf.edu/modbase-cgi/model_search.cgi?searchkw=name&kword=%s\" TARGET=_blank>", swissProtAcc);
+hPrintf("<A HREF=\"http://salilab.org/modbase/search?databaseID=%s\" TARGET=_blank>", swissProtAcc);
+//hPrintf("<A HREF=\"http://salilab.org/modbase-cgi/model_search.cgi?searchkw=name&kword=%s\" TARGET=_blank>", swissProtAcc);
 }
 
 static void domainsPrint(struct section *section, 
@@ -201,8 +201,6 @@ doSamT02(swissProtAcc, database);
     hPrintf("<TD>");
     modBaseAnchor(swissProtAcc);
     
-    //hPrintf("\n<IMG SRC=\"http://modbase.compbio.ucsf.edu/modbaseimages/image/modbase.jpg?database_id=%s\"></A></TD>", swissProtAcc);
-    //hPrintf("\n<IMG SRC=\"http://modbase.compbio.ucsf.edu/modbaseimages/image/modbase.jpg?database_id=%s\"></A></TD>", swissProtAcc);
     hPrintf("<TD>");
     hPrintf("\n<IMG SRC=\"http://salilab.org/modbaseimages/image/modbase.jpg?database_id=%s\"></A></TD>", swissProtAcc);
     hPrintf("<TD>");
