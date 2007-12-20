@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/HgAutomate.pm instead.
 
-# $Id: HgAutomate.pm,v 1.10 2007/10/11 20:57:38 angie Exp $
+# $Id: HgAutomate.pm,v 1.11 2007/12/20 23:35:00 hiram Exp $
 package HgAutomate;
 
 use warnings;
@@ -58,6 +58,9 @@ use vars qw( %cluster %clusterFilesystem $defaultDbHost );
       'kki' =>
         { 'enabled' => 1, 'gigaHz' => 2.2, 'ram' => 8,
 	  'hostCount' => 16, },
+      'memk' =>
+        { 'enabled' => 1, 'gigaHz' => 1.0, 'ram' => 32,
+	  'hostCount' => 32, },
       'kk9' => # Guessing here since the machines are down:
         { 'enabled' => 0, 'gigaHz' => 1.5, 'ram' => 2,
 	  'hostCount' => 100, },
