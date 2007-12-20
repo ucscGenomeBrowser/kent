@@ -8,7 +8,7 @@
 #include "hgGene.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: domains.c,v 1.22 2007/12/20 00:05:48 fanhsu Exp $";
+static char const rcsid[] = "$Id: domains.c,v 1.23 2007/12/20 01:01:40 fanhsu Exp $";
 
 static boolean domainsExists(struct section *section, 
 	struct sqlConnection *conn, char *geneId)
@@ -200,8 +200,6 @@ doSamT02(swissProtAcc, database);
     hPrintf("<TABLE><TR>");
     hPrintf("<TD>");
     modBaseAnchor(swissProtAcc);
-    
-    hPrintf("<TD>");
     hPrintf("\n<IMG SRC=\"http://salilab.org/modbaseimages/image/modbase.jpg?database_id=%s\"></A></TD>", swissProtAcc);
     hPrintf("<TD>");
     modBaseAnchor(swissProtAcc);
