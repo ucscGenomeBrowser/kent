@@ -1504,4 +1504,69 @@ TMPDIR=/scratch/tmp
     cat fb.ponAbe2.chainRheMac2Link.txt
     #	2556010573 bases of 3093572278 (82.623%) in intersection
 
-###########################################################################
+############################################################################
+# SGP GENES (DONE - 2007-12-20 - Hiram)
+    ssh kkstore01
+    mkdir  /cluster/data/rheMac2/bed/sgp
+    cd  /cluster/data/rheMac2/bed/sgp
+
+    mkdir gtf
+for C in `awk '{print $1}' /cluster/data/rheMac2/chrom.sizes`
+do
+    wget --timestamping \
+"http://genome.imim.es/genepredictions/M.mulatta/rmJan2006/SGP/200603mm8/${C}.gtf" \
+        -O "gtf/${C}.gtf"
+done
+
+    ssh hgwdev
+    cd /cluster/data/rheMac2/bed/sgp
+    ldHgGene -gtf -genePredExt rheMac2 sgpGene gtf/chr*.gtf
+    # Read 31416 transcripts in 264479 lines in 22 files
+    # 31416 groups 22 seqs 1 sources 3 feature types
+    # 31416 gene predictions
+
+    featureBits rheMac2 sgpGene
+    #	32556064 bases of 2646704109 (1.230%) in intersection
+
+    featureBits rheMac2 -enrichment refGene:CDS sgpGene
+# refGene:CDS 0.017%, sgpGene 1.230%, both 0.014%, cover 83.53%, enrich 67.91x
+
+#####################################################################
+# LOAD GENEID GENES (DONE - 2007-12-20 - Hiram)
+    ssh kkstore01
+    mkdir -p /cluster/data/rheMac2/bed/geneid
+    cd /cluster/data/rheMac2/bed/geneid
+    mkdir gtf prot
+
+for C in `awk '{print $1}' /cluster/data/rheMac2/chrom.sizes`
+do
+  echo $C
+  wget --timestamping \
+"http://genome.imim.es/genepredictions/M.mulatta/rmJan2006/geneid_v1.2/${C}.gtf" \
+	-O "gtf/${C}.gtf"
+  wget --timestamping \
+"http://genome.imim.es/genepredictions/M.mulatta/rmJan2006/geneid_v1.2/${C}.prot" \
+	-O "prot/${C}.prot"
+done
+
+    # Add missing .1 to protein id's
+    cd prot
+    foreach f (*.prot)
+      perl -wpe 's/^(>chr\S+)$/$1.1/' $f > $f:r-fixed.prot
+    end
+
+    ssh hgwdev
+    cd /cluster/data/rheMac2/bed/geneid
+    ldHgGene -genePredExt -gtf rheMac2 geneid gtf/*.gtf
+# Read 30202 transcripts in 248094 lines in 22 files
+# 30202 groups 22 seqs 1 sources 3 feature types
+# 30202 gene predictions
+
+    hgPepPred rheMac2 generic geneidPep prot/chr*-fixed.prot
+    featureBits rheMac2 geneid
+    #	33978840 bases of 2646704109 (1.284%) in intersection
+
+    featureBits rheMac2 -enrichment refGene:CDS geneid
+# refGene:CDS 0.017%, geneid 1.284%, both 0.013%, cover 77.14%, enrich 60.09x
+
+##########################################################################

@@ -1298,3 +1298,28 @@ chmod +x getIrows.sh
 
     nice +19 featureBits felCat3 chainMm9Link
     # 486766552 bases of 1642698377 (29.632%) in intersection
+
+############################################################################
+# SGP GENES (DONE - 2007-12-20 - Hiram)
+    ssh kkstore05
+    mkdir  /cluster/data/felCat3/bed/sgp
+    cd  /cluster/data/felCat3/bed/sgp
+
+    wget --timestamping \
+"http://genome.imim.es/genepredictions/F.catus/golden_path_200603/SGP/200603mm8/scaffolds.gtf" \
+	-O felCat3.gtf
+
+    ssh hgwdev
+    cd /cluster/data/felCat3/bed/sgp
+    ldHgGene -gtf -genePredExt felCat3 sgpGene felCat3.gtf
+    #	Read 51619 transcripts in 153058 lines in 1 files
+    #	51619 groups 39049 seqs 1 sources 3 feature types
+    #	51619 gene predictions
+
+    featureBits felCat3 sgpGene
+    #	18130668 bases of 1642698377 (1.104%) in intersection
+    featureBits felCat3 -enrichment refGene:CDS sgpGene
+    # refGene:CDS 0.014%, sgpGene 1.104%, both 0.006%, cover 41.92%,
+    #	enrich 37.98x
+
+#####################################################################

@@ -1048,3 +1048,66 @@ doBlastzChainNet.pl DEF -chainMinScore=3000 -chainLinearGap=medium \
 hgsql equCab1 -e 'load data local infile "equCab1M.tab" into table chrM_gold'
 
 ##########################################################################
+# SGP GENES (DONE - 2007-12-20 - Hiram)
+    ssh kkstore05
+    mkdir  /cluster/data/equCab1/bed/sgp
+    cd  /cluster/data/equCab1/bed/sgp
+
+    mkdir gtf
+for C in `awk '{print $1}' /cluster/data/equCab1/chrom.sizes`
+do
+    wget --timestamping \
+"http://genome.imim.es/genepredictions/E.caballus/ecJan2007/SGP/200603mm8/${C}.gtf" \
+        -O "gtf/${C}.gtf"
+done
+    ssh hgwdev
+    cd /cluster/data/equCab1/bed/sgp
+    ldHgGene -gtf -genePredExt equCab1 sgpGene gtf/chr*.gtf
+    #	Read 30403 transcripts in 267753 lines in 33 files
+    #	30403 groups 33 seqs 1 sources 3 feature types
+    #	30403 gene predictions
+
+    featureBits equCab1 sgpGene
+    #	32915117 bases of 2421923695 (1.359%) in intersection
+    featureBits equCab1 -enrichment refGene:CDS sgpGene
+# refGene:CDS 0.015%, sgpGene 1.359%, both 0.014%, cover 89.17%, enrich 65.61x
+
+#####################################################################
+# LOAD GENEID GENES (DONE - 2007-12-20 - Hiram)
+    ssh kkstore05
+    mkdir -p /cluster/data/equCab1/bed/geneid
+    cd /cluster/data/equCab1/bed/geneid
+    mkdir gtf prot
+
+for C in `awk '{print $1}' /cluster/data/equCab1/chrom.sizes`
+do
+  echo $C
+  wget --timestamping \
+"http://genome.imim.es/genepredictions/E.caballus/ecJan2007/geneid_v1.2/${C}.gtf" \
+	-O "gtf/${C}.gtf"
+      wget --timestamping \
+"http://genome.imim.es/genepredictions/E.caballus/ecJan2007/geneid_v1.2/${C}.prot" \
+	-O "prot/${C}.prot"
+done
+
+    # Add missing .1 to protein id's
+    cd prot
+    foreach f (*.prot)
+      perl -wpe 's/^(>chr\S+)$/$1.1/' $f > $f:r-fixed.prot
+    end
+
+    ssh hgwdev
+    cd /cluster/data/equCab1/bed/geneid
+    ldHgGene -genePredExt -gtf equCab1 geneid gtf/*.gtf
+# Read 35577 transcripts in 285553 lines in 33 files
+# 35577 groups 33 seqs 1 sources 3 feature types
+# 35577 gene predictions
+
+    #	load proteins
+    hgPepPred equCab1 generic geneidPep prot/chr*-fixed.prot
+    featureBits equCab1 geneid
+    #	38938548 bases of 2421923695 (1.608%) in intersection
+    featureBits equCab1 -enrichment refGene:CDS geneid
+# refGene:CDS 0.015%, geneid 1.608%, both 0.013%, cover 86.04%, enrich 53.52x
+
+##########################################################################

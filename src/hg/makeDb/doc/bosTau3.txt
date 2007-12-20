@@ -753,4 +753,81 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
       /usr/local/apache/htdocs/goldenPath/bosTau3/chromosomes
 
 
+############################################################################
+# SGP GENES (DONE - 2007-12-20 - Hiram)
+    ssh kkstore05
+    mkdir  /cluster/data/bosTau3/bed/sgp
+    cd  /cluster/data/bosTau3/bed/sgp
+
+    mkdir gtf
+    #   chrUn is done in a different manner
+for C in `grep -v chrUn /cluster/data/bosTau3/chrom.sizes | awk '{print $1}'`
+do
+    wget --timestamping \
+"http://genome.imim.es/genepredictions/B.taurus/hgsc_Btau20060815/SGP/mm9/${C}.gtf" \
+        -O "gtf/${C}.gtf"
+done
+    #	a single chrUn.gtf file has all the scaffolds
+    wget --timestamping \
+'http://genome.imim.es/genepredictions/B.taurus/hgsc_Btau20060815/SGP/mm9/chrUn.gtf' \
+	-O "gtf/chrUn.gtf"
+
+    ssh hgwdev
+    cd /cluster/data/bosTau3/bed/sgp
+    ldHgGene -gtf -genePredExt bosTau3 sgpGene gtf/chr*.gtf
+    #	Read 41496 transcripts in 308500 lines in 31 files
+    #	41496 groups 4767 seqs 1 sources 3 feature types
+    #	41496 gene predictions
+
+    featureBits bosTau3 sgpGene
+    #	40658543 bases of 2731807384 (1.488%) in intersection
+
+    featureBits bosTau3 -enrichment refGene:CDS sgpGene
+    #	refGene:CDS 0.426%, sgpGene 1.488%, both 0.384%, cover 90.22%,
+    #	enrich 60.62x
+
+#####################################################################
+# LOAD GENEID GENES (DONE - 2007-12-20 - Hiram)
+    ssh kkstore05
+    mkdir -p /cluster/data/bosTau3/bed/geneid
+    cd /cluster/data/bosTau3/bed/geneid
+    mkdir gtf prot
+
+for C in `grep -v chrUn /cluster/data/bosTau3/chrom.sizes | awk '{print $1}'`
+do
+  echo $C
+  wget --timestamping \
+"http://genome.imim.es/genepredictions/B.taurus/hgsc_Btau20060815/geneidv1.2/${C}.gtf" \
+	-O "gtf/${C}.gtf"
+      wget --timestamping \
+"http://genome.imim.es/genepredictions/B.taurus/hgsc_Btau20060815/geneidv1.2/${C}.prot" \
+	-O "prot/${C}.prot"
+    done
+    wget --timestamping \
+"http://genome.imim.es/genepredictions/B.taurus/hgsc_Btau20060815/geneidv1.2/chrUn.gtf" \
+	-O "gtf/chrUn.gtf"
+    wget --timestamping \
+"http://genome.imim.es/genepredictions/B.taurus/hgsc_Btau20060815/geneidv1.2/chrUn.prot" \
+	-O "prot/chrUn.prot"
+
+    # Add missing .1 to protein id's
+    cd prot
+    foreach f (*.prot)
+      perl -wpe 's/^(>chr\S+)$/$1.1/' $f > $f:r-fixed.prot
+    end
+
+    ssh hgwdev
+    cd /cluster/data/bosTau3/bed/geneid
+    ldHgGene -genePredExt -gtf bosTau3 geneid gtf/*.gtf
+# Read 50891 transcripts in 325387 lines in 31 files
+# 50891 groups 12602 seqs 1 sources 3 feature types
+# 50891 gene predictions
+
+    #	the chr16_random file is empty, do not attempt to use it
+    hgPepPred bosTau3 generic geneidPep prot/chr*-fixed.prot
+    featureBits bosTau3 geneid
+    #	39257634 bases of 2731807384 (1.437%) in intersection
+    featureBits bosTau3 -enrichment refGene:CDS geneid
+# refGene:CDS 0.426%, geneid 1.437%, both 0.339%, cover 79.52%, enrich 55.34x
+
 ##########################################################################

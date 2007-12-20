@@ -4740,4 +4740,69 @@ TMPDIR=/scratch/tmp
     #	25931742 bases of 2620346127 (0.990%) in intersection
     nice -n +19 featureBits mm8 exoniphy
     #	25952211 bases of 2567283971 (1.011%) in intersection
-###########################################################################
+
+############################################################################
+# SGP GENES (DONE - 2007-12-20 - Hiram)
+    ssh kkstore04
+    mkdir  /cluster/data/rn4/bed/sgp
+    cd  /cluster/data/rn4/bed/sgp
+
+    mkdir gtf
+for C in `awk '{print $1}' /cluster/data/rn4/chrom.sizes`
+do
+    wget --timestamping \
+"http://genome.imim.es/genepredictions/R.norvegicus/rnNov2004/SGP/humangp200603/${C}.gtf" \
+        -O "gtf/${C}.gtf"
+done
+
+    ssh hgwdev
+    cd /cluster/data/rn4/bed/sgp
+    ldHgGene -gtf -genePredExt rn4 sgpGene gtf/chr*.gtf
+    # Read 36569 transcripts in 286299 lines in 45 files
+    # 36569 groups 44 seqs 1 sources 3 feature types
+    # 36569 gene predictions
+
+    featureBits rn4 sgpGene
+    #	36219236 bases of 2571531505 (1.408%) in intersection
+
+    featureBits rn4 -enrichment refGene:CDS sgpGene
+# refGene:CDS 0.770%, sgpGene 1.408%, both 0.672%, cover 87.35%, enrich 62.02x
+
+#####################################################################
+# LOAD GENEID GENES (DONE - 2007-12-20 - Hiram)
+    ssh kkstore04
+    mkdir -p /cluster/data/rn4/bed/geneid
+    cd /cluster/data/rn4/bed/geneid
+    mkdir gtf prot
+
+for C in `awk '{print $1}' /cluster/data/rn4/chrom.sizes`
+do
+  echo $C
+  wget --timestamping \
+"http://genome.imim.es/genepredictions/R.norvegicus/rnNov2004/geneid_v1.2/${C}.gtf" \
+	-O "gtf/${C}.gtf"
+  wget --timestamping \
+"http://genome.imim.es/genepredictions/R.norvegicus/rnNov2004/geneid_v1.2/${C}.prot" \
+	-O "prot/${C}.prot"
+done
+
+    # Add missing .1 to protein id's
+    cd prot
+    foreach f (*.prot)
+      perl -wpe 's/^(>chr\S+)$/$1.1/' $f > $f:r-fixed.prot
+    end
+
+    ssh hgwdev
+    cd /cluster/data/rn4/bed/geneid
+    ldHgGene -genePredExt -gtf rn4 geneid gtf/*.gtf
+# Read 38143 transcripts in 287158 lines in 45 files
+# 38143 groups 45 seqs 1 sources 3 feature types
+# 38143 gene predictions
+
+    hgPepPred rn4 generic geneidPep prot/chr*-fixed.prot
+    featureBits rn4 geneid
+    #	40255245 bases of 2571531505 (1.565%) in intersection
+    featureBits rn4 -enrichment refGene:CDS geneid
+# refGene:CDS 0.770%, geneid 1.565%, both 0.615%, cover 79.92%, enrich 51.05x
+
+##########################################################################
