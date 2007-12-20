@@ -25,7 +25,6 @@ struct mgcStatusType
  * values, with the pointer to the status being using as the value. */
 {
     char *dbValue;    /* value used for database field (which is an enum) */
-    int dbIndex;      /* database enum index for value */
     int ncbiCode;     /* code used in fullength.full_length column of NCBI MGC
                        * tracking table; -1 for status that don't correspond
                        * to fullength code */
@@ -70,6 +69,7 @@ extern struct mgcStatusType MGC_CANT_SEQUENCE;
 extern struct mgcStatusType MGC_INCONSISTENT_WITH_GENE;
 extern struct mgcStatusType MGC_MANUALLY_SUPPRESSED;
 extern struct mgcStatusType MGC_PLATE_CONTAMINATED;
+extern struct mgcStatusType MGC_NOT_SUBMITTED;
 
 struct mgcStatus
 /* A row in the mgcStatus table.  None of the fields are unique, am image id
