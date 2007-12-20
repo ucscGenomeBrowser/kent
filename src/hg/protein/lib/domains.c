@@ -9,7 +9,7 @@
 #include "hdb.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: domains.c,v 1.9 2007/03/26 22:21:28 fanhsu Exp $";
+static char const rcsid[] = "$Id: domains.c,v 1.10 2007/12/20 00:54:14 fanhsu Exp $";
 
 char *samGenomeDb(char *proteinId)
 /* Determin if a protein belongs to a genome DB that has SAM results */
@@ -35,7 +35,9 @@ else
 void modBaseAnchor(char *swissProtAcc)
 /* Print out anchor to modBase. */
 {
-hPrintf("<A HREF=\"http://salilab.org/modbase-cgi/model_search.cgi?searchkw=name&kword=%s\" TARGET=_blank>", swissProtAcc);
+//hPrintf("<A HREF=\"http://salilab.org/modbase-cgi/model_search.cgi?searchkw=name&kword=%s\" TARGET=_blank>", swissProtAcc);
+hPrintf("<A HREF=\"http://salilab.org/modbase/search?databaseID=%s\" TARGET=_blank>", swissProtAcc);
+//hPrintf("<A HREF=\"http://salilab.org/modbase-cgi/model_search.cgi?searchkw=name&kword=%s\" TARGET=_blank>", swissProtAcc);
 }
 
 void domainsPrint(struct sqlConnection *spConn, char *swissProtAcc)
