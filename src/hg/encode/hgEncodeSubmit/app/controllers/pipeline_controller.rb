@@ -97,7 +97,7 @@ class PipelineController < ApplicationController
     @project.status = 'new'
     @project.archives_active = ""
     if @project.save
-      redirect_to :action => 'show_user'
+      redirect_to :action => 'show', :id => @project.id
     else
       @projectTypes = getProjectTypes
       render :action => 'new'
@@ -167,7 +167,7 @@ class PipelineController < ApplicationController
     
     unless @upurl.blank?
       @filename = sanitize_filename(@upurl)
-      @upload = open(@upurl)
+      #old way not used: @upload = open(@upurl)
     else
       @filename = sanitize_filename(@upload.original_filename)
       extensionsByMIME = {
@@ -220,7 +220,6 @@ class PipelineController < ApplicationController
         return
       end
     end
-
 
 
     unless @upurl.blank?
