@@ -33,7 +33,7 @@
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 #define MAX_SP_SIZE 2000
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.405 2007/10/31 18:41:28 angie Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.406 2007/11/15 16:45:41 giardine Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -523,10 +523,11 @@ void gvUi(struct trackDb *tdb)
 /* print UI for human mutation filters */
 {
 int i = 0; /* variable to walk through arrays */
-char *def;
+//char *def;
 
 gvIdControls(tdb);
 
+/*
 printf("<BR><B>Exclude data source</B><BR>");
 for (i = 0; i < gvSrcSize; i++)
     {
@@ -534,14 +535,14 @@ for (i = 0; i < gvSrcSize; i++)
         {
         if (sameString(gvSrcDbValue[i], "UniProt (Swiss-Prot/TrEMBL)"))
             {
-            /* exclude Swiss-Prot data by default, can be misleading */
+            // exclude Swiss-Prot data by default, can be misleading 
             cartMakeCheckBox(cart, gvSrcString[i], TRUE);
             }
         else
             {
             cartMakeCheckBox(cart, gvSrcString[i], FALSE);
             }
-        printf (" %s<BR>", gvSrcDbValue[i]); /* label with db value */
+        printf (" %s<BR>", gvSrcDbValue[i]); // label with db value 
         }
     else
         {
@@ -549,7 +550,7 @@ for (i = 0; i < gvSrcSize; i++)
         printf (" Locus Specific Databases<BR>");
         }
     }
-
+*/
 printf("<BR><B>Exclude</B><BR>");
 for (i = 0; i < gvAccuracySize; i++)
     {
@@ -571,13 +572,14 @@ for (i = 0; i < gvLocationSize; i++)
     printf (" %s<BR>", gvLocationLabel[i]);
     }
 
+/* 
 printf("<BR><B>Exclude phenotype association</B><BR>");
 for (i = 0; i < gvFilterDASize; i++)
     {
     cartMakeCheckBox(cart, gvFilterDAString[i], FALSE);
     printf (" %s<BR>", gvFilterDALabel[i]);
     }
-
+*/
 printf("<BR>");
 cartMakeRadioButton(cart, "gvPos.filter.colorby", "type", "type");
 printf("<B>Color mutations by type</B><BR>");
@@ -589,6 +591,7 @@ for (i = 0; i < gvColorTypeSize; i++)
     }
 
 printf("<BR>");
+/*
 cartMakeRadioButton(cart, "gvPos.filter.colorby", "disease", "type");
 printf("<B>Color mutations by phenotype association</B> (determination is described <A HREF=#phenoassoc>below</A>)<BR>");
 for (i = 0; i < gvColorDASize; i++)
@@ -598,7 +601,9 @@ for (i = 0; i < gvColorDASize; i++)
     cgiMakeDropList(gvColorDAStrings[i], gvColorLabels, gvColorLabelSize, defaultVal);
     }
 printf("<BR>");
+*/
 /* only on development page for now, but need to check in other changes */
+/*
 if (startsWith("hgwdev-giardine", cgiServerName())) 
     {
     cartMakeRadioButton(cart, "gvPos.filter.colorby", "count", "type");
@@ -611,6 +616,7 @@ if (startsWith("hgwdev-giardine", cgiServerName()))
     cgiMakeDropList("gvColorCountMult", gvColorLabels, gvColorLabelSize, def);
     printf("<BR>");
     }
+*/
 }
 
 void retroposonsUi(struct trackDb *tdb) 

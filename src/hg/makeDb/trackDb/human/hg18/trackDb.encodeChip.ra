@@ -2073,6 +2073,54 @@ urlLabel Yale DART Link:
     color 200,50,50
     priority 2
 
+# WG Yale ChIP-seq supertrack
+    track wgEncodeYaleChipSeqSuper
+    superTrack on
+    shortLabel Yale WG ChIP-seq
+    longLabel Whole-Genome Yale ChIP-seq 
+    group encodeChip
+    priority 70.0
+     
+track wgEncodeYalePolIISignal
+superTrack wgEncodeYaleChipSeqSuper dense
+shortLabel PolII Signal
+longLabel Yale PolII whole-genome ChIP-seq signal
+group encodeChip
+priority 70.01
+type wig 1 1260
+viewLimits 0:150
+autoScale off
+visibility hide
+
+track wgEncodeYalePolIISites
+superTrack wgEncodeYaleChipSeqSuper dense
+shortLabel PolII Sites
+longLabel Yale PolII whole-genome ChIP-seq sites
+group encodeChip
+priority 70.02
+type bed 4 .
+visibility hide
+
+track wgEncodeYaleStat1Signal
+superTrack wgEncodeYaleChipSeqSuper dense
+shortLabel STAT1 Signal
+longLabel Yale STAT1 whole-genome ChIP-seq signal
+group encodeChip
+priority 70.03
+type wig 1 2197
+viewLimits 0:150
+autoScale off
+visibility hide
+
+track wgEncodeYaleStat1Sites
+superTrack wgEncodeYaleChipSeqSuper dense
+shortLabel STAT1 Sites
+longLabel Yale STAT1 whole-genome ChIP-seq sites
+group encodeChip
+priority 70.04
+type bed 4 .
+visibility hide
+
 searchTable encodeUppsalaChipSites
 searchMethod exact
 searchType bed

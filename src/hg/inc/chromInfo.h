@@ -59,5 +59,8 @@ void chromInfoOutput(struct chromInfo *el, FILE *f, char sep, char lastSep);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+boolean chromSeqFileExists(char *db, char *chrom);
+/* Check whether chromInfo exists for a database, find the path of the */
+/* sequence file for this chromosome and check if the file exists. */
 #endif /* CHROMINFO_H */
 

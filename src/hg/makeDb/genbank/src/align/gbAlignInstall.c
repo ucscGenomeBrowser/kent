@@ -17,7 +17,7 @@
 #include "estOrientInfo.h"
 #include <stdio.h>
 
-static char const rcsid[] = "$Id: gbAlignInstall.c,v 1.9 2004/02/23 09:07:20 kent Exp $";
+static char const rcsid[] = "$Id: gbAlignInstall.c,v 1.10 2007/11/17 22:33:35 markd Exp $";
 
 /*
  * Notes:
@@ -220,7 +220,7 @@ if ((prevEntry != NULL)
         /* ok, not get the current entry.  Only null if igored */
         struct gbEntry* entry = getEntry(migrate->select, acc, refFile);
         if (entry != NULL)
-            return gbEntryGetAligned(entry, migrate->select->update, version);
+            return gbEntryGetAligned(entry, migrate->select->update, version, NULL);
         }
     }
 return NULL;
@@ -386,7 +386,7 @@ struct gbEntry* entry = getEntry(select, acc, inPsl);
 if (entry == NULL)
     errAbort("no entry for %s %s in %s", gPslFileExt[pslFileType],
              psl->qName, inPsl);
-aligned = gbEntryGetAligned(entry, select->update, version);
+aligned = gbEntryGetAligned(entry, select->update, version, NULL);
 pslTabOut(psl, outPslFh);
 if (pslFileType == MAIN_PSL_FILE)
     {

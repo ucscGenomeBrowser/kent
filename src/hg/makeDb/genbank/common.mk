@@ -1,9 +1,3 @@
-#Optimized for performance or debugging
-OPT= -ggdb
-#OPT= -ggdb -O3
-#OPT= -ggdb -O
-#OPT= -ggdb -O3 -pg
-
 KENT = ${GBROOT}/../../..
 
 # FIXME: for now, need to link statically on RH7 or a warning is written
@@ -19,7 +13,7 @@ $(error must set MYSQLLIBS env var)
 endif
 
 INCL = -I${GBROOT}/src/inc -I${KENT}/inc -I${KENT}/hg/inc
-CFLAGS = ${OPT} ${STATIC} -DJK_WARN -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_GNU_SOURCE -Wall -Werror ${INCL}
+CFLAGS = ${COPT} ${STATIC} -DJK_WARN -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_GNU_SOURCE -Wall -Werror ${INCL}
 
 GB_BINDIR = ${GBROOT}/bin
 GB_BINARCH = ${GB_BINDIR}/${MACHTYPE}

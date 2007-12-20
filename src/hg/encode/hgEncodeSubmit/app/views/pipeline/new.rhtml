@@ -1,31 +1,31 @@
-<h1>New Submission</h1>
+<h1>New Project</h1>
 
-<%= error_messages_for 'submission' -%>
+<%= error_messages_for 'project' -%>
 
 <%= start_form_tag :action => 'create' %>
 
-  <p><label for="submission_name">Name</label><br/>
-  <%= text_field 'submission', 'name'  %></p>
+  <p><label for="project_name">Name</label><br/>
+  <%= text_field 'project', 'name'  %></p>
  
 <%
 =begin %>
     Maybe I can use code like this for the "type"
     if we ever have a "types" table
-  <p><label for="submission_category">Category</label><br/>
-  <%= collection_select(:submission, :category_id, @categories, :id, :name) %></p>
+  <p><label for="project_category">Category</label><br/>
+  <%= collection_select(:project, :category_id, @categories, :id, :name) %></p>
 
-  <p><label for="submission_submission_type_id">Type</label><br/>
-  <%= collection_select(:submission, :submission_type_id, @submissionTypesColl, :id, :name) %></p>
+  <p><label for="project_project_type_id">Type</label><br/>
+  <%= collection_select(:project, :project_type_id, @projectTypesColl, :id, :name) %></p>
 
-  <p><label for="submission_submission_type_id">Type</label><br/>
-  <%= text_field 'submission', 'submission_type_id'  %></p>
+  <p><label for="project_project_type_id">Type</label><br/>
+  <%= text_field 'project', 'project_type_id'  %></p>
 
 <%
 =end %>
 
-  <p><label for="submission_submission_type_id">Type</label><br/>
-  <select id="submission_submission_type_id" name="submission[submission_type_id]">
-  <% @submissionTypes.each do |t| %>
+  <p><label for="project_project_type_id">Type</label><br/>
+  <select id="project_project_type_id" name="project[project_type_id]">
+  <% @projectTypes.each do |t| %>
   <option value="<%= t.id -%>"><%= t.short_label -%></option>
   <% end %>
   </select></p>

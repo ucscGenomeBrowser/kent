@@ -61,7 +61,8 @@ struct gbAligned* gbEntryFindAlignedVer(struct gbEntry* entry, int version);
 /* Find an aligned entry for a specific version, or NULL not found */
 
 struct gbAligned* gbEntryGetAligned(struct gbEntry* entry,
-                                    struct gbUpdate* update, int version);
+                                    struct gbUpdate* update, int version,
+                                    boolean *created);
 /* Get an aligned entry for a specific version, creating a new one if not
  * found */
 

@@ -1,48 +1,48 @@
-<h1>Submission:</h1>
+<h1>Project:</h1>
 
 <p>
-<strong>Name: <%= @submission.name -%> </strong><br/>
-<strong>Type: </strong> <%= @submission.submission_type.short_label -%><br/>
+<strong>Name: <%= @project.name -%> </strong><br/>
+<strong>Type: </strong> <%= @project.project_type.short_label -%><br/>
 <strong>Status: </strong> <%= 
-  if @submission.status.starts_with?("schedule uploading ")
+  if @project.status.starts_with?("schedule uploading ")
     "schedule uploading"
   else
-    if @submission.status.starts_with?("schedule expanding ")
+    if @project.status.starts_with?("schedule expanding ")
       "schedule expanding"
     else
-      @submission.status
+      @project.status
     end
   end
 -%><br/>
 
-<strong>Date Posted: </strong> <%= distance_of_time_in_words_to_now(@submission.created_at) -%> ago<br/>
-<strong>Last Updated: </strong> <%= distance_of_time_in_words(@submission.updated_at, Time.now) -%> ago<br/>
+<strong>Date Posted: </strong> <%= distance_of_time_in_words_to_now(@project.created_at) -%> ago<br/>
+<strong>Last Updated: </strong> <%= distance_of_time_in_words(@project.updated_at, Time.now) -%> ago<br/>
 </p>
 <br>
 <table CELLSPACING=10 CELLPADDING=10>
-  <td><%= link_to 'Edit', {:action => 'edit', :id => @submission.id} -%></td>
-  <td><%= link_to 'Delete', {:action => 'delete', :id => @submission.id},
-    :confirm => "Are you sure you want to delete this submission?" -%></td>
-  <td><%= link_to 'Upload', {:action => 'upload', :id => @submission.id} -%></td>
+  <td><%= link_to 'Edit', {:action => 'edit', :id => @project.id} -%></td>
+  <td><%= link_to 'Delete', {:action => 'delete', :id => @project.id},
+    :confirm => "Are you sure you want to delete this project?" -%></td>
+  <td><%= link_to 'Upload', {:action => 'upload', :id => @project.id} -%></td>
 
-  <td><%= link_to 'Re-Expand All', {:action => 'reexpand_all', :id => @submission.id} -%></td>
+  <td><%= link_to 'Re-Expand All', {:action => 'reexpand_all', :id => @project.id} -%></td>
 
-  <% if @submission.status == "uploaded" -%> 
-    <td><%= link_to 'Schedule Validating', {:action => 'begin_validating', :id => @submission.id},
-      :confirm => "Are you sure your submission is ready to schedule for validating?" -%></td>
+  <% if @project.status == "uploaded" -%> 
+    <td><%= link_to 'Schedule Validating', {:action => 'begin_validating', :id => @project.id},
+      :confirm => "Are you sure your project is ready to schedule for validating?" -%></td>
   <% end %>
 
-  <% if @submission.status == "validated" -%> 
-    <td><%= link_to 'Schedule Loading', {:action => 'begin_loading', :id => @submission.id},
-      :confirm => "Are you sure your submission is ready to schedule for loading?" -%></td>
+  <% if @project.status == "validated" -%> 
+    <td><%= link_to 'Schedule Loading', {:action => 'begin_loading', :id => @project.id},
+      :confirm => "Are you sure your project is ready to schedule for loading?" -%></td>
   <% end %>
 
 </table>
 
 
-<h3> Submission Archive Files</h3>
+<h3> Project Archive Files</h3>
 
-<% @submission.submission_archives.each do |a| %>
+<% @project.project_archives.each do |a| %>
   <table CELLSPACING=10 CELLPADDING=10>
   <tr>
   <td><%= a.file_name -%></td>
@@ -55,7 +55,7 @@
 
 
 <table CELLSPACING=10 CELLPADDING=10>
-<% a.submission_files.each do |f| %>
+<% a.project_files.each do |f| %>
   <tr>
   <td>&nbsp;</td>
   <td><%= f.file_name -%></td>

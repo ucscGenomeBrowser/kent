@@ -305,5 +305,8 @@ rsync -a
  /san/sanvol1/scratch/visiGene/downloads/jackson/jacksonLab/
 
 
+# 2007-11-20 galt 
+To make these more in line with the rest of the structure
+these jackson downloads have been moved to /san/sanvol1/visiGene/offline/
 
 

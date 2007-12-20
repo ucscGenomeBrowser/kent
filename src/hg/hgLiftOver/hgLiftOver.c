@@ -17,7 +17,7 @@
 #include "liftOver.h"
 #include "liftOverChain.h"
 
-static char const rcsid[] = "$Id: hgLiftOver.c,v 1.55 2007/10/12 22:11:00 angie Exp $";
+static char const rcsid[] = "$Id: hgLiftOver.c,v 1.56 2007/11/20 00:46:29 hartera Exp $";
 
 /* CGI Variables */
 #define HGLFT_USERDATA_VAR "hglft_userData"     /* typed/pasted in data */
@@ -393,6 +393,8 @@ getDbAndGenome(cart, &db, &organism, oldVars);
 chainList = liftOverChainListFiltered();
 
 choice = defaultChoices(chainList, db);
+if (choice == NULL)
+    errAbort("Sorry, no conversions available from this assembly\n");
 
 minSizeQ = cartCgiUsualInt(cart, HGLFT_MINSIZEQ, choice->minSizeQ);
 minSizeT = cartCgiUsualInt(cart, HGLFT_MINSIZET, choice->minSizeT);

@@ -20,7 +20,7 @@
 #include "gsidTable.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidTable.c,v 1.26 2007/11/13 17:40:22 fanhsu Exp $";
+static char const rcsid[] = "$Id: gsidTable.c,v 1.30 2007/11/20 03:52:43 fanhsu Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "submit_filter", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -285,6 +285,11 @@ cartSaveSession(cart);
 mainControlPanel();
 if (subjList != NULL)
     bigTable(conn, colList,subjList);
+printf("<br>* Estimated Study Day of Infection (ESDI), ");
+printf("click <a href=\"http://www.gsid.org/gsidhivdatabrowser/intro.html/ESDI\"> here </a>");
+printf(" for further explanation.\n");
+
+
 hPrintf("</FORM>\n");
 }
 
@@ -800,8 +805,18 @@ char *queryCellVal(struct column *col, struct subjInfo *si,
 /* return query lookup on subj id */
 {
 char query[256];
+char *answer;
 safef(query, sizeof(query), col->query, si->fields[0]);
-return sqlQuickString(conn, query);
+answer = sqlQuickString(conn, query);
+if (answer == NULL) 
+    {
+    //return(cloneString("N/A"));
+    return(cloneString("-1"));
+    }
+else 
+    {
+    return answer;
+    }
 }
 
 char *stringCellVal(struct column *col, struct subjInfo *si,
@@ -820,15 +835,58 @@ void setupColumnString(struct column *col, char *parameters)
 col->cellVal = stringCellVal;
 }
 
-
-
 void integerCellPrint(struct column *col, struct subjInfo *si,
         struct sqlConnection *conn)
 /* Print value including favorite hyperlink in debug column. */
 {
+boolean special;
+special = FALSE;
 char *s = col->cellVal(col, si, conn);
 hPrintf("<TD align=right>");
-hPrintf("%s", s);
+if (sameWord(col->name, "cd4Count"))
+    {
+    if (sameWord(s, "-1") || sameWord(s, "0"))
+	{
+	printf("N/A");
+	special = TRUE;
+	}
+    }
+if (sameWord(col->name, "hivQuan"))
+    {
+    if (sameWord(s, "-1"))
+	{
+	printf("N/A");
+	special = TRUE;
+	}
+    }
+if (sameWord(col->name, "esdi"))
+    {
+    if (sameWord(s, "-1"))
+	{
+	printf("N/A");
+	special = TRUE;
+	}
+    }
+if (sameWord(col->name, "hivQuan"))
+    {
+    if (sameWord(s, "1000000"))
+	{
+	printf("&gt; 1000000");
+	special = TRUE;
+	}
+    }
+if (sameWord(col->name, "hivQuan"))
+    {
+    if (sameWord(s, "200"))
+	{
+	printf("&lt; 400");
+	special = TRUE;
+	}
+    }
+if (!special)
+    {
+    hPrintf("%s", s);
+    }
 hPrintf("</TD>");
 freeMem(s);
 }

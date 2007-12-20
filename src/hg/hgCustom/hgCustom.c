@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.118 2007/11/02 23:47:56 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.120 2007/12/05 00:19:17 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -151,6 +151,11 @@ if (!isUpdateForm)
     char *onChangeDb = "onchange=\"document.orgForm.db.value = document.mainForm.db.options[document.mainForm.db.selectedIndex].value; document.orgForm.submit();\"";
     char *onChangeOrg = "onchange=\"document.orgForm.org.value = document.mainForm.org.options[document.mainForm.org.selectedIndex].value; document.orgForm.db.value = 0; document.orgForm.submit();\"";
     char *onChangeClade = "onchange=\"document.orgForm.clade.value = document.mainForm.clade.options[document.mainForm.clade.selectedIndex].value; document.orgForm.org.value = 0; document.orgForm.db.value = 0; document.orgForm.submit();\"";
+
+if (hIsGsidServer())
+    {
+    printf("<font color=red>The Custom Track function and its documentation is currently under development ...<BR><BR></font>\n");
+    }
 
     puts("<TABLE BORDER=0>\n");
     if (gotClade)
@@ -404,7 +409,7 @@ void showCustomTrackList(struct customTrack *ctList, int numCts)
 /* print table of custom tracks with controls */
 {
 struct customTrack *ct;
-char buf[64];
+char buf[256];
 char *pos = NULL;
 char *dataUrl;
 

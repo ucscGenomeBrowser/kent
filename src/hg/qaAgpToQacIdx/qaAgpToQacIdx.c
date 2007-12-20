@@ -47,7 +47,7 @@ while ((qa = qaReadNext(qalf)) != NULL)
 		*s = '\0';
 		}
 	
-	strncpy(buffer, qa->name, sizeof(buffer));
+	safef(buffer, sizeof(buffer), "%s", qa->name);
 
 	/* strip off anything after the first '.' */
 	/* scaffold_0.1-193456 seemed redundant,  */
@@ -65,7 +65,14 @@ while ((qa = qaReadNext(qalf)) != NULL)
 			if (! agp->isFrag)
 				{
 				gap = (struct agpGap *) (agp->entry);
-				memset(qa->qa + gap->chromStart - 1, FAKE_GAP_QUAL, gap->size);
+				if (qa->size - gap->chromStart + 1 > gap->size)
+					{
+					memset(qa->qa + gap->chromStart - 1, FAKE_GAP_QUAL, gap->size);
+					}
+				else
+					{
+					errAbort("gap too big: chromStart = %d size = %d\n", gap->chromStart, gap->size);
+					}
 				}
 			}
 		}

@@ -3,7 +3,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: mm6.txt,v 1.6 2007/07/26 17:20:25 angie Exp $"
+#	"$Id: mm6.txt,v 1.7 2007/12/03 23:37:46 angie Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -10241,9 +10241,11 @@ knownToVisiGene mm6
 ### fasta added 2006-06-21
 ### Doug Stryke <stryke@cgl.ucsf.edu> in Tom Ferrin's lab
 
-### NOTE -- as of 2007-03-01 the igtc track will be automatically 
+### NOTE -- as of 2007-03-01 the igtc track were automatically 
 ### updated on hgwdev by the scripts monthlyUpdateIgtc.csh and 
-### updateIgtc.pl in kent/src/hg/utils/automation/ .
+### updateIgtc.pl in kent/src/hg/utils/automation/ .  
+### 2007-09-01 was the last update for mm6 because IGTC moved on
+### to {mm7, mm8, mm9}.
 
     ssh hgwdev
     mkdir /cluster/data/mm6/bed/igtc

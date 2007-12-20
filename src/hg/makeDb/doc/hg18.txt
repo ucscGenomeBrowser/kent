@@ -9882,8 +9882,8 @@ ensArchive apr2006
     # correct version will be displayed and the correct links made on both
     # the RR and hgwdev.
 
-# Create knownToEnsembl column
-    hgMapToGene hg17 ensGene knownGene knownToEnsembl
+# Create knownToEnsembl column (updated 2007-11-15 - Jim Kent)
+    hgMapToGene hg18 ensGene knownGene knownToEnsembl
 
 # QA NOTE [ASZ: 9-11-2006]: mytouch on ensGtp and ensPep.  This is because 
 # ensGene was updated later than they were.  Ensembl treats hap chroms 
@@ -15852,6 +15852,7 @@ cat > downloads4.csh << 'EOF'
         ccdsMgcMap
     # << emacs
 
+#########################################################################
 # RECIPROCAL BEST CHIMP PANTRO2 (2007-03-02 kate)
 #       Requested by Daryl
     cd /cluster/data/hg18/bed/blastz.panTro2
@@ -17204,11 +17205,9 @@ mkdir hg17 hg18
 for f in *.cg; do    
     table=${f%.cg};
     echo $table
-    hgLoadChromGraph -idTable=affy500k -minusLog10 -pathPrefix=/gbdb/hg17/chromGraph \
-       hg17 $table $f 2> ${table}.hg17.errors
+    hgLoadChromGraph -idTable=affy500k -minusLog10 -pathPrefix=/gbdb/hg17/chromGraph hg17 $table $f 2> ${table}.hg17.errors
     mv ${table}.cgb hg17/
-    hgLoadChromGraph -idTable=affy500k -minusLog10 -pathPrefix=/gbdb/hg18/chromGraph \
-       hg18 $table $f 2> ${table}.hg18.errors
+    hgLoadChromGraph -idTable=affy500k -minusLog10 -pathPrefix=/gbdb/hg18/chromGraph hg18 $table $f 2> ${table}.hg18.errors
     mv ${table}.cgb hg18/
 done
 pushd /gbdb/hg18/chromGraph
@@ -17568,7 +17567,10 @@ TMPDIR=/scratch/tmp
 	-chainMinScore=3000 -chainLinearGap=medium \
 	-continue=cat -bigClusterHub=pk > cat.log 2>&1 &
     #	real    390m56.934s
+    cat fb.hg18.chainPonAbe2Link.txt
+    #	2676696124 bases of 2881515245 (92.892%) in intersection
 
+    #	And the swap
     mkdir /cluster/data/ponAbe2/bed/blastz.hg18.swap
     cd /cluster/data/ponAbe2/bed/blastz.hg18.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
@@ -17856,8 +17858,6 @@ BASE=/cluster/data/hg18/bed/blastz.calJac1.2007-10-07
       -bigClusterHub pk -continue=download \
       -chainMinScore=3000 -chainLinearGap=medium >& do2.log &
     tail -f do2.log
-
-
 
 
 #########################################################
@@ -18492,4 +18492,182 @@ cd /projects/compbiousr/wet/browser/vista_enhancer/
 liftOver vista_enhancer.hg17.bed /cluster/data/hg17/bed/liftOver/hg17ToHg18.over.chain.gz vista_enhancer.hg18.bed vista_enhancer.hg17ToHg18.unMapped
 hgLoadBed hg18 vistaEnhancers vista_enhancer.hg18.bed
 
+############################################################################
+# Reload CCDS (ccdsInfo, ccdsGene, ccdsKgMap) (2007-10-30 markd)
+
+    cd /cluster/data/genbank/data/ccds/
+    ftp ftp-private.ncbi.nih.gov (user ccds, needs password)
+    get CCDS.20071030.tar.gz
+    mkdir /scratch/tmp/ccds
+    cd /scratch/tmp/ccds
+    tar -zxf /cluster/data/genbank/data/ccds/CCDS.20071030.tar.gz
+
+    # import ccds database tables
+    /cluster/data/genbank/bin/x86_64/ccdsImport ccds data/*.txt
+
+    # create and load ccdsGene and ccdsInfo tables from imported database
+    /cluster/data/genbank/bin/x86_64/ccdsMkTables -loadDb ccds hg18 ccdsInfo ccdsGene
+    /cluster/data/genbank/bin/x86_64/mkCcdsGeneMap  -db=hg18 -loadDb ccdsGene knownGene ccdsKgMap
+    checkTableCoords hg18 -verbose=2 ccdsGene
+    # update all.jointer to include hg18 in ccdsDb
+    joinerCheck -database=hg18 -identifier=ccdsGeneId ~/compbio/genbank/kent/src/hg/makeDb/schema/all.joiner
+
+    # build initial version of ccdsMgcMap table, updated by nightly genbank update
+    /cluster/data/genbank/bin/x86_64/mkCcdsGeneMap -loadDb -db=hg18 ccdsGene mgcGenes ccdsMgcMap
+    
+    # request push of 
+        ccdsGene
+        ccdsInfo
+        ccdsKgMap
+        ccdsMgcMap
+    # << emacs
+
 #########################################################################
+# Load ENSEMBL ver 45  (2007-09-5 markd)
+
+mkdir /cluster/data/hg18/bed/ensembl45
+cd /cluster/data/hg18/bed/ensembl45
+
+##
+# need to find bounds of haplotype chromosomes
+##
+
+# get unmasked haplotype pseudochroms from ensemble (dna, NOT dna_rm)
+wget ftp://ftp.ensembl.org/pub/current_homo_sapiens/data/fasta/dna/
+    Homo_sapiens.NCBI36.46.dna.chromosome.c22_H2.fa.gz
+    Homo_sapiens.NCBI36.46.dna.chromosome.c5_H2.fa.gz
+    Homo_sapiens.NCBI36.46.dna.chromosome.c6_COX.fa.gz
+    Homo_sapiens.NCBI36.46.dna.chromosome.c6_QBL.fa.gz
+
+# get gap locations and create hap.lift
+foreach f ( *.fa.gz )
+   faGapLocs $f $f:r:r.lift
+end
+
+# build lift file for randons and haps
+(mkRandomNTLift hg18 && cat hap.lift) > randHap.lift
+
+# load ensembl genes
+hgLoadEnsembl -l randHap.lift  -p homo_sapiens core_45_36g hg18>&log
+
+# got 1 genes with CDS exons with no frame:
+ENST00000374459
+# add this to problem ids and rerun
+
+hgLoadEnsembl -l randHap.lift -f problem.ids homo_sapiens core_45_36g hg18>&log
+
+# load pseudogenes
+hgLoadEnsembl -l randHap.lift  -p homo_sapiens core_45_36g hg18>&log
+
+# got 3 pseudogenes with CDS bounds outside of exons
+ENST00000342841
+ENST00000361218
+ENST00000388856
+# add this to problem ids and rerun
+
+hgLoadEnsembl -l randHap.lift -f problem.ids -p homo_sapiens core_45_36g hg18>&log
+
+# vega code is not working in robert's scripts.
+# done to support CCDS; push not requested awaiting resolution of vega
+# stuff
+
+#########################################################################
+# AFFY TRANSCRIPTOME PHASE 3 (2007-11-06, Andy)
+
+ssh hgwdev
+bash
+cd /san/sanVol1/scratch/andy/transcriptome
+mkdir splits
+cd originalWigs/
+for f in *.wigVar; do 
+   table=${f%.wigVar};
+   mkdir ../splits/$table
+   grep -v "^track" $f | splitWig stdin 1000000 ../splits/${table}/split
+   echo Done with $table
+done
+# Done with cluster run
+ssh kolossus
+cd /san/sanVol1/scratch/andy/transcriptome/lift/bed
+for tab in *; do
+   for split in ${tab}/*; do
+      cat $split >> ${tab}.bed   
+   done
+   echo done catting $tab
+done
+# Split into chrom beds (with a cluster run)
+for f in `ls -1 hg18.bed`; do
+     tab=${f%.bed};
+     for c in `cut -f1 chrom.sizes`; do
+        cfile=hg18.bed.chromSplit/${tab}.${c}.bed;
+        outFile=hg18.wigVar/${tab}.wigVar;
+        if [ -e $cfile ]; then
+            echo variableStep chrom=${c} span=1 >> $outFile;
+            bedSort $cfile stdout | awk 'BEGIN{FS="\t"}{print $2+1, $4;}' | awk -f noDupe.awk >> $outFile;
+            echo Added $cfile to $outFile >> the.log;
+        fi;
+     done;
+     echo DONE with $tab >> the.log;
+     wigEncode $outFile hg18.wigVar/${tab}.wig hg18.wigVar/${tab}.wib >> the.log;
+     gzip $outFile
+done
+cd hg18.wigVar/
+mkdir -p /cluster/data/hg18/bed/affyTxnPhase3/wib
+for f in *.wib; do
+   echo copying $f...;
+   cp $f /cluster/data/hg18/bed/affyTxnPhase3/wib/;
+done
+pushd /gbdb/hg18/wib
+ln -s /cluster/data/hg18/bed/affyTxnPhase3/wib/* .
+popd
+mkdir -p /cluster/data/hg18/bed/affyTxnPhase3/downloads
+cp *.wigVar.gz /cluster/data/hg18/bed/affyTxnPhase3/downloads
+mkdir -p /usr/local/apache/htdocs/goldenPath/hg18/affyTxnPhase3
+pushd /usr/local/apache/htdocs/goldenPath/hg18/affyTxnPhase3
+ln -s /cluster/data/hg18/bed/affyTxnPhase3/downloads/* .
+for f in *Strand*; do mv $f sRNA.$f; done
+for f in affyTxnPhase3*; do mv $f lRNA.$f; done
+
+#########################################################################
+# Blastz Marmoset calJac1 (DONE - 2007-11-09 - Hiram)
+##	this is not necessary - already done by Kate in October
+    ssh kkstore06
+    screen # use screen to control this job
+    mkdir /cluster/data/hg18/bed/blastzCalJac1.2007-11-09
+    cd /cluster/data/hg18/bed/blastzCalJac1.2007-11-09
+
+    cat << '_EOF_' > DEF
+# Human vs marmoset
+BLASTZ_M=50
+
+# TARGET: Human Hg18
+SEQ1_DIR=/cluster/bluearc/scratch/data/hg18/nib
+SEQ1_LEN=/cluster/data/hg18/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Marmoset calJac1
+SEQ2_DIR=/cluster/bluearc/scratch/data/calJac1/calJac1.2bit
+SEQ2_LEN=/cluster/data/calJac1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/hg18/bed/blastzCalJac1.2007-11-09
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-chainMinScore=3000 -chainLinearGap=medium \
+	-bigClusterHub=pk > blastz.log 2>&1 &
+    #	real    542m2.359s
+# Completed: 230805 of 230805 jobs
+# CPU time in finished jobs:    7279638s  121327.30m  2022.12h   84.26d  0.231 y
+# IO & Wait Time:                831303s   13855.05m   230.92h    9.62d  0.026 y
+# Average job time:                  35s       0.59m     0.01h    0.00d
+# Longest finished job:             972s      16.20m     0.27h    0.01d
+# Submission to last job:         20572s     342.87m     5.71h    0.24d
+    cat fb.hg18.chainCalJac1Link.txt
+    #	2236493373 bases of 2881515245 (77.615%) in intersection
+
+###########################################################################
+

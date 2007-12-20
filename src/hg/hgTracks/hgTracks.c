@@ -98,6 +98,7 @@
 #include "hgConfig.h"
 #include "gv.h"
 #include "gvUi.h"
+#include "protVar.h"
 #include "oreganno.h"
 #include "oregannoUi.h"
 #include "bed12Source.h"
@@ -118,7 +119,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1421 2007/11/05 14:12:47 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1429 2007/11/26 02:11:23 kent Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -372,6 +373,12 @@ for (item = tg->items; item != NULL; item = item->next)
 	    end = insideWidth;
 	else
 	    end = round((baseEnd - winStart)*scale);
+	if (tg->itemRightPixels && withLabels)
+	    {
+	    end += tg->itemRightPixels(tg, item);
+	    if (end > insideWidth)
+	        end = insideWidth;
+	    }
 	if (start < 0) start = 0;
 	if (spaceSaverAddOverflow(ss, start, end, item, allowOverflow) == NULL)
 	    break;
@@ -11712,6 +11719,27 @@ for (el = tg->items; el != NULL; el = el->next)
 hFreeConn(&conn);
 }
 
+void loadProtVar(struct track *tg)
+/* Load UniProt Variants with labels */
+{
+struct protVarPos *list = NULL, *el;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+int rowOffset;
+
+sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = protVarPosLoad(row);
+    slAddHead(&list, el);
+    }
+slReverse(&list);
+sqlFreeResult(&sr);
+tg->items = list;
+hFreeConn(&conn);
+}
+
 void loadGV(struct track *tg)
 /* Load human mutation with filter */
 {
@@ -11724,6 +11752,19 @@ char **row;
 int rowOffset;
 enum trackVisibility vis = tg->visibility;
 
+if (!cartVarExists(cart, "gvDisclaimer")) 
+    {
+    /* display disclaimer and add flag to cart, program exits from here */
+    gvDisclaimer();
+    }
+else if (sameString("Disagree", cartString(cart, "gvDisclaimer")))
+    {
+    /* hide track, remove from cart so will get option again later */
+    tg->visibility = tvHide;
+    cartRemove(cart, "gvDisclaimer");
+    cartSetString(cart, "gvPos", "hide");
+    return;
+    }
 /* load as linked list once, outside of loop */
 srcList = gvSrcLoadByQuery(conn, "select * from hgFixed.gvSrc");
 /* load part need from gv table, outside of loop (load in hash?) */
@@ -11885,6 +11926,21 @@ winEnd = winEndCopy;
 return list;
 }
 
+char *protVarName(struct track *tg, void *item)
+/* Get name to use for gv item. */
+{
+struct protVarPos *el = item;
+return el->label;
+}
+
+char *protVarMapName (struct track *tg, void *item)
+/* return id for item */
+{
+struct protVarPos *el = item;
+return el->name;
+}
+
+
 char *gvName(struct track *tg, void *item)
 /* Get name to use for gv item. */
 {
@@ -11907,6 +11963,16 @@ tg->itemColor = gvColor;
 tg->itemNameColor = gvColor;
 tg->itemName = gvName;
 tg->mapItemName = gvPosMapName;
+tg->labelNextItemButtonable = TRUE;
+tg->labelNextPrevItem = linkedFeaturesLabelNextPrevItem;
+}
+
+void protVarMethods (struct track *tg)
+/* name vs id, next items */
+{
+tg->loadItems = loadProtVar;
+tg->itemName = protVarName;
+tg->mapItemName = protVarMapName;
 tg->labelNextItemButtonable = TRUE;
 tg->labelNextPrevItem = linkedFeaturesLabelNextPrevItem;
 }
@@ -12137,6 +12203,8 @@ else if (sameString(source, "SIGTR"))
     color = vgFindColorIx(vg, 0x99, 0x66, 0x00); /* brown */
 else if (sameString(source, "TIGEM"))
     color = vgFindColorIx(vg, 0xcc, 0x00, 0x00); /* red */
+else if (sameString(source, "TIGM"))
+    color = vgFindColorIx(vg, 0xaa, 0x00, 0x66); /* Juneberry (per D.S.) */
 return color;
 }
 
@@ -12403,6 +12471,10 @@ else if (sameWord(type, "rmsk"))
 else if (sameWord(type, "ld2"))
     {
     ldMethods(track);
+    }
+else if (sameWord(type, "factorSource"))
+    {
+    factorSourceMethods(track);
     }
 }
 
@@ -13192,16 +13264,20 @@ struct dyString *uiVars = uiStateUrlPart(NULL);
 char *orgEnc = cgiEncode(organism);
 
 hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#000000\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>\n");
-hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#536ED3\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"2\"><TR>\n");
+hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#2636D1\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"2\"><TR>\n");
 hPrintf("<TD ALIGN=CENTER><A HREF=\"../index.html?org=%s\" class=\"topbar\">Home</A></TD>", orgEnc);
 
-hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgGateway?org=%s&db=%s\" class=\"topbar\">Genomes</A></TD>", orgEnc, database);
 if (hIsGsidServer())
     {
+    hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgGateway?org=%s&db=%s\" class=\"topbar\">Sequence View Gateway</A></TD>", orgEnc, database);
     hPrintf(
     "<TD ALIGN=CENTER><A HREF=\"../cgi-bin/gsidTable?gsidTable.do.advFilter=filter+%c28now+on%c29&fromProg=hgTracks\" class=\"topbar\">%s</A></TD>",
     '%', '%', "Select Subjects");
-    } ;
+    } 
+else
+    {
+    hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgGateway?org=%s&db=%s\" class=\"topbar\">Genomes</A></TD>", orgEnc, database);
+    }
 if (gotBlat)
     {
     hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgBlat?%s\" class=\"topbar\">Blat</A></TD>", uiVars->string);
@@ -13904,6 +13980,7 @@ registerTrackHandler("encodeGencodeIntronOct05", gencodeIntronMethods);
 registerTrackHandler("encodeGencodeRaceFrags", gencodeRaceFragsMethods);
 registerTrackHandler("affyTxnPhase2", affyTxnPhase2Methods);
 registerTrackHandler("gvPos", gvMethods);
+registerTrackHandler("protVarPos", protVarMethods);
 registerTrackHandler("oreganno", oregannoMethods);
 registerTrackHandler("encodeDless", dlessMethods);
 

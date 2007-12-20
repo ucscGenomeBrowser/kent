@@ -1083,7 +1083,7 @@ dataVersion ENCODE June 2005 Freeze
 track encodeAffyEcSites
 compositeTrack on
 shortLabel Affy EC Sites
-longLabel Affymetrix ENCODE Extension Sites
+longLabel Affymetrix ENCODE Extension Transcription Sites
 priority 31.0
 group encodeTxLevels
 visibility hide
@@ -1093,199 +1093,199 @@ type bed 3 .
     track encodeAffyEc1FetalThymusSites
     subTrack encodeAffyEcSites
     shortLabel EC1 Sites FetalT
-    longLabel Affymetrix ENCODE Extension (One-base window) (Fetal Thymus) Sites
+    longLabel Affymetrix ENCODE Extension Transcription (One-base window) (Fetal Thymus) Sites
     priority 1
 
     track encodeAffyEc51FetalThymusSites
     subTrack encodeAffyEcSites
     shortLabel EC51 Site FetalT
-    longLabel Affymetrix ENCODE Extension (51-base window) (Fetal Thymus) Sites
+    longLabel Affymetrix ENCODE Extension Transcription (51-base window) (Fetal Thymus) Sites
     priority 2
 
     track encodeAffyEc1TestisSites
     subTrack encodeAffyEcSites
     shortLabel EC1 Sites Testis
-    longLabel Affymetrix ENCODE Extension (One-base window) (Testis) Sites
+    longLabel Affymetrix ENCODE Extension Transcription (One-base window) (Testis) Sites
     priority 3
 
     track encodeAffyEc51TestisSites
     subTrack encodeAffyEcSites
     shortLabel EC51 Site Testis
-    longLabel Affymetrix ENCODE Extension (51-base window) (Testis) Sites
+    longLabel Affymetrix ENCODE Extension Transcription (51-base window) (Testis) Sites
     priority 4
 
     track encodeAffyEc1PlacentaSites
     subTrack encodeAffyEcSites
     shortLabel EC1 Sites Placen
-    longLabel Affymetrix ENCODE Extension (One-base window) (Placenta) Sites
+    longLabel Affymetrix ENCODE Extension Transcription (One-base window) (Placenta) Sites
     priority 5
 
     track encodeAffyEc51PlacentaSites
     subTrack encodeAffyEcSites
     shortLabel EC51 Site Placen
-    longLabel Affymetrix ENCODE Extension (51-base window) (Placenta) Sites
+    longLabel Affymetrix ENCODE Extension Transcription (51-base window) (Placenta) Sites
     priority 6
 
     track encodeAffyEc1FetalSpleenSites
     subTrack encodeAffyEcSites
     shortLabel EC1 Sites Spleen
-    longLabel Affymetrix ENCODE Extension (One-base window) (Fetal Spleen) Sites
+    longLabel Affymetrix ENCODE Extension Transcription (One-base window) (Fetal Spleen) Sites
     priority 7
 
     track encodeAffyEc51FetalSpleenSites
     subTrack encodeAffyEcSites
     shortLabel EC51 Site Spleen
-    longLabel Affymetrix ENCODE Extension (51-base window) (Fetal Spleen) Sites
+    longLabel Affymetrix ENCODE Extension Transcription (51-base window) (Fetal Spleen) Sites
     priority 8
 
     track encodeAffyEc1OvarySites
     subTrack encodeAffyEcSites
     shortLabel EC1 Sites Ovary
-    longLabel Affymetrix ENCODE Extension (One-base window) (Ovary) Sites
+    longLabel Affymetrix ENCODE Extension Transcription (One-base window) (Ovary) Sites
     priority 9
 
     track encodeAffyEc51OvarySites
     subTrack encodeAffyEcSites
     shortLabel EC51 Site Ovary
-    longLabel Affymetrix ENCODE Extension (51-base window) (Ovary) Sites
+    longLabel Affymetrix ENCODE Extension Transcription (51-base window) (Ovary) Sites
     priority 10
 
     track encodeAffyEc1BrainHypothalamusSites
     subTrack encodeAffyEcSites
     shortLabel EC1 Sites BrainH
-    longLabel Affymetrix ENCODE Extension (One-base window) (Brain Hypothalamus) Sites
+    longLabel Affymetrix ENCODE Extension Transcription (One-base window) (Brain Hypothalamus) Sites
     priority 11
 
     track encodeAffyEc51BrainHypothalamusSites
     subTrack encodeAffyEcSites
     shortLabel EC51 Site BrainH
-    longLabel Affymetrix ENCODE Extension (51-base window) (Brain Hypothalamus) Sites
+    longLabel Affymetrix ENCODE Extension Transcription (51-base window) (Brain Hypothalamus) Sites
     priority 12
 
     track encodeAffyEc1ProstateSites
     subTrack encodeAffyEcSites
     shortLabel EC1 Sites Prost
-    longLabel Affymetrix ENCODE Extension (One-base window) (Prostate) Sites
+    longLabel Affymetrix ENCODE Extension Transcription (One-base window) (Prostate) Sites
     priority 13
 
     track encodeAffyEc51ProstateSites
     subTrack encodeAffyEcSites
     shortLabel EC51 Site Prost
-    longLabel Affymetrix ENCODE Extension (51-base window) (Prostate) Sites
+    longLabel Affymetrix ENCODE Extension Transcription (51-base window) (Prostate) Sites
     priority 14
 
     track encodeAffyEc1HeLaS3Sites
     subTrack encodeAffyEcSites
     shortLabel EC1 Sites HeLaS3
-    longLabel Affymetrix ENCODE Extension (One-base window) (HeLa S3) Sites
+    longLabel Affymetrix ENCODE Extension Transcription (One-base window) (HeLa S3) Sites
     priority 15
 
     track encodeAffyEc51HeLaS3Sites
     subTrack encodeAffyEcSites
     shortLabel EC51 Site HeLaS3
-    longLabel Affymetrix ENCODE Extension (51-base window) (HeLa S3) Sites
+    longLabel Affymetrix ENCODE Extension Transcription (51-base window) (HeLa S3) Sites
     priority 16
 
     track encodeAffyEc1GM06990Sites
     subTrack encodeAffyEcSites
     shortLabel EC1 Sites GM0699
-    longLabel Affymetrix ENCODE Extension (One-base window) (GM06990) Sites
+    longLabel Affymetrix ENCODE Extension Transcription (One-base window) (GM06990) Sites
     priority 17
 
     track encodeAffyEc51GM06990Sites
     subTrack encodeAffyEcSites
     shortLabel EC51 Site GM0699
-    longLabel Affymetrix ENCODE Extension (51-base window) (GM06990) Sites
+    longLabel Affymetrix ENCODE Extension Transcription (51-base window) (GM06990) Sites
     priority 18
 
     track encodeAffyEc1HepG2Sites
     subTrack encodeAffyEcSites
     shortLabel EC1 Sites HepG2
-    longLabel Affymetrix ENCODE Extension (One-base window) (Hep G2) Sites
+    longLabel Affymetrix ENCODE Extension Transcription (One-base window) (Hep G2) Sites
     priority 19
 
     track encodeAffyEc51HepG2Sites
     subTrack encodeAffyEcSites
     shortLabel EC51 Site HepG2
-    longLabel Affymetrix ENCODE Extension (51-base window) (HepG2) Sites
+    longLabel Affymetrix ENCODE Extension Transcription (51-base window) (HepG2) Sites
     priority 20
 
     track encodeAffyEc1FetalKidneySites
     subTrack encodeAffyEcSites
     shortLabel EC1 Sites FetalK
-    longLabel Affymetrix ENCODE Extension (One-base window) (Fetal Kidney) Sites
+    longLabel Affymetrix ENCODE Extension Transcription (One-base window) (Fetal Kidney) Sites
     priority 21
 
     track encodeAffyEc51FetalKidneySites
     subTrack encodeAffyEcSites
     shortLabel EC51 Site FetalK
-    longLabel Affymetrix ENCODE Extension (51-base window) (Fetal Kidney) Sites
+    longLabel Affymetrix ENCODE Extension Transcription (51-base window) (Fetal Kidney) Sites
     priority 22
 
     track encodeAffyEc1BrainHippocampusSites
     subTrack encodeAffyEcSites
     shortLabel EC1 Sites Hippoc
-    longLabel Affymetrix ENCODE Extension (One-base window) (Hippocampus) Sites
+    longLabel Affymetrix ENCODE Extension Transcription (One-base window) (Hippocampus) Sites
     priority 23
 
     track encodeAffyEc51BrainHippocampusSites
     subTrack encodeAffyEcSites
     shortLabel EC51 Site Hippoc
-    longLabel Affymetrix ENCODE Extension (51-base window) (Brain Hippocampus) Sites
+    longLabel Affymetrix ENCODE Extension Transcription (51-base window) (Brain Hippocampus) Sites
     priority 24
 
     track encodeAffyEc1K562Sites
     subTrack encodeAffyEcSites
     shortLabel EC1 Sites K562
-    longLabel Affymetrix ENCODE Extension (One-base window) (K562) Sites
+    longLabel Affymetrix ENCODE Extension Transcription (One-base window) (K562) Sites
     priority 25
 
     track encodeAffyEc51K562Sites
     subTrack encodeAffyEcSites
     shortLabel EC51 Site K562
-    longLabel Affymetrix ENCODE Extension (51-base window) (K562) Sites
+    longLabel Affymetrix ENCODE Extension Transcription (51-base window) (K562) Sites
     priority 26
 
     track encodeAffyEc1BrainCerebelumSites
     subTrack encodeAffyEcSites
     shortLabel EC1 Sites BrainC
-    longLabel Affymetrix ENCODE Extension (One-base window) (Brain Cerebelum) Sites
+    longLabel Affymetrix ENCODE Extension Transcription (One-base window) (Brain Cerebelum) Sites
     priority 27
 
     track encodeAffyEc51BrainCerebelumSites
     subTrack encodeAffyEcSites
     shortLabel EC51 Site BrainC
-    longLabel Affymetrix ENCODE Extension (51-base window) (Brain Cerebellum) Sites
+    longLabel Affymetrix ENCODE Extension Transcription (51-base window) (Brain Cerebellum) Sites
     priority 28
 
     track encodeAffyEc1TertBJSites
     subTrack encodeAffyEcSites
     shortLabel EC1 Sites TertBJ
-    longLabel Affymetrix ENCODE Extension (One-base window) (Tert-BJ) Sites
+    longLabel Affymetrix ENCODE Extension Transcription (One-base window) (Tert-BJ) Sites
     priority 29
 
     track encodeAffyEc51TertBJSites
     subTrack encodeAffyEcSites
     shortLabel EC51 Site TertBJ
-    longLabel Affymetrix ENCODE Extension (51-base window) (Tert-BJ) Sites
+    longLabel Affymetrix ENCODE Extension Transcription (51-base window) (Tert-BJ) Sites
     priority 30
 
     track encodeAffyEc1BrainFrontalLobeSites
     subTrack encodeAffyEcSites
     shortLabel EC1 Sites BrainF
-    longLabel Affymetrix ENCODE Extension (One-base window) (Brain Frontal Lobe) Sites
+    longLabel Affymetrix ENCODE Extension Transcription (One-base window) (Brain Frontal Lobe) Sites
     priority 31    
 
     track encodeAffyEc51BrainFrontalLobeSites
     subTrack encodeAffyEcSites
     shortLabel EC51 Site BrainF
-    longLabel Affymetrix ENCODE Extension (51-base window) (Brain Frontal Lobe) Sites
+    longLabel Affymetrix ENCODE Extension Transcription (51-base window) (Brain Frontal Lobe) Sites
     priority 32    
 
 track encodeAffyEcSignal
 compositeTrack on
 shortLabel Affy EC Signal
-longLabel Affymetrix ENCODE Extension Signal
+longLabel Affymetrix ENCODE Extension Transcription Signal
 priority 31.2
 group encodeTxLevels
 visibility hide
@@ -1298,193 +1298,193 @@ type wig 0 1000
     track encodeAffyEc1FetalThymusSignal
     subTrack encodeAffyEcSignal
     shortLabel EC1 Sig FetalT
-    longLabel Affymetrix ENCODE Extension (One-base window) (Fetal Thymus) Signal
+    longLabel Affymetrix ENCODE Extension Transcription (One-base window) (Fetal Thymus) Signal
     priority 1
 
     track encodeAffyEc51FetalThymusSignal
     subTrack encodeAffyEcSignal
     shortLabel EC51 Sig FetalT
-    longLabel Affymetrix ENCODE Extension (51-base window) (Fetal Thymus) Signal
+    longLabel Affymetrix ENCODE Extension Transcription (51-base window) (Fetal Thymus) Signal
     priority 2
 
     track encodeAffyEc1TestisSignal
     subTrack encodeAffyEcSignal
     shortLabel EC1 Sig Testis
-    longLabel Affymetrix ENCODE Extension (One-base window) (Testis) Signal
+    longLabel Affymetrix ENCODE Extension Transcription (One-base window) (Testis) Signal
     priority 3
 
     track encodeAffyEc51TestisSignal
     subTrack encodeAffyEcSignal
     shortLabel EC51 Sig Testis
-    longLabel Affymetrix ENCODE Extension (51-base window) (Testis) Signal
+    longLabel Affymetrix ENCODE Extension Transcription (51-base window) (Testis) Signal
     priority 4
 
     track encodeAffyEc1PlacentaSignal
     subTrack encodeAffyEcSignal
     shortLabel EC1 Sig Placen
-    longLabel Affymetrix ENCODE Extension (One-base window) (Placenta) Signal
+    longLabel Affymetrix ENCODE Extension Transcription (One-base window) (Placenta) Signal
     priority 5
 
     track encodeAffyEc51PlacentaSignal
     subTrack encodeAffyEcSignal
     shortLabel EC51 Sig Placen
-    longLabel Affymetrix ENCODE Extension (51-base window) (Placenta) Signal
+    longLabel Affymetrix ENCODE Extension Transcription (51-base window) (Placenta) Signal
     priority 6
 
     track encodeAffyEc1FetalSpleenSignal
     subTrack encodeAffyEcSignal
     shortLabel EC1 Sig Spleen
-    longLabel Affymetrix ENCODE Extension (One-base window) (Fetal Spleen) Signal
+    longLabel Affymetrix ENCODE Extension Transcription (One-base window) (Fetal Spleen) Signal
     priority 7
 
     track encodeAffyEc51FetalSpleenSignal
     subTrack encodeAffyEcSignal
     shortLabel EC51 Sig Spleen
-    longLabel Affymetrix ENCODE Extension (51-base window) (Fetal Spleen) Signal
+    longLabel Affymetrix ENCODE Extension Transcription (51-base window) (Fetal Spleen) Signal
     priority 8
 
     track encodeAffyEc1OvarySignal
     subTrack encodeAffyEcSignal
     shortLabel EC1 Sig Ovary
-    longLabel Affymetrix ENCODE Extension (One-base window) (Ovary) Signal
+    longLabel Affymetrix ENCODE Extension Transcription (One-base window) (Ovary) Signal
     priority 9
 
     track encodeAffyEc51OvarySignal
     subTrack encodeAffyEcSignal
     shortLabel EC51 Sig Ovary
-    longLabel Affymetrix ENCODE Extension (51-base window) (Ovary) Signal
+    longLabel Affymetrix ENCODE Extension Transcription (51-base window) (Ovary) Signal
     priority 10
 
     track encodeAffyEc1BrainHypothalamusSignal
     subTrack encodeAffyEcSignal
     shortLabel EC1 Sig BrainH
-    longLabel Affymetrix ENCODE Extension (One-base window) (Brain Hypothalamus) Signal
+    longLabel Affymetrix ENCODE Extension Transcription (One-base window) (Brain Hypothalamus) Signal
     priority 11
 
     track encodeAffyEc51BrainHypothalamusSignal
     subTrack encodeAffyEcSignal
     shortLabel EC51 Sig BrainH
-    longLabel Affymetrix ENCODE Extension (51-base window) (Brain Hypothalamus) Signal
+    longLabel Affymetrix ENCODE Extension Transcription (51-base window) (Brain Hypothalamus) Signal
     priority 12
 
     track encodeAffyEc1ProstateSignal
     subTrack encodeAffyEcSignal
     shortLabel EC1 Sig Prost
-    longLabel Affymetrix ENCODE Extension (One-base window) (Prostate) Signal
+    longLabel Affymetrix ENCODE Extension Transcription (One-base window) (Prostate) Signal
     priority 13
 
     track encodeAffyEc51ProstateSignal
     subTrack encodeAffyEcSignal
     shortLabel EC51 Sig Prost
-    longLabel Affymetrix ENCODE Extension (51-base window) (Prostate) Signal
+    longLabel Affymetrix ENCODE Extension Transcription (51-base window) (Prostate) Signal
     priority 14
 
     track encodeAffyEc1HeLaS3Signal
     subTrack encodeAffyEcSignal
     shortLabel EC1 Sig HeLaS3
-    longLabel Affymetrix ENCODE Extension (One-base window) (HeLa S3) Signal
+    longLabel Affymetrix ENCODE Extension Transcription (One-base window) (HeLa S3) Signal
     priority 15
 
     track encodeAffyEc51HeLaS3Signal
     subTrack encodeAffyEcSignal
     shortLabel EC51 Sig HeLaS3
-    longLabel Affymetrix ENCODE Extension (51-base window) (HeLa S3) Signal
+    longLabel Affymetrix ENCODE Extension Transcription (51-base window) (HeLa S3) Signal
     priority 16
 
     track encodeAffyEc1GM06990Signal
     subTrack encodeAffyEcSignal
     shortLabel EC1 Sig GM0699
-    longLabel Affymetrix ENCODE Extension (One-base window) (GM06990) Signal
+    longLabel Affymetrix ENCODE Extension Transcription (One-base window) (GM06990) Signal
     priority 17
 
     track encodeAffyEc51GM06990Signal
     subTrack encodeAffyEcSignal
     shortLabel EC51 Sig GM0699
-    longLabel Affymetrix ENCODE Extension (51-base window) (GM06990) Signal
+    longLabel Affymetrix ENCODE Extension Transcription (51-base window) (GM06990) Signal
     priority 18
 
     track encodeAffyEc1HepG2Signal
     subTrack encodeAffyEcSignal
     shortLabel EC1 Sig HepG2
-    longLabel Affymetrix ENCODE Extension (One-base window) (Hep-G2) Signal
+    longLabel Affymetrix ENCODE Extension Transcription (One-base window) (Hep-G2) Signal
     priority 19
 
     track encodeAffyEc51HepG2Signal
     subTrack encodeAffyEcSignal
     shortLabel EC51 Sig HepG2
-    longLabel Affymetrix ENCODE Extension (51-base window) (Hep-G2) Signal
+    longLabel Affymetrix ENCODE Extension Transcription (51-base window) (Hep-G2) Signal
     priority 20
 
     track encodeAffyEc1FetalKidneySignal
     subTrack encodeAffyEcSignal
     shortLabel EC1 Sig FetalK
-    longLabel Affymetrix ENCODE Extension (One-base window) (Fetal Kidney) Signal
+    longLabel Affymetrix ENCODE Extension Transcription (One-base window) (Fetal Kidney) Signal
     priority 21
 
     track encodeAffyEc51FetalKidneySignal
     subTrack encodeAffyEcSignal
     shortLabel EC51 Sig FetalK
-    longLabel Affymetrix ENCODE Extension (51-base window) (Fetal Kidney) Signal
+    longLabel Affymetrix ENCODE Extension Transcription (51-base window) (Fetal Kidney) Signal
     priority 22
 
     track encodeAffyEc1BrainHippocampusSignal
     subTrack encodeAffyEcSignal
     shortLabel EC1 Sig Hippoc
-    longLabel Affymetrix ENCODE Extension (One-base window) (Brain Hippocampus) Signal
+    longLabel Affymetrix ENCODE Extension Transcription (One-base window) (Brain Hippocampus) Signal
     priority 23
 
     track encodeAffyEc51BrainHippocampusSignal
     subTrack encodeAffyEcSignal
     shortLabel EC51 Sig Hippoc
-    longLabel Affymetrix ENCODE Extension (51-base window) (Brain Hippocampus) Signal
+    longLabel Affymetrix ENCODE Extension Transcription (51-base window) (Brain Hippocampus) Signal
     priority 24
 
     track encodeAffyEc1K562Signal
     subTrack encodeAffyEcSignal
     shortLabel EC1 Sig K562
-    longLabel Affymetrix ENCODE Extension (One-base window) (K562) Signal
+    longLabel Affymetrix ENCODE Extension Transcription (One-base window) (K562) Signal
     priority 25
 
     track encodeAffyEc51K562Signal
     subTrack encodeAffyEcSignal
     shortLabel EC51 Sig K562
-    longLabel Affymetrix ENCODE Extension (51-base window) (K562) Signal
+    longLabel Affymetrix ENCODE Extension Transcription (51-base window) (K562) Signal
     priority 26
 
     track encodeAffyEc1BrainCerebelumSignal
     subTrack encodeAffyEcSignal
     shortLabel EC1 Sig BrainC
-    longLabel Affymetrix ENCODE Extension (One-base window) (Brain Cerebelum) Signal
+    longLabel Affymetrix ENCODE Extension Transcription (One-base window) (Brain Cerebelum) Signal
     priority 27
 
     track encodeAffyEc51BrainCerebelumSignal
     subTrack encodeAffyEcSignal
     shortLabel EC51 Sig BrainC
-    longLabel Affymetrix ENCODE Extension (51-base window) (Brain Cerebelum) Signal
+    longLabel Affymetrix ENCODE Extension Transcription (51-base window) (Brain Cerebelum) Signal
     priority 28
 
     track encodeAffyEc1TertBJSignal
     subTrack encodeAffyEcSignal
     shortLabel EC1 Sig TertBJ
-    longLabel Affymetrix ENCODE Extension (One-base window) (Tert-BJ) Signal
+    longLabel Affymetrix ENCODE Extension Transcription (One-base window) (Tert-BJ) Signal
     priority 29
 
     track encodeAffyEc51TertBJSignal
     subTrack encodeAffyEcSignal
     shortLabel EC51 Sig TertBJ
-    longLabel Affymetrix ENCODE Extension (51-base window) (Tert-BJ) Signal
+    longLabel Affymetrix ENCODE Extension Transcription (51-base window) (Tert-BJ) Signal
     priority 30
 
     track encodeAffyEc1BrainFrontalLobeSignal
     subTrack encodeAffyEcSignal
     shortLabel EC1 Sig BrainF
-    longLabel Affymetrix ENCODE Extension (One-base window) (Brain Frontal Lobe) Signal
+    longLabel Affymetrix ENCODE Extension Transcription (One-base window) (Brain Frontal Lobe) Signal
     priority 31    
 
     track encodeAffyEc51BrainFrontalLobeSignal
     subTrack encodeAffyEcSignal
     shortLabel EC51 Sig BrainF
-    longLabel Affymetrix ENCODE Extension (51-base window) (Brain Frontal Lobe) Signal
+    longLabel Affymetrix ENCODE Extension Transcription (51-base window) (Brain Frontal Lobe) Signal
     priority 32    
 
 track encodeAffyChIpHl60Pval

@@ -8,7 +8,7 @@
 #include "hgGene.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: domains.c,v 1.19 2007/09/12 17:38:56 hiram Exp $";
+static char const rcsid[] = "$Id: domains.c,v 1.23 2007/12/20 01:01:40 fanhsu Exp $";
 
 static boolean domainsExists(struct section *section, 
 	struct sqlConnection *conn, char *geneId)
@@ -21,7 +21,8 @@ return swissProtAcc != NULL;
 void modBaseAnchor(char *swissProtAcc)
 /* Print out anchor to modBase. */
 {
-hPrintf("<A HREF=\"http://salilab.org/modbase-cgi/model_search.cgi?searchkw=name&kword=%s\" TARGET=_blank>", swissProtAcc);
+hPrintf("<A HREF=\"http://salilab.org/modbase/search?databaseID=%s\" TARGET=_blank>", swissProtAcc);
+//hPrintf("<A HREF=\"http://salilab.org/modbase-cgi/model_search.cgi?searchkw=name&kword=%s\" TARGET=_blank>", swissProtAcc);
 }
 
 static void domainsPrint(struct section *section, 
@@ -195,6 +196,7 @@ doSamT02(swissProtAcc, database);
     modBaseAnchor(swissProtAcc);
     hPrintf("%s", swissProtAcc);
     hPrintf("</A></B><BR>\n");
+
     hPrintf("<TABLE><TR>");
     hPrintf("<TD>");
     modBaseAnchor(swissProtAcc);

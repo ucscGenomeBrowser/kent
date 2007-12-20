@@ -4,7 +4,7 @@
 # This file describes browser build for the Marmoset
 # genome, July 2007
 #
-#	"$Id: calJac1.txt,v 1.2 2007/09/08 00:03:05 hiram Exp $"
+#	"$Id: calJac1.txt,v 1.4 2007/11/21 20:18:29 hiram Exp $"
 #
 ######################################################################
 ## DOWNLOAD SEQUENCE (DONE - 2007-08-21 - Hiram)
@@ -67,7 +67,7 @@ dbDbSpeciesDir marmoset
     # add the trackDb files to the source tree and to the trackDb/makefile
 
 ##########################################################################
-## Repeat masker (WORKING - 2007-08-21 - Hiram)
+## Repeat masker (DONE - 2007-08-21 - Hiram)
     ssh kkstore06
     ## use screen for this
     mkdir /cluster/data/calJac1/bed/RepeatMasker
@@ -189,3 +189,261 @@ done
 	    hgcentraltest
     #	test it with some sequence
 
+#########################################################################
+## genscan run (DONE - 2007-11-08 - Hiram)
+##	create hard masked sequence
+    ssh kkstore06
+    cd /cluster/data/calJac1
+    twoBitToFa calJac1.2bit stdout \
+	| maskOutFa stdin hard stdout | faToTwoBit stdin calJac1.hard.2bit
+    #	And, make sure there aren't any sequences in this lot that have
+    #	become all N's with no sequence left in them.  This drives genscan nuts
+    twoBitToFa calJac1.hard.2bit stdout \
+	| faCount stdin > faCount.hard.txt
+    #	the lowest three are:
+    egrep -v "^#|^total" faCount.hard.txt \
+	| awk '{print $1,$2-$7}' | sort -k2,2nr | tail -3
+    #	there are a lot of these that turned into zero sequence left
+    #	will sort this out when making the sequence to use on the Iservers
+
+    ssh kkr1u00
+    mkdir /iscratch/i/calJac1/hardMasked
+    cd /iscratch/i/calJac1/hardMasked
+    twoBitToFa /cluster/data/calJac1/calJac1.hard.2bit stdout \
+	| faSplit byname stdin ./
+    #	more than 128 bases of sequence results in the removal of 1,208
+    #	sequences that are too short, leaving 48,516 sequences
+    egrep -v "^#|^total" /cluster/data/calJac1/faCount.hard.txt \
+	| awk '{size=$2-$7; if (size < 128) {print $1}}' | while read F
+do
+    rm -f "${F}.fa"
+    echo "${F}.fa"
+done
+    mkdir ../hardChunks
+    cd ../hardChunks
+    
+    #	chunk them up into 4,000,000 base packages, no sequence is broken
+    catDir ../hardMasked \
+	| faSplit about stdin 4000000 c_
+    rm -fr ../hardMasked
+
+    for R in 2 3 4 5 6 7 8
+do
+    rsync -a --progress ./ kkr${R}u00:/iscratch/i/calJac1/hardChunks/
+done
+
+    ssh hgwdev
+    mkdir /cluster/data/calJac1/bed/genscan
+    cd /cluster/data/calJac1/bed/genscan
+    # Check out hg3rdParty/genscanlinux to get latest genscan:
+    cvs co hg3rdParty/genscanlinux
+
+    # Run on small cluster (more mem than big cluster).
+    ssh kki
+    cd /cluster/data/calJac1/bed/genscan
+    # Make 3 subdirectories for genscan to put their output files in
+    mkdir gtf pep subopt
+    # Generate a list file, genome.list, of all the hard-masked contigs that 
+    # *do not* consist of all-N's (which would cause genscan to blow up)
+    #	Since we split on gaps, we have no chunks like that.  You can
+    #	verify with faCount on the chunks.
+    ls -1Sr /iscratch/i/calJac1/hardChunks/c_*.fa > genome.list
+
+    # Create script to run gsBig
+    cat << '_EOF_' > runGsBig
+#!/bin/csh -fe
+set runDir = `pwd`
+set srcDir = $1
+set inFile = $2
+set fileRoot = $inFile:r
+mkdir /scratch/tmp/$fileRoot
+cp -p $srcDir/$inFile /scratch/tmp/$fileRoot
+pushd /scratch/tmp/$fileRoot
+/cluster/bin/x86_64/gsBig $inFile $fileRoot.gtf -trans=$fileRoot.pep -subopt=$fileRoot.bed -exe=$runDir/hg3rdParty/genscanlinux/genscan -par=$runDir/hg3rdParty/genscanlinux/HumanIso.smat -tmp=/scratch/tmp -window=2400000
+popd
+cp -p /scratch/tmp/$fileRoot/$fileRoot.gtf gtf
+cp -p /scratch/tmp/$fileRoot/$fileRoot.pep pep
+cp -p /scratch/tmp/$fileRoot/$fileRoot.bed subopt
+rm -fr /scratch/tmp/$fileRoot
+'_EOF_'
+    # << happy emacs
+    chmod +x runGsBig
+
+    #	template file for gensub2
+    cat << '_EOF_' > template
+#LOOP
+runGsBig /iscratch/i/calJac1/hardChunks $(file1) {check out line gtf/$(root1).gtf} {check out line pep/$(root1).pep} {check out line subopt/$(root1).bed} 
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    gensub2 genome.list single template jobList
+    para create jobList
+    para try, check, push, check, ...
+# Completed: 720 of 720 jobs
+# CPU time in finished jobs:      55325s     922.09m    15.37h    0.64d  0.002 y
+# IO & Wait Time:                  2063s      34.38m     0.57h    0.02d  0.000 y
+# Average job time:                  80s       1.33m     0.02h    0.00d
+# Longest finished job:             132s       2.20m     0.04h    0.00d
+# Submission to last job:         65396s    1089.93m    18.17h    0.76d
+
+    # cat and lift the results into single files
+    ssh kkstore06
+    cd /cluster/data/calJac1/bed/genscan
+    cat gtf/c_*.gtf > genscan.gtf
+    cat subopt/c_*.bed > genscanSubopt.bed
+    cat pep/c_*.pep > genscan.pep
+
+    # Load into the database as so:
+    ssh hgwdev
+    cd /cluster/data/calJac1/bed/genscan
+    ldHgGene calJac1 -gtf genscan genscan.gtf
+    #	Read 64005 transcripts in 344791 lines in 1 files
+    #	64005 groups 23602 seqs 1 sources 1 feature types
+    #	64005 gene predictions
+
+    hgPepPred calJac1 generic genscanPep genscan.pep
+    hgLoadBed calJac1 genscanSubopt genscanSubopt.bed
+    #	Loaded 576960 elements of size 6
+
+    #	check the numbers
+    time nice -n +19 featureBits calJac1 genscan
+    #	59205113 bases of 2929139385 (2.021%) in intersection
+    #	the next closest genome with a genscan track
+    time nice -n +19 featureBits panTro2 genscan
+    #	53758386 bases of 2909485072 (1.848%) in intersection
+    time nice -n +19 featureBits mm9 genscan
+    #	55293837 bases of 2620346127 (2.110%) in intersection
+
+############################################################################
+# GENBANK AUTO UPDATE (DONE - 2007-11-21 - Hiram)
+    #	Create a lift file as per the procedures for Chimp from the AGP:
+    ssh kolossus
+    cd /cluster/data/calJac1
+    # MAKE 11.OOC FILE FOR BLAT
+    blat calJac1.2bit \
+	 /dev/null /dev/null -tileSize=11 -makeOoc=11.ooc -repMatch=1024
+    #	Wrote 34303 overused 11-mers to 11.ooc
+
+    # align with latest genbank process.
+    ssh hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+    # edit etc/genbank.conf to add calJac1 just after panTro2
+    # calJac1
+# Marmoset
+calJac1.serverGenome = /cluster/data/calJac1/calJac1.2bit
+calJac1.clusterGenome = /scratch/data/calJac1/calJac1.2bit
+calJac1.ooc = /cluster/data/calJac1/calJac1/11.ooc
+calJac1.lift = no
+calJac1.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+calJac1.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+calJac1.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+calJac1.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+calJac1.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+calJac1.genbank.est.xeno.pslCDnaFilter    = ${ordered.genbank.est.xeno.pslCDnaFilter}
+calJac1.downloadDir = calJac1
+calJac1.genbank.est.xeno.load = no
+calJac1.refseq.mrna.native.load  = yes
+calJac1.refseq.mrna.xeno.load = yes
+calJac1.refseq.mrna.xeno.loadDesc  = yes
+
+    cvs ci -m "Added calJac1." etc/genbank.conf
+    # update /cluster/data/genbank/:
+    make etc-update
+
+    # Edit src/lib/gbGenome.c to add new species.  With these two lines:
+    #	static char *calJacNames[] = {"Callithrix jacchus", NULL};
+    #	{"calJac", calJacNames},
+
+    cvs ci -m "Added Callithrix jacchus (Marmoset)." src/lib/gbGenome.c
+    make install-server
+
+    ssh genbank
+    screen  # control this business with a screen since it takes a while
+    cd /cluster/data/genbank
+
+    # This is a call to a script that will push our jobs out to the cluster
+    # since it's a big job.  
+    time nice -n +19 bin/gbAlignStep -initial calJac1 &
+    # logFile: var/build/logs/2007.11.20-11:31:54.calJac1.initalign.log
+    #	real    607m38.957s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad calJac1
+    #	logFile: var/dbload/hgwdev/logs/2007.11.21-09:30:23.dbload.log
+    #	real    88m19.420s
+
+    # enable daily alignment and update of hgwdev (DONE - 2007-11-21 - Hiram)
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+    # add calJac1 to:
+        etc/align.dbs
+        etc/hgwdev.dbs
+    cvs ci -m "Added calJac1." etc/align.dbs etc/hgwdev.dbs
+    make etc-update
+
+#########################################################################
+# Blastz Platypus ornAna1 (DONE - 2007-11-14 - Hiram)
+#	this was done a second time, see ornAna1.txt for the second run
+#	since this run produced a null result for some unknown reason.
+    ssh kkstore06
+    screen # use screen to control this job
+    mkdir /cluster/data/calJac1/bed/blastzOrnAna1.2007-11-14
+    cd /cluster/data/calJac1/bed/blastzOrnAna1.2007-11-14
+
+    cat << '_EOF_' > DEF
+# Orangutan vs. platypus
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+BLASTZ_M=50
+
+# QUERY: Marmoset calJac1
+SEQ1_DIR=/cluster/bluearc/scratch/data/calJac1/calJac1.2bit
+SEQ1_LEN=/cluster/data/calJac1/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ2_LIMIT=400
+SEQ1_LAP=0
+
+# QUERY: Platypus ornAna1
+SEQ2_DIR=/cluster/bluearc/scratch/data/ornAna1/ornAna1.2bit
+SEQ2_LEN=/cluster/data/ornAna1/chrom.sizes
+SEQ2_CHUNK=40000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/cluster/data/calJac1/bed/blastzOrnAna1.2007-11-14
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl DEF -chainMinScore=5000 \
+	-chainLinearGap=loose -bigClusterHub=pk -verbose=2 > do.log 2>&1 &
+    #	real    1927m20.962s - to the first pk crash
+    #	this was a tough job to get finished.  Several pk crashes,
+    #	problems with garbage in the para.results file, and so forth.
+    #	But, it did finish as of Monday afternoon 2007-11-19
+# Completed: 899536 of 900180 jobs
+# Crashed: 644 jobs
+# CPU time in finished jobs:  131663141s 2194385.68m 36573.09h 1523.88d  4.175 y
+# IO & Wait Time:              12592457s  209874.29m  3497.90h  145.75d  0.399 y
+# Average job time:                 160s       2.67m     0.04h    0.00d
+# Longest finished job:            1795s      29.92m     0.50h    0.02d
+# Submission to last job:        440290s    7338.17m   122.30h    5.10d
+    #	despite the '644 jobs' crashed, they are actually done and all results
+    #	are complete
+
+    #	continuing:
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	-continue=cat -bigClusterHub=pk > cat.log 2>&1 &
+    #	real    31m45.069s
+    cat fb.calJac1.chainOrnAna1Link.txt
+    #	0 bases of 2929139385 (0.000%) in intersection
+XXXX something went wrong, there are no results !  Everything is empty
+
+###########################################################################

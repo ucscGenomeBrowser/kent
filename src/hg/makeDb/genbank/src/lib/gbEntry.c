@@ -8,7 +8,7 @@
 #include "localmem.h"
 #include "hash.h"
 
-static char const rcsid[] = "$Id: gbEntry.c,v 1.4 2007/04/20 04:37:44 markd Exp $";
+static char const rcsid[] = "$Id: gbEntry.c,v 1.5 2007/11/17 22:33:36 markd Exp $";
 
 struct gbEntry* gbEntryNew(struct gbRelease* release, char* acc, unsigned type)
 /* allocate a new gbEntry object and add it to the release*/
@@ -154,13 +154,15 @@ return aligned;
 }
 
 struct gbAligned* gbEntryGetAligned(struct gbEntry* entry,
-                                    struct gbUpdate* update, int version)
+                                    struct gbUpdate* update, int version,
+                                    boolean *created)
 /* Get an aligned entry for a specific version, creating a new one if not
  * found */
 {
 struct gbAligned* aligned = entry->aligned;
 struct gbAligned* prev = NULL;
-
+if (created != NULL)
+    *created = FALSE;
 while ((aligned != NULL) && (version < aligned->version))
     {
     prev = aligned;
@@ -183,6 +185,8 @@ if ((aligned == NULL) || (aligned->update != update)
         aligned->next = prev->next;
         prev->next = aligned;
         }
+    if (created != NULL)
+        *created = TRUE;
     }
 return aligned;
 }

@@ -45,4 +45,7 @@ extern char *gvColorDADefault[];
 extern char *gvColorDAAttrVal[];
 extern int gvColorDASize;
 
+void gvDisclaimer ();
+/* displays page with disclaimer forwarding query string that got us here */
+
 #endif

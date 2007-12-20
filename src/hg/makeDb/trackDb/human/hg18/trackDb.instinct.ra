@@ -5,13 +5,15 @@ group x
 priority 920
 visibility hide
 type expRatio
-expScale 1.5
+expScale 1.0
 expStep 0.2
 groupings ispyMipCGHGroups
-patDb ispy
+patDb ispy1
+patId trackId
 patTable labTrack
 patKey ispyId
-aliasTable probeAliases2
+aliasTable probeAliases
+setsTable genesets
 
 track ispyAgiExp
 shortLabel ispy gene expression by agilent
@@ -23,10 +25,48 @@ type expRatio
 expScale 2.0
 expStep 0.2
 groupings ispyAgiExpGroups
-patDb ispy
+patDb ispy1
+patId trackId
 patTable labTrack
 patKey ispyId
-aliasTable probeAliases2
+aliasTable probeAliases
+setsTable genesets
+
+track ispyAgiExpT1
+shortLabel ispy gene expression TP= T1 by agilent
+longLabel ispy gene expression time point=T1 measured on agilent whole genome array 44K
+group x
+priority 920
+visibility hide
+type expRatio
+expScale 2.0
+expStep 0.2
+groupings ispyAgiExpT1Groups
+patDb ispy1
+patId trackId
+patTable labTrack
+patKey ispyId
+aliasTable probeAliases
+setsTable genesets
+
+track ISPYproteomics
+shortLabel ispy proteomics
+longLabel ispy proteomics
+group x
+priority 920
+visibility hide
+type expRatio
+expScale 5.0
+expStep 0.2
+groupings ISPYproteomicsGroups
+patDb ispy1
+patId trackId
+patTable proteomicsTrack
+patKey ispyId
+aliasTable probeAliases
+setsTable genesets
+
+#TCGA
 
 track mskccCGH
 shortLabel TCGA GBM mskccCGH
@@ -37,7 +77,12 @@ type expRatio
 expScale 0.4
 expStep 0.05
 groupings mskccCGHGroups
+patTable sampleInfo
+patId sampleId
+patKey subjId 
 patDb tcga1
+aliasTable mskccCGHProbes
+setsTable genesets
 
 track harvardCGH
 shortLabel TCGA GBM harvardCGH
@@ -48,4 +93,46 @@ type expRatio
 expScale 1.0
 expStep 0.1
 groupings harvardCGHGroups
+patTable sampleInfo
+patId sampleId
+patKey subjId 
 patDb tcga1
+aliasTable harvardCGHProbes
+setsTable genesets
+
+track uncAgiExp
+shortLabel TCGA GBM uncAgiExp
+longLabel TCGA GBM unc Agilent Expression array 4x44k
+group x
+visibility hide
+type expRatio
+expScale 1.0
+expStep 0.1  
+groupings uncAgiExpGroups
+patTable sampleInfo
+patId sampleId
+patKey subjId
+patDb tcga1
+aliasTable uncAgiExpProbes
+setsTable genesets
+
+track broadAffyExp
+shortLabel TCGA GBM broadAffyExp
+longLabel TCGA GBM Broad Affymetrix Expression array U133A
+group x
+visibility hide
+type expRatio
+expScale 3.0
+expStep 0.2
+groupings broadAffyExpGroups
+patTable sampleInfo
+patId sampleId
+patKey subjId
+patDb tcga1
+
+track CaMPScoreExternal
+shortLabel CaMPScoreExternal 
+longLabel CaMPScoreExternal Science 2007 volelstein
+group x
+visibility hide
+type bed

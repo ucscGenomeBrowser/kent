@@ -75,13 +75,17 @@ select->orgCats = orgCat;
 safef(baseName, sizeof(baseName), "%s.gz", gGetWhat);
 gbAlignedGetPath(select, baseName, NULL, inPsl);
 
-inPslLf = gzLineFileOpen(inPsl); 
-while ((psl = pslNext(inPslLf)) != NULL)
+// if there are no intronPsls, file doesn't exist, so skip
+if (sameString(gGetWhat, "psl") || fileExists(inPsl))
     {
-    processPsl(select, psl);
-    pslFree(&psl);
+    inPslLf = gzLineFileOpen(inPsl); 
+    while ((psl = pslNext(inPslLf)) != NULL)
+        {
+        processPsl(select, psl);
+        pslFree(&psl);
+        }
+    gzLineFileClose(&inPslLf);
     }
-gzLineFileClose(&inPslLf);
 select->orgCats = orgCatsHold;
 }
 

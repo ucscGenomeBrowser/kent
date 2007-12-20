@@ -41,7 +41,7 @@ label PAHdb
 acc yes
 
 name BGMUT
-url http://www.ncbi.nlm.nih.gov/projects/mhc/xslcgi.fcgi?cmd=bgmut/allele_details&id=%s
+url http://www.ncbi.nlm.nih.gov/gv/mhc/xslcgi.cgi?cmd=bgmut/allele_details&id=%s
 label BGMUT
 acc yes
 
@@ -123,6 +123,16 @@ acc yes
 name RISN
 label RISN Mutation Database
 url http://www.retina-international.org/sci-news/%s
+acc yes
+
+name ADM
+label AD&FTD Mutation Database
+url http://www.molgen.ua.ac.be/ADMutations/Default.cfm?MT=1&ML=0&Page=Mutations&ID=%s
+acc yes
+
+name HIFD
+label HIFD
+url http://www.interfil.org/searchKeywords.php?mutation_columns=yes&task=search&submit=Search%s
 acc yes
 
 name KinMutBase

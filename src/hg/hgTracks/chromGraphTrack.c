@@ -124,7 +124,7 @@ else
 
 hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", xOff, yOff, xOff+width,
 	yOff+height);
-hPrintf("HREF=\"%s&o=%d&t=%d&g=%s&c=%s&l=%d&r=%d&db=%s&pix=%d\" ", 
+hPrintf("HREF=\"%s&o=%d&t=%d&g=%s&c=%s&l=%d&r=%d&db=%s&pix=%d\">\n", 
 	    hgcNameAndSettings(), winStart, winEnd, encodedTrack, chromName, winStart, winEnd, 
 	    database, tl.picWidth);
 }

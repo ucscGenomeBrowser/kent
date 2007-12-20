@@ -3167,4 +3167,156 @@ TMPDIR=/scratch/tmp
       -bigClusterHub=pk  -chainMinScore=5000 -chainLinearGap=loose \
       >& blastz.out 2>&1 &
 
+##############################################################################
+# Blastz Orangutan ponAbe2 (DONE - 2007-11-26 - Hiram)
+    ssh kkstore04
+    #	managing disk space on full filesystem
+    mkdir /cluster/store8/monDom4/bed/blastzPonAbe2.2007-11-22
+    ln -s /cluster/store8/monDom4/bed/blastzPonAbe2.2007-11-22 \
+	/cluster/data/monDom4/bed
+    cd /cluster/data/monDom4/bed/blastzPonAbe2.2007-11-22
 
+    screen # use screen to control this job
+    mkdir /cluster/data/ponAbe2/bed/blastzOrnAna1.2007-11-13
+    cd /cluster/data/ponAbe2/bed/blastzOrnAna1.2007-11-13
+
+    cat << '_EOF_' > DEF
+# Opossum vs. Orangutan
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+BLASTZ_M=50
+
+# TARGET: Opossum MonDom4
+SEQ1_DIR=/san/sanvol1/scratch/monDom4/monDom4.2bit
+SEQ1_LEN=/cluster/data/monDom4/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Orangutan PonAbe2
+SEQ2_DIR=/cluster/bluearc/scratch/data/ponAbe2/ponAbe2.2bit
+SEQ2_LEN=/cluster/data/ponAbe2/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ1_LIMIT=100
+SEQ2_LAP=0
+
+BASE=/cluster/data/monDom4/bed/blastzPonAbe2.2007-11-22
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    # XXX - can run Opossum only on pk since the chroms are so large
+    time nice -n +19 doBlastzChainNet.pl DEF -chainMinScore=5000 \
+	-stop=cat -chainLinearGap=loose -bigClusterHub=pk -verbose=2 \
+	> cat.log 2>&1 &
+    #	real    1600m18.602s
+# Completed: 134688 of 134688 jobs
+# CPU time in finished jobs:   12106044s  201767.41m  3362.79h  140.12d  0.384 y
+# IO & Wait Time:                851946s   14199.09m   236.65h    9.86d  0.027 y
+# Average job time:                  96s       1.60m     0.03h    0.00d
+# Longest finished job:           11205s     186.75m     3.11h    0.13d
+# Submission to last job:         95155s    1585.92m    26.43h    1.10d
+    time nice -n +19 doBlastzChainNet.pl DEF -chainMinScore=5000 \
+	-continue=chainRun -stop=download -chainLinearGap=loose \
+	-bigClusterHub=pk -verbose=2 \
+	> chainRun.log 2>&1 &
+    #	real    2724m19.530s
+
+    cat fb.monDom4.chainPonAbe2Link.txt
+    #	395887393 bases of 3501643220 (11.306%) in intersection
+
+    #	and for the swap
+    mkdir /cluster/data/ponAbe2/bed/blastz.monDom4.swap
+    cd /cluster/data/ponAbe2/bed/blastz.monDom4.swap
+    time nice -n +19 doBlastzChainNet.pl -chainMinScore=5000 \
+	/cluster/data/monDom4/bed/blastzPonAbe2.2007-11-22/DEF \
+	-swap -chainLinearGap=loose -bigClusterHub=pk -verbose=2 \
+	> swap.log 2>&1 &
+    #	real    223m38.325s
+    cat fb.ponAbe2.chainMonDom4Link.txt
+    #	406409435 bases of 3093572278 (13.137%) in intersection
+
+##############################################################################
+# Blastz Marmoset calJac1 (WORKING - 2007-11-24 - Hiram)
+    ssh kkstore04
+    screen # use screen to control this job
+    #	managing disk space on full filesystem
+    mkdir /cluster/store8/monDom4/bed/blastzCalJac1.2007-11-24
+    ln -s /cluster/store8/monDom4/bed/blastzCalJac1.2007-11-24 \
+	/cluster/data/monDom4/bed
+    cd /cluster/data/monDom4/bed/blastzCalJac1.2007-11-24
+
+    #	this chunking makes 651,480 jobs
+    cat << '_EOF_' > DEF
+# Opossum vs. Marmoset
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+BLASTZ_M=50
+
+# TARGET: Opossum MonDom4
+SEQ1_DIR=/san/sanvol1/scratch/monDom4/monDom4.2bit
+SEQ1_LEN=/cluster/data/monDom4/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Marmoset calJac1, largest contig 2,551,648, 49,724 contigs
+SEQ2_DIR=/cluster/bluearc/scratch/data/calJac1/calJac1.2bit
+SEQ2_LEN=/cluster/data/calJac1/chrom.sizes
+SEQ2_CHUNK=2000000
+SEQ2_LIMIT=200
+SEQ2_LAP=0
+
+BASE=/cluster/data/monDom4/bed/blastzCalJac1.2007-11-24
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    # XXX - can run Opossum only on pk since the chroms are so large
+    time nice -n +19 doBlastzChainNet.pl `pwd`/DEF -chainMinScore=5000 \
+	-stop=cat -chainLinearGap=loose -bigClusterHub=pk -verbose=2 \
+	> cat.log 2>&1 &
+    #	real 2581m49.853s
+# Completed: 651480 of 651480 jobs
+# CPU time in finished jobs:   25871528s  431192.14m  7186.54h  299.44d  0.820 y
+# IO & Wait Time:               2695828s   44930.46m   748.84h   31.20d  0.085 y
+# Average job time:                  44s       0.73m     0.01h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            1804s      30.07m     0.50h    0.02d
+# Submission to last job:        146641s    2444.02m    40.73h    1.70d
+    time nice -n +19 doBlastzChainNet.pl `pwd`/DEF -chainMinScore=5000 \
+	-continue=chainRun -stop=download \
+	-chainLinearGap=loose -bigClusterHub=pk -verbose=2 \
+	> chainRun.log 2>&1 &
+    #	real    1810m38.601s
+    # the 10 chaining jobs on kki take about 35 hours for the longest job
+# Completed: 10 of 10 jobs
+# CPU time in finished jobs:     369079s    6151.32m   102.52h    4.27d  0.012 y
+# IO & Wait Time:                   385s       6.41m     0.11h    0.00d  0.000 y
+# Average job time:               36946s     615.77m    10.26h    0.43d
+# Longest finished job:          103069s    1717.82m    28.63h    1.19d
+# Submission to last job:        103069s    1717.82m    28.63h    1.19d
+
+    cat fb.monDom4.chainCalJac1Link.txt
+    #	386915334 bases of 3501643220 (11.050%) in intersection
+
+    time nice -n +19 doBlastzChainNet.pl `pwd`/DEF -chainMinScore=5000 \
+	-continue=cleanup \
+	-chainLinearGap=loose -bigClusterHub=pk -verbose=2 \
+	> cleanup.log 2>&1 &
+
+    mkdir /cluster/data/calJac1/bed/blastz.monDom4.swap
+    cd /cluster/data/calJac1/bed/blastz.monDom4.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/monDom4/bed/blastzCalJac1.2007-11-24/DEF \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	-swap -bigClusterHub=pk > swap.log 2>&1 &
+    #	real    498m24.344s
+    #	this failed during the load because the chainLink table became
+    #	too large.
+
+###########################################################################

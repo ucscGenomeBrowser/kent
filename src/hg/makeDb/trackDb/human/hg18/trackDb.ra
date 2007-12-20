@@ -317,7 +317,7 @@ compositeTrack on
 shortLabel HapMap LD Unph.
 longLabel HapMap Linkage Disequilibrium - Phase II - from unphased genotypes
 group varRep
-priority 144.49
+priority 144.492
 visibility hide
 canPack off
 chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX
@@ -327,31 +327,19 @@ type ld2
     track hapmapLdYri
     subTrack hapmapLd off
     shortLabel Unphased YRI
-    longLabel Linkage Disequilibrium for the Yoruba (YRI) -- Unphased
+    longLabel Linkage Disequilibrium for the Yoruba (YRI) from unphased genotypes
     priority 1
 
     track hapmapLdCeu
     subTrack hapmapLd
     shortLabel Unphased CEU
-    longLabel Linkage Disequilibrium for the CEPH (CEU) -- Unphased
+    longLabel Linkage Disequilibrium for the CEPH (CEU) from unphased genotypes
     priority 2
-
-    track hapmapLdChb
-    subTrack hapmapLd off
-    shortLabel Unphased CHB
-    longLabel Linkage Disequilibrium for the Han Chinese (CHB) -- Unphased
-    priority 3
-
-    track hapmapLdJpt
-    subTrack hapmapLd off
-    shortLabel Unphased JPT
-    longLabel Linkage Disequilibrium for the Japanese from Tokyo (JPT) -- Unphased
-    priority 4
 
     track hapmapLdChbJpt
     subTrack hapmapLd off
     shortLabel Unph JPT+CHB
-    longLabel Linkage Disequilibrium for the Han Chinese and Japanese from Tokyo (JPT+CHB) -- Unphased
+    longLabel Linkage Disequilibrium for the Han Chinese and Japanese from Tokyo (JPT+CHB) from unphased genotypes
     priority 5
 
 track hapmapLdPh
@@ -359,7 +347,7 @@ compositeTrack on
 shortLabel HapMap LD Phased
 longLabel HapMap Linkage Disequilibrium - Phase II - from phased genotypes
 group varRep
-priority 144.48
+priority 144.491
 visibility hide
 canPack off
 chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22
@@ -369,31 +357,31 @@ type ld2
     track hapmapLdPhYri
     subTrack hapmapLdPh off
     shortLabel Phased YRI
-    longLabel Linkage Disequilibrium for the Yoruba (YRI) -- Phased
+    longLabel Linkage Disequilibrium for the Yoruba (YRI) from phased genotypes
     priority 1
 
     track hapmapLdPhCeu
     subTrack hapmapLdPh
     shortLabel Phased CEU
-    longLabel Linkage Disequilibrium for the CEPH (CEU) -- Phased
+    longLabel Linkage Disequilibrium for the CEPH (CEU) from phased genotypes
     priority 2
 
     track hapmapLdPhChb
     subTrack hapmapLdPh off
     shortLabel Phased CHB
-    longLabel Linkage Disequilibrium for the Han Chinese (CHB) -- Phased
+    longLabel Linkage Disequilibrium for the Han Chinese (CHB) from phased genotypes
     priority 3
 
     track hapmapLdPhJpt
     subTrack hapmapLdPh off
     shortLabel Phased JPT
-    longLabel Linkage Disequilibrium for the Japanese from Tokyo (JPT) -- Phased
+    longLabel Linkage Disequilibrium for the Japanese from Tokyo (JPT) from phased genotypes
     priority 4
 
     track hapmapLdPhChbJpt
     subTrack hapmapLdPh off
     shortLabel Ph JPT+CHB
-    longLabel Linkage Disequilibrium for the Han Chinese and Japanese from Tokyo (JPT+CHB) -- Phased
+    longLabel Linkage Disequilibrium for the Han Chinese and Japanese from Tokyo (JPT+CHB) from phased genotypes
     priority 5
 
 track knownGene

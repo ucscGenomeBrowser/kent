@@ -30,7 +30,7 @@
 #include "hgGenome.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.22 2007/10/30 10:07:55 aamp Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.23 2007/11/16 14:52:55 aamp Exp $";
 
 
 static char *allColors[] = {
@@ -108,8 +108,7 @@ if (gg != NULL)
 	int rightX = gl->picWidth - gl->rightLabelWidth - gl->margin;
 	int leftX = gl->leftLabelWidth + gl->margin;
 	int width = rightX - leftX;
-	double threshold = cartUsualDouble(cart, hggThreshold, 
-		defaultThreshold);
+	double threshold = getThreshold();
 	if (threshold >= gMin && threshold <= gMax)
 	    {
 	    int y = height - ((threshold - gMin)*gScale) + yOff;
@@ -391,7 +390,7 @@ static void addThresholdGraphCarries(struct dyString *dy, int graphRows, int gra
 /* Add javascript that carries over threshold and graph vars
  * to new form. */
 {
-jsTextCarryOver(dy, hggThreshold);
+jsTextCarryOver(dy, getThresholdName());
 int i,j;
 for (i=0; i<graphRows; ++i)
     for (j=0; j<graphCols; ++j)
@@ -583,7 +582,7 @@ if (count > 500)  /* non-chrom assembly */
 	"This one has %d contigs. Please select another organism or assembly.", count);
     /* dummy hidden variable to make javascript happy */
     hPrintf("<INPUT TYPE=\"HIDDEN\" NAME=\"%s\" SIZE=\"%d\" VALUE=\"%g\"",
-	    hggThreshold, 3, cartUsualDouble(cart, hggThreshold, defaultThreshold));
+	    getThresholdName(), 3, getThreshold());
     hPrintf(" onchange=\"changeOther();\" "
 	"onkeypress=\"return submitOnEnter(event,document.mainForm);\">");
     }
@@ -621,7 +620,7 @@ else
     cgiMakeOptionalButton(hggCorrelate, "correlate", realCount < 2);
     hPrintf(" <B>significance threshold:</B>");
     hPrintf("<INPUT TYPE=\"TEXT\" NAME=\"%s\" SIZE=\"%d\" VALUE=\"%g\"",
-	    hggThreshold, 3, cartUsualDouble(cart, hggThreshold, defaultThreshold));
+	    getThresholdName(), 3, getThreshold());
     hPrintf(" onchange=\"changeOther();\" onkeypress=\"return submitOnEnter(event,document.mainForm);\">");
     hPrintf(" ");
     cgiMakeOptionalButton(hggBrowse, "browse regions", realCount == 0);
@@ -650,14 +649,15 @@ hPrintf("</FORM>\n");
     * also all the source/color pairs that depend on the 
     * configuration. */
     static char *regularVars[] = {
-      "clade", "org", "db", hggThreshold,
+      "clade", "org", "db",
       };
     int regularCount = ArraySize(regularVars);
-    int varCount = regularCount + 2 * graphRows * graphCols;
+    int varCount = regularCount + 1 + 2 * graphRows * graphCols;
     int varIx = regularCount;
     char **allVars;
     AllocArray(allVars, varCount);
     CopyArray(regularVars, allVars, regularCount);
+    allVars[varIx++] = cloneString(getThresholdName());
     for (i=0; i<graphRows; ++i)
         {
 	for (j=0; j<graphCols; ++j)

@@ -18,6 +18,17 @@ group map
 visibility dense
 type bed 3 +
 
+track scaffold
+shortLabel Scaffolds
+longLabel Assembly Scaffolds
+group map
+priority 12
+visibility hide
+color 100,75,20
+noScoreFilter .
+type bed 6
+chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chr23,chr24,chr25,chr26,chr27,chr28,chr29,chrX,
+
 # Unsplit mRNA track for scaffold-based assembly.
 track all_mrna
 shortLabel $Organism mRNAs
@@ -55,4 +66,11 @@ group varRep
 priority 100
 visibility dense
 type bed 6 +
+
+
+
+searchTable scaffold
+searchType bed
+shortCircuit on
+searchPriority 100
 

@@ -86,6 +86,9 @@ struct track
     int (*itemHeight)(struct track *xtg, void *item);
     /* Return height of one item. */
 
+    int (*itemRightPixels)(struct track *tg, void *item);
+    /* Return number of pixels needed to right of item for additional labeling. (Optional) */
+
     void (*drawItems)(struct track *tg, int seqStart, int seqEnd,
 	struct vGfx *vg, int xOff, int yOff, int width, 
 	MgFont *font, Color color, enum trackVisibility vis);
@@ -127,9 +130,9 @@ struct track
     void (*trackFilter)(struct track *tg);	
     /* Stuff to handle user interface parts. */
 
-    void *customPt;  /* Misc pointer variable unique to group. */
-    int customInt;   /* Misc int variable unique to group. */
-    int subType;     /* Variable to say what subtype this is for similar groups
+    void *customPt;  /* Misc pointer variable unique to track. */
+    int customInt;   /* Misc int variable unique to track. */
+    int subType;     /* Variable to say what subtype this is for similar tracks
 	              * to share code. */
 
     float minRange, maxRange;	  /*min and max range for sample tracks 0.0 to 1000.0*/
@@ -152,6 +155,10 @@ struct track
 
     float expScale;	/* What to scale expression tracks by. */
     char *expTable;	/* Expression table in hgFixed. */
+
+    int sourceCount;	/* Number of sources for factorSource tracks. */
+    struct expRecord **sources;  /* Array of sources */
+    int sourceRightPixels;	/* Number of pixels to right we'll need. */
 
     boolean exonArrows;	/* Draw arrows on exons? */
     boolean exonArrowsAlways;	/* Draw arrows on exons even with introns showing? */
@@ -964,6 +971,9 @@ void wikiTrackMethods(struct track *tg);
 struct bed *wikiTrackGetBedRange(char *mapName, char *chromName,
 	int start, int end);
 /* fetch wiki track items as simple bed 3 list in given range */
+
+void factorSourceMethods(struct track *track);
+/* Set up special methods for factorSource type tracks. */
 
 void bed8To12(struct bed *bed);
 /* Turn a bed 8 into a bed 12 by defining one block. */

@@ -14,7 +14,6 @@ set startField=""
 set lastField=""
 set threeFields=""
 set i=0
-set now=""
 
 if ($#argv < 2 || $#argv > 3 ) then
   echo
@@ -80,12 +79,16 @@ set endTime=`echo $startTime $duration | awk '{print $1+$2*60}'`
 
 echo
 while ( `date +%s` < $endTime )
+  date
   foreach address ( $ip )
+    echo
+    checkBOT.csh $address terse | egrep . | grep -v hits
     /usr/local/bin/bottleneck -host=genome-bottle set $address 0 \
       | egrep .
     checkBOT.csh $address terse | egrep .
   end
+  echo "--------------------"
   echo
-  sleep 30
+  sleep 5 
 end
 

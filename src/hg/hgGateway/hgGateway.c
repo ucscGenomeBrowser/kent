@@ -14,7 +14,7 @@
 #include "hui.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hgGateway.c,v 1.106 2007/08/08 23:04:55 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgGateway.c,v 1.107 2007/11/16 00:29:39 ann Exp $";
 
 boolean isPrivateHost;		/* True if we're on genome-test. */
 struct cart *cart = NULL;
@@ -183,7 +183,7 @@ if (hIsGsidServer())
     {
     webNewSection("%s", "Sequence View\n");
     printf("%s", 
-	   "Sequence View is a customized version of the UCSC Genome Browser, which is specifically tailored to provide functions needed for the GSID HIV Vaccine Database.\n");
+	   "Sequence View is a customized version of the UCSC Genome Browser, which is specifically tailored to provide functions needed for the GSID HIV Data Browser.\n");
     }
 
 hgPositionsHelpHtml(organism, db);

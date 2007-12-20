@@ -1355,3 +1355,129 @@ cat > rbest.csh << 'EOF'
 'EOF'
 csh rbest.csh >&! rbest.log &
 #Not yet loaded
+
+#########################################################################
+# Blastz Marmoset calJac1 (DONE - 2007-11-15 - Hiram)
+    ssh kkstore01
+    screen # use screen to control this job
+    mkdir /cluster/data/rheMac2/bed/blastzCalJac1.2007-11-16
+    cd /cluster/data/rheMac2/bed/blastzCalJac1.2007-11-16
+
+    cat << '_EOF_' > DEF
+# Rhesus vs marmoset
+BLASTZ_M=50
+
+# TARGET: Rhesus RheMac2
+SEQ1_DIR=/scratch/hg/rheMac2/rheMac2.2bit
+SEQ1_LEN=/cluster/data/rheMac2/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Marmoset calJac1
+SEQ2_DIR=/cluster/bluearc/scratch/data/calJac1/calJac1.2bit
+SEQ2_LEN=/cluster/data/calJac1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/rheMac2/bed/blastzCalJac1.2007-11-16
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-chainMinScore=3000 -chainLinearGap=medium \
+	-bigClusterHub=kk > blastz.log 2>&1 &
+    #	real    2115m6.616s
+    # failed during the load due to MySQL problems on hgwdev
+    #	run loadUp.csh manually on hgwdev
+    #	real    28m35.926s
+    cat fb.rheMac2.chainCalJac1Link.txt
+    #	2055107003 bases of 2646704109 (77.648%) in intersection
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-continue=download -chainMinScore=3000 -chainLinearGap=medium \
+	-bigClusterHub=kk > download.log 2>&1 &
+
+    mkdir /cluster/data/calJac1/bed/blastz.rheMac2.swap
+    cd /cluster/data/calJac1/bed/blastz.rheMac2.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/rheMac2/bed/blastzCalJac1.2007-11-16/DEF \
+	-swap -chainMinScore=3000 -chainLinearGap=medium \
+	-bigClusterHub=kk > swap.log 2>&1 &
+    #	real    349m36.073s
+    cat fb.calJac1.chainRheMac2Link.txt
+    #	2191300051 bases of 2929139385 (74.810%) in intersection
+
+###########################################################################
+# Blastz Orangutan ponAbe2 (DONE - 2007-11-16 - Hiram)
+    ssh kkstore01
+    screen # use screen to control this job
+    mkdir /cluster/data/rheMac2/bed/blastzPonAbe2.2007-11-16
+    cd /cluster/data/rheMac2/bed/blastzPonAbe2.2007-11-16
+
+    cat << '_EOF_' > DEF
+# Rhesus vs marmoset
+BLASTZ_M=50
+
+# TARGET: Rhesus RheMac2
+SEQ1_DIR=/scratch/hg/rheMac2/rheMac2.2bit
+SEQ1_LEN=/cluster/data/rheMac2/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Orangutan ponAbe2
+SEQ2_DIR=/cluster/bluearc/scratch/data/ponAbe2/ponAbe2.2bit
+SEQ2_LEN=/cluster/data/ponAbe2/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/rheMac2/bed/blastzPonAbe2.2007-11-16
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-chainMinScore=3000 -chainLinearGap=medium \
+	-bigClusterHub=kk > blastz.log 2>&1 &
+    # something got lost during the para make.  A couple of jobs couldn't
+    #	finish, due to memory limits.  Finish them off on hgwdev
+    #	real    1911m11.906s
+# Completed: 108924 of 108928 jobs
+# Crashed: 4 jobs
+# CPU time in finished jobs:   20658708s  344311.80m  5738.53h  239.11d  0.655 y
+# IO & Wait Time:               1801215s   30020.25m   500.34h   20.85d  0.057 y
+# Average job time:                 206s       3.44m     0.06h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            5401s      90.02m     1.50h    0.06d
+# Submission to last job:        111924s    1865.40m    31.09h    1.30d
+    #	continuing after those were done:
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-continue=cat -chainMinScore=3000 -chainLinearGap=medium \
+	-bigClusterHub=kk > cat.log 2>&1 &
+
+    # some jobs failed due to memory limits on kk nodes
+    #	finished them manually on kolossus and hgwdev, then continuing
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-chainMinScore=3000 -chainLinearGap=medium \
+	-continue=cat -bigClusterHub=kk > cat.log 2>&1 &
+    #	real    322m54.734s
+    #	failed during load due to MySQL problems on hgwdev
+    #	run loadUp.csh manually on hgwdev
+    #	real    22m22.225s
+    cat fb.rheMac2.chainPonAbe2Link.txt
+    #	2333264093 bases of 2646704109 (88.157%) in intersection
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-chainMinScore=3000 -chainLinearGap=medium \
+	-continue=download -bigClusterHub=kk > download.log 2>&1 &
+
+    #	and, for the swap
+    mkdir /cluster/data/ponAbe2/bed/blastz.rheMac2.swap
+    cd /cluster/data/ponAbe2/bed/blastz.rheMac2.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/rheMac2/bed/blastzPonAbe2.2007-11-16/DEF \
+	-swap -chainMinScore=3000 -chainLinearGap=medium \
+	-bigClusterHub=kk > swap.log 2>&1 &
+    #	real    289m9.479s
+    cat fb.ponAbe2.chainRheMac2Link.txt
+    #	2556010573 bases of 3093572278 (82.623%) in intersection
+
+###########################################################################

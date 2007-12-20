@@ -1,13 +1,13 @@
-<% if @submissions.blank? %>
-  <p>There are no submissions currently.</p>
+<% if @projects.blank? %>
+  <p>There are no projects currently.</p>
 <% else %>
   <p><%= @title -%></p>
 
- <table id="submissions" cellpadding=10 cellspacing=10>
- <% @submissions.each do |c| %>
+ <table id="projects" cellpadding=10 cellspacing=10>
+ <% @projects.each do |c| %>
   <tr>
   <td><%= link_to c.name, {:action => 'show', :id => c.id} -%></td>
-  <td><%= c.submission_type.short_label -%></td>
+  <td><%= c.project_type.short_label -%></td>
 
   <td> 
   <%= 
@@ -43,7 +43,7 @@
  </table>
 <% end %>
 <br/>
-<p><%= link_to "Add new submission", {:action => 'new' }%></p>
+<p><%= link_to "Add new project", {:action => 'new' }%></p>
   
 <%
 =begin %>

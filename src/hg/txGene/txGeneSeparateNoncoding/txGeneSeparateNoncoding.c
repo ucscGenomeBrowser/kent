@@ -8,7 +8,7 @@
 #include "txInfo.h"
 #include "rangeTree.h"
 
-static char const rcsid[] = "$Id: txGeneSeparateNoncoding.c,v 1.5 2007/03/17 04:20:58 kent Exp $";
+static char const rcsid[] = "$Id: txGeneSeparateNoncoding.c,v 1.6 2007/11/25 17:20:35 kent Exp $";
 
 int minNearOverlap=20;
 
@@ -18,13 +18,14 @@ void usage()
 errAbort(
   "txGeneSeparateNoncoding - Separate genes into four piles - coding, non-coding that overlap coding, and independent non-coding.\n"
   "usage:\n"
-  "   txGeneSeparateNoncoding in.bed in.info coding.bed nearCoding.bed antisense.bed noncoding.bed out.info\n"
+  "   txGeneSeparateNoncoding in.bed in.info coding.bed nearCoding.bed junk.bed antisense.bed noncoding.bed out.info\n"
   "where:\n"
   "   in.bed is input transcripts\n"
-  "   in.info is txInfo file that will have type field updated in out.infon"
+  "   in.info is txInfo file that will have type field updated in out.info\n"
   "   coding.bed contains coding transcripts\n"
   "   nearCoding.bed contains noncoding transcripts overlapping coding transcripts on\n"
   "        same strand\n"
+  "   junk.bed contains transcripts that are near coding with retained or bleeding exons\n"
   "   antisense.bed contains noncoding transcripts overlapping coding transcripts on\n"
   "        opposite strand\n"
   "   noncoding.bed contains other noncoding transcripts\n"

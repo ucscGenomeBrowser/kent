@@ -1114,3 +1114,4 @@ Error: danRer1: gene danRer1.refFlat:1854 NM_131267 chr7: NM_131267 geneName "ir
 
 - RefSeq details pages incorrectly has `CDS:' completeness from 
   comment section, when it is, in fact mRNA completeness/
+

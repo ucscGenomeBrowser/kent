@@ -10,7 +10,7 @@
 ################################
 
 set db=""
-set index=""
+set index="index"
 set mach="hgwbeta"
 set url1="http://$mach.cse.ucsc.edu/cgi-bin/hgTables"
 set url2=""
@@ -24,9 +24,9 @@ if ( $#argv < 1 || $#argv > 2 ) then
   echo
   echo "  gets size of database from TABLE STATUS dumps"
   echo "    from hgwbeta only."
-  echo "  opitonally gives size of indices."
+  echo "  opitonally suppresses size of indices."
   echo
-  echo "    usage:  database | all | filename [index]"
+  echo "    usage:  database | all | filename [noIndex]"
   echo "           defaults to hgwbeta"
   echo '           "filename" refers to list of dbs'
   echo
@@ -42,9 +42,9 @@ endif
 
 if ( $#argv == 2 ) then
   set index=$argv[2]
-  if ( "index" != $index ) then
+  if ( "noIndex" != $index ) then
     echo
-    echo ' error.  second argument must be "index" ' 
+    echo ' error.  second argument must be "noIndex" ' 
     $0
     echo
     exit
@@ -108,5 +108,11 @@ if ( "true" == $list ) then
     echo "\n total = $totSize Gbytes "
   endif
 endif
-echo
+#print grand total if index
 
+if ( "index" == $index ) then
+  echo
+  echo "combined $totSize  $totIndexSize Gbytes" | awk '{print $1, $2+$3, $4}'
+endif
+
+echo

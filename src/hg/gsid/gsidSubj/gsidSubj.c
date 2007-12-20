@@ -17,7 +17,7 @@
 #include "hPrint.h"
 #include "gsidSubj.h"
 
-static char const rcsid[] = "$Id: gsidSubj.c,v 1.7 2007/11/13 17:29:46 fanhsu Exp $";
+static char const rcsid[] = "$Id: gsidSubj.c,v 1.9 2007/11/15 17:54:49 fanhsu Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -235,7 +235,7 @@ printf("<img src=\"/images/gsid_header.jpg\" alt=\"\" name=\"gsid_header\" width
 hPrintf("<br><br>");
 hotLinks();
 
-printf("<font size=\"5\"><BR><B>HIV Vaccine Subject View   </B></font>");
+printf("<font size=\"5\"><BR><B>Subject View   </B></font>");
 
 if (sameWord(curSubjId, ""))
     {
@@ -254,7 +254,8 @@ else
     sqlFreeResult(&sr);
     if (row != NULL)
     	{
-    	printf("&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspsearch for another subject:&nbsp");
+    	printf(
+	"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;search for another subject:&nbsp;");
     	printf("<input type=\"text\" name=\"hgs_subj\" value=\"\">\n");
 	cgiMakeButton("submit", "Go!");
     	printSections(sectionList, conn, curSubjId);

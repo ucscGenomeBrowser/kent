@@ -2559,3 +2559,88 @@ TMPDIR=/scratch/tmp
     doBlastzChainNet.pl DEF \
       -bigClusterHub=pk  -chainMinScore=5000 -chainLinearGap=loose \
       >& blastz.out 2>&1 &
+
+#########################################################################
+# Blastz Marmoset calJac1 (DONE - 2007-11-28 - 30 - Hiram)
+    ssh kkstore04
+    screen # use screen to control this job
+    #	managing disk space on full filesystem
+    mkdir -p /cluster/store8/canFam2/bed/blastzCalJac1.2007-11-28
+    ln -s /cluster/store8/canFam2/bed/blastzCalJac1.2007-11-28 \
+	/cluster/data/canFam2/bed
+    cd /cluster/data/canFam2/bed/blastzCalJac1.2007-11-28
+
+    cat << '_EOF_' > DEF
+# Dog vs. Marmoset
+BLASTZ_M=50
+
+# TARGET: Dog MonDom4
+SEQ1_DIR=/scratch/data/canFam2/nib
+SEQ1_LEN=/cluster/data/canFam2/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Marmoset calJac1, largest contig 2,551,648, 49,724 contigs
+SEQ2_DIR=/scratch/data/calJac1/calJac1.2bit
+SEQ2_LEN=/cluster/data/calJac1/chrom.sizes
+SEQ2_CHUNK=2000000
+SEQ2_LIMIT=200
+SEQ2_LAP=0
+
+BASE=/cluster/data/canFam2/bed/blastzCalJac1.2007-11-28
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl `pwd`/DEF -chainMinScore=3000 \
+	-chainLinearGap=medium -bigClusterHub=kk -verbose=2 \
+	> do.log 2>&1 &
+    #	real    864m49.290s
+# Completed: 266999 of 267000 jobs
+# Crashed: 1 jobs
+# CPU time in finished jobs:   17058860s  284314.33m  4738.57h  197.44d  0.541 y
+# IO & Wait Time:               1031855s   17197.59m   286.63h   11.94d  0.033 y
+# Average job time:                  68s       1.13m     0.02h    0.00d
+# Longest finished job:            1302s      21.70m     0.36h    0.02d
+# Submission to last job:         47998s     799.97m    13.33h    0.56d
+    #	one job ran out of memory on the kk nodes.  It was finished on kolossus
+    /cluster/bin/scripts/blastz-run-ucsc -outFormat psl \
+/scratch/data/canFam2/nib/chr21.nib:chr21:20000000-40010000 qParts/part238.lst \
+../DEF \
+../psl/chr21.nib:chr21:20000000-40010000/chr21.nib:chr21:20000000-40010000_part238.lst.psl
+
+    #	continuing
+    time nice -n +19 doBlastzChainNet.pl `pwd`/DEF -chainMinScore=3000 \
+	-continue=cat -chainLinearGap=medium -bigClusterHub=kk -verbose=2 \
+	> cat.log 2>&1 &
+    #	had a problem with files missing from /scratch/data/ on
+    #	the Iservers - rsync that directory /iscratch/data/ full on
+    #	kkr1u00 from /cluster/bluearc/scratch/data/ and push it to
+    #	the other Iservers
+    time nice -n +19 doBlastzChainNet.pl `pwd`/DEF -chainMinScore=3000 \
+	-continue=chainMerge -chainLinearGap=medium -bigClusterHub=kk \
+	-verbose=2 > chainMerge.log 2>&1 &
+    #	real    79m39.909s
+
+    cat fb.canFam2.chainCalJac1Link.txt
+    #	1369690756 bases of 2384996543 (57.429%) in intersection
+
+    mkdir /cluster/data/calJac1/bed/blastz.canFam2.swap
+    cd /cluster/data/calJac1/bed/blastz.canFam2.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/canFam2/bed/blastzCalJac1.2007-11-28/DEF \
+	-chainMinScore=3000 -chainLinearGap=medium \
+	-swap -bigClusterHub=kk > swap.log 2>&1 &
+    #	encountered difficulties with /scratch/data/ on kolossus
+    #	had to finish the netChains.csh script manually, then continuing:
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/canFam2/bed/blastzCalJac1.2007-11-28/DEF \
+	-continue=load -chainMinScore=3000 -chainLinearGap=medium \
+	-swap -bigClusterHub=kk > load.log 2>&1 &
+    #	real    56m44.375s
+
+    cat fb.calJac1.chainCanFam2Link.txt
+    #	1451345669 bases of 2929139385 (49.549%) in intersection
+
+###########################################################################

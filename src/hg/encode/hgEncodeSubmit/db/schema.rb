@@ -2,55 +2,33 @@
 # migrations feature of ActiveRecord to incrementally modify your database, and
 # then regenerate this schema definition.
 
-ActiveRecord::Schema.define(:version => 20) do
-
-  create_table "categories", :force => true do |t|
-    t.column "name", :string
-  end
-
-  create_table "classifieds", :force => true do |t|
-    t.column "title",       :string
-    t.column "price",       :float
-    t.column "location",    :string
-    t.column "description", :text
-    t.column "email",       :string
-    t.column "created_at",  :datetime
-    t.column "updated_at",  :datetime
-    t.column "category_id", :integer
-  end
+ActiveRecord::Schema.define(:version => 23) do
 
   create_table "plugin_schema_info", :id => false, :force => true do |t|
     t.column "plugin_name", :string
     t.column "version",     :integer
   end
 
-  create_table "running", :id => false, :force => true do |t|
-    t.column "pid",         :integer, :limit => 10
-    t.column "submission",  :integer, :limit => 10
-    t.column "startTime",   :string,  :limit => 10
-    t.column "commandLine", :string
+  create_table "project_archives", :force => true do |t|
+    t.column "file_name",  :string
+    t.column "file_size",  :string
+    t.column "file_date",  :datetime
+    t.column "project_id", :integer
+    t.column "created_at", :datetime
+    t.column "updated_at", :datetime
+    t.column "archive_no", :integer
   end
 
-  create_table "submission_archives", :force => true do |t|
-    t.column "file_name",     :string
-    t.column "file_size",     :string
-    t.column "file_date",     :datetime
-    t.column "submission_id", :integer
-    t.column "created_at",    :datetime
-    t.column "updated_at",    :datetime
-    t.column "archive_no",    :integer
+  create_table "project_files", :force => true do |t|
+    t.column "file_name",          :string
+    t.column "file_size",          :string
+    t.column "file_date",          :datetime
+    t.column "project_archive_id", :integer
+    t.column "created_at",         :datetime
+    t.column "updated_at",         :datetime
   end
 
-  create_table "submission_files", :force => true do |t|
-    t.column "file_name",             :string
-    t.column "file_size",             :string
-    t.column "file_date",             :datetime
-    t.column "submission_archive_id", :integer
-    t.column "created_at",            :datetime
-    t.column "updated_at",            :datetime
-  end
-
-  create_table "submission_types", :force => true do |t|
+  create_table "project_types", :force => true do |t|
     t.column "name",          :string
     t.column "short_label",   :string
     t.column "long_label",    :string
@@ -61,14 +39,23 @@ ActiveRecord::Schema.define(:version => 20) do
     t.column "time_out",      :integer
   end
 
-  create_table "submissions", :force => true do |t|
-    t.column "name",               :string
-    t.column "user_id",            :integer
-    t.column "status",             :string
-    t.column "created_at",         :datetime
-    t.column "updated_at",         :datetime
-    t.column "archive_count",      :integer,  :default => 0
-    t.column "submission_type_id", :integer
+  create_table "projects", :force => true do |t|
+    t.column "name",            :string
+    t.column "user_id",         :integer
+    t.column "status",          :string
+    t.column "created_at",      :datetime
+    t.column "updated_at",      :datetime
+    t.column "archive_count",   :integer,  :default => 0
+    t.column "project_type_id", :integer
+  end
+
+  create_table "running", :id => false, :force => true do |t|
+    t.column "pid",         :integer, :limit => 10
+    t.column "submission",  :integer, :limit => 10
+    t.column "jobType",     :string
+    t.column "startTime",   :integer, :limit => 10
+    t.column "timeOut",     :integer, :limit => 10
+    t.column "commandLine", :string
   end
 
   create_table "users", :force => true do |t|

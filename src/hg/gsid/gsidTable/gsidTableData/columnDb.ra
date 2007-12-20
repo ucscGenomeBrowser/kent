@@ -10,7 +10,7 @@ visibility on
 type string
 
 name immunStatus
-shortLabel vac
+shortLabel group
 longLabel Immunization Status
 priority 2
 visibility on
@@ -20,36 +20,31 @@ filterDropDown on
 
 #(not in main table gsidSubjInfo)
 name hivQuan
-shortLabel HIV
+shortLabel HIV-1 RNA
 longLabel HIV Quantity - viral load in HIV-1 RNA copies/mL
 priority 3
 visibility on
 type integer
-query select hivQuan from gsidClinicRec where subjId='%s' order by daysCollection desc limit 1;
+#query select hivQuan from gsidClinicRec where subjId='%s' order by daysCollection desc limit 1;
+query select hivQuan from gsidClinicRecWithSeq where subjId='%s';
 
 #(not in main table gsidSubjInfo)
 name cd4Count
 shortLabel CD4
-longLabel CD4 Count
+longLabel CD4 Count in cells/microliter
 priority 4
 visibility on
 type integer
-query select cd4Count from gsidClinicRec where subjId='%s' order by daysCollection desc limit 1;
+#query select cd4Count from gsidClinicRec where subjId='%s' order by daysCollection desc limit 1;
+query select cd4Count from gsidClinicRecWithSeq where subjId='%s';
 
-name daysInfectL
-shortLabel DILN
-longLabel The day of infection relative to last negative date
-priority 5
-visibility on
-type integer
-
-name daysInfectF
-shortLabel DIFI
-longLabel The day of infection relative to first injection date
+name esdi
+shortLabel ESDI*
+longLabel Estimated Study Day of Infection
 priority 6
 visibility on
 type integer
-
+query select daysCollection from gsidClinicRecWithSeq where subjId='%s';
 
 name gender
 shortLabel sex
@@ -70,7 +65,7 @@ name weight
 shortLabel weight
 longLabel Weight in kilograms
 priority 9
-visibility on
+visibility off
 type double
 
 name race

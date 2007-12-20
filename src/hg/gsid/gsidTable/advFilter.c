@@ -13,7 +13,7 @@
 #include "hPrint.h"
 #include "gsidTable.h"
 
-static char const rcsid[] = "$Id: advFilter.c,v 1.5 2007/11/11 21:33:34 fanhsu Exp $";
+static char const rcsid[] = "$Id: advFilter.c,v 1.6 2007/11/13 23:21:41 fanhsu Exp $";
 
 struct subjInfo *advFilterResults(struct column *colList, 
 	struct sqlConnection *conn)
@@ -148,7 +148,7 @@ cartRemovePrefix(cart, keyWordUploadPrefix);
 hPrintf("<H2>Upload List : %s - %s</H2>\n", col->shortLabel, col->longLabel);
 hPrintf("<FORM ACTION=\"../cgi-bin/gsidTable\" METHOD=POST ENCTYPE=\"multipart/form-data\">\n");
 cartSaveSession(cart);
-hPrintf("Enter the name of a file from your computer that contains a list");
+hPrintf("Enter the name of a text (ASCII) file from your computer that contains a list");
 hPrintf(" of items separated by a space, tab or line.<BR>");
 
 varName = colVarName(col, keyWordPastedPrefix);

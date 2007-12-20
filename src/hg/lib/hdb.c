@@ -35,7 +35,7 @@
 #include "customTrack.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.337 2007/10/23 15:59:13 aamp Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.338 2007/11/20 00:35:45 hartera Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -249,6 +249,23 @@ void hSetDbConnect2(char* host, char *db, char *user, char *password)
     hdbName2 = cloneString(db);
     hdbUser = cloneString(user);
     hdbPassword = cloneString(password);
+}
+
+boolean hArchiveDbExists(char *database)
+/*
+  Function to check if this is a valid db name in the dbDbArch table 
+  of archived databases. 
+*/
+{
+struct sqlConnection *conn = hConnectCentral();
+char buf[128];
+char query[256];
+boolean res = FALSE;
+safef(query, sizeof(query), "select name from dbDbArch where name = '%s'",
+      database);
+res = (sqlQuickQuery(conn, query, buf, sizeof(buf)) != NULL);
+hDisconnectCentral(&conn);
+return res;
 }
 
 boolean hDbExists(char *database)
@@ -2129,23 +2146,26 @@ char *hArchiveOrCentralDbDbOptionalField(char *database, char *field, boolean ar
 /* Look up field in dbDb table keyed by database,
  * Return NULL if database doesn't exist. 
  * Free this string when you are done. Look in 
- * either the regular or the archive database. 
+ * either the regular or the archive dbDb table for . 
  * The name for this function may be a little silly. */
 {
-struct sqlConnection *conn;
+struct sqlConnection *conn = hConnectCentral();
 char buf[128];
 char query[256];
+char dbDbTable[128];
 char *res = NULL;
-    
-conn = (archive) ? hConnectArchiveCentral() : hConnectCentral();
-safef(query, sizeof(query), "select %s from dbDb where name = '%s'",
-      field, database);
+
+if (archive)
+    safef(dbDbTable, sizeof(dbDbTable), "dbDbArch");
+else
+    safef(dbDbTable, sizeof(dbDbTable), "dbDb");
+
+safef(query, sizeof(query), "select %s from %s where name = '%s'",
+      field, dbDbTable, database);
 if (sqlQuickQuery(conn, query, buf, sizeof(buf)) != NULL)
     res = cloneString(buf);
-if (archive)
-    hDisconnectArchiveCentral(&conn);
-else 
-    hDisconnectCentral(&conn);
+
+hDisconnectCentral(&conn);
 return res;
 }
 
@@ -2534,11 +2554,12 @@ struct dbDb *dbList = NULL, *db;
 char *assembly;
 char *next;
 
-conn = hConnectArchiveCentral();
+conn = hConnectCentral();
+
 if (conn)
     {
     /* NOTE: archive orderKey convention is opposite of production server! */
-    sr = sqlGetResult(conn, "select * from dbDb order by orderKey desc,name desc");
+    sr = sqlGetResult(conn, "select * from dbDbArch order by orderKey desc,name desc");
     while ((row = sqlNextRow(sr)) != NULL)
         {
         db = archiveDbDbLoad(row);
@@ -2554,7 +2575,8 @@ if (conn)
         slAddHead(&dbList, db);
         }
     sqlFreeResult(&sr);
-    hDisconnectArchiveCentral(&conn);
+    
+    hDisconnectCentral(&conn);
     slReverse(&dbList);
     }
 return dbList;
@@ -3982,8 +4004,6 @@ hashAddInt(dbNameHash, "maxRank", rank);
 dbDbFreeList(&allDbList);
 return dbNameHash;
 }
-
-
 
 struct dbDb *hGetLiftOverFromDatabases()
 /* Get list of databases for which there is at least one liftOver chain file

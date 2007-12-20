@@ -11,9 +11,9 @@ class PipelineController < ApplicationController
   layout 'standard'
   
   def list
-    @submissions = Submission.find(:all)
-    #@submissionTypes = getSubmissionTypes
-    @title = "These are the submissions in our system"
+    @projects = Project.find(:all)
+    #@projectTypes = getProjectTypes
+    @title = "These are the projects in our system"
   end
   
   def show_user
@@ -22,30 +22,30 @@ class PipelineController < ApplicationController
     #exitCode = system("sleep 20")
 
     @user = User.find(current_user.id)
-    @submissions = @user.submissions
-    #@submissionTypes = getSubmissionTypes
-    @title = "These are your submissions"
+    @projects = @user.projects
+    #@projectTypes = getProjectTypes
+    @title = "These are your projects"
     render :action => 'list'
     # not now using show_user.rhtml
   end
   
   def show
-    @submission = Submission.find(params[:id])
-    #@submissionTypes = getSubmissionTypes
-    if @submission.status == "invalid"
+    @project = Project.find(params[:id])
+    #@projectTypes = getProjectTypes
+    if @project.status == "invalid"
       @errText = getErrText
     else
-      if @submission.status == "load failed"
+      if @project.status == "load failed"
         @errText = getLoadErrText
       else
-	if @submission.status == "upload failed"
+	if @project.status == "upload failed"
 	  @errText = getUploadErrText
 	else
 	  @errText = ""
     	end
       end
     end
-    if @submission.status.starts_with?("schedule expanding ")
+    if @project.status.starts_with?("schedule expanding ")
       if process_uploaded_archive
         # ok
       end
@@ -53,49 +53,49 @@ class PipelineController < ApplicationController
   end
 
   def valid_status
-    @submission = Submission.find(params[:id])
+    @project = Project.find(params[:id])
     @errText = getErrText
   end
 
   def load_status
-    @submission = Submission.find(params[:id])
+    @project = Project.find(params[:id])
     @errText = getLoadErrText
   end
 
   def upload_status
-    @submission = Submission.find(params[:id])
+    @project = Project.find(params[:id])
     @errText = getUploadErrText
   end
 
   def begin_loading
-    @submission = Submission.find(params[:id])
-    if @submission.status == "validated"
-      @submission.status = "schedule loading"
-      @submission.save
+    @project = Project.find(params[:id])
+    if @project.status == "validated"
+      @project.status = "schedule loading"
+      @project.save
     end
     redirect_to :action => 'list'
   end
 
   def begin_validating
-    @submission = Submission.find(params[:id])
-    if @submission.status == "uploaded"
-      @submission.status = "schedule validating"
-      @submission.save
+    @project = Project.find(params[:id])
+    if @project.status == "uploaded"
+      @project.status = "schedule validating"
+      @project.save
     end
     redirect_to :action => 'list'
   end
 
   def new
-    @submission = Submission.new
-    @submissionTypes = getSubmissionTypes
-    #@submissionTypesArray = @submissionTypes.to_a.sort_by { |x| x[1]["displayOrder"] }
+    @project = Project.new
+    @projectTypes = getProjectTypes
+    #@projectTypesArray = @projectTypes.to_a.sort_by { |x| x[1]["displayOrder"] }
   end
   
   def create
-    @submission = Submission.new(params[:submission])
-    @submission.user_id = @current_user.id 
-    @submission.status = 'new'
-    if @submission.save
+    @project = Project.new(params[:project])
+    @project.user_id = @current_user.id 
+    @project.status = 'new'
+    if @project.save
       redirect_to :action => 'list'
     else
       render :action => 'new'
@@ -103,38 +103,38 @@ class PipelineController < ApplicationController
   end
   
   def edit
-    @submission = Submission.find(params[:id])
-    @submissionTypes = getSubmissionTypes
-    #@submissionTypesArray = @submissionTypes.to_a.sort_by { |x| x[1]["displayOrder"] }
+    @project = Project.find(params[:id])
+    @projectTypes = getProjectTypes
+    #@projectTypesArray = @projectTypes.to_a.sort_by { |x| x[1]["displayOrder"] }
   end
   
   def update
-    @submission = Submission.find(params[:id])
-    old_submission_type_id = @submission.submission_type_id
-    if @submission.update_attributes(params[:submission])
-      if old_submission_type_id != @submission.submission_type_id
-        if @submission.submission_archives.length == 0
-	  @submission.status = "new"
+    @project = Project.find(params[:id])
+    old_project_type_id = @project.project_type_id
+    if @project.update_attributes(params[:project])
+      if old_project_type_id != @project.project_type_id
+        if @project.project_archives.length == 0
+	  @project.status = "new"
 	else
-	  @submission.status = "uploaded"
+	  @project.status = "uploaded"
 	end
-	unless @submission.save
-	  flash[:warning] = "submission record save failed"
+	unless @project.save
+	  flash[:warning] = "project record save failed"
 	  return false
 	end
       end
-      redirect_to :action => 'show', :id => @submission
+      redirect_to :action => 'show', :id => @project
     else
       render :action => 'edit'
     end
   end
   
   def delete
-    submissionDir=File.expand_path("#{ActiveRecord::Base.configurations[RAILS_ENV]['upload']}/#{@current_user.id}/#{@submission.id}/")
-    if File.exists?(submissionDir)
-      Dir.entries(submissionDir).each { 
+    projectDir=File.expand_path("#{ActiveRecord::Base.configurations[RAILS_ENV]['upload']}/#{@current_user.id}/#{@project.id}/")
+    if File.exists?(projectDir)
+      Dir.entries(projectDir).each { 
         |f| 
-        fullName = File.join(submissionDir,f)
+        fullName = File.join(projectDir,f)
         cmd = "rm -fr #{fullName}"
         exitCode = system(cmd)
         unless exitCode 
@@ -142,14 +142,14 @@ class PipelineController < ApplicationController
           return false
         end
       }
-      Dir.delete(submissionDir)
+      Dir.delete(projectDir)
     end
-    Submission.find(params[:id]).destroy
+    Project.find(params[:id]).destroy
     redirect_to :action => 'list'
   end
  
   def upload
-    @submission = Submission.find(params[:id])
+    @project = Project.find(params[:id])
     return unless request.post?
     @upurl = params[:upload_url]
     if @upurl == "http://"
@@ -168,12 +168,12 @@ class PipelineController < ApplicationController
     msg = ""
 
     # make sure parent paths exist
-    submissionDir = File.dirname(path_to_file)
-    userDir = File.dirname(submissionDir)
+    projectDir = File.dirname(path_to_file)
+    userDir = File.dirname(projectDir)
     Dir.mkdir(userDir) unless File.exists?(userDir)
-    Dir.mkdir(submissionDir) unless File.exists?(submissionDir)
+    Dir.mkdir(projectDir) unless File.exists?(projectDir)
 
-    nextArchiveNo = @submission.archive_count+1
+    nextArchiveNo = @project.archive_count+1
 
     @filename = "#{"%03d" % nextArchiveNo}_#{@filename}"
 
@@ -187,20 +187,20 @@ class PipelineController < ApplicationController
     # just in case, remove it it already exists (shouldn't happen)
     File.delete(path_to_file) if File.exists?(path_to_file)
 
-    @submission.status = "schedule uploading #{@upurl}"
+    @project.status = "schedule uploading #{@upurl}"
 
-    unless @submission.save
-      flash[:warning] = "submission record save failed"
+    unless @project.save
+      flash[:warning] = "project record save failed"
       return
     end
 
     flash[:notice] = msg
-    redirect_to :action => 'show', :id => @submission
+    redirect_to :action => 'show', :id => @project
 
   end
 
   def uploadOld
-    @submission = Submission.find(params[:id])
+    @project = Project.find(params[:id])
     return unless request.post?
     @upload = params[:upload_file]
     @upurl = params[:upload_url]
@@ -240,12 +240,12 @@ class PipelineController < ApplicationController
     msg = ""
 
     # make sure parent paths exist
-    submissionDir = File.dirname(path_to_file)
-    userDir = File.dirname(submissionDir)
+    projectDir = File.dirname(path_to_file)
+    userDir = File.dirname(projectDir)
     Dir.mkdir(userDir) unless File.exists?(userDir)
-    Dir.mkdir(submissionDir) unless File.exists?(submissionDir)
+    Dir.mkdir(projectDir) unless File.exists?(projectDir)
 
-    nextArchiveNo = @submission.archive_count+1
+    nextArchiveNo = @project.archive_count+1
 
     @filename = "#{"%03d" % nextArchiveNo}_#{@filename}"
 
@@ -262,10 +262,10 @@ class PipelineController < ApplicationController
     # just in case, remove it it already exists (shouldn't happen)
     File.delete(path_to_file) if File.exists?(path_to_file)
 
-    @submission.status = "uploading #{@filename}"
+    @project.status = "uploading #{@filename}"
 
-    unless @submission.save
-      flash[:warning] = "submission record save failed"
+    unless @project.save
+      flash[:warning] = "project record save failed"
       return
     end
 
@@ -278,7 +278,7 @@ class PipelineController < ApplicationController
       msg += "child pid=#{pid}<br>"
 
       flash[:notice] = msg
-      redirect_to :action => 'show', :id => @submission
+      redirect_to :action => 'show', :id => @project
       return
 
     else
@@ -311,24 +311,24 @@ class PipelineController < ApplicationController
   # This is the older method, see begin_validating above
   #  (this will be phased out and removed probably)
   def validate
-    @submission = Submission.find(params[:id])
-    @submissionTypes = getSubmissionTypes
+    @project = Project.find(params[:id])
+    @projectTypes = getProjectTypes
     msg = ""
     # make sure status is uploaded
-    if @submission.status == "new"
+    if @project.status == "new"
       msg += "Nothing uploaded yet"
       flash[:notice] = msg
-      redirect_to :action => 'show', :id => @submission
+      redirect_to :action => 'show', :id => @project
       return
     end
 
     # make sure parent paths exist
-    submissionDir = path_to_file
-    userDir = File.dirname(submissionDir)
-    unless File.exists?(userDir) and File.exists?(submissionDir)
-      msg += "Unexpected error, userDir and submissionDir do not exist!"
+    projectDir = path_to_file
+    userDir = File.dirname(projectDir)
+    unless File.exists?(userDir) and File.exists?(projectDir)
+      msg += "Unexpected error, userDir and projectDir do not exist!"
       flash[:warning] = msg
-      redirect_to :action => 'show', :id => @submission
+      redirect_to :action => 'show', :id => @project
       return
     end
 
@@ -338,11 +338,11 @@ class PipelineController < ApplicationController
 
     # run the validator
     cmd = ""
-    cmd += @submission.submission_type.validator
+    cmd += @project.project_type.validator
     cmd += " "
-    cmd += @submission.submission_type.type_params
+    cmd += @project.project_type.type_params
     cmd += " "
-    cmd += submissionDir
+    cmd += projectDir
     cmd += " 2>"
     cmd += errFile
 
@@ -352,10 +352,10 @@ class PipelineController < ApplicationController
     if exitCode >= 0
       msg += "<br>validate exitCode = #{exitCode}<br>" 
       if exitCode == 0
-        if @submission.status != "validated"
-          @submission.status = "validated"
-          unless @submission.save
-            flash[:warning] = "submission record save failed"
+        if @project.status != "validated"
+          @project.status = "validated"
+          unless @project.save
+            flash[:warning] = "project record save failed"
           end
         end
       else
@@ -363,27 +363,27 @@ class PipelineController < ApplicationController
         errText = File.open(errFile, "rb") { |f| f.read }
 	flash[:warning] = "error:<br>" + errText
         
-        if @submission.status != "invalid"
-          @submission.status = "invalid"
-          unless @submission.save
-            flash[:warning] = "submission record save failed"
+        if @project.status != "invalid"
+          @project.status = "invalid"
+          unless @project.save
+            flash[:warning] = "project record save failed"
           end
         end
       end
     else
       flash[:warning] = "validate timeout exceeded<br>"  
-      redirect_to :action => 'show', :id => @submission
+      redirect_to :action => 'show', :id => @project
       return
     end 
 
     flash[:notice] = msg
-    redirect_to :action => 'show', :id => @submission
+    redirect_to :action => 'show', :id => @project
 
   end
 
   def delete_archive
-    archive = SubmissionArchive.find(params[:id])
-    params[:id] = archive.submission_id
+    archive = ProjectArchive.find(params[:id])
+    params[:id] = archive.project_id
     unless check_user_is_owner
       return
     end
@@ -395,10 +395,10 @@ class PipelineController < ApplicationController
   end
 
   def reexpand_all
-    @submission = Submission.find(params[:id])
+    @project = Project.find(params[:id])
     # make a hash of things to keep
     keepers = {}
-    @submission.submission_archives.each do |a|
+    @project.project_archives.each do |a|
       keepers[a.file_name] = "keep"
     end
     # keep other special files
@@ -407,46 +407,46 @@ class PipelineController < ApplicationController
 
     msg = ""
     # make sure parent paths exist
-    submissionDir = path_to_file
+    projectDir = path_to_file
 
-    # clean out directory (this will be handled more delicately later for re-uploading a submission)
-    Dir.entries(submissionDir).each do 
+    # clean out directory (this will be handled more delicately later for re-uploading a project)
+    Dir.entries(projectDir).each do 
       |f| 
-      fullName = File.join(submissionDir,f)
+      fullName = File.join(projectDir,f)
       unless keepers[f] or (f == ".") or (f == "..")
         
         # debug
-        #msg += "submissionDir: #{f} #{File.ftype(fullName)}<br>\n" 
+        #msg += "projectDir: #{f} #{File.ftype(fullName)}<br>\n" 
         cmd = "rm -fr #{fullName}"
         exitCode = system(cmd)
         unless exitCode 
           flash[:warning] = "error cleaning up temporary upload subdirectory: <br>command=[#{cmd}], exitCode = #{exitCode}<br>"  
-	  redirect_to :action => 'show', :id => @submission
+	  redirect_to :action => 'show', :id => @project
           return false
         end
       end
     end
 
-    @submission.submission_archives.each do |a|
-      a.submission_files.each do |f|
+    @project.project_archives.each do |a|
+      a.project_files.each do |f|
         f.destroy
       end
     end
  
-    @submission.submission_archives.each do |a|
+    @project.project_archives.each do |a|
       unless expand_archive(a)
         return
       end
     end
 
-    if @submission.submission_archives.length == 0
-      @submission.status = "new"
+    if @project.project_archives.length == 0
+      @project.status = "new"
     else
-      @submission.status = "uploaded"
+      @project.status = "uploaded"
     end
-    unless @submission.save
-      flash[:warning] = "submission record save failed"
-      redirect_to :action => 'show', :id => @submission
+    unless @project.save
+      flash[:warning] = "project record save failed"
+      redirect_to :action => 'show', :id => @project
       return false
     end
 
@@ -456,7 +456,7 @@ class PipelineController < ApplicationController
     else
       flash[:notice] = msg
     end 
-    redirect_to :action => 'show', :id => @submission
+    redirect_to :action => 'show', :id => @project
 
   end
 
@@ -464,9 +464,9 @@ class PipelineController < ApplicationController
 private
   
   def check_user_is_owner
-    @submission = Submission.find(params[:id])
-    unless @submission.user_id == @current_user.id
-      flash[:warning] = "That submission does not belong to you."
+    @project = Project.find(params[:id])
+    unless @project.user_id == @current_user.id
+      flash[:warning] = "That project does not belong to you."
       redirect_to :action => 'list'
       return false
     end
@@ -484,13 +484,13 @@ private
 
   def path_to_file
     # the expand_path method resolves this relative path to full absolute path
-    File.expand_path("#{ActiveRecord::Base.configurations[RAILS_ENV]['upload']}/#{@current_user.id}/#{@submission.id}/#{@filename}")
+    File.expand_path("#{ActiveRecord::Base.configurations[RAILS_ENV]['upload']}/#{@current_user.id}/#{@project.id}/#{@filename}")
   end
 
-  # --- read submission types from config file into hash -------
-  def getSubmissionTypes
-    #open("#{RAILS_ROOT}/config/submissionTypes.yml") { |f| YAML.load(f.read) }
-    SubmissionType.find(:all, :conditions => ['display_order != 0'], :order => "display_order")
+  # --- read project types from config file into hash -------
+  def getProjectTypes
+    #open("#{RAILS_ROOT}/config/projectTypes.yml") { |f| YAML.load(f.read) }
+    ProjectType.find(:all, :conditions => ['display_order != 0'], :order => "display_order")
   end
 
   # --- run process with timeout ---- (probably should move this to an application helper location)
@@ -521,10 +521,10 @@ private
 
     # make sure parent paths exist
     @filename = ""
-    submissionDir = path_to_file
+    projectDir = path_to_file
 
     # make a temporary upload directory to unpack and merge from
-    uploadDir = submissionDir+"/upload"
+    uploadDir = projectDir+"/upload"
     if File.exists?(uploadDir)
       cmd = "rm -fr #{uploadDir}"
       exitCode = system(cmd)
@@ -553,7 +553,7 @@ private
       return false
     end
  
-    process_archive(archive.id, submissionDir, uploadDir, "")
+    process_archive(archive.id, projectDir, uploadDir, "")
 
     # cleanup: delete temporary upload subdirectory
     if File.exists?(uploadDir)
@@ -565,14 +565,14 @@ private
       end
     end
 
-    if @submission.submission_archives.length == 0
-      @submission.status = "new"
+    if @project.project_archives.length == 0
+      @project.status = "new"
     else
-      @submission.status = "uploaded"
+      @project.status = "uploaded"
     end
 
-    unless @submission.save
-      flash[:warning] = "submission record save failed"
+    unless @project.save
+      flash[:warning] = "project record save failed"
       return false
     end
 
@@ -590,7 +590,7 @@ private
     return File.join(path,name)
   end
 
-  def process_archive(archive_id, submissionDir, uploadDir, relativePath)
+  def process_archive(archive_id, projectDir, uploadDir, relativePath)
     # process the archive files
     #msg += "uploadDir:<br>\n" 
     fullPath = my_join(uploadDir,relativePath)
@@ -600,11 +600,11 @@ private
       if (File.ftype(fullName) == "directory")
         if (f != ".") and (f != "..")
           newRelativePath = my_join(relativePath,f)
-          newDir = my_join(submissionDir, newRelativePath)
+          newDir = my_join(projectDir, newRelativePath)
 	  unless File.exists?(newDir)
 	    Dir.mkdir(newDir)
 	  end
-          process_archive(archive_id, submissionDir, uploadDir, newRelativePath)
+          process_archive(archive_id, projectDir, uploadDir, newRelativePath)
         end
       else 
         if File.ftype(fullName) == "file"
@@ -616,23 +616,23 @@ private
    
 	  relName = my_join(relativePath,f)
  
-          # delete any equivalent submissionFile records
-  	  @submission.submission_archives.each do |c|
-            old = SubmissionFile.find(:first, :conditions => ['submission_archive_id = ? and file_name = ?', c.id, relName])
+          # delete any equivalent projectFile records
+  	  @project.project_archives.each do |c|
+            old = ProjectFile.find(:first, :conditions => ['project_archive_id = ? and file_name = ?', c.id, relName])
             old.destroy if old
           end
 
-          submission_file = SubmissionFile.new
-          submission_file.file_name = relName
-          submission_file.file_size = File.size(fullName)
-          submission_file.file_date = File.ctime(fullName)
-          submission_file.submission_archive_id = archive_id 
-          unless submission_file.save
-            flash[:warning] = "error saving submission_file record for: #{f}"
+          project_file = ProjectFile.new
+          project_file.file_name = relName
+          project_file.file_size = File.size(fullName)
+          project_file.file_date = File.ctime(fullName)
+          project_file.project_archive_id = archive_id 
+          unless project_file.save
+            flash[:warning] = "error saving project_file record for: #{f}"
             return false
           end
     
-          parentDir = my_join(submissionDir, relativePath)
+          parentDir = my_join(projectDir, relativePath)
           toName = my_join(parentDir, f)    
           # move file from temporary upload dir into parent dir
           File.rename(fullName,toName);
@@ -644,15 +644,15 @@ private
 
  def process_uploaded_archive
 
-    @filename = @submission.status.gsub(/^schedule expanding /,'')
+    @filename = @project.status.gsub(/^schedule expanding /,'')
 
     # make sure parent paths exist
-    submissionDir = File.dirname(path_to_file)
-    userDir = File.dirname(submissionDir)
+    projectDir = File.dirname(path_to_file)
+    userDir = File.dirname(projectDir)
     Dir.mkdir(userDir) unless File.exists?(userDir)
-    Dir.mkdir(submissionDir) unless File.exists?(submissionDir)
+    Dir.mkdir(projectDir) unless File.exists?(projectDir)
 
-    nextArchiveNo = @submission.archive_count+1
+    nextArchiveNo = @project.archive_count+1
 
     @filename = "#{"%03d" % nextArchiveNo}_#{@filename}"
 
@@ -661,35 +661,35 @@ private
     #write_attribute("file", path_to_file)
 
     # need to test for and delete any with same archive_no (just in case?)
-    # moved this up here just to get the @submission_archive.id set
-    old = SubmissionArchive.find(:first, :conditions => ['submission_id = ? and archive_no = ?', @submission.id, nextArchiveNo])
+    # moved this up here just to get the @project_archive.id set
+    old = ProjectArchive.find(:first, :conditions => ['project_id = ? and archive_no = ?', @project.id, nextArchiveNo])
     old.destroy if old
-    # add new submissionArchive record
-    submission_archive = SubmissionArchive.new
-    submission_archive.submission_id = @submission.id 
-    submission_archive.archive_no = nextArchiveNo
-    submission_archive.file_name = @filename
-    submission_archive.file_size = File.size(path_to_file)
-    submission_archive.file_date = Time.now    # TODO: add .utc to make UTC time?
-    unless submission_archive.save
-      flash[:warning] += "error saving submission_archive record for: #{@filename}"
+    # add new projectArchive record
+    project_archive = ProjectArchive.new
+    project_archive.project_id = @project.id 
+    project_archive.archive_no = nextArchiveNo
+    project_archive.file_name = @filename
+    project_archive.file_size = File.size(path_to_file)
+    project_archive.file_date = Time.now    # TODO: add .utc to make UTC time?
+    unless project_archive.save
+      flash[:warning] += "error saving project_archive record for: #{@filename}"
       return false
     end
 
-    @submission.archive_count = nextArchiveNo
+    @project.archive_count = nextArchiveNo
 
-    unless @submission.save
-      flash[:warning] += "submission record save failed"
+    unless @project.save
+      flash[:warning] += "project record save failed"
       return false
     end
 
-    unless expand_archive(submission_archive)
-      @submission.archive_count = nextArchiveNo - 1
-      @submissions.status = "expand failed"
-      @submission.save
+    unless expand_archive(project_archive)
+      @project.archive_count = nextArchiveNo - 1
+      @projects.status = "expand failed"
+      @project.save
       return false
     end
-    #redirect_to :action => 'show', :id => @submission
+    #redirect_to :action => 'show', :id => @project
 
     #@upload.methods.each {|x| msg += "#{x.to_str}<br>"}
     return true

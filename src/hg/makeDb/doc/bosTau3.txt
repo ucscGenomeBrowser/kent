@@ -679,3 +679,56 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     # 58996872 bases of 2731807384 (2.160%) in intersection
     # Should be zero intersection with rmsk
     featureBits bosTau3 genscan rmsk
+
+
+##########################################################################
+# MAKE SCAFFOLD LIFT FILE (DONE 11/14/07 angie)
+# Bovine consortium is doing analysis in scaffold coords.  Make a liftUp
+# for viewing in GB.
+    cd /cluster/data/bosTau3/baylor
+    wget ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Btaurus/fasta/Btau20060815-freeze/individualScaffolds/Btau3.1.scaffolds.chr
+    # Exclude chrUn from the lift file for two bosTau3-specific reasons:
+    # chrUn scaffolds were kept separate, and they used a different prefix
+    # (bosTau3 prefix is "chrUn.003" while Baylor scaffold prefix is just
+    # ChrUn)
+    sed -e '/ChrUn/ d; s/Chr30/ChrX/' Btau3.1.scaffolds.chr \
+    | ~/kent/src/utils/baylorScaffoldChrToAgp.pl \
+      ../chrom.sizes \
+    | agpToLift -revStrand \
+      > ../jkStuff/scaffolds.lft
+    # Actually, we can add on some name-translating .lft lines for chrUn.*:
+    perl -wpe '@w=split; if ($w[0] !~ /ChrUn/) { s/^.*\n$//; next; } \
+               $w[0] =~ s/^.*Chr/Chr/; \
+               $chr = $w[0];  $chr =~ s/ChrUn/chrUn.003/; \
+               $size = $w[2] - $w[1] + 1;\
+               s/^.*/0\t$w[0]\t$size\t$chr\t$size\t$w[3]/; \
+      ' Btau3.1.scaffolds.chr \
+    > /tmp/chrUn.lft
+    # Make sure sizes agree:
+    grep ^chrUn ../chrom.sizes > /tmp/1
+    awk '{print $4 "\t" $5;}' /tmp/chrUn.lft > /tmp/2
+    cmp /tmp/1 /tmp/2
+    # Add chrUn lines to main .lft:
+    cat /tmp/chrUn.lft >> ../jkStuff/scaffolds.lft
+
+
+##########################################################################
+# MAKE SCAFFOLDS TRACK (DONE 11/14/07 angie)
+    ssh hgwdev
+    mkdir /cluster/data/bosTau3/bed/scaffolds
+    cd /cluster/data/bosTau3/bed/scaffolds
+    # bosTau3's chrUn.* scaffolds are separate, so make this track only 
+    # for the assembled chroms.
+    perl -wpe 'if (/ChrUn/) {s/^.*\n$//; next;} \
+           m/(Chr\w+)\.(\d+)\t(\d+)\t(\d+)\t([+N-])/ || die; \
+           ($chr, $scafNum, $start, $end, $strand) = ($1, $2, $3, $4, $5); \
+           $scafName = "$chr.$scafNum"; \
+           $chr =~ s/^C/c/; $chr =~ s/chr30/chrX/; \
+           $start--;  $strand =~ s/N/+/; \
+           s/^.*$/$chr\t$start\t$end\t$scafName\t0\t$strand/;' \
+        ../../baylor/Btau3.1.scaffolds.chr \
+      > scaffolds.bed
+    hgLoadBed bosTau3 scaffold scaffolds.bed
+
+
+##########################################################################

@@ -192,6 +192,7 @@
 #include "dless.h"
 #include "gv.h"
 #include "gvUi.h"
+#include "protVar.h"
 #include "oreganno.h"
 #include "oregannoUi.h"
 #include "ec.h"
@@ -209,8 +210,9 @@
 #include "omicia.h"
 #include "atomDb.h"
 #include "itemConf.h"
+#include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1369 2007/11/07 05:07:54 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1371 2007/11/26 22:45:57 hartera Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -2489,40 +2491,6 @@ if (subChain != NULL && otherOrg != NULL)
     printf("Open %s browser</A> at position corresponding to the part of chain that is in this window.<BR>\n", otherOrg);
     }
 chainFree(&toFree);
-}
-
-boolean chromSeqFileExists(char *db, char *chrom)
-/* check whether chromInfo exists for a database, find the path of the */
-/* sequence file for this chromosome and check if the file exists. */
-{
-char seqFile[512];
-struct sqlConnection *conn = sqlConnect(db);
-char query[256];
-char *res = NULL;
-boolean exists = FALSE;
-
-/* if the database exists, check for the chromInfo file */
-if (sqlDatabaseExists(db))
-    {
-    safef(query, sizeof(query), "select fileName from chromInfo where chrom = '%s'", chrom);
-    res = sqlQuickQuery(conn, query, seqFile, 512);
-    sqlDisconnect(&conn);
-    }
-
-/* if there is not table or no information in the table or if the table */
-/* exists but the file can not be opened return false, otherwise sequence */
-/* file exists and return true */
-if (res != NULL)
-    {
-    /* chromInfo table exists so check that sequence file can be opened */
-    FILE *f = fopen(seqFile, "rb");
-    if (f != NULL)
-        {
-        exists = TRUE;
-        fclose(f);
-        }
-    }
-return exists;
 }
 
 void genericChainClick(struct sqlConnection *conn, struct trackDb *tdb, 
@@ -18693,6 +18661,103 @@ hFreeConn(&conn);
 return;
 }
 
+int printProtVarLink (char *id, int i)
+{
+struct protVarLink *link = NULL;
+struct hash *linkInstructions = NULL;
+struct hash *thisLink = NULL;
+struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn2 = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char query[256];
+char *linktype, *label;
+char *doubleEntry = NULL;
+int attrCnt = 0;
+
+hgReadRa(database, organism, rootDir, "links.ra", &linkInstructions);
+safef(query, sizeof(query),
+     "select * from protVarLink where id = '%s' and attrType = '%s'",
+     id, gvAttrTypeKey[i]);
+/* attrType == gvAttrTypeKey should be quote safe */
+
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct sqlResult *sr2;
+    char **row2;
+
+    attrCnt++;
+    link = protVarLinkLoad(row);
+    /* determine how to do link from .ra file */
+    thisLink = hashFindVal(linkInstructions, link->raKey);
+    if (thisLink == NULL) 
+        continue; /* no link found */
+    /* type determined by fields: url = external, dataSql = internal, others added later? */
+    printGvAttrCatType(i); /* only print header if data */
+    linktype = hashFindVal(thisLink, "dataSql");
+    label = hashFindVal(thisLink, "label");
+    if (label == NULL) 
+        label = "";
+    if (linktype != NULL) 
+        {
+        safef(query, sizeof(query), linktype, link->acc);
+        sr2 = sqlGetResult(conn2, query);
+        while ((row2 = sqlNextRow(sr2)) != NULL)
+            {
+            /* should this print more than 1 column, get count from ra? */
+            if (row2[0] != NULL)
+                {
+                /* print label and result */
+                printf("<B>%s</B> - %s", label, row2[0]);
+                /* check for link */
+                doubleEntry = hashFindVal(thisLink, "dataLink");
+                if (doubleEntry != NULL)
+                    {
+                    char url[512];
+                    struct hash *newLink;
+                    char *accCol = NULL, *format = NULL;
+                    int colNum = 1;
+	            newLink = hashFindVal(linkInstructions, doubleEntry);
+                    accCol = hashFindVal(thisLink, "dataLinkCol");
+                    if (newLink == NULL || accCol == NULL)
+                       errAbort("missing required fields in .ra file");
+                    colNum = atoi(accCol);
+                    format = hashFindVal(newLink, "url");
+                    safef(url, sizeof(url), format, row2[colNum - 1]);
+                    printf(" - <A HREF=\"%s\" TARGET=_blank>%s</A>\n",
+                        url, row2[colNum - 1]);
+                    }
+                printf("<BR>\n");
+                }
+            }
+        sqlFreeResult(&sr2);
+        }
+    else 
+        {
+        linktype = hashFindVal(thisLink, "url");
+        if (linktype != NULL)
+            {
+            char url[1024];
+            char *encodedAcc = cgiEncode(link->acc);
+            char *encode = hashFindVal(thisLink, "needsEncoded");
+            if (encode != NULL && sameString(encode, "yes"))
+                safef(url, sizeof(url), linktype, encodedAcc);
+            else
+                safef(url, sizeof(url), linktype, link->acc);
+            if (sameString(link->displayVal, ""))
+                printf("<B>%s</B> - <A HREF=\"%s\" TARGET=_blank>%s</A><BR>\n", label, url, link->acc);
+            else
+                printf("<B>%s</B> - <A HREF=\"%s\" TARGET=_blank>%s</A><BR>\n", label, url, link->displayVal);
+            }
+        }
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+hFreeConn(&conn2);
+return attrCnt;
+}
+
 int printGvLink (char *id, int i)
 {
 struct gvLink *link = NULL;
@@ -18770,13 +18835,19 @@ while ((row = sqlNextRow(sr)) != NULL)
         linktype = hashFindVal(thisLink, "url");
         if (linktype != NULL)
             {
-            char url[512];
+            char url[1024];
             char *encodedAcc = cgiEncode(link->acc);
             char *encode = hashFindVal(thisLink, "needsEncoded");
             if (encode != NULL && sameString(encode, "yes"))
                 safef(url, sizeof(url), linktype, encodedAcc);
             else
                 safef(url, sizeof(url), linktype, link->acc);
+            /* bounce srcLinks through PSU first for disclaimers */
+            if (sameString(link->attrType, "srcLink"))
+                {
+                char *copy = cgiEncode(url);
+                safef(url, sizeof(url), "http://globin.bx.psu.edu/cgi-bin/phencode-test/link-disclaimer?src=%s&link=%s", link->raKey, copy);
+                }
             if (sameString(link->displayVal, ""))
                 printf("<B>%s</B> - <A HREF=\"%s\" TARGET=_blank>%s</A><BR>\n", label, url, link->acc);
             else
@@ -18849,6 +18920,89 @@ sqlFreeResult(&sr);
 printTrackHtml(tdb);
 }
 
+void doProtVar (struct trackDb *tdb, char *itemName)
+/* this prints the detail page for the UniProt variation track */
+{
+char *table = tdb->tableName;
+struct protVarPos *mut = NULL;
+struct protVar *details = NULL;
+struct protVarAttr attr;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char query[256];
+char *escName = NULL;
+int hasAttr = 0;  
+int i;
+int start = cartInt(cart, "o");
+
+/* official name, position, band, genomic size */
+escName = sqlEscapeString(itemName);
+safef(query, sizeof(query), "select * from protVar where id = '%s'", escName);
+details = protVarLoadByQuery(conn, query); 
+
+genericHeader(tdb, details->name);
+
+/* change label based on species */
+if (sameString(organism, "Human"))
+    printf("<B>HGVS name:</B> %s <BR>\n", details->name);
+else
+    printf("<B>Official name:</B> %s <BR>\n", details->name);
+safef(query, sizeof(query),
+      "select * from %s where chrom = '%s' and "
+      "chromStart=%d and name = '%s'", table, seqName, start, escName);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    mut = protVarPosLoad(row);
+    printPos(mut->chrom, mut->chromStart, mut->chromEnd, mut->strand, TRUE, mut->name);
+    }
+sqlFreeResult(&sr);
+printf("*Note the DNA retrieved by the above link is the genomic sequence.<br>");
+
+/* print location and mutation type fields */
+printf("<B>location:</B> %s<BR>\n", details->location);
+printf("<B>type:</B> %s<BR>\n", details->baseChangeType);
+/* add note here about exactness of coordinates */
+if (details->coordinateAccuracy == 0) 
+    {
+    printf("<B>note:</B> The coordinates for this mutation are only estimated.<BR>\n");
+    }
+
+printf("<DL>");
+
+/* loop through attributes (uses same lists as gv*) */
+for(i=0; i<gvAttrSize; i++)
+    {
+    /* check 2 attribute tables for each type */
+    safef(query, sizeof(query),
+        "select * from protVarAttr where id = '%s' and attrType = '%s'",
+        escName, gvAttrTypeKey[i]);
+    /* attrType == gvAttrTypeKey should be quote safe */
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+        hasAttr++;
+        protVarAttrStaticLoad(row, &attr);
+        printGvAttrCatType(i); /* only print header, if data */
+        /* print value */
+        printf("%s<BR>", attr.attrVal);
+        }
+    sqlFreeResult(&sr);
+    hasAttr += printProtVarLink(escName, i);
+    }
+if (hasAttr > 0)
+    printf("</DD>"); 
+printf("</DL>\n");
+
+protVarPosFree(&mut);
+freeMem(escName);
+freeMem(gvPrevCat);
+freeMem(gvPrevType);
+printTrackHtml(tdb);
+hFreeConn(&conn);
+}
+
 void doGv (struct trackDb *tdb, char *itemName)
 /* this prints the detail page for the Genome variation track */
 {
@@ -18899,11 +19053,7 @@ sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     {
     struct gvSrc *src = gvSrcLoad(row);
-    printf("<B>source:</B> %s", src->src);
-    if (src->lsdb != NULL && differentString(src->lsdb, "")) 
-        {
-        printf("; %s", src->lsdb);
-        }
+    printf("<B>source:</B> %s", src->lsdb);
     printf("<BR>\n");
     }
 sqlFreeResult(&sr);
@@ -20309,6 +20459,10 @@ else if (sameString("snpArrayIllumina300", track) ||
 else if (sameString("gvPos", track))
     {
     doGv(tdb, item);
+    }
+else if (sameString("protVarPos", track))
+    {
+    doProtVar(tdb, item);
     }
 else if (sameString("oreganno", track))
     {

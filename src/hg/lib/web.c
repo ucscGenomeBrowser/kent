@@ -13,7 +13,7 @@
 #include "hgColors.h"
 #include "wikiLink.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.139 2007/11/05 18:15:14 fanhsu Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.141 2007/12/03 22:50:43 fanhsu Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -328,6 +328,12 @@ else
 	       uiState);
 	puts("           PDF/PS</A> &nbsp;&nbsp;&nbsp;");
 	}
+    if (endsWith(scriptName, "hgHeatmap"))
+	{
+	printf("       <A HREF=\"../cgi-bin/hgHeatmap%s&hgHeatmap_doPsOutput=on\" class=\"topbar\">\n",
+	       uiState);
+	puts("           PDF/PS</A> &nbsp;&nbsp;&nbsp;");
+	}
     if (wikiLinkEnabled() && !endsWith(scriptName, "hgSession"))
 	{
 	printf("<A HREF=\"../cgi-bin/hgSession%s%shgS_doMainPage=1\" "
@@ -351,7 +357,7 @@ else
     	else if (endsWith(scriptName, "hgGenome"))
 	    puts("       <A HREF=\"../goldenPath/help/hgGenomeHelp.html\"");
     	else if (endsWith(scriptName, "hgSession"))
-	    puts("       <A HREF=\"../goldenPath/help/hgTracksHelp.html#Sessions\"");
+	    puts("       <A HREF=\"../goldenPath/help/hgSessionHelp.html\"");
     	else if (endsWith(scriptName, "hgVisiGene"))
 	    puts("       <A HREF=\"../goldenPath/help/hgTracksHelp.html#VisiGeneHelp\"");
     	else 
