@@ -2773,6 +2773,7 @@ tablesIgnored $hg
     delMccarroll
     eponine
     exaptedRepeats
+    geneTests
     genomicSuperDups
     haplotype
     kg2ToKg3
