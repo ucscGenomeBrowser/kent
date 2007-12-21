@@ -9,7 +9,7 @@
 #	Data release policy: http://medaka.utgenome.org/#policy
 #	Ensembl: http://www.ensembl.org/Oryzias_latipes/index.html
 #
-#	"$Id: oryLat1.txt,v 1.34 2007/09/17 22:01:21 hartera Exp $"
+#	"$Id: oryLat1.txt,v 1.35 2007/12/21 20:56:35 hiram Exp $"
 #
 
 ##########################################################################
@@ -2399,23 +2399,20 @@ cat  << '_EOF_' > template
     cd /cluster/data/oryLat1/bed/multiz5way
 
     # upstream mafs 
+    #	rebuilt 2007-12-21 to fix difficulty in mafFrags when species.lst
+    #	did not have fr2 as the first one
     #	There isn't any refGene table, trying ensGene instead
-    time for S in 1000 2000 5000
-    do
-        echo "making upstream${S}.maf"
-        nice -n +19 featureBits oryLat1 ensGene:upstream:${S} \
-		-fa=/dev/null -bed=up.bad
-        awk -F'\t' \
-'{printf("%s\t%s\t%s\t%s\t%s\t%s\n", $1, $2, $3, substr($4, 0, 9), 0, $5)}' \
-		up.bad > up.bed
-        rm up.bad
-        nice -n +19 mafFrags oryLat1 multiz5way up.bed upstream${S}.maf \
-                -orgs=species.lst
-        rm up.bed
-	nice -n +19 gzip -c upstream${S}.maf \
-	    > mafDownloads/ensGene.upstream${S}.maf.gz
-	rm -f upstream${S}.maf
-    done > mafFrags.log 2>&1 &
+for S in 1000 2000 5000
+do
+    echo "making upstream${S}.maf"
+    nice -n +19 $HOME/bin/$MACHTYPE/featureBits -verbose=2 oryLat1 \
+        ensGene:upstream:${S} -fa=/dev/null -bed=stdout \
+        | perl -wpe 's/_up[^\t]+/\t0/' \
+        | $HOME/kent/src/hg/ratStuff/mafFrags/mafFrags oryLat1 multiz5way \
+                stdin stdout -orgs=species.lst \
+        | gzip -c > mafDownloads/ensGene.upstream${S}.maf.gz
+    echo "done ensGene.upstream${S}.maf.gz"
+done
 
     # re-done 2007-04-13 after proper annotation
     ssh kkstore04

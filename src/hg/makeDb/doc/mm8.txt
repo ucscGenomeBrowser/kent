@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: mm8.txt,v 1.60 2007/12/12 19:24:12 markd Exp $"
+#	"$Id: mm8.txt,v 1.61 2007/12/21 20:56:36 hiram Exp $"
 #
 
 #  NOTE:  this doc may have genePred loads that fail to include
@@ -3718,33 +3718,22 @@ autoMultiz $(root1) {check out line+ /cluster/store8/mm8/bed/multiz17way/maf/$(r
 
     # creating upstream mafs (DONE - 2006-07-31 - Hiram)
     ssh hgwdev
-    #	data load balancing in the kkstore04 filesystems
+    #	data data load balancing in the kkstore04 filesystems
     mkdir /cluster/store8/mm8/bed/multiz17way/upstreamMafs
     cd /cluster/data/mm8/bed/multiz17way
     ln -s /cluster/store8/mm8/bed/multiz17way/upstreamMafs ./upstreamMafs
-    cd upstreamMafs
-    for N in 1000 2000 5000
+    #	rebuilt 2007-12-21 to fix difficulty in mafFrags when species.lst
+    #	did not have mm8 as the first one
+for S in 1000 2000 5000
 do
-    echo "making up${N}.bed"
-    nice featureBits mm8 refGene:upstream:${N} -fa=/dev/null -bed=stdout \
-	| awk -F '\t' \
-'{
-gsub("_up.*","",$4)
-printf("%s\t%s\t%s\t%s\t%d\t%s\n", $1, $2, $3, $4, 0, $5)}' \
-	> up${N}.bed
-done
-    for N in 1000 2000 5000
-do
-    echo "making upstream${N}.maf"
-    nice mafFrags mm8 multiz17way up${N}.bed upstream${N}.maf \
-                -orgs=/cluster/data/mm8/bed/multiz17way/species.lst
-done
-    ssh kkstore04
-    cd /cluster/data/mm8/bed/multiz17way/upstreamMafs
-    for N in 1000 2000 5000
-do
-    echo "nice gzip upstream${N}.maf"
-    nice gzip upstream${N}.maf
+    echo "making upstream${S}.maf"
+    nice -n +19 $HOME/bin/$MACHTYPE/featureBits -verbose=2 mm8 \
+        refGene:upstream:${S} -fa=/dev/null -bed=stdout \
+        | perl -wpe 's/_up[^\t]+/\t0/' | sort -k1,1 -k2,2n \
+        | $HOME/kent/src/hg/ratStuff/mafFrags/mafFrags mm8 multiz17way \
+                stdin stdout -orgs=species.lst \
+        | gzip -c > upstreamMafs/upstream${S}.maf.gz
+    echo "done upstream${S}.maf.gz"
 done
 
     ssh hgwdev

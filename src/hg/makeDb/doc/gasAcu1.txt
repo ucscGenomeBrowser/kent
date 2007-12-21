@@ -1514,26 +1514,20 @@ autoMultiz $(root1) {check out line+ /cluster/data/gasAcu1/bed/multiz8way/maf/$(
     cd /cluster/data/gasAcu1/bed/multiz8way
 
     # upstream mafs 
-    #	There isn't any refGene table, trying ensGene instead
-    time for S in 1000 2000 5000
-    do
-        echo "making upstream${S}.maf"
-        nice -n +19 featureBits gasAcu1 ensGene:upstream:${S} \
-		-fa=/dev/null -bed=up.bad
-        awk -F'\t' \
-'{printf("%s\t%s\t%s\t%s\t%s\t%s\n", $1, $2, $3, substr($4, 0, 9), 0, $5)}' \
-		up.bad > up.bed
-        rm up.bad
-        nice -n +19 mafFrags gasAcu1 multiz8way up.bed upstream${S}.maf \
-                -orgs=species.lst
-        rm up.bed
-	nice -n +19 gzip -c upstream${S}.maf \
-	    > mafDownloads/ensGene.upstream${S}.maf.gz
-	rm -f upstream${S}.maf
-    done > mafFrags.log 2>&1 &
-    #	to monitor progress:
-    tail -f mafFrags.log
-    #	real    3m12.000s
+    #	rebuilt 2007-12-21 to fix difficulty in mafFrags when species.lst
+    #	did not have mm8 as the first one
+    #	There isn't any refGene table, using ensGene instead
+for S in 1000 2000 5000
+do
+    echo "making upstream${S}.maf"
+    nice -n +19 $HOME/bin/$MACHTYPE/featureBits -verbose=2 gasAcu1 \
+	ensGene:upstream:${S} -fa=/dev/null -bed=stdout \
+    	| perl -wpe 's/_up[^\t]+/\t0/' | sort -k1,1 -k2,2n \
+	| $HOME/kent/src/hg/ratStuff/mafFrags/mafFrags gasAcu1 multiz8way \
+		stdin stdout -orgs=species.lst \
+	| gzip -c > mafDownloads/ensGene.upstream${S}.maf.gz
+    echo "done ensGene.upstream${S}.maf.gz"
+done
 
     ## re-done after correction to anno/maf files 2007-03-27 - Hiram
     ssh kkstore05

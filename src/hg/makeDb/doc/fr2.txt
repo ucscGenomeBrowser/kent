@@ -9,7 +9,7 @@
 #       Data release policy: http://medaka.utgenome.org/#policy
 #       Ensembl: http://www.ensembl.org/Oryzias_latipes/index.html
 #
-#       "$Id: fr2.txt,v 1.18 2007/09/23 01:48:54 hartera Exp $"
+#       "$Id: fr2.txt,v 1.19 2007/12/21 20:56:35 hiram Exp $"
 #
 
 ##########################################################################
@@ -1099,26 +1099,20 @@ autoMultiz $(root1) {check out line+ /cluster/data/fr2/bed/multiz5way/maf/$(root
     cd /cluster/data/fr2/bed/multiz5way
 
     # upstream mafs 
-    #	There isn't any refGene table, trying ensGene instead
-    time for S in 1000 2000 5000
-    do
-        echo "making upstream${S}.maf"
-        nice -n +19 featureBits fr2 ensGene:upstream:${S} \
-		-fa=/dev/null -bed=up.bad
-        awk -F'\t' \
-'{printf("%s\t%s\t%s\t%s\t%s\t%s\n", $1, $2, $3, substr($4, 0, 9), 0, $5)}' \
-		up.bad > up.bed
-        rm up.bad
-        nice -n +19 mafFrags fr2 multiz5way up.bed upstream${S}.maf \
-                -orgs=species.lst
-        rm up.bed
-	nice -n +19 gzip -c upstream${S}.maf \
-	    > mafDownloads/ensGene.upstream${S}.maf.gz
-	rm -f upstream${S}.maf
-    done > mafFrags.log 2>&1 &
-    #	to monitor progress:
-    tail -f mafFrags.log
-    #	real    0m54.940s
+    #	rebuilt 2007-12-21 to fix difficulty in mafFrags when species.lst
+    #	did not have fr2 as the first one
+    #	There isn't any refGene table, using ensGene instead
+for S in 1000 2000 5000
+do
+    echo "making upstream${S}.maf"
+    nice -n +19 $HOME/bin/$MACHTYPE/featureBits -verbose=2 fr2 \
+        ensGene:upstream:${S} -fa=/dev/null -bed=stdout \
+        | perl -wpe 's/_up[^\t]+/\t0/' \
+        | $HOME/kent/src/hg/ratStuff/mafFrags/mafFrags fr2 multiz5way \
+                stdin stdout -orgs=species.lst \
+        | gzip -c > mafDownloads/ensGene.upstream${S}.maf.gz
+    echo "done ensGene.upstream${S}.maf.gz"
+done
 
     ssh kkstore05
     cd /cluster/data/fr2/bed/multiz5way
