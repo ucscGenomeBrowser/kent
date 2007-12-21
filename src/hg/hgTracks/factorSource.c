@@ -73,7 +73,6 @@ bedMethods(track);
 track->drawItemAt = factorSourceDrawItemAt;
 track->loadItems = loadAll;
 track->itemRightPixels = rightPixels;
-track->canPack = TRUE;
 
 /* Get the associated data describing the various sources. */
 track->expTable = trackDbRequiredSetting(track->tdb, "sourceTable");
