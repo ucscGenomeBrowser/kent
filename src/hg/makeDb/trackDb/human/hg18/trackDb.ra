@@ -2144,6 +2144,14 @@ speciesOrder ci2 dm2 ce3
 # treeImage phylo/syn_6way.jpg
 # speciesCodonDefault hg18
 
+track jkTestChipData
+longLabel Test of Unified Factor/Source Type Display
+group x
+priority 1110
+visibility hide
+type factorSource
+sourceTable jkTestChipExps
+
 track jkgInputRefSeq
 shortLabel RefSeq Input
 longLabel JKG Input RefSeq Alignments Take 9
