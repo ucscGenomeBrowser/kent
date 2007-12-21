@@ -4,7 +4,7 @@
 # This file describes browser build for the Marmoset
 # genome, July 2007
 #
-#	"$Id: calJac1.txt,v 1.7 2007/12/14 00:08:31 hiram Exp $"
+#	"$Id: calJac1.txt,v 1.8 2007/12/21 22:32:47 hiram Exp $"
 #
 ######################################################################
 ## DOWNLOAD SEQUENCE (DONE - 2007-08-21 - Hiram)
@@ -200,6 +200,21 @@ done
 
     # fb.calJac1.chainHg18Link.txt:
     #   2426684781 bases of 2929139385 (82.846%) in intersection
+
+    #	running syntenic net (DONE - 2007-12-14 - Hiram)
+    time nice -n +19 $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
+    /cluster/data/hg18/bed/blastz.calJac1.2007-10-07/DEF \
+      -bigClusterHub=pk -continue=syntenicNet -syntenicNet \
+      -swap -chainMinScore=3000 -chainLinearGap=medium > syntenicNet.log 2>&1 &
+    #	real    8m24.277s
+    #	failed during a chainSplit:
+    #	Can't open chain/Contig836.chain to append: Too many open files
+
+    #	create reciprocal best chains/nets
+    ssh hgwdev
+    cd /cluster/data/calJac1/bed/blastz.hg18.swap
+    time nice -n +19 /cluster/bin/scripts/doRecipBest.pl calJac1 hg18 \
+	> rbest.log 2>&1 &
 
 #########################################################################
 ## genscan run (DONE - 2007-11-08 - Hiram)
@@ -462,4 +477,155 @@ TMPDIR=/scratch/tmp
     #	wild-card expansion problem, changed to a 'find' to avoid that.
 
 ###########################################################################
+## BLASTZ Mouse Mm9 swap (DONE - 2007-09-07 - Hiram
+    ssh kkstore06
+    #	use a screen to control this job
+    screen
+    #	the original alignment
+    cd /cluster/data/mm9/bed/blastzCalJac1.2007-09-06
+    cat fb.mm9.chainCalJac1Link.txt
+    #	863961573 bases of 2620346127 (32.971%) in intersection
 
+    #	the swap
+    mkdir /cluster/data/calJac1/bed/blastz.mm9.swap
+    cd /cluster/data/calJac1/bed/blastz.mm9.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/mm9/bed/blastzCalJac1.2007-09-06/DEF \
+	-stop=load -chainMinScore=3000 \
+	-swap -chainLinearGap=medium -bigClusterHub=pk > swap.log 2>&1 &
+    #	real    217m10.835s
+    cat fb.calJac1.chainMm9Link.txt
+    #	887586922 bases of 2929139385 (30.302%) in intersection
+    time nice -n +19 $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
+	-verbose=2 /cluster/data/mm9/bed/blastzCalJac1.2007-09-06/DEF \
+	-continue=download -chainMinScore=3000 \
+	-swap -chainLinearGap=medium -bigClusterHub=pk > download.log 2>&1 &
+    #	real    1m9.876s
+
+    #	run the syntenic net for multiple alignment (DONE - 2007-12-14 - Hiram)
+    time nice -n +19 $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
+	-verbose=2 /cluster/data/mm9/bed/blastzCalJac1.2007-09-06/DEF \
+	-syntenicNet -continue=syntenicNet -chainMinScore=3000 \
+	-swap -chainLinearGap=medium -bigClusterHub=pk > syntenicNet.log 2>&1 &
+    #	real    7m23.683s
+    #	failed during a chainSplit:
+    #	Can't open chain/Contig1203.chain to append: Too many open files
+
+    #	create reciprocal best chains/nets for 9-way multiple alignment
+    ssh hgwdev
+    cd /cluster/data/calJac1/bed/blastz.mm9.swap
+    time nice -n +19 /cluster/bin/scripts/doRecipBest.pl calJac1 mm9 \
+	> rbest.log 2>&1 &
+    time nice -n +19 /cluster/bin/scripts/doRecipBest.pl calJac1 mm9 \
+	-continue=download > rbest.download.log 2>&1 &
+
+###########################################################################
+# Blastz swap Chimp panTro2 (DONE - 2007-11-14 - Hiram)
+    ssh kkstore06
+    screen # use screen to manage this job
+    cd /cluster/data/panTro2/bed/blastzCalJac1.2007-11-13
+    cat fb.panTro2.chainCalJac1Link.txt
+    #	2220169777 bases of 2909485072 (76.308%) in intersection
+
+    mkdir /cluster/data/calJac1/bed/blastz.panTro2.swap
+    cd /cluster/data/calJac1/bed/blastz.panTro2.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/panTro2/bed/blastzCalJac1.2007-11-13/DEF \
+	-chainMinScore=3000 -chainLinearGap=medium \
+	-swap -bigClusterHub=pk > swap.log 2>&1 &
+    #	real    320m14.293s
+    cat fb.calJac1.chainPanTro2Link.txt
+    #	2264115411 bases of 2929139385 (77.296%) in intersection
+
+    #	create reciprocal best chains/nets for 9-way maf alignments
+    ssh hgwdev
+    cd /cluster/data/calJac1/bed/blastz.panTro2.swap
+    time nice -n +19 /cluster/bin/scripts/doRecipBest.pl calJac1 panTro2 \
+	> rbest.log 2>&1 &
+
+###########################################################################
+# SWAP BLASTZ Orangutan ponAbe2 (DONE - 2007-11-29 - Hiram)
+    #	primary blastz result
+    cd /cluster/data/ponAbe2/bed/blastzCalJac1.2007-11-18
+    cat fb.ponAbe2.chainCalJac1Link.txt
+    #	2310720863 bases of 3093572278 (74.694%) in intersection
+
+    #	and for the swap
+    ssh kkstore02
+    mkdir /cluster/data/calJac1/bed/blastz.ponAbe2.swap
+    cd /cluster/data/calJac1/bed/blastz.ponAbe2.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/ponAbe2/bed/blastzCalJac1.2007-11-18/DEF \
+	-chainMinScore=3000 -chainLinearGap=medium \
+	-swap -bigClusterHub=kk > swap.log 2>&1 &
+    #	real    341m54.548s
+    cat fb.calJac1.chainPonAbe2Link.txt
+    #	2253236255 bases of 2929139385 (76.925%) in intersection
+
+    #	reciprocal best for 9-way maf alignments
+    ssh hgwdev
+    cd /cluster/data/calJac1/bed/blastz.ponAbe2.swap
+    time nice -n +19 /cluster/bin/scripts/doRecipBest.pl calJac1 ponAbe2 \
+	> rbest.log 2>&1 &
+
+###########################################################################
+# SWAP BLASTZ Dog canFam2 (DONE - 2007-11-30 - Hiram)
+    # primary blastz result
+    cd /cluster/data/canFam2/bed/blastzCalJac1.2007-11-28
+    cat fb.canFam2.chainCalJac1Link.txt
+    #	1369690756 bases of 2384996543 (57.429%) in intersection
+
+    mkdir /cluster/data/calJac1/bed/blastz.canFam2.swap
+    cd /cluster/data/calJac1/bed/blastz.canFam2.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/canFam2/bed/blastzCalJac1.2007-11-28/DEF \
+	-chainMinScore=3000 -chainLinearGap=medium \
+	-swap -bigClusterHub=kk > swap.log 2>&1 &
+    #	encountered difficulties with /scratch/data/ on kolossus
+    #	had to finish the netChains.csh script manually, then continuing:
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/canFam2/bed/blastzCalJac1.2007-11-28/DEF \
+	-continue=load -chainMinScore=3000 -chainLinearGap=medium \
+	-swap -bigClusterHub=kk > load.log 2>&1 &
+    #	real    56m44.375s
+
+    cat fb.calJac1.chainCanFam2Link.txt
+    #	1451345669 bases of 2929139385 (49.549%) in intersection
+
+    #	reciprocal best for 9-way maf alignments
+    ssh hgwdev
+    #	expects blastz.canFam2 to exist
+    cd /cluster/data/calJac1/bed
+    ln -s blastz.canFam2.swap blastz.canFam2
+    cd /cluster/data/calJac1/bed/blastz.canFam2
+    time nice -n +19 /cluster/bin/scripts/doRecipBest.pl calJac1 canFam2 \
+	> rbest.log 2>&1 &
+
+###########################################################################
+# SWAP BLASTZ Chimp rheMac2 (DONE - 2007-11-18 - Hiram)
+    #	primary blastz result
+    cd /cluster/data/rheMac2/bed/blastzCalJac1.2007-11-16
+    cat fb.rheMac2.chainCalJac1Link.txt
+    #	2055107003 bases of 2646704109 (77.648%) in intersection
+
+    #	and the download
+    mkdir /cluster/data/calJac1/bed/blastz.rheMac2.swap
+    cd /cluster/data/calJac1/bed/blastz.rheMac2.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/rheMac2/bed/blastzCalJac1.2007-11-16/DEF \
+	-swap -chainMinScore=3000 -chainLinearGap=medium \
+	-bigClusterHub=kk > swap.log 2>&1 &
+    #	real    349m36.073s
+    cat fb.calJac1.chainRheMac2Link.txt
+    #	2191300051 bases of 2929139385 (74.810%) in intersection
+
+    #	reciprocal best for 9-way maf alignments
+    ssh hgwdev
+    #	expects blastz.rheMac2 to exist
+    cd /cluster/data/calJac1/bed
+    ln -s blastz.rheMac2.swap blastz.rheMac2
+    cd /cluster/data/calJac1/bed/blastz.rheMac2
+    time nice -n +19 /cluster/bin/scripts/doRecipBest.pl calJac1 rheMac2 \
+	> rbest.log 2>&1 &
+
+###########################################################################
