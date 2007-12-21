@@ -9,7 +9,7 @@
 #include "hdb.h"
 
 
-static char const rcsid[] = "$Id: freen.c,v 1.79 2007/09/27 19:49:31 kent Exp $";
+static char const rcsid[] = "$Id: freen.c,v 1.80 2007/12/21 18:56:07 kent Exp $";
 
 void usage()
 {
@@ -20,24 +20,8 @@ errAbort("freen - test some hairbrained thing.\n"
 void freen(char *fileName)
 /* Test some hair-brained thing. */
 {
-hSetDb("hg18");
-struct slName *chrom, *chromList = hAllChromNames();
-FILE *f = mustOpen(fileName, "w");
-for (chrom = chromList; chrom != NULL; chrom = chrom->next)
-    {
-    int size = hChromSize(chrom->name);
-    int start = 0, end;
-    int step = 100000;
-    int itemSize = 100;
-    for (end = start + step; end <= size; end += step)
-        {
-	fprintf(f, "%s\t%d\t%d\tnothing\t%d\n",
-		chrom->name, start, start+itemSize,
-		start/step*100%1000 + 90);
-	start = end;
-	}
-    }
-carefulClose(&f);
+printf("sizeof double = %d\n", (int)sizeof(double));
+printf("sizeof float = %d\n", (int)sizeof(float));
 }
 
 int main(int argc, char *argv[])
