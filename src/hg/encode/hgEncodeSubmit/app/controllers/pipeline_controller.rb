@@ -502,6 +502,7 @@ class PipelineController < ApplicationController
       if c == "1"
         found = true
         unless expand_archive(a)
+	  redirect_to :action => 'show', :id => @project
           return
         end
       end
@@ -615,7 +616,7 @@ private
       end
     end
 
-    exitCode = run_with_timeout(cmd, 8)
+    exitCode = run_with_timeout(cmd, 300)
     unless exitCode >= 0
       flash[:warning] = "unzip timeout exceeded<br>"  
       return false
@@ -756,7 +757,7 @@ private
 
     unless expand_archive(project_archive)
       @project.archive_count = nextArchiveNo - 1
-      @projects.status = "expand failed"
+      @project.status = "expand failed"
       @project.save
       return false
     end
