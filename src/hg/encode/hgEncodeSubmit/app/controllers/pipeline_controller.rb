@@ -50,6 +50,9 @@ class PipelineController < ApplicationController
         # ok
       end
     end
+    if @project.status.starts_with?("schedule expand all")
+      reexpand_all_completion
+    end
   end
 
   def valid_status
@@ -221,209 +224,34 @@ class PipelineController < ApplicationController
       end
     end
 
+    initiateToDo
 
     unless @upurl.blank?
-      @project.status = "schedule uploading #{@upurl}"
+      toDo "wget -nv -O #{path_to_file} '#{@upurl}'"
+      #@project.status = "schedule todo (upload and expand)"
     else
       if @upload.instance_of?(Tempfile)
         FileUtils.copy(@upload.local_path, path_to_file)
       else
         File.open(path_to_file, "wb") { |f| f.write(@upload.read) }
       end
-      @project.status = "schedule expanding #{plainName}"
+      #@project.status = "schedule todo (expand)"
     end
+    @project.status = "schedule uploading #{plainName}"
 
     unless @project.save
       flash[:warning] = "project record save failed"
       return
     end
 
-    flash[:notice] = msg
-    redirect_to :action => 'show', :id => @project
-
-  end
-
-  def uploadOld
-    @project = Project.find(params[:id])
-    return unless request.post?
-    @upload = params[:upload_file]
-    @upurl = params[:upload_url]
-    if @upurl == "http://"
-      @upurl = ""
-    end
-
-    return if @upload.blank? && @upurl.blank?
-    #raise @upload.inspect
-    #flash[:notice] = "#{@upload.inspect}"
-
-    unless @upurl.blank?
-      @filename = sanitize_filename(@upurl)
-      @upload = open(@upurl)
-    else
-      @filename = sanitize_filename(@upload.original_filename)
-    end
-
-    extensionsByMIME = {
-      "application/zip" => ["zip", "ZIP"],
-      "application/x-tar" => ["tar.gz", "TAR.GZ", "tar.bz2", "TAR.BZ2"]
-    }
-    extensions = extensionsByMIME[@upload.content_type.chomp]
-    unless extensions
-      flash[:warning] = "invalid content_type=#{@upload.content_type.chomp}"
-      return
-    end
-    unless extensions && extensions.any? {|ext| @filename.ends_with?("." + ext) }
-      flash[:warning] = "File name <strong>#{@filename}</strong> is invalid. " +
-        "Only a compressed archive file (zip,bz2,gz) is allowed"
-      # debug only next line:
-      flash[:notice] = "content_type=#{@upload.content_type}" unless @upload.blank?
-      return
-    end
-
-
-    msg = ""
-
-    # make sure parent paths exist
-    projectDir = File.dirname(path_to_file)
-    userDir = File.dirname(projectDir)
-    Dir.mkdir(userDir) unless File.exists?(userDir)
-    Dir.mkdir(projectDir) unless File.exists?(projectDir)
-
-    nextArchiveNo = @project.archive_count+1
-
-    @filename = "#{"%03d" % nextArchiveNo}_#{@filename}"
-
-    #debugging
-    msg += "content_type=#{@upload.content_type}<br>"
-    msg += "original_filename=#{@upload.original_filename}<br>" if @upurl.blank?
-    msg += "sanitized filename=#{@filename}<br>"
-    msg += "size=#{@upload.size}<br>"
-    msg += "RAILS_ROOT=#{RAILS_ROOT}<br>"
-    msg += "upload path=#{ActiveRecord::Base.configurations[RAILS_ENV]['upload']}<br>"
-    msg += "path_to_file=#{path_to_file}<br>"
-    msg += "nextArchiveNo=#{nextArchiveNo}<br>"
-
-    # just in case, remove it it already exists (shouldn't happen)
-    File.delete(path_to_file) if File.exists?(path_to_file)
-
-    @project.status = "uploading #{@filename}"
-
-    unless @project.save
-      flash[:warning] = "project record save failed"
-      return
-    end
-
-
-    # fork here
-    pid = Process.fork
-    # if parent
-
-    if pid
-      msg += "child pid=#{pid}<br>"
-
-      flash[:notice] = msg
-      redirect_to :action => 'show', :id => @project
-      return
-
-    else
-
-      # if child
-
-      unless @upurl.blank?
-        File.open(path_to_file, "wb") { |f| f.write(@upload.read) }
-      else
-        if @upload.instance_of?(Tempfile)
-          FileUtils.copy(@upload.local_path, path_to_file)
-        else
-          File.open(path_to_file, "wb") { |f| f.write(@upload.read) }
-        end
-      end
-
-      exit!(0)	
-       # exit ? or return?
-
-    end
-   
-
-  rescue OpenURI::HTTPError => err
-    flash[:warning] = "HTTP Error: " + err.message
-  end
-
-
-
-
-  # This is the older method, see begin_validating above
-  #  (this will be phased out and removed probably)
-  def validate
-    @project = Project.find(params[:id])
-    @projectTypes = getProjectTypes
-    msg = ""
-    # make sure status is uploaded
-    if @project.status == "new"
-      msg += "Nothing uploaded yet"
-      flash[:notice] = msg
-      redirect_to :action => 'show', :id => @project
-      return
-    end
-
-    # make sure parent paths exist
-    projectDir = path_to_file
-    userDir = File.dirname(projectDir)
-    unless File.exists?(userDir) and File.exists?(projectDir)
-      msg += "Unexpected error, userDir and projectDir do not exist!"
-      flash[:warning] = msg
-      redirect_to :action => 'show', :id => @project
-      return
-    end
-
-    # make up an error output file
-    @filename = "validate_error"
-    errFile = path_to_file
-
-    # run the validator
-    cmd = ""
-    cmd += @project.project_type.validator
-    cmd += " "
-    cmd += @project.project_type.type_params
-    cmd += " "
-    cmd += projectDir
-    cmd += " 2>"
-    cmd += errFile
-
-    msg += cmd
-
-    exitCode = run_with_timeout(cmd, 30)
-    if exitCode >= 0
-      msg += "<br>validate exitCode = #{exitCode}<br>" 
-      if exitCode == 0
-        if @project.status != "validated"
-          @project.status = "validated"
-          unless @project.save
-            flash[:warning] = "project record save failed"
-          end
-        end
-      else
-
-        errText = File.open(errFile, "rb") { |f| f.read }
-	flash[:warning] = "error:<br>" + errText
-        
-        if @project.status != "invalid"
-          @project.status = "invalid"
-          unless @project.save
-            flash[:warning] = "project record save failed"
-          end
-        end
-      end
-    else
-      flash[:warning] = "validate timeout exceeded<br>"  
-      redirect_to :action => 'show', :id => @project
-      return
-    end 
+    prep_one_archive @filename, nextArchiveNo
 
     flash[:notice] = msg
     redirect_to :action => 'show', :id => @project
 
   end
+
+
 
   def delete_archive
     archive = ProjectArchive.find(params[:id])
@@ -438,8 +266,10 @@ class PipelineController < ApplicationController
     c = @project.archives_active[n..n]
     if c == "1"
       c = "0"
+      msg += "Archive deleted" 
     else
       c = "1"
+      msg += "Archive undeleted" 
     end
     @project.archives_active[n..n] = c
 
@@ -450,7 +280,6 @@ class PipelineController < ApplicationController
     end
 
     #old way: archive.destroy  #we do not delete, just mark
-    msg += "Archive deleted" 
     flash[:notice] = msg
     reexpand_all 
   end
@@ -495,23 +324,23 @@ class PipelineController < ApplicationController
       end
     end
 
+    initiateToDo
     found = false 
     @project.project_archives.each do |a|
       n = a.archive_no-1
       c = @project.archives_active[n..n]
       if c == "1"
         found = true
-        unless expand_archive(a)
-	  redirect_to :action => 'show', :id => @project
-          return
-        end
+        prep_one_archive a.file_name, a.archive_no
       end
     end
 
-    if found 
-      @project.status = "uploaded"
-    else
+    unless found 
       @project.status = "new"
+      msg = "All archives are currently marked as deleted"
+    else
+      @project.status = "schedule re-expand all"
+      msg = "Scheduling clean out of upload dir and re-expansion of all archives"
     end
     unless @project.save
       flash[:warning] = "project record save failed"
@@ -519,7 +348,6 @@ class PipelineController < ApplicationController
       return false
     end
 
-    msg = "Cleaned out upload dir and re-expanded all archives"
     if flash[:notice]
       flash[:notice] += "<br>"+msg
     else
@@ -528,6 +356,10 @@ class PipelineController < ApplicationController
     redirect_to :action => 'show', :id => @project
 
   end
+
+
+
+
 
   # --------- PRIVATE ---------
 private
@@ -551,9 +383,15 @@ private
     just_filename.gsub(/[^\w\.\_]/,'_') 
   end
 
+  def path_to_project_dir
+    # the expand_path method resolves this relative path to full absolute path
+    File.expand_path("#{ActiveRecord::Base.configurations[RAILS_ENV]['upload']}/#{@current_user.id}/#{@project.id}")
+  end
+
+
   def path_to_file
     # the expand_path method resolves this relative path to full absolute path
-    File.expand_path("#{ActiveRecord::Base.configurations[RAILS_ENV]['upload']}/#{@current_user.id}/#{@project.id}/#{@filename}")
+    path_to_project_dir+"/#{@filename}"
   end
 
   # --- read project types from config file into hash -------
@@ -585,54 +423,49 @@ private
     end
   end
 
-  def expand_archive(archive)
-    # expand archive belonging to archive record
 
-    # make sure parent paths exist
-    @filename = ""
-    projectDir = path_to_file
-
-    # make a temporary upload directory to unpack and merge from
-    uploadDir = projectDir+"/upload"
-    if File.exists?(uploadDir)
-      cmd = "rm -fr #{uploadDir}"
+  def clean_out_dir(path)
+    if File.exists?(path)
+      cmd = "rm -fr #{path}"
       exitCode = system(cmd)
       unless exitCode 
         flash[:warning] = "command=[#{cmd}], exitCode = #{exitCode}<br>"  
         return false
       end
     end
+    return true
+  end
+
+  def prep_one_archive(file_name, archive_no)
+
+    # make sure parent paths exist
+    projectDir = path_to_project_dir
+    userDir = File.dirname(projectDir)
+
+    # make a temporary upload directory to unpack and merge from
+    uploadDir = projectDir+"/upload_#{archive_no}"
+    clean_out_dir uploadDir
     Dir.mkdir(uploadDir)
 
-    @filename = archive.file_name
-    # handle unzipping the archive
-    if ["zip", "ZIP"].any? {|ext| @filename.ends_with?("." + ext) }
-      cmd = "unzip -o  #{path_to_file} -d #{uploadDir}"     # .zip 
-    else
-      if ["gz", "GZ"].any? {|ext| @filename.ends_with?("." + ext) }
-        cmd = "tar -xzf #{path_to_file} -C #{uploadDir}"  # .gz  gzip
-      else  
-        cmd = "tar -xjf #{path_to_file} -C #{uploadDir}"  # .bz2 bzip2
-      end
-    end
+    @filename = file_name
+    cmd = makeUnarchiveCommand(uploadDir)
+    toDo cmd
 
-    exitCode = run_with_timeout(cmd, 300)
-    unless exitCode >= 0
-      flash[:warning] = "unzip timeout exceeded<br>"  
-      return false
-    end
- 
+  end
+
+
+  def expand_archive(archive)
+    # expand archive belonging to archive record
+
+    projectDir = path_to_project_dir
+    uploadDir = projectDir+"/upload_#{archive.archive_no}"
+
+    @filename = archive.file_name
+
     process_archive(archive.id, projectDir, uploadDir, "")
 
     # cleanup: delete temporary upload subdirectory
-    if File.exists?(uploadDir)
-      cmd = "rm -fr #{uploadDir}"
-      exitCode = system(cmd)
-      unless exitCode 
-        flash[:warning] = "error cleaning up temporary upload subdirectory: <br>command=[#{cmd}], exitCode = #{exitCode}<br>"  
-        return false
-      end
-    end
+    clean_out_dir uploadDir
 
     if @project.project_archives.length == 0
       @project.status = "new"
@@ -716,15 +549,11 @@ private
     @filename = @project.status.gsub(/^schedule expanding /,'')
 
     # make sure parent paths exist
-    projectDir = File.dirname(path_to_file)
-    userDir = File.dirname(projectDir)
-    Dir.mkdir(userDir) unless File.exists?(userDir)
-    Dir.mkdir(projectDir) unless File.exists?(projectDir)
+    projectDir = path_to_project_dir
 
     nextArchiveNo = @project.archive_count+1
 
     @filename = "#{"%03d" % nextArchiveNo}_#{@filename}"
-
 
     # dead code, just an example of using write_attribute:
     #write_attribute("file", path_to_file)
@@ -793,6 +622,59 @@ private
     return File.open(errFile, "rb") { |f| f.read }
   rescue
     return ""
+  end
+
+  def todoName
+    # the expand_path method resolves this relative path to full absolute path
+    path_to_project_dir+"/todo"
+  end
+  def toDo(line)
+    f = File.open(todoName, "a")
+    f.puts(line)
+    f.close
+  end
+  def initiateToDo
+    f = File.open(todoName, "w")
+    f.close
+    toDo "#!/bin/tcsh"
+    File.chmod 0755, todoName
+  end
+
+  def makeUnarchiveCommand(uploadDir)
+    # handle unzipping the archive
+    if ["zip", "ZIP"].any? {|ext| @filename.ends_with?("." + ext) }
+      cmd = "unzip -o  #{path_to_file} -d #{uploadDir}"     # .zip 
+    else
+      if ["gz", "GZ"].any? {|ext| @filename.ends_with?("." + ext) }
+        cmd = "tar -xzf #{path_to_file} -C #{uploadDir}"  # .gz  gzip
+      else  
+        cmd = "tar -xjf #{path_to_file} -C #{uploadDir}"  # .bz2 bzip2
+      end
+    end
+  end
+
+  def reexpand_all_completion
+    # after background expansion of all archives not marked as deleted
+
+    @project.project_archives.each do |a|
+      n = a.archive_no-1
+      c = @project.archives_active[n..n]
+      if c == "1"
+        unless expand_archive(a)
+	  redirect_to :action => 'show', :id => @project
+          return
+        end
+      end
+    end
+
+    msg = "Cleaned out upload dir and re-expanded all archives"
+    if flash[:notice]
+      flash[:notice] += "<br>"+msg
+    else
+      flash[:notice] = msg
+    end 
+    redirect_to :action => 'show', :id => @project
+
   end
 
 end

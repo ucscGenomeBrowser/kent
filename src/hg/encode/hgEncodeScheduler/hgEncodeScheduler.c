@@ -16,7 +16,7 @@
 #include <signal.h>
 #include <sys/wait.h>
 
-static char const rcsid[] = "$Id: hgEncodeScheduler.c,v 1.8 2007/12/19 20:49:47 galt Exp $";
+static char const rcsid[] = "$Id: hgEncodeScheduler.c,v 1.9 2007/12/22 02:12:31 galt Exp $";
 
 char *db = NULL;
 char *dir = NULL;
@@ -206,6 +206,8 @@ if (status==0)
 	safef(temp, sizeof(temp), "schedule expanding %s", extra);
 	jobStatus = cloneString(temp);
 	}
+    else if (sameString(jobType,"reexpandall"))
+	jobStatus = "schedule expand all";
     else
 	errAbort("unexpected jobType=[%s]", jobType);
     }
@@ -217,6 +219,8 @@ else
 	jobStatus = "invalid";
     else if (sameString(jobType,"upload"))
 	jobStatus = "upload failed";
+    else if (sameString(jobType,"reexpandall"))
+	jobStatus = "re-expand-all failed";
     else
 	errAbort("unexpected jobType=[%s]", jobType);
     }
@@ -256,6 +260,8 @@ else if (sameOk(status, "schedule validating"))
     jobType = "validate";
 else if (startsWith("schedule uploading ", status))
     jobType = "upload";
+else if (sameOk(status, "schedule re-expand all"))
+    jobType = "reexpandall";
 else
     errAbort("unexpected jobType=[%s]", jobType);
 char *projectPath = getPathToErrorFile(conn, project, jobType);
@@ -276,6 +282,7 @@ else if (sameString(jobType,"load"))
     }
 else if (sameString(jobType,"upload"))
     {
+    timeOut = 300;
     char *url = cloneString(status+strlen("schedule uploading "));
      uglyf("url=[%s]\n",url);
     char *projectDir = cloneStringZ(projectPath, strrchr(projectPath,'/')-projectPath);
@@ -285,12 +292,21 @@ else if (sameString(jobType,"upload"))
     safef(query, sizeof(query), "select archive_count from projects where id=%d", project);
     int nextArchiveNo = sqlQuickNum(conn, query) + 1;
 
-    plainName = strrchr(url,'/')+1;
+    plainName = url; // oldway:  strrchr(url,'/')+1;
     char filename[256];
     safef(filename, sizeof(filename), "%03d_%s", nextArchiveNo, plainName);
      uglyf("filename=[%s]\n",filename);
 
-    safef(commandLine, sizeof(commandLine), "wget -nv -O %s/%s '%s'", projectDir, filename, url);
+    //safef(commandLine, sizeof(commandLine), "wget -nv -O %s/%s '%s'", projectDir, filename, url);
+    safef(commandLine, sizeof(commandLine), "%s/todo", projectDir);
+     uglyf("commandLine=[%s]\n",commandLine);
+    }
+else if (sameString(jobType,"reexpandall"))
+    {
+    timeOut = 300;
+    char *projectDir = cloneStringZ(projectPath, strrchr(projectPath,'/')-projectPath);
+     uglyf("projectDir=[%s]\n",projectDir);
+    safef(commandLine, sizeof(commandLine), "%s/todo", projectDir);
      uglyf("commandLine=[%s]\n",commandLine);
     }
 updateErrorFile(conn, project, jobType, ""); // clear out job_error file
@@ -339,7 +355,9 @@ else
     else if (sameString(jobType,"validate"))
 	jobStatus = "validating";
     else if (sameString(jobType,"upload"))
-	jobStatus = "uploading";
+	jobStatus = "uploading/expanding";
+    else if (sameString(jobType,"reexpandall"))
+	jobStatus = "re-expanding all archives";
     else
 	errAbort("unexpected jobType=[%s]", jobType);
     safef(query, sizeof(query), "insert into running values (%d, %d, '%s', %d, %d, '%s')", 
@@ -386,6 +404,7 @@ if (sqlQuickNum(conn,query) < 10) // only allow max 10 jobs at once
 	" where status = 'schedule validating'"
 	" or status = 'schedule loading'"
 	" or status like 'schedule uploading %%'"
+        " or status = 'schedule re-expand all'"
 	);
     struct sqlResult *rs;
     char **row = NULL;
