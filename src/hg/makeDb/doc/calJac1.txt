@@ -4,7 +4,7 @@
 # This file describes browser build for the Marmoset
 # genome, July 2007
 #
-#	"$Id: calJac1.txt,v 1.8 2007/12/21 22:32:47 hiram Exp $"
+#	"$Id: calJac1.txt,v 1.9 2007/12/22 00:45:04 hiram Exp $"
 #
 ######################################################################
 ## DOWNLOAD SEQUENCE (DONE - 2007-08-21 - Hiram)
@@ -210,7 +210,7 @@ done
     #	failed during a chainSplit:
     #	Can't open chain/Contig836.chain to append: Too many open files
 
-    #	create reciprocal best chains/nets
+    #	create reciprocal best chains/nets for 9-way maf alignments
     ssh hgwdev
     cd /cluster/data/calJac1/bed/blastz.hg18.swap
     time nice -n +19 /cluster/bin/scripts/doRecipBest.pl calJac1 hg18 \
@@ -567,6 +567,7 @@ TMPDIR=/scratch/tmp
     cd /cluster/data/calJac1/bed/blastz.ponAbe2.swap
     time nice -n +19 /cluster/bin/scripts/doRecipBest.pl calJac1 ponAbe2 \
 	> rbest.log 2>&1 &
+    #	real    96m17.285s
 
 ###########################################################################
 # SWAP BLASTZ Dog canFam2 (DONE - 2007-11-30 - Hiram)
@@ -600,6 +601,7 @@ TMPDIR=/scratch/tmp
     cd /cluster/data/calJac1/bed/blastz.canFam2
     time nice -n +19 /cluster/bin/scripts/doRecipBest.pl calJac1 canFam2 \
 	> rbest.log 2>&1 &
+    #	real    70m45.324s
 
 ###########################################################################
 # SWAP BLASTZ Chimp rheMac2 (DONE - 2007-11-18 - Hiram)
@@ -627,5 +629,348 @@ TMPDIR=/scratch/tmp
     cd /cluster/data/calJac1/bed/blastz.rheMac2
     time nice -n +19 /cluster/bin/scripts/doRecipBest.pl calJac1 rheMac2 \
 	> rbest.log 2>&1 &
+    #	real    87m53.651s
+
+#########################################################################
+## 9-Way Multiz (DONE - 2007-12-21 - Hiram)
+##
+    ssh hgwdev
+    mkdir /cluster/data/calJac1/bed/multiz9way
+    cd /cluster/data/calJac1/bed/multiz9way
+    #	take the 30-way tree from mm9 and eliminate genomes not in
+    #	this alignment
+    #	rearrange to get calJac1 on the top of the graph
+    #	paste this tree into the on-line phyloGif tool:
+    #	http://genome.ucsc.edu/cgi-bin/phyloGif
+    #	to create the image for the tree diagram
+
+    #	select the 9 organisms from the 30-way recently done on mouse mm9
+    /cluster/bin/phast/tree_doctor \
+	--prune-all-but Human_hg18,Mouse_mm9,Chimp_panTro2,Marmoset_calJac1,Rhesus_rheMac2,Orangutan_ponAbe2,Dog_canFam2,Platypus_ornAna1,Opossum_monDom4 \
+	/cluster/data/mm9/bed/multiz30way/mm9OnTop.fullNames.nh \
+	> 9-way.fullNames.nh
+
+    #	looks something like this:
+((((Mouse_mm9:0.325818,
+((((Human_hg18:0.005873,Chimp_panTro2:0.007668):0.013037,
+     Orangutan_ponAbe2:0.020000):0.013037,
+       Rhesus_rheMac2:0.031973):0.036500,
+Marmoset_calJac1:0.070000):0.058454):0.019763,
+Dog_canFam2:0.187963):0.243550,
+Opossum_monDom4:0.320721):0.088647,Platypus_ornAna1:0.488110);
+
+(((
+(Mouse_mm9:0.325818,
+(Marmoset_calJac1:0.070000,
+ (((Human_hg18:0.005873,Chimp_panTro2:0.007668):0.013037,
+     Orangutan_ponAbe2:0.020000):0.013037,
+       Rhesus_rheMac2:0.031973):0.036500):0.058454):0.019763,
+Dog_canFam2:0.187963):0.243550,
+Opossum_monDom4:0.320721):0.088647,Platypus_ornAna1:0.488110);
+
+    #	rearrange to get Marmoset at the top:
+    # this leaves us with:
+    cat << '_EOF_' > calJac1.9-way.nh
+(((((Marmoset_calJac1:0.070000,
+     (((Human_hg18:0.005873,Chimp_panTro2:0.007668):0.013037,
+    Orangutan_ponAbe2:0.020000):0.013037,
+   Rhesus_rheMac2:0.031973):0.036500):0.058454,
+  Mouse_mm9:0.325818):0.019763,
+ Dog_canFam2:0.187963):0.243550,
+Opossum_monDom4:0.320721):0.088647,Platypus_ornAna1:0.488110);
+'_EOF_'
+    #	<< happy emacs
+
+    #	create a species list from that file:
+    sed -e 's/[()]//g; s/ /\n/g; s/,/\n/g' calJac1.9-way.nh \
+        | sed -e "s/[ \t]*//g; /^[ \t]$/d; /^$/d" | sort -u \
+        | sed -e "s/.*_//; s/:.*//" | sort > species.list
+    #	verify that has 9 db names in it
+    # create a stripped down nh file for use in autoMZ run
+    echo \
+`sed 's/[a-zA-Z0-9]*_//g; s/:0.[0-9]*//g; s/[,;]/ /g' calJac1.9-way.nh \
+	| sed -e "s/  / /g"` > tree.9.nh
+    #	that looks like, as a single line:
+# (((((calJac1(((hg18 panTro2)ponAbe2)rheMac2)) mm9) canFam2) monDom4) ornAna1)
+
+    # verify all blastz's exists
+    cat << '_EOF_' > listMafs.csh
+#!/bin/csh -fe
+cd /cluster/data/calJac1/bed/multiz9way
+foreach db (`grep -v calJac1 species.list`)
+    set bdir = /cluster/data/calJac1/bed/blastz.$db
+    if (-e $bdir/mafRBestNet/calJac1.$db.rbest.maf.gz) then
+	echo "$db mafRBestNet"
+    else if (-e $bdir/mafSynNet/calJac1.$db.net.maf.gz) then
+	echo "$db mafSynNet"
+    else if (-e $bdir/mafNet/calJac1.$db.net.maf.gz) then
+	echo "$db mafNet"
+    else
+	echo "$db mafs not found"
+    endif
+end
+'_EOF_'
+    # << happy emacs
+    chmod +x ./listMafs.csh
+    #	see what it says, the "mafs not found" should only show up on calJac1
+    ./listMafs.csh
+# canFam2 mafRBestNet
+# hg18 mafRBestNet
+# mm9 mafRBestNet
+# monDom4 mafNet
+# ornAna1 mafNet
+# panTro2 mafRBestNet
+# ponAbe2 mafRBestNet
+# rheMac2 mafRBestNet
+
+
+    /cluster/bin/phast/all_dists calJac1.9-way.nh > 9way.distances.txt
+    grep -i caljac 9way.distances.txt | sort -k3,3n
+Marmoset_calJac1        Human_hg18      0.138447
+Marmoset_calJac1        Rhesus_rheMac2  0.138473
+Marmoset_calJac1        Orangutan_ponAbe2       0.139537
+Marmoset_calJac1        Chimp_panTro2   0.140242
+Marmoset_calJac1        Dog_canFam2     0.336180
+Marmoset_calJac1        Mouse_mm9       0.454272
+Marmoset_calJac1        Opossum_monDom4 0.712488
+Marmoset_calJac1        Platypus_ornAna1        0.968524
+
+    #	use the calculated
+    #	distances in the table below to order the organisms and check
+    #	the button order on the browser.  Zebrafish ends up before
+    #	tetraodon and fugu on the browser despite its distance.
+    #	And if you can fill in the table below entirely, you have
+    #	succeeded in finishing all the alignments required.
+    #
+#                         featureBits chainLink measures
+#                                       chainCalJac1Link   chain   linearGap
+#    distance                     on CalJac1    on other   minScore
+#  1  0.138447 Human_hg18         (% 82.846)   (% 78.351)   3000     medium
+#  2  0.138473 Rhesus_rheMac2     (% 74.810)   (% 77.648)   3000     medium
+#  3  0.139537 Orangutan_ponAbe2  (% 76.925)   (% 74.694)   3000     medium
+#  4  0.140242 Chimp_panTro2      (% 77.296)   (% 76.308)   3000     medium
+#  5  0.336180 Dog_canFam2        (% 57.429)   (% 49.549)   3000     medium
+#  6  0.454272 Mouse_mm9          (% 30.302)   (% 32.971)   3000     medium
+#  6  0.712488 Opossum_monDom4    (% 13.357)   (% 11.050)   5000     loose
+#  7  0.968524 Platypus_ornAna1   (%  7.221)   (% 10.619)   5000     loose
+
+    # copy net mafs to cluster-friendly storage, splitting chroms
+    mkdir mafLinks
+    cd mafLinks
+    # hint: obtained these links by altering listMafs.csh above
+    ln -s ../../blastz.canFam2/mafRBestNet/calJac1.canFam2.rbest.maf.gz \
+	mafLinks/canFam2.maf.gz
+    ln -s ../../blastz.hg18/mafRBestNet/calJac1.hg18.rbest.maf.gz \
+	mafLinks/hg18.maf.gz
+    ln -s ../../blastz.mm9/mafRBestNet/calJac1.mm9.rbest.maf.gz \
+	mafLinks/mm9.maf.gz
+    ln -s ../../blastz.monDom4/mafNet/calJac1.monDom4.net.maf.gz \
+	mafLinks/monDom4.maf.gz
+    ln -s ../../blastz.ornAna1/mafNet/calJac1.ornAna1.net.maf.gz \
+	mafLinks/ornAna1.maf.gz
+    ln -s ../../blastz.panTro2/mafRBestNet/calJac1.panTro2.rbest.maf.gz \
+	mafLinks/panTro2.maf.gz
+    ln -s ../../blastz.ponAbe2/mafRBestNet/calJac1.ponAbe2.rbest.maf.gz \
+	mafLinks/ponAbe2.maf.gz
+    ln -s ../../blastz.rheMac2/mafRBestNet/calJac1.rheMac2.rbest.maf.gz \
+	mafLinks/rheMac2.maf.gz
+    ssh kkstore06
+    cd /cluster/data/calJac1/bed/multiz9way/mafLinks
+    mkdir -p /san/sanvol1/scratch/calJac1/multiz9way/maf
+    rsync --copy-links -a --progress ./ \
+	/san/sanvol1/scratch/calJac1/multiz9way/maf
+
+    # ready for the multiz run
+    ssh memk
+    cd /cluster/data/calJac1/bed/multiz9way
+    mkdir -p maf run
+    cd run
+    mkdir penn
+    # use latest penn utilities
+    P=/cluster/bin/penn/multiz.v11.2007-03-19/multiz-tba
+    cp -p $P/{autoMZ,multiz,maf_project} penn
+
+    cat > autoMultiz.csh << '_EOF_'
+#!/bin/csh -ef
+set db = calJac1
+set c = $1
+set maf = $2
+set run = `pwd`
+set tmp = /scratch/tmp/$db/multiz.$c
+set pairs = /san/sanvol1/scratch/$db/multiz9way/maf
+rm -fr $tmp
+mkdir -p $tmp
+cp ../tree.9.nh ../species.list $tmp
+pushd $tmp
+foreach s (`cat species.list`)
+    set in = $pairs/$s.maf
+    set out = $db.$s.sing.maf
+    if ($s == calJac1) then
+	continue
+    endif
+    if (-e $in.gz) then
+	zcat $in.gz > $out
+    else if (-e $in) then
+	cp $in $out
+    else
+	echo "##maf version=1 scoring=autoMZ" > $out
+    endif
+end
+set path = ($run/penn $path); rehash
+$run/penn/autoMZ + T=$tmp E=$db "`cat tree.9.nh`" $db.*.sing.maf $c.maf
+popd
+cp $tmp/$c.maf $maf
+rm -fr $tmp
+'_EOF_'
+# << happy emacs
+    chmod +x autoMultiz.csh
+
+    cat  << '_EOF_' > template
+#LOOP
+./autoMultiz.csh $(root1) {check out line+ /cluster/data/calJac1/bed/multiz9way/maf/$(root1).maf}
+#ENDLOOP
+'_EOF_'
+    # << emacs
+    #	it is a single job since everything is in the same maf file
+    time nice -n +19 ./autoMultiz.csh calJac1
+    XXX - running 2007-12-21 16:32 on mkr0u3
+
+    gensub2 species.list single template jobList
+    para create jobList
+    # the 104 jobs run time:
+# Completed: 104 of 104 jobs
+# CPU time in finished jobs:     174748s    2912.47m    48.54h    2.02d  0.006 y
+# IO & Wait Time:                  2952s      49.20m     0.82h    0.03d  0.000 y
+# Average job time:                1709s      28.48m     0.47h    0.02d
+# Longest finished job:            3340s      55.67m     0.93h    0.04d
+# Submission to last job:          4413s      73.55m     1.23h    0.05d
+
+    # put the split maf results back together into single chroms
+    ssh kkstore02
+    cd /cluster/data/calJac1/bed/multiz9way
+    # here is where the result directory maf should have already been maf.split
+    mv maf maf.split
+    mkdir maf
+    # going to sort out the redundant header garbage to leave a cleaner maf
+    for C in `ls maf.split | sed -e "s#__.*##" | sort -u`
+do
+    echo ${C}
+    head -q -n 1 maf.split/${C}__*.maf | sort -u > maf/${C}.maf
+    grep -h "^#" maf.split/${C}__*.maf | egrep -v "maf version=1|eof maf" | \
+	sed -e "s#_MZ_[^ ]* # #g; s#__[0-9]##g" | sort -u >> maf/${C}.maf
+    grep -h -v "^#" maf.split/${C}__*.maf >> maf/${C}.maf
+    tail -q -n 1 maf.split/${C}__*.maf | sort -u >> maf/${C}.maf
+done
+
+    # load tables for a look
+    ssh hgwdev
+    mkdir -p /gbdb/calJac1/multiz9way/maf
+    ln -s /cluster/data/calJac1/bed/multiz9way/maf/*.maf \
+                /gbdb/calJac1/multiz9way/maf
+    # this generates a large 1 Gb multiz9way.tab file in the directory
+    #	where it is running.  Best to run this over in scratch.
+    cd /scratch/tmp
+    time nice -n +19 hgLoadMaf \
+	-pathPrefix=/gbdb/calJac1/multiz9way/maf calJac1 multiz9way
+    #	real    6m37.534s
+    #	Loaded 6981959 mafs in 55 files from /gbdb/calJac1/multiz9way/maf
+
+    # load summary table
+    time nice -n +19 cat /gbdb/calJac1/multiz9way/maf/*.maf \
+	| hgLoadMafSummary calJac1 -minSize=30000 -mergeGap=1500 \
+	 -maxSize=200000  multiz9waySummary stdin
+    #	Created 1417364 summary blocks from 29928557 components
+    #	and 6981421 mafs from stdin
+    #	real    21m35.057s
+
+    # Gap Annotation
+    # prepare bed files with gap info
+    ssh kkstore02
+    mkdir /cluster/data/calJac1/bed/multiz9way/anno
+    cd /cluster/data/calJac1/bed/multiz9way/anno
+    mkdir maf run
+
+    #	these actually already all exist from previous multiple alignments
+    for DB in `cat ../species.list`
+do
+    CDIR="/cluster/data/${DB}"
+    if [ ! -f ${CDIR}/${DB}.N.bed ]; then
+	echo "creating ${DB}.N.bed"
+	echo twoBitInfo -nBed ${CDIR}/${DB}.2bit ${CDIR}/${DB}.N.bed
+    else
+	ls -og ${CDIR}/${DB}.N.bed
+    fi
+done
+
+    cd run
+    rm -f nBeds sizes
+    for DB in `grep -v calJac1 ../../species.list`
+do
+    echo "${DB} "
+    ln -s  /cluster/data/${DB}/${DB}.N.bed ${DB}.bed
+    echo ${DB}.bed  >> nBeds
+    ln -s  /cluster/data/${DB}/chrom.sizes ${DB}.len
+    echo ${DB}.len  >> sizes
+done
+
+    ssh kki
+    cd /cluster/data/calJac1/bed/multiz9way/anno/run
+
+    cat << '_EOF_' > doAnno.csh
+#!/bin/csh -ef
+    set dir = /cluster/data/calJac1/bed/multiz9way
+    set c = $1
+    cat $dir/maf/${c}.maf | \
+        nice mafAddIRows -nBeds=nBeds stdin /cluster/data/calJac1/calJac1.2bit $2
+'_EOF_'
+    # << happy emacs
+    chmod +x doAnno.csh
+
+    cat << '_EOF_' > template
+#LOOP
+./doAnno.csh $(root1) {check out line+ /cluster/data/calJac1/bed/multiz9way/anno/maf/$(root1).maf}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    cut -f1 /cluster/data/calJac1/chrom.sizes > chrom.list
+    gensub2 chrom.list single template jobList
+    para create jobList
+    para try ... check ... push ... etc.
+# Completed: 55 of 55 jobs
+# CPU time in finished jobs:       2278s      37.97m     0.63h    0.03d  0.000 y
+# IO & Wait Time:                  9909s     165.15m     2.75h    0.11d  0.000 y
+# Average job time:                 222s       3.69m     0.06h    0.00d
+# Longest finished job:            3340s      55.67m     0.93h    0.04d
+# Submission to last job:          3897s      64.95m     1.08h    0.05d
+
+    ssh hgwdev
+    cd /cluster/data/calJac1/bed/multiz9way/anno
+    mkdir -p /gbdb/calJac1/multiz9way/anno/maf
+    ln -s /cluster/data/calJac1/bed/multiz9way/anno/maf/*.maf \
+                /gbdb/calJac1/multiz9way/anno/maf
+    #	by loading this into the table multiz9way, it will replace the
+    #	previously loaded table with the unannotated mafs
+    #	huge temp files are made, do them on local disk
+    cd /scratch/tmp
+    time nice -n +19 hgLoadMaf -pathPrefix=/gbdb/calJac1/multiz9way/anno/maf \
+                calJac1 multiz9way
+    #	Loaded 7331265 mafs in 55 files from /gbdb/calJac1/multiz9way/anno/maf
+    #	real    8m31.092s
+
+    cat /cluster/data/calJac1/chrom.sizes | \
+	awk '{if ($2 > 1000000) { print $1 }}' |
+	while read C
+do
+    echo /gbdb/calJac1/multiz9way/anno/maf/$C.maf
+done | xargs cat | \
+        hgLoadMafSummary calJac1 -minSize=30000 -mergeGap=1500 \
+            -maxSize=200000  multiz9waySummary stdin
+    #	Created 1417364 summary blocks from 29928557 components and 7330669
+    #	mafs from stdin
+    #	by loading this into the table multiz9waySummary, it will replace
+    #	the previously loaded table with the unannotated mafs
+    #	remove the multiz9way*.tab files in this /scratch/tmp directory
+    rm multiz9way*
 
 ###########################################################################
