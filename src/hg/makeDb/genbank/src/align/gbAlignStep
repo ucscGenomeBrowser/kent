@@ -62,7 +62,7 @@ Alignment step, runs:
  - gbAlignFinish - Process PSL files and install in data directory";
 
 #
-# $Id: gbAlignStep,v 1.18 2007/12/25 05:32:52 markd Exp $
+# $Id: gbAlignStep,v 1.19 2007/12/26 16:22:35 markd Exp $
 #
 use strict;
 use warnings;
@@ -74,13 +74,18 @@ use gbCommon;
 # open all of the /cluster/store directory to avoid automounter problems on
 # genbank server (FIXME: tmp hack)
 use POSIX;
+sub holdOpenDir($) {
+    my($path) = @_;
+    my $fd = POSIX::open($path);
+    if (!defined($fd)) {
+        die("can't open cluster directory $path");
+    }
+}
 sub openStoreDirsHack() {
+    holdOpenDir("/cluster/data");
+    holdOpenDir("/cluster/bin");
     for (my $i = 1; $i <= 12; $i++) {
-        my $path = "/cluster/store".scalar($i);
-        my $fd = POSIX::open($path);
-        if (!defined($fd)) {
-            die("can't open cluster directory $path");
-        }
+        holdOpenDir("/cluster/store".scalar($i));
     }
 }
 
