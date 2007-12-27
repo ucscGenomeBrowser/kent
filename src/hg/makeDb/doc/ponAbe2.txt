@@ -4,7 +4,7 @@
 # This file describes browser build for the Orangutan
 # genome, July 31 2007
 #
-#	"$Id: ponAbe2.txt,v 1.11 2007/12/20 23:34:24 hiram Exp $"
+#	"$Id: ponAbe2.txt,v 1.12 2007/12/27 22:01:31 hiram Exp $"
 #
 ######################################################################
 ## DOWNLOAD SEQUENCE (DONE - 2007-09-06 - Hiram)
@@ -1510,6 +1510,9 @@ done
     chmod +x gzipAscii.sh
     time nice -n +19 ./gzipAscii.sh
     #	real    38m22.760s
+    #	copy the phastCons8wayScores to:
+# /cluster/data/ponAbe2/bed/multiz8way/downloads/phastCons8way/phastConsScores
+    #	for hgdownload downloads
 
     # Create merged posterier probability file and wiggle track data files
     # currently doesn't matter where this is performed, the san is the same
@@ -1691,6 +1694,82 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
 
     display histo.png &
 
+#############################################################################
+## Create downloads for 8-way business (DONE - 2007-12-27 - Hiram)
+    ssh kkstore02
+    mkdir -p /cluster/data/ponAbe2/bed/multiz8way/downloads/multiz8way/maf
+    cd /cluster/data/ponAbe2/bed/multiz8way/downloads/multiz8way/maf
+    cp -p /cluster/data/ponAbe2/bed/multiz8way/anno/maf/*.maf .
+    time nice -n +19 gzip -v *.maf
+    #	creating upstream files
+    ssh hgwdev
+    cd /cluster/data/ponAbe2/bed/multiz8way/downloads/multiz8way/maf
+    #	creating upstream files from xenoRefGene, bash script:
+DB=ponAbe2
+GENE=xenoRefGene
+NWAY=multiz8way
+export DB GENE
+
+for S in 1000 2000 5000
+do
+    echo "making upstream${S}.maf"
+    featureBits ${DB} ${GENE}:upstream:${S} -fa=/dev/null -bed=stdout \
+        | perl -wpe 's/_up[^\t]+/\t0/' | sort -k1,1 -k2,2n \
+        | $HOME/kent/src/hg/ratStuff/mafFrags/mafFrags ${DB} ${NWAY} \
+                stdin stdout \
+                -orgs=/cluster/data/${DB}/bed/${NWAY}/species.list \
+        | gzip -c > upstream${S}.maf.gz
+    echo "done upstream${S}.maf.gz"
+done
+    #
+    ssh kkstore02
+    cd /cluster/data/ponAbe2/bed/multiz8way/downloads/multiz8way/maf
+    md5sum *.maf.gz > md5sum.txt
+
+    cd ..
+    ln -s ../../ponAbe2.8-way.nh ./8way.nh
+    ln -s $HOME/kent/src/hg/makeDb/trackDb/orangutan/ponAbe2/multiz8way.html .
+    # copy README.txt from mm9 30-way downloads and edit to represent
+    #	this directory
+    cd ..
+    mkdir -p phastCons8way/phastConsScores
+    cd phastCons8way/phastConsScores
+    cp -p \
+/san/sanvol1/scratch/ponAbe2/multiz8way/cons/all/phastCons8wayScores/*.data.gz .
+    md5sum *.data.gz > md5sum.txt
+    cd ..
+    ln -s ../../cons/all/all.mod 8way.mod
+    # copy README.txt from mm9 30way downloads and edit to represent
+    #	this directory
+
+    #	enable them for hgdownload rsync transfer
+    ssh hgwdev
+    cd /usr/local/apache/htdocs/goldenPath/ponAbe2
+    mkdir multiz8way phastCons8way
+    cd multiz8way
+    ln -s /cluster/data/ponAbe2/bed/multiz8way/downloads/multiz8way/8way.nh .
+    ln -s /cluster/data/ponAbe2/bed/multiz8way/downloads/multiz8way/*.html .
+    ln -s /cluster/data/ponAbe2/bed/multiz8way/downloads/multiz8way/R*.txt .
+    mkdir maf
+    cd maf
+    ln -s \
+/cluster/data/ponAbe2/bed/multiz8way/downloads/multiz8way/maf/*.maf.gz .
+    ln -s \
+/cluster/data/ponAbe2/bed/multiz8way/downloads/multiz8way/maf/md5sum.txt
+    cd ../../phastCons8way
+    mkdir phastConsScores
+    cd phastConsScores
+    ln -s \
+/cluster/data/ponAbe2/bed/multiz8way/downloads/phastCons8way/phastConsScores/*.gz .
+    ln -s \
+/cluster/data/ponAbe2/bed/multiz8way/downloads/phastCons8way/phastConsScores/md5sum.txt .
+    cd ..
+    ln -s \
+/cluster/data/ponAbe2/bed/multiz8way/downloads/phastCons8way/8way.mod .
+    ln -s \
+/cluster/data/ponAbe2/bed/multiz8way/downloads/phastCons8way/README.txt .
+    
+    
 ###########################################################################
 # BLASTZ SWAP Human Hg18 (DONE - 2007-10-05 - Hiram)
     ssh kkstore02
