@@ -3,7 +3,7 @@
 # Caenorhabditis elegans
 #	Washington University School of Medicine GSC and Sanger Institute WS170
 
-#  $Id: ce4.txt,v 1.28 2007/10/12 00:08:03 angie Exp $
+#  $Id: ce4.txt,v 1.29 2007/12/27 20:59:33 hiram Exp $
 
 
 #########################################################################
@@ -1216,25 +1216,23 @@ done
     done
 
     ssh hgwdev
+    cd /cluster/data/ce4/bed/multiz5way
+    #	redone 2007-12-21 to fix difficulty in mafFrags when ce4 was not the
+    #	first species listed
     # upstream mafs 
     #	There isn't any refGene table, trying sangerGene instead
-    time for S in 1000 2000 5000
-    do
-        echo "making upstream${S}.maf"
-        nice -n +19 featureBits ce4 sangerGene:upstream:${S} \
-		-fa=/dev/null -bed=up.bad
-        awk -F'\t' \
-'{printf("%s\t%s\t%s\t%s\t%s\t%s\n", $1, $2, $3, substr($4, 0, 9), 0, $5)}' \
-		up.bad > up.bed
-        rm up.bad
-        nice -n +19 mafFrags ce4 multiz5way up.bed upstream${S}.maf \
-                -orgs=species.lst
-        rm up.bed
-	nice -n +19 gzip -c upstream${S}.maf \
-	    > mafDownloads/sangerGene.upstream${S}.maf.gz
-	rm -f upstream${S}.maf
-    done > mafFrags.log 2>&1 &
-
+#!/bin/sh
+for S in 1000 2000 5000
+do
+    echo "making upstream${S}.maf"
+    nice -n +19 $HOME/bin/$MACHTYPE/featureBits -verbose=2 ce4 \
+        sangerGene:upstream:${S} -fa=/dev/null -bed=stdout \
+        | perl -wpe 's/_up[^\t]+/\t0/' | sort -k1,1 -k2,2n \
+        | $HOME/kent/src/hg/ratStuff/mafFrags/mafFrags ce4 multiz5way \
+                stdin stdout -orgs=species.lst \
+        | gzip -c > mafDownloads/sangerGene.upstream${S}.maf.gz
+    echo "done sangerGene.upstream${S}.maf.gz"
+done
 
     cd mafDownloads
     md5sum *.gz > md5sum.txt
