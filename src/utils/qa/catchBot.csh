@@ -24,7 +24,6 @@ if ($#argv < 1 || $#argv > 2) then
   echo "    usage:  threshhold [report size] "
   echo "      where threshhold is number of hits from single source"
   echo "      report size is number of highest hitters listed (defaults to 5)"
-  echo "            
   echo
   exit
 else
