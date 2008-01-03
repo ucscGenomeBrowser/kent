@@ -9,7 +9,7 @@
 #include "hdb.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: domains.c,v 1.11 2007/12/20 01:02:51 fanhsu Exp $";
+static char const rcsid[] = "$Id: domains.c,v 1.12 2008/01/03 20:45:18 ann Exp $";
 
 char *samGenomeDb(char *proteinId)
 /* Determin if a protein belongs to a genome DB that has SAM results */
@@ -103,7 +103,7 @@ if (kgVersion == KG_III)
 	    description = sqlQuickString(hgConn, query);
 	    if (description == NULL)
 	    	description = cloneString("n/a");
-	    hPrintf("<A HREF=\"http://www.sanger.ac.uk/cgi-bin/Pfam/getacc?%s\" TARGET=_blank>", 
+	    hPrintf("<A HREF=\"http://pfam.sanger.ac.uk/family?acc=%s\" TARGET=_blank>", 
 	    	    el->name);
 	    hPrintf("%s</A> - %s<BR>\n", el->name, description);
 	    freez(&description);
@@ -151,7 +151,7 @@ else
 	    description = sqlQuickString(spConn, query);
 	    if (description == NULL)
 	    	description = cloneString("n/a");
-	    hPrintf("<LI><A HREF=\"http://www.sanger.ac.uk/cgi-bin/Pfam/getacc?%s\" TARGET=_blank>", 
+	    hPrintf("<LI><A HREF=\"http://pfam.sanger.ac.uk/family?acc=%s\" TARGET=_blank>", 
 	    	    el->name);
 	    hPrintf("%s</A> - %s</LI>\n", el->name, description);
 	    freez(&description);
