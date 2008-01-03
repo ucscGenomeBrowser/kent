@@ -35,7 +35,7 @@
 #include "customTrack.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.340 2007/12/18 23:23:43 fanhsu Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.341 2008/01/03 17:28:54 fanhsu Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -51,7 +51,7 @@ static struct sqlConnCache *hdbCc2 = NULL;  /* cache for second database connect
 static struct sqlConnCache *centralCc = NULL;
 static struct sqlConnCache *centralArchiveCc = NULL;
 static struct sqlConnCache *cartCc = NULL;  /* cache for cart; normally same as centralCc */
-static struct sqlConnCache *tcgaCc = NULL;  /* cache for TCGA DB connection */
+static struct sqlConnCache *localCc = NULL;  /* cache for TCGA DB connection */
 
 static char *hdbHost = NULL;
 static char *hdbName = NULL;
@@ -653,20 +653,20 @@ if (conn == NULL)
 return(conn);
 }
 
-struct sqlConnection *hConnectTcga()
-/* Connect to tcga database where user info and other info
+struct sqlConnection *hConnectLocal()
+/* Connect to local database where user info and other info
  * not specific to a particular genome lives.  Free this up
  * with hDisconnectCentral(). */
 {
 struct sqlConnection *conn = NULL;
-if (tcgaCc == NULL)
-    tcgaCc = getCentralCcFromCfg("tcgaDb");
+if (localCc == NULL)
+    localCc = getCentralCcFromCfg("localDb");
 
-if (tcgaCc == NULL)
+if (localCc == NULL)
     {
     errAbort("problem encountered trying to connect to tcga DB");
     }
-conn = sqlMayAllocConnection(tcgaCc, FALSE);
+conn = sqlMayAllocConnection(localCc, FALSE);
 if (conn == NULL)
     {
     errAbort("Could not connect to tcga DB");
@@ -674,6 +674,11 @@ if (conn == NULL)
 return(conn);
 }
 
+void hDisconnectLocal(struct sqlConnection **pConn)
+/* Put back connection for reuse. */
+{
+sqlFreeConnection(localCc, pConn);
+}
 
 void hDisconnectCentral(struct sqlConnection **pConn)
 /* Put back connection for reuse. */
