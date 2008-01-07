@@ -170,6 +170,9 @@ The format of the type fields:
       speciesDefaultOff - contains a list of species that are
             not displayed in the track display unless explicitly
             configured in from the track config page.
+      itemFirstCharCase - this controls if species names in the multiple alignment 
+            should be capitalized in the pairwise display.
+
 14. type wig [lower] [upper]
    Continuous value graphing track.
    [lower] - overall lower limit of the data, default 0.0
