@@ -13,7 +13,7 @@
 #include "pipeline.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: linefile.c,v 1.54 2007/03/23 08:12:42 kent Exp $";
+static char const rcsid[] = "$Id: linefile.c,v 1.55 2008/01/07 23:24:00 angie Exp $";
 
 char *getFileNameFromHdrSig(char *m)
 /* Check if header has signature of supported compression stream,
@@ -24,6 +24,7 @@ char *ext=NULL;
 if (startsWith("\x1f\x8b",m)) ext = "gz";
 else if (startsWith("\x1f\x9d\x90",m)) ext = "Z";
 else if (startsWith("BZ",m)) ext = "bz2";
+else if (startsWith("PK\x03\x04",m)) ext = "zip";
 if (ext==NULL) 
     return NULL;
 safef(buf, sizeof(buf), "somefile.%s", ext);
@@ -37,6 +38,7 @@ static char **getDecompressor(char *fileName)
 static char *GZ_READ[] = {"gzip", "-dc", NULL};
 static char *Z_READ[] = {"compress", "-dc", NULL};
 static char *BZ2_READ[] = {"bzip2", "-dc", NULL};
+static char *ZIP_READ[] = {"zcat", "-c", NULL};
 
 if (endsWith(fileName, ".gz"))
     return GZ_READ;
@@ -44,6 +46,8 @@ else if (endsWith(fileName, ".Z"))
     return Z_READ;
 else if (endsWith(fileName, ".bz2"))
     return BZ2_READ;
+else if (endsWith(fileName, ".zip"))
+    return ZIP_READ;
 else
     return NULL;
 }
@@ -120,10 +124,11 @@ struct lineFile *lineFileDecompress(char *fileName, bool zTerm)
 struct pipeline *pl;
 struct lineFile *lf;
 char *testName = NULL;
-char *testbytes = NULL;    /* the header signatures for .gz .bz2, .Z are all 2 or 3 bytes only */
+char *testbytes = NULL;    /* the header signatures for .gz, .bz2, .Z,
+			    * .zip are all 2-4 bytes only */
 if (fileName==NULL)
   return NULL;
-testbytes=headerBytes(fileName,3);
+testbytes=headerBytes(fileName,4);
 if (!testbytes)
     return NULL;  /* avoid error from pipeline */
 testName=getFileNameFromHdrSig(testbytes);
