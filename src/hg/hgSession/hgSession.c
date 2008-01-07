@@ -16,7 +16,7 @@
 #include "customFactory.h"
 #include "hgSession.h"
 
-static char const rcsid[] = "$Id: hgSession.c,v 1.30 2007/11/06 04:33:00 angie Exp $";
+static char const rcsid[] = "$Id: hgSession.c,v 1.31 2008/01/07 21:07:47 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -823,13 +823,37 @@ if (fromUrl)
     }
 else
     {
-    char *settings = trimSpaces(cartString(cart, hgsLoadLocalFileName));
-    dyStringPrintf(dyMessage, "Loaded settings from local file (%lu bytes).",
-		   (unsigned long)strlen(settings));
+    char *fileName = cartOptionalString(cart,
+					hgsLoadLocalFileName "__filename");
+    if (isNotEmpty(fileName) &&
+	/* #*** This should be a lineFile lib function. */
+	(endsWith(fileName, ".bzip2") ||
+	 endsWith(fileName, ".Z") ||
+	 endsWith(fileName, ".gz")))
+	{
+	char *binInfo = cloneString(cartString(cart,
+				       hgsLoadLocalFileName "__binary"));
+	char *words[2];
+	char *mem;
+        unsigned long size;
+	chopByWhite(binInfo, words, ArraySize(words));
+    	mem = (char *)sqlUnsignedLong(words[0]);
+        size = sqlUnsignedLong(words[1]);
+	lf = lineFileDecompressMem(TRUE, mem, size);
+	dyStringPrintf(dyMessage,
+		       "Loaded settings from local file (%lu bytes).", size);
+	}
+    else
+	{
+	char *settings = trimSpaces(cartString(cart, hgsLoadLocalFileName));
+	dyStringPrintf(dyMessage,
+		       "Loaded settings from local file (%lu bytes).",
+		       (unsigned long)strlen(settings));
+	lf = lineFileOnString("settingsFromFile", TRUE, cloneString(settings));
+	}
     dyStringPrintf(dyMessage, " <A HREF=\"http://%s%s?%s=%u\">Browser</A>",
 		   cgiServerName(), destAppScriptName(),
 		   cartSessionVarName(), cartSessionId(cart));
-    lf = lineFileOnString("settingsFromFile", TRUE, cloneString(settings));
     }
 cartLoadSettings(lf, cart, NULL, actionVar);
 checkForCustomTracks(dyMessage);
