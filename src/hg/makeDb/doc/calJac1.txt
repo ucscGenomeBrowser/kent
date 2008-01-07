@@ -4,7 +4,7 @@
 # This file describes browser build for the Marmoset
 # genome, July 2007
 #
-#	"$Id: calJac1.txt,v 1.9 2007/12/22 00:45:04 hiram Exp $"
+#	"$Id: calJac1.txt,v 1.10 2008/01/07 23:17:15 hiram Exp $"
 #
 ######################################################################
 ## DOWNLOAD SEQUENCE (DONE - 2007-08-21 - Hiram)
@@ -758,6 +758,7 @@ Marmoset_calJac1        Platypus_ornAna1        0.968524
     mkdir mafLinks
     cd mafLinks
     # hint: obtained these links by altering listMafs.csh above
+    #	add an echo statement to output these commands
     ln -s ../../blastz.canFam2/mafRBestNet/calJac1.canFam2.rbest.maf.gz \
 	mafLinks/canFam2.maf.gz
     ln -s ../../blastz.hg18/mafRBestNet/calJac1.hg18.rbest.maf.gz \
@@ -774,15 +775,40 @@ Marmoset_calJac1        Platypus_ornAna1        0.968524
 	mafLinks/ponAbe2.maf.gz
     ln -s ../../blastz.rheMac2/mafRBestNet/calJac1.rheMac2.rbest.maf.gz \
 	mafLinks/rheMac2.maf.gz
+    #	need to split these things up by Contig number for efficient kluster run
     ssh kkstore06
     cd /cluster/data/calJac1/bed/multiz9way/mafLinks
-    mkdir -p /san/sanvol1/scratch/calJac1/multiz9way/maf
-    rsync --copy-links -a --progress ./ \
-	/san/sanvol1/scratch/calJac1/multiz9way/maf
+    mkdir -p /san/sanvol1/scratch/calJac1/multiz9way/contigMaf
+    cd /scratch/tmp
+    for D in `grep -v calJac1 /cluster/data/calJac1/bed/multiz9way/species.list`
+do
+    mkdir /scratch/tmp/${D}
+    cd /scratch/tmp/${D}
+    mafSplit -verbose=2 /dev/null -byTarget -useSequenceName Contig \
+	/cluster/data/calJac1/bed/multiz9way/mafLinks/${D}.maf.gz -outDirDepth=2
+    rsync -a --progress ./ \
+	/san/sanvol1/scratch/calJac1/multiz9way/contigMaf/${D}
+    cd /scratch/tmp
+    rm -fr ${D}
+done
+    #	create a run-time list of contigs to operate on, not all contigs
+    #	exist in all alignments, but we want all contig names used in any
+    #	alignment:
+    cd /san/sanvol1/scratch/calJac1/multiz9way/contigMaf
+    for D in *
+do
+    cd "${D}"
+    find . -type f
+    cd ..
+done | sort -u > /tmp/9-way.contig.list
+    wc -l /tmp/9-way.contig.list
+    #	36707 /tmp/9-way.contig.list
 
     # ready for the multiz run
-    ssh memk
-    cd /cluster/data/calJac1/bed/multiz9way
+    ssh pk
+    mkdir /cluster/data/calJac1/bed/multiz9way/splitRun
+    cd /cluster/data/calJac1/bed/multiz9way/splitRun
+    scp -p kkstore06:/tmp/9-way.contig.list .
     mkdir -p maf run
     cd run
     mkdir penn
@@ -790,24 +816,25 @@ Marmoset_calJac1        Platypus_ornAna1        0.968524
     P=/cluster/bin/penn/multiz.v11.2007-03-19/multiz-tba
     cp -p $P/{autoMZ,multiz,maf_project} penn
 
+    #	set the db and pairs directories here
     cat > autoMultiz.csh << '_EOF_'
 #!/bin/csh -ef
 set db = calJac1
-set c = $1
-set maf = $2
+set subdir = $1
+set c = $2
+set result = $3
+set resultDir = $result:h
 set run = `pwd`
 set tmp = /scratch/tmp/$db/multiz.$c
-set pairs = /san/sanvol1/scratch/$db/multiz9way/maf
+set pairs = /san/sanvol1/scratch/$db/multiz9way/contigMaf
 rm -fr $tmp
 mkdir -p $tmp
-cp ../tree.9.nh ../species.list $tmp
+mkdir -p $resultDir
+cp ../../tree.9.nh ../../species.list $tmp
 pushd $tmp
-foreach s (`cat species.list`)
-    set in = $pairs/$s.maf
+foreach s (`grep -v $db species.list`)
+    set in = $pairs/$s/$subdir/$c.maf
     set out = $db.$s.sing.maf
-    if ($s == calJac1) then
-	continue
-    endif
     if (-e $in.gz) then
 	zcat $in.gz > $out
     else if (-e $in) then
@@ -819,15 +846,16 @@ end
 set path = ($run/penn $path); rehash
 $run/penn/autoMZ + T=$tmp E=$db "`cat tree.9.nh`" $db.*.sing.maf $c.maf
 popd
-cp $tmp/$c.maf $maf
+cp $tmp/$c.maf $result
 rm -fr $tmp
+rmdir --ignore-fail-on-non-empty /scratch/tmp/$db
 '_EOF_'
 # << happy emacs
     chmod +x autoMultiz.csh
 
     cat  << '_EOF_' > template
 #LOOP
-./autoMultiz.csh $(root1) {check out line+ /cluster/data/calJac1/bed/multiz9way/maf/$(root1).maf}
+./autoMultiz.csh $(dir1) $(root1) {check out line+ /cluster/data/calJac1/bed/multiz9way/splitRun/maf/$(dir1)/$(root1).maf}
 #ENDLOOP
 '_EOF_'
     # << emacs
@@ -835,53 +863,56 @@ rm -fr $tmp
     time nice -n +19 ./autoMultiz.csh calJac1
     XXX - running 2007-12-21 16:32 on mkr0u3
 
-    gensub2 species.list single template jobList
-    para create jobList
-    # the 104 jobs run time:
-# Completed: 104 of 104 jobs
-# CPU time in finished jobs:     174748s    2912.47m    48.54h    2.02d  0.006 y
-# IO & Wait Time:                  2952s      49.20m     0.82h    0.03d  0.000 y
-# Average job time:                1709s      28.48m     0.47h    0.02d
-# Longest finished job:            3340s      55.67m     0.93h    0.04d
-# Submission to last job:          4413s      73.55m     1.23h    0.05d
+    sed -e "s/^\.\///" ../9-way.contig.list \
+	| gensub2 stdin single template jobList
 
-    # put the split maf results back together into single chroms
-    ssh kkstore02
+    para create jobList
+    para try ... check ... push ... etc
+# Completed: 36707 of 36707 jobs
+# CPU time in finished jobs:     244659s    4077.65m    67.96h    2.83d  0.008 y
+# IO & Wait Time:                115457s    1924.29m    32.07h    1.34d  0.004 y
+# Average job time:                  10s       0.16m     0.00h    0.00d
+# Longest finished job:             249s       4.15m     0.07h    0.00d
+# Submission to last job:          2454s      40.90m     0.68h    0.03d
+
+    # put the split maf results back together into a single maf file
+    #	eliminate duplicate comments
+    ssh kkstore06
     cd /cluster/data/calJac1/bed/multiz9way
-    # here is where the result directory maf should have already been maf.split
-    mv maf maf.split
-    mkdir maf
-    # going to sort out the redundant header garbage to leave a cleaner maf
-    for C in `ls maf.split | sed -e "s#__.*##" | sort -u`
+    mkdir togetherMaf
+    grep "^##maf version" splitRun/maf/0/0/Contig00000.maf \
+	| sort -u > togetherMaf/calJac1.9way.maf
+    for F in `find ./splitRun/maf -type f -depth`
 do
-    echo ${C}
-    head -q -n 1 maf.split/${C}__*.maf | sort -u > maf/${C}.maf
-    grep -h "^#" maf.split/${C}__*.maf | egrep -v "maf version=1|eof maf" | \
-	sed -e "s#_MZ_[^ ]* # #g; s#__[0-9]##g" | sort -u >> maf/${C}.maf
-    grep -h -v "^#" maf.split/${C}__*.maf >> maf/${C}.maf
-    tail -q -n 1 maf.split/${C}__*.maf | sort -u >> maf/${C}.maf
-done
+    grep -h "^#" "${F}" | egrep -v "maf version=1|eof maf" \
+	| sed -e "s#/_MZ_[^ ]* # #g; s#__[0-9]##g"
+done | sort -u >> togetherMaf/calJac1.9way.maf
+    for F in `find ./splitRun/maf -type f -depth`
+do
+    grep -v -h "^#" "${F}"
+done >> togetherMaf/calJac1.9way.maf
+    grep "^##eof maf" splitRun/maf/0/0/Contig00000.maf \
+	| sort -u >> togetherMaf/calJac1.9way.maf
 
     # load tables for a look
     ssh hgwdev
     mkdir -p /gbdb/calJac1/multiz9way/maf
-    ln -s /cluster/data/calJac1/bed/multiz9way/maf/*.maf \
-                /gbdb/calJac1/multiz9way/maf
-    # this generates a large 1 Gb multiz9way.tab file in the directory
+    ln -s /cluster/data/calJac1/bed/multiz9way/togetherMaf/*.maf \
+                /gbdb/calJac1/multiz9way/maf/multiz9way.maf
+    # this generates an immense multiz9way.tab file in the directory
     #	where it is running.  Best to run this over in scratch.
     cd /scratch/tmp
     time nice -n +19 hgLoadMaf \
 	-pathPrefix=/gbdb/calJac1/multiz9way/maf calJac1 multiz9way
-    #	real    6m37.534s
-    #	Loaded 6981959 mafs in 55 files from /gbdb/calJac1/multiz9way/maf
-
+    #	real    5m6.330s
+    #	Loaded 8484286 mafs in 1 files from /gbdb/calJac1/multiz9way/maf
     # load summary table
     time nice -n +19 cat /gbdb/calJac1/multiz9way/maf/*.maf \
 	| hgLoadMafSummary calJac1 -minSize=30000 -mergeGap=1500 \
 	 -maxSize=200000  multiz9waySummary stdin
-    #	Created 1417364 summary blocks from 29928557 components
-    #	and 6981421 mafs from stdin
-    #	real    21m35.057s
+    #	real    5m58.150s
+    #	Created 121083 summary blocks from 3410157 components
+    #	and 693943 mafs from stdin
 
     # Gap Annotation
     # prepare bed files with gap info
@@ -913,36 +944,135 @@ do
     echo ${DB}.len  >> sizes
 done
 
-    ssh kki
+    ssh memk
+    #	temporarily copy the calJac1.9way.maf file onto the memk
+    #	nodes /scratch/data/calJac1/maf/ directory
+    for R in 0 1 2 3 4 5 6 7
+do
+    ssh mkr0u${R} rsync -a --progress \
+/cluster/data/calJac1/bed/multiz9way/togetherMaf/calJac1.9way.maf.gz \
+	/scratch/data/calJac1/maf/
+done
+    mkdir /cluster/data/calJac1/bed/multiz9way/anno/splitMaf
+    #	need to split up the single maf file into individual
+    #	per-scaffold maf files to run annotation on
+    cd /cluster/data/calJac1/bed/multiz9way/anno/splitMaf
+    #	create bed files to list approximately 1553 scaffolds in
+    #	a single list, approximately 33 lists
+    cat << '_EOF_' > mkBedLists.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my $bedCount = 0;
+my $i = 0;
+
+my $bedFile = sprintf("file_%d.bed", $bedCount);
+
+open (BF,">$bedFile") or die "can not write to $bedFile $!";
+
+open (FH,"</cluster/data/calJac1/chrom.sizes") or
+        die "can not read /cluster/data/calJac1/chrom.sizes $!";
+while (my $line = <FH>) {
+    chomp $line;
+    if ( (($i + 1) % 1553) == 0 )  {
+        printf "%s\n", $line;
+        close (BF);
+        ++$bedCount;
+        $bedFile = sprintf("file_%d.bed", $bedCount);
+        open (BF,">$bedFile") or die "can not write to $bedFile $!";
+    }
+    ++$i;
+    my ($chr, $size) = split('\s+',$line);
+    printf BF "%s\t0\t%d\t%s\n", $chr, $size, $chr;
+}
+close (FH);
+close (BH);
+'_EOF_'
+    # << happy emacs
+    chmod +x mkBedLists.pl
+    ./mkBedLists.pl
+
+    #	now, run a mafsInRegion on each one of those lists
+    cat << '_EOF_' > runOne
+#!/bin/csh -fe
+set runDir = "/cluster/data/calJac1/bed/multiz9way/anno/splitMaf"
+set resultDir = $1
+set bedFile = $resultDir.bed
+mkdir -p $resultDir
+mkdir -p /scratch/tmp/calJac1/$resultDir
+pushd /scratch/tmp/calJac1/$resultDir
+mafsInRegion $runDir/$bedFile -outDir . \
+        /scratch/data/calJac1/maf/calJac1.9way.maf
+popd
+rsync -q -a /scratch/tmp/calJac1/$resultDir/ ./$resultDir/
+rm -fr /scratch/tmp/calJac1/$resultDir
+rmdir --ignore-fail-on-non-empty /scratch/tmp/calJac1
+'_EOF_'
+    # << happy emacs
+    chmod +x runOne
+
+    cat << '_EOF_' > template
+#LOOP
+./runOne $(root1)
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    ls file*.bed > runList
+    gensub2 runList single template jobList
+    para create jobList
+    para try ... check ... push ... etc
+# Completed: 33 of 33 jobs
+# CPU time in finished jobs:      11075s     184.58m     3.08h    0.13d  0.000 y
+# IO & Wait Time:                 22992s     383.20m     6.39h    0.27d  0.001 y
+# Average job time:                1032s      17.21m     0.29h    0.01d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            2019s      33.65m     0.56h    0.02d
+# Submission to last job:         22051s     367.52m     6.13h    0.26d
+
     cd /cluster/data/calJac1/bed/multiz9way/anno/run
 
     cat << '_EOF_' > doAnno.csh
 #!/bin/csh -ef
-    set dir = /cluster/data/calJac1/bed/multiz9way
-    set c = $1
-    cat $dir/maf/${c}.maf | \
-        nice mafAddIRows -nBeds=nBeds stdin /cluster/data/calJac1/calJac1.2bit $2
+set outDir = ../maf/$2
+set result = $3
+set input = $1
+mkdir -p $outDir
+cat $input | \
+nice mafAddIRows -nBeds=nBeds stdin /scratch/data/calJac1/calJac1.2bit $result
 '_EOF_'
     # << happy emacs
     chmod +x doAnno.csh
 
     cat << '_EOF_' > template
 #LOOP
-./doAnno.csh $(root1) {check out line+ /cluster/data/calJac1/bed/multiz9way/anno/maf/$(root1).maf}
+./doAnno.csh $(path1) $(lastDir1) {check out line+ ../maf/$(lastDir1)/$(root1).maf}
 #ENDLOOP
 '_EOF_'
     # << happy emacs
 
-    cut -f1 /cluster/data/calJac1/chrom.sizes > chrom.list
-    gensub2 chrom.list single template jobList
+    find ../splitMaf -type f -name "*.maf > maf.list
+    gensub2 maf.list single template jobList
     para create jobList
     para try ... check ... push ... etc.
-# Completed: 55 of 55 jobs
-# CPU time in finished jobs:       2278s      37.97m     0.63h    0.03d  0.000 y
-# IO & Wait Time:                  9909s     165.15m     2.75h    0.11d  0.000 y
-# Average job time:                 222s       3.69m     0.06h    0.00d
-# Longest finished job:            3340s      55.67m     0.93h    0.04d
-# Submission to last job:          3897s      64.95m     1.08h    0.05d
+# Completed: 36707 of 36707 jobs
+# CPU time in finished jobs:      94093s    1568.22m    26.14h    1.09d  0.003 y
+# IO & Wait Time:                 94674s    1577.90m    26.30h    1.10d  0.003 y
+# Average job time:                   5s       0.09m     0.00h    0.00d
+# Longest finished job:              12s       0.20m     0.00h    0.00d
+# Submission to last job:          6129s     102.15m     1.70h    0.07d
+
+    ssh kkstore06
+    cd /cluster/data/calJac1/bed/multiz9way/anno
+    grep "^##maf version" maf/file_0/Contig0.maf \
+	| sort -u > calJac1.anno.9way.maf
+    find ./maf -type f -depth -name "*.maf" | while read F
+do
+    grep -v -h "^#" "${F}"
+done >> calJac1.anno.9way.maf
+    echo "##eof maf" >> calJac1.anno.9way.maf
 
     ssh hgwdev
     cd /cluster/data/calJac1/bed/multiz9way/anno
