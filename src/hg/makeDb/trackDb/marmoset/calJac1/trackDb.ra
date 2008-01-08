@@ -67,7 +67,7 @@ windowingFunction mean
 pairwiseHeight 12
 yLineOnOff Off
 # frames multiz9wayFrames
-# irows on
+irows on
 summary multiz9waySummary
 speciesCodonDefault calJac1
 speciesGroups Primates Vertebrate
