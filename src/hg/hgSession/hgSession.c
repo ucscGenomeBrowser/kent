@@ -16,7 +16,7 @@
 #include "customFactory.h"
 #include "hgSession.h"
 
-static char const rcsid[] = "$Id: hgSession.c,v 1.32 2008/01/07 23:26:11 angie Exp $";
+static char const rcsid[] = "$Id: hgSession.c,v 1.33 2008/01/08 20:09:59 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -868,10 +868,9 @@ else
 	dyStringAppend(dyMessage, "Sorry, your web browser seems to have "
 		       "posted no data");
 	if (isNotEmpty(fileName))
-	    dyStringPrintf(dyMessage, ", only the filename <B>%s</B>.",
+	    dyStringPrintf(dyMessage, ", only the filename <B>%s</B>",
 			   fileName);
-	else
-	    dyStringAppend(dyMessage, ".");
+	dyStringAppend(dyMessage, ".  Your settings have not been changed.");
 	lf = NULL;
 	}
     dyStringPrintf(dyMessage, "&nbsp;&nbsp;"
