@@ -7,6 +7,7 @@
 #
 ####################
 
+set ip=""
 set worst=""
 set mode=""
 
@@ -35,7 +36,6 @@ if ($#argv == 2 ) then
   endif
 endif
 
-
 if ( "$HOST" != "hgwdev" ) then
  echo "\n error: you must run this script on dev!\n"
  exit 1
@@ -44,8 +44,8 @@ endif
 echo
 if ($ip == "all") then
   rm -f ipFile
-  /etc/init.d/bottleneck status | egrep "current"
-  /etc/init.d/bottleneck status | grep -w -v "0" \
+  /usr/local/bin/bottleneck -host=genome-bottle list | egrep "current"
+  /usr/local/bin/bottleneck -host=genome-bottle list | grep -w -v "0" \
      | grep -v "current" | sort -nr -k5 > ipFile
   set allIPs=`cat ipFile | awk '{print $1}'`
   set worst=`echo $allIPs | awk '{print $1}'`
@@ -58,7 +58,7 @@ if ($ip == "all") then
     echo "$ip\t\t$current\t  $orgName"
   end
 else
-  /etc/init.d/bottleneck status | egrep "$ip|current"
+  /usr/local/bin/bottleneck -host=genome-bottle list | egrep "$ip|current"
 endif
 echo 
 
