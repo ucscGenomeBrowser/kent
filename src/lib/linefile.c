@@ -13,7 +13,7 @@
 #include "pipeline.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: linefile.c,v 1.55 2008/01/07 23:24:00 angie Exp $";
+static char const rcsid[] = "$Id: linefile.c,v 1.56 2008/01/08 20:11:09 angie Exp $";
 
 char *getFileNameFromHdrSig(char *m)
 /* Check if header has signature of supported compression stream,
@@ -36,9 +36,9 @@ static char **getDecompressor(char *fileName)
  * approriate format, otherwise return NULL */
 {
 static char *GZ_READ[] = {"gzip", "-dc", NULL};
-static char *Z_READ[] = {"compress", "-dc", NULL};
+static char *Z_READ[] = {"gzip", "-dc", NULL};
 static char *BZ2_READ[] = {"bzip2", "-dc", NULL};
-static char *ZIP_READ[] = {"zcat", "-c", NULL};
+static char *ZIP_READ[] = {"gzip", "-dc", NULL};
 
 if (endsWith(fileName, ".gz"))
     return GZ_READ;
