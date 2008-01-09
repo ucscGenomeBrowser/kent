@@ -169,7 +169,9 @@ boolean notOverlapped = FALSE;  // negative crieria (ceiling)
 unsigned overBases = selectOverlapBases(inCa, selCa);
 if (criteria->similarity > 0.0)
     {
-    // bi-directional
+    // bi-directional 
+    // FIXME: this isn't really a measure of similarity, it should be
+    // # (2*numSimilar)/totalBasesInBoth
     if ((selectFracOverlap(inCa, overBases) >= criteria->similarity)
         && (selectFracOverlap(selCa, overBases) >= criteria->similarity))
         overlapped = TRUE;
