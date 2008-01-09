@@ -125,6 +125,7 @@ visibility pack
 color 0, 10, 100
 altColor 0,90,10
 type wigMaf 0.0 1.0
+speciesCodonDefault hg18
 speciesGroups Primate Placental_Mammal Vertebrate
 sGroup_Primate panTro2 rheMac2 otoGar1
 sGroup_Placental_Mammal tupBel1 mm8 rn4 cavPor2 oryCun1 sorAra1 eriEur1 canFam2 felCat3 equCab1 bosTau3 dasNov1 loxAfr1 echTel1
