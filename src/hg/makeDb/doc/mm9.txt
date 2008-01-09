@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.54 2007/12/27 20:59:33 hiram Exp $"
+#	"$Id: mm9.txt,v 1.55 2008/01/09 22:49:03 hiram Exp $"
 #
 
 #######################################################################
@@ -1797,6 +1797,49 @@ rm -fr /scratch/tmp/${root1}_${root2}
 
     featureBits mm9 bacEndPairsBad
 # 48850302 bases of 2620346127 (1.864%) in intersection
+
+#######################################################################
+#  Special one-off bacEnds added (DONE - 2008-01-09 - Hiram)
+    ssh hgwdev
+    # BAC RP23-473N24 was reported missing
+    #	its two ends are AZ095043 and AZ095046
+    #	end AZ095046 maps just fine to the correct location on chr7
+    #	the end AZ095043 does not map correctly when using the -ooc
+    #	option to blat.  Run the blat without ooc and it does the
+    #	correct thing.  From the genbank record:
+    cd /cluster/data/mm9/bed/bacends
+    cat << '_EOF_' > AZ095043.fa
+>AZ095043
+TTTATCATGAATGGGTGTTGTATCTTGTCGAAGCTTTTTCCGCATCTAACGAGATGATCATGTGGTTTTT
+GTCTTTGAGTTTGTTTATATAATGGATTACATTGATGGATTTTCATATATTAAACCATCCCTGCATCCCT
+GGAATAAAACCTACTTGGTCAGGATGGATGACTGCCAAGGCGGACCGGG
+'_EOF_'
+    blat /san/sanvol1/scratch/mm9/noMask/chr7.fa AZ095043.fa AZ095043.raw.psl
+    pslReps -nearTop=0.01 -minCover=0.7 -minAli=0.8 \
+	-noIntrons AZ095043.raw.psl AZ095043.psl /dev/null
+    #	before adding this one item:
+    hgsql -e "select count(*) from all_bacends;" mm9
+    #	8167555
+    hgLoadPsl -table=all_bacends -append mm9 AZ095043.psl
+    #	verify one row added
+    hgsql -e "select count(*) from all_bacends;" mm9
+    #	8167556
+    #	Using the Mm6 records from all_bacends and bacEndPairs as a guide
+    #	The bed record for this BAC is therefore:
+    cat << '_EOF_' > RP23-473N24.bed
+chr7 150015932 150193247 RP23-473N24 1000 - all_bacends 2 150015932,150192880 172,367 AZ095043,AZ095046
+'_EOF_'
+    #	verify rows before adding this one new row
+    hgsql -e "select count(*) from bacEndPairs;" mm9
+    #	239101
+    #	YOW !  The -oldTable option didn't work !  I'm guessing that with
+    #	the -sqlTable argument it became confused
+    hgLoadBed -oldTable -notItemRgb mm9 bacEndPairs RP23-473N24.bed \
+	-sqlTable=$HOME/kent/src/hg/lib/bacEndPairs.sql
+    #	reload everything:
+    cat ../../bacends/bacEndPairs.bed RP23-473N24.bed \
+	| hgLoadBed -notItemRgb mm9 bacEndPairs stdin \
+	-sqlTable=$HOME/kent/src/hg/lib/bacEndPairs.sql
 
 #######################################################################
 ## create random contigs for genscan and other alignment tasks
