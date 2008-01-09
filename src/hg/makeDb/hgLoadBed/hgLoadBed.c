@@ -11,7 +11,7 @@
 #include "hgRelate.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgLoadBed.c,v 1.52 2007/03/20 02:56:33 angie Exp $";
+static char const rcsid[] = "$Id: hgLoadBed.c,v 1.53 2008/01/09 23:09:28 hiram Exp $";
 
 /* Command line switches. */
 boolean noSort = FALSE;		/* don't sort */
@@ -262,7 +262,7 @@ else
     tab = cloneString("bed.tab");
 
 /* First make table definition. */
-if (sqlTable != NULL)
+if (sqlTable != NULL && !oldTable)
     {
     /* Read from file. */
     char *sql, *s;
