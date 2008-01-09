@@ -212,7 +212,7 @@
 #include "itemConf.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1375 2008/01/08 05:40:32 markd Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1376 2008/01/09 09:22:21 markd Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -4657,8 +4657,6 @@ char query[256];
 char *type,*direction,*source,*orgFullName,*library,*clone,*sex,*tissue,
     *development,*cell,*cds,*description, *author,*geneName,
     *date,*productName;
-boolean isMgcTrack = startsWith("mgc", tdb->tableName);
-int imageId = (isMgcTrack ? getImageId(conn, acc) : 0);
 int seqSize,fileSize;
 long fileOffset;
 char *ext_file;	
@@ -4740,15 +4738,10 @@ if (row != NULL)
     /* Now we have all the info out of the database and into nicely named
      * local variables.  There's still a few hoops to jump through to 
      * format this prettily on the web with hyperlinks to NCBI. */
-    if (isMgcTrack)
-        printf("<H2>Information on %s %s <A HREF=\"", mgcDbName(), type);
-    else
-        printf("<H2>Information on %s <A HREF=\"",  type);
+    printf("<H2>Information on %s <A HREF=\"",  type);
     printEntrezNucleotideUrl(stdout, acc);
     printf("\" TARGET=_blank>%s</A></H2>\n", acc);
 
-    if (isMgcTrack && (imageId > 0))
-        printMgcRnaSpecs(tdb, acc, imageId);
     printf("<B>Description:</B> %s<BR>\n", description);
 
     medlineLinkedLine("Gene", geneName, geneName);

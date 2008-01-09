@@ -12,9 +12,6 @@ void printMgcDetailsUrl(char *acc);
 /* print out an URL to link to MGC details pages from another details page in
  * the browser.*/
 
-void printMgcRnaSpecs(struct trackDb *tdb, char *acc, int imageId);
-/* print status information for MGC mRNA or EST; must have imageId */
-
 void doMgcGenes(struct trackDb *tdb, char *acc);
 /* Process click on a mgcGenes track. */
 

@@ -19,8 +19,8 @@ struct ccdsGeneMap *getCcdsGenesForMappedGene(struct sqlConnection *conn, char *
 /* get a list of ccds genes associated with a current and window from a
  * mapping table, or NULL */
 
-void printCcdsUrlForMappedGene(struct sqlConnection *conn, struct ccdsGeneMap *gene);
-/* Print out CCDS url for a gene mapped via a cddsGeneMap table  */
+void printCcdsUrl(struct sqlConnection *conn, char *ccdsId);
+/* Print out CCDS url for a gene  */
 
 void doCcdsGene(struct trackDb *tdb, char *ccdsId);
 /* Process click on a CCDS gene. */
