@@ -14,6 +14,10 @@ scripts:
 
 alpha: scripts
 
+test:
+	doEncodeLoad.rb load /cluster/store3/encpipeline_dev/15/43
+
+
 SCRIPT_FILES = \
 	doEncodeLoad.rb
 
