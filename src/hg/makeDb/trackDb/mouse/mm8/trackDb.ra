@@ -39,6 +39,17 @@ directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_t
 baseColorUseCds given
 baseColorDefault genomicCodons
 
+track ensGene
+shortLabel Ensembl Genes
+longLabel Ensembl (Build 39) Gene Predictions
+group genes
+priority 40
+visibility dense
+color 150,0,0
+type genePred ensPep
+ensArchive jun2006
+dataVersion Ensembl Release 39 
+
 track NIAGene
 shortLabel NIA Gene Index
 longLabel NIA Mouse Gene Index
