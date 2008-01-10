@@ -10,7 +10,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.8 2007/12/19 23:23:45 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.9 2008/01/10 22:24:06 kate Exp $
 
 use warnings;
 use strict;
@@ -120,7 +120,8 @@ sub validateWig {
         "head -10 $file | $loaderPath/wigEncode stdin /dev/null /dev/null >validateWig.out 2>&1");
     if ($err) {
         print STDERR  "ERROR: File '\$file\' failed wiggle validation.\n";
-        open(ERR, "validateWig.out") || die "\n";
+        my $outfile = "validateWig.out";
+        open(ERR, $outfile) || die "ERROR: Can't open wiggle validation file, \'$outfile\': $!\n";
         my @err = <ERR>;
         die "@err\n";
     } else {
@@ -134,7 +135,8 @@ sub validateBed {
         "head -10 $file | egrep -v '^track|browser' | $loaderPath/hgLoadBed -noLoad hg18 testTable stdin >validateBed.out 2>&1");
     if ($err) {
         print STDERR  "ERROR: File '\$file\' failed bed validation.\n";
-        open(ERR, "validateBed.out") || die "\n";
+        my $outfile = "validateBed.out";
+        open(ERR, $outfile) || die "ERROR: Can't open bed validation file, \'$outfile\': $!\n";
         my @err = <ERR>;
         die "@err\n";
     } else {
@@ -305,8 +307,8 @@ open(IN, $ddfFile) || die "ERROR: Can't open DDF file \'$ddfFile\'\n";
 # Get header containing column names
 while ($line = <IN>) {
     # remove leading and trailing spaces and newline
-    $line =~ s/^ *//;
-    $line =~ s/ *$//;
+    $line =~ s/^ +//;
+    $line =~ s/ +$//;
     # ignore empty lines and comments
     next if $line =~ /^$/;
     next if $line =~ /^#/;
