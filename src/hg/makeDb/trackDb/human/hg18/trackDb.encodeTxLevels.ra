@@ -426,7 +426,7 @@ type bed 3 .
     track encodeAffyEc1BrainCerebelumSites
     subTrack encodeAffyEcSites
     shortLabel EC1 Sites BrainC
-    longLabel Affymetrix ENCODE Extension Transcription (One-base window) (Brain Cerebelum) Sites
+    longLabel Affymetrix ENCODE Extension Transcription (One-base window) (Brain Cerebellum) Sites
     color 248,0,8
     priority 5
 
@@ -664,14 +664,14 @@ type wig 0 62385
     track encodeAffyEc1BrainCerebelumSignal
     subTrack encodeAffyEcSignal
     shortLabel EC1 Sig BrainC
-    longLabel Affymetrix ENCODE Extension Transcription (One-base window) (Brain Cerebelum) Signal
+    longLabel Affymetrix ENCODE Extension Transcription (One-base window) (Brain Cerebellum) Signal
     color 248,0,8
     priority 5
 
     track encodeAffyEc51BrainCerebelumSignal
     subTrack encodeAffyEcSignal
     shortLabel EC51 Sig BrainC
-    longLabel Affymetrix ENCODE Extension Transcription (51-base window) (Brain Cerebelum) Signal
+    longLabel Affymetrix ENCODE Extension Transcription (51-base window) (Brain Cerebellum) Signal
     color 248,0,8
     priority 6
 
