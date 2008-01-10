@@ -16,7 +16,7 @@
 #include <signal.h>
 #include <sys/wait.h>
 
-static char const rcsid[] = "$Id: hgEncodeScheduler.c,v 1.9 2007/12/22 02:12:31 galt Exp $";
+static char const rcsid[] = "$Id: hgEncodeScheduler.c,v 1.10 2008/01/10 03:04:34 galt Exp $";
 
 char *db = NULL;
 char *dir = NULL;
@@ -128,6 +128,38 @@ if ((row=sqlNextRow(rs)))
     *typeParams = cloneString(row[1]);
     if (row[2] == NULL) errAbort("project_types.time_out cannot be NULL");
     *timeOut = sqlUnsigned(row[2]);
+    }
+else
+    {
+    errAbort("project %d not found!\n", project);
+    }
+sqlFreeResult(&rs);
+}
+
+void getProjectLoadData(struct sqlConnection *conn, int project,
+ char **loader, char **loadParams, int *loadTimeOut)
+/* return data from project_type record */
+{
+char query[256];
+
+safef(query,sizeof(query),"select t.loader, t.load_params, t.load_time_out"
+    " from projects p, project_types t"
+    " where p.project_type_id = t.id" 
+    " and p.id = '%d'", 
+    project);
+
+struct sqlResult *rs;
+char **row = NULL;
+
+rs = sqlGetResult(conn, query);
+if ((row=sqlNextRow(rs)))
+    {
+    if (row[0] == NULL) errAbort("project_types.loader cannot be NULL");
+    *loader = cloneString(row[0]);
+    if (row[1] == NULL) errAbort("project_types.load_params cannot be NULL");
+    *loadParams = cloneString(row[1]);
+    if (row[2] == NULL) errAbort("project_types.load_time_out cannot be NULL");
+    *loadTimeOut = sqlUnsigned(row[2]);
     }
 else
     {
@@ -278,7 +310,14 @@ if (sameString(jobType,"validate"))
     }
 else if (sameString(jobType,"load"))
     {
-    safef(commandLine, sizeof(commandLine), "/bin/sleep 20");
+    //safef(commandLine, sizeof(commandLine), "/bin/sleep 20");
+    char *loader;
+    char *loadParams;
+    char *projectDir = cloneStringZ(projectPath, strrchr(projectPath,'/')-projectPath);
+     //uglyf("projectDir=[%s]\n",projectDir);
+    getProjectLoadData(conn, project, &loader, &loadParams, &timeOut);
+    safef(commandLine, sizeof(commandLine), "%s %s %s", loader, loadParams, projectDir);
+     //uglyf("commandLine=[%s]\n",commandLine);
     }
 else if (sameString(jobType,"upload"))
     {
