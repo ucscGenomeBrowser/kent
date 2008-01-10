@@ -212,7 +212,7 @@
 #include "itemConf.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1376 2008/01/09 09:22:21 markd Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1377 2008/01/10 23:34:23 markd Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -4763,9 +4763,9 @@ if (row != NULL)
         {
         printf("<B>Read direction: </B>");
         if (direction[0] != '0') 
-            printf("%s' <EM>(guessed from GenBank description)</EM><BR>\n", direction);
+            printf("%s' (guessed from GenBank description)<BR>\n", direction);
         else
-            printf("unknown <EM>(can't guess from GenBank description)</EM><BR>");
+            printf("unknown (can't guess from GenBank description)<BR>");
         }
     else
         printf("<B>CDS:</B> %s<BR>\n", cds);
@@ -4799,7 +4799,7 @@ if (row != NULL)
         {
         int estOrient = getEstTranscriptionDir(conn2, psl);
         if (estOrient != 0)
-            printf("<B>EST on %c strand </B>supported by %d splice sites.<BR>\n",
+            printf("<B>EST transcribed from %c strand </B>(supported by %d splice sites).<BR>\n",
                    (estOrient > 0 ? '+' : '-' ), abs(estOrient));
         }
     if (hGenBankHaveSeq(acc, NULL))
