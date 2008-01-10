@@ -60,7 +60,7 @@ color 0, 10, 100
 altColor 0,90,10
 type wigMaf 0.0 1.0
 maxHeightPixels 100:40:11
-# wiggle phastCons9way
+wiggle phastCons9way
 spanList 1
 autoScaleDefault Off
 windowingFunction mean
@@ -73,7 +73,6 @@ speciesCodonDefault calJac1
 speciesGroups Primates Vertebrate
 sGroup_Primates hg18 panTro2 ponAbe2 rheMac2
 sGroup_Vertebrate mm9 canFam2 monDom4 ornAna1
-# speciesDefaultOff rheMac2 calJac1 panTro2 ornAna1
 itemFirstCharCase noChange
 treeImage phylo/calJac1_9way.gif
 
