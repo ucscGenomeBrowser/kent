@@ -11575,6 +11575,8 @@ gzip illumina.bed
 # new entries for previous sources and more IDbases
 # Update, reloaded table January 2007       Belinda Giardine
 # new source (first set of LOVD) and some fixes to IDbases and HbVar
+# Update most LSDBs, add more genes for LMDp(LOVD) Jan 11, 2008
+# loaded and tested first at PSU
 
 #update old dbs and add dbPEX     March 22-23, 2007
 #need to truncate and reload all tables (new entries in old)
