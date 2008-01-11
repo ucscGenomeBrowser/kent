@@ -2873,6 +2873,7 @@ while (<FILE>) {
    }
 }
 '_EOF_'
+    # << emacs
     chmod +x removeById.pl
     # this removed data for all 38 of these Ids from stsInfo2.bed
     
@@ -18085,6 +18086,7 @@ while(<IN>) {
     print "/cluster/home/sugnet/bin/i386/orthoSplice -chromSize=$w[1] -exonFile=hg17.exoniphy.bed -trumpNum=3 -chrom=$w[0] -altInFile=../agxs/hg17.$w[0].agx -orthoAgxFile=../../mm5-2005.03.28/mm5.agx -db=hg17 -orthoDb=mm5 -netFile=nets/$w[0].net -chainFile=chains/$w[0].chain -commonFile=agx/$w[0].hg17.mm5.cons.t3.agx -reportFile=report/$w[0].hg17.report -edgeFile=report/$w[0].hg17.edge.report >& logs/$w[0].test.log\n";
 }
 '_EOF_'
+# << emacs
 
 ./makeRun.sh > orthoSplice.para.spec
 ssh kki
@@ -18384,6 +18386,7 @@ while (<STDIN>) {
 
 }
 
+# << emacs
 # Switch to C programs from kent/src/hg/snp/snpLoad.
 
 # Determine allele1 and allele2 (set allele2 to "none" if monomorphic)
@@ -21473,6 +21476,7 @@ mkdir -p ${blatDir}/{over,net}
 /cluster/bin/x86_64/chainNet $chain $sizesHGOld $sizesHG17 $net /dev/null
 /cluster/bin/x86_64/netChainSubset $net $chain $over
 'EOF'
+# << emacs
     chmod +x netOver.sh
 
     mkdir netRun
@@ -21976,7 +21980,8 @@ hgsql -e 'delete from seq where extFile = 33852294' hg17
 hgsql -e 'alter table snpSeq add index acc (acc)' hg17
 
 #############################################################
-# Get panTro2 and rheMac2 allele for all SNPs (Heather, Dec 2006 and Feb 2007)
+# Get panTro2 and rheMac2 allele for all SNPs (Heather, Dec 2006, Feb 2007 and
+# June 2007 [fix release 6/25/07: using hg17 instead of hg18 liftOver files])
 # Deletions will probably lift okay
 # The insertions have start == end so none of them will lift
 
@@ -22140,6 +22145,7 @@ foreach fileName (`ls input/*`)
     addQual.pl panTro2 $chromName < $fileName > output/$chromName
 end
 'EOF'
+# << emacs
 
 cd rheMac2Seq/output
 concat.csh
@@ -23668,6 +23674,7 @@ set path = (/usr/java/jre1.5.0_06/bin /bin /usr/bin /usr/X11R6/bin \
              /cluster/bin/scripts)
 java -jar ./eponine-scan.jar -threshold 0.999 -seq $1 > $2
 '_EOF_'
+     # << emacs
      chmod a+x doEpo
      cp /dev/null jobList
      foreach f (/san/sanvol1/scratch/hg17/chunks/NT*.fa)
@@ -24048,7 +24055,7 @@ done
     cd /gbdb/hg17/wib
     mv 061116 regPot061116
     hgsql -e " update regPotential7X SET file = \
-      "/gbdb/hg17/wib/regPot061116/regPotential7X.wib" hg17
+      /gbdb/hg17/wib/regPot061116/regPotential7X.wib" hg17
     Query OK, 2366123 rows affected (31.46 sec)
     Rows matched: 2366123  Changed: 2366123  Warnings: 0
 
