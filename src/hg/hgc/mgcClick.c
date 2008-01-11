@@ -216,15 +216,15 @@ static void getRefSeqInfo(struct sqlConnection *conn, struct cloneInfo *ci)
 struct geneSimilarities *refSeqs
     = geneSimilaritiesBuildAt(conn, TRUE, ci->acc, seqName, ci->start,
                               ci->table, "refGene");
-if (refSeqs != NULL)
+if (refSeqs->genes != NULL)
     {
     // use first one (highest similarity)
     struct geneSim *refSeq = refSeqs->genes;
     safecpy(ci->refSeqAcc, sizeof(ci->refSeqAcc), refSeq->gene->name);
     ci->refSeqAccv = getAccVersion(conn, ci->refSeqAcc);
     ci->refSeqSum = findRefSeqSummary(conn, refSeqs);
-    geneSimilaritiesFree(&refSeqs);
     }
+geneSimilaritiesFree(&refSeqs);
 }
 
 static void parseCloneField(struct cloneInfo *ci)
@@ -572,7 +572,7 @@ static void prCcdsLinks(struct sqlConnection *conn, struct cloneInfo *ci)
 struct geneSimilarities *ccdsGenes
     = geneSimilaritiesBuildAt(conn, TRUE, ci->acc, seqName, ci->start,
                               ci->table, "ccdsGene");
-if (ccdsGenes != NULL)
+if (ccdsGenes->genes != NULL)
     {
     /* just use cloest one */
     char *ccdsId = ccdsGenes->genes->gene->name;
@@ -583,6 +583,7 @@ if (ccdsGenes != NULL)
     printf("\">%s</A>", ccdsId);
     webPrintLinkCellEnd();
     }
+geneSimilaritiesFree(&ccdsGenes);
 }
 
 static void prUcscGenesLinks(struct sqlConnection *conn, struct cloneInfo *ci)
@@ -591,7 +592,7 @@ static void prUcscGenesLinks(struct sqlConnection *conn, struct cloneInfo *ci)
 struct geneSimilarities *ucscGenes
     = geneSimilaritiesBuildAt(conn, TRUE, ci->acc, seqName, ci->start,
                               ci->table, "knownGene");
-if (ucscGenes != NULL)
+if (ucscGenes->genes != NULL)
     {
     /* just use cloest one */
     struct genePred *gene = ucscGenes->genes->gene;
@@ -601,6 +602,7 @@ if (ucscGenes != NULL)
            cartSidUrlString(cart), database, gene->name, seqName, gene->txStart, gene->txEnd, gene->name);
     webPrintLinkCellEnd();
     }
+geneSimilaritiesFree(&ucscGenes);
 }
 
 static void prMgcCloneLinks(struct sqlConnection *conn, struct mgcDb *mgcDb, struct cloneInfo *ci)
