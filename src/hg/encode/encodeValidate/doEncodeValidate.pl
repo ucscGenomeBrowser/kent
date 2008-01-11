@@ -12,7 +12,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.10 2008/01/11 00:54:34 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.11 2008/01/11 19:55:15 kate Exp $
 
 use warnings;
 use strict;
@@ -32,6 +32,7 @@ our $vocabConfigFile = $encodeConfigDir . "/cv.ra";
 our $trackFile = 'trackDb.ra';
 our $loadScript = 'load.sh';
 our $loadRa = 'load.ra';
+our $logDir = "log";
 
 # Global variables
 our $submitDir;
@@ -118,12 +119,12 @@ our %formatCheckers = (
 
 sub validateWig {
     my ($file) = @_;
+    my $logFile = $logDir . "/validateWig.out";
     my $err = system (
-        "head -10 $file | $loaderPath/wigEncode stdin /dev/null /dev/null >validateWig.out 2>&1");
+        "head -10 $file | $loaderPath/wigEncode stdin /dev/null /dev/null >$logFile 2>&1");
     if ($err) {
-        print STDERR  "ERROR: File '\$file\' failed wiggle validation.\n";
-        my $outfile = "validateWig.out";
-        open(ERR, $outfile) || die "ERROR: Can't open wiggle validation file, \'$outfile\': $!\n";
+        print STDERR  "ERROR: File \'$file\' failed wiggle validation\n";
+        open(ERR, $logFile) || die "ERROR: Can't open wiggle validation file \'$logFile\': $!\n";
         my @err = <ERR>;
         die "@err\n";
     } else {
@@ -133,12 +134,12 @@ sub validateWig {
 
 sub validateBed {
     my ($file, $type) = @_;
+    my $logFile = $logDir . "/validateBed.out";
     my $err = system (
-        "head -10 $file | egrep -v '^track|browser' | $loaderPath/hgLoadBed -noLoad hg18 testTable stdin >validateBed.out 2>&1");
+        "head -10 $file | egrep -v '^track|browser' | $loaderPath/hgLoadBed -noLoad hg18 testTable stdin >$logFile 2>&1");
     if ($err) {
-        print STDERR  "ERROR: File '\$file\' failed bed validation.\n";
-        my $outfile = "validateBed.out";
-        open(ERR, $outfile) || die "ERROR: Can't open bed validation file, \'$outfile\': $!\n";
+        print STDERR  "ERROR: File \'$file\' failed bed validation\n";
+        open(ERR, $logFile) || die "ERROR: Can't open bed validation file \'$logFile\': $!\n";
         my @err = <ERR>;
         die "@err\n";
     } else {
@@ -288,7 +289,10 @@ if (scalar(@ARGV) < 2) { usage(); }
 my $submitType = $ARGV[0];	# currently not used
 $submitDir = $ARGV[1];
 &HgAutomate::verbose(1, "Validating submission in directory \'$submitDir\'\n");
-chdir $submitDir;
+chdir $submitDir ||
+    die ("SYS ERROR; Can't change to submission directory \'$submitDir\': $!\n");
+mkdir $logDir || 
+    die ("SYS ERROR; Can't create log directory \'$logDir\': $!\n");
 
 # Locate project information (PIF) file and verify that project is
 #  ready for submission
@@ -383,7 +387,7 @@ close(IN);
 # Validate files and metadata fields in all datasets.  Create .ra file
 # for loader 
 open(LOADER_RA, ">$loadRa") || 
-        die "SYS ERROR: Can't write \'$loadRa\' file\n";
+        die "SYS ERROR: Can't write \'$loadRa\' file ($!)\n";
 
 foreach $dataset (keys %datasets) {
     my $datasetRef = $datasets{$dataset};
