@@ -8,9 +8,11 @@
 # Writes error or log information to STDOUT
 # Returns 0 if validation succeeds.
 
+# TODO:  Handle Mac and DOS EOLs
+
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.9 2008/01/10 22:24:06 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.10 2008/01/11 00:54:34 kate Exp $
 
 use warnings;
 use strict;
@@ -164,6 +166,8 @@ sub checkDataFormat {
         $format = $1;
         $type = $2;
     }
+    $formatCheckers{$format} || 
+        die "ERROR: Data format \'$format\' in PIF file is unknown\n";
     $formatCheckers{$format}->($file, $type);
 }
 
