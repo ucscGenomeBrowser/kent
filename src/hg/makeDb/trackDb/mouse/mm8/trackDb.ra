@@ -48,7 +48,7 @@ visibility dense
 color 150,0,0
 type genePred ensPep
 ensArchive jun2006
-dataVersion Ensembl Release 39 
+dataVersion June 2006 
 
 track NIAGene
 shortLabel NIA Gene Index
