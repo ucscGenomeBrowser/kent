@@ -29,6 +29,9 @@ if ($#argv != 1 ) then
   echo "    usage: date"
   echo '    ("date" of associated fasta files -- format = yyyy-mm-dd)'
   echo
+  echo "  Script should be run before pushing new tables to hgwbeta."
+  echo "  Warning: this script creates many files."
+  echo
   exit
 else
   set update=$argv[1]
@@ -473,7 +476,8 @@ foreach mouse ( $mice )
   echo "     /gbdb/$mouse/igtc/genetrap.$update.fasta"
 end
 
-echo " - ask for drop of old files from hgnfs1:"
+echo " - ask for drop of old files from hgnfs1"
+echo "   (do this AFTER the new tables have been pushed to the RR):"
 foreach mouse ( $mice )
   echo "     /gbdb/$mouse/igtc/genetrap.$lastMonth.fasta"
 end
@@ -507,7 +511,7 @@ foreach i ( $counter)
   echo 'hgsql -Ne' "'" 'SELECT COUNT(*) FROM seq WHERE extFile = "'$extFileId[$i]'"' \' $mice[$i]
 end
 foreach i ( $counter)
-  echo 'hgsql -hgwbeta -Ne' "'" 'SELECT COUNT(*) FROM seq WHERE extFile = "'$extFileId[$i]'"' \' $mice[$i]
+  echo 'hgsql -h hgwbeta -Ne' "'" 'SELECT COUNT(*) FROM seq WHERE extFile = "'$extFileId[$i]'"' \' $mice[$i]
 end
 echo
 echo
