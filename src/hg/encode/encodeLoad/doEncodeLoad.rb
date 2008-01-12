@@ -9,7 +9,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeLoad/doEncodeLoad.rb,v 1.2 2008/01/10 22:50:51 galt Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeLoad/doEncodeLoad.rb,v 1.3 2008/01/12 20:26:53 galt Exp $
 
 # Global constants
 
@@ -18,6 +18,8 @@ $opt_verbose = 1
 $loadRa = 'load.ra'
 $submitDir = ""
 $submitType = ""
+$tempDir = "/data/tmp"
+$encodeDb = "hg18"
 
 #probably get rid of this:
 $err = false
@@ -39,32 +41,23 @@ end
 
 
 
-def loadWig(tablename, files)
-    #my ($file) = @_;
-    #my $err = system (
-    #    "head -10 $file | $loaderPath/wigEncode stdin /dev/null /dev/null >validateWig.out 2>&1");
-    if ($err) 
-        STDERR.print "ERROR: File '\$file\' failed wiggle validation.\n"
-        #open(ERR, "validateWig.out") || die "\n";
-        #my @err = <ERR>;
-        die "@err\n";
-    else 
-        print "Passed\n";
-    end
+def loadWig(tableName, fileList)
+  if system ( "head -1000 -q #{fileList} | wigEncode stdin stdout #{tableName}.wib | hgLoadWiggle -pathPrefix=/gbdb/#{$encodeDb}/wib -tmpDir=#{$tempDir} #{$encodeDb} #{tableName} stdin >validateWig.out 2>&1" )
+      system ( "ln -s #{tableName}.wib /gbdb/#{$encodeDb}/wib/" )
+      print "#{fileList} Passed\n";
+  else 
+      STDERR.print "ERROR: File(s) '#{fileList}' failed wiggle validation.\n";
+      errAbort File.read("validateWig.out")
+  end
 end
 
-def loadBed3(tablename, files)
-    #my ($file, $type) = @_;
-    #my $err = system (
-        #"head -10 $file | egrep -v '^track|browser' | $loaderPath/hgLoadBed -noLoad hg18 testTable stdin >validateBed.out 2>&1");
-    if ($err) 
-        STDERR.print "ERROR: File '\$file\' failed bed validation.\n";
-        #open(ERR, "validateBed.out") || die "\n";
-        #my @err = <ERR>;
-        die "@err\n";
-    else
-        print "Passed\n";
-    end
+def loadBed3(tableName, fileList)
+  if system ( "head -1000 -q #{fileList} | egrep -v '^track|browser' | hgLoadBed #{$encodeDb} #{tableName} stdin >validateBed.out 2>&1")
+      print "#{fileList} Passed\n";
+  else
+      STDERR.print "ERROR: File(s) '#{fileList}' failed bed validation.\n";
+      errAbort File.read("validateBed.out")
+  end
 end
 
 ############################################################################
@@ -145,10 +138,10 @@ ra.each do |x|
   case h["type"]
   when "wig"
     STDERR.puts "  it's a WIGGLE!\n"  #debug
-    loadWig h["tablename"], h["files"].split
+    loadWig h["tablename"], h["files"]
   when "bed3"
     STDERR.puts "  it's a BED3!\n"  #debug
-    loadBed3 h["tablename"], h["files"].split
+    loadBed3 h["tablename"], h["files"]
   else
     errAbort "unexpected error: unknown type #{h["type"]} in load.ra\n"
   end 
