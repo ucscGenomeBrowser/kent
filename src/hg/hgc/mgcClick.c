@@ -502,16 +502,18 @@ struct gbMiscDiff *gmds = NULL, *gmd;
 if (sqlTableExists(conn, "gbMiscDiff"))
     gmds = sqlQueryObjs(conn, (sqlLoadFunc)gbMiscDiffLoad, sqlQueryMulti,
                         "select * from gbMiscDiff where acc=\"%s\"", acc);
+webNewSection("NCBI Clone Validation");
 if (gmds != NULL)
     {
     unsigned miscDiffFlds = getMiscDiffFields(gmds);
-    webNewSection("NCBI Clone Validation");
     webPrintLinkTableStart();
     prMiscDiffHdr(miscDiffFlds);
     for (gmd = gmds; gmd != NULL; gmd = gmd->next)
         prMiscDiff(gmd, miscDiffFlds);
     webPrintLinkTableEnd();
     }
+else
+    printf("<EM>No clone discrepancies with genome annotated</EM><BR><BR>\n");
 }
 
 static void prMethodsLink(struct sqlConnection *conn, char *track)
