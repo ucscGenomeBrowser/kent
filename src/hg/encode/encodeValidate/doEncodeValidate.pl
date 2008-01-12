@@ -12,7 +12,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.11 2008/01/11 19:55:15 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.12 2008/01/12 20:24:51 galt Exp $
 
 use warnings;
 use strict;
@@ -26,7 +26,7 @@ sub usage {
 
 # Global constants
 our $loaderPath = "/usr/local/apache/cgi-bin/loader";
-our $encodeConfigDir = '../../config'; # change to top of scratch dir  before deployment
+our $encodeConfigDir = '../config'; # change to top of scratch dir  before deployment
 our $fieldConfigFile = $encodeConfigDir . "/fields.ra";
 our $vocabConfigFile = $encodeConfigDir . "/cv.ra";
 our $trackFile = 'trackDb.ra';
