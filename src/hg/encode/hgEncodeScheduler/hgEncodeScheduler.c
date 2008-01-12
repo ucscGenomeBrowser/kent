@@ -16,7 +16,7 @@
 #include <signal.h>
 #include <sys/wait.h>
 
-static char const rcsid[] = "$Id: hgEncodeScheduler.c,v 1.10 2008/01/10 03:04:34 galt Exp $";
+static char const rcsid[] = "$Id: hgEncodeScheduler.c,v 1.11 2008/01/12 20:14:40 galt Exp $";
 
 char *db = NULL;
 char *dir = NULL;
@@ -195,26 +195,30 @@ else
 sqlFreeResult(&rs);
 }
 
-char *getPathToErrorFile(struct sqlConnection *conn, int project, char *jobType)
-/* return path to load_error or validate_error file */
+char *getProjectPath(int project)
+/* return path to project dir */
 {
-char query[256];
-safef(query, sizeof(query), "select user_id from projects where id=%d", 
-    project);
-int user = sqlQuickNum(conn, query);
 char projectPath[256];
-safef(projectPath, sizeof(projectPath), "%s/%d/%d/%s_error", dir, user, project, jobType);
+safef(projectPath, sizeof(projectPath), "%s/%d", dir, project);
 return cloneString(projectPath);
 }
 
-void updateErrorFile(struct sqlConnection *conn, int project, char *jobType, char *message)
+char *getPathToErrorFile(int project, char *jobType)
+/* return path to load_error or validate_error file */
+{
+char errorPath[256];
+safef(errorPath, sizeof(errorPath), "%s/%s_error", getProjectPath(project), jobType);
+return cloneString(errorPath);
+}
+
+void updateErrorFile(int project, char *jobType, char *message)
 /* remove a process from running, update project load_error or validate_error file */
 {
-char *projectPath = getPathToErrorFile(conn, project, jobType);
+char *errorPath = getPathToErrorFile(project, jobType);
 
-//uglyf("\n  submssionPath=%s\n", projectPath);
+//uglyf("\n  submssionPath=%s\n", errorPath);
 
-FILE *f = fopen(projectPath,"w");
+FILE *f = fopen(errorPath,"w");
 fprintf(f, "%s", message);
 carefulClose(&f);
 
@@ -296,14 +300,17 @@ else if (sameOk(status, "schedule re-expand all"))
     jobType = "reexpandall";
 else
     errAbort("unexpected jobType=[%s]", jobType);
-char *projectPath = getPathToErrorFile(conn, project, jobType);
+
+char *errorPath = getPathToErrorFile(project, jobType);
+
+char *projectDir = getProjectPath(project);
+uglyf("projectDir=[%s]\n",projectDir);
+
 char *plainName = NULL;
 if (sameString(jobType,"validate"))
     {
     char *validator;
     char *typeParams;
-    char *projectDir = cloneStringZ(projectPath, strrchr(projectPath,'/')-projectPath);
-     //uglyf("projectDir=[%s]\n",projectDir);
     getProjectTypeData(conn, project, &validator, &typeParams, &timeOut);
     safef(commandLine, sizeof(commandLine), "%s %s %s", validator, typeParams, projectDir);
      //uglyf("commandLine=[%s]\n",commandLine);
@@ -313,8 +320,6 @@ else if (sameString(jobType,"load"))
     //safef(commandLine, sizeof(commandLine), "/bin/sleep 20");
     char *loader;
     char *loadParams;
-    char *projectDir = cloneStringZ(projectPath, strrchr(projectPath,'/')-projectPath);
-     //uglyf("projectDir=[%s]\n",projectDir);
     getProjectLoadData(conn, project, &loader, &loadParams, &timeOut);
     safef(commandLine, sizeof(commandLine), "%s %s %s", loader, loadParams, projectDir);
      //uglyf("commandLine=[%s]\n",commandLine);
@@ -324,8 +329,6 @@ else if (sameString(jobType,"upload"))
     timeOut = 300;
     char *url = cloneString(status+strlen("schedule uploading "));
      uglyf("url=[%s]\n",url);
-    char *projectDir = cloneStringZ(projectPath, strrchr(projectPath,'/')-projectPath);
-     uglyf("projectDir=[%s]\n",projectDir);
 
     char query[256];
     safef(query, sizeof(query), "select archive_count from projects where id=%d", project);
@@ -343,12 +346,10 @@ else if (sameString(jobType,"upload"))
 else if (sameString(jobType,"reexpandall"))
     {
     timeOut = 300;
-    char *projectDir = cloneStringZ(projectPath, strrchr(projectPath,'/')-projectPath);
-     uglyf("projectDir=[%s]\n",projectDir);
     safef(commandLine, sizeof(commandLine), "%s/todo", projectDir);
      uglyf("commandLine=[%s]\n",commandLine);
     }
-updateErrorFile(conn, project, jobType, ""); // clear out job_error file
+updateErrorFile(project, jobType, ""); // clear out job_error file
 sqlDisconnect(&conn);
 
 signal(SIGCLD, SIG_DFL);  /* will be waiting for child */
@@ -363,7 +364,7 @@ if ( pid == 0 )
 
     //uglyf("commandLine=[%s]\n",commandLine);
 
-    int f = open(projectPath, O_WRONLY | O_NOCTTY);
+    int f = open(errorPath, O_WRONLY | O_NOCTTY);
     dup2(f, STDERR_FILENO);
     //dup2(f, STDOUT_FILENO);  //debug
     close(f);
@@ -491,7 +492,7 @@ while((project = sqlQuickNum(conn,query)))
     char message[256];
     safef(message, sizeof(message), "load timed out age = %d minutes\n", age);
     // save status in result file in build area
-    updateErrorFile(conn, project, jobType, message);
+    updateErrorFile(project, jobType, message);
 
     /* kill old job timedout, set status in db */
 
