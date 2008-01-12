@@ -29,7 +29,8 @@ priority 40
 visibility dense
 color 150,0,0
 type genePred ensPep
-url http://www.ensembl.org/Mus_musculus/transview?transcript=$$
+ensArchive apr2006
+dataVersion April 2006
 
 track netFr1
 shortLabel $o_Organism Net
