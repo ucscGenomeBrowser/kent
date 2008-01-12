@@ -18198,6 +18198,11 @@ ldHgGene -predTab hg17 exonWalk hg17.mm5.exonWalk.gp
 
 ############################################################################################
 # HapMap SNPs rel21a (Feb. 2007, Heather)
+# June 2007 [partial fix of hapmapAllelesSummary released 6/25/07:
+# using hg17 instead of hg18 liftOver files... for most but not all
+# chroms! :( not documented below; error found by user]
+# 1/11/08 (angie): regenerated hapmapAllelesSummary with corrected
+# hapmapAllelesChimp.
 
 # get files for each chrom, for each population
 # these contain data for all individuals
@@ -18616,11 +18621,12 @@ hapmapMixed hg17
 # Summary table score is heterozygosity
 # Individual zygosity is *not* preserved
 ssh hgwdev
+# 6/25/08: regenerated with mostly-corrected hapmapAllelesChimp
+# 1/11/08 angie: regenerated with finally-corrected (I hope) hapmapAllelesChimp
 cd /cluster/data/hg17/bed/hapmap/rel21a
 /cluster/home/heather/kent/src/hg/snp/snpLoad/hapmapSummary hg17 hapmapSnpsCombined hapmapAllelesChimp hapmapAllelesMacaque
 hgLoadBed hg17 hapmapAllelesSummary -sqlTable=/cluster/home/heather/kent/src/hg/lib/hapmapAllelesSummary.sql hapmapSummary.tab -tab
-mysql> alter table hapmapAllelesSummary add index name (name);
-mysql> alter table hapmapAllelesSummary add index chrom (chrom, bin);
+
 # sanity check
 mysql> select count(*) from hapmapAllelesSummary where majorAlleleCountCEU > totalAlleleCountCEU;
 +----------+
@@ -21981,7 +21987,11 @@ hgsql -e 'alter table snpSeq add index acc (acc)' hg17
 
 #############################################################
 # Get panTro2 and rheMac2 allele for all SNPs (Heather, Dec 2006, Feb 2007 and
-# June 2007 [fix release 6/25/07: using hg17 instead of hg18 liftOver files])
+# June 2007 [partial fix released 6/25/07: using hg17 instead of hg18 liftOver
+# files... for most but not all chroms! :( not documented below; error found 
+# by user]
+# 1/11/08 (angie): re-running panTro2Qual and subsequent chimp & summary 
+# steps, so hg17 liftOver files will have been used for all outputs.
 # Deletions will probably lift okay
 # The insertions have start == end so none of them will lift
 
@@ -22114,6 +22124,8 @@ mkdir input
 splitFileByColumn all.sort input
 mkdir output
 
+# If we do this again, we should write a c program to read qac files into
+# memory -- much faster than one hgWiggle process per line.
 cat << 'EOF' > addQual.pl
 #!/usr/bin/perl -W
 $db=shift;
@@ -22146,6 +22158,7 @@ foreach fileName (`ls input/*`)
 end
 'EOF'
 # << emacs
+./getQual.csh
 
 cd rheMac2Seq/output
 concat.csh
@@ -22167,22 +22180,56 @@ grep chr21 ../../panTro2Seq/output/all.sort > chr21
 grep chrY ../../panTro2Seq/output/all.sort | grep -v random > chrY
 grep chrY ../../panTro2Seq/output/all.sort | grep random > chrY_random
 grep chrM ../../panTro2Seq/output/all.sort > chrM
+#-----------------------------------------------------------------------------
+# 1/11/08: replace outputs for chroms that apparently were skipped in the June 
+# run, and re-run subsequent steps for chimp.  
+cd /san/sanvol1/snp/liftOver/hg17/panTro2Qual
+mv output output-jun25
+foreach f (output-jun25/chr*)
+  if ( "X"`cmp $f output-feb26/$f:t` == "X" ) then
+    echo $f:t
+  endif
+end
+#chr21
+#chrM
+#chrY
+#chrY_random
+# <<-- those are the ones that may not have actually been regenerated.
+
+# It appears that the Feb. outputs, instead of the June Seq files, were copied 
+# to the June output for those chroms.  oops!
+# As a minor improvement, skip duplicate rows instead of just copying.
+foreach chr (chr21 chrM chrY chrY_random)
+  echo $chr
+  uniq input/$chr.sort > output/$chr
+end
+# << emacs
+
+mkdir output-jun25-incorrect
+mv output-jun25/chr{21,M,Y,Y_random} output-jun25-incorrect
+cat output-jun25/chr* output/chr* > output/qual.tab
+
+# end 1/11/08 fix-specific; proceeding to post-concat.csh chimp steps.
+#-----------------------------------------------------------------------------
 ./concat.csh
 /cluster/home/heather/kent/src/hg/snp/snpLoad/snpOrtho hg17 snp125 qual.tab
 hgLoadBed hg17 snp125OrthoPanTro2 snpOrtho.tab -tab -sqlTable=/cluster/home/heather/kent/src/hg/lib/snp125OrthoPanTro2.sql
+#Loaded 9591230 elements of size 17
+# previously 9590961
 # add index
-alter table snp125OrthoPanTro2 add index name (name);
-alter table snp125OrthoPanTro2 add index chrom (chrom, bin);
+hgsql hg17
+  alter table snp125OrthoPanTro2 add index name (name);
+  alter table snp125OrthoPanTro2 add index chrom (chrom, bin);
 # tweak to match panTro2 assembly
-mysql> update snp125OrthoPanTro2 set score = 98 where orthoChrom = "chr21";
-# Query OK, 127754 rows affected (26.26 sec)
-# Rows matched: 127754  Changed: 127754  Warnings: 0
-mysql> update snp125OrthoPanTro2 set score = 98 where orthoChrom = "chrY";
-# Query OK, 24958 rows affected (25.86 sec)
-# Rows matched: 24958  Changed: 24958  Warnings: 0
-mysql> update snp125OrthoPanTro2 set score = 98 where orthoChrom = "chrY_random";
-# Query OK, 135 rows affected (26.19 sec)
-# Rows matched: 135  Changed: 135  Warnings: 0
+  update snp125OrthoPanTro2 set score = 98 where orthoChrom = "chr21";
+#Query OK, 129170 rows affected (25.37 sec)
+#Rows matched: 129170  Changed: 129170  Warnings: 0
+  update snp125OrthoPanTro2 set score = 98 where orthoChrom = "chrY";
+#Query OK, 22081 rows affected (25.16 sec)
+#Rows matched: 22081  Changed: 22081  Warnings: 0
+  update snp125OrthoPanTro2 set score = 98 where orthoChrom = "chrY_random";
+#Query OK, 155 rows affected (25.41 sec)
+#Rows matched: 155  Changed: 155  Warnings: 0
 
 # macaque
 cd /san/sanvol1/snp/liftOver/hg17/rheMac2Qual/output
@@ -22199,8 +22246,9 @@ alter table snp125OrthoRheMac2 add index chrom (chrom, bin);
 cd /cluster/data/hg17/bed/hapmap/rel21a
 /cluster/home/heather/kent/src/hg/snp/snpLoad/hapmapOrtho hg17 hapmapSnpsCombined snp125OrthoPanTro2
 hgLoadBed hg17 hapmapAllelesChimp hapmapOrtho.tab -tab -sqlTable=/cluster/home/heather/kent/src/hg/lib/hapmapAllelesChimp.sql
-alter table hapmapAllelesChimp add index name(name);
-alter table hapmapAllelesChimp add index chrom (chrom, bin);
+#Loaded 3930564 elements of size 13
+hgsql hg17 -e 'alter table hapmapAllelesChimp add index name(name); \
+  alter table hapmapAllelesChimp add index chrom (chrom, bin);'
 
 # get hapmap subset for macaque
 # this run 106607 skipped
