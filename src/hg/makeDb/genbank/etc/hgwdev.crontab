@@ -6,12 +6,12 @@ SHELL=/bin/sh
 MAILTO=genbank@cse.ucsc.edu
 
 # mon-fri AM, load mRNAs
-# poll every 15 minutes 1-6
-0,15,30,45 1-6 * * 0-5	/cluster/data/genbank/etc/hgwdev-dbload
+# poll every hour 1-6
+0 1-6 * * 0-5	/cluster/data/genbank/etc/hgwdev-dbload
 
 # sat,sun AM both mRNAs and ESTS
-# poll every 15 minutes midnight to 2pm
-0,15,30,45 0-14 * * 6,7	/cluster/data/genbank/etc/hgwdev-dbload -inclEsts
+# poll every hour midnight to 2pm
+0 * * 6,7	/cluster/data/genbank/etc/hgwdev-dbload -inclEsts
 # -extFileUpdate
 
 
