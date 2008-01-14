@@ -41,7 +41,7 @@ baseColorDefault genomicCodons
 
 track ensGene
 shortLabel Ensembl Genes
-longLabel Ensembl (Build 39) Gene Predictions
+longLabel Ensembl (Version 39) Gene Predictions
 group genes
 priority 40
 visibility dense

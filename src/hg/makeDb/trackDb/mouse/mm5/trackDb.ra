@@ -9,7 +9,7 @@ type bed 4 +
 
 track ensGene
 shortLabel Ensembl Genes
-longLabel Ensembl (Build 27) Gene Predictions
+longLabel Ensembl (Version 27) Gene Predictions
 group genes
 priority 40
 visibility dense
