@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, August 2005, ncbi mouse_35 - Mm7
 #
-#	"$Id: mm7.txt,v 1.10 2008/01/12 00:12:36 rhead Exp $"
+#	"$Id: mm7.txt,v 1.11 2008/01/14 23:06:15 rhead Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-08-26 - Hiram)
@@ -12000,6 +12000,7 @@ refGene:CDS 1.059%, sgpGene 1.451%, both 0.912%, cover 86.18%, enrich 59.39x
 
 ###########################################################################
 #### LOAD ENSEMBL GENES (DONE 5/12/06, Fan)
+# ADDDED STABLE URL TO TRACKDB BLOCK (V38, APR 2006) (2008-01-11, rhead)
 #	needed for Gene Sorter procedure below
 #	Ensembl released Mouse build 34 the week of August 10th, 2005
    mkdir -p /cluster/store5/mm7/bed/ensGene

@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: mm8.txt,v 1.61 2007/12/21 20:56:36 hiram Exp $"
+#	"$Id: mm8.txt,v 1.62 2008/01/14 23:06:15 rhead Exp $"
 #
 
 #  NOTE:  this doc may have genePred loads that fail to include
@@ -6156,6 +6156,7 @@ elsif ($a[5] =~ m/^N[TC]_\d+$/)
 #####################################################################
 #### LOAD ENSEMBL GENES (DONE - 2006-06-21 - Hiram)
 # ADDED PEPTIDE TABLE, ENSPEP (DONE, 2006-07-11, hartera)
+# ADDDED STABLE URL TO TRACKDB BLOCK (V39, JUN 2006) (2008-01-10, rhead)
    mkdir /cluster/data/mm8/bed/ensGene
    cd /cluster/data/mm7/bed/ensGene
 
