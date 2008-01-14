@@ -9,7 +9,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeLoad/doEncodeLoad.rb,v 1.3 2008/01/12 20:26:53 galt Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeLoad/doEncodeLoad.rb,v 1.4 2008/01/14 19:33:58 galt Exp $
 
 # Global constants
 
@@ -42,8 +42,8 @@ end
 
 
 def loadWig(tableName, fileList)
-  if system ( "head -1000 -q #{fileList} | wigEncode stdin stdout #{tableName}.wib | hgLoadWiggle -pathPrefix=/gbdb/#{$encodeDb}/wib -tmpDir=#{$tempDir} #{$encodeDb} #{tableName} stdin >validateWig.out 2>&1" )
-      system ( "ln -s #{tableName}.wib /gbdb/#{$encodeDb}/wib/" )
+  if system( "head -1000 -q #{fileList} | wigEncode stdin stdout #{tableName}.wib | hgLoadWiggle -pathPrefix=/gbdb/#{$encodeDb}/wib -tmpDir=#{$tempDir} #{$encodeDb} #{tableName} stdin >loadWig.out 2>&1" )
+      system( "ln -s #{tableName}.wib /gbdb/#{$encodeDb}/wib" )
       print "#{fileList} Passed\n";
   else 
       STDERR.print "ERROR: File(s) '#{fileList}' failed wiggle validation.\n";
@@ -52,11 +52,16 @@ def loadWig(tableName, fileList)
 end
 
 def loadBed3(tableName, fileList)
-  if system ( "head -1000 -q #{fileList} | egrep -v '^track|browser' | hgLoadBed #{$encodeDb} #{tableName} stdin >validateBed.out 2>&1")
+
+  system "echo $SHELL" #debug
+  puts  "head -1000 -q #{fileList} | egrep -v '^track|browser' | hgLoadBed #{$encodeDb} #{tableName} stdin >loadBed.out 2>&1"  #debug
+
+  if system( "head -1000 -q #{fileList} | egrep -v '^track|browser' | hgLoadBed #{$encodeDb} #{tableName} stdin >loadBed.out 2>&1")
       print "#{fileList} Passed\n";
+      #debug restore: File.delete "bed.tab"
   else
-      STDERR.print "ERROR: File(s) '#{fileList}' failed bed validation.\n";
-      errAbort File.read("validateBed.out")
+      STDERR.print "ERROR: File(s) '#{fileList}' failed bed load.\n";
+      errAbort File.read("loadBed.out")
   end
 end
 
