@@ -8,72 +8,32 @@
 #include "web.h"
 #include "genbank.h"
 #include "htmshell.h"
+#include "genePred.h"
+#include "geneSimilarities.h"
 
-static char *mgcStatusDesc[][2] =
-/* Table of MGC status codes to descriptions.  This is essentially duplicated
- * from MGC loading code, but we don't share the data to avoid creating some
- * dependencies.  Might want to move these to a shared file or just put these
- * in a table.  Although it is nice to be able to customize for the browser. */
+static char *findRefSeqSummary(struct sqlConnection *conn,
+                               struct geneSimilarities *refSeqs)
+/* Given similar refseq genes, find the first one with a refseq
+ * summary and return that summary, or NULL if not found */
 {
-    {"unpicked", "not picked"},
-    {"picked", "picked"},
-    {"notBack", "not back"},
-    {"noDecision", "no decision yet"},
-    {"fullLength", "full length"},
-    {"fullLengthShort", "full length (short isoform)"},
-    {"fullLengthSynthetic", "full length (synthetic, expression ready, no stop)"},
-    {"incomplete", "incomplete"},
-    {"chimeric", "chimeric"},
-    {"frameShift", "frame shifted"},
-    {"contaminated", "contaminated"},
-    {"retainedIntron", "retained intron"},
-    {"mixedWells", "mixed wells"},
-    {"noGrowth", "no growth"},
-    {"noInsert", "no insert"},
-    {"no5est", "no 5' EST match"},
-    {"microDel", "no cloning site / microdeletion"},
-    {"artifact", "library artifacts"},
-    {"noPolyATail", "no polyA-tail"},
-    {"cantSequence", "unable to sequence"},
-    {"inconsistentWithGene", "inconsistent with known gene structure"},
-    {"manuallySupressed", "manually supressed"},
-    {"plateContaminated", "plate contaminated"},
-    {NULL, NULL}
-};
-
-static char *getMgcStatusDesc(struct sqlConnection *conn, int imageId)
-/* get a description of the status of a MGC clone */
-{
-struct sqlResult *sr;
-char **row;
-char query[128];
-char *desc = NULL;
-
-/* mgcFullStatus is used on browsers with only the full-length (mgc genes)
- * track */
-if (sqlTableExists(conn, "mgcStatus"))
-    safef(query, sizeof(query),
-          "SELECT status FROM mgcStatus WHERE (imageId = %d)", imageId);
-else
-    safef(query, sizeof(query),
-          "SELECT status FROM mgcFullStatus WHERE (imageId = %d)", imageId);
-sr = sqlMustGetResult(conn, query);
-row = sqlNextRow(sr);
-if (row != NULL)
+struct geneSim *rs;
+for (rs = refSeqs->genes; rs != NULL; rs = rs->next)
     {
-    int i;
-    for (i = 0; (mgcStatusDesc[i][0] != NULL) && (desc == NULL); i++)
-        {
-        if (sameString(row[0], mgcStatusDesc[i][0]))
-            desc = mgcStatusDesc[i][1];
-        }
+    char *sum = getRefSeqSummary(conn, rs->gene->name);
+    if (sum != NULL)
+        return sum;
     }
-if (desc == NULL)
-    desc = "missing or unknown MGC status; please report to browser maintainers";
+return NULL;
+}
 
-sqlFreeResult(&sr);
-return desc;
-}                   
+static char *getAccVersion(struct sqlConnection *conn, char *acc)
+/* given a accession, get acc.ver */
+{
+char query[256], accver[64];
+safef(query, sizeof(query), "SELECT version FROM gbCdnaInfo WHERE acc=\"%s\"", acc);
+safef(accver, sizeof(accver), "%s.%d", acc, sqlNeedQuickNum(conn, query));
+return cloneString(accver);
+}
 
 struct mgcDb
 /* information about an MGC databases */
@@ -171,6 +131,8 @@ struct cloneInfo
 /* Information on a MGC or ORFeome clone collected from various tables */
 {
     char *acc;
+    int start;
+    char *table;
     char *desc;       // genbank info
     char *organism;
     char *tissue;
@@ -184,6 +146,7 @@ struct cloneInfo
     char *keyword;
     int version;
     int imageId;
+    int mgcId;
     int gi;
     char *refSeqAccv;  // RefSeq info
     char refSeqAcc[GENBANK_ACC_BUFSZ];
@@ -207,34 +170,17 @@ if ((fconn != NULL) && sqlTableExists(fconn, "mgcMBLabValid"))
 return inMBLabValidDb;
 }
 
-static int getGI(struct sqlConnection *conn, char *acc)
-/* get the GI number from gbCdnaInfo, or -1 there is no GI column */
+static void cdnaInfoLoad(struct cloneInfo *ci, struct sqlConnection *conn)
+/* Loading clone information from gbCdnaInfo relational tables. */
 {
-if (sqlFieldIndex(conn, "gbCdnaInfo", "gi") < 0)
-    return -1;
-else
-    {
-    char query[128];
-    safef(query, sizeof(query), "select gi from gbCdnaInfo where acc=\"%s\"", acc);
-    return sqlQuickNum(conn, query);
-    }
-}
-
-static struct cloneInfo *cloneInfoLoad(struct sqlConnection *conn, char *acc)
-/* Load various piece information for a clone from gbCdnaInfo relational
- * tables. */
-{
-struct cloneInfo *ci;
-AllocVar(ci);
-ci->acc = acc;
-
 // data from gbCdnaInfo and friends
 char query[1024];
 safef(query, sizeof(query),
       "select "
       "description.name, organism.name, tissue.name, library.name,"
       "development.name, geneName.name, productName.name, mrnaClone.name,"
-      "cds.name,keyword.name,gbCdnaInfo.moddate,gbCdnaInfo.version"
+      "cds.name,keyword.name,gbCdnaInfo.moddate,gbCdnaInfo.version,"
+      "gbCdnaInfo.gi"
       " from "
       "gbCdnaInfo,description,organism,tissue,library,development,"
       "geneName,productName,mrnaClone,cds,keyword"
@@ -244,7 +190,7 @@ safef(query, sizeof(query),
       "(tissue = tissue.id) and (library = library.id) and"
       "(development = development.id) and (geneName = geneName.id) and"
       "(productName = productName.id) and (mrnaClone = mrnaClone.id) and"
-      "(cds = cds.id) and (keyword = keyword.id)", acc);
+      "(cds = cds.id) and (keyword = keyword.id)", ci->acc);
 struct sqlResult *sr = sqlMustGetResult(conn, query);
 char **row = sqlNextRow(sr);
 int i = 0;
@@ -260,59 +206,90 @@ ci->cds = cloneString(row[i++]);
 ci->keyword = cloneString(row[i++]);
 ci->moddate = cloneString(row[i++]);
 ci->version = sqlUnsigned(row[i++]);
+ci->gi = sqlUnsigned(row[i++]);
 sqlFreeResult(&sr);
-ci->gi = getGI(conn, acc);
+}
+
+static void getRefSeqInfo(struct sqlConnection *conn, struct cloneInfo *ci)
+/* fill in refSeq info */
+{
+struct geneSimilarities *refSeqs
+    = geneSimilaritiesBuildAt(conn, TRUE, ci->acc, seqName, ci->start,
+                              ci->table, "refGene");
+if (refSeqs->genes != NULL)
+    {
+    // use first one (highest similarity)
+    struct geneSim *refSeq = refSeqs->genes;
+    safecpy(ci->refSeqAcc, sizeof(ci->refSeqAcc), refSeq->gene->name);
+    ci->refSeqAccv = getAccVersion(conn, ci->refSeqAcc);
+    ci->refSeqSum = findRefSeqSummary(conn, refSeqs);
+    }
+geneSimilaritiesFree(&refSeqs);
+}
+
+static void parseCloneField(struct cloneInfo *ci)
+/* parse the mrnaClone field to get IMAGE and MGC fields, if available */
+{
+/* MGC:135061 IMAGE:40080529
+ * or
+ * IMAGE:100005038; FLH186078.01X; RZPDo839A0971D
+ */
+char buf[1024], *words[64];
+safecpy(buf, sizeof(buf), ci->clone);
+int nwords = chopByWhite(buf, words, ArraySize(words));
+if (nwords == ArraySize(words))
+    errAbort("more words in mrnaClone file than can be parsed, most likely data corruption: %s",
+             ci->clone);
+int i;
+for (i = 0; i < nwords; i++)
+    {
+    char *word = words[i];
+    int l = strlen(word);
+    if ((l > 0) && (word[l-1] == ';'))
+        word[l-1] = '\0';  // wack trailing `;'
+    if (startsWith("MGC:", word))
+        ci->mgcId = sqlUnsigned(word+4);
+    else if (startsWith("IMAGE:", word))
+        ci->imageId = sqlUnsigned(word+6);
+    }
+}
+
+static struct cloneInfo *cloneInfoLoad(struct sqlConnection *conn, char *acc,
+                                       int start, char *cloneTbl)
+/* Load clone information tables. */
+{
+struct cloneInfo *ci;
+AllocVar(ci);
+ci->acc = cloneString(acc);
+ci->start = start;
+ci->table = cloneString(cloneTbl);
+cdnaInfoLoad(ci, conn);
+parseCloneField(ci);
+if (sqlTableExists(conn, "refGene"))
+    getRefSeqInfo(conn, ci);
 return ci;
 }
 
-static struct cloneInfo *mgcCloneInfoLoad(struct sqlConnection *conn, char *acc)
+static struct cloneInfo *mgcCloneInfoLoad(struct sqlConnection *conn, char *acc,
+                                          int start)
 /* Load MGC clone information */
 {
-struct cloneInfo *ci = cloneInfoLoad(conn, acc);
-
-// get imageId and RefSeq acc from mgc status table
-char *mgcStatTbl = sqlTableExists(conn, "mgcFullStatus")
-    ? "mgcFullStatus" : "mgcStatus";
-char query[1024];
-safef(query, sizeof(query), "select imageId, geneName from %s where acc = \"%s\"",
-      mgcStatTbl, acc);
-struct sqlResult *sr = sqlMustGetResult(conn, query);
-char **row = sqlNextRow(sr);
-int i = 0;
-ci->imageId = sqlUnsigned(row[i++]);
-if (strlen(row[i]) > 0)
-    {
-    ci->refSeqAccv = cloneString(row[i++]);
-    genbankDropVer(ci->refSeqAcc, ci->refSeqAccv);
-    }
-sqlFreeResult(&sr);
-
-// if there is a RefSeq acc, get summary if available
-if (ci->refSeqAccv != NULL)
-    ci->refSeqSum = getRefSeqSummary(conn, ci->refSeqAcc);
-
+struct cloneInfo *ci = cloneInfoLoad(conn, acc, start, "mgcGenes");
+if (ci->mgcId == 0)
+    errAbort("no MGC:nnnn entry in mrnaClone table for MGC clone %s", acc);
+if (ci->imageId == 0)
+    errAbort("no IMAGE:nnnn entry in mrnaClone table for MGC clone %s", acc);
 return ci;
 }      
 
-static struct cloneInfo *orfeomeCloneInfoLoad(struct sqlConnection *conn, char *acc)
+static struct cloneInfo *orfeomeCloneInfoLoad(struct sqlConnection *conn, char *acc,
+                                              int start)
 /* Load ORFeome clone information */
 {
-struct cloneInfo *ci = cloneInfoLoad(conn, acc);
-ci->imageId = getImageId(conn, acc);
+struct cloneInfo *ci = cloneInfoLoad(conn, acc, start, "orfeomeGenes");
+if (ci->imageId == 0)
+    errAbort("no IMAGE:nnnn entry in mrnaClone table for ORRFeome clone %s", acc);
 return ci;
-}
-
-void printMgcRnaSpecs(struct trackDb *tdb, char *acc, int imageId)
-/* print status information for MGC mRNA or EST; must have imageId */
-{
-struct sqlConnection *conn = hgAllocConn();
-struct mgcDb mgcDb = getMgcDb();
-char *statusDesc;
-/* add status description */
-statusDesc = getMgcStatusDesc(conn, imageId);
-if (statusDesc != NULL)
-    printf("<B>%s status:</B> %s<BR>", mgcDb.name, statusDesc);
-hFreeConn(&conn);
 }
 
 static void prCellLabelVal(char *label, char *val)
@@ -320,6 +297,18 @@ static void prCellLabelVal(char *label, char *val)
 {
 webPrintLabelCell(label);
 webPrintLinkCell(val);
+}
+
+static void prInitialSection(struct cloneInfo *ci, char *collection)
+/* start page and print initial section */
+{
+cartWebStart(cart, "%s Clone %s.%d", collection, ci->acc, ci->version);
+printf("<B>%s</B>\n", ci->geneName);
+printf("<BR>%s\n", ci->desc);
+if (ci->refSeqAccv != NULL)
+    printf("<BR><B>RefSeq</B>: %s\n", ci->refSeqAccv);
+if (ci->refSeqSum != NULL)
+    printf("<BR><B>RefSeq Summary</B>: %s\n", ci->refSeqSum);
 }
 
 static void prCloneInfo(struct cloneInfo *ci)
@@ -513,16 +502,18 @@ struct gbMiscDiff *gmds = NULL, *gmd;
 if (sqlTableExists(conn, "gbMiscDiff"))
     gmds = sqlQueryObjs(conn, (sqlLoadFunc)gbMiscDiffLoad, sqlQueryMulti,
                         "select * from gbMiscDiff where acc=\"%s\"", acc);
+webNewSection("NCBI Clone Validation");
 if (gmds != NULL)
     {
     unsigned miscDiffFlds = getMiscDiffFields(gmds);
-    webNewSection("NCBI Clone Validation");
     webPrintLinkTableStart();
     prMiscDiffHdr(miscDiffFlds);
     for (gmd = gmds; gmd != NULL; gmd = gmd->next)
         prMiscDiff(gmd, miscDiffFlds);
     webPrintLinkTableEnd();
     }
+else
+    printf("<EM>No clone discrepancies annotated</EM><BR><BR>\n");
 }
 
 static void prMethodsLink(struct sqlConnection *conn, char *track)
@@ -531,14 +522,6 @@ static void prMethodsLink(struct sqlConnection *conn, char *track)
 webNewSection("Description and Methods");
 printf("Click <A HREF=\"%s&g=htcTrackHtml&table=%s&c=%s&l=%d&r=%d\">here</A> for details",
        hgcPathAndSettings(), track, seqName, winStart, winEnd);
-}
-
-static boolean canOrderClone(boolean isMgc, struct cloneInfo *ci)
-/* all clones in MGC can be ordered. 
- * FIXME: isMgc flag is provided because some synthetic clones don't have
- * db_xref MGC:, which they should */
-{
-return (ci->gi > 0) && (isMgc || strstr(ci->clone, "MGC:"));
 }
 
 static void prOrderLink(char *name, struct cloneInfo *ci)
@@ -574,14 +557,62 @@ printf("\" TARGET=_blank>Genbank %s</a>", ci->acc);
 webPrintLinkCellEnd();
 }
 
+static void prRefSeqLinks(struct cloneInfo *ci)
+/* print link to RefSeq */
+{
+webPrintLinkTableNewRow();
+webPrintLinkCellStart();
+printf("<a href=\"");
+printEntrezNucleotideUrl(stdout, ci->refSeqAcc);
+printf("\" TARGET=_blank>RefSeq %s</a>", ci->refSeqAcc);
+webPrintLinkCellEnd();
+}
+
+static void prCcdsLinks(struct sqlConnection *conn, struct cloneInfo *ci)
+/* generate links to CCDS gene */
+{
+struct geneSimilarities *ccdsGenes
+    = geneSimilaritiesBuildAt(conn, TRUE, ci->acc, seqName, ci->start,
+                              ci->table, "ccdsGene");
+if (ccdsGenes->genes != NULL)
+    {
+    /* just use cloest one */
+    char *ccdsId = ccdsGenes->genes->gene->name;
+    webPrintLinkTableNewRow();
+    webPrintLinkCellStart();
+    printf("<A href=\"");
+    printCcdsUrl(conn, ccdsId);
+    printf("\">%s</A>", ccdsId);
+    webPrintLinkCellEnd();
+    }
+geneSimilaritiesFree(&ccdsGenes);
+}
+
+static void prUcscGenesLinks(struct sqlConnection *conn, struct cloneInfo *ci)
+/* generate links to UCSC or known genes */
+{
+struct geneSimilarities *ucscGenes
+    = geneSimilaritiesBuildAt(conn, TRUE, ci->acc, seqName, ci->start,
+                              ci->table, "knownGene");
+if (ucscGenes->genes != NULL)
+    {
+    /* just use cloest one */
+    struct genePred *gene = ucscGenes->genes->gene;
+    webPrintLinkTableNewRow();
+    webPrintLinkCellStart();
+    printf("<A href=\"../cgi-bin/hgGene?%s&db=%s&hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=knownGene\">UCSC Gene %s</A>",
+           cartSidUrlString(cart), database, gene->name, seqName, gene->txStart, gene->txEnd, gene->name);
+    webPrintLinkCellEnd();
+    }
+geneSimilaritiesFree(&ucscGenes);
+}
+
 static void prMgcCloneLinks(struct sqlConnection *conn, struct mgcDb *mgcDb, struct cloneInfo *ci)
 /* print table of clone links */
 {
 webPrintLinkTableStart();
 webPrintLabelCell("Links");
-
-// link to NCBI clone order CGI
-if (canOrderClone(TRUE, ci))
+if (ci->gi > 0)
     prOrderLink(mgcDb->name, ci);
 
 // link to MGC database
@@ -594,35 +625,12 @@ webPrintLinkCellEnd();
 
 prImageLink(ci);
 prGenbankLink(ci);
-
-// link to RefSeq, if available
 if (ci->refSeqAccv != NULL)
-    {
-    webPrintLinkTableNewRow();
-    webPrintLinkCellStart();
-    printf("<a href=\"");
-    printEntrezNucleotideUrl(stdout, ci->refSeqAcc);
-    printf("\" TARGET=_blank>RefSeq %s</a>", ci->refSeqAcc);
-    webPrintLinkCellEnd();
-    }
-
-// CCDS details if available
-struct ccdsGeneMap *ccdsGenes = getCcdsGenesForMappedGene(conn, ci->acc, "ccdsMgcMap");
-if (ccdsGenes != NULL)
-    {
-    webPrintLinkTableNewRow();
-    webPrintLinkCellStart();
-    struct ccdsGeneMap *gene;
-    for (gene = ccdsGenes; gene != NULL; gene = gene->next)
-        {
-        if (gene != ccdsGenes)
-            printf(", ");
-        printf("<A href=\"");
-        printCcdsUrlForMappedGene(conn, gene);
-        printf("\">%s</A>", gene->ccdsId);
-        }
-    webPrintLinkCellEnd();
-    }
+    prRefSeqLinks(ci);
+if (sqlTableExists(conn, "ccdsGene"))
+    prCcdsLinks(conn, ci);
+if (sqlTableExists(conn, "knownGene"))
+    prUcscGenesLinks(conn, ci);
 
 // Brent lab validation database
 if (isInMBLabValidDb(ci->acc))
@@ -638,7 +646,7 @@ webPrintLinkTableEnd();
 }
 
 static void prMgcInfoLinks(struct sqlConnection *conn, char *acc, struct mgcDb *mgcDb,
-                        struct cloneInfo *ci)
+                           struct cloneInfo *ci)
 /* print clone info and links */
 {
 webNewSection("%s Clone Information and Links", mgcDb->name);
@@ -655,21 +663,14 @@ void doMgcGenes(struct trackDb *tdb, char *acc)
 struct sqlConnection *conn = hAllocConn();
 int start = cartInt(cart, "o");
 struct mgcDb mgcDb = getMgcDb();
-struct cloneInfo *mi = mgcCloneInfoLoad(conn, acc);
+struct cloneInfo *ci = mgcCloneInfoLoad(conn, acc, start);
 
-// initial section
-cartWebStart(cart, "%s Clone %s.%d", mgcDb.name, acc, mi->version);
-printf("<B>%s</B>\n", mi->geneName);
-printf("<BR>%s\n", mi->desc);
-if (mi->refSeqAccv != NULL)
-    printf("<BR><B>RefSeq</B>: %s\n", mi->refSeqAccv);
-if (mi->refSeqSum != NULL)
-    printf("<BR><B>RefSeq Summary</B>: %s\n", mi->refSeqSum);
+prInitialSection(ci, mgcDb.name);
 printf("<BR><B>Clone Source</B>: <A href=\"");
 printMgcHomeUrl(&mgcDb);
 printf("\" TARGET=_blank>%s</A>\n", mgcDb.title);
 
-prMgcInfoLinks(conn, acc, &mgcDb, mi);
+prMgcInfoLinks(conn, acc, &mgcDb, ci);
 prSeqLinks(conn, tdb->tableName, acc);
 prAligns(conn, "mgcFullMrna", acc, start);
 prMiscDiffs(conn, acc);
@@ -684,11 +685,7 @@ static void prOrfeomeCloneLinks(struct sqlConnection *conn, char *acc, struct cl
 webPrintLinkTableStart();
 webPrintLabelCell("Links");
 webPrintLinkTableNewRow();
-
-// link to NCBI clone order CGI
-// FIXME: can't currently figure out if an ORFeome clone is can be ordered,
-// even those also in MGC seem broken.
-if (canOrderClone(FALSE, ci))
+if (ci->gi > 0)
     prOrderLink("ORFeome", ci);
 
 #if 0
@@ -700,6 +697,12 @@ if (canOrderClone(FALSE, ci))
 if (ci->imageId > 0)
     prImageLink(ci);
 prGenbankLink(ci);
+if (ci->refSeqAccv != NULL)
+    prRefSeqLinks(ci);
+if (sqlTableExists(conn, "ccdsGene"))
+    prCcdsLinks(conn, ci);
+if (sqlTableExists(conn, "knownGene"))
+    prUcscGenesLinks(conn, ci);
 
 webPrintLinkTableEnd();
 }
@@ -720,16 +723,15 @@ void doOrfeomeGenes(struct trackDb *tdb, char *acc)
 {
 struct sqlConnection *conn = hAllocConn();
 int start = cartInt(cart, "o");
-struct cloneInfo *mi = orfeomeCloneInfoLoad(conn, acc);
+struct cloneInfo *ci = orfeomeCloneInfoLoad(conn, acc, start);
 
 // initial section
-cartWebStart(cart, "ORFeome Clone %s.%d", acc, mi->version);
+prInitialSection(ci, "ORFeome");
 printf("<BR><B>Clone Source</B>: <A href=\"http://www.orfeomecollaboration.org/\""
        " TARGET=_blank>ORFeome collaboration</A>\n");
 
-prOrfeomeInfoLinks(conn, acc, mi);
+prOrfeomeInfoLinks(conn, acc, ci);
 prSeqLinks(conn, tdb->tableName, acc);
-// FIXME: could get mrna table name from trackDb
 prAligns(conn, "orfeomeMrna", acc, start);
 prMiscDiffs(conn, acc);
 prMethodsLink(conn, tdb->tableName);

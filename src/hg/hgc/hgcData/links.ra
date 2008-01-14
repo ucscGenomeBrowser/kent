@@ -36,9 +36,10 @@ label OMIM
 acc yes
 
 name PAHdb
-url http://www.pahdb.mcgill.ca/cgi-bin/pahdb/pahdbsearch.cgi?Field=id_mut&OrderedField=nucl_no&Value=%s&SortType=Asc&Search=Mutation&Go=1&ToShowFrom=0&F2S1=id_mut&F2S2=nucl_no&F2S3=syst_name&F2S5=amino_acid&F2S6=mut_name&F2S7=other_name&F2S17=Mutation.comment
+url http://www.pahdb.mcgill.ca/PahdbSearch.php?SearchValue=%s&SearchField=mut_name&SearchOrderedField=id_mut&SearchAscDesc=ASC&Submit=Submit&MenuSelection=Mutation
 label PAHdb
 acc yes
+needsEncoded yes
 
 name BGMUT
 url http://www.ncbi.nlm.nih.gov/gv/mhc/xslcgi.cgi?cmd=bgmut/allele_details&id=%s

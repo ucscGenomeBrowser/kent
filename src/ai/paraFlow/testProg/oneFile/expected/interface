@@ -1,8 +1,0 @@
-black box(10 20 100 200)
-orange box(15 25 90 190)
-red circle(3 3 2.50)
-red circle(6 6 2.50)
-blue circle(9 9 2.55)
-special font at 0 1
-special font at 1 2
-blue circle(10 20 30.00)

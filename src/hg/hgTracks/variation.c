@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.131 2007/12/12 19:42:09 angie Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.132 2008/01/08 19:00:00 angie Exp $";
 
 struct hash *snp125FuncCartColorHash = NULL;
 struct hash *snp125FuncCartNameHash = NULL;
@@ -1551,7 +1551,7 @@ if (vis == tvDense)
 else
     yVisOffset = tg->heightPer + height/2;
 
-safef(var, sizeof(var), "%s_val", tg->mapName);
+safef(var, sizeof(var), "%s_val", tg->tdb->tableName);
 ldVal = cartUsualString(cart, var, ldValDefault);
 if (sameString(ldVal, "lod"))
     ldVal = cloneString("LOD");

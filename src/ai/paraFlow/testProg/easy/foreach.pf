@@ -1,7 +1,0 @@
-array of int a = (1,2,3,4,5);
-for (el in a)
-    prin(el + " ");
-print("");
-
-for (int i=0,j=10; i<5; i++, j--)
-    print("$i $j");

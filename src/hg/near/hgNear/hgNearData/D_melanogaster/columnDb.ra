@@ -1,6 +1,0 @@
-name pfamDomains
-type pfam flyBaseToPfam
-queryFull select name,description from flyBaseToPfam,proteome.pfamDesc where pfamDesc.pfamAC = flyBaseToPfam.value
-queryOne select description,value from proteome.pfamDesc,flyBaseToPfam where flyBaseToPfam.name = '%s' and flyBaseToPfam.value = pfamDesc.pfamAC
-invQueryOne select name from flyBaseToPfam,proteome.pfamDesc where description = '%s' and pfamDesc.pfamAc = flyBaseToPfam.value
-

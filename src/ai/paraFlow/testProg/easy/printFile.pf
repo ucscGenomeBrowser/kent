@@ -1,5 +1,0 @@
-file f = fileOpen(args[0], "r");
-for (s in f.readLine())
-    prin(s);
-print("----- and again all at once ----");
-prin(fileReadAll(args[0]));

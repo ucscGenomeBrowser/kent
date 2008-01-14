@@ -212,7 +212,7 @@
 #include "itemConf.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1374 2007/12/12 19:47:47 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1378 2008/01/14 23:55:44 fanhsu Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -4631,8 +4631,20 @@ printf("</TT></PRE>");
 dnaSeqFree(&seq);
 }
 
+static int getEstTranscriptionDir(struct sqlConnection *conn, struct psl *psl)
+/* get the direction of transcription for an EST; return splice support count */
+{
+char query[256], estOrient[64];
+safef(query, sizeof(query),
+      "select intronOrientation from %s.estOrientInfo where chrom = '%s' and chromStart = %d and name = '%s'",
+      database, psl->tName, psl->tStart, psl->qName);
+if (sqlQuickQuery(conn, query, estOrient, sizeof(estOrient)) != NULL)
+    return sqlSigned(estOrient) * ((psl->strand[0] == '+') ? 1 : -1);
+else
+    return 0;
+}
 
-void printRnaSpecs(struct trackDb *tdb, char *acc)
+static void printRnaSpecs(struct trackDb *tdb, char *acc, struct psl *psl)
 /* Print auxiliarry info on RNA. */
 {
 struct dyString *dy = newDyString(1024);
@@ -4641,13 +4653,10 @@ struct sqlConnection *conn2= hgAllocConn();
 struct sqlResult *sr;
 char **row;
 char rgdEstId[512];
-char estOrient[512];
 char query[256];
 char *type,*direction,*source,*orgFullName,*library,*clone,*sex,*tissue,
     *development,*cell,*cds,*description, *author,*geneName,
     *date,*productName;
-boolean isMgcTrack = startsWith("mgc", tdb->tableName);
-int imageId = (isMgcTrack ? getImageId(conn, acc) : 0);
 int seqSize,fileSize;
 long fileOffset;
 char *ext_file;	
@@ -4718,6 +4727,7 @@ if (row != NULL)
     ext_file = row[17];
     fileOffset=sqlUnsigned(row[18]);
     fileSize=sqlUnsigned(row[19]);
+    boolean isEst = sameWord(type, "est");
 
     if (hasVersion) 
         {
@@ -4728,15 +4738,10 @@ if (row != NULL)
     /* Now we have all the info out of the database and into nicely named
      * local variables.  There's still a few hoops to jump through to 
      * format this prettily on the web with hyperlinks to NCBI. */
-    if (isMgcTrack)
-        printf("<H2>Information on %s %s <A HREF=\"", mgcDbName(), type);
-    else
-        printf("<H2>Information on %s <A HREF=\"",  type);
+    printf("<H2>Information on %s <A HREF=\"",  type);
     printEntrezNucleotideUrl(stdout, acc);
     printf("\" TARGET=_blank>%s</A></H2>\n", acc);
 
-    if (isMgcTrack && (imageId > 0))
-        printMgcRnaSpecs(tdb, acc, imageId);
     printf("<B>Description:</B> %s<BR>\n", description);
 
     medlineLinkedLine("Gene", geneName, geneName);
@@ -4754,14 +4759,22 @@ if (row != NULL)
     printf("<B>Sex:</B> %s<BR>\n", sex);
     printf("<B>Library:</B> %s<BR>\n", library);
     printf("<B>Clone:</B> %s<BR>\n", clone);
-    if (direction[0] != '0') printf("<B>Read direction:</B> %s'<BR>\n", direction);
-    printf("<B>CDS:</B> %s<BR>\n", cds);
+    if (isEst)
+        {
+        printf("<B>Read direction: </B>");
+        if (direction[0] != '0') 
+            printf("%s' (guessed from GenBank description)<BR>\n", direction);
+        else
+            printf("unknown (can't guess from GenBank description)<BR>");
+        }
+    else
+        printf("<B>CDS:</B> %s<BR>\n", cds);
     printf("<B>Date:</B> %s<BR>\n", date);
     if (hasVersion) 
         {
         printf("<B>Version:</B> %s<BR>\n", version);
         }
-    if (sameWord(type, "mrna") && startsWith("Human", organism))
+    if ((!isEst) && startsWith("Human", organism))
 	{
 	printGeneLynxAcc(acc);
 	}
@@ -4782,23 +4795,12 @@ if (row != NULL)
 	    }
 	}
     printStanSource(acc, type);
-    if (sameWord(tdb->tableName, "intronEst")) 
+    if (isEst && hTableExists("estOrientInfo") && (psl != NULL))
         {
-	if (hTableExists("estOrientInfo"))
-	    {
-	    snprintf(query, sizeof(query),
-            	"select intronOrientation from %s.estOrientInfo where chrom = '%s' and chromStart = %d and name = '%s';",  database, chrom, start, acc);
-	    if (sqlQuickQuery(conn2, query, estOrient, sizeof(estOrient)) != NULL)
-                {
-                int estOrientInt = atoi(estOrient);
-                if (estOrientInt != 0)
-                    {
-                    printf("<B>EST on %c strand </b>supported by %d splice sites.", estOrientInt > 0 ? '+' : '-' , abs(estOrientInt) );
-                    printf("<BR>\n" );
-                    }
-                }
-            }
-        
+        int estOrient = getEstTranscriptionDir(conn2, psl);
+        if (estOrient != 0)
+            printf("<B>EST transcribed from %c strand </B>(supported by %d splice sites).<BR>\n",
+                   (estOrient > 0 ? '+' : '-' ), abs(estOrient));
         }
     if (hGenBankHaveSeq(acc, NULL))
         {
@@ -4907,6 +4909,20 @@ slReverse(&pslList);
 return pslList;
 }
 
+struct psl *findClickedAlignment(struct psl *psls, int start)
+/* find the alignment that was clicked on from a list of alignments, or NULL if
+ * not found */
+{
+struct psl *psl;
+for (psl = psls; psl != NULL; psl = psl->next)
+    {
+    if (psl->tStart == start)
+        return psl;
+    }
+return NULL;
+}
+
+
 struct psl *loadPslRangeT(char *table, char *qName, char *tName, int tStart, int tEnd)
 /* Load a list of psls given qName tName tStart tEnd */
 {
@@ -4940,7 +4956,6 @@ struct sqlConnection *conn = hAllocConn();
 char *type;
 char *table;
 int start = cartInt(cart, "o");
-struct psl *pslList = NULL;
 
 if (sameString("xenoMrna", track) || sameString("xenoBestMrna", track) || sameString("xenoEst", track) || sameString("sim4", track) )
     {
@@ -5004,13 +5019,14 @@ else
     table = "all_mrna";
     }
 
-/* Print non-sequence info. */
+/* Print list of information about cDNA. */
 cartWebStart(cart, acc);
 
-printRnaSpecs(tdb, acc);
+struct psl *pslList = getAlignments(conn, table, acc);
+struct psl *psl = findClickedAlignment(pslList, start);
+printRnaSpecs(tdb, acc, psl);
 
-/* Get alignment info. */
-pslList = getAlignments(conn, table, acc);
+/* Print alignment info. */
 if (pslList == NULL)
     {
     /* this was not actually a click on an aligned item -- we just
@@ -7856,8 +7872,9 @@ if (url != NULL && url[0] != 0)
 
     printf("<BR><B>CDC HuGE Published Literature:  ");
     printf("<A HREF=\"%s%s%s\" target=_blank>", 
-       "http://apps.nccd.cdc.gov/Genomics/GDPQueryTool/frmQuerySumPage.asp?IO_strGeneSymbolValue=",
-       itemName, "&selConditionGene=2&strCurrentForm=SearchByGene.asp");
+       "http://www.hugenavigator.net/HuGENavigator/searchSummary.do?firstQuery=",
+       itemName, 
+       "+%09&publitSearchType=now&whichContinue=firststart&check=n&dbType=publit&");
     printf("%s</B></A>\n", itemName);
 
     safef(query, sizeof(query), 

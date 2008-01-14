@@ -1,7 +1,0 @@
-
-Code associated with the ORFeome Collaboration:
-      http://www.orfeomecollaboration.org/
-
-ORFeome cDNAs are identified by preassigned blocks of IMAGE ids, which are
-stored in etc/orfeome.imageIds.  They also have the `ORFeome collaboration'
-keyword.

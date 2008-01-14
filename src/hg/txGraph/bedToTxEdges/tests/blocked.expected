@@ -1,9 +1,0 @@
-chr1	1000	2000	oneBlock	1000	+	(	exon	)
-chr1	10000	10100	twoBlocks	999	+	(	exon	]
-chr1	10100	19800	twoBlocks	999	+	]	intron	[
-chr1	19800	20000	twoBlocks	999	+	[	exon	)
-chr1	100000	100100	threeBlocks	998	-	(	exon	]
-chr1	100100	149800	threeBlocks	998	-	]	intron	[
-chr1	149800	150000	threeBlocks	998	-	[	exon	]
-chr1	150000	199700	threeBlocks	998	-	]	intron	[
-chr1	199700	200000	threeBlocks	998	-	[	exon	)
