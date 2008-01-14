@@ -513,7 +513,7 @@ if (gmds != NULL)
     webPrintLinkTableEnd();
     }
 else
-    printf("<EM>No clone discrepancies with genome annotated</EM><BR><BR>\n");
+    printf("<EM>No clone discrepancies annotated</EM><BR><BR>\n");
 }
 
 static void prMethodsLink(struct sqlConnection *conn, char *track)
