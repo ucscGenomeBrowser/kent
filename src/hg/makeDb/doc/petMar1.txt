@@ -1,0 +1,26 @@
+# for emacs: -*- mode: sh; -*-
+
+
+# This file describes browser build for the Sea Lamprey
+# genome, Petromyzon marinus, March 2007, v.3.0 from WUSTL
+#
+#       "$Id: petMar1.txt,v 1.1 2008/01/14 19:58:49 hiram Exp $"
+#
+
+##########################################################################
+### Fetch sequence       (DONE - 2008-01-14 - Hiram)
+    #	determine estimated disk usage, from example genome like this one,
+    #	braFlo1 which used about 3.5 Gb, do not need much space, store04
+    #	has 42 Gb, plenty of space on store9
+    ssh kkstore04
+    mkdir /cluster/store9/petMar1
+    ln -s /cluster/store9/petMar1 /cluster/data/petMar1
+    mkdir /cluster/data/petMar1/downloads
+    cd /cluster/data/petMar1/downloads
+
+    wget --timestamping \
+    'ftp://genome.wustl.edu/pub/organism/Other_Vertebrates/Petromyzon_marinus/assembly/Petromyzon_marinus-3.0/output/*'
+
+##########################################################################
+#  Fixup the agp file to make a chrUn agp file, add a 1000 base gap
+#	between the supercontigs
