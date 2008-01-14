@@ -23,24 +23,26 @@ type genePred geneidPep
 track ensGene
 release alpha
 shortLabel Ensembl Genes
-longLabel Ensembl (Build 46) Gene Predictions
+longLabel Ensembl (Version 46) Gene Predictions
 group genes
 priority 40
 visibility hide
 color 150,0,0
 type genePred ensPep
 ensArchive aug2007
+dataVersion August 2007
 
 track ensGene
 release beta
 shortLabel Ensembl Genes
-longLabel Ensembl (Build 38) Gene Predictions
+longLabel Ensembl (Version 38) Gene Predictions
 group genes
 priority 40
 visibility hide
 color 150,0,0
 type genePred ensPep
 ensArchive apr2006
+dataVersion April 2006
 
 track exoniphy
 shortLabel Exoniphy
