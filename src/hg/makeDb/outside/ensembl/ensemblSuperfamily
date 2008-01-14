@@ -1,9 +1,0 @@
-#!/bin/bash -e
-# load superfamily track using Ensembl cross reference
-db=$1
-superDb=$2
-set -x
-hgSuperfam $db $superDb > sf.log 
-hgsql $db -e "drop table if exists sfDescription"
-hgLoadSqlTab $db sfDescription $HOME/kent/src/hg/lib/sfDescription.sql sfDescription.tab
-hgLoadBed $db superfamily superfamily.tab -tab

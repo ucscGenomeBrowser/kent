@@ -1,6 +1,0 @@
-Routines to load the human genome browser database.
-
-makeHgN.doc describes the process for generating the
-databases:
-	hg3 - july 17th freeze (finished)
-	hg4 - sept 7th freeze (in progress)

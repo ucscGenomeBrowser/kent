@@ -1,2 +1,0 @@
-#queryCnt	minQSize	maxQSize	meanQSize	alnCnt	minIdent	maxIndent	meanIdent	minQCover	maxQCover	meanQCover	minRepMatch	maxRepMatch	meanRepMatch	minTCover	maxTCover
-13	664	7260	11085	31	0.9013	0.9990	0.9724	0.0048	0.9956	0.0813	0.0000	0.9762	0.2881	0.0000	0.0001
