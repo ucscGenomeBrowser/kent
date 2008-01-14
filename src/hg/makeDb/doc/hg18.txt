@@ -19261,7 +19261,8 @@ TMPDIR=/scratch/tmp
    gadPos hg18 j18.tmp
    cat j18.tmp |sort -u >hg18.gad.tab
 
-   hgLoadBed hg18 gad hg18.gad.tab
+# use -nobin option to ensure display order is according to genomic position
+   hgLoadBed -nobin hg18 gad hg18.gad.tab
    rm j18.tmp
 #######################################################################
 
