@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/automation/makeGenomeDb.pl instead.
 
-# $Id: makeGenomeDb.pl,v 1.14 2007/10/11 20:54:32 angie Exp $
+# $Id: makeGenomeDb.pl,v 1.15 2008/01/15 00:26:54 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -426,6 +426,10 @@ rm -rf $HgAutomate::trackBuild/chromInfo
 mkdir $HgAutomate::trackBuild/chromInfo
 awk '{print \$1 "\t" \$2 "\t$HgAutomate::gbdb/$db/$db.2bit";}' chrom.sizes \\
   > $HgAutomate::trackBuild/chromInfo/chromInfo.tab
+_EOF_
+    );
+  if ($gotAgp) {
+    $bossScript->add(<<_EOF_
 
 if (`wc -l < chrom.sizes` < 1000) then
   # Install per-chrom .agp files for download.
@@ -433,7 +437,8 @@ if (`wc -l < chrom.sizes` < 1000) then
   | splitFileByColumn -col=1 -ending=.agp stdin $topDir -chromDirs
 endif
 _EOF_
-    );
+      );
+  }
   $bossScript->execute();
 
   # Now that we have created chrom.sizes (unless we're in -debug mode),
