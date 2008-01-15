@@ -6940,6 +6940,7 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     gzip *.gff *TCs
 
 #### LOAD ENSEMBL GENES (DONE - 2004-12-17 Fan)
+# ADDDED STABLE URL TO TRACKDB BLOCK (V27, DEC 2004) (2008-01-11, rhead)
 #	needed for Gene Sorter procedure below
 #	Ensembl released Mouse build 33 the week of Dec 4 2004
      mkdir /cluster/data/mm5/bed/ensembl

@@ -37,7 +37,7 @@ yLineOnOff Off
 frames multiz8wayFrames
 irows on
 summary multiz8waySummary
-speciesCodonDefault ponAbe2
+speciesCodonDefault panTro2
 speciesGroups Primates Vertebrate
 sGroup_Primates hg18 panTro2 rheMac2 calJac1
 sGroup_Vertebrate mm9 monDom4 ornAna1

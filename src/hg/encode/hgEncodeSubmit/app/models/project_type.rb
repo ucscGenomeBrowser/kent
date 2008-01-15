@@ -10,6 +10,9 @@ class ProjectType < ActiveRecord::Base
   validates_presence_of :description
   validates_presence_of :display_order
   validates_presence_of :time_out
+  validates_presence_of :loader
+  validates_presence_of :load_params
+  validates_presence_of :load_time_out
 
   protected
     def validate

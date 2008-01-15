@@ -21,13 +21,13 @@ hgsql proteins070202 -e 'load data local infile "hgncXref.tab" into table hgncXr
 #note:  please notify Elspeth Bruford at hgnc that there is a new mapping
 # to their names.  hgnc@genenames.org  here is the file that ann gave them
 # hgsql -Ne
-# "SELECT geneSymbol,transcript
+# "SELECT geneSymbol,hgncId,transcript
 # FROM knownCanonical,kgXref,proteome.hgncXref
 # WHERE kgXref.kgID=knownCanonical.transcript
 # AND kgXref.geneSymbol = proteome.hgncXref.symbol"
-# hg18 > hg18.geneSymbol.transcript
+# hg18 > hg18.hgncId
 #   -- b0b 12-26-2007
-
+#   -- ASZ updated 01-03-2008
 
 # make sure the pfamXref program is available:
 cd /cluster/data/proteins/070202/build

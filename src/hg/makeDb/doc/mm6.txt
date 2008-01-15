@@ -3,7 +3,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: mm6.txt,v 1.7 2007/12/03 23:37:46 angie Exp $"
+#	"$Id: mm6.txt,v 1.8 2008/01/14 23:06:15 rhead Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -8781,6 +8781,7 @@ SEQ2_LEN=$BASE/S2.len
 
 
 #### LOAD ENSEMBL GENES (DONE - 2005-08-10 Fan)
+# ADDDED STABLE URL TO TRACKDB BLOCK (V32, JUL 2005) (2008-01-11, rhead)
 #	needed for Gene Sorter procedure below
 #	Ensembl released Mouse build 34 the week of August 10th, 2005
    mkdir -p /cluster/store11/mm6/bed/ensGene

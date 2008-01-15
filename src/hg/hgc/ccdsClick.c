@@ -57,11 +57,11 @@ return ccdsGenes;
 }
 
 
-void printCcdsUrlForMappedGene(struct sqlConnection *conn, struct ccdsGeneMap *gene)
-/* Print out CCDS url for a gene mapped via a cddsGeneMap table  */
+void printCcdsUrl(struct sqlConnection *conn, char *ccdsId)
+/* Print out CCDS url for a gene  */
 {
 printf("../cgi-bin/hgc?%s&g=ccdsGene&i=%s&c=%s&o=%d&l=%d&r=%d&db=%s",
-       cartSidUrlString(cart), gene->ccdsId, seqName, 
+       cartSidUrlString(cart), ccdsId, seqName, 
        winStart, winStart, winEnd, database);
 }
 
@@ -79,7 +79,7 @@ if (ccdsGenes != NULL)
         if (gene != ccdsGenes)
             printf(", ");
         printf("<A href=\"");
-        printCcdsUrlForMappedGene(conn, gene);
+        printCcdsUrl(conn, gene->ccdsId);
         printf("\">%s</A>", gene->ccdsId);
         }
     printf("<BR>\n");

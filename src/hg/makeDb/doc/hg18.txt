@@ -11575,6 +11575,8 @@ gzip illumina.bed
 # new entries for previous sources and more IDbases
 # Update, reloaded table January 2007       Belinda Giardine
 # new source (first set of LOVD) and some fixes to IDbases and HbVar
+# Update most LSDBs, add more genes for LMDp(LOVD) Jan 11, 2008
+# loaded and tested first at PSU
 
 #update old dbs and add dbPEX     March 22-23, 2007
 #need to truncate and reload all tables (new entries in old)
@@ -19237,3 +19239,30 @@ TMPDIR=/scratch/tmp
 	-stop=download -smallClusterHub=memk -bigClusterHub=pk \
 	> download.log 2>&1 &
 ############################################################################
+# RE-BUILD GAD TRACK (Done, 1/11/08, Fan)
+# During previous build, all.txt was corrupted during receiving file from
+# email.
+
+   mkdir /cluster/store12/gad080111
+   rm /cluster/data/gad
+   ln -s /cluster/store12/gad080111 /cluster/data/gad
+
+   cd /cluster/data/gad
+
+# Receive "all.txt" from GAD
+# contact person: Garner, John (NIH/NIA/IRP) [F] [garnerjr@mail.nih.gov]
+
+   hgsql hg18 -e 'drop table gadAll'
+   hgsql hg18 <~/src/hg/lib/gadAll.sql
+   hgsql hg18 -e 'load data local infile "all.txt" into table gadAll ignore 3 lines'
+
+# create gad table
+
+   gadPos hg18 j18.tmp
+   cat j18.tmp |sort -u >hg18.gad.tab
+
+# use -nobin option to ensure display order is according to genomic position
+   hgLoadBed -nobin hg18 gad hg18.gad.tab
+   rm j18.tmp
+#######################################################################
+

@@ -3,7 +3,7 @@
 #	UCSC Genome Browser - Version VER DATE_STAMP
 #		MySQL user permissions setup
 #
-#	$Id: ex.MySQLUserPerms.sh,v 1.6 2005/03/07 20:57:56 hiram Exp $
+#	$Id: ex.MySQLUserPerms.sh,v 1.7 2008/01/03 19:44:56 hiram Exp $
 #
 
 SQL_USER=""	# set this to "-u<user_name>" if different than your login name
@@ -55,7 +55,7 @@ fi
 #
 for DB in cb1 hgcentral hgFixed hg17 proteins040315
 do
-    ${MYSQL} -e "GRANT SELECT, INSERT, UPDATE, \
+    ${MYSQL} -e "GRANT SELECT, INSERT, UPDATE, FILE, \
 	DELETE, CREATE, DROP, ALTER on ${DB}.* TO browser@localhost \
 	IDENTIFIED BY 'genome';" mysql
 done

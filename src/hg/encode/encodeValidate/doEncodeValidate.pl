@@ -8,9 +8,11 @@
 # Writes error or log information to STDOUT
 # Returns 0 if validation succeeds.
 
+# TODO:  Handle Mac and DOS EOLs
+
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.8 2007/12/19 23:23:45 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.12 2008/01/12 20:24:51 galt Exp $
 
 use warnings;
 use strict;
@@ -24,12 +26,13 @@ sub usage {
 
 # Global constants
 our $loaderPath = "/usr/local/apache/cgi-bin/loader";
-our $encodeConfigDir = '../../config'; # change to top of scratch dir  before deployment
+our $encodeConfigDir = '../config'; # change to top of scratch dir  before deployment
 our $fieldConfigFile = $encodeConfigDir . "/fields.ra";
 our $vocabConfigFile = $encodeConfigDir . "/cv.ra";
 our $trackFile = 'trackDb.ra';
 our $loadScript = 'load.sh';
 our $loadRa = 'load.ra';
+our $logDir = "log";
 
 # Global variables
 our $submitDir;
@@ -116,11 +119,12 @@ our %formatCheckers = (
 
 sub validateWig {
     my ($file) = @_;
+    my $logFile = $logDir . "/validateWig.out";
     my $err = system (
-        "head -10 $file | $loaderPath/wigEncode stdin /dev/null /dev/null >validateWig.out 2>&1");
+        "head -10 $file | $loaderPath/wigEncode stdin /dev/null /dev/null >$logFile 2>&1");
     if ($err) {
-        print STDERR  "ERROR: File '\$file\' failed wiggle validation.\n";
-        open(ERR, "validateWig.out") || die "\n";
+        print STDERR  "ERROR: File \'$file\' failed wiggle validation\n";
+        open(ERR, $logFile) || die "ERROR: Can't open wiggle validation file \'$logFile\': $!\n";
         my @err = <ERR>;
         die "@err\n";
     } else {
@@ -130,11 +134,12 @@ sub validateWig {
 
 sub validateBed {
     my ($file, $type) = @_;
+    my $logFile = $logDir . "/validateBed.out";
     my $err = system (
-        "head -10 $file | egrep -v '^track|browser' | $loaderPath/hgLoadBed -noLoad hg18 testTable stdin >validateBed.out 2>&1");
+        "head -10 $file | egrep -v '^track|browser' | $loaderPath/hgLoadBed -noLoad hg18 testTable stdin >$logFile 2>&1");
     if ($err) {
-        print STDERR  "ERROR: File '\$file\' failed bed validation.\n";
-        open(ERR, "validateBed.out") || die "\n";
+        print STDERR  "ERROR: File \'$file\' failed bed validation\n";
+        open(ERR, $logFile) || die "ERROR: Can't open bed validation file \'$logFile\': $!\n";
         my @err = <ERR>;
         die "@err\n";
     } else {
@@ -162,6 +167,8 @@ sub checkDataFormat {
         $format = $1;
         $type = $2;
     }
+    $formatCheckers{$format} || 
+        die "ERROR: Data format \'$format\' in PIF file is unknown\n";
     $formatCheckers{$format}->($file, $type);
 }
 
@@ -282,7 +289,10 @@ if (scalar(@ARGV) < 2) { usage(); }
 my $submitType = $ARGV[0];	# currently not used
 $submitDir = $ARGV[1];
 &HgAutomate::verbose(1, "Validating submission in directory \'$submitDir\'\n");
-chdir $submitDir;
+chdir $submitDir ||
+    die ("SYS ERROR; Can't change to submission directory \'$submitDir\': $!\n");
+mkdir $logDir || 
+    die ("SYS ERROR; Can't create log directory \'$logDir\': $!\n");
 
 # Locate project information (PIF) file and verify that project is
 #  ready for submission
@@ -305,8 +315,8 @@ open(IN, $ddfFile) || die "ERROR: Can't open DDF file \'$ddfFile\'\n";
 # Get header containing column names
 while ($line = <IN>) {
     # remove leading and trailing spaces and newline
-    $line =~ s/^ *//;
-    $line =~ s/ *$//;
+    $line =~ s/^ +//;
+    $line =~ s/ +$//;
     # ignore empty lines and comments
     next if $line =~ /^$/;
     next if $line =~ /^#/;
@@ -377,7 +387,7 @@ close(IN);
 # Validate files and metadata fields in all datasets.  Create .ra file
 # for loader 
 open(LOADER_RA, ">$loadRa") || 
-        die "SYS ERROR: Can't write \'$loadRa\' file\n";
+        die "SYS ERROR: Can't write \'$loadRa\' file ($!)\n";
 
 foreach $dataset (keys %datasets) {
     my $datasetRef = $datasets{$dataset};

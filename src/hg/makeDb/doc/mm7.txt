@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, August 2005, ncbi mouse_35 - Mm7
 #
-#	"$Id: mm7.txt,v 1.9 2007/03/05 19:57:42 angie Exp $"
+#	"$Id: mm7.txt,v 1.11 2008/01/14 23:06:15 rhead Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-08-26 - Hiram)
@@ -8515,109 +8515,6 @@ XXX - Started - 2005-10-07 12:13
     #	71277532 bases of 1630323462 (4.372%) in intersection
 
 ###########################################################################
-#### LOAD ENSEMBL GENES (TBD)
-#	needed for Gene Sorter procedure below
-#	Ensembl released Mouse build 34 the week of August 10th, 2005
-   mkdir -p /cluster/store11/mm7/bed/ensGene
-   ln -s /cluster/store11/mm7/bed/ensGene /cluster/data/mm7/bed/ensGene
-   cd /cluster/data/mm7/bed/ensGene
-
-        Get the Ensembl BioMart at http://www.ensembl.org/Multi/martview
-        Choose Ensembl 32 and Mus musculus, click next
-        Follow this sequence through the pages:
-        1) Select "Known genes" in the Gene seciont. Hit next.
-        2) Select "Structures". 
-        3) Choose GTF as the output, choose gzip compression, name the
-	output file ensGeneMm6.gtf.gz and then hit Export
-
-# Ensembl handles random chromosomes differently than us, so we
-# strip this data.  Fortunately it just loses a couple of genes.
-     zcat ensGeneMm6.gtf.gz | grep -v ^6_DR51 | grep -v NT_ > unrandom.gtf
-#	Let's see how much it loses:
-#  	None.
-
-# Add "chr" to front of each line in the gene data gtf file to make 
-# it compatible with ldHgGene
-
-    sed -e "s/^/chr/" unrandom.gtf | sed -e "s/chrMT/chrM/" > ensGene.gtf
-    ldHgGene mm7 ensGene ensGene.gtf
-# Read 38200 transcripts in 674378 lines in 1 files
-#   38200 groups 22 seqs 1 sources 4 feature types
-# 38200 gene predictions
-
-hgsql mm7 -N -e 'select * from ensGene' | sed -e 's/\./\t/' |\
-cut -f 1,3-11 >ensGeneNew.tab
-
-#	save space, gzip them:
-    gzip unrandom.gtf
-    gzip ensGene.gtf
-
-# Load Ensembl peptides:
-        Get the ensembl protein data from BioMar
-        Choose Mus musculus as the organism
-        Follow this sequence through the pages:
-        1) Choose "Known genes". Hit next.
-        2) Choose "Sequences" and "Peptide" and "Ensembl Transcript ID",
-	     choose text/fasta and gzip compression,
-	     name the file ensPep and then hit export.
-
-     zcat ensPep.fasta.gz|faToTab -type=protein stdin j1.tmp
-     cat j1.tmp|grep -v "SEQXENCEXNAVAILAXLE" >j2.tmp  
-     cat j2.tmp |awk '{print ">" $1;print $2}' > ensPep.fa
-     rm j1.tmp j2.tmp
-
-     hgPepPred mm7 generic ensPep ensPep.fa
-
-# Load ensGtp table.
-    # ensGtp associates geneId/transcriptId/proteinId for hgPepPred and 
-    # hgKnownToSuper.  
-
-    # Get the Ensembl BioMart at http://www.ensembl.org/Multi/martview
-    # Choose Ensembl 32 and Mus musculus, click next
-    # Follow this sequence through the pages:
-    # 1) Select "Known genes" in the Gene seciont. Hit next.
-    # 2) Select "Structures".
-    # 3) select Ensembl Gene ID, Ensembl Transcript ID, Ensembl Peptide ID. 
-    # 4) select "Text, tab separated" and name the output file as "ensGtp"
-    # 5) download the output file "ensGtp.tsv.gz"  
-
-    gunzip ensGtp.tsv.gz
-    hgsql mm7 < ~/kent/src/hg/lib/ensGtp.sql
-    hgsql mm7 -N -e 'load data local infile "ensGtp.tsv" into table ensGtp ignore 1 lines;' 
-
-# Create knownToEnsembl column
-    hgMapToGene mm7 ensGene knownGene knownToEnsembl
-
-# Compress everthing to save space
-    gzip *
-    
-#### BUILD Ensembl cross-reference table, ensemblXref3 (TBD)
-
-# PLEASE NOTE THAT THE ENSEMBLXREF3 TABLE IS BUILT USING ENSEMBL BIOMART DATA OF MOUSE BUILD 34.
-# THIS TABLE IS NEEDED TO SUPPORT SUPERFAMILY TRACK OF THE PROTEOME BROWSER.
-# SINCE ENSEMBL CHANGED THE DATA FORMAT AGAIN (AS USUAL :-(  ), THERE IS NO VERSION NUMBER
-# IN THEIR IDs, A FAKE "0" IS GENERATED FOR EACH ID IN ensemblXref3 TABLE.
-    # Get the ensembl gene/protein cross-reference data BioMart
-    # Follow this sequence through the pages:
-    # 1) Make sure that the Mus musculus choice is selected. Hit next.
-    # 2) Choose the "Feature" box, select Ensembl gene, transcript, and peptid IDs,
-	      SPTrEMBL ID, SWISSPROT ID, and SWISSPROT AC 
-    # 3) Choose "Text, tab separated".  choose gzip compression.  hit export.
-    # Save as ensXref
-
-    load data local infile "ensXref.tsv" into table ensemblXref3Temp ignore 1 lines;
-
-    hgsql mm7 -N -e 'select gene, "0", transcript, "0", protein, "0", tremblAcc, swissDisplayId, swissAcc from ensemblXref3Temp' \
-    > ensemblXref3.tab
-
-    hgsql mm7 -e 'drop table ensemblXref3'
-    hgsql mm7 <~/src/hg/lib/ensemblXref3.sql
-    hgsql mm7 -e 'load data local infile "ensemblXref3.tab" into table ensemblXref3'
-    
-# load the table into proteome DB also    
-    hgsql proteome -e 'load data local infile "ensemblXref3.tab" into table ensemblXref3'
-
-###########################################################################
 #### BUILD SUPERFAMILY RELATED TABLES (TBD)
 
 # Download Superfamily data files and build the Superfamily DB
@@ -12103,6 +12000,7 @@ refGene:CDS 1.059%, sgpGene 1.451%, both 0.912%, cover 86.18%, enrich 59.39x
 
 ###########################################################################
 #### LOAD ENSEMBL GENES (DONE 5/12/06, Fan)
+# ADDDED STABLE URL TO TRACKDB BLOCK (V38, APR 2006) (2008-01-11, rhead)
 #	needed for Gene Sorter procedure below
 #	Ensembl released Mouse build 34 the week of August 10th, 2005
    mkdir -p /cluster/store5/mm7/bed/ensGene

@@ -48,13 +48,10 @@ track.</EM>
 
 <H2>Display Conventions and Configuration</H2>
 <P>
-The track configuration options allow the user to display either
-the vertebrate or placental mammal conservation scores, or both
-simultaneously.
 In full and pack display modes, conservation scores are displayed as a
 <EM>wiggle track</EM> (histogram) in which the height reflects the 
 size of the score. 
-The conservation wiggles can be configured in a variety of ways to 
+The conservation wiggle can be configured in a variety of ways to 
 highlight different aspects of the displayed information. 
 Click the <A HREF="../goldenPath/help/hgWiggleTrackHelp.html" 
 TARGET=_blank>Graph configuration help</A> link for an explanation 
@@ -167,7 +164,7 @@ species-specific reading frames for gene translation.
 
 <H2>Methods</H2>
 <P> 
-Pairwise alignments with the human genome were generated for 
+Pairwise alignments with the $organism genome were generated for 
 each species using blastz from repeat-masked genomic sequence. 
 Lineage-specific repeats were removed prior to alignment, then reinserted.
 Pairwise alignments were then linked into chains using a dynamic programming
@@ -213,9 +210,9 @@ PhastCons measurements rely on a tree model containing the tree topology,
 branch lengths representing evolutionary distance at neutrally
 evolving sites, the background distribution of nucleotides, and a substitution
 rate matrix.  The 
-<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/hg18/phastCons8way/8way.mod"
+<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/ponAbe2/multiz8way/8way.nh" 
 TARGET=_blank>vertebrate tree model</A> for this track was
-generated using the phyloFit program from the phastCons package  
+generated using the phyloFit program from the phastCons package 
 (REV model, EM algorithm, medium precision) using multiple alignments of 
 4-fold degenerate sites extracted from the 28-way human(hg18) alignment
 (msa_view).  The 4d sites were derived from the 

@@ -135,7 +135,7 @@ class PipelineController < ApplicationController
   end
   
   def delete
-    projectDir=File.expand_path("#{ActiveRecord::Base.configurations[RAILS_ENV]['upload']}/#{@current_user.id}/#{@project.id}/")
+    projectDir= path_to_project_dir
     if File.exists?(projectDir)
       Dir.entries(projectDir).each { 
         |f| 
@@ -196,9 +196,7 @@ class PipelineController < ApplicationController
 
     # make sure parent paths exist
     projectDir = File.dirname(path_to_file)
-    userDir = File.dirname(projectDir)
-    Dir.mkdir(userDir) unless File.exists?(userDir)
-    Dir.mkdir(projectDir) unless File.exists?(projectDir)
+    Dir.mkdir(projectDir,0775) unless File.exists?(projectDir)
 
     nextArchiveNo = @project.archive_count+1
 
@@ -385,7 +383,7 @@ private
 
   def path_to_project_dir
     # the expand_path method resolves this relative path to full absolute path
-    File.expand_path("#{ActiveRecord::Base.configurations[RAILS_ENV]['upload']}/#{@current_user.id}/#{@project.id}")
+    File.expand_path("#{ActiveRecord::Base.configurations[RAILS_ENV]['upload']}/#{@project.id}")
   end
 
 
@@ -440,12 +438,11 @@ private
 
     # make sure parent paths exist
     projectDir = path_to_project_dir
-    userDir = File.dirname(projectDir)
 
     # make a temporary upload directory to unpack and merge from
     uploadDir = projectDir+"/upload_#{archive_no}"
     clean_out_dir uploadDir
-    Dir.mkdir(uploadDir)
+    Dir.mkdir(uploadDir,0775)
 
     @filename = file_name
     cmd = makeUnarchiveCommand(uploadDir)
@@ -504,7 +501,7 @@ private
           newRelativePath = my_join(relativePath,f)
           newDir = my_join(projectDir, newRelativePath)
 	  unless File.exists?(newDir)
-	    Dir.mkdir(newDir)
+	    Dir.mkdir(newDir,0775)
 	  end
           process_archive(archive_id, projectDir, uploadDir, newRelativePath)
         end

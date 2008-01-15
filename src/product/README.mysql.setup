@@ -55,7 +55,7 @@ databases.
 for DB in cb1 hgcentral hgFixed hg17 proteins040315
 do
     mysql -u root -p${SQL_PASSWORD} -e "GRANT SELECT, INSERT, UPDATE, DELETE, \
-	CREATE, DROP, ALTER, CREATE TEMPORARY TABLES on ${DB}.* \
+	FILE, CREATE, DROP, ALTER, CREATE TEMPORARY TABLES on ${DB}.* \
 	TO browser@localhost \
 	IDENTIFIED BY 'genome';" mysql
 done
@@ -96,7 +96,7 @@ access and the "readwrite" user for hgcentral database access:
 # written 'name=value' (note that there is no space between
 # the name and its value.
 #
-#	$Id: README.mysql.setup,v 1.12 2007/06/01 19:39:14 galt Exp $
+#	$Id: README.mysql.setup,v 1.13 2008/01/03 19:44:56 hiram Exp $
 #
 ###########################################################
 # db.host is the name of the MySQL host to connect to
@@ -211,4 +211,4 @@ To test this access with your ~/.hg.conf file in place:
 $ hgsql -e "show tables;" hgcentral
 
 ====================================================================
-This file last updated: $Date: 2007/06/01 19:39:14 $
+This file last updated: $Date: 2008/01/03 19:44:56 $

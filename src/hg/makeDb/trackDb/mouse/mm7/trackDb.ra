@@ -23,13 +23,14 @@ baseColorDefault genomicCodons
 
 track ensGene
 shortLabel Ensembl Genes
-longLabel Ensembl (Build 38) Gene Predictions
+longLabel Ensembl (Version 38) Gene Predictions
 group genes
 priority 40
 visibility dense
 color 150,0,0
 type genePred ensPep
-url http://www.ensembl.org/Mus_musculus/transview?transcript=$$
+ensArchive apr2006
+dataVersion April 2006
 
 track netFr1
 shortLabel $o_Organism Net

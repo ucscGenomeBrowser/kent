@@ -3,10 +3,10 @@
 #ifndef HGSESSION_H
 #define HGSESSION_H
 
-/* NOTE: some of the original contents have been moved up to hui.h for 
+/* NOTE: some of the original contents have been moved up to cart.h for 
  * sharing with hgTracks. */
 
-#include "hui.h"
+#include "cart.h"
 
 /* hgSession form inputs */
 #define hgsNewSessionName hgSessionPrefix "newSessionName"

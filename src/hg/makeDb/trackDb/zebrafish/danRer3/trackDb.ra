@@ -87,6 +87,7 @@ visibility pack
 color 150,0,0
 type genePred ensPep
 ensArchive jul2005
+dataVersion July 2005
 
 track multiz5way
 shortLabel Conservation

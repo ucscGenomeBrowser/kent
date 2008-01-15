@@ -16,7 +16,7 @@
 #include "customFactory.h"
 #include "hgSession.h"
 
-static char const rcsid[] = "$Id: hgSession.c,v 1.30 2007/11/06 04:33:00 angie Exp $";
+static char const rcsid[] = "$Id: hgSession.c,v 1.33 2008/01/08 20:09:59 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -471,6 +471,7 @@ void cleanHgSessionFromCart(struct cart *cart)
 cartRemovePrefix(cart, hgsUnsharePrefix);
 cartRemovePrefix(cart, hgsSharePrefix);
 cartRemovePrefix(cart, hgsLoadPrefix);
+cartRemovePrefix(cart, hgsLoadLocalFileName);
 cartRemovePrefix(cart, hgsDeletePrefix);
 cartRemovePrefix(cart, hgsDo);
 }
@@ -823,17 +824,66 @@ if (fromUrl)
     }
 else
     {
-    char *settings = trimSpaces(cartString(cart, hgsLoadLocalFileName));
-    dyStringPrintf(dyMessage, "Loaded settings from local file (%lu bytes).",
-		   (unsigned long)strlen(settings));
-    dyStringPrintf(dyMessage, " <A HREF=\"http://%s%s?%s=%u\">Browser</A>",
+    char *filePlainContents = cartOptionalString(cart, hgsLoadLocalFileName);
+    char *fileBinaryCoords = cartOptionalString(cart,
+					hgsLoadLocalFileName "__binary");
+    char *fileName = cartOptionalString(cart,
+					hgsLoadLocalFileName "__filename");
+    if (isNotEmpty(filePlainContents))
+	{
+	char *settings = trimSpaces(filePlainContents);
+	dyStringAppend(dyMessage, "Loaded settings from local file ");
+	if (isNotEmpty(fileName))
+	    dyStringPrintf(dyMessage, "<B>%s</B> ", fileName);
+	dyStringPrintf(dyMessage, "(%lu bytes).",
+		       (unsigned long)strlen(settings));
+	lf = lineFileOnString("settingsFromFile", TRUE, cloneString(settings));
+	}
+    else if (isNotEmpty(fileBinaryCoords))
+	{
+	char *binInfo = cloneString(fileBinaryCoords);
+	char *words[2];
+	char *mem;
+	unsigned long size;
+	chopByWhite(binInfo, words, ArraySize(words));
+	mem = (char *)sqlUnsignedLong(words[0]);
+	size = sqlUnsignedLong(words[1]);
+	lf = lineFileDecompressMem(TRUE, mem, size);
+	if (lf != NULL)
+	    {
+	    dyStringAppend(dyMessage, "Loaded settings from local file ");
+	    if (isNotEmpty(fileName))
+		dyStringPrintf(dyMessage, "<B>%s</B> ", fileName);
+	    dyStringPrintf(dyMessage, "(%lu bytes).", size);
+	    }
+	else
+	    dyStringPrintf(dyMessage,
+			   "Sorry, I don't recognize the file type of "
+			   "<B>%s</B>.  Please submit plain text or "
+			   "compressed text in one of the formats offered in "
+			   "<B>Save Settings</B>.", fileName);
+	}
+    else
+	{
+	dyStringAppend(dyMessage, "Sorry, your web browser seems to have "
+		       "posted no data");
+	if (isNotEmpty(fileName))
+	    dyStringPrintf(dyMessage, ", only the filename <B>%s</B>",
+			   fileName);
+	dyStringAppend(dyMessage, ".  Your settings have not been changed.");
+	lf = NULL;
+	}
+    dyStringPrintf(dyMessage, "&nbsp;&nbsp;"
+		   "<A HREF=\"http://%s%s?%s=%u\">Browser</A>",
 		   cgiServerName(), destAppScriptName(),
 		   cartSessionVarName(), cartSessionId(cart));
-    lf = lineFileOnString("settingsFromFile", TRUE, cloneString(settings));
     }
-cartLoadSettings(lf, cart, NULL, actionVar);
-checkForCustomTracks(dyMessage);
-lineFileClose(&lf);
+if (lf != NULL)
+    {
+    cartLoadSettings(lf, cart, NULL, actionVar);
+    checkForCustomTracks(dyMessage);
+    lineFileClose(&lf);
+    }
 return dyStringCannibalize(&dyMessage);
 }
 

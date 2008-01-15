@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/doSimpleRepeat.pl instead.
 
-# $Id: doSimpleRepeat.pl,v 1.2 2007/10/15 21:10:28 angie Exp $
+# $Id: doSimpleRepeat.pl,v 1.3 2008/01/15 18:04:46 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -313,7 +313,7 @@ sub doLoad {
   $bossScript->add(<<_EOF_
 hgLoadBed $db simpleRepeat simpleRepeat.bed \\
         -sqlTable=\$HOME/kent/src/hg/lib/simpleRepeat.sql
-nice featureBits $db simpleRepeat >& fb.simpleRepeat
+featureBits $db simpleRepeat >& fb.simpleRepeat
 cat fb.simpleRepeat
 _EOF_
   );

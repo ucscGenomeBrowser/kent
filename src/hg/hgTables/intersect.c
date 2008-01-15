@@ -16,7 +16,7 @@
 #include "hgTables.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: intersect.c,v 1.39 2007/05/22 23:03:30 galt Exp $";
+static char const rcsid[] = "$Id: intersect.c,v 1.40 2008/01/09 01:15:54 angie Exp $";
 
 /* We keep two copies of variables, so that we can
  * cancel out of the page. */
@@ -122,10 +122,11 @@ void doIntersectMore(struct sqlConnection *conn)
 {
 struct trackDb *iTrack;
 char *name = curTableLabel();
-char *iName;
+char *iName, *iTable;
 char *onChange = onChangeEither();
 char *op, *setting;
 boolean wigOptions = (isWiggle(database, curTable) || isBedGraph(curTable));
+struct hTableInfo *hti1 = maybeGetHti(database, curTable), *hti2 = NULL;
 htmlOpen("Intersect with %s", name);
 
 hPrintf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=GET>\n", getScriptName());
@@ -139,15 +140,25 @@ iTrack = showGroupTrackRow(hgtaNextIntersectGroup, onChange,
 iName = iTrack->shortLabel;
 
 hPrintf("<TR><TD>\n");
-showTableField(iTrack, hgtaNextIntersectTable, FALSE);
+iTable = showTableField(iTrack, hgtaNextIntersectTable, FALSE);
+hti2 = maybeGetHti(database, iTable);
 hPrintf("</TD></TR>\n");
 hPrintf("</TABLE>\n");
 
 if (!wigOptions)
     {
-    hPrintf("<BR>\n");
-    hPrintf("These combinations will maintain the gene/alignment structure (if any) of %s: <P>\n",
-       name);
+    if (hti1 && hti1->hasBlocks)
+	hPrintf("<BR>Note: %s has gene/alignment structure.  "
+		"Only the exons/blocks will be considered.\n", name);
+    if (hti2 && hti2->hasBlocks)
+	hPrintf("<BR>Note: %s has gene/alignment structure.  "
+		"Only the bases covered by its exons/blocks will be "
+		"considered.\n", iName);
+    hPrintf("<H4>Intersect %s items with bases covered by %s:</H4>\n",
+	    name, iName);
+    hPrintf("These combinations will maintain the names and "
+	    "gene/alignment structure (if any) of %s: <P>\n",
+	    name);
     }
 else
     hPrintf("<P>\n");
@@ -187,20 +198,28 @@ else
 
 if (!wigOptions)
     {
-    printf("These combinations will discard the gene/alignment structure (if any) of %s and produce a simple list of position ranges.<P>\n",
-       name);
+    hPrintf("<H4>Intersect bases covered by %s and/or %s:</H4>\n",
+	    name, iName);
+    hPrintf("These combinations will discard the names and "
+	    "gene/alignment structure (if any) of %s and produce a simple "
+	    "list of position ranges.<P>\n",
+	    name);
     makeOpButton("and", op);
     printf("Base-pair-wise intersection (AND) of %s and %s <BR>\n",
-       name, iName);
+	name, iName);
     makeOpButton("or", op);
     printf("Base-pair-wise union (OR) of %s and %s <P>\n",
 	name, iName);
-    puts("Check the following boxes to complement one or both tables. To complement a table means to include a row in the intersection if it \n"
-     "is <I>not</I> included in the table. <P>");
+    hPrintf("Check the following boxes to complement one or both tables.  "
+	    "To complement a table means to include a base pair in the "
+	    "intersection/union if it is <I>not</I> included in the table."
+	    "<P>\n");
     jsMakeTrackingCheckBox(cart, hgtaNextInvertTable, "invertTable", FALSE);
-    printf("Complement %s before intersection/union <BR>\n", name);
+    printf("Complement %s before base-pair-wise intersection/union <BR>\n",
+	   name);
     jsMakeTrackingCheckBox(cart, hgtaNextInvertTable2, "invertTable2", FALSE);
-    printf("Complement %s before intersection/union <P>\n", iName);
+    printf("Complement %s before base-pair-wise intersection/union <P>\n",
+	   iName);
     }
 else
     {

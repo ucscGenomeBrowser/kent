@@ -46,12 +46,13 @@ patDb ispy1
 patId trackId
 patTable labTrack
 patKey ispyId
-aliasTable probeAliases
 setsTable genesets
+aliasTable probeAliases
+#aliasTable probeIspyAgiExpT1
 
 track ISPYproteomics
 shortLabel ispy proteomics
-longLabel ispy proteomics
+longLabel ispy proteomics data from Petricoin lab
 group x
 priority 43
 visibility dense
@@ -63,7 +64,7 @@ patDb ispy1
 patId trackId
 patTable proteomicsTrack
 patKey ispyId
-aliasTable probeAliases
+aliasTable probeISPYproteomics
 setsTable genesets
 
 #TCGA
@@ -146,6 +147,8 @@ patTable sampleInfo
 patId sampleId
 patKey subjId
 patDb tcga1
+aliasTable probeBroadAffyExp
+setsTable genesets
 
 track CaMPScoreExternal
 shortLabel CaMPScoreExternal 
