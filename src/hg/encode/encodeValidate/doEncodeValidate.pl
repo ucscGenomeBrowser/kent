@@ -5,38 +5,52 @@
 # Verifies that all files and metadata are present and of correct formats
 # Creates a load script (load.csh) and track configuration (trackDb.ra) 
 #               for the datasets
-# Writes error or log information to STDOUT
 # Returns 0 if validation succeeds.
 
 # TODO:  Handle Mac and DOS EOLs
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.12 2008/01/12 20:24:51 galt Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.13 2008/01/15 18:54:06 kate Exp $
 
 use warnings;
 use strict;
 use lib "/cluster/bin/scripts";
 use HgAutomate;
 use File::stat;
+use Getopt::Long;
+
+use vars qw/
+    $opt_configDir
+    $opt_outDir
+    $opt_verbose
+    /;
 
 sub usage {
-    die "usage: encodeValidate.pl <submission type> <project submission dir>\n";
+    print STDERR "
+usage: encodeValidate.pl submission-type project-submission-dir
+options:
+    -verbose num        Set verbose level to num (default 1).            -
+    -configDir dir      Path of configuration directory, containing
+                        metadata .ra files (default: submission dir/../config).
+    -outDir dir         Path of output directory, for validation files
+                        (default: submission-dir/out)
+";
+exit 1;
 }
 
 # Global constants
 our $loaderPath = "/usr/local/apache/cgi-bin/loader";
-our $encodeConfigDir = '../config'; # change to top of scratch dir  before deployment
-our $fieldConfigFile = $encodeConfigDir . "/fields.ra";
-our $vocabConfigFile = $encodeConfigDir . "/cv.ra";
-our $trackFile = 'trackDb.ra';
-our $loadScript = 'load.sh';
-our $loadRa = 'load.ra';
-our $logDir = "log";
+
+our $fieldConfigFile = "/fields.ra";
+our $vocabConfigFile = "/cv.ra";
+
+our $loadFile = "/load.ra";
+our $trackFile = "/trackDb.ra";
 
 # Global variables
 our $submitDir;
-our $opt_verbose = 1;
+our $submitPath;
 our %terms;             # controlled vocabulary
 our %pif;               # project information
 
@@ -70,7 +84,7 @@ sub validateFileName {
         -r $file || die "ERROR: File \'$file\' is not readable \n";
         &checkDataFormat($pif{'trackHash'}->{$track}, $file);
     }
-    print "    Files: ", join (' ', @files), "\n";
+    &HgAutomate::verbose(3, "    Files: " . join (' ', @files) . "\n");
 }
 
 sub validatePart {
@@ -102,9 +116,6 @@ sub validateDataVersion {
 # project-specific validators
 sub validateCellLineREF {
     my ($val) = @_;
-    if (!%terms) {
-        &loadControlledVocab;
-    }
     defined($terms{'Cell Line'}{$val}) || die "ERROR: Cell line \'$val\' is not known \n";
 }
 
@@ -119,31 +130,33 @@ our %formatCheckers = (
 
 sub validateWig {
     my ($file) = @_;
-    my $logFile = $logDir . "/validateWig.out";
+    my $outFile = "validateWig.out";
+    my $filePath = "$submitPath/$file";
     my $err = system (
-        "head -10 $file | $loaderPath/wigEncode stdin /dev/null /dev/null >$logFile 2>&1");
+        "cd $opt_outDir; head -10 $filePath | $loaderPath/wigEncode stdin /dev/null /dev/null >$outFile 2>&1");
     if ($err) {
         print STDERR  "ERROR: File \'$file\' failed wiggle validation\n";
-        open(ERR, $logFile) || die "ERROR: Can't open wiggle validation file \'$logFile\': $!\n";
+        open(ERR, $outFile) || die "ERROR: Can't open wiggle validation file \'$outFile\': $!\n";
         my @err = <ERR>;
         die "@err\n";
     } else {
-        print "Passed\n";
+        &HgAutomate::verbose(2, "File \'$file\' passed wiggle validation\n");
     }
 }
 
 sub validateBed {
     my ($file, $type) = @_;
-    my $logFile = $logDir . "/validateBed.out";
+    my $outFile = "validateBed.out";
+    my $filePath = "$submitPath/$file";
     my $err = system (
-        "head -10 $file | egrep -v '^track|browser' | $loaderPath/hgLoadBed -noLoad hg18 testTable stdin >$logFile 2>&1");
+        "cd $opt_outDir; head -10 $filePath | egrep -v '^track|browser' | $loaderPath/hgLoadBed -noLoad hg18 testTable stdin >$outFile 2>&1");
     if ($err) {
         print STDERR  "ERROR: File \'$file\' failed bed validation\n";
-        open(ERR, $logFile) || die "ERROR: Can't open bed validation file \'$logFile\': $!\n";
+        open(ERR, $outFile) || die "ERROR: Can't open bed validation file \'$outFile\': $!\n";
         my @err = <ERR>;
         die "@err\n";
     } else {
-        print "Passed\n";
+        &HgAutomate::verbose(2, "File \'$file\' passed bed validation\n");
     }
 }
 
@@ -154,14 +167,14 @@ sub validateField {
     # validate value for type of field
     my ($type, $val, $arg) = @_;
     $type =~ s/ /_/g;
-    &HgAutomate::verbose(2, "Validating $type : $val\n");
+    &HgAutomate::verbose(4, "Validating $type : $val\n");
     $validators{$type}->($val, $arg);
 }
 
 sub checkDataFormat {
     # validate file type
     my ($format, $file) = @_;
-    &HgAutomate::verbose(1, "Checking data format for $file : $format\n");
+    &HgAutomate::verbose(3, "Checking data format for $file : $format\n");
     my $type = "";
     if ($format =~ m/(bed)(\d+)/) {
         $format = $1;
@@ -174,7 +187,7 @@ sub checkDataFormat {
 
 sub loadControlledVocab {
     %terms = ();
-    my %termRa = &readRaFile($vocabConfigFile, "term");
+    my %termRa = &readRaFile("$opt_configDir/$vocabConfigFile", "term");
     foreach my $term (keys %termRa) {
         my $type = $termRa{$term}->{'type'};
         $terms{$type}->{$term} = $termRa{$term};
@@ -202,7 +215,7 @@ sub getPif {
     # are present and that the project is marked active.
     my %pif = ();
     my $pifFile = &newestFile(glob "*.PIF");
-    &HgAutomate::verbose(1, "Using newest PIF file \'$pifFile\'\n");
+    &HgAutomate::verbose(2, "Using newest PIF file \'$pifFile\'\n");
     open(PIF, $pifFile) || die "ERROR: Can't open PIF file \'$pifFile\'\n";
     while (my $line = <PIF>) {
         # strip leading and trailing spaces
@@ -214,7 +227,7 @@ sub getPif {
         chomp $line;
         my ($key, $val) = split(/\t/, $line);
         $pif{$key} = $val;
-        HgAutomate::verbose(1, "PIF field: $key = $val\n");
+        HgAutomate::verbose(3, "PIF field: $key = $val\n");
     }
     close(PIF);
     # Validate fields
@@ -250,7 +263,8 @@ sub getPif {
 sub readRaFile {
     # Read records from a .ra file into a hash of hashes and return it.
     my ($file, $type) = @_;
-    open(RA, $file) || die "ERROR: Can't open RA file \'$fieldConfigFile\'\n";
+    open(RA, $file) || 
+        die "ERROR: Can't open RA file \'$file\'\n";
     my @lines = <RA>;
     my %ra = ();
     my $raKey = undef;
@@ -284,15 +298,27 @@ my @ddfHeader;
 my %ddfHeader = ();
 my %datasets = ();
 
+my $ok = GetOptions("configDir=s",
+                    "outDir=s",
+                    "verbose=i",
+                    );
+&usage() if (!$ok);
+&usage() if (scalar(@ARGV) < 2);
+
+$opt_verbose = 1 if (!defined $opt_verbose);
+
 # Change dir to submission directory obtained from command-line
-if (scalar(@ARGV) < 2) { usage(); }
 my $submitType = $ARGV[0];	# currently not used
 $submitDir = $ARGV[1];
-&HgAutomate::verbose(1, "Validating submission in directory \'$submitDir\'\n");
+&HgAutomate::verbose(2, "Validating submission in directory \'$submitDir\'\n");
 chdir $submitDir ||
     die ("SYS ERROR; Can't change to submission directory \'$submitDir\': $!\n");
-mkdir $logDir || 
-    die ("SYS ERROR; Can't create log directory \'$logDir\': $!\n");
+$submitPath=`pwd`;
+chomp $submitPath;
+$opt_outDir = "out" if (!defined $opt_outDir);
+&HgAutomate::verbose(3, "Creating output in directory \'$opt_outDir\'\n");
+mkdir $opt_outDir || 
+    die ("SYS ERROR; Can't create out directory \'$opt_outDir\': $!\n");
 
 # Locate project information (PIF) file and verify that project is
 #  ready for submission
@@ -300,7 +326,9 @@ mkdir $logDir ||
 
 # Gather fields defined for DDF file. File is in 
 # ra format:  field <name>, required <true|false>
-my %fields = &readRaFile($fieldConfigFile, "field");
+$opt_configDir = "../config" if (!defined $opt_configDir);
+&HgAutomate::verbose(3, "Using configuration directory \'$opt_configDir\'\n");
+my %fields = &readRaFile("$opt_configDir/$fieldConfigFile", "field");
 
 # Add required fields for this -- the variables in the PIF file
 foreach my $variable (keys %{$pif{'variableHash'}}) {
@@ -309,7 +337,7 @@ foreach my $variable (keys %{$pif{'variableHash'}}) {
 
 # Open dataset descriptor file (DDF)
 my $ddfFile = &newestFile(glob "*.DDF");
-&HgAutomate::verbose(1, "Using newest DDF file \'$ddfFile\'\n");
+&HgAutomate::verbose(2, "Using newest DDF file \'$ddfFile\'\n");
 open(IN, $ddfFile) || die "ERROR: Can't open DDF file \'$ddfFile\'\n";
 
 # Get header containing column names
@@ -384,15 +412,15 @@ while ($line = <IN>) {
 }
 close(IN);
 
-# Validate files and metadata fields in all datasets.  Create .ra file
-# for loader 
-open(LOADER_RA, ">$loadRa") || 
-        die "SYS ERROR: Can't write \'$loadRa\' file ($!)\n";
-
+# Validate files and metadata fields in all datasets using controlled
+# vocabulary.  Create .ra file for loader .
+&loadControlledVocab;
+open(LOADER_RA, ">$opt_outDir/$loadFile") ||
+        die "SYS ERROR: Can't write \'$opt_outDir/$loadFile\' file ($!)\n";
 foreach $dataset (keys %datasets) {
     my $datasetRef = $datasets{$dataset};
     my $dataType = $datasetRef->[$ddfHeader{'Data Type REF'}];
-    &HgAutomate::verbose(1, "Dataset: $dataset\tTrack: $dataType\n");
+    &HgAutomate::verbose(2, "  Dataset: $dataset\tTrack: $dataType\n");
     for ($i=0; $i < @ddfHeader; $i++) {
         &validateField($ddfHeader[$i], $datasetRef->[$i], $dataType);
     }
