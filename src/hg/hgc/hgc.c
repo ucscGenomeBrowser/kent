@@ -212,7 +212,7 @@
 #include "itemConf.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1378 2008/01/14 23:55:44 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1379 2008/01/15 17:37:01 fanhsu Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -7872,9 +7872,9 @@ if (url != NULL && url[0] != 0)
 
     printf("<BR><B>CDC HuGE Published Literature:  ");
     printf("<A HREF=\"%s%s%s\" target=_blank>", 
-       "http://www.hugenavigator.net/HuGENavigator/searchSummary.do?firstQuery=",
+    "http://www.hugenavigator.net/HuGENavigator/searchSummary.do?firstQuery=",
        itemName, 
-       "+%09&publitSearchType=now&whichContinue=firststart&check=n&dbType=publit&");
+    "&publitSearchType=now&whichContinue=firststart&check=n&dbType=publit&Mysubmit=go");
     printf("%s</B></A>\n", itemName);
 
     safef(query, sizeof(query), 
