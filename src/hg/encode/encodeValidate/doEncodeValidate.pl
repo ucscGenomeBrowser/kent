@@ -11,7 +11,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.13 2008/01/15 18:54:06 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.14 2008/01/15 19:10:05 kate Exp $
 
 use warnings;
 use strict;
@@ -50,7 +50,8 @@ our $trackFile = "/trackDb.ra";
 
 # Global variables
 our $submitDir;
-our $submitPath;
+our $submitPath;        # full path of data submission directory
+our $outPath;           # full path of output directory
 our %terms;             # controlled vocabulary
 our %pif;               # project information
 
@@ -133,7 +134,7 @@ sub validateWig {
     my $outFile = "validateWig.out";
     my $filePath = "$submitPath/$file";
     my $err = system (
-        "cd $opt_outDir; head -10 $filePath | $loaderPath/wigEncode stdin /dev/null /dev/null >$outFile 2>&1");
+        "cd $outPath; head -10 $filePath | $loaderPath/wigEncode stdin /dev/null /dev/null >$outFile 2>&1");
     if ($err) {
         print STDERR  "ERROR: File \'$file\' failed wiggle validation\n";
         open(ERR, $outFile) || die "ERROR: Can't open wiggle validation file \'$outFile\': $!\n";
@@ -149,7 +150,7 @@ sub validateBed {
     my $outFile = "validateBed.out";
     my $filePath = "$submitPath/$file";
     my $err = system (
-        "cd $opt_outDir; head -10 $filePath | egrep -v '^track|browser' | $loaderPath/hgLoadBed -noLoad hg18 testTable stdin >$outFile 2>&1");
+        "cd $outPath; head -10 $filePath | egrep -v '^track|browser' | $loaderPath/hgLoadBed -noLoad hg18 testTable stdin >$outFile 2>&1");
     if ($err) {
         print STDERR  "ERROR: File \'$file\' failed bed validation\n";
         open(ERR, $outFile) || die "ERROR: Can't open bed validation file \'$outFile\': $!\n";
@@ -305,17 +306,24 @@ my $ok = GetOptions("configDir=s",
 &usage() if (!$ok);
 &usage() if (scalar(@ARGV) < 2);
 
-$opt_verbose = 1 if (!defined $opt_verbose);
-
-# Change dir to submission directory obtained from command-line
+# get command-line args
 my $submitType = $ARGV[0];	# currently not used
 $submitDir = $ARGV[1];
+
+# get options
+$opt_verbose = 1 if (!defined $opt_verbose);
+$opt_configDir = "../config" if (!defined $opt_configDir);
+$opt_outDir = "out" if (!defined $opt_outDir);
+my $wd = `pwd`;
+chomp $wd;
+$outPath = "$wd/$opt_outDir";
+
+# Change dir to submission directory obtained from command-line
 &HgAutomate::verbose(2, "Validating submission in directory \'$submitDir\'\n");
 chdir $submitDir ||
     die ("SYS ERROR; Can't change to submission directory \'$submitDir\': $!\n");
 $submitPath=`pwd`;
 chomp $submitPath;
-$opt_outDir = "out" if (!defined $opt_outDir);
 &HgAutomate::verbose(3, "Creating output in directory \'$opt_outDir\'\n");
 mkdir $opt_outDir || 
     die ("SYS ERROR; Can't create out directory \'$opt_outDir\': $!\n");
@@ -326,7 +334,6 @@ mkdir $opt_outDir ||
 
 # Gather fields defined for DDF file. File is in 
 # ra format:  field <name>, required <true|false>
-$opt_configDir = "../config" if (!defined $opt_configDir);
 &HgAutomate::verbose(3, "Using configuration directory \'$opt_configDir\'\n");
 my %fields = &readRaFile("$opt_configDir/$fieldConfigFile", "field");
 
@@ -415,8 +422,8 @@ close(IN);
 # Validate files and metadata fields in all datasets using controlled
 # vocabulary.  Create .ra file for loader .
 &loadControlledVocab;
-open(LOADER_RA, ">$opt_outDir/$loadFile") ||
-        die "SYS ERROR: Can't write \'$opt_outDir/$loadFile\' file ($!)\n";
+open(LOADER_RA, ">$outPath/$loadFile") ||
+        die "SYS ERROR: Can't write \'$outPath/$loadFile\' file ($!)\n";
 foreach $dataset (keys %datasets) {
     my $datasetRef = $datasets{$dataset};
     my $dataType = $datasetRef->[$ddfHeader{'Data Type REF'}];
