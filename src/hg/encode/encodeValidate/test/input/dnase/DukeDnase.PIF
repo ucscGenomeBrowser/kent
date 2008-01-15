@@ -1,0 +1,7 @@
+# Project Information File for Duke Dnase project
+
+lab	Duke
+project	DukeDnase
+variables	Cell_Line_REF
+active	yes
+tracks	DukeDnaseSignal:wig DukeDnaseSites:bed

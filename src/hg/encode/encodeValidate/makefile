@@ -17,4 +17,8 @@ alpha: scripts
 SCRIPT_FILES = \
 	doEncodeValidate.pl
 
+test: force
+	cd test && ${MAKE}
+
+force:
 

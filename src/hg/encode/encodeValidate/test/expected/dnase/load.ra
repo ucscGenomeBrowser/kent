@@ -1,0 +1,20 @@
+tablename wgEncodeDukeDnaseSignalHeLaS3
+type wig
+assembly hg17
+files hela/chr1.wig hela/chr2.wig
+
+tablename wgEncodeDukeDnaseSitesHUVEC
+type bed
+assembly hg17
+files cd4/sites.bed
+
+tablename wgEncodeDukeDnaseSignalHUVEC
+type wig
+assembly hg17
+files cd4/chr1.wig cd4/chr2.wig
+
+tablename wgEncodeDukeDnaseSitesHeLaS3
+type bed
+assembly hg17
+files hela/sites.bed
+
