@@ -4,7 +4,7 @@
 # This file describes browser build for the Sea Lamprey
 # genome, Petromyzon marinus, March 2007, v.3.0 from WUSTL
 #
-#       "$Id: petMar1.txt,v 1.1 2008/01/14 19:58:49 hiram Exp $"
+#       "$Id: petMar1.txt,v 1.2 2008/01/15 01:04:41 hiram Exp $"
 #
 
 ##########################################################################
@@ -24,3 +24,55 @@
 ##########################################################################
 #  Fixup the agp file to make a chrUn agp file, add a 1000 base gap
 #	between the supercontigs
+
+##########################################################################
+#  Run the makeGenomeDb.pl script (DONE - 2008-01-14 - Hiram)
+    ssh kkstore04
+    cd /cluster/data/petMar1
+    cat << '_EOF_' > petMar1.config.ra
+# Config parameters for makeGenomeDb.pl:
+db petMar1
+clade vertebrate
+genomeCladePriority 130
+scientificName Petromyzon marinus
+commonName Lamprey
+assemblyDate Mar. 2007
+assemblyLabel WUSTL v.3.0 (March 2007)
+orderKey 480
+mitoAcc 5835065
+fastaFiles /cluster/data/petMar1/downloads/contigs.fa.gz
+agpFiles /cluster/data/petMar1/downloads/chrUn.agp
+# qualFiles none
+dbDbSpeciesDir lamprey
+'_EOF_'
+
+    makeGenomeDb.pl petMar1 > makeGenome.log
+    #	this got hung up in hgGcPercent due to unknown problems
+    #	backed out the source tree to last year to run an old copy of
+    #	hgGcPercent and got the gc5Base build done.  Then checked with
+    #	the -debug option to see what other steps were to be done in the
+    #	db step which was the single jkStuff/makeDb.csh which got the
+    #	database started.  Then, continuing:
+    makeGenomeDb.pl -continue=dbDb petMar1 > dbDb.log
+    #	which completed successfully
+    #	checked in the trackDb/lamprey/ files and the browser was functioning
+    #	Created symlink from /gbdb/petMar1/petMar1.2bit -> petMar1.unmasked.2bit
+    #	to enable base-level display on the browser.
+
+##########################################################################
+#  Pick up an image from the EPA, usage rights are free
+#	http://www.epa.gov/glnpo/image/restrictions.htm
+    mkdir /cluster/data/petMar1/photo
+    cd /cluster/data/petMar1/photo
+    wget --timestamping 'http://www.epa.gov/glnpo/image/vbig/229.jpg' \
+	-O petromyzon_marinus.epa.jpg
+##########################################################################
+#  Running WindowMasker
+    ssh kolossus
+    mkdir /cluster/data/petMar1/bed/WindowMasker
+    cd /cluster/data/petMar1/bed/WindowMasker
+    /cluster/bin/scripts/doWindowMasker.pl \
+	-buildDir /cluster/data/petMar1/bed/WindowMasker \
+	-workhorse=kolossus -verbose=2 petMar1 > wm.log 2>&1 &
+    
+##########################################################################
