@@ -13,6 +13,9 @@ class ProjectType < ActiveRecord::Base
   validates_presence_of :loader
   validates_presence_of :load_params
   validates_presence_of :load_time_out
+  validates_presence_of :unloader
+  validates_presence_of :unload_params
+  validates_presence_of :unload_time_out
 
   protected
     def validate
