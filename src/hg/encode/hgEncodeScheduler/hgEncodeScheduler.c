@@ -16,7 +16,7 @@
 #include <signal.h>
 #include <sys/wait.h>
 
-static char const rcsid[] = "$Id: hgEncodeScheduler.c,v 1.11 2008/01/12 20:14:40 galt Exp $";
+static char const rcsid[] = "$Id: hgEncodeScheduler.c,v 1.12 2008/01/15 21:31:17 galt Exp $";
 
 char *db = NULL;
 char *dir = NULL;
@@ -168,6 +168,38 @@ else
 sqlFreeResult(&rs);
 }
 
+void getProjectUnloadData(struct sqlConnection *conn, int project,
+ char **unloader, char **unloadParams, int *unloadTimeOut)
+/* return data from project_type record */
+{
+char query[256];
+
+safef(query,sizeof(query),"select t.unloader, t.unload_params, t.unload_time_out"
+    " from projects p, project_types t"
+    " where p.project_type_id = t.id" 
+    " and p.id = '%d'", 
+    project);
+
+struct sqlResult *rs;
+char **row = NULL;
+
+rs = sqlGetResult(conn, query);
+if ((row=sqlNextRow(rs)))
+    {
+    if (row[0] == NULL) errAbort("project_types.unloader cannot be NULL");
+    *unloader = cloneString(row[0]);
+    if (row[1] == NULL) errAbort("project_types.unload_params cannot be NULL");
+    *unloadParams = cloneString(row[1]);
+    if (row[2] == NULL) errAbort("project_types.unload_time_out cannot be NULL");
+    *unloadTimeOut = sqlUnsigned(row[2]);
+    }
+else
+    {
+    errAbort("project %d not found!\n", project);
+    }
+sqlFreeResult(&rs);
+}
+
 void getRunningData(struct sqlConnection *conn, int project,
  int *pid, char **jobType, int *startTime, int *timeOut, char **commandLine)
 /* return data from project record */
@@ -234,6 +266,8 @@ if (status==0)
     {
     if (sameString(jobType,"load"))
 	jobStatus = "loaded";
+    else if (sameString(jobType,"unload"))
+	jobStatus = "schedule deleting";
     else if (sameString(jobType,"validate"))
 	jobStatus = "validated";
     else if (sameString(jobType,"upload"))
@@ -251,6 +285,8 @@ else
     {
     if (sameString(jobType,"load"))
 	jobStatus = "load failed";
+    else if (sameString(jobType,"unload"))
+	jobStatus = "unload failed";
     else if (sameString(jobType,"validate"))
 	jobStatus = "invalid";
     else if (sameString(jobType,"upload"))
@@ -292,6 +328,8 @@ safef(query, sizeof(query), "select status from projects where id = %d", project
 char *status = sqlQuickString(conn, query);
 if (sameOk(status, "schedule loading"))
     jobType = "load";
+else if (sameOk(status, "schedule unloading"))
+    jobType = "unload";
 else if (sameOk(status, "schedule validating"))
     jobType = "validate";
 else if (startsWith("schedule uploading ", status))
@@ -322,6 +360,15 @@ else if (sameString(jobType,"load"))
     char *loadParams;
     getProjectLoadData(conn, project, &loader, &loadParams, &timeOut);
     safef(commandLine, sizeof(commandLine), "%s %s %s", loader, loadParams, projectDir);
+     //uglyf("commandLine=[%s]\n",commandLine);
+    }
+else if (sameString(jobType,"unload"))
+    {
+    //safef(commandLine, sizeof(commandLine), "/bin/sleep 20");
+    char *unloader;
+    char *unloadParams;
+    getProjectUnloadData(conn, project, &unloader, &unloadParams, &timeOut);
+    safef(commandLine, sizeof(commandLine), "%s %s %s", unloader, unloadParams, projectDir);
      //uglyf("commandLine=[%s]\n",commandLine);
     }
 else if (sameString(jobType,"upload"))
@@ -392,6 +439,8 @@ else
     char *jobStatus = NULL;
     if (sameString(jobType,"load"))
 	jobStatus = "loading";
+    if (sameString(jobType,"unload"))
+	jobStatus = "unloading";
     else if (sameString(jobType,"validate"))
 	jobStatus = "validating";
     else if (sameString(jobType,"upload"))
@@ -443,6 +492,7 @@ if (sqlQuickNum(conn,query) < 10) // only allow max 10 jobs at once
     safef(query,sizeof(query),"select id from projects"
 	" where status = 'schedule validating'"
 	" or status = 'schedule loading'"
+	" or status = 'schedule unloading'"
 	" or status like 'schedule uploading %%'"
         " or status = 'schedule re-expand all'"
 	);
