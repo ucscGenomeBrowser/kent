@@ -16,7 +16,7 @@
 #include "customFactory.h"
 #include "hgSession.h"
 
-static char const rcsid[] = "$Id: hgSession.c,v 1.33 2008/01/08 20:09:59 angie Exp $";
+static char const rcsid[] = "$Id: hgSession.c,v 1.34 2008/01/15 21:13:39 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -31,6 +31,16 @@ errAbort(
 /* Global variables. */
 struct cart *cart;
 char *excludeVars[] = {"Submit", "submit", NULL};
+
+
+char *cgiDecodeClone(char *encStr)
+/* Allocate and return a CGI-decoded copy of encStr. */
+{
+size_t len = strlen(encStr);
+char *decStr = needMem(len+1);
+cgiDecode(encStr, decStr, len);
+return decStr;
+}
 
 
 void welcomeUser(char *wikiUserName)
@@ -122,18 +132,18 @@ else
 dyStringFree(&dyTmp);
 }
 
-char *getSessionLink(char *userName, char *sessionName)
+char *getSessionLink(char *encUserName, char *encSessionName)
 /* Form a link that will take the user to a bookmarkable page that 
  * will load the given session. */
 {
 struct dyString *dy = dyStringNew(1024);
 dyStringPrintf(dy, "<A HREF=\"");
-addSessionLink(dy, userName, sessionName, FALSE);
+addSessionLink(dy, encUserName, encSessionName, FALSE);
 dyStringPrintf(dy, "\">Browser</A>\n");
 return dyStringCannibalize(&dy);
 }
 
-char *getSessionEmailLink(char *userName, char *sessionName)
+char *getSessionEmailLink(char *encUserName, char *encSessionName)
 /* Invoke mailto: with a cgi-encoded link that will take the user to a 
  * bookmarkable page that will load the given session. */
 {
@@ -141,8 +151,8 @@ struct dyString *dy = dyStringNew(1024);
 dyStringPrintf(dy, "<A HREF=\"mailto:?subject=UCSC browser session %s&"
 	       "body=Here is a UCSC browser session I%%27d like to share with "
 	       "you:%%20",
-	       sessionName);
-addSessionLink(dy, userName, sessionName, TRUE);
+	       cgiDecodeClone(encSessionName));
+addSessionLink(dy, encUserName, encSessionName, TRUE);
 dyStringPrintf(dy, "\">Email</A>\n");
 return dyStringCannibalize(&dy);
 }
@@ -192,16 +202,6 @@ return dyStringCannibalize(&dy);
 }
 
 
-char *cgiDecodeClone(char *encStr)
-/* Allocate and return a CGI-decoded copy of encStr. */
-{
-size_t len = strlen(encStr);
-char *decStr = needMem(len+1);
-cgiDecode(encStr, decStr, len);
-return decStr;
-}
-
-
 void showExistingSessions(char *userName)
 /* Print out a table with buttons for sharing/unsharing/loading/deleting 
  * previously saved sessions. */
@@ -238,10 +238,10 @@ while ((row = sqlNextRow(sr)) != NULL)
     safef(buf, sizeof(buf), "%s%s", hgsSharePrefix, encSessionName);
     cgiMakeCheckBoxJS(buf, shared, "onchange=\"document.mainForm.submit();\"");
     printf("share with others\n");
-    link = getSessionLink(userName, encSessionName);
+    link = getSessionLink(encUserName, encSessionName);
     printf("</TD><TD>&nbsp;&nbsp;&nbsp;%s</TD>\n", link);
     freez(&link);
-    link = getSessionEmailLink(userName, encSessionName);
+    link = getSessionEmailLink(encUserName, encSessionName);
     printf("<TD>%s</TD></TR>\n", link);
     freez(&link);
     foundAny = TRUE;
@@ -537,15 +537,15 @@ if (sqlTableExists(conn, namedSessionTable))
 	  "(that %s be shared with other users).  "
 	  "%s %s",
 	  htmlEncode(sessionName), (shareSession ? "may" : "may not"),
-	  getSessionLink(userName, encSessionName),
-	  getSessionEmailLink(userName, encSessionName));
+	  getSessionLink(encUserName, encSessionName),
+	  getSessionEmailLink(encUserName, encSessionName));
     else
 	dyStringPrintf(dyMessage,
 	  "Added a new session <B>%s</B> that %s be shared with other users.  "
 	  "%s %s",
 	  htmlEncode(sessionName), (shareSession ? "may" : "may not"),
-	  getSessionLink(userName, encSessionName),
-	  getSessionEmailLink(userName, encSessionName));
+	  getSessionLink(encUserName, encSessionName),
+	  getSessionEmailLink(encUserName, encSessionName));
     if (cartFindPrefix(cart, CT_FILE_VAR_PREFIX) != NULL)
 	dyStringPrintf(dyMessage,
 		"<P>Note: the session contains a reference to at least one "
@@ -736,8 +736,8 @@ if (hel != NULL)
     dyStringPrintf(dyMessage,
 		   "Loaded settings from session <B>%s</B>. %s %s<BR>\n",
 		   htmlEncode(sessionName),
-		   getSessionLink(userName, encSessionName),
-		   getSessionEmailLink(userName, encSessionName));
+		   getSessionLink(encUserName, encSessionName),
+		   getSessionEmailLink(encUserName, encSessionName));
     cartLoadUserSession(conn, userName, sessionName, cart, NULL, wildStr);
     checkForCustomTracks(dyMessage);
     didSomething = TRUE;
@@ -776,13 +776,14 @@ struct sqlConnection *conn = hConnectCentral();
 struct dyString *dyMessage = dyStringNew(1024);
 char *otherUser = trimSpaces(cartString(cart, hgsOtherUserName));
 char *sessionName = trimSpaces(cartString(cart, hgsOtherUserSessionName));
+char *encOtherUser = cgiEncodeFull(otherUser);
 char *encSessionName = cgiEncodeFull(sessionName);
 
 dyStringPrintf(dyMessage,
        "Loaded settings from user <B>%s</B>'s session <B>%s</B>. %s %s",
 	       otherUser, htmlEncode(sessionName),
 	       getSessionLink(otherUser, encSessionName),
-	       getSessionEmailLink(otherUser, encSessionName));
+	       getSessionEmailLink(encOtherUser, encSessionName));
 cartLoadUserSession(conn, otherUser, sessionName, cart, NULL, actionVar);
 checkForCustomTracks(dyMessage);
 hDisconnectCentral(&conn);
