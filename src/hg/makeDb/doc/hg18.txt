@@ -19239,13 +19239,13 @@ TMPDIR=/scratch/tmp
 	-stop=download -smallClusterHub=memk -bigClusterHub=pk \
 	> download.log 2>&1 &
 ############################################################################
-# RE-BUILD GAD TRACK (Done, 1/11/08, Fan)
+# RE-BUILD GAD TRACK (Done, 1/16/08, Fan)
 # During previous build, all.txt was corrupted during receiving file from
 # email.
 
-   mkdir /cluster/store12/gad080111
+   mkdir /cluster/store12/gad080116
    rm /cluster/data/gad
-   ln -s /cluster/store12/gad080111 /cluster/data/gad
+   ln -s /cluster/store12/gad080116 /cluster/data/gad
 
    cd /cluster/data/gad
 
@@ -19260,6 +19260,9 @@ TMPDIR=/scratch/tmp
 
    gadPos hg18 j18.tmp
    cat j18.tmp |sort -u >hg18.gad.tab
+
+# removed 1 record from hg18.gad.tab that has multiple words in geneSymbol
+# field.
 
 # use -nobin option to ensure display order is according to genomic position
    hgLoadBed -nobin hg18 gad hg18.gad.tab
