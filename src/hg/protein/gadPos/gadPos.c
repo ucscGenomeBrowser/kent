@@ -29,6 +29,7 @@ char *refSeq;
 FILE   *outputFile;
 char *geneSymbol, *clusterId;
 char *chrom, *chromStart, *chromEnd;
+boolean found;
 
 if (argc != 3) usage();
 gdb   = argv[1];
@@ -48,7 +49,7 @@ row2 = sqlNextRow(sr2);
 while (row2 != NULL)
     {
     geneSymbol  = row2[0];
-    
+    found = FALSE;    
     /* first look for start/end positions in KG clusters */
     sprintf(query3, 
        "select distinct clusterId from %s.kgXref x, %s.knownIsoforms i where x.geneSymbol='%s' and i.transcript=x.kgId",
@@ -86,7 +87,7 @@ while (row2 != NULL)
 	    	{
 		chromStart = row4[0];
 		chromEnd   = row4[1];
-		
+		found = TRUE;
 		fprintf(outputFile, "%s\t%s\t%s\t%s\n", chrom, chromStart, chromEnd, geneSymbol);
 	        row4 = sqlNextRow(sr4);
 		}
@@ -96,7 +97,8 @@ while (row2 != NULL)
 	    }
         sqlFreeResult(&sr3);
 	}
-    else
+    
+    if (!found)
         {
 	/* if no KG cluster can be found for the GAD gene symbol, 
 	   try it with RefSeqs */
@@ -124,7 +126,7 @@ while (row2 != NULL)
 		    chrom      = row4[0];
 		    chromStart = row4[1];
 		    chromEnd   = row4[2];
-		
+		    found = TRUE;
 		    fprintf(outputFile, "%s\t%s\t%s\t%s\n", chrom, chromStart, chromEnd, geneSymbol);
 	            row4 = sqlNextRow(sr4);
 		    }
@@ -133,8 +135,10 @@ while (row2 != NULL)
 		}
             sqlFreeResult(&sr);
 	    }
-	else
-	   /* if not finding the gene symbol in RefSeq, try it with kgAlias table then */
+	}
+
+    if (!found)
+	    /* if not finding the gene symbol in RefSeq, try it with kgAlias table then */
 	    {
 	    sprintf(query5, 
     		   "select chrom, txStart, txEnd from %s.knownGene, %s.kgAlias where alias='%s' and name=kgId",
@@ -154,7 +158,6 @@ while (row2 != NULL)
 		}
             sqlFreeResult(&sr5);
 	    }
-	}
     row2 = sqlNextRow(sr2);
     }
 sqlFreeResult(&sr2);
