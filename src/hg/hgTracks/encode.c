@@ -27,7 +27,7 @@ void encodeErgeMethods(struct track *tg)
 tg->itemName = encodeErgeName;
 }
 
-Color encodeStanfordNRSFColor(struct track *tg, void *item, struct vGfx *vg)
+Color encodeStanfordNRSFColor(struct track *tg, void *item, struct hvGfx *hvg)
 /* color by strand */
 {
 struct bed *thisItem = item;
@@ -41,7 +41,7 @@ if (thisItem->strand[0] == '-')
     g = b;
     b = tg->color.r;
     }
-return vgFindColorIx(vg, r, g, b);
+return hvGfxFindColorIx(hvg, r, g, b);
 }
 
 void encodeStanfordNRSFMethods(struct track *tg)
@@ -65,13 +65,13 @@ void freeEncodeRna(struct track *tg)
 encodeRnaFreeList((struct encodeRna**)&tg->items);
 }
 
-Color encodeRnaColor(struct track *tg, void *item, struct vGfx *vg)
+Color encodeRnaColor(struct track *tg, void *item, struct hvGfx *hvg)
 /* Return color of encodeRna track item. */
 {
 struct encodeRna *el = item;
 
 if(el->isRmasked)     return MG_BLACK;
-if(el->isTranscribed) return vgFindColorIx(vg, 0x79, 0xaa, 0x3d);
+if(el->isTranscribed) return hvGfxFindColorIx(hvg, 0x79, 0xaa, 0x3d);
 if(el->isPrediction)  return MG_RED;
 return MG_BLUE;
 }

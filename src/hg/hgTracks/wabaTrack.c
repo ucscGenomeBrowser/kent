@@ -125,7 +125,7 @@ return ix;
 
 
 static void wabaDraw(struct track *tg, int seqStart, int seqEnd,
-        struct vGfx *vg, int xOff, int yOff, int width, 
+        struct hvGfx *hvg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw waba alignment items. */
 {
@@ -157,7 +157,7 @@ for (wch = tg->items; wch != NULL; wch = wch->next)
 	    w = x2-x1;
 	    if (w < 1)
 		w = 1;
-	    vgBox(vg, x1, y, w, heightPer, color);
+	    hvGfxBox(hvg, x1, y, w, heightPer, color);
 	    }
 	}
     if (isFull)

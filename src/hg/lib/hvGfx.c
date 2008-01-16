@@ -1,13 +1,68 @@
-/* Browser graphics - stuff for drawing graphics displays that
- * are reasonably browser (human and intronerator) specific. */
+/* hvGfx - browser graphics interface.  This is a thin layer on top of vGfx
+ * that adds wraps it with an object providing genome browser-specific
+ * features. */
 
+/* Notes:
+ * - This was added to support reverse complement in the browser.  It would be
+ *   nice if all genome coordinates to pixel coordinates happened in this layer,
+ *   but that is a larger change to the browser code.
+ */
 #include "common.h"
-#include "memgfx.h"
-#include "vGfx.h"
-#include "browserGfx.h"
+#include "hvGfx.h"
 
-static char const rcsid[] = "$Id: browserGfx.c,v 1.8 2006/05/08 09:43:31 aamp Exp $";
+static char const rcsid[] = "$Id: hvGfx.c,v 1.1.2.1 2008/01/16 07:00:38 markd Exp $";
 
+static struct hvGfx *hvGfxAlloc(struct vGfx *vg, int leftMargin)
+/* allocate a hvgGfx object */
+{
+struct hvGfx *hvg;
+AllocVar(hvg);
+hvg->vg = vg;
+hvg->rc = TRUE;
+hvg->leftMargin = leftMargin;
+hvg->trackWidth = vg->width-leftMargin;
+hvg->pixelBased = vg->pixelBased;
+hvg->width = vg->width;
+hvg->height = vg->height;
+hvg->clipMaxX = hvg->width;
+return hvg;
+}
+
+struct hvGfx *hvGfxOpenGif(int width, int height, int leftMargin, char *fileName)
+/* Open up something that we'll write out as a gif someday. */
+{
+return hvGfxAlloc(vgOpenGif(width, height, fileName), leftMargin);
+}
+
+struct hvGfx *hvGfxOpenPostScript(int width, int height, int leftMargin, char *fileName)
+/* Open up something that will someday be a PostScript file. */
+{
+return hvGfxAlloc(vgOpenPostScript(width, height, fileName), leftMargin);
+}
+
+void hvGfxClose(struct hvGfx **pHvg)
+/* Close down virtual graphics object, and finish writing it to file. */
+{
+struct hvGfx *hvg = *pHvg;
+if (hvg != NULL)
+    {
+    vgClose(&hvg->vg);
+    freez(pHvg);
+    }
+}
+
+void hvGfxSetClip(struct hvGfx *hvg, int x, int y, int width, int height)
+/* Set clipping rectangle. */
+{
+vgSetClip(hvg->vg, hvGfxAdjX(hvg, x, width), y, width, height);
+if (x < 0)
+    x = 0;
+int x2 = x + width;
+if (x2 > hvg->width)
+    x2 = hvg->width;
+hvg->clipMinX = x;
+hvg->clipMaxX = x2;
+}
 
 static long figureTickSpan(long totalLength, int maxNumTicks)
 /* Figure out whether ticks on ruler should be 1, 5, 10, 50, 100, 500, 
@@ -42,13 +97,14 @@ sprintf(label, "%s%d", sign, num);
 }
 
 
-void vgDrawRulerBumpText(struct vGfx *vg, int xOff, int yOff, 
+void hvGfxDrawRulerBumpText(struct hvGfx *hvg, int xOff, int yOff, 
 	int height, int width,
         Color color, MgFont *font,
         int startNum, int range, int bumpX, int bumpY)
 /* Draw a ruler inside the indicated part of mg with numbers that start at
  * startNum and span range.  Bump text positions slightly. */
 {
+xOff = hvGfxAdjX(hvg, xOff, width);
 int tickSpan;
 int tickPos;
 double scale;
@@ -79,33 +135,35 @@ for (tickPos=firstTick; tickPos<end; tickPos += tickSpan)
     numLabelString(tickPos, tbuf);
     numWid = mgFontStringWidth(font, tbuf)+4;
     x = (int)((tickPos-startNum) * scale) + xOff;
-    vgBox(vg, x, yOff, 1, height, color);
+    vgBox(hvg->vg, x, yOff, 1, height, color);
     if (x - numWid >= xOff)
         {
-        vgTextCentered(vg, x-numWid + bumpX, yOff + bumpY, numWid, 
+        vgTextCentered(hvg->vg, x-numWid + bumpX, yOff + bumpY, numWid, 
 	    height, color, font, tbuf);
         }
     }
 }
 
-void vgDrawRuler(struct vGfx *vg, int xOff, int yOff, int height, int width,
+void hvGfxDrawRuler(struct hvGfx *hvg, int xOff, int yOff, int height, int width,
         Color color, MgFont *font,
         int startNum, int range)
 /* Draw a ruler inside the indicated part of mg with numbers that start at
  * startNum and span range.  */
 {
-vgDrawRulerBumpText(vg, xOff, yOff, height, width, color, font,
+hvGfxDrawRulerBumpText(hvg, xOff, yOff, height, width, color, font,
     startNum, range, 0, 0);
 }
 
 
-void vgBarbedHorizontalLine(struct vGfx *vg, int x, int y, 
+void hvGfxBarbedHorizontalLine(struct hvGfx *hvg, int x, int y, 
 	int width, int barbHeight, int barbSpacing, int barbDir, Color color,
 	boolean needDrawMiddle)
 /* Draw a horizontal line starting at xOff, yOff of given width.  Will
  * put barbs (successive arrowheads) to indicate direction of line.  
  * BarbDir of 1 points barbs to right, of -1 points them to left. */
 {
+barbDir = (hvg->rc) ? -barbDir : barbDir;
+x = hvGfxAdjX(hvg, x, width);
 int x1, x2;
 int yHi, yLo;
 int offset, startOffset, endOffset, barbAdd;
@@ -131,17 +189,18 @@ for (offset = startOffset; offset < endOffset; offset += barbSpacing)
     {
     x1 = x + offset;
     x2 = x1 + barbAdd;
-    vgLine(vg, x1, y, x2, yHi, color);
-    vgLine(vg, x1, y, x2, yLo, color);
+    vgLine(hvg->vg, x1, y, x2, yHi, color);
+    vgLine(hvg->vg, x1, y, x2, yLo, color);
     }
 }
 
-void vgNextItemButton(struct vGfx *vg, int x, int y, int w, int h, 
-		      Color color, Color bgColor, boolean nextItem)
+void hvGfxNextItemButton(struct hvGfx *hvg, int x, int y, int w, int h, 
+		      Color color, Color hvgColor, boolean nextItem)
 /* Draw a button that looks like a fast-forward or rewind button on */
 /* a remote control. If nextItem is TRUE, it points right, otherwise */
-/* left. color is the outline color, and bgColor is the fill color. */
+/* left. color is the outline color, and hvgColor is the fill color. */
 {
+x = hvGfxAdjX(hvg, x, w);
 struct gfxPoly *t1, *t2;
 /* Make the triangles */
 t1 = gfxPolyNew();
@@ -167,11 +226,37 @@ else
     gfxPolyAddPoint(t2, x+w, y+h);
     }
 /* The two filled triangles. */
-vgDrawPoly(vg, t1, bgColor, TRUE);
-vgDrawPoly(vg, t2, bgColor, TRUE);
+vgDrawPoly(hvg->vg, t1, hvgColor, TRUE);
+vgDrawPoly(hvg->vg, t2, hvgColor, TRUE);
 /* The two outline triangles. */
-vgDrawPoly(vg, t1, color, FALSE);
-vgDrawPoly(vg, t2, color, FALSE);
+vgDrawPoly(hvg->vg, t1, color, FALSE);
+vgDrawPoly(hvg->vg, t2, color, FALSE);
 gfxPolyFree(&t1);
 gfxPolyFree(&t2);
 }
+
+void hvGfxMakeColorGradient(struct hvGfx *hvg, 
+                            struct rgbColor *start, struct rgbColor *end,
+                            int steps, Color *colorIxs)
+/* Make a color gradient that goes smoothly from start
+ * to end colors in given number of steps.  Put indices
+ * in color table in colorIxs */
+{
+double scale = 0, invScale;
+double invStep;
+int i;
+int r,g,b;
+
+steps -= 1;	/* Easier to do the calculation in an inclusive way. */
+invStep = 1.0/steps;
+for (i=0; i<=steps; ++i)
+    {
+    invScale = 1.0 - scale;
+    r = invScale * start->r + scale * end->r;
+    g = invScale * start->g + scale * end->g;
+    b = invScale * start->b + scale * end->b;
+    colorIxs[i] = hvGfxFindColorIx(hvg, r, g, b);
+    scale += invStep;
+    }
+}
+

@@ -3,8 +3,8 @@
 #ifndef CDS_H
 #define CDS_H
 
-#ifndef VGFX_H
-#include "vGfx.h"
+#ifndef HVGFX_H
+#include "hvGfx.h"
 #endif
 
 #ifndef PSL_H
@@ -42,7 +42,7 @@ void baseColorCodonsFromPsl(char *chromName, struct linkedFeatures *lf,
  * are for defaulting to one-simpleFeature-per-exon if cds is not found. */
 
 
-enum baseColorDrawOpt baseColorDrawSetup(struct vGfx *vg, struct track *tg,
+enum baseColorDrawOpt baseColorDrawSetup(struct hvGfx *hvg, struct track *tg,
 			struct linkedFeatures *lf,
 			struct dnaSeq **retMrnaSeq, struct psl **retPsl);
 /* Returns the CDS coloring option, allocates colors if necessary, and 
@@ -51,7 +51,7 @@ enum baseColorDrawOpt baseColorDrawSetup(struct vGfx *vg, struct track *tg,
  * mrna seq if query insert/polyA display is enabled. */
 
 void baseColorDrawItem(struct track *tg,  struct linkedFeatures *lf,
-        int grayIx, struct vGfx *vg, int xOff, int y,
+        int grayIx, struct hvGfx *hvg, int xOff, int y,
         double scale, MgFont *font, int s, int e, int heightPer,
         boolean zoomedToCodonLevel, struct dnaSeq *mrnaSeq, struct psl *psl,
 	enum baseColorDrawOpt drawOpt,
@@ -61,7 +61,7 @@ void baseColorDrawItem(struct track *tg,  struct linkedFeatures *lf,
  * alternate light/dark blue colors. */
 
 void baseColorOverdrawDiff(struct track *tg,  struct linkedFeatures *lf,
-			   struct vGfx *vg, int xOff,
+			   struct hvGfx *hvg, int xOff,
 			   int y, double scale, int heightPer,
 			   struct dnaSeq *mrnaSeq, struct psl *psl,
 			   int winStart, enum baseColorDrawOpt drawOpt);
@@ -71,7 +71,7 @@ void baseColorOverdrawDiff(struct track *tg,  struct linkedFeatures *lf,
  * has been drawn already and we're not in dense mode etc. */
 
 void baseColorOverdrawQInsert(struct track *tg,  struct linkedFeatures *lf,
-			      struct vGfx *vg, int xOff,
+			      struct hvGfx *hvg, int xOff,
 			      int y, double scale, int heightPer,
 			      struct dnaSeq *mrnaSeq, struct psl *psl,
 			      int winStart, enum baseColorDrawOpt drawOpt,
@@ -91,7 +91,7 @@ struct simpleFeature *baseColorCodonsFromDna(int frame, int chromStart,
 					     bool reverse);
 /* Create list of codons from a DNA sequence */
 
-void baseColorDrawRulerCodons(struct vGfx *vg, struct simpleFeature *sfList,
+void baseColorDrawRulerCodons(struct hvGfx *hvg, struct simpleFeature *sfList,
                 double scale, int xOff, int y, int height, MgFont *font, 
                 int winStart, int maxPixels, bool zoomedToText);
 /* Draw amino acid translation of genomic sequence based on a list

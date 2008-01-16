@@ -7,7 +7,6 @@
 
 #ifndef MEMGFX_H
 #include "memgfx.h"
-#include "hash.h"
 #endif
 
 struct vGfx

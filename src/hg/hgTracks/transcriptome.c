@@ -13,11 +13,11 @@
 #include "bed.h"
 #include "wigCommon.h"
 
-static char const rcsid[] = "$Id: transcriptome.c,v 1.8 2007/06/14 22:56:38 aamp Exp $";
+static char const rcsid[] = "$Id: transcriptome.c,v 1.8.28.1 2008/01/16 07:00:44 markd Exp $";
 
 
 
-static Color affyTransfragColor(struct track *tg, void *item, struct vGfx *vg)
+static Color affyTransfragColor(struct track *tg, void *item, struct hvGfx *hvg)
 /* Color for an affyTransfrag item. Different colors are returned depending
    on score. 
    0 - Passes all filters
@@ -35,8 +35,8 @@ struct bed *bed = item;
 if(cleanCol == MG_WHITE)
     {
     cleanCol = tg->ixColor;
-    blatCol = vgFindColorIx(vg, 100, 100, 160);
-    pseudoCol = vgFindColorIx(vg, 190, 190, 230);
+    blatCol = hvGfxFindColorIx(hvg, 100, 100, 160);
+    pseudoCol = hvGfxFindColorIx(hvg, 190, 190, 230);
     }
 
 switch(bed->score) 
@@ -104,7 +104,7 @@ tg->itemColor = affyTransfragColor;
 tg->loadItems = affyTransfragsLoad;
 }
 
-static Color affyTxnPhase2ItemColor(struct track *tg, void *item, struct vGfx *vg)
+static Color affyTxnPhase2ItemColor(struct track *tg, void *item, struct hvGfx *hvg)
 /* Color for an affyTransfrag item. Different colors are returned depending
    on name. 
    0 - Passes all filters
@@ -122,8 +122,8 @@ struct bed *bed = item;
 if(cleanCol == MG_WHITE)
     {
     cleanCol = tg->ixColor;
-    blatCol = vgFindColorIx(vg, 100, 100, 160);
-    pseudoCol = vgFindColorIx(vg, 190, 190, 230);
+    blatCol = hvGfxFindColorIx(hvg, 100, 100, 160);
+    pseudoCol = hvGfxFindColorIx(hvg, 190, 190, 230);
     }
 
 switch(bed->name[0]) 
@@ -143,7 +143,7 @@ return tg->ixColor;
 }
 
 static void affyTxnPhase2DrawLeftLabels(struct track *tg, int seqStart, int seqEnd,
-				 struct vGfx *vg, int xOff, int yOff, int width, int height, 
+				 struct hvGfx *hvg, int xOff, int yOff, int width, int height, 
 				 boolean withCenterLabels, MgFont *font,
 				 Color color, enum trackVisibility vis)
 {
@@ -151,7 +151,7 @@ static void affyTxnPhase2DrawLeftLabels(struct track *tg, int seqStart, int seqE
 }
 
 static void affyTxnPhase2BedDrawLeftLabels(struct track *track, int seqStart, int seqEnd,
-				    struct vGfx *vg, int xOff, int yOff, int width, int height,
+				    struct hvGfx *hvg, int xOff, int yOff, int width, int height,
 				    boolean withCenterLabels, MgFont *font, Color color,
 				    enum trackVisibility vis)
 /* Draw the left label. Simple as we draw the name centered in the
@@ -170,11 +170,11 @@ if(track->limitedVis == tvHide)
    name on left side centered vertically. */
 if (withCenterLabels)
     yOff += fontHeight;
-vgSetClip(vg, leftLabelX, yOff, leftLabelWidth, tHeight);
-vgTextRight(vg, leftLabelX, yOff+centerLabel, leftLabelWidth-1, 
+hvGfxSetClip(hvg, leftLabelX, yOff, leftLabelWidth, tHeight);
+hvGfxTextRight(hvg, leftLabelX, yOff+centerLabel, leftLabelWidth-1, 
 	    track->lineHeight, labelColor, font, 
 	    track->shortLabel);
-vgUnclip(vg);    
+hvGfxUnclip(hvg);    
 }
 
 static char *affyTxnP2ItemName(struct track *track, void *item)

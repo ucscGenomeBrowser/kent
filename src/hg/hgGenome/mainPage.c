@@ -18,7 +18,7 @@
 #include "hgColors.h"
 #include "trackLayout.h"
 #include "chromInfo.h"
-#include "vGfx.h"
+#include "hvGfx.h"
 #include "genoLay.h"
 #include "cytoBand.h"
 #include "hCytoBand.h"
@@ -30,7 +30,7 @@
 #include "hgGenome.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.23 2007/11/16 14:52:55 aamp Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.23.6.1 2008/01/16 07:00:45 markd Exp $";
 
 
 static char *allColors[] = {
@@ -55,7 +55,7 @@ if (color == NULL) color = defaultColors[0][0];
 return color;
 }
 
-Color colorFromAscii(struct vGfx *vg, char *asciiColor)
+Color colorFromAscii(struct hvGfx *hvg, char *asciiColor)
 /* Get color index for a named color. */
 {
 if (sameWord("red", asciiColor))
@@ -63,13 +63,13 @@ if (sameWord("red", asciiColor))
 else if (sameWord("blue", asciiColor))
     return MG_BLUE;
 else if (sameWord("yellow", asciiColor))
-    return vgFindColorIx(vg, 220, 220, 0);
+    return hvGfxFindColorIx(hvg, 220, 220, 0);
 else if (sameWord("purple", asciiColor))
-    return vgFindColorIx(vg, 150, 0, 200);
+    return hvGfxFindColorIx(hvg, 150, 0, 200);
 else if (sameWord("orange", asciiColor))
-    return vgFindColorIx(vg, 230, 120, 0);
+    return hvGfxFindColorIx(hvg, 230, 120, 0);
 else if (sameWord("green", asciiColor))
-    return vgFindColorIx(vg, 0, 180, 0);
+    return hvGfxFindColorIx(hvg, 0, 180, 0);
 else if (sameWord("gray", asciiColor))
     return MG_GRAY;
 else
@@ -78,7 +78,7 @@ else
 
 /* Page drawing stuff. */
 
-void drawChromGraph(struct vGfx *vg, struct sqlConnection *conn, 
+void drawChromGraph(struct hvGfx *hvg, struct sqlConnection *conn, 
 	struct genoLay *gl, char *chromGraph, int yOff, int height, Color color,
 	boolean leftLabel, boolean rightLabel, boolean firstInRow)
 /* Draw chromosome graph on all chromosomes in layout at given
@@ -93,7 +93,7 @@ if (gg != NULL)
     struct chromGraphSettings *cgs = gg->settings;
     int maxGapToFill = cgs->maxGapToFill;
     static struct rgbColor missingDataColor = { 180, 180, 120};
-    Color missingColor = vgFindRgb(vg, &missingDataColor);
+    Color missingColor = hvGfxFindRgb(hvg, &missingDataColor);
     double pixelsPerBase = 1.0/gl->basesPerPixel;
     double gMin = cgs->minVal, gMax = cgs->maxVal, gScale;
     gScale = height/(gMax-gMin);
@@ -102,7 +102,7 @@ if (gg != NULL)
     if (leftLabel)
         {
 	static struct rgbColor guidelineColor = { 220, 220, 255};
-	Color lightBlue = vgFindRgb(vg, &guidelineColor);
+	Color lightBlue = hvGfxFindRgb(hvg, &guidelineColor);
 	struct slRef *ref;
 	struct genoLayChrom *chrom;
 	int rightX = gl->picWidth - gl->rightLabelWidth - gl->margin;
@@ -115,13 +115,13 @@ if (gg != NULL)
 	    for (ref = gl->leftList; ref != NULL; ref = ref->next)
 		{
 		chrom = ref->val;
-		vgBox(vg, leftX, y + chrom->y, width, 1, lightBlue);
+		hvGfxBox(hvg, leftX, y + chrom->y, width, 1, lightBlue);
 		}
 	    ref = gl->bottomList;
 	    if (ref != NULL)
 		{
 		chrom = ref->val;
-		vgBox(vg, leftX, y + chrom->y, width, 1, lightBlue);
+		hvGfxBox(hvg, leftX, y + chrom->y, width, 1, lightBlue);
 		}
 	    }
 	}
@@ -140,7 +140,7 @@ if (gg != NULL)
 	    if (chromGraphBinNextVal(cgb))
 	        {
 		/* Set clipping so can't scribble outside of box. */
-		vgSetClip(vg, chromX, chromY, chrom->width+1, chrom->height);
+		hvGfxSetClip(hvg, chromX, chromY, chrom->width+1, chrom->height);
 
 		/* Handle first point as special case here, so don't
 		 * have to test for first point in inner loop. */
@@ -155,13 +155,13 @@ if (gg != NULL)
 		else if (y > maxY) y = maxY;
 
 		struct pscmGfx *pscm = NULL;
-		if (vg->pixelBased)
+		if (hvg->pixelBased)
 		    {
-    		    vgDot(vg, x, y, color);
+    		    hvGfxDot(hvg, x, y, color);
 		    }
 		else
 		    {
-		    pscm = (struct pscmGfx *)vg->data;
+		    pscm = (struct pscmGfx *)hvg->vg->data;
 		    pscmSetColor(pscm, color);
 		    psFillEllipse(pscm->ps, x, y, 0.01, 0.01);
 		    psSetLineWidth(pscm->ps, 0.01);
@@ -173,7 +173,7 @@ if (gg != NULL)
 		    {
 		    start = cgb->chromStart;
 		    x = pixelsPerBase*start + chromX;
-		    if (vg->pixelBased)
+		    if (hvg->pixelBased)
 			x = (int) x;
 		    y = (height - ((cgb->val - gMin)*gScale)) + chromY+yOff;
 		    if (y < minY) y = minY;
@@ -182,8 +182,8 @@ if (gg != NULL)
 		        {
 			if (start - lastStart <= maxGapToFill)
 			    {
-			    if (vg->pixelBased)
-				vgLine(vg, lastX, lastY, x, y, color);
+			    if (hvg->pixelBased)
+				hvGfxLine(hvg, lastX, lastY, x, y, color);
 			    else
 				{
 				pscmSetColor(pscm, color);
@@ -196,11 +196,11 @@ if (gg != NULL)
 			        {
 				int width = x - lastX - 1;
 				if (width > 0)
-				    vgBox(vg, lastX+1, minY, width, height, missingColor);
+				    hvGfxBox(hvg, lastX+1, minY, width, height, missingColor);
 				}
-			    if (vg->pixelBased)
+			    if (hvg->pixelBased)
 				{
-				vgDot(vg, x, y, color);
+				hvGfxDot(hvg, x, y, color);
 				}
 			    else
 				{
@@ -214,12 +214,12 @@ if (gg != NULL)
 		    lastStart = start;
 		    }
 
-		if (!vg->pixelBased)
+		if (!hvg->pixelBased)
 		    {
 		    psSetLineWidth(pscm->ps, 1);
 		    }
 
-		vgUnclip(vg);
+		hvGfxUnclip(hvg);
 		}
 	    }
 	else
@@ -241,7 +241,7 @@ if (gg != NULL)
 	int fontPixelHeight = mgFontPixelHeight(gl->font);
 	for (i=0; i<gl->lineCount; ++i)
 	    {
-	    vgSetClip(vg, 0, lineY, gl->picWidth, gl->lineHeight);
+	    hvGfxSetClip(hvg, 0, lineY, gl->picWidth, gl->lineHeight);
 	    for (j=0; j< cgs->linesAtCount; ++j)
 	        {
 		double lineAt = cgs->linesAt[j];
@@ -252,30 +252,30 @@ if (gg != NULL)
 		safef(label, sizeof(label), "%g", lineAt);
 		if (leftLabel)
 		    {
-		    vgBox(vg, gl->margin + gl->leftLabelWidth - tickWidth-1, y,
+		    hvGfxBox(hvg, gl->margin + gl->leftLabelWidth - tickWidth-1, y,
 		    	tickWidth, 1, color);
 		    if (textTop >= lineY && textBottom < lineY + height)
 			{
-			vgTextRight(vg, gl->margin, textTop, 
+			hvGfxTextRight(hvg, gl->margin, textTop, 
 			    gl->leftLabelWidth-spaceWidth, fontPixelHeight,
 			    color, gl->font, label);
 			}
 		    }
 		if (rightLabel)
 		    {
-		    vgBox(vg, 
+		    hvGfxBox(hvg, 
 		    	gl->picWidth - gl->margin - gl->rightLabelWidth+1, 
 		    	y, tickWidth, 1, color);
 		    if (textTop >= lineY && textBottom < lineY + height)
 			{
-			vgText(vg,
+			hvGfxText(hvg,
 			    gl->picWidth - gl->margin - gl->rightLabelWidth + spaceWidth,
 			    textTop, color, gl->font, label);
 			}
 		    }
 		}
 	    lineY += gl->lineHeight;
-	    vgUnclip(vg);
+	    hvGfxUnclip(hvg);
 	    }
 	}
     }
@@ -285,7 +285,7 @@ void genomeGif(struct sqlConnection *conn, struct genoLay *gl,
 	int graphRows, int graphCols, int oneRowHeight, char *psOutput)
 /* Create genome GIF file and HTML that includes it. */
 {
-struct vGfx *vg;
+struct hvGfx *hvg;
 struct tempName gifTn;
 Color shadesOfGray[10];
 int maxShade = ArraySize(shadesOfGray)-1;
@@ -297,25 +297,25 @@ int i,j;
 
 if (psOutput)
     {
-    vg = vgOpenPostScript(gl->picWidth, gl->picHeight, psOutput);
+    hvg = hvGfxOpenPostScript(gl->picWidth, gl->picHeight, 0, psOutput);
     }
 else
     {
 
     /* Create gif file and make reference to it in html. */
     trashDirFile(&gifTn, "hgg", "ideo", ".gif");
-    vg = vgOpenGif(gl->picWidth, gl->picHeight, gifTn.forCgi);
+    hvg = hvGfxOpenGif(gl->picWidth, gl->picHeight, 0, gifTn.forCgi);
 
     hPrintf("<INPUT TYPE=IMAGE SRC=\"%s\" BORDER=1 WIDTH=%d HEIGHT=%d NAME=\"%s\">",
 		gifTn.forHtml, gl->picWidth, gl->picHeight, hggClick);
     }
 
 /* Get our grayscale. */
-hMakeGrayShades(vg, shadesOfGray, maxShade);
+hMakeGrayShades(hvg, shadesOfGray, maxShade);
 
 /* Draw the labels and then the chromosomes. */
-genoLayDrawChromLabels(gl, vg, MG_BLACK);
-genoLayDrawBandedChroms(gl, vg, database, conn, 
+genoLayDrawChromLabels(gl, hvg, MG_BLACK);
+genoLayDrawBandedChroms(gl, hvg, database, conn, 
 	shadesOfGray, maxShade, MG_BLACK);
 
 /* Draw chromosome graphs. */
@@ -327,8 +327,8 @@ for (i=0; i<graphRows; ++i)
 	char *graph = graphSourceAt(i,j);
 	if (graph != NULL && graph[0] != 0)
 	    {
-	    Color color = colorFromAscii(vg, graphColorAt(i,j));
-	    drawChromGraph(vg, conn, gl, graph, 
+	    Color color = colorFromAscii(hvg, graphColorAt(i,j));
+	    drawChromGraph(hvg, conn, gl, graph, 
 		    gl->betweenChromOffsetY + yOffset, 
 		    innerHeight,  color, j==0, j==1, firstInRow);
 	    firstInRow = FALSE;
@@ -337,11 +337,11 @@ for (i=0; i<graphRows; ++i)
     yOffset += oneRowHeight;
     }
 
-vgBox(vg, 0, 0, gl->picWidth, 1, MG_GRAY);
-vgBox(vg, 0, gl->picHeight-1, gl->picWidth, 1, MG_GRAY);
-vgBox(vg, 0, 0, 1, gl->picHeight, MG_GRAY);
-vgBox(vg, gl->picWidth-1, 0, 1, gl->picHeight, MG_GRAY);
-vgClose(&vg);
+hvGfxBox(hvg, 0, 0, gl->picWidth, 1, MG_GRAY);
+hvGfxBox(hvg, 0, gl->picHeight-1, gl->picWidth, 1, MG_GRAY);
+hvGfxBox(hvg, 0, 0, 1, gl->picHeight, MG_GRAY);
+hvGfxBox(hvg, gl->picWidth-1, 0, 1, gl->picHeight, MG_GRAY);
+hvGfxClose(&hvg);
 }
 
 void graphDropdown(struct sqlConnection *conn, char *varName, char *curVal, char *js)

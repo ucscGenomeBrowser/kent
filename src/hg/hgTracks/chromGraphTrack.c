@@ -8,10 +8,10 @@
 #include "trackDb.h"
 #include "hdb.h"
 #include "hgTracks.h"
-#include "vGfx.h"
+#include "hvGfx.h"
 #include "chromGraph.h"
 
-Color colorFromAscii(struct vGfx *vg, char *asciiColor)
+Color colorFromAscii(struct hvGfx *hvg, char *asciiColor)
 /* Get color index for a named color. */
 /* Copy/pasted from hgGenome/mainPage.c ... should be in a library */
 /* somewhere! */
@@ -21,20 +21,20 @@ if (sameWord("red", asciiColor))
 else if (sameWord("blue", asciiColor))
     return MG_BLUE;
 else if (sameWord("yellow", asciiColor))
-    return vgFindColorIx(vg, 220, 220, 0);
+    return hvGfxFindColorIx(hvg, 220, 220, 0);
 else if (sameWord("purple", asciiColor))
-    return vgFindColorIx(vg, 150, 0, 200);
+    return hvGfxFindColorIx(hvg, 150, 0, 200);
 else if (sameWord("orange", asciiColor))
-    return vgFindColorIx(vg, 230, 120, 0);
+    return hvGfxFindColorIx(hvg, 230, 120, 0);
 else if (sameWord("green", asciiColor))
-    return vgFindColorIx(vg, 0, 180, 0);
+    return hvGfxFindColorIx(hvg, 0, 180, 0);
 else if (sameWord("gray", asciiColor))
     return MG_GRAY;
 else
     return MG_BLACK;
 }
 
-static Color cgColorLikeHgGenome(struct track *tg, struct vGfx *vg)
+static Color cgColorLikeHgGenome(struct track *tg, struct hvGfx *hvg)
 /* Search the cart variables and use the colors corresponding to the hgGenome */
 /* graph. */
 {
@@ -63,12 +63,12 @@ if (graphCartVarName)
     freeMem(colorCartVarName);
     }
 hashElFreeList(&matchingCartSettings);
-ret = colorFromAscii(vg, colorCartVarSetting);
+ret = colorFromAscii(hvg, colorCartVarSetting);
 return ret;
 }
 
 static void cgDrawEither(struct track *tg, int seqStart, int seqEnd,
-        struct vGfx *vg, int xOff, int yOff, int width, 
+        struct hvGfx *hvg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis,
 	char *binFileName)
 /* Draw chromosome graph - either built in or not. */
@@ -82,17 +82,17 @@ double minVal = cgs->minVal;
 double yScale = (height-1)/(cgs->maxVal - minVal);
 double xScale = scaleForPixels(width);
 char *encodedTrack = cgiEncode(tg->mapName);
-Color myColor = cgColorLikeHgGenome(tg, vg);
+Color myColor = cgColorLikeHgGenome(tg, hvg);
 
 /* Draw background lines in full mode. */
 if (vis == tvFull && cgs->linesAtCount != 0)
     {
     int i;
-    Color lightBlue = vgFindRgb(vg, &guidelineColor);
+    Color lightBlue = hvGfxFindRgb(hvg, &guidelineColor);
     for (i=0; i<cgs->linesAtCount; ++i)
         {
 	y = height - 1 - (cgs->linesAt[i] - minVal)*yScale + yOff;
-	vgBox(vg, xOff, y, width, 1, lightBlue);
+	hvGfxBox(hvg, xOff, y, width, 1, lightBlue);
 	}
     }
 
@@ -115,10 +115,10 @@ if (binFileName)
 		    if (pos - lastPos <= maxGapToFill)
 			{
 			if (llastX != lastX || llastY != lastY || lastX != x || lastY != y)
-			    vgLine(vg, lastX, lastY, x, y, myColor);
+			    hvGfxLine(hvg, lastX, lastY, x, y, myColor);
 			}
 		    else
-			vgDot(vg, x, y, myColor);
+			hvGfxDot(hvg, x, y, myColor);
 		    }
 		llastX = lastX;
 		llastY = lastY;
@@ -159,10 +159,10 @@ else
 	    if (pos - lastPos <= maxGapToFill)
 		{
 		if (llastX != lastX || llastY != lastY || lastX != x || lastY != y)
-		    vgLine(vg, lastX, lastY, x, y, myColor);
+		    hvGfxLine(hvg, lastX, lastY, x, y, myColor);
 		}
 	    else
-		vgDot(vg, x, y, myColor);
+		hvGfxDot(hvg, x, y, myColor);
 	    }
 	llastX = lastX;
 	llastY = lastY;
@@ -187,20 +187,20 @@ hPrintf("HREF=\"%s&o=%d&t=%d&g=%s&c=%s&l=%d&r=%d&db=%s&pix=%d\">\n",
 }
 
 static void cgDrawItems(struct track *tg, int seqStart, int seqEnd,
-        struct vGfx *vg, int xOff, int yOff, int width, 
+        struct hvGfx *hvg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw chromosome graph for built-in track. */
 {
-cgDrawEither(tg, seqStart, seqEnd, vg, xOff, yOff, width,
+cgDrawEither(tg, seqStart, seqEnd, hvg, xOff, yOff, width,
 	font, color, vis, NULL);
 }
 
 static void cgDrawItemsCt(struct track *tg, int seqStart, int seqEnd,
-        struct vGfx *vg, int xOff, int yOff, int width, 
+        struct hvGfx *hvg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw chromosome graph for customTrack. */
 {
-cgDrawEither(tg, seqStart, seqEnd, vg, xOff, yOff, width,
+cgDrawEither(tg, seqStart, seqEnd, hvg, xOff, yOff, width,
 	font, color, vis, trackDbRequiredSetting(tg->tdb, "binaryFile"));
 }
 
@@ -224,7 +224,7 @@ switch (vis)
 return tg->height;
 }
 
-void wrapTextAndCenter(struct vGfx *vg, int xOff, int yOff, int width,
+void wrapTextAndCenter(struct hvGfx *hvg, int xOff, int yOff, int width,
 	int height,  MgFont *font, Color color, char *text)
 /* Try and word-wrap text into box more or less. */
 {
@@ -238,13 +238,13 @@ yUsed = lineCount * fontHeight;
 y = (height - yUsed)/2 + yOff;
 for (word = wordList; word != NULL; word = word->next)
     {
-    vgText(vg, xOff, y, color, font, word->name);
+    hvGfxText(hvg, xOff, y, color, font, word->name);
     y += fontHeight;
     }
 }
 
 void cgLeftLabels(struct track *tg, int seqStart, int seqEnd,
-	struct vGfx *vg, int xOff, int yOff, int width, int height,
+	struct hvGfx *hvg, int xOff, int yOff, int width, int height,
 	boolean withCenterLabels, MgFont *font, Color color,
 	enum trackVisibility vis)
 /* Draw labels to the left. */
@@ -252,7 +252,7 @@ void cgLeftLabels(struct track *tg, int seqStart, int seqEnd,
 struct chromGraphSettings *cgs = tg->customPt;
 if (vis == tvDense || cgs->linesAtCount == 0)
     {
-    vgTextRight(vg, xOff, yOff, width - 1, height,
+    hvGfxTextRight(hvg, xOff, yOff, width - 1, height,
 	color, font, tg->shortLabel);
     }
 else
@@ -277,13 +277,13 @@ else
 	double val = cgs->linesAt[i];
 	int y = realHeight - 1 - (val - minVal)*yScale + realYoff;
 	char numText[16];
-	vgBox(vg, xOff + width - tickSize, y, tickSize, 1, color);
+	hvGfxBox(hvg, xOff + width - tickSize, y, tickSize, 1, color);
 	safef(numText, sizeof(numText), "%g", val);
-	vgTextRight(vg, xOff, y - tl.fontHeight+2, 
+	hvGfxTextRight(hvg, xOff, y - tl.fontHeight+2, 
 		width - numPos, tl.fontHeight,
 		color, font, numText);
 	}
-    wrapTextAndCenter(vg, xOff+1, yOff, width*5*tl.nWidth, height,
+    wrapTextAndCenter(hvg, xOff+1, yOff, width*5*tl.nWidth, height,
     	font, color, tg->shortLabel);
     }
 }

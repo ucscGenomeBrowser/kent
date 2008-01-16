@@ -4,12 +4,8 @@
 #ifndef HCYTOBAND_H
 #define HCYTOBAND_H
 
-#ifndef MEMGFX_H
-#include "memgfx.h"
-#endif
-
-#ifndef VGFX_H
-#include "vGfx.h"
+#ifndef HVGFX_H
+#include "hvGfx.h"
 #endif
 
 #define hCytoBandDbIsDmel(db) (startsWith("dm", db))
@@ -18,11 +14,11 @@
 #define hCytoBandIsDmel() (hCytoBandDbIsDmel(hGetDb()))
 /* We have to treat drosophila differently in some places. */
 
-Color hCytoBandColor(struct cytoBand *band, struct vGfx *vg, boolean isDmel,
+Color hCytoBandColor(struct cytoBand *band, struct hvGfx *hvg, boolean isDmel,
 	Color aColor, Color bColor, Color *shades, int maxShade);
 /* Return appropriate color for band. */
 
-void hCytoBandDrawAt(struct cytoBand *band, struct vGfx *vg,
+void hCytoBandDrawAt(struct cytoBand *band, struct hvGfx *hvg,
 	int x, int y, int width, int height, boolean isDmel,
 	MgFont *font, int fontPixelHeight, Color aColor, Color bColor,
 	Color *shades, int maxShade);
@@ -32,10 +28,10 @@ void hCytoBandDrawAt(struct cytoBand *band, struct vGfx *vg,
 char *hCytoBandName(struct cytoBand *band, boolean isDmel);
 /* Return name of band.  Returns a static buffer, so don't free result. */
 
-Color hCytoBandCentromereColor(struct vGfx *vg);
+Color hCytoBandCentromereColor(struct hvGfx *hvg);
 /* Get the color used traditionally to draw centromere */
 
-void hCytoBandDrawCentromere(struct vGfx *vg, int x, int y, 
+void hCytoBandDrawCentromere(struct hvGfx *hvg, int x, int y, 
 	int width, int height, Color bgColor, Color fgColor);
 /* Draw the centromere. */
 

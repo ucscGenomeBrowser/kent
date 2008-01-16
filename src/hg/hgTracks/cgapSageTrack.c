@@ -289,7 +289,7 @@ tg->items = itemList;
 static Color cgapShadesOfRed[10+1];
 /* This will go from white to darker red. */
 
-static Color cgapSageItemColor(struct track *tg, void *item, struct vGfx *vg)
+static Color cgapSageItemColor(struct track *tg, void *item, struct hvGfx *hvg)
 /* Return color to draw CGAP SAGE item */
 {
 struct linkedFeatures *thisItem = item;
@@ -298,14 +298,14 @@ return cgapShadesOfRed[thisItem->grayIx];
 
 void cgapSageDrawItems(struct track *tg, 
         int seqStart, int seqEnd,
-        struct vGfx *vg, int xOff, int yOff, int width, 
+        struct hvGfx *hvg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Initialize the colors, then do the normal drawing. */
 {
 static struct rgbColor lowerColor = {205, 191, 191};
 static struct rgbColor cgapRed = {205, 0, 0};
-vgMakeColorGradient(vg, &lowerColor, &cgapRed, 10, cgapShadesOfRed);
-genericDrawItems(tg, seqStart, seqEnd, vg, xOff, yOff, width, font, color, vis);
+hvGfxMakeColorGradient(hvg, &lowerColor, &cgapRed, 10, cgapShadesOfRed);
+genericDrawItems(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis);
 }
 
 void cgapSageMethods(struct track *tg)

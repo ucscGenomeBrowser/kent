@@ -65,11 +65,11 @@ double preDrawAutoScale(struct preDrawElement *preDraw, int preDrawZero,
 /*	if autoScaling, scan preDraw array and determine limits */
 
 Color * allocColorArray(struct preDrawElement *preDraw, int width,
-    int preDrawZero, char *colorTrack, struct track *tg, struct vGfx *vg);
+    int preDrawZero, char *colorTrack, struct track *tg, struct hvGfx *hvg);
 /*	allocate and fill in a coloring array based on another track */
 
 void graphPreDraw(struct preDrawElement *preDraw, int preDrawZero, int width,
-    struct track *tg, struct vGfx *vg, int xOff, int yOff,
+    struct track *tg, struct hvGfx *hvg, int xOff, int yOff,
     double graphUpperLimit, double graphLowerLimit, double graphRange,
     double epsilon, Color *colorArray, enum trackVisibility vis,
     enum wiggleGraphOptEnum lineBar);
@@ -78,13 +78,13 @@ void graphPreDraw(struct preDrawElement *preDraw, int preDrawZero, int width,
 void drawZeroLine(enum trackVisibility vis,
     enum wiggleGridOptEnum horizontalGrid,
     double graphUpperLimit, double graphLowerLimit,
-    struct vGfx *vg, int xOff, int yOff, int width, int lineHeight);
+    struct hvGfx *hvg, int xOff, int yOff, int width, int lineHeight);
 /*	draw a line at y=0 on the graph	*/
 
 void drawArbitraryYLine(enum trackVisibility vis,
     enum wiggleGridOptEnum horizontalGrid,
     double graphUpperLimit, double graphLowerLimit,
-    struct vGfx *vg, int xOff, int yOff, int width, int lineHeight,
+    struct hvGfx *hvg, int xOff, int yOff, int width, int lineHeight,
     double yLineMark, double graphRange, enum wiggleYLineMarkEnum yLineOnOff);
 /*	draw a line at y=yLineMark on the graph	*/
 
@@ -93,7 +93,7 @@ void wigMapSelf(struct track *tg, int seqStart, int seqEnd,
 /*	if self mapping, create the mapping box	*/
 
 void wigLeftLabels(struct track *tg, int seqStart, int seqEnd,
-	struct vGfx *vg, int xOff, int yOff, int width, int height,
+	struct hvGfx *hvg, int xOff, int yOff, int width, int height,
 	boolean withCenterLabels, MgFont *font, Color color,
 	enum trackVisibility vis);
 /*	drawing left labels	*/

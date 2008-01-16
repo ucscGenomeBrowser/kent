@@ -7,7 +7,7 @@ char *encodeErgeName(struct track *tg, void *item);
 void encodeErgeMethods(struct track *tg);
 /* setup special methods for ENCODE dbERGE II tracks */
 
-Color encodeStanfordNRSFColor(struct track *tg, void *item, struct vGfx *vg);
+Color encodeStanfordNRSFColor(struct track *tg, void *item, struct hvGfx *hvg);
 /* different color for negative strand */
 
 void encodeStanfordNRSFMethods(struct track *tg);
@@ -19,7 +19,7 @@ void loadEncodeRna(struct track *tg);
 void freeEncodeRna(struct track *tg);
 /* Free up encodeRna items. */
 
-Color encodeRnaColor(struct track *tg, void *item, struct vGfx *vg);
+Color encodeRnaColor(struct track *tg, void *item, struct hvGfx *hvg);
 /* Return color of encodeRna track item. */
 
 char *encodeRnaName(struct track *tg, void *item);

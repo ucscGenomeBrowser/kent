@@ -37,7 +37,7 @@ freeMem(tempstr2);
 return(ret);
 }
 
-void samplePrintYAxisLabel( struct vGfx *vg, int y, struct track *track, char *labelString,
+void samplePrintYAxisLabel( struct hvGfx *hvg, int y, struct track *track, char *labelString,
         double min0, double max0 )
 /*print a label for a horizontal y-axis line*/
 {
@@ -50,7 +50,7 @@ int inWid = insideX-gfxBorder*3;
 tmp = -whichSampleBin( atof(labelString), min0, max0, 1000 );
 tmp = (int)((double)ymin+((double)tmp)*(double)track->heightPer/1000.0+(double)track->heightPer)-fontHeight/2.0;
 if( !withCenterLabels ) tmp -= fontHeight;
-vgTextRight(vg, gfxBorder, tmp, inWid-1, itemHeight0, track->ixColor, tl.font, labelString );
+hvGfxTextRight(hvg, gfxBorder, tmp, inWid-1, itemHeight0, track->ixColor, tl.font, labelString );
 }
 
 
@@ -185,7 +185,7 @@ else
 }
 
 
-static void drawWiggleHorizontalLine( struct vGfx *vg, 
+static void drawWiggleHorizontalLine( struct hvGfx *hvg, 
 	double where, double min0, double max0, 
 	int binCount, int y, double hFactor, int heightPer, 
 	Color lineColor )
@@ -196,12 +196,12 @@ int bin;
 double y1;
 bin = -whichSampleBin( where, min0, max0, binCount);
 y1 = (int)((double)y+((double)bin)*hFactor+(double)heightPer);
-vgBox( vg, 0, y1, vg->width, 1, lineColor );
+hvGfxBox(hvg, 0, y1, hvg->width, 1, lineColor);
 }
 
 static void wiggleLinkedFeaturesDraw(struct track *tg, 
     int seqStart, int seqEnd,
-    struct vGfx *vg, int xOff, int yOff, int width, 
+    struct hvGfx *hvg, int xOff, int yOff, int width, 
     MgFont *font, Color color, enum trackVisibility vis)
 /* Currently this routine is adapted from Terry's 
  * linkedFeatureSeriesDraw() routine.
@@ -261,7 +261,7 @@ double minRange, maxRange;
 double minRangeCutoff, maxRangeCutoff;
 
 
-Color gridColor = vgFindRgb(vg, &guidelineColor); /* for horizontal lines*/
+Color gridColor = hvGfxFindRgb(hvg, &guidelineColor); /* for horizontal lines*/
 
 lf=tg->items;    
 if(lf==NULL) return;
@@ -332,7 +332,7 @@ else if( tg->minRange == 0 && tg->maxRange == 8 )    //range for all L-score tra
         min0 = whichSampleNum( minRange, tg->minRange, tg->maxRange, binCount );
         max0 = whichSampleNum( maxRange, tg->minRange, tg->maxRange,  binCount );
         for( i=1; i<=6; i++ )
-            drawWiggleHorizontalLine( vg, (double)i, min0, max0,
+            drawWiggleHorizontalLine(hvg, (double)i, min0, max0,
 	            binCount, y, hFactor, heightPer, gridColor );
         }
     }
@@ -364,7 +364,7 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
 	    	minRange, maxRange, binCount );
 	    y1 = (int)((double)y+((double)bin)* hFactor+(double)heightPer);
 	    if( gapPrevX >= 0 )
-		drawScaledBox(vg, sampleX, gapPrevX, scale, 
+		drawScaledBox(hvg, sampleX, gapPrevX, scale, 
 			xOff, (int)y1, (int)(.10*heightPer), shadesOfGray[2]);
 	    gapPrevX = sampleX;
 	    prevX = -1; /*connect next point with gray bar too*/
@@ -393,9 +393,9 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
 		    /*don't interpolate over large gaps*/
 		    {
 		    if (fill)
-			vgFillUnder(vg, x1,y1, x2,y2, ybase, bColor);
+			hvGfxFillUnder(hvg, x1,y1, x2,y2, ybase, bColor);
 		    else
-			vgLine(vg, x1,y1, x2,y2, color);
+			hvGfxLine(hvg, x1,y1, x2,y2, color);
 		    }
 		}
 	    }
@@ -405,9 +405,9 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
 	if( x1 >= 0 && x1 <= tl.picWidth )
 	{
 	/* Draw the points themselves*/
-	drawScaledBox(vg, sampleX, sampleX+1, scale, xOff, (int)y1-1, 3, color);
+	drawScaledBox(hvg, sampleX, sampleX+1, scale, xOff, (int)y1-1, 3, color);
 	if( fill )
-		drawScaledBox(vg, sampleX, sampleX+1, scale, xOff, (int)y1+2, 
+		drawScaledBox(hvg, sampleX, sampleX+1, scale, xOff, (int)y1+2, 
 			      ybase-y1-2, bColor);
 	}
 

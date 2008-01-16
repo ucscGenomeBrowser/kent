@@ -66,7 +66,7 @@ return frag->frag;
 }
 
 static void goldDrawDense(struct track *tg, int seqStart, int seqEnd,
-        struct vGfx *vg, int xOff, int yOff, int width, 
+        struct hvGfx *hvg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw golden path items. */
 {
@@ -82,8 +82,8 @@ boolean isFull = (vis == tvFull);
 Color brown = color;
 Color gold = tg->ixAltColor;
 Color pink = 0;
-Color pink1 = vgFindColorIx(vg, 240, 140, 140);
-Color pink2 = vgFindColorIx(vg, 240, 100, 100);
+Color pink1 = hvGfxFindColorIx(hvg, 240, 140, 140);
+Color pink2 = hvGfxFindColorIx(hvg, 240, 100, 100);
 int ix = 0;
 double scale = scaleForPixels(width);
 
@@ -95,7 +95,7 @@ if (!isFull)
 	{
 	if (!sameWord(gap->bridge, "no"))
 	    {
-	    drawScaledBox(vg, gap->chromStart, gap->chromEnd, scale, xOff, midY, 1, brown);
+	    drawScaledBox(hvg, gap->chromStart, gap->chromEnd, scale, xOff, midY, 1, brown);
 	    }
 	}
     }
@@ -110,7 +110,7 @@ for (frag = tg->items; frag != NULL; frag = frag->next)
     if (w < 1)
 	w = 1;
     if (sameString(frag->type, "A")) color = pink;
-    vgBox(vg, x1, y, w, heightPer, color);
+    hvGfxBox(hvg, x1, y, w, heightPer, color);
     if (isFull)
 	y += lineHeight;
     else if (baseWidth < 10000000)
@@ -129,23 +129,23 @@ for (frag = tg->items; frag != NULL; frag = frag->next)
 }
 
 static void goldDraw(struct track *tg, int seqStart, int seqEnd,
-        struct vGfx *vg, int xOff, int yOff, int width, 
+        struct hvGfx *hvg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw golden path items. */
 {
 if (vis == tvDense)
-    goldDrawDense(tg, seqStart, seqEnd, vg, xOff, yOff, width,
+    goldDrawDense(tg, seqStart, seqEnd, hvg, xOff, yOff, width,
     	font, color, vis);
 else
-    genericDrawItems(tg, seqStart, seqEnd, vg, xOff, yOff, width,
+    genericDrawItems(tg, seqStart, seqEnd, hvg, xOff, yOff, width,
     	font, color, vis);
 }
 
-static Color goldColor(struct track *tg, void *item, struct vGfx *vg)
+static Color goldColor(struct track *tg, void *item, struct hvGfx *hvg)
 /* Return color to draw known gene in. */
 {
 struct agpFrag *frag = item;
-Color pink = vgFindColorIx(vg, 240, 140, 140);
+Color pink = hvGfxFindColorIx(hvg, 240, 140, 140);
 Color color = (sameString(frag->type, "A") ? pink : tg->ixColor);
 
 return color;

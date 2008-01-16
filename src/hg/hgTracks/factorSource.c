@@ -29,7 +29,7 @@ return track->sourceRightPixels;
 }
 
 static void factorSourceDrawItemAt(struct track *track, void *item, 
-	struct vGfx *vg, int xOff, int y, 
+	struct hvGfx *hvg, int xOff, int y, 
 	double scale, MgFont *font, Color color, enum trackVisibility vis)
 /* Draw factorSource item at a particular position. */
 {
@@ -41,7 +41,7 @@ int x2 = round((double)((int)bed->chromEnd-winStart)*scale) + xOff;
 int w = x2-x1;
 if (w < 1)
     w = 1;
-vgBox(vg, x1, y, w, heightPer, color);
+hvGfxBox(hvg, x1, y, w, heightPer, color);
 
 /* Draw text to the right */
 if (vis == tvFull || vis == tvPack)
@@ -57,7 +57,7 @@ if (vis == tvFull || vis == tvPack)
 	    {
 	    int grayIx = grayInRange(score*100, 0, 100);
 	    int color = shadesOfGray[grayIx];
-	    vgTextCentered(vg, x, y, w, heightPer, color, font, label);
+	    hvGfxTextCentered(hvg, x, y, w, heightPer, color, font, label);
 	    x += mgFontStringWidth(font, label);
 	    }
 	}

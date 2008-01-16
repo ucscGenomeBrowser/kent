@@ -6,7 +6,7 @@
 #include "cutterTrack.h"
 
 void cuttersDrawAt(struct track *tg, void *item,
-	struct vGfx *vg, int xOff, int y, double scale, 
+	struct hvGfx *hvg, int xOff, int y, double scale, 
 	MgFont *font, Color color, enum trackVisibility vis)
 /* Draw the restriction enzyme at position. */
 {
@@ -15,7 +15,7 @@ int heightPer, x1, x2, w;
 struct trackDb *tdb = tg->tdb;
 int scoreMin, scoreMax;
 if (!zoomedToBaseLevel)
-    bedDrawSimpleAt(tg, item, vg, xOff, y, scale, font, color, vis);
+    bedDrawSimpleAt(tg, item, hvg, xOff, y, scale, font, color, vis);
 else 
     {
     heightPer = tg->heightPer;
@@ -23,7 +23,7 @@ else
     x2 = round((double)((int)bed->chromEnd-winStart)*scale) + xOff;
     scoreMin = atoi(trackDbSettingOrDefault(tdb, "scoreMin", "0"));
     scoreMax = atoi(trackDbSettingOrDefault(tdb, "scoreMax", "1000"));    
-    color = vgFindColorIx(vg, 0,0,0);
+    color = hvGfxFindColorIx(hvg, 0,0,0);
     w = x2-x1;
     if (w < 1)
 	w = 1;
@@ -40,7 +40,7 @@ else
 	int i, xH;
 	Color baseHighlight = getBlueColor();
 
-	baseHighlight = lighterColor(vg, baseHighlight);
+	baseHighlight = lighterColor(hvg, baseHighlight);
 	safef(query, sizeof(query), "select * from cutters where name=\'%s\'", s);
 	cut = cutterLoadByQuery(conn, query);
 	letterWidth = round(((double)w)/cut->size);
@@ -57,22 +57,22 @@ else
 	    }
 	if (strand == '+')
 	    {
-	    vgBox(vg, cuts[0], y - tickHeight, tickWidth, tickHeight, color);
-	    vgBox(vg, cuts[1], y + 2, tickWidth, tickHeight, color);	    
+	    hvGfxBox(hvg, cuts[0], y - tickHeight, tickWidth, tickHeight, color);
+	    hvGfxBox(hvg, cuts[1], y + 2, tickWidth, tickHeight, color);	    
 	    }
 	else if (strand == '-')
 	    {
-	    vgBox(vg, cuts[2], y - tickHeight, tickWidth, tickHeight, color);
-	    vgBox(vg, cuts[3], y + 2, tickWidth, tickHeight, color);	    	    
+	    hvGfxBox(hvg, cuts[2], y - tickHeight, tickWidth, tickHeight, color);
+	    hvGfxBox(hvg, cuts[3], y + 2, tickWidth, tickHeight, color);	    	    
 	    }
-	vgBox(vg, x1, y, w, 2, color);
+	hvGfxBox(hvg, x1, y, w, 2, color);
 	/* Draw highlight of non-N bases. */
 	xH = x1;
 	for (i = 0; i < strlen(cut->seq); i++)
 	    {
 	    char c = (strand == '+') ? cut->seq[i] : cut->seq[strlen(cut->seq)-i-1];
 	    if ((c != 'A') && (c != 'C') && (c != 'G') && (c != 'T'))
-		vgBox(vg, xH, y, letterWidth, 2, baseHighlight);
+		hvGfxBox(hvg, xH, y, letterWidth, 2, baseHighlight);
 	    xH += letterWidth;
 	    }
 	if (tg->drawName && vis != tvSquish)
@@ -81,8 +81,8 @@ else
 	    w = x2-x1;
 	    if (w > mgFontStringWidth(font, s))
 		{
-		Color textColor = vgContrastingColor(vg, color);
-		vgTextCentered(vg, x1, y, w, heightPer, textColor, font, s);
+		Color textColor = hvGfxContrastingColor(hvg, color);
+		hvGfxTextCentered(hvg, x1, y, w, heightPer, textColor, font, s);
 		}
 	    mapBoxHc(bed->chromStart, bed->chromEnd, x1, y, x2 - x1, heightPer,
 		     tg->mapName, tg->mapItemName(tg, bed), NULL);

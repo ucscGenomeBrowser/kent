@@ -4,8 +4,8 @@
 #ifndef HGTRACKS_H
 #define HGTRACKS_H
 
-#ifndef VGFX_H
-#include "vGfx.h"
+#ifndef HVGFX_H
+#include "hvGfx.h"
 #endif
 
 #ifndef HUI_H
@@ -90,11 +90,11 @@ struct track
     /* Return number of pixels needed to right of item for additional labeling. (Optional) */
 
     void (*drawItems)(struct track *tg, int seqStart, int seqEnd,
-	struct vGfx *vg, int xOff, int yOff, int width, 
+	struct hvGfx *hvg, int xOff, int yOff, int width, 
 	MgFont *font, Color color, enum trackVisibility vis);
     /* Draw item list, one per track. */
 
-    void (*drawItemAt)(struct track *tg, void *item, struct vGfx *vg, 
+    void (*drawItemAt)(struct track *tg, void *item, struct hvGfx *hvg, 
         int xOff, int yOff, double scale, 
 	MgFont *font, Color color, enum trackVisibility vis);
     /* Draw a single option.  This is optional, but if it's here
@@ -110,13 +110,13 @@ struct track
     void (*freeItems)(struct track *tg);
     /* Free item list. */
 
-    Color (*itemColor)(struct track *tg, void *item, struct vGfx *vg);
+    Color (*itemColor)(struct track *tg, void *item, struct hvGfx *hvg);
     /* Get color of item (optional). */
 
-    Color (*itemNameColor)(struct track *tg, void *item, struct vGfx *vg);
+    Color (*itemNameColor)(struct track *tg, void *item, struct hvGfx *hvg);
     /* Get color for the item's name (optional). */
 
-    Color (*itemLabelColor)(struct track *tg, void *item, struct vGfx *vg);
+    Color (*itemLabelColor)(struct track *tg, void *item, struct hvGfx *hvg);
     /* Get color for the item's label (optional). */
 
     void (*mapItem)(struct track *tg, void *item, 
@@ -170,7 +170,7 @@ struct track
     /* fill in left label drawing area */
     Color labelColor;   /* Fixed color for the track label (optional) */
     void (*drawLeftLabels)(struct track *tg, int seqStart, int seqEnd,
-	struct vGfx *vg, int xOff, int yOff, int width, int height, 
+	struct hvGfx *hvg, int xOff, int yOff, int width, int height, 
 	boolean withCenterLabels, MgFont *font,
 	Color color, enum trackVisibility vis);
 
@@ -348,8 +348,8 @@ extern Color shadesOfBlue[EXPR_DATA_SHADES];
 
 extern boolean exprBedColorsMade; /* Have the shades of Green, Red, and Blue been allocated? */
 extern int maxRGBShade;
-void makeRedGreenShades(struct vGfx *vg);
-void makeLoweShades(struct vGfx *vg);
+void makeRedGreenShades(struct hvGfx *hvg);
+void makeLoweShades(struct hvGfx *hvg);
 /* Allocate the  shades of Red, Green and Blue */
 
 /* used in MAF display */
@@ -416,7 +416,7 @@ double scaleForPixels(double pixelWidth);
 /* Return what you need to multiply bases by to
  * get to scale of pixel coordinates. */
 
-void drawScaledBox(struct vGfx *vg, int chromStart, int chromEnd, 
+void drawScaledBox(struct hvGfx *hvg, int chromStart, int chromEnd, 
 	double scale, int xOff, int y, int height, Color color);
 /* Draw a box scaled from chromosome to window coordinates. 
  * Get scale first with scaleForPixels. */
@@ -442,29 +442,19 @@ int percentGrayIx(int percent);
 int pslGrayIx(struct psl *psl, boolean isXeno, int maxShade);
 /* Figure out gray level for an RNA block. */
 
-int vgFindRgb(struct vGfx *vg, struct rgbColor *rgb);
-/* Find color index corresponding to rgb color. */
-
-void vgMakeColorGradient(struct vGfx *vg, 
-    struct rgbColor *start, struct rgbColor *end,
-    int steps, Color *colorIxs);
-/* Make a color gradient that goes smoothly from start
- * to end colors in given number of steps.  Put indices
- * in color table in colorIxs */
-
 boolean isNonChromColor(Color color);
 /* assign fake chrom color to scaffold, based on number */
 
-Color getSeqColor(char *name, struct vGfx *vg);
+Color getSeqColor(char *name, struct hvGfx *hvg);
 /* Return color index corresponding to chromosome/scaffold name. */
 
-Color lighterColor(struct vGfx *vg, Color color);
+Color lighterColor(struct hvGfx *hvg, Color color);
 /* Get lighter shade of a color */ 
 
-Color slightlyLighterColor(struct vGfx *vg, Color color);
+Color slightlyLighterColor(struct hvGfx *hvg, Color color);
 /* Get slightly lighter shade of a color */ 
 
-void clippedBarbs(struct vGfx *vg, int x, int y, 
+void clippedBarbs(struct hvGfx *hvg, int x, int y, 
 	int width, int barbHeight, int barbSpacing, int barbDir, Color color,
 	boolean needDrawMiddle);
 /* Draw barbed line.  Clip it to fit the window first though since
@@ -472,7 +462,7 @@ void clippedBarbs(struct vGfx *vg, int x, int y,
  * clipping at the lower level is not efficient since we added
  * PostScript output support. */
 
-void innerLine(struct vGfx *vg, int x, int y, int w, Color color);
+void innerLine(struct hvGfx *hvg, int x, int y, int w, Color color);
 /* Draw a horizontal line of given width minus a pixel on either
  * end.  This pixel is needed for PostScript only, but doesn't
  * hurt elsewhere. */
@@ -517,13 +507,13 @@ void changeTrackVis(struct group *groupList, char *groupTarget, int changeVis);
 
 void genericDrawItems(struct track *tg, 
 	int seqStart, int seqEnd,
-        struct vGfx *vg, int xOff, int yOff, int width, 
+        struct hvGfx *hvg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis);
 /* Draw generic item list.  Features must be fixed height
  * and tg->drawItemAt has to be filled in. */
 
 void bedDrawSimpleAt(struct track *tg, void *item, 
-	struct vGfx *vg, int xOff, int y, 
+	struct hvGfx *hvg, int xOff, int y, 
 	double scale, MgFont *font, Color color, enum trackVisibility vis);
 /* Draw a single simple bed item at position. */
 
@@ -570,13 +560,13 @@ int lfCalcGrayIx(struct linkedFeatures *lf);
 /* Calculate gray level from components. */
 
 void linkedFeaturesDraw(struct track *tg, int seqStart, int seqEnd,
-        struct vGfx *vg, int xOff, int yOff, int width, 
+        struct hvGfx *hvg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis);
 /* Draw linked features items. */
 
 void linkedFeaturesAverageDense(struct track *tg, 
 	int seqStart, int seqEnd,
-        struct vGfx *vg, int xOff, int yOff, int width, 
+        struct hvGfx *hvg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis);
 /* Draw dense linked features items. */
 
@@ -585,7 +575,7 @@ void linkedFeaturesMethods(struct track *tg);
  * Many other methods routines will call this first
  * to get a reasonable set of defaults. */
 
-Color lfChromColor(struct track *tg, void *item, struct vGfx *vg);
+Color lfChromColor(struct track *tg, void *item, struct hvGfx *hvg);
 /* Return color of chromosome for linked feature type items
  * where the chromosome is listed somewhere in the lf->name. */
 
@@ -598,16 +588,16 @@ char *linkedFeaturesName(struct track *tg, void *item);
 int getFilterColor(char *type, int colorIx);
 /* Get color corresponding to type - MG_RED for "red" etc. */
 
-void spreadBasesString(struct vGfx *vg, int x, int y, int width, int height,
+void spreadBasesString(struct hvGfx *hvg, int x, int y, int width, int height,
 	Color color, MgFont *font, char *s, int count, bool isCodon);
 /* Draw evenly spaced base letters in string. */
 
-void spreadStringAlternateBackground(struct vGfx *vg, int x, int y, 
+void spreadStringAlternateBackground(struct hvGfx *hvg, int x, int y, 
         int width, int height, Color color, MgFont *font, char *s, 
         int count, Color backA, Color backB, int stripeWidth);
 /* Draw evenly spaced base letters in string. */
 
-void spreadAlignString(struct vGfx *vg, int x, int y, int width, int height,
+void spreadAlignString(struct hvGfx *hvg, int x, int y, int width, int height,
                         Color color, MgFont *font, char *s, 
                         char *match, int count, bool dots, bool isCodon);
 /* Draw evenly spaced letters in string.  For multiple alignments,
@@ -618,7 +608,7 @@ void spreadAlignString(struct vGfx *vg, int x, int y, int width, int height,
  * by an escaped ('/') insert count in the sequence.
  * If "dots" is set, matching bases are displayed as a dot. */
 
-void spreadAlignStringProt(struct vGfx *vg, int x, int y, int width, int height,
+void spreadAlignStringProt(struct hvGfx *hvg, int x, int y, int width, int height,
                         Color color, MgFont *font, char *s,
                         char *match, int count, bool dots, bool isCodon, int initialColorIndex, int mafOrigOffset);
 /* similar to spreadAlignString, but it is used for protein sequences. */
@@ -745,7 +735,7 @@ int sampleUpdateY( char *name, char *nextName, int lineHeight );
   *This assumes that the entries are sorted by name as they would
   *be if loaded by hgLoadSample*/
 
-void samplePrintYAxisLabel( struct vGfx *vg, int y, struct track *track, char *labelString,
+void samplePrintYAxisLabel( struct hvGfx *hvg, int y, struct track *track, char *labelString,
         double min0, double max0 );
 /*print a label for a horizontal y-axis line*/
 
@@ -838,7 +828,7 @@ struct linkedFeaturesSeries *msBedGroupByIndex(struct bed *bedList, char *databa
                                                char *filter, int filterIndex);
 /* This one is related to lfsFromMsBedSimple */
 
-void makeRedGreenShades(struct vGfx *vg);
+void makeRedGreenShades(struct hvGfx *hvg);
 /* Makes some colors for the typical red/green microarray spectrum. */
 
 int lfsSortByName(const void *va, const void *vb);
@@ -851,11 +841,11 @@ void loadMaScoresBed(struct track *tg);
 void lfsMapItemName(struct track *tg, void *item, char *itemName, char *mapItemName, int start, int end, 
 		    int x, int y, int width, int height);
 
-Color expressionColor(struct track *tg, void *item, struct vGfx *vg,
+Color expressionColor(struct track *tg, void *item, struct hvGfx *hvg,
                       float denseMax, float fullMax);
 /* Returns track item color based on expression. */
 
-void drawScaledBoxSample(struct vGfx *vg,
+void drawScaledBoxSample(struct hvGfx *hvg,
         int chromStart, int chromEnd, double scale,
         int xOff, int y, int height, Color color,
         int score);
@@ -864,7 +854,7 @@ void drawScaledBoxSample(struct vGfx *vg,
 boolean genePredClassFilter(struct track *tg, void *item);
 /* Returns true if an item should be added to the filter. */
 
-Color genePredItemClassColor(struct track *tg, void *item, struct vGfx *vg);
+Color genePredItemClassColor(struct track *tg, void *item, struct hvGfx *hvg);
 /* Return color to draw a genePred based on looking up the gene class */
 /* in an itemClass table. */
         
@@ -894,14 +884,14 @@ Color getChromBreakBlueColor();
 Color getChromBreakGreenColor();
 
 void linkedFeaturesDrawAt(struct track *tg, void *item,
-				 struct vGfx *vg, int xOff, int y, double scale, 
+				 struct hvGfx *hvg, int xOff, int y, double scale, 
 				 MgFont *font, Color color, enum trackVisibility vis);
 /* Draw a single simple bed item at position. */
 
 char *dnaInWindow();
 /* This returns the DNA in the window, all in lower case. */
 
-Color lighterColor(struct vGfx *vg, Color color);
+Color lighterColor(struct hvGfx *hvg, Color color);
 /* Get lighter shade of a color */ 
 
 struct track *chromIdeoTrack(struct track *trackList);
@@ -955,7 +945,7 @@ boolean highlightItem(struct track *tg, void *item);
 /* Should this item be highlighted? */
 
 void linkedFeaturesSeriesDrawAt(struct track *tg, void *item, 
-        struct vGfx *vg, int xOff, int y, double scale,
+        struct hvGfx *hvg, int xOff, int y, double scale,
 	MgFont *font, Color color, enum trackVisibility vis);
 /* Draw a linked features series item at position. */
 

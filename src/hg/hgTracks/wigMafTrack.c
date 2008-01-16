@@ -18,7 +18,7 @@
 #include "mafFrames.h"
 #include "phyloTree.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.121 2007/12/17 00:03:46 braney Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.121.4.1 2008/01/16 07:00:45 markd Exp $";
 
 #define GAP_ITEM_LABEL  "Gaps"
 #define MAX_SP_SIZE 2000
@@ -68,7 +68,7 @@ for (el = *pList; el != NULL; el = next)
 *pList = NULL;
 }
 
-Color wigMafItemLabelColor(struct track *tg, void *item, struct vGfx *vg)
+Color wigMafItemLabelColor(struct track *tg, void *item, struct hvGfx *hvg)
 /* Return color to draw a maf item based on the species group it is in */
 {
 struct wigMafItem *mi = (struct wigMafItem *)item;
@@ -734,7 +734,7 @@ return insertCounts;
 }
 
 static int drawScore(float score, int chromStart, int chromEnd, int seqStart,
-                        double scale, struct vGfx *vg, int xOff, int yOff,
+                        double scale, struct hvGfx *hvg, int xOff, int yOff,
                         int height, Color color, enum trackVisibility vis)
 /* Draw density plot or graph based on score. Return last X drawn  */
 {
@@ -747,7 +747,7 @@ w = x2-x1+1;
 if (vis == tvFull)
     {
     y = score * height1;
-    vgBox(vg, x1 + xOff, yOff + height1 - y, w, y+1, color);
+    hvGfxBox(hvg, x1 + xOff, yOff + height1 - y, w, y+1, color);
     }
 else
     {
@@ -758,14 +758,14 @@ else
     else if (shade > maxShade)
         shade = maxShade;
     c = shadesOfGray[shade];
-    vgBox(vg, x1 + xOff, yOff, w, height1, c);
+    hvGfxBox(hvg, x1 + xOff, yOff, w, height1, c);
     }
 return xOff + x1 + w - 1;
 }
 
 static void drawScoreSummary(struct mafSummary *summaryList, int height,
                              int seqStart, int seqEnd, 
-                            struct vGfx *vg, int xOff, int yOff,
+                            struct hvGfx *hvg, int xOff, int yOff,
                             int width, MgFont *font, 
                             Color color, Color altColor,
                             enum trackVisibility vis, boolean chainBreaks)
@@ -791,7 +791,7 @@ if (chainBreaks && ms->chromStart > chromStart)
 	x2 = round((double)((int)ms->chromStart-1 - seqStart) * scale) + xOff;
 	w = x2 - x1;
 	if (w > 0)
-	    drawMafChain(vg, x1, yOff, w, height, isDouble);
+	    drawMafChain(hvg, x1, yOff, w, height, isDouble);
 	}
     else if (ms->leftStatus[0] == MAF_MISSING_STATUS )
 	{
@@ -800,13 +800,13 @@ if (chainBreaks && ms->chromStart > chromStart)
 	x1 = xOff;
 	x2 = round((double)((int)ms->chromStart-1 - seqStart) * scale) + xOff;
 	w = x2 - x1;
-	vgBox(vg, x1, yOff, w, height, fuzz);
+	hvGfxBox(hvg, x1, yOff, w, height, fuzz);
 	}
     }
 for (ms = summaryList; ms != NULL; ms = ms->next)
     {
     lastX = drawScore(ms->score, ms->chromStart, ms->chromEnd, seqStart,
-                        scale, vg, xOff, yOff, height, color, vis);
+                        scale, hvg, xOff, yOff, height, color, vis);
 
     /* draw chain after alignment */
     if (chainBreaks && ms->chromEnd < seqEnd && ms->next != NULL)
@@ -822,7 +822,7 @@ for (ms = summaryList; ms != NULL; ms = ms->next)
 	    if (w == 1 && x1 == lastX)
 		continue;
 	    if (w > 0);
-		drawMafChain(vg, x1, yOff, w, height, isDouble);
+		drawMafChain(hvg, x1, yOff, w, height, isDouble);
 	    }
 	else if (ms->rightStatus[0] == MAF_MISSING_STATUS )
 	    {
@@ -834,7 +834,7 @@ for (ms = summaryList; ms != NULL; ms = ms->next)
 	    if (w == 1 && x1 == lastX)
 		continue;
 	    if (w > 0)
-		vgBox(vg, x1, yOff, w, height, fuzz);
+		hvGfxBox(hvg, x1, yOff, w, height, fuzz);
 	    }
 	}
     }
@@ -842,7 +842,7 @@ for (ms = summaryList; ms != NULL; ms = ms->next)
 
 static void drawScoreOverview(char *tableName, int height,
                              int seqStart, int seqEnd, 
-                            struct vGfx *vg, int xOff, int yOff,
+                            struct hvGfx *hvg, int xOff, int yOff,
                             int width, MgFont *font, 
                             Color color, Color altColor,
                             enum trackVisibility vis)
@@ -863,7 +863,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     struct scoredRef ref;
     scoredRefStaticLoad(row + rowOffset, &ref);
     drawScore(ref.score, ref.chromStart, ref.chromEnd, seqStart, scale,
-                vg, xOff, yOff, height, color, vis);
+                hvg, xOff, yOff, height, color, vis);
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
@@ -872,7 +872,7 @@ hFreeConn(&conn);
 
 static boolean drawPairsFromSummary(struct track *track, 
         int seqStart, int seqEnd,
-        struct vGfx *vg, int xOff, int yOff, int width, MgFont *font,
+        struct hvGfx *hvg, int xOff, int yOff, int width, MgFont *font,
         Color color, enum trackVisibility vis)
 {
 /* Draw pairwise display for this multiple alignment */
@@ -964,22 +964,22 @@ for (mi = miList; mi != NULL; mi = mi->next)
 	{
 	if (vis == tvFull)
 	    {
-	    vgSetClip(vg, xOff, yOff, width, 16);
-	    drawScoreSummary(summaryList, mi->height, seqStart, seqEnd, vg, 
+	    hvGfxSetClip(hvg, xOff, yOff, width, 16);
+	    drawScoreSummary(summaryList, mi->height, seqStart, seqEnd, hvg, 
 				    xOff, yOff, width, font, track->ixAltColor,
 				    track->ixAltColor, tvFull, useIrowChains);
-	    vgUnclip(vg);
+	    hvGfxUnclip(hvg);
 	    }
 	else 
 	    {
 	    /* pack */
 	    /* get maf table, containing pairwise alignments for this organism */
 	    /* display pairwise alignments in this region in dense format */
-	    vgSetClip(vg, xOff, yOff, width, mi->height);
-	    drawScoreSummary(summaryList, mi->height, seqStart, seqEnd, vg, 
+	    hvGfxSetClip(hvg, xOff, yOff, width, mi->height);
+	    drawScoreSummary(summaryList, mi->height, seqStart, seqEnd, hvg, 
 				xOff, yOff, width, font, color, color, tvDense,
 				useIrowChains);
-	    vgUnclip(vg);
+	    hvGfxUnclip(hvg);
 	    }
 	}
     yOff += mi->height;
@@ -988,7 +988,7 @@ return TRUE;
 }
 
 static boolean drawPairsFromPairwiseMafScores(struct track *track, 
-        int seqStart, int seqEnd, struct vGfx *vg, int xOff, int yOff, 
+        int seqStart, int seqEnd, struct hvGfx *hvg, int xOff, int yOff, 
         int width, MgFont *font, Color color, enum trackVisibility vis)
 /* Draw pairwise display for this multiple alignment */
 {
@@ -1042,24 +1042,24 @@ for (mi = miList; mi != NULL; mi = mi->next)
             wigTrack->height = wigTrack->lineHeight = wigTrack->heightPer =
                                                     pairwiseHeight - 1;
             /* clip, but leave 1 pixel border */
-            vgSetClip(vg, xOff, yOff, width, wigTrack->height);
-            wigTrack->drawItems(wigTrack, seqStart, seqEnd, vg, xOff, yOff,
+            hvGfxSetClip(hvg, xOff, yOff, width, wigTrack->height);
+            wigTrack->drawItems(wigTrack, seqStart, seqEnd, hvg, xOff, yOff,
                              width, font, color, tvFull);
-            vgUnclip(vg);
+            hvGfxUnclip(hvg);
             }
         else
             {
             /* no wiggle table for this -- compute a graph on-the-fly 
                from mafs */
-            vgSetClip(vg, xOff, yOff, width, mi->height);
+            hvGfxSetClip(hvg, xOff, yOff, width, mi->height);
             tableName = getMafTablename(mi->name, suffix);
             if (!hTableExists(tableName))
                 tableName = getMafTablename(mi->db, suffix);
             if (hTableExists(tableName))
-                drawScoreOverview(tableName, mi->height, seqStart, seqEnd, vg, 
+                drawScoreOverview(tableName, mi->height, seqStart, seqEnd, hvg, 
                                 xOff, yOff, width, font, track->ixAltColor, 
                                 track->ixAltColor, tvFull);
-            vgUnclip(vg);
+            hvGfxUnclip(hvg);
             }
         /* need to add extra space between wiggles (for now) */
         mi->height = pairwiseHeight;
@@ -1069,14 +1069,14 @@ for (mi = miList; mi != NULL; mi = mi->next)
         /* pack */
         /* get maf table, containing pairwise alignments for this organism */
         /* display pairwise alignments in this region in dense format */
-        vgSetClip(vg, xOff, yOff, width, mi->height);
+        hvGfxSetClip(hvg, xOff, yOff, width, mi->height);
         tableName = getMafTablename(mi->name, suffix);
 	if (!hTableExists(tableName))
 	    tableName = getMafTablename(mi->db, suffix);
         if (hTableExists(tableName))
-            drawScoreOverview(tableName, mi->height, seqStart, seqEnd, vg, 
+            drawScoreOverview(tableName, mi->height, seqStart, seqEnd, hvg, 
                                 xOff, yOff, width, font, color, color, tvDense);
-        vgUnclip(vg);
+        hvGfxUnclip(hvg);
         }
     yOff += mi->height;
     }
@@ -1085,7 +1085,7 @@ return TRUE;
 
 static boolean drawPairsFromMultipleMaf(struct track *track, 
         int seqStart, int seqEnd,
-        struct vGfx *vg, int xOff, int yOff, int width, MgFont *font,
+        struct hvGfx *hvg, int xOff, int yOff, int width, MgFont *font,
         Color color, enum trackVisibility vis)
 /* Draw pairwise display from maf of multiple alignment.
  * Extract pairwise alignments from maf and rescore.
@@ -1157,11 +1157,11 @@ for (mi = miList; mi != NULL; mi = mi->next)
     slReverse(&mafList);
 
     /* compute a graph or density on-the-fly from mafs */
-    vgSetClip(vg, xOff, yOff, width, mi->height);
-    drawMafRegionDetails(mafList, mi->height, seqStart, seqEnd, vg, xOff, yOff,
+    hvGfxSetClip(hvg, xOff, yOff, width, mi->height);
+    drawMafRegionDetails(mafList, mi->height, seqStart, seqEnd, hvg, xOff, yOff,
                          width, font, pairColor, pairColor, vis, FALSE, 
                          useIrowChains);
-    vgUnclip(vg);
+    hvGfxUnclip(hvg);
 
     /* need to add extra space between graphs ?? (for now) */
     if (vis == tvFull)
@@ -1174,7 +1174,7 @@ return TRUE;
 }
 
 static boolean wigMafDrawPairwise(struct track *track, int seqStart, int seqEnd,
-        struct vGfx *vg, int xOff, int yOff, int width, MgFont *font,
+        struct hvGfx *hvg, int xOff, int yOff, int width, MgFont *font,
         Color color, enum trackVisibility vis)
 /* Draw pairwise display for this multiple alignment
  * When zoomed in, use on-the-fly scoring of alignments extracted from multiple
@@ -1187,18 +1187,18 @@ static boolean wigMafDrawPairwise(struct track *track, int seqStart, int seqEnd,
  *      (saves space, and performs better) */
 {
     if (displayZoomedIn(track))
-        return drawPairsFromMultipleMaf(track, seqStart, seqEnd, vg,
+        return drawPairsFromMultipleMaf(track, seqStart, seqEnd, hvg,
                                         xOff, yOff, width, font, color, vis);
     if (pairwiseSuffix(track))
-        return drawPairsFromPairwiseMafScores(track, seqStart, seqEnd, vg,
+        return drawPairsFromPairwiseMafScores(track, seqStart, seqEnd, hvg,
                                         xOff, yOff, width, font, color, vis);
     if (summarySetting(track))
-        return drawPairsFromSummary(track, seqStart, seqEnd, vg,
+        return drawPairsFromSummary(track, seqStart, seqEnd, hvg,
                                         xOff, yOff, width, font, color, vis);
     return FALSE;
 }
 
-static void alternateBlocksBehindChars(struct vGfx *vg, int x, int y, 
+static void alternateBlocksBehindChars(struct hvGfx *hvg, int x, int y, 
 	int width, int height, int charWidth, int charCount, 
 	int stripeCharWidth, Color a, Color b)
 /* Draw blocks that alternate between color a and b. */
@@ -1210,7 +1210,7 @@ for (i=0; i<charCount; i += stripeCharWidth)
     {
     x1 = i * width / charCount;
     x2 = (i+stripeCharWidth) * width/charCount;
-    vgBox(vg, x1+x, y, x2-x1, height, color);
+    hvGfxBox(hvg, x1+x, y, x2-x1, height, color);
     if (color == a)
         color = b;
     else
@@ -1269,7 +1269,7 @@ static void translateCodons(char *tableName, char *compName, DNA *dna, int start
 				char strand,int prevEnd, int nextStart,
 				bool alreadyComplemented,
 				int x, int y, int width, int height, 
-				struct vGfx *vg)
+				struct hvGfx *hvg)
 {
 int size = length;
 DNA *ptr;
@@ -1395,7 +1395,7 @@ if (fillBox)
 	{
 	x1 = x + (start - 2) * width / winBaseCount;
 	}
-    vgBox(vg, x1, y, mult*width/winBaseCount + 1 , height, color);
+    hvGfxBox(hvg, x1, y, mult*width/winBaseCount + 1 , height, color);
     }
 
 for (;length > 2; ptr +=3 , length -=3)
@@ -1420,7 +1420,7 @@ for (;length > 2; ptr +=3 , length -=3)
 	    color = shadesOfSea[1];
 	else
 	    color = shadesOfSea[0];
-	vgBox(vg, x1, y, 3*width/winBaseCount + 1 , height, color);
+	hvGfxBox(hvg, x1, y, 3*width/winBaseCount + 1 , height, color);
 	}
     }
 
@@ -1489,7 +1489,7 @@ if (length && (nextStart != -1))
 		color = shadesOfSea[1];
 	    else
 		color = shadesOfSea[0];
-	    vgBox(vg, x1, y, mult*width/winBaseCount + 1 , height, color);
+	    hvGfxBox(hvg, x1, y, mult*width/winBaseCount + 1 , height, color);
 	    }
 	}
     }
@@ -1514,7 +1514,7 @@ hFreeConn(&conn);
 }
 
 static int wigMafDrawBases(struct track *track, int seqStart, int seqEnd,
-        struct vGfx *vg, int xOff, int yOff, int width, 
+        struct hvGfx *hvg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis,
 	struct wigMafItem *miList)
 /* Draw base-by-base view, return new Y offset. */
@@ -1887,7 +1887,7 @@ for(offset=startSub2*2; (offset < alignLineLength) && (offset < winBaseCount + s
 	    dyStringClear(label);
 	    dyStringPrintf(label, "%c",(insertCounts[offset] % 3) == 0 ? '*' : '+');
 	    }
-	vgTextCentered(vg, x1+x - (width/winBaseCount)/2, y, x2-x1, mi->height, 
+	hvGfxTextCentered(hvg, x1+x - (width/winBaseCount)/2, y, x2-x1, mi->height, 
 		getOrangeColor(), font, label->string);
 	dyStringFree(&label);
 	}
@@ -1905,7 +1905,7 @@ y += mi->height;
         {
         int baseWidth = spreadStringCharWidth(width, winBaseCount);
         int colorX = x + alternateColorBaseOffset * baseWidth;
-        alternateBlocksBehindChars(vg, colorX, y-1, width, 
+        alternateBlocksBehindChars(hvg, colorX, y-1, width, 
                 mi->height*(lineCount-1), tl.mWidth, winBaseCount, 
                 alternateColorBaseCount, shadesOfSea[0], MG_WHITE);
         }
@@ -1926,7 +1926,7 @@ for (mi = miList->next, i=1; mi != NULL && mi->db != NULL; mi = mi->next, i++)
 	complement(line, strlen(line));
         }
     /* draw sequence letters for alignment */
-    vgSetClip(vg, x, y-1, width, mi->height);
+    hvGfxSetClip(hvg, x, y-1, width, mi->height);
 
     if (framesTable != NULL)
 	{
@@ -1988,7 +1988,7 @@ tryagain:
 	    w= end - start;
 
 	    translateCodons(track->mapName, mi->db, line, start , w, frame, mf.strand[0],mf.prevFramePos,mf.nextFramePos,complementBases,
-				x, y, width, mi->height,  vg);
+				x, y, width, mi->height,  hvg);
 	    
 	    }
 	sqlFreeResult(&sr);
@@ -2009,54 +2009,54 @@ tryagain:
 	{
         if (strstr(track->tdb->type, "wigMafProt"))
             {
-            spreadAlignStringProt(vg, x, y, width, mi->height-1, color,
+            spreadAlignStringProt(hvg, x, y, width, mi->height-1, color,
                         font, &line[2], &selfLine[2], winBaseCount, dots, FALSE, seqStart, mafOrigOffset);
             }
 	else
 	    {
 	    /* make sure we have bases to display before printing them */
 	    if (strlen(line) > 2)
-		spreadAlignString(vg, x, y, width, mi->height-1, color,
+		spreadAlignString(hvg, x, y, width, mi->height-1, color,
 		    font, &line[2], &selfLine[2], winBaseCount, dots, FALSE);
 	    }
 	}
     else
-	spreadAlignString(vg, x, y, width, mi->height-1, color,
+	spreadAlignString(hvg, x, y, width, mi->height-1, color,
                         font, line, selfLine, winBaseCount, dots, FALSE);
     for(offset = 0; offset < mi->seqEndsSize; offset++)
 	{
 	int x1;
 
 	x1 = x + (mi->seqEnds[offset] -1 - startSub2 * 2) * width/winBaseCount;
-	vgBox(vg, x1, y-1, 1, mi->height-1, getChromBreakBlueColor());
+	hvGfxBox(hvg, x1, y-1, 1, mi->height-1, getChromBreakBlueColor());
 	}
     for(offset = 0; offset < mi->insertsSize; offset++)
 	{
 	int x1;
 
 	x1 = x + (mi->inserts[offset] -1 - startSub2 * 2) * width/winBaseCount;
-	vgBox(vg, x1, y-1, 1, mi->height-1, getOrangeColor());
+	hvGfxBox(hvg, x1, y-1, 1, mi->height-1, getOrangeColor());
 	}
     for(offset = 0; offset < mi->brackStartsSize; offset++)
 	{
 	int x1;
 
 	x1 = x + (mi->brackStarts[offset] -1- startSub2 * 2) * width/winBaseCount;
-	vgBox(vg, x1, y-1, 2, 1, getChromBreakGreenColor());
-	vgBox(vg, x1, y-1, 1, mi->height-1, getChromBreakGreenColor());
-	vgBox(vg, x1, y + mi->height-3, 2, 1, getChromBreakGreenColor());
+	hvGfxBox(hvg, x1, y-1, 2, 1, getChromBreakGreenColor());
+	hvGfxBox(hvg, x1, y-1, 1, mi->height-1, getChromBreakGreenColor());
+	hvGfxBox(hvg, x1, y + mi->height-3, 2, 1, getChromBreakGreenColor());
 	}
     for(offset = 0; offset < mi->brackEndsSize; offset++)
 	{
 	int x1;
 
 	x1 = x + (mi->brackEnds[offset] -1- startSub2 * 2) * width/winBaseCount;
-	vgBox(vg, x1-1, y-1, 2, 1, getChromBreakGreenColor());
-	vgBox(vg, x1, y-1, 1, mi->height-1, getChromBreakGreenColor());
-	vgBox(vg, x1-1, y + mi->height-3, 2, 1, getChromBreakGreenColor());
+	hvGfxBox(hvg, x1-1, y-1, 2, 1, getChromBreakGreenColor());
+	hvGfxBox(hvg, x1, y-1, 1, mi->height-1, getChromBreakGreenColor());
+	hvGfxBox(hvg, x1-1, y + mi->height-3, 2, 1, getChromBreakGreenColor());
 	}
 
-    vgUnclip(vg);
+    hvGfxUnclip(hvg);
     y += mi->height;
     }
 
@@ -2071,7 +2071,7 @@ return y;
 }
 
 static int wigMafDrawScoreGraph(struct track *track, int seqStart, int seqEnd,
-        struct vGfx *vg, int xOff, int yOff, int width, 
+        struct hvGfx *hvg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 {
 /* Draw routine for score graph, returns new Y offset */
@@ -2092,13 +2092,13 @@ if (wigTrack == NULL)
         {
         /* use mafs */
         drawMafRegionDetails(track->customPt, height, seqStart, seqEnd,
-                                vg, xOff, yOff, width, font,
+                                hvg, xOff, yOff, width, font,
                                 color, color, scoreVis, FALSE, FALSE);
         }
     else
         {
         /* use or scored refs from maf table*/
-        drawScoreOverview(track->mapName, height, seqStart, seqEnd, vg, 
+        drawScoreOverview(track->mapName, height, seqStart, seqEnd, hvg, 
                             xOff, yOff, width, font, color, color, scoreVis);
         yOff++;
         }
@@ -2111,15 +2111,15 @@ else
         {
         /* draw conservation wiggles */
         if (!wigColor)
-            wigColor = vgFindRgb(vg, &wigTrack->color);
+            wigColor = hvGfxFindRgb(hvg, &wigTrack->color);
         else
-            wigColor = slightlyLighterColor(vg, wigColor);
+            wigColor = slightlyLighterColor(hvg, wigColor);
         wigTrack->ixColor = wigColor;
-        wigTrack->ixAltColor = vgFindRgb(vg, &wigTrack->altColor);
-        vgSetClip(vg, xOff, yOff, width, wigTotalHeight(wigTrack, scoreVis) - 1);
-        wigTrack->drawItems(wigTrack, seqStart, seqEnd, vg, xOff, yOff,
+        wigTrack->ixAltColor = hvGfxFindRgb(hvg, &wigTrack->altColor);
+        hvGfxSetClip(hvg, xOff, yOff, width, wigTotalHeight(wigTrack, scoreVis) - 1);
+        wigTrack->drawItems(wigTrack, seqStart, seqEnd, hvg, xOff, yOff,
                              width, font, color, scoreVis);
-        vgUnclip(vg);
+        hvGfxUnclip(hvg);
         yOff += wigTotalHeight(wigTrack, scoreVis);
         wigTrack = wigTrack->next;
         }
@@ -2129,12 +2129,12 @@ return yOff;
 
 
 static void wigMafDraw(struct track *track, int seqStart, int seqEnd,
-        struct vGfx *vg, int xOff, int yOff, int width, 
+        struct hvGfx *hvg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw routine for wigmaf type tracks */
 {
 int y = yOff;
-y = wigMafDrawScoreGraph(track, seqStart, seqEnd, vg, xOff, y, width,
+y = wigMafDrawScoreGraph(track, seqStart, seqEnd, hvg, xOff, y, width,
                                 font, color, vis);
 if (vis == tvFull || vis == tvPack)
     {
@@ -2148,12 +2148,12 @@ if (vis == tvFull || vis == tvPack)
             wiList = wiList->next;
             wigTrack = wigTrack->next;
             }
-	y = wigMafDrawBases(track, seqStart, seqEnd, vg, xOff, y, width, font,
+	y = wigMafDrawBases(track, seqStart, seqEnd, hvg, xOff, y, width, font,
 				    color, vis, wiList);
 				    //MG_RED, vis, wiList);
 	}
     else 
-	wigMafDrawPairwise(track, seqStart, seqEnd, vg, xOff, y, 
+	wigMafDrawPairwise(track, seqStart, seqEnd, hvg, xOff, y, 
 				width, font, color, vis);
     }
 mapBoxHc(seqStart, seqEnd, xOff, yOff, width, track->height, track->mapName, 

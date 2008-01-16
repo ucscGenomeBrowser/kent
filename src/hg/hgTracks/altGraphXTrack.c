@@ -79,7 +79,7 @@ mapBoxHc(start, end, x, y, width, height, tableName, buff, "altGraphX Details");
 }
 
 static void altGraphXDrawPackTrack(struct track *tg, int seqStart, int seqEnd,         
-			 struct vGfx *vg, int xOff, int yOff, int width, 
+			 struct hvGfx *hvg, int xOff, int yOff, int width, 
 			 MgFont *font, Color color, enum trackVisibility vis)
 /* Draws the blocks for an alt-spliced gene and the connections */
 {
@@ -88,17 +88,17 @@ int lineHeight = tg->lineHeight;
 double scale = scaleForPixels(width);
 if(vis == tvFull) 
     {
-    vgSetClip(vg, insideX, yOff, insideWidth, tg->height);
-    altGraphXDrawPack(tg->items, tg->ss, vg, xOff, yOff, width, heightPer, lineHeight,
+    hvGfxSetClip(hvg, insideX, yOff, insideWidth, tg->height);
+    altGraphXDrawPack(tg->items, tg->ss, hvg, xOff, yOff, width, heightPer, lineHeight,
 		      winStart, winEnd, scale, font, color, shadesOfGray,
 		      tg->mapName, altGraphXMap);
-    vgUnclip(vg);
+    hvGfxUnclip(hvg);
     }
 }
 
 
 
-Color altGraphXColorForEdge(struct vGfx *vg, struct altGraphX *ag, int eIx)
+Color altGraphXColorForEdge(struct hvGfx *hvg, struct altGraphX *ag, int eIx)
 /* Return the color of an edge given by confidence */
 {
 int confidence = altGraphConfidenceForEdge(ag, eIx);
@@ -113,7 +113,7 @@ else
 /* if(ag->edgeTypes[eIx] == ggCassette) */
 /*     { */
 /*     if(!exprBedColorsMade) */
-/* 	makeRedGreenShades(vg); */
+/* 	makeRedGreenShades(bg); */
 /*     if(confidence == 1) c = shadesOfRed[(maxRGBShade - 6 > 0) ? maxRGBShade - 6 : 0]; */
 /*     else if(confidence == 2) c = shadesOfRed[(maxRGBShade - 4 > 0) ? maxRGBShade - 4: 0]; */
 /*     else if(confidence >= 3) c = shadesOfRed[(maxRGBShade - 4 > 0) ? maxRGBShade - 1: 0]; */
@@ -137,7 +137,7 @@ if( (ag->vTypes[ag->edgeStarts[edge]] == ggHardStart || ag->vTypes[ag->edgeStart
 return exon;
 }
 
-static void altGraphXDrawAt(struct track *tg, void *item, struct vGfx *vg, 
+static void altGraphXDrawAt(struct track *tg, void *item, struct hvGfx *hvg, 
 			    int xOff, int yOff, double scale, 
 			    MgFont *font, Color color, enum trackVisibility vis)
 /* Draw an altGraphX at the specified location. */
@@ -185,13 +185,13 @@ for(i= 0; i <  ag->edgeCount; i++)
     e = ag->vPositions[ag->edgeEnds[i]];
     color2 = MG_BLACK;
 /*  If you want to shade by number of transcripts uncomment next line. */
-/* 	color2 = altGraphXColorForEdge(vg, ag, i); */
+/* 	color2 = altGraphXColorForEdge(hvg, ag, i); */
     if(isExon(ag, i))
 	{
 	if(vis == tvPack)
-	    drawScaledBox(vg, s, e, scale, xOff, yOff+heightPer/2, heightPer/2, color2);
+	    drawScaledBox(hvg, s, e, scale, xOff, yOff+heightPer/2, heightPer/2, color2);
 	else
-	    drawScaledBox(vg, s, e, scale, xOff, yOff, heightPer, color2);
+	    drawScaledBox(hvg, s, e, scale, xOff, yOff, heightPer, color2);
 	}
     else 
 	{
@@ -203,11 +203,11 @@ for(i= 0; i <  ag->edgeCount; i++)
 	if(vis == tvPack)
 	    {
 	    midX = (x1+x2)/2;
-	    vgLine(vg, x1, yOff+heightPer/2, midX, yOff, color2);
-	    vgLine(vg, midX, yOff, x2, yOff+heightPer/2, color2);
+	    hvGfxLine(hvg, x1, yOff+heightPer/2, midX, yOff, color2);
+	    hvGfxLine(hvg, midX, yOff, x2, yOff+heightPer/2, color2);
 	    }
 	else
-	    vgLine(vg, x1, yOff+heightPer/2, x2, yOff+heightPer/2, color2);
+	    hvGfxLine(hvg, x1, yOff+heightPer/2, x2, yOff+heightPer/2, color2);
 	}
     }
 }

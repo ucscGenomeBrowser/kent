@@ -10,7 +10,7 @@
 #include "rnaSecStr.h"
 #include "rnautil.h"
 
-static char const rcsid[] = "$Id: rnaFoldTrack.c,v 1.4 2006/06/23 23:45:05 kent Exp $";
+static char const rcsid[] = "$Id: rnaFoldTrack.c,v 1.4.80.1 2008/01/16 07:00:43 markd Exp $";
 
 
 void bedLoadItemBySqlResult(struct track *tg, struct sqlResult *sr, int rowOffset, ItemLoader loader)
@@ -71,7 +71,7 @@ void freeRnaSecStr(struct track *tg)
 rnaSecStrFreeList((struct rnaSecStr**)&tg->items);
 }
 
-void spreadAndColorString(struct vGfx *vg, int x, int y, int width, int height,
+void spreadAndColorString(struct hvGfx *hvg, int x, int y, int width, int height,
 			  Color *colorIxs, int maxShade, MgFont *font, char *text, int count, 
 			  double *scores, double minScore, double maxScore)
 /* Draw evenly spaced letters in string. The scores array contains a
@@ -92,18 +92,18 @@ for (i=0; i<count; i++, text++, scores++)
     x2         = (i+1) * width/count;
     clr        = colorIxs[assignBin(*scores, minScore, maxScore, maxShade+1)];
     c[0]       = *text;
-    vgTextCentered(vg, x1+x, y, x2-x1, height, clr, font, c);
+    hvGfxTextCentered(hvg, x1+x, y, x2-x1, height, clr, font, c);
     }
 }
 
-void spreadAndGrayShadeString(struct vGfx *vg, int x, int y, int width, int height,
+void spreadAndGrayShadeString(struct hvGfx *hvg, int x, int y, int width, int height,
 			  MgFont *font, char *text, int count, double *scores, double minScore, double maxScore)
 /* Draw evenly spaced letters in string and gray shade letters according to scores. */
 {
-spreadAndColorString(vg, x, y, width, height, shadesOfGray+2, maxShade-2, font, text, count, scores, minScore, maxScore);
+spreadAndColorString(hvg, x, y, width, height, shadesOfGray+2, maxShade-2, font, text, count, scores, minScore, maxScore);
 }
 
-void spreadRnaFoldAnno(struct vGfx *vg, int x, int y, int width, int height, Color color, MgFont *font, struct rnaSecStr *item)
+void spreadRnaFoldAnno(struct hvGfx *hvg, int x, int y, int width, int height, Color color, MgFont *font, struct rnaSecStr *item)
 /* Draw parenthesis structure which defines rna secondary structure. */
 {
 char *fold     = cloneString(item->secStr);
@@ -113,13 +113,13 @@ if (*item->strand == '-')
     reverseFold(fold);
     reverseDoubles(scores, item->size);
 }
-spreadAndGrayShadeString(vg, x, y, width, height, font, fold, item->size, scores, 0.0, 1.0);
+spreadAndGrayShadeString(hvg, x, y, width, height, font, fold, item->size, scores, 0.0, 1.0);
 freeMem(fold);
 freeMem(scores);
 }
 
 
-void drawCharBox(struct vGfx *vg, int x, int y, int width, int height, Color color, char *s, char c)
+void drawCharBox(struct hvGfx *hvg, int x, int y, int width, int height, Color color, char *s, char c)
 /* s defines a string which spans width. Draw a box in intervals
  * corresponding to positions where s has letter c */
 {
@@ -140,25 +140,25 @@ for (;*s;s++,i++)
 	    {
 	    int x1 = x + (int) begin *charWidth;
 	    int w  = (int) length*charWidth;
-	    vgBox(vg, x1, y, w, height, color);
+	    hvGfxBox(hvg, x1, y, w, height, color);
 	    length = 0;
 	    }
     }
 }
 
 
-void colorSingleStranded(struct vGfx *vg, int x, int y, int width, int height, Color color, struct rnaSecStr *item)
+void colorSingleStranded(struct hvGfx *hvg, int x, int y, int width, int height, Color color, struct rnaSecStr *item)
 {
 char *fold = cloneString(item->secStr);
 if (*item->strand == '-')
     reverseFold(fold);
-drawCharBox(vg, x, y, width, height, color, fold, '.');
+drawCharBox(hvg, x, y, width, height, color, fold, '.');
 freeMem(fold);
 }
 
 
 void rnaSecStrDrawAt(struct track *tg, void *item, 
-		     struct vGfx *vg, int xOff, int y, 
+		     struct hvGfx *hvg, int xOff, int y, 
 		     double scale, MgFont *font, Color color, enum trackVisibility vis)
 /* Draw a single simple rnaSecStr item at position. */
 {
@@ -172,7 +172,7 @@ int scoreMin = atoi(trackDbSettingOrDefault(tdb, "scoreMin", "0"));
 int scoreMax = atoi(trackDbSettingOrDefault(tdb, "scoreMax", "1000"));
 
 if (tg->itemColor != NULL)
-    color = tg->itemColor(tg, rnaSecStr, vg);
+    color = tg->itemColor(tg, rnaSecStr, hvg);
 else
     {
     if (tg->colorShades)
@@ -184,10 +184,10 @@ if (w < 1)
 if (color)
     {
     if (zoomedToBaseLevel)
-	spreadRnaFoldAnno(vg, x1, y, w, heightPer, color, font, rnaSecStr);
+	spreadRnaFoldAnno(hvg, x1, y, w, heightPer, color, font, rnaSecStr);
     else {
-    vgBox(vg, x1, y, w, heightPer, color);
-    colorSingleStranded(vg, x1, y, w, heightPer, lighterColor(vg, color), rnaSecStr);
+    hvGfxBox(hvg, x1, y, w, heightPer, color);
+    colorSingleStranded(hvg, x1, y, w, heightPer, lighterColor(hvg, color), rnaSecStr);
     if (tg->subType == lfWithBarbs || tg->exonArrows)
 	{
 	int dir = 0;
@@ -198,8 +198,8 @@ if (color)
 	if (dir != 0 && w > 2)
 	    {
 	    int midY = y + (heightPer>>1);
-	    Color textColor = vgContrastingColor(vg, color);
-	    clippedBarbs(vg, x1, midY, w, 2, 5, dir, textColor, TRUE);
+	    Color textColor = hvGfxContrastingColor(hvg, color);
+	    clippedBarbs(hvg, x1, midY, w, 2, 5, dir, textColor, TRUE);
 	    }
 	}
     }
@@ -209,8 +209,8 @@ if (color)
 	w = x2-x1;
 	if (w > mgFontStringWidth(font, s))
 	    {
-	    Color textColor = vgContrastingColor(vg, color);
-	    vgTextCentered(vg, x1, y, w, heightPer, textColor, font, s);
+	    Color textColor = hvGfxContrastingColor(hvg, color);
+	    hvGfxTextCentered(hvg, x1, y, w, heightPer, textColor, font, s);
 	    }
 	mapBoxHc(rnaSecStr->chromStart, rnaSecStr->chromEnd, x1, y, x2 - x1, heightPer,
 		 tg->mapName, tg->mapItemName(tg, rnaSecStr), NULL);

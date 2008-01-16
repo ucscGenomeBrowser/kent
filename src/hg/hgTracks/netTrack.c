@@ -11,7 +11,7 @@
 #include "chainNet.h"
 #include "chainNetDbLoad.h"
 
-static char const rcsid[] = "$Id: netTrack.c,v 1.20 2006/06/23 23:45:04 kent Exp $";
+static char const rcsid[] = "$Id: netTrack.c,v 1.20.80.1 2008/01/16 07:00:43 markd Exp $";
 
 struct netItem
 /* A net track item. */
@@ -62,7 +62,7 @@ return ni->className;
 }
 
 static struct track *rTg;
-static struct vGfx *rVg;
+static struct hvGfx *rHvg;
 static int rX;          /* X offset of drawing area. */
 static int rHeightPer;  /* Height of boxes. */
 static int rMidLineOff; /* Offset to draw connecting lines. */
@@ -82,7 +82,7 @@ static Color netColor(char *chrom)
 {
 static Color color;
 if (!sameString(chrom, netColorLastChrom))
-    color = getSeqColor(chrom, rVg);
+    color = getSeqColor(chrom, rHvg);
 if (0 == color)
     color = 1;	/*	don't display in white	*/
 netColorLastChrom = chrom;
@@ -108,9 +108,9 @@ w = x2-x1;
 
 if (w < 1)
     w = 1;
-vgBox(rVg, x1, y, w, rHeightPer, color);
+hvGfxBox(rHvg, x1, y, w, rHeightPer, color);
 if (w > 3)
-    clippedBarbs(rVg, x1, y+rMidLineOff, w, 2, 5, orientation, barbColor, TRUE);
+    clippedBarbs(rHvg, x1, y+rMidLineOff, w, 2, 5, orientation, barbColor, TRUE);
 if (w > 1)
     {
     if (rNextLine > 0)	 /* Put up click info in full mode. */
@@ -150,8 +150,8 @@ if (w >= 1)
     struct dyString *bubble = newDyString(256);
     char depth[8];
     int midY = y + rMidLineOff;
-    clippedBarbs(rVg, x1, midY, w, 2, 5, orientation, color, FALSE);
-    vgLine(rVg, x1, midY, x2, midY, color);
+    clippedBarbs(rHvg, x1, midY, w, 2, 5, orientation, color, FALSE);
+    hvGfxLine(rHvg, x1, midY, x2, midY, color);
     if (rNextLine > 0)	 /* Put up click info in full mode. */
 	{
 	snprintf(depth, sizeof(depth), "%d", level);
@@ -177,7 +177,7 @@ int orientation;
 for (fill = fillList; fill != NULL; fill = fill->next)
     {
     color = netColor(fill->qName);
-    invColor = vgContrastingColor(rVg, color);
+    invColor = hvGfxContrastingColor(rHvg, color);
     orientation = orientFromChar(fill->qStrand);
     if (fill->children == NULL || fill->tSize * rScale < 2.5)
     /* Draw single solid box if no gaps or no room to draw gaps. */
@@ -212,7 +212,7 @@ for (fill = fillList; fill != NULL; fill = fill->next)
 }
 
 static void netDraw(struct track *tg, int seqStart, int seqEnd,
-        struct vGfx *vg, int xOff, int yOff, int width, 
+        struct hvGfx *hvg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw routine for netAlign type tracks.  This will load
  * the items as well as drawing them. */
@@ -225,7 +225,7 @@ if (net != NULL)
     {
     /* Copy parameters to statics for recursive routine. */
     rTg = tg;
-    rVg = vg;
+    rHvg = hvg;
     rX = xOff;
 
     /* Clear cashe. */

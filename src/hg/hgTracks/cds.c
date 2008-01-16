@@ -6,7 +6,7 @@
 #include "memalloc.h"
 #include "dystring.h"
 #include "memgfx.h"
-#include "vGfx.h"
+#include "hvGfx.h"
 #include "dnaseq.h"
 #include "dnautil.h"
 #include "hdb.h"
@@ -18,7 +18,7 @@
 #include "hgTracks.h"
 #include "cdsSpec.h"
 
-static char const rcsid[] = "$Id: cds.c,v 1.65 2007/12/05 23:10:34 mhoechsm Exp $";
+static char const rcsid[] = "$Id: cds.c,v 1.65.4.1 2008/01/16 07:00:39 markd Exp $";
 
 /* Definitions of cds colors for coding coloring display */
 #define CDS_ERROR   0
@@ -80,7 +80,7 @@ Color cdsColor[CDS_NUM_COLORS];
 boolean cdsColorsMade = FALSE;
 
 
-static void drawScaledBoxSampleWithText(struct vGfx *vg, 
+static void drawScaledBoxSampleWithText(struct hvGfx *hvg, 
                                         int chromStart, int chromEnd,
                                         double scale, int xOff, int y,
                                         int height, Color color, int score,
@@ -91,7 +91,7 @@ static void drawScaledBoxSampleWithText(struct vGfx *vg,
 {
 
 /*first draw the box itself*/
-drawScaledBoxSample(vg, chromStart, chromEnd, scale, xOff, y, height, 
+drawScaledBoxSample(hvg, chromStart, chromEnd, scale, xOff, y, height, 
 		    color, score);
 
 /*draw text in box if space, and align properly for codons or DNA*/
@@ -111,10 +111,10 @@ if (zoomed)
         w = 1;
 
     if (chromEnd - chromStart == 3)
-        spreadBasesString(vg,x1,y,w,height,whiteIndex(),
+        spreadBasesString(hvg,x1,y,w,height,whiteIndex(),
 		     font,text,strlen(text), TRUE);
     else if (chromEnd - chromStart < 3)
-        spreadBasesString(vg,x1,y,w,height,cdsColor[CDS_PARTIAL_CODON],font,
+        spreadBasesString(hvg,x1,y,w,height,cdsColor[CDS_PARTIAL_CODON],font,
 		     text,strlen(text), TRUE);
     else
         {
@@ -125,7 +125,7 @@ if (zoomed)
             sprintf(c,"%c",text[i]);
             thisX = round((double)(chromStart+i-winStart)*scale) + xOff;
             thisX2 = round((double)(chromStart+1+i-winStart)*scale) + xOff;
-            vgTextCentered(vg, thisX, y, thisX2-thisX, height,
+            hvGfxTextCentered(hvg, thisX, y, thisX2-thisX, height,
 			   whiteIndex(),font,c);
             }
         }
@@ -278,7 +278,7 @@ else   /*negative strand*/
 }
 
 
-static void drawVertLine(struct linkedFeatures *lf, struct vGfx *vg,
+static void drawVertLine(struct linkedFeatures *lf, struct hvGfx *hvg,
                          int chromStart, int xOff, int y,
 			 int height, double scale, Color color)
 /* Draw a 1-pixel wide vertical line at the given chromosomal coord. */
@@ -293,13 +293,13 @@ if ((chromStart < lf->tallStart) || (chromStart >= lf->tallEnd))
     thisY += height/4;
     thisHeight = height - height/2;
     }
-vgLine(vg, thisX, thisY, thisX, thisY+thisHeight, color);
+hvGfxLine(hvg, thisX, thisY, thisX, thisY+thisHeight, color);
 }
 
 
 static void drawCdsDiffBaseTickmarksOnly(struct track *tg,
 	struct linkedFeatures *lf,
-	struct vGfx *vg, int xOff,
+	struct hvGfx *hvg, int xOff,
 	int y, double scale, int heightPer,
 	struct dnaSeq *mrnaSeq, struct psl *psl,
 	int winStart)
@@ -325,7 +325,7 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
 		{
 		if (mrnaSeq->dna[mrnaS+i] != genoSeq->dna[i])
 		    {
-		    drawVertLine(lf, vg, s+i, xOff, y+1, heightPer-2, scale,
+		    drawVertLine(lf, hvg, s+i, xOff, y+1, heightPer-2, scale,
 				 cdsColor[CDS_STOP]);
 		    }
 		}
@@ -352,19 +352,19 @@ for (i=0; i<strlen(s1); i++)
 retStr[i] = '\0';
 }
 
-Color lighterShade(struct vGfx *vg, Color color, double percentLess)
+Color lighterShade(struct hvGfx *hvg, Color color, double percentLess)
     /* Get lighter shade of a color, with a variable level */ 
 {
-    struct rgbColor rgbColor =  vgColorIxToRgb(vg, color); 
+    struct rgbColor rgbColor =  hvGfxColorIxToRgb(hvg, color); 
     rgbColor.r = (int)((rgbColor.r+127)/percentLess);
     rgbColor.g = (int)((rgbColor.g+127)/percentLess);
     rgbColor.b = (int)((rgbColor.b+127)/percentLess);
-    return vgFindColorIx(vg, rgbColor.r, rgbColor.g, rgbColor.b);
+    return hvGfxFindColorIx(hvg, rgbColor.r, rgbColor.g, rgbColor.b);
 }
 
 
 
-static Color colorAndCodonFromGrayIx(struct vGfx *vg, char *codon, int grayIx, 
+static Color colorAndCodonFromGrayIx(struct hvGfx *hvg, char *codon, int grayIx, 
 			      Color ixColor)
 /*convert grayIx value to color and codon which
  * are both encoded in the grayIx*/
@@ -404,7 +404,7 @@ else if (grayIx <= 26)
     }
 else if (grayIx > 26)
     {
-    color = lighterShade(vg, ixColor,1.5);
+    color = lighterShade(hvg, ixColor,1.5);
     sprintf(codon,"%c",grayIx - 26 + 'A' - 1);
     }
 else
@@ -735,30 +735,30 @@ return mrnaSeq;
 
 
 
-static void makeCdsShades(struct vGfx *vg, Color *cdsColor)
+static void makeCdsShades(struct hvGfx *hvg, Color *cdsColor)
 /* setup CDS colors */
 {
-cdsColor[CDS_ERROR] = vgFindColorIx(vg,0,0,0); 
-cdsColor[CDS_ODD] = vgFindColorIx(vg,CDS_ODD_R,CDS_ODD_G,CDS_ODD_B);
-cdsColor[CDS_EVEN] = vgFindColorIx(vg,CDS_EVEN_R,CDS_EVEN_G,CDS_EVEN_B);
-cdsColor[CDS_START] = vgFindColorIx(vg,CDS_START_R,CDS_START_G,CDS_START_B);
-cdsColor[CDS_STOP] = vgFindColorIx(vg,CDS_STOP_R,CDS_STOP_G,CDS_STOP_B);
-cdsColor[CDS_SPLICE] = vgFindColorIx(vg,CDS_SPLICE_R,CDS_SPLICE_G,
+cdsColor[CDS_ERROR] = hvGfxFindColorIx(hvg,0,0,0); 
+cdsColor[CDS_ODD] = hvGfxFindColorIx(hvg,CDS_ODD_R,CDS_ODD_G,CDS_ODD_B);
+cdsColor[CDS_EVEN] = hvGfxFindColorIx(hvg,CDS_EVEN_R,CDS_EVEN_G,CDS_EVEN_B);
+cdsColor[CDS_START] = hvGfxFindColorIx(hvg,CDS_START_R,CDS_START_G,CDS_START_B);
+cdsColor[CDS_STOP] = hvGfxFindColorIx(hvg,CDS_STOP_R,CDS_STOP_G,CDS_STOP_B);
+cdsColor[CDS_SPLICE] = hvGfxFindColorIx(hvg,CDS_SPLICE_R,CDS_SPLICE_G,
 				     CDS_SPLICE_B);
-cdsColor[CDS_PARTIAL_CODON] = vgFindColorIx(vg,CDS_PARTIAL_CODON_R,
+cdsColor[CDS_PARTIAL_CODON] = hvGfxFindColorIx(hvg,CDS_PARTIAL_CODON_R,
 					    CDS_PARTIAL_CODON_G, 
 					    CDS_PARTIAL_CODON_B);
-cdsColor[CDS_QUERY_INSERTION] = vgFindColorIx(vg,CDS_QUERY_INSERTION_R, 
+cdsColor[CDS_QUERY_INSERTION] = hvGfxFindColorIx(hvg,CDS_QUERY_INSERTION_R, 
 						CDS_QUERY_INSERTION_G,
 						CDS_QUERY_INSERTION_B);
-cdsColor[CDS_QUERY_INSERTION_AT_END] = vgFindColorIx(vg, CDS_QUERY_INSERTION_AT_END_R, 
+cdsColor[CDS_QUERY_INSERTION_AT_END] = hvGfxFindColorIx(hvg, CDS_QUERY_INSERTION_AT_END_R, 
 					      CDS_QUERY_INSERTION_AT_END_G,
 					      CDS_QUERY_INSERTION_AT_END_B);
-cdsColor[CDS_POLY_A] = vgFindColorIx(vg,CDS_POLY_A_R,
+cdsColor[CDS_POLY_A] = hvGfxFindColorIx(hvg,CDS_POLY_A_R,
 					    CDS_POLY_A_G, 
 					    CDS_POLY_A_B);
 
-cdsColor[CDS_ALT_START] = vgFindColorIx(vg,CDS_ALT_START_R,
+cdsColor[CDS_ALT_START] = hvGfxFindColorIx(hvg,CDS_ALT_START_R,
 					    CDS_ALT_START_G, 
 					    CDS_ALT_START_B);
 }
@@ -1133,7 +1133,7 @@ if (isRc)
     reverseComplement(retMrnaBases, strlen(retMrnaBases));
 }
 
-static void drawDiffTextBox(struct vGfx *vg, int xOff, int y, 
+static void drawDiffTextBox(struct hvGfx *hvg, int xOff, int y, 
         double scale, int heightPer, MgFont *font, Color color, 
         char *chrom, unsigned s, unsigned e, struct psl *psl, 
         struct dnaSeq *mrnaSeq, struct linkedFeatures *lf,
@@ -1160,7 +1160,7 @@ if(mrnaS >= 0)
 	{
 	if (cartUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE))
 	    complement(dyMrnaSeq->string, dyMrnaSeq->stringSize);
-	drawScaledBoxSampleWithText(vg, s, e, scale, xOff, y, heightPer, 
+	drawScaledBoxSampleWithText(hvg, s, e, scale, xOff, y, heightPer, 
 				    color, lf->score, font, dyMrnaSeq->string,
 				    zoomedToBaseLevel, winStart, maxPixels);
 	}
@@ -1175,17 +1175,17 @@ if(mrnaS >= 0)
 					   FALSE, TRUE);
 	    if (color == cdsColor[CDS_START])
                 startColor = TRUE;
-	    color = colorAndCodonFromGrayIx(vg, mrnaCodon, mrnaGrayIx,
+	    color = colorAndCodonFromGrayIx(hvg, mrnaCodon, mrnaGrayIx,
 					    ixColor);
 	    if (startColor && sameString(mrnaCodon,"M"))
                 color = cdsColor[CDS_START];
-	    drawScaledBoxSampleWithText(vg, s, e, scale, xOff, y, heightPer, 
+	    drawScaledBoxSampleWithText(hvg, s, e, scale, xOff, y, heightPer, 
 					color, lf->score, font, mrnaCodon,
 					zoomedToCodonLevel, winStart,
 					maxPixels);
 	    }
 	else
-	    drawScaledBox(vg, s, e, scale, xOff, y, heightPer, color);
+	    drawScaledBox(hvg, s, e, scale, xOff, y, heightPer, color);
 	}
     else if (drawOpt == baseColorDrawDiffBases)
 	{
@@ -1196,7 +1196,7 @@ if(mrnaS >= 0)
 		       ' ');
 	if (cartUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE))
 	    complement(diffStr, strlen(diffStr));
-	drawScaledBoxSampleWithText(vg, s, e, scale, xOff, y, heightPer, 
+	drawScaledBoxSampleWithText(hvg, s, e, scale, xOff, y, heightPer, 
 				    color, lf->score, font, diffStr, 
 				    zoomedToBaseLevel, winStart, maxPixels);
 	freeMem(diffStr);
@@ -1208,26 +1208,26 @@ if(mrnaS >= 0)
 	    {
 	    /* Color codons red wherever mrna differs from genomic;
 	     * keep the odd/even cycle of dark/light shades. */
-	    colorAndCodonFromGrayIx(vg, genomicCodon, grayIx, ixColor);
+	    colorAndCodonFromGrayIx(hvg, genomicCodon, grayIx, ixColor);
 	    int mrnaGrayIx = setColorByDiff(mrnaBases, genomicCodon[0],
 					    (grayIx > 26));
-	    color = colorAndCodonFromGrayIx(vg, mrnaCodon, mrnaGrayIx,
+	    color = colorAndCodonFromGrayIx(hvg, mrnaCodon, mrnaGrayIx,
 					    ixColor);
 	    safef(mrnaCodon, sizeof(mrnaCodon), "%c", lookupCodon(mrnaBases));
 	    if (mrnaCodon[0] == '\0')
 		mrnaCodon[0] = '*';
 	    if (genomicCodon[0] != 'X' && mrnaCodon[0] != genomicCodon[0])
 		{
-		drawScaledBoxSampleWithText(vg, s, e, scale, xOff, y, 
+		drawScaledBoxSampleWithText(hvg, s, e, scale, xOff, y, 
 					    heightPer, color, lf->score, font,
 					    mrnaCodon, zoomedToCodonLevel,
 					    winStart, maxPixels );
 		}
 	    else
-		drawScaledBox(vg, s, e, scale, xOff, y, heightPer, color);
+		drawScaledBox(hvg, s, e, scale, xOff, y, heightPer, color);
 	    }
 	else
-	    drawScaledBox(vg, s, e, scale, xOff, y, heightPer, color);
+	    drawScaledBox(hvg, s, e, scale, xOff, y, heightPer, color);
 	}
     else if (drawOpt != baseColorDrawCds)
         errAbort("Unknown drawOpt: %d<br>\n", drawOpt);
@@ -1237,12 +1237,12 @@ if(mrnaS >= 0)
 else
     {
     /*show we have an error by coloring entire exon block yellow*/
-    drawScaledBox(vg, s, e, scale, xOff, y, heightPer, MG_YELLOW);
+    drawScaledBox(hvg, s, e, scale, xOff, y, heightPer, MG_YELLOW);
     }
 }
 
 void baseColorDrawItem(struct track *tg,  struct linkedFeatures *lf, 
-		       int grayIx, struct vGfx *vg, int xOff, 
+		       int grayIx, struct hvGfx *hvg, int xOff, 
                        int y, double scale, MgFont *font, int s, int e, 
                        int heightPer, boolean zoomedToCodonLevel, 
                        struct dnaSeq *mrnaSeq, struct psl *psl, 
@@ -1252,7 +1252,7 @@ void baseColorDrawItem(struct track *tg,  struct linkedFeatures *lf,
 /* Draw codon/base-colored item. */
 {
 char codon[2] = " ";
-Color color = colorAndCodonFromGrayIx(vg, codon, grayIx, originalColor);
+Color color = colorAndCodonFromGrayIx(hvg, codon, grayIx, originalColor);
 /* When we are zoomed out far enough so that multiple bases/codons share the 
  * same pixel, we have to draw differences in a separate pass (baseColorOverdrawDiff)
  * so don't waste time drawing the differences here: */
@@ -1261,24 +1261,24 @@ boolean zoomedOutToPostProcessing =
      (drawOpt == baseColorDrawDiffCodons && !zoomedToCdsColorLevel));
 
 if (drawOpt == baseColorDrawGenomicCodons && (e-s <= 3))
-    drawScaledBoxSampleWithText(vg, s, e, scale, xOff, y, heightPer, 
+    drawScaledBoxSampleWithText(hvg, s, e, scale, xOff, y, heightPer, 
                                 color, lf->score, font, codon, 
                                 zoomedToCodonLevel, winStart, maxPixels);
 else if (mrnaSeq != NULL && psl != NULL && !zoomedOutToPostProcessing &&
 	 drawOpt != baseColorDrawGenomicCodons)
-    drawDiffTextBox(vg, xOff, y, scale, heightPer, font, 
+    drawDiffTextBox(hvg, xOff, y, scale, heightPer, font, 
 		    color, chromName, s, e, psl, mrnaSeq, lf,
 		    grayIx, drawOpt, maxPixels,
 		    tg->colorShades, originalColor);
 else
     /* revert to normal coloring */
-    drawScaledBoxSample(vg, s, e, scale, xOff, y, heightPer, 
+    drawScaledBoxSample(hvg, s, e, scale, xOff, y, heightPer, 
 			color, lf->score );
 }
 
 
 static void drawCdsDiffCodonsOnly(struct track *tg,  struct linkedFeatures *lf,
-			   struct vGfx *vg, int xOff,
+			   struct hvGfx *hvg, int xOff,
 			   int y, double scale, int heightPer,
 			   struct dnaSeq *mrnaSeq, struct psl *psl,
 			   int winStart)
@@ -1318,22 +1318,22 @@ for (sf = lf->codons; sf != NULL; sf = sf->next)
 	    mrnaCodon = lookupCodon(mrnaBases);
 	    if (mrnaCodon == '\0')
 		mrnaCodon = '*';
-	    colorAndCodonFromGrayIx(vg, genomicCodon, sf->grayIx, dummyColor);
+	    colorAndCodonFromGrayIx(hvg, genomicCodon, sf->grayIx, dummyColor);
 	    if (queryInsertion ||
 		(genomicCodon[0] != 'X' && mrnaCodon != genomicCodon[0]))
-		drawScaledBox(vg, s, e, scale, xOff, y, heightPer, color);
+		drawScaledBox(hvg, s, e, scale, xOff, y, heightPer, color);
 	    }
 	else
 	    {
 	    /*show we have an error by coloring entire exon block yellow*/
-	    drawScaledBox(vg, s, e, scale, xOff, y, heightPer, MG_YELLOW);
+	    drawScaledBox(hvg, s, e, scale, xOff, y, heightPer, MG_YELLOW);
 	    }
 	}
     }
 }
 
 void baseColorOverdrawDiff(struct track *tg,  struct linkedFeatures *lf,
-			   struct vGfx *vg, int xOff,
+			   struct hvGfx *hvg, int xOff,
 			   int y, double scale, int heightPer,
 			   struct dnaSeq *mrnaSeq, struct psl *psl,
 			   int winStart, enum baseColorDrawOpt drawOpt)
@@ -1355,19 +1355,19 @@ if (setting != NULL)
 
 if (drawOpt == baseColorDrawDiffCodons && !zoomedToCdsColorLevel && enabled)
     {
-    drawCdsDiffCodonsOnly(tg, lf, vg, xOff, y, scale,
+    drawCdsDiffCodonsOnly(tg, lf, hvg, xOff, y, scale,
 			  heightPer, mrnaSeq, psl, winStart);
     }
 if (drawOpt == baseColorDrawDiffBases && !zoomedToBaseLevel && enabled)
     {
-    drawCdsDiffBaseTickmarksOnly(tg, lf, vg, xOff, y, scale,
+    drawCdsDiffBaseTickmarksOnly(tg, lf, hvg, xOff, y, scale,
 				 heightPer, mrnaSeq, psl, winStart);
     }
 }
 
 
 void baseColorOverdrawQInsert(struct track *tg,  struct linkedFeatures *lf,
-			      struct vGfx *vg, int xOff,
+			      struct hvGfx *hvg, int xOff,
 			      int y, double scale, int heightPer,
 			      struct dnaSeq *mrnaSeq, struct psl *psl,
 			      int winStart, enum baseColorDrawOpt drawOpt,
@@ -1404,7 +1404,7 @@ if (indelShowPolyA && mrnaSeq)
 	    if (polyTSize > 0 && (polyTSize + 3) >= psl->qStarts[0])
 		{
 		s = psl->tStarts[0];
-		drawVertLine(lf, vg, s, xOff, y, heightPer-1, scale,
+		drawVertLine(lf, hvg, s, xOff, y, heightPer-1, scale,
 			     cdsColor[CDS_POLY_A]);
 		gotPolyAStart = TRUE;
 		}
@@ -1423,7 +1423,7 @@ if (indelShowPolyA && mrnaSeq)
 	    if (polyTSize > 0 && (polyTSize + 3) >= rcQStart)
 		{
 		s = psl->tStart;
-		drawVertLine(lf, vg, s, xOff, y, heightPer-1, scale,
+		drawVertLine(lf, hvg, s, xOff, y, heightPer-1, scale,
 			     cdsColor[CDS_POLY_A]);
 		gotPolyAEnd = TRUE;
 		}
@@ -1439,7 +1439,7 @@ if (indelShowPolyA && mrnaSeq)
 		  (psl->qStarts[lastBlk] + psl->blockSizes[lastBlk]))))
 		{
 		s = psl->tStarts[lastBlk] + psl->blockSizes[lastBlk];
-		drawVertLine(lf, vg, s, xOff, y, heightPer-1, scale,
+		drawVertLine(lf, hvg, s, xOff, y, heightPer-1, scale,
 			     cdsColor[CDS_POLY_A]);
 		gotPolyAEnd = TRUE;
 		}
@@ -1455,7 +1455,7 @@ if (indelShowQInsert)
 	 * unless it's polyA. */
 	s = (psl->strand[1] == '-') ? (psl->tSize - psl->tStarts[0]) :
 				      psl->tStarts[0];
-	drawVertLine(lf, vg, s, xOff, y, heightPer-1, scale,
+	drawVertLine(lf, hvg, s, xOff, y, heightPer-1, scale,
 		     cdsColor[CDS_QUERY_INSERTION_AT_END]);
 	}
     for (i = 1;  i < psl->blockCount;  i++)
@@ -1473,7 +1473,7 @@ if (indelShowQInsert)
 		/* Insert in query only -- draw vertical orange line. */
 		s = (psl->strand[1] == '-') ? (psl->tSize - psl->tStarts[i]) :
 					      psl->tStarts[i];
-		drawVertLine(lf, vg, s, xOff, y, heightPer-1, scale,
+		drawVertLine(lf, hvg, s, xOff, y, heightPer-1, scale,
 			     cdsColor[CDS_QUERY_INSERTION]);
 		}
 	    }
@@ -1491,14 +1491,14 @@ if (indelShowQInsert)
 	s = (psl->strand[1] == '-') ?
 	    (psl->tSize - (psl->tStarts[lastBlk] + psl->blockSizes[lastBlk])) :
 	    (psl->tStarts[lastBlk] + psl->blockSizes[lastBlk]);
-	drawVertLine(lf, vg, s, xOff, y, heightPer-1, scale,
+	drawVertLine(lf, hvg, s, xOff, y, heightPer-1, scale,
 		     cdsColor[CDS_QUERY_INSERTION_AT_END]);
 	}
     }
 }
 
 
-enum baseColorDrawOpt baseColorDrawSetup(struct vGfx *vg, struct track *tg,
+enum baseColorDrawOpt baseColorDrawSetup(struct hvGfx *hvg, struct track *tg,
 			struct linkedFeatures *lf,
 			struct dnaSeq **retMrnaSeq, struct psl **retPsl)
 /* Returns the CDS coloring option, allocates colors if necessary, and 
@@ -1518,7 +1518,7 @@ if (drawOpt <= baseColorDrawOff && !(indelShowQueryInsert || indelShowPolyA))
 /* allocate colors for coding coloring */
 if (!cdsColorsMade)
     { 
-    makeCdsShades(vg, cdsColor);
+    makeCdsShades(hvg, cdsColor);
     cdsColorsMade = TRUE;
     }
    
@@ -1549,7 +1549,7 @@ if (drawOpt == baseColorDrawItemBases ||
 return drawOpt;
 }
 
-void baseColorDrawRulerCodons(struct vGfx *vg, struct simpleFeature *sfList,
+void baseColorDrawRulerCodons(struct hvGfx *hvg, struct simpleFeature *sfList,
                 double scale, int xOff, int y, int height, MgFont *font, 
                 int winStart, int maxPixels, bool zoomedToText)
 /* Draw amino acid translation of genomic sequence based on a list
@@ -1559,21 +1559,21 @@ struct simpleFeature *sf;
 
 if (!cdsColorsMade)
     {
-    makeCdsShades(vg, cdsColor);
+    makeCdsShades(hvg, cdsColor);
     cdsColorsMade = TRUE;
     }
 
 for (sf = sfList; sf != NULL; sf = sf->next)
     {
     char codon[4];
-    Color color = colorAndCodonFromGrayIx(vg, codon, sf->grayIx, MG_GRAY);
+    Color color = colorAndCodonFromGrayIx(hvg, codon, sf->grayIx, MG_GRAY);
     if (zoomedToText)
-        drawScaledBoxSampleWithText(vg, sf->start, sf->end, scale, insideX, y,
+        drawScaledBoxSampleWithText(hvg, sf->start, sf->end, scale, insideX, y,
 				    height, color, 1.0, font, codon, TRUE,
 				    winStart, maxPixels);
     else
         /* zoomed in just enough to see colored boxes */
-        drawScaledBox(vg, sf->start, sf->end, scale, xOff, y, height, color);
+        drawScaledBox(hvg, sf->start, sf->end, scale, xOff, y, height, color);
     }
 }
 
