@@ -12,7 +12,7 @@ hgEncodeScheduler: $O $(MYLIBS)
 	${STRIP} ${BINDIR}/hgEncodeScheduler${EXE}
 
 test:
-	hgEncodeScheduler encpipeline_dev /scratch/encpipeline_dev
+	hgEncodeScheduler encpipeline_dev /cluster/store3/encpipeline_dev
 
 clean:
 	rm $O

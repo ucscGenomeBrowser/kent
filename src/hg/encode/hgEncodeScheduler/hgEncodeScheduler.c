@@ -16,7 +16,7 @@
 #include <signal.h>
 #include <sys/wait.h>
 
-static char const rcsid[] = "$Id: hgEncodeScheduler.c,v 1.12 2008/01/15 21:31:17 galt Exp $";
+static char const rcsid[] = "$Id: hgEncodeScheduler.c,v 1.13 2008/01/16 07:35:13 galt Exp $";
 
 char *db = NULL;
 char *dir = NULL;
@@ -250,7 +250,7 @@ char *errorPath = getPathToErrorFile(project, jobType);
 
 //uglyf("\n  submssionPath=%s\n", errorPath);
 
-FILE *f = fopen(errorPath,"w");
+FILE *f = mustOpen(errorPath,"w");
 fprintf(f, "%s", message);
 carefulClose(&f);
 
