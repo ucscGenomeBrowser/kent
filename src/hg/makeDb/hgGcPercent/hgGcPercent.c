@@ -11,7 +11,7 @@
 #include "twoBit.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: hgGcPercent.c,v 1.28 2007/10/30 05:56:32 daryl Exp $";
+static char const rcsid[] = "$Id: hgGcPercent.c,v 1.29 2008/01/16 20:39:45 angie Exp $";
 
 /* Command line switches. */
 int winSize = 20000;            /* window size */
@@ -69,9 +69,10 @@ errAbort(
   "   -bedRegionIn=input.bed   Read in a bed file for GC content in specific regions and write to bedRegionsOut\n"
   "   -bedRegionOut=output.bed Write a bed file of GC content in specific regions from bedRegionIn\n\n"
   "example:\n"
-  "  calculate GC percent in 5 base windows using a 2bit nib assembly (dp2):\n"
-  "  hgGcPercent -wigOut -doGaps -file=stdout -win=5 dp2 \\\n"
-  "      /cluster/data/dp2 | wigEncode stdin gc5Base.wig gc5Base.wib"
+  "  calculate GC percent in 5 base windows using a 2bit assembly (dp2):\n"
+  "    hgGcPercent -wigOut -doGaps -win=5 -file=stdout -verbose=0 \\\n"
+  "      dp2 /cluster/data/dp2 \\\n"
+  "    | wigEncode stdin gc5Base.wig gc5Base.wib"
       , winSize);
 }
 
@@ -103,13 +104,12 @@ if (! (previousChrom && (sameWord(previousChrom, chrom))))
 fprintf(f, "%d\t%g\n", start+1, ppt/10.0);
 }
 
-void makeGcLineFromSeq(struct dnaSeq *seq, char *chrom, int start, int end,
-		       FILE *f)
-/* Given a window of sequence, print out a line of BED 5 with the GC 
- * parts per thousand (not percent) in the window. */
+void makeGcLineFromSeq(DNA *dna, char *chrom, int start, int end, FILE *f)
+/* Given a sequence and window within the sequence, print out a line of
+ * BED 5 with the GC parts per thousand (not percent) in the window (or 
+ * ascii-wiggle if -wigOut). */
 {
 static int dotMod = 0;
-DNA *dna = seq->dna;
 int minCount = winSize/4;
 int i, count, gcCount, val, ppt, gapCount;
 
@@ -125,7 +125,7 @@ if ((++dotMod&127) == 0)
     }
 
 gapCount = count = gcCount = 0;
-for (i=0; i < seq->size; ++i)
+for (i = start;  i < end;  ++i)
     {
     if ((val = ntVal[(int)dna[i]]) >= 0)
 	{
@@ -146,17 +146,7 @@ else
     ppt = 0;
 
 
-if (doGaps)
-    {
-    if (gapCount < seq->size)
-	{
-	if (wigOut)
-	    wigOutLine(f, chrom, start, end, ppt);
-	else
-	    fprintf(f, "%s\t%d\t%d\t%s\t%d\n", chrom, start, end, "GC", ppt);
-	}
-    }
-else
+if (!doGaps || gapCount < (end - start))
     {
     if (wigOut)
 	wigOutLine(f, chrom, start, end, ppt);
@@ -239,15 +229,10 @@ else
     for (start=0, end=0;  start < chromSize && end < chromSize;  
 	 start = end - overlap)
 	{
-	struct dnaSeq *subSeq = NULL;
-	DNA *subSeqDNA = NULL;
 	end = start + winSize;
 	if (end > chromSize)
 	    end = chromSize;
-	subSeqDNA = cloneStringZ(seq->dna + start, end - start);
-	subSeq = newDnaSeq(subSeqDNA, end - start, NULL);
-	makeGcLineFromSeq(subSeq, chrom, start, end, f);
-	freeDnaSeq(&subSeq);
+	makeGcLineFromSeq(seq->dna, chrom, start, end, f);
 	}
 freeDnaSeq(&seq);
 carefulClose(&nf);
@@ -310,15 +295,10 @@ else
 	    for (start=0, end=0;  start < chromSize && end < chromSize;  
 		 start = end - overlap)
 		{
-		struct dnaSeq *subSeq = NULL;
-		DNA *subSeqDNA = NULL;
 		end = start + winSize;
 		if (end > chromSize)
 		    end = chromSize;
-		subSeqDNA = cloneStringZ(seq->dna + start, end - start);
-		subSeq = newDnaSeq(subSeqDNA, end - start, NULL);
-		makeGcLineFromSeq(subSeq, chrom, start, end, f);
-		freeDnaSeq(&subSeq);
+		makeGcLineFromSeq(seq->dna, chrom, start, end, f);
 		}
 	    freeDnaSeq(&seq);
 	    }
