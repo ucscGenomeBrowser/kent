@@ -149,17 +149,23 @@ class PipelineController < ApplicationController
   def delete
     # call an unload cleanup routine 
     #  (e.g. that can remove .wib symlinks from /gbdb/ to the submission dir)
-    msg = ""
-    msg += "scheduling project cleanup for deletion"
-    @project.status = "schedule unloading"
+    projectDir= path_to_project_dir
+    if File.exists?(projectDir)
+      msg = ""
+      msg += "scheduling project cleanup for deletion"
+      @project.status = "schedule unloading"
 
-    unless @project.save
-      flash[:warning] = "project record save failed"
-      return
-    end
+      unless @project.save
+        flash[:warning] = "project record save failed"
+        return
+      end
     
-    flash[:notice] = msg
-    redirect_to :action => 'show', :id => @project
+      flash[:notice] = msg
+      redirect_to :action => 'show', :id => @project
+    else
+      # nothing was every uploaded, no cleanup required
+      delete_completion
+    end
 
   end
   
