@@ -212,7 +212,7 @@
 #include "itemConf.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1379 2008/01/15 17:37:01 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1380 2008/01/16 20:37:30 fanhsu Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -7842,6 +7842,7 @@ char *chrom, *chromStart, *chromEnd;
 struct dyString *currentCgiUrl;
 char *upperDisease;
 char *diseaseClass;
+char *upperItemName;
 
 char *url = tdb->url;
 
@@ -7931,8 +7932,10 @@ if (url != NULL && url[0] != 0)
 	printf("<A HREF=\"%s",
 	"http://geneticassociationdb.nih.gov/cgi-bin/tableview.cgi?table=allview&cond=upper(DISEASE)%20like%20'%25");
 	printf("%s", cgiEncode(upperDisease));
-	printf("%s%s%s\" target=_blank>", "%25'%20AND%20upper(GENE)%20%20like%20'%25", itemName, "%25'");
-	
+
+	upperItemName = strdup(itemName);
+	touppers(upperItemName);
+	printf("%s%s%s\" target=_blank>", "%25'%20AND%20upper(GENE)%20%20like%20'%25", upperItemName, "%25'");
 	printf("%s</B></A>\n", row[0]);
         row = sqlNextRow(sr);
     	}
