@@ -38,10 +38,14 @@ class PipelineController < ApplicationController
       if @project.status == "load failed"
         @errText = getLoadErrText
       else
-	if @project.status == "upload failed"
-	  @errText = getUploadErrText
+	if @project.status == "unload failed"
+	  @errText = getUnloadErrText
 	else
-	  @errText = ""
+	  if @project.status == "upload failed"
+	    @errText = getUploadErrText
+	  else
+	    @errText = ""
+    	  end
     	end
       end
     end
@@ -53,6 +57,9 @@ class PipelineController < ApplicationController
     if @project.status.starts_with?("schedule expand all")
       reexpand_all_completion
     end
+    if @project.status.starts_with?("schedule deleting")
+      delete_completion
+    end
   end
 
   def valid_status
@@ -63,6 +70,11 @@ class PipelineController < ApplicationController
   def load_status
     @project = Project.find(params[:id])
     @errText = getLoadErrText
+  end
+
+  def unload_status
+    @project = Project.find(params[:id])
+    @errText = getUnloadErrText
   end
 
   def upload_status
@@ -135,27 +147,22 @@ class PipelineController < ApplicationController
   end
   
   def delete
-    projectDir= path_to_project_dir
-    if File.exists?(projectDir)
-      Dir.entries(projectDir).each { 
-        |f| 
-        unless (f == ".") or (f == "..")
-          fullName = File.join(projectDir,f)
-          cmd = "rm -fr #{fullName}"
-          exitCode = system(cmd)
-          unless exitCode 
-            flash[:warning] = "error cleaning up temporary upload subdirectory: <br>command=[#{cmd}], exitCode = #{exitCode}<br>"  
-	    redirect_to :action => 'show_user'
-            return
-          end
-        end
-      }
-      Dir.delete(projectDir)
+    # call an unload cleanup routine 
+    #  (e.g. that can remove .wib symlinks from /gbdb/ to the submission dir)
+    msg = ""
+    msg += "scheduling project cleanup for deletion"
+    @project.status = "schedule unloading"
+
+    unless @project.save
+      flash[:warning] = "project record save failed"
+      return
     end
-    Project.find(params[:id]).destroy
-    redirect_to :action => 'show_user'
+    
+    flash[:notice] = msg
+    redirect_to :action => 'show', :id => @project
+
   end
- 
+  
   def upload
     @project = Project.find(params[:id])
     return unless request.post?
@@ -612,6 +619,15 @@ private
     return ""
   end
 
+  def getUnloadErrText
+    # get error output file
+    @filename = "unload_error"
+    errFile = path_to_file
+    return File.open(errFile, "rb") { |f| f.read }
+  rescue
+    return ""
+  end
+
   def getUploadErrText
     # get error output file
     @filename = "upload_error"
@@ -674,4 +690,27 @@ private
 
   end
 
+  def delete_completion
+
+    projectDir= path_to_project_dir
+    if File.exists?(projectDir)
+      Dir.entries(projectDir).each { 
+        |f| 
+        unless (f == ".") or (f == "..")
+          fullName = File.join(projectDir,f)
+          cmd = "rm -fr #{fullName}"
+          exitCode = system(cmd)
+          unless exitCode 
+            flash[:warning] = "error cleaning up temporary upload subdirectory: <br>command=[#{cmd}], exitCode = #{exitCode}<br>"  
+	    redirect_to :action => 'show_user'
+            return
+          end
+        end
+      }
+      Dir.delete(projectDir)
+    end
+    Project.find(params[:id]).destroy
+    redirect_to :action => 'show_user'
+  end
+ 
 end

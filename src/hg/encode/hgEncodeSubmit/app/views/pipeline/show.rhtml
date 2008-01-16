@@ -95,8 +95,10 @@
 <hr />
 
 <% if @errText != "" -%> 
-  <h3>validate error:<br>
-    <%= @errText -%>
+  <h3>Error:<br>
+<pre>
+<%= @errText -%>
+</pre>
   </h3><br>
 <% end %>
 

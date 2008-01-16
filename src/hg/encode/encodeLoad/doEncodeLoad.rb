@@ -9,7 +9,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeLoad/doEncodeLoad.rb,v 1.4 2008/01/14 19:33:58 galt Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeLoad/doEncodeLoad.rb,v 1.5 2008/01/16 03:07:26 galt Exp $
 
 # Global constants
 
@@ -30,7 +30,7 @@ def errAbort(msg)
 end
 
 def usage 
-    errAbort "usage: encodeLoad.rb submission_type project_submission_dir\n"
+    errAbort "usage: doEncodeLoad.rb submission_type project_submission_dir\n"
 end
 
 def verbose(level, string)
@@ -43,6 +43,7 @@ end
 
 def loadWig(tableName, fileList)
   if system( "head -1000 -q #{fileList} | wigEncode stdin stdout #{tableName}.wib | hgLoadWiggle -pathPrefix=/gbdb/#{$encodeDb}/wib -tmpDir=#{$tempDir} #{$encodeDb} #{tableName} stdin >loadWig.out 2>&1" )
+      system( "rm -f /gbdb/#{$encodeDb}/wib/#{tableName}.wib" )
       system( "ln -s #{tableName}.wib /gbdb/#{$encodeDb}/wib" )
       print "#{fileList} Passed\n";
   else 
@@ -122,7 +123,7 @@ end
 $submitType = ARGV[0]	# currently not used
 $submitDir = ARGV[1]
 
-verbose 1, "Loading submission in directory \'#{$submitDir}\'\n"
+verbose 1, "Loading submission in directory #{$submitDir}\n"
 Dir.chdir $submitDir
 
 
