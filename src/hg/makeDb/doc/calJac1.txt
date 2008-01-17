@@ -4,7 +4,7 @@
 # This file describes browser build for the Marmoset
 # genome, July 2007
 #
-#	"$Id: calJac1.txt,v 1.11 2008/01/11 17:55:19 hiram Exp $"
+#	"$Id: calJac1.txt,v 1.12 2008/01/17 20:48:20 hiram Exp $"
 #
 ######################################################################
 ## DOWNLOAD SEQUENCE (DONE - 2007-08-21 - Hiram)
@@ -1464,6 +1464,28 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     #	Let's see if the downloads will work
     ssh hgwdev
     /cluster/data/calJac1
-    makeDownloads.pl calJac1
+    #	expecting to find repeat masker .out file here:
+    ln -s bed/RepeatMasker/calJac1.fa.out .
+    time nice -n +19 /cluster/bin/scripts/makeDownloads.pl \
+	-workhorse=hgwdev calJac1 > jkStuff/downloads.log 2>&1
+    #	real    24m3.210s
+    #	failed making upstream sequences:
+    #	featureBits calJac1 mgcGenes:upstream:1000 -fa=stdout
+    #	setpriority: Permission denied.
+    #	the 'nice' from my bash shell causes trouble inside the csh
+    #	script which uses nice.  Finish off the install step manually
+    #	with the mgcGenes upstreams ...
+
+#############################################################################
+#  PushQ entries (DONE - 2008-01-11 - Hiram)
+    ssh hgwdev
+    /cluster/data/calJac1
+    /cluster/bin/scripts/makePushQSql.pl calJac1 > jkStuff/pushQ.sql
+    #	output warnings:
+# calJac1 does not have seq
+# calJac1 does not have gbMiscDiff
+# Could not tell (from trackDb, all.joiner and hardcoded lists of supporting
+# and genbank tables) which tracks to assign these tables to:
+#	genscanPep
 
 #############################################################################
