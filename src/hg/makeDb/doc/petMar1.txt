@@ -4,7 +4,7 @@
 # This file describes browser build for the Sea Lamprey
 # genome, Petromyzon marinus, March 2007, v.3.0 from WUSTL
 #
-#       "$Id: petMar1.txt,v 1.2 2008/01/15 01:04:41 hiram Exp $"
+#       "$Id: petMar1.txt,v 1.3 2008/01/17 20:49:36 hiram Exp $"
 #
 
 ##########################################################################
@@ -58,6 +58,15 @@ dbDbSpeciesDir lamprey
     #	checked in the trackDb/lamprey/ files and the browser was functioning
     #	Created symlink from /gbdb/petMar1/petMar1.2bit -> petMar1.unmasked.2bit
     #	to enable base-level display on the browser.
+    twoBitToFa petMar1.unmasked.2bit stdout | faSize stdin
+    #	1135497967 bases (303801529 N's 831696438 real 831696438
+    #	upper 0 lower) in 2 sequences in 1 files
+
+    #	the AGP file came with 162 gaps of zero length, eliminate them
+    #	from the gap table
+    hgsql -e "select * from chrUn_gap where chromEnd=chromStart;" petMar1
+    hgsql -N -e "delete from chrUn_gap where chromEnd=chromStart;" petMar1
+
 
 ##########################################################################
 #  Pick up an image from the EPA, usage rights are free
@@ -66,6 +75,7 @@ dbDbSpeciesDir lamprey
     cd /cluster/data/petMar1/photo
     wget --timestamping 'http://www.epa.gov/glnpo/image/vbig/229.jpg' \
 	-O petromyzon_marinus.epa.jpg
+
 ##########################################################################
 #  Running WindowMasker
     ssh kolossus
@@ -74,5 +84,307 @@ dbDbSpeciesDir lamprey
     /cluster/bin/scripts/doWindowMasker.pl \
 	-buildDir /cluster/data/petMar1/bed/WindowMasker \
 	-workhorse=kolossus -verbose=2 petMar1 > wm.log 2>&1 &
-    
+    twoBitToFa petMar1.wmsk.sdust.2bit stdout | faSize stdin
+    #	1135497967 bases (303801529 N's 831696438 real 493957060
+    #	upper 337739378 lower) in 2 sequences in 1 files
+    #	%29.74 masked total, %40.61 masked real
+
+
+    ssh hgwdev
+    cd /cluster/data/petMar1/bed/WindowMasker
+    hgLoadBed petMar1 windowmaskerSdust windowmasker.sdust.bed.gz
+    #	Loaded 4976025 elements of size 3
+
+    #	WM has a bug where it masks the gaps too, don't like that,
+    #	fetch the WM track without the gaps, can do this in the
+    #	table browser with an intersection of WMask AND ! gap
+    #	or via featureBits:
+    featureBits petMar1 -not gap -bed=notGap.bed
+    #	hint: also works with the gold table instead of notGap
+    featureBits petMar1 windowmaskerSdust notGap.bed -bed=stdout \
+	| gzip -c > cleanWMask.bed.gz
+    hgLoadBed petMar1 windowmaskerSdust cleanWMask.bed.gz
+    #	Loaded 4956395 elements of size 4
+    featureBits petMar1 windowmaskerSdust
+    #	337739378 bases of 831696438 (40.608%) in intersection
+
+    #	chrM has a gi:5835065 fragment name, I would rather have NC_001626
+    hgsql -e 'update chrM_gold set frag="NC_001626";' petMar1
+ 
 ##########################################################################
+#	Running TRF simple repeats (DONE - 2008-01-14 - Hiram)
+    ssh kkstore04
+    mkdir /cluster/data/petMar1/bed/simpleRepeat
+    cd /cluster/data/petMar1/bed/simpleRepeat
+    doSimpleRepeat.pl petMar1 -smallClusterHub=memk \
+	-workhorse=kolossus \
+	-buildDir=/cluster/data/petMar1/bed/simpleRepeat > do.log 2>&1 &
+    #	ran into a bug with the nice difficulty on the featureBits
+    featureBits petMar1 simpleRepeat >& fb.simpleRepeat
+    75844896 bases of 831696438 (9.119%) in intersection
+    doSimpleRepeat.pl petMar1 -smallClusterHub=memk \
+	-continue=cleanup -workhorse=kolossus \
+	-buildDir=/cluster/data/petMar1/bed/simpleRepeat > cleanup.log 2>&1 &
+
+##########################################################################
+# Repeat Masker (DONE - 2008-01-15 - Hiram)
+    ssh kkstore04
+    mkdir /cluster/data/petMar1/bed/RepeatMasker
+    cd /cluster/data/petMar1/bed/RepeatMasker
+    doRepeatMasker.pl petMar1 -bigClusterHub=kk -workhorse=kolossus \
+	-buildDir=/cluster/data/petMar1/bed/RepeatMasker \
+	-verbose=2 > do.log 2>&1
+##########################################################################
+# Add WindowMasker and trfMask masking to the 2bit sequenct
+    ssh kkstore04
+    cd /cluster/data/petMar1
+    cat bed/WindowMasker/cleanWMask.bed bed/simpleRepeat/trfMask.bed \
+	| twoBitMask -type=.bed petMar1.unmasked.2bit stdin petMar1.2bit
+    #	ignore the warning about bed file > 13 fields
+    twoBitToFa petMar1.2bit stdout | faSize stdin
+    #	1135497967 bases (303801529 N's 831696438 real 493403731 upper
+    #	338292707 lower) in 2 sequences in 1 files
+    %29.79 masked total, %40.68 masked real
+
+############################################################################
+#  BLATSERVERS ENTRY (DONE - 2008-01-15 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("petMar1", "blat15", "17788", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("petMar1", "blat15", "17789", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################
+## Reset default position to the uc002wuf.1 opsin gene
+    ssh hgwdev
+    hgsql -e 'update dbDb set defaultPos="chrUn:662749842-662752352"
+	where name="petMar1";' hgcentraltest
+
+#########################################################################
+# MAKE 11.OOC FILE FOR BLAT (DONE - 2008-01-15 - Hiram)
+    # Use -repMatch=200 (based on size -- for human we use 1024, and 
+    # medaka size is ~20% of human judging by gapless oryLat1 vs. hg18 
+    # genome sizes from featureBits.
+    ssh kkstore04
+    cd /cluster/data/petMar1
+    blat petMar1.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=petMar1.11.ooc -repMatch=200
+    #	Wrote 49108 overused 11-mers to petMar1.11.ooc
+
+    #	And the lift file for non-bridged gaps:
+    ssh hgwdev
+    cd /cluster/data/petMar1/jkStuff
+    gapToLift petMar1 petMar1.nonBridged.lft
+
+##########################################################################
+# GENBANK AUTO UPDATE (DONE - 2008-01-15 - Hiram)
+    # align with latest genbank process.
+    ssh hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+    # edit etc/genbank.conf to add petMar1 just after gasAcu1
+
+# petMar1 (Branchiostoma floridae - Lancelet)
+petMar1.serverGenome = /cluster/data/petMar1/petMar1.2bit
+petMar1.clusterGenome = /cluster/bluearc/scratch/data/petMar1/petMar1.2bit
+petMar1.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+petMar1.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+petMar1.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+petMar1.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+petMar1.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+petMar1.ooc = /cluster/data/petMar1/petMar1.11.ooc
+petMar1.lift = /cluster/data/petMar1/jkStuff/petMar1.nonBridged.lft
+petMar1.refseq.mrna.native.load = yes
+petMar1.refseq.mrna.xeno.load = yes
+petMar1.genbank.mrna.xeno.load = yes
+petMar1.genbank.est.native.load = yes
+petMar1.downloadDir = petMar1
+petMar1.perChromTables = no
+
+    cvs ci -m "Added petMar1." etc/genbank.conf
+    # update /cluster/data/genbank/:
+    make etc-update
+
+    # Edit src/lib/gbGenome.c to add new species.
+    cvs ci -m "Added Petromyzon marinus (Sea Lamprey)." src/lib/gbGenome.c
+    make install-server
+
+    ssh genbank
+    screen # control this with a screen so you can get back to it
+    cd /cluster/data/genbank
+    time nice -n +19 bin/gbAlignStep -initial petMar1 &
+    #	logFile: var/build/logs/2008.01.15-12:00:34.petMar1.initalign.log
+    #	real    258m7.976s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad petMar1
+    #	logFile: var/dbload/hgwdev/logs/2008.01.15-16:21:10.dbload.log
+XXX - running - 2008-01-15
+
+    #	real    6m57.557s
+    ## re-load to get the est track after adding that to the .conf file
+    #	var/dbload/hgwdev/logs/2007.03.29-17:09:35.dbload.log
+    #	real    19m2.168s
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+    # add petMar1 to:
+        etc/align.dbs
+        etc/hgwdev.dbs
+    cvs ci -m "Added petMar1 - Branchiostoma floridae (lancelet)" \
+	etc/align.dbs etc/hgwdev.dbs
+    make etc-update
+
+#########################################################################
+# BLASTZ/CHAIN/NET Medaka oryLat1 (DONE - 2008-01-15 - Hiram)
+#	Try 1 failed, run again with contigs
+    ssh kkstore04
+    screen # use screen to control this job
+    mkdir /cluster/data/oryLat1/bed/blastz.petMar1.2008-01-15
+    cd /cluster/data/oryLat1/bed/blastz.petMar1.2008-01-15
+
+    cat << '_EOF_' > DEF
+# Medaka vs. Lamprey
+
+# using the "close" genome alignment parameters
+#	see also: http://genomewiki.ucsc.edu/index.php/Mm9_multiple_alignment
+BLASTZ_Y=9400
+BLASTZ_L=3000
+BLASTZ_K=3000
+BLASTZ_M=50
+
+# TARGET: Medaka oryLat1 (40M chunks covers the largest chroms in one gulp)
+#       chrUn in Scaffolds for this alignment run
+SEQ1_DIR=/san/sanvol1/scratch/oryLat1/oryLat1.sdTrf.2bit
+SEQ1_LEN=/cluster/data/oryLat1/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LIMIT=30
+SEQ1_LAP=10000
+
+# QUERY: Lamprey petMar1
+SEQ2_DIR=/cluster/bluearc/scratch/data/petMar1/petMar1.2bit
+SEQ2_LEN=/cluster/data/petMar1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=30
+SEQ2_LAP=0
+
+BASE=/cluster/data/oryLat1/bed/blastz.petMar1.2008-01-15
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    time doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-chainMinScore=3000 -chainLinearGap=medium \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-bigClusterHub=memk > do.log 2>&1 &
+XXX - running 2008-01-15 12:50
+    #	real    1053m9.027s
+    #	netChains failed, during chainStitchId:
+    #	q end mismatch 1073742062 vs 1111312799 line 510 of stdin
+
+############################################################################
+#  Create contigs-only masked 2bit file for non-bridged gap free blastz runs
+#	 (DONE - 2008-01-15 - Hiram)
+    ssh kkstore04
+    mkdir /cluster/data/petMar1/contigSequence
+    cd /cluster/data/petMar1/contigSequence
+    cp -p /cluster/data/priPac1/jkStuff/lft2BitToFa.pl ../jkStuff
+    ../jkStuff/lft2BitToFa.pl ../petMar1.2bit \
+	../jkStuff/petMar1.nonBridged.lft > supercontigs.fa
+    #	this took quite a long time, about 6 hours or so
+    #	this doesn't have chrM yet
+    faSize supercontigs.fa ../M/chrM.fa
+    #	1027258967 bases (195562529 N's 831696438 real 493405059 upper
+    #	338291379 lower) in 108241 sequences in 2 files
+    #	%32.93 masked total, %40.67 masked real
+    cat supercontigs.fa ../M/chrM.fa | faToTwoBit stdin petMar1.supers.2bit
+    twoBitToFa petMar1.supers.2bit stdout | faSize stdin
+    #	1027258967 bases (195562529 N's 831696438 real 493405059 upper
+    #	338291379 lower) in 108241 sequences in 1 files
+    #	%32.93 masked total, %40.67 masked real
+    twoBitInfo petMar1.supers.2bit stdout | sort -k2nr > super.sizes
+    cp -p petMar1.supers.2bit /cluster/bluearc/scratch/data/petMar1
+    cd ..
+    ln -s contigSequence/super.sizes .
+
+#########################################################################
+# BLASTZ/CHAIN/NET Medaka oryLat1 (DONE - 2008-01-16 - Hiram)
+#	Try 2 with contigs for Lamprey
+    ssh kkstore04
+    screen # use screen to control this job
+    mkdir /cluster/data/oryLat1/bed/blastz.petMar1.2008-01-15
+    cd /cluster/data/oryLat1/bed/blastz.petMar1.2008-01-15
+
+    cat << '_EOF_' > DEF
+# Medaka vs. Lamprey
+
+# using the "close" genome alignment parameters
+#	see also: http://genomewiki.ucsc.edu/index.php/Mm9_multiple_alignment
+BLASTZ_Y=9400
+BLASTZ_L=3000
+BLASTZ_K=3000
+BLASTZ_M=50
+
+# TARGET: Medaka oryLat1 (40M chunks covers the largest chroms in one gulp)
+#       chrUn in Scaffolds for this alignment run
+SEQ1_DIR=/san/sanvol1/scratch/oryLat1/oryLat1.sdTrf.2bit
+SEQ1_LEN=/cluster/data/oryLat1/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LIMIT=30
+SEQ1_LAP=10000
+
+# QUERY: Lamprey petMar1
+SEQ2_DIR=/cluster/bluearc/scratch/data/petMar1/petMar1.2bit
+SEQ2_LEN=/cluster/data/petMar1/chrom.sizes
+SEQ2_CTGDIR=/cluster/bluearc/scratch/data/petMar1/petMar1.supers.2bit
+SEQ2_CTGLEN=/cluster/data/petMar1/super.sizes
+SEQ2_LIFT=/cluster/data/petMar1/jkStuff/petMar1.nonBridged.lft
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=150
+SEQ2_LAP=0
+
+BASE=/cluster/data/oryLat1/bed/blastz.petMar1.2008-01-16
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    time doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-chainMinScore=3000 -chainLinearGap=medium \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-bigClusterHub=kk > do.log 2>&1 &
+    #	real    218m14.787s
+# Completed: 69774 of 70854 jobs
+# Crashed: 1080 jobs
+# CPU time in finished jobs:    3950133s   65835.55m  1097.26h   45.72d  0.125 y
+# IO & Wait Time:               1218716s   20311.93m   338.53h   14.11d  0.039 y
+# Average job time:                  74s       1.23m     0.02h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            1629s      27.15m     0.45h    0.02d
+# Submission to last job:         12951s     215.85m     3.60h    0.15d
+    #	had some parasol bookeeping problems, it actually finished
+    #	the kluster run but got confused.  Checked manually with
+    #	para recover -> nothing in new job list, and check files in
+    #	psl result directory finding the correct number of files for the
+    #	the job count.  Make the run.time file and continuing:
+    time doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-continue=cat -chainMinScore=3000 -chainLinearGap=medium \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-bigClusterHub=kk > cat.log 2>&1 &
+    #	real    7m47.963s
+    #	something failed
+    #	had the specification to the lft file incorrect, failed during
+    #	chain run.  Fix that, finish the run, now continuing:
+    time doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-continue=chainMerge -chainMinScore=3000 -chainLinearGap=medium \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-bigClusterHub=kk > chainMerge.log 2>&1 &
+XXX - running 2008-01-16 22:35
+
+
