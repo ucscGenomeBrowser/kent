@@ -19268,4 +19268,57 @@ TMPDIR=/scratch/tmp
    hgLoadBed -nobin hg18 gad hg18.gad.tab
    rm j18.tmp
 #######################################################################
+# BLASTZ/CHAIN/NET Lamprey petMar1 (DONE - 2008-01-16 - Hiram)
+#	with contigs for Lamprey
+    ssh kkstore04
+    screen # use screen to control this job
+    mkdir /cluster/data/hg18/bed/blastzPetMar1.2008-01-16
+    cd /cluster/data/hg18/bed/blastzPetMar1.2008-01-16
+
+    cat << '_EOF_' > DEF
+# Human vs. Lamprey
+
+# using the "close" genome alignment parameters
+#	see also: http://genomewiki.ucsc.edu/index.php/Mm9_multiple_alignment
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: Human - WindowMasker sequence
+SEQ1_DIR=/san/sanvol1/scratch/hg18/hg18.sdTrf.2bit
+SEQ1_LEN=/cluster/data/hg18/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=1
+
+# QUERY: Lamprey petMar1
+SEQ2_DIR=/cluster/bluearc/scratch/data/petMar1/petMar1.2bit
+SEQ2_LEN=/cluster/data/petMar1/chrom.sizes
+SEQ2_CTGDIR=/cluster/bluearc/scratch/data/petMar1/petMar1.supers.2bit
+SEQ2_CTGLEN=/cluster/data/petMar1/super.sizes
+SEQ2_LIFT=/cluster/data/petMar1/petMar1.nonBridged.lft
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=150
+SEQ2_LAP=0
+
+BASE=/cluster/data/hg18/bed/blastzPetMar1.2008-01-16
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    time doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-bigClusterHub=pk > do.log 2>&1 &
+    #	strange failures in the initial pk batch.  Two times an ASCII zero
+    #	turned into a ctrl-P.  Manually edit the batch file to fix it up.
+    #	finish the batch manually. Continuing:
+    time doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-continue=cat -chainMinScore=5000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-bigClusterHub=pk > cat.log 2>&1 &
+
+XXX - running 2008-01-16 12:40
 
