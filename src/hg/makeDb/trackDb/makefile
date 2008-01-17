@@ -50,6 +50,7 @@ DBS = 	hg13 hg15 hg16 hg17 hg18\
 	oryLat1 \
 	ornAna1 \
 	fr1 fr2 \
+	petMar1 \
 	braFlo1 \
 	cioSav1 \
 	danRer2 danRer3 danRer4 danRer5 \
