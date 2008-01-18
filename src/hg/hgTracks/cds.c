@@ -18,7 +18,7 @@
 #include "hgTracks.h"
 #include "cdsSpec.h"
 
-static char const rcsid[] = "$Id: cds.c,v 1.65 2007/12/05 23:10:34 mhoechsm Exp $";
+static char const rcsid[] = "$Id: cds.c,v 1.66 2008/01/18 23:27:22 aamp Exp $";
 
 /* Definitions of cds colors for coding coloring display */
 #define CDS_ERROR   0
@@ -1388,26 +1388,17 @@ if (indelShowPolyA && mrnaSeq)
     /* Draw green lines for polyA first, so if the entire transcript is 
      * jammed into one pixel and the other end has a blue line, blue is 
      * what the user sees. */
-    if (psl->qStarts[0] != 0 && psl->strand[0] == '-')
+    if (psl->qStarts[0] != 0 && psl->strand[0] == '-' && psl->strand[1] != '-')
 	{
-	if (psl->strand[1] == '-')
+	/* We reverse-complemented in baseColorDrawSetup, so test for 
+	 * polyT head: */
+	int polyTSize = headPolyTSizeLoose(mrnaSeq->dna, mrnaSeq->size);
+	if (polyTSize > 0 && (polyTSize + 3) >= psl->qStarts[0])
 	    {
-	    warn("warning: %s has strand \"--\" which "
-		 "baseColorOverdrawQInsert doesn't know how to handle",
-		 psl->qName);
-	    }
-	else
-	    {
-	    /* We reverse-complemented in baseColorDrawSetup, so test for 
-	     * polyT head: */
-	    int polyTSize = headPolyTSizeLoose(mrnaSeq->dna, mrnaSeq->size);
-	    if (polyTSize > 0 && (polyTSize + 3) >= psl->qStarts[0])
-		{
-		s = psl->tStarts[0];
-		drawVertLine(lf, vg, s, xOff, y, heightPer-1, scale,
-			     cdsColor[CDS_POLY_A]);
-		gotPolyAStart = TRUE;
-		}
+	    s = psl->tStarts[0];
+	    drawVertLine(lf, vg, s, xOff, y, heightPer-1, scale,
+			 cdsColor[CDS_POLY_A]);
+	    gotPolyAStart = TRUE;
 	    }
 	}
     if ((psl->qStarts[lastBlk] + psl->blockSizes[lastBlk] != psl->qSize) &&
