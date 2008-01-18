@@ -11,7 +11,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.14 2008/01/15 19:10:05 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.15 2008/01/18 20:45:27 kate Exp $
 
 use warnings;
 use strict;
@@ -19,6 +19,7 @@ use lib "/cluster/bin/scripts";
 use HgAutomate;
 use File::stat;
 use Getopt::Long;
+use English;
 
 use vars qw/
     $opt_configDir
@@ -32,7 +33,7 @@ usage: encodeValidate.pl submission-type project-submission-dir
 options:
     -verbose num        Set verbose level to num (default 1).            -
     -configDir dir      Path of configuration directory, containing
-                        metadata .ra files (default: submission dir/../config).
+                        metadata .ra files (default: submission-dir/../config)
     -outDir dir         Path of output directory, for validation files
                         (default: submission-dir/out)
 ";
@@ -49,11 +50,12 @@ our $loadFile = "/load.ra";
 our $trackFile = "/trackDb.ra";
 
 # Global variables
-our $submitDir;
 our $submitPath;        # full path of data submission directory
+our $configPath;        # full path of configuration directory
 our $outPath;           # full path of output directory
 our %terms;             # controlled vocabulary
 our %pif;               # project information
+our %tracks;            # track information
 
 ############################################################################
 # Validators -- extend when adding new metadata fields
@@ -76,6 +78,7 @@ sub validateFileName {
     # Check files exist and are of correct data format
     my ($files, $track) = @_;
     my @files = @{$files};
+    &HgAutomate::verbose(3, "     Track: $track    Files: " . join (' ', @files) . "\n");
     for (my $i=0; $i < @files; $i++) {
         my $file = $files[$i];
         my $part = $i + 1;
@@ -83,9 +86,8 @@ sub validateFileName {
         -e $file || die "ERROR: File \'$file\' does not exist\n";
         -s $file || die "ERROR: File \'$file\' is empty\n";
         -r $file || die "ERROR: File \'$file\' is not readable \n";
-        &checkDataFormat($pif{'trackHash'}->{$track}, $file);
+        &checkDataFormat($tracks{$track}->{'type'}, $file);
     }
-    &HgAutomate::verbose(3, "    Files: " . join (' ', @files) . "\n");
 }
 
 sub validatePart {
@@ -168,16 +170,16 @@ sub validateField {
     # validate value for type of field
     my ($type, $val, $arg) = @_;
     $type =~ s/ /_/g;
-    &HgAutomate::verbose(4, "Validating $type : $val\n");
+    &HgAutomate::verbose(4, "Validating $type: $val\n");
     $validators{$type}->($val, $arg);
 }
 
 sub checkDataFormat {
     # validate file type
     my ($format, $file) = @_;
-    &HgAutomate::verbose(3, "Checking data format for $file : $format\n");
+    &HgAutomate::verbose(3, "Checking data format for $file: $format\n");
     my $type = "";
-    if ($format =~ m/(bed)(\d+)/) {
+    if ($format =~ m/(bed) (\d+)/) {
         $format = $1;
         $type = $2;
     }
@@ -188,7 +190,7 @@ sub checkDataFormat {
 
 sub loadControlledVocab {
     %terms = ();
-    my %termRa = &readRaFile("$opt_configDir/$vocabConfigFile", "term");
+    my %termRa = &readRaFile("$configPath/$vocabConfigFile", "term");
     foreach my $term (keys %termRa) {
         my $type = $termRa{$term}->{'type'};
         $terms{$type}->{$term} = $termRa{$term};
@@ -218,34 +220,62 @@ sub getPif {
     my $pifFile = &newestFile(glob "*.PIF");
     &HgAutomate::verbose(2, "Using newest PIF file \'$pifFile\'\n");
     open(PIF, $pifFile) || die "ERROR: Can't open PIF file \'$pifFile\'\n";
-    while (my $line = <PIF>) {
+
+    %tracks = ();  # this is a global
+    my $track;
+
+    my @lines = <PIF>;
+    while (my $line = shift @lines) {
         # strip leading and trailing spaces
         $line =~ s/^ +//;
         $line =~ s/ +$//;
-        # ignore empty lines and comments
-        next if $line =~ /^$/;
+
+        # ignore comments and blank lines
         next if $line =~ /^#/;
+        next if $line =~ /^$/;
+
         chomp $line;
         my ($key, $val) = split(/\t/, $line);
-        $pif{$key} = $val;
-        HgAutomate::verbose(3, "PIF field: $key = $val\n");
+
+        if ($key ne "track") {
+            &HgAutomate::verbose(3, "PIF field: $key = $val\n");
+            $pif{$key} = $val;
+        } else {
+            my %track = ();
+            $track = $val;
+            $tracks{$track} = \%track;
+            &HgAutomate::verbose(5, "  Found track: \'$track\'\n");
+            while ($line = shift @lines) {
+                $line =~ s/^ +//;
+                $line =~ s/ +$//;
+                next if $line =~ /^#/;
+                next if $line =~ /^$/;
+                if ($line =~ /^track/) {
+                    unshift @lines, $line;
+                    last;
+                }
+                chomp $line;
+                my ($key, $val) = split(/\t/, $line);
+                $track{$key} = $val;
+                &HgAutomate::verbose(5, "    Property: $key = $val\n");
+            }
+        }
     }
-    close(PIF);
+
     # Validate fields
     defined($pif{'project'}) || die "ERROR: Project not defined\n"; 
-    defined($pif{'tracks'}) || 
-        die "ERROR: Tracks not defined for project \'$pif{'project'}\'\n";
     $pif{'active'} =~ "yes" || 
         die "ERROR: Project \'$pif{'project'}\' not yet active\n";
+    defined(%tracks) ||
+        die "ERROR: Tracks not defined for project \'$pif{'project'}\'\n";
 
-    # Reformat fields in more convenient form
-    my @tracks = split(' ', $pif{'tracks'});
-    my %tracks = ();
-    foreach my $track (@tracks) {
-        my ($trackName, $trackType) = split(':', $track);
-        $tracks{$trackName} = $trackType;
+    foreach my $track (keys %tracks) {
+        &HgAutomate::verbose(4, "  Track: $track\n");
+        my %track = %{$tracks{$track}};
+        foreach my $key (keys %track) {
+            &HgAutomate::verbose(4, "    Setting: $key   Value: $track{$key}\n");
+        }
     }
-    $pif{'trackHash'} = \%tracks;
 
     my @variables = split (' ', $pif{'variables'});
     my %variables;
@@ -298,6 +328,7 @@ my $i;
 my @ddfHeader;
 my %ddfHeader = ();
 my %datasets = ();
+my $wd = `pwd`; chomp $wd;
 
 my $ok = GetOptions("configDir=s",
                     "outDir=s",
@@ -306,27 +337,50 @@ my $ok = GetOptions("configDir=s",
 &usage() if (!$ok);
 &usage() if (scalar(@ARGV) < 2);
 
-# get command-line args
+# Get command-line args
 my $submitType = $ARGV[0];	# currently not used
-$submitDir = $ARGV[1];
+my $submitDir = $ARGV[1];
 
-# get options
+# Get general options
 $opt_verbose = 1 if (!defined $opt_verbose);
-$opt_configDir = "../config" if (!defined $opt_configDir);
-$opt_outDir = "out" if (!defined $opt_outDir);
-my $wd = `pwd`;
-chomp $wd;
-$outPath = "$wd/$opt_outDir";
 
-# Change dir to submission directory obtained from command-line
+# Determine submission, configuration, and output directory paths
 &HgAutomate::verbose(2, "Validating submission in directory \'$submitDir\'\n");
-chdir $submitDir ||
-    die ("SYS ERROR; Can't change to submission directory \'$submitDir\': $!\n");
-$submitPath=`pwd`;
-chomp $submitPath;
-&HgAutomate::verbose(3, "Creating output in directory \'$opt_outDir\'\n");
-mkdir $opt_outDir || 
-    die ("SYS ERROR; Can't create out directory \'$opt_outDir\': $!\n");
+if ($submitDir =~ /^\/.*/) {
+    $submitPath = $submitDir;
+} else {
+    $submitPath = "$wd/$submitDir";
+}
+&HgAutomate::verbose(4, "Submission directory path: \'$submitPath\'\n");
+
+if (defined $opt_configDir) {
+    if ($opt_configDir =~ /^\//) {
+        $configPath = $opt_configDir;
+    } else {
+        $configPath = "$wd/$opt_configDir";
+    }
+} else {
+    $configPath = "$submitDir/../config"
+}
+&HgAutomate::verbose(4, "Config directory path: \'$configPath\'\n");
+
+if (defined $opt_outDir) {
+    if ($opt_outDir =~ /^\//) {
+        $outPath = $opt_outDir;
+    } else {
+        $outPath = "$wd/$opt_outDir";
+    }
+} else {
+    $configPath = "$submitDir/out"
+}
+&HgAutomate::verbose(4, "Output directory path: \'$outPath\'\n");
+
+# Change dir to submission directory 
+chdir $submitPath ||
+    die ("SYS ERR; Can't change to submission directory \'$submitPath\': $OS_ERROR\n");
+&HgAutomate::verbose(3, "Creating output in directory \'$outPath\'\n");
+mkdir $outPath || 
+    die ("SYS ERR: Can't create out directory \'$outPath\': $OS_ERROR\n");
 
 # Locate project information (PIF) file and verify that project is
 #  ready for submission
@@ -334,8 +388,7 @@ mkdir $opt_outDir ||
 
 # Gather fields defined for DDF file. File is in 
 # ra format:  field <name>, required <true|false>
-&HgAutomate::verbose(3, "Using configuration directory \'$opt_configDir\'\n");
-my %fields = &readRaFile("$opt_configDir/$fieldConfigFile", "field");
+my %fields = &readRaFile("$configPath/$fieldConfigFile", "field");
 
 # Add required fields for this -- the variables in the PIF file
 foreach my $variable (keys %{$pif{'variableHash'}}) {
@@ -427,17 +480,23 @@ open(LOADER_RA, ">$outPath/$loadFile") ||
 foreach $dataset (keys %datasets) {
     my $datasetRef = $datasets{$dataset};
     my $dataType = $datasetRef->[$ddfHeader{'Data Type REF'}];
+    my $tableType = $tracks{$dataType}->{'tableType'};
     &HgAutomate::verbose(2, "  Dataset: $dataset\tTrack: $dataType\n");
     for ($i=0; $i < @ddfHeader; $i++) {
         &validateField($ddfHeader[$i], $datasetRef->[$i], $dataType);
     }
-    my $tableName = "wgEncode" . $dataType;
+
+    # Construct table name from track name and variables
+    my $trackName = "wgEncode" . $dataType;
+    my $tableName = $trackName;
     my @variables = @{$pif{'variableArray'}};
     for (my $i = 0; $i < @variables; $i++) {
         $tableName = $tableName . $datasetRef->[$ddfHeader{$variables[$i]}];
     }
     print LOADER_RA "tablename $tableName\n";
-    print LOADER_RA "type $pif{'trackHash'}->{$dataType}\n";
+    print LOADER_RA "track $trackName\n";
+    print LOADER_RA "type $tracks{$dataType}->{'type'}\n";
+    print LOADER_RA "tableType $tableType\n" if defined($tableType);
     print LOADER_RA "assembly $datasetRef->[$ddfHeader{'Assembly REF'}]\n";
     print LOADER_RA "files @{$datasetRef->[$ddfHeader{'File Name'}]}\n";
     print LOADER_RA "\n";
