@@ -14,7 +14,9 @@ struct gbIndex;
                                          * latest release's files. */
 #define DBLOAD_BYPASS_GBLOADED   0x40   /* skip gbLoaded table optimizations,
                                          * needed if native or xeno partation is
-                                         * added*/
+                                         * added */
+#define DBLOAD_REBUILD_DERIVED   0x80   /* rebuild genePred table and gbMiscDiff'
+                                         * implies DBLOAD_BYPASS_GBLOADED. */
 
 struct dbLoadAttr
 /* attributes associated with a srcDb+type+orgCat */

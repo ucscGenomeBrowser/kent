@@ -5,6 +5,7 @@
  */
 
 #include "gbMetaData.h"
+#include "gbGeneTbl.h"
 #include "gbMDParse.h"
 #include "common.h"
 #include "hash.h"
@@ -32,8 +33,9 @@
 #include "genbank.h"
 #include "gbSql.h"
 #include "gbMiscDiff.h"
+#include <regex.h>
 
-static char const rcsid[] = "$Id: gbMetaData.c,v 1.41 2007/07/14 00:16:02 markd Exp $";
+static char const rcsid[] = "$Id: gbMetaData.c,v 1.42 2008/01/19 23:05:33 markd Exp $";
 
 /* mol enum shared by gbCdnaInfo and refSeqStatus */
 #define molEnumDef \
@@ -192,7 +194,7 @@ static boolean haveMol = FALSE; /* does the gbCdnaInfo table have the mol
 static boolean haveRsMol = FALSE; /* does the refSeqStatus table have the mol
                                    * column? */
 static boolean haveMgc = FALSE; /* does this organism have MGC tables */
-static boolean loadMiscDiff = FALSE;  /* load gbMiscDiff records */
+static boolean haveOrfeome = FALSE; /* does this organism have ORFeome tables */
 
 static void gbWarn(char *format, ...)
 /* issue a warning */
@@ -204,6 +206,13 @@ fprintf(stderr, "Warning: ");
 vfprintf(stderr, format, args);
 fprintf(stderr, "\n");
 va_end(args);
+}
+
+static void setGeneTblFlags(struct sqlConnection *conn, struct dbLoadOptions* options)
+/* set gene table flags from options */
+{
+haveMgc = gbConfGetDbBoolean(options->conf, sqlGetDatabase(conn), "mgc");
+haveOrfeome = gbConfGetDbBoolean(options->conf, sqlGetDatabase(conn), "orfeome");
 }
 
 void gbMetaDataInit(struct sqlConnection *conn, unsigned srcDb,
@@ -237,12 +246,9 @@ else
         errAbort("must have gi column to have mol");
     }
 
-/* load gbMiscDiff table only if MGC tables are loaded */
-/* do we have MGC on this ? */
-char *val = gbConfGetDb(options->conf, sqlGetDatabase(conn), "mgcTables.default");
-haveMgc = (val != NULL) && !sameString(val, "no");
-loadMiscDiff = haveMgc;
-if (loadMiscDiff && !sqlTableExists(conn, "gbMiscDiff"))
+setGeneTblFlags(conn, options);
+
+if (!sqlTableExists(conn, "gbMiscDiff"))
     sqlUpdate(conn, gbMiscDiffCreate);
 
 if (gbCdnaInfoUpd == NULL)
@@ -273,6 +279,22 @@ if (gSrcDb == GB_REFSEQ)
         refLinkUpd = sqlUpdaterNew("refLink", gTmpDir, (gbVerbose >= 4),
                                    &allUpdaters);
     }
+}
+
+static boolean partitionMayHaveGeneTbls(struct gbSelect* select)
+/* determine if its possible for the select alignment tracks to
+ * have associated gene tracks. */
+{
+return (select->release->srcDb == GB_REFSEQ)
+    || ((select->type == GB_MRNA) && (haveMgc || haveOrfeome));
+}
+
+static boolean inGeneTbls(struct gbStatus* status)
+/* determine if an entry is in one or more gene tracks */
+{
+return (status->srcDb == GB_REFSEQ)
+    || (status->isMgcFull && haveMgc)
+    || (status->isOrfeome && haveOrfeome);
 }
 
 static HGID getExtFileId(struct sqlConnection *conn, char* relPath)
@@ -442,7 +464,7 @@ if (status->stateChg & (GB_NEW|GB_META_CHG))
 static void gbMiscDiffUpdate(struct gbStatus* status, struct sqlConnection *conn)
 /* update gbMiscDiff table */
 {
-if (status->stateChg & (GB_NEW|GB_META_CHG))
+if (status->stateChg & (GB_NEW|GB_META_CHG|GB_REBUILD_DERIVED))
     {
     if (gbMiscDiffUpd == NULL)
         gbMiscDiffUpd = sqlUpdaterNew("gbMiscDiff", gTmpDir, (gbVerbose >= 4), &allUpdaters);
@@ -560,25 +582,109 @@ static boolean keepDesc(struct gbStatus* status)
 return dbLoadOptionsGetAttr(gOptions, status->srcDb, status->type, status->orgCat)->loadDesc;
 }
 
+static void reComp(regex_t *preg, char* pattern)
+/* compile the regular expression or abort */
+{
+int e = regcomp(preg, pattern, REG_EXTENDED|REG_ICASE|REG_NOSUB);
+if (e != 0)
+    {
+    char errbuf[256];
+    regerror(e, preg, errbuf, sizeof(errbuf));
+    errAbort("can't compile regular expression: \"%s\": %s",
+             pattern, errbuf);
+    }
+}
+
+static boolean reMatches(regex_t *preg, char* str)
+/* determine if strange matches regular expression */
+{
+int e = regexec(preg, str, 0, NULL, 0);
+if (e == 0)
+    return TRUE;
+else if (e == REG_NOMATCH)
+    return FALSE;
+else
+    {
+    char errbuf[256];
+    regerror(e, preg, errbuf, sizeof(errbuf));
+    errAbort("error executing regular expresion:: %s", errbuf);
+    return FALSE;
+    }
+}
+
+static boolean isMgcFullLength()
+/* determine if the current RA entry is for an MGC */
+{
+/* Check for keyword and source /clone field to identify MGC genes.  Keywords
+ * end in `.' and are seperated by "; ".  So look for .
+ * Clone can be like: /clone="MGC:9349 IMAGE:3846611" */
+static boolean first = TRUE;
+static regex_t keyRe, cloRe;
+if (first)
+    {
+    reComp(&keyRe, "(^|.* )MGC(\\.$|;.*)");
+    reComp(&cloRe, "(^|.* )MGC:[0-9]+( .*|$)");
+    first = FALSE;
+    }
+char *key = raFieldCurVal("key");
+if (key == NULL)
+    return FALSE;
+if (!reMatches(&keyRe, key))
+    return FALSE;
+char *clo = raFieldCurVal("clo");
+if (clo == NULL)
+    return FALSE;
+if (!reMatches(&cloRe, clo))
+    return FALSE;
+return TRUE;
+}
+
+static boolean isOrfeome()
+/* determine if the current RA entry is for an ORFeome */
+{
+/* keyword containing "ORFeome collaboration" */
+static boolean first = TRUE;
+static regex_t keyRe;
+if (first)
+    {
+    reComp(&keyRe, "(^|.* )ORFeome collaboration(\\.$|;.*)");
+    first = FALSE;
+    }
+char *key = raFieldCurVal("key");
+return (key != NULL) && reMatches(&keyRe, key);
+}
+
 static void updateMetaData(struct sqlConnection *conn, struct gbStatus* status,
                            struct gbStatusTbl* statusTbl, HGID faFileId,
                            HGID pepFaId)
 /* update the database tables for the current entry based on the stateChg
  * flags */
 {
-char *geneName;
+assert(status->stateChg & (GB_NEW|GB_META_CHG|GB_REBUILD_DERIVED));
+
+/* check for MGC, ORFeome */
+if (status->orgCat == GB_NATIVE)
+    {
+    status->isMgcFull = isMgcFullLength();
+    status->isOrfeome = isOrfeome();
+    }
 
 /* clear description if we are not keeping it */
 if (!keepDesc(status))
     raFieldClear("def");
 
-seqUpdate(status, faFileId);  /* must be first to get status->gbSeqId */
-gbCdnaInfoUpdate(status, conn);
-imageCloneUpdate(status, conn);
-if (loadMiscDiff && (raMiscDiffs != NULL))
+/* most database changes are only done for GB_EXT_CHG */
+
+if (status->stateChg & (GB_NEW|GB_META_CHG))
+    {
+    seqUpdate(status, faFileId);  /* must be first to get status->gbSeqId */
+    gbCdnaInfoUpdate(status, conn);
+    imageCloneUpdate(status, conn);
+    }
+if (raMiscDiffs != NULL)
     gbMiscDiffUpdate(status, conn);
 
-if (gSrcDb == GB_REFSEQ)
+if ((gSrcDb == GB_REFSEQ) && (status->stateChg & (GB_NEW|GB_META_CHG)))
     {
     refSeqStatusUpdate(status);
     refSeqSummaryUpdate(conn, status);
@@ -598,7 +704,7 @@ if (!genbankCdsParse(raCds, &status->cds))
     }
 
 /* geneName for refFlat, if not available, try locus_tag  */
-geneName = raFieldCurVal("gen");
+char *geneName = raFieldCurVal("gen");
 if (geneName == NULL)
     geneName = raFieldCurVal("lot");
 if (geneName != NULL)
@@ -676,6 +782,50 @@ gbProcessedGetPath(select, "ra.gz", raPath);
 metaDataProcess(conn, statusTbl, raPath, faFileId, pepFaId);
 }
 
+static void updateGeneEntries(struct sqlConnection *conn,
+                              struct gbGeneTblSet *ggts,
+                              struct gbStatus* status)
+/* update gene table entries when annotation have changed */
+{
+struct gbGeneTbl *geneTbl = NULL;
+if (status->srcDb == GB_REFSEQ)
+    {
+    if (status->orgCat == GB_NATIVE)
+        geneTbl = gbGeneTblSetRefGeneGet(ggts, conn);
+    else
+        geneTbl = gbGeneTblSetXenoRefGeneGet(ggts, conn);
+    }
+else if (status->isMgcFull && haveMgc)
+    geneTbl = gbGeneTblSetMgcGenesGet(ggts, conn);
+else if (status->isOrfeome && haveOrfeome)
+    geneTbl = gbGeneTblSetOrfeomeGenesGet(ggts, conn);
+
+if (geneTbl == NULL)
+    errAbort("BUG: updateGeneEntries should have matched table");
+gbGeneTblRebuild(geneTbl, status, conn);
+}
+
+void gbMetaDataUpdateChgGenes(struct sqlConnection *conn,
+                              struct gbSelect *select,
+                              struct gbStatusTbl* statusTbl,
+                              char *tmpDir)
+/* update gene tables where annotations have changed but sequence
+ * has not changes and is not being reloaded */
+{
+if (partitionMayHaveGeneTbls(select))
+    {
+    struct gbGeneTblSet *ggts = gbGeneTblSetNew(tmpDir);
+    struct gbStatus* status;
+    for (status = statusTbl->metaChgList; status != NULL; status = status->next)
+        {
+        if (inGeneTbls(status) && !(status->stateChg & GB_SEQ_CHG))
+            updateGeneEntries(conn, ggts, status);  // ext chg or rebuild derived
+        }
+    gbGeneTblSetCommit(ggts, conn);
+    gbGeneTblSetFree(&ggts);
+    }
+}
+
 void gbMetaDataDbLoad(struct sqlConnection *conn)
 /* load the metadata changes into the database */
 {
@@ -718,26 +868,57 @@ gbMDParseFree();
 extFileTblFree(&extFiles);
 }
 
-void gbMetaDataDeleteFromIdTables(struct sqlConnection *conn,
+void gbMetaDataDeleteFromIdTables(struct sqlConnection *conn, struct dbLoadOptions* options,
                                   struct sqlDeleter* deleter)
 /* delete sequence from metadata tables with ids.  These are always
  * deleted and rebuilt even for modification */
 {
+gOptions = options;
+setGeneTblFlags(conn, options);
 sqlDeleterDel(deleter, conn, IMAGE_CLONE_TBL, "acc");
-if (loadMiscDiff)
-    sqlDeleterDel(deleter, conn, "gbMiscDiff", "acc");
+sqlDeleterDel(deleter, conn, "gbMiscDiff", "acc");
 }
 
-void gbMetaDataDeleteFromTables(struct sqlConnection *conn, unsigned srcDb,
-                                struct sqlDeleter* deleter)
+static void deleteFromGeneTbls(struct sqlConnection *conn, struct gbSelect* select, 
+                               struct sqlDeleter* deleter)
+/* delete accession from gene tables.  Used when metaData has changed, but
+ * sequence has not changed. */
+{
+if (select->release->srcDb == GB_REFSEQ)
+    {
+    if (select->orgCats & GB_NATIVE)
+        {
+        sqlDeleterDel(deleter, conn, REF_GENE_TBL, "name");
+        sqlDeleterDel(deleter, conn, REF_FLAT_TBL, "name");
+        }
+    if (select->orgCats & GB_XENO)
+        {
+        sqlDeleterDel(deleter, conn, XENO_REF_GENE_TBL, "name");
+        sqlDeleterDel(deleter, conn, XENO_REF_FLAT_TBL, "name");
+        }
+    }
+else
+    {
+    if (haveMgc)
+        sqlDeleterDel(deleter, conn, MGC_GENES_TBL, "name");
+    if (haveOrfeome)
+        sqlDeleterDel(deleter, conn, ORFEOME_GENES_TBL, "name");
+    }
+}
+
+void gbMetaDataDeleteFromTables(struct sqlConnection *conn, struct dbLoadOptions* options,
+                                unsigned srcDb, struct sqlDeleter* deleter)
 /* delete sequence from metadata tables */
 {
+gOptions = options;
+setGeneTblFlags(conn, options);
 if (srcDb == GB_REFSEQ)
     {
     sqlDeleterDel(deleter, conn, "refSeqStatus", "mrnaAcc");
     sqlDeleterDel(deleter, conn, "refSeqSummary", "mrnaAcc");
     sqlDeleterDel(deleter, conn, "refLink", "mrnaAcc");
     }
+sqlDeleterDel(deleter, conn, "gbMiscDiff", "acc");
 sqlDeleterDel(deleter, conn, IMAGE_CLONE_TBL, "acc");
 sqlDeleterDel(deleter, conn, "gbCdnaInfo", "acc");
 sqlDeleterDel(deleter, conn, "gbSeq", "acc");
@@ -762,7 +943,7 @@ if (!sqlTableExists(conn, "refLink"))
 deleter = sqlDeleterNew(gTmpDir, (gbVerbose >= 4));
 
 /* Use a join to get list of acc, which proved reasonable fastly because
-* the the list is small */
+ * the the list is small */
 safef(query, sizeof(query), "SELECT acc FROM gbSeq LEFT JOIN refLink ON (refLink.protAcc = gbSeq.acc) "
       "WHERE (acc LIKE 'NP_%%') AND (refLink.protAcc IS NULL)");
 sr = sqlGetResult(conn, query);
@@ -779,28 +960,49 @@ void gbMetaDataDeleteOutdated(struct sqlConnection *conn,
                               struct gbStatusTbl* statusTbl,
                               struct dbLoadOptions* options,
                               char *tmpDir)
-/* delete outdated metadata */
+/* Delete outdated metadata.  Also delete genePred table entries for genes
+ * where metadata changed but sequence has not.  These will have the genePred
+ * records reloaded.*/
 {
+setGeneTblFlags(conn, options);
 struct sqlDeleter* deleter = sqlDeleterNew(tmpDir, (gbVerbose >= 4));
+struct sqlDeleter* geneTblDeleter = NULL;
+struct sqlDeleter* derivedTblDeleter = NULL;
+if (partitionMayHaveGeneTbls(select))
+    {
+    geneTblDeleter = sqlDeleterNew(tmpDir, (gbVerbose >= 4));
+    derivedTblDeleter = sqlDeleterNew(tmpDir, (gbVerbose >= 4));
+    }
 struct gbStatus* status;
 gSrcDb = select->release->srcDb;
 gOptions = options;
 strcpy(gTmpDir, tmpDir);
 
 /* Delete any meta modified from id tables */
-deleter = sqlDeleterNew(tmpDir, (gbVerbose >= 4));
 for (status = statusTbl->seqChgList; status != NULL; status = status->next)
     {
     if (status->stateChg & GB_META_CHG)
         sqlDeleterAddAcc(deleter, status->acc);
     }
 for (status = statusTbl->metaChgList; status != NULL; status = status->next)
-    sqlDeleterAddAcc(deleter, status->acc);
+    {
+    assert(!(status->stateChg&GB_SEQ_CHG));
+    if (status->stateChg&GB_META_CHG)
+        sqlDeleterAddAcc(deleter, status->acc);
+    else if (status->stateChg&GB_REBUILD_DERIVED)
+        sqlDeleterAddAcc(derivedTblDeleter, status->acc);
+    if (geneTblDeleter != NULL)
+        {
+        // need to just try, since we can set the status->isMgcFull
+        // flag until we are reading the ra.
+        sqlDeleterAddAcc(geneTblDeleter, status->acc);
+        }
+    }
 for (status = statusTbl->deleteList; status != NULL; status = status->next)
     sqlDeleterAddAcc(deleter, status->acc);
 for (status = statusTbl->orphanList; status != NULL; status = status->next)
     sqlDeleterAddAcc(deleter, status->acc);
-gbMetaDataDeleteFromIdTables(conn, deleter);
+gbMetaDataDeleteFromIdTables(conn, options, deleter);
 sqlDeleterFree(&deleter);
 
 /* remove deleted and orphans from metadata. */
@@ -810,9 +1012,16 @@ for (status = statusTbl->deleteList; status != NULL; status = status->next)
 for (status = statusTbl->orphanList; status != NULL; status = status->next)
     sqlDeleterAddAcc(deleter, status->acc);
 
-gbMetaDataDeleteFromTables(conn, select->release->srcDb, deleter);
+// must do gene tbls before other tables
+if (geneTblDeleter != NULL)
+    deleteFromGeneTbls(conn, select, geneTblDeleter);
+if (derivedTblDeleter != NULL)
+    sqlDeleterDel(derivedTblDeleter, conn, "gbMiscDiff", "acc");
+gbMetaDataDeleteFromTables(conn, options, select->release->srcDb, deleter);
 
 sqlDeleterFree(&deleter);
+sqlDeleterFree(&geneTblDeleter);
+sqlDeleterFree(&derivedTblDeleter);
 
 /* If we are cleaning up the ext table, we need to get rid of any
  * refseq peptides in gbSeq that are no longer referenced.  We don't
@@ -829,7 +1038,7 @@ void gbMetaDataRemove(struct sqlConnection *conn,
 /* remove metaData from all entries in the select categories.
  * Used when reloading. */
 {
-gbMetaDataDeleteFromTables(conn, select->release->srcDb, deleter);
+gbMetaDataDeleteFromTables(conn, gOptions, select->release->srcDb, deleter);
 }
 
 struct slName* gbMetaDataListTables(struct sqlConnection *conn)

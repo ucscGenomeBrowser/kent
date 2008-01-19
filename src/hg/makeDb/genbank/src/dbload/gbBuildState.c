@@ -19,7 +19,7 @@
 #include "gbProcessed.h"
 #include "gbStatusTbl.h"
 
-static char const rcsid[] = "$Id: gbBuildState.c,v 1.22 2007/04/20 04:37:43 markd Exp $";
+static char const rcsid[] = "$Id: gbBuildState.c,v 1.23 2008/01/19 23:05:33 markd Exp $";
 
 static struct dbLoadOptions* gOptions; /* options from cmdline and conf */
 static int gErrorCnt = 0;  /* count of errors during build */
@@ -72,6 +72,17 @@ if (aligned != NULL)
 return processed;
 }
 
+static void flagUpdate(struct gbProcessed* processed,
+                       struct gbAligned* aligned,
+                       boolean inclAligned)
+/* flag an update as needing processed based on a sequence */
+{
+processed->entry->selectVer = aligned->version;
+processed->update->selectProc = TRUE;
+if (inclAligned)
+    aligned->update->selectAlign = TRUE;
+}
+
 static void markDeleted(struct gbStatusTbl* statusTbl,
                         struct gbStatus* tmpStatus,
                         struct selectStatusData* ssData)
@@ -117,10 +128,7 @@ status->metaUpdate = status->seqUpdate;
 status->extRelease = status->seqRelease;
 status->extUpdate = status->seqUpdate;
 
-/* flag update as needing processing */
-processed->entry->selectVer = aligned->version;
-processed->update->selectProc = TRUE;
-aligned->update->selectAlign = TRUE;
+flagUpdate(processed, aligned, TRUE);
 if (gbVerbose >= 5)
     traceSelect("seqChg", status);
 }
@@ -151,9 +159,7 @@ if (!sameString(status->extRelease, select->release->version))
     status->extUpdate = status->metaUpdate;
     }
 
-/* flag update as needing processing */
-processed->entry->selectVer = aligned->version;
-processed->update->selectProc = TRUE;
+flagUpdate(processed, aligned, FALSE);
 if (gbVerbose >= 5)
     traceSelect("metaChg", status);
 }
@@ -177,10 +183,31 @@ status->extUpdate = gbStatusTblGetStr(statusTbl,
                                        aligned->update->shortName);
 
 /* flag update as needing processing */
-processed->entry->selectVer = aligned->version;
-processed->update->selectProc = TRUE;
+flagUpdate(processed, aligned, FALSE);
 if (gbVerbose >= 5)
     traceSelect("extChg", status);
+}
+
+static void markRebuildDerived(struct gbStatusTbl* statusTbl,
+                               struct gbStatus* tmpStatus,
+                               struct gbProcessed* processed,
+                               struct gbAligned* aligned)
+/* mark an entry as rebuilDerived, which is a subset of metaChg */
+{
+struct gbStatus* status = gbStatusStore(statusTbl, tmpStatus);
+
+slAddHead(&statusTbl->metaChgList, status);  // metaChgList is correct
+statusTbl->numRebuildDerived++;
+status->entry = processed->entry;
+status->selectProc = processed;
+status->stateChg = GB_REBUILD_DERIVED;
+status->metaRelease = gbStatusTblGetStr(statusTbl,
+                                        aligned->update->release->version);
+status->metaUpdate = gbStatusTblGetStr(statusTbl,
+                                       aligned->update->shortName);
+flagUpdate(processed, aligned, FALSE);
+if (gbVerbose >= 5)
+    traceSelect("rebuildDerived", status);
 }
 
 static void markNoChange(struct gbStatusTbl* statusTbl,
@@ -225,10 +252,7 @@ status->metaUpdate = status->seqUpdate;
 status->extRelease = status->seqRelease;
 status->extUpdate = status->seqUpdate;
 
-/* flag update as needing processing */
-processed->entry->selectVer = aligned->version;
-processed->update->selectProc = TRUE;
-aligned->update->selectAlign = TRUE;
+flagUpdate(processed, aligned, TRUE);
 if (gbVerbose >= 5)
     traceSelect("new", status);
 }
@@ -290,6 +314,9 @@ else
              && !sameString(tmpStatus->extRelease,
                             ssData->select->release->version))
         markExtChanged(statusTbl, tmpStatus, processed, aligned);
+    else if ((gOptions->flags & DBLOAD_REBUILD_DERIVED)
+             && (entry->type == GB_MRNA))
+        markRebuildDerived(statusTbl, tmpStatus, processed, aligned);
     else 
         markNoChange(statusTbl, tmpStatus, entry);
     }
@@ -500,9 +527,9 @@ static boolean checkShrinkage(struct gbSelect* select, float maxShrinkage,
 {
 float shrinkage = 0.0;
 unsigned numOld = statusTbl->numDelete + statusTbl->numSeqChg
-    + statusTbl->numMetaChg + statusTbl->numExtChg + statusTbl->numNoChg;
+    + statusTbl->numMetaChg + statusTbl->numRebuildDerived + statusTbl->numExtChg + statusTbl->numNoChg;
 unsigned numNew  = statusTbl->numSeqChg + statusTbl->numMetaChg
-    + statusTbl->numExtChg +  statusTbl->numNoChg + statusTbl->numNew;
+    + statusTbl->numExtChg + +statusTbl->numRebuildDerived + statusTbl->numNoChg + statusTbl->numNew;
 if (numNew < numOld)
     {
     /* FIXME: the at least 5 feels like a hack */
@@ -515,11 +542,11 @@ if (numNew < numOld)
                 "Error: size after deletion exceeds maximum shrinkage for %s,\n"
                 "Rerun with -allowLargeDeletes to overrided.\n"
                 "Will continue checking for other large deletes.\n"
-                 "delete=%u seqChg=%u metaChg=%u extChg=%u new=%u orphan=%u noChg=%u\n",
+                 "delete=%u seqChg=%u metaChg=%u extChg=%u new=%u orphan=%u derived=%u noChg=%u\n",
                  gbSelectDesc(select), statusTbl->numDelete,
                 statusTbl->numSeqChg, statusTbl->numMetaChg,
                 statusTbl->numExtChg, statusTbl->numNew, statusTbl->numOrphan,
-                statusTbl->numNoChg);
+                statusTbl->numRebuildDerived, statusTbl->numNoChg);
         listDeletedAcc(select, statusTbl);
         return FALSE;
         }
@@ -589,10 +616,11 @@ hashFree(&ssData.seqHash);
 gbVerbLeave(3, "build state table");
 
 /* always print stats */
-fprintf(stderr, "gbLoadRna: selected %s: delete=%u seqChg=%u metaChg=%u extChg=%u new=%u orphan=%u noChg=%u\n",
-          gbSelectDesc(select), statusTbl->numDelete, statusTbl->numSeqChg,
-          statusTbl->numMetaChg, statusTbl->numExtChg, statusTbl->numNew,
-          statusTbl->numOrphan, statusTbl->numNoChg);
+fprintf(stderr, "gbLoadRna: selected %s: delete=%u seqChg=%u metaChg=%u extChg=%u new=%u orphan=%u derived=%u noChg=%u\n",
+        gbSelectDesc(select), statusTbl->numDelete, statusTbl->numSeqChg,
+        statusTbl->numMetaChg, statusTbl->numExtChg, statusTbl->numNew,
+        statusTbl->numOrphan, statusTbl->numRebuildDerived, 
+        statusTbl->numNoChg);
 
 /* this doesn't include large delete errors */
 if (gErrorCnt > 0)

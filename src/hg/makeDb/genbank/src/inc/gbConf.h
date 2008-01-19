@@ -30,6 +30,10 @@ char* gbConfMustGetDb(struct gbConf* conf, char* db, char* baseName);
 /* parse an option for a database; check for database-specific value and
  * default */
 
+boolean gbConfGetDbBoolean(struct gbConf* conf, char* db, char* baseName);
+/* parse boolean option for a database; check for database-specific value and
+ * default, FALSE if not specified */
+
 boolean gbConfMustGetDbBoolean(struct gbConf* conf, char* db, char* baseName);
 /* parse boolean option for a database; check for database-specific value and
  * default */

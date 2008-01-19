@@ -42,7 +42,7 @@
 #include "gbFileOps.h"
 #include "gbProcessed.h"
 
-static char const rcsid[] = "$Id: gbProcess.c,v 1.20 2007/04/20 04:37:44 markd Exp $";
+static char const rcsid[] = "$Id: gbProcess.c,v 1.21 2008/01/19 23:05:34 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -138,6 +138,8 @@ for (monthIx = 0; monthIx<12; ++monthIx)
     }
 if (monthIx == 12)
     errAbort("Unrecognized month %s for %s", month, acc);
+// FIXME: this should be monthIx+1, but need to do updates carefuly
+// or this will cascade into updating tons of stuff.
 safef(sqlDate, sqlDateSize, "%s-%02d-%s", year, monthIx, day);
 }
 

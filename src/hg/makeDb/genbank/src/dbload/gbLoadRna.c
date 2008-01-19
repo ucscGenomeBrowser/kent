@@ -32,7 +32,7 @@
 #include "dbLoadPartitions.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: gbLoadRna.c,v 1.34 2007/03/08 22:47:39 markd Exp $";
+static char const rcsid[] = "$Id: gbLoadRna.c,v 1.35 2008/01/19 23:05:33 markd Exp $";
 
 /* FIXME: add optimize subcommand to sort all alignment tables */
 
@@ -54,6 +54,7 @@ static struct optionSpec optionSpecs[] = {
     {"allowLargeDeletes", OPTION_BOOLEAN},
     {"gbdbGenBank", OPTION_STRING},
     {"forceIgnoreDelete", OPTION_BOOLEAN},
+    {"rebuildDerived", OPTION_BOOLEAN},
     {"reloadList", OPTION_STRING},
     {"reload", OPTION_BOOLEAN},
     {"verbose", OPTION_INT},
@@ -140,7 +141,7 @@ gbVerbEnter(3, "delete outdated");
 
 /* first the alignments */
 gbVerbMsg(4, "delete outdated alignments");
-gbAlignDataDeleteOutdated(conn, select, statusTbl, tmpDir);
+gbAlignDataDeleteOutdated(conn, select, statusTbl, &gOptions, tmpDir);
 
 /* now drop metadata entries */
 gbVerbMsg(4, "delete outdated metadata");
@@ -283,8 +284,11 @@ for (update = select->release->updates; update != NULL; update = update->next)
     }
 select->update = NULL;
 gbVerbLeave(3, "processing metadata");
-if ((gOptions.flags & DBLOAD_INITIAL) == 0)
+if (!(gOptions.flags & DBLOAD_INITIAL))
+    {
+    gbMetaDataUpdateChgGenes(conn, select, statusTbl, tmpDir);
     loadMetaData(conn);
+    }
 }
 
 void processUpdateAlignsForOrgCat(struct sqlConnection *conn,
@@ -353,7 +357,7 @@ struct gbUpdate* update;
 
 gbVerbEnter(3, "processing alignments");
 
-gbAlignDataInit(tmpDir, &gOptions);
+gbAlignDataInit(tmpDir, &gOptions, conn);
 /* load alignments for updates that are new and actually had sequences align */
 for (update = select->release->updates; update != NULL; update = update->next)
     {
@@ -419,6 +423,7 @@ gExtFileChged += statusTbl->numExtChg;
 /* first clean out old and changed */
 deleteOutdated(conn, select, statusTbl, tmpDir);
 
+/* meta data MUST be done first, it sets some gbStatus data */
 processMetaData(conn, select, statusTbl, tmpDir);
 processAligns(conn, select, statusTbl, tmpDir);
 
@@ -483,8 +488,7 @@ gbVerbLeave(2, "load for %s", gbSelectDesc(select));
 gbReleaseUnload(select->release);
 }
 
-void loadPartition(struct gbSelect* select, struct sqlConnection* conn,
-                   boolean forceLoad)
+void loadPartition(struct gbSelect* select, struct sqlConnection* conn)
 /* Sync the database with the state in the genbank respository for a given
  * partition of the data.  The gbLoadedTbl is loaded as needed for new
  * release. forceLoad overrides checking the gbLoaded table */
@@ -500,7 +504,7 @@ if (gReload)
 
 /* do a cheap check to see if it possible there is something
  * to load, before much longer examination of per-sequence tables.*/
-if (forceLoad || anyUpdatesNeedLoaded(select))
+if ((gOptions.flags & DBLOAD_BYPASS_GBLOADED) || anyUpdatesNeedLoaded(select))
     doLoadPartition(select);
 
 checkForStop();  /* database committed */
@@ -544,9 +548,10 @@ struct gbIndex* index = gbIndexNew(gDatabase, NULL);
 struct gbSelect* selectList, *select;
 struct sqlConnection* conn;
 
-/* must go through all tables if any reload is selected or
- * extFile update is requested */
-boolean forceLoad = (reloadList != NULL) || gReload;
+/* must go through all tables if any reload is selected,
+ * extFile update is requested, or rebuilding derived */
+if ((reloadList != NULL) || gReload)
+    gOptions.flags |= DBLOAD_BYPASS_GBLOADED;
 
 if (gReload && (gOptions.flags & DBLOAD_DRY_RUN))
     errAbort("can't specify both -reload and -dryRun");
@@ -561,8 +566,8 @@ if (gOptions.flags & DBLOAD_INITIAL)
 /* delete anything on the reload list up front */
 if (((gOptions.flags & DBLOAD_DRY_RUN) == 0) && (reloadList != NULL))
     {
-    gbAlignDataInit(NULL, &gOptions);
-    gbReloadDelete(reloadList, gWorkDir);
+    gbAlignDataInit(gWorkDir, &gOptions, conn);
+    gbReloadDelete(reloadList, &gOptions, gWorkDir);
     }
 
 selectList = dbLoadPartitionsGet(&gOptions, index);
@@ -571,8 +576,7 @@ if ((gOptions.flags & DBLOAD_INITIAL) && (selectList == NULL))
 
 /* clean up any ignored entries before setting anything up */
 gbVerbEnter(3, "delete ignored");
-gbAlignDataInit(NULL, &gOptions);
-gbIgnoredDelete(selectList, gForceIgnoreDelete, gWorkDir);
+gbIgnoredDelete(selectList, gForceIgnoreDelete, &gOptions, gWorkDir);
 gbVerbLeave(3, "delete ignored");
 
 /* loaded table to track updates that have been processed */
@@ -580,7 +584,7 @@ gLoadedTbl = gbLoadedTblNew(conn);
 
 /* load each partition */
 for (select = selectList; select != NULL; select = select->next)
-    loadPartition(select, conn, forceLoad);
+    loadPartition(select, conn);
 
 /* If we are delaying table load, now is the time */
 if ((gOptions.flags & DBLOAD_INITIAL)
@@ -806,6 +810,8 @@ errAbort(
   "      sequences to be reloaded.  This optional also causes all partitions\n"
   "      to be examined, which slows things down.\n"
   "\n"
+  "     -rebuildDerived - rebuild genePred, and gbMiscDiff tables\n"
+  "\n"
   "SIGUSR1 will cause process to stop after the current partition.  This\n"
   "will leave the database in a clean state, but the update incomplete.\n"
   );
@@ -861,6 +867,8 @@ else
     gDatabase = argv[1];
     gOptions = dbLoadOptionsParse(gDatabase);
     gForceIgnoreDelete = optionExists("forceIgnoreDelete");
+    if (optionExists("rebuildDerived"))
+        gOptions.flags |= DBLOAD_BYPASS_GBLOADED|DBLOAD_REBUILD_DERIVED;
 
     gMaxShrinkage = optionFloat("maxShrinkage", 0.1);
 
@@ -881,9 +889,3 @@ else
 
 return 0;
 }
-/*
- * Local Variables:
- * c-file-style: "jkent-c"
- * End:
- */
-

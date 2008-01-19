@@ -60,10 +60,8 @@ void tblBldGenePredFromPsl(struct sqlConnection *conn, char *tmpDir, char *pslTb
                            char *genePredTbl, FILE *warnFh);
 /* build a genePred table from a PSL table, output warnings about missing or
  * invalid CDS if warnFh is not NULL */
-#endif
 
-/*
- * Local Variables:
- * c-file-style: "jkent-c"
- * End:
- */
+struct slName *getChromNames();
+/* get a list of chrom names; do not modify results, as it is cached */
+
+#endif

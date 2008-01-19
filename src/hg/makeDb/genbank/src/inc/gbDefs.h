@@ -31,7 +31,7 @@
 
 /* Size for array indexed by combination attributes of srcDb, type, and,
  * orgCat */
-#define GB_NUM_ATTRS (GB_NUM_SRC_DB * GB_NUM_TYPES * GB_NUM_ORG_CATS)
+#define GB_NUM_ATTRS ((GB_TYPE_MASK|GB_ORG_CAT_MASK|GB_SRC_DB_MASK)+1)
 
 
 /* Processing state */
@@ -111,6 +111,23 @@ short gbSplitAccVer(char* accVer, char* acc);
 /* Split an GenBank version into accession and version number. acc maybe
  * null to just get the version. */
 
+INLINE char *gbDropVer(char *acc)
+/* remove version from accession if it has one, returning a pointer to the
+ * dot so it can be restored */
+{
+char *dot = strrchr(acc, '.');
+if (dot != NULL)
+    *dot = '\0';
+return dot;
+}
+
+INLINE void gbRestoreVer(char *acc, char *dot)
+/* restore version number if it was removed by gbDropVer */
+{
+if (dot != NULL)
+    *dot = '.';
+}
+
 unsigned gbParseType(char* typeStr);
 /* Parse a type name (mrna or est), or comma seperate list of types
  * into a constant. Case is ignored. */
@@ -133,7 +150,6 @@ INLINE boolean gbIsProteinCodingRefSeq(char *acc)
 {
 return startsWith("NM_", acc) || startsWith("XM_", acc);
 }
-
 
 unsigned gbOrgCatIdx(unsigned orgCat);
 /* To convert a organism category const (or flag set containing it) to a

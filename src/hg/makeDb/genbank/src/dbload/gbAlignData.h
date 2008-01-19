@@ -13,8 +13,10 @@ struct gbGenome;
 struct slName;
 struct sqlDeleter;
 struct dbLoadOptions;
+struct gbGeneTblSet;
 
-void gbAlignDataInit(char *tmpDirPath, struct dbLoadOptions* options);
+void gbAlignDataInit(char *tmpDir, struct dbLoadOptions* options,
+                     struct sqlConnection *conn);
 /* initialize for outputing PSL files, called once per genbank type.
  * tmpDirPath can be null to setup just for deletion.*/
 
@@ -35,13 +37,15 @@ void gbAlignDataDbLoad(struct sqlConnection *conn);
 
 void gbAlignDataDeleteFromTables(struct sqlConnection *conn,
                                  unsigned srcDb, unsigned type,
-                                 struct sqlDeleter* deleter);
+                                 struct sqlDeleter* deleter,
+                                 struct dbLoadOptions* options);
 /* delete alignment data from tables */
 
 void gbAlignDataDeleteOutdated(struct sqlConnection *conn,
                                struct gbSelect* select, 
                                struct gbStatusTbl* statusTbl,
-                               char *tmpDirPath);
+                               struct dbLoadOptions* options,
+                               char *tmpDir);
 /* delete outdated alignment data */
 
 void gbAlignRemove(struct sqlConnection *conn, struct gbSelect* select,

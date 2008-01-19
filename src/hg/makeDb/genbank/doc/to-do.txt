@@ -1105,6 +1105,16 @@ Error: danRer1: gene danRer1.refFlat:1854 NM_131267 chr7: NM_131267 geneName "ir
 
 - hg17 NM_001502 - CDS updated, but refgene was not updated.
 
+- detect missing files (ooc, etc) as early as possible.
+
+- add details of stop codon to ORFeome clone details:
+    "full-length ORF with stop codon" 
+    or "full-length ORF without stop codon"
+
+- need source build/updated problems that builds both i386 and x86_64
+
+- location information not provided in CCDS description (e.g. strand);
+
 - genePredCheck -db=danRer5 refGene
   Error: refGene:5212: NM_001045301 no exonFrame on CDS exon 0
   checked: 12649 failed: 1
@@ -1119,3 +1129,6 @@ Error: danRer1: gene danRer1.refFlat:1854 NM_131267 chr7: NM_131267 geneName "ir
   or just get rid of them.
 
 - regenerate upstream/downstream sequences when refGene is updated.
+
+- mm9 alignment of EST CJ046163 chooses a less optimal, unspliced alignment
+  over a spliced alignment.  Make splice sites part of the scoring

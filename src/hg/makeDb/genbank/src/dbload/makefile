@@ -8,7 +8,7 @@ PROGS = ${GB_BINDIR}/gbDbLoadStep \
 	${GB_BINDIR}/findUnusedReleases \
 	${GB_BINDIR}/dumpGrepIndex
 
-O = gbIgnoreDelete.o gbBuildState.o gbMDParse.o gbMetaData.o gbAlignData.o dbLoadOptions.o \
+O = gbIgnoreDelete.o gbBuildState.o gbMDParse.o gbMetaData.o gbAlignData.o gbAlignTbl.o gbGeneTbl.o dbLoadOptions.o \
 	dbLoadPartitions.o gbLoadRna.o
 
 all: ${PROGS}

@@ -16,6 +16,7 @@
 #define GB_EXT_CHG   0x10    /* extFile has changed */
 #define GB_ORPHAN    0x20    /* orphaned (normally GB_NEW as well) */
 #define GB_IGNORE    0x40    /* ignore this entry */
+#define GB_REBUILD_DERIVED 0x80   /* rebuild derived for this entry */
 
 
 struct gbStatus
@@ -48,6 +49,8 @@ struct gbStatus
     struct gbAligned* selectAlign;      /* selected aligned obj */
     UWORD stateChg;                     /* set of state change flags */
     boolean metaDone;                   /* add to metadata tables  */
+    boolean isMgcFull;                  /* is an MGC full length mRNA */
+    boolean isOrfeome;                  /* is an ORFeome clone */
     struct genbankCds cds;              /* CDS from genbank */    
     char *geneName;                     /* gene name for refSeq */
 };
@@ -72,6 +75,7 @@ struct gbStatusTbl
     unsigned numSeqChg;
     struct gbStatus* metaChgList;   /* meta info change, but not seq */
     unsigned numMetaChg;
+    unsigned numRebuildDerived;
     struct gbStatus* extChgList;    /* external file release changed */
     unsigned numExtChg;
     struct gbStatus* newList;       /* new seqs (to be added to table) */

@@ -235,8 +235,11 @@ carefulClose(&tabFh);
 sqlLoadTabFile(conn, tabFile, genePredTbl, SQL_TAB_FILE_ON_SERVER);
 }
 
-/*
- * Local Variables:
- * c-file-style: "jkent-c"
- * End:
- */
+struct slName *getChromNames()
+/* get a list of chrom names; do not modify results, as it is cached */
+{
+static struct slName* chroms = NULL;
+if (chroms == NULL)
+    chroms = hAllChromNames();
+return chroms;
+}

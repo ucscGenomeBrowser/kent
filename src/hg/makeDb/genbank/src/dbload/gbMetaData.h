@@ -25,16 +25,23 @@ void gbMetaDataProcess(struct sqlConnection *conn,
                        struct gbSelect* select);
 /* process metadata for an update */
 
+void gbMetaDataUpdateChgGenes(struct sqlConnection *conn,
+                              struct gbSelect *select,
+                              struct gbStatusTbl* statusTbl,
+                              char *tmpDir);
+/* update gene tables where annotations have changed but sequence
+ * has not changes and is not being reloaded */
+
 void gbMetaDataDbLoad(struct sqlConnection *conn);
 /* load the metadata changes into the database */
 
-void gbMetaDataDeleteFromIdTables(struct sqlConnection *conn,
+void gbMetaDataDeleteFromIdTables(struct sqlConnection *conn, struct dbLoadOptions* options,
                                   struct sqlDeleter* deleter);
 /* delete sequence from metadata tables with ids.  These are always
  * deleted and rebuilt even for modification */
 
-void gbMetaDataDeleteFromTables(struct sqlConnection *conn, unsigned srcDb,
-                                struct sqlDeleter* deleter);
+void gbMetaDataDeleteFromTables(struct sqlConnection *conn, struct dbLoadOptions* options,
+                                unsigned srcDb, struct sqlDeleter* deleter);
 /* delete sequence from metadata tables */
 
 void gbMetaDataRemove(struct sqlConnection *conn,

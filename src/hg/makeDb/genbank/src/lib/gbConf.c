@@ -6,7 +6,7 @@
 #include "dystring.h"
 #include "localmem.h"
 
-static char const rcsid[] = "$Id: gbConf.c,v 1.6 2006/10/09 16:17:29 markd Exp $";
+static char const rcsid[] = "$Id: gbConf.c,v 1.7 2008/01/19 23:05:34 markd Exp $";
 
 /* standard conf file */
 char *GB_CONF_FILE = "etc/genbank.conf";
@@ -158,11 +158,10 @@ if (value == NULL)
 return value;
 }
 
-boolean gbConfMustGetDbBoolean(struct gbConf* conf, char* db, char* baseName)
+static boolean parseDbBoolean(char* db, char* baseName, char *value)
 /* parse boolean option for a database; check for database-specific value and
  * default */
 {
-char* value = gbConfMustGetDb(conf, db, baseName);
 if (sameString(value, "yes") || sameString(value, "true"))
     return TRUE;
 else if (sameString(value, "no") || sameString(value, "false"))
@@ -174,6 +173,21 @@ else
 return FALSE;
 }
 
+boolean gbConfGetDbBoolean(struct gbConf* conf, char* db, char* baseName)
+/* parse boolean option for a database; check for database-specific value and
+ * default, FALSE if not specified */
+{
+char* value = gbConfGetDb(conf, db, baseName);
+return (value != NULL) && parseDbBoolean(db, baseName, value);
+}
+
+boolean gbConfMustGetDbBoolean(struct gbConf* conf, char* db, char* baseName)
+/* parse boolean option for a database; check for database-specific value and
+ * default */
+{
+char* value = gbConfMustGetDb(conf, db, baseName);
+return parseDbBoolean(db, baseName, value);
+}
 
 /*
  * Local Variables:
