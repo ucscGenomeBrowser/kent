@@ -35,7 +35,7 @@
 #include "gbMiscDiff.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: gbMetaData.c,v 1.42 2008/01/19 23:05:33 markd Exp $";
+static char const rcsid[] = "$Id: gbMetaData.c,v 1.43 2008/01/19 23:31:05 markd Exp $";
 
 /* mol enum shared by gbCdnaInfo and refSeqStatus */
 #define molEnumDef \
@@ -989,7 +989,7 @@ for (status = statusTbl->metaChgList; status != NULL; status = status->next)
     assert(!(status->stateChg&GB_SEQ_CHG));
     if (status->stateChg&GB_META_CHG)
         sqlDeleterAddAcc(deleter, status->acc);
-    else if (status->stateChg&GB_REBUILD_DERIVED)
+    else if ((status->stateChg&GB_REBUILD_DERIVED) && inGeneTbls(status))
         sqlDeleterAddAcc(derivedTblDeleter, status->acc);
     if (geneTblDeleter != NULL)
         {
