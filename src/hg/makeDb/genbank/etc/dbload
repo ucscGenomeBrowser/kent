@@ -15,6 +15,7 @@
 #    latest release.  A limit on the number to update is set in this
 #    file.
 #   -allowLargeDeletes - see gbDbLoadStep
+#   -rebuildDerived - see gbDbLoadStep
 
 # errors terminate with message
 set -e
@@ -38,6 +39,9 @@ while [[ $1 == -* ]] ; do
         -allowLargeDeletes)
             opts="$opts $opt"
             largeDeletes=YES
+            ;;
+        -rebuildDerived)
+            opts="$opts $opt"
             ;;
         -*) echo "Error: invalid option $opt" >&2
             exit 1 ;;
