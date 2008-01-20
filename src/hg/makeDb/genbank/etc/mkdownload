@@ -12,6 +12,9 @@ set -e
 trap "echo Error: `hostname` mkdownload failed >&2; exit 1" ERR
 exec </dev/null
 
+# output root
+downloadRootDir=/cluster/data/genbank/ftp
+
 #verb='-verbose=1'
 verb=''
 
@@ -34,7 +37,7 @@ if [ $# != 0 ] ; then
 fi
 
 # initialize
-gbRoot=/genbank
+gbRoot=/cluster/data/genbank
 cd $gbRoot
 . $gbRoot/lib/gbCommon.sh
 
@@ -45,4 +48,4 @@ gbCheckLock $gbRoot/var/mkdownload/run/mkdownload.lock
 # make downloads for everything on the rr
 databases=`gbGetDatabases etc/hgwbeta.dbs etc/rr.dbs`
 
-nice gbMakeDownload $verb -getDownloadSeqs=$downloadSeqsDays $databases
+nice gbMakeDownload $verb -getDownloadSeqs=$downloadSeqsDays -downloadRootDir=$downloadRootDir $databases

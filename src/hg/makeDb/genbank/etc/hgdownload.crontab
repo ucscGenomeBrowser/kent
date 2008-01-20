@@ -6,12 +6,6 @@ SHELL=/bin/sh
 MAILTO=genbank@cse.ucsc.edu
 PATH=/usr/local/bin:/usr/bin:/bin
 
-
-# during the week only build downloads if they don't exist
-# to handle new genomes.
+# copy new download files from genbank server
 # poll hourly 16:30 - 21:30
-30 16-21 * * 1-5	/genbank/etc/mkdownload
-
-# on weekends rebuild downloads if more than 5 days old
-# poll hourly sat 0:30 - 23:30, sun 0:30 - 18:00
-30 0-23 * * 0,6	/genbank/etc/mkdownload -getDownloadSeqs=5
+30 16-21 * * * rsync --quiet -e 'ssh -x' --ignore-existing --archive --include='*.fa.gz' genbank:/genbank/ftp/ /mirrordata/apache/htdocs/goldenPath
