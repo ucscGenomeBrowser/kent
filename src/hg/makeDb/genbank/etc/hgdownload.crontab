@@ -8,4 +8,4 @@ PATH=/usr/local/bin:/usr/bin:/bin
 
 # copy new download files from genbank server
 # poll hourly 16:30 - 21:30
-30 16-21 * * * rsync --quiet -e 'ssh -x' --ignore-existing --archive --include='*.fa.gz' genbank:/genbank/ftp/ /mirrordata/apache/htdocs/goldenPath
+30 16-21 * * * rsync --quiet -e 'ssh -x' --whole-file -rl --include='*.fa.gz' genbank:/cluster/data/genbank/ftp/ /mirrordata/apache/htdocs/goldenPath
