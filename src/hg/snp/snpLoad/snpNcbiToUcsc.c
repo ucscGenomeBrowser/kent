@@ -13,7 +13,7 @@
 #include "twoBit.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: snpNcbiToUcsc.c,v 1.1 2007/12/18 05:26:57 angie Exp $";
+static char const rcsid[] = "$Id: snpNcbiToUcsc.c,v 1.2 2008/01/22 06:38:52 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -71,15 +71,11 @@ static struct optionSpec options[] = {
  * display functionality).
  */
 
-/* This is my understanding of the dependencies among class, observed, 
- * locType and allele:
- * - observed is completely independent (comes from submitters)
- * - allele is completely independent (comes from alignment)
- * - class is completely dependent on observed (or rather, on submitters)
- * - locType depends primarily on allele, but may also use class/observed. */
+/* $ftpBcp below refers to
+ * ftp://ftp.ncbi.nih.gov/snp/organisms/human_9606/database/shared_data */
 
 /* These class strings and their positions must correspond to the values in
- * ftp://ftp.ncbi.nih.gov/snp/organisms/human_9606/database/shared_data/SnpClassCode.bcp.gz
+ * $ftpBcp/SnpClassCode.bcp.gz
  * -- see also snpClass in the ASN:
  * ftp://ftp.ncbi.nih.gov/snp/specs/docsum_2005.asn */
 /* They are determined by data submitters, and should be consistent with 
@@ -103,17 +99,31 @@ char *classStrings[] = {
 };
 
 /* These strings and their positions must correspond to the values in
- * $ftpSnpDb/shared_data/LocTypeCode.bcp.gz 
+ * $ftpBcp/LocTypeCode.bcp.gz 
  * -- see also locType in the ASN:
  * ftp://ftp.ncbi.nih.gov/snp/specs/docsum_2005.asn */
-/* They are determined by NCBI, from alignments to the reference genome
- * sequence.  They should be consistent with allele (refNCBI, refUCSC) and
- * the genomic size (end-start).  The range{Ins,Subs,Del} take observed
- * into account -- the relative size of allele and observed(s) determines
- * whether it's an insertion or deletion on the reference. The other types
- * have no particular relationship to the SNP classes.  IMHO NCBI's
- * "insertion" and "deletion" names are sometimes misleading because
- * they don't consider the length of observed alleles. */
+/***************************** IMPORTANT *********************************:
+ * As of snp128, NCBI still aligns flanking sequences concatenated
+ * with only one IUPAC-ambiguous-coded base to represent the SNP --
+ * even if observed alleles are longer.  Multi-base SNPs are coded as
+ * a single N.  IMHO that renders locTypes 1-3 unreliable and causes a
+ * lot of alignment problems, increasing the number of locTypes 4-6
+ * and conflicts between observed & reference allele.  So we have a
+ * lot of related exceptions to report...  This use of a single IUPAC
+ * base for SNP of any size is described on this page:
+ * http://www.ncbi.nlm.nih.gov/books/bv.fcgi?indexed=google&rid=helpsnpfaq.section.Build.The_dbSNP_Mapping_Pr
+ * -- expand the "Reassigning loctype" section.
+ */
+/* locType is determined by NCBI, from alignments to the reference genome
+ * sequence.  The first 3 types (range, exact, between) tell us only
+ * whether the alignment spans multiple bases, one base, or 0 bases
+ * respectively -- so they are redundant with chrEnd-chrStart.  
+ * The latter 3 types (range{Insertion,Substitution,Deletion}) are 
+ * used when the alignment of flanking sequence immediately adjacent to
+ * the IUPAC code for the SNP, and the code itself, does not match the
+ * genome.  This is often a flag for a suboptimal alignment or a 
+ * flanking sequence with a lot of ambiguous bases near the coded base. */
+
 #define MAX_LOCTYPE 6
 char *locTypeStrings[] = {
     "unknown",		/* UCSC addition */
@@ -127,7 +137,7 @@ char *locTypeStrings[] = {
 };
 
 /* These strings and their positions must correspond to the values in
- * $ftpSnpDb/shared_data/SnpValidationCode.bcp.gz / ASN. */
+ * $ftpBcp/SnpValidationCode.bcp.gz / ASN. */
 #define MAX_VALID 31
 #define VALID_BITS 5
 char *validBitStrings[] = {
@@ -139,7 +149,7 @@ char *validBitStrings[] = {
 };
 
 /* These strings and their positions must correspond to the values in
- * $ftpSnpDb/shared_data/SnpFunctionCode.bcp.gz / ASN (but ASN doesn't have
+ * $ftpBcp/SnpFunctionCode.bcp.gz / ASN (but ASN doesn't have
  * the newer encodings (> 10). */
 /* See also
  * http://www.ncbi.nlm.nih.gov/books/bv.fcgi?rid=helpsnpfaq.section.Build.Data_Changes_that_Oc */
@@ -261,11 +271,39 @@ int rsId = 0;
 
 
 /******************* Reporting of errors and exceptions *********************/
+/* The following exceptions that appeared in snp126 have been 
+ * significantly changed:
+ * - RefAlleleNotRevComp --> RefAlleleRevComp 
+ *   -- because NCBI's convention changed.
+ * - RefAlleleWrongSize: promoted to error (would require investigation)
+ * - SingleClassBetweenLocType --> SingleClassZeroSpan
+ *   SingleClassRangeLocType --> SingleClassLongerSpan
+ *   NamedClassWrongLocType --> NamedDeletionZeroSpan,
+ *                              NamedInsertionNonzeroSpan
+ *   -- to remove dependence on locTypes 1-3 which are IMHO unreliable for
+ *      multi-base SNPs.
+ * - ObservedWrongFormat: only used for class=single now; otherwise we 
+ *   write an error or abort because an unrecognized format deserves 
+ *   developer attention.  IUPAC bases in other classes get their own
+ *   exception, ObservedContainsIupac -- good to highlight, but not as
+ *   bad as a real format error.
+ * - ObservedWrongSize: removed.  IMHO it's locType, not observed, that 
+ *   most likely has the problem.
+ * - RangeSubstitutionLocTypeExactMatch: removed -- I think rangeSubstitution
+ *   was misinterpreted.
+ * - ObservedNotAvailable: missing observed promoted to error (skip
+ *   this snp) -- not much to show, and these seem to be deleted SNPs in
+ *   general.  lengthTooLong gets its own exception, ObservedTooLong.
+ * New exceptions not named above:
+ * - FlankMismatchGenome{Longer,Equal,Shorter} -- When we see locType
+ *   4, 5, 6 / range{Insertion,Substitution,Deletion} respectively,
+ *   alert the user (probably a problem with alignment and/or flanking
+ *   sequences).
+ */
+
 /* Use an enum that indexes arrays of char * to avoid spelling errors. */
 enum exceptionType
     {
-    /* adjustCoords() */
-    RefAlleleWrongSize,
     /* processUcscAllele() */
     RefAlleleMismatch,
     RefAlleleRevComp,
@@ -273,12 +311,14 @@ enum exceptionType
     DuplicateObserved,
     MixedObserved,
     /* checkLocType() */
-    LocTypeRangeLength0,
-    LocTypeRangeLength1,
-    LocTypeExactMultiBase,
-    LocTypeExactLength0,
-    LocTypeBetweenLengthNonZero,
-    LocTypeNamedObservedMismatch,
+    FlankMismatchGenomeLonger,
+    FlankMismatchGenomeEqual,
+    FlankMismatchGenomeShorter,
+    /* checkClass() */
+    NamedDeletionZeroSpan,
+    NamedInsertionNonzeroSpan,
+    SingleClassLongerSpan,
+    SingleClassZeroSpan,
     /* checkObservedFormat() */
     SingleClassTriAllelic,
     SingleClassQuadAllelic,
@@ -287,24 +327,11 @@ enum exceptionType
     ObservedContainsIupac,
     /* checkObservedAgainstReference() */
     ObservedMismatch,
-    LocTypeRangeSpecWrongSizes,
-    RangeSubstitutionLocTypeExactMatch,
     /* reportMultipleMappings() */
     MultipleAlignments,
     /* Keep this one last as a count of enum values: */
     exceptionTypeCount
     };
-/* The following exceptions, applied to SNP125-127, have been intentionally
- * removed:
- * SingleClassRangeLocType: single simply means that all observed val's are
- *                          1 base long.  ref might have more bases and not
- *                          yet have been observed.
- * SingleClassBetweenLocType: again, this means all observed are 1bp.
- *
- * These have been significantly changed:
- * NamedClassWrongLocType: renamed to LocTypeNamedObservedMismatch
- * ObservedWrongSize: whittled down to LocTypeRangeSpecWrongSizes
- */
 
 FILE *fErr = NULL;
 FILE *fExc = NULL;
@@ -325,8 +352,6 @@ safef(fileName, sizeof(fileName), "%sExceptions.bed", outRoot);
 fExc = mustOpen(fileName, "w");
 
 AllocArray(exceptionNames, exceptionTypeCount);
-/* asjustCoords() */
-exceptionNames[RefAlleleWrongSize] = "RefAlleleWrongSize";
 /* processUcscAllele() */
 exceptionNames[RefAlleleMismatch] = "RefAlleleMismatch";
 exceptionNames[RefAlleleRevComp] = "RefAlleleRevComp";
@@ -334,12 +359,14 @@ exceptionNames[RefAlleleRevComp] = "RefAlleleRevComp";
 exceptionNames[DuplicateObserved] = "DuplicateObserved";
 exceptionNames[MixedObserved] = "MixedObserved";
 /* checkLocType() */
-exceptionNames[LocTypeRangeLength0] = "LocTypeRangeLength0";
-exceptionNames[LocTypeRangeLength1] = "LocTypeRangeLength1";
-exceptionNames[LocTypeExactMultiBase] = "LocTypeExactMultiBase";
-exceptionNames[LocTypeExactLength0] = "LocTypeExactLength0";
-exceptionNames[LocTypeBetweenLengthNonZero] = "LocTypeBetweenLengthNonZero";
-exceptionNames[LocTypeNamedObservedMismatch] = "LocTypeNamedObservedMismatch";
+exceptionNames[FlankMismatchGenomeLonger] = "FlankMismatchGenomeLonger";
+exceptionNames[FlankMismatchGenomeEqual] = "FlankMismatchGenomeEqual";
+exceptionNames[FlankMismatchGenomeShorter] = "FlankMismatchGenomeShorter";
+/* checkClass() */
+exceptionNames[NamedDeletionZeroSpan] = "NamedDeletionZeroSpan";
+exceptionNames[NamedInsertionNonzeroSpan] = "NamedInsertionNonzeroSpan";
+exceptionNames[SingleClassLongerSpan] = "SingleClassLongerSpan";
+exceptionNames[SingleClassZeroSpan] = "SingleClassZeroSpan";
 /* checkObservedFormat() */
 exceptionNames[SingleClassQuadAllelic] = "SingleClassQuadAllelic";
 exceptionNames[SingleClassTriAllelic] = "SingleClassTriAllelic";
@@ -348,18 +375,17 @@ exceptionNames[ObservedTooLong] = "ObservedTooLong";
 exceptionNames[ObservedContainsIupac] = "ObservedContainsIupac";
 /* checkObservedAgainstReference() */
 exceptionNames[ObservedMismatch] = "ObservedMismatch";
-exceptionNames[LocTypeRangeSpecWrongSizes] = "LocTypeRangeSpecWrongSizes";
-exceptionNames[RangeSubstitutionLocTypeExactMatch] =
-    "RangeSubstitutionLocTypeExactMatch";
 /* reportMultipleMappings() */
 exceptionNames[MultipleAlignments] = "MultipleAlignments";
 
 
+/* Many of these conditions imply a problem with NCBI's alignment and/or the
+ * flanking sequences.  hgc shows an axtAffine re-alignment of the flanking
+ * sequences, which isn't always exactly the same as NCBI's, but often it
+ * can shed some light. */
+#define SEE_ALIGNMENT "(UCSC's re-alignment of flanking sequences to the genome may be informative -- see below.)"
+
 AllocArray(exceptionDescs, exceptionTypeCount);
-/* adjustCoords() */
-exceptionDescs[RefAlleleWrongSize] =
-    "The reference allele from dbSNP has an expanded length different "
-    "from the size of the given position range.";
 /* processUcscAllele() */
 exceptionDescs[RefAlleleMismatch] =
     "The reference allele from dbSNP does not match the UCSC reference "
@@ -373,25 +399,44 @@ exceptionDescs[DuplicateObserved] =
 exceptionDescs[MixedObserved] =
     "There are other rsIds at this position with different variation.";
 /* checkLocType() */
-exceptionDescs[LocTypeRangeLength0] =
-    "Location type is range, but the span on the genome is 0 bases.";
-exceptionDescs[LocTypeRangeLength1] =
-    "Location type is range, but the span on the genome is 1 base.";
-exceptionDescs[LocTypeExactMultiBase] =
-    "Location type is exact, but the span on the genome is >1 base.";
-exceptionDescs[LocTypeExactLength0] =
-    "Location type is exact, but the span on the genome is 0 bases.";
-exceptionDescs[LocTypeBetweenLengthNonZero] =
-    "Location type is between, but the span on the genome is >0 bases.";
-exceptionDescs[LocTypeNamedObservedMismatch] =
-    "Mismatch between named-observed and location type.";
+exceptionDescs[FlankMismatchGenomeLonger] =
+    "Part of the flanking sequence including the SNP was not aligned to "
+    "the genome, and "
+    "the genome has more unaligned bases than the flanking sequences.  "
+    SEE_ALIGNMENT;
+exceptionDescs[FlankMismatchGenomeEqual] =
+    "Part of the flanking sequence including the SNP was not aligned to "
+    "the genome, and "
+    "the genome has the same number of unaligned bases as the flanking "
+    "sequences.  "
+    SEE_ALIGNMENT;
+exceptionDescs[FlankMismatchGenomeShorter] =
+    "Part of the flanking sequence including the SNP was not aligned to "
+    "the genome, and "
+    "the genome has fewer unaligned bases than the flanking sequences.  "
+    SEE_ALIGNMENT;
+/* checkClass() */
+exceptionDescs[NamedDeletionZeroSpan] =
+    "A deletion was observed but the annotation spans 0 bases.  "
+    SEE_ALIGNMENT;
+exceptionDescs[NamedInsertionNonzeroSpan] =
+    "An insertion was observed but the annotation spans more than 0 bases.  "
+    SEE_ALIGNMENT;
+exceptionDescs[SingleClassLongerSpan] =
+    "All observed alleles are single-base, but the annotation spans more "
+    "than 1 base.  "
+    SEE_ALIGNMENT;
+exceptionDescs[SingleClassZeroSpan] =
+    "All observed alleles are single-base, but the annotation spans 0 bases.  "
+    SEE_ALIGNMENT;
 /* checkObservedFormat() */
 exceptionDescs[SingleClassTriAllelic] =
     "This single-base substitution is tri-allelic.";
 exceptionDescs[SingleClassQuadAllelic] =
     "This single-base substitution is quad-allelic.";
 exceptionDescs[ObservedWrongFormat] =
-    "Observed allele(s) from dbSNP have unexpected format.";
+    "Observed allele(s) from dbSNP have unexpected format for the "
+    "given class.";
 exceptionDescs[ObservedTooLong] =
     "Observed allele not given (length too long).";
 exceptionDescs[ObservedContainsIupac] =
@@ -399,11 +444,6 @@ exceptionDescs[ObservedContainsIupac] =
 /* checkObservedAgainstReference() */
 exceptionDescs[ObservedMismatch] =
     "UCSC reference allele does not match any observed allele from dbSNP.";
-exceptionDescs[LocTypeRangeSpecWrongSizes] =
-    "Length of observed allele(s) from dbSNP is inconsistent with "
-    "dbSNP location type.";
-exceptionDescs[RangeSubstitutionLocTypeExactMatch] =
-    "Observed allele from dbSNP is not different from UCSC reference allele.";
 /* reportMultipleMappings() */
 exceptionDescs[MultipleAlignments] =
     "This variant aligns in more than one location.";
@@ -777,7 +817,7 @@ else if (sameString(locType, "between"))
 else if (sameString(locType, "exact"))
     {
     /* dbSNP single-base SNPs have start=end (0-based, fully closed coords).
-     * We increment end so length is 1 (in our -based, half open coords). */
+     * We increment end so length is 1 (in our 0-based, half open coords). */
     if (chrEnd != chrStart)
 	writeError("Unexpected coords for locType \"%s\" (%d) -- "
 		   "expected NCBI's chrEnd = chrStart.", locType, locTypeNum);
@@ -787,18 +827,29 @@ else if (sameString(locType, "exact"))
     else
 	chrEnd++;
     }
-else if (sameString(locType, "range") ||
-	 sameString(locType, "rangeInsertion") ||
-	 sameString(locType, "rangeSubstitution") ||
-	 sameString(locType, "rangeDeletion"))
+else if (sameString(locType, "range"))
     {
-    int len = strlen(refNCBI);
-    /* Sometimes chrEnd needs incrementing, sometimes not!  Might depend
-     * on class but I haven't verified that. */
-    if (len == chrEnd - chrStart + 1)
+    /* dbSNP multi-base SNPs have start<end (0-based, fully closed coords).
+     * We increment end to convert to our 0-based, half open coords. */
+    if (chrEnd <= chrStart)
+	writeError("Unexpected coords for locType \"%s\" (%d) -- "
+		   "expected NCBI's chrEnd > chrStart.", locType, locTypeNum);
+    else if (strlen(refNCBI) <= 1)
+	writeError("Expected refNCBI to be single-base for locType \"%s\" "
+		   "(%d) but got \"%s\"", locType, locTypeNum, refNCBI);
+    else
+	chrEnd++;
+    }
+else
+    {
+    /* The range{Insertion,Substitution,Deletion} locTypes don't have a
+     * constraint on size, but do need to be converted. */
+    if (strlen(refNCBI) != chrEnd - chrStart + 1)
+	writeError("Unexpected coords for locType \"%s\" (%d) -- "
+		   "expected NCBI's chrEnd == chrStart + 1.",
+		   locType, locTypeNum);
+    else
 	chrEnd ++;
-    else if (len != chrEnd - chrStart)
-	writeException(RefAlleleWrongSize);
     }
 }
 
@@ -900,66 +951,96 @@ for (el = idList;  el != NULL;  el = el->next)
     writeExceptionDetailed(clusterChr, clusterPos, clusterPos, el->val, exc);
 }
 
-//#*** BTW later take a look at this:
-// awk '$16 == "rangeSubstitution" {print;}' snp128.bed | head
-// they look totally wrong...?  rangeSubst, class=single... observed has 
-// no range to subst.  Here's the class breakdown for rangeSubs:
-//     17 in-del -- class should be mnp but I guess this is 2nd best. rs9279444
-//      1 mixed  -- mixed ==> not always subst... locType should be range. rs3993624
-//      1 mnp    -- yay! they got one right. rs36201470
-//      1 named  -- eh? rs10522800
-//     46 single -- this just can't be right. rs3956134
-
-void checkLocType(struct lineFile *lf, char *locType,
-		  char *class, char *observed)
-/* Complain if locType isn't consistent with length of SNP on the genome. 
- * Also, if class is named, then observed might declare itself to be
- * an insertion or deletion.  If so, complain if locType isn't consistent
- * with observed. */
+void checkLocType(struct lineFile *lf, char *locType)
+/* Write exception if locType indicates a suboptimal alignment. */
 {
-int span = chrEnd - chrStart;
-if (startsWith("range", locType))
-    {
-    if (span == 1)
-	writeException(LocTypeRangeLength1);
-    else if (span == 0)
-	writeException(LocTypeRangeLength0);
-    }
-else if (sameString(locType, "exact"))
-    {
-    if (span > 1)
-	writeException(LocTypeExactMultiBase);
-    else if (span == 0)
-	writeException(LocTypeExactLength0);
-    }
-else if (sameString(locType, "between"))
-    {
-    if (span > 0)
-	writeException(LocTypeBetweenLengthNonZero);
-    }
+if (sameString(locType, "rangeInsertion"))
+    writeException(FlankMismatchGenomeLonger);
+else if (sameString(locType, "rangeSubstitution"))
+    writeException(FlankMismatchGenomeEqual);
+else if (sameString(locType, "rangeDeletion"))
+    writeException(FlankMismatchGenomeShorter);
+}
 
-if (sameString(class, "named"))
+void measureObserved(char *observed, char *refAllele,
+		     int *retMinLen, int *retMaxLen,
+		     boolean *retGotRefAllele)
+/* NOTE: Results are not valid if observed isn't ^[IUPAC/-]+$ . */
+/* Parse observed into /-separated sequence (or -) chunks, and note a
+ * few properties of those chunks.  
+ * If one of the chunks is the refAllele, its length is ignored!  --
+ * so we can compare lengths of other alleles to ref.  */
+{
+int minLen = BIGNUM, maxLen = 0;
+boolean gotRefAllele = FALSE;
+char *words[128];
+int wordCount, i;
+char buf[2048];
+safecpy(buf, sizeof(buf), observed);
+wordCount = chopString(buf, "/", words, ArraySize(words));
+if (wordCount < 2)
     {
-    /* When observed is a large insertion into the genome, we don't know
-     * the length so we can't compare length of allele vs. observed to
-     * determine what locType should be.  But rangeSubstitution and
-     * rangeInsertion are dubious.  As of snp128, only 1 out of 2382 
-     * has a dubious locType (rs6148746 has rangeInsertion). */
-    if (strstr(observed, "INSERT") &&
-	(sameString(locType, "rangeSubstitution") ||
-	 sameString(locType, "rangeInsertion")))
-	writeException(LocTypeNamedObservedMismatch);
-    /* When observed is a large deletion from the genome, we expect
-     * some kind of insertion (or just "there", like exact or range)
-     * locType.  So locType should't be between, rangeSubstitution or
-     * rangeDeletion.  As of snp128, 15% of them are -- maybe the
-     * observed was assigned incorrectly?  For some, blat mapping is
-     * quite diff from NCBI's. #*** investigate */
-    else if (strstr(observed, "DELET") &&
-	     (sameString(locType, "between") ||
-	      sameString(locType, "rangeSubstitution") ||
-	      sameString(locType, "rangeDeletion")))
-	writeException(LocTypeNamedObservedMismatch);
+    errAbort("Oops, I thought we always had at least one slash here -- "
+	     "got observed=\"%s\" for this snp:"
+	     "\n%s\t%d\t%d\trs%d",
+	     observed, chr, chrStart, chrEnd, rsId);
+    minLen = maxLen = strlen(observed);
+    gotRefAllele = sameString(observed, refAllele);
+    }
+else
+    {
+    for (i=0;  i < wordCount;  i++)
+	{
+	if (sameString(words[i], refAllele))
+	    {
+	    gotRefAllele = TRUE;
+	    continue;
+	    }
+	int len = strlen(words[i]);
+	if (sameString(words[i], "-"))
+	    len = 0;
+	if (len > maxLen)
+	    maxLen = len;
+	if (len < minLen)
+	    minLen = len;
+	}
+    }
+if (retMinLen != NULL)
+    *retMinLen = minLen;
+if (retMaxLen != NULL)
+    *retMaxLen = maxLen;
+if (retGotRefAllele != NULL)
+    *retGotRefAllele = gotRefAllele;
+}
+
+void checkClass(struct lineFile *lf, char *class, char *observed,
+		char *refUCSC)
+/* Look for some anomalous cases where the alignment's genomic span seems 
+ * inconsistent with the observed alleles. */
+{
+if (sameString(class, "single"))
+    {
+    if (chrEnd == chrStart)
+	writeException(SingleClassZeroSpan);
+    else if (chrEnd > chrStart + 1)
+	writeException(SingleClassLongerSpan);
+    }
+else if (sameString(class, "named"))
+    {
+    /* Insertion snp ==> deletion in genome & vice versa.  But watch out for
+     * cases where there's a large in-del, but also the ref allele, among the
+     * observed alleles. */
+    char *rightParen = strstr(observed, ")/-/");
+    boolean obsGotRef = FALSE;
+    if (rightParen)
+	measureObserved(rightParen+2, refUCSC, NULL, NULL, &obsGotRef);
+    if (! obsGotRef)
+	{
+	if (strstr(observed, "INSERT") && chrEnd != chrStart)
+	    writeException(NamedInsertionNonzeroSpan);
+	else if (strstr(observed, "DELET") && chrEnd == chrStart)
+	    writeException(NamedDeletionZeroSpan);
+	}
     }
 }
 
@@ -1077,8 +1158,12 @@ else if (sameString(class, "deletion") || sameString(class, "insertion") ||
 	/* The regex tolerates some stuff worth flagging/fixing: */
 	if (strchr(observed, ' '))
 	    {
-	    writeException(ObservedWrongFormat);
 	    stripChar(observed, ' ');
+	    /* Since we fix this, an exception would be confusing.
+	     * SNP128 has only one instance of this, so just report it
+	     * on stderr and tell NCBI. */
+	    warn("spaces stripped from observed:\n%s\t%d\t%d\trs%d",
+		 chr, chrStart, chrEnd, rsId);
 	    }
 	flagIupac(observed);
 	}
@@ -1159,108 +1244,35 @@ else if (! sameString(class, "unknown"))
 return TRUE;
 }
 
-void measureObserved(char *observed, char *refAllele,
-		     int *retMinLen, int *retMaxLen,
-		     boolean *retStartsWithDash, boolean *retGotRefAllele)
-/* NOTE: Results are not valid if observed isn't ^[IUPAC/-]+$ . */
-/* Parse observed into /-separated sequence (or -) chunks, and note a
- * few properties of those chunks.  
- * If one of the chunks is the refAllele, its length is ignored!  --
- * so we can compare lengths of other alleles to ref.  */
-{
-int minLen = BIGNUM, maxLen = 0;
-boolean startsWithDash = FALSE, gotRefAllele = FALSE;
-char *words[128];
-int wordCount, i;
-char buf[2048];
-safecpy(buf, sizeof(buf), observed);
-wordCount = chopString(buf, "/", words, ArraySize(words));
-if (wordCount < 2)
-    {
-    errAbort("Oops, I thought we always had at least one slash here -- "
-	     "got observed=\"%s\" for this snp:"
-	     "\n%s\t%d\t%d\trs%d\n",
-	     observed, chr, chrStart, chrEnd, rsId);
-    minLen = maxLen = strlen(observed);
-    gotRefAllele = sameString(observed, refAllele);
-    }
-else
-    {
-    if (sameString(words[0], "-"))
-	startsWithDash = TRUE;
-    for (i=0;  i < wordCount;  i++)
-	{
-	if (sameString(words[i], refAllele))
-	    {
-	    gotRefAllele = TRUE;
-	    continue;
-	    }
-	int len = strlen(words[i]);
-	if (sameString(words[i], "-"))
-	    len = 0;
-	if (len > maxLen)
-	    maxLen = len;
-	if (len < minLen)
-	    minLen = len;
-	}
-    }
-if (retMinLen != NULL)
-    *retMinLen = minLen;
-if (retMaxLen != NULL)
-    *retMaxLen = maxLen;
-if (retStartsWithDash != NULL)
-    *retStartsWithDash = startsWithDash;
-if (retGotRefAllele != NULL)
-    *retGotRefAllele = gotRefAllele;
-}
-
 void checkObservedAgainstReference(struct lineFile *lf,
 				   char *class, char *observed,
-				   char *locType, char *refAllele)
+				   char *refAllele)
 /* For relevant classes, check whether refAllele is included in
- * observed values.  
- * For in-del with locType=range{Ins,Subs,Del}, check whether locType
- * is consistent with observed allele lengths. */
+ * observed values. */
 {
-int obsMinLen, obsMaxLen;
-boolean obsStartsWithDash, obsContainsRefAllele;
-measureObserved(observed, refAllele, &obsMinLen, &obsMaxLen,
-		&obsStartsWithDash, &obsContainsRefAllele);
-
 if ((sameString(class, "single") || sameString(class, "in-del") ||
-     sameString(class, "mixed") || sameString(class, "mnp")) &&
-    !obsContainsRefAllele)
-    writeException(ObservedMismatch);
-
-if (sameString(class, "in-del"))
+     sameString(class, "mixed") || sameString(class, "mnp")))
     {
-    int span = chrEnd - chrStart;
-    if ((sameString(locType, "rangeInsertion") && obsMaxLen >= span) ||
-	(sameString(locType, "rangeSubstitution") &&
-	 (obsMinLen != span || obsMaxLen != span)) ||
-	(sameString(locType, "rangeDeletion") && obsMinLen <= span))
-	/* NCBI has assigned a locType for which we're about to assign a
-	 * contradictory class in adjustClass. */
-	writeException(LocTypeRangeSpecWrongSizes);
-
-    if (sameString(locType, "rangeSubstitution") &&
-	obsStartsWithDash && strlen(observed + 2) == strlen(refAllele))
-	{
-	/* One instance of this in SNP128: rs4053839.  Looks to me like wrong
-	 * locType, should be rangeDeletion. */
-	if (sameString(observed+2, refAllele))
-	    writeException(RangeSubstitutionLocTypeExactMatch);
-	}
+    boolean obsContainsRefAllele;
+    measureObserved(observed, refAllele, NULL, NULL,
+		    &obsContainsRefAllele);
+    if (!obsContainsRefAllele)
+	writeException(ObservedMismatch);
     }
 }
 
 boolean checkObserved(struct lineFile *lf, char *class, char *observed,
-		      char *locType, char *refAllele)
+		      char *refAllele)
 /* If there is a formatting problem, don't proceed with other checks. */
 {
+if (sameString(observed, "MISSING"))
+    {
+    writeError("Missing observed value (deleted SNP?).");
+    return FALSE;
+    }
 if (! checkObservedFormat(lf, class, observed))
     return FALSE;
-checkObservedAgainstReference(lf, class, observed, locType, refAllele);
+checkObservedAgainstReference(lf, class, observed, refAllele);
 return TRUE;
 }
 
@@ -1276,29 +1288,24 @@ if (! sameString(class, "in-del"))
 	     class);
 int span = chrEnd - chrStart;
 int obsMinLen, obsMaxLen;
-boolean obsStartsWithDash, obsContainsRefAllele;
-measureObserved(observed, refAllele, &obsMinLen, &obsMaxLen,
-		&obsStartsWithDash, &obsContainsRefAllele);
+measureObserved(observed, refAllele, &obsMinLen, &obsMaxLen, NULL);
 
-/* Note1: we are intentionally changing the sense of inversion vs.
- * deletion relative to locType.  NCBI's locType describes what's
- * going on with the contig, while our reported SNP class describes
- * the SNP's role in the in-del. */
-/* Note2: class and locType alone are not sufficient to determine
- * ins vs. del in some cases.  We have to compare the lengths of
- * reference allele (span) vs. observed allele(s).*/
-if (obsMaxLen < span)
-    /* All observed alleles (except observed refAllele) are shorter
-     * than the genomic segment ==> SNP is a deletion. */
-    safecpy(class, classSize, "deletion");
-else if (obsMinLen > span)
-    /* All observed alleles (except observed refAllele) are longer
-     * than the genomic segment ==> SNP is an insertion. */
-    safecpy(class, classSize, "insertion");
-
-if (sameString(locType, "between") && !sameString(class, "insertion"))
-    lineFileAbort(lf, "locType \"between\" should be identified "
-		  "as an insertion here.");
+if (!sameString(locType, "rangeInsertion") &&
+    !sameString(locType, "rangeSubstitution") &&
+    !sameString(locType, "rangeDeletion"))
+    {
+    if (obsMaxLen < span)
+	/* All observed alleles (except observed refAllele) are shorter
+	 * than the genomic segment ==> SNP is a deletion. */
+	safecpy(class, classSize, "deletion");
+    else if (obsMinLen > span)
+	/* All observed alleles (except observed refAllele) are longer
+	 * than the genomic segment ==> SNP is an insertion. */
+	safecpy(class, classSize, "insertion");
+    if (sameString(locType, "between") && !sameString(class, "insertion"))
+	lineFileAbort(lf, "locType \"between\" should be identified "
+		      "as an insertion here.");
+    }
 }
 
 void checkCluster(struct lineFile *lf, char strand, char *observed)
@@ -1523,8 +1530,9 @@ while ((wordCount = lineFileChopTab(lf, row)) > 0)
     safecpy(refAllele, sizeof(refAllele), refUCSC);
     if (strand == '-')
 	reverseComplement(refAllele, strlen(refAllele));
-    checkLocType(lf, locType, class, observed);
-    boolean obsOk = checkObserved(lf, class, observed, locType, refAllele);
+    checkLocType(lf, locType);
+    checkClass(lf, class, observed, refUCSC);
+    boolean obsOk = checkObserved(lf, class, observed, refAllele);
     if (obsOk && sameString(class, "in-del"))
 	adjustClass(lf, class, sizeof(class), observed, locType, refAllele);
 
@@ -1536,8 +1544,16 @@ while ((wordCount = lineFileChopTab(lf, row)) > 0)
 	{
 	fprintf(f, "%s\t%d\t%d\trs%d\t", chr, chrStart, chrEnd, rsId);
 	fprintf(f, "%d\t%c\t%s\t%s\t", score, strand, refNCBI, refUCSC);
-	fprintf(f, "%s\t%s\t%s\t", observed, molType, class);
-	fprintf(f, "%s\t%lf\t%lf\t", valid, avHet, avHetSE);
+	fprintf(f, "%s\t%s\t%s\t%s\t", observed, molType, class, valid);
+	/* Save a few bytes by not printing out tons of 0.000000's: */
+	if (avHet == 0.0)
+	    fprintf(f, "0.0\t");
+	else
+	    fprintf(f, "%lf\t", avHet);
+	if (avHetSE == 0.0)
+	    fprintf(f, "0.0\t");
+	else
+	    fprintf(f, "%lf\t", avHetSE);
 	fprintf(f, "%s\t%s\t%d\n", func, locType, weight);
 	}
     }
