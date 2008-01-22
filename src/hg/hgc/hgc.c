@@ -7,6 +7,7 @@
 #include "hash.h"
 #include "bits.h"
 #include "memgfx.h"
+#include "hvGfx.h"
 #include "portable.h"
 #include "errabort.h"
 #include "dystring.h"
@@ -212,7 +213,7 @@
 #include "itemConf.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1378 2008/01/14 23:55:44 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1378.2.1 2008/01/22 22:57:25 markd Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -15726,7 +15727,7 @@ printf("</td></tr></table>\n");
 chuckHtmlContactInfo();
 }
 
-void makeGrayShades(struct vGfx *vg)
+void makeGrayShades(struct hvGfx *hvg)
 /* Make eight shades of gray in display. */
 {
 int i;
@@ -15736,7 +15737,7 @@ for (i=0; i<=maxShade; ++i)
     int level = 255 - (255*i/maxShade);
     if (level < 0) level = 0;
     rgb.r = rgb.g = rgb.b = level;
-    shadesOfGray[i] = vgFindRgb(vg, &rgb);
+    shadesOfGray[i] = hvGfxFindRgb(hvg, &rgb);
     }
 shadesOfGray[maxShade+1] = MG_RED;
 }
@@ -15786,7 +15787,7 @@ int rowCount = 0;
 struct tempName gifTn;
 int pixWidth = atoi(cartUsualString(cart, "pix", DEFAULT_PIX_WIDTH ));
 int pixHeight = 0;
-struct vGfx *vg;
+struct hvGfx *hvg;
 int lineHeight = 0;
 double scale = 0;
 
@@ -15795,13 +15796,13 @@ lineHeight = 2 * fontHeight +1;
 altGraphXLayout(ag, ag->tStart, ag->tEnd, scale, 100, &ssList, &heightHash, &rowCount);
 pixHeight = rowCount * lineHeight;
 trashDirFile(&gifTn, "hgc", "hgc", ".gif");
-vg = vgOpenGif(pixWidth, pixHeight, gifTn.forCgi);
-makeGrayShades(vg);
-vgSetClip(vg, 0, 0, pixWidth, pixHeight);
-altGraphXDrawPack(ag, ssList, vg, 0, 0, pixWidth, lineHeight, lineHeight-1,
+hvg = hvGfxOpenGif(pixWidth, pixHeight, 0, gifTn.forCgi);
+makeGrayShades(hvg);
+hvGfxSetClip(hvg, 0, 0, pixWidth, pixHeight);
+altGraphXDrawPack(ag, ssList, hvg, 0, 0, pixWidth, lineHeight, lineHeight-1,
 		  ag->tStart, ag->tEnd, scale, font, MG_BLACK, shadesOfGray, "Dummy", NULL);
-vgUnclip(vg);
-vgClose(&vg); 
+hvGfxUnclip(hvg);
+hvGfxClose(&hvg); 
 printf(
        "<IMG SRC = \"%s\" BORDER=1 WIDTH=%d HEIGHT=%d><BR>\n",
        gifTn.forHtml, pixWidth, pixHeight);

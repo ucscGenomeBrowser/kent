@@ -5,12 +5,12 @@
 #include "linefile.h"
 #include "dystring.h"
 #include "hdb.h"
-#include "vGfx.h"
+#include "hvGfx.h"
 #include "portable.h"
 #include "altGraphX.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: altSplice.c,v 1.8 2006/03/06 17:46:34 angie Exp $";
+static char const rcsid[] = "$Id: altSplice.c,v 1.8.94.1 2008/01/22 22:57:27 markd Exp $";
 
 static int gpBedBasesShared(struct genePred *gp, struct bed *bed)
 /* Return number of bases genePred and bed share. */
@@ -61,7 +61,7 @@ if (bestBed != NULL)
 return ret;
 }
 
-void makeGrayShades(struct vGfx *vg, int maxShade, Color shadesOfGray[])
+void makeGrayShades(struct hvGfx *hvg, int maxShade, Color shadesOfGray[])
 /* Make eight shades of gray in display. */
 {
 int i;
@@ -69,7 +69,7 @@ for (i=0; i<=maxShade; ++i)
     {
     int level = 255 - (255*i/maxShade);
     if (level < 0) level = 0;
-    shadesOfGray[i] = vgFindColorIx(vg, level, level, level);
+    shadesOfGray[i] = hvGfxFindColorIx(hvg, level, level, level);
     }
 shadesOfGray[maxShade+1] = MG_RED;
 }
@@ -85,7 +85,7 @@ int rowCount = 0;
 struct tempName gifTn;
 int pixWidth = atoi(cartUsualString(cart, "pix", "620" ));
 int pixHeight = 0;
-struct vGfx *vg;
+struct hvGfx *hvg;
 int lineHeight = 0;
 double scale = 0;
 Color shadesOfGray[9];
@@ -97,14 +97,14 @@ altGraphXLayout(ag, ag->tStart, ag->tEnd, scale, 100, &ssList, &heightHash, &row
 hashFree(&heightHash);
 pixHeight = rowCount * lineHeight;
 makeTempName(&gifTn, "hgc", ".gif");
-vg = vgOpenGif(pixWidth, pixHeight, gifTn.forCgi);
-makeGrayShades(vg, maxShade, shadesOfGray);
-vgSetClip(vg, 0, 0, pixWidth, pixHeight);
-altGraphXDrawPack(ag, ssList, vg, 0, 0, pixWidth, lineHeight, lineHeight-1,
+hvg = hvGfxOpenGif(pixWidth, pixHeight, 0, gifTn.forCgi);
+makeGrayShades(hvg, maxShade, shadesOfGray);
+hvGfxSetClip(hvg, 0, 0, pixWidth, pixHeight);
+altGraphXDrawPack(ag, ssList, hvg, 0, 0, pixWidth, lineHeight, lineHeight-1,
 		  ag->tStart, ag->tEnd, scale, 
 		  font, MG_BLACK, shadesOfGray, "Dummy", NULL);
-vgUnclip(vg);
-vgClose(&vg);
+hvGfxUnclip(hvg);
+hvGfxClose(&hvg);
 printf(
        "<IMG SRC = \"%s\" BORDER=1 WIDTH=%d HEIGHT=%d><BR>\n",
        gifTn.forHtml, pixWidth, pixHeight);
