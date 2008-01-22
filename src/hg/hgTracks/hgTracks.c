@@ -119,7 +119,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1430 2007/12/11 21:14:01 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1431 2008/01/22 21:51:32 hiram Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -14541,7 +14541,10 @@ void zoomToSize(int newSize)
  * center a little bit to keep it from going past
  * edges. */
 {
-int center = (winStart + winEnd)/2;
+int center = ((long long int)winStart + (long long int)winEnd)/2;
+if (center < 0)
+    errAbort("zoomToSize: error computing center: %d = (%d + %d)/2\n",
+	center, winStart, winEnd);
 if (newSize > seqBaseCount)
     newSize = seqBaseCount;
 winStart = center - newSize/2;
