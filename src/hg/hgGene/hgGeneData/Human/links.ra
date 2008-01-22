@@ -13,6 +13,13 @@ idSql select refLink.omimId from kgXref,refLink where kgID = '%s' and kgXref.ref
 url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=OMIM&term=%s&doptcmdl=Detailed&tool=genome.ucsc.edu
 priority 10
 
+name huge
+shortLabel HuGE
+tables huge
+idSql select huge.geneSymbol from kgXref, huge where kgID = '%s' and kgXref.geneSymbol = huge.geneSymbol
+url http://www.hugenavigator.net/HuGENavigator/huGEPedia.do?firstQuery=NONE&geneID=%s&check=y&which=2&typeSubmit=GO&typeOption=gene&pubOrderType=pubD
+priority 10
+
 name geneTests
 shortLabel GeneTests
 tables geneTests kgXref
