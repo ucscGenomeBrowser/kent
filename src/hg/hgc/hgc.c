@@ -212,7 +212,7 @@
 #include "itemConf.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1381 2008/01/22 06:42:52 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1382 2008/01/22 20:17:23 angie Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -12569,7 +12569,7 @@ int start = 0;
 int end = 0;
 int skipCount = 0;
 
-off_t offset = 0;
+unsigned long offset = 0;
 
 fileName = getSnpSeqFile(tdb);
 if (!fileName)
