@@ -212,7 +212,7 @@
 #include "itemConf.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1380 2008/01/16 20:37:30 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1381 2008/01/22 06:42:52 angie Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -12583,6 +12583,9 @@ lf = lineFileOpen(fileName, TRUE);
 lineFileSeek(lf, offset, SEEK_SET);
 /* skip the header line */
 lineFileNext(lf, &line, &lineSize);
+if (!startsWith(">rs", line))
+    errAbort("Expected FASTA header, got this line:\n%s\nat offset %ld "
+	     "in file %s", line, offset, fileName);
 
 while (lineFileNext(lf, &line, &lineSize))
     {
@@ -12654,9 +12657,12 @@ if (seqNib == NULL)
 if (sameString(strand,"-"))
     reverseComplement(seqNib->dna, seqNib->size);
 
-printf("\n<BR><B>Alignment between the SNP's flanking sequences and the Genomic sequence:</B>");
+printf("\n<BR><B>Re-alignment of the SNP's flanking sequences to the "
+       "genomic sequence:</B><BR>\n"
+       "Note: this alignment was computed by UCSC and may not be identical to "
+       "NCBI's alignment used to map the SNP.\n");
 
-printf("<PRE><B>Genomic Sequence:</B><BR>");
+printf("<PRE><B>Genomic Sequence:</B><BR>\n");
 writeSeqWithBreaks(stdout, seqNib->dna, seqNib->size, displayLength);
 printf("</PRE>\n");
 
@@ -13394,7 +13400,7 @@ if (isNotEmpty(orthoTable) && hTableExists(orthoTable))
 }
 
 
-void printSnp125Info(struct trackDb *tdb, struct snp125 snp)
+void printSnp125Info(struct trackDb *tdb, struct snp125 snp, int version)
 /* print info on a snp125 */
 {
 int alleleLen = strlen(snp.refUCSC);
@@ -13423,14 +13429,23 @@ if (!sameString(snp.class, "insertion"))
     else if (sameString(snp.strand,"-"))
         {
         printf("<BR><B>Reference allele: </B>%s\n",                 refUCSCRevComp);
-        if (!sameString(refUCSCRevComp, snp.refNCBI))
+        if (version < 127 && !sameString(refUCSCRevComp, snp.refNCBI))
             printf("<BR><B>dbSnp reference allele: </B>%s\n",       snp.refNCBI);
+        else if (version >= 127 && !sameString(snp.refUCSC, snp.refNCBI))
+	    {
+	    char refNCBIRevComp[1024];
+	    safecpy(refNCBIRevComp, sizeof(refNCBIRevComp), snp.refNCBI);
+	    reverseComplement(refNCBIRevComp, strlen(refNCBIRevComp));
+            printf("<BR><B>dbSnp reference allele: </B>%s\n",       refNCBIRevComp);
+	    }
         }
     }
 
 
 printSnpOrthos(tdb, snp.name);
-printf("<BR><B><A HREF=\"#LocType\">Location Type</A>: </B>%s\n",          snp.locType);
+if (version <= 127)
+    printf("<BR><B><A HREF=\"#LocType\">Location Type</A>: </B>%s\n",
+	   snp.locType);
 printf("<BR><B><A HREF=\"#Class\">Class</A>: </B>%s\n",     snp.class);
 printf("<BR><B><A HREF=\"#Valid\">Validation</A>: </B>%s\n", snp.valid);
 printf("<BR><B><A HREF=\"#Func\">Function</A>: </B>%s\n",           snp.func);
@@ -13541,7 +13556,7 @@ bedPrintPos((struct bed *)&snp, 3);
 
 snpAlign = snp125ToSnp(&snp);
 printf("<BR>\n");
-printSnp125Info(tdb, snp);
+printSnp125Info(tdb, snp, version);
 doSnpEntrezGeneLink(tdb, itemName);
 sqlFreeResult(&sr);
 
