@@ -9,7 +9,7 @@
 #include "chainBlock.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: chainNet.c,v 1.37 2007/09/01 02:37:14 markd Exp $";
+static char const rcsid[] = "$Id: chainNet.c,v 1.38 2008/01/22 23:05:37 hiram Exp $";
 
 int minSpace = 25;	/* Minimum gap size to fill. */
 int minFill;		/* Minimum fill to record. */
@@ -221,7 +221,7 @@ for (b = startBlock; b != NULL; b = b->next)
     if (start > s) start = s;
     if (end < e) end = e;
     }
-if (end - start < minFill)
+if ((end < 0) || ((end - start) < minFill))
     return FALSE;
 *retStart = start;
 *retEnd = end;
