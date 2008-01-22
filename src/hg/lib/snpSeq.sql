@@ -5,6 +5,7 @@
 
 #Information about sequences contained in rs_fasta files described in snpExtFile
 CREATE TABLE snpSeq (
-    name varchar(255) not null,	   # rsId of sequence
-    file_offset bigint not null	   # byte offset of sequence in file
+    acc varchar(255) not null,	   # rsId of sequence
+    file_offset bigint not null,   # byte offset of sequence in file
+    PRIMARY KEY(acc)
 );
