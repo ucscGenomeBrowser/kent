@@ -2,7 +2,7 @@
 #include "common.h"
 #include "hCommon.h"
 #include "hdb.h"
-static char const rcsid[] = "$Id: hgCalStat.c,v 1.2 2006/03/18 18:18:45 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgCalStat.c,v 1.3 2008/01/23 21:49:37 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
