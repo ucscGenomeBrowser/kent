@@ -8,7 +8,7 @@ char *mgcDbName();
 void printMgcUrl(int imageId);
 /* print out an URL to link to the MGC site for a full-length MGC clone */
 
-void printMgcDetailsUrl(char *acc);
+void printMgcDetailsUrl(char *acc, int start);
 /* print out an URL to link to MGC details pages from another details page in
  * the browser.*/
 

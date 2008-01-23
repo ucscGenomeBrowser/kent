@@ -4,6 +4,7 @@
 #include "ccdsClick.h"
 #include "ccdsInfo.h"
 #include "ccdsGeneMap.h"
+#include "geneSimilarities.h"
 #include "genbank.h"
 #include "genePred.h"
 #include "genePredReader.h"
@@ -276,18 +277,23 @@ for (ccdsKg = ccdsKgs; ccdsKg != NULL; ccdsKg = ccdsKg->next)
 static void ccdsMgcRows(struct sqlConnection *conn, char *ccdsId)
 /* output MGCs mapped to CCDS */
 {
-struct ccdsGeneMap *ccdsMgcs = ccdsGetGenes(conn, "ccdsMgcMap", ccdsId);
-struct ccdsGeneMap *ccdsMgc;
-for (ccdsMgc = ccdsMgcs; ccdsMgc != NULL; ccdsMgc = ccdsMgc->next)
+// only possible to get multiple CCDS genePreds in PAR, since we are linking
+// to details, not browser, only use the first set.
+struct geneSimilarities *geneSims
+    = geneSimilaritiesBuildAll(conn, TRUE, ccdsId, "ccdsGene", "mgcGenes");
+
+struct geneSim *mgc;
+for (mgc = geneSims->genes; mgc != NULL; mgc = mgc->next)
     {
     printf("<TR>");
-    if (ccdsMgc == ccdsMgcs)
-        printf("<TH ROWSPAN=%d>MGC", slCount(ccdsMgcs));
+    if (mgc == geneSims->genes)
+        printf("<TH ROWSPAN=%d>MGC", slCount(geneSims->genes));
     printf("<TD><A HREF=\"");
-    printMgcDetailsUrl(ccdsMgc->geneId);
-    printf("\">%s</A>", ccdsMgc->geneId);
+    printMgcDetailsUrl(mgc->gene->name, mgc->gene->txStart);
+    printf("\">%s</A>", mgc->gene->name);
     printf("<TD>&nbsp;</TR>\n");
     }
+geneSimilaritiesFreeList(&geneSims);
 }
 
 void doCcdsGene(struct trackDb *tdb, char *ccdsId)
@@ -362,7 +368,7 @@ if (vegaCcds != NULL)
     ccdsHinxtonRows(ccdsId, TRUE, vegaCcds);
 if (ensCcds != NULL)
     ccdsHinxtonRows(ccdsId, FALSE, ensCcds);
-if (sqlTableExists(conn, "ccdsMgcMap"))
+if (sqlTableExists(conn, "mgcGenes"))
     ccdsMgcRows(conn, ccdsId);
 
 printf("</TBODY></TABLE>\n");

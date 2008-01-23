@@ -112,13 +112,13 @@ static void printImageUrl(int imageId)
 printf("http://image.llnl.gov/image/IQ/bin/singleCloneQuery?clone_id=%d", imageId);
 }
 
-void printMgcDetailsUrl(char *acc)
+void printMgcDetailsUrl(char *acc, int start)
 /* print out an URL to link to MGC details pages from another details page in
  * the browser.*/
 {
 // pass zero coordiates for window to indicate this isn't a browser click
-printf("../cgi-bin/hgc?%s&g=mgcGenes&i=%s&l=0&r=0&db=%s",
-       cartSidUrlString(cart), acc, database);
+printf("../cgi-bin/hgc?%s&g=mgcGenes&o=%d&i=%s&l=0&r=0&db=%s",
+       cartSidUrlString(cart), start, acc, database);
 }
 
 static void printMBLabValidDbUrl(char *acc)

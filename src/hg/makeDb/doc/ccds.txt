@@ -33,9 +33,6 @@
     # ccdsKgMap
     /cluster/data/genbank/bin/x86_64/mkCcdsGeneMap -db=${db} -loadDb ccdsGene knownGene ccdsKgMap
 
-    # build initial version of ccdsMgcMap table, updated by nightly genbank update
-    /cluster/data/genbank/bin/x86_64/mkCcdsGeneMap -db=${db} -loadDb ccdsGene mgcGenes ccdsMgcMap
-
     checkTableCoords ${db} -verbose=2 ccdsGene
     # update all.jointer to include ${db} in ccdsDb
     joinerCheck -database=${db} -identifier=ccdsGeneId ~/compbio/genbank/kent/src/hg/makeDb/schema/all.joiner
@@ -43,7 +40,6 @@
         ccdsGene
         ccdsInfo
         ccdsKgMap
-        ccdsMgcMap
     # << emacs
 ############################################################################
 
