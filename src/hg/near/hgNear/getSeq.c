@@ -14,7 +14,7 @@
 #include "genePred.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: getSeq.c,v 1.9 2005/03/03 07:10:57 donnak Exp $";
+static char const rcsid[] = "$Id: getSeq.c,v 1.10 2008/01/23 18:12:00 angie Exp $";
 
 static void printNameAndDescription(struct sqlConnection *conn, 
 	struct genePos *gp, struct column *nameCol, struct column *descCol)
@@ -89,6 +89,7 @@ struct sqlConnection *conn2 = hAllocConn();
 struct column *descCol = findNamedColumn("description");
 struct column *nameCol = findNamedColumn("name");
 char *table = genomeSetting(tableId);
+boolean hasBin = hOffsetPastBin(NULL, table);
 
 hPrintf("<TT><PRE>");
 for (gp = geneList; gp != NULL; gp = gp->next)
@@ -101,7 +102,7 @@ for (gp = geneList; gp != NULL; gp = gp->next)
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         {
-	struct genePred *gene = genePredLoad(row);
+	struct genePred *gene = genePredLoad(row+hasBin);
 	struct bed *bed = bedFromGenePred(gene);
 	struct dnaSeq *seq = hSeqForBed(bed);
 	hPrintf(">%s (predicted mRNA)", id);
@@ -174,6 +175,7 @@ int downSize = cartInt(cart, proDownSizeVarName);
 boolean fiveOnly = cartBoolean(cart, proIncludeFiveOnly);
 struct column *descCol = findNamedColumn("description");
 struct column *nameCol = findNamedColumn("name");
+boolean hasBin = hOffsetPastBin(NULL, table);
 
 hPrintf("<TT><PRE>");
 for (gp = geneList; gp != NULL; gp = gp->next)
@@ -186,7 +188,7 @@ for (gp = geneList; gp != NULL; gp = gp->next)
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         {
-	struct genePred *gene = genePredLoad(row);
+	struct genePred *gene = genePredLoad(row+hasBin);
 	if (!fiveOnly || hasUtr5(gene))
 	    {
 	    struct dnaSeq *seq = genePromoSeq(gene, upSize, downSize);
@@ -227,6 +229,7 @@ struct genePos *gp;
 char query[256];
 struct sqlResult *sr;
 char **row;
+boolean hasBin = hOffsetPastBin(NULL, table);
 
 hPrintf("<TT><PRE>");
 for (gp = geneList; gp != NULL; gp = gp->next)
@@ -237,7 +240,7 @@ for (gp = geneList; gp != NULL; gp = gp->next)
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         {
-	struct genePred *gene = genePredLoad(row);
+	struct genePred *gene = genePredLoad(row+hasBin);
 	struct bed *bed = bedFromGenePred(gene);
 	hgSeqBed(hti, bed);
 	bedFree(&bed);
