@@ -13,7 +13,7 @@
 #include "twoBit.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: snpNcbiToUcsc.c,v 1.2 2008/01/22 06:38:52 angie Exp $";
+static char const rcsid[] = "$Id: snpNcbiToUcsc.c,v 1.3 2008/01/23 05:31:16 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -1536,9 +1536,11 @@ while ((wordCount = lineFileChopTab(lf, row)) > 0)
     if (obsOk && sameString(class, "in-del"))
 	adjustClass(lf, class, sizeof(class), observed, locType, refAllele);
 
-    if (sameString("between", locType) && sameString("insertion", class))
+    if (sameString("between", locType) && sameString("insertion", class) &&
+	!skipIt)
 	checkCluster(lf, strand, observed);
-    storeMapping();
+    if (! skipIt)
+	storeMapping();
 
     if (! skipIt)
 	{
