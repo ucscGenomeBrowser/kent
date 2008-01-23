@@ -11,7 +11,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.15 2008/01/18 20:45:27 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.16 2008/01/23 01:51:37 kate Exp $
 
 use warnings;
 use strict;
@@ -371,7 +371,7 @@ if (defined $opt_outDir) {
         $outPath = "$wd/$opt_outDir";
     }
 } else {
-    $configPath = "$submitDir/out"
+    $outPath = "$submitDir/out"
 }
 &HgAutomate::verbose(4, "Output directory path: \'$outPath\'\n");
 
