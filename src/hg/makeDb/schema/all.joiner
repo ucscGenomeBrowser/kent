@@ -1860,6 +1860,17 @@ identifier snpAnnotations127
     $snpDb127.snp127Exceptions.name 
     $snpDb127.snpSeq.acc minCheck=.8
 
+identifier snpName128
+"dbSNP version 128 rs* identifiers"
+    $gbd.snp128.name dupeOk
+    $gbd.snp128Exceptions.name 
+    $gbd.snpSeq.acc minCheck=.8
+
+identifier snpExceptions128
+"Annotations of unusual conditions in dbSNP version 128"
+    $gbd.snp128ExceptionDesc.exception
+    $gbd.snp128Exceptions.exception
+
 identifier snpArrayHg17
 "SNP array track for hg17"
     hg17.snp125.name dupeOk
@@ -1882,11 +1893,17 @@ identifier snpArrayHg18
     hg18.snpArrayIllumina550.name
     hg18.snpArrayIllumina650.name
 
-identifier snpOrtho
+identifier snpOrtho126
 "ortho SNPs for hg18 only"
     hg18.snp126.name dupeOk
     hg18.snp126ortho.name 
     hg18.snp126orthoPanTro2RheMac2.name 
+
+identifier snpOrtho128
+"ortho SNPs for hg18 only"
+    hg18.snp128.name dupeOk
+    hg18.snp128ortho.name 
+    hg18.snp128orthoPanTro2RheMac2.name 
 
 # Other NCBI Identifiers
 
