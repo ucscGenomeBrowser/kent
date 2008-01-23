@@ -29,12 +29,12 @@
   <td><%= link_to 'Re-Expand All', {:action => 'reexpand_all', :id => @project.id} -%></td>
 
   <% if @project.status == "uploaded" -%> 
-    <td><%= link_to 'Schedule Validating', {:action => 'begin_validating', :id => @project.id},
+    <td><%= link_to 'Validate', {:action => 'begin_validating', :id => @project.id},
       :confirm => "Are you sure your project is ready to schedule for validating?" -%></td>
   <% end %>
 
   <% if @project.status == "validated" -%> 
-    <td><%= link_to 'Schedule Loading', {:action => 'begin_loading', :id => @project.id},
+    <td><%= link_to 'Load', {:action => 'begin_loading', :id => @project.id},
       :confirm => "Are you sure your project is ready to schedule for loading?" -%></td>
   <% end %>
 
