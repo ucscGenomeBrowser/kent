@@ -18,7 +18,7 @@
 #include "hgTracks.h"
 #include "cdsSpec.h"
 
-static char const rcsid[] = "$Id: cds.c,v 1.66 2008/01/18 23:27:22 aamp Exp $";
+static char const rcsid[] = "$Id: cds.c,v 1.67 2008/01/23 03:21:38 angie Exp $";
 
 /* Definitions of cds colors for coding coloring display */
 #define CDS_ERROR   0
@@ -1388,14 +1388,17 @@ if (indelShowPolyA && mrnaSeq)
     /* Draw green lines for polyA first, so if the entire transcript is 
      * jammed into one pixel and the other end has a blue line, blue is 
      * what the user sees. */
-    if (psl->qStarts[0] != 0 && psl->strand[0] == '-' && psl->strand[1] != '-')
+    if (psl->qStarts[0] != 0 && psl->strand[0] == '-')
 	{
-	/* We reverse-complemented in baseColorDrawSetup, so test for 
-	 * polyT head: */
+	/* Query is -.  We reverse-complemented in baseColorDrawSetup,
+	 * so test for polyT head: */
 	int polyTSize = headPolyTSizeLoose(mrnaSeq->dna, mrnaSeq->size);
 	if (polyTSize > 0 && (polyTSize + 3) >= psl->qStarts[0])
 	    {
-	    s = psl->tStarts[0];
+	    if (psl->strand[1] == '-')
+		s = psl->tSize - psl->tStarts[0];
+	    else
+		s = psl->tStarts[0];
 	    drawVertLine(lf, vg, s, xOff, y, heightPer-1, scale,
 			 cdsColor[CDS_POLY_A]);
 	    gotPolyAStart = TRUE;
@@ -1406,8 +1409,8 @@ if (indelShowPolyA && mrnaSeq)
 	{
 	if (psl->strand[1] == '-')
 	    {
-	    /* We reverse-complemented in baseColorDrawSetup, so test for 
-	     * polyT head: */
+	    /* Query is + but target is -.  We reverse-complemented in
+	     * baseColorDrawSetup, so test for polyT head: */
 	    int polyTSize = headPolyTSizeLoose(mrnaSeq->dna, mrnaSeq->size);
 	    int rcQStart = (psl->qSize -
 			(psl->qStarts[lastBlk] + psl->blockSizes[lastBlk]));
@@ -1421,8 +1424,8 @@ if (indelShowPolyA && mrnaSeq)
 	    }
 	else
 	    {
-	    /* We didn't reverse-complement in baseColorDrawSetup, so test for
-	     * polyA tail: */
+	    /* Both are +.  We didn't reverse-complement in
+	     * baseColorDrawSetup, so test for polyA tail: */
 	    int polyASize = tailPolyASizeLoose(mrnaSeq->dna, mrnaSeq->size);
 	    if (polyASize > 0 &&
 		((polyASize + 3) >= 
