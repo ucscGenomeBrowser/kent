@@ -19,7 +19,7 @@ kentDir="$1"
 cd $kentDir
 cvsStatusFilter=src/utils/cvsTools/cvsStatusFilter
 
-cvs status 2>&1 | cvsStatusFilter | awk 'NR>1{print $1}' | xargs file | awk '
+cvs status 2>&1 | $cvsStatusFilter | awk 'NR>1{print $1}' | xargs file | awk '
 /with CRLF line terminators/ {
     if (crlfCnt == 0) {
         print "Error: files in CVS with MS-DOS CRLF line terminators" > "/dev/stderr";
