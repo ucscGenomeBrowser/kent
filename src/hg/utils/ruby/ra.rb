@@ -3,9 +3,9 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/utils/ruby/ra.rb,v 1.1 2008/01/24 18:38:08 galt Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/utils/ruby/ra.rb,v 1.2 2008/01/24 18:53:03 galt Exp $
 
-require 'errAbort'
+require '/cluster/bin/scripts/err.rb'
 
 def readRaFile(file)
   inRecord = false
