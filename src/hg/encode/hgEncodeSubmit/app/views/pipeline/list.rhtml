@@ -11,7 +11,7 @@
 
   <td> 
   <%= 
-  if c.status == "invalid"
+  if c.status == "validate failed"
     link_to c.status, {:action => 'valid_status', :id => c.id}
   else
     if c.status == "load failed"

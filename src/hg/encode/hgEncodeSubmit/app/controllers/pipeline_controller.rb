@@ -32,7 +32,7 @@ class PipelineController < ApplicationController
   def show
     @project = Project.find(params[:id])
     #@projectTypes = getProjectTypes
-    if @project.status == "invalid"
+    if @project.status == "validate failed"
       @errText = getErrText
     else
       if @project.status == "load failed"
