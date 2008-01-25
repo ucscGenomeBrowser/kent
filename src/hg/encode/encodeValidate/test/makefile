@@ -5,7 +5,7 @@ PROG = ../doEncodeValidate.pl
 
 all: test
 
-test: dnase
+test: dnase dnaseBig genes
 
 dnase: output
 	${PROG} x input/dnase -configDir=../config -outDir=output/dnase
@@ -19,8 +19,13 @@ dnaseBig: output dnaseBigLinks
 	diff output/dnaseBig/validateBed.out expected/dnaseBig
 	diff output/dnaseBig/load.ra expected/dnaseBig
 
+genes: output
+	${PROG} x input/genes -configDir=../config -outDir=output/genes
+	diff output/genes/validateGFF.out expected/genes
+	diff output/genes/load.ra expected/genes
+
 output:
-	${MKDIR} output/dnase output/dnaseBig
+	${MKDIR} output/dnase output/dnaseBig output/genes
 
 clean: 
 	rm -rf output
@@ -31,17 +36,24 @@ dnaseBigClean:
 	rm -f input/dnaseBig/*/*.{wig,bed}
 
 dnaseBigLinks: dnaseBigClean
-	ln -s ${DNASE_BIG_DATA}/chr1_dukeDnaseHsCd4Wiggle.out input/dnaseBig/cd4/chr1.wig 
-	ln -s ${DNASE_BIG_DATA}/chr2_dukeDnaseHsCd4Wiggle.out input/dnaseBig/cd4/chr2.wig
-	ln -s ${DNASE_BIG_DATA}/dukeDnaseHsCd4.bed input/dnaseBig/cd4/sites.bed
-	ln -s ${DNASE_BIG_DATA}/chr1_dukeDnaseHsCd4Wiggle.out input/dnaseBig/hela/chr1.wig
-	ln -s ${DNASE_BIG_DATA}/chr2_dukeDnaseHsCd4Wiggle.out input/dnaseBig/hela/chr2.wig
-	ln -s ${DNASE_BIG_DATA}/dukeDnaseHsCd4.bed input/dnaseBig/hela/sites.bed
+	ln -s ${DNASE_BIG_DATA}/chr1_dukeDnaseHsCd4Wiggle.out \
+                    input/dnaseBig/cd4/chr1.wig 
+	ln -s ${DNASE_BIG_DATA}/chr2_dukeDnaseHsCd4Wiggle.out \
+                    input/dnaseBig/cd4/chr2.wig
+	ln -s ${DNASE_BIG_DATA}/dukeDnaseHsCd4.bed \
+		    input/dnaseBig/cd4/sites.bed
+	ln -s ${DNASE_BIG_DATA}/chr1_dukeDnaseHsCd4Wiggle.out \
+                    input/dnaseBig/hela/chr1.wig
+	ln -s ${DNASE_BIG_DATA}/chr2_dukeDnaseHsCd4Wiggle.out \
+                    input/dnaseBig/hela/chr2.wig
+	ln -s ${DNASE_BIG_DATA}/dukeDnaseHsCd4.bed \
+                    input/dnaseBig/hela/sites.bed
 
 TEST_INSTALL_DIR = /cluster/data/encode/pipeline/tests
 
 install:
 	(cd input/dnase; tar cvfz ${TEST_INSTALL_DIR}/dnase.tar.gz --exclude=CVS --exclude=out * )
+	(cd input/genes; tar cvfz ${TEST_INSTALL_DIR}/genes.tar.gz --exclude=CVS --exclude=out * )
 
 installBig: dnaseBigLinks
 	(cd input/dnaseBig; tar cvfzh ${TEST_INSTALL_DIR}/dnaseBig.tar.gz --exclude=CVS --exclude=out * )
