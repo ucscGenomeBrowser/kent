@@ -895,6 +895,52 @@ type bed 4 .
     type bed 4 .
     priority 7
 
+track hapmapSnps
+compositeTrack on
+shortLabel HapMap SNPs
+longLabel HapMap SNPs
+group varRep
+priority 144.48
+visibility hide
+type bed 6 + 
+exonArrows off
+
+    track hapmapSnpsCEU
+    subTrack hapmapSnps
+    shortLabel SNPs CEU
+    longLabel SNPs from the CEU Population
+    priority 1
+
+    track hapmapSnpsCHB
+    subTrack hapmapSnps
+    shortLabel SNPs CHB
+    longLabel SNPs from the CHB Population
+    priority 2
+
+    track hapmapSnpsJPT
+    subTrack hapmapSnps
+    shortLabel SNPs JPT
+    longLabel SNPs from the JPT Population
+    priority 3
+
+    track hapmapSnpsYRI
+    subTrack hapmapSnps
+    shortLabel SNPs YRI
+    longLabel SNPs from the YRI Population
+    priority 4
+
+    track hapmapAllelesChimp
+    subTrack hapmapSnps
+    shortLabel Chimp Alleles
+    longLabel Orthologous Alleles from Chimp (panTro2)
+    priority 5
+
+    track hapmapAllelesMacaque
+    subTrack hapmapSnps
+    shortLabel Macaque Alleles
+    longLabel Orthologous Alleles from Macaque (rheMac2)
+    priority 6
+
 track cnp
 compositeTrack on
 shortLabel Structural Var
