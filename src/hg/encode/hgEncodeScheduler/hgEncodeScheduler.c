@@ -16,7 +16,7 @@
 #include <signal.h>
 #include <sys/wait.h>
 
-static char const rcsid[] = "$Id: hgEncodeScheduler.c,v 1.16 2008/01/25 18:13:53 galt Exp $";
+static char const rcsid[] = "$Id: hgEncodeScheduler.c,v 1.17 2008/01/25 18:40:51 galt Exp $";
 
 char *db = NULL;
 char *dir = NULL;
@@ -309,6 +309,10 @@ sqlUpdate(conn, query);
 void startBackgroundProcess(int project)
 /* start background job process for project */
 {
+
+fflush(stdout);
+fflush(stderr);
+
 int xpid = fork();
 if ( xpid < 0 )
     { 
