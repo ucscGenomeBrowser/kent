@@ -212,7 +212,7 @@
 #include "itemConf.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1382 2008/01/22 20:17:23 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1383 2008/01/25 18:10:30 angie Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -13417,28 +13417,24 @@ if (differentString(snp.strand,"?")) {printf("<B>Strand: </B>%s\n", snp.strand);
 
 printf("<BR><B>Observed: </B>%s\n",                                 snp.observed);
 
-if (!sameString(snp.class, "insertion"))
-
+if (sameString(snp.strand,"+"))
     {
-    if (sameString(snp.strand,"+"))
-        {
-	printf("<BR><B>Reference allele: </B>%s\n",                 snp.refUCSC);
-        if (!sameString(snp.refUCSC, snp.refNCBI))
-            printf("<BR><B>dbSnp reference allele: </B>%s\n",       snp.refNCBI);
-        }
-    else if (sameString(snp.strand,"-"))
-        {
-        printf("<BR><B>Reference allele: </B>%s\n",                 refUCSCRevComp);
-        if (version < 127 && !sameString(refUCSCRevComp, snp.refNCBI))
-            printf("<BR><B>dbSnp reference allele: </B>%s\n",       snp.refNCBI);
-        else if (version >= 127 && !sameString(snp.refUCSC, snp.refNCBI))
-	    {
-	    char refNCBIRevComp[1024];
-	    safecpy(refNCBIRevComp, sizeof(refNCBIRevComp), snp.refNCBI);
-	    reverseComplement(refNCBIRevComp, strlen(refNCBIRevComp));
-            printf("<BR><B>dbSnp reference allele: </B>%s\n",       refNCBIRevComp);
-	    }
-        }
+    printf("<BR><B>Reference allele: </B>%s\n",                 snp.refUCSC);
+    if (!sameString(snp.refUCSC, snp.refNCBI))
+	printf("<BR><B>dbSnp reference allele: </B>%s\n",       snp.refNCBI);
+    }
+else if (sameString(snp.strand,"-"))
+    {
+    printf("<BR><B>Reference allele: </B>%s\n",                 refUCSCRevComp);
+    if (version < 127 && !sameString(refUCSCRevComp, snp.refNCBI))
+	printf("<BR><B>dbSnp reference allele: </B>%s\n",       snp.refNCBI);
+    else if (version >= 127 && !sameString(snp.refUCSC, snp.refNCBI))
+	{
+	char refNCBIRevComp[1024];
+	safecpy(refNCBIRevComp, sizeof(refNCBIRevComp), snp.refNCBI);
+	reverseComplement(refNCBIRevComp, strlen(refNCBIRevComp));
+	printf("<BR><B>dbSnp reference allele: </B>%s\n",       refNCBIRevComp);
+	}
     }
 
 
