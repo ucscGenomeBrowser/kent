@@ -11,7 +11,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.16 2008/01/23 01:51:37 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.17 2008/01/25 18:20:18 kate Exp $
 
 use warnings;
 use strict;
@@ -41,8 +41,6 @@ exit 1;
 }
 
 # Global constants
-our $loaderPath = "/usr/local/apache/cgi-bin/loader";
-
 our $fieldConfigFile = "/fields.ra";
 our $vocabConfigFile = "/cv.ra";
 
@@ -70,6 +68,7 @@ our %validators = (
     Raw_Data_Acc_REF => \&validateRawDataAccREF,
     Data_Version => \&validateDataVersion,
     Cell_Line_REF => \&validateCellLineREF,
+    Gene_Type_REF => \&validateGeneTypeREF
     );
 
 # standard validators (required or optional for all projects)
@@ -122,6 +121,11 @@ sub validateCellLineREF {
     defined($terms{'Cell Line'}{$val}) || die "ERROR: Cell line \'$val\' is not known \n";
 }
 
+sub validateGeneTypeREF {
+    my ($val) = @_;
+    defined($terms{'Gene Type'}{$val}) || die "ERROR: Gene type \'$val\' is not known \n";
+}
+
 ############################################################################
 # Format checkers - extend when adding new data format
 
@@ -129,6 +133,7 @@ sub validateCellLineREF {
 our %formatCheckers = (
     wig => \&validateWig,
     bed => \&validateBed,
+    genePred => \&validateGene
     );
 
 sub validateWig {
@@ -136,10 +141,10 @@ sub validateWig {
     my $outFile = "validateWig.out";
     my $filePath = "$submitPath/$file";
     my $err = system (
-        "cd $outPath; head -10 $filePath | $loaderPath/wigEncode stdin /dev/null /dev/null >$outFile 2>&1");
+        "cd $outPath; head -10 $filePath | wigEncode stdin /dev/null /dev/null >$outFile 2>&1");
     if ($err) {
         print STDERR  "ERROR: File \'$file\' failed wiggle validation\n";
-        open(ERR, $outFile) || die "ERROR: Can't open wiggle validation file \'$outFile\': $!\n";
+        open(ERR, $outPath/$outFile) || die "ERROR: Can't open wiggle validation file \'$outPath/$outFile\': $!\n";
         my @err = <ERR>;
         die "@err\n";
     } else {
@@ -152,14 +157,30 @@ sub validateBed {
     my $outFile = "validateBed.out";
     my $filePath = "$submitPath/$file";
     my $err = system (
-        "cd $outPath; head -10 $filePath | egrep -v '^track|browser' | $loaderPath/hgLoadBed -noLoad hg18 testTable stdin >$outFile 2>&1");
+        "cd $outPath; head -10 $filePath | egrep -v '^track|browser' | hgLoadBed -noLoad hg18 testTable stdin >$outFile 2>&1");
     if ($err) {
         print STDERR  "ERROR: File \'$file\' failed bed validation\n";
-        open(ERR, $outFile) || die "ERROR: Can't open bed validation file \'$outFile\': $!\n";
+        open(ERR, $outPath/$outFile) || die "ERROR: Can't open bed validation file \'$outPath/$outFile\': $!\n";
         my @err = <ERR>;
         die "@err\n";
     } else {
         &HgAutomate::verbose(2, "File \'$file\' passed bed validation\n");
+    }
+}
+
+sub validateGene {
+    my ($file, $type) = @_;
+    my $outFile = "validateGene.out";
+    my $filePath = "$submitPath/$file";
+    my $err = system (
+        "cd $outPath; egrep -v '^track|browser' $filePath | ldHgGene -out=genePred.tab -genePredExt hg18 testTable stdin >$outFile 2>&1");
+    if ($err) {
+        print STDERR  "ERROR: File \'$file\' failed GFF validation\n";
+        open(ERR, "$outPath/$outFile") || die "ERROR: Can't open GFF validation file \'$outPath/$outFile\': $!\n";
+        my @err = <ERR>;
+        die "@err\n";
+    } else {
+        &HgAutomate::verbose(2, "File \'$file\' passed GFF validation\n");
     }
 }
 
@@ -267,7 +288,7 @@ sub getPif {
     $pif{'active'} =~ "yes" || 
         die "ERROR: Project \'$pif{'project'}\' not yet active\n";
     defined(%tracks) ||
-        die "ERROR: Tracks not defined for project \'$pif{'project'}\'\n";
+        die "ERROR: Tracks not defined for project \'$pif{'project'}\'in $pifFile \n";
 
     foreach my $track (keys %tracks) {
         &HgAutomate::verbose(4, "  Track: $track\n");
@@ -277,17 +298,19 @@ sub getPif {
         }
     }
 
-    my @variables = split (' ', $pif{'variables'});
-    my %variables;
-    my $i = 0;
-    foreach my $variable (@variables) {
-        # replace underscore with space
-        $variable =~ s/_/ /g;
-        $variables[$i++] = $variable;
-        $variables{$variable} = 1;
+    if (defined($pif{'variables'})) {
+        my @variables = split (' ', $pif{'variables'});
+        my %variables;
+        my $i = 0;
+        foreach my $variable (@variables) {
+            # replace underscore with space
+            $variable =~ s/_/ /g;
+            $variables[$i++] = $variable;
+            $variables{$variable} = 1;
+        }
+        $pif{'variableHash'} = \%variables;
+        $pif{'variableArray'} = \@variables;
     }
-    $pif{'variableHash'} = \%variables;
-    $pif{'variableArray'} = \@variables;
     return %pif;
 }
 
@@ -391,8 +414,10 @@ mkdir $outPath ||
 my %fields = &readRaFile("$configPath/$fieldConfigFile", "field");
 
 # Add required fields for this -- the variables in the PIF file
-foreach my $variable (keys %{$pif{'variableHash'}}) {
-    $fields{$variable}->{'required'} = 'yes';
+if (defined($pif{'variables'})) {
+    foreach my $variable (keys %{$pif{'variableHash'}}) {
+        $fields{$variable}->{'required'} = 'yes';
+    }
 }
 
 # Open dataset descriptor file (DDF)
@@ -489,9 +514,11 @@ foreach $dataset (keys %datasets) {
     # Construct table name from track name and variables
     my $trackName = "wgEncode" . $dataType;
     my $tableName = $trackName;
-    my @variables = @{$pif{'variableArray'}};
-    for (my $i = 0; $i < @variables; $i++) {
-        $tableName = $tableName . $datasetRef->[$ddfHeader{$variables[$i]}];
+    if (defined($pif{'variables'})) {
+        my @variables = @{$pif{'variableArray'}};
+        for (my $i = 0; $i < @variables; $i++) {
+            $tableName = $tableName . $datasetRef->[$ddfHeader{$variables[$i]}];
+        }
     }
     print LOADER_RA "tablename $tableName\n";
     print LOADER_RA "track $trackName\n";
