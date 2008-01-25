@@ -16,7 +16,7 @@
 #include <signal.h>
 #include <sys/wait.h>
 
-static char const rcsid[] = "$Id: hgEncodeScheduler.c,v 1.15 2008/01/25 01:03:14 galt Exp $";
+static char const rcsid[] = "$Id: hgEncodeScheduler.c,v 1.16 2008/01/25 18:13:53 galt Exp $";
 
 char *db = NULL;
 char *dir = NULL;
@@ -413,7 +413,8 @@ if ( pid == 0 )
 
     int f = open(errorPath, O_WRONLY | O_NOCTTY);
     dup2(f, STDERR_FILENO);
-    //dup2(f, STDOUT_FILENO);  //debug
+    /* required to free cron job to finish immediately without waiting */
+    dup2(f, STDOUT_FILENO);  
     close(f);
 
     char *args[64];
@@ -433,6 +434,13 @@ if ( pid == 0 )
 else
     {
     /* Parent process */ 
+
+    /* required to free cron job to finish immediately without waiting */
+    int f = open(errorPath, O_WRONLY | O_NOCTTY);
+    dup2(f, STDERR_FILENO);
+    dup2(f, STDOUT_FILENO);  //debug
+    close(f);
+
     struct sqlConnection *conn = sqlConnect(db);
     char query[256];
     time_t now = time(NULL);
