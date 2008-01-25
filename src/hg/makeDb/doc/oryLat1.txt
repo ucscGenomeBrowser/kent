@@ -9,7 +9,7 @@
 #	Data release policy: http://medaka.utgenome.org/#policy
 #	Ensembl: http://www.ensembl.org/Oryzias_latipes/index.html
 #
-#	"$Id: oryLat1.txt,v 1.35 2007/12/21 20:56:35 hiram Exp $"
+#	"$Id: oryLat1.txt,v 1.36 2008/01/25 21:07:53 hiram Exp $"
 #
 
 ##########################################################################
@@ -3513,3 +3513,107 @@ done
     mv ./blastz.swap.danRer5/swap.log ./blastz.danRer5.swap
     rm -r blastz.swap.danRer5
     ln -s blastz.danRer5.swap blastz.danRer5
+
+#########################################################################
+# BLASTZ/CHAIN/NET Medaka oryLat1 (DONE - 2008-01-16 - Hiram)
+#	with contigs for Lamprey
+    ssh kkstore04
+    screen # use screen to control this job
+    mkdir /cluster/data/oryLat1/bed/blastz.petMar1.2008-01-15
+    cd /cluster/data/oryLat1/bed/blastz.petMar1.2008-01-15
+
+    cat << '_EOF_' > DEF
+# Medaka vs. Lamprey
+
+# using the "close" genome alignment parameters
+#	see also: http://genomewiki.ucsc.edu/index.php/Mm9_multiple_alignment
+BLASTZ_Y=9400
+BLASTZ_L=3000
+BLASTZ_K=3000
+BLASTZ_M=50
+
+# TARGET: Medaka oryLat1 (40M chunks covers the largest chroms in one gulp)
+#       chrUn in Scaffolds for this alignment run
+SEQ1_DIR=/san/sanvol1/scratch/oryLat1/oryLat1.sdTrf.2bit
+SEQ1_LEN=/cluster/data/oryLat1/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LIMIT=30
+SEQ1_LAP=10000
+
+# QUERY: Lamprey petMar1
+SEQ2_DIR=/cluster/bluearc/scratch/data/petMar1/petMar1.2bit
+SEQ2_LEN=/cluster/data/petMar1/chrom.sizes
+SEQ2_CTGDIR=/cluster/bluearc/scratch/data/petMar1/petMar1.supers.2bit
+SEQ2_CTGLEN=/cluster/data/petMar1/super.sizes
+SEQ2_LIFT=/cluster/data/petMar1/jkStuff/petMar1.nonBridged.lft
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=150
+SEQ2_LAP=0
+
+BASE=/cluster/data/oryLat1/bed/blastz.petMar1.2008-01-16
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    time doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-chainMinScore=3000 -chainLinearGap=medium \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-bigClusterHub=kk > do.log 2>&1 &
+    #	real    218m14.787s
+# Completed: 69774 of 70854 jobs
+# Crashed: 1080 jobs
+# CPU time in finished jobs:    3950133s   65835.55m  1097.26h   45.72d  0.125 y
+# IO & Wait Time:               1218716s   20311.93m   338.53h   14.11d  0.039 y
+# Average job time:                  74s       1.23m     0.02h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            1629s      27.15m     0.45h    0.02d
+# Submission to last job:         12951s     215.85m     3.60h    0.15d
+    #	had some parasol bookeeping problems, it actually finished
+    #	the kluster run but got confused.  Checked manually with
+    #	para recover -> nothing in new job list, and check files in
+    #	psl result directory finding the correct number of files for the
+    #	the job count.  Make the run.time file and continuing:
+    time doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-continue=cat -chainMinScore=3000 -chainLinearGap=medium \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-bigClusterHub=kk > cat.log 2>&1 &
+    #	real    7m47.963s
+    #	something failed
+    #	had the specification to the lft file incorrect, failed during
+    #	chain run.  Fix that, finish the run, now continuing:
+    time doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-continue=chainMerge -chainMinScore=3000 -chainLinearGap=medium \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-bigClusterHub=kk > chainMerge.log 2>&1 &
+    #	had the same failure as the first time test of this alignment.
+    #	something is wrong with netChainSubset, needs to be debugged.
+    #	ignore the step to create the "over.chain" file, finish the net
+    #	step manually, then continuing:
+    time doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-continue=load -chainMinScore=3000 -chainLinearGap=medium \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-bigClusterHub=kk > load.log 2>&1 &
+    #	real    3m53.686s
+    cat fb.oryLat1.chainPetMar1Link.txt
+    #	24990733 bases of 700386597 (3.568%) in intersection
+
+    #	And, for the swap:
+    mkdir /cluster/data/petMar1/bed/blastz.oryLat1.swap
+    cd /cluster/data/petMar1/bed/blastz.oryLat1.swap
+    time doBlastzChainNet.pl -verbose=2 -swap \
+	/cluster/data/oryLat1/bed/blastz.petMar1.2008-01-16/DEF \
+	-chainMinScore=3000 -chainLinearGap=medium \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-bigClusterHub=kk > swap.log 2>&1 &
+    #	real    1m3.572s
+    #	same problem in netChainSubset trying to make the "over.chain" file.
+    #	skip that, finish the chains manually:
+    #	real    14m35.340s
+    #	then continuing:
+    time doBlastzChainNet.pl -verbose=2 -swap \
+	/cluster/data/oryLat1/bed/blastz.petMar1.2008-01-16/DEF \
+	-continue=load -chainMinScore=3000 -chainLinearGap=medium \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-bigClusterHub=kk > load.log 2>&1 &
+    cat fb.petMar1.chainOryLat1Link.txt
+    #	23358156 bases of 831696438 (2.808%) in intersection
