@@ -21,15 +21,37 @@ class PipelineController < ApplicationController
     #debug add a delay to simulate busyness.  is the db locked?
     #exitCode = system("sleep 20")
 
+    @autoRefresh = true
     @user = User.find(current_user.id)
     @projects = @user.projects
     #@projectTypes = getProjectTypes
     @title = "These are your projects"
+
+    # finish any unfinished business for this user
+    @projects.each do |p|
+      if p.status.starts_with?("schedule expanding ")
+        @project = p
+        if process_uploaded_archive
+          # ok
+        end
+      end
+      if p.status.starts_with?("schedule expand all")
+        @project = p
+        reexpand_all_completion
+      end
+      if p.status.starts_with?("schedule deleting")
+        @project = p
+        delete_completion
+        @project.destroy
+      end
+    end
+
     render :action => 'list'
-    # not now using show_user.rhtml
+    
   end
   
   def show
+    @autoRefresh = true
     @project = Project.find(params[:id])
     #@projectTypes = getProjectTypes
     if @project.status == "validate failed"
@@ -59,6 +81,8 @@ class PipelineController < ApplicationController
     end
     if @project.status.starts_with?("schedule deleting")
       delete_completion
+      @project.destroy
+      redirect_to :action => 'show_user'
     end
   end
 
@@ -88,7 +112,8 @@ class PipelineController < ApplicationController
       @project.status = "schedule loading"
       @project.save
     end
-    redirect_to :action => 'show_user'
+    redirect_to :action => 'show', :id => @project.id
+    #old way redirect_to :action => 'show_user'
   end
 
   def begin_validating
@@ -97,7 +122,8 @@ class PipelineController < ApplicationController
       @project.status = "schedule validating"
       @project.save
     end
-    redirect_to :action => 'show_user'
+    redirect_to :action => 'show', :id => @project.id
+    #old way redirect_to :action => 'show_user'
   end
 
   def new
@@ -161,10 +187,13 @@ class PipelineController < ApplicationController
       end
     
       flash[:notice] = msg
-      redirect_to :action => 'show', :id => @project
+      #oldway redirect_to :action => 'show', :id => @project
+      redirect_to :action => 'show_user'
     else
       # nothing was every uploaded, no cleanup required
       delete_completion
+      @Project.destroy
+      redirect_to :action => 'show_user'
     end
 
   end
@@ -692,7 +721,7 @@ private
     else
       flash[:notice] = msg
     end 
-    redirect_to :action => 'show', :id => @project
+    #old dont need: redirect_to :action => 'show', :id => @project
 
   end
 
@@ -715,8 +744,7 @@ private
       }
       Dir.delete(projectDir)
     end
-    Project.find(params[:id]).destroy
-    redirect_to :action => 'show_user'
+    #oldway Project.find(params[:id]).destroy
   end
  
 end
