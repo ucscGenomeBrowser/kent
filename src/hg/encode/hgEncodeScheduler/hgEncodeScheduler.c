@@ -16,7 +16,7 @@
 #include <signal.h>
 #include <sys/wait.h>
 
-static char const rcsid[] = "$Id: hgEncodeScheduler.c,v 1.14 2008/01/24 06:31:15 galt Exp $";
+static char const rcsid[] = "$Id: hgEncodeScheduler.c,v 1.15 2008/01/25 01:03:14 galt Exp $";
 
 char *db = NULL;
 char *dir = NULL;
@@ -439,7 +439,7 @@ else
     char *jobStatus = NULL;
     if (sameString(jobType,"load"))
 	jobStatus = "loading";
-    if (sameString(jobType,"unload"))
+    else if (sameString(jobType,"unload"))
 	jobStatus = "unloading";
     else if (sameString(jobType,"validate"))
 	jobStatus = "validating";
