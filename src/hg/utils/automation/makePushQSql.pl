@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/makePushQSql.pl instead.
 
-# $Id: makePushQSql.pl,v 1.12 2007/10/16 00:02:14 angie Exp $
+# $Id: makePushQSql.pl,v 1.13 2008/01/25 23:18:25 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -15,7 +15,9 @@ use HgRemoteScript;
 
 # Option variable names:
 use vars @HgAutomate::commonOptionVars;
-use vars '$opt_noGenbank';
+use vars qw/
+  $opt_noGenbank
+  /;
 
 # Option defaults:
 my $dbHost = 'hgwdev';
@@ -64,37 +66,44 @@ sub checkOptions {
 } # checkOptions
 
 
-my %chromInfo = ();
-my $chromInfoInited = 0;
+# hash of hashes, chromInfoDb key is db, hash ref key is chrom name
+my %chromInfoDb = ();
 
-sub isChrom {
+sub isChrom($$) {
   # Return true if $str is in chromInfo.chrom.
-  my ($str) = @_;
-  if (! $chromInfoInited) {
-    foreach my $chr (`echo select chrom from chromInfo | $sql`) {
+  my ($str, $localDb) = @_;
+  my $localSql = "ssh -x $dbHost hgsql -N $localDb";
+  my %localHash = ();
+  my $hashRef = \%localHash;
+  if (exists($chromInfoDb{$localDb})) {
+    $hashRef = $chromInfoDb{$localDb};
+  } else {
+    foreach my $chr (`echo select chrom from chromInfo | $localSql`) {
       chomp $chr;
-      $chromInfo{$chr} = 1;
+      $hashRef->{$chr} = 1;
     }
-    $chromInfoInited = 1;
+    $chromInfoDb{$localDb} = $hashRef;
   }
-  return (defined $chromInfo{$str});
+  return (defined $hashRef->{$str});
 } # isChrom
 
 
-sub getAllTables {
-  # Return a hash for testing the existence of all tables in $db.
+sub getAllTables($) {
+  # Return a hash for testing the existence of all tables in given db argument.
   # Well, almost all -- ignore per-user trackDb.ra-derived tables, the
   # cron-generated tableDescriptions, and tables that we never push.
   # And collapse split tables.
+  my ($localDb) = @_;
+  my $localSql = "ssh -x $dbHost hgsql -N $localDb";
   my %tables = ();
-  foreach my $t (`echo show tables | $sql`) {
+  foreach my $t (`echo show tables | $localSql`) {
     chomp $t;
     next if ($t =~ /^(trackDb|hgFindSpec)_\w+/);
     next if ($t eq 'tableDescriptions');
     next if (defined $noPush{$t});
     if ($t =~ /^(\S+)_(\w+)$/) {
       my ($maybeChr, $track) = ($1, $2);
-      if (&isChrom($maybeChr)) {
+      if (&isChrom($maybeChr, $localDb)) {
 	my $prefix;
 	if ($maybeChr =~ /^chr/) {
 	  $prefix = 'chr*_';
@@ -435,7 +444,7 @@ sub getEntries {
   # list of entry hash refs and to a hash of tables that could not be
   # accounted for.
   my @entries = ();
-  my $allTables = &getAllTables();
+  my $allTables = &getAllTables($db);
 
   push @entries, &getInfrastructureEntry($allTables);
   push @entries, &getGenbankEntry($allTables) unless $opt_noGenbank;
@@ -491,9 +500,9 @@ _EOF_
 } # printHeader
 
 
-sub printEntry {
+sub printEntry($$$) {
   # Print out a single push queue entry (row of new table).
-  my ($entry, $id) = @_;
+  my ($entry, $id, $localDb) = @_;
   my $idStr = sprintf "%06d", $id;
   my $date = `date +%Y-%m-%d`;
   my $rank = $id;
@@ -501,20 +510,61 @@ sub printEntry {
   my $size = 0;  # User will have to use qaPushq to update for now.
   chomp $date;
   print <<_EOF_
-INSERT INTO $db VALUES ('$idStr','','A',$rank,'$date','Y','$entry->{shortLabel}','$db','$entry->{tables}','','$entry->{files}',$size,'$dbHost','N','','N','N','','$ENV{USER}','','','','','N','$date','',0,'','','$releaseLog','');
+INSERT INTO $db VALUES ('$idStr','','A',$rank,'$date','Y','$entry->{shortLabel}','$localDb','$entry->{tables}','','$entry->{files}',$size,'$dbHost','N','','N','N','','$ENV{USER}','','','','','N','$date','',0,'','','$releaseLog','');
 _EOF_
   ;
 } # printEntry
 
+
+sub printSwaps($) {
+# print out entries in other DBs for chain/net swapped tracks
+  my ($id) = @_;
+  my $Db = ucfirst($db);
+  my $checkChain = "chain$Db";
+  my $checkNet = "net$Db";
+  my ($oO) = &HgAutomate::getAssemblyInfo($dbHost, $db);
+  foreach my $oDb (@netODbs) {
+    my %entry = ();
+    $entry{'shortLabel'} = "$oO Chain and Net";
+    $entry{'priority'} = 1;
+    my $tableList = "";
+    my $dbTables = &getAllTables($oDb);
+    foreach my $table (sort keys %{$dbTables}) {
+	if ($table =~ m/$checkChain/ || $table =~ m/$checkNet/) {
+	    $tableList .= "$table ";
+	}
+    }
+    $tableList =~ s/ +$//;
+    $entry{'tables'} = $tableList;
+    $entry{'files'} = "";
+    my $over = "${oDb}To$Db.over.chain.gz";
+    foreach my $downloads
+      ("$HgAutomate::goldenPath/$oDb/vs$Db/*",
+       "$HgAutomate::goldenPath/$oDb/liftOver/$over",
+       "$HgAutomate::gbdb/$oDb/liftOver/$over") {
+	  if (&HgAutomate::machineHasFile($dbHost, $downloads)) {
+	    $entry{'files'} .= $downloads . '\r\n';
+	  } else {
+	    &HgAutomate::verbose(0, "$dbHost:$oDb does not have " .
+			     "chain/net download $downloads !\n");
+	  }
+      }
+    &printEntry(\%entry, $id, $oDb);
+    ++$id;
+    undef($dbTables);
+    undef(%entry);
+  }
+} # printSwaps
 
 sub printAllEntries {
   # Print out SQL commands to add all entries.
   my ($entries) = @_;
   my $id = 1;
   foreach my $entry (@{$entries}) {
-    &printEntry($entry, $id);
+    &printEntry($entry, $id, $db);
     $id++;
   }
+  &printSwaps($id);
 } # printAllEntries
 
 
@@ -610,13 +660,9 @@ _EOF_
   if (@netODbs) {
     &HgAutomate::verbose(1, <<_EOF_
  *** When $db is on the RR (congrats!), please doBlastz -swap if you haven't
-     already, and make pushQ entries for the chains/nets to $db in these
-     other dbs:
+     already.
 _EOF_
     );
-    foreach my $oDb (@netODbs) {
-      &HgAutomate::verbose(1, "       $oDb\n");
-    }
   }
   &HgAutomate::verbose(1, "\n");
 }
