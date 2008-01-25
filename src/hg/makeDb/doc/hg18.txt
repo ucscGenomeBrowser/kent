@@ -19343,6 +19343,30 @@ TMPDIR=/scratch/tmp
 	-continue=cat -chainMinScore=5000 -chainLinearGap=loose \
 	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
 	-bigClusterHub=pk > cat.log 2>&1 &
+    #	ran into the same failure as petMar1<->oryLat1 in netChainSubset
+    #	when building the "over.chain" file.  Something is wrong there.
+    #	Ignore that step, finish off the netChains.csh step, then continuing:
+    time doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-continue=cat -chainMinScore=5000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-continue=load -bigClusterHub=pk > load.log 2>&1 &
+    cat fb.hg18.chainPetMar1Link.txt
+    #	36043809 bases of 2881515245 (1.251%) in intersection
 
-XXX - running 2008-01-16 12:40
-
+    #	That is OK, now for the swap:
+    mkdir /cluster/data/petMar1/bed/blastz.hg18.swap
+    cd /cluster/data/petMar1/bed/blastz.hg18.swap
+    time doBlastzChainNet.pl -verbose=2 -swap \
+	/cluster/data/hg18/bed/blastzPetMar1.2008-01-16/DEF \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-bigClusterHub=pk > swap.log 2>&1 &
+    #	real    1m27.220s
+    #	same problem in netChainSubset trying to make the "over.chain" file.
+    #	skip that, finish the chains manually, then continuing:
+    time doBlastzChainNet.pl -verbose=2 -swap \
+	/cluster/data/hg18/bed/blastzPetMar1.2008-01-16/DEF \
+	-continue=load -chainMinScore=5000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-bigClusterHub=pk > load.log 2>&1 &
+    #	real    6m29.399s
