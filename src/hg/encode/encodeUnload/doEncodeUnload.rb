@@ -9,111 +9,89 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeUnload/doEncodeUnload.rb,v 1.2 2008/01/16 03:05:35 galt Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeUnload/doEncodeUnload.rb,v 1.3 2008/01/25 01:00:07 galt Exp $
+
+$scripts = "/cluster/bin/scripts"
+
+require "#{$scripts}/err.rb"
+require "#{$scripts}/verbose.rb"
+require "#{$scripts}/ra.rb"
+require 'tempfile'
 
 # Global constants
 
 # Global variables
-$opt_verbose = 1
-$loadRa = 'load.ra'
+$unloadRa = 'out/unload.ra'
 $submitDir = ""
 $submitType = ""
 $tempDir = "/data/tmp"
 $encodeDb = "hg18"
-
-#probably get rid of this:
-$err = false
-
-def errAbort(msg)
-  STDERR.puts msg
-  exit 1
-end
+$encInstance = ""
 
 def usage 
     errAbort "usage: doEncodeUnload.rb submission_type project_submission_dir\n"
 end
 
-def verbose(level, string)
-  if level <= $opt_verbose
-    STDERR.puts string
+def execResults(cmd)
+  temp_file = Tempfile.new('results')
+
+  #STDOUT.puts "temp_file.path = #{temp_file.path}"  # DEBUG
+  #STDOUT.puts "cmd  = [#{cmd}]"  # DEBUG
+
+  unless system( "#{cmd} > #{temp_file.path} 2>&1" )
+    errAbort "unexpected error running command #{cmd}"
+  end
+  result = File.read temp_file.path
+  temp_file.close
+  #STDOUT.puts "result = [#{result}]"  # DEBUG
+  return result
+end
+
+def tableExist?(db, tableName)
+  result =  execResults( "hgsql #{db} -BNe 'show tables like \"#{tableName}\"'" )
+  #STDOUT.puts "result = [#{result}]"  # DEBUG
+  return result == "#{tableName}\n"
+end
+
+def dropTable(db, tableName)
+  unless system( "hgsql -e 'drop table #{db}.#{tableName}'" )
+    errAbort "unexpected error dropping table #{db}.#{tableName}"
+  end
+end
+
+def dropTableIfExist(db, tableName)
+  if tableExist?(db, tableName)
+    STDOUT.puts "table #{db}.#{tableName} exists, dropping it"  # DEBUG
+    # drop table
+    dropTable db, tableName
   end
 end
 
 
 
-def unloadWig(tableName, fileList)
+def unloadGene(tableName)
   
-  # debug TODO 
-  return
+  dropTableIfExist $encodeDb, tableName
 
-  if system( "head -1000 -q #{fileList} | wigEncode stdin stdout #{tableName}.wib | hgLoadWiggle -pathPrefix=/gbdb/#{$encodeDb}/wib -tmpDir=#{$tempDir} #{$encodeDb} #{tableName} stdin >loadWig.out 2>&1" )
-      system( "ln -s #{tableName}.wib /gbdb/#{$encodeDb}/wib" )
-      print "#{fileList} Passed\n";
-  else 
-      STDERR.print "ERROR: File(s) '#{fileList}' failed wiggle validation.\n";
-      errAbort File.read("validateWig.out")
-  end
 end
 
-def unloadBed3(tableName, fileList)
+def unloadWig(tableName)
+
+  dropTableIfExist $encodeDb, tableName
+
+  # remove symlink 
+  unless system( "rm -f /gbdb/#{$encodeDb}/wib/#{tableName}.wib" )
+    errAbort "unexpected error removing symlink /gbdb/#{$encodeDb}/wib/#{tableName}.wib"
+  end
+ 
+end
+
+def unloadBed(tableName)
   
-  # debug TODO 
-  return
+  dropTableIfExist $encodeDb, tableName
 
-  system "echo $SHELL" #debug
-  puts  "head -1000 -q #{fileList} | egrep -v '^track|browser' | hgLoadBed #{$encodeDb} #{tableName} stdin >loadBed.out 2>&1"  #debug
-
-  if system( "head -1000 -q #{fileList} | egrep -v '^track|browser' | hgLoadBed #{$encodeDb} #{tableName} stdin >loadBed.out 2>&1")
-      print "#{fileList} Passed\n";
-      #debug restore: File.delete "bed.tab"
-  else
-      STDERR.print "ERROR: File(s) '#{fileList}' failed bed load.\n";
-      errAbort File.read("loadBed.out")
-  end
 end
 
-############################################################################
-# Misc subroutines
-
-def readRaFile(file)
-  inRecord = false
-  ra = []
-  hash = {}
-  keyword = nil
-  f = File.open(file)
-  f.readlines.each do |line|
-    line.chomp!
-    STDERR.puts "#{line}\n"  #debug
-    if line[0,1] == '#'
-      continue
-    end
-    if line == ""
-      if inRecord
-        ra << [keyword,hash]
-        hash = {}
-      end
-      inRecord = false
-    else
-      spc = line.index(' ')
-      if spc == nil
-        errAbort "syntax error: invalid line in .ra file: #{line}\n"
-      end
-      word = line[0,spc]
-      value = line[spc+1,line.length]
-      #STDERR.puts "debug: #{word}=#{value}\n"  #debug
-      unless inRecord
-        inRecord = true
-        keyword = value
-      end
-      hash[word] = value
-    end
-  end
-  if inRecord
-    ra << [keyword,hash]
-  end
-  f.close
-  return ra
-end
 
 
 ############################################################################
@@ -129,36 +107,61 @@ end
 $submitType = ARGV[0]	# currently not used
 $submitDir = ARGV[1]
 
-verbose 1, "Unloading ENCODE pipeline project in directory #{$submitDir}\n"
+$encInstance = File.dirname($submitDir)
+$encProject = File.basename($submitDir)
+
+und = $encInstance.rindex('_')
+if und
+  $encInstance = $encInstance[und,$encInstance.length]
+else
+  $encInstance = ""
+end
+
+
+unless File.exist? $submitDir
+  exit 0
+end
+
 Dir.chdir $submitDir
 
+unless File.exist? $unloadRa
+  exit 0
+end
 
-# Unload files listed in load.ra
+verbose 1, "Unloading project in directory #{$submitDir}\n"
 
-if File.exist? $loadRa
-  ra = readRaFile $loadRa
+# Unload resources listed in unload.ra
+
+ra = readRaFile $unloadRa
   
-  #STDERR.puts "debug: ra.length=#{ra.length}\n"  #debug
-  #STDERR.puts "debug: #{ra.inspect}\n"  #debug
-
-  ra.each do |x|
-    h = x[1]
-    STDERR.puts "debug: #{x[0]}\n"  #debug
-    STDERR.puts "  tablename #{h["tablename"]}\n"  #debug
-    STDERR.puts "  type      #{h["type"]}\n"  #debug
-    STDERR.puts "  assembly  #{h["assembly"]}\n"  #debug
-    STDERR.puts "  files     #{h["files"]}\n"  #debug
-    case h["type"]
-    when "wig"
-      STDERR.puts "  it's a WIGGLE!\n"  #debug
-      unloadWig h["tablename"], h["files"]
-    when "bed3"
-      STDERR.puts "  it's a BED3!\n"  #debug
-      unloadBed3 h["tablename"], h["files"]
-    else
-      errAbort "unexpected error: unknown type #{h["type"]} in load.ra\n"
-    end 
-  end
+ra.each do |x|
+  h = x[1]
+  tablenameExt = "#{h["tablename"]}#{$encInstance}_#{$encProject}"
+  verbose 2, "debug: #{x[0]}\n"  
+  verbose 2, "  tablename #{h["tablename"]}\n" 
+  verbose 2, "  type      #{h["type"]}\n"  
+  verbose 2, "  tableType #{h["tableType"]}\n"  
+  verbose 2, "  assembly  #{h["assembly"]}\n" 
+  verbose 2, "  files     #{h["files"]}\n"  
+  verbose 2, "  tablenameExt #{tablenameExt}\n" 
+  case h["type"]
+  when "genePred"
+    unloadGene tablenameExt
+  when "wig"
+    unloadWig tablenameExt
+  when "bed 5 +"
+    unloadBed tablenameExt
+  when "bed 3"
+    unloadBed tablenameExt
+  when "bed 4"
+    unloadBed tablenameExt
+  when "bed 5"
+    unloadBed tablenameExt
+  when "bed 6"
+    unloadBed tablenameExt
+  else
+    errAbort "unexpected error: unknown type #{h["type"]} in unload.ra\n"
+  end 
 end
 
 exit 0
