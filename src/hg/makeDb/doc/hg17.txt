@@ -18201,7 +18201,7 @@ ldHgGene -predTab hg17 exonWalk hg17.mm5.exonWalk.gp
 # June 2007 [partial fix of hapmapAllelesSummary released 6/25/07:
 # using hg17 instead of hg18 liftOver files... for most but not all
 # chroms! :( not documented below; error found by user]
-# 1/11/08 (angie): regenerated hapmapAllelesSummary with corrected
+# 1/11/08, 1/24/08 (angie): regenerated hapmapAllelesSummary with corrected
 # hapmapAllelesChimp.
 
 # get files for each chrom, for each population
@@ -18623,6 +18623,7 @@ hapmapMixed hg17
 ssh hgwdev
 # 6/25/08: regenerated with mostly-corrected hapmapAllelesChimp
 # 1/11/08 angie: regenerated with finally-corrected (I hope) hapmapAllelesChimp
+# 1/24/08 angie: regenerated with finally-corrected (I hope!) hapmapAllelesChimp
 cd /cluster/data/hg17/bed/hapmap/rel21a
 /cluster/home/heather/kent/src/hg/snp/snpLoad/hapmapSummary hg17 hapmapSnpsCombined hapmapAllelesChimp hapmapAllelesMacaque
 hgLoadBed hg17 hapmapAllelesSummary -sqlTable=/cluster/home/heather/kent/src/hg/lib/hapmapAllelesSummary.sql hapmapSummary.tab -tab
@@ -21994,6 +21995,8 @@ hgsql -e 'alter table snpSeq add index acc (acc)' hg17
 # steps, so hg17 liftOver files will have been used for all outputs.
 # Deletions will probably lift okay
 # The insertions have start == end so none of them will lift
+# 1/24/08 (angie): constant quality score of 98 for chimp chr{21,M,Y,Y_random}
+# was previously put in score field -- corrected to orthoScore.
 
 ssh hgwdev
 cd /san/sanvol1/snp/liftOver/hg17
@@ -22220,14 +22223,15 @@ hgLoadBed hg17 snp125OrthoPanTro2 snpOrtho.tab -tab -sqlTable=/cluster/home/heat
 hgsql hg17
   alter table snp125OrthoPanTro2 add index name (name);
   alter table snp125OrthoPanTro2 add index chrom (chrom, bin);
+# 1/24/08: these used to set score; should have set orthoScore all along.
 # tweak to match panTro2 assembly
-  update snp125OrthoPanTro2 set score = 98 where orthoChrom = "chr21";
+  update snp125OrthoPanTro2 set orthoScore = 98 where orthoChrom = "chr21";
 #Query OK, 129170 rows affected (25.37 sec)
 #Rows matched: 129170  Changed: 129170  Warnings: 0
-  update snp125OrthoPanTro2 set score = 98 where orthoChrom = "chrY";
+  update snp125OrthoPanTro2 set orthoScore = 98 where orthoChrom = "chrY";
 #Query OK, 22081 rows affected (25.16 sec)
 #Rows matched: 22081  Changed: 22081  Warnings: 0
-  update snp125OrthoPanTro2 set score = 98 where orthoChrom = "chrY_random";
+  update snp125OrthoPanTro2 set orthoScore = 98 where orthoChrom = "chrY_random";
 #Query OK, 155 rows affected (25.41 sec)
 #Rows matched: 155  Changed: 155  Warnings: 0
 
@@ -22244,7 +22248,9 @@ alter table snp125OrthoRheMac2 add index chrom (chrom, bin);
 # skip if lift wasn't size 1
 # this run 124822 skipped
 cd /cluster/data/hg17/bed/hapmap/rel21a
-/cluster/home/heather/kent/src/hg/snp/snpLoad/hapmapOrtho hg17 hapmapSnpsCombined snp125OrthoPanTro2
+time /cluster/home/heather/kent/src/hg/snp/snpLoad/hapmapOrtho hg17 \
+  hapmapSnpsCombined snp125OrthoPanTro2
+#108.505u 16.869s 2:26.22 85.7%  0+0k 0+0io 4pf+0w
 hgLoadBed hg17 hapmapAllelesChimp hapmapOrtho.tab -tab -sqlTable=/cluster/home/heather/kent/src/hg/lib/hapmapAllelesChimp.sql
 #Loaded 3930564 elements of size 13
 hgsql hg17 -e 'alter table hapmapAllelesChimp add index name(name); \
