@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.55 2008/01/09 22:49:03 hiram Exp $"
+#	"$Id: mm9.txt,v 1.56 2008/01/25 21:07:21 hiram Exp $"
 #
 
 #######################################################################
@@ -6143,6 +6143,8 @@ done
     #	Loaded 16799995 mafs in 34 files from /gbdb/mm9/multiz30way/anno/maf
     #	real    18m12.171s
 
+    #	This step may be useless.  The original mafs should have the same
+    #	summary.
     cat /cluster/data/mm9/chrom.sizes | \
 	awk '{if ($2 > 1000000) { print $1 }}' |
 	while read C
