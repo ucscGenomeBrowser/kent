@@ -4,6 +4,7 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1" />
   <meta http-equiv="Content-Language" content="en-us" />
+  <% if @autoRefresh %><meta http-equiv="refresh" content="30" /><% end %>  
   <title><%= ActiveRecord::Base.configurations[RAILS_ENV]['title'] -%> Pipeline</title>
 <%= stylesheet_link_tag "style" %>
 </head>
