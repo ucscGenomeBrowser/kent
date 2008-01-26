@@ -9,7 +9,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeLoad/doEncodeLoad.rb,v 1.7 2008/01/26 07:05:40 galt Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeLoad/doEncodeLoad.rb,v 1.8 2008/01/26 07:12:25 galt Exp $
 
 $scripts = "/cluster/bin/scripts"
 
@@ -83,7 +83,6 @@ def loadBed(tableName, fileList)
       STDERR.print "ERROR: File(s) #{fileList} failed bed load.\n";
       errAbort File.read("out/loadBed.out")
   end
-  temp_file.close
 
 end
 
