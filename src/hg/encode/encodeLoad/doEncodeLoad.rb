@@ -9,7 +9,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeLoad/doEncodeLoad.rb,v 1.6 2008/01/25 00:59:41 galt Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeLoad/doEncodeLoad.rb,v 1.7 2008/01/26 07:05:40 galt Exp $
 
 $scripts = "/cluster/bin/scripts"
 
@@ -55,9 +55,9 @@ end
 
 def loadWig(tableName, fileList)
 
-  #TODO replace head -999 with cat
+  #TEST by replacing "cat" with  "head -1000 -q"
 
-  if system( "head -1000 -q #{fileList} | wigEncode stdin stdout #{tableName}.wib | hgLoadWiggle -pathPrefix=/gbdb/#{$encodeDb}/wib -tmpDir=#{$tempDir} #{$encodeDb} #{tableName} stdin >out/loadWig.out 2>&1" )
+  if system( "cat #{fileList} | wigEncode stdin stdout #{tableName}.wib | hgLoadWiggle -pathPrefix=/gbdb/#{$encodeDb}/wib -tmpDir=#{$tempDir} #{$encodeDb} #{tableName} stdin >out/loadWig.out 2>&1" )
       system( "rm -f /gbdb/#{$encodeDb}/wib/#{tableName}.wib" )
       system( "ln -s #{tableName}.wib /gbdb/#{$encodeDb}/wib" )
       print "#{fileList} Loaded\n";
@@ -70,9 +70,9 @@ end
 
 def loadBed(tableName, fileList)
 
-  #TODO replace head -999 with cat
+  #TEST by replacing "cat" with  "head -1000 -q"
 
-  cmd = "head -1000 -q #{fileList} | egrep -v '^track|browser' | hgLoadBed #{$encodeDb} #{tableName} stdin -tmpDir=out >out/loadBed.out 2>&1"
+  cmd = "cat #{fileList} | egrep -v '^track|browser' | hgLoadBed #{$encodeDb} #{tableName} stdin -tmpDir=out >out/loadBed.out 2>&1"
 
   #STDERR.puts "debug: cmd = [#{cmd}]" #debug
 
@@ -90,10 +90,6 @@ end
 
 def loadBed5Plus(tableName, fileList, sqlTable)
 
-  #TODO replace head -999 with cat
-
-  #system "echo $SHELL" #debug
-
   unless File.exist? "#{$sqlCreate}/#{sqlTable}.sql"
     errAbort "#{$sqlCreate}/#{sqlTable}.sql not found "
   end
@@ -108,7 +104,9 @@ def loadBed5Plus(tableName, fileList, sqlTable)
   temp_file.print sql
   temp_file.flush
 
-  cmd = "head -1000 -q #{fileList} | egrep -v '^track|browser' | hgLoadBed #{$encodeDb} #{tableName} stdin -tmpDir=out -sqlTable=#{temp_file.path} >out/loadBed.out 2>&1"
+  #TEST by replacing "cat" with  "head -1000 -q"
+
+  cmd = "cat #{fileList} | egrep -v '^track|browser' | hgLoadBed #{$encodeDb} #{tableName} stdin -tmpDir=out -sqlTable=#{temp_file.path} >out/loadBed.out 2>&1"
 
   #STDERR.puts "debug: cmd = [#{cmd}]" #debug
 
@@ -116,7 +114,7 @@ def loadBed5Plus(tableName, fileList, sqlTable)
       print "#{fileList} Loaded\n"
       #debug restore: File.delete "out/bed.tab"
   else
-      STDERR.print "ERROR: File(s) #{fileList} failed bed load.\n";
+      STDERR.print "ERROR: File(s) #{fileList} failed bed load.\n"
       errAbort File.read("out/loadBed.out")
   end
   temp_file.close
