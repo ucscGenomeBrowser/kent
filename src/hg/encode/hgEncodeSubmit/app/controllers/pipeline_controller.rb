@@ -273,6 +273,9 @@ class PipelineController < ApplicationController
 
     unless @upurl.blank?
       toDo "wget -nv -O #{path_to_file} '#{@upurl}'"
+      toDo "if ($status) then"
+      toDo "  exit 1"
+      toDo "endif"
       #@project.status = "schedule todo (upload and expand)"
     else
       if @upload.instance_of?(Tempfile)
