@@ -251,11 +251,15 @@ class PipelineController < ApplicationController
     @filename = "#{"%03d" % nextArchiveNo}_#{@filename}"
 
     #debugging
-    msg += "sanitized filename=#{@filename}<br>"
-    msg += "RAILS_ROOT=#{RAILS_ROOT}<br>"
-    msg += "upload path=#{ActiveRecord::Base.configurations[RAILS_ENV]['upload']}<br>"
-    msg += "path_to_file=#{path_to_file}<br>"
-    msg += "nextArchiveNo=#{nextArchiveNo}<br>"
+    #msg += "sanitized filename=#{@filename}<br>"
+    #msg += "RAILS_ROOT=#{RAILS_ROOT}<br>"
+    #msg += "upload path=#{ActiveRecord::Base.configurations[RAILS_ENV]['upload']}<br>"
+    #msg += "path_to_file=#{path_to_file}<br>"
+    #msg += "nextArchiveNo=#{nextArchiveNo}<br>"
+
+    msg += "uploading/expanding #{plainName}<br>"
+
+
 
     # just in case, remove it it already exists (shouldn't happen)
     File.delete(path_to_file) if File.exists?(path_to_file)
