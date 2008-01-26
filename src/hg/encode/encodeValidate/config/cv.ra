@@ -1,6 +1,8 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
 
+# Cell types
+
 term GM12878
 description lymphoblastoid
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12878&PgId=166
@@ -40,8 +42,25 @@ tier 2
 
 term Keratinocyte
 type Cell Line
-description none
+description keratinocyte
 lineage ectoderm
 karyotype normal
 tier 2
+
+# Gene types
+term Known
+type Gene Type
+description known or novel CDS
+
+term Putative
+type Gene Type
+description novel, putative, TEC or artifact
+
+term Polymorphic
+type Gene Type
+description polymorphic
+
+term Pseudo
+type Gene Type
+description pseudogene
 
