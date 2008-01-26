@@ -16,7 +16,7 @@
 #include <signal.h>
 #include <sys/wait.h>
 
-static char const rcsid[] = "$Id: hgEncodeScheduler.c,v 1.18 2008/01/26 02:30:07 galt Exp $";
+static char const rcsid[] = "$Id: hgEncodeScheduler.c,v 1.19 2008/01/26 06:34:47 galt Exp $";
 
 char *db = NULL;
 char *dir = NULL;
@@ -514,7 +514,8 @@ if (sqlQuickNum(conn,query) < 10) // only allow max 10 jobs at once
 	{
     	int project = sqlUnsigned(row[0]);
 	// note: consider paranoid check for job already in "running" with the projectid?
-	slAddHead(&list, slIntNew(project));
+	e = slIntNew(project);
+	slAddHead(&list, e);
 	}
     sqlFreeResult(&rs);
     }
@@ -525,13 +526,14 @@ for(e=list; e; e = e->next)
     readyId = e->val;
     uglyf("ready project id: %d\n", readyId);
     
-    // run the child
+    /* run the child */
     startBackgroundProcess(readyId);
 
     if (e->next)
     	sleep(1);
     }
 conn = sqlConnect(db);
+
 
 /* scan for old jobs that have timed out */
 safef(query,sizeof(query),"select project from running"
@@ -552,7 +554,7 @@ while((project = sqlQuickNum(conn,query)))
     int age = ((int) now - startTime)/60;
     char message[256];
     safef(message, sizeof(message), "load timed out age = %d minutes\n", age);
-    // save status in result file in build area
+    /* save status in result file in build area */
     updateErrorFile(project, jobType, message);
 
     /* kill old job timedout, set status in db */
