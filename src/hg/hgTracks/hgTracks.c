@@ -118,7 +118,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1430.4.1 2008/01/16 07:00:41 markd Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1430.4.2 2008/01/26 20:05:33 markd Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -1371,7 +1371,7 @@ return shadesOfGray[3];
 void makeGrayShades(struct hvGfx *hvg)
 /* Make eight shades of gray in display. */
 {
-hMakeGrayShades(hvg->vg, shadesOfGray, maxShade);
+hMakeGrayShades(hvg, shadesOfGray, maxShade);
 shadesOfGray[maxShade+1] = MG_RED;
 }
 
@@ -2110,6 +2110,189 @@ else if (vis == tvFull)
     }
 }
 
+static void genericDrawOverflowItem(struct track *tg, struct spaceNode *sn,
+                                    struct hvGfx *hvg, int xOff, int yOff, int width, 
+                                    MgFont *font, Color color, double scale,
+                                    int overflowRow, boolean firstOverflow)
+/* genericDrawItems logic for drawing an overflow row */
+{
+/* change some state to paint it in the "overflow" row. */
+enum trackVisibility origVis = tg->limitedVis;
+int origLineHeight = tg->lineHeight;
+int origHeightPer = tg->heightPer;
+tg->limitedVis = tvDense;
+tg->heightPer = tl.fontHeight;
+tg->lineHeight = tl.fontHeight+1;
+struct slList *item = sn->val;
+int origRow = sn->row;
+sn->row = overflowRow;
+if (tg->itemNameColor != NULL) 
+    color = tg->itemNameColor(tg, item, hvg);
+int y = yOff + origLineHeight * overflowRow;
+tg->drawItemAt(tg, item, hvg, xOff, y, scale, font, color, tvDense);
+sn->row = origRow;
+
+/* Draw label for overflow row. */
+if (withLeftLabels && firstOverflow)
+    {
+    int overflowCount = 0;
+    for (sn = tg->ss->nodeList; sn != NULL; sn = sn->next)
+	if (sn->row >= overflowRow)
+	    overflowCount++;
+    hvGfxUnclip(hvg);
+    hvGfxSetClip(hvg, leftLabelX, yOff, insideWidth, tg->height);
+    char nameBuff[64];
+    safef(nameBuff, sizeof(nameBuff), "Last Row: %d", overflowCount);
+    mgFontStringWidth(font, nameBuff);
+    hvGfxTextRight(hvg, leftLabelX, y, leftLabelWidth-1, tg->lineHeight, 
+                   color, font, nameBuff);
+    hvGfxUnclip(hvg);
+    hvGfxSetClip(hvg, insideX, yOff, insideWidth, tg->height);
+    }
+/* restore state */
+tg->limitedVis = origVis;
+tg->heightPer = origHeightPer;
+tg->lineHeight = origLineHeight;
+}
+
+static void genericDrawItem(struct track *tg, struct spaceNode *sn,
+                            struct hvGfx *hvg, int xOff, int yOff, int width, 
+                            MgFont *font, Color color, enum trackVisibility vis,
+                            double scale, boolean withLeftLabels)
+/* draw one non-overflow item */
+{
+struct slList *item = sn->val;
+boolean withLabels = (withLeftLabels && (vis == tvPack) && !tg->drawName);
+int s = tg->itemStart(tg, item);
+int e = tg->itemEnd(tg, item);
+int sClp = (s < winStart) ? winStart : s;
+int eClp = (e > winEnd)   ? winEnd   : e;
+int x1 = round((sClp - winStart)*scale) + xOff;
+int x2 = round((eClp - winStart)*scale) + xOff;
+int textX = x1;
+char *name = tg->itemName(tg, item);
+
+if(tg->itemNameColor != NULL) 
+    color = tg->itemNameColor(tg, item, hvg);
+int y = yOff + tg->lineHeight * sn->row;
+tg->drawItemAt(tg, item, hvg, xOff, y, scale, font, color, vis);
+if (withLabels)
+    {
+    int nameWidth = mgFontStringWidth(font, name);
+    int dotWidth = tl.nWidth/2;
+    boolean snapLeft = FALSE;
+    boolean drawNameInverted = highlightItem(tg, item);
+    textX -= nameWidth + dotWidth;
+    snapLeft = (textX < insideX);
+    /* Special tweak for expRatio in pack mode: force all labels 
+     * left to prevent only a subset from being placed right: */
+    snapLeft |= (startsWith("expRatio", tg->tdb->type));
+    if (snapLeft)        /* Snap label to the left. */
+        {
+        textX = leftLabelX;
+        hvGfxUnclip(hvg);
+        hvGfxSetClip(hvg, leftLabelX, yOff, insideWidth, tg->height);
+        if(drawNameInverted)
+            {
+            int boxStart = leftLabelX + leftLabelWidth - 2 - nameWidth;
+            hvGfxBox(hvg, boxStart, y, nameWidth+1, tg->heightPer - 1, color);
+            hvGfxTextRight(hvg, leftLabelX, y, leftLabelWidth-1, tg->heightPer,
+                        MG_WHITE, font, name);
+            }
+        else
+            hvGfxTextRight(hvg, leftLabelX, y, leftLabelWidth-1, tg->heightPer,
+                        color, font, name);
+        hvGfxUnclip(hvg);
+        hvGfxSetClip(hvg, insideX, yOff, insideWidth, tg->height);
+        }
+    else
+        {
+        if(drawNameInverted)
+            {
+            hvGfxBox(hvg, textX - 1, y, nameWidth+1, tg->heightPer-1, color);
+            hvGfxTextRight(hvg, textX, y, nameWidth, tg->heightPer, MG_WHITE, font, name);
+            }
+        else
+            hvGfxTextRight(hvg, textX, y, nameWidth, tg->heightPer, color, font, name);
+        }
+    }
+if (!tg->mapsSelf)
+    {
+    int w = x2-textX;
+    /* Arrows? */
+    if (w > 0)
+        {
+        if (nextItemCompatible(tg))
+            genericDrawNextItemStuff(tg, hvg, vis, item, x2, textX, y, tg->heightPer, FALSE, 
+                                     color);
+        else
+            {
+            tg->mapItem(tg, item, tg->itemName(tg, item), 
+                        tg->mapItemName(tg, item), s, e, textX, y, w, tg->heightPer);
+            }
+        }
+    }
+}
+
+static void genericDrawItemsPackSquish(struct track *tg, 
+        int seqStart, int seqEnd,
+        struct hvGfx *hvg, int xOff, int yOff, int width, 
+        MgFont *font, Color color, enum trackVisibility vis)
+/* genericDrawItems logic for pack and squish modes */
+{
+double scale = scaleForWindow(width, seqStart, seqEnd);
+int lineHeight = tg->lineHeight;
+struct spaceNode *sn;
+int maxHeight = maximumTrackHeight(tg);
+int overflowRow = (maxHeight - tl.fontHeight +1) / lineHeight;
+boolean firstOverflow = TRUE;
+
+hvGfxSetClip(hvg, insideX, yOff, insideWidth, tg->height);
+assert(tg->ss);
+
+/* Loop through and draw each item individually */
+for (sn = tg->ss->nodeList; sn != NULL; sn = sn->next)
+    {
+    if (sn->row >= overflowRow)
+        {
+        genericDrawOverflowItem(tg, sn, hvg, xOff, yOff, width, font, color,
+                                scale, overflowRow, firstOverflow);
+        firstOverflow = FALSE;
+        }
+    else
+        genericDrawItem(tg, sn, hvg, xOff, yOff, width, font, color, vis,
+                        scale, withLeftLabels);
+    }
+
+hvGfxUnclip(hvg);
+}
+
+static void genericDrawItemsFullDense(struct track *tg, 
+        int seqStart, int seqEnd,
+        struct hvGfx *hvg, int xOff, int yOff, int width, 
+        MgFont *font, Color color, enum trackVisibility vis)
+/* genericDrawItems logic for full and dense modes */
+{
+double scale = scaleForWindow(width, seqStart, seqEnd);
+struct slList *item;
+int y = yOff;
+for (item = tg->items; item != NULL; item = item->next)
+    {
+    if(tg->itemColor != NULL) 
+        color = tg->itemColor(tg, item, hvg);
+    tg->drawItemAt(tg, item, hvg, xOff, y, scale, font, color, vis);
+    if (vis == tvFull) 
+        {
+        /* The doMapItems will make the mapboxes normally but make */
+        /* them here if we're drawing nextItem buttons. */
+        if (nextItemCompatible(tg))
+            genericDrawNextItemStuff(tg, hvg, vis, item, -1, -1, y, tg->heightPer, FALSE, 
+                                     color);
+        y += tg->lineHeight;
+        }
+    }
+}
+
 void genericDrawItems(struct track *tg, 
         int seqStart, int seqEnd,
         struct hvGfx *hvg, int xOff, int yOff, int width, 
@@ -2117,176 +2300,14 @@ void genericDrawItems(struct track *tg,
 /* Draw generic item list.  Features must be fixed height
  * and tg->drawItemAt has to be filled in. */
 {
-double scale = scaleForWindow(width, seqStart, seqEnd);
-int lineHeight = tg->lineHeight;
-int heightPer = tg->heightPer;
-int y;
-boolean withLabels = (withLeftLabels && vis == tvPack && !tg->drawName);
 if (tg->mapItem == NULL)
     tg->mapItem = genericMapItem;
 if (vis == tvPack || vis == tvSquish)
-    {
-    struct spaceSaver *ss = tg->ss;
-    struct spaceNode *sn;
-    /* These variables keep track of state if there are
-       too many items and there is going to be an overflow row. */
-    int maxHeight = maximumTrackHeight(tg);
-    int overflowRow = (maxHeight - tl.fontHeight +1) / lineHeight;
-    int overflowCount = 0;
-    boolean overflowDrawn = FALSE;
-    char nameBuff[128];
-    boolean origWithLabels = withLabels;
-    enum trackVisibility origVis = tg->limitedVis;
-    int origLineHeight = lineHeight;
-    int origHeightPer = heightPer;
-
-    hvGfxSetClip(hvg, insideX, yOff, insideWidth, tg->height);
-    assert(ss);
-
-    /* Loop though and count number of entries that will 
-       end up in overflow. */
-    for (sn = ss->nodeList; sn != NULL; sn = sn->next)
-	if(sn->row >= overflowRow)
-	    overflowCount++;
-
-    /* Loop through and draw each item individually. */
-    for (sn = ss->nodeList; sn != NULL; sn = sn->next)
-        {
-	struct slList *item = sn->val;
-	int s = tg->itemStart(tg, item);
-	int e = tg->itemEnd(tg, item);
-	int sClp = (s < winStart) ? winStart : s;
-	int eClp = (e > winEnd)   ? winEnd   : e;
-	int x1 = round((sClp - winStart)*scale) + xOff;
-	int x2 = round((eClp - winStart)*scale) + xOff;
-	int textX = x1;
-	char *name = tg->itemName(tg, item);
-	boolean drawNameInverted = FALSE;
-	int origRow = sn->row;
-	boolean doingOverflow = FALSE;
-	boolean snapLeft = FALSE;
-
-	if(tg->itemNameColor != NULL) 
-	    color = tg->itemNameColor(tg, item, hvg);
-
-	/* If this row falls outside of the last row have to
-	   change some state to paint it in the "overflow" row. */
-	if(sn->row >= overflowRow)
-	    {
-	    doingOverflow = TRUE;
-	    sn->row = overflowRow;
-	    vis = tg->limitedVis = tvDense;
-	    heightPer = tg->heightPer = tl.fontHeight;
-	    lineHeight = tg->lineHeight = tl.fontHeight+1;
-	    withLabels = FALSE;
-	    }
-	y = yOff + origLineHeight * sn->row;
-        tg->drawItemAt(tg, item, hvg, xOff, y, scale, font, color, vis);
-        if (withLabels)
-            {
-            int nameWidth = mgFontStringWidth(font, name);
-            int dotWidth = tl.nWidth/2;
-	    boolean snapLeft = FALSE;
-	    drawNameInverted = highlightItem(tg, item);
-            textX -= nameWidth + dotWidth;
-	    snapLeft = (textX < insideX);
-	    /* Special tweak for expRatio in pack mode: force all labels 
-	     * left to prevent only a subset from being placed right: */
-	    snapLeft |= (startsWith("expRatio", tg->tdb->type));
-            if (snapLeft)        /* Snap label to the left. */
-		{
-		textX = leftLabelX;
-		hvGfxUnclip(hvg);
-		hvGfxSetClip(hvg, leftLabelX, yOff, insideWidth, tg->height);
-		if(drawNameInverted)
-		    {
-		    int boxStart = leftLabelX + leftLabelWidth - 2 - nameWidth;
-		    hvGfxBox(hvg, boxStart, y, nameWidth+1, heightPer - 1, color);
-		    hvGfxTextRight(hvg, leftLabelX, y, leftLabelWidth-1, heightPer,
-				MG_WHITE, font, name);
-		    }
-		else
-		    hvGfxTextRight(hvg, leftLabelX, y, leftLabelWidth-1, heightPer,
-				color, font, name);
-		hvGfxUnclip(hvg);
-		hvGfxSetClip(hvg, insideX, yOff, insideWidth, tg->height);
-		}
-            else
-		{
-		if(drawNameInverted)
-		    {
-		    hvGfxBox(hvg, textX - 1, y, nameWidth+1, heightPer-1, color);
-		    hvGfxTextRight(hvg, textX, y, nameWidth, heightPer, MG_WHITE, font, name);
-		    }
-		else
-		    hvGfxTextRight(hvg, textX, y, nameWidth, heightPer, color, font, name);
-		}
-            }
-        if (!tg->mapsSelf && !doingOverflow)
-            {
-            int w = x2-textX;
-	    /* Arrows? */
-	    if (w > 0)
-		{
-		if (nextItemCompatible(tg))
-		    genericDrawNextItemStuff(tg, hvg, vis, item, x2, textX, y, heightPer, snapLeft, 
-					     color);
-		else
-		    {
-		    tg->mapItem(tg, item, tg->itemName(tg, item), 
-				tg->mapItemName(tg, item), s, e, textX, y, w, heightPer);
-		    }
-		}
-            }
-
-	/* If printing things to the "overflow" row return state to original 
-	   configuration and print label. */
-	if(doingOverflow)
-	    {
-	    /* Draw label if we haven't yet. */
-	    if(withLeftLabels && !overflowDrawn)
-		{
-		hvGfxUnclip(hvg);
-		hvGfxSetClip(hvg, leftLabelX, yOff, insideWidth, tg->height);
-		safef(nameBuff, sizeof(nameBuff), "Last Row: %d", overflowCount);
-		mgFontStringWidth(font, nameBuff);
-		hvGfxTextRight(hvg, leftLabelX, y, leftLabelWidth-1, lineHeight, 
-			    color, font, nameBuff);
-		hvGfxUnclip(hvg);
-		hvGfxSetClip(hvg, insideX, yOff, insideWidth, tg->height);
-		overflowDrawn = TRUE;
-		}
-	    /* Put state back to original state. */
-	    withLabels = origWithLabels;
-	    sn->row = origRow;
-	    vis = tg->limitedVis = origVis;
-	    heightPer = tg->heightPer = origHeightPer;
-	    lineHeight = tg->lineHeight = origLineHeight;
-	    }
-        }
-    hvGfxUnclip(hvg);
-    }
+    genericDrawItemsPackSquish(tg, seqStart, seqEnd, hvg, xOff, yOff, width, 
+                               font, color, vis);
 else
-    {
-    boolean isFull = (vis == tvFull);
-    struct slList *item;
-    y = yOff;
-    for (item = tg->items; item != NULL; item = item->next)
-	{
-	if(tg->itemColor != NULL) 
-	    color = tg->itemColor(tg, item, hvg);
-	tg->drawItemAt(tg, item, hvg, xOff, y, scale, font, color, vis);
-	if (isFull) 
-	    {
-	    /* The doMapItems will make the mapboxes normally but make */
-	    /* them here if we're drawing nextItem buttons. */
-	    if (nextItemCompatible(tg))
-		genericDrawNextItemStuff(tg, hvg, vis, item, -1, -1, y, heightPer, FALSE, 
-					 color);
-	    y += lineHeight;
-	    }
-	} 
-    }
+    genericDrawItemsFullDense(tg, seqStart, seqEnd, hvg, xOff, yOff, width, 
+                              font, color, vis);
 }
 
 static void linkedFeaturesSeriesDraw(struct track *tg, 
@@ -2970,7 +2991,7 @@ slSort(&itemList, bedCmp);
 tg->items = itemList;
 }
 
-void atomDrawSimpleAt(struct track *tg, void *item, 
+static void atomDrawSimpleAt(struct track *tg, void *item, 
 	struct hvGfx *hvg, int xOff, int y, 
 	double scale, MgFont *font, Color color, enum trackVisibility vis);
 
@@ -8733,10 +8754,9 @@ void drawComplementArrow( struct hvGfx *hvg, int x, int y,
                                 int width, int height, MgFont *font)
 /* Draw arrow and create clickbox for complementing ruler bases */
 {
-if(cartUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE))
-    hvGfxTextRight(hvg, x, y, width, height, MG_GRAY, font, "<---");
-else
-    hvGfxTextRight(hvg, x, y, width, height, MG_BLACK, font, "--->");
+char *text =  cartUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE)
+    ?"<---" : "--->";
+hvGfxTextRight(hvg, x, y, width, height, MG_BLACK, font, text);
 mapBoxToggleComplement(x, y, width, height, NULL, chromName, winStart, winEnd,
                                 "complement bases");
 }
@@ -9916,8 +9936,10 @@ if (rulerMode != tvHide)
 	 * for translation in to amino acids */
         boolean complementRulerBases = 
                 cartUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE);
+#if 0 // FIXME: why is this here???
         if (complementRulerBases)
             baseColor = MG_GRAY;
+#endif
 
         /* get sequence, with leading & trailing 3 bases
          * used for amino acid translation */

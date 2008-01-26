@@ -20,25 +20,53 @@ struct hvGfx
     int clipMaxX;
 };
 
-INLINE int hvGfxAdjX(struct hvGfx *hvg, int x, int width)
-/* return X pixel start location for a range, handing reverse-complement
- * mode.  Specify width of 0 fo a point. */
+INLINE int hvGfxClipX(struct hvGfx *hvg, int x)
+/* clip X to be in cliping region bounds */
 {
-if (hvg->rc)
+if (x < hvg->clipMinX)
+    x = hvg->clipMinX;
+if (x > hvg->clipMaxX)
+    x = hvg->clipMaxX;
+return x;
+}
+
+INLINE int hvGfxAdjXW(struct hvGfx *hvg, int x, int *widthPtr)
+/* return X pixel start location and update width for a range, handing
+ * reverse-complement mode.  If widthPtr is NULL, a width of 1 pixel is
+ * assumed.  -1 is return if all out of range */
+{
+int width = (widthPtr != NULL) ? *widthPtr : 1;
+if (x+width <= hvg->leftMargin)
+    return x;     // in label area
+else if (hvg->rc)
     {
-    // clip, then only reverse coordinated with the track area
-    // FIXME: maybe detect crossing region??
-    if (x < hvg->clipMinX)
-        x = hvg->clipMinX;
-    if (x <  hvg->leftMargin)
-        return x;
-    int x2 = x + width;
-    if (x2 > hvg->clipMaxX)
-        x2 = hvg->clipMaxX;
-    return ((hvg->trackWidth-(x2-hvg->leftMargin))+hvg->leftMargin);
+    // clip, then rc
+    int xs = hvGfxClipX(hvg, x);
+    int xe = hvGfxClipX(hvg, x+width);
+    if (xs >= xe)
+        return -1;
+    if (widthPtr != NULL)
+        *widthPtr = xe - xs;
+    // must RC bases on width of track area
+    return ((hvg->trackWidth-(xe-hvg->leftMargin))+hvg->leftMargin);
     }
 else
     return x;
+}
+
+INLINE int hvGfxAdjXX(struct hvGfx *hvg, int x1, int *x2Ptr)
+/* return X pixel start location and update end location, handing
+ * reverse-complement mode.  -1 is return if all out of range */
+{
+int width = *x2Ptr - x1;
+int x =  hvGfxAdjXW(hvg, x1, &width);
+if (x < 0)
+    return -1;
+else
+    {
+    *x2Ptr = x + width;
+    return x;
+    }
 }
 
 struct hvGfx *hvGfxOpenGif(int width, int height, int leftMargin, char *fileName);
@@ -53,30 +81,33 @@ void hvGfxClose(struct hvGfx **pHvg);
 INLINE void hvGfxDot(struct hvGfx *hvg, int x, int y, int colorIx)
 /* Draw a single pixel.  Try to work at a higher level when possible! */
 {
-vgDot(hvg->vg, hvGfxAdjX(hvg, x, 0), y, colorIx);
+vgDot(hvg->vg, hvGfxAdjXW(hvg, x, NULL), y, colorIx);
 }
 
+#if 0 // FIXME: drop this
 INLINE int hvGfxGetDot(struct hvGfx *hvg, int x, int y)
 /* Fetch a single pixel.  Please do not use this, this is special
  * for verticalText only. */
 {
-return vgGetDot(hvg->vg, hvGfxAdjX(hvg, x, 0), y);
+return vgGetDot(hvg->vg, hvGfxAdjXW(hvg, x, NULL), y);
 }
+#endif
 
 INLINE void hvGfxBox(struct hvGfx *hvg, int x, int y, 
                   int width, int height, int colorIx)
 /* Draw a box. */
 {
-vgBox(hvg->vg, hvGfxAdjX(hvg, x, width), y, width, height, colorIx);
+x = hvGfxAdjXW(hvg, x, &width);
+if (x >= 0)
+    vgBox(hvg->vg, x, y, width, height, colorIx);
 }
 
 INLINE void hvGfxLine(struct hvGfx *hvg, 
                    int x1, int y1, int x2, int y2, int colorIx)
 /* Draw a line from one point to another. */
 {
-if (hvg->rc)
-    vgLine(hvg->vg, hvGfxAdjX(hvg, x2, 0), y1, hvGfxAdjX(hvg, x1, 0), y2, colorIx);
-else
+x1  = hvGfxAdjXX(hvg, x1, &x2);
+if (x1 >= 0)
     vgLine(hvg->vg, x1, y1, x2, y2, colorIx);
 }
 
@@ -84,21 +115,25 @@ INLINE void hvGfxText(struct hvGfx *hvg, int x, int y, int colorIx,
                    void *font, char *text)
 /* Draw a line of text with upper left corner x,y. */
 {
-vgText(hvg->vg, hvGfxAdjX(hvg, x, 0), y, colorIx, font, text);
+vgText(hvg->vg, hvGfxAdjXW(hvg, x, NULL), y, colorIx, font, text);
 }
 
 INLINE void hvGfxTextRight(struct hvGfx *hvg, int x, int y, int width, int height,
                       int colorIx, void *font, char *text)
 /* Draw a line of text with upper right corner x,y. */
 {
-vgTextRight(hvg->vg, hvGfxAdjX(hvg, x, width), y, width, height, colorIx, font, text);
+x = hvGfxAdjXW(hvg, x, &width);
+if (x >= 0)
+    vgTextRight(hvg->vg, x, y, width, height, colorIx, font, text);
 }
 
 INLINE void hvGfxTextCentered(struct hvGfx *hvg, int x, int y, int width, int height,
                            int colorIx, void *font, char *text)
 /* Draw a line of text in middle of box. */
 {
-vgTextCentered(hvg->vg, hvGfxAdjX(hvg, x, width), y, width, height, colorIx, font, text);
+x = hvGfxAdjXW(hvg, x, &width);
+if (x >= 0)
+    vgTextCentered(hvg->vg, x, y, width, height, colorIx, font, text);
 }
 
 INLINE int hvGfxFindColorIx(struct hvGfx *hvg, int r, int g, int b)
@@ -114,8 +149,12 @@ INLINE struct rgbColor hvGfxColorIxToRgb(struct hvGfx *hvg, int colorIx)
 return vgColorIxToRgb(hvg->vg, colorIx);
 };
 
-void hvGfxSetClip(struct hvGfx *hvg, int x, int y, int width, int height);
+INLINE void hvGfxSetClip(struct hvGfx *hvg, int x, int y, int width, int height)
 /* Set clipping rectangle. */
+{
+// this should not be adjusted for RC
+vgSetClip(hvg->vg, x, y, width, height);
+}
 
 INLINE void hvGfxUnclip(struct hvGfx *hvg)
 /* Set clipping rect cover full thing. */
@@ -130,7 +169,9 @@ INLINE void hvGfxVerticalSmear(struct hvGfx *hvg,
                             unsigned char *dots, boolean zeroClear)
 /* Put a series of one 'pixel' width vertical lines. */
 {
-vgVerticalSmear(hvg->vg, hvGfxAdjX(hvg, xOff, width), yOff, width, height, dots, zeroClear);
+xOff = hvGfxAdjXW(hvg, xOff, &width);
+if (xOff >= 0)
+    vgVerticalSmear(hvg->vg, xOff, yOff, width, height, dots, zeroClear);
 }
 
 INLINE void hvGfxFillUnder(struct hvGfx *hvg, int x1, int y1, int x2, int y2, 
@@ -140,9 +181,8 @@ INLINE void hvGfxFillUnder(struct hvGfx *hvg, int x1, int y1, int x2, int y2,
  * vertical lines from the bottom to y1 on the left and bottom to
  * y2 on the right. */
 {
-if (hvg->rc)
-    vgFillUnder(hvg->vg, hvGfxAdjX(hvg, x2, 0), y1, hvGfxAdjX(hvg, x1, 0), y2, bottom, color);
-else
+x1  = hvGfxAdjXX(hvg, x1, &x2);
+if (x1 >= 0)
     vgFillUnder(hvg->vg, x1, y1, x2, y2, bottom, color);
 }
 

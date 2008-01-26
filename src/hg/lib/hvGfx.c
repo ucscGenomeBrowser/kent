@@ -10,7 +10,7 @@
 #include "common.h"
 #include "hvGfx.h"
 
-static char const rcsid[] = "$Id: hvGfx.c,v 1.1.2.1 2008/01/16 07:00:38 markd Exp $";
+static char const rcsid[] = "$Id: hvGfx.c,v 1.1.2.2 2008/01/26 20:05:28 markd Exp $";
 
 static struct hvGfx *hvGfxAlloc(struct vGfx *vg, int leftMargin)
 /* allocate a hvgGfx object */
@@ -18,7 +18,11 @@ static struct hvGfx *hvGfxAlloc(struct vGfx *vg, int leftMargin)
 struct hvGfx *hvg;
 AllocVar(hvg);
 hvg->vg = vg;
+#if 1
 hvg->rc = TRUE;
+#else
+hvg->rc = FALSE;
+#endif
 hvg->leftMargin = leftMargin;
 hvg->trackWidth = vg->width-leftMargin;
 hvg->pixelBased = vg->pixelBased;
@@ -49,19 +53,6 @@ if (hvg != NULL)
     vgClose(&hvg->vg);
     freez(pHvg);
     }
-}
-
-void hvGfxSetClip(struct hvGfx *hvg, int x, int y, int width, int height)
-/* Set clipping rectangle. */
-{
-vgSetClip(hvg->vg, hvGfxAdjX(hvg, x, width), y, width, height);
-if (x < 0)
-    x = 0;
-int x2 = x + width;
-if (x2 > hvg->width)
-    x2 = hvg->width;
-hvg->clipMinX = x;
-hvg->clipMaxX = x2;
 }
 
 static long figureTickSpan(long totalLength, int maxNumTicks)
@@ -104,7 +95,6 @@ void hvGfxDrawRulerBumpText(struct hvGfx *hvg, int xOff, int yOff,
 /* Draw a ruler inside the indicated part of mg with numbers that start at
  * startNum and span range.  Bump text positions slightly. */
 {
-xOff = hvGfxAdjX(hvg, xOff, width);
 int tickSpan;
 int tickPos;
 double scale;
@@ -135,11 +125,11 @@ for (tickPos=firstTick; tickPos<end; tickPos += tickSpan)
     numLabelString(tickPos, tbuf);
     numWid = mgFontStringWidth(font, tbuf)+4;
     x = (int)((tickPos-startNum) * scale) + xOff;
-    vgBox(hvg->vg, x, yOff, 1, height, color);
+    hvGfxBox(hvg, x, yOff, 1, height, color);
     if (x - numWid >= xOff)
         {
-        vgTextCentered(hvg->vg, x-numWid + bumpX, yOff + bumpY, numWid, 
-	    height, color, font, tbuf);
+        hvGfxTextCentered(hvg, x-numWid + bumpX, yOff + bumpY, numWid, 
+                          height, color, font, tbuf);
         }
     }
 }
@@ -151,7 +141,7 @@ void hvGfxDrawRuler(struct hvGfx *hvg, int xOff, int yOff, int height, int width
  * startNum and span range.  */
 {
 hvGfxDrawRulerBumpText(hvg, xOff, yOff, height, width, color, font,
-    startNum, range, 0, 0);
+                       startNum, range, 0, 0);
 }
 
 
@@ -163,7 +153,7 @@ void hvGfxBarbedHorizontalLine(struct hvGfx *hvg, int x, int y,
  * BarbDir of 1 points barbs to right, of -1 points them to left. */
 {
 barbDir = (hvg->rc) ? -barbDir : barbDir;
-x = hvGfxAdjX(hvg, x, width);
+x = hvGfxAdjXW(hvg, x, &width);
 int x1, x2;
 int yHi, yLo;
 int offset, startOffset, endOffset, barbAdd;
@@ -200,7 +190,7 @@ void hvGfxNextItemButton(struct hvGfx *hvg, int x, int y, int w, int h,
 /* a remote control. If nextItem is TRUE, it points right, otherwise */
 /* left. color is the outline color, and hvgColor is the fill color. */
 {
-x = hvGfxAdjX(hvg, x, w);
+x = hvGfxAdjXW(hvg, x, &w);
 struct gfxPoly *t1, *t2;
 /* Make the triangles */
 t1 = gfxPolyNew();
