@@ -11,7 +11,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.17 2008/01/25 18:20:18 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.18 2008/01/26 00:04:14 kate Exp $
 
 use warnings;
 use strict;
@@ -51,9 +51,11 @@ our $trackFile = "/trackDb.ra";
 our $submitPath;        # full path of data submission directory
 our $configPath;        # full path of configuration directory
 our $outPath;           # full path of output directory
-our %terms;             # controlled vocabulary
+our $pifFile;           # project information filename (most recent found in 
+                                # submission dir)
 our %pif;               # project information
 our %tracks;            # track information
+our %terms;             # controlled vocabulary
 
 ############################################################################
 # Validators -- extend when adding new metadata fields
@@ -144,7 +146,7 @@ sub validateWig {
         "cd $outPath; head -10 $filePath | wigEncode stdin /dev/null /dev/null >$outFile 2>&1");
     if ($err) {
         print STDERR  "ERROR: File \'$file\' failed wiggle validation\n";
-        open(ERR, $outPath/$outFile) || die "ERROR: Can't open wiggle validation file \'$outPath/$outFile\': $!\n";
+        open(ERR, "$outPath/$outFile") || die "ERROR: Can't open wiggle validation file \'$outPath/$outFile\': $!\n";
         my @err = <ERR>;
         die "@err\n";
     } else {
@@ -160,7 +162,7 @@ sub validateBed {
         "cd $outPath; head -10 $filePath | egrep -v '^track|browser' | hgLoadBed -noLoad hg18 testTable stdin >$outFile 2>&1");
     if ($err) {
         print STDERR  "ERROR: File \'$file\' failed bed validation\n";
-        open(ERR, $outPath/$outFile) || die "ERROR: Can't open bed validation file \'$outPath/$outFile\': $!\n";
+        open(ERR, "$outPath/$outFile") || die "ERROR: Can't open bed validation file \'$outPath/$outFile\': $!\n";
         my @err = <ERR>;
         die "@err\n";
     } else {
@@ -205,7 +207,7 @@ sub checkDataFormat {
         $type = $2;
     }
     $formatCheckers{$format} || 
-        die "ERROR: Data format \'$format\' in PIF file is unknown\n";
+        die "ERROR: Data format \'$format\' in PIF file \'$pifFile\' is unknown\n";
     $formatCheckers{$format}->($file, $type);
 }
 
@@ -238,7 +240,7 @@ sub getPif {
     # Read info from Project Information File.  Verify required fields
     # are present and that the project is marked active.
     my %pif = ();
-    my $pifFile = &newestFile(glob "*.PIF");
+    $pifFile = &newestFile(glob "*.PIF");
     &HgAutomate::verbose(2, "Using newest PIF file \'$pifFile\'\n");
     open(PIF, $pifFile) || die "ERROR: Can't open PIF file \'$pifFile\'\n";
 
