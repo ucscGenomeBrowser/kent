@@ -345,6 +345,7 @@ class PipelineController < ApplicationController
     keepers["validate_error"] = "keep"
     keepers["load_error"] = "keep"
     keepers["upload_error"] = "keep"
+    keepers["out"] = "keep"
 
     msg = ""
     # make sure parent paths exist
