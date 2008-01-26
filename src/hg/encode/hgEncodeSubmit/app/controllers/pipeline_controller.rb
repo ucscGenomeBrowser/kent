@@ -29,26 +29,24 @@ class PipelineController < ApplicationController
 
     # finish any unfinished business for this user
     @projects.delete_if do |p|
-      result = false
+      doDelete = false
       if p.status.starts_with?("schedule expanding ")
-        result = true
         @project = p
         if process_uploaded_archive
           # ok
         end
       end
       if p.status.starts_with?("schedule expand all")
-        result = true
         @project = p
         reexpand_all_completion
       end
       if p.status.starts_with?("schedule deleting")
-        result = true
+        doDelete = true
         @project = p
         delete_completion
         @project.destroy
       end
-      result
+      doDelete
     end
 
     render :action => 'list'
