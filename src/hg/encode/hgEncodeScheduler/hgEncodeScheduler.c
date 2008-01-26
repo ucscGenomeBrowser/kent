@@ -16,7 +16,7 @@
 #include <signal.h>
 #include <sys/wait.h>
 
-static char const rcsid[] = "$Id: hgEncodeScheduler.c,v 1.17 2008/01/25 18:40:51 galt Exp $";
+static char const rcsid[] = "$Id: hgEncodeScheduler.c,v 1.18 2008/01/26 02:30:07 galt Exp $";
 
 char *db = NULL;
 char *dir = NULL;
@@ -321,6 +321,7 @@ if ( xpid < 0 )
 if (xpid > 0)
     return;  /* return to start any remaining ready jobs */
 
+signal(SIGCLD, SIG_DFL);  /* will be waiting for child */
 
 /* get job info */
 struct sqlConnection *conn = sqlConnect(db);
@@ -403,7 +404,17 @@ else if (sameString(jobType,"reexpandall"))
 updateErrorFile(project, jobType, ""); // clear out job_error file
 sqlDisconnect(&conn);
 
-signal(SIGCLD, SIG_DFL);  /* will be waiting for child */
+
+fflush(stdout);
+fflush(stderr);
+
+
+int f = open(errorPath, O_WRONLY | O_NOCTTY);
+dup2(f, STDERR_FILENO);
+/* required to free cron job to finish immediately without waiting */
+dup2(f, STDOUT_FILENO);  
+close(f);
+
 int pid = fork();
 if ( pid < 0 )
     { 
@@ -414,12 +425,6 @@ if ( pid == 0 )
     /* Child process */ 
 
     //uglyf("commandLine=[%s]\n",commandLine);
-
-    int f = open(errorPath, O_WRONLY | O_NOCTTY);
-    dup2(f, STDERR_FILENO);
-    /* required to free cron job to finish immediately without waiting */
-    dup2(f, STDOUT_FILENO);  
-    close(f);
 
     char *args[64];
     // parse(commandLine, args, sizeof(args));
@@ -438,12 +443,6 @@ if ( pid == 0 )
 else
     {
     /* Parent process */ 
-
-    /* required to free cron job to finish immediately without waiting */
-    int f = open(errorPath, O_WRONLY | O_NOCTTY);
-    dup2(f, STDERR_FILENO);
-    dup2(f, STDOUT_FILENO);  //debug
-    close(f);
 
     struct sqlConnection *conn = sqlConnect(db);
     char query[256];
