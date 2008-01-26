@@ -5,7 +5,7 @@ PROG = ../doEncodeValidate.pl
 
 all: test
 
-test: dnase dnaseBig genes
+test: dnase dnaseBig genes bed3
 
 dnase: output
 	${PROG} x input/dnase -configDir=../config -outDir=output/dnase
@@ -24,8 +24,13 @@ genes: output
 	diff output/genes/validateGFF.out expected/genes
 	diff output/genes/load.ra expected/genes
 
+bed3: output
+	${PROG} x input/bed3 -configDir=../config -outDir=output/bed3
+	diff output/bed3/validateBed.out expected/bed3
+	diff output/bed3/load.ra expected/bed3
+
 output:
-	${MKDIR} output/dnase output/dnaseBig output/genes
+	${MKDIR} output/dnase output/dnaseBig output/genes output/bed3
 
 clean: 
 	rm -rf output
@@ -52,9 +57,18 @@ dnaseBigLinks: dnaseBigClean
 TEST_INSTALL_DIR = /cluster/data/encode/pipeline/tests
 
 install:
-	(cd input/dnase; tar cvfz ${TEST_INSTALL_DIR}/dnase.tar.gz --exclude=CVS --exclude=out * )
-	(cd input/genes; tar cvfz ${TEST_INSTALL_DIR}/genes.tar.gz --exclude=CVS --exclude=out * )
+	tar cvfz ${TEST_INSTALL_DIR}/bed3.good.tar.gz \
+                    -C input/bed3 bed3.PIF chr1.bed chr2.bed chr3.bed -C DDFs bed3.3files.DDF
+	tar cvfz ${TEST_INSTALL_DIR}/bed3.bad.tar.gz \
+                    -C input/bed3 bed3.PIF bed3.2files.DDF chr2.bed \
+                    -C bad chr1.bed
+	tar cvfz ${TEST_INSTALL_DIR}/bed3.fix.tar.gz -C input/bed3 chr1.bed
+	tar cvfz ${TEST_INSTALL_DIR}/bed3.update.tar.gz \
+                    -C input/bed3 chr3.bed -C DDFs bed3.3files.DDF
+	(cd input/dnase; tar cvfz ${TEST_INSTALL_DIR}/dnase.tar.gz --exclude=CVS --exclude=out *)
+	(cd input/genes; tar cvfz ${TEST_INSTALL_DIR}/genes.tar.gz --exclude=CVS --exclude=out *)
 
 installBig: dnaseBigLinks
-	(cd input/dnaseBig; tar cvfzh ${TEST_INSTALL_DIR}/dnaseBig.tar.gz --exclude=CVS --exclude=out * )
+	tar cvfzh ${TEST_INSTALL_DIR}/dnaseBig.tar.gz \
+                    -C input/dnaseBig --exclude=CVS --exclude=out *
 
