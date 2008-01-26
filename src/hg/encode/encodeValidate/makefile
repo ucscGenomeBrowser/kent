@@ -2,7 +2,7 @@
 
 include ../../../inc/common.mk
 
-install: scripts
+install: scripts config
 
 scripts:
 	@for F in ${SCRIPT_FILES}; do \
@@ -11,6 +11,12 @@ scripts:
 	    echo cp -p $$F ${SCRIPTS}; \
 	    cp -p $$F ${SCRIPTS}; \
 	done
+
+PIPELINE_DIR = /cluster/data/encode/pipeline/encpipeline_kate
+#PIPELINE_DIR = /cluster/data/encode/pipeline/encpipeline_dev
+
+config: force
+	cp -rp config ${PIPELINE_DIR}
 
 alpha: scripts
 
