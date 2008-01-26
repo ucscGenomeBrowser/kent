@@ -9,7 +9,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeLoad/doEncodeLoad.rb,v 1.8 2008/01/26 07:12:25 galt Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeLoad/doEncodeLoad.rb,v 1.9 2008/01/26 07:31:02 galt Exp $
 
 $scripts = "/cluster/bin/scripts"
 
@@ -42,7 +42,7 @@ def loadGene(tableName, fileList)
   #TODO replace head -999 with cat
 
   if system( "head -1000 -q #{fileList} | egrep -v '^track|browser' | ldHgGene -genePredExt #{$encodeDb} #{tableName} stdin > out/loadGene.out 2>&1")
-    print "#{fileList} Passed\n";
+    print "#{fileList} Loaded\n"
     #debug restore: File.delete "genePred.tab"
   else
     STDERR.print "ERROR: File(s) '#{fileList}' failed gene load.\n"
@@ -60,7 +60,7 @@ def loadWig(tableName, fileList)
   if system( "cat #{fileList} | wigEncode stdin stdout #{tableName}.wib | hgLoadWiggle -pathPrefix=/gbdb/#{$encodeDb}/wib -tmpDir=#{$tempDir} #{$encodeDb} #{tableName} stdin >out/loadWig.out 2>&1" )
       system( "rm -f /gbdb/#{$encodeDb}/wib/#{tableName}.wib" )
       system( "ln -s #{tableName}.wib /gbdb/#{$encodeDb}/wib" )
-      print "#{fileList} Loaded\n";
+      print "#{fileList} Loaded\n"
   else 
       STDERR.print "ERROR: File(s) #{fileList} failed wiggle load.\n"
       errAbort File.read("out/loadWig.out")
