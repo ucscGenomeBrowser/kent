@@ -68,7 +68,7 @@ class AccountController < ApplicationController
     @user.port = request.port
     if @user and @user.activate
       redirect_back_or_default(:controller => '/account', :action => 'login')
-      flash[:notice] = 'Your account has been activated.  Please login..'
+      flash[:notice] = 'Your account has been activated.  Please login.'
     else
       flash[:notice] = 'Unable to activate the account.  Please check or enter manually.' 
     end
