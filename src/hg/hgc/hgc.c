@@ -212,7 +212,7 @@
 #include "itemConf.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1383 2008/01/25 18:10:30 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1384 2008/01/28 23:48:39 hiram Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -16306,7 +16306,11 @@ else
 	if (ct->fieldCount < 4)
 	    safef(where, sizeof(where), "chromStart = '%d'", start);
 	else
-	    safef(where, sizeof(where), "name = '%s'", itemName);
+	    {
+	    char * safeName = sqlEscapeString(itemName);
+	    safef(where, sizeof(where), "name = '%s'", safeName);
+	    freeMem(safeName);
+	    }
 	sr = hRangeQuery(conn, ct->dbTableName, seqName, winStart, winEnd,
                      where, &rowOffset);
 	while ((row = sqlNextRow(sr)) != NULL)
