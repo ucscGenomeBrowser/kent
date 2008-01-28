@@ -1,7 +1,5 @@
-<h1>Project:</h1>
-
 <p>
-<strong>Name: <%= @project.name -%> </strong><br/>
+<strong>Project: <%= @project.name -%> </strong><br/>
 <strong>Type: </strong> <%= @project.project_type.short_label -%><br/>
 <strong>Status: </strong> <%= 
   if @project.status.starts_with?("schedule uploading ")
@@ -21,22 +19,29 @@
 </p>
 <br>
 <table CELLSPACING=10 CELLPADDING=10>
-  <td><%= link_to 'Edit', {:action => 'edit', :id => @project.id} -%></td>
+
+<% if @project.status == "loading" or
+      @project.status == "uploading/expanding" or
+      @project.status == "validating" %> 
+  <td><%= link_to 'Cancel', {:action => 'edit', :id => @project.id} -%></td>
+<% elsif @project.status.starts_with?("schedule") %>
+  <td><%= link_to ' ', {:action => 'edit', :id => @project.id} -%></td>
+<% else %>
+  <% if @project.status == "uploaded" %> 
+    <td><%= link_to 'Validate', {:action => 'begin_validating', :id => @project.id},
+        :confirm => "Are you sure your project is ready to schedule for validating?" -%></td>
+  <% elsif @project.status == "validated" %> 
+    <td><%= link_to 'Load', {:action => 'begin_loading', :id => @project.id},
+        :confirm => "Are you sure your project is ready to schedule for loading?" -%></td>
+  <% end %>
+  <td><%= link_to 'Upload', {:action => 'upload', :id => @project.id} -%></td>
   <td><%= link_to 'Delete', {:action => 'delete', :id => @project.id},
     :confirm => "Are you sure you want to delete this project?" -%></td>
-  <td><%= link_to 'Upload', {:action => 'upload', :id => @project.id} -%></td>
-
-  <td><%= link_to 'Re-Expand All', {:action => 'reexpand_all', :id => @project.id} -%></td>
-
-  <% if @project.status == "uploaded" -%> 
-    <td><%= link_to 'Validate', {:action => 'begin_validating', :id => @project.id},
-      :confirm => "Are you sure your project is ready to schedule for validating?" -%></td>
+  <td><%= link_to 'Edit', {:action => 'edit', :id => @project.id} -%></td>
+  <% if @project_status != "new" %>
+    <td><%= link_to 'Re-Expand', {:action => 'reexpand_all', :id => @project.id} -%></td>
   <% end %>
-
-  <% if @project.status == "validated" -%> 
-    <td><%= link_to 'Load', {:action => 'begin_loading', :id => @project.id},
-      :confirm => "Are you sure your project is ready to schedule for loading?" -%></td>
-  <% end %>
+<% end %>
 
 </table>
 
