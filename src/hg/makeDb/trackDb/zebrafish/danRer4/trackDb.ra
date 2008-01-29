@@ -64,7 +64,7 @@ exonArrows off
 
 track ensGene
 shortLabel Ensembl Genes
-longLabel Ensembl v42 Gene Predictions (Protein-Coding Genes)
+longLabel Ensembl (Version 42) Gene Predictions (Protein-Coding Genes)
 group genes
 priority 32.8
 visibility pack
@@ -75,7 +75,7 @@ dataVersion December 2006
  
 track ensGeneNonCoding
 shortLabel Ensembl NonCoding
-longLabel Ensembl v42 Gene Predictions (Non-Coding Genes) 
+longLabel Ensembl (Version 42) Gene Predictions (Non-Coding Genes) 
 group genes
 priority 32.9
 visibility hide

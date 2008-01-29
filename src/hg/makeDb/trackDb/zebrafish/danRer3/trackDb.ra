@@ -80,7 +80,7 @@ baseColorDefault genomicCodons
 track ensGene
 release beta
 shortLabel Ensembl Genes
-longLabel Ensembl v32 Gene Predictions (Protein Coding Genes)
+longLabel Ensembl (Version 32) Gene Predictions (Protein Coding Genes)
 group genes
 priority 32.8
 visibility pack
