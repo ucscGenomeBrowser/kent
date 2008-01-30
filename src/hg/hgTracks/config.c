@@ -402,7 +402,11 @@ char *javascript="onClick=\"document.mainForm.hgTracksConfigPage.value='configur
 hCheckBoxJS("fastConfigureMode",
 	cartUsualBoolean(cart, "fastConfigureMode" , FALSE), javascript);
 hPrintf("</TD><TD>");
-hPrintf("Fast configure mode (<A HREF=\"../../goldenPath/help/hgTracksHelp.html#FastConfig\">help</A>)");
+char tracksHelp[256];
+safef(tracksHelp, sizeof(tracksHelp), "%s/%s", 
+	HELP_DIR, "hgTracksHelp.html#FastConfig");
+hPrintf("Fast configure mode (<A TARGET=_blank HREF=\"%s\">help</A>)",
+	tracksHelp);
 hPrintf("</TD></TR>\n");
 
 hPrintf("<TR><TD>");
