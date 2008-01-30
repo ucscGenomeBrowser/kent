@@ -19,7 +19,7 @@ gbdb=/export/gbdb
 
 # location of the genbank root and files on the remote build server
 gbBuildServer=genbank
-rsyncPort="ssh"
+rsyncPort="rsh"
 gbBuildRoot=/cluster/data/genbank
 
 # Checking for an existing lock file, Silently exits if lock file exists
