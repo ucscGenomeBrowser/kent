@@ -7,7 +7,7 @@
 #include "options.h"
 #include "nib.h"
 
-static char const rcsid[] = "$Id: faCmp.c,v 1.6 2007/09/24 22:18:30 markd Exp $";
+static char const rcsid[] = "$Id: faCmp.c,v 1.7 2008/01/30 23:11:27 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -29,7 +29,7 @@ errAbort(
 /* command line options and values */
 static struct optionSpec optionSpecs[] =
 {
-    {"sortMask", OPTION_BOOLEAN},
+    {"softMask", OPTION_BOOLEAN},
     {"sortName", OPTION_BOOLEAN},
     {"peptide", OPTION_BOOLEAN},
     {NULL, 0}
