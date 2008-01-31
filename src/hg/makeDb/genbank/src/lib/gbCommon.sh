@@ -47,9 +47,13 @@ gbMkTimeFile() {
 
 
 # Compare time files.  First file must exist. Returns 0 if second file is
-# out-of-date
+# out-of-date.  Option delayDays only returns 0 if file is out-of-date by that
+# many days.
 gbCmpTimeFiles() {
-    local timeFile1=$1 timeFile2=$2
+    local timeFile1=$1 timeFile2=$2 delayDays=$3
+    if [ "x$delayDays" = "x" ] ; then
+        delayDays=0
+    fi
     if [ ! -e "$timeFile1" ] ; then
         echo "gbCmpTimeFiles: $timeFile1 doesn't exist" >&2
         exit 1
@@ -58,7 +62,7 @@ gbCmpTimeFiles() {
         return 0  # time2 out-of-date
     fi
     local time1=`gawk '{print $1}' $timeFile1`
-    local time2=`gawk '{print $1}' $timeFile2`
+    local time2=`gawk -v delayDays=$delayDays '{print $1+(60*60*24*delayDays)}' $timeFile2`
     if [ $time1 -gt $time2 ] ; then
         return 0  # time2 out-of-date
     else
