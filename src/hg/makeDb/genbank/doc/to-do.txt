@@ -1132,3 +1132,5 @@ Error: danRer1: gene danRer1.refFlat:1854 NM_131267 chr7: NM_131267 geneName "ir
 
 - mm9 alignment of EST CJ046163 chooses a less optimal, unspliced alignment
   over a spliced alignment.  Make splice sites part of the scoring
+
+- deal with CDS complement() annotations for cDNA: AF116618, AF116676
