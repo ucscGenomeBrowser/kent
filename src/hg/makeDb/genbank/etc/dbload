@@ -16,6 +16,8 @@
 #    file.
 #   -allowLargeDeletes - see gbDbLoadStep
 #   -rebuildDerived - see gbDbLoadStep
+#   -delayDays=n - delay dbload until build is at least n days older
+#    than last load time.
 
 # errors terminate with message
 set -e
@@ -28,6 +30,7 @@ maxExtFileUpdate=10000000
 inclEsts=NO
 opts=""
 largeDeletes=NO
+delayDays=0
 while [[ $1 == -* ]] ; do
     opt=$1
     shift
@@ -43,6 +46,8 @@ while [[ $1 == -* ]] ; do
         -rebuildDerived)
             opts="$opts $opt"
             ;;
+        -delayDays=*) 
+            delayDays=`echo "$opt" |sed -e 's/-delayDays=//'` ;;
         -*) echo "Error: invalid option $opt" >&2
             exit 1 ;;
     esac
@@ -84,7 +89,7 @@ mkdir -p $dbloadVar
 gbCheckLock $dbloadVar/run/dbload.lock
 
 # check if the build is newer that what was last loaded
-if ! gbCmpTimeFiles $timeFile $lastTime ; then
+if ! gbCmpTimeFiles $timeFile $lastTime $delayDays ; then
     exit 0
 fi
 
