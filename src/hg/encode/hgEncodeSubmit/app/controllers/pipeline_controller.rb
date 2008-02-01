@@ -114,6 +114,7 @@ class PipelineController < ApplicationController
     if @project.status == "validated"
       @project.status = "schedule loading"
       @project.save
+      log_project_status
     end
     redirect_to :action => 'show', :id => @project.id
     #old way redirect_to :action => 'show_user'
@@ -124,6 +125,7 @@ class PipelineController < ApplicationController
     if @project.status == "uploaded"
       @project.status = "schedule validating"
       @project.save
+      log_project_status
     end
     redirect_to :action => 'show', :id => @project.id
     #old way redirect_to :action => 'show_user'
@@ -142,6 +144,7 @@ class PipelineController < ApplicationController
     @project.archives_active = ""
     if @project.save
       redirect_to :action => 'show', :id => @project.id
+      log_project_status
     else
       @projectTypes = getProjectTypes
       render :action => 'new'
@@ -164,6 +167,7 @@ class PipelineController < ApplicationController
 	else
 	  @project.status = "uploaded"
 	end
+        log_project_status
 	unless @project.save
 	  flash[:warning] = "project record save failed"
 	  return false
@@ -188,6 +192,7 @@ class PipelineController < ApplicationController
         flash[:warning] = "project record save failed"
         return
       end
+      log_project_status
     
       flash[:notice] = msg
       #oldway redirect_to :action => 'show', :id => @project
@@ -195,7 +200,7 @@ class PipelineController < ApplicationController
     else
       # nothing was every uploaded, no cleanup required
       delete_completion
-      @Project.destroy
+      @project.destroy
       redirect_to :action => 'show_user'
     end
 
@@ -293,6 +298,7 @@ class PipelineController < ApplicationController
       flash[:warning] = "project record save failed"
       return
     end
+    log_project_status
 
     prep_one_archive @filename, nextArchiveNo
 
@@ -397,7 +403,8 @@ class PipelineController < ApplicationController
       flash[:warning] = "project record save failed"
       redirect_to :action => 'show', :id => @project
       return false
-    end
+    end   
+    log_project_status
 
     if flash[:notice]
       flash[:notice] += "<br>"+msg
@@ -527,6 +534,7 @@ private
       flash[:warning] = "project record save failed"
       return false
     end
+    log_project_status
 
     return true
 
@@ -638,6 +646,7 @@ private
       @project.archive_count = nextArchiveNo - 1
       @project.status = "expand failed"
       @project.save
+      log_project_status
       return false
     end
     #redirect_to :action => 'show', :id => @project
@@ -756,6 +765,17 @@ private
       Dir.delete(projectDir)
     end
     #oldway Project.find(params[:id]).destroy
+  end
+
+
+  def log_project_status
+    # add new projectArchive record
+    project_status_log = ProjectStatusLog.new
+    project_status_log.project_id = @project.id 
+    project_status_log.status = @project.status
+    unless project_status_log.save
+      flash[:warning] = "error saving project_status_log record"
+    end
   end
  
 end
