@@ -19751,3 +19751,137 @@ done | xargs cat | \
     rm multizPrimate*
 
 #######
+
+################################################################################
+# RE-SEQUENCING TRACE DOWNLOAD (DONE 2008-01-25, Andy)
+
+ssh kolossus
+bash
+cd /san/sanVol1/scratch/andy
+mkdir traces
+cd traces/
+cat < "EOF" > getOldTraces.sh
+#!/bin/bash
+
+echo Retrieving sequences before Jan 2008
+echo Starting at `date`
+
+# Query the database and figure out the total number of pages needed
+count=`./query_tracedb "query count species_code='HOMO SAPIENS' and strategy='Re-Sequencing' and load_date<'1/1/2008'"`
+pages=$(( (count/40000) + ((count % 40000) > 0) ))
+
+echo
+echo Total of $count sequences and $pages pages to retrieve
+echo
+
+for ((page=0; page < pages; page++)); do
+    pagenum=`printf "%03d" $((page+1))`
+    ./query_tracedb "query page_size 40000 page_number $page binary species_code='HOMO SAPIENS' and strategy='Re-Sequencing' and load_date<'1/1/2008'" > page.bin
+    echo -n "Retrieving page $((page+1)) of $pages compressed fasta... "
+    (echo -n "retrieve_gz fasta 0b"; cat page.bin ) | ./query_tracedb > page-${pagenum}.fa.gz
+    echo "done at `date +%T`"
+    echo -n "Retrieving page $((page+1)) of $pages compressed quality file... "
+    (echo -n "retrieve_gz quality 0b"; cat page.bin ) | ./query_tracedb > page-${pagenum}.qa.gz
+    echo "done at `date +%T`"
+    echo -n "Retrieving page $((page+1)) of $pages xml file... "
+    (echo -n "retrieve xml_info 0b"; cat page.bin ) | ./query_tracedb > page-${pagenum}.xml
+    gzip page-${pagenum}.xml
+    echo "done at `date +%T`"
+    rm page.bin
+done
+
+echo
+echo All done at `date`!
+EOF
+chmod +x getOldTraces.sh
+screen
+./getOldTraces.sh > download.log
+# detach screen
+# tail -f download.log
+#Retrieving sequences before Jan 2008
+#Starting at Wed Jan 23 11:47:04 PST 2008
+#
+#Total of 13978657 sequences and 350 pages to retrieve
+#
+#Retrieving page 1 of 350 compressed fasta... done at 11:48:40
+#Retrieving page 1 of 350 compressed quality file... done at 11:49:10
+#Retrieving page 1 of 350 xml file... done at 11:51:05
+#Retrieving page 2 of 350 compressed fasta... done at 11:52:40
+#Retrieving page 2 of 350 compressed quality file... done at 11:53:10
+# ...
+#Retrieving page 350 of 350 compressed quality file... done at 07:07:08
+#Retrieving page 350 of 350 xml file... done at 07:08:16
+#
+#All done at Fri Jan 25 07:08:16 PST 2008!
+
+################################################################################
+# RE-SEQUENCING TRACE ALIGNMENT TO HG18 (DONE 2008-01-31, Andy)
+
+ssh kkr12u22
+cd /san/sanVol1/scratch/andy/traces
+mkdir run
+cd run/
+ls -1 /scratch/hg/hg18/nib/* | grep -v hap > nib.lst
+ls -1 /san/sanVol1/scratch/andy/traces/page-*.fa.gz > traces.lst
+
+cat < "EOF" > gsub
+#LOOP
+./doBlat.sh {check in exists $(path1)} $(path2) {check out line+ $(root2)/$(root1).$(root2).maf}
+#ENDLOOP
+cat < "EOF" > doBlat.sh
+#!/bin/bash
+
+thisDir=`pwd -P`
+fa=`basename $1`
+nib=$2
+f=${fa%.fa.gz}
+
+n=`basename $2`
+n=${n%.nib}
+name=${f}.${n}
+
+out=${name}.maf
+mkdir -p /scratch/tmp/andy/$name
+mkdir -p $n
+pushd /scratch/tmp/andy/$name
+cp $1 .
+blat -minMatch=12 -ooc=/scratch/hg/hg18/11.ooc -out=maf $nib $fa $out
+cp $out ${thisDir}/$n
+popd
+rm -rf /scratch/tmp/andy/$name
+EOF
+chmod +x doBlat.sh
+
+ssh pk
+cd /san/sanVol1/scratch/andy/traces/run
+gensub2 traces.lst nib.lst gsub spec
+sed 's/\.fa\.c/.c/' spec > tmp; mv tmp spec
+para create spec
+para try, push, check
+para time
+#15750 jobs in batch
+#100 jobs (including everybody's) in Parasol queue.
+#Checking finished jobs
+#Completed: 15750 of 15750 jobs
+#CPU time in finished jobs:     385991s    6433.19m   107.22h    4.47d  0.012 y
+#IO & Wait Time:                 47866s     797.76m    13.30h    0.55d  0.002 y
+#Average job time:                  28s       0.46m     0.01h    0.00d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:             186s       3.10m     0.05h    0.00d
+#Submission to last job:          1551s      25.85m     0.43h    0.02d
+
+# Cat all the alignments
+
+ssh hgwdev
+cd /san/sanVol1/scratch/andy/traces/run
+head -n1 chrY/page-112.chrY.maf > maf.header
+for ((i=0; i < 350; i++)); do
+   echo page $((i+1))
+   pagenum=`printf "%03d" $((i+1))`
+   prefix=page-$pagenum
+   newfile=cat/${prefix}.maf
+   cp maf.header $newfile
+   for f in `find . -name "${prefix}*"`; do 
+      tail +2 $f | sed 's/gnl|ti|//' >> $newfile
+   done
+done
