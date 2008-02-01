@@ -202,7 +202,7 @@ class PipelineController < ApplicationController
       #oldway redirect_to :action => 'show', :id => @project
       redirect_to :action => 'show_user'
     else
-      # nothing was every uploaded, no cleanup required
+      # nothing was ever uploaded, no cleanup required
       delete_completion
       @project.status = "deleted"
       log_project_status
