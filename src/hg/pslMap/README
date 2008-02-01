@@ -1,10 +1,16 @@
 
-pslMap is a tool for projecting an alignment of 
+pslMap is a tool for projecting alignments to another sequence through a
+common alignment.  This is an implementation of the TransMap algorithm:
+Given alignments of
+      a -> b
+      b -> c
+
+it produces and alignment of a -> c
 
 
 Examples:
 
-Mapping between organism using syntenic chains
+Mapping cDNAs between organism using syntenic chains of genomic alignments:
 
    # to map a psl of mouse cDNA to genomoic (mm8) alignments to hg18
    # in mmCDna.mm8.psl
