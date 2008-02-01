@@ -16,7 +16,7 @@
 #include <signal.h>
 #include <sys/wait.h>
 
-static char const rcsid[] = "$Id: hgEncodeScheduler.c,v 1.19 2008/01/26 06:34:47 galt Exp $";
+static char const rcsid[] = "$Id: hgEncodeScheduler.c,v 1.20 2008/02/01 10:11:32 galt Exp $";
 
 char *db = NULL;
 char *dir = NULL;
@@ -302,6 +302,11 @@ sqlUpdate(conn, query);
 safef(query, sizeof(query), "update projects set status = '%s' where id=%d", 
     jobStatus, project);
 sqlUpdate(conn, query);
+/* log new status value */
+safef(query, sizeof(query), "insert into project_status_logs"
+    " set project_id=%d, status = '%s', created_at=now()", 
+    project, jobStatus);
+sqlUpdate(conn, query);
 
 }
 
@@ -465,6 +470,11 @@ else
     sqlUpdate(conn, query);
     safef(query, sizeof(query), "update projects set status = '%s' where id=%d", 
 	jobStatus, project);
+    sqlUpdate(conn, query);
+    /* log new status value */
+    safef(query, sizeof(query), "insert into project_status_logs"
+	" set project_id=%d, status = '%s', created_at=now()", 
+    	project, jobStatus);
     sqlUpdate(conn, query);
     sqlDisconnect(&conn);
     /* wait for child to finish */
