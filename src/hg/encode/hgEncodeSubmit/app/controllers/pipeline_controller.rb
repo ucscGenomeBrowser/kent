@@ -44,6 +44,8 @@ class PipelineController < ApplicationController
         doDelete = true
         @project = p
         delete_completion
+        @project.status = "deleted"
+        log_project_status
         @project.destroy
       end
       doDelete
@@ -84,6 +86,8 @@ class PipelineController < ApplicationController
     end
     if @project.status.starts_with?("schedule deleting")
       delete_completion
+      @project.status = "deleted"
+      log_project_status
       @project.destroy
       redirect_to :action => 'show_user'
     end
@@ -200,6 +204,8 @@ class PipelineController < ApplicationController
     else
       # nothing was every uploaded, no cleanup required
       delete_completion
+      @project.status = "deleted"
+      log_project_status
       @project.destroy
       redirect_to :action => 'show_user'
     end
