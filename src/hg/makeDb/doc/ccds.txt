@@ -1,6 +1,6 @@
 ###
 # instructions for building CCDS tracks and log of CCDS database imports
-  independent of assembly
+#  independent of assembly
 ###
 
 ############################################################################
@@ -46,3 +46,4 @@
 ############################################################################
 # CCDS import log
 2007-12-12 markd import of CCDS.20071212 as described above
+2008-02-01 markd import of CCDS.20080201 as described above

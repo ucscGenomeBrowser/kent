@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.56 2008/01/25 21:07:21 hiram Exp $"
+#	"$Id: mm9.txt,v 1.57 2008/02/02 00:14:23 markd Exp $"
 #
 
 #######################################################################
@@ -7349,4 +7349,22 @@ done
     checkTableCoords ${db} -verbose=2 ccdsGene
     joinerCheck -database=${db} -identifier=ccdsGeneId ~/compbio/genbank/kent/src/hg/makeDb/schema/all.joiner
 
-#########################################################################
+############################################################################
+# Reload CCDS (2008-02-01 markd)
+    # import ccds database as described in ccds.txt
+    set db=mm9
+    # create and load ccdsGene and ccdsInfo tables from imported database
+    /cluster/data/genbank/bin/x86_64/ccdsMkTables -loadDb ccds ${db} ccdsInfo ccdsGene
+
+    # ccdsKgMap
+    /cluster/data/genbank/bin/x86_64/mkCcdsGeneMap -db=${db} -loadDb ccdsGene knownGene ccdsKgMap
+
+    checkTableCoords ${db} -verbose=2 ccdsGene
+    # update all.jointer to include ${db} in ccdsDb
+    joinerCheck -database=${db} -identifier=ccdsGeneId ~/compbio/genbank/kent/src/hg/makeDb/schema/all.joiner
+    # request push of 
+        ccdsGene
+        ccdsInfo
+        ccdsKgMap
+    # << emacs
+
