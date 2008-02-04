@@ -28,6 +28,8 @@ hgsql proteins070202 -e 'load data local infile "hgncXref.tab" into table hgncXr
 # hg18 > hg18.hgncId
 #   -- b0b 12-26-2007
 #   -- ASZ updated 01-03-2008
+# Actually, they have automated this task, so we no longer need to notify
+# them. (ASZ: 02-04-2008). 
 
 # make sure the pfamXref program is available:
 cd /cluster/data/proteins/070202/build
