@@ -3,13 +3,26 @@ include ../../../inc/common.mk
 L = ${MYSQLLIBS} -lm
 MYLIBDIR = ../../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
-#CFLAGS=-ggdb
+
+all: snpMaskSingle snpMaskAddInsertions snpMaskCutDeletions
+
+snpMaskSingle: snpMaskSingle.o ${MYLIBS}
+	${CC} ${COPT} -o ${BINDIR}/snpMaskSingle snpMaskSingle.o ${MYLIBS} $L
+	${STRIP} ${BINDIR}/snpMaskSingle${EXE}
+
+snpMaskAddInsertions: snpMaskAddInsertions.o ${MYLIBS}
+	${CC} ${COPT} -o ${BINDIR}/snpMaskAddInsertions snpMaskAddInsertions.o ${MYLIBS} $L
+	${STRIP} ${BINDIR}/snpMaskAddInsertions${EXE}
+
+snpMaskCutDeletions: snpMaskCutDeletions.o ${MYLIBS}
+	${CC} ${COPT} -o ${BINDIR}/snpMaskCutDeletions snpMaskCutDeletions.o ${MYLIBS} $L
+	${STRIP} ${BINDIR}/snpMaskCutDeletions${EXE}
 
 O = snpMapToExon.o snpMaskChrom.o snpMaskFlank.o \
     snpMaskFlankSubset.o snpMaskGenes.o \
     seqWithInsertions.o seqWithoutDeletions.o
 
-all: snpMapToExon snpMaskChrom snpMaskFlank \
+old:snpMapToExon snpMaskChrom snpMaskFlank \
     snpMaskFlankSubset snpMaskGenes \
     seqWithInsertions seqWithoutDeletions
 
