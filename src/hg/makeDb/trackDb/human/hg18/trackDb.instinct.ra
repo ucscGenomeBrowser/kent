@@ -50,6 +50,24 @@ setsTable genesets
 aliasTable probeAliases
 #aliasTable probeIspyAgiExpT1
 
+track ispyAgiDeltaT2
+shortLabel ispy gene expression T2-T1 by agilent
+longLabel ispy gene expression difference between time point T1 and T2 measured on agilent whole genome array 44K
+group x
+priority 42.1
+visibility dense
+type expRatio
+expScale 1.0
+expStep 0.1
+groupings ispyAgiDeltaT2Groups
+patDb ispy1
+patId trackId
+patTable labTrack
+patKey ispyId
+setsTable genesets
+aliasTable probeAliases
+
+
 track ISPYproteomics
 shortLabel ispy proteomics
 longLabel ispy proteomics data from Petricoin lab
