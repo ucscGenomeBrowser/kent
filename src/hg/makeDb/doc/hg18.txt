@@ -10882,7 +10882,9 @@ mysql> load data local infile 'snpCheckCluster.tab' into table snp126Exceptions;
 # update snp126ExceptionDesc
 
 ################################################################
-# generate snpMasked sequence (Heather, Sept. 2006)
+# generate snpMasked sequence for snp126 (Heather, Sept. 2006)
+# snpMaskChrom was run too, not documented here.
+# OBSOLETED by snp128Mask, see below.
 
 # 3 steps: simple filtering, advanced filtering, generate sequence
 
@@ -17889,9 +17891,12 @@ BASE=/cluster/data/hg18/bed/blastz.calJac1.2007-10-07
 
 
 #########################################################################
-# HAPMAP LD (DONE 10/26/07 angie)
+# HAPMAP LD (DONE 10/26/07 angie -- phased REDONE 1/30/08)
     # Based on Daryl's hg17 work.  Data version here is release #22,
     # March 2007 (2007-03).
+    # 1/30/08: HapMap re-released the phased genotypes 1/22/08 -- re-run, 
+    # but without the removal of question marks that we had to do the 
+    # first time around.
 
     # hapmap.org offers ld_data downloads that look like the output of 
     # makeDcc -- but only for older versions.  To get LD for the latest
@@ -18043,7 +18048,9 @@ mv $tmpOut $outFile
     mkdir -p /san/sanvol1/scratch/hg18/bed/hapmapLd/phased_2007-08_rel22
     cd /san/sanvol1/scratch/hg18/bed/hapmapLd
     cd /san/sanvol1/scratch/hg18/bed/hapmapLd/phased_2007-08_rel22
-    wget ftp://ftp.hapmap.org/pub/hapmap/public/phasing/2007-08_rel22/phased/\*.gz
+    # 1/30/08: re-run from this point on, to pick up re-release (same URL)
+    wget --timestamping \
+      ftp://ftp.hapmap.org/pub/hapmap/public/phasing/2007-08_rel22/phased/\*.gz
     # Downstream stuff depends on the inputs being sorted by position -- check:
     cd /san/sanvol1/scratch/hg18/bed/hapmapLd
     foreach f (phased_2007-08_rel22/*_legend.txt.gz)
@@ -18055,6 +18062,7 @@ mv $tmpOut $outFile
     rm -f /tmp/1 /tmp/2
 
     # kki cluster run -- need lots of memory!  more than pk's 2G hard limit.
+    # (would use memk but it doesn't have java and kki is sufficient)
     ssh kki
     mkdir /san/sanvol1/scratch/hg18/bed/hapmapLd/run.HaploviewPhased
     cd /san/sanvol1/scratch/hg18/bed/hapmapLd/run.HaploviewPhased
@@ -18072,77 +18080,12 @@ mv $tmpOut $outFile
     end
     para make jobList
     para time
-#Completed: 50 of 64 jobs
-#Crashed: 14 jobs
-#CPU time in finished jobs:     293583s    4893.04m    81.55h    3.40d  0.009 y
-#IO & Wait Time:                   756s      12.61m     0.21h    0.01d  0.000 y
-#Average job time:                5887s      98.11m     1.64h    0.07d
-#Longest finished job:           15601s     260.02m     4.33h    0.18d
-#Submission to last job:         22771s     379.52m     6.33h    0.26d
-    # The 14 jobs that crashed are for the .phase files that include some 
-    # '?' characters in addition to the '0' and '1'.  The DCC put those 
-    # ?'s there to indicate putative buggy PHASE output values.  
-    # Unfortunately, Haploview barfs if it doesn't see a 0 or 1.
-
-    # Workaround: Remove the .phase columns and legend rows for all 
-    # SNPs that have a ? in any row of the .phase file, then run
-    # Haploview.
-    ssh kolossus
-    cd /san/sanvol1/scratch/hg18/bed/hapmapLd
-    set scriptBin = ~/kent/src/hg/snp/hapmapLd
-    mkdir phased_deQuestioned
-    cp /dev/null deQ.log
-    foreach f ( \
-        phased_2007-08_rel22/genotypes_chr2_CEU_r22_nr.b36_fwd.phase.gz \
-        phased_2007-08_rel22/genotypes_chr6_YRI_r22_nr.b36_fwd.phase.gz \
-        phased_2007-08_rel22/genotypes_chr1_CEU_r22_nr.b36_fwd.phase.gz \
-        phased_2007-08_rel22/genotypes_chr6_CEU_r22_nr.b36_fwd.phase.gz \
-        phased_2007-08_rel22/genotypes_chr5_CEU_r22_nr.b36_fwd.phase.gz \
-        phased_2007-08_rel22/genotypes_chr4_CEU_r22_nr.b36_fwd.phase.gz \
-        phased_2007-08_rel22/genotypes_chr8_CEU_r22_nr.b36_fwd.phase.gz \
-        phased_2007-08_rel22/genotypes_chr7_CEU_r22_nr.b36_fwd.phase.gz \
-        phased_2007-08_rel22/genotypes_chr10_CEU_r22_nr.b36_fwd.phase.gz \
-        phased_2007-08_rel22/genotypes_chr9_CEU_r22_nr.b36_fwd.phase.gz \
-        phased_2007-08_rel22/genotypes_chr14_CEU_r22_nr.b36_fwd.phase.gz \
-        phased_2007-08_rel22/genotypes_chr16_CEU_r22_nr.b36_fwd.phase.gz \
-        phased_2007-08_rel22/genotypes_chr20_CEU_r22_nr.b36_fwd.phase.gz \
-        phased_2007-08_rel22/genotypes_chr21_CEU_r22_nr.b36_fwd.phase.gz )
-      $scriptBin/deQuestionPhase.pl $f:r:r phased_deQuestioned >>& deQ.log
-    end
-    # ~11 minutes for the 14 files.
-    # Check again that the files are sorted by position.
-    foreach f (phased_deQuestioned/*_legend.txt.gz)
-      echo $f
-      zcat $f | tail +2 | awk '{print $2;}' > /tmp/1
-      sort -n /tmp/1 > /tmp/2
-      cmp /tmp/1 /tmp/2
-    end
-    rm -f /tmp/1 /tmp/2
-
-    # Would it be worth the trouble to write a split script for the 
-    # PHASE format files?  Not this time around.
-    ssh kki
-    mkdir /san/sanvol1/scratch/hg18/bed/hapmapLd/run.HaploviewPhasedDeQ
-    cd /san/sanvol1/scratch/hg18/bed/hapmapLd/run.HaploviewPhasedDeQ
-    set scriptBin = $HOME/kent/src/hg/snp/hapmapLd
-    set hv = $scriptBin/runHaploviewPhased.csh
-    set phaseDir = /san/sanvol1/scratch/hg18/bed/hapmapLd/phased_deQuestioned
-    set hvPath = /san/sanvol1/scratch/hg18/bed/hapmapLd/Haploview.jar
-    # Latest installed java on the cluster nodes (not on the para hub machine):
-    set javaPath = /usr/java/jre1.5.0_12/bin/java
-    set javaMemSize = 4G
-    # Sort by size (descending) to kick off the biggest jobs first:
-    cp /dev/null jobList
-    foreach f (`ls -1S $phaseDir/genotypes_chr*.phase.gz`)
-      echo $hv $f:r:r $javaPath $hvPath $javaMemSize >> jobList
-    end
-    para make jobList
-    para time
-#CPU time in finished jobs:     101992s    1699.87m    28.33h    1.18d  0.003 y
-#IO & Wait Time:                   175s       2.92m     0.05h    0.00d  0.000 y
-#Average job time:                7298s     121.63m     2.03h    0.08d
-#Longest finished job:           12352s     205.87m     3.43h    0.14d
-#Submission to last job:         12352s     205.87m     3.43h    0.14d
+#Completed: 66 of 66 jobs
+#CPU time in finished jobs:     406845s    6780.76m   113.01h    4.71d  0.013 y
+#IO & Wait Time:                  1517s      25.28m     0.42h    0.02d  0.000 y
+#Average job time:                6187s     103.12m     1.72h    0.07d
+#Longest finished job:           15667s     261.12m     4.35h    0.18d
+#Submission to last job:         29868s     497.80m     8.30h    0.35d
 
     # Our software assumes that LD scores are given for consecutive SNPs
     # without gaps in between, so scores in the encoded lists can be
@@ -18152,8 +18095,7 @@ mv $tmpOut $outFile
     ssh kolossus
     cd /san/sanvol1/scratch/hg18/bed/hapmapLd
     cp /dev/null checkLD.log
-    foreach f ( mergedUnphasedLD/*.LD.gz phased_2007-08_rel22/*.LD.gz \
-                phased_deQuestioned/*.LD.gz )
+    foreach f ( mergedUnphasedLD/*.LD.gz phased_2007-08_rel22/*.LD.gz )
       echo $f >> checkLD.log 
       $scriptBin/checkLDSnpOrder.pl $f >>& checkLD.log 
       echo "" >> checkLD.log 
@@ -18224,19 +18166,17 @@ $scriptBin/makeDccAndLdBed.pl ${basePath}_legend.txt.gz $basePath.LD.gz \
     # << emacs
     chmod a+x runFormatsPhased.csh
     cp /dev/null jobList
-    foreach f (`ls -1S ../phased_2007-08_rel22/genotypes_chr*.LD.gz \
-                       ../phased_deQuestioned/genotypes_chr*.LD.gz`)
+    foreach f (`ls -1S ../phased_2007-08_rel22/genotypes_chr*.LD.gz`)
       echo ./runFormatsPhased.csh $f:r:r >> jobList
     end
     para make jobList
     para time
-#Completed: 64 of 64 jobs
-#CPU time in finished jobs:      62248s    1037.46m    17.29h    0.72d  0.002 y
+#Completed: 66 of 66 jobs
+#CPU time in finished jobs:      66155s    1102.58m    18.38h    0.77d  0.002 y
 #IO & Wait Time:                     0s       0.00m     0.00h    0.00d  0.000 y
-#Average job time:                 970s      16.16m     0.27h    0.01d
-#Longest finished job:            2168s      36.13m     0.60h    0.03d
-#Submission to last job:          2168s      36.13m     0.60h    0.03d
-
+#Average job time:                 972s      16.20m     0.27h    0.01d
+#Longest finished job:            2292s      38.20m     0.64h    0.03d
+#Submission to last job:          2292s      38.20m     0.64h    0.03d
 
     # Create empty tables, then load one pop_chr at a time in order
     # to avoid thrashing.
@@ -18253,7 +18193,7 @@ set bedDir = $3
 
 set table = $tableBase$Pop
 hgsql hg18 -e "drop table if exists $table;"
-sed "s/hapmapLd2/$table/" $HOME/kent/src/hg/lib/hapmapLd2.sql \
+sed "s/ld2/$table/" $HOME/kent/src/hg/lib/ld2.sql \
 | hgsql hg18
 
 set pop = `echo $Pop | perl -wpe 's/ChbJpt/JPT+CHB/; tr/a-z/A-Z/;'`
@@ -18277,6 +18217,7 @@ echo -n "\nDone with $table.    "; date
       ./loadOne.csh hapmapLdPh $Pop bedPhased >>& loadPhased.log
     end
     # ~16 minutes for all phased on kolossus
+    # 1/30/08: ~11 minutes for all phased on hgwdev!  bg load ~1.25
     # unphased:
     cp /dev/null loadUnphased.log
     foreach Pop (Ceu Chb ChbJpt Jpt Yri)
@@ -18324,7 +18265,8 @@ zcat $dccIn \
     cat dccUnphased/*.check > maxDist.txt
     grep -B1 ERROR maxDist.txt
 
-    # Other cleanup? probably the splitUnphased dir. any other intermediates?
+    # Other cleanup:
+    rm -r splitUnphased
 
 
 #########################################################################
@@ -18794,8 +18736,6 @@ ignore 1 lines'
 
 ############################################################################
 # dbSNP BUILD 128 (DONE 1/22/08 angie)
-# -- snp128 track tables have been loaded, but I have made some more 
-#    tweaks to snpNcbiToUcsc, so need to re-run and re-load.
     # Set up build directory
     ssh kkstore06
     mkdir -p /cluster/store3/dbSNP128/{human,shared}
@@ -19207,6 +19147,121 @@ ignore 1 lines'
     ln -s /cluster/data/dbSNP/128/human/snp128.fa /gbdb/hg18/snp/snp128.fa
     time nice hgLoadSqlTab hg18 snp128Seq snp128Seq.sql snp128Seq.tab
 #0.001u 0.000s 2:31.19 0.0%      0+0k 0+0io 0pf+0w
+
+    # Put in a link where one would expect to find the track build dir...
+    ln -s /cluster/data/dbSNP/128/human /cluster/data/hg18/bed/snp128
+
+
+#######################################################################
+# SNPMASKED SEQUENCE FOR SNP128 (DONE 2/1/08 angie)
+    ssh kolossus
+    mkdir /cluster/data/hg18/snp128Mask
+    cd /cluster/data/hg18/snp128Mask
+
+    # Identify rsIds with various problems -- we will exclude those.
+    # MultipleAlignments is kinda broad because anything that maps on 
+    # both chrN and chrN_foo_hap1 will be excluded... similarly, extra
+    # matches on chrN_random might disqualify good matches on chrN.
+    # Well, erring on the side of caution is good.
+    awk '$5 ~ /^MultipleAlignments|ObservedTooLong|ObservedWrongFormat|ObservedMismatch|MixedObserved$/ {print $4;}' \
+      /cluster/data/dbSNP/128/human/snp128Exceptions.bed \
+      | sort -u \
+      > snp128ExcludeRsIds.txt
+    time grep -vFwf snp128ExcludeRsIds.txt \
+      /cluster/data/dbSNP/128/human/snp128.bed \
+      > snp128Cleaned.bed
+#100.027u 11.779s 2:09.61 86.2%  0+0k 0+0io 0pf+0w
+
+    # Substitutions: 
+    mkdir substitutions
+    snpMaskSingle snp128Cleaned.bed /cluster/data/hg18/hg18.2bit stdout \
+    | faSplit byname stdin substitutions/
+    #-- 79 warnings about differing observed at same base positions 
+    #-- (66 distinct positions) -- send to NCBI.
+    # Also this warning about total size -- just means that some chroms
+    # didn't have any SNPS that survived the stringent filtering.
+#Masked 9146694 snps in 9146642 out of 3091528550 genomic bases
+#/cluster/data/hg18/hg18.2bit has 3107677273 total bases, but the total number of bases in sequences for which we masked snps is 3091528550 (difference is 16148723)
+    # Make sure that sizes are identical, first diffs are normal -> IUPAC,
+    # and first diffs' case is preserved:
+    foreach f (substitutions/chr*.fa)
+      faCmp -softMask $f ../[1-9MXY]*/$f:t |& grep -v "that differ"
+    end
+#(output OK)
+    foreach f (substitutions/chr*.fa)
+      echo $f:t:r
+      mv $f $f:r.subst.fa
+      gzip $f:r.subst.fa
+    end
+
+    # Insertions:
+    mkdir insertions
+    snpMaskAddInsertions snp128Cleaned.bed /cluster/data/hg18/hg18.2bit stdout \
+    | faSplit byname stdin insertions/
+#Added 1332737 snps totaling 2372942 bases to 3085151178 genomic bases
+#/cluster/data/hg18/hg18.2bit has 3107677273 total bases, but the total number of bases in sequences for which we masked snps is 3085151178 (difference is 22526095)
+    # Again, that just means that some chroms didn't have filtered SNPs.
+    # Make sure that all sizes have increased relative to original:
+    foreach f (insertions/chr*.fa)
+      faCmp -softMask $f ../[1-9MXY]*/$f:t |& grep -v "that differ" \
+      |& perl -we '$_=<>; \
+           if (/^\w+ in \S+ has (\d+) bases.  \w+ in \S+ has (\d+) bases/) { \
+             if ($1 > $2) {print "OK: ins size $1 > $2\n";} \
+             else {die "ERROR: ins size $1 <= $2\n";} \
+           } else {die $_;}'
+    end
+#(output OK)
+    foreach f (insertions/chr*.fa)
+      mv $f $f:r.ins.fa
+      gzip $f:r.ins.fa
+    end
+
+    # Deletions:
+    mkdir deletions
+    snpMaskCutDeletions snp128Cleaned.bed /cluster/data/hg18/hg18.2bit stdout \
+    | faSplit byname stdin deletions/
+#Cut 661637 snps totaling 1248873 bases from 3085167749 genomic bases
+#/cluster/data/hg18/hg18.2bit has 3107677273 total bases, but the total number of bases in sequences for which we masked snps is 3085167749 (difference is 22509524)
+    # Again, that just means that some chroms didn't have filtered SNPs.
+    # Make sure that all sizes have decreased relative to original:
+    foreach f (deletions/chr*.fa)
+      faCmp -softMask $f ../[1-9MXY]*/$f:t |& grep -v "that differ" \
+      |& perl -we '$_=<>; \
+           if (/^\w+ in \S+ has (\d+) bases.  \w+ in \S+ has (\d+) bases/) { \
+             if ($1 < $2) {print "OK: del size $1 < $2\n";} \
+             else {die "ERROR: del size $1 >= $2\n";} \
+           } else {die $_;}'
+    end
+#(output OK)
+    foreach f (deletions/chr*.fa)
+      mv $f $f:r.del.fa
+      gzip $f:r.del.fa
+    end
+
+    # Clean up and prepare for download:
+    gzip snp128Cleaned.bed
+    foreach d (substitutions insertions deletions)
+      pushd $d
+        md5sum *.gz > md5sum.txt
+      popd
+    end
+    # Make a README.txt in each subdir.
+
+    # Create download links on hgwdev.
+    # NOTE: I am going to start by offering only the substitutions.
+    # If we get any user requests, then maybe we can put the insertions
+    # and deletions out there.
+    ssh hgwdev
+    mkdir /usr/local/apache/htdocs/goldenPath/hg18/snp128Mask
+    ln -s /cluster/data/hg18/snp128Mask/substitutions/* \
+      /usr/local/apache/htdocs/goldenPath/hg18/snp128Mask/
+## If there is user demand for ins & del, then start over with an empty
+## goldenPath/snp128Mask and do this:
+##    foreach type (substitutions insertions deletions)
+##      mkdir /usr/local/apache/htdocs/goldenPath/hg18/snp128Mask/$type
+##      ln -s /cluster/data/hg18/snp128Mask/$type/* \
+##        /usr/local/apache/htdocs/goldenPath/hg18/snp128Mask/$type/
+##    end
 
 
 ############################################################################
