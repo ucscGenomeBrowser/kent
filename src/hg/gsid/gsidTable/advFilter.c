@@ -13,7 +13,7 @@
 #include "hPrint.h"
 #include "gsidTable.h"
 
-static char const rcsid[] = "$Id: advFilter.c,v 1.6 2007/11/13 23:21:41 fanhsu Exp $";
+static char const rcsid[] = "$Id: advFilter.c,v 1.7 2008/02/05 00:01:32 fanhsu Exp $";
 
 struct subjInfo *advFilterResults(struct column *colList, 
 	struct sqlConnection *conn)
@@ -272,7 +272,7 @@ if (cartVarExists(cart, redirectName))
     /* preserve in cgiVars */
     cgiMakeHiddenVar(redirectName,cartString(cart,redirectName));
     }
-
+printf("<font size=5><B>Select Subjects</B></font>");
 controlPanelStart();
 hPrintf("On this page you can restrict which subjects appear in the main table<BR>");
 hPrintf("based on the values in any column. Click the <em>submit</em> button to return<BR>");
