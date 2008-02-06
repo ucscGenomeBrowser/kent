@@ -5,6 +5,7 @@
 #include "obscure.h"
 #include "hCommon.h"
 #include "hash.h"
+#include "binRange.h"
 #include "bits.h"
 #include "memgfx.h"
 #include "portable.h"
@@ -212,7 +213,7 @@
 #include "itemConf.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1384 2008/01/28 23:48:39 hiram Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1385 2008/02/06 23:23:05 angie Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -13358,22 +13359,85 @@ if (isNotEmpty(orthoTable) && hTableExists(orthoTable))
     char **row;
     char query[512];
     safef(query, sizeof(query),
-          "select count(*) from %s where name='%s'", orthoTable, rsId);
-    if (sqlQuickNum(conn, query) != 1)
-	return;
-    safef(query, sizeof(query),
           "select chimpAllele from %s where name='%s'", orthoTable, rsId);
     sr = sqlGetResult(conn, query);
-    row = sqlNextRow(sr);
-    printf("<B>Summary: </B>%s>%s (chimp allele displayed first, "
-	   "then '>', then human alleles)<br>\n", row[0], observed);
+    if ((row = sqlNextRow(sr)) != NULL)
+	printf("<B>Summary: </B>%s>%s (chimp allele displayed first, "
+	       "then '>', then human alleles)<br>\n", row[0], observed);
     sqlFreeResult(&sr);
     hFreeConn(&conn);
     }
 }
 
-void printSnpOrthos(struct trackDb *tdb, char *rsId)
-/* helper function for printSnp125Info */
+#define FOURBLANKCELLS "<TD></TD><TD></TD><TD></TD><TD></TD>"
+
+void printSnpAlleleRows(struct snp125 *snp, int version)
+/* Print the UCSC ref allele (and dbSNP if it differs), as row(s) of a
+ * 6-column table. */
+{
+if (sameString(snp->strand,"+"))
+    {
+    printf("<TR><TD><B>Reference allele:&nbsp;</B></TD>"
+	   "<TD align=center>%s</TD>"FOURBLANKCELLS"</TR>\n", snp->refUCSC);
+    if (!sameString(snp->refUCSC, snp->refNCBI))
+	printf("<TR><TD><B>dbSnp reference allele:&nbsp;</B></TD>"
+	       "<TD align=center>%s</TD>"FOURBLANKCELLS"</TR>\n", snp->refNCBI);
+    }
+else if (sameString(snp->strand,"-"))
+    {
+    char refUCSCRevComp[1024];
+    if (sameString(snp->strand, "-"))
+	{
+	safef(refUCSCRevComp, sizeof(refUCSCRevComp), "%s", snp->refUCSC);
+	reverseComplement(refUCSCRevComp, strlen(refUCSCRevComp));
+	}
+    printf("<TR><TD><B>Reference allele:&nbsp;</B></TD>"
+	   "<TD align=center>%s</TD>"FOURBLANKCELLS"</TR>\n", refUCSCRevComp);
+    if (version < 127 && !sameString(refUCSCRevComp, snp->refNCBI))
+	printf("<TR><TD><B>dbSnp reference allele:&nbsp;</B></TD>"
+	       "<TD align=center>%s</TD>"FOURBLANKCELLS"</TR>\n", snp->refNCBI);
+    else if (version >= 127 && !sameString(snp->refUCSC, snp->refNCBI))
+	{
+	char refNCBIRevComp[1024];
+	safecpy(refNCBIRevComp, sizeof(refNCBIRevComp), snp->refNCBI);
+	reverseComplement(refNCBIRevComp, strlen(refNCBIRevComp));
+	printf("<TR><TD><B>dbSnp reference allele:&nbsp;</B></TD>"
+	       "<TD align=center>%s</TD>"FOURBLANKCELLS"</TR>\n",
+	       refNCBIRevComp);
+	}
+    }
+}
+
+#define TINYPADDING 3
+void printSnpOrthoOneRow(char *orthoName, char *orthoDb,
+			 char *orthoAllele, char *orthoStrand,
+			 char *orthoChrom, int orthoStart, int orthoEnd)
+/* Print out a 6-column table row describing an orthologous allele. */
+{
+printf("<TR><TD><B>%s allele:&nbsp;</B></TD>"
+       "<TD align=center>%s</TD>\n", orthoName, orthoAllele);
+if (!sameString(orthoAllele, "?"))
+    {
+    printf("<TD>&nbsp;&nbsp;&nbsp;<B>%s strand:&nbsp;</B></TD>"
+	   "<TD>%s</TD>\n", orthoName, orthoStrand);
+    printf("<TD>&nbsp;&nbsp;&nbsp;<B>%s position:&nbsp;</B></TD>"
+	   "<TD>\n", orthoName);
+    if (isNotEmpty(orthoDb))
+	linkToOtherBrowser(orthoDb, orthoChrom,
+			   orthoStart-TINYPADDING, orthoEnd+TINYPADDING);
+    printf("%s:%d-%d\n", orthoChrom, orthoStart+1, orthoEnd);
+    printf("%s&nbsp;&nbsp;&nbsp;</TD>\n",
+	   isNotEmpty(orthoDb) ? "</A>" : "");
+    }
+else
+    printf(FOURBLANKCELLS"\n");
+printf("</TR>\n<TR>");
+}
+
+
+void printSnpOrthoRows(struct trackDb *tdb, struct snp125 *snp)
+/* If a chimp+macaque ortho table was specified, print out the orthos
+ * (if any), as rows of a 6-column table. */
 {
 char *orthoTable = trackDbSetting(tdb, "chimpMacaqueOrthoTable");
 if (isNotEmpty(orthoTable) && hTableExists(orthoTable))
@@ -13381,74 +13445,71 @@ if (isNotEmpty(orthoTable) && hTableExists(orthoTable))
     struct sqlConnection *conn = hAllocConn();
     struct sqlResult *sr;
     char **row;
-    char query[512];
+    char query[1024];
     safef(query, sizeof(query),
-          "select count(*) from %s where name='%s'", orthoTable, rsId);
-    if (sqlQuickNum(conn, query) != 1)
-	return;
-    safef(query, sizeof(query),
-          "select chimpAllele, macaqueAllele from %s where name='%s'",
-	  orthoTable, rsId);
+      "select chimpChrom, chimpStart, chimpEnd, chimpAllele, chimpStrand, "
+      "macaqueChrom, macaqueStart, macaqueEnd, macaqueAllele, macaqueStrand "
+      "from %s where chrom='%s' and bin=%d and chromStart=%d and name='%s'",
+	  orthoTable, seqName, binFromRange(snp->chromStart, snp->chromEnd),
+	  snp->chromStart, snp->name);
     sr = sqlGetResult(conn, query);
-    row = sqlNextRow(sr);
-    printf("<BR><B>Chimp Allele: </B>%s\n", row[0]);
-    printf("<BR><B>Macaque Allele: </B>%s\n", row[1]);
-    printf("<BR>\n");
-    sqlFreeResult(&sr);
-    hFreeConn(&conn);
+    if ((row = sqlNextRow(sr)) != NULL)
+	{
+	char *chimpChrom = row[0];
+	int chimpStart = sqlUnsigned(row[1]);
+	int chimpEnd = sqlUnsigned(row[2]);
+	char *chimpAllele = row[3];
+	char *chimpStrand = row[4];
+	char *chimpDb = trackDbSetting(tdb, "chimpDb");
+	printSnpOrthoOneRow("Chimp", chimpDb, chimpAllele, chimpStrand,
+			    chimpChrom, chimpStart, chimpEnd);
+	char *macaqueChrom = row[5];
+	int macaqueStart = sqlUnsigned(row[6]);
+	int macaqueEnd = sqlUnsigned(row[7]);
+	char *macaqueAllele = row[8];
+	char *macaqueStrand = row[9];
+	char *macaqueDb = trackDbSetting(tdb, "macaqueDb");
+	printSnpOrthoOneRow("Macaque", macaqueDb, macaqueAllele, macaqueStrand,
+			    macaqueChrom, macaqueStart, macaqueEnd);
+	sqlFreeResult(&sr);
+	hFreeConn(&conn);
+	}
     }
+}
+
+void printSnpAlleleAndOrthos(struct trackDb *tdb, struct snp125 *snp,
+			     int version)
+/* Print the UCSC ref allele (and dbSNP if it differs).  If a
+ * chimp+macaque ortho table was specified, print out the orthos (if
+ * any).  Wrap a table around them all so that if there are dbSNP,
+ * chimp and/or macaque alleles, we can line them up nicely with the
+ * reference allele. */
+{
+printf("<TABLE border=0 cellspacing=0 cellpadding=0>\n");
+printSnpAlleleRows(snp, version);
+printSnpOrthoRows(tdb, snp);
+printf("</TABLE>");
 }
 
 
 void printSnp125Info(struct trackDb *tdb, struct snp125 snp, int version)
 /* print info on a snp125 */
 {
-int alleleLen = strlen(snp.refUCSC);
-char refUCSCRevComp[1024];
-
 printSnpOrthoSummary(tdb, snp.name, snp.observed);
-if (sameString(snp.strand,"-"))
-    {
-    safef(refUCSCRevComp, ArraySize(refUCSCRevComp), "%s", snp.refUCSC);
-    reverseComplement(refUCSCRevComp, alleleLen);
-    }
-
-if (differentString(snp.strand,"?")) {printf("<B>Strand: </B>%s\n", snp.strand);}
-
-printf("<BR><B>Observed: </B>%s\n",                                 snp.observed);
-
-if (sameString(snp.strand,"+"))
-    {
-    printf("<BR><B>Reference allele: </B>%s\n",                 snp.refUCSC);
-    if (!sameString(snp.refUCSC, snp.refNCBI))
-	printf("<BR><B>dbSnp reference allele: </B>%s\n",       snp.refNCBI);
-    }
-else if (sameString(snp.strand,"-"))
-    {
-    printf("<BR><B>Reference allele: </B>%s\n",                 refUCSCRevComp);
-    if (version < 127 && !sameString(refUCSCRevComp, snp.refNCBI))
-	printf("<BR><B>dbSnp reference allele: </B>%s\n",       snp.refNCBI);
-    else if (version >= 127 && !sameString(snp.refUCSC, snp.refNCBI))
-	{
-	char refNCBIRevComp[1024];
-	safecpy(refNCBIRevComp, sizeof(refNCBIRevComp), snp.refNCBI);
-	reverseComplement(refNCBIRevComp, strlen(refNCBIRevComp));
-	printf("<BR><B>dbSnp reference allele: </B>%s\n",       refNCBIRevComp);
-	}
-    }
-
-
-printSnpOrthos(tdb, snp.name);
+if (differentString(snp.strand,"?"))
+    printf("<B>Strand: </B>%s<BR>\n", snp.strand);
+printf("<B>Observed: </B>%s<BR>\n", snp.observed);
+printSnpAlleleAndOrthos(tdb, &snp, version);
 if (version <= 127)
     printf("<BR><B><A HREF=\"#LocType\">Location Type</A>: </B>%s\n",
 	   snp.locType);
 printf("<BR><B><A HREF=\"#Class\">Class</A>: </B>%s\n",     snp.class);
 printf("<BR><B><A HREF=\"#Valid\">Validation</A>: </B>%s\n", snp.valid);
-printf("<BR><B><A HREF=\"#Func\">Function</A>: </B>%s\n",           snp.func);
-printf("<BR><B><A HREF=\"#MolType\">Molecule Type</A>: </B>%s\n",   snp.molType);
+printf("<BR><B><A HREF=\"#Func\">Function</A>: </B>%s\n",         snp.func);
+printf("<BR><B><A HREF=\"#MolType\">Molecule Type</A>: </B>%s\n", snp.molType);
 if (snp.avHet>0)
     printf("<BR><B><A HREF=\"#AvHet\">Average Heterozygosity</A>: </B>%.3f +/- %.3f", snp.avHet, snp.avHetSE);
-printf("<BR><B><A HREF=\"#Weight\">Weight</A>: </B>%d",             snp.weight);
+printf("<BR><B><A HREF=\"#Weight\">Weight</A>: </B>%d",           snp.weight);
 printf("<BR>\n");
 }   
     
