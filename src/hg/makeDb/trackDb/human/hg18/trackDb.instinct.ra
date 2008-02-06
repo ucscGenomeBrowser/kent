@@ -67,6 +67,23 @@ patKey ispyId
 setsTable genesets
 aliasTable probeAliases
 
+track ispyAgiDeltaT4
+shortLabel ispy gene expression T4-T1 by agilent
+longLabel ispy gene expression difference between time point T1 and T4 measured on agilent whole genome array 44K
+group x
+priority 42.2
+visibility dense
+type expRatio
+expScale 1.0
+expStep 0.1
+groupings ispyAgiDeltaT4Groups
+patDb ispy1
+patId trackId
+patTable labTrack
+patKey ispyId
+setsTable genesets
+aliasTable probeAliases
+
 
 track ISPYproteomics
 shortLabel ispy proteomics
