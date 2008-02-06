@@ -64,13 +64,16 @@ class AccountController < ApplicationController
     return if params[:id] == nil and params[:activation_code] == nil
     activator = params[:id] || params[:activation_code]
     @user = User.find_by_activation_code(activator) 
-    @user.host = request.host
-    @user.port = request.port
+    if @user
+      @user.host = request.host
+      @user.port = request.port
+    end
     if @user and @user.activate
-      redirect_back_or_default(:controller => '/account', :action => 'login')
       flash[:notice] = 'Your account has been activated.  Please login.'
+      redirect_back_or_default(:controller => '/account', :action => 'login')
     else
       flash[:notice] = 'Unable to activate the account.  Please check or enter manually.' 
+      redirect_back_or_default(:controller => '/account', :action => 'login')
     end
   end
 
