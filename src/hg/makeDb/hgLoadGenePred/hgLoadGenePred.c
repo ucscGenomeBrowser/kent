@@ -7,7 +7,7 @@
 #include "hdb.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgLoadGenePred.c,v 1.5 2007/04/13 16:36:02 markd Exp $";
+static char const rcsid[] = "$Id: hgLoadGenePred.c,v 1.6 2008/02/06 07:02:57 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -88,7 +88,7 @@ void copyGene(struct genePred *gene, FILE *tabFh)
 /* copy one gene to the tab file */
 {
 unsigned holdOptFields = gene->optFields;
-unsigned optFields = (genePredIdFld|genePredName2Fld|genePredCdsStatFld|genePredExonFramesFld);
+unsigned optFields = (genePredScoreFld|genePredName2Fld|genePredCdsStatFld|genePredExonFramesFld);
 
 if (gGenePredExt && ((optFields & optFields) != optFields))
     errAbort("genePred %s doesn't have fields required for -genePredExt", gene->name);

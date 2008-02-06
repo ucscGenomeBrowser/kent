@@ -9,16 +9,6 @@
 #include "genePred.h"
 #include "binRange.h"
 
-/* Aliases for id field */
-static char *idAliases[] =
-{
-#if 0   /* FIXME: alignID is not numeric or unique */
-    "alignID",  /* knownGene */
-#endif
-    NULL
-};
-
-
 /* Aliases for name2 field */
 static char *name2Aliases[] =
 {
@@ -51,7 +41,7 @@ static struct field fieldTbl[] =
     {"exonCount",     7, 0, NULL, NULL},
     {"exonStarts",    8, 0, NULL, NULL},
     {"exonEnds",      9, 0, NULL, NULL},
-    {"id",           10, genePredIdFld, idAliases, "0"},
+    {"score",        10, genePredScoreFld, NULL, "0"},
     {"name2",        11, genePredName2Fld, name2Aliases, ""}, 
     {"cdsStartStat", 12, genePredCdsStatFld, NULL, "none"},
     {"cdsEndStat",   13, genePredCdsStatFld, NULL, "none"},
@@ -84,7 +74,7 @@ static int optFieldsToNumFields(unsigned optFields)
  * fields */
 {
 int numFields = GENEPRED_NUM_COLS;
-if (optFields & genePredIdFld)
+if (optFields & genePredScoreFld)
     numFields = GENEPRED_NUM_COLS+1;
 if (optFields & genePredName2Fld)
     numFields = GENEPRED_NUM_COLS+2;

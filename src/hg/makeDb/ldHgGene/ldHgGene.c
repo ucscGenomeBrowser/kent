@@ -12,7 +12,7 @@
 #include "genePred.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: ldHgGene.c,v 1.37 2007/04/13 16:36:02 markd Exp $";
+static char const rcsid[] = "$Id: ldHgGene.c,v 1.38 2008/02/06 07:02:57 markd Exp $";
 
 char *exonType = "exon";	/* Type field that signifies exons. */
 boolean requireCDS = FALSE;     /* should genes with CDS be dropped */
@@ -142,7 +142,6 @@ boolean nonCoding = optionExists("noncoding") || optionExists("nonCoding");
 boolean isGtf = optionExists("gtf");
 
 boolean isSoftberry = sameWord("softberryGene", table);
-int nextId = 1;
 
 for (i=0; i<gtfCount; ++i)
     {
@@ -176,11 +175,7 @@ for (group = gff->groupList; group != NULL; group = group->next)
         if (requireCDS && (gp->cdsStart == gp->cdsEnd))
             genePredFree(&gp);
         else
-            {
-            if (gOptFields & genePredIdFld)
-                gp->id = nextId++;
             slAddHead(&gpList, gp);
-            }
 	}
     }
 verbose(1, "%d gene predictions\n", slCount(gpList));

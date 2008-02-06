@@ -50,7 +50,7 @@ enum genePredFields
  * N.B. value order must match order in genePred */
 {
     genePredNoOptFld      = 0x00,  /* use for no opt fields */
-    genePredIdFld         = 0x01,  /* id field */
+    genePredScoreFld      = 0x01,  /* score field */
     genePredName2Fld      = 0x02,  /* name2 field */
     genePredCdsStatFld    = 0x04,  /* cdsStart/EndStat fields */
     genePredExonFramesFld = 0x08,  /* exonFrames field */
@@ -75,8 +75,7 @@ struct genePred
     /* optional fields */
     unsigned optFields;           /* which optional fields are used (not in
                                    * database) */
-    unsigned id;                  /* Numeric id of gene annotation,
-                                   * zero if not available. */
+    int score;                    /* score */
     char *name2;                  /* Secondary name. (e.g. name of gene), or
                                    * empty if none, NULL if field not
                                    * requested */

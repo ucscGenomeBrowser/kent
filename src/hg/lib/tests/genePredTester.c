@@ -13,7 +13,7 @@
 #include "binRange.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: genePredTester.c,v 1.11 2007/04/12 05:12:38 markd Exp $";
+static char const rcsid[] = "$Id: genePredTester.c,v 1.12 2008/02/06 07:02:56 markd Exp $";
 
 void usage(char *msg)
 /* Explain usage and exit. */
@@ -55,7 +55,7 @@ errAbort(
     "\n"
     "Options:\n"
     "  -verbose=1 - set verbose level\n"
-    "  -idFld - include id field\n"
+    "  -scoreFld - include id field\n"
     "  -name2Fld - include name2 field\n"
     "  -cdsStatFld - include cdsStat fields\n"
     "  -exonFramesFld - include exonFrames field\n"
@@ -78,7 +78,7 @@ errAbort(
 }
 
 static struct optionSpec options[] = {
-    {"idFld", OPTION_BOOLEAN},
+    {"scoreFld", OPTION_BOOLEAN},
     {"name2Fld", OPTION_BOOLEAN},
     {"cdsStatFld", OPTION_BOOLEAN},
     {"exonFramesFld", OPTION_BOOLEAN},
@@ -144,7 +144,7 @@ void writeInfo(struct genePred *gp)
 if (gInfo != NULL)
     {
     FILE *infoFh = mustOpen(gInfo, "w");
-    writeOptField(infoFh, gp, "genePredIdFld", genePredIdFld);
+    writeOptField(infoFh, gp, "genePredScoreFld", genePredScoreFld);
     writeOptField(infoFh, gp, "genePredName2Fld", genePredName2Fld);
     writeOptField(infoFh, gp, "genePredCdsStatFld", genePredCdsStatFld);
     writeOptField(infoFh, gp, "genePredExonFramesFld", genePredExonFramesFld);
@@ -362,8 +362,8 @@ optionInit(&argc, argv, options);
 if (argc < 2)
     usage("must supply a task");
 task = argv[1];
-if (optionExists("idFld"))
-    gOptFields |= genePredIdFld;
+if (optionExists("scoreFld"))
+    gOptFields |= genePredScoreFld;
 if (optionExists("name2Fld"))
     gOptFields |= genePredName2Fld;    
 if (optionExists("cdsStatFld"))

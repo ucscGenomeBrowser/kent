@@ -12,7 +12,7 @@
 #include "rangeTree.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.96 2007/09/05 04:30:57 markd Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.97 2008/02/06 07:02:56 markd Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -37,8 +37,8 @@ static char *binFieldSql =
 static char *noBinIndexSql = 
 "   INDEX(chrom,txStart),";
 
-static char *idFieldSql = 
-"   ,id int unsigned PRIMARY KEY auto_increment";   /* Numeric id of gene annotation. */
+static char *scoreFieldSql = 
+"   ,score int";
 
 static char *name2FieldSql = 
 "  ,name2 varchar(255) not null,"    /* Secondary name. (e.g. name of gene) or NULL if not available */
@@ -224,10 +224,10 @@ for (i=0; i<el->exonCount; ++i)
 if (sep == ',') fputc('}',f);
 
 /* optional fields, >= test is used so unspecified coumns can be filled in */
-if (el->optFields >= genePredIdFld)
+if (el->optFields >= genePredScoreFld)
     {
     fputc(sep,f);
-    fprintf(f, "%u", el->id);
+    fprintf(f, "%d", el->score);
     }
 if (el->optFields >= genePredName2Fld)
     {
@@ -328,8 +328,8 @@ if (sizeOne != ret->exonCount)
 iCol=GENEPRED_NUM_COLS;
 if (iCol < numCols)
     {
-    ret->id = sqlUnsigned(row[iCol++]);
-    ret->optFields |= genePredIdFld;
+    ret->score = sqlSigned(row[iCol++]);
+    ret->optFields |= genePredScoreFld;
     }
 if (iCol < numCols)
     {
@@ -1133,8 +1133,8 @@ char sqlCmd[1024];
 
 safef(sqlCmd, sizeof(sqlCmd), createSql, table,
       ((options & genePredWithBin) ? binFieldSql : noBinIndexSql));
-if (optFields >= genePredIdFld)
-    safecat(sqlCmd, sizeof(sqlCmd), idFieldSql);
+if (optFields >= genePredScoreFld)
+    safecat(sqlCmd, sizeof(sqlCmd), scoreFieldSql);
 if (optFields >= genePredName2Fld)
     safecat(sqlCmd, sizeof(sqlCmd), name2FieldSql);
 if (optFields >= genePredCdsStatFld)
@@ -1232,7 +1232,7 @@ if (bestMatch != NULL)
         gp->exonEnds[i] = bestMatch->exonEnds[i] ;
         }
     gp->optFields = bestMatch->optFields;
-    gp->id = bestMatch->id;
+    gp->score = bestMatch->score;
 
     if (bestMatch->optFields & genePredName2Fld)
         gp->name2 = cloneString(bestMatch->name2);

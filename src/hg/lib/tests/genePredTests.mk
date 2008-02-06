@@ -14,8 +14,8 @@ TEST_TBL=gpTest_${USER}
 #     because of frame problems, etc.
 #   - refSeq.cds - CDS for above.
 #   - refSeqMin.gp - miminmal genePred, only required columns
-#   - refSeqId.gp - with id
-#   - refSeqIdName2.gp - with id, name2
+#   - refSeqId.gp - with score
+#   - refSeqIdName2.gp - with score, name2
 #   - refSeqFrame.gp - with id, name2, cdsStat and frame fields (from mrnaToGene)
 #   - acembly.gff - data files used to build various tracks
 #   - tigr.gff
@@ -43,10 +43,10 @@ fileMinTest:
 	${doFileTest} id=$@ inGp=refSeqMin.gp
 
 fileIdTest:
-	${doFileTest} id=$@ inGp=refSeqId.gp opts="-idFld"
+	${doFileTest} id=$@ inGp=refSeqId.gp opts="-scoreFld"
 
 fileIdName2Test:
-	${doFileTest} id=$@ inGp=refSeqIdName2.gp opts="-idFld -name2Fld"
+	${doFileTest} id=$@ inGp=refSeqIdName2.gp opts="-scoreFld -name2Fld"
 
 fileFrameTest:
 	${doFileTest} id=$@ inGp=refSeqFrame.gp opts="-cdsStatFld -exonFramesFld"
@@ -80,10 +80,10 @@ tableMinTest:
 	${doTableTest} id=$@ inGp=refSeqMin.gp expGp=input/genePred/refSeqMin.gp
 
 tableIdTest:
-	${doTableTest} id=$@ inGp=refSeqId.gp opts="-idFld" expGp=input/genePred/refSeqId.gp
+	${doTableTest} id=$@ inGp=refSeqId.gp opts="-scoreFld" expGp=input/genePred/refSeqId.gp
 
 tableIdName2Test:
-	${doTableTest} id=$@ inGp=refSeqIdName2.gp opts="-idFld -name2Fld" expGp=input/genePred/refSeqIdName2.gp
+	${doTableTest} id=$@ inGp=refSeqIdName2.gp opts="-scoreFld -name2Fld" expGp=input/genePred/refSeqIdName2.gp
 
 tableFrameTest:
 	${doTableTest} id=$@ inGp=refSeqFrame.gp opts="-cdsStatFld -exonFramesFld" expGp=expected/genePred/tableFrameTest.gp
@@ -182,7 +182,7 @@ fromGxfVegaTest:
 	${doFromGxfTest} id=$@ what=fromGtf inBase=vegaGene.gtf opts="-name2Fld"
 
 fromGxfVegaFrameTest:
-	${doFromGxfTest} id=$@ what=fromGtf inBase=vegaGene.gtf opts="-name2Fld -cdsStatFld -exonFramesFld -idFld"
+	${doFromGxfTest} id=$@ what=fromGtf inBase=vegaGene.gtf opts="-name2Fld -cdsStatFld -exonFramesFld -scoreFld"
 
 fromGxfVegaPseudoTest:
 	${doFromGxfTest} id=$@ what=fromGtf inBase=vegaPseudo.gtf opts="-name2Fld"
@@ -191,11 +191,11 @@ fromGxfAcemblyTest:
 	${doFromGxfTest} id=$@ what=fromGff inBase=acembly.gff
 
 fromGxfAcemblyFrameTest:
-	${doFromGxfTest} id=$@ what=fromGff inBase=acembly.gff opts="-name2Fld -cdsStatFld -exonFramesFld -idFld"
+	${doFromGxfTest} id=$@ what=fromGff inBase=acembly.gff opts="-name2Fld -cdsStatFld -exonFramesFld -scoreFld"
 
 # this crashed ldHgLoad gene
 fromGxfNcbiTest:
-	${doFromGxfTest} id=$@ what=fromGff inBase=ncbi.gff opts="-name2Fld -cdsStatFld -exonFramesFld -idFld -exonSelectWord=exon"
+	${doFromGxfTest} id=$@ what=fromGff inBase=ncbi.gff opts="-name2Fld -cdsStatFld -exonFramesFld -scoreFld -exonSelectWord=exon"
 
 # GTF bug regression:
 #   - stop_codon wiping out frame on last CDS 
