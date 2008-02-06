@@ -11,7 +11,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.18 2008/01/26 00:04:14 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.19 2008/02/06 17:24:31 kate Exp $
 
 use warnings;
 use strict;
@@ -41,11 +41,11 @@ exit 1;
 }
 
 # Global constants
-our $fieldConfigFile = "/fields.ra";
-our $vocabConfigFile = "/cv.ra";
+our $fieldConfigFile = "fields.ra";
+our $vocabConfigFile = "cv.ra";
 
-our $loadFile = "/load.ra";
-our $trackFile = "/trackDb.ra";
+our $loadFile = "load.ra";
+our $trackFile = "trackDb.ra";
 
 # Global variables
 our $submitPath;        # full path of data submission directory
