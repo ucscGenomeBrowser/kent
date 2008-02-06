@@ -1,0 +1,1 @@
+mongrel_rails stop
