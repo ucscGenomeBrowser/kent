@@ -7,7 +7,7 @@
 #include "dnaseq.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: faToMaf.c,v 1.2 2005/09/07 20:47:40 kent Exp $";
+static char const rcsid[] = "$Id: faToMaf.c,v 1.3 2008/02/06 01:34:03 rhead Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -142,7 +142,7 @@ return maf;
 void faToMaf(char *inFa, char *outMaf)
 /* faToMaf - Convert fa multiple alignment format to maf. */
 {
-struct dnaSeq *seq, *seqList = readMultiFa(inFa);
+struct dnaSeq *seqList = readMultiFa(inFa);
 struct mafAli *maf = mafFromSeqList(seqList, inFa);
 FILE *f = mustOpen(outMaf, "w");
 mafWriteStart(f, NULL);
