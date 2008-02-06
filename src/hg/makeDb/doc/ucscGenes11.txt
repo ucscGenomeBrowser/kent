@@ -7,7 +7,6 @@
 
 # Directories
 set dir = /cluster/data/hg18/bed/ucsc.11
-set gbDir = $dir/gb
 set scratchDir = /san/sanvol1/scratch
 
 # Databases
@@ -58,23 +57,10 @@ mkdir -p $dir
 cd $dir
 
 # Get Genbank info
-mkdir -p $gbDir
-cd $gbDir
 txGenbankData $db
-echo 'select acc,status from mgcFullStatus' | hgsql -N $db > mgcStatus.tab
 
-# Unpack and process RA Files
-cd $dir
-zcat $gbDir/genbank.ra.gz >mrna.ra
-zcat $gbDir/refseq.ra.gz > refSeq.ra
+# process RA Files
 txReadRa mrna.ra refSeq.ra .
-
-# Unpack sequence and psl files
-zcat $gbDir/refseq.pep.fa.gz > refPep.fa
-zcat $gbDir/genbank.fa.gz > mrna.fa
-zcat $gbDir/refseq.fa.gz > refSeq.fa
-zcat $gbDir/genbank.psl.gz > mrna.psl
-zcat $gbDir/refseq.psl.gz > refSeq.psl
 
 # Get some other info from the database.  Best to get it about
 # the same time so it is synced with other data. Takes 4 seconds.
