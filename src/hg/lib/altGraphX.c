@@ -10,7 +10,7 @@
 #include "geneGraph.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: altGraphX.c,v 1.35.16.1 2008/01/16 07:00:37 markd Exp $";
+static char const rcsid[] = "$Id: altGraphX.c,v 1.35.16.2 2008/02/07 07:12:17 markd Exp $";
 struct altGraphX *_agxSortable = NULL; /* used for sorting. */
 
 struct evidence *evidenceCommaIn(char **pS, struct evidence *ret)
@@ -1412,7 +1412,7 @@ else
 
 
 static void drawExonAt(struct spliceEdge *se, int heightPer, int regionStart, int regionEnd,
-		struct hvGfx *hvg, int xOff, int y, 
+		struct hvGfxPane *hvgp, int xOff, int y, 
 		double scale, MgFont *font, Color color, Color *shades)
 /* Draw an exon at. */
 {
@@ -1434,13 +1434,13 @@ if (w < 1)
     w = 1;
 //exonColor = shades[conf];
 exonColor = MG_BLACK;
-hvGfxBox(hvg, x1, y, w, heightPer/2, exonColor);
+hvGfxPaneBox(hvgp, x1, y, w, heightPer/2, exonColor);
 if(drawLabel)
     {
     safef(buff, sizeof(buff), "%d-%d-%d", se->v1, se->v2, (int)se->conf);
     textWidth = mgFontStringWidth(font, buff);
     if(textWidth <= w)
-	hvGfxTextCentered(hvg, x1, y, w, heightPer/2, MG_WHITE, font, buff);
+	hvGfxPaneTextCentered(hvgp, x1, y, w, heightPer/2, MG_WHITE, font, buff);
     }
 }
 
@@ -1682,7 +1682,7 @@ slReverse(ssList);
 }
 
 void altGraphXDrawPack(struct altGraphX *agList, struct spaceSaver *ssList, 
-		       struct hvGfx *hvg, int xOff, int yOff, int width, 
+		       struct hvGfxPane *hvgp, int xOff, int yOff, int width, 
 		       int heightPer, int lineHeight, int seqStart, int seqEnd, double scale, 
 		       MgFont *font, Color color, Color *shades, char *drawName,
 		       void (*mapItem)(char *tableName, struct altGraphX *ag, int start, int end,
@@ -1718,7 +1718,7 @@ for(ss = ssList, ag=agList; ss != NULL && ag != NULL; ss=ss->next, ag=ag->next)
 	    {
 	    y = yOff + (lineHeight * sn->row) + (lineHeight/2);
 	    drawExonAt(se, heightPer, seqStart, seqEnd,
-		       hvg, xOff, y, scale, font, color, shades);
+		       hvgp, xOff, y, scale, font, color, shades);
  	    }
 	else if(se->type == ggSJ)
 	    {
@@ -1737,8 +1737,8 @@ for(ss = ssList, ag=agList; ss != NULL && ag != NULL; ss=ss->next, ag=ag->next)
 			    minRow = min(j, i);
 			    midY = yOff + (lineHeight * minRow);
 			    midX = se->mid + xOff;
-			    hvGfxLine(hvg, x1,round(yOff+(lineHeight*i)+lineHeight/2), midX, midY, c);
-			    hvGfxLine(hvg, midX, midY, x2, round(yOff+(lineHeight*j)+lineHeight/2), c);
+			    hvGfxPaneLine(hvgp, x1,round(yOff+(lineHeight*i)+lineHeight/2), midX, midY, c);
+			    hvGfxPaneLine(hvgp, midX, midY, x2, round(yOff+(lineHeight*j)+lineHeight/2), c);
 			    }
 			}
 		    }

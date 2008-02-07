@@ -377,7 +377,7 @@ else
 return gl;
 }
 
-void leftLabel(struct hvGfx *hvg, struct genoLay *gl,
+static void leftLabel(struct hvGfxPane *hvg, struct genoLay *gl,
 	struct genoLayChrom *chrom, int yOffset, int fontHeight,
 	int color)
 /* Draw a chromosome with label on left. */
@@ -387,7 +387,7 @@ hvGfxTextRight(hvg, gl->margin, chrom->y + yOffset,
     gl->font, chrom->shortName);
 }
 
-void rightLabel(struct hvGfx *hvg, struct genoLay *gl,
+static void rightLabel(struct hvGfx *hvg, struct genoLay *gl,
 	struct genoLayChrom *chrom, int yOffset, int fontHeight, 
 	int color)
 /* Draw a chromosome with label on left. */
@@ -397,7 +397,7 @@ hvGfxText(hvg, chrom->x + chrom->width + gl->spaceWidth,
 	color, gl->font, chrom->shortName);
 }
 
-void midLabel(struct hvGfx *hvg, struct genoLay *gl,
+static void midLabel(struct hvGfx *hvg, struct genoLay *gl,
 	struct genoLayChrom *chrom, int yOffset, int fontHeight, 
 	int color)
 /* Draw a chromosome with label on left. */
