@@ -4,7 +4,7 @@
 # This file describes browser build for the Sea Lamprey
 # genome, Petromyzon marinus, March 2007, v.3.0 from WUSTL
 #
-#       "$Id: petMar1.txt,v 1.3 2008/01/17 20:49:36 hiram Exp $"
+#       "$Id: petMar1.txt,v 1.4 2008/02/07 23:48:00 hiram Exp $"
 #
 
 ##########################################################################
@@ -26,8 +26,17 @@
 #	between the supercontigs
 
 ##########################################################################
-#  Run the makeGenomeDb.pl script (DONE - 2008-01-14 - Hiram)
+#  Run the makeGenomeDb.pl script (DONE - 2008-01-27 - Hiram)
     ssh kkstore04
+    cd /cluster/data/petMar1/downloads
+    #	eliminate zero-length fragments from the AGP file
+    zcat supercontigs.agp.gz | awk '
+{
+size=$3-$2
+if (size >= 0) print
+}
+' | gzip -c > supers.agp.gz
+
     cd /cluster/data/petMar1
     cat << '_EOF_' > petMar1.config.ra
 # Config parameters for makeGenomeDb.pl:
@@ -40,33 +49,21 @@ assemblyDate Mar. 2007
 assemblyLabel WUSTL v.3.0 (March 2007)
 orderKey 480
 mitoAcc 5835065
-fastaFiles /cluster/data/petMar1/downloads/contigs.fa.gz
-agpFiles /cluster/data/petMar1/downloads/chrUn.agp
+fastaFiles /cluster/data/petMar1/downloads/supercontigs.fa.gz
+agpFiles /cluster/data/petMar1/downloads/supers.agp.gz
 # qualFiles none
 dbDbSpeciesDir lamprey
 '_EOF_'
 
-    makeGenomeDb.pl petMar1 > makeGenome.log
-    #	this got hung up in hgGcPercent due to unknown problems
-    #	backed out the source tree to last year to run an old copy of
-    #	hgGcPercent and got the gc5Base build done.  Then checked with
-    #	the -debug option to see what other steps were to be done in the
-    #	db step which was the single jkStuff/makeDb.csh which got the
-    #	database started.  Then, continuing:
-    makeGenomeDb.pl -continue=dbDb petMar1 > dbDb.log
-    #	which completed successfully
-    #	checked in the trackDb/lamprey/ files and the browser was functioning
-    #	Created symlink from /gbdb/petMar1/petMar1.2bit -> petMar1.unmasked.2bit
-    #	to enable base-level display on the browser.
+    #	can stop at db since trackDb and dbDb were created in first
+    #	attempt
+    makeGenomeDb.pl -stop=db petMar1.config.ra > makeGenome.log 2>&1 &
     twoBitToFa petMar1.unmasked.2bit stdout | faSize stdin
     #	1135497967 bases (303801529 N's 831696438 real 831696438
     #	upper 0 lower) in 2 sequences in 1 files
 
-    #	the AGP file came with 162 gaps of zero length, eliminate them
-    #	from the gap table
-    hgsql -e "select * from chrUn_gap where chromEnd=chromStart;" petMar1
-    hgsql -N -e "delete from chrUn_gap where chromEnd=chromStart;" petMar1
-
+    #	chrM has a gi:5835065 fragment name, I would rather have NC_001626
+    hgsql -e 'update gold set frag="NC_001626" where chrom="chrM";' petMar1
 
 ##########################################################################
 #  Pick up an image from the EPA, usage rights are free
@@ -77,7 +74,7 @@ dbDbSpeciesDir lamprey
 	-O petromyzon_marinus.epa.jpg
 
 ##########################################################################
-#  Running WindowMasker
+#  Running WindowMasker (DONE - 2008-01-26 - Hiram)
     ssh kolossus
     mkdir /cluster/data/petMar1/bed/WindowMasker
     cd /cluster/data/petMar1/bed/WindowMasker
@@ -85,15 +82,17 @@ dbDbSpeciesDir lamprey
 	-buildDir /cluster/data/petMar1/bed/WindowMasker \
 	-workhorse=kolossus -verbose=2 petMar1 > wm.log 2>&1 &
     twoBitToFa petMar1.wmsk.sdust.2bit stdout | faSize stdin
-    #	1135497967 bases (303801529 N's 831696438 real 493957060
-    #	upper 337739378 lower) in 2 sequences in 1 files
-    #	%29.74 masked total, %40.61 masked real
+    #	1027258967 bases (195562529 N's 831696438 real 494032631 upper
+    #	337663807 lower) in 108241 sequences in 1 files
 
+    #	%32.87 masked total, %40.60 masked real
 
     ssh hgwdev
     cd /cluster/data/petMar1/bed/WindowMasker
     hgLoadBed petMar1 windowmaskerSdust windowmasker.sdust.bed.gz
-    #	Loaded 4976025 elements of size 3
+    #	Loaded 4938211 elements of size 3
+    featureBits petMar1 windowmaskerSdust
+    #	533224658 bases of 831696438 (64.113%) in intersection
 
     #	WM has a bug where it masks the gaps too, don't like that,
     #	fetch the WM track without the gaps, can do this in the
@@ -101,18 +100,17 @@ dbDbSpeciesDir lamprey
     #	or via featureBits:
     featureBits petMar1 -not gap -bed=notGap.bed
     #	hint: also works with the gold table instead of notGap
-    featureBits petMar1 windowmaskerSdust notGap.bed -bed=stdout \
-	| gzip -c > cleanWMask.bed.gz
+    time nice -n +19 featureBits petMar1 windowmaskerSdust notGap.bed \
+	-bed=stdout | gzip -c > cleanWMask.bed.gz
+    #	337663807 bases of 831696438 (40.599%) in intersection
+    #	real    182m45.469s
     hgLoadBed petMar1 windowmaskerSdust cleanWMask.bed.gz
-    #	Loaded 4956395 elements of size 4
-    featureBits petMar1 windowmaskerSdust
-    #	337739378 bases of 831696438 (40.608%) in intersection
-
-    #	chrM has a gi:5835065 fragment name, I would rather have NC_001626
-    hgsql -e 'update chrM_gold set frag="NC_001626";' petMar1
+    #	Loaded 4919722 elements of size 4
+    featureBits petMar1 windowmaskerSdust > fb.petMar1.cleanWMask.txt 2>&1
+    #	337663807 bases of 831696438 (40.599%) in intersection
  
 ##########################################################################
-#	Running TRF simple repeats (DONE - 2008-01-14 - Hiram)
+#	Running TRF simple repeats (DONE - 2008-01-26 - Hiram)
     ssh kkstore04
     mkdir /cluster/data/petMar1/bed/simpleRepeat
     cd /cluster/data/petMar1/bed/simpleRepeat
@@ -120,14 +118,14 @@ dbDbSpeciesDir lamprey
 	-workhorse=kolossus \
 	-buildDir=/cluster/data/petMar1/bed/simpleRepeat > do.log 2>&1 &
     #	ran into a bug with the nice difficulty on the featureBits
-    featureBits petMar1 simpleRepeat >& fb.simpleRepeat
-    75844896 bases of 831696438 (9.119%) in intersection
+    featureBits petMar1 simpleRepeat > fb.petMar1.simpleRepeat.txt 2>&1
+    #	75844864 bases of 831696438 (9.119%) in intersection
     doSimpleRepeat.pl petMar1 -smallClusterHub=memk \
 	-continue=cleanup -workhorse=kolossus \
 	-buildDir=/cluster/data/petMar1/bed/simpleRepeat > cleanup.log 2>&1 &
 
 ##########################################################################
-# Repeat Masker (DONE - 2008-01-15 - Hiram)
+# Repeat Masker (DONE - 2008-01-26 - Hiram)
     ssh kkstore04
     mkdir /cluster/data/petMar1/bed/RepeatMasker
     cd /cluster/data/petMar1/bed/RepeatMasker
@@ -136,15 +134,17 @@ dbDbSpeciesDir lamprey
 	-verbose=2 > do.log 2>&1
 ##########################################################################
 # Add WindowMasker and trfMask masking to the 2bit sequenct
+#	(DONE - 2008-01-26 - Hiram)
     ssh kkstore04
     cd /cluster/data/petMar1
-    cat bed/WindowMasker/cleanWMask.bed bed/simpleRepeat/trfMask.bed \
+    gzip bed/simpleRepeat/trfMask.bed
+    zcat bed/WindowMasker/cleanWMask.bed.gz bed/simpleRepeat/trfMask.bed.gz \
 	| twoBitMask -type=.bed petMar1.unmasked.2bit stdin petMar1.2bit
-    #	ignore the warning about bed file > 13 fields
+    #	ignore the warning about bed file > 13 fields, that is OK
     twoBitToFa petMar1.2bit stdout | faSize stdin
-    #	1135497967 bases (303801529 N's 831696438 real 493403731 upper
-    #	338292707 lower) in 2 sequences in 1 files
-    %29.79 masked total, %40.68 masked real
+    #	1027258967 bases (195562529 N's 831696438 real 493479824 upper
+    #	338216614 lower) in 108241 sequences in 1 files
+    #	%32.92 masked total, %40.67 masked real
 
 ############################################################################
 #  BLATSERVERS ENTRY (DONE - 2008-01-15 - Hiram)
@@ -159,13 +159,15 @@ dbDbSpeciesDir lamprey
     #	test it with some sequence
 
 ############################################################################
-## Reset default position to the uc002wuf.1 opsin gene
+## Reset default position to 
+#	Where RHO1 protein is found via blat:
+#	GEMSLWSLVV LAIERYIVIC KPMGNFRFGS THAYMGVAFT WFMALSCAAP PLVGWSR
     ssh hgwdev
-    hgsql -e 'update dbDb set defaultPos="chrUn:662749842-662752352"
+    hgsql -e 'update dbDb set defaultPos="Contig11034:8429-10197"
 	where name="petMar1";' hgcentraltest
 
 #########################################################################
-# MAKE 11.OOC FILE FOR BLAT (DONE - 2008-01-15 - Hiram)
+# MAKE 11.OOC FILE FOR BLAT (DONE - 2008-01-29 - Hiram)
     # Use -repMatch=200 (based on size -- for human we use 1024, and 
     # medaka size is ~20% of human judging by gapless oryLat1 vs. hg18 
     # genome sizes from featureBits.
@@ -173,12 +175,7 @@ dbDbSpeciesDir lamprey
     cd /cluster/data/petMar1
     blat petMar1.2bit /dev/null /dev/null -tileSize=11 \
       -makeOoc=petMar1.11.ooc -repMatch=200
-    #	Wrote 49108 overused 11-mers to petMar1.11.ooc
-
-    #	And the lift file for non-bridged gaps:
-    ssh hgwdev
-    cd /cluster/data/petMar1/jkStuff
-    gapToLift petMar1 petMar1.nonBridged.lft
+    #	Wrote 49155 overused 11-mers to petMar1.11.ooc
 
 ##########################################################################
 # GENBANK AUTO UPDATE (DONE - 2008-01-15 - Hiram)
@@ -217,28 +214,35 @@ petMar1.perChromTables = no
     screen # control this with a screen so you can get back to it
     cd /cluster/data/genbank
     time nice -n +19 bin/gbAlignStep -initial petMar1 &
-    #	logFile: var/build/logs/2008.01.15-12:00:34.petMar1.initalign.log
-    #	real    258m7.976s
+    #	logFile: var/build/logs/2008.01.29-11:27:10.petMar1.initalign.log
+    #	real    332m36.025s
+    #	There was some kind of problem with this alignment, although the
+    #	kluster run actually finished:
+# Completed: 366520 of 366520 jobs
+# CPU time in finished jobs:    6854057s  114234.28m  1903.90h   79.33d  0.217 y
+# IO & Wait Time:               2300432s   38340.53m   639.01h   26.63d  0.073 y
+# Average job time:                  25s       0.42m     0.01h    0.00d
+# Longest finished job:            1292s      21.53m     0.36h    0.01d
+# Submission to last job:         21121s     352.02m     5.87h    0.24d
+    #	So, continuing:
+    time nice -n +19 bin/gbAlignStep -continue=finish -initial petMar1 &
+    #	logFile: var/build/logs/2008.01.30-09:18:56.petMar1.initalign.log
+    #	real    70m20.669s
 
     # load database when finished
     ssh hgwdev
     cd /cluster/data/genbank
     time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad petMar1
     #	logFile: var/dbload/hgwdev/logs/2008.01.15-16:21:10.dbload.log
-XXX - running - 2008-01-15
+    #	real    19m34.853s
 
-    #	real    6m57.557s
-    ## re-load to get the est track after adding that to the .conf file
-    #	var/dbload/hgwdev/logs/2007.03.29-17:09:35.dbload.log
-    #	real    19m2.168s
-
-    # enable daily alignment and update of hgwdev
+    # enable daily alignment and update of hgwdev (2008-01-30 - Hiram)
     cd ~/kent/src/hg/makeDb/genbank
     cvsup
     # add petMar1 to:
         etc/align.dbs
         etc/hgwdev.dbs
-    cvs ci -m "Added petMar1 - Branchiostoma floridae (lancelet)" \
+    cvs ci -m "Added petMar1 - Petromyzon marinus (lamprey)" \
 	etc/align.dbs etc/hgwdev.dbs
     make etc-update
 
