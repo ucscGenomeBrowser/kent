@@ -23,9 +23,9 @@
 <% if @project.status == "loading" or
       @project.status == "uploading/expanding" or
       @project.status == "validating" %> 
-  <td><%= link_to 'Cancel', {:action => 'edit', :id => @project.id} -%></td>
+  <td><%= link_to ' ', {:action => 'nothingyet', :id => @project.id} -%></td>
 <% elsif @project.status.starts_with?("schedule") %>
-  <td><%= link_to ' ', {:action => 'edit', :id => @project.id} -%></td>
+  <td><%= link_to ' ', {:action => 'nothingyet', :id => @project.id} -%></td>
 <% else %>
   <% if @project.status == "uploaded" %> 
     <td><%= link_to 'Validate', {:action => 'begin_validating', :id => @project.id} -%></td>
