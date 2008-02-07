@@ -19547,13 +19547,14 @@ TMPDIR=/scratch/tmp
 # use -nobin option to ensure display order is according to genomic position
    hgLoadBed -nobin hg18 gad hg18.gad.tab
    rm j18.tmp
+
 #######################################################################
-# BLASTZ/CHAIN/NET Lamprey petMar1 (DONE - 2008-01-16 - Hiram)
+# BLASTZ/CHAIN/NET Lamprey petMar1 (DONE - 2008-01-29 - Hiram)
 #	with contigs for Lamprey
-    ssh kkstore04
+    ssh kkstore02
     screen # use screen to control this job
-    mkdir /cluster/data/hg18/bed/blastzPetMar1.2008-01-16
-    cd /cluster/data/hg18/bed/blastzPetMar1.2008-01-16
+    mkdir /cluster/data/hg18/bed/blastzPetMar1.2008-01-29
+    cd /cluster/data/hg18/bed/blastzPetMar1.2008-01-29
 
     cat << '_EOF_' > DEF
 # Human vs. Lamprey
@@ -19576,14 +19577,11 @@ SEQ1_LIMIT=1
 # QUERY: Lamprey petMar1
 SEQ2_DIR=/cluster/bluearc/scratch/data/petMar1/petMar1.2bit
 SEQ2_LEN=/cluster/data/petMar1/chrom.sizes
-SEQ2_CTGDIR=/cluster/bluearc/scratch/data/petMar1/petMar1.supers.2bit
-SEQ2_CTGLEN=/cluster/data/petMar1/super.sizes
-SEQ2_LIFT=/cluster/data/petMar1/petMar1.nonBridged.lft
-SEQ2_CHUNK=10000000
-SEQ2_LIMIT=150
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=300
 SEQ2_LAP=0
 
-BASE=/cluster/data/hg18/bed/blastzPetMar1.2008-01-16
+BASE=/cluster/data/hg18/bed/blastzPetMar1.2008-01-29
 TMPDIR=/scratch/tmp
 '_EOF_'
     # << this line keeps emacs coloring happy
@@ -19592,31 +19590,20 @@ TMPDIR=/scratch/tmp
 	-chainMinScore=5000 -chainLinearGap=loose \
 	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
 	-bigClusterHub=pk > do.log 2>&1 &
-    #	strange failures in the initial pk batch.  Two times an ASCII zero
-    #	turned into a ctrl-P.  Manually edit the batch file to fix it up.
-    #	finish the batch manually. Continuing:
-    time doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
-	-continue=cat -chainMinScore=5000 -chainLinearGap=loose \
-	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
-	-bigClusterHub=pk > cat.log 2>&1 &
-    #	ran into the same failure as petMar1<->oryLat1 in netChainSubset
-    #	when building the "over.chain" file.  Something is wrong there.
-    #	Ignore that step, finish off the netChains.csh step, then continuing:
-    time doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
-	-continue=cat -chainMinScore=5000 -chainLinearGap=loose \
-	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
-	-continue=load -bigClusterHub=pk > load.log 2>&1 &
+    #	real    414m33.533s
     cat fb.hg18.chainPetMar1Link.txt
+    #	36042598 bases of 2881515245 (1.251%) in intersection
     #	36043809 bases of 2881515245 (1.251%) in intersection
 
     #	That is OK, now for the swap:
     mkdir /cluster/data/petMar1/bed/blastz.hg18.swap
     cd /cluster/data/petMar1/bed/blastz.hg18.swap
     time doBlastzChainNet.pl -verbose=2 -swap \
-	/cluster/data/hg18/bed/blastzPetMar1.2008-01-16/DEF \
+	/cluster/data/hg18/bed/blastzPetMar1.2008-01-29/DEF \
 	-chainMinScore=5000 -chainLinearGap=loose \
 	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
 	-bigClusterHub=pk > swap.log 2>&1 &
+
     #	real    1m27.220s
     #	same problem in netChainSubset trying to make the "over.chain" file.
     #	skip that, finish the chains manually, then continuing:
@@ -19627,6 +19614,7 @@ TMPDIR=/scratch/tmp
 	-bigClusterHub=pk > load.log 2>&1 &
     #	real    6m29.399s
 
+#######################################################################
 ###################
 # Build recip-best alignments with calJac1 (WORKING 2008-01-25 braney)
 
