@@ -1894,16 +1894,15 @@ identifier snpArrayHg18
     hg18.snpArrayIllumina650.name
 
 identifier snpOrtho126
-"ortho SNPs for hg18 only"
+"Ortho SNPs for hg18 only (dbSNP 126)"
     hg18.snp126.name dupeOk
     hg18.snp126ortho.name 
     hg18.snp126orthoPanTro2RheMac2.name 
 
 identifier snpOrtho128
-"ortho SNPs for hg18 only"
+"Ortho SNPs for hg18 only (dbSNP 128)"
     hg18.snp128.name dupeOk
-    hg18.snp128ortho.name 
-    hg18.snp128orthoPanTro2RheMac2.name 
+    hg18.snp128OrthoPanTro2RheMac2.name 
 
 # Other NCBI Identifiers
 
