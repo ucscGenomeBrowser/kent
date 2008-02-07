@@ -3,9 +3,11 @@ include ../../../../inc/common.mk
 #PROG = ${SCRIPTS}/doEncodeValidate.pl
 PROG = ../doEncodeValidate.pl
 
+TEST_INSTALL_DIR = /cluster/data/encode/pipeline/tests
+
 all: test
 
-test: dnase dnaseBig genes bed3
+test: dnase dnaseBig genes bed3 dnaseHuge
 
 dnase: output
 	${PROG} x input/dnase -configDir=../config -outDir=output/dnase
@@ -19,6 +21,12 @@ dnaseBig: output dnaseBigLinks
 	diff output/dnaseBig/validateBed.out expected/dnaseBig
 	diff output/dnaseBig/load.ra expected/dnaseBig
 
+dnaseHuge: output dnaseHugeLinks
+	${PROG} x input/dnaseHuge -configDir=../config -outDir=output/dnaseHuge
+	diff output/dnaseHuge/validateWig.out expected/dnaseHuge
+	diff output/dnaseHuge/validateBed.out expected/dnaseHuge
+	diff output/dnaseHuge/load.ra expected/dnaseHuge
+
 genes: output
 	${PROG} x input/genes -configDir=../config -outDir=output/genes
 	diff output/genes/validateGFF.out expected/genes
@@ -30,7 +38,7 @@ bed3: output
 	diff output/bed3/load.ra expected/bed3
 
 output:
-	${MKDIR} output/dnase output/dnaseBig output/genes output/bed3
+	${MKDIR} output/dnase output/dnaseBig output/genes output/bed3 output/dnaseHuge
 
 clean: 
 	rm -rf output
@@ -40,7 +48,11 @@ DNASE_BIG_DATA = /cluster/data/hg17/bed/dukeDnase/2007-10-25/lab
 dnaseBigClean:
 	rm -f input/dnaseBig/*/*.{wig,bed}
 
+dnaseHugeClean:
+	rm -f input/dnaseHuge/*/*.{wig,bed}
+
 dnaseBigLinks: dnaseBigClean
+	mkdir -p input/dnaseHuge/{cd4,hela}
 	ln -s ${DNASE_BIG_DATA}/chr1_dukeDnaseHsCd4Wiggle.out \
                     input/dnaseBig/cd4/chr1.wig 
 	ln -s ${DNASE_BIG_DATA}/chr2_dukeDnaseHsCd4Wiggle.out \
@@ -54,7 +66,14 @@ dnaseBigLinks: dnaseBigClean
 	ln -s ${DNASE_BIG_DATA}/dukeDnaseHsCd4.bed \
                     input/dnaseBig/hela/sites.bed
 
-TEST_INSTALL_DIR = /cluster/data/encode/pipeline/tests
+dnaseHugeLinks: dnaseHugeClean
+	mkdir -p input/dnaseHuge/cd4
+	ln -s ${DNASE_BIG_DATA}/dukeDnaseHsCd4.bed input/dnaseHuge/cd4/sites.bed
+	@for C in `seq 1 22`; do \
+	    ln -s ${DNASE_BIG_DATA}/chr$${C}_dukeDnaseHsCd4Wiggle.out \
+	        input/dnaseHuge/cd4/chr$${C}.wig; \
+	done
+
 
 install:
 	tar cvfz ${TEST_INSTALL_DIR}/bed3.good.tar.gz \
@@ -69,6 +88,10 @@ install:
 	(cd input/genes; tar cvfz ${TEST_INSTALL_DIR}/genes.tar.gz --exclude=CVS --exclude=out *)
 
 installBig: dnaseBigLinks
-	tar cvfzh ${TEST_INSTALL_DIR}/dnaseBig.tar.gz \
-                    -C input/dnaseBig --exclude=CVS --exclude=out *
+	(cd input/dnaseBig; nice tar cvfzh ${TEST_INSTALL_DIR}/dnaseBig.tar.gz \
+                    -exclude=CVS --exclude=out *
+
+installHuge: dnaseHugeLinks
+	(cd input/dnaseHuge; nice tar cvfzh ${TEST_INSTALL_DIR}/dnaseHuge.tar.gz \
+                    --exclude=CVS --exclude=out * )
 
