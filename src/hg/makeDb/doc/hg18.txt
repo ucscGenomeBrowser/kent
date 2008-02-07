@@ -19769,12 +19769,12 @@ done
     gensub2 chrom.list single template jobList
     para create jobList
     para try ... check ... push ... etc.
-# Completed: 55 of 55 jobs
-# CPU time in finished jobs:       2278s      37.97m     0.63h    0.03d  0.000 y
-# IO & Wait Time:                  9909s     165.15m     2.75h    0.11d  0.000 y
-# Average job time:                 222s       3.69m     0.06h    0.00d
-# Longest finished job:            3340s      55.67m     0.93h    0.04d
-# Submission to last job:          3897s      64.95m     1.08h    0.05d
+# Completed: 49 of 49 jobs
+# CPU time in finished jobs:      10782s     179.71m     3.00h    0.12d  0.000 y
+# IO & Wait Time:                  3380s      56.33m     0.94h    0.04d  0.000 y
+# Average job time:                 289s       4.82m     0.08h    0.00d
+# Longest finished job:             751s      12.52m     0.21h    0.01d
+# Submission to last job:          1479s      24.65m     0.41h    0.02d
 
     ssh hgwdev
     cd /cluster/data/hg18/bed/multizPrimate/anno
@@ -19798,10 +19798,8 @@ do
 done | xargs cat | \
         hgLoadMafSummary hg18 -minSize=30000 -mergeGap=1500 \
             -maxSize=200000  multizPrimateSummary stdin
-    #	Created 1417364 summary blocks from 29928557 components and 7330669
-    #	mafs from stdin
-    #	by loading this into the table multizPrimateSummary, it will replace
-    #	the previously loaded table with the unannotated mafs
+    # Created 1621960 summary blocks from 75794119 components and 12601786
+    # mafs from stdin
     #	remove the multizPrimate*.tab files in this /scratch/tmp directory
     rm multizPrimate*
 
@@ -19960,3 +19958,547 @@ done
         ccdsKgMap
     # << emacs
 
+#############################################################################
+# phastCons multizPrimage (InProgress braney 2008-02-06)
+
+    # split 8way mafs into 10M chunks and generate sufficient statistics 
+    # files for # phastCons
+    ssh kki
+    mkdir /cluster/data/ponAbe2/bed/multiz8way/msa.split
+    cd /cluster/data/ponAbe2/bed/multiz8way/msa.split
+    mkdir -p /san/sanvol1/scratch/ponAbe2/multiz8way/cons/ss
+
+    cat << '_EOF_' > doSplit.csh
+#!/bin/csh -ef
+set MAFS = /cluster/data/ponAbe2/bed/multiz8way/maf
+set WINDOWS = /san/sanvol1/scratch/ponAbe2/multiz8way/cons/ss
+pushd $WINDOWS
+set c = $1
+rm -fr $c
+mkdir $c
+twoBitToFa -seq=$c /scratch/data/ponAbe2/ponAbe2.2bit /scratch/tmp/ponAbe2.$c.fa
+# need to truncate odd-ball scaffold/chrom names that include dots
+# as phastCons utils can't handle them
+set CLEAN_MAF = /scratch/tmp/$c.clean.maf.$$
+perl -wpe 's/^s ([^.]+\.[^. ]+)\.\S+/s $1/' $MAFS/$c.maf > $CLEAN_MAF
+/cluster/bin/phast/$MACHTYPE/msa_split $CLEAN_MAF -i MAF \
+    -M /scratch/tmp/ponAbe2.$c.fa \
+    -o SS -r $c/$c -w 10000000,0 -I 1000 -B 5000
+rm -f $CLEAN_MAF /scratch/tmp/ponAbe2.$c.fa
+popd
+date >> $c.done
+'_EOF_'
+    # << happy emacs
+    chmod +x doSplit.csh
+
+    cat << '_EOF_' > template
+#LOOP
+doSplit.csh $(root1) {check out line+ $(root1).done}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    #	do the easy ones first to see some immediate results
+    ls -1S -r ../maf | sed -e "s/.maf//" > maf.list
+
+    gensub2 maf.list single template jobList
+    para create jobList
+    para try ... check ... etc
+    #	push these with a -maxPush number that would put a single job on
+    #	each iserver, you don't want two jobs at a time on each iserver,
+    #	they consume too much memory and cause swapping to the point where
+    #	they slow to a crawl and take hours to finish.
+# Completed: 55 of 55 jobs
+# CPU time in finished jobs:       2679s      44.65m     0.74h    0.03d  0.000 y
+# IO & Wait Time:                  2980s      49.67m     0.83h    0.03d  0.000 y
+# Average job time:                 103s       1.71m     0.03h    0.00d
+# Longest finished job:             716s      11.93m     0.20h    0.01d
+# Submission to last job:         10391s     173.18m     2.89h    0.12d
+
+    # XXXX Estimates were attempted, not really very useful, instead, as seen
+    # below, merely take the cons and noncons trees from the mouse 30-way
+
+    # Estimate phastCons parameters
+    #	see also:
+    #	http://compgen.bscb.cornell.edu/~acs/phastCons-HOWTO.html
+
+    # Create a list of .ss files over 3,000,000 in length
+    #	this is almost everything
+    cd /san/sanvol1/scratch/ponAbe2/multiz8way/cons/ss
+    ls -1l chr*/chr*.ss | egrep -v "_hap|chrUn|random" | \
+	awk '$5 > 3000000 {print $9;}' > ../tuningRun.list
+
+    # Set up parasol directory to calculate trees on these 50 regions
+    ssh kk
+    mkdir /cluster/data/ponAbe2/bed/multiz8way/treeRun2
+    cd /cluster/data/ponAbe2/bed/multiz8way/treeRun2
+    mkdir tree log most
+
+    #	Tuning this loop should come back to here to recalculate 
+    # Create script that calls phastCons with right arguments
+    cat > makeTree.csh << '_EOF_'
+#!/bin/csh -fe
+set SAN="/san/sanvol1/scratch/ponAbe2/multiz8way/cons"
+set SS=$1
+set C=$1:h
+set F=$1:t
+set tmpDir="/scratch/tmp/pA2_$2"
+rm -fr $tmpDir
+mkdir $tmpDir
+mkdir -p log/${C} tree/${C} most/${C}
+scp -p hiram@pk:$SAN/ss/$1 $tmpDir/$F
+scp -p hiram@pk:$SAN/estimate/starting-tree.mod $tmpDir
+pushd $tmpDir
+/cluster/bin/phast/$MACHTYPE/phastCons $F starting-tree.mod \
+      --gc 0.355 --nrates 1,1 --no-post-probs --ignore-missing \
+      --expected-length 45 --target-coverage 0.3 --most-conserved $F.most \
+      --quiet --log $F.log --estimate-trees $F.tree
+popd
+cp -p $tmpDir/$F.log log/$C
+cp -p $tmpDir/$F.most most/$C
+cp -p $tmpDir/$F.tree.*cons.mod tree/$C
+rm -fr $tmpDir
+'_EOF_'
+#	<< happy emacs
+      chmod a+x makeTree.csh
+
+# Create gensub file
+      cat > template << '_EOF_'
+#LOOP
+makeTree.csh $(path1) $(num1)
+#ENDLOOP
+'_EOF_'
+#	<< happy emacs
+
+# Make cluster job and run it
+  scp -p hiram@pk:/san/sanvol1/scratch/ponAbe2/multiz8way/cons/tuningRun.list .
+    gensub2 tuningRun.list single template jobList
+    para create jobList
+    para try/push/check/etc
+# Completed: 50 of 50 jobs
+# CPU time in finished jobs:      51439s     857.32m    14.29h    0.60d  0.002 y
+# IO & Wait Time:                   948s      15.79m     0.26h    0.01d  0.000 y
+# Average job time:                1048s      17.46m     0.29h    0.01d
+# Longest finished job:            1388s      23.13m     0.39h    0.02d
+# Submission to last job:          4376s      72.93m     1.22h    0.05d
+
+# Now combine parameter estimates.  We can average the .mod files
+# using phyloBoot.  This must be done separately for the conserved
+# and nonconserved models
+    ls -1 tree/chr*/*.cons.mod > cons.list
+    /cluster/bin/phast/$MACHTYPE/phyloBoot --read-mods '*cons.list' \
+	--output-average ave.cons.mod > cons_summary.txt
+    ls -1 tree/chr*/*.noncons.mod > noncons.list
+    /cluster/bin/phast/$MACHTYPE/phyloBoot --read-mods '*noncons.list' \
+	--output-average ave.noncons.mod > noncons_summary.txt
+    sort -k1,1 -k2,2n  most/chr*/*.most > mostConserved.bed
+    wc -l mostConserved.bed
+    #	at --target_coverage .3 and --expected_length 45
+    #	1159312 most conserved elements
+    #	primates only at --target_coverage .75 and --expected_length 1000
+
+#	measuring entropy
+#	consEntopy <target coverage> <expected lengths>
+#		 ave.cons.mod ave.noncons.mod --NH 9.78
+    /cluster/bin/phast/$MACHTYPE/consEntropy .3 45 --NH 9.78 \
+	ave.cons.mod ave.noncons.mod
+
+# ( Solving for new omega: 45.000000 21.095519 13.646969 11.146376
+#	10.499722 10.437794 10.437185 )
+# Transition parameters: gamma=0.300000, omega=45.000000,
+#	mu=0.022222, nu=0.009524
+# Relative entropy: H=0.415553 bits/site
+# Expected min. length: L_min=30.634230 sites
+# Expected max. length: L_max=24.942235 sites
+# Phylogenetic information threshold: PIT=L_min*H=12.730148 bits
+# Recommended expected length: omega=10.437185 sites (for L_min*H=9.780000)
+
+    #	and checking the most conserved areas, on hgwdev:
+    #	at --target_coverage .3 and --expected_length 45
+    featureBits -noRandom -noHap ponAbe2 mostConserved.bed
+    #	221759187 bases of 2723012131 (8.144%) in intersection
+    featureBits -noRandom -noHap -enrichment ponAbe2 genscan:cds \
+	mostConserved.bed
+    #	genscan:cds 1.688%, mostConserved.bed 8.144%, both 0.146%,
+    #	cover 8.63%, enrich 1.06x
+
+    #	primates only at --target_coverage .75 and --expected_length 1000
+    featureBits -noRandom -noHap ponAbe2 mostConserved.bed
+    #	524207695 bases of 2723012131 (19.251%) in intersection
+    featureBits -enrichment -noRandom -noHap ponAbe2 genscan:cds \
+	mostConserved.bed
+    #	genscan:cds 1.688%, mostConserved.bed 19.251%, both 0.314%,
+    #	cover 18.61%, enrich 0.97x
+
+    #	Estimates could be made, but more correctly, take the 30-way
+    #	.mod file, and re-use it here.
+    ssh hgwdev
+    cd /cluster/data/ponAbe2/bed/multiz8way
+    cp -p /cluster/data/mm9/bed/multiz30way/mm9.30way.mod .
+
+    ssh hgwdev
+    screen # use screen to manage this long running job
+    cd /cluster/data/ponAbe2/bed/multiz8way/msa.split
+    #	using one of the sections of chr1 as an example
+    time nice -n +19 /cluster/bin/phast.2007-05-04/phyloFit -i SS \
+/san/sanvol1/scratch/ponAbe2/multiz8way/cons/ss/chr1/chr1.50000209-60000000.ss \
+--tree \
+"((((((ponAbe2,(hg18,panTro2)),rheMac2),calJac1),mm9),monDom4),ornAna1)" \
+    --out-root starting-tree
+    #	real    1m35.979s
+
+    #	create a single ss file from a whole chrom maf file
+    /cluster/bin/phast/$MACHTYPE/msa_split chr1.maf -i MAF -M chr1.fa \
+	-o SS -r chr1 -w 300000000,0 -I 1000 -B 5000 
+
+    #	run a phyloFit on that large .ss file to find a starting-tree
+    time nice -n +19 /cluster/bin/phast.2007-05-04/phyloFit -i SS \
+	chr1.1-229942017.ss --tree \
+"((((((ponAbe2,(hg18,panTro2)),rheMac2),calJac1),mm9),monDom4),ornAna1)" \
+	--out-root starting-tree
+# Reading alignment from chr1.1-229942017.ss ...
+# Compacting sufficient statistics ...
+# Fitting tree model to chr1.1-229942017.ss using REV ...
+# Writing model to starting-tree.mod ...
+# Done.
+
+# real    5m30.470s
+
+    # add up the C and G:
+    grep BACKGROUND starting-tree.mod | awk '{printf "%0.3f\n", $3 + $4;}'
+    #	0.355
+    #	This 0.355 is used in the --gc argument below
+
+    # Run phastCons
+    #	This job is I/O intensive in its output files, thus it is all
+    #	working over in /scratch/tmp/
+    ssh pk
+    mkdir -p /cluster/data/ponAbe2/bed/multiz8way/cons/run.cons
+    cd /cluster/data/ponAbe2/bed/multiz8way/cons/run.cons
+
+    #	there are going to be several different phastCons runs using
+    #	this same script.  They trigger off of the current working directory
+    #	$cwd:t which is the "grp" in this script.  It is one of:
+    #	all gliers placentals
+
+    cat << '_EOF_' > doPhast.csh
+#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast.2007-05-04
+set c = $1
+set f = $2
+set len = $3
+set cov = $4
+set rho = $5
+set grp = $cwd:t
+set tmp = /scratch/tmp/$f
+set cons = /cluster/data/ponAbe2/bed/multiz8way/cons
+mkdir -p $tmp
+set san = /san/sanvol1/scratch/ponAbe2/multiz8way/cons
+if (-s $cons/$grp/$grp.non-inf) then
+  cp -p $cons/$grp/$grp.mod $cons/$grp/$grp.non-inf .
+  cp -p $san/ss/$c/$f.ss $cons/$grp/$grp.mod $cons/$grp/$grp.non-inf $tmp
+else
+  cp -p $cons/$grp/$grp.mod .
+  cp -p $san/ss/$c/$f.ss $cons/$grp/$grp.mod $tmp
+endif
+pushd $tmp > /dev/null
+if (-s $grp.non-inf) then
+  $PHASTBIN/phastCons $f.ss $grp.mod \
+    --rho $rho --expected-length $len --target-coverage $cov --quiet \
+    --not-informative `cat $grp.non-inf` \
+    --seqname $c --idpref $c --most-conserved $f.bed --score > $f.pp
+else
+  $PHASTBIN/phastCons $f.ss $grp.mod \
+    --rho $rho --expected-length $len --target-coverage $cov --quiet \
+    --seqname $c --idpref $c --most-conserved $f.bed --score > $f.pp
+endif
+popd > /dev/null
+mkdir -p $san/$grp/pp/$c $san/$grp/bed/$c
+sleep 4
+touch $san/$grp/pp/$c $san/$grp/bed/$c
+rm -f $san/$grp/pp/$c/$f.pp
+rm -f $san/$grp/bed/$c/$f.bed
+mv $tmp/$f.pp $san/$grp/pp/$c
+mv $tmp/$f.bed $san/$grp/bed/$c
+rm -fr $tmp
+'_EOF_'
+    # << happy emacs
+    chmod a+x doPhast.csh
+
+    #	it may be better to have the result check file be the .pp file, since
+    #	this .bed file is sometimes empty even though there are .pp results
+    cat << '_EOF_' > template
+#LOOP
+../doPhast.csh $(root1) $(file1) 45 .3 .31 {check out line+ /san/sanvol1/scratch/ponAbe2/multiz8way/cons/all/bed/$(root1)/$(file1).bed}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    # Create parasol batch and run it
+    pushd /san/sanvol1/scratch/ponAbe2/multiz8way/cons
+    ls -1 ss/chr*/chr*.ss | sed 's/.ss$//' > \
+        /cluster/data/ponAbe2/bed/multiz8way/cons/ss.list
+    popd
+
+    # run for all species
+    cd ..
+    mkdir -p all run.cons/all
+    cd all
+    /cluster/bin/phast.new/tree_doctor ../../mm9.30way.mod \
+    --prune-all-but=ponAbe2,hg18,panTro2,rheMac2,calJac1,mm9,monDom4,ornAna1 \
+	> all.mod
+    cd ../run.cons/all
+
+    #	root1 == chrom name, file1 == ss file name without .ss suffix
+    #	it may be better to have the result check file be the .pp file, since
+    #	this .bed file is sometimes empty even though there are .pp results
+    # Create template file for "all" run
+    cat << '_EOF_' > template
+#LOOP
+../doPhast.csh $(root1) $(file1) 45 .3 .31 {check out line+ /san/sanvol1/scratch/ponAbe2/multiz8way/cons/all/bed/$(root1)/$(file1).bed}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+    gensub2 ../ss.list single template jobList
+    para create jobList
+    para try ... check ... push ... etc.
+# Completed: 368 of 368 jobs
+# CPU time in finished jobs:      11954s     199.23m     3.32h    0.14d  0.000 y
+# IO & Wait Time:                  3688s      61.47m     1.02h    0.04d  0.000 y
+# Average job time:                  43s       0.71m     0.01h    0.00d
+# Longest finished job:              52s       0.87m     0.01h    0.00d
+# Submission to last job:           577s       9.62m     0.16h    0.01d
+
+    # create Most Conserved track
+    ssh kolossus
+    cd /san/sanvol1/scratch/ponAbe2/multiz8way/cons/all
+    time nice -n +19 cat bed/*/chr*.bed | sort -k1,1 -k2,2n | \
+        awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' | \
+            /cluster/bin/scripts/lodToBedScore /dev/stdin > mostConserved.bed
+    #	~ 1 minute
+    cp -p mostConserved.bed /cluster/data/ponAbe2/bed/multiz8way/cons/all
+
+    # load into database
+    ssh hgwdev
+    cd /cluster/data/ponAbe2/bed/multiz8way/cons/all
+    time nice -n +19 hgLoadBed ponAbe2 phastConsElements8way mostConserved.bed
+    #	Loaded 1096981 elements of size 5
+
+    # Try for 5% overall cov, and 70% CDS cov 
+    #	We don't have and gene tracks to compare CDS coverage
+    #	--rho .31 --expected-length 45 --target-coverage .3
+    featureBits ponAbe2 phastConsElements8way
+    #	134611760 bases of 3093572278 (4.351%) in intersection
+
+    # Create merged posterier probability file and wiggle track data files
+    # currently doesn't matter where this is performed, the san is the same
+    # network distance from all machines.
+    # sort by chromName, chromStart so that items are in numerical order 
+    #  for wigEncode
+    cd /san/sanvol1/scratch/ponAbe2/multiz8way/cons/all
+    cat << '_EOF_' > gzipAscii.sh
+#!/bin/sh
+
+TOP=`pwd`
+export TOP
+
+mkdir -p phastCons8wayScores
+
+for D in pp/chr*
+do
+    C=${D/pp\/}
+    out=phastCons8wayScores/${C}.data.gz
+    echo "${D} > ${C}.data.gz"
+    ls $D/*.pp | sort -n -t\. -k2 | xargs cat | \
+	gzip > ${out}
+done
+'_EOF_'
+    #	<< happy emacs
+    chmod +x gzipAscii.sh
+    time nice -n +19 ./gzipAscii.sh
+    #	real    38m22.760s
+    #	copy the phastCons8wayScores to:
+# /cluster/data/ponAbe2/bed/multiz8way/downloads/phastCons8way/phastConsScores
+    #	for hgdownload downloads
+
+    # Create merged posterier probability file and wiggle track data files
+    # currently doesn't matter where this is performed, the san is the same
+    # network distance from all machines.
+    cd /san/sanvol1/scratch/ponAbe2/multiz8way/cons/all
+    time nice -n +19 ls phastCons8wayScores/*.data.gz | xargs zcat \
+	| wigEncode -noOverlap stdin phastCons8way.wig phastCons8way.wib
+    # Converted stdin, upper limit 1.00, lower limit 0.00
+    #	real    23m55.813s
+    time nice -n +19 cp -p *.wi? /cluster/data/ponAbe2/bed/multiz8way/cons/all
+    #	real    2m2.107s
+
+    # Load gbdb and database with wiggle.
+    ssh hgwdev
+    cd /cluster/data/ponAbe2/bed/multiz8way/cons/all
+    ln -s `pwd`/phastCons8way.wib /gbdb/ponAbe2/multiz8way/phastCons8way.wib
+    time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/ponAbe2/multiz8way ponAbe2 \
+	phastCons8way phastCons8way.wig
+    #	real    1m27.666s
+
+
+    #  Create histogram to get an overview of all the data
+    ssh hgwdev
+    cd /cluster/data/ponAbe2/bed/multiz8way/cons/all
+    time nice -n +19 hgWiggle -doHistogram \
+	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+	    -db=ponAbe2 phastCons8way > histogram.data 2>&1
+    #	real    5m0.608s
+
+    #	create plot of histogram:
+
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small color x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Orangutan PonAbe2 Histogram phastCons8way track"
+set xlabel " phastCons8way score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.02]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #	<< happy emacs
+
+    display histo.png &
+
+    ### Create a phastCons data set for primates-only
+    # XXX - this was only a test, this data was not used
+
+    # setup primates-only run
+    ssh pk
+    cd /cluster/data/ponAbe2/bed/multiz8way/cons
+    mkdir primates run.cons/primates
+    cd primates
+    # primates-only: exclude all but these for phastCons tree:
+    /cluster/bin/phast.new/tree_doctor ../../mm9.30way.mod \
+	--prune-all-but=ponAbe2,hg18,panTro2,rheMac2,calJac1 \
+	    > primates.mod
+    #	and place the removed ones in the non-inf file so phastCons will
+    #	truly ignore them:
+    echo "monDom4,ornAna1" > primates.non-inf
+
+    cd ../run.cons/primates
+    #	root1 == chrom name, file1 == ss file name without .ss suffix
+    #	it may be better to have the result check file be the .pp file, since
+    #	this .bed file is sometimes empty even though there are .pp results
+    # Create template file for "all" run
+    cat << '_EOF_' > template
+#LOOP
+../doPhast.csh $(root1) $(file1) 45 .3 .31 {check out line+ /san/sanvol1/scratch/ponAbe2/multiz8way/cons/primates/bed/$(root1)/$(file1).bed}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+    gensub2 ../ss.list single template jobList
+    para create jobList
+    para try ... check ... push ... etc.
+    #	Four of these jobs fail to produce any output:
+    #	chr5_h2_hap1/chr5_h2_hap1.1-191932.bed
+    #	chr6_cox_hap1_random/chr6_cox_hap1_random.1-239941.bed
+    #	chr6_qbl_hap2_random/chr6_qbl_hap2_random.1-120011.bed
+    #	chrM/chrM.1-16499.bed
+    # this chrM missing one is interesting.  It should have something ?
+    # I don't know.  They all have data in their pp files.
+
+# Completed: 364 of 368 jobs
+# Crashed: 4 jobs
+# CPU time in finished jobs:      11969s     199.49m     3.32h    0.14d  0.000 y
+# IO & Wait Time:                  3757s      62.61m     1.04h    0.04d  0.000 y
+# Average job time:                  43s       0.72m     0.01h    0.00d
+# Longest finished job:              56s       0.93m     0.02h    0.00d
+# Submission to last job:          2362s      39.37m     0.66h    0.03d
+
+    # create Most Conserved track
+    ssh kolossus
+    cd /san/sanvol1/scratch/ponAbe2/multiz8way/cons/euarchontoglires
+    cat bed/*/chr*.bed | sort -k1,1 -k2,2n | \
+        awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' | \
+            /cluster/bin/scripts/lodToBedScore /dev/stdin > mostConserved.bed
+    #	~ 1 minute
+    cp -p mostConserved.bed /cluster/data/ponAbe2/bed/multiz8way/cons/primates
+
+    # load into database
+    ssh hgwdev
+    cd /cluster/data/ponAbe2/bed/multiz8way/cons/primates
+    time nice -n +19 hgLoadBed ponAbe2 phastConsElements8wayPrimates \
+	mostConserved.bed
+    #	Loaded 298598 elements of size 5
+    #	real    0m8.768s
+    # verify coverage
+    featureBits ponAbe2 phastConsElements8wayPrimates
+    #	92315637 bases of 3093572278 (2.984%) in intersection
+
+    #	Create the downloads .pp files, from which the phastCons wiggle data
+    #	is calculated
+    # currently doesn't matter where this is performed, the san is the same
+    # network distance from all machines.
+    # sort by chromName, chromStart so that items are in numerical order 
+    #  for wigEncode
+    cd /san/sanvol1/scratch/ponAbe2/multiz8way/cons/primates
+    mkdir downloads
+    for D in pp/chr*
+do
+    C=${D/pp\//}
+    ls $D/*.pp | sort -n -t\. -k2 | xargs cat | gzip -c \
+	> downloads/${C}.primates.pp.data.gz
+    echo $D $C done
+done
+
+    # Create merged posterier probability file and wiggle track data files
+    cd /san/sanvol1/scratch/ponAbe2/multiz8way/cons/primates
+    time nice -n +19 ls downloads/chr*.data.gz | xargs zcat \
+	| wigEncode -noOverlap stdin \
+	    phastCons8wayPrimates.wig phastCons8wayPrimates.wib
+# Converted stdin, upper limit 1.00, lower limit 0.00
+
+    ## load table with wiggle data
+    ssh hgwdev
+    cd /cluster/data/ponAbe2/bed/multiz8way/cons/primates
+    cp -p /san/sanvol1/scratch/ponAbe2/multiz8way/cons/primates/*.wi? .
+    ln -s `pwd`/phastCons8wayEuarch.wib \
+	/gbdb/ponAbe2/multiz8way/phastCons8wayPrimates.wib
+    time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/ponAbe2/multiz8way ponAbe2 \
+	phastCons8wayPrimates phastCons8wayPrimates.wig
+    #	real    0m44.161s
+
+    #  Create histogram to get an overview of all the data
+    time nice -n +19 hgWiggle -doHistogram \
+	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+	    -db=ponAbe2 phastCons8wayPrimates > histogram.data 2>&1
+    #	real    5m15.581s
+
+    #	create plot of histogram:
+
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small color \
+        x000000 xffffff xc000ff x66ff66 xffff00 x00ffff xff0000
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Orantutan PonAbe2 Histogram phastCons8wayPrimates track"
+set xlabel " phastCons8wayPrimates score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.02]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #	<< happy emacs
+
+    display histo.png &
+
+###################
