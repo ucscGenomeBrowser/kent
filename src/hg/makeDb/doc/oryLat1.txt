@@ -9,7 +9,7 @@
 #	Data release policy: http://medaka.utgenome.org/#policy
 #	Ensembl: http://www.ensembl.org/Oryzias_latipes/index.html
 #
-#	"$Id: oryLat1.txt,v 1.36 2008/01/25 21:07:53 hiram Exp $"
+#	"$Id: oryLat1.txt,v 1.37 2008/02/07 23:47:15 hiram Exp $"
 #
 
 ##########################################################################
@@ -3617,3 +3617,58 @@ TMPDIR=/scratch/tmp
 	-bigClusterHub=kk > load.log 2>&1 &
     cat fb.petMar1.chainOryLat1Link.txt
     #	23358156 bases of 831696438 (2.808%) in intersection
+
+#########################################################################
+# BLASTZ/CHAIN/NET Medaka oryLat1 (DONE - 2008-01-29 - Hiram)
+#	with contigs for Lamprey
+    ssh kkstore04
+    screen # use screen to control this job
+    mkdir /cluster/data/oryLat1/bed/blastz.petMar1.2008-01-29
+    cd /cluster/data/oryLat1/bed/blastz.petMar1.2008-01-29
+
+    cat << '_EOF_' > DEF
+# Medaka vs. Lamprey
+
+# using the "close" genome alignment parameters
+#	see also: http://genomewiki.ucsc.edu/index.php/Mm9_multiple_alignment
+BLASTZ_Y=9400
+BLASTZ_L=3000
+BLASTZ_K=3000
+BLASTZ_M=50
+
+# TARGET: Medaka oryLat1 (40M chunks covers the largest chroms in one gulp)
+#       chrUn in Scaffolds for this alignment run
+SEQ1_DIR=/san/sanvol1/scratch/oryLat1/oryLat1.sdTrf.2bit
+SEQ1_LEN=/cluster/data/oryLat1/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LIMIT=30
+SEQ1_LAP=10000
+
+# QUERY: Lamprey petMar1
+SEQ2_DIR=/cluster/bluearc/scratch/data/petMar1/petMar1.2bit
+SEQ2_LEN=/cluster/data/petMar1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=150
+SEQ2_LAP=0
+
+BASE=/cluster/data/oryLat1/bed/blastz.petMar1.2008-01-29
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    time doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-chainMinScore=3000 -chainLinearGap=medium \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-bigClusterHub=memk > do.log 2>&1 &
+    #	real    1117m45.898s
+    cat fb.oryLat1.chainPetMar1Link.txt
+    #	24991574 bases of 700386597 (3.568%) in intersection
+
+    mkdir /cluster/data/petMar1/bed/blastz.oryLat1.swap
+    cd /cluster/data/petMar1/bed/blastz.oryLat1.swap
+    time doBlastzChainNet.pl -verbose=2 -swap \
+	/cluster/data/oryLat1/bed/blastz.petMar1.2008-01-29/DEF \
+	-chainMinScore=3000 -chainLinearGap=medium \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-bigClusterHub=memk > swap.log 2>&1 &
+
