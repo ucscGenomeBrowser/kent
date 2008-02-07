@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/EnsGeneAutomate.pm instead.
 
-# $Id: EnsGeneAutomate.pm,v 1.1 2008/02/07 19:25:53 hiram Exp $
+# $Id: EnsGeneAutomate.pm,v 1.2 2008/02/07 22:48:23 hiram Exp $
 package EnsGeneAutomate;
 
 use warnings;
@@ -12,7 +12,6 @@ use strict;
 use Carp;
 use vars qw(@ISA @EXPORT_OK);
 use Exporter;
-use File::Basename;
 
 @ISA = qw(Exporter);
 
@@ -20,7 +19,7 @@ use File::Basename;
 # treated as constants) exported by this module:
 @EXPORT_OK = (
     # Support for common command line options:
-    qw( mapEnsGeneFileName ensGeneVersioning
+    qw( ensGeneVersioning
       ),
 );
 
@@ -39,7 +38,7 @@ my %ensGeneFtpFileNames_47 = (
 'cavPor2' => 'Cavia_porcellus.GUINEAPIG.47.gtf.gz',
 'ci2' => 'Ciona_intestinalis.JGI2.47.gtf.gz',
 'cioSav2' => 'Ciona_savignyi.CSAV2.0.47.gtf.gz',
-'danRem5' => 'Danio_rerio.ZFISH7.47.gtf.gz',
+'danRer5' => 'Danio_rerio.ZFISH7.47.gtf.gz',
 'dasNov1' => 'Dasypus_novemcinctus.ARMA.47.gtf.gz',
 'dm4' => 'Drosophila_melanogaster.BDGP4.3.47.gtf.gz',
 'echTel1' => 'Echinops_telfairi.TENREC.47.gtf.gz',
