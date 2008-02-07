@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/HgAutomate.pm instead.
 
-# $Id: HgAutomate.pm,v 1.11 2007/12/20 23:35:00 hiram Exp $
+# $Id: HgAutomate.pm,v 1.12 2008/02/07 22:47:38 hiram Exp $
 package HgAutomate;
 
 use warnings;
@@ -31,7 +31,7 @@ use File::Basename;
       ),
     # General-purpose utility routines:
     qw( checkCleanSlate checkExistsUnlessDebug closeStdin
-	getAssemblyInfo machineHasFile
+	getAssemblyInfo getSpecies machineHasFile
 	makeGsub mustMkdir mustOpen nfsNoodge run verbose
       ),
     # Hardcoded paths/commands/constants:
@@ -570,6 +570,18 @@ sub getAssemblyInfo {
   my ($genome, $date, $source) = split("\t", $line);
   return ($genome, $date, $source);
 }
+
+sub getSpecies {
+  # fetch scientificName from dbDb
+  my ($dbHost, $db) = @_;
+  confess "Must have exactly 2 arguments" if (scalar(@_) != 2);
+  my $query = "select scientificName from dbDb " .
+              "where name = \"$db\";";
+  my $line = `echo '$query' | ssh -x $dbHost $centralDbSql`;
+  chomp $line;
+  my ($scientificName) = split("\t", $line);
+  return ($scientificName);
+} # getSpecies
 
 sub machineHasFile {
   # Return a positive integer if $mach appears to have $file or 0 if it

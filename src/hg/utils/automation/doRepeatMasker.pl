@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/doRepeatMasker.pl instead.
 
-# $Id: doRepeatMasker.pl,v 1.8 2007/08/27 19:02:40 angie Exp $
+# $Id: doRepeatMasker.pl,v 1.9 2008/02/07 22:47:38 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -117,19 +117,6 @@ sub checkOptions {
   $dbHost = $opt_dbHost if ($opt_dbHost);
 }
 
-
-#*** libify?
-sub getSpecies {
-  my ($dbHost, $db) = @_;
-  confess "Must have exactly 2 arguments" if (scalar(@_) != 2);
-  my $query = "select scientificName from dbDb " .
-              "where name = \"$db\";";
-  my $line = `echo '$query' | ssh -x $dbHost $HgAutomate::centralDbSql`;
-  chomp $line;
-  my ($scientificName) = split("\t", $line);
-  return ($scientificName);
-} # getSpecies
-
 #########################################################################
 # * step: cluster [bigClusterHub]
 sub doCluster {
@@ -148,7 +135,7 @@ sub doCluster {
   my $clusterSeqDir = "$okIn[0]/$db";
   my $clusterSeq = "$clusterSeqDir/$db.unmasked.2bit";
   my $partDir .= "$okOut[0]/$db/RMPart";
-  my $species = $opt_species ? $opt_species : &getSpecies($dbHost, $db);
+  my $species = $opt_species ? $opt_species : &HgAutomate::getSpecies($dbHost, $db);
   my $customLib = $opt_customLib;
   my $repeatLib = "";
   if ($opt_customLib && $opt_species) {
