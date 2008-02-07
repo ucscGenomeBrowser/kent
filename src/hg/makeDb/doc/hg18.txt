@@ -19264,6 +19264,207 @@ ignore 1 lines'
 ##    end
 
 
+#######################################################################
+# ORTHOLOGOUS ALLELES IN CHIMP AND MACAQUE FOR SNP128 (DONE 2/5/08 angie)
+    ssh kolossus
+    mkdir /cluster/data/hg18/bed/snp128Ortho
+    cd /cluster/data/hg18/bed/snp128Ortho
+
+    # Following Heather's lead in snp126orthos, filter SNPs to to keep
+    # only those with class=single, length=1, chrom!~random; 
+    # Exclude those with exceptions MultipleAlignments,
+    # SingleClassTriAllelic or SingleClassQuadAllelic.
+    # Unlike snp masking, we do not filter for weight -- don't know why.
+    awk '$5 ~ /^MultipleAlignments|SingleClassTriAllelic|SingleClassQuadAllelic/ {print $4;}' \
+      /cluster/data/dbSNP/128/human/snp128Exceptions.bed \
+    | sort -u \
+      > snp128ExcludeIds.txt
+    awk '$3-$2 == 1 && $1 !~ /_random/ $11 == "single" {print;}' \
+      /cluster/data/dbSNP/128/human/snp128.bed \
+    | grep -vFwf snp128ExcludeIds.txt \
+      > snp128Simple.bed
+    # took ~3 minutes
+    wc -l snp128Simple.bed 
+#8974017 snp128Simple.bed
+    # This is the analog of db table snp126simple.
+
+    # Glom all human info that we need for the final table onto the 
+    # name, to sneak it through liftOver: rsId|chr|start|end|obs|ref|strand
+    awk 'BEGIN{OFS="\t";} \
+        {print $1, $2, $3, \
+               $4 "|" $1 "|" $2 "|" $3 "|" $9 "|" $8 "|" $6, \
+               0, $6;}' \
+      snp128Simple.bed > snp128ForLiftOver.bed
+
+    # Map coords to chimp using liftOver.
+    # Note for next time: split into smaller pieces, run on pk.  
+    # I don't know why chimp took so much longer than macaque... the
+    # chimp .over has fewer chains and fewer bytes than the macaque .over.
+    mkdir run.liftOChimp
+    cd run.liftOChimp
+    mkdir split out
+    splitFile ../snp128ForLiftOver.bed 150000 split/chunk
+    cp /dev/null jobList
+    foreach f (split/chunk*)
+      echo liftOver $f \
+        /cluster/data/hg18/bed/liftOver/hg18ToPanTro2.over.chain.gz \
+        \{check out exists out/panTro2.$f:t.bed\} out/hg18.$f:t.unmapped \
+        >> jobList
+    end
+    ssh memk
+    cd /cluster/data/hg18/bed/snp128Ortho/run.liftOChimp
+    para make jobList
+#Completed: 60 of 60 jobs
+#CPU time in finished jobs:      69226s    1153.77m    19.23h    0.80d  0.002 y
+#IO & Wait Time:                   211s       3.52m     0.06h    0.00d  0.000 y
+#Average job time:                1157s      19.29m     0.32h    0.01d
+#Longest finished job:            2341s      39.02m     0.65h    0.03d
+#Submission to last job:          4029s      67.15m     1.12h    0.05d
+
+    # Map coords to macaque using liftOver.
+    mkdir ../run.liftOMac
+    cd ../run.liftOMac
+    mkdir out
+    ln -s ../run.liftOChimp/split .
+    cp /dev/null jobList
+    foreach f (split/chunk*)
+      echo liftOver $f \
+        /cluster/data/hg18/bed/liftOver/hg18ToRheMac2.over.chain.gz \
+        \{check out exists out/rheMac2.$f:t.bed\} out/hg18.$f:t.unmapped \
+        >> jobList
+    end
+    para make jobList
+#Completed: 60 of 60 jobs
+#CPU time in finished jobs:       1334s      22.24m     0.37h    0.02d  0.000 y
+#IO & Wait Time:                   277s       4.61m     0.08h    0.00d  0.000 y
+#Average job time:                  27s       0.45m     0.01h    0.00d
+#Longest finished job:              69s       1.15m     0.02h    0.00d
+#Submission to last job:           639s      10.65m     0.18h    0.01d
+
+    # Switch to fileserver for concatenation and subsequent processing
+    # of output.
+    ssh kkstore02
+    cd /cluster/data/hg18/bed/snp128Ortho
+    # Here is a script that looks up the base value in the ortho species
+    # and swizzles columns to prepare for the joining and re-swizzling
+    # of both ortho species' columns into the final product.  If it is
+    # used more than once, should be checked in, perhaps in hg/snp/snpLoad.
+    cat > getOrthoSeq.pl <<'_EOF_'
+#!/usr/bin/env perl
+# Dig up orthologous alleles and swizzle columns so the glommed name that
+# includes human position info etc. is first.  It will be used as a key for
+# joining up multiple other-species' ortho data.  Also swizzle columns so
+# that the remaining columns are in order of appearance in the final result,
+# snp128OrthoPanTro2RheMac2.
+use warnings;
+use strict;
+
+my $twoBitFName = shift @ARGV
+  || die "usage: getOrthoSeq.pl orthoDb.2bit [file(s)]\n";
+
+sub getOChrSeq($$) {
+  # Slurp in fasta sequence using twoBitToFa.
+  my ($twoBitFName, $oChr) = @_;
+  open(P, "twoBitToFa $twoBitFName -seq=$oChr stdout |")
+    || die "Can't open pipe from twoBitToFa $twoBitFName -seq=$oChr: $!\n";
+  <P> =~ /^>\w+/
+    || die "Doesn't look like we got fasta -- first line is this:\n$_";
+  # From man perlfaq5: trick to slurp entire contents:
+  my $c = 0;
+  my $seq = do { local $/; my $data = <P>; $c = ($data =~ s/\n//g); $data; };
+  close(P);
+  return $seq;
+}
+
+my %rc = ( "a" => "t", "c" => "g", "g" => "c", "t" => "a",
+           "A" => "T", "C" => "G", "G" => "C", "T" => "A", );
+sub revComp($) {
+  # Reverse-complement fasta input.  (Pass through non-agtc chars.)
+  my ($seq) = @_;
+  my $rcSeq = reverse $seq;
+  for (my $i = 0;  $i < length($rcSeq);  $i++) {
+    my $base = substr($rcSeq, $i, 1);
+    my $cBase = $rc{$base} || $base;
+    substr($rcSeq, $i, 1, $cBase);
+  }
+  return $rcSeq;
+}
+
+my $prevOChr;
+my ($oChrSeq, $oChrSize);
+while (<>) {
+  chomp;
+  my ($oChr, $oStart, $oEnd, $nameGlom, undef, $oStrand) = split;
+  if (! defined $prevOChr || $oChr ne $prevOChr) {
+    $oChrSeq = &getOChrSeq($twoBitFName, $oChr);
+    $oChrSize = length($oChrSeq);
+  }
+  die "Coords out of range, input line $.: $oEnd > $oChr size $oChrSize\n\t"
+    if ($oEnd > $oChrSize);
+  my $oAllele = substr($oChrSeq, $oStart, $oEnd - $oStart);
+  $oAllele = &revComp($oAllele) if ($oStrand eq "-");
+  print join("\t", $nameGlom, $oChr, $oStart, $oEnd, $oAllele, $oStrand) .
+        "\n";
+  $prevOChr = $oChr;
+}
+'_EOF_'
+    # << emacs
+    chmod a+x getOrthoSeq.pl
+
+    # Concatenate the chimp results, sorting by chimp pos in order to
+    # efficiently access 2bit sequence in ./getOrthoSeq.  The output of
+    # that is then sorted by the glommed human info field, so that we
+    # can use join to combine chimp and macaque results in the next step.
+    sort -k1,1 -k2n,2n run.liftOChimp/out/panTro2.chunk*.bed \
+    | ./getOrthoSeq.pl /cluster/data/panTro2/panTro2.2bit \
+    | sort > panTro2.orthoGlom.txt
+    # ditto for macaque:
+    sort -k1,1 -k2n,2n run.liftOMac/out/rheMac2.chunk*.bed \
+    | ./getOrthoSeq.pl /cluster/data/rheMac2/rheMac2.2bit \
+    | sort > rheMac2.orthoGlom.txt
+    # The whole pipeline takes ~4 minutes each.
+    wc -l panTro2.orthoGlom.txt rheMac2.orthoGlom.txt 
+#   8339051 panTro2.orthoGlom.txt
+#   7139425 rheMac2.orthoGlom.txt
+
+    # Use the glommed name field as a key to join up chimp and macaque
+    # allele data.  Include glommed name from both files because if only
+    # file 2 has a line for the key in 2.1, then 1.1 is empty.  Then plop
+    # in the orthoGlom files from each file, which are in the same order
+    # as the chimp and macaque columns of snp128OrthoPanTro2RheMac2.
+    join -o '1.1 2.1 1.2 1.3 1.4 1.5 1.6 2.2 2.3 2.4 2.5 2.6' \
+      -a 1 -a 2 -e 0 \
+      panTro2.orthoGlom.txt rheMac2.orthoGlom.txt \
+    | perl -wpe 'chomp; \
+        ($glom1, $glom2, $o1Chr, $o1Start, $o1End, $o1Al, $o1Strand, \
+         $o2Chr, $o2Start, $o2End, $o2Al, $o2Strand) = split; \
+        $glomKey = ($glom1 ne "0") ? $glom1 : $glom2; \
+        ($rsId, $hChr, $hStart, $hEnd, $hObs, $hAl, $hStrand) = \
+          split(/\|/, $glomKey); \
+        $o1Chr    =~ s/^0$/?/;   $o2Chr    =~ s/^0$/?/; \
+        $o1Al     =~ s/^0$/?/;   $o2Al     =~ s/^0$/?/; \
+        $o1Strand =~ s/^0$/?/;   $o2Strand =~ s/^0$/?/; \
+        print join("\t", $hChr, $hStart, $hEnd, $rsId, $hObs, $hAl, $hStrand, \
+                         $o1Chr, $o1Start, $o1End, $o1Al, $o1Strand, \
+                         $o2Chr, $o2Start, $o2End, $o2Al, $o2Strand) . "\n"; \
+        s/^.*$//;' \
+    | sort -k1,1 -k2n,2n > snp128OrthoPanTro2RheMac2.bed
+    # took ~4 minutes.
+    wc -l snp128OrthoPanTro2RheMac2.bed
+#8588947 snp128OrthoPanTro2RheMac2.bed
+
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/snp128Ortho
+    sed -e 's/snpOrthoPanTroRheMac/snp128OrthoPanTro2RheMac2/' \
+      ~/kent/src/hg/lib/snpOrthoPanTroRheMac.sql \
+      > snp128OrthoPanTro2RheMac2.sql
+    time nice hgLoadBed -tab -onServer -tmpDir=/scratch/tmp \
+      hg18 snp128OrthoPanTro2RheMac2 -sqlTable=snp128OrthoPanTro2RheMac2.sql \
+      snp128OrthoPanTro2RheMac2.bed
+#Loaded 8588947 elements of size 17
+#40.069u 6.547s 4:56.31 15.7%    0+0k 0+0io 0pf+0w
+
+
 ############################################################################
 #  BLASTZ SELF chain minScore=2000 (DONE - 2007-12-19 - Hiram)
     ssh kkstore02
