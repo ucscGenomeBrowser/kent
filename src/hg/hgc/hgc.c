@@ -213,7 +213,7 @@
 #include "itemConf.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1385 2008/02/06 23:23:05 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1386 2008/02/07 22:00:41 hiram Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -2169,19 +2169,27 @@ if (!foundPep)
     if (autoTranslate == NULL || differentString(autoTranslate, "0"))
 	{
 	puts("<LI>\n");
-	hgcAnchorSomewhere("htcTranslatedPredMRna", geneName, "translate", seqName);
 	/* put out correct message to describe translated mRNA */
-	printf("Translated Protein</A> from ");
-	if (sameString(geneTable, "refGene") ) 
+        if (sameString(geneTable, "ensGene"))
 	    {
-	    printf("genomic DNA\n");
-	    } 
+	    printf("No protein prediction for Ensembl gene");
+	    }
 	else
 	    {
-	    printf("predicted mRNA \n"); 
+	    hgcAnchorSomewhere("htcTranslatedPredMRna", geneName,
+		"translate", seqName);
+	    printf("Translated Protein</A> from ");
+	    if (sameString(geneTable, "refGene") ) 
+		{
+		printf("genomic DNA\n");
+		} 
+	    else
+		{
+		printf("predicted mRNA \n"); 
+		}
+	    foundPep = TRUE;
 	    }
 	puts("</LI>\n");
-	foundPep = TRUE;
 	}
     }
 
