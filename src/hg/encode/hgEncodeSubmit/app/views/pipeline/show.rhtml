@@ -16,12 +16,19 @@
 
 <strong>Date Posted: </strong> <%= distance_of_time_in_words_to_now(@project.created_at) -%> ago<br/>
 <strong>Last Updated: </strong> <%= distance_of_time_in_words(@project.updated_at, Time.now) -%> ago<br/>
+<% if @uploadText -%>
+<strong>wget: </strong> <%= @uploadText -%> <br/>
+<% end %>
 </p>
 <br>
+
 <table CELLSPACING=10 CELLPADDING=10>
 
+
 <% if @project.status == "loading" or
-      @project.status == "uploading/expanding" or
+      @project.status == "uploading" or
+      @project.status == "expanding" or
+      @project.status == "re-expanding all" or
       @project.status == "validating" %> 
   <td><%= link_to ' ', {:action => 'nothingyet', :id => @project.id} -%></td>
 <% elsif @project.status.starts_with?("schedule") %>
