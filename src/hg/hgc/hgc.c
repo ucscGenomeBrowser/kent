@@ -213,7 +213,7 @@
 #include "itemConf.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1386 2008/02/07 22:00:41 hiram Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1387 2008/02/08 07:22:00 angie Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -12578,7 +12578,7 @@ int start = 0;
 int end = 0;
 int skipCount = 0;
 
-unsigned long offset = 0;
+off_t offset = 0;
 
 fileName = getSnpSeqFile(tdb);
 if (!fileName)
@@ -12593,8 +12593,8 @@ lineFileSeek(lf, offset, SEEK_SET);
 /* skip the header line */
 lineFileNext(lf, &line, &lineSize);
 if (!startsWith(">rs", line))
-    errAbort("Expected FASTA header, got this line:\n%s\nat offset %ld "
-	     "in file %s", line, offset, fileName);
+    errAbort("Expected FASTA header, got this line:\n%s\nat offset %lld "
+	     "in file %s", line, (long long)offset, fileName);
 
 while (lineFileNext(lf, &line, &lineSize))
     {
