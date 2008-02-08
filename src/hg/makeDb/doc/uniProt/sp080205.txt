@@ -1,16 +1,18 @@
-# Download swissprot and create tab separated files from it.
-# This will take about 70 minutes for the wgets, and
-# 15 minutes for the spToDb step..
-
+# Set up working directory
 ssh hgwdev
 mkdir -p /cluster/store11/swissprot/080205/build
 ln -s /cluster/store11/swissprot/080205 /cluster/store5/swissprot/080205
+
+# Download swissprot. This will take about 90 minutes.
 cd /cluster/store5/swissprot/080205/build
 wget ftp://us.expasy.org/databases/uniprot/current_release/knowledgebase/complete/uniprot_sprot.dat.gz
 wget ftp://us.expasy.org/databases/uniprot/current_release/knowledgebase/complete/uniprot_trembl.dat.gz
 wget ftp://us.expasy.org/databases/uniprot/current_release/knowledgebase/complete/uniprot_sprot_varsplic.fasta.gz
-zcat *.dat.gz | spToDb stdin ../tabFiles
 
+# Turn flat file into relational tab-separated files.  The -dupeOk flag was
+# needed this time for spToDb since their were things in swissProt that had
+# not been removed from trEMBL.   This step takes about 20 minutes.
+zcat *.dat.gz | spToDb -dupeOk stdin ../tabFiles
 
 # Create the database.  
 hgsql mysql <<end
@@ -20,23 +22,11 @@ end
 # Load it up with table definitions from source directory
 hgsql sp080205 < ~/kent/src/hg/protein/spToDb/spDb.sql
 
-# Load up the data from tab files.  This takes about 45 minutes.
-# (Started at 3:00 done by 4:00)
+# Load up the data from tab files.  This takes about an hour.
 cd /cluster/store5/swissprot/080205/tabFiles
 foreach i (*.txt)
     hgsqlimport --local sp080205 $i
 end
-
-# This loaded pretty cleanly, but did get warnings on the
-# following tables:
-# sp080205.feature: Records: 3534564  Deleted: 0  Skipped: 0  Warnings: 112
-# sp080205.organelle: Records: 3553  Deleted: 0  Skipped: 0  Warnings: 3
-
-# Fixed up feature table definition to turn softEndBits from a char to a
-# smallint.
-# sp080205.feature: Records: 3534564  Deleted: 0  Skipped: 0  Warnings: 0
-# Changed organelle.val from varchar to longblob.
-# sp080205.organelle: Records: 3553  Deleted: 0  Skipped: 0  Warnings: 0
 
 # Add varsplice info 
 zcat ../build/uniprot_sprot_varsplic.fasta.gz | spDbAddVarSplice sp080205 stdin .
