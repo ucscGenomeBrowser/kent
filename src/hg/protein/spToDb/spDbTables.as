@@ -243,3 +243,18 @@ table varAcc
     char[12] parAcc;    "Accession of parent (non-variant)"
     char[4] variant;    "Variant part of accession"
     )
+
+table proteinEvidenceType
+"Type of evidence that this is actually a protein"
+    (
+    int id;	"ID of type (shared with UniProt)"
+    lstring val; "Description of protein evidence"
+    )
+
+table proteinEvidence
+"Associate protein with evidence for its existence"
+    (
+    char[12] acc;	"Primary accession"
+    int proteinEvidenceType;	"ID in proteinEvidenceType table"
+    )
+

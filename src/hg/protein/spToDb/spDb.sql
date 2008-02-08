@@ -309,3 +309,19 @@ CREATE TABLE varAcc (
               #Indices
     PRIMARY KEY(varAcc)
 );
+
+#Type of evidence that this is actually a protein
+CREATE TABLE proteinEvidenceType (
+    id int not null,	# ID of type (shared with UniProt)
+    val longblob not null,	# Description of protein evidence
+              #Indices
+    PRIMARY KEY(id)
+);
+
+#Associate protein with evidence for its existence
+CREATE TABLE proteinEvidence (
+    acc char(12) not null,	# Primary accession
+    proteinEvidenceType int not null,	# ID in proteinEvidenceType table
+              #Indices
+    PRIMARY KEY(acc)
+);

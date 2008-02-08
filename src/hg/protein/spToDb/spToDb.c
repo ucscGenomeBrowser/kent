@@ -6,9 +6,11 @@
 #include "localmem.h"
 #include "dystring.h"
 #include "portable.h"
+#include "sqlNum.h"
 #include "obscure.h"
+#include "intValTree.h"
 
-static char const rcsid[] = "$Id: spToDb.c,v 1.17 2007/02/02 22:53:09 kent Exp $";
+static char const rcsid[] = "$Id: spToDb.c,v 1.18 2008/02/08 20:59:50 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -92,6 +94,7 @@ struct spRecord
     struct slName *keyWordList;	/* Key word list. */
     struct spFeature *featureList;	/* List of features. */
     int molWeight;	/* Molecular weight. */
+    struct spProtEv *spProtEvList;   /* Protein evidence list. */
     char *seq;	/* Sequence, one letter per amino acid. */
     };
 
@@ -149,6 +152,23 @@ struct spLitRef
     char *medlineId;	/* Medline ID, may be NULL. */
     char *doiId;	/* DOI ID, may be NULL. */
     };
+
+struct spProtEv
+/* Protein evidence type from PE line. */
+    {
+    struct spProtEv *next;	/* Next in list. */
+    int id;			/* Numerical ID from SwissProt. */
+    char *name;			/* Name. */
+    };
+
+int spProtEvCmpId(const void *va, const void *vb)
+/* Compare spProtEv by id. */
+{
+const struct spProtEv *a = *((struct spProtEv **)va);
+const struct spProtEv *b = *((struct spProtEv **)vb);
+return a->id - b->id;
+}
+
 
 static void spParseComment(struct lineFile *lf, char *line, 
 	struct lm *lm, struct dyString *dy, struct spRecord *spr)
@@ -446,6 +466,45 @@ else
 slAddHead(&spr->featureList, feat);
 }
 
+static void parseProteinEvidence(struct lineFile *lf, struct lm *lm, struct dyString *dy, 
+	struct spRecord *spr)
+/* Parse protein evidence line[s] assuming these are already grouped into dy.  At this
+ * stage they will be of form:
+ *     ID: evidence description; ID: evidence description;
+ * where ID is a number.   There should be a 1-1 correnspondence between ID's and
+ * evidence descriptions, but we check that later, not here, since we're just parsing
+ * a single one here.  The return value is setting the spProtEvList field of spr. */
+{
+char *s = dy->string;
+for (;;)
+    {
+    s = skipLeadingSpaces(s);
+    if (s == NULL || s[0] == 0)
+	break;
+    struct spProtEv *spProtEv;
+    char *evidenceId = s;
+    s = strchr(s, ':');
+    if (s == NULL)
+       errAbort("Expecting colon after number in PE line %d of %s",
+	    lf->lineIx, lf->fileName);
+    *s++ = 0;
+    if (!isdigit(evidenceId[0]))
+	errAbort("Non-numerical evidence ID line %d of %s", 
+	    lf->lineIx, lf->fileName);
+    s = skipLeadingSpaces(s);
+    char *evidenceName = s;
+    s = strchr(s, ';');
+    if (s == NULL)
+	errAbort("expecting semicolon line %d of %s", 
+	    lf->lineIx, lf->fileName);
+    *s++ = 0;
+    lmAllocVar(lm, spProtEv);
+    spProtEv->id = sqlUnsigned(evidenceId);
+    spProtEv->name = lmCloneString(lm, evidenceName);
+    slAddHead(&spr->spProtEvList, spProtEv);
+    }
+}
+
 struct spRecord *spRecordNext(struct lineFile *lf, 
 	struct lm *lm, 	/* Local memory pool for this structure. */
 	struct dyString *dy)	/* Scratch string to use. */
@@ -506,9 +565,15 @@ for (;;)
     {
     if (!lineFileNextReal(lf, &line))
         errAbort("%s ends in middle of a record", lf->fileName);
-    /* uglyf("%d %s\n", lf->lineIx, line);*/
+    if (startsWith("//", line))
+        break;
     type = line;
     line += 5;
+    if (type[2] != ' ' || line[-1] != ' ' || line[0] == ' ')
+	{
+        errAbort("Looks like SwissProt changed white space after type, line %d of %s", 
+		lf->lineIx, lf->fileName);
+	}
     if (startsWith("FT", type))
         {
 	spParseFeature(lf, line, lm, dy, spr);
@@ -553,8 +618,6 @@ for (;;)
 	    	line, lf->lineIx, lf->fileName);
 	    }
 	}
-    else if (startsWith("//", type))
-        break;
     else if (startsWith("AC", type))
         {
 	while ((word = nextWord(&line)) != NULL)
@@ -681,6 +744,11 @@ for (;;)
 	spr->genes = lmCloneString(lm, dy->string);
 	parseNameVals(lf, lm, dy->string, &spr->gnList);
 	}
+    else if (startsWith("PE", type))
+        {
+	groupLine(lf, type, line, dy);
+	parseProteinEvidence(lf, lm, dy, spr);
+	}
     else
         {
 	errAbort("Unrecognized line %d of %s:\n%s",
@@ -697,6 +765,7 @@ slReverse(&spr->commentList);
 slReverse(&spr->dbRefList);
 slReverse(&spr->keyWordList);
 slReverse(&spr->featureList);
+slReverse(&spr->spProtEvList);
 return spr;
 }
 
@@ -846,6 +915,8 @@ FILE *rcType = createAt(tabDir, "rcType");
 FILE *rcVal = createAt(tabDir, "rcVal");
 FILE *citationRc = createAt(tabDir, "citationRc");
 FILE *pathogenHost = createAt(tabDir, "pathogenHost");
+FILE *proteinEvidenceType = createAt(tabDir, "proteinEvidenceType");
+FILE *proteinEvidence = createAt(tabDir, "proteinEvidence");
 
 /* Some of the tables require unique IDs */
 struct uniquer *organelleUni = uniquerNew(organelle, 14);
@@ -867,6 +938,11 @@ struct hash *taxonHash = newHash(18);
 struct hash *taxonIdHash = newHash(18);
 struct hash *pathogenHostHash = newHash(16);
 int citationId = 0;
+
+/* A little stuff to process proteinEvidenceType IDs, so that we can share the same
+ * numerical ID with SwissProt. */
+struct rbTree *proteinEvidenceTree = intValTreeNew();
+struct spProtEv *proteinEvidenceList = NULL;
 
 for (;;)
     {
@@ -1031,6 +1107,33 @@ for (;;)
 	    }
 	}
 
+    /* proteinEvidence. */
+        {
+	if (spr->spProtEvList == NULL)
+	    errAbort("Missing required PE field in record ending line %d of %s",
+	        lf->lineIx, lf->fileName);
+	struct spProtEv *ev;
+	for (ev = spr->spProtEvList; ev != NULL; ev = ev->next)
+	    {
+	    struct spProtEv *savedEv = intValTreeFind(proteinEvidenceTree, ev->id);
+	    if (savedEv == NULL)
+	        {
+		AllocVar(savedEv);
+		savedEv->id = ev->id;
+		savedEv->name = cloneString(ev->name);
+		slAddHead(&proteinEvidenceList, savedEv);
+		intValTreeAdd(proteinEvidenceTree, savedEv->id, savedEv);
+		}
+	    else
+	        {
+		if (!sameString(ev->name, savedEv->name))
+		   errAbort("Disagreement on PE id/name pairing on record ending line %d of %s\n"
+		            "'%s' vs. '%s'", lf->lineIx, lf->fileName, ev->name, savedEv->name);
+		}
+	    fprintf(proteinEvidence, "%s\t%d\n", acc, ev->id);
+	    }
+	}
+
     /* citation, reference, author, and related tables. */
         {
 	struct spLitRef *ref;
@@ -1083,6 +1186,15 @@ for (;;)
     }
 dyStringFree(&dy);
 
+/* Sort and out protein evidence type. */
+    {
+    slSort(&proteinEvidenceList, spProtEvCmpId);
+    struct spProtEv *ev;
+    for (ev = proteinEvidenceList; ev != NULL; ev = ev->next)
+        fprintf(proteinEvidenceType, "%d\t%s\n", ev->id, ev->name);
+    }
+
+/* Compare spProtEv by id. */
 carefulClose(&displayId);
 carefulClose(&otherAcc);
 carefulClose(&organelle);
@@ -1114,6 +1226,8 @@ carefulClose(&rcType);
 carefulClose(&rcVal);
 carefulClose(&citationRc);
 carefulClose(&pathogenHost);
+carefulClose(&proteinEvidenceType);
+carefulClose(&proteinEvidence);
 }
 
 int main(int argc, char *argv[])

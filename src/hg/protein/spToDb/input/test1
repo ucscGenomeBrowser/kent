@@ -33,6 +33,7 @@ CC   --------------------------------------------------------------------------
 DR   EMBL; M29954; AAA18217.1; -.
 DR   PIR; A44945; A44945.
 DR   TIGRFAMs; TIGR01870; cas_TM1810; 1.
+PE   3: Inferred from homology;
 KW   Antigen; Repeat; Sporozoite.
 FT   DOMAIN        1     19       Hydrophobic.
 FT   DOMAIN      905    924       Hydrophobic.
@@ -89,6 +90,7 @@ DR   PIR; S26409; S26409.
 DR   InterPro; IPR003612; AAI.
 DR   Pfam; PF00234; Tryp_alpha_amyl; 1.
 DR   SMART; SM00499; AAI; 1.
+PE   2: Evidence at transcript level;
 KW   Signal.
 FT   SIGNAL        1     30       Potential.
 FT   CHAIN        31    102       Protein 108.
@@ -140,6 +142,7 @@ DR   Pfam; PF00304; Gamma-thionin; 1.
 DR   ProDom; PD002594; G_Purothionin; 1.
 DR   SMART; SM00505; Knot1; 1.
 DR   PROSITE; PS00940; GAMMA_THIONIN; 1.
+PE   2: Evidence at transcript level;
 KW   Germination; Signal.
 FT   SIGNAL        1     24       Potential.
 FT   CHAIN        25     75       10 kDa protein.
@@ -179,6 +182,7 @@ CC   or send an email to license@isb-sib.ch).
 CC   --------------------------------------------------------------------------
 DR   EMBL; M19152; AAA29471.1; -.
 DR   PIR; A54527; A54527.
+PE   1: Evidence at protein level;
 KW   Antigen; Malaria; Repeat.
 FT   NON_TER       1      1
 FT   DOMAIN      132    296       13.5 X 12 AA approximate tandem repeats
@@ -250,6 +254,7 @@ DR   InterPro; IPR006044; Seedstore_11s.
 DR   Pfam; PF00190; Cupin; 2.
 DR   PRINTS; PR00439; 11SGLOBULIN.
 DR   PROSITE; PS00305; 11S_SEED_STORAGE; 1.
+PE   1: Evidence at protein level;
 KW   Multigene family; Seed storage protein; Signal.
 FT   SIGNAL        1     20
 FT   CHAIN        21    305       11S globulin seed storage protein G3
@@ -323,6 +328,7 @@ DR   InterPro; IPR006044; Seedstore_11s.
 DR   Pfam; PF00190; Cupin; 2.
 DR   PRINTS; PR00439; 11SGLOBULIN.
 DR   PROSITE; PS00305; 11S_SEED_STORAGE; 1.
+PE   1: Evidence at protein level;
 KW   Direct protein sequencing; Pyrrolidone carboxylic acid;
 KW   Seed storage protein; Signal.
 FT   SIGNAL        1     21
@@ -389,6 +395,7 @@ DR   Pfam; PF02824; TGS; 1.
 DR   PRINTS; PR00326; GTP1OBG.
 DR   TIGRFAMs; TIGR00231; small_GTP; 1.
 DR   PROSITE; PS00905; GTP1_OBG; 1.
+PE   3: Inferred from homology;
 KW   GTP-binding.
 FT   NP_BIND      71     78       GTP (By similarity).
 FT   NP_BIND     117    121       GTP (By similarity).
@@ -429,6 +436,7 @@ CC   -!- SUBUNIT: Homotetramer.
 CC   -!- MISCELLANEOUS: The thermostability of the enzyme is greatly
 CC       increased due to NADP binding.
 DR   PIR; S14099; S14099.
+PE   3: Inferred from homology;
 KW   Bile acid catabolism; Direct protein sequencing; NADP; Oxidoreductase.
 FT   NON_TER      29     29
 SQ   SEQUENCE   29 AA;  2900 MW;  A827DB34DB6C8812 CRC64;
@@ -469,6 +477,7 @@ DR   EMBL; L44142; AAA73872.1; -.
 DR   PIR; S11850; S11850.
 DR   InterPro; IPR008406; Auxin_repressed.
 DR   Pfam; PF05564; Auxin_repressed; 1.
+PE   3: Inferred from homology;
 FT   DOMAIN       43     57       Pro/Thr-rich.
 SQ   SEQUENCE   111 AA;  12416 MW;  E44CACBADE6F3C51 CRC64;
      MVLLDKLWDD IVAGPQPERG LGMLRKVPQP LNLKDEGESS KITMPTTPTT PVTPTTPISA
@@ -488,6 +497,7 @@ RN   [1]
 RP   SEQUENCE.
 RA   Pahl A., Keller U.;
 RL   Submitted (MAR-1995) to Swiss-Prot.
+PE   3: Inferred from homology;
 KW   Direct protein sequencing.
 FT   NON_TER      24     24
 SQ   SEQUENCE   24 AA;  2764 MW;  0D19F1F488DB3201 CRC64;
@@ -592,6 +602,7 @@ DR   InterPro; IPR006044; Seedstore_11s.
 DR   Pfam; PF00190; Cupin; 2.
 DR   PRINTS; PR00439; 11SGLOBULIN.
 DR   PROSITE; PS00305; 11S_SEED_STORAGE; 1.
+PE   3: Inferred from homology;
 KW   Alternative splicing; Multigene family; Seed storage protein; Signal.
 FT   SIGNAL        1     24       Potential.
 FT   CHAIN        25    282       12S seed storage protein CRA1 alpha chain
@@ -719,6 +730,7 @@ DR   InterPro; IPR006044; Seedstore_11s.
 DR   Pfam; PF00190; Cupin; 2.
 DR   PRINTS; PR00439; 11SGLOBULIN.
 DR   PROSITE; PS00305; 11S_SEED_STORAGE; 1.
+PE   3: Inferred from homology;
 KW   Multigene family; Seed storage protein; Signal.
 FT   SIGNAL        1     24       Potential.
 FT   CHAIN        25    269       12S seed storage protein CRB alpha chain
@@ -787,6 +799,7 @@ DR   InterPro; IPR011051; RmlC_like_cupin.
 DR   InterPro; IPR006044; Seedstore_11s.
 DR   Pfam; PF00190; Cupin; 2.
 DR   PRINTS; PR00439; 11SGLOBULIN.
+PE   3: Inferred from homology;
 KW   Multigene family; Seed storage protein; Signal.
 FT   SIGNAL        1     20       Potential.
 FT   CHAIN        21    377       13S globulin seed storage protein 1
@@ -853,6 +866,7 @@ DR   InterPro; IPR011051; RmlC_like_cupin.
 DR   InterPro; IPR006044; Seedstore_11s.
 DR   Pfam; PF00190; Cupin; 2.
 DR   PRINTS; PR00439; 11SGLOBULIN.
+PE   3: Inferred from homology;
 KW   Multigene family; Seed storage protein; Signal.
 FT   SIGNAL        1     20       Potential.
 FT   CHAIN        21    313       13S globulin seed storage protein 2
@@ -920,6 +934,7 @@ DR   InterPro; IPR011051; RmlC_like_cupin.
 DR   InterPro; IPR006044; Seedstore_11s.
 DR   Pfam; PF00190; Cupin; 2.
 DR   PRINTS; PR00439; 11SGLOBULIN.
+PE   3: Inferred from homology;
 KW   Allergen; Multigene family; Seed storage protein; Signal.
 FT   SIGNAL        1     20       Potential.
 FT   CHAIN        21    347       13S globulin seed storage protein 3
@@ -979,6 +994,7 @@ DR   InterPro; IPR011051; RmlC_like_cupin.
 DR   InterPro; IPR006044; Seedstore_11s.
 DR   Pfam; PF00190; Cupin; 1.
 DR   PRINTS; PR00439; 11SGLOBULIN.
+PE   3: Inferred from homology;
 KW   Direct protein sequencing; Multigene family; Seed storage protein.
 FT   DISULFID      7      7       Interchain (alpha-beta) (Potential).
 SQ   SEQUENCE   194 AA;  21846 MW;  65A6FC49AFC1E9D0 CRC64;
