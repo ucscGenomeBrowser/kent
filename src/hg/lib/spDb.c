@@ -7,7 +7,7 @@
 #include "hdb.h"
 #include "spDb.h"
 
-static char const rcsid[] = "$Id: spDb.c,v 1.17 2006/07/21 20:35:47 baertsch Exp $";
+static char const rcsid[] = "$Id: spDb.c,v 1.18 2008/02/08 21:08:01 kent Exp $";
 
 boolean spIsPrimaryAcc(struct sqlConnection *conn, char *acc)
 /* Return TRUE if this is a primary accession in database. */
@@ -193,6 +193,18 @@ else
 	"and accToTaxon.taxon = %d"
 	, gene, taxon);
     }
+return sqlQuickList(conn, query);
+}
+
+struct slName *spProteinEvidence(struct sqlConnection *conn, char *acc)
+/* Get list of evidence that protein exists for accession.  There will be at least one. */
+{
+char query[256];
+safef(query, sizeof(query), 
+	"select proteinEvidenceType.val from proteinEvidence,proteinEvidenceType "
+	"where proteinEvidence.acc = '%s' "
+	"and proteinEvidence.proteinEvidenceType = proteinEvidenceType.id"
+	, acc);
 return sqlQuickList(conn, query);
 }
 

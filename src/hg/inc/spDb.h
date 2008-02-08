@@ -228,4 +228,7 @@ char *uniProtFindPrimAccFromGene(char *gene, char *db);
 /* Return primary accession given gene name.
  * NULL if not found. */
 
+struct slName *spProteinEvidence(struct sqlConnection *conn, char *acc);
+/* Get list of evidence that protein exists for accession.  There will be at least one. */
+
 #endif /* SPDB_H */
