@@ -10,7 +10,7 @@
 #include "gff.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: gff.c,v 1.22 2007/04/23 23:09:55 markd Exp $";
+static char const rcsid[] = "$Id: gff.c,v 1.23 2008/02/08 22:48:31 markd Exp $";
 
 void gffGroupFree(struct gffGroup **pGroup)
 /* Free up a gffGroup including lineList. */
@@ -48,9 +48,7 @@ if ((gff = *pGff) != NULL)
     freeHash(&gff->featureHash);
     freeHash(&gff->groupHash);
     freeHash(&gff->geneIdHash);
-    freeHash(&gff->exonHash);
-    freeHash(&gff->intronStatusHash);
-    freeHash(&gff->proteinIdHash);
+    freeHash(&gff->strPool);
     slFreeList(&gff->lineList);
     slFreeList(&gff->seqList);
     slFreeList(&gff->sourceList);
@@ -59,6 +57,12 @@ if ((gff = *pGff) != NULL)
     gffGroupFreeList(&gff->groupList);
     freez(pGff);
     }
+}
+
+static char *gffFileGetStr(struct gffFile *gff, char *str)
+/* get a string from the string pool */
+{
+return hashStore(gff->strPool,  str)->name;
 }
 
 int gffLineCmp(const void *va, const void *vb)
@@ -209,11 +213,7 @@ for (;;)
        gl->group = gg->name;
        }
    else if (sameString("exon_id", type))
-       {
-       if ((hel = hashLookup(gff->exonHash, val)) == NULL)
-	   hel = hashAdd(gff->exonHash, val, NULL);
-       gl->exonId = hel->val;
-       }
+       gl->exonId = gffFileGetStr(gff, val);
    else if (sameString("exon_number", type))
        {
        if (!isdigit(val[0]))
@@ -221,19 +221,15 @@ for (;;)
        gl->exonNumber = atoi(val);
        }
    else if (sameString("intron_id", type))
-       gl->intronId = cloneString(val);
+       gl->intronId = gffFileGetStr(gff, val);
    else if (sameString("intron_status", type))
-       {
-       if ((hel = hashLookup(gff->intronStatusHash, val)) == NULL)
-	   hel = hashAdd(gff->intronStatusHash, val, NULL);
-       gl->intronStatus = hel->name;
-       }
+       gl->intronStatus = gffFileGetStr(gff, val);
    else if (sameString("protein_id", type))
-       {
-       if ((hel = hashLookup(gff->proteinIdHash, val)) == NULL)
-	   hel = hashAdd(gff->proteinIdHash, val, NULL);
-       gl->proteinId = hel->name;
-       }
+       gl->proteinId = gffFileGetStr(gff, val);
+   else if (sameString("gene_name", type))
+       gl->geneName = gffFileGetStr(gff, val);
+   else if (sameString("transcript_name", type))
+       gl->transcriptName = gffFileGetStr(gff, val);
    }
 if (gl->group == NULL)
     {
@@ -354,14 +350,12 @@ struct gffFile *gffFileNew(char *fileName)
 struct gffFile *gff;
 AllocVar(gff);
 gff->fileName = cloneString(fileName);
-gff->seqHash = newHash(6);
+gff->seqHash = newHash(18);
 gff->sourceHash = newHash(6);
 gff->featureHash = newHash(6);
-gff->groupHash = newHash(12);
-gff->geneIdHash = newHash(12);
-gff->exonHash = newHash(16);
-gff->intronStatusHash = newHash(4);
-gff->proteinIdHash = newHash(12);
+gff->groupHash = newHash(16);
+gff->geneIdHash = newHash(16);
+gff->strPool = newHash(20);
 return gff;
 }
 

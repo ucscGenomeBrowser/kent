@@ -42,27 +42,34 @@ int badGroupCount = 0;  /* count of inconsistent groups found */
 
 
 /* header for info file */
-static char *infoHeader = "#transId\tgeneId\tsource\tchrom\tstart\tend\tstrand\tproteinId\n";
+static char *infoHeader = "#transId\tgeneId\tsource\tchrom\tstart\tend\tstrand\tproteinId\tgeneName\ttranscriptName\n";
 
+static void saveName(char **name, char *newName)
+/* if name references NULL, and newName is not NULL, update name */
+{
+if ((*name == NULL) && (newName != NULL))
+    *name = newName;
+}
 static void writeInfo(FILE *infoFh, struct gffGroup *group)
 /* write a row for a GTF group from the info file */
 {
 
 // scan lineList for group and protein ids
 struct gffLine *ll;
-char *geneId = NULL, *proteinId = NULL;
+char *geneId = NULL, *proteinId = NULL, *geneName = NULL, *transcriptName = NULL;
 for (ll = group->lineList; ll != NULL; ll = ll->next)
     {
-    if ((geneId == NULL) && (ll->geneId != NULL))
-        geneId = ll->geneId;
-    if ((proteinId == NULL) && (ll->proteinId != NULL))
-        proteinId = ll->proteinId;
+    saveName(&geneId, ll->geneId);
+    saveName(&proteinId, ll->proteinId);
+    saveName(&geneName, ll->geneName);
+    saveName(&transcriptName, ll->transcriptName);
     }
 
-fprintf(infoFh, "%s\t%s\t%s\t%s\t%d\t%d\t%c\t%s\n",
+fprintf(infoFh, "%s\t%s\t%s\t%s\t%d\t%d\t%c\t%s\t%s\t%s\n",
         group->name, emptyForNull(geneId), group->source,
         group->seq, group->start, group->end, group->strand,
-        emptyForNull(proteinId));
+        emptyForNull(proteinId), emptyForNull(geneName),
+        emptyForNull(transcriptName));
 }
 
 static void gtfGroupToGenePred(struct gffFile *gtf, struct gffGroup *group, FILE *gpFh,

@@ -27,6 +27,8 @@ struct gffLine
     char *intronId;       /* intron_id in GTF, NULL in GFF. Not allocated here. */
     char *intronStatus;   /* intron status. Not allocated here. */
     char *proteinId;      /* protein_id in GTF, NULL in GFF. Not allocated here. */
+    char *geneName;       /* gene_name or NULL in GTF, NULL in GFF. Not allocated here. */
+    char *transcriptName; /* transcript_name or NULL in GTF, NULL in GFF. Not allocated here. */
     };
 
 struct gffGroup
@@ -82,9 +84,7 @@ struct gffFile
     struct hash *featureHash;   /* A name only hash of gff types. */
     struct hash *groupHash;	/* Associates group names and gffGroups. */
     struct hash *geneIdHash;    /* Hash of all geneIds. */
-    struct hash *exonHash;       /* Hash of all exonIds. */
-    struct hash *intronStatusHash;/* Hash of intron statuses. */
-    struct hash *proteinIdHash;  /* Hash of all proteinIds. */
+    struct hash *strPool;       /* hash used to allocate strings */
     struct gffLine *lineList;   /* List of lines - lines may be in groupList instead. */
     struct gffSeqName *seqList; /* List of sequences in file. */
     struct gffSource *sourceList; /* List of all sources in file. */
