@@ -2,23 +2,20 @@
 
 include ../../../inc/common.mk
 
-install: scripts
+SCRIPT_FILES = \
+	doEncodeLoad.rb
+
+all:
+	@${MAKE} --no-print-directory SCRIPTS=${HOME}/bin/scripts scripts
+
+alpha: scripts
 
 scripts:
 	@for F in ${SCRIPT_FILES}; do \
 	    chmod +x $$F; \
-	    rm -f ${SCRIPTS}/$${F}; \
-	    echo cp -p $$F ${SCRIPTS}; \
-	    cp -p $$F ${SCRIPTS}; \
+            ruby -c $$F && cp -upv $$F ${SCRIPTS}; \
 	done
-
-alpha: scripts
 
 test:
 	doEncodeLoad.rb load /cluster/store3/encpipeline_dev/43
-
-
-SCRIPT_FILES = \
-	doEncodeLoad.rb
-
 
