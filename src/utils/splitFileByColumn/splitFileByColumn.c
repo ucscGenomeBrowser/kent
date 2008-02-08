@@ -179,7 +179,10 @@ char *line = NULL;
 
 if (ending == NULL)
     {
-    char *ptr = strchr(inFileName, '.');
+    char *ptr = inFileName + strlen(inFileName) - 1;
+    while (ptr > inFileName && *ptr != '/')
+	ptr--;
+    ptr = strchr(ptr, '.');
     if (ptr == NULL)
 	ending = "";
     else
