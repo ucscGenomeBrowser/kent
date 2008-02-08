@@ -13,7 +13,7 @@
 #include "twoBit.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: snpNcbiToUcsc.c,v 1.3 2008/01/23 05:31:16 angie Exp $";
+static char const rcsid[] = "$Id: snpNcbiToUcsc.c,v 1.4 2008/02/08 21:07:01 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -235,7 +235,8 @@ fprintf(f,
 "  refNCBI blob NOT NULL,\n"
 "  refUCSC blob NOT NULL,\n"
 "  observed varchar(255) NOT NULL default '',\n"
-"  molType enum('unknown','genomic','cDNA') NOT NULL default 'unknown',\n",
+"  molType enum('unknown','genomic','cDNA','mito') "
+           "NOT NULL default 'unknown',\n",
 	outRoot);
 fprintf(f,
 "  class enum(");
@@ -645,7 +646,7 @@ if (err)
 /* man 3 regex for POSIX lib usage; man 7 regex for regular expression info. */
 const char *expansionUnit = 
     "^([ACGTN]+)?"	/* Regular bases and/or N, unless line starts with ( */
-     "\\(([ACGT])\\)"	/* A single base, in parentheses. */
+     "\\(([ACGTN])\\)"	/* A single base, in parentheses. */
      "([0-9]+)"		/* A number (how many times to repeat the base). */
      "([ACGTN]*)";	/* Maybe some regular bases after that. */
 
@@ -1103,9 +1104,9 @@ const char *observedNamedFormat =
     "\\/-(\\/[ACGT]+)*$";
 const char *observedNamedOddballFormat =
     "^\\(((LARGE (INSERTION|DELETION))|" /* with a space */
-    "[0-9]+ ?BP( ((TRIPLE )?ALU))?|"/* might get an N-bp alu or triple alu ? */
+    "[0-9]+ ?BP( ((TRIPLE )?ALU)| DEL)?|"/* might get an N-bp alu etc */
     "ALU)\\)"		        /* or the whole thing might be just "(ALU)". */
-    "\\/-(\\/[ACGT]+)*$";
+    "(\\/-)?(\\/[ACGT]+)*$";
 /* class=no-var (6): no SNPs use this class (intended for null results). */
 const char *observedMixedFormat =
     "^-\\/[ACGT]+(\\/["IUPAC"]+)+$";
