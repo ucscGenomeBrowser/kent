@@ -1864,7 +1864,7 @@ identifier snpName128
 "dbSNP version 128 rs* identifiers"
     $gbd.snp128.name dupeOk
     $gbd.snp128Exceptions.name 
-    $gbd.snpSeq.acc minCheck=.8
+    $gbd.snp128Seq.acc minCheck=.9
 
 identifier snpExceptions128
 "Annotations of unusual conditions in dbSNP version 128"
