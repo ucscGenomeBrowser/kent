@@ -8,11 +8,11 @@ SCRIPT_FILES = \
 PIPELINE_PATH=/cluster/data/encode/pipeline
 PIPELINE_DIR=encpipeline_beta
 
-alpha:  
+all:  
 	@${MAKE} --no-print-directory SCRIPTS=${HOME}/bin/scripts scripts
 	@${MAKE} --no-print-directory PIPELINE_DIR=encpipeline_${USER} config
 
-install: scripts config
+alpha: scripts config
 
 scripts:
 	@for F in ${SCRIPT_FILES}; do \
