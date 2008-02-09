@@ -1134,3 +1134,6 @@ Error: danRer1: gene danRer1.refFlat:1854 NM_131267 chr7: NM_131267 geneName "ir
   over a spliced alignment.  Make splice sites part of the scoring
 
 - deal with CDS complement() annotations for cDNA: AF116618, AF116676
+
+- pslCDNAFilter: look at NM_012196.1/ CCDS35257.1 -  multiple overlapping
+  NM alignments,  none match CCDS
