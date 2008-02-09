@@ -20,6 +20,8 @@ class AccountController < ApplicationController
       end
       redirect_back_or_default(:controller => '/pipeline', :action => 'list')
       flash[:notice] = "Logged in successfully"
+    else
+      flash[:warning] = "Unknown user or password"
     end
   end
 
