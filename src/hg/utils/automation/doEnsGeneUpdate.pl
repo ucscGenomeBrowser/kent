@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/doEnsGeneUpdate.pl instead.
 
-# $Id: doEnsGeneUpdate.pl,v 1.1 2008/02/07 22:02:16 hiram Exp $
+# $Id: doEnsGeneUpdate.pl,v 1.2 2008/02/09 00:03:33 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -33,6 +33,7 @@ my $stepper = new HgStepManager(
       { name => 'cleanup', func => \&doCleanup },
     ]
 				);
+
 # Option defaults:
 my $dbHost = 'hgwdev';
 

@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/EnsGeneAutomate.pm instead.
 
-# $Id: EnsGeneAutomate.pm,v 1.2 2008/02/07 22:48:23 hiram Exp $
+# $Id: EnsGeneAutomate.pm,v 1.3 2008/02/09 00:03:33 hiram Exp $
 package EnsGeneAutomate;
 
 use warnings;
@@ -19,7 +19,7 @@ use Exporter;
 # treated as constants) exported by this module:
 @EXPORT_OK = (
     # Support for common command line options:
-    qw( ensGeneVersioning
+    qw( ensVersionList ensGeneVersioning
       ),
 );
 
@@ -65,6 +65,44 @@ my %ensGeneFtpFileNames_47 = (
 'tetNig1' => 'Tetraodon_nigroviridis.TETRAODON7.47.gtf.gz',
 'tupBel1' => 'Tupaia_belangeri.TREESHREW.47.gtf.gz',
 'xenTro2' => 'Xenopus_tropicalis.JGI4.1.47.gtf.gz',
+);
+
+my %ensGeneFtpPeptideFileNames_47 = (
+'aedAeg0' => 'aedes_aegypti_47_1a/pep/Aedes_aegypti.AaegL1.47.pep.all.fa.gz',
+'anoGam1' => 'anopheles_gambiae_47_3i/pep/Anopheles_gambiae.AgamP3.47.pep.all.fa.gz',
+'bosTau3' => 'bos_taurus_47_3d/pep/Bos_taurus.Btau_3.1.47.pep.all.fa.gz',
+'ce5' => 'caenorhabditis_elegans_47_180/pep/Caenorhabditis_elegans.WS180.47.pep.all.fa.gz',
+'canFam2' => 'canis_familiaris_47_2e/pep/Canis_familiaris.BROADD2.47.pep.all.fa.gz',
+'cavPor2' => 'cavia_porcellus_47_1b/pep/Cavia_porcellus.GUINEAPIG.47.pep.all.fa.gz',
+'ci2' => 'ciona_intestinalis_47_2g/pep/Ciona_intestinalis.JGI2.47.pep.all.fa.gz',
+'cioSav2' => 'ciona_savignyi_47_2e/pep/Ciona_savignyi.CSAV2.0.47.pep.all.fa.gz',
+'danRer5' => 'danio_rerio_47_7a/pep/Danio_rerio.ZFISH7.47.pep.all.fa.gz',
+'dasNov1' => 'dasypus_novemcinctus_47_1d/pep/Dasypus_novemcinctus.ARMA.47.pep.all.fa.gz',
+'dm4' => 'drosophila_melanogaster_47_43b/pep/Drosophila_melanogaster.BDGP4.3.47.pep.all.fa.gz',
+'echTel1' => 'echinops_telfairi_47_1d/pep/Echinops_telfairi.TENREC.47.pep.all.fa.gz',
+'eriEur1' => 'erinaceus_europaeus_47_1b/pep/Erinaceus_europaeus.HEDGEHOG.47.pep.all.fa.gz',
+'felCat3' => 'felis_catus_47_1b/pep/Felis_catus.CAT.47.pep.all.fa.gz',
+'galGal3' => 'gallus_gallus_47_2e/pep/Gallus_gallus.WASHUC2.47.pep.all.fa.gz',
+'gasAcu1' => 'gasterosteus_aculeatus_47_1d/pep/Gasterosteus_aculeatus.BROADS1.47.pep.all.fa.gz',
+'hg18' => 'homo_sapiens_47_36i/pep/Homo_sapiens.NCBI36.47.pep.all.fa.gz',
+'loxAfr1' => 'loxodonta_africana_47_1c/pep/Loxodonta_africana.BROADE1.47.pep.all.fa.gz',
+'rheMac2' => 'macaca_mulatta_47_10f/pep/Macaca_mulatta.MMUL_1.47.pep.all.fa.gz',
+'monDom5' => 'monodelphis_domestica_47_5b/pep/Monodelphis_domestica.BROADO5.47.pep.all.fa.gz',
+'mm9' => 'mus_musculus_47_37/pep/Mus_musculus.NCBIM37.47.pep.all.fa.gz',
+'myoLuc0' => 'myotis_lucifugus_47_1c/pep/Myotis_lucifugus.MICROBAT1.47.pep.all.fa.gz',
+'ornAna1' => 'ornithorhynchus_anatinus_47_1d/pep/Ornithorhynchus_anatinus.OANA5.47.pep.all.fa.gz',
+'oryCun1' => 'oryctolagus_cuniculus_47_1d/pep/Oryctolagus_cuniculus.RABBIT.47.pep.all.fa.gz',
+'oryLat1' => 'oryzias_latipes_47_1c/pep/Oryzias_latipes.MEDAKA1.47.pep.all.fa.gz',
+'otoGar1' => 'otolemur_garnettii_47_1a/pep/Otolemur_garnettii.BUSHBABY1.47.pep.all.fa',
+'panTro2' => 'pan_troglodytes_47_21f/pep/Pan_troglodytes.CHIMP2.1.47.pep.all.fa.gz ',
+'rn4' => 'rattus_norvegicus_47_34q/pep/Rattus_norvegicus.RGSC3.4.47.pep.all.fa.gz',
+'sacCer1' => 'saccharomyces_cerevisiae_47_1g/pep/Saccharomyces_cerevisiae.SGD1.01.47.pep.all.fa.gz',
+'sorAra0' => 'sorex_araneus_47_1a/pep/Sorex_araneus.COMMON_SHREW1.47.pep.all.fa.gz',
+'speTri0' => 'spermophilus_tridecemlineatus_47_1c/pep/Spermophilus_tridecemlineatus.SQUIRREL.47.pep.all.fa.gz',
+'fr2' => 'takifugu_rubripes_47_4g/pep/Takifugu_rubripes.FUGU4.47.pep.all.fa.gz',
+'tetNig1' => 'tetraodon_nigroviridis_47_1i/pep/Tetraodon_nigroviridis.TETRAODON7.47.pep.all.fa.gz',
+'tupBel1' => 'tupaia_belangeri_47_1b/pep/Tupaia_belangeri.TREESHREW.47.pep.all.fa.gz',
+'xenTro2' => 'xenopus_tropicalis_47_41g/pep/Xenopus_tropicalis.JGI4.1.47.pep.all.fa.gz',
 );
 
 # key is UCSC db name, result is FTP file name under the gtf directory
@@ -149,11 +187,18 @@ my %ensGeneFtpPeptideFileNames_48 = (
 'xenTro2' => 'xenopus_tropicalis/pep/Xenopus_tropicalis.JGI4.1.48.pep.all.fa.gz',
 );
 
+my @versionList = qw( 48 47 );
+
 my @ensGtfReference;
 $ensGtfReference[47] = \%ensGeneFtpFileNames_47;
 $ensGtfReference[48] = \%ensGeneFtpFileNames_48;
 my @ensPepReference;
 $ensPepReference[48] = \%ensGeneFtpPeptideFileNames_48;
+$ensPepReference[47] = \%ensGeneFtpPeptideFileNames_47;
+
+sub ensVersionList() {
+   return @versionList;
+}
 
 sub ensGeneVersioning($$) {
 #  given a UCSC db name, and an Ensembl version number, return
