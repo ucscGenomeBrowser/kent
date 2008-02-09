@@ -39,7 +39,7 @@ class UserNotifier < ActionMailer::Base
   protected
   def setup_email(user)
     @recipients  = "#{user.email}"
-    @from        = "galt@soe.ucsc.edu"
+    @from        = "#{ActiveRecord::Base.configurations[RAILS_ENV]['from']}"
     @subject     = "ENCODE Pipeline: "
     @sent_on     = Time.now
     @body[:user] = user
