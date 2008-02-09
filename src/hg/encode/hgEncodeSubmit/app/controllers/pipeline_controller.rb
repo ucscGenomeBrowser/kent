@@ -2,13 +2,6 @@ class PipelineController < ApplicationController
 
   # TODO: move some stuff into the private area so it can't be called by URL-hackers
 
-  #require 'open-uri'
-
-  #require 'net/http'
-
-  #Process.wait
-  #Process.waitpid2(0, Process::WNOHANG | Process::WUNTRACED)
-
   #CONSTANTS
 
   AUTOUPLOADLABEL = "Upload/Validate/Load (automatic)"
@@ -20,44 +13,15 @@ class PipelineController < ApplicationController
   
   def list
     @projects = Project.find(:all)
-    #@projectTypes = getProjectTypes
     @title = "These are the projects in our system"
   end
   
   def show_user
 
-    #debug add a delay to simulate busyness.  is the db locked?
-    #exitCode = system("sleep 20")
-
     @autoRefresh = true
     @user = User.find(current_user.id)
     @projects = @user.projects
-    #@projectTypes = getProjectTypes
     @title = "These are your projects"
-
-    # finish any unfinished business for this user
-    #@projects.delete_if do |p|
-      #doDelete = false
-      #if p.status.starts_with?("schedule expanding ")
-      #  @project = p
-      #  if process_uploaded_archive
-      #    # ok
-      #  end
-      #end
-      #if p.status.starts_with?("schedule expand all")
-      #  @project = p
-      #  reexpand_all_completion
-      #end
-      #if p.status.starts_with?("schedule deleting")
-      #  doDelete = true
-      #  @project = p
-      #  delete_completion
-      #  @project.status = "deleted"
-      #  log_project_status
-      #  @project.destroy
-      #end
-      #doDelete
-    #end
 
     render :action => 'list'
     
@@ -86,23 +50,7 @@ class PipelineController < ApplicationController
           end
         end
     end 
-
  
-    #if @project.status.starts_with?("schedule expanding ")
-    #  if process_uploaded_archive
-    #    # ok
-    #  end
-    #end
-    #if @project.status.starts_with?("schedule expand all")
-    #  reexpand_all_completion
-    #end
-    #if @project.status.starts_with?("schedule deleting")
-    #  delete_completion
-    #  @project.status = "deleted"
-    #  log_project_status
-    #  @project.destroy
-    #  redirect_to :action => 'show_user'
-    #end
   end
 
 
@@ -129,14 +77,13 @@ class PipelineController < ApplicationController
   def begin_loading
     @project = Project.find(params[:id])
     if @project.status == "validated"
-      #@project.status = "schedule loading"
       @project.status = "loading"
       @project.save
       log_project_status
     end
     redirect_to :action => 'show', :id => @project.id
-    #old way redirect_to :action => 'show_user'
-    galtDebug = true
+    galtDebug = false  # set to true to cause processing in parent without child 
+                       # for debugging so you can see the error messages
     if galtDebug
       load
     else
@@ -160,15 +107,7 @@ class PipelineController < ApplicationController
     if exitCode == 0
       @project.status = "loaded"
       # send email notification
-
-      # debug remove
-      logger.info "\n\nGALT! emailOnLoad=#{ActiveRecord::Base.configurations[RAILS_ENV]['emailOnLoad']}\n\n"
-
       if ActiveRecord::Base.configurations[RAILS_ENV]['emailOnLoad']
-
-        #DEBUG REMOVE:
-        flash[:warning] = "about to call UserNotifier.deliver_load..."
-
         @user = User.find(current_user.id)
         UserNotifier.deliver_load_notification(@user, @project)
       end
@@ -186,7 +125,6 @@ class PipelineController < ApplicationController
   def begin_validating
     @project = Project.find(params[:id])
     if @project.status == "uploaded"
-      #@project.status = "schedule validating"  
       @project.status = "validating"
       @project.save
       log_project_status
@@ -198,7 +136,6 @@ class PipelineController < ApplicationController
   end
 
   def validate
-    #logger.info("pretending to validate!")
     projectType = getProjectType
  
     #require 'pp'   # debug
@@ -278,7 +215,6 @@ class PipelineController < ApplicationController
     msg = ""
     msg += "project deleted"
     if File.exists?(projectDir)
-      #@project.status = "schedule unloading"
       @project.status = "unloading"
       unless @project.save
         flash[:warning] = "project record save failed"
@@ -328,17 +264,10 @@ class PipelineController < ApplicationController
       @upurl = ""
     end
     return if @upload.blank? && @upurl.blank?
-    #raise @upload.inspect
-    #flash[:notice] = "#{@upload.inspect}"
 
-    #logger.info "\n\nGALT! got here 1\n\n"
-    
     unless @upurl.blank?
       @filename = sanitize_filename(@upurl)
-      #@upload = open(@upurl)  # can not do here, but maybe a HEAD would check it exists before starting
-
-      #logger.info "\n\nGALT! got here 2\n\n"
-    
+      #TODO add a HEAD would check it exists before starting?
     else
       @filename = sanitize_filename(@upload.original_filename)
       extensionsByMIME = {
@@ -385,11 +314,9 @@ class PipelineController < ApplicationController
     msg += "uploading/expanding #{plainName}<br>"
 
 
-    #logger.info "\n\nGALT! got here 4\n\n"
-   
-    galtDebug = false
+    galtDebug = false  # set to true to cause processing in parent without child 
+                       # for debugging so you can see the error messages
 
-    # DEBUG REMOVE!
     if galtDebug
       upload_background
     end
@@ -397,9 +324,6 @@ class PipelineController < ApplicationController
     flash[:notice] = msg
     redirect_to :action => 'show', :id => @project
 
-
-    #logger.info "\n\nGALT! got here 5\n\n"
-    
     unless galtDebug
       spawn do
         upload_background
@@ -416,30 +340,6 @@ class PipelineController < ApplicationController
       end
       log_project_status
 
-        #toDo "if ($status) then"
-        #toDo "  exit 1"
-        #toDo "endif"
-        #@project.status = "schedule todo (upload and expand)"
- 
-        # TESTING shows that rails is too slow by far!
-        #@upload = open(@upurl)  THIS FAILS FOR BIG FILES
-        #@upload = open(@upurl, 'User-Agent' => 'Ruby/1.8.6')  # WORKS BUT 40X slower than wget!
-
-        #unless @upload
-        #  projectDir = path_to_project_dir
-        #  errFile = "#{projectDir}/upload_error"
-        #  errMsg = "404 error"
-        #  File.open(errFile, "wb") { |f| f.write(errMsg+"\n") }
-        #  @project.status = "upload failed"
-        #  unless @project.save
-        #    return
-        #  end
-        #  log_project_status
-        #  return
-        #end
-
-      #logger.info "\n\nGALT! got here 6\n\n"
-    
       # just in case, remove it it already exists (shouldn't happen)
       File.delete(path_to_file) if File.exists?(path_to_file)
     
@@ -452,15 +352,6 @@ class PipelineController < ApplicationController
         end
       end
 
-      #initiateToDo
-
-      #logger.info "\n\nGALT! got here 7\n\n"
-    
-
-      #logger.info "\n\nGALT! got here 8\n\n"
-
-
-      # WARNING: do not try to re-arrange this block, it causes rails to crash    
       unless @upurl.blank?
 
         projectDir = path_to_project_dir
@@ -480,46 +371,8 @@ class PipelineController < ApplicationController
         end
 
       else  # should be local-file upload, Hmm... where does Mongrel put it during upload?
-        #if @upload.instance_of?(Tempfile)  # very touchy, never evaluate unless local file uploaded
-          FileUtils.copy(@upload.local_path, path_to_file)
-        #else
-          # File.open(path_to_file, "wb") { |f| f.write(@upload.read) } 
-        #end
+        FileUtils.copy(@upload.local_path, path_to_file)
       end
-
-      # way too slow
-        #uri = URI.parse(@upurl)
-        #http = Net::HTTP.start(uri.host, uri.port)
-
-
-
-#        # old way  f.write(@upload.read) 
-#        totalBytesRead = 0
-#        bytesRead = 0
-#        updateSize = 10000000  # 10 MB
-#        bufSize = 65536
-#        File.open(path_to_file, "wb") do |f| 
-#          more = true
-#          http.get(uri.path) do |buf|
-#          #while more do
-#            #buf = @upload.read(bufSize)
-#            if buf.length > 0
-#              f.write(buf)
-#              bytesRead += buf.length
-#              if bytesRead > updateSize
-#                totalBytesRead += updateSize
-#                bytesRead -= updateSize
-#                @project.status = "uploading #{(totalBytesRead + bytesRead)/1000000} MB"
-#                unless @project.save
-#                  return
-#                end
-#              end
-#            else
-#              more = false
-#            end
-#          end
-#          f.close
-#        end
 
       @project.status = "expanding"
       unless @project.save
@@ -528,8 +381,6 @@ class PipelineController < ApplicationController
       log_project_status
 
 
-      #logger.info "\n\nGALT! got here 9\n\n"
-    
       nextArchiveNo = @project.archive_count+1
       if prep_one_archive @filename, nextArchiveNo
         if process_uploaded_archive
@@ -541,8 +392,6 @@ class PipelineController < ApplicationController
           @project.status = "upload failed"
       end
 
-      #logger.info "\n\nGALT! got here 10\n\n"
-    
       unless @project.save
         flash[:warning] = "project record save failed"
         return
@@ -555,18 +404,6 @@ class PipelineController < ApplicationController
           load
         end
       end
-
-
-
-  #rescue OpenURI::HTTPError => err
-  #  projectDir = path_to_project_dir
-  #  errFile = "#{projectDir}/upload_error"
-  #  File.open(errFile, "wb") { |f| f.write(err.message+"\n") }
-  #  @project.status = "upload failed"
-  #  unless @project.save
-  #    return
-  #  end
-  #  log_project_status
 
   end
 
@@ -625,9 +462,6 @@ class PipelineController < ApplicationController
       |f| 
       fullName = File.join(projectDir,f)
       unless keepers[f] or (f == ".") or (f == "..")
-        
-        # debug
-        #msg += "projectDir: #{f} #{File.ftype(fullName)}<br>\n" 
         cmd = "rm -fr #{fullName}"
         unless system(cmd)
           flash[:warning] = "error cleaning up subdirectory: <br>command=[#{cmd}]<br>"  
@@ -643,7 +477,6 @@ class PipelineController < ApplicationController
       end
     end
 
-    #initiateToDo
     found = false 
     @project.project_archives.each do |a|
       n = a.archive_no-1
@@ -682,7 +515,6 @@ class PipelineController < ApplicationController
             prep_one_archive a.file_name, a.archive_no
           end
         end
-        # do we have to update the status?
         reexpand_all_completion 
       end
     end
@@ -791,12 +623,11 @@ private
 
     @filename = file_name
     cmd = makeUnarchiveCommand(uploadDir)
-    #toDo cmd
     timeout = 3600
     exitCode = run_with_timeout(cmd, timeout)
 
     #debug
-    logger.info "got past running decompressor:\ncmd=[#{cmd}]\nexitCode=#{exitCode}\n"
+    #logger.info "got past running decompressor:\ncmd=[#{cmd}]\nexitCode=#{exitCode}\n"
 
     if exitCode != 0
       return false
@@ -847,7 +678,6 @@ private
 
   def process_archive(archive_id, projectDir, uploadDir, relativePath)
     # process the archive files
-    #msg += "uploadDir:<br>\n" 
     fullPath = my_join(uploadDir,relativePath)
     Dir.entries(fullPath).each do
       |f| 
@@ -863,11 +693,6 @@ private
         end
       else 
         if File.ftype(fullName) == "file"
-          #msg += "&nbsp;#{f}<br>\n"
-          #unless ["bed", "idf", "adf", "sdrf" ].any? {|ext| f.downcase.ends_with?("." + ext) }
-          #  flash[:warning] = "unknown file type: #{f}"
-          #  return false
-          #end 
    
 	  relName = my_join(relativePath,f)
  
@@ -899,19 +724,12 @@ private
 
  def process_uploaded_archive
     
-    #@filename = @project.status.gsub(/^schedule expanding /,'')  # old delete this
-
     logger.info "\n\n@filename=#{@filename}\n\n" #debug
 
     # make sure parent paths exist
     projectDir = path_to_project_dir
 
     nextArchiveNo = @project.archive_count+1
-
-    #@filename = "#{"%03d" % nextArchiveNo}_#{@filename}"
-
-    # dead code, just an example of using write_attribute:
-    #write_attribute("file", path_to_file)
 
     # need to test for and delete any with same archive_no (just in case?)
     # moved this up here just to get the @project_archive.id set
@@ -927,7 +745,6 @@ private
     project_archive.status = "see current"
     project_archive.archives_active = ""
     unless project_archive.save
-      #flash[:warning] = "error saving project_archive record for: #{@filename}"
       return false
     end
 
@@ -935,7 +752,6 @@ private
     @project.archives_active += "1"
 
     unless @project.save
-      #flash[:warning] = "project record save failed"
       return false
     end
 
@@ -946,9 +762,7 @@ private
       log_project_status
       return false
     end
-    #redirect_to :action => 'show', :id => @project
 
-    #@upload.methods.each {|x| msg += "#{x.to_str}<br>"}
     return true
 
   end
@@ -989,22 +803,6 @@ private
     return ""
   end
 
-  def todoName
-    # the expand_path method resolves this relative path to full absolute path
-    path_to_project_dir+"/todo"
-  end
-  def toDo(line)
-    f = File.open(todoName, "a")
-    f.puts(line)
-    f.close
-  end
-  def initiateToDo
-    f = File.open(todoName, "w")
-    f.close
-    toDo "#!/bin/tcsh"
-    File.chmod 0755, todoName
-  end
-
   def makeUnarchiveCommand(uploadDir)
     # handle unzipping the archive
     if ["zip", "ZIP"].any? {|ext| @filename.ends_with?("." + ext) }
@@ -1026,20 +824,10 @@ private
       c = @project.archives_active[n..n]
       if c == "1"
         unless expand_archive(a)
-	  #redirect_to :action => 'show', :id => @project
           return
         end
       end
     end
-
-    #msg = "Cleaned out upload dir and re-expanded all archives"
-    #if flash[:notice]
-    #  flash[:notice] += "<br>"+msg
-    #else
-    #  flash[:notice] = msg
-    #end 
-
-    #old dont need: redirect_to :action => 'show', :id => @project
 
   end
 
@@ -1061,7 +849,6 @@ private
       }
       Dir.delete(projectDir)
     end
-    #oldway Project.find(params[:id]).destroy
   end
 
 
