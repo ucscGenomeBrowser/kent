@@ -20,6 +20,7 @@ development:
   socket: /var/lib/mysql/mysql.sock
   upload: /somestorage/encpipeline_yourname
   title: ENCODE
+  from: you@somewhere.com
 
 # Warning: The database defined as 'test' will be erased and
 # re-generated from your development database when you run 'rake'.
@@ -33,6 +34,7 @@ test:
   socket: /var/lib/mysql/mysql.sock
   upload: /somestorage/encpipeline_test
   title: ENCODE
+  from: you@somewhere.com
 
 
 production:
@@ -44,4 +46,5 @@ production:
   socket: /var/lib/mysql/mysql.sock
   upload: /somestorage/encpipeline_prod
   title: ENCODE
+  from: you@somewhere.com
 
