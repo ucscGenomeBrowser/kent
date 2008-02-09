@@ -136,8 +136,13 @@ class PipelineController < ApplicationController
     end
     redirect_to :action => 'show', :id => @project.id
     #old way redirect_to :action => 'show_user'
-    spawn do
-      load 
+    galtDebug = true
+    if galtDebug
+      load
+    else
+      spawn do
+        load 
+      end
     end
   end
 
@@ -154,6 +159,19 @@ class PipelineController < ApplicationController
 
     if exitCode == 0
       @project.status = "loaded"
+      # send email notification
+
+      # debug remove
+      logger.info "\n\nGALT! emailOnLoad=#{ActiveRecord::Base.configurations[RAILS_ENV]['emailOnLoad']}\n\n"
+
+      if ActiveRecord::Base.configurations[RAILS_ENV]['emailOnLoad']
+
+        #DEBUG REMOVE:
+        flash[:warning] = "about to call UserNotifier.deliver_load..."
+
+        @user = User.find(current_user.id)
+        UserNotifier.deliver_load_notification(@user, @project)
+      end
     else
       @project.status = "load failed"
     end

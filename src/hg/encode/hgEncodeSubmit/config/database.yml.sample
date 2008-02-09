@@ -21,6 +21,7 @@ development:
   upload: /somestorage/encpipeline_yourname
   title: ENCODE
   from: you@somewhere.com
+  emailOnLoad: somebody@somewhere.com
 
 # Warning: The database defined as 'test' will be erased and
 # re-generated from your development database when you run 'rake'.
@@ -35,6 +36,7 @@ test:
   upload: /somestorage/encpipeline_test
   title: ENCODE
   from: you@somewhere.com
+  emailOnLoad: somebody@somewhere.com
 
 
 production:
@@ -47,4 +49,5 @@ production:
   upload: /somestorage/encpipeline_prod
   title: ENCODE
   from: you@somewhere.com
+  emailOnLoad: somebody@somewhere.com
 

@@ -121,6 +121,7 @@ class AccountController < ApplicationController
     @user = self.current_user
     @user.update_attributes(params[:user])
     @user.reset_password
+    @user.new_email = ""  # prevent it from thinking it's new
     @user.save!
     # until we have a place to redirect back to, just log them out  
     self.current_user.forget_me if logged_in?

@@ -1,4 +1,14 @@
 class UserNotifier < ActionMailer::Base
+
+  def load_notification(user, project)
+    setup_email(user)
+    @recipients  = ActiveRecord::Base.configurations[RAILS_ENV]['emailOnLoad']
+    db = ActiveRecord::Base.configurations[RAILS_ENV]['database']
+    @subject    += "Project #{db} #{project.id} #{project.name} Loaded"
+    @body[:project] = project
+    @body[:database] = db
+  end
+  
   def signup_notification(user)
     setup_email(user)
     @subject    += 'Please activate your new account'
