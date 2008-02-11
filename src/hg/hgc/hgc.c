@@ -213,7 +213,7 @@
 #include "itemConf.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1387 2008/02/08 07:22:00 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1388 2008/02/11 18:56:14 angie Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -13614,15 +13614,18 @@ printf("<H2>dbSNP build %d %s</H2>\n", version, itemName);
 safef(query, sizeof(query), "select * from %s where chrom='%s' and "
       "chromStart=%d and name='%s'", table, seqName, start, itemName);
 sr = sqlGetResult(conn, query);
-row = sqlNextRow(sr);
-snp125StaticLoad(row+rowOffset, &snp);
-printCustomUrl(tdb, itemName, FALSE);
-bedPrintPos((struct bed *)&snp, 3);
-
-snpAlign = snp125ToSnp(&snp);
-printf("<BR>\n");
-printSnp125Info(tdb, snp, version);
-doSnpEntrezGeneLink(tdb, itemName);
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    snp125StaticLoad(row+rowOffset, &snp);
+    printCustomUrl(tdb, itemName, FALSE);
+    bedPrintPos((struct bed *)&snp, 3);
+    snpAlign = snp125ToSnp(&snp);
+    printf("<BR>\n");
+    printSnp125Info(tdb, snp, version);
+    doSnpEntrezGeneLink(tdb, itemName);
+    }
+else
+    errAbort("SNP %s not found at %s base %d", itemName, seqName, start);
 sqlFreeResult(&sr);
 
 writeSnpExceptionWithVersion(table, itemName, version);
