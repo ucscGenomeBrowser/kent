@@ -108,8 +108,8 @@ class PipelineController < ApplicationController
       @project.status = "loaded"
       # send email notification
       if ActiveRecord::Base.configurations[RAILS_ENV]['emailOnLoad']
-        @user = User.find(current_user.id)
-        UserNotifier.deliver_load_notification(@user, @project)
+        user = User.find(current_user.id)
+        UserNotifier.deliver_load_notification(user, @project)
       end
     else
       @project.status = "load failed"
