@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/makeDownloads.pl instead.
 
-# $Id: makeDownloads.pl,v 1.11 2008/01/25 18:18:31 hiram Exp $
+# $Id: makeDownloads.pl,v 1.12 2008/02/11 19:04:01 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -690,11 +690,12 @@ _EOF_
   }
   print $fh <<_EOF_
 ------------------------------------------------------------------
-If you plan to download a large file or multiple files from this 
-directory, we recommend that you use ftp rather than downloading the 
-files via our website. To do so, ftp to hgdownload.cse.ucsc.edu, then 
-go to the directory goldenPath/$db/bigZips. To download multiple 
-files, use the "mget" command:
+If you plan to download a large file or multiple files from this
+directory, we recommend that you use ftp rather than downloading the
+files via our website. To do so, ftp to hgdownload.cse.ucsc.edu
+[username: anonymous, password: your email address], then cd to the
+directory goldenPath/$db/bigZips. To download multiple files, use
+the "mget" command:
 
     mget <filename1> <filename2> ...
     - or -
