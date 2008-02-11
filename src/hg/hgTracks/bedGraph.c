@@ -14,7 +14,7 @@
 #include "customTrack.h"
 #include "wigCommon.h"
 
-static char const rcsid[] = "$Id: bedGraph.c,v 1.7.160.1 2008/01/16 07:00:39 markd Exp $";
+static char const rcsid[] = "$Id: bedGraph.c,v 1.7.160.2 2008/02/11 17:52:11 markd Exp $";
 
 struct bedGraphItem
 /* A bedGraph track item. */
@@ -315,7 +315,7 @@ drawArbitraryYLine(vis, wigCart->yLineOnOff,
     hvg, xOff, yOff, width, tg->lineHeight, wigCart->yLineMark, graphRange,
     wigCart->yLineOnOff);
 
-wigMapSelf(tg, seqStart, seqEnd, xOff, yOff, width);
+wigMapSelf(tg, hvg, seqStart, seqEnd, xOff, yOff, width);
 
 freez(&colorArray);
 freeMem(preDraw);

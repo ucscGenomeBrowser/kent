@@ -10,7 +10,7 @@
 #include "rnaSecStr.h"
 #include "rnautil.h"
 
-static char const rcsid[] = "$Id: rnaFoldTrack.c,v 1.4.80.1 2008/01/16 07:00:43 markd Exp $";
+static char const rcsid[] = "$Id: rnaFoldTrack.c,v 1.4.80.2 2008/02/11 17:52:14 markd Exp $";
 
 
 void bedLoadItemBySqlResult(struct track *tg, struct sqlResult *sr, int rowOffset, ItemLoader loader)
@@ -212,7 +212,7 @@ if (color)
 	    Color textColor = hvGfxContrastingColor(hvg, color);
 	    hvGfxTextCentered(hvg, x1, y, w, heightPer, textColor, font, s);
 	    }
-	mapBoxHc(rnaSecStr->chromStart, rnaSecStr->chromEnd, x1, y, x2 - x1, heightPer,
+	mapBoxHc(hvg, rnaSecStr->chromStart, rnaSecStr->chromEnd, x1, y, x2 - x1, heightPer,
 		 tg->mapName, tg->mapItemName(tg, rnaSecStr), NULL);
 	}
     }

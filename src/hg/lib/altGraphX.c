@@ -10,7 +10,7 @@
 #include "geneGraph.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: altGraphX.c,v 1.35.16.3 2008/02/11 07:24:40 markd Exp $";
+static char const rcsid[] = "$Id: altGraphX.c,v 1.35.16.4 2008/02/11 17:52:10 markd Exp $";
 struct altGraphX *_agxSortable = NULL; /* used for sorting. */
 
 struct evidence *evidenceCommaIn(char **pS, struct evidence *ret)
@@ -1685,7 +1685,7 @@ void altGraphXDrawPack(struct altGraphX *agList, struct spaceSaver *ssList,
 		       struct hvGfx *hvg, int xOff, int yOff, int width, 
 		       int heightPer, int lineHeight, int seqStart, int seqEnd, double scale, 
 		       MgFont *font, Color color, Color *shades, char *drawName,
-		       void (*mapItem)(char *tableName, struct altGraphX *ag, int start, int end,
+		       void (*mapItem)(char *tableName, struct altGraphX *ag, struct hvGfx *hvg, int start, int end,
 				       int x, int y, int width, int height))
 /** Draw a splicing graph for each altGraphX in the agList where the
     exons don't overlap as they have been laid out in the spaceSaver
@@ -1708,7 +1708,7 @@ for(ss = ssList, ag=agList; ss != NULL && ag != NULL; ss=ss->next, ag=ag->next)
 	int mapWidth = mapEnd - mapStart;
 	if(mapWidth < 1) 
 	    mapStart = 1;
-	mapItem(drawName, ag, ag->tStart, ag->tEnd, mapStart, yOff, mapWidth, mapHeight);
+	mapItem(drawName, ag, hvg, ag->tStart, ag->tEnd, mapStart, yOff, mapWidth, mapHeight);
 	}
     /* Draw all of the exons that have been stored in the spacesaver. */
     for (sn = ss->nodeList; sn != NULL; sn = sn->next)

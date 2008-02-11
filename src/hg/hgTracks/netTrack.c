@@ -11,7 +11,7 @@
 #include "chainNet.h"
 #include "chainNetDbLoad.h"
 
-static char const rcsid[] = "$Id: netTrack.c,v 1.20.80.1 2008/01/16 07:00:43 markd Exp $";
+static char const rcsid[] = "$Id: netTrack.c,v 1.20.80.2 2008/02/11 17:52:14 markd Exp $";
 
 struct netItem
 /* A net track item. */
@@ -89,7 +89,7 @@ netColorLastChrom = chrom;
 return color;
 }
 
-static void rNetBox(struct cnFill *fill, int start, int end, int y, int level,
+static void rNetBox(struct hvGfx *hvg, struct cnFill *fill, int start, int end, int y, int level,
 	Color color, Color barbColor, int orientation)
 /* Draw a scaled box. */
 {
@@ -120,14 +120,14 @@ if (w > 1)
 	snprintf(depth, sizeof(depth), "%d", level);
 	dyStringPrintf(bubble, "%s %c %dk ", 
 	    fill->qName, fill->qStrand, fill->qStart/1000);
-	mapBoxHc(start, end, x1, y, w, rHeightPer, rTg->mapName, 
+	mapBoxHc(hvg, start, end, x1, y, w, rHeightPer, rTg->mapName, 
 	    depth, bubble->string);
 	dyStringFree(&bubble);
 	}
     }
 }
 
-static void rNetLine(struct cnFill *gap, int y, int level, Color color,
+static void rNetLine(struct hvGfx *hvg, struct cnFill *gap, int y, int level, Color color,
 	int orientation)
 /* Write out line filling gap and associated info. */
 {
@@ -158,7 +158,7 @@ if (w >= 1)
 	dyStringPrintf(bubble, "size %d/%d Ns %d/%d newRep %d/%d", 
 	    gap->qSize, gap->tSize, gap->qN, gap->tN,
 	    gap->qNewR, gap->tNewR);
-	    mapBoxHc(start, end, x1, y, w, rHeightPer, rTg->mapName, 
+        mapBoxHc(hvg, start, end, x1, y, w, rHeightPer, rTg->mapName, 
 		depth, bubble->string);
 	dyStringFree(&bubble);
 	}
@@ -166,7 +166,7 @@ if (w >= 1)
 }
 
 
-static void rNetDraw(struct cnFill *fillList, int level, int y)
+static void rNetDraw(struct hvGfx *hvg, struct cnFill *fillList, int level, int y)
 /* Recursively draw net. */
 {
 struct cnFill *fill;
@@ -182,7 +182,7 @@ for (fill = fillList; fill != NULL; fill = fill->next)
     if (fill->children == NULL || fill->tSize * rScale < 2.5)
     /* Draw single solid box if no gaps or no room to draw gaps. */
         {
-	rNetBox(fill, fill->tStart, fill->tStart + fill->tSize, y, level,
+	rNetBox(hvg, fill, fill->tStart, fill->tStart + fill->tSize, y, level,
 		color, invColor, orientation);
 	}
     else
@@ -192,20 +192,20 @@ for (fill = fillList; fill != NULL; fill = fill->next)
 	    {
 	    if (gap->tSize * rScale >= 1)
 		{
-		rNetBox(fill, fStart, gap->tStart, y, level,
+		rNetBox(hvg, fill, fStart, gap->tStart, y, level,
 			color, invColor, orientation);
 		fStart = gap->tStart + gap->tSize;
-		rNetLine(gap, y, level+1, color, orientation);
+		rNetLine(hvg, gap, y, level+1, color, orientation);
 		}
 	    }
-	rNetBox(fill, fStart, fill->tStart + fill->tSize, y, level,
+	rNetBox(hvg, fill, fStart, fill->tStart + fill->tSize, y, level,
 		color, invColor, orientation);
 	}
     for (gap = fill->children; gap != NULL; gap = gap->next)
         {
 	if (gap->children)
 	    {
-	    rNetDraw(gap->children, level+2, y + rNextLine);
+	    rNetDraw(hvg, gap->children, level+2, y + rNextLine);
 	    }
 	}
     }
@@ -242,11 +242,11 @@ if (net != NULL)
     rScale = scaleForPixels(width);
 
     /* Recursively do main bit of work. */
-    rNetDraw(net->fillList, 1, yOff);
+    rNetDraw(hvg, net->fillList, 1, yOff);
     chainNetFree(&net);
     }
 if (vis == tvDense)
-    mapBoxToggleVis(xOff, yOff, width, tg->heightPer, tg);
+    mapBoxToggleVis(hvg, xOff, yOff, width, tg->heightPer, tg);
 }
 
 void netMethods(struct track *tg)

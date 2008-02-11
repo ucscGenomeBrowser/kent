@@ -124,7 +124,7 @@ if (isFull)
 		sprintf(statusLine, "Repeat %s, family %s",
 		    ro.repName, ro.repFamily);
 		}
-	    mapBoxHc(ro.genoStart, ro.genoEnd, x1, ri->yOffset, w, heightPer, tg->mapName,
+	    mapBoxHc(hvg, ro.genoStart, ro.genoEnd, x1, ri->yOffset, w, heightPer, tg->mapName,
 	    	ro.repName, statusLine);
 	    }
 	}

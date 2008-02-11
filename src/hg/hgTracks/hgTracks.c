@@ -118,7 +118,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1430.4.4 2008/02/11 07:24:41 markd Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1430.4.5 2008/02/11 17:52:12 markd Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -214,6 +214,7 @@ boolean withNextItemArrows = FALSE;	/* Display next feature (gene) navigation bu
 boolean withNextExonArrows = FALSE;	/* Display next exon navigation buttons near center labels? */
 boolean withPriorityOverride = FALSE;	/* Display priority for each track to allow reordering */
 boolean hideControls = FALSE;		/* Hide all controls? */
+boolean revComplement = FALSE;          /* reverse-complement display */
 
 int rulerMode = tvHide;         /* on, off, full */
 
@@ -658,10 +659,13 @@ hPutc('"');
 va_end(args);
 }
 
-static void mapBoxUi(int x, int y, int width, int height,
+static void mapBoxUi(struct hvGfx *hvg, int x, int y, int width, int height,
                                 char *name, char *shortLabel)
 /* Print out image map rectangle that invokes hgTrackUi. */
 {
+x = hvGfxAdjXW(hvg, x, &width);
+y = hvGfxClipYH(hvg, y, &height);
+assert((x >= 0) && (y >= 0));
 char *encodedName = cgiEncode(name);
 
 hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
@@ -672,19 +676,22 @@ hPrintf(">\n");
 freeMem(encodedName);
 }
 
-void mapBoxTrackUi(int x, int y, int width, int height, struct track *tg)
+void mapBoxTrackUi(struct hvGfx *hvg, int x, int y, int width, int height, struct track *tg)
 /* Print out image map rectangle that invokes hgTrackUi for track. */
 {
-mapBoxUi(x, y, width, height, tg->mapName, tg->shortLabel);
+mapBoxUi(hvg, x, y, width, height, tg->mapName, tg->shortLabel);
 }
 
-static void mapBoxToggleComplement(int x, int y, int width, int height, 
+static void mapBoxToggleComplement(struct hvGfx *hvg, int x, int y, int width, int height, 
 	struct track *toggleGroup, char *chrom,
 	int start, int end, char *message)
 /*print out a box along the DNA bases that toggles a cart variable
  * "complement" to complement the DNA bases at the top by the ruler*/
 {
 struct dyString *ui = uiStateUrlPart(toggleGroup);
+x = hvGfxAdjXW(hvg, x, &width);
+y = hvGfxClipYH(hvg, y, &height);
+assert((x >= 0) && (y >= 0));
 hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
 hPrintf("HREF=\"%s?complement=%d",
 	hgTracksName(), !cartUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE));
@@ -695,15 +702,18 @@ if (message != NULL)
 hPrintf(">\n");
 }
 
-void mapBoxReinvokeExtra(int x, int y, int width, int height, 
-                            struct track *toggleGroup, char *chrom,
-                            int start, int end, char *message, char *extra)
+void mapBoxReinvokeExtra(struct hvGfx *hvg, int x, int y, int width, int height, 
+                         struct track *toggleGroup, char *chrom,
+                         int start, int end, char *message, char *extra)
 /* Print out image map rectangle that would invoke this program again.
  * If toggleGroup is non-NULL then toggle that track between full and dense.
  * If chrom is non-null then jump to chrom:start-end.
  * Add extra string to the URL if it's not NULL */
 {
 struct dyString *ui = uiStateUrlPart(toggleGroup);
+x = hvGfxAdjXW(hvg, x, &width);
+y = hvGfxClipYH(hvg, y, &height);
+assert((x >= 0) && (y >= 0));
 
 if (extra != NULL)
     {
@@ -726,18 +736,18 @@ if (message != NULL)
 hPrintf(">\n");
 }
 
-void mapBoxReinvoke(int x, int y, int width, int height, 
+void mapBoxReinvoke(struct hvGfx *hvg, int x, int y, int width, int height, 
 	struct track *toggleGroup, char *chrom,
 	int start, int end, char *message)
 /* Print out image map rectangle that would invoke this program again.
  * If toggleGroup is non-NULL then toggle that track between full and dense.
  * If chrom is non-null then jump to chrom:start-end. */
 {
-mapBoxReinvokeExtra(x, y, width, height, toggleGroup, chrom, start, end, 
-                                message, NULL);
+mapBoxReinvokeExtra(hvg, x, y, width, height, toggleGroup, chrom, start, end, 
+                    message, NULL);
 }
 
-void mapBoxToggleVis(int x, int y, int width, int height, 
+void mapBoxToggleVis(struct hvGfx *hvg, int x, int y, int width, int height, 
 	struct track *curGroup)
 /* Print out image map rectangle that would invoke this program again.
  * program with the current track expanded. */
@@ -745,15 +755,15 @@ void mapBoxToggleVis(int x, int y, int width, int height,
 char buf[256];
 safef(buf, sizeof(buf), 
 	"Toggle the display density of %s", curGroup->shortLabel);
-mapBoxReinvoke(x, y, width, height, curGroup, NULL, 0, 0, buf);
+mapBoxReinvoke(hvg, x, y, width, height, curGroup, NULL, 0, 0, buf);
 }
 
-void mapBoxJumpTo(int x, int y, int width, int height, 
+void mapBoxJumpTo(struct hvGfx *hvg, int x, int y, int width, int height, 
 	char *newChrom, int newStart, int newEnd, char *message)
 /* Print out image map rectangle that would invoke this program again
  * at a different window. */
 {
-mapBoxReinvoke(x, y, width, height, NULL, newChrom, newStart, newEnd, message);
+mapBoxReinvoke(hvg, x, y, width, height, NULL, newChrom, newStart, newEnd, message);
 }
 
 
@@ -769,16 +779,19 @@ if (dy == NULL)
 return dy->string;
 }
 
-void mapBoxHgcOrHgGene(int start, int end, int x, int y, int width, int height, 
-	char *track, char *item, char *statusLine, char *directUrl, boolean withHgsid)
+void mapBoxHgcOrHgGene(struct hvGfx *hvg, int start, int end, int x, int y, int width, int height, 
+                       char *track, char *item, char *statusLine, char *directUrl, boolean withHgsid,
+                       char *extra)
 /* Print out image map rectangle that would invoke the hgc (human genome click)
  * program. */
 {
+if (x < 0) x = 0;
+x = hvGfxAdjXW(hvg, x, &width);
+y = hvGfxClipYH(hvg, y, &height);
 int xEnd = x+width;
 int yEnd = y+height;
-if (x < 0) x = 0;
-if (xEnd > tl.picWidth) xEnd = tl.picWidth;
-if (x < xEnd)
+
+if ((x < xEnd) && (x >= 0) && (y >= 0))
     {
     char *encodedItem = cgiEncode(item);
     char *encodedTrack = cgiEncode(track);
@@ -790,15 +803,17 @@ if (x < xEnd)
 	hPrintf(directUrl, item, chromName, start, end, encodedTrack, database);
 	if (withHgsid)
 	     hPrintf("&%s", cartSidUrlString(cart));
-	hPrintf("\" ");
 	}
     else
 	{
-	hPrintf("HREF=\"%s&o=%d&t=%d&g=%s&i=%s&c=%s&l=%d&r=%d&db=%s&pix=%d\" ", 
+	hPrintf("HREF=\"%s&o=%d&t=%d&g=%s&i=%s&c=%s&l=%d&r=%d&db=%s&pix=%d", 
 	    hgcNameAndSettings(), start, end, encodedTrack, encodedItem, 
 	    chromName, winStart, winEnd, 
 	    database, tl.picWidth);
 	}
+    if (extra != NULL)
+        hPrintf("&%s", extra);
+    hPrintf("\" ");
     if (statusLine != NULL)
 	mapStatusMessage("%s", statusLine);
     hPrintf(">\n");
@@ -807,12 +822,12 @@ if (x < xEnd)
     }
 }
 
-void mapBoxHc(int start, int end, int x, int y, int width, int height, 
+void mapBoxHc(struct hvGfx *hvg, int start, int end, int x, int y, int width, int height, 
 	char *track, char *item, char *statusLine)
 /* Print out image map rectangle that would invoke the hgc (human genome click)
  * program. */
 {
-mapBoxHgcOrHgGene(start, end, x, y, width, height, track, item, statusLine, NULL, FALSE);
+mapBoxHgcOrHgGene(hvg, start, end, x, y, width, height, track, item, statusLine, NULL, FALSE, NULL);
 }
 
 boolean chromTableExists(char *tabSuffix)
@@ -1009,7 +1024,7 @@ void linkedFeaturesMoveWinEnd(int exonEnd, int bufferToEdge, int newWinSize, int
 *pNewWinStart = *pNewWinEnd - newWinSize;
 }
 
-void linkedFeaturesNextPrevItem(struct track *tg, void *item, int x, int y, int w, int h, boolean next)
+void linkedFeaturesNextPrevItem(struct track *tg, struct hvGfx *hvg, void *item, int x, int y, int w, int h, boolean next)
 /* Draw a mapBox over the arrow-button on an *item already in the window*. */
 /* Clicking this will do one of several things: */
 {
@@ -1057,7 +1072,7 @@ for (ref = exonList; ref != NULL; ref = ref->next, exonIx++)
 	else
 	    linkedFeaturesMoveWinEnd(exon->end, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
 	safef(mouseOverText, sizeof(mouseOverText), "Next Feature (%d/%d)", exonIx+1, numExons);
-	mapBoxJumpTo(x, y, w, h, chromName, newWinStart, newWinEnd, mouseOverText);
+	mapBoxJumpTo(hvg, x, y, w, h, chromName, newWinStart, newWinEnd, mouseOverText);
 	break;
 	}
     else if (!next && (exon->start < winStart))
@@ -1075,7 +1090,7 @@ for (ref = exonList; ref != NULL; ref = ref->next, exonIx++)
 	else
 	    linkedFeaturesMoveWinStart(exon->start, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
 	safef(mouseOverText, sizeof(mouseOverText), "Prev Feature (%d/%d)", numExons-exonIx, numExons);
-	mapBoxJumpTo(x, y, w, h, chromName, newWinStart, newWinEnd, mouseOverText);
+	mapBoxJumpTo(hvg, x, y, w, h, chromName, newWinStart, newWinEnd, mouseOverText);
 	break;
 	}
     }    
@@ -1942,7 +1957,7 @@ for (lf = lfs->features; lf != NULL; lf = lf->next)
 	int x1 = round((double)((int)lf->start-winStart)*scale) + xOff;
 	int x2 = round((double)((int)lf->end-winStart)*scale) + xOff;
 	int w = x2-x1;
-	tg->mapItem(tg, lf, lf->name, tg->mapItemName(tg, item), lf->start, lf->end, x1, y, w, tg->heightPer);
+	tg->mapItem(tg, hvg, lf, lf->name, tg->mapItemName(tg, item), lf->start, lf->end, x1, y, w, tg->heightPer);
 	}
     }
 lfSeriesDrawConnecter(lfs, hvg, prevEnd, lfs->end, scale, xOff, midY, 
@@ -2006,15 +2021,15 @@ boolean nextItemCompatible(struct track *tg)
 return (withNextExonArrows && tg->nextItemButtonable && tg->nextPrevItem);
 }
 
-static void genericMapItem(struct track *tg, void *item, char *itemName, char *mapItemName, int start, int end,
+static void genericMapItem(struct track *tg, struct hvGfx *hvg, void *item, char *itemName, char *mapItemName, int start, int end,
 			    int x, int y, int width, int height)
 /* This is meant to be used by genericDrawItems to set to tg->mapItem in */
 /* case tg->mapItem isn't set to anything already. */
 {
 char *directUrl = trackDbSetting(tg->tdb, "directUrl");
 boolean withHgsid = (trackDbSetting(tg->tdb, "hgsid") != NULL);
-mapBoxHgcOrHgGene(start, end, x, y, width, height, tg->mapName, 
-			  mapItemName, itemName, directUrl, withHgsid);
+mapBoxHgcOrHgGene(hvg, start, end, x, y, width, height, tg->mapName, 
+                  mapItemName, itemName, directUrl, withHgsid, NULL);
 }
 
 void genericDrawNextItemStuff(struct track *tg, struct hvGfx *hvg, enum trackVisibility vis, struct slList *item, 
@@ -2048,35 +2063,35 @@ if (vis == tvPack)
     int w = x2-textX;
     if (lButton)
 	{
-	tg->mapItem(tg, item, tg->itemName(tg, item), tg->mapItemName(tg, item), 
+	tg->mapItem(tg, hvg, item, tg->itemName(tg, item), tg->mapItemName(tg, item), 
 		    s, e, textX, y, insideX-textX, heightPer);
-	tg->nextPrevItem(tg, item, insideX, y, buttonW, heightPer, FALSE);
+	tg->nextPrevItem(tg, hvg, item, insideX, y, buttonW, heightPer, FALSE);
 	if (rButton)
 	    {
-	    tg->mapItem(tg, item, tg->itemName(tg, item), tg->mapItemName(tg, item), 
+	    tg->mapItem(tg, hvg, item, tg->itemName(tg, item), tg->mapItemName(tg, item), 
 			s, e, insideX + buttonW, y, x2 - (insideX + 2*buttonW), heightPer);
-	    tg->nextPrevItem(tg, item, x2-buttonW, y, buttonW, heightPer, TRUE);			    
+	    tg->nextPrevItem(tg, hvg, item, x2-buttonW, y, buttonW, heightPer, TRUE);			    
 	    }
 	else 
-	    tg->mapItem(tg, item, tg->itemName(tg, item), tg->mapItemName(tg, item), 
+	    tg->mapItem(tg, hvg, item, tg->itemName(tg, item), tg->mapItemName(tg, item), 
 			s, e, insideX + buttonW, y, x2 - (insideX + buttonW), heightPer);
 	}
     else if (snapLeft && rButton)
 	/* This is a special case where there's a next-item button, NO */
 	/* prev-item button, AND the gene name is drawn left of the browser window. */
 	{
-	tg->mapItem(tg, item, tg->itemName(tg, item), tg->mapItemName(tg, item), 
+	tg->mapItem(tg, hvg, item, tg->itemName(tg, item), tg->mapItemName(tg, item), 
 		    s, e, textX, y, x2 - buttonW - textX, heightPer);
-	tg->nextPrevItem(tg, item, x2-buttonW, y, buttonW, heightPer, TRUE);			
+	tg->nextPrevItem(tg, hvg, item, x2-buttonW, y, buttonW, heightPer, TRUE);			
 	}
     else if (rButton)
 	{
-	tg->mapItem(tg, item, tg->itemName(tg, item), tg->mapItemName(tg, item), 
+	tg->mapItem(tg, hvg, item, tg->itemName(tg, item), tg->mapItemName(tg, item), 
 		    s, e, textX, y, w - buttonW, heightPer);
-	tg->nextPrevItem(tg, item, x2-buttonW, y, buttonW, heightPer, TRUE);			
+	tg->nextPrevItem(tg, hvg, item, x2-buttonW, y, buttonW, heightPer, TRUE);			
 	}
     else
-	tg->mapItem(tg, item, tg->itemName(tg, item), tg->mapItemName(tg, item), 
+	tg->mapItem(tg, hvg, item, tg->itemName(tg, item), tg->mapItemName(tg, item), 
 		    s, e, textX, y, w, heightPer);
     }
 /* Full mode is a little easier to deal with. */
@@ -2085,13 +2100,13 @@ else if (vis == tvFull)
     int geneMapBoxX = insideX;
     int geneMapBoxW = insideWidth;
     /* Draw the first gene mapbox, in the left margin. */
-    tg->mapItem(tg, item, tg->itemName(tg, item), tg->mapItemName(tg, item), 
+    tg->mapItem(tg, hvg, item, tg->itemName(tg, item), tg->mapItemName(tg, item), 
 		s, e, trackPastTabX, y, insideX - trackPastTabX, heightPer);
     /* Make the button mapboxes. */
     if (lButton)
-	tg->nextPrevItem(tg, item, insideX, y, buttonW, heightPer, FALSE);
+	tg->nextPrevItem(tg, hvg, item, insideX, y, buttonW, heightPer, FALSE);
     if (rButton)
-	tg->nextPrevItem(tg, item, insideX + insideWidth - buttonW, y, buttonW, heightPer, TRUE);
+	tg->nextPrevItem(tg, hvg, item, insideX + insideWidth - buttonW, y, buttonW, heightPer, TRUE);
     /* Depending on which button mapboxes we drew, draw the remaining mapbox. */
     if (lButton && rButton)
 	{
@@ -2105,7 +2120,7 @@ else if (vis == tvFull)
 	}
     else if (rButton)
 	geneMapBoxW -= buttonW;
-    tg->mapItem(tg, item, tg->itemName(tg, item), tg->mapItemName(tg, item), 
+    tg->mapItem(tg, hvg, item, tg->itemName(tg, item), tg->mapItemName(tg, item), 
 		s, e, geneMapBoxX, y, geneMapBoxW, heightPer);
     }
 }
@@ -2227,7 +2242,7 @@ if (!tg->mapsSelf)
                                      color);
         else
             {
-            tg->mapItem(tg, item, tg->itemName(tg, item), 
+            tg->mapItem(tg, hvg, item, tg->itemName(tg, item), 
                         tg->mapItemName(tg, item), s, e, textX, y, w, tg->heightPer);
             }
         }
@@ -4171,7 +4186,7 @@ if (color)
 	    hvGfxTextCentered(hvg, x1, y, w, heightPer, textColor, font, s);
 	    }
 	}
-    mapBoxHc(bed->chromStart, bed->chromEnd, x1, y, x2 - x1, heightPer,
+    mapBoxHc(hvg, bed->chromStart, bed->chromEnd, x1, y, x2 - x1, heightPer,
 	     tg->mapName, tg->mapItemName(tg, bed), sLong);
     }
 if (tg->subType == lfWithBarbs)
@@ -4361,7 +4376,7 @@ if (color)
 	    hvGfxTextCentered(hvg, x1, y, w, heightPer, textColor, font, s);
 	    }
 	}
-    mapBoxHc(bed->chromStart, bed->chromEnd, x1, y, x2 - x1, heightPer,
+    mapBoxHc(hvg, bed->chromStart, bed->chromEnd, x1, y, x2 - x1, heightPer,
 	     tg->mapName, tg->mapItemName(tg, bed), sDiseases);
     }
 if (tg->subType == lfWithBarbs)
@@ -4448,9 +4463,9 @@ if (color)
 	/* enable mouse over */
 	char *directUrl = trackDbSetting(tdb, "directUrl");
 	boolean withHgsid = (trackDbSetting(tdb, "hgsid") != NULL);
-	mapBoxHgcOrHgGene(bed->chromStart, bed->chromEnd, x1, y, x2 - x1,
+	mapBoxHgcOrHgGene(hvg, bed->chromStart, bed->chromEnd, x1, y, x2 - x1,
 			  heightPer, tg->mapName, tg->mapItemName(tg, bed), 
-			  s, directUrl, withHgsid);
+			  s, directUrl, withHgsid, NULL);
 	}
     }
 else
@@ -5386,8 +5401,8 @@ if (w < 1)
 	    Color textColor = hvGfxContrastingColor(hvg, color);
 	    hvGfxTextCentered(hvg, x1, y, w, heightPer, textColor, font, s);
 	    }
-	mapBoxHgcOrHgGene(bed->chromStart, bed->chromEnd, x1, y, x2 - x1, heightPer,
-		tg->mapName, tg->mapItemName(tg, bed), NULL, directUrl, withHgsid);
+	mapBoxHgcOrHgGene(hvg, bed->chromStart, bed->chromEnd, x1, y, x2 - x1, heightPer,
+                          tg->mapName, tg->mapItemName(tg, bed), NULL, directUrl, withHgsid, NULL);
 	}
     }
 }
@@ -5440,8 +5455,8 @@ if (color)
 	    Color textColor = hvGfxContrastingColor(hvg, color);
 	    hvGfxTextCentered(hvg, x1, y, w, heightPer, textColor, font, s);
 	    }
-	mapBoxHgcOrHgGene(bed->chromStart, bed->chromEnd, x1, y, x2 - x1, heightPer,
-		tg->mapName, tg->mapItemName(tg, bed), NULL, directUrl, withHgsid);
+	mapBoxHgcOrHgGene(hvg, bed->chromStart, bed->chromEnd, x1, y, x2 - x1, heightPer,
+                          tg->mapName, tg->mapItemName(tg, bed), NULL, directUrl, withHgsid, NULL);
 	}
     }
 if (tg->subType == lfWithBarbs || tg->exonArrows)
@@ -5835,7 +5850,7 @@ for (item = tg->items; item != NULL; item = item->next)
     if (w < 1)
 	w = 1;
     hvGfxBox(hvg, x1, y, w, heightPer, color);
-    mapBoxHc(item->chromStart, item->chromEnd, x1, y, w, heightPer, tg->mapName,
+    mapBoxHc(hvg, item->chromStart, item->chromEnd, x1, y, w, heightPer, tg->mapName,
 	item->name, item->name);
     if (isFull)
 	y += lineHeight;
@@ -8757,8 +8772,8 @@ void drawComplementArrow( struct hvGfx *hvg, int x, int y,
 char *text =  cartUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE)
     ?"<---" : "--->";
 hvGfxTextRight(hvg, x, y, width, height, MG_BLACK, font, text);
-mapBoxToggleComplement(x, y, width, height, NULL, chromName, winStart, winEnd,
-                                "complement bases");
+mapBoxToggleComplement(hvg, x, y, width, height, NULL, chromName, winStart, winEnd,
+                       "complement bases");
 }
 
 struct track *chromIdeoTrack(struct track *trackList)
@@ -8873,6 +8888,7 @@ if(doIdeo)
     hPrintf("<MAP Name=%s>\n", mapName);
     ideoHeight = gfxBorder + ideoTrack->height;
     hvg = hvGfxOpenGif(ideoWidth, ideoHeight, gifTn.forCgi);
+    hvg->rc = revComplement;
     makeGrayShades(hvg);
     makeBrownShades(hvg);
     makeSeaShades(hvg);
@@ -9202,11 +9218,11 @@ labelColor = blackIndex();
 hvGfxNextItemButton(hvg, rightButtonX + NEXT_ITEM_ARROW_BUFFER, y, arrowWidth, arrowWidth, labelColor, fillColor, TRUE);
 hvGfxNextItemButton(hvg, insideX + NEXT_ITEM_ARROW_BUFFER, y, arrowWidth, arrowWidth, labelColor, fillColor, FALSE);
 safef(buttonText, ArraySize(buttonText), "hgt.prevItem=%s", track->mapName);
-mapBoxReinvokeExtra(insideX, y + 1, arrowButtonWidth, insideHeight, NULL,
+mapBoxReinvokeExtra(hvg, insideX, y + 1, arrowButtonWidth, insideHeight, NULL,
  		    NULL, 0, 0, "Previous item", buttonText);
-mapBoxToggleVis(insideX + arrowButtonWidth, y + 1, insideWidth - (2 * arrowButtonWidth), insideHeight, parentTrack);
+mapBoxToggleVis(hvg, insideX + arrowButtonWidth, y + 1, insideWidth - (2 * arrowButtonWidth), insideHeight, parentTrack);
 safef(buttonText, ArraySize(buttonText), "hgt.nextItem=%s", track->mapName);
-mapBoxReinvokeExtra(insideX + insideWidth - arrowButtonWidth, y + 1, arrowButtonWidth, insideHeight, NULL,
+mapBoxReinvokeExtra(hvg, insideX + insideWidth - arrowButtonWidth, y + 1, arrowButtonWidth, insideHeight, NULL,
  		    NULL, 0, 0, "Next item", buttonText);
 }
 
@@ -9228,9 +9244,9 @@ if (track->limitedVis != tvHide)
 	doLabelNextItemButtons(track, parentTrack, hvg, font, y, trackPastTabX,
 			  trackPastTabWidth, fontHeight, insideHeight, labelColor);
     else
-	mapBoxToggleVis(trackPastTabX, y+1, 
+	mapBoxToggleVis(hvg, trackPastTabX, y+1, 
 			trackPastTabWidth, insideHeight, parentTrack);
-    mapBoxToggleVis(trackPastTabX, y+1, 
+    mapBoxToggleVis(hvg, trackPastTabX, y+1, 
                     trackPastTabWidth, insideHeight, parentTrack);
     y += fontHeight;
     y += track->height;
@@ -9266,7 +9282,7 @@ y += track->height;
 return y;
 }
 
-static int doMapItems(struct track *track, int fontHeight, int y)
+static int doMapItems(struct track *track, struct hvGfx *hvg, int fontHeight, int y)
 /* Draw map boxes around track items */
 {
 char *type = track->tdb->type;
@@ -9320,11 +9336,11 @@ for (item = track->items; item != NULL; item = item->next)
 	    track->mapItem = genericMapItem;
         if (!track->mapsSelf)
             {
-	    track->mapItem(track, item, track->itemName(track, item), 
-			   track->mapItemName(track, item),
-			   track->itemStart(track, item),
-			   track->itemEnd(track, item), trackPastTabX,
-			   y, trackPastTabWidth,height);
+	    track->mapItem(track, hvg, item, track->itemName(track, item), 
+                           track->mapItemName(track, item),
+                           track->itemStart(track, item),
+                           track->itemEnd(track, item), trackPastTabX,
+                           y, trackPastTabWidth,height);
             }
         y += height;
         }
@@ -9513,7 +9529,7 @@ if (!tg->limitedVisSet)
 return tg->limitedVis;
 }
 
-int doTrackMap(struct track *track, int y, int fontHeight, 
+int doTrackMap(struct track *track, struct hvGfx *hvg, int y, int fontHeight, 
 	       int trackPastTabX, int trackPastTabWidth)
 /* Write out the map for this track. Return the new offset. */
 {
@@ -9535,10 +9551,10 @@ switch (track->limitedVis)
 		for (subtrack = track->subtracks;  subtrack != NULL;
 		     subtrack = subtrack->next)
 		    if (isSubtrackVisible(subtrack))
-			y = doMapItems(subtrack, fontHeight, y);
+                        y = doMapItems(subtrack, hvg, fontHeight, y);
 		}
 	    else
-		y = doMapItems(track, fontHeight, y);
+		y = doMapItems(track, hvg, fontHeight, y);
 	    }
 	else
 	    y += trackPlusLabelHeight(track, fontHeight);
@@ -9550,7 +9566,7 @@ switch (track->limitedVis)
 	    mapHeight = track->height;
 	else
 	    mapHeight = track->lineHeight;
-	mapBoxToggleVis(trackPastTabX, y, trackPastTabWidth, mapHeight, track);
+	mapBoxToggleVis(hvg, trackPastTabX, y, trackPastTabWidth, mapHeight, track);
 	y += mapHeight;
 	break;
     }
@@ -9673,6 +9689,8 @@ else
     trashDirFile(&gifTn, "hgt", "hgt", ".gif");
     hvg = hvGfxOpenGif(pixWidth, pixHeight, gifTn.forCgi);
     }
+hvg->rc = revComplement;
+
 makeGrayShades(hvg);
 makeBrownShades(hvg);
 makeSeaShades(hvg);
@@ -9725,8 +9743,8 @@ if (withLeftLabels && psOutput == NULL)
         if (rulerCds)
             height += rulerTranslationHeight;
         drawGrayButtonBox(hvg, trackTabX, y, trackTabWidth, height, TRUE);
-        mapBoxUi(trackTabX, y, trackTabWidth, height, RULER_TRACK_NAME, 
-                                                      RULER_TRACK_LABEL);
+        mapBoxUi(hvg, trackTabX, y, trackTabWidth, height, RULER_TRACK_NAME, 
+                 RULER_TRACK_LABEL);
         y += height + 1;
         }
     for (track = trackList; track != NULL; track = track->next)
@@ -9749,7 +9767,7 @@ if (withLeftLabels && psOutput == NULL)
                 drawBlueButtonBox(hvg, trackTabX, yStart, trackTabWidth, 
 	    	                h, track->hasUi); 
 	    if (track->hasUi)
-                mapBoxTrackUi(trackTabX, yStart, trackTabWidth, h, track);
+                mapBoxTrackUi(hvg, trackTabX, yStart, trackTabWidth, h, track);
 	    }
 	}
     butOff = trackTabX + trackTabWidth;
@@ -9780,7 +9798,10 @@ if (withLeftLabels)
 	    }
 	{
 	char rulerLabel[64];
-	safef(rulerLabel,ArraySize(rulerLabel),"%s:",chromName);
+        if (hvg->rc)
+            safef(rulerLabel,ArraySize(rulerLabel),":%s",chromName);
+        else
+            safef(rulerLabel,ArraySize(rulerLabel),"%s:",chromName);
 	hvGfxTextRight(hvg, leftLabelX, y, leftLabelWidth-1, rulerHeight, 
 		    MG_BLACK, font, rulerLabel);
 	}
@@ -9923,7 +9944,7 @@ if (rulerMode != tvHide)
 	    ns -= (ne - seqBaseCount);
 	    ne = seqBaseCount;
 	    }
-	mapBoxJumpTo(ps+insideX,rulerClickY,pe-ps,rulerClickHeight,
+	mapBoxJumpTo(hvg, ps+insideX,rulerClickY,pe-ps,rulerClickHeight,
 		        chromName, ns, ne, message);
 	}
     }
@@ -9975,7 +9996,7 @@ if (rulerMode != tvHide)
                          rulerMode == tvFull ?  
                                 rulerMenu[tvDense] : 
                                 rulerMenu[tvFull]);
-            mapBoxReinvokeExtra(insideX, y+rulerHeight, insideWidth,baseHeight, 
+            mapBoxReinvokeExtra(hvg, insideX, y+rulerHeight, insideWidth,baseHeight, 
                                 NULL, NULL, 0, 0, "", newRulerVis);
             }
         if (rulerCds)
@@ -10119,7 +10140,7 @@ y = yAfterRuler;
 for (track = trackList; track != NULL; track = track->next)
     {
     if (track->limitedVis != tvHide)
-        y = doTrackMap(track, y, fontHeight, trackPastTabX, trackPastTabWidth);
+        y = doTrackMap(track, hvg, y, fontHeight, trackPastTabX, trackPastTabWidth);
     }
 
 /* Finish map. */
@@ -14582,7 +14603,8 @@ void relativeScroll(double amount)
 {
 int offset;
 int newStart, newEnd;
-
+if (revComplement)
+    amount = -amount;
 offset = (int)(amount * winBaseCount);
 /* Make sure don't scroll of ends. */
 newStart = winStart + offset;
@@ -14765,6 +14787,7 @@ withNextExonArrows = cartUsualBoolean(cart, "nextExonArrows", FALSE);
 withPriorityOverride = cartUsualBoolean(cart, configPriorityOverride, FALSE);
 insideX = trackOffsetX();
 insideWidth = tl.picWidth-gfxBorder-insideX;
+revComplement = TRUE;  // FIXME
 
 baseShowPos = cartUsualBoolean(cart, BASE_SHOWPOS, FALSE);
 baseShowAsm = cartUsualBoolean(cart, BASE_SHOWASM, FALSE);
@@ -15057,10 +15080,13 @@ char *debugTmp = NULL;
 /* Initialize layout and database. */
 cart = theCart;
 
-/* Uncomment this to see parameters for debugging. */
+/* #if 1 this to see parameters for debugging. */
 /* Be careful though, it breaks if custom track
  * is more than 4k */
-/*state = cgiUrlString(); printf("State: %s\n", state->string);   */
+#if  0
+state = cgiUrlString();
+printf("State: %s\n", state->string);
+#endif
 getDbAndGenome(cart, &database, &organism, oldVars);
 
 protDbName = hPdbFromGdb(database);

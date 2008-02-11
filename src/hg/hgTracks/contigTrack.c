@@ -84,7 +84,7 @@ for (ctg = tg->items; ctg != NULL; ctg = ctg->next)
 	y += lineHeight;
     else 
 	{
-	mapBoxHc(ctg->chromStart, ctg->chromEnd, x1,y,w,heightPer, tg->mapName, 
+	mapBoxHc(hvg, ctg->chromStart, ctg->chromEnd, x1,y,w,heightPer, tg->mapName, 
 	    tg->mapItemName(tg, ctg), 
 	    tg->itemName(tg, ctg));
 	}

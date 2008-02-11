@@ -72,10 +72,10 @@ hCytoBandDrawAt(band, hvg, x1, y, w, heightPer, hCytoBandIsDmel(), font,
 	shadesOfGray, maxShade);
 
 if(tg->mapsSelf)
-    tg->mapItem(tg, band, band->name, band->name, band->chromStart, band->chromEnd,
+    tg->mapItem(tg, hvg, band, band->name, band->name, band->chromStart, band->chromEnd,
 		x1, y, w, heightPer);
 else
-    mapBoxHc(band->chromStart, band->chromEnd, x1,y,w,heightPer, tg->mapName, 
+    mapBoxHc(hvg, band->chromStart, band->chromEnd, x1,y,w,heightPer, tg->mapName, 
 	     band->name, band->name);
 }
 
@@ -186,13 +186,13 @@ tg->heightPer += 11;
 tg->lineHeight += 11;
 }
 
-void cytoBandIdeoMapItem(struct track *tg, void *item, 
+void cytoBandIdeoMapItem(struct track *tg, struct hvGfx *hvg, void *item, 
 			    char *itemName, char *mapItemName, int start, int end, 
 			    int x, int y, int width, int height)
 /* Print out a box to jump to band in browser window .*/
 {
 struct cytoBand *cb = item;
-mapBoxJumpTo(x, y, width, height, cb->chrom, cb->chromStart, cb->chromEnd, cb->name);
+mapBoxJumpTo(hvg, x, y, width, height, cb->chrom, cb->chromStart, cb->chromEnd, cb->name);
 }
 
 int cytoBandIdeoTotalHeight(struct track *tg, enum trackVisibility vis)

@@ -177,7 +177,9 @@ else
     }
 
 /* Do map box */
-
+xOff = hvGfxAdjXW(hvg, xOff, &width);
+yOff = hvGfxClipYH(hvg, yOff, &height);
+assert((xOff >= 0) && (yOff >= 0));
 
 hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", xOff, yOff, xOff+width,
 	yOff+height);

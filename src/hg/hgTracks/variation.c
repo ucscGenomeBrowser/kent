@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.132.2.1 2008/01/16 07:00:44 markd Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.132.2.2 2008/02/11 17:52:15 markd Exp $";
 
 struct hash *snp125FuncCartColorHash = NULL;
 struct hash *snp125FuncCartNameHash = NULL;
@@ -820,7 +820,7 @@ if ( w<1 )
 hvGfxBox(hvg, x1, y, w, heightPer, itemColor);
 /* Clip here so that text will tend to be more visible... */
 if (tg->drawName && vis != tvSquish)
-    mapBoxHc(sm->chromStart, sm->chromEnd, x1, y, w, heightPer, tg->mapName, tg->mapItemName(tg, sm), NULL);
+    mapBoxHc(hvg, sm->chromStart, sm->chromEnd, x1, y, w, heightPer, tg->mapName, tg->mapItemName(tg, sm), NULL);
 }
 
 void snpDrawItemAt(struct track *tg, void *item, struct hvGfx *hvg, int xOff, int y, 
@@ -839,7 +839,7 @@ if ( w<1 )
 hvGfxBox(hvg, x1, y, w, heightPer, itemColor);
 /* Clip here so that text will tend to be more visible... */
 if (tg->drawName && vis != tvSquish)
-    mapBoxHc(s->chromStart, s->chromEnd, x1, y, w, heightPer,
+    mapBoxHc(hvg, s->chromStart, s->chromEnd, x1, y, w, heightPer,
 	     tg->mapName, tg->mapItemName(tg, s), NULL);
 }
 
@@ -859,7 +859,7 @@ if ( w<1 )
 hvGfxBox(hvg, x1, y, w, heightPer, itemColor);
 /* Clip here so that text will tend to be more visible... */
 if (tg->drawName && vis != tvSquish)
-    mapBoxHc(s->chromStart, s->chromEnd, x1, y, w, heightPer,
+    mapBoxHc(hvg, s->chromStart, s->chromEnd, x1, y, w, heightPer,
 	     tg->mapName, tg->mapItemName(tg, s), NULL);
 }
 
@@ -916,7 +916,7 @@ if (vis == tvPack || vis == tvSquish)
 			    itemNameColor, font, name);
             }
         if (!tg->mapsSelf && ( ( w = x2-textX ) > 0 ))
-	    mapBoxHgcOrHgGene(s, e, textX, y, w, heightPer, tg->mapName, tg->mapItemName(tg, item), name, NULL, FALSE);
+	    mapBoxHgcOrHgGene(hvg, s, e, textX, y, w, heightPer, tg->mapName, tg->mapItemName(tg, item), name, NULL, FALSE, NULL);
         }
     hvGfxUnclip(hvg);
     }
@@ -1006,7 +1006,7 @@ if (vis == tvPack || vis == tvSquish)
 		}
             }
         if (!tg->mapsSelf && ( ( w = x2-textX ) > 0 ) )
-	    mapBoxHgcOrHgGene(s, e, textX, y, w, heightPer, tg->mapName, tg->mapItemName(tg, item), name, NULL, FALSE);
+	    mapBoxHgcOrHgGene(hvg, s, e, textX, y, w, heightPer, tg->mapName, tg->mapItemName(tg, item), name, NULL, FALSE, NULL);
         }
     hvGfxUnclip(hvg);
     }

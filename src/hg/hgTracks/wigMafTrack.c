@@ -18,7 +18,7 @@
 #include "mafFrames.h"
 #include "phyloTree.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.121.4.1 2008/01/16 07:00:45 markd Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.121.4.2 2008/02/11 17:52:15 markd Exp $";
 
 #define GAP_ITEM_LABEL  "Gaps"
 #define MAX_SP_SIZE 2000
@@ -2156,7 +2156,7 @@ if (vis == tvFull || vis == tvPack)
 	wigMafDrawPairwise(track, seqStart, seqEnd, hvg, xOff, y, 
 				width, font, color, vis);
     }
-mapBoxHc(seqStart, seqEnd, xOff, yOff, width, track->height, track->mapName, 
+mapBoxHc(hvg, seqStart, seqEnd, xOff, yOff, width, track->height, track->mapName, 
             track->mapName, NULL);
 }
 

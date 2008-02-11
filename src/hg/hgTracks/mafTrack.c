@@ -14,7 +14,7 @@
 #include "hgMaf.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: mafTrack.c,v 1.57.98.1 2008/01/16 07:00:43 markd Exp $";
+static char const rcsid[] = "$Id: mafTrack.c,v 1.57.98.2 2008/02/11 17:52:14 markd Exp $";
 
 struct mafItem
 /* A maf track item. */
@@ -889,7 +889,7 @@ else
     mafDrawGraphic(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, 
                     color, vis, isAxt);
     }
-mapBoxHc(seqStart, seqEnd, xOff, yOff, width, tg->height, tg->mapName, 
+mapBoxHc(hvg, seqStart, seqEnd, xOff, yOff, width, tg->height, tg->mapName, 
     tg->mapName, NULL);
 }
 

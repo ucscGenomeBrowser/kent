@@ -119,7 +119,7 @@ struct track
     Color (*itemLabelColor)(struct track *tg, void *item, struct hvGfx *hvg);
     /* Get color for the item's label (optional). */
 
-    void (*mapItem)(struct track *tg, void *item, 
+    void (*mapItem)(struct track *tg, struct hvGfx *hvg, void *item, 
     	char *itemName, char *mapItemName, int start, int end, 
 	int x, int y, int width, int height); 
     /* Write out image mapping for a given item */
@@ -179,7 +179,7 @@ struct track
                                 is used for "composite" tracks, such
                                 as "mafWiggle */
 
-    void (*nextPrevItem)(struct track *tg, void *item, int x, int y, int w, int h, boolean next);    
+    void (*nextPrevItem)(struct track *tg, struct hvGfx *hvg, void *item, int x, int y, int w, int h, boolean next);    
     /* Function will draw the button on a track item and assign a map */
     /* box to it as well, so that a click will move the browser window */
     /* to the next (or previous if next==FALSE) item. This is meant to */
@@ -390,17 +390,17 @@ enum trackVisibility limitVisibility(struct track *tg);
 char *hgcNameAndSettings();
 /* Return path to hgc with variables to store UI settings. */
 
-void mapBoxHc(int start, int end, int x, int y, int width, int height, 
+void mapBoxHc(struct hvGfx *hvg, int start, int end, int x, int y, int width, int height, 
 	char *group, char *item, char *statusLine);
 /* Print out image map rectangle that would invoke the htc (human track click)
  * program. */
 
-void mapBoxToggleVis(int x, int y, int width, int height, 
+void mapBoxToggleVis(struct hvGfx *hvg, int x, int y, int width, int height, 
 	struct track *curGroup);
 /* Print out image map rectangle that would invoke this program again.
  * program with the current track expanded. */
 
-void mapBoxJumpTo(int x, int y, int width, int height, 
+void mapBoxJumpTo(struct hvGfx *hvg, int x, int y, int width, int height, 
 		  char *newChrom, int newStart, int newEnd, char *message);
 /* Print out image map rectangle that would invoke this program again
  * at a different window. */
@@ -838,7 +838,7 @@ void linkedFeaturesSeriesMethods(struct track *tg);
 void loadMaScoresBed(struct track *tg);
 /* This one loads microarray specific beds (multiple scores). */
 
-void lfsMapItemName(struct track *tg, void *item, char *itemName, char *mapItemName, int start, int end, 
+void lfsMapItemName(struct track *tg, struct hvGfx *hvg, void *item, char *itemName, char *mapItemName, int start, int end, 
 		    int x, int y, int width, int height);
 
 Color expressionColor(struct track *tg, void *item, struct hvGfx *hvg,
@@ -866,8 +866,9 @@ int leftLabelWidth;		/* Width of area to draw left labels on. */
 boolean trackWantsHgGene(struct track *tg);
 /* Return TRUE if track wants hgGene on details page. */
 
-void mapBoxHgcOrHgGene(int start, int end, int x, int y, int width, int height, 
-	char *track, char *item, char *statusLine, char *directUrl, boolean withHguid);
+void mapBoxHgcOrHgGene(struct hvGfx *hvg, int start, int end, int x, int y, int width, int height, 
+                       char *track, char *item, char *statusLine, char *directUrl, boolean withHguid,
+                       char *extra);
 /* Print out image map rectangle that would invoke the hgc (human genome click)
  * program. */
 

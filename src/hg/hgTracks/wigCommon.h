@@ -88,7 +88,7 @@ void drawArbitraryYLine(enum trackVisibility vis,
     double yLineMark, double graphRange, enum wiggleYLineMarkEnum yLineOnOff);
 /*	draw a line at y=yLineMark on the graph	*/
 
-void wigMapSelf(struct track *tg, int seqStart, int seqEnd,
+void wigMapSelf(struct track *tg, struct hvGfx *hvg, int seqStart, int seqEnd,
     int xOff, int yOff, int width);
 /*	if self mapping, create the mapping box	*/
 

@@ -424,7 +424,7 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
 
     if( noZoom && isFull )
 	{
-	mapBoxHc(lf->start, lf->end, currentX ,y, currentWidth,
+	mapBoxHc(hvg, lf->start, lf->end, currentX ,y, currentWidth,
 	    heightPer, tg->mapName, tg->mapItemName(tg, lf), tg->itemName(tg, lf));
 
 	if( lf->next != NULL )

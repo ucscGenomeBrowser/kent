@@ -160,13 +160,16 @@ return tg->height;
 
 
 
-void mapBoxHcTwoItems(int start, int end, int x, int y, int width, int height, 
+void mapBoxHcTwoItems(struct hvGfx *hvg, int start, int end, int x, int y, int width, int height, 
 	char *track, char *item1, char *item2, char *statusLine)
 /* Print out image map rectangle that would invoke the htc (human track click)
  * program. */
 {
-  char *encodedItem1 = cgiEncode(item1);
+char *encodedItem1 = cgiEncode(item1);
 char *encodedItem2 = cgiEncode(item2);
+x = hvGfxAdjXW(hvg, x, &width);
+y = hvGfxClipYH(hvg, y, &height);
+assert((x >= 0) && (y >= 0));
 hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
 hPrintf("HREF=\"%s&o=%d&t=%d&g=%s&i=%s&i2=%s&c=%s&l=%d&r=%d&db=%s&pix=%d\" ", 
        hgcNameAndSettings(), start, end, track, encodedItem1, encodedItem2,chromName, winStart, winEnd, 
@@ -206,11 +209,11 @@ for(i = 0; i < ArraySize(tissues); i++)
 return -1;
 }
 
-void lfsMapItemName(struct track *tg, void *item, char *itemName, char *mapItemName, int start, int end, 
+void lfsMapItemName(struct track *tg, struct hvGfx *hvg, void *item, char *itemName, char *mapItemName, int start, int end, 
 		    int x, int y, int width, int height)
 {
 if(tg->visibility != tvDense && tg->visibility != tvHide)
-    mapBoxHcTwoItems(start, end, x,y, width, height, tg->mapName, itemName, itemName, itemName);
+    mapBoxHcTwoItems(hvg, start, end, x,y, width, height, tg->mapName, itemName, itemName, itemName);
 }
 
 
@@ -1351,7 +1354,7 @@ else if (vis == tvDense)
     }
 }
 
-static void expRatioMapBoxes(struct track *tg, int seqStart, int seqEnd, int xOff, int yOff, int width)
+static void expRatioMapBoxes(struct track *tg, struct hvGfx *hvg, int seqStart, int seqEnd, int xOff, int yOff, int width)
 /* This function makes clickable mapboxes on the browser window for a */
 /* microarray track.  */
 {
@@ -1377,7 +1380,7 @@ if ((nProbes > MICROARRAY_CLICK_LIMIT) &&
     hPrintf("HREF=\"%s&g=%s&c=%s&l=%d&r=%d&db=%s&i=zoomInMore\" ", 
 	    hgcNameAndSettings(), tg->mapName, chromName, winStart, winEnd, database);
     hPrintf("TITLE=\"zoomInMore\">\n");
-    }
+     }
 else
     {
     struct linkedFeatures *probe;
@@ -1397,7 +1400,7 @@ else
             for (item = tg->items; item != NULL; item = item->next)
                 {
                 char *name = tg->itemName(tg, item);
-                mapBoxHcTwoItems(winStart, winEnd, xOff, y, winEnd-winStart, lineHeight, tg->mapName, name, name, name); 
+                mapBoxHcTwoItems(hvg, winStart, winEnd, xOff, y, winEnd-winStart, lineHeight, tg->mapName, name, name, name); 
                 y = y + lineHeight;
                 }
 	    break;
@@ -1418,7 +1421,7 @@ else
 		    clinicalItem = (struct simpleClinical *)hel->val;
 		    if (ucsfdemoMatch(clinicalItem->er, clinicalItem->pr))
 		        {
-                        mapBoxHcTwoItems(winStart, winEnd, xOff, y, winEnd-winStart, lineHeight, tg->mapName, name, name, name); 
+                        mapBoxHcTwoItems(hvg, winStart, winEnd, xOff, y, winEnd-winStart, lineHeight, tg->mapName, name, name, name); 
                         y = y + lineHeight;
 			}
 		    }
@@ -1426,7 +1429,7 @@ else
 	    break;
 	    }
 	else 
-	    mapBoxHcTwoItems(probe->start, probe->end, x1+xOff, y, w, totalHeight, tg->mapName, probe->name, probe->name, probe->name);
+	    mapBoxHcTwoItems(hvg, probe->start, probe->end, x1+xOff, y, w, totalHeight, tg->mapName, probe->name, probe->name, probe->name);
 	}
     }
 }
@@ -1603,7 +1606,7 @@ else
 	}
 /* Make the clickable mapboxes in full or pack. */
     if ((vis == tvFull) || (vis == tvPack))
-	expRatioMapBoxes(tg, seqStart, seqEnd, xOff, yOff, width);
+	expRatioMapBoxes(tg, hvg, seqStart, seqEnd, xOff, yOff, width);
     for (i = 0; i < nExps; i++)
 	freeMem(pixScoreArray[i]);
     freeMem(pixScoreArray);

@@ -84,7 +84,7 @@ else
 		Color textColor = hvGfxContrastingColor(hvg, color);
 		hvGfxTextCentered(hvg, x1, y, w, heightPer, textColor, font, s);
 		}
-	    mapBoxHc(bed->chromStart, bed->chromEnd, x1, y, x2 - x1, heightPer,
+	    mapBoxHc(hvg, bed->chromStart, bed->chromEnd, x1, y, x2 - x1, heightPer,
 		     tg->mapName, tg->mapItemName(tg, bed), NULL);
 	    }
 	hFreeOrDisconnect(&conn);

@@ -277,10 +277,10 @@ for (sn = ss->nodeList; sn != NULL; sn = sn->next)
 	    	psl->qName, psl->qStart, 
 		psl->qEnd, psl->qSize, psl->strand,
 		psl->tStart, psl->tEnd);
-	    mapBoxHc(cfa->start, cfa->end, x1,y,w,heightPer, "hgClone", cfa->frag->name, fullPos);
+	    mapBoxHc(hvg, cfa->start, cfa->end, x1,y,w,heightPer, "hgClone", cfa->frag->name, fullPos);
 	    }
 	else
-	    mapBoxHc(cfa->start, cfa->end, x1,y,w,heightPer, "hgClone", cfa->frag->name, cfa->frag->name);
+	    mapBoxHc(hvg, cfa->start, cfa->end, x1,y,w,heightPer, "hgClone", cfa->frag->name, cfa->frag->name);
 	}
     }
 freeHash(&dupeHash);

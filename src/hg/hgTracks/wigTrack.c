@@ -14,7 +14,7 @@
 #include "customTrack.h"
 #include "wigCommon.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.75.82.1 2008/01/16 07:00:45 markd Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.75.82.2 2008/02/11 17:52:16 markd Exp $";
 
 struct wigItem
 /* A wig track item. */
@@ -932,7 +932,7 @@ if ((vis == tvFull) && (yLineOnOff == wiggleYLineMarkOn))
     }	/*	drawing y= line marker	*/
 }	/*	drawArbitraryYLine()	*/
 
-void wigMapSelf(struct track *tg, int seqStart, int seqEnd,
+void wigMapSelf(struct track *tg, struct hvGfx *hvg, int seqStart, int seqEnd,
     int xOff, int yOff, int width)
 /*	if self mapping, create the mapping box	*/
 {
@@ -949,7 +949,7 @@ if (tg->mapsSelf)
     else
 	itemName = cloneString(tg->mapName);
 
-    mapBoxHc(seqStart, seqEnd, xOff, yOff, width, tg->height, tg->mapName, 
+    mapBoxHc(hvg, seqStart, seqEnd, xOff, yOff, width, tg->height, tg->mapName, 
             itemName, NULL);
     freeMem(itemName);
     }
@@ -1201,7 +1201,7 @@ drawArbitraryYLine(vis, wigCart->yLineOnOff, graphUpperLimit, graphLowerLimit,
     hvg, xOff, yOff, width, tg->lineHeight, wigCart->yLineMark, graphRange,
     wigCart->yLineOnOff);
 
-wigMapSelf(tg, seqStart, seqEnd, xOff, yOff, width);
+wigMapSelf(tg, hvg, seqStart, seqEnd, xOff, yOff, width);
 
 freez(&colorArray);
 freeMem(preDraw);

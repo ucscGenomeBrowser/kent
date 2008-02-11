@@ -58,24 +58,24 @@ tg->customPt = heightHash;
 return rowCount;
 }
 
-void altGraphXMapItem(struct track *tg, void *item, char *itemName, char *mapItemName, int start, int end, 
+void altGraphXMapItem(struct track *tg, struct hvGfx *hvg, void *item, char *itemName, char *mapItemName, int start, int end, 
 		    int x, int y, int width, int height)
 /* Create a link to hgc for altGraphX track */
 {
 struct altGraphX *ag = item;
 char buff[32];
 snprintf(buff, sizeof(buff), "%d", ag->id);
-mapBoxHc(start, end, x, y, width, height, tg->mapName, buff, "altGraphX Details");
+mapBoxHc(hvg, start, end, x, y, width, height, tg->mapName, buff, "altGraphX Details");
 }
 
-void altGraphXMap(char *tableName, struct altGraphX *ag, int start, int end, 
+void altGraphXMap(char *tableName, struct altGraphX *ag, struct hvGfx *hvg, int start, int end, 
 		  int x, int y, int width, int height)
 /* Create a link to hgc for altGraphX track without using a track
  * structure. */
 {
 char buff[32];
 snprintf(buff, sizeof(buff), "%d", ag->id);
-mapBoxHc(start, end, x, y, width, height, tableName, buff, "altGraphX Details");
+mapBoxHc(hvg, start, end, x, y, width, height, tableName, buff, "altGraphX Details");
 }
 
 static void altGraphXDrawPackTrack(struct track *tg, int seqStart, int seqEnd,         
@@ -174,7 +174,7 @@ if(tg->mapsSelf && tg->mapItem)
 	    textX = insideX - nameWidth;
 	width = width + (x1 - textX);
 	}
-    tg->mapItem(tg, ag, "notUsed", "notUsed", ag->tStart, ag->tEnd, textX, yOff, width, heightPer);
+    tg->mapItem(tg, hvg, ag, "notUsed", "notUsed", ag->tStart, ag->tEnd, textX, yOff, width, heightPer);
     }
 
 /* Draw the edges (exons and introns). */
