@@ -323,5 +323,5 @@ CREATE TABLE proteinEvidence (
     acc char(12) not null,	# Primary accession
     proteinEvidenceType int not null,	# ID in proteinEvidenceType table
               #Indices
-    PRIMARY KEY(acc)
+    INDEX(acc)
 );
