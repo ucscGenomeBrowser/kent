@@ -2125,6 +2125,15 @@ priority 1.1
 visibility hide
 type bed 6
 
+track reTraceStacks
+shortLabel Trace Stacks
+longLabel Re-sequencing trace pileups
+group x
+visibility hide
+type wig 1 7960
+viewLimits 1:500
+autoScale off
+
 track multizMetazoan
 shortLabel Metazoan Maf
 longLabel Metazoan Multiz Alignment (4 species: hg18, ce3, dm2, ci2)
