@@ -118,7 +118,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1430.4.3 2008/02/07 07:12:18 markd Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1430.4.4 2008/02/11 07:24:41 markd Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -830,36 +830,36 @@ double scaleForPixels(double pixelWidth)
 return pixelWidth / (winEnd - winStart);
 }
 
-void drawScaledBox(struct hvGfxPane *hvgp, int chromStart, int chromEnd, 
-	double scale, int y, int height, Color color)
+void drawScaledBox(struct hvGfx *hvg, int chromStart, int chromEnd, 
+	double scale, int xOff, int y, int height, Color color)
 /* Draw a box scaled from chromosome to window coordinates. 
  * Get scale first with scaleForPixels. */
 {
-int x1 = round((double)(chromStart-winStart)*scale);
-int x2 = round((double)(chromEnd-winStart)*scale);
+int x1 = round((double)(chromStart-winStart)*scale) + xOff;
+int x2 = round((double)(chromEnd-winStart)*scale) + xOff;
 int w = x2-x1;
 if (w < 1)
     w = 1;
-hvGfxPaneBox(hvgp, x1, y, w, height, color);
+hvGfxBox(hvg, x1, y, w, height, color);
 }
 
 
-void drawScaledBoxSample(struct hvGfxPane *hvgp,
+void drawScaledBoxSample(struct hvGfx *hvg, 
 	int chromStart, int chromEnd, double scale, 
-        int y, int height, Color color, int score)
+	int xOff, int y, int height, Color color, int score)
 /* Draw a box scaled from chromosome to window coordinates. */
 {
 int i;
 int x1, x2, w;
-x1 = round((double)(chromStart-winStart)*scale);
-x2 = round((double)(chromEnd-winStart)*scale);
+x1 = round((double)(chromStart-winStart)*scale) + xOff;
+x2 = round((double)(chromEnd-winStart)*scale) + xOff;
 
 if (x2 >= MAXPIXELS)
     x2 = MAXPIXELS - 1;
 w = x2-x1;
 if (w < 1)
     w = 1;
-hvGfxPaneBox(hvgp, x1, y, w, height, color);
+hvGfxBox(hvg, x1, y, w, height, color);
 if ((x1 >= 0) && (x1 < MAXPIXELS) && (chromEnd >= winStart) && (chromStart <= winEnd))
     {
     for (i = x1 ; i < x1+w; i++)
@@ -1527,7 +1527,7 @@ const struct linkedFeatures *b = *((struct linkedFeatures **)vb);
 return a->start - b->start;
 }
 
-void clippedBarbs(struct hvGfxPane *hvgp, int x, int y, 
+void clippedBarbs(struct hvGfx *hvg, int x, int y, 
 	int width, int barbHeight, int barbSpacing, int barbDir, Color color,
 	boolean needDrawMiddle)
 /* Draw barbed line.  Clip it to fit the window first though since
@@ -1535,12 +1535,20 @@ void clippedBarbs(struct hvGfxPane *hvgp, int x, int y,
  * clipping at the lower level is not efficient since we added
  * PostScript output support. */
 {
-// clipping now handled in hvGfxPaneBarbedHorizontalLine
-hvGfxPaneBarbedHorizontalLine(hvgp, x, y, width, barbHeight, barbSpacing, barbDir,
-                              color, needDrawMiddle);
+int x2 = x + width;
+
+if (barbDir == 0)
+    return;
+
+if (x < 0) x = 0;
+if (x2 > hvg->width) x2 = hvg->width;
+width = x2 - x;
+if (width > 0)
+    hvGfxBarbedHorizontalLine(hvg, x, y, width, barbHeight, barbSpacing, barbDir,
+	    color, needDrawMiddle);
 }
 
-void innerLine(struct hvGfxPane *hvgp, int x, int y, int w, Color color)
+void innerLine(struct hvGfx *hvg, int x, int y, int w, Color color)
 /* Draw a horizontal line of given width minus a pixel on either
  * end.  This pixel is needed for PostScript only, but doesn't
  * hurt elsewhere. */
@@ -1556,9 +1564,9 @@ if (w > 1)
    int x1 = x+1;
    int x2 = x + w - 1;
    if (x1 < 0) x1 = 0;
-   if (x2 > hvgp->width) x2 = hvgp->width;
+   if (x2 > hvg->width) x2 = hvg->width;
    if (x2-x1 > 0)
-       hvGfxPaneLine(hvgp, x1, y, x2, y, color);
+       hvGfxLine(hvg, x1, y, x2, y, color);
    }
 }
 
@@ -1637,7 +1645,7 @@ return ret;
 
 void lfDrawSpecialGaps(struct linkedFeatures *lf,
 		       int intronGap, boolean chainLines, int gapFactor,
-		       struct track *tg, struct hvGfxPane *hvgp, int y,
+		       struct track *tg, struct hvGfx *hvg, int xOff, int y,
 		       double scale, Color color, Color bColor,
 		       enum trackVisibility vis)
 /* If applicable, draw something special for the gap following this block.
@@ -1675,8 +1683,8 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
 	else
 	    qGap = sf->next->qStart - sf->qEnd;
 
-	x1 = round((double)((int)s-winStart)*scale);
-	x2 = round((double)((int)e-winStart)*scale);
+	x1 = round((double)((int)s-winStart)*scale) + xOff;
+	x2 = round((double)((int)e-winStart)*scale) + xOff;
 	w = x2 - x1;
 	if (chainLines && tGap > 0)
 	    {
@@ -1686,7 +1694,7 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
 	    /* If the gap in the target is more than gapFactor times the gap 
 	     * in the query we draw only one line, otherwise two. */
 	    if (qGap == 0 || (gapFactor > 0 && tGap > gapFactor * qGap))
-		innerLine(hvgp, x1, midY, w, color);
+		innerLine(hvg, x1, midY, w, color);
 	    else
 		{
 		int midY1 = midY - (heightPer>>2);
@@ -1696,13 +1704,13 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
 		    midY1 = y;
 		    midY2 = y + heightPer - 1;
 		    }
-		innerLine(hvgp, x1, midY1, w, color);
-		innerLine(hvgp, x1, midY2, w, color);
+		innerLine(hvg, x1, midY1, w, color);
+		innerLine(hvg, x1, midY2, w, color);
 		}
 	    }
 	if (intronGap && (qGap == 0) && (tGap >= intronGap))
 	    {
-	    clippedBarbs(hvgp, x1, midY, w, tl.barbHeight, tl.barbSpacing, 
+	    clippedBarbs(hvg, x1, midY, w, tl.barbHeight, tl.barbSpacing, 
 			 lf->orientation, bColor, FALSE);
 	    }
 	}
@@ -1714,7 +1722,7 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
 #define CHAIN_GAP_FACTOR 5
 
 void linkedFeaturesDrawAt(struct track *tg, void *item,
-	struct hvGfxPane *hvgp, int y, double scale, 
+	struct hvGfx *hvg, int xOff, int y, double scale, 
 	MgFont *font, Color color, enum trackVisibility vis)
 /* Draw a single simple bed item at position. */
 {
@@ -1767,14 +1775,14 @@ if (indelShowDoubleInsert && !hideLine)
   by codon, and setup if so.*/
 if (vis != tvDense)
     {
-    drawOpt = baseColorDrawSetup(hvgp->hvg, tg, lf, &mrnaSeq, &psl);
+    drawOpt = baseColorDrawSetup(hvg, tg, lf, &mrnaSeq, &psl);
     if (drawOpt > baseColorDrawOff)
 	exonArrows = FALSE;
     }
 if ((tg->tdb != NULL) && (vis != tvDense))
     intronGap = atoi(trackDbSettingOrDefault(tg->tdb, "intronGap", "0"));
 
-lfColors(tg, lf, hvgp->hvg, &color, &bColor);
+lfColors(tg, lf, hvg, &color, &bColor);
 if (vis == tvDense && trackDbSetting(tg->tdb, EXP_COLOR_DENSE))
     color = saveColor;
 
@@ -1786,18 +1794,18 @@ if ((tallStart == 0 && tallEnd == 0) && !sameWord(tg->mapName, "jaxQTL3"))
     tallStart = lf->start;
     tallEnd   = lf->end;
     }
-x1 = round((double)((int)lf->start-winStart)*scale);
-x2 = round((double)((int)lf->end-winStart)*scale);
+x1 = round((double)((int)lf->start-winStart)*scale) + xOff;
+x2 = round((double)((int)lf->end-winStart)*scale) + xOff;
 w = x2-x1;
 if (!hideLine)
     {
-    innerLine(hvgp, x1, midY, w, color);
+    innerLine(hvg, x1, midY, w, color);
     }
 if (!hideArrows)
     {
     if ((intronGap == 0) && (vis == tvFull || vis == tvPack))
 	{
-	clippedBarbs(hvgp, x1, midY, w, tl.barbHeight, tl.barbSpacing, 
+	clippedBarbs(hvg, x1, midY, w, tl.barbHeight, tl.barbSpacing, 
 		 lf->orientation, bColor, FALSE);
 	}
     }
@@ -1813,7 +1821,7 @@ for (sf = components; sf != NULL; sf = sf->next)
 	{
 	e2 = e;
 	if (e2 > tallStart) e2 = tallStart;
-	drawScaledBoxSample(hvgp, s, e2, scale, y+shortOff, shortHeight, 
+	drawScaledBoxSample(hvg, s, e2, scale, xOff, y+shortOff, shortHeight, 
             color, lf->score);
 	s = e2;
 	}
@@ -1821,7 +1829,7 @@ for (sf = components; sf != NULL; sf = sf->next)
 	{
 	s2 = s;
 	if (s2 < tallEnd) s2 = tallEnd; 
-	drawScaledBoxSample(hvgp, s2, e, scale, y+shortOff, shortHeight, 
+	drawScaledBoxSample(hvg, s2, e, scale, xOff, y+shortOff, shortHeight, 
             color, lf->score);
 	e = s2;
 	}
@@ -1831,14 +1839,14 @@ for (sf = components; sf != NULL; sf = sf->next)
         if (drawOpt > baseColorDrawOff &&
             e + 6 >= winStart && s - 6 < winEnd &&
 	    (e-s <= 3 || psl != NULL)) 
-                baseColorDrawItem(tg, lf, sf->grayIx, hvgp, y, 
+                baseColorDrawItem(tg, lf, sf->grayIx, hvg, xOff, y, 
 				  scale, font, s, e, heightPer, 
 				  zoomedToCodonLevel, mrnaSeq, psl, 
 				  drawOpt,
 				  MAXPIXELS, winStart, color);
         else
             {
-            drawScaledBoxSample(hvgp, s, e, scale, y, heightPer, 
+            drawScaledBoxSample(hvg, s, e, scale, xOff, y, heightPer, 
                                 color, lf->score );
 
             if (exonArrowsAlways || (exonArrows &&
@@ -1862,7 +1870,7 @@ for (sf = components; sf != NULL; sf = sf->next)
     }
 if ((intronGap > 0) || chainLines)
     lfDrawSpecialGaps(lf, intronGap, chainLines, gapFactor,
-		      tg, hvgp, y, scale, color, bColor, vis);
+		      tg, hvg, xOff, y, scale, color, bColor, vis);
 
 if (vis != tvDense)
     {
@@ -1880,21 +1888,21 @@ if (vis != tvDense)
 }
 
 static void lfSeriesDrawConnecter(struct linkedFeaturesSeries *lfs, 
-	struct hvGfxPane *hvgp, int start, int end, double scale, int midY,
+	struct hvGfx *hvg, int start, int end, double scale, int xOff, int midY,
 	Color color, Color bColor, enum trackVisibility vis)
 /* Draw connection between two sets of linked features. */
 {
 if (start != -1 && !lfs->noLine)
     {
-    int x1 = round((double)((int)start-winStart)*scale);
-    int x2 = round((double)((int)end-winStart)*scale);
+    int x1 = round((double)((int)start-winStart)*scale) + xOff;
+    int x2 = round((double)((int)end-winStart)*scale) + xOff;
     int w = x2-x1;
     if (w > 0)
 	{
 	if (vis == tvFull || vis == tvPack) 
-	    clippedBarbs(hvgp, x1, midY, w, tl.barbHeight, tl.barbSpacing, 
+	    clippedBarbs(hvg, x1, midY, w, tl.barbHeight, tl.barbSpacing, 
 	  	lfs->orientation, bColor, TRUE);
-	hvGfxPaneLine(hvgp, x1, midY, x2, midY, color);
+	hvGfxLine(hvg, x1, midY, x2, midY, color);
 	}
     }
 }
@@ -1925,10 +1933,10 @@ if (vis == tvDense && trackDbSetting(tg->tdb, EXP_COLOR_DENSE))
     color = saveColor;
 for (lf = lfs->features; lf != NULL; lf = lf->next)
     {
-    lfSeriesDrawConnecter(lfs, hvgp, prevEnd, lf->start, scale, midY,
+    lfSeriesDrawConnecter(lfs, hvg, prevEnd, lf->start, scale, xOff, midY,
         color, bColor, vis);
     prevEnd = lf->end;
-    linkedFeaturesDrawAt(tg, lf, hvgp, y, scale, font, color, vis);
+    linkedFeaturesDrawAt(tg, lf, hvg, xOff, y, scale, font, color, vis);
     if(tg->mapsSelf) 
 	{
 	int x1 = round((double)((int)lf->start-winStart)*scale) + xOff;
@@ -1937,7 +1945,7 @@ for (lf = lfs->features; lf != NULL; lf = lf->next)
 	tg->mapItem(tg, lf, lf->name, tg->mapItemName(tg, item), lf->start, lf->end, x1, y, w, tg->heightPer);
 	}
     }
-lfSeriesDrawConnecter(lfs, hvgp, prevEnd, lfs->end, scale, midY, 
+lfSeriesDrawConnecter(lfs, hvg, prevEnd, lfs->end, scale, xOff, midY, 
 	color, bColor, vis);
 }
 
@@ -2015,7 +2023,6 @@ void genericDrawNextItemStuff(struct track *tg, struct hvGfx *hvg, enum trackVis
 /* After the item is drawn in genericDrawItems, draw next/prev item related */
 /* buttons and the corresponding mapboxes. */
 {
-struct hvGfxPane *hvgTracks = hvGfxGetPane(hvg, hvGfxPaneTracks);
 int trackPastTabX = (withLeftLabels ? trackTabWidth : 0);
 int buttonW = heightPer-1 + 2*NEXT_ITEM_ARROW_BUFFER;
 int s = tg->itemStart(tg, item);
@@ -2026,14 +2033,13 @@ boolean lButton = FALSE;
 if (s < winStart)
     {
     lButton = TRUE;
-    hvGfxPaneNextItemButton(hvgTracks, NEXT_ITEM_ARROW_BUFFER, y, 
+    hvGfxNextItemButton(hvg, insideX + NEXT_ITEM_ARROW_BUFFER, y, 
 		     heightPer-1, heightPer-1, color, MG_WHITE, FALSE);
     }
 if (e > winEnd)
     {
     rButton = TRUE;
-    // FIXME: why -heightPer
-    hvGfxPaneNextItemButton(hvgTracks, insideWidth - NEXT_ITEM_ARROW_BUFFER - heightPer, 
+    hvGfxNextItemButton(hvg, insideX + insideWidth - NEXT_ITEM_ARROW_BUFFER - heightPer, 
 		     y, heightPer-1, heightPer-1, color, MG_WHITE, TRUE);
     }
 /* If we're in pack, there's some crazy logic. */
@@ -8866,7 +8872,7 @@ if(doIdeo)
     /* Start up client side map. */
     hPrintf("<MAP Name=%s>\n", mapName);
     ideoHeight = gfxBorder + ideoTrack->height;
-    hvg = hvGfxOpenGif(ideoWidth, ideoHeight, 0, gifTn.forCgi);
+    hvg = hvGfxOpenGif(ideoWidth, ideoHeight, gifTn.forCgi);
     makeGrayShades(hvg);
     makeBrownShades(hvg);
     makeSeaShades(hvg);
@@ -9661,11 +9667,11 @@ for (track = trackList; track != NULL; track = track->next)
 
 imagePixelHeight = pixHeight;
 if (psOutput)
-    hvg = hvGfxOpenPostScript(pixWidth, pixHeight, insideX, psOutput);
+    hvg = hvGfxOpenPostScript(pixWidth, pixHeight, psOutput);
 else
     {
     trashDirFile(&gifTn, "hgt", "hgt", ".gif");
-    hvg = hvGfxOpenGif(pixWidth, pixHeight, insideX, gifTn.forCgi);
+    hvg = hvGfxOpenGif(pixWidth, pixHeight, gifTn.forCgi);
     }
 makeGrayShades(hvg);
 makeBrownShades(hvg);

@@ -377,7 +377,7 @@ else
 return gl;
 }
 
-static void leftLabel(struct hvGfxPane *hvg, struct genoLay *gl,
+static void leftLabel(struct hvGfx *hvg, struct genoLay *gl,
 	struct genoLayChrom *chrom, int yOffset, int fontHeight,
 	int color)
 /* Draw a chromosome with label on left. */

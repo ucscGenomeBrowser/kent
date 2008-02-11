@@ -42,7 +42,7 @@ struct vGfx
 
     void (*textRight)(void *v, int x, int y, int width, int height,
     	int colorIx, void *font, char *text);
-    /* Draw a line of text with upper left corner x,y. */
+   /* Draw a line of text right justified in box defined by x/y/width/height */
 
     void (*textCentered)(void *v, int x, int y, int width, int height,
     	int colorIx, void *font, char *text);
@@ -83,6 +83,11 @@ struct vGfx
     char * (*getHint)(void *v, char *hint);
     /* Get hint */
 
+    int (*getFontPixelHeight)(void *v, void *font);
+    /* How high in pixels is font? */
+
+    int (*getFontStringWidth)(void *v, void *font, char *string);
+    /* How wide is a string? */
     };
 
 struct vGfx *vgOpenGif(int width, int height, char *fileName);
@@ -114,7 +119,7 @@ void vgClose(struct vGfx **pVg);
 
 #define vgTextRight(v,x,y,width,height,color,font,string) \
 	v->textRight(v->data,x,y,width,height,color,font,string)
-/* Draw a line of text with upper left corner x,y. */
+/* Draw a line of text right justified in box defined by x/y/width/height */
 
 #define vgTextCentered(v,x,y,width,height,color,font,string) \
 	v->textCentered(v->data,x,y,width,height,color,font,string)
@@ -161,7 +166,13 @@ void vgClose(struct vGfx **pVg);
 	v->getHint(v->data,hint)
     /* Get hint */
 
+#define vgGetFontPixelHeight(v,font) \
+	v->getFontPixelHeight(v->data,font)
+    /* How high in pixels is font? */
 
+#define vgGetFontStringWidth(v,font,string) \
+	v->getFontStringWidth(v->data,font,string)
+    /* How wide is a string? */
 
 int vgFindRgb(struct vGfx *vg, struct rgbColor *rgb);
 /* Find color index corresponding to rgb color. */

@@ -416,8 +416,8 @@ double scaleForPixels(double pixelWidth);
 /* Return what you need to multiply bases by to
  * get to scale of pixel coordinates. */
 
-void drawScaledBox(struct hvGfxPane *hvgp, int chromStart, int chromEnd, 
-	double scale, int y, int height, Color color);
+void drawScaledBox(struct hvGfx *hvg, int chromStart, int chromEnd, 
+	double scale, int xOff, int y, int height, Color color);
 /* Draw a box scaled from chromosome to window coordinates. 
  * Get scale first with scaleForPixels. */
 
@@ -454,7 +454,7 @@ Color lighterColor(struct hvGfx *hvg, Color color);
 Color slightlyLighterColor(struct hvGfx *hvg, Color color);
 /* Get slightly lighter shade of a color */ 
 
-void clippedBarbs(struct hvGfxPane *hvgp, int x, int y, 
+void clippedBarbs(struct hvGfx *hvg, int x, int y, 
 	int width, int barbHeight, int barbSpacing, int barbDir, Color color,
 	boolean needDrawMiddle);
 /* Draw barbed line.  Clip it to fit the window first though since
@@ -462,7 +462,7 @@ void clippedBarbs(struct hvGfxPane *hvgp, int x, int y,
  * clipping at the lower level is not efficient since we added
  * PostScript output support. */
 
-void innerLine(struct hvGfxPane *hvgp, int x, int y, int w, Color color);
+void innerLine(struct hvGfx *hvg, int x, int y, int w, Color color);
 /* Draw a horizontal line of given width minus a pixel on either
  * end.  This pixel is needed for PostScript only, but doesn't
  * hurt elsewhere. */
@@ -845,9 +845,9 @@ Color expressionColor(struct track *tg, void *item, struct hvGfx *hvg,
                       float denseMax, float fullMax);
 /* Returns track item color based on expression. */
 
-void drawScaledBoxSample(struct hvGfxPane *hvgp,
+void drawScaledBoxSample(struct hvGfx *hvg,
         int chromStart, int chromEnd, double scale,
-        int y, int height, Color color,
+        int xOff, int y, int height, Color color,
         int score);
 /* Draw a box scaled from chromosome to window coordinates. */
 
@@ -884,7 +884,7 @@ Color getChromBreakBlueColor();
 Color getChromBreakGreenColor();
 
 void linkedFeaturesDrawAt(struct track *tg, void *item,
-				 struct hvGfxPane *hvgp, int y, double scale, 
+				 struct hvGfx *hvg, int xOff, int y, double scale, 
 				 MgFont *font, Color color, enum trackVisibility vis);
 /* Draw a single simple bed item at position. */
 
