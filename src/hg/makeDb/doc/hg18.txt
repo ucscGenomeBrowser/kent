@@ -20148,7 +20148,8 @@ done
     # << emacs
 
 #############################################################################
-# phastCons multizPrimage (InProgress braney 2008-02-06)
+# phastCons multizPrimage 
+##		(DONE - 2008-02-11 braney )
 
     # split mafs into 10M chunks and generate sufficient statistics 
     # files for # phastCons
@@ -20538,7 +20539,7 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
 
 #############################################################################
 ## Annotate multizPrimate multiple alignment with gene annotations
-##		(WORKING - 2007-10-18 - Hiram)
+##		(DONE - 2008-02-11 braney )
     # Gene frames
     ## survey all genomes to see what type of gene track to use
     ssh hgwdev
