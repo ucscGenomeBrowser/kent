@@ -10,7 +10,7 @@
 #include "obscure.h"
 #include "intValTree.h"
 
-static char const rcsid[] = "$Id: spToDb.c,v 1.18 2008/02/08 20:59:50 kent Exp $";
+static char const rcsid[] = "$Id: spToDb.c,v 1.19 2008/02/11 17:08:48 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -20,13 +20,16 @@ errAbort(
   "usage:\n"
   "   spToDb swissProt.dat outDir\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -dupeOk - Allow duplicate accessions in input, and just use first one\n"
   );
 }
 
 static struct optionSpec options[] = {
+   {"dupeOk", OPTION_BOOLEAN},
    {NULL, 0},
 };
+
+boolean dupeOk;
 
 const int lineHeadSize = 5;
 
@@ -937,6 +940,7 @@ struct uniquer *rcValUni = uniquerNew(rcVal, 18);
 struct hash *taxonHash = newHash(18);
 struct hash *taxonIdHash = newHash(18);
 struct hash *pathogenHostHash = newHash(16);
+struct hash *accHash = newHash(18);
 int citationId = 0;
 
 /* A little stuff to process proteinEvidenceType IDs, so that we can share the same
@@ -955,6 +959,17 @@ for (;;)
     if (spr == NULL)
         break;
     acc = spr->accList->name;
+
+    if (hashLookup(accHash, acc))
+        {
+	if (dupeOk)
+	    continue;
+	else
+	    errAbort("Duplicate accession %s in record ending line %d of %s", 
+	        acc, lf->lineIx, lf->fileName);
+	}
+    else
+        hashAdd(accHash, acc, NULL);
 
     /* displayId */
     fprintf(displayId, "%s\t%s\n", acc, spr->id);
@@ -1234,6 +1249,7 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
+dupeOk = optionExists("dupeOk");
 if (argc != 3)
     usage();
 spToDb(argv[1], argv[2]);
