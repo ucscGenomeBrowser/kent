@@ -1780,7 +1780,9 @@ priority 100.096
 visibility dense 
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP: 
-chimpMacaqueOrthoTable snp128orthoPanTro2RheMac2
+chimpMacaqueOrthoTable snp128OrthoPanTro2RheMac2
+chimpDb panTro2
+macaqueDb rheMac2
 type bed 6 +
 
 track snp127
@@ -1803,6 +1805,8 @@ visibility dense
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP: 
 chimpMacaqueOrthoTable snp126orthoPanTro2RheMac2
+chimpDb panTro2
+macaqueDb rheMac2
 type bed 6 +
 
 track snpArray
