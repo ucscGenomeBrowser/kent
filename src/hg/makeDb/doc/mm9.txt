@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.57 2008/02/02 00:14:23 markd Exp $"
+#	"$Id: mm9.txt,v 1.58 2008/02/11 19:00:25 angie Exp $"
 #
 
 #######################################################################
@@ -7367,4 +7367,361 @@ done
         ccdsInfo
         ccdsKgMap
     # << emacs
+
+
+############################################################################
+# dbSNP BUILD 128 (DONE 2/8/08 angie)
+    # Set up build directory
+    ssh kkstore06
+    mkdir -p /cluster/store3/dbSNP128/{mouse,shared}
+
+    # dbSNP 128 field encodings (*.bcp.gz) were already downloaded -- 
+    # see hg18.txt.  
+
+    ########################## DOWNLOAD #############################
+    cd /cluster/data/dbSNP/128/mouse
+    mkdir data schema rs_fasta
+    # Get data from NCBI (anonymous FTP)
+    wget ftp://ftp.ncbi.nih.gov/snp/00readme.txt
+    cd /cluster/data/dbSNP/128/mouse/data
+    alias wg wget --timestamping
+    set ftpSnpDb = ftp://ftp.ncbi.nih.gov/snp/organisms/mouse_10090/database
+    # ContigLoc table has coords, orientation, loc_type, and refNCBI allele
+    wg $ftpSnpDb/organism_data/b128_SNPContigLoc_37_1.bcp.gz
+    wg $ftpSnpDb/organism_data/b128_SNPContigLocusId_37_1.bcp.gz
+    wg $ftpSnpDb/organism_data/b128_ContigInfo_37_1.bcp.gz
+    # MapInfo has alignment weights
+    wg $ftpSnpDb/organism_data/b128_SNPMapInfo_37_1.bcp.gz
+    # SNP has univar_id, validation status and heterozygosity
+    wg $ftpSnpDb/organism_data/SNP.bcp.gz
+
+    # Get schema
+    cd /cluster/data/dbSNP/128/mouse/schema
+    wg $ftpSnpDb/organism_schema/mouse_10090_table.sql.gz
+
+    # Get fasta files
+    # using headers of fasta files for molType, class, observed
+    cd /cluster/data/dbSNP/128/mouse/rs_fasta
+    wg ftp://ftp.ncbi.nih.gov/snp/organisms/mouse_10090/rs_fasta/\*.gz
+
+
+    ########################## LOAD NCBI TABLES #############################
+    # Simplify names of data files -- strip version & extras to get
+    # local canonical table names.
+    cd /cluster/data/dbSNP/128/mouse/data
+    foreach f (*.bcp.gz)
+      set new = `echo $f \
+                 | sed -e 's/^b128_SNP//; s/^b128_//; s/_37_1//; s/.bcp//;'`
+      mv $f $new
+      echo $new
+    end
+
+    # Extract just the tables that we need from the NCBI msSQL table
+    # creation file, and get CREATE statements from
+    # mouse_10090_table.sql for our 5 tables
+    cd /cluster/data/dbSNP/128/mouse/schema
+
+    zcat mouse_10090_table.sql.gz \
+    | perl -we '$/ = "\nGO\n\n\n"; \
+        while (<>) { \
+          next unless /^CREATE TABLE \[(b128_(SNP)?)?(ContigInfo|ContigLoc|ContigLocusId|MapInfo|SNP)(_37_1)?\]/; \
+          s/b128_(SNP)?//; s/_37_1//; \
+          s/[\[\]]//g;  s/GO\n\n\n/;/;  s/smalldatetime/datetime/g; \
+          s/ON PRIMARY//g;  s/COLLATE//g;  s/Latin1_General_BIN//g; \
+          s/IDENTITY (1, 1) NOT NULL /NOT NULL AUTO_INCREMENT, PRIMARY KEY (id)/g; \
+          s/nvarchar/varchar/g;  s/set quoted/--set quoted/g; \
+          s/(image|varchar\s+\(\d+\))/BLOB/g; \
+          print; \
+        }' \
+      > table.sql
+
+    # load on kolossus or a small cluster machine (mysql5 is OK for this).
+    ssh kkr3u00
+    hgsql '' -e 'create database mm9snp128' 
+    cd /cluster/data/dbSNP/128/mouse/schema
+    hgsql mm9snp128 < table.sql
+    cd ../data
+
+    foreach t (ContigInfo ContigLoc ContigLocusId MapInfo SNP)
+      zcat $t.gz \
+      | perl -wpe 's/(\d\d:\d\d:\d\d)\.0/$1/g;' \
+      | hgLoadSqlTab -oldTable mm9snp128 $t placeholder stdin
+    end
+    # There were some warnings (many cleared up by the perl substitution)
+    # but no rows were dropped.  I eyeballed a few examples, seemed OK,
+    # e.g. no value given for a field where NULL is OK.
+    foreach t (ContigInfo ContigLoc ContigLocusId MapInfo SNP) 
+     echo -n "${t}:\t"
+      hgsql -N -B mm9snp128 -e 'select count(*) from '$t
+    end
+#ContigInfo:     13636
+#ContigLoc:      31733892
+#ContigLocusId:  12883378
+#MapInfo:        28464204
+#SNP:            14380527
+
+    # compare contig list in mm9.ctgPos vs ContigInfo (for the reference
+    # strain, not the alts included in ContigInfo)
+    ssh hgwdev hgsql mm9 -NBe 'select * from ctgPos;' \
+      | sed -re 's/^(N[A-Z]_[0-9]+)\.[0-9]+/\1/;' \
+      > ctgPos.tab
+    awk '{print $1;}' ctgPos.tab | sort > /tmp/1
+
+    # Take a look at the group_label values and choose a set that matches
+    # the reference assembly:
+    hgsql mm9snp128 -NBe 'select distinct(group_label) from ContigInfo'
+    # Looks like just ref_strain will do.
+
+    hgsql mm9snp128 -NBe 'select contig_acc from ContigInfo \
+                          where group_label = "C57BL/6J"' \
+    | sort > /tmp/2
+    diff /tmp/1 /tmp/2 
+    # No diff, good.
+    # Make sure there are no orient != 0 contigs among those selected.
+    hgsql mm9snp128 -NBe \
+      'select count(*) from ContigInfo where orient != 0 and \
+         group_label = "C57BL/6J";'
+#0
+
+    #################### EXTRACT INFO FROM NCBI TABLES ####################
+    mkdir -p /scratch/snp/128/mouse
+    cd /scratch/snp/128/mouse
+
+    time hgsql mm9snp128 -e \
+      'alter table ContigLoc  add index (ctg_id); \
+       alter table ContigInfo add index (ctg_id);'
+#0.002u 0.001s 6:18.71 0.0%      0+0k 0+0io 1pf+0w
+
+    time hgsql mm9snp128 -e \
+      'alter table ContigInfo add index (group_label(9));'
+#0.002u 0.002s 0:00.35 0.0%      0+0k 0+0io 1pf+0w
+
+    # Since there is only one group_label for mouse, just use snp_id
+    # as key.  If there is more than one group_label to pick up, then
+    # don't use this as a template -- use hg18.txt.
+    hgsql mm9snp128 -NBe \
+      'select snp_id, ContigInfo.contig_acc, asn_from, asn_to, \
+              loc_type, orientation, allele, phys_pos_from \
+       from ContigLoc, ContigInfo \
+       where ContigLoc.ctg_id = ContigInfo.ctg_id and  \
+             ContigInfo.group_label = "C57BL/6J";' \
+      | sort \
+      > ucscContigLoc.txt
+    # took ~7 minutes
+    # The IDs are non-unique (can be multiply mapped).  This is OK if 
+    # everything else that we relate to these uniquely maps to snp_id.
+    wc -l ucscContigLoc.txt
+#16232825 ucscContigLoc.txt
+    awk '{print $1;}' ucscContigLoc.txt | uniq | wc -l
+#14304640
+
+    # SNP -> valid, avHet, avHetSE
+    # SNP has only snp_id as identifier, nothing relating to assembly.
+    hgsql mm9snp128 -NBe \
+      'select snp_id, validation_status, avg_heterozygosity, het_se \
+       from SNP;' \
+    | sort \
+      > ucscSNP.txt
+    # Check ID uniqueness:
+    wc -l ucscSNP.txt
+#14380527 ucscSNP.txt
+    awk '{print $1;}' ucscSNP.txt | uniq | wc -l
+#14380527
+
+    # ContigLocusId -> func
+    # ContigLocusId has only snp_id as an identifier (it gives one 
+    # example contig if the SNP is on multiple contigs).  
+    # The sort options and awk are to convert multiple entries with different
+    # function classes for the same SNP into one entry per SNP with a list
+    # of function classes.
+    hgsql mm9snp128 -NBe \
+      'select snp_id, fxn_class from ContigLocusId;' \
+    | sort -u -k1,1 -k2,2n  \
+    | awk '{if (prevId == $1) { prevFunc = prevFunc $2 ","; } \
+            else { if (prevId) {print prevId "\t" prevFunc;} \
+                                prevFunc = $2 ","; }} \
+           {prevId = $1;} \
+           END {print prevId "\t" prevFunc;}' \
+      > ucscFunc.txt
+    # Check ID uniqueness:
+    wc -l ucscFunc.txt
+#5878591 ucscFunc.txt
+    awk '{print $1;}' ucscFunc.txt | sort -u | wc -l
+#5878591
+
+    # MapInfo -> weight
+    # MapInfo needs assembly+snp_ids in order to have unique IDs.
+    time hgsql mm9snp128 -e \
+      'alter table MapInfo add index (assembly(9));'
+#0.000u 0.004s 2:22.64 0.0%      0+0k 0+0io 0pf+0w
+    hgsql mm9snp128 -NBe \
+      'select snp_id, weight from MapInfo where assembly = "C57BL/6J";' \
+      | sort \
+      > weight.txt
+    # ~1 minute
+    # Check ID uniqueness:
+    wc -l weight.txt
+#14304640 weight.txt
+    awk '{print $1;}' weight.txt | uniq | wc -l
+#14304640
+    awk '{print $2;}' weight.txt | sort -n | uniq -c
+#13954580 1
+# 113119 2
+# 169755 3
+#  67186 10
+    # SNPs w/weight 0 and 10 will be discarded later.
+
+    # fasta headers -> observed, molType, class
+    zcat /cluster/data/dbSNP/128/mouse/rs_fasta/rs_ch*.fas.gz \
+    | grep '^>gnl' \
+    | perl -wpe 's/^\S+rs(\d+) .*mol="(\w+)"\|class=(\d+)\|alleles="([^"]+)"\|build.*/$1\t$4\t$2\t$3/ || die "Parse error line $.:\n$_\n\t";' \
+    | sort \
+      > ucscGnl.txt
+    # ~4 minutes
+    wc -l ucscGnl.txt
+#14380527 ucscGnl.txt
+    awk '{print $1;}' ucscGnl.txt | uniq | wc -l
+#14380527
+
+    ############### JOIN NCBI COLUMNS TO GET UCSC SNP COLUMNS ################
+    # Join files by ID.  
+    time join -a 1 -e MISSING -t '	' ucscContigLoc.txt weight.txt \
+      > ucscCL+w.txt
+#26.811u 4.091s 1:02.59 49.3%    0+0k 0+0io 0pf+0w
+    wc -l ucscCL+w.txt 
+#16232825 ucscCL+w.txt
+    # Same as ucscContigLoc.txt above, good.
+    # Any missing weights?
+    grep MISSING ucscCL+w.txt | head
+    # No output, good.
+
+    # Join the files with SNP-only IDs.
+    time join -e MISSING -t '	' ucscGnl.txt ucscSNP.txt \
+      > ucscG+S.txt
+#16.591u 1.935s 0:28.44 65.1%    0+0k 0+0io 0pf+0w
+    wc -l ucscG+S.txt
+#14380527 ucscG+S.txt
+    # Same as ucscSNP.txt and ucscGnl.txt above.
+    grep MISSING ucscG+S.txt | wc -l
+#0
+    time join -a 1 -e MISSING -o 1.1,1.2,1.3,1.4,1.5,1.6,1.7,2.2 \
+      -t '	' ucscG+S.txt ucscFunc.txt \
+      > ucscG+S+F.txt
+#17.438u 2.115s 0:24.83 78.6%    0+0k 0+0io 0pf+0w
+    wc -l ucscG+S+F.txt
+#14380527 ucscG+S+F.txt
+    grep MISSING ucscG+S+F.txt | wc -l 
+#8501936
+    # Not surprising -- ucscFunc.txt has only 5878591 lines.
+    expr 14380527 - 5878591
+#8501936
+
+    # Final join -- treat ContigLoc as authoritative (since it has coords).
+    # Arrange columns in same order as in the SNP table, with extras for
+    # checking at the end (phys_pos_from).
+    # chr chrS chrE name strand refN obs molT cls val aH aHSE fxn locT wt ...
+    time join -a 1 -e MISSING -t '	' \
+  -o '1.2 1.3 1.4 1.1 1.6 1.7 2.2 2.3 2.4 2.5 2.6 2.7 2.8 1.5 1.9 1.8' \
+      ucscCL+w.txt ucscG+S+F.txt \
+      > ucscNcbiSnp.ctg.txt
+#41.401u 6.045s 1:02.04 76.4%    0+0k 0+0io 0pf+0w
+    wc -l ucscNcbiSnp.ctg.txt
+#16232825 ucscNcbiSnp.ctg.txt
+    grep MISSING ucscNcbiSnp.ctg.txt | awk '{print $4;}' | uniq | wc -l
+#8432812
+    # a bit less than the 8501936 missing FUNC's above... perhaps some
+    # of those did not have any mappings in ucscContigLoc.txt.
+
+    # Lift the map contig coordinates to chrom coordinates (~2m);
+    sed -re 's/\t(N[A-Z]_[0-9]+)\.[0-9]+\t/\t\1\t/;' \
+      /cluster/data/mm9/jkStuff/mm9.contigs.lift > liftContigs.lft
+    time liftUp ucscNcbiSnp.bed liftContigs.lft warn ucscNcbiSnp.ctg.txt
+#131.007u 7.438s 2:26.48 94.5%   0+0k 0+0io 0pf+0w
+    wc -l ucscNcbiSnp.bed
+#16232825 ucscNcbiSnp.bed
+
+    # At this point, move back from /scratch to /cluster/data.
+    nice gzip ucscNcbiSnp.bed
+    cp -p ucscNcbiSnp.bed.gz /cluster/data/dbSNP/128/mouse/
+
+    # Translate NCBI's encoding into UCSC's, and perform a bunch of
+    # checks.  This is where developer involvement is most likely as
+    # NCBI extends the encodings used in dbSNP.
+    cd /cluster/data/dbSNP/128/mouse/
+    gunzip ucscNcbiSnp.bed.gz
+    time snpNcbiToUcsc ucscNcbiSnp.bed /cluster/data/mm9/mm9.2bit \
+      snp128
+#count of snps with weight  0 = 0
+#count of snps with weight  1 = 13954580
+#count of snps with weight  2 = 226238
+#count of snps with weight  3 = 712684
+#count of snps with weight 10 = 1339323
+#Found no errors.
+#162.963u 9.783s 3:02.77 94.5%   0+0k 0+0io 1pf+0w
+    wc -l snp*
+#  14893502 snp128.bed
+#        22 snp128.sql
+#         0 snp128Errors.bed
+#        18 snp128ExceptionDesc.tab
+#   1898314 snp128Exceptions.bed
+
+    # Make one big fasta file.  (note: snp126 skipped chrUn... but it's small
+    # compared to chr1, chr2 etc.)
+    # Some of the fasta files have SNPs that were not mapped to the reference
+    # assembly.  Make sure there is no overlap with snp128.bed, and then
+    # move then out of the way.
+    zcat rs_fasta/rs_chNotOn.fas.gz \
+    | perl -we 'while (<>) { \
+                  next unless /^>gnl/; s/^>gnl.dbSNP.(rs\d+).*/$1/; print; }' \
+    | sort | grep -Fwf - snp128.bed | head
+    ^chNotOn^chAltOnly
+    # No output from either command -- good.
+    mkdir rs_fasta/omitted
+    mv rs_fasta/rs_ch{AltOnly,NotOn}.fas.gz rs_fasta/omitted/
+
+    zcat rs_fasta/rs_ch*.fas.gz \
+    | perl -wpe 's/^>gnl\|dbSNP\|(rs\d+) .*/>$1/ || ! /^>/ || die;' \
+      > snp128.fa
+    # Check for duplicates.
+    grep ^\>rs snp128.fa | sort > /scratch/tmp/seqHeaders
+    wc -l /scratch/tmp/seqHeaders
+#14304640 /scratch/tmp/seqHeaders
+    uniq /scratch/tmp/seqHeaders | wc -l
+#14304640
+    # Use hgLoadSeq to generate .tab output for sequence file offsets,
+    # and keep only the columns that we need: acc and file_offset.
+    # Index it and translate to snpSeq table format.
+    time hgLoadSeq -test placeholder snp128.fa
+#42.866u 4.977s 0:48.09 99.4%    0+0k 0+0io 4pf+0w
+    cut -f 2,6 seq.tab > snp128Seq.tab
+    rm seq.tab
+
+    ssh hgwdev
+    # Load up main track tables.
+    cd /cluster/data/dbSNP/128/mouse
+    time nice hgLoadBed -tab -noSort -onServer -tmpDir=/scratch/tmp \
+      mm9 snp128 -sqlTable=snp128.sql snp128.bed
+#Loaded 14893502 elements of size 17
+#67.395u 12.818s 8:43.01 15.3%   0+0k 0+0io 0pf+0w
+    sed -e 's/snp125/snp128/' ~/kent/src/hg/lib/snp125Exceptions.sql \
+      > snp128Exceptions.sql
+    time nice hgLoadBed -tab -onServer -tmpDir=/scratch/tmp \
+      mm9 snp128Exceptions -sqlTable=snp128Exceptions.sql \
+      snp128Exceptions.bed
+#Loaded 1898314 elements of size 5
+#8.925u 1.354s 0:52.66 19.5%     0+0k 0+0io 0pf+0w
+    sed -e 's/snp125/snp128/' ~/kent/src/hg/lib/snp125ExceptionDesc.sql \
+      > snp128ExceptionDesc.sql
+    hgLoadSqlTab mm9 snp128ExceptionDesc snp128ExceptionDesc.sql \
+      snp128ExceptionDesc.tab
+    # Load up sequences.
+    sed -e 's/snpSeq/snp128Seq/' ~/kent/src/hg/lib/snpSeq.sql \
+      > snp128Seq.sql
+    mkdir -p /gbdb/mm9/snp
+    ln -s /cluster/data/dbSNP/128/mouse/snp128.fa /gbdb/mm9/snp/snp128.fa
+    time nice hgLoadSqlTab mm9 snp128Seq snp128Seq.sql snp128Seq.tab
+#0.000u 0.003s 3:02.66 0.0%      0+0k 0+0io 0pf+0w
+    # Put in a link where one would expect to find the track build dir...
+    ln -s /cluster/data/dbSNP/128/mouse /cluster/data/mm9/bed/snp128
+
 
