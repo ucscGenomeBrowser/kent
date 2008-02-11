@@ -17,7 +17,7 @@
 #include "pbStamp.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: pbUtil.c,v 1.23 2007/05/26 17:42:15 angie Exp $";
+static char const rcsid[] = "$Id: pbUtil.c,v 1.24 2008/02/11 22:04:45 fanhsu Exp $";
 
 void hWrites(char *string)
 /* Write string with no '\n' if not suppressed. */
@@ -397,7 +397,10 @@ hPrintf("<B>Total amino acids:</B> %d\n", strlen(aa));
 hPrintf("\n");
 hPrintf("<P><B>FASTA record:</B>\n");
 hPrintf("<pre>\n");
-hPrintf(">%s|%s|%s", proteinID, protDisplayID, description);
+if (hIsGsidServer())
+    hPrintf(">%s", proteinID);
+else
+    hPrintf(">%s|%s|%s", proteinID, protDisplayID, description);
 
 chp = aa;
 for (i=0; i<l; i++)
