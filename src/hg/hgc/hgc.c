@@ -213,7 +213,7 @@
 #include "itemConf.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1388 2008/02/11 18:56:14 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1389 2008/02/11 22:22:09 angie Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -13600,7 +13600,7 @@ void doSnpWithVersion(struct trackDb *tdb, char *itemName, int version)
 {
 char   *table = tdb->tableName;
 struct snp125 snp;
-struct snp *snpAlign;
+struct snp *snpAlign = NULL;
 int    start = cartInt(cart, "o");
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
