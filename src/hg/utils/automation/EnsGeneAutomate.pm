@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/EnsGeneAutomate.pm instead.
 
-# $Id: EnsGeneAutomate.pm,v 1.3 2008/02/09 00:03:33 hiram Exp $
+# $Id: EnsGeneAutomate.pm,v 1.4 2008/02/11 23:07:11 hiram Exp $
 package EnsGeneAutomate;
 
 use warnings;
@@ -105,6 +105,46 @@ my %ensGeneFtpPeptideFileNames_47 = (
 'xenTro2' => 'xenopus_tropicalis_47_41g/pep/Xenopus_tropicalis.JGI4.1.47.pep.all.fa.gz',
 );
 
+#	directory name under release-47/mysql/ to find 'seq_region' and
+#	'assembly' table copies for GeneScaffold coordinate conversions
+my %ensGeneFtpMySqlFileNames_47 = (
+'aedAeg0' => 'aedes_aegypti_core_47_1a',
+'anoGam1' => 'anopheles_gambiae_core_47_3i',
+'bosTau3' => 'bos_taurus_core_47_3d',
+'ce5' => 'caenorhabditis_elegans_core_47_180',
+'canFam2' => 'canis_familiaris_core_47_2e',
+'cavPor2' => 'cavia_porcellus_core_47_1b',
+'ci2' => 'ciona_intestinalis_core_47_2g',
+'cioSav2' => 'ciona_savignyi_core_47_2e',
+'danRer5' => 'danio_rerio_core_47_7a',
+'dasNov1' => 'dasypus_novemcinctus_core_47_1d',
+'dm4' => 'drosophila_melanogaster_core_47_43b',
+'echTel1' => 'echinops_telfairi_core_47_1d',
+'eriEur1' => 'erinaceus_europaeus_core_47_1b',
+'felCat3' => 'felis_catus_core_47_1b',
+'galGal3' => 'gallus_gallus_core_47_2e',
+'gasAcu1' => 'gasterosteus_aculeatus_core_47_1d',
+'hg18' => 'homo_sapiens_core_47_36i',
+'loxAfr1' => 'loxodonta_africana_core_47_1c',
+'rheMac2' => 'macaca_mulatta_core_47_10f',
+'monDom5' => 'monodelphis_domestica_core_47_5b',
+'mm9' => 'mus_musculus_core_47_37',
+'myoLuc0' => 'myotis_lucifugus_core_47_1c',
+'ornAna1' => 'ornithorhynchus_anatinus_core_47_1d',
+'oryCun1' => 'oryctolagus_cuniculus_core_47_1d',
+'oryLat1' => 'oryzias_latipes_core_47_1c',
+'otoGar1' => 'otolemur_garnettii_core_47_1a',
+'panTro2' => 'pan_troglodytes_core_47_21f',
+'rn4' => 'rattus_norvegicus_core_47_34q',
+'sacCer1' => 'saccharomyces_cerevisiae_core_47_1g',
+'sorAra0' => 'sorex_araneus_core_47_1a',
+'speTri0' => 'spermophilus_tridecemlineatus_core_47_1c',
+'fr2' => 'takifugu_rubripes_core_47_4g',
+'tetNig1' => 'tetraodon_nigroviridis_core_47_1i',
+'tupBel1' => 'tupaia_belangeri_core_47_1b',
+'xenTro2' => 'xenopus_tropicalis_core_47_41g',
+);
+
 # key is UCSC db name, result is FTP file name under the gtf directory
 my %ensGeneFtpFileNames_48 = (
 'aedAeg0' => 'aedes_aegypti/Aedes_aegypti.AaegL1.48.gtf.gz',
@@ -187,14 +227,59 @@ my %ensGeneFtpPeptideFileNames_48 = (
 'xenTro2' => 'xenopus_tropicalis/pep/Xenopus_tropicalis.JGI4.1.48.pep.all.fa.gz',
 );
 
+#	directory name under release-48/mysql/ to find 'seq_region' and
+#	'assembly' table copies for GeneScaffold coordinate conversions
+my %ensGeneFtpMySqlFileNames_48 = (
+'aedAeg0' => 'aedes_aegypti_core_48_1b',
+'anoGam1' => 'anopheles_gambiae_core_48_3j',
+'bosTau3' => 'bos_taurus_core_48_3e',
+'ce5' => 'caenorhabditis_elegans_core_48_180a',
+'canFam2' => 'canis_familiaris_core_48_2f',
+'cavPor2' => 'cavia_porcellus_core_48_1c',
+'ci2' => 'ciona_intestinalis_core_48_2h',
+'cioSav2' => 'ciona_savignyi_core_48_2f',
+'danRer5' => 'danio_rerio_core_48_7b',
+'dasNov1' => 'dasypus_novemcinctus_core_48_1e',
+'dm4' => 'drosophila_melanogaster_core_48_43b',
+'echTel1' => 'echinops_telfairi_core_48_1e',
+'eriEur1' => 'erinaceus_europaeus_core_48_1c',
+'felCat3' => 'felis_catus_core_48_1c',
+'galGal3' => 'gallus_gallus_core_48_2f',
+'gasAcu1' => 'gasterosteus_aculeatus_core_48_1e',
+'hg18' => 'homo_sapiens_core_48_36j',
+'loxAfr1' => 'loxodonta_africana_core_48_1d',
+'rheMac2' => 'macaca_mulatta_core_48_10g',
+'micMur0' => 'microcebus_murinus_core_48_1',
+'monDom5' => 'monodelphis_domestica_core_48_5c',
+'mm9' => 'mus_musculus_core_48_37a',
+'myoLuc0' => 'myotis_lucifugus_core_48_1d',
+'ochPri0' => 'ochotona_princeps_core_48_1',
+'ornAna1' => 'ornithorhynchus_anatinus_core_48_1e',
+'oryCun1' => 'oryctolagus_cuniculus_core_48_1e',
+'oryLat1' => 'oryzias_latipes_core_48_1d',
+'otoGar1' => 'otolemur_garnettii_core_48_1b',
+'panTro2' => 'pan_troglodytes_core_48_21g',
+'sacCer1' => 'rattus_norvegicus_core_48_34r',
+'sorAra0' => 'saccharomyces_cerevisiae_core_48_1h',
+'' => 'sorex_araneus_core_48_1b',
+'speTri0' => 'spermophilus_tridecemlineatus_core_48_1d',
+'fr2' => 'takifugu_rubripes_core_48_4h',
+'tetNig1' => 'tetraodon_nigroviridis_core_48_1j',
+'tupBel1' => 'tupaia_belangeri_core_48_1c',
+'xenTro2' => 'xenopus_tropicalis_core_48_41h',
+);
+
 my @versionList = qw( 48 47 );
 
 my @ensGtfReference;
-$ensGtfReference[47] = \%ensGeneFtpFileNames_47;
 $ensGtfReference[48] = \%ensGeneFtpFileNames_48;
+$ensGtfReference[47] = \%ensGeneFtpFileNames_47;
 my @ensPepReference;
 $ensPepReference[48] = \%ensGeneFtpPeptideFileNames_48;
 $ensPepReference[47] = \%ensGeneFtpPeptideFileNames_47;
+my @ensMySqlReference;
+$ensMySqlReference[48] = \%ensGeneFtpMySqlFileNames_48;
+$ensMySqlReference[47] = \%ensGeneFtpMySqlFileNames_47;
 
 sub ensVersionList() {
    return @versionList;
@@ -202,19 +287,23 @@ sub ensVersionList() {
 
 sub ensGeneVersioning($$) {
 #  given a UCSC db name, and an Ensembl version number, return
-#	FTP gtf file name, peptide file name, Vega file
+#	FTP gtf file name, peptide file name, MySql core directory
   my ($ucscDb, $ensVersion) = @_;
   if (defined($ensGtfReference[$ensVersion]) &&
 	defined($ensPepReference[$ensVersion])) {
     my $gtfReference = $ensGtfReference[$ensVersion];
     my $pepReference = $ensPepReference[$ensVersion];
+    my $mySqlReference = $ensMySqlReference[$ensVersion];
     my $gtfDir = "release-$ensVersion/gtf/";
     my $pepDir = "release-$ensVersion/fasta/";
-    if (exists($gtfReference->{$ucscDb}) &
-	exists($pepReference->{$ucscDb}) ) {
+    my $mySqlDir = "release-$ensVersion/mysql/";
+    if (exists($gtfReference->{$ucscDb}) &&
+	exists($pepReference->{$ucscDb}) &&
+	exists($mySqlReference->{$ucscDb}) ) {
 	my $gtfName =  $ensemblFTP . $gtfDir . $gtfReference->{$ucscDb};
 	my $pepName =  $ensemblFTP . $pepDir . $pepReference->{$ucscDb};
-	return ($gtfName, $pepName);
+	my $mySqlName =  $ensemblFTP . $mySqlDir . $mySqlReference->{$ucscDb};
+	return ($gtfName, $pepName, $mySqlName);
     }
   }
   return (undef, undef);

@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/doEnsGeneUpdate.pl instead.
 
-# $Id: doEnsGeneUpdate.pl,v 1.2 2008/02/09 00:03:33 hiram Exp $
+# $Id: doEnsGeneUpdate.pl,v 1.3 2008/02/11 23:07:11 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -40,6 +40,8 @@ my $dbHost = 'hgwdev';
 
 my $base = $0;
 $base =~ s/^(.*\/)?//;
+my (@versionList) = &EnsGeneAutomate::ensVersionList();
+my $versionListString = join(", ", @versionList);
 
 sub usage {
   # Usage / help / self-documentation:
@@ -75,7 +77,8 @@ To see detailed information about what should appear in config.ra,
 run \"$base -help\".
 ";
   # Detailed help (-help):
-  print STDERR "
+  if ($detailed) {
+  print STDERR <<_EOF_
 -----------------------------------------------------------------------------
 Required ensGeneConfig.ra settings:
 
@@ -85,6 +88,22 @@ db xxxYyyN
     N is the sequence number of this species' build at UCSC.  For some
     species that we have been processing since before this convention, the
     pattern is xyN.
+ensVersion NN
+  - The Ensembl version to fetch, possible values: $versionListString
+
+Optional ensGeneConfig.ra settings:
+
+liftRandoms yes
+  - Need to lift Ensembl contig coordinates to UCSC _random coordinates.
+  - Will use UCSC ctgPos information about contigs to perform the lift.
+nameTranslation "<sed translation pattern>"
+  - sed translation statement to change Ensembl chrom numbers and MT to
+    UCSC chrN and chrM chrom names.  Example:
+    nameTranslation "s/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/"
+geneScaffolds yes
+  - need to translate Ensembl GeneScaffold coordinates to UCSC scaffolds
+    Will fetch and use the Ensembl MySQL tables seq_region and assembly
+    to perform the translation
 
 Assumptions:
 1. $HgAutomate::clusterData/\$db/\$db.2bit contains RepeatMasked sequence for
@@ -94,7 +113,8 @@ Assumptions:
 3. The \$db.2bit files have already been distributed to cluster-scratch
    (/scratch/hg or /iscratch, /san etc).
 4. anything else here ?
-" if ($detailed);
+_EOF_
+  }
   print "\n";
   exit $status;
 }
@@ -102,13 +122,13 @@ Assumptions:
 
 
 # Globals:
-my ($species, $ensGtfUrl, $ensGtfFile, $ensPepUrl, $ensPepFile);
+my ($species, $ensGtfUrl, $ensGtfFile, $ensPepUrl, $ensPepFile, $ensMySqlUrl);
 # Command line argument:
 my $CONFIG;
 # Required config parameters:
 my ($db, $ensVersion);
 # Conditionally required config parameters:
-my ($liftRandoms, $nameTranslation);
+my ($liftRandoms, $nameTranslation, $geneScaffolds);
 # Other globals:
 my ($topDir, $chromBased);
 my ($bedDir, $scriptDir, $endNotes);
@@ -183,7 +203,7 @@ sub doProcess {
   my $fileServer = &HgAutomate::chooseFileServer($runDir);
   my $lifting = 0;
   my $bossScript;
-  if (defined($liftRandoms) && $liftRandoms =~ m/yes/) {
+  if (defined($liftRandoms) && $liftRandoms =~ m/yes/i) {
       $lifting = 1;
       $bossScript = new HgRemoteScript("$runDir/doProcess.csh", $dbHost,
 				      $runDir, $whatItDoes);
@@ -317,40 +337,32 @@ sub parseConfig {
     }
   }
   close($fh);
+
   # Required variables.
   $db = &requireVar('db', \%config);
   $ensVersion = &requireVar('ensVersion', \%config);
   $species = &HgAutomate::getSpecies($dbHost, $db);
   &HgAutomate::verbose(1,
 	"\n db: $db, species: '$species'\n");
+
+  # Optional variables.
   $liftRandoms = &optionalVar('liftRandoms', \%config);
   $nameTranslation = &optionalVar('nameTranslation', \%config);
-#  $scientificName = &requireVar('scientificName', \%config);
-#  $assemblyDate = &requireVar('assemblyDate', \%config);
-#  $assemblyLabel = &requireVar('assemblyLabel', \%config);
-#  $orderKey = &requireVar('orderKey', \%config);
-#  $mitoAcc = &requireVar('mitoAcc', \%config);
-#  $fastaFiles = &requireVar('fastaFiles', \%config);
-#  $dbDbSpeciesDir = &requireVar('dbDbSpeciesDir', \%config);
-  # Conditionally required variables -- optional here, but they might be
-  # required later on in some cases.
-#   $fakeAgpMinScaffoldGap = &optionalVar('fakeAgpMinScaffoldGap', \%config);
-#   $clade = &optionalVar('clade', \%config);
-#   $genomeCladePriority = &optionalVar('genomeCladePriority', \%config);
-  # Optional variables.
-#  $commonName = &optionalVar('commonName', \%config);
-#  $agpFiles = &optionalVar('agpFiles', \%config);
-#  $qualFiles = &optionalVar('qualFiles', \%config);
+  $geneScaffolds = &optionalVar('geneScaffolds', \%config);
+  if (defined($liftRandoms) && $liftRandoms !~ m/yes/i) {
+	undef $liftRandoms;
+  }
+  if (defined($geneScaffolds) && $geneScaffolds !~ m/yes/i) {
+	undef $geneScaffolds;
+  }
+
   # Make sure no unrecognized variables were given.
   my @stragglers = sort keys %config;
   if (scalar(@stragglers) > 0) {
-    die "ERROR: parseConfig: config file $CONFIG has unrecognized variables:\n" .
-      "    " . join(", ", @stragglers) . "\n" .
+    die "ERROR: parseConfig: config file $CONFIG has unrecognized variables:\n"
+      . "    " . join(", ", @stragglers) . "\n" .
       "For a detailed list of supported variables, run \"$base -help\".\n";
   }
-#  $gotMito = ($mitoAcc ne 'none');
-#  $gotAgp = (defined $agpFiles);
-#  $gotQual = (defined $qualFiles);
   $topDir = "/cluster/data/$db";
 } # parseConfig
 
@@ -379,7 +391,7 @@ chomp $date;
 $buildDir = $opt_buildDir ? $opt_buildDir :
   "$HgAutomate::clusterData/$db/$HgAutomate::trackBuild/ensGene.$date";
 
-($ensGtfUrl, $ensPepUrl) =
+($ensGtfUrl, $ensPepUrl, $ensMySqlUrl) =
 	&EnsGeneAutomate::ensGeneVersioning($db, $ensVersion );
 die "ERROR: download: can not find Ensembl FTP URL for UCSC database $db"
 	if (!defined($ensGtfUrl));
@@ -389,6 +401,7 @@ $ensPepFile = basename($ensPepUrl);
 &HgAutomate::verbose(2,"Ensembl GTF File: $ensGtfFile\n");
 &HgAutomate::verbose(2,"Ensembl PEP URL: $ensPepUrl\n");
 &HgAutomate::verbose(2,"Ensembl PEP File: $ensPepFile\n");
+&HgAutomate::verbose(2,"Ensembl MySql URL: $ensMySqlUrl\n");
 
 # Do everything.
 $stepper->execute();
