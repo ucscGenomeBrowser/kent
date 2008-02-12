@@ -158,6 +158,14 @@ float selectFracOverlap(struct chromAnn *ca, int overBases)
 return ((float)overBases) / ((float)ca->totalSize);
 }
 
+float selectFracSimilarity(struct chromAnn *ca1, struct chromAnn *ca2,
+                           int overBases)
+/* get the fractions similarity betten two annotations, give number of
+ * overlapped bases */
+{
+return ((float)(2*overBases)) / ((float)(ca1->totalSize+ca2->totalSize));
+}
+
 static boolean isOverlapped(unsigned opts, struct chromAnn *inCa, struct chromAnn* selCa,
                             struct overlapCriteria *criteria)
 /* see if a chromAnn objects overlap base on thresholds.  If thresholds are zero,
@@ -169,19 +177,15 @@ boolean notOverlapped = FALSE;  // negative crieria (ceiling)
 unsigned overBases = selectOverlapBases(inCa, selCa);
 if (criteria->similarity > 0.0)
     {
-    // bi-directional 
-    // FIXME: this isn't really a measure of similarity, it should be
-    // # (2*numSimilar)/totalBasesInBoth
-    if ((selectFracOverlap(inCa, overBases) >= criteria->similarity)
-        && (selectFracOverlap(selCa, overBases) >= criteria->similarity))
+    // similarity
+    if (selectFracSimilarity(inCa, selCa, overBases) >= criteria->similarity)
         overlapped = TRUE;
     anyCriteria = TRUE;
     }
 if (criteria->similarityCeil <= 1.0)
     {
     // bi-directional ceiling
-    if ((selectFracOverlap(inCa, overBases) >= criteria->similarityCeil)
-        && (selectFracOverlap(selCa, overBases) >= criteria->similarityCeil))
+    if (selectFracSimilarity(inCa, selCa, overBases) >= criteria->similarityCeil)
         notOverlapped = TRUE;
     anyCriteria = TRUE;
     }

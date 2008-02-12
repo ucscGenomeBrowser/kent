@@ -67,6 +67,11 @@ int selectOverlapBases(struct chromAnn *ca1, struct chromAnn *ca2);
 float selectFracOverlap(struct chromAnn *ca, int overBases);
 /* get the fraction of ca overlapped give number of overlapped bases */
 
+float selectFracSimilarity(struct chromAnn *ca1, struct chromAnn *ca2,
+                           int overBases);
+/* get the fractions similarity betten two annotations, give number of
+ * overlapped bases */
+
 boolean selectIsOverlapped(unsigned opts, struct chromAnn *inCa,
                            struct overlapCriteria *criteria,
                            struct slRef **overlappingRecs);

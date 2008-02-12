@@ -148,7 +148,7 @@ for (selectCaRef = overlappingRecs; selectCaRef != NULL; selectCaRef = selectCaR
 }
 
 /* format string for stats output */
-static char *statsFmt = "%s\t%s\t%0.3g\t%0.3g\t%d\n";
+static char *statsFmt = "%s\t%s\t%0.3g\t%0.3g\t%d\t%0.3g\n";
 
 static void outputStats(struct chromAnn* inCa, FILE *outFh,
                         struct slRef *overlappingRecs)
@@ -157,7 +157,7 @@ static void outputStats(struct chromAnn* inCa, FILE *outFh,
 if (overlappingRecs == NULL)
     {
     // -statsOutputAll and nothing overlapping
-    fprintf(outFh, statsFmt, getPrintId(inCa), "", 0.0, 0.0, 0);
+    fprintf(outFh, statsFmt, getPrintId(inCa), "", 0.0, 0.0, 0, 0.0);
     }
 struct slRef *selectCaRef;
 for (selectCaRef = overlappingRecs; selectCaRef != NULL; selectCaRef = selectCaRef->next)
@@ -165,7 +165,8 @@ for (selectCaRef = overlappingRecs; selectCaRef != NULL; selectCaRef = selectCaR
     struct chromAnn *selectCa = selectCaRef->val;
     unsigned overBases = selectOverlapBases(inCa, selectCa);
     fprintf(outFh, statsFmt, getPrintId(inCa), getPrintId(selectCa),
-            selectFracOverlap(inCa, overBases), selectFracOverlap(selectCa, overBases), overBases);
+            selectFracOverlap(inCa, overBases), selectFracOverlap(selectCa, overBases), overBases,
+            selectFracSimilarity(inCa, selectCa, overBases));
     }
 }
 
@@ -177,7 +178,7 @@ struct chromAnn *selCa;
 while ((selCa = selectTableNext(&iter)) != NULL)
     {
     if (!selCa->used)
-        fprintf(outFh, statsFmt, "", getPrintId(selCa), 0.0, 0.0, 0);
+        fprintf(outFh, statsFmt, "", getPrintId(selCa), 0.0, 0.0, 0, 0.0);
     }
 }
 
@@ -348,7 +349,7 @@ if (statsOutput)
     if (useAggregate)
         fputs("#inId\t" "inOverlap\t" "inOverBases\t" "inBases\n", ioFiles.outFh);
     else
-        fputs("#inId\t" "selectId\t" "inOverlap\t" "selectOverlap\t" "overBases\n", ioFiles.outFh);
+        fputs("#inId\t" "selectId\t" "inOverlap\t" "selectOverlap\t" "overBases\t" "similarity\n", ioFiles.outFh);
     }
 
 switch (inFmt)
