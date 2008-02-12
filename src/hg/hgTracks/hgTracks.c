@@ -119,7 +119,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1431 2008/01/22 21:51:32 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1432 2008/02/12 20:33:34 kate Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -12821,6 +12821,8 @@ if (ct->dbTrack)
     while ((row = sqlNextRow(sr)) != NULL)
 	{
 	bed = bedLoadN(row+rowOffset, fieldCount);
+        if (scoreFilter && bed->score < scoreFilter)
+            continue;
 	slAddHead(&list, bed);
 	}
     hFreeOrDisconnect(&conn);

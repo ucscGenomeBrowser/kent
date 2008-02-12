@@ -11,7 +11,7 @@
 #include "chainNet.h"
 #include "chainNetDbLoad.h"
 
-static char const rcsid[] = "$Id: netTrack.c,v 1.20 2006/06/23 23:45:04 kent Exp $";
+static char const rcsid[] = "$Id: netTrack.c,v 1.21 2008/02/12 20:33:35 kate Exp $";
 
 struct netItem
 /* A net track item. */
@@ -25,12 +25,13 @@ struct netItem
 static char *netClassNames[] =  {
     "Level 1", "Level 2", "Level 3", "Level 4", "Level 5", "Level 6", };
 
-static struct netItem *makeNetItems()
+static struct netItem *makeNetItems(int levels)
 /* Make the levels for net alignment track. */
 {
 struct netItem *ni, *niList = NULL;
 int i;
 int numClasses = ArraySize(netClassNames);
+numClasses = min(numClasses, levels);
 for (i=0; i<numClasses; ++i)
     {
     AllocVar(ni);
@@ -45,7 +46,12 @@ return niList;
 static void netLoad(struct track *tg)
 /* Load up net tracks.  (Will query database during drawing for a change.) */
 {
-tg->items = makeNetItems();
+char option[64];
+int levels = 6;
+safef(option, sizeof option, "%s.%s", tg->mapName, NET_OPT_TOP_ONLY);
+if (cartUsualBoolean(cart, option, FALSE))
+    levels = 1;
+tg->items = makeNetItems(levels);
 }
 
 static void netFree(struct track *tg)
