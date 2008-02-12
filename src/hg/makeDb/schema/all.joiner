@@ -2550,6 +2550,7 @@ tablesIgnored $gbd
     history
     knownAlt
     miRNA
+    nestedRepeats
     quality
     rnaCluster
     rnaGene
