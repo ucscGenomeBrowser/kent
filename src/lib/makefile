@@ -1,7 +1,7 @@
 include ../inc/common.mk
 HG_WARN = ${HG_WARN_ERR}
 
-O = aliType.o apacheLog.o asParse.o axt.o axtAffine.o \
+O = aliType.o anc.o apacheLog.o asParse.o axt.o axtAffine.o \
     base64.o bits.o binRange.o \
     blastOut.o blastParse.o boxClump.o boxLump.o browserGfx.o \
     cda.o chain.o chainBlock.o chainConnect.o chainToAxt.o \
