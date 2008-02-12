@@ -91,6 +91,7 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     oregannoUi.o gvUi.o gv.o omicia.o protVar.o
 
 
+
 ../../lib/$(MACHTYPE)/jkhgap.a: $(O) 
 	ar rcus ../../lib/$(MACHTYPE)/jkhgap.a $(O)
 

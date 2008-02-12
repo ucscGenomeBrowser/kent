@@ -5,7 +5,7 @@
 #include "common.h"
 #include "hvGfx.h"
 
-static char const rcsid[] = "$Id: hvGfx.c,v 1.1.2.5 2008/02/11 17:52:10 markd Exp $";
+static char const rcsid[] = "$Id: hvGfx.c,v 1.1.2.6 2008/02/12 22:29:14 markd Exp $";
 
 static struct hvGfx *hvGfxAlloc(struct vGfx *vg)
 /* allocate a hvgGfx object */
@@ -13,6 +13,7 @@ static struct hvGfx *hvGfxAlloc(struct vGfx *vg)
 struct hvGfx *hvg;
 AllocVar(hvg);
 hvg->vg = vg;
+hvg->pixelBased = hvg->pixelBased;
 hvg->width = vg->width;
 hvg->height = vg->height;
 hvg->clipMaxX = vg->width;
@@ -98,7 +99,6 @@ if (num < 0)
     }
 sprintf(label, "%s%d", sign, num);
 }
-
 
 void hvGfxDrawRulerBumpText(struct hvGfx *hvg, int xOff, int yOff, 
 	int height, int width,
@@ -204,6 +204,8 @@ void hvGfxNextItemButton(struct hvGfx *hvg, int x, int y, int w, int h,
 /* a remote control. If nextItem is TRUE, it points right, otherwise */
 /* left. color is the outline color, and hvgColor is the fill color. */
 {
+if (hvg->rc)
+    nextItem = !nextItem;
 x = hvGfxAdjXW(hvg, x, &w);
 struct gfxPoly *t1, *t2;
 /* Make the triangles */

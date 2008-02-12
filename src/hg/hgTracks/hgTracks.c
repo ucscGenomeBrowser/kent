@@ -1,4 +1,4 @@
-/* hgTracks - Human Genome browser main cgi script. */
+ /* hgTracks - Human Genome browser main cgi script. */
 #include "common.h"
 #include "hCommon.h"
 #include "linefile.h"
@@ -118,7 +118,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1430.4.5 2008/02/11 17:52:12 markd Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1430.4.6 2008/02/12 22:29:15 markd Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -214,7 +214,7 @@ boolean withNextItemArrows = FALSE;	/* Display next feature (gene) navigation bu
 boolean withNextExonArrows = FALSE;	/* Display next exon navigation buttons near center labels? */
 boolean withPriorityOverride = FALSE;	/* Display priority for each track to allow reordering */
 boolean hideControls = FALSE;		/* Hide all controls? */
-boolean revComplement = FALSE;          /* reverse-complement display */
+boolean revCmplDisp = FALSE;          /* reverse-complement display */
 
 int rulerMode = tvHide;         /* on, off, full */
 
@@ -664,8 +664,7 @@ static void mapBoxUi(struct hvGfx *hvg, int x, int y, int width, int height,
 /* Print out image map rectangle that invokes hgTrackUi. */
 {
 x = hvGfxAdjXW(hvg, x, &width);
-y = hvGfxClipYH(hvg, y, &height);
-assert((x >= 0) && (y >= 0));
+assert(x >= 0);
 char *encodedName = cgiEncode(name);
 
 hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
@@ -690,8 +689,7 @@ static void mapBoxToggleComplement(struct hvGfx *hvg, int x, int y, int width, i
 {
 struct dyString *ui = uiStateUrlPart(toggleGroup);
 x = hvGfxAdjXW(hvg, x, &width);
-y = hvGfxClipYH(hvg, y, &height);
-assert((x >= 0) && (y >= 0));
+assert(x >= 0);
 hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
 hPrintf("HREF=\"%s?complement=%d",
 	hgTracksName(), !cartUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE));
@@ -712,8 +710,7 @@ void mapBoxReinvokeExtra(struct hvGfx *hvg, int x, int y, int width, int height,
 {
 struct dyString *ui = uiStateUrlPart(toggleGroup);
 x = hvGfxAdjXW(hvg, x, &width);
-y = hvGfxClipYH(hvg, y, &height);
-assert((x >= 0) && (y >= 0));
+assert(x >= 0);
 
 if (extra != NULL)
     {
@@ -787,7 +784,6 @@ void mapBoxHgcOrHgGene(struct hvGfx *hvg, int start, int end, int x, int y, int 
 {
 if (x < 0) x = 0;
 x = hvGfxAdjXW(hvg, x, &width);
-y = hvGfxClipYH(hvg, y, &height);
 int xEnd = x+width;
 int yEnd = y+height;
 
@@ -8888,7 +8884,7 @@ if(doIdeo)
     hPrintf("<MAP Name=%s>\n", mapName);
     ideoHeight = gfxBorder + ideoTrack->height;
     hvg = hvGfxOpenGif(ideoWidth, ideoHeight, gifTn.forCgi);
-    hvg->rc = revComplement;
+    hvg->rc = revCmplDisp;
     makeGrayShades(hvg);
     makeBrownShades(hvg);
     makeSeaShades(hvg);
@@ -9689,7 +9685,7 @@ else
     trashDirFile(&gifTn, "hgt", "hgt", ".gif");
     hvg = hvGfxOpenGif(pixWidth, pixHeight, gifTn.forCgi);
     }
-hvg->rc = revComplement;
+hvg->rc = revCmplDisp;
 
 makeGrayShades(hvg);
 makeBrownShades(hvg);
@@ -9810,8 +9806,8 @@ if (withLeftLabels)
 	    {		    
 	    /* disable complement toggle for HIV because HIV is single stranded RNA */
 	    if (!hIsGsidServer())
-	    drawComplementArrow(hvg,leftLabelX, y,
-				leftLabelWidth-1, baseHeight, font);
+                drawComplementArrow(hvg,leftLabelX, y,
+                                    leftLabelWidth-1, baseHeight, font);
 	    if (zoomedToBaseLevel)				    
     		y += baseHeight;
 	    }
@@ -9957,10 +9953,9 @@ if (rulerMode != tvHide)
 	 * for translation in to amino acids */
         boolean complementRulerBases = 
                 cartUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE);
-#if 0 // FIXME: why is this here???
-        if (complementRulerBases)
+        // gray bases if not matching the direction of display
+        if (complementRulerBases != revCmplDisp)
             baseColor = MG_GRAY;
-#endif
 
         /* get sequence, with leading & trailing 3 bases
          * used for amino acid translation */
@@ -14359,6 +14354,8 @@ if (!hideControls)
     hPrintf(" ");
     hButton("hgTracksConfigPage", "configure");
     hPrintf(" ");
+    hButton("hgt.toggleRevCmplDisp", "reverse");
+    hPrintf(" ");
     hButton("submit", "refresh");
 
     hPrintf("<BR>\n");
@@ -14552,6 +14549,15 @@ cartSaveSession(cart);
 hPrintf("</FORM>\n");
 }
 
+static void toggleRevCmplDisp()
+/* toggle the reverse complement display mode */
+{
+// forces complement bases to match display
+revCmplDisp = !revCmplDisp;
+cartSetBoolean(cart, REV_CMPL_DISP, revCmplDisp);
+cartSetBoolean(cart, COMPLEMENT_BASES_VAR, revCmplDisp);
+}
+
 void zoomToSize(int newSize)
 /* Zoom so that center stays in same place,
  * but window is new size.  If necessary move
@@ -14603,7 +14609,7 @@ void relativeScroll(double amount)
 {
 int offset;
 int newStart, newEnd;
-if (revComplement)
+if (revCmplDisp)
     amount = -amount;
 offset = (int)(amount * winBaseCount);
 /* Make sure don't scroll of ends. */
@@ -14784,10 +14790,11 @@ withCenterLabels = cartUsualBoolean(cart, "centerLabels", TRUE);
 withGuidelines = cartUsualBoolean(cart, "guidelines", TRUE);
 withNextItemArrows = cartUsualBoolean(cart, "nextItemArrows", FALSE);
 withNextExonArrows = cartUsualBoolean(cart, "nextExonArrows", FALSE);
+revCmplDisp = cartUsualBoolean(cart, REV_CMPL_DISP, FALSE);
 withPriorityOverride = cartUsualBoolean(cart, configPriorityOverride, FALSE);
 insideX = trackOffsetX();
 insideWidth = tl.picWidth-gfxBorder-insideX;
-revComplement = TRUE;  // FIXME
+
 
 baseShowPos = cartUsualBoolean(cart, BASE_SHOWPOS, FALSE);
 baseShowAsm = cartUsualBoolean(cart, BASE_SHOWASM, FALSE);
@@ -14796,6 +14803,8 @@ baseTitle = cartUsualString(cart, titleVar, "");
 if (sameString(baseTitle, "")) 
     baseTitle = NULL;
 
+if  (cgiVarExists("hgt.toggleRevCmplDisp"))
+    toggleRevCmplDisp();
 setRulerMode();
 
 /* Do zoom/scroll if they hit it. */
@@ -15192,7 +15201,7 @@ char *excludeVars[] = { "submit", "Submit", "hgt.reset",
 			"hgt.right1", "hgt.right2", "hgt.right3", 
 			"hgt.dinkLL", "hgt.dinkLR", "hgt.dinkRL", "hgt.dinkRR",
 			"hgt.tui", "hgt.hideAll", "hgt.visAllFromCt", 
-                        "hgt.psOutput", "hideControls",
+                        "hgt.psOutput", "hideControls", "hgt.toggleRevCmplDisp",
 			NULL };
 
 int main(int argc, char *argv[])

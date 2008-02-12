@@ -81,7 +81,6 @@ int lastPos = -maxGapToFill-1;
 double minVal = cgs->minVal;
 double yScale = (height-1)/(cgs->maxVal - minVal);
 double xScale = scaleForPixels(width);
-char *encodedTrack = cgiEncode(tg->mapName);
 Color myColor = cgColorLikeHgGenome(tg, hvg);
 
 /* Draw background lines in full mode. */
@@ -178,9 +177,9 @@ else
 
 /* Do map box */
 xOff = hvGfxAdjXW(hvg, xOff, &width);
-yOff = hvGfxClipYH(hvg, yOff, &height);
-assert((xOff >= 0) && (yOff >= 0));
+assert(xOff >= 0);
 
+char *encodedTrack = cgiEncode(tg->mapName);
 hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", xOff, yOff, xOff+width,
 	yOff+height);
 hPrintf("HREF=\"%s&o=%d&t=%d&g=%s&c=%s&l=%d&r=%d&db=%s&pix=%d\">\n", 

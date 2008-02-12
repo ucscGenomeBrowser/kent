@@ -213,7 +213,7 @@
 #include "itemConf.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1378.2.1 2008/01/22 22:57:25 markd Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1378.2.2 2008/02/12 22:29:16 markd Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -15796,7 +15796,7 @@ lineHeight = 2 * fontHeight +1;
 altGraphXLayout(ag, ag->tStart, ag->tEnd, scale, 100, &ssList, &heightHash, &rowCount);
 pixHeight = rowCount * lineHeight;
 trashDirFile(&gifTn, "hgc", "hgc", ".gif");
-hvg = hvGfxOpenGif(pixWidth, pixHeight, 0, gifTn.forCgi);
+hvg = hvGfxOpenGif(pixWidth, pixHeight, gifTn.forCgi);
 makeGrayShades(hvg);
 hvGfxSetClip(hvg, 0, 0, pixWidth, pixHeight);
 altGraphXDrawPack(ag, ssList, hvg, 0, 0, pixWidth, lineHeight, lineHeight-1,

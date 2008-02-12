@@ -12,6 +12,7 @@ struct hvGfx
     struct hvGfx *next;	     /* Next in list. */
     struct vGfx *vg;         /* virtual graphics object */
     boolean rc;              /* reverse-complement display (negative strand) */
+    boolean pixelBased;      /* Real pixels, not PostScript or something. */
     int width, height;       /* Virtual pixel dimensions. */
     int clipMinX;            /* X clipping region, before reverse */
     int clipMaxX;
@@ -37,8 +38,9 @@ if ((x < hvg->clipMinX) || (x >= hvg->clipMaxX))
 else
     {
     if (hvg->rc)
-        x = hvg->width - (x+1);
-    return x;
+        return hvg->width - (x+1);
+    else
+        return x;
     }
 }
 
@@ -73,53 +75,11 @@ if (x < 0)
 return x;
 }
 
-INLINE int hvGfxClipY(struct hvGfx *hvg, int y)
-/* clip Y to be in cliping region bounds, return  -1 if out of bounds */
-{
-// >= need due to [0..n) clipping box
-if ((y < hvg->clipMinY) || (y >= hvg->clipMaxY))
-    return -1;
-else
-    return y;
-}
-
-INLINE int hvGfxClipYY(struct hvGfx *hvg, int y1, int *y2Ptr)
-/* clip Y range to be in cliping region bounds. Allows for special cases of
- * y1==y2 being a minimum width line., return -1 if out of bounds */
-{
-int y2 = *y2Ptr;
-y1 = max(y1, hvg->clipMinY);
-y2 = min(y2, hvg->clipMaxY);
-if ((y1 > y2) || (y1 < 0))  // insist on in bounds if zero width
-    return -1;
-else
-    {
-    *y2Ptr = y2;
-    return y1;
-    }
-}
-
-INLINE int hvGfxClipYH(struct hvGfx *hvg, int y, int *heightPtr)
-/* clip Y and height to be in cliping region bounds, return -1 if out of
- * bounds */
-{
-int y2 = y + *heightPtr;
-y = hvGfxClipYY(hvg, y, &y2);
-if (y < 0)
-    return -1;
-else
-    {
-    *heightPtr = y2 - y;
-    return y;
-    }
-}
-
 INLINE void hvGfxDot(struct hvGfx *hvg, int x, int y, int colorIx)
 /* Draw a single pixel.  Try to work at a higher level when possible! */
 {
 x = hvGfxAdjX(hvg, x);
-y = hvGfxClipY(hvg, y);
-if ((x >= 0) && (y >= 0))
+if (x >= 0)
     vgDot(hvg->vg, x, y, colorIx);
 }
 
@@ -128,8 +88,7 @@ INLINE void hvGfxBox(struct hvGfx *hvg, int x, int y,
 /* Draw a box. */
 {
 x = hvGfxAdjXW(hvg, x, &width);
-y = hvGfxClipYH(hvg, y, &height);
-if ((x >= 0) && (y >= 0))
+if (x >= 0)
     vgBox(hvg->vg, x, y, width, height, colorIx);
 }
 
@@ -138,46 +97,43 @@ INLINE void hvGfxLine(struct hvGfx *hvg,
 /* Draw a line from one point to another. */
 {
 x1  = hvGfxAdjXX(hvg, x1, &x2);
-y1  = hvGfxClipYY(hvg, y1, &y2);
-if ((x1 >= 0) && (y1 >= 0))
+if (x1 >= 0)
     vgLine(hvg->vg, x1, y1, x2, y2, colorIx);
 }
 
 INLINE void hvGfxText(struct hvGfx *hvg, int x, int y, int colorIx,
-                   void *font, char *text)
+                      void *font, char *text)
 /* Draw a line of text with upper left corner x,y. */
 {
 if (hvg->rc)
     {
+    // move x,y to lower-left corner
     int width = vgGetFontStringWidth(hvg->vg, font, text);
     int height = vgGetFontPixelHeight(hvg->vg, font);
+    y -= height/2;
     x  = hvGfxAdjXW(hvg, x, &width);
-    y  = hvGfxClipYH(hvg, y, &height);
-    if ((x >= 0) && (y >= 0))
+    if (x >= 0)
         vgTextRight(hvg->vg, x, y, width, height, colorIx, font, text);
     }
 else
-    {
-    x  = hvGfxAdjX(hvg, x);
-    y  = hvGfxClipY(hvg, y);
-    if ((x >= 0) && (y >= 0))
-        vgText(hvg->vg, x, y, colorIx, font, text);
-    }
+    vgText(hvg->vg, x, y, colorIx, font, text);
 }
 
 INLINE void hvGfxTextRight(struct hvGfx *hvg, int x, int y, int width, int height,
                       int colorIx, void *font, char *text)
 /* Draw a line of text with upper right corner x,y. */
 {
-x = hvGfxAdjXW(hvg, x, &width);
-y = hvGfxClipYH(hvg, y, &height);
-if ((x >= 0) && (y >= 0))
+if (hvg->rc)
     {
-    if (hvg->rc)
+    // move x,y to upper right corner
+    int fHeight = vgGetFontPixelHeight(hvg->vg, font);
+    y += fHeight/2;
+    x = hvGfxAdjXW(hvg, x, &width);
+    if (x >= 0)
         vgText(hvg->vg, x, y, colorIx, font, text);
-    else
-        vgTextRight(hvg->vg, x, y, width, height, colorIx, font, text);
     }
+else
+    vgTextRight(hvg->vg, x, y, width, height, colorIx, font, text);
 }
 
 INLINE void hvGfxTextCentered(struct hvGfx *hvg, int x, int y, int width, int height,
@@ -185,8 +141,7 @@ INLINE void hvGfxTextCentered(struct hvGfx *hvg, int x, int y, int width, int he
 /* Draw a line of text in middle of box. */
 {
 x = hvGfxAdjXW(hvg, x, &width);
-y = hvGfxClipYH(hvg, y, &height);
-if ((x >= 0) && (y >= 0))
+if (x >= 0)
     vgTextCentered(hvg->vg, x, y, width, height, colorIx, font, text);
 }
 
@@ -220,8 +175,7 @@ INLINE void hvGfxVerticalSmear(struct hvGfx *hvg,
 /* Put a series of one 'pixel' width vertical lines. */
 {
 xOff = hvGfxAdjXW(hvg, xOff, &width);
-yOff = hvGfxClipYH(hvg, yOff, &height);
-if ((xOff >= 0) && (yOff >= 0))
+if (xOff >= 0)
     vgVerticalSmear(hvg->vg, xOff, yOff, width, height, dots, zeroClear);
 }
 
@@ -233,18 +187,18 @@ INLINE void hvGfxFillUnder(struct hvGfx *hvg, int x1, int y1, int x2, int y2,
  * y2 on the right. */
 {
 x1  = hvGfxAdjXX(hvg, x1, &x2);
-y1  = hvGfxClipYY(hvg, y1, &y2);
-if ((x1 >= 0) && (y2 >= 0))
+if (x1 >= 0)
     vgFillUnder(hvg->vg, x1, y1, x2, y2, bottom, color);
 }
 
 INLINE void hvGfxRevPoly(struct hvGfx *hvg, struct gfxPoly *poly)
 /* reverse coordinates in polygons */
 {
+/* reverse but don't clip; clipping requires working at the line level */
 struct gfxPoint *pt = poly->ptList;
 int i;
 for (i = 0; i < poly->ptCount; i++, pt = pt->next)
-    pt->x = hvGfxAdjX(hvg, pt->x);
+    pt->x = hvg->width - (pt->x+1);
 }
 
 INLINE void hvGfxDrawPoly(struct hvGfx *hvg, struct gfxPoly *poly, Color color, 
