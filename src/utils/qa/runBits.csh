@@ -83,7 +83,7 @@ if ( -z $db.$track.unbridged.gaps ) then
 else
   # print 3 records, both as text and as links
   # links have 300 bp padding 
-  echo "total number of undridged gaps:"
+  echo "total number of unbridged gaps:"
   wc -l $db.$track.unbridged.gaps
   head -3 $db.$track.unbridged.gaps
   echo
