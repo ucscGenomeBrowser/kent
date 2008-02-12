@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+
 #define MAX_LINE_SIZE 1024
 #define HASH_SIZE (64*1024-1)
 #define TRUE 1
@@ -144,12 +145,12 @@ struct hash *hashNew()
 return needClearMemory(sizeof(struct hash));
 }
 
-int hashFunction(char *s)
+unsigned int hashFunction(char *s)
 /* Return an integer between 0 and HASH_SIZE-1 that is repeatably associated
  * with string s, and that tends to be different between different strings. */
 {
-int val = 0;
-char c;
+unsigned val = 0;
+unsigned char c;
 while ((c = *s++) != 0)
     {
     val *= 5;
