@@ -176,8 +176,7 @@ else
     }
 
 /* Do map box */
-xOff = hvGfxAdjXW(hvg, xOff, &width);
-assert(xOff >= 0);
+xOff = hvGfxAdjXW(hvg, xOff, width);
 
 char *encodedTrack = cgiEncode(tg->mapName);
 hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", xOff, yOff, xOff+width,

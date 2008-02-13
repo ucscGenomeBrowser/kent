@@ -1,11 +1,12 @@
 /* hvGfx - browser graphics interface.  This is a thin layer on top of vGfx
- * that adds wraps it with an object providing genome browser-specific
- * features. */
+ * providing genome browser-specific features.  It was added to handle
+ * reverse-complement display. I was is not hidden under vGfx, as the image
+ * map code must also do the reverse-complement handling. */
 
 #include "common.h"
 #include "hvGfx.h"
 
-static char const rcsid[] = "$Id: hvGfx.c,v 1.1.2.6 2008/02/12 22:29:14 markd Exp $";
+static char const rcsid[] = "$Id: hvGfx.c,v 1.1.2.7 2008/02/13 08:27:42 markd Exp $";
 
 static struct hvGfx *hvGfxAlloc(struct vGfx *vg)
 /* allocate a hvgGfx object */
@@ -165,9 +166,9 @@ void hvGfxBarbedHorizontalLine(struct hvGfx *hvg, int x, int y,
  * BarbDir of 1 points barbs to right, of -1 points them to left. */
 {
 barbDir = (hvg->rc) ? -barbDir : barbDir;
-x = hvGfxAdjXW(hvg, x, &width);
-if ((x <  0) || (barbDir == 0))
+if (barbDir == 0)
     return;  // fully clipped, or no barbs
+x = hvGfxAdjXW(hvg, x, width);
 int x1, x2;
 int yHi, yLo;
 int offset, startOffset, endOffset, barbAdd;
@@ -204,9 +205,10 @@ void hvGfxNextItemButton(struct hvGfx *hvg, int x, int y, int w, int h,
 /* a remote control. If nextItem is TRUE, it points right, otherwise */
 /* left. color is the outline color, and hvgColor is the fill color. */
 {
+x = hvGfxAdjXW(hvg, x, w);
 if (hvg->rc)
     nextItem = !nextItem;
-x = hvGfxAdjXW(hvg, x, &w);
+
 struct gfxPoly *t1, *t2;
 /* Make the triangles */
 t1 = gfxPolyNew();

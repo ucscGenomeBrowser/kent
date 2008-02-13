@@ -1,6 +1,5 @@
-/* hvGfx - browser graphics interface.  This is a thin layer on top of vGfx
- * that divides an image up into panes and providing genome browser-specific
- * features. */
+ /* hvGfx - browser graphics interface.  This is a thin layer on top of vGfx
+ * providing genome browser-specific features.*/
 #ifndef BRGFX_H
 #define BRGFX_H
 #include "vGfx.h"
@@ -30,75 +29,58 @@ void hvGfxClose(struct hvGfx **pHvg);
 /* Close down virtual graphics object, and finish writing it to file. */
 
 INLINE int hvGfxAdjX(struct hvGfx *hvg, int x)
-/* return x, handling reverse mode, or -1 if outside of cliping region */
+/* Return an X position, updating if reverse-complement mode */
 {
-// >= need due to [0..n) clipping box
-if ((x < hvg->clipMinX) || (x >= hvg->clipMaxX))
-    return -1;
+if (hvg->rc)
+    return hvg->width - (x+1);
 else
-    {
-    if (hvg->rc)
-        return hvg->width - (x+1);
-    else
-        return x;
-    }
+    return x;
 }
 
-INLINE int hvGfxAdjXX(struct hvGfx *hvg, int x1, int *x2Ptr)
-/* return X pixel start location and update end location, handling clipping
- * and reverse mode.  Allows for special cases of x1==x2 being a minimum width
- * line.  -1 is return if all out of range */
+INLINE int hvGfxAdjXX(struct hvGfx *hvg, int x1, int *x2Ptr,
+                      int *y1Ptr, int *y2Ptr)
+/* Update a pair of coordinates if reverse-coordiates mode */
 {
-int x2 = *x2Ptr;
-x1 = max(x1, hvg->clipMinX);
-x2 = min(x2, hvg->clipMaxX);
-if ((x1 > x2) || (x1 < 0))  // insist on in bounds if zero width
-    return -1;
-else
+if (hvg->rc)
     {
-    if (hvg->rc)
-        reverseIntRange(&x1, &x2, hvg->width);
-    *x2Ptr = x2;
-    return x1;
+    reverseIntRange(&x1, x2Ptr, hvg->width);
+    int hold = *y1Ptr;
+    *y1Ptr = *y2Ptr;
+    *y2Ptr = hold;
     }
+return x1;
 }
 
-INLINE int hvGfxAdjXW(struct hvGfx *hvg, int x, int *widthPtr)
-/* return X pixel start location and update width for a range, handling *
- * clipping and reverse-complement mode.  -1 is return if all out of range */
+INLINE int hvGfxAdjXW(struct hvGfx *hvg, int x, int width)
+/* Update a X position and width if reverse-complement mode */
 {
-int x2 = x + *widthPtr;
-x = hvGfxAdjXX(hvg, x, &x2);
-if (x < 0)
-    return -1;
-*widthPtr = x2 - x;
+if (hvg->rc)
+    {
+    int x2 = (x + width);
+    reverseIntRange(&x, &x2, hvg->width);
+    }
 return x;
 }
 
 INLINE void hvGfxDot(struct hvGfx *hvg, int x, int y, int colorIx)
 /* Draw a single pixel.  Try to work at a higher level when possible! */
 {
-x = hvGfxAdjX(hvg, x);
-if (x >= 0)
-    vgDot(hvg->vg, x, y, colorIx);
+vgDot(hvg->vg, hvGfxAdjX(hvg, x), y, colorIx);
 }
 
 INLINE void hvGfxBox(struct hvGfx *hvg, int x, int y, 
                   int width, int height, int colorIx)
 /* Draw a box. */
 {
-x = hvGfxAdjXW(hvg, x, &width);
-if (x >= 0)
-    vgBox(hvg->vg, x, y, width, height, colorIx);
+vgBox(hvg->vg, hvGfxAdjXW(hvg, x, width), y, width, height, colorIx);
 }
 
 INLINE void hvGfxLine(struct hvGfx *hvg, 
                    int x1, int y1, int x2, int y2, int colorIx)
 /* Draw a line from one point to another. */
 {
-x1  = hvGfxAdjXX(hvg, x1, &x2);
-if (x1 >= 0)
-    vgLine(hvg->vg, x1, y1, x2, y2, colorIx);
+x1 = hvGfxAdjXX(hvg, x1, &x2, &y1, &y2);
+vgLine(hvg->vg, x1, y1, x2, y2, colorIx);
 }
 
 INLINE void hvGfxText(struct hvGfx *hvg, int x, int y, int colorIx,
@@ -111,9 +93,7 @@ if (hvg->rc)
     int width = vgGetFontStringWidth(hvg->vg, font, text);
     int height = vgGetFontPixelHeight(hvg->vg, font);
     y -= height/2;
-    x  = hvGfxAdjXW(hvg, x, &width);
-    if (x >= 0)
-        vgTextRight(hvg->vg, x, y, width, height, colorIx, font, text);
+    vgTextRight(hvg->vg, hvGfxAdjXW(hvg, x, width), y, width, height, colorIx, font, text);
     }
 else
     vgText(hvg->vg, x, y, colorIx, font, text);
@@ -128,9 +108,7 @@ if (hvg->rc)
     // move x,y to upper right corner
     int fHeight = vgGetFontPixelHeight(hvg->vg, font);
     y += fHeight/2;
-    x = hvGfxAdjXW(hvg, x, &width);
-    if (x >= 0)
-        vgText(hvg->vg, x, y, colorIx, font, text);
+    vgText(hvg->vg, hvGfxAdjXW(hvg, x, width), y, colorIx, font, text);
     }
 else
     vgTextRight(hvg->vg, x, y, width, height, colorIx, font, text);
@@ -140,9 +118,7 @@ INLINE void hvGfxTextCentered(struct hvGfx *hvg, int x, int y, int width, int he
                            int colorIx, void *font, char *text)
 /* Draw a line of text in middle of box. */
 {
-x = hvGfxAdjXW(hvg, x, &width);
-if (x >= 0)
-    vgTextCentered(hvg->vg, x, y, width, height, colorIx, font, text);
+vgTextCentered(hvg->vg, hvGfxAdjXW(hvg, x, width), y, width, height, colorIx, font, text);
 }
 
 INLINE void hvGfxSetClip(struct hvGfx *hvg, int x, int y, int width, int height)
@@ -174,9 +150,7 @@ INLINE void hvGfxVerticalSmear(struct hvGfx *hvg,
                                    unsigned char *dots, boolean zeroClear)
 /* Put a series of one 'pixel' width vertical lines. */
 {
-xOff = hvGfxAdjXW(hvg, xOff, &width);
-if (xOff >= 0)
-    vgVerticalSmear(hvg->vg, xOff, yOff, width, height, dots, zeroClear);
+vgVerticalSmear(hvg->vg, hvGfxAdjXW(hvg, xOff, width), yOff, width, height, dots, zeroClear);
 }
 
 INLINE void hvGfxFillUnder(struct hvGfx *hvg, int x1, int y1, int x2, int y2, 
@@ -186,9 +160,8 @@ INLINE void hvGfxFillUnder(struct hvGfx *hvg, int x1, int y1, int x2, int y2,
  * vertical lines from the bottom to y1 on the left and bottom to
  * y2 on the right. */
 {
-x1  = hvGfxAdjXX(hvg, x1, &x2);
-if (x1 >= 0)
-    vgFillUnder(hvg->vg, x1, y1, x2, y2, bottom, color);
+x1  = hvGfxAdjXX(hvg, x1, &x2, &y1, &y2);
+vgFillUnder(hvg->vg, x1, y1, x2, y2, bottom, color);
 }
 
 INLINE void hvGfxRevPoly(struct hvGfx *hvg, struct gfxPoly *poly)

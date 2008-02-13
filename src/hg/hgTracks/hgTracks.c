@@ -118,7 +118,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1430.4.6 2008/02/12 22:29:15 markd Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1430.4.7 2008/02/13 08:27:43 markd Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -663,8 +663,7 @@ static void mapBoxUi(struct hvGfx *hvg, int x, int y, int width, int height,
                                 char *name, char *shortLabel)
 /* Print out image map rectangle that invokes hgTrackUi. */
 {
-x = hvGfxAdjXW(hvg, x, &width);
-assert(x >= 0);
+x = hvGfxAdjXW(hvg, x, width);
 char *encodedName = cgiEncode(name);
 
 hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
@@ -688,8 +687,7 @@ static void mapBoxToggleComplement(struct hvGfx *hvg, int x, int y, int width, i
  * "complement" to complement the DNA bases at the top by the ruler*/
 {
 struct dyString *ui = uiStateUrlPart(toggleGroup);
-x = hvGfxAdjXW(hvg, x, &width);
-assert(x >= 0);
+x = hvGfxAdjXW(hvg, x, width);
 hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
 hPrintf("HREF=\"%s?complement=%d",
 	hgTracksName(), !cartUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE));
@@ -709,8 +707,7 @@ void mapBoxReinvokeExtra(struct hvGfx *hvg, int x, int y, int width, int height,
  * Add extra string to the URL if it's not NULL */
 {
 struct dyString *ui = uiStateUrlPart(toggleGroup);
-x = hvGfxAdjXW(hvg, x, &width);
-assert(x >= 0);
+x = hvGfxAdjXW(hvg, x, width);
 
 if (extra != NULL)
     {
@@ -783,11 +780,11 @@ void mapBoxHgcOrHgGene(struct hvGfx *hvg, int start, int end, int x, int y, int 
  * program. */
 {
 if (x < 0) x = 0;
-x = hvGfxAdjXW(hvg, x, &width);
+x = hvGfxAdjXW(hvg, x, width);
 int xEnd = x+width;
 int yEnd = y+height;
 
-if ((x < xEnd) && (x >= 0) && (y >= 0))
+if (x < xEnd)
     {
     char *encodedItem = cgiEncode(item);
     char *encodedTrack = cgiEncode(track);
@@ -1551,8 +1548,8 @@ int x2 = x + width;
 if (barbDir == 0)
     return;
 
-if (x < 0) x = 0;
-if (x2 > hvg->width) x2 = hvg->width;
+x = max(x, hvg->clipMinX);
+x2 = min(x2, hvg->clipMaxX);
 width = x2 - x;
 if (width > 0)
     hvGfxBarbedHorizontalLine(hvg, x, y, width, barbHeight, barbSpacing, barbDir,
