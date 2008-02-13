@@ -12,7 +12,7 @@
 
 #define MAXSPECIES  100
 
-static char const rcsid[] = "$Id: mafToAnc.c,v 1.1 2008/02/12 18:28:32 rico Exp $";
+static char const rcsid[] = "$Id: mafToAnc.c,v 1.2 2008/02/13 00:16:43 rico Exp $";
 
 static struct optionSpec options[] = {
 	{"minLen", OPTION_INT},
@@ -97,7 +97,7 @@ while (ma1->next != NULL)
 		for (mc1 = ma1->components, mc2 = ma2->components; mc1 != NULL && mc2 != NULL; mc1 = mc1->next, mc2 = mc2->next)
 			{
 			mc1->size += mc2->size;
-			text = AllocArray(text, ma1->textSize + ma2->textSize + 1);
+			AllocArray(text, ma1->textSize + ma2->textSize + 1);
 			strcpy(text, mc1->text);
 			strcat(text, mc2->text);
 			freeMem(mc1->text);
@@ -156,7 +156,7 @@ static void findAnchors(struct mafAli **aliList, char *outAnc, int minLen)
 {
 struct mafAli *ma, *next;
 struct mafComp *mc;
-int idx, len, numComps, compIdx, gapCol = 0;
+int idx, len, numComps, gapCol = 0;
 int compPos[MAXSPECIES];
 struct ancBlock *block;
 FILE *f = mustOpen(outAnc, "w");
