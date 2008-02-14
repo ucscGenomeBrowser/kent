@@ -7,7 +7,7 @@
 #include "hdb.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgLoadGenePred.c,v 1.6 2008/02/06 07:02:57 markd Exp $";
+static char const rcsid[] = "$Id: hgLoadGenePred.c,v 1.7 2008/02/14 00:38:30 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -32,7 +32,7 @@ errAbort("%s\n"
          "usage:\n"
          "   hgLoadGenePred database table genePredFile [...]\n"
          "\n"
-         "This will sort the input file by chromsome and validated\n"
+         "This will sort the input file by chromosome and validated\n"
          "the genePreds/\n"
          "\n"
          "Options:\n"

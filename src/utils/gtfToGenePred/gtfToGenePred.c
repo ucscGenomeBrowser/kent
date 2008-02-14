@@ -19,9 +19,9 @@ errAbort(
   "      information and gene name\n"
   "     -allErrors - skip groups with errors rather than aborting.\n"
   "      Useful for getting infomation about as many errors as possible.\n"
-  "     -infoOut=file - write a file with informaton on each transcript\n"
+  "     -infoOut=file - write a file with information on each transcript\n"
   "     -sourcePrefix=pre - only process entries where the source name has the\n"
-  "      specified prefix.  Maybe repeated.\n"
+  "      specified prefix.  May be repeated.\n"
   "     -impliedStopAfterCds - implied stop codon in after CDS\n");
 }
 
