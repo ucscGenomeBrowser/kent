@@ -4,28 +4,37 @@ include ../../../inc/common.mk
 
 SCRIPT_FILES = \
 	doEncodeValidate.pl
+CONFIG_FILES = \
+	fields.ra \
+	cv.ra
 
 PIPELINE_PATH=/cluster/data/encode/pipeline
-PIPELINE_DIR=encpipeline_beta
+CONFIG_DIR = ${PIPELINE_PATH}/${PIPELINE_DIR}/config
 
-all:  
-	@${MAKE} --no-print-directory SCRIPTS=${HOME}/bin/scripts scripts
-	@${MAKE} --no-print-directory PIPELINE_DIR=encpipeline_${USER} config
+all:
+	@${MAKE} --no-print-directory SCRIPTS=${HOME}/bin/scripts PIPELINE_DIR=encpipeline_${USER} scripts config
 
-alpha: scripts config
+alpha:
+	@${MAKE} --no-print-directory SCRIPTS=${SCRIPTS} PIPELINE_DIR=encpipeline_beta scripts config
 
-scripts:
-	@for F in ${SCRIPT_FILES}; do \
-	    chmod +x $$F; \
-            perl -c $$F && cp -upv $$F ${SCRIPTS}; \
-	done
+# recursive targets, arguments:
+#   SCRIPTS PIPELINE_DIR
 
-config: force
-	mkdir -p ${PIPELINE_PATH}/${PIPELINE_DIR}/config
-	cp -up config/{fields,cv}.ra ${PIPELINE_PATH}/${PIPELINE_DIR}/config
+scripts: ${SCRIPT_FILES:%=${SCRIPTS}/%}
 
-test: force
+${SCRIPTS}/%: %
+	@mkdir -p $(dir $@)
+	chmod +x $<
+	perl -c $<
+	cp -p $< $@.tmp
+	mv -f $@.tmp $@
+
+config: ${CONFIG_FILES:%=${CONFIG_DIR}/%}
+
+${CONFIG_DIR}/%: config/%
+	@mkdir -p $(dir $@)
+	cp -p $< $@.tmp
+	mv -f $@.tmp $@
+
+test:
 	cd test && ${MAKE}
-
-force:
-
