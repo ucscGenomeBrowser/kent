@@ -5,8 +5,9 @@
 #include "options.h"
 #include "sqlNum.h"
 #include "genePred.h"
+#include "sqlList.h"
 
-static char const rcsid[] = "$Id: liftAcross.c,v 1.3 2008/02/13 23:08:27 hiram Exp $";
+static char const rcsid[] = "$Id: liftAcross.c,v 1.4 2008/02/14 00:18:08 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -52,6 +53,7 @@ struct liftedItem
     int start;
     int end;
     char strand;
+    int frame;
     };
 
 static int lsStartCmp(const void *va, const void *vb)
@@ -158,6 +160,8 @@ else
     result->start = ls->end - 1 - start + ls->dstStart;
     result->end = ls->end - 1 - end + ls->dstStart;
     }
+verbose(3,"#\t%s:%d-%d -> %s:%d-%d %c\n", name, start, end,
+    result->name, result->start, result->end, result->strand);
 return result;
 }
 
@@ -173,11 +177,18 @@ struct liftedItem *cdsStart = liftOne(ls, gp->chrom, gp->cdsStart,
 	gp->cdsStart+1);
 struct liftedItem *cdsEnd = liftOne(ls, gp->chrom, gp->cdsEnd, gp->cdsEnd-1);
 int i;
+boolean frames = FALSE;
 
+if (gp->optFields & genePredExonFramesFld)
+    {
+    frames = TRUE;
+    }
 for (i = 0; i < exonCount; ++i)
     {
     struct liftedItem *itemLift = liftOne(ls, gp->chrom,
 	gp->exonStarts[i], gp->exonEnds[i]);
+    if (frames)
+	itemLift->frame = gp->exonFrames[i];
     hel = hashStore(items, itemLift->name);
     slAddHead(&(hel->val), itemLift);
     }
@@ -189,15 +200,17 @@ while ((hel = hashNext(&cookie)) != NULL)
     struct liftedItem *itemList = (struct liftedItem *)hel->val;
     struct genePred *gpItem;
     slSort(&itemList, liStartCmp);
-    int exonCount = slCount(itemList);
+    int itemExonCount = slCount(itemList);
     unsigned *exonStarts = NULL;
     unsigned *exonEnds = NULL;
-    AllocArray(exonStarts, exonCount);
-    AllocArray(exonEnds, exonCount);
+    AllocArray(exonStarts, itemExonCount);
+    AllocArray(exonEnds, itemExonCount);
     AllocVar(gpItem);
+    if (frames)
+	AllocArray(gpItem->exonFrames, itemExonCount);
     gpItem->name = cloneString(gp->name);
     gpItem->chrom = cloneString(hel->name);
-    gpItem->exonCount = exonCount;
+    gpItem->exonCount = itemExonCount;
     gpItem->exonStarts = exonStarts;
     gpItem->exonEnds = exonEnds;
     int i = 0;
@@ -206,8 +219,11 @@ while ((hel = hashNext(&cookie)) != NULL)
     gpItem->strand[1] = 0;
     for ( ; li != NULL; li = li->next)
 	{
+	if (frames)
+	    gpItem->exonFrames[i] = li->frame;
 	exonStarts[i] = li->start;
 	exonEnds[i++] = li->end;
+verbose(2, "#\t%d,%d  -  %d, %d\n", li->start, li->end, txStart->start, txEnd->end);
 	}
     if (sameWord(txStart->name, hel->name))
 	gpItem->txStart = txStart->start;   /* this guy has the txStart */
@@ -216,7 +232,7 @@ while ((hel = hashNext(&cookie)) != NULL)
     if (sameWord(txEnd->name, hel->name))
 	gpItem->txEnd = txEnd->end;   /* this guy has the txEnd */
     else
-	gpItem->txEnd = exonEnds[exonCount-1];    /* last exon */
+	gpItem->txEnd = exonEnds[itemExonCount-1];    /* last exon */
     if (sameWord(cdsStart->name, hel->name))
 	gpItem->cdsStart = cdsStart->start;   /* this guy has the cdsStart */
     else
@@ -224,9 +240,11 @@ while ((hel = hashNext(&cookie)) != NULL)
     if (sameWord(cdsEnd->name, hel->name))
 	gpItem->cdsEnd = cdsEnd->end;   /* this guy has the cdsEnd */
     else
-	gpItem->cdsEnd = exonEnds[exonCount-1];    /* last exon */
-#ifdef NOT
+	gpItem->cdsEnd = exonEnds[itemExonCount-1];    /* last exon */
+
     gpItem->optFields = gp->optFields;
+    if (gpItem->optFields & genePredScoreFld)
+	gpItem->score = gp->score;
     if (gpItem->optFields & genePredName2Fld)
 	{
 	if (gp->name2)
@@ -239,7 +257,6 @@ while ((hel = hashNext(&cookie)) != NULL)
 	gpItem->cdsStartStat = gp->cdsStartStat;
 	gpItem->cdsEndStat = gp->cdsEndStat;
 	}
-#endif
 
     slAddHead(&result, gpItem);
     }
