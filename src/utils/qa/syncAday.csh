@@ -35,7 +35,6 @@ checkSync.csh $db hgw1 hgw8 times >> $basePath/$db
 checkSync.csh $db hgw2 hgw3 times >> $basePath/$db
 checkSync.csh $db hgw4 hgw5 times >> $basePath/$db
 checkSync.csh $db hgw6 hgw7 times >> $basePath/$db
-checkSync.csh $db hgwbeta mgc times >> $basePath/$db
 cat $basePath/$db
 echo "http://hgwdev.cse.ucsc.edu/qa/test-results/sync/$db" | mail -s "sync for today" $USER@soe.ucsc.edu
 

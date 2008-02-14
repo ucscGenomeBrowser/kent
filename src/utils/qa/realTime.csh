@@ -47,8 +47,8 @@ foreach table ($tables)
   echo $table
   echo "============="
 
-  foreach machine (hgwdev hgwbeta hgw1 hgw2 hgw3 hgw4 hgw5 hgw6 hgw7 hgw8 mgc)
-    if ("mgc" == $machine || "hgw1" == $machine ) then
+  foreach machine ( hgwdev hgwbeta hgw1 hgw2 hgw3 hgw4 hgw5 hgw6 hgw7 hgw8 )
+    if ( "hgw1" == $machine ) then
       echo  # space out results
     endif
     # find out version of mysql running 

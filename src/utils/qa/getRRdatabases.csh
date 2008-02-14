@@ -2,7 +2,7 @@
 
 ################################
 #  10-04-04
-#  gets the names of all databases on an RR (or mgc) machine
+#  gets the names of all databases on an RR machine
 #  using mark's genbank dumps.
 #
 ################################
@@ -21,7 +21,7 @@ set badmach=0
 
 if ($#argv != 1) then
   echo
-  echo "  gets the names of all databases on an RR (or mgc) machine"
+  echo "  gets the names of all databases on an RR machine"
   echo "  not real-time. uses morning TABLE STATUS dump."
   echo
   echo "    usage: machine"

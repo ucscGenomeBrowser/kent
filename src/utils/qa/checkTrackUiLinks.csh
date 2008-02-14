@@ -78,7 +78,7 @@ set baseUrl="http://$machine.cse.ucsc.edu/"
 set hgsid=`htmlCheck  getVars $baseUrl/cgi-bin/hgGateway | grep hgsid \
   | head -1 | awk '{print $4}'`
 
-foreach node (hgw1 hgw2 hgw3 hgw4 hgw5 hgw6 hgw7 hgw8 mgc)
+foreach node ( hgw1 hgw2 hgw3 hgw4 hgw5 hgw6 hgw7 hgw8 )
   if ( $machine == $node ) then 
     set rr="true"
   endif

@@ -2,7 +2,7 @@
 
 ################################
 #  10-12-04
-#  gets the names of all tables from an RR (or mgc) database
+#  gets the names of all tables from an RR database
 #  using mark's genbank dumps.
 #
 #  Robert Kuhn
@@ -17,7 +17,7 @@ set fullpath1=""
 
 if ($#argv != 2) then
   echo
-  echo "  gets the names of all tables from an RR (or mgc) database"
+  echo "  gets the names of all tables from an RR database"
   echo "  using mark's genbank dumps."
   echo "    warning:  not in real time.  uses overnight dump."
   echo

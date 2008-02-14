@@ -2,7 +2,7 @@
 
 ################################
 #  12-31-04
-#  gets the status of any table from an RR (or mgc) database
+#  gets the status of any table from an RR database
 #  using mark's genbank dumps.
 #
 #  Robert Kuhn
@@ -16,7 +16,7 @@ set dumpfile=""
 
 if ( $#argv < 3 | $#argv > 4 ) then
   echo
-  echo "  gets the status of any table from an RR (or mgc) database."
+  echo "  gets the status of any table from an RR database."
   echo "  using mark's genbank dumps."
   echo "    warning:  not in real time.  uses overnight dump."
   echo

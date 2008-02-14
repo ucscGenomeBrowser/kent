@@ -20,7 +20,6 @@ echo "hgw5: `ls -1 /cluster/data/genbank/var/tblstats/hgw5 | tail -1`"
 echo "hgw6: `ls -1 /cluster/data/genbank/var/tblstats/hgw6 | tail -1`"
 echo "hgw7: `ls -1 /cluster/data/genbank/var/tblstats/hgw7 | tail -1`"
 echo "hgw8: `ls -1 /cluster/data/genbank/var/tblstats/hgw8 | tail -1`"
-echo "mgc:  `ls -1 /cluster/data/genbank/var/tblstats/mgc | tail -1`"
 echo 
 
 
