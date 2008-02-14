@@ -13,7 +13,7 @@
 #include "ccdsLocationsJoin.h"
 #include "ccdsCommon.h"
 
-static char const rcsid[] = "$Id: ccdsMkTables.c,v 1.17 2007/10/31 04:06:08 markd Exp $";
+static char const rcsid[] = "$Id: ccdsMkTables.c,v 1.18 2008/02/14 20:11:58 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -573,7 +573,6 @@ for (loc = locs, iExon = 0; loc != NULL; loc = loc->next, iExon++)
     gp->exonStarts[iExon] = loc->start;
     gp->exonEnds[iExon] = loc->stop+1;
     }
-gp->id = 0;
 gp->name2 = cloneString("");
 gp->cdsStartStat = cdsComplete;
 gp->cdsEndStat = cdsComplete;
