@@ -18,3 +18,6 @@ struct txGraph *makeGraph(struct linkedBeds *lbList, int maxBleedOver,
  * can be cut off when snapping to a hard edge.  The singleExonMaxOverlap
  * controls what ratio of a single exon transcript can overlap spliced 
  * transcripts */
+
+boolean trustedSource(char *sourceType);
+/* Return TRUE source type is trusted (refSeq or something similar). */ 

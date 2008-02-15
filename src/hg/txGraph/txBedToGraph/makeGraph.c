@@ -81,6 +81,19 @@ if (diff == 0)
 return diff;
 }
 
+static boolean trustedEdge(struct edge *edge)
+/* Return TRUE if any member of edge evidence is from a trusted source. */
+{
+struct evidence *ev;
+for (ev = edge->evList; ev != NULL; ev = ev->next)
+    {
+    if (trustedSource(ev->lb->sourceType))
+        return TRUE;
+    }
+return FALSE;
+}
+
+
 static struct vertex *matchingVertex(struct rbTree *tree, int position, enum ggVertexType type)
 /* Find matching vertex.  Return NULL if none. */
 {
@@ -611,7 +624,7 @@ for (edgeRef = v->waysOut; edgeRef != NULL; edgeRef = edgeRef->next)
 	    {
 	    lmAllocVar(lm, el);
 	    el->position = ev->end;
-	    el->trustedSource = sameString(ev->lb->sourceType, "refSeq");
+	    el->trustedSource = trustedSource(ev->lb->sourceType);
 	    slAddHead(&list, el);
 	    ++softCount;
 	    }
@@ -659,7 +672,7 @@ for (edgeRef = v->waysIn; edgeRef != NULL; edgeRef = edgeRef->next)
 	    {
 	    lmAllocVar(lm, el);
 	    el->position = ev->start;
-	    el->trustedSource = sameString(ev->lb->sourceType, "refSeq");
+	    el->trustedSource = trustedSource(ev->lb->sourceType);
 	    slAddHead(&list, el);
 	    ++softCount;
 	    }
@@ -824,8 +837,11 @@ for (edgeRef = edgeRefList; edgeRef != NULL; edgeRef = edgeRef->next)
 	     int splicedOverlap = rangeTreeOverlapSize(rangeTree, s, e);
 	     if (splicedOverlap > 0 && splicedOverlap > singleExonMaxOverlap*size)
 	         {
-		 rbTreeRemove(edgeTree, edge);
-		 ++removedCount;
+		 if (!trustedEdge(edge))
+		     {
+		     rbTreeRemove(edgeTree, edge);
+		     ++removedCount;
+		     }
 		 }
 	     }
 	}
@@ -1036,6 +1052,7 @@ verbose(2, "%d edges, %d vertices after snapHalfHards\n",
 halfHardConsensuses(vertexTree, edgeTree);
 verbose(2, "%d edges, %d vertices after medianHalfHards\n", 
 	edgeTree->n, vertexTree->n);
+
 
 removeEnclosedDoubleSofts(vertexTree, edgeTree, maxBleedOver, singleExonMaxOverlap);
 verbose(2, "%d edges, %d vertices after mergeEnclosedDoubleSofts\n",

@@ -24,6 +24,12 @@ int maxBleedOver = 6;
 char *prefix = "a";
 double singleExonMaxOverlap = 0.60;
 
+boolean trustedSource(char *sourceType)
+/* Return TRUE source type is trusted (refSeq or something similar). */ 
+{
+return sameString(sourceType, "refSeq") || sameString(sourceType, "ccds");
+}
+
 void usage()
 /* Explain usage and exit. */
 {
