@@ -14,7 +14,7 @@
 #include "../dbload/dbLoadOptions.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: chkAlignTbls.c,v 1.11 2007/08/03 04:58:19 markd Exp $";
+static char const rcsid[] = "$Id: chkAlignTbls.c,v 1.12 2008/02/15 00:34:49 markd Exp $";
 
 /* FIXME: check native vs xeno, flag in metaData. */
 /* FIXME: check OI tables */
@@ -145,7 +145,7 @@ if (tableInfo == NULL)
             fprintf(stderr, "Warning: no psl table %s.%s\n",
                     select->release->genome->database, table);
         else
-            gbError("no psl table %s.%s\n", select->release->genome->database,
+            gbError("no psl table %s.%s", select->release->genome->database,
                     table);
         }
     }
@@ -213,29 +213,24 @@ if ((md != NULL) && (geneName != NULL))
     }
 }
 
-static void chkGenePredTable(struct gbSelect* select,
+static void chkGenePredRows(struct gbSelect* select,
                              struct sqlConnection* conn,
                              char* table, boolean isRefFlat, 
                              struct metaDataTbls* metaDataTbls,
                              unsigned typeFlags)
-/* Validate a genePred table.  Also count the number of genePreds for a
- * mrna.  If this is refFlat, also check the geneName.  Return numbner of
- * rows. */
+/* check rows of genePred or refFlat table */
 {
 unsigned iRow = 0;
-char query[512];
-struct sqlResult *sr;
 char **row;
 char *geneName = NULL;
+
 int rowOff = (isRefFlat ? 1 : 0);  /* columns to skip to genePred */
 if (sqlFieldIndex(conn, table, "bin") >= 0)
     rowOff++;
 
-
-gbVerbEnter(3, "chkGenePredTable %s", table);
-
+char query[512];
 safef(query, sizeof(query), "SELECT * FROM %s", table);
-sr = sqlGetResult(conn, query);
+struct sqlResult *sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct genePred* gene = genePredLoad(row+rowOff);
@@ -247,6 +242,24 @@ while ((row = sqlNextRow(sr)) != NULL)
     iRow++;
     }
 sqlFreeResult(&sr);
+
+}
+
+static void chkGenePredTable(struct gbSelect* select,
+                             struct sqlConnection* conn,
+                             char* table, boolean isRefFlat, 
+                             struct metaDataTbls* metaDataTbls,
+                             unsigned typeFlags)
+/* Validate a genePred table.  Also count the number of genePreds for a
+ * mrna.  If this is refFlat, also check the geneName.  Return numbner of
+ * rows. */
+{
+gbVerbEnter(3, "chkGenePredTable %s", table);
+if (!sqlTableExists(conn, table))
+    gbError("no genePred table %s.%s", select->release->genome->database,
+            table);
+else
+    chkGenePredRows(select, conn, table, isRefFlat, metaDataTbls, typeFlags);
 gbVerbLeave(3, "chkGenePredTable %s", table);
 }
 
