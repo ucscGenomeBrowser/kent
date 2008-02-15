@@ -1,7 +1,0 @@
-name global
-knownGene bdgpGene
-knownGenePep bdgpGenePep
-knownToRef bdgpToRefSeq
-nameSql select symbol from bdgpSwissProt where bdgpName = '%s'
-descriptionSql select spGeneName from bdgpSwissProt where bdgpName = '%s'
-proteinSql select proteinID from bdgpGene where name = '%s'
