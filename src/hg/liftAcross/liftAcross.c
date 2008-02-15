@@ -7,7 +7,7 @@
 #include "genePred.h"
 #include "sqlList.h"
 
-static char const rcsid[] = "$Id: liftAcross.c,v 1.4 2008/02/14 00:18:08 hiram Exp $";
+static char const rcsid[] = "$Id: liftAcross.c,v 1.5 2008/02/15 00:41:07 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -15,11 +15,13 @@ void usage()
 errAbort(
   "liftAcross - convert one coordinate system to another, no overlapping items\n"
   "usage:\n"
-  "   liftAcross liftAcross.txt srcFile.gp dstOut.gp\n"
-  "options:\n"
+  "   liftAcross [options] liftAcross.txt srcFile.gp dstOut.gp\n"
+  "required arguments:\n"
   "   liftAcross.txt - six column file relating src to destination\n"
   "   srcFile.gp - genePred input file to be lifted\n"
   "   dstOut.gp - genePred output file result\n"
+  "options:\n"
+  "   -warn - warnings only on broken items, not the default error exit\n"
   "The six columns in the liftAcross.txt file are:\n"
   "srcName  srcStart  srcEnd  dstName  dstStart dstStrand\n"
   "    the destination regions are the same size as the source regions.\n"
@@ -31,6 +33,7 @@ errAbort(
 }
 
 static struct optionSpec options[] = {
+   {"warn", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -89,16 +92,22 @@ struct lineFile *lf = lineFileOpen(liftAcross, TRUE);
 while (lineFileNextRow(lf, row, ArraySize(row)))
     {
     struct liftSpec *liftSpec;
-    hel = hashStore(result, row[0]);
+    hel = hashStore(result, row[0]);		/* srcName hash	*/
     AllocVar(liftSpec);
-    liftSpec->start = sqlUnsigned(row[1]);
-    liftSpec->end = sqlUnsigned(row[2]);
-    liftSpec->dstName = cloneString(row[3]);
-    liftSpec->dstStart = sqlUnsigned(row[4]);
-    liftSpec->strand = '+';
-    if ('-' == *row[5]) liftSpec->strand = '-';
+    liftSpec->start = sqlUnsigned(row[1]);	/* src start	*/
+    liftSpec->end = sqlUnsigned(row[2]);	/* src end	*/
+    liftSpec->dstName = cloneString(row[3]);	/* dstName	*/
+    liftSpec->dstStart = sqlUnsigned(row[4]);	/* dst start	*/
+    liftSpec->strand = '+';			/* dst strand	*/
+    if ('-' == *row[5])
+	liftSpec->strand = '-';
+    /* accumulate list of lift specs under the srcName hash	*/
     slAddHead(&(hel->val), liftSpec);
     }
+
+/*	Go through each srcName in the hash, and sort the list there by
+ *	the start coordinate of each item
+ */
 int hashItemCount = 0;
 int liftItemCount = 0;
 struct hashCookie cookie = hashFirst(result);
@@ -121,19 +130,37 @@ verbose(2,"#\tsource names count: %d, lift item count: %d\n",
 return result;
 }
 
-struct liftSpec *findLiftSpec(struct liftSpec *lift, char *name,
+struct liftSpec *findLiftSpec(struct liftSpec *lsList, char *name,
     int start, int end)
+/* see if the given item: name:start-end can be found in the liftSpec lsList
+ *	if it can, return the liftSpec for that item
+ *	if not found, return NULL
+ * Verify sanity of lifting this item.  It needs to fall fully within
+ *	the liftSpec found.  If not, it will not lift.
+ */
 {
 struct liftSpec *ret = NULL;
 struct liftSpec *ls;
-for (ls = lift; ls != NULL; ls = ls->next)
+for (ls = lsList; ls != NULL; ls = ls->next)
     {
     if (start < ls->end)
 	{
 	if (end > ls->end)
 	    errAbort("item %s:%d-%d not fully contained in %s:%d-%d",
 		name, start, end, ls->dstName, ls->start, ls->end);
-	verbose(3,"# lift %s:%d-%d to %s:%d-%d\n", name, start, end,
+        if (end < ls->start)
+	    {
+	    if (optionExists("warn"))
+		{
+		warn("item %s:%d-%d can not be found in %s:%d-%d",
+		    name, start, end, ls->dstName, ls->start, ls->end);
+		break;
+		}
+	    else
+		errAbort("item %s:%d-%d can not be found in %s:%d-%d",
+		    name, start, end, ls->dstName, ls->start, ls->end);
+	    }
+	verbose(4,"# lift %s:%d-%d to %s:%d-%d\n", name, start, end,
 		ls->dstName, ls->start, ls->end);
 	ret = ls;
 	break;
@@ -144,104 +171,174 @@ return (ret);
 
 struct liftedItem *liftOne(struct liftSpec *lift,
 	char *name, int start, int end)
+/* Given an item: name:start-end
+ * lift it via the given liftSpec to a liftedItem
+ *	return NULL if not found in the liftSpec
+ */
 {
-struct liftedItem *result;
+struct liftedItem *result = NULL;
 struct liftSpec *ls = findLiftSpec(lift, name, start, end);
-AllocVar(result);
-result->name = cloneString(ls->dstName);
-result->strand = ls->strand;
-if ('+' == ls->strand)
+if (ls)
     {
-    result->start = start - ls->start + ls->dstStart;
-    result->end = end - ls->start + ls->dstStart;
+    AllocVar(result);
+    result->name = cloneString(ls->dstName);
+    result->strand = ls->strand;
+    if ('+' == ls->strand)
+	{
+	result->start = start - ls->start + ls->dstStart;
+	result->end = end - ls->start + ls->dstStart;
+	}
+    else
+	{
+	result->start = ls->end - 1 - end + ls->dstStart;
+	result->end = ls->end - 1 - start + ls->dstStart;
+	}
+    verbose(3,"#\t%s:%d-%d -> %s:%d-%d %c\n", name, start, end,
+	result->name, result->start, result->end, result->strand);
     }
-else
-    {
-    result->start = ls->end - 1 - start + ls->dstStart;
-    result->end = ls->end - 1 - end + ls->dstStart;
-    }
-verbose(3,"#\t%s:%d-%d -> %s:%d-%d %c\n", name, start, end,
-    result->name, result->start, result->end, result->strand);
 return result;
 }
 
 static struct genePred *liftGenePred(struct genePred *gp, struct liftSpec *ls)
+/* lift the specified genePred gp via the given liftSpec ls
+ *	result is a list of genePred items on various other scaffolds
+ */
 {
 struct genePred *result = NULL;
 struct hash *items = newHash(8);
 struct hashEl *hel = NULL;
 int exonCount = gp->exonCount;
 struct liftedItem *txStart = liftOne(ls, gp->chrom, gp->txStart, gp->txStart+1);
-struct liftedItem *txEnd = liftOne(ls, gp->chrom, gp->txEnd, gp->txEnd-1);
+struct liftedItem *txEnd = liftOne(ls, gp->chrom, gp->txEnd-1, gp->txEnd);
 struct liftedItem *cdsStart = liftOne(ls, gp->chrom, gp->cdsStart,
 	gp->cdsStart+1);
-struct liftedItem *cdsEnd = liftOne(ls, gp->chrom, gp->cdsEnd, gp->cdsEnd-1);
+struct liftedItem *cdsEnd = liftOne(ls, gp->chrom, gp->cdsEnd-1, gp->cdsEnd);
 int i;
 boolean frames = FALSE;
+boolean noCds = FALSE;
+
+if (NULL == txStart)
+    warn("#\tWARNING: missing txStart for %s:%d\n", gp->chrom, gp->txStart);
+if (NULL == txEnd)
+    warn("#\tWARNING: missing txEnd for %s:%d\n", gp->chrom, gp->txEnd);
+if (NULL == cdsStart)
+    warn("#\tWARNING: missing cdsStart for %s:%d\n", gp->chrom, gp->cdsStart);
+else if ((0 == gp->cdsStart) && (0 == gp->cdsEnd))
+    noCds = TRUE;
+if (NULL == cdsEnd)
+    warn("#\tWARNING: missing cdsEnd for %s:%d\n", gp->chrom, gp->cdsEnd);
+else if ((0 == gp->cdsStart) && (0 == gp->cdsEnd))
+    noCds = TRUE;
 
 if (gp->optFields & genePredExonFramesFld)
-    {
     frames = TRUE;
-    }
+
+/* lift each exon.  Some do not lift, their lift specification may be
+ * missing, ignore them.  For each lifted exon, keep it on a hash list by the
+ *	lifted scaffold name
+ */
 for (i = 0; i < exonCount; ++i)
     {
     struct liftedItem *itemLift = liftOne(ls, gp->chrom,
 	gp->exonStarts[i], gp->exonEnds[i]);
-    if (frames)
-	itemLift->frame = gp->exonFrames[i];
-    hel = hashStore(items, itemLift->name);
-    slAddHead(&(hel->val), itemLift);
+    if (itemLift)
+	{
+	if (frames)
+	    itemLift->frame = gp->exonFrames[i];
+	hel = hashStore(items, itemLift->name);
+	slAddHead(&(hel->val), itemLift);
+	}
     }
 
+/* Each scaffold name in the hash becomes a new genePred item all by itself */
 struct hashCookie cookie = hashFirst(items);
 while ((hel = hashNext(&cookie)) != NULL)
     {
     struct liftedItem *li;
     struct liftedItem *itemList = (struct liftedItem *)hel->val;
     struct genePred *gpItem;
-    slSort(&itemList, liStartCmp);
+    slSort(&itemList, liStartCmp);	/* sort the exons by start coord */
     int itemExonCount = slCount(itemList);
     unsigned *exonStarts = NULL;
     unsigned *exonEnds = NULL;
     AllocArray(exonStarts, itemExonCount);
     AllocArray(exonEnds, itemExonCount);
-    AllocVar(gpItem);
+    AllocVar(gpItem);	/*	start this new genePred item	*/
     if (frames)
 	AllocArray(gpItem->exonFrames, itemExonCount);
-    gpItem->name = cloneString(gp->name);
-    gpItem->chrom = cloneString(hel->name);
-    gpItem->exonCount = itemExonCount;
+    gpItem->name = cloneString(gp->name);	/* gene name stays the same */
+    gpItem->chrom = cloneString(hel->name);	/* new scaffold name */
+    gpItem->exonCount = itemExonCount;		/* this many exons in this gp */
     gpItem->exonStarts = exonStarts;
     gpItem->exonEnds = exonEnds;
     int i = 0;
     li = itemList;
     gpItem->strand[0] = li->strand;
-    gpItem->strand[1] = 0;
+    /* gpItem->strand[1] = 0; is already zero from the AllocVar */
+    /* copy each new exon start and end to the new gpItem */
     for ( ; li != NULL; li = li->next)
 	{
 	if (frames)
 	    gpItem->exonFrames[i] = li->frame;
 	exonStarts[i] = li->start;
 	exonEnds[i++] = li->end;
-verbose(2, "#\t%d,%d  -  %d, %d\n", li->start, li->end, txStart->start, txEnd->end);
 	}
-    if (sameWord(txStart->name, hel->name))
-	gpItem->txStart = txStart->start;   /* this guy has the txStart */
-    else
-	gpItem->txStart = itemList->start;  /* first exon */
-    if (sameWord(txEnd->name, hel->name))
-	gpItem->txEnd = txEnd->end;   /* this guy has the txEnd */
-    else
-	gpItem->txEnd = exonEnds[itemExonCount-1];    /* last exon */
-    if (sameWord(cdsStart->name, hel->name))
-	gpItem->cdsStart = cdsStart->start;   /* this guy has the cdsStart */
-    else
-	gpItem->cdsStart = itemList->start;  /* first exon */
-    if (sameWord(cdsEnd->name, hel->name))
-	gpItem->cdsEnd = cdsEnd->end;   /* this guy has the cdsEnd */
-    else
-	gpItem->cdsEnd = exonEnds[itemExonCount-1];    /* last exon */
+    /*	assign txStart,End and cdsStart,End appropriately
+     *	First, assume this scaffold is not the one with these items, thus
+     *	the first and last exon define these starts and ends.
+     *	If this scaffold has one of those, then apply the actual items.
+     *	The negative strand turns everything on its head.
+     */
+    if ('-' == gpItem->strand[0])
+	{
+	gpItem->txEnd = exonEnds[itemExonCount-1];  /* assume last exon */
+	gpItem->txStart = exonStarts[0];  /* assume first exon */
+	if (txStart && sameWord(txStart->name, hel->name))
+	    gpItem->txEnd = txStart->start+1;   /* this guy has the txEnd */
+	if (txEnd && sameWord(txEnd->name, hel->name))
+	    gpItem->txStart = txEnd->start;   /* this guy has the txStart */
 
+	if (noCds)
+	    {
+	    gpItem->cdsEnd = 0;
+	    gpItem->cdsStart = 0;
+	    }
+	else
+	    {
+	    gpItem->cdsEnd = exonEnds[itemExonCount-1];/* assume last exon */
+	    gpItem->cdsStart = exonStarts[0];/* assume first exon */
+	    if (cdsStart && sameWord(cdsStart->name, hel->name))
+		gpItem->cdsEnd = cdsStart->start+1; /* this has the cdsEnd */
+	    if (cdsEnd && sameWord(cdsEnd->name, hel->name))
+		gpItem->cdsStart = cdsEnd->start;   /* this has the cdsStart */
+	    }
+	}
+    else
+	{
+	gpItem->txStart = exonStarts[0];  /* assume first exon */
+	gpItem->txEnd = exonEnds[itemExonCount-1];/* assume last exon */
+	if (txStart && sameWord(txStart->name, hel->name))
+	    gpItem->txStart = txStart->start;   /* this guy has the txStart */
+	if (txEnd && sameWord(txEnd->name, hel->name))
+	    gpItem->txEnd = txEnd->end;   /* this guy has the txEnd */
+
+	if (noCds)
+	    {
+	    gpItem->cdsEnd = 0;
+	    gpItem->cdsStart = 0;
+	    }
+	else
+	    {
+	    gpItem->cdsStart = itemList->start;  /* assume first exon */
+	    gpItem->cdsEnd = exonEnds[itemExonCount-1];/* assume last exon */
+	    if (cdsStart && sameWord(cdsStart->name, hel->name))
+		gpItem->cdsStart = cdsStart->start; /* this has the cdsStart */
+	    if (cdsEnd && sameWord(cdsEnd->name, hel->name))
+		gpItem->cdsEnd = cdsEnd->end;   /* this has the cdsEnd */
+	    }
+	}
+
+    /*	if optional fields present, carry them along to the new item */
     gpItem->optFields = gp->optFields;
     if (gpItem->optFields & genePredScoreFld)
 	gpItem->score = gp->score;
@@ -258,11 +355,11 @@ verbose(2, "#\t%d,%d  -  %d, %d\n", li->start, li->end, txStart->start, txEnd->e
 	gpItem->cdsEndStat = gp->cdsEndStat;
 	}
 
+    /* accumulating a list of genePred items for the final result */
     slAddHead(&result, gpItem);
     }
-/* would be good to free the lifted items here */
+/* XXX would be good to free the lifted items here, and their container hash */
 
-/*result = gp;*/
 return (result);
 }	/*	static struct genePred *liftGenePred()	*/
 
@@ -285,11 +382,10 @@ for (gp = gpList; gp != NULL; gp = gp->next)
 	struct genePred *gpl;
 	for (gpl = gpLifted; gpl != NULL; gpl = gpl->next)
 	    genePredTabOut(gpl, out);
-	verbose(1,"# found: %s\n", gp->chrom);
+	/* XXX it would be good to free the gpLifted item here */
 	}
     else
 	{
-	verbose(1,"# not found: %s\n", gp->chrom);
 	genePredTabOut(gp, out);
 	}
     ++genePredItemCount;
