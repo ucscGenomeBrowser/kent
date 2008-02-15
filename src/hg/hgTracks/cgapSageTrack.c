@@ -127,41 +127,10 @@ return (char *)lf->extra;
 static void cgapSageMapItem(struct track *tg, struct hvGfx *hvg, void *item, char *itemName, char *mapItemName, int start, int end,
 			    int x, int y, int width, int height)
 {
-#if 1
-#if 0 // FIXME
- void mapBoxHgcOrHgGene(struct hvGfx *hvg, int start, int end, int x, int y, int width, int height, 
-	char *track, char *item, char *statusLine, char *directUrl, boolean withHgsid)
-
-    hPrintf("HREF=\"%s &o=%d &t=%d &g=%s &%s &c=%s &l=%d &r=%d &db=%s &pix=%d\" ",
-	    hgcNameAndSettings(), o=start, t=end, g=encodedTrack,
-            (char *)lf->extra,
-	     c=chromName, l=winStart, r=winEnd, db=database, pix=tl.picWidth);
-#endif
 struct linkedFeatures *lf = item;
 mapBoxHgcOrHgGene(hvg, start, end, x, y, width, height, 
                   tg->mapName, itemName, NULL, NULL, TRUE,
                   (char *)lf->extra);
-
-#else // FIXME
-struct linkedFeatures *lf = item;
-if (x < 0) x = 0;
-x = hvGfxAdjXW(hvg, x, &width);
-y = hvGfxClipYH(hvg, y, &height);
-int xEnd = x+width;
-int yEnd = y+height;
-if (x < xEnd)
-    {
-    char *encodedItem = cgiEncode(itemName);
-    char *encodedTrack = cgiEncode(tg->mapName);
-    hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, xEnd, yEnd);
-    hPrintf("HREF=\"%s&o=%d&t=%d&g=%s&%s&c=%s&l=%d&r=%d&db=%s&pix=%d\" ",
-	    hgcNameAndSettings(), start, end, encodedTrack, (char *)lf->extra,
-	    chromName, winStart, winEnd, database, tl.picWidth);
-    hPrintf(">\n");
-    freeMem(encodedItem);
-    freeMem(encodedTrack);
-    }
-#endif
 }
 
 int cgapLinkedFeaturesCmp(const void *va, const void *vb)
