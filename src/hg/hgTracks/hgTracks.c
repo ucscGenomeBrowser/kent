@@ -118,7 +118,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1430.4.7 2008/02/13 08:27:43 markd Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1430.4.8 2008/02/15 21:41:01 markd Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -14625,6 +14625,11 @@ winEnd += offset;
 void dinkWindow(boolean start, int dinkAmount)
 /* Move one end or other of window a little. */
 {
+if (revCmplDisp)
+    {
+    start = !start;
+    dinkAmount = -dinkAmount;
+    }
 if (start)
    {
    winStart += dinkAmount;
