@@ -46,9 +46,6 @@ set taxon = 9606
 # Previous gene set
 set oldGeneBed = /cluster/data/hg18/bed/ucsc.10/ucscGenes.faa
 
-# NCBI gene models (just for human at the moment, for CCDS)
-set ncbiMapDir /cluster/data/hg18/bed/ucsc.11/ncbiMappings
-
 # Machines
 set dbHost = hgwdev
 set ramFarm = memk
@@ -58,6 +55,7 @@ set cpuFarm = pk
 mkdir -p $dir
 cd $dir
 
+if (0) then  # BRACKET
 # Get Genbank info
 txGenbankData $db
 
@@ -68,6 +66,18 @@ txReadRa mrna.ra refSeq.ra .
 # the same time so it is synced with other data. Takes 4 seconds.
 hgsql -N $db -e 'select distinct name,sizePolyA from mrnaOrientInfo' | \
 	subColumn -miss=sizePolyA.miss 1 stdin accVer.tab sizePolyA.tab
+
+# For human get CCDS as a bed for each chromosome. Otherwise just get empty dir of ccds.
+mkdir ccds
+foreach c (`awk '{print $1;}' /cluster/data/$db/chrom.sizes`)
+  if ($db =~ hg*) then
+     set where = "where chrom='$c'"
+     hgsql -N $db -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from ccdsGene $where" | \
+         genePredToBed > ccds/$c.bed
+  else 
+     echo "" > ccds/$c.bed
+  endif
+end
 
 # Create directories full of alignments split by chromosome.
 mkdir -p est refSeq mrna
@@ -106,6 +116,7 @@ else
     awk '$13 > 100' antibody.cluster | cut -f 1-12 > antibody.bed
 endif
 
+
 # Convert psls to bed, saving mapping info and weeding antibodies.  Takes 2.5 min
 foreach c (`awk '{print $1;}' /cluster/data/$db/chrom.sizes`)
     if (-s refSeq/$c.psl) then
@@ -132,16 +143,6 @@ foreach c (`awk '{print $1;}' /cluster/data/$db/chrom.sizes`)
     endif
 end
 
-# Get NCBI mappings to use as proxies for CCDS, our highest priority gene set.
-# To do this you first need to make the ncbiMapping dir, which Mark made this
-# time.  See the notes.txt file in that dir for how he did it.
-if ($db =~ hg*) then
-    genePredToBed $ncbiMapDir/ncbiGenes.gp > $ncbiMapDir/ncbiGenes.bed
-    foreach c (`awk '{print $1;}' /cluster/data/$db/chrom.sizes`)
-	txGeneSubInBed refSeq/$c.bed $ncbiMapDir/ncbiGenes.bed tmp.bed
-	mv tmp.bed refSeq/$c.bed
-    end
-endif
 
 
 #  seven minutes to this point
@@ -149,9 +150,10 @@ endif
 # Create mrna splicing graphs.  Takes 10 seconds.
 mkdir -p bedToGraph
 foreach c (`awk '{print $1;}' /cluster/data/$db/chrom.sizes`)
-    txBedToGraph -prefix=$c. refSeq/$c.bed refSeq mrna/$c.bed mrna \
+    txBedToGraph -prefix=$c. ccds/$c.bed ccds refSeq/$c.bed refSeq mrna/$c.bed mrna \
 	bedToGraph/$c.txg
 end
+
 
 # Create est splicing graphs.  Takes 6 minutes.
 foreach c (`awk '{print $1;}' /cluster/data/$db/chrom.sizes`)
@@ -159,9 +161,11 @@ foreach c (`awk '{print $1;}' /cluster/data/$db/chrom.sizes`)
 end
 
 
+
 # Create an evidence weight file
 cat > trim.weights <<end
 refSeq  100
+ccds    50
 mrna    2
 txOrtho 1
 exoniphy 1
@@ -194,6 +198,7 @@ foreach c (`awk '{print $1;}' /cluster/data/$xdb/chrom.sizes`)
     echo $c
     txBedToGraph refSeq/$c.bed refSeq mrna/$c.bed mrna est/$c.bed est stdout >> other.txg
 end
+
 
 # Clean up all but final other.txg
 rm -r est mrna refSeq
@@ -291,6 +296,8 @@ foreach c (`awk '{print $1;}' /cluster/data/$db/chrom.sizes`)
 	   | txgAddEvidence stdin est/$c.edges est graphWithEvidence/$c.txg
 end
 
+endif # BRACKET
+
 # Do  txWalk  - takes 32 seconds (mostly loading the mrnaSize.tab again and
 # again...)
 mkdir -p txWalk
@@ -313,6 +320,8 @@ end
 cat txWalk/*.bed > txWalk.bed
 txBedToGraph txWalk.bed txWalk txWalk.txg
 txgAnalyze txWalk.txg /cluster/data/$db/$db.2bit stdout | sort | uniq > altSplice.bed
+
+exit # BRACKET
 
 # Get txWalk transcript sequences.  This'll take about 2 minutes
 #	This appears to take a significant amount of time.  Each chrom
