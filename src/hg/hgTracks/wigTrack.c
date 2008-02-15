@@ -14,7 +14,7 @@
 #include "customTrack.h"
 #include "wigCommon.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.75.82.2 2008/02/11 17:52:16 markd Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.75.82.3 2008/02/15 07:21:17 markd Exp $";
 
 struct wigItem
 /* A wig track item. */
@@ -284,7 +284,7 @@ el = hashLookup(trackSpans, trackName);
 if ( el == NULL)
 	hashAdd(trackSpans, trackName, spans);
 /*	see if this span is already in our hash for this track */
-snprintf(spanName, sizeof(spanName), "%d", wi->span);
+safef(spanName, sizeof(spanName), "%d", wi->span);
 el = hashLookup(spans, spanName);
 /*	no, then add this span to the spans list for this track */
 if ( el == NULL)
@@ -429,7 +429,7 @@ spanMinimum = max(1,
 	minSpan(conn, dbTableName, chromName, winStart, winEnd, cart, tdb));
 
 itemsLoaded = 0;
-safef(whereSpan, ArraySize(whereSpan), "span=%d limit 1", spanMinimum);
+safef(whereSpan, sizeof(whereSpan), "span=%d limit 1", spanMinimum);
 
 sr = hRangeQuery(conn, dbTableName, chromName, loadStart, loadEnd,
     whereSpan, &rowOffset);
@@ -507,7 +507,7 @@ tg->items = wiList;
 
 static void wigFreeItems(struct track *tg) {
 #if defined(DEBUG)
-snprintf(dbgMsg, DBGMSGSZ, "I haven't seen wigFreeItems ever called ?");
+safef(dbgMsg, DBGMSGSZ, "I haven't seen wigFreeItems ever called ?");
 wigDebugPrint("wigFreeItems");
 #endif
 }
@@ -1291,14 +1291,30 @@ else if (tg->visibility == tvFull)
 	    double d = graphLowerLimit;
 	    graphLowerLimit = graphUpperLimit;
 	    graphUpperLimit = d;
-	    snprintf(upper, 128, "No data %c", upperTic);
-	    snprintf(lower, 128, "No data _");
+            if (hvg->rc)
+                {
+                safef(upper, sizeof(upper), " %c No data", upperTic);
+                safef(lower, sizeof(lower), "_ No data");
+                }
+            else
+                {
+                safef(upper, sizeof(upper), "No data %c", upperTic);
+                safef(lower, sizeof(lower), "No data _");
+                }
 	    zeroOK = FALSE;
 	    }
 	else
 	    {
-	    snprintf(upper, 128, "%g %c", graphUpperLimit, upperTic);
-	    snprintf(lower, 128, "%g _", graphLowerLimit);
+            if (hvg->rc)
+                {
+                safef(upper, sizeof(upper), "%c %g", upperTic, graphUpperLimit);
+                safef(lower, sizeof(lower), "_ %g", graphLowerLimit);
+                }
+            else
+                {
+                safef(upper, sizeof(upper), "%g %c", graphUpperLimit, upperTic);
+                safef(lower, sizeof(lower), "%g _", graphLowerLimit);
+                }
 	    }
 	drawColor = tg->ixColor;
 	if (graphUpperLimit < 0.0) drawColor = tg->ixAltColor;
@@ -1326,10 +1342,10 @@ else if (tg->visibility == tvFull)
 				(height - centerOffset)) /
 			(graphUpperLimit - graphLowerLimit));
 		/*	reusing the lower string here	*/
-		if (i == 0)
-		    snprintf(lower, 128, "0 -");
-		else
-		    snprintf(lower, 128, "%g -", lineValue);
+                if (hvg->rc)
+                    safef(lower, sizeof(lower), "- %g", ((i == 0) ? 0.0 : lineValue));
+                else
+                    safef(lower, sizeof(lower), "%g -", ((i == 0) ? 0.0 : lineValue));
 		/*	only draw if it is far enough away from the
 		 *	upper and lower labels, and it won't overlap with
 		 *	the center label.

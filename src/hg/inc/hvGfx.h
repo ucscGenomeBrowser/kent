@@ -89,10 +89,10 @@ INLINE void hvGfxText(struct hvGfx *hvg, int x, int y, int colorIx,
 {
 if (hvg->rc)
     {
+    // FIXME: test
     // move x,y to lower-left corner
     int width = vgGetFontStringWidth(hvg->vg, font, text);
     int height = vgGetFontPixelHeight(hvg->vg, font);
-    y -= height/2;
     vgTextRight(hvg->vg, hvGfxAdjXW(hvg, x, width), y, width, height, colorIx, font, text);
     }
 else
@@ -107,7 +107,8 @@ if (hvg->rc)
     {
     // move x,y to upper right corner
     int fHeight = vgGetFontPixelHeight(hvg->vg, font);
-    y += fHeight/2;
+    // this is what mgTextRight does,  not sure why
+    y += (height - fHeight)/2 + ((font == mgSmallFont()) ?  1 : 0);
     vgText(hvg->vg, hvGfxAdjXW(hvg, x, width), y, colorIx, font, text);
     }
 else

@@ -1,12 +1,11 @@
 /* hvGfx - browser graphics interface.  This is a thin layer on top of vGfx
  * providing genome browser-specific features.  It was added to handle
- * reverse-complement display. I was is not hidden under vGfx, as the image
- * map code must also do the reverse-complement handling. */
+ * reverse-complement display. */
 
 #include "common.h"
 #include "hvGfx.h"
 
-static char const rcsid[] = "$Id: hvGfx.c,v 1.1.2.7 2008/02/13 08:27:42 markd Exp $";
+static char const rcsid[] = "$Id: hvGfx.c,v 1.1.2.8 2008/02/15 07:21:16 markd Exp $";
 
 static struct hvGfx *hvGfxAlloc(struct vGfx *vg)
 /* allocate a hvgGfx object */
