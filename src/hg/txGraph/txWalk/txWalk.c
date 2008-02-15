@@ -53,7 +53,7 @@ struct weight
 boolean isRnaSource(struct txSource *source)
 /* Return TRUE if it's some sort of RNA source. */
 {
-return sameString(source->type, "refSeq") || sameString(source->type, "mrna");
+return sameString(source->type, "refSeq") || sameString(source->type, "mrna") || sameString(source->type, "ccds");
 }
 
 struct hash *hashWeights(char *in)
