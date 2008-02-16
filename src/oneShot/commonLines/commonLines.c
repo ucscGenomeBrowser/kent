@@ -6,10 +6,11 @@
 #include <string.h>
 
 
-#define MAX_LINE_SIZE 1024
+#define MAX_LINE_SIZE (4*1024)
 #define HASH_SIZE (64*1024-1)
 #define TRUE 1
 #define FALSE 0
+#define boolean int
 
 void usage()
 /* Explain usage and exit. */
@@ -58,14 +59,21 @@ if (f == NULL)
 return f;
 }
 
-int readLine(FILE *f, char line[MAX_LINE_SIZE])
+boolean readLine(FILE *f, char line[MAX_LINE_SIZE])
 /* Read a line from file.  Return number of characters in line (0 at end of file) */
 {
 int c, i;
 for (i=0; i<MAX_LINE_SIZE-1; ++i)
     {
     c = getc(f);
-    if (c < 0 || c == '\n')
+    if (c < 0)
+        {
+	if (i == 0)
+	    return FALSE;
+	else
+	    break;
+	}
+    if (c == '\n')
         break;
     line[i] = c;
     }
@@ -75,7 +83,7 @@ if (i == MAX_LINE_SIZE-1)	/* Warn and abort about long lines. */
     printf("Long line starting \"%s\"\n", line);
     exit(-1);
     }
-return i;
+return TRUE;
 }
 
 /** String routines. */
