@@ -14,7 +14,7 @@
 #include "hgMaf.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: mafTrack.c,v 1.57 2006/02/24 01:20:45 kate Exp $";
+static char const rcsid[] = "$Id: mafTrack.c,v 1.58 2008/02/16 17:17:06 braney Exp $";
 
 struct mafItem
 /* A maf track item. */
@@ -408,8 +408,12 @@ if (numScores >= masterSize)	 /* More pixels than bases */
 	    if (score > 1.0) score = 1.0;
 	    x1 = masterPos*numScores/masterSize;
 	    x2 = (masterPos+1)*numScores/masterSize;
-	    for (j=x1; j<x2; ++j)
-	        scores[j] = score;
+	    /* make sure we don't overflow our array */
+	    if (x2 > numScores - 1)
+		x2 = numScores - 1;
+	    if (x1 < numScores)
+		for (j=x1; j<x2; ++j)
+		    scores[j] = score;
 	    ++masterPos;
 	    }
 	}
