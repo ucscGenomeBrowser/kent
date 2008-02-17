@@ -50,8 +50,8 @@ struct weight
     double value;	/* Weight value */
     };
 
-boolean isRnaSource(struct txSource *source)
-/* Return TRUE if it's some sort of RNA source. */
+boolean isAccessionedSource(struct txSource *source)
+/* Return TRUE if it's some sort of source we want to keep track of. */
 {
 return sameString(source->type, "refSeq") || sameString(source->type, "mrna") || sameString(source->type, "ccds");
 }
@@ -197,7 +197,7 @@ struct weightedRna *rnaList = NULL, *rna;
 for (sourceId = 0; sourceId < txg->sourceCount; ++sourceId)
     {
     struct txSource *source = &txg->sources[sourceId];
-    if (isRnaSource(source))
+    if (isAccessionedSource(source))
 	{
 	lmAllocVar(lm, rna);
 	rna->id = sourceId;
@@ -296,7 +296,7 @@ for (ref = trackerRefList; ref != NULL; ref = ref->next)
 	for (ev = edge->evList; ev != NULL; ev = ev->next)
 	    {
 	    struct txSource *source = &txg->sources[ev->sourceId];
-	    if (isRnaSource(source))
+	    if (isAccessionedSource(source))
 		{
 		if (!hashLookup(evHash, source->accession))
 		    hashAdd(evHash, source->accession, source);
@@ -339,7 +339,10 @@ if (doDefrag)
     {
     int size = hashIntValDefault(sizeHash, source->accession, 0);
     if (!size)
-	verbose(1, "%s not in sizes tab file", source->accession);
+	{
+	if (!sameString(source->type, "ccds"))
+	    verbose(1, "%s not in sizes tab file\n", source->accession);
+	}
     if (totalSize < size * defragSize)
         return NULL;
     }
