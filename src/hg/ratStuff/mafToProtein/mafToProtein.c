@@ -13,13 +13,14 @@ void usage()
 errAbort(
   "mafToProtein - output protein alignments using maf and frames\n"
   "usage:\n"
-  "   mafToProtein dbName mafTable frameTable organism output\n"
+  "   mafToProtein dbName mafTable frameTable organism species.lst output\n"
   "arguments:\n"
-  "   dbName     name of SQL database\n"
-  "   mafTable   name of maf file table\n"
-  "   frameTable name of the frames table\n"
-  "   organism   name of the organism to use in frames table\n"
-  "   output     put output here\n"
+  "   dbName      name of SQL database\n"
+  "   mafTable    name of maf file table\n"
+  "   frameTable  name of the frames table\n"
+  "   organism    name of the organism to use in frames table\n"
+  "   species.lst list of species names\n"
+  "   output      put output here\n"
   "options:\n"
   "   -geneName=foobar   name of gene as it appears in frameTable\n"
   "   -geneName=foolst   name of file with list of genes\n"
@@ -67,6 +68,8 @@ while (lineFileRow(lf, row))
     strcpy(sn->name, row[0]);
     slAddHead(&list, sn);
     }
+
+slReverse(&list);
 
 lineFileClose(&lf);
 return list;
@@ -181,52 +184,32 @@ hFreeConn(&conn);
 return list;
 }
 
-struct speciesInfo *getSpeciesList(struct geneInfo *giList)
+struct speciesInfo *getSpeciesInfo(struct geneInfo *giList, 
+    struct slName *speciesNames, struct hash *siHash)
 {
-struct hash *nameHash = newHash(5);
 struct geneInfo *gi;
 int size = 0;
+struct speciesInfo *siList = NULL;
 
 for(gi = giList ; gi ; gi = gi->next)
-    {
-    struct mafAli *ali = gi->ali;
-
     size += gi->frame->chromEnd - gi->frame->chromStart;
 
-    for(; ali; ali = ali->next)
-	{
-	struct mafComp *comp = ali->components;
+struct slName *name = speciesNames;
 
-	for(; comp ; comp = comp->next)
-	    {
-	    char *ptr = strchr(comp->src, '.');
-
-	    if (ptr == NULL)
-		errAbort("expect all maf components src names to have '.'");
-
-	    *ptr = 0;
-	    hashStoreName(nameHash, comp->src);
-	    *ptr = '.';
-	    }
-	}
-    }
-
-struct speciesInfo *siList = NULL;
-struct hashCookie cookie = hashFirst(nameHash);
-struct hashEl *hel;
-
-while((hel = hashNext(&cookie)) != NULL)
+for(; name ; name = name->next)
     {
     struct speciesInfo *si;
 
     AllocVar(si);
-    si->name = hel->name;
+    si->name = name->name;
     si->size = size;
     si->nucSequence = needMem(size + 1);
+    memset(si->nucSequence, '-', size);
     si->aaSequence = needMem(size/3 + 1);
-
+    hashAdd(siHash, si->name, si);
     slAddHead(&siList, si);
     }
+slReverse(&siList);
 
 return siList;
 }
@@ -234,11 +217,89 @@ return siList;
 void writeOutSpecies(FILE *f, struct speciesInfo *si)
 {
 for(; si ; si = si->next)
-    fprintf(f, "%s %d\n", si->name, si->size);
+    {
+    fprintf(f, ">%s\n", si->name);
+    fprintf(f, "%s\n", si->nucSequence);
+    }
+}
+
+#define MAX_COMPS  	5000 
+char *compText[MAX_COMPS]; 
+char *siText[MAX_COMPS]; 
+
+int copyAli(struct hash *siHash, struct mafAli *ali, int start)
+{
+struct mafComp *comp = ali->components;
+int num = 0;
+
+for(; comp; comp = comp->next)
+    {
+    char *ptr = strchr(comp->src, '.');
+
+    if (ptr == NULL)
+	errAbort("all components must have a '.'");
+
+    *ptr = 0;
+
+    struct speciesInfo *si = hashMustFindVal(siHash, comp->src);
+    compText[num] = comp->text;
+    siText[num] = &si->nucSequence[start];
+    ++num;
+    if (num == MAX_COMPS)
+	errAbort("can only deal with maf's with less than %d components",
+	    MAX_COMPS);
+    }
+
+int ii, jj;
+int count = 0; 
+
+for(jj = 0 ; jj < ali->textSize; jj++)
+    {
+    if (*compText[0] != '-')
+	{
+	for(ii=0; ii < num; ii++)
+	    {
+	    *siText[ii] = *compText[ii];
+	    siText[ii]++;
+	    }
+	count++;
+	}
+    for(ii=0; ii < num; ii++)
+	compText[ii]++;
+    }
+
+return start + count;
+}
+
+void copyMafs(struct hash *siHash, struct geneInfo *giList)
+{
+int start = 0;
+struct geneInfo *gi = giList;
+
+for(; gi; gi = gi->next)
+    {
+    struct mafAli *ali = gi->ali;
+
+    for(; ali; ali = ali->next)
+	start = copyAli(siHash, ali, start);
+    }
+
+struct mafComp *comp = giList->ali->components;
+boolean frameNeg = (giList->frame->strand[0] == '-');
+
+if (frameNeg)
+    {
+    for(; comp; comp = comp->next)
+	{
+	struct speciesInfo *si = hashMustFindVal(siHash, comp->src);
+
+	reverseComplement(si->nucSequence, si->size);
+	}
+    }
 }
 
 void outGene(char *geneName, char *mafTable, char *frameTable, 
-    char *org, char *outName)
+    char *org, struct slName *speciesNameList, char *outName)
 {
 struct mafFrames *frames = getFrames(geneName, frameTable, org);
 struct mafFrames *frame;
@@ -255,35 +316,40 @@ for(frame = frames; frame; frame = frame->next)
     gi->ali = getAliForFrame(mafTable, frame);
     slAddHead(&giList, gi);
     }
+slReverse(&giList);
 
-struct speciesInfo *speciesList = getSpeciesList(giList);
+struct hash *speciesInfoHash = newHash(5);
+struct speciesInfo *speciesList = getSpeciesInfo(giList, speciesNameList, 
+    speciesInfoHash);
 
+copyMafs(speciesInfoHash, giList);
 writeOutSpecies(f, speciesList);
 
 //hFreeConn(&conn);
 }
 
 void mafToProtein(char *dbName, char *mafTable, char *frameTable, 
-    char *org, char *outName)
+    char *org,  char *speciesList, char *outName)
 /* mafToProtein - output protein alignments using maf and frames. */
 {
-struct slName *names = NULL;
+struct slName *geneNames = NULL;
+struct slName *speciesNames = readList(speciesList);
 
 hSetDb(dbName);
 
 if (geneList != NULL)
-    names = readList(geneList);
+    geneNames = readList(geneList);
 else if (geneName != NULL)
     {
     int len = strlen(geneName);
-    names = needMem(sizeof(*names)+len);
-    strcpy(names->name, geneName);
+    geneNames = needMem(sizeof(*geneNames)+len);
+    strcpy(geneNames->name, geneName);
     }
 else
-    names = queryNames(dbName, frameTable, org);
+    geneNames = queryNames(dbName, frameTable, org);
 
-for(; names; names = names->next)
-    outGene(names->name, mafTable, frameTable, org, outName);
+for(; geneNames; geneNames = geneNames->next)
+    outGene(geneNames->name, mafTable, frameTable, org, speciesNames, outName);
 }
 
 int main(int argc, char *argv[])
@@ -291,7 +357,7 @@ int main(int argc, char *argv[])
 {
 optionInit(&argc, argv, options);
 
-if (argc != 6)
+if (argc != 7)
     usage();
 
 geneName = optionVal("geneName", geneName);
@@ -301,6 +367,6 @@ onlyChrom = optionVal("chrom", onlyChrom);
 if ((geneName != NULL) && (geneList != NULL))
     errAbort("cannot specify both geneList and geneName");
 
-mafToProtein(argv[1],argv[2],argv[3],argv[4],argv[5]);
+mafToProtein(argv[1],argv[2],argv[3],argv[4],argv[5],argv[6]);
 return 0;
 }
