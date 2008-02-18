@@ -7,12 +7,15 @@ class PipelineController < ApplicationController
   AUTOUPLOADLABEL = "Upload/Validate/Load (automatic)"
 
   before_filter :login_required
-  before_filter :check_user_is_owner, :except => [:new, :create, :list, :show_user, :show, :delete_archive ]
+  before_filter :check_user_is_owner, :except => 
+        [:new, :create, :list, :show_user, :show, :delete_archives, 
+        :valid_status, :load_status, :unload_status, :upload_status ]
   
   layout 'standard'
   
   def list
-    @projects = Project.find(:all)
+    @autoRefresh = true
+    @projects = Project.find(:all, :order => 'name')
     @title = "These are the projects in our system"
   end
   
@@ -119,9 +122,6 @@ class PipelineController < ApplicationController
 
   end 
 
-
-
-
   def begin_validating
     @project = Project.find(params[:id])
     if @project.status == "uploaded"
@@ -158,7 +158,6 @@ class PipelineController < ApplicationController
     log_project_status
 
   end 
-
 
   def new
     @project = Project.new
@@ -408,7 +407,6 @@ class PipelineController < ApplicationController
   end
 
 
-
   def delete_archive
     archive = ProjectArchive.find(params[:id])
     params[:id] = archive.project_id
@@ -520,10 +518,6 @@ class PipelineController < ApplicationController
     end
 
   end
-
-
-
-
 
   # --------- PRIVATE ---------
 private
