@@ -1,6 +1,9 @@
 <p>
 <strong>Project: <%= @project.name -%> </strong><br/>
-<strong>Type: </strong> <%= @project.project_type.short_label -%><br/>
+<% if current_user.login == "admin" %>
+  <strong>Type: </strong> <%= @project.project_type.short_label -%><br/>
+  <strong>Active: </strong> <%= @project.archives_active -%><br/>
+<% end %>
 <strong>Status: </strong> <%= 
   if @project.status.starts_with?("schedule uploading ")
     "schedule uploading"
@@ -12,10 +15,10 @@
     end
   end
 -%><br/>
-<strong>Active: </strong> <%= @project.archives_active -%><br/>
 
-<strong>Date Posted: </strong> <%= distance_of_time_in_words_to_now(@project.created_at) -%> ago<br/>
-<strong>Last Updated: </strong> <%= distance_of_time_in_words(@project.updated_at, Time.now) -%> ago<br/>
+<p>
+<strong>Created: </strong> <%= @project.created_at.strftime("%b %d, %Y %H:%M") -%><br>
+<strong>Updated: </strong> <%= @project.updated_at.strftime("%b %d, %Y %H:%M") -%><br>
 <% if @uploadText -%>
 <strong>wget: </strong> <%= @uploadText -%> <br/>
 <% end %>
@@ -43,8 +46,8 @@
   <td><%= link_to 'Delete', {:action => 'delete', :id => @project.id},
     :confirm => "Are you sure you want to delete this project?" -%></td>
   <td><%= link_to 'Edit', {:action => 'edit', :id => @project.id} -%></td>
-  <% if @project_status != "new" %>
-    <td><%= link_to 'Re-Expand', {:action => 'reexpand_all', :id => @project.id} -%></td>
+  <% if current_user.login == "admin" and @project_status != "new" %>
+    <td><%= link_to 'Expand', {:action => 'reexpand_all', :id => @project.id} -%></td>
   <% end %>
 <% end %>
 
@@ -53,14 +56,12 @@
 
 <h3> Project Archive Files</h3>
 
-<% @project.project_archives.each do |a| %>
+<% @project.project_archives.reverse_each do |a| %>
   <table CELLSPACING=10 CELLPADDING=10>
   <tr>
   <td><%= a.file_name -%></td>
   <td align=right><%= a.file_size -%></td>
-  <td><%= a.file_date -%></td>
-
-
+  <td><%= a.file_date.strftime("%b %d %H:%M") -%></td>
 
   <% 
   n = a.archive_no-1
@@ -68,22 +69,26 @@
   if c == "1" -%> 
     <td><%= link_to 'Delete', {:action => 'delete_archive', :id => a.id} -%></td>
   <% else %>
-    <td><%= link_to 'Un-Delete', {:action => 'delete_archive', :id => a.id} -%></td>
+    <% if current_user.login == "admin" %>
+      <td><%= link_to 'Un-Delete', {:action => 'delete_archive', :id => a.id} -%></td>
+    <% end %>
   <% end %>
 
   <td><%= 
   if a.status.starts_with?("schedule uploading ")
     "schedule uploading"
+  elsif a.status.starts_with?("schedule expanding ")
+    "schedule expanding"
+  elsif a.status == "see current"
+    @project.status
   else
-    if a.status.starts_with?("schedule expanding ")
-      "schedule expanding"
-    else
       a.status
-    end
   end
   -%></td>
 
-  <td><%= a.archives_active -%></td>
+  <% if current_user.login == "admin" %>
+    <td><%= a.archives_active -%></td>
+  <% end %>
   </tr>
   </table>
 
@@ -93,7 +98,7 @@
       <td>&nbsp;</td>
       <td><%= f.file_name -%></td>
       <td align=right><%= f.file_size -%></td>
-      <td><%= f.file_date -%></td>
+      <td><%= f.file_date.strftime("%b %d %H:%M") -%></td>
     </tr>
   <% end %>
   </table>
