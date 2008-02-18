@@ -16,4 +16,16 @@ Setting up a development environment:
 
 6. Start server:
         ruby script/server -p 300? & (choose unused port)
+            OR
+        mongrel_rails start -p 300?
 
+-------------------------------
+To update server:
+
+1. mongrel_rails stop
+
+2. cd /kent/src/hg/encode; cvsup
+
+3. rake db:migrate
+
+4. mongrel_rails start -p <yourPort> -d
