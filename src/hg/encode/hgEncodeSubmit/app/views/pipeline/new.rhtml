@@ -2,7 +2,7 @@
 
 <%= error_messages_for 'project' -%>
 
-<%= start_form_tag :action => 'create' %>
+<% form_tag (:action => 'create') do %>
 
   <p><label for="project_name">Name</label><br/>
   <%= text_field 'project', 'name'  %></p>
@@ -23,14 +23,20 @@
 <%
 =end %>
 
+<!-- Project type dropdown menu, now only for 'admin' user -->
+<% if current_user.login == "admin" %>
   <p><label for="project_project_type_id">Type</label><br/>
   <select id="project_project_type_id" name="project[project_type_id]">
   <% @projectTypes.each do |t| %>
   <option value="<%= t.id -%>"><%= t.short_label -%></option>
   <% end %>
   </select></p>
+<% else %>
+   <% @project.project_type_id = @projectTypes[0].id %>
+   <%= hidden_field :project, :project_type_id %>
+<% end %>
   
   <%= submit_tag "Create" %>
-<%= end_form_tag %>
+<% end %>
 
 <%= link_to 'Back', {:action => 'list'} %>
