@@ -8,11 +8,13 @@
 #include "hash.h"
 #include "options.h"
 #include "maf.h"
-#include "anc.h"
+#include "seg.h"
 
-#define MAXSPECIES  100
 
-static char const rcsid[] = "$Id: mafToAnc.c,v 1.2 2008/02/13 00:16:43 rico Exp $";
+#define MAXSPECIES	100
+	
+
+static char const rcsid[] = "$Id: mafToAnc.c,v 1.3 2008/02/18 20:42:01 rico Exp $";
 
 static struct optionSpec options[] = {
 	{"minLen", OPTION_INT},
@@ -115,40 +117,37 @@ while (ma1->next != NULL)
 }
 
 
-static struct ancBlock *buildAnchor(int len, int *compPos, struct mafAli *ma)
+static struct segBlock *buildAnchor(int len, int *compPos, struct mafAli *ma)
 /* Build and anchor from the argument data. */
 {
 struct mafComp *mc;
-struct ancBlock *ab;
-struct ancComp *ac, *tail = NULL;
+struct segBlock *sb;
+struct segComp *sc, *tail = NULL;
 int compIdx;
 
 /* Initialize the anchor block */
-AllocVar(ab);
-ab->prev       = NULL;
-ab->next       = NULL;
-ab->ancLen     = len;
-ab->components = NULL;
+AllocVar(sb);
+sb->val = len;
 
 for (mc = ma->components, compIdx = 0; mc != NULL; mc = mc->next, compIdx++)
 	{
 	/* Initialize a new anchor component. */
-	AllocVar(ac);
-	ac->next    = NULL;
-	ac->src     = cloneString(mc->src);
-	ac->start   = compPos[compIdx] - len;
-	ac->strand  = mc->strand;
-	ac->srcSize = mc->srcSize;
+	AllocVar(sc);
+	sc->src     = cloneString(mc->src);
+	sc->start   = compPos[compIdx] - len;
+	sc->size    = len;
+	sc->strand  = mc->strand;
+	sc->srcSize = mc->srcSize;
 
 	/* Add the new component to the current list. */
-	if (ab->components == NULL)
-		ab->components = ac;
+	if (sb->components == NULL)
+		sb->components = sc;
 	else
-		tail->next = ac;
-	tail = ac;
+		tail->next = sc;
+	tail = sc;
 	}
 
-return(ab);
+return(sb);
 }
 
 static void findAnchors(struct mafAli **aliList, char *outAnc, int minLen)
@@ -158,11 +157,11 @@ struct mafAli *ma, *next;
 struct mafComp *mc;
 int idx, len, numComps, gapCol = 0;
 int compPos[MAXSPECIES];
-struct ancBlock *block;
+struct segBlock *block;
 FILE *f = mustOpen(outAnc, "w");
 
 
-ancWriteStart(f, minLen);
+segWriteStart(f);
 
 /* Find and report anchors. */
 for (ma = *aliList; ma != NULL; ma = next)
@@ -195,8 +194,8 @@ for (ma = *aliList; ma != NULL; ma = next)
 			if (len >= minLen)
 				{
 				block = buildAnchor(len, compPos, ma);
-				ancWrite(f, block);
-				ancBlockFree(&block);
+				segWrite(f, block);
+				segBlockFree(&block);
 				}
 			len = 0;
 			}
@@ -213,8 +212,8 @@ for (ma = *aliList; ma != NULL; ma = next)
 	if ((! gapCol) && (len >= minLen))
 		{
 		block = buildAnchor(len, compPos, ma);
-		ancWrite(f, block);
-		ancBlockFree(&block);
+		segWrite(f, block);
+		segBlockFree(&block);
 		}
 
 	mafAliFree(&ma);

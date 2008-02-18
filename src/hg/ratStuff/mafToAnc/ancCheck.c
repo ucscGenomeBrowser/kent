@@ -5,12 +5,12 @@
 #include "hash.h"
 #include "options.h"
 #include "maf.h"
-#include "anc.h"
+#include "seg.h"
 
 #define MAX(x,y) ((x) > (y) ? (x) : (y))
 #define MIN(x,y) ((x) < (y) ? (x) : (y))
 
-static char const rcsid[] = "$Id: ancCheck.c,v 1.1 2008/02/12 18:28:32 rico Exp $";
+static char const rcsid[] = "$Id: ancCheck.c,v 1.2 2008/02/18 20:42:01 rico Exp $";
 
 
 void usage()
@@ -26,24 +26,24 @@ errAbort(
 static void ancCheck(char *inAnc, char *inMaf)
 /* Check an anchor file against the maf file used to generate it. */
 {
-struct ancFile *af = ancOpen(inAnc);
-struct ancBlock *ab;
-struct ancComp *ac;
+struct segFile *sf = segOpen(inAnc);
+struct segBlock *sb;
+struct segComp *sc;
 struct mafFile *mf = mafOpen(inMaf);
 struct mafAli *ma;
 struct mafComp *mc, *mcc;
 int cbeg, cend, pos, idx;
 int fail;
 
-ab = ancNext(af);
+sb = segNext(sf);
 ma = mafNext(mf);
 
-while (ab != NULL && ma != NULL)
+while (sb != NULL && ma != NULL)
 	{
-	if ((ac = ab->components) == NULL)
+	if ((sc = sb->components) == NULL)
 		{
 		warn("Anchor has no first component?\n");
-		ancWrite(stderr, ab);
+		segWrite(stderr, sb);
 		exit(EXIT_FAILURE);
 		}
 	if ((mc = ma->components) == NULL)
@@ -54,7 +54,7 @@ while (ab != NULL && ma != NULL)
 		}
 
 	/* Anchor is to the RIGHT if alignment block */
-	if (ac->start >= (mc->start + mc->size))
+	if (sc->start >= (mc->start + mc->size))
 		{
 		mafAliFree(&ma);
 		ma = mafNext(mf);
@@ -62,16 +62,16 @@ while (ab != NULL && ma != NULL)
 		}
 
 	/* Anchor is to the LEFT of alignment block */
-	if ((ac->start + ab->ancLen) <= mc->start)
+	if ((sc->start + sc->size) <= mc->start)
 		{
-		ancBlockFree(&ab);
-		ab = ancNext(af);
+		segBlockFree(&sb);
+		sb = segNext(sf);
 		continue;
 		}
 
 	/* Anchor & alignment block overlap */
-	cbeg = MAX(ac->start, mc->start);
-	cend = MIN(ac->start + ab->ancLen, mc->start + mc->size);
+	cbeg = MAX(sc->start, mc->start);
+	cend = MIN(sc->start + sc->size, mc->start + mc->size);
 	pos  = mc->start;
 	idx  = 0;
 
@@ -117,7 +117,7 @@ while (ab != NULL && ma != NULL)
 	if (fail)
 		{
 		printf("fail at pos = %d :: idx = %d cbeg = %d :: cend = %d\n", pos, idx, cbeg, cend);
-		ancWrite(stdout, ab);
+		segWrite(stdout, sb);
 		mafWrite(stdout, ma);
 		printf("----------\n");
 		}
@@ -128,7 +128,7 @@ while (ab != NULL && ma != NULL)
 	}
 
 mafFileFree(&mf);
-ancFileFree(&af);
+segFileFree(&sf);
 }
 
 
