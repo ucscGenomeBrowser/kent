@@ -13,18 +13,18 @@ O = gsidSubj.o \
 include ../../../inc/cgi_build_rules.mk
 
 my::
-	rsync -ar --exclude=CVS/ --delete gsidSubjData ${CGI_BIN}-${USER}/
+	rsync -ar --exclude=CVS/ --exclude=.svn/ --delete gsidSubjData ${CGI_BIN}-${USER}/
 	chmod -R a+rX ${CGI_BIN}-${USER}/gsidSubjData
 
 alpha::
 	rm -fr ${CGI_BIN}/gsidSubjData
-	rsync -ar --exclude=CVS/ --delete gsidSubjData ${CGI_BIN}/
+	rsync -ar --exclude=CVS/ --exclude=.svn/ --delete gsidSubjData ${CGI_BIN}/
 	chmod -R g+w ${CGI_BIN}/gsidSubjData
 	chmod -R a+rX ${CGI_BIN}/gsidSubjData
 
 beta::
 	rm -fr ${CGI_BIN}-beta/gsidSubjData
-	rsync -ar --exclude=CVS/ --delete gsidSubjData ${CGI_BIN}-beta/
+	rsync -ar --exclude=CVS/ --exclude=.svn/ --delete gsidSubjData ${CGI_BIN}-beta/
 	chmod -R g+w ${CGI_BIN}-beta/gsidSubjData
 	chmod -R a+rX ${CGI_BIN}-beta/gsidSubjData
 

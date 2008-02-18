@@ -15,18 +15,18 @@ O = hgGene.o altSplice.o dnaBindMotif.o domains.o gad.o\
 include ../../inc/cgi_build_rules.mk
 
 my::
-	rsync -ar --exclude=CVS/ --delete hgGeneData ${CGI_BIN}-${USER}/
+	rsync -ar --exclude=CVS/ --exclude=.svn/ --delete hgGeneData ${CGI_BIN}-${USER}/
 	chmod -R a+rX ${CGI_BIN}-${USER}/hgGeneData
 
 alpha::
 	rm -fr ${CGI_BIN}/hgGeneData
-	rsync -ar --exclude=CVS/ --delete hgGeneData ${CGI_BIN}/
+	rsync -ar --exclude=CVS/ --exclude=.svn/ --delete hgGeneData ${CGI_BIN}/
 	chmod -R g+w ${CGI_BIN}/hgGeneData
 	chmod -R a+rX ${CGI_BIN}/hgGeneData
 
 beta::
 	rm -fr ${CGI_BIN}-beta/hgGeneData
-	rsync -ar --exclude=CVS/ --delete hgGeneData ${CGI_BIN}-beta/
+	rsync -ar --exclude=CVS/ --exclude=.svn/ --delete hgGeneData ${CGI_BIN}-beta/
 	chmod -R g+w ${CGI_BIN}-beta/hgGeneData
 	chmod -R a+rX ${CGI_BIN}-beta/hgGeneData
 
