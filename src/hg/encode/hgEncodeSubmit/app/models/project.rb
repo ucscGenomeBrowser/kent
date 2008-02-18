@@ -8,6 +8,7 @@ class Project < ActiveRecord::Base
   validates_presence_of :project_type_id
   validates_presence_of :status
   validates_presence_of :user_id
+  validates_uniqueness_of   :name
   #validates_presence_of :archives_active # caused problems for new project create
 
   # This works, but I don't even know if I need it.
