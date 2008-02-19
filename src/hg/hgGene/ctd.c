@@ -1,0 +1,119 @@
+/* ctd - do CTD section. */
+
+#include "common.h"
+#include "hash.h"
+#include "linefile.h"
+#include "dystring.h"
+#include "cheapcgi.h"
+#include "spDb.h"
+#include "hgGene.h"
+#include "hdb.h"
+#include "net.h"
+
+static char const rcsid[] = "$Id: ctd.c,v 1.1 2008/02/19 16:45:15 fanhsu Exp $";
+
+static boolean ctdExists(struct section *section, 
+	struct sqlConnection *conn, char *geneId)
+/* Return TRUE if CTD database exists and it has an entry with the gene symbol */
+{
+char condStr[255];
+char *geneSymbol;
+if (sqlTableExists(conn, "ctd.chem_gene_ixns") == TRUE)
+    {
+    safef(condStr, sizeof(condStr), "x.geneSymbol=c.GeneSymbol and kgId='%s' limit 1", geneId);
+    geneSymbol = sqlGetField(conn, database, "kgXref x, ctd.chem_gene_ixns c", 
+    			     "ChemicalId", condStr);
+    if (geneSymbol != NULL) return(TRUE);
+    }
+return(FALSE);
+}
+
+static void ctdPrint(struct section *section, 
+	struct sqlConnection *conn, char *geneId)
+/* Print out CTD section. */
+{
+char condStr[256];
+char query[256];
+struct sqlResult *sr;
+char **row;
+struct sqlConnection *conn2;
+char *chemId, *chemName;
+int chemCnt;
+int first = 1;
+boolean showCompleteCtdList;
+struct dyString *currentCgiUrl;
+
+conn2=hAllocConn();
+
+showCompleteCtdList = FALSE;
+if (cgiOptionalString("showAllCtdRef") != NULL)
+    {
+    if (sameWord(cgiOptionalString("showAllCtdRef"), "Y") ||
+	sameWord(cgiOptionalString("showAllCtdRef"), "y") )
+	{
+	showCompleteCtdList = TRUE;
+	}
+    }
+currentCgiUrl = cgiUrlString();
+    
+/* List chemicals related to this gene */
+safef(query, sizeof(query),
+     "select distinct ChemicalId from kgXref x, ctd.chem_gene_ixns c where x.geneSymbol=c.GeneSymbol and kgId='%s'", geneId);
+
+sr = sqlMustGetResult(conn, query);
+row = sqlNextRow(sr);
+    
+chemCnt = 0;
+while (row != NULL) 
+    {
+    chemId       = cloneString(row[0]);
+    chemName     = cloneString(row[0]);
+   
+    if (first)
+    	{
+	printf("<B>The following chemicals interact with this gene</B>\n");
+	printf("<UL>");
+	first = 0;
+	}
+    
+    safef(condStr, sizeof(condStr), "ChemicalId='%s'", chemId);
+    chemName = cloneString(sqlGetField(NULL, "ctd", "chem_gene_ixns", "ChemicalName", condStr));
+    printf("<LI><A HREF=\"http://ctd.mdibl.org/detail.go?type=chem&acc=%s\" target=_blank>", 
+    	   chemId);
+    printf("%s</B></A>\n", chemId);
+    printf("%s\n", chemName);fflush(stdout);
+	
+    chemCnt++;
+    row = sqlNextRow(sr);
+
+    /* Initially, just show no more than 10 items */
+    if ((!showCompleteCtdList) && (chemCnt >= 10) && (row != NULL))
+	{
+	break;
+	}
+    }
+sqlFreeResult(&sr);
+
+if (!first) printf("</UL>");
+
+/* Offer user the option to see the complete list */
+if ((!showCompleteCtdList) && chemCnt > 10)
+    {
+    printf("<B>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; more ...  </B>");
+    printf("<A HREF=\"%s?showAllCtdRef=Y&TITLE=#ctd&%s\">click here to view the complete list</A> " 
+	   ,"hgGene", currentCgiUrl->string);
+    }
+
+return;
+}
+
+struct section *ctdSection(struct sqlConnection *conn, 
+	struct hash *sectionRa)
+/* Create CTD section. */
+{
+struct section *section = sectionNew(sectionRa, "ctd");
+section->exists = ctdExists;
+section->print = ctdPrint;
+return section;
+}
+
