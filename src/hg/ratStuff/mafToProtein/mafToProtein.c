@@ -25,8 +25,9 @@ errAbort(
   "   -geneName=foobar   name of gene as it appears in frameTable\n"
   "   -geneName=foolst   name of file with list of genes\n"
   "   -chrom=chr1        name of chromosome from which to grab genes\n"
-  "   -exons             output exons\n"
+  "   -frames            output frames\n"
   "   -noTrans           don't translate output into amino acids\n"
+  "   -delay=N           delay N seconds between genes (default 0)\n" 
   );
 }
 
@@ -34,24 +35,26 @@ static struct optionSpec options[] = {
    {"geneName", OPTION_STRING},
    {"geneList", OPTION_STRING},
    {"chrom", OPTION_STRING},
-   {"exons", OPTION_BOOLEAN},
+   {"frames", OPTION_BOOLEAN},
    {"noTrans", OPTION_BOOLEAN},
+   {"delay", OPTION_INT},
    {NULL, 0},
 };
 
 char *geneName = NULL;
 char *geneList = NULL;
 char *onlyChrom = NULL;
-boolean inExons = FALSE;
+boolean inFrames = FALSE;
 boolean noTrans = TRUE;
+int delay = 0;
 
 struct geneInfo
 {
     struct geneInfo *next;
     struct mafFrames *frame;
     struct mafAli *ali;
-    int exonStart;
-    int exonSize;
+    int frameStart;
+    int frameSize;
     char *name;
 };
 
@@ -64,6 +67,7 @@ struct speciesInfo
     char *aaSequence;
 };
 
+/* read a list of single words from a file */
 struct slName *readList(char *fileName)
 {
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
@@ -84,6 +88,7 @@ lineFileClose(&lf);
 return list;
 }
 
+/* query the list of gene names from the frames table */
 struct slName *queryNames(char *dbName, char *frameTable, char *org)
 {
 struct sqlConnection *conn = hAllocConn();
@@ -118,6 +123,7 @@ hFreeConn(&conn);
 return list;
 }
 
+/* load a set of mafFrames from the database */
 struct mafFrames *getFrames(char *geneName, char *frameTable, char *org)
 {
 struct sqlConnection *conn = hAllocConn();
@@ -152,6 +158,7 @@ return list;
 }
 
 
+/* get the maf alignments for a particular mafFrame */
 struct mafAli *getAliForFrame(char *mafTable, struct mafFrames *frame)
 {
 struct sqlConnection *conn = hAllocConn();
@@ -161,8 +168,6 @@ struct mafAli *ali;
 struct mafAli *list = NULL;
 struct mafAli *nextAli;
 
-//printf("getting alis for %s:%d-%d\n",frame->chrom, 
-    //frame->chromStart + 1, frame->chromEnd);
 for(ali = aliAll; ali; ali = nextAli)
     {
     nextAli = ali->next;
@@ -173,15 +178,10 @@ for(ali = aliAll; ali; ali = nextAli)
 
     if (mafNeedSubset(ali, masterSrc, frame->chromStart, frame->chromEnd))
 	{
-//	printf("got subset\n");
 	subAli = mafSubset( ali, masterSrc, 
 	    frame->chromStart, frame->chromEnd);
-	//mafWrite(stdout, subAli);
 	if (subAli == NULL)
-	    {
-	    printf("subAli is NULL\n");
 	    continue;
-	    }
 	}
 
     if (subAli)
@@ -199,6 +199,7 @@ hFreeConn(&conn);
 return list;
 }
 
+/* allocate space for the nuc and aa sequence for each species */
 struct speciesInfo *getSpeciesInfo(struct geneInfo *giList, 
     struct slName *speciesNames, struct hash *siHash)
 {
@@ -229,13 +230,18 @@ slReverse(&siList);
 return siList;
 }
 
-
-void outSpeciesExon(FILE *f, struct speciesInfo *si, struct geneInfo *gi)
+/* this is was meant to be an exon output, but it turns out
+ * that frames don't correspond to exons 
+ */
+void outSpeciesFrames(FILE *f, struct speciesInfo *si, struct geneInfo *gi)
 {
-errAbort("haven't implemented trans with exons");
+errAbort("haven't implemented trans with frames");
 }
 
-void outSpeciesExonNoTrans(FILE *f, struct speciesInfo *si, struct geneInfo *gi)
+/* this is really only useful for debug since frames 
+ * don't correspond to exons
+ */
+void outSpeciesFramesNoTrans(FILE *f, struct speciesInfo *si, struct geneInfo *gi)
 {
 int start = 0;
 int exonNum = 0;
@@ -245,7 +251,7 @@ for(; gi; gi = gi->next, exonNum++)
     {
     struct speciesInfo *siTemp = si;
 
-    end = start + gi->exonSize;
+    end = start + gi->frameSize;
 
     for(; siTemp ; siTemp = siTemp->next)
 	{
@@ -257,6 +263,10 @@ for(; gi; gi = gi->next, exonNum++)
     }
 }
 
+/* translate a nuc sequence into amino acids. If there
+ * are any dashes in any of the three nuc positions
+ * make the AA a dash.
+ */
 aaSeq *doTranslate(struct dnaSeq *inSeq, unsigned offset, 
     unsigned inSize, boolean stop)
 {
@@ -300,6 +310,7 @@ seq->name = cloneString(inSeq->name);
 return seq;
 }
 
+/* translate nuc sequence into an sequence of amino acids */
 void translateProtein(struct speciesInfo *si)
 {
 struct dnaSeq thisSeq;
@@ -311,6 +322,7 @@ outSeq =  doTranslate(&thisSeq, 0,  0, FALSE);
 si->aaSequence  = outSeq->dna;
 }
 
+/* is the sequence all dashes ? */
 boolean allDashes(char *seq)
 {
 while (*seq)
@@ -320,12 +332,13 @@ while (*seq)
 return TRUE;
 }
 
+/* output a particular species sequence to the file stream */
 void writeOutSpecies(FILE *f, struct speciesInfo *si, struct geneInfo *gi)
 {
 if (noTrans)
     {
-    if (inExons)
-	outSpeciesExonNoTrans(f, si, gi);
+    if (inFrames)
+	outSpeciesFramesNoTrans(f, si, gi);
     else
 	{
 	for(; si ; si = si->next)
@@ -337,13 +350,12 @@ if (noTrans)
     }
 else
     {
-    if (inExons)
-	outSpeciesExon(f, si, gi);
+    if (inFrames)
+	outSpeciesFrames(f, si, gi);
     else
 	{
 	for(; si ; si = si->next)
 	    {
-
 	    translateProtein(si);
 	    if (!allDashes(si->aaSequence))
 		{
@@ -355,11 +367,17 @@ else
     }
 }
 
+/* rather than allocate space for these every time,
+ * just re-use a global resource
+ */
 #define MAX_COMPS  	5000 
 char *compText[MAX_COMPS]; 
 char *siText[MAX_COMPS]; 
 
-int ii, jj;
+/* copy the maf alignments into the species sequence buffers.
+ * remove all the dashes from the reference sequence, and collapse
+ * all the separate maf blocks into one sequence
+ */
 int copyAli(struct hash *siHash, struct mafAli *ali, int start)
 {
 struct mafComp *comp = ali->components;
@@ -374,11 +392,12 @@ for(; comp; comp = comp->next)
 
     *ptr = 0;
 
-    struct speciesInfo *si = hashMustFindVal(siHash, comp->src);
+    struct speciesInfo *si = hashFindVal(siHash, comp->src);
+    if (si == NULL)
+	continue;
+
     compText[num] = comp->text;
-    //printf("comp->text %p\n",comp->text);
     siText[num] = &si->nucSequence[start];
-    //printf("siText[%d] %p]\n",num, &si->nucSequence[start]);
     ++num;
     if (num == MAX_COMPS)
 	errAbort("can only deal with maf's with less than %d components",
@@ -386,6 +405,7 @@ for(; comp; comp = comp->next)
     }
 
 int count = 0; 
+int ii, jj;
 
 for(jj = 0 ; jj < ali->textSize; jj++)
     {
@@ -407,6 +427,9 @@ for(jj = 0 ; jj < ali->textSize; jj++)
 return start + count;
 }
 
+/* copyMafs - copy all the maf alignments into 
+ * one sequence for each species
+ */
 void copyMafs(struct hash *siHash, struct geneInfo *giList)
 {
 int start = 0;
@@ -414,18 +437,13 @@ struct geneInfo *gi = giList;
 
 for(; gi; gi = gi->next)
     {
-
     struct mafAli *ali = gi->ali;
-//    for(; ali; ali = ali->next)
-//	mafWrite(stdout, ali);
 
-
-    gi->exonStart = start;
- //   ali = gi->ali;
+    gi->frameStart = start;
     for(; ali; ali = ali->next)
 	start = copyAli(siHash, ali, start);
 
-    gi->exonSize = start - gi->exonStart;
+    gi->frameSize = start - gi->frameStart;
     }
 
 struct mafComp *comp = giList->ali->components;
@@ -437,7 +455,10 @@ if (frameNeg)
 
     for(; comp; comp = comp->next)
 	{
-	struct speciesInfo *si = hashMustFindVal(siHash, comp->src);
+	struct speciesInfo *si = hashFindVal(siHash, comp->src);
+
+	if (si == NULL)
+	    continue;
 
 	size = si->size;
 	reverseComplement(si->nucSequence, si->size);
@@ -446,27 +467,56 @@ if (frameNeg)
     gi = giList;
     for(; gi; gi = gi->next)
 	{
-//	printf("exonStart was %d, size %d, length %d\n",gi->exonStart, size, gi->exonSize);
-	gi->exonStart = size - (gi->exonStart + gi->exonSize);
-//	printf("exonStart now %d\n",gi->exonStart);
+	gi->frameStart = size - (gi->frameStart + gi->frameSize);
 	}
     }
 }
 
+/* free species info list */
+void freeSpeciesInfo(struct speciesInfo *list)
+{
+struct speciesInfo *siNext;
+
+for(; list ; list = siNext)
+    {
+    siNext = list->next;
+
+    freez(&list->nucSequence);
+    freez(&list->aaSequence);
+    }
+}
+
+/* free geneInfo list */
+void freeGIList(struct geneInfo *list)
+{
+struct geneInfo *giNext;
+
+for(; list ; list = giNext)
+    {
+    giNext = list->next;
+
+    mafFramesFreeList(&list->frame);
+    mafAliFreeList(&list->ali);
+    }
+}
+ 
+/* output the sequence for one gene for every species to 
+ * the file stream 
+ */
 void outGene(FILE *f, char *geneName, char *mafTable, char *frameTable, 
     char *org, struct slName *speciesNameList)
 {
 struct mafFrames *frames = getFrames(geneName, frameTable, org);
-struct mafFrames *frame;
-//struct sqlConnection *conn = hAllocConn();
+struct mafFrames *frame, *nextFrame;
 struct geneInfo *giList = NULL;
 
-printf("outing gene %s\n",geneName);
-for(frame = frames; frame; frame = frame->next)
+for(frame = frames; frame; frame = nextFrame)
     {
     struct geneInfo *gi;
 
     AllocVar(gi);
+    nextFrame = frame->next;
+    frame->next = NULL;
     gi->frame = frame;
     gi->name = frame->name;
     gi->ali = getAliForFrame(mafTable, frame);
@@ -481,7 +531,8 @@ struct speciesInfo *speciesList = getSpeciesInfo(giList, speciesNameList,
 copyMafs(speciesInfoHash, giList);
 writeOutSpecies(f, speciesList, giList);
 
-//hFreeConn(&conn);
+freeSpeciesInfo(speciesList);
+freeGIList(giList);
 }
 
 void mafToProtein(char *dbName, char *mafTable, char *frameTable, 
@@ -506,7 +557,15 @@ else
     geneNames = queryNames(dbName, frameTable, org);
 
 for(; geneNames; geneNames = geneNames->next)
+    {
+    verbose(2, "outting  gene %s \n",geneNames->name);
     outGene(f, geneNames->name, mafTable, frameTable, org, speciesNames);
+    if (delay)
+	{
+	verbose(2, "delaying %d seconds\n",delay);
+	sleep(delay);
+	}
+    }
 }
 
 int main(int argc, char *argv[])
@@ -520,8 +579,9 @@ if (argc != 7)
 geneName = optionVal("geneName", geneName);
 geneList = optionVal("geneList", geneList);
 onlyChrom = optionVal("chrom", onlyChrom);
-inExons = optionExists("exons");
+inFrames = optionExists("frames");
 noTrans = optionExists("noTrans");
+delay = optionInt("delay", delay);
 
 if ((geneName != NULL) && (geneList != NULL))
     errAbort("cannot specify both geneList and geneName");
