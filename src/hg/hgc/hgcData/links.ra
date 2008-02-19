@@ -141,6 +141,12 @@ label KinMutBase
 url http://bioinf.uta.fi/cgi-bin/submit/kmb/KMBfetch.cgi?%s
 acc yes
 
+name CBS
+label CBS
+url http://cbs.lf1.cuni.cz/search_res.php?what=search&submit=Submit&search=%s
+acc yes
+needsEncoded yes
+
 name CA2base
 label CA2base
 url http://bioinf.uta.fi/cgi-bin/fetch_idbase.cgi?gene=CA2;view=full;mut=%s
