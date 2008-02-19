@@ -17,7 +17,7 @@
 #include "hgColors.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.107 2007/08/03 16:33:17 hiram Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.108 2008/02/19 16:47:21 fanhsu Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -353,6 +353,7 @@ readRa("section.ra", &sectionRa);
 addGoodSection(linksSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(otherOrgsSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(gadSection(conn, sectionRa), conn, &sectionList);
+addGoodSection(ctdSection(conn, sectionRa), conn, &sectionList);
 
 //addGoodSection(microarraySection(conn, sectionRa), conn, &sectionList);
 /* temporarily disable microarray section for Zebrafish, until a bug is fixed */

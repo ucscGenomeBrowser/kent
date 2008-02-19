@@ -13,6 +13,12 @@ priority 20
 #longLabel Sequence
 #priority 30
 #
+
+name ctd
+shortLabel CTD
+longLabel Comparative Toxicogenomics Database (CTD)
+priority 35.2
+
 name gad
 shortLabel Genetic Associations
 longLabel Genetic Association Studies of Complex Diseases and Disorders
