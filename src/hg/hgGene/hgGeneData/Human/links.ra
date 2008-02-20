@@ -16,8 +16,8 @@ priority 10
 name huge
 shortLabel HuGE
 tables huge
-idSql select huge.geneSymbol from kgXref, huge where kgID = '%s' and kgXref.geneSymbol = huge.geneSymbol
-url http://www.hugenavigator.net/HuGENavigator/huGEPedia.do?firstQuery=NONE&geneID=%s&check=y&which=2&typeSubmit=GO&typeOption=gene&pubOrderType=pubD
+idSql select huge.geneSymbol, l.value from kgXref, huge, knownToLocusLink l where kgID = '%s' and kgXref.geneSymbol = huge.geneSymbol and kgID=l.name
+url http://hugenavigator.net/HuGENavigator/searchSummary.do?firstQuery=%s&publitSearchType=now&whichContinue=firststart&check=n&dbType=publit&Mysubmit=go
 priority 10
 
 name geneTests
@@ -67,6 +67,13 @@ priority 10
 
 name ensembl
 url http://www.ensembl.org/Homo_sapiens/geneview?transcript=%s
+
+name allenBrain
+shortLabel Allen Brain Atlas
+tables allenBrainGene
+idSql select a.geneSymbol from kgXref x, allenBrainGene a where x.geneSymbol=a.geneSymbol and kgId='%s'
+url http://humancortex.alleninstitute.org/has/human/brain/%s.html 
+priority 10.2
 
 name aceView
 shortLabel AceView
