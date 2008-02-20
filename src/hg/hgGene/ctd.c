@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "net.h"
 
-static char const rcsid[] = "$Id: ctd.c,v 1.1 2008/02/19 16:45:15 fanhsu Exp $";
+static char const rcsid[] = "$Id: ctd.c,v 1.2 2008/02/20 18:12:34 fanhsu Exp $";
 
 static boolean ctdExists(struct section *section, 
 	struct sqlConnection *conn, char *geneId)
@@ -85,10 +85,10 @@ while (row != NULL)
 	
     chemCnt++;
     row = sqlNextRow(sr);
-
     /* Initially, just show no more than 10 items */
     if ((!showCompleteCtdList) && (chemCnt >= 10) && (row != NULL))
 	{
+	chemCnt++;
 	break;
 	}
     }
