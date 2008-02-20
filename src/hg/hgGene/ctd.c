@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "net.h"
 
-static char const rcsid[] = "$Id: ctd.c,v 1.2 2008/02/20 18:12:34 fanhsu Exp $";
+static char const rcsid[] = "$Id: ctd.c,v 1.3 2008/02/20 23:23:07 fanhsu Exp $";
 
 static boolean ctdExists(struct section *section, 
 	struct sqlConnection *conn, char *geneId)
@@ -32,7 +32,6 @@ static void ctdPrint(struct section *section,
 	struct sqlConnection *conn, char *geneId)
 /* Print out CTD section. */
 {
-char condStr[256];
 char query[256];
 struct sqlResult *sr;
 char **row;
@@ -58,7 +57,7 @@ currentCgiUrl = cgiUrlString();
     
 /* List chemicals related to this gene */
 safef(query, sizeof(query),
-     "select distinct ChemicalId from kgXref x, ctd.chem_gene_ixns c where x.geneSymbol=c.GeneSymbol and kgId='%s'", geneId);
+     "select ChemicalId, ChemicalName from kgXref x, ctd.ctdSorted c where x.geneSymbol=c.GeneSymbol and kgId='%s'", geneId);
 
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
@@ -66,8 +65,8 @@ row = sqlNextRow(sr);
 chemCnt = 0;
 while (row != NULL) 
     {
-    chemId       = cloneString(row[0]);
-    chemName     = cloneString(row[0]);
+    chemId   = cloneString(row[0]);
+    chemName = cloneString(row[1]);
    
     if (first)
     	{
@@ -76,8 +75,6 @@ while (row != NULL)
 	first = 0;
 	}
     
-    safef(condStr, sizeof(condStr), "ChemicalId='%s'", chemId);
-    chemName = cloneString(sqlGetField(NULL, "ctd", "chem_gene_ixns", "ChemicalName", condStr));
     printf("<LI><A HREF=\"http://ctd.mdibl.org/detail.go?type=chem&acc=%s\" target=_blank>", 
     	   chemId);
     printf("%s</B></A>\n", chemId);
