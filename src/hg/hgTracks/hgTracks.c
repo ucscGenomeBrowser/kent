@@ -118,7 +118,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1433 2008/02/20 00:42:26 markd Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1434 2008/02/20 06:17:09 markd Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -8762,8 +8762,9 @@ void drawComplementArrow( struct hvGfx *hvg, int x, int y,
                                 int width, int height, MgFont *font)
 /* Draw arrow and create clickbox for complementing ruler bases */
 {
-char *text =  cartUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE)
-    ?"<---" : "--->";
+boolean baseCmpl = cartUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE);
+// reverse arrow when base complement doesn't match display
+char *text =  (baseCmpl == revCmplDisp) ? "--->" : "<---";
 hvGfxTextRight(hvg, x, y, width, height, MG_BLACK, font, text);
 mapBoxToggleComplement(hvg, x, y, width, height, NULL, chromName, winStart, winEnd,
                        "complement bases");
