@@ -12,7 +12,7 @@
 #include "vGfxPrivate.h"
 #include "colHash.h"
 
-static char const rcsid[] = "$Id: memgfx.c,v 1.47 2007/04/15 00:33:35 galt Exp $";
+static char const rcsid[] = "$Id: memgfx.c,v 1.48 2008/02/20 00:42:33 markd Exp $";
 
 static void mgSetDefaultColorMap(struct memGfx *mg)
 /* Set up default color map for a memGfx. */
@@ -565,6 +565,12 @@ int mgFontPixelHeight(MgFont *font)
 return font_cel_height(font);
 }
 
+int mgGetFontPixelHeight(struct memGfx *mg, MgFont *font)
+/* How high in pixels is font? */
+{
+return mgFontPixelHeight(font);
+}
+
 int mgFontLineHeight(MgFont *font)
 /* How many pixels to next line ideally? */
 {
@@ -582,6 +588,12 @@ int mgFontStringWidth(MgFont *font, char *string)
 /* How wide is a string? */
 {
 return mgFontWidth(font, string, strlen(string));
+}
+
+int mgGetFontStringWidth(struct memGfx *mg, MgFont *font, char *string)
+/* How wide is a string? */
+{
+return mgFontStringWidth(font, string);
 }
 
 int mgFontCharWidth(MgFont *font, char c)
@@ -660,5 +672,6 @@ vg->fillUnder = (vg_fillUnder)mgFillUnder;
 vg->drawPoly = (vg_drawPoly)mgDrawPoly;
 vg->setHint = (vg_setHint)mgSetHint;
 vg->getHint = (vg_getHint)mgGetHint;
+vg->getFontPixelHeight = (vg_getFontPixelHeight)mgGetFontPixelHeight;
+vg->getFontStringWidth = (vg_getFontStringWidth)mgGetFontStringWidth;
 }
-

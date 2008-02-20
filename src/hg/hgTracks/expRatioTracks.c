@@ -160,13 +160,14 @@ return tg->height;
 
 
 
-void mapBoxHcTwoItems(int start, int end, int x, int y, int width, int height, 
+void mapBoxHcTwoItems(struct hvGfx *hvg, int start, int end, int x, int y, int width, int height, 
 	char *track, char *item1, char *item2, char *statusLine)
 /* Print out image map rectangle that would invoke the htc (human track click)
  * program. */
 {
-  char *encodedItem1 = cgiEncode(item1);
+char *encodedItem1 = cgiEncode(item1);
 char *encodedItem2 = cgiEncode(item2);
+x = hvGfxAdjXW(hvg, x, width);
 hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
 hPrintf("HREF=\"%s&o=%d&t=%d&g=%s&i=%s&i2=%s&c=%s&l=%d&r=%d&db=%s&pix=%d\" ", 
        hgcNameAndSettings(), start, end, track, encodedItem1, encodedItem2,chromName, winStart, winEnd, 
@@ -206,11 +207,11 @@ for(i = 0; i < ArraySize(tissues); i++)
 return -1;
 }
 
-void lfsMapItemName(struct track *tg, void *item, char *itemName, char *mapItemName, int start, int end, 
+void lfsMapItemName(struct track *tg, struct hvGfx *hvg, void *item, char *itemName, char *mapItemName, int start, int end, 
 		    int x, int y, int width, int height)
 {
 if(tg->visibility != tvDense && tg->visibility != tvHide)
-    mapBoxHcTwoItems(start, end, x,y, width, height, tg->mapName, itemName, itemName, itemName);
+    mapBoxHcTwoItems(hvg, start, end, x,y, width, height, tg->mapName, itemName, itemName, itemName);
 }
 
 
@@ -811,7 +812,7 @@ return lfsList;
 }
 
 
-Color cghNci60Color(struct track *tg, void *item, struct vGfx *vg ) 
+Color cghNci60Color(struct track *tg, void *item, struct hvGfx *hvg ) 
 {
 struct linkedFeatures *lf = item;
 float val = lf->score;
@@ -823,7 +824,7 @@ char *colorScheme = cartUsualString(cart, "cghNci60.color", "gr");
 
 /* Make sure colors available */
 if(!exprBedColorsMade)
-    makeRedGreenShades(vg);
+    makeRedGreenShades(hvg);
 if(val == -10000)
     return shadesOfGray[5];
 
@@ -867,7 +868,7 @@ else
 }
 
 
-Color expressionScoreColor(struct track *tg, float val, struct vGfx *vg,
+Color expressionScoreColor(struct track *tg, float val, struct hvGfx *hvg,
 		 float denseMax, float fullMax) 
 /* Does the score->color conversion for various microarray tracks */
 /* NOTE: item is a linkedFeatures struct */
@@ -897,7 +898,7 @@ if(val <= -10000)
 /*     absVal = absVal/1000; */
  
 if(!exprBedColorsMade)
-    makeRedGreenShades(vg);
+    makeRedGreenShades(hvg);
 
 /* cap the value to be less than or equal to maxDeviation */
 if (tg->limitedVis == tvFull || tg->limitedVis == tvPack || tg->limitedVis == tvSquish)
@@ -930,7 +931,7 @@ else
 }
 
 /*For Lowe Lab arrays with M and A values*/
-Color loweExpressionScoreColor(struct track *tg, float val, struct vGfx *vg,
+Color loweExpressionScoreColor(struct track *tg, float val, struct hvGfx *hvg,
 		 float denseMax, float fullMax) 
 /* Does the score->color conversion for various microarray tracks */
 /* NOTE: item is a linkedFeatures struct */
@@ -961,9 +962,9 @@ if(val <= (-1*addednumber))
  
 if(tg->limitedVis == tvDense)
     absVal = absVal/1000;
- makeLoweShades(vg);
+ makeLoweShades(hvg);
 if(!exprBedColorsMade)
-    makeRedGreenShades(vg);
+    makeRedGreenShades(hvg);
 
 /* cap the value to be less than or equal to maxDeviation */
 if (tg->limitedVis == tvFull || tg->limitedVis == tvPack || tg->limitedVis == tvSquish)
@@ -1004,27 +1005,27 @@ else
     }
 }
 
-Color expressionColor(struct track *tg, void *item, struct vGfx *vg,
+Color expressionColor(struct track *tg, void *item, struct hvGfx *hvg,
 		 float denseMax, float fullMax) 
 /* Does the score->color conversion for various microarray tracks */
 {
 struct linkedFeatures *lf = item;
-return expressionScoreColor(tg, lf->score, vg, denseMax, fullMax);
+return expressionScoreColor(tg, lf->score, hvg, denseMax, fullMax);
 }
 
 /*For Lowe Lab arrays with M and A values*/
-Color loweExpressionColor(struct track *tg, void *item, struct vGfx *vg,
+Color loweExpressionColor(struct track *tg, void *item, struct hvGfx *hvg,
 		 float denseMax, float fullMax) 
 /* Does the score->color conversion for various microarray tracks */
 {
 struct linkedFeatures *lf = item;
-return loweExpressionScoreColor(tg, lf->score, vg, denseMax, fullMax);
+return loweExpressionScoreColor(tg, lf->score, hvg, denseMax, fullMax);
 }
 
-Color nci60Color(struct track *tg, void *item, struct vGfx *vg)
+Color nci60Color(struct track *tg, void *item, struct hvGfx *hvg)
 /* Does the score->color conversion for various microarray tracks */
 {
-return expressionColor(tg, item, vg, 1.0, 2.6);
+return expressionColor(tg, item, hvg, 1.0, 2.6);
 }
 
 Color getColorForAffyExpssn(float val, float max)
@@ -1062,7 +1063,7 @@ colorIndex = (int)(val * maxShade/max);
 return shadesOfSea[colorIndex];
 }
 
-Color affyColor(struct track *tg, void *item, struct vGfx *vg)
+Color affyColor(struct track *tg, void *item, struct hvGfx *hvg)
 /* Does the score->color conversion for affymetrix arrays */
 {
 struct linkedFeatures *lf = item;
@@ -1070,11 +1071,11 @@ float score = lf->score;
 if(tg->visibility == tvDense)
     score = score/10;
 if(!exprBedColorsMade)
-    makeRedGreenShades(vg);
+    makeRedGreenShades(hvg);
 return getColorForAffyExpssn(score, 262144/16); /* 262144 == 2^18 */
 }
 
-Color affyRatioColor(struct track *tg, void *item, struct vGfx *vg)
+Color affyRatioColor(struct track *tg, void *item, struct hvGfx *hvg)
 /* Does the score->color conversion for affymetrix arrays using ratios,
  * if dense do an intensity color in blue based on score value otherwise do
  * red/green display from expScores */
@@ -1082,7 +1083,7 @@ Color affyRatioColor(struct track *tg, void *item, struct vGfx *vg)
 struct linkedFeatures *lf = item;
 float score = lf->score;
 if(!exprBedColorsMade)
-    makeRedGreenShades(vg);
+    makeRedGreenShades(hvg);
 if(tg->limitedVis == tvDense || tg->limitedVis == tvPack || tg->limitedVis == tvSquish)
     {
     score = score/10;
@@ -1090,23 +1091,23 @@ if(tg->limitedVis == tvDense || tg->limitedVis == tvPack || tg->limitedVis == tv
     }
 else
     {
-    return expressionColor(tg, item, vg, 1.0, 3.0);
+    return expressionColor(tg, item, hvg, 1.0, 3.0);
     }
 }
 
-Color expRatioColor(struct track *tg, void *item, struct vGfx *vg)
+Color expRatioColor(struct track *tg, void *item, struct hvGfx *hvg)
 /* Does the score->color conversion  */
 {
 struct linkedFeatures *lf;
 struct linkedFeaturesSeries *lfs;
 if(!exprBedColorsMade)
-    makeRedGreenShades(vg);
+    makeRedGreenShades(hvg);
 if(tg->visibility == tvDense)
     {
     lfs = item;
     if (trackDbSetting(tg->tdb, EXP_COLOR_DENSE))
         /* scaled by 1000.  Brighten up just a bit... */
-        return expressionScoreColor(tg, lfs->grayIx * 1100, vg, tg->expScale, 
+        return expressionScoreColor(tg, lfs->grayIx * 1100, hvg, tg->expScale, 
                                                         tg->expScale);
     else
         return MG_BLACK;
@@ -1114,42 +1115,42 @@ if(tg->visibility == tvDense)
 else
     {
     lf = item;
-    return expressionColor(tg, item, vg, tg->expScale, tg->expScale);
+    return expressionColor(tg, item, hvg, tg->expScale, tg->expScale);
     }
 }
 
-Color affyUclaNormColor(struct track *tg, void *item, struct vGfx *vg)
+Color affyUclaNormColor(struct track *tg, void *item, struct hvGfx *hvg)
 /* Does the score->color conversion for affymetrix arrays using ratios,
  * if dense do an intensity color in blue based on score value otherwise do
  * red/green display from expScores */
 {
 struct linkedFeatures *lf = item;
 if(!exprBedColorsMade)
-    makeRedGreenShades(vg);
+    makeRedGreenShades(hvg);
 if(tg->customInt != 1)
     {
     return shadesOfSea[grayInRange(lf->score, 0, 1000)];
     }
 else
     {
-    return expressionColor(tg, item, vg, 1.0, 3.0);
+    return expressionColor(tg, item, hvg, 1.0, 3.0);
     }
 }
 
 /*For Lowe Lab arrays with M and A values*/
-Color loweRatioColor(struct track *tg, void *item, struct vGfx *vg)
+Color loweRatioColor(struct track *tg, void *item, struct hvGfx *hvg)
 /* Does the score->color conversion  */
 {
 struct linkedFeatures *lf;
 struct linkedFeaturesSeries *lfs;
 if(!exprBedColorsMade)
-    makeRedGreenShades(vg);
+    makeRedGreenShades(hvg);
 if(tg->visibility == tvDense)
     {
     lfs = item;
     if (trackDbSetting(tg->tdb, EXP_COLOR_DENSE))
         /* scaled by 1000.  Brighten up just a bit... */
-        return loweExpressionScoreColor(tg, lfs->grayIx * 1100, vg, tg->expScale, 
+        return loweExpressionScoreColor(tg, lfs->grayIx * 1100, hvg, tg->expScale, 
                                                         tg->expScale);
     else
         return MG_BLACK;
@@ -1157,7 +1158,7 @@ if(tg->visibility == tvDense)
 else
     {
     lf = item;
-    return loweExpressionColor(tg, item, vg, tg->expScale, tg->expScale);
+    return loweExpressionColor(tg, item, hvg, tg->expScale, tg->expScale);
     }
 }
 
@@ -1294,7 +1295,7 @@ for(lfs = tg->items; lfs != NULL; lfs = lfs->next)
 }
 
 void expRatioDrawLeftLabels(struct track *tg, int seqStart, int seqEnd,
-	struct vGfx *vg, int xOff, int yOff, int width, int height, 
+	struct hvGfx *hvg, int xOff, int yOff, int width, int height, 
 	boolean withCenterLabels, MgFont *font,
 	Color color, enum trackVisibility vis)
 /* Because I want the labels to appear in pack mode, and make the display */
@@ -1314,8 +1315,8 @@ if ((vis == tvFull) || (vis == tvPack))
     /* mode.  This resets it to being the same as full mode. */
     if (vis == tvPack)
 	{
-	vgUnclip(vg);
-	vgSetClip(vg, xOff, yOff, width, height);
+	hvGfxUnclip(hvg);
+	hvGfxSetClip(hvg, xOff, yOff, width, height);
 	}
     /* Go through and print each label, no mystery here. */
     /* Apply filtering here */
@@ -1332,14 +1333,14 @@ if ((vis == tvFull) || (vis == tvPack))
 		clinicalItem = (struct simpleClinical *)hel->val;
 		if (ucsfdemoMatch(clinicalItem->er, clinicalItem->pr))
 		    {
-	            vgTextRight(vg, leftLabelX, y, width - 1, itemHeight, color, font, name);
+	            hvGfxTextRight(hvg, leftLabelX, y, width - 1, itemHeight, color, font, name);
 	            y += itemHeight;
 		    }
                 }
 	    }
 	else
 	    {
-	    vgTextRight(vg, leftLabelX, y, width - 1, itemHeight, color, font, name);
+	    hvGfxTextRight(hvg, leftLabelX, y, width - 1, itemHeight, color, font, name);
 	    y += itemHeight;
 	    }
 	}
@@ -1347,11 +1348,11 @@ if ((vis == tvFull) || (vis == tvPack))
 else if (vis == tvDense)
     /* In dense mode it's just the shortLabel. */
     {
-    vgTextRight(vg, leftLabelX, y, width - 1, tg->lineHeight, color, font, tg->shortLabel);
+    hvGfxTextRight(hvg, leftLabelX, y, width - 1, tg->lineHeight, color, font, tg->shortLabel);
     }
 }
 
-static void expRatioMapBoxes(struct track *tg, int seqStart, int seqEnd, int xOff, int yOff, int width)
+static void expRatioMapBoxes(struct track *tg, struct hvGfx *hvg, int seqStart, int seqEnd, int xOff, int yOff, int width)
 /* This function makes clickable mapboxes on the browser window for a */
 /* microarray track.  */
 {
@@ -1377,7 +1378,7 @@ if ((nProbes > MICROARRAY_CLICK_LIMIT) &&
     hPrintf("HREF=\"%s&g=%s&c=%s&l=%d&r=%d&db=%s&i=zoomInMore\" ", 
 	    hgcNameAndSettings(), tg->mapName, chromName, winStart, winEnd, database);
     hPrintf("TITLE=\"zoomInMore\">\n");
-    }
+     }
 else
     {
     struct linkedFeatures *probe;
@@ -1397,7 +1398,7 @@ else
             for (item = tg->items; item != NULL; item = item->next)
                 {
                 char *name = tg->itemName(tg, item);
-                mapBoxHcTwoItems(winStart, winEnd, xOff, y, winEnd-winStart, lineHeight, tg->mapName, name, name, name); 
+                mapBoxHcTwoItems(hvg, winStart, winEnd, xOff, y, winEnd-winStart, lineHeight, tg->mapName, name, name, name); 
                 y = y + lineHeight;
                 }
 	    break;
@@ -1418,7 +1419,7 @@ else
 		    clinicalItem = (struct simpleClinical *)hel->val;
 		    if (ucsfdemoMatch(clinicalItem->er, clinicalItem->pr))
 		        {
-                        mapBoxHcTwoItems(winStart, winEnd, xOff, y, winEnd-winStart, lineHeight, tg->mapName, name, name, name); 
+                        mapBoxHcTwoItems(hvg, winStart, winEnd, xOff, y, winEnd-winStart, lineHeight, tg->mapName, name, name, name); 
                         y = y + lineHeight;
 			}
 		    }
@@ -1426,7 +1427,7 @@ else
 	    break;
 	    }
 	else 
-	    mapBoxHcTwoItems(probe->start, probe->end, x1+xOff, y, w, totalHeight, tg->mapName, probe->name, probe->name, probe->name);
+	    mapBoxHcTwoItems(hvg, probe->start, probe->end, x1+xOff, y, w, totalHeight, tg->mapName, probe->name, probe->name, probe->name);
 	}
     }
 }
@@ -1490,7 +1491,7 @@ freeMem(pixCountArray);
 }
 
 void expRatioDrawItemsWithExons(struct track *tg, int seqStart, int seqEnd,
-	struct vGfx *vg, int xOff, int yOff, int width, 
+	struct hvGfx *hvg, int xOff, int yOff, int width, 
 	MgFont *font, Color color, enum trackVisibility vis)
 /* Draw the microarray measurements and show exons.  A cart var should be */
 /* on to access this function instead of directly. */
@@ -1502,14 +1503,14 @@ struct slList *item;
 for (item = tg->items; item != NULL; item = item->next)
     {
     if(tg->itemColor != NULL) 
-	color = tg->itemColor(tg, item, vg);
-    linkedFeaturesSeriesDrawAt(tg, item, vg, xOff, y, scale, font, color, vis);
+	color = tg->itemColor(tg, item, hvg);
+    linkedFeaturesSeriesDrawAt(tg, item, hvg, xOff, y, scale, font, color, vis);
     y += lineHeight;
     } 
 }
 
 void expRatioDrawItems(struct track *tg, int seqStart, int seqEnd,
-	struct vGfx *vg, int xOff, int yOff, int width, 
+	struct hvGfx *hvg, int xOff, int yOff, int width, 
 	MgFont *font, Color color, enum trackVisibility vis)
 /* Draw the microarray measurements, and do it a lot faster than */
 /* genericDrawItems would. */
@@ -1532,7 +1533,7 @@ safef(exonDrawCartName, sizeof(exonDrawCartName), "%s.expDrawExons", tg->mapName
 drawExonChecked = cartCgiUsualBoolean(cart, exonDrawCartName, FALSE);
 if (drawExons && sameWord(drawExons, "on") && drawExonChecked)
     {
-    expRatioDrawItemsWithExons(tg, seqStart, seqEnd, vg, xOff, yOff, width,
+    expRatioDrawItemsWithExons(tg, seqStart, seqEnd, hvg, xOff, yOff, width,
 			       font, color, vis);
     }
 else
@@ -1562,8 +1563,8 @@ else
 			}
 		if (goodMeasures == 0)
 		    biggest = MICROARRAY_MISSING_DATA;
-		theColor = expressionScoreColor(tg, biggest, vg, tg->expScale, tg->expScale);
-		vgLine(vg, xOff + i, y, xOff + i, y + heightPer - 1, theColor);
+		theColor = expressionScoreColor(tg, biggest, hvg, tg->expScale, tg->expScale);
+		hvGfxLine(hvg, xOff + i, y, xOff + i, y + heightPer - 1, theColor);
 		}
 	    }
 	}
@@ -1594,8 +1595,8 @@ else
 		{
 		if (pixCountArray[j] > 0)
 		    {
-		    Color theColor = expressionScoreColor(tg, pixScoreArray[i][j], vg, tg->expScale, tg->expScale);
-		    vgLine(vg, xOff + j, y, xOff + j, y + heightPer - 1, theColor);
+		    Color theColor = expressionScoreColor(tg, pixScoreArray[i][j], hvg, tg->expScale, tg->expScale);
+		    hvGfxLine(hvg, xOff + j, y, xOff + j, y + heightPer - 1, theColor);
 		    }
 		}
 	    y += lineHeight;
@@ -1603,7 +1604,7 @@ else
 	}
 /* Make the clickable mapboxes in full or pack. */
     if ((vis == tvFull) || (vis == tvPack))
-	expRatioMapBoxes(tg, seqStart, seqEnd, xOff, yOff, width);
+	expRatioMapBoxes(tg, hvg, seqStart, seqEnd, xOff, yOff, width);
     for (i = 0; i < nExps; i++)
 	freeMem(pixScoreArray[i]);
     freeMem(pixScoreArray);

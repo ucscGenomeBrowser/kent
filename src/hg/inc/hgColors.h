@@ -3,12 +3,8 @@
 #ifndef HGCOLORS_H
 #define HGCOLORS_H
 
-#ifndef MEMGFX_H
-#include "memgfx.h"
-#endif
-
-#ifndef VGFX_H
-#include "vGfx.h"
+#ifndef HVGFX_H
+#include "hvGfx.h"
 #endif
 
 #define HG_COL_HOTLINKS "2636D1"
@@ -22,7 +18,7 @@
 #define HG_COL_LOCAL_TABLE "D9E4FF"
 #define HG_COL_TABLE_LABEL "1616D1"
 
-void hMakeGrayShades(struct vGfx *vg, Color *shades, int maxShade);
+void hMakeGrayShades(struct hvGfx *hvg, Color *shades, int maxShade);
 /* Make up gray scale with 0 = white, and maxShade = black. 
  * Shades needs to have maxShade+1 colors. */
 

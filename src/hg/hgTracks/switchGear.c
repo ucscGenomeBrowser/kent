@@ -63,7 +63,7 @@ loadLinkedFeaturesWithLoaders(tg, switchDbTssLoadConduit, lfFromSwitchDbTss,
 			      switchDbTssFreeConduit, "confScore", NULL, switchDbTssFilterPseudo);
 }
 
-Color switchDbTssItemColor(struct track *tg, void *item, struct vGfx *vg)
+Color switchDbTssItemColor(struct track *tg, void *item, struct hvGfx *hvg)
 /* Return color to switchDbTss item */
 {
 struct linkedFeatures *thisItem = item;

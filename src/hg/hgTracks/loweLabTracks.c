@@ -34,7 +34,7 @@ Color rnaHybShadesPos[RNA_HYBRIDIZATION_SHADES];
 Color rnaHybShadesNeg[RNA_HYBRIDIZATION_SHADES];
 int rnaHybShadesInitialized = 0;
 
-void rnaHybShadesInit(struct vGfx *vg) 
+void rnaHybShadesInit(struct hvGfx *hvg) 
 /* Allocate the LD for positive and negative values, and error cases */
 {
 static struct rgbColor white  = {255, 255, 255};
@@ -42,42 +42,42 @@ static struct rgbColor red   =  {255,   0,   0};
 static struct rgbColor blue  =  {  0,   0, 255};
 
 
-vgMakeColorGradient(vg, &white, &blue,  RNA_HYBRIDIZATION_SHADES, rnaHybShadesPos);
-vgMakeColorGradient(vg, &white, &red,   RNA_HYBRIDIZATION_SHADES, rnaHybShadesNeg);
+hvGfxMakeColorGradient(hvg, &white, &blue,  RNA_HYBRIDIZATION_SHADES, rnaHybShadesPos);
+hvGfxMakeColorGradient(hvg, &white, &red,   RNA_HYBRIDIZATION_SHADES, rnaHybShadesNeg);
 
  rnaHybShadesInitialized = 1;
 }
 
 
 
-void initializeColors(struct vGfx *vg)
+void initializeColors(struct hvGfx *hvg)
 {
-LLshadesOfCOGS['J'-'A']=vgFindColorIx(vg, 252, 204,252);
-LLshadesOfCOGS['A'-'A']=vgFindColorIx(vg, 252, 220,252);
-LLshadesOfCOGS['K'-'A']=vgFindColorIx(vg, 252, 220,236);
-LLshadesOfCOGS['L'-'A']=vgFindColorIx(vg, 252, 220,220);
-LLshadesOfCOGS['B'-'A']=vgFindColorIx(vg, 252, 220,204);
-LLshadesOfCOGS['D'-'A']=vgFindColorIx(vg, 252, 252,220);
-LLshadesOfCOGS['Y'-'A']=vgFindColorIx(vg, 252, 252,204);
-LLshadesOfCOGS['V'-'A']=vgFindColorIx(vg, 252, 252,188);
-LLshadesOfCOGS['T'-'A']=vgFindColorIx(vg, 252, 252,172);
-LLshadesOfCOGS['M'-'A']=vgFindColorIx(vg, 236, 252,172);
-LLshadesOfCOGS['N'-'A']=vgFindColorIx(vg, 220, 252,172);
-LLshadesOfCOGS['Z'-'A']=vgFindColorIx(vg, 204, 252,172);
-LLshadesOfCOGS['W'-'A']=vgFindColorIx(vg, 188, 252,172);
-LLshadesOfCOGS['U'-'A']=vgFindColorIx(vg, 172, 252,172);
-LLshadesOfCOGS['O'-'A']=vgFindColorIx(vg, 156, 252,172);
-LLshadesOfCOGS['C'-'A']=vgFindColorIx(vg, 188, 252,252);  /* light blue  133, 233,204);  */
-LLshadesOfCOGS['G'-'A']=vgFindColorIx(vg, 204, 252,252);
-LLshadesOfCOGS['E'-'A']=vgFindColorIx(vg, 220, 252,252);
-LLshadesOfCOGS['F'-'A']=vgFindColorIx(vg, 220, 236,252);
-LLshadesOfCOGS['H'-'A']=vgFindColorIx(vg, 220, 220,252);
-LLshadesOfCOGS['I'-'A']=vgFindColorIx(vg, 220, 204,252);
-LLshadesOfCOGS['P'-'A']=vgFindColorIx(vg, 204, 204,252);
-LLshadesOfCOGS['Q'-'A']=vgFindColorIx(vg, 188, 204,252);
-LLshadesOfCOGS['R'-'A']=vgFindColorIx(vg, 224, 224,224); /* general function prediction */
-LLshadesOfCOGS['S'-'A']=vgFindColorIx(vg, 204, 204,204);
-LLshadesOfCOGS['-'-'A']=vgFindColorIx(vg, 224, 224,224);/* no cog - same as R (general function prediction) */
+LLshadesOfCOGS['J'-'A']=hvGfxFindColorIx(hvg, 252, 204,252);
+LLshadesOfCOGS['A'-'A']=hvGfxFindColorIx(hvg, 252, 220,252);
+LLshadesOfCOGS['K'-'A']=hvGfxFindColorIx(hvg, 252, 220,236);
+LLshadesOfCOGS['L'-'A']=hvGfxFindColorIx(hvg, 252, 220,220);
+LLshadesOfCOGS['B'-'A']=hvGfxFindColorIx(hvg, 252, 220,204);
+LLshadesOfCOGS['D'-'A']=hvGfxFindColorIx(hvg, 252, 252,220);
+LLshadesOfCOGS['Y'-'A']=hvGfxFindColorIx(hvg, 252, 252,204);
+LLshadesOfCOGS['V'-'A']=hvGfxFindColorIx(hvg, 252, 252,188);
+LLshadesOfCOGS['T'-'A']=hvGfxFindColorIx(hvg, 252, 252,172);
+LLshadesOfCOGS['M'-'A']=hvGfxFindColorIx(hvg, 236, 252,172);
+LLshadesOfCOGS['N'-'A']=hvGfxFindColorIx(hvg, 220, 252,172);
+LLshadesOfCOGS['Z'-'A']=hvGfxFindColorIx(hvg, 204, 252,172);
+LLshadesOfCOGS['W'-'A']=hvGfxFindColorIx(hvg, 188, 252,172);
+LLshadesOfCOGS['U'-'A']=hvGfxFindColorIx(hvg, 172, 252,172);
+LLshadesOfCOGS['O'-'A']=hvGfxFindColorIx(hvg, 156, 252,172);
+LLshadesOfCOGS['C'-'A']=hvGfxFindColorIx(hvg, 188, 252,252);  /* light blue  133, 233,204);  */
+LLshadesOfCOGS['G'-'A']=hvGfxFindColorIx(hvg, 204, 252,252);
+LLshadesOfCOGS['E'-'A']=hvGfxFindColorIx(hvg, 220, 252,252);
+LLshadesOfCOGS['F'-'A']=hvGfxFindColorIx(hvg, 220, 236,252);
+LLshadesOfCOGS['H'-'A']=hvGfxFindColorIx(hvg, 220, 220,252);
+LLshadesOfCOGS['I'-'A']=hvGfxFindColorIx(hvg, 220, 204,252);
+LLshadesOfCOGS['P'-'A']=hvGfxFindColorIx(hvg, 204, 204,252);
+LLshadesOfCOGS['Q'-'A']=hvGfxFindColorIx(hvg, 188, 204,252);
+LLshadesOfCOGS['R'-'A']=hvGfxFindColorIx(hvg, 224, 224,224); /* general function prediction */
+LLshadesOfCOGS['S'-'A']=hvGfxFindColorIx(hvg, 204, 204,204);
+LLshadesOfCOGS['-'-'A']=hvGfxFindColorIx(hvg, 224, 224,224);/* no cog - same as R (general function prediction) */
 }
 
 void loadBed6(struct track *tg)
@@ -102,7 +102,7 @@ slReverse(&list);
 tg->items = list;
 }
 
-Color gbGeneColor(struct track *tg, void *item, struct vGfx *vg)
+Color gbGeneColor(struct track *tg, void *item, struct hvGfx *hvg)
 /* Return color to draw gene in. */
 {
 struct sqlConnection *conn = hAllocConn();
@@ -121,7 +121,7 @@ if(hTableExists("COG"))
    	    COG = COGLoad(row);
     sqlFreeResult(&sr);
     hFreeConn(&conn);
-    initializeColors(vg);
+    initializeColors(hvg);
     if(COG!=NULL)
 	{
         chopString(COG->code, "," , temparray, 9999);
@@ -145,7 +145,7 @@ tg->loadItems = loadBed6;
 tg->itemColor = gbGeneColor;
 }
 
-Color gpGeneColor(struct track *tg, void *item, struct vGfx *vg)
+Color gpGeneColor(struct track *tg, void *item, struct hvGfx *hvg)
 /* Return color to draw gene (genePred) in. */
 {
 struct sqlConnection *conn = hAllocConn();
@@ -167,7 +167,7 @@ if(hTableExists("COG"))
 	COG = COGLoad(row);
     sqlFreeResult(&sr);
     hFreeConn(&conn);
-    initializeColors(vg);
+    initializeColors(hvg);
     if(COG!=NULL)
 	{
 	chopString(COG->code, "," , temparray, 9999);
@@ -184,7 +184,7 @@ else
 slFreeList(&lf);
 }
 
-Color gpGeneNameColor(struct track *tg, void *item, struct vGfx *vg)
+Color gpGeneNameColor(struct track *tg, void *item, struct hvGfx *hvg)
 /* draw name for the linked feature in blue. */
 {
 tg->ixAltColor = 1;
@@ -199,7 +199,7 @@ tg->itemNameColor = gpGeneNameColor;
 tg->loadItems = loadGenePred;
 }
 
-Color sargassoSeaGeneColor(struct track *tg, void *item, struct vGfx *vg)
+Color sargassoSeaGeneColor(struct track *tg, void *item, struct hvGfx *hvg)
 /* Return color to draw gene in. */
 {
 struct bed *lf=item;
@@ -229,7 +229,7 @@ tg->loadItems = loadBed6;
 tg->itemColor = sargassoSeaGeneColor;
 }
 
-Color tigrGeneColor(struct track *tg, void *item, struct vGfx *vg)
+Color tigrGeneColor(struct track *tg, void *item, struct hvGfx *hvg)
 /* Return color to draw gene in. */
 {
 struct bed *bed = item;
@@ -505,7 +505,7 @@ slFreeList(&codes);
 codeBlastFree(&list);
 }
 
-Color cbGeneColor(struct track *tg, void *item, struct vGfx *vg)
+Color cbGeneColor(struct track *tg, void *item, struct hvGfx *hvg)
 /* Return color to draw gene in. */
 {
 struct linkedFeatures *lf=item;
@@ -540,11 +540,11 @@ tg->itemColor=cbGeneColor;
 tg->mapsSelf = TRUE;
 }
 
-Color rgGeneColor(struct track *tg, void *item, struct vGfx *vg)
+Color rgGeneColor(struct track *tg, void *item, struct hvGfx *hvg)
 /* Return color to draw gene in. */
 {
 struct rnaGenes *lf=item;
-makeRedGreenShades(vg);
+makeRedGreenShades(hvg);
 if (lf->score ==100) 
     return shadesOfGreen[15];
 if (lf->score == 300) 
@@ -600,7 +600,7 @@ tg->items = lfList;
 }
 
 void tigrOperonDrawAt(struct track *tg, void *item,
-		      struct vGfx *vg, int xOff, int y, double scale, 
+		      struct hvGfx *hvg, int xOff, int y, double scale, 
 		      MgFont *font, Color color, enum trackVisibility vis)
 /* Draw the operon at position. */
 {
@@ -617,15 +617,15 @@ color = tg->ixColor;
 x1 = round((double)((int)lf->start-winStart)*scale) + xOff;
 x2 = round((double)((int)lf->end-winStart)*scale) + xOff;
 w = x2-x1;
-innerLine(vg, x1, midY, w, color);
+innerLine(hvg, x1, midY, w, color);
 if (vis == tvFull || vis == tvPack)
-    clippedBarbs(vg, x1, midY, w, 2, 5, lf->orientation, color, FALSE);
+    clippedBarbs(hvg, x1, midY, w, 2, 5, lf->orientation, color, FALSE);
 for (sf = lf->components; sf != NULL; sf = sf->next)
     {
     s = sf->start; e = sf->end;
     /* shade ORF (exon) based on the grayIx value of the sf */
     color = shades[sf->grayIx];
-    drawScaledBox(vg, s, e, scale, xOff, y, heightPer, color );
+    drawScaledBox(hvg, s, e, scale, xOff, y, heightPer, color );
     }
 }
 
@@ -672,14 +672,14 @@ tg->items = list;
 }
 
 
-Color rnaHybColor(struct track *tg, void *item, struct vGfx *vg)
+Color rnaHybColor(struct track *tg, void *item, struct hvGfx *hvg)
 /* Return color to draw gene in. */
 {
 struct rnaHybridization *rh=item;
 int cindex = (int)(rh->gcContent * (float)(RNA_HYBRIDIZATION_SHADES - 1));
 
 if(!rnaHybShadesInitialized)
-  rnaHybShadesInit(vg);  
+  rnaHybShadesInit(hvg);  
 
 if(rh->targetAnnotation)
 {

@@ -14,7 +14,7 @@
 #include "chainDb.h"
 #include "chainCart.h"
 
-static char const rcsid[] = "$Id: chainTrack.c,v 1.28 2007/06/26 23:10:11 angie Exp $";
+static char const rcsid[] = "$Id: chainTrack.c,v 1.29 2008/02/20 00:42:25 markd Exp $";
 
 
 struct cartOptions
@@ -76,7 +76,7 @@ dyStringFree(&query);
 }
 
 static void chainDraw(struct track *tg, int seqStart, int seqEnd,
-        struct vGfx *vg, int xOff, int yOff, int width, 
+        struct hvGfx *hvg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw chained features. This loads up the simple features from 
  * the chainLink table, calls linkedFeaturesDraw, and then
@@ -232,7 +232,7 @@ if (hash->size)
 	    }
 	}
     }
-linkedFeaturesDraw(tg, seqStart, seqEnd, vg, xOff, yOff, width,
+linkedFeaturesDraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width,
 	font, color, vis);
 /* Cleanup time. */
 for (lf = tg->items; lf != NULL; lf = lf->next)
@@ -345,14 +345,14 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }	/*	chainLoadItems()	*/
 
-static Color chainScoreColor(struct track *tg, void *item, struct vGfx *vg)
+static Color chainScoreColor(struct track *tg, void *item, struct hvGfx *hvg)
 {
 struct linkedFeatures *lf = (struct linkedFeatures *)item;
 
 return(tg->colorShades[lf->grayIx]);
 }
 
-static Color chainNoColor(struct track *tg, void *item, struct vGfx *vg)
+static Color chainNoColor(struct track *tg, void *item, struct hvGfx *hvg)
 {
 return(tg->ixColor);
 }

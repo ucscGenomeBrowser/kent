@@ -4,8 +4,8 @@
 #ifndef GENOLAY_H
 #define GENOLAY_H
 
-#ifndef VGFX_H
-#include "vGfx.h"
+#ifndef HVGFX_H
+#include "hvGfx.h"
 #endif
 
 struct genoLayChrom
@@ -72,14 +72,14 @@ struct genoLay *genoLayNew(struct genoLayChrom *chromList,
  * by the platypus having a bunch of sex chromosomes.  The how
  * parameter should be one of the string constants defined above. */
 
-void genoLayDrawChromLabels(struct genoLay *gl, struct vGfx *vg, int color);
+void genoLayDrawChromLabels(struct genoLay *gl, struct hvGfx *hvg, int color);
 /* Draw chromosomes labels in image */
 
 void genoLayDrawSimpleChroms(struct genoLay *gl,
-	struct vGfx *vg, int color);
+	struct hvGfx *hvg, int color);
 /* Draw boxes for all chromosomes in given color */
 
-void genoLayDrawBandedChroms(struct genoLay *gl, struct vGfx *vg, char *db,
+void genoLayDrawBandedChroms(struct genoLay *gl, struct hvGfx *hvg, char *db,
 	struct sqlConnection *conn, Color *shadesOfGray, int maxShade, 
 	int defaultColor);
 /* Draw chromosomes with centromere and band glyphs. 

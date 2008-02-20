@@ -14,7 +14,7 @@
 #include "hgMaf.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: mafTrack.c,v 1.58 2008/02/16 17:17:06 braney Exp $";
+static char const rcsid[] = "$Id: mafTrack.c,v 1.59 2008/02/20 00:42:27 markd Exp $";
 
 struct mafItem
 /* A maf track item. */
@@ -464,7 +464,7 @@ else
 }
 
 static void mafDrawOverview(struct track *tg, int seqStart, int seqEnd,
-        struct vGfx *vg, int xOff, int yOff, int width, 
+        struct hvGfx *hvg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw wiggle-plot based on overall maf scores rather than
  * computing them for sections.  For this routine we don't
@@ -492,7 +492,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (vis == tvFull)
 	{
 	y = ref.score * height1;
-	vgBox(vg, x1 + xOff, yOff + height1 - y, w, y+1, color);
+	hvGfxBox(hvg, x1 + xOff, yOff + height1 - y, w, y+1, color);
 	}
     else
 	{
@@ -501,13 +501,13 @@ while ((row = sqlNextRow(sr)) != NULL)
 	if ((shade < 0) || (shade >= maxShade))
 	    shade = 0;
 	c = shadesOfGray[shade];
-	vgBox(vg, x1 + xOff, yOff, w, tg->heightPer, c);
+	hvGfxBox(hvg, x1 + xOff, yOff, w, tg->heightPer, c);
 	}
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
-void drawMafChain(struct vGfx *vg, int xOff, int yOff, int width, int height,
+void drawMafChain(struct hvGfx *hvg, int xOff, int yOff, int width, int height,
                         boolean isDouble)
 /* draw single or double chain line between alignments in MAF display */
 {
@@ -526,8 +526,8 @@ if (width == 1)
 width++;
 if (isDouble)
     {
-    innerLine(vg, xOff, midY1, width, gray);
-    innerLine(vg, xOff, midY2, width, gray);
+    innerLine(hvg, xOff, midY1, width, gray);
+    innerLine(hvg, xOff, midY2, width, gray);
     }
 else
 #ifdef MISSING_DATA
@@ -535,24 +535,24 @@ else
     int x;
     Color fuzz = shadesOfGray[3];
         /*
-    vgBox(vg, xOff, yOff+height-5, width, 3, fuzz1);
+    hvGfxBox(hvg, xOff, yOff+height-5, width, 3, fuzz1);
     for (x = xOff+1; x < xOff+width; x += 2)
         {
-        vgBox(vg, x, yOff+height-5, 1, 3, fuzz1);
+        hvGfxBox(hvg, x, yOff+height-5, 1, 3, fuzz1);
         }
         */
     for (x = xOff+1; x < xOff+width; x += 3)
         {
-        vgBox(vg, x, yOff+height-5, 2, 3, fuzz);
+        hvGfxBox(hvg, x, yOff+height-5, 2, 3, fuzz);
         }
     }
 #else
-    innerLine(vg, xOff, midY, width, gray);
+    innerLine(hvg, xOff, midY, width, gray);
 #endif
 }
 
 void drawMafRegionDetails(struct mafAli *mafList, int height,
-        int seqStart, int seqEnd, struct vGfx *vg, int xOff, int yOff,
+        int seqStart, int seqEnd, struct hvGfx *hvg, int xOff, int yOff,
         int width, MgFont *font, Color color, Color altColor,
         enum trackVisibility vis, boolean isAxt, boolean chainBreaks)
 /* Draw wiggle/density plot based on scoring things on the fly
@@ -612,19 +612,19 @@ for (full = mafList; full != NULL; full = full->next)
             /* no alignment here -- just a gap/break annotation */
             if ((mc->leftStatus == MAF_MISSING_STATUS ) && (mc->rightStatus == MAF_MISSING_STATUS))
 		{
-		Color yellow = vgFindRgb(vg, &undefinedYellowColor);
-		vgBox(vg, x1, yOff, w, height - 1, yellow);
+		Color yellow = hvGfxFindRgb(hvg, &undefinedYellowColor);
+		hvGfxBox(hvg, x1, yOff, w, height - 1, yellow);
 		}
             else if ((mc->leftStatus == MAF_INSERT_STATUS ||  mc->leftStatus == MAF_NEW_NESTED_STATUS)  &&
                 (mc->rightStatus == MAF_INSERT_STATUS ||  mc->rightStatus == MAF_NEW_NESTED_STATUS))
 		{
 		/* double gap -> display double line ala chain tracks */
-		drawMafChain(vg, x1, yOff, w, height, TRUE);
+		drawMafChain(hvg, x1, yOff, w, height, TRUE);
 		}
             else if (( mc->leftStatus == MAF_CONTIG_STATUS)  && ( mc->rightStatus == MAF_CONTIG_STATUS ))
 		{
 		/* single gap -> display single line ala chain tracks */
-		drawMafChain(vg, x1, yOff, w, height, FALSE);
+		drawMafChain(hvg, x1, yOff, w, height, FALSE);
 		}
             }
         else
@@ -633,13 +633,13 @@ for (full = mafList; full != NULL; full = full->next)
             AllocArray(pixelScores, w);
             mafFillInPixelScores(maf, mcMaster, pixelScores, w);
             if (vis != tvFull && mc->leftStatus == MAF_NEW_STATUS)
-		vgBox(vg, x1-3, yOff, 2, height, getChromBreakBlueColor());
+		hvGfxBox(hvg, x1-3, yOff, 2, height, getChromBreakBlueColor());
             for (i=0; i<w; ++i)
                 {
                 if (vis == tvFull)
                     {
                     int y = pixelScores[i] * height1;
-                    vgBox(vg, i+x1, yOff + height1 - y, 
+                    hvGfxBox(hvg, i+x1, yOff + height1 - y, 
                         1, y+1, (ixMafAli % 2) ? color : altColor);
                     }
                 else
@@ -649,26 +649,26 @@ for (full = mafList; full != NULL; full = full->next)
                     if (shade > maxShade)
                         shade = maxShade;
                     c = shadesOfGray[shade];
-                    //vgBox(vg, i+x1, yOff+2, 1, height - 5, c);
-                    vgBox(vg, i+x1, yOff, 1, height - 1, c);
+                    //hvGfxBox(hvg, i+x1, yOff+2, 1, height - 5, c);
+                    hvGfxBox(hvg, i+x1, yOff, 1, height - 1, c);
                     }
                 }
             if (vis != tvFull && mc->leftStatus == MAF_NEW_NESTED_STATUS)
 		{
-		vgBox(vg, x1-1, yOff, 2, 1, getChromBreakGreenColor());
-		vgBox(vg, x1-1, yOff, 1, height, getChromBreakGreenColor());
-		vgBox(vg, x1-1, yOff + height-1, 2, 1, 
+		hvGfxBox(hvg, x1-1, yOff, 2, 1, getChromBreakGreenColor());
+		hvGfxBox(hvg, x1-1, yOff, 1, height, getChromBreakGreenColor());
+		hvGfxBox(hvg, x1-1, yOff + height-1, 2, 1, 
                                 getChromBreakGreenColor());
 		}
             if (vis != tvFull && mc->rightStatus == MAF_NEW_NESTED_STATUS)
 		{
-		vgBox(vg, i+x1-1, yOff, 2, 1, getChromBreakGreenColor());
-		vgBox(vg, i+x1, yOff, 1, height, getChromBreakGreenColor());
-		vgBox(vg, i+x1-1, yOff + height-1, 2, 1, 
+		hvGfxBox(hvg, i+x1-1, yOff, 2, 1, getChromBreakGreenColor());
+		hvGfxBox(hvg, i+x1, yOff, 1, height, getChromBreakGreenColor());
+		hvGfxBox(hvg, i+x1-1, yOff + height-1, 2, 1, 
                                 getChromBreakGreenColor());
 		}
             if (vis != tvFull && mc->rightStatus == MAF_NEW_STATUS) 
-		vgBox(vg, i+x1+1, yOff, 2, height, getChromBreakBlueColor());
+		hvGfxBox(hvg, i+x1+1, yOff, 2, height, getChromBreakBlueColor());
             freez(&pixelScores);
             }
 	}
@@ -678,7 +678,7 @@ for (full = mafList; full != NULL; full = full->next)
 }
 
 static void mafDrawDetails(struct track *tg, int seqStart, int seqEnd,
-        struct vGfx *vg, int xOff, int yOff, int width, MgFont *font,
+        struct hvGfx *hvg, int xOff, int yOff, int width, MgFont *font,
         Color color, enum trackVisibility vis, boolean isAxt)
 /* Draw wiggle/density plot based on scoring things on the fly. */
 {
@@ -693,7 +693,7 @@ if (mafList == NULL)
                                                 seqStart, seqEnd, isAxt);
 
 /* display the multiple alignment in this region */
-drawMafRegionDetails(mafList, mi->height, seqStart, seqEnd, vg, xOff, yOff,
+drawMafRegionDetails(mafList, mi->height, seqStart, seqEnd, hvg, xOff, yOff,
                          width, font, color, tg->ixAltColor,  vis, isAxt, FALSE);
 mafAliFreeList(&mafList);
 
@@ -715,7 +715,7 @@ if (vis == tvFull)
         mafList = mafLoadInRegion(conn, mafTable, chromName, seqStart, seqEnd);
         /* display pairwise alignments in this region in dense format */
         drawMafRegionDetails(mafList, mi->height, seqStart, seqEnd, 
-                                 vg, xOff, yOff, width, font,
+                                 hvg, xOff, yOff, width, font,
                                  color, tg->ixAltColor, tvDense, isAxt, FALSE);
         yOff += mi->height + 1;
         mafAliFreeList(&mafList);
@@ -725,27 +725,27 @@ hFreeConn(&conn);
 }
 
 static void mafDrawGraphic(struct track *tg, int seqStart, int seqEnd,
-        struct vGfx *vg, int xOff, int yOff, int width, 
+        struct hvGfx *hvg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis, boolean isAxt)
 /* Draw wiggle or density plot, not base-by-base. */
 {
 int seqSize = seqEnd - seqStart;
 if (seqSize >= MAF_SUMMARY_VIEW)
     {
-    mafDrawOverview(tg, seqStart, seqEnd, vg, xOff, yOff, width, font, 
+    mafDrawOverview(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, 
             color, vis);
     }
 else
     {
-    mafDrawDetails(tg, seqStart, seqEnd, vg, 
+    mafDrawDetails(tg, seqStart, seqEnd, hvg, 
                         xOff, yOff, width, font, color, vis, isAxt);
     }
 // density gradient of blastz's
-// mafDrawPairwise(tg, seqStart, seqEnd, vg, xOff, yOff, font, width, color, vis);
+// mafDrawPairwise(tg, seqStart, seqEnd, hvg, xOff, yOff, font, width, color, vis);
 }
 
 static void mafDrawBases(struct track *tg, int seqStart, int seqEnd,
-        struct vGfx *vg, int xOff, int yOff, int width, 
+        struct hvGfx *hvg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw base-by-base view. */
 {
@@ -841,7 +841,7 @@ for (mi = miList, i=0; mi->next != NULL; mi = mi->next, ++i)
     int x = xOff;
     if (line == insertLine)
 	x -= (width/winBaseCount)/2;
-    spreadBasesString(vg, x, y, width, mi->height-1, color, font, 
+    spreadBasesString(hvg, x, y, width, mi->height-1, color, font, 
     	line, winBaseCount, FALSE);
     y += mi->height;
     }
@@ -859,12 +859,12 @@ for (i=0; i<winBaseCount; ++i)
 	{
 	int shade = scores[i] * scoreScale;
 	int color = shadesOfGray[shade];
-	vgBox(vg, x1+xOff, y, x2-x1, mi->height-1, color);
+	hvGfxBox(hvg, x1+xOff, y, x2-x1, mi->height-1, color);
 	}
     else
         {
 	int wiggleH = scores[i] * scoreScale;
-	vgBox(vg, x1+xOff, y + mi->height-2 - wiggleH, 
+	hvGfxBox(hvg, x1+xOff, y + mi->height-2 - wiggleH, 
 	    x2-x1, wiggleH+1, 
             getIxMafAli(ixMafAli, i, winBaseCount) % 2 ? color : tg->ixAltColor);
 	}
@@ -880,30 +880,30 @@ hashFree(&miHash);
 }
 
 static void mafOrAxtDraw(struct track *tg, int seqStart, int seqEnd,
-        struct vGfx *vg, int xOff, int yOff, int width, 
+        struct hvGfx *hvg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis, 
 	boolean isAxt)
 /* Draw routine for maf or axt type tracks.  This will load
  * the items as well as drawing them. */
 {
 if (zoomedToBaseLevel)
-    mafDrawBases(tg, seqStart, seqEnd, vg, xOff, yOff, width, font, color, vis);
+    mafDrawBases(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis);
 else 
     {
-    mafDrawGraphic(tg, seqStart, seqEnd, vg, xOff, yOff, width, font, 
+    mafDrawGraphic(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, 
                     color, vis, isAxt);
     }
-mapBoxHc(seqStart, seqEnd, xOff, yOff, width, tg->height, tg->mapName, 
+mapBoxHc(hvg, seqStart, seqEnd, xOff, yOff, width, tg->height, tg->mapName, 
     tg->mapName, NULL);
 }
 
 static void mafDraw(struct track *tg, int seqStart, int seqEnd,
-        struct vGfx *vg, int xOff, int yOff, int width, 
+        struct hvGfx *hvg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw routine for mafAlign type tracks.  This will load
  * the items as well as drawing them. */
 {
-mafOrAxtDraw(tg,seqStart,seqEnd,vg,xOff,yOff,width,font,color,vis,FALSE);
+mafOrAxtDraw(tg,seqStart,seqEnd,hvg,xOff,yOff,width,font,color,vis,FALSE);
 }
 
 void mafMethods(struct track *tg)
@@ -929,12 +929,12 @@ mafOrAxtLoad(tg, TRUE);
 }
 
 static void axtDraw(struct track *tg, int seqStart, int seqEnd,
-        struct vGfx *vg, int xOff, int yOff, int width, 
+        struct hvGfx *hvg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw routine for axt type tracks.  This will load
  * the items as well as drawing them. */
 {
-mafOrAxtDraw(tg,seqStart,seqEnd,vg,xOff,yOff,width,font,color,vis,TRUE);
+mafOrAxtDraw(tg,seqStart,seqEnd,hvg,xOff,yOff,width,font,color,vis,TRUE);
 }
 
 void axtMethods(struct track *tg, char *otherDb)

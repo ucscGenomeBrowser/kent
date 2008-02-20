@@ -10,7 +10,7 @@
 #include "geneGraph.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: altGraphX.c,v 1.35 2007/08/31 11:58:42 kent Exp $";
+static char const rcsid[] = "$Id: altGraphX.c,v 1.36 2008/02/20 00:42:30 markd Exp $";
 struct altGraphX *_agxSortable = NULL; /* used for sorting. */
 
 struct evidence *evidenceCommaIn(char **pS, struct evidence *ret)
@@ -1411,8 +1411,8 @@ else
 }
 
 
-void drawExonAt(struct spliceEdge *se, int heightPer, int regionStart, int regionEnd,
-		struct vGfx *vg, int xOff, int y, 
+static void drawExonAt(struct spliceEdge *se, int heightPer, int regionStart, int regionEnd,
+		struct hvGfx *hvg, int xOff, int y, 
 		double scale, MgFont *font, Color color, Color *shades)
 /* Draw an exon at. */
 {
@@ -1434,13 +1434,13 @@ if (w < 1)
     w = 1;
 //exonColor = shades[conf];
 exonColor = MG_BLACK;
-vgBox(vg, x1, y, w, heightPer/2, exonColor);
+hvGfxBox(hvg, x1, y, w, heightPer/2, exonColor);
 if(drawLabel)
     {
     safef(buff, sizeof(buff), "%d-%d-%d", se->v1, se->v2, (int)se->conf);
     textWidth = mgFontStringWidth(font, buff);
     if(textWidth <= w)
-	vgTextCentered(vg, x1, y, w, heightPer/2, MG_WHITE, font, buff);
+	hvGfxTextCentered(hvg, x1, y, w, heightPer/2, MG_WHITE, font, buff);
     }
 }
 
@@ -1682,10 +1682,10 @@ slReverse(ssList);
 }
 
 void altGraphXDrawPack(struct altGraphX *agList, struct spaceSaver *ssList, 
-		       struct vGfx *vg, int xOff, int yOff, int width, 
+		       struct hvGfx *hvg, int xOff, int yOff, int width, 
 		       int heightPer, int lineHeight, int seqStart, int seqEnd, double scale, 
 		       MgFont *font, Color color, Color *shades, char *drawName,
-		       void (*mapItem)(char *tableName, struct altGraphX *ag, int start, int end,
+		       void (*mapItem)(char *tableName, struct altGraphX *ag, struct hvGfx *hvg, int start, int end,
 				       int x, int y, int width, int height))
 /** Draw a splicing graph for each altGraphX in the agList where the
     exons don't overlap as they have been laid out in the spaceSaver
@@ -1708,7 +1708,7 @@ for(ss = ssList, ag=agList; ss != NULL && ag != NULL; ss=ss->next, ag=ag->next)
 	int mapWidth = mapEnd - mapStart;
 	if(mapWidth < 1) 
 	    mapStart = 1;
-	mapItem(drawName, ag, ag->tStart, ag->tEnd, mapStart, yOff, mapWidth, mapHeight);
+	mapItem(drawName, ag, hvg, ag->tStart, ag->tEnd, mapStart, yOff, mapWidth, mapHeight);
 	}
     /* Draw all of the exons that have been stored in the spacesaver. */
     for (sn = ss->nodeList; sn != NULL; sn = sn->next)
@@ -1718,7 +1718,7 @@ for(ss = ssList, ag=agList; ss != NULL && ag != NULL; ss=ss->next, ag=ag->next)
 	    {
 	    y = yOff + (lineHeight * sn->row) + (lineHeight/2);
 	    drawExonAt(se, heightPer, seqStart, seqEnd,
-		       vg, xOff, y, scale, font, color, shades);
+		       hvg, xOff, y, scale, font, color, shades);
  	    }
 	else if(se->type == ggSJ)
 	    {
@@ -1737,8 +1737,8 @@ for(ss = ssList, ag=agList; ss != NULL && ag != NULL; ss=ss->next, ag=ag->next)
 			    minRow = min(j, i);
 			    midY = yOff + (lineHeight * minRow);
 			    midX = se->mid + xOff;
-			    vgLine(vg, x1,round(yOff+(lineHeight*i)+lineHeight/2), midX, midY, c);
-			    vgLine(vg, midX, midY, x2, round(yOff+(lineHeight*j)+lineHeight/2), c);
+			    hvGfxLine(hvg, x1,round(yOff+(lineHeight*i)+lineHeight/2), midX, midY, c);
+			    hvGfxLine(hvg, midX, midY, x2, round(yOff+(lineHeight*j)+lineHeight/2), c);
 			    }
 			}
 		    }

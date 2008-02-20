@@ -51,7 +51,7 @@ return NULL;
 }
 
 static void contigDraw(struct track *tg, int seqStart, int seqEnd,
-        struct vGfx *vg, int xOff, int yOff, int width, 
+        struct hvGfx *hvg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw contig items. */
 {
@@ -76,15 +76,15 @@ for (ctg = tg->items; ctg != NULL; ctg = ctg->next)
     w = x2-x1;
     if (w < 1)
 	w = 1;
-    vgBox(vg, x1, y, w, heightPer, color);
+    hvGfxBox(hvg, x1, y, w, heightPer, color);
     s = abbreviateContig(ctg->contig, tl.font, w);
     if (s != NULL)
-	vgTextCentered(vg, x1, y, w, heightPer, MG_WHITE, tl.font, s);
+	hvGfxTextCentered(hvg, x1, y, w, heightPer, MG_WHITE, tl.font, s);
     if (isFull)
 	y += lineHeight;
     else 
 	{
-	mapBoxHc(ctg->chromStart, ctg->chromEnd, x1,y,w,heightPer, tg->mapName, 
+	mapBoxHc(hvg, ctg->chromStart, ctg->chromEnd, x1,y,w,heightPer, tg->mapName, 
 	    tg->mapItemName(tg, ctg), 
 	    tg->itemName(tg, ctg));
 	}

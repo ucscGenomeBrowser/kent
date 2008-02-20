@@ -10,10 +10,10 @@
 #include "cytoBand.h"
 #include "hCytoBand.h"
 
-static Color cytoBandItemColor(struct track *tg, void *item, struct vGfx *vg)
+static Color cytoBandItemColor(struct track *tg, void *item, struct hvGfx *hvg)
 /* Figure out color of band. */
 {
-return hCytoBandColor(item, vg, hCytoBandIsDmel(),
+return hCytoBandColor(item, hvg, hCytoBandIsDmel(),
 	tg->ixColor, tg->ixAltColor, shadesOfGray, maxShade);
 }
 
@@ -48,7 +48,7 @@ return ((struct cytoBand *)item)->chromEnd + winStart;
 }
 
 static void cytoBandDrawAt(struct track *tg, void *item,
-	struct vGfx *vg, int xOff, int y, double scale, 
+	struct hvGfx *hvg, int xOff, int y, double scale, 
 	MgFont *font, Color color, enum trackVisibility vis)
 /* Draw cytoBand items. */
 {
@@ -67,15 +67,15 @@ w = x2-x1;
 if (w < 1)
     w = 1;
 
-hCytoBandDrawAt(band, vg, x1, y, w, heightPer, hCytoBandIsDmel(), font, 
+hCytoBandDrawAt(band, hvg, x1, y, w, heightPer, hCytoBandIsDmel(), font, 
 	mgFontPixelHeight(font), tg->ixColor, tg->ixAltColor,
 	shadesOfGray, maxShade);
 
 if(tg->mapsSelf)
-    tg->mapItem(tg, band, band->name, band->name, band->chromStart, band->chromEnd,
+    tg->mapItem(tg, hvg, band, band->name, band->name, band->chromStart, band->chromEnd,
 		x1, y, w, heightPer);
 else
-    mapBoxHc(band->chromStart, band->chromEnd, x1,y,w,heightPer, tg->mapName, 
+    mapBoxHc(hvg, band->chromStart, band->chromEnd, x1,y,w,heightPer, tg->mapName, 
 	     band->name, band->name);
 }
 
@@ -109,7 +109,7 @@ cytoBandFreeList((struct cytoBand**)&tg->items);
 
 void cytoBandIdeoDraw(struct track *tg, 
 		      int seqStart, int seqEnd,
-		      struct vGfx *vg, int xOff, int yOff, int width, 
+		      struct hvGfx *hvg, int xOff, int yOff, int width, 
 		      MgFont *font, Color color, enum trackVisibility vis)
 /* Draw the entire chromosome with a little red box around our
    current position. */
@@ -132,8 +132,8 @@ heightPer = tg->heightPer;
 yOff = yOff;
 
 /* Time to draw the bands. */
-vgSetClip(vg, xOff, yOff, insideWidth, tg->height); 
-genericDrawItems(tg, 0, chromSize, vg, xOff+xBorder, yOff+5, width-(2*xBorder), font, color, tvDense);
+hvGfxSetClip(hvg, xOff, yOff, insideWidth, tg->height); 
+genericDrawItems(tg, 0, chromSize, hvg, xOff+xBorder, yOff+5, width-(2*xBorder), font, color, tvDense);
 
 x1 = round((winStart)*scale) + xOff + xBorder -1;
 x2 = round((winEnd)*scale) + xOff + xBorder -1;
@@ -144,10 +144,10 @@ yBorder = tg->heightPer + 7 + 1;
 
 /* Draw an outline around chromosome for visualization purposes. Helps
  to make the chromosome look better. */
-vgLine(vg, xOff+xBorder, yOff+4, xOff+width-xBorder, yOff+4, MG_BLACK);
-vgLine(vg, xOff+xBorder, yOff+yBorder-3, xOff+width-xBorder, yOff+yBorder-3, MG_BLACK);
-vgLine(vg, xOff+xBorder, yOff+4, xOff+xBorder, yOff+yBorder-3, MG_BLACK);
-vgLine(vg, xOff+width-xBorder, yOff+4, xOff+width-xBorder, yOff+yBorder-3, MG_BLACK);
+hvGfxLine(hvg, xOff+xBorder, yOff+4, xOff+width-xBorder, yOff+4, MG_BLACK);
+hvGfxLine(hvg, xOff+xBorder, yOff+yBorder-3, xOff+width-xBorder, yOff+yBorder-3, MG_BLACK);
+hvGfxLine(hvg, xOff+xBorder, yOff+4, xOff+xBorder, yOff+yBorder-3, MG_BLACK);
+hvGfxLine(hvg, xOff+width-xBorder, yOff+4, xOff+width-xBorder, yOff+yBorder-3, MG_BLACK);
 
 /* Find and draw the centromere which is defined as the
  two bands with gieStain "acen" */
@@ -166,19 +166,19 @@ for(cb = cbList; cb != NULL; cb = cb->next)
 	cenBottom = yOff + yBorder - 3;
 
 	/* Draw centromere itself. */
-	hCytoBandDrawCentromere(vg, cenLeft, cenTop, cenRight - cenLeft, 
-	     cenBottom-cenTop+1, MG_WHITE, hCytoBandCentromereColor(vg));
+	hCytoBandDrawCentromere(hvg, cenLeft, cenTop, cenRight - cenLeft, 
+	     cenBottom-cenTop+1, MG_WHITE, hCytoBandCentromereColor(hvg));
 	break;
 	}
     }
 
 /* Draw a red box around position in current browser window.  double
  thick so two lines each. */
-vgBox(vg, x1, yOff+1, x2-x1, 2, MG_RED);
-vgBox(vg, x1, yOff + yBorder - 1, x2-x1, 2, MG_RED);
-vgBox(vg, x1, yOff+1, 2, yBorder, MG_RED);
-vgBox(vg, x2, yOff+1, 2, yBorder, MG_RED);
-vgUnclip(vg);
+hvGfxBox(hvg, x1, yOff+1, x2-x1, 2, MG_RED);
+hvGfxBox(hvg, x1, yOff + yBorder - 1, x2-x1, 2, MG_RED);
+hvGfxBox(hvg, x1, yOff+1, 2, yBorder, MG_RED);
+hvGfxBox(hvg, x2, yOff+1, 2, yBorder, MG_RED);
+hvGfxUnclip(hvg);
 
 /* Put back the lineHeight for the track
    now that we are done spoofing tgDrawItems(). */
@@ -186,13 +186,13 @@ tg->heightPer += 11;
 tg->lineHeight += 11;
 }
 
-void cytoBandIdeoMapItem(struct track *tg, void *item, 
+void cytoBandIdeoMapItem(struct track *tg, struct hvGfx *hvg, void *item, 
 			    char *itemName, char *mapItemName, int start, int end, 
 			    int x, int y, int width, int height)
 /* Print out a box to jump to band in browser window .*/
 {
 struct cytoBand *cb = item;
-mapBoxJumpTo(x, y, width, height, cb->chrom, cb->chromStart, cb->chromEnd, cb->name);
+mapBoxJumpTo(hvg, x, y, width, height, cb->chrom, cb->chromStart, cb->chromEnd, cb->name);
 }
 
 int cytoBandIdeoTotalHeight(struct track *tg, enum trackVisibility vis)

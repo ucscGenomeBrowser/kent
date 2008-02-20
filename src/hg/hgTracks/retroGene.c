@@ -1,7 +1,7 @@
 
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: retroGene.c,v 1.11 2007/04/06 22:21:40 baertsch Exp $";
+static char const rcsid[] = "$Id: retroGene.c,v 1.12 2008/02/20 00:42:27 markd Exp $";
 
 struct linkedFeatures *lfFromRetroGene(struct retroMrnaInfo *pg)
 /* Return a linked feature from a retroGene. */
@@ -151,10 +151,10 @@ if (vis != tvDense)
 vis = limitVisibility(tg);
 }
 
-Color retroGeneColor(struct track *tg, void *item, struct vGfx *vg)
+Color retroGeneColor(struct track *tg, void *item, struct hvGfx *hvg)
 /* Return color to draw retroGene in. */
 {
-return vgFindColorIx(vg, CHROM_20_R, CHROM_20_G, CHROM_20_B);
+return hvGfxFindColorIx(hvg, CHROM_20_R, CHROM_20_G, CHROM_20_B);
 }
 
 char *retroName(struct track *tg, void *item)

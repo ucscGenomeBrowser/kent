@@ -3,9 +3,9 @@
 #include "common.h"
 #include "hgColors.h"
 
-static char const rcsid[] = "$Id: hgColors.c,v 1.1 2006/06/23 23:45:03 kent Exp $";
+static char const rcsid[] = "$Id: hgColors.c,v 1.2 2008/02/20 00:42:31 markd Exp $";
 
-void hMakeGrayShades(struct vGfx *vg, Color *shades, int maxShade)
+void hMakeGrayShades(struct hvGfx *hvg, Color *shades, int maxShade)
 /* Make up gray scale with 0 = white, and maxShade = black. 
  * Shades needs to have maxShade+1 colors. */
 {
@@ -16,7 +16,7 @@ for (i=0; i<=maxShade; ++i)
     int level = 255 - (255*i/maxShade);
     if (level < 0) level = 0;
     rgb.r = rgb.g = rgb.b = level;
-    shades[i] = vgFindRgb(vg, &rgb);
+    shades[i] = hvGfxFindRgb(hvg, &rgb);
     }
 }
 

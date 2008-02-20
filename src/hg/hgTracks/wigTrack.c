@@ -14,7 +14,7 @@
 #include "customTrack.h"
 #include "wigCommon.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.75 2006/06/13 01:58:08 kent Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.76 2008/02/20 00:42:29 markd Exp $";
 
 struct wigItem
 /* A wig track item. */
@@ -66,7 +66,7 @@ for(lf = lfList; lf != NULL; lf = lf->next)
 }
 
 static void wigFillInColorBedArray(struct track *wigTrack, Color *colArray, int colSize,
-				  struct track *colorTrack, struct vGfx *vg)
+				  struct track *colorTrack, struct hvGfx *hvg)
 /* Fill in a color array with the simple bed based colorTrack's
    color where it would normally have an block. */
 {
@@ -87,14 +87,14 @@ for (bed = bedList; bed != NULL; bed = bed->next)
     for(i = x1; i < x2 && i < colSize; i++)
 	{
 	if(colorTrack->itemColor != NULL)
-	    colArray[i] = colorTrack->itemColor(colorTrack, bed, vg);
+	    colArray[i] = colorTrack->itemColor(colorTrack, bed, hvg);
 	else
 	    colArray[i] = colorTrack->ixColor;
 	}
     }
 }
 
-void wigFillInColorArray(struct track *wigTrack, struct vGfx *vg, 
+void wigFillInColorArray(struct track *wigTrack, struct hvGfx *hvg, 
 			 Color *colorArray, int colSize, struct track *colorTrack)
 /* Fill in a color array with the colorTrack's color where
    it would normally have an exon. */
@@ -105,14 +105,14 @@ if(colorTrack->limitedVis == tvHide)
     {
     trackLoaded = TRUE;
     colorTrack->loadItems(colorTrack);
-    colorTrack->ixColor = vgFindRgb(vg, &colorTrack->color);
-    colorTrack->ixAltColor = vgFindRgb(vg, &colorTrack->altColor);
+    colorTrack->ixColor = hvGfxFindRgb(hvg, &colorTrack->color);
+    colorTrack->ixAltColor = hvGfxFindRgb(hvg, &colorTrack->altColor);
     }
 
 if(colorTrack->drawItemAt == linkedFeaturesDrawAt)
     wigFillInColorLfArray(wigTrack, colorArray, colSize, colorTrack);
 else if(colorTrack->drawItemAt == bedDrawSimpleAt)
-    wigFillInColorBedArray(wigTrack, colorArray, colSize, colorTrack, vg);
+    wigFillInColorBedArray(wigTrack, colorArray, colSize, colorTrack, hvg);
 
 if(trackLoaded && colorTrack->freeItems != NULL)
     colorTrack->freeItems(colorTrack);
@@ -284,7 +284,7 @@ el = hashLookup(trackSpans, trackName);
 if ( el == NULL)
 	hashAdd(trackSpans, trackName, spans);
 /*	see if this span is already in our hash for this track */
-snprintf(spanName, sizeof(spanName), "%d", wi->span);
+safef(spanName, sizeof(spanName), "%d", wi->span);
 el = hashLookup(spans, spanName);
 /*	no, then add this span to the spans list for this track */
 if ( el == NULL)
@@ -429,7 +429,7 @@ spanMinimum = max(1,
 	minSpan(conn, dbTableName, chromName, winStart, winEnd, cart, tdb));
 
 itemsLoaded = 0;
-safef(whereSpan, ArraySize(whereSpan), "span=%d limit 1", spanMinimum);
+safef(whereSpan, sizeof(whereSpan), "span=%d limit 1", spanMinimum);
 
 sr = hRangeQuery(conn, dbTableName, chromName, loadStart, loadEnd,
     whereSpan, &rowOffset);
@@ -507,7 +507,7 @@ tg->items = wiList;
 
 static void wigFreeItems(struct track *tg) {
 #if defined(DEBUG)
-snprintf(dbgMsg, DBGMSGSZ, "I haven't seen wigFreeItems ever called ?");
+safef(dbgMsg, DBGMSGSZ, "I haven't seen wigFreeItems ever called ?");
 wigDebugPrint("wigFreeItems");
 #endif
 }
@@ -695,7 +695,7 @@ return(graphRange);
 }
 
 Color * allocColorArray(struct preDrawElement *preDraw, int width,
-    int preDrawZero, char *colorTrack, struct track *tg, struct vGfx *vg)
+    int preDrawZero, char *colorTrack, struct track *tg, struct hvGfx *hvg)
 /*	allocate and fill in a coloring array based on another track */
 {
 int x1;
@@ -727,14 +727,14 @@ if(colorTrack != NULL)
     {
     struct track *cTrack = hashMustFindVal(trackHash, colorTrack);
 
-    wigFillInColorArray(tg, vg, colorArray, width, cTrack);
+    wigFillInColorArray(tg, hvg, colorArray, width, cTrack);
     }
 
 return colorArray;
 }
 
 void graphPreDraw(struct preDrawElement *preDraw, int preDrawZero, int width,
-    struct track *tg, struct vGfx *vg, int xOff, int yOff,
+    struct track *tg, struct hvGfx *hvg, int xOff, int yOff,
     double graphUpperLimit, double graphLowerLimit, double graphRange,
     double epsilon, Color *colorArray, enum trackVisibility vis,
     enum wiggleGraphOptEnum lineBar)
@@ -750,7 +750,7 @@ int lastRealY = -1;
  */
 for (x1 = 0; x1 < width; ++x1)
     {
-    Color drawColor = vgFindColorIx(vg, 0, 0, 0);
+    Color drawColor = hvGfxFindColorIx(hvg, 0, 0, 0);
     int preDrawIndex = x1 + preDrawZero;
 
     /*	count is non-zero meaning valid data exists here	*/
@@ -838,11 +838,11 @@ for (x1 = 0; x1 < width; ++x1)
 	    {
 	    if (lineBar == wiggleGraphBar)
 		{
-		vgBox(vg, x1+xOff, yOff+boxTop, 1, boxHeight, drawColor);
+		hvGfxBox(hvg, x1+xOff, yOff+boxTop, 1, boxHeight, drawColor);
 		}
 	    else
 		{	/*	draw a 3 pixel height box	*/
-		vgBox(vg, x1+xOff, yPointGraph, 1, 3, drawColor);
+		hvGfxBox(hvg, x1+xOff, yPointGraph, 1, 3, drawColor);
 		}
 	    }	/*	vis == tvFull	*/
 	else if (vis == tvDense)
@@ -858,7 +858,7 @@ for (x1 = 0; x1 < width; ++x1)
 		tg->colorShades[grayInRange(grayIndex, 0, MAX_WIG_VALUE)];
 
 	    boxHeight = tg->lineHeight;
-	    vgBox(vg, x1+xOff, yOff, 1,
+	    hvGfxBox(hvg, x1+xOff, yOff, 1,
 		boxHeight, drawColor);
 	    }	/*	vis == tvDense	*/
 	lastRealX = xOff + x1;
@@ -870,7 +870,7 @@ for (x1 = 0; x1 < width; ++x1)
 void drawZeroLine(enum trackVisibility vis,
     enum wiggleGridOptEnum horizontalGrid,
     double graphUpperLimit, double graphLowerLimit,
-    struct vGfx *vg, int xOff, int yOff, int width, int lineHeight)
+    struct hvGfx *hvg, int xOff, int yOff, int width, int lineHeight)
 /*	draw a line at y=0 on the graph	*/
 {
 /*	Do we need to draw a zero line ?
@@ -879,7 +879,7 @@ void drawZeroLine(enum trackVisibility vis,
  */
 if ((vis == tvFull) && (horizontalGrid == wiggleHorizontalGridOn))
     {
-    Color black = vgFindColorIx(vg, 0, 0, 0);
+    Color black = hvGfxFindColorIx(hvg, 0, 0, 0);
     int x1, x2, y1, y2;
 
     x1 = xOff;
@@ -895,7 +895,7 @@ if ((vis == tvFull) && (horizontalGrid == wiggleHorizontalGridOn))
 	y1 = yOff + zeroOffset;
 	if (y1 >= (yOff + lineHeight)) y1 = yOff + lineHeight - 1;
 	y2 = y1;
-	vgLine(vg,x1,y1,x2,y2,black);
+	hvGfxLine(hvg,x1,y1,x2,y2,black);
 	}
 
     }	/*	drawing horizontalGrid	*/
@@ -904,7 +904,7 @@ if ((vis == tvFull) && (horizontalGrid == wiggleHorizontalGridOn))
 void drawArbitraryYLine(enum trackVisibility vis,
     enum wiggleGridOptEnum horizontalGrid,
     double graphUpperLimit, double graphLowerLimit,
-    struct vGfx *vg, int xOff, int yOff, int width, int lineHeight,
+    struct hvGfx *hvg, int xOff, int yOff, int width, int lineHeight,
     double yLineMark, double graphRange, enum wiggleYLineMarkEnum yLineOnOff)
 /*	draw a line at y=yLineMark on the graph	*/
 {
@@ -912,7 +912,7 @@ void drawArbitraryYLine(enum trackVisibility vis,
 if ((vis == tvFull) && (yLineOnOff == wiggleYLineMarkOn))
     {
     int x1, x2, y1, y2;
-    Color black = vgFindColorIx(vg, 0, 0, 0);
+    Color black = hvGfxFindColorIx(hvg, 0, 0, 0);
 
     x1 = xOff;
     x2 = x1 + width;
@@ -926,13 +926,13 @@ if ((vis == tvFull) && (yLineOnOff == wiggleYLineMarkOn))
 	y1 = yOff + Offset;
 	if (y1 >= (yOff + lineHeight)) y1 = yOff + lineHeight - 1;
 	y2 = y1;
-	vgLine(vg,x1,y1,x2,y2,black);
+	hvGfxLine(hvg,x1,y1,x2,y2,black);
 	}
 
     }	/*	drawing y= line marker	*/
 }	/*	drawArbitraryYLine()	*/
 
-void wigMapSelf(struct track *tg, int seqStart, int seqEnd,
+void wigMapSelf(struct track *tg, struct hvGfx *hvg, int seqStart, int seqEnd,
     int xOff, int yOff, int width)
 /*	if self mapping, create the mapping box	*/
 {
@@ -949,7 +949,7 @@ if (tg->mapsSelf)
     else
 	itemName = cloneString(tg->mapName);
 
-    mapBoxHc(seqStart, seqEnd, xOff, yOff, width, tg->height, tg->mapName, 
+    mapBoxHc(hvg, seqStart, seqEnd, xOff, yOff, width, tg->height, tg->mapName, 
             itemName, NULL);
     freeMem(itemName);
     }
@@ -988,7 +988,7 @@ return usingDataSpan;
 
 
 static void wigDrawItems(struct track *tg, int seqStart, int seqEnd,
-	struct vGfx *vg, int xOff, int yOff, int width,
+	struct hvGfx *hvg, int xOff, int yOff, int width,
 	MgFont *font, Color color, enum trackVisibility vis)
 /* Draw wiggle items that resolve to doing a box for each pixel. */
 {
@@ -1188,20 +1188,20 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
     }
 
 colorArray = allocColorArray(preDraw, width, preDrawZero,
-    wigCart->colorTrack, tg, vg);
+    wigCart->colorTrack, tg, hvg);
 
 graphPreDraw(preDraw, preDrawZero, width,
-    tg, vg, xOff, yOff, graphUpperLimit, graphLowerLimit, graphRange,
+    tg, hvg, xOff, yOff, graphUpperLimit, graphLowerLimit, graphRange,
     epsilon, colorArray, vis, lineBar);
 
 drawZeroLine(vis, wigCart->horizontalGrid, graphUpperLimit, graphLowerLimit,
-    vg, xOff, yOff, width, tg->lineHeight);
+    hvg, xOff, yOff, width, tg->lineHeight);
 
 drawArbitraryYLine(vis, wigCart->yLineOnOff, graphUpperLimit, graphLowerLimit,
-    vg, xOff, yOff, width, tg->lineHeight, wigCart->yLineMark, graphRange,
+    hvg, xOff, yOff, width, tg->lineHeight, wigCart->yLineMark, graphRange,
     wigCart->yLineOnOff);
 
-wigMapSelf(tg, seqStart, seqEnd, xOff, yOff, width);
+wigMapSelf(tg, hvg, seqStart, seqEnd, xOff, yOff, width);
 
 freez(&colorArray);
 freeMem(preDraw);
@@ -1225,7 +1225,7 @@ for (wi = items; wi != NULL; wi = wi->next)
 }
 
 void wigLeftLabels(struct track *tg, int seqStart, int seqEnd,
-	struct vGfx *vg, int xOff, int yOff, int width, int height,
+	struct hvGfx *hvg, int xOff, int yOff, int width, int height,
 	boolean withCenterLabels, MgFont *font, Color color,
 	enum trackVisibility vis)
 /*	drawing left labels	*/
@@ -1249,7 +1249,7 @@ if (withCenterLabels)
 /*	We only do Dense and Full	*/
 if (tg->visibility == tvDense)
     {
-    vgTextRight(vg, xOff, yOff+centerOffset, width - 1, height-centerOffset,
+    hvGfxTextRight(hvg, xOff, yOff+centerOffset, width - 1, height-centerOffset,
 	tg->ixColor, font, tg->shortLabel);
     }
 else if (tg->visibility == tvFull)
@@ -1258,7 +1258,7 @@ else if (tg->visibility == tvFull)
     int labelWidth = 0;
 
     /* track label is centered in the whole region */
-    vgText(vg, xOff, yOff+centerLabel, tg->ixColor, font, tg->shortLabel);
+    hvGfxText(hvg, xOff, yOff+centerLabel, tg->ixColor, font, tg->shortLabel);
     labelWidth = mgFontStringWidth(font,tg->shortLabel);
     /*	Is there room left to draw the min, max ?	*/
     if (height >= (3 * fontHeight))
@@ -1291,22 +1291,38 @@ else if (tg->visibility == tvFull)
 	    double d = graphLowerLimit;
 	    graphLowerLimit = graphUpperLimit;
 	    graphUpperLimit = d;
-	    snprintf(upper, 128, "No data %c", upperTic);
-	    snprintf(lower, 128, "No data _");
+            if (hvg->rc)
+                {
+                safef(upper, sizeof(upper), " %c No data", upperTic);
+                safef(lower, sizeof(lower), "_ No data");
+                }
+            else
+                {
+                safef(upper, sizeof(upper), "No data %c", upperTic);
+                safef(lower, sizeof(lower), "No data _");
+                }
 	    zeroOK = FALSE;
 	    }
 	else
 	    {
-	    snprintf(upper, 128, "%g %c", graphUpperLimit, upperTic);
-	    snprintf(lower, 128, "%g _", graphLowerLimit);
+            if (hvg->rc)
+                {
+                safef(upper, sizeof(upper), "%c %g", upperTic, graphUpperLimit);
+                safef(lower, sizeof(lower), "_ %g", graphLowerLimit);
+                }
+            else
+                {
+                safef(upper, sizeof(upper), "%g %c", graphUpperLimit, upperTic);
+                safef(lower, sizeof(lower), "%g _", graphLowerLimit);
+                }
 	    }
 	drawColor = tg->ixColor;
 	if (graphUpperLimit < 0.0) drawColor = tg->ixAltColor;
-	vgTextRight(vg, xOff, yOff, width - 1, fontHeight, drawColor,
+	hvGfxTextRight(hvg, xOff, yOff, width - 1, fontHeight, drawColor,
 	    font, upper);
 	drawColor = tg->ixColor;
 	if (graphLowerLimit < 0.0) drawColor = tg->ixAltColor;
-	vgTextRight(vg, xOff, yOff+height-fontHeight, width - 1, fontHeight,
+	hvGfxTextRight(hvg, xOff, yOff+height-fontHeight, width - 1, fontHeight,
 	    drawColor, font, lower);
 
 	for (i = 0; i < numberOfLines; ++i )
@@ -1320,16 +1336,16 @@ else if (tg->visibility == tvFull)
 		int offset;
 		int Width;
 
-		drawColor = vgFindColorIx(vg, 0, 0, 0);
+		drawColor = hvGfxFindColorIx(hvg, 0, 0, 0);
 		offset = centerOffset +
 		    (int)(((graphUpperLimit - lineValue) *
 				(height - centerOffset)) /
 			(graphUpperLimit - graphLowerLimit));
 		/*	reusing the lower string here	*/
-		if (i == 0)
-		    snprintf(lower, 128, "0 -");
-		else
-		    snprintf(lower, 128, "%g -", lineValue);
+                if (hvg->rc)
+                    safef(lower, sizeof(lower), "- %g", ((i == 0) ? 0.0 : lineValue));
+                else
+                    safef(lower, sizeof(lower), "%g -", ((i == 0) ? 0.0 : lineValue));
 		/*	only draw if it is far enough away from the
 		 *	upper and lower labels, and it won't overlap with
 		 *	the center label.
@@ -1341,7 +1357,7 @@ else if (tg->visibility == tvFull)
 		    (offset > (fontHeight*2)) &&
 		    (offset < height-(fontHeight*2)) )
 		    {
-		    vgTextRight(vg, xOff, yOff+offset-(fontHeight/2),
+		    hvGfxTextRight(hvg, xOff, yOff+offset-(fontHeight/2),
 			width - 1, fontHeight, drawColor, font, lower);
 		    }
 		}	/*	drawing a zero label	*/

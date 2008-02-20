@@ -10,7 +10,7 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     axtLib.o bactigPos.o bdgpExprLink.o bdgpGeneInfo.o \
     bed.o bed5FloatScore.o bed5Pval.o bed6FloatScore.o bed12Source.o \
     bedCart.o bgiGeneInfo.o bgiGeneSnp.o bgiSnp.o bioImage.o \
-    blastTab.o blastzNet.o blatServers.o borf.o borkPseudoHom.o botDelay.o \
+    blastTab.o blastzNet.o blatServers.o borf.o borkPseudoHom.o botDelay.o\
     cart.o cartDb.o cdsEvidence.o cdsOrtho.o cdsPick.o cdsSpec.o \
     ccdsInfo.o ccdsGeneMap.o celeraCoverage.o \
     celeraDupPositive.o cgapSage/cgapSage.o cgapSage/cgapSageLib.o cgh.o chainCart.o \
@@ -47,7 +47,7 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     hCommon.o \
     hCytoBand.o hdb.o hgColors.o hgConfig.o hgExp.o hgFind.o \
     hgFindSpec.o hgFindSpecCustom.o \
-    hgGene.o hgMaf.o hgRelate.o hgSeq.o hPrint.o \
+    hgGene.o hgMaf.o hgRelate.o hgSeq.o hPrint.o  hvGfx.o \
     HInv.o hui.o humanParalog.o \
     imageClone.o isochores.o ispyTables.o itemAttr.o itemConf.o jalview.o \
     jaxOrtholog.o jaxQTL.o jaxQTL3.o jksql.o joiner.o jsHelper.o kg1ToKg2.o \
@@ -89,6 +89,7 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     wabAli.o web.o ncRna.o wgRna.o wigAsciiToBinary.o wigDataStream.o wiggle.o \
     wiggleCart.o wiggleUtils.o wikiLink.o wikiTrack.o zdobnovSynt.o oreganno.o \
     oregannoUi.o gvUi.o gv.o omicia.o protVar.o
+
 
 
 ../../lib/$(MACHTYPE)/jkhgap.a: $(O) 

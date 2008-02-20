@@ -567,14 +567,14 @@ simpleItemsFiltered = filterSimpleList(simpleItemList, summaryItemList);
 tg->items = simpleItemsFiltered;
 }
 
-void hapmapDrawAt(struct track *tg, void *item, struct vGfx *vg, int xOff, int y, double scale, MgFont *font, Color color, enum trackVisibility vis)
+void hapmapDrawAt(struct track *tg, void *item, struct hvGfx *hvg, int xOff, int y, double scale, MgFont *font, Color color, enum trackVisibility vis)
 /* Draw the hapmap snps at a given position. */
 /* Display allele when zoomed to base level. */
 {
 
 if (!zoomedToBaseLevel)
     {
-    bedDrawSimpleAt(tg, item, vg, xOff, y, scale, font, color, vis);
+    bedDrawSimpleAt(tg, item, hvg, xOff, y, scale, font, color, vis);
     return;
     }
 
@@ -624,13 +624,13 @@ if (cartUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE))
     reverseComplement(allele, 1);
 
 Color textColor = MG_BLACK;
-vgTextCentered(vg, x1, y, w, heightPer, textColor, font, allele);
+hvGfxTextCentered(hvg, x1, y, w, heightPer, textColor, font, allele);
 
 }
 
 
 
-static Color hapmapColor(struct track *tg, void *item, struct vGfx *vg)
+static Color hapmapColor(struct track *tg, void *item, struct hvGfx *hvg)
 /* Return color to draw hapmap item */
 /* Use grayscale based on minor allele score or quality score. */
 /* The higher minor allele frequency, the darker the shade. */

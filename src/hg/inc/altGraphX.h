@@ -21,8 +21,8 @@
 #include "spaceSaver.h"
 #endif
 
-#ifndef VGFX_H
-#include "vGfx.h"
+#ifndef HVGFX_H
+#include "hvGfx.h"
 #endif
 
 enum altSpliceType
@@ -242,10 +242,10 @@ void altGraphXLayout(struct altGraphX *agList, int seqStart, int seqEnd,
     required to layout. */
 
 void altGraphXDrawPack(struct altGraphX *agList, struct spaceSaver *ssList, 
-		       struct vGfx *vg, int xOff, int yOff, int width, 
+		       struct hvGfx *hvg, int xOff, int yOff, int width, 
 		       int heightPer, int lineHeight, int seqStart, int seqEnd, double scale, 
 		       MgFont *font, Color color, Color *shades, char *drawName,
-		       void (*mapItem)(char *tableName, struct altGraphX *ag, int start, int end,
+		       void (*mapItem)(char *tableName, struct altGraphX *ag, struct hvGfx *hvg, int start, int end,
 				       int x, int y, int width, int height));
 /** Draw a splicing graph for each altGraphX in the agList where the
     exons don't overlap as they have been laid out in the spaceSaver

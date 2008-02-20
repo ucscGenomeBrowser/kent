@@ -182,7 +182,7 @@ return tg->height;
 }
 
 static void drawOneClone(struct cloneInfo *ci, int seqStart, int seqEnd,
-    struct vGfx *vg, int xOff, int yOff, int width,
+    struct hvGfx *hvg, int xOff, int yOff, int width,
     MgFont *font, int lineHeight, Color color, boolean stagger, 
     boolean hiliteDupes, boolean nofrag)
 /* Draw a single clone item - using space saver layout on fragments. */
@@ -264,10 +264,10 @@ for (sn = ss->nodeList; sn != NULL; sn = sn->next)
 		col = MG_BLUE;
 	    }
 	}
-    vgBox(vg, x1, y, w, heightPer, col);
+    hvGfxBox(hvg, x1, y, w, heightPer, col);
     textWidth = mgFontStringWidth(font, s);
     if ((textWidth <= w) && (!nofrag))
-	vgTextCentered(vg, x1, y, w, heightPer, MG_WHITE, font, s); 
+	hvGfxTextCentered(hvg, x1, y, w, heightPer, MG_WHITE, font, s); 
     if (baseWidth <= 2000000)
 	{
 	psl = cfa->psl;
@@ -277,10 +277,10 @@ for (sn = ss->nodeList; sn != NULL; sn = sn->next)
 	    	psl->qName, psl->qStart, 
 		psl->qEnd, psl->qSize, psl->strand,
 		psl->tStart, psl->tEnd);
-	    mapBoxHc(cfa->start, cfa->end, x1,y,w,heightPer, "hgClone", cfa->frag->name, fullPos);
+	    mapBoxHc(hvg, cfa->start, cfa->end, x1,y,w,heightPer, "hgClone", cfa->frag->name, fullPos);
 	    }
 	else
-	    mapBoxHc(cfa->start, cfa->end, x1,y,w,heightPer, "hgClone", cfa->frag->name, cfa->frag->name);
+	    mapBoxHc(hvg, cfa->start, cfa->end, x1,y,w,heightPer, "hgClone", cfa->frag->name, cfa->frag->name);
 	}
     }
 freeHash(&dupeHash);
@@ -318,7 +318,7 @@ for (i=0; i<width; ++i)
 }
 
 static void cloneDenseDraw(struct track *tg, int seqStart, int seqEnd,
-        struct vGfx *vg, int xOff, int yOff, int width, 
+        struct hvGfx *hvg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw dense clone items. */
 {
@@ -355,13 +355,13 @@ for (ci = tg->items; ci != NULL; ci = ci->next)
     }
 resampleBytes(useCounts, sampleWidth, aveCounts, width);
 grayThreshold(aveCounts, width);
-vgVerticalSmear(vg,xOff,yOff,width,lineHeight,aveCounts,TRUE);
+hvGfxVerticalSmear(hvg,xOff,yOff,width,lineHeight,aveCounts,TRUE);
 freeMem(useCounts);
 freeMem(aveCounts);
 }
 
 static void cloneFullDraw(struct track *tg, int seqStart, int seqEnd,
-        struct vGfx *vg, int xOff, int yOff, int width, 
+        struct hvGfx *hvg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw full  clone items. */
 {
@@ -409,12 +409,12 @@ for (ci = tg->items; ci != NULL; ci = ci->next)
     x1 = roundingScale(ci->cloneStart-winStart, width, baseWidth)+xOff;
     x2 = roundingScale(ci->cloneEnd-winStart, width, baseWidth)+xOff;
     w = x2-x1;
-    vgBox(vg, x1, y, w, oneHeight-1, bgColor);
+    hvGfxBox(hvg, x1, y, w, oneHeight-1, bgColor);
     if (!tooBig)
-	drawOneClone(ci, seqStart, seqEnd, vg, xOff, y+1, width, font, lineHeight, 
+	drawOneClone(ci, seqStart, seqEnd, hvg, xOff, y+1, width, font, lineHeight, 
 		color, TRUE, tg->subType, nofrag);
     else
-	drawOneClone(ci, seqStart, seqEnd, vg, xOff, y, width, font, oneHeight-1, 
+	drawOneClone(ci, seqStart, seqEnd, hvg, xOff, y, width, font, oneHeight-1, 
 		color, FALSE, tg->subType, nofrag);
     y += oneHeight;
     }
@@ -422,14 +422,14 @@ hFreeConn(&conn);
 }
 
 static void cloneDraw(struct track *tg, int seqStart, int seqEnd,
-        struct vGfx *vg, int xOff, int yOff, int width, 
+        struct hvGfx *hvg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw clone items. */
 {
 if (vis == tvFull)
-    cloneFullDraw(tg, seqStart, seqEnd, vg, xOff, yOff, width, font, color, vis);
+    cloneFullDraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis);
 else
-    cloneDenseDraw(tg, seqStart, seqEnd, vg, xOff, yOff, width, font, color, vis);
+    cloneDenseDraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis);
 }
 
 

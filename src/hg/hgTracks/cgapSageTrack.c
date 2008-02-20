@@ -124,26 +124,13 @@ struct linkedFeatures *lf = item;
 return (char *)lf->extra;
 }
 
-static void cgapSageMapItem(struct track *tg, void *item, char *itemName, char *mapItemName, int start, int end,
+static void cgapSageMapItem(struct track *tg, struct hvGfx *hvg, void *item, char *itemName, char *mapItemName, int start, int end,
 			    int x, int y, int width, int height)
 {
 struct linkedFeatures *lf = item;
-int xEnd = x+width;
-int yEnd = y+height;
-if (x < 0) x = 0;
-if (xEnd > tl.picWidth) xEnd = tl.picWidth;
-if (x < xEnd)
-    {
-    char *encodedItem = cgiEncode(itemName);
-    char *encodedTrack = cgiEncode(tg->mapName);
-    hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, xEnd, yEnd);
-    hPrintf("HREF=\"%s&o=%d&t=%d&g=%s&%s&c=%s&l=%d&r=%d&db=%s&pix=%d\" ",
-	    hgcNameAndSettings(), start, end, encodedTrack, (char *)lf->extra,
-	    chromName, winStart, winEnd, database, tl.picWidth);
-    hPrintf(">\n");
-    freeMem(encodedItem);
-    freeMem(encodedTrack);
-    }
+mapBoxHgcOrHgGene(hvg, start, end, x, y, width, height, 
+                  tg->mapName, itemName, NULL, NULL, TRUE,
+                  (char *)lf->extra);
 }
 
 int cgapLinkedFeaturesCmp(const void *va, const void *vb)
@@ -289,7 +276,7 @@ tg->items = itemList;
 static Color cgapShadesOfRed[10+1];
 /* This will go from white to darker red. */
 
-static Color cgapSageItemColor(struct track *tg, void *item, struct vGfx *vg)
+static Color cgapSageItemColor(struct track *tg, void *item, struct hvGfx *hvg)
 /* Return color to draw CGAP SAGE item */
 {
 struct linkedFeatures *thisItem = item;
@@ -298,14 +285,14 @@ return cgapShadesOfRed[thisItem->grayIx];
 
 void cgapSageDrawItems(struct track *tg, 
         int seqStart, int seqEnd,
-        struct vGfx *vg, int xOff, int yOff, int width, 
+        struct hvGfx *hvg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Initialize the colors, then do the normal drawing. */
 {
 static struct rgbColor lowerColor = {205, 191, 191};
 static struct rgbColor cgapRed = {205, 0, 0};
-vgMakeColorGradient(vg, &lowerColor, &cgapRed, 10, cgapShadesOfRed);
-genericDrawItems(tg, seqStart, seqEnd, vg, xOff, yOff, width, font, color, vis);
+hvGfxMakeColorGradient(hvg, &lowerColor, &cgapRed, 10, cgapShadesOfRed);
+genericDrawItems(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis);
 }
 
 void cgapSageMethods(struct track *tg)

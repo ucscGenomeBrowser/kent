@@ -61,7 +61,7 @@ return ri->className;
 }
 
 static void repeatDraw(struct track *tg, int seqStart, int seqEnd,
-        struct vGfx *vg, int xOff, int yOff, int width, 
+        struct hvGfx *hvg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 {
 int baseWidth = seqEnd - seqStart;
@@ -111,7 +111,7 @@ if (isFull)
 	w = x2-x1;
 	if (w <= 0)
 	    w = 1;
-	vgBox(vg, x1, ri->yOffset, w, heightPer, col);
+	hvGfxBox(hvg, x1, ri->yOffset, w, heightPer, col);
 	if (baseWidth <= 100000)
 	    {
 	    if (ri == otherRepeatItem)
@@ -124,7 +124,7 @@ if (isFull)
 		sprintf(statusLine, "Repeat %s, family %s",
 		    ro.repName, ro.repFamily);
 		}
-	    mapBoxHc(ro.genoStart, ro.genoEnd, x1, ri->yOffset, w, heightPer, tg->mapName,
+	    mapBoxHc(hvg, ro.genoStart, ro.genoEnd, x1, ri->yOffset, w, heightPer, tg->mapName,
 	    	ro.repName, statusLine);
 	    }
 	}
@@ -155,7 +155,7 @@ else
 	    w = x2-x1;
 	    if (w <= 0)
 		w = 1;
-	    vgBox(vg, x1, yOff, w, heightPer, MG_BLACK);
+	    hvGfxBox(hvg, x1, yOff, w, heightPer, MG_BLACK);
 	    }
 	}
     dyStringFree(&query);

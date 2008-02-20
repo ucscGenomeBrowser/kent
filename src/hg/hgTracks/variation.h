@@ -46,14 +46,14 @@ void loadSnpMap(struct track *tg);
 void freeSnpMap(struct track *tg);
 /* Free up snpMap items. */
 
-Color snpMapColor(struct track *tg, void *item, struct vGfx *vg);
+Color snpMapColor(struct track *tg, void *item, struct hvGfx *hvg);
 /* Return color of snpMap track item. */
 
-void snpMapDrawItemAt(struct track *tg, void *item, struct vGfx *vg, int xOff, int y, 
+void snpMapDrawItemAt(struct track *tg, void *item, struct hvGfx *hvg, int xOff, int y, 
 		      double scale, MgFont *font, Color color, enum trackVisibility vis);
 /* Draw a single snpMap item at position. */
 
-void drawDiamond(struct vGfx *vg, 
+void drawDiamond(struct hvGfx *hvg, 
 		 int xl, int yl, int xt, int yt, int xr, int yr, int xb, int yb, 
 		 Color fillColor, Color outlineColor);
 /* Draw diamond shape. */
@@ -69,13 +69,13 @@ Color getOutlineColor(struct track *tg, int itemCount);
 void mapTrackBackground(struct track *tg, int xOff, int yOff);
 /* Print out image map rectangle that invokes hgTrackUi. */
 
-void initColorLookup(struct track *tg, struct vGfx *vg, boolean isDprime);
+void initColorLookup(struct track *tg, struct hvGfx *hvg, boolean isDprime);
 
 void ldAddToDenseValueHash(struct hash *ldHash, unsigned a, char charValue);
 /* Add new values to LD hash or update existing values.
    Values are averaged along the diagonals. */
 
-void ldDrawDenseValueHash(struct vGfx *vg, struct track *tg, int xOff, int yOff, 
+void ldDrawDenseValueHash(struct hvGfx *hvg, struct track *tg, int xOff, int yOff, 
 			  double scale, Color outlineColor, struct hash *ldHash);
 /* Draw all dense LD values */
 
@@ -110,11 +110,11 @@ void loadSnp125(struct track *tg);
 void freeSnp(struct track *tg);
 /* Free up snp items. */
 
-Color snpColor(struct track *tg, void *item, struct vGfx *vg);
-Color snp125Color(struct track *tg, void *item, struct vGfx *vg);
+Color snpColor(struct track *tg, void *item, struct hvGfx *hvg);
+Color snp125Color(struct track *tg, void *item, struct hvGfx *hvg);
 /* Return color of snp track item. */
 
-void snpDrawItemAt(struct track *tg, void *item, struct vGfx *vg, int xOff, int y, 
+void snpDrawItemAt(struct track *tg, void *item, struct hvGfx *hvg, int xOff, int y, 
 		   double scale, MgFont *font, Color color, enum trackVisibility vis);
 /* Draw a single snp item at position. */
 
@@ -174,11 +174,11 @@ int ldTotalHeight(struct track *tg, enum trackVisibility vis);
  * Must set height, lineHeight, heightPer */ 
 
 void ldDrawItems(struct track *tg, int seqStart, int seqEnd,
-		  struct vGfx *vg, int xOff, int yOff, int width, 
+		  struct hvGfx *hvg, int xOff, int yOff, int width, 
 		  MgFont *font, Color color, enum trackVisibility vis);
 /* Draw item list, one per track. */
 
-void ldDrawItemAt(struct track *tg, void *item, struct vGfx *vg, 
+void ldDrawItemAt(struct track *tg, void *item, struct hvGfx *hvg, 
 		  int xOff, int yOff, double scale, 
 		  MgFont *font, Color color, enum trackVisibility vis);
 /* Draw a single item.  Required for genericDrawItems */
@@ -196,7 +196,7 @@ void cnpIafrateLoadItems(struct track *tg);
 
 void cnpIafrateFreeItems(struct track *tg);
 
-Color cnpIafrateColor(struct track *tg, void *item, struct vGfx *vg);
+Color cnpIafrateColor(struct track *tg, void *item, struct hvGfx *hvg);
 /* green for GAIN, red for LOSS, blue for both */
 
 void cnpIafrateMethods(struct track *tg);
@@ -207,7 +207,7 @@ void cnpIafrate2LoadItems(struct track *tg);
 
 void cnpIafrate2FreeItems(struct track *tg);
 
-Color cnpIafrate2Color(struct track *tg, void *item, struct vGfx *vg);
+Color cnpIafrate2Color(struct track *tg, void *item, struct hvGfx *hvg);
 /* green for GAIN, red for LOSS, blue for both */
 
 void cnpIafrate2Methods(struct track *tg);
@@ -218,7 +218,7 @@ void cnpSebatLoadItems(struct track *tg);
 
 void cnpSebatFreeItems(struct track *tg);
 
-Color cnpSebatColor(struct track *tg, void *item, struct vGfx *vg);
+Color cnpSebatColor(struct track *tg, void *item, struct hvGfx *hvg);
 /* green for GAIN, red for LOSS, blue for both */
 
 void cnpSebatMethods(struct track *tg);
@@ -229,7 +229,7 @@ void cnpSebat2LoadItems(struct track *tg);
 
 void cnpSebat2FreeItems(struct track *tg);
 
-Color cnpSebat2Color(struct track *tg, void *item, struct vGfx *vg);
+Color cnpSebat2Color(struct track *tg, void *item, struct hvGfx *hvg);
 /* green for GAIN, red for LOSS */
 
 void cnpSebat2Methods(struct track *tg);
@@ -240,7 +240,7 @@ void cnpSharpLoadItems(struct track *tg);
 
 void cnpSharpFreeItems(struct track *tg);
 
-Color cnpSharpColor(struct track *tg, void *item, struct vGfx *vg);
+Color cnpSharpColor(struct track *tg, void *item, struct hvGfx *hvg);
 /* green for GAIN, red for LOSS, blue for both */
 
 void cnpSharpMethods(struct track *tg);
@@ -251,7 +251,7 @@ void cnpSharp2LoadItems(struct track *tg);
 
 void cnpSharp2FreeItems(struct track *tg);
 
-Color cnpSharp2Color(struct track *tg, void *item, struct vGfx *vg);
+Color cnpSharp2Color(struct track *tg, void *item, struct hvGfx *hvg);
 /* green for GAIN, red for LOSS, blue for both */
 
 void cnpSharp2Methods(struct track *tg);
@@ -262,7 +262,7 @@ void cnpFosmidLoadItems(struct track *tg);
 
 void cnpFosmidFreeItems(struct track *tg);
 
-Color cnpFosmidColor(struct track *tg, void *item, struct vGfx *vg);
+Color cnpFosmidColor(struct track *tg, void *item, struct hvGfx *hvg);
 /* green for I, red for D */
 
 void cnpFosmidMethods(struct track *tg);
@@ -273,7 +273,7 @@ void cnpRedonLoadItems(struct track *tg);
 
 void cnpRedonFreeItems(struct track *tg);
 
-Color cnpRedonColor(struct track *tg, void *item, struct vGfx *vg);
+Color cnpRedonColor(struct track *tg, void *item, struct hvGfx *hvg);
 /* always gray */
 
 void cnpRedonMethods(struct track *tg);
@@ -284,36 +284,36 @@ void cnpLockeLoadItems(struct track *tg);
 
 void cnpLockeFreeItems(struct track *tg);
 
-Color cnpLockeColor(struct track *tg, void *item, struct vGfx *vg);
+Color cnpLockeColor(struct track *tg, void *item, struct hvGfx *hvg);
 
 void cnpLockeMethods(struct track *tg);
 /* methods for cnpLocke */
 
-Color cnpTuzunColor(struct track *tg, void *item, struct vGfx *vg);
+Color cnpTuzunColor(struct track *tg, void *item, struct hvGfx *hvg);
 /* always gray */
 
 void cnpTuzunMethods(struct track *tg);
 /* methods for cnpTuzun */
 
-Color delConradColor(struct track *tg, void *item, struct vGfx *vg);
+Color delConradColor(struct track *tg, void *item, struct hvGfx *hvg);
 /* always red */
 
 void delConradMethods(struct track *tg);
 /* methods for delConrad */
 
-Color delConrad2Color(struct track *tg, void *item, struct vGfx *vg);
+Color delConrad2Color(struct track *tg, void *item, struct hvGfx *hvg);
 /* always red */
 
 void delConrad2Methods(struct track *tg);
 /* methods for delConrad2 */
 
-Color delMccarrollColor(struct track *tg, void *item, struct vGfx *vg);
+Color delMccarrollColor(struct track *tg, void *item, struct hvGfx *hvg);
 /* always red */
 
 void delMccarrollMethods(struct track *tg);
 /* methods for delMccarroll */
 
-Color delHindsColor(struct track *tg, void *item, struct vGfx *vg);
+Color delHindsColor(struct track *tg, void *item, struct hvGfx *hvg);
 /* always red */
 
 void delHindsMethods(struct track *tg);

@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.132 2008/01/08 19:00:00 angie Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.133 2008/02/20 00:42:28 markd Exp $";
 
 struct hash *snp125FuncCartColorHash = NULL;
 struct hash *snp125FuncCartNameHash = NULL;
@@ -362,7 +362,7 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
-Color snp125ExtendedColor(struct track *tg, void *item, struct vGfx *vg)
+Color snp125ExtendedColor(struct track *tg, void *item, struct hvGfx *hvg)
 /* Return color of snp track item. */
 {
 return ((struct snp125Extended *)item)->color;
@@ -620,7 +620,7 @@ snp125FreeList((struct snp125**)&tg->items);
 }
 
 
-Color snpMapColor(struct track *tg, void *item, struct vGfx *vg)
+Color snpMapColor(struct track *tg, void *item, struct hvGfx *hvg)
 /* Return color of snpMap track item. */
 {
 struct snpMap *el = item;
@@ -668,7 +668,7 @@ switch (thisSnpColor)
     }
 }
 
-Color snp125Color(struct track *tg, void *item, struct vGfx *vg)
+Color snp125Color(struct track *tg, void *item, struct hvGfx *hvg)
 /* Return color of snp track item. */
 {
 struct snp125 *el = item;
@@ -737,7 +737,7 @@ switch (index1)
 return snp125ColorToMg(thisSnpColor);
 }
 
-Color snpColor(struct track *tg, void *item, struct vGfx *vg)
+Color snpColor(struct track *tg, void *item, struct hvGfx *hvg)
 /* Return color of snp track item. */
 {
 struct snp *el = item;
@@ -804,7 +804,7 @@ switch (thisSnpColor)
     }
 }
 
-void snpMapDrawItemAt(struct track *tg, void *item, struct vGfx *vg, int xOff, int y, 
+void snpMapDrawItemAt(struct track *tg, void *item, struct hvGfx *hvg, int xOff, int y, 
 	double scale, MgFont *font, Color color, enum trackVisibility vis)
 /* Draw a single snpMap item at position. */
 {
@@ -813,17 +813,17 @@ int heightPer = tg->heightPer;
 int x1 = round((double)((int)sm->chromStart-winStart)*scale) + xOff;
 int x2 = round((double)((int)sm->chromEnd-winStart)*scale) + xOff;
 int w = x2-x1;
-Color itemColor = tg->itemColor(tg, sm, vg);
+Color itemColor = tg->itemColor(tg, sm, hvg);
 
 if ( w<1 )
     w = 1;
-vgBox(vg, x1, y, w, heightPer, itemColor);
+hvGfxBox(hvg, x1, y, w, heightPer, itemColor);
 /* Clip here so that text will tend to be more visible... */
 if (tg->drawName && vis != tvSquish)
-    mapBoxHc(sm->chromStart, sm->chromEnd, x1, y, w, heightPer, tg->mapName, tg->mapItemName(tg, sm), NULL);
+    mapBoxHc(hvg, sm->chromStart, sm->chromEnd, x1, y, w, heightPer, tg->mapName, tg->mapItemName(tg, sm), NULL);
 }
 
-void snpDrawItemAt(struct track *tg, void *item, struct vGfx *vg, int xOff, int y, 
+void snpDrawItemAt(struct track *tg, void *item, struct hvGfx *hvg, int xOff, int y, 
 	double scale, MgFont *font, Color color, enum trackVisibility vis)
 /* Draw a single snp item at position. */
 {
@@ -832,18 +832,18 @@ int heightPer = tg->heightPer;
 int x1 = round((double)((int)s->chromStart-winStart)*scale) + xOff;
 int x2 = round((double)((int)s->chromEnd-winStart)*scale) + xOff;
 int w = x2-x1;
-Color itemColor = tg->itemColor(tg, s, vg);
+Color itemColor = tg->itemColor(tg, s, hvg);
 
 if ( w<1 )
     w = 1;
-vgBox(vg, x1, y, w, heightPer, itemColor);
+hvGfxBox(hvg, x1, y, w, heightPer, itemColor);
 /* Clip here so that text will tend to be more visible... */
 if (tg->drawName && vis != tvSquish)
-    mapBoxHc(s->chromStart, s->chromEnd, x1, y, w, heightPer,
+    mapBoxHc(hvg, s->chromStart, s->chromEnd, x1, y, w, heightPer,
 	     tg->mapName, tg->mapItemName(tg, s), NULL);
 }
 
-void snp125DrawItemAt(struct track *tg, void *item, struct vGfx *vg, int xOff, int y, 
+void snp125DrawItemAt(struct track *tg, void *item, struct hvGfx *hvg, int xOff, int y, 
 	double scale, MgFont *font, Color color, enum trackVisibility vis)
 /* Draw a single snp125 item at position. */
 {
@@ -852,19 +852,19 @@ int heightPer = tg->heightPer;
 int x1 = round((double)((int)s->chromStart-winStart)*scale) + xOff;
 int x2 = round((double)((int)s->chromEnd-winStart)*scale) + xOff;
 int w = x2-x1;
-Color itemColor = tg->itemColor(tg, s, vg);
+Color itemColor = tg->itemColor(tg, s, hvg);
 
 if ( w<1 )
     w = 1;
-vgBox(vg, x1, y, w, heightPer, itemColor);
+hvGfxBox(hvg, x1, y, w, heightPer, itemColor);
 /* Clip here so that text will tend to be more visible... */
 if (tg->drawName && vis != tvSquish)
-    mapBoxHc(s->chromStart, s->chromEnd, x1, y, w, heightPer,
+    mapBoxHc(hvg, s->chromStart, s->chromEnd, x1, y, w, heightPer,
 	     tg->mapName, tg->mapItemName(tg, s), NULL);
 }
 
 static void snpMapDrawItems(struct track *tg, int seqStart, int seqEnd,
-        struct vGfx *vg, int xOff, int yOff, int width, 
+        struct hvGfx *hvg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw snpMap items. */
 {
@@ -881,7 +881,7 @@ if (vis == tvPack || vis == tvSquish)
     {
     struct spaceSaver *ss = tg->ss;
     struct spaceNode *sn = NULL;
-    vgSetClip(vg, insideX, yOff, insideWidth, tg->height);
+    hvGfxSetClip(hvg, insideX, yOff, insideWidth, tg->height);
     for (sn = ss->nodeList; sn != NULL; sn = sn->next)
         {
         struct slList *item = sn->val;
@@ -891,11 +891,11 @@ if (vis == tvPack || vis == tvSquish)
         int x2 = round((e - winStart)*scale) + xOff;
         int textX = x1;
         char *name = tg->itemName(tg, item);
-	Color itemColor = tg->itemColor(tg, item, vg);
-	Color itemNameColor = tg->itemNameColor(tg, item, vg);
+	Color itemColor = tg->itemColor(tg, item, hvg);
+	Color itemNameColor = tg->itemNameColor(tg, item, hvg);
 	
         y = yOff + lineHeight * sn->row;
-        tg->drawItemAt(tg, item, vg, xOff, y, scale, font, itemColor, vis);
+        tg->drawItemAt(tg, item, hvg, xOff, y, scale, font, itemColor, vis);
         if (withLabels)
             {
             int nameWidth = mgFontStringWidth(font, name);
@@ -904,21 +904,21 @@ if (vis == tvPack || vis == tvSquish)
             if (textX < insideX)        /* Snap label to the left. */
 		{
 		textX = leftLabelX;
-		vgUnclip(vg);
-		vgSetClip(vg, leftLabelX, yOff, insideWidth, tg->height);
-		vgTextRight(vg, leftLabelX, y, leftLabelWidth-1, heightPer,
+		hvGfxUnclip(hvg);
+		hvGfxSetClip(hvg, leftLabelX, yOff, insideWidth, tg->height);
+		hvGfxTextRight(hvg, leftLabelX, y, leftLabelWidth-1, heightPer,
 			    itemNameColor, font, name);
-		vgUnclip(vg);
-		vgSetClip(vg, insideX, yOff, insideWidth, tg->height);
+		hvGfxUnclip(hvg);
+		hvGfxSetClip(hvg, insideX, yOff, insideWidth, tg->height);
 		}
             else
-		vgTextRight(vg, textX, y, nameWidth, heightPer, 
+		hvGfxTextRight(hvg, textX, y, nameWidth, heightPer, 
 			    itemNameColor, font, name);
             }
         if (!tg->mapsSelf && ( ( w = x2-textX ) > 0 ))
-	    mapBoxHgcOrHgGene(s, e, textX, y, w, heightPer, tg->mapName, tg->mapItemName(tg, item), name, NULL, FALSE);
+	    mapBoxHgcOrHgGene(hvg, s, e, textX, y, w, heightPer, tg->mapName, tg->mapItemName(tg, item), name, NULL, FALSE, NULL);
         }
-    vgUnclip(vg);
+    hvGfxUnclip(hvg);
     }
 else
     {
@@ -926,8 +926,8 @@ else
     y = yOff;
     for (item = tg->items; item != NULL; item = item->next)
         {
-	Color itemColor = tg->itemColor(tg, item, vg);
-        tg->drawItemAt(tg, item, vg, xOff, y, scale, font, itemColor, vis);
+	Color itemColor = tg->itemColor(tg, item, hvg);
+        tg->drawItemAt(tg, item, hvg, xOff, y, scale, font, itemColor, vis);
         if (vis == tvFull) 
 	    y += lineHeight;
         } 
@@ -935,7 +935,7 @@ else
 }
 
 static void snpDrawItems(struct track *tg, int seqStart, int seqEnd,
-        struct vGfx *vg, int xOff, int yOff, int width, 
+        struct hvGfx *hvg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw snp items. */
 {
@@ -951,7 +951,7 @@ if (vis == tvPack || vis == tvSquish)
     {
     struct spaceSaver *ss = tg->ss;
     struct spaceNode *sn = NULL;
-    vgSetClip(vg, insideX, yOff, insideWidth, tg->height);
+    hvGfxSetClip(hvg, insideX, yOff, insideWidth, tg->height);
     for (sn = ss->nodeList; sn != NULL; sn = sn->next)
         {
         struct slList *item = sn->val;
@@ -961,12 +961,12 @@ if (vis == tvPack || vis == tvSquish)
         int x2 = round((e - winStart)*scale) + xOff;
         int textX = x1;
         char *name = tg->itemName(tg, item);
-	Color itemColor = tg->itemColor(tg, item, vg);
-	Color itemNameColor = tg->itemNameColor(tg, item, vg);
+	Color itemColor = tg->itemColor(tg, item, hvg);
+	Color itemNameColor = tg->itemNameColor(tg, item, hvg);
 	boolean drawNameInverted = FALSE;
 	
         y = yOff + lineHeight * sn->row;
-        tg->drawItemAt(tg, item, vg, xOff, y, scale, font, itemColor, vis);
+        tg->drawItemAt(tg, item, hvg, xOff, y, scale, font, itemColor, vis);
         if (withLabels)
             {
             int nameWidth = mgFontStringWidth(font, name);
@@ -978,37 +978,37 @@ if (vis == tvPack || vis == tvSquish)
             if (snapLeft)        /* Snap label to the left. */
 		{
 		textX = leftLabelX;
-		vgUnclip(vg);
-		vgSetClip(vg, leftLabelX, yOff, insideWidth, tg->height);
+		hvGfxUnclip(hvg);
+		hvGfxSetClip(hvg, leftLabelX, yOff, insideWidth, tg->height);
 		if (drawNameInverted)
 		    {
 		    int boxStart = leftLabelX + leftLabelWidth - 2 - nameWidth;
-		    vgBox(vg, boxStart, y, nameWidth+1, heightPer - 1, color);
-		    vgTextRight(vg, leftLabelX, y, leftLabelWidth-1, heightPer,
+		    hvGfxBox(hvg, boxStart, y, nameWidth+1, heightPer - 1, color);
+		    hvGfxTextRight(hvg, leftLabelX, y, leftLabelWidth-1, heightPer,
 		                MG_WHITE, font, name);
 		    }
 		else
-		    vgTextRight(vg, leftLabelX, y, leftLabelWidth-1, heightPer,
+		    hvGfxTextRight(hvg, leftLabelX, y, leftLabelWidth-1, heightPer,
 			    itemNameColor, font, name);
-		vgUnclip(vg);
-		vgSetClip(vg, insideX, yOff, insideWidth, tg->height);
+		hvGfxUnclip(hvg);
+		hvGfxSetClip(hvg, insideX, yOff, insideWidth, tg->height);
 		}
             else
 	        {
 		if (drawNameInverted)
 		    {
-		    vgBox(vg, textX - 1, y, nameWidth+1, heightPer-1, color);
-		    vgTextRight(vg, textX, y, nameWidth, heightPer, MG_WHITE, font, name);
+		    hvGfxBox(hvg, textX - 1, y, nameWidth+1, heightPer-1, color);
+		    hvGfxTextRight(hvg, textX, y, nameWidth, heightPer, MG_WHITE, font, name);
 		    }
 		else
-		    vgTextRight(vg, textX, y, nameWidth, heightPer, 
+		    hvGfxTextRight(hvg, textX, y, nameWidth, heightPer, 
 			    itemNameColor, font, name);
 		}
             }
         if (!tg->mapsSelf && ( ( w = x2-textX ) > 0 ) )
-	    mapBoxHgcOrHgGene(s, e, textX, y, w, heightPer, tg->mapName, tg->mapItemName(tg, item), name, NULL, FALSE);
+	    mapBoxHgcOrHgGene(hvg, s, e, textX, y, w, heightPer, tg->mapName, tg->mapItemName(tg, item), name, NULL, FALSE, NULL);
         }
-    vgUnclip(vg);
+    hvGfxUnclip(hvg);
     }
 else
     {
@@ -1016,8 +1016,8 @@ else
     y = yOff;
     for (item = tg->items; item != NULL; item = item->next)
         {
-	Color itemColor = tg->itemColor(tg, item, vg);
-        tg->drawItemAt(tg, item, vg, xOff, y, scale, font, itemColor, vis);
+	Color itemColor = tg->itemColor(tg, item, hvg);
+        tg->drawItemAt(tg, item, hvg, xOff, y, scale, font, itemColor, vis);
         if (vis == tvFull) 
 	    y += lineHeight;
         } 
@@ -1083,7 +1083,7 @@ return (tg->heightPer-4);
 }
 
 static void haplotypeLinkedFeaturesDrawAt(struct track *tg, void *item,
-               struct vGfx *vg, int xOff, int y, double scale, 
+               struct hvGfx *hvg, int xOff, int y, double scale, 
 	       MgFont *font, Color color, enum trackVisibility vis)
 /* draws and individual haplotype and a given location */
 {
@@ -1108,11 +1108,11 @@ if (lf->components != NULL && !hideLine)
     w = x2 - x1;
     color = shades[lf->grayIx+isXeno];
 
-    vgBox(vg, x1, y+3, w, shortHeight-2, color);
+    hvGfxBox(hvg, x1, y+3, w, shortHeight-2, color);
     if (vis==tvSquish)
-	vgBox(vg, x1, y+1, w, tg->heightPer/2, color);
+	hvGfxBox(hvg, x1, y+1, w, tg->heightPer/2, color);
     else
-	vgBox(vg, x1, y+3, w, shortHeight-1, color);
+	hvGfxBox(hvg, x1, y+3, w, shortHeight-1, color);
     }
 for (sf = lf->components; sf != NULL; sf = sf->next)
     {
@@ -1120,9 +1120,9 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
     e = sf->end;
     heightPer = haplotypeHeight(tg, lf, sf);
     if (vis==tvSquish)
-	drawScaledBox(vg, s, e, scale, xOff, y, tg->heightPer, blackIndex());
+	drawScaledBox(hvg, s, e, scale, xOff, y, tg->heightPer, blackIndex());
     else
-	drawScaledBox(vg, s, e, scale, xOff, y+((tg->heightPer-heightPer)/2),
+	drawScaledBox(hvg, s, e, scale, xOff, y+((tg->heightPer-heightPer)/2),
 		      heightPer, blackIndex());
     }
 }
@@ -1150,7 +1150,7 @@ Color ldHighLodLowDprime; /* pink */
 Color ldHighDprimeLowLod; /* blue */
 int colorLookup[256];
 
-void ldShadesInit(struct track *tg, struct vGfx *vg, boolean isDprime) 
+void ldShadesInit(struct track *tg, struct hvGfx *hvg, boolean isDprime) 
 /* Allocate the LD for positive and negative values, and error cases */
 {
 static struct rgbColor white = {255, 255, 255};
@@ -1162,14 +1162,14 @@ char *ldPos = NULL;
 
 dyStringPrintf(dsLdPos, "%s_pos", tg->tdb->tableName);
 ldPos = cartUsualString(cart, dsLdPos->string, ldPosDefault);
-ldHighLodLowDprime = vgFindColorIx(vg, 255, 224, 224); /* pink */
-ldHighDprimeLowLod = vgFindColorIx(vg, 192, 192, 240); /* blue */
+ldHighLodLowDprime = hvGfxFindColorIx(hvg, 255, 224, 224); /* pink */
+ldHighDprimeLowLod = hvGfxFindColorIx(hvg, 192, 192, 240); /* blue */
 if (sameString(ldPos,"red")) 
-    vgMakeColorGradient(vg, &white, &red,   LD_DATA_SHADES, ldShadesPos);
+    hvGfxMakeColorGradient(hvg, &white, &red,   LD_DATA_SHADES, ldShadesPos);
 else if (sameString(ldPos,"blue"))
-    vgMakeColorGradient(vg, &white, &blue,  LD_DATA_SHADES, ldShadesPos);
+    hvGfxMakeColorGradient(hvg, &white, &blue,  LD_DATA_SHADES, ldShadesPos);
 else if (sameString(ldPos,"green"))
-    vgMakeColorGradient(vg, &white, &green, LD_DATA_SHADES, ldShadesPos);
+    hvGfxMakeColorGradient(hvg, &white, &green, LD_DATA_SHADES, ldShadesPos);
 else
     errAbort("LD fill color must be 'red', 'blue', or 'green'; '%s' is not recognized", ldPos);
 }
@@ -1260,9 +1260,9 @@ else
 return tg->height;
 }
 
-void initColorLookup(struct track *tg, struct vGfx *vg, boolean isDprime)
+void initColorLookup(struct track *tg, struct hvGfx *hvg, boolean isDprime)
 {
-ldShadesInit(tg, vg, isDprime);
+ldShadesInit(tg, hvg, isDprime);
 colorLookup[(int)'a'] = ldShadesPos[0];
 colorLookup[(int)'b'] = ldShadesPos[1];
 colorLookup[(int)'c'] = ldShadesPos[2];
@@ -1277,7 +1277,7 @@ colorLookup[(int)'y'] = ldHighLodLowDprime; /* LOD error case */
 colorLookup[(int)'z'] = ldHighDprimeLowLod; /* LOD error case */
 }
 
-void drawDiamond(struct vGfx *vg, 
+void drawDiamond(struct hvGfx *hvg, 
 	 int xl, int yl, int xt, int yt, int xr, int yr, int xb, int yb, 
 	 Color fillColor, Color outlineColor)
 /* Draw diamond shape. */
@@ -1287,13 +1287,13 @@ gfxPolyAddPoint(poly, xl, yl);
 gfxPolyAddPoint(poly, xt, yt);
 gfxPolyAddPoint(poly, xr, yr);
 gfxPolyAddPoint(poly, xb, yb);
-vgDrawPoly(vg, poly, fillColor, TRUE);
+hvGfxDrawPoly(hvg, poly, fillColor, TRUE);
 if (outlineColor != 0)
-    vgDrawPoly(vg, poly, outlineColor, FALSE);
+    hvGfxDrawPoly(hvg, poly, outlineColor, FALSE);
 gfxPolyFree(&poly);
 }
 
-void ldDrawDiamond(struct vGfx *vg, struct track *tg, int width, 
+void ldDrawDiamond(struct hvGfx *hvg, struct track *tg, int width, 
 		   int xOff, int yOff, int a, int b, int c, int d, 
 		   Color shade, Color outlineColor, double scale, 
 		   boolean drawMap, char *name, enum trackVisibility vis,
@@ -1301,7 +1301,7 @@ void ldDrawDiamond(struct vGfx *vg, struct track *tg, int width,
 /* Draw and map a single pairwise LD box */
 {
 int yMax = ldTotalHeight(tg, vis)+yOff;
-/* convert from genomic coordinates to vg coordinates */
+/* convert from genomic coordinates to hvg coordinates */
 int xl = round((double)(scale*((c+a)/2-winStart))) + xOff;
 int xt = round((double)(scale*((d+a)/2-winStart))) + xOff;
 int xr = round((double)(scale*((d+b)/2-winStart))) + xOff;
@@ -1327,7 +1327,7 @@ if (yb<=0)
     yb=1;
 if (yt>yMax && trim)
     yt=yMax;
-drawDiamond(vg, xl, yl, xt, yt, xr, yr, xb, yb, shade, outlineColor);
+drawDiamond(hvg, xl, yl, xt, yt, xr, yr, xb, yb, shade, outlineColor);
 return; /* mapDiamondUI is working well, but there is a bug with 
 	   AREA=POLY on the Mac browsers, so this will be 
 	   postponed for now by not using this code */
@@ -1460,7 +1460,7 @@ else
     }
 }
 
-void ldDrawDenseValue(struct vGfx *vg, struct track *tg, int xOff, int y1, 
+void ldDrawDenseValue(struct hvGfx *hvg, struct track *tg, int xOff, int y1, 
 		      double scale, Color outlineColor, struct ldStats *d)
 /* Draw single dense LD value */
 {
@@ -1474,27 +1474,27 @@ int   w2        = w/2;
 int   x         = round((d->chromStart-winStart)*scale) + xOff - w2;
 int   x1=x-w2, x2=x1+w, y2=y1+tg->heightPer-1;
 
-vgBox(vg, x1, y1, w, tg->heightPer, shade);
+hvGfxBox(hvg, x1, y1, w, tg->heightPer, shade);
 if (outlineColor!=0)
     {
-    vgLine(vg, x1, y1, x2, y1, outlineColor);
-    vgLine(vg, x1, y2, x2, y2, outlineColor);
-    vgLine(vg, x1, y1, x1, y2, outlineColor);
-    vgLine(vg, x2, y1, x2, y2, outlineColor);
+    hvGfxLine(hvg, x1, y1, x2, y1, outlineColor);
+    hvGfxLine(hvg, x1, y2, x2, y2, outlineColor);
+    hvGfxLine(hvg, x1, y1, x1, y2, outlineColor);
+    hvGfxLine(hvg, x2, y1, x2, y2, outlineColor);
     }
 }
 
-void ldDrawDenseValueHash(struct vGfx *vg, struct track *tg, int xOff, int yOff, 
+void ldDrawDenseValueHash(struct hvGfx *hvg, struct track *tg, int xOff, int yOff, 
 			  double scale, Color outlineColor, struct hash *ldHash)
 /* Draw dynamically computed dense LD values */
 {
 struct hashEl *hashEl, *stats=hashElListHash(ldHash);
 for (hashEl=stats; hashEl!=NULL; hashEl=hashEl->next)
-    ldDrawDenseValue(vg, tg, xOff, yOff, scale, outlineColor, hashEl->val);
+    ldDrawDenseValue(hvg, tg, xOff, yOff, scale, outlineColor, hashEl->val);
 hashElFreeList(&stats);
 }
 
-void ldDrawDense(struct vGfx *vg, struct track *tg, int xOff, int yOff, 
+void ldDrawDense(struct hvGfx *hvg, struct track *tg, int xOff, int yOff, 
 		 double scale, Color outlineColor,
 		 boolean isLod, boolean isRsquared)
 /* Draw precomputed dense LD values from ld2 table. */
@@ -1525,14 +1525,14 @@ for (dPtr = tg->items;  dPtr != NULL;  dPtr = dPtr->next)
 	int x1 = round((e1-winStart)*scale) + xOff;
 	int x2 = round((dPtr->next->chromStart-winStart)*scale) + xOff;
 	int w  = x2 - x1;
-	vgBox(vg, x1, yOff, w, tg->heightPer-1, shade);
+	hvGfxBox(hvg, x1, yOff, w, tg->heightPer-1, shade);
 	}
-    ldDrawDenseValue(vg, tg, xOff, yOff, scale, outlineColor, &lds);
+    ldDrawDenseValue(hvg, tg, xOff, yOff, scale, outlineColor, &lds);
     }
 }
 
 void ldDrawLeftLabels(struct track *tg, int seqStart, int seqEnd,
-	struct vGfx *vg, int xOff, int yOff, int width, int height, 
+	struct hvGfx *hvg, int xOff, int yOff, int width, int height, 
 	boolean withCenterLabels, MgFont *font,
 	Color color, enum trackVisibility vis)
 /* Draw left labels. */
@@ -1581,11 +1581,11 @@ else
 	safef(label, sizeof(label), "LD %s", ldVal);
     }
 
-vgUnclip(vg);
-vgSetClip(vg, leftLabelX, yOff+yVisOffset, leftLabelWidth, tg->heightPer);
-vgTextRight(vg, leftLabelX, yOff+yVisOffset, leftLabelWidth, tg->heightPer, color, font, label);
-vgUnclip(vg);
-vgSetClip(vg, insideX, yOff, insideWidth, tg->height);
+hvGfxUnclip(hvg);
+hvGfxSetClip(hvg, leftLabelX, yOff+yVisOffset, leftLabelWidth, tg->heightPer);
+hvGfxTextRight(hvg, leftLabelX, yOff+yVisOffset, leftLabelWidth, tg->heightPer, color, font, label);
+hvGfxUnclip(hvg);
+hvGfxSetClip(hvg, insideX, yOff, insideWidth, tg->height);
 }
 
 
@@ -1613,12 +1613,12 @@ vgSetClip(vg, insideX, yOff, insideWidth, tg->height);
      b: the SNP immediately 3' of the chromStart (dPtr->next->chromStart)
      c: the SNP immediately 5' of the second position's chromStart (sPtr->chromStart)
      d: the SNP at the second position's chromStart (sPtr->next->chromStart) 
- * The chromosome coordinates are converted into vg coordinates in
+ * The chromosome coordinates are converted into hvg coordinates in
    ldDrawDiamond.
  * A counter (i) is used to keep from reading beyond the end of the 
    value array.  */
 void ldDrawItems(struct track *tg, int seqStart, int seqEnd,
-		 struct vGfx *vg, int xOff, int yOff, int width,
+		 struct hvGfx *hvg, int xOff, int yOff, int width,
 		 MgFont *font, Color color, enum trackVisibility vis)
 /* Draw item list, one per track. */
 {
@@ -1630,7 +1630,7 @@ Color        shade     = 0, outlineColor = getOutlineColor(tg, itemCount);
 int          a, b, c, d, i; /* chromosome coordinates and counter */
 boolean      drawMap   = FALSE; /* ( itemCount<1000 ? TRUE : FALSE ); */
 struct hash *ldHash    = newHash(20);
-Color        yellow    = vgFindRgb(vg, &undefinedYellowColor);
+Color        yellow    = hvGfxFindRgb(hvg, &undefinedYellowColor);
 char        *ldVal     = NULL;
 boolean      ldTrm;
 struct dyString *dsLdVal = newDyString(32);
@@ -1654,7 +1654,7 @@ if (vis == tvDense)
 	dynamicDense = TRUE;
     }
 if (vis == tvDense)
-    vgBox(vg, insideX, yOff, insideWidth, tg->height-1, yellow);
+    hvGfxBox(hvg, insideX, yOff, insideWidth, tg->height-1, yellow);
 mapTrackBackground(tg, xOff, yOff);
 if (tg->items==NULL)
     return;
@@ -1669,12 +1669,12 @@ else
     errAbort ("LD score value must be 'rsquared', 'dprime', or 'lod'; '%s' is not known", ldVal);
 
 /* initialize arrays to convert from ascii encoding to color values */
-initColorLookup(tg, vg, isDprime);
+initColorLookup(tg, hvg, isDprime);
 
 /* If this is an ld2 table with precomputed averages, skip the big loop. */
 if (!dynamicDense && vis == tvDense)
     {
-    ldDrawDense(vg, tg, xOff, yOff, scale, outlineColor, isLod, isRsquared);
+    ldDrawDense(hvg, tg, xOff, yOff, scale, outlineColor, isLod, isRsquared);
     return;
     }
 
@@ -1707,7 +1707,7 @@ for (dPtr=tg->items; dPtr!=NULL && dPtr->next!=NULL; dPtr=dPtr->next)
 	    continue;
 	shade = colorLookup[(int)ldVal[i]];
 	if (vis == tvFull)
-	    ldDrawDiamond(vg, tg, width, xOff, yOff, a, b, c, d, shade, outlineColor, scale, drawMap, dPtr->name, vis, ldTrm);
+	    ldDrawDiamond(hvg, tg, width, xOff, yOff, a, b, c, d, shade, outlineColor, scale, drawMap, dPtr->name, vis, ldTrm);
 	else if (dynamicDense)
 	    {
 	    ldAddToDenseValueHash(ldHash, a, ldVal[i]);
@@ -1726,7 +1726,7 @@ for (dPtr=tg->items; dPtr!=NULL && dPtr->next!=NULL; dPtr=dPtr->next)
 	    continue;
 	shade = colorLookup[(int)ldVal[i]];
 	if (vis == tvFull)
-	    ldDrawDiamond(vg, tg, width, xOff, yOff, a, b, c, d, shade, outlineColor, scale, drawMap, dPtr->name, vis, ldTrm);
+	    ldDrawDiamond(hvg, tg, width, xOff, yOff, a, b, c, d, shade, outlineColor, scale, drawMap, dPtr->name, vis, ldTrm);
 	else if (dynamicDense)
 	    {
 	    ldAddToDenseValueHash(ldHash, a, ldVal[i]);
@@ -1749,7 +1749,7 @@ if (dPtr->next==NULL)
 	    ldVal = dPtr->dprime;
 	shade = colorLookup[(int)ldVal[0]];
 	if (vis == tvFull)
-	    ldDrawDiamond(vg, tg, width, xOff, yOff, a, b, a, b, shade, outlineColor, scale, drawMap, dPtr->name, vis, ldTrm);
+	    ldDrawDiamond(hvg, tg, width, xOff, yOff, a, b, a, b, shade, outlineColor, scale, drawMap, dPtr->name, vis, ldTrm);
 	else if (dynamicDense)
 	    {
 	    ldAddToDenseValueHash(ldHash, a, ldVal[0]);
@@ -1758,7 +1758,7 @@ if (dPtr->next==NULL)
 	}
     }
 if (dynamicDense)
-    ldDrawDenseValueHash(vg, tg, xOff, yOff, scale, outlineColor, ldHash);
+    ldDrawDenseValueHash(hvg, tg, xOff, yOff, scale, outlineColor, ldHash);
 }
 
 void ldFreeItems(struct track *tg)
@@ -1874,7 +1874,7 @@ void cnpLockeFreeItems(struct track *tg)
 bedFreeList((struct bed**)&tg->items);
 }
 
-Color cnpSharpItemColor(struct track *tg, void *item, struct vGfx *vg)
+Color cnpSharpItemColor(struct track *tg, void *item, struct hvGfx *hvg)
 {
 struct cnpSharp *cnpSh = item;
 
@@ -1887,7 +1887,7 @@ if (sameString(cnpSh->variationType, "Gain and Loss"))
 return MG_BLACK;
 }
 
-Color cnpSharp2ItemColor(struct track *tg, void *item, struct vGfx *vg)
+Color cnpSharp2ItemColor(struct track *tg, void *item, struct hvGfx *hvg)
 {
 struct cnpSharp2 *cnpSh = item;
 
@@ -1900,7 +1900,7 @@ if (sameString(cnpSh->variationType, "Gain and Loss"))
 return MG_BLACK;
 }
 
-Color cnpIafrateItemColor(struct track *tg, void *item, struct vGfx *vg)
+Color cnpIafrateItemColor(struct track *tg, void *item, struct hvGfx *hvg)
 {
 struct cnpIafrate *cnpIa = item;
 
@@ -1913,7 +1913,7 @@ if (sameString(cnpIa->variationType, "Gain and Loss"))
 return MG_BLACK;
 }
 
-Color cnpIafrate2ItemColor(struct track *tg, void *item, struct vGfx *vg)
+Color cnpIafrate2ItemColor(struct track *tg, void *item, struct hvGfx *hvg)
 {
 struct cnpIafrate2 *cnpIa = item;
 int gainCount = cnpIa->normalGain + cnpIa->patientGain;
@@ -1928,7 +1928,7 @@ if (gainCount > 0 && lossCount > 0)
 return MG_BLACK;
 }
 
-Color cnpSebatItemColor(struct track *tg, void *item, struct vGfx *vg)
+Color cnpSebatItemColor(struct track *tg, void *item, struct hvGfx *hvg)
 {
 struct cnpSebat *cnpSe = item;
 
@@ -1941,7 +1941,7 @@ if (sameString(cnpSe->name, "Gain and Loss"))
 return MG_BLACK;
 }
 
-Color cnpSebat2ItemColor(struct track *tg, void *item, struct vGfx *vg)
+Color cnpSebat2ItemColor(struct track *tg, void *item, struct hvGfx *hvg)
 {
 struct cnpSebat2 *cnpSe = item;
 
@@ -1952,7 +1952,7 @@ if (sameString(cnpSe->name, "Loss"))
 return MG_BLACK;
 }
 
-Color cnpFosmidItemColor(struct track *tg, void *item, struct vGfx *vg)
+Color cnpFosmidItemColor(struct track *tg, void *item, struct hvGfx *hvg)
 {
 struct bed *cnpFo = item;
 
@@ -1963,17 +1963,17 @@ if (cnpFo->name[0] == 'D')
 return MG_BLACK;
 }
 
-Color cnpTuzunItemColor (struct track *tg, void *item, struct vGfx *vg)
+Color cnpTuzunItemColor (struct track *tg, void *item, struct hvGfx *hvg)
 {
 return MG_GRAY;
 }
 
-Color cnpRedonItemColor (struct track *tg, void *item, struct vGfx *vg)
+Color cnpRedonItemColor (struct track *tg, void *item, struct hvGfx *hvg)
 {
 return MG_GRAY;
 }
 
-Color cnpLockeItemColor(struct track *tg, void *item, struct vGfx *vg)
+Color cnpLockeItemColor(struct track *tg, void *item, struct hvGfx *hvg)
 {
 struct cnpLocke *thisItem = item;
 
@@ -1986,22 +1986,22 @@ if (sameString(thisItem->variationType, "Gain and Loss"))
 return MG_BLACK;
 }
 
-Color delConradItemColor (struct track *tg, void *item, struct vGfx *vg)
+Color delConradItemColor (struct track *tg, void *item, struct hvGfx *hvg)
 {
 return MG_RED;
 }
 
-Color delConrad2ItemColor (struct track *tg, void *item, struct vGfx *vg)
+Color delConrad2ItemColor (struct track *tg, void *item, struct hvGfx *hvg)
 {
 return MG_RED;
 }
 
-Color delMccarrollItemColor (struct track *tg, void *item, struct vGfx *vg)
+Color delMccarrollItemColor (struct track *tg, void *item, struct hvGfx *hvg)
 {
 return MG_RED;
 }
 
-Color delHindsItemColor (struct track *tg, void *item, struct vGfx *vg)
+Color delHindsItemColor (struct track *tg, void *item, struct hvGfx *hvg)
 {
 return MG_RED;
 }

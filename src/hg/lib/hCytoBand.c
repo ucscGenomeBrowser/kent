@@ -2,8 +2,7 @@
  * banding data. */
 
 #include "common.h"
-#include "memgfx.h"
-#include "vGfx.h"
+#include "hvGfx.h"
 #include "hCommon.h"
 #include "hgColors.h"
 #include "cytoBand.h"
@@ -38,7 +37,7 @@ return NULL;
 }
 
 static Color cytoBandColorGiemsa(struct cytoBand *band, 
-	struct vGfx *vg, Color aColor, Color bColor,
+	struct hvGfx *hvg, Color aColor, Color bColor,
 	Color *shades, int maxShade)
 /* Figure out color of band based on gieStain field. */
 {
@@ -66,7 +65,7 @@ else
 }
 
 static Color cytoBandColorDmel(struct cytoBand *band, 
-	struct vGfx *vg, Color aColor, Color bColor,
+	struct hvGfx *hvg, Color aColor, Color bColor,
 	Color *shades, int maxShade)
 /* Figure out color of band based on D. melanogaster band name: just toggle 
  * color based on subband letter before the number at end of name (number 
@@ -85,14 +84,14 @@ else
     return bColor;
 }
 
-Color hCytoBandColor(struct cytoBand *band, struct vGfx *vg, boolean isDmel,
+Color hCytoBandColor(struct cytoBand *band, struct hvGfx *hvg, boolean isDmel,
 	Color aColor, Color bColor, Color *shades, int maxShade)
 /* Return appropriate color for band. */
 {
 if (isDmel)
-     return cytoBandColorDmel(band, vg, aColor, bColor, shades, maxShade);
+     return cytoBandColorDmel(band, hvg, aColor, bColor, shades, maxShade);
 else
-     return cytoBandColorGiemsa(band, vg, aColor, bColor, shades, maxShade);
+     return cytoBandColorGiemsa(band, hvg, aColor, bColor, shades, maxShade);
 }
 
 char *hCytoBandName(struct cytoBand *band, boolean isDmel)
@@ -103,33 +102,33 @@ sprintf(buf, "%s%s", (isDmel ? "" : skipChr(band->chrom)), band->name);
 return buf;
 }
 
-void hCytoBandDrawAt(struct cytoBand *band, struct vGfx *vg,
+void hCytoBandDrawAt(struct cytoBand *band, struct hvGfx *hvg,
 	int x, int y, int width, int height, boolean isDmel,
 	MgFont *font, int fontPixelHeight, Color aColor, Color bColor,
 	Color *shades, int maxShade)
 /* Draw a single band in appropriate color at given position.  If there's
  * room put in band label. */
 {
-Color col = hCytoBandColor(band, vg, isDmel, aColor, bColor, shades, maxShade);
-vgBox(vg, x, y, width, height, col);
+Color col = hCytoBandColor(band, hvg, isDmel, aColor, bColor, shades, maxShade);
+hvGfxBox(hvg, x, y, width, height, col);
 if (height >= fontPixelHeight+2)
     {
     char *s = abbreviatedBandName(band, font, width, isDmel);
     if (s != NULL)
 	{
-	Color textCol = vgContrastingColor(vg, col);
-	vgTextCentered(vg, x, y, width, height, textCol, font, s);
+	Color textCol = hvGfxContrastingColor(hvg, col);
+	hvGfxTextCentered(hvg, x, y, width, height, textCol, font, s);
 	}
     }
 }
 
-Color hCytoBandCentromereColor(struct vGfx *vg)
+Color hCytoBandCentromereColor(struct hvGfx *hvg)
 /* Get the color used traditionally to draw centromere */
 {
-return vgFindColorIx(vg, 150, 50, 50);
+return hvGfxFindColorIx(hvg, 150, 50, 50);
 }
 
-void hCytoBandDrawCentromere(struct vGfx *vg, int x, int y, 
+void hCytoBandDrawCentromere(struct hvGfx *hvg, int x, int y, 
 	int width, int height, Color bgColor, Color fgColor)
 /* Draw the centromere. */
 {
@@ -140,17 +139,17 @@ int xEnd = x+width-1, yEnd = y+height-1;
 /* Draw box over centromere, may be drawn already with lettering
  * which we don't want. */
 
-vgBox(vg, x, y, width, height, bgColor);
+hvGfxBox(hvg, x, y, width, height, bgColor);
 
-char *savedHint = vgGetHint(vg,"fat");
-vgSetHint(vg,"fat","on");
+char *savedHint = hvGfxGetHint(hvg,"fat");
+hvGfxSetHint(hvg,"fat","on");
 
 /* Make up triangle on left of centromere and draw. */
 poly = gfxPolyNew();
 gfxPolyAddPoint(poly, x, y);
 gfxPolyAddPoint(poly, xCen, yCen);
 gfxPolyAddPoint(poly, x, yEnd);
-vgDrawPoly(vg, poly, fgColor, TRUE);
+hvGfxDrawPoly(hvg, poly, fgColor, TRUE);
 gfxPolyFree(&poly);
 
 /* Make up triangle on right of centromere and draw. */
@@ -158,10 +157,10 @@ poly = gfxPolyNew();
 gfxPolyAddPoint(poly, xEnd, y);
 gfxPolyAddPoint(poly, xCen, yCen);
 gfxPolyAddPoint(poly, xEnd, yEnd);
-vgDrawPoly(vg, poly, fgColor, TRUE);
+hvGfxDrawPoly(hvg, poly, fgColor, TRUE);
 gfxPolyFree(&poly);
 
-vgSetHint(vg,"fat",savedHint);
+hvGfxSetHint(hvg,"fat",savedHint);
 }
 
 	

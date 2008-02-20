@@ -38,4 +38,6 @@ typedef void (*vg_fillUnder)(void *v, int x1, int y1,
 typedef void (*vg_drawPoly)(void *v, struct gfxPoly *poly, Color color, boolean filled);
 typedef void (*vg_setHint)(void *v, char *hint, char *value);
 typedef char * (*vg_getHint)(void *v, char *hint);
+typedef int (*vg_getFontPixelHeight)(void *v, void *font);
+typedef int (*vg_getFontStringWidth)(void *v, void *font, char *string);
 

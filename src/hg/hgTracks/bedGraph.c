@@ -14,7 +14,7 @@
 #include "customTrack.h"
 #include "wigCommon.h"
 
-static char const rcsid[] = "$Id: bedGraph.c,v 1.7 2005/02/09 23:37:42 hiram Exp $";
+static char const rcsid[] = "$Id: bedGraph.c,v 1.8 2008/02/20 00:42:24 markd Exp $";
 
 struct bedGraphItem
 /* A bedGraph track item. */
@@ -164,7 +164,7 @@ wigDebugPrint("bedGraphFreeItems");
 }
 
 static void bedGraphDrawItems(struct track *tg, int seqStart, int seqEnd,
-	struct vGfx *vg, int xOff, int yOff, int width,
+	struct hvGfx *hvg, int xOff, int yOff, int width,
 	MgFont *font, Color color, enum trackVisibility vis)
 {
 struct bedGraphItem *wi;
@@ -300,22 +300,22 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
     }
 
 colorArray = allocColorArray(preDraw, width, preDrawZero,
-    wigCart->colorTrack, tg, vg);
+    wigCart->colorTrack, tg, hvg);
 
 graphPreDraw(preDraw, preDrawZero, width,
-    tg, vg, xOff, yOff, graphUpperLimit, graphLowerLimit, graphRange,
+    tg, hvg, xOff, yOff, graphUpperLimit, graphLowerLimit, graphRange,
     epsilon, colorArray, vis, wigCart->lineBar);
 
 drawZeroLine(vis, wigCart->horizontalGrid,
     graphUpperLimit, graphLowerLimit,
-    vg, xOff, yOff, width, tg->lineHeight);
+    hvg, xOff, yOff, width, tg->lineHeight);
 
 drawArbitraryYLine(vis, wigCart->yLineOnOff,
     graphUpperLimit, graphLowerLimit,
-    vg, xOff, yOff, width, tg->lineHeight, wigCart->yLineMark, graphRange,
+    hvg, xOff, yOff, width, tg->lineHeight, wigCart->yLineMark, graphRange,
     wigCart->yLineOnOff);
 
-wigMapSelf(tg, seqStart, seqEnd, xOff, yOff, width);
+wigMapSelf(tg, hvg, seqStart, seqEnd, xOff, yOff, width);
 
 freez(&colorArray);
 freeMem(preDraw);

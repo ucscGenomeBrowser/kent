@@ -16,7 +16,7 @@
 #include "vGfx.h"
 #include "vGfxPrivate.h"
 
-static char const rcsid[] = "$Id: pscmGfx.c,v 1.23 2007/05/18 01:18:46 galt Exp $";
+static char const rcsid[] = "$Id: pscmGfx.c,v 1.24 2008/02/20 00:42:33 markd Exp $";
 
 
 static struct pscmGfx *boxPscm;	 /* Used to keep from drawing the same box again
@@ -49,6 +49,19 @@ char *pscmGetHint(struct pscmGfx *pscm, char *hint)
 {
 return hashOptionalVal(pscm->hints, hint, "");
 }
+
+int pscmGetFontPixelHeight(struct pscmGfx *pscm, MgFont *font)
+/* How high in pixels is font? */
+{
+return font_cel_height(font);
+}
+
+int pscmGetFontStringWidth(struct pscmGfx *pscm, MgFont *font, char *string)
+/* How wide is a string? */
+{
+return fnstring_width(font, string, strlen(string));
+}
+
 void pscmSetClip(struct pscmGfx *pscm, int x, int y, int width, int height)
 /* Set clipping rectangle. */
 {
@@ -763,6 +776,8 @@ vg->fillUnder = (vg_fillUnder)pscmFillUnder;
 vg->drawPoly = (vg_drawPoly)pscmDrawPoly;
 vg->setHint = (vg_setHint)pscmSetHint;
 vg->getHint = (vg_getHint)pscmGetHint;
+vg->getFontPixelHeight = (vg_getFontPixelHeight)pscmGetFontPixelHeight;
+vg->getFontStringWidth = (vg_getFontStringWidth)pscmGetFontStringWidth;
 return vg;
 }
 

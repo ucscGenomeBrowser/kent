@@ -20,7 +20,7 @@ int maxBasePairSpan=5000;
 boolean rnaPLFoldInv=FALSE; // default is inverted = sequence on buttom
 double scaleHeight=0;
 
-void plShadesInit(struct track *tg, struct vGfx *vg, boolean isDprime) 
+void plShadesInit(struct track *tg, struct hvGfx *hvg, boolean isDprime) 
 /* Allocate the LD for positive and negative values, and error cases */
 {
 static struct rgbColor white = {255, 255, 255};
@@ -28,21 +28,21 @@ static struct rgbColor red   = {255,   0,   0};
 static struct rgbColor green = {0   , 255,  0};
 static struct rgbColor blue  = {  0,   0, 255};
 
-plOutlineColor = vgFindColorIx(vg, 0, 0, 0); /* black */
-plHighDprimeLowLod = vgFindColorIx(vg, 192, 192, 240); /* blue */
+plOutlineColor = hvGfxFindColorIx(hvg, 0, 0, 0); /* black */
+plHighDprimeLowLod = hvGfxFindColorIx(hvg, 192, 192, 240); /* blue */
 
 
-vgMakeColorGradient(vg, &white, &blue,  RNAPLFOLD_DATA_SHADES, plShadesPos);
-vgMakeColorGradient(vg, &white, &red,   RNAPLFOLD_DATA_SHADES, plShadesPos + RNAPLFOLD_DATA_SHADES);
-vgMakeColorGradient(vg, &white, &green, RNAPLFOLD_DATA_SHADES, plShadesPos + 2 * RNAPLFOLD_DATA_SHADES);
+hvGfxMakeColorGradient(hvg, &white, &blue,  RNAPLFOLD_DATA_SHADES, plShadesPos);
+hvGfxMakeColorGradient(hvg, &white, &red,   RNAPLFOLD_DATA_SHADES, plShadesPos + RNAPLFOLD_DATA_SHADES);
+hvGfxMakeColorGradient(hvg, &white, &green, RNAPLFOLD_DATA_SHADES, plShadesPos + 2 * RNAPLFOLD_DATA_SHADES);
 
 char *cartString = cartCgiUsualString(cart, RNAPLFOLD_INVERT, RNAPLFOLD_INVERT_DEF);
 rnaPLFoldInv =  sameString(cartString,RNAPLFOLD_INVERT_BUTTOM) ? FALSE : TRUE;
 }
 
-void plInitColorLookup(struct track *tg, struct vGfx *vg, boolean isDprime)
+void plInitColorLookup(struct track *tg, struct hvGfx *hvg, boolean isDprime)
 {
-plShadesInit(tg, vg, isDprime);
+plShadesInit(tg, hvg, isDprime);
 colorLookup[(int)'a'] = plShadesPos[0];
 colorLookup[(int)'b'] = plShadesPos[1];
 colorLookup[(int)'c'] = plShadesPos[2];
@@ -162,7 +162,7 @@ if ( vis==tvDense || ( tg->limitedVisSet && tg->limitedVis==tvDense ) )
 return tg->height;
 }
 
-void lpDrawDiamond(struct vGfx *vg, 
+void lpDrawDiamond(struct hvGfx *hvg, 
 		   int xl, int yl, int xt, int yt, int xr, int yr, int xb, int yb, 
 		   Color fillColor, Color outlineColor)
 /* Draw diamond shape. */
@@ -172,11 +172,11 @@ gfxPolyAddPoint(poly, xl, yl);
 gfxPolyAddPoint(poly, xt, yt);
 gfxPolyAddPoint(poly, xr, yr);
 gfxPolyAddPoint(poly, xb, yb);
-vgDrawPoly(vg, poly, fillColor, TRUE);
+hvGfxDrawPoly(hvg, poly, fillColor, TRUE);
 gfxPolyFree(&poly);
 }
 
-void rnaPLFoldDrawDiamond(struct vGfx *vg, struct track *tg, int width, 
+void rnaPLFoldDrawDiamond(struct hvGfx *hvg, struct track *tg, int width, 
 			  int xOff, int yOff, int a, int b, int c, int d, 
 			  Color shade, Color outlineColor, double scale, 
 			  boolean drawMap, char *name, enum trackVisibility vis,
@@ -184,7 +184,7 @@ void rnaPLFoldDrawDiamond(struct vGfx *vg, struct track *tg, int width,
 /* Draw and map a single pairwise RNALPFOLD box */
 {
 int yMax = rnaPLFoldTotalHeight(tg, vis)+yOff;
-/* convert from genomic coordinates to vg coordinates */
+/* convert from genomic coordinates to hvg coordinates */
 /* multiple coordinates by 10 to avoid integer division rounding errors */
 a*=10;
 b*=10;
@@ -213,7 +213,7 @@ if (yb<=0)
 if (yt>yMax && trim)
     yt=yMax;
  
- lpDrawDiamond(vg, xl, yl, xt, yt, xr, yr, xb, yb, shade, outlineColor);
+ lpDrawDiamond(hvg, xl, yl, xt, yt, xr, yr, xb, yb, shade, outlineColor);
 
 
 
@@ -232,17 +232,17 @@ void rnaPLFoldAddToDenseValueHash(struct hash *rnaPLFoldHash, unsigned a, char r
 ldAddToDenseValueHash(rnaPLFoldHash, a, rnaPLFoldVal);
 }
 
-void rnaPLFoldDrawDenseValueHash(struct vGfx *vg, struct track *tg, int xOff, int yOff, 
+void rnaPLFoldDrawDenseValueHash(struct hvGfx *hvg, struct track *tg, int xOff, int yOff, 
 				 double scale, Color outlineColor, struct hash *ldHash)
 {
-ldDrawDenseValueHash(vg, tg, xOff, yOff, scale, outlineColor, ldHash);
+ldDrawDenseValueHash(hvg, tg, xOff, yOff, scale, outlineColor, ldHash);
 }
 
 
 /* rnaPLFoldDrawItems -- lots of disk and cpu optimizations here.  
  * Based on rnaPLFoldDrawItems */
 void rnaPLFoldDrawItems(struct track *tg, int seqStart, int seqEnd,
-			struct vGfx *vg, int xOff, int yOff, int width,
+			struct hvGfx *hvg, int xOff, int yOff, int width,
 			MgFont *font, Color color, enum trackVisibility vis)
 /* Draw item list, one per track. */
 {
@@ -254,7 +254,7 @@ double       scale     = scaleForPixels(insideWidth);
 int          a=0, b, c, d=0, i; /* chromosome coordinates and counter */
 boolean      drawMap   = FALSE; /* ( itemCount<1000 ? TRUE : FALSE ); */
 //struct hash *rnaPLFoldHash    = newHash(20);
-Color        yellow    = vgFindRgb(vg, &undefinedYellowColor);
+Color        yellow    = hvGfxFindRgb(hvg, &undefinedYellowColor);
 char        *rnaPLFoldVal     = NULL;
 boolean      rnaPLFoldTrm     = FALSE;
 struct dyString *dsRnaLpFoldTrm = newDyString(32);
@@ -262,7 +262,7 @@ struct dyString *dsRnaLpFoldTrm = newDyString(32);
 
 dyStringPrintf(dsRnaLpFoldTrm, "%s_trm", tg->mapName);
 if ( vis==tvDense || ( tg->limitedVisSet && tg->limitedVis==tvDense ) )
-    vgBox(vg, insideX, yOff, insideWidth, tg->height-1, yellow);
+    hvGfxBox(hvg, insideX, yOff, insideWidth, tg->height-1, yellow);
 mapTrackBackground(tg, xOff, yOff);
 
 /*nothing to do? */
@@ -270,7 +270,7 @@ if (tg->items==NULL)
     return;
 
 /* initialize arrays to convert from ascii encoding to color values */
-plInitColorLookup(tg, vg, FALSE);
+plInitColorLookup(tg, hvg, FALSE);
 
 /* Loop through all items to get values and initial coordinates (a and b) */
 for (dPtr=tg->items; dPtr!=NULL && dPtr->next!=NULL; dPtr=dPtr->next)
@@ -315,7 +315,7 @@ for (dPtr=tg->items; dPtr!=NULL && dPtr->next!=NULL; dPtr=dPtr->next)
 	       else
 		 outlineColor=0;
 
-	    rnaPLFoldDrawDiamond(vg, tg, width, xOff, yOff, a, b, c, d, shade, outlineColor, scale, drawMap, "", vis, rnaPLFoldTrm);
+	    rnaPLFoldDrawDiamond(hvg, tg, width, xOff, yOff, a, b, c, d, shade, outlineColor, scale, drawMap, "", vis, rnaPLFoldTrm);
 	    //	else if ( vis==tvDense || ( tg->limitedVisSet && tg->limitedVis==tvDense ) )
 	    //	    {
 	    //	    rnaPLFoldAddToDenseValueHash(rnaPLFoldHash, a, rnaPLFoldVal[i]);
@@ -342,8 +342,8 @@ for (dPtr=tg->items; dPtr!=NULL && dPtr->next!=NULL; dPtr=dPtr->next)
 Color pColorDarkGray;
 Color pColorLightGray;
 
-pColorDarkGray = vgFindColorIx(vg, 128, 128, 128); /* dark gray */
-pColorLightGray = vgFindColorIx(vg, 200, 200, 200); /* light gray */
+pColorDarkGray = hvGfxFindColorIx(hvg, 128, 128, 128); /* dark gray */
+pColorLightGray = hvGfxFindColorIx(hvg, 200, 200, 200); /* light gray */
  
 int diagDark = atoi(cartCgiUsualString(cart, RNAPLFOLD_DIAGDARK, RNAPLFOLD_DIAGDARK_DEF));
 int diagLight = atoi(cartCgiUsualString(cart, RNAPLFOLD_DIAGLIGHT, RNAPLFOLD_DIAGLIGHT_DEF));
@@ -361,29 +361,29 @@ int x,r;
        {
 	 if(diagDark && i%diagDark == 0)
 	   {
-	     vgLine(vg, x+(int)(xAdd*(double)r), yOff+tg->height, x+(int)(xAdd*(double)r+(basePairSpan*xAdd)), yOff-tg->height, pColorDarkGray);
+	     hvGfxLine(hvg, x+(int)(xAdd*(double)r), yOff+tg->height, x+(int)(xAdd*(double)r+(basePairSpan*xAdd)), yOff-tg->height, pColorDarkGray);
 	     
-	     vgLine(vg, x+(int)(xAdd*(double)r), yOff-tg->height, x+(int)(xAdd*(double)r+(basePairSpan*xAdd)), yOff+tg->height , pColorDarkGray);
+	     hvGfxLine(hvg, x+(int)(xAdd*(double)r), yOff-tg->height, x+(int)(xAdd*(double)r+(basePairSpan*xAdd)), yOff+tg->height , pColorDarkGray);
 	     
 	   }
 	 else
 	   {
 	     if(diagLight && i%diagLight == 0)
 	       {
-		 vgLine(vg, x+(int)(xAdd*(double)r), yOff+tg->height, x+(int)(xAdd*(double)r+(basePairSpan*xAdd)), yOff-tg->height, pColorLightGray);
+		 hvGfxLine(hvg, x+(int)(xAdd*(double)r), yOff+tg->height, x+(int)(xAdd*(double)r+(basePairSpan*xAdd)), yOff-tg->height, pColorLightGray);
 		 
-		 vgLine(vg, x+(int)(xAdd*(double)r), yOff-tg->height, x+(int)(xAdd*(double)r+(basePairSpan*xAdd)), yOff+tg->height, pColorLightGray);
+		 hvGfxLine(hvg, x+(int)(xAdd*(double)r), yOff-tg->height, x+(int)(xAdd*(double)r+(basePairSpan*xAdd)), yOff+tg->height, pColorLightGray);
 	       }
 	   }
        }
    }
 
  //if ( vis==tvDense || ( tg->limitedVisSet && tg->limitedVis==tvDense ) )
- //   rnaPLFoldDrawDenseValueHash(vg, tg, xOff, yOff, scale, outlineColor, rnaPLFoldHash);
+ //   rnaPLFoldDrawDenseValueHash(hvg, tg, xOff, yOff, scale, outlineColor, rnaPLFoldHash);
 }
 
 void rnaPLFoldDrawLeftLabels(struct track *tg, int seqStart, int seqEnd,
-			     struct vGfx *vg, int xOff, int yOff, int width, int height, 
+			     struct hvGfx *hvg, int xOff, int yOff, int width, int height, 
 			     boolean withCenterLabels, MgFont *font,
 			     Color color, enum trackVisibility vis)
 /* Draw left labels. */
@@ -392,11 +392,11 @@ char  label[16];
 int   yVisOffset  = 0 + tl.fontHeight; // ( vis == tvDense ? 0 : tg->heightPer + height/2 );
 
 safef(label, sizeof(label), tg->shortLabel);
-vgUnclip(vg);
-vgSetClip(vg, leftLabelX, yOff+yVisOffset, leftLabelWidth, tg->heightPer);
-vgTextRight(vg, leftLabelX, yOff+yVisOffset, leftLabelWidth, tg->heightPer, color, font, label);
-vgUnclip(vg);
-vgSetClip(vg, insideX, yOff, insideWidth, tg->height);
+hvGfxUnclip(hvg);
+hvGfxSetClip(hvg, leftLabelX, yOff+yVisOffset, leftLabelWidth, tg->heightPer);
+hvGfxTextRight(hvg, leftLabelX, yOff+yVisOffset, leftLabelWidth, tg->heightPer, color, font, label);
+hvGfxUnclip(hvg);
+hvGfxSetClip(hvg, insideX, yOff, insideWidth, tg->height);
 }
 
 void rnaPLFoldMethods(struct track *tg)
