@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "net.h"
 
-static char const rcsid[] = "$Id: gad.c,v 1.5 2006/10/10 16:11:07 fanhsu Exp $";
+static char const rcsid[] = "$Id: gad.c,v 1.6 2008/02/20 23:14:15 fanhsu Exp $";
 
 static boolean gadExists(struct section *section, 
 	struct sqlConnection *conn, char *geneId)
@@ -69,8 +69,9 @@ if (url != NULL && url[0] != 0)
 
     printf("<BR><B>CDC HuGE Published Literature:  ");
     printf("<A HREF=\"%s%s%s\" target=_blank>", 
-       "http://apps.nccd.cdc.gov/Genomics/GDPQueryTool/frmQuerySumPage.asp?IO_strGeneSymbolValue=",
-       itemName, "&selConditionGene=2&strCurrentForm=SearchByGene.asp");
+           "http://hugenavigator.net/HuGENavigator/searchSummary.do?firstQuery=",
+           itemName, 
+	   "&publitSearchType=now&whichContinue=firststart&check=n&dbType=publit&Mysubmit=go");
     printf("%s</B></A>\n", itemName);
 
     /* List diseases associated with the gene */
