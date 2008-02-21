@@ -1890,8 +1890,8 @@ type wig
     shortLabel r_pd
     longLabel log2 (r_pd) chimp
     subGroups specRec=ch
-    color 0,0,250
-    altcolor 200,100,0
+    color 200,100,0
+    altcolor 0,0,250
     priority 1
 
     track divChimpFet
@@ -1899,7 +1899,6 @@ type wig
     shortLabel p-value
     longLabel -log10 (p-value) chimp
     subGroups specRec=ch
-    color 25,150,25
     priority 2
 
     track divChimpFdr
@@ -1907,6 +1906,7 @@ type wig
     shortLabel FDR
     longLabel -log10 (FDR) chimp
     subGroups specRec=ch
+    color 25,150,25
     priority 3
 
     track divRhesusRpd
@@ -1914,8 +1914,8 @@ type wig
     shortLabel r_pd
     longLabel log2 (r_pd) rhesus
     subGroups specRec=rh
-    color 0,0,250
-    altcolor 200,100,0
+    color 200,100,0
+    altcolor 0,0,250
     priority 4
 
     track divRhesusFet
@@ -1923,7 +1923,6 @@ type wig
     shortLabel p-value
     longLabel -log10 (p-value) rhesus
     subGroups specRec=rh
-    color 25,150,25
     priority 5
 
     track divRhesusFdr
@@ -1931,6 +1930,7 @@ type wig
     shortLabel FDR
     longLabel -log10 (FDR) rhesus
     subGroups specRec=rh
+    color 25,150,25
     priority 6
 
 
@@ -2582,6 +2582,7 @@ type bed 6 .
     shortLabel Omicia OMIM Hand-Curation
     longLabel Omicia OMIM Hand-Curation, Early Access R1, May 2007
     priority 2
+
 
 searchName affy6SV
 searchTable snpArrayAffy6SV
