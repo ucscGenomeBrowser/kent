@@ -72,119 +72,6 @@ hgsql hg18 -e "DELETE FROM grp where name='encode'"
     cp ../../hg17/encode/regions/README.txt regions
     # edit README
 
-
-#############################################################################
-# MSA alignments (2007-10-22 kate)
-#  Submittted by Elliott Margulies (Apr 2007 freeze), 2007-05-11
-#  Resubmittted by Elliott (Sep 2007 freeze) Margulies, 2007-10-10
-
-    ssh kkstore03
-    cd /cluster/data/encode/MSA
-    mkdir -p SEP-07/lab
-    cd SEP-07/lab
-
-    # obtain sequence freeze
-    wget -nd ftp://kronos.nhgri.nih.gov/pub/outgoing/elliott/encode/freeze/SEP-2007/SEP-2007.tar.gz
-    tar xvfz SEP-2007.tar.gz
-    cd ..
-    mkdir downloads
-    cd downloads
-    cp /cluster/data/encode/downloads/msa/SEP-2005/README.txt .
-    # edit as needed
-    ln -s /cluster/data/encode/MSA/SEP-07/lab/SEP-2007.tar.gz  .
-    ln -s /cluster/data/encode/MSA/SEP-07/lab/seq/metadata.txt .
-    ln -s /cluster/data/encode/MSA/SEP-07/lab/seq sequences
-
-    # post for download 
-    ssh hgwdev
-    cd /usr/local/apache/htdocs/goldenPath/hg18/encode
-    mkdir -p MSA
-    cd MSA
-    ln -s /cluster/data/encode/MSA/SEP-07/downloads SEP-2007
-
-    # NOTE: waiting for Elliott to update README with rmask options
-
-    # obtain TBA alignments
-    cd /cluster/data/encode/TBA
-    mkdir -p SEP-07/2007-10-22/lab
-    cd SEP-07/2007-10-22/lab
-    wget -nd ftp://kronos.nhgri.nih.gov/pub/outgoing/elliott/encode/freeze/SEP-2007/tba_sep2007.tar.gz
-    tar xvfz tba_sep2007.tar.gz
-
-    cd ..
-    mkdir maf
-cat > getMafs.csh << 'EOF'
-    foreach f (lab/tba/*/*.maf.gz)
-        set r = $f:t:r:r:e
-        echo $r
-        gunzip -c $f | \
-            sed -e 's/^s human\./s hg18./' \
-                -e 's/^s cow\./s bosTau2./' \
-                -e 's/^s dog\./s canFam2./' \
-                -e 's/^s chicken\./s galGal3./' \
-                -e 's/^s monodelphis\./s monDom4./' \
-                -e 's/^s chimp\./s panTro2./' \
-                -e 's/^s macaque\./s rheMac2./' \
-                -e 's/^s rat\./s rn4./' \
-                -e 's/^s xenopus\./s xenTro2./' \
-                        > maf/$r.maf
-    end
-'EOF'
-    csh getMafs.csh >&! getMafs.log &
-
-    ssh hgwdev
-    cd /cluster/data/encode/TBA/SEP-07/2007-10-22/maf
-    set gdir = /gbdb/hg18/encode/TBA/SEP-07/2007-10-22/maf
-    rm -f $gdir/*.maf
-    mkdir -p $gdir
-    ln -s /cluster/data/encode/TBA/SEP-07/2007-10-22/maf/*.maf $gdir
-    hgLoadMaf -pathPrefix=$gdir -WARN hg18 encodeTbaAlignSep07 >&! load.log
-
-    # add gap annotation
-
-    # add framing
-
-    cat *.maf | hgLoadMafSummary hg18 encodeTbaSummarySep07 stdin
-
-    # post for download
-    mkdir -p MSA/alignments/TBA
-
-    # April 2007 sequence freeze and alignments
-    cd /cluster/data/encode/TBA
-    mkdir -p APR-07/lab
-    cd APR-07/lab
-    wget -r -nv -nd -np ftp://kronos.nhgri.nih.gov/pub/outgoing/elliott/msa/APR-2007/apr_2007_tba_hg18.tar
-
-    cd ..
-    mkdir maf
-cat > getMafs.csh << 'EOF'
-    foreach f (lab/tba/*/*.maf.gz)
-        set r = $f:t:r:r:e
-        echo $r
-        gunzip -c $f | \
-            sed -e 's/^s human\./s hg18./' \
-                -e 's/^s cow\./s bosTau2./' \
-                -e 's/^s dog\./s canFam2./' \
-                -e 's/^s chicken\./s galGal3./' \
-                -e 's/^s monodelphis\./s monDom4./' \
-                -e 's/^s chimp\./s panTro2./' \
-                -e 's/^s macaque\./s rheMac2./' \
-                -e 's/^s rat\./s rn4./' \
-                -e 's/^s xenopus\./s xenTro2./' \
-                        > maf/$r.maf
-    end
-'EOF'
-    csh getMafs.csh >&! getMafs.log &
-
-    ssh hgwdev
-    cd /cluster/data/encode/TBA/APR-07/maf
-    set gdir = /gbdb/hg18/encode/TBA/APR-07/maf
-    mkdir -p $gdir
-    rm -f $gdir/*.maf
-    ln -s /cluster/data/encode/TBA/APR-07/maf/*.maf $gdir
-    hgLoadMaf -pathPrefix=$gdir -WARN hg18 encodeTbaAlign >&! load.log
-    cat *.maf | hgLoadMafSummary hg18 encodeTbaSummary stdin
-
 ##############################################################################
 # Lifting rampage (Andy)
 
@@ -720,13 +607,47 @@ ln -s /cluster/data/encode/Affy/2007-07-12/processed/download/*.gz .
 # Yale Pol II Chip (Chip-seq) (DONE Andy 11-07-2007)
 
 cd /cluster/data/encode/yale
-mkdir 2007-07-17
-cd 2007-07-17/
-unzip YaleJuly17.zip
-rm YaleJuly17.zip
-cd PolII/
+mkdir -p 2007-07-17/lab
+cd 2007-07-17/lab
+unzip Yale_jul17_v2.zip
+
+set table = wgEncodeYaleChipSeqPol2HelaSites
+hgLoadBed hg18 $table lab/PolII/PolII_hg18-sites.bed
+#Reading PolII_hg18-sites.bed
+#Loaded 87253 elements of size 4
+#Sorted
+#Creating table definition for encodeYalePolIISites
+#Saving bed.tab
+#start -142, end 1144 out of range in findBin (max is 512M)
+# CONTACTED submitter to ask about negative coordinate.
+# For now, leave out chrM
+sed '/^chrM/d' lab/PolII/PolII_hg18-sites.bed | hgLoadBed hg18 $table stdin
+
+# NOTE: max score=1779, min score=7
+# data distribution
+ awk '{print $4}' pol2.bed | sort -n | textHistogram stdin -binSize=100 ;
+   0 ************************************************************ 83113
+   100 ** 3300
+   200  545
+   300  144
+   400  58
+   500  37
+   600  20
+   700  6
+   800  6
+   900  0
+   1000  2
+   1100  2
+   1200  0
+   1300  0
+   1400  0
+   1500  0
+   1600  0
+   1700  1
+
+
 bedSort PolII_hg18-signal.wig tmp.wig
-mv tmp.wig PolII_hg18-signal.wig 
+v tmp.wig PolII_hg18-signal.wig 
 ../../../bin/scripts/trimOverlap.pl < PolII_hg18-signal.wig > tmp.wig
 mv tmp.wig PolII_hg18-signal.wig 
 mv encodeYalePolIISignal.wib /cluster/data/encode/hg18.wib/
@@ -1030,3 +951,210 @@ vi ${HOME}/kent/src/hg/makeDb/trackDb/human/hg18/encodeYaleRnaSuper.html
 #edit to add the new RACE track to the Credits section
 
 
+#############################################################################
+# TBA alignments from Margulies lab, NHGRI (2008-2-20 kate)
+#  Submitted by Gayle McEwen (mceweng@mail.nih.gov), from their DEC-07 freeze
+#  Requested doc update (README & track description) from Elliott on 2/20
+
+    ssh kkstore03
+    cd /cluster/data/encode/TBA
+    mkdir -p DEC-07/2008-01-10/lab
+    cd DEC-07/2008-01-10/lab
+    wget -nd ftp://kronos.nhgri.nih.gov/pub/outgoing/elliott/encode/freeze/DEC-2007/tba-DEC-2007.tar.gz
+    tar xvfz tba-DEC-2007.tar.gz
+    cd ..
+
+    mkdir maf
+cat > getMafs.csh << 'EOF'
+    foreach f (lab/tba/*/*.maf.gz)
+        set r = $f:t:r:r:e
+        echo $r
+        gunzip -c $f | \
+            sed -e 's/^s human\./s hg18./' \
+                -e 's/^s cow\./s bosTau2./' \
+                -e 's/^s dog\./s canFam2./' \
+                -e 's/^s chicken\./s galGal3./' \
+                -e 's/^s monodelphis\./s monDom4./' \
+                -e 's/^s chimp\./s panTro2./' \
+                -e 's/^s macaque\./s rheMac2./' \
+                -e 's/^s rat\./s rn4./' \
+                -e 's/^s xenopus\./s xenTro2./' \
+                        > maf/$r.maf
+    end
+'EOF'
+    csh getMafs.csh >&! getMafs.log &
+
+    # Score too small messages -- can be ignored (the score isn't meaningful)
+
+    # Add gap annotation
+    # prepare bed files with gap info
+    ssh kkstore03
+    cd /cluster/data/encode/TBA
+    cd DEC-07/2008-01-10
+    mkdir anno
+    cd anno
+    mkdir maf run
+    cd run
+
+    cat > species.lst << 'EOF'
+        hg18
+        bosTau2
+        canFam2
+        galGal3
+        monDom4
+        panTro2
+        rheMac2
+        rn4
+        xenTro2
+'EOF'
+
+cat > doNBed.csh << 'EOF'
+    foreach db (`cat species.lst`)
+        echo -n "$db "
+        set cdir = /cluster/data/$db
+        if (! -e $cdir/$db.N.bed) then
+            echo "creating N.bed"
+            twoBitInfo -nBed $cdir/$db.2bit $cdir/$db.N.bed
+        else
+            echo ""
+        endif
+    end
+'EOF'
+    csh doNBed.csh >&! doNBed.log &
+
+    rm -f nBeds sizes
+    foreach db (`grep -v hg18 species.lst`)
+        echo "$db "
+        ln -s  /cluster/data/$db/$db.N.bed $db.bed
+        echo $db.bed  >> nBeds
+    end
+    
+cat > doAnno.csh << 'EOF'
+    foreach f (../../maf/*.maf)
+        set b = $f:t
+        echo $f
+        nice mafAddIRows -nBeds=nBeds $f \
+                /cluster/data/hg18/hg18.2bit ../maf/$b
+    end
+'EOF'
+#<< happy emacs
+    csh doAnno.csh >&! doAnno.log &
+
+    # Load MAF table with annotated mafs.  Also load summary table.
+    ssh hgwdev
+    set mdir = /cluster/data/encode/TBA/DEC-07/2008-01-10/anno/maf
+    cd $mdir
+    set gdir = /gbdb/hg18/encode/TBA/DEC-07/2008-01-10/maf
+    rm -f $gdir/*.maf
+    mkdir -p $gdir
+    ln -s $mdir/*.maf $gdir
+    hgLoadMaf -pathPrefix=$gdir -WARN hg18 encodeTbaAlignDec07 >&! load.log
+    cat *.maf | hgLoadMafSummary hg18 encodeTbaSummaryDec07 stdin
+    cd ..
+
+    #Created 141213 summary blocks from 8144409 components and 389847 mafs from stdin
+    #Loading into hg18 table encodeTbaSummaryDec07...
+
+    # Gene frames
+    ssh hgwdev
+    cd /cluster/data/encode/TBA/DEC-07/2008-01-10
+    mkdir frames
+    cd frames
+
+    # Pick gene tables, according to the following criteria:
+    # KG if present, else refGene if >10000 entries, else ensGene (unless dog),
+    # else mgcGenes, else mrnas if > 10000 else none.   In all cases 
+    # except none, add in refGene.
+    # NOTE: shortcut by using sources from hg18 multiz framing
+
+hg18: knownGene
+bosTau2: mrna
+canFam2: mrna
+galGal3: mrna
+monDom4: ensGene
+panTro2: refGene
+rheMac2: ensGene
+rn4: knownGene
+xenTro2: mrna
+
+    # get the genes for all genomes
+    # mRNAs with CDS.  single select to get cds+psl, then split that up and
+    # create genePred
+    # using mrna table as genes
+cat > getGenes.csh << 'EOF'
+    rm -fr genes
+    mkdir -p genes
+    set mrnaDbs = "bosTau2 canFam2 galGal3 xenTro2"
+    foreach queryDb ($mrnaDbs)
+      set tmpExt = `mktemp temp.XXXXXX`
+      set tmpMrnaCds = ${queryDb}.mrna-cds.${tmpExt}
+      set tmpMrna = ${queryDb}.mrna.${tmpExt}
+      set tmpCds = ${queryDb}.cds.${tmpExt}
+      echo $queryDb
+      hgsql -N -e 'select all_mrna.qName,cds.name,all_mrna.* \
+                   from all_mrna,gbCdnaInfo,cds \
+                   where (all_mrna.qName = gbCdnaInfo.acc) and \
+                     (gbCdnaInfo.cds != 0) and (gbCdnaInfo.cds = cds.id)' \
+       $queryDb > ${tmpMrnaCds}
+      cut -f 1-2  ${tmpMrnaCds} > ${tmpCds}
+      cut -f 4-100  ${tmpMrnaCds} > ${tmpMrna}
+      mrnaToGene -cdsFile=${tmpCds} -smallInsertSize=8 -quiet ${tmpMrna} stdout | \
+        genePredSingleCover stdin stdout | gzip -2c > /scratch/tmp/$queryDb.tmp.gz
+      rm ${tmpMrnaCds} ${tmpMrna} ${tmpCds}
+      mv /scratch/tmp/$queryDb.tmp.gz genes/$queryDb.gp.gz
+      rm -f $tmpExt
+    end
+    # using knownGene for rn4 mm8 hg18
+    # using refGene for panTro2
+    # using ensGene for monDom4, rheMac2
+    # genePreds; (must keep only the first 10 columns for knownGene)
+    set geneDbs = "hg18 rn4 panTro2 monDom4 rheMac2"
+    foreach queryDb ($geneDbs)
+      if ($queryDb == "monDom4" || $queryDb == "rheMac2") then
+        set geneTbl = ensGene
+      else if ($queryDb == "panTro2") then
+        set geneTbl = refGene
+      else if ($queryDb == "hg18" || $queryDb == "rn4") then
+        set geneTbl = knownGene
+      endif
+      hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from $geneTbl" ${queryDb} \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /scratch/tmp/$queryDb.tmp.gz
+      mv /scratch/tmp/$queryDb.tmp.gz genes/$queryDb.gp.gz
+    end
+'EOF'
+    csh getGenes.csh >&! getGenes.log &
+
+    ssh kkstore03
+    cd /cluster/data/encode/TBA/DEC-07/2008-01-10/frames
+    (cat  ../maf/*.maf | nice genePredToMafFrames hg18 stdin stdout bosTau2 genes/bosTau2.gp.gz canFam2 genes/canFam2.gp.gz galGal3 genes/galGal3.gp.gz hg18 genes/hg18.gp.gz panTro2 genes/panTro2.gp.gz rheMac2 genes/rheMac2.gp.gz rn4 genes/rn4.gp.gz xenTro2 genes/xenTro2.gp.gz monDom4 genes/monDom4.gp.gz | nice gzip > mafFrames.gz) >& frames.log &
+
+    ssh hgwdev
+    cd /cluster/data/encode/TBA/DEC-07/2008-01-10/frames
+    nice hgLoadMafFrames hg18 encodeTbaFramesDec07 mafFrames.gz >& loadFrames.log &
+
+    # Post downloads
+
+    # Obtain sequence freeze
+    ssh kkstore03
+    cd /cluster/data/encode/MSA
+    mkdir -p DEC-07/lab
+    cd DEC-07/lab
+    wget -nd ftp://kronos.nhgri.nih.gov/pub/outgoing/elliott/encode/freeze/DEC-2007/DEC-2007.tar.gz
+    # GOT HERE
+
+    mkdir downloads
+    cd downloads
+    cp /cluster/data/encode/downloads/msa/DEC-2005/README.txt .
+
+    # edit as needed
+    ln -s /cluster/data/encode/MSA/DEC-07/lab/DEC-2007.tar.gz  .
+    ln -s /cluster/data/encode/MSA/DEC-07/lab/seq/metadata.txt .
+    ln -s /cluster/data/encode/MSA/DEC-07/lab/seq sequences
+
+    # post for download 
+    ssh hgwdev
+    cd /usr/local/apache/htdocs/goldenPath/hg18/encode
+    mkdir -p MSA
+    cd MSA
+    ln -s /cluster/data/encode/MSA/DEC-07/downloads DEC-2007
