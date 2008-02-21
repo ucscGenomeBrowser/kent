@@ -18,7 +18,7 @@
 #include "mafFrames.h"
 #include "phyloTree.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.122 2008/02/20 00:42:28 markd Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.123 2008/02/21 00:11:45 markd Exp $";
 
 #define GAP_ITEM_LABEL  "Gaps"
 #define MAX_SP_SIZE 2000
@@ -1534,7 +1534,7 @@ char buf[1024];
 char option[64];
 int alignLineLength = winBaseCount * 2;
         /* doubled to allow space for insert counts */
-boolean complementBases = cartUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE);
+boolean complementBases = cartUsualBooleanDb(cart, database, COMPLEMENT_BASES_VAR, FALSE);
 bool dots;         /* configuration option */
 /* this line must be longer than the longest base-level display */
 char noAlignment[2000];

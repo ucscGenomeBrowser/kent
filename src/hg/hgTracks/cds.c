@@ -18,7 +18,7 @@
 #include "hgTracks.h"
 #include "cdsSpec.h"
 
-static char const rcsid[] = "$Id: cds.c,v 1.68 2008/02/20 00:42:24 markd Exp $";
+static char const rcsid[] = "$Id: cds.c,v 1.69 2008/02/21 00:11:44 markd Exp $";
 
 /* Definitions of cds colors for coding coloring display */
 #define CDS_ERROR   0
@@ -1158,7 +1158,7 @@ if(mrnaS >= 0)
 
     if (drawOpt == baseColorDrawItemBases)
 	{
-	if (cartUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE))
+	if (cartUsualBooleanDb(cart, database, COMPLEMENT_BASES_VAR, FALSE))
 	    complement(dyMrnaSeq->string, dyMrnaSeq->stringSize);
 	drawScaledBoxSampleWithText(hvg, s, e, scale, xOff, y, heightPer, 
 				    color, lf->score, font, dyMrnaSeq->string,
@@ -1194,7 +1194,7 @@ if(mrnaS >= 0)
 	diffStr = needMem(sizeof(char) * (e - s + 1));
 	maskDiffString(diffStr, dyMrnaSeq->string, (char *)genoSeq->dna,
 		       ' ');
-	if (cartUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE))
+	if (cartUsualBooleanDb(cart, database, COMPLEMENT_BASES_VAR, FALSE))
 	    complement(diffStr, strlen(diffStr));
 	drawScaledBoxSampleWithText(hvg, s, e, scale, xOff, y, heightPer, 
 				    color, lf->score, font, diffStr, 

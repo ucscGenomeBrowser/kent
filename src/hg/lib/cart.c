@@ -18,7 +18,7 @@
 #include "customFactory.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.77 2007/10/12 23:21:57 galt Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.78 2008/02/21 00:11:44 markd Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -362,6 +362,15 @@ loadCgiOverHash(cart, oldVars);
 cartCopyCustomTracks(cart, oldVars);
 if (isNotEmpty(actionVar))
     cartRemove(cart, actionVar);
+}
+
+char *_cartVarDbName(char *db, char *var)
+/* generate cart variable name that is local to an assembly database.
+ * Only for use inside of cart.h.  WARNING: static return */
+{
+static char buf[PATH_LEN]; // something rather big
+safef(buf, sizeof(buf), "%s_%s", var, db);
+return buf;
 }
 
 struct cart *cartNew(unsigned int userId, unsigned int sessionId, 

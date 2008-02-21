@@ -620,7 +620,7 @@ int fontHeight = mgFontLineHeight(font);
 int heightPer = tg->heightPer;
 y += heightPer / 2 - fontHeight / 2;
 
-if (cartUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE))
+if (cartUsualBooleanDb(cart, database, COMPLEMENT_BASES_VAR, FALSE))
     reverseComplement(allele, 1);
 
 Color textColor = MG_BLACK;

@@ -29,6 +29,10 @@ struct cart
    struct cartDb *sessionInfo;	/* Info on session. */
    };
 
+char *_cartVarDbName(char *db, char *var);
+/* generate cart variable name that is local to an assembly database.
+ * Only for use inside of cart.h.  WARNING: static return */
+
 struct cart *cartNew(unsigned int userId, unsigned int sessionId, 
 	char **exclude, struct hash *oldVars);
 /* Load up cart from user & session id's.  Exclude is a null-terminated list of
@@ -74,18 +78,49 @@ void cartRemovePrefix(struct cart *cart, char *prefix);
 boolean cartVarExists(struct cart *cart, char *var);
 /* Return TRUE if variable is in cart. */
 
+INLINE boolean cartVarExistsDb(struct cart *cart, char *db, char *var)
+/* Return TRUE if variable_$db is in cart. */
+{
+    return cartVarExists(cart, _cartVarDbName(db, var));
+}
+
 char *cartString(struct cart *cart, char *var);
 /* Return string valued cart variable. */
 
+INLINE char *cartStringDb(struct cart *cart, char *db, char *var)
+/* Return string valued cart var_$db. */
+{
+    return cartString(cart, _cartVarDbName(db, var));
+}
+
 char *cartOptionalString(struct cart *cart, char *var);
 /* Return string valued cart variable or NULL if it doesn't exist. */
+
+INLINE char *cartOptionalStringDb(struct cart *cart, char *db, char *var)
+/* Return string valued cart variable_$db or NULL if it doesn't exist. */
+{
+    return cartOptionalString(cart, _cartVarDbName(db, var));
+}
 
 char *cartNonemptyString(struct cart *cart, char *name);
 /* Return string value associated with name.  Return NULL
  * if value doesn't exist or if it is pure white space. */
 
+INLINE char *cartNonemptyStringDb(struct cart *cart, char *db, char *name)
+/* Return string value associated with name_$db.  Return NULL
+ * if value doesn't exist or if it is pure white space. */
+{
+    return cartNonemptyString(cart, _cartVarDbName(db, name));
+}
+
 char *cartUsualString(struct cart *cart, char *var, char *usual);
 /* Return variable value if it exists or usual if not. */
+
+INLINE char *cartUsualStringDb(struct cart *cart, char *db, char *var, char *usual)
+/* Return var_$db value if it exists or usual if not. */
+{
+    return cartUsualString(cart, _cartVarDbName(db, var), usual);
+}
 
 char *cartCgiUsualString(struct cart *cart, char *var, char *usual);
 /* Look for var in CGI, then in cart, if not found then return usual. */
@@ -93,14 +128,33 @@ char *cartCgiUsualString(struct cart *cart, char *var, char *usual);
 void cartSetString(struct cart *cart, char *var, char *val);
 /* Set string valued cart variable. */
 
+INLINE void cartSetStringDb(struct cart *cart, char *db, char *var, char *val)
+/* Set string valued cart var_$db. */
+{
+    return cartSetString(cart, _cartVarDbName(db, var), val);
+}
+
 int cartInt(struct cart *cart, char *var);
 /* Return int valued variable. */
+
+INLINE int cartIntDb(struct cart *cart, char *db, char *var)
+/* Return int valued variable_$db. */
+{
+    return cartInt(cart, _cartVarDbName(db, var));
+}
+
 
 int cartIntExp(struct cart *cart, char *var);
 /* Return integer valued expression in variable. */
 
 int cartUsualInt(struct cart *cart, char *var, int usual);
 /* Return variable value if it exists or usual if not. */
+
+INLINE int cartUsualIntDb(struct cart *cart, char *db, char *var, int usual)
+/* Return variable_$db value if it exists or usual if not. */
+{
+    return cartUsualInt(cart, _cartVarDbName(db, var), usual);
+}
 
 int cartUsualIntClipped(struct cart *cart, char *var, int usual,
 	int minVal, int maxVal);
@@ -112,11 +166,29 @@ int cartCgiUsualInt(struct cart *cart, char *var, int usual);
 void cartSetInt(struct cart *cart, char *var, int val);
 /* Set integer value. */
 
+INLINE void cartSetIntDb(struct cart *cart, char *db, char *var, int val)
+/* Set integer value for var_$db. */
+{
+    return cartSetInt(cart, _cartVarDbName(db, var), val);
+}
+
 double cartDouble(struct cart *cart, char *var);
 /* Return double valued variable. */
 
+INLINE double cartDoubleDb(struct cart *cart, char *db, char *var)
+/* Return double valued var_$db. */
+{
+    return cartDouble(cart, _cartVarDbName(db, var));
+}
+
 double cartUsualDouble(struct cart *cart, char *var, double usual);
 /* Return variable value if it exists or usual if not. */
+
+INLINE double cartUsualDoubleDb(struct cart *cart, char *db, char *var, double usual)
+/* Return var_$db value if it exists or usual if not. */
+{
+    return cartUsualDouble(cart, _cartVarDbName(db, var), usual);
+}
 
 double cartCgiUsualDouble(struct cart *cart, char *var, double usual);
 /* Look for var in CGI, then in cart, if not found then return usual. */
@@ -124,17 +196,41 @@ double cartCgiUsualDouble(struct cart *cart, char *var, double usual);
 void cartSetDouble(struct cart *cart, char *var, double val);
 /* Set double value. */
 
+INLINE void cartSetDoubleDb(struct cart *cart, char *db, char *var, double val)
+/* Set double value for var_$db. */
+{
+    return cartSetDouble(cart, _cartVarDbName(db, var), val);
+}
+
 boolean cartBoolean(struct cart *cart, char *var);
 /* Retrieve cart boolean. */
 
+INLINE boolean cartBooleanDb(struct cart *cart, char *db, char *var)
+/* Retrieve cart boolean for var_$db. */
+{
+    return cartBoolean(cart, _cartVarDbName(db, var));
+}
+
 boolean cartUsualBoolean(struct cart *cart, char *var, boolean usual);
 /* Return variable value if it exists or usual if not.  */
+
+INLINE boolean cartUsualBooleanDb(struct cart *cart, char *db, char *var, boolean usual)
+/* Return var_$db value if it exists or usual if not.  */
+{
+    return cartUsualBoolean(cart, _cartVarDbName(db, var), usual);
+}
 
 boolean cartCgiUsualBoolean(struct cart *cart, char *var, boolean usual);
 /* Look for var in CGI, then in cart, if not found then return usual. */
 
 void cartSetBoolean(struct cart *cart, char *var, boolean val);
 /* Set boolean value. */
+
+INLINE void cartSetBooleanDb(struct cart *cart, char *db, char *var, boolean val)
+/* Set boolean value for $var_db. */
+{
+    return cartSetBoolean(cart, _cartVarDbName(db, var), val);
+}
 
 void cartMakeTextVar(struct cart *cart, char *var, char *defaultVal, int charSize);
 /* Make a text control filled with value from cart if it exists or

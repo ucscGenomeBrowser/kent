@@ -118,7 +118,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1434 2008/02/20 06:17:09 markd Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1435 2008/02/21 00:11:45 markd Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -690,7 +690,7 @@ struct dyString *ui = uiStateUrlPart(toggleGroup);
 x = hvGfxAdjXW(hvg, x, width);
 hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
 hPrintf("HREF=\"%s?complement=%d",
-	hgTracksName(), !cartUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE));
+	hgTracksName(), !cartUsualBooleanDb(cart, database, COMPLEMENT_BASES_VAR, FALSE));
 hPrintf("&%s\"", ui->string);
 freeDyString(&ui);
 if (message != NULL)
@@ -1100,6 +1100,7 @@ int size = winBaseCount;
 int sizeWanted = size;
 int bufferToEdge;
 struct bed *items = NULL;
+
 /* If there's stuff on the screen, skip past it. */
 /* If not, skip to the edge of the window. */
 if (next)
@@ -8762,7 +8763,7 @@ void drawComplementArrow( struct hvGfx *hvg, int x, int y,
                                 int width, int height, MgFont *font)
 /* Draw arrow and create clickbox for complementing ruler bases */
 {
-boolean baseCmpl = cartUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE);
+boolean baseCmpl = cartUsualBooleanDb(cart, database, COMPLEMENT_BASES_VAR, FALSE);
 // reverse arrow when base complement doesn't match display
 char *text =  (baseCmpl == revCmplDisp) ? "--->" : "<---";
 hvGfxTextRight(hvg, x, y, width, height, MG_BLACK, font, text);
@@ -9950,7 +9951,7 @@ if (rulerMode != tvHide)
 	/* extraSeq has extra leading & trailing bases
 	 * for translation in to amino acids */
         boolean complementRulerBases = 
-                cartUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE);
+                cartUsualBooleanDb(cart, database, COMPLEMENT_BASES_VAR, FALSE);
         // gray bases if not matching the direction of display
         if (complementRulerBases != revCmplDisp)
             baseColor = MG_GRAY;
@@ -12247,7 +12248,7 @@ struct sqlConnection *conn;
 char **row;
 FILE *f;
 unsigned short *mem, *p;
-boolean complementBases = cartUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE);
+boolean complementBases = cartUsualBooleanDb(cart, database, COMPLEMENT_BASES_VAR, FALSE);
 
 if (!zoomedToBaseLevel)
 	return;
@@ -14170,7 +14171,7 @@ if (hideAll || defaultTracks)
     }
 
 /* Before loading items, deal with the next/prev item arrow buttons if pressed. */
-if (cgiVarExists("hgt.nextItem"))       
+if (cgiVarExists("hgt.nextItem"))
     doNextPrevItem("nextItem", cgiUsualString("hgt.nextItem", NULL));
 else if (cgiVarExists("hgt.prevItem"))
     doNextPrevItem("prevItem", cgiUsualString("hgt.prevItem", NULL));
@@ -14554,8 +14555,8 @@ static void toggleRevCmplDisp()
 {
 // forces complement bases to match display
 revCmplDisp = !revCmplDisp;
-cartSetBoolean(cart, REV_CMPL_DISP, revCmplDisp);
-cartSetBoolean(cart, COMPLEMENT_BASES_VAR, revCmplDisp);
+cartSetBooleanDb(cart, database, REV_CMPL_DISP, revCmplDisp);
+cartSetBooleanDb(cart, database, COMPLEMENT_BASES_VAR, revCmplDisp);
 }
 
 void zoomToSize(int newSize)
@@ -14798,7 +14799,7 @@ withCenterLabels = cartUsualBoolean(cart, "centerLabels", TRUE);
 withGuidelines = cartUsualBoolean(cart, "guidelines", TRUE);
 withNextItemArrows = cartUsualBoolean(cart, "nextItemArrows", FALSE);
 withNextExonArrows = cartUsualBoolean(cart, "nextExonArrows", FALSE);
-revCmplDisp = cartUsualBoolean(cart, REV_CMPL_DISP, FALSE);
+revCmplDisp = cartUsualBooleanDb(cart, database, REV_CMPL_DISP, FALSE);
 withPriorityOverride = cartUsualBoolean(cart, configPriorityOverride, FALSE);
 insideX = trackOffsetX();
 insideWidth = tl.picWidth-gfxBorder-insideX;
