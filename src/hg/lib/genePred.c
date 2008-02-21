@@ -12,7 +12,7 @@
 #include "rangeTree.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.97 2008/02/06 07:02:56 markd Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.98 2008/02/21 01:24:07 markd Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -716,8 +716,17 @@ gp->chrom = cloneString(group->seq);
 gp->strand[0] = group->strand;
 gp->txStart = group->start;
 gp->txEnd = group->end;
-gp->cdsStart = cdsStart;
-gp->cdsEnd = cdsEnd;
+if (cdsStart < cdsEnd)
+    {
+    gp->cdsStart = cdsStart;
+    gp->cdsEnd = cdsEnd;
+    }
+else
+    {
+    // no CDS, set to txEnd
+    gp->cdsStart = gp->txEnd;
+    gp->cdsEnd = gp->txEnd;
+    }
 gp->exonStarts = AllocArray(eStarts, exonCount);
 gp->exonEnds = AllocArray(eEnds, exonCount);
 gp->optFields = optFields;
