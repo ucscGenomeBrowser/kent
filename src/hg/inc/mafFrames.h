@@ -5,13 +5,13 @@
 #ifndef MAFFRAMES_H
 #define MAFFRAMES_H
 
-#define MAFFRAMES_NUM_COLS 9
+#define MAFFRAMES_NUM_COLS 11
 
 struct mafFrames
 /* codon frame assignment for MAF components */
     {
     struct mafFrames *next;  /* Next in singly linked list. */
-    char *chrom;	/* Chromosome */
+    char *chrom;	/* Reference sequence chromosome or scaffold */
     unsigned chromStart;	/* Start range in chromosome */
     unsigned chromEnd;	/* End range in chromosome */
     char *src;	/* Name of sequence source in MAF */
@@ -20,6 +20,8 @@ struct mafFrames
     char *name;	/* Name of gene used to define frame */
     int prevFramePos;	/* target position of the previous base (in transcription direction) that continues this frame, or -1 if none, or frame not contiguous */
     int nextFramePos;	/* target position of the next base (in transcription direction) that continues this frame, or -1 if none, or frame not contiguous */
+    unsigned char isExonStart;	/* does this start the CDS portion of an exon? */
+    unsigned char isExonEnd;	/* does this end the CDS portion of an exon? */
     };
 
 void mafFramesStaticLoad(char **row, struct mafFrames *ret);

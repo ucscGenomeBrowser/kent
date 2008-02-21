@@ -107,7 +107,7 @@ slReverse(&frames);
 exon->frames = frames;
 }
 
-static struct exonFrames *linkExonFrames(struct exonFrames *prevEf, struct cdsExon *exon)
+ static struct exonFrames *linkExonFrames(struct exonFrames *prevEf, struct cdsExon *exon)
 /* link split frames for an exon, if needed.  Assumes this is called in
  * transcription order, so preceeding exon frames for this gene have been
  * linked. Return new prevEf. */
@@ -123,6 +123,17 @@ for (ef = exon->frames; ef != NULL; ef = ef->next)
 return prevEf;
 }
 
+static void setExonBounds(struct cdsExon *exon)
+/* set isExonStart/isExonEnd flags on frames associated with an exon */
+{
+if (exon->frames != NULL)
+    {
+    exon->frames->mf.isExonStart = TRUE;
+    struct exonFrames *ef = slLastEl(exon->frames);
+    ef->mf.isExonEnd = TRUE;
+    }
+}
+
 static void finishGene(struct gene *gene)
 /* finish mafFrames for one gene. */
 {
@@ -133,7 +144,10 @@ geneSortFramesTargetOff(gene);
 for (exon = gene->exons; exon != NULL; exon = exon->next)
     joinExonFrames(exon);
 for (exon = gene->exons; exon != NULL; exon = exon->next)
+    {
     prevEf = linkExonFrames(prevEf, exon);
+    setExonBounds(exon);
+    }
 }
 
 void finishMafFrames(struct orgGenes *genes)

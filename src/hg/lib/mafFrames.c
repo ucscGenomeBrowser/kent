@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "mafFrames.h"
 
-static char const rcsid[] = "$Id: mafFrames.c,v 1.3 2005/10/15 00:34:21 markd Exp $";
+static char const rcsid[] = "$Id: mafFrames.c,v 1.4 2008/02/21 00:21:43 markd Exp $";
 
 void mafFramesStaticLoad(char **row, struct mafFrames *ret)
 /* Load a row from mafFrames table into ret.  The contents of ret will
@@ -20,10 +20,12 @@ ret->chromStart = sqlUnsigned(row[1]);
 ret->chromEnd = sqlUnsigned(row[2]);
 ret->src = row[3];
 ret->frame = sqlUnsigned(row[4]);
-strcpy(ret->strand, row[5]);
+safecpy(ret->strand, sizeof(ret->strand), row[5]);
 ret->name = row[6];
 ret->prevFramePos = sqlSigned(row[7]);
 ret->nextFramePos = sqlSigned(row[8]);
+ret->isExonStart = sqlUnsigned(row[9]);
+ret->isExonEnd = sqlUnsigned(row[10]);
 }
 
 struct mafFrames *mafFramesLoad(char **row)
@@ -38,10 +40,12 @@ ret->chromStart = sqlUnsigned(row[1]);
 ret->chromEnd = sqlUnsigned(row[2]);
 ret->src = cloneString(row[3]);
 ret->frame = sqlUnsigned(row[4]);
-strcpy(ret->strand, row[5]);
+safecpy(ret->strand, sizeof(ret->strand), row[5]);
 ret->name = cloneString(row[6]);
 ret->prevFramePos = sqlSigned(row[7]);
 ret->nextFramePos = sqlSigned(row[8]);
+ret->isExonStart = sqlUnsigned(row[9]);
+ret->isExonEnd = sqlUnsigned(row[10]);
 return ret;
 }
 
@@ -51,7 +55,7 @@ struct mafFrames *mafFramesLoadAll(char *fileName)
 {
 struct mafFrames *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[9];
+char *row[11];
 
 while (lineFileRow(lf, row))
     {
@@ -69,7 +73,7 @@ struct mafFrames *mafFramesLoadAllByChar(char *fileName, char chopper)
 {
 struct mafFrames *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[9];
+char *row[11];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -99,6 +103,8 @@ sqlFixedStringComma(&s, ret->strand, sizeof(ret->strand));
 ret->name = sqlStringComma(&s);
 ret->prevFramePos = sqlSignedComma(&s);
 ret->nextFramePos = sqlSignedComma(&s);
+ret->isExonStart = sqlUnsignedComma(&s);
+ret->isExonEnd = sqlUnsignedComma(&s);
 *pS = s;
 return ret;
 }
@@ -157,10 +163,15 @@ fputc(sep,f);
 fprintf(f, "%d", el->prevFramePos);
 fputc(sep,f);
 fprintf(f, "%d", el->nextFramePos);
+fputc(sep,f);
+fprintf(f, "%u", el->isExonStart);
+fputc(sep,f);
+fprintf(f, "%u", el->isExonEnd);
 fputc(lastSep,f);
 }
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
+
 
 static char *createSql = 
     "CREATE TABLE %s ("
@@ -172,8 +183,10 @@ static char *createSql =
     "    frame tinyint unsigned not null,"  /* frame (0,1,2) for first base(+) or last bast(-) */
     "    strand char(1) not null,"          /* + or - */
     "    name varchar(255) not null,"       /* Name of gene used to define frame */
-    "    prevEnd int not null,"             /* chromEnd of previous part of gene, or -1 if none */
-    "    nextStart int not null,"           /* chromStart of next part of gene, or -1 if none */
+    "    prevFramePos int not null,"        /* target position of the previous base (in transcription direction) that continues this frame, or -1 if none, or frame not contiguous */
+    "    nextFramePos int not null,"        /* target position of the next base (in transcription direction) that continues this frame, or -1 if none, or frame not contiguous */
+    "    isExonStart tinyint unsigned not null,"  /* does this start the CDS portion of an exon? */
+    "    isExonEnd tinyint unsigned not null,"    /* does this end the CDS portion of an exon? */
     "    INDEX(chrom(%d),bin)"              /* used by range query */
     ")";
 char *mafFramesGetSql(char *table, unsigned options, int chromIdxLen)
