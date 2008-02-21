@@ -32,6 +32,7 @@ altColor 1,128,0
 type wigMaf 0.0 1.0
 pairwiseHeight 10
 summary encodeTbaSummarySep07
+frames encodeTbaFramesDec07
 speciesGroups primate placental mammal vertebrate
 sGroup_primate panTro2 baboon gibbon colobus_monkey vervet rheMac2 dusky_titi owl_monkey marmoset squirrel_monkey mouse_lemur galago
 sGroup_placental tree_shrew rn4 mouse guinea_pig st_squirrel rabbit bosTau2 horse cat canFam2 flying_fox sbbat rfbat hedgehog armadillo elephant tenrec rock_hyrax
