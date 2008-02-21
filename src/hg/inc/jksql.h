@@ -45,6 +45,11 @@ struct sqlConnection *sqlConnectRemote(char *host,
 	char *user, char *password, char *database);
 /* Connect to database somewhere as somebody. */
 
+struct sqlConnection *sqlConnRemote(char *host, 
+				    char *user, char *password, char *database, boolean abort);
+/* Connect to database somewhere as somebody.  
+ * If abort is set display error message and abort on error. */
+
 struct sqlConnection *sqlCtConn(boolean abort);
 /* Connect to customTrash database, optionally abort on failure */
 
