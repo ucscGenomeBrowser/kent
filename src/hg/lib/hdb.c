@@ -35,7 +35,7 @@
 #include "customTrack.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.343 2008/02/21 18:14:50 jzhu Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.344 2008/02/21 18:31:33 jzhu Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -673,7 +673,7 @@ password = cfgOption(setting);
 if (host == NULL || user == NULL || password == NULL)
     errAbort("Please set %s options in the hg.conf file.", prefix);
 
-conn = sqlConnectRemote(host, user, password, database);
+conn = sqlConnRemote(host, user, password, database, FALSE);
 
 if (conn == NULL)
     return NULL;
