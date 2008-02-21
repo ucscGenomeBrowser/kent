@@ -1,7 +1,5 @@
 include ../../inc/common.mk
 
-HG_WARN=-Wall
-
 L = $(MYSQLLIBS) -lm
 MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
@@ -27,7 +25,7 @@ test: compile
 testWeb: compile
 	wget -O testWeb.gif 'http://hgwdev.cse.ucsc.edu/cgi-bin/phyloGif?phyloGif_tree=(A:0.1,B:0.1);'
 	file testWeb.gif
-	
+
 clean::
 	rm -f test.gif testWeb.gif
 

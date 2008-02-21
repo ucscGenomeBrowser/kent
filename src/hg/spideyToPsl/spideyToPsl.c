@@ -9,7 +9,7 @@
 #include "sqlNum.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: spideyToPsl.c,v 1.3 2004/01/17 16:52:39 markd Exp $";
+static char const rcsid[] = "$Id: spideyToPsl.c,v 1.4 2008/02/21 02:13:24 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -64,7 +64,7 @@ static char* START_PREFIX = "--SPIDEY";  /* first line */
 
 void parseErr(struct parser *parser, char* format, ...)
 /* prototype to get gnu attribute check */
-#if defined(__GNUC__) && defined(JK_WARN)
+#if defined(__GNUC__)
 __attribute__((format(printf, 2, 3)))
 #endif
 ;

@@ -19,7 +19,7 @@
 #define ERRABORT_H
 void errAbort(char *format, ...)
 /* Abort function, with optional (printf formatted) error message. */
-#if defined(__GNUC__) && defined(JK_WARN)
+#if defined(__GNUC__)
 __attribute__((format(printf, 1, 2)))
 #endif
 ;
@@ -29,7 +29,7 @@ void vaErrAbort(char *format, va_list args);
 
 void errnoAbort(char *format, ...)
 /* Prints error message from UNIX errno first, then does errAbort. */
-#if defined(__GNUC__) && defined(JK_WARN)
+#if defined(__GNUC__)
 __attribute__((format(printf, 1, 2)))
 #endif
 ;
@@ -54,14 +54,14 @@ void vaWarn(char *format, va_list args);
 
 void warn(char *format, ...)
 /* Issue a warning message. */
-#if defined(__GNUC__) && defined(JK_WARN)
+#if defined(__GNUC__)
 __attribute__((format(printf, 1, 2)))
 #endif
 ;
 
 void errnoWarn(char *format, ...)
 /* Prints error message from UNIX errno first, then does rest of warning. */
-#if defined(__GNUC__) && defined(JK_WARN)
+#if defined(__GNUC__)
 __attribute__((format(printf, 1, 2)))
 #endif
 ;

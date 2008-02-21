@@ -1,5 +1,4 @@
 include ../../inc/common.mk
-HG_WARN = -Wall
 
 CFLAGS=-ggdb
 

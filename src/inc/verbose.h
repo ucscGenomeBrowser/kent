@@ -8,7 +8,7 @@ void verbose(int verbosity, char *format, ...)
 /* Write printf formatted message to log (which by
  * default is stderr) if global verbose variable
  * is set to verbosity or higher. */
-#if defined(__GNUC__) && defined(JK_WARN)
+#if defined(__GNUC__)
 __attribute__((format(printf, 2, 3)))
 #endif
     ;

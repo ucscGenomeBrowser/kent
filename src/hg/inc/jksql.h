@@ -401,7 +401,7 @@ void *sqlQueryObjs(struct sqlConnection *conn, sqlLoadFunc loadFunc,
  * using loadFunc.  Check the number of rows returned against the sqlQueryOpts
  * bit set.  Designed for use with autoSql, although load function must be
  * cast to sqlLoadFunc. */
-#if defined(__GNUC__) && defined(JK_WARN)
+#if defined(__GNUC__)
 __attribute__((format(printf, 4, 5)))
 #endif
 ;

@@ -1,5 +1,4 @@
 include ../../inc/common.mk
-HG_WARN = ${HG_WARN_ERR}
 L = -lm
 MYLIBDIR = ../../../src/lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a

@@ -1,5 +1,4 @@
 include ../../../../inc/common.mk
-HG_WARN=${HG_WARN_ERR}
 
 ensScripts = ensGeneToGenePred ensemblDbImport ensemblDownload ensemblGetAll ensemblSuperfamily ensemblVegaMap ensemblExport geneCheckAndLoad hgLoadEnsembl ensemblLoad mkRandomGoldLift mkRandomNTLift
 

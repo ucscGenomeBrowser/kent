@@ -105,7 +105,7 @@ void lineFileSeek(struct lineFile *lf, off_t offset, int whence);
 
 void lineFileAbort(struct lineFile *lf, char *format, ...)
 /* Print file name, line number, and error message, and abort. */
-#if defined(__GNUC__) && defined(JK_WARN)
+#if defined(__GNUC__)
 __attribute__((format(printf, 2, 3)))
 #endif
 ;

@@ -1,7 +1,5 @@
 include ../../inc/common.mk
 
-HG_WARN=-Wall
-
 L = -lm ${MYSQLLIBS} 
 MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a

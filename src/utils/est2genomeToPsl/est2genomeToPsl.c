@@ -11,7 +11,7 @@
 #include "fa.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: est2genomeToPsl.c,v 1.3 2005/08/03 00:45:08 markd Exp $";
+static char const rcsid[] = "$Id: est2genomeToPsl.c,v 1.4 2008/02/21 02:13:26 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -71,7 +71,7 @@ static char* END_PREFIX = "Alignment Score:";
 
 void parseErr(struct parser *parser, char* format, ...)
 /* prototype to get gnu attribute check */
-#if defined(__GNUC__) && defined(JK_WARN)
+#if defined(__GNUC__)
 __attribute__((format(printf, 2, 3)))
 #endif
 ;

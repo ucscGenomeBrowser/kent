@@ -3,7 +3,6 @@ include ../../inc/common.mk
 MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 L = ${MYSQLLIBS} -lm
-HG_WARN = -Wall
 
 A = snpException
 O = ${A}.o

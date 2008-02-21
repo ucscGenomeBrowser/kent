@@ -12,7 +12,7 @@
 #include "alignSeqSizes.h"
 #include "splignAlign.h"
 
-static char const rcsid[] = "$Id: splignToPsl.c,v 1.1 2004/02/24 19:49:30 ytlu Exp $";
+static char const rcsid[] = "$Id: splignToPsl.c,v 1.2 2008/02/21 02:13:24 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -68,7 +68,7 @@ struct parser
 
 void parseErr(struct parser *pr, char* format, ...)
 /* prototype to get gnu attribute check */
-#if defined(__GNUC__) && defined(JK_WARN)
+#if defined(__GNUC__)
 __attribute__((format(printf, 2, 3)))
 #endif
 ;

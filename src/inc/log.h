@@ -27,7 +27,7 @@ void logErrorVa(char *format, va_list args);
 
 void logError(char *format, ...)
 /* Log an error message. */
-#if defined(__GNUC__) && defined(JK_WARN)
+#if defined(__GNUC__)
 __attribute__((format(printf, 1, 2)))
 #endif
 ;
@@ -37,7 +37,7 @@ void logWarnVa(char *format, va_list args);
 
 void logWarn(char *format, ...)
 /* Log a warn message. */
-#if defined(__GNUC__) && defined(JK_WARN)
+#if defined(__GNUC__)
 __attribute__((format(printf, 1, 2)))
 #endif
 ;
@@ -47,7 +47,7 @@ void logInfoVa(char *format, va_list args);
 
 void logInfo(char *format, ...)
 /* Log an info message. */
-#if defined(__GNUC__) && defined(JK_WARN)
+#if defined(__GNUC__)
 __attribute__((format(printf, 1, 2)))
 #endif
 ;
@@ -57,7 +57,7 @@ void logDebugVa(char *format, va_list args);
 
 void logDebug(char *format, ...)
 /* Log a debug message. */
-#if defined(__GNUC__) && defined(JK_WARN)
+#if defined(__GNUC__)
 __attribute__((format(printf, 1, 2)))
 #endif
 ;

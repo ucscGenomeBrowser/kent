@@ -4,26 +4,25 @@ ifeq (${COPT},)
 endif
 CFLAGS=
 HG_DEFS=-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_GNU_SOURCE -DMACHTYPE_${MACHTYPE}
-HG_WARN=-Wformat -Wimplicit -Wuninitialized -Wreturn-type
 HG_INC=-I../inc -I../../inc -I../../../inc -I../../../../inc -I../../../../../inc
 
-# Stronger warning checks, and warnings-->errors, for libraries and CGIs:
-ifeq (darwin,$(findstring darwin,${OSTYPE}))
-    HG_WARN_ERR = -DJK_WARN -Wall -Werror -Wno-unused-variable -Wno-long-double
-else
-  ifeq (solaris,$(findstring solaris,${OSTYPE}))
-    HG_WARN_ERR = -DJK_WARN -Wall
+ifeq (${HG_WARN},)
+  ifeq (darwin,$(findstring darwin,${OSTYPE}))
+      HG_WARN = -Wall -Werror -Wno-unused-variable -Wno-long-double
+      HG_WARN_UNINIT=
   else
-    HG_WARN_ERR = -DJK_WARN -Wall -Werror
+    ifeq (solaris,$(findstring solaris,${OSTYPE}))
+      HG_WARN = -Wall -Wformat -Wimplicit -Wreturn-type
+      HG_WARN_UNINIT=-Wuninitialized
+    else
+      HG_WARN = -Wall -Werror -Wformat -Wimplicit -Wreturn-type
+      HG_WARN_UNINIT=-Wuninitialized
+    endif
   endif
-endif
-# Apply the stronger checks to all code on our development machine:
-ifeq (${HOST},hgwdev)
-    HG_WARN=${HG_WARN_ERR}
-endif
-# also if specifically requrested
-ifneq (${USE_HGWARN},)
-    HG_WARN=${HG_WARN_ERR}
+  # -Wuninitialized generates a warning without optimization
+  ifeq ($(findstring -O,${COPT}),-O)
+     HG_WARN += ${HG_WARN_UNINIT}
+  endif
 endif
 
 ifeq (${SCRIPTS},)

@@ -1,6 +1,5 @@
 XINC = -I$(MYSQLINC)
 include ../../../inc/common.mk
-HG_WARN = ${HG_WARN_ERR}
 
 L = -lm $(MYSQLLIBS)
 

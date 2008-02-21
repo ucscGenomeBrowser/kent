@@ -1124,9 +1124,13 @@ identifier nativeMrnaAccession typeOf=mrnaAccession
 
 identifier mgcAccession typeOf=nativeMrnaAccession
 "Mammalian Gene Collection Genbank mRNA accession."
-    $gbd.mgcFullStatus.acc
     $gbd.mgcFullMrna.qName 
-    $gbd.mgcGenes.name
+    $gbd.mgcGenes.name full
+
+identifier orfeomeAccession typeOf=nativeMrnaAccession
+"ORFeome collaboration Genbank mRNA accession."
+    $gbd.orfeomeMrna.qName 
+    $gbd.orfeomeGenes.name full
 
 identifier refSeqId typeOf=mrnaAccession
 "RefSeq mRNA accession"
@@ -1366,7 +1370,6 @@ identifier bacCloneName fuzzy
 identifier imageCloneId external=IMAGEConsortium fuzzy
 "An image cDNA clone ID"
     $gbd.imageClone.imageId
-    $gbd.mgcFullStatus.imageId
 
 identifier humanFosmidId
 "Human Fosmid (~50kb genomic sequence) clone"
