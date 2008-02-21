@@ -18,7 +18,7 @@
 #include "gsid.h"
 #include "gsidSubj.h"
 
-static char const rcsid[] = "$Id: gsidSubj.c,v 1.10 2007/12/15 17:16:28 fanhsu Exp $";
+static char const rcsid[] = "$Id: gsidSubj.c,v 1.11 2008/02/21 15:19:42 fanhsu Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -205,7 +205,7 @@ hPrintf("<TD ALIGN=CENTER><A HREF=\"/index.html\" class=\"topbar\"><FONT COLOR=\
 hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgBlat?command=start\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Blat</FONT></A></TD>");
 
 /* Sequence View */
-hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgGateway?db=%s\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Sequence View</FONT></A></TD>", database);
+hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgGateway?db=%s\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Sequence View Gateway</FONT></A></TD>", database);
 
 /* Table View */
 hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/gsidTable\" class=\"topbar\">%s</A></TD>", "<FONT COLOR=\"#FFFFFF\">Table View</FONT>");
@@ -286,7 +286,9 @@ getDbAndGenome(cart, &database, &genome, oldCart);
 
 /* !!! force database to hiv1 until move to server hiv1 is complete 
    and the default database of hgcentral on it point to hiv1. */
-database = strdup("hiv1");
+
+//database = strdup("hiv1");
+database = strdup("hivVax003Vax004");
 
 hSetDb(database);
 conn = hAllocConn();
