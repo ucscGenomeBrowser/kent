@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "mafFrames.h"
 
-static char const rcsid[] = "$Id: mafFrames.c,v 1.5 2008/02/21 03:26:21 braney Exp $";
+static char const rcsid[] = "$Id: mafFrames.c,v 1.6 2008/02/21 03:44:32 braney Exp $";
 
 void mafFramesStaticLoad(char **row, struct mafFrames *ret)
 /* Load a row from mafFrames table into ret.  The contents of ret will
@@ -62,6 +62,25 @@ ret->prevFramePos = sqlSigned(row[7]);
 ret->nextFramePos = sqlSigned(row[8]);
 ret->isExonStart = sqlUnsigned(row[9]);
 ret->isExonEnd = sqlUnsigned(row[10]);
+return ret;
+}
+
+struct mafFrames *mafFramesLoadOld(char **row)
+/* Load a mafFrames from row fetched with select * from mafFrames
+ * from database.  Dispose of this with mafFramesFree(). */
+{
+struct mafFrames *ret;
+
+AllocVar(ret);
+ret->chrom = cloneString(row[0]);
+ret->chromStart = sqlUnsigned(row[1]);
+ret->chromEnd = sqlUnsigned(row[2]);
+ret->src = cloneString(row[3]);
+ret->frame = sqlUnsigned(row[4]);
+safecpy(ret->strand, sizeof(ret->strand), row[5]);
+ret->name = cloneString(row[6]);
+ret->prevFramePos = sqlSigned(row[7]);
+ret->nextFramePos = sqlSigned(row[8]);
 return ret;
 }
 

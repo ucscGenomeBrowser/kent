@@ -36,6 +36,10 @@ struct mafFrames *mafFramesLoad(char **row);
 /* Load a mafFrames from row fetched with select * from mafFrames
  * from database.  Dispose of this with mafFramesFree(). */
 
+struct mafFrames *mafFramesLoadOld(char **row);
+/* Load an old style mafFrames from row fetched with select * from mafFrames
+ * from database.  Dispose of this with mafFramesFree(). */
+
 struct mafFrames *mafFramesLoadAll(char *fileName);
 /* Load all mafFrames from whitespace-separated file.
  * Dispose of this with mafFramesFreeList(). */
