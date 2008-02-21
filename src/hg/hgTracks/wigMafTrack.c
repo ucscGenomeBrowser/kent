@@ -18,7 +18,7 @@
 #include "mafFrames.h"
 #include "phyloTree.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.123 2008/02/21 00:11:45 markd Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.124 2008/02/21 01:59:39 braney Exp $";
 
 #define GAP_ITEM_LABEL  "Gaps"
 #define MAX_SP_SIZE 2000
@@ -1350,6 +1350,7 @@ else if (frame && (prevEnd != -1))
 		mult = 2;
 		*ptr++ = ' ';
 		*ptr++ = lookupCodon(codon);
+		if (ptr[-1] == 0) ptr[-1] = '*';
 		}
 	    else
 		ptr+=2;
@@ -1459,6 +1460,7 @@ if (length && (nextStart != -1))
 		    fillBox = TRUE;
 		    *ptr++ = ' ';
 		    *ptr++ = lookupCodon(codon);
+		    if (ptr[-1] == 0) ptr[-1] = '*';
 		    mult = 2;
 		    }
 		break;
@@ -1471,6 +1473,7 @@ if (length && (nextStart != -1))
 		if (!(ISGAPSPACEORN(codon[0]) ||ISGAPSPACEORN(codon[1]) ||ISGAPSPACEORN(codon[2])))
 		    {
 		    *ptr++ = lookupCodon(codon);
+		    if (ptr[-1] == 0) ptr[-1] = '*';
 		    fillBox = TRUE;
 		    }
 		break;
