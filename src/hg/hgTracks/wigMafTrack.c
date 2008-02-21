@@ -18,7 +18,7 @@
 #include "mafFrames.h"
 #include "phyloTree.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.125 2008/02/21 03:25:48 braney Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.126 2008/02/21 22:38:25 braney Exp $";
 
 #define GAP_ITEM_LABEL  "Gaps"
 #define MAX_SP_SIZE 2000
@@ -1592,7 +1592,10 @@ if (framesTable)
 	framesTable = NULL;
     }
 
-boolean newTableType = hHasField(framesTable, "isExonStart");
+boolean newTableType = FALSE;
+
+if (framesTable != NULL)
+    newTableType = hHasField(framesTable, "isExonStart");
 
 /* initialize "no alignment" string to o's */
 for (i = 0; i < sizeof noAlignment - 1; i++)
