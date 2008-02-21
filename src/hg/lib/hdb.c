@@ -35,7 +35,7 @@
 #include "customTrack.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.342 2008/02/21 10:59:40 jzhu Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.343 2008/02/21 18:14:50 jzhu Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -676,7 +676,7 @@ if (host == NULL || user == NULL || password == NULL)
 conn = sqlConnectRemote(host, user, password, database);
 
 if (conn == NULL)
-    errAbort("Could not connect to %s on local host", database);
+    return NULL;
 
 return conn;
 }
