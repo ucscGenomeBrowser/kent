@@ -28,6 +28,10 @@ void mafFramesStaticLoad(char **row, struct mafFrames *ret);
 /* Load a row from mafFrames table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 
+void mafFramesStaticLoadOld(char **row, struct mafFrames *ret);
+/* Load a row from old style mafFrames table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+
 struct mafFrames *mafFramesLoad(char **row);
 /* Load a mafFrames from row fetched with select * from mafFrames
  * from database.  Dispose of this with mafFramesFree(). */
