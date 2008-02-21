@@ -35,7 +35,7 @@
 #include "customTrack.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.341 2008/01/03 17:28:54 fanhsu Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.342 2008/02/21 10:59:40 jzhu Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -653,10 +653,39 @@ if (conn == NULL)
 return(conn);
 }
 
-struct sqlConnection *hConnectLocal()
+struct sqlConnection *hConnectLocalDb(char *database)
 /* Connect to local database where user info and other info
  * not specific to a particular genome lives.  Free this up
- * with hDisconnectCentral(). */
+ * with sqlDisconnect(&conn). */
+{
+struct sqlConnection *conn = NULL;
+char *host, *user, *password;
+
+char setting[128];
+char *prefix = "localDb";
+safef(setting, sizeof(setting), "%s.host", prefix);
+host = cfgOption(setting);
+safef(setting, sizeof(setting), "%s.user", prefix);
+user = cfgOption(setting);
+safef(setting, sizeof(setting), "%s.password", prefix);
+password = cfgOption(setting);
+    
+if (host == NULL || user == NULL || password == NULL)
+    errAbort("Please set %s options in the hg.conf file.", prefix);
+
+conn = sqlConnectRemote(host, user, password, database);
+
+if (conn == NULL)
+    errAbort("Could not connect to %s on local host", database);
+
+return conn;
+}
+
+
+struct sqlConnection *hConnectLocal()
+/* Connect to local host where user info and other info
+ * not specific to a particular genome lives.  No database is specified 
+ * Free this up with hDisconnectCentral(). */
 {
 struct sqlConnection *conn = NULL;
 if (localCc == NULL)
