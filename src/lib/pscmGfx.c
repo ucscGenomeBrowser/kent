@@ -16,7 +16,7 @@
 #include "vGfx.h"
 #include "vGfxPrivate.h"
 
-static char const rcsid[] = "$Id: pscmGfx.c,v 1.24 2008/02/20 00:42:33 markd Exp $";
+static char const rcsid[] = "$Id: pscmGfx.c,v 1.25 2008/02/21 20:11:47 jzhu Exp $";
 
 
 static struct pscmGfx *boxPscm;	 /* Used to keep from drawing the same box again
@@ -59,7 +59,7 @@ return font_cel_height(font);
 int pscmGetFontStringWidth(struct pscmGfx *pscm, MgFont *font, char *string)
 /* How wide is a string? */
 {
-return fnstring_width(font, string, strlen(string));
+return fnstring_width(font, (unsigned char *)string, strlen(string));
 }
 
 void pscmSetClip(struct pscmGfx *pscm, int x, int y, int width, int height)
