@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/doEnsGeneUpdate.pl instead.
 
-# $Id: doEnsGeneUpdate.pl,v 1.3 2008/02/11 23:07:11 hiram Exp $
+# $Id: doEnsGeneUpdate.pl,v 1.4 2008/02/22 22:52:10 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -54,8 +54,8 @@ options:
   print STDERR $stepper->getOptionHelp();
   print STDERR <<_EOF_
     -buildDir dir         Use dir instead of default
-                          $HgAutomate::clusterData/\$db/$HgAutomate::trackBuild/ensGene.\$date
-                          (necessary when continuing at a later date).
+                          $HgAutomate::clusterData/\$db/$HgAutomate::trackBuild/ensGene.<ensVersion #>
+                          (necessary if experimenting with builds).
 _EOF_
   ;
   print STDERR &HgAutomate::getCommonOptionHelp('dbHost' => $dbHost,
@@ -71,7 +71,7 @@ Automates UCSC's Ensembl gene updates.  Steps:
     load: load the coding and non-coding tracks, and the proteins
     cleanup: Removes or compresses intermediate files.
 All operations are performed in the build directory which is
-$HgAutomate::clusterData/\$db/$HgAutomate::trackBuild/ensGene.\$date unless -buildDir is given.
+$HgAutomate::clusterData/\$db/$HgAutomate::trackBuild/ensGene.<ensVersion #> unless -buildDir is given.
 ensGeneConfig.ra describes the species, assembly and downloaded files.
 To see detailed information about what should appear in config.ra,
 run \"$base -help\".
@@ -164,8 +164,18 @@ sub doLoad {
 				      $runDir, $whatItDoes);
 
   $bossScript->add(<<_EOF_
-gtfToGenePred -genePredExt process/allGenes.gtf.gz $db.allGenes.gp
-hgLoadGenePred -genePredExt $db ensGene $db.allGenes.gp
+hgLoadGenePred -skipInvalid -genePredExt $db ensGene process/$db.allGenes.gp
+_EOF_
+  );
+
+  if (defined $geneScaffolds) {
+      $bossScript->add(<<_EOF_
+hgLoadBed $db ensemblGeneScaffolds process/ensemblGeneScaffolds.oryCun1.bed
+_EOF_
+      );
+  }
+
+  $bossScript->add(<<_EOF_
 zcat download/$ensPepFile \\
         | sed -e 's/^>.* transcript:/>/; s/ CCDS.*\$//;' | gzip > ensPep.txt.gz
 zcat ensPep.txt.gz \\
@@ -248,6 +258,20 @@ _EOF_
 	| gzip > allGenes.gtf.gz
 _EOF_
   );
+  $bossScript->add(<<_EOF_
+gtfToGenePred -genePredExt allGenes.gtf.gz $db.allGenes.gp
+_EOF_
+  );
+  if (defined $geneScaffolds) {
+      $bossScript->add(<<_EOF_
+mv $db.allGenes.gp $db.allGenes.beforeLift.gp
+$Bin/ensGeneScaffolds.pl ../download/seq_region.txt.gz \\
+	../download/assembly.txt.gz > $db.ensGene.lft
+liftAcross -warn -bedOut=ensemblGeneScaffolds.$db.bed $db.ensGene.lft \\
+	$db.allGenes.beforeLift.gp $db.allGenes.gp >& liftAcross.err.out
+_EOF_
+      );
+  }
   $bossScript->execute();
 } # doProcess
 
@@ -269,14 +293,25 @@ sub doDownload {
 				      $runDir, $whatItDoes);
 
   $bossScript->add(<<_EOF_
-wget --timestamping --user=anonymous --password=ucscGenomeBrowser\@ \\
+wget --timestamping --user=anonymous --password=ucscGenomeBrowser\@.ucsc.edu \\
 $ensGtfUrl \\
 -O $ensGtfFile
-wget --timestamping --user=anonymous --password=ucscGenomeBrowser\@ \\
+wget --timestamping --user=anonymous --password=ucscGenomeBrowser\@.ucsc.edu \\
 $ensPepUrl \\
 -O $ensPepFile
 _EOF_
   );
+  if (defined $geneScaffolds) {
+      $bossScript->add(<<_EOF_
+wget --timestamping --user=anonymous --password=ucscGenomeBrowser\@.ucsc.edu \\
+$ensMySqlUrl/seq_region.txt.gz \\
+-O seq_region.txt.gz
+wget --timestamping --user=anonymous --password=ucscGenomeBrowser\@.ucsc.edu \\
+$ensMySqlUrl/assembly.txt.gz \\
+-O assembly.txt.gz
+_EOF_
+      );
+  }
   $bossScript->execute();
 } # doDownload
 
@@ -385,11 +420,9 @@ $bedDir = "$topDir/$HgAutomate::trackBuild";
 # $opt_debug = 1;
 $opt_verbose = 3 if ($opt_verbose < 3);
 
-# Establish what directory we will work in.
-my $date = `date +%Y-%m-%d`;
-chomp $date;
+# Establish what directory we will work in, tack on the ensembl version ID.
 $buildDir = $opt_buildDir ? $opt_buildDir :
-  "$HgAutomate::clusterData/$db/$HgAutomate::trackBuild/ensGene.$date";
+  "$HgAutomate::clusterData/$db/$HgAutomate::trackBuild/ensGene.$ensVersion";
 
 ($ensGtfUrl, $ensPepUrl, $ensMySqlUrl) =
 	&EnsGeneAutomate::ensGeneVersioning($db, $ensVersion );
