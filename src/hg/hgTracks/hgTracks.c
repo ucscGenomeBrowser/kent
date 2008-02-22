@@ -118,7 +118,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1436 2008/02/22 08:11:46 markd Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1437 2008/02/22 23:14:53 kuhn Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -14374,7 +14374,7 @@ if (showTrackControls)
      * the controls don't wrap around randomly */
     hPrintf("<table border=0 cellspacing=1 cellpadding=1 width=%d>\n", CONTROL_TABLE_WIDTH);
     hPrintf("<tr><td colspan='5' align='CENTER' nowrap>"
-	   "Use drop down controls below and press refresh to alter tracks "
+	   "Use drop-down controls below and press refresh to alter tracks "
 	   "displayed.<BR>"
 	   "Tracks with lots of items will automatically be displayed in "
 	   "more compact modes.</td></tr>\n");
