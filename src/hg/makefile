@@ -1,6 +1,6 @@
 # Build all directories in utils
 
-# 	$Id: makefile,v 1.136 2007/12/18 05:37:01 angie Exp $
+# 	$Id: makefile,v 1.137 2008/02/22 19:53:59 hiram Exp $
 
 BROWSER_BINS=cartReset das hgBlat makeDb/hgCgiData hgConvert \
         hgGateway hgGene hgGenome hgPcr hgSession hgTables hgTracks \
@@ -14,10 +14,10 @@ BROWSER_BINS=cartReset das hgBlat makeDb/hgCgiData hgConvert \
 BROWSER_LOADERS = makeDb/hgLoadBed makeDb/hgLoadWiggle
 
 TEST_DIRS = lib autoDtd autoSql blastToPsl checkTableCoords embossToPsl \
-            genePredSingleCover genePredHisto genePredToGtf genePredToMafFrames\
-	    gbGetEntries \
-            hgGetAnn mrnaToGene overlapSelect pslCDnaFilter pslDiff \
-            pslHisto pslMap pslPartition pslSelect pslStats pslSwap spideyToPsl \
+            genePredSingleCover genePredHisto genePredToGtf \
+	    genePredToMafFrames gbGetEntries hgGetAnn liftAcross \
+            mrnaToGene overlapSelect pslCDnaFilter pslDiff pslHisto \
+            pslMap pslPartition pslSelect pslStats pslSwap spideyToPsl \
 	    sqlToXml xmlToSql
 
 BROKEN_TEST_DIRS = liftOver scaffoldFaToAgp
@@ -172,6 +172,7 @@ UTIL_DIRS = \
 	hgsqlimport \
 	intronEnds \
 	lib \
+	liftAcross \
 	liftAgp \
 	liftFrags \
 	liftOver \
