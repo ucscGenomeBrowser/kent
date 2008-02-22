@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/doEnsGeneUpdate.pl instead.
 
-# $Id: doEnsGeneUpdate.pl,v 1.4 2008/02/22 22:52:10 hiram Exp $
+# $Id: doEnsGeneUpdate.pl,v 1.5 2008/02/22 23:23:56 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -164,13 +164,14 @@ sub doLoad {
 				      $runDir, $whatItDoes);
 
   $bossScript->add(<<_EOF_
-hgLoadGenePred -skipInvalid -genePredExt $db ensGene process/$db.allGenes.gp
+hgLoadGenePred -skipInvalid -genePredExt $db ensGene process/$db.allGenes.gp.gz
 _EOF_
   );
 
   if (defined $geneScaffolds) {
       $bossScript->add(<<_EOF_
-hgLoadBed $db ensemblGeneScaffolds process/ensemblGeneScaffolds.oryCun1.bed
+zcat process/ensemblGeneScaffolds.oryCun1.bed.gz \\
+    | sed -e "s/GeneScaffold/GS/" | hgLoadBed $db ensemblGeneScaffold stdin
 _EOF_
       );
   }
@@ -259,16 +260,17 @@ _EOF_
 _EOF_
   );
   $bossScript->add(<<_EOF_
-gtfToGenePred -genePredExt allGenes.gtf.gz $db.allGenes.gp
+gtfToGenePred -genePredExt allGenes.gtf.gz stdout | gzip > $db.allGenes.gp.gz
 _EOF_
   );
   if (defined $geneScaffolds) {
       $bossScript->add(<<_EOF_
-mv $db.allGenes.gp $db.allGenes.beforeLift.gp
+mv $db.allGenes.gp.gz $db.allGenes.beforeLift.gp.gz
 $Bin/ensGeneScaffolds.pl ../download/seq_region.txt.gz \\
-	../download/assembly.txt.gz > $db.ensGene.lft
-liftAcross -warn -bedOut=ensemblGeneScaffolds.$db.bed $db.ensGene.lft \\
-	$db.allGenes.beforeLift.gp $db.allGenes.gp >& liftAcross.err.out
+	../download/assembly.txt.gz | gzip > $db.ensGene.lft.gz
+liftAcross -warn -bedOut=ensemblGeneScaffolds.$db.bed $db.ensGene.lft.gz \\
+	$db.allGenes.beforeLift.gp.gz $db.allGenes.gp >& liftAcross.err.out
+gzip ensemblGeneScaffolds.$db.bed $db.allGenes.gp liftAcross.err.out
 _EOF_
       );
   }
@@ -325,9 +327,7 @@ sub doCleanup {
   my $bossScript = new HgRemoteScript("$runDir/doCleanup.csh", $fileServer,
 				      $runDir, $whatItDoes);
   $bossScript->add(<<_EOF_
-rm -rf run.template/raw/
-rm -rf templateOtherBigTempFilesOrDirectories
-gzip template
+rm -f bed.tab ensPep.txt.gz ensPep.$db.fa.tab ensPep.name ensGene.name
 _EOF_
   );
   $bossScript->execute();
