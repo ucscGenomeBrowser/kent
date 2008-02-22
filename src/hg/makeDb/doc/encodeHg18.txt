@@ -971,14 +971,15 @@ cat > getMafs.csh << 'EOF'
         echo $r
         gunzip -c $f | \
             sed -e 's/^s human\./s hg18./' \
-                -e 's/^s cow\./s bosTau2./' \
+                -e 's/^s mouse\./s mm9./' \
+                -e 's/^s cow\./s bosTau3./' \
                 -e 's/^s dog\./s canFam2./' \
                 -e 's/^s chicken\./s galGal3./' \
                 -e 's/^s monodelphis\./s monDom4./' \
                 -e 's/^s chimp\./s panTro2./' \
                 -e 's/^s macaque\./s rheMac2./' \
+                -e 's/^s orangutan\./s ponAbe2./' \
                 -e 's/^s rat\./s rn4./' \
-                -e 's/^s xenopus\./s xenTro2./' \
                         > maf/$r.maf
     end
 'EOF'
@@ -998,14 +999,15 @@ cat > getMafs.csh << 'EOF'
 
     cat > species.lst << 'EOF'
         hg18
-        bosTau2
+        bosTau3
         canFam2
         galGal3
         monDom4
         panTro2
         rheMac2
+        ponAbe2
+        mm9
         rn4
-        xenTro2
 'EOF'
 
 cat > doNBed.csh << 'EOF'
@@ -1022,7 +1024,7 @@ cat > doNBed.csh << 'EOF'
 'EOF'
     csh doNBed.csh >&! doNBed.log &
 
-    rm -f nBeds sizes
+    rm -f nBeds
     foreach db (`grep -v hg18 species.lst`)
         echo "$db "
         ln -s  /cluster/data/$db/$db.N.bed $db.bed
@@ -1068,14 +1070,15 @@ cat > doAnno.csh << 'EOF'
     # NOTE: shortcut by using sources from hg18 multiz framing
 
 hg18: knownGene
-bosTau2: mrna
+bosTau3: mrna
 canFam2: mrna
 galGal3: mrna
 monDom4: ensGene
 panTro2: refGene
+ponAbe2: refGene
 rheMac2: ensGene
 rn4: knownGene
-xenTro2: mrna
+mm9: knownGene
 
     # get the genes for all genomes
     # mRNAs with CDS.  single select to get cds+psl, then split that up and
@@ -1084,7 +1087,7 @@ xenTro2: mrna
 cat > getGenes.csh << 'EOF'
     rm -fr genes
     mkdir -p genes
-    set mrnaDbs = "bosTau2 canFam2 galGal3 xenTro2"
+    set mrnaDbs = "bosTau3 canFam2 galGal3"
     foreach queryDb ($mrnaDbs)
       set tmpExt = `mktemp temp.XXXXXX`
       set tmpMrnaCds = ${queryDb}.mrna-cds.${tmpExt}
@@ -1104,17 +1107,17 @@ cat > getGenes.csh << 'EOF'
       mv /scratch/tmp/$queryDb.tmp.gz genes/$queryDb.gp.gz
       rm -f $tmpExt
     end
-    # using knownGene for rn4 mm8 hg18
-    # using refGene for panTro2
+    # using knownGene for rn4 mm9 hg18
+    # using refGene for panTro2, ponAbe2
     # using ensGene for monDom4, rheMac2
     # genePreds; (must keep only the first 10 columns for knownGene)
-    set geneDbs = "hg18 rn4 panTro2 monDom4 rheMac2"
+    set geneDbs = "hg18 mm9 rn4 panTro2 monDom4 rheMac2 ponAbe2"
     foreach queryDb ($geneDbs)
       if ($queryDb == "monDom4" || $queryDb == "rheMac2") then
         set geneTbl = ensGene
-      else if ($queryDb == "panTro2") then
+      else if ($queryDb == "panTro2" || $queryDb == "ponAbe2") then
         set geneTbl = refGene
-      else if ($queryDb == "hg18" || $queryDb == "rn4") then
+      else if ($queryDb == "hg18" || $queryDb == "rn4" || $queryDb == "mm9") then
         set geneTbl = knownGene
       endif
       hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from $geneTbl" ${queryDb} \
@@ -1127,7 +1130,7 @@ cat > getGenes.csh << 'EOF'
 
     ssh kkstore03
     cd /cluster/data/encode/TBA/DEC-07/2008-01-10/frames
-    (cat  ../maf/*.maf | nice genePredToMafFrames hg18 stdin stdout bosTau2 genes/bosTau2.gp.gz canFam2 genes/canFam2.gp.gz galGal3 genes/galGal3.gp.gz hg18 genes/hg18.gp.gz panTro2 genes/panTro2.gp.gz rheMac2 genes/rheMac2.gp.gz rn4 genes/rn4.gp.gz xenTro2 genes/xenTro2.gp.gz monDom4 genes/monDom4.gp.gz | nice gzip > mafFrames.gz) >& frames.log &
+    (cat  ../maf/*.maf | nice genePredToMafFrames hg18 stdin stdout bosTau3 genes/bosTau2.gp.gz canFam2 genes/canFam2.gp.gz galGal3 genes/galGal3.gp.gz hg18 genes/hg18.gp.gz panTro2 genes/panTro2.gp.gz rheMac2 genes/rheMac2.gp.gz mm9 genes/mm9.gp.gz rn4 genes/rn4.gp.gz ponAbe2 genes/ponAbe2.gp.gz monDom4 genes/monDom4.gp.gz | nice gzip > mafFrames.gz) >& frames.log &
 
     ssh hgwdev
     cd /cluster/data/encode/TBA/DEC-07/2008-01-10/frames
