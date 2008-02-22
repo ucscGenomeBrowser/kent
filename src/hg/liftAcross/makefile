@@ -13,5 +13,9 @@ liftAcross: $O ${MYLIBS}
 compile:	${O}
 	${CC} ${COPT} -o liftAcross $O ${MYLIBS} $L
 
+test:
+	(cd tests && ${MAKE})
+
 clean:
 	rm -f $O liftAcross
+	(cd tests && ${MAKE} clean)
