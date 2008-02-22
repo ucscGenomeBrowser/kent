@@ -21,7 +21,7 @@
 #include "botDelay.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgBlat.c,v 1.121 2007/11/11 07:35:04 donnak Exp $";
+static char const rcsid[] = "$Id: hgBlat.c,v 1.122 2008/02/22 19:29:39 kent Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -414,7 +414,7 @@ FILE *f;
 struct dnaSeq *seqList = NULL, *seq;
 struct tempName pslTn, faTn;
 int maxSingleSize, maxTotalSize, maxSeqCount;
-int minSingleSize = 18;
+int minSingleSize = minMatchShown;
 char *genome, *db;
 char *type = cgiString("type");
 char *seqLetters = cloneString(userSeq);
@@ -544,7 +544,7 @@ for (seq = seqList; seq != NULL; seq = seq->next)
 	    seq->name, seq->size, maxSingleSize);
 	continue;
 	}
-    if (oneSize < 18)
+    if (oneSize < minSingleSize)
         {
 	warn("Sequence %s is %d letters long (min is %d), skipping", 
 		seq->name, seq->size, minSingleSize);
@@ -683,7 +683,7 @@ printf(
 "<P>BLAT on DNA is designed to\n"
 "quickly find sequences of 95%% and greater similarity of length 25 bases or\n"
 "more.  It may miss more divergent or shorter sequence alignments.  It will find\n"
-"perfect sequence matches of 33 bases, and sometimes find them down to %d bases.\n"
+"perfect sequence matches of 25 bases, and sometimes find them down to %d bases.\n"
 "BLAT on proteins finds sequences of 80%% and greater similarity of length 20 amino\n"
 "acids or more.  In practice DNA BLAT works well on primates, and protein\n"
 "blat on land vertebrates.",
