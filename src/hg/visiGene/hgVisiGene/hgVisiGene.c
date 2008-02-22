@@ -566,11 +566,11 @@ puts(
 "<UL> \n"
 "<LI>High-quality high-resolution images of eight-week-old male mouse \n"
 "sagittal brain slices with reverse-complemented mRNA hybridization probes \n"
-"from the <A HREF=\"http://www.brainatlas.org/\" TARGET=_blank>Allen Brain \n"
+"from the <A HREF=\"http://brain-map.org/\" TARGET=_blank>Allen Brain \n"
 "Atlas</A>, courtesy of the <A HREF=\"http://www.alleninstitute.org/\" \n"
 "TARGET=_blank>Allen Institute for Brain Science</A> \n"
 "<LI>Mouse <em>in situ</em> images from the \n"
-"<A HREF=\"http://www.informatics.jax.org/menus/expression_menu.shtml\" \n"
+"<A HREF=\"http://www.informatics.jax.org/expression.shtml\" \n"
 "TARGET=_blank>Jackson Lab Gene Expression Database</A> (GXD) at MGI \n" 
 "<LI>Transcription factors in mouse embryos from the \n"
 "<A HREF=\"http://mahoney.chip.org/mahoney/\" TARGET=_blank>Mahoney Center \n"
@@ -635,7 +635,7 @@ puts(
 "<P> \n"
 "VisiGene was written by Jim Kent and Galt Barber. \n"
 "Contact <A HREF=\"mailto:kent@soe.ucsc.edu\">Jim</A> if you have \n"
-"an image set you'd like to contribute for display. </P>\n"
+"an image set you would like to contribute for display. </P>\n"
 );
 }
 
