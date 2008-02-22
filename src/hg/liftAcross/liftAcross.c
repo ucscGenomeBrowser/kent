@@ -7,7 +7,7 @@
 #include "genePred.h"
 #include "sqlList.h"
 
-static char const rcsid[] = "$Id: liftAcross.c,v 1.6 2008/02/22 17:37:11 hiram Exp $";
+static char const rcsid[] = "$Id: liftAcross.c,v 1.7 2008/02/22 19:46:09 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -21,6 +21,10 @@ errAbort(
   "   srcFile.gp - genePred input file to be lifted\n"
   "   dstOut.gp - genePred output file result\n"
   "options:\n"
+  "   -bedOut=<regionMap.bed> - mappings from liftAcross.lft in bed format\n"
+  "	          - this is a type bed 6+ file, where thickStart and thickEnd\n"
+  "               - are the GeneScaffold coordinates, unrelated to the\n"
+  "               - scaffold target coordinates."
   "   -warn - warnings only on broken items, not the default error exit\n"
   "The six columns in the liftAcross.lft file are:\n"
   "srcName  srcStart  srcEnd  dstName  dstStart dstStrand\n"
@@ -32,7 +36,10 @@ errAbort(
   );
 }
 
+char *bedOut = NULL;	/*	default NULL == not happening */
+
 static struct optionSpec options[] = {
+   {"bedOut", OPTION_STRING},
    {"warn", OPTION_BOOLEAN},
    {NULL, 0},
 };
@@ -461,6 +468,78 @@ freeHash(&items);
 return (result);
 }	/*	static struct genePred *liftGenePred()	*/
 
+static void bedRegionOutput(struct hash *lftHash)
+/* write the lift spec out as a bed file to map the regions lifted
+ *	scores of the items are set at 1000 when they are in order,
+ *	or 200 when they are out of order.
+*/
+{
+FILE *bedFile = mustOpen(bedOut, "w");
+struct hashEl *hel = NULL;
+struct hashCookie cookie = hashFirst(lftHash);
+while ((hel = hashNext(&cookie)) != NULL)
+    {
+    struct liftSpec *lsList = hel->val;
+    struct liftSpec *ls = NULL;
+    int itemCount = 0;
+    struct liftSpec *prevLs = lsList;
+    struct liftSpec *nextLs = prevLs->next;
+    int size = prevLs->end - prevLs->start;
+    int prevStart = prevLs->dstStart;
+    int prevEnd = prevStart + size;
+    char prevStrand = prevLs->strand;
+    char *prevDstName = NULL;
+    int nextStart = prevStart;
+    int nextEnd = prevEnd;
+    char nextStrand = prevStrand;
+    char *nextDstName = NULL;
+
+    for (ls = lsList; ls != NULL; ls = ls->next)
+	{
+	size = ls->end - ls->start;
+	int dstEnd = ls->dstStart+size;
+	int score = 1000;	/* assume everything is in order */
+	nextLs = ls->next;
+	if (nextLs)		/* if there is a next item */
+	    {
+	    size = nextLs->end - nextLs->start;
+	    nextStart = nextLs->dstStart;
+	    nextEnd = nextStart + size;
+	    nextStrand = nextLs->strand;
+	    nextDstName = nextLs->dstName;
+	    }
+	/* verify we are properly in order from previous item 
+	 *	strands must be the same, and start/end in order
+	 *	negative strand reverses meaning of "in order"
+	 */
+	if ( ! differentStringNullOk(prevDstName,ls->dstName) &&
+		( (prevStrand != ls->strand) ||
+	    (('-' == ls->strand) ? (dstEnd > prevStart) :
+				    (prevEnd > ls->dstStart) ) ) )
+	    {
+	    score = 200;
+	    }
+	/* when possible, verify next item properly follows this item */
+	if (nextLs)
+	    {
+	    if ( ! differentStringNullOk(nextDstName,ls->dstName) &&
+		    ( (nextStrand != ls->strand) ||
+		(('-' == ls->strand) ? (nextEnd > ls->dstStart) :
+					(dstEnd > nextStart) ) ) )
+		{
+		score = 200;
+		}
+	    }
+	fprintf(bedFile, "%s\t%d\t%d\t%s.%d\t%d\t%c\t%d\t%d\n",
+	    ls->dstName, ls->dstStart, dstEnd, hel->name,
+	    ++itemCount, score, ls->strand, ls->start, ls->end);
+	prevStart = ls->dstStart;
+	prevEnd = dstEnd;
+	prevStrand = ls->strand;
+	prevDstName = ls->dstName;
+	}
+    }
+}
 
 void liftAcross(char *liftAcross, char *srcFile, char *dstOut)
 /* liftAcross - convert one coordinate system to another, no overlapping items. */
@@ -469,6 +548,9 @@ struct hash *lftHash = readLift(liftAcross);
 struct genePred *gpList = genePredExtLoadAll(srcFile);
 struct genePred *gp = NULL;
 FILE *out = mustOpen(dstOut, "w");
+
+if (bedOut)
+    bedRegionOutput(lftHash);
 
 int genePredItemCount = 0;
 for (gp = gpList; gp != NULL; gp = gp->next)
@@ -498,6 +580,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 4)
     usage();
+bedOut = optionVal("bedOut", bedOut);
 liftAcross(argv[1], argv[2], argv[3]);
 return 0;
 }
