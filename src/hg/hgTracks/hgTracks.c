@@ -118,7 +118,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1435 2008/02/21 00:11:45 markd Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1436 2008/02/22 08:11:46 markd Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -689,8 +689,8 @@ static void mapBoxToggleComplement(struct hvGfx *hvg, int x, int y, int width, i
 struct dyString *ui = uiStateUrlPart(toggleGroup);
 x = hvGfxAdjXW(hvg, x, width);
 hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
-hPrintf("HREF=\"%s?complement=%d",
-	hgTracksName(), !cartUsualBooleanDb(cart, database, COMPLEMENT_BASES_VAR, FALSE));
+hPrintf("HREF=\"%s?complement_%s=%d",
+	hgTracksName(), database, !cartUsualBooleanDb(cart, database, COMPLEMENT_BASES_VAR, FALSE));
 hPrintf("&%s\"", ui->string);
 freeDyString(&ui);
 if (message != NULL)
