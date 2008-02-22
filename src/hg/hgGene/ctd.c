@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "net.h"
 
-static char const rcsid[] = "$Id: ctd.c,v 1.3 2008/02/20 23:23:07 fanhsu Exp $";
+static char const rcsid[] = "$Id: ctd.c,v 1.4 2008/02/22 16:58:06 fanhsu Exp $";
 
 static boolean ctdExists(struct section *section, 
 	struct sqlConnection *conn, char *geneId)
@@ -35,14 +35,11 @@ static void ctdPrint(struct section *section,
 char query[256];
 struct sqlResult *sr;
 char **row;
-struct sqlConnection *conn2;
 char *chemId, *chemName;
 int chemCnt;
 int first = 1;
 boolean showCompleteCtdList;
 struct dyString *currentCgiUrl;
-
-conn2=hAllocConn();
 
 showCompleteCtdList = FALSE;
 if (cgiOptionalString("showAllCtdRef") != NULL)
@@ -52,6 +49,7 @@ if (cgiOptionalString("showAllCtdRef") != NULL)
 	{
 	showCompleteCtdList = TRUE;
 	}
+    cartRemove(cart, "showAllCtdRef");
     }
 currentCgiUrl = cgiUrlString();
     
@@ -79,7 +77,7 @@ while (row != NULL)
     	   chemId);
     printf("%s</B></A>\n", chemId);
     printf("%s\n", chemName);fflush(stdout);
-	
+    printf("</LI>");	
     chemCnt++;
     row = sqlNextRow(sr);
     /* Initially, just show no more than 10 items */
