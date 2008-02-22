@@ -20,7 +20,7 @@ errAbort(
   "in the template between #LOOP and #ENDLOOP, and write the results to\n"
   "the output.  Other substitution variables are:\n"
   "       $(path1)  - Full path name of first file.\n"
-  "       $(path1)  - Full path name of second file.\n"
+  "       $(path2)  - Full path name of second file.\n"
   "       $(dir1)   - First directory. Includes trailing slash if any.\n"
   "       $(dir2)   - Second directory.\n"
   "       $(lastDir1) - The last directory in the first path. Includes trailing slash if any.\n"
