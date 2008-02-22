@@ -7,7 +7,7 @@
 #include "genePred.h"
 #include "sqlList.h"
 
-static char const rcsid[] = "$Id: liftAcross.c,v 1.5 2008/02/15 00:41:07 hiram Exp $";
+static char const rcsid[] = "$Id: liftAcross.c,v 1.6 2008/02/22 17:37:11 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -15,19 +15,19 @@ void usage()
 errAbort(
   "liftAcross - convert one coordinate system to another, no overlapping items\n"
   "usage:\n"
-  "   liftAcross [options] liftAcross.txt srcFile.gp dstOut.gp\n"
+  "   liftAcross [options] liftAcross.lft srcFile.gp dstOut.gp\n"
   "required arguments:\n"
-  "   liftAcross.txt - six column file relating src to destination\n"
+  "   liftAcross.lft - six column file relating src to destination\n"
   "   srcFile.gp - genePred input file to be lifted\n"
   "   dstOut.gp - genePred output file result\n"
   "options:\n"
   "   -warn - warnings only on broken items, not the default error exit\n"
-  "The six columns in the liftAcross.txt file are:\n"
+  "The six columns in the liftAcross.lft file are:\n"
   "srcName  srcStart  srcEnd  dstName  dstStart dstStrand\n"
   "    the destination regions are the same size as the source regions.\n"
-  "First incarnation only works with items that are fully contained in a\n"
+  "This only works with items that are fully contained in a\n"
   "   single source region.  First incarnation only lifts genePred files.\n"
-  "Items not found in the liftAcross.txt file are merely passed along\n"
+  "Items not found in the liftAcross.lft file are merely passed along\n"
   "   unchanged."
   );
 }
@@ -57,7 +57,33 @@ struct liftedItem
     int end;
     char strand;
     int frame;
+    boolean outOfOrder;
     };
+
+static void freeLiftedItem(struct liftedItem **pLi)
+/* free up the space for a single item */
+{
+struct liftedItem *li = *pLi;
+if (NULL == li)
+    return;
+freeMem(li->name);
+freez(pLi);
+}
+
+static void freeLiftedItemList(struct liftedItem **pLi)
+/* free up the space for all items on the list */
+{
+struct liftedItem *liList = *pLi;
+if (NULL == liList)
+    return;
+struct liftedItem *li;
+struct liftedItem *next;
+for (li = liList; li; li = next)
+    {
+    next = li->next;
+    freeLiftedItem(&li);
+    }
+}
 
 static int lsStartCmp(const void *va, const void *vb)
 /* Compare a sort based on start for a liftSpec item. */
@@ -106,16 +132,13 @@ while (lineFileNextRow(lf, row, ArraySize(row)))
     }
 
 /*	Go through each srcName in the hash, and sort the list there by
- *	the start coordinate of each item
+ *	the start coordinate of each item.  The searching will expect
+ *	them to be in order.
  */
-int hashItemCount = 0;
-int liftItemCount = 0;
 struct hashCookie cookie = hashFirst(result);
 while ((hel = hashNext(&cookie)) != NULL)
     {
     slSort(&(hel->val), lsStartCmp);
-    ++hashItemCount;
-    liftItemCount += slCount(hel->val);
     if (verboseLevel() > 2)
 	{
 	struct liftSpec *ls;
@@ -124,65 +147,89 @@ while ((hel = hashNext(&cookie)) != NULL)
 		ls->end, ls->dstName, ls->dstStart, ls->strand);
 	}
     }
-verbose(2,"#\tsource names count: %d, lift item count: %d\n",
-	hashItemCount, liftItemCount);
 
 return result;
 }
 
-struct liftSpec *findLiftSpec(struct liftSpec *lsList, char *name,
+static int verifyCoordinates(int start1, int end1, int start2, int end2,
+    char *name1, char *name2)
+/* verify start1-end1 is completely contained in start2-end2
+ *	return (when 'warn'):
+ *	-1 == no overlap at all, completely disjoint
+ *	1 == partially overlap
+ *	0 == perfectly OK
+ * name1 and name2 are along for the ride only for printout
+ */
+{
+if ((end1 <= start2) || (start1 >= end2))
+    {
+    if (optionExists("warn"))
+	warn("item %s:%d-%d can not be found in %s:%d-%d",
+	    name1, start1, end1, name2, start2, end2);
+    else
+	errAbort("item %s:%d-%d can not be found in %s:%d-%d",
+	    name1, start1, end1, name2, start2, end2);
+    return -1;
+    }
+if ((start1 < start2) || (end1 > end2))
+    {
+    if (optionExists("warn"))
+	warn("item %s:%d-%d not fully contained in %s:%d-%d",
+	    name1, start1, end1, name2, start2, end2);
+    else
+	errAbort("item %s:%d-%d not fully contained in %s:%d-%d",
+	    name1, start1, end1, name2, start2, end2);
+    return 1;
+    }
+return 0;
+}
+
+static struct liftSpec *findLiftSpec(struct liftSpec *lsList, char *srcName,
     int start, int end)
-/* see if the given item: name:start-end can be found in the liftSpec lsList
+/* see if the given item: start-end can be found in the liftSpec lsList
  *	if it can, return the liftSpec for that item
  *	if not found, return NULL
  * Verify sanity of lifting this item.  It needs to fall fully within
  *	the liftSpec found.  If not, it will not lift.
+ * The srcName is used here merely for debug and error output
+ *	information.  The given liftSpec is the liftSpec that belongs
+ *	to this srcName as already found by the caller to findLiftSpec.
  */
 {
 struct liftSpec *ret = NULL;
-struct liftSpec *ls;
+struct liftSpec *ls = NULL;
 for (ls = lsList; ls != NULL; ls = ls->next)
     {
-    if (start < ls->end)
+    if (start < ls->end)	/* lift found when start < end */
 	{
-	if (end > ls->end)
-	    errAbort("item %s:%d-%d not fully contained in %s:%d-%d",
-		name, start, end, ls->dstName, ls->start, ls->end);
-        if (end < ls->start)
-	    {
-	    if (optionExists("warn"))
-		{
-		warn("item %s:%d-%d can not be found in %s:%d-%d",
-		    name, start, end, ls->dstName, ls->start, ls->end);
-		break;
-		}
-	    else
-		errAbort("item %s:%d-%d can not be found in %s:%d-%d",
-		    name, start, end, ls->dstName, ls->start, ls->end);
-	    }
-	verbose(4,"# lift %s:%d-%d to %s:%d-%d\n", name, start, end,
-		ls->dstName, ls->start, ls->end);
-	ret = ls;
-	break;
+	if (verifyCoordinates(start, end, ls->start, ls->end,
+		srcName, ls->dstName))
+	    break;	/* skip any illegal ones */
+	ret = ls;	/* this one is it, remember it and */
+	break;		/* get out of here */
 	}
     }
 return (ret);
 }
 
 struct liftedItem *liftOne(struct liftSpec *lift,
-	char *name, int start, int end)
-/* Given an item: name:start-end
+	char *srcName, int start, int end)
+/* Given an item: start-end
  * lift it via the given liftSpec to a liftedItem
  *	return NULL if not found in the liftSpec
+ * The srcName is used here merely for debug and error output
+ *	information.  The given liftSpec is the liftSpec that belongs
+ *	to this srcName as already found by the caller to liftOne.
  */
 {
 struct liftedItem *result = NULL;
-struct liftSpec *ls = findLiftSpec(lift, name, start, end);
+struct liftSpec *ls = findLiftSpec(lift, srcName, start, end);
 if (ls)
     {
     AllocVar(result);
     result->name = cloneString(ls->dstName);
     result->strand = ls->strand;
+    result->outOfOrder = FALSE;	/* can only be determined later */
     if ('+' == ls->strand)
 	{
 	result->start = start - ls->start + ls->dstStart;
@@ -193,7 +240,7 @@ if (ls)
 	result->start = ls->end - 1 - end + ls->dstStart;
 	result->end = ls->end - 1 - start + ls->dstStart;
 	}
-    verbose(3,"#\t%s:%d-%d -> %s:%d-%d %c\n", name, start, end,
+    verbose(3,"#\t%s:%d-%d -> %s:%d-%d %c\n", srcName, start, end,
 	result->name, result->start, result->end, result->strand);
     }
 return result;
@@ -206,6 +253,7 @@ static struct genePred *liftGenePred(struct genePred *gp, struct liftSpec *ls)
 {
 struct genePred *result = NULL;
 struct hash *items = newHash(8);
+struct hash *prevLift = newHash(8);
 struct hashEl *hel = NULL;
 int exonCount = gp->exonCount;
 struct liftedItem *txStart = liftOne(ls, gp->chrom, gp->txStart, gp->txStart+1);
@@ -221,14 +269,16 @@ if (NULL == txStart)
     warn("#\tWARNING: missing txStart for %s:%d\n", gp->chrom, gp->txStart);
 if (NULL == txEnd)
     warn("#\tWARNING: missing txEnd for %s:%d\n", gp->chrom, gp->txEnd);
-if (NULL == cdsStart)
+
+if (((0 == gp->cdsStart) && (0 == gp->cdsEnd)) || (gp->cdsStart == gp->cdsEnd))
+    noCds = TRUE;
+else if (NULL == cdsStart)
     warn("#\tWARNING: missing cdsStart for %s:%d\n", gp->chrom, gp->cdsStart);
-else if ((0 == gp->cdsStart) && (0 == gp->cdsEnd))
+
+if (((0 == gp->cdsStart) && (0 == gp->cdsEnd)) || (gp->cdsStart == gp->cdsEnd))
     noCds = TRUE;
-if (NULL == cdsEnd)
+else if (NULL == cdsEnd)
     warn("#\tWARNING: missing cdsEnd for %s:%d\n", gp->chrom, gp->cdsEnd);
-else if ((0 == gp->cdsStart) && (0 == gp->cdsEnd))
-    noCds = TRUE;
 
 if (gp->optFields & genePredExonFramesFld)
     frames = TRUE;
@@ -247,20 +297,41 @@ for (i = 0; i < exonCount; ++i)
 	    itemLift->frame = gp->exonFrames[i];
 	hel = hashStore(items, itemLift->name);
 	slAddHead(&(hel->val), itemLift);
+	/* see if exons are getting mixed up, compare result with previous lift
+	 *	on this scaffold */
+	struct hashEl *prev = hashStore(prevLift, itemLift->name);
+	if (prev->val)
+	    {
+	    struct liftedItem *prevLift = prev->val;
+	    /* things are out of order if the strands are different, or
+	     *	the items are not marching along in order.  - strand
+	     *	results reverse the sense of "marching along"
+	     */
+	    if ( (prevLift->strand != itemLift->strand) ||
+		(('-' == itemLift->strand) ?
+			(itemLift->end > prevLift->start) :
+			(prevLift->end > itemLift->start) ) )
+		{
+    		prevLift->outOfOrder = itemLift->outOfOrder = TRUE;
+		}
+	    }
+	prev->val = itemLift;
 	}
     }
+freeHash(&prevLift);
 
 /* Each scaffold name in the hash becomes a new genePred item all by itself */
 struct hashCookie cookie = hashFirst(items);
 while ((hel = hashNext(&cookie)) != NULL)
     {
-    struct liftedItem *li;
+    struct liftedItem *li = NULL;
     struct liftedItem *itemList = (struct liftedItem *)hel->val;
-    struct genePred *gpItem;
-    slSort(&itemList, liStartCmp);	/* sort the exons by start coord */
-    int itemExonCount = slCount(itemList);
+    struct genePred *gpItem = NULL;
     unsigned *exonStarts = NULL;
     unsigned *exonEnds = NULL;
+    int itemExonCount = slCount(itemList);
+
+    slSort(&itemList, liStartCmp);	/* sort the exons by start coord */
     AllocArray(exonStarts, itemExonCount);
     AllocArray(exonEnds, itemExonCount);
     AllocVar(gpItem);	/*	start this new genePred item	*/
@@ -269,48 +340,64 @@ while ((hel = hashNext(&cookie)) != NULL)
     gpItem->name = cloneString(gp->name);	/* gene name stays the same */
     gpItem->chrom = cloneString(hel->name);	/* new scaffold name */
     gpItem->exonCount = itemExonCount;		/* this many exons in this gp */
-    gpItem->exonStarts = exonStarts;
-    gpItem->exonEnds = exonEnds;
+    gpItem->exonStarts = exonStarts;		/* an array of unsigned ints */
+    gpItem->exonEnds = exonEnds;		/* an array of unsigned ints */
+    gpItem->strand[0] = gp->strand[0];		/* assume lifted to + result */
+    /* set result strand properly, lifted to - may reverse it */
+    if ('-' == itemList->strand)		/* assume all on same strand */
+	gpItem->strand[0] = ('+' == gp->strand[0]) ? '-' : '+';
+
+    /* no need to set gpItem->strand[1]=0, is already zero from the AllocVar */
+
     int i = 0;
-    li = itemList;
-    gpItem->strand[0] = li->strand;
-    /* gpItem->strand[1] = 0; is already zero from the AllocVar */
+    boolean exonsOutOfOrder = FALSE;
     /* copy each new exon start and end to the new gpItem */
-    for ( ; li != NULL; li = li->next)
+    for (li = itemList; li != NULL; li = li->next)
 	{
 	if (frames)
 	    gpItem->exonFrames[i] = li->frame;
 	exonStarts[i] = li->start;
 	exonEnds[i++] = li->end;
+	if (li->outOfOrder)
+	    exonsOutOfOrder = TRUE;
 	}
     /*	assign txStart,End and cdsStart,End appropriately
      *	First, assume this scaffold is not the one with these items, thus
      *	the first and last exon define these starts and ends.
      *	If this scaffold has one of those, then apply the actual items.
-     *	The negative strand turns everything on its head.
+     *	A negative strand lift result turns everything on its head.
      */
-    if ('-' == gpItem->strand[0])
+    if ('-' == itemList->strand)	/* assume all on same strand */
 	{
-	gpItem->txEnd = exonEnds[itemExonCount-1];  /* assume last exon */
 	gpItem->txStart = exonStarts[0];  /* assume first exon */
+	gpItem->txEnd = exonEnds[itemExonCount-1];  /* assume last exon */
 	if (txStart && sameWord(txStart->name, hel->name))
 	    gpItem->txEnd = txStart->start+1;   /* this guy has the txEnd */
 	if (txEnd && sameWord(txEnd->name, hel->name))
 	    gpItem->txStart = txEnd->start;   /* this guy has the txStart */
+	/*	fix unusual (mixed up) mappings onto a scaffold */
+	gpItem->txStart = min(gpItem->txStart, exonStarts[0]);
+	gpItem->txEnd = max(gpItem->txEnd,exonEnds[itemExonCount-1]);
 
 	if (noCds)
 	    {
-	    gpItem->cdsEnd = 0;
-	    gpItem->cdsStart = 0;
+	    gpItem->cdsStart = gpItem->txEnd;
+	    gpItem->cdsEnd = gpItem->txEnd;
 	    }
 	else
 	    {
-	    gpItem->cdsEnd = exonEnds[itemExonCount-1];/* assume last exon */
 	    gpItem->cdsStart = exonStarts[0];/* assume first exon */
+	    gpItem->cdsEnd = exonEnds[itemExonCount-1];/* assume last exon */
 	    if (cdsStart && sameWord(cdsStart->name, hel->name))
 		gpItem->cdsEnd = cdsStart->start+1; /* this has the cdsEnd */
 	    if (cdsEnd && sameWord(cdsEnd->name, hel->name))
 		gpItem->cdsStart = cdsEnd->start;   /* this has the cdsStart */
+	    /*	fix unusual (mixed up) mappings onto a scaffold */
+	    if (exonsOutOfOrder)
+		{
+		gpItem->cdsStart = min(gpItem->cdsStart, exonStarts[0]);
+		gpItem->cdsEnd = max(gpItem->cdsEnd,exonEnds[itemExonCount-1]);
+		}
 	    }
 	}
     else
@@ -321,20 +408,29 @@ while ((hel = hashNext(&cookie)) != NULL)
 	    gpItem->txStart = txStart->start;   /* this guy has the txStart */
 	if (txEnd && sameWord(txEnd->name, hel->name))
 	    gpItem->txEnd = txEnd->end;   /* this guy has the txEnd */
+	/*	fix unusual (mixed up) mappings onto a scaffold */
+	gpItem->txStart = min(gpItem->txStart, exonStarts[0]);
+	gpItem->txEnd = max(gpItem->txEnd, exonEnds[itemExonCount-1]);
 
 	if (noCds)
 	    {
-	    gpItem->cdsEnd = 0;
-	    gpItem->cdsStart = 0;
+	    gpItem->cdsEnd = gpItem->txEnd;
+	    gpItem->cdsStart = gpItem->txEnd;
 	    }
 	else
 	    {
-	    gpItem->cdsStart = itemList->start;  /* assume first exon */
+	    gpItem->cdsStart = exonStarts[0];  /* assume first exon */
 	    gpItem->cdsEnd = exonEnds[itemExonCount-1];/* assume last exon */
 	    if (cdsStart && sameWord(cdsStart->name, hel->name))
 		gpItem->cdsStart = cdsStart->start; /* this has the cdsStart */
 	    if (cdsEnd && sameWord(cdsEnd->name, hel->name))
 		gpItem->cdsEnd = cdsEnd->end;   /* this has the cdsEnd */
+	    /*	fix unusual (mixed up) mappings onto a scaffold */
+	    if (exonsOutOfOrder)
+		{
+		gpItem->cdsStart = min(gpItem->cdsStart, exonStarts[0]);
+		gpItem->cdsEnd = max(gpItem->cdsEnd, exonEnds[itemExonCount-1]);
+		}
 	    }
 	}
 
@@ -357,8 +453,10 @@ while ((hel = hashNext(&cookie)) != NULL)
 
     /* accumulating a list of genePred items for the final result */
     slAddHead(&result, gpItem);
-    }
-/* XXX would be good to free the lifted items here, and their container hash */
+    freeLiftedItemList((struct liftedItem **)(&hel->val));
+    }	/*	while ((hel = hashNext(&cookie)) != NULL)	*/
+
+freeHash(&items);
 
 return (result);
 }	/*	static struct genePred *liftGenePred()	*/
@@ -382,7 +480,7 @@ for (gp = gpList; gp != NULL; gp = gp->next)
 	struct genePred *gpl;
 	for (gpl = gpLifted; gpl != NULL; gpl = gpl->next)
 	    genePredTabOut(gpl, out);
-	/* XXX it would be good to free the gpLifted item here */
+	genePredFreeList(&gpLifted);
 	}
     else
 	{
@@ -390,6 +488,7 @@ for (gp = gpList; gp != NULL; gp = gp->next)
 	}
     ++genePredItemCount;
     }
+/* lftHash and gpList are left allocated to disappear at exit */
 verbose(2,"#\tgene pred item count: %d\n", genePredItemCount);
 }
 
