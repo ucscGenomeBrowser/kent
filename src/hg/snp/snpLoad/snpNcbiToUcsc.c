@@ -13,7 +13,7 @@
 #include "twoBit.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: snpNcbiToUcsc.c,v 1.4 2008/02/08 21:07:01 angie Exp $";
+static char const rcsid[] = "$Id: snpNcbiToUcsc.c,v 1.5 2008/02/22 07:30:46 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -678,17 +678,17 @@ if (rm->rm_so == 0)
     else
 	lineFileAbort(lf, "Got left-flanking sequence for a subsequent "
 		      "expansionUnit match...?  %d..%d %s",
-		      rm->rm_so, rm->rm_eo, refNcbiEnc + rm->rm_so);
+		      (int)rm->rm_so, (int)rm->rm_eo, refNcbiEnc + rm->rm_so);
     }
 else if (rm->rm_so > 0)
-    lineFileAbort(lf, "How can matches[1].rm_so be %d (> 0)?", rm->rm_so);
+    lineFileAbort(lf, "How can matches[1].rm_so be %d (> 0)?", (int)rm->rm_so);
 /* Get base: */
 rm = &(matches[2]);
 if (rm->rm_so < 0)
     errAbort("Out of sync with matches? Null match for base.");
 if (rm->rm_eo != rm->rm_so + 1)
     errAbort("Length > 1 for base in ()'s ? %d..%d %s",
-	     rm->rm_so, rm->rm_eo, refNcbiEnc + rm->rm_so);
+	     (int)rm->rm_so, (int)rm->rm_eo, refNcbiEnc + rm->rm_so);
 base = refNcbiEnc[rm->rm_so];
 /* Get number: */
 rm = &(matches[3]);
@@ -713,7 +713,7 @@ if (rm->rm_so >= 0)
 rm = &(matches[5]);
 if (rm->rm_so >= 0)
     lineFileAbort(lf, "Got too many matches for expansionUnit: %d..%d %s",
-		  rm->rm_so, rm->rm_eo, refNcbiEnc + rm->rm_so);
+		  (int)rm->rm_so, (int)rm->rm_eo, refNcbiEnc + rm->rm_so);
 return matches[0].rm_eo;
 }
 
