@@ -20,7 +20,7 @@
 #include "gsidTable.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidTable.c,v 1.34 2008/02/21 15:21:11 fanhsu Exp $";
+static char const rcsid[] = "$Id: gsidTable.c,v 1.35 2008/02/22 17:57:20 fanhsu Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "submit_filter", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -322,8 +322,19 @@ hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/gsidSubj\" class=\"topbar\">%s</A
 hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgGateway?db=%s\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Sequence View Gateway</FONT></A></TD>", database);
 
 /* Help */
-hPrintf("<TD ALIGN=CENTER><A HREF=\"/goldenPath/help/gsidTutorial.html#TableView\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Help</FONT></A></TD>");
+
+if (cartVarExists(cart, advFilterVarName))
+    {
+    hPrintf("<TD ALIGN=CENTER><A HREF=\"/goldenPath/help/gsidTutorial.html#SelectSubject\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Help</FONT></A></TD>");
+    }
+else
+    {
+    hPrintf("<TD ALIGN=CENTER><A HREF=\"/goldenPath/help/gsidTutorial.html#TableView\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Help</FONT></A></TD>");
+    }
+
 hPuts("</TR></TABLE>");
+
+
 hPuts("</TD></TR></TABLE>\n");
 }
 
