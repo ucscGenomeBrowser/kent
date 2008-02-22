@@ -1030,3 +1030,17 @@ chain.csh {check in exists $(path1).gz} {check out line+ chain/$(root1).chain}
 
     # fb.oryCun1.chainMm9Link.txt:
     #   500397488 bases of 2076044328 (24.103%) in intersection
+
+############################################################################
+#  Adding Ensembl Genes (DONE - 2008-02-22 - Hiram)
+    ssh kkstore04
+    cd /cluster/data/oryCun1
+    cat << '_EOF_' > oryCun1.ensGene.ra
+# required db and ensVersion variables
+db oryCun1
+ensVersion 48
+# do we need to translate geneScaffold coordinates
+geneScaffolds yes
+'_EOF_'
+    # << happy emacs
+    doEnsGeneUpdate.pl oryCun1.ensGene.ra
