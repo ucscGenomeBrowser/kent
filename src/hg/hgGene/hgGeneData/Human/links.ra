@@ -69,7 +69,7 @@ name ensembl
 url http://www.ensembl.org/Homo_sapiens/geneview?transcript=%s
 
 name allenBrain
-shortLabel Allen Brain Atlas
+shortLabel Human Cortex Gene Expression
 tables allenBrainGene
 idSql select a.geneSymbol from kgXref x, allenBrainGene a where x.geneSymbol=a.geneSymbol and kgId='%s'
 url http://humancortex.alleninstitute.org/has/human/brain/%s.html 
