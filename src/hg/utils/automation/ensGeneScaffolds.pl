@@ -3,7 +3,7 @@
 # Combine Ensembl MySQL tables seq_region and assembly to produce
 #	a lift specification for GeneScaffold to scaffold coordinates.
 
-# $Id: ensAssemblyChain.pl,v 1.1 2008/02/22 20:00:45 hiram Exp $
+# $Id: ensGeneScaffolds.pl,v 1.1 2008/02/22 22:51:28 hiram Exp $
 
 use strict;
 use warnings;
@@ -11,8 +11,12 @@ use warnings;
 my $argc = scalar(@ARGV);
 
 if (2 != $argc) {
-    print STDERR "usage: ./ensAssemblyChain.pl mysql/seq_region.txt.gz ",
-	"mysql/assembly.txt.gz > oryCun1.ensGene.lft\n";
+    print STDERR "usage: ensGeneScaffolds.pl ",
+	"../download/seq_region.txt.gz \\\n",
+	"\t../download/assembly.txt.gz > ensGene.lft\n";
+    print STDERR "\nCombine Ensembl MySQL tables 'seq_region'\n",
+	"and 'assembly' to produce a lift specification for GeneScaffold\n",
+	"to scaffold coordinates.\n";
     exit 255;
 }
 
@@ -31,7 +35,7 @@ while (my $line = <FH>) {
 close (FH);
 
 my %assem;
-my $chainCount = 0;
+my $assemCount = 0;
 open(FH,"zcat $assembly|") or die "can not zcat $assembly";
 while (my $line = <FH>) {
     my ($asmId, $cmpId, $asmStart, $asmEnd, $cmpStart, $cmpEnd, $ori) =
@@ -44,16 +48,14 @@ while (my $line = <FH>) {
     my $checkLength = $asmEnd - $asmStart + 1;
     die "assembled length $checkLength != component length $partLength"
 	if ($partLength != $checkLength);
-    ++$chainCount;
-    my $strand="+";
+    my $strand = "+";
     $strand = "-" if ($ori < 0);
     if ($asmName =~ m/^GeneScaffold_/ && $cmpName =~ m/^scaffold_/) {
-	printf "chain 100 %s %s + %s %s %s %s %s %s %s %s\n",
-	    $asmName, $asmLength, $asmStart-1, $asmEnd,
-		$cmpName, $cmpLength, $strand, $cmpStart-1, $cmpEnd,
-		    $chainCount;
-        printf "%d 0 0\n", $checkLength;
-        print "0\n\n";
+	printf "%s\t%s\t%s\t%s\t%s\t%s\n", $asmName, $asmStart-1, $asmEnd,
+		$cmpName, $cmpStart-1, $strand;
     }
+    ++$assemCount;
 }
 close (FH);
+
+print STDERR "have $assemCount assembly lines\n";
