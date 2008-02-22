@@ -5,7 +5,6 @@ class AccountController < ApplicationController
   # If you want "remember me" functionality, add this before_filter to Application Controller
   before_filter :login_from_cookie
 
-  # say something nice, you goof!  something sweet.
   def index
     redirect_to(:action => 'signup') unless logged_in? || User.count > 0
   end
@@ -19,9 +18,8 @@ class AccountController < ApplicationController
         cookies[:auth_token] = { :value => self.current_user.remember_token , :expires => self.current_user.remember_token_expires_at }
       end
       redirect_back_or_default(:controller => '/pipeline', :action => 'list')
-      flash[:notice] = "Logged in successfully"
     else
-      flash[:warning] = "Unknown user or password"
+      flash[:error] = "Unknown user or password"
     end
   end
 

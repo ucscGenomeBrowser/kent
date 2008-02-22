@@ -1,5 +1,6 @@
-<h1>New Project</h1>
-
+<p>
+<b>Create new project</b>
+<p>
 <%= error_messages_for 'project' -%>
 
 <% form_tag (:action => 'create') do %>
@@ -38,5 +39,3 @@
   
   <%= submit_tag "Create" %>
 <% end %>
-
-<%= link_to 'Back', {:action => 'list'} %>

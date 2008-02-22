@@ -5,16 +5,18 @@
   <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1" />
   <meta http-equiv="Content-Language" content="en-us" />
   <title><%= ActiveRecord::Base.configurations[RAILS_ENV]['title'] -%> Pipeline</title>
-<%= stylesheet_link_tag "style" %>
+<%= stylesheet_link_tag "encode" %>
 </head>
 <body id="encode-pipeline">
 <div id="container">
-  <div id="header">
-    <h1><%= ActiveRecord::Base.configurations[RAILS_ENV]['title'] -%> Submission Pipeline</h1>
+  <img align="left" height=40 width=80  src="http://hgwdev.cse.ucsc.edu/images/logos/ENCODE_scaleup_logo.png">
+  <div id="header"><%= ActiveRecord::Base.configurations[RAILS_ENV]['title'] -%>
   </div>
-  <% if flash[:error] %><div id="error"><%= flash[:error] %></div><% end %>  
-  <% if flash[:warning] %><div id="warning"><%= flash[:warning] %></div><% end %>  
-  <% if flash[:notice] %><div id="notice"><%= flash[:notice] %></div><% end %>  
+  <div id="message">
+    <% if flash[:error] %><div id="error"><%= flash[:error] %></div><% end %>  
+    <% if flash[:warning] %><div id="warning"><%= flash[:warning] %></div><% end %>  
+    <% if flash[:notice] %><div id="notice"><%= flash[:notice] %></div><% end %>  
+  </div>
   <div id="content">
       <%= yield -%>
   </div>

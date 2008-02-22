@@ -1,0 +1,102 @@
+body {
+  font-family: Helvetica, Geneva, Arial, sans-serif;
+}
+
+#container {
+}
+
+#header {
+  #font-size: 18pt;
+  font-size: 12pt;
+  #padding: 0.25em;
+  padding: 0.3em;
+  text-align: left;
+}
+
+#user {
+  #margin-left: 400px;
+  text-align: right;
+  margin-top: 0px;
+  font-size: 10pt;
+  padding: 0.25em;
+}
+
+#nav {
+  #font-size: 12pt;
+  font-size: 10pt;
+  font-weight; bold;
+  background: #ddd;
+  padding: 0.5em;
+}
+
+#nav a, #nav a:visited {
+  text-decoration: none;
+}
+
+#nav a:hover {
+  border-bottom: 2px dotted;
+}
+
+#content {
+  #padding: 1em;
+  font-size: 10pt;
+  margin-left: 15%;
+}
+
+#footer {
+  #padding: 1em;
+  font-size: 10pt;
+  text-align: center;
+  background: #ddd;
+  margin-left: 35%;
+  width: 150px;
+  padding: 0.4em;
+}
+
+#content a, #content a:visited, #footer a, #footer a:visited  {
+  text-decoration: none;
+  margin-bottom: 0;
+  margin-top: 0;
+}
+
+#content a:hover, #footer a:hover  {
+  border-bottom: 2px dotted;
+}
+
+#content h1 {
+  font-size: 12pt;
+}
+
+#message {
+  font-size: 10pt;
+  margin-top: 10px;
+}
+
+#notice  { background:#9e9; color:#222; padding: 5px }
+#warning { background:#ee8; color:#222; padding: 5px }
+#error { background:#fbb; color:#222; padding: 5px }
+.flash { padding:10px; text-align:center}
+
+.fieldWithErrors {
+    #margin: 2px;
+    padding: 2px;
+    background-color: #f88;
+    display: table;
+}
+
+#errorExplanation {
+    padding-bottom: 5px;
+    background-color:#f0f0f0;
+    font-size: 10pt;
+}
+
+#errorExplanation h2 {
+    text-align: left;
+    padding: 4px 4px 4px 10px;
+    font-size: 10pt;
+    background-color: #f88;
+}
+
+input {
+    margin: 2px;
+}

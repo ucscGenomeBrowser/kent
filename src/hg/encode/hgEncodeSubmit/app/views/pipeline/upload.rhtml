@@ -1,36 +1,27 @@
-<h1>Upload Project Archive File</h1>
-
+<p>
+<b>Submit data to project '<%= @project.name -%>'</b>
+</p>
 <%= form_tag({:action => 'upload'}, :multipart => true) %>
 
-  <h3>for <%= @project.name -%></h3>
+  <p><label for="project_upload_url">Upload from URL</label><br/>
+  <%= text_field_tag 'upload_url', "http://", :size => 40 %><br>
 
-  <p><label for="project_upload_url">Submit Using URL</label><br/>
-  <%= text_field_tag 'upload_url', "http://", :size => 40 %> &nbsp;
-  <label for="project_upload_auto_resume">Auto-resume</label>
+  <label for="project_upload_auto_resume"></label>
   <%= check_box 'auto_resume', '0' %>
-  <br/>
+Resume if the previous upload  was interrupted.
+<br/>
 
-  <p><label for="project_upload_file">Submit Local Archive File</label><br/>
+
+
+  <p><label for="project_upload_file">or Upload local file</label><br/>
   <%= file_field_tag 'upload_file', :size => 25 %><br/>
 
   <br/>
-  <%= submit_tag "Upload" %>
-  <%= submit_tag @autoUploadLabel %><br/>
+  <%= submit_tag @autoUploadLabel %>
+  <%= submit_tag "Upload Only" %>
 
 <% end_form_tag %>
-
-<%= link_to 'Back', {:action => 'show', :id => @project} %> <br/>
-<br/>
+<p>
 The archive file must have one of these extensions: <br/>
-.zip<br/> 
-.tar.gz<br/>
-.tar.bz2 <br/>
-<br/>
-Resuming an interrupted download: <br/>
-Check auto-resume only if the previous upload <br/>
-was interrupted before finishing, and the archive <br/>
-referred to by the URL has not changed. <br/>
-<br/>
-<%= link_to 'Back', {:action => 'show', :id => @project} %>
-
-
+.zip, .tar.gz, .tar.bz2 <br/>
+</p>

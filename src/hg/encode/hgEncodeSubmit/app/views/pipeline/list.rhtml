@@ -1,19 +1,19 @@
 <% if @projects.blank? %>
   <p>There are no projects currently.</p>
 <% else %>
-  <p><%= @title -%></p>
 
- <table id="projects" cellpadding=10 cellspacing=10>
- <tr><td><b>Name</b></td>
+<p>
+ <table id="projects" cellpadding=1 cellspacing=3>
+ <tr><td align="center"><b>Name</b></td>
 
  <% if current_user.login == "admin" %>
-   <td><b>Type</b></td>
+   <td align="center"><b>Type</b></td>
  <% end %>
  <td><b>Status</b></td>
  <% if !defined? @user %>
-   <td><b>PI</b></td>
+   <td align="center"><b>Investigator</b></td>
  <% end %>
- <td><b>Updated</b></td></tr>
+ <td align="center"><b>Updated</b></td></tr>
 
  <% @projects.each do |c| %>
   <tr>
@@ -56,13 +56,12 @@
   <% if !defined? @user %>
     <td><%= c.user.pi -%></td>
   <% end %>
-  <td><%= c.updated_at.strftime("%b %d, %Y %H:%M") -%></td>
+  <td><%= c.updated_at.strftime("%b %d %H:%M") -%></td>
   </tr>
  <% end %>
  </table>
 <% end %>
 <br/>
-<p><%= link_to "Add new project", {:action => 'new' }%></p>
   
 <%
 =begin %>

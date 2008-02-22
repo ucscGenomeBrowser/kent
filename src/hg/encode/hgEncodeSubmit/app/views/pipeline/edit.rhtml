@@ -1,11 +1,8 @@
-<h1>Editing Project: <%= @project.name -%></h1>
+<p>
+<b>Edit project '<%= @project.name -%>'</b>
+<p>
 
 <%= error_messages_for 'project' -%>
-
-<% form_tag :action => 'update', :id => @project do %>
-
-  <p><label for="project_name">Name</label><br/>
-  <%= text_field 'project', 'name'  %></p>
 
   <% if current_user.login == "admin" %>
     <p><label for="project_project_type_id">Type</label><br/>
@@ -17,10 +14,12 @@
     </select></p>
   <% end %>
  
-  <p><label for="project_status">Status:</label>
-  <%= @project.status %></p>
+<% form_tag :action => 'update', :id => @project do %>
+
+  <p><label for="project_name">Name</label><br/>
+  <%= text_field 'project', 'name'  %></p>
+
   
-  <%= submit_tag "Save changes" %>
+  <%= submit_tag "Save" %>
 <% end %>
 
-<%= link_to 'Back', {:action => 'show', :id => @project} %>
