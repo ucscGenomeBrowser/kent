@@ -3723,3 +3723,18 @@ mysql> select count(*), exception from snp125Exceptions group by exception;
       -tab -sqlTable=$HOME/kent/src/hg/lib/genomicSuperDups.sql
 
 
+#####################################################################
+# MICROSATELLITES (DONE 02/22/08 kuhn)
+
+cd /cluster/data/canFam1/bed
+mkdir microsat
+cd microsat
+
+awk '
+($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 
+  {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' 
+     ../simpleRepeat/simpleRepeat.bed > microsat.bed
+hgLoadBed canFam1 microsat microsat.bed
+# {actually needed to catenate the whole  awk command to get it to work)
+
+
