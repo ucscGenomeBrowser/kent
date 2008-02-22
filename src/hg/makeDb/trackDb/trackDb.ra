@@ -1258,7 +1258,7 @@ track blatFr1
 shortLabel Fugu Blat
 longLabel $o_Organism ($o_date/$o_db) Translated Blat Alignments
 group compGeno
-priority 113
+priority 139.7
 visibility hide
 color 0,60,120
 altColor 200,220,255
@@ -1683,6 +1683,16 @@ defaultViewLimits 30:70
 spanList 5
 type wig 0 100 
 
+track ensemblGeneScaffold
+shortLabel Ensembl Assembly
+longLabel Ensembl Gene Scaffold assembly
+group map
+priority 26
+visibility hide
+color 0,0,0
+useScore 1
+type bed 6 +
+
 track blatHg16KG
 shortLabel Human knownGene BLAT
 longLabel Human knownGene BLAT
@@ -2054,7 +2064,7 @@ track chainPetMar1
 shortLabel $o_Organism Chain 
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
-priority 164.49
+priority 138.8
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -2068,7 +2078,7 @@ track netPetMar1
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
-priority 164.50
+priority 138.9
 visibility hide
 spectrum on
 type netAlign petMar1 chainPetMar1
