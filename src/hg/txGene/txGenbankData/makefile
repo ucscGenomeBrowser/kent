@@ -2,7 +2,8 @@ include ../../../inc/common.mk
 
 ${SCRIPTS}/txGenbankData: txGenbankData
 	@${MKDIR} $(dir $@) 
-	cp --remove-destination -p $< $@
+	cp -p $< $@.tmp
+	mv -f $@.tmp $@
 
 test:
 clean:
