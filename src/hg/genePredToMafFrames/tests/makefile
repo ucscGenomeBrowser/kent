@@ -8,6 +8,8 @@ test:   oneExon splitExon revExon negNeg finishIsSplit \
 	manyExonPos unalignedExonStart lostBlock splitNegStart \
 	dupFrames revStrand twoOrg
 
+# FIXME: corner case needs debugged: gapOne
+
 oneExon: mkout
 	${genePredToMafFrames} canHg10 input/BC101503.maf output/$@.mafFrames hg17 input/BC101503.gp
 	${DIFF} expected/$@.mafFrames output/$@.mafFrames
@@ -89,6 +91,11 @@ revStrand: mkout
 # two organisms
 twoOrg: mkout
 	${genePredToMafFrames} canHg10 input/NM_145830.maf output/$@.mafFrames mm6 input/NM_145830.gp hg17 input/NM_006709.gp
+	${DIFF} expected/$@.mafFrames output/$@.mafFrames
+
+# regression: ended up with a one based gap in frames
+gapOne: mkout
+	${genePredToMafFrames} hg18 input/uc003izz.maf output/$@.mafFrames hg18 input/uc003izz.gp
 	${DIFF} expected/$@.mafFrames output/$@.mafFrames
 
 mkout:
