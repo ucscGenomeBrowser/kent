@@ -10,7 +10,7 @@
 #include "altGraphX.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: altSplice.c,v 1.9 2008/02/20 00:42:24 markd Exp $";
+static char const rcsid[] = "$Id: altSplice.c,v 1.10 2008/02/22 07:33:49 markd Exp $";
 
 static int gpBedBasesShared(struct genePred *gp, struct bed *bed)
 /* Return number of bases genePred and bed share. */
@@ -97,7 +97,7 @@ altGraphXLayout(ag, ag->tStart, ag->tEnd, scale, 100, &ssList, &heightHash, &row
 hashFree(&heightHash);
 pixHeight = rowCount * lineHeight;
 makeTempName(&gifTn, "hgc", ".gif");
-hvg = hvGfxOpenGif(pixWidth, pixHeight, 0, gifTn.forCgi);
+hvg = hvGfxOpenGif(pixWidth, pixHeight, gifTn.forCgi);
 makeGrayShades(hvg, maxShade, shadesOfGray);
 hvGfxSetClip(hvg, 0, 0, pixWidth, pixHeight);
 altGraphXDrawPack(ag, ssList, hvg, 0, 0, pixWidth, lineHeight, lineHeight-1,
