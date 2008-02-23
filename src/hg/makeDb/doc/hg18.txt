@@ -19603,16 +19603,9 @@ TMPDIR=/scratch/tmp
 	-chainMinScore=5000 -chainLinearGap=loose \
 	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
 	-bigClusterHub=pk > swap.log 2>&1 &
-
-    #	real    1m27.220s
-    #	same problem in netChainSubset trying to make the "over.chain" file.
-    #	skip that, finish the chains manually, then continuing:
-    time doBlastzChainNet.pl -verbose=2 -swap \
-	/cluster/data/hg18/bed/blastzPetMar1.2008-01-16/DEF \
-	-continue=load -chainMinScore=5000 -chainLinearGap=loose \
-	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
-	-bigClusterHub=pk > load.log 2>&1 &
-    #	real    6m29.399s
+    #	real    60m1.928s
+    cat  fb.petMar1.chainHg18Link.txt
+    #	26751073 bases of 831696438 (3.216%) in intersection
 
 #######################################################################
 ###################
