@@ -376,3 +376,18 @@ ci2.perChromTables = no
 
     # Note: download sequences are made as part of the first
     # genbank update on hgdownload.
+
+############################################################################
+#  Adding Ensembl Genes (DONE - 2008-02-22 - Hiram)
+    ssh kkstore02
+    cd /cluster/data/ci2
+    cat << '_EOF_' > ci2.ensGene.ra
+# required db and ensVersion variables
+db ci2
+ensVersion 48
+# optional nameTranslation, the sed command that will transform
+#       Ensemble names to UCSC names.  With quotes just to make sure.
+nameTranslation "s/^\([0-9][pq]\)/chr0\1/; s/^\([0-9][0-9][pq]\)/chr\1/; "
+'_EOF_'
+    # << happy emacs
+    doEnsGeneUpdate.pl oryCun1.ensGene.ra
