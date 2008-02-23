@@ -1,6 +1,6 @@
 # Build all directories in utils
 # test comment
-# 	$Id: makefile,v 1.9 2007/10/10 17:21:13 angie Exp $
+# 	$Id: makefile,v 1.10 2008/02/23 01:24:07 angie Exp $
 
 include ../../inc/common.mk
 
@@ -19,6 +19,7 @@ scripts:
 	    echo cp -p $$F ${SCRIPTS}; \
 	    cp -p $$F ${SCRIPTS}; \
 	 done
+	cd automation && ${MAKE} scripts
 
 alpha: scripts all
 
