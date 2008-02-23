@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/doEnsGeneUpdate.pl instead.
 
-# $Id: doEnsGeneUpdate.pl,v 1.5 2008/02/22 23:23:56 hiram Exp $
+# $Id: doEnsGeneUpdate.pl,v 1.6 2008/02/23 00:20:10 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -128,7 +128,7 @@ my $CONFIG;
 # Required config parameters:
 my ($db, $ensVersion);
 # Conditionally required config parameters:
-my ($liftRandoms, $nameTranslation, $geneScaffolds);
+my ($liftRandoms, $nameTranslation, $geneScaffolds, $knownToEnsembl);
 # Other globals:
 my ($topDir, $chromBased);
 my ($bedDir, $scriptDir, $endNotes);
@@ -163,15 +163,16 @@ sub doLoad {
   my $bossScript = new HgRemoteScript("$runDir/doLoad.csh", $dbHost,
 				      $runDir, $whatItDoes);
 
-  $bossScript->add(<<_EOF_
-hgLoadGenePred -skipInvalid -genePredExt $db ensGene process/$db.allGenes.gp.gz
-_EOF_
-  );
-
   if (defined $geneScaffolds) {
       $bossScript->add(<<_EOF_
+hgLoadGenePred -skipInvalid -genePredExt $db ensGene process/$db.allGenes.gp.gz
 zcat process/ensemblGeneScaffolds.oryCun1.bed.gz \\
     | sed -e "s/GeneScaffold/GS/" | hgLoadBed $db ensemblGeneScaffold stdin
+_EOF_
+      );
+  } else {
+  $bossScript->add(<<_EOF_
+hgLoadGenePred -genePredExt $db ensGene process/$db.allGenes.gp.gz
 _EOF_
       );
   }
@@ -195,6 +196,12 @@ if (\$pepCount != \$commonCount) then
 endif
 _EOF_
   );
+  if (defined $knownToEnsembl) {
+      $bossScript->add(<<_EOF_
+hgMapToGene $db ensGene knownGene knownToEnsembl
+_EOF_
+      );
+  }
   $bossScript->execute();
 } # doLoad
 
@@ -384,11 +391,16 @@ sub parseConfig {
   $liftRandoms = &optionalVar('liftRandoms', \%config);
   $nameTranslation = &optionalVar('nameTranslation', \%config);
   $geneScaffolds = &optionalVar('geneScaffolds', \%config);
-  if (defined($liftRandoms) && $liftRandoms !~ m/yes/i) {
+  $knownToEnsembl = &optionalVar('knownToEnsembl', \%config);
+  #	verify they actually do say yes
+  if (defined($liftRandoms) && $liftRandoms !~ m/^yes$/i) {
 	undef $liftRandoms;
   }
-  if (defined($geneScaffolds) && $geneScaffolds !~ m/yes/i) {
+  if (defined($geneScaffolds) && $geneScaffolds !~ m/^yes$/i) {
 	undef $geneScaffolds;
+  }
+  if (defined($knownToEnsembl) && $knownToEnsembl !~ m/^yes$/i) {
+	undef $knownToEnsembl;
   }
 
   # Make sure no unrecognized variables were given.
