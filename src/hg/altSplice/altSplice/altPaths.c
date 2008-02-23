@@ -7,8 +7,9 @@
 #include "bed.h"
 #include "obscure.h"
 #include "dystring.h"
+#include "errabort.h"
 
-static char const rcsid[] = "$Id: altPaths.c,v 1.19 2007/01/08 19:23:34 sugnet Exp $";
+static char const rcsid[] = "$Id: altPaths.c,v 1.20 2008/02/23 15:49:55 braney Exp $";
 
 static struct optionSpec optionSpecs[] = 
 /* Our acceptable options to be called with. */
@@ -89,7 +90,7 @@ fprintf(stderr,
 	"where options are:\n");
 for(i=0; i<ArraySize(optionSpecs) -1; i++)
     fprintf(stderr, "   -%s -- %s\n", optionSpecs[i].name, optionDescripts[i]);
-errAbort("");
+noWarnAbort();
 }
 
 void logSpliceType(enum altSpliceType type, int size)
@@ -1710,8 +1711,7 @@ while(lineFileRow(lf, row))
     altGraphXFree(&agx);
     altGraphXFreeList(&subAgxList);
     }
-warn("");
-warn("%d loose cassettes added", looseCassettesCount);
+warn("\n%d loose cassettes added", looseCassettesCount);
 lineFileClose(&lf);
 carefulClose(&subOut);
 printSpliceTypeInfo(total, altGraphCount, totalAltCount);

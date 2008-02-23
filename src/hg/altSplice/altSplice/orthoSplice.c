@@ -38,7 +38,7 @@
 #include "chromKeeper.h"
 
 #define IS_MRNA 1
-static char const rcsid[] = "$Id: orthoSplice.c,v 1.35 2007/02/10 02:04:53 kent Exp $";
+static char const rcsid[] = "$Id: orthoSplice.c,v 1.36 2008/02/23 15:49:55 braney Exp $";
 static struct binKeeper *netBins = NULL;  /* Global bin keeper structure to find cnFills. */
 boolean usingChromKeeper = FALSE;      /* Are we using a chromosome keeper for agxs? database otherwise. */
 static char *workingChrom = NULL;      /* Chromosme we are working on. */
@@ -1818,7 +1818,7 @@ if(netFile != NULL)
     }
 if(orthoAgxFile != NULL)
     {
-    warn("Loading orthoAltGraphX records from file", orthoAgxFile);
+    warn("Loading orthoAltGraphX records from file %s", orthoAgxFile);
     initAgxChromKeeper(orthoAgxFile);
     }
 /* Want to read in and process each altGraphX record individually
