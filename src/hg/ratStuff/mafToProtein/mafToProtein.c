@@ -25,9 +25,10 @@ errAbort(
   "   -geneName=foobar   name of gene as it appears in frameTable\n"
   "   -geneName=foolst   name of file with list of genes\n"
   "   -chrom=chr1        name of chromosome from which to grab genes\n"
-  "   -frames            output frames\n"
+  "   -exons             output exons\n"
   "   -noTrans           don't translate output into amino acids\n"
   "   -delay=N           delay N seconds between genes (default 0)\n" 
+  "   -transUC           use kgXref table to translate uc* names\n"
   );
 }
 
@@ -35,8 +36,9 @@ static struct optionSpec options[] = {
    {"geneName", OPTION_STRING},
    {"geneList", OPTION_STRING},
    {"chrom", OPTION_STRING},
-   {"frames", OPTION_BOOLEAN},
+   {"exons", OPTION_BOOLEAN},
    {"noTrans", OPTION_BOOLEAN},
+   {"transUC", OPTION_BOOLEAN},
    {"delay", OPTION_INT},
    {NULL, 0},
 };
@@ -44,17 +46,21 @@ static struct optionSpec options[] = {
 char *geneName = NULL;
 char *geneList = NULL;
 char *onlyChrom = NULL;
-boolean inFrames = FALSE;
+boolean inExons = FALSE;
 boolean noTrans = TRUE;
+boolean transUC = FALSE;
 int delay = 0;
+boolean newTableType;
 
-struct geneInfo
+struct exonInfo
 {
-    struct geneInfo *next;
+    struct exonInfo *next;
     struct mafFrames *frame;
     struct mafAli *ali;
-    int frameStart;
-    int frameSize;
+    int exonStart;
+    int exonSize;
+    int chromStart;
+    int chromEnd;
     char *name;
 };
 
@@ -65,8 +71,66 @@ struct speciesInfo
     int size;
     char *nucSequence;
     char *aaSequence;
+    int aaSize;
 };
 
+/* is the sequence all dashes ? */
+boolean allDashes(char *seq)
+{
+while (*seq)
+    if (*seq++ != '-')
+	return FALSE;
+
+return TRUE;
+}
+
+/* translate a nuc sequence into amino acids. If there
+ * are any dashes in any of the three nuc positions
+ * make the AA a dash.
+ */
+aaSeq *doTranslate(struct dnaSeq *inSeq, unsigned offset, 
+    unsigned inSize, boolean stop)
+
+{
+aaSeq *seq;
+DNA *dna = inSeq->dna;
+AA *pep, aa;
+int i, lastCodon;
+int actualSize = 0;
+
+assert(offset <= inSeq->size);
+if ((inSize == 0) || (inSize > (inSeq->size - offset)))
+    inSize = inSeq->size - offset;
+lastCodon = offset + inSize - 3;
+
+AllocVar(seq);
+seq->dna = pep = needLargeMem(inSize/3+1);
+for (i=offset; i <= lastCodon; i += 3)
+    {
+    aa = lookupCodon(dna+i);
+    if (aa == 'X')
+	{
+	if ((dna[i] == '-') ||
+	    (dna[i+1] == '-') ||
+	    (dna[i+2] == '-'))
+	    aa = '-';
+	}
+    if (aa == 0)
+	{
+        if (stop)
+	    break;
+	else
+	    aa = 'Z';
+	}
+    *pep++ = aa;
+    ++actualSize;
+    }
+*pep = 0;
+assert(actualSize <= inSize/3+1);
+seq->size = actualSize;
+//seq->name = cloneString(inSeq->name);
+return seq;
+}
 /* read a list of single words from a file */
 struct slName *readList(char *fileName)
 {
@@ -140,7 +204,12 @@ sr = sqlGetResult(conn, query);
 
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    struct mafFrames *frame = mafFramesLoad(&row[1]);
+    struct mafFrames *frame;
+    
+    if (newTableType)
+	frame = mafFramesLoad(&row[1]);
+    else
+	frame = mafFramesLoadOld(&row[1]);
 
     slAddHead(&list, frame);
     }
@@ -163,7 +232,7 @@ struct mafAli *getAliForFrame(char *mafTable, struct mafFrames *frame)
 {
 struct sqlConnection *conn = hAllocConn();
 struct mafAli *aliAll = mafLoadInRegion(conn, mafTable,
-	frame->chrom, frame->chromStart, frame->chromEnd);
+	frame->chrom, frame->chromStart, frame->chromEnd );
 struct mafAli *ali;
 struct mafAli *list = NULL;
 struct mafAli *nextAli;
@@ -176,10 +245,14 @@ for(ali = aliAll; ali; ali = nextAli)
     char *masterSrc = ali->components->src;
     struct mafAli *subAli = NULL;
 
+    //printf("ali\n");
+    //mafWrite(stdout, ali);
     if (mafNeedSubset(ali, masterSrc, frame->chromStart, frame->chromEnd))
 	{
+	//printf("subAli\n");
 	subAli = mafSubset( ali, masterSrc, 
 	    frame->chromStart, frame->chromEnd);
+	//mafWrite(stdout, subAli);
 	if (subAli == NULL)
 	    continue;
 	}
@@ -194,21 +267,29 @@ for(ali = aliAll; ali; ali = nextAli)
     }
 slReverse(&list);
 
+int size = 0;
+for(ali = list; ali; ali = ali->next)
+    {
+    size += ali->components->size;
+    //printf("size %d compSize %d\n",size,ali->components->size);
+    }
+assert(size == frame->chromEnd - frame->chromStart);
+
 hFreeConn(&conn);
 
 return list;
 }
 
 /* allocate space for the nuc and aa sequence for each species */
-struct speciesInfo *getSpeciesInfo(struct geneInfo *giList, 
+struct speciesInfo *getSpeciesInfo(struct exonInfo *giList, 
     struct slName *speciesNames, struct hash *siHash)
 {
-struct geneInfo *gi;
+struct exonInfo *gi;
 int size = 0;
 struct speciesInfo *siList = NULL;
 
 for(gi = giList ; gi ; gi = gi->next)
-    size += gi->frame->chromEnd - gi->frame->chromStart;
+    size += gi->exonSize;
 
 struct slName *name = speciesNames;
 
@@ -230,84 +311,175 @@ slReverse(&siList);
 return siList;
 }
 
-/* this is was meant to be an exon output, but it turns out
- * that frames don't correspond to exons 
- */
-void outSpeciesFrames(FILE *f, struct speciesInfo *si, struct geneInfo *gi)
+#define MAX_EXON_SIZE 100 * 1024
+char exonBuffer[MAX_EXON_SIZE];
+
+char geneNameBuffer[5000];
+
+char *getGeneName(char *ucName)
 {
-errAbort("haven't implemented trans with frames");
+struct sqlConnection *conn = hAllocConn();
+char query[1024];
+struct sqlResult *sr = NULL;
+char **row;
+
+safef(query, sizeof query, 
+    "select geneSymbol from kgXref where kgID='%s'\n", ucName);
+sr = sqlGetResult(conn, query);
+
+if ((row = sqlNextRow(sr)) == NULL)
+    return NULL;
+
+safef(geneNameBuffer, sizeof geneNameBuffer, "%s", row[0]);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+return geneNameBuffer;
+}
+
+void outSpeciesExons(FILE *f, struct speciesInfo *si, struct exonInfo *giList)
+{
+int exonNum = 1;
+struct dnaSeq thisSeq;
+aaSeq *outSeq;
+int exonCount = 0;
+struct exonInfo *gi = giList;
+
+for(; gi; gi = gi->next)
+    exonCount++;
+
+for(gi = giList; gi; gi = gi->next, exonNum++)
+    {
+    struct speciesInfo *siTemp = si;
+    if (gi->frame->strand[0] == '-')
+	slReverse(&gi->frame);
+
+    struct mafFrames *startFrame = gi->frame;
+    assert(startFrame->isExonStart == TRUE);
+    struct mafFrames *lastFrame = startFrame;
+    assert(gi->exonSize < MAX_EXON_SIZE);
+
+    while(lastFrame->next)
+	lastFrame = lastFrame->next;
+    assert(lastFrame->isExonEnd == TRUE);
+
+    for(; siTemp ; siTemp = siTemp->next)
+	{
+	char *ptr = exonBuffer;
+
+	switch(startFrame->frame)
+	    {
+	    case 0:
+		memcpy(ptr, 
+		    &siTemp->nucSequence[gi->exonStart], gi->exonSize);
+		ptr += gi->exonSize;
+		break;
+	    case 1:
+		*ptr++ = siTemp->nucSequence[gi->exonStart - 1];
+		memcpy(ptr, 
+		    &siTemp->nucSequence[gi->exonStart], gi->exonSize);
+		ptr += gi->exonSize;
+		break;
+
+	    case 2:
+		memcpy(ptr, 
+		    &siTemp->nucSequence[gi->exonStart+1], gi->exonSize - 1);
+		ptr += gi->exonSize - 1;
+		break;
+	    }
+
+	int lastFrame = (startFrame->frame + gi->exonSize) % 3;
+	if (lastFrame == 1)
+	    --ptr;
+	else if (lastFrame == 2)
+	    *ptr++ = siTemp->nucSequence[gi->exonStart + gi->exonSize];
+	*ptr++ = 0;
+
+	thisSeq.dna = exonBuffer;
+	thisSeq.size = ptr - exonBuffer;
+	outSeq =  doTranslate(&thisSeq, 0,  0, FALSE);
+	if (!allDashes(outSeq->dna))
+	    {
+	    if (transUC)
+		{
+		geneName = getGeneName(gi->name);
+		fprintf(f, ">%s_%s_%d_%d %d %d %d %s:%d-%d %c %s\n",
+		    gi->name, 
+		    siTemp->name, exonNum, exonCount, 
+		    outSeq->size,
+		    startFrame->frame, lastFrame,
+		    gi->frame->chrom,
+		    gi->chromStart+1, gi->chromEnd, startFrame->strand[0],
+		    geneName);
+		}
+	    else
+		fprintf(f, ">%s_%s_%d_%d %d %d %d %s:%d-%d %c\n",
+		    gi->name, 
+		    siTemp->name, exonNum, exonCount, 
+		    outSeq->size,
+		    startFrame->frame, lastFrame,
+		    gi->frame->chrom,
+		    gi->chromStart+1, gi->chromEnd, startFrame->strand[0]);
+	    fprintf(f, "%s\n",  outSeq->dna);
+	    }
+	}
+    fprintf(f, "\n");
+    }
+fprintf(f, "\n");
 }
 
 /* this is really only useful for debug since frames 
  * don't correspond to exons
  */
-void outSpeciesFramesNoTrans(FILE *f, struct speciesInfo *si, struct geneInfo *gi)
+void outSpeciesExonsNoTrans(FILE *f, struct speciesInfo *si, 
+    struct exonInfo *giList)
 {
-int start = 0;
-int exonNum = 0;
-int end;
+int exonNum = 1;
+int exonCount = 0;
+struct exonInfo *gi;
 
-for(; gi; gi = gi->next, exonNum++)
+for(gi = giList; gi; gi = gi->next)
+    exonCount++;
+
+for(gi = giList; gi; gi = gi->next, exonNum++)
     {
     struct speciesInfo *siTemp = si;
 
-    end = start + gi->frameSize;
-
     for(; siTemp ; siTemp = siTemp->next)
 	{
-	fprintf(f, ">%s.%s-%d\n",gi->name, siTemp->name, exonNum);
+	int start = gi->exonStart;
+	int end = start + gi->exonSize;
+	char *ptr = &siTemp->nucSequence[gi->exonStart];
+
 	for (; start < end; start++)
-	    fprintf(f, "%c", siTemp->nucSequence[start]);
+	    if (*ptr != '-')
+		break;
+	if (start == end)
+	    continue;
+
+	start = gi->exonStart;
+	if (transUC)
+	    {
+	    geneName = getGeneName(gi->name);
+	    fprintf(f, ">%s_%s_%d_%d %d %s:%d-%d %c %s\n",
+		gi->name, 
+		siTemp->name, exonNum, exonCount, 
+		gi->exonSize,
+		gi->frame->chrom,
+		gi->chromStart+1, gi->chromEnd, gi->frame->strand[0],
+		geneName);
+	    }
+	else
+	    fprintf(f, ">%s_%s_%d_%d %d %s:%d-%d %c\n",
+		gi->name, 
+		siTemp->name, exonNum, exonCount, 
+		gi->exonSize,
+		gi->frame->chrom,
+		gi->chromStart+1, gi->chromEnd, gi->frame->strand[0]);
+	for (; start < end; start++)
+	    fprintf(f, "%c", *ptr++);
 	fprintf(f, "\n");
 	}
     }
-}
-
-/* translate a nuc sequence into amino acids. If there
- * are any dashes in any of the three nuc positions
- * make the AA a dash.
- */
-aaSeq *doTranslate(struct dnaSeq *inSeq, unsigned offset, 
-    unsigned inSize, boolean stop)
-{
-aaSeq *seq;
-DNA *dna = inSeq->dna;
-AA *pep, aa;
-int i, lastCodon;
-int actualSize = 0;
-
-assert(offset <= inSeq->size);
-if ((inSize == 0) || (inSize > (inSeq->size - offset)))
-    inSize = inSeq->size - offset;
-lastCodon = offset + inSize - 3;
-
-AllocVar(seq);
-seq->dna = pep = needLargeMem(inSize/3+1);
-for (i=offset; i <= lastCodon; i += 3)
-    {
-    aa = lookupCodon(dna+i);
-    if (aa == 'X')
-	{
-	if ((dna[i] == '-') ||
-	    (dna[i+1] == '-') ||
-	    (dna[i+2] == '-'))
-	    aa = '-';
-	}
-    if (aa == 0)
-	{
-        if (stop)
-	    break;
-	else
-	    aa = 'Z';
-	}
-    *pep++ = aa;
-    ++actualSize;
-    }
-*pep = 0;
-assert(actualSize <= inSize/3+1);
-seq->size = actualSize;
-seq->name = cloneString(inSeq->name);
-return seq;
 }
 
 /* translate nuc sequence into an sequence of amino acids */
@@ -320,48 +492,73 @@ thisSeq.dna = si->nucSequence;
 thisSeq.size = si->size;
 outSeq =  doTranslate(&thisSeq, 0,  0, FALSE);
 si->aaSequence  = outSeq->dna;
-}
-
-/* is the sequence all dashes ? */
-boolean allDashes(char *seq)
-{
-while (*seq)
-    if (*seq++ != '-')
-	return FALSE;
-
-return TRUE;
+si->aaSize = outSeq->size;
 }
 
 /* output a particular species sequence to the file stream */
-void writeOutSpecies(FILE *f, struct speciesInfo *si, struct geneInfo *gi)
+void writeOutSpecies(FILE *f, struct speciesInfo *si, struct exonInfo *giList)
 {
+if (inExons)
+    {
+    if (noTrans)
+	outSpeciesExonsNoTrans(f, si, giList);
+    else
+	outSpeciesExons(f, si, giList);
+    return;
+    }
+
+struct exonInfo *lastGi;
+int start = giList->chromStart + 1;
+
+for(lastGi = giList; lastGi->next ; lastGi = lastGi->next)
+    ;
+int end = lastGi->chromEnd;
+
 if (noTrans)
     {
-    if (inFrames)
-	outSpeciesFramesNoTrans(f, si, gi);
-    else
+    for(; si ; si = si->next)
 	{
-	for(; si ; si = si->next)
+	if (!allDashes(si->nucSequence))
 	    {
-	    fprintf(f, ">%s-%s\n", gi->name, si->name);
+	    if (transUC)
+		{
+		geneName = getGeneName(giList->name);
+		fprintf(f, ">%s_%s %d %s:%d-%d %c %s\n",
+		    giList->name, si->name, si->size,
+		    giList->frame->chrom, start, end, giList->frame->strand[0],
+		    geneName);
+		}
+	    else
+		fprintf(f, ">%s_%s %d %s:%d-%d %c\n",
+		    giList->name, si->name, si->size,
+		    giList->frame->chrom, start, end, giList->frame->strand[0]);
 	    fprintf(f, "%s\n", si->nucSequence);
 	    }
 	}
     }
 else
     {
-    if (inFrames)
-	outSpeciesFrames(f, si, gi);
-    else
+    for(; si ; si = si->next)
 	{
-	for(; si ; si = si->next)
+	translateProtein(si);
+	if (!allDashes(si->aaSequence))
 	    {
-	    translateProtein(si);
-	    if (!allDashes(si->aaSequence))
+	    if (transUC)
 		{
-		fprintf(f, ">%s-%s\n", gi->name, si->name);
-		fprintf(f, "%s\n", si->aaSequence);
+		geneName = getGeneName(giList->name);
+		fprintf(f, ">%s_%s %d %s:%d-%d %c %s\n",
+		    giList->name, si->name, si->aaSize,
+		    giList->frame->chrom, start, end, giList->frame->strand[0],
+		    geneName);
 		}
+	    else
+		{
+		fprintf(f, ">%s_%s %d %s:%d-%d %c\n",
+		    giList->name, si->name, si->aaSize,
+		    giList->frame->chrom, start, end, giList->frame->strand[0]);
+		}
+
+	    fprintf(f, "%s\n", si->aaSequence);
 	    }
 	}
     }
@@ -381,8 +578,10 @@ char *siText[MAX_COMPS];
 int copyAli(struct hash *siHash, struct mafAli *ali, int start)
 {
 struct mafComp *comp = ali->components;
-int num = 0;
+int jj;
 
+//printf("start %d\n",start);
+//mafWrite(stdout, ali);
 for(; comp; comp = comp->next)
     {
     char *ptr = strchr(comp->src, '.');
@@ -396,79 +595,88 @@ for(; comp; comp = comp->next)
     if (si == NULL)
 	continue;
 
-    compText[num] = comp->text;
-    siText[num] = &si->nucSequence[start];
-    ++num;
-    if (num == MAX_COMPS)
-	errAbort("can only deal with maf's with less than %d components",
-	    MAX_COMPS);
+    char *mptr = ali->components->text;
+    char *cptr = comp->text;
+    char *sptr = &si->nucSequence[start];
+
+    if (cptr != NULL)
+	{
+	for(jj = 0 ; jj < ali->textSize; jj++)
+	    {
+	    if (*mptr++ != '-')
+		{
+		if (cptr != NULL)
+		    {
+		    *sptr++ = *cptr++;
+		    }
+		}
+	    else 
+		cptr++;
+	    }
+	}
     }
 
-int count = 0; 
-int ii, jj;
+char *mptr = ali->components->text;
+int count = 0;
 
 for(jj = 0 ; jj < ali->textSize; jj++)
-    {
-    if (*compText[0] != '-')
-	{
-	for(ii=0; ii < num; ii++)
-	    {
-	    if (compText[ii] != NULL)
-		*siText[ii] = *compText[ii];
-	    siText[ii]++;
-	    }
+    if (*mptr++ != '-')
 	count++;
-	}
-    for(ii=0; ii < num; ii++)
-	if (compText[ii] != NULL)
-	    compText[ii]++;
-    }
 
+//printf("count %d\n",count);
 return start + count;
+
 }
 
 /* copyMafs - copy all the maf alignments into 
  * one sequence for each species
  */
-void copyMafs(struct hash *siHash, struct geneInfo *giList)
+void copyMafs(struct hash *siHash, struct exonInfo **giList)
 {
 int start = 0;
-struct geneInfo *gi = giList;
+struct exonInfo *gi = *giList;
 
 for(; gi; gi = gi->next)
     {
+    int thisSize = 0;
     struct mafAli *ali = gi->ali;
 
-    gi->frameStart = start;
     for(; ali; ali = ali->next)
-	start = copyAli(siHash, ali, start);
-
-    gi->frameSize = start - gi->frameStart;
+	{
+	int newStart = copyAli(siHash, ali, start);
+	thisSize += newStart - start;
+	start = newStart;
+	}
+    //printf("thisSize %d\n",thisSize);
     }
 
-struct mafComp *comp = giList->ali->components;
-boolean frameNeg = (giList->frame->strand[0] == '-');
+boolean frameNeg = ((*giList)->frame->strand[0] == '-');
 
 if (frameNeg)
     {
     int size = 0;
-
-    for(; comp; comp = comp->next)
+    struct hashCookie cookie =  hashFirst(siHash);
+    struct hashEl *hel;
+    
+    while ((hel = hashNext(&cookie)) != NULL)
 	{
-	struct speciesInfo *si = hashFindVal(siHash, comp->src);
+	struct speciesInfo *si = hel->val;
 
 	if (si == NULL)
 	    continue;
 
-	size = si->size;
+	if (size != 0)
+	    assert(size == si->size);
+	else
+	    size = si->size;
 	reverseComplement(si->nucSequence, si->size);
 	}
 
-    gi = giList;
+    gi = *giList;
     for(; gi; gi = gi->next)
-	{
-	gi->frameStart = size - (gi->frameStart + gi->frameSize);
-	}
+	gi->exonStart = size - (gi->exonStart + gi->exonSize);
+
+    slReverse(giList);
     }
 }
 
@@ -486,10 +694,10 @@ for(; list ; list = siNext)
     }
 }
 
-/* free geneInfo list */
-void freeGIList(struct geneInfo *list)
+/* free exonInfo list */
+void freeGIList(struct exonInfo *list)
 {
-struct geneInfo *giNext;
+struct exonInfo *giNext;
 
 for(; list ; list = giNext)
     {
@@ -508,27 +716,50 @@ void outGene(FILE *f, char *geneName, char *mafTable, char *frameTable,
 {
 struct mafFrames *frames = getFrames(geneName, frameTable, org);
 struct mafFrames *frame, *nextFrame;
-struct geneInfo *giList = NULL;
+struct exonInfo *giList = NULL;
+struct exonInfo *gi = NULL;
+int start = 0;
 
 for(frame = frames; frame; frame = nextFrame)
     {
-    struct geneInfo *gi;
-
-    AllocVar(gi);
     nextFrame = frame->next;
     frame->next = NULL;
-    gi->frame = frame;
-    gi->name = frame->name;
-    gi->ali = getAliForFrame(mafTable, frame);
-    slAddHead(&giList, gi);
+    boolean exonEdge = (frame->strand[0] == '-') ? 
+	frame->isExonEnd : frame->isExonStart;
+
+    if (!newTableType || exonEdge)
+	{
+	AllocVar(gi);
+	gi->frame = frame;
+	gi->name = frame->name;
+	gi->ali = getAliForFrame(mafTable, frame);
+	gi->chromStart = frame->chromStart;
+	gi->chromEnd = frame->chromEnd;
+	gi->exonStart = start;
+	gi->exonSize = frame->chromEnd - frame->chromStart;
+	start += gi->exonSize;
+	slAddHead(&giList, gi);
+	}
+    else
+	{
+	struct mafAli *newAli;
+
+	assert(gi != NULL);
+	gi->exonSize += frame->chromEnd - frame->chromStart;
+	gi->chromEnd = frame->chromEnd;
+	newAli = getAliForFrame(mafTable, frame);
+	gi->ali = slCat(gi->ali, newAli);
+	slAddTail(&gi->frame, frame);
+	}
     }
+
 slReverse(&giList);
 
 struct hash *speciesInfoHash = newHash(5);
 struct speciesInfo *speciesList = getSpeciesInfo(giList, speciesNameList, 
     speciesInfoHash);
 
-copyMafs(speciesInfoHash, giList);
+copyMafs(speciesInfoHash, &giList);
 writeOutSpecies(f, speciesList, giList);
 
 freeSpeciesInfo(speciesList);
@@ -544,6 +775,11 @@ struct slName *speciesNames = readList(speciesList);
 FILE *f = mustOpen(outName, "w");
 
 hSetDb(dbName);
+
+newTableType = hHasField(frameTable, "isExonStart");
+
+if (inExons && !newTableType)
+    errAbort("must have new mafFrames type to output in exons");
 
 if (geneList != NULL)
     geneNames = readList(geneList);
@@ -576,11 +812,13 @@ optionInit(&argc, argv, options);
 if (argc != 7)
     usage();
 
+
 geneName = optionVal("geneName", geneName);
 geneList = optionVal("geneList", geneList);
 onlyChrom = optionVal("chrom", onlyChrom);
-inFrames = optionExists("frames");
+inExons = optionExists("exons");
 noTrans = optionExists("noTrans");
+transUC = optionExists("transUC");
 delay = optionInt("delay", delay);
 
 if ((geneName != NULL) && (geneList != NULL))
