@@ -13,7 +13,7 @@
 #include "hPrint.h"
 #include "gsidTable.h"
 
-static char const rcsid[] = "$Id: advFilter.c,v 1.7 2008/02/05 00:01:32 fanhsu Exp $";
+static char const rcsid[] = "$Id: advFilter.c,v 1.8 2008/02/24 23:53:03 fanhsu Exp $";
 
 struct subjInfo *advFilterResults(struct column *colList, 
 	struct sqlConnection *conn)
@@ -276,7 +276,8 @@ printf("<font size=5><B>Select Subjects</B></font>");
 controlPanelStart();
 hPrintf("On this page you can restrict which subjects appear in the main table<BR>");
 hPrintf("based on the values in any column. Click the <em>submit</em> button to return<BR>");
-hPrintf("to the main Table View page with the current filter settings applied.");
+hPrintf("to the Table View (or Sequence View) page with the current filter settings<BR>applied.");
+hPrintf("  If available value is more than one word, value must be enclosed <BR>in quotes (e.g. \"West Coast\") to filter correctly.");
 bigButtons();
 //hPrintf("Quickly obtain a list of gene "
 // "names that pass the filter: ");
