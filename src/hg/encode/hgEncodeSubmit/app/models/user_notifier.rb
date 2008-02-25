@@ -4,7 +4,7 @@ class UserNotifier < ActionMailer::Base
     setup_email(user)
     @recipients  = ActiveRecord::Base.configurations[RAILS_ENV]['emailOnLoad']
     db = ActiveRecord::Base.configurations[RAILS_ENV]['database']
-    @subject    += "Project #{db} #{project.id} #{project.name} Loaded"
+    @subject    += "Project #{db} #{project.id} #{project.name} loaded"
     @body[:project] = project
     @body[:database] = db
   end
@@ -18,7 +18,7 @@ class UserNotifier < ActionMailer::Base
   
   def activation(user)
     setup_email(user)
-    @subject    += 'Your account has been activated!'
+    @subject    += 'Your account has been activated'
     @body[:url]  = url_for(:host => user.host, :port => user.port, :controller => "account") 
   end
 
@@ -50,7 +50,7 @@ class UserNotifier < ActionMailer::Base
   def setup_email(user)
     @recipients  = "#{user.email}"
     @from        = "#{ActiveRecord::Base.configurations[RAILS_ENV]['from']}"
-    @subject     = "ENCODE Pipeline: "
+    @subject     = "ENCODE DCC: "
     @sent_on     = Time.now
     @body[:user] = user
   end
