@@ -9,34 +9,41 @@
   <body>
 
   <div id="container">
-  <img align="left" height=40 width=80  src="http://hgwdev.cse.ucsc.edu/images/logos/ENCODE_scaleup_logo.png">
+  <!--<img align="left" height=40 width=80  src="http://hgwdev.cse.ucsc.edu/images/logos/ENCODE_scaleup_logo.png">-->
+  <img align="left" height=50 width=100  src="http://hgwdev.cse.ucsc.edu/images/logos/ENCODE_scaleup_logo.png">
     <div id="header"><%= ActiveRecord::Base.configurations[RAILS_ENV]['title'] -%>
     </div>
    </div>
-      <div id="content">
-          <ul>
-            <li>
-              <a href="/account/login"><b>Log In</b></a>
-              <p>&nbsp;&nbsp;&nbsp;&nbsp;Existing users should log-in</a>.</p>
-            </li>
+      <div id="welcome">
+   Welcome to the data submission site for the ENCODE Consortium.
+   This site is managed by the <A TARGET=_BLANK HREF="http://genome.ucsc.edu/ENCODE">ENCODE Data Coordination Center</A> at UC Santa Cruz.
+        <ul>
+        <li>
+          <a href="/account/login"><b>Log In</b></a>
+          <p>&nbsp;&nbsp;&nbsp;&nbsp;Existing users should log in</a>.</p>
+        </li>
+      
+        <li>
+          <a href="/account/signup"><b>Sign Up</b></a>
+          <p>&nbsp;&nbsp;&nbsp;&nbsp;If you do not have an account, sign up</a>.<br>
+             &nbsp;&nbsp;&nbsp;&nbsp;Your account will be validated by email.</p>
+        </li>
+      
+        <li>
+          <a href="/account/forgot_password"><b>Lost Password</b></a>
+           <p>&nbsp;&nbsp;&nbsp;&nbsp;You may change your password,<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;if you know the email address used to sign up.<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;Your change will be validated by email.</p>
           
-            <li>
-              <a href="/account/signup"><b>Sign Up</b></a>
-              <p>&nbsp;&nbsp;&nbsp;&nbsp;If you do not have an account, sign-up</a>.</p>
-              <p>&nbsp;&nbsp;&nbsp;&nbsp;Your account will be validated by email.</p>
-            </li>
-          
-            <li>
-              <a href="/account/forgot_password"><b>Lost Password</b></a>
-               <p>&nbsp;&nbsp;&nbsp;&nbsp;You may change your password,<br>
-                  &nbsp;&nbsp;&nbsp;&nbsp;if you know the email address used to sign-up.</p>
-              <p>&nbsp;&nbsp;&nbsp;&nbsp;Your change will be validated by email.</p>
-              
-            </li>
-          
-          </ul>
-        </div>
-      </div>
+        </li>
+      
+      </ul>
+   Before submitting data, the submission format must be defined
+   by agreement between the DCC and the provider.  
+   Please <A HREF=mailto:kate@soe.ucsc.edu?subject=Request%20for%20data%20agreement>contact the DCC</A>
+   to initiate a data agreement for your project.
+    </div>
+  </div>
     </div>
   </body>
 </html>

@@ -19,7 +19,7 @@ class AccountController < ApplicationController
       end
       redirect_back_or_default(:controller => '/pipeline', :action => 'list')
     else
-      flash[:error] = "Unknown user or password"
+      flash[:error] = "Unknown user or password."
     end
   end
 
@@ -56,7 +56,7 @@ class AccountController < ApplicationController
     cookies.delete :auth_token
     reset_session
     flash[:notice] = "You have been logged out."
-    redirect_back_or_default(:controller => '/account', :action => 'index')
+    redirect_back_or_default(:controller => '/welcome', :action => 'index')
   end
 
   def activate
@@ -69,10 +69,10 @@ class AccountController < ApplicationController
       @user.port = request.port
     end
     if @user and @user.activate
-      flash[:notice] = 'Your account has been activated.  Please login.'
+      flash[:notice] = 'Your account has been activated.  Please log in.'
       redirect_back_or_default(:controller => '/account', :action => 'login')
     else
-      flash[:notice] = 'Unable to activate the account.  Please check or enter manually.' 
+      flash[:error] = 'Unable to activate the account.  Please check or enter manually.' 
       redirect_back_or_default(:controller => '/account', :action => 'login')
     end
   end
@@ -87,9 +87,9 @@ class AccountController < ApplicationController
       @user.forgot_password
       @user.save
       redirect_back_or_default(:controller => '/account', :action => 'index')
-      flash[:notice] = "A password reset link has been sent to your email address" 
+      flash[:notice] = "A password reset link has been sent to your email address." 
     else
-      flash[:notice] = "Could not find a user with that email address" 
+      flash[:error] = "Could not find a user with that email address." 
     end
   end
 
@@ -101,14 +101,14 @@ class AccountController < ApplicationController
         @user.password_confirmation = params[:password_confirmation]
         @user.password = params[:password]
         @user.reset_password
-        flash[:notice] = @user.save ? "Password reset" : "Password not reset" 
+        flash[:notice] = @user.save ? "Password reset." : "Password not reset." 
       else
-        flash[:notice] = "Password mismatch" 
+        flash[:error] = "Password mismatch." 
       end  
       redirect_back_or_default(:controller => '/account', :action => 'index') 
   rescue
-    logger.error "Invalid Reset Code entered" 
-    flash[:notice] = "Sorry - That is an invalid password reset code. Please check your code and try again. (Perhaps your email client inserted a carriage return?" 
+    logger.error "Invalid reset code entered." 
+    flash[:error] = "Sorry - that is an invalid password reset code. Please check your code and try again. Perhaps your email client inserted a carriage return." 
     redirect_back_or_default(:controller => '/account', :action => 'index')
   end
 
@@ -127,11 +127,10 @@ class AccountController < ApplicationController
     reset_session
     flash[:notice] = "Password has been successfully changed."
     redirect_to(:action => 'index')
+    # Depends on exception thrown (from save?) to get here ??
   rescue ActiveRecord::RecordInvalid
     render :action => 'change_password'
   end
-
-
 
   # change email section
   def change_email
@@ -146,10 +145,10 @@ class AccountController < ApplicationController
         flash.clear  
       end
     else
-      flash[:notice] = "Please enter an email address" 
+      #flash[:warning] = "Please enter an email address." 
     end
   rescue Net::SMTPFatalError
-    flash[:notice] = "Invalid email address." 
+    flash[:error] = "Invalid email address." 
     @changed = false
     render :action => 'change_email'
   end
@@ -163,7 +162,7 @@ class AccountController < ApplicationController
       redirect_back_or_default(:controller => '/pipeline', :action => 'list')
       flash[:notice] = "The email address for your account has been updated." 
     else
-      flash[:notice] = "Unable to update the email address." 
+      flash[:error] = "Unable to update the email address." 
     end
   end
 

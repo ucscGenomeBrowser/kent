@@ -1,8 +1,8 @@
 <p>
 <% if @project.project_archives.blank? %>
-  <b>Upload data submission for this project</b>
+  <b>Upload data submission for this project:</b>
 <% end %>
-<table cellpadding=1 cellspacing=1>
+<table style="margin-top:10px;" cellpadding=1 cellspacing=1>
 <tr><td>Project: </td><td><%= @project.name -%></td><td>&nbsp;&nbsp;&nbsp;</td>
 <td>Created: </td><td><%= @project.created_at.strftime("%b %d %H:%M"); -%></td>
 </tr>
@@ -46,16 +46,22 @@
   <td><%= link_to ' ', {:action => 'nothingyet', :id => @project.id} -%></td>
 <% else %>
   <% if @project.status == "uploaded" %> 
-    <td><%= link_to 'Validate', {:action => 'begin_validating', :id => @project.id} -%></td>
+    <td><%= link_to 'Validate', {:action => 'begin_validating', :id => @project.id} -%>
+    <%= ' | ' -%> </td>
   <% elsif @project.status == "validated" %> 
-    <td><%= link_to 'Load | ', {:action => 'begin_loading', :id => @project.id} -%></td>
+    <td><%= link_to 'Load', {:action => 'begin_loading', :id => @project.id} -%>
+    <%= ' | ' -%> </td>
   <% end %>
-  <td><%= link_to 'Upload | ', {:action => 'upload', :id => @project.id} -%></td>
-  <td><%= link_to 'Delete | ', {:action => 'delete', :id => @project.id},
-    :confirm => "Are you sure you want to delete this project?" -%></td>
+
+  <td><%= link_to 'Upload', {:action => 'upload', :id => @project.id} -%>
+  <%= ' | ' -%> </td>
+  <td><%= link_to 'Delete', {:action => 'delete', :id => @project.id},
+    :confirm => "Are you sure you want to delete this project?" -%>
+  <%= ' | ' -%> </td>
   <td><%= link_to 'Edit', {:action => 'edit', :id => @project.id} -%></td>
   <% if current_user.login == "admin" and @project_status != "new" %>
-    <td><%= link_to ' | Expand', {:action => 'reexpand_all', :id => @project.id} -%></td>
+    <td><%= ' | ' -%>
+    <%= link_to 'Expand', {:action => 'reexpand_all', :id => @project.id} -%></td>
   <% end %>
 <% end %>
 

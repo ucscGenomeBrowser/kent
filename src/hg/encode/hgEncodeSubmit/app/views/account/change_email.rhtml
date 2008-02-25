@@ -1,27 +1,23 @@
 <%= error_messages_for :user %>
 
-<% unless @changed -%>
-  <h1>
-    Step 1 of 3
-  </h1>    
+<% unless @changed  %>
 
-  <% form_for :user do |f| -%>
+  <% form_for :user do |f| %>
     <p>
-      <label for="user_email">New Email</label> <br />
-      <%= f.text_field :email %> <br />
-      <%= submit_tag "Update email!" %> <br/>
-      <%= link_to 'Back', {:controller => 'pipeline', :action => 'list'} %>
-  <% end -%>
-<% else -%>
-  <h1>
-    Step 2 of 3
-  </h1>
+      <label for="user_email">New Email</label> <br >
+      <%= f.text_field :email %> <br>
+      <table><tr>
+      <td><%= submit_tag "Update Email" -%> </td>
+  <% end %>
+      <td> <%= button_to 'Cancel', {:controller => 'pipeline', :action => 'show_user', :user => @user } -%></td>
+    </tr></table>
+<% else %>
   <p>  
-    Thanks. An email has been sent to the address provided 
-    (<%= self.current_user.new_email %>).
+    An email has been sent to:
+    <%= self.current_user.new_email -%>.
   </p>
   <p>
-    Please follow the instructions contained within the 
+    Please follow the instructions contained in the 
     email to complete this process.
   </p> 
 <% end -%>

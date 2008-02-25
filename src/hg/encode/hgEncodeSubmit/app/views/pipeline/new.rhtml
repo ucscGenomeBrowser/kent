@@ -1,5 +1,5 @@
 <p>
-<b>Create new project</b>
+<b>Create new project:</b>
 <p>
 <%= error_messages_for 'project' -%>
 
@@ -37,5 +37,8 @@
    <%= hidden_field :project, :project_type_id %>
 <% end %>
   
-  <%= submit_tag "Create" %>
+<table><tr>
+<td > <%= submit_tag 'Create' -%></td>
 <% end %>
+<td> <%= button_to 'Cancel', {:controller => 'pipeline', :action => 'list'} %></td>
+</tr></table>

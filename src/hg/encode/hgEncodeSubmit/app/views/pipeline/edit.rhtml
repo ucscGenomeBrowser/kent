@@ -1,5 +1,5 @@
 <p>
-<b>Edit project '<%= @project.name -%>'</b>
+<b>Edit project '<%= @project.name -%>':</b>
 <p>
 
 <%= error_messages_for 'project' -%>
@@ -19,7 +19,9 @@
   <p><label for="project_name">Name</label><br/>
   <%= text_field 'project', 'name'  %></p>
 
-  
-  <%= submit_tag "Save" %>
+<table><tr>
+<td > <%= submit_tag 'Save' -%></td>
 <% end %>
-
+<td> <%= button_to 'Cancel', {:controller => 'pipeline', :action => 'show', :id => @project.id } -%></td>
+</tr></table>
+  

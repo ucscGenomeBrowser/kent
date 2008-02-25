@@ -1,36 +1,38 @@
 body {
-  font-family: Helvetica, Geneva, Arial, sans-serif;
+  #font-family: Helvetica, Geneva, Arial, sans-serif;
+  font-family: sans-serif;
 }
 
 #container {
 }
 
 #header {
-  #font-size: 18pt;
-  font-size: 12pt;
-  #padding: 0.25em;
-  padding: 0.3em;
+  padding: 5px;
+  font-size: 18pt;
   text-align: left;
 }
 
 #user {
-  #margin-left: 400px;
   text-align: right;
   margin-top: 0px;
-  font-size: 10pt;
+  font-size: 12pt;
   padding: 0.25em;
 }
 
 #nav {
-  #font-size: 12pt;
-  font-size: 10pt;
+  font-size: 12pt;
   font-weight; bold;
   background: #ddd;
   padding: 0.5em;
 }
 
 #nav a, #nav a:visited {
+  font-size: 12pt;
   text-decoration: none;
+}
+
+a {
+text-decoration: none;
 }
 
 #nav a:hover {
@@ -38,14 +40,21 @@ body {
 }
 
 #content {
-  #padding: 1em;
-  font-size: 10pt;
+  font-size: 12pt;
   margin-left: 15%;
 }
 
+#welcome {
+  font-size: 12pt;
+  margin-top:5%;
+  margin-left: 15%;
+  margin-right: 15%;
+  padding: 5%;
+  border: 2px solid #bbb;
+}
+
 #footer {
-  #padding: 1em;
-  font-size: 10pt;
+  font-size: 12pt;
   text-align: center;
   background: #ddd;
   margin-left: 35%;
@@ -53,7 +62,7 @@ body {
   padding: 0.4em;
 }
 
-#content a, #content a:visited, #footer a, #footer a:visited  {
+#content a, #content a:visited, #footer a, #footer a:visited #welcome a, #welcome a:visited {
   text-decoration: none;
   margin-bottom: 0;
   margin-top: 0;
@@ -64,12 +73,13 @@ body {
 }
 
 #content h1 {
-  font-size: 12pt;
+  font-size: 14pt;
 }
 
 #message {
-  font-size: 10pt;
-  margin-top: 10px;
+  font-size: 12pt;
+  margin-top: 18px;
+  margin-bottom: 9px;
 }
 
 #notice  { background:#9e9; color:#222; padding: 5px }
@@ -78,25 +88,23 @@ body {
 .flash { padding:10px; text-align:center}
 
 .fieldWithErrors {
-    #margin: 2px;
-    padding: 2px;
-    background-color: #f88;
     display: table;
+    padding: 2px;
 }
 
 #errorExplanation {
+    font-size: 12pt;
     padding-bottom: 5px;
     background-color:#f0f0f0;
-    font-size: 10pt;
 }
 
 #errorExplanation h2 {
     text-align: left;
     padding: 4px 4px 4px 10px;
-    font-size: 10pt;
-    background-color: #f88;
+    font-size: 12pt;
 }
 
 input {
     margin: 2px;
+    font-size: 12pt;
 }

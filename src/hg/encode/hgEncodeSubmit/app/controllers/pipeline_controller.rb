@@ -195,7 +195,7 @@ class PipelineController < ApplicationController
 	end
         log_project_status
 	unless @project.save
-	  flash[:error] = "system error - project record save failed"
+	  flash[:error] = "System error - project record save failed."
 	  return false
 	end
       end
@@ -210,11 +210,11 @@ class PipelineController < ApplicationController
     #  (e.g. that can remove .wib symlinks from /gbdb/ to the submission dir)
     projectDir= path_to_project_dir
     msg = ""
-    msg += "Project deleted"
+    msg += "Project deleted."
     if File.exists?(projectDir)
       @project.status = "unloading"
       unless @project.save
-        flash[:error] = "system error - project record save failed"
+        flash[:error] = "System error - project record save failed."
         return
       end
     
@@ -233,7 +233,7 @@ class PipelineController < ApplicationController
         @project.save
         log_project_status
       else
-        msg = "project unload failed"
+        msg = "Project unload failed."
         flash[:notice] = msg
         @project.status = "unload failed"
         @project.save
@@ -276,7 +276,7 @@ class PipelineController < ApplicationController
       }
       extensions = extensionsByMIME[@upload.content_type.chomp]
       unless extensions
-        flash[:error] = "invalid content_type=#{@upload.content_type.chomp}"
+        flash[:error] = "Invalid content_type=#{@upload.content_type.chomp}."
         return
       end
     end
@@ -284,7 +284,7 @@ class PipelineController < ApplicationController
     extensions = ["zip", "ZIP", "tar.gz", "TAR.GZ", "tar.bz2", "TAR.BZ2"]
     unless extensions.any? {|ext| @filename.ends_with?("." + ext) }
       flash[:error] = "File name <strong>#{@filename}</strong> is invalid. " +
-        "Only a compressed archive file (zip,bz2,gz) is allowed"
+        "Only a compressed archive file (tar.gz, tar.bz2, zip) is allowed."
       return
     end
 
@@ -308,7 +308,7 @@ class PipelineController < ApplicationController
     #msg += "path_to_file=#{path_to_file}<br>"
     #msg += "nextArchiveNo=#{nextArchiveNo}<br>"
 
-    msg += "Uploading/expanding #{plainName}<br>"
+    msg += "Uploading/expanding #{plainName}.<br>"
 
 
     galtDebug = false  # set to true to cause processing in parent without child 
@@ -344,7 +344,7 @@ class PipelineController < ApplicationController
         @project.project_archives.last.status = @project.status
         @project.project_archives.last.archives_active = @project.archives_active
         unless @project.project_archives.last.save
-          flash[:error] = "system error - project_archive record status save failed"
+          flash[:error] = "System error - project_archive record status save failed."
           return
         end
       end
@@ -390,7 +390,7 @@ class PipelineController < ApplicationController
       end
 
       unless @project.save
-        flash[:error] = "system error - project record save failed"
+        flash[:error] = "System error - project record save failed."
         return
       end
       log_project_status
@@ -418,15 +418,15 @@ class PipelineController < ApplicationController
     c = @project.archives_active[n..n]
     if c == "1"
       c = "0"
-      msg += "Archive deleted" 
+      msg += "Archive deleted." 
     else
       c = "1"
-      msg += "Archive undeleted" 
+      msg += "Archive undeleted." 
     end
     @project.archives_active[n..n] = c
 
     unless @project.save
-      flash[:error] = "system error - project record save failed"
+      flash[:error] = "System error - project record save failed."
       redirect_to :action => 'show', :id => @project
       return false
     end
@@ -460,7 +460,7 @@ class PipelineController < ApplicationController
       unless keepers[f] or (f == ".") or (f == "..")
         cmd = "rm -fr #{fullName}"
         unless system(cmd)
-          flash[:error] = "system error cleaning up subdirectory: <br>command=[#{cmd}]<br>"  
+          flash[:error] = "System error cleaning up subdirectory: <br>command=[#{cmd}].<br>"  
 	  redirect_to :action => 'show', :id => @project
           return false
         end
@@ -484,13 +484,13 @@ class PipelineController < ApplicationController
 
     unless found 
       @project.status = "new"
-      msg = "All archives are currently marked as deleted"
+      msg = "All archives are currently marked as deleted."
     else
       @project.status = "re-expanding all"
-      msg = "Cleaning out upload dir and re-expanding all archives"
+      msg = "Cleaning out upload dir and re-expanding all archives."
     end
     unless @project.save
-      flash[:error] = "system error - project record save failed"
+      flash[:error] = "System error - project record save failed."
       redirect_to :action => 'show', :id => @project
       return false
     end   
@@ -524,7 +524,7 @@ private
     @project = Project.find(params[:id])
     unless @project.user_id == @current_user.id
       flash[:error] = "That project does not belong to you."
-      redirect_to :action => 'show_user'
+      redirect_to :action => 'list'
       return false
     end
     return true
@@ -596,7 +596,7 @@ private
     if File.exists?(path)
       cmd = "rm -fr #{path}"
       unless system(cmd)
-        flash[:error] = "system error cleaning out subdirectory: <br>command=[#{cmd}]<br>"  
+        flash[:error] = "System error cleaning out subdirectory: <br>command=[#{cmd}].<br>"  
         return false
       end
     end
@@ -649,7 +649,7 @@ private
     end
 
     unless @project.save
-      flash[:error] = "system error - project record save failed"
+      flash[:error] = "System error - project record save failed."
       return false
     end
     log_project_status
@@ -700,7 +700,7 @@ private
           project_file.file_date = File.ctime(fullName)
           project_file.project_archive_id = archive_id 
           unless project_file.save
-            flash[:error] = "system error saving project_file record for: #{f}"
+            flash[:error] = "System error saving project_file record for: #{f}."
             return false
           end
     
@@ -833,7 +833,7 @@ private
           fullName = File.join(projectDir,f)
           cmd = "rm -fr #{fullName}"
           unless system(cmd)
-            flash[:error] = "system error cleaning out project subdirectory: <br>command=[#{cmd}]<br>"  
+            flash[:error] = "System error cleaning out project subdirectory: <br>command=[#{cmd}].<br>"  
 	    redirect_to :action => 'show_user'
             return
           end
@@ -850,7 +850,7 @@ private
     project_status_log.project_id = @project.id 
     project_status_log.status = @project.status
     unless project_status_log.save
-      flash[:error] = "system error saving project_status_log record"
+      flash[:error] = "System error saving project_status_log record."
     end
   end
  
