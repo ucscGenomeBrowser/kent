@@ -15,4 +15,5 @@ else
   endif
 endif
 
-find . -type f | xargs ls -og | awk '{print $3, "\t", $7}' | sort -n
+find . -type f | xargs ls -og | awk '{print $3, "\t", $7}' | sort -n \
+  | tail -50
