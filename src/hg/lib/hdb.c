@@ -35,7 +35,7 @@
 #include "customTrack.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.344 2008/02/21 18:31:33 jzhu Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.345 2008/02/26 00:09:46 angie Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -3587,10 +3587,14 @@ while (tdbList != NULL)
     {
     tdb = slPopHead(&tdbList);
     if (tdb->isSuper)
+	{
         /* save supertrack entries, but don't add to list */
+	hLookupStringsInTdb(tdb, database);
         hashAdd(superHash, tdb->tableName, tdb);
+	}
     else if (trackDbSetting(tdb, "compositeTrack"))
         {
+	hLookupStringsInTdb(tdb, database);
         slAddHead(&tdbFullList, tdb);
         hashAdd(compositeHash, tdb->tableName, tdb);
         }
