@@ -6,8 +6,9 @@
 #include "hdb.h"
 #include "genePred.h"
 #include "genePredReader.h"
+#include "chromInfo.h"
 
-static char const rcsid[] = "$Id: genePredCheck.c,v 1.5 2007/03/30 00:23:16 markd Exp $";
+static char const rcsid[] = "$Id: genePredCheck.c,v 1.6 2008/02/26 01:32:24 markd Exp $";
 
 /* Command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -35,22 +36,41 @@ errAbort(
   "\n");
 }
 
-void checkGenePred(char *fileTbl)
-/* check a genePred */
+static void checkAGenePred(char *fileTbl, int iRec, struct genePred *gp)
+/* check one genePred */
+{
+int chromSize = -1;  /* default to not checking */
+char desc[512];
+
+safef(desc, sizeof(desc), "%s:%d", fileTbl, iRec);
+if (gDb != NULL)
+    {
+    struct chromInfo *ci = hGetChromInfo(gDb, gp->chrom);
+    if (ci == NULL)
+        {
+        fprintf(stderr, "Error: %s: %s has invalid chrom for %s: %s\n",
+                desc, gp->name, gDb, gp->chrom);
+        gErrCount++;
+        chromSize = -1;  // don't validate
+        }
+    else
+        chromSize = ci->size;
+    }
+gErrCount += genePredCheck(desc, stderr, chromSize, gp);
+gChkCount++;
+}
+
+static void checkGenePred(char *fileTbl)
+/* check a genePred file or table */
 {
 struct sqlConnection *conn = NULL;
 struct genePredReader *gpr;
 struct genePred *gp;
-int chromSize = -1;  /* default to not checking */
-char desc[512];
 int iRec = 0;
 
 
 if (gDb != NULL)
-    {
-    hSetDb(gDb);  /* needed for hChromSize */
-    conn = hAllocConn(gDb);
-    }
+    hSetDb(gDb);  /* needed for hGetChromInfo */
 
 if (fileExists(fileTbl))
     {
@@ -58,6 +78,7 @@ if (fileExists(fileTbl))
     }
 else if (gDb != NULL)
     {
+    conn = hAllocConn(gDb);
     gpr = genePredReaderQuery(conn, fileTbl, NULL);
     }
 else
@@ -67,17 +88,11 @@ else
 
 while ((gp = genePredReaderNext(gpr)) != NULL)
     {
-    if (gDb != NULL)
-        chromSize = hChromSize(gp->chrom);
-    iRec++;
-    safef(desc, sizeof(desc), "%s:%d", fileTbl, iRec);
-    gErrCount += genePredCheck(desc, stderr, chromSize, gp);
+    checkAGenePred(fileTbl, ++iRec, gp);
     genePredFree(&gp);
-    gChkCount++;
     }
 genePredReaderFree(&gpr);
-if (conn != NULL)
-    hFreeConn(&conn);
+hFreeConn(&conn);
 }
 
 int main(int argc, char *argv[])

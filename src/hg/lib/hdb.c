@@ -35,7 +35,7 @@
 #include "customTrack.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.345 2008/02/26 00:09:46 angie Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.346 2008/02/26 01:32:24 markd Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -80,7 +80,7 @@ hFreeOrDisconnect(&conn);
 return ci;
 }
 
-static struct chromInfo *getChromInfo(char *db, char *chrom)
+struct chromInfo *hGetChromInfo(char *db, char *chrom)
 /* Get chromInfo for named chromosome (case-insens.) from db.  
  * Return NULL if no such chrom. */
 /* Cache results, but build up the hash incrementally instead of in one slurp 
@@ -118,7 +118,7 @@ static struct chromInfo *mustGetChromInfo(char *db, char *chrom)
 /* Get chromInfo for named chrom from primary database or
  * die trying. */
 {
-struct chromInfo *ci = getChromInfo(db, chrom);
+struct chromInfo *ci = hGetChromInfo(db, chrom);
 if (ci == NULL)
     errAbort("Couldn't find chromosome/scaffold %s in database", chrom);
 return ci;
@@ -132,7 +132,7 @@ struct chromInfo *ci = NULL;
 char buf[HDB_MAX_CHROM_STRING];
 strncpy(buf, name, HDB_MAX_CHROM_STRING);
 buf[HDB_MAX_CHROM_STRING-1] = 0;
-ci = getChromInfo(db, buf);
+ci = hGetChromInfo(db, buf);
 if (ci != NULL)
     return cloneString(ci->chrom);
 else

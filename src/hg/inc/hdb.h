@@ -34,6 +34,7 @@
 #ifndef BED_H
 #include "bed.h"
 #endif
+struct chromInfo;
 
 /* At or below this number of sequences, allow split tables: */
 #define HDB_MAX_SEQS_FOR_SPLIT 100
@@ -268,6 +269,10 @@ int hChromSize(char *chromName);
 
 int hChromSize2(char *chromName);
 /* Return size of chromosome from secondary database. */
+
+struct chromInfo *hGetChromInfo(char *db, char *chrom);
+/* Get chromInfo for named chromosome (case-insens.) from db.  
+ * Return NULL if no such chrom. */
 
 struct dnaSeq *hFetchSeq(char *fileName, char *seqName, int start, int end);
 /* Fetch sequence from file.  If it is a .2bit file then fetch the named sequence.

@@ -6,8 +6,9 @@
 #include "genePredReader.h"
 #include "hdb.h"
 #include "hgRelate.h"
+#include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgLoadGenePred.c,v 1.7 2008/02/14 00:38:30 markd Exp $";
+static char const rcsid[] = "$Id: hgLoadGenePred.c,v 1.8 2008/02/26 01:32:24 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -23,6 +24,8 @@ boolean gBin = TRUE;
 boolean gGenePredExt = FALSE;
 boolean gSkipInvalid = FALSE;
 boolean gNoValidate = FALSE;
+
+int gInvalidCnt = 0;
 
 void usage(char *msg)
 /* Explain usage and exit. */
@@ -68,23 +71,27 @@ slSort(&genes, genePredCmp);
 return genes;
 }
 
-boolean checkGene(struct genePred *gene)
+boolean checkGene(char *db, struct genePred *gene)
 /* validate that a genePred is ok, either exit or return false if it's not */
 {
-int chromSize = hChromSize(gene->chrom);
-if (genePredCheck("invalid genePred", stderr, chromSize, gene) == 0)
+struct chromInfo *ci = hGetChromInfo(db, gene->chrom);
+if (ci == NULL)
+    {
+    fprintf(stderr, "Error: %s has invalid chrom for %s: %s\n",
+            gene->name, db, gene->chrom);
+    gInvalidCnt++;
+    return FALSE;
+    }
+else if (genePredCheck("invalid genePred", stderr, ci->size, gene) == 0)
     return TRUE;
 else
     {
-    if (gSkipInvalid)
-        warn("Warning: skipping %s", gene->name);
-    else
-        errAbort("Error: invalid genePreds, database unchanged");
+    gInvalidCnt++;
     return FALSE;
     }
 }
 
-void copyGene(struct genePred *gene, FILE *tabFh)
+void copyGene(char *db, struct genePred *gene, FILE *tabFh)
 /* copy one gene to the tab file */
 {
 unsigned holdOptFields = gene->optFields;
@@ -93,7 +100,7 @@ unsigned optFields = (genePredScoreFld|genePredName2Fld|genePredCdsStatFld|geneP
 if (gGenePredExt && ((optFields & optFields) != optFields))
     errAbort("genePred %s doesn't have fields required for -genePredExt", gene->name);
 
-if (gNoValidate || checkGene(gene))
+if (gNoValidate || checkGene(db, gene))
     {
     if (!gGenePredExt)
         gene->optFields = 0;  /* omit optional fields */
@@ -106,14 +113,22 @@ if (gNoValidate || checkGene(gene))
     }
 }
 
-void mkTabFile(struct genePred *genes, FILE *tabFh)
+void mkTabFile(char *db, struct genePred *genes, FILE *tabFh)
 /* create a tab file to load, optionally adding binning or stripping extended
  * fields if not requested */
 {
 struct genePred *gene;
 
 for (gene = genes; gene != NULL; gene = gene->next)
-    copyGene(gene, tabFh);
+    copyGene(db, gene, tabFh);
+
+if (gInvalidCnt > 0)
+    {
+    if (gSkipInvalid)
+        fprintf(stderr, "Warning: skipping %d invalid genePreds\n", gInvalidCnt);
+    else
+        errAbort("Error: %d invalid genePreds, database unchanged", gInvalidCnt);
+    }
 }
 
 void hgLoadGenePred(char *db, char *table, int numGenePreds, char **genePredFiles)
@@ -125,7 +140,7 @@ char *tmpDir = ".";
 FILE *tabFh = hgCreateTabFile(tmpDir, table);
 
 hSetDb(db);
-mkTabFile(genes, tabFh);
+mkTabFile(db, genes, tabFh);
 genePredFreeList(&genes);
 setupTable(conn, table);
 hgLoadTabFile(conn, tmpDir, table, &tabFh);

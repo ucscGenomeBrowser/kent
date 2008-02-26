@@ -12,7 +12,7 @@
 #include "rangeTree.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.98 2008/02/21 01:24:07 markd Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.99 2008/02/26 01:32:23 markd Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -1317,7 +1317,7 @@ static void gpError(char *format, ...)
 /* print and count an error */
 {
 va_list args;
-fprintf(stderr, "Error: ");
+fprintf(gpErrFh, "Error: ");
 va_start(args, format);
 vfprintf(gpErrFh, format, args);
 va_end(args);
