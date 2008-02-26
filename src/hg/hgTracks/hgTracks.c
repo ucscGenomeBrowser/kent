@@ -118,7 +118,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1437 2008/02/22 23:14:53 kuhn Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1438 2008/02/26 04:56:38 markd Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -8476,6 +8476,14 @@ int textLength = strlen(text);
 bool selfLine = (match == text);
 cBuf[1] = '\0';  
 
+/* For some reason, the text is left shifted by one pixel in forward mode and
+ * right shift in reverse-complement mode.  Not sure why this is, but its more
+ * obvious in reverse-complement mode, with characters truncated at the larger
+ * base display zoom level.  I appologize for doing this rather than figure
+ * out the whole font size stuff.  markd
+ */
+x += (revCmplDisp ? 1 : -1);
+
 /* If we have motifs, look for them in the string. */
 if(motifString != NULL && strlen(motifString) != 0 && !isCodon)
     {
@@ -8609,7 +8617,7 @@ color1 = lighterColor(hvg, color1);
 color1 = lighterColor(hvg, color1);
 color2 = lighterColor(hvg, color1);
 
-cBuf[1] = '\0';  
+cBuf[1] = '\0';
 
 /* If we have motifs, look for them in the string. */
 if(motifString != NULL && strlen(motifString) != 0 && !isCodon)
