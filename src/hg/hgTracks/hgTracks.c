@@ -118,7 +118,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1438 2008/02/26 04:56:38 markd Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1439 2008/02/26 05:44:47 markd Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -1064,7 +1064,8 @@ for (ref = exonList; ref != NULL; ref = ref->next, exonIx++)
 	    linkedFeaturesMoveWinStart(exon->start, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
 	else
 	    linkedFeaturesMoveWinEnd(exon->end, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
-	safef(mouseOverText, sizeof(mouseOverText), "Next Feature (%d/%d)", exonIx+1, numExons);
+	safef(mouseOverText, sizeof(mouseOverText), "%s Feature (%d/%d)",
+              (revCmplDisp ? "Prev" : "Next"), exonIx+1, numExons);
 	mapBoxJumpTo(hvg, x, y, w, h, chromName, newWinStart, newWinEnd, mouseOverText);
 	break;
 	}
@@ -1082,7 +1083,8 @@ for (ref = exonList; ref != NULL; ref = ref->next, exonIx++)
 	    linkedFeaturesMoveWinEnd(exon->end, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
 	else
 	    linkedFeaturesMoveWinStart(exon->start, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
-	safef(mouseOverText, sizeof(mouseOverText), "Prev Feature (%d/%d)", numExons-exonIx, numExons);
+	safef(mouseOverText, sizeof(mouseOverText), "%s Feature (%d/%d)", 
+              (revCmplDisp ? "Next" : "Prev"), numExons-exonIx, numExons);
 	mapBoxJumpTo(hvg, x, y, w, h, chromName, newWinStart, newWinEnd, mouseOverText);
 	break;
 	}
@@ -9222,11 +9224,11 @@ hvGfxNextItemButton(hvg, rightButtonX + NEXT_ITEM_ARROW_BUFFER, y, arrowWidth, a
 hvGfxNextItemButton(hvg, insideX + NEXT_ITEM_ARROW_BUFFER, y, arrowWidth, arrowWidth, labelColor, fillColor, FALSE);
 safef(buttonText, ArraySize(buttonText), "hgt.prevItem=%s", track->mapName);
 mapBoxReinvokeExtra(hvg, insideX, y + 1, arrowButtonWidth, insideHeight, NULL,
- 		    NULL, 0, 0, "Previous item", buttonText);
+ 		    NULL, 0, 0, (revCmplDisp ? "Next item" : "Prev item"), buttonText);
 mapBoxToggleVis(hvg, insideX + arrowButtonWidth, y + 1, insideWidth - (2 * arrowButtonWidth), insideHeight, parentTrack);
 safef(buttonText, ArraySize(buttonText), "hgt.nextItem=%s", track->mapName);
 mapBoxReinvokeExtra(hvg, insideX + insideWidth - arrowButtonWidth, y + 1, arrowButtonWidth, insideHeight, NULL,
- 		    NULL, 0, 0, "Next item", buttonText);
+ 		    NULL, 0, 0, (revCmplDisp ? "Prev item" : "Next item"), buttonText);
 }
 
 static int doCenterLabels(struct track *track, struct track *parentTrack,
