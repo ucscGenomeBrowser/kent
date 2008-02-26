@@ -162,4 +162,8 @@ struct maGrouping *maCombineGroupingFromCart(struct microarrayGroups *groupings,
 void maBedClumpGivenGrouping(struct bed *bedList, struct maGrouping *grouping);
 /* Clump (mean/median) a bed 15 given the grouping kind. */
 
+struct maGrouping *maHashToMaGrouping(struct hash *oneGroup);
+/* This converts a single "stanza" of the microarrayGroups.ra file to a
+   maGrouping struct. */
+
 #endif
