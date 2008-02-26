@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/doEnsGeneUpdate.pl instead.
 
-# $Id: doEnsGeneUpdate.pl,v 1.6 2008/02/23 00:20:10 hiram Exp $
+# $Id: doEnsGeneUpdate.pl,v 1.7 2008/02/26 23:11:27 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -21,6 +21,7 @@ use File::Basename;
 use vars @HgAutomate::commonOptionVars;
 use vars @HgStepManager::optionVars;
 use vars qw/
+    $opt_ensVersion
     $opt_buildDir
     /;
 
@@ -32,11 +33,10 @@ my $stepper = new HgStepManager(
       { name => 'load',   func => \&doLoad },
       { name => 'cleanup', func => \&doCleanup },
     ]
-				);
+);
 
 # Option defaults:
 my $dbHost = 'hgwdev';
-
 
 my $base = $0;
 $base =~ s/^(.*\/)?//;
@@ -48,11 +48,18 @@ sub usage {
   my ($status, $detailed) = @_;
   # Basic help (for incorrect usage):
   print STDERR "
-usage: $base ensGeneConfig.ra
-options:
+usage: $base -ensVersion=NN ensGeneConfig.ra
+required options:
+  -ensVersion=NN - must specify desired Ensembl version
+                 - possible values: $versionListString
+  ensGeneConfig.ra - configuration file with database and other options
+
+other options:
 ";
   print STDERR $stepper->getOptionHelp();
   print STDERR <<_EOF_
+    -ensVersion NN        Request one of the Ensembl versions:
+                          Currently available: $versionListString
     -buildDir dir         Use dir instead of default
                           $HgAutomate::clusterData/\$db/$HgAutomate::trackBuild/ensGene.<ensVersion #>
                           (necessary if experimenting with builds).
@@ -88,8 +95,6 @@ db xxxYyyN
     N is the sequence number of this species' build at UCSC.  For some
     species that we have been processing since before this convention, the
     pattern is xyN.
-ensVersion NN
-  - The Ensembl version to fetch, possible values: $versionListString
 
 Optional ensGeneConfig.ra settings:
 
@@ -104,6 +109,8 @@ geneScaffolds yes
   - need to translate Ensembl GeneScaffold coordinates to UCSC scaffolds
     Will fetch and use the Ensembl MySQL tables seq_region and assembly
     to perform the translation
+skipInvalid yes
+  - during the loading of the gene pred, skip all invalid genes
 
 Assumptions:
 1. $HgAutomate::clusterData/\$db/\$db.2bit contains RepeatMasked sequence for
@@ -125,10 +132,12 @@ _EOF_
 my ($species, $ensGtfUrl, $ensGtfFile, $ensPepUrl, $ensPepFile, $ensMySqlUrl);
 # Command line argument:
 my $CONFIG;
+# Required command line argumen:
+my ($ensVersion);
 # Required config parameters:
-my ($db, $ensVersion);
+my ($db);
 # Conditionally required config parameters:
-my ($liftRandoms, $nameTranslation, $geneScaffolds, $knownToEnsembl);
+my ($liftRandoms, $nameTranslation, $geneScaffolds, $knownToEnsembl, $skipInvalid);
 # Other globals:
 my ($topDir, $chromBased);
 my ($bedDir, $scriptDir, $endNotes);
@@ -138,6 +147,7 @@ my ($buildDir);
 sub checkOptions {
   # Make sure command line options are valid/supported.
   my $ok = GetOptions(@HgStepManager::optionSpec,
+		      'ensVersion=s',
 		      'buildDir=s',
 		      @HgAutomate::commonOptionSpec,
 		      );
@@ -163,16 +173,20 @@ sub doLoad {
   my $bossScript = new HgRemoteScript("$runDir/doLoad.csh", $dbHost,
 				      $runDir, $whatItDoes);
 
+  my $skipInv = "";
+  $skipInv = "-skipInvalid" if (defined $skipInvalid);
+
   if (defined $geneScaffolds) {
       $bossScript->add(<<_EOF_
-hgLoadGenePred -skipInvalid -genePredExt $db ensGene process/$db.allGenes.gp.gz
-zcat process/ensemblGeneScaffolds.oryCun1.bed.gz \\
+hgLoadGenePred $skipInv -genePredExt $db ensGene process/$db.allGenes.gp.gz
+zcat process/ensemblGeneScaffolds.oryCun1.bed.gz >& loadGenePred.errors.txt \\
     | sed -e "s/GeneScaffold/GS/" | hgLoadBed $db ensemblGeneScaffold stdin
 _EOF_
       );
   } else {
   $bossScript->add(<<_EOF_
-hgLoadGenePred -genePredExt $db ensGene process/$db.allGenes.gp.gz
+hgLoadGenePred $skipInv -genePredExt $db \\
+    ensGene process/$db.allGenes.gp.gz >& loadGenePred.errors.txt
 _EOF_
       );
   }
@@ -184,14 +198,20 @@ zcat ensPep.txt.gz \\
     | ~/kent/src/utils/faToTab/faToTab.pl /dev/null /dev/stdin \\
          | sed -e '/^\$/d; s/\*\$//' | sort > ensPep.$db.fa.tab
 hgPepPred $db tab ensPep ensPep.$db.fa.tab
+hgLoadSqlTab $db ensGtp ~/kent/src/hg/lib/ensGtp.sql process/ensGtp.tab
 # verify names in ensGene is a superset of names in ensPep
-hgsql -e "select name from ensPep;" $db | sort > ensPep.name
-hgsql -e "select name from ensGene;" $db | sort > ensGene.name
+hgsql -N -e "select name from ensPep;" $db | sort > ensPep.name
+hgsql -N -e "select name from ensGene;" $db | sort > ensGene.name
+set geneCount = `cat ensGene.name | wc -l`
 set pepCount = `cat ensPep.name | wc -l`
 set commonCount = `comm -12 ensPep.name ensGene.name | wc -l`
-echo "peptide name count: \$pepCount, common name count: \$commonCount"
-if (\$pepCount != \$commonCount) then
-    echo "ERROR: load: gene name set does not include peptide name set"
+set percentId = \\
+    `echo \$commonCount \$pepCount | awk '{printf "%d", 100.0*\$1/\$2}'`
+echo "gene count: \$geneCount, peptide count: \$pepCount, common name count: \$commonCount"
+echo "percentId: \$percentId"
+if (! (\$percentId > 95)) then
+    echo "ERROR: percent coverage of peptides to genes: \$percentId"
+    echo "ERROR: should be greater than 95"
     exit 255
 endif
 _EOF_
@@ -202,6 +222,14 @@ hgMapToGene $db ensGene knownGene knownToEnsembl
 _EOF_
       );
   }
+  $bossScript->add(<<_EOF_
+hgsql -e 'INSERT INTO trackVersion \\
+    (db, name, who, version, updateTime, comment, source) \\
+    VALUES("$db", "ensGene", "$ENV{'USER'}", "$ensVersion", now(), \\
+	"with peptides $ensPepFile", \\
+	"$ensGtfUrl" );' hgFixed
+_EOF_
+  );
   $bossScript->execute();
 } # doLoad
 
@@ -221,7 +249,7 @@ sub doProcess {
   my $fileServer = &HgAutomate::chooseFileServer($runDir);
   my $lifting = 0;
   my $bossScript;
-  if (defined($liftRandoms) && $liftRandoms =~ m/yes/i) {
+  if (defined $liftRandoms) {
       $lifting = 1;
       $bossScript = new HgRemoteScript("$runDir/doProcess.csh", $dbHost,
 				      $runDir, $whatItDoes);
@@ -237,7 +265,7 @@ foreach C (`cut -f1 /cluster/data/$db/chrom.sizes | grep random`)
    set size = `grep \$C /cluster/data/$db/chrom.sizes | cut -f2`
    hgsql -N -e \\
 "select chromStart,contig,size,chrom,\$size from ctgPos where chrom='\$C';" \\
-	$db  | awk '{gsub("\\\\.[0-9]+", "", \$2); print }' >> randoms.mm9.lift
+	$db  | awk '{gsub("\\\\.[0-9]+", "", \$2); print }' >> randoms.$db.lift
 end
 _EOF_
       );
@@ -248,7 +276,7 @@ zcat ../download/$ensGtfFile \\
 _EOF_
   );
   #  translate Ensemble chrom names to UCSC chrom name
-  if (defined($nameTranslation)) {
+  if (defined $nameTranslation) {
   $bossScript->add(<<_EOF_
 	| sed -e $nameTranslation \\
 _EOF_
@@ -267,7 +295,9 @@ _EOF_
 _EOF_
   );
   $bossScript->add(<<_EOF_
-gtfToGenePred -genePredExt allGenes.gtf.gz stdout | gzip > $db.allGenes.gp.gz
+gtfToGenePred -infoOut=infoOut.txt -genePredExt allGenes.gtf.gz stdout \\
+    | gzip > $db.allGenes.gp.gz
+$Bin/extractGtf.pl infoOut.txt > ensGtp.tab
 _EOF_
   );
   if (defined $geneScaffolds) {
@@ -382,7 +412,6 @@ sub parseConfig {
 
   # Required variables.
   $db = &requireVar('db', \%config);
-  $ensVersion = &requireVar('ensVersion', \%config);
   $species = &HgAutomate::getSpecies($dbHost, $db);
   &HgAutomate::verbose(1,
 	"\n db: $db, species: '$species'\n");
@@ -392,15 +421,19 @@ sub parseConfig {
   $nameTranslation = &optionalVar('nameTranslation', \%config);
   $geneScaffolds = &optionalVar('geneScaffolds', \%config);
   $knownToEnsembl = &optionalVar('knownToEnsembl', \%config);
+  $skipInvalid = &optionalVar('skipInvalid', \%config);
   #	verify they actually do say yes
-  if (defined($liftRandoms) && $liftRandoms !~ m/^yes$/i) {
+  if (defined $liftRandoms && $liftRandoms !~ m/^yes$/i) {
 	undef $liftRandoms;
   }
-  if (defined($geneScaffolds) && $geneScaffolds !~ m/^yes$/i) {
+  if (defined $geneScaffolds && $geneScaffolds !~ m/^yes$/i) {
 	undef $geneScaffolds;
   }
-  if (defined($knownToEnsembl) && $knownToEnsembl !~ m/^yes$/i) {
+  if (defined $knownToEnsembl && $knownToEnsembl !~ m/^yes$/i) {
 	undef $knownToEnsembl;
+  }
+  if (defined $skipInvalid && $skipInvalid !~ m/^yes$/i) {
+	undef $skipInvalid;
   }
 
   # Make sure no unrecognized variables were given.
@@ -424,6 +457,24 @@ sub parseConfig {
 &checkOptions();
 &usage(1) if (scalar(@ARGV) != 1);
 
+if (!defined $ENV{'USER'}) {
+    print STDERR "ERROR: your shell environment does not define a USER";
+    print STDERR "The USER identity is required for history";
+    exit 255;
+}
+
+if (!defined $opt_ensVersion) {
+    print STDERR "ERROR: must specify -ensVersion=NN on command line\n";
+    &usage(1);
+}
+
+$ensVersion = $opt_ensVersion;
+
+if ($versionListString !~ m/$ensVersion/) {
+    print STDERR "ERROR: do not recognize given -ensVersion=$ensVersion\n";
+    die "must be one of: $versionListString\n";
+}
+
 ($CONFIG) = @ARGV;
 &parseConfig($CONFIG);
 $bedDir = "$topDir/$HgAutomate::trackBuild";
@@ -436,10 +487,13 @@ $opt_verbose = 3 if ($opt_verbose < 3);
 $buildDir = $opt_buildDir ? $opt_buildDir :
   "$HgAutomate::clusterData/$db/$HgAutomate::trackBuild/ensGene.$ensVersion";
 
+
 ($ensGtfUrl, $ensPepUrl, $ensMySqlUrl) =
 	&EnsGeneAutomate::ensGeneVersioning($db, $ensVersion );
-die "ERROR: download: can not find Ensembl FTP URL for UCSC database $db"
-	if (!defined($ensGtfUrl));
+
+die "ERROR: download: can not find Ensembl version $ensVersion FTP URL for UCSC database $db"
+    if (!defined $ensGtfUrl);
+
 $ensGtfFile = basename($ensGtfUrl);
 $ensPepFile = basename($ensPepUrl);
 &HgAutomate::verbose(2,"Ensembl GTF URL: $ensGtfUrl\n");
