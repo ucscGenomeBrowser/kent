@@ -7,7 +7,7 @@
 #include "maf.h"
 #include "qaSeq.h"
 
-static char const rcsid[] = "$Id: reTraceFixMaf.c,v 1.1 2008/02/26 19:02:33 aamp Exp $";
+static char const rcsid[] = "$Id: reTraceFixMaf.c,v 1.2 2008/02/26 19:02:38 aamp Exp $";
 
 void usage()
 /* Explain usage and exit. */
