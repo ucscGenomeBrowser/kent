@@ -118,7 +118,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1440 2008/02/27 22:32:06 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1441 2008/02/27 23:25:32 fanhsu Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -8618,6 +8618,11 @@ color1 = hvGfxFindColorIx(hvg, 12, 12, 120);
 color1 = lighterColor(hvg, color1);
 color1 = lighterColor(hvg, color1);
 color2 = lighterColor(hvg, color1);
+
+if (!hIsGsidServer())
+    {
+    errAbort("Function spreadAlignStringProt() called.  It is not supported on non-GSID server.");
+    }
 
 cBuf[1] = '\0';
 
