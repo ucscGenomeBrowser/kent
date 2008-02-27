@@ -118,7 +118,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1439 2008/02/26 05:44:47 markd Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1440 2008/02/27 22:32:06 fanhsu Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -14365,8 +14365,12 @@ if (!hideControls)
     hPrintf(" ");
     hButton("hgTracksConfigPage", "configure");
     hPrintf(" ");
-    hButton("hgt.toggleRevCmplDisp", "reverse");
-    hPrintf(" ");
+
+    if (!hIsGsidServer())
+	{
+        hButton("hgt.toggleRevCmplDisp", "reverse");
+        hPrintf(" ");
+	}
     hButton("submit", "refresh");
 
     hPrintf("<BR>\n");
@@ -14809,7 +14813,10 @@ withCenterLabels = cartUsualBoolean(cart, "centerLabels", TRUE);
 withGuidelines = cartUsualBoolean(cart, "guidelines", TRUE);
 withNextItemArrows = cartUsualBoolean(cart, "nextItemArrows", FALSE);
 withNextExonArrows = cartUsualBoolean(cart, "nextExonArrows", FALSE);
-revCmplDisp = cartUsualBooleanDb(cart, database, REV_CMPL_DISP, FALSE);
+if (!hIsGsidServer())
+    {
+    revCmplDisp = cartUsualBooleanDb(cart, database, REV_CMPL_DISP, FALSE);
+    }
 withPriorityOverride = cartUsualBoolean(cart, configPriorityOverride, FALSE);
 insideX = trackOffsetX();
 insideWidth = tl.picWidth-gfxBorder-insideX;
