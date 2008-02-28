@@ -1876,19 +1876,20 @@ type bed 4 .
 
  
 track divMKAR
-shortLabel McDonald-Kreitman AR 4
+shortLabel Recent Selection NC
 longLabel Recent selection in human non-coding regions using a McDonald-Kreitman test
 compositeTrack on
-group x
-priority 205
+group varRep
+priority 147
 visibility hide
+yLineOnOff Off
 subGroup1 specRec Species_reckoned_with ch=chimp rh=rhesus
 type wig
 
     track divChimpRpd
     subTrack divMKAR
-    shortLabel r_pd
-    longLabel log2 (r_pd) chimp
+    shortLabel log2 r_pd
+    longLabel log2 (r_pd) divergence from chimp
     subGroups specRec=ch
     color 200,100,0
     altcolor 0,0,250
@@ -1896,23 +1897,28 @@ type wig
 
     track divChimpFet
     subTrack divMKAR
-    shortLabel p-value
-    longLabel -log10 (p-value) chimp
+    shortLabel -log10 p-value
+    longLabel -log10 (p-value) divergence from chimp
     subGroups specRec=ch
     priority 2
 
     track divChimpFdr
     subTrack divMKAR
-    shortLabel FDR
-    longLabel -log10 (FDR) chimp
+    shortLabel -log10 FDR
+    longLabel -log10 (FDR) divergence from chimp
     subGroups specRec=ch
+    noInherit on
+    type wig
+    yLineOnOff On
+    yLineMark 1.0
+    maxHeightPixels 128:64:11
     color 25,150,25
     priority 3
 
     track divRhesusRpd
     subTrack divMKAR
-    shortLabel r_pd
-    longLabel log2 (r_pd) rhesus
+    shortLabel log2 r_pd
+    longLabel log2 (r_pd) divergence from rhesus
     subGroups specRec=rh
     color 200,100,0
     altcolor 0,0,250
@@ -1920,191 +1926,23 @@ type wig
 
     track divRhesusFet
     subTrack divMKAR
-    shortLabel p-value
-    longLabel -log10 (p-value) rhesus
+    shortLabel -log10 p-value
+    longLabel -log10 (p-value) divergence from rhesus
     subGroups specRec=rh
     priority 5
 
     track divRhesusFdr
     subTrack divMKAR
-    shortLabel FDR
-    longLabel -log10 (FDR) rhesus
+    shortLabel -log10 FDR
+    longLabel -log10 (FDR) divergence from rhesus
     subGroups specRec=rh
+    noInherit on
+    type wig
+    yLineOnOff On
+    yLineMark 1.0
+    maxHeightPixels 128:64:11
     color 25,150,25
     priority 6
-
-
-track divMMK
-shortLabel McDonald-Kreitman AR
-longLabel Recent selection in human non-coding regions using a McDonald-Kreitman test
-compositeTrack on
-group x
-priority 205
-visibility hide
-subGroup1 specRec Species_reckoned_with ch=chimp rh=rhesus
-type wig
-
-    track divChimpMaskPVal
-    subTrack divMMK
-    shortLabel -log(p-value) chimp old
-    longLabel Negative log of p-value, chi-square test, chimp divergence old
-    subGroups specRec=ch
-    priority 7
-
-    track divChimpMaskNI
-    subTrack divMMK
-    shortLabel NI chimp old
-    longLabel Neutrality index, chimp divergence  old
-    subGroups specRec=ch
-    color 0,0,250
-    priority 8
-
-    track divChimpMaskCorrQVal
-    subTrack divMMK
-    shortLabel -log(FDR) chimp old
-    longLabel Negative log of the false discovery rate, chimp divergence  old
-    subGroups specRec=ch
-    color 25,150,25
-    priority 9
-
-    track divRhesusMaskPVal
-    subTrack divMMK
-    shortLabel -log(p-value) rhesus old
-    longLabel Negative log of p-value, chi-square test, rhesus divergence old
-    subGroups specRec=rh
-    priority 10
-
-    track divRhesusMaskNI
-    subTrack divMMK
-    shortLabel NI rhesus old
-    longLabel Neutrality index, rhesus divergence old
-    subGroups specRec=rh
-    color 0,0,250
-    priority 11
-
-    track divRhesusMaskCorrQVal
-    subTrack divMMK
-    shortLabel -log(FDR) rhesus old
-    longLabel Negative log of the false discovery rate, rhesus divergence old
-    subGroups specRec=rh
-    color 25,150,25
-    priority 12
-
-    track mkarChimpPVal
-    subTrack divMMK
-    shortLabel -log(p-value) chimp
-    longLabel Negative log of p-value, Fisher's Exact, chimp divergence
-    subGroups specRec=ch
-    priority 1
-
-    track mkarChimpNI
-    subTrack divMMK
-    shortLabel NI chimp
-    longLabel Neutrality index, chimp divergence
-    subGroups specRec=ch
-    color 0,0,250
-    priority 2
-
-    track mkarChimpCorr
-    subTrack divMMK
-    shortLabel -log(FDR) chimp
-    longLabel Negative log of the false discovery rate, chimp divergence
-    subGroups specRec=ch
-    color 25,150,25
-    priority 3
-
-    track mkarRhesusPVal
-    subTrack divMMK
-    shortLabel -log(p-value) rhesus
-    longLabel Negative log of p-value, Fisher's Exact, rhesus divergence
-    subGroups specRec=rh
-    priority 4
-
-    track mkarRhesusNI
-    subTrack divMMK
-    shortLabel NI rhesus
-    longLabel Neutrality index, rhesus divergence
-    subGroups specRec=rh
-    color 0,0,250
-    priority 5
-
-    track mkarRhesusCorr
-    subTrack divMMK
-    shortLabel -log(FDR) rhesus
-    longLabel Negative log of the false discovery rate, rhesus divergence
-    subGroups specRec=rh
-    color 25,150,25
-    priority 6
-
-track mkar2
-shortLabel McDonald-Kreitman AR 3
-longLabel Recent selection in human non-coding regions using a McDonald-Kreitman test
-compositeTrack on
-group x
-priority 206
-visibility hide
-subGroup1 specRec Species_reckoned_with ch=chimp rh=rhesus
-type wig
-
-    track divdbChimpNI
-    subTrack mkar2
-    shortLabel NI chimp
-    longLabel Neutrality index, chimp divergence, dbSNP
-    color 0,0,250
-    subGroups specRec=ch
-    priority 1
-
-    track divdbChimpPVal
-    subTrack mkar2
-    shortLabel -log(p-value) chimp
-    longLabel Negative log of p-value, chi-square test, chimp divergence, dbSNP
-    subGroups specRec=ch
-    priority 2
-
-    track divhapChimpNI
-    subTrack mkar2
-    shortLabel NI chimp
-    longLabel Neutrality index, chimp divergence, HapMap
-    subGroups specRec=ch
-    color 0,0,250
-    priority 3
-
-    track divhapChimpPVal
-    subTrack mkar2
-    shortLabel -log(p-value) chimp
-    longLabel Negative log of p-value, chi-square test, chimp divergence, HapMap
-    subGroups specRec=ch
-    priority 4
-
-    track divdbRhesusNI
-    subTrack mkar2
-    shortLabel NI rhesus
-    longLabel Neutrality index, rhesus divergence, dbSNP
-    color 0,0,250
-    subGroups specRec=rh
-    priority 5
-
-    track divdbRhesusPVal
-    subTrack mkar2
-    shortLabel -log(p-value) rhesus
-    longLabel Negative log of p-value, chi-square test, rhesus divergence, dbSNP
-    subGroups specRec=rh
-    priority 6
-
-    track divhapRhesusNI
-    subTrack mkar2
-    shortLabel NI rhesus
-    longLabel Neutrality index, rhesus divergence, HapMap
-    color 0,0,250
-    subGroups specRec=rh
-    priority 7
-
-    track divhapRhesusPVal
-    subTrack mkar2
-    shortLabel -log(p-value) rhesus
-    longLabel Negative log of p-value, chi-square test, rhesus divergence, HapMap
-    subGroups specRec=rh
-    priority 8
 
 
 track vsigMaf
@@ -2583,6 +2421,14 @@ type bed 6 .
     longLabel Omicia OMIM Hand-Curation, Early Access R1, May 2007
     priority 2
 
+track variome
+shortLabel Variome
+longLabel Human Variome Microattribution
+visibility pack
+group varRep
+priority 146.4
+exonArrows off
+type bed 8 +
 
 searchName affy6SV
 searchTable snpArrayAffy6SV
