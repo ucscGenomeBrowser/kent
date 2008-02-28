@@ -12,7 +12,7 @@
 #include "liftUp.h"
 #include "chainNet.h"
 
-static char const rcsid[] = "$Id: netClass.c,v 1.20 2007/03/02 17:12:12 kent Exp $";
+static char const rcsid[] = "$Id: netClass.c,v 1.21 2008/02/28 17:22:43 hiram Exp $";
 
 /* Command line switches. */
 char *tNewR = NULL;
@@ -45,6 +45,8 @@ errAbort(
   "netClass - Add classification info to net\n"
   "usage:\n"
   "   netClass [options] in.net tDb qDb out.net\n"
+  "       tDb - database to fetch target repeat masker table information\n"
+  "       qDb - database to fetch query repeat masker table information\n"
   "options:\n"
   "   -tNewR=dir - Dir of chrN.out.spec files, with RepeatMasker .out format\n"
   "                lines describing lineage specific repeats in target\n"
