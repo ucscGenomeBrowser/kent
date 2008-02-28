@@ -77,7 +77,7 @@ proc hasColumn {db tbl col} {
 }
 
 proc prLog {logFh msg} {
-    puts $logFh "[clock format [clock seconds]] $msg"
+    puts $logFh "[clock format [clock seconds] -format %Y-%m-%dT%T] $msg"
 }
 
 proc doModify {logFh dbFile} {
