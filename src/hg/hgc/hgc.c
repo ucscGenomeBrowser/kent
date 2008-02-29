@@ -214,7 +214,7 @@
 #include "itemConf.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1390 2008/02/20 00:42:29 markd Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1391 2008/02/29 00:11:09 hiram Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -7433,11 +7433,39 @@ int start = cartInt(cart, "o");
 struct sqlConnection *conn = hAllocConn();
 char condStr[256];
 char geneCheck[256];
+char ensVersionString[256];
+char headerTitle[512];
+
+/* see if hgFixed.trackVersion exists */
+boolean trackVersionExists = hTableExistsDb("hgFixed", "trackVersion");
+
+if (trackVersionExists)
+    {
+    char query[256];
+    safef(query, sizeof(query), "select version from hgFixed.trackVersion where db = '%s' order by updateTime DESC limit 1", database);
+    struct sqlResult *sr = sqlGetResult(conn, query);
+    char **row;
+
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+	safef(ensVersionString, sizeof(ensVersionString), "version %s",
+		row[0]);
+	}
+    sqlFreeResult(&sr);
+    }
+else
+    ensVersionString[0] = 0;
+
 
 if (itemForUrl == NULL)
     itemForUrl = item;
 dupe = cloneString(tdb->type);
-genericHeader(tdb, item);
+if (ensVersionString[0])
+    safef(headerTitle, sizeof(headerTitle), "%s - %s", item, ensVersionString);
+else
+    safef(headerTitle, sizeof(headerTitle), "%s", item);
+
+genericHeader(tdb, headerTitle);
 wordCount = chopLine(dupe, words);
 printEnsemblCustomUrl(tdb, itemForUrl, item == itemForUrl);
 sprintf(condStr, "name='%s'", item);
