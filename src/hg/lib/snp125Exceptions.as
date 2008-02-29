@@ -1,5 +1,5 @@
 table snp125Exceptions
-"Annotations for snp125 data"
+"Annotations on data from dbSNP (for version 125 and later)."
     (
     string  chrom;      "Reference sequence chromosome or scaffold"
     uint    chromStart; "Start position in chrom"
