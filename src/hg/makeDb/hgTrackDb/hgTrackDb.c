@@ -11,7 +11,7 @@
 #include "portable.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgTrackDb.c,v 1.34 2007/10/11 01:14:50 galt Exp $";
+static char const rcsid[] = "$Id: hgTrackDb.c,v 1.35 2008/02/29 23:32:08 jzhu Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -35,6 +35,7 @@ errAbort(
   "  -priority=priority.ra - A ra file used to override the priority settings\n"
   "  -hideFirst - Before applying vis.ra, set all visibilities to hide.\n"
   "  -strict - only include tables that exist (and complain about missing html files).\n"
+  "  -local - connect to local host, instead of default host, using localDb.XXX variables defined in .hg.conf.\n"
   "  -raName=trackDb.ra - Specify a file name to use other than trackDb.ra\n"
   "   for the ra files.\n" 
   "  -release=alpha|beta - Include trackDb entries with this release only.\n"
@@ -46,12 +47,14 @@ static struct optionSpec optionSpecs[] = {
     {"priority", OPTION_STRING},
     {"raName", OPTION_STRING},
     {"strict", OPTION_BOOLEAN},
+    {"local", OPTION_BOOLEAN},
     {"hideFirst", OPTION_BOOLEAN},
     {"release", OPTION_STRING},
 };
 
 static char *raName = "trackDb.ra";
 static char *release = "alpha";
+boolean localDb=FALSE;
 
 void addVersion(boolean strict, char *database, char *dirName, char *raName, 
     struct hash *uniqHash,
@@ -436,7 +439,11 @@ printf("Loaded %d track descriptions total\n", slCount(tdList));
     {
     char *create, *end;
     char query[256];
-    struct sqlConnection *conn = sqlConnect(database);
+    struct sqlConnection *conn = NULL;
+    if (!localDb)
+	conn = sqlConnect(database);
+    else
+	conn = hConnectLocalDb(database);
 
     /* Load in table definition. */
     readInGulp(sqlFile, &create, NULL);
@@ -488,6 +495,7 @@ if (argc != 6)
     usage();
 raName = optionVal("raName", raName);
 release = optionVal("release", release);
+localDb = optionExists("local");
 
 hgTrackDb(argv[1], argv[2], argv[3], argv[4], argv[5],
           optionVal("visibility", NULL), optionVal("priority", NULL), 
