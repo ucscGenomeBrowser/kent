@@ -128,7 +128,6 @@ for (i=offset; i <= lastCodon; i += 3)
 *pep = 0;
 assert(actualSize <= inSize/3+1);
 seq->size = actualSize;
-//seq->name = cloneString(inSeq->name);
 return seq;
 }
 /* read a list of single words from a file */
@@ -245,14 +244,10 @@ for(ali = aliAll; ali; ali = nextAli)
     char *masterSrc = ali->components->src;
     struct mafAli *subAli = NULL;
 
-    //printf("ali\n");
-    //mafWrite(stdout, ali);
     if (mafNeedSubset(ali, masterSrc, frame->chromStart, frame->chromEnd))
 	{
-	//printf("subAli\n");
 	subAli = mafSubset( ali, masterSrc, 
 	    frame->chromStart, frame->chromEnd);
-	//mafWrite(stdout, subAli);
 	if (subAli == NULL)
 	    continue;
 	}
@@ -271,7 +266,6 @@ int size = 0;
 for(ali = list; ali; ali = ali->next)
     {
     size += ali->components->size;
-    //printf("size %d compSize %d\n",size,ali->components->size);
     }
 assert(size == frame->chromEnd - frame->chromStart);
 
@@ -368,19 +362,21 @@ for(gi = giList; gi; gi = gi->next, exonNum++)
 
 	switch(startFrame->frame)
 	    {
-	    case 0:
+	    case 0: /* just copy the sequence over */
 		memcpy(ptr, 
 		    &siTemp->nucSequence[gi->exonStart], gi->exonSize);
 		ptr += gi->exonSize;
 		break;
-	    case 1:
+	    case 1: /* we need to grab one nuc from the end 
+	             * of the previous exon */
 		*ptr++ = siTemp->nucSequence[gi->exonStart - 1];
 		memcpy(ptr, 
 		    &siTemp->nucSequence[gi->exonStart], gi->exonSize);
 		ptr += gi->exonSize;
 		break;
 
-	    case 2:
+	    case 2: /* we need to delete the first nuc from this exon
+	             * because we included it on the last exon */
 		memcpy(ptr, 
 		    &siTemp->nucSequence[gi->exonStart+1], gi->exonSize - 1);
 		ptr += gi->exonSize - 1;
@@ -388,11 +384,12 @@ for(gi = giList; gi; gi = gi->next, exonNum++)
 	    }
 
 	int lastFrame = (startFrame->frame + gi->exonSize) % 3;
-	if (lastFrame == 1)
+	if (lastFrame == 1) /* delete the last nucleotide */
 	    --ptr;
-	else if (lastFrame == 2)
+	else if (lastFrame == 2) /* add one more nucleotide from
+	                          * the next exon */
 	    *ptr++ = siTemp->nucSequence[gi->exonStart + gi->exonSize];
-	*ptr++ = 0;
+	*ptr++ = 0;   /* null terminate */
 
 	thisSeq.dna = exonBuffer;
 	thisSeq.size = ptr - exonBuffer;
@@ -580,8 +577,6 @@ int copyAli(struct hash *siHash, struct mafAli *ali, int start)
 struct mafComp *comp = ali->components;
 int jj;
 
-//printf("start %d\n",start);
-//mafWrite(stdout, ali);
 for(; comp; comp = comp->next)
     {
     char *ptr = strchr(comp->src, '.');
@@ -623,7 +618,6 @@ for(jj = 0 ; jj < ali->textSize; jj++)
     if (*mptr++ != '-')
 	count++;
 
-//printf("count %d\n",count);
 return start + count;
 
 }
@@ -647,7 +641,6 @@ for(; gi; gi = gi->next)
 	thisSize += newStart - start;
 	start = newStart;
 	}
-    //printf("thisSize %d\n",thisSize);
     }
 
 boolean frameNeg = ((*giList)->frame->strand[0] == '-');
