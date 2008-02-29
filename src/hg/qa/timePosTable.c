@@ -7,6 +7,8 @@
 #include "obscure.h"
 #include "portable.h"
 
+static char const rcsid[] = "$Id: timePosTable.c,v 1.2 2008/02/29 16:43:30 markd Exp $";
+
 static void usage()
 /* Explain usage and exit. */
 {
@@ -21,12 +23,13 @@ errAbort(
     "   -minSize=10000 - minimum base range\n"
     "   -maxSize=1000000 - maximum base range\n"
     "   -sizeMult=10 - amount to multiply size by for each pass\n"
+    "   -iter=2 - number of iterations\n"
     "\n"
     "Read ranges across the specified chromsome(s) using hRangeQuery.\n"
     "Starting with ranges of min size, reading random, not overlapping\n"
     "ranges until all chromsome are covered.  Then increase size by sizeMult\n"
     "and repeat until maxSize is exceeded.  Tables are flushed between each\n"
-    "pass.\n");
+    "pass.  This is repeated for each interation.\n");
 }
 
 static struct optionSpec options[] = {
@@ -34,6 +37,7 @@ static struct optionSpec options[] = {
    {"minSize", OPTION_INT},
    {"maxSize", OPTION_INT},
    {"sizeMult", OPTION_INT},
+   {"iter", OPTION_INT},
    {NULL, 0}
 };
 
@@ -145,21 +149,30 @@ sqlUpdate(conn, "flush tables");
 return elapsed;
 }
 
-static void timePosTable(char *db, char *table, int minSize, int maxSize,
-                         int sizeMult,  struct chromSize *chroms)
-/* time access to a positional table. */
+static void timePosTableIter(char *db, char *table, int minSize, int maxSize,
+                             int sizeMult,  int iter, struct chromSize *chroms)
+/* run one iteration of test */
 {
-printf("time %s.%s sizes %d to %d, grow by *%d, %d chroms\n", db, table,
-       minSize, maxSize, sizeMult, slCount(chroms));
 struct sqlConnection *conn = sqlConnect(db);
 double totalTime = 0.0;
 int sz;
 int passCnt = 0;
 for (sz = minSize; sz <= maxSize; sz *= sizeMult, passCnt++)
     totalTime += timePass(conn, table, sz, chroms);
-printf("total: passes: %d, time: %g seconds\n", passCnt,
+printf("total: iteration: %d passes: %d, time: %g seconds\n", iter, passCnt,
        totalTime);
 sqlDisconnect(&conn);
+}
+
+static void timePosTable(char *db, char *table, int minSize, int maxSize,
+                         int sizeMult,  int iterations, struct chromSize *chroms)
+/* time access to a positional table. */
+{
+printf("time: %s.%s iterations: %d  sizes: %d to %d, grow  by: *%d, chroms: %d\n",
+       db, table, iterations, minSize, maxSize, sizeMult, slCount(chroms));
+int iter;
+for (iter = 0; iter < iterations; iter++)
+    timePosTableIter(db, table, minSize, maxSize, sizeMult, iter, chroms);
 }
 
 static struct chromSize *getLongestChrom(char *db)
@@ -232,6 +245,7 @@ timePosTable(db, table,
              optionInt("minSize", 10000),
              optionInt("maxSize", 1000000),
              optionInt("sizeMult", 10),
+             optionInt("inter", 2),
              getChroms(db));
 return 0;
 }
