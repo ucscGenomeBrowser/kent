@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "net.h"
 
-static char const rcsid[] = "$Id: ctd.c,v 1.4 2008/02/22 16:58:06 fanhsu Exp $";
+static char const rcsid[] = "$Id: ctd.c,v 1.5 2008/02/29 00:59:29 fanhsu Exp $";
 
 static boolean ctdExists(struct section *section, 
 	struct sqlConnection *conn, char *geneId)
@@ -18,6 +18,8 @@ static boolean ctdExists(struct section *section,
 {
 char condStr[255];
 char *geneSymbol;
+if (sqlTableExists(conn, "kgXref") == FALSE) return FALSE;
+
 if (sqlTableExists(conn, "ctd.chem_gene_ixns") == TRUE)
     {
     safef(condStr, sizeof(condStr), "x.geneSymbol=c.GeneSymbol and kgId='%s' limit 1", geneId);
