@@ -7,7 +7,7 @@
 #include "genePred.h"
 #include "sqlList.h"
 
-static char const rcsid[] = "$Id: liftAcross.c,v 1.7 2008/02/22 19:46:09 hiram Exp $";
+static char const rcsid[] = "$Id: liftAcross.c,v 1.8 2008/02/29 20:28:35 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -244,8 +244,8 @@ if (ls)
 	}
     else
 	{
-	result->start = ls->end - 1 - end + ls->dstStart;
-	result->end = ls->end - 1 - start + ls->dstStart;
+	result->start = ls->end - end + ls->dstStart;
+	result->end = ls->end - start + ls->dstStart;
 	}
     verbose(3,"#\t%s:%d-%d -> %s:%d-%d %c\n", srcName, start, end,
 	result->name, result->start, result->end, result->strand);
