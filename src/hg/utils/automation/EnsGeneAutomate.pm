@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/EnsGeneAutomate.pm instead.
 
-# $Id: EnsGeneAutomate.pm,v 1.4 2008/02/11 23:07:11 hiram Exp $
+# $Id: EnsGeneAutomate.pm,v 1.5 2008/02/29 23:24:37 hiram Exp $
 package EnsGeneAutomate;
 
 use warnings;
@@ -259,6 +259,7 @@ my %ensGeneFtpMySqlFileNames_48 = (
 'oryLat1' => 'oryzias_latipes_core_48_1d',
 'otoGar1' => 'otolemur_garnettii_core_48_1b',
 'panTro2' => 'pan_troglodytes_core_48_21g',
+'rn4' => 'rattus_norvegicus_core_48_34r',
 'sacCer1' => 'rattus_norvegicus_core_48_34r',
 'sorAra0' => 'saccharomyces_cerevisiae_core_48_1h',
 '' => 'sorex_araneus_core_48_1b',
