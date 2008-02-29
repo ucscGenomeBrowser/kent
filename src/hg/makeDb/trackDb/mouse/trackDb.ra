@@ -93,15 +93,6 @@ visibility dense
 color 12,12,120
 type genePred xenoRefPep xenoRefMrna
 
-track ensGene
-shortLabel Ensembl Genes
-longLabel Ensembl Gene Predictions
-group genes
-priority 40
-visibility dense
-color 150,0,0
-type genePred ensPep
-
 track acembly
 shortLabel AceView Genes
 longLabel AceView Gene Models With Alt-Splicing
