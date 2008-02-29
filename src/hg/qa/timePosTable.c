@@ -7,7 +7,7 @@
 #include "obscure.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: timePosTable.c,v 1.2 2008/02/29 16:43:30 markd Exp $";
+static char const rcsid[] = "$Id: timePosTable.c,v 1.3 2008/02/29 18:57:38 markd Exp $";
 
 static void usage()
 /* Explain usage and exit. */
@@ -131,8 +131,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 }
 
-static double timePass(struct sqlConnection *conn, char *table, int size,
-                       struct chromSize *chroms)
+static double timePass(int pass, struct sqlConnection *conn, char *table,
+                       int size, struct chromSize *chroms)
 /* one time pass for the given size */
 {
 struct chromRange *ranges = buildRanges(size, chroms);
@@ -142,7 +142,7 @@ for (range = ranges; range != NULL; range = range->next)
     queryRange(conn, table, range);
 
 double elapsed = ((double)(clock1000()-startTime))/1000.0;
-printf("range size: %d ranges: %d time: %g seconds\n", size,
+printf("pass: %d  range size: %d  ranges: %d  time: %g seconds\n", pass, size,
        slCount(ranges), elapsed);
 slFreeList(&ranges);
 sqlUpdate(conn, "flush tables");
@@ -156,10 +156,10 @@ static void timePosTableIter(char *db, char *table, int minSize, int maxSize,
 struct sqlConnection *conn = sqlConnect(db);
 double totalTime = 0.0;
 int sz;
-int passCnt = 0;
-for (sz = minSize; sz <= maxSize; sz *= sizeMult, passCnt++)
-    totalTime += timePass(conn, table, sz, chroms);
-printf("total: iteration: %d passes: %d, time: %g seconds\n", iter, passCnt,
+int pass = 0;
+for (sz = minSize; sz <= maxSize; sz *= sizeMult, pass++)
+    totalTime += timePass(pass, conn, table, sz, chroms);
+printf("iteration: %d  passes: %d  time: %g seconds\n", iter, pass,
        totalTime);
 sqlDisconnect(&conn);
 }
@@ -168,7 +168,7 @@ static void timePosTable(char *db, char *table, int minSize, int maxSize,
                          int sizeMult,  int iterations, struct chromSize *chroms)
 /* time access to a positional table. */
 {
-printf("time: %s.%s iterations: %d  sizes: %d to %d, grow  by: *%d, chroms: %d\n",
+printf("timing %s.%s iterations: %d  sizes: %d to %d  grow by: *%d  chroms: %d\n",
        db, table, iterations, minSize, maxSize, sizeMult, slCount(chroms));
 int iter;
 for (iter = 0; iter < iterations; iter++)
@@ -245,7 +245,7 @@ timePosTable(db, table,
              optionInt("minSize", 10000),
              optionInt("maxSize", 1000000),
              optionInt("sizeMult", 10),
-             optionInt("inter", 2),
+             optionInt("iter", 2),
              getChroms(db));
 return 0;
 }
