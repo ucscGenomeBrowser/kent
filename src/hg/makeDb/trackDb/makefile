@@ -2,6 +2,10 @@
 #	make update
 # Make it for genome-test with
 #	make alpha
+# Make your private trackDb on local host (if defined as localDB.XXX=XXX in .hg.conf) with
+#	make updateLocal  
+# Make non-private trackDb on local host (if defined as localDB.XXX=XXX in .hg.conf) with
+#	make alphaLocal  
 
 # Browser supports multiple trackDb's so that individual developers
 # can change things rapidly without stepping on other people's toes. 
@@ -102,9 +106,16 @@ ARCHIVED_DBS = \
 update: #clean
 	./loadTracks trackDb_${USER} hgFindSpec_${USER} ${DBS}
 
+updateLocal: #clean
+	./loadTracks -local trackDb_${USER} hgFindSpec_${USER} ${DBS}
+
 alpha: clean
 	${CVS} -q up -d -P .
 	./loadTracks -release=alpha trackDb hgFindSpec ${DBS}
+
+alphaLocal: clean
+	${CVS} -q up -d -P .
+	./loadTracks -local -release=alpha trackDb hgFindSpec ${DBS}
 
 strict: clean
 	${CVS} -q up -d -P .
