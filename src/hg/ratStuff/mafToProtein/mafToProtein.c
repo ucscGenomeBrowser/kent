@@ -84,6 +84,7 @@ while (*seq)
 return TRUE;
 }
 
+
 /* translate a nuc sequence into amino acids. If there
  * are any dashes in any of the three nuc positions
  * make the AA a dash.
@@ -330,6 +331,15 @@ hFreeConn(&conn);
 return geneNameBuffer;
 }
 
+void maybePrintGeneName(char *name, FILE *f)
+{
+if (transUC)
+    {
+    char *geneName = getGeneName(name);
+    fprintf(f, " %s", geneName);
+    }
+}
+
 void outSpeciesExons(FILE *f, struct speciesInfo *si, struct exonInfo *giList)
 {
 int exonNum = 1;
@@ -396,27 +406,17 @@ for(gi = giList; gi; gi = gi->next, exonNum++)
 	outSeq =  doTranslate(&thisSeq, 0,  0, FALSE);
 	if (!allDashes(outSeq->dna))
 	    {
-	    if (transUC)
-		{
-		geneName = getGeneName(gi->name);
-		fprintf(f, ">%s_%s_%d_%d %d %d %d %s:%d-%d %c %s\n",
-		    gi->name, 
-		    siTemp->name, exonNum, exonCount, 
-		    outSeq->size,
-		    startFrame->frame, lastFrame,
-		    gi->frame->chrom,
-		    gi->chromStart+1, gi->chromEnd, startFrame->strand[0],
-		    geneName);
-		}
-	    else
-		fprintf(f, ">%s_%s_%d_%d %d %d %d %s:%d-%d %c\n",
-		    gi->name, 
-		    siTemp->name, exonNum, exonCount, 
-		    outSeq->size,
-		    startFrame->frame, lastFrame,
-		    gi->frame->chrom,
-		    gi->chromStart+1, gi->chromEnd, startFrame->strand[0]);
-	    fprintf(f, "%s\n",  outSeq->dna);
+	    fprintf(f, ">%s_%s_%d_%d %d %d %d %s:%d-%d %c",
+		gi->name, 
+		siTemp->name, exonNum, exonCount, 
+		outSeq->size,
+		startFrame->frame, lastFrame,
+		gi->frame->chrom,
+		gi->chromStart+1, gi->chromEnd, startFrame->strand[0]);
+
+	    maybePrintGeneName(gi->name, f);
+
+	    fprintf(f, "\n%s\n",  outSeq->dna);
 	    }
 	}
     fprintf(f, "\n");
@@ -454,24 +454,16 @@ for(gi = giList; gi; gi = gi->next, exonNum++)
 	    continue;
 
 	start = gi->exonStart;
-	if (transUC)
-	    {
-	    geneName = getGeneName(gi->name);
-	    fprintf(f, ">%s_%s_%d_%d %d %s:%d-%d %c %s\n",
-		gi->name, 
-		siTemp->name, exonNum, exonCount, 
-		gi->exonSize,
-		gi->frame->chrom,
-		gi->chromStart+1, gi->chromEnd, gi->frame->strand[0],
-		geneName);
-	    }
-	else
-	    fprintf(f, ">%s_%s_%d_%d %d %s:%d-%d %c\n",
-		gi->name, 
-		siTemp->name, exonNum, exonCount, 
-		gi->exonSize,
-		gi->frame->chrom,
-		gi->chromStart+1, gi->chromEnd, gi->frame->strand[0]);
+	fprintf(f, ">%s_%s_%d_%d %d %s:%d-%d %c",
+	    gi->name, 
+	    siTemp->name, exonNum, exonCount, 
+	    gi->exonSize,
+	    gi->frame->chrom,
+	    gi->chromStart+1, gi->chromEnd, gi->frame->strand[0]);
+
+	maybePrintGeneName(gi->name, f);
+
+	fprintf(f, "\n");
 	for (; start < end; start++)
 	    fprintf(f, "%c", *ptr++);
 	fprintf(f, "\n");
@@ -517,19 +509,12 @@ if (noTrans)
 	{
 	if (!allDashes(si->nucSequence))
 	    {
-	    if (transUC)
-		{
-		geneName = getGeneName(giList->name);
-		fprintf(f, ">%s_%s %d %s:%d-%d %c %s\n",
-		    giList->name, si->name, si->size,
-		    giList->frame->chrom, start, end, giList->frame->strand[0],
-		    geneName);
-		}
-	    else
-		fprintf(f, ">%s_%s %d %s:%d-%d %c\n",
-		    giList->name, si->name, si->size,
-		    giList->frame->chrom, start, end, giList->frame->strand[0]);
-	    fprintf(f, "%s\n", si->nucSequence);
+	    fprintf(f, ">%s_%s %d %s:%d-%d %c",
+		giList->name, si->name, si->size,
+		giList->frame->chrom, start, end, giList->frame->strand[0]);
+
+	    maybePrintGeneName(giList->name, f);
+	    fprintf(f, "\n%s\n", si->nucSequence);
 	    }
 	}
     }
@@ -540,22 +525,13 @@ else
 	translateProtein(si);
 	if (!allDashes(si->aaSequence))
 	    {
-	    if (transUC)
-		{
-		geneName = getGeneName(giList->name);
-		fprintf(f, ">%s_%s %d %s:%d-%d %c %s\n",
-		    giList->name, si->name, si->aaSize,
-		    giList->frame->chrom, start, end, giList->frame->strand[0],
-		    geneName);
-		}
-	    else
-		{
-		fprintf(f, ">%s_%s %d %s:%d-%d %c\n",
-		    giList->name, si->name, si->aaSize,
-		    giList->frame->chrom, start, end, giList->frame->strand[0]);
-		}
+	    fprintf(f, ">%s_%s %d %s:%d-%d %c",
+		giList->name, si->name, si->aaSize,
+		giList->frame->chrom, start, end, giList->frame->strand[0]);
 
-	    fprintf(f, "%s\n", si->aaSequence);
+	    maybePrintGeneName(giList->name, f);
+
+	    fprintf(f, "\n%s\n", si->aaSequence);
 	    }
 	}
     }
