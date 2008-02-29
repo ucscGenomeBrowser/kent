@@ -4,6 +4,7 @@ usage='loadTracks [options] trackDb hgFindSpec db0 ...
 options:
    -release=release
    -strict
+   -local
    -raName=trackDb.ra  - base name of ra file
    -grpSql=grp.sql - create a grp table using this sql file
 '
