@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/doEnsGeneUpdate.pl instead.
 
-# $Id: doEnsGeneUpdate.pl,v 1.7 2008/02/26 23:11:27 hiram Exp $
+# $Id: doEnsGeneUpdate.pl,v 1.8 2008/02/29 22:41:14 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -111,6 +111,13 @@ geneScaffolds yes
     to perform the translation
 skipInvalid yes
   - during the loading of the gene pred, skip all invalid genes
+haplotypeLift <path/to/file.lift>
+  - a lift-down file for Ensembl full chromosome haplotype coordinates
+  - to UCSC simple haplotype coordinates
+liftUp <path/to/ensGene.lft>
+  - after everything else is done, lift the final gene pred via this
+  - lift file.  Comes in handy if Ensembl chrom names are simply
+  - different than UCSC chrom names.  For example in bushbaby, otoGar1
 
 Assumptions:
 1. $HgAutomate::clusterData/\$db/\$db.2bit contains RepeatMasked sequence for
@@ -137,7 +144,8 @@ my ($ensVersion);
 # Required config parameters:
 my ($db);
 # Conditionally required config parameters:
-my ($liftRandoms, $nameTranslation, $geneScaffolds, $knownToEnsembl, $skipInvalid);
+my ($liftRandoms, $nameTranslation, $geneScaffolds, $knownToEnsembl,
+    $skipInvalid, $haplotypeLift, $liftUp);
 # Other globals:
 my ($topDir, $chromBased);
 my ($bedDir, $scriptDir, $endNotes);
@@ -178,8 +186,9 @@ sub doLoad {
 
   if (defined $geneScaffolds) {
       $bossScript->add(<<_EOF_
-hgLoadGenePred $skipInv -genePredExt $db ensGene process/$db.allGenes.gp.gz
-zcat process/ensemblGeneScaffolds.oryCun1.bed.gz >& loadGenePred.errors.txt \\
+hgLoadGenePred $skipInv -genePredExt $db ensGene process/$db.allGenes.gp.gz \\
+	>& loadGenePred.errors.txt
+zcat process/ensemblGeneScaffolds.$db.bed.gz \\
     | sed -e "s/GeneScaffold/GS/" | hgLoadBed $db ensemblGeneScaffold stdin
 _EOF_
       );
@@ -282,12 +291,19 @@ _EOF_
 _EOF_
   );
   }
+  # lift down haplotypes if necessary
+  if (defined $haplotypeLift) {
+      $bossScript->add(<<_EOF_
+	| liftUp -type=.gtf stdout $haplotypeLift carry stdin \\
+_EOF_
+      );
+  }
   #  lift randoms if necessary
   if ($lifting) {
-  $bossScript->add(<<_EOF_
+      $bossScript->add(<<_EOF_
 	| liftUp -type=.gtf stdout randoms.$db.lift carry stdin \\
 _EOF_
-  );
+      );
   }
   #  result is protein coding set
   $bossScript->add(<<_EOF_
@@ -308,6 +324,16 @@ $Bin/ensGeneScaffolds.pl ../download/seq_region.txt.gz \\
 liftAcross -warn -bedOut=ensemblGeneScaffolds.$db.bed $db.ensGene.lft.gz \\
 	$db.allGenes.beforeLift.gp.gz $db.allGenes.gp >& liftAcross.err.out
 gzip ensemblGeneScaffolds.$db.bed $db.allGenes.gp liftAcross.err.out
+_EOF_
+      );
+  }
+  if (defined $liftUp) {
+      $bossScript->add(<<_EOF_
+mv $db.allGenes.gp.gz $db.allGenes.beforeLiftUp.gp.gz
+liftUp -extGenePred -type=.gp $db.allGenes.gp \\
+    $liftUp carry \\
+    $db.allGenes.beforeLiftUp.gp.gz
+gzip $db.allGenes.gp
 _EOF_
       );
   }
@@ -422,6 +448,8 @@ sub parseConfig {
   $geneScaffolds = &optionalVar('geneScaffolds', \%config);
   $knownToEnsembl = &optionalVar('knownToEnsembl', \%config);
   $skipInvalid = &optionalVar('skipInvalid', \%config);
+  $haplotypeLift = &optionalVar('haplotypeLift', \%config);
+  $liftUp = &optionalVar('liftUp', \%config);
   #	verify they actually do say yes
   if (defined $liftRandoms && $liftRandoms !~ m/^yes$/i) {
 	undef $liftRandoms;
@@ -434,6 +462,18 @@ sub parseConfig {
   }
   if (defined $skipInvalid && $skipInvalid !~ m/^yes$/i) {
 	undef $skipInvalid;
+  }
+  if (defined $haplotypeLift) {
+    if (! -s $haplotypeLift) {
+        print STDERR "ERROR: config file specifies a haplotypeLift file:\n";
+	die "$haplotypeLift can not be found.\n";
+    }
+  }
+  if (defined $liftUp) {
+    if (! -s $liftUp) {
+        print STDERR "ERROR: config file specifies a liftUp file:\n";
+	die "$liftUp can not be found.\n";
+    }
   }
 
   # Make sure no unrecognized variables were given.
