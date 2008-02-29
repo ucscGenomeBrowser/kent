@@ -214,7 +214,7 @@
 #include "itemConf.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1391 2008/02/29 00:11:09 hiram Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1392 2008/02/29 22:56:39 hiram Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -7448,7 +7448,7 @@ if (trackVersionExists)
 
     while ((row = sqlNextRow(sr)) != NULL)
 	{
-	safef(ensVersionString, sizeof(ensVersionString), "version %s",
+	safef(ensVersionString, sizeof(ensVersionString), "Ensembl %s",
 		row[0]);
 	}
     sqlFreeResult(&sr);
