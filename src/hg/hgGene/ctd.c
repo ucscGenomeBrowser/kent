@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "net.h"
 
-static char const rcsid[] = "$Id: ctd.c,v 1.5 2008/02/29 00:59:29 fanhsu Exp $";
+static char const rcsid[] = "$Id: ctd.c,v 1.6 2008/02/29 18:15:43 fanhsu Exp $";
 
 static boolean ctdExists(struct section *section, 
 	struct sqlConnection *conn, char *geneId)
@@ -97,7 +97,7 @@ if (!first) printf("</UL>");
 if ((!showCompleteCtdList) && chemCnt > 10)
     {
     printf("<B>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; more ...  </B>");
-    printf("<A HREF=\"%s?showAllCtdRef=Y&TITLE=#ctd&%s\">click here to view the complete list</A> " 
+    printf("<A HREF=\"%s?showAllCtdRef=Y&%s&#35;ctd\">click here to view the complete list</A> " 
 	   ,"hgGene", currentCgiUrl->string);
     }
 
