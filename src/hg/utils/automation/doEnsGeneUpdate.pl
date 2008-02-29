@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/doEnsGeneUpdate.pl instead.
 
-# $Id: doEnsGeneUpdate.pl,v 1.8 2008/02/29 22:41:14 hiram Exp $
+# $Id: doEnsGeneUpdate.pl,v 1.9 2008/02/29 22:53:08 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -336,6 +336,16 @@ liftUp -extGenePred -type=.gp $db.allGenes.gp \\
 gzip $db.allGenes.gp
 _EOF_
       );
+      if (defined $geneScaffolds) {
+      $bossScript->add(<<_EOF_
+mv ensemblGeneScaffolds.$db.bed.gz ensemblGeneScaffolds.$db.beforeLiftUp.bed.gz
+liftUp -type=.bed ensemblGeneScaffolds.$db.bed \
+    $liftUp carry \
+    ensemblGeneScaffolds.$db.beforeLiftUp.bed.gz
+gzip ensemblGeneScaffolds.$db.bed
+_EOF_
+	  );
+      }
   }
   $bossScript->execute();
 } # doProcess
