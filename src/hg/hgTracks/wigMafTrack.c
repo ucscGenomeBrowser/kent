@@ -18,7 +18,7 @@
 #include "mafFrames.h"
 #include "phyloTree.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.126 2008/02/21 22:38:25 braney Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.127 2008/02/29 20:14:47 braney Exp $";
 
 #define GAP_ITEM_LABEL  "Gaps"
 #define MAX_SP_SIZE 2000
@@ -1265,6 +1265,16 @@ else
 #define ISSPACE(x)  ((x) == ' ') 
 #define ISGAPSPACEORN(x)  (ISSPACE(x) || ISGAP(x) || ISN(x))
 
+static AA lookupAndCheckCodon(char *codon)
+{
+AA retValue;
+
+if ((retValue = lookupCodon(codon)) == 0)
+    return '*';
+
+return retValue;
+}
+
 static void translateCodons(char *tableName, char *compName, DNA *dna, int start, int length, int frame, 
 				char strand,int prevEnd, int nextStart,
 				bool alreadyComplemented,
@@ -1349,8 +1359,7 @@ else if (frame && (prevEnd != -1))
 		fillBox = TRUE;
 		mult = 2;
 		*ptr++ = ' ';
-		*ptr++ = lookupCodon(codon);
-		if (ptr[-1] == 0) ptr[-1] = '*';
+		*ptr++ = lookupAndCheckCodon(codon);
 		}
 	    else
 		ptr+=2;
@@ -1377,8 +1386,7 @@ else if (frame && (prevEnd != -1))
 		codon[2] = *ptr;
 		fillBox = TRUE;
 		mult = 1;
-		*ptr++ = lookupCodon(codon);
-		if (ptr[-1] == 0) ptr[-1] = '*';
+		*ptr++ = lookupAndCheckCodon(codon);
 		}
 	    else
 		ptr++;
@@ -1403,8 +1411,7 @@ for (;length > 2; ptr +=3 , length -=3)
     {
     if (!(ISGAPSPACEORN(ptr[0]) || ISGAPSPACEORN(ptr[1]) || ISGAPSPACEORN(ptr[2]) ))
 	{
-	ptr[1] = lookupCodon(ptr);
-	if (ptr[1] == 0) ptr[1] = '*';
+	ptr[1] = lookupAndCheckCodon(ptr);
 	ptr[0] = ' ';
 	ptr[2] = ' ';
 
@@ -1459,8 +1466,7 @@ if (length && (nextStart != -1))
 		    {
 		    fillBox = TRUE;
 		    *ptr++ = ' ';
-		    *ptr++ = lookupCodon(codon);
-		    if (ptr[-1] == 0) ptr[-1] = '*';
+		    *ptr++ = lookupAndCheckCodon(codon);
 		    mult = 2;
 		    }
 		break;
@@ -1472,8 +1478,7 @@ if (length && (nextStart != -1))
 		codon[2] = comp->text[1];
 		if (!(ISGAPSPACEORN(codon[0]) ||ISGAPSPACEORN(codon[1]) ||ISGAPSPACEORN(codon[2])))
 		    {
-		    *ptr++ = lookupCodon(codon);
-		    if (ptr[-1] == 0) ptr[-1] = '*';
+		    *ptr++ = lookupAndCheckCodon(codon);
 		    fillBox = TRUE;
 		    }
 		break;
