@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/doEnsGeneUpdate.pl instead.
 
-# $Id: doEnsGeneUpdate.pl,v 1.9 2008/02/29 22:53:08 hiram Exp $
+# $Id: doEnsGeneUpdate.pl,v 1.10 2008/02/29 22:54:51 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -339,8 +339,8 @@ _EOF_
       if (defined $geneScaffolds) {
       $bossScript->add(<<_EOF_
 mv ensemblGeneScaffolds.$db.bed.gz ensemblGeneScaffolds.$db.beforeLiftUp.bed.gz
-liftUp -type=.bed ensemblGeneScaffolds.$db.bed \
-    $liftUp carry \
+liftUp -type=.bed ensemblGeneScaffolds.$db.bed \\
+    $liftUp carry \\
     ensemblGeneScaffolds.$db.beforeLiftUp.bed.gz
 gzip ensemblGeneScaffolds.$db.bed
 _EOF_
