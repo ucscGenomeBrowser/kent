@@ -45,7 +45,6 @@ install:
 	cp -p --remove-destination findBigFiles.csh        ${SCRIPTS}
 	cp -p --remove-destination findColumn.csh          ${SCRIPTS}
 	cp -p --remove-destination findLevel.csh           ${SCRIPTS}
-	cp -p --remove-destination findTableSize.csh       ${SCRIPTS}
 	cp -p --remove-destination gc-stats.pl             ${SCRIPTS}
 	cp -p --remove-destination genbankRun.csh          ${SCRIPTS}
 	cp -p --remove-destination generic_range_check.csh ${SCRIPTS} 
@@ -65,7 +64,7 @@ install:
 	cp -p --remove-destination getRRdumpfile.csh       ${SCRIPTS}
 	cp -p --remove-destination getRRtableStatus.csh    ${SCRIPTS}
 	cp -p --remove-destination getRRtables.csh         ${SCRIPTS}
-	cp -p --remove-destination getTablesize.csh        ${SCRIPTS}
+	cp -p --remove-destination getTableSize.csh        ${SCRIPTS}
 	cp -p --remove-destination getTableStatus.csh      ${SCRIPTS}
 	cp -p --remove-destination getTrackName.csh        ${SCRIPTS}
 	cp -p --remove-destination getSplit.csh            ${SCRIPTS}
