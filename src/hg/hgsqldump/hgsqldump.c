@@ -3,7 +3,7 @@
 #include "options.h"
 #include "sqlProg.h"
 
-static char const rcsid[] = "$Id: hgsqldump.c,v 1.6 2008/03/01 07:57:23 jzhu Exp $";
+static char const rcsid[] = "$Id: hgsqldump.c,v 1.7 2008/03/01 08:08:22 jzhu Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -22,9 +22,7 @@ errAbort(
   "Note: directory for results must be writable by mysql.  i.e. 'chmod 777 .'\n"
   "Which is a security risk, so remember to change permissions back after use.\n"
   "e.g.: hgsqldump --all -c --tab=. cb1"
-  "\n\n"
-  "Options:\n"
-  "  -local - connect to local host, instead of default host, using localDb.XXX variables defined in .hg.conf.\n"
+  "\n"
   );
 }
 
