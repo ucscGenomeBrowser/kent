@@ -11,7 +11,7 @@
 #include "hgRelate.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgLoadBed.c,v 1.53 2008/01/09 23:09:28 hiram Exp $";
+static char const rcsid[] = "$Id: hgLoadBed.c,v 1.54 2008/03/01 00:21:51 jzhu Exp $";
 
 /* Command line switches. */
 boolean noSort = FALSE;		/* don't sort */
@@ -25,12 +25,13 @@ boolean notItemRgb = FALSE;	/* do NOT parse field nine as r,g,b */
 boolean noStrict = FALSE;	/* skip the coord sanity checks */
 int bedGraph = 0;		/* bedGraph column option, non-zero means yes */
 char *sqlTable = NULL;		/* Read table from this .sql if non-NULL. */
-int maxChromNameLength = 0;		/* specify to avoid chromInfo */
-char *tmpDir = (char *)NULL;	/*	location to create a temporary file */
-boolean nameIx = TRUE;	/*	FALSE == do not create the name index */
+int maxChromNameLength = 0;	/* specify to avoid chromInfo */
+char *tmpDir = (char *)NULL;	/* location to create a temporary file */
+boolean nameIx = TRUE;	        /* FALSE == do not create the name index */
 boolean ignoreEmpty = FALSE;	/* TRUE == empty input files are not an error */
 boolean allowNegativeScores = FALSE;	/* TRUE == score column set to int */
 boolean customTrackLoader = FALSE; /*TRUE == turn on all custom track options*/
+boolean localDb = FALSE;        /* Connect to local host, instead of default host, using localDb.XXX variables defined in .hg.conf.\n"*/ 
 /* turns on: noNameIx, ignoreEmpty, allowNegativeScores
 	-verbose=0 */
 
@@ -55,6 +56,7 @@ static struct optionSpec optionSpecs[] = {
     {"ignoreEmpty", OPTION_BOOLEAN},
     {"allowNegativeScores", OPTION_BOOLEAN},
     {"customTrackLoader", OPTION_BOOLEAN},
+    {"local", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
@@ -89,7 +91,8 @@ errAbort(
   "   -allowNegativeScores  - sql definition of score column is int, not unsigned\n"
   "   -customTrackLoader  - turns on: -noNameIx, -ignoreEmpty,\n"
   "                         -allowNegativeScores -verbose=0\n"
-  "   -verbose=N - verbose level for extra information to STDERR"
+  "   -verbose=N - verbose level for extra information to STDERR\n"
+  "   -local - connect to local host, instead of default host, using localDb.XXX variables defined in .hg.conf.\n"
   );
 }
 
@@ -255,6 +258,9 @@ char comment[256];
 
 if ( ! noLoad )
     conn = sqlConnect(database);
+
+if (localDb)
+    conn = hConnectLocalDb(database);
 
 if ((char *)NULL != tmpDir)
     tab = cloneString(rTempName(tmpDir,"loadBed",".tab"));
@@ -445,6 +451,7 @@ nameIx = ! optionExists("noNameIx");
 ignoreEmpty = optionExists("ignoreEmpty");
 allowNegativeScores = optionExists("allowNegativeScores");
 customTrackLoader = optionExists("customTrackLoader");
+localDb = optionExists("local");
 /* turns on: noNameIx, ignoreEmpty, allowNegativeScores
 	-verbose=0 */
 if (customTrackLoader)

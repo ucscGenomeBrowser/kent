@@ -3,7 +3,7 @@
 #include "options.h"
 #include "sqlProg.h"
 
-static char const rcsid[] = "$Id: hgsqldump.c,v 1.4 2005/10/27 23:36:52 markd Exp $";
+static char const rcsid[] = "$Id: hgsqldump.c,v 1.5 2008/03/01 00:21:16 jzhu Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -22,14 +22,27 @@ errAbort(
   "Note: directory for results must be writable by mysql.  i.e. 'chmod 777 .'\n"
   "Which is a security risk, so remember to change permissions back after use.\n"
   "e.g.: hgsqldump --all -c --tab=. cb1"
+  "\n\n"
+  "Options:\n"
+  "  -local - connect to local host, instead of default host, using localDb.XXX variables defined in .hg.conf.\n"
   );
 }
+
+static struct optionSpec optionSpecs[] = {
+    {"local", OPTION_BOOLEAN},
+};
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+optionInit(&argc, argv, optionSpecs);
 if (argc <= 1)
     usage();
-sqlExecProg("mysqldump", NULL, argc-1, argv+1);
+boolean localDb = optionExists("local");
+
+if (localDb)
+    sqlExecProgLocal("mysqldump", NULL, argc-1, argv+1);
+else
+    sqlExecProg("mysqldump", NULL, argc-1, argv+1);
 return 0;  /* never reaches here */
 }
