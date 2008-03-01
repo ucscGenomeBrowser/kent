@@ -1068,14 +1068,15 @@ cat > doAnno.csh << 'EOF'
     # else mgcGenes, else mrnas if > 10000 else none.   In all cases 
     # except none, add in refGene.
     # NOTE: shortcut by using sources from hg18 multiz framing
+    # (added braney 2008-03-01)  use geneCode for hg18, no
+    #                            genes from ponAbe2
 
-hg18: knownGene
+hg18: encodeGencodeGeneKnownMar07 
 bosTau3: mrna
 canFam2: mrna
 galGal3: mrna
 monDom4: ensGene
 panTro2: refGene
-ponAbe2: refGene
 rheMac2: ensGene
 rn4: knownGene
 mm9: knownGene
@@ -1107,18 +1108,21 @@ cat > getGenes.csh << 'EOF'
       mv /scratch/tmp/$queryDb.tmp.gz genes/$queryDb.gp.gz
       rm -f $tmpExt
     end
+    # using encodeGencodeGeneKnownMar07 for hg18
     # using knownGene for rn4 mm9 hg18
-    # using refGene for panTro2, ponAbe2
+    # using refGene for panTro2
     # using ensGene for monDom4, rheMac2
     # genePreds; (must keep only the first 10 columns for knownGene)
     set geneDbs = "hg18 mm9 rn4 panTro2 monDom4 rheMac2 ponAbe2"
     foreach queryDb ($geneDbs)
       if ($queryDb == "monDom4" || $queryDb == "rheMac2") then
         set geneTbl = ensGene
-      else if ($queryDb == "panTro2" || $queryDb == "ponAbe2") then
+      else if ($queryDb == "panTro2") then
         set geneTbl = refGene
-      else if ($queryDb == "hg18" || $queryDb == "rn4" || $queryDb == "mm9") then
+      else if ($queryDb == "rn4" || $queryDb == "mm9") then
         set geneTbl = knownGene
+      else if ($queryDb == "hg18") then
+        set geneTbl = encodeGencodeGeneMar07 
       endif
       hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from $geneTbl" ${queryDb} \
       | genePredSingleCover stdin stdout | gzip -2c \
@@ -1130,7 +1134,7 @@ cat > getGenes.csh << 'EOF'
 
     ssh kkstore03
     cd /cluster/data/encode/TBA/DEC-07/2008-01-10/frames
-    (cat  ../maf/*.maf | nice genePredToMafFrames hg18 stdin stdout bosTau3 genes/bosTau2.gp.gz canFam2 genes/canFam2.gp.gz galGal3 genes/galGal3.gp.gz hg18 genes/hg18.gp.gz panTro2 genes/panTro2.gp.gz rheMac2 genes/rheMac2.gp.gz mm9 genes/mm9.gp.gz rn4 genes/rn4.gp.gz ponAbe2 genes/ponAbe2.gp.gz monDom4 genes/monDom4.gp.gz | nice gzip > mafFrames.gz) >& frames.log &
+    (cat  ../maf/*.maf | nice genePredToMafFrames hg18 stdin stdout bosTau3 genes/bosTau3.gp.gz canFam2 genes/canFam2.gp.gz galGal3 genes/galGal3.gp.gz hg18 genes/hg18.gp.gz panTro2 genes/panTro2.gp.gz rheMac2 genes/rheMac2.gp.gz mm9 genes/mm9.gp.gz rn4 genes/rn4.gp.gz monDom4 genes/monDom4.gp.gz | nice gzip > mafFrames.gz) >& frames.log &
 
     ssh hgwdev
     cd /cluster/data/encode/TBA/DEC-07/2008-01-10/frames
