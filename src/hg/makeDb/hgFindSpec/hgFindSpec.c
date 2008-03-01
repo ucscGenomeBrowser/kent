@@ -13,7 +13,7 @@
 #include "dystring.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: hgFindSpec.c,v 1.6 2008/02/29 23:32:22 jzhu Exp $";
+static char const rcsid[] = "$Id: hgFindSpec.c,v 1.7 2008/03/01 00:23:25 jzhu Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -38,7 +38,7 @@ static struct optionSpec optionSpecs[] = {
 };
 
 static char *raName = "trackDb.ra";
-boolean localDb=FALSE;
+boolean localDb=FALSE;              /* Connect to local host, instead of default host, using localDb.XXX variables defined in .hg.conf.\n"*/ 
 
 void addVersion(boolean strict, char *database, char *dirName, char *raName, 
     struct hash *uniqHash,
