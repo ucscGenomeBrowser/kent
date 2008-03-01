@@ -3,7 +3,7 @@
 #include "options.h"
 #include "sqlProg.h"
 
-static char const rcsid[] = "$Id: hgsqldump.c,v 1.5 2008/03/01 00:21:16 jzhu Exp $";
+static char const rcsid[] = "$Id: hgsqldump.c,v 1.6 2008/03/01 07:57:23 jzhu Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -28,21 +28,12 @@ errAbort(
   );
 }
 
-static struct optionSpec optionSpecs[] = {
-    {"local", OPTION_BOOLEAN},
-};
-
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-optionInit(&argc, argv, optionSpecs);
 if (argc <= 1)
     usage();
-boolean localDb = optionExists("local");
 
-if (localDb)
-    sqlExecProgLocal("mysqldump", NULL, argc-1, argv+1);
-else
-    sqlExecProg("mysqldump", NULL, argc-1, argv+1);
+sqlExecProg("mysqldump", NULL, argc-1, argv+1);
 return 0;  /* never reaches here */
 }
