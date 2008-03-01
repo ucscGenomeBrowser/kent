@@ -47,9 +47,9 @@ dbs="$@"
 dbExists() {
     local db="$1"
     if [ -n "$local" ] ; then
-	local dbChk=$(hgsql -Ne 'show databases like "'$db'"')
-    else 
 	local dbChk=$(hgsqlLocal -Ne 'show databases like "'$db'"')
+    else 
+	local dbChk=$(hgsql -Ne 'show databases like "'$db'"')
     fi
     if [ -z "$dbChk" ] ; then
         echo "Note: database $db does not exist, skipping"
