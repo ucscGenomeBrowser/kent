@@ -15,7 +15,7 @@ speciesCodonDefault hg18
 irows on
 speciesGroups primate placental mammal vertebrate
 sGroup_primate panTro2 ponAbe2 gibbon colobus_monkey vervet baboon rheMac2 dusky_titi owl_monkey marmoset squirrel_monkey mouse_lemur galago
-sGroup_placental tree_shrew rn4 mm9 guinea_pig st_squirrel rabbit bosTau3 horse cat canFam2 flying_fox sbbat rfbat hedgehog armadillo elephant tenrec rock_hyrax
+sGroup_placental tree_shrew rn4 mm9 guinea_pig st_squirrel rabbit bosTau3 horse cat canFam2 flying_fox sbbat rfbat hedgehog shrew armadillo elephant tenrec rock_hyrax
 sGroup_mammal monDom4 platypus 
 sGroup_vertebrate galGal3
 #treeImage phylo/encodeSpecies37.gif
