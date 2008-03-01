@@ -323,7 +323,10 @@ safef(query, sizeof query,
 sr = sqlGetResult(conn, query);
 
 if ((row = sqlNextRow(sr)) == NULL)
+    {
+    hFreeConn(&conn);
     return NULL;
+    }
 
 safef(geneNameBuffer, sizeof geneNameBuffer, "%s", row[0]);
 sqlFreeResult(&sr);
@@ -340,7 +343,8 @@ if (transUC)
     }
 }
 
-void outSpeciesExons(FILE *f, struct speciesInfo *si, struct exonInfo *giList)
+void outSpeciesExons(FILE *f, char *dbName, struct speciesInfo *si, 
+    struct exonInfo *giList)
 {
 int exonNum = 1;
 struct dnaSeq thisSeq;
@@ -406,12 +410,12 @@ for(gi = giList; gi; gi = gi->next, exonNum++)
 	outSeq =  doTranslate(&thisSeq, 0,  0, FALSE);
 	if (!allDashes(outSeq->dna))
 	    {
-	    fprintf(f, ">%s_%s_%d_%d %d %d %d %s:%d-%d %c",
+	    fprintf(f, ">%s_%s_%d_%d %d %d %d %s.%s:%d-%d %c",
 		gi->name, 
 		siTemp->name, exonNum, exonCount, 
 		outSeq->size,
 		startFrame->frame, lastFrame,
-		gi->frame->chrom,
+		dbName, gi->frame->chrom,
 		gi->chromStart+1, gi->chromEnd, startFrame->strand[0]);
 
 	    maybePrintGeneName(gi->name, f);
@@ -427,7 +431,7 @@ fprintf(f, "\n");
 /* this is really only useful for debug since frames 
  * don't correspond to exons
  */
-void outSpeciesExonsNoTrans(FILE *f, struct speciesInfo *si, 
+void outSpeciesExonsNoTrans(FILE *f, char *dbName, struct speciesInfo *si, 
     struct exonInfo *giList)
 {
 int exonNum = 1;
@@ -454,11 +458,11 @@ for(gi = giList; gi; gi = gi->next, exonNum++)
 	    continue;
 
 	start = gi->exonStart;
-	fprintf(f, ">%s_%s_%d_%d %d %s:%d-%d %c",
+	fprintf(f, ">%s_%s_%d_%d %d %s.%s:%d-%d %c",
 	    gi->name, 
 	    siTemp->name, exonNum, exonCount, 
 	    gi->exonSize,
-	    gi->frame->chrom,
+	    dbName, gi->frame->chrom,
 	    gi->chromStart+1, gi->chromEnd, gi->frame->strand[0]);
 
 	maybePrintGeneName(gi->name, f);
@@ -485,14 +489,15 @@ si->aaSize = outSeq->size;
 }
 
 /* output a particular species sequence to the file stream */
-void writeOutSpecies(FILE *f, struct speciesInfo *si, struct exonInfo *giList)
+void writeOutSpecies(FILE *f, char *dbName, struct speciesInfo *si, 
+    struct exonInfo *giList)
 {
 if (inExons)
     {
     if (noTrans)
-	outSpeciesExonsNoTrans(f, si, giList);
+	outSpeciesExonsNoTrans(f, dbName, si, giList);
     else
-	outSpeciesExons(f, si, giList);
+	outSpeciesExons(f, dbName, si, giList);
     return;
     }
 
@@ -509,8 +514,8 @@ if (noTrans)
 	{
 	if (!allDashes(si->nucSequence))
 	    {
-	    fprintf(f, ">%s_%s %d %s:%d-%d %c",
-		giList->name, si->name, si->size,
+	    fprintf(f, ">%s_%s %d %s.%s:%d-%d %c",
+		giList->name, si->name, si->size, dbName,
 		giList->frame->chrom, start, end, giList->frame->strand[0]);
 
 	    maybePrintGeneName(giList->name, f);
@@ -525,8 +530,8 @@ else
 	translateProtein(si);
 	if (!allDashes(si->aaSequence))
 	    {
-	    fprintf(f, ">%s_%s %d %s:%d-%d %c",
-		giList->name, si->name, si->aaSize,
+	    fprintf(f, ">%s_%s %d %s.%s:%d-%d %c",
+		giList->name, si->name, si->aaSize, dbName,
 		giList->frame->chrom, start, end, giList->frame->strand[0]);
 
 	    maybePrintGeneName(giList->name, f);
@@ -680,8 +685,8 @@ for(; list ; list = giNext)
 /* output the sequence for one gene for every species to 
  * the file stream 
  */
-void outGene(FILE *f, char *geneName, char *mafTable, char *frameTable, 
-    char *org, struct slName *speciesNameList)
+void outGene(FILE *f, char *geneName, char *dbName, char *mafTable, 
+    char *frameTable, char *org, struct slName *speciesNameList)
 {
 struct mafFrames *frames = getFrames(geneName, frameTable, org);
 struct mafFrames *frame, *nextFrame;
@@ -729,7 +734,7 @@ struct speciesInfo *speciesList = getSpeciesInfo(giList, speciesNameList,
     speciesInfoHash);
 
 copyMafs(speciesInfoHash, &giList);
-writeOutSpecies(f, speciesList, giList);
+writeOutSpecies(f, dbName, speciesList, giList);
 
 freeSpeciesInfo(speciesList);
 freeGIList(giList);
@@ -764,7 +769,8 @@ else
 for(; geneNames; geneNames = geneNames->next)
     {
     verbose(2, "outting  gene %s \n",geneNames->name);
-    outGene(f, geneNames->name, mafTable, frameTable, org, speciesNames);
+    outGene(f, geneNames->name, dbName, mafTable, 
+	frameTable, org, speciesNames);
     if (delay)
 	{
 	verbose(2, "delaying %d seconds\n",delay);
