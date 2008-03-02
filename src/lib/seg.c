@@ -8,7 +8,7 @@
 #include <fcntl.h>
 
 
-static char const rcsid[] = "$Id: seg.c,v 1.1 2008/02/18 20:44:02 rico Exp $";
+static char const rcsid[] = "$Id: seg.c,v 1.2 2008/03/02 15:53:09 rico Exp $";
 
 
 void segCompFree(struct segComp **pObj)
@@ -200,7 +200,7 @@ for (;;)
 			*val++ = 0;
 
 			if (sameString(name, "name"))
-				block->name = cloneString(name);
+				block->name = cloneString(val);
 			else if (sameString(name, "val"))
 				block->val = atoi(val);
 			}
