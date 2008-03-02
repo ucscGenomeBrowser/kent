@@ -8,7 +8,7 @@
 #include <fcntl.h>
 
 
-static char const rcsid[] = "$Id: seg.c,v 1.2 2008/03/02 15:53:09 rico Exp $";
+static char const rcsid[] = "$Id: seg.c,v 1.3 2008/03/02 17:00:54 rico Exp $";
 
 
 void segCompFree(struct segComp **pObj)
@@ -94,7 +94,7 @@ struct segFile *segMayOpen(char *fileName)
 {
 struct segFile *sf;
 struct lineFile *lf;
-char *line, *word;
+char *line, *name, *val, *word;
 char *sig = "##seg";
 
 /* Open fileName. */
@@ -112,8 +112,8 @@ line += strlen(sig);
 /* parse name=val. */
 while ((word = nextWord(&line)) != NULL)
 	{
-	char *name = word;
-	char *val = strchr(word, '=');
+	name = word;
+	val = strchr(word, '=');
 	if (val == NULL)
 		errAbort("Missing = after %s line 1 of %s", name, fileName);
 	*val++ = 0;
@@ -167,7 +167,9 @@ struct segBlock *segNextWithPos(struct segFile *sf, off_t *retOffset)
 {
 struct lineFile *lf = sf->lf;
 struct segBlock *block;
-char *line, *word;
+struct segComp *comp, *tail = NULL;
+char *line, *name, *row[6], *val, *word;
+int wordCount;
 
 /* Loop until we get a segment paragraph or reach end of file. */
 for (;;)
@@ -192,8 +194,8 @@ for (;;)
 		/* Parse name=val. */
 		while ((word = nextWord(&line)) != NULL)
 			{
-			char *name = word;
-			char *val = strchr(word, '=');
+			name = word;
+			val = strchr(word, '=');
 			if (val == NULL)
 				errAbort("Missing = after %s line %d of %s",
 					name, lf->lineIx, lf->fileName);
@@ -215,10 +217,6 @@ for (;;)
 				break;
 			if (sameString(word, "s"))
 				{
-				struct segComp *comp;
-				int wordCount;
-				char *row[6];
-
 				/* Chop line up by white space. This involves a few +=1's
 				 * because we have already chopped out the first word. */
 				row[0] = word;
@@ -244,11 +242,14 @@ for (;;)
 					errAbort("Invalid strand line %d of %s",
 						lf->lineIx, lf->fileName);
 
-				/* Add component to head of list. */
-				slAddHead(&block->components, comp);
+				/* Add the new component to the current list. */
+				if (block->components == NULL)
+					block->components = comp;
+				else
+					tail->next = comp;
+				tail = comp;
 				}
 			}
-		slReverse(&block->components);
 		return block;
 		}
 		else	/* Skip over paragraph we don't understand. */
@@ -277,10 +278,18 @@ struct segFile *segReadAll(char *fileName)
 /* Read in full segment file */
 {
 struct segFile *sf = segOpen(fileName);
-struct segBlock *block;
+struct segBlock *block, *tail = NULL;
 while ((block = segNext(sf)) != NULL)
-	slAddHead(&sf->blocks, block);
-slReverse(&sf->blocks);
+	{
+	if (sf->blocks == NULL)
+		sf->blocks = block;
+	else
+		{
+		tail->next = block;
+		block->prev = tail;
+		}
+	tail = block;
+	}
 return sf;
 }
 
