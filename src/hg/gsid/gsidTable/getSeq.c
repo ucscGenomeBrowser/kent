@@ -9,7 +9,7 @@
 #include "hPrint.h"
 #include "gsidTable.h"
 
-static char const rcsid[] = "$Id: getSeq.c,v 1.4 2007/03/15 17:00:20 fanhsu Exp $";
+static char const rcsid[] = "$Id: getSeq.c,v 1.5 2008/03/02 17:47:59 fanhsu Exp $";
 
 
 static void getSeqFromBlob(struct sqlConnection *conn,
@@ -20,7 +20,7 @@ struct sqlResult *sr;
 char **row;
 char query[256];
 struct subjInfo *si;
-
+int seqCnt = 0;
 hPrintf("<TT><PRE>");
 for (si = siList; si != NULL; si = si->next)
     {
@@ -38,9 +38,11 @@ for (si = siList; si != NULL; si = si->next)
         hPrintf("|%s\n", subjId);
         writeSeqWithBreaks(stdout, seq, strlen(seq), 60);
         hPrintf("\n");
+	seqCnt++;
         }
     sqlFreeResult(&sr);
     }
+if (seqCnt == 0) hPrintf("No sequence data available for this subject.");fflush(stdout);
 hPrintf("</TT></PRE>");
 }
 
