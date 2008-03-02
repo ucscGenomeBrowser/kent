@@ -4,23 +4,23 @@
 
 <p>
  <table id="projects" cellpadding=1 cellspacing=3>
- <tr><td align="center"><b>Name</b></td>
+ <tr><td align="left"><b>Name</b></td><td>&nbsp;</td>
 
  <% if current_user.login == "admin" %>
-   <td align="center"><b>Type</b></td>
+   <td align="left"><b>Type</b></td><td>&nbsp;</td>
  <% end %>
- <td><b>Status</b></td>
+ <td align="left"><b>Status</b></td><td>&nbsp;</td>
  <% if !defined? @user %>
-   <td align="center"><b>Investigator</b></td>
+   <td align="left"><b>Investigator</b></td><td>&nbsp;</td>
  <% end %>
- <td align="center"><b>Updated</b></td></tr>
+ <td align="left"><b>Updated</b></td></tr>
 
  <% @projects.each do |c| %>
   <tr>
-  <td><%= link_to c.name, {:action => 'show', :id => c.id} -%></td>
+  <td><%= link_to c.name, {:action => 'show', :id => c.id} -%></td><td>&nbsp;</td>
 
   <% if current_user.login == "admin" %>
-  <td><%= c.project_type.short_label -%></td>
+  <td><%= c.project_type.short_label -%></td><td>&nbsp;</td><td>&nbsp;</td>
   <% end %>
 
   <td> 
@@ -51,10 +51,10 @@
     end
   end
   -%>
-  </td>
+  </td><td>&nbsp;</td>
 
   <% if !defined? @user %>
-    <td><%= c.user.pi -%></td>
+    <td><%= c.user.pi -%></td><td>&nbsp;</td>
   <% end %>
   <td><%= c.updated_at.strftime("%b %d %H:%M") -%></td>
   </tr>
