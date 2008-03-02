@@ -4,8 +4,14 @@
 
   <% form_for :user do |f| %>
     <p>
-      <label for="user_email">New Email</label> <br >
-      <%= f.text_field :email %> <br>
+      <label for="user_email">Current Email</label> <br/>
+      <%= f.text_field :email, {:disabled => true} %> <br/>
+      </p>
+      <p>
+      <label for="user_email">New Email</label> <br/>
+      <%= f.text_field :email, { :value => ""} %> <br/>
+      <p>
+
       <table><tr>
       <td><%= submit_tag "Update Email" -%> </td>
   <% end %>
