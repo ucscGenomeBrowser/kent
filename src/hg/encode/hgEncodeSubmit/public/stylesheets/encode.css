@@ -105,6 +105,10 @@ text-decoration: none;
 }
 
 input {
-    margin: 2px;
     font-size: 12pt;
+    margin: 2px;
+}
+
+.button-to {
+    margin: 0;
 }
