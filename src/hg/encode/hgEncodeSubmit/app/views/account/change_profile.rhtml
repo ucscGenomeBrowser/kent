@@ -4,7 +4,7 @@
 <%= f.text_field :login %></p>
 
 <p><label for="email">Email</label><br/>
-<%= @user.email %></p><br/>
+<%= f.text_field :email, {:disabled => true} %></p>
 
 <p><label for="name">Name</label><br/>
 <%= f.text_field :name %></p>
