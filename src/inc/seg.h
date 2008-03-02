@@ -20,6 +20,7 @@ struct segBlock
 /* A list of genomic segments. */
 	{
 	struct segBlock *next;
+	struct segBlock *prev;
 	char *name;					/* Name of this segment list. */
 	int val;					/* Integer value for this segment list. */
 	struct segComp *components;	/* List of segments in this segment list. */
