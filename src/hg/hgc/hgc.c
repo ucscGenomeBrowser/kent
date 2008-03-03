@@ -214,7 +214,7 @@
 #include "itemConf.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1394 2008/03/03 20:00:27 hiram Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1395 2008/03/03 21:00:53 hiram Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -7319,6 +7319,7 @@ if (sameString(gpList->name2, "noXref"))
 else
    printf("<A HREF=\"%s/geneview?gene=%s\" "
 	"target=_blank>%s</A><BR>", ensUrl, gpList->name2, gpList->name2);
+genePredFreeList(&gpList);
 
 printf("<B>Ensembl Transcript: </B>");
 printf("<A HREF=\"%s/transview?transcript=%s\" "
@@ -14173,7 +14174,6 @@ struct genePred *gpList = NULL, *gp = NULL;
 boolean hasBin; 
 char table[128];
 char aliasTable[256];
-struct sqlResult *sr = NULL;
 boolean gotAlias = FALSE;
 
 genericHeader(tdb, item);
@@ -14201,7 +14201,6 @@ for (gp = gpList; gp != NULL; gp = gp->next)
     }
 printTrackHtml(tdb);
 genePredFreeList(&gpList);
-sqlFreeResult(&sr);
 hFreeConn(&conn2);
 hFreeConn(&conn);
 }
