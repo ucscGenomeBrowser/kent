@@ -214,7 +214,7 @@
 #include "itemConf.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1393 2008/03/01 00:40:50 hiram Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1394 2008/03/03 20:00:27 hiram Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -7310,7 +7310,17 @@ if (archive != NULL)
 else
     safef(ensUrl, sizeof(ensUrl), "http://www.ensembl.org/%s", genomeStrEnsembl);
  
+char query[512];
+safef(query, sizeof(query), "name = \"%s\"", itemName);
+struct genePred *gpList = genePredReaderLoadQuery(conn, "ensGene", query);
 printf("<B>Ensembl Gene Link: </B>");
+if (sameString(gpList->name2, "noXref"))
+   printf("none<BR>\n");
+else
+   printf("<A HREF=\"%s/geneview?gene=%s\" "
+	"target=_blank>%s</A><BR>", ensUrl, gpList->name2, gpList->name2);
+
+printf("<B>Ensembl Transcript: </B>");
 printf("<A HREF=\"%s/transview?transcript=%s\" "
                "target=_blank>", ensUrl, shortItemName);
 printf("%s</A><br>", itemName);
