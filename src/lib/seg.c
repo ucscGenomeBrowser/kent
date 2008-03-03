@@ -8,7 +8,7 @@
 #include <fcntl.h>
 
 
-static char const rcsid[] = "$Id: seg.c,v 1.4 2008/03/03 17:55:02 rico Exp $";
+static char const rcsid[] = "$Id: seg.c,v 1.5 2008/03/03 18:12:39 rico Exp $";
 
 
 void segCompFree(struct segComp **pObj)
@@ -386,7 +386,7 @@ struct segComp *segFindCompSpecies(struct segBlock *sb, char *species,
 {
 struct segComp *sc = segMayFindCompSpecies(sb, species, sepChar);
 if (sc == NULL)
-	errAbort("Couldn't find %s%c or just %s... in block",
+	errAbort("Couldn't find %s%c or just %s... in block.",
 		species, sepChar, species);
 
 return(sc);
