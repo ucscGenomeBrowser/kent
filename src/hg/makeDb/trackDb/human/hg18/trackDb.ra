@@ -2421,15 +2421,6 @@ type bed 6 .
     longLabel Omicia OMIM Hand-Curation, Early Access R1, May 2007
     priority 2
 
-track variome
-shortLabel Variome
-longLabel Human Variome Microattribution
-visibility pack
-group varRep
-priority 146.4
-exonArrows off
-type bed 8 +
-
 searchName affy6SV
 searchTable snpArrayAffy6SV
 searchMethod exact
