@@ -33,7 +33,7 @@
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 #define MAX_SP_SIZE 2000
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.408 2007/12/11 21:35:08 angie Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.409 2008/03/03 19:14:12 angie Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -166,6 +166,17 @@ for (snpMapType=0; snpMapType<snpMapTypeCartSize; snpMapType++)
     }
 }
 
+int snpVersion(char *track)
+/* If track starts with snpNNN where NNN is 125 or later, return the number. */
+{
+int version = 0;
+if ( startsWith("snp", track) && strlen(track) >= 6 &&
+     isdigit(track[3]) && isdigit(track[4]) && isdigit(track[5]) &&
+     atoi(track+3) >= 125 )
+    version = atoi(track+3);
+return version;
+}
+
 void snp125Ui(struct trackDb *tdb)
 {
 /* It would be nice to add a 'reset' button here to reset the snp
@@ -196,17 +207,21 @@ printf("Any type of data can be excluded from view by deselecting the checkbox b
 printf("Not all assemblies include values in all categories.\n");
 printf("<BR><BR>\n");
 
-printf("<B>Location Type</B>: ");
-printf("<BR>\n");
-for (i=0; i < snp125LocTypeLabelsSize; i++)
+if (snpVersion(tdb->tableName) <= 127)
     {
-    snp125LocTypeIncludeCart[i] = 
-        cartUsualBoolean(cart, snp125LocTypeIncludeStrings[i], snp125LocTypeIncludeDefault[i]);
-    cgiMakeCheckBox(snp125LocTypeIncludeStrings[i], snp125LocTypeIncludeCart[i]);
-    printf(" %s", snp125LocTypeLabels[i]);
+    printf("<B>Location Type</B>: ");
+    printf("<BR>\n");
+    for (i=0; i < snp125LocTypeLabelsSize; i++)
+	{
+	snp125LocTypeIncludeCart[i] = 
+	    cartUsualBoolean(cart, snp125LocTypeIncludeStrings[i],
+			     snp125LocTypeIncludeDefault[i]);
+	cgiMakeCheckBox(snp125LocTypeIncludeStrings[i],
+			snp125LocTypeIncludeCart[i]);
+	printf(" %s", snp125LocTypeLabels[i]);
+	}
+    printf("<BR>\n");
     }
-printf("<BR>\n");
-
 
 printf("<B>Class</B>: ");
 printf("<BR>\n");
