@@ -84,5 +84,17 @@ void segWrite(FILE *f, struct segBlock *block);
 void segWriteEnd(FILE *f);
 /* Write segment file end tag to the file. */
 
+struct segComp *segMayFindCompSpecies(struct segBlock *sb, char *species,
+	char sepChar);
+/* Find component of a given source that starts with species possibly
+   followed by sepChar or \0. Return NULL if not found. */
+
+struct segComp *segFindCompSpecies(struct segBlock *sb, char *species,
+	char sepChar);
+/* Find component of given source that starts with species followed by
+   sepChar or die trying. */
+
+
+
 
 #endif /* SEG_H */

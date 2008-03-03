@@ -8,7 +8,7 @@
 #include <fcntl.h>
 
 
-static char const rcsid[] = "$Id: seg.c,v 1.3 2008/03/02 17:00:54 rico Exp $";
+static char const rcsid[] = "$Id: seg.c,v 1.4 2008/03/03 17:55:02 rico Exp $";
 
 
 void segCompFree(struct segComp **pObj)
@@ -356,4 +356,38 @@ fprintf(f, "\n");
 void segWriteEnd(FILE *f)
 /* Write segment file end tag to the file.  In this case, nothing. */
 {
+}
+
+
+struct segComp *segMayFindCompSpecies(struct segBlock *sb, char *species,
+	char sepChar)
+/* Find component of a given source that starts with species possibly
+   followed by sepChar or \0. Return NULL if not found. */
+{
+struct segComp *sc;
+int speciesLen = strlen(species);
+
+for (sc = sb->components; sc != NULL; sc = sc->next)
+	if (startsWith(species, sc->src))
+		{
+		char endChar = sc->src[speciesLen];
+		if ((endChar == '\0') || (endChar == sepChar))
+			return(sc);
+		}
+
+return(NULL);
+}
+
+
+struct segComp *segFindCompSpecies(struct segBlock *sb, char *species,
+	char sepChar)
+/* Find component of given source that starts with species followed by
+   sepChar or die trying. */
+{
+struct segComp *sc = segMayFindCompSpecies(sb, species, sepChar);
+if (sc == NULL)
+	errAbort("Couldn't find %s%c or just %s... in block",
+		species, sepChar, species);
+
+return(sc);
 }
