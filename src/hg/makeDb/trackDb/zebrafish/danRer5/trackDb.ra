@@ -83,17 +83,6 @@ indelDoubleInsert on
 indelQueryInsert on
 maxItems 300
 
-track ensGene
-shortLabel Ensembl Genes
-longLabel Ensembl v46 Gene Predictions (Protein-Coding Genes)
-group genes
-priority 32.8
-visibility pack
-color 150,0,0
-type genePred ensPep
-ensArchive aug2007
-dataVersion August 2007
-
 track affyConsensusAndTargetZonWildType
 compositeTrack on
 shortLabel Wild Type Array
