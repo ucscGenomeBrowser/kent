@@ -8,12 +8,6 @@ type expRatio
 expScale 1.0
 expStep 0.2
 groupings ispyMipCGHGroups
-patDb ispy1
-patId trackId
-patTable labTrack
-patKey ispyId
-aliasTable probeAliases
-setsTable genesets
 
 track ispyAgiExp
 shortLabel ispy gene expression by agilent
@@ -25,12 +19,6 @@ type expRatio
 expScale 2.0
 expStep 0.2
 groupings ispyAgiExpGroups
-patDb ispy1
-patId trackId
-patTable labTrack
-patKey ispyId
-aliasTable probeAliases
-setsTable genesets
 
 track ispyAgiExpT1
 shortLabel ispy gene expression TP= T1 by agilent
@@ -42,13 +30,6 @@ type expRatio
 expScale 2.0
 expStep 0.2
 groupings ispyAgiExpT1Groups
-patDb ispy1
-patId trackId
-patTable labTrack
-patKey ispyId
-setsTable genesets
-aliasTable probeAliases
-#aliasTable probeIspyAgiExpT1
 
 track ispyAgiDeltaT2
 shortLabel ispy gene expression T2-T1 by agilent
@@ -60,12 +41,6 @@ type expRatio
 expScale 1.0
 expStep 0.1
 groupings ispyAgiDeltaT2Groups
-patDb ispy1
-patId trackId
-patTable labTrack
-patKey ispyId
-setsTable genesets
-aliasTable probeAliases
 
 track ispyAgiDeltaT4
 shortLabel ispy gene expression T4-T1 by agilent
@@ -77,13 +52,6 @@ type expRatio
 expScale 1.0
 expStep 0.1
 groupings ispyAgiDeltaT4Groups
-patDb ispy1
-patId trackId
-patTable labTrack
-patKey ispyId
-setsTable genesets
-aliasTable probeAliases
-
 
 track ISPYproteomics
 shortLabel ispy proteomics
@@ -95,12 +63,17 @@ type expRatio
 expScale 5.0
 expStep 0.2
 groupings ISPYproteomicsGroups
-patDb ispy1
-patId trackId
-patTable proteomicsTrack
-patKey ispyId
-aliasTable probeISPYproteomics
-setsTable genesets
+
+name ucsfNeveExp
+shortLabel Breast Cell Line Expression (Neve. et.al)
+longLabel breast cancer cell line gene expression (Neve et.al.Cancer Cell 2006)
+type expRatio
+expScale 2.0
+expStep 0.2
+visibility dense
+group x
+groupings ucsfNeveExpGroups
+priority 44
 
 #TCGA
 
@@ -113,12 +86,6 @@ type expRatio
 expScale 0.4
 expStep 0.05
 groupings mskccCGHGroups
-patTable sampleInfo
-patId sampleId
-patKey subjId 
-patDb tcga1
-aliasTable mskccCGHProbes
-setsTable genesets
 
 track harvardCGH
 shortLabel TCGA GBM harvardCGH
@@ -129,29 +96,6 @@ type expRatio
 expScale 1.0
 expStep 0.1
 groupings harvardCGHGroups
-patTable sampleInfo
-patId sampleId
-patKey subjId 
-patDb tcga1
-aliasTable harvardCGHProbes
-setsTable genesets
-
-
-track harvardCGH_downSample
-shortLabel TCGA GBM harvardCGH
-longLabel TCGA GBM harvard CGH array 244A 
-group x
-visibility hide
-type expRatio
-expScale 1.0
-expStep 0.1
-groupings harvardCGH_downSampleGroups
-patTable sampleInfo
-patId sampleId
-patKey subjId 
-patDb tcga1
-aliasTable harvardCGHProbes
-setsTable genesets
 
 track uncAgiExp
 shortLabel TCGA GBM uncAgiExp
@@ -162,12 +106,6 @@ type expRatio
 expScale 1.0
 expStep 0.1  
 groupings uncAgiExpGroups
-patTable sampleInfo
-patId sampleId
-patKey subjId
-patDb tcga1
-aliasTable uncAgiExpProbes
-setsTable genesets
 
 track broadAffyExp
 shortLabel TCGA GBM broadAffyExp
@@ -178,12 +116,6 @@ type expRatio
 expScale 3.0
 expStep 0.2
 groupings broadAffyExpGroups
-patTable sampleInfo
-patId sampleId
-patKey subjId
-patDb tcga1
-aliasTable probeBroadAffyExp
-setsTable genesets
 
 track CaMPScoreExternal
 shortLabel CaMPScoreExternal 
