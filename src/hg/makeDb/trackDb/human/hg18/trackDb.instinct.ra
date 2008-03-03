@@ -64,16 +64,17 @@ expScale 5.0
 expStep 0.2
 groupings ISPYproteomicsGroups
 
-name ucsfNeveExp
+track ucsfNeveExp
 shortLabel Breast Cell Line Expression (Neve. et.al)
 longLabel breast cancer cell line gene expression (Neve et.al.Cancer Cell 2006)
+group x
+priority 44
+visibility dense
 type expRatio
 expScale 2.0
 expStep 0.2
-visibility dense
-group x
 groupings ucsfNeveExpGroups
-priority 44
+
 
 #TCGA
 
