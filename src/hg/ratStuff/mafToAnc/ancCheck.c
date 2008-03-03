@@ -10,7 +10,7 @@
 #define MAX(x,y) ((x) > (y) ? (x) : (y))
 #define MIN(x,y) ((x) < (y) ? (x) : (y))
 
-static char const rcsid[] = "$Id: ancCheck.c,v 1.2 2008/02/18 20:42:01 rico Exp $";
+static char const rcsid[] = "$Id: ancCheck.c,v 1.3 2008/03/03 16:48:32 rico Exp $";
 
 
 void usage()
@@ -40,6 +40,15 @@ ma = mafNext(mf);
 
 while (sb != NULL && ma != NULL)
 	{
+	/* Skip over chromBreak blocks. */
+	if (sb->name != NULL && sameString(sb->name, "chromBreak"))
+		{
+		segBlockFree(&sb);
+		sb = segNext(sf);
+		continue;
+		}
+
+	/* Sanity check. */
 	if ((sc = sb->components) == NULL)
 		{
 		warn("Anchor has no first component?\n");
