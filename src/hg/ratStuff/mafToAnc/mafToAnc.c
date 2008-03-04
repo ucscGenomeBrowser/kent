@@ -13,7 +13,7 @@
 #include "seg.h"
 
 
-static char const rcsid[] = "$Id: mafToAnc.c,v 1.5 2008/03/04 19:23:38 rico Exp $";
+static char const rcsid[] = "$Id: mafToAnc.c,v 1.6 2008/03/04 19:48:50 rico Exp $";
 
 struct aliCont
 /* A container for an alignment block. */
@@ -319,6 +319,7 @@ for (ac = *acList; ac != NULL; ac = next)
 	freeMem(ac);
 	}
 
+segWriteEnd(f);
 carefulClose(&f);
 freeMem(compPos);
 hashFreeWithVals(&speciesHash, freeSpeciesInfo);
