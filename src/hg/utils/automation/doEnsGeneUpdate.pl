@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/doEnsGeneUpdate.pl instead.
 
-# $Id: doEnsGeneUpdate.pl,v 1.12 2008/03/04 00:28:58 hiram Exp $
+# $Id: doEnsGeneUpdate.pl,v 1.13 2008/03/04 00:39:24 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -49,11 +49,11 @@ sub usage {
   my ($status, $detailed) = @_;
   # Basic help (for incorrect usage):
   print STDERR "
-usage: $base -ensVersion=NN ensGeneConfig.ra
+usage: $base -ensVersion=NN <db>.ensGene.ra
 required options:
   -ensVersion=NN - must specify desired Ensembl version
                  - possible values: $versionListString
-  ensGeneConfig.ra - configuration file with database and other options
+  <db>.ensGene.ra - configuration file with database and other options
 
 other options:
 ";
@@ -82,7 +82,7 @@ Automates UCSC's Ensembl gene updates.  Steps:
 	which would be done for this build.
 All operations are performed in the build directory which is
 $HgAutomate::clusterData/\$db/$HgAutomate::trackBuild/ensGene.<ensVersion #> unless -buildDir is given.
-ensGeneConfig.ra describes the species, assembly and downloaded files.
+<db>.ensGene.ra describes the species, assembly and downloaded files.
 To see detailed information about what should appear in config.ra,
 run \"$base -help\".
 ";
@@ -90,7 +90,7 @@ run \"$base -help\".
   if ($detailed) {
   print STDERR <<_EOF_
 -----------------------------------------------------------------------------
-Required ensGeneConfig.ra settings:
+Required <db>.ensGene.ra settings:
 
 db xxxYyyN
   - The UCSC database name and assembly identifier.  xxx is the first three
@@ -99,7 +99,7 @@ db xxxYyyN
     species that we have been processing since before this convention, the
     pattern is xyN.
 
-Optional ensGeneConfig.ra settings:
+Optional <db>.ensGene.ra settings:
 
 liftRandoms yes
   - Need to lift Ensembl contig coordinates to UCSC _random coordinates.
