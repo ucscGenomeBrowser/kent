@@ -94,7 +94,8 @@ struct segComp *segFindCompSpecies(struct segBlock *sb, char *species,
 /* Find component of given source that starts with species followed by
    sepChar or die trying. */
 
-
+struct segComp *cloneSegComp(struct segComp *sc);
+/* Return a copy of the argument segment component. */
 
 
 #endif /* SEG_H */
