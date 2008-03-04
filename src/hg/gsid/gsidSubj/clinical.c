@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "net.h"
 
-static char const rcsid[] = "$Id: clinical.c,v 1.8 2007/12/15 18:08:28 fanhsu Exp $";
+static char const rcsid[] = "$Id: clinical.c,v 1.9 2008/03/04 23:51:08 fanhsu Exp $";
 
 static boolean clinicalExists(struct section *section, 
 	struct sqlConnection *conn, char *subjId)
@@ -32,7 +32,7 @@ char bigQuery[2000];
 struct sqlResult *sr;
 char **row;
 char *specimenId, *labCode, *daysCollection, *hivQuan, *cd4Count;
-
+char *naString = strdup("N/A");
 printf("<TABLE BGCOLOR=#222222 CELLSPACING=1 CELLPADDING=3><TR>\n");
 
 printf("<TR>\n");
@@ -56,6 +56,10 @@ while (row != NULL)
     daysCollection = row[2];
     hivQuan        = row[3];
     cd4Count       = row[4];
+
+    if (daysCollection == NULL) daysCollection = naString;
+    if (hivQuan  == NULL) hivQuan = naString;
+    if (cd4Count == NULL) cd4Count = naString;
     
     printf("<TR>");
     printf("<TD align=right BGCOLOR=\"#D9F8E4\">%s</TD>\n", daysCollection);
@@ -93,10 +97,10 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 printf("</TR></TABLE>");
 printf("<br>* Estimated Study Day of Infection (ESDI), ");
-printf("click <a href=\"http://www.gsid.org/methods_and_conventions.html\"> here </a>");
+printf("click <a href=\"http://www.gsid.org/downloads/methods_and_conventions.pdf\" target=_blank> here </a>");
 printf(" for further explanation.\n");
 printf("<br>* Days After Estimated Infection (DAEI), ");
-printf("click <a href=\"http://www.gsid.org/methods_and_conventions.html\"> here </a>");
+printf("click <a href=\"http://www.gsid.org/downloads/methods_and_conventions.pdf\" target=_blank> here </a>");
 printf(" for further explanation.\n");
 return;
 }
