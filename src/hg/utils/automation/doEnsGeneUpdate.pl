@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/doEnsGeneUpdate.pl instead.
 
-# $Id: doEnsGeneUpdate.pl,v 1.10 2008/02/29 22:54:51 hiram Exp $
+# $Id: doEnsGeneUpdate.pl,v 1.11 2008/03/04 00:20:38 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -32,6 +32,7 @@ my $stepper = new HgStepManager(
       { name => 'process',   func => \&doProcess },
       { name => 'load',   func => \&doLoad },
       { name => 'cleanup', func => \&doCleanup },
+      { name => 'makeDoc', func => \&doMakeDoc },
     ]
 );
 
@@ -77,6 +78,8 @@ Automates UCSC's Ensembl gene updates.  Steps:
 		lift random contigs to UCSC random coordinates
     load: load the coding and non-coding tracks, and the proteins
     cleanup: Removes or compresses intermediate files.
+    makeDoc: Displays the make doc text entry to stdout for the procedure
+	which would be done for this build.
 All operations are performed in the build directory which is
 $HgAutomate::clusterData/\$db/$HgAutomate::trackBuild/ensGene.<ensVersion #> unless -buildDir is given.
 ensGeneConfig.ra describes the species, assembly and downloaded files.
@@ -347,6 +350,14 @@ _EOF_
 	  );
       }
   }
+  # if all of these are supposed to be valid, they should be able to
+  #	pass genePredCheck right now
+  if (! defined $skipInvalid) {
+      $bossScript->add(<<_EOF_
+genePredCheck -db=$db $db.allGenes.gp.gz
+_EOF_
+	  );
+  }
   $bossScript->execute();
 } # doProcess
 
@@ -405,6 +416,36 @@ _EOF_
   );
   $bossScript->execute();
 } # doCleanup
+
+#########################################################################
+# * step: makeDoc [fileServer]
+sub doMakeDoc {
+  my $runDir = "$buildDir";
+  my $whatItDoes = "Display the make doc text to stdout.";
+  my $fileServer = &HgAutomate::chooseFileServer($runDir);
+
+  my $updateTime = `hgsql -N -e 'select updateTime from trackVersion where db = "$db" order by updateTime DESC limit 1;' hgFixed`;
+  chomp $updateTime;
+  $updateTime =~ s/ .*//;	#	removes time
+
+  print <<_EOF_
+############################################################################
+#  Adding Ensembl Genes (DONE - $updateTime - $ENV{'USER'})
+    ssh $fileServer
+    cd /cluster/data/$db
+    cat << '_EOF_' > $db.ensGene.ra
+_EOF_
+  ;
+  print `cat $db.ensGene.ra`;
+  print "'_EOF_'\n";
+  print "#  << happy emacs\n\n";
+  print "    doEnsGeneUpdate.pl -ensVersion=$ensVersion $db.ensGene.ra\n";
+  print "    featureBits $db ensGene\n";
+  print "    # ";
+  print `featureBits $db ensGene`;
+  print "############################################################################\n";
+
+} # doMakeDoc
 
 sub requireVar {
   # Ensure that var is in %config and return its value.
@@ -531,7 +572,7 @@ $bedDir = "$topDir/$HgAutomate::trackBuild";
 
 # Force debug and verbose until this is looking pretty solid:
 # $opt_debug = 1;
-$opt_verbose = 3 if ($opt_verbose < 3);
+# $opt_verbose = 3 if ($opt_verbose < 3);
 
 # Establish what directory we will work in, tack on the ensembl version ID.
 $buildDir = $opt_buildDir ? $opt_buildDir :
