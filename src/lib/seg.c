@@ -8,7 +8,7 @@
 #include <fcntl.h>
 
 
-static char const rcsid[] = "$Id: seg.c,v 1.5 2008/03/03 18:12:39 rico Exp $";
+static char const rcsid[] = "$Id: seg.c,v 1.6 2008/03/04 19:59:42 rico Exp $";
 
 
 void segCompFree(struct segComp **pObj)
@@ -390,4 +390,21 @@ if (sc == NULL)
 		species, sepChar, species);
 
 return(sc);
+}
+
+struct segComp *cloneSegComp(struct segComp *sc)
+/* Return a copy of the argument segment component. */
+{
+struct segComp *newSc;
+
+AllocVar(newSc);
+
+newSc->next    = sc->next;
+newSc->src     = cloneString(sc->src);
+newSc->start   = sc->start;
+newSc->size    = sc->size;
+newSc->strand  = sc->strand;
+newSc->srcSize = sc->srcSize;
+
+return(newSc);
 }
