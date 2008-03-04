@@ -11,7 +11,7 @@
 #include "hgRelate.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgLoadBed.c,v 1.54 2008/03/01 00:21:51 jzhu Exp $";
+static char const rcsid[] = "$Id: hgLoadBed.c,v 1.55 2008/03/04 00:44:37 kate Exp $";
 
 /* Command line switches. */
 boolean noSort = FALSE;		/* don't sort */
@@ -25,6 +25,8 @@ boolean notItemRgb = FALSE;	/* do NOT parse field nine as r,g,b */
 boolean noStrict = FALSE;	/* skip the coord sanity checks */
 int bedGraph = 0;		/* bedGraph column option, non-zero means yes */
 char *sqlTable = NULL;		/* Read table from this .sql if non-NULL. */
+boolean renameSqlTable = FALSE;	/* Rename table created with -sqlTable to */
+                                /*     to match track */
 int maxChromNameLength = 0;	/* specify to avoid chromInfo */
 char *tmpDir = (char *)NULL;	/* location to create a temporary file */
 boolean nameIx = TRUE;	        /* FALSE == do not create the name index */
@@ -43,6 +45,7 @@ static struct optionSpec optionSpecs[] = {
     {"oldTable", OPTION_BOOLEAN},
     {"onServer", OPTION_BOOLEAN},
     {"sqlTable", OPTION_STRING},
+    {"renameSqlTable", OPTION_BOOLEAN},
     {"tab", OPTION_BOOLEAN},
     {"hasBin", OPTION_BOOLEAN},
     {"noLoad", OPTION_BOOLEAN},
@@ -74,6 +77,7 @@ errAbort(
   "   -onServer This will speed things up if you're running in a directory that\n"
   "             the mysql server can access.\n"
   "   -sqlTable=table.sql Create table from .sql file\n"
+  "   -renameSqlTable Rename table created with -sqlTable to match track\n"
   "   -tab  Separate by tabs rather than space\n"
   "   -hasBin   Input bed file starts with a bin field.\n"
   "   -noLoad  - Do not load database and do not clean up tab files\n"
@@ -274,12 +278,25 @@ if (sqlTable != NULL && !oldTable)
     char *sql, *s;
     readInGulp(sqlTable, &sql, NULL);
 
-    /* Chop of end-of-statement semicolon if need be. */
+    /* Chop off end-of-statement semicolon if need be. */
     s = strchr(sql, ';');
     if (s != NULL) *s = 0;
     
-    if ( ! noLoad )
-	sqlRemakeTable(conn, track, sql);
+    if ( !noLoad )
+        {
+        if (renameSqlTable)
+            {
+            char *pos = stringIn("CREATE TABLE ", sql);
+            if (pos == NULL)
+                errAbort("Can't find CREATE TABLE in %s\n", sqlTable);
+            char *oldSql = cloneString(sql);
+            nextWord(&pos); nextWord(&pos);
+            char *tableName = nextWord(&pos);
+            sql = replaceChars(oldSql, tableName, track);
+            }
+        verbose(1, "Creating table definition for %s\n", track);
+        sqlRemakeTable(conn, track, sql);
+        }
 
     freez(&sql);
     }
@@ -439,6 +456,7 @@ noSort = optionExists("noSort");
 strictTab = optionExists("tab");
 oldTable = optionExists("oldTable");
 sqlTable = optionVal("sqlTable", sqlTable);
+renameSqlTable = optionExists("renameSqlTable");
 hasBin = optionExists("hasBin");
 noLoad = optionExists("noLoad");
 bedGraph = optionInt("bedGraph",0);
