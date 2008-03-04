@@ -22,6 +22,7 @@ development:
   title: ENCODE
   from: you@somewhere.com
   emailOnLoad: somebody@somewhere.com
+  emailDCC: somebody@somewhere.com
 
 # Warning: The database defined as 'test' will be erased and
 # re-generated from your development database when you run 'rake'.
@@ -37,6 +38,7 @@ test:
   title: ENCODE
   from: you@somewhere.com
   emailOnLoad: somebody@somewhere.com
+  emailDCC: somebody@somewhere.com
 
 
 production:
@@ -50,4 +52,5 @@ production:
   title: ENCODE
   from: you@somewhere.com
   emailOnLoad: somebody@somewhere.com
+  emailDCC: somebody@somewhere.com
 
