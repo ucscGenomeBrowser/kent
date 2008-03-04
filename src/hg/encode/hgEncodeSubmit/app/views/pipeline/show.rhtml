@@ -71,10 +71,10 @@
 <% if !@project.project_archives.blank? && @project.status != "new"  %>
 <table cellspacing=2 cellpadding=2>
 <tr><td></td>
-<td align="center"><b>File</b></td>
-<td align="center"><b>Size</b></td>
-<td align="center"><b>Updated</b></td>
-<td align="center"><b>Status</b></td>
+<td align="left"><b>File</b></td>
+<td align="left"><b>Size</b></td>
+<td align="left"><b>Updated</b></td>
+<td align="left"><b>Status</b></td>
 <td></td></tr>
 <% @project.project_archives.reverse_each do |a| %>
   <% n = a.archive_no-1 %>
