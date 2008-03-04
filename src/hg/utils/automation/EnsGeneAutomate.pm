@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/EnsGeneAutomate.pm instead.
 
-# $Id: EnsGeneAutomate.pm,v 1.5 2008/02/29 23:24:37 hiram Exp $
+# $Id: EnsGeneAutomate.pm,v 1.6 2008/03/04 00:33:14 hiram Exp $
 package EnsGeneAutomate;
 
 use warnings;
@@ -31,7 +31,7 @@ my $ensemblFTP = "ftp://ftp.ensembl.org/pub/";
 # key is UCSC db name, result is FTP file name under the gtf directory
 my %ensGeneFtpFileNames_47 = (
 'aedAeg0' => 'Aedes_aegypti.AaegL1.47.gtf.gz',
-'anoGam1' => 'Anopheles_gambiae.AgamP3.47.gtf.gz',
+'anoGam2' => 'Anopheles_gambiae.AgamP3.47.gtf.gz',
 'bosTau3' => 'Bos_taurus.Btau_3.1.47.gtf.gz',
 'ce5' => 'Caenorhabditis_elegans.WS180.47.gtf.gz',
 'canFam2' => 'Canis_familiaris.BROADD2.47.gtf.gz',
@@ -69,7 +69,7 @@ my %ensGeneFtpFileNames_47 = (
 
 my %ensGeneFtpPeptideFileNames_47 = (
 'aedAeg0' => 'aedes_aegypti_47_1a/pep/Aedes_aegypti.AaegL1.47.pep.all.fa.gz',
-'anoGam1' => 'anopheles_gambiae_47_3i/pep/Anopheles_gambiae.AgamP3.47.pep.all.fa.gz',
+'anoGam2' => 'anopheles_gambiae_47_3i/pep/Anopheles_gambiae.AgamP3.47.pep.all.fa.gz',
 'bosTau3' => 'bos_taurus_47_3d/pep/Bos_taurus.Btau_3.1.47.pep.all.fa.gz',
 'ce5' => 'caenorhabditis_elegans_47_180/pep/Caenorhabditis_elegans.WS180.47.pep.all.fa.gz',
 'canFam2' => 'canis_familiaris_47_2e/pep/Canis_familiaris.BROADD2.47.pep.all.fa.gz',
@@ -109,7 +109,7 @@ my %ensGeneFtpPeptideFileNames_47 = (
 #	'assembly' table copies for GeneScaffold coordinate conversions
 my %ensGeneFtpMySqlFileNames_47 = (
 'aedAeg0' => 'aedes_aegypti_core_47_1a',
-'anoGam1' => 'anopheles_gambiae_core_47_3i',
+'anoGam2' => 'anopheles_gambiae_core_47_3i',
 'bosTau3' => 'bos_taurus_core_47_3d',
 'ce5' => 'caenorhabditis_elegans_core_47_180',
 'canFam2' => 'canis_familiaris_core_47_2e',
@@ -148,7 +148,7 @@ my %ensGeneFtpMySqlFileNames_47 = (
 # key is UCSC db name, result is FTP file name under the gtf directory
 my %ensGeneFtpFileNames_48 = (
 'aedAeg0' => 'aedes_aegypti/Aedes_aegypti.AaegL1.48.gtf.gz',
-'anoGam1' => 'anopheles_gambiae/Anopheles_gambiae.AgamP3.48.gtf.gz',
+'anoGam2' => 'anopheles_gambiae/Anopheles_gambiae.AgamP3.48.gtf.gz',
 'bosTau3' => 'bos_taurus/Bos_taurus.Btau_3.1.48.gtf.gz',
 'ce5' => 'caenorhabditis_elegans/Caenorhabditis_elegans.WS180.48.gtf.gz',
 'canFam2' => 'canis_familiaris/Canis_familiaris.BROADD2.48.gtf.gz',
@@ -189,7 +189,7 @@ my %ensGeneFtpFileNames_48 = (
 # key is UCSC db name, result is FTP file name under the fasta directory
 my %ensGeneFtpPeptideFileNames_48 = (
 'aedAeg0' => 'aedes_aegypti/pep/Aedes_aegypti.AaegL1.48.pep.all.fa.gz',
-'anoGam1' => 'anopheles_gambiae/pep/Anopheles_gambiae.AgamP3.48.pep.all.fa.gz',
+'anoGam2' => 'anopheles_gambiae/pep/Anopheles_gambiae.AgamP3.48.pep.all.fa.gz',
 'bosTau3' => 'bos_taurus/pep/Bos_taurus.Btau_3.1.48.pep.all.fa.gz',
 'ce5' => 'caenorhabditis_elegans/pep/Caenorhabditis_elegans.WS180.48.pep.all.fa.gz',
 'canFam2' => 'canis_familiaris/pep/Canis_familiaris.BROADD2.48.pep.all.fa.gz',
@@ -231,7 +231,7 @@ my %ensGeneFtpPeptideFileNames_48 = (
 #	'assembly' table copies for GeneScaffold coordinate conversions
 my %ensGeneFtpMySqlFileNames_48 = (
 'aedAeg0' => 'aedes_aegypti_core_48_1b',
-'anoGam1' => 'anopheles_gambiae_core_48_3j',
+'anoGam2' => 'anopheles_gambiae_core_48_3j',
 'bosTau3' => 'bos_taurus_core_48_3e',
 'ce5' => 'caenorhabditis_elegans_core_48_180a',
 'canFam2' => 'canis_familiaris_core_48_2f',
