@@ -13,7 +13,7 @@
 #include "seg.h"
 
 
-static char const rcsid[] = "$Id: mafToAnc.c,v 1.4 2008/03/03 16:48:32 rico Exp $";
+static char const rcsid[] = "$Id: mafToAnc.c,v 1.5 2008/03/04 19:23:38 rico Exp $";
 
 struct aliCont
 /* A container for an alignment block. */
@@ -68,7 +68,7 @@ errAbort(
   "   out.anc  name of the output anchor file\n"
   "options:\n"
   "   -minLen=<D>       Minimum length of an ungapped alignment to define an\n"
-  "                     anchor.  (default=100)\n"
+  "                     anchor.  (default = 100)\n"
   "   -noCheckSrc       Don't check that the src of the first component of\n"
   "                     every alignment block is the same.\n"
   "   -noCheckStrand    Don't check that the first component of every\n"
@@ -78,6 +78,16 @@ errAbort(
   );
 }
 
+static void freeSpeciesInfo(void **pObj)
+/* Free a speciesInfo struct. */
+{
+struct speciesInfo *si = *pObj;
+
+freeMem(si->chrom);
+freeMem(si);
+
+*pObj = NULL;
+}
 
 static struct segBlock *buildAnchorBlock(int len, struct mafAli *ma, int *cp)
 /* Build and anchor from the argument data. */
@@ -310,9 +320,8 @@ for (ac = *acList; ac != NULL; ac = next)
 	}
 
 carefulClose(&f);
-
-/* Deallocate the compPos array. */
 freeMem(compPos);
+hashFreeWithVals(&speciesHash, freeSpeciesInfo);
 }
 
 
