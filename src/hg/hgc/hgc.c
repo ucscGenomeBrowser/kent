@@ -214,7 +214,7 @@
 #include "itemConf.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1395 2008/03/03 21:00:53 hiram Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1396 2008/03/04 00:43:29 kate Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -699,7 +699,7 @@ void bedPrintPos(struct bed *bed, int bedSize)
  * standard format. */
 {
 char *strand = NULL;
-if (bedSize >= 4)
+if (bedSize >= 4 && bed->name[0] != 0)
     printf("<B>Item:</B> %s<BR>\n", bed->name);
 if (bedSize >= 5)
     printf("<B>Score:</B> %d<BR>\n", bed->score);
