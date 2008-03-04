@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/doEnsGeneUpdate.pl instead.
 
-# $Id: doEnsGeneUpdate.pl,v 1.11 2008/03/04 00:20:38 hiram Exp $
+# $Id: doEnsGeneUpdate.pl,v 1.12 2008/03/04 00:28:58 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -427,10 +427,12 @@ sub doMakeDoc {
   my $updateTime = `hgsql -N -e 'select updateTime from trackVersion where db = "$db" order by updateTime DESC limit 1;' hgFixed`;
   chomp $updateTime;
   $updateTime =~ s/ .*//;	#	removes time
+  my $organism = `hgsql -N -e 'select organism from dbDb where name = "$db";' hgcentraltest`;
+  chomp $organism;
 
   print <<_EOF_
 ############################################################################
-#  Adding Ensembl Genes (DONE - $updateTime - $ENV{'USER'})
+#  $db - $organism - Ensembl Genes (DONE - $updateTime - $ENV{'USER'})
     ssh $fileServer
     cd /cluster/data/$db
     cat << '_EOF_' > $db.ensGene.ra
