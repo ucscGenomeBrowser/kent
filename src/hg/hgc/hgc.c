@@ -214,7 +214,7 @@
 #include "itemConf.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1396 2008/03/04 00:43:29 kate Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1397 2008/03/05 19:18:20 hiram Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -7313,12 +7313,15 @@ else
 char query[512];
 safef(query, sizeof(query), "name = \"%s\"", itemName);
 struct genePred *gpList = genePredReaderLoadQuery(conn, "ensGene", query);
-printf("<B>Ensembl Gene Link: </B>");
-if (sameString(gpList->name2, "noXref"))
-   printf("none<BR>\n");
-else
-   printf("<A HREF=\"%s/geneview?gene=%s\" "
-	"target=_blank>%s</A><BR>", ensUrl, gpList->name2, gpList->name2);
+if (gpList && gpList->name2)
+    {
+    printf("<B>Ensembl Gene Link: </B>");
+    if (sameString(gpList->name2, "noXref"))
+       printf("none<BR>\n");
+    else
+       printf("<A HREF=\"%s/geneview?gene=%s\" "
+	    "target=_blank>%s</A><BR>", ensUrl, gpList->name2, gpList->name2);
+    }
 genePredFreeList(&gpList);
 
 printf("<B>Ensembl Transcript: </B>");
