@@ -9,7 +9,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeUnload/doEncodeUnload.rb,v 1.3 2008/01/25 01:00:07 galt Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeUnload/doEncodeUnload.rb,v 1.4 2008/03/05 23:09:06 galt Exp $
 
 $scripts = "/cluster/bin/scripts"
 
@@ -144,6 +144,10 @@ ra.each do |x|
   verbose 2, "  assembly  #{h["assembly"]}\n" 
   verbose 2, "  files     #{h["files"]}\n"  
   verbose 2, "  tablenameExt #{tablenameExt}\n" 
+
+  # temporary work-around
+  $encodeDb = h["assembly"]
+
   case h["type"]
   when "genePred"
     unloadGene tablenameExt
