@@ -15,7 +15,7 @@
 #include "hgConfig.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.105 2007/10/16 18:06:01 angie Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.106 2008/03/05 00:45:04 angie Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -758,6 +758,52 @@ sqlFreeResult(&sr);
 return exists;
 }
 
+static char **sqlMaybeNextRow(struct sqlResult *sr, boolean *retOk)
+/* Get next row from query result; set retOk according to error status. */
+{
+char** row = NULL;
+if (sr != NULL)
+    {
+    monitorEnter();
+    row = mysql_fetch_row(sr->result);
+    monitorLeave();
+    if (mysql_errno(sr->conn->conn) != 0)
+	{
+	if (retOk != NULL)
+	    *retOk = FALSE;
+	}
+    else if (retOk != NULL)
+	*retOk = TRUE;
+    }
+else if (retOk != NULL)
+    *retOk = TRUE;
+return row;
+}
+
+boolean sqlTableOk(struct sqlConnection *sc, char *table)
+/* Return TRUE if a table not only exists, but also is not corrupted. */
+{
+int rowCount = sqlTableSizeIfExists(sc, table);
+if (rowCount < 0)
+    return FALSE;
+else if (rowCount == 0)
+    return TRUE;
+else
+    {
+    char query[256];
+    struct sqlResult *sr;
+    boolean ret = TRUE;
+    safef(query, sizeof(query), "select * from %s limit 1,1", table);
+    if ((sr = sqlUseOrStore(sc,query,mysql_use_result, FALSE)) == NULL)
+	ret = FALSE;
+    else
+	/* Discard row, but see if we get an error while reading it. */
+	sqlMaybeNextRow(sr, &ret);
+    sqlFreeResult(&sr);
+    return ret;
+    }
+}
+
 struct sqlResult *sqlGetResult(struct sqlConnection *sc, char *query)
 /* Returns NULL if result was empty.  Otherwise returns a structure
  * that you can do sqlRow() on. */
@@ -968,15 +1014,10 @@ return sqlUseOrStore(sc,query,mysql_store_result, TRUE);
 char **sqlNextRow(struct sqlResult *sr)
 /* Get next row from query result. */
 {
-char** row = NULL;
-if (sr != NULL)
-    {
-    monitorEnter();
-    row = mysql_fetch_row(sr->result);
-    monitorLeave();
-    if (mysql_errno(sr->conn->conn) != 0)
-        sqlAbort(sr->conn, "nextRow failed");
-    }
+boolean ok = FALSE;
+char** row = sqlMaybeNextRow(sr, &ok);
+if (! ok)
+    sqlAbort(sr->conn, "nextRow failed");
 return row;
 }
 

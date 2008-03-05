@@ -175,6 +175,9 @@ boolean sqlTableWildExists(struct sqlConnection *sc, char *table);
 /* Return TRUE if table (which can include SQL wildcards) exists. 
  * A bit slower than sqlTableExists. */
 
+boolean sqlTableOk(struct sqlConnection *sc, char *table);
+/* Return TRUE if a table not only exists, but also is not corrupted. */
+
 char *sqlQuickQuery(struct sqlConnection *sc, char *query, char *buf, int bufSize);
 /* Does query and returns first field in first row.  Meant
  * for cases where you are just looking up one small thing.  
