@@ -7,7 +7,7 @@
 #	zcat fixedStepData.gz | ./fixStepToBedGraph.pl \
 #		| gzip > bedGraph.gz
 
-#	$Id: fixStepToBedGraph.pl,v 1.1 2005/10/27 20:03:53 hiram Exp $
+#	$Id: fixStepToBedGraph.pl,v 1.2 2008/03/05 18:18:14 kate Exp $
 
 use warnings;
 use strict;
@@ -46,6 +46,7 @@ if ( $dataValue =~ m/^fixedStep / ) {
     }
   } else {
       printf "%s\t%d\t%d\t%g\n", $chr, $position, $position+$span, $dataValue;
-      ++$position;
+      $position;
+      $position = $position + $step;
   }
 }
