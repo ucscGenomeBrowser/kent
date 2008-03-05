@@ -35,7 +35,7 @@
 #include "customTrack.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.346 2008/02/26 01:32:24 markd Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.347 2008/03/05 01:00:01 angie Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -643,13 +643,22 @@ struct sqlConnection *hConnectCentral()
 {
 struct sqlConnection *conn = NULL;
 if (centralCc == NULL)
-    centralCc = getCentralCcFromCfg("central");
-conn = sqlMayAllocConnection(centralCc, FALSE);
-if (conn == NULL)
     {
-    centralCc = getCentralCcFromCfg("backupcentral");
-    conn = sqlAllocConnection(centralCc);
+    centralCc = getCentralCcFromCfg("central");
+    conn = sqlMayAllocConnection(centralCc, FALSE);
+    if (conn == NULL || !cartTablesOk(conn))
+	{
+	centralCc = getCentralCcFromCfg("backupcentral");
+	conn = sqlAllocConnection(centralCc);
+	if (!cartTablesOk(conn))
+	    errAbort("Cannot access cart tables in central (nor backupcentral) "
+		     "database.  Please check central and backupcentral "
+		     "settings in the hg.conf file, and the databases they "
+		     "specify.");
+	}
     }
+else
+    conn = sqlAllocConnection(centralCc);
 return(conn);
 }
 
