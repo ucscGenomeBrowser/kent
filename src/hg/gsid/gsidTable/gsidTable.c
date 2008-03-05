@@ -20,7 +20,7 @@
 #include "gsidTable.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidTable.c,v 1.35 2008/02/22 17:57:20 fanhsu Exp $";
+static char const rcsid[] = "$Id: gsidTable.c,v 1.36 2008/03/05 05:39:11 fanhsu Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "submit_filter", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -325,11 +325,11 @@ hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgGateway?db=%s\" class=\"topbar\
 
 if (cartVarExists(cart, advFilterVarName))
     {
-    hPrintf("<TD ALIGN=CENTER><A HREF=\"/goldenPath/help/gsidTutorial.html#SelectSubject\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Help</FONT></A></TD>");
+    hPrintf("<TD ALIGN=CENTER><A HREF=\"/goldenPath/help/gsidTutorial.html#SelectSubject\" TARGET=_blank class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Help</FONT></A></TD>");
     }
 else
     {
-    hPrintf("<TD ALIGN=CENTER><A HREF=\"/goldenPath/help/gsidTutorial.html#TableView\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Help</FONT></A></TD>");
+    hPrintf("<TD ALIGN=CENTER><A HREF=\"/goldenPath/help/gsidTutorial.html#TableView\" TARGET=_blank class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Help</FONT></A></TD>");
     }
 
 hPuts("</TR></TABLE>");
@@ -354,10 +354,10 @@ if (subjList != NULL)
     bigTable(conn, colList,subjList);
 
 printf("<br>* Estimated Study Day of Infection (ESDI), ");
-printf("click <a href=\"http://www.gsid.org/methods_and_conventions.html\"> here </a>");
+printf("click <a href=\"http://www.gsid.org/downloads/methods_and_conventions.pdf\" target=_blank> here </a>");
 printf(" for further explanation.\n");
 printf("<br>* Days After Estimated Infection (DAEI), ");
-printf("click <a href=\"http://www.gsid.org/methods_and_conventions.html\"> here </a>");
+printf("click <a href=\"http://www.gsid.org/downloads/methods_and_conventions.pdf\" target=_blank> here </a>");
 printf(" for further explanation.\n");
 
 hPrintf("</FORM>\n");
@@ -609,7 +609,11 @@ else
 	freeMem(s);
 	s = cloneString("&nbsp;");
 	}
+if (!sameString(col->name,"dnaSeqs"))
     hPrintNonBreak(s);
+else
+    hPrintf("%s", s);
+
     if (needsLink)
 	hPrintf("</A>");
     freeMem(s);
