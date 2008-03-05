@@ -36,3 +36,30 @@
 36	rn3	ensGene	fanhsu	21	2004-04-29 09:57:47	estimated version 21, fetched 2004-04-29	EnsMart
 37	rn4	ensGene	angie	39	2006-06-13 08:38:02	current 2008-02-25 version on the RR, fetched 2006-06-13	EnsMart
 38	rn4	ensGene	baertsch	43	2007-03-13 07:43:44	most likely fetched 2007-03-13 via Robert's automatic mechanism	ftp://ftp.ensembl.org/pub/release-43/rattus_norvegicus_43_34m/data/gtf/Rattus_norvegicus.RGSC3.4.43.gtf.gz
+40	ornAna1	ensGene	hiram	48	2008-02-26 10:38:08	with peptides Ornithorhynchus_anatinus.OANA5.48.pep.all.fa.gz	ftp://ftp.ensembl.org/pub/release-48/gtf/ornithorhynchus_anatinus/Ornithorhynchus_anatinus.OANA5.48.gtf.gz
+41	ornAna1	ensGene	hiram	48	2008-02-26 11:26:47	with peptides Ornithorhynchus_anatinus.OANA5.48.pep.all.fa.gz	ftp://ftp.ensembl.org/pub/release-48/gtf/ornithorhynchus_anatinus/Ornithorhynchus_anatinus.OANA5.48.gtf.gz
+42	panTro2	ensGene	hiram	48	2008-02-26 15:06:46	with peptides Pan_troglodytes.CHIMP2.1.48.pep.all.fa.gz	ftp://ftp.ensembl.org/pub/release-48/gtf/pan_troglodytes/Pan_troglodytes.CHIMP2.1.48.gtf.gz
+43	panTro2	ensGene	hiram	48	2008-02-26 15:08:30	with peptides Pan_troglodytes.CHIMP2.1.48.pep.all.fa.gz	ftp://ftp.ensembl.org/pub/release-48/gtf/pan_troglodytes/Pan_troglodytes.CHIMP2.1.48.gtf.gz
+44	hg18	ensGene	hiram	48	2008-02-27 10:35:25	with peptides Homo_sapiens.NCBI36.48.pep.all.fa.gz	ftp://ftp.ensembl.org/pub/release-48/gtf/homo_sapiens/Homo_sapiens.NCBI36.48.gtf.gz
+45	rheMac2	ensGene	hiram	48	2008-02-28 10:28:05	with peptides Macaca_mulatta.MMUL_1.48.pep.all.fa.gz	ftp://ftp.ensembl.org/pub/release-48/gtf/macaca_mulatta/Macaca_mulatta.MMUL_1.48.gtf.gz
+46	otoGar1	ensGene	hiram	48	2008-02-29 13:44:05	with peptides Otolemur_garnettii.BUSHBABY1.48.pep.all.fa.gz	ftp://ftp.ensembl.org/pub/release-48/gtf/otolemur_garnettii/Otolemur_garnettii.BUSHBABY1.48.gtf.gz
+47	otoGar1	ensGene	hiram	48	2008-02-29 14:40:43	with peptides Otolemur_garnettii.BUSHBABY1.48.pep.all.fa.gz	ftp://ftp.ensembl.org/pub/release-48/gtf/otolemur_garnettii/Otolemur_garnettii.BUSHBABY1.48.gtf.gz
+48	oryCun1	ensGene	hiram	48	2008-02-29 15:07:32	with peptides Oryctolagus_cuniculus.RABBIT.48.pep.all.fa.gz	ftp://ftp.ensembl.org/pub/release-48/gtf/oryctolagus_cuniculus/Oryctolagus_cuniculus.RABBIT.48.gtf.gz
+49	tupBel1	ensGene	hiram	48	2008-02-29 15:14:19	with peptides Tupaia_belangeri.TREESHREW.48.pep.all.fa.gz	ftp://ftp.ensembl.org/pub/release-48/gtf/tupaia_belangeri/Tupaia_belangeri.TREESHREW.48.gtf.gz
+50	rn4	ensGene	hiram	48	2008-02-29 15:34:07	with peptides Rattus_norvegicus.RGSC3.4.48.pep.all.fa.gz	ftp://ftp.ensembl.org/pub/release-48/gtf/rattus_norvegicus/Rattus_norvegicus.RGSC3.4.48.gtf.gz
+51	felCat3	ensGene	hiram	48	2008-02-29 15:46:12	with peptides Felis_catus.CAT.48.pep.all.fa.gz	ftp://ftp.ensembl.org/pub/release-48/gtf/felis_catus/Felis_catus.CAT.48.gtf.gz
+52	ci2	ensGene	hiram	48	2008-02-29 15:54:44	with peptides Ciona_intestinalis.JGI2.48.pep.all.fa.gz	ftp://ftp.ensembl.org/pub/release-48/gtf/ciona_intestinalis/Ciona_intestinalis.JGI2.48.gtf.gz
+53	mm9	ensGene	hiram	48	2008-02-29 15:56:50	with peptides Mus_musculus.NCBIM37.48.pep.all.fa.gz	ftp://ftp.ensembl.org/pub/release-48/gtf/mus_musculus/Mus_musculus.NCBIM37.48.gtf.gz
+54	canFam2	ensGene	hiram	48	2008-02-29 16:06:00	with peptides Canis_familiaris.BROADD2.48.pep.all.fa.gz	ftp://ftp.ensembl.org/pub/release-48/gtf/canis_familiaris/Canis_familiaris.BROADD2.48.gtf.gz
+55	bosTau3	ensGene	hiram	48	2008-02-29 16:41:42	with peptides Bos_taurus.Btau_3.1.48.pep.all.fa.gz	ftp://ftp.ensembl.org/pub/release-48/gtf/bos_taurus/Bos_taurus.Btau_3.1.48.gtf.gz
+56	dasNov1	ensGene	hiram	48	2008-02-29 16:50:14	with peptides Dasypus_novemcinctus.ARMA.48.pep.all.fa.gz	ftp://ftp.ensembl.org/pub/release-48/gtf/dasypus_novemcinctus/Dasypus_novemcinctus.ARMA.48.gtf.gz
+57	echTel1	ensGene	hiram	48	2008-02-29 16:55:09	with peptides Echinops_telfairi.TENREC.48.pep.all.fa.gz	ftp://ftp.ensembl.org/pub/release-48/gtf/echinops_telfairi/Echinops_telfairi.TENREC.48.gtf.gz
+58	loxAfr1	ensGene	hiram	48	2008-02-29 17:01:24	with peptides Loxodonta_africana.BROADE1.48.pep.all.fa.gz	ftp://ftp.ensembl.org/pub/release-48/gtf/loxodonta_africana/Loxodonta_africana.BROADE1.48.gtf.gz
+59	galGal3	ensGene	hiram	48	2008-03-03 08:57:19	with peptides Gallus_gallus.WASHUC2.48.pep.all.fa.gz	ftp://ftp.ensembl.org/pub/release-48/gtf/gallus_gallus/Gallus_gallus.WASHUC2.48.gtf.gz
+60	xenTro2	ensGene	hiram	48	2008-03-03 09:04:32	with peptides Xenopus_tropicalis.JGI4.1.48.pep.all.fa.gz	ftp://ftp.ensembl.org/pub/release-48/gtf/xenopus_tropicalis/Xenopus_tropicalis.JGI4.1.48.gtf.gz
+61	danRer5	ensGene	hiram	48	2008-03-03 09:08:04	with peptides Danio_rerio.ZFISH7.48.pep.all.fa.gz	ftp://ftp.ensembl.org/pub/release-48/gtf/danio_rerio/Danio_rerio.ZFISH7.48.gtf.gz
+62	tetNig1	ensGene	hiram	48	2008-03-03 09:14:12	with peptides Tetraodon_nigroviridis.TETRAODON7.48.pep.all.fa.gz	ftp://ftp.ensembl.org/pub/release-48/gtf/tetraodon_nigroviridis/Tetraodon_nigroviridis.TETRAODON7.48.gtf.gz
+63	fr2	ensGene	hiram	48	2008-03-03 09:30:30	with peptides Takifugu_rubripes.FUGU4.48.pep.all.fa.gz	ftp://ftp.ensembl.org/pub/release-48/gtf/takifugu_rubripes/Takifugu_rubripes.FUGU4.48.gtf.gz
+64	sacCer1	ensGene	hiram	48	2008-03-03 10:07:22	with peptides Saccharomyces_cerevisiae.SGD1.48.pep.all.fa.gz	ftp://ftp.ensembl.org/pub/release-48/gtf/saccharomyces_cerevisiae/Saccharomyces_cerevisiae.SGD1.48.gtf.gz
+65	gasAcu1	ensGene	hiram	48	2008-03-03 10:32:20	with peptides Gasterosteus_aculeatus.BROADS1.48.pep.all.fa.gz	ftp://ftp.ensembl.org/pub/release-48/gtf/gasterosteus_aculeatus/Gasterosteus_aculeatus.BROADS1.48.gtf.gz
+66	oryLat1	ensGene	hiram	48	2008-03-03 11:46:26	with peptides Oryzias_latipes.MEDAKA1.48.pep.all.fa.gz	ftp://ftp.ensembl.org/pub/release-48/gtf/oryzias_latipes/Oryzias_latipes.MEDAKA1.48.gtf.gz
