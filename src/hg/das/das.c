@@ -13,7 +13,7 @@
 #include "trackTable.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: das.c,v 1.35 2006/11/13 22:57:33 donnak Exp $";
+static char const rcsid[] = "$Id: das.c,v 1.36 2008/03/05 00:02:58 markd Exp $";
 
 char *version = "1.00";
 char *database = NULL;	
@@ -499,7 +499,7 @@ struct slName *db;
 
 normalHeader();
 printf(
-// " <!DOCTYPE DASDSN SYSTEM \"http://www.biodas.org/dtd/dasdsn.dtd\">\n"
+"<!DOCTYPE DASDSN SYSTEM \"http://www.biodas.org/dtd/dasdsn.dtd\">\n"
 " <DASDSN>\n");
 for (db = dbList; db != NULL; db = db->next)
     {
@@ -594,19 +594,6 @@ return acc;
 }
 
 
-void regExpTest(char *needle, char *haystack)
-/* Test regular expression. */
-{
-regex_t preg;
-int res;
-res = regcomp(&preg, needle, REG_NOSUB);
-printf("Result of regcomp is %d\n", res);
-res = regexec(&preg, haystack, 0, NULL, 0);
-printf("Result of regexec is %d\n", res);
-regfree(&preg);
-printf("All done\n");
-}
-
 void doTypes()
 /* Handle a types request. */
 {
@@ -616,7 +603,7 @@ struct regExp *category = regExpFromCgiVar("category");
 struct regExp *type = regExpFromCgiVar("type");
 
 normalHeader();
-// printf("<!DOCTYPE DASTYPES SYSTEM \"http://www.biodas.org/dtd/dastypes.dtd\">\n");
+printf("<!DOCTYPE DASTYPES SYSTEM \"http://www.biodas.org/dtd/dastypes.dtd\">\n");
 printf("<DASTYPES>\n");
 printf("<GFF version=\"1.2\" summary=\"yes\" href=\"%s\">\n", currentUrl());
 for (segment = segmentList;;)
@@ -784,6 +771,7 @@ struct tableDef *tdList = getTables(), *td;
 struct regExp *category = regExpFromCgiVar("category");
 struct regExp *type = regExpFromCgiVar("type");
 struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn2 = hAllocConn();
 struct sqlResult *sr;
 char **row;
 int start, end;
@@ -793,7 +781,7 @@ struct dyString *query = newDyString(0);
 /* Write out DAS features header. */
 normalHeader();
 printf(
-// "<!DOCTYPE DASGFF SYSTEM \"http://www.biodas.org/dtd/dasgff.dtd\">\n"
+"<!DOCTYPE DASGFF SYSTEM \"http://www.biodas.org/dtd/dasgff.dtd\">\n"
 "<DASGFF>\n"
 "<GFF version=\"1.0\" href=\"%s\">\n", currentUrl());
 
@@ -821,7 +809,9 @@ for (segment = segmentList; segment != NULL; segment = segment->next)
 	    hFindSplitTable(seq, td->name, table, &hasBin);
 	    tt = hashFindVal(trackHash, td->name);
 	    sr = hRangeQuery(conn, td->name, seq, start, end, NULL, &rowOffset);
-	    if (sameString(td->startField, "tStart"))
+            // FIXME: should use trackDb to determine type, as field names are
+            // not always unique.
+	    if (sameString(td->startField, "tStart") && (sqlFieldIndex(conn2, table, "qStart") >= 0))
 		{
 		while ((row = sqlNextRow(sr)) != NULL)
 		    {
@@ -870,6 +860,7 @@ printf("</GFF></DASGFF>\n");
 /* Clean up. */
 freeDyString(&query);
 freeHash(&trackHash);
+hFreeConn(&conn2);
 hFreeConn(&conn);
 }
 
@@ -884,7 +875,7 @@ struct chromInfo *ci;
 
 normalHeader();
 conn = hAllocConn();
-// printf("<!DOCTYPE DASEP SYSTEM \"http://www.biodas.org/dtd/dasep.dtd\">\n");
+printf("<!DOCTYPE DASEP SYSTEM \"http://www.biodas.org/dtd/dasep.dtd\">\n");
 printf("<DASEP>\n");
 printf("<ENTRY_POINTS href=\"%s\" version=\"7.00\">\n",
 	currentUrl());
@@ -915,7 +906,7 @@ int i, oneSize, lineSize = 50;
 
 /* Write header. */
 normalHeader();
-// printf("<!DOCTYPE DASDNA SYSTEM \"http://www.biodas.org/dtd/dasdna.dtd\">\n");
+printf("<!DOCTYPE DASDNA SYSTEM \"http://www.biodas.org/dtd/dasdna.dtd\">\n");
 printf("<DASDNA>\n");
 
 /* Write each sequence. */
