@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.133 2008/02/20 00:42:28 markd Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.134 2008/03/05 02:12:46 markd Exp $";
 
 struct hash *snp125FuncCartColorHash = NULL;
 struct hash *snp125FuncCartNameHash = NULL;
@@ -1218,13 +1218,16 @@ else
 tg->canPack = FALSE;
 }
 
-void mapDiamondUi(int xl, int yl, int xt, int yt, 
+void mapDiamondUi(struct hvGfx *hvg, int xl, int yl, int xt, int yt, 
 		  int xr, int yr, int xb, int yb, 
 		  char *name, char *shortLabel, char *trackName)
 /* Print out image map rectangle that invokes hgTrackUi. */
 {
 hPrintf("<AREA SHAPE=POLY COORDS=\"%d,%d,%d,%d,%d,%d,%d,%d\" ", 
-	xl, yl, xt, yt, xr, yr, xb, yb);
+	hvGfxAdjX(hvg, xl), yl, 
+        hvGfxAdjX(hvg, xt), yt,
+        hvGfxAdjX(hvg, xr), yr,
+        hvGfxAdjX(hvg, xb), yb);
 /* move this to hgTracks when finished */
 hPrintf("HREF=\"%s?%s=%u&c=%s&g=%s&i=%s\"", hgTrackUiName(), 
 	cartSessionVarName(), cartSessionId(cart), chromName, trackName, name);
@@ -1232,9 +1235,10 @@ mapStatusMessage("%s controls", shortLabel);
 hPrintf(">\n");
 }
 
-void mapTrackBackground(struct track *tg, int xOff, int yOff)
+void mapTrackBackground(struct track *tg, struct hvGfx *hvg, int xOff, int yOff)
 /* Print out image map rectangle that invokes hgTrackUi. */
 {
+xOff = hvGfxAdjXW(hvg, xOff, insideWidth);
 hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", 
 	xOff, yOff, xOff+insideWidth, yOff+tg->height);
 /* move this to hgTracks when finished */
@@ -1332,7 +1336,7 @@ return; /* mapDiamondUI is working well, but there is a bug with
 	   AREA=POLY on the Mac browsers, so this will be 
 	   postponed for now by not using this code */
 if (drawMap && xt-xl>5 && xb-xl>5)
-    mapDiamondUi(xl, yl, xt, yt, xr, yr, xb, yb, name, tg->mapName,
+    mapDiamondUi(hvg, xl, yl, xt, yt, xr, yr, xb, yb, name, tg->mapName,
 		 tg->tdb->tableName);
 }
 
@@ -1655,7 +1659,7 @@ if (vis == tvDense)
     }
 if (vis == tvDense)
     hvGfxBox(hvg, insideX, yOff, insideWidth, tg->height-1, yellow);
-mapTrackBackground(tg, xOff, yOff);
+mapTrackBackground(tg, hvg, xOff, yOff);
 if (tg->items==NULL)
     return;
 
