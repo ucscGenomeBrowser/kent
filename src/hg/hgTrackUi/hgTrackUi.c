@@ -33,7 +33,7 @@
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 #define MAX_SP_SIZE 2000
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.409 2008/03/03 19:14:12 angie Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.410 2008/03/05 22:43:50 angie Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -177,12 +177,68 @@ if ( startsWith("snp", track) && strlen(track) >= 6 &&
 return version;
 }
 
+#define SNP125_FILTER_COLUMNS 4
+
+void snp125PrintFilterControls(char *attributeName,
+			       char *vars[], char *labels[], boolean checked[],
+			       boolean defaults[], int varCount)
+/* Print two or more rows (attribute name header and row(s) of checkboxes) 
+ * of a table displaying snp125 attribute filter checkboxes. */
+{
+int i;
+printf("<TR><TD colspan=%d><B>%s</B>:</TD></TR>\n",
+       SNP125_FILTER_COLUMNS*2, attributeName);
+for (i=0; i < varCount; i++)
+    {
+    checked[i] = cartUsualBoolean(cart, vars[i], defaults[i]);
+    if (i % SNP125_FILTER_COLUMNS == 0)
+	{
+	if (i > 0)
+	    printf("</TR>\n");
+	printf("<TR>");
+	}
+    printf("<TD>");
+    cgiMakeCheckBox(vars[i], checked[i]);
+    printf("</TD><TD>%s</TD>\n", labels[i]);
+    }
+printf("</TR>\n");
+}
+
+void snp125PrintColorSpec(char *vars[], char *labels[], char *checked[],
+			  char *defaults[], int varCount)
+/* Print a table displaying snp125 attribute color selects. */
+{
+int i;
+printf("<TABLE border=0 cellspacing=0 cellpadding=0>\n");
+if (varCount > SNP125_FILTER_COLUMNS)
+    for (i = 0;  i < SNP125_FILTER_COLUMNS;  i++)
+	printf("<COLGROUP><COL width=\"%d%%\"><COL><COL width=\"%d%%\">"
+	       "</COLGROUP>\n",
+	       round(80 / SNP125_FILTER_COLUMNS),
+	       round(20 / SNP125_FILTER_COLUMNS));
+for (i=0; i < varCount; i++)
+    {
+    if (i % SNP125_FILTER_COLUMNS == 0)
+	{
+	if (i > 0)
+	    printf("</TR>\n");
+	printf("<TR>");
+	}
+    printf("<TD><B>%s</B>:&nbsp;</TD><TD>", labels[i]);
+    checked[i] = cartUsualString(cart, vars[i], defaults[i]);
+    cgiMakeDropListWithVals(vars[i], snp125ColorLabel, snp125ColorLabel, 
+			    snp125ColorLabelSize, checked[i]);
+    printf("</TD><TD>&nbsp;&nbsp;</TD>");
+    }
+printf("</TABLE>\n");
+}
+
 void snp125Ui(struct trackDb *tdb)
 {
 /* It would be nice to add a 'reset' button here to reset the snp
  * variables to their defaults. */
 int i = 0;
-char *autoSubmit = "onchange=\"document.snp125UiForm.submit();\"";
+char autoSubmit[2048];
 char *orthoTable = trackDbSetting(tdb, "chimpMacaqueOrthoTable");
 
 if (isNotEmpty(orthoTable) && hTableExists(orthoTable))
@@ -207,131 +263,68 @@ printf("Any type of data can be excluded from view by deselecting the checkbox b
 printf("Not all assemblies include values in all categories.\n");
 printf("<BR><BR>\n");
 
+printf("<TABLE border=0 cellspacing=0 cellpadding=0>\n");
+for (i = 0;  i < SNP125_FILTER_COLUMNS;  i++)
+    printf("<COLGROUP><COL><COL width=\"%d%%\"></COLGROUP>\n",
+	   round(100 / SNP125_FILTER_COLUMNS));
 if (snpVersion(tdb->tableName) <= 127)
-    {
-    printf("<B>Location Type</B>: ");
-    printf("<BR>\n");
-    for (i=0; i < snp125LocTypeLabelsSize; i++)
-	{
-	snp125LocTypeIncludeCart[i] = 
-	    cartUsualBoolean(cart, snp125LocTypeIncludeStrings[i],
-			     snp125LocTypeIncludeDefault[i]);
-	cgiMakeCheckBox(snp125LocTypeIncludeStrings[i],
-			snp125LocTypeIncludeCart[i]);
-	printf(" %s", snp125LocTypeLabels[i]);
-	}
-    printf("<BR>\n");
-    }
+    snp125PrintFilterControls("Location Type", snp125LocTypeIncludeStrings,
+			 snp125LocTypeLabels, snp125LocTypeIncludeCart,
+			 snp125LocTypeIncludeDefault, snp125LocTypeLabelsSize);
+snp125PrintFilterControls("Class", snp125ClassIncludeStrings,
+			  snp125ClassLabels, snp125ClassIncludeCart,
+			  snp125ClassIncludeDefault, snp125ClassLabelsSize);
+snp125PrintFilterControls("Validation", snp125ValidIncludeStrings,
+			  snp125ValidLabels, snp125ValidIncludeCart,
+			  snp125ValidIncludeDefault, snp125ValidLabelsSize);
+snp125PrintFilterControls("Function", snp125FuncIncludeStrings,
+			  snp125FuncLabels, snp125FuncIncludeCart,
+			  snp125FuncIncludeDefault, snp125FuncLabelsSize);
+snp125PrintFilterControls("Molecule Type", snp125MolTypeIncludeStrings,
+			  snp125MolTypeLabels, snp125MolTypeIncludeCart,
+			  snp125MolTypeIncludeDefault, snp125MolTypeLabelsSize);
+printf("</TABLE>\n");
 
-printf("<B>Class</B>: ");
-printf("<BR>\n");
-for (i=0; i < snp125ClassLabelsSize; i++)
-    {
-    snp125ClassIncludeCart[i] = cartUsualBoolean(cart, snp125ClassIncludeStrings[i], snp125ClassIncludeDefault[i]);
-    cgiMakeCheckBox(snp125ClassIncludeStrings[i], snp125ClassIncludeCart[i]);
-    printf(" %s", snp125ClassLabels[i]);
-    }
-printf("<BR>\n");
 
-printf("<B>Validation</B>: ");
-printf("<BR>\n");
-for (i=0; i < snp125ValidLabelsSize; i++)
-    {
-    snp125ValidIncludeCart[i] = cartUsualBoolean(cart, snp125ValidIncludeStrings[i], snp125ValidIncludeDefault[i]);
-    cgiMakeCheckBox(snp125ValidIncludeStrings[i], snp125ValidIncludeCart[i]);
-    printf(" %s", snp125ValidLabels[i]);
-    }
-printf("<BR>\n");
-
-printf("<B>Function</B>: ");
-printf("<BR>\n");
-for (i=0; i < snp125FuncLabelsSize; i++)
-    {
-    snp125FuncIncludeCart[i] = cartUsualBoolean(cart, snp125FuncIncludeStrings[i], snp125FuncIncludeDefault[i]);
-    cgiMakeCheckBox(snp125FuncIncludeStrings[i], snp125FuncIncludeCart[i]);
-    printf(" %s", snp125FuncLabels[i]);
-    }
-printf("<BR>\n");
-
-printf("<B>Molecule Type</B>: ");
-printf("<BR>\n");
-for (i=0; i < snp125MolTypeLabelsSize; i++)
-    {
-    snp125MolTypeIncludeCart[i] = cartUsualBoolean(cart, snp125MolTypeIncludeStrings[i], snp125MolTypeIncludeDefault[i]);
-    cgiMakeCheckBox(snp125MolTypeIncludeStrings[i], snp125MolTypeIncludeCart[i]);
-    printf(" %s", snp125MolTypeLabels[i]);
-    }
-printf("<BR>\n");
-
-/* prematurely close the hgTracks FORM because forms cannot be nested */
-/* we will open another FORM here, and allow it to be closed later */
-printf("</FORM>\n");
-puts("<FORM ACTION=\"../cgi-bin/hgTrackUi\" NAME=\"snp125UiForm\" METHOD=\"GET\">");
-cartSaveSession(cart);
+safef(autoSubmit, sizeof(autoSubmit), "onchange=\""
+      "document.mainForm.action = '%s'; "
+      "document.mainForm.submit();\"", cgiScriptName());
 cgiContinueHiddenVar("g");
 cgiContinueHiddenVar("c");
 
 printf("<HR>\n");
 printf("<B>SNP Feature for Color Specification:</B>\n");
-snp125ColorSourceCart[0] = cartUsualString(cart, snp125ColorSourceDataName[0], snp125ColorSourceDefault[0]);
-cgiMakeDropListFull(snp125ColorSourceDataName[0], snp125ColorSourceLabels, snp125ColorSourceLabels, 
-                    snp125ColorSourceLabelsSize, snp125ColorSourceCart[0], autoSubmit);
+snp125ColorSourceCart[0] = cartUsualString(cart, snp125ColorSourceDataName[0],
+					   snp125ColorSourceDefault[0]);
+cgiMakeDropListFull(snp125ColorSourceDataName[0], snp125ColorSourceLabels,
+		    snp125ColorSourceLabels, snp125ColorSourceLabelsSize,
+		    snp125ColorSourceCart[0], autoSubmit);
 printf("<BR><BR>\n");
 printf("The selected feature above has the following values below.  \n");
 printf("For each value, a selection of colors is available.<BR><BR>\n");
 
-snp125ColorSourceCart[0] = cartUsualString(cart, snp125ColorSourceDataName[0], snp125ColorSourceDefault[0]);
+snp125ColorSourceCart[0] = cartUsualString(cart, snp125ColorSourceDataName[0],
+					   snp125ColorSourceDefault[0]);
 if (sameString(snp125ColorSourceCart[0], "Location Type"))
-    {
-    for (i=0; i<snp125LocTypeLabelsSize; i++)
-        {
-	printf("<B>%s</B>: ", snp125LocTypeLabels[i]);
-	snp125LocTypeCart[i] = cartUsualString(cart, snp125LocTypeStrings[i], snp125LocTypeDefault[i]);
-        cgiMakeDropListFull(snp125LocTypeStrings[i], snp125ColorLabel, snp125ColorLabel, 
-                            snp125ColorLabelSize, snp125LocTypeCart[i], autoSubmit);
-        }
-    }
+    snp125PrintColorSpec(snp125LocTypeStrings, snp125LocTypeLabels,
+			 snp125LocTypeCart, snp125LocTypeDefault,
+			 snp125LocTypeLabelsSize);
 else if (sameString(snp125ColorSourceCart[0], "Class"))
-    {
-    for (i=0; i<snp125ClassLabelsSize; i++)
-        {
-	printf("<B>%s</B>: ", snp125ClassLabels[i]);
-	snp125ClassCart[i] = cartUsualString(cart, snp125ClassStrings[i], snp125ClassDefault[i]);
-        cgiMakeDropListFull(snp125ClassStrings[i], snp125ColorLabel, snp125ColorLabel, 
-                            snp125ColorLabelSize, snp125ClassCart[i], autoSubmit);
-        }
-    }
+    snp125PrintColorSpec(snp125ClassStrings, snp125ClassLabels,
+			 snp125ClassCart, snp125ClassDefault,
+			 snp125ClassLabelsSize);
 else if (sameString(snp125ColorSourceCart[0], "Validation"))
-    {
-    for (i=0; i<snp125ValidLabelsSize; i++)
-        {
-	printf("<B>%s</B>: ", snp125ValidLabels[i]);
-	snp125ValidCart[i] = cartUsualString(cart, snp125ValidStrings[i], snp125ValidDefault[i]);
-        cgiMakeDropListFull(snp125ValidStrings[i], snp125ColorLabel, snp125ColorLabel, 
-                            snp125ColorLabelSize, snp125ValidCart[i], autoSubmit);
-        }
-    }
+    snp125PrintColorSpec(snp125ValidStrings, snp125ValidLabels,
+			 snp125ValidCart, snp125ValidDefault,
+			 snp125ValidLabelsSize);
 else if (sameString(snp125ColorSourceCart[0], "Function"))
-    {
-    for (i=0; i<snp125FuncLabelsSize; i++)
-        {
-	printf("<B>%s</B>: ", snp125FuncLabels[i]);
-	snp125FuncCart[i] = cartUsualString(cart, snp125FuncStrings[i], snp125FuncDefault[i]);
-        cgiMakeDropListFull(snp125FuncStrings[i], snp125ColorLabel, snp125ColorLabel, 
-                            snp125ColorLabelSize, snp125FuncCart[i], autoSubmit);
-        }
-    }
+    snp125PrintColorSpec(snp125FuncStrings, snp125FuncLabels,
+			 snp125FuncCart, snp125FuncDefault,
+			 snp125FuncLabelsSize);
 else if (sameString(snp125ColorSourceCart[0], "Molecule Type"))
-    {
-    for (i=0; i<snp125MolTypeLabelsSize; i++)
-        {
-	printf("<B>%s</B>: ", snp125MolTypeLabels[i]);
-	snp125MolTypeCart[i] = cartUsualString(cart, snp125MolTypeStrings[i], snp125MolTypeDefault[i]);
-        cgiMakeDropListFull(snp125MolTypeStrings[i], snp125ColorLabel, snp125ColorLabel, 
-                            snp125ColorLabelSize, snp125MolTypeCart[i], autoSubmit);
-        }
-    }
-printf("<BR>\n");
+    snp125PrintColorSpec(snp125MolTypeStrings, snp125MolTypeLabels,
+			 snp125MolTypeCart, snp125MolTypeDefault,
+			 snp125MolTypeLabelsSize);
 printf("<HR>\n");
 }
 
