@@ -18,7 +18,7 @@
 #include "customFactory.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.78 2008/02/21 00:11:44 markd Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.79 2008/03/05 00:47:37 angie Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -39,6 +39,17 @@ else
     freeMem(hel->val);
     hel->val = val;
     }
+}
+
+boolean cartTablesOk(struct sqlConnection *conn)
+/* Return TRUE if cart tables are accessible (otherwise, the connection
+ * doesn't do us any good). */
+{
+if (!sqlTableOk(conn, "userDb"))
+    return FALSE;
+if (!sqlTableOk(conn, "sessionDb"))
+    return FALSE;
+return TRUE;
 }
 
 void cartParseOverHash(struct cart *cart, char *contents)
@@ -135,7 +146,8 @@ else
     sqlUpdate(conn, query);
     id = sqlLastAutoId(conn);
     if ((cdb = cartDbLoadFromId(conn,table,id)) == NULL)
-        errAbort("Couldn't get cartDb right after loading.  MySQL problem??");
+        errAbort("Couldn't get cartDb for id=%d right after loading.  "
+		 "MySQL problem??", id);
     }
 return cdb;
 }

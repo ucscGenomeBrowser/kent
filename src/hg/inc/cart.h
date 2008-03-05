@@ -33,6 +33,10 @@ char *_cartVarDbName(char *db, char *var);
 /* generate cart variable name that is local to an assembly database.
  * Only for use inside of cart.h.  WARNING: static return */
 
+boolean cartTablesOk(struct sqlConnection *conn);
+/* Return TRUE if cart tables are accessible (otherwise, the connection
+ * doesn't do us any good). */
+
 struct cart *cartNew(unsigned int userId, unsigned int sessionId, 
 	char **exclude, struct hash *oldVars);
 /* Load up cart from user & session id's.  Exclude is a null-terminated list of
