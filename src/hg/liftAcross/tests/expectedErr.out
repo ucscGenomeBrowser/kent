@@ -11,10 +11,7 @@ item GeneScaffold_3374:155763-155911 can not be found in scaffold_102311:156011-
 item GeneScaffold_4692:7943-8026 can not be found in scaffold_195576:8126-21439
 item GeneScaffold_4738:98301-98461 can not be found in scaffold_142000:98561-101091
 item GeneScaffold_6308:4493-4640 can not be found in scaffold_209320:4740-51305
-item GeneScaffold_6959:65541-65542 can not be found in scaffold_96827:65555-78239
 item GeneScaffold_6959:-1-0 can not be found in scaffold_188232:0-18139
-#	WARNING: missing txStart for GeneScaffold_6959:65541
-
 item GeneScaffold_6959:65541-65648 not fully contained in scaffold_96827:65555-78239
 item GeneScaffold_338:530834-531308 can not be found in scaffold_149129:531408-545740
 item GeneScaffold_338:597444-597568 can not be found in scaffold_206398:597668-659970

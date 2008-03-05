@@ -7,7 +7,7 @@
 #include "genePred.h"
 #include "sqlList.h"
 
-static char const rcsid[] = "$Id: liftAcross.c,v 1.8 2008/02/29 20:28:35 hiram Exp $";
+static char const rcsid[] = "$Id: liftAcross.c,v 1.9 2008/03/05 20:11:00 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -263,19 +263,12 @@ struct hash *items = newHash(8);
 struct hash *prevLift = newHash(8);
 struct hashEl *hel = NULL;
 int exonCount = gp->exonCount;
-struct liftedItem *txStart = liftOne(ls, gp->chrom, gp->txStart, gp->txStart+1);
-struct liftedItem *txEnd = liftOne(ls, gp->chrom, gp->txEnd-1, gp->txEnd);
 struct liftedItem *cdsStart = liftOne(ls, gp->chrom, gp->cdsStart,
 	gp->cdsStart+1);
 struct liftedItem *cdsEnd = liftOne(ls, gp->chrom, gp->cdsEnd-1, gp->cdsEnd);
 int i;
 boolean frames = FALSE;
 boolean noCds = FALSE;
-
-if (NULL == txStart)
-    warn("#\tWARNING: missing txStart for %s:%d\n", gp->chrom, gp->txStart);
-if (NULL == txEnd)
-    warn("#\tWARNING: missing txEnd for %s:%d\n", gp->chrom, gp->txEnd);
 
 if (((0 == gp->cdsStart) && (0 == gp->cdsEnd)) || (gp->cdsStart == gp->cdsEnd))
     noCds = TRUE;
@@ -368,24 +361,17 @@ while ((hel = hashNext(&cookie)) != NULL)
 	if (li->outOfOrder)
 	    exonsOutOfOrder = TRUE;
 	}
-    /*	assign txStart,End and cdsStart,End appropriately
-     *	First, assume this scaffold is not the one with these items, thus
-     *	the first and last exon define these starts and ends.
-     *	If this scaffold has one of those, then apply the actual items.
+    /*	assign cdsStart,End appropriately.  txStart/End are always first
+     *	and last exon extents no matter what.
+     *	First, assume this scaffold is not the one with the cds bits, thus
+     *	the first and last exon define these cds starts and ends.
+     *	If this scaffold has one of those, then apply the actual cds bit.
      *	A negative strand lift result turns everything on its head.
      */
+    gpItem->txStart = exonStarts[0];  /* assume first exon */
+    gpItem->txEnd = exonEnds[itemExonCount-1];  /* assume last exon */
     if ('-' == itemList->strand)	/* assume all on same strand */
 	{
-	gpItem->txStart = exonStarts[0];  /* assume first exon */
-	gpItem->txEnd = exonEnds[itemExonCount-1];  /* assume last exon */
-	if (txStart && sameWord(txStart->name, hel->name))
-	    gpItem->txEnd = txStart->start+1;   /* this guy has the txEnd */
-	if (txEnd && sameWord(txEnd->name, hel->name))
-	    gpItem->txStart = txEnd->start;   /* this guy has the txStart */
-	/*	fix unusual (mixed up) mappings onto a scaffold */
-	gpItem->txStart = min(gpItem->txStart, exonStarts[0]);
-	gpItem->txEnd = max(gpItem->txEnd,exonEnds[itemExonCount-1]);
-
 	if (noCds)
 	    {
 	    gpItem->cdsStart = gpItem->txEnd;
@@ -409,16 +395,6 @@ while ((hel = hashNext(&cookie)) != NULL)
 	}
     else
 	{
-	gpItem->txStart = exonStarts[0];  /* assume first exon */
-	gpItem->txEnd = exonEnds[itemExonCount-1];/* assume last exon */
-	if (txStart && sameWord(txStart->name, hel->name))
-	    gpItem->txStart = txStart->start;   /* this guy has the txStart */
-	if (txEnd && sameWord(txEnd->name, hel->name))
-	    gpItem->txEnd = txEnd->end;   /* this guy has the txEnd */
-	/*	fix unusual (mixed up) mappings onto a scaffold */
-	gpItem->txStart = min(gpItem->txStart, exonStarts[0]);
-	gpItem->txEnd = max(gpItem->txEnd, exonEnds[itemExonCount-1]);
-
 	if (noCds)
 	    {
 	    gpItem->cdsEnd = gpItem->txEnd;
