@@ -11,12 +11,13 @@ set pslTbls {
     ^chr.+_est$
     ^chr.+_intronEst$
     ^intronEst$
-    ^xenoEst$
     ^refSeqAli$
     ^xenoRefSeqAli$
     ^mgcFullMrna$
     ^orfeomeMrna$
 }
+
+# takes far too long:  ^xenoEst$
 
 set gpTbls {
     ^refGene$
@@ -207,6 +208,7 @@ proc doModify {logFh dbFile} {
 
 file mkdir $workDir
 exec chmod a+rwx $workDir
+set env(TMPDIR) $workDir
 
 catch {file mkdir $logDir}
 catch {file mkdir $logDir}
