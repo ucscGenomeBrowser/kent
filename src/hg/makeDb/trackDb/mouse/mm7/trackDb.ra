@@ -21,17 +21,6 @@ directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_t
 baseColorUseCds given
 baseColorDefault genomicCodons
 
-track ensGene
-shortLabel Ensembl Genes
-longLabel Ensembl (Version 38) Gene Predictions
-group genes
-priority 40
-visibility dense
-color 150,0,0
-type genePred ensPep
-ensArchive apr2006
-dataVersion April 2006
-
 track netFr1
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
