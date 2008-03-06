@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.134 2008/03/05 02:12:46 markd Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.135 2008/03/06 04:03:45 angie Exp $";
 
 struct hash *snp125FuncCartColorHash = NULL;
 struct hash *snp125FuncCartNameHash = NULL;
@@ -210,15 +210,6 @@ for (i = 0;  i < wordCount;  i++)
     {
     char *simpleFunc = (char *)hashMustFindVal(snp125FuncCartNameHash,
 					       words[i]);
-    if (sameString(simpleFunc, "ignore"))
-	{
-	/* Defer to other listed functions.  If there aren't any,
-	 * treat as unknown. */
-	if (wordCount-i > 1)
-	    continue;
-	else
-	    simpleFunc = snp125FuncDataName[0];
-	}
     int snpFunc = stringArrayIx(simpleFunc,
 				snp125FuncDataName, snp125FuncDataNameSize);
     if (snpFunc < 0)
@@ -476,13 +467,11 @@ for (i=0; i < snp125FuncCartSize; i++)
 int j, k;
 for (j = 0;  snp125FuncDataSynonyms[j] != NULL;  j++)
     {
-    char *funcNoIgnore = snp125FuncDataSynonyms[j][0];
-    if (sameString(funcNoIgnore, "ignore"))
-	funcNoIgnore = snp125FuncDataName[0];
     for (k = 1;  snp125FuncDataSynonyms[j][k] != NULL;  k++)
 	{
 	hashAddInt(snp125FuncCartColorHash, snp125FuncDataSynonyms[j][k],
-		   hashIntVal(snp125FuncCartColorHash, funcNoIgnore));
+		   hashIntVal(snp125FuncCartColorHash,
+			      snp125FuncDataSynonyms[j][0]));
 	hashAdd(snp125FuncCartNameHash, snp125FuncDataSynonyms[j][k],
 		snp125FuncDataSynonyms[j][0]);
 	}
@@ -712,10 +701,6 @@ switch (index1)
 	    {
 	    enum snp125ColorEnum wordColor = (enum snp125ColorEnum)
 		hashIntVal(snp125FuncCartColorHash, words[i]);
-	    char *simpleFunc = (char *)hashMustFindVal(snp125FuncCartNameHash,
-						       words[i]);
-	    if (sameString(simpleFunc, "ignore"))
-		continue;
 	    /* This sorting function is a reverse-sort, so use it backwards: */
 	    if (snp125ExtendedColorCmpRaw(
 			snp125ColorToMg(wordColor), "wordColor",
