@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "snp125.h"
 
-static char const rcsid[] = "$Id: snp125.c,v 1.19 2006/10/07 06:47:34 daryl Exp $";
+static char const rcsid[] = "$Id: snp125.c,v 1.20 2008/03/06 06:40:29 angie Exp $";
 
 void snp125StaticLoad(char **row, struct snp125 *ret)
 /* Load a row from snp125 table into ret.  The contents of ret will
@@ -336,5 +336,17 @@ ret->nameExtra = cloneString("");
 ret->color = 0;
 
 return ret;
+}
+
+int snpVersion(char *track)
+/* If track starts with snpNNN where NNN is 125 or later, return the number;
+ * otherwise return 0. */
+{
+int version = 0;
+if ( startsWith("snp", track) && strlen(track) >= 6 &&
+     isdigit(track[3]) && isdigit(track[4]) && isdigit(track[5]) &&
+     atoi(track+3) >= 125 )
+    version = atoi(track+3);
+return version;
 }
 
