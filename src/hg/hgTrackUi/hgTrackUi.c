@@ -33,7 +33,7 @@
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 #define MAX_SP_SIZE 2000
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.411 2008/03/06 00:02:20 angie Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.412 2008/03/06 04:02:25 angie Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -312,7 +312,11 @@ else
     }
 printf("<BR><BR>\n");
 printf("The selected feature above has the following values below.  \n");
-printf("For each value, a selection of colors is available.<BR><BR>\n");
+printf("For each value, a selection of colors is available.\n");
+printf("If a SNP has more than one of these properties, resulting in\n");
+printf("more than one color, then the stronger color will override the\n");
+printf("weaker color.  In order by strongest to weakest, the colors are\n");
+printf("red, green, blue, gray, black.<BR><BR>\n");
 
 if (sameString(snp125ColorSourceCart[0], "Location Type"))
     {
