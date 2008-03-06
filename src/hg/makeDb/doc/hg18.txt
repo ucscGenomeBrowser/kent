@@ -20677,4 +20677,25 @@ done
     hgsql ctd -e 'load data local infile "ctdSorted.tab" into table ctdSorted'
     
 #############################################################################
+# CREATE huge TABLE FOR HuGE LINK (DONE 3/6/08, Fan)
 
+# Get HuGEgeneList.txt (list of HuGE genes from HuGE collaborator).
+
+    mkdir /cluster/store11/gs.19/build36/bed/HuGE
+    cd /cluster/store11/gs.19/build36/bed/HuGE
+
+# put the file there.
+
+    cp HuGEgeneList.txt huge.tab
+    
+# get rid of header lines and blank lines at the end.    
+    vi huge.tab
+
+    hgsql hg17 < ~/kent/src/hg/lib/huge.sql
+    hgsql hg18 < ~/kent/src/hg/lib/huge.sql
+    
+    hgsql hg17 -e 'load data local infile "huge.tab" into table huge'
+    hgsql hg18 -e 'load data local infile "huge.tab" into table huge'
+#############################################################################
+    
+    
