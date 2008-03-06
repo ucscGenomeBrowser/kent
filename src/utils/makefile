@@ -88,7 +88,6 @@ DIRS = \
 	gapSplit \
 	gffPeek \
 	gtfToGenePred \
-	gffToGenePred \
 	headRest \
 	htmlPics \
 	htmlCheck \
