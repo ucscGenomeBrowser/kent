@@ -37,6 +37,16 @@ else
   set update=$argv[1]
 endif
 
+
+# check to see if input was even a date
+echo $update | grep -q "^20"
+if ($status ) then
+  echo
+  echo "  need to provide a valid date:  yyyy-mm-dd."
+  echo
+  exit 1
+endif
+
 # parse the date
 set year=`echo $update | awk -F- '{print $1}'`
 set month=`echo $update | awk -F- '{print $2}'`
@@ -44,7 +54,7 @@ set day=`echo $update | awk -F- '{print $3}'`
 
 if ( 0 == 0 ) then  ##  not-run block
 
-# make sure they have entered something close to correct (kludge warning!)
+# make sure they have entered something close to correct date (kludge warning!)
 if ( $year < 2007 || $year > 2020 || $month > 12 || $day > 31 ) then
   echo "\nERROR: the 'date' format is incorrect"
   $0
@@ -84,6 +94,11 @@ echo "run Joiner Check"
 # runs on all assemblies
 joinerCheck -keys -identifier=igtcName ~/kent/src/hg/makeDb/schema/all.joiner
 
+echo "\n\n----------------------"
+echo "run featureBits"
+foreach mouse ( $mice )
+  runBits.csh $mouse igtc
+end
 
 echo "\n\n----------------------"
 echo "compare new (dev) and old (beta) tables"
@@ -91,7 +106,6 @@ echo
 foreach mouse ( $mice )
   compareWholeColumn.csh $mouse igtc qName
 end
-
 
 echo "\n\n----------------------"
 echo "check for number from all contributing labs."
@@ -140,6 +154,11 @@ foreach mouse ( $mice )
     echo "$urldev$url6"
   end
   tail -3 $mouse.igtc.qName.devOnly
+  set sample=`tail -3 $mouse.igtc.qName.devOnly`
+  foreach item ( $sample )
+    set url6="&db=$mouse&position=$item"
+    echo "$urldev$url6"
+  end
 end
 
 echo "\n\n----------------------"
@@ -166,6 +185,11 @@ foreach mouse ( $mice )
   echo
   echo "bottom of list:"
   tail -3 $mouse.igtc.qName.betaOnly
+  set sample=`tail -3 $mouse.igtc.qName.betaOnly`
+  foreach item ( $sample )
+    set url5="&db=$mouse&position=$item"
+    echo "$urlbeta$url5"
+  end
 end
 
 echo "\n\n----------------------"
@@ -276,19 +300,33 @@ echo "(if the values aren't equal per assembly, this needs investigation)\n"
 
 echo "compare count from seq tables"
 echo "to the count from genetrap.$update.fasta file:"
+echo "will also be the same for all mice (see below for confirmation)"
+echo "  - everything is there whether it alsigns of not"
 
 foreach i ( $counter )
   echo $mice[$i]
   hgsql -Ne 'SELECT COUNT(*) FROM seq \
     WHERE extFile = "'$extFileId[$i]'"' $mice[$i]
-  echo "  "`grep '>' /gbdb/$mice[$i]/igtc/genetrap.$update.fasta | wc -l`
+  grep '>' /gbdb/$mice[$i]/igtc/genetrap.$update.fasta | wc -l
 echo
 end
+
+# check that all acc in the seq file are the same for all assemblies
+echo "check that all acc in the seq file are the same for all assemblies"
+foreach i ( $counter ) 
+  echo $mice[$i]
+  echo $extFileId[$i]
+  hgsql -N -e "SELECT acc FROM seq WHERE extFile = $extFileId[$i]" $mice[$i] \
+     > $mice[$i].seq.acc
+end
+echo
+commTrio.csh $mice[1].seq.acc $mice[2].seq.acc
+commTrio.csh $mice[2].seq.acc $mice[3].seq.acc
 
 
 # get the new rows from tables on dev
 echo "\n\n----------------------"
-echo "Creating a file with the new rows from the extFile and seq tables \
+echo "Creating files with the new rows from the extFile and seq tables \
   on dev"
 echo "(these rows will need to be moved to the approriate table on beta)\n"
 
@@ -310,7 +348,7 @@ endif ##  not-run block
 
 # set up deletion of the rows from beta tables.
 echo "\n\n----------------------"
-echo "Here are the commands needed to delete the rows from the extFile \
+echo "Here are the commands needed to delete the old rows from the extFile \
   and seq tables on DEV and BETA\n"
 echo "(these are last month's data)"
 
@@ -430,7 +468,7 @@ end
 echo "\n\n----------------------"
 echo "How many items in seq still have old extFile number?"
 echo "Should be more than the number in devOnly because some were not used"
-echo "These should be lost using DELETE commands below)."
+echo "These should be lost using DELETE commands above)."
 echo
 
 echo "dev"
@@ -470,6 +508,12 @@ echo " - push tables to hgwbeta:"
 foreach mouse ( $mice )
   echo "     sudo mypush $mouse igtc hgwbeta"
 end
+
+echo " - check push:"
+foreach mouse ( $mice )
+  echo "     realTime.csh $mouse igtc"
+end
+
 
 echo " - ask for push of files from hgwdev to hgnfs1:"
 foreach mouse ( $mice )
