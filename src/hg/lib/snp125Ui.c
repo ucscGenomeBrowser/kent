@@ -2,7 +2,7 @@
 #include "snp125Ui.h"
 #include "common.h"
 
-static char const rcsid[] = "$Id: snp125Ui.c,v 1.28 2007/12/11 23:15:01 angie Exp $";
+static char const rcsid[] = "$Id: snp125Ui.c,v 1.29 2008/03/06 00:06:26 angie Exp $";
 
 boolean snp125ExtendedNames = TRUE;
 
@@ -34,14 +34,6 @@ char *snp125ColorSourceLabels[] = {
     "Molecule Type",
 };
 
-char *snp125ColorSourceStrings[] = {
-    "snp125ColorSourceLocType",
-    "snp125ColorSourceClass",
-    "snp125ColorSourceValid",
-    "snp125ColorSourceFunc",
-    "snp125ColorSourceMolType",
-};
-
 // why are these arrays?
 char *snp125ColorSourceDataName[] = {
     "snp125ColorSource",
@@ -55,11 +47,19 @@ char *snp125ColorSourceCart[] = {
 };
 
 int snp125ColorSourceLabelsSize   = ArraySize(snp125ColorSourceLabels);
-int snp125ColorSourceStringsSize  = ArraySize(snp125ColorSourceStrings);
 int snp125ColorSourceDataNameSize = ArraySize(snp125ColorSourceDataName);
 int snp125ColorSourceDefaultSize  = ArraySize(snp125ColorSourceDefault);
 int snp125ColorSourceCartSize     = ArraySize(snp125ColorSourceCart);
 
+/* As of dbSNP 128, locType is ignored: */
+char *snp128ColorSourceLabels[] = {
+    "Class",
+    "Validation",
+    "Function",
+    "Molecule Type",
+};
+
+int snp128ColorSourceLabelsSize   = ArraySize(snp128ColorSourceLabels);
 
 /****** MolType related controls *******/
 /* Types: unknown, genomic, cDNA */

@@ -31,16 +31,17 @@ enum snp125ColorSourceEnum {
 };
 
 extern char *snp125ColorSourceLabels[];
-extern char *snp125ColorSourceStrings[];
 extern char *snp125ColorSourceDataName[];
 extern char *snp125ColorSourceDefault[];
 extern char *snp125ColorSourceCart[];
 
 extern int snp125ColorSourceLabelsSize;
-extern int snp125ColorSourceStringsSize;
 extern int snp125ColorSourceDataNameSize;
 extern int snp125ColorSourceDefaultSize;
 extern int snp125ColorSourceCartSize;
+
+extern char *snp128ColorSourceLabels[];
+extern int snp128ColorSourceLabelsSize;
 
 /****** MolType related controls *******/
 /* unknown, genomic, cDNA */
