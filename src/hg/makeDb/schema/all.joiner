@@ -1282,6 +1282,11 @@ identifier ccdsGeneId
     $ccdsDb.ccdsInfo.ccds full
     $ccdsDb.ccdsKgMap.ccdsId 
 
+identifier hugeId
+"HuGE Gene ID"
+    $hg.kgXref.geneSymbol dupeOk
+    $hg.huge.geneSymbol minCheck=0.89
+
 # Fields parsed out of a Genbank flat file, associated with mRNA records
 
 identifier genBankAuthor
