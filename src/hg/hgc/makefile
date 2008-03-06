@@ -16,7 +16,7 @@ mgsc: compile
 	mv $A ${CGI_BIN}-mgsc/$A
 
 compile: $O 
-	${CC} $O ${F64} ${MYLIBS} ${L}
+	${CC} ${CFLAGS} $O ${F64} ${MYLIBS} ${L}
 	mv ${AOUT} $A${EXE}
 
 my::

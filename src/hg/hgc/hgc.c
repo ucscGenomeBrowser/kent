@@ -214,7 +214,7 @@
 #include "itemConf.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1398 2008/03/06 06:42:25 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1399 2008/03/06 20:20:14 hiram Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -7274,7 +7274,8 @@ printTrackHtml(tdb);
 hFreeConn(&conn);
 }
 
-void printEnsemblCustomUrl(struct trackDb *tdb, char *itemName, boolean encode)
+void printEnsemblCustomUrl(struct trackDb *tdb, char *itemName, boolean encode,
+    char *archive)
 /* Print Ensembl Gene URL. */
 {
 struct trackDb *tdbSf;
@@ -7288,7 +7289,6 @@ char *proteinID = NULL;
 char *ans;
 char *ensPep;
 char *chp;
-char *archive = trackDbSetting(tdb, "ensArchive");
 char ensUrl[256];
 
 /* shortItemName is the name without the "." + version */ 
@@ -7448,6 +7448,7 @@ struct sqlConnection *conn = hAllocConn();
 char condStr[256];
 char geneCheck[256];
 char ensVersionString[256];
+char ensDateReference[256];
 char headerTitle[512];
 
 /* see if hgFixed.trackVersion exists */
@@ -7456,7 +7457,7 @@ boolean trackVersionExists = hTableExistsDb("hgFixed", "trackVersion");
 if (trackVersionExists)
     {
     char query[256];
-    safef(query, sizeof(query), "select version from hgFixed.trackVersion where db = '%s' order by updateTime DESC limit 1", database);
+    safef(query, sizeof(query), "select version,dateReference from hgFixed.trackVersion where db = '%s' order by updateTime DESC limit 1", database);
     struct sqlResult *sr = sqlGetResult(conn, query);
     char **row;
 
@@ -7466,11 +7467,16 @@ if (trackVersionExists)
 	{
 	safef(ensVersionString, sizeof(ensVersionString), "Ensembl %s",
 		row[0]);
+	safef(ensDateReference, sizeof(ensDateReference), "%s",
+		row[1]);
 	}
     sqlFreeResult(&sr);
     }
 else
+    {
     ensVersionString[0] = 0;
+    ensDateReference[0] = 0;
+    }
 
 
 if (itemForUrl == NULL)
@@ -7483,7 +7489,16 @@ else
 
 genericHeader(tdb, headerTitle);
 wordCount = chopLine(dupe, words);
-printEnsemblCustomUrl(tdb, itemForUrl, item == itemForUrl);
+char *archive = trackDbSetting(tdb, "ensArchive");
+if (archive == NULL)
+    {
+    if (ensDateReference[0])
+	{
+	if (differentWord("current", ensDateReference))
+	    archive = cloneString(ensDateReference);
+	}
+    }
+printEnsemblCustomUrl(tdb, itemForUrl, item == itemForUrl, archive);
 sprintf(condStr, "name='%s'", item);
 
 /* if this is a non-coding gene track, then print the biotype and
