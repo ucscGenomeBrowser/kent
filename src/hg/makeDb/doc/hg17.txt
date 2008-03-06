@@ -24328,3 +24328,8 @@ See hg18.txt for details.
         ccdsKgMap
     # << emacs
 
+############################################################################
+# CREATE huge TABLE FOR HuGE LINK (DONE 3/6/08, Fan)
+
+# See the HuGE section in hg18.txt for details.
+############################################################################
