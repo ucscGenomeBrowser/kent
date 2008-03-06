@@ -33,7 +33,7 @@
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 #define MAX_SP_SIZE 2000
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.412 2008/03/06 04:02:25 angie Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.413 2008/03/06 06:56:49 angie Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -166,17 +166,6 @@ for (snpMapType=0; snpMapType<snpMapTypeCartSize; snpMapType++)
     }
 }
 
-int snpVersion(char *track)
-/* If track starts with snpNNN where NNN is 125 or later, return the number. */
-{
-int version = 0;
-if ( startsWith("snp", track) && strlen(track) >= 6 &&
-     isdigit(track[3]) && isdigit(track[4]) && isdigit(track[5]) &&
-     atoi(track+3) >= 125 )
-    version = atoi(track+3);
-return version;
-}
-
 #define SNP125_FILTER_COLUMNS 4
 
 void snp125PrintFilterControls(char *attributeName,
@@ -258,11 +247,15 @@ cgiMakeDoubleVar("snp125AvHetCutoff",snp125AvHetCutoff,6);
 snp125WeightCutoff = atoi(cartUsualString(cart, "snp125WeightCutoff", "3"));
 printf("<BR><B>Maximum <A HREF=\"#Weight\">Weight</A>:</B>&nbsp;");
 cgiMakeIntVar("snp125WeightCutoff",snp125WeightCutoff,4);
-
 printf("<I>SNPs with higher weights are less reliable</I><BR><BR>\n");
-printf("Any type of data can be excluded from view by deselecting the checkbox below.\n");
-printf("Not all assemblies include values in all categories.\n");
-printf("<BR><BR>\n");
+
+printf("<HR><B>Filter by Attribute</B><BR>\n"
+       "Check the boxes below to include SNPs with those attributes.  "
+       "In order to be displayed, a SNP must pass the filter for each "
+       "category.  \n"
+       "Some assemblies may not contain any SNPs that have some of the "
+       "listed attributes.\n"
+       "<BR><BR>\n");
 
 printf("<TABLE border=0 cellspacing=0 cellpadding=0>\n");
 for (i = 0;  i < SNP125_FILTER_COLUMNS;  i++)
@@ -284,7 +277,7 @@ snp125PrintFilterControls("Function", snp125FuncIncludeStrings,
 snp125PrintFilterControls("Molecule Type", snp125MolTypeIncludeStrings,
 			  snp125MolTypeLabels, snp125MolTypeIncludeCart,
 			  snp125MolTypeIncludeDefault, snp125MolTypeLabelsSize);
-printf("</TABLE>\n");
+printf("</TABLE><BR>\n");
 
 
 safef(autoSubmit, sizeof(autoSubmit), "onchange=\""
@@ -2585,9 +2578,7 @@ else if (sameString(track, "snpMap"))
         snpMapUi(tdb);
 else if (sameString(track, "snp"))
         snpUi(tdb);
-else if (startsWith("snp", track) && strlen(track) >= 6 &&
-	 isdigit(track[3]) && isdigit(track[4]) && isdigit(track[5]) &&
-	 atoi(track+3) >= 125)
+else if (snpVersion(track) >= 125)
 	snp125Ui(tdb);
 else if (sameString(track, "rertyHumanDiversityLd") ||
 	 startsWith("hapmapLd", track) ||
