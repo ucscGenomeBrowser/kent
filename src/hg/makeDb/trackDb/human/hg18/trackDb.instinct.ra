@@ -38,7 +38,7 @@ group x
 priority 42.1
 visibility dense
 type expRatio
-expScale 1.0
+expScale 2.0
 expStep 0.1
 groupings ispyAgiDeltaT2Groups
 
@@ -49,7 +49,7 @@ group x
 priority 42.2
 visibility dense
 type expRatio
-expScale 1.0
+expScale 2.0
 expStep 0.1
 groupings ispyAgiDeltaT4Groups
 
@@ -84,7 +84,7 @@ longLabel TCGA GBM mskcc CGH array 244A
 group x
 visibility hide
 type expRatio
-expScale 0.4
+expScale 0.5
 expStep 0.05
 groupings mskccCGHGroups
 
