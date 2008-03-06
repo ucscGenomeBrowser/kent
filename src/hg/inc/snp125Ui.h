@@ -8,10 +8,10 @@ extern boolean snp125ExtendedNames;
 
 enum snp125ColorEnum {
     snp125ColorRed,
-    snp125ColorBlue,
     snp125ColorGreen,
-    snp125ColorBlack,
+    snp125ColorBlue,
     snp125ColorGray,
+    snp125ColorBlack,
     snp125ColorExclude
 };
 
