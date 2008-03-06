@@ -12,6 +12,7 @@
 #include "ldUi.h"
 #include "snpUi.h"
 #include "snp125Ui.h"
+#include "snp125.h"
 #include "sample.h"
 #include "wiggle.h"
 #include "hgMaf.h"
@@ -33,7 +34,7 @@
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 #define MAX_SP_SIZE 2000
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.413 2008/03/06 06:56:49 angie Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.414 2008/03/06 18:19:26 angie Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
