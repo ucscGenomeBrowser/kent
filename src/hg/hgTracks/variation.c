@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.135 2008/03/06 04:03:45 angie Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.136 2008/03/06 06:55:02 angie Exp $";
 
 struct hash *snp125FuncCartColorHash = NULL;
 struct hash *snp125FuncCartNameHash = NULL;
@@ -32,7 +32,7 @@ tg->items = newList;
 }
 
 boolean snpMapSourceFilterItem(struct track *tg, void *item)
-/* Return TRUE if item passes filter. */
+/* Return TRUE if item passes filter, i.e. has no excluded property. */
 {
 struct snpMap *el = item;
 int    snpMapSource = 0;
@@ -45,7 +45,7 @@ return TRUE;
 }
 
 boolean snpMapTypeFilterItem(struct track *tg, void *item)
-/* Return TRUE if item passes filter. */
+/* Return TRUE if item passes filter, i.e. has no excluded property. */
 {
 struct snpMap *el = item;
 int    snpMapType = 0;
@@ -67,7 +67,7 @@ if (el->avHet < atof(cartUsualString(cart, "snpAvHetCutoff", "0.0")))
 return TRUE;
 }
 
-boolean snp125AvHetFilterItem(struct track *tg, void *item)
+boolean snp125AvHetFilterItem(void *item)
 /* Return TRUE if item passes filter. */
 {
 struct snp125 *el = item;
@@ -77,7 +77,7 @@ if (el->avHet < atof(cartUsualString(cart, "snp125AvHetCutoff", "0.0")))
 return TRUE;
 }
 
-boolean snp125WeightFilterItem(struct track *tg, void *item)
+boolean snp125WeightFilterItem(void *item)
 /* Return TRUE if item passes filter. */
 {
 struct snp125 *el = item;
@@ -88,7 +88,7 @@ return TRUE;
 }
 
 boolean snpSourceFilterItem(struct track *tg, void *item)
-/* Return TRUE if item passes filter. */
+/* Return TRUE if item passes filter, i.e. has no excluded property. */
 {
 struct snp *el = item;
 int    snpSource = 0;
@@ -101,7 +101,7 @@ return TRUE;
 }
 
 boolean snpMolTypeFilterItem(struct track *tg, void *item)
-/* Return TRUE if item passes filter. */
+/* Return TRUE if item passes filter, i.e. has no excluded property. */
 {
 struct snp *el = item;
 int    snpMolType = 0;
@@ -113,8 +113,8 @@ for (snpMolType=0; snpMolType<snpMolTypeCartSize; snpMolType++)
 return TRUE;
 }
 
-boolean snp125MolTypeFilterItem(struct track *tg, void *item)
-/* Return TRUE if item passes filter. */
+boolean snp125MolTypeFilterItem(void *item)
+/* Return TRUE if item passes filter, i.e. has an included property. */
 {
 struct snp125 *el = item;
 int i;
@@ -123,13 +123,14 @@ for (i=0; i<snp125MolTypeLabelsSize; i++)
     {
     if (!sameString(snp125MolTypeDataName[i], el->molType)) 
 	continue;
-    return snp125MolTypeIncludeCart[i];
+    if (snp125MolTypeIncludeCart[i])
+	return TRUE;
     }
-return TRUE;
+return FALSE;
 }
 
 boolean snpClassFilterItem(struct track *tg, void *item)
-/* Return TRUE if item passes filter. */
+/* Return TRUE if item passes filter, i.e. has no excluded property. */
 {
 struct snp *el = item;
 int    snpClass = 0;
@@ -141,8 +142,8 @@ for (snpClass=0; snpClass<snpClassCartSize; snpClass++)
 return TRUE;
 }
 
-boolean snp125ClassFilterItem(struct track *tg, void *item)
-/* Return TRUE if item passes filter. */
+boolean snp125ClassFilterItem(void *item)
+/* Return TRUE if item passes filter, i.e. has an included property. */
 {
 struct snp125 *el = item;
 int i;
@@ -151,13 +152,14 @@ for (i=0; i<snp125ClassLabelsSize; i++)
     {
     if (!sameString(snp125ClassDataName[i], el->class)) 
 	continue;
-    return snp125ClassIncludeCart[i];
+    if (snp125ClassIncludeCart[i])
+	return TRUE;
     }
-return TRUE;
+return FALSE;
 }
 
 boolean snpValidFilterItem(struct track *tg, void *item)
-/* Return TRUE if item passes filter. */
+/* Return TRUE if item passes filter, i.e. has no excluded property. */
 {
 struct snp *el = item;
 int    snpValid = 0;
@@ -169,8 +171,8 @@ for (snpValid=0; snpValid<snpValidCartSize; snpValid++)
 return TRUE;
 }
 
-boolean snp125ValidFilterItem(struct track *tg, void *item)
-/* Return TRUE if item passes filter. */
+boolean snp125ValidFilterItem(void *item)
+/* Return TRUE if item passes filter, i.e. has an included property. */
 {
 struct snp125 *el = item;
 int i;
@@ -179,13 +181,14 @@ for (i=0; i<snp125ValidLabelsSize; i++)
     {
     if (!containsStringNoCase(el->valid, snp125ValidDataName[i])) 
 	continue;
-    return snp125ValidIncludeCart[i];
+    if (snp125ValidIncludeCart[i])
+	return TRUE;
     }
-return TRUE;
+return FALSE;
 }
 
 boolean snpFuncFilterItem(struct track *tg, void *item)
-/* Return TRUE if item passes filter. */
+/* Return TRUE if item passes filter, i.e. has no excluded property. */
 {
 struct snp *el = item;
 int    snpFunc = 0;
@@ -197,8 +200,8 @@ for (snpFunc=0; snpFunc<snpFuncCartSize; snpFunc++)
 return TRUE;
 }
 
-boolean snp125FuncFilterItem(struct track *tg, void *item)
-/* Return TRUE if item passes filter. */
+boolean snp125FuncFilterItem(void *item)
+/* Return TRUE if item passes filter, i.e. has an included property. */
 {
 struct snp125 *el = item;
 char *words[128];
@@ -214,14 +217,14 @@ for (i = 0;  i < wordCount;  i++)
 				snp125FuncDataName, snp125FuncDataNameSize);
     if (snpFunc < 0)
 	errAbort("Unrecognized function %s", simpleFunc);
-    if (! snp125FuncIncludeCart[snpFunc])
-	return FALSE;
+    if (snp125FuncIncludeCart[snpFunc])
+	return TRUE;
     }
-return TRUE;
+return FALSE;
 }
 
 boolean snpLocTypeFilterItem(struct track *tg, void *item)
-/* Return TRUE if item passes filter. */
+/* Return TRUE if item passes filter, i.e. has no excluded property. */
 {
 struct snp *el = item;
 int    snpLocType = 0;
@@ -233,8 +236,8 @@ for (snpLocType=0; snpLocType<snpLocTypeCartSize; snpLocType++)
 return TRUE;
 }
 
-boolean snp125LocTypeFilterItem(struct track *tg, void *item)
-/* Return TRUE if item passes filter. */
+boolean snp125LocTypeFilterItem(void *item)
+/* Return TRUE if item passes filter, i.e. has an included property. */
 {
 struct snp125 *el = item;
 int i;
@@ -243,9 +246,31 @@ for (i=0; i<snp125LocTypeLabelsSize; i++)
     {
     if (!sameString(snp125LocTypeDataName[i], el->locType)) 
 	continue;
-    return snp125LocTypeIncludeCart[i];
+    if (snp125LocTypeIncludeCart[i])
+	return TRUE;
     }
-return TRUE;
+return FALSE;
+}
+
+void filterSnp125Items(struct track *tg, int version)
+/* Filter out items from track->itemList using snp125 filters. */
+{
+struct slList *newList = NULL, *el, *next;
+
+for (el = tg->items; el != NULL; el = next)
+    {
+    next = el->next;
+    if (snp125AvHetFilterItem(el) &&
+	snp125WeightFilterItem(el) &&
+	snp125MolTypeFilterItem(el) &&
+	snp125ClassFilterItem(el) &&
+	snp125ValidFilterItem(el) &&
+	snp125FuncFilterItem(el) &&
+	(version >= 128 || snp125LocTypeFilterItem(el)))
+ 	slAddHead(&newList, el);
+    }
+slReverse(&newList);
+tg->items = newList;
 }
 
 struct orthoBed *orthoBedLoad(char **row)
@@ -425,6 +450,7 @@ struct sqlResult       *sr        = NULL;
 struct snp125Extended  *se        = NULL;
 enum   trackVisibility  vis       = tg->visibility;
 enum   trackVisibility  visLim    = tg->limitedVis;
+int                     version   = snpVersion(tg->mapName);
 int                     i         = 0;
 
 snp125AvHetCutoff = atof(cartUsualString(cart, "snp125AvHetCutoff", "0.0"));
@@ -508,13 +534,7 @@ hFreeConn(&conn);
 
 tg->items = itemList;
 
-filterSnpItems(tg, snp125AvHetFilterItem);
-filterSnpItems(tg, snp125WeightFilterItem);
-filterSnpItems(tg, snp125MolTypeFilterItem);
-filterSnpItems(tg, snp125ClassFilterItem);
-filterSnpItems(tg, snp125ValidFilterItem);
-filterSnpItems(tg, snp125FuncFilterItem);
-filterSnpItems(tg, snp125LocTypeFilterItem);
+filterSnp125Items(tg, version);
 
 vis = estimateVisibility(tg);
 if(vis==tvDense || visLim==tvDense)
