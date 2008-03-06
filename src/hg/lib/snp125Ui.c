@@ -2,7 +2,7 @@
 #include "snp125Ui.h"
 #include "common.h"
 
-static char const rcsid[] = "$Id: snp125Ui.c,v 1.29 2008/03/06 00:06:26 angie Exp $";
+static char const rcsid[] = "$Id: snp125Ui.c,v 1.30 2008/03/06 04:01:25 angie Exp $";
 
 boolean snp125ExtendedNames = TRUE;
 
@@ -13,10 +13,10 @@ int snp125WeightCutoff = 1;
 
 char *snp125ColorLabel[] = {
     "red",
-    "blue",
     "green",
-    "black",
+    "blue",
     "gray",
+    "black",
 };
 
 int snp125ColorLabelSize = ArraySize(snp125ColorLabel);
@@ -309,8 +309,9 @@ int snp125ValidCartSize     = ArraySize(snp125ValidCart);
 int snp125ValidIncludeStringsSize     = ArraySize(snp125ValidIncludeStrings);
 
 /****** function related controls *******/
-/* unknown, locus, coding, coding-synon, coding-nonsynon,
- * untranslated, intron, splice-site, exception */
+/* Values are a subset of snpNNN.func values:
+ * unknown, locus, coding, coding-synon, coding-nonsynon,
+ * untranslated, intron, splice-site, cds-reference */
 
 char *snp125FuncLabels[] = {
     "Unknown",
@@ -340,7 +341,7 @@ char *snp125FuncDataName[] = {
     "untranslated",
     "intron",
     "splice-site",
-    "exception",
+    "cds-reference",
 };
 char *snp125FuncDefault[] = {
     "black",   // unknown
@@ -367,8 +368,7 @@ char *snp125FuncCart[] = {
  * pre-existing simpler function classes.  This mapping is an array of 
  * arrays, each of which has the simpler type (from snp125FuncDataName
  * above) followed by more specific subtypes, if any.  All arrays are
- * NULL-terminated.  Types that do not appear in snp125FuncDataName are
- * mapped onto ignore. */
+ * NULL-terminated. */
 static char *locusSyn[] =
     {"locus",		"gene-segment", "near-gene-3", "near-gene-5", NULL};
 static char *nonsynonSyn[] =
@@ -377,15 +377,15 @@ static char *untranslatedSyn[] =
     {"untranslated",	"untranslated-3", "untranslated-5", NULL};
 static char *spliceSyn[] =
     {"splice-site",	"splice-3", "splice-5", NULL};
-static char *ignoreSyn[] =
-    {"ignore",		"coding", "cds-reference", "coding-synonymy-unknown",
+static char *cdsRefSyn[] =
+    {"cds-reference",	"coding", "coding-synonymy-unknown",
      NULL};
 char **snp125FuncDataSynonyms[] = {
     locusSyn,
     nonsynonSyn,
     untranslatedSyn,
     spliceSyn,
-    ignoreSyn,
+    cdsRefSyn,
     NULL
 };
 
