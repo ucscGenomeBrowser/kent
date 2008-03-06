@@ -33,7 +33,7 @@
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 #define MAX_SP_SIZE 2000
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.410 2008/03/05 22:43:50 angie Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.411 2008/03/06 00:02:20 angie Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -240,6 +240,7 @@ void snp125Ui(struct trackDb *tdb)
 int i = 0;
 char autoSubmit[2048];
 char *orthoTable = trackDbSetting(tdb, "chimpMacaqueOrthoTable");
+int version = snpVersion(tdb->tableName);
 
 if (isNotEmpty(orthoTable) && hTableExists(orthoTable))
     {
@@ -267,7 +268,7 @@ printf("<TABLE border=0 cellspacing=0 cellpadding=0>\n");
 for (i = 0;  i < SNP125_FILTER_COLUMNS;  i++)
     printf("<COLGROUP><COL><COL width=\"%d%%\"></COLGROUP>\n",
 	   round(100 / SNP125_FILTER_COLUMNS));
-if (snpVersion(tdb->tableName) <= 127)
+if (version <= 127)
     snp125PrintFilterControls("Location Type", snp125LocTypeIncludeStrings,
 			 snp125LocTypeLabels, snp125LocTypeIncludeCart,
 			 snp125LocTypeIncludeDefault, snp125LocTypeLabelsSize);
@@ -296,19 +297,30 @@ printf("<HR>\n");
 printf("<B>SNP Feature for Color Specification:</B>\n");
 snp125ColorSourceCart[0] = cartUsualString(cart, snp125ColorSourceDataName[0],
 					   snp125ColorSourceDefault[0]);
-cgiMakeDropListFull(snp125ColorSourceDataName[0], snp125ColorSourceLabels,
-		    snp125ColorSourceLabels, snp125ColorSourceLabelsSize,
-		    snp125ColorSourceCart[0], autoSubmit);
+if (version <= 127)
+    cgiMakeDropListFull(snp125ColorSourceDataName[0], snp125ColorSourceLabels,
+			snp125ColorSourceLabels, snp125ColorSourceLabelsSize,
+			snp125ColorSourceCart[0], autoSubmit);
+else
+    {
+    if (stringArrayIx(snp125ColorSourceCart[0], snp128ColorSourceLabels,
+		      snp128ColorSourceLabelsSize) < 0)
+	snp125ColorSourceCart[0] = snp125ColorSourceDefault[0];
+    cgiMakeDropListFull(snp125ColorSourceDataName[0], snp128ColorSourceLabels,
+			snp128ColorSourceLabels, snp128ColorSourceLabelsSize,
+			snp125ColorSourceCart[0], autoSubmit);
+    }
 printf("<BR><BR>\n");
 printf("The selected feature above has the following values below.  \n");
 printf("For each value, a selection of colors is available.<BR><BR>\n");
 
-snp125ColorSourceCart[0] = cartUsualString(cart, snp125ColorSourceDataName[0],
-					   snp125ColorSourceDefault[0]);
 if (sameString(snp125ColorSourceCart[0], "Location Type"))
-    snp125PrintColorSpec(snp125LocTypeStrings, snp125LocTypeLabels,
-			 snp125LocTypeCart, snp125LocTypeDefault,
-			 snp125LocTypeLabelsSize);
+    {
+    if (version <= 127)
+	snp125PrintColorSpec(snp125LocTypeStrings, snp125LocTypeLabels,
+			     snp125LocTypeCart, snp125LocTypeDefault,
+			     snp125LocTypeLabelsSize);
+    }
 else if (sameString(snp125ColorSourceCart[0], "Class"))
     snp125PrintColorSpec(snp125ClassStrings, snp125ClassLabels,
 			 snp125ClassCart, snp125ClassDefault,
