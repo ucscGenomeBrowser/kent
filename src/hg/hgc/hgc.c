@@ -214,7 +214,7 @@
 #include "itemConf.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1397 2008/03/05 19:18:20 hiram Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1398 2008/03/06 06:42:25 angie Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -19840,12 +19840,9 @@ else if (sameWord(track, "snp"))
     {
     doSnp(tdb, item);
     }
-else if (startsWith("snp", track) && strlen(track) >= 6 &&
-	 isdigit(track[3]) && isdigit(track[4]) && isdigit(track[5]) &&
-	 atoi(track+3) >= 125)
+else if (snpVersion(track) >= 125)
     {
-    int version = atoi(track+3);
-    doSnpWithVersion(tdb, item, version);
+    doSnpWithVersion(tdb, item, snpVersion(track));
     }
 else if (sameWord(track, "cnpIafrate"))
     {
