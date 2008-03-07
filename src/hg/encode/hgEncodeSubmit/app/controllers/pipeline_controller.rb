@@ -294,8 +294,6 @@ class PipelineController < ApplicationController
     projectDir = File.dirname(path_to_file)
     Dir.mkdir(projectDir,0775) unless File.exists?(projectDir)
 
-    logger.info "\n\nGALT! got here 3\n\n"
-    
     nextArchiveNo = @project.archive_count+1
 
     plainName = @filename
@@ -337,7 +335,7 @@ class PipelineController < ApplicationController
       end
       log_project_status
 
-      # just in case, remove it it already exists (shouldn't happen)
+      # just in case, remove it if it already exists (shouldn't happen)
       File.delete(path_to_file) if File.exists?(path_to_file)
     
       if @project.project_archives.last
@@ -368,7 +366,14 @@ class PipelineController < ApplicationController
         end
 
       else  # should be local-file upload, Hmm... where does Mongrel put it during upload?
-        FileUtils.copy(@upload.local_path, path_to_file)
+        unless defined? @upload.local_path
+          FileUtils.copy(@upload.local_path, path_to_file)
+        else
+          flash[:error] = "System error - file copy failed."
+          @project.status = "new"
+          @project.save
+          return
+        end
       end
 
       @project.status = "expanding"
@@ -376,7 +381,6 @@ class PipelineController < ApplicationController
         return
       end
       log_project_status
-
 
       nextArchiveNo = @project.archive_count+1
       if prep_one_archive @filename, nextArchiveNo
@@ -401,9 +405,7 @@ class PipelineController < ApplicationController
           load
         end
       end
-
   end
-
 
   def delete_archive
     archive = ProjectArchive.find(params[:id])
