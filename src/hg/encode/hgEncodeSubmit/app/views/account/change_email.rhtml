@@ -15,7 +15,7 @@
       <table><tr>
       <td><%= submit_tag "Update Email" -%> </td>
   <% end %>
-      <td> <%= button_to 'Cancel', {:controller => 'pipeline', :action => 'show_user', :user => @user } -%></td>
+      <td> <%= button_to 'Cancel', {:controller => 'account', :action => 'change_profile', :user => @user } -%></td>
     </tr></table>
 <% else %>
   <p>  
