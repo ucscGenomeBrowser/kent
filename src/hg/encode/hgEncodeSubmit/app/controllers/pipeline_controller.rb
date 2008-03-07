@@ -169,7 +169,7 @@ class PipelineController < ApplicationController
     @project.status = 'new'
     @project.archives_active = ""
     if @project.save
-      redirect_to :action => 'show', :id => @project.id
+      redirect_to :action => 'upload', :id => @project.id
       log_project_status
     else
       @projectTypes = getProjectTypes
