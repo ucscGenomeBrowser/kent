@@ -58,7 +58,7 @@ void drawDiamond(struct hvGfx *hvg,
 		 Color fillColor, Color outlineColor);
 /* Draw diamond shape. */
 
-void mapDiamondUi(int xl, int yl, int xt, int yt, 
+void mapDiamondUi(struct hvGfx *hvg, int xl, int yl, int xt, int yt, 
 			 int xr, int yr, int xb, int yb, 
 			 char *name, char *shortLabel, char *trackName);
 /* Print out image map rectangle that invokes hgTrackUi. */
@@ -66,7 +66,7 @@ void mapDiamondUi(int xl, int yl, int xt, int yt,
 Color getOutlineColor(struct track *tg, int itemCount);
 /* get outline color from cart and set outlineColor*/
 
-void mapTrackBackground(struct track *tg, int xOff, int yOff);
+void mapTrackBackground(struct track *tg, struct hvGfx *hvg, int xOff, int yOff);
 /* Print out image map rectangle that invokes hgTrackUi. */
 
 void initColorLookup(struct track *tg, struct hvGfx *hvg, boolean isDprime);

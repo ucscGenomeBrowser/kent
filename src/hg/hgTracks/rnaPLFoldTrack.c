@@ -221,7 +221,7 @@ return; /* mapDiamondUI is working well, but there is a bug with
 	   AREA=POLY on the Mac browsers, so this will be 
 	   postponed for now by not using this code */
 if (drawMap && xt-xl>5 && xb-xl>5)
-    mapDiamondUi(xl, yl, xt, yt, xr, yr, xb, yb, name, tg->mapName,
+    mapDiamondUi(hvg, xl, yl, xt, yt, xr, yr, xb, yb, name, tg->mapName,
 		 tg->tdb->tableName);
 }
 
@@ -263,7 +263,7 @@ struct dyString *dsRnaLpFoldTrm = newDyString(32);
 dyStringPrintf(dsRnaLpFoldTrm, "%s_trm", tg->mapName);
 if ( vis==tvDense || ( tg->limitedVisSet && tg->limitedVis==tvDense ) )
     hvGfxBox(hvg, insideX, yOff, insideWidth, tg->height-1, yellow);
-mapTrackBackground(tg, xOff, yOff);
+mapTrackBackground(tg, hvg, xOff, yOff);
 
 /*nothing to do? */
 if (tg->items==NULL)
