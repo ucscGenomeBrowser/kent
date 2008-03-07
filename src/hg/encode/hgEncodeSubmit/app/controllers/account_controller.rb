@@ -30,7 +30,7 @@ class AccountController < ApplicationController
     @user.save!
     flash[:notice] = "Profile has been successfully changed."
     redirect_back_or_default(:controller => '/pipeline', :action => 'list')
-  rescue ActiveRecord::RecordInvalid
+  rescue 
     render :action => 'change_profile'
   end
 
