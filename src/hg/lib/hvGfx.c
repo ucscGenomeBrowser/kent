@@ -5,7 +5,7 @@
 #include "common.h"
 #include "hvGfx.h"
 
-static char const rcsid[] = "$Id: hvGfx.c,v 1.2 2008/02/20 00:42:31 markd Exp $";
+static char const rcsid[] = "$Id: hvGfx.c,v 1.3 2008/03/07 18:47:41 markd Exp $";
 
 static struct hvGfx *hvGfxAlloc(struct vGfx *vg)
 /* allocate a hvgGfx object */
@@ -13,7 +13,7 @@ static struct hvGfx *hvGfxAlloc(struct vGfx *vg)
 struct hvGfx *hvg;
 AllocVar(hvg);
 hvg->vg = vg;
-hvg->pixelBased = hvg->pixelBased;
+hvg->pixelBased = vg->pixelBased;
 hvg->width = vg->width;
 hvg->height = vg->height;
 hvg->clipMaxX = vg->width;
