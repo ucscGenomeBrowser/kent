@@ -329,6 +329,7 @@ class PipelineController < ApplicationController
 
   def upload_background
 
+      saveProjectStatus = @project.status
       @project.status = "uploading"
       unless @project.save
         return
@@ -339,7 +340,7 @@ class PipelineController < ApplicationController
       File.delete(path_to_file) if File.exists?(path_to_file)
     
       if @project.project_archives.last
-        @project.project_archives.last.status = @project.status
+        @project.project_archives.last.status = saveProjectStatus
         @project.project_archives.last.archives_active = @project.archives_active
         unless @project.project_archives.last.save
           flash[:error] = "System error - project_archive record status save failed."
