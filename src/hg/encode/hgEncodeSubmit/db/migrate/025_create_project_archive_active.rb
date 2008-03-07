@@ -6,7 +6,7 @@ class CreateProjectArchiveActive < ActiveRecord::Migration
         t.column :active, :boolean
     end
 
-    execute "insert into project_archive_active (archive_id, archive_no, active) select a.id, b.archive_no, 1 from project_archives a, project_archives b where a.project_id = b.project_id and a.archive_no >= b.archive_no order by a.id, b.archive_no"
+    execute "insert into project_archive_active (archive_id, archive_no, active) select a.id, b.archive_no, true from project_archives a, project_archives b where a.project_id = b.project_id and a.archive_no >= b.archive_no order by a.id, b.archive_no"
 
   end
 
