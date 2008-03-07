@@ -13,7 +13,7 @@
 #include "twoBit.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: snpNcbiToUcsc.c,v 1.5 2008/02/22 07:30:46 markd Exp $";
+static char const rcsid[] = "$Id: snpNcbiToUcsc.c,v 1.6 2008/03/07 21:38:03 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -22,7 +22,7 @@ errAbort(
 "snpNcbiToUcsc - Reformat NCBI SNP field values into UCSC, and flag exceptions.\n"
 "usage:\n"
 "   snpNcbiToUcsc ucscNcbiSnp.bed db.2bit snpNNN\n"
-/*
+/* could add options to provide support for different dbSNP versions.
 "options:\n"
 "   -xxx=XXX\n"
 */
@@ -384,7 +384,10 @@ exceptionNames[MultipleAlignments] = "MultipleAlignments";
  * flanking sequences.  hgc shows an axtAffine re-alignment of the flanking
  * sequences, which isn't always exactly the same as NCBI's, but often it
  * can shed some light. */
-#define SEE_ALIGNMENT "(UCSC's re-alignment of flanking sequences to the genome may be informative -- see below.)"
+#define NCBI_ALI_PROBLEM "NCBI's alignment of the flanking sequences " \
+                         "had at least one mismatch or gap.  "
+#define SEE_ALIGNMENT "(UCSC's re-alignment of flanking sequences " \
+                      "to the genome may be informative -- see below.)"
 
 AllocArray(exceptionDescs, exceptionTypeCount);
 /* processUcscAllele() */
@@ -401,27 +404,22 @@ exceptionDescs[MixedObserved] =
     "There are other rsIds at this position with different variation.";
 /* checkLocType() */
 exceptionDescs[FlankMismatchGenomeLonger] =
-    "Part of the flanking sequence including the SNP was not aligned to "
-    "the genome, and "
-    "the genome has more unaligned bases than the flanking sequences.  "
+    NCBI_ALI_PROBLEM
     SEE_ALIGNMENT;
 exceptionDescs[FlankMismatchGenomeEqual] =
-    "Part of the flanking sequence including the SNP was not aligned to "
-    "the genome, and "
-    "the genome has the same number of unaligned bases as the flanking "
-    "sequences.  "
+    NCBI_ALI_PROBLEM
     SEE_ALIGNMENT;
 exceptionDescs[FlankMismatchGenomeShorter] =
-    "Part of the flanking sequence including the SNP was not aligned to "
-    "the genome, and "
-    "the genome has fewer unaligned bases than the flanking sequences.  "
+    NCBI_ALI_PROBLEM
     SEE_ALIGNMENT;
 /* checkClass() */
 exceptionDescs[NamedDeletionZeroSpan] =
-    "A deletion was observed but the annotation spans 0 bases.  "
+    "A deletion (from the genome) was observed but the annotation "
+    "spans 0 bases.  "
     SEE_ALIGNMENT;
 exceptionDescs[NamedInsertionNonzeroSpan] =
-    "An insertion was observed but the annotation spans more than 0 bases.  "
+    "An insertion (into the genome) was observed but the annotation "
+    "spans more than 0 bases.  "
     SEE_ALIGNMENT;
 exceptionDescs[SingleClassLongerSpan] =
     "All observed alleles are single-base, but the annotation spans more "
