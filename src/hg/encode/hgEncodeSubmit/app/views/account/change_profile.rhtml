@@ -1,4 +1,10 @@
 <%= error_messages_for :user %>
+
+<table><tr>
+<td> <%= link_to 'Change Password', {:controller => 'account', :action => 'change_password'} %></td><td> | </td>
+<td> <%= link_to 'Change Email', {:controller => 'account', :action => 'change_email', :user => @user, :email => @user.email } %></td>
+</tr></table>
+
 <% form_for :user do |f| -%>
 <p><label for="login">Login</label><br/>
 <%= f.text_field :login %></p>
@@ -16,11 +22,8 @@
 <%= f.text_field :institution %></p>
 
 <table><tr>
-<td > <%= submit_tag 'Save Profile' -%></td>
+<td > <%= submit_tag 'Save' -%></td>
 <% end -%>
-<td> <%= button_to 'Change Password', {:controller => 'account', :action => 'change_password'} %></td>
-<td> <%= button_to 'Change Email', {:controller => 'account', :action => 'change_email', :user => @user, :email => @user.email } %></td>
 <td> <%= button_to 'Cancel', {:controller => 'pipeline', :action => 'show_user'} %></td>
 </tr></table>
-
 
