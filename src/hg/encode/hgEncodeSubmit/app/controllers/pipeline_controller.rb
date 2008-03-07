@@ -369,10 +369,7 @@ class PipelineController < ApplicationController
         unless defined? @upload.local_path
           FileUtils.copy(@upload.local_path, path_to_file)
         else
-          flash[:error] = "System error - file copy failed."
-          @project.status = "new"
-          @project.save
-          return
+          File.open(path_to_file, "wb") { |f| f.write(@upload.read) }
         end
       end
 
