@@ -122,7 +122,7 @@ with the mapping, and reports them in the Annotations section if found:
   <LI>Class is single, in-del, mnp or mixed and the UCSC reference
       allele does not match any observed allele.</LI>
   <LI>In NCBI's alignment of flanking sequences to the genome, part
-      of the flanking sequence including the SNP does not align to
+      of the flanking sequence around the SNP does not align to
       the genome.</LI>
   <LI>Class is single, but the size of the mapped SNP is not one base.</LI>
   <LI>Class is named and indicates an insertion or deletion, but the size
@@ -139,6 +139,17 @@ Another condition, which does not necessarily imply any problem, is noted:
   <UL>
   <LI>Class is single and SNP is tri-allelic or quad-allelic.</LI>
   </UL>
+</P>
+
+<H2>UCSC Re-alignment of flanking sequences</H2>
+<P>
+dbSNP determines the genomic locations of SNPs by aligning their flanking 
+sequences to the genome.
+UCSC does not have dbSNP's alignments, but re-aligns the flanking sequences 
+to the neighboring genomic sequence for display on SNP details pages.  
+While the recomputed alignments may differ from the alignments upon which 
+dbSNP bases its annotations, they often are informative when UCSC has 
+annotated an unusual condition.
 </P>
 
 <H2>Data Sources</H2>
