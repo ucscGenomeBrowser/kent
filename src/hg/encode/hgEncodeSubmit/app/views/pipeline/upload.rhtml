@@ -1,28 +1,31 @@
 <p>
-<b>Submit data to project '<%= @project.name -%>'</b>
+<b>Submit data to project '<%= @project.name -%>':</b>
 </p>
 <%= start_form_tag({:action => 'upload'}, :multipart => true) %>
 
-  <p><label for="project_upload_url">Upload from URL</label><br>
-  <%= text_field_tag 'upload_url', "http://", :size => 40 %><br>
+  <p><label for="project_upload_url">Upload from URL</label><br/>
+  <%= text_field_tag 'upload_url', "http://", :size => 40 %><br/>
 
   <label for="project_upload_auto_resume"></label>
   <%= check_box 'auto_resume', '0' %>
 Resume if the previous upload  was interrupted.
 <br/>
 
-
-
-  <p><label for="project_upload_file">or Upload local file</label><br>
-  <%= file_field_tag 'upload_file', :size => 25 %><br>
+  <p><label for="project_upload_file">or Upload local file</label><br/>
+  <%= file_field_tag 'upload_file', :size => 25 %><br/>
 
   <table cellpadding=0 cellspacing=0><tr>
   <td><%= submit_tag @autoUploadLabel %></td>
   <td><%= submit_tag "Upload Only" %></td>
 <%= end_form_tag -%>
-  <td> <%= button_to 'Cancel', {:controller => 'pipeline', :action => 'show', :id => @project.id} %></td>
-  </table></tr>
-
+  <td> <%= button_to 'Cancel', {:controller => 'pipeline', :action => 'show', :id => @project.id } %></td>
+ </tr></table>
+<p>
+Use 'Submit' to upload and expand the archive, 
+validate the data and metadata, 
+and load the data to the database.
+Use 'Upload Only' to run these
+steps individually.</p>
 <p>
 The archive file must have one of these extensions: <br/>
 .zip, .tar.gz, .tar.bz2 <br/>
