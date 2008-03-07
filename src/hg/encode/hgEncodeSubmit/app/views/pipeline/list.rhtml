@@ -13,7 +13,7 @@
  <% if !defined? @user %>
    <td align="left"><b>Investigator</b></td><td>&nbsp;</td>
  <% end %>
- <td align="left"><b>Updated</b></td></tr>
+ <td align="left"><b>Updated PST</b></td></tr>
 
  <% @projects.each do |c| %>
   <tr>
@@ -64,25 +64,4 @@
 <br/>
   
 <%
-=begin %>
-
-
-  <td><small><%= link_to 'Edit', {:action => 'edit', :id => c.id} -%></small></td>
-  <td><small><%= link_to 'Delete', {:action => 'delete', :id => c.id},
-    :confirm => "Are you sure you want to delete this item?"%></small></td>
-
-  <td><small>
-    <%= link_to 'Upload', {:action => 'upload', :id => c.id} -%>
-  </small></td>
- Just keeping this for a while as an example of making a dropdown 
-  list from linking to another table.  Change "category" to "user" below.
-
- <ul id="categories">
- <% Category.find(:all).each do |c| %>
-  <li><%= link_to c.name, {:action => 'show_category', :id => c.id} -%></li>
- <% end %>
- </ul>
-
-<%
-=end %>
 
