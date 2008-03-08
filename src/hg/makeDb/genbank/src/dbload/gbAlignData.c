@@ -29,7 +29,7 @@
 #include "gbSql.h"
 #include "sqlDeleter.h"
 
-static char const rcsid[] = "$Id: gbAlignData.c,v 1.27 2008/01/19 23:05:32 markd Exp $";
+static char const rcsid[] = "$Id: gbAlignData.c,v 1.28 2008/03/08 15:27:56 markd Exp $";
 
 /* objects handling table loads */
 static struct gbAlignTblSet *alignTblSet = NULL;
@@ -49,8 +49,6 @@ if (alignTblSet == NULL)
                                    tmpDir);
     geneTblSet = gbGeneTblSetNew(tmpDir);
     }
-else
-    assert(options->flags & DBLOAD_INITIAL);
 
 /* do we have MGC or ORFeome */
 haveMgc = gbConfGetDbBoolean(options->conf, sqlGetDatabase(conn), "mgc");
