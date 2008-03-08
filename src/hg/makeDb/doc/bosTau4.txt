@@ -1,0 +1,163 @@
+# for emacs: -*- mode: sh; -*-
+
+# Bos Taurus -- Baylor Release 4.0 (Oct 4 2007)
+#	"$Id: bosTau4.txt,v 1.1 2008/03/08 01:23:32 hiram Exp $"
+#########################################################################
+# DOWNLOAD SEQUENCE (DONE - 2008-03-07 - Hiram)
+    ssh kkstore06
+    mkdir /cluster/store3/bosTau4
+    ln -s /cluster/store3/bosTau4 /cluster/data/bosTau4
+    mkdir /cluster/data/bosTau4/baylor
+    cd /cluster/data/bosTau4/baylor
+
+    for F in README.Btau20070913.txt Contigs/*
+do
+    wget --timestamping \
+"ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Btaurus/fasta/Btau20070913-freeze/${F}"
+done
+
+    mkdir chroms
+    cd chroms
+    wget --timestamping \
+"ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Btaurus/fasta/Btau20070913-freeze/LinearScaffolds/*"
+
+    #	Looking up chrM in Entrez nucleotide search,
+    #	from bosTau3 note: NC_006853 GI:60101824
+    #	search for Bos taurus mitochondrion complete genome
+
+    #	fixup the Chr case names in the agp file:
+    sed -e "s/^Chr/chr/" Btau20070913.All.ac.agp > bosTau4.agp
+
+    #	fixup the contig names in the contigs.fa and qual files, utilize
+    #	the following perl scripts:
+    cat << '_EOF_' > fixContigNames.pl
+#!/usr/bin/env perl
+
+use warnings;
+use strict;
+
+my $argc = scalar(@ARGV);
+
+if (1 != $argc) {
+    print "usage ./fixContigNames.pl Btau20060815.contigs.fa.gz \\\n",
+	" | gzip > bosTau4.contigs.fa.gz\n";
+    exit 255;
+}
+
+my $fName = shift;
+
+open (FH,"zcat $fName|") or die "can not read $fName $!";
+while (my $line = <FH>) {
+    if ($line =~ m/^>/) {
+	my @a = split('\|', $line);
+	$a[3] =~ s/\.[0-9]+//;
+	print ">$a[3]\n";
+    } else {
+	print "$line";
+    }
+}
+close (FH)
+'_EOF_'
+    # << happy emacs
+
+    cat << '_EOF_' > fixQuals.pl
+#!/usr/bin/env perl
+
+use warnings;
+use strict;
+
+my $argc = scalar(@ARGV);
+
+if (1 != $argc) {
+    print "usage ./fixQuals.pl Btau20060815.contigs.fa.qual.gz \\\n",
+	" | gzip > bosTau4.qual.gz\n";
+    exit 255;
+}
+
+my $fName = shift;
+
+open (FH,"zcat $fName|") or die "can not read $fName $!";
+while (my $line = <FH>) {
+    if ($line =~ m/^>/) {
+	$line =~ s/\.[0-9]+.*//;
+    }
+    print "$line";
+}
+close (FH)
+'_EOF_'
+    # << happy emacs
+
+    #	There are extra records in the qual and contigs fa files.
+    #	Only the sequences in the agp file should be used:
+    grep "^chr" bosTau4.agp | egrep -v "clone|fragment" | cut -f6 \
+	| sort > agp.names
+    #	run those scripts, extract only the used records, and lift the
+    #	qual scores via the AGP file to a qac file.
+    chmod +x fixContigNames.pl fixQuals.pl
+    ./fixContigNames.pl Btau20060815.contigs.fa.gz \
+	| faSomeRecords stdin agp.names stdout | gzip > bosTau4.contigs.fa.gz
+    ./fixQuals.pl Btau20060815.contigs.fa.qual.gz \
+	| faSomeRecords stdin agp.names stdout \
+	| qaToQac stdin stdout \
+	| qacAgpLift bosTau4.agp stdin bosTau4.qual.qac
+
+#############################################################################
+#  running makeGenomeDb.pl (DONE - 2008-03-07 - Hiram)
+    ssh kkstore06
+    cd /cluster/data/bosTau4
+    cat << '_EOF_' > bosTau4.config.ra
+db bosTau4
+clade mammal
+scientificName Bos Taurus
+assemblyDate Oct. 2006
+assemblyLabel Baylor Release 4.0
+orderKey 236
+dbDbSpeciesDir cow
+mitoAcc 60101824
+agpFiles /cluster/data/bosTau4/baylor/bosTau4.agp
+fastaFiles /cluster/data/bosTau4/baylor/bosTau4.contigs.fa.gz
+qualFiles /cluster/data/bosTau4/baylor/bosTau4.qual.qac
+commonName Cow
+'_EOF_'
+    # << happy emacs
+
+    makeGenomeDb.pl bosTau4.config.ra > makeGenomeDb.log 2>&1
+
+#########################################################################
+# REPEATMASKER (DONE - 2008-03-07 - Hiram)
+    ssh kkstore06
+    screen # use a screen to manage this job
+    mkdir /cluster/data/bosTau4/bed/repeatMasker
+    cd /cluster/data/bosTau4/bed/repeatMasker
+    # 
+    doRepeatMasker.pl -buildDir=/cluster/data/bosTau4/bed/repeatMasker \
+	-bigClusterHub=memk bosTau4 > do.log 2>&1 &
+XXX - running 2008-03-07
+
+    # RepeatMasker and lib version from do.log:
+    #    Jan 11 2008 (open-3-1-9) version of RepeatMasker
+    #	RELEASE 20071204;
+
+    # Compare coverage to previous assembly:
+    featureBits bosTau3 rmsk
+    # 1200525422 bases of 2731807384 (43.946%) in intersection
+    featureBits bosTau2 rmsk
+    # 1291561904 bases of 2812203870 (45.927%) in intersection
+
+    # Oct 16
+    #    October 6 2006 (open-3-1-6) version of RepeatMasker
+    #CC   RELEASE 20061006;                                            *
+    featureBits bosTau3 rmsk
+    # 1270629763 bases of 2731807384 (46.512%) in intersection
+
+#########################################################################
+# SIMPLE REPEATS TRF (DONE - 2008-03-07 - Hiram)
+    ssh kkstore06
+    screen # use a screen to manage this job
+    mkdir /cluster/data/bosTau4/bed/simpleRepeat
+    cd /cluster/data/bosTau4/bed/simpleRepeat
+    # 
+    doSimpleRepeat.pl -buildDir=/cluster/data/bosTau4/bed/simpleRepeat \
+	bosTau4 > do.log 2>&1 &
+XXX - running 2008-03-07
+

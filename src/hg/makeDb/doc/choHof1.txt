@@ -1,0 +1,62 @@
+# for emacs: -*- mode: sh; -*-
+
+
+# This file describes browser build for the Marmoset
+# genome, February 2008
+#
+#	"$Id: choHof1.txt,v 1.1 2008/03/08 01:23:32 hiram Exp $"
+#
+######################################################################
+## DOWNLOAD SEQUENCE (DONE - 2007-08-21 - Hiram)
+    ssh kkstore06
+    mkdir /cluster/store3/choHof1
+    ln -s /cluster/store3/choHof1 /cluster/data/choHof1
+    mkdir /cluster/data/choHof1/wustl
+    cd /cluster/data/choHof1/wustl
+    wget --timestamping \
+'ftp://genome.wustl.edu/pub/organism/Other_Vertebrates/Choloepus_hoffmanni/assembly/Choloepus_hoffmanni-1.0/output/*'
+    wget --timestamping \
+'ftp://genome.wustl.edu/pub/organism/Other_Vertebrates/Choloepus_hoffmanni/assembly/Choloepus_hoffmanni-1.0/ASSEMBLY' \
+-O ASSEMBLY.txt
+    wget --timestamping \
+'ftp://genome.wustl.edu/pub/organism/Other_Vertebrates/Choloepus_hoffmanni/assembly/Choloepus_hoffmanni-1.0/README' \
+-O README.txt
+
+    ls -ogrt
+# -rw-rw-r--  1  633475784 Feb 27 17:51 contigs.fa.gz
+# -rw-rw-r--  1 1259580727 Feb 27 18:39 contigs.fa.qual.gz
+# -rw-rw-r--  1    6013988 Feb 27 18:41 supercontigs.gz
+# -rw-rw-r--  1    7311800 Feb 27 18:41 reads.unplaced.gz
+# -rw-rw-r--  1  115609191 Feb 27 18:41 reads.placed.gz
+# -rw-rw-r--  1   18580911 Feb 27 18:42 supercontigs.agp.gz
+# -rw-rw-r--  1  654216866 Feb 27 19:29 supercontigs.fa.gz
+# -rw-rw-r--  1       6221 Mar  7 15:54 ASSEMBLY.txt
+# -rw-rw-r--  1       5864 Mar  7 15:55 README.txt
+
+    #	There appear to be a number of zero-length fragments, filter
+    #	them out:
+    zcat supercontigs.broken.agp.gz | awk '$6 != 0' \
+	| gzip > supercontigs.agp.gz
+
+#############################################################################
+#  running makeGenomeDb.pl (DONE - 2008-03-07 - Hiram)
+    ssh kkstore06
+    cd /cluster/data/choHof1
+    cat << '_EOF_' > choHof1.config.ra
+db choHof1
+clade mammal
+scientificName Choloepus hoffmanni
+assemblyDate February 2008
+assemblyLabel WUSTL Choloepus_hoffmanni_1.0
+orderKey 70
+dbDbSpeciesDir sloth
+mitoAcc none
+agpFiles /cluster/data/choHof1/wustl/supercontigs.agp.gz
+fastaFiles /cluster/data/choHof1/wustl/contigs.fa.gz
+qualFiles /cluster/data/choHof1/wustl/contigs.fa.qual.gz
+genomeCladePriority 17
+commonName Hoffmann's two-fingered sloth
+'_EOF_'
+    # << happy emacs
+
+    makeGenomeDb.pl choHof1.config.ra > makeGenomeDb.log 2>&1
