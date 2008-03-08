@@ -204,9 +204,6 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 #include "trashDir.h"
-#include "geneCheckWidget.h"
-#include "geneCheck.h"
-#include "geneCheckDetails.h"
 #include "kg1ToKg2.h"
 #include "wikiTrack.h"
 #include "omicia.h"
@@ -214,7 +211,7 @@
 #include "itemConf.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1399 2008/03/06 20:20:14 hiram Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1400 2008/03/08 00:52:52 markd Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -7446,7 +7443,6 @@ int wordCount;
 int start = cartInt(cart, "o");
 struct sqlConnection *conn = hAllocConn();
 char condStr[256];
-char geneCheck[256];
 char ensVersionString[256];
 char ensDateReference[256];
 char headerTitle[512];
@@ -7570,36 +7566,6 @@ if (sqlGetField(conn, database, tdb->tableName, "name", condStr) != NULL)
 	    }
         }
     }
-safef(geneCheck, sizeof(geneCheck), "%sChk", tdb->tableName);
-if (hTableExists(geneCheck))
-    {
-    struct geneCheck *gc
-        = sqlQueryObjs(conn, (sqlLoadFunc)geneCheckLoad, sqlQuerySingle,
-                       "select * from %s where acc='%s'", 
-                       geneCheck, item);
-    if (gc != NULL)
-        {
-        printf("<TABLE>\n");
-        printf("<TBODY>\n");
-        printf("<tr><td>\n");
-        geneCheckWidgetSummary(gc, "transMap", "Gene checks\n");
-        printf("</td><td>\n");
-        /* display gene-check details */
-        safef(geneCheck, sizeof(geneCheck), "%sChkDetails", tdb->tableName);
-        if (hTableExists(geneCheck))
-            {
-            struct geneCheckDetails *gcdList
-                = sqlQueryObjs(conn, (sqlLoadFunc)geneCheckDetailsLoad, sqlQueryMulti,
-                               "select * from %s where acc='%s'",
-                               geneCheck,  item);
-            if (gcdList != NULL)
-                geneCheckWidgetDetails(cart, gc, gcdList, "transMap", "Gene check details", NULL);
-            geneCheckDetailsFreeList(&gcdList);
-            }
-        printf("</td></tr></tbody></table>\n");
-        }
-    }
-
 printTrackHtml(tdb);
 freez(&dupe);
 hFreeConn(&conn);
