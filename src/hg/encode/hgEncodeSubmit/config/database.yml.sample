@@ -19,7 +19,8 @@ development:
   host: localhost
   socket: /var/lib/mysql/mysql.sock
   upload: /somestorage/encpipeline_yourname
-  title: ENCODE
+  title: ENCODE DCC Data Submission
+  subtitle: Your Dev Site
   from: you@somewhere.com
   emailOnLoad: somebody@somewhere.com
   emailDCC: somebody@somewhere.com

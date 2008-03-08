@@ -3,15 +3,20 @@
 <html>
   <head>
     <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-    <title><%= ActiveRecord::Base.configurations[RAILS_ENV]['title'] -%> </title>
+    <title>
+    <%= ActiveRecord::Base.configurations[RAILS_ENV]['title'] + " " +  ActiveRecord::Base.configurations[RAILS_ENV]['subtitle'] -%>
+    </title>
     <%= stylesheet_link_tag "encode" %>
   </head>
   <body>
 
   <div id="container">
-  <!--<img align="left" height=40 width=80  src="http://hgwdev.cse.ucsc.edu/images/logos/ENCODE_scaleup_logo.png">-->
-  <img align="left" height=50 width=100  src="http://hgwdev.cse.ucsc.edu/images/logos/ENCODE_scaleup_logo.png">
-    <div id="header"><%= ActiveRecord::Base.configurations[RAILS_ENV]['title'] -%>
+  <img align="left" height=50 width=100  src="/images/encode_logo.png">
+    <div id="header">
+        <%= ActiveRecord::Base.configurations[RAILS_ENV]['title'] -%>
+        <font size=-1 color="gray"> <em>
+        <%= ActiveRecord::Base.configurations[RAILS_ENV]['subtitle'] -%>
+        </em></font>
     </div>
    </div>
       <div id="welcome">
