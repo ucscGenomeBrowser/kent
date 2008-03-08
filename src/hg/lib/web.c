@@ -13,7 +13,7 @@
 #include "hgColors.h"
 #include "wikiLink.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.141 2007/12/03 22:50:43 fanhsu Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.142 2008/03/08 15:05:44 fanhsu Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -214,11 +214,11 @@ if (isGsid)
 
     if (endsWith(scriptName, "hgBlat"))
     	{
-	printf("<TD ALIGN=CENTER><A HREF=\"/goldenPath/help/gsidTutorial.html#BLAT\" class=\"topbar\">%s</A></TD>", "<FONT COLOR=\"#FFFFFF\">Help</FONT>");
+	printf("<TD ALIGN=CENTER><A HREF=\"/goldenPath/help/gsidTutorial.html#BLAT\" TARGET=_blank class=\"topbar\">%s</A></TD>", "<FONT COLOR=\"#FFFFFF\">Help</FONT>");
     	}
     else
 	{    
-    	printf("<TD ALIGN=CENTER><A HREF=\"/goldenPath/help/sequenceViewHelp.html\" class=\"topbar\">%s</A></TD>", "<FONT COLOR=\"#FFFFFF\">Help</FONT>");
+    	printf("<TD ALIGN=CENTER><A HREF=\"/goldenPath/help/sequenceViewHelp.html\" TARGET=_blank class=\"topbar\">%s</A></TD>", "<FONT COLOR=\"#FFFFFF\">Help</FONT>");
 	}
     printf("</TR></TABLE>");
     printf("</TD></TR></TABLE>\n");
