@@ -211,7 +211,7 @@
 #include "itemConf.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1400 2008/03/08 00:52:52 markd Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1401 2008/03/08 00:53:40 markd Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -19408,10 +19408,12 @@ else if (sameWord(track, G_CREATE_WIKI_ITEM))
     {
     doCreateWikiItem(item, seqName, winStart, winEnd);
     }
+#if 0
 else if (startsWith("transMap", track))
     transMapClickHandler(tdb, item);
 else if (sameString(track, "hgcTransMapCdnaAli"))
     transMapShowCdnaAli(item);
+#endif
 else if (sameWord(track, "mrna") || sameWord(track, "mrna2") || 
 	 startsWith("all_mrna",track) ||
 	 sameWord(track, "all_est") ||
