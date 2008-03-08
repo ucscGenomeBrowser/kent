@@ -20655,7 +20655,7 @@ done
 # irows on
 
 #############################################################################
-## Add CTD data	(DONE - 2008-02-22 Fan )
+## Add CTD data	(DONE - 2008-02-22, updated 2008-03-07, Fan )
 
     mkir /cluster/store11/gs.19/build36/bed/ctd021508
     cd /cluster/store11/gs.19/build36/bed/ctd021508
@@ -20673,8 +20673,8 @@ done
     'select x.geneSymbol, ChemicalId, count(distinct Interaction), ChemicalName from kgXref x, ctd.chem_gene_ixns c where x.geneSymbol=c.GeneSymbol group by x.geneSymbol, ChemicalId'|\
     sort -k 1,1 -k 3,3nr -k 4,4 >ctdSorted.tab
 
-    hgsql ctd < ~/kent/src/hg/lib/ctdSorted.sql
-    hgsql ctd -e 'load data local infile "ctdSorted.tab" into table ctdSorted'
+    hgsql hgFixed < ~/kent/src/hg/lib/ctdSorted.sql
+    hgsql hgFixed -e 'load data local infile "ctdSorted.tab" into table ctdSorted'
     
 #############################################################################
 # CREATE huge TABLE FOR HuGE LINK (DONE 3/6/08, Fan)
