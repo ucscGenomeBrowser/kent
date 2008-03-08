@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "net.h"
 
-static char const rcsid[] = "$Id: ctd.c,v 1.6 2008/02/29 18:15:43 fanhsu Exp $";
+static char const rcsid[] = "$Id: ctd.c,v 1.7 2008/03/08 00:18:34 fanhsu Exp $";
 
 static boolean ctdExists(struct section *section, 
 	struct sqlConnection *conn, char *geneId)
@@ -20,10 +20,10 @@ char condStr[255];
 char *geneSymbol;
 if (sqlTableExists(conn, "kgXref") == FALSE) return FALSE;
 
-if (sqlTableExists(conn, "ctd.chem_gene_ixns") == TRUE)
+if (sqlTableExists(conn, "hgFixed.ctdSorted") == TRUE)
     {
     safef(condStr, sizeof(condStr), "x.geneSymbol=c.GeneSymbol and kgId='%s' limit 1", geneId);
-    geneSymbol = sqlGetField(conn, database, "kgXref x, ctd.chem_gene_ixns c", 
+    geneSymbol = sqlGetField(conn, database, "kgXref x, hgFixed.ctdSorted c", 
     			     "ChemicalId", condStr);
     if (geneSymbol != NULL) return(TRUE);
     }
@@ -57,7 +57,7 @@ currentCgiUrl = cgiUrlString();
     
 /* List chemicals related to this gene */
 safef(query, sizeof(query),
-     "select ChemicalId, ChemicalName from kgXref x, ctd.ctdSorted c where x.geneSymbol=c.GeneSymbol and kgId='%s'", geneId);
+     "select ChemicalId, ChemicalName from kgXref x, hgFixed.ctdSorted c where x.geneSymbol=c.GeneSymbol and kgId='%s'", geneId);
 
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
