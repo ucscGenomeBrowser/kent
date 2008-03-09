@@ -5,7 +5,7 @@
 #include "options.h"
 #include "seg.h"
 
-static char const rcsid[] = "$Id: segInfo.c,v 1.2 2008/03/09 01:03:08 rico Exp $";
+static char const rcsid[] = "$Id: segInfo.c,v 1.3 2008/03/09 01:09:53 rico Exp $";
 
 static struct optionSpec options[] = {
 	{"merge", OPTION_BOOLEAN},
@@ -126,20 +126,6 @@ struct hashEl *hel;
 struct nameListList *data, *new;
 char *p;
 
-/* Get the list of species lists associated with this key. */
-if ((hel = hashLookup(exists, key)) == NULL)
-	{
-	hel = hashAdd(exists, key, (void *) NULL);
-	slNameAddHead(&keyList, key);
-	}
-data = (struct nameListList *) hel->val;
-
-if (merge && data == NULL)
-	{
-	AllocVar(new);
-	data = new;
-	}
-
 /* Genrate a list of species in this block other than the reference species. */
 for (sc = sb->components; sc != NULL; sc = sc->next)
 	{
@@ -149,27 +135,30 @@ for (sc = sb->components; sc != NULL; sc = sc->next)
 	if ((p = strchr(sc->src, '.')) != NULL)
 		*p = '\0';
 
-	if (merge)
-		slNameStore(&data->nameList, sc->src);
-	else
-		slNameStore(&blockList, sc->src);
+	slNameStore(&blockList, sc->src);
 
 	if (p != NULL)
 		*p = '.';
 	}
 
-if (! merge)
+/* Get the list of species lists associated with this key. */
+if ((hel = hashLookup(exists, key)) == NULL)
 	{
-	/* Add this list of species if it's not aready there. */
-	if (inLists(blockList, data))
-		slNameFreeList(&blockList);
-	else
-		{
-		AllocVar(new);
-		new->nameList = blockList;
-		slAddHead(&data, new);
-		}
+	hel = hashAdd(exists, key, (void *) NULL);
+	slNameAddHead(&keyList, key);
 	}
+data = (struct nameListList *) hel->val;
+
+/* Add this list of species if it's not aready there. */
+if (inLists(blockList, data))
+	slNameFreeList(&blockList);
+else
+	{
+	AllocVar(new);
+	new->nameList = blockList;
+	slAddHead(&data, new);
+	}
+}
 
 hel->val = (void *) data;
 }
