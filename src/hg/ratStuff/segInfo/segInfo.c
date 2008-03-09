@@ -5,7 +5,7 @@
 #include "options.h"
 #include "seg.h"
 
-static char const rcsid[] = "$Id: segInfo.c,v 1.3 2008/03/09 01:09:53 rico Exp $";
+static char const rcsid[] = "$Id: segInfo.c,v 1.4 2008/03/09 01:13:09 rico Exp $";
 
 static struct optionSpec options[] = {
 	{"merge", OPTION_BOOLEAN},
@@ -158,7 +158,6 @@ else
 	new->nameList = blockList;
 	slAddHead(&data, new);
 	}
-}
 
 hel->val = (void *) data;
 }
