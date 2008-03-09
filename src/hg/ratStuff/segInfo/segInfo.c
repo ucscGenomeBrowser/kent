@@ -5,15 +5,17 @@
 #include "options.h"
 #include "seg.h"
 
-static char const rcsid[] = "$Id: segInfo.c,v 1.1 2008/03/06 17:10:55 rico Exp $";
+static char const rcsid[] = "$Id: segInfo.c,v 1.2 2008/03/09 01:03:08 rico Exp $";
 
 static struct optionSpec options[] = {
+	{"merge", OPTION_BOOLEAN},
 	{"noChrom", OPTION_BOOLEAN},
 	{"ref", OPTION_STRING},
 	{"species", OPTION_BOOLEAN},
 	{NULL, 0},
 };
 
+static boolean merge    = FALSE;
 static boolean noChrom  = FALSE;
 static char    *ref     = NULL;
 static boolean species  = FALSE;
@@ -21,6 +23,11 @@ static boolean species  = FALSE;
 static struct hash   *exists  = NULL;
 static struct slName *keyList = NULL;
 
+struct nameListList {
+/* A list of struct slName. */
+	struct nameListList *next;
+	struct slName *nameList;
+};
 
 void usage()
 /* Explain usage and exit. */
@@ -35,6 +42,7 @@ errAbort(
   "             (default = first species seen in the segment files(s))\n"
   "   -species  Output unique list of species seen in the segment file(s)\n"
   "   -noChrom  Output a unique list of species seen with ref.\n"
+  "   -merge    Merge species lists into largest superset.\n"
   );
 }
 
@@ -81,24 +89,58 @@ for (sc = sb->components; sc != NULL; sc = sc->next)
 	}
 }
 
+static boolean sameSpeciesInLists(struct slName *list1, struct slName *list2)
+/* Check to see if two name lists have the same names. */
+{
+struct slName *nl;
+
+if (slCount(list1) != slCount(list2))
+	return(FALSE);
+
+for (nl = list1; nl != NULL; nl = nl->next)
+	if (! slNameInList(list2, nl->name))
+		return(FALSE);
+
+return(TRUE);
+}
+
+static boolean inLists(struct slName *list, struct nameListList *lists)
+/* Check to see if the give list is already in lists. */
+{
+struct nameListList *nll;
+
+for (nll = lists; nll != NULL; nll = nll->next)
+	if (sameSpeciesInLists(nll->nameList, list))
+		return(TRUE);
+
+return(FALSE);
+}
+
 static void addData(struct segBlock *sb, struct segComp *refComp, char *key)
-/* Keep a list of unique keys. For each key, maintain a list of uniq
+/* Keep a list of unique keys. For each key, maintain a lists of uniq
    species seen with that key. */
 {
 struct segComp *sc;
+struct slName *blockList = NULL;
 struct hashEl *hel;
-struct slName *oldList;
+struct nameListList *data, *new;
 char *p;
 
-/* Get the list of species currently associated with this key. */
+/* Get the list of species lists associated with this key. */
 if ((hel = hashLookup(exists, key)) == NULL)
 	{
 	hel = hashAdd(exists, key, (void *) NULL);
 	slNameAddHead(&keyList, key);
 	}
-oldList = (struct slName *) hel->val;
+data = (struct nameListList *) hel->val;
 
-/* Add species to this list for this key if we haven't seen them yet. */
+if (merge && data == NULL)
+	{
+	AllocVar(new);
+	data = new;
+	}
+
+/* Genrate a list of species in this block other than the reference species. */
 for (sc = sb->components; sc != NULL; sc = sc->next)
 	{
 	if (sc == refComp)
@@ -107,14 +149,29 @@ for (sc = sb->components; sc != NULL; sc = sc->next)
 	if ((p = strchr(sc->src, '.')) != NULL)
 		*p = '\0';
 
-	slNameStore(&oldList, sc->src);
+	if (merge)
+		slNameStore(&data->nameList, sc->src);
+	else
+		slNameStore(&blockList, sc->src);
 
 	if (p != NULL)
 		*p = '.';
 	}
 
-/* Store the updated list for this key. */
-hel->val = (void *) oldList;
+if (! merge)
+	{
+	/* Add this list of species if it's not aready there. */
+	if (inLists(blockList, data))
+		slNameFreeList(&blockList);
+	else
+		{
+		AllocVar(new);
+		new->nameList = blockList;
+		slAddHead(&data, new);
+		}
+	}
+
+hel->val = (void *) data;
 }
 
 void segInfo(char *inSeg)
@@ -148,8 +205,9 @@ segFileFree(&sf);
 static void outputData(void)
 /* Print out the data we collected. */
 {
-struct slName *key, *list, *species = NULL;
 struct hashEl *hel;
+struct nameListList *data, *nll;
+struct slName *key, *slist;
 
 for (key = keyList; key != NULL; key = key->next)
 	{
@@ -164,12 +222,20 @@ for (key = keyList; key != NULL; key = key->next)
 		if ((hel = hashLookup(exists, key->name)) == NULL)
 			errAbort("Can't find %s in exists hash!", key->name);
 
-		list = (struct slName *) hel->val;
-		slReverse(&list);
+		data = (struct nameListList *) hel->val;
+		slReverse(&data);
 
-		for (species = list; species != NULL; species = species->next)
+		for (nll = data; nll != NULL; nll = nll->next)
 			{
-			printf("%s ", species->name);
+			slReverse(&nll->nameList);
+			for (slist = nll->nameList; slist != NULL; slist = slist->next)
+				{
+				printf("%s", slist->name);
+				if (slist->next != NULL)
+					printf(".");
+				}
+			if (nll->next != NULL)
+				printf(",");
 			}
 		printf("\n");
 		}
@@ -186,6 +252,7 @@ optionInit(&argc, argv, options);
 if (argc < 2)
     usage();
 
+merge   = optionExists("merge");
 noChrom = optionExists("noChrom");
 ref     = optionVal("ref", ref);
 species = optionExists("species");
