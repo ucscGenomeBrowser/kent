@@ -196,6 +196,14 @@ In some cases the orthologous allele is unknown; these are set to 'N'.
 If a lift was not possible, we set the orthologous allele to '?' and the orthologous start and end 
 position to 0 (zero).
 
+<H2>Masked FASTA Files (human only)</H2>
+
+FASTA files that have been modified to use IUPAC ambiguous nucleotide characters at
+each base covered by a single-base substitution are available for download
+<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/hg18/snp128Mask/">here</A>.
+Note that only single-base substitutions (no insertions or deletions) were used
+to mask the sequence, and these were filtered to exlcude problematic SNPs.
+
 <H2>References</H2>
 <P>
 Sherry ST, Ward MH, Kholodov M, Baker J, Phan L, Smigielski EM, Sirotkin K. 
