@@ -5,7 +5,7 @@
 #include "options.h"
 #include "seg.h"
 
-static char const rcsid[] = "$Id: segInfo.c,v 1.4 2008/03/09 01:13:09 rico Exp $";
+static char const rcsid[] = "$Id: segInfo.c,v 1.5 2008/03/10 20:47:06 rico Exp $";
 
 static struct optionSpec options[] = {
 	{"merge", OPTION_BOOLEAN},
@@ -45,6 +45,7 @@ errAbort(
   "   -merge    Merge species lists into largest superset.\n"
   );
 }
+
 
 static void setRef(struct segBlock *sb)
 /* Set ref to the species of the first component. */
@@ -89,8 +90,8 @@ for (sc = sb->components; sc != NULL; sc = sc->next)
 	}
 }
 
-static boolean sameSpeciesInLists(struct slName *list1, struct slName *list2)
-/* Check to see if two name lists have the same names. */
+static boolean listsEquivalent(struct slName *list1, struct slName *list2)
+/* Check to see if two name lists re equivalent (same size and names). */
 {
 struct slName *nl;
 
@@ -105,12 +106,12 @@ return(TRUE);
 }
 
 static boolean inLists(struct slName *list, struct nameListList *lists)
-/* Check to see if the give list is already in lists. */
+/* Check to see if the given list is already in lists. */
 {
 struct nameListList *nll;
 
 for (nll = lists; nll != NULL; nll = nll->next)
-	if (sameSpeciesInLists(nll->nameList, list))
+	if (listsEquivalent(nll->nameList, list))
 		return(TRUE);
 
 return(FALSE);
@@ -190,6 +191,86 @@ while ((sb = segNext(sf)) != NULL)
 segFileFree(&sf);
 }
 
+static int nameSubset(struct slName *a, struct slName *b)
+/* Return 1 if the set of names in 'b' is a subset of the set of names in 'a'.
+   Return 2 if the set of names in 'a' is a subset of the set of names in 'b'.
+   Return 0 otherwise. */
+{
+int aSize = slCount(a), bSize = slCount(b);
+struct slName *small = a, *big = b, *nl;
+
+if (bSize < aSize)
+	{
+	small = b;
+	big   = a;
+	}
+
+/* Every name in the small list MUST be in the big list. */
+for (nl = small; nl != NULL; nl = nl->next)
+	if (! slNameInList(big, nl->name))
+		return(0);
+
+if (big == a)
+	return(1);
+else
+	return(2);
+}
+
+static void mergeLists(void)
+/* Merge lists for each key which have a subset/superset relationship. */
+{
+struct slName *key, *temp;
+struct hashEl *hel;
+struct nameListList *data, *master, *prev, *curr;
+int sub;
+
+for (key = keyList; key != NULL; key = key->next)
+	{
+	if ((hel = hashLookup(exists, key->name)) == NULL)
+		errAbort("Can't find %s in exists hash!", key->name);
+
+	master = data = (struct nameListList *) hel->val;
+
+	while (master->next != NULL)
+		{
+		prev = master;
+		curr = master->next;
+
+		while (curr != NULL)
+			{
+			/* Check for a subset relationship between master and curr. */
+			if ((sub = nameSubset(master->nameList, curr->nameList)) != 0)
+				{
+				/* Swap nameLists so that curr contains the subset. */
+				if (sub == 2)
+					{
+					temp = master->nameList;
+					master->nameList = curr->nameList;
+					curr->nameList = temp;
+					}
+
+				/* Delete curr (the subset). */
+				prev->next = curr->next;
+				slNameFreeList(&curr->nameList);
+				freeMem(curr);
+
+				/* Start over. */
+				prev = master;
+				curr = master->next;
+				}
+			else
+				{
+				prev = curr;
+				curr = curr->next;
+				}
+			}
+
+		if (master->next != NULL)
+			master = master->next;
+		}
+	}
+}
+
 static void outputData(void)
 /* Print out the data we collected. */
 {
@@ -250,6 +331,10 @@ for (i = 1; i < argc; i++)
 	segInfo(argv[i]);
 
 slReverse(&keyList);
+
+if (merge & !species)
+	mergeLists();
+
 outputData();
 
 hashFreeWithVals(&exists, slNameFreeList);
