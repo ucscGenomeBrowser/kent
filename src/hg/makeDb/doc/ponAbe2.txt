@@ -4,7 +4,7 @@
 # This file describes browser build for the Orangutan
 # genome, July 31 2007
 #
-#	"$Id: ponAbe2.txt,v 1.13 2008/01/17 20:47:59 hiram Exp $"
+#	"$Id: ponAbe2.txt,v 1.14 2008/03/10 18:02:50 hiram Exp $"
 #
 ######################################################################
 ## DOWNLOAD SEQUENCE (DONE - 2007-09-06 - Hiram)
@@ -266,30 +266,30 @@ ponAbe2.refseq.mrna.xeno.loadDesc  = yes
     make etc-update
 
     # Edit src/lib/gbGenome.c to add new species.  With these two lines:
-    #	static char *ponAbeNames[] = {"Pongo pygmaeus abelii", NULL};
-    #	{"ponAbe", ponAbeNames},
+    #	static char *ponAbeNames[] = {"Pongo abelii", "Pongo pygmaeus",
+    #		"Pongo pygmaeus pygmaeus", "Pongo pygmaeus abelii", NULL};
 
     cvs ci -m "Added Pongo pygmaeus abelii (Orangutan)." src/lib/gbGenome.c
     make install-server
 
-    ssh kkstore02
+    ssh genbank
     screen  # control this business with a screen since it takes a while
     cd /cluster/data/genbank
 
+    #	2008-02-14 12:28 add other Pongo names to gbGeneom.c,
+    #	ssh to genbank machine, remove data/aligned/*/ponAbe2
+    #	and start this build again.
     # This is a call to a script that will push our jobs out to the cluster
     # since it's a big job.  
     time nice -n +19 bin/gbAlignStep -initial ponAbe2 &
-    # logFile: var/build/logs/2007.09.20-16:34:38.ponAbe2.initalign.log
-    #	kk kluster difficulties, finish the parasol run manually, then
-    time nice -n +19 bin/gbAlignStep -continue=finish -initial ponAbe2 &
-    #	var/build/logs/2007.09.21-20:10:48.ponAbe2.initalign.log
-    #	real    61m12.655s
+    # logFile: var/build/logs/2008.02.14-12:28:36.ponAbe2.initalign.log
+    #	real    702m19.137s
 
     # load database when finished
     ssh hgwdev
     cd /cluster/data/genbank
     time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad ponAbe2
-    #	logFile: var/dbload/hgwdev/logs/2007.09.22-10:40:27.dbload.log
+    #	logFile: var/dbload/hgwdev/logs/2008.02.22-17:08:01.dbload.log
     #	real    16m22.221s
 
     # enable daily alignment and update of hgwdev (DONE - 2007-11-09 - Hiram)
@@ -1956,8 +1956,20 @@ TMPDIR=/scratch/tmp
 	-verbose=2 /cluster/data/ponAbe2/bed/blastzGalGal3.2007-12-13/DEF \
 	-chainMinScore=5000 -chainLinearGap=loose -smallClusterHub=memk \
 	-swap -bigClusterHub=kk > swap.log 2>&1 &
-XXX - running 2007-12-20 15:33
     cat fb.galGal3.chainPonAbe2Link.txt
-    #	201368027 bases of 1842236818 (10.931%) in intersection
+    #	115578761 bases of 1042591351 (11.086%) in intersection
 
 ###########################################################################
+#  Add quality score track (DONE - 2008-03-10 - Hiram)
+    ssh kkstore02
+    cd /cluster/data/ponAbe2/wustl
+    #	use mScore=99 since the "Finished" contigs are not in the qual file
+    zcat contigs.fa.qual.gz \
+	| qaToQac stdin stdout \
+	| qacAgpLift -mScore=99 ../ponAbe2.agp stdin ponAbe2.qual.qac
+
+    ssh hgwdev
+    cd /cluster/data/ponAbe2/wustl
+    rm -f /gbdb/ponAbe2/wib/qual.wib
+    ln -s /cluster/data/ponAbe2/bed/qual/qual.wib /gbdb/ponAbe2/wib/
+    hgLoadWiggle -pathPrefix=/gbdb/ponAbe2/wib ponAbe2 quality qual.wig
