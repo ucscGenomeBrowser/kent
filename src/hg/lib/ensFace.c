@@ -5,7 +5,7 @@
 #include "ensFace.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: ensFace.c,v 1.5 2005/12/17 00:51:57 hartera Exp $";
+static char const rcsid[] = "$Id: ensFace.c,v 1.6 2008/03/10 17:48:11 hiram Exp $";
 
 struct stringPair
 /* A pair of strings. */
@@ -42,9 +42,9 @@ char *ensOrgNameFromScientificName(char *scientificName)
 
 struct dyString *ensContigViewUrl(
                             char *ensOrg, char *chrom, int chromSize,
-                            int winStart, int winEnd)
+                            int winStart, int winEnd, char *archive)
 /* Return a URL that will take you to ensembl's contig view. */
-/* Not using chromSize. */
+/* Not using chromSize.  archive is possibly a date reference */
 {
 struct dyString *dy = dyStringNew(0);
 char *chrName;
@@ -53,7 +53,12 @@ if (startsWith("scaffold", chrom))
     chrName = chrom;
 else
     chrName = skipChr(chrom);
-dyStringPrintf(dy, 
+if (archive)
+    dyStringPrintf(dy, 
+	   "http://%s.archive.ensembl.org/%s/contigview?chr=%s&start=%d&end=%d",
+		    archive, ensOrg, chrName, winStart, winEnd);
+else
+    dyStringPrintf(dy, 
                "http://www.ensembl.org/%s/contigview?chr=%s&start=%d&end=%d", ensOrg, chrName, winStart, winEnd);
 return dy;
 }
