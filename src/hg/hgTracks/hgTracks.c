@@ -118,7 +118,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1441 2008/02/27 23:25:32 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1442 2008/03/10 17:49:27 hiram Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -10163,7 +10163,7 @@ hPrintf("><BR>\n");
 }
 
 
-void printEnsemblAnchor(char *database)
+static void printEnsemblAnchor(char *database, char* archive)
 /* Print anchor to Ensembl display on same window. */
 {
 char *scientificName = hScientificName(database);
@@ -10189,7 +10189,7 @@ else
     end = winEnd;
     }
 start += 1;
-ensUrl = ensContigViewUrl(dir, name, seqBaseCount, start, end);
+ensUrl = ensContigViewUrl(dir, name, seqBaseCount, start, end, archive);
 hPrintf("<A HREF=\"%s\" TARGET=_blank class=\"topbar\">", ensUrl->string);
 /* NOTE: probably should free mem from dir and scientificName ?*/
 dyStringFree(&ensUrl);
@@ -13342,9 +13342,40 @@ if (liftOverChainForDb(database) != NULL)
     hPrintf("\" class=\"topbar\">Convert</A></TD>");
     }
 
+/* see if hgFixed.trackVersion exists */
+boolean trackVersionExists = hTableExistsDb("hgFixed", "trackVersion");
+char ensVersionString[256];
+char ensDateReference[256];
+if (trackVersionExists)
+    {
+    struct sqlConnection *conn = hAllocConn();
+    char query[256];
+    safef(query, sizeof(query), "select version,dateReference from hgFixed.trackVersion where db = '%s' order by updateTime DESC limit 1", database);
+    struct sqlResult *sr = sqlGetResult(conn, query);
+    char **row;
+
+    /* in case of NULL result from the table */
+    ensVersionString[0] = 0;
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+        safef(ensVersionString, sizeof(ensVersionString), "Ensembl %s",
+                row[0]);
+        safef(ensDateReference, sizeof(ensDateReference), "%s",
+                row[1]);
+        }
+    sqlFreeResult(&sr);
+    hFreeConn(&conn);
+    }
+else
+    {
+    ensVersionString[0] = 0;
+    ensDateReference[0] = 0;
+    }
+
 /* Print Ensembl anchor for latest assembly of organisms we have
  * supported by Ensembl (human, mouse, rat, fugu) */
-if (sameString(database, "hg18")
+if (ensVersionString[0]
+	    || sameString(database, "hg18")
             || sameString(database, "mm8")
             || sameString(database, "rn4") 
             || sameString(database, "monDom4") 
@@ -13356,8 +13387,14 @@ if (sameString(database, "hg18")
             || sameString(database, "panTro2")
             || sameString(database, "tetNig1"))
     {
+    char *archive = NULL;
+    if (ensDateReference[0])
+        {
+        if (differentWord("current", ensDateReference))
+            archive = cloneString(ensDateReference);
+        }
     hPuts("<TD ALIGN=CENTER>");
-    printEnsemblAnchor(database);
+    printEnsemblAnchor(database, archive);
     hPrintf("%s</A></TD>", "Ensembl");
     }
 
