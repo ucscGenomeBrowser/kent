@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/doEnsGeneUpdate.pl instead.
 
-# $Id: doEnsGeneUpdate.pl,v 1.13 2008/03/04 00:39:24 hiram Exp $
+# $Id: doEnsGeneUpdate.pl,v 1.14 2008/03/10 23:07:18 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -139,7 +139,8 @@ _EOF_
 
 
 # Globals:
-my ($species, $ensGtfUrl, $ensGtfFile, $ensPepUrl, $ensPepFile, $ensMySqlUrl);
+my ($species, $ensGtfUrl, $ensGtfFile, $ensPepUrl, $ensPepFile,
+    $ensMySqlUrl, $ensVersionDateReference);
 # Command line argument:
 my $CONFIG;
 # Required command line argumen:
@@ -442,6 +443,8 @@ _EOF_
   print "'_EOF_'\n";
   print "#  << happy emacs\n\n";
   print "    doEnsGeneUpdate.pl -ensVersion=$ensVersion $db.ensGene.ra\n";
+  print "    ssh hgwdev";
+  print "    cd /cluster/data/$db/bed/ensGene.$ensVersion";
   print "    featureBits $db ensGene\n";
   print "    # ";
   print `featureBits $db ensGene`;
@@ -581,7 +584,7 @@ $buildDir = $opt_buildDir ? $opt_buildDir :
   "$HgAutomate::clusterData/$db/$HgAutomate::trackBuild/ensGene.$ensVersion";
 
 
-($ensGtfUrl, $ensPepUrl, $ensMySqlUrl) =
+($ensGtfUrl, $ensPepUrl, $ensMySqlUrl, $ensVersionDateReference) =
 	&EnsGeneAutomate::ensGeneVersioning($db, $ensVersion );
 
 die "ERROR: download: can not find Ensembl version $ensVersion FTP URL for UCSC database $db"
@@ -594,6 +597,7 @@ $ensPepFile = basename($ensPepUrl);
 &HgAutomate::verbose(2,"Ensembl PEP URL: $ensPepUrl\n");
 &HgAutomate::verbose(2,"Ensembl PEP File: $ensPepFile\n");
 &HgAutomate::verbose(2,"Ensembl MySql URL: $ensMySqlUrl\n");
+&HgAutomate::verbose(2,"Ensembl Date Reference: $ensVersionDateReference\n");
 
 # Do everything.
 $stepper->execute();

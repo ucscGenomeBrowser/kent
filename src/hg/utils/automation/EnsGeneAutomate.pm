@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/EnsGeneAutomate.pm instead.
 
-# $Id: EnsGeneAutomate.pm,v 1.6 2008/03/04 00:33:14 hiram Exp $
+# $Id: EnsGeneAutomate.pm,v 1.7 2008/03/10 23:07:18 hiram Exp $
 package EnsGeneAutomate;
 
 use warnings;
@@ -25,6 +25,50 @@ use Exporter;
 
 #	Location of Ensembl FTP site for the releases
 my $ensemblFTP = "ftp://ftp.ensembl.org/pub/";
+
+#	version to date relationship for Ensembl archive reference
+my @verToDate;
+$verToDate[27] = "dec2004";
+$verToDate[32] = "jul2005";
+$verToDate[33] = "sep2005";
+$verToDate[34] = "oct2005";
+$verToDate[35] = "nov2005";
+$verToDate[37] = "feb2006";
+$verToDate[38] = "apr2006";
+$verToDate[39] = "jun2006";
+$verToDate[41] = "oct2006";
+$verToDate[42] = "dec2006";
+$verToDate[43] = "feb2007";
+$verToDate[44] = "apr2007";
+$verToDate[45] = "jun2007";
+$verToDate[46] = "aug2007";
+$verToDate[47] = "oct2007";
+$verToDate[48] = "dec2007";
+
+#	older versions for archive purposes, there are different
+#	directory structures for these, thus, the full path name
+#	to append to the release-NN/ top level directory.
+#  Fugu fr1 needs help here since there is no GTF file, fetch it from
+#	EnsMart
+my %ensGeneFtpFileNames_35 = (
+'fr1' => 'fugu_rubripes_35_2g/data/fasta/dna/README',
+);
+my %ensGeneFtpPeptideFileNames_35 = (
+'fr1' => 'fugu_rubripes_35_2g/data/fasta/pep/Fugu_rubripes.FUGU2.nov.pep.fa.gz',
+);
+my %ensGeneFtpMySqlFileNames_35 = (
+'fr1' => 'fugu_rubripes_35_2g/data/mysql/fugu_rubripes_core_35_2g/assembly.txt.table.gz',
+);
+
+my %ensGeneFtpFileNames_46 = (
+'mm8' => 'mus_musculus_46_36g/data/gtf/Mus_musculus.NCBIM36.46.gtf.gz',
+);
+my %ensGeneFtpPeptideFileNames_46 = (
+'mm8' => 'mus_musculus_46_36g/data/fasta/pep/Mus_musculus.NCBIM36.46.pep.all.fa.gz',
+);
+my %ensGeneFtpMySqlFileNames_46 = (
+'mm8' => 'mus_musculus_46_36g/data/mysql/mus_musculus_core_46_36g',
+);
 
 #	This listings are created by going to the FTP site and running
 #	an ls on the gtf directory.  Edit that listing into this hash.
@@ -270,17 +314,23 @@ my %ensGeneFtpMySqlFileNames_48 = (
 'xenTro2' => 'xenopus_tropicalis_core_48_41h',
 );
 
-my @versionList = qw( 48 47 );
+my @versionList = qw( 48 47 46 35 );
 
 my @ensGtfReference;
 $ensGtfReference[48] = \%ensGeneFtpFileNames_48;
 $ensGtfReference[47] = \%ensGeneFtpFileNames_47;
+$ensGtfReference[46] = \%ensGeneFtpFileNames_46;
+$ensGtfReference[35] = \%ensGeneFtpFileNames_35;
 my @ensPepReference;
 $ensPepReference[48] = \%ensGeneFtpPeptideFileNames_48;
 $ensPepReference[47] = \%ensGeneFtpPeptideFileNames_47;
+$ensPepReference[46] = \%ensGeneFtpPeptideFileNames_46;
+$ensPepReference[35] = \%ensGeneFtpPeptideFileNames_35;
 my @ensMySqlReference;
 $ensMySqlReference[48] = \%ensGeneFtpMySqlFileNames_48;
 $ensMySqlReference[47] = \%ensGeneFtpMySqlFileNames_47;
+$ensMySqlReference[46] = \%ensGeneFtpMySqlFileNames_46;
+$ensMySqlReference[35] = \%ensGeneFtpMySqlFileNames_35;
 
 sub ensVersionList() {
    return @versionList;
@@ -289,6 +339,7 @@ sub ensVersionList() {
 sub ensGeneVersioning($$) {
 #  given a UCSC db name, and an Ensembl version number, return
 #	FTP gtf file name, peptide file name, MySql core directory
+#	and archive version string
   my ($ucscDb, $ensVersion) = @_;
   if (defined($ensGtfReference[$ensVersion]) &&
 	defined($ensPepReference[$ensVersion])) {
@@ -298,14 +349,19 @@ sub ensGeneVersioning($$) {
     my $gtfDir = "release-$ensVersion/gtf/";
     my $pepDir = "release-$ensVersion/fasta/";
     my $mySqlDir = "release-$ensVersion/mysql/";
+    if ($ensVersion < 47) {
+	$gtfDir = "release-$ensVersion/";
+	$pepDir = "release-$ensVersion/";
+	$mySqlDir = "release-$ensVersion/";
+    }
     if (exists($gtfReference->{$ucscDb}) &&
 	exists($pepReference->{$ucscDb}) &&
 	exists($mySqlReference->{$ucscDb}) ) {
 	my $gtfName =  $ensemblFTP . $gtfDir . $gtfReference->{$ucscDb};
 	my $pepName =  $ensemblFTP . $pepDir . $pepReference->{$ucscDb};
 	my $mySqlName =  $ensemblFTP . $mySqlDir . $mySqlReference->{$ucscDb};
-	return ($gtfName, $pepName, $mySqlName);
+	return ($gtfName, $pepName, $mySqlName, $verToDate[$ensVersion]);
     }
   }
-  return (undef, undef);
+  return (undef, undef, undef);
 }
