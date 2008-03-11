@@ -17,7 +17,7 @@ class AccountController < ApplicationController
         self.current_user.remember_me
         cookies[:auth_token] = { :value => self.current_user.remember_token , :expires => self.current_user.remember_token_expires_at }
       end
-       redirect_to(:controller => '/pipeline', :action => 'show_user')
+      redirect_to(:controller => '/pipeline', :action => 'show_user')
     else
       flash[:error] = "Unknown user or password."
     end
@@ -30,9 +30,9 @@ class AccountController < ApplicationController
       @user.update_attributes(params[:user])
       @user.save!
       flash[:notice] = "Profile has been successfully changed."
-       redirect_to(:controller => '/pipeline', :action => 'show_user')
+      redirect_to(:controller => '/pipeline', :action => 'show_user')
     else
-       redirect_to(:controller => '/pipeline', :action => 'show_user')
+      redirect_to(:controller => '/pipeline', :action => 'show_user')
     end
   rescue 
     render :action => 'change_profile'
@@ -90,7 +90,7 @@ class AccountController < ApplicationController
       @user.port = request.port
       @user.forgot_password
       @user.save
-       redirect_to(:controller => '/account', :action => 'index')
+      redirect_to(:controller => '/account', :action => 'index')
       flash[:notice] = "A password reset link has been sent to your email address." 
     else
       flash[:error] = "Could not find a user with that email address." 
@@ -109,7 +109,7 @@ class AccountController < ApplicationController
       else
         flash[:error] = "Password mismatch." 
       end  
-       redirect_to(:controller => '/account', :action => 'index') 
+      redirect_to(:controller => '/account', :action => 'index') 
   rescue
     logger.error "Invalid reset code entered." 
     flash[:error] = "Sorry - that is an invalid password reset code. Please check your code and try again. Perhaps your email client inserted a carriage return." 
@@ -123,17 +123,17 @@ class AccountController < ApplicationController
     unless params[:commit] == "Cancel"
       @user = self.current_user
       @user.update_attributes(params[:user])
-      @user.reset_password
-      @user.new_email = ""  # prevent it from thinking it's new
-      @user.save!
+      @user.new_email = ""  # prevent it from thinking it's new email which triggers email notify
       # until we have a place to redirect back to, just log them out  
-      self.current_user.forget_me if logged_in?
+      @user.forget_me if logged_in?  # part of log out, it must be before reset_password flag is set
+      @user.reset_password
+      @user.save!  # put this after all other change to @user to prevent multiple email notices
       cookies.delete :auth_token
       reset_session
       flash[:notice] = "Password has been successfully changed."
       redirect_to(:action => 'index')
     else # cancel
-       redirect_to(:controller => '/pipeline', :action => 'show_user')
+      redirect_to(:controller => '/pipeline', :action => 'show_user')
     end
   rescue ActiveRecord::RecordInvalid
     render :action => 'change_password'
@@ -156,7 +156,7 @@ class AccountController < ApplicationController
         #flash[:warning] = "Please enter an email address." 
       end
     else # cancel
-       redirect_to(:controller => '/pipeline', :action => 'show_user')
+      redirect_to(:controller => '/pipeline', :action => 'show_user')
     end
   rescue Net::SMTPFatalError
     flash[:error] = "Invalid email address." 
@@ -170,7 +170,7 @@ class AccountController < ApplicationController
     activator = params[:id] || params[:email_activation_code]
     @user = User.find_by_email_activation_code(activator) 
     if @user and @user.activate_new_email
-       redirect_to(:controller => '/pipeline', :action => 'show_user')
+      redirect_to(:controller => '/pipeline', :action => 'show_user')
       flash[:notice] = "The email address for your account has been updated." 
     else
       flash[:error] = "Unable to update the email address." 
