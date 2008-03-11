@@ -257,9 +257,8 @@ boolean cnv2 = (pslIsProtein(mapPsl) && !pslIsProtein(inPsl));
 int iBlock;
 struct psl* mappedPsl;
 
-if (!sameString(inPsl->tName, mapPsl->qName))
-    errAbort("Error: inPsl tName %s != mapPsl tName %s)",
-            inPsl->tName, mapPsl->qName);
+/* sanity check size, but allow names to vary to allow ids to have
+ * unique-ifying suffixes. */
 if (inPsl->tSize != mapPsl->qSize)
     errAbort("Error: inPsl %s tSize (%d) != mapPsl %s qSize (%d)",
             inPsl->tName, inPsl->tSize, mapPsl->qName, mapPsl->qSize);
