@@ -1126,12 +1126,12 @@ identifier nativeMrnaAccession typeOf=mrnaAccession
 
 identifier mgcAccession typeOf=nativeMrnaAccession
 "Mammalian Gene Collection Genbank mRNA accession."
-    $gbd.mgcFullMrna.qName 
+    $gbd.mgcFullMrna.qName dupeOk
     $gbd.mgcGenes.name full
 
 identifier orfeomeAccession typeOf=nativeMrnaAccession
 "ORFeome collaboration Genbank mRNA accession."
-    $gbd.orfeomeMrna.qName 
+    $gbd.orfeomeMrna.qName dupeOk
     $gbd.orfeomeGenes.name full
 
 identifier refSeqId typeOf=mrnaAccession
