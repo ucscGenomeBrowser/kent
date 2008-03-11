@@ -1766,7 +1766,7 @@ shortLabel SNPs (127)
 longLabel Simple Nucleotide Polymorphisms (dbSNP build 127)
 group varRep
 priority 100.097
-visibility dense 
+visibility hide 
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP: 
 snpSeq snp127Seq
