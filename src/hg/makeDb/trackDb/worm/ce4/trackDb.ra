@@ -250,29 +250,29 @@ type bed 5 .
 #	longLabel non-unique and almost repetitive 20-mer starts, antisense strand
 #	priority 2
 #	color 255,128,33
-#
-#track nucleosome
-#shortLabel Nucleosome
-#longLabel Nucleosome predictions from SOLiD core alignments
-#group map
-#priority 120.0
-#visibility hide
-#type bed 12
-#itemRgb on
-#compositeTrack on
-#
-#	track nucleosomeFragmentsSense
-#	subTrack nucleosome
-#	shortLabel fragments +
-#	longLabel mononucleosomal fragments, sense strand reads
-#	priority 1
-#
-#	track nucleosomeFragmentsAntisense
-#	subTrack nucleosome
-#	shortLabel fragments -
-#	longLabel mononucleosomal fragments, antisense strand reads
-#	priority 2
-#
+
+track nucleosome
+shortLabel Nucleosome
+longLabel Nucleosome predictions from SOLiD core alignments
+group map
+priority 120.0
+visibility hide
+type bed 12
+itemRgb on
+compositeTrack on
+
+	track nucleosomeFragmentsSense
+	subTrack nucleosome
+	shortLabel fragments +
+	longLabel mononucleosomal fragments, sense strand reads
+	priority 1
+
+	track nucleosomeFragmentsAntisense
+	subTrack nucleosome
+	shortLabel fragments -
+	longLabel mononucleosomal fragments, antisense strand reads
+	priority 2
+
 #	track nucleosomeDNAsense
 #	subTrack nucleosome
 #	shortLabel genomic DNA +
