@@ -145,11 +145,12 @@ Another condition, which does not necessarily imply any problem, is noted:
 <P>
 dbSNP determines the genomic locations of SNPs by aligning their flanking 
 sequences to the genome.
-UCSC does not have dbSNP's alignments, but re-aligns the flanking sequences 
+UCSC displays SNPs in the locations determined by dbSNP, but does not
+have access to the alignments on which dbSNP based its mappings.
+Instead, UCSC re-aligns the flanking sequences 
 to the neighboring genomic sequence for display on SNP details pages.  
-While the recomputed alignments may differ from the alignments upon which 
-dbSNP bases its annotations, they often are informative when UCSC has 
-annotated an unusual condition.
+While the recomputed alignments may differ from dbSNP's alignments,
+they often are informative when UCSC has annotated an unusual condition.
 </P>
 
 <H2>Data Sources</H2>
