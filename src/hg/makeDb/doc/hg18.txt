@@ -20699,3 +20699,20 @@ done
 #############################################################################
     
     
+#############################################################################
+# ULTRACONSERVED TRACKS (LIFT FROM HG17) (DONE 2008-03-10, Andy)
+
+ssh hgwdev
+cd /cluster/data/hg18/bed
+mkdir ultras
+cd ultras/
+echo "select chrom,chromStart,chromEnd,name from uc16" \
+    | hgsql hg17 | tail +2 > uc16Hg17.bed
+echo "select chrom,chromStart,chromEnd,name from ux16" \
+    | hgsql hg17 | tail +2 > ux16Hg17.bed
+liftOver uc16Hg17.bed /gbdb/hg17/liftOver/hg17ToHg18.over.chain.gz \
+    uc16Hg18.bed uc16Hg18.unmapped
+liftOver ux16Hg17.bed /gbdb/hg17/liftOver/hg17ToHg18.over.chain.gz \
+    ux16Hg18.bed ux16Hg18.unmapped
+hgLoadBed hg18 uc16 uc16Hg18.bed 
+hgLoadBed hg18 ux16 ux16Hg18.bed 
