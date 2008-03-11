@@ -19,7 +19,7 @@
 #include "gbProcessed.h"
 #include "gbStatusTbl.h"
 
-static char const rcsid[] = "$Id: gbBuildState.c,v 1.23 2008/01/19 23:05:33 markd Exp $";
+static char const rcsid[] = "$Id: gbBuildState.c,v 1.24 2008/03/11 05:08:16 markd Exp $";
 
 static struct dbLoadOptions* gOptions; /* options from cmdline and conf */
 static int gErrorCnt = 0;  /* count of errors during build */
@@ -587,8 +587,8 @@ statusTbl = gbStatusTblSelectLoad(conn, selectFlags, select->accPrefix,
 findNewEntries(select, statusTbl);
 
 /* Don't allow deletes when select criteria has changed */
-if (ssData.orgCatDelCnt > 0)
-    errAbort("%u entries deleted due to organism category no longer being selected",
+if ((ssData.orgCatDelCnt > 0) && !(gOptions->flags & DBLOAD_LARGE_DELETES))
+    errAbort("%u entries deleted due to organism category no longer being selected, specify -allowLargeDeletes to override",
              ssData.orgCatDelCnt);
 
 /* check shrinkage unless override */
