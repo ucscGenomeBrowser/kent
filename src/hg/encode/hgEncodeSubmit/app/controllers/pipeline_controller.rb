@@ -269,10 +269,10 @@ class PipelineController < ApplicationController
       @filename = sanitize_filename(@upload.original_filename)
       extensionsByMIME = {
         "application/zip" => ["zip", "ZIP"],
-        "application/x-tar" => ["tar.gz", "TAR.GZ", "tar.bz2", "TAR.BZ2"],
-        "application/octet-stream" => ["tar.gz", "TAR.GZ", "tar.bz2", "TAR.BZ2"],
-        "application/gzip" => ["tar.gz", "TAR.GZ"],
-        "application/x-gzip" => ["tar.gz", "TAR.GZ"]
+        "application/x-tar" => ["tar.gz", "TAR.GZ", "tar.bz2", "TAR.BZ2", "tgz", "TGZ"],
+        "application/octet-stream" => ["tar.gz", "TAR.GZ", "tar.bz2", "TAR.BZ2", "tgz", "TGZ"],
+        "application/gzip" => ["tar.gz", "TAR.GZ", "tgz", "TGZ"],
+        "application/x-gzip" => ["tar.gz", "TAR.GZ", "tgz", "TGZ"]
       }
       extensions = extensionsByMIME[@upload.content_type.chomp]
       unless extensions
@@ -281,7 +281,7 @@ class PipelineController < ApplicationController
       end
     end
 
-    extensions = ["zip", "ZIP", "tar.gz", "TAR.GZ", "tar.bz2", "TAR.BZ2"]
+    extensions = ["zip", "ZIP", "tar.gz", "TAR.GZ", "tar.bz2", "TAR.BZ2", "tgz", "TGZ"]
     unless extensions.any? {|ext| @filename.ends_with?("." + ext) }
       flash[:error] = "File name <strong>#{@filename}</strong> is invalid. " +
         "Only a compressed archive file (tar.gz, tar.bz2, zip) is allowed."
@@ -800,8 +800,8 @@ private
     if ["zip", "ZIP"].any? {|ext| @filename.ends_with?("." + ext) }
       cmd = "unzip -o  #{path_to_file} -d #{uploadDir} &> #{File.dirname(uploadDir)}/upload_error"   # .zip 
     else
-      if ["gz", "GZ"].any? {|ext| @filename.ends_with?("." + ext) }
-        cmd = "tar -xzf #{path_to_file} -C #{uploadDir} &> #{File.dirname(uploadDir)}/upload_error"  # .gz  gzip
+      if ["gz", "GZ", "tgz", "TGZ"].any? {|ext| @filename.ends_with?("." + ext) }
+        cmd = "tar -xzf #{path_to_file} -C #{uploadDir} &> #{File.dirname(uploadDir)}/upload_error"  # .gz .tgz gzip 
       else  
         cmd = "tar -xjf #{path_to_file} -C #{uploadDir} &> #{File.dirname(uploadDir)}/upload_error"  # .bz2 bzip2
       end
