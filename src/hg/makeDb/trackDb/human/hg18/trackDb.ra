@@ -1777,7 +1777,7 @@ shortLabel SNPs (126)
 longLabel Simple Nucleotide Polymorphisms (dbSNP build 126)
 group varRep
 priority 100.098
-visibility dense 
+visibility hide 
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP: 
 chimpMacaqueOrthoTable snp126orthoPanTro2RheMac2
