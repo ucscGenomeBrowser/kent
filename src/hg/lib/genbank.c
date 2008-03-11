@@ -6,7 +6,7 @@
 #include "genbank.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: genbank.c,v 1.10 2007/09/05 23:33:39 markd Exp $";
+static char const rcsid[] = "$Id: genbank.c,v 1.11 2008/03/11 04:32:35 markd Exp $";
 
 static char *JOIN_PREFIX = "join(";
 static char *COMPLEMENT_PREFIX = "complement(";
@@ -204,6 +204,10 @@ struct genbankCds genbankCdsToGenome(struct genbankCds* cds, struct psl *psl)
  * alignment.  Returns a genbankCds object with genomic (positive strand)
  * coordinates */
 {
+// FIXME: this is used only by genePred code, but since  frame was added,
+// genome mapping  of CDS is computed both here and genePred.getFrame().
+// this should really be unified.
+int nblks = psl->blockCount;
 int rnaCdsStart = cds->start,  rnaCdsEnd = cds->end;
 int iBlk;
 struct genbankCds genomeCds;
@@ -224,7 +228,7 @@ if (psl->strand[0] == '-')
     }
 
 /* find query block or gap containing start and map to target */
-for (iBlk = 0; (iBlk < psl->blockCount) && (genomeCds.start < 0); iBlk++)
+for (iBlk = 0; (iBlk < nblks) && (genomeCds.start < 0); iBlk++)
     {
     if (rnaCdsStart < psl->qStarts[iBlk])
         {
@@ -246,13 +250,13 @@ if (genomeCds.start < 0)
     }
 
 /* find query block or gap containing end and map to target */
-for (iBlk = 0; (iBlk < psl->blockCount) && (genomeCds.end < 0); iBlk++)
+for (iBlk = 0; (iBlk < nblks) && (genomeCds.end < 0); iBlk++)
     {
     if (rnaCdsEnd <= psl->qStarts[iBlk])
         {
         /* in gap before block, set to start of gap */
         if (iBlk == 0)
-            genomeCds.end = psl->tStarts[0] - 1;  /* end of gene */
+            genomeCds.end = psl->tStarts[0]; /* before first block */
         else
             genomeCds.end = psl->tStarts[iBlk-1] + psl->blockSizes[iBlk-1];
         endComplete = FALSE;
@@ -266,8 +270,14 @@ for (iBlk = 0; (iBlk < psl->blockCount) && (genomeCds.end < 0); iBlk++)
 if (genomeCds.end < 0)
     {
     /* after last block, set to end of that block */
-    genomeCds.end = psl->tStarts[iBlk-1] + psl->blockSizes[iBlk-1];
+    genomeCds.end = psl->tStarts[nblks-1] + psl->blockSizes[nblks-1];
     endComplete = FALSE;
+    }
+if (genomeCds.start >= genomeCds.end)
+    {
+    // CDS not aligned
+    genomeCds.start = genomeCds.end = psl->tStarts[nblks-1] + psl->blockSizes[nblks-1];
+    startComplete = endComplete = FALSE;
     }
 
 if (geneStrand == '+')
