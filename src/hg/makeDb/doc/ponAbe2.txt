@@ -4,7 +4,7 @@
 # This file describes browser build for the Orangutan
 # genome, July 31 2007
 #
-#	"$Id: ponAbe2.txt,v 1.15 2008/03/11 04:27:54 hiram Exp $"
+#	"$Id: ponAbe2.txt,v 1.16 2008/03/11 19:02:05 hiram Exp $"
 #
 ######################################################################
 ## DOWNLOAD SEQUENCE (DONE - 2007-09-06 - Hiram)
@@ -290,7 +290,7 @@ ponAbe2.refseq.mrna.xeno.loadDesc  = yes
     cd /cluster/data/genbank
     time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad ponAbe2
     #	logFile: var/dbload/hgwdev/logs/2008.02.22-17:08:01.dbload.log
-    #	real    16m22.221s
+    #	real    21m12.354s
 
     # enable daily alignment and update of hgwdev (DONE - 2007-11-09 - Hiram)
     cd ~/kent/src/hg/makeDb/genbank
