@@ -1,7 +1,7 @@
 # for emacs: -*- mode: sh; -*-
 
 # Bos Taurus -- Baylor Release 4.0 (Oct 4 2007)
-#	"$Id: bosTau4.txt,v 1.1 2008/03/08 01:23:32 hiram Exp $"
+#	"$Id: bosTau4.txt,v 1.2 2008/03/11 19:01:39 hiram Exp $"
 #########################################################################
 # DOWNLOAD SEQUENCE (DONE - 2008-03-07 - Hiram)
     ssh kkstore06
@@ -130,25 +130,30 @@ commonName Cow
     mkdir /cluster/data/bosTau4/bed/repeatMasker
     cd /cluster/data/bosTau4/bed/repeatMasker
     # 
+    #	This was going too slow on memk, on the order of 8 days.
+    #	chilled that memk batch, then switched it to finish on pk
     doRepeatMasker.pl -buildDir=/cluster/data/bosTau4/bed/repeatMasker \
 	-bigClusterHub=memk bosTau4 > do.log 2>&1 &
-XXX - running 2008-03-07
+    #	continuing
+    doRepeatMasker.pl -buildDir=/cluster/data/bosTau4/bed/repeatMasker \
+	-continue=cat -bigClusterHub=pk bosTau4 > cat.log 2>&1 &
+
+    time nice -n +19 featureBits bosTau4 rmsk > fb.bosTau4.rmsk.txt 2>&1 &
+    #	1280927549 bases of 2731830700 (46.889%) in intersection
+
+
+
 
     # RepeatMasker and lib version from do.log:
-    #    Jan 11 2008 (open-3-1-9) version of RepeatMasker
-    #	RELEASE 20071204;
+    #	RepeatMasker,v 1.20 2008/01/16 18:15:45 angie Exp $
+    #   Jan 11 2008 (open-3-1-9) version of RepeatMasker
+    #	CC   RELEASE 20071204;
 
     # Compare coverage to previous assembly:
     featureBits bosTau3 rmsk
     # 1200525422 bases of 2731807384 (43.946%) in intersection
     featureBits bosTau2 rmsk
     # 1291561904 bases of 2812203870 (45.927%) in intersection
-
-    # Oct 16
-    #    October 6 2006 (open-3-1-6) version of RepeatMasker
-    #CC   RELEASE 20061006;                                            *
-    featureBits bosTau3 rmsk
-    # 1270629763 bases of 2731807384 (46.512%) in intersection
 
 #########################################################################
 # SIMPLE REPEATS TRF (DONE - 2008-03-07 - Hiram)
@@ -159,5 +164,342 @@ XXX - running 2008-03-07
     # 
     doSimpleRepeat.pl -buildDir=/cluster/data/bosTau4/bed/simpleRepeat \
 	bosTau4 > do.log 2>&1 &
-XXX - running 2008-03-07
+    #	after RM run is done, add this mask:
+    cd /cluster/data/bosTau4
+    twoBitMask bosTau4.rmsk.2bit -add bed/simpleRepeat/trfMask.bed bosTau4.2bit
 
+    twoBitToFa bosTau4.2bit stdout | faSize stdin
+    #	2917974530 bases (186161294 N's 2731813236 real
+    #	1450855409 upper 1280957827 lower) in 11900 sequences in 1 files
+    #	%43.90 masked total, %46.89 masked real
+
+    twoBitToFa bosTau4.rmsk.2bit stdout | faSize stdin
+    #	2917974530 bases (186161294 N's 2731813236 real
+    #	1451369861 upper 1280443375 lower) in 11900 sequences in 1 files
+    #	%43.88 masked total, %46.87 masked real
+
+#########################################################################
+# Create OOC file for genbank runs (DONE - 2008-03-10 - Hiram)
+# use same repMatch value as bosTau2
+    ssh kkstore06
+    cd /cluster/data/bosTau3
+    blat bosTau4.2bit /dev/null /dev/null -tileSize=11 \
+	-makeOoc=bosTau4.11.ooc -repMatch=1005
+
+    ssh kkr1u00
+    mkdir /iscratch/i/bosTau4
+    cd /iscratch/i/bosTau4
+    cp -p /cluster/data/bosTau4/bosTau4.2bit .
+    for R in 2 3 4 5 6 7 8
+do
+    rsync -a --progress ./ kkr${R}u00:/iscratch/i/bosTau4/
+done
+
+#########################################################################
+#  Starting Genbank
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    # edit etc/genbank.conf to add the following entry:
+
+# bosTau4 (B. taurus) 31 chromosomes plus 11869 scaffolds
+bosTau4.serverGenome = /cluster/data/bosTau4/bosTau4.2bit
+bosTau4.clusterGenome = /iscratch/i/bosTau4/bosTau4.2bit
+bosTau4.ooc = /cluster/data/bosTau4/bosTau4.11.ooc
+bosTau4.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+bosTau4.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+bosTau4.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+bosTau4.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+bosTau4.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+bosTau4.lift = no
+bosTau4.downloadDir = bosTau4
+bosTau4.perChromTables = no
+bosTau4.mgc = yes
+
+    cvs ci -m "Added bosTau4." etc/genbank.conf
+    # update /cluster/data/genbank/:
+    make etc-update
+
+    ssh genbank
+    screen  # control this business with a screen since it takes a while
+    cd /cluster/data/genbank
+
+    # This is a call to a script that will push our jobs out to the cluster
+    # since it's a big job.  
+    time nice -n +19 bin/gbAlignStep -initial bosTau4 &
+    #	logFile: var/build/logs/2008.03.10-14:14:43.bosTau4.initalign.log
+    #	real    567m7.431s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad bosTau4
+    #	logFile: var/dbload/hgwdev/logs/2008.03.11-08:48:17.dbload.log
+    #	real    34m55.565s
+
+    # enable daily alignment and update of hgwdev (DONE - 2008-03-11 - Hiram)
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+    # add bosTau4 to:
+        etc/align.dbs
+        etc/hgwdev.dbs
+    cvs ci -m "Added bosTau4." etc/align.dbs etc/hgwdev.dbs
+    make etc-update
+
+############################################################################
+#	DONE - 2008-03-11 - Hiram
+#	Reset default position to an area of chr3 with a number of genes
+    hgsql -e \
+'update dbDb set defaultPos="chr3:21083267-21232422" where name="bosTau4";' \
+	hgcentraltest
+
+#########################################################################
+## genscan run (DONE - 2008-03-11 - Hiram)
+##	create hard masked sequence
+    ssh kkstore06
+    cd /cluster/data/bosTau4
+    mkdir hardMasked
+    for C in `cut -f1 chrom.sizes`
+do
+    echo "hardMasked/${C}.hard.fa"
+    twoBitToFa -seq=${C} bosTau4.2bit stdout \
+	| maskOutFa stdin hard hardMasked/${C}.hard.fa
+    ls -ld "hardMasked/${C}.hard.fa"
+done
+
+    #	And, make sure there aren't any sequences in this lot that have
+    #	become all N's with no sequence left in them.  This drives genscan nuts
+    echo hardMasked/*.hard.fa | xargs faCount > faCount.hard.txt
+
+    #	the lowest three are:
+    egrep -v "^#|^total" faCount.hard.txt \
+	| awk '{print $1,$2-$7}' | sort -k2,2nr | tail -3
+    #	chrUn.004.9957 0
+    #	chrUn.004.9961 0
+    #	chrUn.004.9996 0
+    #	There are a whole bunch of these, and many with just a few bases.
+    #	Actually, before removing these for genscan, run the cpgIsland
+    #	business first since it can work on them all.
+    #	So, remove any with less than 100 bases of sequence
+    egrep -v "^#|^total" faCount.hard.txt \
+| awk '{size=$2-$7; if (size < 100){printf "hardMasked/%s.hard.fa\n", $1}}' \
+    | xargs rm
+
+    #	now get them over to a kluster location
+    mkdir /san/sanvol1/scratch/bosTau4/hardChunks
+    cd /san/sanvol1/scratch/bosTau4/hardChunks
+    #	creating 4,000,000 sized chunks, the chroms stay together as
+    #	single pieces.  The contigs get grouped together into 4,000,000
+    #	sized fasta files.  You don't want to break these things up
+    #	because genscan will be doing its own internal 2.4 million
+    #	window on these pieces, and the gene names are going to be
+    #	constructed from the sequence name in these fasta files.
+    echo /cluster/data/bosTau4/hardMasked/*.hard.fa | xargs cat \
+	| faSplit about stdin 4000000 c_
+
+    ssh hgwdev
+    mkdir /cluster/data/bosTau4/bed/genscan
+    cd /cluster/data/bosTau4/bed/genscan
+    # Check out hg3rdParty/genscanlinux to get latest genscan:
+    cvs co hg3rdParty/genscanlinux
+
+    # Run on small cluster (more mem than big cluster).
+    ssh memk
+    cd /cluster/data/bosTau4/bed/genscan
+    # Make 3 subdirectories for genscan to put their output files in
+    mkdir gtf pep subopt
+    # Generate a list file, genome.list, of all the hard-masked contigs that 
+    # *do not* consist of all-N's (which would cause genscan to blow up)
+    #	Since we split on gaps, we have no chunks like that.  You can
+    #	verify with faCount on the chunks.
+    ls -1Sr /san/sanvol1/scratch/bosTau4/hardChunks/c_*.fa > genome.list
+
+    # Create run-time script to operate gsBig in a cluster safe manner
+    cat << '_EOF_' > runGsBig
+#!/bin/csh -fe
+set runDir = `pwd`
+set srcDir = $1
+set inFile = $2
+set fileRoot = $inFile:r
+mkdir /scratch/tmp/$fileRoot
+cp -p $srcDir/$inFile /scratch/tmp/$fileRoot
+pushd /scratch/tmp/$fileRoot
+/cluster/bin/x86_64/gsBig $inFile $fileRoot.gtf -trans=$fileRoot.pep -subopt=$fileRoot.bed -exe=$runDir/hg3rdParty/genscanlinux/genscan -par=$runDir/hg3rdParty/genscanlinux/HumanIso.smat -tmp=/scratch/tmp -window=2400000
+popd
+cp -p /scratch/tmp/$fileRoot/$fileRoot.gtf gtf
+cp -p /scratch/tmp/$fileRoot/$fileRoot.pep pep
+cp -p /scratch/tmp/$fileRoot/$fileRoot.bed subopt
+rm -fr /scratch/tmp/$fileRoot
+'_EOF_'
+    # << happy emacs
+    chmod +x runGsBig
+    cat << '_EOF_' > template
+#LOOP
+runGsBig /san/sanvol1/scratch/bosTau4/hardChunks $(file1) {check out line gtf/$(root1).gtf} {check out line pep/$(root1).pep} {check out line subopt/$(root1).bed} 
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    gensub2 genome.list single template jobList
+    para create jobList
+    para try, check, push, check, ...
+XXX - running 2008-03-11 11:20
+# Completed: 44 of 48 jobs
+# Crashed: 4 jobs
+# CPU time in finished jobs:     327299s    5454.99m    90.92h    3.79d  0.010 y
+# IO & Wait Time:                  1091s      18.18m     0.30h    0.01d  0.000 y
+# Average job time:                7463s     124.39m     2.07h    0.09d
+# Longest finished job:           93797s    1563.28m    26.05h    1.09d
+# Submission to last job:        104573s    1742.88m    29.05h    1.21d
+    #	four jobs will not finish.  They don't finish on kolossus either.
+    #	The sequence involved is:
+    #	c_12.fa -> chr8
+    #	c_08.fa -> chr6
+    #	c_06.fa -> chr5
+    #	c_04.fa -> chr4
+    #	So, split up these chroms on a couple of the non-bridged gaps
+    ssh kkr1u00
+    cd /iscratch/i/bosTau4/hardChunks
+    mkdir ../genscanSplit
+    # examine the gap sizes to see if there is a good size range to
+    #	break them up on, c_12 turns out to be about 30,000
+    faGapSizes c_12.fa
+    # this makes 6 or 7 pieces for each of these
+    faSplit -minGapSize=29999 -lift=../genscanSplit/c_12.lift gap c_12.fa \
+	40000000 ../genscanSplit/c_12_
+    faSplit -minGapSize=29999 -lift=../genscanSplit/c_08.lift gap c_08.fa \
+	40000000 ../genscanSplit/c_08_
+    faSplit -minGapSize=29999 -lift=../genscanSplit/c_06.lift gap c_06.fa \
+	40000000 ../genscanSplit/c_06_
+    faSplit -minGapSize=29999 -lift=../genscanSplit/c_04.lift gap c_04.fa \
+	40000000 ../genscanSplit/c_04_
+    #	copy the genscanSplit directory to the other Iservers
+    cd ../genscanSplit
+    for R in 2 3 4 5 6 7 8
+do
+    rsync -a --progress ./ kkr${R}u00:/iscratch/i/bosTau4/genscanSplit/
+done
+    # and run these four items in a small kluster job
+    #	can re-use the runGsBig script from before, just a different
+    #	source directory location
+    ssh kki
+    mkdir /cluster/data/bosTau4/bed/genscan/split
+    cd /cluster/data/bosTau4/bed/genscan/split
+    # Make 3 subdirectories for genscan to put their output files in
+    mkdir gtf pep subopt
+    cat << '_EOF_' > template
+#LOOP
+../runGsBig /iscratch/i/bosTau4/genscanSplit $(file1) {check out line gtf/$(root1).gtf} {check out line pep/$(root1).pep} {check out line subopt/$(root1).bed} 
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    ls -1Sr /iscratch/i/bosTau4/genscanSplit/c_*.fa > genome.list
+    gensub2 genome.list single template jobList
+    para create jobList
+    #	even after this split, three of these jobs would not complete
+# Completed: 22 of 25 jobs
+# Crashed: 3 jobs
+# CPU time in finished jobs:      17154s     285.89m     4.76h    0.20d  0.001 y
+# IO & Wait Time:                    77s       1.29m     0.02h    0.00d  0.000 y
+# Average job time:                 783s      13.05m     0.22h    0.01d
+# Longest finished job:            1135s      18.92m     0.32h    0.01d
+# Submission to last job:         22398s     373.30m     6.22h    0.26d
+    #	so, take those three jobs and split them up and run them like this
+    #	after all that is done, lifting all results back to their chroms
+    for F in c_04 c_08 c_12
+do
+sort -k1,1 -k4,4n gtf/${F}_*.gtf ../secondSplit/${F}_?.gtf | liftUp -type=.gtf stdout split.lift error stdin \
+	| sed -e "s/${F}_\([0-9][0-9]*\)\./chr${F}.\1/g" \
+        | sed -e "s/chrc_04/chr4/g; s/chrc_08/chr6/g; s/chrc_12/chr8/g" \
+        > ${F}.gtf
+sort -k1,1 -k2,2n subopt/${F}_*.bed ../secondSplit/${F}_?.bed | liftUp -type=.bed stdout split.lift error stdin \
+	| sed -e "s/${F}_\([0-9][0-9]*\)\./chr${F}.\1/g" \
+        | sed -e "s/chrc_04/chr4/g; s/chrc_08/chr6/g; s/chrc_12/chr8/g" \
+        > ${F}.bed
+cat pep/${F}_*.pep ../secondSplit/${F}_?.pep \
+	| sed -e "s/${F}_\([0-9][0-9]*\)\./chr${F}.\1/g" \
+        | sed -e "s/chrc_04/chr4/g; s/chrc_08/chr6/g; s/chrc_12/chr8/g" \
+        > ${F}.pep
+echo $F
+done
+    #	that includes the secondary splits for three jobs too.
+    #	the result of all this is copied to ../gtf ../pep and ../subopt
+    #	to fully populate the original result, now continuing with the
+    #	processing of all results
+
+    # cat and lift the results into single files
+    ssh kkstore06
+    cd /cluster/data/bosTau4/bed/genscan
+    sort -k1,1 -k4.4n gtf/c_*.gtf > genscan.gtf
+    sort -k1,1 -k2,2n subopt/c_*.bed > genscanSubopt.bed 
+    cat pep/c_*.pep > genscan.pep
+
+    # Load into the database as so:
+    ssh hgwdev
+    cd /cluster/data/bosTau4/bed/genscan
+    ldHgGene bosTau4 -gtf genscan genscan.gtf
+    #	Read 42190 transcripts in 314789 lines in 1 files
+    #	42190 groups 54 seqs 1 sources 1 feature types
+    #	42190 gene predictions
+
+    hgPepPred bosTau4 generic genscanPep genscan.pep
+    hgLoadBed bosTau4 genscanSubopt genscanSubopt.bed
+    #	Loaded 517874 elements of size 6
+
+    #	check the numbers
+    time nice -n +19 featureBits bosTau4 genscan
+    #	52587049 bases of 3093572278 (1.700%) in intersection
+
+#########################################################################
+# CPGISLANDS (DONE - 2008-03-11 - Hiram)
+    ssh hgwdev
+    mkdir /cluster/data/bosTau4/bed/cpgIsland
+    cd /cluster/data/bosTau4/bed/cpgIsland
+
+    # Build software from Asif Chinwalla (achinwal@watson.wustl.edu)
+    cvs co hg3rdParty/cpgIslands
+    cd hg3rdParty/cpgIslands
+    make
+    #	There was a problem in here, in both cpg.c and cpg_lh.c:
+    #	warning: conflicting types for built-in function 'malloc'
+    #	comment out the lines where malloc is declared to get this to build
+    #	gcc readseq.c cpg_lh.c -o cpglh.exe
+    cd ../..
+    ln -s hg3rdParty/cpgIslands/cpglh.exe .
+    
+    # There may be warnings about "bad character" for IUPAC ambiguous 
+    # characters like R, S, etc.  Ignore the warnings.  
+    mkdir results
+    echo ../../hardMasked/*.hard.fa | sed -e "s/ /\n/g" | while read F
+    do
+	FA=${F/*\/}
+	C=${FA/.hard.fa/}
+	echo "./cpglh.exe ${FA} > results/${C}.cpg"
+	nice -n +19 ./cpglh.exe ${F} > results/${C}.cpg
+    done > cpglh.out 2>&1 &
+    #	about 5 minutes
+
+    # Transform cpglh output to bed +
+    cat << '_EOF_' > filter.awk
+{
+$2 = $2 - 1;
+width = $3 - $2;
+printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
+       $1, $2, $3, $5,$6, width,
+       $6, width*$7*0.01, 100.0*2*$6/width, $7, $9);
+}
+'_EOF_'
+    #	<< happy emacs
+    catDir results \
+    | awk -f filter.awk | sort -k1,1 -k2,2n > cpgIsland.bed
+
+    ssh hgwdev
+    cd /cluster/data/bosTau4/bed/cpgIsland
+    hgLoadBed bosTau4 cpgIslandExt -tab \
+      -sqlTable=$HOME/kent/src/hg/lib/cpgIslandExt.sql cpgIsland.bed
+    #	Reading cpgIsland.bed
+    #	Loaded 37595 elements of size 10
+    featureBits bosTau4 cpgIslandExt
+    #	24202824 bases of 2731830700 (0.886%) in intersection
+    featureBits bosTau3 cpgIslandExt
+    #	24374280 bases of 2731807384 (0.892%) in intersection
