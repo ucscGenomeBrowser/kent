@@ -9,7 +9,7 @@
 #	Data release policy: http://medaka.utgenome.org/#policy
 #	Ensembl: http://www.ensembl.org/Oryzias_latipes/index.html
 #
-#	"$Id: oryLat1.txt,v 1.37 2008/02/07 23:47:15 hiram Exp $"
+#	"$Id: oryLat1.txt,v 1.38 2008/03/11 23:23:05 hiram Exp $"
 #
 
 ##########################################################################
@@ -3671,4 +3671,7 @@ TMPDIR=/scratch/tmp
 	-chainMinScore=3000 -chainLinearGap=medium \
 	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
 	-bigClusterHub=memk > swap.log 2>&1 &
+    #	real    38m58.711s
 
+    cat fb.petMar1.chainOryLat1Link.txt
+    #	23359179 bases of 831696438 (2.809%) in intersection
