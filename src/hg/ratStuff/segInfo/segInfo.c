@@ -5,7 +5,7 @@
 #include "options.h"
 #include "seg.h"
 
-static char const rcsid[] = "$Id: segInfo.c,v 1.5 2008/03/10 20:47:06 rico Exp $";
+static char const rcsid[] = "$Id: segInfo.c,v 1.6 2008/03/11 17:03:49 rico Exp $";
 
 static struct optionSpec options[] = {
 	{"merge", OPTION_BOOLEAN},
@@ -46,25 +46,6 @@ errAbort(
   );
 }
 
-
-static void setRef(struct segBlock *sb)
-/* Set ref to the species of the first component. */
-{
-char *p;
-
-if (sb->components == NULL)
-	errAbort("ref is not set and the first segment block has no components.");
-
-/* Temporarily split src into species and chrom. */
-if ((p = strchr(sb->components->src, '.')) != NULL)
-	*p = '\0';
-
-ref = cloneString(sb->components->src);
-
-/* Restore src. */
-if (p != NULL)
-	*p = '.';
-}
 
 static void addSpeciesData(struct segBlock *sb)
 /* Keep a list of uniqe species we've seen. */
@@ -177,7 +158,9 @@ while ((sb = segNext(sf)) != NULL)
 	else
 		{
 		if (ref == NULL)
-			setRef(sb);
+			if ((ref = segFirstCompSpecies(sb, '.')) == NULL)
+				errAbort("ref is not set and the first segment block has no "
+					"components.");
 
 		refComp = segFindCompSpecies(sb, ref, '.');
 
