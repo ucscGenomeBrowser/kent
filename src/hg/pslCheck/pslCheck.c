@@ -9,7 +9,7 @@
 #include "chromInfo.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: pslCheck.c,v 1.11 2007/08/21 18:33:20 markd Exp $";
+static char const rcsid[] = "$Id: pslCheck.c,v 1.12 2008/03/11 21:56:27 markd Exp $";
 
 /* command line options and values */
 static struct optionSpec optionSpecs[] =
@@ -156,7 +156,7 @@ else
     safef(pslDesc, sizeof(pslDesc), "%s", tbl);
 numErrs += pslCheck(pslDesc, errFh, psl);
 if (!noCountCheck)
-    numErrs = checkCounts(psl, pslDesc, numErrs, errFh);
+    numErrs += checkCounts(psl, pslDesc, numErrs, errFh);
 if (protCheck && !pslIsProtein(psl))
     {
     if (numErrs == 0)
