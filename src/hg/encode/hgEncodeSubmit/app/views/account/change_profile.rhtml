@@ -1,29 +1,30 @@
 <%= error_messages_for :user %>
 
 <table><tr>
-<td> <%= link_to 'Change Password', {:controller => 'account', :action => 'change_password'} %></td><td> | </td>
-<td> <%= link_to 'Change Email', {:controller => 'account', :action => 'change_email', :user => @user, :email => @user.email } %></td>
+<td> <%= link_to 'Change Password', {:controller => 'account', :action => 'change_password'} %></td>
+<td> | </td>
+<td> <%= link_to 'Change Email', {:controller => 'account', :action => 'change_email'} %></td>
 </tr></table>
 
-<% form_for :user do |f| -%>
+<% form_for :user do |f| %>
 <p><label for="login">Login</label><br/>
-<%= f.text_field :login %></p>
+<%= f.text_field :login -%></p>
 
 <p><label for="email">Email</label><br/>
-<%= f.text_field :email, {:disabled => true} %></p>
+<%= f.text_field :email, {:disabled => true} -%></p>
 
 <p><label for="name">Name</label><br/>
-<%= f.text_field :name %></p>
+<%= f.text_field :name -%></p>
 
 <p><label for="pi">Primary Investigator</label><br/>
-<%= f.text_field :pi %></p>
+<%= f.text_field :pi -%></p>
 
 <p><label for="institution">Institution</label><br/>
-<%= f.text_field :institution %></p>
+<%= f.text_field :institution -%></p>
 
 <table><tr>
 <td > <%= submit_tag 'Save' -%></td>
-<% end -%>
-<td> <%= button_to 'Cancel', {:controller => 'pipeline', :action => 'show_user'} %></td>
+<td > <%= submit_tag 'Cancel' -%></td>
+<% end %>
 </tr></table>
 

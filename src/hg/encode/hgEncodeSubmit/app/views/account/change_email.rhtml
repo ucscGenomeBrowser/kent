@@ -5,18 +5,17 @@
   <% form_for :user do |f| %>
     <p>
       <label for="user_email">Current Email</label> <br/>
-      <%= f.text_field :email, {:disabled => true} %> <br/>
+      <%= f.text_field :email, {:disabled => true} -%> <br/>
       </p>
       <p>
       <label for="user_email">New Email</label> <br/>
-      <%= f.text_field :email, { :value => ""} %> <br/>
+      <%= f.text_field :email, { :value => ""} -%> <br/>
       <p>
-
       <table><tr>
       <td><%= submit_tag "Update Email" -%> </td>
+      <td><%= submit_tag "Cancel" -%> </td>
+      </tr></table>
   <% end %>
-      <td> <%= button_to 'Cancel', {:controller => 'account', :action => 'change_profile', :user => @user } -%></td>
-    </tr></table>
 <% else %>
   <p>  
     An email has been sent to:
@@ -26,4 +25,4 @@
     Please follow the instructions contained in the 
     email to complete this process.
   </p> 
-<% end -%>
+<% end %>
