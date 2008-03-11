@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: mm8.txt,v 1.63 2008/02/02 00:14:22 markd Exp $"
+#	"$Id: mm8.txt,v 1.64 2008/03/11 19:02:49 hiram Exp $"
 #
 
 #  NOTE:  this doc may have genePred loads that fail to include
@@ -8562,3 +8562,26 @@ FYI Couldn't open chr1_17_02.fa.align: No such file or directory
         ccdsKgMap
     # << emacs
 
+############################################################################
+#  mm8 - Mouse - Ensembl Genes (DONE - 2008-03-06 - hiram)
+    ssh kkstore04
+    cd /cluster/data/mm8
+    cat << '_EOF_' > mm8.ensGene.ra
+# required db variable
+db mm8
+# optional liftRandoms yes/no or absent
+liftRandoms yes
+# optional nameTranslation, the sed command that will transform
+#       Ensemble names to UCSC names.  With quotes just to make sure.
+nameTranslation "s/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/"
+# optionally update the knownToEnsembl table after ensGene updated
+knownToEnsembl yes
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl -ensVersion=46 mm8.ensGene.ra
+    ssh hgwdev
+    cd /cluster/data/mm8/bed/ensGene.46
+    featureBits mm8 ensGene
+    # 56654064 bases of 2567283971 (2.207%) in intersection
+############################################################################
