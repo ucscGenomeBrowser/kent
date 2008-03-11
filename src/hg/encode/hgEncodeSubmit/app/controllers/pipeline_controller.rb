@@ -255,6 +255,9 @@ class PipelineController < ApplicationController
     @project = Project.find(params[:id])
     @autoUploadLabel = AUTOUPLOADLABEL
     return unless request.post?
+    if params[:commit] == "Cancel"
+      redirect_to :action => 'show', :id => @project
+    end
     @upurl = params[:upload_url]
     @upload = params[:upload_file]
     if @upurl == "http://"

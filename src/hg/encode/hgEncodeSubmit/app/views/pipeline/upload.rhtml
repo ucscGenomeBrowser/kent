@@ -17,9 +17,9 @@ Resume if the previous upload  was interrupted.
   <table cellpadding=0 cellspacing=0><tr>
   <td><%= submit_tag @autoUploadLabel %></td>
   <td><%= submit_tag "Upload Only" %></td>
+  <td><%= submit_tag "Cancel" %></td>
+  </tr></table>
 <%= end_form_tag -%>
-  <td> <%= button_to 'Cancel', {:controller => 'pipeline', :action => 'show', :id => @project.id } %></td>
- </tr></table>
 <p>
 Use 'Submit' to upload and expand the archive, 
 validate the data and metadata, 
