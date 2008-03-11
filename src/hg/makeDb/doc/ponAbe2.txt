@@ -4,7 +4,7 @@
 # This file describes browser build for the Orangutan
 # genome, July 31 2007
 #
-#	"$Id: ponAbe2.txt,v 1.14 2008/03/10 18:02:50 hiram Exp $"
+#	"$Id: ponAbe2.txt,v 1.15 2008/03/11 04:27:54 hiram Exp $"
 #
 ######################################################################
 ## DOWNLOAD SEQUENCE (DONE - 2007-09-06 - Hiram)
@@ -1963,13 +1963,22 @@ TMPDIR=/scratch/tmp
 #  Add quality score track (DONE - 2008-03-10 - Hiram)
     ssh kkstore02
     cd /cluster/data/ponAbe2/wustl
-    #	use mScore=99 since the "Finished" contigs are not in the qual file
-    zcat contigs.fa.qual.gz \
+    #	use mScore=98 since the "Finished" contigs are not in the qual file
+    time nice -n +19 zcat contigs.fa.qual.gz \
 	| qaToQac stdin stdout \
-	| qacAgpLift -mScore=99 ../ponAbe2.agp stdin ponAbe2.qual.qac
+	| qacAgpLift -mScore=98 ../ponAbe2.agp stdin ponAbe2.qual.qac
+    #	3m35.075s
+    mkdir /cluster/data/ponAbe2/bed/qual
+    cd /cluster/data/ponAbe2/bed/qual
+    time nice -n +19 qacToWig -fixed \
+	/cluster/data/ponAbe2/wustl/ponAbe2.qual.qac stdout \
+	| wigEncode stdin qual.wig qual.wib
+    #	real    21m33.899s
 
     ssh hgwdev
-    cd /cluster/data/ponAbe2/wustl
+    cd /cluster/data/ponAbe2/bed/qual
     rm -f /gbdb/ponAbe2/wib/qual.wib
     ln -s /cluster/data/ponAbe2/bed/qual/qual.wib /gbdb/ponAbe2/wib/
-    hgLoadWiggle -pathPrefix=/gbdb/ponAbe2/wib ponAbe2 quality qual.wig
+    time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/ponAbe2/wib \
+	ponAbe2 quality qual.wig
+    #	real    1m30.877s
