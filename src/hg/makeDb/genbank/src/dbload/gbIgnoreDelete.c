@@ -123,6 +123,7 @@ static struct sqlDeleter* buildReloadDeleter(char *reloadList, unsigned srcDb, c
 {
 struct sqlDeleter* deleter = NULL;
 struct lineFile *lf = gzLineFileOpen(reloadList);
+int cnt = 0;
 char *row[1];
 
 while (lineFileChopNext(lf, row, ArraySize(row)))
@@ -133,10 +134,12 @@ while (lineFileChopNext(lf, row, ArraySize(row)))
         if (deleter == NULL)
             deleter = sqlDeleterNew(tmpDir, (gbVerbose >= 4));
         sqlDeleterAddAcc(deleter, acc);
-        gbVerbMsg(3, "%s delete for reloading", acc);
+        cnt++;
+        gbVerbMsg(5, "%s delete for reloading", acc);
         }
     }
 gzLineFileClose(&lf);
+gbVerbMsg(1, "delete %d entries for reloading", cnt);
 return deleter;
 }
 
