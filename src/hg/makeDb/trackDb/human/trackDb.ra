@@ -547,6 +547,28 @@ type bed 5 +
 useScore 1
 url http://enhancer.lbl.gov/cgi-bin/imagedb.pl?form=presentation&show=1&experiment_id=$$
 
+track uc16
+shortLabel Ultra Conserved
+longLabel Ultraconserved Elements (200 bp 100% ID in rat/mouse/human)
+group compGeno
+priority 109.31
+visibility hide
+exonArrows off
+color 150,0,0
+type bed 4 .
+searchMethod exact
+searchType bed
+
+track ux16
+shortLabel Extended Ultras 
+longLabel Ultras Extended Until 5 Bases Below 85% in Conservation Track
+group compGeno
+priority 109.32
+visibility hide
+exonArrows off
+color 100,0,100
+type bed 4 .
+
 track humMusL 
 shortLabel Mouse Cons
 longLabel Human/Mouse Evolutionary Conservation Score (std units)
