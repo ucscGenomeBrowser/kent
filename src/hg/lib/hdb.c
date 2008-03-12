@@ -35,7 +35,7 @@
 #include "customTrack.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.347 2008/03/05 01:00:01 angie Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.348 2008/03/12 21:47:30 angie Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -2322,7 +2322,7 @@ return hDbDbField(database, "description");
 
 int hOrganismID(char *database)
 /* Get organism ID from relational organism table */
-/* Return -1 if not found */
+/* Return 0 if not found. */
 {
 char query[256];
 struct sqlConnection *conn = hAllocOrConnect(database);

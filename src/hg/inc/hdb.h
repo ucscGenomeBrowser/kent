@@ -763,7 +763,7 @@ char *hArchiveOrganism(char *database);
 
 int hOrganismID(char *database);
 /* Get organism ID from relational organism table */
-/* Return -1 if not found */
+/* Return 0 if not found. */
 
 char *hScientificName(char *database);
 /* Return scientific name for organism represented by this database */
