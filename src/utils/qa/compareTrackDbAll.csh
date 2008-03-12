@@ -12,11 +12,14 @@ if ($#argv < 1 || $#argv > 4) then
   echo ""
   echo "  checks all fields in trackDb"
   echo
-  echo "    usage: database, [machine1], [machine2] (defaults to hgw1 and hgwbeta)"
-  echo "             [mode] (fast|verbose|fastVerbose) "
+  echo "    usage: database [machine1] [machine2] [mode] "
+  echo
+  echo "      (defaults to hgw1 and hgwbeta)"
+  echo "      mode = (fast|verbose|fastVerbose) "
+  echo              
   echo "               - verbose is for html field - defaults to terse"
   echo "               - fast = (mysql-genome) - defaults to realTime (WGET)"
-  echo ""
+  echo 
   exit 1
 endif
 
