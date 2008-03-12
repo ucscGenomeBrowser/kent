@@ -4,13 +4,17 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1" />
   <meta http-equiv="Content-Language" content="en-us" />
-  <% if @autoRefresh %><meta http-equiv="refresh" content="15" /><% end %>
     <title>
     <%= ActiveRecord::Base.configurations[RAILS_ENV]['title'] + " " +  ActiveRecord::Base.configurations[RAILS_ENV]['subtitle'] -%>
     </title>
 <%= stylesheet_link_tag "encode" %>
 </head>
 <body id="encode-pipeline">
+<% if @autoRefresh %>
+<script type="text/javascript">
+window.setInterval("window.location.reload(true)",15000);
+</script>
+<% end %>
 <div id="container">
   <img align="left" height=50 width=100  src="/images/encode_logo.png">
     <div id="header">

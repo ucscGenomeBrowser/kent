@@ -4,11 +4,15 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1" />
   <meta http-equiv="Content-Language" content="en-us" />
-  <% if @autoRefresh %><meta http-equiv="refresh" content="5" /><% end %>  
   <title><%= ActiveRecord::Base.configurations[RAILS_ENV]['title'] -%> Pipeline</title>
 <%= stylesheet_link_tag "style" %>
 </head>
 <body id="encode-pipeline">
+<% if @autoRefresh %>
+<script type="text/javascript">
+window.setInterval("window.location.reload(true)",15000);
+</script>
+<% end %>  
 <div id="container">
   <div id="header">
     <h1><%= ActiveRecord::Base.configurations[RAILS_ENV]['title'] -%> Submission Pipeline</h1>
