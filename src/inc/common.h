@@ -523,6 +523,11 @@ struct slName *slNameListFromString(char *s, char delimiter);
 #define slNameListFromComma(s) slNameListFromString(s, ',')
 /* Parse out comma-separated list. */
 
+struct slName *slNameListFromStringArray(char *stringArray[], int arraySize);
+/* Return list of slNames from an array of strings of length arraySize. 
+ * If a string in the array is NULL, the array will be treated as 
+ * NULL-terminated. */
+
 struct slName *slNameLoadReal(char *fileName);
 /* load file lines that are not blank or start with a '#' into a slName
  * list */

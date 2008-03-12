@@ -9,7 +9,7 @@
 #include "portable.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.113 2007/10/11 01:14:12 galt Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.114 2008/03/12 20:11:02 angie Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -673,6 +673,7 @@ slReverse(&newList);
 return newList;
 }
 
+
 struct slName *slNameListFromString(char *s, char delimiter)
 /* Return list of slNames gotten from parsing delimited string.
  * The final delimiter is optional. a,b,c  and a,b,c, are equivalent
@@ -692,6 +693,28 @@ while (s != NULL && s[0] != 0)
 	}
     slAddHead(&list, el);
     s = e;
+    }
+slReverse(&list);
+return list;
+}
+
+struct slName *slNameListFromStringArray(char *stringArray[], int arraySize)
+/* Return list of slNames from an array of strings of length arraySize. 
+ * If a string in the array is NULL, the array will be treated as 
+ * NULL-terminated (shorter than arraySize). */
+{
+char *s;
+struct slName *list = NULL, *el;
+int i;
+if (stringArray == NULL)
+    return NULL;
+for (i = 0;  i < arraySize;  i++)
+    {
+    s = stringArray[i];
+    if (s == NULL)
+	break;
+    el = slNameNew(s);
+    slAddHead(&list, el);
     }
 slReverse(&list);
 return list;
