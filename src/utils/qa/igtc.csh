@@ -301,7 +301,7 @@ echo "(if the values aren't equal per assembly, this needs investigation)\n"
 echo "compare count from seq tables"
 echo "to the count from genetrap.$update.fasta file:"
 echo "will also be the same for all mice (see below for confirmation)"
-echo "  - everything is there whether it alsigns of not"
+echo "  - everything is there whether it aligns or not"
 
 foreach i ( $counter )
   echo $mice[$i]
