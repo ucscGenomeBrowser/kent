@@ -4,7 +4,7 @@
 # This file describes browser build for the Marmoset
 # genome, February 2008
 #
-#	"$Id: choHof1.txt,v 1.1 2008/03/08 01:23:32 hiram Exp $"
+#	"$Id: choHof1.txt,v 1.2 2008/03/12 23:00:56 hiram Exp $"
 #
 ######################################################################
 ## DOWNLOAD SEQUENCE (DONE - 2007-08-21 - Hiram)
@@ -38,6 +38,9 @@
     zcat supercontigs.broken.agp.gz | awk '$6 != 0' \
 	| gzip > supercontigs.agp.gz
 
+    #	The quality file needs to be lifted
+    zcat contigs.fa.qual.gz | qaToQac stdin stdout \
+	| qacAgpLift supercontigs.agp.gz stdin choHof1.qual.qac
 #############################################################################
 #  running makeGenomeDb.pl (DONE - 2008-03-07 - Hiram)
     ssh kkstore06
@@ -60,3 +63,105 @@ commonName Hoffmann's two-fingered sloth
     # << happy emacs
 
     makeGenomeDb.pl choHof1.config.ra > makeGenomeDb.log 2>&1
+    #	Broken at the load of dbDb with this commonName:
+    #	commonName Hoffmann's two-fingered sloth
+    #	because of the ' quote mark, remove that from the .ra and try again
+    makeGenomeDb.pl -continue=dbDb choHof1.config.ra > makeGenomeDb.dbDb.log 2>&1
+    #	Actually, since that commonName is displayed in the pull-down gateway
+    #	page, make it short:
+    
+
+#########################################################################
+# REPEATMASKER (DONE - 2008-03-10 - Hiram)
+    ssh kkstore06
+    screen # use a screen to manage this job
+    mkdir /cluster/data/choHof1/bed/repeatMasker
+    cd /cluster/data/choHof1/bed/repeatMasker
+    # 
+    doRepeatMasker.pl -buildDir=/cluster/data/choHof1/bed/repeatMasker \
+	-bigClusterHub=pk choHof1 > do.log 2>&1 &
+    #	RM version from the do.log file:
+    #	RepeatMasker,v 1.20 2008/01/16 18:15:45 angie Exp $
+    #	Jan 11 2008 (open-3-1-9) version of RepeatMasker
+    #	RELEASE 20071204;
+
+    cd /cluster/data/choHof1
+    twoBitToFa choHof1.rmsk.2bit stdout | faSize stdin
+    #	2677018039 bases (554539602 N's 2122478437 real 1356874663 upper
+    #	765603774 lower) in 352568 sequences in 1 files
+    #	%28.60 masked total, %36.07 masked real
+
+    ssh hgwdev
+    cd /cluster/data/choHof1/bed/repeatMasker
+    time nice -n +19 featureBits choHof1 rmsk > fb.choHof1.rmsk.txt 2>&1 &
+    #	768056704 bases of 2122478437 (36.187%) in intersection
+
+#########################################################################
+# SIMPLE REPEATS TRF (DONE - 2008-03-11,12 - Hiram)
+    ssh kkstore06
+    screen # use a screen to manage this job
+    mkdir /cluster/data/choHof1/bed/simpleRepeat
+    cd /cluster/data/choHof1/bed/simpleRepeat
+    # 
+    time nice -n +19 doSimpleRepeat.pl \
+	-buildDir=/cluster/data/choHof1/bed/simpleRepeat \
+	choHof1 > do.log 2>&1 &
+    #	real    439m47.929s
+# Completed: 53 of 54 jobs
+# Crashed: 1 jobs
+# CPU time in finished jobs:      73785s    1229.74m    20.50h    0.85d  0.002 y
+# IO & Wait Time:                   389s       6.49m     0.11h    0.00d  0.000 y
+# Average job time:                1400s      23.33m     0.39h    0.02d
+# Longest finished job:            8842s     147.37m     2.46h    0.10d
+# Submission to last job:         26209s     436.82m     7.28h    0.30d
+    #	One of these jobs failed.  There were lifting problems
+    #	in one of the groups of Contigs since they were all null results.
+    #	Manually go to the node where it last failed, and pick up all the
+    #	and get them into place.
+    #	Then, continuing:
+    time nice -n +19 doSimpleRepeat.pl \
+	-buildDir=/cluster/data/choHof1/bed/simpleRepeat \
+	-continue=filter choHof1 > filter.log 2>&1 &
+    #	real    2m9.332s
+
+    #	after RM run is done, add this mask:
+    cd /cluster/data/choHof1
+    twoBitMask choHof1.rmsk.2bit -add bed/simpleRepeat/trfMask.bed choHof1.2bit
+    #	OK to ignore the warnings about fields >=13 in trfMask.bed
+
+    twoBitToFa choHof1.2bit stdout | faSize stdin
+    #	2677018039 bases (554539602 N's 2122478437 real 1356456216 upper
+    #	766022221 lower) in 352568 sequences in 1 files
+    #	%28.61 masked total, %36.09 masked real
+
+    twoBitToFa choHof1.rmsk.2bit stdout | faSize stdin
+    #	2677018039 bases (554539602 N's 2122478437 real 1356874663 upper
+    #	765603774 lower) in 352568 sequences in 1 files
+    #	%28.60 masked total, %36.07 masked real
+
+#########################################################################
+#  Pick up a photograph, permission obtained from Dr. Tanya Dewey
+#		2008-03-12
+    ssh hgwdev
+    mkdir /cluster/data/choHof1/photo
+    cd /cluster/data/choHof1/photo
+    wget --timestamping \
+'http://animaldiversity.ummz.umich.edu/site/resources/tanya_dewey/choloepushoffmani.jpg/large.jpg' \
+	-O CholoepusHoffmani.orig.jpg
+
+    convert -quality 80 -sharpen 0 -normalize -geometry 300x300 \
+	CholoepusHoffmani.orig.jpg  Choloepus_hoffmanni.jpg
+    #	add that result to the browser/images source tree
+
+############################################################################
+#  BLATSERVERS ENTRY (DONE - 2008-03-12 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("choHof1", "blat2", "17780", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("choHof1", "blat2", "17781", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
