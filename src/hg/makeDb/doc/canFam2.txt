@@ -2683,6 +2683,17 @@ TMPDIR=/scratch/tmp
 	`pwd`/DEF -verbose=2 -smallClusterHub=memk \
 	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
 	    -continue=cat -syntenicNet > cat.log 2>&1
-XXX - running 2008-03-12 10:00
+    #	real    175m41.674s
+    cat fb.canFam2.chainBosTau4Link.txt
+    #	1367017426 bases of 2384996543 (57.317%) in intersection
+
+    mkdir /cluster/data/bosTau4/bed/blastz.canFam2.swap
+    cd /cluster/data/bosTau4/bed/blastz.canFam2.swap
+    time nice -n +19 $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
+	/cluster/data/canFam2/bed/blastzBosTau4.2008-03-11/DEF \
+	-verbose=2 -smallClusterHub=memk \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	    -swap -syntenicNet > swap.log 2>&1
+XXX - running 2008-03-12 16:35
 
 ###########################################################################
