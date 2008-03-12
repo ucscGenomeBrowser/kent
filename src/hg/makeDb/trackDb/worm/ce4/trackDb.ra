@@ -251,6 +251,33 @@ type bed 5 .
 #	priority 2
 #	color 255,128,33
 
+track nucleosomeDensity
+shortLabel Nucleosome Density
+longLabel Density of nucleosome predictions from SOLiD core alignments
+group map
+priority 120.0
+visibility hide
+type wig 1 19138
+maxHeightPixels 100:40:11
+windowingFunction mean
+defaultViewLimits 1:100
+autoScaleDefault Off
+compositeTrack on
+
+	track monoNucleosomesSense
+	subTrack nucleosomeDensity
+	shortLabel Nucleosome density +
+	longLabel Density of mononucleosomal fragments, sense strand reads
+	color 0,180,0
+	priority 1
+
+	track monoNucleosomesAntiSense
+	subTrack nucleosomeDensity
+	shortLabel Nucleosome density -
+	longLabel Density of mononucleosomal fragments, antisense strand reads
+	color 0,0,180
+	priority 2
+
 track nucleosome
 shortLabel Nucleosome
 longLabel Nucleosome predictions from SOLiD core alignments
