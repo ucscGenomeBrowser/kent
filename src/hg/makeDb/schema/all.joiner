@@ -1505,10 +1505,10 @@ identifier wormBaseId external=WormBase dependency
     $ce.sangerToPfam.name
     $ce.sangerToRefSeq.name
     $ce.dmBlastTab.query
-    $ce.drBlastTab.query
+    $ce,!ce2.drBlastTab.query
     $ce.hgBlastTab.query
-    $ce.mmBlastTab.query
-    $ce.rnBlastTab.query
+    $ce,!ce2.mmBlastTab.query
+    $ce,!ce2.rnBlastTab.query
     $ce.scBlastTab.query
     $ce.sangerGeneToWBGeneID.sangerGene
 
