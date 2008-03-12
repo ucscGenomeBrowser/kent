@@ -31,10 +31,11 @@
 #include "nonCodingUi.h"
 #include "expRecord.h"
 
+#define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 #define MAX_SP_SIZE 2000
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.414 2008/03/06 18:19:26 angie Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.415 2008/03/12 20:10:24 angie Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -58,6 +59,38 @@ radioButton(filterTypeVar, filterTypeVal, "exclude");
 radioButton(filterTypeVar, filterTypeVal, "include");
 if (none)
     radioButton(filterTypeVar, filterTypeVal, "none");
+}
+
+#define CLEAR_ALL_BUTTON_LABEL    "Clear all"
+#define SET_ALL_BUTTON_LABEL  "Set all"
+#define DEFAULTS_BUTTON_LABEL "Set defaults"
+
+void makeSetClearButton(char *form, char *buttonVar, char *buttonLabel,
+			char *cartVarPrefix, struct slName *cartVarSuffixList,
+			boolean isSet)
+/* Make a button for setting or clearing all of a list of checkboxes, and
+ * if the button was just pressed, set or clear the cart variables. */
+{
+struct slName *suffix;
+char javascript[2048];
+cgiMakeHiddenVar(buttonVar, "");
+safef(javascript, sizeof javascript,
+      "document.%s.action = '%s'; document.%s.%s.value='%s'; "
+      "document.%s.submit();",
+      form, cgiScriptName(), form, buttonVar, buttonLabel, form);
+cgiMakeOnClickButton(javascript, buttonLabel);
+
+if (isNotEmpty(cgiOptionalString(buttonVar)))
+    {
+    char option[1024];
+    if (cartVarPrefix == NULL)
+	cartVarPrefix = "";
+    for (suffix = cartVarSuffixList;  suffix != NULL;  suffix = suffix->next)
+        {
+        safef(option, sizeof(option), "%s%s", cartVarPrefix, suffix->name);
+        cartSetBoolean(cart, option, isSet);
+        }
+    }
 }
 
 void tfbsConsSitesUi(struct trackDb *tdb)
@@ -131,16 +164,6 @@ radioButton(filterTypeVar, filterTypeVal, "blue");
 radioButton(filterTypeVar, filterTypeVal, "black");
 }
 
-void snp125FilterButtons(char *filterTypeVar, char *filterTypeVal)
-/* Put up some filter buttons. */
-{
-printf("&nbsp;&nbsp;&nbsp;&nbsp;");
-radioButton(filterTypeVar, filterTypeVal, "red");
-radioButton(filterTypeVar, filterTypeVal, "green");
-radioButton(filterTypeVar, filterTypeVal, "blue");
-radioButton(filterTypeVar, filterTypeVal, "black");
-}
-
 void snpMapUi(struct trackDb *tdb)
 /* Put up UI snpMap data. */
 {
@@ -168,6 +191,20 @@ for (snpMapType=0; snpMapType<snpMapTypeCartSize; snpMapType++)
 }
 
 #define SNP125_FILTER_COLUMNS 4
+#define SNP125_SET_ALL "snp125SetAll"
+#define SNP125_CLEAR_ALL "snp125ClearAll"
+
+void snp125PrintFilterColGroup()
+/* Print the fancy COLGROUP for the table enclosing all filter checkbox 
+ * groups. */
+{
+int i;
+/* Each colgroup has a skinny column for checkboxes followed by a proportional
+ * column for labels. */
+for (i = 0;  i < SNP125_FILTER_COLUMNS;  i++)
+    printf("<COLGROUP><COL><COL width=\"%d%%\"></COLGROUP>\n",
+	   round(100 / SNP125_FILTER_COLUMNS));
+}
 
 void snp125PrintFilterControls(char *attributeName,
 			       char *vars[], char *labels[], boolean checked[],
@@ -175,9 +212,21 @@ void snp125PrintFilterControls(char *attributeName,
 /* Print two or more rows (attribute name header and row(s) of checkboxes) 
  * of a table displaying snp125 attribute filter checkboxes. */
 {
+struct slName *varList = slNameListFromStringArray(vars, varCount);
+char buttonVar[1024];
 int i;
-printf("<TR><TD colspan=%d><B>%s</B>:</TD></TR>\n",
+printf("<TR><TD colspan=%d><B>%s:</B>&nbsp;\n",
        SNP125_FILTER_COLUMNS*2, attributeName);
+safef(buttonVar, sizeof(buttonVar), "%s_%s", SNP125_SET_ALL, attributeName);
+stripChar(buttonVar, ' ');
+makeSetClearButton(MAIN_FORM, buttonVar, SET_ALL_BUTTON_LABEL, "", varList,
+		   TRUE);
+printf("&nbsp;\n");
+safef(buttonVar, sizeof(buttonVar), "%s_%s", SNP125_CLEAR_ALL, attributeName);
+stripChar(buttonVar, ' ');
+makeSetClearButton(MAIN_FORM, buttonVar, CLEAR_ALL_BUTTON_LABEL, "", varList,
+		   FALSE);
+printf("</TD></TR>\n");
 for (i=0; i < varCount; i++)
     {
     checked[i] = cartUsualBoolean(cart, vars[i], defaults[i]);
@@ -224,10 +273,8 @@ printf("</TABLE>\n");
 }
 
 void snp125Ui(struct trackDb *tdb)
+/* UI for dbSNP version 125 and later. */
 {
-/* It would be nice to add a 'reset' button here to reset the snp
- * variables to their defaults. */
-int i = 0;
 char autoSubmit[2048];
 char *orthoTable = trackDbSetting(tdb, "chimpMacaqueOrthoTable");
 int version = snpVersion(tdb->tableName);
@@ -259,9 +306,7 @@ printf("<HR><B>Filter by Attribute</B><BR>\n"
        "<BR><BR>\n");
 
 printf("<TABLE border=0 cellspacing=0 cellpadding=0>\n");
-for (i = 0;  i < SNP125_FILTER_COLUMNS;  i++)
-    printf("<COLGROUP><COL><COL width=\"%d%%\"></COLGROUP>\n",
-	   round(100 / SNP125_FILTER_COLUMNS));
+snp125PrintFilterColGroup();
 if (version <= 127)
     snp125PrintFilterControls("Location Type", snp125LocTypeIncludeStrings,
 			 snp125LocTypeLabels, snp125LocTypeIncludeCart,
@@ -282,8 +327,8 @@ printf("</TABLE><BR>\n");
 
 
 safef(autoSubmit, sizeof(autoSubmit), "onchange=\""
-      "document.mainForm.action = '%s'; "
-      "document.mainForm.submit();\"", cgiScriptName());
+      "document."MAIN_FORM".action = '%s'; "
+      "document."MAIN_FORM".submit();\"", cgiScriptName());
 cgiContinueHiddenVar("g");
 cgiContinueHiddenVar("c");
 
@@ -1830,10 +1875,6 @@ void wigMafUi(struct trackDb *tdb)
 /* UI for maf/wiggle track
  * NOTE: calls wigUi */
 {
-#define CLEAR_BUTTON_LABEL    "Clear all"
-#define SET_ALL_BUTTON_LABEL  "Set all"
-#define DEFAULTS_BUTTON_LABEL "Set defaults"
-
 char *defaultCodonSpecies = trackDbSetting(tdb, SPECIES_CODON_DEFAULT);
 char *speciesTarget = trackDbSetting(tdb, SPECIES_TARGET_VAR);
 char *speciesTree = trackDbSetting(tdb, SPECIES_TREE_VAR);
@@ -1846,7 +1887,7 @@ char *groups[20];
 char sGroup[24];
 char *treeImage = NULL;
 struct wigMafSpecies *wmSpecies, *wmSpeciesList = NULL;
-struct slName *speciesName, *speciesList = NULL;
+struct slName *speciesList = NULL;
 int group, prevGroup;
 int speciesCt = 0, groupCt = 1;
 int i;
@@ -1854,10 +1895,7 @@ char option[MAX_SP_SIZE];
 struct phyloTree *tree;
 struct consWiggle *consWig, *consWiggles = wigMafWiggles(tdb);
 
-char javascript[2048];
 char buttonVar[64];
-char *button;
-char *form = "mainForm";
 int numberPerRow;
 boolean isWigMafProt = FALSE;
 
@@ -1916,42 +1954,28 @@ for (group = 0; group < groupCt; group++)
     }
 slReverse(&wmSpeciesList);
 
-//#define CODON_HIGHLIGHT
-#ifdef CODON_HIGHLIGHT
-char *currentCodonMode;
-#endif
-
 puts("\n<P STYLE=><B>Pairwise alignments:</B>&nbsp;");
 
+cgiContinueHiddenVar("g");
+
+char prefix[512];
+safef(prefix, sizeof prefix, "%s.", tdb->tableName);
 char *defaultOffSpecies = trackDbSetting(tdb, "speciesDefaultOff");
 if (defaultOffSpecies)
     {
-    safef(buttonVar, sizeof buttonVar, "%s", "set_defaults_button");
-    cgiMakeHiddenVar(buttonVar, "");
-    safef(javascript, sizeof javascript,
-          "document.%s.action = '%s'; document.%s.%s.value='%s'; "
-          "document.%s.submit();",
-          form, cgiScriptName(), form, buttonVar, DEFAULTS_BUTTON_LABEL, form);
-    cgiMakeOnClickButton(javascript, DEFAULTS_BUTTON_LABEL);
-    button = cgiOptionalString(buttonVar);
-    if (isNotEmpty(button))
+    safecpy(buttonVar, sizeof buttonVar, "set_defaults_button");
+    /* make button and turn on all species (if button was pressed) */
+    makeSetClearButton(MAIN_FORM, buttonVar, DEFAULTS_BUTTON_LABEL, prefix,
+		       speciesList, TRUE);
+    if (isNotEmpty(cgiOptionalString(buttonVar)))
         {
         char *words[MAX_SP_SIZE];
-        //char *setting = trackDbSetting(tdb, "speciesDefaultOff");
         int wordCt = chopLine(defaultOffSpecies, words);
-        /* turn on all species */
-        for (speciesName = speciesList; speciesName  != NULL; 
-                        speciesName = speciesName->next)
-            {
-            safef(option, sizeof(option), "%s.%s", 
-                    tdb->tableName, speciesName->name);
-            cartSetBoolean(cart, option, TRUE);
-            }
         /* turn off those that are default off */
         int i;
         for (i = 0; i < wordCt; i++)
             {
-            safef(option, sizeof(option), "%s.%s", tdb->tableName, words[i]);
+            safef(option, sizeof(option), "%s%s", prefix, words[i]);
             cartSetBoolean(cart, option, FALSE);
             }
         }
@@ -1959,48 +1983,12 @@ if (defaultOffSpecies)
 
 puts("&nbsp;");
 safef(buttonVar, sizeof buttonVar, "%s", "set_all_button");
-cgiMakeHiddenVar(buttonVar, "");
-safef(javascript, sizeof javascript,
-      "document.%s.action = '%s'; document.%s.%s.value='%s'; "
-      "document.%s.submit();",
-      form, cgiScriptName(), form, buttonVar, SET_ALL_BUTTON_LABEL, form);
-cgiMakeOnClickButton(javascript, SET_ALL_BUTTON_LABEL);
-
-cgiContinueHiddenVar("g");
-
-button = cgiOptionalString(buttonVar);
-if (isNotEmpty(button))
-    {
-    for (speciesName = speciesList; speciesName  != NULL; 
-		    speciesName = speciesName->next)
-        {
-        safef(option, sizeof(option), "%s.%s", 
-                tdb->tableName, speciesName->name);
-        cartSetBoolean(cart, option, TRUE);
-        }
-    }
+makeSetClearButton(MAIN_FORM, buttonVar, SET_ALL_BUTTON_LABEL, prefix,
+		   speciesList, TRUE);
 puts("&nbsp;");
 safef(buttonVar, sizeof buttonVar, "%s", "clear_all_button");
-cgiMakeHiddenVar(buttonVar, "");
-safef(javascript, sizeof javascript,
-      "document.%s.action = '%s'; document.%s.%s.value='%s'; "
-      "document.%s.submit();",
-      form, cgiScriptName(), form, buttonVar, CLEAR_BUTTON_LABEL, form);
-cgiMakeOnClickButton(javascript, CLEAR_BUTTON_LABEL);
-
-cgiContinueHiddenVar("g");
-
-button = cgiOptionalString(buttonVar);
-if (isNotEmpty(button))
-    {
-    for (speciesName = speciesList; speciesName  != NULL; 
-		    speciesName = speciesName->next)
-        {
-        safef(option, sizeof(option), "%s.%s", 
-                tdb->tableName, speciesName->name);
-        cartSetBoolean(cart, option, FALSE);
-        }
-    }
+makeSetClearButton(MAIN_FORM, buttonVar, CLEAR_ALL_BUTTON_LABEL, prefix,
+		   speciesList, FALSE);
 
 if ((speciesTree != NULL) && ((tree = phyloParseString(speciesTree)) != NULL))
 {
@@ -2127,7 +2115,7 @@ else
 #ifdef GENE_FRAMING
 
     	safef(option, sizeof(option), "%s.%s", tdb->tableName, MAF_FRAME_VAR);
-    	currentCodonMode = cartCgiUsualString(cart, option, MAF_FRAME_GENE);
+    	char *currentCodonMode = cartCgiUsualString(cart, option, MAF_FRAME_GENE);
 
     	/* Disable codon highlighting */
    	 cgiMakeRadioButton(option, MAF_FRAME_NONE, 
@@ -2768,13 +2756,13 @@ else if (tdb->type != NULL)
 if (tdb->isSuper)
     superTrackUi(tdb);
 else if (trackDbSetting(tdb, "compositeTrack"))
-    hCompositeUi(cart, tdb, NULL, NULL, "mainForm");
+    hCompositeUi(cart, tdb, NULL, NULL, MAIN_FORM);
 }
 
 void trackUi(struct trackDb *tdb)
 /* Put up track-specific user interface. */
 {
-printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=%s>\n\n",
+printf("<FORM ACTION=\"%s\" NAME=\""MAIN_FORM"\" METHOD=%s>\n\n",
        hgTracksName(), cartUsualString(cart, "formMethod", "POST"));
 cartSaveSession(cart);
 printf("<H1>%s%s</H1>\n", tdb->longLabel, tdb->isSuper ? " Tracks" : "");
