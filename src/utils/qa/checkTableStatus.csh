@@ -4,7 +4,7 @@
 #  10-03-06
 #
 #  Checks the date for the last TABLE STATUS dump for 
-#  dev, beta and each of the 8 RR machines and MGC.
+#  dev, beta and each of the 8 RR machines.
 #
 ################################
 

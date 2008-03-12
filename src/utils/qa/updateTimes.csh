@@ -34,7 +34,7 @@ if ( $#argv < 2 || $#argv > 5 ) then
   echo "            (defaults to dev and beta)"
   echo
   echo '            "3" indicates dev, beta and hgw1'
-  echo '            "all" indicates dev, beta, all 8 RR machines and MGC'
+  echo '            "all" indicates dev, beta, all 8 RR machines'
   echo
   exit
 else
