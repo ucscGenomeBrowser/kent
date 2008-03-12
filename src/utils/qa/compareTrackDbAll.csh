@@ -16,9 +16,8 @@ if ($#argv < 1 || $#argv > 4) then
   echo
   echo "      (defaults to hgw1 and hgwbeta)"
   echo "      mode = (fast|verbose|fastVerbose) "
-  echo              
-  echo "               - verbose is for html field - defaults to terse"
-  echo "               - fast = (mysql-genome) - defaults to realTime (WGET)"
+  echo "       - verbose is for html field - defaults to terse"
+  echo "       - fast = (mysql-genome) - defaults to realTime (WGET)"
   echo 
   exit 1
 endif
