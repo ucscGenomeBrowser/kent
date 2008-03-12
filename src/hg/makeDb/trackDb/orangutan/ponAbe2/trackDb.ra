@@ -55,3 +55,19 @@ visibility hide
 exonArrows off
 showTopScorers 200
 type bed 5 .
+
+track nscanGene
+shortLabel N-SCAN
+longLabel N-SCAN Gene Predictions
+group genes
+priority 45.1
+visibility hide
+color 34,139,34
+type genePred nscanPep
+baseColorUseCds given
+baseColorDefault genomicCodons
+
+searchTable nscanGene
+searchType genePred
+termRegex chr[0-9a-zA-Z_].*\.[0-9]+\.[0-9]
+searchPriority 50

@@ -4,7 +4,7 @@
 # This file describes browser build for the Orangutan
 # genome, July 31 2007
 #
-#	"$Id: ponAbe2.txt,v 1.16 2008/03/11 19:02:05 hiram Exp $"
+#	"$Id: ponAbe2.txt,v 1.17 2008/03/12 21:56:21 markd Exp $"
 #
 ######################################################################
 ## DOWNLOAD SEQUENCE (DONE - 2007-09-06 - Hiram)
@@ -1982,3 +1982,27 @@ TMPDIR=/scratch/tmp
     time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/ponAbe2/wib \
 	ponAbe2 quality qual.wig
     #	real    1m30.877s
+
+#############################################################################
+# N-SCAN gene predictions (nscanGene) - (2008-03-11 markd)
+
+    # obtained NSCAN predictions from michael brent's group
+    # at WUSTL
+    cd /cluster/data/ponAbe2/bed/nscan/
+    wget http://mblab.wustl.edu/predictions/orang_utan/ponAbe2/ponAbe2.gtf
+    wget http://mblab.wustl.edu/predictions/orang_utan/ponAbe2/ponAbe2.prot.fa
+    wget http://mblab.wustl.edu/predictions/orang_utan/ponAbe2/readme.html
+    bzip2 ponAbe2.*
+    chmod a-w *
+
+    # load track
+    gtfToGenePred -genePredExt ponAbe2.gtf.bz2 stdout | hgLoadGenePred -bin -genePredExt ponAbe2 nscanGene stdin
+    hgPepPred ponAbe2 generic nscanPep  ponAbe2.prot.fa.bz2
+    rm *.tab
+
+    # update trackDb; need a ponAbe2-specific page to describe informants
+    orangutan/ponAbe2/nscanGene.html   (copy from readme.html)
+    orangutan/ponAbe2/trackDb.ra
+    # set search regex to
+        termRegex chr[0-9a-zA-Z_].*\.[0-9]+\.[0-9]
+
