@@ -31,7 +31,7 @@
 #include "hgConfig.h"
 #include "trix.h"
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.204 2007/09/27 22:25:17 angie Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.205 2008/03/12 22:54:58 angie Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -1159,8 +1159,8 @@ return TRUE;
 #endif
 
 static boolean mrnaInfo(char *acc, struct sqlConnection *conn, 
-                                char **mrnaType, int *organismID)
-/* Return mrna/est type and organism name for the accession */
+                                char **mrnaType)
+/* Sets *mrnaType to mrna/est type for the accession */
 /* Ignores returned values if parameters are NULL */
 /* Return TRUE if search succeeded, else FALSE */
 /* NOTE: caller must free mrnaType */
@@ -1171,14 +1171,12 @@ char **row;
 int ret;
 
 safef(query, sizeof(query),
-      "select type, organism from gbCdnaInfo where acc = '%s'", acc);
+      "select type from gbCdnaInfo where acc = '%s'", acc);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     {
     if (mrnaType != NULL)
         *mrnaType = cloneString(row[0]);
-    if (organismID != NULL)
-        *organismID = sqlUnsigned(row[1]);
     ret = TRUE;
     }
 else
@@ -1207,7 +1205,7 @@ char *ret;
 if (isRefSeqAcc(acc))
     return NULL;
 conn = hAllocConn();
-if (mrnaInfo(acc, conn, &type, NULL))
+if (mrnaInfo(acc, conn, &type))
    ret = type;
 else
    ret = NULL;
@@ -1589,13 +1587,12 @@ struct hgPos *pos = NULL;
 struct slName *el = NULL;
 struct slName *elToFree = NULL;
 struct dyString *dy = newDyString(256);
-char query[256];
+char query[512];
 char description[512];
 char product[256];
 char organism[128];
 char *ui = getUiUrl(cart);
 char *acc = NULL;
-int itemOrganismID;
 int organismID = hOrganismID(hgp->database);   /* id from mrna organism table */
 int alignCount = 0;
 char hgAppCombiner = (strchr(hgAppName, '?')) ? '&' : '?';
@@ -1611,11 +1608,21 @@ for (el = *pAccList; el != NULL; el = el->next)
     {
     freez(&elToFree);
     acc = el->name;
-    itemOrganismID = hashIntVal(accOrgHash, acc);
 
     /* check if item matches xeno criterion */
-    if (isXeno == (itemOrganismID == organismID))
-        continue;
+    if (hTableExists("gbStatus"))
+	{
+	safef(query, sizeof(query),
+	      "select (orgCat = 'native') from gbStatus where acc = '%s'", acc);
+	if (isXeno == sqlQuickNum(conn, query))
+	    continue;
+	}
+    else
+	{
+	int itemOrganismID = hashIntVal(accOrgHash, acc);
+	if (isXeno == (itemOrganismID == organismID))
+	    continue;
+	}
 
     /* check if item matches alignment criterion */
     if (aligns != (mrnaTableExists && mrnaAligns(conn, mrnaTable, acc)))
