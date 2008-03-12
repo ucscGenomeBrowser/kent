@@ -4,10 +4,11 @@
 # automatic way.
 
 # This sql was hacked to insert the datetime object, autoSql could not do that
+# and added auto_increment to the ix field
 
 #version information for database tables to monitor data loading history
 CREATE TABLE trackVersion (
-    ix int not null,	# auto-increment ID
+    ix int not null auto_increment,	# auto-increment ID
     db varchar(255) not null,	# UCSC database name
     name varchar(255) not null,	# table name in database
     who varchar(255) not null,	# Unix userID that performed this update
