@@ -2643,4 +2643,46 @@ TMPDIR=/scratch/tmp
     cat fb.calJac1.chainCanFam2Link.txt
     #	1451345669 bases of 2929139385 (49.549%) in intersection
 
+#########################################################################
+# BLASTZ/CHAIN/NET BOSTAU4 (DONE - 2008-03-11 - Hiram)
+    ssh kkstore04
+    screen # use a screen to manage this multi-day job
+    mkdir /cluster/data/canFam2/bed/blastzBosTau4.2008-03-11
+    cd /cluster/data/canFam2/bed/blastzBosTau4.2008-03-11
+
+    cat << '_EOF_' > DEF
+BLASTZ_M=50
+
+# TARGET: Human Hg18
+SEQ1_DIR=/scratch/data/canFam2/nib
+SEQ1_LEN=/cluster/data/canFam2/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Cow bosTau4
+SEQ2_DIR=/san/sanvol1/scratch/bosTau4/bosTau4.2bit
+SEQ2_LEN=/cluster/data/bosTau4/chrom.sizes
+# Maximum number of scaffolds that can be lumped together
+SEQ2_LIMIT=300
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/canFam2/bed/blastzBosTau4.2008-03-11
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    time nice -n +19 $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
+	`pwd`/DEF -verbose=2 \
+	-bigClusterHub=memk -chainMinScore=3000 -chainLinearGap=medium \
+	    -syntenicNet > do.log 2>&1
+    #	the pk became free as this job had 3 days to go.  So, chill out
+    #	the batch on memk, let it finish its running jobs, then finish
+    #	the batch manually on pk.  Continuing:
+    time nice -n +19 $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
+	`pwd`/DEF -verbose=2 -smallClusterHub=memk \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	    -continue=cat -syntenicNet > cat.log 2>&1
+XXX - running 2008-03-12 10:00
+
 ###########################################################################
