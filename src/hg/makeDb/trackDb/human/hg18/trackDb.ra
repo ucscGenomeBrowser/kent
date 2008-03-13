@@ -2397,6 +2397,12 @@ type bed 6 .
     longLabel Omicia OMIM Hand-Curation, Early Access R1, May 2007
     priority 2
 
+searchName rnaGene
+searchTable rnaGene
+searchType bed
+searchPriority 50
+padding 250
+
 searchName affy6SV
 searchTable snpArrayAffy6SV
 searchMethod exact
