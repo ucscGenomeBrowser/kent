@@ -164,6 +164,10 @@ class PipelineController < ApplicationController
   end
   
   def create
+    if params[:commit] == "Cancel"
+      redirect_to :action => 'show_user'
+      return
+    end
     @project = Project.new(params[:project])
     @project.user_id = @current_user.id 
     @project.status = 'new'
@@ -260,6 +264,7 @@ class PipelineController < ApplicationController
     return unless request.post?
     if params[:commit] == "Cancel"
       redirect_to :action => 'show', :id => @project
+      return
     end
     @upurl = params[:upload_url]
     @upload = params[:upload_file]
