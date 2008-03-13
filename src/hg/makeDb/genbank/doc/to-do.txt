@@ -1137,3 +1137,6 @@ Error: danRer1: gene danRer1.refFlat:1854 NM_131267 chr7: NM_131267 geneName "ir
 
 - pslCDNAFilter: look at NM_012196.1/ CCDS35257.1 -  multiple overlapping
   NM alignments,  none match CCDS
+
+
+- deal with orfeomes like mm  BC148437 that have two sources.
