@@ -34,7 +34,7 @@ class AccountController < ApplicationController
     else
       redirect_to(:controller => '/pipeline', :action => 'show_user')
     end
-  rescue 
+  rescue ActiveRecord::RecordInvalid
     render :action => 'change_profile'
   end
 
