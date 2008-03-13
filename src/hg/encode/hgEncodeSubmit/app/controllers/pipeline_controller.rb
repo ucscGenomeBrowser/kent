@@ -215,6 +215,8 @@ class PipelineController < ApplicationController
       @project.status = "unloading"
       unless @project.save
         flash[:error] = "System error - project record save failed."
+        #@project.errors.each_full { |x| msg += x + "<br>" }
+        redirect_to :action => 'show', :id => @project
         return
       end
     
@@ -244,6 +246,7 @@ class PipelineController < ApplicationController
     end    
     delete_completion
     @project.status = "deleted"
+    @project.save
     log_project_status
     @project.destroy
     flash[:notice] = msg
@@ -403,6 +406,9 @@ class PipelineController < ApplicationController
       if params[:commit] == @autoUploadLabel 
 	validate
         if @project.status == "validated"
+          @project.status = "loading"
+          @project.save
+          log_project_status
           load
         end
       end
@@ -412,8 +418,7 @@ class PipelineController < ApplicationController
     archive = ProjectArchive.find(params[:id])
     params[:id] = archive.project_id
     unless check_user_is_owner
-      redirect_to :action => 'show', :id => @project
-      return
+      return false
     end
     msg = ""
     @project = Project.find(params[:id])
