@@ -19,7 +19,7 @@
 #include "gbProcessed.h"
 #include "gbStatusTbl.h"
 
-static char const rcsid[] = "$Id: gbBuildState.c,v 1.24 2008/03/11 05:08:16 markd Exp $";
+static char const rcsid[] = "$Id: gbBuildState.c,v 1.25 2008/03/13 00:05:03 markd Exp $";
 
 static struct dbLoadOptions* gOptions; /* options from cmdline and conf */
 static int gErrorCnt = 0;  /* count of errors during build */
@@ -206,8 +206,13 @@ status->metaRelease = gbStatusTblGetStr(statusTbl,
 status->metaUpdate = gbStatusTblGetStr(statusTbl,
                                        aligned->update->shortName);
 flagUpdate(processed, aligned, FALSE);
+#if 0
 if (gbVerbose >= 5)
     traceSelect("rebuildDerived", status);
+#else
+if (gbVerbose >= 1)
+    traceSelect("rebuildDerived", status);
+#endif
 }
 
 static void markNoChange(struct gbStatusTbl* statusTbl,

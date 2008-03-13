@@ -1,4 +1,4 @@
-#!/bin/csh -ef
+#!/bin/bash -e
 #
 # Create flag file to indicate gbLoadRna should stop when it reaches
 # a safe place.  This can be run from any directory, but must reside
@@ -6,20 +6,14 @@
 #
 
 # get gbRoot from path to executable
-switch ($0)
-    case "*/*":
-        set scriptPath=$0
-        breaksw
-    default:
-        set scriptPath=(`where $0`)
-        breaksw
-endsw
-set gbRoot=$scriptPath:h:h
-if (! -d $gbRoot/var) then
-    echo "Error: $gbRoot/var does not exist or is not a directory"
+scriptPath=$(which $0)
+gbRoot=$(dirname $(dirname $scriptPath))
+varDir=$gbRoot/var
+if [ ! -d $varDir ] ; then
+    echo "Error: $varDir does not exist or is not a directory" >&2
     exit 1
-endif
+fi
 
-touch $gbRoot/var/dbload.stop
+touch $varDir/dbload.stop
 
 echo dbload stop request

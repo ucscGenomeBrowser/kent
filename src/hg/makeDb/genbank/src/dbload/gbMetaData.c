@@ -35,7 +35,7 @@
 #include "gbMiscDiff.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: gbMetaData.c,v 1.43 2008/01/19 23:31:05 markd Exp $";
+static char const rcsid[] = "$Id: gbMetaData.c,v 1.44 2008/03/13 00:05:03 markd Exp $";
 
 /* mol enum shared by gbCdnaInfo and refSeqStatus */
 #define molEnumDef \
@@ -665,8 +665,10 @@ assert(status->stateChg & (GB_NEW|GB_META_CHG|GB_REBUILD_DERIVED));
 /* check for MGC, ORFeome */
 if (status->orgCat == GB_NATIVE)
     {
-    status->isMgcFull = isMgcFullLength();
-    status->isOrfeome = isOrfeome();
+    if (haveMgc)
+        status->isMgcFull = isMgcFullLength();
+    if (haveOrfeome)
+        status->isOrfeome = isOrfeome();
     }
 
 /* clear description if we are not keeping it */
@@ -794,15 +796,16 @@ if (status->srcDb == GB_REFSEQ)
         geneTbl = gbGeneTblSetRefGeneGet(ggts, conn);
     else
         geneTbl = gbGeneTblSetXenoRefGeneGet(ggts, conn);
+    gbGeneTblRebuild(geneTbl, status, conn);
     }
-else if (status->isMgcFull && haveMgc)
-    geneTbl = gbGeneTblSetMgcGenesGet(ggts, conn);
-else if (status->isOrfeome && haveOrfeome)
-    geneTbl = gbGeneTblSetOrfeomeGenesGet(ggts, conn);
-
-if (geneTbl == NULL)
-    errAbort("BUG: updateGeneEntries should have matched table");
-gbGeneTblRebuild(geneTbl, status, conn);
+else 
+    {
+    // can be both MGC and orfeome
+    if (status->isMgcFull)
+        gbGeneTblRebuild(gbGeneTblSetMgcGenesGet(ggts, conn), status, conn);
+    if (status->isOrfeome)
+        gbGeneTblRebuild(gbGeneTblSetOrfeomeGenesGet(ggts, conn), status, conn);
+    }
 }
 
 void gbMetaDataUpdateChgGenes(struct sqlConnection *conn,
@@ -826,7 +829,7 @@ if (partitionMayHaveGeneTbls(select))
     }
 }
 
-void gbMetaDataDbLoad(struct sqlConnection *conn)
+ void gbMetaDataDbLoad(struct sqlConnection *conn)
 /* load the metadata changes into the database */
 {
 struct sqlUpdater *nextUpd;
