@@ -163,6 +163,13 @@ int axtScoreDnaDefault(struct axt *axt);
 int axtScoreProteinDefault(struct axt *axt);
 /* Score protein-based axt using default scheme. */
 
+boolean axtGetSubsetOnT(struct axt *axt, struct axt *axtOut,
+			int newStart, int newEnd, struct axtScoreScheme *ss,
+			boolean includeEdgeGaps);
+/* Return FALSE if axt is not in the new range.  Otherwise, set axtOut to
+ * a subset that goes from newStart to newEnd in target coordinates. 
+ * If includeEdgeGaps, don't trim target gaps before or after the range. */
+
 void axtSubsetOnT(struct axt *axt, int newStart, int newEnd, 
 	struct axtScoreScheme *ss, FILE *f);
 /* Write out subset of axt that goes from newStart to newEnd
@@ -244,6 +251,13 @@ void axtAddBlocksToBoxInList(struct cBlock **pList, struct axt *axt);
 void axtPrintTraditional(struct axt *axt, int maxLine, struct axtScoreScheme *ss, 
 	FILE *f);
 /* Print out an alignment with line-breaks. */
+
+void axtPrintTraditionalExtra(struct axt *axt, int maxLine,
+			      struct axtScoreScheme *ss, FILE *f,
+			      boolean reverseTPos, boolean reverseQPos);
+/* Print out an alignment with line-breaks.  If reverseTPos is true, then
+ * the sequence has been reverse complemented, so show the coords starting
+ * at tEnd and decrementing down to tStart; likewise for reverseQPos. */
 
 double axtIdWithGaps(struct axt *axt);
 /* Return ratio of matching bases to total symbols in alignment. */

@@ -20,7 +20,7 @@
 #include "dnautil.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: axt.c,v 1.48 2007/09/05 23:03:22 kent Exp $";
+static char const rcsid[] = "$Id: axt.c,v 1.49 2008/03/14 04:27:53 angie Exp $";
 
 void axtFree(struct axt **pEl)
 /* Free an axt. */
@@ -307,27 +307,47 @@ if (ss == NULL)
 return axtScore(axt, ss);
 }
 
-void axtSubsetOnT(struct axt *axt, int newStart, int newEnd, 
-	struct axtScoreScheme *ss, FILE *f)
-/* Write out subset of axt that goes from newStart to newEnd
- * in target coordinates. */
+boolean axtGetSubsetOnT(struct axt *axt, struct axt *axtOut,
+			int newStart, int newEnd, struct axtScoreScheme *ss,
+			boolean includeEdgeGaps)
+/* Return FALSE if axt is not in the new range.  Otherwise, set axtOut to
+ * a subset that goes from newStart to newEnd in target coordinates. 
+ * If includeEdgeGaps, don't trim target gaps before or after the range. */
 {
+if (axt == NULL)
+    return FALSE;
 if (newStart < axt->tStart)
     newStart = axt->tStart;
 if (newEnd > axt->tEnd)
     newEnd = axt->tEnd;
 if (newEnd <= newStart) 
-    return;
+    return FALSE;
 if (newStart == axt->tStart && newEnd == axt->tEnd)
     {
     axt->score = axtScore(axt, ss);
-    axtWrite(axt, f);
+    *axtOut = *axt;
+    return TRUE;
     }
 else
     {
     struct axt a = *axt;
     char *tSymStart = skipIgnoringDash(a.tSym, newStart - a.tStart, TRUE);
     char *tSymEnd = skipIgnoringDash(tSymStart, newEnd - newStart, FALSE);
+    if (includeEdgeGaps)
+	{
+	while (tSymStart > a.tSym)
+	    if (*(--tSymStart) != '-')
+		{
+		tSymStart++;
+		break;
+		}
+	while (tSymEnd < a.tSym + newEnd)
+	    if (*(++tSymEnd) != '-')
+		{
+		tSymEnd--;
+		break;
+		}
+	}
     int symCount = tSymEnd - tSymStart;
     char *qSymStart = a.qSym + (tSymStart - a.tSym);
     a.qStart += countNonDash(a.qSym, qSymStart - a.qSym);
@@ -338,9 +358,24 @@ else
     a.qSym = qSymStart;
     a.tSym = tSymStart;
     a.score = axtScore(&a, ss);
-    if (a.qStart < a.qEnd && a.tStart < a.tEnd)
-	axtWrite(&a, f);
+    if ((a.qStart < a.qEnd && a.tStart < a.tEnd) ||
+	(includeEdgeGaps && (a.qStart < a.qEnd || a.tStart < a.tEnd)))
+	{
+	*axtOut = a;
+	return TRUE;
+	}
+    return FALSE;
     }
+}
+
+void axtSubsetOnT(struct axt *axt, int newStart, int newEnd, 
+	struct axtScoreScheme *ss, FILE *f)
+/* Write out subset of axt that goes from newStart to newEnd
+ * in target coordinates. */
+{
+struct axt axtSub;
+if (axtGetSubsetOnT(axt, &axtSub, newStart, newEnd, ss, FALSE))
+    axtWrite(&axtSub, f);
 }
 
 int axtTransPosToQ(struct axt *axt, int tPos)
@@ -863,8 +898,12 @@ for (i=0; i<=axt->symCount; ++i)
     }
 }
 
-void axtPrintTraditional(struct axt *axt, int maxLine, struct axtScoreScheme *ss, FILE *f)
-/* Print out an alignment with line-breaks. */
+void axtPrintTraditionalExtra(struct axt *axt, int maxLine,
+			      struct axtScoreScheme *ss, FILE *f,
+			      boolean reverseTPos, boolean reverseQPos)
+/* Print out an alignment with line-breaks.  If reverseTPos is true, then
+ * the sequence has been reverse complemented, so show the coords starting
+ * at tEnd and decrementing down to tStart; likewise for reverseQPos. */
 {
 int qPos = axt->qStart;
 int tPos = axt->tStart;
@@ -872,6 +911,8 @@ int symPos;
 int aDigits = digitsBaseTen(axt->qEnd);
 int bDigits = digitsBaseTen(axt->tEnd);
 int digits = max(aDigits, bDigits);
+int qFlipOff = axt->qEnd + axt->qStart;
+int tFlipOff = axt->tEnd + axt->tStart;
 
 for (symPos = 0; symPos < axt->symCount; symPos += maxLine)
     {
@@ -883,7 +924,7 @@ for (symPos = 0; symPos < axt->symCount; symPos += maxLine)
     lineEnd = symPos + lineSize;
 
     /* Draw query line including numbers. */
-    fprintf(f, "%0*d ", digits, qPos+1);
+    fprintf(f, "%0*d ", digits, (reverseQPos ? qFlipOff - qPos: qPos+1));
     for (i=symPos; i<lineEnd; ++i)
         {
 	char c = axt->qSym[i];
@@ -891,7 +932,7 @@ for (symPos = 0; symPos < axt->symCount; symPos += maxLine)
 	if (c != '.' && c != '-')
 	    ++qPos;
 	}
-    fprintf(f, " %0*d\n", digits, qPos);
+    fprintf(f, " %0*d\n", digits, (reverseQPos? qFlipOff - qPos + 1 : qPos));
 
     /* Draw line with match/mismatch symbols. */
     spaceOut(f, digits+1);
@@ -909,7 +950,7 @@ for (symPos = 0; symPos < axt->symCount; symPos += maxLine)
     fputc('\n', f);
 
     /* Draw target line including numbers. */
-    fprintf(f, "%0*d ", digits, tPos+1);
+    fprintf(f, "%0*d ", digits, (reverseTPos ? tFlipOff - tPos : tPos+1));
     for (i=symPos; i<lineEnd; ++i)
         {
 	char c = axt->tSym[i];
@@ -917,7 +958,7 @@ for (symPos = 0; symPos < axt->symCount; symPos += maxLine)
 	if (c != '.' && c != '-')
 	    ++tPos;
 	}
-    fprintf(f, " %0*d\n", digits, tPos);
+    fprintf(f, " %0*d\n", digits, (reverseTPos ? tFlipOff - tPos + 1: tPos));
 
     /* Draw extra empty line. */
     fputc('\n', f);
@@ -935,6 +976,12 @@ for (i=0; i<axt->symCount; ++i)
         ++matchCount;
     }
 return (double)matchCount/axt->symCount;
+}
+
+void axtPrintTraditional(struct axt *axt, int maxLine, struct axtScoreScheme *ss, FILE *f)
+/* Print out an alignment with line-breaks. */
+{
+axtPrintTraditionalExtra(axt, maxLine, ss, f, FALSE, FALSE);
 }
 
 double axtCoverage(struct axt *axt, int qSize, int tSize)
