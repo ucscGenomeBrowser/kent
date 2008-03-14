@@ -1,7 +1,7 @@
 # for emacs: -*- mode: sh; -*-
 
 # Bos Taurus -- Baylor Release 4.0 (Oct 4 2007)
-#	"$Id: bosTau4.txt,v 1.4 2008/03/14 16:09:48 hiram Exp $"
+#	"$Id: bosTau4.txt,v 1.5 2008/03/14 21:00:51 hiram Exp $"
 #########################################################################
 # DOWNLOAD SEQUENCE (DONE - 2008-03-07 - Hiram)
     ssh kkstore06
@@ -481,6 +481,12 @@ TMPDIR=/scratch/tmp
 	/cluster/data/hg18/bed/blastzBosTau4.2008-03-11/DEF \
 	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
 	    -swap -syntenicNet > do.log 2>&1
+    #	broken down during netSynteny.csh due to too many open files on
+    #	a chainSplit
+    #	To get them split, set up a job on memk to do the split
+    #	via chainFilter: chainFilter -t=${T} bigFile.chain > ${T}.chain
+    #   Where the targets T are from the list:
+    #   grep "^chain " bigFile.chain | awk '{print $3}' | sort -u
 
 ###########################################################################
 # Blastz Platypus ornAna1 (DONE - 2008-03-11,14 - Hiram)
@@ -557,4 +563,112 @@ TMPDIR=/scratch/tmp
 	VALUES ("bosTau4", "blat2", "17779", "0", "1");' \
 	    hgcentraltest
     #	test it with some sequence
+
+#########################################################################
+## 5-Way Multiz (DONE - 2007-12-21 - Hiram)
+##
+    ssh hgwdev
+    mkdir /cluster/data/bosTau4/bed/multiz5way
+    cd /cluster/data/bosTau4/bed/multiz5way
+    #	take the 30-way tree from mm9 and eliminate genomes not in
+    #	this alignment
+    #	rearrange to get bosTau4 on the top of the graph
+    #	paste this tree into the on-line phyloGif tool:
+    #	http://genome.ucsc.edu/cgi-bin/phyloGif
+    #	to create the image for the tree diagram
+
+    #	select the 9 organisms from the 30-way recently done on mouse mm9
+    /cluster/bin/phast/tree_doctor \
+--prune-all-but Human_hg18,Mouse_mm9,Dog_canFam2,Platypus_ornAna1,Cow_bosTau3 \
+	/cluster/data/mm9/bed/multiz30way/mm9OnTop.fullNames.nh \
+	| sed -e "s/bosTau3/bosTau4/g" > 5-way.fullNames.nh
+
+    #	looks something like this:
+(((Mouse_mm9:0.325818,Human_hg18:0.126901):0.019763,
+(Dog_canFam2:0.156637,Cow_bosTau4:0.163945):0.031326):0.332197,
+Platypus_ornAna1:0.488110);
+
+
+
+    #	rearrange to get Cow at the top:
+    # this leaves us with:
+    cat << '_EOF_' > bosTau4.5-way.nh
+(((Cow_bosTau4:0.163945,Dog_canFam2:0.156637):0.031326,
+   (Human_hg18:0.126901,Mouse_mm9:0.325818):0.019763):0.332197,
+   Platypus_ornAna1:0.488110);
+'_EOF_'
+    #	<< happy emacs
+
+    #	create a species list from that file:
+    sed -e 's/[()]//g; s/ /\n/g; s/,/\n/g' bosTau4.5-way.nh \
+        | sed -e "s/[ \t]*//g; /^[ \t]$/d; /^$/d" | sort -u \
+        | sed -e "s/.*_//; s/:.*//" | sort > species.list
+    #	verify that has 5 db names in it
+    # create a stripped down nh file for use in autoMZ run
+    echo \
+`sed 's/[a-zA-Z0-9]*_//g; s/:0.[0-9]*//g; s/[,;]/ /g' bosTau4.5-way.nh \
+	| sed -e "s/  / /g"` > tree.5.nh
+    #	that looks like, as a single line:
+    #	(((bosTau4 canFam2) (hg18 mm9)) ornAna1)
+
+    # verify all blastz's exists
+    cat << '_EOF_' > listMafs.csh
+#!/bin/csh -fe
+cd /cluster/data/bosTau4/bed/multiz5way
+foreach db (`grep -v bosTau4 species.list`)
+    set bdir = /cluster/data/bosTau4/bed/blastz.$db
+    if (-e $bdir/mafRBestNet/bosTau4.$db.rbest.maf.gz) then
+	echo "$db mafRBestNet"
+    else if (-e $bdir/mafSynNet/bosTau4.$db.net.maf.gz) then
+	echo "$db mafSynNet"
+    else if (-e $bdir/mafNet/bosTau4.$db.net.maf.gz) then
+	echo "$db mafNet"
+    else
+	echo "$db mafs not found"
+    endif
+end
+'_EOF_'
+    # << happy emacs
+    chmod +x ./listMafs.csh
+    #	see what it says, the "mafs not found" should only show up on bosTau4
+    ./listMafs.csh
+# canFam2 mafRBestNet
+# hg18 mafRBestNet
+# mm9 mafRBestNet
+# monDom4 mafNet
+# ornAna1 mafNet
+# panTro2 mafRBestNet
+# ponAbe2 mafRBestNet
+# rheMac2 mafRBestNet
+
+
+    /cluster/bin/phast/all_dists bosTau4.5-way.nh > 5way.distances.txt
+    grep -i caljac 5way.distances.txt | sort -k3,3n
+Marmoset_calJac1        Human_hg18      0.138447
+Marmoset_calJac1        Rhesus_rheMac2  0.138473
+Marmoset_calJac1        Orangutan_ponAbe2       0.139537
+Marmoset_calJac1        Chimp_panTro2   0.140242
+Marmoset_calJac1        Dog_canFam2     0.336180
+Marmoset_calJac1        Mouse_mm9       0.454272
+Marmoset_calJac1        Opossum_monDom4 0.712488
+Marmoset_calJac1        Platypus_ornAna1        0.968524
+
+    #	use the calculated
+    #	distances in the table below to order the organisms and check
+    #	the button order on the browser.  Zebrafish ends up before
+    #	tetraodon and fugu on the browser despite its distance.
+    #	And if you can fill in the table below entirely, you have
+    #	succeeded in finishing all the alignments required.
+    #
+#                         featureBits chainLink measures
+#                                       chainCalJac1Link   chain   linearGap
+#    distance                     on CalJac1    on other   minScore
+#  1  0.138447 Human_hg18         (% 82.846)   (% 78.351)   3000     medium
+#  2  0.138473 Rhesus_rheMac2     (% 74.810)   (% 77.648)   3000     medium
+#  3  0.139537 Orangutan_ponAbe2  (% 76.925)   (% 74.694)   3000     medium
+#  4  0.140242 Chimp_panTro2      (% 77.296)   (% 76.308)   3000     medium
+#  5  0.336180 Dog_canFam2        (% 57.429)   (% 49.549)   3000     medium
+#  6  0.454272 Mouse_mm9          (% 30.302)   (% 32.971)   3000     medium
+#  6  0.712488 Opossum_monDom4    (% 13.357)   (% 11.050)   5000     loose
+#  7  0.968524 Platypus_ornAna1   (%  7.221)   (% 10.619)   5000     loose
 
