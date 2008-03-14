@@ -211,7 +211,7 @@
 #include "itemConf.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1401 2008/03/08 00:53:40 markd Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1402 2008/03/14 18:33:37 angie Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -12466,7 +12466,7 @@ if (hTableExists("lsSnpFunction"))
 hFreeConn(&conn);
 }
 
-off_t getSnpOffset(struct trackDb *tdb, struct snp *snp)
+off_t getSnpSeqFileOffset(struct trackDb *tdb, struct snp *snp)
 /* do a lookup in snpSeq for the offset */
 {
 char *snpSeqSetting = trackDbSetting(tdb, "snpSeq");
@@ -12530,36 +12530,92 @@ return NULL;
 }
 
 
+void printOffsetAndBoldAxt(struct axt *axtIn, int lineWidth,
+			   struct axtScoreScheme *ss, int tOffset, int qOffset,
+			   int boldStart, int boldEnd,
+			   boolean qIsRc, int qRcRangeSize)
+/* Given an axt block, break it into multiple blocks for printing if
+ * the bold range falls in the middle; add t & qOffset to t & q
+ * coords; and print all blocks.  boldStart and boldEnd are relative to 
+ * the target sequence used to make axtIn (start at 0, not tOffset). 
+ * qIsRc means that the query sequence that was aligned to create axtIn 
+ * was reverse-complemented so we want to display q coords backwards; 
+ * that includes reversing block coords within the query seq range. 
+ * Note: caller generateAlignments swaps q and t for the sake of printout! */
+{
+struct axt axtBlock;
 
-void generateAlignment(struct dnaSeq *seq1, struct dnaSeq *seq2, int displayLength)
-/* seq1 is target (usually a chromosome), seq2 is query */
+/* (Defining a macro because a function would have an awful lot of arguments.)
+ * First extract the portion of axtIn for this block.  If qIsRc, then
+ * reverse the block's q coords within the range of axtIn's q seq coords.
+ * Finally, add t and qOffset and print it out, adding bold tags before and 
+ * afterwards if isBold. */
+#define doBlock(blkStart, blkEnd, isBold) \
+    if (axtGetSubsetOnT(axtIn, &axtBlock, blkStart, blkEnd, ss, isBold)) \
+	{ \
+	if (isBold) printf("<B>"); \
+	if (qIsRc) \
+	    { \
+	    int tmp = axtBlock.qStart; \
+	    axtBlock.qStart = qRcRangeSize - axtBlock.qEnd;  \
+	    axtBlock.qEnd = qRcRangeSize - tmp; \
+	    } \
+	axtBlock.tStart += tOffset;  axtBlock.tEnd += tOffset; \
+	axtBlock.qStart += qOffset;  axtBlock.qEnd += qOffset; \
+	axtPrintTraditionalExtra(&axtBlock, lineWidth, ss, stdout, \
+				 FALSE, qIsRc); \
+	if (isBold) printf("</B>"); \
+	}
+
+/* First block: before bold range */
+doBlock(axtIn->tStart, boldStart, FALSE);
+/* Second block: bold range */
+doBlock(boldStart, boldEnd, TRUE);
+/* Third block: after bold range */
+doBlock(boldEnd, axtIn->tEnd, FALSE);
+
+#undef doBlock
+}
+
+void generateAlignment(struct dnaSeq *tSeq, struct dnaSeq *qSeq,
+		       int lineWidth, int tOffset, int qOffset,
+		       int boldStart, int boldEnd, boolean tIsRc)
+/* Use axtAffine to align tSeq to qSeq.  Print the resulting alignment.
+ * tOffset and qOffset are added to the respective sets of coordinates for
+ * printing.  If boldStart and boldEnd have any overlap with the aligned
+ * qSeq, print that region as a separate block, in bold.  boldStart and 
+ * boldEnd are relative to the start of qSeq (start at 0 not qOffset).
+ * tIsRc means that tSeq has been reverse-complemented so we want to
+ * display t coords backwards. */
 {
 int matchScore = 100;
 int misMatchScore = 100;
 int gapOpenPenalty = 400;  
 int gapExtendPenalty = 50; 
 struct axtScoreScheme *ss = axtScoreSchemeSimpleDna(matchScore, misMatchScore, gapOpenPenalty, gapExtendPenalty);
-struct axt *axt = axtAffine(seq1, seq2, ss), *axtBlock=axt;
+/* Note: we are swapping the order of target and query here so that when
+ * we print out the alignment, the target will appear on top. */
+struct axt *axt = axtAffine(tSeq, qSeq, ss), *axtBlock=axt;
 
 hPrintf("<TT><PRE>");
 if (axt == NULL)
    {
-   printf("%s and %s don't align\n", seq1->name, seq2->name);
+   printf("%s and %s don't align\n", tSeq->name, qSeq->name);
    return;
    }
 
-axtBlock=axt;
-while (axtBlock !=NULL)
+printf("<B>Alignment between genome (%s; %d bp) and "
+       "dbSNP sequence (%s; %d bp)</B>\n",
+       tSeq->name, tSeq->size, qSeq->name, qSeq->size);
+for (axtBlock=axt;  axtBlock !=NULL;  axtBlock = axtBlock->next)
     {
-    printf("ID (including gaps) %3.1f%%, coverage (of both) %3.1f%%, score %d\n",
+    printf("ID (including gaps) %3.1f%%, coverage (of both) %3.1f%%\n\n",
            axtIdWithGaps(axtBlock)*100, 
-	   axtCoverage(axtBlock, seq1->size, seq2->size)*100, 
-	   axtBlock->score);
-    printf("Alignment between genome (%s; %d bp) and ", seq1->name, seq1->size);
-    printf("flanking sequence (%s; %d bp)\n", seq2->name, seq2->size);
-    printf("\n");
-    axtPrintTraditional(axtBlock, displayLength, ss, stdout);
-    axtBlock=axtBlock->next;
+	   axtCoverage(axtBlock, tSeq->size, qSeq->size)*100);
+    /* Recall that t and q have swapped places for desired printout,
+     * so we pass in t values for the last two args: */
+    printOffsetAndBoldAxt(axtBlock, lineWidth, ss, qOffset, tOffset,
+			  boldStart, boldEnd, tIsRc, tSeq->size);
     }
 
 axtFree(&axt);
@@ -12571,13 +12627,12 @@ void printSnpAlignment(struct trackDb *tdb, struct snp *snp)
 {
 char *fileName = NULL;
 char *variation = NULL;
-char *strand = NULL;
 
 char *line;
 struct lineFile *lf = NULL;
 int lineSize;
 static int maxFlank = 1000;
-static int displayLength = 100;
+static int lineWidth = 100;
 
 boolean gotVar = FALSE;
 boolean isNucleotide = TRUE;
@@ -12610,7 +12665,7 @@ fileName = getSnpSeqFile(tdb);
 if (!fileName)
     return;
 
-offset = getSnpOffset(tdb, snp);
+offset = getSnpSeqFileOffset(tdb, snp);
 if (offset == -1) 
     return;
 
@@ -12647,10 +12702,8 @@ lineFileClose(&lf);
 
 /* trim */
 /* axtAffine has a limit of 100,000,000 bases for query x target */
-leftFlank = cloneString(seqDbSnp5->string);
-rightFlank = cloneString(seqDbSnp3->string);
-freeDyString(&seqDbSnp5);
-freeDyString(&seqDbSnp3);
+leftFlank = dyStringCannibalize(&seqDbSnp5);
+rightFlank = dyStringCannibalize(&seqDbSnp3);
 len5 = strlen(leftFlank);
 len3 = strlen(rightFlank);
 if (len5 > maxFlank) 
@@ -12667,41 +12720,72 @@ if (len3 > maxFlank)
     len3 = strlen(rightFlank);
     }
 
-/* get coords */
-strand  = cloneString(snp->strand);
-if (sameString(strand,"+") || sameString(strand,"?"))
-    {
-    start = snp->chromStart - len5;
-    end = snp->chromEnd + len3;
-    }
-else 
+/* get genomic coords */
+int isRc = sameString(snp->strand, "-");
+if (isRc)
     {
     start = snp->chromStart - len3;
     end = snp->chromEnd + len5;
     }
-if (start < 0) start = 0;
-if (end > hChromSize(snp->chrom)) end = hChromSize(snp->chrom);
+else 
+    {
+    start = snp->chromStart - len5;
+    end = snp->chromEnd + len3;
+    }
+int genoLen3 = len3;
+int genoLen5 = len5;
+if (start < 0)
+    {
+    if (isRc)
+	genoLen3 += start;
+    else
+	genoLen5 += start;
+    start = 0;
+    }
+int chromSize = hChromSize(snp->chrom);
+if (end > chromSize)
+    {
+    if (isRc)
+	genoLen5 += (chromSize - end);
+    else
+	genoLen3 += (chromSize - end);
+    end = chromSize;
+    }
 
 /* do the lookup */
 seqNib = hChromSeqMixed(snp->chrom, start, end);
 if (seqNib == NULL)
-    {
-    warn("Couldn't get sequences");
-    return;
-    }
-if (sameString(strand,"-"))
+    errAbort("Couldn't get genomic sequence around %s (%s:%d-%d)",
+	     snp->name, snp->chrom, start+1, end);
+if (isRc)
     reverseComplement(seqNib->dna, seqNib->size);
+char betterName[512];
+safef(betterName, sizeof(betterName), "%s %s:%d-%d",
+      database, seqName, start+1, end);
+seqNib->name = cloneString(betterName);
 
 printf("\n<BR><B>Re-alignment of the SNP's flanking sequences to the "
        "genomic sequence:</B><BR>\n"
        "Note: this alignment was computed by UCSC and may not be identical to "
        "NCBI's alignment used to map the SNP.\n");
 
-printf("<PRE><B>Genomic Sequence:</B><BR>\n");
-writeSeqWithBreaks(stdout, seqNib->dna, seqNib->size, displayLength);
+printf("<PRE><B>Genomic sequence around %s (%s:%d-%d%s):</B>\n",
+       snp->name, snp->chrom, start+1, end,
+       isRc ? "; reverse complemented" : "");
+writeSeqWithBreaks(stdout, seqNib->dna, genoLen5, lineWidth);
+printf("<B>");
+if (snp->chromEnd > snp->chromStart)
+    writeSeqWithBreaks(stdout, seqNib->dna + genoLen5,
+		       (snp->chromEnd - snp->chromStart), lineWidth);
+else
+    printf("-\n");
+printf("</B>");
+writeSeqWithBreaks(stdout, seqNib->dna + seqNib->size - genoLen3, genoLen3,
+		   lineWidth);
 printf("</PRE>\n");
 
-printf("\n<PRE><B>dbSNP Sequence (Flanking sequences and observed alleles):</B><BR>");
+printf("\n<PRE><B>dbSNP flanking sequences and observed allele code for %s"
+       ":</B>\n", snp->name);
 printf("(Uses ");
 printf("<A HREF=\" http://www.chem.qmul.ac.uk/iubmb/misc/naseq.html#tab1 \"" );
 printf("TARGET=_BLANK>IUPAC ambiguity codes</A>");
@@ -12713,16 +12797,19 @@ if (rightFlankTrimmed)
 dnaSeqDbSnp5 = newDnaSeq(leftFlank, len5, "dbSNP seq 5");
 dnaSeqDbSnpO = newDnaSeq(variation, strlen(variation),"dbSNP seq O");
 dnaSeqDbSnp3 = newDnaSeq(rightFlank, len3, "dbSNP seq 3");
-writeSeqWithBreaks(stdout, dnaSeqDbSnp5->dna, dnaSeqDbSnp5->size, displayLength);
-writeSeqWithBreaks(stdout, dnaSeqDbSnpO->dna, dnaSeqDbSnpO->size, displayLength);
-writeSeqWithBreaks(stdout, dnaSeqDbSnp3->dna, dnaSeqDbSnp3->size, displayLength);
+writeSeqWithBreaks(stdout, dnaSeqDbSnp5->dna, dnaSeqDbSnp5->size, lineWidth);
+printf("<B>");
+writeSeqWithBreaks(stdout, dnaSeqDbSnpO->dna, dnaSeqDbSnpO->size, lineWidth);
+printf("</B>");
+writeSeqWithBreaks(stdout, dnaSeqDbSnp3->dna, dnaSeqDbSnp3->size, lineWidth);
 printf("</PRE>\n");
 
 /* create seqDbSnp */
 dyStringAppend(seqDbSnpTemp, leftFlank);
 dyStringAppend(seqDbSnpTemp, variation);
 dyStringAppend(seqDbSnpTemp, rightFlank);
-seqDbSnp = newDnaSeq(seqDbSnpTemp->string, strlen(seqDbSnpTemp->string), "dbSNP seq");
+seqDbSnp = newDnaSeq(seqDbSnpTemp->string, strlen(seqDbSnpTemp->string),
+		     snp->name);
 if (seqDbSnp == NULL)
     {
     warn("Couldn't get sequences");
@@ -12730,7 +12817,8 @@ if (seqDbSnp == NULL)
     }
 seqDbSnp->size = strlen(seqDbSnp->dna);
 
-generateAlignment(seqNib, seqDbSnp, displayLength);
+generateAlignment(seqNib, seqDbSnp, lineWidth, start, skipCount,
+		  len5, len5 + dnaSeqDbSnpO->size, isRc);
 }
 
 void doSnp(struct trackDb *tdb, char *itemName)
