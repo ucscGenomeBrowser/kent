@@ -4,7 +4,7 @@
 # This file describes browser build for the Marmoset
 # genome, February 2008
 #
-#	"$Id: choHof1.txt,v 1.2 2008/03/12 23:00:56 hiram Exp $"
+#	"$Id: choHof1.txt,v 1.3 2008/03/14 21:00:32 hiram Exp $"
 #
 ######################################################################
 ## DOWNLOAD SEQUENCE (DONE - 2007-08-21 - Hiram)
@@ -43,15 +43,18 @@
 	| qacAgpLift supercontigs.agp.gz stdin choHof1.qual.qac
 #############################################################################
 #  running makeGenomeDb.pl (DONE - 2008-03-07 - Hiram)
+#	assemblyDate should be Mmm. YYYY
+#	or for three letter month names:  Mmm YYYY
+#	determine order key via Taxonomy browser at NCBI
     ssh kkstore06
     cd /cluster/data/choHof1
     cat << '_EOF_' > choHof1.config.ra
 db choHof1
 clade mammal
 scientificName Choloepus hoffmanni
-assemblyDate February 2008
+assemblyDate Feb. 2008
 assemblyLabel WUSTL Choloepus_hoffmanni_1.0
-orderKey 70
+orderKey 331
 dbDbSpeciesDir sloth
 mitoAcc none
 agpFiles /cluster/data/choHof1/wustl/supercontigs.agp.gz
@@ -165,3 +168,9 @@ commonName Hoffmann's two-fingered sloth
 	    hgcentraltest
     #	test it with some sequence
 
+    #	Order key was incorrect, and date string too long:
+    hgsql \
+-e 'update dbDb set orderKey=331 where name="choHof1";' hgcentraltest
+    hgsql \
+-e 'update dbDb set description=\"Feb. 2008\" where name="choHof1";' \
+	hgcentraltest
