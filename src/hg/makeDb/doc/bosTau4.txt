@@ -1,7 +1,7 @@
 # for emacs: -*- mode: sh; -*-
 
 # Bos Taurus -- Baylor Release 4.0 (Oct 4 2007)
-#	"$Id: bosTau4.txt,v 1.3 2008/03/12 22:59:52 hiram Exp $"
+#	"$Id: bosTau4.txt,v 1.4 2008/03/14 16:09:48 hiram Exp $"
 #########################################################################
 # DOWNLOAD SEQUENCE (DONE - 2008-03-07 - Hiram)
     ssh kkstore06
@@ -483,7 +483,7 @@ TMPDIR=/scratch/tmp
 	    -swap -syntenicNet > do.log 2>&1
 
 ###########################################################################
-# Blastz Platypus ornAna1 (DONE - 2008-03-11 - Hiram)
+# Blastz Platypus ornAna1 (DONE - 2008-03-11,14 - Hiram)
     ssh kkstore06
     screen # use screen to control this job
     mkdir /cluster/data/bosTau4/bed/blastzOrnAna1.2008-03-11
@@ -520,43 +520,31 @@ TMPDIR=/scratch/tmp
     time nice -n +19 doBlastzChainNet.pl `pwd`/DEF \
 	-chainMinScore=5000 -verbose=2 \
 	-chainLinearGap=loose -bigClusterHub=kk > do.log 2>&1 &
+    #	real    1233m16.397s
     #	the pk kluster became free as this job had a long time to go.
     #	Unsure how long it had to go because the batch became confused
     #	and couldn't calculate eta, it had waiting=0 jobs ?  So, chill
-    #	out the batch, allow the running jobs to complete, then continuing:
+    #	out the batch, allow the running jobs to complete,
+    #	go to pk and get the jobs completed there.
+    #	There was a difficulty with the para.results file.  It lost track
+    #	of 1158 jobs, but they were completed and results exist.
+    #	then continuing:
     time nice -n +19 doBlastzChainNet.pl `pwd`/DEF \
 	-chainMinScore=5000 -verbose=2 -smallClusterHub=memk \
 	-continue=cat -chainLinearGap=loose -bigClusterHub=pk > cat.log 2>&1 &
-XXX - running 2008-03-12 10:30
-    #	real    2585m50.826s
-    # some of the jobs got confused during kk parasol hub reboots, where they
-    # think they aren't done, but they actually are.  A 'para recover' finds
-    # nothing to re-run, all the result files are present.
-# Completed: 263242 of 263488 jobs
-# Crashed: 246 jobs
-# CPU time in finished jobs:   48351127s  805852.12m 13430.87h  559.62d  1.533 y
-# IO & Wait Time:               7609407s  126823.45m  2113.72h   88.07d  0.241 y
-# Average job time:                 213s       3.54m     0.06h    0.00d
-# Longest finished job:            2146s      35.77m     0.60h    0.02d
-# Submission to last job:        259048s    4317.47m    71.96h    3.00d
-
-    #	after verifying all jobs are actually finished, continuing:
-    time nice -n +19 doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
-	-chainMinScore=5000 -chainLinearGap=loose \
-	-continue=cat -bigClusterHub=kk > cat.log 2>&1 &
-    #	real    53m18.757s
+    #	real    66m36.465s
     cat fb.bosTau4.chainOrnAna1Link.txt
-    #	214557704 bases of 3093572278 (6.936%) in intersection
+    #	201799073 bases of 2731830700 (7.387%) in intersection
 
     mkdir /cluster/data/ornAna1/bed/blastz.bosTau4.swap
     cd /cluster/data/ornAna1/bed/blastz.bosTau4.swap
-    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+    time nice -n +19 doBlastzChainNet.pl \
 	/cluster/data/bosTau4/bed/blastzOrnAna1.2008-03-11/DEF \
-	-chainMinScore=5000 -chainLinearGap=loose \
-	-swap -bigClusterHub=kk > swap.log 2>&1 &
-    #	real    120m20.860s
-    cat fb.ornAna1.chainPonAbe2Link.txt
-    #	201368027 bases of 1842236818 (10.931%) in intersection
+	-chainMinScore=5000 -verbose=2 -smallClusterHub=memk \
+	-swap -chainLinearGap=loose -bigClusterHub=pk > do.log 2>&1 &
+    #	real    106m17.385s
+    cat fb.ornAna1.chainBosTau4Link.txt
+    #	187868681 bases of 1842236818 (10.198%) in intersection
 
 ############################################################################
 #  BLATSERVERS ENTRY (DONE - 2008-03-12 - Hiram)
