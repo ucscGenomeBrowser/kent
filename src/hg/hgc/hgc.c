@@ -211,7 +211,7 @@
 #include "itemConf.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1403 2008/03/14 21:05:52 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1404 2008/03/14 22:03:09 angie Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -12533,39 +12533,45 @@ return NULL;
 void printOffsetAndBoldAxt(struct axt *axtIn, int lineWidth,
 			   struct axtScoreScheme *ss, int tOffset, int qOffset,
 			   int boldStart, int boldEnd,
-			   boolean qIsRc, int qRcRangeSize)
+			   boolean tIsRc, int tSize, int qSize)
 /* Given an axt block, break it into multiple blocks for printing if
  * the bold range falls in the middle; add t & qOffset to t & q
  * coords; and print all blocks.  boldStart and boldEnd are relative to 
  * the target sequence used to make axtIn (start at 0, not tOffset). 
- * qIsRc means that the query sequence that was aligned to create axtIn 
- * was reverse-complemented so we want to display q coords backwards; 
- * that includes reversing block coords within the query seq range. 
- * Note: caller generateAlignments swaps q and t for the sake of printout! */
+ * tIsRc means that the target sequence that was aligned to create axtIn 
+ * was reverse-complemented so we want to display t coords backwards; 
+ * that includes reversing block coords within the target seq range. */
 {
 struct axt axtBlock;
 
 /* (Defining a macro because a function would have an awful lot of arguments.)
- * First extract the portion of axtIn for this block.  If qIsRc, then
- * reverse the block's q coords within the range of axtIn's q seq coords.
- * Finally, add t and qOffset and print it out, adding bold tags before and 
- * afterwards if isBold. */
+ * First extract the portion of axtIn for this block.  If tIsRc, then
+ * reverse the block's t coords within the range of (0, tSize].
+ * Add t and qOffset, swap target and query so that target sequence is on top,
+ * and print it out, adding bold tags before and afterwards if isBold. */
 #define doBlock(blkStart, blkEnd, isBold) \
+    if (isBold) printf("<B>"); \
     if (axtGetSubsetOnT(axtIn, &axtBlock, blkStart, blkEnd, ss, isBold)) \
 	{ \
-	if (isBold) printf("<B>"); \
-	if (qIsRc) \
+	if (tIsRc) \
 	    { \
-	    int tmp = axtBlock.qStart; \
-	    axtBlock.qStart = qRcRangeSize - axtBlock.qEnd;  \
-	    axtBlock.qEnd = qRcRangeSize - tmp; \
+	    int tmp = axtBlock.tStart; \
+	    axtBlock.tStart = tSize - axtBlock.tEnd;  \
+	    axtBlock.tEnd = tSize - tmp; \
 	    } \
 	axtBlock.tStart += tOffset;  axtBlock.tEnd += tOffset; \
 	axtBlock.qStart += qOffset;  axtBlock.qEnd += qOffset; \
+	axtSwap(&axtBlock, tSize, qSize); \
 	axtPrintTraditionalExtra(&axtBlock, lineWidth, ss, stdout, \
-				 FALSE, qIsRc); \
-	if (isBold) printf("</B>"); \
-	}
+				 FALSE, tIsRc); \
+	} \
+    else if (isBold) \
+	{ \
+	int ins = (tIsRc ? tSize - blkEnd : blkEnd) + tOffset; \
+	while (ins > 0) { putc(' ', stdout); ins = ins / 10; } \
+	printf(" -\n\n"); \
+	} \
+    if (isBold) printf("</B>");
 
 /* First block: before bold range */
 doBlock(axtIn->tStart, boldStart, FALSE);
@@ -12583,8 +12589,8 @@ void generateAlignment(struct dnaSeq *tSeq, struct dnaSeq *qSeq,
 /* Use axtAffine to align tSeq to qSeq.  Print the resulting alignment.
  * tOffset and qOffset are added to the respective sets of coordinates for
  * printing.  If boldStart and boldEnd have any overlap with the aligned
- * qSeq, print that region as a separate block, in bold.  boldStart and 
- * boldEnd are relative to the start of qSeq (start at 0 not qOffset).
+ * tSeq, print that region as a separate block, in bold.  boldStart and 
+ * boldEnd are relative to the start of tSeq (start at 0 not tOffset).
  * tIsRc means that tSeq has been reverse-complemented so we want to
  * display t coords backwards. */
 {
@@ -12593,9 +12599,7 @@ int misMatchScore = 100;
 int gapOpenPenalty = 400;  
 int gapExtendPenalty = 50; 
 struct axtScoreScheme *ss = axtScoreSchemeSimpleDna(matchScore, misMatchScore, gapOpenPenalty, gapExtendPenalty);
-/* Note: we are swapping the order of target and query here so that when
- * we print out the alignment, the target will appear on top. */
-struct axt *axt = axtAffine(tSeq, qSeq, ss), *axtBlock=axt;
+struct axt *axt = axtAffine(qSeq, tSeq, ss), *axtBlock=axt;
 
 hPrintf("<TT><PRE>");
 if (axt == NULL)
@@ -12611,11 +12615,9 @@ for (axtBlock=axt;  axtBlock !=NULL;  axtBlock = axtBlock->next)
     {
     printf("ID (including gaps) %3.1f%%, coverage (of both) %3.1f%%\n\n",
            axtIdWithGaps(axtBlock)*100, 
-	   axtCoverage(axtBlock, tSeq->size, qSeq->size)*100);
-    /* Recall that t and q have swapped places for desired printout,
-     * so we pass in t values for the last two args: */
-    printOffsetAndBoldAxt(axtBlock, lineWidth, ss, qOffset, tOffset,
-			  boldStart, boldEnd, tIsRc, tSeq->size);
+	   axtCoverage(axtBlock, qSeq->size, tSeq->size)*100);
+    printOffsetAndBoldAxt(axtBlock, lineWidth, ss, tOffset, qOffset,
+			  boldStart, boldEnd, tIsRc, tSeq->size, qSeq->size);
     }
 
 axtFree(&axt);
@@ -12818,7 +12820,8 @@ if (seqDbSnp == NULL)
 seqDbSnp->size = strlen(seqDbSnp->dna);
 
 generateAlignment(seqNib, seqDbSnp, lineWidth, start, skipCount,
-		  len5, len5 + dnaSeqDbSnpO->size, isRc);
+		  genoLen5, genoLen5 + (snp->chromEnd - snp->chromStart),
+		  isRc);
 }
 
 void doSnp(struct trackDb *tdb, char *itemName)
