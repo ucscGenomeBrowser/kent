@@ -376,10 +376,10 @@ while (lineFileRow(lf, row))
     info.sourceAcc = txAccFromTempName(bed->name);
     info.isRefSeq = startsWith("NM_", info.sourceAcc);
 
-    if (startsWith("antibody.", info.sourceAcc))
+    if (startsWith("antibody.", info.sourceAcc) || startsWith("CCDS", info.sourceAcc))
         {
-	/* Fake up some things for antibody frag. */
-	info.sourceSize = 10000;
+	/* Fake up some things for antibody frag and CCDS that don't have alignments. */
+	info.sourceSize = bedTotalBlockSize(bed);
 	info.aliCoverage = 1.0;
 	info.aliIdRatio = 1.0;
 	info. genoMapCount = 1;
@@ -389,8 +389,6 @@ while (lineFileRow(lf, row))
 	/* Loop through all psl's associated with our RNA.  Figure out
 	 * our overlap with each, and pick best one. */
 	struct hashEl *hel, *firstPslHel = hashLookup(pslHash, info.sourceAcc);
-	if (firstPslHel == NULL)
-	    errAbort("%s is not in %s", info.sourceAcc, pslFile);
 	int mapCount = 0;
 	struct psl *psl, *bestPsl = NULL;
 	int coverage, bestCoverage = 0;
