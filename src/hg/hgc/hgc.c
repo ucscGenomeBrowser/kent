@@ -211,7 +211,7 @@
 #include "itemConf.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1402 2008/03/14 18:33:37 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1403 2008/03/14 21:05:52 angie Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -12604,9 +12604,9 @@ if (axt == NULL)
    return;
    }
 
-printf("<B>Alignment between genome (%s; %d bp) and "
+printf("<B>Alignment between genome (%s, %c strand; %d bp) and "
        "dbSNP sequence (%s; %d bp)</B>\n",
-       tSeq->name, tSeq->size, qSeq->name, qSeq->size);
+       tSeq->name, (tIsRc ? '-' : '+'), tSeq->size, qSeq->name, qSeq->size);
 for (axtBlock=axt;  axtBlock !=NULL;  axtBlock = axtBlock->next)
     {
     printf("ID (including gaps) %3.1f%%, coverage (of both) %3.1f%%\n\n",
@@ -12769,9 +12769,9 @@ printf("\n<BR><B>Re-alignment of the SNP's flanking sequences to the "
        "Note: this alignment was computed by UCSC and may not be identical to "
        "NCBI's alignment used to map the SNP.\n");
 
-printf("<PRE><B>Genomic sequence around %s (%s:%d-%d%s):</B>\n",
+printf("<PRE><B>Genomic sequence around %s (%s:%d-%d, %s strand):</B>\n",
        snp->name, snp->chrom, start+1, end,
-       isRc ? "; reverse complemented" : "");
+       isRc ? "reverse complemented for -" : "+");
 writeSeqWithBreaks(stdout, seqNib->dna, genoLen5, lineWidth);
 printf("<B>");
 if (snp->chromEnd > snp->chromStart)
