@@ -13,7 +13,7 @@
 #include "hgConfig.h"
 #include "jsHelper.h"
 
-void textSizeDropDown()
+static void textSizeDropDown()
 /* Create drop down for font size. */
 {
 static char *sizes[] = {"tiny", "small", "medium", "large", "huge"};
@@ -21,7 +21,7 @@ cartUsualString(cart, textSizeVar, "small");
 hDropList(textSizeVar, sizes, ArraySize(sizes), tl.textSize);
 }
 
-void printGroupListHtml(char *groupCgiName, struct group *groupList, char *defaultGroup)
+static void printGroupListHtml(char *groupCgiName, struct group *groupList, char *defaultGroup)
 /* Make an HTML select input listing the groups. */
 {
 char *groups[128];
@@ -45,7 +45,7 @@ cgiMakeDropListFull(groupCgiName, labels, groups, numGroups,
 		    defaultLabel, NULL);
 }
 
-void trackConfig(struct track *trackList, struct group *groupList,
+static void trackConfig(struct track *trackList, struct group *groupList,
 	char *groupTarget,  int changeVis)
 /* Put up track configurations. If groupTarget is 
  * NULL then set visibility for tracks in all groups.  Otherwise,
