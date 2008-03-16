@@ -252,7 +252,9 @@ class PipelineController < ApplicationController
     @project.status = "deleted"
     @project.save
     log_project_status
-    @project.destroy
+    unless @project.destroy
+        @project.errors.each_full { |x| msg += x + "<br>" }
+    end
     flash[:notice] = msg
     redirect_to :action => 'show_user'
 

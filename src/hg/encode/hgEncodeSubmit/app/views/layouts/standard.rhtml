@@ -10,7 +10,27 @@
 <body id="encode-pipeline">
 <% if @autoRefresh %>
 <script type="text/javascript">
-window.setInterval("window.location.reload(true)",15000);
+var myTimeout = window.setTimeout("window.location.reload(true)",15000);
+function click(e) {
+  if (!e) var e = window.event;
+  if (e.target) targ = e.target;
+  else if (e.srcElement) targ = e.srcElement;
+  if (targ.nodeType == 3) // defeat Safari bug
+    targ = targ.parentNode;
+  if (targ)
+    if (targ.href) {
+      var rightclick;
+      if (e.which) rightclick = (e.which == 3);
+      else if (e.button) rightclick = (e.button == 2);
+      if (!rightclick)
+        window.clearTimeout(myTimeout);
+    }
+}
+if (navigator.appName=="Netscape") {
+    document.addEventListener("click", click, true);
+} else {
+    document.onclick  = click;
+}
 </script>
 <% end %>  
 <div id="container">
