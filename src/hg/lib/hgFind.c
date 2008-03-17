@@ -31,7 +31,7 @@
 #include "hgConfig.h"
 #include "trix.h"
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.205 2008/03/12 22:54:58 angie Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.206 2008/03/17 18:04:37 angie Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -2423,7 +2423,7 @@ for (table = hgp->tableList; table != NULL; table = table->next)
 	if (table->htmlStart) 
 	    table->htmlStart(table, f);
 	else
-	    fprintf(f, "<H2>%s</H2><PRE><TT>", table->description);
+	    fprintf(f, "<H2>%s</H2><PRE><TT>\n", table->description);
 	for (pos = table->posList; pos != NULL; pos = pos->next)
 	    {
 	    if (table->htmlOnePos)
