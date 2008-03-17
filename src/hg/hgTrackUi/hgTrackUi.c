@@ -35,7 +35,7 @@
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 #define MAX_SP_SIZE 2000
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.415 2008/03/12 20:10:24 angie Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.416 2008/03/17 19:37:20 angie Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -67,17 +67,20 @@ if (none)
 
 void makeSetClearButton(char *form, char *buttonVar, char *buttonLabel,
 			char *cartVarPrefix, struct slName *cartVarSuffixList,
-			boolean isSet)
+			char *anchor, boolean isSet)
 /* Make a button for setting or clearing all of a list of checkboxes, and
- * if the button was just pressed, set or clear the cart variables. */
+ * if the button was just pressed, set or clear the cart variables.
+ * Optional html anchor is appended to the form's action if given. */
 {
 struct slName *suffix;
 char javascript[2048];
 cgiMakeHiddenVar(buttonVar, "");
 safef(javascript, sizeof javascript,
-      "document.%s.action = '%s'; document.%s.%s.value='%s'; "
+      "document.%s.action = '%s%s%s'; document.%s.%s.value='%s'; "
       "document.%s.submit();",
-      form, cgiScriptName(), form, buttonVar, buttonLabel, form);
+      form, cgiScriptName(),
+      (isNotEmpty(anchor) ? "#" : ""), (isNotEmpty(anchor) ? anchor : ""),
+      form, buttonVar, buttonLabel, form);
 cgiMakeOnClickButton(javascript, buttonLabel);
 
 if (isNotEmpty(cgiOptionalString(buttonVar)))
@@ -220,12 +223,12 @@ printf("<TR><TD colspan=%d><B>%s:</B>&nbsp;\n",
 safef(buttonVar, sizeof(buttonVar), "%s_%s", SNP125_SET_ALL, attributeName);
 stripChar(buttonVar, ' ');
 makeSetClearButton(MAIN_FORM, buttonVar, SET_ALL_BUTTON_LABEL, "", varList,
-		   TRUE);
+		   "filterControls", TRUE);
 printf("&nbsp;\n");
 safef(buttonVar, sizeof(buttonVar), "%s_%s", SNP125_CLEAR_ALL, attributeName);
 stripChar(buttonVar, ' ');
 makeSetClearButton(MAIN_FORM, buttonVar, CLEAR_ALL_BUTTON_LABEL, "", varList,
-		   FALSE);
+		   "filterControls", FALSE);
 printf("</TD></TR>\n");
 for (i=0; i < varCount; i++)
     {
@@ -243,18 +246,12 @@ for (i=0; i < varCount; i++)
 printf("</TR>\n");
 }
 
-void snp125PrintColorSpec(char *vars[], char *labels[], char *checked[],
+void snp125PrintColorSpec(char *vars[], char *labels[], char *selected[],
 			  char *defaults[], int varCount)
 /* Print a table displaying snp125 attribute color selects. */
 {
 int i;
-printf("<TABLE border=0 cellspacing=0 cellpadding=0>\n");
-if (varCount > SNP125_FILTER_COLUMNS)
-    for (i = 0;  i < SNP125_FILTER_COLUMNS;  i++)
-	printf("<COLGROUP><COL width=\"%d%%\"><COL><COL width=\"%d%%\">"
-	       "</COLGROUP>\n",
-	       round(80 / SNP125_FILTER_COLUMNS),
-	       round(20 / SNP125_FILTER_COLUMNS));
+printf("<TABLE border=0 cellspacing=0 cellpadding=1>\n");
 for (i=0; i < varCount; i++)
     {
     if (i % SNP125_FILTER_COLUMNS == 0)
@@ -263,11 +260,11 @@ for (i=0; i < varCount; i++)
 	    printf("</TR>\n");
 	printf("<TR>");
 	}
-    printf("<TD><B>%s</B>:&nbsp;</TD><TD>", labels[i]);
-    checked[i] = cartUsualString(cart, vars[i], defaults[i]);
+    printf("<TD align=right>%s</TD><TD>", labels[i]);
+    selected[i] = cartUsualString(cart, vars[i], defaults[i]);
     cgiMakeDropListWithVals(vars[i], snp125ColorLabel, snp125ColorLabel, 
-			    snp125ColorLabelSize, checked[i]);
-    printf("</TD><TD>&nbsp;&nbsp;</TD>");
+			    snp125ColorLabelSize, selected[i]);
+    printf("</TD><TD>&nbsp;&nbsp;&nbsp;</TD>");
     }
 printf("</TABLE>\n");
 }
@@ -297,7 +294,8 @@ printf("<BR><B>Maximum <A HREF=\"#Weight\">Weight</A>:</B>&nbsp;");
 cgiMakeIntVar("snp125WeightCutoff",snp125WeightCutoff,4);
 printf("<I>SNPs with higher weights are less reliable</I><BR><BR>\n");
 
-printf("<HR><B>Filter by Attribute</B><BR>\n"
+printf("<A name=\"filterControls\"><HR>\n"
+       "<B>Filter by Attribute</B><BR>\n"
        "Check the boxes below to include SNPs with those attributes.  "
        "In order to be displayed, a SNP must pass the filter for each "
        "category.  \n"
@@ -327,12 +325,12 @@ printf("</TABLE><BR>\n");
 
 
 safef(autoSubmit, sizeof(autoSubmit), "onchange=\""
-      "document."MAIN_FORM".action = '%s'; "
+      "document."MAIN_FORM".action = '%s#colorSpec'; "
       "document."MAIN_FORM".submit();\"", cgiScriptName());
 cgiContinueHiddenVar("g");
 cgiContinueHiddenVar("c");
 
-printf("<HR>\n");
+printf("<A name=\"colorSpec\"><HR>\n");
 printf("<B>SNP Feature for Color Specification:</B>\n");
 snp125ColorSourceCart[0] = cartUsualString(cart, snp125ColorSourceDataName[0],
 					   snp125ColorSourceDefault[0]);
@@ -1966,7 +1964,7 @@ if (defaultOffSpecies)
     safecpy(buttonVar, sizeof buttonVar, "set_defaults_button");
     /* make button and turn on all species (if button was pressed) */
     makeSetClearButton(MAIN_FORM, buttonVar, DEFAULTS_BUTTON_LABEL, prefix,
-		       speciesList, TRUE);
+		       speciesList, NULL, TRUE);
     if (isNotEmpty(cgiOptionalString(buttonVar)))
         {
         char *words[MAX_SP_SIZE];
@@ -1984,11 +1982,11 @@ if (defaultOffSpecies)
 puts("&nbsp;");
 safef(buttonVar, sizeof buttonVar, "%s", "set_all_button");
 makeSetClearButton(MAIN_FORM, buttonVar, SET_ALL_BUTTON_LABEL, prefix,
-		   speciesList, TRUE);
+		   speciesList, NULL, TRUE);
 puts("&nbsp;");
 safef(buttonVar, sizeof buttonVar, "%s", "clear_all_button");
 makeSetClearButton(MAIN_FORM, buttonVar, CLEAR_ALL_BUTTON_LABEL, prefix,
-		   speciesList, FALSE);
+		   speciesList, NULL, FALSE);
 
 if ((speciesTree != NULL) && ((tree = phyloParseString(speciesTree)) != NULL))
 {
