@@ -351,6 +351,77 @@ type ld2
     longLabel LD for the Han Chinese + Japanese from Tokyo (JPT+CHB) from phased genotypes
     priority 5
 
+track tajdSnp
+compositeTrack on
+shortLabel Tajima's D SNPs
+longLabel Tajima's D SNPs (from Human May 2004 assembly)
+group varRep
+priority 144.6
+visibility hide
+type bed 4 . 
+
+    track tajdSnpAd
+    subTrack tajdSnp
+    shortLabel SNPs AD
+    longLabel  SNPs from African Descent (from Human May 2004 assembly)
+    color 200,100,0
+    altColor 0,100,200
+    priority 1
+
+    track tajdSnpEd
+    subTrack tajdSnp
+    shortLabel SNPs ED
+    longLabel  SNPs from European Descent (from Human May 2004 assembly)
+    color 200,100,0
+    altColor 0,100,200
+    priority 3
+
+    track tajdSnpXd
+    subTrack tajdSnp
+    shortLabel SNPs XD
+    longLabel  SNPs from Chinese Descent (from Human May 2004 assembly)
+    color 200,100,0
+    altColor 0,100,200
+    priority 5
+
+track tajD
+compositeTrack on
+shortLabel Tajima's D
+longLabel Tajima's D (from Human May 2004 assembly)
+group varRep
+visibility hide
+defaultViewLimits -2.5:3
+minLimit -4
+maxLimit 5
+autoScaleDefault Off
+maxHeightPixels 128:64:11
+priority 144.65
+type bedGraph 4 
+
+    track tajdAd
+    subTrack tajD
+    shortLabel Tajima's D AD
+    longLabel  Tajima's D from African Descent (from Human May 2004 assembly)
+    color 200,100,0
+    altColor 0,100,200
+    priority 2
+    
+    track tajdEd
+    subTrack tajD
+    shortLabel Tajima's D ED
+    longLabel  Tajima's D from European Descent (from Human May 2004 assembly)
+    color 200,100,0
+    altColor 0,100,200
+    priority 4
+
+    track tajdXd
+    subTrack tajD
+    shortLabel Tajima's D XD
+    longLabel  Tajima's D from Chinese Descent (from Human May 2004 assembly)
+    color 200,100,0
+    altColor 0,100,200
+    priority 6
+
 track knownGene
 shortLabel UCSC Genes
 longLabel UCSC Gene Predictions Based on RefSeq, UniProt, GenBank, and Comparative Genomics
