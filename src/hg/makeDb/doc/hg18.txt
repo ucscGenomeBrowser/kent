@@ -10965,6 +10965,7 @@ cd /usr/local/apache/htdocs/goldenPath/hg18/snpMask/deletions
 
 ############################################################################
 # Lift simple bi-allelic SNPs to rheMac2 and panTro2 (Heather, August 2006)
+# OBSOLETED by snp128Ortho, see below.
 
 ssh hgwdev
 cd /cluster/data/dbSNP/ortho/hg18/snpDump
@@ -18736,6 +18737,7 @@ ignore 1 lines'
 
 ############################################################################
 # dbSNP BUILD 128 (DONE 1/22/08 angie)
+# updated snp128ExceptionDesc (tweaked wording) 3/7/08
     # Set up build directory
     ssh kkstore06
     mkdir -p /cluster/store3/dbSNP128/{human,shared}
@@ -18848,7 +18850,9 @@ ignore 1 lines'
     | hgLoadSqlTab hg18snp128 ctgPos ~/kent/src/hg/lib/ctgPos.sql stdin
     hgsql hg18snp128 -N -B -e 'select contig from ctgPos;' | sort > /tmp/1
     # Note: we used to look for group_term = "ref_assembly", but that leaves
-    # behind some contigs that we include.  So use a list of group_label's:
+    # behind some contigs that we include.  So use a list of group_label:
+    hgsql hg18snp128 -NBe 'select distinct(group_label) from ContigInfo'
+    # --> ("reference", "c5_H2", "c6_COX", "c6_QBL", "c22_H2")
     hgsql hg18snp128 -N -B -e 'select contig_acc from ContigInfo \
         where group_label in \
         ("reference", "c5_H2", "c6_COX", "c6_QBL", "c22_H2");' | sort > /tmp/2
@@ -18982,7 +18986,7 @@ ignore 1 lines'
 #   91766 2
 #  100142 3
 #    2483 10
-    # SNPs w/weight 0 and 10 will be discarded later (& added to exceptions).
+    # SNPs w/weight 0 and 10 will be discarded later.
 
     # fasta headers -> observed, molType, class
     zcat /cluster/data/dbSNP/128/human/rs_fasta/rs_ch*.fas.gz \
@@ -19138,6 +19142,7 @@ ignore 1 lines'
 #5.915u 0.492s 0:28.69 22.3%     0+0k 0+0io 0pf+0w
     sed -e 's/snp125/snp128/' ~/kent/src/hg/lib/snp125ExceptionDesc.sql \
       > snp128ExceptionDesc.sql
+    # 3/7/08: reloaded snp128ExceptionDesc (tweaked wording)
     hgLoadSqlTab hg18 snp128ExceptionDesc snp128ExceptionDesc.sql \
       snp128ExceptionDesc.tab
     # Load up sequences.
@@ -19177,7 +19182,7 @@ ignore 1 lines'
     snpMaskSingle snp128Cleaned.bed /cluster/data/hg18/hg18.2bit stdout \
     | faSplit byname stdin substitutions/
     #-- 79 warnings about differing observed at same base positions 
-    #-- (66 distinct positions) -- send to NCBI.
+    #-- (66 distinct positions) -- send to NCBI. snp-admin@ncbi.nlm.nih.gov
     # Also this warning about total size -- just means that some chroms
     # didn't have any SNPS that survived the stringent filtering.
 #Masked 9146694 snps in 9146642 out of 3091528550 genomic bases
@@ -19265,7 +19270,8 @@ ignore 1 lines'
 
 
 #######################################################################
-# ORTHOLOGOUS ALLELES IN CHIMP AND MACAQUE FOR SNP128 (DONE 2/5/08 angie)
+# ORTHOLOGOUS ALLELES IN CHIMP AND MACAQUE FOR SNP128 (DONE 2/8/08 angie)
+# REDONE 2/29/08 (upcase ortho alleles)
     ssh kolossus
     mkdir /cluster/data/hg18/bed/snp128Ortho
     cd /cluster/data/hg18/bed/snp128Ortho
@@ -19279,13 +19285,13 @@ ignore 1 lines'
       /cluster/data/dbSNP/128/human/snp128Exceptions.bed \
     | sort -u \
       > snp128ExcludeIds.txt
-    awk '$3-$2 == 1 && $1 !~ /_random/ $11 == "single" {print;}' \
+    awk '$3-$2 == 1 && $1 !~ /_random/ && $11 == "single" {print;}' \
       /cluster/data/dbSNP/128/human/snp128.bed \
     | grep -vFwf snp128ExcludeIds.txt \
       > snp128Simple.bed
     # took ~3 minutes
     wc -l snp128Simple.bed 
-#8974017 snp128Simple.bed
+#9133704 snp128Simple.bed
     # This is the analog of db table snp126simple.
 
     # Glom all human info that we need for the final table onto the 
@@ -19296,14 +19302,17 @@ ignore 1 lines'
                0, $6;}' \
       snp128Simple.bed > snp128ForLiftOver.bed
 
+    # 2/29/08 -- re-ran from this point on to regenerate cleaned up
+    # cluster run results (oops) and then force ortho alleles to upper
+    # case, for consistency with dbSNP formatting.
+
     # Map coords to chimp using liftOver.
-    # Note for next time: split into smaller pieces, run on pk.  
     # I don't know why chimp took so much longer than macaque... the
     # chimp .over has fewer chains and fewer bytes than the macaque .over.
     mkdir run.liftOChimp
     cd run.liftOChimp
     mkdir split out
-    splitFile ../snp128ForLiftOver.bed 150000 split/chunk
+    splitFile ../snp128ForLiftOver.bed 25000 split/chunk
     cp /dev/null jobList
     foreach f (split/chunk*)
       echo liftOver $f \
@@ -19311,15 +19320,15 @@ ignore 1 lines'
         \{check out exists out/panTro2.$f:t.bed\} out/hg18.$f:t.unmapped \
         >> jobList
     end
-    ssh memk
+    ssh pk
     cd /cluster/data/hg18/bed/snp128Ortho/run.liftOChimp
     para make jobList
-#Completed: 60 of 60 jobs
-#CPU time in finished jobs:      69226s    1153.77m    19.23h    0.80d  0.002 y
-#IO & Wait Time:                   211s       3.52m     0.06h    0.00d  0.000 y
-#Average job time:                1157s      19.29m     0.32h    0.01d
-#Longest finished job:            2341s      39.02m     0.65h    0.03d
-#Submission to last job:          4029s      67.15m     1.12h    0.05d
+#Completed: 366 of 366 jobs
+#CPU time in finished jobs:      71660s    1194.33m    19.91h    0.83d  0.002 y
+#IO & Wait Time:                  5377s      89.62m     1.49h    0.06d  0.000 y
+#Average job time:                 210s       3.51m     0.06h    0.00d
+#Longest finished job:             518s       8.63m     0.14h    0.01d
+#Submission to last job:           518s       8.63m     0.14h    0.01d
 
     # Map coords to macaque using liftOver.
     mkdir ../run.liftOMac
@@ -19334,16 +19343,16 @@ ignore 1 lines'
         >> jobList
     end
     para make jobList
-#Completed: 60 of 60 jobs
-#CPU time in finished jobs:       1334s      22.24m     0.37h    0.02d  0.000 y
-#IO & Wait Time:                   277s       4.61m     0.08h    0.00d  0.000 y
-#Average job time:                  27s       0.45m     0.01h    0.00d
-#Longest finished job:              69s       1.15m     0.02h    0.00d
-#Submission to last job:           639s      10.65m     0.18h    0.01d
+#Completed: 366 of 366 jobs
+#CPU time in finished jobs:       5663s      94.38m     1.57h    0.07d  0.000 y
+#IO & Wait Time:                 12066s     201.10m     3.35h    0.14d  0.000 y
+#Average job time:                  48s       0.81m     0.01h    0.00d
+#Longest finished job:             102s       1.70m     0.03h    0.00d
+#Submission to last job:           102s       1.70m     0.03h    0.00d
+    # Average job time was 54s with 50000 chunks, but those made chimp 
+    # jobs run too long.
 
-    # Switch to fileserver for concatenation and subsequent processing
-    # of output.
-    ssh kkstore02
+    ssh kolossus
     cd /cluster/data/hg18/bed/snp128Ortho
     # Here is a script that looks up the base value in the ortho species
     # and swizzles columns to prepare for the joining and re-swizzling
@@ -19355,7 +19364,7 @@ ignore 1 lines'
 # includes human position info etc. is first.  It will be used as a key for
 # joining up multiple other-species' ortho data.  Also swizzle columns so
 # that the remaining columns are in order of appearance in the final result,
-# snp128OrthoPanTro2RheMac2.
+# snp128OrthoPanTro2RheMac2.  Upcase ortho alleles for consistency w/dbSNP.
 use warnings;
 use strict;
 
@@ -19365,7 +19374,7 @@ my $twoBitFName = shift @ARGV
 sub getOChrSeq($$) {
   # Slurp in fasta sequence using twoBitToFa.
   my ($twoBitFName, $oChr) = @_;
-  open(P, "twoBitToFa $twoBitFName -seq=$oChr stdout |")
+  open(P, "twoBitToFa -noMask $twoBitFName -seq=$oChr stdout |")
     || die "Can't open pipe from twoBitToFa $twoBitFName -seq=$oChr: $!\n";
   <P> =~ /^>\w+/
     || die "Doesn't look like we got fasta -- first line is this:\n$_";
@@ -19422,10 +19431,10 @@ while (<>) {
     sort -k1,1 -k2n,2n run.liftOMac/out/rheMac2.chunk*.bed \
     | ./getOrthoSeq.pl /cluster/data/rheMac2/rheMac2.2bit \
     | sort > rheMac2.orthoGlom.txt
-    # The whole pipeline takes ~4 minutes each.
+    # The whole pipeline takes ~4-6 minutes each.
     wc -l panTro2.orthoGlom.txt rheMac2.orthoGlom.txt 
-#   8339051 panTro2.orthoGlom.txt
-#   7139425 rheMac2.orthoGlom.txt
+#   8549323 panTro2.orthoGlom.txt
+#   7324851 rheMac2.orthoGlom.txt
 
     # Use the glommed name field as a key to join up chimp and macaque
     # allele data.  Include glommed name from both files because if only
@@ -19449,9 +19458,9 @@ while (<>) {
                          $o2Chr, $o2Start, $o2End, $o2Al, $o2Strand) . "\n"; \
         s/^.*$//;' \
     | sort -k1,1 -k2n,2n > snp128OrthoPanTro2RheMac2.bed
-    # took ~4 minutes.
+    # took ~5 minutes.
     wc -l snp128OrthoPanTro2RheMac2.bed
-#8588947 snp128OrthoPanTro2RheMac2.bed
+#8770301 snp128OrthoPanTro2RheMac2.bed
 
     ssh hgwdev
     cd /cluster/data/hg18/bed/snp128Ortho
@@ -19461,8 +19470,13 @@ while (<>) {
     time nice hgLoadBed -tab -onServer -tmpDir=/scratch/tmp \
       hg18 snp128OrthoPanTro2RheMac2 -sqlTable=snp128OrthoPanTro2RheMac2.sql \
       snp128OrthoPanTro2RheMac2.bed
-#Loaded 8588947 elements of size 17
-#40.069u 6.547s 4:56.31 15.7%    0+0k 0+0io 0pf+0w
+#Loaded 8770301 elements of size 17
+#52.659u 8.528s 5:18.68 19.1%    0+0k 0+0io 0pf+0w
+
+    # Cleanup on fileserver:
+    cd /cluster/data/hg18/bed/snp128Ortho
+    nice gzip snp128Simple.bed snp128ExcludeIds.txt snp128ForLiftOver.bed
+    rm -r run*/split *.orthoGlom.txt
 
 
 ############################################################################
@@ -20653,6 +20667,7 @@ done
     #	enable the trackDb entries:
 # frames multizPrimateFrames
 # irows on
+
 
 #############################################################################
 ## Add CTD data	(DONE - 2008-02-22, updated 2008-03-07, Fan )
