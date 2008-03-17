@@ -13,7 +13,7 @@
 #include "trashDir.h"
 #include "web.h"
 
-static char const rcsid[] = "$Id: identifiers.c,v 1.17 2007/12/14 04:16:27 angie Exp $";
+static char const rcsid[] = "$Id: identifiers.c,v 1.18 2008/03/17 23:40:38 angie Exp $";
 
 
 static boolean forCurTable()
@@ -71,8 +71,13 @@ hPrintf("The items must be values of the <B>%s</B> field of the currently "
 	"selected table, <B>%s</B>",
 	idField, curTable);
 if (aliasField != NULL)
-    hPrintf(", or the <B>%s</B> field of the alias table <B>%s</B>.\n",
-	    aliasField, xrefTable);
+    {
+    if (sameString(curTable, xrefTable))
+	hPrintf(", or the <B>%s</B> field.\n", aliasField);
+    else
+	hPrintf(", or the <B>%s</B> field of the alias table <B>%s</B>.\n",
+		aliasField, xrefTable);
+    }
 else
     hPrintf(".\n");
 hPrintf("(The \"describe table schema\" button shows more information about "
@@ -313,15 +318,16 @@ if (isNotEmpty(idText))
 	{
 	char *xrefTable, *aliasField;
 	getXrefInfo(&xrefTable, NULL, &aliasField);
+	boolean xrefIsSame = xrefTable && sameString(curTable, xrefTable);
 	warn("Note: %d of the %d given identifiers (e.g. %s) have no match in "
 	     "table %s, field %s%s%s%s%s.  "
 	     "Try the \"describe table schema\" button for more "
 	     "information about the table and field.",
 	     (totalTerms - foundTerms), totalTerms,
 	     exampleMiss, curTable, idField,
-	     (xrefTable ? " or in alias table " : ""),
-	     (xrefTable ? xrefTable : ""),
-	     (xrefTable ? ", field " : ""),
+	     (xrefTable ? (xrefIsSame ? "" : " or in alias table ") : ""),
+	     (xrefTable ? (xrefIsSame ? "" : xrefTable) : ""),
+	     (xrefTable ? (xrefIsSame ? " or in field " : ", field ") : ""),
 	     (xrefTable ? aliasField : ""));
 	webNewSection("Table Browser");
 	}
