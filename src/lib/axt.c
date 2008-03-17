@@ -20,7 +20,7 @@
 #include "dnautil.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: axt.c,v 1.49 2008/03/14 04:27:53 angie Exp $";
+static char const rcsid[] = "$Id: axt.c,v 1.50 2008/03/17 21:13:26 angie Exp $";
 
 void axtFree(struct axt **pEl)
 /* Free an axt. */
@@ -320,7 +320,7 @@ if (newStart < axt->tStart)
     newStart = axt->tStart;
 if (newEnd > axt->tEnd)
     newEnd = axt->tEnd;
-if (newEnd <= newStart) 
+if (includeEdgeGaps ? (newEnd < newStart) : (newEnd <= newStart)) 
     return FALSE;
 if (newStart == axt->tStart && newEnd == axt->tEnd)
     {
