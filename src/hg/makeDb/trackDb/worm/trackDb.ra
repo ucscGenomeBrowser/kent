@@ -66,7 +66,7 @@ priority 35
 visibility pack
 color 12,12,120
 type genePred refPep refMrna
-idXref refLink mrnaAcc name
+idXref refGene name name2
 
 track chainCaePb1
 shortLabel $o_Organism Chain

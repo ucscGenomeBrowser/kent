@@ -14,7 +14,7 @@ priority 35
 visibility hide
 color 12,12,120
 type genePred refPep refMrna
-idXref refLink mrnaAcc name
+idXref refGene name name2
 
 track all_est
 shortLabel $Organism ESTs
