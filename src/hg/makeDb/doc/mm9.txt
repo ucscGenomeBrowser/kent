@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.59 2008/03/12 23:01:30 hiram Exp $"
+#	"$Id: mm9.txt,v 1.60 2008/03/17 18:05:29 angie Exp $"
 #
 
 #######################################################################
@@ -7371,6 +7371,7 @@ done
 
 ############################################################################
 # dbSNP BUILD 128 (DONE 2/8/08 angie)
+# updated snp128ExceptionDesc (tweaked wording) 3/11/08
     # Set up build directory
     ssh kkstore06
     mkdir -p /cluster/store3/dbSNP128/{mouse,shared}
@@ -7712,6 +7713,7 @@ done
 #8.925u 1.354s 0:52.66 19.5%     0+0k 0+0io 0pf+0w
     sed -e 's/snp125/snp128/' ~/kent/src/hg/lib/snp125ExceptionDesc.sql \
       > snp128ExceptionDesc.sql
+    # 3/11/08: reloaded snp128ExceptionDesc (tweaked wording)
     hgLoadSqlTab mm9 snp128ExceptionDesc snp128ExceptionDesc.sql \
       snp128ExceptionDesc.tab
     # Load up sequences.
