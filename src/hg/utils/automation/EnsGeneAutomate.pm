@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/EnsGeneAutomate.pm instead.
 
-# $Id: EnsGeneAutomate.pm,v 1.7 2008/03/10 23:07:18 hiram Exp $
+# $Id: EnsGeneAutomate.pm,v 1.8 2008/03/17 23:30:33 hiram Exp $
 package EnsGeneAutomate;
 
 use warnings;
@@ -38,6 +38,7 @@ $verToDate[38] = "apr2006";
 $verToDate[39] = "jun2006";
 $verToDate[41] = "oct2006";
 $verToDate[42] = "dec2006";
+# before 43 there are no GTF files
 $verToDate[43] = "feb2007";
 $verToDate[44] = "apr2007";
 $verToDate[45] = "jun2007";
