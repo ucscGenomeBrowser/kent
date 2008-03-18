@@ -189,6 +189,16 @@ color 12,12,120
 type genePred
 url http://vega.sanger.ac.uk/Homo_sapiens/geneview?transcript=$$
 
+track retroMrnaInfo
+shortLabel Retroposed Genes 2.0
+longLabel Retroposed Genes, Including Pseudogenes [retroMrnaInfo]
+group genes
+priority 37.12
+visibility hide
+nextItemButton on 
+spectrum on
+type bed 12 .
+
 track sanger20
 shortLabel Sanger 20
 longLabel Sanger Institute Chromosome 20 Genes
@@ -254,16 +264,6 @@ visibility hide
 color 100,50,0
 altColor 175,150,128
 type genePred 
-
-track retroMrnaInfo
-shortLabel Retroposed Genes 2.0
-longLabel Retroposed Genes, Including Pseudogenes [retroMrnaInfo]
-group genes
-priority 52.5
-visibility hide
-nextItemButton on 
-spectrum on
-type bed 12 .
 
 track pseudoYale
 shortLabel Yale Pseudo

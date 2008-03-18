@@ -2277,16 +2277,6 @@ type genePred
 cdsEvidence jkgTxCdsEvidence
 txInfo jkgTxInfo
 
-track retroMrnaInfo
-shortLabel Retroposed Gene new
-longLabel Retroposed Genes, Including Pseudogenes newest run [retroMrnaInfo]
-group jkX
-priority 13
-visibility pack
-nextItemButton on 
-spectrum on
-type bed 12 .
-
 track jkgNoncoding
 shortLabel Noncoding Genes
 longLabel JKG Noncoding Genes Take 9
