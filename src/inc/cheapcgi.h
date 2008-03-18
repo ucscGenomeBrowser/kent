@@ -143,6 +143,10 @@ void cgiMakeButton(char *name, char *value);
 void cgiMakeOnClickButton(char *command, char *value);
 /* Make 'push' type button with client side onClick (java)script. */
 
+void cgiMakeOnClickSubmitButton(char *command, char *name, char *value);
+/* Make submit button with both variable name and value with client side
+ * onClick (java)script. */
+
 void cgiMakeOptionalButton(char *name, char *value, boolean disabled);
 /* Make 'submit' type button that can be disabled. */
 

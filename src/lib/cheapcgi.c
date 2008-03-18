@@ -13,7 +13,7 @@
 #include "mime.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.95 2007/10/12 23:22:41 galt Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.96 2008/03/18 23:34:08 angie Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -863,6 +863,14 @@ void cgiMakeOnClickButton(char *command, char *value)
 /* Make 'push' type button with client side onClick (java)script. */
 {
 printf("<INPUT TYPE=\"button\" VALUE=\"%s\" onClick=\"%s\">", value, command);
+}
+
+void cgiMakeOnClickSubmitButton(char *command, char *name, char *value)
+/* Make submit button with both variable name and value with client side
+ * onClick (java)script. */
+{
+printf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\" onClick=\"%s\">",
+       name, value, command);
 }
 
 void cgiMakeOptionalButton(char *name, char *value, boolean disabled)
