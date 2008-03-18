@@ -1,7 +1,7 @@
 # for emacs: -*- mode: sh; -*-
 
 # Bos Taurus -- Baylor Release 4.0 (Oct 4 2007)
-#	"$Id: bosTau4.txt,v 1.5 2008/03/14 21:00:51 hiram Exp $"
+#	"$Id: bosTau4.txt,v 1.6 2008/03/18 23:46:48 hiram Exp $"
 #########################################################################
 # DOWNLOAD SEQUENCE (DONE - 2008-03-07 - Hiram)
     ssh kkstore06
@@ -487,6 +487,7 @@ TMPDIR=/scratch/tmp
     #	via chainFilter: chainFilter -t=${T} bigFile.chain > ${T}.chain
     #   Where the targets T are from the list:
     #   grep "^chain " bigFile.chain | awk '{print $3}' | sort -u
+    #	see full example below in Platypus Blastz
 
 ###########################################################################
 # Blastz Platypus ornAna1 (DONE - 2008-03-11,14 - Hiram)
@@ -552,6 +553,44 @@ TMPDIR=/scratch/tmp
     cat fb.ornAna1.chainBosTau4Link.txt
     #	187868681 bases of 1842236818 (10.198%) in intersection
 
+    #	need to split up the chain file to run the reciprocal net
+    #	there are too many chroms to work with chain split
+    #	do it with chainFilter as a kluster job on memk
+    ssh memk
+    mkdir /scratch/tmp/ornAna1
+    cd /scratch/tmp/ornAna1
+    for R in 0 1 2 3 4 5 6 7
+do
+    echo $R
+    ssh mkr0u${R} mkdir /scratch/tmp/ornAna1
+    ssh mkr0u${R} cp -p /cluster/data/bosTau4/bed/blastz.ornAna1/axtChain/bosTau4.ornAna1.all.chain.gz /scratch/tmp/ornAna1
+    ssh mkr0u${R} gunzip /scratch/tmp/ornAna1/bosTau4.ornAna1.all.chain.gz
+done
+
+    zcat /cluster/data/bosTau4/bed/blastz.ornAna1/axtChain/bosTau4.ornAna1.all.chain.gz | grep "^chain "  | awk '{print $3}' | sort -u > chain.list
+    cat << '_EOF_' > splitOne.csh
+#!/bin/csh -fe
+set tmpDir = /scratch/tmp/ornAna1
+set T=$1
+chainFilter -t=${T} $tmpDir/bosTau4.ornAna1.all.chain > $tmpDir/${T}.chain
+'_EOF_'
+    # << happy emacs
+
+    cat << '_EOF_' > template
+#LOOP
+./splitOne.csh $(file1)
+'_EOF_'
+    # << happy emacs
+
+    gensub2 chain.list single template jobList
+    para create jobList
+    para try ... check ... push ... time ...
+    #	fetch the results from tmp directories
+    for R in 0 1 2 3 4 5 6 7
+do
+    ssh mkr0u${R} "(cd /scratch/tmp/ornAna1; cp -p -u chr*.chain /cluster/data/bosTau4/bed/blastz.ornAna1/axtChain/chain)"
+done
+
 ############################################################################
 #  BLATSERVERS ENTRY (DONE - 2008-03-12 - Hiram)
 #	After getting a blat server assigned by the Blat Server Gods,
@@ -565,8 +604,10 @@ TMPDIR=/scratch/tmp
     #	test it with some sequence
 
 #########################################################################
-## 5-Way Multiz (DONE - 2007-12-21 - Hiram)
+## 5-Way Multiz (DONE - 2008-03-18 - Hiram)
 ##
+    #	the all.chain.gz files were split up via kluster jobs on memk
+    #	in order to get mafSynNet files.  Example above in ornAna1 blastz
     ssh hgwdev
     mkdir /cluster/data/bosTau4/bed/multiz5way
     cd /cluster/data/bosTau4/bed/multiz5way
@@ -617,11 +658,11 @@ Platypus_ornAna1:0.488110);
 cd /cluster/data/bosTau4/bed/multiz5way
 foreach db (`grep -v bosTau4 species.list`)
     set bdir = /cluster/data/bosTau4/bed/blastz.$db
-    if (-e $bdir/mafRBestNet/bosTau4.$db.rbest.maf.gz) then
+    if (-e $bdir/mafRBestNet/chr1.maf.gz) then
 	echo "$db mafRBestNet"
-    else if (-e $bdir/mafSynNet/bosTau4.$db.net.maf.gz) then
+    else if (-e $bdir/mafSynNet/chr1.maf.gz) then
 	echo "$db mafSynNet"
-    else if (-e $bdir/mafNet/bosTau4.$db.net.maf.gz) then
+    else if (-e $bdir/mafNet/chr1.maf.gz) then
 	echo "$db mafNet"
     else
 	echo "$db mafs not found"
@@ -630,45 +671,724 @@ end
 '_EOF_'
     # << happy emacs
     chmod +x ./listMafs.csh
-    #	see what it says, the "mafs not found" should only show up on bosTau4
+    #	see what it says:
     ./listMafs.csh
-# canFam2 mafRBestNet
-# hg18 mafRBestNet
-# mm9 mafRBestNet
-# monDom4 mafNet
-# ornAna1 mafNet
-# panTro2 mafRBestNet
-# ponAbe2 mafRBestNet
-# rheMac2 mafRBestNet
-
+# canFam2 mafSynNet
+# hg18 mafSynNet
+# mm9 mafSynNet
+# ornAna1 mafSynNet
 
     /cluster/bin/phast/all_dists bosTau4.5-way.nh > 5way.distances.txt
-    grep -i caljac 5way.distances.txt | sort -k3,3n
-Marmoset_calJac1        Human_hg18      0.138447
-Marmoset_calJac1        Rhesus_rheMac2  0.138473
-Marmoset_calJac1        Orangutan_ponAbe2       0.139537
-Marmoset_calJac1        Chimp_panTro2   0.140242
-Marmoset_calJac1        Dog_canFam2     0.336180
-Marmoset_calJac1        Mouse_mm9       0.454272
-Marmoset_calJac1        Opossum_monDom4 0.712488
-Marmoset_calJac1        Platypus_ornAna1        0.968524
+    grep -i bostau 5way.distances.txt | sort -k3,3n
+# Cow_bosTau4     Dog_canFam2     0.320582
+# Cow_bosTau4     Human_hg18      0.341935
+# Cow_bosTau4     Mouse_mm9       0.540852
+# Cow_bosTau4     Platypus_ornAna1        1.015578
 
     #	use the calculated
     #	distances in the table below to order the organisms and check
-    #	the button order on the browser.  Zebrafish ends up before
-    #	tetraodon and fugu on the browser despite its distance.
+    #	the button order on the browser.
     #	And if you can fill in the table below entirely, you have
     #	succeeded in finishing all the alignments required.
     #
 #                         featureBits chainLink measures
 #                                       chainCalJac1Link   chain   linearGap
 #    distance                     on CalJac1    on other   minScore
-#  1  0.138447 Human_hg18         (% 82.846)   (% 78.351)   3000     medium
-#  2  0.138473 Rhesus_rheMac2     (% 74.810)   (% 77.648)   3000     medium
-#  3  0.139537 Orangutan_ponAbe2  (% 76.925)   (% 74.694)   3000     medium
-#  4  0.140242 Chimp_panTro2      (% 77.296)   (% 76.308)   3000     medium
-#  5  0.336180 Dog_canFam2        (% 57.429)   (% 49.549)   3000     medium
-#  6  0.454272 Mouse_mm9          (% 30.302)   (% 32.971)   3000     medium
-#  6  0.712488 Opossum_monDom4    (% 13.357)   (% 11.050)   5000     loose
-#  7  0.968524 Platypus_ornAna1   (%  7.221)   (% 10.619)   5000     loose
+#  1  0.320582 Dog_canFam2        (% 82.846)   (% 78.351)   3000     medium
+#  2  0.341935 Human_hg18         (% 74.810)   (% 77.648)   3000     medium
+#  3  0.540852 Mouse_mm9          (% 76.925)   (% 74.694)   3000     medium
+#  4  1.015578 Platypus_ornAna1   (% 77.296)   (% 76.308)   3000     medium
 
+    #	create a coherent set of all the mafs involved in this run
+    mkdir mafLinks
+    cd mafLinks
+    ln -s ../../blastz.canFam2/mafSynNet ./canFam2
+    ln -s ../../blastz.hg18/mafSynNet ./hg18
+    ln -s ../../blastz.mm9/mafSynNet ./mm9
+    ln -s ../../blastz.ornAna1/mafSynNet ./ornAna1
+
+    #	check data size:
+    du -hscL *
+# 982M    canFam2
+# 940M    hg18
+# 483M    mm9
+# 79M     ornAna1
+# 2.5G    total
+
+    # copy net mafs to cluster-friendly storage
+    ssh kkstore06
+    cd /cluster/data/bosTau4/bed/multiz5way/mafLinks
+    mkdir -p /san/sanvol1/scratch/bosTau4/multiz5way/mafs
+    rsync -a --progress --copy-links ./ \
+	/san/sanvol1/scratch/bosTau4/multiz5way/mafs/
+    #	create a run-time list of contigs to operate on, not all contigs
+    #	exist in all alignments, but we want all contig names used in any
+    #	alignment:
+    cd /san/sanvol1/scratch/bosTau4/multiz5way/mafs
+    for D in *
+do
+    cd "${D}"
+    find . -type f
+    cd ..
+done | sed -e "s#^./##; s#.maf##" | sort -u > /tmp/5-way.contig.list
+    wc -l /tmp/5-way.contig.list
+    #	2321 /tmp/5-way.contig.list
+
+    # ready for the multiz run
+    ssh pk
+    mkdir /cluster/data/bosTau4/bed/multiz5way/splitRun
+    cd /cluster/data/bosTau4/bed/multiz5way/splitRun
+    scp -p kkstore06:/tmp/5-way.contig.list .
+    mkdir -p maf run
+    cd run
+    mkdir penn
+    # use latest penn utilities
+    P=/cluster/bin/penn/multiz.v11.2007-03-19/multiz-tba
+    cp -p $P/{autoMZ,multiz,maf_project} penn
+
+    #	set the db and pairs directories here
+    cat << '_EOF_' > autoMultiz.csh
+#!/bin/csh -ef
+set db = bosTau4
+set c = $1
+set result = $2
+set resultDir = $result:h
+set run = `pwd`
+set tmp = /scratch/tmp/$db/multiz.$c
+set pairs = /san/sanvol1/scratch/$db/multiz5way/mafs
+rm -fr $tmp
+mkdir -p $tmp
+mkdir -p $resultDir
+cp ../../tree.5.nh ../../species.list $tmp
+pushd $tmp
+foreach s (`grep -v $db species.list`)
+    set in = $pairs/$s/$c.maf
+    set out = $db.$s.sing.maf
+    if (-e $in.gz) then
+	zcat $in.gz > $out
+    else if (-e $in) then
+	cp $in $out
+    else
+	echo "##maf version=1 scoring=autoMZ" > $out
+    endif
+end
+set path = ($run/penn $path); rehash
+$run/penn/autoMZ + T=$tmp E=$db "`cat tree.5.nh`" $db.*.sing.maf $c.maf
+popd
+cp $tmp/$c.maf $result
+rm -fr $tmp
+rmdir --ignore-fail-on-non-empty /scratch/tmp/$db
+'_EOF_'
+# << happy emacs
+    chmod +x autoMultiz.csh
+
+    cat  << '_EOF_' > template
+#LOOP
+./autoMultiz.csh $(root1) {check out line+ /cluster/data/bosTau4/bed/multiz5way/splitRun/maf/$(root1).maf}
+#ENDLOOP
+'_EOF_'
+    # << emacs
+
+    gensub2 ../5-way.contig.list single template jobList
+
+    para create jobList
+    para try ... check ... push ... etc
+# Completed: 2321 of 2321 jobs
+# CPU time in finished jobs:      35680s     594.67m     9.91h    0.41d  0.001 y
+# IO & Wait Time:                  9398s     156.63m     2.61h    0.11d  0.000 y
+# Average job time:                  19s       0.32m     0.01h    0.00d
+# Longest finished job:            1982s      33.03m     0.55h    0.02d
+# Submission to last job:          3983s      66.38m     1.11h    0.05d
+
+    # put the split maf results back together into a single maf file
+    #	eliminate duplicate comments
+    ssh kkstore06
+    cd /cluster/data/bosTau4/bed/multiz5way
+    grep "^##maf version" splitRun/maf/chr1.maf \
+	| sort -u > bosTau4.5way.maf
+    for F in `find ./splitRun/maf -type f -depth`
+do
+    grep -h "^#" "${F}" | egrep -v "maf version=1|eof maf" \
+	| sed -e "s#/_MZ_[^ ]* # #g; s#__[0-9]##g"
+done | sort -u >> bosTau4.5way.maf
+    for F in `find ./splitRun/maf -type f -depth`
+do
+    grep -v -h "^#" "${F}"
+done >> bosTau4.5way.maf
+    grep "^##eof maf" splitRun/maf/chr1.maf \
+	| sort -u >> bosTau4.5way.maf
+
+    # load tables for a look
+    ssh hgwdev
+    mkdir -p /gbdb/bosTau4/multiz5way/maf
+    ln -s /cluster/data/bosTau4/bed/multiz5way/*.maf \
+                /gbdb/bosTau4/multiz5way/maf/multiz5way.maf
+    # this generates an immense multiz5way.tab file in the directory
+    #	where it is running.  Best to run this over in scratch.
+    cd /scratch/tmp
+    time nice -n +19 hgLoadMaf \
+	-pathPrefix=/gbdb/bosTau4/multiz5way/maf bosTau4 multiz5way
+    #	real    3m31.593s
+    #	Loaded 5392296 mafs in 1 files from /gbdb/bosTau4/multiz5way/maf
+    # load summary table
+    time nice -n +19 cat /gbdb/bosTau4/multiz5way/maf/*.maf \
+	| hgLoadMafSummary bosTau4 -minSize=30000 -mergeGap=1500 \
+	 -maxSize=200000  multiz5waySummary stdin
+    #	real    3m41.663s
+    #	Created 779088 summary blocks from 10697864 components and 5164426 mafs from stdin
+
+    # Gap Annotation
+    # prepare bed files with gap info
+    ssh kkstore06
+    mkdir /cluster/data/bosTau4/bed/multiz5way/anno
+    cd /cluster/data/bosTau4/bed/multiz5way/anno
+    mkdir maf run
+
+    #	these actually already all exist from previous multiple alignments
+    #	remove the echo in front of the twoBitInfo to actually make it work
+    for DB in `cat ../species.list`
+do
+    CDIR="/cluster/data/${DB}"
+    if [ ! -f ${CDIR}/${DB}.N.bed ]; then
+	echo "creating ${DB}.N.bed"
+	echo twoBitInfo -nBed ${CDIR}/${DB}.2bit ${CDIR}/${DB}.N.bed
+    else
+	ls -og ${CDIR}/${DB}.N.bed
+    fi
+done
+
+    cd run
+    rm -f nBeds sizes
+    for DB in `grep -v bosTau4 ../../species.list`
+do
+    echo "${DB} "
+    ln -s  /cluster/data/${DB}/${DB}.N.bed ${DB}.bed
+    echo ${DB}.bed  >> nBeds
+    ln -s  /cluster/data/${DB}/chrom.sizes ${DB}.len
+    echo ${DB}.len  >> sizes
+done
+
+    ssh memk
+    #	temporarily copy the bosTau4.5way.maf file onto the memk
+    #	nodes /scratch/data/bosTau4/maf/ directory
+    for R in 0 1 2 3 4 5 6 7
+do
+    ssh mkr0u${R} rsync -a --progress \
+/cluster/data/bosTau4/bed/multiz5way/bosTau4.5way.maf \
+	/scratch/data/bosTau4/maf/
+done
+    mkdir /cluster/data/bosTau4/bed/multiz5way/anno/splitMaf
+    #	need to split up the single maf file into individual
+    #	per-scaffold maf files to run annotation on
+    cd /cluster/data/bosTau4/bed/multiz5way/anno/splitMaf
+    #	create bed files to list approximately 1553 scaffolds in
+    #	a single list, approximately 33 lists
+    cat << '_EOF_' > mkBedLists.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my $bedCount = 0;
+my $i = 0;
+
+my $bedFile = sprintf("file_%d.bed", $bedCount);
+
+open (BF,">$bedFile") or die "can not write to $bedFile $!";
+
+open (FH,"</cluster/data/bosTau4/chrom.sizes") or
+        die "can not read /cluster/data/bosTau4/chrom.sizes $!";
+while (my $line = <FH>) {
+    chomp $line;
+    if ( (($i + 1) % 1553) == 0 )  {
+        printf "%s\n", $line;
+        close (BF);
+        ++$bedCount;
+        $bedFile = sprintf("file_%d.bed", $bedCount);
+        open (BF,">$bedFile") or die "can not write to $bedFile $!";
+    }
+    ++$i;
+    my ($chr, $size) = split('\s+',$line);
+    printf BF "%s\t0\t%d\t%s\n", $chr, $size, $chr;
+}
+close (FH);
+close (BH);
+'_EOF_'
+    # << happy emacs
+    chmod +x mkBedLists.pl
+    ./mkBedLists.pl
+
+    #	now, run a mafsInRegion on each one of those lists
+    cat << '_EOF_' > runOne
+#!/bin/csh -fe
+set runDir = "/cluster/data/bosTau4/bed/multiz5way/anno/splitMaf"
+set resultDir = $1
+set bedFile = $resultDir.bed
+mkdir -p $resultDir
+mkdir -p /scratch/tmp/bosTau4/$resultDir
+pushd /scratch/tmp/bosTau4/$resultDir
+mafsInRegion $runDir/$bedFile -outDir . \
+        /scratch/data/bosTau4/maf/bosTau4.5way.maf
+popd
+rsync -q -a /scratch/tmp/bosTau4/$resultDir/ ./$resultDir/
+rm -fr /scratch/tmp/bosTau4/$resultDir
+rmdir --ignore-fail-on-non-empty /scratch/tmp/bosTau4
+'_EOF_'
+    # << happy emacs
+    chmod +x runOne
+
+    cat << '_EOF_' > template
+#LOOP
+./runOne $(root1)
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    ls file*.bed > runList
+    gensub2 runList single template jobList
+    para create jobList
+    para try ... check ... push ... etc
+# Completed: 8 of 8 jobs
+# CPU time in finished jobs:       1137s      18.96m     0.32h    0.01d  0.000 y
+# IO & Wait Time:                   552s       9.19m     0.15h    0.01d  0.000 y
+# Average job time:                 211s       3.52m     0.06h    0.00d
+# Longest finished job:             599s       9.98m     0.17h    0.01d
+# Submission to last job:           599s       9.98m     0.17h    0.01d
+
+    cd /cluster/data/bosTau4/bed/multiz5way/anno/run
+
+    cat << '_EOF_' > doAnno.csh
+#!/bin/csh -ef
+set outDir = ../maf/$2
+set result = $3
+set input = $1
+mkdir -p $outDir
+cat $input | \
+nice mafAddIRows -nBeds=nBeds stdin /scratch/data/bosTau4/bosTau4.2bit $result
+'_EOF_'
+    # << happy emacs
+    chmod +x doAnno.csh
+
+    cat << '_EOF_' > template
+#LOOP
+./doAnno.csh $(path1) $(lastDir1) {check out line+ ../maf/$(lastDir1)/$(root1).maf}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    find ../splitMaf -type f -name "*.maf" > maf.list
+    gensub2 maf.list single template jobList
+    para create jobList
+    para try ... check ... push ... etc.
+# Completed: 2320 of 2320 jobs
+# CPU time in finished jobs:       8405s     140.09m     2.33h    0.10d  0.000 y
+# IO & Wait Time:                  6934s     115.56m     1.93h    0.08d  0.000 y
+# Average job time:                   7s       0.11m     0.00h    0.00d
+# Longest finished job:             369s       6.15m     0.10h    0.00d
+# Submission to last job:           834s      13.90m     0.23h    0.01d
+
+    #	put the results back together into a single file
+    ssh kkstore06
+    cd /cluster/data/bosTau4/bed/multiz5way/anno
+    grep "^##maf version" maf/file_0/chr1.maf \
+	| sort -u > bosTau4.anno.5way.maf
+    find ./maf -type f -depth -name "*.maf" | while read F
+do
+    grep -v -h "^#" "${F}"
+done >> bosTau4.anno.5way.maf
+    echo "##eof maf" >> bosTau4.anno.5way.maf
+
+    ssh hgwdev
+    cd /cluster/data/bosTau4/bed/multiz5way/anno
+    mkdir -p /gbdb/bosTau4/multiz5way/anno
+    ln -s `pwd`/bosTau4.anno.5way.maf \
+                /gbdb/bosTau4/multiz5way/anno/multiz5way.maf
+    #	by loading this into the table multiz5way, it will replace the
+    #	previously loaded table with the unannotated mafs
+    #	huge temp files are made, do them on local disk
+    cd /scratch/tmp
+    time nice -n +19 hgLoadMaf -pathPrefix=/gbdb/bosTau4/multiz5way/anno \
+                bosTau4 multiz5way
+    #	Loaded 6711605 mafs in 1 files from /gbdb/bosTau4/multiz5way/anno
+    #	real    4m54.025s
+
+    #	normally filter this for chrom size > 1,000,000 and only load
+    #	those chroms.  But this is a scaffold assembly, load everything:
+    time nice -n +19 hgLoadMafSummary bosTau4 -minSize=30000 -mergeGap=1500 \
+	-maxSize=200000  multiz5waySummary \
+	    /gbdb/bosTau4/multiz5way/anno/multiz5way.maf
+    #	Created 779088 summary blocks from 10697864 components
+    #	and 6412983 mafs from /gbdb/bosTau4/multiz5way/anno/multiz5way.maf
+    #	real    4m6.782s
+
+    #	by loading this into the table multiz5waySummary, it will replace
+    #	the previously loaded table with the unannotated mafs
+    #	remove the multiz5way*.tab files in this /scratch/tmp directory
+    rm multiz5way*.tab
+    #	And, you can remove the previously loaded non-annotated maf file link:
+    rm /gbdb/bosTau4/multiz5way/maf/bosTau4.5way.maf
+    rmdir /gbdb/bosTau4/multiz5way/maf
+
+###########################################################################
+## Annotate 5-way multiple alignment with gene annotations
+##		(DONE - 2008-03-18 - Hiram)
+    # Gene frames
+    ## given previous survey done for 9-way alignment on Marmoset
+    ## and the appearance of new ensGene tables on everything
+    #	use knownGene for hg18, mm9
+    #	use ensGene for canFam2, ornAna1
+    #	and refGene for bosTau4
+
+    ssh hgwdev
+    mkdir /cluster/data/bosTau4/bed/multiz5way/frames
+    cd /cluster/data/bosTau4/bed/multiz5way/frames
+    mkdir genes
+    # knownGene
+    for DB in hg18 mm9
+do
+    hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from knownGene" ${DB} \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /scratch/tmp/${DB}.tmp.gz
+    mv /scratch/tmp/${DB}.tmp.gz genes/$DB.gp.gz
+    echo "${DB} done"
+done
+    # ensGene
+    for DB in canFam2 ornAna1
+do
+    hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from ensGene" ${DB} \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /scratch/tmp/${DB}.tmp.gz
+    mv /scratch/tmp/${DB}.tmp.gz genes/$DB.gp.gz
+    echo "${DB} done"
+done
+    # refGene
+    for DB in bosTau4
+do
+    hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from refGene" ${DB} \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /scratch/tmp/${DB}.tmp.gz
+    mv /scratch/tmp/${DB}.tmp.gz genes/$DB.gp.gz
+    echo "${DB} done"
+done
+
+    ls -og genes
+# -rw-rw-r--  1  861210 Mar 18 15:40 bosTau4.gp.gz
+# -rw-rw-r--  1 1865308 Mar 18 15:40 canFam2.gp.gz
+# -rw-rw-r--  1 2008806 Mar 18 15:39 hg18.gp.gz
+# -rw-rw-r--  1 1965274 Mar 18 15:39 mm9.gp.gz
+# -rw-rw-r--  1 1347532 Mar 18 15:40 ornAna1.gp.gz
+
+    ssh kkstore06
+    cd /cluster/data/bosTau4/bed/multiz5way/frames
+    #	anything to annotate is in a pair, e.g.: bosTau4 genes/bosTau4.gp.gz
+    time (cat  ../anno/bosTau4.anno.5way.maf | nice -n +19 genePredToMafFrames bosTau4 stdin stdout bosTau4 genes/bosTau4.gp.gz hg18 genes/hg18.gp.gz mm9 genes/mm9.gp.gz canFam2 genes/canFam2.gp.gz ornAna1 genes/ornAna1.gp.gz | gzip > multiz5way.mafFrames.gz) > frames.log 2>&1
+    # see what it looks like in terms of number of annotations per DB:
+    zcat multiz5way.mafFrames.gz | cut -f4 | sort | uniq -c | sort -n
+#  77526 bosTau4
+# 110768 ornAna1
+# 221524 mm9
+# 230010 hg18
+# 243396 canFam2
+
+    #	load the resulting file
+    ssh hgwdev
+    cd /cluster/data/bosTau4/bed/multiz5way/frames
+    time nice -n +19 hgLoadMafFrames bosTau4 multiz5wayFrames \
+	multiz5way.mafFrames.gz
+    #	real    0m21.968s
+
+    #	enable the trackDb entries:
+# frames multiz5wayFrames
+# irows on
+#############################################################################
+# phastCons 5-way (DONE - 2008-03-18 - Hiram)
+
+    # split 5way mafs into 10M chunks and generate sufficient statistics 
+    # files for # phastCons
+    ssh memk
+    mkdir /cluster/data/bosTau4/bed/multiz5way/msa.split
+    cd /cluster/data/bosTau4/bed/multiz5way/msa.split
+    mkdir -p /san/sanvol1/scratch/bosTau4/multiz5way/cons/ss
+
+    cat << '_EOF_' > doSplit.csh
+#!/bin/csh -ef
+set MAFS = /cluster/data/bosTau4/bed/multiz5way/anno/maf
+set WINDOWS = /san/sanvol1/scratch/bosTau4/multiz5way/cons/ss
+pushd $WINDOWS
+set resultDir = $1
+set c = $2
+rm -fr $resultDir/$c
+mkdir -p $resultDir
+twoBitToFa -seq=$c /scratch/data/bosTau4/bosTau4.2bit /scratch/tmp/bosTau4.$c.fa
+/cluster/bin/phast/$MACHTYPE/msa_split $MAFS/$resultDir/$c.maf -i MAF \
+    -M /scratch/tmp/bosTau4.$c.fa \
+    -o SS -r $resultDir/$c -w 10000000,0 -I 1000 -B 5000
+rm -f /scratch/tmp/bosTau4.$c.fa
+popd
+mkdir -p $resultDir
+date > $resultDir/$c.out
+'_EOF_'
+    # << happy emacs
+    chmod +x doSplit.csh
+
+    cat << '_EOF_' > template
+#LOOP
+doSplit.csh $(dir1) $(root1) {check out line+ $(dir1)/$(root1).out}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    #	create list of maf files:
+    (cd ../anno/maf; find . -type f) | sed -e "s#^./##" > maf.list
+
+    gensub2 maf.list single template jobList
+    para create jobList
+    para try ... check ... etc
+# Completed: 2320 of 2320 jobs
+# CPU time in finished jobs:       1710s      28.50m     0.47h    0.02d  0.000 y
+# IO & Wait Time:                  6951s     115.85m     1.93h    0.08d  0.000 y
+# Average job time:                   4s       0.06m     0.00h    0.00d
+# Longest finished job:             128s       2.13m     0.04h    0.00d
+# Submission to last job:          1048s      17.47m     0.29h    0.01d
+
+    # take the cons and noncons trees from the mouse 30-way
+
+    #	Estimates are not easy to make, probably more correctly,
+    #	take the 30-way .mod file, and re-use it here.
+    ssh hgwdev
+    cd /cluster/data/bosTau4/bed/multiz5way
+    cp -p /cluster/data/mm9/bed/multiz30way/mm9.30way.mod .
+
+    # Run phastCons
+    #	This job is I/O intensive in its output files, thus it is all
+    #	working over in /scratch/tmp/
+    ssh memk
+    mkdir -p /cluster/data/bosTau4/bed/multiz5way/cons/run.cons
+    cd /cluster/data/bosTau4/bed/multiz5way/cons/run.cons
+
+    #	there are going to be several different phastCons runs using
+    #	this same script.  They trigger off of the current working directory
+    #	$cwd:t which is the "grp" in this script.  It is one of:
+    #	all gliers placentals
+    #	Well, that's what it was when used in the Mm9 30-way,
+    #	in this instance, there is only the directory "all"
+
+    cat << '_EOF_' > doPhast.csh
+#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast.2007-05-04
+set subDir = $1
+set f = $2
+set c = $2:r
+set len = $3
+set cov = $4
+set rho = $5
+set grp = $cwd:t
+set tmp = /scratch/tmp/$f
+set cons = /cluster/data/bosTau4/bed/multiz5way/cons
+mkdir -p $tmp
+set san = /san/sanvol1/scratch/bosTau4/multiz5way/cons
+if (-s $cons/$grp/$grp.non-inf) then
+  cp -p $cons/$grp/$grp.mod $cons/$grp/$grp.non-inf $tmp
+  cp -p $san/ss/$subDir/$f.ss $cons/$grp/$grp.mod $cons/$grp/$grp.non-inf $tmp
+else
+  cp -p $cons/$grp/$grp.mod $tmp
+  cp -p $san/ss/$subDir/$f.ss $cons/$grp/$grp.mod $tmp
+endif
+pushd $tmp > /dev/null
+if (-s $grp.non-inf) then
+  $PHASTBIN/phastCons $f.ss $grp.mod \
+    --rho $rho --expected-length $len --target-coverage $cov --quiet \
+    --not-informative `cat $grp.non-inf` \
+    --seqname $c --idpref $c --most-conserved $f.bed --score > $f.pp
+else
+  $PHASTBIN/phastCons $f.ss $grp.mod \
+    --rho $rho --expected-length $len --target-coverage $cov --quiet \
+    --seqname $c --idpref $c --most-conserved $f.bed --score > $f.pp
+endif
+popd > /dev/null
+mkdir -p $san/$grp/pp/$subDir $san/$grp/bed/$subDir
+sleep 4
+touch $san/$grp/pp/$subDir $san/$grp/bed/$subDir
+rm -f $san/$grp/pp/$subDir/$f.pp
+rm -f $san/$grp/bed/$subDir/$f.bed
+mv $tmp/$f.pp $san/$grp/pp/$subDir
+mv $tmp/$f.bed $san/$grp/bed/$subDir
+rm -fr $tmp
+'_EOF_'
+    # << happy emacs
+    chmod a+x doPhast.csh
+
+    cat << '_EOF_' > template
+#LOOP
+../doPhast.csh $(root1) $(file1) 45 .3 .31 {check out line+ /san/sanvol1/scratch/bosTau4/multiz5way/cons/all/pp/$(root1)/$(file1).pp}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    # Create parasol batch and run it
+    pushd /san/sanvol1/scratch/bosTau4/multiz5way/cons
+    find ./ss -type f -name "*.ss" | sed -e "s#^./##; s/.ss$//" \
+	> /cluster/data/bosTau4/bed/multiz5way/cons/ss.list
+
+    # run for all species
+    cd ..
+    mkdir -p all run.cons/all
+    cd all
+    /cluster/bin/phast.new/tree_doctor ../../mm9.30way.mod \
+--prune-all-but=bosTau4,hg18,panTro2,rheMac2,ponAbe2,mm9,canFam2,monDom4,ornAna1 \
+	> all.mod
+    cd ../run.cons/all
+
+    #	root1 == chrom name, file1 == ss file name without .ss suffix
+    # Create template file for "all" run
+    cat << '_EOF_' > template
+#LOOP
+../run.cons/doPhast.csh $(lastDir1) $(file1) 45 .3 .31 {check out line+ /san/sanvol1/scratch/bosTau4/multiz5way/cons/all/pp/$(lastDir1)/$(file1).pp}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+    gensub2 ../ss.list single template jobList
+    para create jobList
+    para try ... check ... push ... etc.
+# Completed: 28485 of 28485 jobs
+# CPU time in finished jobs:      14082s     234.70m     3.91h    0.16d  0.000 y
+# IO & Wait Time:                188534s    3142.23m    52.37h    2.18d  0.006 y
+# Average job time:                   7s       0.12m     0.00h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:              17s       0.28m     0.00h    0.00d
+# Submission to last job:         72420s    1207.00m    20.12h    0.84d
+
+    # create Most Conserved track
+    ssh kolossus
+    cd /san/sanvol1/scratch/bosTau4/multiz5way/cons/all
+    find ./bed -type f -name "Contig*.bed" | xargs cat \
+	| sort -k1,1 -k2,2n | \
+        awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' | \
+            /cluster/bin/scripts/lodToBedScore /dev/stdin > mostConserved.bed
+    #	~ 3 minutes
+    cp -p mostConserved.bed /cluster/data/bosTau4/bed/multiz5way/cons/all
+
+    # load into database
+    ssh hgwdev
+    cd /cluster/data/bosTau4/bed/multiz5way/cons/all
+    time nice -n +19 hgLoadBed bosTau4 phastConsElements5way mostConserved.bed
+    #	Loaded 1297014 elements of size 5
+
+    # Try for 5% overall cov, and 70% CDS cov 
+    #	We don't have any gene tracks to compare CDS coverage
+    #	--rho .31 --expected-length 45 --target-coverage .3
+    featureBits bosTau4 phastConsElements5way
+    #	141561229 bases of 2929139385 (4.833%) in intersection
+
+    # Create merged posterier probability file and wiggle track data files
+    # currently doesn't matter where this is performed, the san is the same
+    # network distance from all machines.
+    # sort by chromName, chromStart so that items are in numerical order 
+    #  for wigEncode
+    cd /san/sanvol1/scratch/bosTau4/multiz5way/cons/all
+    mkdir -p phastCons5wayScores
+
+for D in `ls -1d pp/file* | sort -t_ -k2n`
+do
+    F=${D/pp\/}
+    out=phastCons5wayScores/${F}.data.gz
+    echo "${D} > ${F}.data.gz"
+    ls -S ${D}/*.pp | xargs cat | gzip > ${out}
+done
+
+    #	real    38m22.760s
+    #	copy the phastCons5wayScores to:
+# /cluster/data/bosTau4/bed/multiz5way/downloads/phastCons5way/phastConsScores
+    #	for hgdownload downloads
+
+    # Create merged posterier probability file and wiggle track data files
+    # currently doesn't matter where this is performed, the san is the same
+    # network distance from all machines.
+    cd /san/sanvol1/scratch/bosTau4/multiz5way/cons/all
+    ls -1 phastCons5wayScores/*.data.gz | sort -t_ -k2n | xargs zcat \
+	| wigEncode -noOverlap stdin phastCons5way.wig phastCons5way.wib
+    # Converted stdin, upper limit 1.00, lower limit 0.00
+    time nice -n +19 cp -p *.wi? /cluster/data/bosTau4/bed/multiz5way/cons/all
+    #	real    1m4.483s
+
+    # Load gbdb and database with wiggle.
+    ssh hgwdev
+    cd /cluster/data/bosTau4/bed/multiz5way/cons/all
+    ln -s `pwd`/phastCons5way.wib /gbdb/bosTau4/multiz5way/phastCons5way.wib
+    time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/bosTau4/multiz5way bosTau4 \
+	phastCons5way phastCons5way.wig
+    #	real    0m56.271s
+    # remove garbage
+    rm wiggle.tab
+
+    #  Create histogram to get an overview of all the data
+    ssh hgwdev
+    cd /cluster/data/bosTau4/bed/multiz5way/cons/all
+    time nice -n +19 hgWiggle -doHistogram \
+	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+	    -db=bosTau4 phastCons5way > histogram.data 2>&1
+    #	real    5m0.608s
+
+    #	create plot of histogram:
+
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small color x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Orangutan PonAbe2 Histogram phastCons5way track"
+set xlabel " phastCons5way score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.02]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #	<< happy emacs
+
+    display histo.png &
+
+    #	These trackDb entries turn on the wiggle phastCons data track:
+    #	type wigMaf 0.0 1.0
+    #	maxHeightPixels 100:40:11
+    #	wiggle phastCons5way
+    #	spanList 1
+    #	autoScaleDefault Off
+    #	windowingFunction mean
+    #	pairwiseHeight 12
+    #	yLineOnOff Off
+
+#############################################################################
+#  Downloads (DONE - 2008-01-11 - Hiram)
+    #	Let's see if the downloads will work
+    ssh hgwdev
+    /cluster/data/bosTau4
+    #	expecting to find repeat masker .out file here:
+    ln -s bed/RepeatMasker/bosTau4.fa.out .
+    time nice -n +19 /cluster/bin/scripts/makeDownloads.pl \
+	-workhorse=hgwdev bosTau4 > jkStuff/downloads.log 2>&1
+    #	real    24m3.210s
+    #	failed making upstream sequences:
+    #	featureBits bosTau4 mgcGenes:upstream:1000 -fa=stdout
+    #	setpriority: Permission denied.
+    #	the 'nice' from my bash shell causes trouble inside the csh
+    #	script which uses nice.  Finish off the install step manually
+    #	with the mgcGenes upstreams ...
+
+#############################################################################
+#  PushQ entries (DONE - 2008-01-11 - Hiram)
+    ssh hgwdev
+    /cluster/data/bosTau4
+    /cluster/bin/scripts/makePushQSql.pl bosTau4 > jkStuff/pushQ.sql
+    #	output warnings:
+# bosTau4 does not have seq
+# bosTau4 does not have gbMiscDiff
+# Could not tell (from trackDb, all.joiner and hardcoded lists of supporting
+# and genbank tables) which tracks to assign these tables to:
+#	genscanPep
+
+#############################################################################
