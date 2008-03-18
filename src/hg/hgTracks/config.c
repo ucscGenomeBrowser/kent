@@ -76,6 +76,7 @@ if (changeVis != -2)
     }
 #endif /* BOB_DOESNT_LIKE */
 
+jsInit();
 cgiMakeHiddenVar(configGroupTarget, "none");
 boolean isFirstNotCtGroup = TRUE;
 for (group = groupList; group != NULL; group = group->next)
@@ -103,16 +104,19 @@ for (group = groupList; group != NULL; group = group->next)
     hPrintf("<B>&nbsp;%s</B> ", wrapWhiteFont(group->label));
     hPrintf("&nbsp;&nbsp;&nbsp;");
     hPrintf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\" "
-	   "onClick=\"document.mainForm.%s.value='%s';\">", 
-	   configHideAll, "hide all", configGroupTarget, group->name);
+	   "onClick=\"document.mainForm.%s.value='%s'; %s\">", 
+	    configHideAll, "hide all", configGroupTarget, group->name,
+	    jsSetVerticalPosition("mainForm"));
     hPrintf(" ");
     hPrintf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\" "
-	   "onClick=\"document.mainForm.%s.value='%s';\">", 
-	   configShowAll, "show all", configGroupTarget, group->name);
+	   "onClick=\"document.mainForm.%s.value='%s'; %s\">", 
+	    configShowAll, "show all", configGroupTarget, group->name,
+	    jsSetVerticalPosition("mainForm"));
     hPrintf(" ");
     hPrintf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\" "
-	   "onClick=\"document.mainForm.%s.value='%s';\">", 
-	   configDefaultAll, "default", configGroupTarget, group->name);
+	   "onClick=\"document.mainForm.%s.value='%s'; %s\">", 
+	    configDefaultAll, "default", configGroupTarget, group->name,
+	    jsSetVerticalPosition("mainForm"));
     hPrintf(" ");
     /* do not want all the submit buttons named the same.  It is
      * confusing to the javascript submit() function.
