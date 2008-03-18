@@ -211,7 +211,7 @@
 #include "itemConf.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1405 2008/03/18 08:02:08 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1406 2008/03/18 21:59:10 angie Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -2334,35 +2334,53 @@ else
 pslFreeList(&pslList);
 }
 
+char *getParentTrackName(struct trackDb *tdb)
+/* Get the track table name or composite track parent name if applicable. */
+{
+char *trackTable = trackDbSetting(tdb, "subTrack");
+if (trackTable == NULL)
+    {
+    /* Look for parentWigMaf passed in explicitly via CGI, not from cart.
+     * tdb->type in this case is wig not wigMaf... */
+    trackTable = cgiUsualString("parentWigMaf", NULL);
+    if (trackTable == NULL)
+	trackTable = tdb->tableName;
+    trackTable = cloneString(trackTable);
+    }
+else
+    {
+    /* trim off extra words in subTrack setting, if any: */
+    char *words[2];
+    if (chopLine(cloneString(trackTable), words) > 0)
+	trackTable = words[0];
+    }
+return trackTable;
+}
+
 void printTBSchemaLink(struct trackDb *tdb)
 /* Make link to TB schema -- unless this is an on-the-fly (tableless) track. */
 {
 if (hTableOrSplitExists(tdb->tableName))
     {
-    char *trackTable = trackDbSetting(tdb, "subTrack");
-    char *tableName = tdb->tableName;
-    if (trackTable == NULL)
-	{
-	/* Look for parentWigMaf passed in explicitly via CGI, not from cart.
-	 * tdb->type in this case is wig not wigMaf... */
-	trackTable = cgiUsualString("parentWigMaf", NULL);
-	if (trackTable == NULL)
-	    trackTable = tableName;
-	}
-    else
-	{
-	/* trim off extra words in subTrack setting, if any: */
-	char *words[2];
-	if (chopLine(cloneString(trackTable), words) > 0)
-	    trackTable = words[0];
-	}
+    char *trackTable = getParentTrackName(tdb);
     printf("<P><A HREF=\"../cgi-bin/hgTables?db=%s&hgta_group=%s&hgta_track=%s"
 	   "&hgta_table=%s&position=%s:%d-%d&"
 	   "hgta_doSchema=describe+table+schema\" TARGET=_BLANK>"
 	   "View table schema</A></P>\n",
-	   database, tdb->grp, trackTable, tableName,
+	   database, tdb->grp, trackTable, tdb->tableName,
 	   seqName, winStart+1, winEnd);
     }
+}
+
+void printTrackUiLink(struct trackDb *tdb)
+/* Make link to hgTrackUi. */
+{
+char *trackTable = getParentTrackName(tdb);
+struct trackDb *parentTdb = tdb;
+if (!sameString(trackTable, tdb->tableName))
+    parentTdb = hTrackDbForTrack(trackTable);
+printf("<P><A HREF=\"../cgi-bin/hgTrackUi?g=%s\">"
+       "Go to %s track controls</A></P>\n", trackTable, parentTdb->shortLabel);
 }
 
 void printDataVersion(struct trackDb *tdb)
@@ -2401,6 +2419,7 @@ char *tableName;
 if (!isCustomTrack(tdb->tableName))
     {
     printTBSchemaLink(tdb);
+    printTrackUiLink(tdb);
     printDataVersion(tdb);
     printOrigAssembly(tdb);
     if ((tableName = hTableForTrack(hGetDb(), tdb->tableName)) != NULL)
@@ -12530,6 +12549,18 @@ return NULL;
 }
 
 
+void printNullAlignment(int l, int r, int q)
+/* Print out a double-sided gap for unaligned insertion SNP. */
+{
+int digits = max(digitsBaseTen(r), digitsBaseTen(q));
+printf("%0*d - %0*d\n"
+       "%*s"
+       "  (dbSNP-annotated position was not re-aligned to "
+       "observed allele code -- see adjacent alignments)\n"
+       "%0*d - %0*d</B>\n\n", digits, l, digits, r, 
+       (digits*2 + 3), "", digits, q+1, digits, q);
+}
+
 void printOffsetAndBoldAxt(struct axt *axtIn, int lineWidth,
 			   struct axtScoreScheme *ss, int tOffset, int qOffset,
 			   int boldStart, int boldEnd,
@@ -12543,6 +12574,7 @@ void printOffsetAndBoldAxt(struct axt *axtIn, int lineWidth,
  * that includes reversing block coords within the target seq range. */
 {
 struct axt axtBlock;
+int nullQStart = 0;
 
 /* (Defining a macro because a function would have an awful lot of arguments.)
  * First extract the portion of axtIn for this block.  If tIsRc, then
@@ -12561,6 +12593,7 @@ struct axt axtBlock;
 	    } \
 	axtBlock.tStart += tOffset;  axtBlock.tEnd += tOffset; \
 	axtBlock.qStart += qOffset;  axtBlock.qEnd += qOffset; \
+	nullQStart = axtBlock.qEnd; \
 	axtSwap(&axtBlock, tSize, qSize); \
 	axtPrintTraditionalExtra(&axtBlock, lineWidth, ss, stdout, \
 				 FALSE, tIsRc); \
@@ -12569,9 +12602,7 @@ struct axt axtBlock;
 	{ \
 	int ins = (tIsRc ? tSize - blkEnd : blkEnd) + tOffset; \
 	int l = tIsRc ? ins : ins+1,  r = tIsRc ? ins+1 : ins; \
-	printf("%d - %d</B>    (insertion point was not aligned to " \
-	       "observed allele code -- see adjacent alignments)" \
-	       "</B>\n\n", l, r); \
+	printNullAlignment(l, r, nullQStart); \
 	} \
     if (isBold) printf("</B>");
 
