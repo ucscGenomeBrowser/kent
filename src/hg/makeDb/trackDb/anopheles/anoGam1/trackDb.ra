@@ -1,12 +1,3 @@
-track ensGene
-shortLabel Ensembl Genes
-longLabel Ensembl Gene Predictions
-group genes
-priority 40
-visibility dense
-color 150,0,0
-type genePred ensPep
-
 track anoEstTcl
 shortLabel AnoEST Unique
 longLabel AnoEST Unique (TCLAG*): Clustered A. gambiae ESTs
