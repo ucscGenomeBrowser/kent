@@ -463,4 +463,25 @@ priority 9.2
         hgLoadNetDist /cluster/data/hg18/p2p/wanker/humanWanker.pathLengths hg18 humanWankerP2P \
         -sqlRemap="select distinct locusLinkID, kgID from refLink, kgXref where refLink.mrnaAcc = kgXref.mRNA"
 
+###############################################################
+# Affy All Exon GeneSorter column. (DONE Andy, 2008-03-17)
 
+ssh hgwdev
+cd /cluster/data/hg18/bed
+mkdir affyAllExonGsColumn
+cd affyAllExonGsColumn/
+echo "select * from knownGene" | \
+   hgsql hg18 | tail +2 > knownGene.gp
+overlapSelect -inFmt=genePred -selectFmt=bed -idOutput \
+   ../affyHumanExon/affyHuEx1.bed knownGene.gp ids.txt
+echo "select * from affyHumanExon" | \
+   hgsql hgFixed | tail +2 > expData.txt
+affyAllExonGSColumn expData.txt ids.txt column.txt
+hgLoadSqlTab hgFixed affyHumanExonGs expData.sql column.txt
+hgRatioMicroarray -clump=affyHumanExon.ra -minAbsVal=0.01 \
+   affyHumanExonGs affyHumanExonGsRatio
+hgMedianMicroarray hgFixed affyHumanExonGs affyHumanExonExps \
+   affyHumanExon.ra affyHumanExonGsMedian affyHumanExonMedianExps
+hgMedianMicroarray hgFixed affyHumanExonGsRatio \
+   affyHumanExonExps affyHumanExon.ra affyHumanExonGsRatioMedian \
+   affyHumanExonMedianExps
