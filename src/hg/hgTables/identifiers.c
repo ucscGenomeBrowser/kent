@@ -13,7 +13,7 @@
 #include "trashDir.h"
 #include "web.h"
 
-static char const rcsid[] = "$Id: identifiers.c,v 1.18 2008/03/17 23:40:38 angie Exp $";
+static char const rcsid[] = "$Id: identifiers.c,v 1.19 2008/03/18 18:40:58 angie Exp $";
 
 
 static boolean forCurTable()
@@ -26,7 +26,8 @@ return (identifierTable &&
 	 sameString(connectingTableForTrack(identifierTable), curTable)));
 }
 
-static void getXrefInfo(char **retXrefTable, char **retIdField,
+static void getXrefInfo(struct sqlConnection *conn,
+			char **retXrefTable, char **retIdField,
 			char **retAliasField)
 /* See if curTrack specifies an xref/alias table for lookup of IDs. */
 {
@@ -43,6 +44,10 @@ if (xrefSpec != NULL)
     xrefTable = words[0];
     idField = words[1];
     aliasField = words[2];
+    if (!sqlTableExists(conn, xrefTable) ||
+	sqlFieldIndex(conn, xrefTable, idField) < 0 ||
+	sqlFieldIndex(conn, xrefTable, aliasField) < 0)
+	xrefTable = idField = aliasField = NULL;
     }
 if (retXrefTable != NULL)
     *retXrefTable = xrefTable;
@@ -66,7 +71,7 @@ static void explainIdentifiers(struct sqlConnection *conn, char *idField)
  * some examples. */
 {
 char *xrefTable = NULL, *aliasField = NULL;
-getXrefInfo(&xrefTable, NULL, &aliasField);
+getXrefInfo(conn, &xrefTable, NULL, &aliasField);
 hPrintf("The items must be values of the <B>%s</B> field of the currently "
 	"selected table, <B>%s</B>",
 	idField, curTable);
@@ -222,7 +227,7 @@ if (idField != NULL)
     addPrimaryIdsToHash(conn, matchHash, idField, tableList);
 if (retIdField != NULL)
     *retIdField = idField;
-getXrefInfo(&xrefTable, &xrefIdField, &aliasField);
+getXrefInfo(conn, &xrefTable, &xrefIdField, &aliasField);
 if (xrefTable != NULL)
     {
     addXrefIdsToHash(conn, matchHash, xrefTable, xrefIdField, aliasField, lm);
@@ -317,7 +322,7 @@ if (isNotEmpty(idText))
     if (foundTerms < totalTerms)
 	{
 	char *xrefTable, *aliasField;
-	getXrefInfo(&xrefTable, NULL, &aliasField);
+	getXrefInfo(conn, &xrefTable, NULL, &aliasField);
 	boolean xrefIsSame = xrefTable && sameString(curTable, xrefTable);
 	warn("Note: %d of the %d given identifiers (e.g. %s) have no match in "
 	     "table %s, field %s%s%s%s%s.  "
