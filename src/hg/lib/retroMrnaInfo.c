@@ -8,8 +8,32 @@
 #include "jksql.h"
 #include "retroMrnaInfo.h"
 
-static char const rcsid[] = "$Id: retroMrnaInfo.c,v 1.1 2007/03/01 00:01:41 baertsch Exp $";
+static char const rcsid[] = "$Id: retroMrnaInfo.c,v 1.2 2008/03/18 05:11:24 baertsch Exp $";
 
+int sqlSignedForgiving(char *s)
+/* Convert string to signed integer.  Unlike atol assumes 
+ * all of string is number. */
+{
+int res = 0;
+char *p, *p0 = s;
+
+if (*p0 == '-')
+    p0++;
+p = p0;
+while ((*p >= '0') && (*p <= '9'))
+    {
+    res *= 10;
+    res += *p - '0';
+    p++;
+    }
+/* test for invalid character, empty, or just a minus */
+if ((*p != '\0') || (p == p0))
+    return -1;
+if (*s == '-')
+    return -res;
+else
+    return res;
+}
 struct retroMrnaInfo *retroMrnaInfoLoad(char **row)
 /* Load a retroMrnaInfo from row fetched with select * from retroMrnaInfo
  * from database.  Dispose of this with retroMrnaInfoFree(). */
@@ -38,7 +62,7 @@ sqlSignedDynamicArray(row[11], &ret->chromStarts, &sizeOne);
 assert(sizeOne == ret->blockCount);
 }
 ret->retroExonCount = sqlSigned(row[12]);
-ret->axtScore = sqlSigned(row[13]);
+ret->axtScore = sqlSignedForgiving(row[13]);
 ret->type = cloneString(row[14]);
 ret->gChrom = cloneString(row[15]);
 ret->gStart = sqlSigned(row[16]);
@@ -112,7 +136,7 @@ sqlSignedDynamicArray(row[11], &ret->chromStarts, &sizeOne);
 assert(sizeOne == ret->blockCount);
 }
 ret->retroExonCount = sqlSigned(row[12]);
-ret->axtScore = sqlSigned(row[13]);
+ret->axtScore = sqlSignedForgiving(row[13]);
 ret->type = cloneString(row[14]);
 ret->gChrom = cloneString(row[15]);
 ret->gStart = sqlSigned(row[16]);
