@@ -7,17 +7,6 @@ visibility hide
 altColor 150,50,50
 type bed 4 +
 
-track ensGene
-shortLabel Ensembl Genes
-longLabel Ensembl (Version 27) Gene Predictions
-group genes
-priority 40
-visibility dense
-color 150,0,0
-type genePred ensPep
-ensArchive dec2004
-dataVersion December 2004
-
 track ECgene
 shortLabel ECgene Genes
 longLabel ECgene v1.2 Gene Predictions with Alt-Splicing
