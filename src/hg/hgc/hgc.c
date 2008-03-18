@@ -211,7 +211,7 @@
 #include "itemConf.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1404 2008/03/14 22:03:09 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1405 2008/03/18 08:02:08 angie Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -12568,8 +12568,10 @@ struct axt axtBlock;
     else if (isBold) \
 	{ \
 	int ins = (tIsRc ? tSize - blkEnd : blkEnd) + tOffset; \
-	while (ins > 0) { putc(' ', stdout); ins = ins / 10; } \
-	printf(" -\n\n"); \
+	int l = tIsRc ? ins : ins+1,  r = tIsRc ? ins+1 : ins; \
+	printf("%d - %d</B>    (insertion point was not aligned to " \
+	       "observed allele code -- see adjacent alignments)" \
+	       "</B>\n\n", l, r); \
 	} \
     if (isBold) printf("</B>");
 
