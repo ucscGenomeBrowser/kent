@@ -20,7 +20,7 @@
 #include "dnautil.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: axt.c,v 1.51 2008/03/18 20:58:51 angie Exp $";
+static char const rcsid[] = "$Id: axt.c,v 1.52 2008/03/18 21:55:47 angie Exp $";
 
 void axtFree(struct axt **pEl)
 /* Free an axt. */
@@ -341,7 +341,7 @@ else
 		tSymStart++;
 		break;
 		}
-	while (tSymEnd < a.tSym + newEnd)
+	while (tSymEnd < a.tSym + a.symCount)
 	    if (*(++tSymEnd) != '-')
 		{
 		tSymEnd--;
@@ -351,7 +351,7 @@ else
 	    {
 	    if (*tSymStart != '-')
 		tSymStart++;
-	    if (*tSymEnd != '-')
+	    if (*(tSymEnd-1) != '-')
 		tSymEnd--;
 	    }
 	}
