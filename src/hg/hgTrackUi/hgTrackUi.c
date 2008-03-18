@@ -4,6 +4,7 @@
 #include "cheapcgi.h"
 #include "htmshell.h"
 #include "jksql.h"
+#include "jsHelper.h"
 #include "trackDb.h"
 #include "hgTrackUi.h"
 #include "hdb.h"
@@ -35,7 +36,7 @@
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 #define MAX_SP_SIZE 2000
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.416 2008/03/17 19:37:20 angie Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.417 2008/03/18 22:15:19 angie Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -59,41 +60,6 @@ radioButton(filterTypeVar, filterTypeVal, "exclude");
 radioButton(filterTypeVar, filterTypeVal, "include");
 if (none)
     radioButton(filterTypeVar, filterTypeVal, "none");
-}
-
-#define CLEAR_ALL_BUTTON_LABEL    "Clear all"
-#define SET_ALL_BUTTON_LABEL  "Set all"
-#define DEFAULTS_BUTTON_LABEL "Set defaults"
-
-void makeSetClearButton(char *form, char *buttonVar, char *buttonLabel,
-			char *cartVarPrefix, struct slName *cartVarSuffixList,
-			char *anchor, boolean isSet)
-/* Make a button for setting or clearing all of a list of checkboxes, and
- * if the button was just pressed, set or clear the cart variables.
- * Optional html anchor is appended to the form's action if given. */
-{
-struct slName *suffix;
-char javascript[2048];
-cgiMakeHiddenVar(buttonVar, "");
-safef(javascript, sizeof javascript,
-      "document.%s.action = '%s%s%s'; document.%s.%s.value='%s'; "
-      "document.%s.submit();",
-      form, cgiScriptName(),
-      (isNotEmpty(anchor) ? "#" : ""), (isNotEmpty(anchor) ? anchor : ""),
-      form, buttonVar, buttonLabel, form);
-cgiMakeOnClickButton(javascript, buttonLabel);
-
-if (isNotEmpty(cgiOptionalString(buttonVar)))
-    {
-    char option[1024];
-    if (cartVarPrefix == NULL)
-	cartVarPrefix = "";
-    for (suffix = cartVarSuffixList;  suffix != NULL;  suffix = suffix->next)
-        {
-        safef(option, sizeof(option), "%s%s", cartVarPrefix, suffix->name);
-        cartSetBoolean(cart, option, isSet);
-        }
-    }
 }
 
 void tfbsConsSitesUi(struct trackDb *tdb)
@@ -222,13 +188,13 @@ printf("<TR><TD colspan=%d><B>%s:</B>&nbsp;\n",
        SNP125_FILTER_COLUMNS*2, attributeName);
 safef(buttonVar, sizeof(buttonVar), "%s_%s", SNP125_SET_ALL, attributeName);
 stripChar(buttonVar, ' ');
-makeSetClearButton(MAIN_FORM, buttonVar, SET_ALL_BUTTON_LABEL, "", varList,
-		   "filterControls", TRUE);
+jsMakeSetClearButton(cart, MAIN_FORM, buttonVar, JS_SET_ALL_BUTTON_LABEL, "",
+		     varList, NULL, TRUE, TRUE);
 printf("&nbsp;\n");
 safef(buttonVar, sizeof(buttonVar), "%s_%s", SNP125_CLEAR_ALL, attributeName);
 stripChar(buttonVar, ' ');
-makeSetClearButton(MAIN_FORM, buttonVar, CLEAR_ALL_BUTTON_LABEL, "", varList,
-		   "filterControls", FALSE);
+jsMakeSetClearButton(cart, MAIN_FORM, buttonVar, JS_CLEAR_ALL_BUTTON_LABEL, "",
+		     varList, NULL, TRUE, FALSE);
 printf("</TD></TR>\n");
 for (i=0; i < varCount; i++)
     {
@@ -324,9 +290,11 @@ snp125PrintFilterControls("Molecule Type", snp125MolTypeIncludeStrings,
 printf("</TABLE><BR>\n");
 
 
+jsInit();
 safef(autoSubmit, sizeof(autoSubmit), "onchange=\""
-      "document."MAIN_FORM".action = '%s#colorSpec'; "
-      "document."MAIN_FORM".submit();\"", cgiScriptName());
+      "document."MAIN_FORM".action = '%s'; %s"
+      "document."MAIN_FORM".submit();\"",
+      cgiScriptName(), jsSetVerticalPosition(MAIN_FORM));
 cgiContinueHiddenVar("g");
 cgiContinueHiddenVar("c");
 
@@ -1955,6 +1923,7 @@ slReverse(&wmSpeciesList);
 puts("\n<P STYLE=><B>Pairwise alignments:</B>&nbsp;");
 
 cgiContinueHiddenVar("g");
+jsInit();
 
 char prefix[512];
 safef(prefix, sizeof prefix, "%s.", tdb->tableName);
@@ -1963,8 +1932,8 @@ if (defaultOffSpecies)
     {
     safecpy(buttonVar, sizeof buttonVar, "set_defaults_button");
     /* make button and turn on all species (if button was pressed) */
-    makeSetClearButton(MAIN_FORM, buttonVar, DEFAULTS_BUTTON_LABEL, prefix,
-		       speciesList, NULL, TRUE);
+    jsMakeSetClearButton(cart, MAIN_FORM, buttonVar, JS_DEFAULTS_BUTTON_LABEL,
+			 prefix, speciesList, NULL, FALSE, TRUE);
     if (isNotEmpty(cgiOptionalString(buttonVar)))
         {
         char *words[MAX_SP_SIZE];
@@ -1981,12 +1950,12 @@ if (defaultOffSpecies)
 
 puts("&nbsp;");
 safef(buttonVar, sizeof buttonVar, "%s", "set_all_button");
-makeSetClearButton(MAIN_FORM, buttonVar, SET_ALL_BUTTON_LABEL, prefix,
-		   speciesList, NULL, TRUE);
+jsMakeSetClearButton(cart, MAIN_FORM, buttonVar, JS_SET_ALL_BUTTON_LABEL,
+		     prefix, speciesList, NULL, FALSE, TRUE);
 puts("&nbsp;");
 safef(buttonVar, sizeof buttonVar, "%s", "clear_all_button");
-makeSetClearButton(MAIN_FORM, buttonVar, CLEAR_ALL_BUTTON_LABEL, prefix,
-		   speciesList, NULL, FALSE);
+jsMakeSetClearButton(cart, MAIN_FORM, buttonVar, JS_CLEAR_ALL_BUTTON_LABEL,
+		      prefix, speciesList, NULL, FALSE, FALSE);
 
 if ((speciesTree != NULL) && ((tree = phyloParseString(speciesTree)) != NULL))
 {
