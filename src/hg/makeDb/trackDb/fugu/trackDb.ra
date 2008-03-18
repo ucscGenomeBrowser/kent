@@ -40,6 +40,14 @@ pred hg17.blastKGPep02
 blastRef hg17.blastKGRef02
 release alpha
 
+track ensGene
+shortLabel Ensembl Genes
+longLabel Ensembl Gene Predictions
+group genes
+priority 40
+color 150,0,0
+type genePred ensPep
+
 track genscan
 shortLabel Genscan Genes
 longLabel Genscan Gene Predictions
