@@ -11,10 +11,26 @@
  * to 'ripple' to other controls.  The onChange also submits the
  * control. */
 
+#ifndef JSHELPER_H
+#define JSHELPER_H
+
+#include "cart.h"
+
+#define JS_CLEAR_ALL_BUTTON_LABEL    "Clear all"
+#define JS_SET_ALL_BUTTON_LABEL  "Set all"
+#define JS_DEFAULTS_BUTTON_LABEL "Set defaults"
+
 void jsCreateHiddenForm(struct cart *cart, char *scriptName,
 	char **vars, int varCount);
 /* Create a hidden form with the given variables.  Must be
  * called. */
+
+void jsInit();
+/* If this is the first call, set window.onload to the operations
+ * performed upon loading a page and print supporting javascript.
+ * Currently this just sets the page vertical position if specified on
+ * CGI, and also calls jsWriteFunctions.
+ * Subsequent calls do nothing, so this can be called many times. */
 
 void jsWriteFunctions();
 /* Write out Javascript functions. */
@@ -54,3 +70,21 @@ char *jsRadioUpdate(char *cgiVar, char *jsVar, char *val);
  * jsWriteFunctions somewhere, and also must use jsMakeTrackingRadioButton
  * to make the buttons. */
 
+char *jsSetVerticalPosition(char *form);
+/* Returns a javascript statement for storing the vertical position of the
+ * page; typically this would go just before a document submit.  
+ * jsInit must be called first.
+ * Do not free return value!   */
+
+void jsMakeSetClearButton(struct cart *cart,
+			  char *form, char *buttonVar, char *buttonLabel,
+			  char *cartVarPrefix, struct slName *cartVarSuffixList,
+			  char *anchor, boolean currentPos, boolean isSet);
+/* Make a button for setting or clearing all of a list of boolean 
+ * cart variables (i.e. checkboxes).  If this button was just pressed, 
+ * set or clear those cart variables.
+ * Optional html anchor is appended to the form's action if given. 
+ * If currentPos, anchor is ignored and jsSetVerticalPosition is used so
+ * that the new page gets the same vertical offset as the current page. */
+
+#endif /* JSHELPER_H */

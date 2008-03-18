@@ -18,6 +18,48 @@
 #include "hPrint.h"
 #include "jsHelper.h"
 
+static char const rcsid[] = "$Id: jsHelper.c,v 1.5 2008/03/18 22:12:57 angie Exp $";
+
+static boolean jsInited = FALSE;
+
+void jsInit()
+/* If this is the first call, set window.onload to the operations
+ * performed upon loading a page and print supporting javascript.
+ * Currently this just sets the page vertical position if specified on
+ * CGI, and also calls jsWriteFunctions.
+ * Subsequent calls do nothing, so this can be called many times. */
+{
+if (! jsInited)
+    {
+    puts(
+"<INPUT TYPE=HIDDEN NAME=\"jsh_pageVertPos\" VALUE=0>\n"
+"<script language=\"javascript\">\n"
+"// f_scrollTop and f_filterResults taken from\n"
+"// http://www.softcomplex.com/docs/get_window_size_and_scrollbar_position.html\n"
+"function f_scrollTop() {\n"
+"	return f_filterResults (\n"
+"		window.pageYOffset ? window.pageYOffset : 0,\n"
+"		document.documentElement ? document.documentElement.scrollTop : 0,\n"
+"		document.body ? document.body.scrollTop : 0\n"
+"	);\n"
+"}\n"
+"function f_filterResults(n_win, n_docel, n_body) {\n"
+"	var n_result = n_win ? n_win : 0;\n"
+"	if (n_docel && (!n_result || (n_result > n_docel)))\n"
+"		n_result = n_docel;\n"
+"	return n_body && (!n_result || (n_result > n_body)) ? n_body : n_result;\n"
+"}\n"
+"</script>\n");
+    int pos = cgiOptionalInt("jsh_pageVertPos", 0);
+    if (pos > 0)
+	printf("\n<script language=\"javascript\">"
+	       "window.onload = function () { window.scrollTo(0, %d); }"
+	       "</script>\n", pos);
+    jsWriteFunctions();
+    jsInited = TRUE;
+    }
+}
+
 void jsWriteFunctions()
 /* Write out Javascript functions. */
 {
@@ -186,5 +228,61 @@ cartSaveSession(cart);
 for (i=0; i<varCount; ++i)
     hPrintf("<input type=\"hidden\" name=\"%s\" value=\"\">\n", vars[i]);
 puts("</FORM>");
+}
+
+char *jsSetVerticalPosition(char *form)
+/* Returns a javascript statement for storing the vertical position of the
+ * page; typically this would go just before a document submit.  
+ * jsInit must be called first.
+ * Do not free return value!   */
+{
+if (! jsInited)
+    errAbort("jsSetVerticalPosition: jsInit must be called first.");
+static char vertPosSet[2048];
+safef(vertPosSet, sizeof(vertPosSet),
+      "document.%s.jsh_pageVertPos.value = f_scrollTop(); ", form);
+return vertPosSet;
+}
+
+void jsMakeSetClearButton(struct cart *cart,
+			  char *form, char *buttonVar, char *buttonLabel,
+			  char *cartVarPrefix, struct slName *cartVarSuffixList,
+			  char *anchor, boolean currentPos, boolean isSet)
+/* Make a button for setting or clearing all of a list of boolean 
+ * cart variables (i.e. checkboxes).  If this button was just pressed, 
+ * set or clear those cart variables.
+ * Optional html anchor is appended to the form's action if given. 
+ * If currentPos, anchor is ignored and jsSetVerticalPosition is used so
+ * that the new page gets the same vertical offset as the current page. */
+{
+struct slName *suffix;
+char javascript[2048];
+char *vertPosJs = "";
+if (currentPos)
+    {
+    anchor = NULL;
+    jsInit();
+    vertPosJs = jsSetVerticalPosition(form);
+    }
+cgiMakeHiddenVar(buttonVar, "");
+safef(javascript, sizeof javascript,
+      "document.%s.action = '%s%s%s'; document.%s.%s.value='%s'; %s"
+      "document.%s.submit();",
+      form, cgiScriptName(),
+      (isNotEmpty(anchor) ? "#" : ""), (isNotEmpty(anchor) ? anchor : ""),
+      form, buttonVar, buttonLabel, jsSetVerticalPosition(form), form);
+cgiMakeOnClickButton(javascript, buttonLabel);
+
+if (isNotEmpty(cgiOptionalString(buttonVar)))
+    {
+    char option[1024];
+    if (cartVarPrefix == NULL)
+	cartVarPrefix = "";
+    for (suffix = cartVarSuffixList;  suffix != NULL;  suffix = suffix->next)
+        {
+        safef(option, sizeof(option), "%s%s", cartVarPrefix, suffix->name);
+        cartSetBoolean(cart, option, isSet);
+        }
+    }
 }
 
