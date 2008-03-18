@@ -9,6 +9,7 @@
 #include "jksql.h"
 #include "htmshell.h"
 #include "cart.h"
+#include "jsHelper.h"
 #include "web.h"
 #include "trackDb.h"
 #include "asParse.h"
@@ -19,7 +20,7 @@
 #include "bedCart.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.51 2007/12/14 01:20:27 angie Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.52 2008/03/18 23:35:49 angie Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -244,11 +245,14 @@ if (withGetButton)
     cgiMakeButton(hgtaDoMainPage, "cancel");
     hPrintf(" ");
     }
-cgiMakeButton(setClearAllVar(hgtaDoSetAllFieldPrefix,db,table), 
-	"check all");
+jsInit();
+cgiMakeOnClickSubmitButton(jsSetVerticalPosition("mainForm"),
+			   setClearAllVar(hgtaDoSetAllFieldPrefix,db,table), 
+			   "check all");
 hPrintf(" ");
-cgiMakeButton(setClearAllVar(hgtaDoClearAllFieldPrefix,db,table), 
-	"clear all");
+cgiMakeOnClickSubmitButton(jsSetVerticalPosition("mainForm"),
+			   setClearAllVar(hgtaDoClearAllFieldPrefix,db,table), 
+			   "clear all");
 }
 
 static void showTableFieldsDb(char *db, char *rootTable, boolean withGetButton)
@@ -356,7 +360,7 @@ if (strchr(table, '.'))
     htmlOpen("Select Fields from %s", table);
 else
     htmlOpen("Select Fields from %s.%s", db, table);
-hPrintf("<FORM ACTION=\"%s\" METHOD=%s>\n", cgiScriptName(),
+hPrintf("<FORM NAME=\"mainForm\" ACTION=\"%s\" METHOD=%s>\n", cgiScriptName(),
 	cartUsualString(cart, "formMethod", "POST"));
 cartSaveSession(cart);
 cgiMakeHiddenVar(hgtaDatabase, db);
