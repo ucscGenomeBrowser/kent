@@ -60,7 +60,7 @@ color 0, 10, 100
 altColor 0,90,10
 type wigMaf 0.0 1.0
 maxHeightPixels 100:40:11
-# wiggle phastCons5way
+wiggle phastCons5way
 spanList 1
 autoScaleDefault Off
 windowingFunction mean
