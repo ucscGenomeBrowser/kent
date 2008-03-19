@@ -1,7 +1,7 @@
 # for emacs: -*- mode: sh; -*-
 
 # Bos Taurus -- Baylor Release 4.0 (Oct 4 2007)
-#	"$Id: bosTau4.txt,v 1.6 2008/03/18 23:46:48 hiram Exp $"
+#	"$Id: bosTau4.txt,v 1.7 2008/03/19 20:19:13 hiram Exp $"
 #########################################################################
 # DOWNLOAD SEQUENCE (DONE - 2008-03-07 - Hiram)
     ssh kkstore06
@@ -1101,7 +1101,7 @@ done
 # frames multiz5wayFrames
 # irows on
 #############################################################################
-# phastCons 5-way (DONE - 2008-03-18 - Hiram)
+# phastCons 5-way (DONE - 2008-03-19 - Hiram)
 
     # split 5way mafs into 10M chunks and generate sufficient statistics 
     # files for # phastCons
@@ -1120,10 +1120,15 @@ set c = $2
 rm -fr $resultDir/$c
 mkdir -p $resultDir
 twoBitToFa -seq=$c /scratch/data/bosTau4/bosTau4.2bit /scratch/tmp/bosTau4.$c.fa
-/cluster/bin/phast/$MACHTYPE/msa_split $MAFS/$resultDir/$c.maf -i MAF \
+# need to truncate odd-ball scaffold/chrom names that include dots
+# as phastCons utils can't handle them
+set TMP = /scratch/tmp/$c.clean.maf.$$
+perl -wpe 's/^s ([^.]+\.[^. ]+)\.\S+/s $1/' $MAFS/$resultDir/$c.maf > $TMP
+/cluster/bin/phast/$MACHTYPE/msa_split $TMP -i MAF \
     -M /scratch/tmp/bosTau4.$c.fa \
     -o SS -r $resultDir/$c -w 10000000,0 -I 1000 -B 5000
 rm -f /scratch/tmp/bosTau4.$c.fa
+rm -f $TMP
 popd
 mkdir -p $resultDir
 date > $resultDir/$c.out
@@ -1175,7 +1180,7 @@ doSplit.csh $(dir1) $(root1) {check out line+ $(dir1)/$(root1).out}
 
     cat << '_EOF_' > doPhast.csh
 #!/bin/csh -fe
-set PHASTBIN = /cluster/bin/phast.2007-05-04
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast/bin
 set subDir = $1
 set f = $2
 set c = $2:r
@@ -1218,50 +1223,43 @@ rm -fr $tmp
     # << happy emacs
     chmod a+x doPhast.csh
 
-    cat << '_EOF_' > template
-#LOOP
-../doPhast.csh $(root1) $(file1) 45 .3 .31 {check out line+ /san/sanvol1/scratch/bosTau4/multiz5way/cons/all/pp/$(root1)/$(file1).pp}
-#ENDLOOP
-'_EOF_'
-    # << happy emacs
-
     # Create parasol batch and run it
     pushd /san/sanvol1/scratch/bosTau4/multiz5way/cons
     find ./ss -type f -name "*.ss" | sed -e "s#^./##; s/.ss$//" \
 	> /cluster/data/bosTau4/bed/multiz5way/cons/ss.list
+    popd
 
     # run for all species
     cd ..
     mkdir -p all run.cons/all
     cd all
-    /cluster/bin/phast.new/tree_doctor ../../mm9.30way.mod \
---prune-all-but=bosTau4,hg18,panTro2,rheMac2,ponAbe2,mm9,canFam2,monDom4,ornAna1 \
-	> all.mod
+    /cluster/bin/phast.cz/tree_doctor ../../mm9.30way.mod \
+--prune-all-but=bosTau3,hg18,mm9,canFam2,ornAna1 \
+	| sed -e "s/bosTau3/bosTau4/" > all.mod
     cd ../run.cons/all
 
     #	root1 == chrom name, file1 == ss file name without .ss suffix
     # Create template file for "all" run
     cat << '_EOF_' > template
 #LOOP
-../run.cons/doPhast.csh $(lastDir1) $(file1) 45 .3 .31 {check out line+ /san/sanvol1/scratch/bosTau4/multiz5way/cons/all/pp/$(lastDir1)/$(file1).pp}
+../doPhast.csh $(lastDir1) $(file1) 45 .3 .31 {check out line+ /san/sanvol1/scratch/bosTau4/multiz5way/cons/all/pp/$(lastDir1)/$(file1).pp}
 #ENDLOOP
 '_EOF_'
     # << happy emacs
-    gensub2 ../ss.list single template jobList
+    gensub2 ../../ss.list single template jobList
     para create jobList
     para try ... check ... push ... etc.
-# Completed: 28485 of 28485 jobs
-# CPU time in finished jobs:      14082s     234.70m     3.91h    0.16d  0.000 y
-# IO & Wait Time:                188534s    3142.23m    52.37h    2.18d  0.006 y
-# Average job time:                   7s       0.12m     0.00h    0.00d
-# Longest running job:                0s       0.00m     0.00h    0.00d
-# Longest finished job:              17s       0.28m     0.00h    0.00d
-# Submission to last job:         72420s    1207.00m    20.12h    0.84d
+# Completed: 2569 of 2569 jobs
+# CPU time in finished jobs:       8636s     143.93m     2.40h    0.10d  0.000 y
+# IO & Wait Time:                 17371s     289.52m     4.83h    0.20d  0.001 y
+# Average job time:                  10s       0.17m     0.00h    0.00d
+# Longest finished job:              44s       0.73m     0.01h    0.00d
+# Submission to last job:          1008s      16.80m     0.28h    0.01d
 
     # create Most Conserved track
     ssh kolossus
     cd /san/sanvol1/scratch/bosTau4/multiz5way/cons/all
-    find ./bed -type f -name "Contig*.bed" | xargs cat \
+    find ./bed -type f -name "chr*.bed" | xargs cat \
 	| sort -k1,1 -k2,2n | \
         awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' | \
             /cluster/bin/scripts/lodToBedScore /dev/stdin > mostConserved.bed
@@ -1272,13 +1270,13 @@ rm -fr $tmp
     ssh hgwdev
     cd /cluster/data/bosTau4/bed/multiz5way/cons/all
     time nice -n +19 hgLoadBed bosTau4 phastConsElements5way mostConserved.bed
-    #	Loaded 1297014 elements of size 5
+    #	Loaded 1005876 elements of size 5
 
     # Try for 5% overall cov, and 70% CDS cov 
     #	We don't have any gene tracks to compare CDS coverage
     #	--rho .31 --expected-length 45 --target-coverage .3
     featureBits bosTau4 phastConsElements5way
-    #	141561229 bases of 2929139385 (4.833%) in intersection
+    #	132010504 bases of 2731830700 (4.832%) in intersection
 
     # Create merged posterier probability file and wiggle track data files
     # currently doesn't matter where this is performed, the san is the same
@@ -1290,14 +1288,20 @@ rm -fr $tmp
 
 for D in `ls -1d pp/file* | sort -t_ -k2n`
 do
+    TOP=`pwd`
     F=${D/pp\/}
-    out=phastCons5wayScores/${F}.data.gz
+    out=${TOP}/phastCons5wayScores/${F}.data.gz
     echo "${D} > ${F}.data.gz"
-    ls -S ${D}/*.pp | xargs cat | gzip > ${out}
+    cd ${D}
+    find . -name "*.pp" -type f \
+	| sed -e "s#^./##; s/chrUn.004./chrUn_004_/; s/-/.-./" \
+	| sort -t '.' -k1,1 -k3.3n \
+	| sed -e "s/.-./-/; s/chrUn_004_/chrUn.004./" | xargs cat \
+	| gzip > ${out}
+    cd "${TOP}"
 done
 
-    #	real    38m22.760s
-    #	copy the phastCons5wayScores to:
+    #	copy those files to the downloads area:
 # /cluster/data/bosTau4/bed/multiz5way/downloads/phastCons5way/phastConsScores
     #	for hgdownload downloads
 
@@ -1309,7 +1313,7 @@ done
 	| wigEncode -noOverlap stdin phastCons5way.wig phastCons5way.wib
     # Converted stdin, upper limit 1.00, lower limit 0.00
     time nice -n +19 cp -p *.wi? /cluster/data/bosTau4/bed/multiz5way/cons/all
-    #	real    1m4.483s
+    #	real    0m40.875s
 
     # Load gbdb and database with wiggle.
     ssh hgwdev
@@ -1317,7 +1321,7 @@ done
     ln -s `pwd`/phastCons5way.wib /gbdb/bosTau4/multiz5way/phastCons5way.wib
     time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/bosTau4/multiz5way bosTau4 \
 	phastCons5way phastCons5way.wig
-    #	real    0m56.271s
+    #	real    1m5.667s
     # remove garbage
     rm wiggle.tab
 
@@ -1327,7 +1331,7 @@ done
     time nice -n +19 hgWiggle -doHistogram \
 	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
 	    -db=bosTau4 phastCons5way > histogram.data 2>&1
-    #	real    5m0.608s
+    #	real    3m37.316s
 
     #	create plot of histogram:
 
@@ -1337,7 +1341,7 @@ set size 1.4, 0.8
 set key left box
 set grid noxtics
 set grid ytics
-set title " Orangutan PonAbe2 Histogram phastCons5way track"
+set title " Cow BosTau4 Histogram phastCons5way track"
 set xlabel " phastCons5way score"
 set ylabel " Relative Frequency"
 set y2label " Cumulative Relative Frequency (CRF)"
