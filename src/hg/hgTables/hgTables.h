@@ -427,6 +427,7 @@ void doSubtrackMergeSubmit(struct sqlConnection *conn);
 #define hgtaPastedIdentifiers "hgta_pastedIdentifiers"
 #define hgtaIdentifierFile "hgta_identifierFile"
 #define hgtaIdentifierTable "hgta_identifierTable"
+#define hgtaIdentifierDb "hgta_identifierDb"
 #define hgtaFilterTable "hgta_filterTable"
 #define hgtaFieldSelectTable "hgta_fieldSelectTable"
 #define hgtaGeneSeqType "hgta_geneSeqType"

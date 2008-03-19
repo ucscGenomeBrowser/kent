@@ -13,15 +13,17 @@
 #include "trashDir.h"
 #include "web.h"
 
-static char const rcsid[] = "$Id: identifiers.c,v 1.20 2008/03/19 05:38:58 angie Exp $";
+static char const rcsid[] = "$Id: identifiers.c,v 1.21 2008/03/19 17:38:09 angie Exp $";
 
 
 static boolean forCurTable()
 /* Return TRUE if cart Identifier stuff is for curTable. */
 {
+char *identifierDb = cartOptionalString(cart, hgtaIdentifierDb);
 char *identifierTable = cartOptionalString(cart, hgtaIdentifierTable);
 
-return (identifierTable &&
+return (identifierDb && identifierTable &&
+	sameString(identifierDb, database) &&
 	(sameString(identifierTable, curTable) ||
 	 sameString(connectingTableForTrack(identifierTable), curTable)));
 }
@@ -288,6 +290,7 @@ if (isNotEmpty(idText))
 	warn("Sorry, I can't tell which field of table %s to treat as the "
 	     "identifier field.", curTable);
 	webNewSection("Table Browser");
+	cartRemove(cart, hgtaIdentifierDb);
 	cartRemove(cart, hgtaIdentifierTable);
 	cartRemove(cart, hgtaIdentifierFile);
 	mainPageAfterOpen(conn);
@@ -342,6 +345,7 @@ if (isNotEmpty(idText))
 	}
     carefulClose(&f);
     lineFileClose(&lf);
+    cartSetString(cart, hgtaIdentifierDb, database);
     cartSetString(cart, hgtaIdentifierTable, curTable);
     cartSetString(cart, hgtaIdentifierFile, tn.forCgi);
     if (saveIdText)
