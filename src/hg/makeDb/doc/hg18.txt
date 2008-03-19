@@ -20731,3 +20731,61 @@ liftOver ux16Hg17.bed /gbdb/hg17/liftOver/hg17ToHg18.over.chain.gz \
     ux16Hg18.bed ux16Hg18.unmapped
 hgLoadBed hg18 uc16 uc16Hg18.bed 
 hgLoadBed hg18 ux16 ux16Hg18.bed 
+
+
+#############################################################################
+# TAJIMA'S D (LIFTOVER FROM HG17) (DONE 3/17/08 angie)
+    ssh hgwdev
+    mkdir /cluster/data/hg18/bed/tajdLiftOver
+    cd /cluster/data/hg18/bed/tajdLiftOver
+    # The submitted hg17 bedGraph custom tracks had 1-based start coords,
+    # so correct; also, the tajdSnp* tables used a sql command to set
+    # the rs names, so get the data from SQL not file:
+    set loChain = /cluster/data/hg17/bed/liftOver/hg17ToHg18.over.chain.gz
+    foreach pop (Ad Ed Xd)
+      zcat /cluster/data/hg17/bed/tajdpoly/20050603/hg17.tajd$pop.bedGraph.gz \
+      | awk '{print $1 "\t" $2-1 "\t" $3 "\t" $4}' \
+      | liftOver stdin -minMatch=0.5 \
+          $loChain hg18.tajd$pop.bedGraph hg17.tajd$pop.unmapped
+      hgsql hg17 -NBe "select chrom,chromStart,chromEnd,name from tajdSnp$pop" \
+      | liftOver stdin \
+          $loChain hg18.tajdSnp$pop.bed hg17.tajdSnp$pop.unmapped
+    end
+    foreach pop (Ad Ed Xd)
+      hgLoadBed hg18 tajdSnp$pop hg18.tajdSnp$pop.bed
+      hgLoadBed -bedGraph=4 hg18 tajd$pop hg18.tajd$pop.bedGraph
+    end
+
+    # The hg17 build had some fancy sql to find items overlapping with gaps,
+    # awk'd to make sql to delete those items.  Use featureBits to find:
+    foreach pop (Ad Ed Xd)
+      featureBits hg18 -countGaps tajdSnp$pop gap -bed=tajdSnp$pop.gap.bed
+      featureBits hg18 -countGaps tajd$pop gap -bed=tajd$pop.gap.bed
+    end
+    wc -l *.gap.bed
+#  8 tajdAd.gap.bed
+#  8 tajdEd.gap.bed
+#  0 tajdSnpAd.gap.bed
+#  0 tajdSnpEd.gap.bed
+#  0 tajdSnpXd.gap.bed
+#  8 tajdXd.gap.bed
+    diff tajdAd.gap.bed tajdEd.gap.bed 
+    diff tajdAd.gap.bed tajdXd.gap.bed
+    # No output from either diff -- same ranges.
+    awk '{print $3 - $2;}' tajdAd.gap.bed 
+#2605
+#5000
+#5000
+#1000
+#1199
+#1359
+#5000
+#4100
+    # Actually, I disagree with removing the items that overlap those.
+    # As the description page says, each 10kb region is really the center
+    # of a 100kb window.  Those windows will overlap gaps -- and if the 
+    # center 10k of a window happens to overal a gap, the whole window is
+    # no worse than a window that overlaps a gap 1/3 of the way in instead
+    # of 1/2. 
+
+
