@@ -1,7 +1,7 @@
 # for emacs: -*- mode: sh; -*-
 
 # Bos Taurus -- Baylor Release 4.0 (Oct 4 2007)
-#	"$Id: bosTau4.txt,v 1.7 2008/03/19 20:19:13 hiram Exp $"
+#	"$Id: bosTau4.txt,v 1.8 2008/03/19 23:51:56 hiram Exp $"
 #########################################################################
 # DOWNLOAD SEQUENCE (DONE - 2008-03-07 - Hiram)
     ssh kkstore06
@@ -1395,4 +1395,27 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
 # and genbank tables) which tracks to assign these tables to:
 #	genscanPep
 
+#############################################################################
+#  create download files (DONE - 2008-03-19 - Hiram)
+    ssh hgwdev
+    cd /cluster/data/bosTau4
+    ln -s /cluster/data/bosTau4/bed/repeatMasker/bosTau4.fa.out .
+    makeDownloads.pl bosTau4 > makeDownloads.log 2>&1
+
+    #	*EDIT* the README files and ensure they are correct
+
+#############################################################################
+#  PushQ entries (DONE - 2008-03-19 - Hiram)
+    ssh hgwdev
+    /cluster/data/bosTau4
+    /cluster/bin/scripts/makePushQSql.pl bosTau4 > jkStuff/pushQ.sql
+    #	output warnings:
+# hgwdev does not have /usr/local/apache/htdocs/goldenPath/bosTau4/liftOver/bosTau4ToBosTau*
+# bosTau4 does not have seq
+
+# Could not tell (from trackDb, all.joiner and hardcoded lists of supporting
+# and genbank tables) which tracks to assign these tables to:
+#	genscanPep
+
+    #	looks like there should be a bosTau3 to bosTau4 liftOver run
 #############################################################################
