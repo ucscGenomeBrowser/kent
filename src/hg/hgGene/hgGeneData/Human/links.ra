@@ -73,7 +73,7 @@ shortLabel Human Cortex Gene Expression
 tables allenBrainGene
 idSql select a.geneSymbol from kgXref x, allenBrainGene a where x.geneSymbol=a.geneSymbol and kgId='%s'
 url http://humancortex.alleninstitute.org/has/human/brain/%s.html 
-priority 10.2
+priority 10
 
 name aceView
 shortLabel AceView
