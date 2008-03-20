@@ -9,6 +9,7 @@
 #include "textOut.h"
 #include "hui.h"
 #include "cart.h"
+#include "jsHelper.h"
 #include "web.h"
 #include "hdb.h"
 #include "wikiLink.h"
@@ -16,7 +17,7 @@
 #include "customFactory.h"
 #include "hgSession.h"
 
-static char const rcsid[] = "$Id: hgSession.c,v 1.34 2008/01/15 21:13:39 angie Exp $";
+static char const rcsid[] = "$Id: hgSession.c,v 1.35 2008/03/20 04:42:24 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -259,17 +260,20 @@ hDisconnectCentral(&conn);
 void showOtherUserOptions()
 /* Print out inputs for loading another user's saved session. */
 {
+char javascript[2048];
 printf("<TABLE BORDERWIDTH=0>\n");
 printf("<TR><TD colspan=2>"
        "Load settings from another user's saved session:</TD></TR>\n"
        "<TR><TD>&nbsp;&nbsp;&nbsp;</TD><TD>user: \n");
-cgiMakeTextVar(hgsOtherUserName,
-	       cartUsualString(cart, hgsOtherUserName, ""),
-	       20);
+cgiMakeOnKeypressTextVar(hgsOtherUserName,
+			 cartUsualString(cart, hgsOtherUserName, ""),
+			 20, "return noSubmitOnEnter(event);");
 printf("&nbsp;&nbsp;&nbsp;session name: \n");
-cgiMakeTextVar(hgsOtherUserSessionName,
-	       cartUsualString(cart, hgsOtherUserSessionName, ""),
-	       20);
+safef(javascript, sizeof(javascript), "return pressOnEnter(event, %s);",
+      hgsDoOtherUser);
+cgiMakeOnKeypressTextVar(hgsOtherUserSessionName,
+			 cartUsualString(cart, hgsOtherUserSessionName, ""),
+			 20, javascript);
 printf("&nbsp;&nbsp;");
 cgiMakeButton(hgsDoOtherUser, "submit");
 printf("</TD></TR>\n");
@@ -281,13 +285,16 @@ void showLoadingOptions(char *userName, boolean savedSessionsSupported)
 /* Show options for loading settings from another user's session, a file 
  * or URL. */
 {
+char javascript[2048];
 printf("<H3>Load Settings</H3>\n");
 if (savedSessionsSupported)
     showOtherUserOptions();
 
 printf("<TABLE BORDERWIDTH=0>\n");
 printf("<TR><TD colspan=2>Load settings from a local file:</TD>\n");
-printf("<TD><INPUT TYPE=FILE NAME=\"%s\">\n", hgsLoadLocalFileName);
+printf("<TD><INPUT TYPE=FILE NAME=\"%s\" "
+       "onkeypress=\"return noSubmitOnEnter(event);\">\n",
+       hgsLoadLocalFileName);
 printf("&nbsp;&nbsp;");
 cgiMakeButton(hgsDoLoadLocal, "submit");
 printf("</TD></TR>\n");
@@ -296,9 +303,11 @@ printf("<TR><TD colspan=2></TD></TR>\n");
 printf("<TR><TD colspan=2>Load settings from a URL (http://..., ftp://...):"
        "</TD>\n");
 printf("<TD>\n");
-cgiMakeTextVar(hgsLoadUrlName,
-	       cartUsualString(cart, hgsLoadUrlName, ""),
-	       20);
+safef(javascript, sizeof(javascript), "return pressOnEnter(event, %s);",
+      hgsDoLoadUrl);
+cgiMakeOnKeypressTextVar(hgsLoadUrlName,
+			 cartUsualString(cart, hgsLoadUrlName, ""),
+			 20, javascript);
 printf("&nbsp;&nbsp;");
 cgiMakeButton(hgsDoLoadUrl, "submit");
 printf("</TD></TR>\n");
@@ -309,6 +318,7 @@ printf("<P></P>\n");
 void showSavingOptions(char *userName)
 /* Show options for saving a new named session in our db or to a file. */
 {
+char javascript[2048];
 static char *textOutCompressMenu[] = textOutCompressMenuContents;
 static char *textOutCompressValues[] = textOutCompressValuesContents;
 static int textOutCompressMenuSize = ArraySize(textOutCompressMenu) - 1;
@@ -321,9 +331,11 @@ if (isNotEmpty(userName))
     printf("<TR><TD colspan=4>Save current settings as named session:"
 	   "</TD></TR>\n"
 	   "<TR><TD>&nbsp;&nbsp;&nbsp;</TD><TD>name:</TD><TD>\n");
-    cgiMakeTextVar(hgsNewSessionName,
-		   cartUsualString(cart, "db", hGetDb()),
-		   20);
+    safef(javascript, sizeof(javascript), "return pressOnEnter(event, %s);",
+	  hgsDoNewSession);
+    cgiMakeOnKeypressTextVar(hgsNewSessionName,
+			     cartUsualString(cart, "db", hGetDb()),
+			     20, javascript);
     printf("&nbsp;&nbsp;&nbsp;");
     cgiMakeCheckBox(hgsNewSessionShare,
 		    cartUsualBoolean(cart, hgsNewSessionShare, TRUE));
@@ -337,9 +349,11 @@ if (isNotEmpty(userName))
 
 printf("<TR><TD colspan=4>Save current settings to a local file:</TD></TR>\n");
 printf("<TR><TD>&nbsp;&nbsp;&nbsp;</TD><TD>file:</TD><TD>\n");
-cgiMakeTextVar(hgsSaveLocalFileName,
-	       cartUsualString(cart, hgsSaveLocalFileName, ""),
-	       20);
+safef(javascript, sizeof(javascript), "return pressOnEnter(event, %s);",
+      hgsDoSaveLocal);
+cgiMakeOnKeypressTextVar(hgsSaveLocalFileName,
+			 cartUsualString(cart, hgsSaveLocalFileName, ""),
+			 20, javascript);
 printf("&nbsp;&nbsp;&nbsp;");
 printf("file type returned: ");
 cgiMakeDropListFull(hgsSaveLocalFileCompress, 
@@ -434,6 +448,7 @@ void doMainPage(char *message)
 /* Login status/links and session controls. */
 {
 puts("Content-Type:text/html\n");
+jsInit();
 if (wikiLinkEnabled())
     {
     char *wikiUserName = wikiLinkUserName();
