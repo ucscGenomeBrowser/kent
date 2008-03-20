@@ -389,6 +389,8 @@ while (lineFileRow(lf, row))
 	/* Loop through all psl's associated with our RNA.  Figure out
 	 * our overlap with each, and pick best one. */
 	struct hashEl *hel, *firstPslHel = hashLookup(pslHash, info.sourceAcc);
+	if (firstPslHel == NULL)
+	    errAbort("%s is not in %s", info.sourceAcc, pslFile);
 	int mapCount = 0;
 	struct psl *psl, *bestPsl = NULL;
 	int coverage, bestCoverage = 0;
