@@ -17,7 +17,7 @@
 #include "trans3.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: genoFind.c,v 1.23 2007/02/04 05:09:02 kent Exp $";
+static char const rcsid[] = "$Id: genoFind.c,v 1.24 2008/03/20 17:38:35 kent Exp $";
 
 char *gfSignature()
 /* Return signature that starts each command to gfServer. Helps defend 
@@ -1160,12 +1160,14 @@ for (clump = clumpList; clump != NULL; clump = clump->next)
 	    {
 	    if (hit->qStart > blockEnd)
 		{
+		/* We're skipping some, so output block so far, and start new block. */
 		qcov += blockEnd - blockStart;
 		blockStart = hit->qStart;
 		blockEnd = blockStart + tileSize;
 		}
 	    else if (hit->qStart + tileSize > blockEnd)
 		{
+		/* Expand current block. */
 		blockEnd = hit->qStart + tileSize;
 		}
 	    }
@@ -1844,6 +1846,23 @@ else
 	}
     }
 return hitList;
+}
+
+static void dumpClump(struct gfClump *clump, FILE *f)
+/* Print out a clump */
+{
+struct gfSeqSource *target = clump->target;
+char *tName = target->fileName;
+if (tName == NULL) tName = target->seq->name;
+fprintf(f, "%d-%d\t%s:%d-%d\n", clump->qStart, clump->qEnd, tName, clump->tStart, clump->tEnd);
+}
+
+static void dumpClumpList(struct gfClump *clumpList, FILE *f)
+/* Dump list of clumps. */
+{
+struct gfClump *clump;
+for (clump = clumpList; clump != NULL; clump = clump->next)
+    dumpClump(clump, f);
 }
 
 struct gfClump *gfFindClumpsWithQmask(struct genoFind *gf, bioSeq *seq, 
