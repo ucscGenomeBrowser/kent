@@ -20789,3 +20789,17 @@ hgLoadBed hg18 ux16 ux16Hg18.bed
     # of 1/2. 
 
 
+#############################################################################
+# ADD ALLEN BRAIN CORTEXT LINK (DONE, 2/12/08, Fan)
+
+    mkdir -p /cluster/store11/gs.19/build36/bed/allenBrain
+    cd /cluster/store11/gs.19/build36/bed/allenBrain
+
+# save list of genes from Allen Brain into file allenBrainGene.tab
+
+    hgsql hg18 < ~/src/hg/lib/allenBrainGene.sql
+    hgsql hg18 -e \
+    'load data local infile "allenBrainGene.tab" into table allenBrainGene'
+#############################################################################
+    
+    
