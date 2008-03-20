@@ -17,7 +17,7 @@
 #include "trans3.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: genoFind.c,v 1.24 2008/03/20 17:38:35 kent Exp $";
+static char const rcsid[] = "$Id: genoFind.c,v 1.25 2008/03/20 17:39:43 kent Exp $";
 
 char *gfSignature()
 /* Return signature that starts each command to gfServer. Helps defend 
@@ -1848,6 +1848,7 @@ else
 return hitList;
 }
 
+#ifdef DEBUG
 static void dumpClump(struct gfClump *clump, FILE *f)
 /* Print out a clump */
 {
@@ -1864,6 +1865,7 @@ struct gfClump *clump;
 for (clump = clumpList; clump != NULL; clump = clump->next)
     dumpClump(clump, f);
 }
+#endif /* DEBUG */
 
 struct gfClump *gfFindClumpsWithQmask(struct genoFind *gf, bioSeq *seq, 
 	Bits *qMaskBits, int qMaskOffset,
