@@ -18,7 +18,7 @@
 #include "trans3.h"
 
 
-static char const rcsid[] = "$Id: gfBlatLib.c,v 1.25 2007/04/20 22:44:11 kent Exp $";
+static char const rcsid[] = "$Id: gfBlatLib.c,v 1.26 2008/03/20 17:38:13 kent Exp $";
 
 static int ssAliCount = 16;	/* Number of alignments returned by ssStitch. */
 
@@ -548,7 +548,6 @@ else
     gfiGetSeqName(tSpec, targetName, NULL);
 }
 
-
 void gfAlignStrand(int *pConn, char *tSeqDir, struct dnaSeq *seq,
     boolean isRc, int minMatch, struct hash *tFileCache, struct gfOutput *out)
 /* Search genome on server with one strand of other sequence to find homology. 
@@ -564,7 +563,6 @@ rangeList = gfQuerySeq(*pConn, seq);
 close(*pConn);
 *pConn = -1;
 slSort(&rangeList, gfRangeCmpTarget);
-/* Dump range list to file for debugging. */
 rangeList = gfRangesBundle(rangeList, ffIntronMax);
 for (range = rangeList; range != NULL; range = range->next)
     {
