@@ -2171,6 +2171,11 @@ identifier anoEstTclId
     $anoGam.anoEstTcl.name
     $anoGam.anoEstExpressed.name minCheck=0.30
 
+identifier allenBrainGene
+"KG link to Allen Brain Institute: Gene Expression in the Human Cortex"
+    $gbd.kgXref.geneSymbol dupeOk
+    $gbd.allenBrainGene.geneSymbol minCheck=0.98
+
 identifier allenBrainProbe
 "A probe used in the Allen Brain Atlas"
     $gbd.allenBrainUrl.name
