@@ -18,7 +18,7 @@
 #include "hPrint.h"
 #include "jsHelper.h"
 
-static char const rcsid[] = "$Id: jsHelper.c,v 1.5 2008/03/18 22:12:57 angie Exp $";
+static char const rcsid[] = "$Id: jsHelper.c,v 1.6 2008/03/20 04:35:23 angie Exp $";
 
 static boolean jsInited = FALSE;
 
@@ -123,6 +123,18 @@ hPrintf("%s\n",
 "function noSubmitOnEnter(e)\n"
 "{\n"
 "return !gotEnterKey(e);\n"
+"}\n"
+"function pressOnEnter(e, button)\n"
+"{\n"
+"if (gotEnterKey(e))\n"
+"    {\n"
+"    button.click();\n"
+"    return false;\n"
+"    }\n"
+"else\n"
+"    {\n"
+"    return true;\n"
+"    }\n"
 "}\n"
 );
 hPrintf("</SCRIPT>\n");
