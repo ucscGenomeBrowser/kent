@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/makePushQSql.pl instead.
 
-# $Id: makePushQSql.pl,v 1.13 2008/01/25 23:18:25 hiram Exp $
+# $Id: makePushQSql.pl,v 1.14 2008/03/21 23:14:49 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -99,7 +99,6 @@ sub getAllTables($) {
   foreach my $t (`echo show tables | $localSql`) {
     chomp $t;
     next if ($t =~ /^(trackDb|hgFindSpec)_\w+/);
-    next if ($t eq 'tableDescriptions');
     next if (defined $noPush{$t});
     if ($t =~ /^(\S+)_(\w+)$/) {
       my ($maybeChr, $track) = ($1, $2);
@@ -167,7 +166,8 @@ sub getInfrastructureEntry {
   $entry{'files'} = join('\r\n', @files);
 
   # Look for infrastructure tables in allTables hash:
-  foreach my $t qw( chromInfo grp seq extFile hgFindSpec trackDb history ) {
+  foreach my $t qw( chromInfo grp seq extFile hgFindSpec trackDb history
+		    tableDescriptions ) {
     if (defined $allTables->{$t}) {
       $entry{'tables'} .= "$t ";
       delete $allTables->{$t};
