@@ -311,14 +311,14 @@ compositeTrack on
 	subTrack nucleosomeControlCoverage
 	shortLabel Nucleosome control +
 	longLabel Coverage of nucleosome control, sense strand reads
-	color 255,235,102
+	color 88,64,200
 	priority 1
 
 	track nucleosomeControlAntisenseCoverage
 	subTrack nucleosomeControlCoverage
 	shortLabel Nucleosome control -
 	longLabel Coverage of nucleosome control, antisense strand reads
-	color 255,132,0
+	color 88,200,64
 	priority 2
 
 track nucleosome
