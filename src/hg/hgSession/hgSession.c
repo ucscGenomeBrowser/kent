@@ -17,7 +17,7 @@
 #include "customFactory.h"
 #include "hgSession.h"
 
-static char const rcsid[] = "$Id: hgSession.c,v 1.35 2008/03/20 04:42:24 angie Exp $";
+static char const rcsid[] = "$Id: hgSession.c,v 1.36 2008/03/21 00:24:05 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -260,7 +260,6 @@ hDisconnectCentral(&conn);
 void showOtherUserOptions()
 /* Print out inputs for loading another user's saved session. */
 {
-char javascript[2048];
 printf("<TABLE BORDERWIDTH=0>\n");
 printf("<TR><TD colspan=2>"
        "Load settings from another user's saved session:</TD></TR>\n"
@@ -269,11 +268,9 @@ cgiMakeOnKeypressTextVar(hgsOtherUserName,
 			 cartUsualString(cart, hgsOtherUserName, ""),
 			 20, "return noSubmitOnEnter(event);");
 printf("&nbsp;&nbsp;&nbsp;session name: \n");
-safef(javascript, sizeof(javascript), "return pressOnEnter(event, %s);",
-      hgsDoOtherUser);
 cgiMakeOnKeypressTextVar(hgsOtherUserSessionName,
 			 cartUsualString(cart, hgsOtherUserSessionName, ""),
-			 20, javascript);
+			 20, jsPressOnEnter(hgsDoOtherUser));
 printf("&nbsp;&nbsp;");
 cgiMakeButton(hgsDoOtherUser, "submit");
 printf("</TD></TR>\n");
@@ -285,7 +282,6 @@ void showLoadingOptions(char *userName, boolean savedSessionsSupported)
 /* Show options for loading settings from another user's session, a file 
  * or URL. */
 {
-char javascript[2048];
 printf("<H3>Load Settings</H3>\n");
 if (savedSessionsSupported)
     showOtherUserOptions();
@@ -303,11 +299,9 @@ printf("<TR><TD colspan=2></TD></TR>\n");
 printf("<TR><TD colspan=2>Load settings from a URL (http://..., ftp://...):"
        "</TD>\n");
 printf("<TD>\n");
-safef(javascript, sizeof(javascript), "return pressOnEnter(event, %s);",
-      hgsDoLoadUrl);
 cgiMakeOnKeypressTextVar(hgsLoadUrlName,
 			 cartUsualString(cart, hgsLoadUrlName, ""),
-			 20, javascript);
+			 20, jsPressOnEnter(hgsDoLoadUrl));
 printf("&nbsp;&nbsp;");
 cgiMakeButton(hgsDoLoadUrl, "submit");
 printf("</TD></TR>\n");
@@ -318,7 +312,6 @@ printf("<P></P>\n");
 void showSavingOptions(char *userName)
 /* Show options for saving a new named session in our db or to a file. */
 {
-char javascript[2048];
 static char *textOutCompressMenu[] = textOutCompressMenuContents;
 static char *textOutCompressValues[] = textOutCompressValuesContents;
 static int textOutCompressMenuSize = ArraySize(textOutCompressMenu) - 1;
@@ -331,11 +324,9 @@ if (isNotEmpty(userName))
     printf("<TR><TD colspan=4>Save current settings as named session:"
 	   "</TD></TR>\n"
 	   "<TR><TD>&nbsp;&nbsp;&nbsp;</TD><TD>name:</TD><TD>\n");
-    safef(javascript, sizeof(javascript), "return pressOnEnter(event, %s);",
-	  hgsDoNewSession);
     cgiMakeOnKeypressTextVar(hgsNewSessionName,
 			     cartUsualString(cart, "db", hGetDb()),
-			     20, javascript);
+			     20, jsPressOnEnter(hgsDoNewSession));
     printf("&nbsp;&nbsp;&nbsp;");
     cgiMakeCheckBox(hgsNewSessionShare,
 		    cartUsualBoolean(cart, hgsNewSessionShare, TRUE));
@@ -349,11 +340,9 @@ if (isNotEmpty(userName))
 
 printf("<TR><TD colspan=4>Save current settings to a local file:</TD></TR>\n");
 printf("<TR><TD>&nbsp;&nbsp;&nbsp;</TD><TD>file:</TD><TD>\n");
-safef(javascript, sizeof(javascript), "return pressOnEnter(event, %s);",
-      hgsDoSaveLocal);
 cgiMakeOnKeypressTextVar(hgsSaveLocalFileName,
 			 cartUsualString(cart, hgsSaveLocalFileName, ""),
-			 20, javascript);
+			 20, jsPressOnEnter(hgsDoSaveLocal));
 printf("&nbsp;&nbsp;&nbsp;");
 printf("file type returned: ");
 cgiMakeDropListFull(hgsSaveLocalFileCompress, 
