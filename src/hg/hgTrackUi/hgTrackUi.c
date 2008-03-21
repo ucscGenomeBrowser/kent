@@ -36,7 +36,7 @@
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 #define MAX_SP_SIZE 2000
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.417 2008/03/18 22:15:19 angie Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.418 2008/03/21 04:03:58 angie Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -162,6 +162,7 @@ for (snpMapType=0; snpMapType<snpMapTypeCartSize; snpMapType++)
 #define SNP125_FILTER_COLUMNS 4
 #define SNP125_SET_ALL "snp125SetAll"
 #define SNP125_CLEAR_ALL "snp125ClearAll"
+#define SNP125_DEFAULTS "snp125Defaults"
 
 void snp125PrintFilterColGroup()
 /* Print the fancy COLGROUP for the table enclosing all filter checkbox 
@@ -235,6 +236,24 @@ for (i=0; i < varCount; i++)
 printf("</TABLE>\n");
 }
 
+void cartSetStringArray(struct cart *cart, char *vars[], char *defaults[],
+			int varCount)
+/* Given parallel arrays of variable names and default values, set those 
+ * cart variables to the default values.  If a NULL is encountered in 
+ * vars[], assume vars[] is NULL-terminated even if varCount has not
+ * been reached. */
+{
+if (vars == NULL)
+    return;
+int i;
+for (i = 0;  i < varCount;  i++)
+    {
+    if (vars[i] == NULL)
+	break;
+    cartSetString(cart, vars[i], defaults[i]);
+    }
+}
+
 void snp125Ui(struct trackDb *tdb)
 /* UI for dbSNP version 125 and later. */
 {
@@ -298,6 +317,27 @@ safef(autoSubmit, sizeof(autoSubmit), "onchange=\""
 cgiContinueHiddenVar("g");
 cgiContinueHiddenVar("c");
 
+/* The actual set defaults button is below, but we need to handle it here: */
+char defaultButton[1024];
+safef(defaultButton, sizeof(defaultButton), "%s_coloring", SNP125_DEFAULTS);
+stripChar(defaultButton, ' ');
+boolean defaultColoring = isNotEmpty(cgiOptionalString(defaultButton));
+if (defaultColoring)
+    {
+    cartSetString(cart,
+		  snp125ColorSourceDataName[0], snp125ColorSourceDefault[0]);
+    cartSetStringArray(cart, snp125LocTypeStrings, snp125LocTypeDefault,
+		       snp125LocTypeLabelsSize);
+    cartSetStringArray(cart, snp125ClassStrings, snp125ClassDefault,
+		       snp125ClassLabelsSize);
+    cartSetStringArray(cart, snp125ValidStrings, snp125ValidDefault,
+		       snp125ValidLabelsSize);
+    cartSetStringArray(cart, snp125FuncStrings, snp125FuncDefault,
+		       snp125FuncLabelsSize);
+    cartSetStringArray(cart, snp125MolTypeStrings, snp125MolTypeDefault,
+		       snp125MolTypeLabelsSize);
+    }
+
 printf("<A name=\"colorSpec\"><HR>\n");
 printf("<B>SNP Feature for Color Specification:</B>\n");
 snp125ColorSourceCart[0] = cartUsualString(cart, snp125ColorSourceDataName[0],
@@ -315,12 +355,18 @@ else
 			snp128ColorSourceLabels, snp128ColorSourceLabelsSize,
 			snp125ColorSourceCart[0], autoSubmit);
     }
+printf("&nbsp;\n");
+char javascript[2048];
+safef(javascript, sizeof(javascript),
+      "document."MAIN_FORM".action='%s'; %s document."MAIN_FORM".submit();",
+      cgiScriptName(), jsSetVerticalPosition(MAIN_FORM));
+cgiMakeOnClickSubmitButton(javascript, defaultButton, JS_DEFAULTS_BUTTON_LABEL);
 printf("<BR><BR>\n");
 printf("The selected feature above has the following values below.  \n");
 printf("For each value, a selection of colors is available.\n");
 printf("If a SNP has more than one of these properties, resulting in\n");
 printf("more than one color, then the stronger color will override the\n");
-printf("weaker color.  In order by strongest to weakest, the colors are\n");
+printf("weaker color.  In order from strongest to weakest, the colors are\n");
 printf("red, green, blue, gray, black.<BR><BR>\n");
 
 if (sameString(snp125ColorSourceCart[0], "Location Type"))
