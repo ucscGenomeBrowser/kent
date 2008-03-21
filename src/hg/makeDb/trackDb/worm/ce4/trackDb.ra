@@ -343,14 +343,8 @@ compositeTrack on
 	longLabel mononucleosomal fragments, antisense strand reads
 	priority 2
 
-	track nucleosomeControlSense
+	track nucleosomeControl
 	subTrack nucleosome
-	shortLabel control +
-	longLabel mononucleosome control, sense strand reads
+	shortLabel Control
+	longLabel mononucleosome control
 	priority 3
-
-	track nucleosomeControlAntisense
-	subTrack nucleosome
-	shortLabel control -
-	longLabel mononucleosome control, antisense strand reads
-	priority 4
