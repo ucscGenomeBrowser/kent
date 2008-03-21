@@ -19,12 +19,12 @@ if ($#argv != 2 ) then
   echo
   echo "  runs test suite for ensGene track update"
   echo "  run this script before you push the new tables to beta"
-  echo "  can run on one database or all dbs with ensGenes tracks"
   echo "  (makes lots of files: run in junk directory)"
   echo "  (it's best to direct output to a file)"
   echo
-  echo "    usage: ensGeneVersionNumber db | all"
+  echo "    usage: ensGeneVersionNumber (db | all)"
   echo "      ensGeneVersionNumber  = Ensembl's version, e.g. 49"
+  echo "      choose one database (db) or all dbs with ensGenes tracks (all)"
   echo
   exit 1
 else
