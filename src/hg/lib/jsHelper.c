@@ -18,7 +18,7 @@
 #include "hPrint.h"
 #include "jsHelper.h"
 
-static char const rcsid[] = "$Id: jsHelper.c,v 1.6 2008/03/20 04:35:23 angie Exp $";
+static char const rcsid[] = "$Id: jsHelper.c,v 1.7 2008/03/21 00:23:16 angie Exp $";
 
 static boolean jsInited = FALSE;
 
@@ -296,5 +296,18 @@ if (isNotEmpty(cgiOptionalString(buttonVar)))
         cartSetBoolean(cart, option, isSet);
         }
     }
+}
+
+char *jsPressOnEnter(char *button)
+/* Returns a javascript statement that clicks button when the Enter key
+ * has been pressed; typically this would go in a text input.
+ * jsInit must be called first. 
+ * Do not free return value!  */
+{
+if (! jsInited)
+    errAbort("jsPressOnEnter: jsInit must be called first.");
+static char poe[2048];
+safef(poe, sizeof(poe), "return pressOnEnter(event, %s);", button);
+return poe;
 }
 
