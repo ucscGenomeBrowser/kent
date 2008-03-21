@@ -253,7 +253,7 @@ type bed 5 .
 
 track nucleosomeStringency
 shortLabel Nucleosome Stringency
-longLabel Nucleosome Stringency from SOLiD core alignments
+longLabel Nucleosome Positioning Stringency from SOLiD core alignments
 group map
 priority 120.0
 visibility hide
@@ -261,12 +261,13 @@ type wig 0 1
 maxHeightPixels 100:40:11
 windowingFunction mean
 defaultViewLimits 0:1
-autoScaleDefault Off
+autoScaleDefault On
+color 128,0,128
 spanList 1
 
 track nucleosomeDensity
-shortLabel Nucleosome Density
-longLabel Density of nucleosome predictions from SOLiD core alignments
+shortLabel Nucleosome Coverage
+longLabel Coverage of nucleosome predictions from SOLiD core alignments
 group map
 priority 120.0
 visibility hide
@@ -280,16 +281,44 @@ compositeTrack on
 
 	track monoNucleosomesSense
 	subTrack nucleosomeDensity
-	shortLabel Nucleosome density +
-	longLabel Density of mononucleosomal fragments, sense strand reads
-	color 0,180,0
+	shortLabel Nucleosome coverage +
+	longLabel Coverage of mononucleosomal fragments, sense strand reads
+	color 0,72,255
 	priority 1
 
 	track monoNucleosomesAntiSense
 	subTrack nucleosomeDensity
-	shortLabel Nucleosome density -
-	longLabel Density of mononucleosomal fragments, antisense strand reads
-	color 0,0,180
+	shortLabel Nucleosome coverage -
+	longLabel Coverage of mononucleosomal fragments, antisense strand reads
+	color 0,170,37
+	priority 2
+
+track nucleosomeControlCoverage
+shortLabel Nucleosome Control
+longLabel Coverage of nucleosome control from SOLiD core alignments
+group map
+priority 120.0
+visibility hide
+type wig 1 145
+spanList 1
+maxHeightPixels 100:40:11
+windowingFunction mean
+defaultViewLimits 1:100
+autoScaleDefault Off
+compositeTrack on
+
+	track nucleosomeControlSenseCoverage
+	subTrack nucleosomeControlCoverage
+	shortLabel Nucleosome control +
+	longLabel Coverage of nucleosome control, sense strand reads
+	color 255,235,102
+	priority 1
+
+	track nucleosomeControlAntisenseCoverage
+	subTrack nucleosomeControlCoverage
+	shortLabel Nucleosome control -
+	longLabel Coverage of nucleosome control, antisense strand reads
+	color 255,132,0
 	priority 2
 
 track nucleosome
@@ -317,23 +346,11 @@ compositeTrack on
 	track nucleosomeControlSense
 	subTrack nucleosome
 	shortLabel control +
-	longLabel mononucleosomal control, sense strand reads
+	longLabel mononucleosome control, sense strand reads
 	priority 3
 
 	track nucleosomeControlAntisense
 	subTrack nucleosome
 	shortLabel control -
-	longLabel mononucleosomal control, antisense strand reads
+	longLabel mononucleosome control, antisense strand reads
 	priority 4
-
-#	track nucleosomeDNAsense
-#	subTrack nucleosome
-#	shortLabel genomic DNA +
-#	longLabel sheared genomic DNA displayed as mononucleosomal fragments, sense strand reads
-#	priority 3
-#
-#	track nucleosomeDNAantisense
-#	subTrack nucleosome
-#	shortLabel genomic DNA -
-#	longLabel sheared genomic DNA displayed as mononucleosomal fragments, antisense strand reads
-#	priority 4
