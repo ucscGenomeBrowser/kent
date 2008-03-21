@@ -251,6 +251,19 @@ type bed 5 .
 #	priority 2
 #	color 255,128,33
 
+track nucleosomeStringency
+shortLabel Nucleosome Stringency
+longLabel Nucleosome Stringency from SOLiD core alignments
+group map
+priority 120.0
+visibility hide
+type wig 0 1
+maxHeightPixels 100:40:11
+windowingFunction mean
+defaultViewLimits 0:1
+autoScaleDefault Off
+spanList 1
+
 track nucleosomeDensity
 shortLabel Nucleosome Density
 longLabel Density of nucleosome predictions from SOLiD core alignments
@@ -258,6 +271,7 @@ group map
 priority 120.0
 visibility hide
 type wig 1 19138
+spanList 1
 maxHeightPixels 100:40:11
 windowingFunction mean
 defaultViewLimits 1:100
