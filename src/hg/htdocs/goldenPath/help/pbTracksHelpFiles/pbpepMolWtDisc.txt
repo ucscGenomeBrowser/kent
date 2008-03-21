@@ -1,7 +1,7 @@
 <!------------Discussion----------->
 The molecular weight of a protein in kilodaltons (kD) can be 
-estimated by adding 10% to its length in amino acids. For example,
-a 400-residue protein is approximately 44 kD,
+estimated by adding 10% to its length in amino acids, then dividing by 10. 
+For example, a 400-residue protein is approximately 44 kD,
 based on an average of 110 daltons per amino acid, assuming
 random composition.
 <P>
