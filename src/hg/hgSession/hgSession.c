@@ -17,7 +17,7 @@
 #include "customFactory.h"
 #include "hgSession.h"
 
-static char const rcsid[] = "$Id: hgSession.c,v 1.36 2008/03/21 00:24:05 angie Exp $";
+static char const rcsid[] = "$Id: hgSession.c,v 1.37 2008/03/21 20:31:55 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -625,13 +625,12 @@ if (helList != NULL)
 		       "<P>Note: the session has at least one active custom "
 		       "track (in database ");
 	for (sln = liveDbList;  sln != NULL;  sln = sln->next)
-	    dyStringPrintf(dyMessage, "%s%s",
+	    dyStringPrintf(dyMessage, "<A HREF=\"hgCustom?%s&db=%s\">%s</A>%s",
+			   cartSidUrlString(cart), sln->name,
 			   sln->name, (sln->next ? sln->next->next ? ", " : " and " : ""));
-	dyStringPrintf(dyMessage,
-		       ").  Custom track(s) can be viewed "
-		       "<A HREF=\"hgCustom?%s\">here</A> "
-		       "or in the genome browser.</P>",
-		       cartSidUrlString(cart));
+	dyStringAppend(dyMessage, "; click on the database link "
+		       "to manage custom tracks).");
+
 	}
     if (gotExpiredCT)
 	{
