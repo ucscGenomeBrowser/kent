@@ -12,6 +12,7 @@ struct linkedBeds
     };
 
 struct txGraph *makeGraph(struct linkedBeds *lbList, int maxBleedOver, 
+	int maxUncheckedBleed, struct nibTwoCache *seqCache,
 	double singleExonMaxOverlap, char *name);
 /* Create a graph corresponding to linkedBedsList.
  * The maxBleedOver parameter controls how much of a soft edge that

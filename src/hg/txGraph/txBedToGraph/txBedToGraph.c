@@ -16,11 +16,14 @@
 #include "rangeTree.h"
 #include "binRange.h"
 #include "txGraph.h"
+#include "nibTwo.h"
 #include "txBedToGraph.h"
 
 int maxJoinSize = 70000;	/* This excludes most of the chr14 IG mess */
 boolean forceRefSeqJoin = TRUE;
 int maxBleedOver = 6;
+int maxUncheckedBleed = 3;
+struct nibTwoCache *seqCache = NULL;
 char *prefix = "a";
 double singleExonMaxOverlap = 0.60;
 
@@ -43,10 +46,15 @@ errAbort(
   "                    on refSeq type\n"
   "    -maxBleedOver=N - Maximum amount of exon that can be lost when snapping\n"
   "                    soft to hard edges. Default %d\n"
+  "    -maxUncheckedBleed=N - Maximum amount of exon that can be lost when\n"
+  "                    snapping soft to hard edges without checking nucleotide\n"
+  "                    match. Only used checkSeq is set.  Default %d\n"
+  "    -checkSeq=file.2bit - If true check sequence when snapping off ends. Can use nib\n"
+  "                    dir or two bit file.\n"
   "    -prefix=xyz - Use the given prefix for the graph names, default %s\n"
   "    -singleExonMaxOverlap=0.N - Maximum ratio of single exon that can overlap\n"
   "                                a multi-exon gene.  Default %g\n"
-  , maxJoinSize, maxBleedOver, prefix, singleExonMaxOverlap
+  , maxJoinSize, maxBleedOver, maxUncheckedBleed, prefix, singleExonMaxOverlap
   );
 }
 
@@ -54,7 +62,10 @@ static struct optionSpec options[] = {
    {"maxJoinSize", OPTION_INT},
    {"noForceRefSeqJoin", OPTION_BOOLEAN},
    {"maxBleedOver", OPTION_INT},
+   {"maxUncheckedBleed", OPTION_INT},
+   {"checkSeq", OPTION_STRING},
    {"prefix", OPTION_STRING},
+   {"singleExonMaxOverlap", OPTION_FLOAT},
    {NULL, 0},
 };
 
@@ -281,7 +292,8 @@ for (cluster = clusterList; cluster != NULL; cluster = nextCluster)
     nextCluster = cluster->next;
     safef(name, sizeof(name), "%s%d", prefix, ++id);
     verbose(2, "Got cluster of %d called %s.\n", slCount(cluster->lbList), name);
-    struct txGraph *graph = makeGraph(cluster->lbList, maxBleedOver, singleExonMaxOverlap, name);
+    struct txGraph *graph = makeGraph(cluster->lbList, maxBleedOver, maxUncheckedBleed, 
+    	seqCache, singleExonMaxOverlap, name);
     slAddHead(&graphList, graph);
     lbClusterFree(&cluster);
     }
@@ -350,6 +362,9 @@ maxJoinSize = optionInt("maxJoinSize", maxJoinSize);
 forceRefSeqJoin = !optionExists("noForceRefSeqJoin");
 maxBleedOver = optionInt("maxBleedOver", maxBleedOver);
 singleExonMaxOverlap = optionDouble("singleExonMaxOverlap", singleExonMaxOverlap);
+maxUncheckedBleed = optionInt("maxUncheckedBleed", maxUncheckedBleed);
+if (optionExists("checkSeq"))
+   seqCache = nibTwoCacheNew(optionVal("checkSeq", NULL));
 prefix = optionVal("prefix", prefix);
 if (argc < 4 || argc%2 != 0)
     usage();

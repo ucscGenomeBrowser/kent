@@ -27,6 +27,7 @@
 #include "dlist.h"
 #include "bed.h"
 #include "ggTypes.h"
+#include "nibTwo.h"
 #include "txGraph.h"
 #include "txBedToGraph.h"
 
@@ -283,12 +284,33 @@ slFreeList(&refList);
 return list;
 }
 
-static boolean snapVertex(struct dlNode *oldNode, int maxSnapSize)
-/* Snap vertex to nearby hard vertex in forward direction */
+static void addWaysInAndOut(struct rbTree *vertexTree, struct rbTree *edgeTree,
+	struct lm *lm)
+/* Put a bunch of ways in and out of the graph onto the edges. */
+{
+struct slRef *edgeRef, *edgeRefList = rbTreeItems(edgeTree);
+for (edgeRef = edgeRefList; edgeRef != NULL; edgeRef = edgeRef->next)
+    {
+    struct edge *edge = edgeRef->val;
+    struct slRef *inRef, *outRef;
+    lmAllocVar(lm, inRef);
+    lmAllocVar(lm, outRef);
+    inRef->val = outRef->val = edge;
+    slAddHead(&edge->start->waysOut, outRef);
+    slAddHead(&edge->end->waysIn, inRef);
+    }
+slFreeList(&edgeRefList);
+}
+
+
+static boolean snapVertex(struct dlNode *oldNode, int maxSnapSize, int maxUncheckedSnapSize,
+	struct nibTwoCache *seqCache, char *chromName)
+/* Snap vertex to nearby hard vertex. */
 {
 /* Figure out hard type we want to snap to, and return if not
  * soft to begin with. */
 struct vertex *vOld = oldNode->val;
+int oldPos = vOld->position;
 enum ggVertexType targetType, currentType = vOld->type;
 if (currentType == ggSoftStart)
     targetType = ggHardStart;
@@ -298,13 +320,15 @@ else
     return FALSE;
 
 /* Search forward */
-int newLimit = vOld->position + maxSnapSize;
 struct dlNode *node;
 for (node = oldNode->next; !dlEnd(node); node = node->next)
     {
     struct vertex *v = node->val;
-    if (v->position > newLimit)
+    int newPos = v->position;
+    int dif = newPos - oldPos;
+    if (dif > maxSnapSize)
         break;
+    /* TODO - check if over maxUnchecked. */
     if (v->type == targetType)
         {
 	vOld->movedTo = v;
@@ -313,12 +337,14 @@ for (node = oldNode->next; !dlEnd(node); node = node->next)
     }
 
 /* Search backwards */
-newLimit = vOld->position - maxSnapSize;
 for (node = oldNode->prev; !dlStart(node); node = node->prev)
     {
     struct vertex *v = node->val;
-    if (v->position < newLimit)
+    int newPos = v->position;
+    int dif = oldPos - newPos;
+    if (dif > maxSnapSize)
         break;
+    /* TODO - check if over maxUnchecked. */
     if (v->type == targetType)
         {
 	vOld->movedTo = v;
@@ -369,19 +395,28 @@ if (forwardCount > 0)
 slFreeList(&refList);
 }
 
-static void snapSoftToCloseHard(struct rbTree *vertexTree, struct rbTree *edgeTree, int maxSnapSize)
+static void snapSoftToCloseHard(struct rbTree *vertexTree, struct rbTree *edgeTree, int maxSnapSize,
+	int maxUncheckedSnapSize, struct nibTwoCache *seqCache, char *chromName)
 /* Snap hard vertices to nearby soft vertices of same type. */
 {
+struct lm *lm = lmInit(0);
+addWaysInAndOut(vertexTree, edgeTree, lm);
 struct dlList *vList = sortedListFromTree(vertexTree);
 struct dlNode *node;
 int snapCount = 0;
 for (node = vList->head; !dlEnd(node); node = node->next)
     {
-    if (snapVertex(node, maxSnapSize))
+    if (snapVertex(node, maxSnapSize, maxUncheckedSnapSize, seqCache, chromName))
 	{
 	rbTreeRemove(vertexTree, node->val);
         ++snapCount;
 	}
+    }
+/* Clean up ways in and out since have removed some nodes. */
+for (node = vList->head; !dlEnd(node); node = node->next)
+    {
+    struct vertex *v = node->val;
+    v->waysIn = v->waysOut = NULL;
     }
 if (snapCount > 0)
     {
@@ -389,24 +424,7 @@ if (snapCount > 0)
     updateForwardedEdges(edgeTree);
     }
 dlListFree(&vList);
-}
-
-static void addWaysInAndOut(struct rbTree *vertexTree, struct rbTree *edgeTree,
-	struct lm *lm)
-/* Put a bunch of ways in and out of the graph onto the edges. */
-{
-struct slRef *edgeRef, *edgeRefList = rbTreeItems(edgeTree);
-for (edgeRef = edgeRefList; edgeRef != NULL; edgeRef = edgeRef->next)
-    {
-    struct edge *edge = edgeRef->val;
-    struct slRef *inRef, *outRef;
-    lmAllocVar(lm, inRef);
-    lmAllocVar(lm, outRef);
-    inRef->val = outRef->val = edge;
-    slAddHead(&edge->start->waysOut, outRef);
-    slAddHead(&edge->end->waysIn, inRef);
-    }
-slFreeList(&edgeRefList);
+lmCleanup(&lm);
 }
 
 int edgeRefCmpEnd(const void *va, const void *vb)
@@ -808,7 +826,8 @@ for (edgeRef = edgeRefList; edgeRef != NULL; edgeRef = edgeRef->next)
     struct vertex *end = edge->end;
     if (start->type == ggHardStart || end->type == ggHardEnd)
 	{
-	rangeTreeAdd(rangeTree, start->position, end->position);
+	struct range *r = rangeTreeAdd(rangeTree, start->position, end->position);
+	r->val = edge;
 	}
     }
 
@@ -839,6 +858,10 @@ for (edgeRef = edgeRefList; edgeRef != NULL; edgeRef = edgeRef->next)
 	         {
 		 if (!trustedEdge(edge))
 		     {
+		     struct range *r = rangeTreeMaxOverlapping(rangeTree, s, e);
+		     struct edge *bigEdge = r->val;
+		     bigEdge->evList = slCat(edge->evList, bigEdge->evList);
+		     edge->evList = NULL;
 		     rbTreeRemove(edgeTree, edge);
 		     ++removedCount;
 		     }
@@ -1022,6 +1045,7 @@ return txg;
 }
 
 struct txGraph *makeGraph(struct linkedBeds *lbList, int maxBleedOver, 
+	int maxUncheckedBleed, struct nibTwoCache *seqCache,
 	double singleExonMaxOverlap, char *name)
 /* Create a graph corresponding to linkedBedsList.
  * The maxBleedOver parameter controls how much of a soft edge that
@@ -1029,6 +1053,8 @@ struct txGraph *makeGraph(struct linkedBeds *lbList, int maxBleedOver,
  * controls what ratio of a single exon transcript can overlap spliced 
  * transcripts */
 {
+char *chromName = lbList->bedList->chrom;
+
 /* Create tree of all unique vertices. */
 struct rbTree *vertexTree = makeVertexTree(lbList);
 verbose(2, "%d unique vertices\n", vertexTree->n);
@@ -1037,7 +1063,7 @@ verbose(2, "%d unique vertices\n", vertexTree->n);
 struct rbTree *edgeTree = makeEdgeTree(lbList, vertexTree);
 verbose(2, "%d unique edges\n", edgeTree->n);
 
-snapSoftToCloseHard(vertexTree, edgeTree, maxBleedOver);
+snapSoftToCloseHard(vertexTree, edgeTree, maxBleedOver, maxUncheckedBleed, seqCache, chromName);
 verbose(2, "%d edges, %d vertices after snapSoftToCloseHard\n", 
 	edgeTree->n, vertexTree->n);
 
@@ -1052,7 +1078,6 @@ verbose(2, "%d edges, %d vertices after snapHalfHards\n",
 halfHardConsensuses(vertexTree, edgeTree);
 verbose(2, "%d edges, %d vertices after medianHalfHards\n", 
 	edgeTree->n, vertexTree->n);
-
 
 removeEnclosedDoubleSofts(vertexTree, edgeTree, maxBleedOver, singleExonMaxOverlap);
 verbose(2, "%d edges, %d vertices after mergeEnclosedDoubleSofts\n",
