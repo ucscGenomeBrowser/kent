@@ -1,3 +1,4 @@
+
 ##########################################################################
 # CREATE HIV1 DATABASE (STARTED 8/1/06, Fan) 
 
@@ -467,3 +468,191 @@ CREATE TABLE gsClinicRec (
     mkdir -p  /gbdb/hiv1/vax004AaMaf 
     cp -p chr1.maf /gbdb/hiv1/vax004AaMaf
     hgLoadMaf hiv1 vax004AaMaf
+
+##########################################################################
+# UPDATE CLINICAL DB TABLES ACCORDING TO CORRECTED DATA FILES FROM GSID
+# (STARTED 3/8/08, DONE 3/12/08, Fan)
+
+# Save .xls files sent by Elizabeth to .txt files and store them under
+# /cluster/store12/medical/vaxGen/clinicalData/20080308/vax004/new/
+
+#    GSID_DEMOG_SEQNO20080304.txt     
+#    VAXGENRND_CD4_SEQNOf_20080308.txt
+#    VAXGENRND_CD4_SEQNO20080308.txt
+
+    mkdir -p /cluster/store12/medical/hiv/hiv1/clinical
+    cd /cluster/store12/medical/hiv/hiv1/clinical
+
+    cp -p /cluster/store12/medical/vaxGen/clinicalData/20080308/vax004/new/*.txt .
+
+# store raw data into xxxxRaw tables
+    processRaw GSID_DEMOG_SEQNO20080304.txt 
+    processRaw VAXGENRND_CD4_SEQNO20080308.txt
+    processRaw VAXGENRND_CD4_SEQNOf_20080308.txt
+
+    hgsql hiv1 < GSID_DEMOG_SEQNO20080304Raw.sql
+    hgsql hiv1 < VAXGENRND_CD4_SEQNO20080308Raw.sql
+    hgsql hiv1 < VAXGENRND_CD4_SEQNOf_20080308Raw.sql
+
+    hgsql hiv1 -e \
+    'load data local infile "GSID_DEMOG_SEQNO20080304.txt" into table GSID_DEMOG_SEQNO20080304Raw ignore 1 lines'
+
+    hgsql hiv1 -e \
+    'load data local infile "VAXGENRND_CD4_SEQNO20080308.txt" into table VAXGENRND_CD4_SEQNO20080308Raw ignore 1 lines'
+
+    hgsql hiv1 -e \
+    'load data local infile "VAXGENRND_CD4_SEQNOf_20080308.txt" into table VAXGENRND_CD4_SEQNOf_20080308Raw ignore 1 lines'
+
+# building initial gsidClinicRecTemp table ...
+# build initial gsidClinicRecTemp table, filter out duplicates for GSID4124
+
+    hgsql hiv1 -N -e \
+    'select "specId",subjId,labCode,daysOfCollection,"rna","cd4" from VAXGENRND_CD4_SEQNO20080308Raw where labCode !="U-210"' \
+    >gsidClinicRecTemp.tab
+
+    hgsql hiv1 -e 'delete from gsidClinicRecTemp'
+    hgsql hiv1 -e \
+    'load data local infile "gsidClinicRecTemp.tab" into table gsidClinicRecTemp'
+
+# building subjLabcode table ...
+    hgsql hiv1 -N -e 'select subjId, labCode from GSID_DEMOG_SEQNO20080304Raw where labCode!=""'\
+    | sort -u > subjLabcode.tab
+
+    hgsql hiv1 -e "drop table subjLabcode"
+    hgsql hiv1 < subjLabcode.sql
+    hgsql hiv1 -e 'load data local infile "subjLabcode.tab" into table subjLabcode'
+    hgsql hiv1 -e 'update subjLabcode set labCode="U-166" where labCode="U-166/U-210"'
+
+# fill in labCode
+
+    hgsql hiv1 -e \
+    'update gsidClinicRecTemp t, subjLabcode l set t.labCode=l.labCode where t.subjId=l.subjId'
+
+# fill in specimenId
+    hgsql hiv1 -e \
+    'update gsidClinicRecTemp t, GSID_DEMOG_SEQNO20080304Raw r set t.specimenId=r.SpecimenNumber where t.subjId=r.subjId and r.SpecimenNumber !=""'
+
+# fill in RNA
+    hgsql hiv1 -e \
+    'update gsidClinicRecTemp t, VAXGENRND_CD4_SEQNO20080308Raw r set t.hivQuan=r.TestResult where t.subjId=r.subjId and t.daysCollection=r.daysOfCollection and TestName="HIV-1 RNA QUANT PCR"' 
+
+# fill in CD4
+    hgsql hiv1 -e \
+    'update gsidClinicRecTemp t, VAXGENRND_CD4_SEQNO20080308Raw r set t.cd4Count=r.TestResult where t.subjId=r.subjId and t.daysCollection=r.daysOfCollection and TestName="ABSOLUTE CD4"'
+
+# change GSID4124 specimenId ...
+    hgsql hiv1 -e \
+    'update gsidClinicRecTemp set specimenId="098-5724662" where specimenId like "098-5724662%"'
+
+# change "< xxx" to 200
+    hgsql hiv1 -e \
+    'update gsidClinicRecTemp set hivQuan="200" where hivQuan like "<%"'
+
+# changing "> xxx" ... to 1000000
+    hgsql hiv1 -e \
+    'update gsidClinicRecTemp set hivQuan="1000000" where hivQuan like ">%"'
+
+# change "." to NULL
+    hgsql hiv1 -e \
+    'update gsidClinicRecTemp set hivQuan="NULL" where hivQuan="."'
+
+# update rna NULL ...
+    hgsql hiv1 -e \
+    'update gsidClinicRecTemp set hivQuan="NULL" where hivQuan="rna"'
+
+# update gsidClinicRecTemp set hivQuan="-1" where hivQuan="rna"'
+
+# update rna "WE ..."
+    hgsql hiv1 -e \
+    'update gsidClinicRecTemp set hivQuan="NULL" where hivQuan like "WE%"'
+
+# update rna blank
+    hgsql hiv1 -e \
+    'update gsidClinicRecTemp set hivQuan="NULL" where hivQuan=""'
+
+# update cd4 "WE ..."
+    hgsql hiv1 -e \
+    'update gsidClinicRecTemp set cd4Count="NULL" where cd4Count like "WE%"'
+
+# update cd4 NULL ...
+    hgsql hiv1 -e \
+    'update gsidClinicRecTemp set cd4Count="NULL" where cd4Count="cd4"'
+
+# update daysCollection NULL ...
+    hgsql hiv1 -e \
+    'update gsidClinicRecTemp set daysCollection="NULL" where daysCollection="."'
+
+
+    hgsql hiv1 -N -e 'select * from gsidClinicRecTemp ' \
+    |uniq |sed -e 's/NULL/-1/g'  > gsidClinicRecNew.tab
+
+# load data into gsidClinicRecNew
+    hgsql hiv1 -e 'drop table gsidClinicRecNew'
+    hgsql hiv1 < gsidClinicRecNew.sql
+    hgsql hiv1 -e 'delete from gsidClinicRecNew'
+    hgsql hiv1 -e 'load data local infile "gsidClinicRecNew.tab" into table gsidClinicRecNew'
+
+# set NULLs
+    hgsql hiv1 -e 'update gsidClinicRecNew set hivQuan=NULL where hivQuan=-1'
+    hgsql hiv1 -e 'update gsidClinicRecNew set cd4Count=NULL where cd4Count=-1'
+    hgsql hiv1 -e 'update gsidClinicRecNew set daysCollection=NULL where daysCollection=-1'
+    hgsql hiv1 -e 'delete from gsidClinicRecNew where labCode="" and subjId=""'
+    hgsql hiv1 -e 'update gsidClinicRecNew set specimenId=NULL where specimenId="specId"'
+
+# check difference between the new table and the old table
+    hgsql hiv1 -N -e 'select * from gsidClinicRec where subjId not like"GSID3%"' \
+    > gsidClinicRecVax004.tab
+    hgsql hiv1 -N -e 'select * from gsidClinicRecNew' >gsidClinicRecNew.tab
+    diff gsidClinicRecVax004.tab gsidClinicRecNew.tab  >gsidClinicRec_diff.txt
+
+# Inspect the diff result to see if there is anything unexpected.
+# Once satisfied, rename the new tables.
+
+    hgsql hiv1 -N -e 'rename table gsidClinicRecNew to gsidClinicRec' 
+
+# create VAXGENRND_CD4_SEQNO20080308RawFixed to fix those "<xxx" and ">xxx" fields.
+    hgsql hiv1 <VAXGENRND_CD4_SEQNO20080308RawFixed.sql
+
+    hgsql hiv1 -e \
+    'load data local infile "VAXGENRND_CD4_SEQNO20080308.txt" into table VAXGENRND_CD4_SEQNO20080308RawFixed ignore 1 lines'
+
+    hgsql hiv1 -e \
+    'update VAXGENRND_CD4_SEQNO20080308RawFixed set testResult='1000000' where testName="HIV-1 RNA QUANT PCR"  and TestResult like ">%"'
+
+    hgsql hiv1 -e \
+    'update VAXGENRND_CD4_SEQNO20080308RawFixed set testResult='200' where testName="HIV-1 RNA QUANT PCR"  and TestResult like "<%"'
+
+# use the newly created ...Fixed table to construct the gsidClinicrecWithSeq table
+
+    hgsql hiv1 -N -e \
+    'select c.* from VAXGENRND_CD4_SEQNO20080308RawFixed t,gsidClinicRecNew c where SequenceDataStatus="Sequence data exist" and t.subjId=c.subjId and testName="ABSOLUTE CD4" and c.labCode=t.labCode and cd4Count=testResult and t.DaysOfCollection=c.daysCollection' >j.1
+
+    hgsql hiv1 -N -e \
+    'select c.* from VAXGENRND_CD4_SEQNO20080308RawFixed t,gsidClinicRecNew c where SequenceDataStatus="Sequence data exist" and t.subjId=c.subjId and testName="HIV-1 RNA QUANT PCR" and c.labCode=t.labCode and hivQuan=testResult and t.DaysOfCollection=c.daysCollection' >j.2
+
+    cat j.1 j.2 |sort -u |sed -e 's/NULL/-1/g' >gsidClinicRecWithSeqNew.tmp
+
+    hgsql hiv1 -e 'drop table gsidClinicRecWithSeqNew'
+    hgsql hiv1 < gsidClinicRecWithSeqNew.sql
+    hgsql hiv1 -e \
+    'load data local infile "gsidClinicRecWithSeqNew.tmp" into table gsidClinicRecWithSeqNew'
+    rm gsidClinicRecWithSeqNew.tmp
+
+    hgsql hiv1 -e 'update gsidClinicRecWithSeqNew set hivQuan=NULL where hivQuan=-1'
+    hgsql hiv1 -e 'update gsidClinicRecWithSeqNew set cd4Count=NULL where cd4Count=-1'
+
+    hgsql hiv1 -N -e 'select * from gsidClinicRecWithSeqOld' >gsidClinicRecWithSeqOld.tab
+    hgsql hiv1 -N -e 'select * from gsidClinicRecWithSeqNew' >gsidClinicRecWithSeqNew.tab
+
+# compare the new with the old.
+    diff gsidClinicRecWithSeqOld.tab gsidClinicRecWithSeqNew.tab > gsidClinicRecWithSeq_diff.txt
+
+# Inspect the diff result to see if there is anything unexpected.
+# Once satisfied, rename the new tables.
+
+    hgsql hiv1 -N -e 'rename table gsidClinicRecWithSeqNew to gsidClinicRecWithSeq' 
+
+# Copy gsidCinicRec and gsidClinicRecWithSeq tables from hiv1 to hivgne8 and
+# hivmn1.
+
+##########################################################################
