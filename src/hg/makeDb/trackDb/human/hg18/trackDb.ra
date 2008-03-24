@@ -363,7 +363,7 @@ type bed 4 .
     track tajdSnpAd
     subTrack tajdSnp
     shortLabel SNPs AD
-    longLabel  SNPs from African Descent (from Human May 2004 assembly)
+    longLabel  SNPs from African Descent used for Tajima's D (from Human May 2004 assembly)
     color 200,100,0
     altColor 0,100,200
     priority 1
@@ -371,7 +371,7 @@ type bed 4 .
     track tajdSnpEd
     subTrack tajdSnp
     shortLabel SNPs ED
-    longLabel  SNPs from European Descent (from Human May 2004 assembly)
+    longLabel  SNPs from European Descent used for Tajima's D (from Human May 2004 assembly)
     color 200,100,0
     altColor 0,100,200
     priority 3
@@ -379,7 +379,7 @@ type bed 4 .
     track tajdSnpXd
     subTrack tajdSnp
     shortLabel SNPs XD
-    longLabel  SNPs from Chinese Descent (from Human May 2004 assembly)
+    longLabel  SNPs from Chinese Descent used for Tajima's D (from Human May 2004 assembly)
     color 200,100,0
     altColor 0,100,200
     priority 5
