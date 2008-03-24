@@ -13,6 +13,7 @@
 #include "options.h"
 #include "ggTypes.h"
 #include "bed.h"
+#include "dnautil.h"
 #include "rangeTree.h"
 #include "binRange.h"
 #include "txGraph.h"
@@ -357,6 +358,7 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 // pushCarefulMemHandler(500000000);
+dnaUtilOpen();
 optionInit(&argc, argv, options);
 maxJoinSize = optionInt("maxJoinSize", maxJoinSize);
 forceRefSeqJoin = !optionExists("noForceRefSeqJoin");

@@ -25,6 +25,7 @@
 #include "rbTree.h"
 #include "rangeTree.h"
 #include "dlist.h"
+#include "dnautil.h"
 #include "bed.h"
 #include "ggTypes.h"
 #include "nibTwo.h"
@@ -302,56 +303,119 @@ for (edgeRef = edgeRefList; edgeRef != NULL; edgeRef = edgeRef->next)
 slFreeList(&edgeRefList);
 }
 
+static boolean checkSeqSimilar(struct dnaSeq *a, struct dnaSeq *b, int minScore)
+/* Check that two sequences are similar.  Assumes sequences are same size. */
+{
+int size = a->size;
+int size1 = size-1;
+return dnaScoreMatch(a->dna, b->dna, size) >= minScore 
+	|| dnaScoreMatch(a->dna+1, b->dna, size1) >= minScore
+	|| dnaScoreMatch(a->dna, b->dna+1, size1) >= minScore;
+}
+
+static boolean checkSnapOk(struct vertex *vOld, struct vertex *vNew, boolean isRev, int bleedSize,
+	struct nibTwoCache *seqCache, char *chromName)
+/* Load sequence that corresponds to bleed-over, and  make sure that sequence of next
+ * exon is similar. */
+{
+int minScore = bleedSize-2;
+boolean similar = FALSE;
+if (isRev)
+    {
+    int oldStart = vOld->position;
+    struct slRef *eRef;
+    struct dnaSeq *oldSeq = nibTwoCacheSeqPartExt(seqCache, chromName, oldStart, bleedSize, FALSE, NULL);
+    for (eRef = vNew->waysIn; eRef != NULL; eRef = eRef->next)
+        {
+	struct edge *edge = eRef->val;
+	struct vertex *vRest = edge->start;
+	int newStart = vRest->position - bleedSize;
+	struct dnaSeq *newSeq = nibTwoCacheSeqPartExt(seqCache, chromName, newStart, bleedSize, FALSE, NULL);
+	similar = checkSeqSimilar(oldSeq, newSeq, minScore);
+	dnaSeqFree(&newSeq);
+	if (similar)
+	    break;
+	}
+    dnaSeqFree(&oldSeq);
+    }
+else
+    {
+    int oldStart = vOld->position - bleedSize;
+    struct slRef *eRef;
+    struct dnaSeq *oldSeq = nibTwoCacheSeqPartExt(seqCache, chromName, oldStart, bleedSize, FALSE, NULL);
+    for (eRef = vNew->waysOut; eRef != NULL; eRef = eRef->next)
+        {
+	struct edge *edge = eRef->val;
+	struct vertex *vRest = edge->end;
+	int newStart = vRest->position;
+	struct dnaSeq *newSeq = nibTwoCacheSeqPartExt(seqCache, chromName, newStart, bleedSize, FALSE, NULL);
+	similar = checkSeqSimilar(oldSeq, newSeq, minScore);
+	dnaSeqFree(&newSeq);
+	if (similar)
+	    break;
+	}
+    }
+return similar;
+}
 
 static boolean snapVertex(struct dlNode *oldNode, int maxSnapSize, int maxUncheckedSnapSize,
 	struct nibTwoCache *seqCache, char *chromName)
-/* Snap vertex to nearby hard vertex. */
+/* Snap vertex to nearby previous hard vertex. */
 {
 /* Figure out hard type we want to snap to, and return if not
  * soft to begin with. */
 struct vertex *vOld = oldNode->val;
 int oldPos = vOld->position;
-enum ggVertexType targetType, currentType = vOld->type;
-if (currentType == ggSoftStart)
-    targetType = ggHardStart;
-else if (currentType == ggSoftEnd)
-    targetType = ggHardEnd;
-else
-    return FALSE;
+enum ggVertexType currentType = vOld->type;
 
-/* Search forward */
-struct dlNode *node;
-for (node = oldNode->next; !dlEnd(node); node = node->next)
-    {
-    struct vertex *v = node->val;
-    int newPos = v->position;
-    int dif = newPos - oldPos;
-    if (dif > maxSnapSize)
-        break;
-    /* TODO - check if over maxUnchecked. */
-    if (v->type == targetType)
-        {
-	vOld->movedTo = v;
-	return TRUE;
-	}
-    }
+/* If no seqCache, then set up things so not bothering to check it. */
+if (seqCache == NULL)
+    maxUncheckedSnapSize = maxSnapSize;
 
 /* Search backwards */
-for (node = oldNode->prev; !dlStart(node); node = node->prev)
+if (currentType == ggSoftEnd)
     {
-    struct vertex *v = node->val;
-    int newPos = v->position;
-    int dif = oldPos - newPos;
-    if (dif > maxSnapSize)
-        break;
-    /* TODO - check if over maxUnchecked. */
-    if (v->type == targetType)
-        {
-	vOld->movedTo = v;
-	return TRUE;
+    struct dlNode *node;
+    for (node = oldNode->prev; !dlStart(node); node = node->prev)
+	{
+	struct vertex *v = node->val;
+	int newPos = v->position;
+	int dif = oldPos - newPos;
+	if (dif > maxSnapSize)
+	    break;
+	if (v->type == ggHardEnd)
+	    {
+	    if (dif <= maxUncheckedSnapSize || checkSnapOk(vOld, v, FALSE, dif, seqCache, chromName))
+		{
+		vOld->movedTo = v;
+		return TRUE;
+		}
+	    }
 	}
     }
 
+/* Search forward */
+else if (currentType == ggSoftStart)
+    {
+    struct dlNode *node;
+    for (node = oldNode->next; !dlEnd(node); node = node->next)
+	{
+	struct vertex *v = node->val;
+	int newPos = v->position;
+	int dif = newPos - oldPos;
+	if (dif > maxSnapSize)
+	    break;
+	/* TODO - check if over maxUnchecked. */
+	if (v->type == ggHardStart)
+	    {
+	    if (dif <= maxUncheckedSnapSize || checkSnapOk(vOld, v, TRUE, dif, seqCache, chromName))
+		{
+		vOld->movedTo = v;
+		return TRUE;
+		}
+	    }
+	}
+    }
 return FALSE;
 }
 
@@ -775,14 +839,14 @@ int listSize = 0;
 for (ev = evList; ev != NULL; ev = ev->next)
     {
     struct sourceAndPos *x;
-    boolean trustedSource = sameString(ev->lb->sourceType, "refSeq");
+    boolean trusted = trustedSource(ev->lb->sourceType);
     lmAllocVar(lm, x);
     x->position = ev->start;
-    x->trustedSource = trustedSource;
+    x->trustedSource = trusted;
     slAddHead(&startList, x);
     lmAllocVar(lm, x);
     x->position = ev->end;
-    x->trustedSource = trustedSource;
+    x->trustedSource = trusted;
     slAddHead(&endList, x);
     ++listSize;
     }
@@ -860,7 +924,7 @@ for (edgeRef = edgeRefList; edgeRef != NULL; edgeRef = edgeRef->next)
 		     {
 		     struct range *r = rangeTreeMaxOverlapping(rangeTree, s, e);
 		     struct edge *bigEdge = r->val;
-		     bigEdge->evList = slCat(edge->evList, bigEdge->evList);
+		     bigEdge->evList = slCat(bigEdge->evList, edge->evList);
 		     edge->evList = NULL;
 		     rbTreeRemove(edgeTree, edge);
 		     ++removedCount;
