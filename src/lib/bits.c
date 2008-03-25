@@ -6,7 +6,7 @@
 #include "common.h"
 #include "bits.h"
 
-static char const rcsid[] = "$Id: bits.c,v 1.19 2006/02/28 05:40:46 markd Exp $";
+static char const rcsid[] = "$Id: bits.c,v 1.20 2008/03/25 16:32:31 angie Exp $";
 
 
 static Bits oneBit[8] = { 0x80, 0x40, 0x20, 0x10, 0x8, 0x4, 0x2, 0x1};
@@ -93,6 +93,8 @@ b[bitIx>>3] &= ~oneBit[bitIx&7];
 void bitSetRange(Bits *b, int startIx, int bitCount)
 /* Set a range of bits. */
 {
+if (bitCount <= 0)
+    return;
 int endIx = (startIx + bitCount - 1);
 int startByte = (startIx>>3);
 int endByte = (endIx>>3);
@@ -121,6 +123,8 @@ return (b[bitIx>>3] & oneBit[bitIx&7]) != 0;
 int bitCountRange(Bits *b, int startIx, int bitCount)
 /* Count number of bits set in range. */
 {
+if (bitCount <= 0)
+    return 0;
 int endIx = (startIx + bitCount - 1);
 int startByte = (startIx>>3);
 int endByte = (endIx>>3);
@@ -197,6 +201,8 @@ zeroBytes(b, byteCount);
 void bitClearRange(Bits *b, int startIx, int bitCount)
 /* Clear a range of bits. */
 {
+if (bitCount <= 0)
+    return;
 int endIx = (startIx + bitCount - 1);
 int startByte = (startIx>>3);
 int endByte = (endIx>>3);
