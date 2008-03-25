@@ -4729,3 +4729,60 @@ sed -e
 # to the table on the hgdownloads server.
 # Table and custom tracks pushed to hgdownloads on 2007-06-01.
 
+###########################################################################
+# Affy EC chrom21/chrom22 RELOAD (Andy 2008-03-20)
+
+ssh hgwdev
+bash
+cd /cluster/data/encode/Affy
+mkdir -p 2008-03-20/{lab,processed}
+cd 2008-03-20/lab/
+cp /var/ftp/encode/encode_ext_RNA_hg17_chr21-22.tar .
+tar xf encode_ext_RNA_hg17_chr21-22.tar
+find . -name '*bz2' -exec bunzip2 '{}' \;
+mkdir -p processed/hg17/download
+for f in lab/BW0/bed/*; do
+   tiss=`echo $f | sed 's/.*\///;s/\.bed//'`;
+   newF=processed/hg17/download/encodeAffyEc1${tiss}Sites.bed;
+   tail +2 $f > $newF;
+done
+for f in lab/BW25/bed/*; do
+   tiss=`echo $f | sed 's/.*\///;s/\.bed//'`;
+   newF=processed/hg17/download/encodeAffyEc51${tiss}Sites.bed;
+   tail +2 $f > $newF;
+done
+cd processed/hg17/download/
+for bed in *.bed; do hgLoadBed hg17 ${bed%.bed} $bed; done
+cd ../../
+# beds loaded, now for the wiggles...
+for f in lab/BW0/wig/*; do
+   tiss=`echo $f | sed 's/.*\///;s/\.sig.wig//'`;
+   table=encodeAffyEc1${tiss}Signal
+   downDir=processed/hg17/download
+   wig=processed/hg17/wigTable/${table}.tab
+   wib=processed/hg17/wib/${table}.wib
+   zip=${downDir}/${table}.wigVar.gz
+   tail +2 $f | gzip -c > $zip
+   wigEncode $zip $wig $wib 2>> processed/hg17/wigEncode.log
+   pushd /gbdb/hg17/encode/wib
+   ln -s `dirs -1`/$wib
+   popd
+   hgLoadWiggle -pathPrefix=/gbdb/hg17/encode/wib hg17 $table $wig
+done
+for f in lab/BW25/wig/*; do
+   tiss=`echo $f | sed 's/.*\///;s/\.sig.wig//'`;
+   table=encodeAffyEc51${tiss}Signal
+   downDir=processed/hg17/download
+   wig=processed/hg17/wigTable/${table}.tab
+   wib=processed/hg17/wib/${table}.wib
+   zip=${downDir}/${table}.wigVar.gz
+   tail +2 $f | gzip -c > $zip
+   wigEncode $zip $wig $wib 2>> processed/hg17/wigEncode.log
+   pushd /gbdb/hg17/encode/wib
+   ln -s `dirs -1`/$wib
+   popd
+   hgLoadWiggle -pathPrefix=/gbdb/hg17/encode/wib hg17 $table $wig
+done
+mkdir /data/apache/htdocs/goldenPath/hg17/encode/downloads
+cd /data/apache/htdocs/goldenPath/hg17/encode/downloads
+ln -s /cluster/data/encode/Affy/2008-03-20/processed/hg17/download/*.gz .
