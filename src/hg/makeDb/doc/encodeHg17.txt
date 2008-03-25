@@ -4740,18 +4740,18 @@ cd 2008-03-20/lab/
 cp /var/ftp/encode/encode_ext_RNA_hg17_chr21-22.tar .
 tar xf encode_ext_RNA_hg17_chr21-22.tar
 find . -name '*bz2' -exec bunzip2 '{}' \;
-mkdir -p processed/hg17/download
+mkdir -p processed/hg17/{download,bed}
 for f in lab/BW0/bed/*; do
    tiss=`echo $f | sed 's/.*\///;s/\.bed//'`;
-   newF=processed/hg17/download/encodeAffyEc1${tiss}Sites.bed;
+   newF=processed/hg17/bed/encodeAffyEc1${tiss}Sites.bed;
    tail +2 $f > $newF;
 done
 for f in lab/BW25/bed/*; do
    tiss=`echo $f | sed 's/.*\///;s/\.bed//'`;
-   newF=processed/hg17/download/encodeAffyEc51${tiss}Sites.bed;
+   newF=processed/hg17/bed/encodeAffyEc51${tiss}Sites.bed;
    tail +2 $f > $newF;
 done
-cd processed/hg17/download/
+cd processed/hg17/bed/
 for bed in *.bed; do hgLoadBed hg17 ${bed%.bed} $bed; done
 cd ../../
 # beds loaded, now for the wiggles...
