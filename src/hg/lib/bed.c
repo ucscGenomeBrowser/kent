@@ -11,7 +11,7 @@
 #include "binRange.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: bed.c,v 1.55 2007/07/01 01:00:23 hiram Exp $";
+static char const rcsid[] = "$Id: bed.c,v 1.56 2008/03/26 19:32:51 kent Exp $";
 
 void bedStaticLoad(char **row, struct bed *ret)
 /* Load a row from bed table into ret.  The contents of ret will
@@ -1435,7 +1435,13 @@ boolean bedCompatibleExtension(struct bed *oldBed, struct bed *newBed)
 {
 /* New bed must have at least as many exons as old bed... */
 if (oldBed->blockCount > newBed->blockCount)
-    return 0;
+    return FALSE;
+
+/* New bed must also must also encompass old bed. */
+if (newBed->chromStart > oldBed->chromStart)
+    return FALSE;
+if (newBed->chromEnd < oldBed->chromEnd)
+    return FALSE;
 
 /* Look for an exact match */
 int oldSize = bedTotalBlockSize(oldBed);
@@ -1445,9 +1451,9 @@ if (oldSize == newSize && oldSize == overlap)
     return TRUE;
 
 /* Next handle case where old bed is a single exon.  For this
- * just require that old bed is a nearly proper superset of new bed. */
-if (oldBed->blockCount == 0)
-    return overlap >= 0.95*oldSize;
+ * just require that old bed is a proper superset of new bed. */
+if (oldBed->blockCount <= 1)
+    return overlap >= oldSize;
 
 /* Otherwise we look for first intron start in old bed, and then
  * flip through new bed until we find an intron that starts at the
