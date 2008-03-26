@@ -22,3 +22,6 @@ struct txGraph *makeGraph(struct linkedBeds *lbList, int maxBleedOver,
 
 boolean trustedSource(char *sourceType);
 /* Return TRUE source type is trusted (refSeq or something similar). */ 
+
+boolean noCutSource(char *sourceType);
+/* Return TRUE if source is not to be truncated during snap to operation. */

@@ -313,11 +313,36 @@ return dnaScoreMatch(a->dna, b->dna, size) >= minScore
 	|| dnaScoreMatch(a->dna, b->dna+1, size1) >= minScore;
 }
 
-static boolean checkSnapOk(struct vertex *vOld, struct vertex *vNew, boolean isRev, int bleedSize,
-	struct nibTwoCache *seqCache, char *chromName)
+static boolean uncuttableEdge(struct edge *e)
+/* Return TRUE if any evidence for edge is uncuttable (ccds) */
+{
+struct evidence *ev;
+for (ev = e->evList; ev != NULL; ev = ev->next)
+    if (noCutSource(ev->lb->sourceType))
+        return TRUE;
+return FALSE;
+}
+
+static boolean vertexPartOfUncuttableEdge(struct vertex *v, boolean isStart)
+/* See if vertex is part of an uncuttable edge. */
+{
+struct slRef *eRef, *eRefList = (isStart ? v->waysOut : v->waysIn);
+assert(eRefList != NULL);
+for (eRef = eRefList; eRef != NULL; eRef = eRef->next)
+    if (uncuttableEdge(eRef->val))
+	return TRUE;
+return FALSE;
+}
+
+static boolean checkSnapOk(struct vertex *vOld, struct vertex *vNew, boolean isRev, 
+	int bleedSize, int maxUncheckedSize, struct nibTwoCache *seqCache, char *chromName)
 /* Load sequence that corresponds to bleed-over, and  make sure that sequence of next
  * exon is similar. */
 {
+if (vertexPartOfUncuttableEdge(vOld, isRev))
+    return FALSE;
+if (bleedSize <= maxUncheckedSize)
+    return TRUE;
 int minScore = bleedSize-2;
 boolean similar = FALSE;
 if (isRev)
@@ -385,7 +410,7 @@ if (currentType == ggSoftEnd)
 	    break;
 	if (v->type == ggHardEnd)
 	    {
-	    if (dif <= maxUncheckedSnapSize || checkSnapOk(vOld, v, FALSE, dif, seqCache, chromName))
+	    if (checkSnapOk(vOld, v, FALSE, dif, maxUncheckedSnapSize, seqCache, chromName))
 		{
 		vOld->movedTo = v;
 		return TRUE;
@@ -405,10 +430,9 @@ else if (currentType == ggSoftStart)
 	int dif = newPos - oldPos;
 	if (dif > maxSnapSize)
 	    break;
-	/* TODO - check if over maxUnchecked. */
 	if (v->type == ggHardStart)
 	    {
-	    if (dif <= maxUncheckedSnapSize || checkSnapOk(vOld, v, TRUE, dif, seqCache, chromName))
+	    if (checkSnapOk(vOld, v, TRUE, dif, maxUncheckedSnapSize, seqCache, chromName))
 		{
 		vOld->movedTo = v;
 		return TRUE;

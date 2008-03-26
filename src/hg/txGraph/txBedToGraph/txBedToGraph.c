@@ -34,6 +34,12 @@ boolean trustedSource(char *sourceType)
 return sameString(sourceType, "refSeq") || sameString(sourceType, "ccds");
 }
 
+boolean noCutSource(char *sourceType)
+/* Return TRUE if source is not to be truncated during snap to operation. */
+{
+return sameString(sourceType, "ccds");
+}
+
 void usage()
 /* Explain usage and exit. */
 {
