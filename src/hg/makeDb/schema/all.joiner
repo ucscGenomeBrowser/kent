@@ -2845,6 +2845,70 @@ tablesIgnored $hg
     encodeAffyRnaHl60SitesHr02
     encodeAffyRnaHl60SitesHr08
     encodeAffyRnaHl60SitesHr32
+    encodeAffyEc1BrainCerebellumSites
+    encodeAffyEc51BrainCerebellumSites
+    encodeAffyEc1BrainFrontalLobeSites
+    encodeAffyEc51BrainFrontalLobeSites
+    encodeAffyEc1BrainHippocampusSites
+    encodeAffyEc51BrainHippocampusSites
+    encodeAffyEc1BrainHypothalamusSites
+    encodeAffyEc51BrainHypothalamusSites
+    encodeAffyEc1FetalKidneySites
+    encodeAffyEc51FetalKidneySites
+    encodeAffyEc1FetalSpleenSites
+    encodeAffyEc51FetalSpleenSites
+    encodeAffyEc1PlacentaSites
+    encodeAffyEc51PlacentaSites
+    encodeAffyEc1TestisSites
+    encodeAffyEc51TestisSites
+    encodeAffyEc1FetalTestisSites
+    encodeAffyEc51FetalTestisSites
+    encodeAffyEc1ProstateSites
+    encodeAffyEc51ProstateSites
+    encodeAffyEc1OvarySites
+    encodeAffyEc51OvarySites
+    encodeAffyEc1HeLaC1S3Sites
+    encodeAffyEc51HeLaC1S3Sites
+    encodeAffyEc1GM06990Sites
+    encodeAffyEc51GM06990Sites
+    encodeAffyEc1HepG2Sites
+    encodeAffyEc51HepG2Sites
+    encodeAffyEc1K562Sites
+    encodeAffyEc51K562Sites
+    encodeAffyEc1TertBJSites
+    encodeAffyEc51TertBJSites
+    encodeAffyEc1BrainCerebellumSignal
+    encodeAffyEc51BrainCerebellumSignal
+    encodeAffyEc1BrainFrontalLobeSignal
+    encodeAffyEc51BrainFrontalLobeSignal
+    encodeAffyEc1BrainHippocampusSignal
+    encodeAffyEc51BrainHippocampusSignal
+    encodeAffyEc1BrainHypothalamusSignal
+    encodeAffyEc51BrainHypothalamusSignal
+    encodeAffyEc1FetalKidneySignal
+    encodeAffyEc51FetalKidneySignal
+    encodeAffyEc1FetalSpleenSignal
+    encodeAffyEc51FetalSpleenSignal
+    encodeAffyEc1PlacentaSignal
+    encodeAffyEc51PlacentaSignal
+    encodeAffyEc1TestisSignal
+    encodeAffyEc51TestisSignal
+    encodeAffyEc1FetalTestisSignal
+    encodeAffyEc51FetalTestisSignal
+    encodeAffyEc1ProstateSignal
+    encodeAffyEc51ProstateSignal
+    encodeAffyEc1OvarySignal
+    encodeAffyEc51OvarySignal
+    encodeAffyEc1HeLaC1S3Signal
+    encodeAffyEc51HeLaC1S3Signal
+    encodeAffyEc1GM06990Signal
+    encodeAffyEc51GM06990Signal
+    encodeAffyEc1HepG2Signal
+    encodeAffyEc51HepG2Signal
+    encodeAffyEc1K562Signal
+    encodeAffyEc51K562Signal
+    encodeAffyEc1TertBJSignal
+    encodeAffyEc51TertBJSignal
     encodeEvoFold
     encodeGisChip%
     encodeGencodeGenePolyA%
