@@ -1389,7 +1389,7 @@ type wig 0 62385
 
     track encodeAffyEc51BrainHypothalamusSignal
     subTrack encodeAffyEcSignal
-    shortLabel EC51 Signal BrainH
+    shortLabel EC51 Sgnl BrainH
     longLabel Affymetrix ENCODE Extension Transcription (51-base window) (Brain Hypothalamus) Signal
     color 248,0,8
     priority 8
