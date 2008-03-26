@@ -1097,6 +1097,7 @@ longLabel Affymetrix ENCODE Extension Transcription Sites
 priority 34.1
 group encodeTxLevels
 visibility hide
+origAssembly hg17
 chromosomes chr21,chr22
 type bed 3 .
 
@@ -1332,6 +1333,7 @@ longLabel Affymetrix ENCODE Extension Transcription Signal
 priority 34.2
 group encodeTxLevels
 visibility hide
+origAssembly hg17
 chromosomes chr21,chr22
 defaultViewLimits 0:5000
 maxHeightPixels 100:30:10
