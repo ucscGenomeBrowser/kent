@@ -1,7 +1,7 @@
 # for emacs: -*- mode: sh; -*-
 
 # Bos Taurus -- Baylor Release 4.0 (Oct 4 2007)
-#	"$Id: bosTau4.txt,v 1.8 2008/03/19 23:51:56 hiram Exp $"
+#	"$Id: bosTau4.txt,v 1.9 2008/03/27 00:41:51 braney Exp $"
 #########################################################################
 # DOWNLOAD SEQUENCE (DONE - 2008-03-07 - Hiram)
     ssh kkstore06
@@ -1419,3 +1419,180 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
 
     #	looks like there should be a bosTau3 to bosTau4 liftOver run
 #############################################################################
+###########################################################################
+# HUMAN (hg18) PROTEINS TRACK (WORKING braney 2008-03-26)
+    ssh kkstore06
+    # bash  if not using bash shell already
+
+    mkdir /cluster/data/bosTau4/blastDb
+    cd /cluster/data/bosTau4
+    grep -v chrUn chrom.sizes | awk '{print $1}' > chr.lst
+    for i in `cat chr.lst`; 
+    do twoBitToFa  bosTau4.unmasked.2bit -seq=$i stdout; 
+    done > temp.fa
+    faSplit gap temp.fa 1000000 blastDb/x -lift=blastDb.lft
+
+    grep chrUn chrom.sizes | awk '{print $1}' > chr.lst
+    for i in `cat chr.lst`; 
+    do twoBitToFa  bosTau4.unmasked.2bit -seq=$i stdout; 
+    done > temp.fa
+    faSplit sequence temp.fa 150 blastDb/y
+    rm temp.fa chr.lst
+
+    cd blastDb
+    for i in *.fa
+    do
+	/cluster/bluearc/blast229/formatdb -i $i -p F
+    done
+    rm *.fa
+    ls *.nsq | wc -l
+#   3440
+
+    mkdir -p /san/sanvol1/scratch/bosTau4/blastDb
+    cd /cluster/data/bosTau4/blastDb
+    for i in nhr nin nsq; 
+    do 
+	echo $i
+	cp *.$i /san/sanvol1/scratch/bosTau4/blastDb
+    done
+
+    mkdir -p /cluster/data/bosTau4/bed/tblastn.hg18KG
+    cd /cluster/data/bosTau4/bed/tblastn.hg18KG
+    echo  /san/sanvol1/scratch/bosTau4/blastDb/*.nsq | xargs ls -S | sed "s/\.nsq//"  > query.lst
+    wc -l query.lst
+# 3440 query.lst
+
+   # we want around 350000 jobs
+   calc `wc /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl | awk '{print $1}'`/\(350000/`wc query.lst | awk '{print $1}'`\)
+
+# 36727/(350000/3440) = 360.973943
+
+   mkdir -p /cluster/bluearc/bosTau4/bed/tblastn.hg18KG/kgfa
+   split -l 361 /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl  /cluster/bluearc/bosTau4/bed/tblastn.hg18KG/kgfa/kg
+   ln -s /cluster/bluearc/bosTau4/bed/tblastn.hg18KG/kgfa kgfa
+   cd kgfa
+   for i in *; do 
+     nice pslxToFa $i $i.fa; 
+     rm $i; 
+     done
+   cd ..
+   ls -1S kgfa/*.fa > kg.lst
+   mkdir -p /cluster/bluearc/bosTau4/bed/tblastn.hg18KG/blastOut
+   ln -s /cluster/bluearc/bosTau4/bed/tblastn.hg18KG/blastOut
+   for i in `cat kg.lst`; do  mkdir blastOut/`basename $i .fa`; done
+   tcsh
+   cd /cluster/data/bosTau4/bed/tblastn.hg18KG
+   cat << '_EOF_' > blastGsub
+#LOOP
+blastSome $(path1) {check in line $(path2)} {check out exists blastOut/$(root2)/q.$(root1).psl }
+#ENDLOOP
+'_EOF_'
+
+   cat << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/cluster/bluearc/blast229/data
+export BLASTMAT
+g=`basename $2`
+f=/tmp/`basename $3`.$g
+for eVal in 0.01 0.001 0.0001 0.00001 0.000001 1E-09 1E-11
+do
+if /cluster/bluearc/blast229/blastall -M BLOSUM80 -m 0 -F no -e $eVal -p tblastn -d $1 -i $2 -o $f.8
+then
+        mv $f.8 $f.1
+        break;
+fi
+done
+if test -f  $f.1
+then
+    if /cluster/bin/i386/blastToPsl $f.1 $f.2
+    then
+	liftUp -nosort -type=".psl" -nohead $f.3 /cluster/data/bosTau4/blastDb.lft carry $f.2
+        liftUp -nosort -type=".psl" -pslQ -nohead $3.tmp /cluster/data/hg18/bed/blat.hg18KG/protein.lft warn $f.3
+
+        if pslCheck -prot $3.tmp                                                  
+        then                                                                      
+            mv $3.tmp $3                                                          
+            rm -f $f.1 $f.2 $f.3 $f.4
+        fi
+        exit 0                                                                    
+    fi                                                                            
+fi                                                                                
+rm -f $f.1 $f.2 $3.tmp $f.8 $f.3 $f.4
+exit 1
+'_EOF_'
+    # << happy emacs
+    chmod +x blastSome
+    gensub2 query.lst kg.lst blastGsub blastSpec
+    exit 
+    
+    ssh pk
+    cd /cluster/data/bosTau4/bed/tblastn.hg18KG
+    para create blastSpec
+#    para try, check, push, check etc.
+
+    para time
+
+# times munged due to recovered batches
+
+    ssh kkstore06
+    cd /cluster/data/bosTau4/bed/tblastn.hg18KG
+    mkdir chainRun
+    cd chainRun
+    tcsh
+    cat << '_EOF_' > chainGsub
+#LOOP
+chainOne $(path1)
+#ENDLOOP
+'_EOF_'
+
+    cat << '_EOF_' > chainOne
+(cd $1; cat q.*.psl | simpleChain -prot -outPsl -maxGap=100000 stdin /cluster/bluearc/bosTau4/bed/tblastn.hg18KG/blastOut/c.`basename $1`.psl)
+'_EOF_'
+    chmod +x chainOne
+    ls -1dS /cluster/bluearc/bosTau4/bed/tblastn.hg18KG/blastOut/kg?? > chain.lst
+    gensub2 chain.lst single chainGsub chainSpec
+    # do the cluster run for chaining
+    ssh kk
+    cd /cluster/data/bosTau4/bed/tblastn.hg18KG/chainRun
+    para create chainSpec
+    para maxNode 30
+    para try, check, push, check etc.
+
+# Completed: 170 of 170 jobs
+# CPU time in finished jobs:       3150s      52.51m     0.88h    0.04d  0.000 y
+# IO & Wait Time:                 42932s     715.53m    11.93h    0.50d  0.001 y
+# Average job time:                 271s       4.52m     0.08h    0.00d
+# Longest finished job:             453s       7.55m     0.13h    0.01d
+# Submission to last job:          1632s      27.20m     0.45h    0.02d
+
+    ssh kkstore06
+    cd /cluster/data/bosTau4/bed/tblastn.hg18KG/blastOut
+    for i in kg??
+    do
+       cat c.$i.psl | awk "(\$13 - \$12)/\$11 > 0.6 {print}" > c60.$i.psl
+       sort -rn c60.$i.psl | pslUniq stdin u.$i.psl
+       awk "((\$1 / \$11) ) > 0.60 { print   }" c60.$i.psl > m60.$i.psl
+       echo $i
+    done
+    sort -T /tmp -k 14,14 -k 16,16n -k 17,17n u.*.psl m60* | uniq > /cluster/data/bosTau4/bed/tblastn.hg18KG/unliftBlastHg18KG.psl
+    cd ..
+    pslCheck unliftBlastHg18KG.psl
+    liftUp blastHg18KG.psl ../../Un/chrUn.lift carry unliftBlastHg18KG.psl
+
+    # load table 
+    ssh hgwdev
+    cd /cluster/data/bosTau4/bed/tblastn.hg18KG
+    hgLoadPsl bosTau4 blastHg18KG.psl
+
+    # check coverage
+    featureBits bosTau4 blastHg18KG 
+# 18960975 bases of 700386597 (2.707%) in intersection
+
+    featureBits bosTau4 ensGene:cds blastHg18KG  -enrichment
+# ensGene:cds 4.125%, blastHg18KG 2.707%, both 2.279%, cover 55.26%, enrich 20.41x
+
+    ssh kkstore06
+    rm -rf /cluster/data/bosTau4/bed/tblastn.hg18KG/blastOut
+    rm -rf /cluster/bluearc/bosTau4/bed/tblastn.hg18KG/blastOut
+#end tblastn
+##########################################################################
