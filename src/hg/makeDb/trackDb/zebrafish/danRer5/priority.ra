@@ -1,3 +1,6 @@
+track ensGene
+priority 32.8
+
 track chainHg18
 priority 99
 
