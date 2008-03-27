@@ -8,22 +8,6 @@ color 150,100,30
 altColor 230,170,40
 type bed 3 +
 
-track mrna
-shortLabel $Organism mRNAs
-longLabel $Organism mRNAs from GenBank
-group rna
-priority 54
-visibility dense
-spectrum on
-type psl .
-baseColorUseCds genbank
-baseColorUseSequence genbank
-baseColorDefault diffCodons
-showDiffBasesAllScales .
-indelDoubleInsert on
-indelQueryInsert on
-indelPolyA on
-
 track blastzCe1
 shortLabel Ce1 Blastz
 longLabel $o_Organism ($o_date/$o_db) Blastz 
