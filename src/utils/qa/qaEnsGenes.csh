@@ -20,7 +20,7 @@ if ($#argv != 2 ) then
   echo "  runs test suite for ensGene track update"
   echo "  run this script before you push the new tables to beta"
   echo "  (makes lots of files: run in junk directory)"
-  echo "  (it's best to direct output to a file)"
+  echo "  (it's best to direct output and errors to a file: '>&')"
   echo
   echo "    usage: ensGeneVersionNumber (db | all)"
   echo "      ensGeneVersionNumber  = Ensembl's version, e.g. 49"
@@ -106,9 +106,10 @@ foreach db ($dbs)
 end
 
 echo "\n\n----------------------"
-echo "check a few full sets of ensGene <-> ensPep <-> ensGtp on hgwdev"
+echo "these are full sets of corresponding rows from the three tables:"
+echo "ensGene <-> ensPep <-> ensGtp on hgwdev"
 foreach db ($dbs)
- echo "\ncheck these two genes on hgwdev for '$db':"
+ echo "\ncheck these two genes (and their peptides) on hgwdev for '$db':"
  hgsql -e "SELECT * FROM ensGene, ensPep, ensGtp WHERE \
  ensGene.name = ensPep.name AND ensGene.name = ensGtp.transcript LIMIT 2\G" $db
 end
@@ -123,13 +124,13 @@ foreach db ($dbs)
 end
 
 echo "\n\n----------------------"
-echo "find out which chroms the genes are on.  look for unusually small or"
-echo "large numbers here."
+echo "find out which chroms the genes are on (for both dev and beta).  
+echo "look for unusually small or large numbers here (or big differences)."
 foreach db ($dbs)
  # don't run this on scaffold assemblies
  set numChroms=`hgsql -Ne "SELECT COUNT(*) FROM chromInfo" $db`
  if ( $numChroms < 100 ) then
-  countPerChrom.csh $db ensGene
+  countPerChrom.csh $db ensGene $db hgwbeta
  else
   echo "$db is a scaffold assembly: skipping countPerChrom"
  endif
