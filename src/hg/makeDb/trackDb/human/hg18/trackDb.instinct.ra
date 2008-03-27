@@ -69,7 +69,7 @@ shortLabel Breast Cell Line Expression (Neve. et.al)
 longLabel breast cancer cell line gene expression (Neve et.al.Cancer Cell 2006)
 group x
 priority 44
-visibility dense
+visibility hide
 type expRatio
 expScale 2.0
 expStep 0.2
