@@ -263,6 +263,25 @@ class PipelineController < ApplicationController
   def upload
     @project = Project.find(params[:id])
     @autoUploadLabel = AUTOUPLOADLABEL
+    # handle FTP stuff
+    @user = current_user
+    @ftpUrl = "ftp://#{@user.login}@#{ActiveRecord::Base.configurations[RAILS_ENV]['ftpServer']}"+
+           ":#{ActiveRecord::Base.configurations[RAILS_ENV]['ftpPort']}"
+    @ftpList = []
+    @fullPath = ActiveRecord::Base.configurations[RAILS_ENV]['ftpMount']+'/'+@user.login
+    extensions = ["zip", "ZIP", "tar.gz", "TAR.GZ", "tar.bz2", "TAR.BZ2", "tgz", "TGZ"]
+    if File.exists?(@fullPath)
+      Dir.entries(@fullPath).each do
+        |file|
+        fullName = File.join(@fullPath,file)
+        if File.ftype(fullName) == "file"
+          if extensions.any? {|ext| file.ends_with?("." + ext) }
+            @ftpList << file
+          end
+        end
+      end
+    end
+
     return unless request.post?
     if params[:commit] == "Cancel"
       redirect_to :action => 'show', :id => @project
@@ -270,31 +289,39 @@ class PipelineController < ApplicationController
     end
     @upurl = params[:upload_url]
     @upload = params[:upload_file]
+    @upftp = params[:ftp]
     if @upurl == "http://"
       @upurl = ""
     end
-    return if @upload.blank? && @upurl.blank?
+
+    #debug
+    #flash[:notice] = "ftp=["+params[:ftp]+"] "+ (params[:ftp].blank? ? "blank" : "not blank")
+
+    return if @upload.blank? && @upurl.blank? && @upftp.blank?
 
     unless @upurl.blank?
       @filename = sanitize_filename(@upurl)
       #TODO add a HEAD would check it exists before starting?
     else
-      @filename = sanitize_filename(@upload.original_filename)
-      extensionsByMIME = {
-        "application/zip" => ["zip", "ZIP"],
-        "application/x-tar" => ["tar.gz", "TAR.GZ", "tar.bz2", "TAR.BZ2", "tgz", "TGZ"],
-        "application/octet-stream" => ["tar.gz", "TAR.GZ", "tar.bz2", "TAR.BZ2", "tgz", "TGZ"],
-        "application/gzip" => ["tar.gz", "TAR.GZ", "tgz", "TGZ"],
-        "application/x-gzip" => ["tar.gz", "TAR.GZ", "tgz", "TGZ"]
-      }
-      extensions = extensionsByMIME[@upload.content_type.chomp]
-      unless extensions
-        flash[:error] = "Invalid content_type=#{@upload.content_type.chomp}."
-        return
+      unless @upftp.blank?
+        @filename = sanitize_filename(@upftp)
+      else
+        @filename = sanitize_filename(@upload.original_filename)
+        extensionsByMIME = {
+          "application/zip" => ["zip", "ZIP"],
+          "application/x-tar" => ["tar.gz", "TAR.GZ", "tar.bz2", "TAR.BZ2", "tgz", "TGZ"],
+          "application/octet-stream" => ["tar.gz", "TAR.GZ", "tar.bz2", "TAR.BZ2", "tgz", "TGZ"],
+          "application/gzip" => ["tar.gz", "TAR.GZ", "tgz", "TGZ"],
+          "application/x-gzip" => ["tar.gz", "TAR.GZ", "tgz", "TGZ"]
+        }
+        extensions = extensionsByMIME[@upload.content_type.chomp]
+        unless extensions
+          flash[:error] = "Invalid content_type=#{@upload.content_type.chomp}."
+          return
+        end
       end
     end
 
-    extensions = ["zip", "ZIP", "tar.gz", "TAR.GZ", "tar.bz2", "TAR.BZ2", "tgz", "TGZ"]
     unless extensions.any? {|ext| @filename.ends_with?("." + ext) }
       flash[:error] = "File name <strong>#{@filename}</strong> is invalid. " +
         "Only a compressed archive file (tar.gz, tar.bz2, zip) is allowed."
@@ -379,11 +406,17 @@ class PipelineController < ApplicationController
           return
         end
 
-      else  # should be local-file upload, Hmm... where does Mongrel put it during upload?
-        unless defined? @upload.local_path
-          FileUtils.copy(@upload.local_path, path_to_file)
+      else 
+        unless @upftp.blank?
+          FileUtils.copy(File.join(@fullPath,@upftp), path_to_file)
+          File.delete(File.join(@fullPath,@upftp))
         else
-          File.open(path_to_file, "wb") { |f| f.write(@upload.read) }
+          # should be local-file upload, Hmm... where does Mongrel put it during upload?
+          unless defined? @upload.local_path
+            FileUtils.copy(@upload.local_path, path_to_file)
+          else
+            File.open(path_to_file, "wb") { |f| f.write(@upload.read) }
+          end
         end
       end
 

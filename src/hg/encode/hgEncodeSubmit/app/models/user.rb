@@ -27,6 +27,7 @@ class User < ActiveRecord::Base
 
   before_save :encrypt_password
   before_create :make_activation_code
+  #after_save :update_ftp_password
 
   # Authenticates a user by their login name and unencrypted password.  Returns the user or nil.
   def self.authenticate(login, password)
@@ -124,8 +125,54 @@ class User < ActiveRecord::Base
     end
   end
 
+  def update_ftp_password
+    return if password.blank?
+    create_ftp_user  # if needed
+
+    logger.info "\n\nGALT! password=[#{password}]\n\n" #debug
+    logger.info "GALT! login=[#{login}]" #debug
+
+    ftpMount = ActiveRecord::Base.configurations[RAILS_ENV]['ftpMount'] 
+
+    logger.info "GALT! ftpMount=[#{ftpMount}]" #debug
+
+    cmd = "echo #{password} | ftpasswd --passwd --name=#{login} --change-password --stdin --file=#{ftpMount}/ftp_passwd"
+
+    logger.info "GALT! cmd=[#{cmd}]\n\n" #debug
+
+    system(cmd)
+
+    logger.info "GALT! $?=[#{$?}]\n\n" #debug
+
+    return  # don't want it to return any value
+  end
+
+
   protected
+
     # before filter 
+
+    def create_ftp_user
+      ftpMount = ActiveRecord::Base.configurations[RAILS_ENV]['ftpMount']
+      userFtpDir = File.join(ftpMount,login)
+      return if File.exists?(userFtpDir)
+      ftpLocal = ActiveRecord::Base.configurations[RAILS_ENV]['ftpLocal'] 
+      ftpUserId = ActiveRecord::Base.configurations[RAILS_ENV]['ftpUserId'] 
+      ftpGroupId = ActiveRecord::Base.configurations[RAILS_ENV]['ftpGroupId'] 
+      Dir.mkdir(userFtpDir,0775)
+      cmd = "echo password | ftpasswd --passwd --name=#{login} --stdin --uid=#{ftpUserId} --gid=#{ftpGroupId}" +
+             " --home=#{ftpLocal}/#{login} --shell=/sbin/nologin  --file=#{ftpMount}/ftp_passwd"
+
+      logger.info "\n\nGALT! cmd=[#{cmd}]" #debug
+
+      system(cmd) 
+
+      logger.info "GALT! $?=[#{$?}]\n\n" #debug
+
+      return  # don't want it to return any value
+    end
+
+    #before_save    # I don't know why, but this gets called up to 4 or more times for one actual save?!
     def encrypt_password
       return if password.blank?
       self.salt = Digest::SHA1.hexdigest("--#{Time.now.to_s}--#{login}--") if new_record?
@@ -136,6 +183,7 @@ class User < ActiveRecord::Base
       crypted_password.blank? || !password.blank?
     end
 
+    # before_create
     def make_activation_code
       self.activation_code = Digest::SHA1.hexdigest( Time.now.to_s.split(//).sort_by {rand}.join )
     end

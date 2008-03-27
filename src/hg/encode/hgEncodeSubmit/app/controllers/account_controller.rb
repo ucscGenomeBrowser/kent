@@ -128,6 +128,7 @@ class AccountController < ApplicationController
       @user.forget_me if logged_in?  # part of log out, it must be before reset_password flag is set
       @user.reset_password
       @user.save!  # put this after all other change to @user to prevent multiple email notices
+      @user.update_ftp_password
       cookies.delete :auth_token
       reset_session
       flash[:notice] = "Password has been successfully changed."
