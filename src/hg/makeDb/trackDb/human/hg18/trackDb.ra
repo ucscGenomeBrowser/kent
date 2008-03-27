@@ -2458,6 +2458,28 @@ type bed 6 .
     longLabel Omicia OMIM Hand-Curation, Early Access R1, May 2007
     priority 2
 
+track mammothMaf
+shortLabel PSU Mammoth 
+longLabel PSU Mammoth PCR Products
+group x
+priority 104.6
+visibility hide
+color 0, 10, 100
+altColor 0,90,10
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+pairwiseHeight 12
+spanList 1
+yLineOnOff Off
+frames mammothMafFrames
+irows on
+autoScaleDefault Off
+windowingFunction mean
+summary multizPrimateSummary
+speciesDefaultOff 
+speciesCodonDefault hg18
+speciesOrder loxAfr1 African_elephant_F African_elephant_R Indian_elephant_F Indian_elephant_R mammoth_M4_F mammoth_M4_R mammoth_M25_F mammoth_M25_R
+
 searchName rnaGene
 searchTable rnaGene
 searchType bed
