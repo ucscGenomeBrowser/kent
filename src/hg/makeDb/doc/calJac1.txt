@@ -4,7 +4,7 @@
 # This file describes browser build for the Marmoset
 # genome, July 2007
 #
-#	"$Id: calJac1.txt,v 1.12 2008/01/17 20:48:20 hiram Exp $"
+#	"$Id: calJac1.txt,v 1.13 2008/03/28 22:52:26 hiram Exp $"
 #
 ######################################################################
 ## DOWNLOAD SEQUENCE (DONE - 2007-08-21 - Hiram)
@@ -1487,5 +1487,95 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
 # Could not tell (from trackDb, all.joiner and hardcoded lists of supporting
 # and genbank tables) which tracks to assign these tables to:
 #	genscanPep
+
+#############################################################################
+#  Create 9-way downloads (DONE - 2008-03-28 - Hiram)
+    ssh hgwdev
+    mkdir -p /cluster/data/calJac1/bed/multiz9way/downloads/phastCons9way
+    cd /cluster/data/calJac1/bed/multiz9way/downloads/phastCons9way
+    cp -p \
+/san/sanvol1/scratch/calJac1/multiz9way/cons/all/phastCons9wayScores/* .
+    ln -s ../../cons/all/all.mod ./9way.mod
+    cp /cluster/data/ponAbe2/bed/multiz8way/downloads/phastCons8way/README.txt .
+    # edit that README.txt to be correct for this 9-way alignment
+    cd ..
+    mkdir multiz9way
+    cd multiz9way
+    cp -p /cluster/data/ponAbe2/bed/multiz8way/downloads/multiz8way/README.txt .
+    # edit that README.txt to be correct for this 9-way alignment
+    ssh kkstore06
+    mkdir -p /cluster/data/calJac1/bed/multiz9way/downloads/multiz9way
+    cd /cluster/data/calJac1/bed/multiz9way/downloads/multiz9way
+    ln -s ../../calJac1.9-way.nh ./9way.nh
+
+    time nice -n +19 gzip -c ../../../anno/calJac1.anno.9way.maf \
+	> calJac1.9way.maf.gz
+    #	real    310m12.800s
+    #	unusual long time due to nice +19 and conflice with other long-running
+    #	jobs on kkstore06
+
+    ssh hgwdev
+    cd /cluster/data/calJac1/bed/multiz9way/downloads/multiz9way
+    #	creating upstream files from xenoRefGene, bash script:
+    cat << '_EOF_' > mkUpstream.sh
+#!/bin/bash
+DB=calJac1
+GENE=xenoRefGene
+NWAY=multiz9way
+export DB GENE
+
+for S in 1000 2000 5000
+do
+    echo "making upstream${S}.maf"
+    featureBits ${DB} ${GENE}:upstream:${S} -fa=/dev/null -bed=stdout \
+        | perl -wpe 's/_up[^\t]+/\t0/' | sort -k1,1 -k2,2n \
+        | $HOME/kent/src/hg/ratStuff/mafFrags/mafFrags ${DB} ${NWAY} \
+                stdin stdout \
+                -orgs=/cluster/data/${DB}/bed/${NWAY}/species.list \
+        | gzip -c > upstream${S}.maf.gz
+    echo "done upstream${S}.maf.gz"
+done
+'_EOF_'
+    # << happy emacs
+    chmod +x ./mkUpstream.sh
+    time nice -n +19 ./mkUpstream.sh
+    #	real    119m5.562s
+# -rw-rw-r--  1   42975041 Mar 28 14:27 upstream1000.maf.gz
+# -rw-rw-r--  1   76363192 Mar 28 15:03 upstream2000.maf.gz
+# -rw-rw-r--  1  303870318 Mar 28 15:42 upstream5000.maf.gz
+
+    #	check the names in these upstream files to ensure sanity:
+    zcat upstream1000.maf.gz | grep "^s " | awk '{print $2}' \
+	| sort | uniq -c | sort -rn | less
+    #	should be a list of the other 4 species with a high count,
+    #	then xenoRefGene names, e.g.:
+    #	51588 rheMac2
+    #	51588 ponAbe2
+    #	51588 panTro2
+    #	51588 ornAna1
+    #	51588 monDom4
+    #	51588 mm9
+    #	51588 hg18
+    #	51588 canFam2
+    #	   18 NM_001033610
+    #	   17 NM_016957
+    #	   17 NM_000992
+    #	   16 NM_181722
+
+    ssh kkstore06
+    cd /cluster/data/calJac1/bed/multiz9way/downloads/multiz9way
+    md5sum *.maf.gz > md5sum.txt
+    cd ../phastCons9way
+    md5sum *.data.gz *.mod > md5sum.txt
+
+    ssh hgwdev
+    mkdir /usr/local/apache/htdocs/goldenPath/calJac1/multiz9way
+    mkdir /usr/local/apache/htdocs/goldenPath/calJac1/phastCons9way
+    cd /cluster/data/calJac1/bed/multiz9way/downloads/multiz9way
+    ln -s `pwd`/* /usr/local/apache/htdocs/goldenPath/calJac1/multiz9way
+    cd ../phastCons9way
+    ln -s `pwd`/* /usr/local/apache/htdocs/goldenPath/calJac1/phastCons9way
+    #	if your ln -s `pwd`/* made extra links to files you don't want there,
+    #	check the goldenPath locations and remove those extra links
 
 #############################################################################
