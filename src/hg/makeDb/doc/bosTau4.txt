@@ -1,7 +1,7 @@
 # for emacs: -*- mode: sh; -*-
 
 # Bos Taurus -- Baylor Release 4.0 (Oct 4 2007)
-#	"$Id: bosTau4.txt,v 1.9 2008/03/27 00:41:51 braney Exp $"
+#	"$Id: bosTau4.txt,v 1.10 2008/03/28 20:35:48 braney Exp $"
 #########################################################################
 # DOWNLOAD SEQUENCE (DONE - 2008-03-07 - Hiram)
     ssh kkstore06
@@ -1418,9 +1418,9 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
 #	genscanPep
 
     #	looks like there should be a bosTau3 to bosTau4 liftOver run
-#############################################################################
+
 ###########################################################################
-# HUMAN (hg18) PROTEINS TRACK (WORKING braney 2008-03-26)
+# HUMAN (hg18) PROTEINS TRACK (DONE braney 2008-03-28)
     ssh kkstore06
     # bash  if not using bash shell already
 
@@ -1532,7 +1532,13 @@ exit 1
 
     para time
 
-# times munged due to recovered batches
+Completed: 350880 of 350880 jobs
+CPU time in finished jobs:   27082816s  451380.27m  7523.00h  313.46d  0.859 y
+IO & Wait Time:               2334990s   38916.50m   648.61h   27.03d  0.074 y
+Average job time:                  84s       1.40m     0.02h    0.00d
+Longest finished job:             578s       9.63m     0.16h    0.01d
+Submission to last job:         96125s    1602.08m    26.70h    1.11d
+
 
     ssh kkstore06
     cd /cluster/data/bosTau4/bed/tblastn.hg18KG
@@ -1546,24 +1552,27 @@ chainOne $(path1)
 '_EOF_'
 
     cat << '_EOF_' > chainOne
-(cd $1; cat q.*.psl | simpleChain -prot -outPsl -maxGap=100000 stdin /cluster/bluearc/bosTau4/bed/tblastn.hg18KG/blastOut/c.`basename $1`.psl)
+(cd $1; cat q.*.psl | simpleChain -prot -outPsl -maxGap=150000 stdin /cluster/bluearc/bosTau4/bed/tblastn.hg18KG/blastOut/c.`basename $1`.psl)
 '_EOF_'
     chmod +x chainOne
     ls -1dS /cluster/bluearc/bosTau4/bed/tblastn.hg18KG/blastOut/kg?? > chain.lst
     gensub2 chain.lst single chainGsub chainSpec
     # do the cluster run for chaining
-    ssh kk
+    ssh pk
     cd /cluster/data/bosTau4/bed/tblastn.hg18KG/chainRun
     para create chainSpec
     para maxNode 30
     para try, check, push, check etc.
 
-# Completed: 170 of 170 jobs
-# CPU time in finished jobs:       3150s      52.51m     0.88h    0.04d  0.000 y
-# IO & Wait Time:                 42932s     715.53m    11.93h    0.50d  0.001 y
-# Average job time:                 271s       4.52m     0.08h    0.00d
-# Longest finished job:             453s       7.55m     0.13h    0.01d
-# Submission to last job:          1632s      27.20m     0.45h    0.02d
+# Completed: 99 of 102 jobs
+# Crashed: 3 jobs
+# CPU time in finished jobs:     113248s    1887.47m    31.46h    1.31d  0.004 y
+# IO & Wait Time:                 86043s    1434.04m    23.90h    1.00d  0.003 y
+# Average job time:                2013s      33.55m     0.56h    0.02d
+# Longest finished job:            6139s     102.32m     1.71h    0.07d
+# Submission to last job:         10416s     173.60m     2.89h    0.12d
+
+# ran three crashed jobs on kolossus
 
     ssh kkstore06
     cd /cluster/data/bosTau4/bed/tblastn.hg18KG/blastOut
@@ -1574,10 +1583,9 @@ chainOne $(path1)
        awk "((\$1 / \$11) ) > 0.60 { print   }" c60.$i.psl > m60.$i.psl
        echo $i
     done
-    sort -T /tmp -k 14,14 -k 16,16n -k 17,17n u.*.psl m60* | uniq > /cluster/data/bosTau4/bed/tblastn.hg18KG/unliftBlastHg18KG.psl
+    sort -T /tmp -k 14,14 -k 16,16n -k 17,17n u.*.psl m60* | uniq > /cluster/data/bosTau4/bed/tblastn.hg18KG/blastHg18KG.psl
     cd ..
-    pslCheck unliftBlastHg18KG.psl
-    liftUp blastHg18KG.psl ../../Un/chrUn.lift carry unliftBlastHg18KG.psl
+    pslCheck blastHg18KG.psl
 
     # load table 
     ssh hgwdev
@@ -1586,10 +1594,10 @@ chainOne $(path1)
 
     # check coverage
     featureBits bosTau4 blastHg18KG 
-# 18960975 bases of 700386597 (2.707%) in intersection
+# 40254923 bases of 2731830700 (1.474%) in intersection
 
-    featureBits bosTau4 ensGene:cds blastHg18KG  -enrichment
-# ensGene:cds 4.125%, blastHg18KG 2.707%, both 2.279%, cover 55.26%, enrich 20.41x
+    featureBits bosTau4 refGene:cds blastHg18KG  -enrichment
+# refGene:cds 0.429%, blastHg18KG 1.474%, both 0.379%, cover 88.39%, enrich 59.98x
 
     ssh kkstore06
     rm -rf /cluster/data/bosTau4/bed/tblastn.hg18KG/blastOut
