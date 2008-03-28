@@ -1,7 +1,7 @@
 # for emacs: -*- mode: sh; -*-
 
 # Bos Taurus -- Baylor Release 4.0 (Oct 4 2007)
-#	"$Id: bosTau4.txt,v 1.10 2008/03/28 20:35:48 braney Exp $"
+#	"$Id: bosTau4.txt,v 1.11 2008/03/28 22:53:07 hiram Exp $"
 #########################################################################
 # DOWNLOAD SEQUENCE (DONE - 2008-03-07 - Hiram)
     ssh kkstore06
@@ -628,8 +628,6 @@ done
 (((Mouse_mm9:0.325818,Human_hg18:0.126901):0.019763,
 (Dog_canFam2:0.156637,Cow_bosTau4:0.163945):0.031326):0.332197,
 Platypus_ornAna1:0.488110);
-
-
 
     #	rearrange to get Cow at the top:
     # this leaves us with:
@@ -1603,4 +1601,88 @@ chainOne $(path1)
     rm -rf /cluster/data/bosTau4/bed/tblastn.hg18KG/blastOut
     rm -rf /cluster/bluearc/bosTau4/bed/tblastn.hg18KG/blastOut
 #end tblastn
+
 ##########################################################################
+#  Create 5-way downloads (DONE - 2008-03-28 - Hiram)
+    ssh hgwdev
+    mkdir -p /cluster/data/bosTau4/bed/multiz5way/downloads/phastCons5way
+    cd /cluster/data/bosTau4/bed/multiz5way/downloads/phastCons5way
+    cp -p \
+/san/sanvol1/scratch/bosTau4/multiz5way/cons/all/phastCons5wayScores/* .
+    ln -s ../../cons/all/all.mod ./5way.mod
+    cp /cluster/data/calJac1/bed/multiz9way/downloads/phastCons9way/README.txt .
+    # edit that README.txt to be correct for this 5-way alignment
+    cd ..
+    mkdir multiz5way
+    cd multiz5way
+    cp -p /cluster/data/calJac1/bed/multiz9way/downloads/multiz9way/README.txt .
+    # edit that README.txt to be correct for this 5-way alignment
+    ssh kkstore06
+    cd /cluster/data/bosTau4/bed/multiz5way/downloads/multiz5way
+    ln -s ../../bosTau4.5-way.nh 5way.nh
+
+    time gzip -c ../../anno/bosTau4.anno.5way.maf > bosTau4.5way.maf.gz
+    #	real    34m59.295s
+
+    ssh hgwdev
+    cd /cluster/data/bosTau4/bed/multiz5way/downloads/multiz5way
+    #	creating upstream files from refGene, bash script:
+    cat << '_EOF_' > mkUpstream.sh
+#!/bin/bash
+DB=bosTau4
+GENE=refGene
+NWAY=multiz5way
+export DB GENE
+
+for S in 1000 2000 5000
+do
+    echo "making upstream${S}.maf"
+    featureBits ${DB} ${GENE}:upstream:${S} -fa=/dev/null -bed=stdout \
+        | perl -wpe 's/_up[^\t]+/\t0/' | sort -k1,1 -k2,2n \
+        | $HOME/kent/src/hg/ratStuff/mafFrags/mafFrags ${DB} ${NWAY} \
+                stdin stdout \
+                -orgs=/cluster/data/${DB}/bed/${NWAY}/species.list \
+        | gzip -c > upstream${S}.maf.gz
+    echo "done upstream${S}.maf.gz"
+done
+'_EOF_'
+    # << happy emacs
+    chmod +x ./mkUpstream.sh
+    time nice -n +19 ./mkUpstream.sh
+-rw-rw-r--  1    9883443 Mar 28 13:02 upstream1000.maf.gz
+-rw-rw-r--  1   17938570 Mar 28 13:06 upstream2000.maf.gz
+-rw-rw-r--  1   40384656 Mar 28 13:10 upstream5000.maf.gz
+    #
+    #	check the names in these upstream files to ensure sanity:
+    zcat upstream1000.maf.gz | grep "^s " | awk '{print $2}' \
+	| sort | uniq -c | sort -rn | less
+    #	should be a list of the other 4 species with a high count,
+    #	then refGene names, e.g.:
+    #	8806 ornAna1
+    #	8806 mm9
+    #	8806 hg18
+    #	8806 canFam2
+    #      7 NM_001077006
+    #      3 NM_001113231
+    #      3 NM_001105381
+    #      3 NM_001102527
+    #      3 NM_001102322
+    #	...
+
+    ssh kkstore06
+    cd /cluster/data/bosTau4/bed/multiz5way/downloads/multiz5way
+    md5sum *.maf.gz > md5sum.txt
+    cd ../phastCons5way
+    md5sum *.data.gz *.mod > md5sum.txt
+
+    ssh hgwdev
+    mkdir /usr/local/apache/htdocs/goldenPath/bosTau4/multiz5way
+    mkdir /usr/local/apache/htdocs/goldenPath/bosTau4/phastCons5way
+    cd /cluster/data/bosTau4/bed/multiz5way/downloads/multiz5way
+    ln -s `pwd`/* /usr/local/apache/htdocs/goldenPath/bosTau4/multiz5way
+    cd ../phastCons5way
+    ln -s `pwd`/* /usr/local/apache/htdocs/goldenPath/bosTau4/phastCons5way
+    #	if your ln -s `pwd`/* made extra links to files you don't want there,
+    #	check the goldenPath locations and remove those extra links
+
+#############################################################################
