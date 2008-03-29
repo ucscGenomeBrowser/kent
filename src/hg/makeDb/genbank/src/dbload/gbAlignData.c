@@ -29,13 +29,20 @@
 #include "gbSql.h"
 #include "sqlDeleter.h"
 
-static char const rcsid[] = "$Id: gbAlignData.c,v 1.28 2008/03/08 15:27:56 markd Exp $";
+static char const rcsid[] = "$Id: gbAlignData.c,v 1.29 2008/03/29 04:46:51 markd Exp $";
 
 /* objects handling table loads */
 static struct gbAlignTblSet *alignTblSet = NULL;
 static struct gbGeneTblSet *geneTblSet = NULL;
 static boolean haveMgc = FALSE; /* does this organism have MGC tables */
 static boolean haveOrfeome = FALSE; /* does this organism have ORFeome tables */
+
+static void setDerivedTblFlags(struct sqlConnection *conn, struct dbLoadOptions* options)
+/* determine if we have MGC or orfeome tables */
+{
+haveMgc = gbConfGetDbBoolean(options->conf, sqlGetDatabase(conn), "mgc");
+haveOrfeome = gbConfGetDbBoolean(options->conf, sqlGetDatabase(conn), "orfeome");
+}
 
 void gbAlignDataInit(char *tmpDir, struct dbLoadOptions* options,
                      struct sqlConnection *conn)
@@ -49,10 +56,7 @@ if (alignTblSet == NULL)
                                    tmpDir);
     geneTblSet = gbGeneTblSetNew(tmpDir);
     }
-
-/* do we have MGC or ORFeome */
-haveMgc = gbConfGetDbBoolean(options->conf, sqlGetDatabase(conn), "mgc");
-haveOrfeome = gbConfGetDbBoolean(options->conf, sqlGetDatabase(conn), "orfeome");
+setDerivedTblFlags(conn, options);
 }
 
 static struct gbStatus *lookupStatus(char *accver, struct gbStatusTbl* statusTbl,
@@ -410,6 +414,10 @@ if (select->orgCats & GB_NATIVE)
         safef(table, sizeof(table), "%s_mrna", chrom->name);
         sqlDropTable(conn, table);
         }
+    if (haveMgc)
+        sqlDropTable(conn, "mgcFullMrna");
+    if (haveOrfeome)
+        sqlDropTable(conn, "orfeomeMrna");
     }
 if (select->orgCats & GB_XENO)
     {
@@ -418,11 +426,12 @@ if (select->orgCats & GB_XENO)
     
 }
 
-void gbAlignRemove(struct sqlConnection *conn, struct gbSelect* select,
-                   struct sqlDeleter* deleter)
+void gbAlignRemove(struct sqlConnection *conn, struct dbLoadOptions* options,
+                   struct gbSelect* select, struct sqlDeleter* deleter)
 /* Delete all alignments for the selected categories.  Used when reloading
  * alignments.*/
 {
+setDerivedTblFlags(conn, options);
 /* ESTs not implemented, which gets rid of complexities of accPrefix */
 if (select->type & GB_EST)
     errAbort("gbAlignRemove doesn't handle ESTs");

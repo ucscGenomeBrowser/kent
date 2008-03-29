@@ -48,8 +48,8 @@ void gbAlignDataDeleteOutdated(struct sqlConnection *conn,
                                char *tmpDir);
 /* delete outdated alignment data */
 
-void gbAlignRemove(struct sqlConnection *conn, struct gbSelect* select,
-                   struct sqlDeleter* deleter);
+void gbAlignRemove(struct sqlConnection *conn, struct dbLoadOptions* options,
+                   struct gbSelect* select, struct sqlDeleter* deleter);
 /* Delete all alignments for the selected categories.  Used when reloading
  * alignments.*/
 
