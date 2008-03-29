@@ -32,7 +32,7 @@
 #include "dbLoadPartitions.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: gbLoadRna.c,v 1.35 2008/01/19 23:05:33 markd Exp $";
+static char const rcsid[] = "$Id: gbLoadRna.c,v 1.36 2008/03/29 02:07:44 markd Exp $";
 
 /* FIXME: add optimize subcommand to sort all alignment tables */
 
@@ -464,7 +464,7 @@ deleter = gbBuildStateReloadDeleter(conn, select,  tmpDir);
 if (deleter != NULL)
     {
     gbAlignRemove(conn, select, deleter);
-    gbMetaDataRemove(conn, select, deleter);
+    gbMetaDataRemove(conn, &gOptions, select, deleter);
     sqlDeleterDel(deleter, conn, "gbStatus", "acc");
     }
 sqlDeleterFree(&deleter);

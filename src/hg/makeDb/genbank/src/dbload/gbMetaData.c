@@ -35,7 +35,7 @@
 #include "gbMiscDiff.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: gbMetaData.c,v 1.44 2008/03/13 00:05:03 markd Exp $";
+static char const rcsid[] = "$Id: gbMetaData.c,v 1.45 2008/03/29 02:07:44 markd Exp $";
 
 /* mol enum shared by gbCdnaInfo and refSeqStatus */
 #define molEnumDef \
@@ -1036,12 +1036,14 @@ if ((select->release->srcDb == GB_REFSEQ)
 } 
 
 void gbMetaDataRemove(struct sqlConnection *conn,
+                      struct dbLoadOptions* options,
                       struct gbSelect* select,
                       struct sqlDeleter* deleter)
 /* remove metaData from all entries in the select categories.
  * Used when reloading. */
 {
-gbMetaDataDeleteFromTables(conn, gOptions, select->release->srcDb, deleter);
+gOptions = options;
+gbMetaDataDeleteFromTables(conn, options, select->release->srcDb, deleter);
 }
 
 struct slName* gbMetaDataListTables(struct sqlConnection *conn)
