@@ -193,6 +193,9 @@ struct sqlConnection *hConnectCentral();
 struct sqlConnection *hConnectLocalDb(char *database);
 /* connect to local database , put back using sqlDisconnect(&Conn) */
 
+struct sqlConnection *hConnectLogicalDb(char *dbName);
+/* connect to a logical database (as specified in hg.conf), disconnect it using sqlDisconnect(&conn) */
+
 struct sqlConnection *hConnectLocal();
 /* connect to local host, no database is specified*/
 
