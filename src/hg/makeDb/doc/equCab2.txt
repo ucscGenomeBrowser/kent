@@ -1,0 +1,56 @@
+# for emacs: -*- mode: sh; -*-
+
+# Equus caballus - ??
+#	"$Id: equCab2.txt,v 1.1 2008/03/31 23:49:05 larrym Exp $"
+#########################################################################
+# DOWNLOAD SEQUENCE (...
+
+# Looked at kkstore05; equCab1 was 52Gigs, and there was 150+ Gigs available on /cluster/store12,
+# so hiram decided we had room to put equCab2 on /cluster/store12 too
+
+    ssh kkstore05
+    mkdir /cluster/store12/equCab2
+    ln -s /cluster/store12/equCab2 /cluster/data/equCab2
+    mkdir /cluster/data/equCab2/broad
+    cd /cluster/data/equCab2/broad
+
+wget --timestamping -r -nd ftp://ftp.broad.mit.edu/pub/assemblies/mammals/horse/Equus2
+
+# sanity check of AGP file:
+
+    zcat assembly.bases.gz | grep '^>' | sed -e 's/>//' | sort > contig_names
+    cat mapped.agp.chromosome.agp | egrep -v 'fragment|clone' | cut -f 6 | sort -u > contig_names2
+    zcat assembly.quals.gz | grep '^>' | sed -e 's/>//' | sort > contig_names3
+    diff contig_names contig_names2
+    diff contig_names contig_names3
+
+no diffs, so the assembly, quality and chromosome files agree.
+
+# Unknown chromosome:
+
+    cut -f 1 mapped.agp.chromosome.agp | sort -u | grep '^chrUn' | wc
+    9604    9604   96040
+
+i.e. lots of unknown fragments
+
+    cd /cluster/data/equCab2/broad/
+    egrep '^chrUn' mapped.agp.chromosome.agp | perl -e '$sum = 0; while(<>) { if(/^\S+\s+(\S+)\s+(\S+)/) { $n = $2 - $1 + 1; $sum += $n;}} print "sum: $sum\n"'
+    sum: 107858955
+
+about 1/3 of the previous horse.
+
+Question for hiram:
+
+    cd /cluster/data/equCab2/broad/
+    egrep '^chrUn' mapped.agp.chromosome.agp | head
+    chrUn0001       1       5285    1       W       contig_42285    1       5285    +
+    chrUn0001       5286    80612   2       N       75327   fragment        yes
+    chrUn0001       80613   95178   3       W       contig_42286    1       14566   +
+    chrUn0001       95179   95278   4       N       100     fragment        yes
+
+why would there be a fragment in an unknown chromosome? Only the "chrUn0001" has fragments. The other unknown chromosomes are like this:
+
+    tail mapped.agp.chromosome.agp
+    chrUn9595       1       3001    1       W       contig_55306    1       3001    +
+    chrUn9596       1       3001    1       W       contig_55307    1       3001    +
+    chrUn9597       1       3001    1       W       contig_55308    1       3001    +
