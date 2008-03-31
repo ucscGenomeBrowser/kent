@@ -2107,6 +2107,7 @@ identifier blastHg18KGPep04Id
      anoCar1.blastHg18KG.qName
      gasAcu1.blastHg18KG.qName
      bosTau3.blastHg18KG.qName
+     bosTau4.blastHg18KG.qName
 
 identifier blastHg18KGRef04Id 
 "hg18 ref 04"
@@ -2132,6 +2133,7 @@ identifier blastHg18KGRef04Id
      anoCar1.blastHg18KG.qName
      gasAcu1.blastHg18KG.qName
      bosTau3.blastHg18KG.qName
+     bosTau4.blastHg18KG.qName
 
 identifier blastHg17KGRef01SwissId 
 "hg17 proteins swiss 01"
