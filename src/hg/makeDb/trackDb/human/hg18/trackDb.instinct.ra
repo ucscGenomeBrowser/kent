@@ -3,8 +3,9 @@ shortLabel ispy CGH by MIP
 longLabel Koei(Gray lab) CGH by MIP (~20K) 
 group x
 priority 41
-visibility dense
+visibility hide
 type expRatio
+logicalDb localDb
 expScale 1.0
 expStep 0.2
 groupings ispyMipCGHGroups
@@ -16,6 +17,7 @@ group x
 priority 920
 visibility hide
 type expRatio
+logicalDb localDb
 expScale 2.0
 expStep 0.2
 groupings ispyAgiExpGroups
@@ -25,8 +27,9 @@ shortLabel ispy gene expression TP= T1 by agilent
 longLabel ispy gene expression time point=T1 measured on agilent whole genome array 44K
 group x
 priority 42
-visibility dense
+visibility hide
 type expRatio
+logicalDb localDb
 expScale 2.0
 expStep 0.2
 groupings ispyAgiExpT1Groups
@@ -36,8 +39,9 @@ shortLabel ispy gene expression T2-T1 by agilent
 longLabel ispy gene expression difference between time point T1 and T2 measured on agilent whole genome array 44K
 group x
 priority 42.1
-visibility dense
+visibility hide
 type expRatio
+logicalDb localDb
 expScale 2.0
 expStep 0.1
 groupings ispyAgiDeltaT2Groups
@@ -47,8 +51,9 @@ shortLabel ispy gene expression T4-T1 by agilent
 longLabel ispy gene expression difference between time point T1 and T4 measured on agilent whole genome array 44K
 group x
 priority 42.2
-visibility dense
+visibility hide
 type expRatio
+logicalDb localDb
 expScale 2.0
 expStep 0.1
 groupings ispyAgiDeltaT4Groups
@@ -58,8 +63,9 @@ shortLabel ispy proteomics
 longLabel ispy proteomics data from Petricoin lab
 group x
 priority 43
-visibility dense
+visibility hide
 type expRatio
+logicalDb localDb
 expScale 5.0
 expStep 0.2
 groupings ISPYproteomicsGroups
@@ -71,6 +77,7 @@ group x
 priority 44
 visibility hide
 type expRatio
+logicalDb localDb
 expScale 2.0
 expStep 0.2
 groupings ucsfNeveExpGroups
@@ -84,6 +91,7 @@ longLabel TCGA GBM mskcc CGH array 244A
 group x
 visibility hide
 type expRatio
+logicalDb localDb
 expScale 0.5
 expStep 0.05
 groupings mskccCGHGroups
@@ -94,6 +102,7 @@ longLabel TCGA GBM harvard CGH array 244A
 group x
 visibility hide
 type expRatio
+logicalDb localDb
 expScale 1.0
 expStep 0.1
 groupings harvardCGHGroups
@@ -104,6 +113,7 @@ longLabel TCGA GBM unc Agilent Expression array 4x44k
 group x
 visibility hide
 type expRatio
+logicalDb localDb
 expScale 1.0
 expStep 0.1  
 groupings uncAgiExpGroups
@@ -114,6 +124,7 @@ longLabel TCGA GBM Broad Affymetrix Expression array U133A
 group x
 visibility hide
 type expRatio
+logicalDb localDb
 expScale 3.0
 expStep 0.2
 groupings broadAffyExpGroups
@@ -133,8 +144,9 @@ shortLabel  Breast Cancer Gene Expression (van 't Veer et.al.)
 longLabel Breast Cancer patients gene expression (van 't Veer et.al. Nature 2002)
 group x
 priority 44
-visibility dense
+visibility hide
 type expRatio
+logicalDb localDb
 expScale 2.0
 expStep 0.2
 groupings vantVeerExpGroups                                                                     
