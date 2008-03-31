@@ -124,7 +124,7 @@ foreach db ($dbs)
 end
 
 echo "\n\n----------------------"
-echo "find out which chroms the genes are on (for both dev and beta).  
+echo "find out which chroms the genes are on (for both dev and beta)."  
 echo "look for unusually small or large numbers here (or big differences)."
 foreach db ($dbs)
  # don't run this on scaffold assemblies
