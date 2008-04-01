@@ -211,7 +211,7 @@
 #include "itemConf.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1406 2008/03/18 21:59:10 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1407 2008/04/01 17:50:21 aamp Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -3250,6 +3250,7 @@ void doChromGraph(struct trackDb *tdb)
 /* Print information for coloredExon type tracks. */
 {
 genericHeader(tdb, NULL);
+printTrackHtml(tdb);
 }
 
 void genericClickHandlerPlus(
@@ -20118,30 +20119,6 @@ else if (sameWord(track, "haplotype"))
 else if (sameWord(track, "mitoSnps"))
     {
     mitoDetails(tdb, item);
-    }
-else if(sameWord(track, "rosetta"))
-    {
-    rosettaDetails(tdb, item);
-    }
-else if (sameWord(track, "cghNci60"))
-    {
-    cghNci60Details(tdb, item);
-    }
-else if (sameWord(track, "nci60"))
-    {
-    nci60Details(tdb, item);
-    }
-else if(sameWord(track, "affy"))
-    {
-    affyDetails(tdb, item);
-    }
-else if(sameWord(track, "llaPfuPrintC2"))
-    {
-    loweExpRatioDetails(tdb, item);
-    }
-else if(sameWord(track, "affyUcla"))
-    {
-    affyUclaDetails(tdb, item);
     }
 else if(sameWord(track, "loweProbes"))
     {
