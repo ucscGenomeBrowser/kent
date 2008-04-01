@@ -36,7 +36,7 @@
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 #define MAX_SP_SIZE 2000
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.418 2008/03/21 04:03:58 angie Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.419 2008/04/01 17:51:05 aamp Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1007,6 +1007,23 @@ cgiMakeCheckBox(checkBoxName, checked);
 puts("<BR>\n");
 }
 
+void expRatioColorOption(struct trackDb *tdb)
+/* Radio button for red/green or blue/yellow */
+{
+char radioName[256];
+char *colorSetting = NULL;
+boolean rgChecked = FALSE;
+safef(radioName, sizeof(radioName), "%s.color", tdb->tableName);
+colorSetting = cartUsualString(cart, radioName, "redGreen");
+if (sameString(colorSetting, "redGreen"))
+    rgChecked = TRUE;
+puts("<BR><B>Color: </B> ");
+cgiMakeRadioButton(radioName, "redGreen", rgChecked);
+puts("red/green");
+cgiMakeRadioButton(radioName, "yellowBlue", !rgChecked);
+puts("yellow/blue<BR>\n");
+}
+
 void expRatioUi(struct trackDb *tdb)
 /* UI options for the expRatio tracks. */
 {
@@ -1019,6 +1036,13 @@ if ((ret == NULL) && (gHashOfHashes == NULL))
     errAbort("Could not get group settings for track.");
 expRatioDrawExonOption(tdb);
 expRatioCombineDropDown(tdb->tableName, groupings, gHashOfHashes);
+expRatioColorOption(tdb);
+}
+
+void expRatioCtUi(struct trackDb *tdb)
+/* UI options for array custom tracks. */
+{
+expRatioColorOption(tdb);
 }
 
 void affyAllExonUi(struct trackDb *tdb)
@@ -2565,7 +2589,6 @@ void specificUi(struct trackDb *tdb)
 {
 char *track = tdb->tableName;
 
-
 if (sameString(track, "stsMap"))
         stsMapUi(tdb);
 else if (sameString(track, "affyTxnPhase2"))
@@ -2732,6 +2755,11 @@ else if (tdb->type != NULL)
 	    {
 	    expRatioUi(tdb);
 	    }	
+	else if (sameWord(words[0], "array"))
+        /* not quite the same as an "expRatio" type (custom tracks) */
+	    {
+	    expRatioCtUi(tdb);
+	    }
 	/* if bed has score then show optional filter based on score */
 	else if (sameWord(words[0], "bed") && wordCount == 3)
 	    {
