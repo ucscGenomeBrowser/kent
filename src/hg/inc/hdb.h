@@ -193,6 +193,12 @@ struct sqlConnection *hConnectCentral();
 struct sqlConnection *hConnectLocalDb(char *database);
 /* connect to local database , put back using sqlDisconnect(&Conn) */
 
+struct sqlConnection *trackDbConn();
+/* get connection for trackDb depending if trackDb.host is specified in hg.conf */
+
+void freeTrackDbConn(struct sqlConnection **conn)
+/* free the trackDb connection */
+
 struct sqlConnection *hConnectLogicalDb(char *dbName);
 /* connect to a logical database (as specified in hg.conf), disconnect it using sqlDisconnect(&conn) */
 
