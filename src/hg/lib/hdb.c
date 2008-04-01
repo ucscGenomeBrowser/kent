@@ -35,7 +35,7 @@
 #include "customTrack.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.348 2008/03/12 21:47:30 angie Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.349 2008/04/01 13:31:27 fanhsu Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -662,6 +662,40 @@ else
 return(conn);
 }
 
+struct sqlConnection *hConnectLogicalDb(char *dbName)
+/* connect to a logical database (as specified in hg.conf), disconnect it using sqlDisconnect(&conn) */
+{
+struct sqlConnection *conn = NULL;
+char *host, *user, *password, *db;
+
+char setting[128];
+char *prefix;
+
+prefix = dbName;
+safef(setting, sizeof(setting), "%s.host", prefix);
+host = cfgOption(setting);
+safef(setting, sizeof(setting), "%s.user", prefix);
+user = cfgOption(setting);
+safef(setting, sizeof(setting), "%s.password", prefix);
+password = cfgOption(setting);
+safef(setting, sizeof(setting), "%s.db", prefix);
+db = cfgOption(setting);
+    
+if (host == NULL || user == NULL || password == NULL)
+    errAbort("Please set logical database %s options in the hg.conf file.", prefix);
+
+conn = sqlConnRemote(host, user, password, db, FALSE);
+if (conn == NULL) 
+    {
+    errAbort("<br>hConnectLogical failed trying to connect to %s.\n", prefix);
+    }
+
+if (conn == NULL)
+    return NULL;
+
+return conn;
+}
+
 struct sqlConnection *hConnectLocalDb(char *database)
 /* Connect to local database where user info and other info
  * not specific to a particular genome lives.  Free this up
@@ -689,7 +723,6 @@ if (conn == NULL)
 
 return conn;
 }
-
 
 struct sqlConnection *hConnectLocal()
 /* Connect to local host where user info and other info
@@ -3573,6 +3606,32 @@ if (!trackDbSetting(subtrackTdb, "noInherit"))
     }
 }
 
+struct sqlConnection *trackDbConn()
+{
+/* get connection for trackDb depending if trackDb.host is specified in hg.conf */
+struct sqlConnection *conn;
+char *hostName;
+char *userName, *userPasswd;
+
+hostName   = cfgOption("trackDb.host");
+userName   = cfgOption("trackDb.user");
+userPasswd = cfgOption("trackDb.password");
+
+if ((hostName != NULL) && (userName != NULL))
+    {
+    conn = sqlConnRemote(hostName, userName, userPasswd, hdbName, FALSE);
+    if (conn == NULL)
+	{
+	errAbort("<br>trackDbConn failed trying to connect to %s.\n", hostName);
+    	}
+    }
+else
+    {
+    conn = hAllocConn();
+    }
+return(conn);
+}
+
 struct trackDb *hTrackDb(char *chrom)
 /* Load tracks associated with current chromosome (which may be NULL for
  * all).  Supertracks are loaded as a trackDb, but are not in the returned list,
@@ -3580,7 +3639,9 @@ struct trackDb *hTrackDb(char *chrom)
  * the supertrack trackDb subtrack fields are not set here (would be
  * incompatible with the returned list) */
 {
-struct sqlConnection *conn = hAllocConn();
+/* get connection for trackDb depending if host is specified in hg.conf */
+struct sqlConnection *conn = trackDbConn();
+
 struct trackDb *tdbList = loadTrackDb(conn, NULL);
 struct trackDb *tdbFullList = NULL, *tdbSubtrackedList = NULL;
 struct trackDb *tdbRetList = NULL;
@@ -3648,7 +3709,14 @@ for (nextTdb = tdb = tdbSubtrackedList; nextTdb != NULL; tdb = nextTdb)
 	slAddHead(&tdbRetList, tdb);
 	}
     }
-hFreeConn(&conn);
+if (cfgOption("trackDb.host") != NULL)
+    {   
+    sqlDisconnect(&conn);
+    }
+else
+    {
+    hFreeConn(&conn);
+    }
 slSort(&tdbRetList, trackDbCmp);
 
 /* Add parent pointers to supertrack members */
