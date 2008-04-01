@@ -196,7 +196,7 @@ struct sqlConnection *hConnectLocalDb(char *database);
 struct sqlConnection *trackDbConn();
 /* get connection for trackDb depending if trackDb.host is specified in hg.conf */
 
-void freeTrackDbConn(struct sqlConnection **conn)
+void freeTrackDbConn(struct sqlConnection **conn);
 /* free the trackDb connection */
 
 struct sqlConnection *hConnectLogicalDb(char *dbName);
