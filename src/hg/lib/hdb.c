@@ -35,7 +35,7 @@
 #include "customTrack.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.349 2008/04/01 13:31:27 fanhsu Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.350 2008/04/01 21:11:30 fanhsu Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -3632,6 +3632,19 @@ else
 return(conn);
 }
 
+void freeTrackDbConn(struct sqlConnection **conn)
+/* free the trackDb connection */
+{
+if (cfgOption("trackDb.host") != NULL)
+    {   
+    sqlDisconnect(conn);
+    }
+else
+    {
+    hFreeConn(conn);
+    }
+}
+
 struct trackDb *hTrackDb(char *chrom)
 /* Load tracks associated with current chromosome (which may be NULL for
  * all).  Supertracks are loaded as a trackDb, but are not in the returned list,
@@ -3804,9 +3817,9 @@ struct trackDb *hTrackDbForTrack(char *track)
  * "noInherit on"...) This will die if the current database does not have
  * a trackDb, but will return NULL if track is not found. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = trackDbConn();
 struct trackDb *tdb = loadTrackDbForTrack(conn, track);
-hFreeConn(&conn);
+freeTrackDbConn(&conn);
 return tdb;
 }
 
