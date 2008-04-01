@@ -42,7 +42,7 @@ shortLabel UniProt
 tables kgXref
 idSql select spId from kgXref where kgID = '%s'
 nameSql select spDisplayId from kgXref where kgID = '%s'
-url http://us.expasy.org/cgi-bin/niceprot.pl?%s
+url http://www.expasy.org/cgi-bin/niceprot.pl?%s
 priority 10
 
 #name refSeq

@@ -7,7 +7,7 @@
 #include "spDb.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: swissProtComments.c,v 1.12 2006/07/26 15:28:38 fanhsu Exp $";
+static char const rcsid[] = "$Id: swissProtComments.c,v 1.13 2008/04/01 21:33:17 fanhsu Exp $";
 
 struct spComment
 /* Swiss prot comment. */
@@ -131,7 +131,7 @@ if (id == NULL)
 description = spDescription(spConn, spFindAcc(spConn, acc));
 			    
 hPrintf("<B>ID:</B> ");
-hPrintf("<A HREF=\"http://us.expasy.org/cgi-bin/niceprot.pl?%s\" TARGET=_blank>", acc);
+hPrintf("<A HREF=\"http://www.expasy.org/cgi-bin/niceprot.pl?%s\" TARGET=_blank>", acc);
 hPrintf("%s</A><BR>\n", id);
 if (description != NULL)
     hPrintf("<B>DESCRIPTION:</B> %s<BR>\n", description);
