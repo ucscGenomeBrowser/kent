@@ -137,16 +137,3 @@ visibility hide
 type bed
 
 
-# van 't Veer data 2002
-
-track vantVeerExp
-shortLabel  Breast Cancer Gene Expression (van 't Veer et.al.)
-longLabel Breast Cancer patients gene expression (van 't Veer et.al. Nature 2002)
-group x
-priority 44
-visibility hide
-type expRatio
-logicalDb localDb
-expScale 2.0
-expStep 0.2
-groupings vantVeerExpGroups                                                                     
