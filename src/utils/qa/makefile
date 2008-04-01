@@ -45,6 +45,7 @@ install:
 	cp -p --remove-destination findBigFiles.csh        ${SCRIPTS}
 	cp -p --remove-destination findColumn.csh          ${SCRIPTS}
 	cp -p --remove-destination findLevel.csh           ${SCRIPTS}
+	cp -p --remove-destination findOrg.csh             ${SCRIPTS}
 	cp -p --remove-destination findPushQLocks.csh      ${SCRIPTS}
 	cp -p --remove-destination gc-stats.pl             ${SCRIPTS}
 	cp -p --remove-destination genbankRun.csh          ${SCRIPTS}
