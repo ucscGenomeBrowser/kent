@@ -38,13 +38,7 @@ if ( "$HOST" != "hgwdev" ) then
  exit 1
 endif
 
-# left justify
-# count rows (does not include borders)
-set rows=`hgsql -e "SELECT name, organism $date FROM dbDb WHERE NAME LIKE '$db%' \
-  ORDER BY name" hgcentraltest | wc -l` 
-set rows=`echo $rows | awk '{print $1+1}'`
-
 hgsql -t -e "SELECT name, organism $date FROM dbDb WHERE NAME LIKE '$db%' \
-  ORDER BY name" hgcentraltest  | tail -$rows
+  ORDER BY name" hgcentraltest  | tail +3
 
 exit 0
