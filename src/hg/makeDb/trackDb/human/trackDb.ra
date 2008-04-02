@@ -412,6 +412,7 @@ visibility hide
 type expRatio
 expScale 3.0
 expStep 0.5
+expDrawExons on
 groupings nci60Groups
 expTable nci60Exps
 # (expTable is obselete)
