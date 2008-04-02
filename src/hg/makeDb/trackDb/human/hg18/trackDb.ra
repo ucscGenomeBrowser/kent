@@ -2477,7 +2477,7 @@ windowingFunction mean
 summary multizPrimateSummary
 speciesDefaultOff 
 speciesCodonDefault hg18
-speciesOrder loxAfr1 African_elephant_F African_elephant_R Indian_elephant_F Indian_elephant_R mammoth_M4_F mammoth_M4_R mammoth_M25_F mammoth_M25_R
+speciesOrder loxAfr1 African_eleph African_eleph Indian_eleph Indian_eleph mammoth_M4_F mammoth_M4_R mammoth_M25_F mammoth_M25_R
 
 searchName rnaGene
 searchTable rnaGene
