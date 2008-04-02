@@ -36,7 +36,7 @@
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 #define MAX_SP_SIZE 2000
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.419 2008/04/01 17:51:05 aamp Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.420 2008/04/02 17:38:22 aamp Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -920,21 +920,6 @@ printf(" green/red ");
 cgiMakeRadioButton("cghNci60.color", "rg", sameString(col, "rg"));
 printf(" red/green ");
 cgiMakeRadioButton("cghNci60.color", "rb", sameString(col, "rb"));
-printf(" red/blue ");
-}
-
-void nci60Ui(struct trackDb *tdb)
-/* put up UI for the nci60 track from stanford track */
-{
-char *nci60Map = cartUsualString(cart, "nci60.type", nci60EnumToString(0));
-char *col = cartUsualString(cart, "exprssn.color", "rg");
-printf("<p><b>Cell Lines: </b> ");
-nci60DropDown("nci60.type", nci60Map);
-printf(" ");
-printf(" <b>Color Scheme</b>: ");
-cgiMakeRadioButton("exprssn.color", "rg", sameString(col, "rg"));
-printf(" red/green ");
-cgiMakeRadioButton("exprssn.color", "rb", sameString(col, "rb"));
 printf(" red/blue ");
 }
 
@@ -2619,8 +2604,6 @@ else if (sameString(track, "recombRateRat"))
         recombRateRatUi(tdb);
 else if (sameString(track, "recombRateMouse"))
         recombRateMouseUi(tdb);
-else if (sameString(track, "nci60"))
-        nci60Ui(tdb);
 else if (sameString(track, "cghNci60"))
         cghNci60Ui(tdb);
 else if (sameString(track, "xenoRefGene"))

@@ -409,7 +409,12 @@ longLabel Microarray Experiments for NCI 60 Cell Lines
 group regulation
 priority 84
 visibility hide
-type bed 15 +
+type expRatio
+expScale 3.0
+expStep 0.5
+groupings nci60Groups
+expTable nci60Exps
+# (expTable is obselete)
 
 track affy
 shortLabel GNF

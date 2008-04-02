@@ -118,7 +118,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1443 2008/04/01 17:50:56 aamp Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1444 2008/04/02 17:38:18 aamp Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -13953,7 +13953,6 @@ registerTrackHandler("encodeErgeStableTransf",encodeErgeMethods);
 registerTrackHandler("encodeErgeSummary",encodeErgeMethods);
 registerTrackHandler("encodeErgeTransTransf",encodeErgeMethods);
 registerTrackHandler("encodeStanfordNRSF",encodeStanfordNRSFMethods);
-registerTrackHandler("nci60", nci60Methods);
 registerTrackHandler("cghNci60", cghNci60Methods);
 registerTrackHandler("rosetta", rosettaMethods);
 registerTrackHandler("affy", affyMethods);
