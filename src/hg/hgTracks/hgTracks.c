@@ -118,7 +118,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1442 2008/03/10 17:49:27 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1444 2008/04/02 17:38:18 aamp Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -145,6 +145,7 @@ int colorBin[MAXPIXELS][256]; /* count of colors for each pixel for each color *
 Color shadesOfGreen[EXPR_DATA_SHADES];
 Color shadesOfRed[EXPR_DATA_SHADES];
 Color shadesOfBlue[EXPR_DATA_SHADES];
+Color shadesOfYellow[EXPR_DATA_SHADES];
 Color orangeColor = 0;
 Color brickColor = 0;
 Color blueColor = 0;
@@ -1405,9 +1406,11 @@ static struct rgbColor black = {0, 0, 0};
 static struct rgbColor red = {255, 0, 0};
 static struct rgbColor green = {0, 255, 0};
 static struct rgbColor blue = {0, 0, 255};
+static struct rgbColor yellow = {255, 255, 0};
 hvGfxMakeColorGradient(hvg, &black, &blue, EXPR_DATA_SHADES, shadesOfBlue);
 hvGfxMakeColorGradient(hvg, &black, &red, EXPR_DATA_SHADES, shadesOfRed);
 hvGfxMakeColorGradient(hvg, &black, &green, EXPR_DATA_SHADES, shadesOfGreen);
+hvGfxMakeColorGradient(hvg, &black, &yellow, EXPR_DATA_SHADES, shadesOfYellow);
 exprBedColorsMade = TRUE;
 }
 
@@ -13950,7 +13953,6 @@ registerTrackHandler("encodeErgeStableTransf",encodeErgeMethods);
 registerTrackHandler("encodeErgeSummary",encodeErgeMethods);
 registerTrackHandler("encodeErgeTransTransf",encodeErgeMethods);
 registerTrackHandler("encodeStanfordNRSF",encodeStanfordNRSFMethods);
-registerTrackHandler("nci60", nci60Methods);
 registerTrackHandler("cghNci60", cghNci60Methods);
 registerTrackHandler("rosetta", rosettaMethods);
 registerTrackHandler("affy", affyMethods);

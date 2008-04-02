@@ -11,7 +11,7 @@
 #include "jksql.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: userSettings.c,v 1.8 2006/03/06 18:09:42 angie Exp $";
+static char const rcsid[] = "$Id: userSettings.c,v 1.9 2008/03/26 00:36:57 galt Exp $";
 
 static char *catAndClone(char *a, char *b)
 /* Return concatenation of a and b in dynamic memory. */
@@ -253,17 +253,17 @@ boolean retVal = TRUE;
 char *name = cartNonemptyString(cart, us->nameVar);
 
 command = trimSpaces(command);
-if (sameWord(command, "Save") && name != NULL)
+if (sameWord(command, "save") && name != NULL)
     {
     char *varName = settingsVarName(us->savePrefix, name);
     saveSettings(us, varName);
     freez(&varName);
     }
-else if (startsWith(command, "Load") && name != NULL)
+else if (startsWith(command, "load") && name != NULL)
     {
     userSettingsUseSelected(us);
     }
-else if (startsWith("Delete", command))
+else if (startsWith("delete", command))
     {
     char *which = cartOptionalString(cart, us->listDisplayVar);
     if (which != NULL)

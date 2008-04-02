@@ -1,3 +1,4 @@
+HG_WARN = -Wall 
 include ../../../inc/common.mk
 
 L = ${MYSQLLIBS} -lm

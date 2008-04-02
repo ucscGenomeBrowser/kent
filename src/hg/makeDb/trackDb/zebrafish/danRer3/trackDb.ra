@@ -62,33 +62,6 @@ visibility hide
 type bed 6 +
 exonArrows off
 
-track ensGene
-release alpha
-shortLabel Ensembl Genes
-longLabel Ensembl v38 Gene Predictions (Protein Coding Genes)
-group genes
-priority 32.8
-visibility pack
-color 150,0,0
-type genePred ensPep
-hgGene on
-hgsid on
-directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s
-baseColorUseCds given
-baseColorDefault genomicCodons
-
-track ensGene
-release beta
-shortLabel Ensembl Genes
-longLabel Ensembl (Version 32) Gene Predictions (Protein Coding Genes)
-group genes
-priority 32.8
-visibility pack
-color 150,0,0
-type genePred ensPep
-ensArchive jul2005
-dataVersion July 2005
-
 track multiz5way
 shortLabel Conservation
 longLabel Vertebrate Multiz Alignment & Conservation

@@ -45,6 +45,7 @@ void gbMetaDataDeleteFromTables(struct sqlConnection *conn, struct dbLoadOptions
 /* delete sequence from metadata tables */
 
 void gbMetaDataRemove(struct sqlConnection *conn,
+                      struct dbLoadOptions* options,
                       struct gbSelect* select,
                       struct sqlDeleter* deleter);
 /* remove metaData from all entries in the select categories.

@@ -14,6 +14,15 @@ Resume if the previous upload  was interrupted.
   <p><label for="project_upload_file">or Upload local file</label><br/>
   <%= file_field_tag 'upload_file', :size => 25 %><br/>
 
+  <p><label for="project_upload_file">or Upload from FTP</label>
+  <A HREF=<%= @ftpUrl -%>> <%= @ftpUrl -%></A><br/>
+  <select id="ftp" name="ftp">
+     <option selected> </option>
+     <% @ftpList.each do |file| %>
+       <option><%= file %></option>
+     <% end %>
+  </select>
+
   <table cellpadding=0 cellspacing=0><tr>
   <td><%= submit_tag @autoUploadLabel %></td>
   <td><%= submit_tag "Upload Only" %></td>

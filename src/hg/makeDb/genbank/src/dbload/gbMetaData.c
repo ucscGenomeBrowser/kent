@@ -35,7 +35,7 @@
 #include "gbMiscDiff.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: gbMetaData.c,v 1.44 2008/03/13 00:05:03 markd Exp $";
+static char const rcsid[] = "$Id: gbMetaData.c,v 1.46 2008/03/29 04:46:52 markd Exp $";
 
 /* mol enum shared by gbCdnaInfo and refSeqStatus */
 #define molEnumDef \
@@ -284,7 +284,7 @@ if (gSrcDb == GB_REFSEQ)
 static boolean partitionMayHaveGeneTbls(struct gbSelect* select)
 /* determine if its possible for the select alignment tracks to
  * have associated gene tracks. */
-{
+ {
 return (select->release->srcDb == GB_REFSEQ)
     || ((select->type == GB_MRNA) && (haveMgc || haveOrfeome));
 }
@@ -972,10 +972,9 @@ struct sqlDeleter* deleter = sqlDeleterNew(tmpDir, (gbVerbose >= 4));
 struct sqlDeleter* geneTblDeleter = NULL;
 struct sqlDeleter* derivedTblDeleter = NULL;
 if (partitionMayHaveGeneTbls(select))
-    {
     geneTblDeleter = sqlDeleterNew(tmpDir, (gbVerbose >= 4));
+if (select->type == GB_MRNA)
     derivedTblDeleter = sqlDeleterNew(tmpDir, (gbVerbose >= 4));
-    }
 struct gbStatus* status;
 gSrcDb = select->release->srcDb;
 gOptions = options;
@@ -992,7 +991,7 @@ for (status = statusTbl->metaChgList; status != NULL; status = status->next)
     assert(!(status->stateChg&GB_SEQ_CHG));
     if (status->stateChg&GB_META_CHG)
         sqlDeleterAddAcc(deleter, status->acc);
-    else if ((status->stateChg&GB_REBUILD_DERIVED) && inGeneTbls(status))
+    else if (status->stateChg&GB_REBUILD_DERIVED)
         sqlDeleterAddAcc(derivedTblDeleter, status->acc);
     if (geneTblDeleter != NULL)
         {
@@ -1018,8 +1017,6 @@ for (status = statusTbl->orphanList; status != NULL; status = status->next)
 // must do gene tbls before other tables
 if (geneTblDeleter != NULL)
     deleteFromGeneTbls(conn, select, geneTblDeleter);
-if (derivedTblDeleter != NULL)
-    sqlDeleterDel(derivedTblDeleter, conn, "gbMiscDiff", "acc");
 gbMetaDataDeleteFromTables(conn, options, select->release->srcDb, deleter);
 
 sqlDeleterFree(&deleter);
@@ -1036,12 +1033,17 @@ if ((select->release->srcDb == GB_REFSEQ)
 } 
 
 void gbMetaDataRemove(struct sqlConnection *conn,
+                      struct dbLoadOptions* options,
                       struct gbSelect* select,
                       struct sqlDeleter* deleter)
 /* remove metaData from all entries in the select categories.
  * Used when reloading. */
 {
-gbMetaDataDeleteFromTables(conn, gOptions, select->release->srcDb, deleter);
+gOptions = options;
+setGeneTblFlags(conn, options);
+if (partitionMayHaveGeneTbls(select))
+    deleteFromGeneTbls(conn, select, deleter);
+gbMetaDataDeleteFromTables(conn, options, select->release->srcDb, deleter);
 }
 
 struct slName* gbMetaDataListTables(struct sqlConnection *conn)

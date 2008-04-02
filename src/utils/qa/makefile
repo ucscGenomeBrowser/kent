@@ -45,6 +45,8 @@ install:
 	cp -p --remove-destination findBigFiles.csh        ${SCRIPTS}
 	cp -p --remove-destination findColumn.csh          ${SCRIPTS}
 	cp -p --remove-destination findLevel.csh           ${SCRIPTS}
+	cp -p --remove-destination findOrg.csh             ${SCRIPTS}
+	cp -p --remove-destination findPushQLocks.csh      ${SCRIPTS}
 	cp -p --remove-destination gc-stats.pl             ${SCRIPTS}
 	cp -p --remove-destination genbankRun.csh          ${SCRIPTS}
 	cp -p --remove-destination generic_range_check.csh ${SCRIPTS} 
@@ -77,6 +79,7 @@ install:
 	cp -p --remove-destination makeFilledBlockBed.csh  ${SCRIPTS}
 	cp -p --remove-destination net.csh                 ${SCRIPTS}
 	cp -p --remove-destination proteins.csh            ${SCRIPTS}
+	cp -p --remove-destination qaEnsGenes.csh          ${SCRIPTS}
 	cp -p --remove-destination realTime.csh            ${SCRIPTS}
 	cp -p --remove-destination retirePushQ.csh         ${SCRIPTS}
 	cp -p --remove-destination runBits.csh             ${SCRIPTS}

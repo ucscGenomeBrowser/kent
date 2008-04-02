@@ -363,6 +363,10 @@ char** sqlGetEnumDef(struct sqlConnection *conn, char* table, char* colName);
 struct slName *sqlRandomSample(char *db, char *table, char *field, int count);
 /* Get random sample from database. */
 
+struct slName *sqlRandomSampleConn(struct sqlConnection *conn, char *table,
+				   char *field, int count);
+/* Get random sample from conn. */
+
 struct slName *sqlRandomSampleWithSeed(char *db, char *table, char *field, int count, int seed);
 /* Get random sample from database specifiying rand number seed, or -1 for none */
 

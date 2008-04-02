@@ -50,6 +50,10 @@ struct range *rangeTreeAllOverlapping(struct rbTree *tree, int start, int end);
  * Do not free this list, it is owned by tree.  However it is only good until
  * next call to rangeTreeFindInRange or rangTreeList. Not thread safe. */
 
+struct range *rangeTreeMaxOverlapping(struct rbTree *tree, int start, int end);
+/* Return item that overlaps most with start-end. Not thread safe.  Trashes list used
+ * by rangeTreeAllOverlapping. */
+
 struct range *rangeTreeList(struct rbTree *tree);
 /* Return list of all ranges in tree in order.  Not thread safe. 
  * No need to free this when done, memory is local to tree. */

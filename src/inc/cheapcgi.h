@@ -143,6 +143,10 @@ void cgiMakeButton(char *name, char *value);
 void cgiMakeOnClickButton(char *command, char *value);
 /* Make 'push' type button with client side onClick (java)script. */
 
+void cgiMakeOnClickSubmitButton(char *command, char *name, char *value);
+/* Make submit button with both variable name and value with client side
+ * onClick (java)script. */
+
 void cgiMakeOptionalButton(char *name, char *value, boolean disabled);
 /* Make 'submit' type button that can be disabled. */
 
@@ -179,6 +183,12 @@ void cgiMakeTextAreaDisableable(char *varName, char *initialVal, int rowCount, i
 void cgiMakeTextVar(char *varName, char *initialVal, int charSize);
 /* Make a text control filled with initial value.  If charSize
  * is zero it's calculated from initialVal size. */
+
+void cgiMakeOnKeypressTextVar(char *varName, char *initialVal, int charSize,
+			      char *script);
+/* Make a text control filled with initial value, with a (java)script
+ * to execute every time a key is pressed.  If charSize is zero it's
+ * calculated from initialVal size. */
 
 void cgiMakeIntVar(char *varName, int initialVal, int maxDigits);
 /* Make a text control filled with initial integer value.  */

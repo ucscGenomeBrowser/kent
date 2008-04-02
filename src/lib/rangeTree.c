@@ -97,6 +97,25 @@ slReverse(&rangeList);
 return rangeList;
 }
 
+
+struct range *rangeTreeMaxOverlapping(struct rbTree *tree, int start, int end)
+/* Return item that overlaps most with start-end. Not thread safe.  Trashes list used
+ * by rangeTreeAllOverlapping. */
+{
+struct range *range, *best = NULL;
+int bestOverlap = 0; 
+for (range  = rangeTreeAllOverlapping(tree, start, end); range != NULL; range = range->next)
+    {
+    int overlap = rangeIntersection(range->start, range->end, start, end);
+    if (overlap > bestOverlap)
+        {
+	bestOverlap = overlap;
+	best = range;
+	}
+    }
+return best;
+}
+
 /* A couple of variables used to calculate total overlap. */
 static int totalOverlap;
 static int overlapStart, overlapEnd;

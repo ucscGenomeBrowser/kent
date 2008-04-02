@@ -24,6 +24,13 @@ development:
   from: you@somewhere.com
   emailOnLoad: somebody@somewhere.com
   emailDCC: somebody@somewhere.com
+  ftpServer: someftp.server.edu
+  ftpPort: someport
+  ftpMount: /some/path
+  ftpLocal: /some/localftp/path
+  ftpUserId: someUid
+  ftpGroupId: someGid
+
 
 # Warning: The database defined as 'test' will be erased and
 # re-generated from your development database when you run 'rake'.
@@ -40,6 +47,12 @@ test:
   from: you@somewhere.com
   emailOnLoad: somebody@somewhere.com
   emailDCC: somebody@somewhere.com
+  ftpServer: someftp.server.edu
+  ftpPort: someport
+  ftpMount: /some/path
+  ftpLocal: /some/localftp/path
+  ftpUserId: someUid
+  ftpGroupId: someGid
 
 
 production:
@@ -54,4 +67,10 @@ production:
   from: you@somewhere.com
   emailOnLoad: somebody@somewhere.com
   emailDCC: somebody@somewhere.com
+  ftpServer: someftp.server.edu
+  ftpPort: someport
+  ftpMount: /some/path
+  ftpLocal: /some/localftp/path
+  ftpUserId: someUid
+  ftpGroupId: someGid
 

@@ -787,11 +787,14 @@ done
     #	enrich 60.62x
 
 #####################################################################
-# LOAD GENEID GENES (DONE - 2007-12-20 - Hiram)
+# LOAD GENEID GENES (DONE - 2007-12-20, 2008-03-27 - Hiram)
     ssh kkstore05
     mkdir -p /cluster/data/bosTau3/bed/geneid
     cd /cluster/data/bosTau3/bed/geneid
     mkdir gtf prot
+
+    #	The data load in December 2007 was broken at their end.
+    #	download new data 27 March 2008 and reload this track
 
 for C in `grep -v chrUn /cluster/data/bosTau3/chrom.sizes | awk '{print $1}'`
 do
@@ -819,15 +822,14 @@ do
     ssh hgwdev
     cd /cluster/data/bosTau3/bed/geneid
     ldHgGene -genePredExt -gtf bosTau3 geneid gtf/*.gtf
-# Read 50891 transcripts in 325387 lines in 31 files
-# 50891 groups 12602 seqs 1 sources 3 feature types
-# 50891 gene predictions
+# Read 50657 transcripts in 325618 lines in 31 files
+# 50657 groups 12601 seqs 1 sources 3 feature types
+# 50657 gene predictions
 
-    #	the chr16_random file is empty, do not attempt to use it
     hgPepPred bosTau3 generic geneidPep prot/chr*-fixed.prot
     featureBits bosTau3 geneid
-    #	39257634 bases of 2731807384 (1.437%) in intersection
+    #	44623578 bases of 2731807384 (1.633%) in intersection
     featureBits bosTau3 -enrichment refGene:CDS geneid
-# refGene:CDS 0.426%, geneid 1.437%, both 0.339%, cover 79.52%, enrich 55.34x
+# refGene:CDS 0.429%, geneid 1.633%, both 0.364%, cover 84.64%, enrich 51.82x
 
 ##########################################################################

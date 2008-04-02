@@ -345,6 +345,7 @@ extern struct rgbColor lightSeaColor;
 extern Color shadesOfGreen[EXPR_DATA_SHADES];
 extern Color shadesOfRed[EXPR_DATA_SHADES];
 extern Color shadesOfBlue[EXPR_DATA_SHADES];
+extern Color shadesOfYellow[EXPR_DATA_SHADES];
 
 extern boolean exprBedColorsMade; /* Have the shades of Green, Red, and Blue been allocated? */
 extern int maxRGBShade;

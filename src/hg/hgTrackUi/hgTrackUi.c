@@ -4,6 +4,7 @@
 #include "cheapcgi.h"
 #include "htmshell.h"
 #include "jksql.h"
+#include "jsHelper.h"
 #include "trackDb.h"
 #include "hgTrackUi.h"
 #include "hdb.h"
@@ -35,7 +36,7 @@
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 #define MAX_SP_SIZE 2000
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.416 2008/03/17 19:37:20 angie Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.420 2008/04/02 17:38:22 aamp Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -59,41 +60,6 @@ radioButton(filterTypeVar, filterTypeVal, "exclude");
 radioButton(filterTypeVar, filterTypeVal, "include");
 if (none)
     radioButton(filterTypeVar, filterTypeVal, "none");
-}
-
-#define CLEAR_ALL_BUTTON_LABEL    "Clear all"
-#define SET_ALL_BUTTON_LABEL  "Set all"
-#define DEFAULTS_BUTTON_LABEL "Set defaults"
-
-void makeSetClearButton(char *form, char *buttonVar, char *buttonLabel,
-			char *cartVarPrefix, struct slName *cartVarSuffixList,
-			char *anchor, boolean isSet)
-/* Make a button for setting or clearing all of a list of checkboxes, and
- * if the button was just pressed, set or clear the cart variables.
- * Optional html anchor is appended to the form's action if given. */
-{
-struct slName *suffix;
-char javascript[2048];
-cgiMakeHiddenVar(buttonVar, "");
-safef(javascript, sizeof javascript,
-      "document.%s.action = '%s%s%s'; document.%s.%s.value='%s'; "
-      "document.%s.submit();",
-      form, cgiScriptName(),
-      (isNotEmpty(anchor) ? "#" : ""), (isNotEmpty(anchor) ? anchor : ""),
-      form, buttonVar, buttonLabel, form);
-cgiMakeOnClickButton(javascript, buttonLabel);
-
-if (isNotEmpty(cgiOptionalString(buttonVar)))
-    {
-    char option[1024];
-    if (cartVarPrefix == NULL)
-	cartVarPrefix = "";
-    for (suffix = cartVarSuffixList;  suffix != NULL;  suffix = suffix->next)
-        {
-        safef(option, sizeof(option), "%s%s", cartVarPrefix, suffix->name);
-        cartSetBoolean(cart, option, isSet);
-        }
-    }
 }
 
 void tfbsConsSitesUi(struct trackDb *tdb)
@@ -196,6 +162,7 @@ for (snpMapType=0; snpMapType<snpMapTypeCartSize; snpMapType++)
 #define SNP125_FILTER_COLUMNS 4
 #define SNP125_SET_ALL "snp125SetAll"
 #define SNP125_CLEAR_ALL "snp125ClearAll"
+#define SNP125_DEFAULTS "snp125Defaults"
 
 void snp125PrintFilterColGroup()
 /* Print the fancy COLGROUP for the table enclosing all filter checkbox 
@@ -222,13 +189,13 @@ printf("<TR><TD colspan=%d><B>%s:</B>&nbsp;\n",
        SNP125_FILTER_COLUMNS*2, attributeName);
 safef(buttonVar, sizeof(buttonVar), "%s_%s", SNP125_SET_ALL, attributeName);
 stripChar(buttonVar, ' ');
-makeSetClearButton(MAIN_FORM, buttonVar, SET_ALL_BUTTON_LABEL, "", varList,
-		   "filterControls", TRUE);
+jsMakeSetClearButton(cart, MAIN_FORM, buttonVar, JS_SET_ALL_BUTTON_LABEL, "",
+		     varList, NULL, TRUE, TRUE);
 printf("&nbsp;\n");
 safef(buttonVar, sizeof(buttonVar), "%s_%s", SNP125_CLEAR_ALL, attributeName);
 stripChar(buttonVar, ' ');
-makeSetClearButton(MAIN_FORM, buttonVar, CLEAR_ALL_BUTTON_LABEL, "", varList,
-		   "filterControls", FALSE);
+jsMakeSetClearButton(cart, MAIN_FORM, buttonVar, JS_CLEAR_ALL_BUTTON_LABEL, "",
+		     varList, NULL, TRUE, FALSE);
 printf("</TD></TR>\n");
 for (i=0; i < varCount; i++)
     {
@@ -267,6 +234,24 @@ for (i=0; i < varCount; i++)
     printf("</TD><TD>&nbsp;&nbsp;&nbsp;</TD>");
     }
 printf("</TABLE>\n");
+}
+
+void cartSetStringArray(struct cart *cart, char *vars[], char *defaults[],
+			int varCount)
+/* Given parallel arrays of variable names and default values, set those 
+ * cart variables to the default values.  If a NULL is encountered in 
+ * vars[], assume vars[] is NULL-terminated even if varCount has not
+ * been reached. */
+{
+if (vars == NULL)
+    return;
+int i;
+for (i = 0;  i < varCount;  i++)
+    {
+    if (vars[i] == NULL)
+	break;
+    cartSetString(cart, vars[i], defaults[i]);
+    }
 }
 
 void snp125Ui(struct trackDb *tdb)
@@ -324,11 +309,34 @@ snp125PrintFilterControls("Molecule Type", snp125MolTypeIncludeStrings,
 printf("</TABLE><BR>\n");
 
 
+jsInit();
 safef(autoSubmit, sizeof(autoSubmit), "onchange=\""
-      "document."MAIN_FORM".action = '%s#colorSpec'; "
-      "document."MAIN_FORM".submit();\"", cgiScriptName());
+      "document."MAIN_FORM".action = '%s'; %s"
+      "document."MAIN_FORM".submit();\"",
+      cgiScriptName(), jsSetVerticalPosition(MAIN_FORM));
 cgiContinueHiddenVar("g");
 cgiContinueHiddenVar("c");
+
+/* The actual set defaults button is below, but we need to handle it here: */
+char defaultButton[1024];
+safef(defaultButton, sizeof(defaultButton), "%s_coloring", SNP125_DEFAULTS);
+stripChar(defaultButton, ' ');
+boolean defaultColoring = isNotEmpty(cgiOptionalString(defaultButton));
+if (defaultColoring)
+    {
+    cartSetString(cart,
+		  snp125ColorSourceDataName[0], snp125ColorSourceDefault[0]);
+    cartSetStringArray(cart, snp125LocTypeStrings, snp125LocTypeDefault,
+		       snp125LocTypeLabelsSize);
+    cartSetStringArray(cart, snp125ClassStrings, snp125ClassDefault,
+		       snp125ClassLabelsSize);
+    cartSetStringArray(cart, snp125ValidStrings, snp125ValidDefault,
+		       snp125ValidLabelsSize);
+    cartSetStringArray(cart, snp125FuncStrings, snp125FuncDefault,
+		       snp125FuncLabelsSize);
+    cartSetStringArray(cart, snp125MolTypeStrings, snp125MolTypeDefault,
+		       snp125MolTypeLabelsSize);
+    }
 
 printf("<A name=\"colorSpec\"><HR>\n");
 printf("<B>SNP Feature for Color Specification:</B>\n");
@@ -347,12 +355,18 @@ else
 			snp128ColorSourceLabels, snp128ColorSourceLabelsSize,
 			snp125ColorSourceCart[0], autoSubmit);
     }
+printf("&nbsp;\n");
+char javascript[2048];
+safef(javascript, sizeof(javascript),
+      "document."MAIN_FORM".action='%s'; %s document."MAIN_FORM".submit();",
+      cgiScriptName(), jsSetVerticalPosition(MAIN_FORM));
+cgiMakeOnClickSubmitButton(javascript, defaultButton, JS_DEFAULTS_BUTTON_LABEL);
 printf("<BR><BR>\n");
 printf("The selected feature above has the following values below.  \n");
 printf("For each value, a selection of colors is available.\n");
 printf("If a SNP has more than one of these properties, resulting in\n");
 printf("more than one color, then the stronger color will override the\n");
-printf("weaker color.  In order by strongest to weakest, the colors are\n");
+printf("weaker color.  In order from strongest to weakest, the colors are\n");
 printf("red, green, blue, gray, black.<BR><BR>\n");
 
 if (sameString(snp125ColorSourceCart[0], "Location Type"))
@@ -909,21 +923,6 @@ cgiMakeRadioButton("cghNci60.color", "rb", sameString(col, "rb"));
 printf(" red/blue ");
 }
 
-void nci60Ui(struct trackDb *tdb)
-/* put up UI for the nci60 track from stanford track */
-{
-char *nci60Map = cartUsualString(cart, "nci60.type", nci60EnumToString(0));
-char *col = cartUsualString(cart, "exprssn.color", "rg");
-printf("<p><b>Cell Lines: </b> ");
-nci60DropDown("nci60.type", nci60Map);
-printf(" ");
-printf(" <b>Color Scheme</b>: ");
-cgiMakeRadioButton("exprssn.color", "rg", sameString(col, "rg"));
-printf(" red/green ");
-cgiMakeRadioButton("exprssn.color", "rb", sameString(col, "rb"));
-printf(" red/blue ");
-}
-
 void affyUi(struct trackDb *tdb)
 /* put up UI for the affy track from stanford track */
 {
@@ -993,6 +992,23 @@ cgiMakeCheckBox(checkBoxName, checked);
 puts("<BR>\n");
 }
 
+void expRatioColorOption(struct trackDb *tdb)
+/* Radio button for red/green or blue/yellow */
+{
+char radioName[256];
+char *colorSetting = NULL;
+boolean rgChecked = FALSE;
+safef(radioName, sizeof(radioName), "%s.color", tdb->tableName);
+colorSetting = cartUsualString(cart, radioName, "redGreen");
+if (sameString(colorSetting, "redGreen"))
+    rgChecked = TRUE;
+puts("<BR><B>Color: </B> ");
+cgiMakeRadioButton(radioName, "redGreen", rgChecked);
+puts("red/green");
+cgiMakeRadioButton(radioName, "yellowBlue", !rgChecked);
+puts("yellow/blue<BR>\n");
+}
+
 void expRatioUi(struct trackDb *tdb)
 /* UI options for the expRatio tracks. */
 {
@@ -1005,6 +1021,13 @@ if ((ret == NULL) && (gHashOfHashes == NULL))
     errAbort("Could not get group settings for track.");
 expRatioDrawExonOption(tdb);
 expRatioCombineDropDown(tdb->tableName, groupings, gHashOfHashes);
+expRatioColorOption(tdb);
+}
+
+void expRatioCtUi(struct trackDb *tdb)
+/* UI options for array custom tracks. */
+{
+expRatioColorOption(tdb);
 }
 
 void affyAllExonUi(struct trackDb *tdb)
@@ -1955,6 +1978,7 @@ slReverse(&wmSpeciesList);
 puts("\n<P STYLE=><B>Pairwise alignments:</B>&nbsp;");
 
 cgiContinueHiddenVar("g");
+jsInit();
 
 char prefix[512];
 safef(prefix, sizeof prefix, "%s.", tdb->tableName);
@@ -1963,8 +1987,8 @@ if (defaultOffSpecies)
     {
     safecpy(buttonVar, sizeof buttonVar, "set_defaults_button");
     /* make button and turn on all species (if button was pressed) */
-    makeSetClearButton(MAIN_FORM, buttonVar, DEFAULTS_BUTTON_LABEL, prefix,
-		       speciesList, NULL, TRUE);
+    jsMakeSetClearButton(cart, MAIN_FORM, buttonVar, JS_DEFAULTS_BUTTON_LABEL,
+			 prefix, speciesList, NULL, FALSE, TRUE);
     if (isNotEmpty(cgiOptionalString(buttonVar)))
         {
         char *words[MAX_SP_SIZE];
@@ -1981,12 +2005,12 @@ if (defaultOffSpecies)
 
 puts("&nbsp;");
 safef(buttonVar, sizeof buttonVar, "%s", "set_all_button");
-makeSetClearButton(MAIN_FORM, buttonVar, SET_ALL_BUTTON_LABEL, prefix,
-		   speciesList, NULL, TRUE);
+jsMakeSetClearButton(cart, MAIN_FORM, buttonVar, JS_SET_ALL_BUTTON_LABEL,
+		     prefix, speciesList, NULL, FALSE, TRUE);
 puts("&nbsp;");
 safef(buttonVar, sizeof buttonVar, "%s", "clear_all_button");
-makeSetClearButton(MAIN_FORM, buttonVar, CLEAR_ALL_BUTTON_LABEL, prefix,
-		   speciesList, NULL, FALSE);
+jsMakeSetClearButton(cart, MAIN_FORM, buttonVar, JS_CLEAR_ALL_BUTTON_LABEL,
+		      prefix, speciesList, NULL, FALSE, FALSE);
 
 if ((speciesTree != NULL) && ((tree = phyloParseString(speciesTree)) != NULL))
 {
@@ -2550,7 +2574,6 @@ void specificUi(struct trackDb *tdb)
 {
 char *track = tdb->tableName;
 
-
 if (sameString(track, "stsMap"))
         stsMapUi(tdb);
 else if (sameString(track, "affyTxnPhase2"))
@@ -2581,8 +2604,6 @@ else if (sameString(track, "recombRateRat"))
         recombRateRatUi(tdb);
 else if (sameString(track, "recombRateMouse"))
         recombRateMouseUi(tdb);
-else if (sameString(track, "nci60"))
-        nci60Ui(tdb);
 else if (sameString(track, "cghNci60"))
         cghNci60Ui(tdb);
 else if (sameString(track, "xenoRefGene"))
@@ -2717,6 +2738,11 @@ else if (tdb->type != NULL)
 	    {
 	    expRatioUi(tdb);
 	    }	
+	else if (sameWord(words[0], "array"))
+        /* not quite the same as an "expRatio" type (custom tracks) */
+	    {
+	    expRatioCtUi(tdb);
+	    }
 	/* if bed has score then show optional filter based on score */
 	else if (sameWord(words[0], "bed") && wordCount == 3)
 	    {

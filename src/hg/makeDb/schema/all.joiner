@@ -31,7 +31,7 @@ set cioSav cioSav1
 set tetNig tetNig1
 set xenTro xenTro1,xenTro2
 set monDom monDom1,monDom4
-set bosTau bosTau1,bosTau2,bosTau3
+set bosTau bosTau1,bosTau2,bosTau3,bosTau4
 set rheMac rheMac1,rheMac2
 set strPur strPur1,strPur2
 set felCat felCat3
@@ -81,7 +81,7 @@ databasesChecked $gbd,$otherDb
 databasesIgnored mysql,lost+found,$proteinDb,$zooDb,sc1,hgcentraltest,hgcentralbeta,test,sp070202,sp060115,sp051015,sp050415,sp040915,sp040515,sp040315,sp040115,qapushq,mysql-save,hgcentralangie,go070111,go060330
 
 # Define various non-self chains
-set chainDest Hg15,Hg16,Hg17,Hg18,Pt0,Mm2,Mm3,Mm4,Mm5,Mm6,Mm7,Mm8,Mm9,Rn2,Rn3,Rn4,Cb1,Dm1,Dm2,Dm3,Dp1,Dp2,Dp3,PanTro1,PanTro2,GalGal2,GalGal3,Fr1,Fr2,DanRer1,DanRer2,DanRer3,DanRer4,DanRer5,CanFam1,CanFam2,DroYak1,DroYak2,DroAna1,DroAna2,DroMoj1,DroMoj2,DroVir1,DroVir2,DroEre1,DroSec1,DroSim1,DroGri1,DroPer1,DroWil1,AnoGam1,ApiMel1,ApiMel2,TetNig1,XenTro1,XenTro2,MonDom1,MonDom2,MonDom4,RheMac1,RheMac2,BosTau1,BosTau2,BosTau3,FelCat3,GasAcu1,OryLat1,EquCab1,AnoCar1,Ce1,Ce2,Ce4,OrnAna1,CaePb1,CaeRem2,Cb3,PriPac1,StrPur1,StrPur2,Ci1,Ci2,PonAbe2,calJac1
+set chainDest Hg15,Hg16,Hg17,Hg18,Pt0,Mm2,Mm3,Mm4,Mm5,Mm6,Mm7,Mm8,Mm9,Rn2,Rn3,Rn4,Cb1,Dm1,Dm2,Dm3,Dp1,Dp2,Dp3,PanTro1,PanTro2,GalGal2,GalGal3,Fr1,Fr2,DanRer1,DanRer2,DanRer3,DanRer4,DanRer5,CanFam1,CanFam2,DroYak1,DroYak2,DroAna1,DroAna2,DroMoj1,DroMoj2,DroVir1,DroVir2,DroEre1,DroSec1,DroSim1,DroGri1,DroPer1,DroWil1,AnoGam1,ApiMel1,ApiMel2,TetNig1,XenTro1,XenTro2,MonDom1,MonDom2,MonDom4,RheMac1,RheMac2,BosTau1,BosTau2,BosTau3,BosTau4,FelCat3,GasAcu1,OryLat1,EquCab1,AnoCar1,Ce1,Ce2,Ce4,OrnAna1,CaePb1,CaeRem2,Cb3,PriPac1,StrPur1,StrPur2,Ci1,Ci2,PonAbe2,CalJac1
 
 # Define databases that support known genes
 set kgDb $hg,$mm,$rn
@@ -2107,6 +2107,7 @@ identifier blastHg18KGPep04Id
      anoCar1.blastHg18KG.qName
      gasAcu1.blastHg18KG.qName
      bosTau3.blastHg18KG.qName
+     bosTau4.blastHg18KG.qName
 
 identifier blastHg18KGRef04Id 
 "hg18 ref 04"
@@ -2132,6 +2133,7 @@ identifier blastHg18KGRef04Id
      anoCar1.blastHg18KG.qName
      gasAcu1.blastHg18KG.qName
      bosTau3.blastHg18KG.qName
+     bosTau4.blastHg18KG.qName
 
 identifier blastHg17KGRef01SwissId 
 "hg17 proteins swiss 01"
@@ -2170,6 +2172,11 @@ identifier anoEstTclId
 "AnoEST TCL* ID -- joins track and aux. table of expressed IDs"
     $anoGam.anoEstTcl.name
     $anoGam.anoEstExpressed.name minCheck=0.30
+
+identifier allenBrainGene
+"KG link to Allen Brain Institute: Gene Expression in the Human Cortex"
+    $gbd.kgXref.geneSymbol dupeOk
+    $gbd.allenBrainGene.geneSymbol minCheck=0.98
 
 identifier allenBrainProbe
 "A probe used in the Allen Brain Atlas"
@@ -2840,6 +2847,70 @@ tablesIgnored $hg
     encodeAffyRnaHl60SitesHr02
     encodeAffyRnaHl60SitesHr08
     encodeAffyRnaHl60SitesHr32
+    encodeAffyEc1BrainCerebellumSites
+    encodeAffyEc51BrainCerebellumSites
+    encodeAffyEc1BrainFrontalLobeSites
+    encodeAffyEc51BrainFrontalLobeSites
+    encodeAffyEc1BrainHippocampusSites
+    encodeAffyEc51BrainHippocampusSites
+    encodeAffyEc1BrainHypothalamusSites
+    encodeAffyEc51BrainHypothalamusSites
+    encodeAffyEc1FetalKidneySites
+    encodeAffyEc51FetalKidneySites
+    encodeAffyEc1FetalSpleenSites
+    encodeAffyEc51FetalSpleenSites
+    encodeAffyEc1PlacentaSites
+    encodeAffyEc51PlacentaSites
+    encodeAffyEc1TestisSites
+    encodeAffyEc51TestisSites
+    encodeAffyEc1FetalTestisSites
+    encodeAffyEc51FetalTestisSites
+    encodeAffyEc1ProstateSites
+    encodeAffyEc51ProstateSites
+    encodeAffyEc1OvarySites
+    encodeAffyEc51OvarySites
+    encodeAffyEc1HeLaC1S3Sites
+    encodeAffyEc51HeLaC1S3Sites
+    encodeAffyEc1GM06990Sites
+    encodeAffyEc51GM06990Sites
+    encodeAffyEc1HepG2Sites
+    encodeAffyEc51HepG2Sites
+    encodeAffyEc1K562Sites
+    encodeAffyEc51K562Sites
+    encodeAffyEc1TertBJSites
+    encodeAffyEc51TertBJSites
+    encodeAffyEc1BrainCerebellumSignal
+    encodeAffyEc51BrainCerebellumSignal
+    encodeAffyEc1BrainFrontalLobeSignal
+    encodeAffyEc51BrainFrontalLobeSignal
+    encodeAffyEc1BrainHippocampusSignal
+    encodeAffyEc51BrainHippocampusSignal
+    encodeAffyEc1BrainHypothalamusSignal
+    encodeAffyEc51BrainHypothalamusSignal
+    encodeAffyEc1FetalKidneySignal
+    encodeAffyEc51FetalKidneySignal
+    encodeAffyEc1FetalSpleenSignal
+    encodeAffyEc51FetalSpleenSignal
+    encodeAffyEc1PlacentaSignal
+    encodeAffyEc51PlacentaSignal
+    encodeAffyEc1TestisSignal
+    encodeAffyEc51TestisSignal
+    encodeAffyEc1FetalTestisSignal
+    encodeAffyEc51FetalTestisSignal
+    encodeAffyEc1ProstateSignal
+    encodeAffyEc51ProstateSignal
+    encodeAffyEc1OvarySignal
+    encodeAffyEc51OvarySignal
+    encodeAffyEc1HeLaC1S3Signal
+    encodeAffyEc51HeLaC1S3Signal
+    encodeAffyEc1GM06990Signal
+    encodeAffyEc51GM06990Signal
+    encodeAffyEc1HepG2Signal
+    encodeAffyEc51HepG2Signal
+    encodeAffyEc1K562Signal
+    encodeAffyEc51K562Signal
+    encodeAffyEc1TertBJSignal
+    encodeAffyEc51TertBJSignal
     encodeEvoFold
     encodeGisChip%
     encodeGencodeGenePolyA%

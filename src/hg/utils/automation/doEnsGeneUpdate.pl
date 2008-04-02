@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/doEnsGeneUpdate.pl instead.
 
-# $Id: doEnsGeneUpdate.pl,v 1.14 2008/03/10 23:07:18 hiram Exp $
+# $Id: doEnsGeneUpdate.pl,v 1.15 2008/03/28 23:40:52 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -140,7 +140,8 @@ _EOF_
 
 # Globals:
 my ($species, $ensGtfUrl, $ensGtfFile, $ensPepUrl, $ensPepFile,
-    $ensMySqlUrl, $ensVersionDateReference);
+    $ensMySqlUrl, $ensVersionDateReference, $previousEnsVersion, $buildDir,
+    $previousBuildDir);
 # Command line argument:
 my $CONFIG;
 # Required command line argumen:
@@ -153,8 +154,6 @@ my ($liftRandoms, $nameTranslation, $geneScaffolds, $knownToEnsembl,
 # Other globals:
 my ($topDir, $chromBased);
 my ($bedDir, $scriptDir, $endNotes);
-# Other:
-my ($buildDir);
 
 sub checkOptions {
   # Make sure command line options are valid/supported.
@@ -185,31 +184,54 @@ sub doLoad {
   my $bossScript = new HgRemoteScript("$runDir/doLoad.csh", $dbHost,
 				      $runDir, $whatItDoes);
 
-  my $skipInv = "";
-  $skipInv = "-skipInvalid" if (defined $skipInvalid);
+  my $thisGenePred = "$buildDir" . "/process/$db.allGenes.gp.gz";
+  my $prevGenePred = "$previousBuildDir" . "/process/$db.allGenes.gp.gz";
+  my $identicalToPrevious = 0;
+  my $thisGenePredSum = `zcat $thisGenePred | sum`;
+  chomp $thisGenePredSum;
+  my $prevGenePredSum = `zcat $prevGenePred | sum`;
+  chomp $prevGenePredSum;
+  print STDERR "prev: $prevGenePredSum, this: $thisGenePredSum\n";
+  if ($prevGenePredSum eq $thisGenePredSum) {
+    print STDERR "previous genes same as new genes";
+    $identicalToPrevious = 1;
+  }
 
-  if (defined $geneScaffolds) {
+  if ($identicalToPrevious ) {
       $bossScript->add(<<_EOF_
+hgsql -e 'INSERT INTO trackVersion \\
+    (db, name, who, version, updateTime, comment, source) \\
+    VALUES("$db", "ensGene", "$ENV{'USER'}", "$ensVersion", now(), \\
+	"identical to previous version $previousEnsVersion", \\
+	"identical to previous version $previousEnsVersion" );' hgFixed
+_EOF_
+	  );
+  } else {
+      my $skipInv = "";
+      $skipInv = "-skipInvalid" if (defined $skipInvalid);
+
+      if (defined $geneScaffolds) {
+	  $bossScript->add(<<_EOF_
 hgLoadGenePred $skipInv -genePredExt $db ensGene process/$db.allGenes.gp.gz \\
 	>& loadGenePred.errors.txt
 zcat process/ensemblGeneScaffolds.$db.bed.gz \\
     | sed -e "s/GeneScaffold/GS/" | hgLoadBed $db ensemblGeneScaffold stdin
 _EOF_
-      );
-  } else {
-  $bossScript->add(<<_EOF_
+	  );
+      } else {
+      $bossScript->add(<<_EOF_
 hgLoadGenePred $skipInv -genePredExt $db \\
     ensGene process/$db.allGenes.gp.gz >& loadGenePred.errors.txt
 _EOF_
-      );
-  }
+	  );
+      }
 
-  $bossScript->add(<<_EOF_
+      $bossScript->add(<<_EOF_
 zcat download/$ensPepFile \\
-        | sed -e 's/^>.* transcript:/>/; s/ CCDS.*\$//;' | gzip > ensPep.txt.gz
+	| sed -e 's/^>.* transcript:/>/; s/ CCDS.*\$//;' | gzip > ensPep.txt.gz
 zcat ensPep.txt.gz \\
     | ~/kent/src/utils/faToTab/faToTab.pl /dev/null /dev/stdin \\
-         | sed -e '/^\$/d; s/\*\$//' | sort > ensPep.$db.fa.tab
+	 | sed -e '/^\$/d; s/\*\$//' | sort > ensPep.$db.fa.tab
 hgPepPred $db tab ensPep ensPep.$db.fa.tab
 hgLoadSqlTab $db ensGtp ~/kent/src/hg/lib/ensGtp.sql process/ensGtp.tab
 # verify names in ensGene is a superset of names in ensPep
@@ -228,21 +250,22 @@ if (! (\$percentId > 95)) then
     exit 255
 endif
 _EOF_
-  );
-  if (defined $knownToEnsembl) {
-      $bossScript->add(<<_EOF_
+      );
+      if (defined $knownToEnsembl) {
+	  $bossScript->add(<<_EOF_
 hgMapToGene $db ensGene knownGene knownToEnsembl
 _EOF_
-      );
-  }
-  $bossScript->add(<<_EOF_
+	  );
+      }
+      $bossScript->add(<<_EOF_
 hgsql -e 'INSERT INTO trackVersion \\
     (db, name, who, version, updateTime, comment, source) \\
     VALUES("$db", "ensGene", "$ENV{'USER'}", "$ensVersion", now(), \\
 	"with peptides $ensPepFile", \\
 	"$ensGtfUrl" );' hgFixed
 _EOF_
-  );
+      );
+  }
   $bossScript->execute();
 } # doLoad
 
@@ -565,6 +588,7 @@ if (!defined $opt_ensVersion) {
 }
 
 $ensVersion = $opt_ensVersion;
+$previousEnsVersion = $ensVersion - 1;
 
 if ($versionListString !~ m/$ensVersion/) {
     print STDERR "ERROR: do not recognize given -ensVersion=$ensVersion\n";
@@ -582,7 +606,8 @@ $bedDir = "$topDir/$HgAutomate::trackBuild";
 # Establish what directory we will work in, tack on the ensembl version ID.
 $buildDir = $opt_buildDir ? $opt_buildDir :
   "$HgAutomate::clusterData/$db/$HgAutomate::trackBuild/ensGene.$ensVersion";
-
+$previousBuildDir =
+  "$HgAutomate::clusterData/$db/$HgAutomate::trackBuild/ensGene.$previousEnsVersion";
 
 ($ensGtfUrl, $ensPepUrl, $ensMySqlUrl, $ensVersionDateReference) =
 	&EnsGeneAutomate::ensGeneVersioning($db, $ensVersion );

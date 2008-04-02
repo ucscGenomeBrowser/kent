@@ -13,7 +13,7 @@
 #include "mime.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.95 2007/10/12 23:22:41 galt Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.97 2008/03/20 04:37:17 angie Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -865,6 +865,14 @@ void cgiMakeOnClickButton(char *command, char *value)
 printf("<INPUT TYPE=\"button\" VALUE=\"%s\" onClick=\"%s\">", value, command);
 }
 
+void cgiMakeOnClickSubmitButton(char *command, char *name, char *value)
+/* Make submit button with both variable name and value with client side
+ * onClick (java)script. */
+{
+printf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\" onClick=\"%s\">",
+       name, value, command);
+}
+
 void cgiMakeOptionalButton(char *name, char *value, boolean disabled)
 /* Make 'submit' type button that can be disabled. */
 {
@@ -1035,17 +1043,29 @@ printf("<TEXTAREA NAME=\"%s\" ROWS=%d COLS=%d %s>%s</TEXTAREA>", varName,
        (initialVal != NULL ? initialVal : ""));
 }
 
-void cgiMakeTextVar(char *varName, char *initialVal, int charSize)
-/* Make a text control filled with initial value.  If charSize
- * is zero it's calculated from initialVal size. */
+void cgiMakeOnKeypressTextVar(char *varName, char *initialVal, int charSize,
+			      char *script)
+/* Make a text control filled with initial value, with a (java)script
+ * to execute every time a key is pressed.  If charSize is zero it's
+ * calculated from initialVal size. */
 {
 if (initialVal == NULL)
     initialVal = "";
 if (charSize == 0) charSize = strlen(initialVal);
 if (charSize == 0) charSize = 8;
 
-printf("<INPUT TYPE=TEXT NAME=\"%s\" SIZE=%d VALUE=\"%s\">", varName, 
+printf("<INPUT TYPE=TEXT NAME=\"%s\" SIZE=%d VALUE=\"%s\"", varName, 
 	charSize, initialVal);
+if (isNotEmpty(script))
+    printf(" onkeypress=\"%s\"", script);
+printf(">\n");
+}
+
+void cgiMakeTextVar(char *varName, char *initialVal, int charSize)
+/* Make a text control filled with initial value.  If charSize
+ * is zero it's calculated from initialVal size. */
+{
+cgiMakeOnKeypressTextVar(varName, initialVal, charSize, NULL);
 }
 
 void cgiMakeIntVar(char *varName, int initialVal, int maxDigits)

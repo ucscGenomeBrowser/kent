@@ -21,7 +21,7 @@
 #include "wiggle.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: galaxy.c,v 1.12 2007/05/22 23:03:30 galt Exp $";
+static char const rcsid[] = "$Id: galaxy.c,v 1.13 2008/03/19 19:25:56 giardine Exp $";
 
 char *getGalaxyUrl()
 /* returns the url for the galaxy cgi, based on script name */
@@ -62,6 +62,15 @@ if (sameString(output, outPrimaryTable) || sameString(output, outSelectedFields)
         errAbort("Can't do all fields output when intersection is on. "
         "Please go back and select another output type (BED or custom track is good), or clear the intersection.");
 
+    }
+if (isMafTable(database, curTrack, curTable))
+    {
+    hPrintf("You are about to download a VERY large dataset to Galaxy. "
+            "For most usage scenarios it is not necessary as Galaxy already "
+            "stores alignments locally. Click here ("
+            "<A HREF=\"http://g2.trac.bx.psu.edu/wiki/MAFanalysis\" TARGET=_blank>http://g2.trac.bx.psu.edu/wiki/MAFanalysis</A>"
+            ") for more information on how to analyze multiple alignments "
+            "through Galaxy.\n<BR><BR>");
     }
 startGalaxyForm();
 /* send the hgta_do parameter that won't be in the cart */

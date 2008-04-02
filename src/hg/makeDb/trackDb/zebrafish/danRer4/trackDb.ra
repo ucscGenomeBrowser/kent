@@ -62,17 +62,6 @@ visibility hide
 type bed 6 +
 exonArrows off
 
-track ensGene
-shortLabel Ensembl Genes
-longLabel Ensembl (Version 42) Gene Predictions (Protein-Coding Genes)
-group genes
-priority 32.8
-visibility pack
-color 150,0,0
-type genePred ensPep
-ensArchive dec2006
-dataVersion December 2006
- 
 track ensGeneNonCoding
 shortLabel Ensembl NonCoding
 longLabel Ensembl (Version 42) Gene Predictions (Non-Coding Genes) 

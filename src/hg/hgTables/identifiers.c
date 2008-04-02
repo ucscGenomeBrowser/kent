@@ -13,20 +13,23 @@
 #include "trashDir.h"
 #include "web.h"
 
-static char const rcsid[] = "$Id: identifiers.c,v 1.18 2008/03/17 23:40:38 angie Exp $";
+static char const rcsid[] = "$Id: identifiers.c,v 1.21 2008/03/19 17:38:09 angie Exp $";
 
 
 static boolean forCurTable()
 /* Return TRUE if cart Identifier stuff is for curTable. */
 {
+char *identifierDb = cartOptionalString(cart, hgtaIdentifierDb);
 char *identifierTable = cartOptionalString(cart, hgtaIdentifierTable);
 
-return (identifierTable &&
+return (identifierDb && identifierTable &&
+	sameString(identifierDb, database) &&
 	(sameString(identifierTable, curTable) ||
 	 sameString(connectingTableForTrack(identifierTable), curTable)));
 }
 
-static void getXrefInfo(char **retXrefTable, char **retIdField,
+static void getXrefInfo(struct sqlConnection *conn,
+			char **retXrefTable, char **retIdField,
 			char **retAliasField)
 /* See if curTrack specifies an xref/alias table for lookup of IDs. */
 {
@@ -43,6 +46,10 @@ if (xrefSpec != NULL)
     xrefTable = words[0];
     idField = words[1];
     aliasField = words[2];
+    if (!sqlTableExists(conn, xrefTable) ||
+	sqlFieldIndex(conn, xrefTable, idField) < 0 ||
+	sqlFieldIndex(conn, xrefTable, aliasField) < 0)
+	xrefTable = idField = aliasField = NULL;
     }
 if (retXrefTable != NULL)
     *retXrefTable = xrefTable;
@@ -52,21 +59,22 @@ if (retAliasField != NULL)
     *retAliasField = aliasField;
 }
 
-static struct slName *getExamples(char *table, char *field, int count)
+static struct slName *getExamples(struct sqlConnection *conn,
+				  char *table, char *field, int count)
 /* Return a list of several example values of table.field. */
 {
 char fullTable[HDB_MAX_TABLE_STRING];
 if (! hFindSplitTableDb(database, NULL, table, fullTable, NULL))
     safef(fullTable, sizeof(fullTable), table);
-return sqlRandomSample(database, fullTable, field, count);
+return sqlRandomSampleConn(conn, fullTable, field, count);
 }
 
 static void explainIdentifiers(struct sqlConnection *conn, char *idField)
 /* Tell the user what field(s) they may paste/upload values for, and give 
  * some examples. */
 {
-char *xrefTable = NULL, *aliasField = NULL;
-getXrefInfo(&xrefTable, NULL, &aliasField);
+char *xrefTable = NULL, *xrefIdField = NULL, *aliasField = NULL;
+getXrefInfo(conn, &xrefTable, &xrefIdField, &aliasField);
 hPrintf("The items must be values of the <B>%s</B> field of the currently "
 	"selected table, <B>%s</B>",
 	idField, curTable);
@@ -86,12 +94,23 @@ if (!isCustomTrack(curTable))
     {
     struct slName *exampleList = NULL, *ex;
     hPrintf("Some example values:<BR>\n");
-    exampleList = getExamples(curTable, idField, 3);
+    exampleList = getExamples(conn, curTable, idField, 3);
     for (ex = exampleList;  ex != NULL;  ex = ex->next)
 	hPrintf("<TT>%s</TT><BR>\n", ex->name);
     if (aliasField != NULL)
 	{
-	exampleList = getExamples(xrefTable, aliasField, 3);
+	char tmpTable[512];
+	char query[2048];
+	safef(tmpTable, sizeof(tmpTable), "tmp%s%s", curTable, xrefTable);
+	safef(query, sizeof(query),
+	      "create temporary table %s "
+	      "select %s.%s as %s from %s,%s "
+	      "where %s.%s = %s.%s and %s.%s != %s.%s limit 100000",
+	      tmpTable, xrefTable, aliasField, aliasField, xrefTable, curTable,
+	      xrefTable, xrefIdField, curTable, idField,
+	      xrefTable, xrefIdField, xrefTable, aliasField);
+	sqlUpdate(conn, query);
+	exampleList = getExamples(conn, tmpTable, aliasField, 3);
 	for (ex = exampleList;  ex != NULL;  ex = ex->next)
 	    hPrintf("<TT>%s</TT><BR>\n", ex->name);
 	}
@@ -154,9 +173,10 @@ htmlClose();
 }
 
 static void addPrimaryIdsToHash(struct sqlConnection *conn, struct hash *hash,
-				char *idField, struct slName *tableList)
+				char *idField, struct slName *tableList,
+				struct lm *lm)
 /* For each table in tableList, query all idField values and add to hash,
- * id -> id self-mapped so we can use the value from lookup. */
+ * id -> uppercased id for case-insensitive matching. */
 {
 struct slName *table;
 struct sqlResult *sr;
@@ -170,8 +190,9 @@ for (table = tableList;  table != NULL;  table = table->next)
 	{
 	if (isNotEmpty(row[0]))
 	    {
-	    struct hashEl *hel = hashStore(hash, row[0]);
-	    hel->val = hel->name;
+	    char *origCase = lmCloneString(lm, row[0]);
+	    touppers(row[0]);
+	    hashAdd(hash, row[0], origCase);
 	    }
 	}
     sqlFreeResult(&sr);
@@ -179,21 +200,32 @@ for (table = tableList;  table != NULL;  table = table->next)
 }
 
 static void addXrefIdsToHash(struct sqlConnection *conn, struct hash *hash,
-			     char *table, char *idField, char *aliasField,
-			     struct lm *lm)
-/* Query all id-alias pairs from table and hash alias -> id. 
+			     char *idField, char *xrefTable, char *xrefIdField,
+			     char *aliasField, struct lm *lm)
+/* Query all id-alias pairs from xrefTable (where id actually appears
+ * in curTable) and hash alias -> id.  Convert alias to upper case for
+ * case-insensitive matching.
  * Ignore self (alias = id) mappings -- we already got those above. */
 {
 struct sqlResult *sr;
 char **row;
 char query[1024];
-safef(query, sizeof(query), "select %s,%s from %s",
-      aliasField, idField, table);
+if (sameString(xrefTable, curTable))
+    safef(query, sizeof(query), "select %s,%s from %s",
+      aliasField, xrefIdField, xrefTable);
+else
+    /* Get only the aliases for items actually in curTable.idField: */
+    safef(query, sizeof(query),
+	  "select %s.%s,%s.%s from %s,%s where %s.%s = %s.%s",
+	  xrefTable, aliasField, xrefTable, xrefIdField,
+	  xrefTable, curTable,
+	  xrefTable, xrefIdField, curTable, idField);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     if (sameString(row[0], row[1]))
 	continue;
+    touppers(row[0]);
     hashAdd(hash, row[0], lmCloneString(lm, row[1]));
     }
 sqlFreeResult(&sr);
@@ -219,13 +251,14 @@ else
     tableList = hSplitTableNames(curTable);
 idField = getIdField(database, curTrack, curTable, hti);
 if (idField != NULL)
-    addPrimaryIdsToHash(conn, matchHash, idField, tableList);
+    addPrimaryIdsToHash(conn, matchHash, idField, tableList, lm);
 if (retIdField != NULL)
     *retIdField = idField;
-getXrefInfo(&xrefTable, &xrefIdField, &aliasField);
+getXrefInfo(conn, &xrefTable, &xrefIdField, &aliasField);
 if (xrefTable != NULL)
     {
-    addXrefIdsToHash(conn, matchHash, xrefTable, xrefIdField, aliasField, lm);
+    addXrefIdsToHash(conn, matchHash, idField,
+		     xrefTable, xrefIdField, aliasField, lm);
     }
 return matchHash;
 }
@@ -233,7 +266,7 @@ return matchHash;
 #define MAX_IDTEXT (64 * 1024)
 
 void doPastedIdentifiers(struct sqlConnection *conn)
-/* Process submit in past identifiers page. */
+/* Process submit in paste identifiers page. */
 {
 char *idText = trimSpaces(cartString(cart, hgtaPastedIdentifiers));
 htmlOpen("Table Browser (Input Identifiers)");
@@ -257,6 +290,7 @@ if (isNotEmpty(idText))
 	warn("Sorry, I can't tell which field of table %s to treat as the "
 	     "identifier field.", curTable);
 	webNewSection("Table Browser");
+	cartRemove(cart, hgtaIdentifierDb);
 	cartRemove(cart, hgtaIdentifierTable);
 	cartRemove(cart, hgtaIdentifierFile);
 	mainPageAfterOpen(conn);
@@ -280,7 +314,10 @@ if (isNotEmpty(idText))
 	    else
 		{
 		/* Support multiple alias->id mappings: */
-		struct hashEl *hel = hashLookup(matchHash, word);
+		char upcased[1024];
+		safecpy(upcased, sizeof(upcased), word);
+		touppers(upcased);
+		struct hashEl *hel = hashLookup(matchHash, upcased);
 		if (hel != NULL)
 		    {
 		    matchList = slNameNew((char *)hel->val);
@@ -308,6 +345,7 @@ if (isNotEmpty(idText))
 	}
     carefulClose(&f);
     lineFileClose(&lf);
+    cartSetString(cart, hgtaIdentifierDb, database);
     cartSetString(cart, hgtaIdentifierTable, curTable);
     cartSetString(cart, hgtaIdentifierFile, tn.forCgi);
     if (saveIdText)
@@ -317,7 +355,7 @@ if (isNotEmpty(idText))
     if (foundTerms < totalTerms)
 	{
 	char *xrefTable, *aliasField;
-	getXrefInfo(&xrefTable, NULL, &aliasField);
+	getXrefInfo(conn, &xrefTable, NULL, &aliasField);
 	boolean xrefIsSame = xrefTable && sameString(curTable, xrefTable);
 	warn("Note: %d of the %d given identifiers (e.g. %s) have no match in "
 	     "table %s, field %s%s%s%s%s.  "

@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/makeDownloads.pl instead.
 
-# $Id: makeDownloads.pl,v 1.12 2008/02/11 19:04:01 angie Exp $
+# $Id: makeDownloads.pl,v 1.13 2008/03/19 23:04:56 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -926,9 +926,9 @@ cd $runDir/bigZips
 foreach size (1000 2000 5000)
   echo \$size
   featureBits $db $geneTable:upstream:\$size -fa=stdout \\
-  | nice gzip -c > upstream\$size.fa.gz
+  | gzip -c > upstream\$size.fa.gz
 end
-nice md5sum up*.gz >> md5sum.txt
+md5sum up*.gz >> md5sum.txt
 ln -s $runDir/bigZips/up*.gz $gp/bigZips/
 _EOF_
     );

@@ -1,12 +1,3 @@
-track ensGene
-shortLabel Ensembl Genes
-longLabel Ensembl Gene Predictions
-group genes
-priority 40
-visibility hide
-color 150,0,0
-type genePred ensPep
-
 track chainHg18
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments

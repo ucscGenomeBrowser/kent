@@ -15,7 +15,7 @@
 #include "hgConfig.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.106 2008/03/05 00:45:04 angie Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.107 2008/03/19 04:39:03 angie Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -1793,10 +1793,9 @@ sqlFreeResult(&sr);
 return enumDef;
 }
 
-struct slName *sqlRandomSampleWithSeed(char *db, char *table, char *field, int count, int seed)
+struct slName *sqlRandomSampleWithSeedConn(struct sqlConnection *conn, char *table, char *field, int count, int seed)
 /* Get random sample from database specifiying rand number seed, or -1 for none */
 {
-struct sqlConnection *conn = sqlConnect(db);
 char query[256], **row;
 struct sqlResult *sr;
 struct slName *list = NULL, *el;
@@ -1822,8 +1821,22 @@ while ((row = sqlNextRow(sr)) != NULL)
     slAddHead(&list, el);
     }
 sqlFreeResult(&sr);
-sqlDisconnect(&conn);
 return list;
+}
+
+struct slName *sqlRandomSampleWithSeed(char *db, char *table, char *field, int count, int seed)
+/* Get random sample from database specifiying rand number seed, or -1 for none */
+{
+struct sqlConnection *conn = sqlConnect(db);
+return sqlRandomSampleWithSeedConn(conn, table, field, count, seed);
+sqlDisconnect(&conn);
+}
+
+struct slName *sqlRandomSampleConn(struct sqlConnection *conn, char *table,
+				   char *field, int count)
+/* Get random sample from conn. */
+{
+return sqlRandomSampleWithSeedConn(conn, table, field, count, -1);
 }
 
 struct slName *sqlRandomSample(char *db, char *table, char *field, int count)

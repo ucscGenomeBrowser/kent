@@ -876,15 +876,11 @@ Color expressionScoreColor(struct track *tg, float val, struct hvGfx *hvg,
 float absVal = fabs(val);
 int colorIndex = 0;
 float maxDeviation = 1.0;
-static char *colorSchemes[] = { "rg", "rb" };
-static char *colorScheme = NULL;
-static int colorSchemeFlag = -1;
-
-/* set up the color scheme items if not done yet */
-if(colorScheme == NULL)
-    colorScheme = cartUsualString(cart, "exprssn.color", "rg");
-if(colorSchemeFlag == -1)
-    colorSchemeFlag = stringArrayIx(colorScheme, colorSchemes, ArraySize(colorSchemes));
+char colorVarName[256];
+boolean redGreen = TRUE;
+safef(colorVarName, sizeof(colorVarName), "%s.color", tg->tdb->tableName);
+if (!sameString(cartUsualString(cart, colorVarName, "redGreen"), "redGreen"))
+    redGreen = FALSE;
 
 /* if val is error value show make it gray */
 if(val <= -10000)
@@ -902,7 +898,6 @@ if(!exprBedColorsMade)
 
 /* cap the value to be less than or equal to maxDeviation */
 if (tg->limitedVis == tvFull || tg->limitedVis == tvPack || tg->limitedVis == tvSquish)
-
     maxDeviation = fullMax;
 else 
     maxDeviation = denseMax;
@@ -918,16 +913,9 @@ if(absVal > maxDeviation)
  */
 colorIndex = (int)(absVal * maxRGBShade/maxDeviation);
 if(val > 0) 
-	
-  	  return shadesOfRed[colorIndex];
-	 
+    return (redGreen ? shadesOfRed[colorIndex] : shadesOfYellow[colorIndex]); 
 else 
-    {
-    if(colorSchemeFlag == 0)
-	return shadesOfGreen[colorIndex];
-    else 
-	return shadesOfBlue[colorIndex];
-    }
+    return (redGreen ? shadesOfGreen[colorIndex] : shadesOfBlue[colorIndex]);
 }
 
 /*For Lowe Lab arrays with M and A values*/
@@ -1186,14 +1174,28 @@ for(lfs = tg->items; lfs != NULL; lfs = lfs->next)
 void loadMultScoresBed(struct track *tg)
 /* Convert bed info in window to linked feature. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn;
 struct sqlResult *sr;
 char **row;
 int rowOffset;
 int itemCount =0;
 struct bed *bedList = NULL, *bed;
 enum trackVisibility vis = tg->visibility;
+char *logicalDb;
+boolean isRegularDb; 
 
+logicalDb = trackDbSetting(tg->tdb, "logicalDb");
+
+if (logicalDb == NULL)
+    {
+    isRegularDb = TRUE;
+    conn = hAllocConn();
+    }
+else
+    {
+    isRegularDb = FALSE;
+    conn = hConnectLogicalDb(logicalDb);
+    }
 sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -1202,7 +1204,14 @@ while ((row = sqlNextRow(sr)) != NULL)
     itemCount++;
     }
 sqlFreeResult(&sr);
-hFreeConn(&conn);
+if (isRegularDb)
+    {
+    hFreeConn(&conn);
+    }
+else
+    {
+    sqlDisconnect(&conn);
+    }
 slReverse(&bedList);
 
 #ifdef NEVER
@@ -1287,6 +1296,7 @@ void loadMaScoresBed(struct track *tg)
    flag on each one */
 {
 struct linkedFeaturesSeries *lfs;
+
 loadMultScoresBed(tg);
 for(lfs = tg->items; lfs != NULL; lfs = lfs->next)
     {

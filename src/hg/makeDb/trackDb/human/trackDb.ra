@@ -45,7 +45,7 @@ visibility dense
 type bed 3 +
 
 track gad
-shortLabel GAD
+shortLabel GAD View
 longLabel Genetic Association Studies of Complex Diseases and Disorders
 group phenDis
 priority 29.5

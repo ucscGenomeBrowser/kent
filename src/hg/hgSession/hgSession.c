@@ -9,6 +9,7 @@
 #include "textOut.h"
 #include "hui.h"
 #include "cart.h"
+#include "jsHelper.h"
 #include "web.h"
 #include "hdb.h"
 #include "wikiLink.h"
@@ -16,7 +17,7 @@
 #include "customFactory.h"
 #include "hgSession.h"
 
-static char const rcsid[] = "$Id: hgSession.c,v 1.34 2008/01/15 21:13:39 angie Exp $";
+static char const rcsid[] = "$Id: hgSession.c,v 1.37 2008/03/21 20:31:55 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -263,13 +264,13 @@ printf("<TABLE BORDERWIDTH=0>\n");
 printf("<TR><TD colspan=2>"
        "Load settings from another user's saved session:</TD></TR>\n"
        "<TR><TD>&nbsp;&nbsp;&nbsp;</TD><TD>user: \n");
-cgiMakeTextVar(hgsOtherUserName,
-	       cartUsualString(cart, hgsOtherUserName, ""),
-	       20);
+cgiMakeOnKeypressTextVar(hgsOtherUserName,
+			 cartUsualString(cart, hgsOtherUserName, ""),
+			 20, "return noSubmitOnEnter(event);");
 printf("&nbsp;&nbsp;&nbsp;session name: \n");
-cgiMakeTextVar(hgsOtherUserSessionName,
-	       cartUsualString(cart, hgsOtherUserSessionName, ""),
-	       20);
+cgiMakeOnKeypressTextVar(hgsOtherUserSessionName,
+			 cartUsualString(cart, hgsOtherUserSessionName, ""),
+			 20, jsPressOnEnter(hgsDoOtherUser));
 printf("&nbsp;&nbsp;");
 cgiMakeButton(hgsDoOtherUser, "submit");
 printf("</TD></TR>\n");
@@ -287,7 +288,9 @@ if (savedSessionsSupported)
 
 printf("<TABLE BORDERWIDTH=0>\n");
 printf("<TR><TD colspan=2>Load settings from a local file:</TD>\n");
-printf("<TD><INPUT TYPE=FILE NAME=\"%s\">\n", hgsLoadLocalFileName);
+printf("<TD><INPUT TYPE=FILE NAME=\"%s\" "
+       "onkeypress=\"return noSubmitOnEnter(event);\">\n",
+       hgsLoadLocalFileName);
 printf("&nbsp;&nbsp;");
 cgiMakeButton(hgsDoLoadLocal, "submit");
 printf("</TD></TR>\n");
@@ -296,9 +299,9 @@ printf("<TR><TD colspan=2></TD></TR>\n");
 printf("<TR><TD colspan=2>Load settings from a URL (http://..., ftp://...):"
        "</TD>\n");
 printf("<TD>\n");
-cgiMakeTextVar(hgsLoadUrlName,
-	       cartUsualString(cart, hgsLoadUrlName, ""),
-	       20);
+cgiMakeOnKeypressTextVar(hgsLoadUrlName,
+			 cartUsualString(cart, hgsLoadUrlName, ""),
+			 20, jsPressOnEnter(hgsDoLoadUrl));
 printf("&nbsp;&nbsp;");
 cgiMakeButton(hgsDoLoadUrl, "submit");
 printf("</TD></TR>\n");
@@ -321,9 +324,9 @@ if (isNotEmpty(userName))
     printf("<TR><TD colspan=4>Save current settings as named session:"
 	   "</TD></TR>\n"
 	   "<TR><TD>&nbsp;&nbsp;&nbsp;</TD><TD>name:</TD><TD>\n");
-    cgiMakeTextVar(hgsNewSessionName,
-		   cartUsualString(cart, "db", hGetDb()),
-		   20);
+    cgiMakeOnKeypressTextVar(hgsNewSessionName,
+			     cartUsualString(cart, "db", hGetDb()),
+			     20, jsPressOnEnter(hgsDoNewSession));
     printf("&nbsp;&nbsp;&nbsp;");
     cgiMakeCheckBox(hgsNewSessionShare,
 		    cartUsualBoolean(cart, hgsNewSessionShare, TRUE));
@@ -337,9 +340,9 @@ if (isNotEmpty(userName))
 
 printf("<TR><TD colspan=4>Save current settings to a local file:</TD></TR>\n");
 printf("<TR><TD>&nbsp;&nbsp;&nbsp;</TD><TD>file:</TD><TD>\n");
-cgiMakeTextVar(hgsSaveLocalFileName,
-	       cartUsualString(cart, hgsSaveLocalFileName, ""),
-	       20);
+cgiMakeOnKeypressTextVar(hgsSaveLocalFileName,
+			 cartUsualString(cart, hgsSaveLocalFileName, ""),
+			 20, jsPressOnEnter(hgsDoSaveLocal));
 printf("&nbsp;&nbsp;&nbsp;");
 printf("file type returned: ");
 cgiMakeDropListFull(hgsSaveLocalFileCompress, 
@@ -434,6 +437,7 @@ void doMainPage(char *message)
 /* Login status/links and session controls. */
 {
 puts("Content-Type:text/html\n");
+jsInit();
 if (wikiLinkEnabled())
     {
     char *wikiUserName = wikiLinkUserName();
@@ -621,13 +625,12 @@ if (helList != NULL)
 		       "<P>Note: the session has at least one active custom "
 		       "track (in database ");
 	for (sln = liveDbList;  sln != NULL;  sln = sln->next)
-	    dyStringPrintf(dyMessage, "%s%s",
+	    dyStringPrintf(dyMessage, "<A HREF=\"hgCustom?%s&db=%s\">%s</A>%s",
+			   cartSidUrlString(cart), sln->name,
 			   sln->name, (sln->next ? sln->next->next ? ", " : " and " : ""));
-	dyStringPrintf(dyMessage,
-		       ").  Custom track(s) can be viewed "
-		       "<A HREF=\"hgCustom?%s\">here</A> "
-		       "or in the genome browser.</P>",
-		       cartSidUrlString(cart));
+	dyStringAppend(dyMessage, "; click on the database link "
+		       "to manage custom tracks).");
+
 	}
     if (gotExpiredCT)
 	{

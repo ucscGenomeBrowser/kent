@@ -1,6 +1,5 @@
 #include trackDb.encode.ra
 #include trackDb.wgEncode.ra
-#include trackDb.instinct.ra
 
 track clonePos
 priority 14
@@ -363,7 +362,7 @@ type bed 4 .
     track tajdSnpAd
     subTrack tajdSnp
     shortLabel SNPs AD
-    longLabel  SNPs from African Descent (from Human May 2004 assembly)
+    longLabel  SNPs from African Descent used for Tajima's D (from Human May 2004 assembly)
     color 200,100,0
     altColor 0,100,200
     priority 1
@@ -371,7 +370,7 @@ type bed 4 .
     track tajdSnpEd
     subTrack tajdSnp
     shortLabel SNPs ED
-    longLabel  SNPs from European Descent (from Human May 2004 assembly)
+    longLabel  SNPs from European Descent used for Tajima's D (from Human May 2004 assembly)
     color 200,100,0
     altColor 0,100,200
     priority 3
@@ -379,7 +378,7 @@ type bed 4 .
     track tajdSnpXd
     subTrack tajdSnp
     shortLabel SNPs XD
-    longLabel  SNPs from Chinese Descent (from Human May 2004 assembly)
+    longLabel  SNPs from Chinese Descent used for Tajima's D (from Human May 2004 assembly)
     color 200,100,0
     altColor 0,100,200
     priority 5
@@ -2457,6 +2456,28 @@ type bed 6 .
     shortLabel Omicia OMIM Hand-Curation
     longLabel Omicia OMIM Hand-Curation, Early Access R1, May 2007
     priority 2
+
+track mammothMaf
+shortLabel PSU Mammoth 
+longLabel PSU Mammoth PCR Products
+group x
+priority 104.6
+visibility hide
+color 0, 10, 100
+altColor 0,90,10
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+pairwiseHeight 12
+spanList 1
+yLineOnOff Off
+frames mammothMafFrames
+irows on
+autoScaleDefault Off
+windowingFunction mean
+summary multizPrimateSummary
+speciesDefaultOff 
+speciesCodonDefault hg18
+speciesOrder loxAfr1 African_elephant_F African_elephant_R Indian_elephant_F Indian_elephant_R mammoth_M4_F mammoth_M4_R mammoth_M25_F mammoth_M25_R
 
 searchName rnaGene
 searchTable rnaGene

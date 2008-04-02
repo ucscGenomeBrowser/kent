@@ -528,6 +528,9 @@ struct slName *slNameListFromStringArray(char *stringArray[], int arraySize);
  * If a string in the array is NULL, the array will be treated as 
  * NULL-terminated. */
 
+char *slNameListToString(struct slName *list, char delimiter);
+/* Return string created by joining all names with the delimiter. */
+
 struct slName *slNameLoadReal(char *fileName);
 /* load file lines that are not blank or start with a '#' into a slName
  * list */

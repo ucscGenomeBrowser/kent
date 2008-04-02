@@ -71,7 +71,7 @@ irows on
 summary multiz9waySummary
 speciesCodonDefault calJac1
 speciesGroups Primates Vertebrate
-sGroup_Primates hg18 panTro2 ponAbe2 rheMac2
+sGroup_Primates rheMac2 ponAbe2 panTro2 hg18
 sGroup_Vertebrate mm9 canFam2 monDom4 ornAna1
 itemFirstCharCase noChange
 treeImage phylo/calJac1_9way.gif

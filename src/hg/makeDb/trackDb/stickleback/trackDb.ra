@@ -1,15 +1,3 @@
-track ensGene
-shortLabel Ensembl Genes
-longLabel Ensembl v41 Gene Predictions
-group genes
-priority 40
-visibility hide
-color 150,0,0
-type genePred ensPep
-urlName gene
-url http://dec2006.archive.ensembl.org/Gasterosteus_aculeatus/transview?transcript=$$
-ensArchive oct2006
-
 track chainMm9
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments

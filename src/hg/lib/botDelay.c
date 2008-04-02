@@ -35,7 +35,7 @@ printf("<BR>There is a very high volume of traffic coming from your "
        "number of sequences.  If you are making large batch queries, "
        "please write to our genome@cse.ucsc.edu public mailing list "
        "and inquire about more efficient ways to access our data.  "
-       "If you are sharing an IP address with someone who is sumitting "
+       "If you are sharing an IP address with someone who is submitting "
        "large batch queries, we apologize for the "
        "inconvenience. Please contact genome-www@cse.ucsc.edu if "
        "you think this delay is being imposed unfairly.<BR><HR>", 
