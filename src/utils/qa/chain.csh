@@ -166,35 +166,6 @@ else
 endif
 
 # -------------------------------------------------
-# check that all chainIds in chrN_chainOrgLink are 
-# used in the corresponding chrN_chainOrg table (as id).
-
-echo
-echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
-echo "check that all chainIds in Link table are used in the other table"
-echo "uses commTrio to compare two counts"
-
-if ( $split == "unsplit" ) then
-  hgsql -N -e "SELECT DISTINCT(chainId) FROM chain${Org}Link" $db \
-     > numChainIdList
-  hgsql -N -e "SELECT DISTINCT(id) FROM chain${Org}" $db > numIdList
-  commTrio.csh numChainIdList numIdList rm
-  rm numIdList 
-  rm numChainIdList
-else
-  foreach chrom (`cat $db.chromlist`)
-    echo $chrom
-    hgsql -N -e "SELECT DISTINCT(chainId) FROM ${chrom}_chain${Org}Link" $db \
-       > numChainIdList
-    hgsql -N -e "SELECT DISTINCT(id) FROM ${chrom}_chain${Org}" $db > numIdList
-    commTrio.csh numChainIdList numIdList rm
-    rm numIdList 
-    rm numChainIdList
-    echo "---------------------------------"
-  end
-endif
-
-# ----------------------------------------------
 # check the min and max score values
 #  (later: get the size of the largest chrom and set the column width to that)
 
