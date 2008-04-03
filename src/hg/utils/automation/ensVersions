@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/doEnsGeneUpdate.pl instead.
 
-# $Id: ensVersions,v 1.4 2008/03/10 23:07:18 hiram Exp $
+# $Id: ensVersions,v 1.5 2008/04/03 23:55:20 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -46,8 +46,10 @@ sub usage {
   print STDERR "usage: $base <ensembl version> [-db=<ucsc db>]
 options:
 ";
+    my (@versionList) = &EnsGeneAutomate::ensVersionList();
+    my $versionListString = join(", ", @versionList);
   print STDERR <<_EOF_
-    <ensembl version> - currently can run 47 or 48, or "any" meaning find all
+    <ensembl version> - currently can run $versionListString or "any" meaning find all
     [-db=<ucsc db>] - when requested check this one db only,
 	default is to check all ucsc databases
 _EOF_
