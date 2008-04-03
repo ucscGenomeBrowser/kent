@@ -129,20 +129,20 @@ class User < ActiveRecord::Base
     return if password.blank?
     create_ftp_user  # if needed
 
-    logger.info "\n\nGALT! password=[#{password}]\n\n" #debug
-    logger.info "GALT! login=[#{login}]" #debug
+    #logger.info "\n\nGALT! password=[#{password}]\n\n" #debug
+    #logger.info "GALT! login=[#{login}]" #debug
 
     ftpMount = ActiveRecord::Base.configurations[RAILS_ENV]['ftpMount'] 
 
-    logger.info "GALT! ftpMount=[#{ftpMount}]" #debug
+    #logger.info "GALT! ftpMount=[#{ftpMount}]" #debug
 
     cmd = "echo #{password} | ftpasswd --passwd --name=#{login} --change-password --stdin --file=#{ftpMount}/ftp_passwd"
 
-    logger.info "GALT! cmd=[#{cmd}]\n\n" #debug
+    #logger.info "GALT! cmd=[#{cmd}]\n\n" #debug
 
     system(cmd)
 
-    logger.info "GALT! $?=[#{$?}]\n\n" #debug
+    #logger.info "GALT! $?=[#{$?}]\n\n" #debug
 
     return  # don't want it to return any value
   end
@@ -163,11 +163,11 @@ class User < ActiveRecord::Base
       cmd = "echo password | ftpasswd --passwd --name=#{login} --stdin --uid=#{ftpUserId} --gid=#{ftpGroupId}" +
              " --home=#{ftpLocal}/#{login} --shell=/sbin/nologin  --file=#{ftpMount}/ftp_passwd"
 
-      logger.info "\n\nGALT! cmd=[#{cmd}]" #debug
+      #logger.info "\n\nGALT! cmd=[#{cmd}]" #debug
 
       system(cmd) 
 
-      logger.info "GALT! $?=[#{$?}]\n\n" #debug
+      #logger.info "GALT! $?=[#{$?}]\n\n" #debug
 
       return  # don't want it to return any value
     end
