@@ -261,7 +261,7 @@ type wig 0 1
 maxHeightPixels 100:48:11
 windowingFunction mean
 defaultViewLimits 0:1
-autoScaleDefault On
+autoScale On
 color 128,0,128
 spanList 1
 
@@ -275,8 +275,8 @@ type wig -11.93 8.76
 maxHeightPixels 100:48:11
 windowingFunction mean
 defaultViewLimits -5:5
-autoScaleDefault On
-color 64,0,64
+autoScale On
+color 255,0,128
 spanList 1
 
 track nucleosomeDensity
