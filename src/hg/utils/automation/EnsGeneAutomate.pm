@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/EnsGeneAutomate.pm instead.
 
-# $Id: EnsGeneAutomate.pm,v 1.9 2008/03/20 23:37:33 hiram Exp $
+# $Id: EnsGeneAutomate.pm,v 1.10 2008/04/03 23:56:32 hiram Exp $
 package EnsGeneAutomate;
 
 use warnings;
@@ -372,6 +372,7 @@ my %ensGeneFtpPeptideFileNames_49 = (
 'dasNov1' => 'dasypus_novemcinctus/pep/Dasypus_novemcinctus.ARMA.49.pep.all.fa.gz',
 'dm5' => 'drosophila_melanogaster/pep/Drosophila_melanogaster.BDGP5.4.49.pep.all.fa.gz',
 'echTel1' => 'echinops_telfairi/pep/Echinops_telfairi.TENREC.49.pep.all.fa.gz',
+'equCab2' => 'equus_caballus/pep/Equus_caballus.EquCab2.49.pep.all.fa.gz',
 'eriEur1' => 'erinaceus_europaeus/pep/Erinaceus_europaeus.HEDGEHOG.49.pep.all.fa.gz',
 'felCat3' => 'felis_catus/pep/Felis_catus.CAT.49.pep.all.fa.gz',
 'galGal3' => 'gallus_gallus/pep/Gallus_gallus.WASHUC2.49.pep.all.fa.gz',
@@ -391,7 +392,7 @@ my %ensGeneFtpPeptideFileNames_49 = (
 'panTro2' => 'pan_troglodytes/pep/Pan_troglodytes.CHIMP2.1.49.pep.all.fa.gz',
 'ponAbe2' => 'pongo_pygmaeus/pep/Pongo_pygmaeus.PPYG2.49.pep.all.fa.gz',
 'rn4' => 'rattus_norvegicus/pep/Rattus_norvegicus.RGSC3.4.49.pep.all.fa.gz',
-'sacCer1' => 'saccharomyces_cerevisiae/pep/Saccharomyces_cerevisiae.SGD1.49.pep.all.fa.gz',
+'sacCer1' => 'saccharomyces_cerevisiae/pep/Saccharomyces_cerevisiae.SGD1.01.49.pep.all.fa.gz',
 'sorAra0' => 'sorex_araneus/pep/Sorex_araneus.COMMON_SHREW1.49.pep.all.fa.gz',
 'speTri0' => 'spermophilus_tridecemlineatus/pep/Spermophilus_tridecemlineatus.SQUIRREL.49.pep.all.fa.gz',
 'fr2' => 'takifugu_rubripes/pep/Takifugu_rubripes.FUGU4.49.pep.all.fa.gz',

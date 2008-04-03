@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/doEnsGeneUpdate.pl instead.
 
-# $Id: doEnsGeneUpdate.pl,v 1.15 2008/03/28 23:40:52 hiram Exp $
+# $Id: doEnsGeneUpdate.pl,v 1.16 2008/04/03 23:56:32 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -171,7 +171,7 @@ sub checkOptions {
 }
 
 #########################################################################
-# * step: load [workhorse]
+# * step: load [dbHost]
 sub doLoad {
   my $runDir = "$buildDir";
   if (! -d "$buildDir/process") {
@@ -270,7 +270,7 @@ _EOF_
 } # doLoad
 
 #########################################################################
-# * step: process [workhorse]
+# * step: process [fileServer]
 sub doProcess {
   my $runDir = "$buildDir/process";
   # First, make sure we're starting clean.
@@ -386,7 +386,7 @@ _EOF_
 } # doProcess
 
 #########################################################################
-# * step: download [workhorse]
+# * step: download [fileServer]
 sub doDownload {
   my $runDir = "$buildDir/download";
   # First, make sure we're starting clean.
@@ -403,20 +403,20 @@ sub doDownload {
 				      $runDir, $whatItDoes);
 
   $bossScript->add(<<_EOF_
-wget --timestamping --user=anonymous --password=ucscGenomeBrowser\@.ucsc.edu \\
+wget --tries=2 --timestamping --user=anonymous --password=ucscGenomeBrowser\@.ucsc.edu \\
 $ensGtfUrl \\
 -O $ensGtfFile
-wget --timestamping --user=anonymous --password=ucscGenomeBrowser\@.ucsc.edu \\
+wget --tries=2 --timestamping --user=anonymous --password=ucscGenomeBrowser\@.ucsc.edu \\
 $ensPepUrl \\
 -O $ensPepFile
 _EOF_
   );
   if (defined $geneScaffolds) {
       $bossScript->add(<<_EOF_
-wget --timestamping --user=anonymous --password=ucscGenomeBrowser\@.ucsc.edu \\
+wget --tries=2 --timestamping --user=anonymous --password=ucscGenomeBrowser\@.ucsc.edu \\
 $ensMySqlUrl/seq_region.txt.gz \\
 -O seq_region.txt.gz
-wget --timestamping --user=anonymous --password=ucscGenomeBrowser\@.ucsc.edu \\
+wget --tries=2 --timestamping --user=anonymous --password=ucscGenomeBrowser\@.ucsc.edu \\
 $ensMySqlUrl/assembly.txt.gz \\
 -O assembly.txt.gz
 _EOF_
@@ -466,8 +466,8 @@ _EOF_
   print "'_EOF_'\n";
   print "#  << happy emacs\n\n";
   print "    doEnsGeneUpdate.pl -ensVersion=$ensVersion $db.ensGene.ra\n";
-  print "    ssh hgwdev";
-  print "    cd /cluster/data/$db/bed/ensGene.$ensVersion";
+  print "    ssh hgwdev\n";
+  print "    cd /cluster/data/$db/bed/ensGene.$ensVersion\n";
   print "    featureBits $db ensGene\n";
   print "    # ";
   print `featureBits $db ensGene`;
