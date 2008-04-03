@@ -93,4 +93,8 @@ char *jsPressOnEnter(char *button);
  * jsInit must be called first. 
  * Do not free return value!  */
 
+void jsIncludeFile(char *fileName);
+/* Prints out html to include given javascript file from the js directory; suppresses redundant
+ * <script ...> tags if called repeatedly */
+
 #endif /* JSHELPER_H */

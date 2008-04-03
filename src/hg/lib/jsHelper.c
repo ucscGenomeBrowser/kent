@@ -16,11 +16,13 @@
 #include "cheapcgi.h"
 #include "cart.h"
 #include "hPrint.h"
+#include "hash.h"
 #include "jsHelper.h"
 
-static char const rcsid[] = "$Id: jsHelper.c,v 1.7 2008/03/21 00:23:16 angie Exp $";
+static char const rcsid[] = "$Id: jsHelper.c,v 1.8 2008/04/03 00:59:39 larrym Exp $";
 
 static boolean jsInited = FALSE;
+struct hash *includedFiles = NULL;
 
 void jsInit()
 /* If this is the first call, set window.onload to the operations
@@ -32,6 +34,7 @@ void jsInit()
 if (! jsInited)
     {
     puts(
+
 "<INPUT TYPE=HIDDEN NAME=\"jsh_pageVertPos\" VALUE=0>\n"
 "<script language=\"javascript\">\n"
 "// f_scrollTop and f_filterResults taken from\n"
@@ -311,3 +314,19 @@ safef(poe, sizeof(poe), "return pressOnEnter(event, %s);", button);
 return poe;
 }
 
+void jsIncludeFile(char *fileName)
+{
+/* Prints out html to include given javascript file from the js directory; suppresses redundant
+ *  <script ...> tags if called repeatedly */
+
+/* XXXX I would like to fail if fileName doesn't exist in proper directory, but am
+ not sure how to safely locate the HTDOCS directory. */
+
+if(!includedFiles)
+    includedFiles = newHash(0);
+if(hashLookup(includedFiles, fileName) == NULL)
+    {
+    hashAdd(includedFiles, fileName, NULL);
+    hPrintf("<script type='text/javascript' src='/js/%s'></script>\n", fileName);
+    }
+}
