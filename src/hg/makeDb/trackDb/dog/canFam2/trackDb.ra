@@ -86,6 +86,7 @@ autoScaleDefault Off
 windowingFunction mean
 summary multiz4waySummary
 speciesOrder hg17 mm6 rn3
+treeImage phylo/canFam2_4way.gif
 
 track phastConsElements4way
 shortLabel Most Conserved
