@@ -4,7 +4,7 @@
 # This file describes browser build for the Marmoset
 # genome, July 2007
 #
-#	"$Id: calJac1.txt,v 1.13 2008/03/28 22:52:26 hiram Exp $"
+#	"$Id: calJac1.txt,v 1.14 2008/04/03 16:16:07 markd Exp $"
 #
 ######################################################################
 ## DOWNLOAD SEQUENCE (DONE - 2007-08-21 - Hiram)
@@ -1577,5 +1577,28 @@ done
     ln -s `pwd`/* /usr/local/apache/htdocs/goldenPath/calJac1/phastCons9way
     #	if your ln -s `pwd`/* made extra links to files you don't want there,
     #	check the goldenPath locations and remove those extra links
+
+#############################################################################
+# N-SCAN gene predictions (nscanGene) - (2008-04-03 markd)
+
+    # obtained NSCAN predictions from michael brent's group
+    # at WUSTL
+    cd /cluster/data/calJac1/bed/nscan/
+    wget http://mblab.wustl.edu/predictions/marmoset/calJac1/calJac1.gtf
+    wget http://mblab.wustl.edu/predictions/marmoset/calJac1/calJac1.prot.fa
+    wget http://mblab.wustl.edu/predictions/marmoset/calJac1/readme.html
+    bzip2 calJac1.*
+    chmod a-w *
+
+    # load track
+    gtfToGenePred -genePredExt calJac1.gtf.bz2 stdout | hgLoadGenePred -bin -genePredExt calJac1 nscanGene stdin
+    hgPepPred calJac1 generic nscanPep  calJac1.prot.fa.bz2
+    rm *.tab
+
+    # update trackDb; need a calJac1-specific page to describe informants
+    marmoset/calJac1/nscanGene.html   (copy from readme.html)
+    marmoset/calJac1/trackDb.ra
+    # set search regex to
+        termRegex chr[0-9a-zA-Z_].*\.[0-9]+\.[0-9]
 
 #############################################################################
