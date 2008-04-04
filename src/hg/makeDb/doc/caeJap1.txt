@@ -3,7 +3,7 @@
 # Caenorhabditis japonica
 #	Washington University School of Medicine GSC and Sanger Institute
 
-#  $Id: caeJap1.txt,v 1.3 2008/04/04 07:02:42 hiram Exp $
+#  $Id: caeJap1.txt,v 1.4 2008/04/04 18:47:01 hiram Exp $
 
 ########################################################################
 #  Download sequence (DONE - 2008-04-03 - Hiram)
@@ -252,7 +252,7 @@ printf "%d\t%s\t%d\tchrUn\t156378573\n", $2, $4, $3-$2
 }' ../wustl/Contig.bed > caeJap1.chrUn.lift
 
 #########################################################################
-# GENBANK AUTO UPDATE (DONE - 2007-04-23,25 - Hiram)
+# GENBANK AUTO UPDATE (DONE - 2008-04-04 - Hiram)
     # align with latest genbank process.
     ssh hgwdev
     cd ~/kent/src/hg/makeDb/genbank
@@ -293,17 +293,14 @@ caeJap1.perChromTables = no
     cd /cluster/data/genbank
     time nice -n +19 bin/gbAlignStep -initial caeJap1 &
     #	logFile: var/build/logs/2008.04.04-00:01:44.caeJap1.initalign.log
-XXX - running 2008-04-04 00:01
+    #	real    124m10.365s
 
     # load database when finished
     ssh hgwdev
     cd /cluster/data/genbank
     time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad caeJap1
-    #   logFile: var/dbload/hgwdev/logs/2007.07.11-13:49:20.dbload.log
-    #   17:10.13
-
-    #	logFile: var/dbload/hgwdev/logs/2007.04.23-14:31:51.dbload.log
-    #	real    6m57.557s
+    #	logFile: var/dbload/hgwdev/logs/2008.04.04-10:07:40.dbload.log
+    #	real    16m14.090s
 
     # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank
@@ -311,6 +308,7 @@ XXX - running 2008-04-04 00:01
     # add caeJap1 to:
         etc/align.dbs
         etc/hgwdev.dbs
-    cvs ci -m "Added caeJap1 - C. remanei" etc/align.dbs etc/hgwdev.dbs
+    cvs ci -m "Added caeJap1 - C. japonica" etc/align.dbs etc/hgwdev.dbs
     make etc-update
 
+#########################################################################
