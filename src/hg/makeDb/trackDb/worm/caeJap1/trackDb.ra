@@ -18,3 +18,11 @@ group map
 visibility dense
 type bed 3 +
 
+# Local declaration so that local ctgPos2.html is picked up.
+track ctgPos2
+shortLabel Contigs
+longLabel Assembly Contigs
+group map
+priority 10
+visibility hide
+

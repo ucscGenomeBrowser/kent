@@ -1,0 +1,14 @@
+track gold
+visibility dense
+
+track ctgPos2
+visibility dense
+
+track gc5Base
+visibility full
+
+track xenoRefGene
+visibility pack
+
+track intronEst
+visibility hide
