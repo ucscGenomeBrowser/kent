@@ -5,6 +5,7 @@
 #include "portable.h"
 #include "linefile.h"
 #include "binRange.h"
+#include <mysql.h>
 #include "jksql.h"
 #include "dnautil.h"
 #include "dnaseq.h"
@@ -35,7 +36,7 @@
 #include "customTrack.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.350 2008/04/01 21:11:30 fanhsu Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.351 2008/04/04 00:08:15 fanhsu Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -3610,20 +3611,29 @@ struct sqlConnection *trackDbConn()
 {
 /* get connection for trackDb depending if trackDb.host is specified in hg.conf */
 struct sqlConnection *conn;
-char *hostName;
+char *hostName, *db;
 char *userName, *userPasswd;
+char *database = hGetDb();
 
 hostName   = cfgOption("trackDb.host");
+db 	   = cfgOption("trackDb.db");
 userName   = cfgOption("trackDb.user");
 userPasswd = cfgOption("trackDb.password");
 
 if ((hostName != NULL) && (userName != NULL))
     {
-    conn = sqlConnRemote(hostName, userName, userPasswd, hdbName, FALSE);
-    if (conn == NULL)
+    if (sameWord(database, db))
 	{
-	errAbort("<br>trackDbConn failed trying to connect to %s.\n", hostName);
-    	}
+    	conn = sqlConnRemote(hostName, userName, userPasswd, hdbName, FALSE);
+    	if (conn == NULL)
+	    {
+	    errAbort("trackDbConn() failed.  Couldn't connect to database %s on %s as %s.\n", db, hostName, userName);
+    	    }
+	}
+    else
+	{
+        conn = hAllocConn();
+	}
     }
 else
     {
@@ -3637,7 +3647,14 @@ void freeTrackDbConn(struct sqlConnection **conn)
 {
 if (cfgOption("trackDb.host") != NULL)
     {   
-    sqlDisconnect(conn);
+    if (sameWord(cfgOption("trackDb.db"), hGetDb()))
+	{
+        sqlDisconnect(conn);
+	}
+    else
+	{
+    	hFreeConn(conn);
+    	}
     }
 else
     {
