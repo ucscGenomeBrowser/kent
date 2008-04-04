@@ -3,7 +3,7 @@
 # Caenorhabditis japonica
 #	Washington University School of Medicine GSC and Sanger Institute
 
-#  $Id: caeJap1.txt,v 1.4 2008/04/04 18:47:01 hiram Exp $
+#  $Id: caeJap1.txt,v 1.5 2008/04/04 23:01:15 hiram Exp $
 
 ########################################################################
 #  Download sequence (DONE - 2008-04-03 - Hiram)
@@ -310,5 +310,24 @@ caeJap1.perChromTables = no
         etc/hgwdev.dbs
     cvs ci -m "Added caeJap1 - C. japonica" etc/align.dbs etc/hgwdev.dbs
     make etc-update
+
+############################################################################
+#  BLATSERVERS ENTRY (DONE - 2008-04-04 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("caeJap1", "blat15", "17790", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("caeJap1", "blat15", "17791", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################
+## Reset default position to the unc-52 gene complex (DONE - 2008-04-04 - Hiram)
+#	as found by a blat search
+    ssh hgwdev
+    hgsql -e 'update dbDb set defaultPos="chrUn:36686834-36727776"
+	where name="caeJap1";' hgcentraltest
 
 #########################################################################
