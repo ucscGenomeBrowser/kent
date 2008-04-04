@@ -21,7 +21,7 @@ set reuseTot=0
 if ( $#argv != 1 ) then
   # no command line args
   echo
-  echo " Gets some stats on hgSession"
+  echo " gets some stats on hgSession"
   echo
   echo "    usage:  go"
   echo
