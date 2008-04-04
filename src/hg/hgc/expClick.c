@@ -12,7 +12,7 @@
 #include "affyAllExonProbe.h"
 #include "microarray.h"
 
-static char const rcsid[] = "$Id: expClick.c,v 1.18 2008/04/01 17:50:21 aamp Exp $";
+static char const rcsid[] = "$Id: expClick.c,v 1.19 2008/04/04 17:24:14 fanhsu Exp $";
 
 static struct rgbColor getColorForExprBed(float val, float max, boolean redGreen)
 /* Return the correct color for a given score */
@@ -187,6 +187,26 @@ for(i=0; i<bedList->expCount; i++)
 printf("</table>");
 printf("</td></tr></table>");
 printf("</basefont>");
+}
+
+static struct bed * loadMsBedFromLogicalDb(char *table, char *chrom, uint start, uint end, 
+			       struct sqlConnection *logicalDbConn)
+/* load every thing from a bed 15 table in the given range, via a logical DB connection */
+{
+struct sqlResult *sr;
+char **row;
+int rowOffset;
+struct bed *bedList = NULL, *bed;
+sr = hRangeQuery(logicalDbConn, table, chrom, start, end, NULL, &rowOffset);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    bed = bedLoadN(row+rowOffset, 15);
+    slAddHead(&bedList, bed);
+    }
+sqlFreeResult(&sr);
+sqlDisconnect(&logicalDbConn);
+slReverse(&bedList);
+return bedList;
 }
 
 static struct bed * loadMsBed(char *table, char *chrom, uint start, uint end)
@@ -395,13 +415,26 @@ char *itemName = cgiUsualString("i2","none");
 char *expName = (item == NULL) ? itemName : item;
 boolean redGreen = TRUE;
 char colorVarName[256];
+char *logicalDb = NULL;
+
 safef(colorVarName, sizeof(colorVarName), "%s.color", tdb->tableName);
 if (!sameString(cartUsualString(cart, colorVarName, "redGreen"), "redGreen"))
     redGreen = FALSE;
 if (!ct)
     {
     genericHeader(tdb, itemName);
-    bedList = loadMsBed(tdb->tableName, seqName, winStart, winEnd);
+    
+    logicalDb = trackDbSetting(tdb, "logicalDb");
+    if (logicalDb != NULL)
+	{
+        bedList = loadMsBedFromLogicalDb(tdb->tableName, seqName, winStart, winEnd, 
+			     hConnectLogicalDb(logicalDb));
+    	}
+    else
+	{
+        bedList = loadMsBed(tdb->tableName, seqName, winStart, winEnd);
+    	}
+
     }
 else if (ct->dbTrack)
     bedList = ctLoadMultScoresBedDb(ct, seqName, winStart, winEnd);
