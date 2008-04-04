@@ -10,7 +10,7 @@
 #include "dnaseq.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: vgLoadNibb.c,v 1.8 2006/04/18 00:40:13 galt Exp $";
+static char const rcsid[] = "$Id: vgLoadNibb.c,v 1.9 2008/04/04 22:57:02 galt Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -87,7 +87,7 @@ fprintf(f, "fullDir ../visiGene/full/inSitu/XenopusLaevis/nibb\n");
 fprintf(f, "thumbDir ../visiGene/200/inSitu/XenopusLaevis/nibb\n");
 fprintf(f, "priority 1200\n");
 fprintf(f, "sliceType whole mount\n");
-fprintf(f, "submissionSource Japanese National Institute of Basic Biology (NIBB) XDB\n");
+fprintf(f, "submissionSource National Institute of Basic Biology (NIBB) XDB\n");
 fprintf(f, "taxon 8355\n");
 fprintf(f, "genotype wild type\n");
 fprintf(f, "acknowledgement Thanks to Naoto Ueno and colleagues at NIBB for helping make these images available in VisiGene\n");
