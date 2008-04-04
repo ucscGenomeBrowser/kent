@@ -1362,4 +1362,10 @@ knownToVisiGene mm8
 
 ####################################################
 
+################### (galt 2008-04-04 done)
+# Slight name change for NIBB (affected visiGene)
+# removed the word "Japanese " from NIBB name in visiGene.submissionSource
+# removed same thing from vgLoadNibb.c source code.
+# requested push of table hgwdev.visiGene.submissionSource.
+
 
