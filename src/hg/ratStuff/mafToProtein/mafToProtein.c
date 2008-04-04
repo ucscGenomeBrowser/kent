@@ -428,9 +428,6 @@ for(gi = giList; gi; gi = gi->next, exonNum++)
 fprintf(f, "\n");
 }
 
-/* this is really only useful for debug since frames 
- * don't correspond to exons
- */
 void outSpeciesExonsNoTrans(FILE *f, char *dbName, struct speciesInfo *si, 
     struct exonInfo *giList)
 {
@@ -648,7 +645,11 @@ if (frameNeg)
 
     gi = *giList;
     for(; gi; gi = gi->next)
+	{
 	gi->exonStart = size - (gi->exonStart + gi->exonSize);
+	if (gi->next == NULL)
+	    assert(gi->exonStart == 0);
+	}
 
     slReverse(giList);
     }
@@ -719,7 +720,9 @@ for(frame = frames; frame; frame = nextFrame)
 	struct mafAli *newAli;
 
 	assert(gi != NULL);
-	gi->exonSize += frame->chromEnd - frame->chromStart;
+	int frameWidth = frame->chromEnd - frame->chromStart;
+	gi->exonSize += frameWidth;
+	start += frameWidth;
 	gi->chromEnd = frame->chromEnd;
 	newAli = getAliForFrame(mafTable, frame);
 	gi->ali = slCat(gi->ali, newAli);
