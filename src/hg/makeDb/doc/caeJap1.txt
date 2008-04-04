@@ -3,7 +3,7 @@
 # Caenorhabditis japonica
 #	Washington University School of Medicine GSC and Sanger Institute
 
-#  $Id: caeJap1.txt,v 1.2 2008/04/04 06:37:30 hiram Exp $
+#  $Id: caeJap1.txt,v 1.3 2008/04/04 07:02:42 hiram Exp $
 
 ########################################################################
 #  Download sequence (DONE - 2008-04-03 - Hiram)
@@ -230,3 +230,87 @@ dbDbSpeciesDir worm
     ssh hgwdev
     cd /cluster/data/caeJap1/wustl
     hgLoadSqlTab caeJap1 ctgPos2 $HOME/kent/src/hg/lib/ctgPos2.sql ctgPos2.tab
+
+#########################################################################
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2008-04-03 - Hiram)
+    # Use -repMatch=50 (based on size -- for human we use 1024, and 
+    # C. remanei size is ~5.1% of human judging by gapless caeJap1 vs. hg18 
+    # genome sizes from featureBits.
+    ssh kolossus
+    cd /cluster/data/caeJap1
+    blat caeJap1.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/11.ooc -repMatch=50
+    #	Wrote 46254 overused 11-mers to jkStuff/11.ooc
+
+#########################################################################
+#	make caeJap1.chrUn.lift
+    ssh hgwdev
+    cd /cluster/data/caeJap1/jkStuff
+
+    awk '{
+printf "%d\t%s\t%d\tchrUn\t156378573\n", $2, $4, $3-$2
+}' ../wustl/Contig.bed > caeJap1.chrUn.lift
+
+#########################################################################
+# GENBANK AUTO UPDATE (DONE - 2007-04-23,25 - Hiram)
+    # align with latest genbank process.
+    ssh hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+    # edit src/lib/gbGenome.c to add caeJap names between caeRem and caePb
+# static char *caeJapNames[] = {"Caenorhabditis japonica", NULL};
+# {"caeJap", caeJapNames},{"caeJap", caeJapNames},
+    cvs ci -m "Added C. japonica" src/lib/gbGenome.c
+    make install-server
+
+    # edit etc/genbank.conf to add caeJap1 just before caeRem1
+
+# caeJap1 (C. remanei)
+caeJap1.serverGenome = /cluster/data/caeJap1/caeJap1.2bit
+caeJap1.clusterGenome = /cluster/data/caeJap1/caeJap1.2bit
+caeJap1.ooc = /cluster/data/caeJap1/jkStuff/11.ooc
+caeJap1.lift = /cluster/data/caeJap1/jkStuff/caeJap1.chrUn.lift
+caeJap1.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+caeJap1.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+caeJap1.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+caeJap1.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+caeJap1.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+caeJap1.refseq.mrna.native.load = yes
+caeJap1.refseq.mrna.xeno.load  = yes
+caeJap1.refseq.mrna.xeno.loadDesc = yes
+caeJap1.genbank.mrna.xeno.load = yes
+caeJap1.genbank.est.native.load = yes
+caeJap1.genbank.est.native.loadDesc = no
+caeJap1.downloadDir = caeJap1
+caeJap1.perChromTables = no
+
+    cvs ci -m "Added caeJap1." etc/genbank.conf
+    # update /cluster/data/genbank/:
+    make etc-update
+
+    ssh genbank
+    screen	#	use a screen to manage this job
+    cd /cluster/data/genbank
+    time nice -n +19 bin/gbAlignStep -initial caeJap1 &
+    #	logFile: var/build/logs/2008.04.04-00:01:44.caeJap1.initalign.log
+XXX - running 2008-04-04 00:01
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad caeJap1
+    #   logFile: var/dbload/hgwdev/logs/2007.07.11-13:49:20.dbload.log
+    #   17:10.13
+
+    #	logFile: var/dbload/hgwdev/logs/2007.04.23-14:31:51.dbload.log
+    #	real    6m57.557s
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+    # add caeJap1 to:
+        etc/align.dbs
+        etc/hgwdev.dbs
+    cvs ci -m "Added caeJap1 - C. remanei" etc/align.dbs etc/hgwdev.dbs
+    make etc-update
+
