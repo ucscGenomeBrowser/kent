@@ -5,7 +5,7 @@
 #  02-22-07
 #  Robert Kuhn
 #
-#  gets info about who wrote the lines is a program
+#  gets info about who wrote the lines in a program
 #
 ################################
 
@@ -15,7 +15,7 @@ set size=""
 
 if ( $#argv != 1 ) then
   echo
-  echo "  gets info about who wrote the lines is a program."
+  echo "  gets info about who wrote the lines in a program."
   echo
   echo "    usage:  program"
   echo
