@@ -84,6 +84,7 @@ install:
 	cp -p --remove-destination retirePushQ.csh         ${SCRIPTS}
 	cp -p --remove-destination runBits.csh             ${SCRIPTS}
 	cp -p --remove-destination runJoiner.csh           ${SCRIPTS}
+	cp -p --remove-destination sessionStats.csh        ${SCRIPTS}
 	cp -p --remove-destination showProcesslist.csh     ${SCRIPTS}
 	cp -p --remove-destination staticpaths             ${SCRIPTS}
 	cp -p --remove-destination syncAday.csh            ${SCRIPTS}
