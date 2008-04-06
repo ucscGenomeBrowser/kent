@@ -13,7 +13,7 @@
 extern char *createTablesSql;
 extern char *createKeysSql;
 
-static char const rcsid[] = "$Id: ccdsImport.c,v 1.8 2007/12/12 18:47:56 markd Exp $";
+static char const rcsid[] = "$Id: ccdsImport.c,v 1.9 2008/04/06 00:40:06 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -234,6 +234,25 @@ if (!keep)
     hgRemoveTabFile(".", table);
 }
 
+static void addExtraIndices(struct sqlConnection *conn)
+/* add extra indices to speed up ccdsMkTables */
+{
+static char *adds[] =
+    {
+    "ALTER TABLE Groups ADD INDEX (tax_id);",
+    "ALTER TABLE GroupVersions ADD INDEX (group_version_uid);",
+    "ALTER TABLE GroupVersions ADD INDEX (ccds_status_val_uid);",
+    "ALTER TABLE GroupVersions ADD INDEX (ncbi_build_number);",
+    "ALTER TABLE GroupVersions ADD INDEX (first_ncbi_build_version);",
+    "ALTER TABLE GroupVersions ADD INDEX (last_ncbi_build_version);",
+    NULL
+    };
+int i;
+for (i = 0; adds[i] != NULL; i++)
+    sqlUpdate(conn, adds[i]);
+
+}
+
 static void ccdsImport(char *db, int numDumpFiles, char **dumpFiles)
 /* import NCBI CCDS DB table dumps into a MySQL database */
 {
@@ -244,6 +263,7 @@ int i;
 for (i = 0; i < numDumpFiles; i++)
     importTable(conn, dumpFiles[i]);
 
+addExtraIndices(conn);
 sqlDisconnect(&conn);
 verbose(1, "done\n");
 }
