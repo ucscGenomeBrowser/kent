@@ -12,8 +12,10 @@
 #include "verbose.h"
 #include "ccdsLocationsJoin.h"
 #include "ccdsCommon.h"
+#include <sys/types.h>
+#include <regex.h>
 
-static char const rcsid[] = "$Id: ccdsMkTables.c,v 1.18 2008/02/14 20:11:58 markd Exp $";
+static char const rcsid[] = "$Id: ccdsMkTables.c,v 1.19 2008/04/06 00:39:43 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -42,10 +44,11 @@ errAbort(
   "ccdsMkTables - create tables for hg db from imported CCDS database\n"
   "\n"
   "Usage:\n"
-  "   ccdsMkTables [options] ccdsDb hgDb ccdsInfoOut ccdsGeneOut\n"
+  "   ccdsMkTables [options] ccdsDb hgDb ncbiBuild ccdsInfoOut ccdsGeneOut\n"
   "\n"
   "ccdsDb is the database created by ccdsImport, hgDb is the targeted\n"
   "genome database, required even if tables are not being loaded.\n"
+  "ncbiBuild is the NCBI build number, such as 32.2.\n"
   "If -loadDb is specified, ccdsInfoOut and ccdsGeneOut are tables to load\n"
   "with the cddsInfo and genePred data.  If -loadDb is not specified, they\n"
   "are files for the data.\n"
@@ -58,6 +61,7 @@ errAbort(
   "      \"Reviewed, update pending\",\n"
   "      \"Under review, withdrawal\",\n"
   "      \"Reviewed, withdrawal pending\"\n"
+  "   if \"any\" is specified, then status is not used in selection.\n"
   "  -loadDb - load tables into hgdb, bin column is added to genePred\n"
   "  -keep - keep tab file used to load database\n"
   "  -verbose=n\n"
@@ -75,17 +79,6 @@ struct genomeInfo
     int ncbiBuildVersion;
 };
 
-/* table of mapping UCSC db to NCBI build information */
-static struct genomeInfo genomeInfoTbl[] = 
-{
-    {"hg17",  9606, 35, 1},
-    {"hg18",  9606, 36, 2},
-    {"mm8",  10090, 36, 1},
-    {"mm9",  10090, 37, 1},
-    {NULL,       0,  0, 0}
-};
-
-
 static char *ccdsMkId(int ccdsId, int ccdsVersion)
 /* construct a CCDS id.  WARNING: static return */
 {
@@ -94,26 +87,41 @@ safef(id, sizeof(id), "CCDS%d.%d", ccdsId, ccdsVersion);
 return id;
 }
 
-static struct genomeInfo *getBuildTaxon(char *hgDb)
+static int getTaxon(char *hgDb)
+/* get the taxon id for the organism associated with hgDb */
+{
+if (startsWith("hg", hgDb))
+    return 9606;
+else if (startsWith("mm", hgDb))
+    return 10090;
+else
+    errAbort("don't know taxon id for %s", hgDb);
+return 0;
+};
+
+static int parseNcbiBuild(char *ncbiBuild, int *verRet)
+/* parse an NCBI build number */
+{
+char *dotPtr = skipNumeric(ncbiBuild);
+char *endPtr = skipNumeric(dotPtr+1);
+if (!(isdigit(ncbiBuild[0]) && (*dotPtr == '.') && (*endPtr == '\0')))
+    errAbort("invalid NCBI build number: %s", ncbiBuild);
+*dotPtr = '\0';
+int bld = sqlUnsigned(ncbiBuild);
+*dotPtr = '.';
+*verRet = sqlUnsigned(dotPtr+1);
+return bld;
+}
+
+static struct genomeInfo *getGenomeInfo(char *hgDb, char *ncbiBuild)
 /* translated the target databases to ncbi build and taxon */
 {
-int i;
-for (i = 0;  genomeInfoTbl[i].db != NULL; i++)
-    {
-    if (sameString(genomeInfoTbl[i].db, hgDb))
-        return &(genomeInfoTbl[i]);
-    }
-
-/* not found, generate error string with databases */
-struct dyString *msg = dyStringNew(0);
-for (i = 0;  genomeInfoTbl[i].db != NULL; i++)
-    {
-    dyStringAppend(msg, " ");
-    dyStringAppend(msg, genomeInfoTbl[i].db);
-    }
-errAbort("don't know how to load ccds into %s, must update code to add new databases. Supported databases are:%s",
-         hgDb, msg->string);
-return NULL;
+struct genomeInfo *gi;
+AllocVar(gi);
+gi->db = cloneString(hgDb);
+gi->taxonId = getTaxon(hgDb);
+gi->ncbiBuild = parseNcbiBuild(ncbiBuild, &gi->ncbiBuildVersion);
+return gi;
 }
 
 static struct hashEl *gotCcdsSave(struct hash *gotCcds, int ccdsId, int ccdsVersion)
@@ -200,6 +208,18 @@ if (errCnt > 0)
 gotCcdsCheckInfo(infoCcds);
 }
 
+static bool selectByStatus()
+/* check if specific status values should be used in select */
+{
+struct slName *val;
+for (val = statVals; val != NULL; val = val->next)
+    {
+    if (sameString(val->name, "any"))
+        return FALSE;
+    }
+return TRUE;
+}
+
 static char *mkStatusValSet(struct sqlConnection *conn)
 /* Generate set of CCDS status values to use, based on cmd options or
  * defaults.  WARNING: static return. */
@@ -224,17 +244,21 @@ return statValSet;
 }
 
 static char *mkCommonFrom()
-/* get common FROM clause. */
+/* Get common FROM clause. WARNING: static return. */
 {
-return "Groups, "
-    "GroupVersions, "
-    "CcdsUids, "
-    "CcdsStatusVals";
+static char clause[257];
+safecpy(clause, sizeof(clause),
+        "Groups, "
+        "GroupVersions, "
+        "CcdsUids");
+if (selectByStatus())
+    safecat(clause, sizeof(clause), ", CcdsStatusVals");
+return clause;
 }
 
 static char *mkCommonWhere(struct genomeInfo *genome, struct sqlConnection *conn)
 /* Get the common clause.  This is the where clause that selects GroupVersions
- * and CcdsUids that are currently selected by organism, build, and status
+ * and CcdsUids that are currently selected by organism, build, and optionally status
  * values. WARNING: static return. */
 {
 static char clause[1025];
@@ -244,12 +268,20 @@ safef(clause, sizeof(clause),
       "AND (GroupVersions.first_ncbi_build_version <= %d) "
       "AND (%d <= GroupVersions.last_ncbi_build_version) "
       "AND (GroupVersions.group_uid = Groups.group_uid) "
-      "AND (CcdsStatusVals.ccds_status_val_uid = GroupVersions.ccds_status_val_uid) "
-      "AND (CcdsStatusVals.ccds_status in (%s)) "
-      "AND (CcdsUids.group_uid = Groups.group_uid)) ",
+      "AND (CcdsUids.group_uid = Groups.group_uid) ",
       genome->taxonId, genome->ncbiBuild,
-      genome->ncbiBuildVersion, genome->ncbiBuildVersion,
-      mkStatusValSet(conn));
+      genome->ncbiBuildVersion, genome->ncbiBuildVersion);
+
+if (selectByStatus())
+    {
+    char clause2[1025];
+    safef(clause2, sizeof(clause2),
+          "AND (CcdsStatusVals.ccds_status_val_uid = GroupVersions.ccds_status_val_uid) "
+          "AND (CcdsStatusVals.ccds_status in (%s)) ",
+          mkStatusValSet(conn));
+    safecat(clause, sizeof(clause), clause2);
+    }
+safecat(clause, sizeof(clause), ")");
 return clause;
 }
 
@@ -264,23 +296,22 @@ while ((hel = hashNext(&cookie)) != NULL)
 
 static void findPartialMatches(struct sqlConnection *conn, struct genomeInfo *genome,
                                struct hash* ignoreTbl)
-/* find CCDS interpretation_subtype of "Partial match" */
+/* find CCDS interpretation_subtype of "Partial match".  Does in a separate
+ * pass due to the lack of sub-selects in mysql 4. */
 {
 verbose(2, "begin findPartialMatches\n");
 static char select[4096];
 safef(select, sizeof(select),
       "SELECT "
       "CcdsUids.ccds_uid, GroupVersions.ccds_version "
-      "FROM %s, "
-      "Interpretations, "
-      "InterpretationSubtypes "
+      "FROM %s, Interpretations, InterpretationSubtypes "
       "WHERE %s "
       "AND (Interpretations.ccds_uid = CcdsUids.ccds_uid) "
-#if 0
+#if 0 // FIXME: not sure why this breaks query
       "AND (Interpretations.group_uid = GroupVersions.group_uid) "
 #endif
       "AND (Interpretations.interpretation_subtype_uid = InterpretationSubtypes.interpretation_subtype_uid) "
-      "AND (InterpretationSubtypes.interpretation_subtype = \"Partial match\") ",
+      "AND (InterpretationSubtypes.interpretation_subtype = \"Partial match\")",
       mkCommonFrom(), mkCommonWhere(genome, conn));
 
 struct sqlResult *sr = sqlGetResult(conn, select);
@@ -293,7 +324,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     cnt++;
     }
 sqlFreeResult(&sr);
-verbose(2, "end   findPartialMatches: %d partial matches found\n", cnt);
+verbose(2, "end findPartialMatches: %d partial matches found\n", cnt);
 }
 
 static struct hash* buildIgnoreTbl(struct sqlConnection *conn, struct genomeInfo *genome)
@@ -320,13 +351,10 @@ safef(select, sizeof(select),
       "Organizations.name, "
       "Accessions.nuc_acc, Accessions.nuc_version, "
       "Accessions.prot_acc, Accessions.prot_version "
-      "FROM %s, "
-      "Accessions, "
-      "Accessions_GroupVersions, "
-      "Organizations "
+      "FROM %s, Accessions_GroupVersions, Accessions, Organizations "
       "WHERE %s "
-      "AND (Accessions.accession_uid = Accessions_GroupVersions.accession_uid) "
       "AND (Accessions_GroupVersions.group_version_uid = GroupVersions.group_version_uid) "
+      "AND (Accessions.accession_uid = Accessions_GroupVersions.accession_uid) "
       "AND (Organizations.organization_uid = Accessions.organization_uid)",
       mkCommonFrom(), mkCommonWhere(genome, conn));
 return select;
@@ -437,7 +465,7 @@ for (ci = ccdsInfoList; ci != NULL; ci = ci->next)
     ccdsInfoTabOut(ci, fh);
 carefulClose(&fh);
 ccdsInfoFreeList(&ccdsInfoList);
-verbose(2, "end   createCcdsInfo: %d processed, %d ignored, %d kept\n",
+verbose(2, "end createCcdsInfo: %d processed, %d ignored, %d kept\n",
         cnt, ignoreCnt, cnt-ignoreCnt);
 }
 
@@ -453,9 +481,7 @@ safef(select, sizeof(select),
       "Groups.orientation, "
       "Locations.chr_start, "
       "Locations.chr_stop "
-      "FROM %s, "
-      "Locations, "
-      "Locations_GroupVersions "
+      "FROM %s, Locations, Locations_GroupVersions "
       "WHERE %s "
       "AND (Locations.location_uid = Locations_GroupVersions.location_uid) "
       "AND (Locations_GroupVersions.group_version_uid = GroupVersions.group_version_uid)",
@@ -519,7 +545,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 slSort(&locs, ccdsLocationsJoinCmp);
-verbose(2, "end   loadLocations: %d exons\n", cnt);
+verbose(2, "end loadLocations: %d exons\n", cnt);
 return locs;
 }
 
@@ -613,7 +639,7 @@ while ((gp = nextCcdsGenePred(locsList)) != NULL)
     }
 slSort(&genes, genePredCmp);
 
-verbose(2, "end   buildCcdsGene: %d CCDS genes\n", cnt);
+verbose(2, "end buildCcdsGene: %d CCDS genes\n", cnt);
 return genes;
 }
 
@@ -670,7 +696,7 @@ if (!keep)
 sqlDisconnect(&conn);
 }
 
-static void ccdsMkTables(char *ccdsDb, char *hgDb, char *ccdsInfoOut, char *ccdsGeneOut)
+static void ccdsMkTables(char *ccdsDb, char *hgDb, char *ncbiBuild, char *ccdsInfoOut, char *ccdsGeneOut)
 /* create tables for hg db from imported CCDS database */
 {
 if (verboseLevel() >= 2)
@@ -678,7 +704,7 @@ if (verboseLevel() >= 2)
 struct sqlConnection *conn = sqlConnect(ccdsDb);
 char ccdsInfoFile[PATH_LEN], ccdsInfoTbl[PATH_LEN];
 char ccdsGeneFile[PATH_LEN], ccdsGeneTbl[PATH_LEN];
-struct genomeInfo *genome = getBuildTaxon(hgDb);
+struct genomeInfo *genome = getGenomeInfo(hgDb, ncbiBuild);
 struct hash *infoCcds = hashNew(20);
 struct hash *geneCcds = hashNew(20);
 hSetDb(hgDb);
@@ -701,7 +727,7 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, optionSpecs);
-if (argc != 5)
+if (argc != 6)
     usage();
 keep = optionExists("keep");
 loadDb = optionExists("loadDb");
@@ -712,7 +738,7 @@ if (statVals == NULL)
     for (i = 0; statValDefaults[i] != NULL; i++)
         slSafeAddHead(&statVals, slNameNew(statValDefaults[i]));
     }
-ccdsMkTables(argv[1], argv[2], argv[3], argv[4]);
+ccdsMkTables(argv[1], argv[2], argv[3], argv[4], argv[5]);
 return 0;
 }
 /*
