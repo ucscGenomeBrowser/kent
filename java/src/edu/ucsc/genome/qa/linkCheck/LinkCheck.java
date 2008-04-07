@@ -42,7 +42,7 @@ class LinkCheck {
 
     if (args.length < 2) {
        System.out.println("\n  Checks all links on a web page.");
-       System.out.println("  Usage: [machine:]path in htdocs, file[.html], [dateString].");
+       System.out.println("  Usage: [machine:]path_in_htdocs  file[.html] [dateString].");
        System.out.println("  Use zero for path if at htdocs level.");
        System.out.println("  dateString defaults to \"today\".");
        System.out.println("  machine defaults to genome.\n");
@@ -80,6 +80,7 @@ class LinkCheck {
 
     // take this as command line arg or read from data file
     String baseURL = "http://" + machine + ".ucsc.edu/" + localPath + file;
+    String webPath = "http://" + machine + ".ucsc.edu/" + localPath;
     if (! baseURL.endsWith("html")) {
       // System.out.println("no html ending");
       baseURL = baseURL + ".html";
@@ -122,11 +123,11 @@ class LinkCheck {
         // skip "mailto" and other protocols
         if (myProtocol.equals("http") | myProtocol.equals("https")) {
           int code = Robot.getResponseCode(wc, linkarray[i]);
-          System.out.println("Link = " + linkarray[i].asText());
+          System.out.println("Link = " + linkarray[i].getText());
           if (code == 200) {
              countok++;
 	     ok.println("\n----------------------------------");
-             ok.println("Link = " + linkarray[i].asText());
+             ok.println("Link = " + linkarray[i].getText());
 	     ok.println("          Response Code = " + code);
 	     ok.println("----------------------------------");
            } else {
@@ -134,8 +135,15 @@ class LinkCheck {
              if (counterr == 1) {
                err.println("Checking file: " + baseURL);
              }
+             /*
+	       err.println("localPath: " + localPath + "\n");
+	       err.println("outputPath: " + outputPath + "\n");
+	       err.println("myURL:      " + myURL + "\n");
+	       err.println("baseURL:    " + baseURL + "\n");
+              */
+
 	       err.println("\n----------------------------------");
-               err.println("Link = " + linkarray[i].asText());
+               err.println("Link = " + linkarray[i].getText());
                err.println("URL = " + myURL);
 	       err.println("          Response Code = " + code);
 	       err.println("----------------------------------");
@@ -143,7 +151,7 @@ class LinkCheck {
 	} else {
 	  countskip++;
             ok.println("\n----------------------------------");
-            ok.println("Link = " + linkarray[i].asText());
+            ok.println("Link = " + linkarray[i].getText());
 	    ok.println("Skipping");
             ok.println("----------------------------------");
 	}
