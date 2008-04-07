@@ -140,46 +140,46 @@ echo
 # check dbDb
 set metatable="dbDb"
 
-hgsql $host1 -e 'SELECT * FROM dbDb WHERE name = "'$db'"' $centdb1 \
+hgsql $host1 -Ne 'SELECT * FROM dbDb WHERE name = "'$db'"' $centdb1 \
   > $metatable.$db.$out1 
-hgsql $host2 -e 'SELECT * FROM dbDb WHERE name = "'$db'"' $centdb2  \
+hgsql $host2 -Ne 'SELECT * FROM dbDb WHERE name = "'$db'"' $centdb2  \
   > $metatable.$db.$out2
 
 
 # check blatServers
 set metatable="blatServers"
 
-hgsql $host1 -e 'SELECT * FROM blatServers WHERE db = "'$db'"' $centdb1 | sort \
+hgsql $host1 -Ne 'SELECT * FROM blatServers WHERE db = "'$db'"' $centdb1 | sort \
   > $metatable.$db.$out1 
-hgsql $host2 -e 'SELECT * FROM blatServers WHERE db = "'$db'"' $centdb2 | sort \
+hgsql $host2 -Ne 'SELECT * FROM blatServers WHERE db = "'$db'"' $centdb2 | sort \
   > $metatable.$db.$out2 
 
 
 # check defaultDb 
 set metatable="defaultDb"
 
-hgsql $host1 -e 'SELECT * FROM defaultDb WHERE name LIKE "'$dbTrunc'%"' \
+hgsql $host1 -Ne 'SELECT * FROM defaultDb WHERE name LIKE "'$dbTrunc'%"' \
    $centdb1 > $metatable.$db.$out1 
-hgsql $host2 -e 'SELECT * FROM defaultDb WHERE name LIKE "'$dbTrunc'%"' \
+hgsql $host2 -Ne 'SELECT * FROM defaultDb WHERE name LIKE "'$dbTrunc'%"' \
    $centdb2 > $metatable.$db.$out2 
 
 
 # check gdbPdb
 set metatable="gdbPdb"
 
-hgsql $host1 -e 'SELECT * FROM gdbPdb WHERE genomeDb = "'$db'"' $centdb1 \
+hgsql $host1 -Ne 'SELECT * FROM gdbPdb WHERE genomeDb = "'$db'"' $centdb1 \
   > $metatable.$db.$out1 
-hgsql $host2 -e 'SELECT * FROM gdbPdb WHERE genomeDb = "'$db'"' $centdb2 \
+hgsql $host2 -Ne 'SELECT * FROM gdbPdb WHERE genomeDb = "'$db'"' $centdb2 \
   > $metatable.$db.$out2 
 
 
 # check liftOverChain
 set metatable="liftOverChain"
 
-hgsql $host1 -e 'SELECT * FROM liftOverChain WHERE fromDb = "'$db'" \
+hgsql $host1 -Ne 'SELECT * FROM liftOverChain WHERE fromDb = "'$db'" \
   or toDb = "'$db'"' $centdb1 | sort \
   > $metatable.$db.$out1
-hgsql $host2 -e 'SELECT * FROM liftOverChain WHERE fromDb = "'$db'" \
+hgsql $host2 -Ne 'SELECT * FROM liftOverChain WHERE fromDb = "'$db'" \
   or toDb = "'$db'"' $centdb2 | sort \
   > $metatable.$db.$out2
 
@@ -201,9 +201,9 @@ set metatable="genomeClade"
 
 # get lookup for clade check
 # filter out "/" when it appears in genome name - to avoid e.g, Dog/Human
-hgsql $host1 -e 'SELECT * FROM genomeClade WHERE genome LIKE "%'$genome'"' \
+hgsql $host1 -Ne 'SELECT * FROM genomeClade WHERE genome LIKE "%'$genome'"' \
   $centdb1 | grep -v "/" > $metatable.$db.$out1 
-hgsql $host2 -e 'SELECT * FROM genomeClade WHERE genome LIKE  "%'$genome'"' \
+hgsql $host2 -Ne 'SELECT * FROM genomeClade WHERE genome LIKE  "%'$genome'"' \
   $centdb2 | grep -v "/" > $metatable.$db.$out2
  
 set metatable=""
