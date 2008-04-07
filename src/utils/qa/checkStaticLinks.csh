@@ -82,25 +82,21 @@ end
 rm -f linkCheck.all.$yymmdd
 set outfile="linkCheck.all.$yymmdd"
 
-echo  >>  $outfile
-echo "========  reporting only on files with errors   ========" >>  $outfile
-echo "========================================================" >>  $outfile
-echo  >>  $outfile
+echo >> $outfile
+echo "========  reporting only on files with errors   ========" >> $outfile
+echo "========================================================" >> $outfile
+echo >> $outfile
+dumpEmpty.csh .
 foreach file (`ls -1 *.$yymmdd.errors`)
-  set fileflag=`cat $file | grep -e "Response Code" | wc -l`
-  if ($fileflag > 0) then
-    # recover directory structure from dir.dir.dir.yymmdd.error files
-    #   and strip out filename from any file with errors
-    set filename=`echo $file | sed -e "s/\./\//g" | sed -e "s/\/$yymmdd\/errors/\.html/"`
-    echo >>  $outfile
-    echo "for htdocs/$filename" >>  $outfile
-    echo >>  $outfile
-    cat $file >>  $outfile
-    echo >>  $outfile
-    echo "========================================================" >>  $outfile
-    echo >>  $outfile
-  endif
-  # rm $file ??
+  # recover directory structure from dir.dir.dir.yymmdd.error files
+  #   and strip out filename from any file with errors
+  set filename=`echo $file | sed -e "s/\./\//g" | sed -e "s/\/$yymmdd\/errors/\.html/"`
+  echo >> $outfile
+  cat $file >> $outfile
+  echo >> $outfile
+  echo "========================================================" >> $outfile
+  echo >> $outfile
+# rm $file ??
 end
 
 rm -f filelist
