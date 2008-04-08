@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/makeDownloads.pl instead.
 
-# $Id: makeDownloads.pl,v 1.13 2008/03/19 23:04:56 hiram Exp $
+# $Id: makeDownloads.pl,v 1.14 2008/04/08 05:14:54 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -505,8 +505,11 @@ Files included in this directory (updated nightly):
   - *.txt.gz files: the database tables in a tab-delimited format
     compressed with gzip.
 
-See http://genome.ucsc.edu/goldenPath/gbdDescriptions.html for
-descriptions of the tables.
+To see descriptions of the tables underlying Genome Browser annotation
+tracks, select the table in the Table Browser:
+  http://genome.ucsc.edu/cgi-bin/hgTables?db=$db
+and click the "describe table schema" button.  There is also a "view
+table schema" link on the configuration page for each track.
 
 ---------------------------------------------------------------
 If you plan to download a large file or multiple files from this 
