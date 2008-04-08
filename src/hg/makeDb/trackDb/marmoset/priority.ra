@@ -1,0 +1,11 @@
+track chainRheMac2
+priority 287.1
+
+track netRheMac2
+priority 287.2
+
+track chainHg18
+priority 235.1
+
+track netHg18
+priority 235.2
