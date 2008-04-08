@@ -3,7 +3,7 @@
 # Caenorhabditis elegans
 #	Washington University School of Medicine GSC and Sanger Institute WS170
 
-#  $Id: ce4.txt,v 1.29 2007/12/27 20:59:33 hiram Exp $
+#  $Id: ce4.txt,v 1.30 2008/04/08 22:33:06 hiram Exp $
 
 
 #########################################################################
@@ -3363,5 +3363,179 @@ scratchDir /san/sanvol1/scratch/ce4HgNearBlastp
     doSameSpeciesLiftOver.pl ce4 ce5 -verbose 3 >& do.log &
     tail -f do.log
 
+
+#########################################################################
+# Nucleosome tracks (DONE - 2008-04-08 - Hiram)
+    ssh kkstore02
+    mkdir /cluster/data/ce4/bed/monoNucleosomes
+    cd /cluster/data/ce4/bed/monoNucleosomes
+    #	download everything into stanford sub-directory
+    mkdir stanford
+    cd stanford
+
+    #	track data was delivered via the following URL:
+    #	http://stellar.stanford.edu/C_elegans_mononucleosomes/index.html
+
+    #	Uncollapsed Track files by chromosome
+for C in I II III IV V X M
+do
+    wget --timestamping \
+http://stellar.stanford.edu/C_elegans_mononucleosomes/mono_nucleosomes_chr${C}_forward.bed.gz
+    wget --timestamping \
+http://stellar.stanford.edu/C_elegans_mononucleosomes/mono_nucleosomes_chr${C}_reverse.bed.gz
+done
+
+    #	Collapsed nucleosome track files by chromosome:
+wget --timestamping \
+http://stellar.stanford.edu/C_elegans_mononucleosomes/chrI-M.nucl.for.bed.gz
+wget --timestamping \
+http://stellar.stanford.edu/C_elegans_mononucleosomes/chrI-M.nucl.rev.bed.gz
+
+    #	Collapsed control track files by chromosome:
+wget --timestamping \
+	 http://stellar.stanford.edu/C_elegans_mononucleosomes/chrI-M.cont.paired.for.bed.gz
+	 wget --timestamping \
+http://stellar.stanford.edu/C_elegans_mononucleosomes/chrI-M.cont.paired.rev.bed.gz
+
+    #	Positioning stringency wig track
+wget --timestamping \
+http://stellar.stanford.edu/C_elegans_mononucleosomes/chrI-M_positioning_stringency.wig.gz
+    #	encode that
+    zcat chrI-M_positioning_stringency.wig.gz \
+	| wigEncode stdin stringency.wig stringency.wib
+
+    #	 Adjusted nucleosome coverage wig track:
+wget --timestamping \
+http://stellar.stanford.edu/C_elegans_mononucleosomes/adjusted_coverage_chrI-M.wig.gz
+    wigEncode adjusted_coverage_chrI-M.wig.gz nucleosomeAdjustedCoverage.wig \
+        nucleosomeAdjustedCoverage.wib
+
+    #	Track files for the whole genome
+wget --timestamping \
+http://stellar.stanford.edu/C_elegans_mononucleosomes/mono_nucleosomes_all_forward.bed.gz
+wget --timestamping \
+http://stellar.stanford.edu/C_elegans_mononucleosomes/mono_nucleosomes_all_reverse.bed.gz
+
+    #	time for all of the above:
+    #	real    2m20.465s
+    #	resulting files:
+# -rw-rw-r--  1 386656573 Feb 29 12:08 mono_nucleosomes_all_forward.bed.gz
+# -rw-rw-r--  1 382914445 Feb 29 12:08 mono_nucleosomes_all_reverse.bed.gz
+# -rw-rw-r--  1 166189150 Mar 17 15:30 chrI-M.cont.paired.for.bed.gz
+# -rw-rw-r--  1 130560514 Mar 17 15:30 chrI-M.nucl.for.bed.gz
+# -rw-rw-r--  1 135184112 Mar 17 15:30 chrI-M.nucl.rev.bed.gz
+# -rw-rw-r--  1 381477404 Mar 19 15:10 chrI-M_positioning_stringency.wig.gz
+# -rw-rw-r--  1 470000654 Mar 24 14:55 adjusted_coverage_chrI-M.wig.gz
+# -rw-rw-r--  1 175019114 Apr  3 11:37 chrI-M.cont.paired.rev.bed.gz
+
+    #	shorten the names which indicate counts:
+    cd ..
+
+    #	Collapsed control track files by chromosome:
+    zcat stanford/chrI-M.cont.paired.rev.bed.gz | grep "^chr" | awk '
+{
+gsub("count=","",$4)
+printf "%s\t%d\t%d\tn = %d\t%d\t-\t%d\t%d\t%s\t%s\t%s\t%s\n",
+    $1,$2,$3,$4,$4,$7,$8,$9,$10,$11,$12
+}
+' | gzip > chrI-M.rev.paired.bed.gz
+    zcat chrI-M.rev.paired.bed.gz | sort -k1,1 -k2,2n \
+     | bedItemOverlapCount ce4 stdin \
+     | wigEncode stdin nucleosomeControlAntisenseCoverage.wig \
+        nucleosomeControlAntisenseCoverage.wib
+
+    zcat stanford/chrI-M.cont.paired.for.bed.gz | grep "^chr" | awk '
+{
+gsub("count=","n = ",$4)
+printf "%s\t%d\t%d\t%s\t%d\t%s\t%d\t%d\t%s\t%s\t%s\t%s\n",
+    $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12
+}
+' | gzip > chrI-M.for.paired.bed.gz
+    zcat chrI-M.for.paired.bed.gz | sort -k1,1 -k2,2n \
+     | bedItemOverlapCount ce4 stdin \
+     | wigEncode stdin nucleosomeControlSenseCoverage.wig \
+        nucleosomeControlSenseCoverage.wib
+
+    #	Collapsed nucleosome track files by chromosome:
+    zcat stanford/chrI-M.nucl.for.bed.gz | grep "^chr" | awk '
+{
+gsub("count=","n = ",$4)
+printf "%s\t%d\t%d\t%s\t%d\t%s\t%d\t%d\t%s\t%s\t%s\t%s\n",
+    $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12
+}
+' | gzip > chrI-M.for.clean.bed.gz
+
+    zcat stanford/chrI-M.nucl.rev.bed.gz | grep "^chr" | awk '
+{
+gsub("count=","n = ",$4)
+printf "%s\t%d\t%d\t%s\t%d\t%s\t%d\t%d\t%s\t%s\t%s\t%s\n",
+    $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12
+}
+' | gzip > chrI-M.rev.clean.bed.gz
+
+    ###########################################################
+    #	loading track data
+    ssh hgwdev
+    cd /cluster/data/ce4/bed/monoNucleosomes
+
+    #	Collapsed control track files by chromosome:
+    LOAD="hgLoadBed -tab -noNameIx ce4"
+    zcat chrI-M.for.paired.bed.gz chrI-M.rev.paired.bed.gz \
+        | ${LOAD} nucleosomeControl stdin
+
+    #	Collapsed nucleosome track files by chromosome:
+    zcat chrI-M.for.clean.bed.gz \
+        | ${LOAD} nucleosomeFragmentsSense stdin
+    zcat chrI-M.rev.clean.bed.gz \
+        | ${LOAD} nucleosomeFragmentsAntisense stdin
+    #	these three tracks grouped into the composite: "nucleosome"
+    #	labels:
+    #   composite container: Nucleosome predictions from SOLidD core alignments
+    #	Control - : mononucleosome control
+    #	fragments + : mononucleosomal fragments, sense strand reads
+    #	fragments - : mononucleosomal fragments, antisense strand reads
+    
+    #	Positioning stringency wig track
+    hgLoadWiggle ce4 nucleosomeStringency stringency.wig
+    #	NSome Stringency
+    #	Nucleosome Positioning Stringency from SOLiD core alignments
+
+    #	 Adjusted nucleosome coverage wig track:
+    hgLoadWiggle ce4 nucleosomeAdjustedCoverage \
+        nucleosomeAdjustedCoverage.wig
+    #	Adj NSome Covrg
+    #	Adjusted nucleosome coverage (25bp)
+
+    #	MNase Coverage
+    #	Micrococcal nuclease control coverage
+    hgLoadWiggle ce4 nucleosomeControlSenseCoverage \
+        nucleosomeControlSenseCoverage.wig
+    #	Cntl MNase +Covg
+    #	Micrococcal nuclease control coverage, sense strand reads
+    hgLoadWiggle ce4 nucleosomeControlAntisenseCoverage \
+        nucleosomeControlAntisenseCoverage.wig
+    #	Cntl MNase -Covg
+    #	Micrococcal nuclease control coverage, antisense strand reads
+
+    zcat stanford/mono_nucleosomes_chr*_forward.bed.gz \
+     | bedItemOverlapCount ce4 stdin \
+         | wigEncode stdin monoNucleosomesSense.wig monoNucleosomesSense.wib
+
+    zcat stanford/mono_nucleosomes_chr*_reverse.bed.gz \
+     | bedItemOverlapCount ce4 stdin \
+     | wigEncode stdin monoNucleosomesAntiSense.wig monoNucleosomesAntiSense.wib
+    #	NSome Coverage
+    #	Coverage of nucleosome predictions from SOLiD core alignments
+
+    zcat stanford/chrI-M.for.paired.bed.gz stanford/chrI-M.rev.paired.bed.gz \
+        | ${LOAD} nucleosomeControl stdin
+    #	Control
+    #	mononucleosome control
+    hgLoadWiggle ce4 monoNucleosomesSense monoNucleosomesSense.wig
+    #	NSome Core +Covg
+    #	Coverage of mononucleosomal fragments, sense strand reads
+    hgLoadWiggle ce4 monoNucleosomesAntiSense monoNucleosomesAntiSense.wig
+    #	NSome Core -Covg
+    #	Coverage of mononucleosomal fragments, antisense strand reads
 
 #########################################################################
