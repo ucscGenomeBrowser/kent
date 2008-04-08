@@ -9,7 +9,7 @@
 #include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.11 2008/02/20 00:42:29 markd Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.12 2008/04/08 23:36:37 hiram Exp $";
 
 
 static void wikiTrackMapItem(struct track *tg, struct hvGfx *hvg, void *item,
@@ -110,7 +110,7 @@ hDisconnectCentral(&conn);
 
 slSort(&lfList, linkedFeaturesCmp);
 
-if (wikiTrackEnabled(NULL))
+if (wikiTrackEnabled(database, NULL))
     {
     // add special item to allow creation of new entries
     AllocVar(bed);
@@ -165,7 +165,7 @@ return bedList;
 void addWikiTrack(struct track **pGroupList)
 /* Add wiki track and append to group list. */
 {
-if (wikiTrackEnabled(NULL))
+if (wikiTrackEnabled(database, NULL))
     {
     struct track *tg = trackNew();
     static char longLabel[80];

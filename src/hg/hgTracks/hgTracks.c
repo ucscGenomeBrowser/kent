@@ -118,7 +118,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1445 2008/04/08 00:53:11 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1446 2008/04/08 23:36:37 hiram Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -13998,7 +13998,7 @@ registerTrackHandler("rnaHybridization", rnaHybridizationMethods);
 registerTrackHandler("wiki", wikiMethods);
 registerTrackHandler("wikibme", wikiMethods);
 #endif
-if (wikiTrackEnabled(NULL))
+if (wikiTrackEnabled(database, NULL))
     registerTrackHandler("wikiTrack", wikiTrackMethods);
 
 /*Test for my own MA data
@@ -14088,7 +14088,7 @@ if (restrictionEnzymesOk())
     {
     slSafeAddHead(&trackList, cuttersTg());
     }
-if (wikiTrackEnabled(NULL))
+if (wikiTrackEnabled(database, NULL))
     addWikiTrack(&trackList);
 loadCustomTracks(&trackList);
 groupTracks(&trackList, pGroupList, vis);

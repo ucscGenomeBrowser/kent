@@ -15,7 +15,7 @@
 #include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.10 2007/06/28 19:34:35 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.11 2008/04/08 23:36:40 hiram Exp $";
 
 static char *hgGeneUrl()
 {
@@ -338,7 +338,7 @@ if (aliases)
 
 dyStringPrintf(extraHeader, "\n<HR>\n");
 
-if (! wikiTrackEnabled(&userName))
+if (! wikiTrackEnabled(database, &userName))
     errAbort("create new wiki item: wiki track not enabled");
 if (NULL == userName)
     errAbort("create new wiki item: user not logged in ?");
@@ -414,7 +414,7 @@ if ((0 == rawListCount) || (0 == locusLocationCount))
 /* we already know the wiki track is enabled since we are here,
  *	now calling this just to see if user is logged into the wiki
  */
-if(!wikiTrackEnabled(&userName))
+if(!wikiTrackEnabled(database, &userName))
     errAbort("hgGene.doWikiTrack: called when wiki track is not enabled");
 if (isNotEmpty(userName) && emailVerified())
     editOK = TRUE;

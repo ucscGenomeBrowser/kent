@@ -111,6 +111,7 @@ void wikiTrackOutput(struct wikiTrack *el, FILE *f, char sep, char lastSep);
 #define CFG_WIKI_URL "wikiTrack.URL"
 #define CFG_WIKI_BROWSER "wikiTrack.browser"
 #define CFG_WIKI_EDITORS "wikiTrack.editors"
+#define CFG_WIKI_DB_LIST "wikiTrack.dbList"
 
 /* name of database table in hgcentral */
 #define WIKI_TRACK_TABLE "wikiTrack"
@@ -141,7 +142,7 @@ void wikiTrackOutput(struct wikiTrack *el, FILE *f, char sep, char lastSep);
     "Please set and validate your e-mail address through your"
 #define GENE_CLASS "Genes and Gene Prediction Tracks"
 
-boolean wikiTrackEnabled(char **wikiUserName);
+boolean wikiTrackEnabled(char *database, char **wikiUserName);
 /*determine if wikiTrack can be used, and is this user logged into the wiki ?*/
 
 char *wikiTrackGetCreateSql(char *tableName);

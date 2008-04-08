@@ -16,7 +16,7 @@
 #include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.34 2007/06/28 23:03:18 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.35 2008/04/08 23:36:42 hiram Exp $";
 
 #define ITEM_SCORE_DEFAULT "1000"
 #define ADD_ITEM_COMMENT_DEFAULT "add comments"
@@ -279,7 +279,7 @@ void doWikiTrack(char *wikiItemId, char *chrom, int winStart, int winEnd)
 {
 char *userName = NULL;
 
-if (wikiTrackEnabled(&userName) && sameWord("0", wikiItemId))
+if (wikiTrackEnabled(database, &userName) && sameWord("0", wikiItemId))
     {
     cartWebStart(cart, "%s", "User Annotation Track: Create new item");
     if (NULL == userName)
@@ -437,7 +437,7 @@ cartWebStart(cart, "%s (%s)", "User Annotation Track, deleted item: ",
 	item->name);
 if (NULL == wikiItemId)
     errAbort("delete wiki item: NULL wikiItemId");
-if (! wikiTrackEnabled(&userName))
+if (! wikiTrackEnabled(database, &userName))
     errAbort("delete wiki item: wiki track not enabled");
 char comments[1024];
 safef(comments,ArraySize(comments), "This item '''%s''' on assembly %s "
@@ -463,7 +463,7 @@ struct wikiTrack *item = findWikiItemId(wikiItemId);
 cartWebStart(cart, "%s (%s)", "User Annotation Track", item->name);
 if (NULL == wikiItemId)
     errAbort("add wiki comments: NULL wikiItemId");
-if (! wikiTrackEnabled(&userName))
+if (! wikiTrackEnabled(database, &userName))
     errAbort("add wiki comments: wiki track not enabled");
 if (NULL == userName)
     errAbort("add wiki comments: user not logged in ?");
@@ -492,7 +492,7 @@ char *color = cartUsualString(cart, NEW_ITEM_COLOR, "#000000");
 int score = 0;
 struct wikiTrack *newItem;
 
-if (! wikiTrackEnabled(&userName))
+if (! wikiTrackEnabled(database, &userName))
     errAbort("create new wiki item: wiki track not enabled");
 if (NULL == userName)
     errAbort("create new wiki item: user not logged in ?");

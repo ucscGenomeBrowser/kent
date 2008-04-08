@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.11 2007/06/28 23:03:23 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.12 2008/04/08 23:36:44 hiram Exp $";
 
 void wikiTrackStaticLoad(char **row, struct wikiTrack *ret)
 /* Load a row from wikiTrack table into ret.  The contents of ret will
@@ -324,14 +324,39 @@ cgiContinueHiddenVar("db");
 }
 #endif
 
-boolean wikiTrackEnabled(char **wikiUserName)
+boolean wikiTrackEnabled(char *database, char **wikiUserName)
 /*determine if wikiTrack can be used, and is this user logged into the wiki ?*/
 {
 if (wikiUserName)
     *wikiUserName = NULL;  /* assume not logged in until proven otherwise */
 
+/*	potentially a comma separated list */
+
+char *dbListString = cfgOption(CFG_WIKI_DB_LIST);
+char *dbList[256];
+int dbCount = 0;
+if (NULL != dbListString)
+    {
+printf("dbList: %s<BR>\n", dbListString);
+    dbCount = chopByChar(cloneString(dbListString), ',', dbList,
+	ArraySize(dbList));
+    }
+boolean validDb = TRUE;
+if (dbCount > 0)
+    {
+    validDb = FALSE;
+    int i;
+    for (i = 0; i < dbCount; ++i)
+	{
+	if (sameWord(dbList[i],database))
+	    {
+	    validDb = TRUE;
+	    break;
+	    }
+	}
+    }
 /* must have wiki login system enabled, and the new cfg options exist too. */
-if (wikiLinkEnabled() &&
+if (validDb && wikiLinkEnabled() &&
 	(cfgOption(CFG_WIKI_SESSION_COOKIE) != NULL) &&
 	(cfgOption(CFG_WIKI_BROWSER) != NULL) &&
 	(cfgOption(CFG_WIKI_URL) != NULL))

@@ -10,7 +10,7 @@
 #include "hgGene.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: links.c,v 1.33 2007/07/27 19:31:12 angie Exp $";
+static char const rcsid[] = "$Id: links.c,v 1.34 2008/04/08 23:36:40 hiram Exp $";
 
 struct link
 /* A link to another web site. */
@@ -77,7 +77,7 @@ for (ra = raList; ra != NULL; ra = ra->next)
 	    {
 	    /* only include the wikiTrack if it is enabled */
 	    if (sameWord(linkRequiredField(ra, "name"), "wikiTrack") &&
-		! wikiTrackEnabled(NULL))
+		! wikiTrackEnabled(database, NULL))
 		continue;
 	    AllocVar(link);
 	    link->priority = atof(linkRequiredField(ra, "priority"));
