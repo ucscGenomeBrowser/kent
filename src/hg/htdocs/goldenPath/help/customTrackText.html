@@ -992,6 +992,12 @@ of the form <tt>hgt.customText=URL</tt>, where
 <I>URL</I> points to the annotation file on your website. An example of an
 annotation file URL is <font color="000099"><A HREF="test.bed"
 TARGET=_blank>http://genome.ucsc.edu/goldenPath/help/test.bed</A></font>.  
+<LI>If your website requires a password and username for access, you can add 
+that to the <I>URL</I>. The syntax for URLs that include the username and 
+password is this: <tt>http://user:password@server.com/path/file?options</tt>. 
+Be aware that this raises security issues. The username and password given 
+on the URL is potentially visible to anyone capable of snooping on the tcp 
+connection.
 </UL>
 
 <P>Combine the above pieces of information into a URL of the following
