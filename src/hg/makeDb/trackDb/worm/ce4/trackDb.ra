@@ -252,7 +252,7 @@ type bed 5 .
 #	color 255,128,33
 
 track nucleosomeStringency
-shortLabel Nucleosome Stringency
+shortLabel NSome Stringency
 longLabel Nucleosome Positioning Stringency from SOLiD core alignments
 group map
 priority 120.0
@@ -266,7 +266,7 @@ color 128,0,128
 spanList 1
 
 track nucleosomeAdjustedCoverage
-shortLabel Nucleosome Adjusted
+shortLabel Adj NSome Covrg
 longLabel Adjusted nucleosome coverage (25bp)
 group map
 priority 121.0
@@ -280,7 +280,7 @@ color 255,0,128
 spanList 1
 
 track nucleosomeDensity
-shortLabel Nucleosome Coverage
+shortLabel NSome Coverage
 longLabel Coverage of nucleosome predictions from SOLiD core alignments
 group map
 priority 120.0
@@ -295,21 +295,21 @@ compositeTrack on
 
 	track monoNucleosomesSense
 	subTrack nucleosomeDensity
-	shortLabel Nucleosome coverage +
+	shortLabel NSome Core +Covg
 	longLabel Coverage of mononucleosomal fragments, sense strand reads
 	color 0,72,255
 	priority 1
 
 	track monoNucleosomesAntiSense
 	subTrack nucleosomeDensity
-	shortLabel Nucleosome coverage -
+	shortLabel NSome Core -Covg
 	longLabel Coverage of mononucleosomal fragments, antisense strand reads
 	color 0,170,37
 	priority 2
 
 track nucleosomeControlCoverage
-shortLabel Nucleosome Control
-longLabel Coverage of nucleosome control from SOLiD core alignments
+shortLabel MNase Coverage
+longLabel Micrococcal nuclease control coverage
 group map
 priority 120.0
 visibility hide
@@ -323,15 +323,15 @@ compositeTrack on
 
 	track nucleosomeControlSenseCoverage
 	subTrack nucleosomeControlCoverage
-	shortLabel Nucleosome control +
-	longLabel Coverage of nucleosome control, sense strand reads
+	shortLabel Cntl MNase +Covg
+	longLabel Micrococcal nuclease control coverage, sense strand reads
 	color 255,132,0
 	priority 1
 
 	track nucleosomeControlAntisenseCoverage
 	subTrack nucleosomeControlCoverage
-	shortLabel Nucleosome control -
-	longLabel Coverage of nucleosome control, antisense strand reads
+	shortLabel Cntl MNase -Covg
+	longLabel Micrococcal nuclease control coverage, antisense strand reads
 	color 200,80,0
 	priority 2
 
