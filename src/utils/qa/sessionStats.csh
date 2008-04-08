@@ -35,7 +35,7 @@ set months=`hgsql -N -h genome-centdb -e "SELECT DISTINCT firstUse FROM namedSes
 # get stats
 echo
 echo " month  count users  shared   reused  "
-echo "------  ----- ----- -------  ---------"
+echo "------  ----- ----- -------  -------"
 foreach month ( $months )
   set count=`hgsql -N -h genome-centdb -e 'SELECT COUNT(*) FROM namedSessionDb \
     WHERE firstUse like "'$month%'"' hgcentral`
@@ -47,9 +47,8 @@ foreach month ( $months )
     WHERE firstUse like "'$month%'"' hgcentral \
     |  awk '$1 != $3 {print $1, $3}'  | wc -l`
   echo $month $count $users $shared $reuse  \
-    | awk '{printf ("%7s %4s %5s %4s %2d %1s %5s %2d %0s\n", \
-    $1, $2, $3, $4, $4/$2*100,"%", $5, $5/$2*100,"%")}' \
-    | sed -e "s/ %/%/g"
+    | awk '{printf ("%7s %4s %5s %4s %2d%% %4s %2d%%\n", \
+    $1, $2, $3, $4, $4/$2*100, $5, $5/$2*100)}'
   # do totals
   set countTot=`echo $countTot $count | awk '{print $1+$2}'`
   set userTot=`echo $userTot $users | awk '{print $1+$2}'`
@@ -57,17 +56,15 @@ foreach month ( $months )
   set reuseTot=`echo $reuseTot $reuse | awk '{print $1+$2}'`
 end
 
-echo "------- ----- ----- -------  ---------"
+echo "------- ----- ----- -------  -------"
 echo "total " $countTot $userTot $shareTot $reuseTot  \
-  | awk '{printf ("%7s %4s %5s %4s %2d %1s %5s %2d %0s\n", \
-  $1, $2, $3, $4, $4/$2*100,"%", $5, $5/$2*100,"%")}' \
-  | sed -e "s/ %/%/g"
+  | awk '{printf ("%7s %4s %5s %4s %2d%% %4s %2d%%\n", \
+  $1, $2, $3, $4, $4/$2*100, $5, $5/$2*100)}'
 set uniq=`hgsql -N -h genome-centdb -e 'SELECT COUNT(DISTINCT(userName)) \
   FROM namedSessionDb' hgcentral`
 echo "uniq " "-" "$uniq" \
   | awk '{printf ("%7s %4s %5s \n", $1, $2, $3)}'
 echo
-
 
 # see how often people make more than one session:
 echo "how many people had more than one session?"
