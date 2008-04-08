@@ -5725,4 +5725,94 @@ chainOne $(path1)
   # (floats).
   hgLoadBed -notItemRgb -sqlTable=/cluster/home/jsp/prog/kent/src/hg/lib/evofold.sql dm2 evofold foldsDm2.bed
 
+
+#########################################################################
+# BDTNP CHIP-CHIP (DONE 4/7/08 angie)
+    # Berkeley Drosophila Transcription Network Project's ChIP-Chip data,
+    # from Mark Biggin (MDBiggin at lbl dot gov).
+    ssh kkstore04
+    mkdir /cluster/data/dm2/bed/bdtnpChipper
+    cd /cluster/data/dm2/bed/bdtnpChipper
+    wget http://rana.lbl.gov/~smacarth/ChIPChip/Public_Release/wiggle/all_public_080407_1FDR.wig.bz2
+    wget http://rana.lbl.gov/~smacarth/ChIPChip/Public_Release/wiggle/all_public_080407_25FDR.wig.bz2
+    # The files contain concatenated custom tracks; split those out into
+    # one .wig file per track, with UCSC table names:
+    bzcat all_public* | perl -we \
+      'my $fh; \
+       while (<>) { \
+         if (/^track .* name="([\w-]+)"/) { \
+           close($fh) if ($fh); \
+           my $name = $1; \
+           $name =~ s/([a-zI]+)_(8WG16)?(\d+)?_\d+_675bp_smoothed_scores-sym-(\d+)/bdtnp\u$1$3Fdr$4/ \
+             || die "parse:\n$name\n\t"; \
+           open($fh, ">$name.wig") || die "Cant open >$name.wig: $!\n"; \
+         } else { \
+           die "data before track line?  at input line $.:\n$_" if (! $fh); \
+           print $fh $_; \
+         } \
+       }'
+    # These two warnings are for the polII filenames, no problem:
+#Use of uninitialized value in concatenation (.) or string at -e line 6, <> line 714856.
+#Use of uninitialized value in concatenation (.) or string at -e line 6, <> line 3595486.
+
+    mkdir wigEncoded
+    cd wigEncoded
+    foreach f (../*Fdr*.wig)
+      wigEncode $f $f:t:r.{wig,wib}
+    end
+#Converted ../bdtnpBcd1Fdr1.wig, upper limit 8.14, lower limit 0.80
+#Converted ../bdtnpBcd1Fdr25.wig, upper limit 8.14, lower limit 0.80
+#Converted ../bdtnpBcd2Fdr1.wig, upper limit 10.74, lower limit 0.68
+#Converted ../bdtnpBcd2Fdr25.wig, upper limit 10.74, lower limit 0.68
+#Converted ../bdtnpCad1Fdr1.wig, upper limit 16.20, lower limit 1.06
+#Converted ../bdtnpCad1Fdr25.wig, upper limit 16.20, lower limit 0.48
+#Converted ../bdtnpGt2Fdr1.wig, upper limit 22.22, lower limit 1.21
+#Converted ../bdtnpGt2Fdr25.wig, upper limit 22.22, lower limit 0.49
+#Converted ../bdtnpHb1Fdr1.wig, upper limit 14.38, lower limit 0.92
+#Converted ../bdtnpHb1Fdr25.wig, upper limit 14.38, lower limit 0.86
+#Converted ../bdtnpHb2Fdr1.wig, upper limit 24.25, lower limit 0.88
+#Converted ../bdtnpHb2Fdr25.wig, upper limit 24.25, lower limit 0.78
+#Converted ../bdtnpKni1Fdr1.wig, upper limit 8.08, lower limit 1.78
+#Converted ../bdtnpKni1Fdr25.wig, upper limit 8.08, lower limit 1.01
+#Converted ../bdtnpKni2Fdr1.wig, upper limit 8.44, lower limit 1.07
+#Converted ../bdtnpKni2Fdr25.wig, upper limit 8.44, lower limit 0.76
+#Converted ../bdtnpKr1Fdr1.wig, upper limit 14.47, lower limit 0.68
+#Converted ../bdtnpKr1Fdr25.wig, upper limit 14.47, lower limit 0.68
+#Converted ../bdtnpKr2Fdr1.wig, upper limit 12.92, lower limit 0.66
+#Converted ../bdtnpKr2Fdr25.wig, upper limit 12.92, lower limit 0.66
+#Converted ../bdtnpPolIIFdr1.wig, upper limit 35.43, lower limit 0.79
+#Converted ../bdtnpPolIIFdr25.wig, upper limit 35.43, lower limit 0.50
+#Converted ../bdtnpZ2Fdr1.wig, upper limit 11.49, lower limit 0.95
+#Converted ../bdtnpZ2Fdr25.wig, upper limit 11.49, lower limit 0.79
+
+    ssh hgwdev
+    mkdir /gbdb/dm2/bdtnp
+    ln -s /cluster/data/dm2/bed/bdtnpChipper/wigEncoded/*.wib /gbdb/dm2/bdtnp/
+    cd /cluster/data/dm2/bed/bdtnpChipper/wigEncoded
+    foreach f (*.wig)
+      hgLoadWiggle -pathPrefix=/gbdb/dm2/bdtnp dm2 $f:r $f
+    end
+    rm wiggle.tab
+    # Print out template for 24 subtrack defs (longLabel will need editing):
+    set pri = 1
+    foreach f (*.wig)
+      echo "    track $f:r"
+      echo "    subTrack bdtnpChipper"
+      set fac = `echo $f:r | perl -wpe 's/^bdtnp([A-Za-z]+).*/\U$1/ || die;'`
+      set ab  = `echo $f:r | perl -wpe 's/^bdtnp[A-Za-z]+(\d)?F.*/\U$1/ || die;'`
+      set fdr = `echo $f:r | perl -wpe 's/.*Fdr(\d+)$/$1/ || die;'`
+      echo "    subGroups fdr=$fdr celltype=$fac"
+      echo "    shortLabel $fac AB $ab FDR $fdr%"
+      echo "    longLabel ($fac) Antibody $ab, False Discovery Rate (FDR) $fdr%"
+      if ($fdr == 1) then
+        echo "    color 50,50,200"
+      else
+        echo "    color 25,150,25"
+      endif
+      echo "    priority $pri"
+      echo ""
+      set pri = `expr $pri + 1`
+    end
+
+
 #########################################################################
