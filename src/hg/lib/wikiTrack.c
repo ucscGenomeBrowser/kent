@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.12 2008/04/08 23:36:44 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.13 2008/04/08 23:41:03 hiram Exp $";
 
 void wikiTrackStaticLoad(char **row, struct wikiTrack *ret)
 /* Load a row from wikiTrack table into ret.  The contents of ret will
@@ -337,7 +337,6 @@ char *dbList[256];
 int dbCount = 0;
 if (NULL != dbListString)
     {
-printf("dbList: %s<BR>\n", dbListString);
     dbCount = chopByChar(cloneString(dbListString), ',', dbList,
 	ArraySize(dbList));
     }
