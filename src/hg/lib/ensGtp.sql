@@ -5,8 +5,8 @@ CREATE TABLE ensGtp (
   transcript char(20) NOT NULL,
   protein char(20) NOT NULL,
 # INDICES
-  INDEX(gene(18)),
-  UNIQUE(transcript(18)),
-  INDEX(protein(18))
+  INDEX(gene(19)),
+  UNIQUE(transcript(19)),
+  INDEX(protein(19))
 ) 
 
