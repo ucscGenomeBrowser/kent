@@ -4,28 +4,47 @@
 ###############################################
 # 
 #  05-11-07 
-#  Small module that runs featureBits and checks for overlap with unbridged gaps
+#  Small module that runs featureBits and checks for overlap with gaps [incl unbridged]
 #  Written by Bob Kuhn 
 # 
 ###############################################
 
 
+set checkUnbridged="false"
 set db=""
 set chrom=""
 set split=""
 set track=""
 
-if ( $#argv != 2 ) then
+if ( $#argv < 2 |  $#argv > 3 |  ) then
   # no command line args
   echo
-  echo "  runs featureBits and checks for overlap with unbridged gaps."
+  echo "  runs featureBits and checks for overlap with gaps."
   echo
-  echo "    usage:  database trackname"
+  echo "    usage:  database trackname [checkUnbridged]"
+  echo "              where overlap with unbridged gaps can be turned on"
   echo
   exit
 else
   set db=$argv[1]
   set track=`echo $argv[2] | sed -e "s/chr.*_//"`
+endif
+
+if ( "$HOST" != "hgwdev" ) then
+ echo "\n  error: you must run this script on dev!\n"
+ exit 1
+endif
+
+if ( $#argv == 3 ) then
+  if ( $argv[3] == "checkUnbridged" ) then
+    set checkUnbridged="true"
+  else
+    echo
+    echo 'third argument must be "checkUnbridged"'
+    echo
+    echo $0
+    $0
+  endif
 endif
 
 set split=`getSplit.csh $db gap hgwdev` 
@@ -51,6 +70,10 @@ if ( -z $db.gapFile ) then
   rm -f $db.gapFile
   rm -f $db.chromlist
   exit
+endif
+
+if ( $checkUnbridged == "false" ) then
+  exit 0
 endif
 
 echo "check for overlap (including introns) to unbridged gaps:"
