@@ -832,4 +832,32 @@ do
     featureBits bosTau3 -enrichment refGene:CDS geneid
 # refGene:CDS 0.429%, geneid 1.633%, both 0.364%, cover 84.64%, enrich 51.82x
 
+#############################################################################
+# LIFTOVER TO bosTau4 (WORKING - 2008-04-02 - Hiram)
+    ssh kkstore05
+    screen -r -d	#	use screen to control this job
+    # -debug run to create run dir, preview scripts...
+    doSameSpeciesLiftOver.pl -debug bosTau3 bosTau4 \
+      -ooc /cluster/bluearc/bosTau3/11.ooc
+    # Real run:
+    cd /cluster/data/bosTau3/bed/blat.bosTau4.2008-04-02
+    time nice -n +19 doSameSpeciesLiftOver.pl bosTau3 bosTau4 \
+      -ooc /cluster/bluearc/bosTau3/11.ooc > do.log 2>&1 &
+    #	real    587m45.013s
+
+    #	this broke down on kolossus due to out of disk space on
+    #	/scratch/tmp/ - so, go to one of the memk nodes, and finish
+    #	the doNet.csh script
+    ssh mkr0u0
+    cd /cluster/data/bosTau3/bed/blat.bosTau4.2008-04-02/run.chain
+    time ./doNet.csh
+    #	real    81m17.919s
+    #	then, continuing:
+    ssh kkstore05
+    cd /cluster/data/bosTau3/bed/blat.bosTau4.2008-04-02
+    time nice -n +19 doSameSpeciesLiftOver.pl -continue=load bosTau3 bosTau4 \
+	-buildDir=/cluster/data/bosTau3/bed/blat.bosTau4.2008-04-02 \
+	-ooc /cluster/bluearc/bosTau3/11.ooc > load.log 2>&1 &
+    #	real    1m17.778s
+
 ##########################################################################
