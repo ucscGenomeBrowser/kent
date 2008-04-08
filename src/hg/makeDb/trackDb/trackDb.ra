@@ -2639,7 +2639,7 @@ type netAlign eriEur1 chainEriEur1
 otherDb eriEur1
 
 track chainBosTau4
-shortLabel $o_db Chain
+shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 256.291
@@ -2653,7 +2653,7 @@ type chain bosTau4
 otherDb bosTau4
 
 track netBosTau4
-shortLabel $o_db Net
+shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 256.292
@@ -2663,7 +2663,7 @@ type netAlign bosTau4 chainBosTau4
 otherDb bosTau4
 
 track chainBosTau3
-shortLabel $o_Organism Chain
+shortLabel $o_db Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 256.3
@@ -2677,7 +2677,7 @@ type chain bosTau3
 otherDb bosTau3
 
 track netBosTau3
-shortLabel $o_Organism Net
+shortLabel $o_db Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 256.4
