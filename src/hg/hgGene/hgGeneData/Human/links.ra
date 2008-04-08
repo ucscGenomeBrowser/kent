@@ -44,8 +44,8 @@ priority 10
 name hugo
 shortLabel HGNC
 tables kgXref
-idSql select geneSymbol from kgXref,proteome.hgncXref where kgID = '%s' and geneSymbol=symbol
-url http://www.genenames.org/data/hgnc_data.php?match=%s
+idSql select hgncId from kgXref,proteome.hgncXref where kgID = '%s' and geneSymbol=symbol
+url http://www.genenames.org/data/hgnc_data.php?hgnc_id=%s
 priority 10
 
 name cgap
