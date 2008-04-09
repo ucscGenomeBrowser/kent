@@ -118,7 +118,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1447 2008/04/09 23:10:12 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1448 2008/04/09 23:19:02 hiram Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -9763,10 +9763,6 @@ if (withLeftLabels && psOutput == NULL)
     for (track = trackList; track != NULL; track = track->next)
         {
 	int h, yStart = y, yEnd;
-if (sameWord("wikiTrack",track->mapName))
-    {
-printf("wikiTrack, %d, %d, %d<BR>\n", track->limitedVis, tvHide, track->hasUi);
-    }
 	if (track->limitedVis != tvHide)
 	    {
 	    y += trackPlusLabelHeight(track, fontHeight);
