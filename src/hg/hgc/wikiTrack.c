@@ -16,7 +16,7 @@
 #include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.35 2008/04/08 23:36:42 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.36 2008/04/09 23:10:20 hiram Exp $";
 
 #define ITEM_SCORE_DEFAULT "1000"
 #define ADD_ITEM_COMMENT_DEFAULT "add comments"
@@ -255,6 +255,7 @@ else if (emailVerified()) /* prints message when not verified */
 	    hPrintf("%s:%d-%d<BR>\n", el->chrom, el->chromStart, el->chromEnd);
 	}
     createPageHelp("wikiTrackAddCommentHelp");
+    createPageHelp("wikiTrack");
     }
 }	/*	displayItem()	*/
 
@@ -300,6 +301,7 @@ if (wikiTrackEnabled(database, &userName) && sameWord("0", wikiItemId))
 	safef(label, ArraySize(label), "Create new item, owner: '%s'\n",
 	    userName);
 	webPrintWideLabelCell(label, 2);
+#ifdef NOT
 	webPrintLinkTableNewRow();
 	/* second row is group classification pull-down menu */
 	webPrintWideCellStart(2, HG_COL_TABLE);
@@ -322,6 +324,7 @@ if (wikiTrackEnabled(database, &userName) && sameWord("0", wikiItemId))
 	cgiMakeDropList(NEW_ITEM_CLASS, classMenu, groupCount,
 		cartUsualString(cart,NEW_ITEM_CLASS,ITEM_NOT_CLASSIFIED));
 	webPrintLinkCellEnd();
+#endif
 	webPrintLinkTableNewRow();
 	/* third row is position entry box */
 	webPrintWideCellStart(2, HG_COL_TABLE);
@@ -386,6 +389,7 @@ if (wikiTrackEnabled(database, &userName) && sameWord("0", wikiItemId))
 	webPrintLinkCellEnd();
 	webPrintLinkTableEnd();
 	createPageHelp("wikiTrackCreateItemHelp");
+	createPageHelp("wikiTrack");
 	}
 
     }

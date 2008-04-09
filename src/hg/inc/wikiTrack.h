@@ -115,6 +115,8 @@ void wikiTrackOutput(struct wikiTrack *el, FILE *f, char sep, char lastSep);
 
 /* name of database table in hgcentral */
 #define WIKI_TRACK_TABLE "wikiTrack"
+#define WIKI_TRACK_LABEL "Wiki Track"
+#define WIKI_TRACK_LONGLABEL "Wiki Track user annotations"
 
 /* hgc variables */
 #define G_CREATE_WIKI_ITEM "htcCreateWikiItem"

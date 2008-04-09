@@ -9,7 +9,7 @@
 #include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.12 2008/04/08 23:36:37 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.13 2008/04/09 23:10:13 hiram Exp $";
 
 
 static void wikiTrackMapItem(struct track *tg, struct hvGfx *hvg, void *item,
@@ -176,12 +176,12 @@ if (wikiTrackEnabled(database, NULL))
 
     linkedFeaturesMethods(tg);
     AllocVar(tdb);
-    tg->mapName = "wikiTrack";
+    tg->mapName = WIKI_TRACK_TABLE;
     tg->canPack = TRUE;
     tg->visibility = tvHide;
-    tg->hasUi = FALSE;
-    tg->shortLabel = cloneString("Wiki Track");
-    safef(longLabel, sizeof(longLabel), "Wiki Track user annotations");
+    tg->hasUi = TRUE;
+    tg->shortLabel = cloneString(WIKI_TRACK_LABEL);
+    safef(longLabel, sizeof(longLabel), WIKI_TRACK_LONGLABEL);
     tg->longLabel = longLabel;
     tg->loadItems = wikiTrackLoadItems;
     tg->itemName = linkedFeaturesName;
