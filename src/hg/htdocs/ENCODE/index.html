@@ -6,6 +6,7 @@
     <META name="keywords" content="ENCODE, project, ENCODE project, genome, genome browser, human genome, Blat, UCSC, bioinformatics, gene prediction, SNP, EST, mRNA, NHGRI, NISC">
     <TITLE>ENCODE Project at UCSC</TITLE>
     <LINK REL="STYLESHEET" HREF="../style/HGStyle.css">
+    <link href="HGStyle.css" rel="stylesheet" type="text/css">
   </HEAD>
 
   <BODY BGCOLOR="FFF9D2" LINK="0000CC" VLINK="#330066" ALINK="#6600FF">
@@ -15,6 +16,9 @@
     <TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH="100%">
       <TR>
         <TH COLSPAN=2 ALIGN="left">&nbsp;&nbsp;
+<!--
+          <A HREF="http://www.genome.gov/10005107" TARGET=_blank><IMG SRC="../EncodeDNALogo_transparent.png" height=102 ALT="ENCODE Project at NHGRI"></A>
+-->
           <A HREF="http://www.genome.gov/10005107" TARGET=_blank><IMG SRC="../images/encodelogo.gif" height=50 ALT="ENCODE Project at NHGRI"></A>
           &nbsp;&nbsp;
           <IMG SRC="../images/encode.jpg" ALT="ENCODE Project at UCSC">
@@ -22,6 +26,7 @@
       </TR>
 
       <TR><TD COLSPAN=2 HEIGHT=40><!--#include virtual="../inc/encode.home.topbar.html"--></TD></TR>
+      </TR>
 
     <TR HEIGHT="100%" VALIGN="top">
     <TD ROWSPAN="3" VALIGN="top" HEIGHT="100%"> 
@@ -35,16 +40,20 @@
             <TABLE WIDTH="100%" BORDER=0 CELLSPACING="0" CELLPADDING=10>
                 <TR HEIGHT="100%">
 	        <TD BGCOLOR="738ED3" VALIGN="top" HEIGHT="100%" > 
-	        <A CLASS="leftbar" HREF="encode.hg18.html">
-		   Regions (hg18)</A><HR>
-	        <A CLASS="leftbar" HREF="encode.hg17.html">
-		   Regions (hg17)</A><HR>
+                <A CLASS="leftbar" HREF="../cgi-bin/hgGateway">
+		   Genome Browser</A>
+	        <HR>
+	        <A CLASS="leftbar" HREF="pilot.html">
+		   ENCODE Pilot Project</A>
+	        <HR>
                 <A CLASS="leftbar" HREF="trackStatus.html">
-                    Data Status</a> <HR>
+                    Data Status</a> <HR> 
 	        <A CLASS="leftbar" HREF="http://hgdownload.cse.ucsc.edu/goldenPath/encode/index.html">
 		   Downloads</A><HR>
-	        <A CLASS="leftbar" HREF="submission.html">
-		   Submission</A><HR>
+	        <A HREF="mailto:&#107;&#97;t&#101;&#64;&#115;&#111;e.&#117;&#99;&#115;&#99;.&#101;&#100;u"
+		    TARGET=_blank class="leftbar">
+		   Submission</A>
+	        <HR>
 	        <A CLASS="leftbar" HREF="../cgi-bin/hgLiftOver">
 		   Tools</A><HR>
                 <A CLASS="leftbar" HREF="releaseLog.html">
@@ -53,9 +62,11 @@
 		   Contributors</a><HR>
 	        <A CLASS="leftbar" HREF="terms.html">
 		   Terms of Use</a><HR>
+<!--
 		<BR>&nbsp<HR>
                 <A CLASS="leftbar" HREF="../cgi-bin/hgGateway">
 		   Genome Browser</A><HR>
+-->
                 <A CLASS="leftbar" HREF="../contacts.html">
 		   Contact Us</A><HR>
  	        <BR>
@@ -74,82 +85,95 @@
             <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
                 <TR><TD>	
 
-	        <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH="100%"><TR><TD>
+	        <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH="100%"><TR>
+	          <TD>
 	            <A NAME="About"></A><FONT SIZE="4"><B>&nbsp; 
-		    About the ENCODE Project</B></FONT>
-	        </TD></TR></TABLE>
+		    About the ENCODE project at UCSC</B></FONT></TD>
+	        </TR></TABLE>
 	
 	        <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
                   <TR><TH HEIGHT=3></TH></TR>
                   <TR><TD WIDTH=10></TD><TD>
 	            <P>
-		    Welcome to the UCSC ENCODE Project portal. 
-		    This site contains information related to the 
-		    <A HREF="http://www.genome.gov/10005107" 
-		    TARGET=_blank>ENCODE</A> project at 
-		    <A HREF="http://www.genome.gov/" TARGET=_blank>NHGRI</A>. 
+		    The UCSC Genome Browser displays data gathered through the 
+		    Encyclopedia of DNA Elements 
+		    (<A HREF="http://www.genome.gov/10005107" 
+		    TARGET=_blank>ENCODE</A>) project of the National Human 
+		    Genome Research  Institute 
+		    (<A HREF="http://www.genome.gov/" TARGET=_blank>NHGRI)</A>, 
+		    which aims to build a comprehensive parts list of the 
+		    functional elements throughout the human genome. The  
+		    project is driven by a highly interactive public research 
+		    consortium. 
 		    The University of California Santa Cruz 
 		    (<A HREF="http://www.ucsc.edu/public/" 
-		    TARGET=_blank>UCSC</A>) manages the official repository of 
-		    sequence-related data for the ENCODE Consortium and 
-		    supports the coordination of data submission, storage, 
-		    retrieval, and visualization. 
+		    TARGET=_blank>UCSC</A>) is the official data coordination 
+		    center for the ENCODE project, supporting data submission, 
+		    organization, storage, retrieval, and visualization. 
 		    <A HREF="http://www.ensembl.org/Homo_sapiens/encode.html" 
 		    TARGET=_blank>Ensembl</A>, a joint project of
 		    EBI and the Wellcome Trust Sanger Institute, coordinates
-		    much of the analysis effort. 
-		    <!--
-		    <A HREF="about.html">Read more</A>. </P> 
-		    -->
+		    much of the analysis effort. </P>
+	            <P>
+		    To access the ENCODE data in the 
+		    <A HREF="../cgi-bin/hgGateway?org=human">Genome Browser</A>,
+		    go to your region of interest in the human genome and turn 
+		    on the ENCODE-related tracks. See the Genome Browser 
+		    <A HREF="../goldenPath/help/hgTracksHelp.html">User's 
+		    Guide</A> for information about displaying tracks and
+		    navigating in the Genome Browser.</A>
+		    If you would like to submit your ENCODE data to the 
+		    Genome Browser, click the 
+		    <A HREF="mailto:<A HREF="mailto:&#107;&#97;t&#101;&#64;&#115;&#111;e.&#117;&#99;&#115;&#99;.&#101;&#100;u"
+		    TARGET=_blank>Submission</A> link for more information.</P>
+<!--
+	            <P>UCSC figured actively in the <a href="pilot.html">pilot 
+		    phase</a> of the ENCODE project, which targeted regions 
+		    amounting to about 1% of the genome, and continues to 
+		    support the project, which  entered the full-genome phase 
+		    in the fall of 2007. In addition to serving as the official 
+		    repository of the sequence-related data for the ENCODE 
+		    consortium, the UCSC group has a special interest in 
+		    comparative genomics and provides additional 
+		    resources for the ENCODE groups working in this area.
+-->
 		    <P>
-		    To view the ENCODE data on the NCBI Build 36 human assembly
-		    (March 2006), click the <A HREF="encode.hg18.html">Regions 
-		    (hg18)</A> link in the left sidebar menu. To view data on
-                    the  previous ENCODE reference assembly (May 2004, hg17, Build 35)
-                    that was used as the basis of the June 2007 Nature and Genome
-                    Research publications, 
-                    click the <A HREF="encode.hg17.html">Regions (hg17)</A> 
-		    link.
-                    <P>
-                    The data from ENCODE contributors
-                    that has been released by UCSC is listed on the 
-                    <A HREF="releaseLog.html">release log 
-		    page</A>. Primary data for ENCODE is available from the 
-                    <A HREF="http://www.ncbi.nlm.nih.gov/projects/geo/info/ENCODE.html"
-		    TARGET=_blank>NCBI GEO</A> and 
-		    <A HREF="http://www.ebi.ac.uk/arrayexpress/"
-		    TARGET=_blank>EBI ArrayExpress</A> public array data 
-		    repositories.  Ensembl provides an 
-		    <A HREF="http://www.ensembl.org/Homo_sapiens/encode.html"
-                    TARGET=_blank>ENCODE resource page</A>, and NHGRI provides 
-		    the <A HREF="http://research.nhgri.nih.gov/ENCODEdb"
-                    TARGET=_blank>ENCODEdb</A> portal.</P>
+		    To view data and information from the ENCODE project pilot 
+		    phase, which targeted regions amounting to about 1% of the 
+		    human genome, click the <A HREF="pilot.html">ENCODE Pilot 
+		    Project</A> link.</P>
 		    <P>
-		    We'd like to thank NHGRI and the contributors of 
+		    We thank NHGRI and those who have contributed 
 		    annotations and analyses to this project. 
 		    This portal is maintained by the 
 		    UCSC Genome Bioinformatics Group, a cross-departmental 
 		    team within the Center for Biomolecular Science and 
 		    Engineering (<A HREF="http://www.cbse.ucsc.edu/" 
-		    TARGET=_blank>CBSE</A>) at UCSC. The individuals who 
+		    TARGET=_blank>CBSE</A>) at UCSC. Click the 
+		    <A HREF="contributors.html">Contributors</A> link 
+		    for a complete list of the ENCODE data contributors
+		    and the UCSC staff who develop and maintain this website.
+		    </P>
+<!--
+		    The individuals who 
 		    develop and maintain this website include
                     <A HREF="mailto:&#107;&#97;t&#101;&#64;&#115;&#111;e.&#117;&#99;&#115;&#99;.&#101;&#100;u"
 		    TARGET=_blank>Kate Rosenbloom</A>, 
                     <A HREF="mailto:&#104;&#97;rt&#101;r&#97;&#64;&#115;&#111;e.&#117;&#99;&#115;&#99;.&#101;&#100;u"
 		    TARGET=_blank>Rachel Harte</A>, 
-                    <A HREF="mailto:t&#105;n&#103;w&#97;n&#103;&#64;&#115;&#111;e.&#117;&#99;&#115;&#99;.&#101;&#100;u"
+                    <A HREF="mailto:&#116;&#105;&#110;&#103;&#119;&#97;&#110;&#103;&#64;&#115;&#111;&#101;&#46;&#117;&#99;&#115;&#99;&#46;&#101;&#100;&#117;"
                     TARGET=_blank>Ting Wang</A>, 
                     <A HREF="http://www.soe.ucsc.edu/~kent/"
-		    TARGET=_blank>Jim Kent</A>, and the 
+		    TARGET=_blank>Jim Kent</A>, <A HREF="mailto:&#102;&#97;&#110;&#104;&#115;&#117;&#64;&#115;&#111;&#101;&#46;&#117;&#99;&#115;&#99;&#46;&#101;&#100;&#117;"
+		    TARGET=_blank>Fan Hsu</A>, <A HREF="mailto:&#107;&#97;&#121;&#108;&#97;&#64;&#115;&#111;&#101;&#46;&#117;&#99;&#115;&#99;&#46;&#101;&#100;&#117;" TARGET=_blank>Kayla Smith</A>, and the 
 		    <A HREF="../staff.html">UCSC Genome Bioinformatics 
-		    staff</A>, with input from
-                    <A HREF="http://www.soe.ucsc.edu/~daryl" 
-		    TARGET=_blank>Daryl Thomas</A>.</P>
+		    staff</A>.</P>
+-->
 		    <P>
- 		    To go to the main UCSC Genome Browser site
-		    that provides access to sequence and annotation data
-		    for a large collection of genome assemblies, click 
-		    <A HREF="../index.html">here</A>. </P>
+ 		    Click <A HREF="../index.html">here</A> to go to 
+		    the main UCSC Genome Browser site, which provides access to 
+		    sequence and annotation data for a large collection of 
+		    genome assemblies.</P>
 	          </TD><TD WIDTH=15>
                 </TD></TR></TABLE>
 	    <BR></TD></TR></TABLE>
@@ -177,19 +201,15 @@
 		<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
     		  <TR><TH HEIGHT=3></TH></TR>
     		  <TR><TD WIDTH=10></TD><TD>
-		    <P>
+		    <P></P>
 <!-- start news item -->
-		    <P>
 		    <FONT FACE="courier" SIZE=3><B>4 Oct. 2007 - ENCODE Genome Browser Released for hg18 Assembly</B></FONT><BR>
 		    <P>
 		    The ENCODE browser for UCSC human genome assembly hg18 
 		    (NCBI Build 36) is now available. You can access the browser
-		    directly at 
-		    <A HREF="encode.hg18.html">http://genome.ucsc.edu/ENCODE/encode.hg18.html</A> 
-		    or by clicking the ENCODE link on the Genome Browser 
-		    <A HREF="../index.html">home page</A>, then
-		    selecting the Regions (hg18) item in the sidebar menu on 
-		    the ENCODE portal page.</P>
+		    directly by clicking <A HREF="encode.hg18.html">here</A> 
+		    or via the Regions (hg18) link on the 
+		    <A HREF="pilot.html">ENCODE Pilot Project</A> page.</P>
 		    <P>
 		    The hg18 ENCODE browser includes 540 data tables in 59 
 		    browser tracks that were migrated from the hg17 browser. 
@@ -244,7 +264,7 @@
 		    full details of the tables, tracks, and super-tracks 
 		    available at the UCSC ENCODE portal on the UCSC
                     <A HREF="http://genomewiki.ucsc.edu/index.php/ENCODE_Hg18_Migration" TARGET=_BLANK>
-                    genomeWiki</A>.</P>
+                    Genome Browser wiki</A>.</P>
 		    <P>
 		    The UCSC team members who contributed to this effort were:
 		    Andy Pohl (data conversion and database loading), Ting Wang
@@ -256,18 +276,6 @@
 
 <!-- end news item --> 
 <!-- start archived item section-->
-		    <HR>
-		    <FONT FACE="courier" SIZE=3><B>13 Jun. 2007 - ENCODE Findings Published in <em>Nature</em> and <em>Genome Research</em>: </B></FONT>
-		    The findings of the ENCODE project have been
-		    released to the public today, the culmination of a 
-		    four-year effort to catalog the biologically functional 
-		    elements in 1 percent of the human genome. 
-		    <A HREF="newsarch.html#061307">Read more</A>.</P>
-		    <P>
-		    <FONT FACE="courier" SIZE=3><B>12 Jun. 2007 - Spring 2007 ENCODE News: </B></FONT>
-		    Between January and May of 2007, several new or upgraded 
-		    data tracks were released by UCSC.
-		    <A HREF="newsarch.html#061207">Read more</A>.</P>
 <!-- end archived item section--> 
 		    <P></P>
     	          </TD><TD WIDTH=15></TD></TR>
