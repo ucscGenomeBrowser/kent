@@ -9,7 +9,7 @@
 #include "paraLib.h"
 #include "paraMessage.h"
 
-static char const rcsid[] = "$Id: parasol.c,v 1.30 2005/02/25 21:50:16 galt Exp $";
+static char const rcsid[] = "$Id: parasol.c,v 1.31 2008/04/09 18:25:40 kate Exp $";
 
 struct rudp *hubRudp;	/* Network connection to paraHub. */
 char *userName;	/* Name of user. */
@@ -30,8 +30,8 @@ errAbort(
   "intended primarily for system administrators.  The 'para' command\n"
   "is the primary command for users.\n"
   "Usage in brief:\n"
-  "   parasol add machine machineName localTempDir  - Add new machine to pool.\n"
-  "   parasol remove machine machineName \"reason why\"  - Remove machine from pool.\n"
+  "   parasol add machine machineFullHostName localTempDir  - Add new machine to pool.\n"
+  "   parasol remove machine machineFullHostName \"reason why\"  - Remove machine from pool.\n"
   "   parasol add spoke  - Add a new spoke daemon.\n"
   "   parasol [options] add job command-line   - Add job to list.\n"
   "         options: -out=out -in=in -dir=dir -results=file -verbose\n"
