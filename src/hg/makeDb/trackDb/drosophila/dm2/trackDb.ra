@@ -67,6 +67,7 @@ type bed 6 +
 mafTrack multiz15way
 speciesOrder droSim1 droSec1 droYak2 droEre2 droAna3 dp4 droPer1 droWil1 droVir3 droMoj3 droGri2 anoGam1 apiMel2 triCas2
 
+
 track affyDrosDevSignal
 compositeTrack on
 shortLabel Affy Signal
@@ -256,6 +257,213 @@ type bed 3 .
     longLabel Affymetrix Drosophila Development Transfrags, 22-24 hours
     color 50,50,240
     priority 12
+
+
+track bdtnpChipper
+compositeTrack on
+subGroup1 fdr FDR 1=1% 25=25%
+subGroup2 factor Factor BCD=bcd CAD=cad GT=gt HB=hb KNI=kni KR=Kr POLII=PolII Z=zeste
+shortLabel BDTNP ChIP/chip
+longLabel Berkeley Drosophila Transcription Network Project Transcription Factor ChIP/chip
+group regulation
+priority 71
+visibility hide
+type wig 0.0 30.86
+viewLimits 1:10
+maxHeightPixels 100:50:20
+autoScale off
+
+    track bdtnpBcd1Fdr1
+    subTrack bdtnpChipper
+    subGroups fdr=1 factor=BCD
+    shortLabel bcd AB 1 FDR  1%
+    longLabel bicoid (bcd) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 1%
+    color 50,50,200
+    priority 1
+
+    track bdtnpBcd1Fdr25
+    subTrack bdtnpChipper
+    subGroups fdr=25 factor=BCD
+    shortLabel bcd AB 1 FDR 25%
+    longLabel bicoid (bcd) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 25%
+    color 25,150,25
+    priority 2
+
+    track bdtnpBcd2Fdr1
+    subTrack bdtnpChipper
+    subGroups fdr=1 factor=BCD
+    shortLabel bcd AB 2 FDR  1%
+    longLabel bicoid (bcd) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 1%
+    color 50,50,200
+    priority 3
+
+    track bdtnpBcd2Fdr25
+    subTrack bdtnpChipper
+    subGroups fdr=25 factor=BCD
+    shortLabel bcd AB 2 FDR 25%
+    longLabel bicoid (bcd) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 25%
+    color 25,150,25
+    priority 4
+
+    track bdtnpCad1Fdr1
+    subTrack bdtnpChipper
+    subGroups fdr=1 factor=CAD
+    shortLabel cad AB 1 FDR  1%
+    longLabel  caudal (cad) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 1%
+    color 50,50,200
+    priority 5
+
+    track bdtnpCad1Fdr25
+    subTrack bdtnpChipper
+    subGroups fdr=25 factor=CAD
+    shortLabel cad AB 1 FDR 25%
+    longLabel caudal (cad) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 25%
+    color 25,150,25
+    priority 6
+
+    track bdtnpGt2Fdr1
+    subTrack bdtnpChipper
+    subGroups fdr=1 factor=GT
+    shortLabel gt AB 2 FDR  1%
+    longLabel giant (gt) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 1%
+    color 50,50,200
+    priority 7
+
+    track bdtnpGt2Fdr25
+    subTrack bdtnpChipper
+    subGroups fdr=25 factor=GT
+    shortLabel gt AB 2 FDR 25%
+    longLabel giant (gt) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 25%
+    color 25,150,25
+    priority 8
+
+    track bdtnpHb1Fdr1
+    subTrack bdtnpChipper
+    subGroups fdr=1 factor=HB
+    shortLabel hb AB 1 FDR  1%
+    longLabel hunchback (hb) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 1%
+    color 50,50,200
+    priority 9
+
+    track bdtnpHb1Fdr25
+    subTrack bdtnpChipper
+    subGroups fdr=25 factor=HB
+    shortLabel hb AB 1 FDR 25%
+    longLabel hunchback (hb) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 25%
+    color 25,150,25
+    priority 10
+
+    track bdtnpHb2Fdr1
+    subTrack bdtnpChipper
+    subGroups fdr=1 factor=HB
+    shortLabel hb AB 2 FDR  1%
+    longLabel hunchback (hb) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 1%
+    color 50,50,200
+    priority 11
+
+    track bdtnpHb2Fdr25
+    subTrack bdtnpChipper
+    subGroups fdr=25 factor=HB
+    shortLabel hb AB 2 FDR 25%
+    longLabel hunchback (hb) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 25%
+    color 25,150,25
+    priority 12
+
+    track bdtnpKni1Fdr1
+    subTrack bdtnpChipper
+    subGroups fdr=1 factor=KNI
+    shortLabel kni AB 1 FDR  1%
+    longLabel knirps (kni) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 1%
+    color 50,50,200
+    priority 13
+
+    track bdtnpKni1Fdr25
+    subTrack bdtnpChipper
+    subGroups fdr=25 factor=KNI
+    shortLabel kni AB 1 FDR 25%
+    longLabel knirps (kni) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 25%
+    color 25,150,25
+    priority 14
+
+    track bdtnpKni2Fdr1
+    subTrack bdtnpChipper
+    subGroups fdr=1 factor=KNI
+    shortLabel kni AB 2 FDR  1%
+    longLabel knirps (kni) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 1%
+    color 50,50,200
+    priority 15
+
+    track bdtnpKni2Fdr25
+    subTrack bdtnpChipper
+    subGroups fdr=25 factor=KNI
+    shortLabel kni AB 2 FDR 25%
+    longLabel knirps (kni) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 25%
+    color 25,150,25
+    priority 16
+
+    track bdtnpKr1Fdr1
+    subTrack bdtnpChipper
+    subGroups fdr=1 factor=KR
+    shortLabel Kr AB 1 FDR  1%
+    longLabel Kruppel (Kr) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 1%
+    color 50,50,200
+    priority 17
+
+    track bdtnpKr1Fdr25
+    subTrack bdtnpChipper
+    subGroups fdr=25 factor=KR
+    shortLabel Kr AB 1 FDR 25%
+    longLabel Kruppel (Kr) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 25%
+    color 25,150,25
+    priority 18
+
+    track bdtnpKr2Fdr1
+    subTrack bdtnpChipper
+    subGroups fdr=1 factor=KR
+    shortLabel Kr AB 2 FDR  1%
+    longLabel Kruppel (Kr) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 1%
+    color 50,50,200
+    priority 19
+
+    track bdtnpKr2Fdr25
+    subTrack bdtnpChipper
+    subGroups fdr=25 factor=KR
+    shortLabel Kr AB 2 FDR 25%
+    longLabel Kruppel (Kr) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 25%
+    color 25,150,25
+    priority 20
+
+    track bdtnpPolIIFdr1
+    subTrack bdtnpChipper
+    subGroups fdr=1 factor=POLII
+    shortLabel PolII AB FDR  1%
+    longLabel RNA Polymerase II (PolII) antibody, stage 4-5 embryos, False Discovery Rate (FDR) 1%
+    color 50,50,200
+    priority 21
+
+    track bdtnpPolIIFdr25
+    subTrack bdtnpChipper
+    subGroups fdr=25 factor=POLII
+    shortLabel PolII AB FDR 25%
+    longLabel RNA Polymerase II (PolII) antibody, stage 4-5 embryos, False Discovery Rate (FDR) 25%
+    color 25,150,25
+    priority 22
+
+    track bdtnpZ2Fdr1
+    subTrack bdtnpChipper
+    subGroups fdr=1 factor=Z
+    shortLabel z AB 2 FDR  1%
+    longLabel zeste (z) antibody 2, stage 11 embryos, False Discovery Rate (FDR) 1%
+    color 50,50,200
+    priority 23
+
+    track bdtnpZ2Fdr25
+    subTrack bdtnpChipper
+    subGroups fdr=25 factor=Z
+    shortLabel z AB 2 FDR 25%
+    longLabel zeste (z) antibody 2, stage 11 embryos, False Discovery Rate (FDR) 25%
+    color 25,150,25
+    priority 24
 
 
 track flyFeepComposite

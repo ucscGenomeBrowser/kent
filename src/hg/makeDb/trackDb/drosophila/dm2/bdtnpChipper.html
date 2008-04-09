@@ -1,0 +1,104 @@
+<H2>Description</H2>
+<P>
+This track shows an estimate of the binding activity of several 
+transcription factors in the <em>D. melanogaster</em> blastoderm.  
+Chromatin immunoprecipitation and whole-genome tiling arrays 
+(ChIP/chip) were used (see Li, MacArthur <em>et al.</em>) 
+to map the genomic regions bound by the 
+maternally controlled transcription factors bicoid (bcd) and 
+caudal (cad), as well as the four zygotic &quot;gap&quot; genes:
+hunchback (hb), Kr&uuml;ppel (Kr), knirps (kni), and giant (gt),
+in stage 4-5 embryos.  
+The assay was also performed on an immunoglobulin G (IgG) control 
+for each sample.
+bcd and cad establish the anterior-posterior (A-P) patterning of the 
+embryo.  The four gap genes encode transcription factors 
+that work together to provide the first zygotic patterning along
+the A-P axis of the embryonic trunk.
+The genomic distribution of RNA polymerase II phosphorylated at the
+C-terminal tail has also been determined at the same stage of
+development to help identify transcriptionally active genes.  
+In addition, ChIP/chip was also used to map binding of the
+ubiquitously expressed transcription factor zeste at a later stage of
+embryo development, stage 11 (Moses <em>et al.</em>). 
+Enrichment factors (1 = no enrichment) are shown in separate subtracks 
+for twelve antibodies at false discovery rates (FDR) of 1% and 25%.
+</P>
+
+<H2>Display Conventions and Configuration</H2>
+<P>
+The subtracks within this composite annotation track
+may be configured in a variety of ways to highlight different aspects of the 
+displayed data. The graphical configuration options for the subtracks 
+are shown at the top of the track description page, followed by a list of 
+subtracks. To show only selected subtracks, uncheck the boxes next to 
+the tracks that you wish to hide.  
+For more information about the graphical configuration options, click the 
+<A HREF="../goldenPath/help/hgWiggleTrackHelp.html" TARGET=_blank>Graph
+configuration help</A> link.</P>
+<P>
+Color differences among the subtracks are arbitrary. They provide a
+visual cue for distinguishing between the different false discovery rates.</P>
+
+<H2>Methods</H2>
+<P>
+For bcd, hb, Kr, and kni, two antibody preparations that were
+independently purified against nonoverlapping epitopes were used.
+For cad, gt, PolII and z, only one set of antibodies was used.
+For each purified antibody, two independent replicates of three
+different sample types were analyzed on separate arrays:
+<UL>
+<LI> &quot;Factor immunoprecipitates (IPs)&quot; obtained by 
+     immunoprecipitation using a factor-specific antibody</LI>
+<LI> &quot;immunoglobulin G (IgG) control IPs&quot; obtained by 
+     immunoprecipitation using a normal IgG antibody</LI>
+<LI> &quot;input DNA&quot; obtained from the chromatin prior to 
+     immunoprecipitation</LI>
+</UL>
+for a total of six arrays per antibody.
+
+Mean hybridization intensities for transcription factor IP replicates and 
+IgG control IP replicates were divided by the mean probe intensity 
+in the input DNA samples to produce oligonucleotide ratio values.
+The logarithms of the oligonucleotide ratios were averaged in windows of 
+675 bp centered around each probe (after discarding the highest and lowest 
+values, to produce a &quot;trimmed mean&quot;) to produce window scores.
+Bound regions were identified by comparing window scores to expected score 
+distributions computed from a symmetric null distribution.
+The symmetric null method assumes that the background window 
+score distribution is symmetric about its mean, and estimates the 
+distribution from values less than the observed mode.  
+This estimated null distribution was used to assign p-values to each 
+window score, and these were corrected for multiple testing to control 
+the FDR.  
+</P>
+
+<H2>Credits</H2>
+<P>
+Thanks to the 
+<A HREF="http://bdtnp.lbl.gov/Fly-Net/" TARGET=_BLANK>Berkeley Drosophila 
+Transcription Network Project</A>'s 
+<A HREF="http://bdtnp.lbl.gov/Fly-Net/chipchip.jsp?w=summary"
+TARGET=_BLANK><em>In Vivo</em> DNA Binding</A> collaboration,
+and Stewart MacArthur and Mark Biggin in particular, for these data.
+
+
+<H2>References</H2>
+<P>
+Li XY, MacArthur S, Bourgon R, Nix D, Pollard DA, Iyer VN, Hechmer A,
+Simirenko L, Stapleton M, Luengo Hendriks CL, Chu HC, Ogawa N, Inwood W,
+Sementchenko V, Beaton A, Weiszmann R, Celniker SE, Knowles DW,
+Gingeras T, Speed TP, Eisen MB, Biggin MD.
+<A HREF="http://www.ncbi.nlm.nih.gov/pubmed/18271625?ordinalpos=1&itool=EntrezSystem2.PEntrez.Pubmed.Pubmed_ResultsPanel.Pubmed_RVDocSum"
+TARGET=_BLANK>Transcription factors bind thousands of active and inactive 
+regions in the Drosophila blastoderm</A>.
+<A HREF="http://biology.plosjournals.org/perlserv/?request=get-document&doi=10.1371/journal.pbio.0060027"
+TARGET=_BLANK><em>PLoS Biol.</em> 2008 Feb;6(2):e27</A>.</P>
+<P>
+Moses AM, Pollard DA, Nix DA, Iyer VN, Li XY, Biggin MD, Eisen MB.
+<A HREF="http://www.ncbi.nlm.nih.gov/pubmed/17040121?ordinalpos=6&itool=EntrezSystem2.PEntrez.Pubmed.Pubmed_ResultsPanel.Pubmed_RVDocSum"
+TARGET=_BLANK>Large-scale turnover of functional transcription factor 
+binding sites in Drosophila</A>.
+<A HREF="http://www.ploscompbiol.org/article/info:doi/10.1371/journal.pcbi.0020130"
+TARGET=_BLANK><em>PLoS Comput Biol.</em> 2006 Oct;2(10):e130</A>.</P>
+
