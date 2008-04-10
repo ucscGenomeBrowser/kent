@@ -1,7 +1,7 @@
 # for emacs: -*- mode: sh; -*-
 
 # Equus caballus - ??
-#	"$Id: equCab2.txt,v 1.1 2008/03/31 23:49:05 larrym Exp $"
+#	"$Id: equCab2.txt,v 1.2 2008/04/10 23:11:40 larrym Exp $"
 #########################################################################
 # DOWNLOAD SEQUENCE (...
 
@@ -23,6 +23,8 @@ wget --timestamping -r -nd ftp://ftp.broad.mit.edu/pub/assemblies/mammals/horse/
     zcat assembly.quals.gz | grep '^>' | sed -e 's/>//' | sort > contig_names3
     diff contig_names contig_names2
     diff contig_names contig_names3
+    # check for non-ATCG
+    zcat assembly.bases.gz | egrep -v '^>contig' | egrep '[^ATCG]' | wc
 
 no diffs, so the assembly, quality and chromosome files agree.
 
@@ -39,18 +41,368 @@ i.e. lots of unknown fragments
 
 about 1/3 of the previous horse.
 
-Question for hiram:
+Coallesce many unknown chromosomes in Broad data to one chrUnk:
 
-    cd /cluster/data/equCab2/broad/
-    egrep '^chrUn' mapped.agp.chromosome.agp | head
-    chrUn0001       1       5285    1       W       contig_42285    1       5285    +
-    chrUn0001       5286    80612   2       N       75327   fragment        yes
-    chrUn0001       80613   95178   3       W       contig_42286    1       14566   +
-    chrUn0001       95179   95278   4       N       100     fragment        yes
+    cat << '_EOF_' > unk.pl
+#!/usr/bin/env perl
 
-why would there be a fragment in an unknown chromosome? Only the "chrUn0001" has fragments. The other unknown chromosomes are like this:
+# Process unknown regions of mapped.agp.chromosome.agp to create one unknown chromosome.
+#
+# run thus:
+#	./unk.pl < mapped.agp.chromosome.agp > test
 
-    tail mapped.agp.chromosome.agp
-    chrUn9595       1       3001    1       W       contig_55306    1       3001    +
-    chrUn9596       1       3001    1       W       contig_55307    1       3001    +
-    chrUn9597       1       3001    1       W       contig_55308    1       3001    +
+use warnings;
+use strict;
+
+my $seq = 1;
+my $end = 0;	# fixed-up end position (field 3) of current chromosome
+my $prevEnd = 0; # field three of previous "chromosome" (not necessarily the previous line)
+my $count = 0;	# current number of $prevEnd lines seen (used to detect single line Unk chromosomes).
+my $lastNum = "";	# "Unk" number of previous line
+
+my $ungappedLen = 1000;
+
+my $debug = 0;
+my $test = 0;
+
+sub printUnGapped
+{
+# print a non-bridged gap for single line unknown chromosomes.
+    my ($prev) = @_;
+    
+    print "chrUn\t";
+    print $prev + 1, "\t";
+    print $prev + 1000, "\t";
+    print $seq++, "\t";
+    print "N\t$ungappedLen\tclone\tno\n";
+    $test++;
+    return $prev + $ungappedLen;
+}
+
+while(<>) {
+    my @a = split /\s+/;
+    if($a[0] =~ /^chrUn(\d+)/) {
+        my $num = $1;
+        my $newChr = $num ne $lastNum;
+
+        # XXXX
+        if($newChr && $count) {
+            $end = printUnGapped($end);
+        }
+
+        if($newChr) {
+            print "chrUn$num\n" if($debug);
+            $prevEnd = $end;
+        }
+
+        # fixup fields 2 & 3
+        $a[1] += $prevEnd;
+        $a[2] += $prevEnd;
+
+        # fixup sequence
+        $a[3] = $seq++;
+
+        print "chrUn\t";
+        for my $i (1..8) {
+            if(defined($a[$i])) {
+                print $a[$i],"\t";
+            }
+        }
+        print "\n";
+        $end = $a[2];
+        $lastNum = $num;
+        $count = $newChr ? 1 : $count + 1;
+    }
+}
+
+print STDERR "test: $test\n" if($debug);
+'_EOF_'
+
+    unk.pl < mapped.agp.chromosome.agp > test
+
+# Sanity checks on unk.pl run:
+
+    cut -f 6 test | egrep ^contig | wc
+    12980   12980  168740
+    cut -f 6 test | egrep ^contig | sort | uniq | wc
+    12980   12980  168740
+
+
+# create our fixed-up up map file (ucsc.agp)
+
+    cp test ucsc.agp
+    egrep -v '^chrUn' mapped.agp.chromosome.agp >> ucsc.agp
+
+Run makeGenomeDb.pl:
+
+makeGenomeDb.pl failed b/c we forgot to lift the QA files, so we manually lifted them thus:
+
+# Lift contig quality scores to chrom coordinates:
+
+	qaToQac assembly.quals.gz stdout | qacAgpLift ucsc.agp stdin equCab2.qual.qac
+        cd /cluster/data/equCab2/bed/qual
+	qacToWig -fixed /cluster/data/equCab2/broad/equCab2.qual.qac stdout | wigEncode stdin qual.{wig,wib}
+	# run on hgwdev:
+	hgLoadWiggle -pathPrefix=/gbdb/equCab2/wib equCab2 quality qual.wig &
+
+then we restarted makeGenomeDb.pl:
+
+	makeGenomeDb.pl -continue dbDb equCab2.config.ra > & makeGenomeDb.log2 &
+
+and it finished correctly.
+
+# Sanity checks on makeGenomeDb data:
+
+    twoBitToFa equCab2.unmasked.2bit stdout | faSize stdin
+    2510493021 bases (56068733 N's 2454424288 real 2454424288 upper 0 lower) in 34 sequences in 1 files
+    Total size: mean 73838030.0 sd 36872490.7 min 16660 (chrM) max 185838109 (chr1) median 80757907
+    N count: mean 1649080.4 sd 4017533.3
+    U count: mean 72188949.6 sd 35782988.9
+    L count: mean 0.0 sd 0.0
+    %0.00 masked total, %0.00 masked real
+
+    zcat assembly.bases.gz | faSize stdin
+    2428773513 bases (0 N's 2428773513 real 2428773513 upper 0 lower) in 55316 sequences in 1 files
+    Total size: mean 43907.3 sd 67000.2 min 601 (contig_28626) max 916837 (contig_34896) median 16149
+    N count: mean 0.0 sd 0.0
+    U count: mean 43907.3 sd 67000.2
+    L count: mean 0.0 sd 0.0
+    %0.00 masked total, %0.00 masked real
+
+2454424288 - 2428773513 == 25650775
+
+i.e. our file has 25,650,775 more real nucleotides:
+
+    zcat assembly.bases.gz | egrep '^>contig' | tail
+    >contig_55315
+    # consistent with faSize data and length of contig_names
+
+    zcat mapped.agp.chromosome.fasta.gz | faSize stdin &
+    2500873361 bases (46465733 N's 2454407628 real 2454407628 upper 0 lower) in 10096 sequences in 1 files
+    Total size: mean 247709.3 sd 1055871.2 min 3000 (Un9604.1-3000) max 5000000 (1.1-5000000) median 4235
+    N count: mean 4602.4 sd 24700.2
+    U count: mean 243106.9 sd 1042172.0
+    L count: mean 0.0 sd 0.0
+    %0.00 masked total, %0.00 masked real
+
+This file is consistent with our gaps:
+
+(56068733 - 46465733) - (9603 * 1000) == 0
+
+Our file has extra real nucleotides:
+
+2454424288 - 2454407628 == 16660
+
+Which is OK, b/c that's the size of ChrM.
+
+Problem is that their assembly uses the same contigs in different chromosomes;
+see broad/dupes.txt; e.g. contig_31550 is at the end of chr27 and chr6
+and broad/dupes.agp
+
+egrep -v "^track" dupes.agp | awk '{print $3-$2+1}' | ave stdin
+total 51268230.000000
+
+51268230 / 2 == 25634115
+
+So there are 25,634,115 duplicated bps.
+
+((2454424288 - 16660) - 25634115) - 2428773513 == 0
+
+i.e. if you take dupes and chrM into account, our data agrees with their raw data.
+
+#########################################################################
+# REPEATMASKER (DONE - 2008-04-03 - larrym)
+    ssh kkstore05
+    screen # use a screen to manage this job
+    mkdir /cluster/data/equCab2/bed/repeatMasker
+    cd /cluster/data/equCab2/bed/repeatMasker
+
+    doRepeatMasker.pl -buildDir=/cluster/data/equCab2/bed/repeatMasker -bigClusterHub=pk equCab2 >& do.log &
+
+    # XXXX Hiram, I had to run this on hgwdev to get access to mysql; does that make sense?
+    time featureBits equCab2 rmsk >& fb.equCab2.rmsk.txt &
+    #   1004742864 bases of 2454424288 (40.936%) in intersection
+
+    # RepeatMasker and lib version from do.log:
+    #   RepeatMasker version development-$Id: equCab2.txt,v 1.2 2008/04/10 23:11:40 larrym Exp $
+    #   Jan 11 2008 (open-3-1-9) version of RepeatMasker
+    #	CC   RELEASE 20071204
+
+    # Compare coverage to previous assembly:
+    featureBits equCab1 rmsk
+    994130286 bases of 2421923695 (41.047%) in intersection
+
+#########################################################################
+# SIMPLE REPEATS TRF (DONE - 2008-04-03 - larrym)
+    ssh kkstore05
+    screen # use a screen to manage this job
+    mkdir /cluster/data/equCab2/bed/simpleRepeat
+    cd /cluster/data/equCab2/bed/simpleRepeat
+
+    doSimpleRepeat.pl -buildDir=/cluster/data/equCab2/bed/simpleRepeat -bigClusterHub=memk \
+	equCab2 >& do.log &
+
+
+    # add simple repeats to the RepeatMasker repeats:
+    cd /cluster/data/equCab2
+    twoBitMask equCab2.rmsk.2bit -add bed/simpleRepeat/trfMask.bed equCab2.2bit
+
+    twoBitToFa equCab2.2bit stdout | faSize stdin
+    #   2510493021 bases (56068733 N's 2454424288 real 1449746465 upper 1004677823 lower) in 34 sequences in 1 files
+    #   Total size: mean 73838030.0 sd 36872490.7 min 16660 (chrM) max 185838109 (chr1) median 80757907
+    #   N count: mean 1649080.4 sd 4017533.3
+    #   U count: mean 42639601.9 sd 20847778.6
+    #   L count: mean 29549347.7 sd 15784709.4
+    #   %40.02 masked total, %40.93 masked real
+
+    twoBitToFa equCab2.rmsk.2bit stdout | faSize stdin
+    #   2510493021 bases (56068733 N's 2454424288 real 1450129420 upper 1004294868 lower) in 34 sequences in 1 files
+    #   Total size: mean 73838030.0 sd 36872490.7 min 16660 (chrM) max 185838109 (chr1) median 80757907
+    #   N count: mean 1649080.4 sd 4017533.3
+    #   U count: mean 42650865.3 sd 20852722.8
+    #   L count: mean 29538084.4 sd 15779986.2
+    #   %40.00 masked total, %40.92 masked real
+
+    featureBits -countGaps equCab2 rmsk
+    # 1004742864 bases of 2510493021 (40.022%) in intersection
+    # Slightly different from above b/c some repeats include N's in gaps.
+
+    featureBits -bed=rmsk_and_gaps.bed -countGaps equCab2 rmsk gap &
+    cat rmsk_and_gaps.bed | awk "{print $3-$2}" | ave stdin
+    # total 448008
+    1004742864 - 448008 - 1004294868 = -12
+    We don't understand the -12 discrepancy
+
+    # Run on hgwdev:
+    rm /gbdb/equCab2/equCab2.2bit
+    ln -s /cluster/data/equCab2/equCab2.2bit /gbdb/equCab2/equCab2.2bit
+
+########################################################################
+#	add ctgPos2 track (DONE - 2008-04-04 - larrym)
+
+    cd /cluster/data/equCab2/broad
+    ./unk.pl < mapped.agp.chromosome.agp > /dev/null
+    ./mkScaffolds.pl assembly.agp mapped.agp.chromosome.agp >> Contig.bed
+
+    awk '{size = $3-$2; printf "%s\t%d\t%s\t%d\t%d\tW\n", $4, size, $1, $2, $3}' Contig.bed > ctgPos2.tab
+
+    ssh hgwdev
+    cd /cluster/data/equCab2/broad
+    hgLoadSqlTab equCab2 ctgPos2 $HOME/kent/src/hg/lib/ctgPos2.sql ctgPos2.tab
+
+############################################################################
+#  BLATSERVERS ENTRY (DONE - 2008-04-04 - larrym)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("equCab2", "blat10", "17784", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("equCab2", "blat10", "17785", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################
+## DEFAULT POSITION (DONE - 2008-04-04 - larrym)
+#	Set default position to be same as equCab1, as found by a blat search
+    ssh hgwdev
+    hgsql -e 'update dbDb set defaultPos="chr11:52,970,942-52,973,091" \
+	where name="equCab2";' hgcentraltest
+
+############################################################################
+## gold.html, ctgPos2.html etc. (working - 2008-04-09 - larrym)
+
+    grep contig_ mapped.agp.chromosome.agp | awk '{print $3-$2+1}' | ave stdin
+    average 43973.978823
+    count 55815
+    total 2454407628.000000
+
+    # But there is only 55316 uniq contigs:
+    grep contig_ mapped.agp.chromosome.agp | awk '{printf "%s\t%s\t%s\n", $6, $7, $8}' | sort | uniq | wc -l
+    55316
+
+    # working with only unique contigs, we get numbers which agree with the Broad data:
+    grep contig_ mapped.agp.chromosome.agp | awk '{printf "%s\t%s\t%s\n", $6, $7, $8}' | sort | uniq | awk '{print $3-$2+1}' | ave stdin
+    average 43907.251302
+    total 2428773513.000000
+
+#########################################################################
+# Create OOC file for genbank runs (WORKING - 2008-04-09 - larrym)
+
+    1024 * (2.5 / 3.1) == 825.805824
+    # Use -repMatch=825 (based on size -- for human we use 1024, and
+    # horse size is 84% of human judging by twoBitInfo -noNs)
+
+    ssh kkstore05
+    cd /cluster/data/equCab2
+    blat equCab2.2bit /dev/null /dev/null -tileSize=11 \
+	-makeOoc=equCab2.11.ooc -repMatch=825
+
+#########################################################################
+#	make equCab2.chrUn.lift and chrUn.fa
+    ssh hgwdev
+    cd /cluster/data/equCab2/jkStuff
+    grep ^chrUn ../broad/Contig.bed | awk '{printf "%d\t%s\t%d\tchrUn\t156378573\n", $2, $4, $3-$2}' > equCab2.chrUn.lift
+
+    # create FASTA file with chrUn, using Broad scaffold names
+    cp -p /cluster/data/gasAcu1/jkStuff/lft2BitToFa.pl .
+    ./lft2BitToFa.pl ../equCab2.2bit equCab2.chrUn.lift > chrUn.fa &
+
+#########################################################################
+# GENBANK AUTO UPDATE (DONE - 2008-04-10 - larrym)
+    # align with latest genbank process.
+    ssh hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+
+    # edit etc/genbank.conf to add equCab2 just before equCab1
+# equCab2 (Equus caballus)
+equCab2.serverGenome = /cluster/data/equCab2/equCab2.2bit
+equCab2.clusterGenome = /scratch/data/equCab2/equCab2.2bit
+equCab2.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+equCab2.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+equCab2.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+equCab2.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+equCab2.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+equCab2.ooc = /cluster/data/equCab2/equCab2.11.ooc
+equCab2.lift = /cluster/data/equCab2/jkStuff/equCab2.chrUn.lift
+equCab2.align.unplacedChroms = chrUn
+equCab2.genbank.mrna.xeno.load = yes
+equCab2.downloadDir = equCab2
+
+    cvs ci -m "Added equCab2" etc/genbank.conf
+    # update /cluster/data/genbank:
+    make etc-update
+
+    ssh genbank
+    screen	#	use a screen to manage this job
+    cd /cluster/data/genbank
+    time /bin/nice -n 19 bin/gbAlignStep -initial equCab2 &
+    #	logFile: var/build/logs/2008.04.09-11:33:43.equCab2.initalign.log
+    
+    # failed (problem with a machine that didn't have proper rsync, so we rsync'ed that
+    # machine and re-ran the batch):
+    para -retries=6 push
+
+    time /bin/nice -n 19 bin/gbAlignStep -initial -continue=finish equCab2 &
+    # logFile: var/build/logs/2008.04.10-14:21:09.equCab2.initalign.log
+    # 2599.431u 1067.489s 1:03:48.15 95.7%    0+0k 0+0io 10pf+0w
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time /bin/nice -n 19 ./bin/gbDbLoadStep -drop -initialLoad equCab2 &
+    #	logFile: var/dbload/hgwdev/logs/2008.04.10-15:27:13.dbload.log
+    # 567.199u 198.673s 16:48.99 75.9%	0+0k 0+0io 4pf+0w
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+    # add equCab2 to:
+        etc/align.dbs
+        etc/hgwdev.dbs
+    cvs ci -m "Added equCab2 - Equus caballus" etc/align.dbs etc/hgwdev.dbs
+    make etc-update
+
+##
+###
