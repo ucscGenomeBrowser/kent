@@ -18,8 +18,9 @@
 #include "hPrint.h"
 #include "hash.h"
 #include "jsHelper.h"
+#include "hui.h"
 
-static char const rcsid[] = "$Id: jsHelper.c,v 1.8 2008/04/03 00:59:39 larrym Exp $";
+static char const rcsid[] = "$Id: jsHelper.c,v 1.9 2008/04/10 19:33:27 larrym Exp $";
 
 static boolean jsInited = FALSE;
 struct hash *includedFiles = NULL;
@@ -319,14 +320,17 @@ void jsIncludeFile(char *fileName)
 /* Prints out html to include given javascript file from the js directory; suppresses redundant
  *  <script ...> tags if called repeatedly */
 
-/* XXXX I would like to fail if fileName doesn't exist in proper directory, but am
- not sure how to safely locate the HTDOCS directory. */
-
 if(!includedFiles)
     includedFiles = newHash(0);
 if(hashLookup(includedFiles, fileName) == NULL)
     {
+    static char realFileName[2048];
+    safef(realFileName, sizeof(realFileName), "%s/js/%s", hDocumentRoot(), fileName);
+    if(!fileExists(realFileName))
+        {
+        errAbort("jsIncludeFile: javascript fileName: %s doesn't exist.", realFileName);
+        }
     hashAdd(includedFiles, fileName, NULL);
-    hPrintf("<script type='text/javascript' src='/js/%s'></script>\n", fileName);
+    hPrintf("<script type='text/javascript' src='../js/%s'></script>\n", fileName);
     }
 }
