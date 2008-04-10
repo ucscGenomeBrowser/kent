@@ -389,3 +389,21 @@ hgsql rn4 -N -e 'select kgId, kgXref.spId from kgXref,proteome.spReactomeId,prot
 # !!! NOTE: Email the above 5 list files to Gopinathrao, Gopal [gopinath@cshl.edu]
 # AFTER THE NEW PROTEIN DBs ARE RELEASED ON RR.
 
+####################################################################################
+# UPDATE HGNC DATA (DONE, Fan, 4/10/08)
+#
+# Go to http://www.genenames.org/cgi-bin/hgnc_downloads.cgi
+# and generate the Perl program by selecting the 25 variables we use
+# and replace ~/src/hg/protein/getHgnc.pl with this new program and check it
+# in.
+
+# Get HGNC data
+~/src/hg/protein/getHgnc.pl >hgnc.tab
+
+hgsql proteins070202 -e 'delete from hgnc'
+hgsql proteins070202 -e 'load data local infile "hgnc.tab" into table hgnc ignore 1 lines'
+
+pbHgnc 070202
+hgsql proteins070202 -e 'delete from hgncXref'
+hgsql proteins070202 -e 'load data local infile "hgncXref.tab" into table hgncXref'
+
