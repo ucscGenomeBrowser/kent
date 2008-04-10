@@ -11,10 +11,10 @@
 Resume if the previous upload  was interrupted.
 <br/>
 
-  <p><label for="project_upload_file">or Upload local file</label><br/>
+  <p><label for="project_upload_file">or Upload a local file</label><br/>
   <%= file_field_tag 'upload_file', :size => 25 %><br/>
 
-  <p><label for="project_upload_file">or Upload from FTP</label>
+  <p><label for="project_upload_file">or Choose a file from your FTP space</label>
   <A HREF=<%= @ftpUrl -%>> <%= @ftpUrl -%></A><br/>
   <select id="ftp" name="ftp">
      <option selected></option>
@@ -23,11 +23,11 @@ Resume if the previous upload  was interrupted.
      <% end %>
   </select>
   <br/>
-  &nbsp;FTP space is provided for each user.<br/>
+  &nbsp;Use any FTP client to upload your archive to the FTP space provided.<br/>
   &nbsp;The FTP login, site, and port are visible in the link above.<br/>
-  &nbsp;The password is the same.<br/>
-  &nbsp;Archives with the correct extension that have been uploaded to FTP<br/>
-  &nbsp;will appear in the dropdown list above.<br/>
+  &nbsp;Use your same password for FTP. Archives with the correct extension <br/>
+  &nbsp;that have been uploaded to your FTP space will appear in the dropdown list above. <br/>
+  &nbsp;Simply choose the desired archive.<br/>
 
   <table cellpadding=0 cellspacing=0><tr>
   <td><%= submit_tag @autoUploadLabel %></td>
