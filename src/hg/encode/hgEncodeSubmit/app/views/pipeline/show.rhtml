@@ -74,7 +74,9 @@
 <td align="left"><b>File</b></td>
 <td align="left"><b>Size</b></td>
 <td align="left"><b>Updated</b></td>
-<td align="left"><b>Status</b></td>
+<% if current_user.login == "admin" %>
+  <td align="left"><b>Status</b></td>
+<% end %>
 <td></td></tr>
 <% @project.project_archives.reverse_each do |a| %>
   <% n = a.archive_no-1 %>
@@ -87,15 +89,15 @@
   <td><b>Archive</b></td><td><%= a.file_name -%></td>
   <td align="right"><%= a.file_size -%></td>
   <td><%= a.file_date.strftime("%b %d %H:%M") -%></td>
-  <td><%= 
-  if a.status == "schedule uploading" then "schedule uploading"
-  elsif a.status == "schedule expanding" then "schedule expanding"
-  elsif a.status == "see current" then @project.status
-  else a.status
-  end
-  -%></td>
 
   <% if current_user.login == "admin" %>
+    <td><%= 
+    if a.status == "schedule uploading" then "schedule uploading"
+    elsif a.status == "schedule expanding" then "schedule expanding"
+    elsif a.status == "see current" then @project.status
+    else a.status
+    end
+    -%></td>
     <td><%= a.archives_active -%></td>
   <% end %>
 
