@@ -3,6 +3,7 @@
 #include "hash.h"
 #include "errabort.h"
 #include "errCatch.h"
+#include "portable.h"
 #include "hCommon.h"
 #include "dystring.h"
 #include "jksql.h"
@@ -22,7 +23,7 @@
 #include "botDelay.h"
 #include "oligoTm.h"
 
-static char const rcsid[] = "$Id: hgPcr.c,v 1.16 2007/07/13 22:56:41 angie Exp $";
+static char const rcsid[] = "$Id: hgPcr.c,v 1.17 2008/04/10 22:36:26 angie Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -40,7 +41,7 @@ errAbort(
 }
 
 struct pcrServer
-/* Information on a server. */
+/* Information on a server running on genomic assembly sequence. */
    {
    struct pcrServer *next;  /* Next in list. */
    char *db;		/* Database name. */
@@ -49,6 +50,25 @@ struct pcrServer
    char *host;		/* Name of machine hosting server. */
    char *port;		/* Port that hosts server. */
    char *seqDir;	/* Directory of sequence files. */
+   };
+
+struct targetPcrServer
+/* Information on a server running on non-genomic sequence, e.g. mRNA,
+ * that has been aligned to a particular genomic assembly. */
+   {
+   struct targetPcrServer *next;  /* Next in list. */
+   char *name;		/* Target name (targetDb.name ~ blatServers.db). */
+   char *db;		/* Database for assembly to which this target has 
+			 * been aligned. */
+   char *description;	/* Brief description (like shortLabel) of target. */
+   char *host;		/* Name of machine hosting server. */
+   char *port;		/* Port that hosts server. */
+   char *seqDir;	/* Directory of sequence files. */
+   char *pslTable;	/* PSL table in db that maps target coords to db. */
+   char *seqTable;	/* Table in db that has extFileTable indices of 
+			 * target sequences */
+   char *extFileTable;	/* Table in db that has extFileTable indices of 
+			 * target sequences. */
    };
 
 struct pcrServer *getServerList()
@@ -99,6 +119,101 @@ errAbort("Can't find a server for PCR database %s\n", db);
 return NULL;
 }
 
+boolean timeMoreRecentThanTable(int time, struct sqlConnection *conn,
+				char *table)
+/* Return TRUE if the given UNIX time is more recent than the time that 
+ * table was last updated. */
+{
+int tableUpdateTime = sqlTableUpdateTime(conn, table);
+return (time > tableUpdateTime);
+}
+
+boolean timeMoreRecentThanFile(int time, char *fileName)
+/* Return TRUE if the given UNIX time is more recent than the time that
+ * fileName was last updated. */
+{
+int fileUpdateTime = fileModTime(fileName);
+return (time > fileUpdateTime);
+}
+
+struct targetPcrServer *getTargetServerList(char *db)
+/* Get list of available non-genomic-assembly target pcr servers associated 
+ * with db.  There may be none -- that's fine. */
+{
+struct targetPcrServer *serverList = NULL, *server;
+struct sqlConnection *conn = hConnectCentral();
+struct sqlConnection *conn2 = hAllocOrConnect(db);
+struct sqlResult *sr;
+char **row;
+char query[2048];
+
+/* Do a little join to get the targetPcrServer field values. */
+safef(query, sizeof(query),
+      "select t.name, t.db, t.description, b.host, b.port, "
+      "  t.seqFile, t.pslTable, t.seqTable, t.extFileTable, t.time "
+      "from targetDb as t, blatServers as b "
+      "where b.db = t.name and t.db = '%s' and b.canPcr = 1 "
+      "order by t.priority",
+      db);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    /* Keep this server only if its timestamp is newer than the tables
+     * and file on which it depends. */
+    char *name = row[0];
+    char *seqFile = row[5];
+    char *pslTable = row[6],  *seqTable = row[7],  *extFileTable = row[8];
+    char *timeStr = row[9];
+    int time = sqlDateToUnixTime(timeStr);
+    if (timeMoreRecentThanTable(time, conn2, pslTable) &&
+	timeMoreRecentThanTable(time, conn2, seqTable) &&
+	timeMoreRecentThanTable(time, conn2, extFileTable) &&
+	timeMoreRecentThanFile(time, seqFile))
+	{
+	char seqDir[1024];
+	splitPath(seqFile, seqDir, NULL, NULL);
+	if (endsWith("/", seqDir))
+	    seqDir[strlen(seqDir) - 1] = '\0';
+	AllocVar(server);
+	server->name = cloneString(row[0]);
+	server->db = cloneString(row[1]);
+	server->description = cloneString(row[2]);
+	server->host = cloneString(row[3]);
+	server->port = cloneString(row[4]);
+	server->seqDir = cloneString(seqDir);
+	server->pslTable = cloneString(pslTable);
+	server->seqTable = cloneString(seqTable);
+	server->extFileTable = cloneString(extFileTable);
+	slAddHead(&serverList, server);
+	}
+    else
+	/* log directly to stderr instead of telling user */
+	fprintf(stderr, "targetDb entry %s is dated %s -- older than at "
+		"least one of its db tables (%s, %s, %s) "
+		"or its sequence file in %s.\n",
+		name, timeStr, pslTable, seqTable, extFileTable, seqFile);
+    }
+sqlFreeResult(&sr);
+hDisconnectCentral(&conn);
+hFreeOrDisconnect(&conn2);
+slReverse(&serverList);
+return serverList;
+}
+
+struct targetPcrServer *findTargetServer(char *target,
+					 struct targetPcrServer *serverList)
+/* Return server for the given target name. */
+{
+struct targetPcrServer *server;
+for (server = serverList; server != NULL; server = server->next)
+    {
+    if (sameString(target, server->name))
+        return server;
+    }
+errAbort("Can't find a server for PCR target database %s\n", target);
+return NULL;
+}
+
 void doHelp()
 /* Print up help page */
 {
@@ -139,20 +254,30 @@ puts(
 );
 }
 
+#define ORGFORM_KEEP_ORG "document.orgForm.org.value = " \
+    " document.mainForm.org.options[document.mainForm.org.selectedIndex].value; "
+#define ORGFORM_KEEP_DB " document.orgForm.db.value = " \
+    " document.mainForm.db.options[document.mainForm.db.selectedIndex].value; "
+#define ORGFORM_KEEP_PARAMS \
+    " document.orgForm.wp_f.value = document.mainForm.wp_f.value; " \
+    " document.orgForm.wp_r.value = document.mainForm.wp_r.value; " \
+    " document.orgForm.wp_size.value = document.mainForm.wp_size.value; " \
+    " document.orgForm.wp_perfect.value = document.mainForm.wp_perfect.value; " \
+    " document.orgForm.wp_good.value = document.mainForm.wp_good.value; "
+#define ORGFORM_RESET_DB " document.orgForm.db.value = 0; "
+#define ORGFORM_RESET_TARGET " document.orgForm.wp_target.value = \"\"; "
+#define ORGFORM_SUBMIT " document.orgForm.submit();'";
+
+
 void showGenomes(char *genome, struct pcrServer *serverList)
 /* Put up drop-down list with genomes on it. */
 {
 struct hash *uniqHash = hashNew(8);
 struct pcrServer *server;
-char *onChangeText = "onchange=\"document.orgForm.org.value = "
-    " document.mainForm.org.options[document.mainForm.org.selectedIndex].value; "
-    " document.orgForm.wp_f.value = document.mainForm.wp_f.value; "
-    " document.orgForm.wp_r.value = document.mainForm.wp_r.value; "
-    " document.orgForm.wp_size.value = document.mainForm.wp_size.value; "
-    " document.orgForm.wp_perfect.value = document.mainForm.wp_perfect.value; "
-    " document.orgForm.wp_good.value = document.mainForm.wp_good.value; "
-    " document.orgForm.db.value = 0; "
-    " document.orgForm.submit();\"";
+char *onChangeText = "onchange='" ORGFORM_KEEP_PARAMS ORGFORM_KEEP_ORG
+    ORGFORM_RESET_DB
+    ORGFORM_RESET_TARGET
+    ORGFORM_SUBMIT;
 
 printf("<SELECT NAME=\"org\" %s>\n", onChangeText);
 for (server = serverList; server != NULL; server = server->next)
@@ -169,18 +294,40 @@ printf("</SELECT>\n");
 hashFree(&uniqHash);
 }
 
-void showAssemblies(char *genome, char *db, struct pcrServer *serverList)
+void showAssemblies(char *genome, char *db, struct pcrServer *serverList,
+		    boolean submitOnClick)
 /* Put up drop-down list with assemblies on it. */
 {
 struct pcrServer *server;
+char *onChangeText = "onchange='" ORGFORM_KEEP_PARAMS ORGFORM_KEEP_ORG
+    ORGFORM_KEEP_DB
+    ORGFORM_RESET_TARGET
+    ORGFORM_SUBMIT;
 
-printf("<SELECT NAME=\"db\">\n");
+printf("<SELECT NAME=\"db\"%s>\n", submitOnClick ? onChangeText : "");
 for (server = serverList; server != NULL; server = server->next)
     {
     if (sameWord(genome, server->genome))
 	printf("  <OPTION%s VALUE=%s>%s</OPTION>\n", 
 	    (sameString(db, server->db) ? " SELECTED" : ""), 
 	    server->db, server->description);
+    }
+printf("</SELECT>\n");
+}
+
+void showTargets(char *target, struct targetPcrServer *serverList)
+/* Put up drop-down list with targets on it. */
+{
+struct targetPcrServer *server;
+
+printf("<SELECT NAME=\"wp_target\">\n");
+printf("  <OPTION%s VALUE=genome>genome assembly</OPTION>\n", 
+       (sameString(target, "genome") ? " SELECTED" : ""));
+for (server = serverList; server != NULL; server = server->next)
+    {
+    printf("  <OPTION%s VALUE=%s>%s</OPTION>\n", 
+	   (sameString(target, server->name) ? " SELECTED" : ""), 
+	   server->name, server->description);
     }
 printf("</SELECT>\n");
 }
@@ -232,6 +379,9 @@ void doGetPrimers(char *db, char *organism, struct pcrServer *serverList,
 /* Put up form to get primers. */
 {
 redoDbAndOrgIfNoServer(serverList, &db, &organism);
+struct sqlConnection *conn = hConnectCentral();
+boolean gotTargetDb = sqlTableExists(conn, "targetDb");
+hDisconnectCentral(&conn);
 
 printf("<FORM ACTION=\"../cgi-bin/hgPcr\" METHOD=\"GET\" NAME=\"mainForm\">\n");
 cartSaveSession(cart);
@@ -245,8 +395,21 @@ printf("%s", "</TD>\n");
 
 printf("%s", "<TD><CENTER>\n");
 printf("Assembly:<BR>");
-showAssemblies(organism, db, serverList);
+showAssemblies(organism, db, serverList, gotTargetDb);
 printf("%s", "</TD>\n");
+
+if (gotTargetDb)
+    {
+    struct targetPcrServer *targetServerList = getTargetServerList(db);
+    if (targetServerList != NULL)
+	{
+	char *target = cartUsualString(cart, "wp_target", "genome");
+	printf("%s", "<TD><CENTER>\n");
+	printf("Target:<BR>");
+	showTargets(target, targetServerList);
+	printf("%s", "</TD>\n");
+	}
+    }
 
 printf("%s", "<TD COLWIDTH=2><CENTER>\n");
 printf("Forward Primer:<BR>");
@@ -292,7 +455,7 @@ printf("</FORM>\n");
 /* Put up a second form who's sole purpose is to preserve state
  * when the user flips the genome button. */
 printf("<FORM ACTION=\"../cgi-bin/hgPcr\" METHOD=\"GET\" NAME=\"orgForm\">"
-       "<input type=\"hidden\" name=\"wp_foo\" value=\"\">\n"
+       "<input type=\"hidden\" name=\"wp_target\" value=\"\">\n"
        "<input type=\"hidden\" name=\"db\" value=\"\">\n"
        "<input type=\"hidden\" name=\"org\" value=\"\">\n"
        "<input type=\"hidden\" name=\"wp_f\" value=\"\">\n"
@@ -314,7 +477,64 @@ printf("%s", "<P>In-Silico PCR was written by "
 "licenses are also available.  Contact Jim for details.</P>\n");
 }
 
-boolean doPcr(struct pcrServer *server,
+void doQuery(struct pcrServer *server, struct gfPcrInput *gpi,
+	     int maxSize, int minPerfect, int minGood)
+/* Send a query to a genomic assembly PCR server and print the results. */
+{
+struct gfPcrOutput *gpoList =
+    gfPcrViaNet(server->host, server->port, server->seqDir, gpi,
+		maxSize, minPerfect, minGood);
+if (gpoList != NULL)
+    {
+    struct dyString *url = newDyString(0);
+    dyStringPrintf(url, "%s?%s&db=%s", 
+		   hgTracksName(), cartSidUrlString(cart), server->db);
+    dyStringAppend(url, "&position=%s:%d-%d");
+    
+    printf("<TT><PRE>");
+    gfPcrOutputWriteAll(gpoList, "fa", url->string, "stdout");
+    printf("</PRE></TT>");
+    dyStringFree(&url);
+    }
+else
+    {
+    printf("No matches to %s %s in %s %s", gpi->fPrimer, gpi->rPrimer, 
+	   server->genome, server->description);
+    }
+}
+
+void doTargetQuery(struct targetPcrServer *server, struct gfPcrInput *gpi,
+		   int maxSize, int minPerfect, int minGood)
+/* Send a query to a non-genomic target PCR server and print the results. */
+{
+struct gfPcrOutput *gpoList =
+    gfPcrViaNet(server->host, server->port, server->seqDir, gpi,
+		maxSize, minPerfect, minGood);
+if (gpoList != NULL)
+    {
+    struct gfPcrOutput *gpo;
+    char urlFormat[2048];
+    safef(urlFormat, sizeof(urlFormat), "%s?%s&db=%s&position=%%s", 
+	  hgTracksName(), cartSidUrlString(cart), server->db);
+    printf("<TT><PRE>");
+    for (gpo = gpoList;  gpo != NULL;  gpo = gpo->next)
+	{
+	if (gpo->strand == '-')
+	    printf("Warning: this amplification is on the reverse-complement "
+		   "of %s.\n", gpo->seqName);
+	gfPcrOutputWriteOne(gpo, "fa", urlFormat, stdout);
+	printf("\n");
+	}
+    printf("</PRE></TT>");
+    }
+else
+    {
+    printf("No matches to %s %s in %s", gpi->fPrimer, gpi->rPrimer, 
+	   server->description);
+    }
+}
+
+boolean doPcr(struct pcrServer *server, struct targetPcrServer *targetServer,
 	char *fPrimer, char *rPrimer, 
 	int maxSize, int minPerfect, int minGood, boolean flipReverse)
 /* Do the PCR, and show results. */
@@ -328,30 +548,14 @@ if (flipReverse)
 if (errCatchStart(errCatch))
     {
     struct gfPcrInput *gpi;
-    struct gfPcrOutput *gpoList;
 
     AllocVar(gpi);
     gpi->fPrimer = fPrimer;
     gpi->rPrimer = rPrimer;
-    gpoList = gfPcrViaNet(server->host, server->port, 
-    	server->seqDir, gpi, maxSize, minPerfect, minGood);
-    if (gpoList != NULL)
-	{
-	struct dyString *url = newDyString(0);
-	dyStringPrintf(url, "%s?%s&db=%s", 
-	    hgTracksName(), cartSidUrlString(cart), server->db);
-	dyStringAppend(url, "&position=%s:%d-%d");
-
-	printf("<TT><PRE>");
-	gfPcrOutputWriteAll(gpoList, "fa", url->string, "stdout");
-	printf("</PRE></TT>");
-	dyStringFree(&url);
-	}
-    else
-	{
-	printf("No matches to %s %s in %s %s", fPrimer, rPrimer, 
-		server->genome, server->description);
-	}
+    if (server != NULL)
+	doQuery(server, gpi, maxSize, minPerfect, minGood);
+    if (targetServer != NULL)
+	doTargetQuery(targetServer, gpi, maxSize, minPerfect, minGood);
     ok = TRUE;
     }
 errCatchEnd(errCatch);
@@ -400,10 +604,18 @@ if (minGood < minPerfect)
 if (cartVarExists(cart, "wp_f") && cartVarExists(cart, "wp_r") &&
 	!cartVarExists(cart, "wp_showPage"))
     {
+    struct pcrServer *server = NULL;
+    struct targetPcrServer *targetServer = NULL;
+    char *target = cartUsualString(cart, "wp_target", "genome");
+    if (sameString(target, "genome"))
+	server = findServer(db, serverList);
+    else
+	targetServer = findTargetServer(target, getTargetServerList(db));
+
     fPrimer = gfPcrMakePrimer(fPrimer);
     rPrimer = gfPcrMakePrimer(rPrimer);
-    if (doPcr(findServer(db, serverList), fPrimer, rPrimer, maxSize, minPerfect, minGood,
-    	flipReverse))
+    if (doPcr(server, targetServer, fPrimer, rPrimer,
+	      maxSize, minPerfect, minGood, flipReverse))
          return;
     }
 doGetPrimers(db, organism, serverList,
