@@ -19479,6 +19479,78 @@ while (<>) {
     rm -r run*/split *.orthoGlom.txt
 
 
+#######################################################################
+# COMPARE SNP128 TO SNP126 (DONE 2/7/08 angie)
+
+    # First, do a featureBits venn, on some machine other than hgwdev.
+    # I can't find the file from which snp126 was loaded... but kkr5u00
+    # has an hg18snp126 database with a snp126 that is a few hours newer,
+    # but apparently the same as, hgwdev's hg18.snp126... so use that 
+    # (had to add gap tables too):
+    ssh kkr5u00
+    time featureBits hg18snp126 snp126
+#12451939 bases of 2881515245 (0.432%) in intersection
+#57.274u 15.283s 1:20.56 90.0%   0+0k 0+0io 0pf+0w
+    # Now make sure we have a file copy of snp126 in case we need it in
+    # the future:
+    hgsql hg18snp126 -NBe 'select * from snp126' \
+    | cut -f 2-18 \
+      > /cluster/data/dbSNP/126/human/snp126.bed
+
+    rsync /cluster/data/dbSNP/128/human/snp128.bed /scratch/tmp/
+    time featureBits hg18 /scratch/tmp/snp128.bed
+#12387071 bases of 2881515245 (0.430%) in intersection
+#636.834u 47.039s 11:24.02 99.9% 0+0k 0+0io 0pf+0w
+    # OK, db is a lot faster!
+    # I am not worried about the drop -- spot-checking, I have seen some
+    # dropped rsIds and some that used to have multiple mappings but now
+    # have only one mapping -- an improvement.  
+    pushd /cluster/data/dbSNP/128/human
+    hgLoadBed -tab -noSort -onServer -tmpDir=/scratch/tmp \
+      hg18snp126 snp128 -sqlTable=snp128.sql snp128.bed
+    popd
+
+    # How many covered bases in common?
+    time featureBits hg18snp126 snp126 snp128
+#11576806 bases of 2881515245 (0.402%) in intersection
+#114.365u 26.671s 3:15.55 72.1%  0+0k 0+0io 0pf+0w
+
+    # Base coverage Venn counts:
+    #            snp126    snp128   !snp126   !snp128
+    # snp126   12451939  11576806         0    875133
+    # snp128   11576806  12387071    810265         0
+
+    # Do the same for SNPs (rs* records as opposed to bases):
+    hgsql hg18snp126 -NBe 'select name from snp126' \
+    | sort -u > /scratch/tmp/1
+    hgsql hg18snp126 -NBe 'select name from snp128' \
+    | sort -u > /scratch/tmp/2
+    wc -l /scratch/tmp/[12]
+# 11647909 /scratch/tmp/1
+# 11677826 /scratch/tmp/2
+    comm -12 /scratch/tmp/[12] | wc -l
+#11531282
+    cd /cluster/data/dbSNP/128/human
+    comm -23 /scratch/tmp/[12] \
+      > /cluster/data/dbSNP/128/human/ids.inSnp126Not128.txt
+    comm -13 /scratch/tmp/[12] \
+      > /cluster/data/dbSNP/128/human/ids.inSnp128Not126.txt
+
+    # rsId Venn counts:
+    #            snp126    snp128   !snp126   !snp128
+    # snp126   11647909  11531282         0    116627
+    # snp128   11531282  11677826    146544         0
+
+    # Interesting that snp128 has more new rsIds but fewer new bases.
+    # It has been 2 versions since 126... also, when spot-checking
+    # exceptions I noticed that a lot of deletion SNPs used to be
+    # mapped to the appropriate span in 126, but in 128 were mapped to
+    # a single base and had some kind of range*tion locType... not an
+    # improvement.  But that kind of observation best falls out of an
+    # examination of exception cases... and that is what will be
+    # useful for us to report to NCBI.
+
+
 ############################################################################
 #  BLASTZ SELF chain minScore=2000 (DONE - 2007-12-19 - Hiram)
     ssh kkstore02
@@ -20803,3 +20875,90 @@ hgLoadBed hg18 ux16 ux16Hg18.bed
 #############################################################################
     
     
+#############################################################################
+# MAKE PCR TARGET FOR UCSC GENES (DONE 4/10/08 angie)
+    ssh hgwdev
+    mkdir /cluster/data/hg18/bed/mrnaPcr
+    cd /cluster/data/hg18/bed/mrnaPcr
+    # First, get consistent FA and PSL for UCSC Genes.
+    # Initially I tried to use files from /cluster/data/hg18/bed/ucsc.10/:
+    # subColumn 10 /cluster/data/hg18/bed/ucsc.10/rnaToGenome.psl
+    #   /cluster/data/hg18/bed/ucsc.10/txToAcc.tab ucscGenes.hg18.psl
+    # /cluster/data/hg18/bed/ucsc.10/ucscGenes.fa
+    # But the psl was not from exactly the same seq's as in the fa.
+    # Jim's suggestion: use sequenceForBed to get genomic-translated
+    # sequences, and then genePredToFakePsl.  sequenceToBed must be
+    # run on hgwdev.
+    genePredToBed /cluster/data/hg18/bed/ucsc.10/ucscGenes.gp > ucscGenes.bed
+    sequenceForBed -keepName -db=hg18 -bedIn=ucscGenes.bed \
+        -fastaOut=kgTargetSeq.fa
+    cut -f 1-10 /cluster/data/hg18/bed/ucsc.10/ucscGenes.gp \
+    | genePredToFakePsl hg18 stdin kgTargetPsl.psl /dev/null    
+
+    # Load up the UCSC Genes target tables:
+    cd /cluster/data/hg18/bed/mrnaPcr
+    mkdir /gbdb/hg18/targetDb
+    ln -s /cluster/data/hg18/bed/mrnaPcr/kgTargetSeq.fa \
+      /gbdb/hg18/targetDb/
+    hgLoadSeq -seqTbl=kgTargetSeq -extFileTbl=kgTargetExtFile \
+      hg18 /gbdb/hg18/targetDb/kgTargetSeq.fa
+#56722 sequences
+    hgLoadPsl hg18 kgTargetPsl.psl
+
+    ssh kolossus
+    # Start up gfServer for kgTargetSeq:
+    cd /cluster/data/hg18/bed/mrnaPcr
+    faToTwoBit kgTargetSeq.fa kgTargetSeq.2bit
+    gfServer -stepSize=5 -canStop start localhost 17990 kgTargetSeq.2bit &
+
+    ssh hgwdev
+    # Add records to hgcentraltest blatServers and targetDb:
+    ln -s /cluster/data/hg18/bed/mrnaPcr/kgTargetSeq.2bit \
+      /gbdb/hg18/targetDb/
+    hgsql hgcentraltest -e \
+      'INSERT into blatServers values ("hg18Kg", "kolossus", 17990, 0, 1);'
+    hgsql hgcentraltest -e \
+      'INSERT into targetDb values("hg18Kg", "UCSC Genes", \
+         "hg18", "kgTargetPsl", "kgTargetSeq", "kgTargetExtFile", \
+         "/gbdb/hg18/targetDb/kgTargetSeq.2bit", 1, now());'
+
+
+#############################################################################
+# MAKE PCR TARGET FOR SNAPSHOT OF ALL_MRNA (DONE 4/10/08 angie)
+    ssh hgwdev
+    # Load up native mRNA target tables:
+    hgsql hg18 -NBe 'select qName from all_mrna' \
+    | sort -u > mrnaAccs.txt
+    $HOME/kent/src/hg/makeDb/genbank/bin/$MACHTYPE/gbGetSeqs \
+      -gbRoot=/gbdb/genbank -accFile=mrnaAccs.txt \
+      -db=hg18 -native genbank mrna mrnaTargetSeq.fa
+    ln -s /cluster/data/hg18/bed/mrnaPcr/mrnaTargetSeq.fa \
+      /gbdb/hg18/targetDb/
+    hgLoadSeq -seqTbl=mrnaTargetSeq -extFileTbl=mrnaTargetExtFile \
+      hg18 /gbdb/hg18/targetDb/mrnaTargetSeq.fa
+#192308 sequences
+    hgsql hg18 -e ' \
+      create table mrnaTargetPsl select * from all_mrna; \
+      alter table mrnaTargetPsl add index (tName,bin); \
+      alter table mrnaTargetPsl add index (qName);'
+    rm *.tab
+
+    ssh kolossus
+    # Start up gfServer for mrnaTargetSeq:
+    cd /cluster/data/hg18/bed/mrnaPcr
+    faToTwoBit mrnaTargetSeq.fa mrnaTargetSeq.2bit
+    gfServer -stepSize=5 -canStop start localhost 17991 mrnaTargetSeq.2bit &
+
+    ssh hgwdev
+    # Add records to hgcentraltest blatServers and targetDb:
+    ln -s /cluster/data/hg18/bed/mrnaPcr/mrnaTargetSeq.2bit \
+      /gbdb/hg18/targetDb/
+    hgsql hgcentraltest -e \
+      'INSERT into blatServers values ("hg18Mrna", "kolossus", 17991, 0, 1);'
+    hgsql hgcentraltest -e \
+      'INSERT into targetDb values("hg18Mrna", "Human mRNAs", \
+         "hg18", "mrnaTargetPsl", "mrnaTargetSeq", "mrnaTargetExtFile", \
+         "/gbdb/hg18/targetDb/mrnaTargetSeq.2bit", 2, now());'
+
+
+#############################################################################
