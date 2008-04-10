@@ -141,10 +141,6 @@ struct lineFile *netLineFileMayOpen(char *url);
 /* Same as netLineFileOpen, but warns and returns
  * null rather than aborting on problems. */
 
-struct lineFile *netLineFileMayOpenCatchError(char *url);
-/* Same as netLineFileMayOpen, but returns NULL 
- * if there's a problem without printing error.  */
-
 struct dyString *netSlurpFile(int sd);
 /* Slurp file into dynamic string and return. */
 

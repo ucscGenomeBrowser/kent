@@ -14,7 +14,7 @@
 #include "linefile.h"
 #include "base64.h"
 
-static char const rcsid[] = "$Id: net.c,v 1.55 2006/10/06 22:17:38 hiram Exp $";
+static char const rcsid[] = "$Id: net.c,v 1.56 2008/04/10 01:22:32 galt Exp $";
 
 /* Brought errno in to get more useful error messages */
 
@@ -652,81 +652,6 @@ close(sd);
 return dy;
 }
 
-int netSkipHttpHeaderLinesCatch(int sd, char *url)
-/* Skip http header lines. Return non zero error if there's a problem.
-   The input is a standard sd or fd descriptor.
-   This is meant to be able work even with a re-passable stream handle,
-   e.g. can pass it to the pipes routines, which means we can't
-   attach a linefile since filling its buffer reads in more than just the http header.
-   positive return code is http error, -1 = http header too long, -2 is a strange http header, 
-   -3 is error reading descriptor.
- */
-{
-char buf[2000];
-char *line = buf;
-int maxbuf = sizeof(buf);
-int i=0;
-char c = ' ';
-int nread = 0;
-char *sep = NULL;
-char *headerName = NULL;
-char *headerVal = NULL;
-while(TRUE)
-    {
-    i = 0;
-    while (TRUE)
-	{
-	nread = read(sd, &c, 1);  /* one char at a time, but http headers are small */
-	if (nread < 0)
-	    return -3;  /* err reading descriptor */
-	if (c == 10)
-	    break;
-	if (c != 13)
-    	    buf[i++] = c;
-	if (i >= maxbuf)
-	    {
-	    return -1;
-	    }
-	}
-    buf[i] = 0;  /* add string terminator */
-
-    if (sameString(line,""))
-	{
-	break; /* End of Header found */
-	}
-    if (startsWith("HTTP/", line))
-        {
-	char *version, *code;
-	version = nextWord(&line);
-	code = nextWord(&line);
-	if (code == NULL)
-	    {
-	    return -2;
-	    }
-	if (startsWith("30", code) && isdigit(code[2]) && code[3] == 0)
-	    {
-            return (atoi(code));
-	    }
-	else if (!sameString(code, "200"))
-	    {
-	    return atoi(code);
-	    }
-	line = buf;  /* restore it */
-	}
-    headerName = line;
-    sep = strchr(line,':');
-    if (sep)
-	{
-	*sep = 0;
-	headerVal = skipLeadingSpaces(++sep);
-	}
-    else
-	{
-	headerVal = NULL;
-	}
-    }
-return 0;
-}
 
 boolean netSkipHttpHeaderLines(int sd, char *url)
 /* Skip http header lines. Return FALSE if there's a problem.
@@ -824,39 +749,6 @@ if (redirectMsg)
 return TRUE;
 }
 
-struct lineFile *netLineFileMayOpenCatchError(char *url)
-/* Return a lineFile attached to url. http skips header.
- * Supports some compression formats.
- * Return NULL if there's a problem without printing error.  */
-{
-int sd = netUrlOpen(url);
-if (sd < 0)
-    {
-    warn("Couldn't open %s", url);
-    return NULL;
-    }
-else
-    {
-    struct lineFile *lf = NULL;
-    if (startsWith("http://",url))
-	{
-	if (netSkipHttpHeaderLinesCatch(sd, url) != 0)
-	    return NULL;     /* url needed only for err msgs*/
-	}
-    if (endsWith(url, ".gz") ||
-	endsWith(url, ".Z")  ||
-    	endsWith(url, ".bz2"))
-	{
-	lf = lineFileDecompressFd(url, TRUE, sd);
-           /* url needed only for compress type determination */
-	}
-    else
-	{
-	lf = lineFileAttach(url, TRUE, sd);
-	}
-    return lf;
-    }
-}
 
 struct lineFile *netLineFileMayOpen(char *url)
 /* Return a lineFile attached to url. http skips header.
