@@ -268,6 +268,7 @@ class PipelineController < ApplicationController
     @ftpUrl = "ftp://#{@user.login}@#{ActiveRecord::Base.configurations[RAILS_ENV]['ftpServer']}"+
            ":#{ActiveRecord::Base.configurations[RAILS_ENV]['ftpPort']}"
     @ftpList = []
+    #@ftpList << "(nothing)"
     @fullPath = ActiveRecord::Base.configurations[RAILS_ENV]['ftpMount']+'/'+@user.login
     extensions = ["zip", "ZIP", "tar.gz", "TAR.GZ", "tar.bz2", "TAR.BZ2", "tgz", "TGZ"]
     if File.exists?(@fullPath)
@@ -293,6 +294,15 @@ class PipelineController < ApplicationController
     if @upurl == "http://"
       @upurl = ""
     end
+    unless @upftp
+      @upftp = ""
+    end
+    #if @upftp == "(nothing)"
+    #  @upftp = ""
+    #end
+    #debug
+    #flash[:notice] = "ftp=["+@upftp+"] "
+    #return
 
     #debug
     #flash[:notice] = "ftp=["+params[:ftp]+"] "+ (params[:ftp].blank? ? "blank" : "not blank")
@@ -443,15 +453,15 @@ class PipelineController < ApplicationController
       end
       log_project_status
 
-      if params[:commit] == @autoUploadLabel 
-	validate
-        if @project.status == "validated"
-          @project.status = "loading"
-          @project.save
-          log_project_status
-          load
-        end
+      #if params[:commit] == @autoUploadLabel 
+      validate
+      if @project.status == "validated"
+        @project.status = "loading"
+        @project.save
+        log_project_status
+        load
       end
+      #end
   end
 
   def delete_archive
