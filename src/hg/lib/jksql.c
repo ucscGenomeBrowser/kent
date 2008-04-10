@@ -15,7 +15,7 @@
 #include "hgConfig.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.107 2008/03/19 04:39:03 angie Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.108 2008/04/10 22:07:30 angie Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -1596,6 +1596,9 @@ if (sscanf(sqlDate, "%4d-%2d-%2d %2d:%2d:%2d",
     errAbort("Couldn't parse sql date \"%s\"", sqlDate);
 tm->tm_year -= 1900;
 tm->tm_mon  -= 1;
+/* Ask mktime to determine whether Daylight Savings Time is in effect for
+ * the given time: */
+tm->tm_isdst = -1;
 clockTime = mktime(tm);
 if (clockTime < 0)
     errAbort("mktime failed (%d-%d-%d %d:%d:%d).",
