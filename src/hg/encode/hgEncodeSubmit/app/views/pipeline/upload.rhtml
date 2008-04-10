@@ -17,15 +17,21 @@ Resume if the previous upload  was interrupted.
   <p><label for="project_upload_file">or Upload from FTP</label>
   <A HREF=<%= @ftpUrl -%>> <%= @ftpUrl -%></A><br/>
   <select id="ftp" name="ftp">
-     <option selected> </option>
+     <option selected></option>
      <% @ftpList.each do |file| %>
        <option><%= file %></option>
      <% end %>
   </select>
+  <br/>
+  &nbsp;FTP space is provided for each user.<br/>
+  &nbsp;The FTP login, site, and port are visible in the link above.<br/>
+  &nbsp;The password is the same.<br/>
+  &nbsp;Archives with the correct extension that have been uploaded to FTP<br/>
+  &nbsp;will appear in the dropdown list above.<br/>
 
   <table cellpadding=0 cellspacing=0><tr>
   <td><%= submit_tag @autoUploadLabel %></td>
-  <td><%= submit_tag "Upload Only" %></td>
+<!--  <td><%= submit_tag "Upload Only" %></td> -->
   <td><%= submit_tag "Cancel" %></td>
   </tr></table>
 <%= end_form_tag -%>
@@ -33,8 +39,9 @@ Resume if the previous upload  was interrupted.
 Use 'Submit' to upload and expand the archive, 
 validate the data and metadata, 
 and load the data to the database.
-Use 'Upload Only' to run these
-steps individually.</p>
+</p>
+<!-- Use 'Upload Only' to run these
+steps individually. -->
 <p>
 The archive file must have one of these extensions: <br/>
 .zip, .tar.gz, .tgz, .tar.bz2 <br/>
