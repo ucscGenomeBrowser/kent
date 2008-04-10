@@ -1104,224 +1104,224 @@ type bed 3 .
     track encodeAffyEc1BrainCerebellumSites
     subTrack encodeAffyEcSites
     shortLabel EC1 Sites BrainC
-    longLabel Affymetrix ENCODE Extension Transcription (One-base window) (Brain Cerebellum) Sites
+    longLabel Affy Ext Trans Sites (1-base window) (Brain Cerebellum)
     color 248,0,8
     priority 1
 
     track encodeAffyEc51BrainCerebellumSites
     subTrack encodeAffyEcSites
     shortLabel EC51 Sites BrainC
-    longLabel Affymetrix ENCODE Extension Transcription (51-base window) (Brain Cerebellum) Sites
+    longLabel Affy Ext Trans Sites (51-base window) (Brain Cerebellum)
     color 248,0,8
     priority 2
 
     track encodeAffyEc1BrainFrontalLobeSites
     subTrack encodeAffyEcSites
     shortLabel EC1 Sites BrainF
-    longLabel Affymetrix ENCODE Extension Transcription (One-base window) (Brain Frontal Lobe) Sites
+    longLabel Affy Ext Trans Sites (1-base window) (Brain Frontal Lobe)
     color 248,0,8
     priority 3    
 
     track encodeAffyEc51BrainFrontalLobeSites
     subTrack encodeAffyEcSites
     shortLabel EC51 Site BrainF
-    longLabel Affymetrix ENCODE Extension Transcription (51-base window) (Brain Frontal Lobe) Sites
+    longLabel Affy Ext Trans Sites (51-base window) (Brain Frontal Lobe)
     color 248,0,8
     priority 4    
 
     track encodeAffyEc1BrainHippocampusSites
     subTrack encodeAffyEcSites
     shortLabel EC1 Sites Hippoc
-    longLabel Affymetrix ENCODE Extension Transcription (One-base window) (Brain Hippocampus) Sites
+    longLabel Affy Ext Trans Sites (1-base window) (Brain Hippocampus)
     color 248,0,8
     priority 5
 
     track encodeAffyEc51BrainHippocampusSites
     subTrack encodeAffyEcSites
     shortLabel EC51 Site Hippoc
-    longLabel Affymetrix ENCODE Extension Transcription (51-base window) (Brain Hippocampus) Sites
+    longLabel Affy Ext Trans Sites (51-base window) (Brain Hippocampus)
     color 248,0,8
     priority 6
 
     track encodeAffyEc1BrainHypothalamusSites
     subTrack encodeAffyEcSites
     shortLabel EC1 Sites BrainH
-    longLabel Affymetrix ENCODE Extension Transcription (One-base window) (Brain Hypothalamus) Sites
+    longLabel Affy Ext Trans Sites (1-base window) (Brain Hypothalamus)
     color 248,0,8
     priority 7
 
     track encodeAffyEc51BrainHypothalamusSites
     subTrack encodeAffyEcSites
     shortLabel EC51 Sites BrainH
-    longLabel Affymetrix ENCODE Extension Transcription (51-base window) (Brain Hypothalamus) Sites
+    longLabel Affy Ext Trans Sites (51-base window) (Brain Hypothalamus)
     color 248,0,8
     priority 8
 
     track encodeAffyEc1FetalKidneySites
     subTrack encodeAffyEcSites
     shortLabel EC1 Sites FetalK
-    longLabel Affymetrix ENCODE Extension Transcription (One-base window) (Fetal Kidney) Sites
+    longLabel Affy Ext Trans Sites (1-base window) (Fetal Kidney)
     color 176,0,80
     priority 9
 
     track encodeAffyEc51FetalKidneySites
     subTrack encodeAffyEcSites
     shortLabel EC51 Site FetalK
-    longLabel Affymetrix ENCODE Extension Transcription (51-base window) (Fetal Kidney) Sites
+    longLabel Affy Ext Trans Sites (51-base window) (Fetal Kidney)
     color 176,0,80
     priority 10
 
     track encodeAffyEc1FetalSpleenSites
     subTrack encodeAffyEcSites
     shortLabel EC1 Sites Spleen
-    longLabel Affymetrix ENCODE Extension Transcription (One-base window) (Fetal Spleen) Sites
+    longLabel Affy Ext Trans Sites (1-base window) (Fetal Spleen)
     color 176,0,80
     priority 11
 
     track encodeAffyEc51FetalSpleenSites
     subTrack encodeAffyEcSites
     shortLabel EC51 Site Spleen
-    longLabel Affymetrix ENCODE Extension Transcription (51-base window) (Fetal Spleen) Sites
+    longLabel Affy Ext Trans Sites (51-base window) (Fetal Spleen)
     color 176,0,80
     priority 12
 
     track encodeAffyEc1PlacentaSites
     subTrack encodeAffyEcSites
     shortLabel EC1 Sites Placen
-    longLabel Affymetrix ENCODE Extension Transcription (One-base window) (Placenta) Sites
+    longLabel Affy Ext Trans Sites (1-base window) (Placenta)
     color 176,0,80
     priority 13
 
     track encodeAffyEc51PlacentaSites
     subTrack encodeAffyEcSites
     shortLabel EC51 Site Placen
-    longLabel Affymetrix ENCODE Extension Transcription (51-base window) (Placenta) Sites
+    longLabel Affy Ext Trans Sites (51-base window) (Placenta)
     color 176,0,80
     priority 14
 
     track encodeAffyEc1TestisSites
     subTrack encodeAffyEcSites
     shortLabel EC1 Sites Testis
-    longLabel Affymetrix ENCODE Extension Transcription (One-base window) (Testis) Sites
+    longLabel Affy Ext Trans Sites (1-base window) (Testis)
     color 128,0,128
     priority 15
 
     track encodeAffyEc51TestisSites
     subTrack encodeAffyEcSites
     shortLabel EC51 Site Testis
-    longLabel Affymetrix ENCODE Extension Transcription (51-base window) (Testis) Sites
+    longLabel Affy Ext Trans Sites (51-base window) (Testis)
     color 128,0,128
     priority 16
 
     track encodeAffyEc1FetalTestisSites
     subTrack encodeAffyEcSites
     shortLabel EC1 Sites FetalT
-    longLabel Affymetrix ENCODE Extension Transcription (One-base window) (Fetal Testis) Sites
+    longLabel Affy Ext Trans Sites (1-base window) (Fetal Testis)
     color 128,0,128    
     priority 17
 
     track encodeAffyEc51FetalTestisSites
     subTrack encodeAffyEcSites
     shortLabel EC51 Site FetalT
-    longLabel Affymetrix ENCODE Extension Transcription (51-base window) (Fetal Testis) Sites
+    longLabel Affy Ext Trans Sites (51-base window) (Fetal Testis)
     color 128,0,128
     priority 18
 
     track encodeAffyEc1ProstateSites
     subTrack encodeAffyEcSites
     shortLabel EC1 Sites Prost
-    longLabel Affymetrix ENCODE Extension Transcription (One-base window) (Prostate) Sites
+    longLabel Affy Ext Trans Sites (1-base window) (Prostate)
     color 128,0,128
     priority 19
 
     track encodeAffyEc51ProstateSites
     subTrack encodeAffyEcSites
     shortLabel EC51 Site Prost
-    longLabel Affymetrix ENCODE Extension Transcription (51-base window) (Prostate) Sites
+    longLabel Affy Ext Trans Sites (51-base window) (Prostate)
     color 128,0,128
     priority 20
 
     track encodeAffyEc1OvarySites
     subTrack encodeAffyEcSites
     shortLabel EC1 Sites Ovary
-    longLabel Affymetrix ENCODE Extension Transcription (One-base window) (Ovary) Sites
+    longLabel Affy Ext Trans Sites (1-base window) (Ovary)
     color 128,0,128
     priority 21
 
     track encodeAffyEc51OvarySites
     subTrack encodeAffyEcSites
     shortLabel EC51 Site Ovary
-    longLabel Affymetrix ENCODE Extension Transcription (51-base window) (Ovary) Sites
+    longLabel Affy Ext Trans Sites (51-base window) (Ovary)
     color 128,0,128
     priority 22
 
     track encodeAffyEc1HeLaC1S3Sites
     subTrack encodeAffyEcSites
     shortLabel EC1 Sites HeLa
-    longLabel Affymetrix ENCODE Extension Transcription (One-base window) (HeLa C1S3) Sites
+    longLabel Affy Ext Trans Sites (1-base window) (HeLa C1S3)
     color 0,0,205
     priority 23
 
     track encodeAffyEc51HeLaC1S3Sites
     subTrack encodeAffyEcSites
     shortLabel EC51 Site HeLa
-    longLabel Affymetrix ENCODE Extension Transcription (51-base window) (HeLa C1S3) Sites
+    longLabel Affy Ext Trans Sites (51-base window) (HeLa C1S3)
     color 0,0,205
     priority 24
 
     track encodeAffyEc1GM06990Sites
     subTrack encodeAffyEcSites
     shortLabel EC1 Sites GM0699
-    longLabel Affymetrix ENCODE Extension Transcription (One-base window) (GM06990) Sites
+    longLabel Affy Ext Trans Sites (1-base window) (GM06990)
     color 0,0,205
     priority 25
 
     track encodeAffyEc51GM06990Sites
     subTrack encodeAffyEcSites
     shortLabel EC51 Site GM0699
-    longLabel Affymetrix ENCODE Extension Transcription (51-base window) (GM06990) Sites
+    longLabel Affy Ext Trans Sites (51-base window) (GM06990)
     color 0,0,205
     priority 26
 
     track encodeAffyEc1HepG2Sites
     subTrack encodeAffyEcSites
     shortLabel EC1 Sites HepG2
-    longLabel Affymetrix ENCODE Extension Transcription (One-base window) (HepG2) Sites
+    longLabel Affy Ext Trans Sites (1-base window) (HepG2)
     color 0,0,205
     priority 27
 
     track encodeAffyEc51HepG2Sites
     subTrack encodeAffyEcSites
     shortLabel EC51 Site HepG2
-    longLabel Affymetrix ENCODE Extension Transcription (51-base window) (HepG2) Sites
+    longLabel Affy Ext Trans Sites (51-base window) (HepG2)
     color 0,0,205
     priority 28
 
     track encodeAffyEc1K562Sites
     subTrack encodeAffyEcSites
     shortLabel EC1 Sites K562
-    longLabel Affymetrix ENCODE Extension Transcription (One-base window) (K562) Sites
+    longLabel Affy Ext Trans Sites (1-base window) (K562)
     color 0,0,205
     priority 29
 
     track encodeAffyEc51K562Sites
     subTrack encodeAffyEcSites
     shortLabel EC51 Site K562
-    longLabel Affymetrix ENCODE Extension Transcription (51-base window) (K562) Sites
+    longLabel Affy Ext Trans Sites (51-base window) (K562)
     color 0,0,205
     priority 30
 
     track encodeAffyEc1TertBJSites
     subTrack encodeAffyEcSites
     shortLabel EC1 Sites TertBJ
-    longLabel Affymetrix ENCODE Extension Transcription (One-base window) (Tert-BJ) Sites
+    longLabel Affy Ext Trans Sites (1-base window) (Tert-BJ)
     color 0,0,205
     priority 31
 
     track encodeAffyEc51TertBJSites
     subTrack encodeAffyEcSites
     shortLabel EC51 Site TertBJ
-    longLabel Affymetrix ENCODE Extension Transcription (51-base window) (Tert-BJ) Sites
+    longLabel Affy Ext Trans Sites (51-base window) (Tert-BJ)
     color 0,0,205
     priority 32
 
@@ -1343,224 +1343,224 @@ type wig 0 62385
     track encodeAffyEc1BrainCerebellumSignal
     subTrack encodeAffyEcSignal
     shortLabel EC1 Sgnl BrainC
-    longLabel Affymetrix ENCODE Extension Transcription (One-base window) (Brain Cerebellum) Signal
+    longLabel Affy Ext Trans Signal (1-base window) (Brain Cerebellum)
     color 248,0,8
     priority 1
 
     track encodeAffyEc51BrainCerebellumSignal
     subTrack encodeAffyEcSignal
     shortLabel EC51 Sgnl BrainC
-    longLabel Affymetrix ENCODE Extension Transcription (51-base window) (Brain Cerebellum) Signal
+    longLabel Affy Ext Trans Signal (51-base window) (Brain Cerebellum)
     color 248,0,8
     priority 2
 
     track encodeAffyEc1BrainFrontalLobeSignal
     subTrack encodeAffyEcSignal
     shortLabel EC1 Sgnl BrainF
-    longLabel Affymetrix ENCODE Extension Transcription (One-base window) (Brain Frontal Lobe) Signal
+    longLabel Affy Ext Trans Signal (1-base window) (Brain Frontal Lobe)
     color 248,0,8
     priority 3    
 
     track encodeAffyEc51BrainFrontalLobeSignal
     subTrack encodeAffyEcSignal
     shortLabel EC51 Sgnl BrainF
-    longLabel Affymetrix ENCODE Extension Transcription (51-base window) (Brain Frontal Lobe) Signal
+    longLabel Affy Ext Trans Signal (51-base window) (Brain Frontal Lobe)
     color 248,0,8
     priority 4    
 
     track encodeAffyEc1BrainHippocampusSignal
     subTrack encodeAffyEcSignal
     shortLabel EC1 Sgnl Hippoc
-    longLabel Affymetrix ENCODE Extension Transcription (One-base window) (Brain Hippocampus) Signal
+    longLabel Affy Ext Trans Signal (1-base window) (Brain Hippocampus)
     color 248,0,8
     priority 5
 
     track encodeAffyEc51BrainHippocampusSignal
     subTrack encodeAffyEcSignal
     shortLabel EC51 Sgnl Hippoc
-    longLabel Affymetrix ENCODE Extension Transcription (51-base window) (Brain Hippocampus) Signal
+    longLabel Affy Ext Trans Signal (51-base window) (Brain Hippocampus)
     color 248,0,8
     priority 6
 
     track encodeAffyEc1BrainHypothalamusSignal
     subTrack encodeAffyEcSignal
     shortLabel EC1 Sgnl BrainH
-    longLabel Affymetrix ENCODE Extension Transcription (One-base window) (Brain Hypothalamus) Signal
+    longLabel Affy Ext Trans Signal (1-base window) (Brain Hypothalamus)
     color 248,0,8
     priority 7
 
     track encodeAffyEc51BrainHypothalamusSignal
     subTrack encodeAffyEcSignal
     shortLabel EC51 Sgnl BrainH
-    longLabel Affymetrix ENCODE Extension Transcription (51-base window) (Brain Hypothalamus) Signal
+    longLabel Affy Ext Trans Signal (51-base window) (Brain Hypothalamus)
     color 248,0,8
     priority 8
 
     track encodeAffyEc1FetalKidneySignal
     subTrack encodeAffyEcSignal
     shortLabel EC1 Sgnl FetalK
-    longLabel Affymetrix ENCODE Extension Transcription (One-base window) (Fetal Kidney) Signal
+    longLabel Affy Ext Trans Signal (1-base window) (Fetal Kidney)
     color 176,0,80
     priority 9
 
     track encodeAffyEc51FetalKidneySignal
     subTrack encodeAffyEcSignal
     shortLabel EC51 Sgnl FetalK
-    longLabel Affymetrix ENCODE Extension Transcription (51-base window) (Fetal Kidney) Signal
+    longLabel Affy Ext Trans Signal (51-base window) (Fetal Kidney)
     color 176,0,80
     priority 10
 
     track encodeAffyEc1FetalSpleenSignal
     subTrack encodeAffyEcSignal
     shortLabel EC1 Sgnl Spleen
-    longLabel Affymetrix ENCODE Extension Transcription (One-base window) (Fetal Spleen) Signal
+    longLabel Affy Ext Trans Signal (1-base window) (Fetal Spleen)
     color 176,0,80
     priority 11
 
     track encodeAffyEc51FetalSpleenSignal
     subTrack encodeAffyEcSignal
     shortLabel EC51 Sgnl Spleen
-    longLabel Affymetrix ENCODE Extension Transcription (51-base window) (Fetal Spleen) Signal
+    longLabel Affy Ext Trans Signal (51-base window) (Fetal Spleen)
     color 176,0,80
     priority 12
 
     track encodeAffyEc1PlacentaSignal
     subTrack encodeAffyEcSignal
     shortLabel EC1 Sgnl Placen
-    longLabel Affymetrix ENCODE Extension Transcription (One-base window) (Placenta) Signal
+    longLabel Affy Ext Trans Signal (1-base window) (Placenta)
     color 176,0,80
     priority 13
 
     track encodeAffyEc51PlacentaSignal
     subTrack encodeAffyEcSignal
     shortLabel EC51 Sgnl Placen
-    longLabel Affymetrix ENCODE Extension Transcription (51-base window) (Placenta) Signal
+    longLabel Affy Ext Trans Signal (51-base window) (Placenta)
     color 176,0,80
     priority 14
 
     track encodeAffyEc1TestisSignal
     subTrack encodeAffyEcSignal
     shortLabel EC1 Sgnl Testis
-    longLabel Affymetrix ENCODE Extension Transcription (One-base window) (Testis) Signal
+    longLabel Affy Ext Trans Signal (1-base window) (Testis)
     color 128,0,128
     priority 15
 
     track encodeAffyEc51TestisSignal
     subTrack encodeAffyEcSignal
     shortLabel EC51 Sgnl Testis
-    longLabel Affymetrix ENCODE Extension Transcription (51-base window) (Testis) Signal
+    longLabel Affy Ext Trans Signal (51-base window) (Testis)
     color 128,0,128
     priority 16
 
     track encodeAffyEc1FetalTestisSignal
     subTrack encodeAffyEcSignal
     shortLabel EC1 Sgnl FetalT
-    longLabel Affymetrix ENCODE Extension Transcription (One-base window) (Fetal Testis) Signal
+    longLabel Affy Ext Trans Signal (1-base window) (Fetal Testis)
     color 128,0,128    
     priority 17
 
     track encodeAffyEc51FetalTestisSignal
     subTrack encodeAffyEcSignal
     shortLabel EC51 Sgnl FetalT
-    longLabel Affymetrix ENCODE Extension Transcription (51-base window) (Fetal Testis) Signal
+    longLabel Affy Ext Trans Signal (51-base window) (Fetal Testis)
     color 128,0,128
     priority 18
 
     track encodeAffyEc1ProstateSignal
     subTrack encodeAffyEcSignal
     shortLabel EC1 Sgnl Prost
-    longLabel Affymetrix ENCODE Extension Transcription (One-base window) (Prostate) Signal
+    longLabel Affy Ext Trans Signal (1-base window) (Prostate)
     color 128,0,128
     priority 19
 
     track encodeAffyEc51ProstateSignal
     subTrack encodeAffyEcSignal
     shortLabel EC51 Sgnl Prost
-    longLabel Affymetrix ENCODE Extension Transcription (51-base window) (Prostate) Signal
+    longLabel Affy Ext Trans Signal (51-base window) (Prostate)
     color 128,0,128
     priority 20
 
     track encodeAffyEc1OvarySignal
     subTrack encodeAffyEcSignal
     shortLabel EC1 Sgnl Ovary
-    longLabel Affymetrix ENCODE Extension Transcription (One-base window) (Ovary) Signal
+    longLabel Affy Ext Trans Signal (1-base window) (Ovary)
     color 128,0,128
     priority 21
 
     track encodeAffyEc51OvarySignal
     subTrack encodeAffyEcSignal
     shortLabel EC51 Sgnl Ovary
-    longLabel Affymetrix ENCODE Extension Transcription (51-base window) (Ovary) Signal
+    longLabel Affy Ext Trans Signal (51-base window) (Ovary)
     color 128,0,128
     priority 22
 
     track encodeAffyEc1HeLaC1S3Signal
     subTrack encodeAffyEcSignal
     shortLabel EC1 Sgnl HeLa
-    longLabel Affymetrix ENCODE Extension Transcription (One-base window) (HeLa C1S3) Signal
+    longLabel Affy Ext Trans Signal (1-base window) (HeLa C1S3)
     color 0,0,205
     priority 23
 
     track encodeAffyEc51HeLaC1S3Signal
     subTrack encodeAffyEcSignal
     shortLabel EC51 Sgnl HeLa
-    longLabel Affymetrix ENCODE Extension Transcription (51-base window) (HeLa C1S3) Signal
+    longLabel Affy Ext Trans Signal (51-base window) (HeLa C1S3)
     color 0,0,205
     priority 24
 
     track encodeAffyEc1GM06990Signal
     subTrack encodeAffyEcSignal
     shortLabel EC1 Sgnl GM0699
-    longLabel Affymetrix ENCODE Extension Transcription (One-base window) (GM06990) Signal
+    longLabel Affy Ext Trans Signal (1-base window) (GM06990)
     color 0,0,205
     priority 25
 
     track encodeAffyEc51GM06990Signal
     subTrack encodeAffyEcSignal
     shortLabel EC51 Sgnl GM0699
-    longLabel Affymetrix ENCODE Extension Transcription (51-base window) (GM06990) Signal
+    longLabel Affy Ext Trans Signal (51-base window) (GM06990)
     color 0,0,205
     priority 26
 
     track encodeAffyEc1HepG2Signal
     subTrack encodeAffyEcSignal
     shortLabel EC1 Sgnl HepG2
-    longLabel Affymetrix ENCODE Extension Transcription (One-base window) (HepG2) Signal
+    longLabel Affy Ext Trans Signal (1-base window) (HepG2)
     color 0,0,205
     priority 27
 
     track encodeAffyEc51HepG2Signal
     subTrack encodeAffyEcSignal
     shortLabel EC51 Sgnl HepG2
-    longLabel Affymetrix ENCODE Extension Transcription (51-base window) (HepG2) Signal
+    longLabel Affy Ext Trans Signal (51-base window) (HepG2)
     color 0,0,205
     priority 28
 
     track encodeAffyEc1K562Signal
     subTrack encodeAffyEcSignal
     shortLabel EC1 Sgnl K562
-    longLabel Affymetrix ENCODE Extension Transcription (One-base window) (K562) Signal
+    longLabel Affy Ext Trans Signal (1-base window) (K562)
     color 0,0,205
     priority 29
 
     track encodeAffyEc51K562Signal
     subTrack encodeAffyEcSignal
     shortLabel EC51 Sgnl K562
-    longLabel Affymetrix ENCODE Extension Transcription (51-base window) (K562) Signal
+    longLabel Affy Ext Trans Signal (51-base window) (K562)
     color 0,0,205
     priority 30
 
     track encodeAffyEc1TertBJSignal
     subTrack encodeAffyEcSignal
     shortLabel EC1 Sgnl TertBJ
-    longLabel Affymetrix ENCODE Extension Transcription (One-base window) (Tert-BJ) Signal
+    longLabel Affy Ext Trans Signal (1-base window) (Tert-BJ)
     color 0,0,205
     priority 31
 
     track encodeAffyEc51TertBJSignal
     subTrack encodeAffyEcSignal
     shortLabel EC51 Sgnl TertBJ
-    longLabel Affymetrix ENCODE Extension Transcription (51-base window) (Tert-BJ) Signal
+    longLabel Affy Ext Trans Signal (51-base window) (Tert-BJ)
     color 0,0,205
     priority 32
 
