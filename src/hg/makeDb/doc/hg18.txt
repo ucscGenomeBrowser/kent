@@ -20872,9 +20872,44 @@ hgLoadBed hg18 ux16 ux16Hg18.bed
     hgsql hg18 < ~/src/hg/lib/allenBrainGene.sql
     hgsql hg18 -e \
     'load data local infile "allenBrainGene.tab" into table allenBrainGene'
+
 #############################################################################
-    
-    
+# BLASTZ/CHAIN/NET equCab2 (DONE - 2008-04-10 - Hiram)
+    ssh kkstore04
+    screen #	use screen to control this multi-day job
+    mkdir /cluster/data/hg18/bed/blastz.equCab2.2008-04-10
+    cd /cluster/data/hg18/bed/blastz.equCab2.2008-04-10
+    cat << '_EOF_' > DEF
+# Human vs. Horse
+
+BLASTZ_M=50
+
+# TARGET: Human Hg18
+SEQ1_DIR=/scratch/data/hg18/nib
+SEQ1_LEN=/cluster/data/hg18/chrom.sizes 
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Horse
+SEQ2_DIR=/scratch/data/equCab2/equCab2.2bit
+SEQ2_LEN=/cluster/data/equCab2/chrom.sizes
+SEQ2_CTGDIR=/san/sanvol1/scratch/equCab2/equCab2.UnScaffolds.2bit
+SEQ2_CTGLEN=/san/sanvol1/scratch/equCab2/equCab2.UnScaffolds.sizes
+SEQ2_LIFT=/cluster/data/equCab2/jkStuff/chrUn.lift
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=100
+SEQ2_LAP=0
+
+BASE=/cluster/data/hg18/bed/blastz.equCab2.2008-04-10
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time doBlastzChainNet.pl `pwd`/DEF \
+	-verbose=2 -bigClusterHub=pk \
+      -chainMinScore=3000 -chainLinearGap=medium \
+      -blastzOutRoot /cluster/bluearc/equCab2/blastz.hg18 >& do.log &
+
 #############################################################################
 # MAKE PCR TARGET FOR UCSC GENES (DONE 4/10/08 angie)
     ssh hgwdev
@@ -20959,6 +20994,5 @@ hgLoadBed hg18 ux16 ux16Hg18.bed
       'INSERT into targetDb values("hg18Mrna", "Human mRNAs", \
          "hg18", "mrnaTargetPsl", "mrnaTargetSeq", "mrnaTargetExtFile", \
          "/gbdb/hg18/targetDb/mrnaTargetSeq.2bit", 2, now());'
-
 
 #############################################################################
