@@ -13,7 +13,7 @@
 #include "gfInternal.h"
 #include "gfPcrLib.h"
 
-static char const rcsid[] = "$Id: gfPcrLib.c,v 1.8 2006/03/15 18:36:16 angie Exp $";
+static char const rcsid[] = "$Id: gfPcrLib.c,v 1.9 2008/04/10 22:05:08 angie Exp $";
 
 /**** Input and Output Handlers *****/
 
@@ -251,15 +251,12 @@ fprintf(f, "%d,%d,\t", 0,size - rPrimerSize);
 fprintf(f, "%d,%d,\n", out->fPos, out->rPos - rPrimerSize);
 }
 
+typedef void (*outFunction)(struct gfPcrOutput *out, FILE *f, char *url) ;
 
-void gfPcrOutputWriteList(struct gfPcrOutput *outList, char *outType, 
-	char *url, FILE *f)
-/* Write list of outputs in specified format (either "fa" or "bed") 
- * to file.  If url is non-null it should be a printf formatted
- * string that takes %s, %d, %d for chromosome, start, end. */
+static outFunction gfPcrOutputFunction(char *outType)
+/* Return a pointer to output function for the given output type. */
 {
-struct gfPcrOutput *out;
-void (*output)(struct gfPcrOutput *out, FILE *f, char *url) = NULL;
+outFunction output = NULL;
 if (sameWord(outType, "fa"))
     output = outputFa;
 else if (sameWord(outType, "bed"))
@@ -268,8 +265,29 @@ else if (sameWord(outType, "psl"))
     output = outputPsl;
 else
     errAbort("Unrecognized pcr output type %s", outType);
+return output;
+}
+
+void gfPcrOutputWriteList(struct gfPcrOutput *outList, char *outType, 
+	char *url, FILE *f)
+/* Write list of outputs in specified format (either "fa" or "bed") 
+ * to file.  If url is non-null it should be a printf formatted
+ * string that takes %s, %d, %d for chromosome, start, end. */
+{
+outFunction output = gfPcrOutputFunction(outType);
+struct gfPcrOutput *out;
 for (out = outList; out != NULL; out = out->next)
     output(out, f, url);
+}
+
+void gfPcrOutputWriteOne(struct gfPcrOutput *out, char *outType, 
+	char *url, FILE *f)
+/* Write a single output in specified format (either "fa" or "bed") 
+ * to file.  If url is non-null it should be a printf formatted
+ * string that takes %s, %d, %d for chromosome, start, end. */
+{
+outFunction output = gfPcrOutputFunction(outType);
+output(out, f, url);
 }
 
 void gfPcrOutputWriteAll(struct gfPcrOutput *outList, 

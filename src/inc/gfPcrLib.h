@@ -75,6 +75,12 @@ struct gfPcrOutput *gfPcrViaNet(char *host, char *port, char *seqDir,
 	int maxSize, int minPerfect, int minGood);
 /* Do PCRs using gfServer index, returning list of results. */
 
+void gfPcrOutputWriteOne(struct gfPcrOutput *out, char *outType, 
+	char *url, FILE *f);
+/* Write a single output in specified format (either "fa" or "bed") 
+ * to file.  If url is non-null it should be a printf formatted
+ * string that takes %s, %d, %d for chromosome, start, end. */
+
 void gfPcrOutputWriteList(struct gfPcrOutput *outList, char *outType, 
 	char *url, FILE *f);
 /* Write list of outputs in specified format (either "fa" or "bed") 
