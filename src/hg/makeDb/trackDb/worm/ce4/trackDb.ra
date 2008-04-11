@@ -285,7 +285,7 @@ longLabel Coverage of nucleosome predictions from SOLiD core alignments
 group map
 priority 120.0
 visibility hide
-type wig 1 19138
+type wig 1 19137
 spanList 1
 maxHeightPixels 100:40:11
 windowingFunction mean
@@ -313,7 +313,7 @@ longLabel Micrococcal nuclease control coverage
 group map
 priority 120.0
 visibility hide
-type wig 1 145
+type wig 1 5544
 spanList 1
 maxHeightPixels 100:40:11
 windowingFunction mean
