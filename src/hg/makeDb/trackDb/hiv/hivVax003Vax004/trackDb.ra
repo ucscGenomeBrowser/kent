@@ -38,6 +38,66 @@ selectSubject on
 maxItems 2000
 type psl
 
+track vax003AECons
+shortLabel VAX003 AE Conservation
+longLabel VAX003 Subtype AE DNA Sequence Conservation
+group compGeno
+priority 24
+visibility full
+color 12,12,120
+maxHeightPixels 100:40:10
+autoScaleDefault Off
+graphTypeDefault Bar
+gridDefault OFF
+windowingFunction Mean
+altColor 128,128,128
+type wig 0 1
+
+track vax003BCons
+shortLabel VAX003 B Conservation
+longLabel VAX003 Subtype B DNA Sequence Conservation
+group compGeno
+priority 24
+visibility full
+color 12,12,120
+maxHeightPixels 100:40:10
+autoScaleDefault Off
+graphTypeDefault Bar
+gridDefault OFF
+windowingFunction Mean
+altColor 128,128,128
+type wig 0 1
+
+track vax003AEAaCons
+shortLabel VAX003 AE Protein Conservation
+longLabel VAX003 Subtype AE Protein Sequence Conservation
+group compGeno
+priority 25
+visibility hide
+color 12,12,120
+maxHeightPixels 100:40:10
+autoScaleDefault Off
+graphTypeDefault Bar
+gridDefault OFF
+windowingFunction Mean
+altColor 128,128,128
+type wig 0 1
+
+track vax003BAaCons
+shortLabel VAX003 B Protein Conservation
+longLabel VAX004 Subtype B Protein Sequence Conservation
+group compGeno
+priority 25
+visibility hide
+color 12,12,120
+maxHeightPixels 100:40:10
+autoScaleDefault Off
+graphTypeDefault Bar
+gridDefault OFF
+windowingFunction Mean
+altColor 128,128,128
+type wig 0 1
+
 track vax004Cons
 shortLabel VAX004 Conservation
 longLabel VAX004 DNA Sequence Conservation
