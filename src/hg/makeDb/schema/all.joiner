@@ -2599,43 +2599,10 @@ tablesIgnored $gbd
     blat%
     blast%
     repeats
-    multiz4waySummary
-    multiz5waySummary
-    multiz6waySummary
-    multiz7waySummary
-    multiz8waySummary
-    multiz9waySummary
-    multiz10waySummary
-    multiz11waySummary
-    multiz12waySummary
-    multiz15waySummary
-    multiz15wayFrames
-    multiz17waySummary
-    multiz17wayFrames
-    multiz28waySummary
-    multiz28wayFrames
-    phastCons4way
-    phastConsElements4way
-    phastCons5way
-    phastConsElements5way
-    phastCons6way
-    phastConsElements6way
-    phastCons7way
-    phastConsElements7way
-    phastCons8way
-    phastConsElements8way
-    phastCons9way
-    phastConsElements9way
-    phastCons10way
-    phastConsElements10way
-    phastCons11way
-    phastConsElements11way
-    phastCons12way
-    phastConsElements12way
-    phastCons15way
-    phastConsElements15way
-    phastCons17way
-    phastConsElements17way
+    multiz%waySummary
+    multiz%wayFrames
+    phastCons%way
+    phastConsElements%way
     jaxQTL
     jaxQtlAsIs
     jaxQtlPadded
