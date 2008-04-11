@@ -76,57 +76,52 @@ else
  echo $dbs
 endif
 
+# a huge loop through all databases
+foreach db ($dbs)
+ echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+ echo "~~~~~~~~~ $db ~~~~~~~~~~~~"
+ echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+
 echo "\n\n----------------------"
 echo "compare new (dev) and old (beta) ens* tables"
 echo "this shows the counts of rows unique to dev, unique to beta, and"
 echo "present on both.  you should be suspicious if there are big differences"
-foreach db ($dbs)
  compareWholeColumn.csh $db ensGene name
  compareWholeColumn.csh $db ensPep name
  compareWholeColumn.csh $db ensGtp transcript
  echo
-end
 
 echo "\n\n----------------------"
 echo "check a few of the new additions to the ensGene table"
 echo "(be sure to click all the way out to Ensembl website)"
-foreach db ($dbs)
  echo "\ncheck these in $db browser on hgwdev:"
  head -2 $db.ensGene.name.devOnly
  tail -2 $db.ensGene.name.devOnly
-end
 
 echo "\n\n----------------------"
 echo "check a few of the deleted items from the ensGene table"
 echo "(make sure they have also been dropped from Ensembl website)"
-foreach db ($dbs)
  echo "\ncheck these in $db browser on hgwbeta:"
  head -2 $db.ensGene.name.betaOnly 
  tail -2 $db.ensGene.name.betaOnly
-end
 
 echo "\n\n----------------------"
 echo "these are full sets of corresponding rows from the three tables:"
 echo "ensGene <-> ensPep <-> ensGtp on hgwdev"
-foreach db ($dbs)
  echo "\ncheck these two genes (and their peptides) on hgwdev for '$db':"
  hgsql -e "SELECT * FROM ensGene, ensPep, ensGtp WHERE \
  ensGene.name = ensPep.name AND ensGene.name = ensGtp.transcript LIMIT 2\G" $db
-end
 
 echo "\n\n----------------------"
 echo "run genePredCheck on the ensGene table. if there a failure here,"
 echo "then something is seriously wrong with the ensGene table."  
 echo "MarkD can help you figure out exactly what's wrong."
-foreach db ($dbs)
  echo "\ngenePredCheck results for $db.ensGene on hgwdev:" 
  genePredCheck -db=$db ensGene
-end
 
 echo "\n\n----------------------"
 echo "find out which chroms the genes are on (for both dev and beta)."  
 echo "look for unusually small or large numbers here (or big differences)."
-foreach db ($dbs)
  # don't run this on scaffold assemblies
  set numChroms=`hgsql -Ne "SELECT COUNT(*) FROM chromInfo" $db`
  if ( $numChroms < 100 ) then
@@ -135,11 +130,9 @@ foreach db ($dbs)
   echo "$db is a scaffold assembly: skipping countPerChrom"
  endif
  echo
-end
 
 echo "\n\n----------------------"
 echo "featureBits for new (dev) and old (beta) tables"
-foreach db ($dbs)
  echo "\nfeatureBits $db ensGene (on hgwdev):"
  featureBits $db ensGene
  echo "featureBits $db -countGaps ensGene (on hgwdev):"
@@ -153,21 +146,17 @@ foreach db ($dbs)
  echo "featureBits $db -countGaps ensGene gap (on hgwbeta):"
  ssh hgwbeta featureBits $db -countGaps ensGene gap
  echo
-end
 
 echo "\n\n----------------------"
 echo "run Joiner Check. look for errors in the following two lines only:"
 echo "ensPep.name and ensGtp.transcript"
-foreach db ($dbs)
  echo "\nrunning joinerCheck for $db on ensemblTranscriptId:"
  joinerCheck -keys -database=$db -identifier=ensemblTranscriptId ~/kent/src/hg/makeDb/schema/all.joiner
-end
 
 echo "\n\n----------------------"
 echo "ensGene names typically begin with 'ENS'. if there is a number other"
 echo "than 0, then there are ensGenes that do not begin with 'ENS'."
 echo "check them out on the Ensembl website."
-foreach db ($dbs)
  echo "\nnumber of ensGenes that do not begin with 'ENS' in '$db':"
  set num=`hgsql -Ne "SELECT COUNT(*) FROM ensGene WHERE name \
  NOT LIKE 'ENS%'" $db`
@@ -176,7 +165,8 @@ foreach db ($dbs)
   echo "instead of 'ENS', the ensGenes in this table look like this:"
   hgsql -Ne "SELECT name FROM ensGene WHERE name NOT LIKE 'ENS%' LIMIT 3" $db
  endif
-end
+
+end # huge loop through each database
 
 # clean up
 if ( -e xxDbListxx) then
