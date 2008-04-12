@@ -14,34 +14,37 @@ Resume if the previous upload  was interrupted.
   <p><label for="project_upload_file">or Upload a local file</label><br/>
   <%= file_field_tag 'upload_file', :size => 25 %><br/>
 
-  <p><label for="project_upload_file">or Choose a file from your FTP space</label>
-  <A HREF=<%= @ftpUrl -%>> <%= @ftpUrl -%></A><br/>
-  <select id="ftp" name="ftp">
-     <option selected></option>
-     <% @ftpList.each do |file| %>
-       <option><%= file %></option>
-     <% end %>
-  </select>
-  <br/>
-  &nbsp;Use any FTP client to upload your archive to the FTP space provided.<br/>
-  &nbsp;The FTP login, site, and port are visible in the link above.<br/>
-  &nbsp;Use your same password for FTP. Archives with the correct extension <br/>
-  &nbsp;that have been uploaded to your FTP space will appear in the dropdown list above. <br/>
-  &nbsp;Simply choose the desired archive.<br/>
+  <% if @ftpList.length > 0 %>
+
+    <p><label for="project_upload_ftp">
+    or Choose a file from your <%= link_to 'FTP', '/help.html#ftpHelp' -%> space</label>
+    <A HREF=<%= @ftpUrl -%>> <%= @ftpUrl -%></A><br/>
+    <select id="ftp" name="ftp">
+       <option selected></option>
+       <% @ftpList.each do |file| %>
+         <option><%= file %></option>
+       <% end %>
+    </select>
+    <br/>
+
+  <% else %>
+
+    <p><label for="project_upload_ftp">
+    or Upload your archive to your <%= link_to 'FTP', '/help.html#ftpHelp' -%> space</label>
+    <A HREF=<%= @ftpUrl -%>> <%= @ftpUrl -%></A><br/>
+    Then <%= link_to 'refresh', {:action => 'upload', :id => @project.id} -%>.
+
+  <% end %>
 
   <table cellpadding=0 cellspacing=0><tr>
   <td><%= submit_tag @autoUploadLabel %></td>
-<!--  <td><%= submit_tag "Upload Only" %></td> -->
   <td><%= submit_tag "Cancel" %></td>
   </tr></table>
 <%= end_form_tag -%>
 <p>
-Use 'Submit' to upload and expand the archive, 
-validate the data and metadata, 
+Use 'Submit' to upload and expand the archive, validate the data and metadata, <br/>
 and load the data to the database.
 </p>
-<!-- Use 'Upload Only' to run these
-steps individually. -->
 <p>
 The archive file must have one of these extensions: <br/>
 .zip, .tar.gz, .tgz, .tar.bz2 <br/>
