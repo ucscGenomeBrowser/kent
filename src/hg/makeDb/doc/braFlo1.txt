@@ -4,7 +4,7 @@
 # This file describes browser build for the Lancelet
 # genome, Branchiostoma floridae, March 2006, v.1.0 from JGI
 #
-#       "$Id: braFlo1.txt,v 1.7 2007/04/11 23:50:18 hiram Exp $"
+#       "$Id: braFlo1.txt,v 1.8 2008/04/13 04:10:35 hiram Exp $"
 #
 
 ##########################################################################
@@ -291,3 +291,75 @@ braFlo1.perChromTables = no
     ssh hgwdev
     hgsql -e 'update dbDb set defaultPos="chrUn:619013791-619054719"
 	where name="braFlo1";' hgcentraltest
+
+############################################################################
+#  BLASTZ petMar1 Lamprey (WORKING - 2008-04-11 - Hiram)
+    ssh kkstore05
+    screen	# use a screen to control this multi-day job
+    mkdir /cluster/data/braFlo1/bed/blastzPetMar1.2008-04-11
+    cd /cluster/data/braFlo1/bed/blastzPetMar1.2008-04-11
+
+    cat << '_EOF_' > DEF
+# Lancelet vs Lamprey
+
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: Lancelet braFlo1 - largest chunk big enough for largest scaffold
+#       Largest scaffold 7,200,735 - 3032 scaffolds + chrM
+SEQ1_DIR=/san/sanvol1/scratch/braFlo1/braFlo1.2bit
+SEQ1_LEN=/san/sanvol1/scratch/braFlo1/chrom.sizes
+SEQ1_CTGDIR=/san/sanvol1/scratch/braFlo1/braFlo1UnScaffolds.2bit
+SEQ1_CTGLEN=/san/sanvol1/scratch/braFlo1/braFlo1UnScaffolds.sizes
+SEQ1_LIFT=/san/sanvol1/scratch/braFlo1/braFlo1.lift
+SEQ1_CHUNK=10000000
+SEQ1_LIMIT=50
+SEQ1_LAP=10000
+
+# QUERY: Lamprey petMar1
+SEQ2_DIR=/scratch/data/petMar1/petMar1.2bit
+SEQ2_LEN=/cluster/data/petMar1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=200
+SEQ2_LAP=0
+
+BASE=/cluster/data/braFlo1/bed/blastzPetMar1.2008-04-11
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl \
+	/cluster/data/braFlo1/bed/blastzPetMar1.2008-04-11/DEF \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-bigClusterHub=kk -verbose=2 > do.log 2>&1 &
+# Completed: 78590 of 78590 jobs
+# CPU time in finished jobs:   10056466s  167607.76m  2793.46h  116.39d  0.319 y
+# IO & Wait Time:               6633099s  110551.65m  1842.53h   76.77d  0.210 y
+# Average job time:                 212s       3.54m     0.06h    0.00d
+# Longest finished job:            4572s      76.20m     1.27h    0.05d
+# Submission to last job:        107694s    1794.90m    29.91h    1.25d
+    #	continuing after various interruptions and finished the batch manually
+    time nice -n +19 doBlastzChainNet.pl \
+	/cluster/data/braFlo1/bed/blastzPetMar1.2008-04-11/DEF \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-continue=cat -bigClusterHub=kk -verbose=2 > cat.log 2>&1 &
+    #	real    12m43.792s
+    cat fb.braFlo1.chainPetMar1Link.txt
+    #	27418217 bases of 923355587 (2.969%) in intersection
+
+    #	and the swap
+    mkdir /cluster/data/petMar1/bed/blastz.braFlo1.swap
+    cd /cluster/data/petMar1/bed/blastz.braFlo1.swap
+    time nice -n +19 doBlastzChainNet.pl \
+	/cluster/data/braFlo1/bed/blastzPetMar1.2008-04-11/DEF \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-swap -bigClusterHub=kk -verbose=2 > swap.log 2>&1 &
+    #	real    194m53.514s
+    cat fb.petMar1.chainBraFlo1Link.txt
+    #	27373264 bases of 831696438 (3.291%) in intersection
