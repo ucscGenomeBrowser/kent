@@ -4,7 +4,7 @@
 # This file describes browser build for the Sea Lamprey
 # genome, Petromyzon marinus, March 2007, v.3.0 from WUSTL
 #
-#       "$Id: petMar1.txt,v 1.4 2008/02/07 23:48:00 hiram Exp $"
+#       "$Id: petMar1.txt,v 1.5 2008/04/13 04:11:08 hiram Exp $"
 #
 
 ##########################################################################
@@ -391,4 +391,23 @@ TMPDIR=/scratch/tmp
 	-bigClusterHub=kk > chainMerge.log 2>&1 &
 XXX - running 2008-01-16 22:35
 
+#############################################################################
+# BLASTZ SWAP Lamprey - Lanclet (DONE - 2008-04-12 - Hiram)
+    ssh kkstore05
+    screen	#	control this job with a screen
+    #	the original
+    cd /cluster/data/braFlo1/bed/blastzPetMar1.2008-04-11
+    cat fb.braFlo1.chainPetMar1Link.txt
+    #	27418217 bases of 923355587 (2.969%) in intersection
 
+    #	and the swap
+    mkdir /cluster/data/petMar1/bed/blastz.braFlo1.swap
+    cd /cluster/data/petMar1/bed/blastz.braFlo1.swap
+    time nice -n +19 doBlastzChainNet.pl \
+	/cluster/data/braFlo1/bed/blastzPetMar1.2008-04-11/DEF \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-swap -bigClusterHub=kk -verbose=2 > swap.log 2>&1 &
+    #	real    194m53.514s
+    cat fb.petMar1.chainBraFlo1Link.txt
+    #	27373264 bases of 831696438 (3.291%) in intersection
