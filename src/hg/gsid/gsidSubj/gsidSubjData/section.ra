@@ -13,6 +13,11 @@ shortLabel Clinical
 longLabel Clinical Information
 priority 30
 
+name clinicalDate
+shortLabel ClinicalDate
+longLabel Key Clinical Dates (relative to date of last negative)
+priority 32
+
 name sequence
 shortLabel Sequence
 longLabel Sequence Information
