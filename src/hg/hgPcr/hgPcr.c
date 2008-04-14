@@ -23,7 +23,7 @@
 #include "botDelay.h"
 #include "oligoTm.h"
 
-static char const rcsid[] = "$Id: hgPcr.c,v 1.17 2008/04/10 22:36:26 angie Exp $";
+static char const rcsid[] = "$Id: hgPcr.c,v 1.18 2008/04/14 23:50:08 angie Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -124,6 +124,8 @@ boolean timeMoreRecentThanTable(int time, struct sqlConnection *conn,
 /* Return TRUE if the given UNIX time is more recent than the time that 
  * table was last updated. */
 {
+if (! sqlTableExists(conn, table))
+    return FALSE;
 int tableUpdateTime = sqlTableUpdateTime(conn, table);
 return (time > tableUpdateTime);
 }
@@ -132,6 +134,8 @@ boolean timeMoreRecentThanFile(int time, char *fileName)
 /* Return TRUE if the given UNIX time is more recent than the time that
  * fileName was last updated. */
 {
+if (! fileExists(fileName))
+    return FALSE;
 int fileUpdateTime = fileModTime(fileName);
 return (time > fileUpdateTime);
 }
@@ -516,6 +520,11 @@ if (gpoList != NULL)
     char urlFormat[2048];
     safef(urlFormat, sizeof(urlFormat), "%s?%s&db=%s&position=%%s", 
 	  hgTracksName(), cartSidUrlString(cart), server->db);
+    printf("The sequences and coordinates shown below are from %s, "
+	   "not from the genome assembly.  The links lead to the "
+	   "Genome Browser at the position of the entire target "
+	   "sequence.<BR>\n",
+	   server->description);
     printf("<TT><PRE>");
     for (gpo = gpoList;  gpo != NULL;  gpo = gpo->next)
 	{
