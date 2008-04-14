@@ -1,0 +1,35 @@
+# human
+track chainHg18
+priority 256
+
+track netHg18
+priority 256.1
+
+# rhesus 
+track chainRheMac2
+priority 240
+
+track netRheMac2
+priority 240.1
+
+# marmoset
+track chainCalJac1
+priority 257
+
+track netCalJac1
+priority 257.1
+
+# dog
+track chainCanFam2
+priority 225
+
+track netCanFam2
+priority 225.1
+
+# guinea pig
+track chainCavPor2
+priority 278
+
+track netCavPor2
+priority 278.1
+
