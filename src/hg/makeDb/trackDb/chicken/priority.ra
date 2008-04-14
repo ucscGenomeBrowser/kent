@@ -3,3 +3,15 @@ priority 260
 
 track netAnoCar1
 priority 260.1
+
+track chainEquCab1
+priority 195
+
+track netEquCab1
+priority 195.1
+
+track chainEquCab2
+priority 196
+
+track netEquCab2
+priority 196.1
