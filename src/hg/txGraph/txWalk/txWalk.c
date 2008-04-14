@@ -396,31 +396,40 @@ boolean properSubsetOf(struct slRef *bigger, struct slRef *smaller)
 /* Return TRUE if smaller is a proper subset of bigger.  */
 {
 struct slRef *bigRef, *smallRef;
-for (smallRef = smaller; smallRef != NULL; smallRef = smallRef->next)
+for (bigRef = bigger; bigRef != NULL; bigRef = bigRef->next)
     {
-    boolean anySame = FALSE;
-    void *smallVal = smallRef->val;
-    for (bigRef = bigger; bigRef != NULL; bigRef = bigRef->next)
-        {
-	if (bigRef->val == smallVal)
-	    {
-	    anySame = TRUE;
-	    break;
-	    }
-	}
-    if (!anySame)
-	return FALSE;
+    if (bigRef->val == smaller->val)
+        break;
     }
-return TRUE;
+if (bigRef == NULL)
+    return FALSE;
+for (smallRef = smaller; smallRef != NULL && bigRef != NULL; smallRef = smallRef->next, bigRef=bigRef->next)
+    {
+    if (smallRef->val != bigRef->val)
+        return FALSE;
+    }
+return smallRef == NULL;
 }
 
+#ifdef DEBUG
+void dumpTrackerRef(struct slRef *ref)
+/* Dump info from a single reference to an edge tracker. */
+{
+struct edgeTracker *tracker = ref->val;
+struct txEdge *edge = tracker->edge;
+if (edge->type == 0)
+    printf("[%d-%d]  ", tracker->start, tracker->end);
+else
+    printf("]%d-%d[  ", tracker->start, tracker->end);
+}
 
 void dumpTrackerRefList(struct slRef *refList)
+/* Dump out information on a list of tracked edges. */
 {
 struct slRef *ref;
 for (ref = refList; ref != NULL; ref = ref->next)
     {
-    printf("%p ", ref->val);
+    dumpTrackerRef(ref);
     }
 }
 
@@ -432,9 +441,9 @@ dumpTrackerRefList(smaller);
 printf("\na subset of;\n  ");
 dumpTrackerRefList(bigger);
 printf("\n? %s\n", (isSubset ? "yes" : "no"));
-printf("\n");
 return isSubset;
 }
+#endif /* DEBUG */
 
 boolean properSubsetOfAny(struct path *pathList, struct slRef *trackerRefList)
 /* Return TRUE if trackerRefList is a subset of any of the paths in
@@ -481,7 +490,10 @@ lmAllocArray(lm, stack, 128);
 double sourceTypeWeights[txg->sourceCount];
 int i;
 for (i=0; i<txg->sourceCount; ++i)
+    {
     sourceTypeWeights[i] = weightFromHash(weightHash, txg->sources[i].type);
+    verbose(3, "weight for %s %s (index %d) is %f\n", txg->sources[i].type, txg->sources[i].accession, i, sourceTypeWeights[i]);
+    }
 
 /* Set up structure to track edges. */
 struct edgeTracker *trackerList = makeTrackerList(txg, sourceTypeWeights, 
@@ -534,8 +546,10 @@ for (rna = rnaList; rna != NULL; rna = rna->next)
     {
     struct slRef *trackerRefList = edgesUsedBySource[rna->id];
     struct slRef *supportedList = supportedSubset(trackerRefList, threshold, lm);
+    verbose(3, "rna %s, supportedBy %d, trackedBy %d\n", txg->sources[rna->id].accession, slCount(supportedList), slCount(trackerRefList));
     if (supportedList != NULL && !properSubsetOfAny(pathList, supportedList))
         {
+	verbose(3, "   outputting %s\n", txg->sources[rna->id].accession);
 	lmAllocVar(lm, path);
 	path->trackerRefList = supportedList;
 	slAddHead(&pathList, path);
@@ -561,7 +575,7 @@ char *row[TXGRAPH_NUM_COLS];
 while (lineFileRow(lf, row))
     {
     struct txGraph *txg = txGraphLoad(row);
-    verbose(3, "Processing %s\n", txg->name);
+    verbose(2, "Processing %s\n", txg->name);
     walkOut(txg, weightHash, threshold, singleExonFactor, f, evFile);
     txGraphFree(&txg);
     }
