@@ -1,7 +1,7 @@
 # for emacs: -*- mode: sh; -*-
 
 # Equus caballus - ??
-#	"$Id: equCab2.txt,v 1.2 2008/04/10 23:11:40 larrym Exp $"
+#	"$Id: equCab2.txt,v 1.3 2008/04/14 17:23:37 hiram Exp $"
 #########################################################################
 # DOWNLOAD SEQUENCE (...
 
@@ -224,7 +224,7 @@ i.e. if you take dupes and chrM into account, our data agrees with their raw dat
     #   1004742864 bases of 2454424288 (40.936%) in intersection
 
     # RepeatMasker and lib version from do.log:
-    #   RepeatMasker version development-$Id: equCab2.txt,v 1.2 2008/04/10 23:11:40 larrym Exp $
+    #   RepeatMasker version development-$Id: equCab2.txt,v 1.3 2008/04/14 17:23:37 hiram Exp $
     #   Jan 11 2008 (open-3-1-9) version of RepeatMasker
     #	CC   RELEASE 20071204
 
@@ -406,3 +406,25 @@ equCab2.downloadDir = equCab2
 
 ##
 ###
+############################################################################
+#  equCab2 - Horse - Ensembl Genes (DONE - 2008-04-02 - hiram)
+    ssh kkstore04
+    cd /cluster/data/equCab2
+    cat << '_EOF_' > equCab2.ensGene.ra
+# required db variable
+db equCab2
+# optional nameTranslation, the sed command that will transform
+#	Ensemble names to UCSC names.  With quotes just to make sure.
+nameTranslation "s/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/; s/^Un/chrUn/"
+#	translate Ensembl chrUnNNNN names to chrUn coordinates
+liftUp /cluster/data/equCab2/jkStuff/chrUn.lift
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl -ensVersion=49 equCab2.ensGene.ra
+    ssh hgwdev
+    cd /cluster/data/canFam2/bed/ensGene.49
+    featureBits equCab2 ensGene
+    #	39746402 bases of 2454424288 (1.619%) in intersection
+
+############################################################################
