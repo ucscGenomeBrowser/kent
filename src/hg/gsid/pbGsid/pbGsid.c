@@ -18,7 +18,7 @@
 #include "trashDir.h"
 #include "psGfx.h"
 
-static char const rcsid[] = "$Id: pbGsid.c,v 1.1 2007/12/10 23:52:52 fanhsu Exp $";
+static char const rcsid[] = "$Id: pbGsid.c,v 1.2 2008/04/14 21:30:57 fanhsu Exp $";
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
@@ -157,23 +157,14 @@ void makeActiveImagePB(char *psOutput, char *psOutput2)
 char *mapName = "map";
 int pixWidth, pixHeight;
 
-char *answer;
-char cond_str[255];
 struct sqlConnection *conn;
-struct sqlConnection *connCentral;
-char query[256];
-struct sqlResult *sr;
-char **row;
 int  iypos;
-char *blatGbDb;
-char *sciName, *commonName;
 char *spDisplayId;
 char *oldDisplayId;
 conn  = sqlConnect(UNIPROT_DB_NAME);
-hPrintf("<br><font size=4>Protein ");
-
-hPrintf("<A HREF=\"http://www.expasy.org/cgi-bin/niceprot.pl?%s\" TARGET=_blank><B>%s</B></A>\n", 
-	proteinID, proteinID);
+printf("<BR>");
+hPrintf("<BR><font size=4><B>protein: ");
+hPrintf("%s</B><BR>", proteinID);
 
 spDisplayId = spAccToId(conn, spFindAcc(conn, proteinID));
 if (strstr(spDisplayId, spFindAcc(conn, proteinID)) == NULL)
@@ -190,32 +181,7 @@ if (strstr(spDisplayId, spFindAcc(conn, proteinID)) == NULL)
 	    }
 	hPrintf(")\n");
 	}
-hPrintf(" %s\n", description);
 hPrintf("</font><br>");
-
-hPrintf("Organism: ");
-/* get scientific and Genbank common name of this organism */
-sciName    = NULL;
-commonName = NULL;
-safef(cond_str, sizeof(cond_str),"accession='%s'", proteinID);
-answer = sqlGetField(conn, PROTEOME_DB_NAME, "spXref3", "division", cond_str);
-if (answer != NULL)
-    {
-    safef(cond_str, sizeof(cond_str), "id=%s and nameType='scientific name'", answer);
-    sciName = sqlGetField(conn, PROTEOME_DB_NAME, "taxonNames", "name", cond_str);
-    
-    safef(cond_str, sizeof(cond_str), "id=%s and nameType='genbank common name'", answer);
-    commonName = sqlGetField(conn, PROTEOME_DB_NAME, "taxonNames", "name", cond_str);
-    }
-if (sciName != NULL)
-    {
-    hPrintf("%s", sciName);
-    }
-if (commonName != NULL)
-    {
-    hPrintf(" (%s)", commonName);
-    }
-hPrintf("<br>");
 
 protSeq = getAA(proteinID);
 if (protSeq == NULL)
@@ -295,63 +261,6 @@ histDone:
 hPrintf("<P>");
 fflush(stdout);
 
-/* See if a Genome Browser exist for this organism.  If so, display BLAT link. */
-connCentral = hConnectCentral();
-safef(query, sizeof(query), 
-      "select defaultDb.name from dbDb, defaultDb where dbDb.scientificName='%s' and dbDb.name=defaultDb.name",
-      sciName);
-sr = sqlGetResult(connCentral, query);
-row = sqlNextRow(sr);
-if (row != NULL)
-    {
-    blatGbDb = strdup(row[0]);
-    }
-else
-    {
-    blatGbDb = NULL;
-    }
-sqlFreeResult(&sr);
-hDisconnectCentral(&connCentral);
-
-if (proteinInSupportedGenome || (blatGbDb != NULL))
-    {
-    hPrintf("\n<B>UCSC Links:</B><BR>\n ");
-    hPrintf("<UL>\n");
-
-    /* Show GB links only if the protein belongs to a supported genome */
-    if (proteinInSupportedGenome)
-    	{
-    	doGenomeBrowserLink(proteinID, mrnaID, hgsidStr);
-    	doGeneDetailsLink(proteinID, mrnaID, hgsidStr);
-    	}
-
-    /* Show Gene Sorter link only if it is valid for this genome */
-    if (hgNearOk(database))
-    	{
-    	doGeneSorterLink(protDisplayID, mrnaID, hgsidStr);
-    	}
-	
-    /* Show BLAT link if we have UCSC Genome Browser for it */
-    if (blatGbDb != NULL)
-    	{
-    	doBlatLink(blatGbDb, sciName, commonName, protSeq);
-    	}
-	
-    hPrintf("</UL><P>");
-    }
-
-/* This section shows various types of  domains */
-conn = sqlConnect(UNIPROT_DB_NAME);
-domainsPrint(conn, proteinID);
-
-hPrintf("<P>");
-
-/* Do Pathway section only if the protein belongs to a supported genome */
-if (proteinInSupportedGenome);
-    {
-    doPathwayLinks(proteinID, mrnaID); 
-    }
-    
 printFASTA(proteinID, protSeq);
 }
 
@@ -370,8 +279,6 @@ cartSaveSession(cart);
 
 hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#"HG_COL_HOTLINKS"\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"2\"><TR>\n");
 hPrintf("<TD ALIGN=LEFT><A HREF=\"../index.html\">%s</A></TD>", wrapWhiteFont("Home"));
-hPrintf("<TD ALIGN=CENTER><FONT COLOR=\"#FFFFFF\" SIZE=4>%s</FONT></TD>",
-        "GSID Proteome Browser");
 hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/pbGsid?%s=%u&pbt.psOutput=on\">%s</A></TD>\n",
         cartSessionVarName(), cartSessionId(cart), wrapWhiteFont("PDF/PS"));
 hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/pbGateway\">%s</A></TD>", wrapWhiteFont("New Query"));
@@ -388,6 +295,7 @@ else
     
 hPrintf("</TR></TABLE>");
 fflush(stdout);
+printf("<font size=5><B>GSID Protein View</B></font>");
 
 /* Make clickable image and map. */
 makeActiveImagePB(psOutput, psOutput2);
@@ -465,7 +373,6 @@ cart = theCart;
 */
 
 queryID = cartOptionalString(cart, "proteinID");
-//printf("<br>queryID=%s\n", queryID);fflush(stdout);
 if (sameString(queryID, ""))
     {
     errAbort("Please go back and enter a gene symbol or a Swiss-Prot/TrEMBL protein ID.\n");
