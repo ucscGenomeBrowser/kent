@@ -20874,7 +20874,7 @@ hgLoadBed hg18 ux16 ux16Hg18.bed
     'load data local infile "allenBrainGene.tab" into table allenBrainGene'
 
 #############################################################################
-# BLASTZ/CHAIN/NET equCab2 (DONE - 2008-04-10 - Hiram)
+# BLASTZ/CHAIN/NET equCab2 (DONE - 2008-04-10 - larrym)
     ssh kkstore04
     screen #	use screen to control this multi-day job
     mkdir /cluster/data/hg18/bed/blastz.equCab2.2008-04-10
@@ -20895,7 +20895,7 @@ SEQ2_DIR=/scratch/data/equCab2/equCab2.2bit
 SEQ2_LEN=/cluster/data/equCab2/chrom.sizes
 SEQ2_CTGDIR=/san/sanvol1/scratch/equCab2/equCab2.UnScaffolds.2bit
 SEQ2_CTGLEN=/san/sanvol1/scratch/equCab2/equCab2.UnScaffolds.sizes
-SEQ2_LIFT=/cluster/data/equCab2/jkStuff/chrUn.lift
+SEQ2_LIFT=/cluster/data/equCab2/jkStuff/equCab2.chrUn.lift
 SEQ2_CHUNK=20000000
 SEQ2_LIMIT=100
 SEQ2_LAP=0
@@ -20906,9 +20906,27 @@ TMPDIR=/scratch/tmp
     # << happy emacs
 
     time doBlastzChainNet.pl `pwd`/DEF \
-	-verbose=2 -bigClusterHub=pk \
+	-verbose=2 -bigClusterHub=pk  \
       -chainMinScore=3000 -chainLinearGap=medium \
-      -blastzOutRoot /cluster/bluearc/equCab2/blastz.hg18 >& do.log &
+      -blastzOutRoot /cluster/bluearc/equCab2/blastz.hg18 >>& do.log &
+
+    # failed so had to rerun stuff manually then, continue thus:
+
+    time doBlastzChainNet.pl `pwd`/DEF \
+	-verbose=2 -bigClusterHub=pk -syntenicNet -continue=load \
+      -chainMinScore=3000 -chainLinearGap=medium \
+      -blastzOutRoot /cluster/bluearc/equCab2/blastz.hg18 >>& do.log &
+    0.157u 0.084s 1:21:15.25 0.0%   0+0k 0+0io 0pf+0w
+
+    ln -s blastz.equCab2.2008-04-10 /cluster/data/hg18/bed/blastz.equCab2
+
+    featureBits hg18 -chrom=chr1 chainEquCab2Link
+    # 133103986 bases of 224999719 (59.157%) in intersection
+
+    cd /cluster/data/hg18/bed/blastz.equCab2.2008-04-10
+
+    cat fb.hg18.chainEquCab2Link.txt 
+    # 1647122438 bases of 2881515245 (57.162%) in intersection
 
 #############################################################################
 # MAKE PCR TARGET FOR UCSC GENES (DONE 4/10/08 angie)
