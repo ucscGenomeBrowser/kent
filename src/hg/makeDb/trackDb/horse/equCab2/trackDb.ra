@@ -18,3 +18,9 @@ group map
 visibility dense
 type bed 3 +
 
+track ctgPos2
+shortLabel Scaffolds
+longLabel Assembly Scaffolds
+group map
+priority 10
+visibility hide
