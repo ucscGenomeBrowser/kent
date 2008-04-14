@@ -2762,6 +2762,30 @@ spectrum on
 type netAlign bosTau1 chainBosTau1
 otherDb bosTau1
 
+track chainEquCab2
+shortLabel $o_db Chain
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+group compGeno
+priority 240
+visibility hide
+color 100,50,0
+altColor 255,240,200
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+matrixHeader A, C, G, T
+spectrum on
+type chain equCab2
+otherDb equCab2
+
+track netEquCab2
+shortLabel $o_db Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
+group compGeno
+priority 240.1
+visibility hide
+spectrum on
+type netAlign equCab2 chainEquCab2
+otherDb equCab2
+
 track chainCanFam2
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
