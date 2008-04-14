@@ -1,4 +1,4 @@
-# medaak
+# medaka
 track netOryLat1
 priority 138.1
 
@@ -9,6 +9,12 @@ priority 168
 track netDanRer4
 priority 168.1
 
+# stickleback
+track chainGasAcu1
+priority 136
+
+track netGasAcu1
+priority 136.1
 
 #lizard
 track chainAnoCar1
@@ -18,13 +24,18 @@ track netAnoCar1
 priority 179.1
 
 # cow
+track chainBosTau3
+priority 256.3
+
+track netBosTau3
+priority 256.4
+
 track chainBosTau2
 priority 256.5
 
 track netBosTau2
 priority 256.6
 
-# cow
 track chainBosTau1
 priority 256.7
 
@@ -33,17 +44,23 @@ priority 256.8
 
 # dog
 track chainCanFam1
-priority 267.3
+priority 220  
 
 track netCanFam1
-priority 267.4
+priority 220.1
+
+track chainCanFam2
+priority 221  
+
+track netCanFam2
+priority 221.1
 
 # cat
 track chainFelCat3
-priority 268.0
+priority 220.0
 
 track netFelCat3
-priority 268.1
+priority 220.1
 
 # bushbaby
 track chainOtoGar1Best
@@ -69,41 +86,54 @@ priority 273.0
 track netEquCab1
 priority 273.1
 
-# guinea pig
-track chainCavPor2
+track chainEquCab2
 priority 274.0
 
-track netCavPor2
+track netEquCab2
 priority 274.1
+
+# guinea pig
+track chainCavPor2
+priority 281.0
+
+track netCavPor2
+priority 281.1
 
 # marmoset
 track chainCalJac1
-priority 276.0
+priority 274.0
 
 track netCalJac1
-priority 276.1
+priority 274.1
 
-# Orangutan
+# orangutan
 track chainPonAbe2
 priority 277.0
 
 track netPonAbe2
 priority 277.1
 
-# Orangutan
 track chainPonAbe1
 priority 277.2
 
 track netPonAbe1
 priority 277.3
 
-# Rhesus
+# rhesus
 track chainRheMac2
-priority 278.0
+priority 276.0
 
 track netRheMac2
-priority 278.1
+priority 276.1
+
+# chimp
+track chainPanTro2
+priority 278.5
+
+track netPanTro2
+priority 278.6
 
 # human
 track chainHg15
 priority 279.9
+
