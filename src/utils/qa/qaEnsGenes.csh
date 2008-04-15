@@ -168,6 +168,15 @@ foreach db ($dbs)
 
 end # huge loop through each database
 
+# remember the hgFixed.trackVersion table
+echo "\n\n----------------------"
+echo "Don't forget to also push (to beta and then to the RR) the appropriate"
+echo "rows from the trackVersion table in the hgFixed database."
+echo "These rows allow the correct version number to be displayed in hgTrackUi."
+echo "\nEdit the following pseudo-SQL statement to include only those"
+echo "assemblies you will be pushing:"
+echo 'hgsql -Ne "SELECT * FROM trackVersion WHERE version = ensGeneUpdateVersion AND name = dbsYouWillPush" hgFixed'
+ 
 # clean up
 if ( -e xxDbListxx) then
  rm xxDbListxx
