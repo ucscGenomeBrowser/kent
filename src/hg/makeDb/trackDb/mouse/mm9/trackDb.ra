@@ -236,7 +236,7 @@ searchPriority 50
 track transcriptome
 shortLabel Transcriptome
 longLabel TROMER Transcriptome database
-group regulation
+group genes
 priority 66
 color 56,108,56
 type genePred
