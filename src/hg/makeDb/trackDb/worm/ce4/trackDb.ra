@@ -255,7 +255,7 @@ track nucleosomeStringency
 shortLabel NSome Stringency
 longLabel Nucleosome Positioning Stringency from SOLiD core alignments
 group map
-priority 120.0
+priority 125.0
 visibility hide
 type wig 0 1
 maxHeightPixels 100:48:11
@@ -269,7 +269,7 @@ track nucleosomeAdjustedCoverage
 shortLabel Adj NSome Covrg
 longLabel Adjusted nucleosome coverage (25bp)
 group map
-priority 121.0
+priority 124.0
 visibility hide
 type wig -11.93 8.76
 maxHeightPixels 100:48:11
@@ -283,7 +283,7 @@ track nucleosomeDensity
 shortLabel NSome Coverage
 longLabel Coverage of nucleosome predictions from SOLiD core alignments
 group map
-priority 120.0
+priority 122.0
 visibility hide
 type wig 1 19137
 spanList 1
@@ -311,7 +311,7 @@ track nucleosomeControlCoverage
 shortLabel MNase Coverage
 longLabel Micrococcal nuclease control coverage
 group map
-priority 120.0
+priority 123.0
 visibility hide
 type wig 1 5544
 spanList 1
