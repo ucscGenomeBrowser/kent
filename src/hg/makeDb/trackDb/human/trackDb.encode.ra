@@ -1199,31 +1199,31 @@ type bed 3 .
     color 176,0,80
     priority 14
 
-    track encodeAffyEc1TestesSites
+    track encodeAffyEc1TestisSites
     subTrack encodeAffyEcSites
-    shortLabel EC1 Sites Testes
-    longLabel Affy Ext Trans Sites (1-base window) (Testes)
+    shortLabel EC1 Sites Testis
+    longLabel Affy Ext Trans Sites (1-base window) (Testis)
     color 128,0,128
     priority 15
 
-    track encodeAffyEc51TestesSites
+    track encodeAffyEc51TestisSites
     subTrack encodeAffyEcSites
-    shortLabel EC51 Site Testes
-    longLabel Affy Ext Trans Sites (51-base window) (Testes)
+    shortLabel EC51 Site Testis
+    longLabel Affy Ext Trans Sites (51-base window) (Testis)
     color 128,0,128
     priority 16
 
-    track encodeAffyEc1FetalTestesSites
+    track encodeAffyEc1FetalTestisSites
     subTrack encodeAffyEcSites
     shortLabel EC1 Sites FetalT
-    longLabel Affy Ext Trans Sites (1-base window) (Fetal Testes)
+    longLabel Affy Ext Trans Sites (1-base window) (Fetal Testis)
     color 128,0,128    
     priority 17
 
-    track encodeAffyEc51FetalTestesSites
+    track encodeAffyEc51FetalTestisSites
     subTrack encodeAffyEcSites
     shortLabel EC51 Site FetalT
-    longLabel Affy Ext Trans Sites (51-base window) (Fetal Testes)
+    longLabel Affy Ext Trans Sites (51-base window) (Fetal Testis)
     color 128,0,128
     priority 18
 
@@ -1438,31 +1438,31 @@ type wig 0 62385
     color 176,0,80
     priority 14
 
-    track encodeAffyEc1TestesSignal
+    track encodeAffyEc1TestisSignal
     subTrack encodeAffyEcSignal
-    shortLabel EC1 Sgnl Testes
-    longLabel Affy Ext Trans Signal (1-base window) (Testes)
+    shortLabel EC1 Sgnl Testis
+    longLabel Affy Ext Trans Signal (1-base window) (Testis)
     color 128,0,128
     priority 15
 
-    track encodeAffyEc51TestesSignal
+    track encodeAffyEc51TestisSignal
     subTrack encodeAffyEcSignal
-    shortLabel EC51 Sgnl Testes
-    longLabel Affy Ext Trans Signal (51-base window) (Testes)
+    shortLabel EC51 Sgnl Testis
+    longLabel Affy Ext Trans Signal (51-base window) (Testis)
     color 128,0,128
     priority 16
 
-    track encodeAffyEc1FetalTestesSignal
+    track encodeAffyEc1FetalTestisSignal
     subTrack encodeAffyEcSignal
     shortLabel EC1 Sgnl FetalT
-    longLabel Affy Ext Trans Signal (1-base window) (Fetal Testes)
+    longLabel Affy Ext Trans Signal (1-base window) (Fetal Testis)
     color 128,0,128    
     priority 17
 
-    track encodeAffyEc51FetalTestesSignal
+    track encodeAffyEc51FetalTestisSignal
     subTrack encodeAffyEcSignal
     shortLabel EC51 Sgnl FetalT
-    longLabel Affy Ext Trans Signal (51-base window) (Fetal Testes)
+    longLabel Affy Ext Trans Signal (51-base window) (Fetal Testis)
     color 128,0,128
     priority 18
 
