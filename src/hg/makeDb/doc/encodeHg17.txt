@@ -4786,3 +4786,113 @@ done
 mkdir /data/apache/htdocs/goldenPath/hg17/encode/downloads
 cd /data/apache/htdocs/goldenPath/hg17/encode/downloads
 ln -s /cluster/data/encode/Affy/2008-03-20/processed/hg17/download/*.gz .
+# found out these have bad headers.  I'm going to reduce the span
+# from 25 to 1.  
+cd /cluster/data/encode/Affy/2008-03-20
+for f in lab/BW0/wig/*; do
+   tiss=`echo $f | sed 's/.*\///;s/\.sig.wig//'`;
+   table=encodeAffyEc1${tiss}Signal
+   downDir=processed/hg17/download
+   wig=processed/hg17/wigTable/${table}.tab
+   wib=${table}.wib
+   zip=${downDir}/${table}.wigVar.gz
+   tail +2 $f | sed 's/span=25/span=1/' | gzip -c > $zip
+   wigEncode $zip $wig $wib 2>> processed/hg17/wigEncode.log
+   mv $wib processed/hg17/wib
+   hgLoadWiggle -pathPrefix=/gbdb/hg17/encode/wib hg17 $table $wig
+done
+for f in lab/BW25/wig/*; do
+   tiss=`echo $f | sed 's/.*\///;s/\.sig.wig//'`;
+   table=encodeAffyEc51${tiss}Signal
+   downDir=processed/hg17/download
+   wig=processed/hg17/wigTable/${table}.tab
+   wib=${table}.wib
+   zip=${downDir}/${table}.wigVar.gz
+   tail +2 $f | sed 's/span=25/span=1/' | gzip -c > $zip
+   wigEncode $zip $wig $wib 2>> processed/hg17/wigEncode.log
+   mv $wib processed/hg17/wib/
+   hgLoadWiggle -pathPrefix=/gbdb/hg17/encode/wib hg17 $table $wig
+done
+
+# Renames (2008-04-14 Andy)
+
+# first GM06690 -> GM06990
+ssh hgwdev
+cd /cluster/data/encode/Affy/2008-03-20/processed
+for f in `find . -name '*GM0*'`; do newF=`echo $f | sed 's/6690/6990/'`; mv $f $newF; done
+for f in `find . -name '*GM06990*.tab'`; do sed 's/GM06690/GM06990/' $f > tmp; mv tmp $f; done
+rm /gbdb/hg1{7,8}/encode/wib/encodeAffyEc{5,}1GM06690Signal.wib
+pushd /gbdb/hg17/encode/wib
+ln -s `dirs +1`/hg17/wib/encodeAffyEc{5,}1GM06990Signal.wib .
+popd
+pushd /gbdb/hg18/encode/wib
+ln -s `dirs +1`/hg18/wib/encodeAffyEc{5,}1GM06990Signal.wib .
+popd
+pushd /usr/local/apache/htdocs/goldenPath/hg17/encode/wig/
+rm encodeAffyEc*GM0*
+ln -s `dirs +1`/hg17/download/encodeAffyEc{5,}1GM06990Signal.wigVar.gz .
+cd ../../../hg18/encode/wig
+rm encodeAffyEc*GM0*
+ln -s `dirs +1`/hg18/wigVar/encodeAffyEc{5,}1GM06990Signal.wigVar.gz .
+for db in hg1{7,8}; do
+   cd $db/wigTable
+   for table in encodeAffyEc{5,}1GM06990Signal; do
+       hgLoadWiggle -pathPrefix=/gbdb/${db}/encode/wib $db $table ${table}.tab
+   done
+   cd ../../
+done
+for db in hg1{7,8}; do 
+   for table in `echo show tables like \'encodeAffyEc%GM066%\' | hgsql $db | tail +2`; do
+      echo drop table $table | hgsql $db;
+   done
+done
+for db in hg1{7,8}; do 
+   for table in encodeAffyEc{5,}1GM06990Sites; do
+      hgLoadBed $db $table ${db}/bed/${table}.bed
+   done
+done
+
+# now Testes -> Testis
+# Delete
+rm /gbdb/hg1{7,8}/encode/wib/encodeAffyEc*Testes*.wib
+rm /usr/local/apache/htdocs/goldenPath/hg1{7,8}/encode/wig/encodeAffyEc*Testes*.wigVar.gz
+for db in hg1{7,8}; do
+   for table in `echo show tables like \'encodeAffyEc%Testes%\' | \
+       hgsql $db | tail +2`; do 
+     echo drop table $table | hgsql $db; 
+   done; 
+done
+
+# Change
+for f in `find . -name '*Testes*'`; do newF=`echo $f | sed 's/Testes/Testis/'`; mv $f $newF; done
+for f in `find . -name '*Testis*.tab'`; do sed 's/Testes/Testis/' $f > tmp; mv tmp $f; done
+
+# add links
+pushd /gbdb/hg17/encode/wib
+ln -s /cluster/data/encode/Affy/2008-03-20/processed/hg17/wib/encodeAffyEc*Testis*.wib .
+cd ../../../hg18/encode/wib
+ln -s /cluster/data/encode/Affy/2008-03-20/processed/hg18/wib/encodeAffyEc*Testis*.wib .
+cd /usr/local/apache/htdocs/goldenPath/hg17/encode/wig
+ln -s /cluster/data/encode/Affy/2008-03-20/processed/hg17/download/encodeAffyEc*Testis*.wigVar.gz .
+cd ../../../hg18/encode/wig/
+ln -s /cluster/data/encode/Affy/2008-03-20/processed/hg18/wigVar/encodeAffyEc*Testis*.wigVar.gz .
+popd
+
+# load beds
+for db in hg1{7,8}; do
+    pushd ${db}/bed
+    for bed in *Testis*; do 
+        hgLoadBed $db ${bed%.bed} $bed
+    done
+    popd
+done
+
+# load wiggles
+for db in hg1{7,8}; do
+    pushd ${db}/wigTable
+    for tab in *Testis*; do 
+        hgLoadWiggle -pathPrefix=/gbdb/${db}/encode/wib $db ${tab%.tab} $tab
+    done
+    popd
+done
+
