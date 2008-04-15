@@ -118,7 +118,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1448 2008/04/09 23:19:02 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1449 2008/04/15 20:06:36 angie Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -12539,7 +12539,7 @@ static int compositeTotalHeight(struct track *track, enum trackVisibility vis)
 struct track *subtrack;
 int height = 0;
 int stCount = subtrackCount(track->subtracks);
-int stMaxHeight = maximumTrackHeight(track) / stCount;
+int maxHeight = maximumTrackHeight(track);
 int maxStHeight = 0;
 for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
     if (isSubtrackVisible(subtrack))
@@ -12552,7 +12552,7 @@ for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
 	}
 /* If one subtrack is over the per-subtrack limit, then pretend all were,
  * so limitVisibility treats the composite track as over the limit. */
-if (maxStHeight > stMaxHeight)
+if (maxStHeight > maxHeight)
     track->height = maxStHeight * stCount;
 else
     track->height = height;
