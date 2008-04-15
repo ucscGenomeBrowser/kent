@@ -232,3 +232,13 @@ searchTable nscanGene
 searchType genePred
 termRegex chr[0-9a-zA-Z_].*\.[0-9]+\.[0-9]+\.[a-z]+
 searchPriority 50
+
+track transcriptome
+shortLabel Transcriptome
+longLabel TROMER Transcriptome database
+group regulation
+priority 66
+color 56,108,56
+type genePred
+url http://www.isrec.isb-sib.ch/cgi-bin/tromer/tromer_quick_search.pl?query_str=$$
+urlLabel TROMER database detail: 
