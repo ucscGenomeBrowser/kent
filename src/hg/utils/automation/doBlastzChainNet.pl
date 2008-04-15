@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/automation/doBlastzChainNet.pl instead.
 
-# $Id: doBlastzChainNet.pl,v 1.17 2007/12/14 00:10:36 hiram Exp $
+# $Id: doBlastzChainNet.pl,v 1.18 2008/04/15 20:29:09 kate Exp $
 
 # to-do items:
 # - lots of testing
@@ -1396,8 +1396,7 @@ sub doSyntenicNet {
   my $whatItDoes =
 "It filters the net for synteny and creates syntenic net MAF files for 
 multiz. Use this option when the query genome is high-coverage and not
-too distant from the reference.  Suppressed unless -syntenicNet is included.
-Do not use with scaffold-based reference genome";
+too distant from the reference.  Suppressed unless -syntenicNet is included.";
   if (not $opt_syntenicNet) {
     return;
   }
@@ -1417,7 +1416,8 @@ Do not use with scaffold-based reference genome";
   }
   my $bossScript = new HgRemoteScript("$runDir/netSynteny.csh", $workhorse,
                                     $runDir, $whatItDoes, $DEF);
-  $bossScript->add(<<_EOF_
+  if ($splitRef) {
+    $bossScript->add(<<_EOF_
 # filter net for synteny and create syntenic net mafs
 netFilter -syn $tDb.$qDb.net.gz  \\
     | netSplit stdin synNet
@@ -1437,9 +1437,20 @@ rm -fr $runDir/synNet
 rm -fr $runDir/chain
 _EOF_
       );
+  } else {
+    $bossScript->add(<<_EOF_
+netToAxt $tDb.$qDb.net.gz $tDb.$qDb.all.chain.gz \\
+    $defVars{'SEQ1_DIR'} $defVars{'SEQ2_DIR'} stdout \\
+  | axtSort stdin stdout \\
+  | axtToMaf -tPrefix=$tDb. -qPrefix=$qDb. stdin \\
+    $defVars{SEQ1_LEN} $defVars{SEQ2_LEN} \\
+    stdout \\
+| gzip -c > $tDb.$qDb.synNet.maf.gz
+_EOF_
+      );
+  }
   $bossScript->execute();
 }
-
 
 #########################################################################
 #
