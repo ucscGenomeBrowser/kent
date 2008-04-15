@@ -2621,6 +2621,15 @@ tablesIgnored $ce
     chr%_gold
     chr%_wabaCbr
     wabaCbr
+    nucleosomeControl
+    nucleosomeFragmentsSense
+    nucleosomeFragmentsAntisense
+    nucleosomeStringency
+    monoNucleosomesSense
+    monoNucleosomesAntiSense
+    nucleosomeControlSenseCoverage
+    nucleosomeControlAntisenseCoverage
+    nucleosomeAdjustedCoverage
 
 tablesIgnored $ci
     snapGene
