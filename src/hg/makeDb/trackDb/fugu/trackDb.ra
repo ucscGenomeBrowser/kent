@@ -189,7 +189,7 @@ searchPriority 5
 searchTable ensGene
 searchType genePred
 shortCircuit 1
-termRegex SINFRUT[0-9]+
+termRegex ENSTRUT[0-9]+
 searchPriority 50
 
 searchName ensGeneGtpGene
@@ -199,7 +199,7 @@ searchMethod prefix
 shortCircuit 1
 xrefTable ensGtp
 xrefQuery select transcript,gene from %s where gene like '%s%%'
-termRegex SINFRUG[0-9]+(\.[0-9]+)?
+termRegex ENSTRUG[0-9]+(\.[0-9]+)?
 searchPriority 50
 
 searchName ensGeneGtpProtein
@@ -209,7 +209,7 @@ searchMethod prefix
 shortCircuit 1
 xrefTable ensGtp
 xrefQuery select transcript,protein from %s where protein like '%s%%'
-termRegex SINFRUP[0-9]+(\.[0-9]+)?
+termRegex ENSTRUP[0-9]+(\.[0-9]+)?
 searchPriority 50
 
 track chainDanRer4

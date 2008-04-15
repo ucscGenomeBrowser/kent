@@ -75,9 +75,3 @@ visibility hide
 spectrum on
 type netAlign danRer5 chainDanRer5
 otherDb danRer5
-
-searchTable ensGene
-searchType genePred
-shortCircuit 1
-termRegex NEWSINFRUT[0-9]+
-searchPriority 50
