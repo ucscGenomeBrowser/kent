@@ -211,7 +211,7 @@
 #include "itemConf.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1407 2008/04/01 17:50:21 aamp Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1408 2008/04/15 16:39:03 hiram Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -7295,15 +7295,12 @@ void printEnsemblCustomUrl(struct trackDb *tdb, char *itemName, boolean encode,
     char *archive)
 /* Print Ensembl Gene URL. */
 {
-struct trackDb *tdbSf;
 char *shortItemName;
-char supfamURL[512];
 char *genomeStr = "";
 char *genomeStrEnsembl = "";
 struct sqlConnection *conn = hAllocConn();
 char cond_str[256], cond_str2[256], cond_str3[256];
 char *proteinID = NULL;
-char *ans;
 char *ensPep;
 char *chp;
 char ensUrl[256];
@@ -7422,14 +7419,18 @@ if (hTableExists("superfamily"))
                 }
             }
         }
+#ifdef NOT
+/* superfamily does not update with ensGene updates, stop printing an
+	invalid URL */
     sprintf(cond_str, "name='%s'", shortItemName);    
-    ans = sqlGetField(conn, database, "superfamily", "name", cond_str);
+    char *ans = sqlGetField(conn, database, "superfamily", "name", cond_str);
     if (ans != NULL)
 	{
 	/* double check to make sure trackDb is also updated to be in sync with existence of supfamily table */
-	tdbSf = hashFindVal(trackHash, "superfamily");
+	struct trackDb *tdbSf = hashFindVal(trackHash, "superfamily");
         if (tdbSf != NULL)
 	    {
+	    char supfamURL[512];
 	    printf("<B>Superfamily Link: </B>");
             safef(supfamURL, sizeof(supfamURL), "<A HREF=\"%s%s;seqid=%s\" target=_blank>", 
 	    	      tdbSf->url, genomeStr, proteinID);
@@ -7437,6 +7438,7 @@ if (hTableExists("superfamily"))
             printf("%s</A><BR>\n", proteinID);
 	    }
         }
+#endif
     }
 if (hTableExists("ensGtp") && (proteinID == NULL))
     {
