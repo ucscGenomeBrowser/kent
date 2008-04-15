@@ -93,10 +93,10 @@ track netEquCab2
 priority 274.1
 
 # guinea pig
-track chainCavPor2
+track chainCavPor3
 priority 281.0
 
-track netCavPor2
+track netCavPor3
 priority 281.1
 
 # marmoset
