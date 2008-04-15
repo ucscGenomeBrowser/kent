@@ -505,7 +505,7 @@ echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
 echo $trackname >> $db.$Org.pushlist
 sort -u $db.$Org.pushlist > pushlist2
 
-getTablesize.csh $db pushlist2 hgwdev
+getTableSize.csh $db pushlist2 hgwdev
 rm -f pushlist2
 
 echo "the end."
