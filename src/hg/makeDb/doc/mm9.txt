@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.60 2008/03/17 18:05:29 angie Exp $"
+#	"$Id: mm9.txt,v 1.61 2008/04/16 16:00:40 hiram Exp $"
 #
 
 #######################################################################
@@ -7771,5 +7771,131 @@ TMPDIR=/scratch/tmp
     #	real    117m39.571s
     cat fb.bosTau4.chainMm9Link.txt
     #	707444627 bases of 2731830700 (25.896%) in intersection
+
+#######################################################################
+# BLASTZ/CHAIN/NET Lamprey petMar1 (DONE - 2008-04-14 - Hiram)
+    ssh kkstore06
+    screen # use screen to control this job
+    mkdir /cluster/data/mm9/bed/blastzPetMar1.2008-04-14
+    cd /cluster/data/mm9/bed/blastzPetMar1.2008-04-14
+
+    cat << '_EOF_' > DEF
+# Mouse vs. Lamprey
+
+# using the "distant" genome alignment parameters
+#	see also: http://genomewiki.ucsc.edu/index.php/Mm9_multiple_alignment
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Mouse
+SEQ1_DIR=/scratch/data/mm9/mm9.2bit
+SEQ1_LEN=/scratch/data/mm9/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=1
+
+# QUERY: Lamprey petMar1
+SEQ2_DIR=/scratch/data/petMar1/petMar1.2bit
+SEQ2_LEN=/scratch/data/petMar1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=300
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm9/bed/blastzPetMar1.2008-04-14
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    time doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/mm9/bed/blastzPetMar1.2008-04-14/DEF \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	-qRepeats=windowmaskerSdust -bigClusterHub=pk > do.log 2>&1 &
+
+    cat fb.mm9.chainPetMar1Link.txt
+    #	29113438 bases of 2620346127 (1.111%) in intersection
+
+    #	That is OK, now for the swap:
+    mkdir /cluster/data/petMar1/bed/blastz.mm9.swap
+    cd /cluster/data/petMar1/bed/blastz.mm9.swap
+    time doBlastzChainNet.pl -verbose=2 -swap \
+	/cluster/data/mm9/bed/blastzPetMar1.2008-04-14/DEF \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	-qRepeats=windowmaskerSdust -bigClusterHub=pk > swap.log 2>&1 &
+    #	real    33m29.076s
+    cat  fb.petMar1.chainMm9Link.txt
+    #	26052507 bases of 831696438 (3.132%) in intersection
+
+#######################################################################
+# BLASTZ/CHAIN/NET Lanclet broFla1 (DONE - 2008-04-14 - Hiram)
+    ssh kkstore06
+    screen # use screen to control this job
+    mkdir /cluster/data/mm9/bed/blastzBraFlo1.2008-04-14
+    cd /cluster/data/mm9/bed/blastzBraFlo1.2008-04-14
+
+    cat << '_EOF_' > DEF
+# Mouse vs. Lanclet
+
+# using the "distant" genome alignment parameters
+#	see also: http://genomewiki.ucsc.edu/index.php/Mm9_multiple_alignment
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Mouse
+SEQ1_DIR=/scratch/data/mm9/mm9.2bit
+SEQ1_LEN=/scratch/data/mm9/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=1
+
+# QUERY: Lancelet braFlo1 - largest chunk big enough for largest scaffold
+#       Largest scaffold 7,200,735 - 3032 scaffolds + chrM
+SEQ2_DIR=/scratch/data/braFlo1/braFlo1.2bit
+SEQ2_LEN=/scratch/data/braFlo1/chrom.sizes
+SEQ2_CTGDIR=/scratch/data/braFlo1/braFlo1UnScaffolds.2bit
+SEQ2_CTGLEN=/scratch/data/braFlo1/braFlo1UnScaffolds.sizes
+SEQ2_LIFT=/scratch/data/braFlo1/braFlo1.lift
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=30
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm9/bed/blastzBraFlo1.2008-04-14
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    time doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/mm9/bed/blastzBraFlo1.2008-04-14/DEF \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	-qRepeats=windowmaskerSdust -bigClusterHub=kk > do.log 2>&1 &
+    #	real    408m36.691s
+    cat fb.mm9.chainBraFlo1Link.txt
+    #	26725980 bases of 2620346127 (1.020%) in intersection
+
+    #	That is OK, now for the swap:
+    mkdir /cluster/data/braFlo1/bed/blastz.mm9.swap
+    cd /cluster/data/braFlo1/bed/blastz.mm9.swap
+    time doBlastzChainNet.pl -verbose=2 -swap \
+	/cluster/data/mm9/bed/blastzBraFlo1.2008-04-14/DEF \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	-qRepeats=windowmaskerSdust -bigClusterHub=kk > swap.log 2>&1 &
+    #	real    12m23.402s
+    cat  fb.braFlo1.chainMm9Link.txt
+    #	31517169 bases of 923355587 (3.413%) in intersection
+
+###########################################################################
+#  LOAD Transcriptome data (DONE - 2008-04-15 - Hiram)
+    ssh hgwdev
+    mkdir /cluster/data/mm9/bed/transcriptome
+    cd /cluster/data/mm9/bed/transcriptome
+    wget --timestamping ftp://ftp.licr.org/pub/MTr.gtf.gz
+    wget --timestamping ftp://ftp.licr.org/pub/txg.tar.gz
+    gtfToGenePred -genePredExt MTR.gtf.gz MTr.gp
+    hgLoadGenePred mm9 transcriptome -genePredExt MTr.gp
 
 ###########################################################################
