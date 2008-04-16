@@ -4,7 +4,7 @@
 # This file describes browser build for the Sea Lamprey
 # genome, Petromyzon marinus, March 2007, v.3.0 from WUSTL
 #
-#       "$Id: petMar1.txt,v 1.5 2008/04/13 04:11:08 hiram Exp $"
+#       "$Id: petMar1.txt,v 1.6 2008/04/16 16:50:16 hiram Exp $"
 #
 
 ##########################################################################
@@ -319,7 +319,7 @@ XXX - running 2008-01-15 12:50
     ln -s contigSequence/super.sizes .
 
 #########################################################################
-# BLASTZ/CHAIN/NET Medaka oryLat1 (DONE - 2008-01-16 - Hiram)
+# BLASTZ/CHAIN/NET Medaka oryLat1 (DONE - 2008-01-16 - 2008-01-30 - Hiram)
 #	Try 2 with contigs for Lamprey
     ssh kkstore04
     screen # use screen to control this job
@@ -389,7 +389,38 @@ TMPDIR=/scratch/tmp
 	-continue=chainMerge -chainMinScore=3000 -chainLinearGap=medium \
 	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
 	-bigClusterHub=kk > chainMerge.log 2>&1 &
-XXX - running 2008-01-16 22:35
+    #	had the same failure as the first time test of this alignment.
+    #	something is wrong with netChainSubset, needs to be debugged.
+    #	ignore the step to create the "over.chain" file, finish the net
+    #	step manually, then continuing:
+    time doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-continue=load -chainMinScore=3000 -chainLinearGap=medium \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-bigClusterHub=kk > load.log 2>&1 &
+    #	real    3m53.686s
+    cat fb.oryLat1.chainPetMar1Link.txt
+    #	24990733 bases of 700386597 (3.568%) in intersection
+
+    #	And, for the swap:
+    mkdir /cluster/data/petMar1/bed/blastz.oryLat1.swap
+    cd /cluster/data/petMar1/bed/blastz.oryLat1.swap
+    time doBlastzChainNet.pl -verbose=2 -swap \
+	/cluster/data/oryLat1/bed/blastz.petMar1.2008-01-16/DEF \
+	-chainMinScore=3000 -chainLinearGap=medium \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-bigClusterHub=kk > swap.log 2>&1 &
+    #	real    1m3.572s
+    #	same problem in netChainSubset trying to make the "over.chain" file.
+    #	skip that, finish the chains manually:
+    #	real    14m35.340s
+    #	then continuing:
+    time doBlastzChainNet.pl -verbose=2 -swap \
+	/cluster/data/oryLat1/bed/blastz.petMar1.2008-01-16/DEF \
+	-continue=load -chainMinScore=3000 -chainLinearGap=medium \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-bigClusterHub=kk > load.log 2>&1 &
+    cat fb.petMar1.chainOryLat1Link.txt
+    #	23358156 bases of 831696438 (2.808%) in intersection
 
 #############################################################################
 # BLASTZ SWAP Lamprey - Lanclet (DONE - 2008-04-12 - Hiram)
@@ -411,3 +442,24 @@ XXX - running 2008-01-16 22:35
     #	real    194m53.514s
     cat fb.petMar1.chainBraFlo1Link.txt
     #	27373264 bases of 831696438 (3.291%) in intersection
+
+#############################################################################
+# BLASTZ SWAP Chicken GalGal3 (DONE - 2008-04-15 - Hiram)
+    #	the original
+    ssh kkstore03
+    cd /cluster/data/galGal3/bed/blastzPetMar1.2008-04-11
+    cat fb.galGal3.chainPetMar1Link.txt
+    #	20134896 bases of 1042591351 (1.931%) in intersection
+
+    #	and the swap
+    mkdir /cluster/data/petMar1/bed/blastz.galGal3.swap
+    cd /cluster/data/petMar1/bed/blastz.galGal3.swap
+    time nice -n +19 doBlastzChainNet.pl \
+	/cluster/data/galGal3/bed/blastzPetMar1.2008-04-11/DEF \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-swap -bigClusterHub=memk -verbose=2 > swap.log 2>&1 &
+    #	real    33m41.587s
+    cat fb.petMar1.chainGalGal3Link.txt
+    #	22308118 bases of 831696438 (2.682%) in intersection
+#############################################################################
