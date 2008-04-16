@@ -23,7 +23,7 @@
 #include "botDelay.h"
 #include "oligoTm.h"
 
-static char const rcsid[] = "$Id: hgPcr.c,v 1.18 2008/04/14 23:50:08 angie Exp $";
+static char const rcsid[] = "$Id: hgPcr.c,v 1.21 2008/04/16 18:14:46 angie Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -240,7 +240,7 @@ puts(
 "primer pair.  The fasta header describes the region in the database\n"
 "and the primers.  The fasta body is capitalized in areas where the primer\n"
 "sequence matches the database sequence and in lower-case elsewhere.  Here\n"
-"is an example:<BR>\n"
+"is an example from human:<BR>\n"
 "<TT><PRE>\n"
 ">chr22:31000551+31001000  TAACAGATTGATGATGCATGAAATGGG CCCATGAGTGGCTCCTAAAGCAGCTGC\n"
 "TtACAGATTGATGATGCATGAAATGGGgggtggccaggggtggggggtga\n"
@@ -413,7 +413,11 @@ if (gotTargetDb)
 	showTargets(target, targetServerList);
 	printf("%s", "</TD>\n");
 	}
+    else
+	cgiMakeHiddenVar("wp_target", "genome");
     }
+else
+    cgiMakeHiddenVar("wp_target", "genome");
 
 printf("%s", "<TD COLWIDTH=2><CENTER>\n");
 printf("Forward Primer:<BR>");
@@ -610,13 +614,13 @@ if (minGood < minPerfect)
 
 /* Decide based on transient variables what page to put up. 
  * By default put up get primer page. */
-if (cartVarExists(cart, "wp_f") && cartVarExists(cart, "wp_r") &&
+if (isNotEmpty(fPrimer) && isNotEmpty(rPrimer) &&
 	!cartVarExists(cart, "wp_showPage"))
     {
     struct pcrServer *server = NULL;
     struct targetPcrServer *targetServer = NULL;
     char *target = cartUsualString(cart, "wp_target", "genome");
-    if (sameString(target, "genome"))
+    if (sameString(target, "genome") || isEmpty(target))
 	server = findServer(db, serverList);
     else
 	targetServer = findTargetServer(target, getTargetServerList(db));
