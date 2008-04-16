@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: mm8.txt,v 1.64 2008/03/11 19:02:49 hiram Exp $"
+#	"$Id: mm8.txt,v 1.65 2008/04/16 00:04:03 kate Exp $"
 #
 
 #  NOTE:  this doc may have genePred loads that fail to include
@@ -8563,6 +8563,198 @@ FYI Couldn't open chr1_17_02.fa.align: No such file or directory
     # << emacs
 
 ############################################################################
+# Broad whole-genome ChIP-Seq in stem and progenitor cells
+# Mikkelson et al., Nature Aug. 2, 2007
+# Requested by David Haussler
+# 21 data sets, ~4M sequences/dataset
+#     7 antibodies (histone meth & pol2), 
+#     4 cell sources (ES, NP, MEF, ES+)
+# alignments/ sequences and mappings for 27bp reads
+#   format: chrom, start, end, strand, read_id, mismatches, sequence 
+# densities/ indication of #reads near the base, 25bp fixed window, -1 if unalignable base
+# Allele-specific fragment counts
+#   format: chr start allele1  allele2  # # 
+# Enriched intervals by HMM
+#   BED3
+# Enriched intervals by fixed-size windows
+#   BED3
+# Also, gene expression data
+
+# Track organization:
+# Broad ChIP ES supertrack, with tracks:
+#       - Broad Stem ChIP Seq (read alignments)
+#       - Broad Stem ChIP Sig (density in 25bp windows)
+#       - Broad Stem ChIP Sites (regions from HMM, windowing)
+# Each track has subtracks for different cell types and antibodies
+
+# Also, a track for the expression data: Broad ES
+#      
+
+    ssh kkstore04
+    cd /cluster/data/mm8/bed
+    mkdir -p broadStemChip
+    cd broadStemChip/
+    wget -r ftp://ftp.broad.mit.edu/pub/papers/chipseq/
+    mv pub/papers/chipseq .
+    rm -fr pub
+    # original data
+    ln -s chipseq lab
+
+    ###############
+    # Sites track
+
+    # HMM Sites -- BED3
+    mkdir -p hmmSites
+    cd hmmSites
+    tar xvfz ../HMMIntervals.tar.gz
+
+    ssh hgwdev
+    cd /cluster/data/mm8/bed/broadStemChip
+cat > hmmSites.csh << 'EOF'
+    foreach f (/hmmSites/HMM_ES_*.txt)
+        set b = $f:t
+        set ab = `echo $b | perl -wpe 's/HMM_ES_(.+).txt/H3$1me3/'`
+        echo $ab
+        tail +2 $f | sed 's/^/chr/' | \
+                hgLoadBed mm8 broadStemChipHmmSites${ab}Es stdin
+    end
+'EOF'
+    csh hmmSites.csh >&! hmmSites.log
+    # Loaded 1788 - 19523 elements in 5 tracks
+    # H3K{20,27,36,4,9)me3
+
+    mkdir -p WindowSites
+    cd WindowSites
+    tar xvfz ../WindowIntervals.tar.gz
+    cd ..
+    awk '{print $4}' *K*.txt | sort -n | head -1
+
+    # Sites from Window algorithm -- BED3 plus float score
+    # min: 2.75, max: 275.50
+    # distribution of data values:
+     awk '{print $4}' *K*.txt | sort | textHistogram -binSize=10 maxBinCount=30 -real stdin
+     0.000000 ************************************************************ 38346
+     10.000000 ************************** 16385
+     20.000000 ************** 9186
+     30.000000 ********* 5705
+     40.000000 ******* 4607
+     50.000000 ****** 3686
+     60.000000 **** 2243
+     70.000000 ** 1094
+     80.000000 * 382
+     90.000000  112
+     100.000000  31
+     110.000000  10
+     120.000000  3
+     130.000000  2
+     140.000000  0
+     150.000000  0
+     160.000000  0
+     170.000000  0
+     180.000000  0
+     190.000000  1
+     200.000000  0
+     210.000000  0
+     220.000000  2
+     230.000000  0
+     240.000000  0
+     250.000000  0
+     260.000000  0
+     270.000000  1
+    
+     # To range score display from 300 to 1000, use:
+     #  (x * 2) + 300
+
+mkdir windowSites
+cat > windowSites.csh << 'EOF'
+    foreach f (chipseq/windowSites/*.K*.txt)
+        set b = $f:t
+        set ab = `echo $b | perl -wpe 's/\w+.(\w)(\w+).txt/H3\u$1\L$2me3/'`
+        set cell = `echo $b | perl -wpe 's/(\w)(\w+).*/\u$1\L$2/'`
+        tail +2 $f |  awk '{printf "%s\t%d\t%d\t \t%d\t%s\n", $1, $2, $3, ($4 * 2) + 300, $4}' > windowSites/$cell.$ab.tab
+        # using kate's version, testing -renameSqlTable option
+        /cluster/home/kate/bin/x86_64/hgLoadBed mm8 -tab -noNameIx -renameSqlTable \
+            -sqlTable=/cluster/bin/sqlCreate/bed5FloatScore.sql \
+                broadStemChipWinSites${ab}${cell} windowSites/$cell.$ab.tab
+    end
+'EOF'
+    csh windowSites.csh >&! windowSites.log
+
+    ###############
+    # Signal track
+    # indication of #reads near the base, 25bp fixed window, -1 if unalignable base
+
+    ssh kkstore04
+    cd /cluster/data/mm8/bed/broadStemChip/lab/densities
+    mkdir -p alignable
+    cd alignable
+    tar xvfz ../alignable.tar.gz
+    cd ../..
+
+    # Get a list of the datasets
+    mkdir -p signal
+    tar tfz chipseq/densities/chr1.tar.gz | \
+        perl -wpe 's/chr\w.(\w+.\w+).txt/$1/' > signal/datasets.txt
+    # ignore control (whole-cell extract)
+    grep -v WCE signal/datasets.txt > signal/subtracks.txt
+    wc -l signal/subtracks.txt
+        # 18
+
+    # Extract datasets from by-chrom packaging
+    # Weed out missing data which are represented as -1 values
+# Convert to wiggle
+
+cat > makeWig.csh << 'EOF'
+    foreach s (`cat signal/subtracks.txt`)
+        set ab = `echo $s | perl -wpe 's/\w+.(\w)(\w+)/H3\u$1\L$2/'`
+        set cell = `echo $s | perl -wpe 's/(\w)(\w+).\w+/\u$1\L$2/'`
+        set table = broadStemChipSignal${ab}${cell}
+        echo $table
+        rm -f signal/$s.wigVar
+        foreach f (chipseq/densities/chr*.tar.gz)
+            set c = $f:t:r:r
+            (echo "fixedStep chrom=$c start=1 step=25 span=25"; \
+                tar xfzO $f $c.$s.txt) | \
+            nice fixStepToBedGraph.pl | \
+            nice grep -v '\-1$' | \
+            nice wigBedToStep stdin stdout >> signal/$s.wigVar
+        end
+        nice wigEncode signal/$s.wigVar signal/$s.wig signal/$s.wib
+    end
+'EOF'
+
+# NEWER
+
+cat > makeWig.csh << 'EOF'
+    foreach s (`cat signal/subtracks.txt`)
+        set ab = `echo $s | perl -wpe 's/\w+.(\w)(\w+)/\u$1\L$2/'`
+        set cell = `echo $s | perl -wpe 's/(\w)(\w+).\w+/\u$1\L$2/'`
+        set table = broadStemChipSignal${ab}${cell}
+        echo $table
+        rm -f signal/$s.wigVar
+        foreach f (chipseq/densities/chr*.tar.gz)
+            set c = $f:t:r:r
+            echo "variableStep chrom=$c span=25" >> signal/$table.wigVar
+            tar xfzO $f $c.$s.txt | \
+                awk 'BEGIN {pos = 1} {print pos, $1; pos += 25}' | \
+                grep -v '\-1$' >> signal/$table.wigVar
+        end
+        cd signal
+        nice wigEncode $table.wigVar $table.wig $table.wib
+        cd ..
+    end
+'EOF'
+    csh makeWig.csh >&! makeWig.log &
+    # check output and cleanup
+    cd signal
+    gzip *.wigVar
+    csh makeWig.csh >&! makeWig.log &
+    # check output and cleanup
+    cd signal
+    gzip *.wigVar
+
+
+############################################################################
 #  mm8 - Mouse - Ensembl Genes (DONE - 2008-03-06 - hiram)
     ssh kkstore04
     cd /cluster/data/mm8
@@ -8585,3 +8777,4 @@ knownToEnsembl yes
     featureBits mm8 ensGene
     # 56654064 bases of 2567283971 (2.207%) in intersection
 ############################################################################
+>>>>>>> 1.64
