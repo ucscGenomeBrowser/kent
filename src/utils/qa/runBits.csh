@@ -44,6 +44,7 @@ if ( $#argv == 3 ) then
     echo
     echo $0
     $0
+    exit 1
   endif
 endif
 
