@@ -11,9 +11,8 @@
 #include "txRnaAccs.h"
 #include "twoBit.h"
 
-boolean uglyOne;
 
-static char const rcsid[] = "$Id: txCdsEvFromBed.c,v 1.2 2008/04/14 16:37:13 kent Exp $";
+static char const rcsid[] = "$Id: txCdsEvFromBed.c,v 1.3 2008/04/16 15:24:27 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -32,7 +31,7 @@ errAbort(
   "      txCdsEvFromBed, txCdsPick and txCdsToGene.  It mostly defines the CDS in terms of\n"
   "      the virtual transcript\n"
   "example:\n"
-  "    txCdsEvFromBed ccds.bed ccds txWalk.bed ccds.tce\n"
+  "    txCdsEvFromBed ccds.bed ccds txWalk.bed hg18.2bit ccds.tce\n"
   "options:\n"
   "   -xxx=XXX\n"
   );
@@ -41,9 +40,6 @@ errAbort(
 static struct optionSpec options[] = {
    {NULL, 0},
 };
-
-
-boolean uglyOne;
 
 struct cdsTxPair
 /* A pair of beds - one a coding region, the other an enclosing transcript. */
@@ -81,10 +77,25 @@ const struct usedBed *b = *((struct usedBed **)vb);
 return bedTotalBlockSize(b->bed) - bedTotalBlockSize(a->bed);
 }
 
-void outputCdsEv(struct bed *tx, struct bed *cds, FILE *f)
+void outputCdsEv(struct bed *tx, struct bed *cds, char *tceType, FILE *f)
 /* Output CDS for transcript. */
 {
-fprintf(f, "%s\t%s\n", tx->name, cds->name);
+int txSize = bedTotalBlockSize(tx);
+int cdsStartInRna = bedBlockSizeInRange(tx, tx->chromStart, cds->chromStart);
+int cdsEndInRna = bedBlockSizeInRange(tx, tx->chromStart, cds->chromEnd);
+if (tx->strand[0] == '-')
+    reverseIntRange(&cdsStartInRna, &cdsEndInRna, txSize);
+fprintf(f, "%s\t", tx->name);
+fprintf(f, "%d\t", cdsStartInRna);
+fprintf(f, "%d\t", cdsEndInRna);
+fprintf(f, "%s\t", tceType);
+fprintf(f, "%s\t", cds->name);
+fprintf(f, "1000\t");	// score
+fprintf(f, "1\t");	// starts with start codon
+fprintf(f, "1\t");	// ends with stop codon
+fprintf(f, "1\t");	// block count
+fprintf(f, "%d,\t", cdsStartInRna);
+fprintf(f, "%d,\n", cdsEndInRna - cdsStartInRna);
 }
 
 struct dyString *dnaOfIntersection(struct bed *bed, int rangeStart, int rangeEnd, 
@@ -141,7 +152,6 @@ else
    }
 boolean gotStart = upstreamStartInString(dna);
 dyStringFree(&dna);
-uglyf("%s\t%s\t%d\n", cds->name, tx->name, gotStart);
 return gotStart;
 }
 
@@ -183,16 +193,17 @@ for (txUsed = txList; txUsed != NULL; txUsed = txUsed->next)
 return bestTx;
 }
 
-void txCdsEvOnCluster(struct cdsTxCluster *cluster, struct twoBitFile *tbf, FILE *f)
+void txCdsEvOnCluster(struct cdsTxCluster *cluster, struct twoBitFile *tbf, char *tceType, FILE *f)
 /* Given a cluster of transcripts and cds's that are compatible, try to make sure
  * there is one transcript for each cds, and that each cds has a unique transcript,
  * and that where possible there are no upstream start codons for a CDS. */
 {
-verbose(3, "Cluster %d %d %d:\n", slCount(cluster->pairList), slCount(cluster->txList), slCount(cluster->cdsList));
+verbose(3, "Cluster %d %d %d:\n", slCount(cluster->pairList), 
+	slCount(cluster->txList), slCount(cluster->cdsList));
 if (cluster->txList->next == NULL && cluster->cdsList->next == NULL)
     {
     /* Special case for clusters with only one CDS and one tx. */
-    outputCdsEv(cluster->txList->bed, cluster->cdsList->bed, f);
+    outputCdsEv(cluster->txList->bed, cluster->cdsList->bed, tceType, f);
     }
 else
     {
@@ -216,7 +227,7 @@ else
 		    cds->bed->name, tx->bed->name);
 	    }
 	tx->used = TRUE;
-	outputCdsEv(tx->bed, cds->bed, f);
+	outputCdsEv(tx->bed, cds->bed, tceType, f);
 	}
     }
 }
@@ -263,7 +274,7 @@ if (!tx->used)
 }
 
 
-void txCdsEvOnChrom(struct cdsTxPair *pairList, struct twoBitFile *tbf, FILE *f)
+void txCdsEvOnChrom(struct cdsTxPair *pairList, struct twoBitFile *tbf, char *tceType, FILE *f)
 /* Cluster together pairs that share any common elements, and then call routine
  * to further process each cluster. */
 {
@@ -293,7 +304,7 @@ slReverse(&clusterList);
 /* Do further processing on each cluster. */
 for (cluster = clusterList; cluster != NULL; cluster = cluster->next)
     {
-    txCdsEvOnCluster(cluster, tbf, f);
+    txCdsEvOnCluster(cluster, tbf, tceType, f);
     }
 }
 
@@ -364,7 +375,7 @@ FILE *f = mustOpen(outFile, "w");
 struct twoBitFile *tbf = twoBitOpen(genomeSeq);
 struct hashEl *hel, *helList = hashElListHash(chromHash);
 for (hel = helList; hel != NULL; hel = hel->next)
-     txCdsEvOnChrom(hel->val, tbf, f);
+     txCdsEvOnChrom(hel->val, tbf, tceType, f);
 
 /* Clean up and go home. */
 twoBitClose(&tbf);
