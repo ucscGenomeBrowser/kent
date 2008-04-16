@@ -23,7 +23,7 @@
 #include "botDelay.h"
 #include "oligoTm.h"
 
-static char const rcsid[] = "$Id: hgPcr.c,v 1.19 2008/04/16 00:18:20 kuhn Exp $";
+static char const rcsid[] = "$Id: hgPcr.c,v 1.20 2008/04/16 17:22:53 angie Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -610,13 +610,13 @@ if (minGood < minPerfect)
 
 /* Decide based on transient variables what page to put up. 
  * By default put up get primer page. */
-if (cartVarExists(cart, "wp_f") && cartVarExists(cart, "wp_r") &&
+if (isNotEmpty(fPrimer) && isNotEmpty(rPrimer) &&
 	!cartVarExists(cart, "wp_showPage"))
     {
     struct pcrServer *server = NULL;
     struct targetPcrServer *targetServer = NULL;
     char *target = cartUsualString(cart, "wp_target", "genome");
-    if (sameString(target, "genome"))
+    if (sameString(target, "genome") || isEmpty(target))
 	server = findServer(db, serverList);
     else
 	targetServer = findTargetServer(target, getTargetServerList(db));
