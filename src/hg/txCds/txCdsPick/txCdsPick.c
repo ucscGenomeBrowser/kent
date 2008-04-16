@@ -43,6 +43,7 @@ errAbort(
   );
 }
 
+double ccdsWeight = 200000;
 double refSeqWeight = 100000;
 double txCdsPredictWeight = 10000;
 double weightedThreshold;
@@ -136,6 +137,10 @@ while  (lineFileRow(lf, row))
         && sameString(cds->accession, refSeqAcc))
 	cds->score += refSeqWeight + 100;
 
+    /* If we are CCDS then that's great too. */
+    if (sameString("ccds", cds->source))
+        cds->score += ccdsWeight;
+
     /* If we are txCdsPredict bump weight too.  Only RefSeq and txCdsPredict
      * can actually possibly make it over real threshold. */
     if (sameString("txCdsPredict", cds->source))
@@ -184,7 +189,7 @@ while (lineFileRow(lf, row))
     struct cdsPick pick;
     ZeroVar(&pick);
     pick.name = bed->name;
-    pick.refSeq = pick.refProt = pick.swissProt = pick.uniProt = "";
+    pick.refSeq = pick.refProt = pick.swissProt = pick.uniProt = pick.ccds = "";
     if (tx != NULL && tx->cdsList->score >= weightedThreshold)
         {
 	struct cdsEvidence *cds, *bestCds = tx->cdsList;
@@ -235,6 +240,11 @@ while (lineFileRow(lf, row))
 		    }
 		else if (sameString("genbankCds", source))
 		    {
+		    }
+		else if (sameString("ccds", source))
+		    {
+		    if (pick.ccds[0] == 0)
+		        pick.ccds = cds->accession;
 		    }
 		else
 		    errAbort("Unknown source %s", source);
