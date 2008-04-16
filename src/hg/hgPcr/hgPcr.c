@@ -23,7 +23,7 @@
 #include "botDelay.h"
 #include "oligoTm.h"
 
-static char const rcsid[] = "$Id: hgPcr.c,v 1.18 2008/04/14 23:50:08 angie Exp $";
+static char const rcsid[] = "$Id: hgPcr.c,v 1.19 2008/04/16 00:18:20 kuhn Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -240,7 +240,7 @@ puts(
 "primer pair.  The fasta header describes the region in the database\n"
 "and the primers.  The fasta body is capitalized in areas where the primer\n"
 "sequence matches the database sequence and in lower-case elsewhere.  Here\n"
-"is an example:<BR>\n"
+"is an example from human:<BR>\n"
 "<TT><PRE>\n"
 ">chr22:31000551+31001000  TAACAGATTGATGATGCATGAAATGGG CCCATGAGTGGCTCCTAAAGCAGCTGC\n"
 "TtACAGATTGATGATGCATGAAATGGGgggtggccaggggtggggggtga\n"
