@@ -9,7 +9,7 @@
 #	Data release policy: http://medaka.utgenome.org/#policy
 #	Ensembl: http://www.ensembl.org/Oryzias_latipes/index.html
 #
-#	"$Id: oryLat1.txt,v 1.38 2008/03/11 23:23:05 hiram Exp $"
+#	"$Id: oryLat1.txt,v 1.39 2008/04/16 16:08:05 hiram Exp $"
 #
 
 ##########################################################################
@@ -3675,3 +3675,61 @@ TMPDIR=/scratch/tmp
 
     cat fb.petMar1.chainOryLat1Link.txt
     #	23359179 bases of 831696438 (2.809%) in intersection
+
+############################################################################
+#  oryLat1 - Medaka - Ensembl Genes (DONE - 2008-03-31 - 04-15 - hiram)
+    ssh kkstore04
+    cd /cluster/data/oryLat1
+    cat << '_EOF_' > oryLat1.ensGene.ra
+# required db variable
+db oryLat1
+# optional nameTranslation, the sed command that will transform
+#	Ensemble names to UCSC names.  With quotes just to make sure.
+nameTranslation "s/^\([0-9][0-9]*\)/chr\1/; s/^MT/chrM/"
+# ignore 2,687 genes that haven't lifted properly yet
+skipInvalid yes
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl -ensVersion=49 oryLat1.ensGene.ra
+    featureBits oryLat1 ensGene
+    #	29680340 bases of 700386597 (4.238%) in intersection
+
+    #	version 49 update had a big change in the Medaka genes.
+    #	Many of the new genes are in the Ensembl Gene Scaffold
+    #	(actually here ultracontigs) coordinate space that will not
+    #	translate to our chrUn assembly.  So, some fixups are
+    #	necessary to get joinerCheck to be a bit more happy.
+    ssh hgwdev
+    cd ~/kent/src/hg/makeDb/schema
+    joinerCheck -keys -database=oryLat1 -identifier=ensemblTranscriptId \
+	all.joiner
+# Checking keys on database oryLat1
+# oryLat1.ensGtp.transcript - hits 22447 of 25134
+# Error: 2687 of 25134 elements of oryLat1.ensGtp.transcript are not in key ensGene.name line 1726 of all.joiner
+# Example miss: ENSORLT00000022895
+# oryLat1.ensPep.name - hits 22053 of 24661
+# Error: 2608 of 24661 elements of oryLat1.ensPep.name are not in key ensGene.name line 1728 of all.joiner
+# Example miss: ENSORLT00000022872
+    cd  /cluster/data/oryLat1/bed/ensGene.49
+    grep "invalid chrom" *.errors.txt | cut -d\  -f2 | sort -u > badLifts.name
+    hgsql -N -e "select transcript from ensGtp;" oryLat1 \
+	| sort > ensGtp.transcript
+    comm -13 ensGene.name ensGtp.transcript | sort > ensGtp.not.ensGene.name
+    comm -13 ensGene.name ensPep.name | sort > ensPep.not.ensGene.name
+    #	do the badLifts account for all the missing peptides:
+    comm -12 badLifts.name ensPep.not.ensGene.name | wc -l
+    #	2608 -> yes, this is the count of missing peptides.
+    #	So, remove this set of business from ensPep table
+    for N in `cat badLifts.name`
+do
+    hgsql -e "delete from ensPep where name=\"$N\";" oryLat1
+    echo $N
+done
+    #	And from the ensGtp table
+    for N in `cat badLifts.name`
+do
+    hgsql -e "delete from ensGtp where transcript=\"$N\";" oryLat1
+    echo $N
+done
+############################################################################
