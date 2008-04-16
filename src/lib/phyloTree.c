@@ -38,6 +38,8 @@ AllocVar(pName);
 /* legal id's are alphanumeric */
 while(isalpha(*ptr) || isdigit(*ptr) || (*ptr == '/')
      || (*ptr == '\'')
+     || (*ptr == '>')
+     || (*ptr == '<')
     || (*ptr == '.') || (*ptr == '_')) 
     ptr++;
 
@@ -357,10 +359,14 @@ if (tree->parent)
     {
     struct phyloTree *edge, *saveParent = tree->parent;
 
-    reParent(saveParent);
-    phyloDeleteEdge(saveParent, tree);
-    edge = newEdge(tree, saveParent);
-    edge->parent = tree;
+    reParent(saveParent); /* make the parent into the root */
+    phyloDeleteEdge(saveParent, tree); /* remove this tree from the
+					  parent tree */
+    tree->parent = NULL; /* make this tree the root */
+    edge = newEdge(tree, saveParent); /* add the old parent tree as a
+					child of the new root */
+    edge->parent = tree; /* set the parent in the new child */
+
     edge->ident->length = tree->ident->length;
     }
 }
