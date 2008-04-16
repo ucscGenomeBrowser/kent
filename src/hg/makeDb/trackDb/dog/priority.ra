@@ -1,29 +1,42 @@
+# marmoset
+track chainCalJac1
+priority 200
+
+track netCalJac1
+priority 200.1
+
+# cow
 track chainBosTau4
 priority 250
 
 track netBosTau4
 priority 250.1
 
+# mouse
 track chainMm9
 priority 240
 
 track netMm9
 priority 240.1
 
+# rat
 track chainRn4
 priority 230
 
 track netRn4
 priority 230.1
 
+# chimp
 track chainPanTro2
 priority 220
 
 track netPanTro2
 priority 220.1
 
+# human
 track chainHg18
 priority 210
 
 track netHg18
 priority 210.1
+
