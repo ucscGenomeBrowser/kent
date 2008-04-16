@@ -10,7 +10,7 @@
 #include "portable.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: gsidMsa.c,v 1.2 2007/04/20 21:52:42 fanhsu Exp $";
+static char const rcsid[] = "$Id: gsidMsa.c,v 1.3 2008/04/16 18:50:39 fanhsu Exp $";
 
 #define MAXSEQ 5000
 #define MAXSEQLEN 15000
@@ -45,11 +45,11 @@ errAbort(
 void gsidMsa(char *database, char *table, char *baseAcc, int startPos, 
 char *outWigFn, char *outConsFn)
 {
-struct sqlConnection *conn2, *conn3, *conn4;
+struct sqlConnection *conn2;
  
-char query2[256], query3[256];
-struct sqlResult *sr2, *sr3;
-char **row2, **row3;
+char query2[256];
+struct sqlResult *sr2;
+char **row2;
 FILE *outf, *outf2;
 
 char base;
@@ -65,6 +65,7 @@ conn2= hAllocConn();
 outf = mustOpen(outWigFn, "w");
 	
 sprintf(query2,"select seq from %s.%s where id='%s'", database, table, baseAcc);
+
 sr2 = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
 baseGenomeSeq = cloneString(row2[0]);
