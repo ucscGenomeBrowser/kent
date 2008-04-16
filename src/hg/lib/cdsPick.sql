@@ -16,6 +16,7 @@ CREATE TABLE cdsPick (
     uniProt varchar(255) not null,	# Matching uniProt if available.
     refProt varchar(255) not null,	# RefSeq protein if available.
     refSeq varchar(255) not null,	# RefSeq transcript if available.
+    ccds varchar(255) not null,	# CCDS accession if available.
               #Indices
     PRIMARY KEY(name)
 );

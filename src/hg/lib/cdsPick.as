@@ -12,4 +12,5 @@ table cdsPick
     string uniProt;	"Matching uniProt if available."
     string refProt;	"RefSeq protein if available."
     string refSeq;	"RefSeq transcript if available."
+    string ccds;	"CCDS accession if available."
     )

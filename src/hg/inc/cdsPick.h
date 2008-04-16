@@ -5,7 +5,7 @@
 #ifndef CDSPICK_H
 #define CDSPICK_H
 
-#define CDSPICK_NUM_COLS 11
+#define CDSPICK_NUM_COLS 12
 
 struct cdsPick
 /* Information on CDS that we picked from competing cdsEvidence */
@@ -22,6 +22,7 @@ struct cdsPick
     char *uniProt;	/* Matching uniProt if available. */
     char *refProt;	/* RefSeq protein if available. */
     char *refSeq;	/* RefSeq transcript if available. */
+    char *ccds;	/* CCDS accession if available. */
     };
 
 void cdsPickStaticLoad(char **row, struct cdsPick *ret);
