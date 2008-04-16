@@ -23,7 +23,7 @@
 #include "botDelay.h"
 #include "oligoTm.h"
 
-static char const rcsid[] = "$Id: hgPcr.c,v 1.20 2008/04/16 17:22:53 angie Exp $";
+static char const rcsid[] = "$Id: hgPcr.c,v 1.21 2008/04/16 18:14:46 angie Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -413,7 +413,11 @@ if (gotTargetDb)
 	showTargets(target, targetServerList);
 	printf("%s", "</TD>\n");
 	}
+    else
+	cgiMakeHiddenVar("wp_target", "genome");
     }
+else
+    cgiMakeHiddenVar("wp_target", "genome");
 
 printf("%s", "<TD COLWIDTH=2><CENTER>\n");
 printf("Forward Primer:<BR>");
