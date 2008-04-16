@@ -2331,5 +2331,130 @@ end
     zcat ensPep.fa.gz | sed -e 's/^>.*ENSGALT/>ENSGALT/' \
     | hgPepPred galGal3 generic ensPep stdin
 
+############################################################################
+#  BLASTZ petMar1 Lamprey (WORKING - 2008-04-11 - Hiram)
+    ssh kkstore03
+    screen	# use a screen to control this multi-day job
+    mkdir /cluster/data/galGal3/bed/blastzPetMar1.2008-04-11
+    cd /cluster/data/galGal3/bed/blastzPetMar1.2008-04-11
+
+    cat << '_EOF_' > DEF
+# Chicken vs Lamprey
+
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: Chicken galGal3
+SEQ1_DIR=/scratch/data/galGal3/nib
+SEQ1_LEN=/cluster/data/galGal3/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Lamprey petMar1
+SEQ2_DIR=/scratch/data/petMar1/petMar1.2bit
+SEQ2_LEN=/cluster/data/petMar1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=200
+SEQ2_LAP=0
+
+BASE=/cluster/data/galGal3/bed/blastzPetMar1.2008-04-11
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl \
+	/cluster/data/galGal3/bed/blastzPetMar1.2008-04-11/DEF \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-bigClusterHub=memk -verbose=2 > do.log 2>&1 &
+# Completed: 83468 of 83468 jobs
+# CPU time in finished jobs:    2199234s   36653.91m   610.90h   25.45d  0.070 y
+# IO & Wait Time:                426454s    7107.56m   118.46h    4.94d  0.014 y
+# Average job time:                  31s       0.52m     0.01h    0.00d
+# Longest finished job:             414s       6.90m     0.12h    0.00d
+# Submission to last job:        103466s    1724.43m    28.74h    1.20d
+    #	continuing after some kluster interruptions
+    time nice -n +19 doBlastzChainNet.pl \
+	/cluster/data/galGal3/bed/blastzPetMar1.2008-04-11/DEF \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-continue=cat -bigClusterHub=memk -verbose=2 > cat.log 2>&1 &
+    #	real    13m54.957s
+    cat fb.galGal3.chainPetMar1Link.txt
+    #	20134896 bases of 1042591351 (1.931%) in intersection
+
+    #	and the swap
+    mkdir /cluster/data/petMar1/bed/blastz.galGal3.swap
+    cd /cluster/data/petMar1/bed/blastz.galGal3.swap
+    time nice -n +19 doBlastzChainNet.pl \
+	/cluster/data/galGal3/bed/blastzPetMar1.2008-04-11/DEF \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-swap -bigClusterHub=memk -verbose=2 > swap.log 2>&1 &
+    #	real    33m41.587s
+    cat fb.petMar1.chainGalGal3Link.txt
+    #	22308118 bases of 831696438 (2.682%) in intersection
+
+############################################################################
+#  BLASTZ petMar1 Lanclet (WORKING - 2008-04-15 - Hiram)
+    ssh kkstore03
+    screen	# use a screen to control this multi-day job
+    mkdir /cluster/data/galGal3/bed/blastzBraFlo1.2008-04-15
+    cd /cluster/data/galGal3/bed/blastzBraFlo1.2008-04-15
+
+    cat << '_EOF_' > DEF
+# Chicken vs Lanclet
+
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Chicken galGal3
+SEQ1_DIR=/scratch/data/galGal3/nib
+SEQ1_LEN=/scratch/data/galGal3/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Lancelet braFlo1 - largest chunk big enough for largest scaffold
+#       Largest scaffold 7,200,735 - 3032 scaffolds + chrM
+SEQ2_DIR=/scratch/data/braFlo1/braFlo1.2bit
+SEQ2_LEN=/scratch/data/braFlo1/chrom.sizes
+SEQ2_CTGDIR=/scratch/data/braFlo1/braFlo1UnScaffolds.2bit
+SEQ2_CTGLEN=/scratch/data/braFlo1/braFlo1UnScaffolds.sizes
+SEQ2_LIFT=/scratch/data/braFlo1/braFlo1.lift
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=30
+SEQ2_LAP=0
+
+BASE=/cluster/data/galGal3/bed/blastzBraFlo1.2008-04-15
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl \
+	/cluster/data/galGal3/bed/blastzBraFlo1.2008-04-15/DEF \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-bigClusterHub=pk -verbose=2 > do.log 2>&1 &
+    #	real    168m49.357s
+    cat fb.galGal3.chainBraFlo1Link.txt
+    #	19795687 bases of 1042591351 (1.899%) in intersection
+
+    #	and the swap
+    mkdir /cluster/data/braFlo1/bed/blastz.galGal3.swap
+    cd /cluster/data/braFlo1/bed/blastz.galGal3.swap
+    time nice -n +19 doBlastzChainNet.pl \
+	/cluster/data/galGal3/bed/blastzBraFlo1.2008-04-15/DEF \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-swap -bigClusterHub=pk -verbose=2 > swap.log 2>&1 &
+    #	real    4m45.054s
+    cat fb.braFlo1.chainGalGal3Link.txt
+    #	30287175 bases of 923355587 (3.280%) in intersection
 
 ###########################################################################
