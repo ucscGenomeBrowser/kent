@@ -4,7 +4,7 @@
 # This file describes browser build for the Lancelet
 # genome, Branchiostoma floridae, March 2006, v.1.0 from JGI
 #
-#       "$Id: braFlo1.txt,v 1.8 2008/04/13 04:10:35 hiram Exp $"
+#       "$Id: braFlo1.txt,v 1.9 2008/04/16 16:48:50 hiram Exp $"
 #
 
 ##########################################################################
@@ -363,3 +363,25 @@ TMPDIR=/scratch/tmp
     #	real    194m53.514s
     cat fb.petMar1.chainBraFlo1Link.txt
     #	27373264 bases of 831696438 (3.291%) in intersection
+
+##########################################################################
+## BLASTZ Chicken GalGal3 swap (DONE - 2008-04-16 - Hiram)
+    #	the original
+    ssh kkstore03
+    cd /cluster/data/galGal3/bed/blastzBraFlo1.2008-04-15
+    cat fb.galGal3.chainBraFlo1Link.txt
+    #	19795687 bases of 1042591351 (1.899%) in intersection
+
+    #	and the swap
+    mkdir /cluster/data/braFlo1/bed/blastz.galGal3.swap
+    cd /cluster/data/braFlo1/bed/blastz.galGal3.swap
+    time nice -n +19 doBlastzChainNet.pl \
+	/cluster/data/galGal3/bed/blastzBraFlo1.2008-04-15/DEF \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-swap -bigClusterHub=pk -verbose=2 > swap.log 2>&1 &
+    #	real    4m45.054s
+    cat fb.braFlo1.chainGalGal3Link.txt
+    #	30287175 bases of 923355587 (3.280%) in intersection
+
+###########################################################################
