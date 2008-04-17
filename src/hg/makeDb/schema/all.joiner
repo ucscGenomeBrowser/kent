@@ -2701,7 +2701,6 @@ tablesIgnored $bosTau
     gold
     intronEst
     contigOrient
-    gbMiscDiff
 
 tablesIgnored $apiMel
     gold
