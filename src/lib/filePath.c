@@ -8,7 +8,8 @@ void undosPath(char *path)
 subChar(path, '\\', '/');
 }
 
-void splitPath(char *path, char dir[256], char name[128], char extension[64])
+void splitPath(char *path, char dir[PATH_LEN], char name[FILENAME_LEN],
+	       char extension[FILEEXT_LEN])
 /* Split a full path into components.  The dir component will include the
  * trailing / if any.  The extension component will include the starting
  * . if any.   Pass in NULL for dir, name, or extension if you don't care about
@@ -28,11 +29,11 @@ extStart = strrchr(nameStart, '.');
 if (extStart == NULL)
     extStart = nameStart + strlen(nameStart);
 extEnd = extStart + strlen(extStart);
-if ((dirSize = (nameStart - dirStart)) >= 256)
+if ((dirSize = (nameStart - dirStart)) >= PATH_LEN)
     errAbort("Directory too long in %s", path);
-if ((nameSize = (extStart - nameStart)) >= 128)
+if ((nameSize = (extStart - nameStart)) >= FILENAME_LEN)
     errAbort("Name too long in %s", path);
-if ((extSize = (extEnd - extStart)) >= 64)
+if ((extSize = (extEnd - extStart)) >= FILEEXT_LEN)
     errAbort("Extension too long in %s", path);
 if (dir != NULL)
     {

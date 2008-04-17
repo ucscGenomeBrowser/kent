@@ -2,7 +2,10 @@
 #ifndef FILEPATH_H
 #define FILEPATH_H
 
-void splitPath(char *path, char dir[256], char name[128], char extension[64]);
+#include "common.h"
+
+void splitPath(char *path, char dir[PATH_LEN], char name[FILENAME_LEN],
+	       char extension[FILEEXT_LEN]);
 /* Split a full path into components.  The dir component will include the
  * trailing / if any.  The extension component will include the starting
  * . if any.   Pass in NULL for dir, name, or extension if you don't care about
