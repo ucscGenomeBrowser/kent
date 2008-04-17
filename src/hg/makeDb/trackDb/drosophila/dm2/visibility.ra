@@ -1,0 +1,12 @@
+track refGene
+visibility hide
+
+track genscan
+visibility hide
+
+track blastHg18KG
+visibility hide
+
+track netHg18
+visibility hide
+
