@@ -14,6 +14,7 @@ set runOn=''
 set ver=0
 set dbs=''
 set db=''
+set betaList=''
 
 if ($#argv != 2 ) then
   echo
@@ -76,11 +77,17 @@ else
  echo $dbs
 endif
 
+# find out what assemblies have and ensGene track on beta
+set betaList=`getAssemblies.csh ensGene | egrep -v 'get' | egrep -v 'ensGene'`
+
 # a huge loop through all databases
 foreach db ($dbs)
  echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
  echo "~~~~~~~~~ $db ~~~~~~~~~~~~"
  echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+
+ # find out if this is a new Ensembl Genes track (or an update)
+ set newTrack=`echo $betaList | egrep -wo $db`
 
  echo "\n\n----------------------"
  echo "compare new (dev) and old (beta) ens* tables"
@@ -98,12 +105,15 @@ foreach db ($dbs)
  head -2 $db.ensGene.name.devOnly
  tail -2 $db.ensGene.name.devOnly
 
- echo "\n\n----------------------"
- echo "check a few of the deleted items from the ensGene table"
- echo "(make sure they have also been dropped from Ensembl website)"
- echo "\ncheck these in $db browser on hgwbeta:"
- head -2 $db.ensGene.name.betaOnly 
- tail -2 $db.ensGene.name.betaOnly
+ # only do this test if the ensGene track alredy exists on beta
+ if ( $db == $newTrack ) then
+  echo "\n\n----------------------"
+  echo "check a few of the deleted items from the ensGene table"
+  echo "(make sure they have also been dropped from Ensembl website)"
+  echo "\ncheck these in $db browser on hgwbeta:"
+  head -2 $db.ensGene.name.betaOnly 
+  tail -2 $db.ensGene.name.betaOnly
+ endif
 
  echo "\n\n----------------------"
  echo "these are full sets of corresponding rows from the three tables:"
@@ -125,7 +135,11 @@ foreach db ($dbs)
  # don't run this on scaffold assemblies
  set numChroms=`hgsql -Ne "SELECT COUNT(*) FROM chromInfo" $db`
  if ( $numChroms < 100 ) then
-  countPerChrom.csh $db ensGene $db hgwbeta
+  if ( $db == $newTrack ) then
+   countPerChrom.csh $db ensGene $db hgwbeta
+  else
+   countPerChrom.csh $db ensGene $db
+  endif
  else
   echo "$db is a scaffold assembly: skipping countPerChrom"
  endif
@@ -139,12 +153,15 @@ foreach db ($dbs)
  featureBits $db -countGaps ensGene
  echo "featureBits $db -countGaps ensGene gap (on hgwdev):"
  featureBits $db -countGaps ensGene gap
- echo "\nfeatureBits $db ensGene (on hgwbeta):"
- ssh hgwbeta featureBits $db ensGene
- echo "featureBits $db -countGaps ensGene (on hgwbeta):"
- ssh hgwbeta featureBits $db -countGaps ensGene
- echo "featureBits $db -countGaps ensGene gap (on hgwbeta):"
- ssh hgwbeta featureBits $db -countGaps ensGene gap
+
+ if ( $db == $newTrack ) then
+  echo "\nfeatureBits $db ensGene (on hgwbeta):"
+  ssh hgwbeta featureBits $db ensGene
+  echo "featureBits $db -countGaps ensGene (on hgwbeta):"
+  ssh hgwbeta featureBits $db -countGaps ensGene
+  echo "featureBits $db -countGaps ensGene gap (on hgwbeta):"
+  ssh hgwbeta featureBits $db -countGaps ensGene gap
+ endif 
  echo
 
  echo "\n\n----------------------"
