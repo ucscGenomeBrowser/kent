@@ -2595,6 +2595,7 @@ tablesIgnored $gbd
     chr%_blat%
     chr%_gap
     chr%_rmsk
+    rmsk
     axtNet%
     blat%
     blast%
@@ -2686,12 +2687,10 @@ tablesIgnored $droMult
     gap
     gold
     intronEst
-    rmsk
 
 tablesIgnored $anoCar
     gap
     gold
-    rmsk
 
 tablesIgnored $anoGam
     chr%_gold
@@ -2701,7 +2700,6 @@ tablesIgnored $bosTau
     gap
     gold
     intronEst
-    rmsk
     contigOrient
     gbMiscDiff
 
@@ -2709,7 +2707,6 @@ tablesIgnored $apiMel
     gap
     gold
     intronEst
-    rmsk
     brhInparalog
     modelRefGene
     scaffolds
@@ -2968,7 +2965,6 @@ tablesIgnored $felCat
     gap
     gold
     intronEst
-    rmsk
     microsat
 
 tablesIgnored mm3
