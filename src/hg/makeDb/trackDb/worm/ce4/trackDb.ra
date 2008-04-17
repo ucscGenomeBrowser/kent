@@ -362,3 +362,13 @@ compositeTrack on
 	shortLabel fragments -
 	longLabel mononucleosomal fragments, antisense strand reads
 	priority 3
+
+track 25mersRepeats
+shortLabel 25mers
+longLabel 25mers repeat annotation
+group varRep
+priority 160
+visibility hide
+type bed 9
+itemRgb on
+
