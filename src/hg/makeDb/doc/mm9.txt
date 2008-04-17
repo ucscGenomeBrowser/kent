@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.61 2008/04/16 16:00:40 hiram Exp $"
+#	"$Id: mm9.txt,v 1.62 2008/04/17 18:59:57 larrym Exp $"
 #
 
 #######################################################################
@@ -7899,3 +7899,40 @@ TMPDIR=/scratch/tmp
     hgLoadGenePred mm9 transcriptome -genePredExt MTr.gp
 
 ###########################################################################
+
+#############################################################################
+# BLASTZ/CHAIN/NET equCab2 (DONE - 2008-04-17 - larrym)
+    ssh kkstore04
+    screen #	use screen to control this multi-day job
+    mkdir /cluster/data/mm9/bed/blastz.equCab2.2008-04-15
+    cd /cluster/data/mm9/bed/blastz.equCab2.2008-04-15
+    cat << '_EOF_' > DEF
+# Mouse vs. Horse
+
+BLASTZ_M=50
+
+# TARGET: Mouse MM9
+SEQ1_DIR=/scratch/data/mm9/nib
+SEQ1_LEN=/cluster/data/mm9/chrom.sizes 
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Horse
+SEQ2_DIR=/scratch/data/equCab2/equCab2.2bit
+SEQ2_LEN=/cluster/data/equCab2/chrom.sizes
+SEQ2_CTGDIR=/san/sanvol1/scratch/equCab2/equCab2.UnScaffolds.2bit
+SEQ2_CTGLEN=/san/sanvol1/scratch/equCab2/equCab2.UnScaffolds.sizes
+SEQ2_LIFT=/cluster/data/equCab2/jkStuff/equCab2.chrUn.lift
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=200
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm9/bed/blastz.equCab2.2008-04-15
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time doBlastzChainNet.pl `pwd`/DEF \
+	-verbose=2 -bigClusterHub=pk  \
+      -chainMinScore=3000 -chainLinearGap=medium \
+      -blastzOutRoot /cluster/bluearc/equCab2/blastz.hg18 >>& do.log &
