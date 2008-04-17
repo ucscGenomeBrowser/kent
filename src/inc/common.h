@@ -122,8 +122,10 @@
 	(2147483647 * ((sizeof(size_t)/4)-1)))
 /*      == 2 Gb for 32 bit machines, 6 Gb for 64 bit machines */
 
-/* Default size of directory path string buffers */
+/* Default size of directory path, file name and extension string buffers */
 #define PATH_LEN 512
+#define FILENAME_LEN 128
+#define FILEEXT_LEN 64
 
 /* inline functions: To declare a function inline, place the entire function
  * in a header file and prefix it with the INLINE macro.  If used with a
@@ -810,11 +812,14 @@ int ptArrayIx(void *pt, void *array, int arraySize);
 #define SEEK_END 2
 #endif
 
-void splitPath(char *path, char dir[256], char name[128], char extension[64]);
+#ifndef FILEPATH_H
+void splitPath(char *path, char dir[PATH_LEN], char name[FILENAME_LEN],
+	       char extension[FILEEXT_LEN]);
 /* Split a full path into components.  The dir component will include the
  * trailing / if any.  The extension component will include the starting
  * . if any.   Pass in NULL for dir, name, or extension if you don't care about
  * that part. */
+#endif /* FILEPATH_H */
 
 char *addSuffix(char *head, char *suffix);
 /* Return a needMem'd string containing "headsuffix". Should be free'd
