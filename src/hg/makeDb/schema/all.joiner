@@ -2601,6 +2601,7 @@ tablesIgnored $gbd
     blat%
     blast%
     repeats
+    multiz%way
     multiz%waySummary
     multiz%wayFrames
     phastCons%way
