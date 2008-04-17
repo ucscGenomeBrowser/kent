@@ -1294,12 +1294,13 @@ identifier hugeId
 # Fields parsed out of a Genbank flat file, associated with mRNA records
 
 identifier gbCdnas
-"Connects gbCdnaInfo with mRNA/EST and xenos"
+"Connects gbCdnaInfo with mRNA/EST"
     $gbd.gbCdnaInfo.acc
     $gbd.all_mrna.qName
     $gbd.all_est.qName
     $gbd.refGene.name
     $gbd.xenoRefGene.name
+    $gbd.gbMiscDiff.acc
 
 identifier genBankAuthor
 "Connects genBank mRNA/EST and its author"
