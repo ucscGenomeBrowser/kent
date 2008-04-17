@@ -1301,6 +1301,10 @@ identifier gbCdnas
     $gbd.refGene.name
     $gbd.xenoRefGene.name
     $gbd.gbMiscDiff.acc
+    $gbd.refSeqAli.qName
+    $gbd.xenoRefSeqAli.qName
+    $gbd.xenoMrna.qName
+    $gbd.xenoEst.qName
 
 identifier genBankAuthor
 "Connects genBank mRNA/EST and its author"
