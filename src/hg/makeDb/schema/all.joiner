@@ -2622,6 +2622,9 @@ tablesIgnored $kgDb
     pbStamp
     pep%Dist
 
+tablesIgnored $calJac
+    gold
+
 tablesIgnored $cb
     chr%_gold
 
