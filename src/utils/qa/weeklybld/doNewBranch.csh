@@ -109,12 +109,12 @@ echo
 ./buildBeta.csh
 if ( $status ) then
  echo "build on beta failed for v$BRANCHNN"
-# echo "v$BRANCHNN build on beta failed." | mail -s "'v$BRANCHNN Build failed on beta'" $USER hartera galt kuhn ann kayla rhead archanat
+# echo "v$BRANCHNN build on beta failed." | mail -s "'v$BRANCHNN Build failed on beta'" $USER hartera galt kuhn ann kayla rhead pauline 
 echo "v$BRANCHNN build on beta failed." | mail -s "'v$BRANCHNN Build failed on beta'" $USER
  exit 1
 endif
 echo "build on beta done for v$BRANCHNN"
-echo "v$BRANCHNN built successfully on beta." | mail -s "'v$BRANCHNN Build complete on beta'" $USER hartera galt kuhn kent ann kayla rhead archanat
+echo "v$BRANCHNN built successfully on beta." | mail -s "'v$BRANCHNN Build complete on beta'" $USER hartera galt kuhn kent ann kayla rhead pauline 
 
 echo
 #echo debug: disabled build utils on beta
