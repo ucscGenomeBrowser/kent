@@ -92,7 +92,7 @@ shortLabel N-SCAN
 longLabel N-SCAN Gene Predictions
 group genes
 priority 45.1
-visibility hide
+visibility pack
 color 34,139,34
 type genePred nscanPep
 baseColorUseCds given
