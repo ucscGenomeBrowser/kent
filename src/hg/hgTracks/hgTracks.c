@@ -118,7 +118,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1449 2008/04/15 20:06:36 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1450 2008/04/17 20:53:18 larrym Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -282,7 +282,7 @@ int tgItemNoStart(struct track *tg, void *item) {return -1;}
 int tgItemNoEnd(struct track *tg, void *item) {return -1;}
 
 int tgCmpPriority(const void *va, const void *vb)
-/* Compare to sort based on priority. */
+/* Compare to sort based on priority; use shortLabel as secondary sort key. */
 {
 const struct track *a = *((struct track **)va);
 const struct track *b = *((struct track **)vb);
@@ -293,7 +293,7 @@ if (dif == 0)
 if (dif < 0)
    return -1;
 else if (dif == 0.0)
-   return 0;
+   return -1 * strcasecmp(a->shortLabel, b->shortLabel);
 else
    return 1;
 }
