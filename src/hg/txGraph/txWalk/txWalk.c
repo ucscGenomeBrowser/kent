@@ -393,7 +393,9 @@ struct path
     };
 
 boolean properSubsetOf(struct slRef *bigger, struct slRef *smaller)
-/* Return TRUE if smaller is a proper subset of bigger.  */
+/* Return TRUE if smaller is a proper subset of bigger.  In addition to
+ * being a subset, the items must also be in the same order without any
+ * intervening extra items in bigger.  */
 {
 struct slRef *bigRef, *smallRef;
 for (bigRef = bigger; bigRef != NULL; bigRef = bigRef->next)
