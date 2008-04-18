@@ -2696,4 +2696,39 @@ TMPDIR=/scratch/tmp
 	    -swap -syntenicNet > swap.log 2>&1
 XXX - running 2008-03-12 16:35
 
-###########################################################################
+#############################################################################
+# BLASTZ/CHAIN/NET equCab2 (WORKING - 2008-04-18 - larrym)
+    ssh kkstore04
+    screen #	use screen to control this multi-day job
+    mkdir /cluster/data/canFam2/bed/blastz.equCab2.2008-04-18
+    cd /cluster/data/canFam2/bed/blastz.equCab2.2008-04-18
+    cat << '_EOF_' > DEF
+# Dog vs. Horse
+
+BLASTZ_M=50
+
+# TARGET: Dog canFam2
+SEQ1_DIR=/scratch/data/canFam2/nib
+SEQ1_LEN=/cluster/data/canFam2/chrom.sizes 
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Horse
+SEQ2_DIR=/scratch/data/equCab2/equCab2.2bit
+SEQ2_LEN=/cluster/data/equCab2/chrom.sizes
+SEQ2_CTGDIR=/san/sanvol1/scratch/equCab2/equCab2.UnScaffolds.2bit
+SEQ2_CTGLEN=/san/sanvol1/scratch/equCab2/equCab2.UnScaffolds.sizes
+SEQ2_LIFT=/cluster/data/equCab2/jkStuff/equCab2.chrUn.lift
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=100
+SEQ2_LAP=0
+
+BASE=/cluster/data/canFam2/bed/blastz.equCab2.2008-04-18
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time doBlastzChainNet.pl `pwd`/DEF \
+	-verbose=2 -bigClusterHub=pk \
+      -chainMinScore=3000 -chainLinearGap=medium \
+      -blastzOutRoot /cluster/bluearc/equCab2/blastz.canFam2 >& do.log &
