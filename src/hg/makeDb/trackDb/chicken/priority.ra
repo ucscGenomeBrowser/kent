@@ -15,3 +15,9 @@ priority 196
 
 track netEquCab2
 priority 196.1
+
+track chainCavPor3
+priority 198
+
+track netCavPor3
+priority 198.1
