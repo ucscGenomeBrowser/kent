@@ -16031,6 +16031,12 @@ TMPDIR=/scratch/tmp
 
     cat fb.hg18.chainBraFlo1Link.txt
     #	26455595 bases of 2881515245 (0.918%) in intersection
+    #	test reciprocal best chains/nets for 5-way maf alignments
+    #	on braFlo1, this did not work right there
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/blastz.braFlo1.2007-03-26
+    time nice -n +19 /cluster/bin/scripts/doRecipBest.pl hg18 braFlo1 \
+	> rbest.log 2>&1 &
 
     # and now the swap, also documented in braFlo1.txt
     mkdir /cluster/data/braFlo1/bed/blastz.hg18.swap
@@ -19679,7 +19685,6 @@ TMPDIR=/scratch/tmp
     #	real    414m33.533s
     cat fb.hg18.chainPetMar1Link.txt
     #	36042598 bases of 2881515245 (1.251%) in intersection
-    #	36043809 bases of 2881515245 (1.251%) in intersection
 
     #	That is OK, now for the swap:
     mkdir /cluster/data/petMar1/bed/blastz.hg18.swap
