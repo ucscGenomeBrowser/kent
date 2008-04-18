@@ -154,7 +154,7 @@ foreach db ($dbs)
  echo "featureBits $db -countGaps ensGene gap (on hgwdev):"
  featureBits $db -countGaps ensGene gap
 
- if ( $db == $newTrack ) then
+ if ( $db != $newTrack ) then
   echo "\nfeatureBits $db ensGene (on hgwbeta):"
   ssh hgwbeta featureBits $db ensGene
   echo "featureBits $db -countGaps ensGene (on hgwbeta):"
