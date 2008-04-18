@@ -79,11 +79,17 @@ track netCalJac1
 priority 257.1
 
 # guinea pig
-track chainCavPor2
+track chainCavPor3
 priority 278
 
-track netCavPor2
+track netCavPor3
 priority 278.1
+
+track chainCavPor2
+priority 278.2
+
+track netCavPor2
+priority 278.3
 
 # mouse
 track chainMm9
