@@ -1,0 +1,40 @@
+# note: these values should be synced up with those up one level
+
+
+# rat
+track chainRn4
+priority 260
+
+track netRn4
+priority 260.1
+
+track chainRn3
+priority 260.2
+
+track netRn3
+priority 260.3
+
+track syntenyNetRn3
+priority 260.4
+
+
+# rhesus
+track chainRheMac2
+priority 280
+
+track netRheMac2
+priority 280.1
+
+# chimp
+track chainPanTro2
+priority 290
+
+track netPanTro2
+priority 290.1
+
+track chainPanTro1
+priority 290.2
+
+track netPanTro1
+priority 290.3
+
