@@ -4,7 +4,7 @@
 # This file describes browser build for the Lancelet
 # genome, Branchiostoma floridae, March 2006, v.1.0 from JGI
 #
-#       "$Id: braFlo1.txt,v 1.9 2008/04/16 16:48:50 hiram Exp $"
+#       "$Id: braFlo1.txt,v 1.10 2008/04/18 23:50:22 hiram Exp $"
 #
 
 ##########################################################################
@@ -180,6 +180,15 @@ done
     cat fb.braFlo1.chainHg18Link.txt
     #	30912893 bases of 923355587 (3.348%) in intersection
 
+    #	create reciprocal best chains/nets for 5-way maf alignments
+    ssh hgwdev
+    cd /cluster/data/braFlo1/bed/blastz.hg18.swap
+    time nice -n +19 /cluster/bin/scripts/doRecipBest.pl braFlo1 hg18 \
+	> rbest.log 2>&1 &
+    #	real    35m1.307s
+    #	This did not work right.  Something went haywire somewhere:
+# Error: braFlo1 rbest net coverage 14190116 != hg18 14270477
+
 #########################################################################
 # MAKE 11.OOC FILE FOR BLAT (DONE - 2007-01-18 - Hiram)
     # Use -repMatch=328 (based on size -- for human we use 1024, and 
@@ -352,6 +361,13 @@ TMPDIR=/scratch/tmp
     cat fb.braFlo1.chainPetMar1Link.txt
     #	27418217 bases of 923355587 (2.969%) in intersection
 
+    #	create reciprocal best chains/nets for 5-way maf alignments
+    ssh hgwdev
+    cd /cluster/data/braFlo1/bed/blastzPetMar1.2008-04-11
+    time nice -n +19 /cluster/bin/scripts/doRecipBest.pl braFlo1 petMar1 \
+	> rbest.log 2>&1 &
+    #	real    30m11.990s
+
     #	and the swap
     mkdir /cluster/data/petMar1/bed/blastz.braFlo1.swap
     cd /cluster/data/petMar1/bed/blastz.braFlo1.swap
@@ -384,4 +400,143 @@ TMPDIR=/scratch/tmp
     cat fb.braFlo1.chainGalGal3Link.txt
     #	30287175 bases of 923355587 (3.280%) in intersection
 
+    #	create reciprocal best chains/nets for 5-way maf alignments
+    ssh hgwdev
+    cd /cluster/data/braFlo1/bed/blastz.galGal3.swap
+    time nice -n +19 /cluster/bin/scripts/doRecipBest.pl braFlo1 galGal3 \
+	> rbest.log 2>&1 &
+    #	real    24m30.834s
+
 ###########################################################################
+## BLASTZ Mouse mm9 swap (DONE - 2008-04-17 - Hiram)
+    #	the original
+    ssh kkstore06
+    cd /cluster/data/mm9/bed/blastzBraFlo1.2008-04-14
+    cat fb.mm9.chainBraFlo1Link.txt
+    #	26725980 bases of 2620346127 (1.020%) in intersection
+
+    #	That is OK, now for the swap:
+    mkdir /cluster/data/braFlo1/bed/blastz.mm9.swap
+    cd /cluster/data/braFlo1/bed/blastz.mm9.swap
+    time doBlastzChainNet.pl -verbose=2 -swap \
+	/cluster/data/mm9/bed/blastzBraFlo1.2008-04-14/DEF \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	-qRepeats=windowmaskerSdust -bigClusterHub=kk > swap.log 2>&1 &
+    #	real    12m23.402s
+    cat  fb.braFlo1.chainMm9Link.txt
+    #	31517169 bases of 923355587 (3.413%) in intersection
+
+    #	create reciprocal best chains/nets for 5-way maf alignments
+    ssh hgwdev
+    cd /cluster/data/braFlo1/bed/blastz.mm9.swap
+    time nice -n +19 /cluster/bin/scripts/doRecipBest.pl braFlo1 mm9 \
+	> rbest.log 2>&1 &
+    #	real    35m15.178s
+
+#############################################################################
+## 5-Way Multiz (WORKING - 2008-04-17 - Hiram)
+##
+    ssh hgwdev
+    mkdir /cluster/data/braFlo1/bed/multiz5way
+    cd /cluster/data/braFlo1/bed/multiz5way
+    #	take the 6-way tree from mm9 and eliminate genomes not in
+    #	this alignment.  Manually add in petMar1 and braFlo1
+    #	arbitrarily somewhere outside of the fishes
+    #	rearrange to get braFlo1 on the top of the graph
+    #	paste this tree into the on-line phyloGif tool:
+    #	http://genome.ucsc.edu/cgi-bin/phyloGif
+    #	to create the image for the tree diagram
+
+    #	select the 5 organisms from the 6-way on Lamprey petMar1
+    /cluster/bin/phast/tree_doctor \
+	--prune-all-but \
+Human_hg18,Mouse_mm9,Chicken_galGal3,Lamprey_petMar1,Lanclet_braFlo1 \
+	/cluster/data/petMar1/bed/multiz6way/petMar1.6-way.nh \
+	> 5-way.fullNames.nh
+
+    #	looks something like this:
+    ((Lamprey_petMar1:1.600000,(Chicken_galGal3:0.488824,
+      (Mouse_mm9:0.325818,Human_hg18:0.126901):0.470757):0.725954):0.400000,
+	Lanclet_braFlo1:2.000000);
+
+    #	rearrange to get Lanclet at the top, this leaves us with:
+    cat << '_EOF_' > braFlo1.5-way.nh
+    (Lanclet_braFlo1:2.0,(Lamprey_petMar1:1.600000,(Chicken_galGal3:0.488824,
+      (Mouse_mm9:0.325818,Human_hg18:0.126901):0.470757):0.725954):0.400000);
+'_EOF_'
+    #	<< happy emacs
+
+    #	create a species list from that file:
+    sed -e 's/[()]//g; s/ /\n/g; s/,/\n/g' braFlo1.5-way.nh \
+        | sed -e "s/[ \t]*//g; /^[ \t]$/d; /^$/d" | sort -u \
+        | sed -e "s/.*_//; s/:.*//" | sort > species.list
+    #	verify that has 5 db names in it
+    # create a stripped down nh file for use in autoMZ run
+    echo \
+`sed 's/[a-zA-Z0-9]*_//g; s/:[012].[0-9]*//g; s/[,;]/ /g' braFlo1.5-way.nh \
+	| sed -e "s/  / /g"` > tree.5.nh
+    #	that looks like, as a single line:
+# (braFlo1 (petMar1 (galGal3 (mm9 hg18))))
+
+    # verify all blastz's exists
+    cat << '_EOF_' > listMafs.csh
+#!/bin/csh -fe
+cd /cluster/data/braFlo1/bed/multiz5way
+foreach db (`grep -v braFlo1 species.list`)
+    set bdir = /cluster/data/braFlo1/bed/blastz.$db
+    if (-e $bdir/mafRBestNet/chrUn.maf.gz) then
+	echo "$db mafRBestNet"
+    else if (-e $bdir/mafSynNet/chrUn.maf.gz) then
+	echo "$db mafSynNet"
+    else if (-e $bdir/mafNet/chrUn.maf.gz) then
+	echo "$db mafNet"
+    else
+	echo "$db mafs not found"
+    endif
+end
+'_EOF_'
+    # << happy emacs
+    chmod +x ./listMafs.csh
+    #	see what it says, these should all be mafRBestNet
+    ./listMafs.csh
+# canFam2 mafRBestNet
+# hg18 mafRBestNet
+# mm9 mafRBestNet
+# monDom4 mafNet
+# ornAna1 mafNet
+# panTro2 mafRBestNet
+# ponAbe2 mafRBestNet
+# rheMac2 mafRBestNet
+
+
+    /cluster/bin/phast/all_dists braFlo1.5-way.nh > 5way.distances.txt
+    grep -i caljac 5way.distances.txt | sort -k3,3n
+Marmoset_calJac1        Human_hg18      0.138447
+Marmoset_calJac1        Rhesus_rheMac2  0.138473
+Marmoset_calJac1        Orangutan_ponAbe2       0.139537
+Marmoset_calJac1        Chimp_panTro2   0.140242
+Marmoset_calJac1        Dog_canFam2     0.336180
+Marmoset_calJac1        Mouse_mm9       0.454272
+Marmoset_calJac1        Opossum_monDom4 0.712488
+Marmoset_calJac1        Platypus_ornAna1        0.968524
+
+    #	use the calculated
+    #	distances in the table below to order the organisms and check
+    #	the button order on the browser.  Zebrafish ends up before
+    #	tetraodon and fugu on the browser despite its distance.
+    #	And if you can fill in the table below entirely, you have
+    #	succeeded in finishing all the alignments required.
+    #
+#                         featureBits chainLink measures
+#                                       chainCalJac1Link   chain   linearGap
+#    distance                     on CalJac1    on other   minScore
+#  1  0.138447 Human_hg18         (% 82.846)   (% 78.351)   3000     medium
+#  2  0.138473 Rhesus_rheMac2     (% 74.810)   (% 77.648)   3000     medium
+#  3  0.139537 Orangutan_ponAbe2  (% 76.925)   (% 74.694)   3000     medium
+#  4  0.140242 Chimp_panTro2      (% 77.296)   (% 76.308)   3000     medium
+#  5  0.336180 Dog_canFam2        (% 57.429)   (% 49.549)   3000     medium
+#  6  0.454272 Mouse_mm9          (% 30.302)   (% 32.971)   3000     medium
+#  6  0.712488 Opossum_monDom4    (% 13.357)   (% 11.050)   5000     loose
+#  7  0.968524 Platypus_ornAna1   (%  7.221)   (% 10.619)   5000     loose
+
+#########################################################################
