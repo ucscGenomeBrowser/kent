@@ -118,7 +118,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1450 2008/04/17 20:53:18 larrym Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1451 2008/04/18 18:44:20 larrym Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -13359,6 +13359,8 @@ if (liftOverChainForDb(database) != NULL)
 boolean trackVersionExists = hTableExistsDb("hgFixed", "trackVersion");
 char ensVersionString[256];
 char ensDateReference[256];
+ensVersionString[0] = 0;
+ensDateReference[0] = 0;
 if (trackVersionExists)
     {
     struct sqlConnection *conn = hAllocConn();
@@ -13367,8 +13369,6 @@ if (trackVersionExists)
     struct sqlResult *sr = sqlGetResult(conn, query);
     char **row;
 
-    /* in case of NULL result from the table */
-    ensVersionString[0] = 0;
     while ((row = sqlNextRow(sr)) != NULL)
         {
         safef(ensVersionString, sizeof(ensVersionString), "Ensembl %s",
@@ -13379,33 +13379,14 @@ if (trackVersionExists)
     sqlFreeResult(&sr);
     hFreeConn(&conn);
     }
-else
-    {
-    ensVersionString[0] = 0;
-    ensDateReference[0] = 0;
-    }
 
 /* Print Ensembl anchor for latest assembly of organisms we have
  * supported by Ensembl (human, mouse, rat, fugu) */
-if (ensVersionString[0]
-	    || sameString(database, "hg18")
-            || sameString(database, "mm8")
-            || sameString(database, "rn4") 
-            || sameString(database, "monDom4") 
-            || sameString(database, "xenTro2") 
-            || sameString(database, "danRer4") 
-            || sameString(database, "canFam1") 
-            || sameString(database, "dm2") 
-            || sameString(database, "galGal2")
-            || sameString(database, "panTro2")
-            || sameString(database, "tetNig1"))
+if (ensVersionString[0] && !isUnknownChrom(database, chromName))
     {
     char *archive = NULL;
-    if (ensDateReference[0])
-        {
-        if (differentWord("current", ensDateReference))
+    if (ensDateReference[0] && differentWord("current", ensDateReference))
             archive = cloneString(ensDateReference);
-        }
     hPuts("<TD ALIGN=CENTER>");
     printEnsemblAnchor(database, archive);
     hPrintf("%s</A></TD>", "Ensembl");
