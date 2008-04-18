@@ -208,10 +208,12 @@
 #include "wikiTrack.h"
 #include "omicia.h"
 #include "atomDb.h"
+#include "pcrResult.h"
+#include "twoBit.h"
 #include "itemConf.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1408 2008/04/15 16:39:03 hiram Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1409 2008/04/18 23:55:57 angie Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -5322,6 +5324,271 @@ hFreeConn(&conn);
 hFreeConn(&conn2);
 }
 
+void getPcrPrimers(char *fileName, char **retFPrimer, char **retRPrimer)
+/* Given a file whose first line is 2 words (forward primer, reverse primer)
+ * set the ret's.  Do not free the statically allocated ret's. */
+{
+static char fPrimer[1024], rPrimer[1024];;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *words[2];
+if (! lineFileRow(lf, words))
+    lineFileAbort(lf, "Couldn't read primers");
+if (retFPrimer != NULL)
+    {
+    safecpy(fPrimer, sizeof(fPrimer), words[0]);
+    touppers(fPrimer);
+    *retFPrimer = fPrimer;
+    }
+if (retRPrimer != NULL)
+    {
+    safecpy(rPrimer, sizeof(rPrimer), words[1]);
+    touppers(rPrimer);
+    *retRPrimer = rPrimer;
+    }
+lineFileClose(&lf);
+}
+
+void getPcrBed(char *fileName, struct targetDb *target, char *item,
+	       struct bed **retItemBed, struct bed **retOtherBeds)
+/* Read in bed from file.  If a bed matches the cart item position, set 
+ * retItemBed to that; otherwise add it to retOtherBeds.  Die if no bed
+ * matches the cart item position. */
+{
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+struct bed *itemBed = NULL, *otherBeds = NULL;
+char *bedFields[12];
+int itemStart = cartInt(cart, "o");
+int itemEnd = cartInt(cart, "t");
+while (lineFileRow(lf, bedFields))
+    {
+    struct bed *bed = bedLoad12(bedFields);
+    boolean gotIt = FALSE;
+    if (target != NULL)
+	{
+	if (sameString(bed->chrom, item))
+	    gotIt = TRUE;
+	}
+    else if (sameString(bed->chrom, seqName) && bed->chromStart == itemStart &&
+	     bed->chromEnd == itemEnd)
+	gotIt = TRUE;
+    if (gotIt)
+	itemBed = bed;
+    else
+	slAddHead(&otherBeds, bed);
+    }
+lineFileClose(&lf);
+if (itemBed == NULL)
+    {
+    if (target != NULL)
+	errAbort("Did not find record for amplicon in %s sequence %s",
+		 target->description, item);
+    else
+	errAbort("Did not find record for amplicon at %s:%d-%d",
+		 seqName, itemStart, itemEnd);
+    }
+if (retItemBed != NULL)
+    *retItemBed = itemBed;
+else
+    bedFree(&itemBed);
+if (retOtherBeds != NULL)
+    {
+    slSort(&otherBeds, bedCmp);
+    *retOtherBeds = otherBeds;
+    }
+else
+    bedFreeList(&otherBeds);
+}
+
+void printPcrTargetMatch(struct targetDb *target, struct bed *bed,
+			 boolean mustGetItem)
+/* Show the non-genomic target PCR result and its genomic mapping. */
+{
+printf("<B>Position in %s:</B> <A HREF=\"%s?%s&db=%s&position=%s\">%s</A>"
+       ":%d-%d<BR>\n", 
+       target->description, hgTracksName(), cartSidUrlString(cart), database,
+       bed->chrom, bed->chrom, bed->chromStart+1, bed->chromEnd);
+printf("<B>Size in %s:</B> %d<BR>\n", bed->chrom,
+       bed->chromEnd - bed->chromStart);
+if (bed->strand[0] == '-')
+    printf("&nbsp;&nbsp;"
+	   "Warning: the match is on the reverse strand of %s<BR>\n",
+	   bed->chrom);
+
+struct psl *itemPsl = NULL, *otherPsls = NULL, *psl;
+int itemStart = cartInt(cart, "o");
+int itemEnd = cartInt(cart, "t");
+int rowOffset = hOffsetPastBin(seqName, target->pslTable);
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char query[2048];
+safef(query, sizeof(query), "select * from %s where qName = '%s'",
+      target->pslTable, bed->chrom);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    psl = pslLoad(row+rowOffset);
+    struct psl *pslTrimmed = pslTrimToQueryRange(psl, bed->chromStart,
+					      bed->chromEnd);
+    if (sameString(psl->tName, seqName) &&
+	psl->tStart == itemStart && psl->tEnd == itemEnd)
+	itemPsl = pslTrimmed;
+    else
+	slAddHead(&otherPsls, pslTrimmed);
+    pslFree(&psl);
+    }
+hFreeConn(&conn);
+if (mustGetItem && itemPsl == NULL)
+    errAbort("Did not find record for amplicon in %s at %s:%d-%d",
+	     bed->chrom, seqName, itemStart, itemEnd);
+char strand[2];
+strand[1] = '\0';
+if (itemPsl != NULL)
+    {
+    if (itemPsl->strand[1] == '\0')
+	strand[0] = itemPsl->strand[0];
+    else if (itemPsl->strand[0] != itemPsl->strand[1])
+	strand[0] = '-';
+    else
+	strand[0] = '+';
+    if (itemPsl != NULL)
+	printPosOnChrom(itemPsl->tName, itemPsl->tStart, itemPsl->tEnd,
+			strand, FALSE, bed->chrom);
+    }
+slSort(&otherPsls, pslCmpTarget);
+if (itemPsl != NULL && otherPsls != NULL)
+    printf("<B>Other matches in genomic alignments of %s:</B><BR>\n",
+	   bed->chrom);
+for (psl = otherPsls;  psl != NULL;  psl = psl->next)
+    {
+    if (psl->strand[1] == '\0')
+	strand[0] = psl->strand[0];
+    else if (psl->strand[0] != psl->strand[1])
+	strand[0] = '-';
+    else
+	strand[0] = '+';
+    printPosOnChrom(psl->tName, psl->tStart, psl->tEnd, strand, FALSE,
+		    bed->chrom);
+    }
+pslFree(&itemPsl);
+pslFreeList(&otherPsls);
+}
+
+static void upperMatch(char *dna, char *primer, int size)
+/* Uppercase DNA where it matches primer. -- copied from gfPcrLib.c. */
+{
+int i;
+for (i=0; i<size; ++i)
+    {
+    if (dna[i] == primer[i])
+        dna[i] = toupper(dna[i]);
+    }
+}
+
+void printPcrSequence(struct targetDb *target, struct bed *bed,
+		      char *fPrimer, char *rPrimer)
+/* Print the amplicon sequence (as on hgPcr results page). */
+{
+int productSize = bed->chromEnd - bed->chromStart;
+char *ffPrimer = cloneString(fPrimer);
+char *rrPrimer = cloneString(rPrimer);
+int rPrimerSize = strlen(rPrimer);
+struct dnaSeq *seq;
+if (target != NULL)
+    {
+    /* Use seq+extFile if specified; otherwise just retrieve from seqFile. */
+    if (isNotEmpty(target->seqTable) && isNotEmpty(target->extFileTable))
+	{
+	struct sqlConnection *conn = hAllocConn();
+	seq = hDnaSeqGet(conn, bed->chrom, target->seqTable,
+			 target->extFileTable);
+	hFreeConn(&conn);
+	char *dna = cloneStringZ(seq->dna + bed->chromStart, productSize);
+	freeMem(seq->dna);
+	seq->dna = dna;
+	}
+    else
+	{
+	struct twoBitFile *tbf = twoBitOpen(target->seqFile);
+	seq = twoBitReadSeqFrag(tbf, bed->chrom, bed->chromStart,
+				bed->chromEnd);
+	twoBitClose(&tbf);
+	}
+    }
+else
+    seq = hChromSeq(bed->chrom, bed->chromStart, bed->chromEnd);
+char *dna = seq->dna;
+tolowers(dna);
+printf("<TT><PRE>");
+/* The rest of this is loosely copied from gfPcrLib.c:outputFa(): */
+printf("><A HREF=\"%s?%s&db=%s&position=%s",
+       hgTracksName(), cartSidUrlString(cart), database, bed->chrom);
+if (target == NULL)
+    printf(":%d-%d", bed->chromStart, bed->chromEnd);
+printf("\">%s:%d%c%d</A> %dbp %s %s\n",
+       bed->chrom, bed->chromStart, bed->strand[0], bed->chromEnd,
+       productSize, fPrimer, rPrimer);
+
+/* Flip reverse primer to be in same direction and case as sequence, to 
+ * compare with sequence: */
+reverseComplement(rrPrimer, rPrimerSize);
+tolowers(rrPrimer);
+tolowers(ffPrimer);
+
+/* Capitalize where sequence and primer match, and write out sequence. */
+upperMatch(dna, ffPrimer, strlen(ffPrimer));
+upperMatch(dna + productSize - rPrimerSize, rrPrimer, rPrimerSize);
+faWriteNext(stdout, NULL, dna, productSize);
+printf("</PRE></TT>");
+}
+
+void doPcrResult(char *track, char *item)
+/* Process click on PCR of user's primers. */
+{
+char *bedFileName, *primerFileName;
+struct targetDb *target;
+cartWebStart(cart, "PCR Results");
+if (! pcrResultParseCart(cart, &bedFileName, &primerFileName, &target))
+    errAbort("PCR Result track has disappeared!");
+
+char *fPrimer, *rPrimer;
+getPcrPrimers(primerFileName, &fPrimer, &rPrimer);
+printf("<H2>PCR Results (<TT>%s %s</TT>)</H2>\n", fPrimer, rPrimer);
+printf("<B>Forward primer:</B> 5' <TT>%s</TT> 3'<BR>\n", fPrimer);
+printf("<B>Reverse primer:</B> 5' <TT>%s</TT> 3'<BR>\n", rPrimer);
+if (target != NULL)
+    printf("<B>Search target:</B> %s<BR>\n", target->description);
+
+struct bed *itemBed = NULL, *otherBeds = NULL, *bed;
+getPcrBed(bedFileName, target, item, &itemBed, &otherBeds);
+if (target != NULL)
+    printPcrTargetMatch(target, itemBed, TRUE);
+else
+    printPosOnChrom(itemBed->chrom, itemBed->chromStart, itemBed->chromEnd,
+		    itemBed->strand, FALSE, NULL);
+
+if (otherBeds != NULL)
+    {
+    puts("<HR>");
+    printf("<B>Other matches for these primers:</B><BR>\n");
+for (bed = otherBeds;  bed != NULL;  bed = bed->next)
+    if (target != NULL)
+	printPcrTargetMatch(target, bed, FALSE);
+    else
+	printPosOnChrom(bed->chrom, bed->chromStart, bed->chromEnd,
+			bed->strand, FALSE, NULL);
+    puts("<HR>");
+    }
+printPcrSequence(target, itemBed, fPrimer, rPrimer);
+
+puts("<BR><HR>");
+char helpName[PATH_LEN], *helpBuf;
+safef(helpName, sizeof(helpName), "%s%s/%s.html", hDocumentRoot(), HELP_DIR,
+      track);
+readInGulp(helpName, &helpBuf, NULL);
+puts(helpBuf);
+}
+
 void doUserPsl(char *track, char *item)
 /* Process click on user-defined alignment. */
 {
@@ -5353,6 +5620,7 @@ slReverse(&pslList);
 lineFileClose(&lf);
 printAlignments(pslList, start, "htcUserAli", "user", encItem);
 pslFreeList(&pslList);
+puts("<BR><HR>");
 safef(helpName, sizeof(helpName), "%s%s/%s.html", hDocumentRoot(), HELP_DIR,
       USER_PSL_TRACK_NAME);
 readInGulp(helpName, &helpBuf, NULL);
@@ -19933,6 +20201,10 @@ else if (sameWord(track, "mouseOrtho"))
 else if (sameWord(track, USER_PSL_TRACK_NAME))
     {
     doUserPsl(track, item);
+    }
+else if (sameWord(track, "hgPcrResult"))
+    {
+    doPcrResult(track, item);
     }
 else if (sameWord(track, "softPromoter"))
     {
