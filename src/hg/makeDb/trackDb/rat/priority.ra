@@ -85,3 +85,22 @@ priority 278
 track netCavPor2
 priority 278.1
 
+# mouse
+track chainMm9
+priority 280
+
+track netMm9
+priority 280.1
+
+track chainMm8
+priority 280.2
+
+track netMm8
+priority 280.3
+
+track chainMm7
+priority 280.4
+
+track netMm7
+priority 280.5
+
