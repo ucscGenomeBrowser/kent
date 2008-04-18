@@ -845,7 +845,7 @@ type netAlign dasNov1 chainDasNov1
 otherDb dasNov1
 
 track chainRn3
-shortLabel $o_db
+shortLabel $o_db Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 260.2
