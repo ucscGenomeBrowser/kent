@@ -1,0 +1,12 @@
+
+# rat
+track chainRn3
+priority 260.2
+
+track netRn3
+priority 260.3
+
+# chimp
+track chimpSimpleDiff
+priority 292.3
+

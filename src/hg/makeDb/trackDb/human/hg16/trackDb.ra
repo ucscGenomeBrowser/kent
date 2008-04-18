@@ -366,7 +366,7 @@ track rBestChainPanTro1
 shortLabel Chimp Recip Chain 
 longLabel $o_Organism ($o_date/$o_db) Reciprocal Best Chained Alignments
 group compGeno
-priority 201
+priority 291.0
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -378,7 +378,7 @@ track rBestNetPanTro1
 shortLabel Chimp Recip Net
 longLabel Chimp (Nov. 2003/panTro1) Reciprocal Best Net
 group compGeno
-priority 202
+priority 291.1
 visibility hide
 spectrum on
 type netAlign panTro1 rBestChainPanTro1
@@ -387,7 +387,7 @@ track chimpDels
 shortLabel Chimp Deletions
 longLabel Deletions in Chimp (Nov. 2003/panTro1) Relative to Human
 group compGeno
-priority 203
+priority 291.2
 visibility hide
 type bed 4 .
 
