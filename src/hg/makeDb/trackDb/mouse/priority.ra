@@ -153,6 +153,12 @@ priority 276.0
 track netRheMac2
 priority 276.1
 
+track chainRheMac1
+priority 276.2
+
+track netRheMac1
+priority 276.3
+
 # orangutan
 track chainPonAbe2
 priority 277.0
@@ -169,13 +175,28 @@ priority 277.3
 
 # chimp
 track chainPanTro2
-priority 278.5
+priority 278.3
 
 track netPanTro2
+priority 278.4
+
+track chainPanTro1
+priority 278.5
+
+track netPanTro1
 priority 278.6
 
 # human
+track chainHg17
+priority 279.6
+
+track netHg17
+priority 279.7
+
 track chainHg15
+priority 279.8
+
+track netHg15
 priority 279.9
 
 # rabbit
@@ -204,3 +225,9 @@ priority 286.0
 
 track netRn4
 priority 286.1
+
+track chainRn3
+priority 286.2
+
+track netRn3
+priority 286.3
