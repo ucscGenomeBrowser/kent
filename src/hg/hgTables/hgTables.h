@@ -399,6 +399,7 @@ void doSubtrackMergeSubmit(struct sqlConnection *conn);
 #define hgtaDoClearSetUserRegionsText "hgta_doClearSetUserRegionsText"
 #define hgtaUserRegionsFile "hgta_userRegionsFile"
 #define hgtaUserRegionsTable "hgta_userRegionsTable"
+#define hgtaUserRegionsDb "hgta_userRegionsDb"
 #define hgtaEnteredUserRegions "hgta_enteredUserRegions"
 #define hgtaEnteredUserRegionFile "hgta_enteredUserRegionFile"
 #define hgtaDoSubmitUserRegions "hgta_doSubmitUserRegions"

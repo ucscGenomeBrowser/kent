@@ -14,13 +14,16 @@
 #include "hui.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: userRegions.c,v 1.10 2007/05/22 23:03:31 galt Exp $";
+static char const rcsid[] = "$Id: userRegions.c,v 1.11 2008/04/18 17:27:13 angie Exp $";
 
 void doSetUserRegions(struct sqlConnection *conn)
 /* Respond to set regions button. */
 {
 char helpName[PATH_LEN], *helpBuf;
 char *oldPasted = cartUsualString(cart, hgtaEnteredUserRegions, "");
+char *db = cartOptionalString(cart, hgtaUserRegionsDb);
+if (db && !sameString(db, database))
+    oldPasted = "";
 htmlOpen("Enter region definition\n");
 hPrintf("<FORM ACTION=\"%s\" METHOD=POST "
     " ENCTYPE=\"multipart/form-data\" NAME=\"mainForm\">\n", getScriptName());
@@ -242,6 +245,7 @@ if (hasData)
 		bedEl->chrom, bedEl->chromStart, bedEl->chromEnd);
 	}
     carefulClose(&f);
+    cartSetString(cart, hgtaUserRegionsDb, database);
     cartSetString(cart, hgtaUserRegionsTable, curTable);
     cartSetString(cart, hgtaUserRegionsFile, tn.forCgi);
     cartSetString(cart, hgtaRegionType, hgtaRegionTypeUserRegions);
@@ -262,6 +266,9 @@ char *userRegionsFileName()
 /* File name defined regions are in, or NULL if no such file. */
 {
 char *fileName = cartOptionalString(cart, hgtaUserRegionsFile);
+char *db = cartOptionalString(cart, hgtaUserRegionsDb);
+if (db && !sameString(database, db))
+    return NULL;
 if (fileName == NULL)
     return NULL;
 if (fileExists(fileName))
