@@ -82,6 +82,25 @@ priority 178.2
 track netXenTro1
 priority 178.3
 
+# opossum
+track chainMonDom4
+priority 190
+
+track netMonDom4
+priority 190.1
+
+track chainMonDom2
+priority 190.2
+
+track netMonDom2
+priority 190.3
+
+track chainMonDom1
+priority 190.4
+
+track netMonDom1
+priority 190.5
+
 # lizard
 track chainAnoCar1
 priority 183
@@ -116,6 +135,12 @@ priority 228
 
 track netCanFam2
 priority 228.1
+
+track chainCanFam1
+priority 228.2
+
+track netCanFam1
+priority 228.3
 
 # horse
 track chainEquCab2

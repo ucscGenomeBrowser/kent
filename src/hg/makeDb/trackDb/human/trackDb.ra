@@ -1777,7 +1777,7 @@ altColor 255,240,200
 type bed 6 .
 
 track chainMonDom4
-shortLabel MonDom4 Chain 
+shortLabel $o_Organism Chain 
 longLabel monDom4 ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 164.1
@@ -1791,7 +1791,7 @@ type chain monDom4
 otherDb monDom4
 
 track netMonDom4
-shortLabel monDom4 Net
+shortLabel $o_Organism Net
 longLabel monDom4 ($o_date/$o_db) Alignment Net
 group compGeno
 priority 164.2
@@ -1799,6 +1799,30 @@ visibility hide
 spectrum on
 type netAlign monDom4 chainMonDom4
 otherDb monDom4
+
+track chainLoxAfr1
+shortLabel $o_Organism Chain
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+group compGeno
+priority 253.1
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+type chain loxAfr1
+otherDb loxAfr1
+
+track netLoxAfr1
+shortLabel $o_Organism Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
+group compGeno
+priority 253.2
+visibility hide
+spectrum on
+type netAlign loxAfr1 chainLoxAfr1
+otherDb loxAfr1
+
 
 track syntenicNet
 shortLabel Syntenic Nets
