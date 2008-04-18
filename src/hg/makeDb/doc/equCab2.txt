@@ -1,7 +1,7 @@
 # for emacs: -*- mode: sh; -*-
 
 # Equus caballus - ??
-#	"$Id: equCab2.txt,v 1.3 2008/04/14 17:23:37 hiram Exp $"
+#	"$Id: equCab2.txt,v 1.4 2008/04/18 00:24:36 larrym Exp $"
 #########################################################################
 # DOWNLOAD SEQUENCE (...
 
@@ -224,7 +224,7 @@ i.e. if you take dupes and chrM into account, our data agrees with their raw dat
     #   1004742864 bases of 2454424288 (40.936%) in intersection
 
     # RepeatMasker and lib version from do.log:
-    #   RepeatMasker version development-$Id: equCab2.txt,v 1.3 2008/04/14 17:23:37 hiram Exp $
+    #   RepeatMasker version development-$Id: equCab2.txt,v 1.4 2008/04/18 00:24:36 larrym Exp $
     #   Jan 11 2008 (open-3-1-9) version of RepeatMasker
     #	CC   RELEASE 20071204
 
@@ -339,14 +339,41 @@ i.e. if you take dupes and chrM into account, our data agrees with their raw dat
 	-makeOoc=equCab2.11.ooc -repMatch=825
 
 #########################################################################
-#	make equCab2.chrUn.lift and chrUn.fa
+#	make equCab2.chrUn.lift, chrUn.fa and equCab2.UnScaffolds.2bit
+
     ssh hgwdev
     cd /cluster/data/equCab2/jkStuff
     grep ^chrUn ../broad/Contig.bed | awk '{printf "%d\t%s\t%d\tchrUn\t156378573\n", $2, $4, $3-$2}' > equCab2.chrUn.lift
 
+    # oops, I copied over hiram's length in the above command, so redo this
+    grep ^chrUn ../broad/Contig.bed | awk '{printf "%d\t%s\t%d\tchrUn\t117461955\n", $2, $4, $3-$2}' > equCab2.chrUn.lift
+
     # create FASTA file with chrUn, using Broad scaffold names
     cp -p /cluster/data/gasAcu1/jkStuff/lft2BitToFa.pl .
     ./lft2BitToFa.pl ../equCab2.2bit equCab2.chrUn.lift > chrUn.fa &
+
+    faSize chrUn.fa
+    107858955 bases (14539925 N's 93319030 real 36162792 upper 57156238 lower) in 9604 sequences in 1 files
+
+    # create FASTA file w/o unknown chroms
+    cd ..
+    twoBitToFa equCab2.2bit stdout | \
+        perl -e 'my $print=0; while(<>) { if(/^>chr(.+)/) { $print = $1 ne "Un";} print if($print);}' > jkStuff/chr.fa &
+
+    faSize jkStuff/chr.fa
+    2393031066 bases (31925808 N's 2361105258 real 1413583673 upper 947521585 lower) in 33 sequences in 1 files
+
+    2393031066 + 107858955 + (9603 * 1000) = 2510493021
+    # i.e. correct size
+    
+    cd jkStuff
+    faToTwoBit chr.fa chrUn.fa ../equCab2.UnScaffolds.2bit
+    cd ..
+    twoBitInfo equCab2.UnScaffolds.2bit equCab2.UnScaffolds.sizes
+    cp -p equCab2.UnScaffolds.2bit /san/sanvol1/scratch/equCab2
+    cp -p equCab2.UnScaffolds.sizes /san/sanvol1/scratch/equCab2
+    
+    # run via hg18.txt
 
 #########################################################################
 # GENBANK AUTO UPDATE (DONE - 2008-04-10 - larrym)
@@ -428,3 +455,28 @@ liftUp /cluster/data/equCab2/jkStuff/chrUn.lift
     #	39746402 bases of 2454424288 (1.619%) in intersection
 
 ############################################################################
+# SWAP equCab2 -> hg18 
+ 
+    mkdir /cluster/data/equCab2/bed/blastz.hg18.swap
+    cd /cluster/data/bosTau4/bed/blastz.hg18.swap
+    time /bin/nice -n 19 doBlastzChainNet.pl \
+    	/cluster/data/hg18/bed/blastz.equCab2.2008-04-10/DEF \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	    -swap -syntenicNet >& do.log &
+    0.191u 0.101s 2:20:34.06 0.0%   0+0k 0+0io 6pf+0w
+
+############################################################################
+# SWAP equCab2 -> mm9 (DONE - 2008-04-17 - larrym) 
+    mkdir /cluster/data/equCab2/bed/blastz.mm9.swap
+    cd /cluster/data/equCab2/bed/blastz.mm9.swap
+    time /bin/nice -n 19 doBlastzChainNet.pl \
+    	/cluster/data/mm9/bed/blastz.equCab2.2008-04-15/DEF \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	    -swap -syntenicNet >& do.log &
+    0.164u 0.128s 1:32:36.50 0.0%   0+0k 0+0io 6pf+0w
+
+BLASTZ to TODO??
+
+galGal3
+canFam2
+platapus (figure out db name)
