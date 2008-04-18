@@ -1747,6 +1747,12 @@ identifier ensemblTranscriptId external=Ensembl dependency
     $danRer.rnBlastTab.query
     $danRer.scBlastTab.query
 
+identifier ensemblTranscriptIdFelCat external=Ensembl dependency
+"Ensembl Transcript ID for felCat"
+    $felCat.ensGene.name chopAfter=. dupeOk
+    $felCat.ensGtp.transcript chopAfter=. minCheck=0.98
+    $felCat.ensPep.name chopAfter=. minCheck=0.98
+
 identifier ensemblTranscriptId3 external=Ensembl dependency
 "Ensembl Transcript ID"
     $gbd,!rn3.ensemblXref3.transcript dupeOk
