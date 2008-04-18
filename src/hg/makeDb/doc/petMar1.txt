@@ -4,7 +4,7 @@
 # This file describes browser build for the Sea Lamprey
 # genome, Petromyzon marinus, March 2007, v.3.0 from WUSTL
 #
-#       "$Id: petMar1.txt,v 1.7 2008/04/18 18:04:33 braney Exp $"
+#       "$Id: petMar1.txt,v 1.8 2008/04/18 23:48:18 hiram Exp $"
 #
 
 ##########################################################################
@@ -288,7 +288,8 @@ TMPDIR=/scratch/tmp
 	-chainMinScore=3000 -chainLinearGap=medium \
 	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
 	-bigClusterHub=memk > do.log 2>&1 &
-XXX - running 2008-01-15 12:50
+    #	abandon this run, ended up using the swap from oryLat1 in:
+    #	/cluster/data/oryLat1/bed/blastz.petMar1.2008-01-15
     #	real    1053m9.027s
     #	netChains failed, during chainStitchId:
     #	q end mismatch 1073742062 vs 1111312799 line 510 of stdin
@@ -422,6 +423,13 @@ TMPDIR=/scratch/tmp
     cat fb.petMar1.chainOryLat1Link.txt
     #	23358156 bases of 831696438 (2.808%) in intersection
 
+    #	create reciprocal best chains/nets for 9-way maf alignments
+    ssh hgwdev
+    cd /cluster/data/petMar1/bed/blastz.oryLat1.swap
+    time nice -n +19 /cluster/bin/scripts/doRecipBest.pl petMar1 oryLat1 \
+	> rbest.log 2>&1 &
+    #	real    22m20.900s
+
 #############################################################################
 # BLASTZ SWAP Lamprey - Lanclet (DONE - 2008-04-12 - Hiram)
     ssh kkstore05
@@ -443,6 +451,13 @@ TMPDIR=/scratch/tmp
     cat fb.petMar1.chainBraFlo1Link.txt
     #	27373264 bases of 831696438 (3.291%) in intersection
 
+    #	create reciprocal best chains/nets for 9-way maf alignments
+    ssh hgwdev
+    cd /cluster/data/petMar1/bed/blastz.braFlo1.swap
+    time nice -n +19 /cluster/bin/scripts/doRecipBest.pl petMar1 braFlo1 \
+	> rbest.log 2>&1 &
+    #	real    110m25.613s
+
 #############################################################################
 # BLASTZ SWAP Chicken GalGal3 (DONE - 2008-04-15 - Hiram)
     #	the original
@@ -462,7 +477,286 @@ TMPDIR=/scratch/tmp
     #	real    33m41.587s
     cat fb.petMar1.chainGalGal3Link.txt
     #	22308118 bases of 831696438 (2.682%) in intersection
+
+    #	create reciprocal best chains/nets for 9-way maf alignments
+    ssh hgwdev
+    cd /cluster/data/petMar1/bed/blastz.galGal3.swap
+    time nice -n +19 /cluster/bin/scripts/doRecipBest.pl petMar1 galGal3 \
+	> rbest.log 2>&1 &
+    #	real    13m33.139s
+
 #############################################################################
+# BLASTZ SWAP Human hg18 (DONE - 2008-01-30 - Hiram)
+    ssh kkstore02
+    screen # use screen to control this job
+    # the original
+    cd /cluster/data/hg18/bed/blastzPetMar1.2008-01-29
+    cat fb.hg18.chainPetMar1Link.txt
+    #	36042598 bases of 2881515245 (1.251%) in intersection
+
+    #	That is OK, now for the swap:
+    mkdir /cluster/data/petMar1/bed/blastz.hg18.swap
+    cd /cluster/data/petMar1/bed/blastz.hg18.swap
+    time doBlastzChainNet.pl -verbose=2 -swap \
+	/cluster/data/hg18/bed/blastzPetMar1.2008-01-29/DEF \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-bigClusterHub=pk > swap.log 2>&1 &
+    #	real    60m1.928s
+    cat  fb.petMar1.chainHg18Link.txt
+    #	26751073 bases of 831696438 (3.216%) in intersection
+
+    #	create reciprocal best chains/nets for 9-way maf alignments
+    ssh hgwdev
+    cd /cluster/data/petMar1/bed/blastz.hg18.swap
+    time nice -n +19 /cluster/bin/scripts/doRecipBest.pl petMar1 hg18 \
+	> rbest.log 2>&1 &
+    #	real    22m34.274s
+
+#############################################################################
+# BLASTZ SWAP Mouse mm9 (DONE - 2008-04-15 - Hiram)
+    ssh kkstore06
+    screen # use screen to control this job
+    #	the original
+    cd /cluster/data/mm9/bed/blastzPetMar1.2008-04-14
+    cat fb.mm9.chainPetMar1Link.txt
+    #	29113438 bases of 2620346127 (1.111%) in intersection
+
+    #	That is OK, now for the swap:
+    mkdir /cluster/data/petMar1/bed/blastz.mm9.swap
+    cd /cluster/data/petMar1/bed/blastz.mm9.swap
+    time doBlastzChainNet.pl -verbose=2 -swap \
+	/cluster/data/mm9/bed/blastzPetMar1.2008-04-14/DEF \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	-qRepeats=windowmaskerSdust -bigClusterHub=pk > swap.log 2>&1 &
+    #	real    33m29.076s
+    cat  fb.petMar1.chainMm9Link.txt
+    #	26052507 bases of 831696438 (3.132%) in intersection
+
+    #	create reciprocal best chains/nets for 9-way maf alignments
+    ssh hgwdev
+    cd /cluster/data/petMar1/bed/blastz.mm9.swap
+    time nice -n +19 /cluster/bin/scripts/doRecipBest.pl petMar1 mm9 \
+	> rbest.log 2>&1 &
+    #	real    21m9.320s
+
+#############################################################################
+## 6-Way Multiz (DONE - 2008-04-17 - Hiram)
+##
+    ssh hgwdev
+    mkdir /cluster/data/petMar1/bed/multiz6way
+    cd /cluster/data/petMar1/bed/multiz6way
+    #	take the 30-way tree from mm9 and eliminate genomes not in
+    #	this alignment.  Manually add in petMar1 and braFlo1
+    #	arbitrarily somewhere outside of the fishes
+    #	rearrange to get petMar1 on the top of the graph
+    #	paste this tree into the on-line phyloGif tool:
+    #	http://genome.ucsc.edu/cgi-bin/phyloGif
+    #	to create the image for the tree diagram
+
+    #	select the 6 organisms from the 30-way recently done on mouse mm9
+    /cluster/bin/phast/tree_doctor \
+	--prune-all-but Human_hg18,Mouse_mm9,Chicken_galGal3,Medaka_oryLat1 \
+	/cluster/data/mm9/bed/multiz30way/mm9OnTop.fullNames.nh \
+	> 6-way.fullNames.nh
+
+    #	looks something like this:
+    (((Mouse_mm9:0.325818,Human_hg18:0.126901):0.470757,
+	Chicken_galGal3:0.488824):0.325954,Medaka_oryLat1:1.077873);
+
+    #	Adding Lamprey and Lanclet:
+((Lamprey_petMar1:1.6,
+  (((Mouse_mm9:0.325818,Human_hg18:0.126901):0.470757,
+   Chicken_galGal3:0.488824):0.325954,Medaka_oryLat1:1.077873):0.4):0.4,
+    Lanclet_braFlo1:2.0);
+
+((Lamprey_petMar1:1.6,
+  (Medaka_oryLat1:1.077873,((Mouse_mm9:0.325818,Human_hg18:0.126901):0.470757,
+   Chicken_galGal3:0.488824):0.325954):0.4):0.4,
+    Lanclet_braFlo1:2.0);
+
+((Lamprey_petMar1:1.6,
+  (Medaka_oryLat1:1.077873,(Chicken_galGal3:0.488824,
+    (Mouse_mm9:0.325818,Human_hg18:0.126901):0.470757):0.325954):0.4):0.4,
+    Lanclet_braFlo1:2.0);
+
+    #	rearrange to get Marmoset at the top:
+    # this leaves us with:
+    cat << '_EOF_' > petMar1.6-way.nh
+((Lamprey_petMar1:1.6,
+  (Medaka_oryLat1:1.077873,(Chicken_galGal3:0.488824,
+    (Mouse_mm9:0.325818,Human_hg18:0.126901):0.470757):0.325954):0.4):0.4,
+    Lanclet_braFlo1:2.0);
+'_EOF_'
+    #	<< happy emacs
+
+    #	create a species list from that file:
+    sed -e 's/[()]//g; s/ /\n/g; s/,/\n/g' petMar1.6-way.nh \
+        | sed -e "s/[ \t]*//g; /^[ \t]$/d; /^$/d" | sort -u \
+        | sed -e "s/.*_//; s/:.*//" | sort > species.list
+    #	verify that has 6 db names in it
+    # create a stripped down nh file for use in autoMZ run
+    echo \
+`sed 's/[a-zA-Z0-9]*_//g; s/:[012].[0-9]*//g; s/[,;]/ /g' petMar1.6-way.nh \
+	| sed -e "s/  / /g"` > tree.6.nh
+    #	that looks like, as a single line:
+# ((petMar1 (oryLat1 (galGal3 (mm9 hg18)))) braFlo1)
+
+    # verify all blastz's exists
+    cat << '_EOF_' > listMafs.csh
+#!/bin/csh -fe
+cd /cluster/data/petMar1/bed/multiz6way
+foreach db (`grep -v petMar1 species.list`)
+    set bdir = /cluster/data/petMar1/bed/blastz.$db
+    if (-e $bdir/mafRBestNet/petMar1.$db.rbest.maf.gz) then
+	echo "$db mafRBestNet"
+    else if (-e $bdir/mafSynNet/petMar1.$db.net.maf.gz) then
+	echo "$db mafSynNet"
+    else if (-e $bdir/mafNet/petMar1.$db.net.maf.gz) then
+	echo "$db mafNet"
+    else
+	echo "$db mafs not found"
+    endif
+end
+'_EOF_'
+    # << happy emacs
+    chmod +x ./listMafs.csh
+    #	see what it says, the "mafs not found" should only show up on petMar1
+    ./listMafs.csh
+# braFlo1 mafRBestNet
+# galGal3 mafRBestNet
+# hg18 mafRBestNet
+# mm9 mafRBestNet
+# oryLat1 mafRBestNet
+
+    /cluster/bin/phast/all_dists petMar1.6-way.nh > 6way.distances.txt
+    grep -i petmar 6way.distances.txt | sort -k3,3n
+Lamprey_petMar1 Chicken_galGal3 2.814778
+Lamprey_petMar1 Human_hg18      2.923612
+Lamprey_petMar1 Medaka_oryLat1  3.077873
+Lamprey_petMar1 Mouse_mm9       3.122529
+Lamprey_petMar1 Lanclet_braFlo1 4.000000
+
+    #	use the calculated
+    #	distances in the table below to order the organisms and check
+    #	the button order on the browser.  Zebrafish ends up before
+    #	tetraodon and fugu on the browser despite its distance.
+    #	And if you can fill in the table below entirely, you have
+    #	succeeded in finishing all the alignments required.
+    #
+#                         featureBits chainLink measures
+#                                       chainCalJac1Link   chain   linearGap
+#                     distance    on PetMar1    on other   minScore
+#  1  Chicken_galGal3 2.814778     (% 2.682)    (% 1.931)   5000      loose
+#  2  Human_hg18      2.923612     (% 3.216)    (% 1.251)   5000      loose
+#  3  Medaka_oryLat1  3.077873     (% 2.808)    (% 3.568)   3000      medium
+#  4  Mouse_mm9       3.122529     (% 3.132)    (% 1.111)   5000      loose
+#  5  Lanclet_braFlo1 4.000000     (% 3.291)    (% 2.969)   5000      loose
+
+    # copy net mafs to cluster-friendly storage, splitting chroms
+    mkdir mafLinks
+    cd mafLinks
+    ln -s ../../blastz.*.swap/mafRBestNet/*.rbest.maf.gz .
+
+    #	need to split these things up by Contig number for efficient kluster run
+    ssh kkstore04
+    mkdir -p /san/sanvol1/scratch/petMar1/multiz6way/contigMaf
+    cd /scratch/tmp
+    #	the 16201 is from petMar/chrom.sizes
+    echo "chrM 0 16201" > chrM.bed
+
+    for D in `grep -v petMar1 /cluster/data/petMar1/bed/multiz6way/species.list`
+do
+    echo ${D}
+    zcat \
+/cluster/data/petMar1/bed/multiz6way/mafLinks/petMar1.${D}.rbest.maf.gz \
+	> ${D}.maf
+    mkdir /scratch/tmp/${D}
+    cd /scratch/tmp/${D}
+    mafSplit -verbose=2 /dev/null -byTarget -useSequenceName Contig \
+	../${D}.maf -outDirDepth=2
+    mafsInRegion ../chrM.bed 0/0/chrM.maf ../${D}.maf
+    rsync -a --progress ./ \
+	/san/sanvol1/scratch/petMar1/multiz6way/contigMaf/${D}
+    cd /scratch/tmp
+    rm -fr ${D} ${D}.maf
+done
+    #	create a run-time list of contigs to operate on, not all contigs
+    #	exist in all alignments, but we want all contig names used in any
+    #	alignment:
+    cd /san/sanvol1/scratch/petMar1/multiz6way/contigMaf
+    for D in *
+do
+    cd "${D}"
+    find . -type f
+    cd ..
+done | sort -u > /tmp/6-way.contig.list
+    wc -l /tmp/6-way.contig.list
+    mkdir /cluster/data/petMar1/bed/multiz6way/splitRun
+    cp -p /tmp/6-way.contig.list \
+	/cluster/data/petMar1/bed/multiz6way/splitRun
+    #	31488 /tmp/6-way.contig.list
+
+    # ready for the multiz run
+    ssh pk
+    cd /cluster/data/petMar1/bed/multiz6way/splitRun
+    mkdir -p maf run
+    cd run
+    mkdir penn
+    # use latest penn utilities
+    P=/cluster/bin/penn/multiz.v11.2007-03-19/multiz-tba
+    cp -p $P/{autoMZ,multiz,maf_project} penn
+
+    #	set the db and pairs directories here
+    cat > autoMultiz.csh << '_EOF_'
+#!/bin/csh -ef
+set db = petMar1
+set subdir = $1
+set c = $2
+set result = $3
+set resultDir = $result:h
+set run = `pwd`
+set tmp = /scratch/tmp/$db/multiz.$c
+set pairs = /san/sanvol1/scratch/$db/multiz6way/contigMaf
+rm -fr $tmp
+mkdir -p $tmp
+mkdir -p $resultDir
+cp ../../tree.6.nh ../../species.list $tmp
+pushd $tmp
+foreach s (`grep -v $db species.list`)
+    set in = $pairs/$s/$subdir/$c.maf
+    set out = $db.$s.sing.maf
+    if (-e $in.gz) then
+	zcat $in.gz > $out
+    else if (-e $in) then
+	cp $in $out
+    else
+	echo "##maf version=1 scoring=autoMZ" > $out
+    endif
+end
+set path = ($run/penn $path); rehash
+$run/penn/autoMZ + T=$tmp E=$db "`cat tree.6.nh`" $db.*.sing.maf $c.maf
+popd
+cp $tmp/$c.maf $result
+rm -fr $tmp
+rmdir --ignore-fail-on-non-empty /scratch/tmp/$db
+'_EOF_'
+# << happy emacs
+    chmod +x autoMultiz.csh
+
+    cat  << '_EOF_' > template
+#LOOP
+./autoMultiz.csh $(dir1) $(root1) {check out line+ /cluster/data/petMar1/bed/multiz6way/splitRun/maf/$(dir1)/$(root1).maf}
+#ENDLOOP
+'_EOF_'
+    # << emacs
+
+    sed -e "s/^\.\///" ../6-way.contig.list \
+	| gensub2 stdin single template jobList
+
+    para create jobList
+    para try ... check ... push ... etc
+XXX - running 2008-04-18 16:47
 
 ###########################################################################
 # HUMAN (hg18) PROTEINS TRACK (WORKING braney 2008-04-18)
