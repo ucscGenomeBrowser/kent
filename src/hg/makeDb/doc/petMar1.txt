@@ -4,7 +4,7 @@
 # This file describes browser build for the Sea Lamprey
 # genome, Petromyzon marinus, March 2007, v.3.0 from WUSTL
 #
-#       "$Id: petMar1.txt,v 1.6 2008/04/16 16:50:16 hiram Exp $"
+#       "$Id: petMar1.txt,v 1.7 2008/04/18 18:04:33 braney Exp $"
 #
 
 ##########################################################################
@@ -463,3 +463,207 @@ TMPDIR=/scratch/tmp
     cat fb.petMar1.chainGalGal3Link.txt
     #	22308118 bases of 831696438 (2.682%) in intersection
 #############################################################################
+
+###########################################################################
+# HUMAN (hg18) PROTEINS TRACK (WORKING braney 2008-04-18)
+
+# (auto) establish native host of /cluster/data/<assembly>
+    ssh kkstore04
+    # bash  if not using bash shell already
+
+    mkdir /cluster/data/petMar1/blastDb
+    cd /cluster/data/petMar1
+    awk '{if ($2 > 1000000) print $1}' chrom.sizes > 1meg.lst
+    if test -s 1meg.lst; then
+	twoBitToFa -seqList=1meg.lst  petMar1.unmasked.2bit temp.fa
+	faSplit gap temp.fa 1000000 blastDb/x -lift=blastDb.lft
+	rm temp.fa 
+    fi
+    rm 1meg.lst
+
+    awk '{if ($2 <= 1000000) print $1}' chrom.sizes > less1meg.lst
+    if test -s less1meg.lst; then
+	twoBitToFa -seqList=less1meg.lst  petMar1.unmasked.2bit temp.fa
+	faSplit about temp.fa 1000000 blastDb/y 
+	rm temp.fa 
+    fi
+    rm less1meg.lst
+
+    cd blastDb
+    for i in *.fa
+    do
+	/cluster/bluearc/blast229/formatdb -i $i -p F
+    done
+    rm *.fa
+    ls *.nsq | wc -l
+# 1018
+
+    mkdir -p /san/sanvol1/scratch/petMar1/blastDb
+    cd /cluster/data/petMar1/blastDb
+    for i in nhr nin nsq; 
+    do 
+	echo $i
+	cp *.$i /san/sanvol1/scratch/petMar1/blastDb
+    done
+
+    mkdir -p /cluster/data/petMar1/bed/tblastn.hg18KG
+    cd /cluster/data/petMar1/bed/tblastn.hg18KG
+    echo  /san/sanvol1/scratch/petMar1/blastDb/*.nsq | xargs ls -S | sed "s/\.nsq//"  > query.lst
+    wc -l query.lst
+
+# 1018 query.lst
+
+   # we want around 100,000 jobs per gig (0.0001 jobs per base)
+   numJobs=`awk '{sum += $2} END {print sum * 0.0001 }' /cluster/data/petMar1/chrom.sizes`
+
+   # we want around numJobs jobs
+   numGenes=`wc /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl | awk '{print $1}'`
+   numQueries=`wc query.lst | awk '{print $1}'`
+   numKGFiles=`awk -v ng=$numGenes -v nq=$numQueries -v nj=$numJobs 'BEGIN {printf "%d", ng/(nj/nq);exit}' `
+
+   mkdir -p /cluster/bluearc/petMar1/bed/tblastn.hg18KG/kgfa
+   split -l $numKGFiles /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl  /cluster/bluearc/petMar1/bed/tblastn.hg18KG/kgfa/kg
+   ln -s /cluster/bluearc/petMar1/bed/tblastn.hg18KG/kgfa kgfa
+   cd kgfa
+   for i in *; do 
+     nice pslxToFa $i $i.fa; 
+     rm $i; 
+     done
+   cd ..
+   ls -1S kgfa/*.fa > kg.lst
+   mkdir -p /cluster/bluearc/petMar1/bed/tblastn.hg18KG/blastOut
+   ln -s /cluster/bluearc/petMar1/bed/tblastn.hg18KG/blastOut
+   for i in `cat kg.lst`; do  mkdir blastOut/`basename $i .fa`; done
+   tcsh
+   cd /cluster/data/petMar1/bed/tblastn.hg18KG
+   cat << '_EOF_' > blastGsub
+#LOOP
+blastSome $(path1) {check in line $(path2)} {check out exists blastOut/$(root2)/q.$(root1).psl }
+#ENDLOOP
+'_EOF_'
+
+   cat << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/cluster/bluearc/blast229/data
+export BLASTMAT
+g=`basename $2`
+f=/tmp/`basename $3`.$g
+for eVal in 0.01 0.001 0.0001 0.00001 0.000001 1E-09 1E-11
+do
+if /cluster/bluearc/blast229/blastall -M BLOSUM80 -m 0 -F no -e $eVal -p tblastn -d $1 -i $2 -o $f.8
+then
+        mv $f.8 $f.1
+        break;
+fi
+done
+if test -f  $f.1
+then
+    if /cluster/bin/i386/blastToPsl $f.1 $f.2
+    then
+	if test -s /cluster/data/petMar1/blastDb.lft
+	then
+	    liftUp -nosort -type=".psl" -nohead $f.3 /cluster/data/petMar1/blastDb.lft carry $f.2
+	else
+	    mv $f.2 $f.3
+	fi
+        liftUp -nosort -type=".psl" -pslQ -nohead $3.tmp /cluster/data/hg18/bed/blat.hg18KG/protein.lft warn $f.3
+        if pslCheck -prot $3.tmp
+        then                  
+            mv $3.tmp $3     
+            rm -f $f.1 $f.2 $f.3 $f.4
+        fi
+        exit 0               
+    fi                      
+fi                         
+rm -f $f.1 $f.2 $3.tmp $f.8 $f.3 $f.4
+exit 1
+'_EOF_'
+    # << happy emacs
+    chmod +x blastSome
+    gensub2 query.lst kg.lst blastGsub blastSpec
+    exit 
+    
+    ssh pk
+    cd /cluster/data/petMar1/bed/tblastn.hg18KG
+    para create blastSpec
+#    para try, check, push, check etc.
+
+    para time
+
+# Completed: 350303 of 350303 jobs
+# CPU time in finished jobs:   25825855s  430430.91m  7173.85h  298.91d  0.819 y
+# IO & Wait Time:               2396715s   39945.25m   665.75h   27.74d  0.076 y
+# Average job time:                  81s       1.34m     0.02h    0.00d
+# Longest finished job:             339s       5.65m     0.09h    0.00d
+# Submission to last job:         80595s    1343.25m    22.39h    0.93d
+
+    ssh kkstore05
+    cd /cluster/data/petMar1/bed/tblastn.hg18KG
+    mkdir chainRun
+    cd chainRun
+    tcsh
+    cat << '_EOF_' > chainGsub
+#LOOP
+chainOne $(path1)
+#ENDLOOP
+'_EOF_'
+
+    cat << '_EOF_' > chainOne
+(cd $1; cat q.*.psl | simpleChain -prot -outPsl -maxGap=150000 stdin /cluster/bluearc/petMar1/bed/tblastn.hg18KG/blastOut/c.`basename $1`.psl)
+'_EOF_'
+    chmod +x chainOne
+    ls -1dS /cluster/bluearc/petMar1/bed/tblastn.hg18KG/blastOut/kg?? > chain.lst
+    gensub2 chain.lst single chainGsub chainSpec
+    # do the cluster run for chaining
+    ssh pk
+    cd /cluster/data/petMar1/bed/tblastn.hg18KG/chainRun
+    para create chainSpec
+    para maxNode 30
+    para try, check, push, check etc.
+
+# Completed: 99 of 103 jobs
+# Crashed: 4 jobs
+# CPU time in finished jobs:      15940s     265.67m     4.43h    0.18d  0.001 y
+# IO & Wait Time:                397633s    6627.21m   110.45h    4.60d  0.013 y
+# Average job time:                4178s      69.63m     1.16h    0.05d
+# Longest finished job:            5502s      91.70m     1.53h    0.06d
+# Submission to last job:          7032s     117.20m     1.95h    0.08d
+
+# ran 4 crashed jobs on memk.  
+Completed: 4 of 4 jobs
+CPU time in finished jobs:       1673s      27.88m     0.46h    0.02d  0.000 y
+IO & Wait Time:                   529s       8.81m     0.15h    0.01d  0.000 y
+Average job time:                 550s       9.17m     0.15h    0.01d
+Longest running job:                0s       0.00m     0.00h    0.00d
+Longest finished job:             712s      11.87m     0.20h    0.01d
+Submission to last job:          1299s      21.65m     0.36h    0.02d
+
+    ssh kkstore05
+    cd /cluster/data/petMar1/bed/tblastn.hg18KG/blastOut
+    for i in kg??
+    do
+       cat c.$i.psl | awk "(\$13 - \$12)/\$11 > 0.6 {print}" > c60.$i.psl
+       sort -rn c60.$i.psl | pslUniq stdin u.$i.psl
+       awk "((\$1 / \$11) ) > 0.60 { print   }" c60.$i.psl > m60.$i.psl
+       echo $i
+    done
+    sort -T /tmp -k 14,14 -k 16,16n -k 17,17n u.*.psl m60* | uniq > /cluster/data/petMar1/bed/tblastn.hg18KG/blastHg18KG.psl
+    cd ..
+    pslCheck blastHg18KG.psl
+
+    # load table 
+    ssh hgwdev
+    cd /cluster/data/petMar1/bed/tblastn.hg18KG
+    hgLoadPsl petMar1 blastHg18KG.psl
+
+    # check coverage
+    featureBits petMar1 blastHg18KG 
+# 35569442 bases of 2663369733 (1.336%) in intersection
+
+    featureBits petMar1 refGene:cds blastHg18KG  -enrichment
+# not done yet
+
+    ssh kkstore05
+    rm -rf /cluster/data/petMar1/bed/tblastn.hg18KG/blastOut
+    rm -rf /cluster/bluearc/petMar1/bed/tblastn.hg18KG/blastOut
+#end tblastn
