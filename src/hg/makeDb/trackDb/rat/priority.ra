@@ -1,4 +1,49 @@
 
+# frog
+track chainXenTro2
+priority 170
+
+track netXenTro2
+priority 170.1
+
+track chainXenTro1
+priority 170.2
+
+track netXenTro1
+priority 170.3
+
+# chicken
+track chainGalGal3
+priority 181
+
+track netGalGal3
+priority 181.1
+
+track chainGalGal2
+priority 181.2
+
+track netGalGal2
+priority 181.3
+
+# cow
+track chainBosTau4
+priority 229
+
+track netBosTau4
+priority 229.1
+
+track chainBosTau3
+priority 229.2
+
+track netBosTau3
+priority 229.3
+
+track chainBosTau2
+priority 229.4
+
+track netBosTau2
+priority 229.5
+
 # dog
 track chainCanFam2
 priority 225
@@ -19,6 +64,12 @@ priority 256
 
 track netHg18
 priority 256.1
+
+track chainHg17
+priority 256.2
+
+track netHg17
+priority 256.3
 
 # marmoset
 track chainCalJac1
