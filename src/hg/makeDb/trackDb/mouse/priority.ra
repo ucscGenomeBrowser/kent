@@ -1,3 +1,11 @@
+# lancelet
+track chainBraFlo1
+priority 110
+
+track netBraFlo1
+priority 110.1
+
+
 # stickleback
 track chainGasAcu1
 priority 136
@@ -16,13 +24,50 @@ priority 168
 track netDanRer4
 priority 168.1
 
-
 #lizard
 track chainAnoCar1
 priority 179
 
 track netAnoCar1
 priority 179.1
+
+
+# tenrec
+track chainEchTel1
+priority 194.0
+
+track netEchTel1
+priority 194.1
+
+# elephant  
+track chainLoxAfr1
+priority 195.0
+
+track netLoxAfr1
+priority 195.1
+
+# armadillo 
+track chainDasNov1
+priority 196.0
+
+track netDasNov1
+priority 196.1
+
+
+# shrew     
+track chainSorAra1
+priority 214.0
+
+track netSorAra1
+priority 214.1
+
+# hedgehog
+track chainEriEur1
+priority 216.0
+
+track netEriEur1
+priority 216.1
+
 
 # dog
 track chainCanFam2
@@ -63,16 +108,19 @@ priority 256.7
 track netBosTau1
 priority 256.8
 
+# horse
+track chainEquCab2
+priority 264.0
 
-# bushbaby
-track chainOtoGar1Best
-priority 270.9
+track netEquCab2
+priority 264.1
 
-track chainOtoGar1
-priority 271.0
+track chainEquCab1
+priority 264.2
 
-track netOtoGar1
-priority 271.1
+track netEquCab1
+priority 264.3
+
 
 # tree shrew
 track chainTupBel1
@@ -81,26 +129,15 @@ priority 272.0
 track netTupBel1
 priority 272.1
 
-# horse
-track chainEquCab2
+# bushbaby
+track chainOtoGar1Best
 priority 274.0
 
-track netEquCab2
+track chainOtoGar1
 priority 274.1
 
-track chainEquCab1
+track netOtoGar1
 priority 274.2
-
-track netEquCab1
-priority 274.3
-
-
-# guinea pig
-track chainCavPor3
-priority 281.0
-
-track netCavPor3
-priority 281.1
 
 # marmoset
 track chainCalJac1
@@ -108,6 +145,13 @@ priority 275.0
 
 track netCalJac1
 priority 275.1
+
+# rhesus
+track chainRheMac2
+priority 276.0
+
+track netRheMac2
+priority 276.1
 
 # orangutan
 track chainPonAbe2
@@ -122,12 +166,6 @@ priority 277.2
 track netPonAbe1
 priority 277.3
 
-# rhesus
-track chainRheMac2
-priority 276.0
-
-track netRheMac2
-priority 276.1
 
 # chimp
 track chainPanTro2
@@ -140,3 +178,29 @@ priority 278.6
 track chainHg15
 priority 279.9
 
+# rabbit
+track chainOryCun1
+priority 282.0
+
+track netOryCun1
+priority 282.1
+
+# guinea pig
+track chainCavPor3
+priority 283.0
+
+track netCavPor3
+priority 283.1
+
+track chainCavPor2
+priority 283.2
+
+track netCavPor2
+priority 283.3
+
+# rat
+track chainRn4
+priority 286.0
+
+track netRn4
+priority 286.1
