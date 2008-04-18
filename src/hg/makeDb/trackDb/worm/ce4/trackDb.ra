@@ -283,7 +283,7 @@ track nucleosomeDensity
 shortLabel NSome Coverage
 longLabel Coverage of nucleosome predictions from SOLiD core alignments
 group map
-priority 122.0
+priority 123.0
 visibility hide
 type wig 1 19137
 spanList 1
@@ -311,7 +311,7 @@ track nucleosomeControlCoverage
 shortLabel MNase Coverage
 longLabel Micrococcal nuclease control coverage
 group map
-priority 123.0
+priority 122.0
 visibility hide
 type wig 1 5544
 spanList 1
