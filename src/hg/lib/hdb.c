@@ -36,7 +36,7 @@
 #include "customTrack.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.351 2008/04/04 00:08:15 fanhsu Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.352 2008/04/18 18:25:16 larrym Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -4873,4 +4873,10 @@ safef(query, sizeof(query),
     " where ucscId  = '%s' and u.domainName=p.name "
     , domainDb, lowerCaseName, ucscGeneId);
 return sqlQuickList(conn, query);
+}
+
+boolean isUnknownChrom(char *dataBase, char *chromName)
+/* Return true if chrom is one of our "unknown" chromomsomes (e.g. chrUn). */
+{
+return  endsWith(chromName, "_random") || startsWith("chrUn", chromName);
 }

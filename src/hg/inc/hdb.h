@@ -904,4 +904,7 @@ boolean isNewChimp(char *database) ;
 struct slName *getDomainList(struct sqlConnection *conn, char *ucscGeneId,
        char *domainDb);
 
+boolean isUnknownChrom(char *dataBase, char *chromName);
+/* Return true if chrom is one of our "unknown" chromomsomes (e.g. chrUn). */
+
 #endif /* HDB_H */
