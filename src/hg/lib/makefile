@@ -58,7 +58,8 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     minChromSize.o minGeneInfo.o mrnaMisMatch.o \
     mouseOrtho.o mouseSyn.o mouseSynWhd.o mysqlTableStatus.o \
     netAlign.o nonCodingUi.o omimTitle.o ooUtils.o orthoAlleles.o \
-    pbStamp.o pepPred.o plasEndPairs.o polyGenotype.o protFeat.o pscreen.o \
+    pbStamp.o pcrResult.o pepPred.o plasEndPairs.o \
+    polyGenotype.o protFeat.o pscreen.o \
     pseudoGeneLink.o pslReader.o pslWScore.o putaInfo.o qaSeq.o \
     rankProp.o recombRate.o recombRateRat.o recombRateMouse.o \
     refLink.o refSeqStatus.o \
@@ -77,7 +78,7 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     stsInfo.o stsInfo2.o stsInfoMouse.o stsInfoMouseNew.o stsInfoRat.o \
     stsMap.o stsMapMouse.o stsMapMouseNew.o stsMapRat.o stsMarker.o \
     switchDbTss.o synMap.o synteny100000.o syntenyBerk.o syntenySanger.o \
-    tableDescriptions.o tableStatus.o tfbsConsMap.o \
+    tableDescriptions.o tableStatus.o targetDb.o tfbsConsMap.o \
     taxonDivision.o taxonGeneticCode.o taxonName.o taxonNode.o taxonXref.o \
     tigrCmrGene.o tigrOperon.o tilingPath.o traceInfo.o trackDb.o \
     trackDbCustom.o trackLayout.o trackTable.o trackVersion.o trashDir.o \
