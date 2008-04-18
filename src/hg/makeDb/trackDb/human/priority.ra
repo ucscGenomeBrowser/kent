@@ -1,3 +1,32 @@
+# urchin
+track chainStrPur2
+priority 110
+
+track netStrPur2
+priority 110.1
+
+# lamprey
+track chainPetMar1
+priority 119
+
+track netPetMar1
+priority 119.1
+
+# medaka
+track chainOryLat1
+priority 120
+
+track netOryLat1
+priority 120.1
+
+# stickleback
+track chainGasAcu1
+priority 130
+
+track netGasAcu1
+priority 130.1
+
+
 # zfish
 track chainDanRer4
 priority 168
@@ -25,30 +54,3 @@ priority 228
 track netCanFam2
 priority 228.1
 
-# lamprey
-track chainPetMar1
-priority 119
-
-track netPetMar1
-priority 119.1
-
-# medaka
-track chainOryLat1
-priority 120
-
-track netOryLat1
-priority 120.1
-
-# stickleback
-track chainGasAcu1
-priority 130
-
-track netGasAcu1
-priority 130.1
-
-# urchin
-track chainStrPur2
-priority 110
-
-track netStrPur2
-priority 110.1
