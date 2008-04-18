@@ -1,9 +1,9 @@
 <!-- Display image in righthand corner -->
-<TABLE ALIGN=RIGHT BORDER=0 WIDTH=315>
+<TABLE ALIGN=RIGHT BORDER=0 WIDTH=215>
   <TR><TD ALIGN=RIGHT>
     <A HREF="http://www.broad.mit.edu/mammals/"
     TARGET=_blank>
-    <IMG SRC="/images/Cavia_porcellus.jpg" WIDTH=300 HEIGHT=273 ALT="Guinea Pig"></A>
+    <IMG SRC="/images/Cavia_porcellus.jpg" WIDTH=200 ALT="Guinea Pig"></A>
   </TD></TR>
   <TR><TD ALIGN=RIGHT> 
     <FONT SIZE=-1><em>Cavia porcellus</em><BR> 
@@ -36,17 +36,21 @@ Guinea Pig genome.  See the
         <TH WIDTH=14>&nbsp;</TH>
        	<TH ALIGN=LEFT>Genome Browser Response:</TH></TR>
     <TR><TD VALIGN=Top COLSPAN=3>&nbsp;</TD></TR>
-    <TR><TD VALIGN=Top>chrZ</TD>
+    <TR><TD VALIGN=Top>scaffold_1</TD>
         <TD WIDTH=14>&nbsp;</TD>
-       	<TD VALIGN=Top>Displays all of chromosome Z</TD>
+       	<TD VALIGN=Top>Displays all of scaffold 1</TD>
     </TR>
-    <TR><TD VALIGN=Top>chr3:1-1000000</TD>
+    <TR><TD VALIGN=Top>scaffold_2:1-1000000</TD>
         <TD WIDTH=14>&nbsp;</TD>
-       	<TD VALIGN=Top>Displays first million bases of chr 3</TD>
+       	<TD VALIGN=Top>Displays first million bases of scaffold 2</TD>
     </TR>
-    <TR><TD VALIGN=Top NOWRAP>chr3:1000000+2000</TD>
+    <TR><TD VALIGN=Top NOWRAP>scaffold_123:1000000+2000</TD>
        	<TD WIDTH=14></TD>
-       	<TD VALIGN=Top>Displays a region of chr 3 that spans 2000 bases, starting with position 1000000 </TD>
+       	<TD VALIGN=Top>Displays a region of scaffold 123 that spans 2000 bases, starting with position 1000000 </TD>
+    </TR>
+    <TR><TD VALIGN=Top NOWRAP>chrM</TD>
+       	<TD WIDTH=14></TD>
+       	<TD VALIGN=Top>Displays all if the mitochondial chromosome </TD>
     </TR>
     <TR><TD VALIGN=Top COLSPAN=3>&nbsp;<br></TD></TR>
     <TR><TD VALIGN=Top>BX950328</TD>
@@ -54,16 +58,18 @@ Guinea Pig genome.  See the
        	<TD VALIGN=Top>Displays region of mRNA with GenBank accession
 		number BX950328</TD>
     </TR>
-    <TR><TD VALIGN=Top>BU335953</TD>
+    <TR><TD VALIGN=Top>EB366004</TD>
         <TD WIDTH=14>&nbsp;</TD>
       	<TD VALIGN=Top>Displays region of EST with GenBank accession
 		BU335953 on chr Z</TD>
     </TR>
     <TR><TD VALIGN=Top COLSPAN=3>&nbsp;<br></TD></TR>
+<!--
     <TR><TD VALIGN=Top>pseudogene mRNA</TD>
         <TD WIDTH=14>&nbsp;</TD>
        	<TD VALIGN=Top>Lists transcribed pseudogenes, but not cDNAs</TD>
     </TR>
+-->
     <TR><TD VALIGN=Top>homeobox caudal</TD>
         <TD WIDTH=14>&nbsp;</TD>
        	<TD VALIGN=Top>Lists mRNAs for caudal homeobox genes</TD>
@@ -94,20 +100,32 @@ Guinea Pig genome.  See the
 <HR>
 <H3>Assembly details</H3>
 <P>
-The genome has been sequenced to 6.76X coverage.
-Approximately 88% of the sequence has been anchored to chromosomes, 
-which include autosomes 1-24, 26-28, and 32, and sex chromosomes W and Z. 
-(In contrast to mammals, the female chicken is heterogametic (ZW) and the 
-male is homogametic (ZZ).) 
-The remaining unanchored contigs that could be localized to a chromosome 
-have been concatenated into the virtual 
-chromosomes &quot;chr*_random&quot;, separated by gaps of 10,000 bp. 
-Unanchored contigs that could not be localized to a chromosome 
-have been concatenated into the virtual 
-chromosome &quot;chrUn&quot;, separated by gaps of 1,000 bp in order 
-to reduce the total size of chrUn. 
-The chicken 
-mitochondrial sequence is also available as the virtual chromosome 
+The guinea pig is one of 24 mammals whose genomes are being sequenced as part 
+of the <A HREF="http://www.broad.mit.edu/mammals/">Mammalian Genome Project</A>, 
+funded by NIH. While most of these are slated for low-coverage (2X), a limited 
+subset (including the guinea pig genome) are being sequenced to a higher quality (6-7X).
+</P><P> 
+The genome has been sequenced to 6.76X coverage with 95.55% of bases assembled.
+A total of 3143 scaffolds cover 2,722,377,657 bases (2.17% in gaps),
+with 50% of the scaffolds having a (N50) length of at least 27,408,292 bases 
+(not including gaps).  Approximately 97.52% of contigs have been assembled 
+into scaffolds of 200,000 bases or more. This genome assembly has a Q20 coverage
+of 5.99X with 99.57% q>=20 and 97.72% q >= 50.
+<!--
+the following percentages of base quality:
+
+<TABLE border=0 CELLPADDING=0 CELLSPACING=0>
+<TR><TH>Bases </TD><TD WIDTH=10>&nbsp;</TH><TH>Quality</TR>
+<TR><TD>100%  </TD><TD WIDTH=10>&nbsp;</TD><TD>q >= 1 </TD></TR>
+<TR><TD>99.57%</TD><TD WIDTH=10>&nbsp;</TD><TD>q >= 20</TD></TR>
+<TR><TD>99.02%</TD><TD WIDTH=10>&nbsp;</TD><TD>q >= 30</TD></TR>
+<TR><TD>98.4% </TD><TD WIDTH=10>&nbsp;</TD><TD>q >= 40</TD></TR>
+<TR><TD>97.72%</TD><TD WIDTH=10>&nbsp;</TD><TD>q >= 50</TD></TR>
+</TABLE>
+-->
+</P><P> 
+In this assembly scaffolds have not been anchored to chromosomes.  However,
+the guinea pig mitochondrial sequence is available as the virtual chromosome 
 &quot;chrM&quot;. 
 </P>
 
@@ -117,11 +135,11 @@ Bulk downloads of the sequence and annotation data are available via
 the Genome Browser <A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/cavPor3/">FTP
 server</A> or the <A HREF="http://hgdownload.cse.ucsc.edu/downloads.html#guinea_pig">Downloads</A> page. 
 
-<!--  *** Developer -- remove this if no conditions for use:
+<!--  *** Developer -- remove this if no conditions for use:-->
 These data have
 <A HREF="../goldenPath/credits.html#guinea_pig_use">specific 
 conditions for use</A>. 
--->
+<!-- -->
 The Guinea Pig browser annotation tracks were generated by UCSC and 
 collaborators worldwide. See the 
 <A HREF="/goldenPath/credits.html#guinea_pig_credits">Credits</A> 
