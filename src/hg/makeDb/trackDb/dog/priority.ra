@@ -5,26 +5,25 @@ priority 200
 track netCalJac1
 priority 200.1
 
-# cow
-track chainBosTau4
-priority 250
+# rhesus
+track chainRheMac2
+priority 208
 
-track netBosTau4
-priority 250.1
+track netRheMac2
+priority 208.1
 
-# mouse
-track chainMm9
-priority 240
+# human
+track chainHg18
+priority 210
 
-track netMm9
-priority 240.1
+track netHg18
+priority 210.1
 
-# rat
-track chainRn4
-priority 230
+track chainHg17
+priority 210.2
 
-track netRn4
-priority 230.1
+track netHg17
+priority 210.3
 
 # chimp
 track chainPanTro2
@@ -33,10 +32,49 @@ priority 220
 track netPanTro2
 priority 220.1
 
-# human
-track chainHg18
-priority 210
+# rat
+track chainRn4
+priority 230
 
-track netHg18
-priority 210.1
+track netRn4
+priority 230.1
+
+track chainRn3
+priority 230.2
+
+track netRn3
+priority 230.3
+
+# mouse
+track chainMm9
+priority 240
+
+track netMm9
+priority 240.1
+
+track chainMm8
+priority 240.2
+
+track netMm8
+priority 240.3
+
+track chainMm7
+priority 240.4
+
+track netMm7
+priority 240.5
+
+# cow
+track chainBosTau4
+priority 250
+
+track netBosTau4
+priority 250.1
+
+track chainBosTau2
+priority 250.2
+
+track netBosTau2
+priority 250.3
+
 
