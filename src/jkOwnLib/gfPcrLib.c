@@ -13,7 +13,7 @@
 #include "gfInternal.h"
 #include "gfPcrLib.h"
 
-static char const rcsid[] = "$Id: gfPcrLib.c,v 1.9 2008/04/10 22:05:08 angie Exp $";
+static char const rcsid[] = "$Id: gfPcrLib.c,v 1.10 2008/04/18 23:29:28 angie Exp $";
 
 /**** Input and Output Handlers *****/
 
@@ -197,24 +197,43 @@ for (i=0; i<size; ++i)
 return count;
 }
 
-static void outputBed(struct gfPcrOutput *out, FILE *f, char *url)
-/* Output match in BED format. */
+static int getBedScore(struct gfPcrOutput *out)
+/* Return a score in BED range (0-1000). */
 {
-int match;
 int size = out->rPos - out->fPos;
 int fPrimerSize = strlen(out->fPrimer);
 int rPrimerSize = strlen(out->rPrimer);
-char *name = out->name;
-if (name == NULL) name = "n/a";
-fprintf(f, "%s\t%d\t%d\t", out->seqName, out->fPos, out->rPos);
-fprintf(f, "%s\t", name);
-match = countMatch(out->dna, out->fPrimer, fPrimerSize);
+int match = countMatch(out->dna, out->fPrimer, fPrimerSize);
 assert(size > 0);
 reverseComplement(out->rPrimer, rPrimerSize);
 match += countMatch(out->dna + size - rPrimerSize, out->rPrimer, rPrimerSize);
 reverseComplement(out->rPrimer, rPrimerSize);
-fprintf(f, "%d\t", round(1000.0 * match / (double)(fPrimerSize + rPrimerSize) ));
+return round(1000.0 * match / (double)(fPrimerSize + rPrimerSize));
+}
+
+static void outputBed(struct gfPcrOutput *out, FILE *f, char *url)
+/* Output match in BED 6 format. */
+{
+char *name = out->name;
+if (name == NULL) name = "n/a";
+fprintf(f, "%s\t%d\t%d\t", out->seqName, out->fPos, out->rPos);
+fprintf(f, "%s\t", name);
+fprintf(f, "%d\t", getBedScore(out));
 fprintf(f, "%c\n", out->strand);
+}
+
+static void outputBed12(struct gfPcrOutput *out, FILE *f, char *url)
+/* Output match in BED 12 format (a block for each primer). */
+{
+int fPrimerSize = strlen(out->fPrimer);
+int rPrimerSize = strlen(out->rPrimer);
+char *name = out->name;
+if (name == NULL) name = "n/a";
+fprintf(f, "%s\t%d\t%d\t%s\t", out->seqName, out->fPos, out->rPos, name);
+fprintf(f, "%d\t%c\t", getBedScore(out), out->strand);
+fprintf(f, "%d\t%d\t", out->fPos, out->rPos);
+fprintf(f, "0\t2\t%d,%d,\t0,%d\n", fPrimerSize, rPrimerSize,
+	out->rPos - out->fPos - rPrimerSize);
 }
 
 static void outputPsl(struct gfPcrOutput *out, FILE *f, char *url)
@@ -261,6 +280,8 @@ if (sameWord(outType, "fa"))
     output = outputFa;
 else if (sameWord(outType, "bed"))
     output = outputBed;
+else if (sameWord(outType, "bed12"))
+    output = outputBed12;
 else if (sameWord(outType, "psl"))
     output = outputPsl;
 else
