@@ -3,7 +3,6 @@
 #include "hash.h"
 #include "errabort.h"
 #include "errCatch.h"
-#include "portable.h"
 #include "hCommon.h"
 #include "dystring.h"
 #include "jksql.h"
@@ -19,11 +18,14 @@
 #include "cart.h"
 #include "dbDb.h"
 #include "blatServers.h"
+#include "targetDb.h"
+#include "pcrResult.h"
+#include "trashDir.h"
 #include "web.h"
 #include "botDelay.h"
 #include "oligoTm.h"
 
-static char const rcsid[] = "$Id: hgPcr.c,v 1.21 2008/04/16 18:14:46 angie Exp $";
+static char const rcsid[] = "$Id: hgPcr.c,v 1.22 2008/04/18 23:49:52 angie Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -57,18 +59,9 @@ struct targetPcrServer
  * that has been aligned to a particular genomic assembly. */
    {
    struct targetPcrServer *next;  /* Next in list. */
-   char *name;		/* Target name (targetDb.name ~ blatServers.db). */
-   char *db;		/* Database for assembly to which this target has 
-			 * been aligned. */
-   char *description;	/* Brief description (like shortLabel) of target. */
    char *host;		/* Name of machine hosting server. */
    char *port;		/* Port that hosts server. */
-   char *seqDir;	/* Directory of sequence files. */
-   char *pslTable;	/* PSL table in db that maps target coords to db. */
-   char *seqTable;	/* Table in db that has extFileTable indices of 
-			 * target sequences */
-   char *extFileTable;	/* Table in db that has extFileTable indices of 
-			 * target sequences. */
+   struct targetDb *targetDb;     /* All of the info about the target. */
    };
 
 struct pcrServer *getServerList()
@@ -119,30 +112,9 @@ errAbort("Can't find a server for PCR database %s\n", db);
 return NULL;
 }
 
-boolean timeMoreRecentThanTable(int time, struct sqlConnection *conn,
-				char *table)
-/* Return TRUE if the given UNIX time is more recent than the time that 
- * table was last updated. */
-{
-if (! sqlTableExists(conn, table))
-    return FALSE;
-int tableUpdateTime = sqlTableUpdateTime(conn, table);
-return (time > tableUpdateTime);
-}
-
-boolean timeMoreRecentThanFile(int time, char *fileName)
-/* Return TRUE if the given UNIX time is more recent than the time that
- * fileName was last updated. */
-{
-if (! fileExists(fileName))
-    return FALSE;
-int fileUpdateTime = fileModTime(fileName);
-return (time > fileUpdateTime);
-}
-
-struct targetPcrServer *getTargetServerList(char *db)
+struct targetPcrServer *getTargetServerList(char *db, char *name)
 /* Get list of available non-genomic-assembly target pcr servers associated 
- * with db.  There may be none -- that's fine. */
+ * with db (and name, if not NULL).  There may be none -- that's fine. */
 {
 struct targetPcrServer *serverList = NULL, *server;
 struct sqlConnection *conn = hConnectCentral();
@@ -151,71 +123,35 @@ struct sqlResult *sr;
 char **row;
 char query[2048];
 
-/* Do a little join to get the targetPcrServer field values. */
 safef(query, sizeof(query),
-      "select t.name, t.db, t.description, b.host, b.port, "
-      "  t.seqFile, t.pslTable, t.seqTable, t.extFileTable, t.time "
-      "from targetDb as t, blatServers as b "
+      "select b.host, b.port, t.* from targetDb as t, blatServers as b "
       "where b.db = t.name and t.db = '%s' and b.canPcr = 1 "
+      "%s%s%s"
       "order by t.priority",
-      db);
+      db,
+      isNotEmpty(name) ? "and t.name = '" : "",
+      isNotEmpty(name) ? name : "",
+      isNotEmpty(name) ? "' " : "");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     /* Keep this server only if its timestamp is newer than the tables
      * and file on which it depends. */
-    char *name = row[0];
-    char *seqFile = row[5];
-    char *pslTable = row[6],  *seqTable = row[7],  *extFileTable = row[8];
-    char *timeStr = row[9];
-    int time = sqlDateToUnixTime(timeStr);
-    if (timeMoreRecentThanTable(time, conn2, pslTable) &&
-	timeMoreRecentThanTable(time, conn2, seqTable) &&
-	timeMoreRecentThanTable(time, conn2, extFileTable) &&
-	timeMoreRecentThanFile(time, seqFile))
+    struct targetDb *target = targetDbMaybeLoad(conn2, row+2);
+    if (target != NULL)
 	{
-	char seqDir[1024];
-	splitPath(seqFile, seqDir, NULL, NULL);
-	if (endsWith("/", seqDir))
-	    seqDir[strlen(seqDir) - 1] = '\0';
 	AllocVar(server);
-	server->name = cloneString(row[0]);
-	server->db = cloneString(row[1]);
-	server->description = cloneString(row[2]);
-	server->host = cloneString(row[3]);
-	server->port = cloneString(row[4]);
-	server->seqDir = cloneString(seqDir);
-	server->pslTable = cloneString(pslTable);
-	server->seqTable = cloneString(seqTable);
-	server->extFileTable = cloneString(extFileTable);
+	server->host = cloneString(row[0]);
+	server->port = cloneString(row[1]);
+	server->targetDb = target;
 	slAddHead(&serverList, server);
 	}
-    else
-	/* log directly to stderr instead of telling user */
-	fprintf(stderr, "targetDb entry %s is dated %s -- older than at "
-		"least one of its db tables (%s, %s, %s) "
-		"or its sequence file in %s.\n",
-		name, timeStr, pslTable, seqTable, extFileTable, seqFile);
     }
 sqlFreeResult(&sr);
 hDisconnectCentral(&conn);
 hFreeOrDisconnect(&conn2);
 slReverse(&serverList);
 return serverList;
-}
-
-struct targetPcrServer *findTargetServer(char *target,
-					 struct targetPcrServer *serverList)
-/* Return server for the given target name. */
-{
-struct targetPcrServer *server;
-for (server = serverList; server != NULL; server = server->next)
-    {
-    if (sameString(target, server->name))
-        return server;
-    }
-errAbort("Can't find a server for PCR target database %s\n", target);
-return NULL;
 }
 
 void doHelp()
@@ -330,8 +266,8 @@ printf("  <OPTION%s VALUE=genome>genome assembly</OPTION>\n",
 for (server = serverList; server != NULL; server = server->next)
     {
     printf("  <OPTION%s VALUE=%s>%s</OPTION>\n", 
-	   (sameString(target, server->name) ? " SELECTED" : ""), 
-	   server->name, server->description);
+	   (sameString(target, server->targetDb->name) ? " SELECTED" : ""), 
+	   server->targetDb->name, server->targetDb->description);
     }
 printf("</SELECT>\n");
 }
@@ -404,7 +340,7 @@ printf("%s", "</TD>\n");
 
 if (gotTargetDb)
     {
-    struct targetPcrServer *targetServerList = getTargetServerList(db);
+    struct targetPcrServer *targetServerList = getTargetServerList(db, NULL);
     if (targetServerList != NULL)
 	{
 	char *target = cartUsualString(cart, "wp_target", "genome");
@@ -485,6 +421,35 @@ printf("%s", "<P>In-Silico PCR was written by "
 "licenses are also available.  Contact Jim for details.</P>\n");
 }
 
+void writePrimers(struct gfPcrOutput *gpo, char *fileName)
+/* Write primer sequences to file.  Look at only the first gpo because there
+ * is only one set of primers in the input form. */
+{
+if (gpo == NULL)
+    return;
+FILE *f = mustOpen(fileName, "w");
+fprintf(f, "%s\t%s\n", gpo->fPrimer, gpo->rPrimer);
+carefulClose(&f);
+}
+
+void writePcrResultTrack(struct gfPcrOutput *gpoList, char *db, char *target)
+/* Write trash files and store their name in a cart variable. */
+{
+char *cartVar = pcrResultCartVar(db);
+struct tempName bedTn, primerTn;
+char buf[2048];
+trashDirFile(&bedTn, "hgPcr", "hgPcr", ".bed");
+trashDirFile(&primerTn, "hgPcr", "hgPcr", ".txt");
+gfPcrOutputWriteAll(gpoList, "bed12", NULL, bedTn.forCgi);
+writePrimers(gpoList, primerTn.forCgi);
+if (isNotEmpty(target))
+    safef(buf, sizeof(buf), "%s %s %s", bedTn.forCgi, primerTn.forCgi, target);
+else
+    safef(buf, sizeof(buf), "%s %s", bedTn.forCgi, primerTn.forCgi);
+cartSetString(cart, cartVar, buf);
+}
+
+
 void doQuery(struct pcrServer *server, struct gfPcrInput *gpi,
 	     int maxSize, int minPerfect, int minGood)
 /* Send a query to a genomic assembly PCR server and print the results. */
@@ -494,15 +459,14 @@ struct gfPcrOutput *gpoList =
 		maxSize, minPerfect, minGood);
 if (gpoList != NULL)
     {
-    struct dyString *url = newDyString(0);
-    dyStringPrintf(url, "%s?%s&db=%s", 
-		   hgTracksName(), cartSidUrlString(cart), server->db);
-    dyStringAppend(url, "&position=%s:%d-%d");
-    
+    char urlFormat[2048];
+    safef(urlFormat, sizeof(urlFormat), "%s?%s&db=%s&position=%%s:%%d-%%d"
+	  "&hgPcrResult=pack", 
+	  hgTracksName(), cartSidUrlString(cart), server->db);
     printf("<TT><PRE>");
-    gfPcrOutputWriteAll(gpoList, "fa", url->string, "stdout");
+    gfPcrOutputWriteAll(gpoList, "fa", urlFormat, "stdout");
     printf("</PRE></TT>");
-    dyStringFree(&url);
+    writePcrResultTrack(gpoList, server->db, NULL);
     }
 else
     {
@@ -515,20 +479,25 @@ void doTargetQuery(struct targetPcrServer *server, struct gfPcrInput *gpi,
 		   int maxSize, int minPerfect, int minGood)
 /* Send a query to a non-genomic target PCR server and print the results. */
 {
-struct gfPcrOutput *gpoList =
-    gfPcrViaNet(server->host, server->port, server->seqDir, gpi,
-		maxSize, minPerfect, minGood);
+struct gfPcrOutput *gpoList;
+char seqDir[PATH_LEN];
+splitPath(server->targetDb->seqFile, seqDir, NULL, NULL);
+if (endsWith("/", seqDir))
+    seqDir[strlen(seqDir) - 1] = '\0';
+gpoList = gfPcrViaNet(server->host, server->port, seqDir, gpi,
+		      maxSize, minPerfect, minGood);
 if (gpoList != NULL)
     {
     struct gfPcrOutput *gpo;
     char urlFormat[2048];
-    safef(urlFormat, sizeof(urlFormat), "%s?%s&db=%s&position=%%s", 
-	  hgTracksName(), cartSidUrlString(cart), server->db);
+    safef(urlFormat, sizeof(urlFormat), "%s?%s&db=%s&position=%%s"
+	  "&hgPcrResult=pack", 
+	  hgTracksName(), cartSidUrlString(cart), server->targetDb->db);
     printf("The sequences and coordinates shown below are from %s, "
 	   "not from the genome assembly.  The links lead to the "
 	   "Genome Browser at the position of the entire target "
 	   "sequence.<BR>\n",
-	   server->description);
+	   server->targetDb->description);
     printf("<TT><PRE>");
     for (gpo = gpoList;  gpo != NULL;  gpo = gpo->next)
 	{
@@ -539,11 +508,12 @@ if (gpoList != NULL)
 	printf("\n");
 	}
     printf("</PRE></TT>");
+    writePcrResultTrack(gpoList, server->targetDb->db, server->targetDb->name);
     }
 else
     {
     printf("No matches to %s %s in %s", gpi->fPrimer, gpi->rPrimer, 
-	   server->description);
+	   server->targetDb->description);
     }
 }
 
@@ -623,7 +593,12 @@ if (isNotEmpty(fPrimer) && isNotEmpty(rPrimer) &&
     if (sameString(target, "genome") || isEmpty(target))
 	server = findServer(db, serverList);
     else
-	targetServer = findTargetServer(target, getTargetServerList(db));
+	{
+	targetServer = getTargetServerList(db, target);
+	if (targetServer == NULL)
+	    errAbort("Can't find targetPcr server for db=%s, target=%s",
+		     db, target);
+	}
 
     fPrimer = gfPcrMakePrimer(fPrimer);
     rPrimer = gfPcrMakePrimer(rPrimer);
