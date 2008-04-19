@@ -13,7 +13,7 @@
 #include "mime.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.97 2008/03/20 04:37:17 angie Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.98 2008/04/19 00:11:06 larrym Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -986,24 +986,44 @@ safef(buf, sizeof(buf), "%s%s", cgiBooleanShadowPrefix(), name);
 return cgiVarExists(buf);
 }
 
-void cgiMakeCheckBoxWithMsg(char *name, boolean checked, char *msg)
-/* Make check box. Also make a shadow hidden variable so we
+void cgiMakeCheckBoxUtil(char *name, boolean checked, char *msg, char *id)
+/* Make check box - designed to be called by the variously overloaded
+ * cgiMakeCheckBox functions, but can also be called directly.
+ * msg: mousever msg (may be NULL)
+ * id: button id (may be NULL)
+ * Also make a shadow hidden variable so we
  * can distinguish between variable not present and
- * variable set to false. Use msg as mousever if present */
+ * variable set to false. */
 {
-char buf[256];
+char buf[256], idBuf[256];
 
-printf("<INPUT TYPE=CHECKBOX NAME=\"%s\" VALUE=on %s%s%s %s>", name,
+if(id)
+	safef(idBuf, sizeof(idBuf), " id=\"%s\"", id);
+else
+	idBuf[0] = 0;
+
+printf("<INPUT TYPE=CHECKBOX NAME=\"%s\"%s VALUE=on %s%s%s %s>", name, idBuf,
     (msg ? " TITLE=\"" : ""), (msg ? msg : ""), (msg ? "\"" : "" ), 
     (checked ? " CHECKED" : ""));
 safef(buf, sizeof(buf), "%s%s", cgiBooleanShadowPrefix(), name);
 cgiMakeHiddenVar(buf, "1");
 }
 
+void cgiMakeCheckBoxWithMsg(char *name, boolean checked, char *msg)
+{
+cgiMakeCheckBoxUtil(name, checked, msg, NULL);
+}
+
+void cgiMakeCheckBoxWithId(char *name, boolean checked, char *id)
+/* Make check box, which includes an ID. */
+{
+cgiMakeCheckBoxUtil(name, checked, NULL, id);
+}
+
 void cgiMakeCheckBox(char *name, boolean checked)
 /* Make check box. */
 {
-cgiMakeCheckBoxWithMsg(name, checked, NULL);
+cgiMakeCheckBoxUtil(name, checked, NULL, NULL);
 }
 
 void cgiMakeCheckBoxJS(char *name, boolean checked, char *javascript)

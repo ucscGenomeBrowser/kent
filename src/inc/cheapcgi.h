@@ -162,13 +162,23 @@ void cgiMakeOnClickRadioButton(char *name, char *value, boolean checked,
  * same name but different values.   The default selection should be
  * sent with checked on. */
 
-void cgiMakeCheckBoxWithMsg(char *name, boolean checked, char *msg);
-/* Make check box. Also make a shadow hidden variable so we
+void cgiMakeCheckBoxUtil(char *name, boolean checked, char *msg, char *id);
+/* Make check box - designed to be called by the variously overloaded
+ * cgiMakeCheckBox functions, but can also be called directly.
+ * msg: mousever msg (may be NULL)
+ * id: button id (may be NULL)
+ * Also make a shadow hidden variable so we
  * can distinguish between variable not present and
- * variable set to false. Use msg as mousever if present */
+ * variable set to false. */
 
 void cgiMakeCheckBox(char *name, boolean checked);
 /* Make check box. */
+
+void cgiMakeCheckBoxMsg(char *name, boolean checked, char *msg);
+/* Make check box, which includes a msg. */
+
+void cgiMakeCheckBoxWithId(char *name, boolean checked, char *id);
+/* Make check box, which includes an ID. */
 
 void cgiMakeCheckBoxJS(char *name, boolean checked, char *javascript);
 /* Make check box with javascript */
