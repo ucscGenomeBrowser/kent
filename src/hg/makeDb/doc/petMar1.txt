@@ -4,7 +4,7 @@
 # This file describes browser build for the Sea Lamprey
 # genome, Petromyzon marinus, March 2007, v.3.0 from WUSTL
 #
-#       "$Id: petMar1.txt,v 1.8 2008/04/18 23:48:18 hiram Exp $"
+#       "$Id: petMar1.txt,v 1.9 2008/04/19 00:17:55 hiram Exp $"
 #
 
 ##########################################################################
@@ -756,7 +756,55 @@ rmdir --ignore-fail-on-non-empty /scratch/tmp/$db
 
     para create jobList
     para try ... check ... push ... etc
-XXX - running 2008-04-18 16:47
+# Completed: 31488 of 31488 jobs
+# CPU time in finished jobs:       5723s      95.38m     1.59h    0.07d  0.000 y
+# IO & Wait Time:                 84949s    1415.82m    23.60h    0.98d  0.003 y
+# Average job time:                   3s       0.05m     0.00h    0.00d
+# Longest finished job:              12s       0.20m     0.00h    0.00d
+# Submission to last job:           900s      15.00m     0.25h    0.01d
+# Estimated complete:                 0s       0.00m     0.00h    0.00d
+
+    # put the split maf results back together into a single maf file
+    #	eliminate duplicate comments
+    ssh kkstore04
+    cd /cluster/data/petMar1/bed/multiz6way
+    mkdir togetherMaf
+    grep "^##maf version" splitRun/maf/0/0/Contig00000.maf \
+	| sort -u > togetherMaf/petMar1.6way.maf
+    for F in `find ./splitRun/maf -type f -depth`
+do
+    grep -h "^#" "${F}" | egrep -v "maf version=1|eof maf" \
+	| sed -e "s#/_MZ_[^ ]* # #g; s#__[0-9]##g"
+done | sort -u >> togetherMaf/petMar1.6way.maf
+    for F in `find ./splitRun/maf -type f -depth`
+do
+    grep -v -h "^#" "${F}"
+done >> togetherMaf/petMar1.6way.maf
+
+    grep "^##eof maf" splitRun/maf/0/0/Contig00000.maf \
+	| sort -u >> togetherMaf/petMar1.6way.maf
+
+    # load tables for a look
+    ssh hgwdev
+    mkdir -p /gbdb/petMar1/multiz6way/maf
+    ln -s /cluster/data/petMar1/bed/multiz6way/togetherMaf/*.maf \
+                /gbdb/petMar1/multiz6way/maf/multiz6way.maf
+    # this generates an immense multiz6way.tab file in the directory
+    #	where it is running.  Best to run this over in scratch.
+    cd /scratch/tmp
+    time nice -n +19 hgLoadMaf \
+	-pathPrefix=/gbdb/petMar1/multiz6way/maf petMar1 multiz6way
+    #	real    0m6.011s
+    #	Loaded 232205 mafs in 1 files from /gbdb/petMar1/multiz6way/maf
+
+    # load summary table
+    time nice -n +19 cat /gbdb/petMar1/multiz6way/maf/*.maf \
+	| hgLoadMafSummary petMar1 -minSize=30000 -mergeGap=1500 \
+	 -maxSize=200000  multiz6waySummary stdin
+    #	real    5m58.150s
+XXX - running 2008-04-18 17:08
+    #	Created 121083 summary blocks from 3410157 components
+    #	and 693943 mafs from stdin
 
 ###########################################################################
 # HUMAN (hg18) PROTEINS TRACK (WORKING braney 2008-04-18)
