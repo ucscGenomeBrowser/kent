@@ -20,7 +20,7 @@
 #include "bedCart.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.52 2008/03/18 23:35:49 angie Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.53 2008/04/19 00:15:04 larrym Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -209,6 +209,12 @@ safef(buf, sizeof(buf), "%scheck.", hgtaFieldSelectPrefix);
 return buf;
 }
 
+static char *checkVarPrefixWithTable(char *db, char *table)
+/* Return prefix for checkBox, including the table name */
+{
+return dbTableFieldVar(checkVarPrefix(), db, table, "");
+}
+
 static char *checkVarName(char *db, char *table, char *field)
 /* Get variable name for check box on given table/field. */
 {
@@ -234,6 +240,7 @@ return buf;
 static void showTableButtons(char *db, char *table, boolean withGetButton)
 /* Put up the last buttons in a showTable section. */
 {
+static char buf[128];
 hPrintf("<BR>\n");
 if (withGetButton)
     {
@@ -246,11 +253,15 @@ if (withGetButton)
     hPrintf(" ");
     }
 jsInit();
-cgiMakeOnClickSubmitButton(jsSetVerticalPosition("mainForm"),
+jsIncludeFile("utils.js");
+
+safef(buf, sizeof(buf), "setCheckBoxesWithPrefix(this, '%s', true); return false", checkVarPrefixWithTable(db, table));
+cgiMakeOnClickSubmitButton(buf,
 			   setClearAllVar(hgtaDoSetAllFieldPrefix,db,table), 
 			   "check all");
 hPrintf(" ");
-cgiMakeOnClickSubmitButton(jsSetVerticalPosition("mainForm"),
+safef(buf, sizeof(buf), "setCheckBoxesWithPrefix(this, '%s', false); return false", checkVarPrefixWithTable(db, table));
+cgiMakeOnClickSubmitButton(buf,
 			   setClearAllVar(hgtaDoClearAllFieldPrefix,db,table), 
 			   "clear all");
 }
@@ -281,7 +292,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     struct asColumn *asCol;
     hPrintf("<TR>");
     hPrintf("<TD>");
-    cgiMakeCheckBox(var, varOn(var));
+    cgiMakeCheckBoxWithId(var, varOn(var), var);
     hPrintf("</TD>");
     hPrintf("<TD>");
     if (showItemRgb && sameWord(field,"reserved"))
@@ -317,7 +328,7 @@ for (field = fieldList; field != NULL; field = field->next)
     {
     char *var = checkVarName(db, table, field->name);
     hPrintf("<TR><TD>");
-    cgiMakeCheckBox(var, varOn(var));
+    cgiMakeCheckBoxWithId(var, varOn(var), var);
     hPrintf("</TD><TD>");
     hPrintf(" %s<BR>\n", field->name);
     hPrintf("</TD></TR>");
