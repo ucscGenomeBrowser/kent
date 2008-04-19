@@ -50,3 +50,33 @@ indelDoubleInsert on
 indelQueryInsert on
 maxItems 300
 
+# Override matrix from root definition
+track chainHg18
+shortLabel $o_Organism Chain
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+group compGeno
+priority 250
+visibility hide
+color 100,50,0
+altColor 255,240,200
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+matrixHeader A, C, G, T
+spectrum on
+type chain hg18
+otherDb hg18
+
+# Override matrix from root definition
+track chainMm9
+shortLabel $o_Organism Chain
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+group compGeno
+priority 209
+visibility hide
+color 100,50,0
+altColor 255,240,200
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+matrixHeader A, C, G, T
+spectrum on
+type chain mm9
+otherDb mm9
+
