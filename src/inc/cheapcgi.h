@@ -174,7 +174,7 @@ void cgiMakeCheckBoxUtil(char *name, boolean checked, char *msg, char *id);
 void cgiMakeCheckBox(char *name, boolean checked);
 /* Make check box. */
 
-void cgiMakeCheckBoxMsg(char *name, boolean checked, char *msg);
+void cgiMakeCheckBoxWithMsg(char *name, boolean checked, char *msg);
 /* Make check box, which includes a msg. */
 
 void cgiMakeCheckBoxWithId(char *name, boolean checked, char *id);
