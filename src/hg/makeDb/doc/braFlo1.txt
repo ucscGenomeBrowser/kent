@@ -4,7 +4,7 @@
 # This file describes browser build for the Lancelet
 # genome, Branchiostoma floridae, March 2006, v.1.0 from JGI
 #
-#       "$Id: braFlo1.txt,v 1.11 2008/04/19 21:41:28 braney Exp $"
+#       "$Id: braFlo1.txt,v 1.12 2008/04/21 15:15:51 braney Exp $"
 #
 
 ##########################################################################
@@ -408,7 +408,7 @@ TMPDIR=/scratch/tmp
     #	real    24m30.834s
 
 ###########################################################################
-# HUMAN (hg18) PROTEINS TRACK (WORKING braney 2008-04-19)
+# HUMAN (hg18) PROTEINS TRACK (DONE braney 2008-04-21)
 
 # (auto) establish native host of /cluster/data/<assembly>
     df /cluster/data/braFlo1
@@ -534,12 +534,12 @@ exit 1
 
     para time
 
-# Completed: 103836 of 103836 jobs
-# CPU time in finished jobs:    9418283s  156971.39m  2616.19h  109.01d  0.299 y
-# IO & Wait Time:                867856s   14464.26m   241.07h   10.04d  0.028 y
-# Average job time:                  99s       1.65m     0.03h    0.00d
-# Longest finished job:             683s      11.38m     0.19h    0.01d
-# Submission to last job:         38789s     646.48m    10.77h    0.45d
+# Completed: 93544 of 93544 jobs
+# CPU time in finished jobs:    8499504s  141658.40m  2360.97h   98.37d  0.270 y
+# IO & Wait Time:                669830s   11163.84m   186.06h    7.75d  0.021 y
+# Average job time:                  98s       1.63m     0.03h    0.00d
+# Longest finished job:             376s       6.27m     0.10h    0.00d
+# Submission to last job:         44890s     748.17m    12.47h    0.52d
 
     ssh kkstore05
     cd /cluster/data/braFlo1/bed/tblastn.hg18KG
@@ -553,34 +553,24 @@ chainOne $(path1)
 '_EOF_'
 
     cat << '_EOF_' > chainOne
-(cd $1; cat q.*.psl | simpleChain -prot -outPsl -maxGap=150000 stdin /cluster/bluearc/braFlo1/bed/tblastn.hg18KG/blastOut/c.`basename $1`.psl)
+(cd $1; cat q.*.psl | simpleChain -prot -outPsl -maxGap=75000 stdin /cluster/bluearc/braFlo1/bed/tblastn.hg18KG/blastOut/c.`basename $1`.psl)
 '_EOF_'
     chmod +x chainOne
     ls -1dS /cluster/bluearc/braFlo1/bed/tblastn.hg18KG/blastOut/kg?? > chain.lst
     gensub2 chain.lst single chainGsub chainSpec
     # do the cluster run for chaining
-    ssh pk
+    ssh memk
     cd /cluster/data/braFlo1/bed/tblastn.hg18KG/chainRun
     para create chainSpec
-    para maxNode 30
     para try, check, push, check etc.
 
-# Completed: 99 of 103 jobs
-# Crashed: 4 jobs
-# CPU time in finished jobs:      15940s     265.67m     4.43h    0.18d  0.001 y
-# IO & Wait Time:                397633s    6627.21m   110.45h    4.60d  0.013 y
-# Average job time:                4178s      69.63m     1.16h    0.05d
-# Longest finished job:            5502s      91.70m     1.53h    0.06d
-# Submission to last job:          7032s     117.20m     1.95h    0.08d
-
-# ran 4 crashed jobs on memk.  
-Completed: 4 of 4 jobs
-CPU time in finished jobs:       1673s      27.88m     0.46h    0.02d  0.000 y
-IO & Wait Time:                   529s       8.81m     0.15h    0.01d  0.000 y
-Average job time:                 550s       9.17m     0.15h    0.01d
-Longest running job:                0s       0.00m     0.00h    0.00d
-Longest finished job:             712s      11.87m     0.20h    0.01d
-Submission to last job:          1299s      21.65m     0.36h    0.02d
+# Completed: 88 of 88 jobs
+# CPU time in finished jobs:        906s      15.09m     0.25h    0.01d  0.000 y
+# IO & Wait Time:                 19435s     323.92m     5.40h    0.22d  0.001 y
+# Average job time:                 231s       3.85m     0.06h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:             322s       5.37m     0.09h    0.00d
+# Submission to last job:           812s      13.53m     0.23h    0.01d
 
     ssh kkstore05
     cd /cluster/data/braFlo1/bed/tblastn.hg18KG/blastOut
@@ -591,9 +581,10 @@ Submission to last job:          1299s      21.65m     0.36h    0.02d
        awk "((\$1 / \$11) ) > 0.60 { print   }" c60.$i.psl > m60.$i.psl
        echo $i
     done
-    sort -T /tmp -k 14,14 -k 16,16n -k 17,17n u.*.psl m60* | uniq > /cluster/data/braFlo1/bed/tblastn.hg18KG/blastHg18KG.psl
+    sort -T /tmp -k 14,14 -k 16,16n -k 17,17n u.*.psl m60* | uniq > /cluster/data/braFlo1/bed/tblastn.hg18KG/preblastHg18KG.psl
     cd ..
-    pslCheck blastHg18KG.psl
+    pslCheck preblastHg18KG.psl
+    liftUp -nosort -type=".psl" -nohead blastHg18KG.psl /cluster/data/braFlo1/scaffolds/braFlo1.lift carry preblastHg18KG.psl
 
     # load table 
     ssh hgwdev
@@ -602,10 +593,10 @@ Submission to last job:          1299s      21.65m     0.36h    0.02d
 
     # check coverage
     featureBits braFlo1 blastHg18KG 
-# 35569442 bases of 2663369733 (1.336%) in intersection
+# 12239766 bases of 923355587 (1.326%) in intersection
 
-    featureBits braFlo1 refGene:cds blastHg18KG  -enrichment
-# not done yet
+    featureBits braFlo1 xenoRefGene:cds blastHg18KG  -enrichment
+# xenoRefGene:cds 1.206%, blastHg18KG 1.326%, both 0.621%, cover 51.51%, enrich 38.86x
 
     ssh kkstore05
     rm -rf /cluster/data/braFlo1/bed/tblastn.hg18KG/blastOut
