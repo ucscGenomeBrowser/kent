@@ -45,44 +45,74 @@ if ( $ver <= 45 || $ver >= 100 ) then
   exit 1
 endif
 
+# get rid of files, if they are around
 if ( -e xxDbListxx) then
  rm xxDbListxx
 endif
+if ( -e xxNotActivexx) then
+ rm xxNotActivexx
+endif
+if ( -e xxNotOnBetaxx) then
+ rm xxNotOnBetaxx
+endif
+
+# figure out which assemblies already have an ensGene track on beta
+set betaList=`getAssemblies.csh ensGene | egrep -v 'get' | egrep -v 'ensGene'` 
 
 # figure out which databases we're running it on
 if ( 'all' == $runOn ) then
  set dbs=`hgsql -Ne "SELECT db FROM trackVersion WHERE version = '$ver' \
- ORDER BY db" hgFixed | sort -u` 
+ ORDER BY db" hgFixed | sort -u`
+ echo "\nThe following databases were updated on hgwdev to ensGenes v$ver :"
+ echo "$dbs\n"
+
  if ( "" == "$dbs" ) then
   echo "\nERROR: there is no update available for version number $ver\n"
   exit 1
- else
-  echo "\nRunning script for Ensembl Genes v$ver on these assemblies:\n"
+ else # updates for this ensGene version exist
   foreach db ($dbs)
    set onBeta=`hgsql -h hgwbeta -Ne "SELECT name FROM dbDb \
    WHERE name = '$db' AND active = 1" hgcentralbeta`
-   if ( '' == $onBeta ) then
-    echo "$db (ensGenes have been updated on dev, but this database is not \
-         active on hgwbeta: skipping)"
+
+   if ( "" == "$onBeta" ) then
+    echo $db >> xxNotActivexx
    else
-    echo $db
-    echo $db >> xxDbListxx
+    set hasTrack=''
+    set hasTrack=`echo $betaList | egrep -wo $db`
+    if ( "$db" != "$hasTrack" ) then
+     echo $db >> xxNotOnBetaxx
+     echo $db >> xxDbListxx
+    else
+     echo $db >> xxDbListxx
+    endif
    endif
   end
+
+  # print out all results
+  if ( -e xxNotActivexx ) then
+   echo "\nOf that list, the following databases are not active on beta"
+   echo "so the tests in this script will not be run on them:"
+   cat xxNotActivexx
+  endif
+
+  if ( -e xxNotOnBetaxx ) then
+   echo "\nOf that list, the following databases do not have an ensGenes track"
+   echo "on hgwbeta (however, the tests in this script will still be run on them)."
+   echo "You might consider releasing an ensGenes track for these databases:"
+   cat xxNotOnBetaxx
+  endif
+
   set dbs=`cat xxDbListxx`
  endif
-else
+else # running on one database only (don't check, just run)
  echo "\nRunning script for Ensebml Genes v$ver on this assembly:\n"
  set dbs=$runOn
  echo $dbs
 endif
 
-# find out what assemblies have and ensGene track on beta
-set betaList=`getAssemblies.csh ensGene | egrep -v 'get' | egrep -v 'ensGene'`
-
 # a huge loop through all databases
 foreach db ($dbs)
- echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+ echo "\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
  echo "~~~~~~~~~ $db ~~~~~~~~~~~~"
  echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 
@@ -105,13 +135,13 @@ foreach db ($dbs)
  head -2 $db.ensGene.name.devOnly
  tail -2 $db.ensGene.name.devOnly
 
- # only do this test if the ensGene track alredy exists on beta
+ # only do this test if the ensGene track already exists on beta
  if ( $db == $newTrack ) then
   echo "\n\n----------------------"
   echo "check a few of the deleted items from the ensGene table"
   echo "(make sure they have also been dropped from Ensembl website)"
   echo "\ncheck these in $db browser on hgwbeta:"
-  head -2 $db.ensGene.name.betaOnly 
+  head -2 $db.ensGene.name.betaOnly
   tail -2 $db.ensGene.name.betaOnly
  endif
 
@@ -154,14 +184,14 @@ foreach db ($dbs)
  echo "featureBits $db -countGaps ensGene gap (on hgwdev):"
  featureBits $db -countGaps ensGene gap
 
- if ( $db != $newTrack ) then
+ if ( $db == $newTrack ) then
   echo "\nfeatureBits $db ensGene (on hgwbeta):"
   ssh hgwbeta featureBits $db ensGene
   echo "featureBits $db -countGaps ensGene (on hgwbeta):"
   ssh hgwbeta featureBits $db -countGaps ensGene
   echo "featureBits $db -countGaps ensGene gap (on hgwbeta):"
   ssh hgwbeta featureBits $db -countGaps ensGene gap
- endif 
+ endif
  echo
 
  echo "\n\n----------------------"
@@ -193,11 +223,18 @@ echo "These rows allow the correct version number to be displayed in hgTrackUi."
 echo "\nEdit the following pseudo-SQL statement to include only those"
 echo "assemblies you will be pushing:"
 echo 'hgsql -Ne "SELECT * FROM trackVersion WHERE version = ensGeneUpdateVersion AND name = dbsYouWillPush" hgFixed'
- 
+
 # clean up
 if ( -e xxDbListxx) then
  rm xxDbListxx
 endif
+if ( -e xxNotActivexx) then
+ rm xxNotActivexx
+endif
+if ( -e xxNotOnBetaxx) then
+ rm xxNotOnBetaxx
+endif
+
 
 echo "\nthe end.\n"
 
