@@ -213,7 +213,7 @@
 #include "itemConf.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1409 2008/04/18 23:55:57 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1410 2008/04/21 23:18:10 angie Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -5519,6 +5519,8 @@ else
     seq = hChromSeq(bed->chrom, bed->chromStart, bed->chromEnd);
 char *dna = seq->dna;
 tolowers(dna);
+if (bed->strand[0] == '-')
+    reverseComplement(dna, productSize);
 printf("<TT><PRE>");
 /* The rest of this is loosely copied from gfPcrLib.c:outputFa(): */
 printf("><A HREF=\"%s?%s&db=%s&position=%s",
