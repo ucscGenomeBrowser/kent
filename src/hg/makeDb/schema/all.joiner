@@ -1232,7 +1232,7 @@ identifier knownGeneId dependency
     $kgDb.knownBlastTab.target
     $kgDb.knownCanonical.transcript 
     $kgDb.knownGeneMrna.name full
-    $kgDb,!hg18.knownGeneLink.name
+    $kgDb,!hg18,!mm9.knownGeneLink.name
     $kgDb.knownIsoforms.transcript full
     $kgDb.knownToCdsSnp.name
     $kgDb.knownToEnsembl.name
