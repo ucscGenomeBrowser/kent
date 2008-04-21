@@ -144,13 +144,20 @@ type distance humanNormalDistance query target distance
 name affyHumanExon
 shortLabel Affy Exons
 longLabel Affymetrix All Exon Microarrays
-priority 3.3
+priority 3.31
 visibility off
 ratioMax 5.0
 absoluteMax 30000
 median affyHumanExonMedianExps affyHumanExonGsRatioMedian affyHumanExonGsMedian 0,1,2,3,4,5,6,7,8,9,10,
 all affyHumanExonExps affyHumanExonGsRatio affyHumanExonGs 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,
 type expMulti knownToKnown
+
+name affyHumanExonDistance
+shortLabel Affy Exon Dst
+longLabel Affymetrix All Exon Microarrays Distance
+priority 3.32
+visibility off
+type distance hgFixed.affyHumanExonGsRatioDistance query target distance
 
 name gladHumES
 shortLabel Gladstone Expr
