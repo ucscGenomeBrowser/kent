@@ -20934,7 +20934,7 @@ TMPDIR=/scratch/tmp
     # 1647122438 bases of 2881515245 (57.162%) in intersection
 
 #############################################################################
-# MAKE PCR TARGET FOR UCSC GENES (DONE 4/10/08 angie)
+# MAKE PCR TARGET FOR UCSC GENES (DONE 4/18/08 angie)
     ssh hgwdev
     mkdir /cluster/data/hg18/bed/mrnaPcr
     cd /cluster/data/hg18/bed/mrnaPcr
@@ -20948,41 +20948,34 @@ TMPDIR=/scratch/tmp
     # sequences, and then genePredToFakePsl.  sequenceToBed must be
     # run on hgwdev.
     genePredToBed /cluster/data/hg18/bed/ucsc.10/ucscGenes.gp > ucscGenes.bed
-    sequenceForBed -keepName -db=hg18 -bedIn=ucscGenes.bed \
-        -fastaOut=kgTargetSeq.fa
+    sequenceForBed -keepName -db=hg18 -bedIn=ucscGenes.bed -fastaOut=stdout \
+    | faToTwoBit stdin kgTargetSeq.2bit
     cut -f 1-10 /cluster/data/hg18/bed/ucsc.10/ucscGenes.gp \
-    | genePredToFakePsl hg18 stdin kgTargetPsl.psl /dev/null    
+    | genePredToFakePsl hg18 stdin kgTargetAli.psl /dev/null    
 
-    # Load up the UCSC Genes target tables:
+    # Load up the UCSC Genes target PSL table and put 2bit in /gbdb::
     cd /cluster/data/hg18/bed/mrnaPcr
+    hgLoadPsl hg18 kgTargetAli.psl
     mkdir /gbdb/hg18/targetDb
-    ln -s /cluster/data/hg18/bed/mrnaPcr/kgTargetSeq.fa \
-      /gbdb/hg18/targetDb/
-    hgLoadSeq -seqTbl=kgTargetSeq -extFileTbl=kgTargetExtFile \
-      hg18 /gbdb/hg18/targetDb/kgTargetSeq.fa
-#56722 sequences
-    hgLoadPsl hg18 kgTargetPsl.psl
+    ln -s /cluster/data/hg18/bed/mrnaPcr/kgTargetSeq.2bit /gbdb/hg18/targetDb/
 
     ssh kolossus
     # Start up gfServer for kgTargetSeq:
     cd /cluster/data/hg18/bed/mrnaPcr
-    faToTwoBit kgTargetSeq.fa kgTargetSeq.2bit
     gfServer -stepSize=5 -canStop start localhost 17990 kgTargetSeq.2bit &
 
     ssh hgwdev
     # Add records to hgcentraltest blatServers and targetDb:
-    ln -s /cluster/data/hg18/bed/mrnaPcr/kgTargetSeq.2bit \
-      /gbdb/hg18/targetDb/
     hgsql hgcentraltest -e \
       'INSERT into blatServers values ("hg18Kg", "kolossus", 17990, 0, 1);'
     hgsql hgcentraltest -e \
       'INSERT into targetDb values("hg18Kg", "UCSC Genes", \
-         "hg18", "kgTargetPsl", "kgTargetSeq", "kgTargetExtFile", \
+         "hg18", "kgTargetAli", "", "", \
          "/gbdb/hg18/targetDb/kgTargetSeq.2bit", 1, now());'
 
 
 #############################################################################
-# MAKE PCR TARGET FOR SNAPSHOT OF ALL_MRNA (DONE 4/10/08 angie)
+# MAKE PCR TARGET FOR SNAPSHOT OF ALL_MRNA (DONE 4/18/08 angie)
     ssh hgwdev
     # Load up native mRNA target tables:
     hgsql hg18 -NBe 'select qName from all_mrna' \
@@ -20990,15 +20983,13 @@ TMPDIR=/scratch/tmp
     $HOME/kent/src/hg/makeDb/genbank/bin/$MACHTYPE/gbGetSeqs \
       -gbRoot=/gbdb/genbank -accFile=mrnaAccs.txt \
       -db=hg18 -native genbank mrna mrnaTargetSeq.fa
-    ln -s /cluster/data/hg18/bed/mrnaPcr/mrnaTargetSeq.fa \
+    faToTwoBit mrnaTargetSeq.fa mrnaTargetSeq.2bit
+    ln -s /cluster/data/hg18/bed/mrnaPcr/mrnaTargetSeq.2bit \
       /gbdb/hg18/targetDb/
-    hgLoadSeq -seqTbl=mrnaTargetSeq -extFileTbl=mrnaTargetExtFile \
-      hg18 /gbdb/hg18/targetDb/mrnaTargetSeq.fa
-#192308 sequences
     hgsql hg18 -e ' \
-      create table mrnaTargetPsl select * from all_mrna; \
-      alter table mrnaTargetPsl add index (tName,bin); \
-      alter table mrnaTargetPsl add index (qName);'
+      create table mrnaTargetAli select * from all_mrna; \
+      alter table mrnaTargetAli add index (tName,bin); \
+      alter table mrnaTargetAli add index (qName);'
     rm *.tab
 
     ssh kolossus
@@ -21009,13 +21000,12 @@ TMPDIR=/scratch/tmp
 
     ssh hgwdev
     # Add records to hgcentraltest blatServers and targetDb:
-    ln -s /cluster/data/hg18/bed/mrnaPcr/mrnaTargetSeq.2bit \
-      /gbdb/hg18/targetDb/
     hgsql hgcentraltest -e \
       'INSERT into blatServers values ("hg18Mrna", "kolossus", 17991, 0, 1);'
     hgsql hgcentraltest -e \
       'INSERT into targetDb values("hg18Mrna", "Human mRNAs", \
-         "hg18", "mrnaTargetPsl", "mrnaTargetSeq", "mrnaTargetExtFile", \
+         "hg18", "mrnaTargetAli", "", "", \
          "/gbdb/hg18/targetDb/mrnaTargetSeq.2bit", 2, now());'
+
 
 #############################################################################
