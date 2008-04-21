@@ -109,6 +109,7 @@
 #include "trashDir.h"
 #include "omicia.h"
 #include "nonCodingUi.h"
+#include "pcrResult.h"
 
 #ifdef LOWELAB
 #include "loweLabTracks.h"
@@ -118,7 +119,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1451 2008/04/18 18:44:20 larrym Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1452 2008/04/21 05:07:52 angie Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -3166,6 +3167,89 @@ struct linkedFeatures *lf = item;
 return lf->extra;
 }
 
+void pcrResultLoad(struct track *tg)
+/* Load locations of primer matches into linkedFeatures items. */
+{
+char *bedFileName, *primerFileName;
+struct targetDb *target;
+if (! pcrResultParseCart(cart, &bedFileName, &primerFileName, &target))
+    return;
+
+struct bed *bedList = bedLoadAll(bedFileName), *bed;
+struct linkedFeatures *itemList = NULL;
+if (target != NULL)
+    {
+    int rowOffset = hOffsetPastBin(chromName, target->pslTable);
+    struct sqlConnection *conn = hAllocConn();
+    struct sqlResult *sr;
+    char **row;
+    char query[2048];
+    for (bed = bedList;  bed != NULL;  bed = bed->next)
+	{
+	safef(query, sizeof(query), "select * from %s where qName = '%s'",
+	      target->pslTable, bed->chrom);
+	sr = sqlGetResult(conn, query);
+	while ((row = sqlNextRow(sr)) != NULL)
+	    {
+	    struct psl *psl = pslLoad(row+rowOffset);
+	    if (sameString(psl->tName, chromName) && psl->tStart < winEnd &&
+		psl->tEnd > winStart)
+		{
+		struct psl *trimmed = pslTrimToQueryRange(psl, bed->chromStart,
+							  bed->chromEnd);
+		struct linkedFeatures *lf = lfFromPsl(psl, FALSE);
+		lf->tallStart = trimmed->tStart;
+		lf->tallEnd = trimmed->tEnd;
+		slAddHead(&itemList, lf);
+		pslFree(&trimmed);
+		}
+	    pslFree(&psl);
+	    }
+	}
+    hFreeConn(&conn);
+    }
+else
+    for (bed = bedList;  bed != NULL;  bed = bed->next)
+	if (sameString(bed->chrom, chromName) && bed->chromStart < winEnd &&
+	    bed->chromEnd > winStart)
+	    {
+	    bed->name = "amplicon";
+	    struct linkedFeatures *lf = lfFromBed(bed);
+	    slAddHead(&itemList, lf);
+	    }
+slSort(&itemList, linkedFeaturesCmp);
+tg->items = itemList;
+}
+
+struct track *pcrResultTg()
+/* Make track of hgPcr results (alignments of user's submitted primers). */
+{
+struct track *tg = linkedFeaturesTg();
+struct trackDb *tdb;
+tg->mapName = "hgPcrResult";
+tg->canPack = TRUE;
+tg->visibility = tvPack;
+tg->longLabel = "Your Sequence from PCR Search";
+tg->shortLabel = "PCR Results";
+tg->loadItems = pcrResultLoad;
+tg->priority = 100.01;
+tg->defaultPriority = tg->priority;
+tg->groupName = "map";
+tg->defaultGroupName = cloneString(tg->groupName);
+tg->exonArrows = TRUE;
+
+AllocVar(tdb);
+tdb->tableName = cloneString(tg->mapName);
+tdb->shortLabel = cloneString(tg->shortLabel);
+tdb->longLabel = cloneString(tg->longLabel);
+tdb->grp = cloneString(tg->groupName);
+tdb->priority = tg->priority;
+tdb->type = cloneString("pcrResult");
+trackDbPolish(tdb);
+tg->tdb = tdb;
+return tg;
+}
+
 void parseSs(char *ss, char **retPsl, char **retFa)
 /* Parse out ss variable into components. */
 {
@@ -3173,7 +3257,7 @@ static char buf[1024];
 char *words[2];
 int wordCount;
 
-strcpy(buf, ss);
+safecpy(buf, sizeof(buf), ss);
 wordCount = chopLine(buf, words);
 if (wordCount < 2)
     errAbort("Badly formated ss variable");
@@ -14063,6 +14147,8 @@ registerTrackHandler("omicia", omiciaMethods);
 /* Load regular tracks, blatted tracks, and custom tracks. 
  * Best to load custom last. */
 loadFromTrackDb(&trackList);
+if (pcrResultParseCart(cart, NULL, NULL, NULL))
+    slSafeAddHead(&trackList, pcrResultTg());
 if (userSeqString != NULL) slSafeAddHead(&trackList, userPslTg());
 slSafeAddHead(&trackList, oligoMatchTg());
 if (restrictionEnzymesOk())
