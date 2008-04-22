@@ -21,13 +21,16 @@ set split=""
 set partName=""
 set matches=""
 set match=""
+set prio=""
+set vis=""
 
-if ( $#argv != 2 ) then
+if ( $#argv < 2  || $#argv > 4 ) then
   echo
   echo " searches trackDb hierarchy for your table and corresponding .html file"
+  echo " optionally returns the location of the priority and visibility entries"
   echo " returns the lowest-level directory for each" 
   echo
-  echo "    usage:  database tableName"
+  echo "    usage:  database tableName [priority] [visibility]"
   echo
   exit
 else
@@ -35,6 +38,20 @@ else
   set tableName=$argv[2]
 endif
 echo
+
+# find out if they want priority and/or visibility as well
+if ( $#argv == 3 ) then
+  if ( $argv[3] == 'priority' ) then
+    set prio="T"
+  endif
+  if ( $argv[3] == 'visibility' ) then
+    set vis="T"
+  endif
+endif
+if ( $#argv == 4 ) then
+  set prio="T"
+  set vis="T"
+endif
 
 if ( "$HOST" != "hgwdev" ) then
  echo "\n error: you must run this script on dev!\n"
@@ -133,6 +150,104 @@ endif
 echo
 
 ###########################################
+# check for entry in priority.ra file, starting at assembly level
+if ( "T" == $prio) then
+  # start back at the assembly level
+  cd ~/trackDb/*/$db 
+  set currDir=`pwd`
+  set matches=`grep -ws "track.$tableName" priority.ra`
+  set match=`echo $matches | grep -v "^#"`
+  if ( "$match" != '' ) then
+    # the track is mentioned in the assembly-level priority.ra file
+  else
+    # the track is not at the assembly-level, go up to the organism level
+    cd ..
+    set currDir=`pwd`
+    set matches=`grep -ws track.$tableName priority.ra`
+    set match=`echo $matches | grep -v "^#"`
+    if ( "$match" != '' ) then
+      # the track is mentioned in the organism-level priority.ra file
+    else
+      # the track is not at the organism level, go up to the top level
+      cd ..
+      set currDir=`pwd`
+      set matches=`grep -ws track.$tableName priority.ra`
+      set match=`echo $matches | grep -v "^#"`
+      if ( "$match" != '' ) the
+        # the track is mentioned in the top-level priority.ra file
+      else 
+        # the track is not at the top level either
+        echo " * priority:"
+        echo " The $db.$tableName track entry does not exist in any level"
+        echo " priority.ra file. This doesn't mean there is no priority"
+        echo " entry -- it's probably in the trackDb.ra file."
+        set currDir=""
+      endif
+    endif
+  if ($currDir != "") then
+    if (-e $currDir/priority.ra) then
+      echo " * priority: \
+        `echo $currDir | sed -e 's^.*makeDb^~^'`/priority.ra"
+    else
+      echo " * priority:"
+      echo " The $db.$tableName track entry does not exist in any level"
+      echo " priority.ra file. This doesn't mean there is no priority"
+      echo " entry -- it's probably in the trackDb.ra file."
+    endif
+  endif
+  echo
+endif #end find priority entry
+
+###########################################
+# check for entry in visibility.ra file, starting at assembly level
+if ( "T" == $vis) then
+  # start back at the assembly level
+  cd ~/trackDb/*/$db 
+  set currDir=`pwd`
+  set matches=`grep -ws "track.$tableName" visibility.ra`
+  set match=`echo $matches | grep -v "^#"`
+  if ( "$match" != '' ) then
+    # the track is mentioned in the assembly-level visibility.ra file
+  else
+    # the track is not at the assembly-level, go up to the organism level
+    cd ..
+    set currDir=`pwd`
+    set matches=`grep -ws track.$tableName visibility.ra`
+    set match=`echo $matches | grep -v "^#"`
+    if ( "$match" != '' ) then
+      # the track is mentioned in the organism-level visibility.ra file
+    else
+      # the track is not at the organism level, go up to the top level
+      cd ..
+      set currDir=`pwd`
+      set matches=`grep -ws track.$tableName visibility.ra`
+      set match=`echo $matches | grep -v "^#"`
+      if ( "$match" != '' ) the
+        # the track is mentioned in the top-level visibility.ra file
+      else 
+        # the track is not at the top level either
+        echo " * visibility:"
+        echo " The $db.$tableName track entry does not exist in any level"
+        echo " visibility.ra file. This doesn't mean there is no visibility"
+        echo " entry -- it's probably in the trackDb.ra file."
+        set currDir=""
+      endif
+    endif
+  if ($currDir != "") then
+    if (-e $currDir/visibility.ra) then
+      echo " * visibility: \
+        `echo $currDir | sed -e 's^.*makeDb^~^'`/visibility.ra"
+    else
+      echo " * visibility:"
+      echo " The $db.$tableName track entry does not exist in any level"
+      echo " visibility.ra file. This doesn't mean there is no visibility"
+      echo " entry -- it's probably in the trackDb.ra file."
+    endif
+  endif
+  echo
+endif #end find visibility entry
+
+###########################################
 # now, find the level of the associated .html file
 # start at the assembly level
 cd ~/trackDb/*/$db
@@ -166,3 +281,5 @@ if ($currDir != "") then
     `echo $currDir | sed 's^.*makeDb^~^'`/$tableName.html"
 endif
 echo
+
+exit 0
