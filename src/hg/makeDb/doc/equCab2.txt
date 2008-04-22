@@ -1,7 +1,7 @@
 # for emacs: -*- mode: sh; -*-
 
 # Equus caballus - ??
-#	"$Id: equCab2.txt,v 1.6 2008/04/22 19:40:21 braney Exp $"
+#	"$Id: equCab2.txt,v 1.7 2008/04/22 20:06:55 larrym Exp $"
 #########################################################################
 # DOWNLOAD SEQUENCE (...
 
@@ -224,7 +224,7 @@ i.e. if you take dupes and chrM into account, our data agrees with their raw dat
     #   1004742864 bases of 2454424288 (40.936%) in intersection
 
     # RepeatMasker and lib version from do.log:
-    #   RepeatMasker version development-$Id: equCab2.txt,v 1.6 2008/04/22 19:40:21 braney Exp $
+    #   RepeatMasker version development-$Id: equCab2.txt,v 1.7 2008/04/22 20:06:55 larrym Exp $
     #   Jan 11 2008 (open-3-1-9) version of RepeatMasker
     #	CC   RELEASE 20071204
 
@@ -475,6 +475,27 @@ liftUp /cluster/data/equCab2/jkStuff/chrUn.lift
 	    -swap -syntenicNet >& do.log &
     0.164u 0.128s 1:32:36.50 0.0%   0+0k 0+0io 6pf+0w
 
+############################################################################
+# SWAP equCab2 -> canFam2 (DONE - 2008-04-22 - larrym)
+    mkdir /cluster/data/equCab2/bed/blastz.canFam2.swap
+    cd /cluster/data/equCab2/bed/blastz.canFam2.swap
+    time /bin/nice -n 19 doBlastzChainNet.pl \
+    	/cluster/data/canFam2/bed/blastz.equCab2.2008-04-18/DEF \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	    -swap -syntenicNet >& do.log &
+    0.191u 0.108s 2:44:26.23 0.0%   0+0k 0+0io 1pf+0w
+
+############################################################################
+# SWAP equCab2 -> galGal3 (DONE - 2008-04-22 - larrym)
+    mkdir /cluster/data/equCab2/bed/blastz.galGal3.swap
+    cd /cluster/data/equCab2/bed/blastz.galGal3.swap
+    time /bin/nice -n 19 doBlastzChainNet.pl \
+    	/cluster/data/galGal3/bed/blastz.equCab2.2008-04-18/DEF \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	    -swap -syntenicNet >& do.log &
+    0.170u 0.107s 12:27.33 0.0%     0+0k 0+0io 0pf+0w
+
+
 ###########################################################################
 # HUMAN (hg18) PROTEINS TRACK (DONE braney 2008-04-22)
 
@@ -685,8 +706,6 @@ chainOne $(path1)
 #end tblastn
 ##################################################
 
-BLASTZ to TODO??
+BLASTZ TODO:
 
-galGal3
-canFam2
-platapus (figure out db name)
+platapus (ornAna1)
