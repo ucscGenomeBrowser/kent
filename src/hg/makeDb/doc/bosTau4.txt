@@ -1,7 +1,7 @@
 # for emacs: -*- mode: sh; -*-
 
 # Bos Taurus -- Baylor Release 4.0 (Oct 4 2007)
-#	"$Id: bosTau4.txt,v 1.11 2008/03/28 22:53:07 hiram Exp $"
+#	"$Id: bosTau4.txt,v 1.12 2008/04/22 01:13:15 markd Exp $"
 #########################################################################
 # DOWNLOAD SEQUENCE (DONE - 2008-03-07 - Hiram)
     ssh kkstore06
@@ -1684,5 +1684,28 @@ done
     ln -s `pwd`/* /usr/local/apache/htdocs/goldenPath/bosTau4/phastCons5way
     #	if your ln -s `pwd`/* made extra links to files you don't want there,
     #	check the goldenPath locations and remove those extra links
+
+#############################################################################
+# N-SCAN gene predictions (nscanGene) - (2008-04-21 markd)
+
+    # obtained NSCAN predictions from michael brent's group
+    # at WUSTL
+    cd /cluster/data/bosTau4/bed/nscan/
+    wget http://mblab.wustl.edu/predictions/Cow/bosTau4/bosTau4.gtf
+    wget http://mblab.wustl.edu/predictions/Cow/bosTau4/bosTau4.prot.fa
+    wget http://mblab.wustl.edu/predictions/Cow/bosTau4/readme.html
+    bzip2 bosTau4.*
+    chmod a-w *
+
+    # load track
+    gtfToGenePred -genePredExt bosTau4.gtf.bz2 stdout | hgLoadGenePred -bin -genePredExt bosTau4 nscanGene stdin
+    hgPepPred bosTau4 generic nscanPep  bosTau4.prot.fa.bz2
+    rm *.tab
+
+    # update trackDb; need a bosTau4-specific page to describe informants
+    cow/bosTau4/nscanGene.html   (copy from readme.html)
+    cow/bosTau4/trackDb.ra
+    # set search regex to
+        termRegex chr[0-9a-zA-Z_]+\.[0-9]+\.[0-9]+(\.[0-9]+)*
 
 #############################################################################
