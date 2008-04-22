@@ -1,7 +1,7 @@
 # for emacs: -*- mode: sh; -*-
 
 # Equus caballus - ??
-#	"$Id: equCab2.txt,v 1.5 2008/04/21 17:43:14 braney Exp $"
+#	"$Id: equCab2.txt,v 1.6 2008/04/22 19:40:21 braney Exp $"
 #########################################################################
 # DOWNLOAD SEQUENCE (...
 
@@ -224,7 +224,7 @@ i.e. if you take dupes and chrM into account, our data agrees with their raw dat
     #   1004742864 bases of 2454424288 (40.936%) in intersection
 
     # RepeatMasker and lib version from do.log:
-    #   RepeatMasker version development-$Id: equCab2.txt,v 1.5 2008/04/21 17:43:14 braney Exp $
+    #   RepeatMasker version development-$Id: equCab2.txt,v 1.6 2008/04/22 19:40:21 braney Exp $
     #   Jan 11 2008 (open-3-1-9) version of RepeatMasker
     #	CC   RELEASE 20071204
 
@@ -476,7 +476,7 @@ liftUp /cluster/data/equCab2/jkStuff/chrUn.lift
     0.164u 0.128s 1:32:36.50 0.0%   0+0k 0+0io 6pf+0w
 
 ###########################################################################
-# HUMAN (hg18) PROTEINS TRACK (WORKING braney 2008-04-21)
+# HUMAN (hg18) PROTEINS TRACK (DONE braney 2008-04-22)
 
 # (auto) establish native host of /cluster/data/<assembly>
     df /cluster/data/equCab2
@@ -613,12 +613,12 @@ exit 1
 
     para time
 
-# Completed: 93544 of 93544 jobs
-# CPU time in finished jobs:    8499504s  141658.40m  2360.97h   98.37d  0.270 y
-# IO & Wait Time:                669830s   11163.84m   186.06h    7.75d  0.021 y
-# Average job time:                  98s       1.63m     0.03h    0.00d
-# Longest finished job:             376s       6.27m     0.10h    0.00d
-# Submission to last job:         44890s     748.17m    12.47h    0.52d
+# Completed: 253052 of 253052 jobs
+# CPU time in finished jobs:   23683489s  394724.82m  6578.75h  274.11d  0.751 y
+# IO & Wait Time:               2116386s   35273.09m   587.88h   24.50d  0.067 y
+# Average job time:                 102s       1.70m     0.03h    0.00d
+# Longest finished job:             405s       6.75m     0.11h    0.00d
+# Submission to last job:         77580s    1293.00m    21.55h    0.90d
 
     ssh kkstore05
     cd /cluster/data/equCab2/bed/tblastn.hg18KG
@@ -632,7 +632,7 @@ chainOne $(path1)
 '_EOF_'
 
     cat << '_EOF_' > chainOne
-(cd $1; cat q.*.psl | simpleChain -prot -outPsl -maxGap=75000 stdin /cluster/bluearc/equCab2/bed/tblastn.hg18KG/blastOut/c.`basename $1`.psl)
+(cd $1; cat q.*.psl | simpleChain -prot -outPsl -maxGap=150000 stdin /cluster/bluearc/equCab2/bed/tblastn.hg18KG/blastOut/c.`basename $1`.psl)
 '_EOF_'
     chmod +x chainOne
     ls -1dS /cluster/bluearc/equCab2/bed/tblastn.hg18KG/blastOut/kg?? > chain.lst
@@ -643,13 +643,13 @@ chainOne $(path1)
     para create chainSpec
     para try, check, push, check etc.
 
-# Completed: 88 of 88 jobs
-# CPU time in finished jobs:        906s      15.09m     0.25h    0.01d  0.000 y
-# IO & Wait Time:                 19435s     323.92m     5.40h    0.22d  0.001 y
-# Average job time:                 231s       3.85m     0.06h    0.00d
-# Longest running job:                0s       0.00m     0.00h    0.00d
-# Longest finished job:             322s       5.37m     0.09h    0.00d
-# Submission to last job:           812s      13.53m     0.23h    0.01d
+
+# Completed: 82 of 82 jobs
+# CPU time in finished jobs:      86617s    1443.62m    24.06h    1.00d  0.003 y
+# IO & Wait Time:                 10159s     169.31m     2.82h    0.12d  0.000 y
+# Average job time:                1180s      19.67m     0.33h    0.01d
+# Longest finished job:            3153s      52.55m     0.88h    0.04d
+# Submission to last job:          8853s     147.55m     2.46h    0.10d
 
     ssh kkstore05
     cd /cluster/data/equCab2/bed/tblastn.hg18KG/blastOut
@@ -663,7 +663,7 @@ chainOne $(path1)
     sort -T /tmp -k 14,14 -k 16,16n -k 17,17n u.*.psl m60* | uniq > /cluster/data/equCab2/bed/tblastn.hg18KG/preblastHg18KG.psl
     cd ..
     pslCheck preblastHg18KG.psl
-    liftUp -nosort -type=".psl" -nohead blastHg18KG.psl /cluster/data/equCab2/scaffolds/equCab2.lift carry preblastHg18KG.psl
+    liftUp -nosort -type=".psl" -nohead blastHg18KG.psl /cluster/data/equCab2/jkStuff/chrUn.lift carry preblastHg18KG.psl
 
     # load table 
     ssh hgwdev
@@ -672,10 +672,12 @@ chainOne $(path1)
 
     # check coverage
     featureBits equCab2 blastHg18KG 
-# 12239766 bases of 923355587 (1.326%) in intersection
+# 41055754 bases of 2454424288 (1.673%) in intersection
 
-    featureBits equCab2 xenoRefGene:cds blastHg18KG  -enrichment
-# xenoRefGene:cds 1.206%, blastHg18KG 1.326%, both 0.621%, cover 51.51%, enrich 38.86x
+    featureBits equCab2 refGene:cds blastHg18KG  -enrichment
+# refGene:cds 0.017%, blastHg18KG 1.673%, both 0.016%, cover 90.76%, enrich  54.26x
+    featureBits equCab2 ensGene:cds blastHg18KG  -enrichment
+# ensGene:cds 1.294%, blastHg18KG 1.673%, both 1.023%, cover 79.08%, enrich  47.27x
 
     ssh kkstore05
     rm -rf /cluster/data/equCab2/bed/tblastn.hg18KG/blastOut
