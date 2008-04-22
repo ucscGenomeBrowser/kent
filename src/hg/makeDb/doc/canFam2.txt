@@ -2697,7 +2697,7 @@ TMPDIR=/scratch/tmp
 XXX - running 2008-03-12 16:35
 
 #############################################################################
-# BLASTZ/CHAIN/NET equCab2 (WORKING - 2008-04-18 - larrym)
+# BLASTZ/CHAIN/NET equCab2 (DONE - 2008-04-18 - larrym)
     ssh kkstore04
     screen #	use screen to control this multi-day job
     mkdir /cluster/data/canFam2/bed/blastz.equCab2.2008-04-18
@@ -2732,3 +2732,29 @@ TMPDIR=/scratch/tmp
 	-verbose=2 -bigClusterHub=pk \
       -chainMinScore=3000 -chainLinearGap=medium \
       -blastzOutRoot /cluster/bluearc/equCab2/blastz.canFam2 >& do.log &
+	0.117u 0.073s 9:20:00.22 0.0%   0+0k 0+0io 1pf+0w
+
+
+six parasol jobs failed; retried with:
+
+    para -retries=5 push
+
+disable bad servers:
+
+      1 kkr10u31.kilokluster.ucsc.edu
+      1 kkr11u16.kilokluster.ucsc.edu
+      1 kkr12u29.kilokluster.ucsc.edu
+
+    pushd /cluster/bluearc/equCab2/blastz.canFam2/psl
+    find . -name '*.psl' | wc
+    64625   64625 6657995
+
+This is the correct number of psl files, so continue with cat step:
+
+    time doBlastzChainNet.pl `pwd`/DEF \
+	-verbose=2 -bigClusterHub=pk -continue=cat \
+      -chainMinScore=3000 -chainLinearGap=medium \
+      -blastzOutRoot /cluster/bluearc/equCab2/blastz.canFam2 >>& do.log &
+    0.212u 0.173s 2:49:45.35 0.0%   0+0k 0+0io 62pf+0w
+
+    ln -s blastz.equCab2.2008-04-18 /cluster/data/canFam2/bed/blastz.equCab2
