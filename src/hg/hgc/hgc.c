@@ -213,7 +213,7 @@
 #include "itemConf.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1411 2008/04/22 05:05:52 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1412 2008/04/22 23:04:21 angie Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -5324,81 +5324,6 @@ hFreeConn(&conn);
 hFreeConn(&conn2);
 }
 
-void getPcrPrimers(char *fileName, char **retFPrimer, char **retRPrimer)
-/* Given a file whose first line is 2 words (forward primer, reverse primer)
- * set the ret's.  Do not free the statically allocated ret's. */
-{
-static char fPrimer[1024], rPrimer[1024];;
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *words[2];
-if (! lineFileRow(lf, words))
-    lineFileAbort(lf, "Couldn't read primers");
-if (retFPrimer != NULL)
-    {
-    safecpy(fPrimer, sizeof(fPrimer), words[0]);
-    touppers(fPrimer);
-    *retFPrimer = fPrimer;
-    }
-if (retRPrimer != NULL)
-    {
-    safecpy(rPrimer, sizeof(rPrimer), words[1]);
-    touppers(rPrimer);
-    *retRPrimer = rPrimer;
-    }
-lineFileClose(&lf);
-}
-
-void getPcrPsl(char *fileName, struct targetDb *target, char *item,
-	       struct psl **retItemPsl, struct psl **retOtherPsls)
-/* Read in psl from file.  If a psl matches the cart item position, set 
- * retItemPsl to that; otherwise add it to retOtherPsls.  Die if no psl
- * matches the cart item position. */
-{
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
-struct psl *itemPsl = NULL, *otherPsls = NULL;
-char *pslFields[21];
-int itemStart = cartInt(cart, "o");
-int itemEnd = cartInt(cart, "t");
-while (lineFileRow(lf, pslFields))
-    {
-    struct psl *psl = pslLoad(pslFields);
-    boolean gotIt = FALSE;
-    if (target != NULL)
-	{
-	if (sameString(psl->tName, item))
-	    gotIt = TRUE;
-	}
-    else if (sameString(psl->tName, seqName) && psl->tStart == itemStart &&
-	     psl->tEnd == itemEnd)
-	gotIt = TRUE;
-    if (gotIt)
-	itemPsl = psl;
-    else
-	slAddHead(&otherPsls, psl);
-    }
-lineFileClose(&lf);
-if (itemPsl == NULL)
-    {
-    if (target != NULL)
-	errAbort("Did not find record for amplicon in %s sequence %s",
-		 target->description, item);
-    else
-	errAbort("Did not find record for amplicon at %s:%d-%d",
-		 seqName, itemStart, itemEnd);
-    }
-if (retItemPsl != NULL)
-    *retItemPsl = itemPsl;
-else
-    pslFree(&itemPsl);
-if (retOtherPsls != NULL)
-    {
-    slSort(&otherPsls, pslCmpTarget);
-    *retOtherPsls = otherPsls;
-    }
-else
-    pslFreeList(&otherPsls);
-}
-
 void printPcrTargetMatch(struct targetDb *target, struct psl *tpsl,
 			 boolean mustGetItem)
 /* Show the non-genomic target PCR result and its genomic mapping. */
@@ -5411,7 +5336,7 @@ printf("<B>Size in %s:</B> %d<BR>\n", tpsl->tName,
        tpsl->tEnd - tpsl->tStart);
 if (tpsl->strand[0] == '-')
     printf("&nbsp;&nbsp;"
-	   "Warning: the match is on the reverse strand of %s<BR>\n",
+	   "<EM>Warning: the match is on the reverse strand of %s</EM><BR>\n",
 	   tpsl->tName);
 
 struct psl *itemPsl = NULL, *otherPsls = NULL, *gpsl;
@@ -5554,7 +5479,7 @@ if (! pcrResultParseCart(cart, &pslFileName, &primerFileName, &target))
     errAbort("PCR Result track has disappeared!");
 
 char *fPrimer, *rPrimer;
-getPcrPrimers(primerFileName, &fPrimer, &rPrimer);
+pcrResultGetPrimers(primerFileName, &fPrimer, &rPrimer);
 printf("<H2>PCR Results (<TT>%s %s</TT>)</H2>\n", fPrimer, rPrimer);
 printf("<B>Forward primer:</B> 5' <TT>%s</TT> 3'<BR>\n", fPrimer);
 printf("<B>Reverse primer:</B> 5' <TT>%s</TT> 3'<BR>\n", rPrimer);
@@ -5562,7 +5487,9 @@ if (target != NULL)
     printf("<B>Search target:</B> %s<BR>\n", target->description);
 
 struct psl *itemPsl = NULL, *otherPsls = NULL, *psl;
-getPcrPsl(pslFileName, target, item, &itemPsl, &otherPsls);
+pcrResultGetPsl(pslFileName, target, item,
+		seqName, cartInt(cart, "o"), cartInt(cart, "t"),
+		&itemPsl, &otherPsls);
 if (target != NULL)
     printPcrTargetMatch(target, itemPsl, TRUE);
 else

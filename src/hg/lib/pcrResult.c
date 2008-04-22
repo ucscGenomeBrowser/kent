@@ -5,7 +5,7 @@
 #include "targetDb.h"
 #include "pcrResult.h"
 
-static char const rcsid[] = "$Id: pcrResult.c,v 1.2 2008/04/22 05:09:20 angie Exp $";
+static char const rcsid[] = "$Id: pcrResult.c,v 1.3 2008/04/22 23:04:21 angie Exp $";
 
 char *pcrResultCartVar(char *db)
 /* Returns the cart variable name for PCR result track info for db. 
@@ -64,5 +64,80 @@ setPtIfNotNull(retTarget, target);
 if (retTarget == NULL)
     targetDbFreeList(&target);
 return TRUE;
+}
+
+void pcrResultGetPrimers(char *fileName, char **retFPrimer, char **retRPrimer)
+/* Given a file whose first line is 2 words (forward primer, reverse primer)
+ * set the ret's to upper-cased primer sequences.  
+ * Do not free the statically allocated ret's. */
+{
+static char fPrimer[1024], rPrimer[1024];;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *words[2];
+if (! lineFileRow(lf, words))
+    lineFileAbort(lf, "Couldn't read primers");
+if (retFPrimer != NULL)
+    {
+    safecpy(fPrimer, sizeof(fPrimer), words[0]);
+    touppers(fPrimer);
+    *retFPrimer = fPrimer;
+    }
+if (retRPrimer != NULL)
+    {
+    safecpy(rPrimer, sizeof(rPrimer), words[1]);
+    touppers(rPrimer);
+    *retRPrimer = rPrimer;
+    }
+lineFileClose(&lf);
+}
+
+void pcrResultGetPsl(char *fileName, struct targetDb *target, char *item,
+		     char *chrom, int itemStart, int itemEnd,
+		     struct psl **retItemPsl, struct psl **retOtherPsls)
+/* Read in psl from file.  If a psl matches the given item position, set 
+ * retItemPsl to that; otherwise add it to retOtherPsls.  Die if no psl
+ * matches the given item position. */
+{
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+struct psl *itemPsl = NULL, *otherPsls = NULL;
+char *pslFields[21];
+while (lineFileRow(lf, pslFields))
+    {
+    struct psl *psl = pslLoad(pslFields);
+    boolean gotIt = FALSE;
+    if (target != NULL)
+	{
+	if (sameString(psl->tName, item))
+	    gotIt = TRUE;
+	}
+    else if (sameString(psl->tName, chrom) && psl->tStart == itemStart &&
+	     psl->tEnd == itemEnd)
+	gotIt = TRUE;
+    if (gotIt)
+	itemPsl = psl;
+    else
+	slAddHead(&otherPsls, psl);
+    }
+lineFileClose(&lf);
+if (itemPsl == NULL)
+    {
+    if (target != NULL)
+	errAbort("Did not find record for amplicon in %s sequence %s",
+		 target->description, item);
+    else
+	errAbort("Did not find record for amplicon at %s:%d-%d",
+		 chrom, itemStart, itemEnd);
+    }
+if (retItemPsl != NULL)
+    *retItemPsl = itemPsl;
+else
+    pslFree(&itemPsl);
+if (retOtherPsls != NULL)
+    {
+    slSort(&otherPsls, pslCmpTarget);
+    *retOtherPsls = otherPsls;
+    }
+else
+    pslFreeList(&otherPsls);
 }
 
