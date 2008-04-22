@@ -15,10 +15,12 @@
 #include "genePred.h"
 #include "cds.h"
 #include "genbank.h"
+#include "pcrResult.h"
+#include "twoBit.h"
 #include "hgTracks.h"
 #include "cdsSpec.h"
 
-static char const rcsid[] = "$Id: cds.c,v 1.69 2008/02/21 00:11:44 markd Exp $";
+static char const rcsid[] = "$Id: cds.c,v 1.70 2008/04/22 23:07:06 angie Exp $";
 
 /* Definitions of cds colors for coding coloring display */
 #define CDS_ERROR   0
@@ -694,6 +696,70 @@ else
     return cloneDnaSeq(userSeq);
 }
 
+static struct dnaSeq *maybeGetPcrResultSeq(struct linkedFeatures *lf)
+/* Return (if possible) the primer sequences concatenated with the 
+ * target sequence between where they match. */
+{
+struct dnaSeq *seq = NULL;
+char *pslFileName, *primerFileName;
+struct targetDb *target;
+if (! pcrResultParseCart(cart, &pslFileName, &primerFileName, &target))
+    return NULL;
+char *fPrimer, *rPrimer;
+pcrResultGetPrimers(primerFileName, &fPrimer, &rPrimer);
+int fPrimerSize = strlen(fPrimer);
+int rPrimerSize = strlen(rPrimer);
+reverseComplement(rPrimer, rPrimerSize);
+if (target != NULL)
+    {
+    struct psl *tpsl;
+    /* isPcr results are so sparse that I think the performance impact 
+     * of re-reading the psl file in the draw function is negligible. */
+    pcrResultGetPsl(pslFileName, target, lf->name,
+		    chromName, cartInt(cart, "o"), cartInt(cart, "t"),
+		    &tpsl, NULL);
+    /* Use seq+extFile if specified; otherwise just retrieve from seqFile. */
+    if (isNotEmpty(target->seqTable) && isNotEmpty(target->extFileTable))
+	{
+	struct sqlConnection *conn = hAllocConn();
+	seq = hDnaSeqGet(conn, tpsl->tName, target->seqTable,
+			 target->extFileTable);
+	hFreeConn(&conn);
+	}
+    else
+	{
+	struct twoBitFile *tbf = twoBitOpen(target->seqFile);
+	seq = twoBitReadSeqFrag(tbf, tpsl->tName, 0, 0);
+	twoBitClose(&tbf);
+	}
+    int start, end;
+    if (tpsl->strand[0] == '-')
+	{
+	reverseComplement(seq->dna, seq->size);
+	start = seq->size - tpsl->tEnd;
+	end = seq->size - tpsl->tStart;
+	}
+    else
+	{
+	start = tpsl->tStart;
+	end = tpsl->tEnd;
+	}
+    CopyArray(fPrimer, (seq->dna + start), fPrimerSize);
+    CopyArray(rPrimer, (seq->dna + end - rPrimerSize), rPrimerSize);
+    if (tpsl->strand[0] == '-')
+	reverseComplement(seq->dna, seq->size);
+    }
+else
+    {
+    seq = hChromSeq(chromName, lf->start, lf->end);
+    if (lf->orientation < 0)
+	reverseComplement(seq->dna, seq->size);
+    CopyArray(fPrimer, seq->dna, fPrimerSize);
+    CopyArray(rPrimer, (seq->dna + seq->size - rPrimerSize), rPrimerSize);
+    }
+return seq;
+}
+
 static struct dnaSeq *maybeGetExtFileSeq(char *seqSource, char *name)
 /* look up sequence name in seq and extFile tables specified in seqSource */
 {
@@ -711,8 +777,8 @@ if ((nwords != ArraySize(words)) || !sameString(words[0], "extFile"))
 return hDnaSeqGet(NULL, name, words[1], words[2]);
 }
 
-static struct dnaSeq *maybeGetSeqUpper(char *name, char *tableName,
-				       struct trackDb *tdb)
+static struct dnaSeq *maybeGetSeqUpper(struct linkedFeatures *lf,
+				       char *tableName, struct trackDb *tdb)
 /* Look up the sequence in genbank tables (hGenBankGetMrna also searches 
  * seq if it can't find it in GB tables) or user's blat sequence, 
  * uppercase and return it if we find it, return NULL if we don't find it. */
@@ -720,13 +786,15 @@ static struct dnaSeq *maybeGetSeqUpper(char *name, char *tableName,
 struct dnaSeq *mrnaSeq = NULL;
 char *seqSource = trackDbSetting(tdb, BASE_COLOR_USE_SEQUENCE);
 if (sameString(tableName,"refGene"))
-    mrnaSeq = hGenBankGetMrna(name, "refMrna");
+    mrnaSeq = hGenBankGetMrna(lf->name, "refMrna");
 else if (sameString(seqSource, "ss"))
-    mrnaSeq = maybeGetUserSeq(name);
+    mrnaSeq = maybeGetUserSeq(lf->name);
+else if (sameString(seqSource, "hgPcrResult"))
+    mrnaSeq = maybeGetPcrResultSeq(lf);
 else if (startsWith("extFile", seqSource))
-    mrnaSeq = maybeGetExtFileSeq(seqSource, name);
+    mrnaSeq = maybeGetExtFileSeq(seqSource, lf->name);
 else
-    mrnaSeq = hGenBankGetMrna(name, NULL);
+    mrnaSeq = hGenBankGetMrna(lf->name, NULL);
 
 if (mrnaSeq != NULL)
     touppers(mrnaSeq->dna);
@@ -1530,7 +1598,7 @@ if (drawOpt == baseColorDrawItemBases ||
     drawOpt == baseColorDrawDiffCodons ||
     indelShowPolyA)
     {
-    *retMrnaSeq = maybeGetSeqUpper(lf->name, tg->mapName, tg->tdb);
+    *retMrnaSeq = maybeGetSeqUpper(lf, tg->mapName, tg->tdb);
     if (*retMrnaSeq != NULL && *retPsl != NULL)
 	{
 	if ((*retPsl)->strand[0] == '-' || (*retPsl)->strand[1] == '-')

@@ -119,7 +119,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1453 2008/04/22 05:06:15 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1454 2008/04/22 23:07:06 angie Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -3199,7 +3199,8 @@ if (target != NULL)
 		{
 		struct psl *trimmed = pslTrimToQueryRange(gpsl, tpsl->tStart,
 							  tpsl->tEnd);
-		struct linkedFeatures *lf = lfFromPsl(gpsl, FALSE);
+		struct linkedFeatures *lf =
+		    lfFromPslx(gpsl, 1, FALSE, FALSE, tg);
 		lf->tallStart = trimmed->tStart;
 		lf->tallEnd = trimmed->tEnd;
 		slAddHead(&itemList, lf);
@@ -3218,7 +3219,8 @@ else
 	    /* Collapse the 2-block PSL into one block for display: */
 	    psl->blockCount = 1;
 	    psl->blockSizes[0] = psl->tEnd - psl->tStart;
-	    struct linkedFeatures *lf = lfFromPsl(psl, FALSE);
+	    struct linkedFeatures *lf = 
+		lfFromPslx(psl, 1, FALSE, FALSE, tg);
 	    safecpy(lf->name, sizeof(lf->name), "amplicon");
 	    slAddHead(&itemList, lf);
 	    }
@@ -3242,6 +3244,14 @@ tdb->canPack = TRUE;
 tdb->visibility = tvPack;
 tdb->grp = cloneString("map");
 trackDbPolish(tdb);
+if (tdb->settingsHash == NULL)
+    tdb->settingsHash = hashNew(0);
+hashAdd(tdb->settingsHash, "baseColorDefault", cloneString("diffBases"));
+hashAdd(tdb->settingsHash, "baseColorUseSequence", cloneString("hgPcrResult"));
+hashAdd(tdb->settingsHash, "showDiffBasesAllScales", cloneString("."));
+hashAdd(tdb->settingsHash, "indelDoubleInsert", cloneString("on"));
+hashAdd(tdb->settingsHash, "indelQueryInsert", cloneString("on"));
+hashAdd(tdb->settingsHash, "indelPolyA", cloneString("on"));
 struct track *tg = trackFromTrackDb(tdb);
 tg->loadItems = pcrResultLoad;
 tg->exonArrows = TRUE;
