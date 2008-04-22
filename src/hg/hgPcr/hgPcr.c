@@ -25,7 +25,7 @@
 #include "botDelay.h"
 #include "oligoTm.h"
 
-static char const rcsid[] = "$Id: hgPcr.c,v 1.22 2008/04/18 23:49:52 angie Exp $";
+static char const rcsid[] = "$Id: hgPcr.c,v 1.23 2008/04/22 05:05:52 angie Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -438,9 +438,9 @@ void writePcrResultTrack(struct gfPcrOutput *gpoList, char *db, char *target)
 char *cartVar = pcrResultCartVar(db);
 struct tempName bedTn, primerTn;
 char buf[2048];
-trashDirFile(&bedTn, "hgPcr", "hgPcr", ".bed");
+trashDirFile(&bedTn, "hgPcr", "hgPcr", ".psl");
 trashDirFile(&primerTn, "hgPcr", "hgPcr", ".txt");
-gfPcrOutputWriteAll(gpoList, "bed12", NULL, bedTn.forCgi);
+gfPcrOutputWriteAll(gpoList, "psl", NULL, bedTn.forCgi);
 writePrimers(gpoList, primerTn.forCgi);
 if (isNotEmpty(target))
     safef(buf, sizeof(buf), "%s %s %s", bedTn.forCgi, primerTn.forCgi, target);
