@@ -5,7 +5,7 @@
 #include "targetDb.h"
 #include "pcrResult.h"
 
-static char const rcsid[] = "$Id: pcrResult.c,v 1.1 2008/04/18 23:32:43 angie Exp $";
+static char const rcsid[] = "$Id: pcrResult.c,v 1.2 2008/04/22 05:09:20 angie Exp $";
 
 char *pcrResultCartVar(char *db)
 /* Returns the cart variable name for PCR result track info for db. 
@@ -18,7 +18,7 @@ return buf;
 
 #define setPtIfNotNull(pt, val) if (pt != NULL) *pt = val
 
-boolean pcrResultParseCart(struct cart *cart, char **retBedFile,
+boolean pcrResultParseCart(struct cart *cart, char **retPslFile,
 			   char **retPrimerFile,
 			   struct targetDb **retTarget)
 /* Parse out hgPcrResult cart variable into components and make sure
@@ -30,7 +30,7 @@ char *cartVar = pcrResultCartVar(cartString(cart, "db"));
 char *hgPcrResult = cartOptionalString(cart, cartVar);
 if (isEmpty(hgPcrResult))
     {
-    setPtIfNotNull(retBedFile, NULL);
+    setPtIfNotNull(retPslFile, NULL);
     setPtIfNotNull(retPrimerFile, NULL);
     setPtIfNotNull(retTarget, NULL);
     return FALSE;
@@ -42,23 +42,23 @@ safecpy(buf, sizeof(buf), hgPcrResult);
 wordCount = chopLine(buf, words);
 if (wordCount < 2)
     errAbort("Badly formatted hgPcrResult variable: %s", hgPcrResult);
-char *bedFile = words[0];
+char *pslFile = words[0];
 char *primerFile = words[1];
 char *targetName = (wordCount > 2) ? words[2] : NULL;
 struct targetDb *target = NULL;
 if (isNotEmpty(targetName))
     target = targetDbLookup(hGetDb(), targetName);
 
-if (!fileExists(bedFile) || !fileExists(primerFile) ||
+if (!fileExists(pslFile) || !fileExists(primerFile) ||
     (wordCount > 2 && target == NULL))
     {
     cartRemove(cart, "hgPcrResult");
-    setPtIfNotNull(retBedFile, NULL);
+    setPtIfNotNull(retPslFile, NULL);
     setPtIfNotNull(retPrimerFile, NULL);
     setPtIfNotNull(retTarget, NULL);
     return FALSE;
     }
-setPtIfNotNull(retBedFile, cloneString(bedFile));
+setPtIfNotNull(retPslFile, cloneString(pslFile));
 setPtIfNotNull(retPrimerFile, cloneString(primerFile));
 setPtIfNotNull(retTarget, target);
 if (retTarget == NULL)

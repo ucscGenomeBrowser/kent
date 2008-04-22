@@ -10,7 +10,7 @@ char *pcrResultCartVar(char *db);
 /* Returns the cart variable name for PCR result track info for db. 
  * Don't free the statically allocated result. */
 
-boolean pcrResultParseCart(struct cart *cart, char **retBedFile,
+boolean pcrResultParseCart(struct cart *cart, char **retPslFile,
 			   char **retPrimerFile,
 			   struct targetDb **retTarget);
 /* Parse out hgPcrResult cart variable into components and make sure
