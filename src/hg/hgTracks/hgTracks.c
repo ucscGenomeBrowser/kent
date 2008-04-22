@@ -119,7 +119,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1452 2008/04/21 05:07:52 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1453 2008/04/22 05:06:15 angie Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -3170,12 +3170,12 @@ return lf->extra;
 void pcrResultLoad(struct track *tg)
 /* Load locations of primer matches into linkedFeatures items. */
 {
-char *bedFileName, *primerFileName;
+char *pslFileName, *primerFileName;
 struct targetDb *target;
-if (! pcrResultParseCart(cart, &bedFileName, &primerFileName, &target))
+if (! pcrResultParseCart(cart, &pslFileName, &primerFileName, &target))
     return;
 
-struct bed *bedList = bedLoadAll(bedFileName), *bed;
+struct psl *pslList = pslLoadAll(pslFileName), *psl;
 struct linkedFeatures *itemList = NULL;
 if (target != NULL)
     {
@@ -3184,39 +3184,45 @@ if (target != NULL)
     struct sqlResult *sr;
     char **row;
     char query[2048];
-    for (bed = bedList;  bed != NULL;  bed = bed->next)
+    struct psl *tpsl;
+    for (tpsl = pslList;  tpsl != NULL;  tpsl = tpsl->next)
 	{
+	/* Query target->pslTable to get target-to-genomic mapping: */
 	safef(query, sizeof(query), "select * from %s where qName = '%s'",
-	      target->pslTable, bed->chrom);
+	      target->pslTable, tpsl->tName);
 	sr = sqlGetResult(conn, query);
 	while ((row = sqlNextRow(sr)) != NULL)
 	    {
-	    struct psl *psl = pslLoad(row+rowOffset);
-	    if (sameString(psl->tName, chromName) && psl->tStart < winEnd &&
-		psl->tEnd > winStart)
+	    struct psl *gpsl = pslLoad(row+rowOffset);
+	    if (sameString(gpsl->tName, chromName) && gpsl->tStart < winEnd &&
+		gpsl->tEnd > winStart)
 		{
-		struct psl *trimmed = pslTrimToQueryRange(psl, bed->chromStart,
-							  bed->chromEnd);
-		struct linkedFeatures *lf = lfFromPsl(psl, FALSE);
+		struct psl *trimmed = pslTrimToQueryRange(gpsl, tpsl->tStart,
+							  tpsl->tEnd);
+		struct linkedFeatures *lf = lfFromPsl(gpsl, FALSE);
 		lf->tallStart = trimmed->tStart;
 		lf->tallEnd = trimmed->tEnd;
 		slAddHead(&itemList, lf);
 		pslFree(&trimmed);
 		}
-	    pslFree(&psl);
+	    pslFree(&gpsl);
 	    }
 	}
     hFreeConn(&conn);
     }
 else
-    for (bed = bedList;  bed != NULL;  bed = bed->next)
-	if (sameString(bed->chrom, chromName) && bed->chromStart < winEnd &&
-	    bed->chromEnd > winStart)
+    for (psl = pslList;  psl != NULL;  psl = psl->next)
+	if (sameString(psl->tName, chromName) && psl->tStart < winEnd &&
+	    psl->tEnd > winStart)
 	    {
-	    bed->name = "amplicon";
-	    struct linkedFeatures *lf = lfFromBed(bed);
+	    /* Collapse the 2-block PSL into one block for display: */
+	    psl->blockCount = 1;
+	    psl->blockSizes[0] = psl->tEnd - psl->tStart;
+	    struct linkedFeatures *lf = lfFromPsl(psl, FALSE);
+	    safecpy(lf->name, sizeof(lf->name), "amplicon");
 	    slAddHead(&itemList, lf);
 	    }
+pslFreeList(&pslList);
 slSort(&itemList, linkedFeaturesCmp);
 tg->items = itemList;
 }
@@ -3224,29 +3230,21 @@ tg->items = itemList;
 struct track *pcrResultTg()
 /* Make track of hgPcr results (alignments of user's submitted primers). */
 {
-struct track *tg = linkedFeaturesTg();
 struct trackDb *tdb;
-tg->mapName = "hgPcrResult";
-tg->canPack = TRUE;
-tg->visibility = tvPack;
-tg->longLabel = "Your Sequence from PCR Search";
-tg->shortLabel = "PCR Results";
-tg->loadItems = pcrResultLoad;
-tg->priority = 100.01;
-tg->defaultPriority = tg->priority;
-tg->groupName = "map";
-tg->defaultGroupName = cloneString(tg->groupName);
-tg->exonArrows = TRUE;
-
 AllocVar(tdb);
-tdb->tableName = cloneString(tg->mapName);
-tdb->shortLabel = cloneString(tg->shortLabel);
-tdb->longLabel = cloneString(tg->longLabel);
-tdb->grp = cloneString(tg->groupName);
-tdb->priority = tg->priority;
-tdb->type = cloneString("pcrResult");
+tdb->tableName = cloneString("hgPcrResult");
+tdb->shortLabel = cloneString("PCR Results");
+tdb->longLabel = cloneString("Your Sequence from PCR Search");
+tdb->grp = cloneString("map");
+tdb->type = cloneString("psl .");
+tdb->priority = 100.01;
+tdb->canPack = TRUE;
+tdb->visibility = tvPack;
+tdb->grp = cloneString("map");
 trackDbPolish(tdb);
-tg->tdb = tdb;
+struct track *tg = trackFromTrackDb(tdb);
+tg->loadItems = pcrResultLoad;
+tg->exonArrows = TRUE;
 return tg;
 }
 
