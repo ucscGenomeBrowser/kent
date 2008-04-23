@@ -119,7 +119,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1454 2008/04/22 23:07:06 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1455 2008/04/23 00:57:38 aamp Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -198,6 +198,7 @@ boolean zoomedToCodonLevel; /* TRUE if zoomed so we can print codons text in gen
 boolean zoomedToCdsColorLevel; /* TRUE if zoomed so we can color each codon*/
 boolean baseShowPos;           /* TRUE if should display full position at top of base track */
 boolean baseShowAsm;           /* TRUE if should display assembly info at top of base track */
+boolean baseShowScaleBar;      /* TRUE if should display scale bar at very top of base track */ 
 char *baseTitle = NULL;        /* Title it should display top of base track (optional)*/
 
 /* These variables are set by getPositionFromCustomTracks() at the very 
@@ -9678,6 +9679,37 @@ switch (track->limitedVis)
 return y;
 }
 
+int computeScaleBar(int numBases, char scaleText[], int scaleTextSize)
+/* Do some scalebar calculations and return the number of bases the scalebar will span. */
+{
+char *baseWord = "bases";
+int scaleBases = 0;
+int scaleBasesTextNum = 0;
+int numFigs = (int)log10(numBases);
+int frontNum = (int)(numBases/pow(10,numFigs));
+if ((numFigs >= 3) && (numFigs < 6))
+    baseWord = "kb";
+else if ((numFigs >= 6) && (numFigs < 9))
+    baseWord = "Mb";
+if (frontNum == 1)
+    {
+    scaleBases = 5 * pow(10, numFigs - 1);
+    scaleBasesTextNum = 5 * pow(10, (numFigs % 3) - 1);
+    }
+else if ((frontNum > 1) && (frontNum <= 4))
+    {   
+    scaleBases = pow(10, numFigs);
+    scaleBasesTextNum = pow(10, numFigs % 3);
+    }
+else if (frontNum > 4)
+    {
+    scaleBases = 2 * pow(10, numFigs);
+    scaleBasesTextNum = 2 * pow(10, numFigs % 3);
+    }
+safef(scaleText, scaleTextSize, "%d %s", scaleBasesTextNum, baseWord);
+return scaleBases;
+}
+
 void makeActiveImage(struct track *trackList, char *psOutput)
 /* Make image and image map. */
 {
@@ -9693,6 +9725,9 @@ int trackPastTabWidth = tl.picWidth - trackPastTabX;
 int pixWidth, pixHeight;
 int y;
 int titleHeight = fontHeight; 
+int scaleBarPad = 2;
+int scaleBarHeight = fontHeight;
+int scaleBarTotalHeight = fontHeight + 2 * scaleBarPad;
 int showPosHeight = fontHeight; 
 int rulerHeight = fontHeight;
 int baseHeight = fontHeight;
@@ -9723,6 +9758,9 @@ if (rulerMode != tvHide)
 	
     if (baseShowPos||baseShowAsm)
 	basePositionHeight += showPosHeight;
+	
+    if (baseShowScaleBar)
+	basePositionHeight += scaleBarTotalHeight;
 	
     if (zoomedToBaseLevel)
 	basePositionHeight += baseHeight;
@@ -9901,6 +9939,13 @@ if (withLeftLabels)
 			MG_BLACK, font, WIN_POS_LABEL);
 	    y += showPosHeight;
 	    }
+	if (baseShowScaleBar)
+	    {
+	    y += scaleBarPad;
+	    hvGfxTextRight(hvg, leftLabelX, y, leftLabelWidth-1, scaleBarHeight, 
+			MG_BLACK, font, SCALE_BAR_LABEL);
+	    y += scaleBarHeight + scaleBarPad;
+	    }
 	{
 	char rulerLabel[64];
         if (hvg->rc)
@@ -9999,6 +10044,25 @@ if (rulerMode != tvHide)
 	rulerClickHeight += showPosHeight;
 	freez(&freezeName);
 	y += showPosHeight;
+	}
+    if (baseShowScaleBar)
+	{
+	char scaleText[32];
+	int scaleBarX = insideX + insideWidth*(0.25);
+	int numBases = winEnd-winStart;	
+	int scaleBases = computeScaleBar(numBases, scaleText, sizeof(scaleText));
+	int scalePixels = (int)((double)insideWidth*scaleBases/numBases);
+	int scaleBarEndX = scaleBarX + scalePixels;
+	int scaleBarY = y + 0.5 * scaleBarTotalHeight;
+	rulerClickHeight += scaleBarTotalHeight;
+	hvGfxTextRight(hvg, insideX, y + scaleBarPad, 
+		       (scaleBarX-2)-insideX, scaleBarHeight, MG_BLACK, font, scaleText);
+	hvGfxLine(hvg, scaleBarX, scaleBarY, scaleBarEndX, scaleBarY, MG_BLACK);
+	hvGfxLine(hvg, scaleBarX, y+scaleBarPad, scaleBarX, 
+		       y+scaleBarTotalHeight-scaleBarPad, MG_BLACK);
+	hvGfxLine(hvg, scaleBarEndX, y+scaleBarPad, scaleBarEndX, 
+		       y+scaleBarTotalHeight-scaleBarPad, MG_BLACK);
+	y += scaleBarTotalHeight;
 	}
     
     hvGfxDrawRulerBumpText(hvg, insideX, y, rulerHeight, insideWidth, MG_BLACK, 
@@ -14953,6 +15017,7 @@ insideWidth = tl.picWidth-gfxBorder-insideX;
 
 baseShowPos = cartUsualBoolean(cart, BASE_SHOWPOS, FALSE);
 baseShowAsm = cartUsualBoolean(cart, BASE_SHOWASM, FALSE);
+baseShowScaleBar = cartUsualBoolean(cart, BASE_SCALE_BAR, FALSE);
 safef(titleVar,sizeof(titleVar),"%s_%s", BASE_TITLE, database);
 baseTitle = cartUsualString(cart, titleVar, "");
 if (sameString(baseTitle, "")) 
