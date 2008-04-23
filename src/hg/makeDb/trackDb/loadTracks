@@ -7,7 +7,7 @@ options:
    -local
    -raName=trackDb.ra  - base name of ra file
    -grpSql=grp.sql - create a grp table using this sql file
-'
+   -sqlDir=../../lib - directory containg trackDb.sql and hgFindSpec.sql'
 
 UNAME_N=`uname -n`
 UNAME_N=${UNAME_N/.cse.ucsc.edu/}
@@ -15,6 +15,7 @@ release=''
 strict=''
 raName=''
 grpSql=''
+sqlDir='../../lib'
 while [[ $1 == -* ]] ; do
     case $1 in
         -release=*)
@@ -27,6 +28,8 @@ while [[ $1 == -* ]] ; do
             raName=$(echo $1 | sed 's/-raName=//') ;;
         -grpSql=*)
             grpSql=$(echo $1 | sed 's/-grpSql=//') ;;
+        -sqlDir=*)
+            sqlDir=$(echo $1 | sed 's/-sqlDir=//') ;;
         *)
             echo "invalid option: $1" >&2
             exit 1 ;;
@@ -91,10 +94,10 @@ loadDbTracks() {
         fopts="$fopts -raName=$raName"
     fi
     # don't use set -x, since the autoload scripts e-mail stderr.
-    local cmd="hgTrackDb $topts $org $db $trackDb ../../lib/trackDb.sql ."
+    local cmd="hgTrackDb $topts $org $db $trackDb ${sqlDir}/trackDb.sql ."
     echo $cmd
     eval $cmd
-    cmd="hgFindSpec $fopts $org $db $hgFindSpec ../../lib/hgFindSpec.sql ."
+    cmd="hgFindSpec $fopts $org $db $hgFindSpec ${sqlDir}/hgFindSpec.sql ."
     echo $cmd
     eval $cmd
     if [ -z "$strict" -a -f $dbpath/description.html ] ; then
