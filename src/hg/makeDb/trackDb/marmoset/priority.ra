@@ -11,3 +11,10 @@ priority 235.1
 
 track netHg18
 priority 235.2
+
+# mouse
+track chainMm9
+priority 232.1
+
+track netMm9
+priority 232.2
