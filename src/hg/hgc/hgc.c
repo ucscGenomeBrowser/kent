@@ -213,7 +213,7 @@
 #include "itemConf.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1412 2008/04/22 23:04:21 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1413 2008/04/23 17:52:48 angie Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -5472,6 +5472,7 @@ printf("</PRE></TT>");
 void doPcrResult(char *track, char *item)
 /* Process click on PCR of user's primers. */
 {
+struct trackDb *tdb = pcrResultFakeTdb();
 char *pslFileName, *primerFileName;
 struct targetDb *target;
 cartWebStart(cart, "PCR Results");
@@ -5511,11 +5512,7 @@ for (psl = otherPsls;  psl != NULL;  psl = psl->next)
 printPcrSequence(target, itemPsl, fPrimer, rPrimer);
 
 puts("<BR><HR>");
-char helpName[PATH_LEN], *helpBuf;
-safef(helpName, sizeof(helpName), "%s%s/%s.html", hDocumentRoot(), HELP_DIR,
-      track);
-readInGulp(helpName, &helpBuf, NULL);
-puts(helpBuf);
+printTrackHtml(tdb);
 }
 
 void doUserPsl(char *track, char *item)
