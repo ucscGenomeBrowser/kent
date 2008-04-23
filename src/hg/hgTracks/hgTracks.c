@@ -119,7 +119,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1457 2008/04/23 18:12:02 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1458 2008/04/23 18:36:12 angie Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -3238,7 +3238,6 @@ struct track *tg = trackFromTrackDb(tdb);
 tg->loadItems = pcrResultLoad;
 tg->exonArrows = TRUE;
 tg->hasUi = TRUE;
-tg->nextItemButtonable = FALSE;
 return tg;
 }
 
