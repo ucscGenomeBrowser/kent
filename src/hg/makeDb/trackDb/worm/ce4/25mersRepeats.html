@@ -4,10 +4,25 @@ Marking the repetetive 25mers in WS170. The centers of repeated 25mers
 are marked black and areas that are covered by the 25mers are in grey.
 </P>
 
+<H2>Methods</H2>
+<P>
+A sliding window of 25 bases was passed over the genome.  Each base
+in the genome is the start of a 25 bp window.  The number of occurrences
+of each of the 25mers is tabulated.  Any 25mer that occurs more than
+once is colored grey over its 25bp extent, and the center base is marked
+in black.  Thus, runs of consecutive black bases indicate overlapping
+25mers with their centers adjacent.
+</P>
+
 <H2>Credits</H2>
 The data for this track is supplied by the
 <A HREF="http://mendel.stanford.edu/SidowLab/" TARGET=_blank>Sidow Lab,</A>
 and the
 <A HREF="http://firelab.stanford.edu/" TARGET=_blank>Fire Lab</A>
 at the <A HREF="http://med.stanford.edu/"
-TARGET=_blank>Stanford School of Medicine.</A>
+TARGET=_blank>Stanford School of Medicine.</A><BR>
+Track display advice provided by
+<A HREF="mailto:&#104;&#105;&#114;a&#109;&#64;&#115;&#111;&#101;
+.&#117;&#99;&#115;&#99;.&#101;&#100;u">Hiram Clawson</A>,
+UCSC Genome Browser Engineering.
+
