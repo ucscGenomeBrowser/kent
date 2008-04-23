@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/makeDownloads.pl instead.
 
-# $Id: makeDownloads.pl,v 1.14 2008/04/08 05:14:54 angie Exp $
+# $Id: makeDownloads.pl,v 1.15 2008/04/23 23:02:11 tdreszer Exp $
 
 use Getopt::Long;
 use warnings;
@@ -321,6 +321,27 @@ _EOF_
 
 _EOF_
     ;
+} elsif ($assemblyLabel =~ /Broad/) {
+    print $fh <<_EOF_
+*** PLEASE CONFIRM THESE CONDITIONS AND/OR ALTER TO INCLUDE ANY PUBLICATION ***
+The $Organism sequence is made freely available before scientific publication 
+with the following understanding:
+
+   1. The data may be freely downloaded, used in analyses, and repackaged in 
+      databases.
+   2. Users are free to use the data in scientific papers analyzing particular 
+      genes and regions if the provider of these data (The Broad Institute) is 
+      properly acknowledged.
+   3. The center producing the data reserves the right to publish the initial 
+      large-scale analyses of the data set, including large-scale identification 
+      of regions of evolutionary conservation and large-scale genomic assembly. 
+      Large-scale refers to regions with size on the order of a chromosome (that 
+      is, 30 Mb or more).
+   4. Any redistribution of the data should carry this notice. 1. The data may 
+      be freely downloaded, used in analyses, and repackaged in databases.
+
+_EOF_
+    ;
   } else {
     print $fh <<_EOF_
 
@@ -477,6 +498,7 @@ sub getDescriptives {
   my $projectUrl = "***PLEASE INSERT PROJECT URL OR REMOVE THIS STATEMENT***";
   # WUSTL project page example: http://genome.wustl.edu/genome.cgi?GENOME=Gallus%20gallus
   # Baylor project page example: http://www.hgsc.bcm.tmc.edu/projects/honeybee/
+  # Broad Institute project page example: http://www.broad.mit.edu/mammals/horse/ 
   return ($Organism, $assemblyDate, $assemblyLabel,
 	  $organism, $consortium, $sequencingCenter, $projectUrl);
 }
@@ -992,8 +1014,9 @@ my $upThrough = ($stopStep eq 'install') ? "" :
 _EOF_
 );
 if ($stopStep eq 'install') {
-  &HgAutomate::verbose(1, <<_EOF_
+&HgAutomate::verbose(1, <<_EOF_
  *** Please take a look at the downloads for $db using a web browser.
+ *** The downloads url is: http://hgwdev.cse.ucsc.edu/goldenPath/$db. 
  *** Edit each README.txt to resolve any notes marked with "***":
      $topDir/goldenPath/database/README.txt
      $topDir/goldenPath/bigZips/README.txt
