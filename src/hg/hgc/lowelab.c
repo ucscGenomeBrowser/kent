@@ -87,7 +87,7 @@
 #include "memalloc.h"
 #include "rnaHybridization.h"
 
-static char const rcsid[] = "$Id: lowelab.c,v 1.26 2007/09/18 10:56:43 pchan Exp $";
+static char const rcsid[] = "$Id: lowelab.c,v 1.27 2008/04/23 19:11:18 pchan Exp $";
 
 extern char *uniprotFormat;
 
@@ -2477,11 +2477,11 @@ void doWiki(char *track, struct trackDb *tdb, char *itemName)
   {
     strand[0] = itemName[strlen(itemName)-1];
     strand[1] = 0;
-    printf("<META HTTP-EQUIV=\"REFRESH\" content=\"0; URL=http://cali.cse.ucsc.edu/%s/index.php/BED:%s:%s:%d-%d:%s\"</META>", wiki, database, seqName, winStart, winEnd, strand);
+    printf("<META HTTP-EQUIV=\"REFRESH\" content=\"0; URL=http://lowedev.cse.ucsc.edu/%s/index.php/BED:%s:%s:%d-%d:%s\"</META>", wiki, database, seqName, winStart, winEnd, strand);
   }
   else
   {   
-    printf("<META HTTP-EQUIV=\"REFRESH\" content=\"0; URL=http://cali.cse.ucsc.edu/%s/index.php/BED:%s:%s:%s\"</META>", wiki, database, seqName, itemName);
+    printf("<META HTTP-EQUIV=\"REFRESH\" content=\"0; URL=http://lowedev.cse.ucsc.edu/%s/index.php/BED:%s:%s:%s\"</META>", wiki, database, seqName, itemName);
   }
   
   printf("</HEAD>");
