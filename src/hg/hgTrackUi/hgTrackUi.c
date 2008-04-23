@@ -31,12 +31,13 @@
 #include "hapmapSnps.h"
 #include "nonCodingUi.h"
 #include "expRecord.h"
+#include "pcrResult.h"
 
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 #define MAX_SP_SIZE 2000
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.421 2008/04/23 00:57:34 aamp Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.422 2008/04/23 17:53:28 angie Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2652,6 +2653,8 @@ else if (sameString(track, "blastHg17KG") || sameString(track, "blastHg16KG")
         || sameString(track, "blastCe3WB") || sameString(track, "blastHg18KG")
         || sameString(track, "blatzHg17KG")|| startsWith("mrnaMap", track)|| startsWith("mrnaXeno", track))
         blastUi(tdb);
+else if (sameString(track, "hgPcrResult"))
+    baseColorDrawOptDropDown(cart, tdb);
 else if (startsWith("bedGraph", tdb->type))
 	wigUi(tdb);
 else if (startsWith("wig", tdb->type))
@@ -2977,6 +2980,8 @@ else if (isCustomTrack(track))
             }
         }
     }
+else if (sameString(track, "hgPcrResult"))
+    tdb = pcrResultFakeTdb();
 else
     tdb = hTrackDbForTrack(track);
 if (tdb == NULL)
