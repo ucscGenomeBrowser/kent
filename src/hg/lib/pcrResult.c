@@ -7,7 +7,7 @@
 #include "targetDb.h"
 #include "pcrResult.h"
 
-static char const rcsid[] = "$Id: pcrResult.c,v 1.4 2008/04/23 17:52:10 angie Exp $";
+static char const rcsid[] = "$Id: pcrResult.c,v 1.5 2008/04/23 18:31:33 angie Exp $";
 
 char *pcrResultCartVar(char *db)
 /* Returns the cart variable name for PCR result track info for db. 
@@ -171,6 +171,7 @@ hashAdd(tdb->settingsHash, "showDiffBasesAllScales", cloneString("."));
 hashAdd(tdb->settingsHash, "indelDoubleInsert", cloneString("on"));
 hashAdd(tdb->settingsHash, "indelQueryInsert", cloneString("on"));
 hashAdd(tdb->settingsHash, "indelPolyA", cloneString("on"));
+hashAdd(tdb->settingsHash, "nextItemButton", cloneString("off"));
 return tdb;
 }
 
