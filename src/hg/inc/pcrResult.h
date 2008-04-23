@@ -29,4 +29,7 @@ void pcrResultGetPsl(char *fileName, struct targetDb *target, char *item,
  * retItemPsl to that; otherwise add it to retOtherPsls.  Die if no psl
  * matches the given item position. */
 
+struct trackDb *pcrResultFakeTdb();
+/* Construct a trackDb record for PCR Results track. */
+
 #endif /* PCRRESULT_H */

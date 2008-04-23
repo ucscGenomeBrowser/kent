@@ -119,7 +119,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1455 2008/04/23 00:57:38 aamp Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1456 2008/04/23 17:52:11 angie Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -3233,29 +3233,11 @@ tg->items = itemList;
 struct track *pcrResultTg()
 /* Make track of hgPcr results (alignments of user's submitted primers). */
 {
-struct trackDb *tdb;
-AllocVar(tdb);
-tdb->tableName = cloneString("hgPcrResult");
-tdb->shortLabel = cloneString("PCR Results");
-tdb->longLabel = cloneString("Your Sequence from PCR Search");
-tdb->grp = cloneString("map");
-tdb->type = cloneString("psl .");
-tdb->priority = 100.01;
-tdb->canPack = TRUE;
-tdb->visibility = tvPack;
-tdb->grp = cloneString("map");
-trackDbPolish(tdb);
-if (tdb->settingsHash == NULL)
-    tdb->settingsHash = hashNew(0);
-hashAdd(tdb->settingsHash, "baseColorDefault", cloneString("diffBases"));
-hashAdd(tdb->settingsHash, "baseColorUseSequence", cloneString("hgPcrResult"));
-hashAdd(tdb->settingsHash, "showDiffBasesAllScales", cloneString("."));
-hashAdd(tdb->settingsHash, "indelDoubleInsert", cloneString("on"));
-hashAdd(tdb->settingsHash, "indelQueryInsert", cloneString("on"));
-hashAdd(tdb->settingsHash, "indelPolyA", cloneString("on"));
+struct trackDb *tdb = pcrResultFakeTdb();
 struct track *tg = trackFromTrackDb(tdb);
 tg->loadItems = pcrResultLoad;
 tg->exonArrows = TRUE;
+tg->hasUi = TRUE;
 return tg;
 }
 
