@@ -54,6 +54,65 @@ done > ensGene.49.thirdTry.log 2>&1
 ############################################################################
 #  The version 49 update individual entries follow:
 ############################################################################
+#  bosTau3 - Cow - Ensembl Genes (DONE - 2008-04-22 - hiram)
+#	This one had to be done manually.  There was a chrUn lift file that
+#	needed to be made to turn the Ensembl chrUn coordinates into
+#	the UCSC chrUn.003.N contig coordinates
+#	It was run with a geneScaffolds yes to fetch the MySQL tables,
+#	Then a script was run:
+    ssh hgwdev
+    cd /cluster/data/bosTau3
+    cat << '_EOF_' > jkStuff/chrUnLiftAcross.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+open (FH,"<chrUn.seq_region.txt") or die "can not read chrUn.seq_region.txt";
+
+my $start = 0;
+my $end = 0;
+my $gap = 10000;
+
+while (my $line = <FH>) {
+    chomp $line;
+    my ($region_id, $name, $type, $size) = split('\s+', $line);
+    $end = $start + $size;
+    printf "chrUn\t%d\t%d\t%s\t%d\t%d\t+\n", $start, $end, $name, 0, $size;
+    $start += $size + $gap;
+}
+
+close (FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x jkStuff/chrUnLiftAcross.pl
+    cd bed/ensGene.49/download
+    ../../../jkStuff/chrUnLiftAcross.pl > ../../../jkStuff/chrUn.liftAcross.txt
+    #	then use that chrUn.liftAcross.txt in the process script procedure
+    #	after that, comment out the gene Scaffolds and -continue=load
+    ssh kkstore05
+    cd /cluster/data/bosTau3
+    cat << '_EOF_' > bosTau3.ensGene.ra
+# required db variable
+db bosTau3
+# optional nameTranslation, the sed command that will transform
+#       Ensemble names to UCSC names.  With quotes just to make sure.
+nameTranslation "s/^\([0-9UX][0-9n]*\)/chr\1/; /^MT/d"
+# cause SQL tables to be fetched to see if chrUn can be fixed up
+# geneScaffolds yes
+'_EOF_'
+#  << happy emacs
+    $HOME/kent/src/hg/utils/automation/doEnsGeneUpdate.pl \
+	-ensVersion=49 -stop=process bosTau3.ensGene.ra
+    #	do the manual fixups as described above
+
+    doEnsGeneUpdate.pl -continue=load -ensVersion=49 bosTau3.ensGene.ra
+    ssh hgwdev
+    cd /cluster/data/bosTau3/bed/ensGene.49
+    featureBits bosTau3 ensGene
+    # 39278215 bases of 2731807384 (1.438%) in intersection
+
+############################################################################
 #  canFam2 - Dog - Ensembl Genes (DONE - 2008-03-31 - hiram)
     ssh kkstore04
     cd /cluster/data/canFam2
