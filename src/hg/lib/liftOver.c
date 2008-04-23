@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: liftOver.c,v 1.37 2007/09/22 00:27:51 kate Exp $";
+static char const rcsid[] = "$Id: liftOver.c,v 1.38 2008/04/23 16:13:21 ann Exp $";
 
 struct chromMap
 /* Remapping information for one (old) chromosome */
@@ -1628,10 +1628,10 @@ char *liftOverErrHelp()
     "    None of sequence intersects with any alignment chain for the region\n"
     "Partially deleted in new:\n"
     "    Sequence intersects with part of a single alignment chain in the region\n"
-    "Split in new\n"
+    "Split in new:\n"
     "    Sequence partially intersects multiple chains in the region\n"
-    "Duplicated in new\n"
+    "Duplicated in new:\n"
     "    Sequence completely intersects multiple chains in the region\n"
-    "Boundary problem\n"
+    "Boundary problem:\n"
     "    Missing start or end base in an exon\n";
 }
