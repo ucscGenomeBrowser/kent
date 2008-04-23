@@ -13,7 +13,7 @@
 #include "hgConfig.h"
 #include "chainCart.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.94 2007/09/05 04:30:58 markd Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.95 2008/04/23 17:48:28 angie Exp $";
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -647,7 +647,8 @@ char *setting = trackDbSetting(tdb, BASE_COLOR_USE_SEQUENCE);
 if (isNotEmpty(setting))
     {
     if (sameString(setting, "genbank") || sameString(setting, "seq") ||
-	sameString(setting, "ss") || startsWith("extFile", setting))
+	sameString(setting, "ss") || startsWith("extFile", setting) ||
+	sameString(setting, "hgPcrResult"))
 	gotIt = TRUE;
     else if (sameString(setting, "none"))
 	errAbort("trackDb for %s, setting %s: unrecognized value \"%s\".  "
