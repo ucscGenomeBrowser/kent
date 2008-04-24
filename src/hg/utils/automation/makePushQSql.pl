@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/makePushQSql.pl instead.
 
-# $Id: makePushQSql.pl,v 1.15 2008/04/24 22:44:13 angie Exp $
+# $Id: makePushQSql.pl,v 1.16 2008/04/24 22:48:38 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -666,7 +666,7 @@ _EOF_
   if (@netODbs) {
     &HgAutomate::verbose(1, <<_EOF_
  *** When $db is on the RR (congrats!), please doBlastz -swap if you haven't
-     already, and add Push Queue entries in those other databases for chains
+     already, and add Push Queue entries for those other databases' chains
      and nets to $db.
 _EOF_
     );
