@@ -144,7 +144,7 @@ cut -f 2 chrom.sizes | ave stdin
     # 732765485 bases of 2663369733 (27.513%) in intersection
 
     # RepeatMasker and lib version from do.log:
-    #    RepeatMasker version development-$Id: cavPor3.txt,v 1.1 2008/04/24 19:10:13 tdreszer Exp $
+    #    RepeatMasker version development-$Id: cavPor3.txt,v 1.2 2008/04/24 23:34:39 tdreszer Exp $
     #    Jan 11 2008 (open-3-1-9) version of RepeatMasker
     #    CC   RELEASE 20071204;
 
@@ -1468,7 +1468,7 @@ _EOF_
 #  trackDb/netOryCun1.html
 
 #############################################################################
-#  Downloads (DONE - 2008-01-11 - Hiram)
+#  Downloads (DONE - 2008-04-23 - Tim)
 #   Let's see if the downloads will work
     ssh hgwdev
     /cluster/data/cavPor3
@@ -1505,41 +1505,56 @@ _EOF_
 
 
 #############################################################################
-#  PushQ entries (DONE - 2008-01-11 - Hiram)
+#  PushQ entries (DONE - 2008-04-24 - Tim)
     ssh hgwdev
     /cluster/data/cavPor3
     /cluster/bin/scripts/makePushQSql.pl cavPor3 > jkStuff/pushQ.sql
     # output warnings:
     # hgwdev does not have /usr/local/apache/htdocs/goldenPath/cavPor3/liftOver/cavPor3ToCavPor*
+    ### is it worth it? NO: cavPor2 was never released.
     # cavPor3 does not have seq
     # cavPor3 does not have extFile
+    ### Not needed because output is from multiz, visiGene, affyProbes, cloneend, stsMarker, nibbImageProbes
+    ### Kate suggests updating makePushQsql to require gbSeq and gbExtFile instead, but it already does.
     # 
     #  *** All done!
     #  *** Please edit the output to ensure correctness before using.
     #  *** 1. Resolve any warnings output by this script.
     #  *** 2. Remove any entries which should not be pushed.
+    ### All accounted for but: genscanSubopt which is not in pushQ.sql but is in 
+
     #  *** 3. Add tables associated with the main track table (e.g. *Pep tables
     #         for gene prediction tracks).
     #  *** 4. Add files associated with tracks.  First, look at the results
     #         of this query:
     #           hgsql cavPor3 -e 'select distinct(path) from extFile'
+    ### Doesn't exist
     #         Then, look at file(s) named in each of the following wiggle tables:
     #           hgsql cavPor3 -e 'select distinct(file) from gc5Base'
+    ### | /gbdb/cavPor3/wib/gc5Base.wib |
     #           hgsql cavPor3 -e 'select distinct(file) from quality'
+    ### | /gbdb/cavPor3/wib/qual.wib |
     #         Files go in the second field after tables (it's tables, cgis, files).
     #  *** 5. This script currently does not recognize composite tracks.  If cavPor3
     #         has any composite tracks, you should manually merge the separate
     #         per-table entries into one entry.
+    ### Doen't apply to cavPor3 at this time.
     #  *** 6. Just before executing the sql, note the ID of the most recent entry
     #         in the Main Push Queue.  If the ID (first column) of the last
     #         INSERT statement is not 1 greater than the most recent entry's,
     #         make it so to avoid an ID clash with an existing entry.
+    ### Updated to 4283
     #  *** When everything looks complete and correct, use hgsql on the qapushq
     #      machine (currently hgwbeta) to execute the sql file.  (Make sure that
     #      qapushq does not already have a table named cavPor3.)  Then use the Push
     #      Queue web interface to check the contents of all entries.
+    ssh hgwbeta
+    cd /cluster/data/cavPor3/jkStuff
+    hgsql qapushq < pushQ.sql 
+    ### All is there
     #  *** If you haven't already, please add cavPor3 to makeDb/schema/all.joiner !
     #      It should be in both $gbd and $chainDest.
+    ### Already there
     #  *** When cavPor3 is on the RR (congrats!), please doBlastz -swap if you haven't
     #      already.
 
