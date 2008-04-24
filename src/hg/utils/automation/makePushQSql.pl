@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/makePushQSql.pl instead.
 
-# $Id: makePushQSql.pl,v 1.14 2008/03/21 23:14:49 angie Exp $
+# $Id: makePushQSql.pl,v 1.15 2008/04/24 22:44:13 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -645,14 +645,20 @@ _EOF_
  *** 5. This script currently does not recognize composite tracks.  If $db
         has any composite tracks, you should manually merge the separate
         per-table entries into one entry.
- *** 6. Just before executing the sql, note the ID of the most recent entry
-        in the Main Push Queue.  If the ID (first column) of the last
-        INSERT statement is not 1 greater than the most recent entry's,
-        make it so to avoid an ID clash with an existing entry.
- *** When everything looks complete and correct, use hgsql on the qapushq
-     machine (currently hgwbeta) to execute the sql file.  (Make sure that
-     qapushq does not already have a table named $db.)  Then use the Push
-     Queue web interface to check the contents of all entries.
+ *** 6. Make sure that qapushq does not already have a table named $db:
+          ssh hgwbeta hgsql qapushq -NBe "'desc $db;'"
+        You *should* see this error:
+          ERROR 1146 at line 1: Table 'qapushq.$db' doesn't exist
+        If it already has that table, talk to QA and figure out whether
+        it can be dropped or fixed up (by sql or the Push Queue web app).
+ *** 7. Just before executing the sql, note the ID of the most recent entry
+        in the Main Push Queue:
+          ssh hgwbeta hgsql qapushq -NBe "'select max(qid) from pushQ;'"
+        The ID (first column) of the last INSERT statement in the sql file
+        must be 1 greater than that -- edit if necessary.
+ *** When everything is complete and correct, use hgsql on hgwbeta to
+     execute the sql file.  Then use the Push Queue web app to check the
+     contents of all entries.
  *** If you haven't already, please add $db to makeDb/schema/all.joiner !
      It should be in both \$gbd and \$chainDest.
 _EOF_
@@ -660,7 +666,8 @@ _EOF_
   if (@netODbs) {
     &HgAutomate::verbose(1, <<_EOF_
  *** When $db is on the RR (congrats!), please doBlastz -swap if you haven't
-     already.
+     already, and add Push Queue entries in those other databases for chains
+     and nets to $db.
 _EOF_
     );
   }
