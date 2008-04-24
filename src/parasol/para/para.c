@@ -15,7 +15,7 @@
 #include "jobResult.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: para.c,v 1.66 2005/08/31 22:41:11 markd Exp $";
+static char const rcsid[] = "$Id: para.c,v 1.67 2008/04/24 00:17:50 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -120,6 +120,10 @@ errAbort(
   "   Set batch priority. Values explained under 'push' options above.\n"
   "para maxNode 999\n"
   "   Set batch maxNode. Values explained under 'push' options above.\n"
+  "para showSickNodes\n"
+  "   Show sick nodes which have failed when running this batch.\n"
+  "para clearSickNodes\n"
+  "   Clear sick nodes statistics of batch.\n"
   "\n"
   "Common options\n"
   "   -verbose=1 - set verbosity level.\n",
@@ -1451,6 +1455,46 @@ if (optionVal("priority",NULL)!=NULL)
     paraPriority(optionVal("priority","medium"));
 }   
 
+
+void clearSickNodes()
+/* Tell hub to show sick nodes on batch */
+{
+struct dyString *dy = newDyString(1024);
+char curDir[512];
+char *result;
+if (getcwd(curDir, sizeof(curDir)) == NULL)
+    errAbort("Couldn't get current directory");
+dyStringPrintf(dy, "clearSickNodes %s %s/para.results", getUser(), curDir);
+result = hubSingleLineQuery(dy->string);
+dyStringFree(&dy);
+if (!sameString(result, "0"))
+    errAbort("Couldn't clear sick nodes for %s\n", curDir);
+freez(&result);
+verbose(1, "Told hub to clear sick nodes\n");
+}
+
+
+void showSickNodes()
+/* Tell hub to show sick nodes on batch */
+{
+struct dyString *dy = newDyString(1024);
+char curDir[512];
+if (getcwd(curDir, sizeof(curDir)) == NULL)
+    errAbort("Couldn't get current directory");
+dyStringPrintf(dy, "showSickNodes %s %s/para.results", getUser(), curDir);
+struct slRef *lineList = hubMultilineQuery(dy->string), *lineEl;
+for (lineEl = lineList; lineEl != NULL; lineEl = lineEl->next)
+    {
+    char *line = lineEl->val;
+    printf("%s\n", line);
+    freez(&lineEl->val);
+    }
+slFreeList(&lineList);
+dyStringFree(&dy);
+}
+
+
+
 int cleanTrackingErrors(struct jobDb *db)
 /* Remove submissions with tracking errors. 
  * Returns count of these submissions */
@@ -1850,6 +1894,14 @@ else if (sameWord(command, "maxNode"))
     if (argc != 3)
         usage();
     paraMaxNode(argv[2]);
+    }
+else if (sameWord(command, "clearSickNodes"))
+    {
+    clearSickNodes();
+    }
+else if (sameWord(command, "showSickNodes"))
+    {
+    showSickNodes();
     }
 else
     {

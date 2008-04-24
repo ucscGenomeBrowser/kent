@@ -52,4 +52,24 @@
      so you don't have to do it twice, and so it logs user and requires
      a comment for the log so admin knows why it was removed.
 
+12 - Added sick node and sick batch detection.  Each batch keeps a hash 
+     of sick nodes and starts avoiding the ones that seem sick.  
+     It currently counts a node as sick if it crashes 3 times in a row.
+     A batch considers itself sick and automatically chills itself
+     after 25 failures in a row.  These sickness thresholds could be made 
+     configurable in the future.  There are two new para commands,
+     one for showing sick node stats for the batch, and another for
+     clearing those stats.  There is a new parasol command for showing
+     machines among currently running users that are in universal
+     agreement about them being sick.  This list could inform the use
+     of the parasol remove node command.  A batch will quickly learn
+     which nodes are probably bad and simply avoid them.  This is aimed
+     at preventing the loss of a night's work on the cluster due to one
+     or two bad nodes that pump through most of a large queue and 
+     erroneously failing all the jobs. A batch that is itself sick 
+     will not affect the stats on other batches.  There is an additional 
+     sick nodes hash maintained by the user structure that simply reflects 
+     the condition of all its batches for a node being sick, this is done 
+     just for efficiency in the algorithm that doles out the machines 
+     to waiting users' batches.
 

@@ -9,7 +9,7 @@
 #include "paraLib.h"
 #include "paraMessage.h"
 
-static char const rcsid[] = "$Id: parasol.c,v 1.31 2008/04/09 18:25:40 kate Exp $";
+static char const rcsid[] = "$Id: parasol.c,v 1.32 2008/04/24 00:17:51 galt Exp $";
 
 struct rudp *hubRudp;	/* Network connection to paraHub. */
 char *userName;	/* Name of user. */
@@ -43,6 +43,7 @@ errAbort(
   "   parasol list jobs  - List jobs one per line.\n"
   "   parasol list users  - List users one per line.\n"
   "   parasol list batches  - List batches one per line.\n"
+  "   parasol list sick  - List sick nodes one per line.\n"
   "   parasol status  - Summarize status of machines, jobs, and spoke daemons.\n"
   );
 }
@@ -359,6 +360,8 @@ else if (sameString(command, "list"))
         hubCommandAndPrint("listUsers");
     else if (sameString(subType, "batch") || sameString(subType, "batches"))
         hubCommandAndPrint("listBatches");
+    else if (sameString(subType, "sick"))
+        hubCommandAndPrint("listSick");
     else
         usage();
     }

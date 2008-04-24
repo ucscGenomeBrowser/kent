@@ -66,8 +66,9 @@
 #include "paraHub.h"
 #include "machSpec.h"
 #include "log.h"
+#include "obscure.h"
 
-static char const rcsid[] = "$Id: paraHub.c,v 1.89 2007/03/03 01:14:54 galt Exp $";
+static char const rcsid[] = "$Id: paraHub.c,v 1.90 2008/04/24 00:17:51 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -83,7 +84,7 @@ static struct optionSpec optionSpecs[] = {
     {NULL, 0}
 };
 
-int version = 11;	/* Version number. */
+int version = 12;	/* Version number. */
 
 /* Some command-line configurable quantities and their defaults. */
 int jobCheckPeriod = 10;	/* Minutes between checking running jobs. */
@@ -94,6 +95,10 @@ int initialSpokes = 30;		/* Number of spokes to start with. */
 unsigned char hubSubnet[4] = {255,255,255,255};   /* Subnet to check. */
 int nextJobId = 0;		/* Next free job id. */
 time_t startupTime;		/* Clock tick of paraHub startup. */
+
+/* not yet configurable */
+int sickNodeThreshold = 3;          /* Treat node as sick if this number of failures */
+int sickBatchThreshold = 25;        /* Auto-chill sick batch if this number of continuous failures */
 
 void usage()
 /* Explain usage and exit. */
@@ -170,6 +175,84 @@ unqueuedUsers = newDlList();
 userHash = newHash(6);
 }
 
+
+void updateUserSickNode(struct user *user, char *machineName)
+/* If all of a users batches reject a sick machine, then the user rejects it. */
+{
+boolean allSick = TRUE;
+struct dlNode *node = user->curBatches->head; 
+if (dlEnd(node))
+    allSick = FALSE;    
+for (; !dlEnd(node); node = node->next)
+    {
+    struct batch *batch = node->val;
+    /* avoid any machine in the sickNodes with threshold failure count */
+    if (hashIntValDefault(batch->sickNodes, machineName, 0) < sickNodeThreshold)
+	{
+	allSick = FALSE;
+	break;
+	}
+    }
+hashRemove(user->sickNodes, machineName);
+if (allSick)
+  hashAddInt(user->sickNodes, machineName, 1);
+}
+
+void updateUserSickNodes(struct user *user)
+/* Update user sickNodes. A node is only sick if all batches call it sick */
+{
+struct dlNode *node;
+struct batch *batch;
+hashFree(&user->sickNodes);
+user->sickNodes = newHash(0);
+node = user->curBatches->head; 
+if (!dlEnd(node))
+    {
+    batch = node->val;
+    struct hashEl *el, *list = hashElListHash(batch->sickNodes);
+    for (el = list; el != NULL; el = el->next)
+	{
+	updateUserSickNode(user, el->name);
+	}
+    hashElFreeList(&list);
+    }
+}
+
+void listSickNodes(struct paraMessage *pm)
+/* find nodes that are sick for all users */
+{
+int count = 0;
+struct user *user;
+if (userList)
+    {
+    struct hashEl *el, *list = hashElListHash(userList->sickNodes);
+    for (el = list; el != NULL; el = el->next)
+	{
+	boolean allSick = TRUE;
+	count = 0;
+	for (user = userList; user != NULL; user = user->next)
+	    {
+	    ++count;
+	    if (!hashLookup(user->sickNodes, el->name))
+		allSick = FALSE;
+	    }
+	if (allSick)
+	    {
+	    pmClear(pm);
+	    pmPrintf(pm, "%s", el->name);
+	    pmSend(pm, rudpOut);
+	    }
+	}
+    hashElFreeList(&list);
+    }
+pmClear(pm);
+pmPrintf(pm, "Strength of evidence: %d users",	count);
+pmSend(pm, rudpOut);
+pmSendString(pm, rudpOut, "");
+}
+
+
+
 void updateUserMaxNode(struct user *user)
 /* Update user maxNode. >=0 only if all batches have >=0 maxNode values */
 {
@@ -229,6 +312,7 @@ batch->user = user;
 batch->jobQueue = newDlList();
 batch->priority = NORMAL_PRIORITY;
 batch->maxNode = -1;
+batch->sickNodes = newHash(0);
 return batch;
 }
 
@@ -252,6 +336,7 @@ if (batch == NULL)
 	dlAddTail(user->curBatches, batch->node);
     updateUserPriority(user);
     updateUserMaxNode(user);
+    updateUserSickNodes(user);
     }
 return batch;
 }
@@ -272,6 +357,7 @@ if (user == NULL)
     dlAddTail(unqueuedUsers, user->node);
     user->curBatches = newDlList();
     user->oldBatches = newDlList();
+    user->sickNodes = newHash(0);
     }
 return user;
 }
@@ -292,28 +378,7 @@ return count;
 }
 
 
-struct user *findLuckyUser()
-/* Find lucky user who gets to run a job. */
-{
-struct user *minUser = NULL;
-int minCount = BIGNUM;
-struct dlNode *node;
-for (node = queuedUsers->head; !dlEnd(node); node = node->next)
-    {
-    struct user *user = node->val;
-    if ((user->maxNode==-1) || (user->runningCount<user->maxNode))
-	{
-	if (!dlEmpty(user->curBatches) && ((user->runningCount+1) * user->priority) < minCount)
-	    {
-	    minCount = user->runningCount * user->priority;
-	    minUser = user;
-	    }
-	}
-    }
-return minUser;
-}
-
-struct batch *findLuckyBatch(struct user *user)
+struct batch *findLuckyBatch(struct user *user, struct machine *machine)
 /* Find the batch that gets to run a job. */
 {
 struct batch *minBatch = NULL;
@@ -326,13 +391,46 @@ for (node = user->curBatches->head; !dlEnd(node); node = node->next)
 	{
 	if (((batch->runningCount+1) * batch->priority) < minCount)
 	    {
-	    minCount = batch->runningCount * batch->priority;
-	    minBatch = batch;
+            /* avoid any machine in the sickNodes with threshold failure count */
+            if (hashIntValDefault(batch->sickNodes, machine->name, 0) < sickNodeThreshold)
+		{
+		minCount = batch->runningCount * batch->priority;
+		minBatch = batch;
+		}
 	    }
 	}
     }
 return minBatch;
 }
+
+
+
+struct user *findLuckyUser(struct machine *machine)
+/* Find lucky user who gets to run a job. */
+{
+struct user *minUser = NULL;
+int minCount = BIGNUM;
+struct dlNode *node;
+for (node = queuedUsers->head; !dlEnd(node); node = node->next)
+    {
+    struct user *user = node->val;
+    if ((user->maxNode==-1) || (user->runningCount<user->maxNode))
+	{
+	if (!dlEmpty(user->curBatches) && ((user->runningCount+1) * user->priority) < minCount)
+	    {
+            /* avoid any machine in the sickNodes */
+            if (!hashLookup(user->sickNodes, machine->name))
+		{
+		minCount = user->runningCount * user->priority;
+		minUser = user;
+		}
+	    }
+	}
+    }
+return minUser;
+}
+
+
 
 void unactivateBatchIfEmpty(struct batch *batch)
 /* If job queue on batch is empty then remove batch from
@@ -344,8 +442,9 @@ if (dlEmpty(batch->jobQueue))
     struct user *user = batch->user;
     dlRemove(batch->node);
     dlAddTail(user->oldBatches, batch->node);
-    updateUserPriority(batch->user);
-    updateUserMaxNode (batch->user);
+    updateUserPriority(user);
+    updateUserMaxNode (user);
+    updateUserSickNodes(user);
     /* Check if it's last user batch and if so take them off queue */
     if (dlEmpty(user->curBatches))
 	{
@@ -359,20 +458,29 @@ if (dlEmpty(batch->jobQueue))
 boolean runNextJob()
 /* Assign next job in pending queue if any to a machine. */
 {
-struct user *user;
-user = findLuckyUser();
-if (user != NULL && !dlEmpty(freeMachines) && !dlEmpty(freeSpokes))
-    {
-    struct dlNode *mNode, *jNode, *sNode;
-    struct spoke *spoke;
-    struct batch *batch = findLuckyBatch(user);
-    struct job *job;
-    struct machine *machine;
 
-    /* Get free machine and spoke and move them to busy lists. */
-    mNode = dlPopHead(freeMachines);
+if (dlEmpty(freeMachines))
+ return FALSE;
+
+if (dlEmpty(freeSpokes))
+ return FALSE;
+
+struct dlNode *mNode;
+struct machine *machine;
+ /* Get free machine */
+mNode = dlPopHead(freeMachines);
+machine = mNode->val;
+struct user *user = findLuckyUser(machine);
+
+if (user)
+    {
+    struct dlNode *jNode, *sNode;
+    struct spoke *spoke;
+    struct batch *batch = findLuckyBatch(user, machine);
+    struct job *job;
+
+    /* Get free spoke and move them to busy lists. */
     dlAddTail(busyMachines, mNode);
-    machine = mNode->val;
     machine->lastChecked = now;
     sNode = dlPopHead(freeSpokes);
     dlAddTail(busySpokes, sNode);
@@ -396,7 +504,11 @@ if (user != NULL && !dlEmpty(freeMachines) && !dlEmpty(freeSpokes))
     return TRUE;
     }
 else
+    {
+    /* Cycle possibly sick free machine to end of list. */
+    dlAddTail(freeMachines, mNode);
     return FALSE;
+    }
 }
 
 void runner(int count)
@@ -545,6 +657,7 @@ dlRemove(user->node);
 dlAddHead(queuedUsers, user->node);
 updateUserPriority(user);
 updateUserMaxNode(user);
+updateUserSickNodes(user);
 }
 
 void removeMachine(char *line)
@@ -824,12 +937,33 @@ if (sameString(status, "0"))
     ++finishedJobCount;
     ++batch->doneCount;
     ++batch->user->doneCount;
+    batch->continuousCrashCount = 0;
+    /* remember the continuous number of times this batch has crashed on this node */
+    struct hashEl *hel = hashLookup(batch->sickNodes, job->machine->name);
+    if (hel)
+      {
+      hashRemove(batch->sickNodes, job->machine->name);
+      }
     }
 else
     {
     ++crashedJobCount;
     ++batch->crashCount;
+    ++batch->continuousCrashCount;
+    /* remember the continuous number of times this batch has crashed on this node */
+    struct hashEl *hel = hashLookup(batch->sickNodes, job->machine->name);
+    if (hel == NULL)
+      {
+      hashAddInt(batch->sickNodes, job->machine->name, 1);
+      }
+    else
+      {
+      ++hel->val;
+      }
     }
+
+updateUserSickNode(batch->user, job->machine->name);
+
 writeResults(batch->name, batch->user->name, job->machine->name,
 	job->id, job->exe, job->submitTime, 
 	job->startTime, job->err, job->cmd,
@@ -1188,6 +1322,84 @@ pmSend(pm, rudpOut);
 
 
 
+int clearSickNodes(char *userName, char *dir)
+/* Clear sick nodes for batch */
+{
+struct user *user = findUser(userName);
+struct batch *batch = findBatch(user, dir, TRUE);
+if (user == NULL) return -2;
+if (batch == NULL) return -2;
+hashFree(&batch->sickNodes);
+batch->sickNodes = newHash(0);
+updateUserSickNodes(user);
+logInfo("paraHub: User %s cleared sick nodes for batch %s", userName, dir);
+return 0;
+}
+
+int clearSickNodesFromMessage(char *line)
+/* Parse out clearSickNodes message and set new maxNode for batch, update user-maxNode. */
+{
+char *userName, *dir;
+if ((userName = nextWord(&line)) == NULL)
+    return -2;
+if ((dir = nextWord(&line)) == NULL)
+    return -2;
+return clearSickNodes(userName, dir);
+}
+
+void clearSickNodesAcknowledge(char *line, struct paraMessage *pm)
+/* Set batch maxNode.  Line format is <user> <dir> <maxNode>
+* Returns new maxNode or -2 if a problem.  Send new maxNode back to client. */
+{
+int result = clearSickNodesFromMessage(line);
+pmClear(pm);
+pmPrintf(pm, "%d", result);
+pmSend(pm, rudpOut);
+}
+
+
+int showSickNodes(char *userName, char *dir, struct paraMessage *pm)
+/* Show sick nodes for batch */
+{
+int machineCount = 0, sickCount = 0;
+struct user *user = findUser(userName);
+struct batch *batch = findBatch(user, dir, TRUE);
+if (user == NULL) return -2;
+if (batch == NULL) return -2;
+struct hashEl *el, *list = hashElListHash(batch->sickNodes);
+slSort(&list, hashElCmp);
+for (el = list; el != NULL; el = el->next)
+    {
+    ++machineCount;
+    sickCount += ptToInt(el->val);
+    pmClear(pm);
+    pmPrintf(pm, "%s %d", el->name, el->val);
+    pmSend(pm, rudpOut);
+    }
+hashElFreeList(&list);
+pmClear(pm);
+pmPrintf(pm, "total sick machines: %d failures: %d", machineCount, sickCount);
+pmSend(pm, rudpOut);
+pmClear(pm);
+pmSend(pm, rudpOut);
+logInfo("paraHub: User %s showed sick nodes for batch %s", userName, dir);
+return 0;
+}
+
+int showSickNodesFromMessage(char *line, struct paraMessage *pm)
+/* Parse out showSickNodes message and print sick nodes for batch. */
+{
+char *userName, *dir;
+if ((userName = nextWord(&line)) == NULL)
+    return -2;
+if ((dir = nextWord(&line)) == NULL)
+    return -2;
+return showSickNodes(userName, dir, pm);
+}
+
+
+
+
 int setPriority(char *userName, char *dir, int priority)
 /* Set new priority for batch */
 {
@@ -1309,6 +1521,26 @@ pmSendString(pm, rudpOut, retVal);
 }
 
 
+void chillABatch(struct batch *batch)
+/* Stop launching jobs from a batch, but don't disturb
+ * running jobs. */
+{
+struct user *user = batch->user;
+struct dlNode *el, *next;
+for (el = batch->jobQueue->head; !dlEnd(el); el = next)
+    {
+    struct job *job = el->val;
+    next = el->next;
+    recycleJob(job);	/* This free's el too! */
+    }
+dlRemove(batch->node);
+dlAddTail(user->oldBatches, batch->node);
+updateUserPriority(user);
+updateUserMaxNode(user);
+updateUserSickNodes(user);
+}
+
+
 void chillBatch(char *line, struct paraMessage *pm)
 /* Stop launching jobs from a batch, but don't disturb
  * running jobs. */
@@ -1326,23 +1558,17 @@ if (batchName != NULL)
 	batch = findBatchInList(user->curBatches, batchName);
 	if (batch != NULL)
 	    {
-	    struct dlNode *el, *next;
-	    for (el = batch->jobQueue->head; !dlEnd(el); el = next)
-		{
-		struct job *job = el->val;
-		next = el->next;
-		recycleJob(job);	/* This free's el too! */
-		}
-	    dlRemove(batch->node);
-	    dlAddTail(user->oldBatches, batch->node);
-	    updateUserPriority(user);
-	    updateUserMaxNode(user);
+            chillABatch(batch);
 	    }
 	res = "ok";
 	}
     }
 pmSendString(pm, rudpOut, res);
 }
+
+
+
+
 
 void jobDone(char *line)
 /* Handle job is done message. */
@@ -1368,7 +1594,14 @@ if (sTime != NULL)
 		machine->errCount += 1;
 	    }
 	writeJobResults(job, status, uTime, sTime);
+	struct batch *batch = job->batch;
 	finishJob(job);
+	/* is the batch sick? */
+	if (batch->continuousCrashCount >= sickBatchThreshold)
+	    {
+	    batch->continuousCrashCount = 0;  /* reset so user can retry later */
+            chillABatch(batch);
+	    }
 	runner(1);
 	}
     }
@@ -2138,6 +2371,10 @@ for (;;)
 	 setPriorityAcknowledge(line, pm);
     else if (sameWord(command, "setMaxNode"))
 	 setMaxNodeAcknowledge(line, pm);
+    else if (sameWord(command, "showSickNodes"))
+	 showSickNodesFromMessage(line, pm);
+    else if (sameWord(command, "clearSickNodes"))
+	 clearSickNodesAcknowledge(line, pm);
     else if (sameWord(command, "addJob"))
 	 addJobAcknowledge(line, pm);
     else if (sameWord(command, "nodeDown"))
@@ -2164,6 +2401,8 @@ for (;;)
 	 listUsers(pm);
     else if (sameWord(command, "listBatches"))
 	 listBatches(pm);
+    else if (sameWord(command, "listSick"))
+	 listSickNodes(pm);
     else if (sameWord(command, "status"))
 	 status(pm);
     else if (sameWord(command, "pstat"))

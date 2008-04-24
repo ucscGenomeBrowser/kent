@@ -56,8 +56,10 @@ struct batch
     int runningCount;		/* Number of jobs running */
     int doneCount;		/* Number of jobs done */
     int crashCount;		/* Number of jobs crashed */
+    int continuousCrashCount;	/* Number of jobs crashed in a row */
     int priority;   		/* Priority of batch, 1 is highest priority */
     int maxNode;    		/* maxNodes for batch, -1 is no limit */
+    struct hash *sickNodes;     /* Hash of nodes that have failed */
     };
 
 struct user
@@ -71,7 +73,8 @@ struct user
     int runningCount;		/* Count of jobs currently running. */
     int doneCount;		/* Count of jobs finished. */
     int priority;   		/* Priority of user, 1 is highest priority */
-    int maxNode;    		/* maxNodes for batch, -1 is no limit */
+    int maxNode;    		/* maxNodes for user, -1 is no limit */
+    struct hash *sickNodes;     /* Hash of nodes that have failed */
     };
 
 struct spoke
