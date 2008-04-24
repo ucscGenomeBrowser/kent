@@ -1,23 +1,27 @@
+#horse
+track chainEquCab2
+priority 195
+
+track netEquCab2
+priority 195.1
+
+track chainEquCab1
+priority 195.2
+
+track netEquCab1
+priority 195.3
+
+# guinea pig
+track chainCavPor3
+priority 198
+
+track netCavPor3
+priority 198.1
+
+# lizard
 track chainAnoCar1
 priority 260
 
 track netAnoCar1
 priority 260.1
 
-track chainEquCab1
-priority 195
-
-track netEquCab1
-priority 195.1
-
-track chainEquCab2
-priority 196
-
-track netEquCab2
-priority 196.1
-
-track chainCavPor3
-priority 198
-
-track netCavPor3
-priority 198.1
