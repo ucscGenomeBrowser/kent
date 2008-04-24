@@ -119,7 +119,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1458 2008/04/23 18:36:12 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1459 2008/04/24 23:13:02 aamp Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -9669,14 +9669,11 @@ int scaleBases = 0;
 int scaleBasesTextNum = 0;
 int numFigs = (int)log10(numBases);
 int frontNum = (int)(numBases/pow(10,numFigs));
-if ((numFigs >= 3) && (numFigs < 6))
-    baseWord = "kb";
-else if ((numFigs >= 6) && (numFigs < 9))
-    baseWord = "Mb";
 if (frontNum == 1)
     {
-    scaleBases = 5 * pow(10, numFigs - 1);
-    scaleBasesTextNum = 5 * pow(10, (numFigs % 3) - 1);
+    numFigs--;
+    scaleBases = 5 * pow(10, numFigs);
+    scaleBasesTextNum = 5 * pow(10, numFigs % 3);
     }
 else if ((frontNum > 1) && (frontNum <= 4))
     {   
@@ -9688,6 +9685,10 @@ else if (frontNum > 4)
     scaleBases = 2 * pow(10, numFigs);
     scaleBasesTextNum = 2 * pow(10, numFigs % 3);
     }
+if ((numFigs >= 3) && (numFigs < 6))
+    baseWord = "kb";
+else if ((numFigs >= 6) && (numFigs < 9))
+    baseWord = "Mb";
 safef(scaleText, scaleTextSize, "%d %s", scaleBasesTextNum, baseWord);
 return scaleBases;
 }
