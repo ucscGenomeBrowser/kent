@@ -25,7 +25,7 @@
 #include "botDelay.h"
 #include "oligoTm.h"
 
-static char const rcsid[] = "$Id: hgPcr.c,v 1.23 2008/04/22 05:05:52 angie Exp $";
+static char const rcsid[] = "$Id: hgPcr.c,v 1.24 2008/04/24 17:28:32 angie Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -502,8 +502,8 @@ if (gpoList != NULL)
     for (gpo = gpoList;  gpo != NULL;  gpo = gpo->next)
 	{
 	if (gpo->strand == '-')
-	    printf("Warning: this amplification is on the reverse-complement "
-		   "of %s.\n", gpo->seqName);
+	    printf("<EM>Warning: this amplification is on the reverse-"
+		   "complement of %s</EM>.\n", gpo->seqName);
 	gfPcrOutputWriteOne(gpo, "fa", urlFormat, stdout);
 	printf("\n");
 	}
@@ -590,7 +590,7 @@ if (isNotEmpty(fPrimer) && isNotEmpty(rPrimer) &&
     struct pcrServer *server = NULL;
     struct targetPcrServer *targetServer = NULL;
     char *target = cartUsualString(cart, "wp_target", "genome");
-    if (sameString(target, "genome") || isEmpty(target))
+    if (isEmpty(target) || sameString(target, "genome"))
 	server = findServer(db, serverList);
     else
 	{
