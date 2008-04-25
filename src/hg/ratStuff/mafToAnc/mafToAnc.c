@@ -12,8 +12,10 @@
 #include "options.h"
 #include "seg.h"
 
+#include <limits.h>	/* For CHAR_BIT */
 
-static char const rcsid[] = "$Id: mafToAnc.c,v 1.6 2008/03/04 19:48:50 rico Exp $";
+
+static char const rcsid[] = "$Id: mafToAnc.c,v 1.7 2008/04/25 17:25:15 rico Exp $";
 
 struct aliCont
 /* A container for an alignment block. */
@@ -35,6 +37,7 @@ struct speciesInfo {
 };
 
 static struct optionSpec options[] = {
+	{"coreSpecies", OPTION_STRING},
 	{"minLen", OPTION_INT},
 	{"noCheckSrc", OPTION_BOOLEAN},
 	{"noCheckStrand", OPTION_BOOLEAN},
@@ -42,15 +45,18 @@ static struct optionSpec options[] = {
 	{NULL, 0},
 };
 
+static char    *coreSpecies    = NULL;
 static int     minLen          = 100;
 static boolean noCheckSrc      = FALSE;
 static boolean noCheckStrand   = FALSE;
 static boolean noCheckCoverage = FALSE;
 
-static unsigned int uint_bits = sizeof(unsigned int) * 8;
+static struct hash *coreSpeciesHash = NULL;
+
+static unsigned int uint_bits = sizeof(unsigned int) * CHAR_BIT;
 static unsigned int uint_div  = 0U;
 static unsigned int uint_rem  = 0U;
-static unsigned int int_bits  = sizeof(int) * 8;
+static unsigned int int_bits  = sizeof(int) * CHAR_BIT;
 static unsigned int *bitMap   = NULL;
 static unsigned int emptyUInt = 0U;
 static unsigned int fullUInt  = ~0U;
@@ -67,6 +73,8 @@ errAbort(
   "   in.maf   name of the input maf file\n"
   "   out.anc  name of the output anchor file\n"
   "options:\n"
+  "   -coreSpecies=spe1,...,speN\n"
+  "                     Use only the listed species when building anchors\n"
   "   -minLen=<D>       Minimum length of an ungapped alignment to define an\n"
   "                     anchor.  (default = 100)\n"
   "   -noCheckSrc       Don't check that the src of the first component of\n"
@@ -491,12 +499,53 @@ static int stripAndCountComponents(struct mafAli *ma)
 {
 struct mafComp *prev, *curr;
 int compCount = 0;
+int keep;
+int dash = 0;
+int i,j;
+struct mafAli *a;
+struct mafComp *c;
+char *p;
 
 prev = curr = ma->components;
 while (curr != NULL)
 	{
+	keep = 1;
+
+	/* Strip out non-core species. */
+	if (coreSpeciesHash != NULL)
+		{
+		if ((p = strchr(curr->src, '.')) != NULL)
+			*p = '\0';
+
+		if (hashLookup(coreSpeciesHash, curr->src) == NULL)
+			{
+			keep = 0;
+			dash = 1;
+			}
+
+		if (p != NULL)
+			*p = '.';
+		}
+
 	/* Strip out "e" components. */
 	if ((curr->size == 0) && (curr->leftStatus))
+		keep = 0;
+
+	if (keep)
+		{
+		compCount++;
+
+		/* Strip out "q" data. */
+		if (curr->quality)
+			freeMem(curr->quality);
+
+		/* Strip out "i" data. */
+		curr->leftStatus = 0;
+
+		prev = curr;
+		curr = curr->next;
+		}
+	else
 		{
 		if (curr == ma->components)
 			{
@@ -511,24 +560,40 @@ while (curr != NULL)
 			curr = prev->next;
 			}
 		}
-	else
-		{
-		compCount++;
-
-		/* Strip out "q" data. */
-		if (curr->quality)
-			freeMem(curr->quality);
-
-		/* Strip out "i" data. */
-		curr->leftStatus = 0;
-
-		prev = curr;
-		curr = curr->next;
-		}
 	}
+
+/* remove columns containing only dashes */
+if (dash)
+	{
+	a = ma;
+
+	for (i = j = 0; i < a->textSize; i++)
+		{
+		for (c = a->components; c != NULL; c = c->next)
+			if (c->text[i] != '-')
+				break;
+
+		if (c != NULL)
+			{
+			if (j != i)
+				for (c = a->components; c != NULL; c = c->next)
+					c->text[j] = c->text[i];
+			j++;
+			}
+		}
+
+	if (j != a->textSize)
+		{
+		a->textSize = j;
+
+		for (c = a->components; c != NULL; c = c->next)
+			c->text[j] = '\0';
+		}
+
+	}
+
 return(compCount);
 }
-
 
 void mafToAnc(char *inMaf, char *outAnc)
 /* mafToAnc - Find anchors in a maf file. */
@@ -538,9 +603,6 @@ struct mafAli *ma;
 struct aliCont *ac, *acList = NULL, *acListTail = NULL;
 int aliCount = 0, maxComps = 0, preSorted = 1, lastEnd = 0, compCount;
 char *firstCmpSrc = NULL;
-
-// /* Initialize the species hash */
-// initializeSpeciesHash();
 
 /* Read in and count the alignment blocks from the maf. Determine the
  * maximum number of components in an alignment. Make sure that the
@@ -616,16 +678,52 @@ if (!noCheckCoverage)
 	freeMem(bitMap);
 
 freeMem(firstCmpSrc);
-// freeSpeciesHash();
 
 /* Sort the alignment containers by the position of the first component. */
 if (!preSorted)
 	aliContSortByPos(&acList, aliCount);
+
 /* Combine adjacent alignment blocks that can be fused. */
 aliContFuse(acList, maxComps);
 
 /* Find and report anchors. */
 findAnchors(&acList, outAnc, maxComps);
+}
+
+static void buildCoreSpeciesHash(char *speciesList)
+{
+char delim = ',';
+char *p, *d;
+int speciesCount=1;
+struct hashEl *hel;
+
+/* We don't need a hash if there's nothing to store. */
+if (speciesList == NULL)
+	return;
+
+/* Count the number of species in the list. */
+for (p = speciesList; *p != '\0'; p++)
+	if (*p == delim)
+		speciesCount++;
+
+/* Create a hash with enough space. */
+coreSpeciesHash = newHash( hashPOTSize(speciesCount) );
+
+/* Populate the hash. */
+p = speciesList;
+while (1)
+	{
+	if ((d = strchr(p, delim)) != NULL)
+		*d = '\0';
+
+	if ((hel = hashLookup(coreSpeciesHash, p)) == NULL)
+		hashAddInt(coreSpeciesHash, p, 1);
+
+	if (d == NULL)
+		break;
+
+	p = d + 1;
+	}
 }
 
 
@@ -637,6 +735,7 @@ optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
 
+coreSpecies     = optionVal("coreSpecies", NULL);
 minLen          = optionInt("minLen", minLen);
 noCheckSrc      = optionExists("noCheckSrc");
 noCheckStrand   = optionExists("noCheckStrand");
@@ -665,7 +764,9 @@ if (!noCheckCoverage)
 		}
 	}
 
+buildCoreSpeciesHash(coreSpecies);
 mafToAnc(argv[1], argv[2]);
+freeHash(&coreSpeciesHash);
 
 return(EXIT_SUCCESS);
 }
