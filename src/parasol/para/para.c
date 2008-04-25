@@ -15,7 +15,7 @@
 #include "jobResult.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: para.c,v 1.67 2008/04/24 00:17:50 galt Exp $";
+static char const rcsid[] = "$Id: para.c,v 1.68 2008/04/25 20:11:52 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -1740,9 +1740,9 @@ if (crashCount > 0)
 if (otherCount > 0)
     {
     if (!fileExists(resultsName))
-	printf("Other count: %d jobs\n", otherCount);
+	printf("para.results: file not found.  paraHub can't write to this dir?\n");
     else
-        printf("para.results: file not found.  paraHub can't write to this dir?\n");
+	printf("Other count: %d jobs\n", otherCount);
     }
 if (queueCount > 0)
     printf("In queue waiting: %d jobs\n", queueCount);
