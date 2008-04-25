@@ -71,5 +71,8 @@
      sick nodes hash maintained by the user structure that simply reflects 
      the condition of all its batches for a node being sick, this is done 
      just for efficiency in the algorithm that doles out the machines 
-     to waiting users' batches.
+     to waiting users' batches.  I also added a minor improvement to pstat
+     so that it optionally passes the user/batch and the hub only returns the relevant
+     queued jobs that are in the batch, and not just sending all batches' queued jobs.
+     So if other batches have huge job queues, you won't suffer.
 

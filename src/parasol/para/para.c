@@ -15,7 +15,7 @@
 #include "jobResult.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: para.c,v 1.69 2008/04/25 21:50:49 galt Exp $";
+static char const rcsid[] = "$Id: para.c,v 1.70 2008/04/25 23:29:06 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -737,7 +737,15 @@ struct hash *hash = newHash(0);
 struct job *job;
 struct submission *sub;
 int queueSize = 0;
-struct slRef *lineList = hubMultilineQuery("pstat"), *lineEl;
+char curDir[512];
+
+if (getcwd(curDir, sizeof(curDir)) == NULL)
+    errAbort("Couldn't get current directory");
+
+struct dyString *dy = newDyString(1024);
+dyStringPrintf(dy, "pstat %s %s/para.results", getUser(), curDir);
+struct slRef *lineList = hubMultilineQuery(dy->string), *lineEl;
+dyStringFree(&dy);
 
 /* Make hash of submissions based on id and clear flags. */
 for (job = db->jobList; job != NULL; job = job->next)
@@ -762,7 +770,10 @@ for (lineEl = lineList; lineEl != NULL; lineEl = lineEl->next)
     char *row[6];
     wordCount = chopLine(line, row);
     if (wordCount < 6)
-	errAbort("Expecting at least 6 words in pstat output. paraHub and para out of sync");
+	{
+	warn("Expecting at least 6 words in pstat output. paraHub and para out of sync.");
+	statusOutputChanged();
+	}
     else
 	{
 	char *state = row[0], *jobId = row[1], *ticks = row[4], *host = row[5];

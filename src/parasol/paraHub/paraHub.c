@@ -68,7 +68,7 @@
 #include "log.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: paraHub.c,v 1.90 2008/04/24 00:17:51 galt Exp $";
+static char const rcsid[] = "$Id: paraHub.c,v 1.91 2008/04/25 23:29:06 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -245,9 +245,12 @@ if (userList)
 	}
     hashElFreeList(&list);
     }
-pmClear(pm);
-pmPrintf(pm, "Strength of evidence: %d users",	count);
-pmSend(pm, rudpOut);
+if (count > 0)
+    {
+    pmClear(pm);
+    pmPrintf(pm, "Strength of evidence: %d users",	count);
+    pmSend(pm, rudpOut);
+    }
 pmSendString(pm, rudpOut, "");
 }
 
@@ -1814,21 +1817,36 @@ for (node = list->head; !dlEnd(node); node = node->next)
 return TRUE;
 }
 
-void pstat(struct paraMessage *pm)
+void pstat(char *line, struct paraMessage *pm)
 /* Write list of jobs in pstat format. */
 {
 struct user *user;
 struct dlNode *bNode;
 struct batch *batch;
+char *userName, *dir;
+struct user *thisUser = NULL;
+struct batch *thisBatch = NULL;
+userName = nextWord(&line);
+dir = nextWord(&line);
+if (userName)
+  thisUser = findUser(userName);
+if (dir)
+  thisBatch = findBatch(thisUser, dir, TRUE);
 if (!onePstatList(pm, runningJobs, TRUE))
     return;
 for (user = userList; user != NULL; user = user->next)
     {
-    for (bNode = user->curBatches->head; !dlEnd(bNode); bNode = bNode->next)
-        {
-	batch = bNode->val;
-	if (!onePstatList(pm, batch->jobQueue, FALSE))
-	    return;
+    if (thisUser == NULL || thisUser == user)
+	{
+	for (bNode = user->curBatches->head; !dlEnd(bNode); bNode = bNode->next)
+	    {
+	    batch = bNode->val;
+	    if (thisBatch == NULL || thisBatch == batch)
+		{
+		if (!onePstatList(pm, batch->jobQueue, FALSE))
+		    return;
+		}
+	    }
 	}
     }
 pmSendString(pm, rudpOut, "");
@@ -2406,7 +2424,7 @@ for (;;)
     else if (sameWord(command, "status"))
 	 status(pm);
     else if (sameWord(command, "pstat"))
-	 pstat(pm);
+	 pstat(line, pm);
     else if (sameWord(command, "addSpoke"))
 	 addSpoke();
     if (sameWord(command, "quit"))
