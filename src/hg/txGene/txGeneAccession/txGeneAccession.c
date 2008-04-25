@@ -2,6 +2,7 @@
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
+#include "dystring.h"
 #include "options.h"
 #include "bed.h"
 #include "binRange.h"
@@ -9,7 +10,7 @@
 #include "sqlNum.h"
 #include "minChromSize.h"
 
-static char const rcsid[] = "$Id: txGeneAccession.c,v 1.12 2007/03/27 03:58:06 kent Exp $";
+static char const rcsid[] = "$Id: txGeneAccession.c,v 1.13 2008/04/25 12:28:29 kent Exp $";
 
 void idToAcc(int id, char acc[16])
 /* Convert ID to accession. */
@@ -98,11 +99,43 @@ slFreeList(&binList);
 return matchingBed;
 }
 
+boolean bedIntronsIdentical(struct bed *a, struct bed *b)
+/* Return TRUE if the introns of the bed are the same. */
+{
+int blockCount = a->blockCount;
+if (blockCount != b->blockCount)
+    return FALSE;
+int aStart = a->chromStart, bStart = b->chromStart;
+int i;
+for (i=1; i<a->blockCount; ++i)
+    {
+    int prev = i-1;
+    int iStart = aStart + a->chromStarts[prev] + a->blockSizes[prev];
+    if (iStart != bStart + b->chromStarts[prev] + b->blockSizes[prev])
+        return FALSE;
+    int iEnd = aStart + a->chromStarts[i];
+    if (iEnd != bStart + b->chromStarts[i])
+        return FALSE;
+    }
+return TRUE;
+}
+
+boolean endUtrChange(struct bed *oldBed, struct bed *newBed)
+/* Returns TRUE if newBed has same CDS as old BED, and same number of exons,
+ * with only difference being length of UTR */
+{
+if (oldBed->thickStart != newBed->thickStart || oldBed->thickEnd != newBed->thickEnd)
+    return FALSE;
+return bedIntronsIdentical(oldBed, newBed);
+}
+   
+
 struct bed *findCompatible(struct bed *newBed, struct hash *oldHash, struct hash *usedHash)
 /* Try and find an old bed compatible with new bed. */
 {
-struct bed *matchingBed = NULL;
 struct binKeeper *bk = hashFindVal(oldHash, newBed->chrom);
+int bestDiff = BIGNUM;
+struct bed *bestBed = NULL;
 if (bk == NULL)
     return NULL;
 struct binElement *bin, *binList = binKeeperFind(bk, newBed->chromStart, newBed->chromEnd);
@@ -113,16 +146,21 @@ for (bin = binList; bin != NULL; bin = bin->next)
 	{
 	if (!hashLookup(usedHash, oldBed->name))
 	    {
-	    if (bedCompatibleExtension(oldBed, newBed))
+	    if (bedCompatibleExtension(oldBed, newBed) || endUtrChange(oldBed, newBed))
 		{
-		matchingBed = oldBed;
-		break;
+		int diff = bedTotalBlockSize(oldBed) - bedTotalBlockSize(newBed);
+		if (diff < 0) diff = -diff;
+		if (diff < bestDiff)
+		    {
+		    bestDiff = diff;
+		    bestBed = oldBed;
+		    }
 		}
 	    }
 	}
     }
 slFreeList(&binList);
-return matchingBed;
+return bestBed;
 }
 
 struct bed *findMostOverlapping(struct bed *bed, struct hash *keeperHash)
@@ -209,7 +247,7 @@ for (newBed = newList; newBed != NULL; newBed = newBed->next)
 	    idToAcc(++txId, newAcc);
 	    strcat(newAcc, ".1");
 	    fprintf(f, "%s\t%s\n", newBed->name, newAcc);
-	    hashAdd(idToAccHash, newBed->name, newAcc);
+	    hashAdd(idToAccHash, newBed->name, cloneString(newAcc));
 	    oldBed = findMostOverlapping(newBed, oldHash);
 	    char *oldAcc = (oldBed == NULL ? "" : oldBed->name);
 	    fprintf(fOld, "%s:%d-%d\t%s\t%s\t%s\n", newBed->chrom, newBed->chromStart, newBed->chromEnd,
