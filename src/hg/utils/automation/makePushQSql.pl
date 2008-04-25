@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/makePushQSql.pl instead.
 
-# $Id: makePushQSql.pl,v 1.16 2008/04/24 22:48:38 angie Exp $
+# $Id: makePushQSql.pl,v 1.17 2008/04/25 17:04:44 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -574,10 +574,7 @@ sub printMainPushQEntry {
   my $date = `date +%Y-%m-%d`;
   my $size = 0;
   chomp $date;
-  my $qidQuery = 'select qid from pushQ order by qid desc limit 1';
   my $qapushqSql = 'ssh -x hgwbeta hgsql -N qapushq';
-  my $qid = `echo $qidQuery | $qapushqSql`;
-  $qid = sprintf "%06d", ($qid + 1);
   my $rankQuery = 'select rank from pushQ order by rank desc limit 1';
   my $rank = `echo $rankQuery | $qapushqSql`;
   $rank += 1;
@@ -586,9 +583,7 @@ sub printMainPushQEntry {
   print <<_EOF_
 
 -- New entry in Main Push Queue, to alert QA to existence of $db:
--- NOTE -- if you wait very long before executing this statement, the first
--- column value (qid) may need to be increased!
-INSERT INTO pushQ VALUES ('$qid','','A',$rank,'$date','Y','$db Initial Release','$db','','','',$size,'hgwdev','N','','N','N','','$ENV{USER}','','','','','N','$date','',0,'','','Initial $db release (using $assemblyLabel): see separate push queue $db.','');
+INSERT INTO pushQ SELECT right(concat("00000",convert(max(qid)+1,CHAR)),6),'','A',$rank,'$date','Y','$db Initial Release','$db','','','',$size,'hgwdev','N','','N','N','','$ENV{USER}','','','','','N','$date','',0,'','','Initial $db release (using $assemblyLabel): see separate push queue $db.','' from pushQ;
 _EOF_
   ;
 } # printMainPushQEntry
@@ -651,11 +646,6 @@ _EOF_
           ERROR 1146 at line 1: Table 'qapushq.$db' doesn't exist
         If it already has that table, talk to QA and figure out whether
         it can be dropped or fixed up (by sql or the Push Queue web app).
- *** 7. Just before executing the sql, note the ID of the most recent entry
-        in the Main Push Queue:
-          ssh hgwbeta hgsql qapushq -NBe "'select max(qid) from pushQ;'"
-        The ID (first column) of the last INSERT statement in the sql file
-        must be 1 greater than that -- edit if necessary.
  *** When everything is complete and correct, use hgsql on hgwbeta to
      execute the sql file.  Then use the Push Queue web app to check the
      contents of all entries.
