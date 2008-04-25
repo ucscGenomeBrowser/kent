@@ -150,6 +150,41 @@ endif
 echo
 
 ###########################################
+# now, find the level of the associated .html file
+# start at the assembly level
+cd ~/trackDb/*/$db
+set currDir=`pwd`
+
+if (-e $tableName.html) then
+  # the .html file is found at the assembly-level
+
+else
+  # the .html is not found at the assembly-level, go up to the organism level
+  cd ..
+  set currDir=`pwd`
+  if (-e $tableName.html) then
+    # the .html file is found at the organism-level
+
+  else
+    # the .html file is not found at the organism level, go up to the top level
+    cd ..
+    set currDir=`pwd`
+    if (-e $tableName.html) then
+      # the .html file is found at the top-level
+    else
+      # the .html file is not at the top level either - it does not exist
+      echo " * the $tableName.html file does not exist at any level"
+      set currDir=""
+    endif
+  endif
+endif
+if ($currDir != "") then
+  echo " * html file: \
+    `echo $currDir | sed 's^.*makeDb^~^'`/$tableName.html"
+endif
+echo
+
+###########################################
 # check for entry in priority.ra file, starting at assembly level
 if ( "T" == $prio) then
   # start back at the assembly level
@@ -246,40 +281,5 @@ if ( "T" == $vis) then
   endif
   echo
 endif #end find visibility entry
-
-###########################################
-# now, find the level of the associated .html file
-# start at the assembly level
-cd ~/trackDb/*/$db
-set currDir=`pwd`
-
-if (-e $tableName.html) then
-  # the .html file is found at the assembly-level
-
-else
-  # the .html is not found at the assembly-level, go up to the organism level
-  cd ..
-  set currDir=`pwd`
-  if (-e $tableName.html) then
-    # the .html file is found at the organism-level
-
-  else
-    # the .html file is not found at the organism level, go up to the top level
-    cd ..
-    set currDir=`pwd`
-    if (-e $tableName.html) then
-      # the .html file is found at the top-level
-    else
-      # the .html file is not at the top level either - it does not exist
-      echo " * the $tableName.html file does not exist at any level"
-      set currDir=""
-    endif
-  endif
-endif
-if ($currDir != "") then
-  echo " * html file: \
-    `echo $currDir | sed 's^.*makeDb^~^'`/$tableName.html"
-endif
-echo
 
 exit 0
