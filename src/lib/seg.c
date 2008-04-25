@@ -8,7 +8,7 @@
 #include <fcntl.h>
 
 
-static char const rcsid[] = "$Id: seg.c,v 1.6 2008/03/04 19:59:42 rico Exp $";
+static char const rcsid[] = "$Id: seg.c,v 1.7 2008/04/25 17:38:39 rico Exp $";
 
 
 void segCompFree(struct segComp **pObj)
@@ -358,36 +358,51 @@ void segWriteEnd(FILE *f)
 {
 }
 
-
-struct segComp *segMayFindCompSpecies(struct segBlock *sb, char *species,
+struct segComp *segMayFindCompSpecies(struct segBlock *sb, char *src,
 	char sepChar)
-/* Find component of a given source that starts with species possibly
-   followed by sepChar or \0. Return NULL if not found. */
+/* Find component with a source that matches src up to and possibly
+   including sepChar. Return NULL if not found. */
 {
 struct segComp *sc;
-int speciesLen = strlen(species);
+char *p, *q;
 
 for (sc = sb->components; sc != NULL; sc = sc->next)
-	if (startsWith(species, sc->src))
+	{
+	for (p = sc->src, q = src;
+		 *p != '\0' && *p != sepChar && *q != '\0' && *q != sepChar;
+		 p++, q++)
 		{
-		char endChar = sc->src[speciesLen];
-		if ((endChar == '\0') || (endChar == sepChar))
-			return(sc);
+		if (*p != *q)
+			break;
 		}
+
+	if ((*p == *q)
+		|| (*p == sepChar && *q == '\0')
+		|| (*p == '\0' && *q == sepChar))
+		{
+		return(sc);
+		}
+	}
 
 return(NULL);
 }
 
 
-struct segComp *segFindCompSpecies(struct segBlock *sb, char *species,
+struct segComp *segFindCompSpecies(struct segBlock *sb, char *src,
 	char sepChar)
-/* Find component of given source that starts with species followed by
-   sepChar or die trying. */
+/* Find component with a source that matches src up to and possibly
+   including sepChar or die trying. */
 {
-struct segComp *sc = segMayFindCompSpecies(sb, species, sepChar);
+struct segComp *sc = segMayFindCompSpecies(sb, src, sepChar);
+char *p;
+
 if (sc == NULL)
-	errAbort("Couldn't find %s%c or just %s... in block.",
-		species, sepChar, species);
+	{
+	if ((p = strchr(src, sepChar)) != NULL)
+		*p = '\0';
+
+	errAbort("Couldn't find %s%c or just %s... in block.", src, sepChar, src);
+	}
 
 return(sc);
 }
@@ -407,4 +422,52 @@ newSc->strand  = sc->strand;
 newSc->srcSize = sc->srcSize;
 
 return(newSc);
+}
+
+char *segFirstCompSpecies(struct segBlock *sb, char sepChar)
+/* Return the species possibly followed by sepChar of the first component
+   of the argument block. Return NULL if the block has no components. */
+{
+char *p, *species;
+
+if (sb->components == NULL)
+	return(NULL);
+
+/* Temporarily split src into species and chrom. */
+if ((p = strchr(sb->components->src, sepChar)) != NULL)
+	*p = '\0';
+
+species = cloneString(sb->components->src);
+
+/* Restore src. */
+if (p != NULL)
+	*p = sepChar;
+
+return(species);
+}
+
+struct slName *segSecSpeciesList(struct segBlock *sb, struct segComp *refComp,
+    char sepChar)
+/* Return a name list containing the species possibly followed by sepChar
+of all components other than refComp on the block. */
+{
+struct segComp *sc;
+char *p;
+struct slName *speciesList = NULL;
+
+for (sc = sb->components; sc != NULL; sc = sc->next)
+	{
+	if (sc == refComp)
+		continue;
+
+	if ((p = strchr(sc->src, '.')) != NULL)
+		*p = '\0';
+
+	slNameStore(&speciesList, sc->src);
+
+	if (p != NULL)
+		*p = '.';
+	}
+
+return(speciesList);
 }
