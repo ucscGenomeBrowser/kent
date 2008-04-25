@@ -62,7 +62,7 @@ set betaList=`getAssemblies.csh ensGene | egrep -v 'get' | egrep -v 'ensGene'`
 # figure out which databases we're running it on
 if ( 'all' == $runOn ) then
  set dbs=`hgsql -Ne "SELECT db FROM trackVersion WHERE version = '$ver' \
- ORDER BY db" hgFixed | sort -u`
+ and name='ensGene' ORDER BY db" hgFixed | sort -u`
  echo "\nThe following databases were updated on hgwdev to ensGenes v$ver :"
  echo "$dbs\n"
 
