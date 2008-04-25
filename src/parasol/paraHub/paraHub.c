@@ -68,7 +68,7 @@
 #include "log.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: paraHub.c,v 1.91 2008/04/25 23:29:06 galt Exp $";
+static char const rcsid[] = "$Id: paraHub.c,v 1.92 2008/04/25 23:55:32 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -1738,7 +1738,7 @@ return ret;
 }
 
 boolean oneJobList(struct paraMessage *pm, struct dlList *list, 
-	boolean sinceStart)
+	boolean sinceStart, boolean extended)
 /* Write out one job list. Return FALSE if there is a problem. */
 {
 struct dlNode *el;
@@ -1758,13 +1758,15 @@ for (el = list->head; !dlEnd(el); el = el->next)
     else
         appendLocalTime(pm, job->submitTime);
     pmPrintf(pm, " %s", job->cmd);
+    if (extended)
+      pmPrintf(pm, " %s", job->batch->name);
     if (!pmSend(pm, rudpOut))
         return FALSE;
     }
 return TRUE;
 }
 
-void listJobs(struct paraMessage *pm)
+void listJobs(struct paraMessage *pm, boolean extended)
 /* Write list of jobs. Format is one job per message
  * followed by a blank message. */
 {
@@ -1772,14 +1774,14 @@ struct user *user;
 struct dlNode *bNode;
 struct batch *batch;
 
-if (!oneJobList(pm, runningJobs, TRUE))
+if (!oneJobList(pm, runningJobs, TRUE, extended))
     return;
 for (user = userList; user != NULL; user = user->next)
     {
     for (bNode = user->curBatches->head; !dlEnd(bNode); bNode = bNode->next)
         {
 	batch = bNode->val;
-	if (!oneJobList(pm, batch->jobQueue, FALSE))
+	if (!oneJobList(pm, batch->jobQueue, FALSE, extended))
 	    return;
 	}
     }
@@ -2412,7 +2414,9 @@ for (;;)
     else if (sameWord(command, "removeMachine"))
 	 removeMachine(line);
     else if (sameWord(command, "listJobs"))
-	 listJobs(pm);
+	 listJobs(pm, FALSE);
+    else if (sameWord(command, "listJobsExtended"))
+	 listJobs(pm, TRUE);
     else if (sameWord(command, "listMachines"))
 	 listMachines(pm);
     else if (sameWord(command, "listUsers"))
