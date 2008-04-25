@@ -84,18 +84,26 @@ void segWrite(FILE *f, struct segBlock *block);
 void segWriteEnd(FILE *f);
 /* Write segment file end tag to the file. */
 
-struct segComp *segMayFindCompSpecies(struct segBlock *sb, char *species,
+struct segComp *segMayFindCompSpecies(struct segBlock *sb, char *src,
 	char sepChar);
-/* Find component of a given source that starts with species possibly
-   followed by sepChar or \0. Return NULL if not found. */
+/* Find component with a source that matches src up to and possibly
+   including sepChar. Return NULL if not found. */
 
-struct segComp *segFindCompSpecies(struct segBlock *sb, char *species,
+struct segComp *segFindCompSpecies(struct segBlock *sb, char *src,
 	char sepChar);
-/* Find component of given source that starts with species followed by
-   sepChar or die trying. */
+/* Find component with a source that matches src up to and possibly
+   including sepChar or die trying. */
 
 struct segComp *cloneSegComp(struct segComp *sc);
 /* Return a copy of the argument segment component. */
 
+char *segFirstCompSpecies(struct segBlock *sb, char sepChar);
+/* Return the species possibly followed by sepChar of the first component
+   of the argument block. Return NULL if the block has no components. */
+
+struct slName *segSecSpeciesList(struct segBlock *sb, struct segComp *refComp,
+	char sepChar);
+/* Return a name list containing the species possibly followed by sepChar
+of all components other than refComp on the block. */
 
 #endif /* SEG_H */
