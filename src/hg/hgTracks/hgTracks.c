@@ -119,7 +119,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1459 2008/04/24 23:13:02 aamp Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1460 2008/04/25 16:35:13 aamp Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -10031,10 +10031,10 @@ if (rulerMode != tvHide)
     if (baseShowScaleBar)
 	{
 	char scaleText[32];
-	int scaleBarX = insideX + insideWidth*(0.25);
 	int numBases = winEnd-winStart;	
 	int scaleBases = computeScaleBar(numBases, scaleText, sizeof(scaleText));
 	int scalePixels = (int)((double)insideWidth*scaleBases/numBases);
+	int scaleBarX = insideX + (int)(((double)insideWidth-scalePixels)/2);
 	int scaleBarEndX = scaleBarX + scalePixels;
 	int scaleBarY = y + 0.5 * scaleBarTotalHeight;
 	rulerClickHeight += scaleBarTotalHeight;
