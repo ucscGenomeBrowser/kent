@@ -5,7 +5,7 @@
 #include "options.h"
 #include "seg.h"
 
-static char const rcsid[] = "$Id: segInfo.c,v 1.6 2008/03/11 17:03:49 rico Exp $";
+static char const rcsid[] = "$Id: segInfo.c,v 1.7 2008/04/25 17:26:09 rico Exp $";
 
 static struct optionSpec options[] = {
 	{"merge", OPTION_BOOLEAN},
@@ -72,7 +72,7 @@ for (sc = sb->components; sc != NULL; sc = sc->next)
 }
 
 static boolean listsEquivalent(struct slName *list1, struct slName *list2)
-/* Check to see if two name lists re equivalent (same size and names). */
+/* Check to see if two name lists are equivalent (same size and names). */
 {
 struct slName *nl;
 
@@ -102,26 +102,12 @@ static void addData(struct segBlock *sb, struct segComp *refComp, char *key)
 /* Keep a list of unique keys. For each key, maintain a lists of uniq
    species seen with that key. */
 {
-struct segComp *sc;
-struct slName *blockList = NULL;
+struct slName *speciesList;
 struct hashEl *hel;
 struct nameListList *data, *new;
-char *p;
 
-/* Genrate a list of species in this block other than the reference species. */
-for (sc = sb->components; sc != NULL; sc = sc->next)
-	{
-	if (sc == refComp)
-		continue;
-
-	if ((p = strchr(sc->src, '.')) != NULL)
-		*p = '\0';
-
-	slNameStore(&blockList, sc->src);
-
-	if (p != NULL)
-		*p = '.';
-	}
+/* Generate a list of species in this block other than the reference species. */
+speciesList = segSecSpeciesList(sb, refComp, '.');
 
 /* Get the list of species lists associated with this key. */
 if ((hel = hashLookup(exists, key)) == NULL)
@@ -132,12 +118,12 @@ if ((hel = hashLookup(exists, key)) == NULL)
 data = (struct nameListList *) hel->val;
 
 /* Add this list of species if it's not aready there. */
-if (inLists(blockList, data))
-	slNameFreeList(&blockList);
+if (inLists(speciesList, data))
+	slNameFreeList(&speciesList);
 else
 	{
 	AllocVar(new);
-	new->nameList = blockList;
+	new->nameList = speciesList;
 	slAddHead(&data, new);
 	}
 
@@ -157,10 +143,10 @@ while ((sb = segNext(sf)) != NULL)
 		addSpeciesData(sb);
 	else
 		{
-		if (ref == NULL)
-			if ((ref = segFirstCompSpecies(sb, '.')) == NULL)
-				errAbort("ref is not set and the first segment block has no "
-					"components.");
+		/* Set ref if it wasn't set on the command line. */
+		if (ref == NULL && ((ref = segFirstCompSpecies(sb, '.')) == NULL))
+			errAbort("ref is not set and the first segment block has no "
+				"components.");
 
 		refComp = segFindCompSpecies(sb, ref, '.');
 

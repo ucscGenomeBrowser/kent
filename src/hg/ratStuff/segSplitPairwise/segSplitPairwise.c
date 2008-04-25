@@ -6,7 +6,7 @@
 #include "options.h"
 #include "seg.h"
 
-static char const rcsid[] = "$Id: segSplitPairwise.c,v 1.1 2008/03/04 20:41:27 rico Exp $";
+static char const rcsid[] = "$Id: segSplitPairwise.c,v 1.2 2008/04/25 17:26:31 rico Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -35,23 +35,6 @@ static struct optionSpec options[] = {
 static char    *ref   = NULL;
 static boolean number = FALSE;
 
-static void setRef(struct segBlock *sb)
-/* Set ref to the species of the first component. */
-{
-char *p;
-
-if (sb->components == NULL)
-	errAbort("ref is not set and the first segment block has no components.");
-
-/* Temporarilty split src into species and chrom. */
-if ((p = strchr(sb->components->src, '.')) != NULL)
-	*p = '\0';
-
-ref = cloneString(sb->components->src);
-
-if (p != NULL)
-	*p = '.';
-}
 
 void segSplitPairwise(char *inSeg, char *outSeg)
 /* segSplitPairwise - Split a segment file pairwise. */
@@ -68,8 +51,10 @@ segWriteStart(of);
 
 while ((sb = segNext(sf)) != NULL)
 	{
-	if (ref == NULL)
-		setRef(sb);
+	/* Set ref if it wasn't set on the commandline. */
+	if (ref == NULL && ((ref = segFirstCompSpecies(sb, '.')) == NULL))
+		errAbort("ref is not set and the first segment block has no "
+			"components.");
 
 	/* Find and clone the reference species component. */
 	refComp = segFindCompSpecies(sb, ref, '.');
