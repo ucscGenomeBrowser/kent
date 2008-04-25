@@ -15,7 +15,7 @@
 #include "jobResult.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: para.c,v 1.68 2008/04/25 20:11:52 galt Exp $";
+static char const rcsid[] = "$Id: para.c,v 1.69 2008/04/25 21:50:49 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -23,8 +23,8 @@ static struct optionSpec optionSpecs[] = {
     {"maxQueue" , OPTION_INT},
     {"minPush"  , OPTION_INT},
     {"maxPush"  , OPTION_INT},
-    {"warnTime" , OPTION_INT},
-    {"killTime" , OPTION_INT},
+    {"warnTime" , OPTION_INT},   // warn - not completely implemented
+    {"killTime" , OPTION_INT},   // hung - not completely implemented
     {"delayTime", OPTION_INT},
     {"eta"      , OPTION_BOOLEAN},
     {"pri"      , OPTION_STRING},
