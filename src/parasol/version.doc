@@ -78,6 +78,6 @@
      queued jobs that are in the batch, and not just sending all batches' queued jobs.
      So if other batches have huge job queues, you won't suffer.
 
-     Added an option to parasol listjobs to include the batch dir in the output.
-     Kevin Karplus suggested that this could be useful.
+     Added an option -extended to parasol list jobs to include the batch dir in the output.
+
 

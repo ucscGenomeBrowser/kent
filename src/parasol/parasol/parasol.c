@@ -9,7 +9,7 @@
 #include "paraLib.h"
 #include "paraMessage.h"
 
-static char const rcsid[] = "$Id: parasol.c,v 1.32 2008/04/24 00:17:51 galt Exp $";
+static char const rcsid[] = "$Id: parasol.c,v 1.33 2008/04/25 23:55:32 galt Exp $";
 
 struct rudp *hubRudp;	/* Network connection to paraHub. */
 char *userName;	/* Name of user. */
@@ -40,7 +40,7 @@ errAbort(
   "   parasol remove jobs userName [jobPattern]  - Remove jobs submitted by user that\n"
   "         match jobPattern (which may include ? and * escaped for shell).\n"
   "   parasol list machines  - List machines in pool.\n"
-  "   parasol list jobs  - List jobs one per line.\n"
+  "   parasol [-extended] list jobs  - List jobs one per line.\n"
   "   parasol list users  - List users one per line.\n"
   "   parasol list batches  - List batches one per line.\n"
   "   parasol list sick  - List sick nodes one per line.\n"
@@ -355,7 +355,12 @@ else if (sameString(command, "list"))
     if (sameString(subType, "machine") || sameString(subType, "machines"))
         hubCommandAndPrint("listMachines");
     else if (sameString(subType, "job") || sameString(subType, "jobs"))
-        hubCommandAndPrint("listJobs");
+	{
+        if (optionExists("extended"))
+	    hubCommandAndPrint("listJobsExtended");
+        else
+	    hubCommandAndPrint("listJobs");
+	}
     else if (sameString(subType, "user") || sameString(subType, "users"))
         hubCommandAndPrint("listUsers");
     else if (sameString(subType, "batch") || sameString(subType, "batches"))
