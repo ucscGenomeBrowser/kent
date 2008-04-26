@@ -42,7 +42,7 @@
 #include "gbFileOps.h"
 #include "gbProcessed.h"
 
-static char const rcsid[] = "$Id: gbProcess.c,v 1.21 2008/01/19 23:05:34 markd Exp $";
+static char const rcsid[] = "$Id: gbProcess.c,v 1.22 2008/04/26 07:09:22 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -431,6 +431,17 @@ for (gmd = gbMiscDiffVals; gmd != NULL; gmd = gmd->next, iDiff++)
 
 }
 
+static void parseWarnings()
+/* check for various clone warning cases and flag. */
+{
+if (isInvitrogenEvilEntry)
+    kvtAdd(kvt, "wrn", "invitroNorm");
+else if (isAthersysRageEntry)
+    kvtAdd(kvt, "wrn", "athRage");
+else if (isOrestesEntry)
+    kvtAdd(kvt, "wrn", "orestes");
+}
+
 static boolean isOrfeomeClone()
 /* determine if this is an ORFeome clone from the keyword field */
 {
@@ -503,8 +514,6 @@ if (gbGuessSrcDb(acc) == GB_REFSEQ)
     return (startsWith("NM_", acc) || startsWith("NR_", acc)
             || ((startsWith("XM_", acc) && inclXMs)));
     }
-else if (invitrogenEvilEntry)
-    return FALSE;
 else if (sameString(cat, "GSS") || sameString(cat, "HTG") || sameString(cat, "STS") || sameString(cat, "CON"))
     return FALSE;   // division to ignore
 else
@@ -635,6 +644,7 @@ if (((wordCount >= 5) && sameString(words[4], "EST")) ||
 parseDbXrefs();
 parseSourceOrganism();
 parseMiscDiffs();
+parseWarnings();
 
 if (startsWith("synthetic construct", gbOrganismField->val->string))
     synOrg = findSyntheticTarget();

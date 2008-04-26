@@ -10,7 +10,7 @@
 #include "gbFileOps.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: gbParse.c,v 1.19 2007/04/20 04:37:44 markd Exp $";
+static char const rcsid[] = "$Id: gbParse.c,v 1.20 2008/04/26 07:09:22 markd Exp $";
 
 
 /* Some fields we'll want to use directly. */
@@ -36,8 +36,11 @@ struct gbField *gbGeneDbxField;
 struct gbField *gbCdsDbxField;
 struct gbField *gbProteinIdField;
 struct gbField *gbTranslationField;
+struct gbField *gbCloneLibField;
 struct gbField *gbMiscDiffField;
-boolean invitrogenEvilEntry;
+boolean isInvitrogenEvilEntry;
+boolean isAthersysRageEntry;
+boolean isOrestesEntry;
 
 /* RefSeq specific data */
 struct gbField *gbRefSeqRoot = NULL;
@@ -239,7 +242,7 @@ slAddTail(&gbs, c0);
 /* FEATURES source */
 c1 = newField("source", NULL, GBF_NONE, 5, 128);
 slAddTail(&c0->children, c1);
-c2 = newField("/clone_lib", "lib", GBF_TRACK_VALS|GBF_MULTI_LINE, 21, 128);
+gbCloneLibField = c2 = newField("/clone_lib", "lib", GBF_TRACK_VALS|GBF_MULTI_LINE, 21, 128);
 slAddTail(&c1->children, c2);
 
 gbCloneField = c2 = newField("/clone", "clo", GBF_NONE, 21, 128);
@@ -401,7 +404,7 @@ slAddHead(&gbMiscDiffVals, gmd);
 gbfClearVals(gbMiscDiffField);
 }
 
-static void checkForInvitrogenEvil(char *line)
+static boolean checkForInvitrogenEvil(char *line)
 /* check if clone is from the invitrogen `fulllength' libraries, some of which
  * have apparently been aligned to pseudogenes and then modified to match the
  * genome.  These have wasted a lot of time, so we toss all of them.  This is determined
@@ -409,10 +412,31 @@ static void checkForInvitrogenEvil(char *line)
  * COMMENT or a REMARK, remarks are not parsed, we just check each line.
  */
 {
-if (containsStringNoCase(line, "http://fulllength.invitrogen.com/") != NULL)
-    invitrogenEvilEntry = TRUE;
+return (containsStringNoCase(line, "http://fulllength.invitrogen.com/") != NULL);
 }
 
+static boolean checkForOrestes(char *cloneLib)
+/* check for ORESTES library */
+{
+char *orestes = stringIn("ORESTES", cloneLib);
+if (orestes == NULL)
+    return FALSE; // fast path
+else
+    {
+    // make sure ORESTES is a word,  BgORESTES is something different
+    // start and end of string, or non-alphanum are word seps
+    char *end = orestes+7;
+    return ((orestes == cloneLib) || !isalnum(*(orestes-1)))
+        && ((*end == '\0') || !isalnum(*end));
+    }
+}
+
+static boolean checkForAthersysRage(char *cloneLib)
+/* check for Athersys RAGE library */
+{
+//  /clone_lib="Athersys RAGE Library"
+return sameString(cloneLib, "Athersys RAGE Library");
+}
 
 static void readOneField(char *line, struct lineFile *lf, struct gbField *gbf, int subIndent)
 /* Read in a single field. */
@@ -503,7 +527,8 @@ for (;;)
         lineFileReuse(lf);
         break;
         }
-    checkForInvitrogenEvil(line);
+    if (checkForInvitrogenEvil(line))
+        isInvitrogenEvilEntry = TRUE;
     if ((gbf->flags & GBF_CONCAT_VAL) == 0)
         dyStringAppendC(gbf->val, ' ');
     }
@@ -548,7 +573,8 @@ struct gbField *gbf;
 
 while (lineFileNext(lf, &line, &lineSize))
     {
-    checkForInvitrogenEvil(line);
+    if (checkForInvitrogenEvil(line))
+        isInvitrogenEvilEntry = TRUE;
     for (indent = 0; ; ++indent)
         {
         if (line[indent] != ' ')
@@ -873,10 +899,17 @@ gbfClearVals(gbStruct);
 gbfClearVals(gbRefSeqRoot);
 gbMiscDiffFreeList(&gbMiscDiffVals);
 gReachedEOR = FALSE;
-invitrogenEvilEntry = FALSE;
+isInvitrogenEvilEntry = FALSE;
+isAthersysRageEntry = FALSE;
+isOrestesEntry = FALSE;
 gotRecord = recurseReadFields(lf, gbStruct, -1);
-if (gotRecord && (gbGuessSrcDb(getCurAcc()) == GB_REFSEQ))
-    refSeqParse();
+if (gotRecord)
+    {
+    isOrestesEntry = checkForOrestes(gbCloneLibField->val->string);
+    isAthersysRageEntry = checkForAthersysRage(gbCloneLibField->val->string);
+    if (gbGuessSrcDb(getCurAcc()) == GB_REFSEQ)
+        refSeqParse();
+    }
 slReverse(&gbMiscDiffVals);
 return gotRecord;
 }

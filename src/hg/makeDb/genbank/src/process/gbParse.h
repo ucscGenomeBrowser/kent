@@ -64,6 +64,7 @@ extern struct gbField *gbGeneDbxField;
 extern struct gbField *gbCdsDbxField;
 extern struct gbField *gbProteinIdField;
 extern struct gbField *gbTranslationField;
+extern struct gbField *gbCloneLibField;
 
 /* RefSeq specific data */
 extern struct gbField *gbRefSeqStatusField;
@@ -86,7 +87,11 @@ struct gbMiscDiff
 extern struct gbMiscDiff *gbMiscDiffVals;
 
 /* appears to be an invirtorgen evil clone (modified to match genome) */
-boolean invitrogenEvilEntry;
+extern boolean isInvitrogenEvilEntry;
+/* Athersys RAGE library */
+extern boolean isAthersysRageEntry;
+/* ORESTES PCR library */
+extern boolean isOrestesEntry;
 
 char *skipLeadingNonSpaces(char *s);
 /* Return first non-white space or NULL. */

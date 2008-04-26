@@ -11,9 +11,10 @@
 #include "gbVerb.h"
 #include "gbFileOps.h"
 #include "gbMiscDiff.h"
+#include "gbWarn.h"
 #include "uniqueStrTbl.h"
 
-static char const rcsid[] = "$Id: gbMDParse.c,v 1.11 2007/03/08 22:47:39 markd Exp $";
+static char const rcsid[] = "$Id: gbMDParse.c,v 1.12 2008/04/26 07:09:22 markd Exp $";
 
 /* Info about the current file being parsed and related state. */
 static struct dbLoadOptions* gOptions = NULL; /* options from cmdline and conf */
@@ -48,6 +49,7 @@ char raMol[16];
 struct gbMiscDiff *raMiscDiffs = NULL;
 static struct hash *raMiscDiffTbl = NULL; /* hash of raMiscDiff objects, keyed
                                            * by misc.n */
+char *raWarn = NULL;
 
 struct raField
 /* Entry for a ra field.  New values are buffered until we decide that
@@ -317,6 +319,14 @@ for (gmd = raMiscDiffs; gmd != NULL; gmd = gmd->next)
     safef(gmd->acc, sizeof(gmd->acc), "%s", raAcc);
 }
 
+void parseWarn(char *tag, char *val)
+/* parse the wrn tag for an entry */
+{
+if (raWarn != NULL)
+    errAbort("multiple wrn");
+raWarn = cloneString(val);
+}
+
 static void resetEntry()
 /* reset the stat of the entry stored in the globals */
 {
@@ -347,6 +357,7 @@ if (raLocusTag == NULL)
 dyStringClear(raLocusTag);
 hashFree(&raMiscDiffTbl);
 gbMiscDiffFreeList(&raMiscDiffs);
+freez(&raWarn);
 raGi = 0;
 raMol[0] = '\0';
 }
@@ -415,6 +426,8 @@ else if (sameString(tag, "ngi"))
     raGi = gbParseUnsigned(gRaLf, val);
 else if (startsWith("mdiff.", tag))
     parseMdiffRow(tag, val);
+else if (sameString("wrn", tag))
+    parseWarn(tag, val);
 else
     {
     /* save under hashed name */

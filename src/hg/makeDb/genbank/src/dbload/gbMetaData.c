@@ -35,7 +35,7 @@
 #include "gbMiscDiff.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: gbMetaData.c,v 1.46 2008/03/29 04:46:52 markd Exp $";
+static char const rcsid[] = "$Id: gbMetaData.c,v 1.47 2008/04/26 07:09:22 markd Exp $";
 
 /* mol enum shared by gbCdnaInfo and refSeqStatus */
 #define molEnumDef \
@@ -166,6 +166,15 @@ static char* gbMiscDiffCreate =
 ");\n";
 
 
+/* SQL to create gbWarn table */
+static char* gbWarnCreate = 
+"CREATE TABLE gbWarn ("
+"    acc char(12) not null,"
+"    reason enum(\"invitroNorm\", \"athRage\", \"orestes\") not null,"
+"    PRIMARY KEY(acc)"
+");";
+
+
 /* global configuration */
 static struct dbLoadOptions* gOptions; /* options from cmdline and conf */
 static char gTmpDir[PATH_LEN];      /* tmp dir for load file */
@@ -183,6 +192,7 @@ static struct sqlUpdater* refSeqStatusUpd = NULL;
 static struct sqlUpdater* refSeqSummaryUpd = NULL;
 static struct sqlUpdater* refLinkUpd = NULL;
 static struct sqlUpdater* gbMiscDiffUpd = NULL;
+static struct sqlUpdater* gbWarnUpd = NULL;
 
 /* other state objects */
 static struct extFileTbl* extFiles = NULL;
@@ -196,7 +206,7 @@ static boolean haveRsMol = FALSE; /* does the refSeqStatus table have the mol
 static boolean haveMgc = FALSE; /* does this organism have MGC tables */
 static boolean haveOrfeome = FALSE; /* does this organism have ORFeome tables */
 
-static void gbWarn(char *format, ...)
+static void prWarn(char *format, ...)
 /* issue a warning */
 {
 va_list args;
@@ -250,6 +260,8 @@ setGeneTblFlags(conn, options);
 
 if (!sqlTableExists(conn, "gbMiscDiff"))
     sqlUpdate(conn, gbMiscDiffCreate);
+if (!sqlTableExists(conn, "gbWarn"))
+    sqlUpdate(conn, gbWarnCreate);
 
 if (gbCdnaInfoUpd == NULL)
     gbCdnaInfoUpd = sqlUpdaterNew("gbCdnaInfo", gTmpDir, (gbVerbose >= 4), &allUpdaters);
@@ -478,6 +490,17 @@ if (status->stateChg & (GB_NEW|GB_META_CHG|GB_REBUILD_DERIVED))
     }
 }
 
+static void gbWarnUpdate(struct gbStatus* status, struct sqlConnection *conn)
+/* update gbWarn table */
+{
+if (status->stateChg & (GB_NEW|GB_META_CHG|GB_REBUILD_DERIVED))
+    {
+    if (gbWarnUpd == NULL)
+        gbWarnUpd = sqlUpdaterNew("gbWarn", gTmpDir, (gbVerbose >= 4), &allUpdaters);
+    sqlUpdaterAddRow(gbWarnUpd, "%s\t%s", raAcc, raWarn);
+    }
+}
+
 static void refSeqStatusUpdate(struct gbStatus* status)
 /* Update the refSeqStatus table for the current entry */
 {
@@ -685,7 +708,8 @@ if (status->stateChg & (GB_NEW|GB_META_CHG))
     }
 if (raMiscDiffs != NULL)
     gbMiscDiffUpdate(status, conn);
-
+if (raWarn != NULL)
+    gbWarnUpdate(status, conn);
 if ((gSrcDb == GB_REFSEQ) && (status->stateChg & (GB_NEW|GB_META_CHG)))
     {
     refSeqStatusUpdate(status);
@@ -702,7 +726,7 @@ if (!genbankCdsParse(raCds, &status->cds))
     {
     /* not valid CDS, only warn if RefSeq, where we expect to be better */
     if ((gSrcDb == GB_REFSEQ) && gbIsProteinCodingRefSeq(status->acc))
-        gbWarn("%s: malformed RefSeq CDS: %s", status->acc, raCds);
+        prWarn("%s: malformed RefSeq CDS: %s", status->acc, raCds);
     }
 
 /* geneName for refFlat, if not available, try locus_tag  */
@@ -859,6 +883,7 @@ refSeqStatusUpd = NULL;
 refSeqSummaryUpd = NULL;
 refLinkUpd = NULL;
 gbMiscDiffUpd = NULL;
+gbWarnUpd = NULL;
 /* cache unique string tables in goFaster mode */
 if ((gOptions->flags & DBLOAD_GO_FASTER) == 0)
     gbMDParseFree();
@@ -880,6 +905,7 @@ gOptions = options;
 setGeneTblFlags(conn, options);
 sqlDeleterDel(deleter, conn, IMAGE_CLONE_TBL, "acc");
 sqlDeleterDel(deleter, conn, "gbMiscDiff", "acc");
+sqlDeleterDel(deleter, conn, "gbWarn", "acc");
 }
 
 static void deleteFromGeneTbls(struct sqlConnection *conn, struct gbSelect* select, 
@@ -922,6 +948,7 @@ if (srcDb == GB_REFSEQ)
     sqlDeleterDel(deleter, conn, "refLink", "mrnaAcc");
     }
 sqlDeleterDel(deleter, conn, "gbMiscDiff", "acc");
+sqlDeleterDel(deleter, conn, "gbWarn", "acc");
 sqlDeleterDel(deleter, conn, IMAGE_CLONE_TBL, "acc");
 sqlDeleterDel(deleter, conn, "gbCdnaInfo", "acc");
 sqlDeleterDel(deleter, conn, "gbSeq", "acc");
@@ -1051,7 +1078,7 @@ struct slName* gbMetaDataListTables(struct sqlConnection *conn)
 {
 static char* TABLE_NAMES[] = {
     "gbSeq", "gbExtFile", "gbCdnaInfo", "refSeqStatus", "refSeqSummary", "refLink",
-    "imageClone", "gbMiscDiff", NULL
+    "imageClone", "gbMiscDiff", "gbWarn", NULL
 };
 struct slName* tables = NULL;
 int i;

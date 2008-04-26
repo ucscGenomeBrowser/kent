@@ -34,6 +34,7 @@ extern struct dyString* raLocusTag;
 extern unsigned raGi;
 extern char raMol[];
 extern struct gbMiscDiff *raMiscDiffs;
+extern char *raWarn;
 
 char* gbMDParseEntry();
 /* Parse the next record from a ra file into current metadata state.

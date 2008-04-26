@@ -55,6 +55,10 @@ rsc - RefSeq completeness from comment.
         part    = not full length.
         unk     = unknown
 rsd - space separated list of accessions that a RefSeq was derived from.
+wrn - warning associated accession
+    - invitroNorm - from invitrogen clone library normalized to match the genome
+    - athRage - Athersys RAGE (induced expression) library
+    - orestes - ORESTES PCR clone
 translExcept - space-seperated list of /transl_except= values.
     - selenocysteine example: pos:275..277,aa:Sec 
     - non-AUG starts example: pos:307..309,aa:Met
