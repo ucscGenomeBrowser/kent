@@ -100,9 +100,25 @@ visibility on
 type string
 filterDropDown on
 
+name dnaSeqs
+shortLabel DNA Sequences
+longLabel DNA Sequence IDs 
+priority 14
+visibility off
+type string
+query select dnaSeqIds from gsidSubjSeq where subjId='%s';
+
+name aaSeqs
+shortLabel Protein Sequences
+longLabel Protein Sequence IDs 
+priority 14.5
+visibility off
+type string
+query select aaSeqIds from gsidSubjSeq where subjId='%s';
+
 name comment
 shortLabel comment
 longLabel Special comment
-priority 13
+priority 16
 visibility off
 type string
