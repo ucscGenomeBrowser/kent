@@ -20,7 +20,7 @@
 #include "gsidTable.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidTable.c,v 1.36 2008/03/05 05:39:11 fanhsu Exp $";
+static char const rcsid[] = "$Id: gsidTable.c,v 1.37 2008/04/27 01:52:55 fanhsu Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "submit_filter", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -594,7 +594,7 @@ void cellSimplePrint(struct column *col, struct subjInfo *si,
 /* This just prints one field from table. */
 {
 char *s = col->cellVal(col, si, conn);
-boolean needsLink = sameString(col->name,"subjId");
+boolean isSubjID = sameString(col->name,"subjId");
 hPrintf("<TD>");
 if (s == NULL)
     {
@@ -602,23 +602,25 @@ if (s == NULL)
     }
 else
     {
-    if (needsLink)
+    if (isSubjID)
 	hPrintf("<A HREF=\"gsidSubj?%s&hgs_subj=%s&submit=Go%21\">",cartSidUrlString(cart),s);
     if (sameString(s,""))
 	{
 	freeMem(s);
 	s = cloneString("&nbsp;");
 	}
-if (!sameString(col->name,"dnaSeqs"))
-    hPrintNonBreak(s);
-else
-    hPrintf("%s", s);
 
-    if (needsLink)
+    if (! (sameString(col->name,"dnaSeqs") || sameString(col->name,"aaSeqs")) )
+    	hPrintNonBreak(s);
+    else
+        /* special processing for DNA and protein sequences */
+    	hPrintf("%s", s);
+
+    if (isSubjID)
 	hPrintf("</A>");
     freeMem(s);
     }
-hPrintf("</TD>");
+hPrintf("</TD>\n");
 }
 
 
@@ -1412,7 +1414,6 @@ for (ord = ordList; ord != NULL; ord = ord->next)
     }
 return ordDefault;
 }
-
 
 struct subjInfo *getOrderedList(struct column *ord,
         struct column *colList, struct sqlConnection *conn,
