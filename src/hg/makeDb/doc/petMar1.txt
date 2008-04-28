@@ -4,7 +4,7 @@
 # This file describes browser build for the Sea Lamprey
 # genome, Petromyzon marinus, March 2007, v.3.0 from WUSTL
 #
-#       "$Id: petMar1.txt,v 1.11 2008/04/28 21:12:33 hiram Exp $"
+#       "$Id: petMar1.txt,v 1.12 2008/04/28 21:40:21 hiram Exp $"
 #
 
 ##########################################################################
@@ -1201,25 +1201,18 @@ chainOne $(path1)
 ##		(DONE - 2008-01-08 - Hiram)
     # Gene frames
     ## given previous survey done for 8-way alignment on Orangutan,
-    ## try using the following tables for this gene annotation
-    #	use knownGene for hg18, mm9
-XXX working on this 2008-04-23 13:50
-hg18
-mm9
-    #	use ensGene for monDom4, ornAna1, panTro2, rheMac2
-    #	new try with xenoMrna for ponAbe2, canFam2 and petMar1
-braFlo1
-galGal3
-oryLat1
-petMar1
-
+    ## try using the following tables for this gene annotation:
+    #	hg18 is in a bit of transition at the moment, so use ensGene
+    #	mm9 can use knownGene
+    #	xenoMrna for braFlo1, petMar1
+    #	ensGene v49 for galGal3, oryLat1
 
     ssh hgwdev
     mkdir /cluster/data/petMar1/bed/multiz6way/frames
     cd /cluster/data/petMar1/bed/multiz6way/frames
     mkdir genes
     # knownGene
-    for DB in hg18 mm9
+    for DB in mm9
 do
     hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from knownGene" ${DB} \
       | genePredSingleCover stdin stdout | gzip -2c \
@@ -1228,7 +1221,7 @@ do
     echo "${DB} done"
 done
     # ensGene
-    for DB in monDom4 ornAna1 panTro2 rheMac2
+    for DB in hg18 galGal3 oryLat1
 do
     hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from ensGene" ${DB} \
       | genePredSingleCover stdin stdout | gzip -2c \
@@ -1237,9 +1230,8 @@ do
     echo "${DB} done"
 done
 
-    #	use xenoMrna for ponAbe2, canFam2, petMar1
-    #	loxAfr1 oryCun1 ponAbe2
-    for DB in ponAbe2 canFam2 petMar1
+    #	use xenoMrna for braFlo1, petMar1
+    for DB in braFlo1 petMar1
 do
 tmpExt=`mktemp temp.XXXXXX`
 tmpMrnaCds=${DB}.mrna-cds.${tmpExt}
@@ -1261,38 +1253,36 @@ echo "${DB} done"
 done
 
     ls -og genes
-# -rw-rw-r--  1 2697811 Jan  8 15:43 petMar1.gp.gz
-# -rw-rw-r--  1 2551552 Jan  8 15:41 canFam2.gp.gz
-# -rw-rw-r--  1 2008806 Jan  8 15:33 hg18.gp.gz
-# -rw-rw-r--  1 1965274 Jan  8 15:33 mm9.gp.gz
-# -rw-rw-r--  1 1751726 Jan  8 15:33 monDom4.gp.gz
-# -rw-rw-r--  1 1232719 Jan  8 15:33 ornAna1.gp.gz
-# -rw-rw-r--  1 1980696 Jan  8 15:33 panTro2.gp.gz
-# -rw-rw-r--  1 2703247 Jan  8 15:39 ponAbe2.gp.gz
-# -rw-rw-r--  1 1935916 Jan  8 15:33 rheMac2.gp.gz
+# -rw-rw-r--  1 1040642 Apr 28 14:30 braFlo1.gp.gz
+# -rw-rw-r--  1 1557911 Apr 28 14:29 galGal3.gp.gz
+# -rw-rw-r--  1 2151412 Apr 28 14:29 hg18.gp.gz
+# -rw-rw-r--  1 1965274 Apr 28 14:28 mm9.gp.gz
+# -rw-rw-r--  1 1713692 Apr 28 14:29 oryLat1.gp.gz
+# -rw-rw-r--  1  596014 Apr 28 14:31 petMar1.gp.gz
 
-    ssh kkstore06
+    ssh kkstore04
     cd /cluster/data/petMar1/bed/multiz6way/frames
+    #	hg18 is in a bit of transition at the moment, so use ensGene
+    #	mm9 can use knownGene
+    #	xenoMrna for braFlo1, petMar1
+    #	ensGene v49 for galGal3, oryLat1
     #	anything to annotate is in a pair, e.g.: petMar1 genes/petMar1.gp.gz
-    time (cat  ../anno/petMar1.anno.6way.maf | nice -n +19 genePredToMafFrames petMar1 stdin stdout petMar1 genes/petMar1.gp.gz hg18 genes/hg18.gp.gz mm9 genes/mm9.gp.gz rheMac2 genes/rheMac2.gp.gz ponAbe2 genes/ponAbe2.gp.gz panTro2 genes/panTro2.gp.gz canFam2 genes/canFam2.gp.gz monDom4 genes/monDom4.gp.gz ornAna1 genes/ornAna1.gp.gz | gzip > multiz6way.mafFrames.gz) > frames.log 2>&1
+    time (cat  ../anno/petMar1.anno.6way.maf | nice -n +19 genePredToMafFrames petMar1 stdin stdout petMar1 genes/petMar1.gp.gz hg18 genes/hg18.gp.gz mm9 genes/mm9.gp.gz galGal3 genes/galGal3.gp.gz oryLat1 genes/oryLat1.gp.gz braFlo1 genes/braFlo1.gp.gz | gzip > multiz6way.mafFrames.gz) > frames.log 2>&1
     # see what it looks like in terms of number of annotations per DB:
     zcat multiz6way.mafFrames.gz | cut -f4 | sort | uniq -c | sort -n
-# 206370 hg18
-# 208834 panTro2
-# 211731 rheMac2
-# 224988 petMar1
-# 225518 canFam2
-# 225632 mm9
-# 261163 ponAbe2
-# 417544 ornAna1
-# 462890 monDom4
+    #	 37711 braFlo1
+    #	 55189 petMar1
+    #	 75566 oryLat1
+    #	 95715 galGal3
+    #	107885 mm9
+    #	110835 hg18
 
     #	load the resulting file
     ssh hgwdev
     cd /cluster/data/petMar1/bed/multiz6way/frames
     time nice -n +19 hgLoadMafFrames petMar1 multiz6wayFrames \
 	multiz6way.mafFrames.gz
-    #	real    0m38.282s
+    #	real    0m7.652s
 
     #	enable the trackDb entries:
 # frames multiz6wayFrames
