@@ -1,7 +1,7 @@
 # for emacs: -*- mode: sh; -*-
 
 # Equus caballus - ??
-#	"$Id: equCab2.txt,v 1.7 2008/04/22 20:06:55 larrym Exp $"
+#	"$Id: equCab2.txt,v 1.8 2008/04/28 21:22:05 larrym Exp $"
 #########################################################################
 # DOWNLOAD SEQUENCE (...
 
@@ -224,7 +224,7 @@ i.e. if you take dupes and chrM into account, our data agrees with their raw dat
     #   1004742864 bases of 2454424288 (40.936%) in intersection
 
     # RepeatMasker and lib version from do.log:
-    #   RepeatMasker version development-$Id: equCab2.txt,v 1.7 2008/04/22 20:06:55 larrym Exp $
+    #   RepeatMasker version development-$Id: equCab2.txt,v 1.8 2008/04/28 21:22:05 larrym Exp $
     #   Jan 11 2008 (open-3-1-9) version of RepeatMasker
     #	CC   RELEASE 20071204
 
@@ -706,6 +706,110 @@ chainOne $(path1)
 #end tblastn
 ##################################################
 
-BLASTZ TODO:
+###########################################################################
+# Blastz Platypus ornAna1 (DONE - 2008-04-28 - larrym)
 
-platapus (ornAna1)
+    cd /cluster/data/equCab2/jkStuff
+    cp -p equCab2.chrUn.lift /san/sanvol1/scratch/equCab2
+    ssh kkstore04
+    screen #	use screen to control this multi-day job
+    mkdir /cluster/data/equCab2/bed/blastz.ornAna1.2008-04-24
+    cd /cluster/data/equCab2/bed/blastz.ornAna1.2008-04-24
+    cat << '_EOF_' > DEF
+# TARGET: Horse
+SEQ1_DIR=/scratch/data/equCab2/equCab2.2bit
+SEQ1_LEN=/scratch/data/equCab2/chrom.sizes
+SEQ1_CTGDIR=/san/sanvol1/scratch/equCab2/equCab2.UnScaffolds.2bit
+SEQ1_CTGLEN=/san/sanvol1/scratch/equCab2/equCab2.UnScaffolds.sizes
+SEQ1_LIFT=/san/sanvol1/scratch/equCab2/equCab2.chrUn.lift
+SEQ1_CHUNK=20000000
+SEQ1_LIMIT=200
+SEQ1_LAP=10000
+
+# QUERY: Platypus ornAna1
+SEQ2_DIR=/scratch/data/ornAna1/ornAna1.2bit
+SEQ2_LEN=/scratch/data/ornAna1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/cluster/data/equCab2/bed/blastz.ornAna1.2008-04-28
+TMPDIR=/scratch/tmp
+
+_EOF_
+
+    time doBlastzChainNet.pl `pwd`/DEF \
+	-verbose=2 -bigClusterHub=pk -stop=partition \
+      -chainMinScore=5000 -chainLinearGap=loose \
+      -blastzOutRoot /cluster/bluearc/ornAna1/blastz.equCab2 >& do.log &
+    0.095u 0.050s 0:12.21 1.1%      0+0k 0+0io 16pf+0w
+
+Ran twice to determine SEQ2_LIMIT=400 (to get number of jobs down to 107525)
+
+    time doBlastzChainNet.pl `pwd`/DEF \
+	-verbose=2 -bigClusterHub=pk -continue=blastz \
+      -chainMinScore=5000 -chainLinearGap=loose \
+      -blastzOutRoot /cluster/bluearc/ornAna1/blastz.equCab2 >>& do.log &
+
+failed on part262.lst b/c of a corrupted line in batch file; I fixed the line and
+reran successfully.
+
+    time doBlastzChainNet.pl `pwd`/DEF \
+	-verbose=2 -bigClusterHub=pk -continue=cat \
+      -chainMinScore=5000 -chainLinearGap=loose \
+      -blastzOutRoot /cluster/bluearc/ornAna1/blastz.equCab2 >>& do.log &
+    0.209u 0.115s 42:36.73 0.0%     0+0k 0+0io 0pf+0w
+
+
+#########################################################################
+## 6-Way Multiz (WORKING - 2008-04-28 - larrym)
+
+    ssh hgwdev
+    mkdir /cluster/data/equCab2/bed/multiz6way
+    cd /cluster/data/equCab2/bed/multiz6way
+
+    #	select the 6 organisms from the 30-way recently done on mouse mm9
+    /cluster/bin/phast/tree_doctor \
+	--prune-all-but Human_hg18,Mouse_mm9,Dog_canFam2,Platypus_ornAna1,Chicken_galGal3,Horse_equCab1 \
+	/cluster/data/mm9/bed/multiz30way/mm9OnTop.fullNames.nh \
+	> 6-way.fullNames.nh
+
+((((Mouse_mm9:0.325818,Human_hg18:0.126901):0.019763,(Dog_canFam2:0.149350,Horse_equCab1:0.099323):0.038613):0.332197,Platypus_ornAna1:0.488110):0.118797,Chicken_galGal3:0.488824);
+
+rearranged to get horse on top:
+
+    cat << '_EOF_' > equCab2.6-way.nh
+((((Horse_equCab2:0.099323,Dog_canFam2:0.149350):0.038613,
+    (Mouse_mm9:0.325818,Human_hg18:0.126901):0.019763):0.332197,
+    Platypus_ornAna1:0.488110):0.118797,Chicken_galGal3:0.488824);
+'_EOF_'
+
+    sed -e 's/[()]//g; s/ /\n/g; s/,/\n/g' equCab2.6-way.nh 
+        | sed -e "s/[ \t]*//g; /^[ \t]$/d; /^$/d" | sort -u \
+        | sed -e "s/.*_//; s/:.*//" | sort > species.list
+
+    #	verify that has 6 db names in it
+    # create a stripped down nh file for use in autoMZ run
+    echo \
+`sed 's/[a-zA-Z0-9]*_//g; s/:0.[0-9]*//g; s/[,;]/ /g' equCab2.6-way.nh \
+	| sed -e "s/  / /g"` > tree.6.nh
+# results:
+# ((((equCab2 canFam2) (mm9 hg18)) ornAna1) galGal3)
+
+    # verify all blastz's exists (XXXX here I am)
+    cat << '_EOF_' > listMafs.csh
+#!/bin/csh -fe
+cd /cluster/data/equCab2/bed/multiz9way
+foreach db (`grep -v equCab2 species.list`)
+    set bdir = /cluster/data/equCab2/bed/blastz.$db
+    if (-e $bdir/mafRBestNet/equCab2.$db.rbest.maf.gz) then
+	echo "$db mafRBestNet"
+    else if (-e $bdir/mafSynNet/equCab2.$db.net.maf.gz) then
+	echo "$db mafSynNet"
+    else if (-e $bdir/mafNet/equCab2.$db.net.maf.gz) then
+	echo "$db mafNet"
+    else
+	echo "$db mafs not found"
+    endif
+end
+'_EOF_'
