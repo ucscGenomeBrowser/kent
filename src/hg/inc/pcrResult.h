@@ -6,6 +6,11 @@
 #include "targetDb.h"
 #include "cart.h"
 
+/* Definitions for track name and labels: */
+#define PCR_RESULT_TRACK_NAME "hgPcrResult"
+#define PCR_RESULT_TRACK_LABEL "PCR Results"
+#define PCR_RESULT_TRACK_LONGLABEL "Your Sequence from PCR Search"
+
 char *pcrResultCartVar(char *db);
 /* Returns the cart variable name for PCR result track info for db. 
  * Don't free the statically allocated result. */

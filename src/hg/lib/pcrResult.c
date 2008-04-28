@@ -7,14 +7,14 @@
 #include "targetDb.h"
 #include "pcrResult.h"
 
-static char const rcsid[] = "$Id: pcrResult.c,v 1.5 2008/04/23 18:31:33 angie Exp $";
+static char const rcsid[] = "$Id: pcrResult.c,v 1.6 2008/04/28 23:58:14 angie Exp $";
 
 char *pcrResultCartVar(char *db)
 /* Returns the cart variable name for PCR result track info for db. 
  * Don't free the result! */
 {
 static char buf[1024];
-safef(buf, sizeof(buf), "hgPcrResult_%s", db);
+safef(buf, sizeof(buf), "%s_%s", PCR_RESULT_TRACK_NAME, db);
 return buf;
 }
 
@@ -54,7 +54,7 @@ if (isNotEmpty(targetName))
 if (!fileExists(pslFile) || !fileExists(primerFile) ||
     (wordCount > 2 && target == NULL))
     {
-    cartRemove(cart, "hgPcrResult");
+    cartRemove(cart, cartVar);
     setPtIfNotNull(retPslFile, NULL);
     setPtIfNotNull(retPrimerFile, NULL);
     setPtIfNotNull(retTarget, NULL);
@@ -149,28 +149,27 @@ struct trackDb *pcrResultFakeTdb()
 struct trackDb *tdb;
 char helpName[PATH_LEN], *helpBuf;
 safef(helpName, sizeof(helpName), "%s%s/%s.html", hDocumentRoot(), HELP_DIR,
-      "hgPcrResult");
+      PCR_RESULT_TRACK_NAME);
 readInGulp(helpName, &helpBuf, NULL);
 AllocVar(tdb);
-tdb->tableName = cloneString("hgPcrResult");
-tdb->shortLabel = cloneString("PCR Results");
-tdb->longLabel = cloneString("Your Sequence from PCR Search");
+tdb->tableName = cloneString(PCR_RESULT_TRACK_NAME);
+tdb->shortLabel = cloneString(PCR_RESULT_TRACK_LABEL);
+tdb->longLabel = cloneString(PCR_RESULT_TRACK_LONGLABEL);
 tdb->grp = cloneString("map");
 tdb->type = cloneString("psl .");
 tdb->priority = 100.01;
 tdb->canPack = TRUE;
 tdb->visibility = tvPack;
-tdb->grp = cloneString("map");
 tdb->html = helpBuf;
 trackDbPolish(tdb);
 if (tdb->settingsHash == NULL)
     tdb->settingsHash = hashNew(0);
-hashAdd(tdb->settingsHash, "baseColorDefault", cloneString("diffBases"));
-hashAdd(tdb->settingsHash, "baseColorUseSequence", cloneString("hgPcrResult"));
-hashAdd(tdb->settingsHash, "showDiffBasesAllScales", cloneString("."));
-hashAdd(tdb->settingsHash, "indelDoubleInsert", cloneString("on"));
-hashAdd(tdb->settingsHash, "indelQueryInsert", cloneString("on"));
-hashAdd(tdb->settingsHash, "indelPolyA", cloneString("on"));
+hashAdd(tdb->settingsHash, BASE_COLOR_DEFAULT, cloneString("diffBases"));
+hashAdd(tdb->settingsHash, BASE_COLOR_USE_SEQUENCE, cloneString("hgPcrResult"));
+hashAdd(tdb->settingsHash, SHOW_DIFF_BASES_ALL_SCALES, cloneString("."));
+hashAdd(tdb->settingsHash, INDEL_DOUBLE_INSERT, cloneString("on"));
+hashAdd(tdb->settingsHash, INDEL_QUERY_INSERT, cloneString("on"));
+hashAdd(tdb->settingsHash, INDEL_POLY_A, cloneString("on"));
 hashAdd(tdb->settingsHash, "nextItemButton", cloneString("off"));
 return tdb;
 }
