@@ -6,7 +6,7 @@
 #include "obscure.h"
 #include "genoFind.h"
 
-static char const rcsid[] = "$Id: blastOut.c,v 1.26 2006/03/10 17:43:36 angie Exp $";
+static char const rcsid[] = "$Id: blastOut.c,v 1.27 2008/04/28 07:30:38 galt Exp $";
 
 struct axtRef
 /* A reference to an axt. */
@@ -600,6 +600,17 @@ for (target = targetList; target != NULL; target = target->next)
 	    {
 	    fprintf(f, " Identities = %d/%d (%d%%)\n",
 		 matches, axt->symCount, round(100.0 * matches / axt->symCount));
+	    /* blast displays dna searches as +- instead of blat's default -+ */
+	    if (!isTranslated)
+		if ((axt->qStrand == '-') && (axt->tStrand == '+'))
+		    {
+		    reverseIntRange(&axt->qStart, &axt->qEnd, querySize);
+		    reverseIntRange(&axt->tStart, &axt->tEnd, target->size);
+		    reverseComplement(axt->qSym, axt->symCount);
+		    reverseComplement(axt->tSym, axt->symCount);
+		    axt->qStrand = '+';
+		    axt->tStrand = '-';
+		    }
 	    fprintf(f, " Strand = %s / %s\n", nameForStrand(axt->qStrand),
 		nameForStrand(axt->tStrand));
 	    }
@@ -726,7 +737,7 @@ struct targetHits *targetList = NULL, *target;
 
 if (withComment)
     {
-    char * rcsDate = "$Date: 2006/03/10 17:43:36 $";
+    char * rcsDate = "$Date: 2008/04/28 07:30:38 $";
     char dateStamp[11];
     strncpy (dateStamp, rcsDate+7, 10);
     dateStamp[10] = 0;
