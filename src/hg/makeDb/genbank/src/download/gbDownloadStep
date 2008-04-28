@@ -23,7 +23,7 @@ my $usage =
     . "\n";
 
 #
-# $Id: gbDownloadStep,v 1.13 2008/04/28 07:41:06 markd Exp $
+# $Id: gbDownloadStep,v 1.14 2008/04/28 08:03:31 markd Exp $
 #
 
 use strict;
@@ -104,8 +104,10 @@ sub downloadOrCheckFull($$$$;$) {
         if (($file =~ $fileRE)
             && (!defined($excludeRE) || !($file =~ $excludeRE))) {
             my $localFile = "$outDir/$file";
-            my $warnOnCheckError = $main::warnOnCheckError
-                || (-e $localFile.".warnOnCheckError");
+            my $warnOnCheckError = $main::warnOnCheckError;
+            if (-e $localFile.".warnOnCheckError") {
+                $warnOnCheckError = 1;
+            }
             if (ftpGetOrCheck($justCheck, $warnOnCheckError, $remFile, $localFile)) {
                 push(@gotFiles, $localFile);
             }
