@@ -9,29 +9,10 @@
 #include "rangeTree.h"
 #include "sqlNum.h"
 #include "minChromSize.h"
+#include "txCommon.h"
 
-static char const rcsid[] = "$Id: txGeneAccession.c,v 1.13 2008/04/25 12:28:29 kent Exp $";
+static char const rcsid[] = "$Id: txGeneAccession.c,v 1.14 2008/04/28 12:25:36 kent Exp $";
 
-void idToAcc(int id, char acc[16])
-/* Convert ID to accession. */
-{
-if (id >= 17576000)
-    errAbort("Out of accessions!");
-acc[8] = 0;
-acc[7] = id%26 + 'a';
-id /= 26;
-acc[6] = id%26 + 'a';
-id /= 26;
-acc[5] = id%26 + 'a';
-id /= 26;
-acc[4] = id%10 + '0';
-id /= 10;
-acc[3] = id%10 + '0';
-id /= 10;
-acc[2] = id%10 + '0';
-acc[1] = 'c';
-acc[0] = 'u';
-}
 
 void usage()
 /* Explain usage and exit. */
@@ -244,7 +225,7 @@ for (newBed = newList; newBed != NULL; newBed = newBed->next)
 	if (oldBed == NULL)
 	    {
 	    char newAcc[16];
-	    idToAcc(++txId, newAcc);
+	    txGeneAccFromId(++txId, newAcc);
 	    strcat(newAcc, ".1");
 	    fprintf(f, "%s\t%s\n", newBed->name, newAcc);
 	    hashAdd(idToAccHash, newBed->name, cloneString(newAcc));

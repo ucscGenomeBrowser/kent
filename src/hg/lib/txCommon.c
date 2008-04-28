@@ -29,3 +29,25 @@ if ((len < 8 && !startsWith("CCDS", s) ) || len > 18)
     }
 return s;
 }
+
+void txGeneAccFromId(int id, char acc[16])
+/* Convert ID to accession in uc123ABC format. */
+{
+if (id >= 17576000)
+    errAbort("Out of accessions!");
+acc[8] = 0;
+acc[7] = id%26 + 'a';
+id /= 26;
+acc[6] = id%26 + 'a';
+id /= 26;
+acc[5] = id%26 + 'a';
+id /= 26;
+acc[4] = id%10 + '0';
+id /= 10;
+acc[3] = id%10 + '0';
+id /= 10;
+acc[2] = id%10 + '0';
+acc[1] = 'c';
+acc[0] = 'u';
+}
+
