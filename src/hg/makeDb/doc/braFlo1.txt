@@ -4,7 +4,7 @@
 # This file describes browser build for the Lancelet
 # genome, Branchiostoma floridae, March 2006, v.1.0 from JGI
 #
-#       "$Id: braFlo1.txt,v 1.12 2008/04/21 15:15:51 braney Exp $"
+#       "$Id: braFlo1.txt,v 1.13 2008/04/28 21:12:11 hiram Exp $"
 #
 
 ##########################################################################
@@ -185,7 +185,7 @@ done
     cd /cluster/data/braFlo1/bed/blastz.hg18.swap
     time nice -n +19 /cluster/bin/scripts/doRecipBest.pl braFlo1 hg18 \
 	> rbest.log 2>&1 &
-    #	real    35m1.307s
+    #	real    34m14.843s
     #	This did not work right.  Something went haywire somewhere:
 # Error: braFlo1 rbest net coverage 14190116 != hg18 14270477
 

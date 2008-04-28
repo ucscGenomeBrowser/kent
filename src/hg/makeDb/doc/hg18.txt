@@ -16037,6 +16037,7 @@ TMPDIR=/scratch/tmp
     cd /cluster/data/hg18/bed/blastz.braFlo1.2007-03-26
     time nice -n +19 /cluster/bin/scripts/doRecipBest.pl hg18 braFlo1 \
 	> rbest.log 2>&1 &
+    #	real    105m14.176s
 
     # and now the swap, also documented in braFlo1.txt
     mkdir /cluster/data/braFlo1/bed/blastz.hg18.swap

@@ -2694,7 +2694,9 @@ TMPDIR=/scratch/tmp
 	-verbose=2 -smallClusterHub=memk \
 	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
 	    -swap -syntenicNet > swap.log 2>&1
-XXX - running 2008-03-12 16:35
+    #	real    388m46.213s
+    cat fb.bosTau4.chainCanFam2Link.txt
+    #	1447088347 bases of 2731830700 (52.971%) in intersection
 
 #############################################################################
 # BLASTZ/CHAIN/NET equCab2 (DONE - 2008-04-18 - larrym)
