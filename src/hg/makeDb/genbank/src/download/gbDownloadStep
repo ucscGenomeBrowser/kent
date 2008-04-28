@@ -23,7 +23,7 @@ my $usage =
     . "\n";
 
 #
-# $Id: gbDownloadStep,v 1.14 2008/04/28 08:03:31 markd Exp $
+# $Id: gbDownloadStep,v 1.15 2008/04/28 15:32:25 markd Exp $
 #
 
 use strict;
@@ -48,6 +48,12 @@ $main::verbose = 0;
 $main::genbankUpd = 0;
 $main::refseqUpd = 0;
 $main::warnOnCheckError = 0;
+
+# should a warning be generated if the specified file doesn't match server?
+sub shouldWarnOnCheckError($) {
+    my ($localFile)  = @_;
+    return $main::warnOnCheckError || (-e $localFile.".warnOnCheckError");
+}
 
 # determine of version of GenBank on the NCBI server from the 
 # GB_Release_Number file.
@@ -104,11 +110,7 @@ sub downloadOrCheckFull($$$$;$) {
         if (($file =~ $fileRE)
             && (!defined($excludeRE) || !($file =~ $excludeRE))) {
             my $localFile = "$outDir/$file";
-            my $warnOnCheckError = $main::warnOnCheckError;
-            if (-e $localFile.".warnOnCheckError") {
-                $warnOnCheckError = 1;
-            }
-            if (ftpGetOrCheck($justCheck, $warnOnCheckError, $remFile, $localFile)) {
+            if (ftpGetOrCheck($justCheck, shouldWarnOnCheckError($localFile), $remFile, $localFile)) {
                 push(@gotFiles, $localFile);
             }
         } else {
@@ -140,7 +142,7 @@ sub downloadOrCheckDaily($$$) {
         my $file = basename($remFile);
         if ($file =~ $fileRE) {
             my $localFile = "$outDir/$file";
-            if (ftpGetOrCheck(0, $main::warnOnCheckError, $remFile, $localFile)) {
+            if (ftpGetOrCheck(0, shouldWarnOnCheckError($localFile), $remFile, $localFile)) {
                 md5Files("$outDir/$file.md5", $localFile);
             }
         } else {
@@ -175,7 +177,8 @@ sub updateGenBank() {
     my $justCheck = -e "$genBankDir/full.md5";
 
     downloadOrCheckFull($justCheck, $ftpDir, $genBankDir, $fullRE, $fullExcludeRE);
-    ftpGetOrCheck($justCheck, $main::warnOnCheckError, "genbank/gbrel.txt", "$genBankDir/gbrel.txt");
+    my $localFile = "$genBankDir/gbrel.txt";
+    ftpGetOrCheck($justCheck,  shouldWarnOnCheckError($localFile), "genbank/gbrel.txt", $localFile);
 
     # Check summing the files takes enough time that the conection may time out, so reopen.
     ftpOpen();
