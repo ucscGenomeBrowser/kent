@@ -18,9 +18,12 @@ my $usage =
     . "  -genbank - only update genbank\n"
     . "  -refseq - only update refseq\n"
     . "  -warnOnCheckError - issue a warning instead of an error if check of existing file\n"
-    . "   against ftp site fails.\n";
+    . "   against ftp site fails.  This can be enabled on individual files by create\n"
+    . "   an empty file with the same path and the extension .warnOnCheckError\n"
+    . "\n";
+
 #
-# $Id: gbDownloadStep,v 1.12 2007/10/29 03:20:27 markd Exp $
+# $Id: gbDownloadStep,v 1.13 2008/04/28 07:41:06 markd Exp $
 #
 
 use strict;
@@ -101,7 +104,9 @@ sub downloadOrCheckFull($$$$;$) {
         if (($file =~ $fileRE)
             && (!defined($excludeRE) || !($file =~ $excludeRE))) {
             my $localFile = "$outDir/$file";
-            if (ftpGetOrCheck($justCheck, $main::warnOnCheckError, $remFile, $localFile)) {
+            my $warnOnCheckError = $main::warnOnCheckError
+                || (-e $localFile.".warnOnCheckError");
+            if (ftpGetOrCheck($justCheck, $warnOnCheckError, $remFile, $localFile)) {
                 push(@gotFiles, $localFile);
             }
         } else {
