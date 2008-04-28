@@ -117,7 +117,7 @@ foreach db ($dbs)
  echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 
  # find out if this is a new Ensembl Genes track (or an update)
- set newTrack=`echo $betaList | egrep -wo $db`
+ set ensTrack=`echo $betaList | egrep -wo $db`
 
  echo "\n\n----------------------"
  echo "compare new (dev) and old (beta) ens* tables"
@@ -136,7 +136,7 @@ foreach db ($dbs)
  tail -2 $db.ensGene.name.devOnly
 
  # only do this test if the ensGene track already exists on beta
- if ( $db == $newTrack ) then
+ if ( $db == $ensTrack ) then
   echo "\n\n----------------------"
   echo "check a few of the deleted items from the ensGene table"
   echo "(make sure they have also been dropped from Ensembl website)"
@@ -165,7 +165,7 @@ foreach db ($dbs)
  # don't run this on scaffold assemblies
  set numChroms=`hgsql -Ne "SELECT COUNT(*) FROM chromInfo" $db`
  if ( $numChroms < 100 ) then
-  if ( $db == $newTrack ) then
+  if ( $db == $ensTrack ) then
    countPerChrom.csh $db ensGene $db hgwbeta
   else
    countPerChrom.csh $db ensGene $db
@@ -184,7 +184,7 @@ foreach db ($dbs)
  echo "featureBits $db -countGaps ensGene gap (on hgwdev):"
  featureBits $db -countGaps ensGene gap
 
- if ( $db == $newTrack ) then
+ if ( $db == $ensTrack ) then
   echo "\nfeatureBits $db ensGene (on hgwbeta):"
   ssh hgwbeta featureBits $db ensGene
   echo "featureBits $db -countGaps ensGene (on hgwbeta):"
