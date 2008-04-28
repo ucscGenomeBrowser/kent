@@ -4,7 +4,7 @@
 # This file describes browser build for the Sea Lamprey
 # genome, Petromyzon marinus, March 2007, v.3.0 from WUSTL
 #
-#       "$Id: petMar1.txt,v 1.10 2008/04/19 18:46:06 braney Exp $"
+#       "$Id: petMar1.txt,v 1.11 2008/04/28 21:12:33 hiram Exp $"
 #
 
 ##########################################################################
@@ -797,14 +797,211 @@ done >> togetherMaf/petMar1.6way.maf
     #	real    0m6.011s
     #	Loaded 232205 mafs in 1 files from /gbdb/petMar1/multiz6way/maf
 
-    # load summary table
+    # load summary table *NOT* - no Contigs are long enough to create
+    #	anything for the summary table.  This command produces an empty
+    #	table.
     time nice -n +19 cat /gbdb/petMar1/multiz6way/maf/*.maf \
 	| hgLoadMafSummary petMar1 -minSize=30000 -mergeGap=1500 \
 	 -maxSize=200000  multiz6waySummary stdin
     #	real    5m58.150s
-XXX - running 2008-04-18 17:08
-    #	Created 121083 summary blocks from 3410157 components
-    #	and 693943 mafs from stdin
+
+    # Gap Annotation
+    # prepare bed files with gap info
+    ssh kkstore04
+    mkdir /cluster/data/petMar1/bed/multiz6way/anno
+    cd /cluster/data/petMar1/bed/multiz6way/anno
+    mkdir maf run
+
+    #	these actually already all exist from previous multiple alignments
+    #	if there are done you will see an ls of them
+    #	or else the twoBitInfo command will be echoed, run it if you want
+    for DB in `cat ../species.list`
+do
+    CDIR="/cluster/data/${DB}"
+    if [ ! -f ${CDIR}/${DB}.N.bed ]; then
+	echo "creating ${DB}.N.bed"
+	echo twoBitInfo -nBed ${CDIR}/${DB}.2bit ${CDIR}/${DB}.N.bed
+    else
+	ls -og ${CDIR}/${DB}.N.bed
+    fi
+done
+
+    cd run
+    rm -f nBeds sizes
+    for DB in `grep -v petMar1 ../../species.list`
+do
+    echo "${DB} "
+    ln -s  /cluster/data/${DB}/${DB}.N.bed ${DB}.bed
+    echo ${DB}.bed  >> nBeds
+    ln -s  /cluster/data/${DB}/chrom.sizes ${DB}.len
+    echo ${DB}.len  >> sizes
+done
+
+    ssh memk
+    #	temporarily copy the petMar1.6way.maf file onto the memk
+    #	nodes /scratch/data/petMar1/maf/ directory
+    for R in 0 1 2 3 4 5 6 7
+do
+    ssh mkr0u${R} mkdir /scratch/data/petMar1/maf
+    ssh mkr0u${R} rsync -a --progress \
+/cluster/data/petMar1/bed/multiz6way/togetherMaf/petMar1.6way.maf \
+	/scratch/data/petMar1/maf/
+done
+    mkdir /cluster/data/petMar1/bed/multiz6way/anno/splitMaf
+    #	need to split up the single maf file into individual
+    #	per-scaffold maf files to run annotation on
+    cd /cluster/data/petMar1/bed/multiz6way/anno/splitMaf
+    #	create bed files to list approximately 1553 scaffolds in
+    #	a single list, approximately 33 lists
+    cat << '_EOF_' > mkBedLists.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my $bedCount = 0;
+my $i = 0;
+
+my $bedFile = sprintf("file_%d.bed", $bedCount);
+
+open (BF,">$bedFile") or die "can not write to $bedFile $!";
+
+open (FH,"</cluster/data/petMar1/chrom.sizes") or
+        die "can not read /cluster/data/petMar1/chrom.sizes $!";
+while (my $line = <FH>) {
+    chomp $line;
+    if ( (($i + 1) % 1553) == 0 )  {
+        printf "%s\n", $line;
+        close (BF);
+        ++$bedCount;
+        $bedFile = sprintf("file_%d.bed", $bedCount);
+        open (BF,">$bedFile") or die "can not write to $bedFile $!";
+    }
+    ++$i;
+    my ($chr, $size) = split('\s+',$line);
+    printf BF "%s\t0\t%d\t%s\n", $chr, $size, $chr;
+}
+close (FH);
+close (BF);
+'_EOF_'
+    # << happy emacs
+    chmod +x mkBedLists.pl
+    ./mkBedLists.pl
+
+    #	now, run a mafsInRegion on each one of those lists
+    cat << '_EOF_' > runOne
+#!/bin/csh -fe
+set runDir = "/cluster/data/petMar1/bed/multiz6way/anno/splitMaf"
+set resultDir = $1
+set bedFile = $resultDir.bed
+mkdir -p $resultDir
+mkdir -p /scratch/tmp/petMar1/$resultDir
+pushd /scratch/tmp/petMar1/$resultDir
+mafsInRegion $runDir/$bedFile -outDir . \
+        /scratch/data/petMar1/maf/petMar1.6way.maf
+popd
+rsync -q -a /scratch/tmp/petMar1/$resultDir/ ./$resultDir/
+rm -fr /scratch/tmp/petMar1/$resultDir
+rmdir --ignore-fail-on-non-empty /scratch/tmp/petMar1
+'_EOF_'
+    # << happy emacs
+    chmod +x runOne
+
+    cat << '_EOF_' > template
+#LOOP
+./runOne $(root1)
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    ls file*.bed > runList
+    gensub2 runList single template jobList
+    para create jobList
+    para try ... check ... push ... etc
+# Completed: 70 of 70 jobs
+# CPU time in finished jobs:        255s       4.24m     0.07h    0.00d  0.000 y
+# IO & Wait Time:                  1904s      31.74m     0.53h    0.02d  0.000 y
+# Average job time:                  31s       0.51m     0.01h    0.00d
+# Longest finished job:              72s       1.20m     0.02h    0.00d
+# Submission to last job:           143s       2.38m     0.04h    0.00d
+
+    cd /cluster/data/petMar1/bed/multiz6way/anno/run
+
+    cat << '_EOF_' > doAnno.csh
+#!/bin/csh -ef
+set outDir = ../maf/$2
+set result = $3
+set input = $1
+mkdir -p $outDir
+cat $input | \
+nice mafAddIRows -nBeds=nBeds stdin /scratch/data/petMar1/petMar1.2bit $result
+'_EOF_'
+    # << happy emacs
+    chmod +x doAnno.csh
+
+    cat << '_EOF_' > template
+#LOOP
+./doAnno.csh $(path1) $(lastDir1) {check out line+ ../maf/$(lastDir1)/$(root1).maf}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    find ../splitMaf -type f -name "*.maf" > maf.list
+    gensub2 maf.list single template jobList
+    para create jobList
+    para try ... check ... push ... etc.
+# Completed: 31488 of 31488 jobs
+# CPU time in finished jobs:      10711s     178.52m     2.98h    0.12d  0.000 y
+# IO & Wait Time:                 79430s    1323.83m    22.06h    0.92d  0.003 y
+# Average job time:                   3s       0.05m     0.00h    0.00d
+# Longest finished job:              12s       0.20m     0.00h    0.00d
+# Submission to last job:          3237s      53.95m     0.90h    0.04d
+
+    ssh kkstore04
+    #	put them all back together into a single file
+    cd /cluster/data/petMar1/bed/multiz6way/anno
+    grep "^##maf version" maf/file_0/Contig0.maf \
+	| sort -u > petMar1.anno.6way.maf
+    find ./maf -type f -depth -name "*.maf" | while read F
+do
+    grep -v -h "^#" "${F}"
+done >> petMar1.anno.6way.maf
+    echo "##eof maf" >> petMar1.anno.6way.maf
+XXX - running 2008-04-23 09:58
+    ls -og *.maf
+# -rw-rw-r--   1 285783792 Apr 23 09:58 petMar1.anno.6way.maf
+
+    ssh hgwdev
+    cd /cluster/data/petMar1/bed/multiz6way/anno
+    mkdir -p /gbdb/petMar1/multiz6way/anno
+    ln -s `pwd`/petMar1.anno.6way.maf \
+                /gbdb/petMar1/multiz6way/anno/multiz6way.maf
+    #	by loading this into the table multiz6way, it will replace the
+    #	previously loaded table with the unannotated mafs
+    #	huge temp files are made, do them on local disk
+    cd /scratch/tmp
+    time nice -n +19 hgLoadMaf -pathPrefix=/gbdb/petMar1/multiz6way/anno \
+                petMar1 multiz6way
+    #	Loaded 296783 mafs in 1 files from /gbdb/petMar1/multiz6way/anno
+    #	real    0m6.690s
+
+    #	normally filter this for chrom size > 1,000,000 and only load
+    #	those chroms.  But this is a scaffold assembly, load everything.
+    #	*NOT* Does not work on petMar1, all contigs are too small,
+    #	this makes an empty table.
+    hgLoadMafSummary petMar1 -minSize=30000 -mergeGap=1500 \
+	-maxSize=200000  multiz6waySummary \
+	    /gbdb/petMar1/multiz6way/anno/multiz6way.maf
+    #	Created 121083 summary blocks from 3410157 components and 749940 mafs
+    #	from /gbdb/petMar1/multiz6way/anno/multiz6way.maf
+
+    #	by loading this into the table multiz6waySummary, it will replace
+    #	the previously loaded table with the unannotated mafs
+    #	remove the multiz6way*.tab files in this /scratch/tmp directory
+    rm multiz6way*.tab
+    #	And, you can remove the previously loaded non-annotated maf file link:
+    rm /gbdb/petMar1/multiz6way/maf/multiz6way.maf
+    rmdir /gbdb/petMar1/multiz6way/maf
 
 ###########################################################################
 # HUMAN (hg18) PROTEINS TRACK (DONE braney 2008-04-19)
@@ -998,3 +1195,106 @@ chainOne $(path1)
     rm -rf /cluster/data/petMar1/bed/tblastn.hg18KG/blastOut
     rm -rf /cluster/bluearc/petMar1/bed/tblastn.hg18KG/blastOut
 #end tblastn
+
+###########################################################################
+## Annotate 6-way multiple alignment with gene annotations
+##		(DONE - 2008-01-08 - Hiram)
+    # Gene frames
+    ## given previous survey done for 8-way alignment on Orangutan,
+    ## try using the following tables for this gene annotation
+    #	use knownGene for hg18, mm9
+XXX working on this 2008-04-23 13:50
+hg18
+mm9
+    #	use ensGene for monDom4, ornAna1, panTro2, rheMac2
+    #	new try with xenoMrna for ponAbe2, canFam2 and petMar1
+braFlo1
+galGal3
+oryLat1
+petMar1
+
+
+    ssh hgwdev
+    mkdir /cluster/data/petMar1/bed/multiz6way/frames
+    cd /cluster/data/petMar1/bed/multiz6way/frames
+    mkdir genes
+    # knownGene
+    for DB in hg18 mm9
+do
+    hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from knownGene" ${DB} \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /scratch/tmp/${DB}.tmp.gz
+    mv /scratch/tmp/${DB}.tmp.gz genes/$DB.gp.gz
+    echo "${DB} done"
+done
+    # ensGene
+    for DB in monDom4 ornAna1 panTro2 rheMac2
+do
+    hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from ensGene" ${DB} \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /scratch/tmp/${DB}.tmp.gz
+    mv /scratch/tmp/${DB}.tmp.gz genes/$DB.gp.gz
+    echo "${DB} done"
+done
+
+    #	use xenoMrna for ponAbe2, canFam2, petMar1
+    #	loxAfr1 oryCun1 ponAbe2
+    for DB in ponAbe2 canFam2 petMar1
+do
+tmpExt=`mktemp temp.XXXXXX`
+tmpMrnaCds=${DB}.mrna-cds.${tmpExt}
+tmpMrna=${DB}.mrna.${tmpExt}
+tmpCds=${DB}.cds.${tmpExt}
+hgsql -N -e 'select xenoMrna.qName,cds.name,xenoMrna.* \
+	   from xenoMrna,gbCdnaInfo,cds \
+	   where (xenoMrna.qName = gbCdnaInfo.acc) and \
+	     (gbCdnaInfo.cds != 0) and (gbCdnaInfo.cds = cds.id)' \
+$DB > ${tmpMrnaCds}
+cut -f 1-2  ${tmpMrnaCds} > ${tmpCds}
+cut -f 4-100  ${tmpMrnaCds} > ${tmpMrna}
+mrnaToGene -cdsFile=${tmpCds} -smallInsertSize=8 -quiet ${tmpMrna} stdout | \
+genePredSingleCover stdin stdout | gzip -2c > /scratch/tmp/$DB.tmp.gz
+rm ${tmpMrnaCds} ${tmpMrna} ${tmpCds}
+mv /scratch/tmp/$DB.tmp.gz genes/$DB.gp.gz
+rm -f $tmpExt
+echo "${DB} done"
+done
+
+    ls -og genes
+# -rw-rw-r--  1 2697811 Jan  8 15:43 petMar1.gp.gz
+# -rw-rw-r--  1 2551552 Jan  8 15:41 canFam2.gp.gz
+# -rw-rw-r--  1 2008806 Jan  8 15:33 hg18.gp.gz
+# -rw-rw-r--  1 1965274 Jan  8 15:33 mm9.gp.gz
+# -rw-rw-r--  1 1751726 Jan  8 15:33 monDom4.gp.gz
+# -rw-rw-r--  1 1232719 Jan  8 15:33 ornAna1.gp.gz
+# -rw-rw-r--  1 1980696 Jan  8 15:33 panTro2.gp.gz
+# -rw-rw-r--  1 2703247 Jan  8 15:39 ponAbe2.gp.gz
+# -rw-rw-r--  1 1935916 Jan  8 15:33 rheMac2.gp.gz
+
+    ssh kkstore06
+    cd /cluster/data/petMar1/bed/multiz6way/frames
+    #	anything to annotate is in a pair, e.g.: petMar1 genes/petMar1.gp.gz
+    time (cat  ../anno/petMar1.anno.6way.maf | nice -n +19 genePredToMafFrames petMar1 stdin stdout petMar1 genes/petMar1.gp.gz hg18 genes/hg18.gp.gz mm9 genes/mm9.gp.gz rheMac2 genes/rheMac2.gp.gz ponAbe2 genes/ponAbe2.gp.gz panTro2 genes/panTro2.gp.gz canFam2 genes/canFam2.gp.gz monDom4 genes/monDom4.gp.gz ornAna1 genes/ornAna1.gp.gz | gzip > multiz6way.mafFrames.gz) > frames.log 2>&1
+    # see what it looks like in terms of number of annotations per DB:
+    zcat multiz6way.mafFrames.gz | cut -f4 | sort | uniq -c | sort -n
+# 206370 hg18
+# 208834 panTro2
+# 211731 rheMac2
+# 224988 petMar1
+# 225518 canFam2
+# 225632 mm9
+# 261163 ponAbe2
+# 417544 ornAna1
+# 462890 monDom4
+
+    #	load the resulting file
+    ssh hgwdev
+    cd /cluster/data/petMar1/bed/multiz6way/frames
+    time nice -n +19 hgLoadMafFrames petMar1 multiz6wayFrames \
+	multiz6way.mafFrames.gz
+    #	real    0m38.282s
+
+    #	enable the trackDb entries:
+# frames multiz6wayFrames
+# irows on
+#############################################################################
