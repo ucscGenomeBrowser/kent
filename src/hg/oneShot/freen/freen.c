@@ -6,25 +6,24 @@
 #include "hash.h"
 #include "bed.h"
 #include "jksql.h"
-#include "spDb.h"
+#include "txCommon.h"
 
 
-static char const rcsid[] = "$Id: freen.c,v 1.82 2008/02/08 23:27:18 kent Exp $";
+static char const rcsid[] = "$Id: freen.c,v 1.83 2008/04/28 13:08:46 kent Exp $";
 
 void usage()
 {
 errAbort("freen - test some hairbrained thing.\n"
-         "usage:  freen file \n");
+         "usage:  freen id \n");
 }
 
-void freen(char *fileName)
+void freen(char *id)
 /* Test some hair-brained thing. */
 {
-char *acc = fileName;
-struct sqlConnection *conn = sqlConnect("sp080205");
-struct slName *el, *list = spProteinEvidence(conn, acc);
-for (el = list; el != NULL; el = el->next)
-    printf("%s %s\n", acc, el->name);
+int x = atoi(id);
+char buf[16];
+txGeneAccFromId(x, buf);
+printf("%s\n", buf);
 }
 
 int main(int argc, char *argv[])
