@@ -516,6 +516,7 @@ enum baseColorDrawOpt
 #define BASE_COLOR_USE_CDS "baseColorUseCds"
 #define BASE_COLOR_USE_SEQUENCE "baseColorUseSequence"
 #define BASE_COLOR_DEFAULT "baseColorDefault"
+#define SHOW_DIFF_BASES_ALL_SCALES "showDiffBasesAllScales"
 
 /* Coloring help pages: */
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
