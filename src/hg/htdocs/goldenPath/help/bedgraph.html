@@ -2,7 +2,7 @@
 <HTML>
 <HEAD>
 	<META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
-	<TITLE>UCSC Genome Browser: BedGraph Track Format (WIG)</TITLE>
+	<TITLE>UCSC Genome Browser: BedGraph Track Format</TITLE>
 	<LINK REL="STYLESHEET" HREF="../../style/HGStyle.css">
 </HEAD>
 <BODY BGCOLOR="FFF9D2" LINK="0000CC" VLINK="#330066" ALINK="#330066">
@@ -18,26 +18,20 @@
   	<TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>	
     <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD>	
 	<TABLE BGCOLOR="D9E4F8" BACKGROUND="../../images/hr.gif" WIDTH=100%><TR><TD>
-		<FONT SIZE="4"><b>&nbsp;  BedGraph Track Format (WIG)</b></FONT>
+		<FONT SIZE="4"><b>&nbsp;  BedGraph Track Format</b></FONT>
 	</TD></TR></TABLE>
 	<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
 	<TR><TD WIDTH=10>&nbsp;</TD><TD>
 		    <P>
-		    The wiggle (WIG) format allows display of
-		    continuous-valued data in track format.  This display type is
-		    useful for GC percent, probability scores, and
-		    transcriptome data.
+		    The bedGraph format allows display of
+		    continuous-valued data in track format. This display type is
+		    useful for probability scores and transcriptome data. This type is very similar to the wiggle (WIG)
+                    format, except the BedGraph format has the advantage of preserving the original
+                    data when exporting your data back out of the system (e.g. with
+                    output format "all fields" or "selected fields" within the table browser).
 
-		    <P><B>General Structure</B><P> The .wig format is
-		    line-oriented.  <!-- The first section begins with <A
-		    HREF="customTrack.html#BROWSER">browser
-		    lines</A> that configure the overall display of
-		    the Genome Browser window when your annotation
-		    file is uploaded. Each line defines one display
-		    attribute. 
-
-		    <P> The browser lines are followed by a <A
-		    <P> The browser lines are followed -->
+		    <P><B>General Structure</B><P> The bedGraph format is
+		    line-oriented.
 		    BedGraph data are preceeded by a <A
 		    HREF="customTrack.html#TRACK">
 		    track definition line</A>, which
@@ -45,37 +39,14 @@
 		    controlling the default display of this track.
 
 		    <P> Following the track definition line are the
-		    track data, which can be entered in several
-		    different formats described below.  Three
-		    formats were developed to allow the file to be
-		    written most compactly, depending on the density of
-		    the data.  When possible, please use the
-		    <B>variableStep</B> or <B>fixedStep</B> data types.
-		    The <B>BED</B> format is the most inefficient format and
-		    is not capable of loading as many data points as the other
-		    two formats.
-		    <UL>
+		    track data in four column BED format.
 
-		    <LI> <B>BED</B> format with no declaration line and four columns of data:
 <FONT color="#0000FF"><PRE>  <I>chromA</I>  <I>chromStartA</I>  <I>chromEndA</I>  <I>dataValueA</I>
   <I>chromB</I>  <I>chromStartB</I>  <I>chromEndB</I>  <I>dataValueB</I></PRE></FONT>
 
-		    <LI> <B>variableStep</B> two column data; started by a
-		    declaration line and followed with chromosome positions and data values:
-<FONT color="#0000FF"><PRE>  <B>variableStep</B>  <B>chrom=</B><I>chrN</I>  <B>[span=</B><I>windowSize</I><B>]</B>
-  <I>chromStartA</I>  <I>dataValueA</I>
-  <I>chromStartB</I>  <I>dataValueB</I></PRE></FONT>
-
-		    <LI> <B>fixedStep</B> single column data; started by a
-		    declaration line and followed with data values:
-<FONT color="#0000FF"><PRE>  <B>fixedStep</B>  <B>chrom=</B><I>chrN</I>  <B>start=</B><I>position</I>  <B>step=</B><I>stepInterval</I>  <B>[span=</B><I>windowSize</I><B>]</B>
-  <I>dataValue1</I>
-  <I>dataValue2</I></PRE></FONT>
-		    </UL>
-
-		    <P><B>Parameters for wiggle track definition lines</B></P>
+		    <P><B>Parameters for bedGraph track definition lines</B></P>
 		    All options are placed in a single line separated by spaces:
-<FONT color="#0000FF"><PRE>  <B>track type=wiggle_0 name=</B><I>track_label</I> <B>description=</B><I>center_label</I> \
+<FONT color="#0000FF"><PRE>  <B>track type=bedGraph name=</B><I>track_label</I> <B>description=</B><I>center_label</I> \
 <B>        visibility=</B><I>display_mode</I> <B>color=</B><I>r,g,b</I> <B>altColor=</B><I>r,g,b</I> \
 <B>        priority=</B><I>priority</I> <B>autoScale=</B><I>on|off</I> \
 <B>        gridDefault=</B><I>on|off</I> <B>maxHeightPixels=</B><I>max:default:min</I> \
@@ -83,99 +54,45 @@
 <B>        yLineMark=</B><I>real-value</I> <B>yLineOnOff=</B><I>on|off</I> \
 <B>        windowingFunction=</B><I>maximum|mean|minimum</I> <B>smoothingWindow=</B>off|2-16
 </I></PRE></FONT>
-		    The track type with version is REQUIRED, and it currently must be <I>wiggle_0</I>:
-		    <FONT color="#0000FF"><PRE>  <B>type wiggle_0</B></PRE></FONT>
-		    The remaining values are OPTIONAL:
-		    <FONT color="#0000FF"><PRE>  <B>name</B>              <I>trackLabel</I>           # default is "User Track"
-  <B>description       </B><I>centerlabel         </I> # default is "User Supplied Track"
-  <B>visibility        </B><I>full|dense|hide     </I> # default is hide (will also take numeric values 2|1|0)
-  <B>color             </B><I>RRR,GGG,BBB         </I> # default is 255,255,255
-  <B>altColor          </B><I>RRR,GGG,BBB         </I> # default is 128,128,128
-  <B>priority          </B><I>N                   </I> # default is 100
-  <B>autoScale         </B><I>on|off              </I> # default is off
-  <B>gridDefault       </B><I>on|off              </I> # default is off
-  <B>maxHeightPixels   </B><I>max:default:min     </I> # default is 128:128:11
-  <B>graphType         </B><I>bar|points          </I> # default is bar
-  <B>viewLimits        </B><I>lower:upper         </I> # default is range found in data
-  <B>yLineMark         </B><I>real-value          </I> # default is 0.0
-  <B>yLineOnOff        </B><I>on|off              </I> # default is off
-  <B>windowingFunction </B><I>maximum|mean|minimum</I> # default is maximum
-  <B>smoothingWindow   </B><I>off|[2-16]          </I> # default is off</PRE></FONT>
-
+		    The track type is REQUIRED, and must be <I>bedGraph</I>:
+		    <FONT color="#0000FF"><PRE>  <B>type=bedGraph</B></PRE></FONT>
+		    The remaining values are OPTIONAL; for documenation, see the <a href='wiggle.html' target='_blank'>wiggle</a> documentation.
 		    A functional description of these options can be
 		    seen in the <A target=_blank
-		    HREF="hgBedGraphTrackHelp.html">BedGraph 
-		   track configuration<A> description. (Custom tracks do not 
+		    HREF="hgWiggleTrackHelp.html">track configuration<A> description. (Custom tracks do not 
 		   have interactive configuration options).
 
 		    <P><B>Data Values</B></P>
 
 		    BedGraph track data values can be integer or real,
 		    positive or negative values. Chromosome positions
-		    are specified as 1-relative.  The first chromosome
-		    position is 1.  The last position in a chromosome
-		    of length N would be N.  Only positions specified
+		    are specified as 0-relative.  The first chromosome
+		    position is 0.  The last position in a chromosome
+		    of length N would be N - 1.  Only positions specified
 		    have data.  Positions not specified do not have
 		    data and will not be graphed. All positions specified 
 		    in the input data must be in numerical order. 
 
-		    <UL><LI>The BED format is a subset of the previous 
-		    description, with four columns of data:
+		    The bedGraph format has four columns of data:
 <FONT color="#0000FF"><PRE> <I>chrom chromStart chromEnd dataValue</I></PRE></FONT> 
-		    <B>Note:</B> These BED coordinates are
-		    <A HREF="../../FAQ/FAQtracks#tracks1">zero-based,
-		    half-open,</A> unlike the 1-relative coordinates for the
-		    <B>variableStep</B> and <B>fixedStep</B> formats.
-		    <P>
-		    In many cases this format will be too verbose to
-		    conveniently specify a large number of data values.
-		    When possible, please use the <B>variableStep</B> or
-		    <B>fixedStep</B> data types.  The <B>BED</B> format
-		    is the most inefficient format and is not capable of
-		    loading as many data points as the other two formats.
-		    Two other two methods of specifying
-		    data were developed to be more space efficient.</LI>
-<P>
-		    <LI>The <B>variableStep</B> two column data format is the most commonly used
-		    data format.  It begins with a declaration line:
-<FONT color="#0000FF"><PRE>  <B>variableStep chrom=</B><I>chrN</I> <B>[span=</B><I>windowSize</I><B>]</B></PRE></FONT>
-		    and is followed with two column data representing
-		    chromosome position and data value.  The declaration line starts with the word
-		    <B>variableStep</B> and is followed by a
-		    specification for chromosome.  The optional
-		    <B>span</B> allows more efficient encoding of a
-		    single value for a contiguous run of bases
-		    beginning at the specified position.
-<P>
-		    <LI>The <B>fixedStep</B> format takes a single
-		    column data, and is used when there is a regular
-		    interval between new data values.  This is used for
-		    data values that apply to a constant size run of bases.  The fixedStep
-		    single column data format begins with the
-		    declaration line: 
-<FONT color="#0000FF"><PRE>  <B>fixedStep chrom=</B><I>chrN</I> <B>start=</B>chromStart<I></I> <B>step=</B><I>stepInterval</I> <B>[span=</B><I>windowSize</I>]</PRE></FONT>
-		    and is followed by a single column of data values.
-		    The declaration line starts with the keyword
-		    <TT><B>fixedStep</B></TT>, and it must include specifications for
-		    chrom, start, and step.
-		    </UL>
+		    <B>Note:</B> These coordinates are
+		    <A HREF="../../FAQ/FAQtracks#tracks1">zero-based, half-open.</A>
 		    <P><B>Example</B></P>
-		    This example specifies 28 separate data points in three 
-		    tracks on chr19 in the region 59,302,001 to 59,311,000.
+		    This example specifies 9 separate data points in three 
+		    tracks on chr19 in the region 59,302,001 to 59,304,701.
 		    To view this example as a custom track in the Genome
-		    Browser, copy the <A HREF="wiggleExample.txt">text</A>
-		    and paste it into the browser annotation track text box.
+		    Browser, copy the text and paste it into the browser annotation track text box.
 		    <P>
 		    <FONT color="#0000FF"><PRE>
-browser position chr19:59302001-59311000
+browser position chr19:59302001-59304701
 browser hide all
 browser pack refGene encodeRegions
 browser full altGraph
 #	300 base wide bar graph, autoScale is on by default == graphing
 #	limits will dynamically change to always show full range of data
 #	in viewing window, priority = 20 positions this as the second graph
-#	Note, zero-relative, half-open coordinate system in use for bed format
-track type=wiggle_0 name="Bed Format" description="BED format" \
+#	Note, zero-relative, half-open coordinate system in use for bedGraph format
+track type=bedGraph name="BedGraph Format" description="BedGraph format" \
     visibility=full color=200,100,0 altColor=0,100,200 priority=20
 chr19 59302000 59302300 -1.0
 chr19 59302300 59302600 -0.75
@@ -186,42 +103,7 @@ chr19 59303500 59303800 0.25
 chr19 59303800 59304100 0.50
 chr19 59304100 59304400 0.75
 chr19 59304400 59304700 1.00
-#	150 base wide bar graph at arbitrarily spaced positions,
-#	threshold line drawn at y=11.76
-#	autoScale off viewing range set to [0:25]
-#	priority = 10 positions this as the first graph
-#	Note, one-relative coordinate system in use for this format
-track type=wiggle_0 name="variableStep" description="variableStep format" \
-    visibility=full autoScale=off viewLimits=0.0:25.0 color=255,200,0 \
-    yLineMark=11.76 yLineOnOff=on priority=10
-variableStep chrom=chr19 span=150
-59304701 10.0
-59304901 12.5
-59305401 15.0
-59305601 17.5
-59305901 20.0
-59306081 17.5
-59306301 15.0
-59306691 12.5
-59307871 10.0
-#	200 base wide points graph at every 300 bases, 50 pixel high graph
-#	autoScale off and viewing range set to [0:1000]
-#	priority = 30 positions this as the third graph
-#	Note, one-relative coordinate system in use for this format
-track type=wiggle_0 name="fixedStep" description="fixed step" visibility=full \
-    autoScale=off viewLimits=0:1000 color=0,200,100 maxHeightPixels=100:50:20 \
-    graphType=points priority=30
-fixedStep chrom=chr19 start=59307401 step=300 span=200
-1000
- 900
- 800
- 700
- 600
- 500
- 400
- 300
- 200
- 100</PRE></FONT>
+</PRE></FONT>
 
 	</TD><TD WIDTH=15></TD></TR></TABLE>
 	<BR></TD></TR></TABLE>
