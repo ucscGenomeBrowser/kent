@@ -26,6 +26,9 @@ char *wrapWhiteFont(char *s);
 
 char *hDocumentRoot();
 /* get the path to the DocumentRoot, or the default */
+char *hCgiRoot();
+/* get the path to the CGI directory.
+ * Returns NULL when not running as a CGI (unless specified by browser.cgiRoot) */
 char *hBackgroundImage();
 /* get the path to the configured background image to use, or the default */
 

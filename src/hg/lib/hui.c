@@ -13,7 +13,7 @@
 #include "hgConfig.h"
 #include "chainCart.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.95 2008/04/23 17:48:28 angie Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.96 2008/04/29 21:06:42 larrym Exp $";
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -36,6 +36,26 @@ char *hDocumentRoot()
 /* get the path to the DocumentRoot, or the default */
 {
 return cfgOptionDefault("browser.documentRoot", DOCUMENT_ROOT);
+}
+
+char *hCgiRoot()
+/* get the path to the CGI directory.
+ * Returns NULL when not running as a CGI (unless specified by browser.cgiRoot) */
+{
+static char defaultDir[PATH_LEN];
+char *scriptFilename = getenv("SCRIPT_FILENAME");
+if(scriptFilename)
+    {
+    char dir[PATH_LEN], name[FILENAME_LEN], extension[FILEEXT_LEN];
+    dir[0] = 0;
+    splitPath(scriptFilename, dir, name, extension);
+    safef(defaultDir, sizeof(defaultDir), "%s", dir);
+    }
+else
+    {
+    defaultDir[0] = 0;
+    }
+return cfgOptionDefault("browser.cgiRoot", defaultDir);
 }
 
 char *hBackgroundImage()
