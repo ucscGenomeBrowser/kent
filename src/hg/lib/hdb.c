@@ -36,7 +36,7 @@
 #include "customTrack.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.352 2008/04/18 18:25:16 larrym Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.353 2008/04/29 07:47:37 markd Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -210,8 +210,8 @@ if(hdbHost == NULL || hdbUser == NULL || hdbPassword == NULL)
     errAbort("cannot read in connection setting from configuration file.");
 }
 
-char *hTrackDbName()
-/* return the name of the track database from the config file. Freez when done */
+static char *hTrackDbPath()
+/* return the space-separated list of the track database from the config file. Freez when done */
 {
 if(hdbTrackDb == NULL)
     hdbTrackDb = getCfgValue("HGDB_TRACKDB", "db.trackDb");
@@ -223,7 +223,7 @@ return cloneString(hdbTrackDb);
 struct slName *hTrackDbList()
 /* Return list of trackDb tables from the config file.  Free list when done. */
 {
-char *name = hTrackDbName();
+char *name = hTrackDbPath();
 struct slName *list = slNameListFromComma(name);
 freez(&name);
 return list;
@@ -3992,10 +3992,17 @@ struct trackDb *hMaybeTrackInfo(struct sqlConnection *conn, char *trackName)
  * "noInherit on"...) Don't die if conn has no trackDb table.  Return NULL
  * if trackName is not found. */
 {
-if (sqlTableExists(conn, hTrackDbName()))
-    return loadTrackDbForTrack(conn, trackName);
-else
-    return NULL;
+struct slName *tdb, *tdbs = hTrackDbList();
+for (tdb = tdbs; tdb != NULL; tdb = tdb->next)
+    {
+    if (sqlTableExists(conn, tdb->name))
+        {
+        slFreeList(&tdbs);
+        return loadTrackDbForTrack(conn, trackName);
+        }
+    }
+slFreeList(&tdbs);
+return NULL;
 }
 
 struct trackDb *hTrackInfo(struct sqlConnection *conn, char *trackName)

@@ -85,11 +85,8 @@ struct hTableInfo
 void hDefaultConnect();
 /* read the default settings from the config file */
 
-char *hTrackDbName();
-/* return the name of the track database from the config file. Freez when done */
-
 struct slName *hTrackDbList();
-/* return the names of the track databases from the config file. Freez when done */
+/* Return list of trackDb tables from the config file.  Free list when done. */
 
 void hSetTrackDbName(char *trackDbName);
 /* Override the hg.conf db.trackDb setting. */
