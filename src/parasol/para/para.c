@@ -15,7 +15,7 @@
 #include "jobResult.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: para.c,v 1.71 2008/04/29 05:18:30 galt Exp $";
+static char const rcsid[] = "$Id: para.c,v 1.72 2008/04/29 09:36:48 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -1087,7 +1087,7 @@ for (job = db->jobList; job != NULL; job = job->next)
 	if (sub->hung) ++hung;
 	if (sub->running) ++running;
 	if (sub->ranOk) ++ranOk;
-	if ((job->submissionCount >= retries && needsRerun(sub)) || hung)
+	if (job->submissionCount >= retries && needsRerun(sub))
 	     ++failed;
 	}
     else
