@@ -28,14 +28,14 @@ color 0, 10, 100
 altColor 0,90,10
 type wigMaf 0.0 1.0
 maxHeightPixels 100:40:11
-# wiggle phastCons6way
+wiggle phastCons6way
 spanList 1
 autoScaleDefault Off
 windowingFunction mean
 pairwiseHeight 12
 yLineOnOff Off
-# frames multiz6wayFrames
-# irows on
+frames multiz6wayFrames
+irows on
 summary multiz6waySummary
 speciesCodonDefault petMar1
 speciesGroups Vertebrate
