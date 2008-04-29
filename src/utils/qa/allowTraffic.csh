@@ -8,6 +8,7 @@
 ####################
 
 set debug=0
+set sleep=10
 set ip=""
 set duration=0
 set startField=""
@@ -15,17 +16,17 @@ set lastField=""
 set threeFields=""
 set i=0
 
-if ($#argv < 2 || $#argv > 3 ) then
+if ($#argv < 2 || $#argv > 4 ) then
   echo
   echo "  allow selected IP(s) to avoid slowdown by BOTtleneck server."
+  echo '  resets delay to n seconds.' 
   echo
-  echo '      usage:  ipAddress time [endOfRange]'
+  echo '      usage:  ipAddress time [endOfRange] [sleep=n]'
   echo
   echo '              (ipAddress also accepts file of ipAddresses)'
   echo '              (time in minutes to keep IP alive)'
   echo '              (endOfRange value should be last field of IP)'
-  echo
-  echo '      sets delay to zero every 30 sec -- hardcoded'
+  echo '              (sleep time in seconds between resets - default = 10)'
   echo
   exit
 else
@@ -33,9 +34,23 @@ else
   set duration=$argv[2]
 endif
 
-if ( $#argv == 3 ) then
-  set lastField=$argv[3]
+# set up optional arguments.  
+if ( $#argv > 2 ) then
+  echo $argv[3] | grep sleep > /dev/null
+  if ( $status ) then
+    set lastField=$argv[3]
+  else
+    set sleep=` echo $argv[3] | sed "s/sleep=//"`
+  endif
+  if ( $#argv == 4 ) then
+    set sleep=` echo $argv[4] | sed "s/sleep=//"`
+  endif
 endif
+
+if ( $debug == 1 ) then
+  echo "lastField = $lastField"
+  echo "sleep     = $sleep"
+endif 
 
 # setting up for multiple IPs
 # check if IP is a file or a tablename
@@ -48,6 +63,14 @@ else
   # get last field of first IP address
   set startField=`echo $ip | awk -F. '{print $NF}'` 
   set threeFields=`echo $ip | sed -e 's/'${startField}'$//'`
+  set lastField=`echo $lastField | sed -e 's/^'${threeFields}'//'`
+  if ( $debug == 1 ) then
+    echo "ip $ip"
+    echo "duration $duration"
+    echo "startField $startField"
+    echo "lastField $lastField"
+    echo "threeFields $threeFields"
+  endif
   if ( $lastField != ""  && $startField > $lastField ) then
     echo
     echo "  sorry, $lastField is not greater than last field of $ip."
@@ -72,11 +95,11 @@ if ( $debug == 1 ) then
   echo "lastField $lastField"
   echo "threeFields $threeFields"
 endif
-
 # set up times for keeping IPs alive for designated time 
 set startTime=`date +%s`
 set endTime=`echo $startTime $duration | awk '{print $1+$2*60}'`
 
+# resetting
 echo
 while ( `date +%s` < $endTime )
   date
@@ -89,6 +112,6 @@ while ( `date +%s` < $endTime )
   end
   echo "--------------------"
   echo
-  sleep 2 
+  sleep $sleep
 end
 
