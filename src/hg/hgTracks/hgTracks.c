@@ -119,7 +119,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1460 2008/04/25 16:35:13 aamp Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1461 2008/04/29 16:51:46 aamp Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -199,6 +199,7 @@ boolean zoomedToCdsColorLevel; /* TRUE if zoomed so we can color each codon*/
 boolean baseShowPos;           /* TRUE if should display full position at top of base track */
 boolean baseShowAsm;           /* TRUE if should display assembly info at top of base track */
 boolean baseShowScaleBar;      /* TRUE if should display scale bar at very top of base track */ 
+boolean baseShowRuler;         /* TRUE if should display the basic ruler in the base track (default) */
 char *baseTitle = NULL;        /* Title it should display top of base track (optional)*/
 
 /* These variables are set by getPositionFromCustomTracks() at the very 
@@ -9736,6 +9737,13 @@ if (rulerMode != tvFull)
 pixHeight = gfxBorder;
 if (rulerMode != tvHide)
     {
+    if (!baseShowRuler && !baseTitle && !baseShowPos && !baseShowAsm && !baseShowScaleBar && !zoomedToBaseLevel && !rulerCds)
+	{
+	warn("Can't turn everything off in base position track.  Turning ruler back on");
+	baseShowRuler = TRUE;
+	cartSetBoolean(cart, BASE_SHOWRULER, TRUE);
+	}
+
     if (baseTitle)
 	basePositionHeight += titleHeight;
 	
@@ -9744,7 +9752,13 @@ if (rulerMode != tvHide)
 	
     if (baseShowScaleBar)
 	basePositionHeight += scaleBarTotalHeight;
-	
+
+    if (!baseShowRuler)
+	{
+	basePositionHeight -= rulerHeight;
+	rulerHeight = 0;
+	}
+
     if (zoomedToBaseLevel)
 	basePositionHeight += baseHeight;
 	
@@ -9929,16 +9943,17 @@ if (withLeftLabels)
 			MG_BLACK, font, SCALE_BAR_LABEL);
 	    y += scaleBarHeight + scaleBarPad;
 	    }
-	{
-	char rulerLabel[64];
-        if (hvg->rc)
-            safef(rulerLabel,ArraySize(rulerLabel),":%s",chromName);
-        else
-            safef(rulerLabel,ArraySize(rulerLabel),"%s:",chromName);
-	hvGfxTextRight(hvg, leftLabelX, y, leftLabelWidth-1, rulerHeight, 
-		    MG_BLACK, font, rulerLabel);
-	}
-	y += rulerHeight;
+	if (baseShowRuler)
+	    {
+	    char rulerLabel[64];
+	    if (hvg->rc)
+		safef(rulerLabel,ArraySize(rulerLabel),":%s",chromName);
+	    else
+		safef(rulerLabel,ArraySize(rulerLabel),"%s:",chromName);
+	    hvGfxTextRight(hvg, leftLabelX, y, leftLabelWidth-1, rulerHeight, 
+			   MG_BLACK, font, rulerLabel);
+	    y += rulerHeight;
+	    }
 	if (zoomedToBaseLevel || rulerCds)
 	    {		    
 	    /* disable complement toggle for HIV because HIV is single stranded RNA */
@@ -10047,9 +10062,11 @@ if (rulerMode != tvHide)
 		       y+scaleBarTotalHeight-scaleBarPad, MG_BLACK);
 	y += scaleBarTotalHeight;
 	}
-    
-    hvGfxDrawRulerBumpText(hvg, insideX, y, rulerHeight, insideWidth, MG_BLACK, 
-                        font, relNumOff, winBaseCount, 0, 1);
+    if (baseShowRuler)
+	{
+	hvGfxDrawRulerBumpText(hvg, insideX, y, rulerHeight, insideWidth, MG_BLACK, 
+			       font, relNumOff, winBaseCount, 0, 1);
+	}
     {
     /* Make hit boxes that will zoom program around ruler. */
     int boxes = 30;
@@ -15001,6 +15018,7 @@ insideWidth = tl.picWidth-gfxBorder-insideX;
 baseShowPos = cartUsualBoolean(cart, BASE_SHOWPOS, FALSE);
 baseShowAsm = cartUsualBoolean(cart, BASE_SHOWASM, FALSE);
 baseShowScaleBar = cartUsualBoolean(cart, BASE_SCALE_BAR, FALSE);
+baseShowRuler = cartUsualBoolean(cart, BASE_SHOWRULER, TRUE);
 safef(titleVar,sizeof(titleVar),"%s_%s", BASE_TITLE, database);
 baseTitle = cartUsualString(cart, titleVar, "");
 if (sameString(baseTitle, "")) 

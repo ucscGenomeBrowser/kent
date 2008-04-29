@@ -34,7 +34,7 @@ char *hBackgroundImage();
 #define RULER_TRACK_NAME        "ruler"
 #define RULER_TRACK_LABEL       "Base Position"
 #define RULER_TRACK_LONGLABEL   "Genome Base Position"
-#define SCALE_BAR_LABEL         "Scale Bar"
+#define SCALE_BAR_LABEL         "Scale"
 #define WIN_POS_LABEL           "Window Position"
 #define WIN_TITLE_LABEL         ""  /* "Title" */
 
@@ -65,6 +65,7 @@ char *hBackgroundImage();
 #define BASE_MOTIFS	"hgt.motifs"
 #define MOTIF_COMPLEMENT	"hgt.motifComplement"
 #define BASE_SCALE_BAR  "hgt.baseShowScaleBar"
+#define BASE_SHOWRULER  "hgt.baseShowRuler"
 #define BASE_SHOWPOS	"hgt.baseShowPos"
 #define BASE_SHOWASM	"hgt.baseShowAsm"
 #define BASE_TITLE	"hgt.baseTitle"

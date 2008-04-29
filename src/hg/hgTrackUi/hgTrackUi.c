@@ -37,7 +37,7 @@
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 #define MAX_SP_SIZE 2000
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.422 2008/04/23 17:53:28 angie Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.423 2008/04/29 16:51:42 aamp Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1841,6 +1841,7 @@ void rulerUi(struct trackDb *tdb)
 /* UI for base position (ruler) */
 {
 boolean showScaleBar = cartUsualBoolean(cart, BASE_SCALE_BAR, FALSE);
+boolean showRuler = cartUsualBoolean(cart, BASE_SHOWRULER, TRUE);
 boolean complementsToo = cartUsualBoolean(cart, MOTIF_COMPLEMENT, FALSE);
 boolean showPos = cartUsualBoolean(cart, BASE_SHOWPOS, FALSE);
 boolean showAsm = cartUsualBoolean(cart, BASE_SHOWASM, FALSE);
@@ -1852,6 +1853,9 @@ char *currentZoom = cartCgiUsualString(cart, RULER_BASE_ZOOM_VAR, ZOOM_3X);
 char *motifString = cartCgiUsualString(cart, BASE_MOTIFS, "");
 safef(titleVar,sizeof(titleVar),"%s_%s",BASE_TITLE,database);
 title = cartUsualString(cart, titleVar, "");
+puts("<P>");
+cgiMakeCheckBox(BASE_SHOWRULER, showRuler);
+puts("&nbsp;<B>Show ruler</B></P>");
 puts("<P>");
 cgiMakeCheckBox(BASE_SCALE_BAR, showScaleBar);
 puts("&nbsp;<B>Show scale bar</B>");
