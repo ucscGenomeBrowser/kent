@@ -1,4 +1,10 @@
-/* das - Distributed Annotation System server. */
+/* das - Distributed Annotation System server.
+ * Needs to be called from a Web server generally.
+ * You can spoof it from the command line by giving
+ * it a command argument such as:
+ *      das dsn
+ *      das hg6/types segment=chr22
+ */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -13,38 +19,36 @@
 #include "trackTable.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: das.c,v 1.36 2008/03/05 00:02:58 markd Exp $";
+static char const rcsid[] = "$Id: das.c,v 1.37 2008/04/29 06:19:28 markd Exp $";
 
-char *version = "1.00";
-char *database = NULL;	
+static char *version = "1.00";
+static char *database = NULL;	
 
-void usage()
-/* Explain usage and exit. */
-{
-errAbort(
-  "das - Distributed Annotation System server.\n"
-  "Needs to be called from a Web server generally.\n"
-  "You can spoof it from the command line by giving\n"
-  "it a command argument such as:\n"
-  "     das dsn\n"
-  "     das hg6/types segment=chr22\n"
-  );
-}
+/* DAS response codes */
+#define DAS_OK                     200
+#define DAS_BAD_COMMAND            400
+#define DAS_BAD_DATA_SOURCE        401
+#define DAS_BAD_COMMAND_ARGS       402
+#define DAS_BAD_REFERENCE_OBJECT   403
+#define DAS_BAD_STYLESHEET         404
+#define DAS_COORDINATE_ERROR       405
+#define DAS_SERVER_ERROR           500
+#define DAS_UNIMPLEMENTED_FEATURE  501
 
-void dasHead(int err)
+static void dasHead(int code)
 /* Write out very start of DAS header */
 {
 printf("X-DAS-Version: DAS/0.95\n");
-printf("X-DAS-Status: %d\n", err);
+printf("X-DAS-Status: %d\n", code);
 printf("Content-Type:text/plain\n");
 printf("\n");
 }
 
-void dasHeader(int err)
+static void dasHeader(int code)
 /* Write out DAS header */
 {
-dasHead(err);
-if (err != 200)
+dasHead(code);
+if (code != DAS_OK)
     exit(-1);
 printf("<?xml version=\"1.0\" standalone=\"no\"?>\n");
 }
@@ -57,7 +61,7 @@ char *raddr = getenv("REMOTE_ADDR");
 if ((rhost != NULL && sameWord(rhost, hogHost)) ||
     (raddr != NULL && sameWord(raddr, hogAddr)))
     {
-    dasHead(200);
+    dasHead(DAS_OK);
     printf("Your host, %s, has been sending too many requests lately and is "
 	   "unfairly loading our site, impacting performance for other users. "
 	   "Please contact genome@cse.ucsc.edu to ask that your site "
@@ -68,18 +72,18 @@ if ((rhost != NULL && sameWord(rhost, hogHost)) ||
     }
 }
 
-void dasHelp(char *s)
+static void dasHelp(char *s)
 /* Put up some hopefully helpful information. */
 {
-dasHead(200);
+dasHead(DAS_OK);
 puts(s);
 exit(0);
 }
 
-void dasAbout()
+static void dasAbout()
 /* Print a little info when they just hit cgi-bin/das. */
 {
-dasHead(200);
+dasHead(DAS_OK);
 dasHelp("UCSC DAS Server.\n"
     "See http://www.biodas.org for more info on DAS.\n"
     "Try http://genome.ucsc.edu/cgi-bin/das/dsn for a list of databases.\n"
@@ -96,19 +100,19 @@ dasHelp("UCSC DAS Server.\n"
 exit(0);
 }
 
-void normalHeader()
+static void normalHeader()
 /* Write normal (non-error) header. */
 {
-dasHeader(200);
+dasHeader(DAS_OK);
 }
 
-void earlyError(int errCode)
+static void earlyError(int errCode)
 /* Return error in early processing (before writing header) */
 {
 dasHeader(errCode);
 }
 
-char *currentUrl()
+static char *currentUrl()
 /* Query environment to get current URL. */
 {
 static char url[512];
@@ -130,7 +134,7 @@ struct tableDef
     boolean hasBin;		/* Has bin field. */
     };
 
-boolean hasLogicalChromName(char *name)
+static boolean hasLogicalChromName(char *name)
 /* Return TRUE if name begins with "chr" or "target" (for Zoo) prefix */
 {
 if (startsWith("chr", name) ||
@@ -139,7 +143,7 @@ if (startsWith("chr", name) ||
 return FALSE;
 }
 
-boolean tableIsSplit(char *table)
+static boolean tableIsSplit(char *table)
 /* Return TRUE if table is split. */
 {
 if (!hasLogicalChromName(table))
@@ -149,7 +153,7 @@ if (strchr(table, '_') == NULL)
 return TRUE;
 }
 
-char *skipOverChrom(char *table)
+static char *skipOverChrom(char *table)
 /* Skip over chrN_ or chrN_random_. */
 {
 char *e = strchr(table, '_');
@@ -163,7 +167,7 @@ if (e != NULL)
 return table;
 }
 
-char *chromNumberToName(char *seqName)
+static char *chromNumberToName(char *seqName)
 /* If seqName is a chrom number, prepend "chr". */
 {
 char *official = NULL;
@@ -176,7 +180,7 @@ return(official);
 }
 
 
-boolean dasableType(char *type)
+static boolean dasableType(char *type)
 /* Return TRUE if we can handle type. */
 {
 char *dupe = cloneString(type);
@@ -196,30 +200,43 @@ freeMem(dupe);
 return ok;
 }
 
-boolean dasableTrack(char *name)
+static struct hash *mkTrackTypeHash()
+/* build a hash of track name to type */
+{
+struct sqlConnection *conn = hAllocConn();
+struct hash *hash = hashNew(10);
+struct slName *trackDb, *trackDbs = hTrackDbList();
+for (trackDb = trackDbs; trackDb != NULL; trackDb = trackDb->next)
+    {
+    if (sqlTableExists(conn, trackDb->name))
+        {
+        char query[128];
+        safef(query, sizeof(query), "select tableName,type from %s", trackDb->name);
+        struct sqlResult *sr = sqlGetResult(conn, query);
+        char **row;
+        while ((row = sqlNextRow(sr)) != NULL)
+            {
+            if (dasableType(row[1]) && (hashLookup(hash, row[0]) == NULL))
+                hashAdd(hash, row[0], NULL);
+            }
+        sqlFreeResult(&sr);
+        }
+    }
+slFreeList(&trackDbs);
+hFreeConn(&conn);
+return hash;
+}
+
+static boolean dasableTrack(char *name)
 /* Return TRUE if track can be put into DAS format. */
 {
 static struct hash *hash = NULL;
 if (hash == NULL)
-    {
-    struct sqlConnection *conn = hAllocConn();
-    struct sqlResult *sr;
-    char **row;
-    hash = hashNew(10);
-    sr = sqlGetResult(conn, "select tableName,type from trackDb");
-    while ((row = sqlNextRow(sr)) != NULL)
-        {
-	if (dasableType(row[1]))
-	    hashAdd(hash, row[0], NULL);
-	}
-    sqlFreeResult(&sr);
-    hFreeConn(&conn);
-    }
+    hash = mkTrackTypeHash();
 return hashLookup(hash, name) != NULL;
 }
 
-
-struct tableDef *getTables()
+static struct tableDef *getTables()
 /* Get all tables. */
 {
 struct sqlConnection *conn = hAllocConn();
@@ -316,7 +333,7 @@ slReverse(&tdList);
 return tdList;
 }
 
-struct hash *hashOfTracks()
+static struct hash *hashOfTracks()
 /* Get list of tracks and put into hash keyed by tableName*/
 {
 struct hash *trackHash = newHash(7);
@@ -337,8 +354,8 @@ struct segment
     char *seqName;      /* Name of sequence in external DAS world */
     };
 
-struct segment *segmentNew(char *seq, int start, int end, boolean wholeThing,
-			   char *seqName)
+static struct segment *segmentNew(char *seq, int start, int end, boolean wholeThing,
+                                  char *seqName)
 /* Make a new segment. */
 {
 struct segment *segment;
@@ -351,7 +368,7 @@ segment->seqName = cloneString(seqName);
 return segment;
 }
 
-struct segment *dasSegmentList(boolean mustExist)
+static struct segment *dasSegmentList(boolean mustExist)
 /* Get a DAS segment list from either segment or ref parameters. 
  * Call this before you write out header so it can return errors
  * properly if parameters are malformed. */
@@ -384,15 +401,15 @@ if (segList != NULL)
 	else if (partCount == 3)
 	    {
 	    if (!isdigit(parts[1][0]) || !isdigit(parts[2][0]))
-		earlyError(402);
+		earlyError(DAS_BAD_COMMAND_ARGS);
 	    start = atoi(parts[1])-1;
 	    end = atoi(parts[2]);
 	    if (start > end)
-	        earlyError(405);
+	        earlyError(DAS_COORDINATE_ERROR);
 	    }
 	else
 	    {
-	    earlyError(402);
+	    earlyError(DAS_BAD_COMMAND_ARGS);
 	    }
 	segment = segmentNew(seq, start, end, wholeThing, seqName);
 	slAddHead(&segmentList, segment);
@@ -407,7 +424,7 @@ else
     if (seqName == NULL)
 	{
 	if (mustExist)
-	    earlyError(402);
+	    earlyError(DAS_BAD_COMMAND_ARGS);
 	else
 	    {
 	    return NULL;
@@ -429,14 +446,14 @@ else
     else
         end = hChromSize(seq);
     if (start > end)
-	earlyError(405);
+	earlyError(DAS_COORDINATE_ERROR);
     segmentList = segmentNew(seq, start, end, wholeThing, seqName);
     }
 /* Check all segments are chromosomes. */
 for (segment = segmentList; segment != NULL; segment = segment->next)
     {
     if (hgOfficialChromName(segment->seq) == NULL)
-        earlyError(403);
+        earlyError(DAS_BAD_REFERENCE_OBJECT);
     }
 return segmentList;
 }
@@ -449,7 +466,7 @@ struct regExp
     regex_t compiled;		/* Compiled version of regExp. */
     };
 
-struct regExp *regExpFromCgiVar(char *cgiVar)
+static struct regExp *regExpFromCgiVar(char *cgiVar)
 /* Make up regExp list from cgiVars */
 {
 struct slName *nList = cgiStringList(cgiVar), *n;
@@ -460,13 +477,13 @@ for (n = nList; n != NULL; n = n->next)
     slAddHead(&reList, re);
     re->exp = n->name;
     if (regcomp(&re->compiled, n->name, REG_NOSUB))
-	earlyError(402);
+	earlyError(DAS_BAD_COMMAND_ARGS);
     }
 slReverse(&reList);
 return reList;
 }
 
-boolean regExpFilter(struct regExp *reList, char *string)
+static boolean regExpFilter(struct regExp *reList, char *string)
 /* Return TRUE if string matches any of the regular expressions
  * on reList. */
 {
@@ -479,7 +496,7 @@ for (re = reList; re != NULL; re = re->next)
 return FALSE;
 }
 
-boolean catTypeFilter(struct regExp *catExp, char *cat, struct regExp *typeExp, char *type)
+static boolean catTypeFilter(struct regExp *catExp, char *cat, struct regExp *typeExp, char *type)
 /* Combined category/type filter. */
 {
 if (catExp != NULL && typeExp != NULL)
@@ -491,8 +508,20 @@ if (typeExp != NULL)
 return TRUE;
 }
 
+static boolean tableDefFilter(struct tableDef *td)
+/* determine if a tableDef has the required information to use the track */
+{
+return isNotEmpty(td->chromField) && isNotEmpty(td->startField)
+    && isNotEmpty(td->endField);
+}
 
-void doDsn(struct slName *dbList)
+static boolean trackFilter(struct regExp *catExp, struct regExp *typeExp, struct tableDef *td)
+/* do track filtering. */
+{
+return tableDefFilter(td) && catTypeFilter(catExp, td->category, typeExp, td->name);
+}
+
+static void doDsn(struct slName *dbList)
 /* dsn - DSN Server for DAS. */
 {
 struct slName *db;
@@ -518,7 +547,7 @@ for (db = dbList; db != NULL; db = db->next)
 printf(" </DASDSN>\n");
 }
 
-int countFeatures(struct tableDef *td, struct segment *segmentList)
+static int countFeatures(struct tableDef *td, struct segment *segmentList)
 /* Count all the features in a given segment. */
 {
 struct segment *segment;
@@ -594,7 +623,7 @@ return acc;
 }
 
 
-void doTypes()
+static void doTypes()
 /* Handle a types request. */
 {
 struct segment *segment, *segmentList = dasSegmentList(FALSE);
@@ -615,7 +644,7 @@ for (segment = segmentList;;)
 	    segment->seqName, segment->start+1, segment->end, version);
     for (td = tdList; td != NULL; td = td->next)
 	{
-	if (catTypeFilter(category, td->category, type, td->name) )
+	if (trackFilter(category, type, td))
 	    {
 	    int count = countFeatures(td, segment);
 	    printf("<TYPE id=\"%s\" category=\"%s\" ", td->name, td->category);
@@ -635,14 +664,14 @@ printf("</GFF>\n");
 printf("</DASTYPES>\n");
 }
 
-void dasPrintType(struct tableDef *td, struct trackTable *tt)
+static void dasPrintType(struct tableDef *td, struct trackTable *tt)
 /* Print out from <TYPE> to </TYPE> inside a feature. */
 {
 char *description = (tt != NULL ? tt->shortLabel : td->name);
 printf(" <TYPE id=\"%s\" category=\"%s\" reference=\"no\">%s</TYPE>\n", td->name, td->category, description);
 }
 
-void dasOutGp(struct genePred *gp, struct tableDef *td, struct trackTable *tt)
+static void dasOutGp(struct genePred *gp, struct tableDef *td, struct trackTable *tt)
 /* Write out DAS info on a gene prediction. */
 {
 int i;
@@ -672,7 +701,7 @@ for (i=0; i<gp->exonCount; ++i)
     }
 }
 
-void dasOutPsl(struct psl *psl, struct tableDef *td, struct trackTable *tt)
+static void dasOutPsl(struct psl *psl, struct tableDef *td, struct trackTable *tt)
 /* Write out DAS info on a psl alignment. */
 {
 int i;
@@ -727,7 +756,7 @@ for (i=0; i<psl->blockCount; ++i)
     }
 }
 
-void dasOutBed(char *chrom, int start, int end, 
+static void dasOutBed(char *chrom, int start, int end, 
 	char *name, char *strand, char *score, 
 	struct tableDef *td, struct trackTable *tt)
 /* Write out a generic one. */
@@ -750,7 +779,7 @@ printf(" </GROUP>\n");
 printf("</FEATURE>\n");
 }
 
-int fieldIndex(char *table, char *field)
+static int fieldIndex(char *table, char *field)
 /* Returns index of field in a row from table, or -1 if it 
  * doesn't exist. */
 {
@@ -761,22 +790,94 @@ return ix;
 }
 
 
-void doFeatures()
+static void writeSegmentFeatures(struct segment *segment,
+                                 struct regExp *category,
+                                 struct regExp *type,
+                                 struct tableDef *tdList,
+                                 struct hash *trackHash,
+                                 struct sqlConnection *conn,
+                                 struct sqlConnection *conn2)
+/* write features for a segment */
+{
+/* Print segment header. */
+char *seq = segment->seq;
+int start = segment->start;
+int end = segment->end;
+char *seqName = segment->seqName;
+printf(
+"<SEGMENT id=\"%s\" start=\"%d\" stop=\"%d\" version=\"%s\" label=\"%s\">\n",
+       seqName, start+1, end, version, seqName);
+
+/* Query database and output features. */
+struct tableDef *td;
+for (td = tdList; td != NULL; td = td->next)
+    {
+    if (trackFilter(category, type, td))
+        {
+        int rowOffset;
+        boolean hasBin;
+        char table[64];
+        char **row;
+
+        verbose(2, "track %s\n", td->name);
+        hFindSplitTable(seq, td->name, table, &hasBin);
+        struct trackTable *tt = hashFindVal(trackHash, td->name);
+        struct sqlResult *sr = hRangeQuery(conn, td->name, seq, start, end, NULL, &rowOffset);
+        // FIXME: should use trackDb to determine type, as field names are
+        // not always unique.
+        if (sameString(td->startField, "tStart") && (sqlFieldIndex(conn2, table, "qStart") >= 0))
+            {
+            while ((row = sqlNextRow(sr)) != NULL)
+                {
+                struct psl *psl = pslLoad(row+rowOffset);
+                dasOutPsl(psl, td, tt);
+                pslFree(&psl);
+                }
+            }
+        else if (sameString(td->startField, "txStart"))
+            {
+            while ((row = sqlNextRow(sr)) != NULL)
+                {
+                struct genePred *gp = genePredLoad(row+rowOffset);
+                dasOutGp(gp, td, tt);
+                genePredFree(&gp);
+                }
+            }
+        else if (sameString(td->startField, "chromStart"))
+            {
+            int scoreIx = fieldIndex(table, "score");
+            int strandIx = fieldIndex(table, "strand");
+            int nameIx = fieldIndex(table, "name");
+
+            if (scoreIx == -1)
+                scoreIx = fieldIndex(table, "gcPpt");
+            while ((row = sqlNextRow(sr)) != NULL)
+                {
+                char *strand = (strandIx >= 0 ? row[strandIx] : "0");
+                char *score = (scoreIx >= 0 ? row[scoreIx] : "-");
+                char *name = (nameIx >= 0 ? row[nameIx] : td->name);
+                dasOutBed(row[0+rowOffset], 
+                    sqlUnsigned(row[1+rowOffset]), 
+                    sqlUnsigned(row[2+rowOffset]), 
+                    name, strand, score, td, tt);
+                }
+            }
+        sqlFreeResult(&sr);
+        }
+    }
+printf("</SEGMENT>\n");
+}
+
+static void doFeatures()
 /* features - DAS Annotation Feature Server. */
 {
 struct segment *segmentList = dasSegmentList(TRUE), *segment;
 struct hash *trackHash = hashOfTracks();
-struct trackTable *tt;
-struct tableDef *tdList = getTables(), *td;
+struct tableDef *tdList = getTables();
 struct regExp *category = regExpFromCgiVar("category");
 struct regExp *type = regExpFromCgiVar("type");
 struct sqlConnection *conn = hAllocConn();
 struct sqlConnection *conn2 = hAllocConn();
-struct sqlResult *sr;
-char **row;
-int start, end;
-char *seq, *seqName;
-struct dyString *query = newDyString(0);
 
 /* Write out DAS features header. */
 normalHeader();
@@ -786,86 +887,19 @@ printf(
 "<GFF version=\"1.0\" href=\"%s\">\n", currentUrl());
 
 for (segment = segmentList; segment != NULL; segment = segment->next)
-    {
-    /* Print segment header. */
-    seq = segment->seq;
-    start = segment->start;
-    end = segment->end;
-    seqName = segment->seqName;
-    printf(
-    "<SEGMENT id=\"%s\" start=\"%d\" stop=\"%d\" version=\"%s\" label=\"%s\">\n",
-	   seqName, start+1, end, version, seqName);
-
-    /* Query database and output features. */
-    for (td = tdList; td != NULL; td = td->next)
-	{
-	if (catTypeFilter(category, td->category, type, td->name) )
-	    {
-	    int rowOffset;
-	    boolean hasBin;
-	    char table[64];
-
-	    verbose(2, "track %s\n", td->name);
-	    hFindSplitTable(seq, td->name, table, &hasBin);
-	    tt = hashFindVal(trackHash, td->name);
-	    sr = hRangeQuery(conn, td->name, seq, start, end, NULL, &rowOffset);
-            // FIXME: should use trackDb to determine type, as field names are
-            // not always unique.
-	    if (sameString(td->startField, "tStart") && (sqlFieldIndex(conn2, table, "qStart") >= 0))
-		{
-		while ((row = sqlNextRow(sr)) != NULL)
-		    {
-		    struct psl *psl = pslLoad(row+rowOffset);
-		    dasOutPsl(psl, td, tt);
-		    pslFree(&psl);
-		    }
-		}
-	    else if (sameString(td->startField, "txStart"))
-	        {
-		while ((row = sqlNextRow(sr)) != NULL)
-		    {
-		    struct genePred *gp = genePredLoad(row+rowOffset);
-		    dasOutGp(gp, td, tt);
-		    genePredFree(&gp);
-		    }
-		}
-	    else if (sameString(td->startField, "chromStart"))
-	        {
-		int scoreIx = fieldIndex(table, "score");
-		int strandIx = fieldIndex(table, "strand");
-		int nameIx = fieldIndex(table, "name");
-
-		if (scoreIx == -1)
-		    scoreIx = fieldIndex(table, "gcPpt");
-		while ((row = sqlNextRow(sr)) != NULL)
-		    {
-		    char *strand = (strandIx >= 0 ? row[strandIx] : "0");
-		    char *score = (scoreIx >= 0 ? row[scoreIx] : "-");
-		    char *name = (nameIx >= 0 ? row[nameIx] : td->name);
-		    dasOutBed(row[0+rowOffset], 
-		    	sqlUnsigned(row[1+rowOffset]), 
-			sqlUnsigned(row[2+rowOffset]), 
-			name, strand, score, td, tt);
-		    }
-		}
-	    sqlFreeResult(&sr);
-	    }
-	}
-    printf("</SEGMENT>\n");
-    }
+    writeSegmentFeatures(segment, category, type, tdList, trackHash, conn, conn2);
 
 /* Write out DAS footer. */
 printf("</GFF></DASGFF>\n");
 
 /* Clean up. */
-freeDyString(&query);
 freeHash(&trackHash);
 hFreeConn(&conn2);
 hFreeConn(&conn);
 }
 
 
-void doEntryPoints()
+static void doEntryPoints()
 /* Handle entry points request. */
 {
 struct sqlConnection *conn;
@@ -896,7 +930,7 @@ printf("</ENTRY_POINTS>\n");
 printf("</DASEP>\n");
 }
 
-void doDna()
+static void doDna()
 /* Handle request for DNA. */
 {
 struct segment *segmentList = dasSegmentList(TRUE), *segment;
@@ -936,7 +970,7 @@ for (segment = segmentList; segment != NULL; segment = segment->next)
 printf("</DASDNA>\n");
 }
 
-void dispatch(char *dataSource, char *command)
+static void dispatch(char *dataSource, char *command)
 /* Dispatch a dase command. */
 {
 struct slName *dbList = hDbList();
@@ -957,13 +991,13 @@ else if (slNameFind(dbList, dataSource) != NULL && hDbIsActive(dataSource))
     else if (sameString(command, "features"))
         doFeatures();
     else
-        earlyError(501);
+        earlyError(DAS_UNIMPLEMENTED_FEATURE);
     }
 else 
-    earlyError(401);
+    earlyError(DAS_BAD_DATA_SOURCE);
 }
 
-void das(char *pathInfo)
+static void das(char *pathInfo)
 /* das - Das Server. */
 {
 static char *parts[3];
@@ -993,9 +1027,10 @@ if (cgiVarExists("verbose"))
     verboseSetLevel(cgiInt("verbose"));
 if (argc == 2)
     path = argv[1];
-/* Temporary measure to shut down abusive client:
+/* Temporary measure to shut down abusive clients */
+#if 0
    blockHog("pix39.systemsbiology.net", "198.107.152.39");
-*/
+#endif
 das(path);
 return 0;
 }
