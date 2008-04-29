@@ -11,7 +11,7 @@
 #include "hgRelate.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgLoadBed.c,v 1.55 2008/03/04 00:44:37 kate Exp $";
+static char const rcsid[] = "$Id: hgLoadBed.c,v 1.56 2008/04/29 22:13:11 tdreszer Exp $";
 
 /* Command line switches. */
 boolean noSort = FALSE;		/* don't sort */
@@ -110,9 +110,9 @@ struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *words[64], *line;
 int wordCount;
 
-if (!lineFileNext(lf, &line, NULL))
+if (!lineFileNextReal(lf, &line))
     if (ignoreEmpty)
-	return(0);
+        return(0);
 line = cloneString(line);
 if (strictTab)
     wordCount = chopTabs(line, words);
@@ -162,7 +162,7 @@ int wordCount;
 struct bedStub *bed;
 
 verbose(1, "Reading %s\n", lf->fileName);
-while (lineFileNext(lf, &line, NULL))
+while (lineFileNextReal(lf, &line))
     {
     if (hasBin)
 	nextWord(&line);
