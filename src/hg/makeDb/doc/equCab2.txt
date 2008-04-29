@@ -1,7 +1,7 @@
 # for emacs: -*- mode: sh; -*-
 
 # Equus caballus - ??
-#	"$Id: equCab2.txt,v 1.9 2008/04/29 20:45:53 markd Exp $"
+#	"$Id: equCab2.txt,v 1.10 2008/04/29 20:58:32 markd Exp $"
 #########################################################################
 # DOWNLOAD SEQUENCE (...
 
@@ -224,7 +224,7 @@ i.e. if you take dupes and chrM into account, our data agrees with their raw dat
     #   1004742864 bases of 2454424288 (40.936%) in intersection
 
     # RepeatMasker and lib version from do.log:
-    #   RepeatMasker version development-$Id: equCab2.txt,v 1.9 2008/04/29 20:45:53 markd Exp $
+    #   RepeatMasker version development-$Id: equCab2.txt,v 1.10 2008/04/29 20:58:32 markd Exp $
     #   Jan 11 2008 (open-3-1-9) version of RepeatMasker
     #	CC   RELEASE 20071204
 
@@ -823,7 +823,8 @@ end
     cd /cluster/data/equCab2/bed/nscan/
     wget http://mblab.wustl.edu/predictions/horse/equCab2/equCab2.gtf
     wget http://mblab.wustl.edu/predictions/horse/equCab2/equCab2.prot.fa
-    wget http://mblab.wustl.edu/predictions/horse/equCab2/rep1.html  # updated readme.html
+    # updated readme.html
+    wget http://mblab.wustl.edu/predictions/horse/equCab2/repl.html
     bzip2 equCab2.*
     chmod a-w *
 
@@ -833,9 +834,9 @@ end
     rm *.tab
 
     # update trackDb; need a equCab2-specific page to describe informants
-    horse/equCab2/nscanGene.html   (copy from readme.html)
+    horse/equCab2/nscanGene.html   (copy from repl.html)
     horse/equCab2/trackDb.ra
     # set search regex to
-        termRegex chr[0-9a-zA-Z_]+\.[0-9]+\.[0-9]+(\.[0-9]+)*
+        termRegex chr[0-9a-zA-Z_]+\.[0-9]+\.[0-9]+
 
 #############################################################################
