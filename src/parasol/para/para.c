@@ -15,7 +15,7 @@
 #include "jobResult.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: para.c,v 1.72 2008/04/29 09:36:48 galt Exp $";
+static char const rcsid[] = "$Id: para.c,v 1.73 2008/04/29 10:14:11 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -96,7 +96,9 @@ errAbort(
   "para finished\n"
   "   List jobs that have finished.\n"
   "para hung\n"
-  "   List hung jobs in the batch.\n"
+  "   List hung jobs in the batch (running > killTime).\n"
+  "para slow\n"
+  "   List slow jobs in the batch (running > warnTime).\n"
   "para crashed\n"
   "   List jobs that crashed or failed output checks the last time they were run.\n"
   "para failed\n"
@@ -1374,6 +1376,8 @@ printf("host: %s\n", sub->host);
 printf("start time: %s", ctime(&startTime)); /* ctime adds \n */
 printf("run time so far: %d sec,  %4.2f min, %4.2f hours,  %4.2f days\n", 
 	duration, duration/60.0, duration/3600.0,  duration/(3600.0*24.0));
+if (sub->slow)
+  printf("This is a slow job, running time > %d minutes.\n", warnTime);
 printf("\n");
 }
 
@@ -1889,6 +1893,12 @@ else if (sameWord(command, "chill"))
 else if (sameWord(command, "hung"))
     {
     paraListState(batch, jaHung);
+    }
+else if (sameWord(command, "slow"))
+    {
+    char temp[256];
+    safef(temp, sizeof(temp), "%d", warnTime);
+    paraRunning(batch, temp);
     }
 else if (sameWord(command, "crashed"))
     {
