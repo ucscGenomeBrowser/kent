@@ -4,7 +4,7 @@
 # This file describes browser build for the Sea Lamprey
 # genome, Petromyzon marinus, March 2007, v.3.0 from WUSTL
 #
-#       "$Id: petMar1.txt,v 1.13 2008/04/29 19:19:51 hiram Exp $"
+#       "$Id: petMar1.txt,v 1.14 2008/04/29 21:50:00 hiram Exp $"
 #
 
 ##########################################################################
@@ -1555,4 +1555,39 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     #	pairwiseHeight 12
     #	yLineOnOff Off
 
+#############################################################################
+#  Downloads (DONE - 2008-04-29 - Hiram)
+    #	Let's see if the downloads will work
+    ssh hgwdev
+    cd /cluster/data/petMar1
+    #	expecting to find repeat masker .out file here:
+    ln -s bed/RepeatMasker/petMar1.fa.out .
+    gunzip bed/simpleRepeat/trfMask.bed.gz
+    time nice -n +19 /cluster/bin/scripts/makeDownloads.pl \
+	-workhorse=hgwdev petMar1 > jkStuff/downloads.log 2>&1
+    #	real    7m13.080s
+
+    #	failed making upstream sequences:
+    #	featureBits calJac1 mgcGenes:upstream:1000 -fa=stdout
+    #	setpriority: Permission denied.
+    #	the 'nice' from my bash shell causes trouble inside the csh
+    #	script which uses nice.  Finish off the install step manually
+    #	with the mgcGenes upstreams ...
+
+#############################################################################
+#  PushQ entries (DONE - 2008-04-29 - Hiram)
+    ssh hgwdev
+    /cluster/data/petMar1
+    /cluster/bin/scripts/makePushQSql.pl petMar1 > jkStuff/pushQ.sql
+    #	output warnings:
+# petMar1 does not have seq
+# Could not tell (from trackDb, all.joiner and hardcoded lists of supporting
+# and genbank tables) which tracks to assign these tables to:
+#	gbWarn
+#	multiz6wayFrames
+#	phastCons6way
+    scp -p jkStuff/pushQ.sql hgwbeta:/tmp/petMar1.sql
+    ssh hgwbeta
+    cd /tmp
+    hgsql qapushq < petMar1.sql
 #############################################################################
