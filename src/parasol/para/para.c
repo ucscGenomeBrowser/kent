@@ -15,7 +15,7 @@
 #include "jobResult.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: para.c,v 1.70 2008/04/25 23:29:06 galt Exp $";
+static char const rcsid[] = "$Id: para.c,v 1.71 2008/04/29 05:18:30 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -23,8 +23,8 @@ static struct optionSpec optionSpecs[] = {
     {"maxQueue" , OPTION_INT},
     {"minPush"  , OPTION_INT},
     {"maxPush"  , OPTION_INT},
-    {"warnTime" , OPTION_INT},   // warn - not completely implemented
-    {"killTime" , OPTION_INT},   // hung - not completely implemented
+    {"warnTime" , OPTION_INT},
+    {"killTime" , OPTION_INT},
     {"delayTime", OPTION_INT},
     {"eta"      , OPTION_BOOLEAN},
     {"pri"      , OPTION_STRING},
@@ -62,7 +62,7 @@ errAbort(
   "      -maxPush=N  Maximum number of jobs to queue - default 100000.\n"
   "      -warnTime=N  Number of minutes job runs before hang warning. \n"
   "         Default 4320 (3 days).\n"
-  "      -killTime=N  Number of minutes job runs before push kills it.\n"
+  "      -killTime=N  Number of minutes hung job runs before push kills it.\n"
   "         Default 20160 (2 weeks).\n"
   "      -delayTime=N  Number of seconds to delay before submitting next job \n"
   "         to minimize i/o load at startup - default 0.\n"
@@ -723,6 +723,21 @@ dyStringFree(&cmd);
 return jobId != NULL;
 }
 
+boolean killJob(char *jobId)
+/* Tell hub to kill a job.  Return TRUE on
+ * success. */
+{
+char buf[256];
+char *result = NULL;
+boolean ok;
+snprintf(buf, sizeof(buf), "removeJob %s", jobId);
+result = hubSingleLineQuery(buf);
+ok = (result != NULL && sameString(result, "ok"));
+freez(&result);
+return ok;
+}
+
+
 void statusOutputChanged()
 /* Complain about status output format change and die. */
 {
@@ -738,6 +753,11 @@ struct job *job;
 struct submission *sub;
 int queueSize = 0;
 char curDir[512];
+
+long killSeconds = killTime*60;
+long warnSeconds = warnTime*60;
+long duration;
+time_t now = time(NULL);
 
 if (getcwd(curDir, sizeof(curDir)) == NULL)
     errAbort("Couldn't get current directory");
@@ -785,6 +805,20 @@ for (lineEl = lineList; lineEl != NULL; lineEl = lineEl->next)
 		sub->running = TRUE;
 		sub->startTime = t;
 		sub->host = cloneString(host);
+		duration = now - sub->startTime;
+                if (duration < 0)
+		    warn("Strange start time in jobId %s: %u", jobId, sub->startTime);
+                else
+		    {
+		    if (duration > killSeconds)
+			{
+    			sub->hung = TRUE;
+			killJob(sub->id);
+                        verbose(1, "killed hung jobId: %s\n", sub->id);
+			}
+		    if (duration > warnSeconds)
+			sub->slow = TRUE;
+		    }
 		}
 	    else
 		{
@@ -888,6 +922,8 @@ for (job=db->jobList; job != NULL; job = job->next)
 		sub->host = cloneString(jr->host);
 		sub->inQueue = FALSE;
 		sub->running = FALSE;
+		sub->hung = FALSE;
+		sub->slow = FALSE;
 		if (isStatusOk(sub->status) && checkOneJob(job, "out", checkHash, stderr) == 0)
 		    sub->ranOk = TRUE;
 		else
@@ -906,7 +942,7 @@ boolean needsRerun(struct submission *sub)
 {
 if (sub == NULL)
     return TRUE;
-return sub->submitError || sub->queueError || sub->crashed || sub->trackingError;
+return sub->submitError || sub->queueError || sub->crashed || sub->trackingError || sub->hung;
 }
 
 struct jobDb *paraCycle(char *batch)
@@ -918,13 +954,12 @@ int queueSize;
 int pushCount = 0, retryCount = 0;
 int tryCount;
 boolean finished = FALSE;
-struct hash *resultsHash;
 char curDir[512];
 
 if (getcwd(curDir, sizeof(curDir)) == NULL)
     errAbort("Couldn't get current directory");
 queueSize = markQueuedJobs(db);
-resultsHash = markRunJobStatus(db);
+markRunJobStatus(db);
 
 beginHappy();
 for (tryCount=1; tryCount<=retries && !finished; ++tryCount)
@@ -969,7 +1004,6 @@ if (pushCount > 0)
     verbose(1, "Pushed Jobs: %d\n", pushCount);
 if (retryCount > 0)
     verbose(1, "Retried jobs: %d\n", retryCount);
-freeResults(&resultsHash);
 return db;
 }
 
@@ -1255,30 +1289,34 @@ void problemReport(struct job *job, struct submission *sub, char *type, struct h
 {
 struct check *check;
 struct hash *hash = newHash(0);
-struct jobResult *jr = hashFindVal(resultsHash, sub->id);
+struct jobResult *jr = NULL;
 
 printf("job: %s\n", job->command);
 printf("id: %s\n", sub->id);
 printf("failure type: %s\n", type);
-if (jr == NULL)
-     printf("tracking error: %d\n", sub->trackingError);
-else
-    {
-    time_t startTime = jr->startTime;
-    printf("host: %s\n", jr->host);
-    printf("start time: %s", ctime(&startTime)); /* ctime adds \n */
-    printf("return: ");
-    if (WIFEXITED(jr->status))
-        printf("%d\n", WEXITSTATUS(jr->status));
-    else if (WIFSIGNALED(jr->status))
-        printf("signal %d\n", WTERMSIG(jr->status));
-    else if (WIFSTOPPED(jr->status))
-        printf("stopped %d\n", WSTOPSIG(jr->status));
-    else 
-        printf("unknow wait status %d\n", jr->status);
-    for (check = job->checkList; check != NULL; check = check->next)
-	doOneCheck(check, hash, stdout);
-    printErrFile(sub, jr);
+if (resultsHash)
+    {    
+    jr = hashFindVal(resultsHash, sub->id);
+    if (jr == NULL)
+	 printf("tracking error: %d\n", sub->trackingError);
+    else
+	{
+	time_t startTime = jr->startTime;
+	printf("host: %s\n", jr->host);
+	printf("start time: %s", ctime(&startTime)); /* ctime adds \n */
+	printf("return: ");
+	if (WIFEXITED(jr->status))
+	    printf("%d\n", WEXITSTATUS(jr->status));
+	else if (WIFSIGNALED(jr->status))
+	    printf("signal %d\n", WTERMSIG(jr->status));
+	else if (WIFSTOPPED(jr->status))
+	    printf("stopped %d\n", WSTOPSIG(jr->status));
+	else 
+	    printf("unknow wait status %d\n", jr->status);
+	for (check = job->checkList; check != NULL; check = check->next)
+	    doOneCheck(check, hash, stdout);
+	printErrFile(sub, jr);
+	}
     }
 printf("\n");
 hashFree(&hash);
@@ -1301,17 +1339,17 @@ for (job = db->jobList; job != NULL; job = job->next)
 	{
 	if (sub->hung)
 	    {
-	    problemReport(job, sub, "hung", resultsHash);
+	    problemReport(job, sub, "hung", NULL);
 	    ++problemCount;
 	    }
 	else if (sub->slow)
 	    {
-	    problemReport(job, sub, "slow", resultsHash);
+	    problemReport(job, sub, "slow", NULL);
 	    ++problemCount;
 	    }
 	else if (sub->trackingError)
 	    {
-	    problemReport(job, sub, "tracking error", resultsHash);
+	    problemReport(job, sub, "tracking error", NULL);
 	    ++problemCount;
 	    }
 	else if (needsRerun(sub))
@@ -1549,20 +1587,6 @@ void paraChill(char *batch)
 {
 sendChillMessage();
 removeChilledSubmissions(batch);
-}
-
-boolean killJob(char *jobId)
-/* Tell hub to kill a job.  Return TRUE on
- * success. */
-{
-char buf[256];
-char *result = NULL;
-boolean ok;
-snprintf(buf, sizeof(buf), "removeJob %s", jobId);
-result = hubSingleLineQuery(buf);
-ok = (result != NULL && sameString(result, "ok"));
-freez(&result);
-return ok;
 }
 
 void paraStopAll(char *batch)

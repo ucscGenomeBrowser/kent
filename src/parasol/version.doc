@@ -80,4 +80,13 @@
 
      Added an option -extended to parasol list jobs to include the batch dir in the output.
 
+     Finished the implementation of -killTime and -warnTime, which had
+     never been completed.  This creates the new status "hung" which 
+     is like the other two statuses "ranOk" and "crash".  If a running
+     job exceeds killTime, then the job is removed and hung is set to true.
+     if job exceeds warnTime, then it appears in various reports as a
+     slow running job.  The defaults are 3 days for warnTime and 2 weeks 
+     for killTime.  Jim voted to complete the implementation rather than
+     simply dropping the options.
+
 
