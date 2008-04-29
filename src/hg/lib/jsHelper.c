@@ -20,7 +20,7 @@
 #include "jsHelper.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: jsHelper.c,v 1.9 2008/04/10 19:33:27 larrym Exp $";
+static char const rcsid[] = "$Id: jsHelper.c,v 1.10 2008/04/29 22:27:12 larrym Exp $";
 
 static boolean jsInited = FALSE;
 struct hash *includedFiles = NULL;
@@ -324,13 +324,40 @@ if(!includedFiles)
     includedFiles = newHash(0);
 if(hashLookup(includedFiles, fileName) == NULL)
     {
-    static char realFileName[2048];
-    safef(realFileName, sizeof(realFileName), "%s/js/%s", hDocumentRoot(), fileName);
-    if(!fileExists(realFileName))
+    char *cgiRoot = hCgiRoot();
+    /* tolerate missing cgiRoot (i.e. when running from command line) */
+    if(cgiRoot)
         {
-        errAbort("jsIncludeFile: javascript fileName: %s doesn't exist.", realFileName);
+        static char realFileName[2048];
+        safef(realFileName, sizeof(realFileName), "%s/js/%s", cgiRoot, fileName);
+        if(!fileExists(realFileName))
+            {
+            errAbort("jsIncludeFile: javascript fileName: %s doesn't exist.", realFileName);
+            }
         }
     hashAdd(includedFiles, fileName, NULL);
-    hPrintf("<script type='text/javascript' src='../js/%s'></script>\n", fileName);
+    hPrintf("<script type='text/javascript' src='../cgi-bin/js/%s'></script>\n", fileName);
     }
+}
+
+char *jsCheckAllOnClickHandler(char *idPrefix, boolean state)
+/* Returns javascript for use as an onclick attribute value to check all/uncheck all
+ * all checkboxes with given idPrefix. 
+ * state parameter determines whether to "check all" or "uncheck all" (TRUE means "check all"). */
+{
+static char buf[512];
+jsIncludeFile("utils.js");
+safef(buf, sizeof(buf), "setCheckBoxesWithPrefix(this, '%s', %s); return false", idPrefix, state ? "true" : "false");
+return buf;
+}
+
+/* cgiMakeCheckAllSubmitButton really belongs in cheapcgi.c, but that is compiled without access to jsHelper.h */
+
+void cgiMakeCheckAllSubmitButton(char *name, char *value, char *id, char *idPrefix, boolean state)
+/* Make submit button which uses javascript to apply check all or uncheck all to all
+ * checkboxes with given idPrefix.
+ * state parameter determines whether to "check all" or "uncheck all" (TRUE means "check all"). 
+ * id parameter may be NULL */
+{
+cgiMakeOnClickSubmitButton(jsCheckAllOnClickHandler(idPrefix, state), name, value);
 }

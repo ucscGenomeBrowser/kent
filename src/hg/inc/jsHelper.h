@@ -97,4 +97,15 @@ void jsIncludeFile(char *fileName);
 /* Prints out html to include given javascript file from the js directory; suppresses redundant
  * <script ...> tags if called repeatedly */
 
+char *jsCheckAllOnClickHandler(char *idPrefix, boolean state);
+/* Returns javascript for use as an onclick attribute value to apply "check all"/"uncheck all" 
+ * to all checkboxes with given idPrefix. 
+ * state parameter determines whether to "check all" or "uncheck all" (TRUE means "check all"). */
+
+void cgiMakeCheckAllSubmitButton(char *name, char *value, char *id, char *idPrefix, boolean state);
+/* Make submit button which uses javascript to apply check all or uncheck all to all
+ * checkboxes with given idPrefix.
+ * state parameter determines whether to "check all" or "uncheck all" (TRUE means "check all"). 
+ * id parameter may be NULL */
+
 #endif /* JSHELPER_H */
