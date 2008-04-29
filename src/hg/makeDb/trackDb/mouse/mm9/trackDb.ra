@@ -240,5 +240,5 @@ group genes
 priority 66
 color 56,108,56
 type genePred
-url http://www.isrec.isb-sib.ch/cgi-bin/tromer/tromer_quick_search.pl?query_str=$$
+url http://www.isrec.isb-sib.ch/cgi-bin/tromer/tromer_quick_search.pl?db=mm9&query_str=$$
 urlLabel TROMER database detail: 
