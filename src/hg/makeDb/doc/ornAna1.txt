@@ -1359,3 +1359,14 @@ Submission to last job:       1991620s   33193.67m   553.23h   23.05d
 	-continue=cleanup -swap -bigClusterHub=pk > cleanup.log 2>&1 &
 
 ###########################################################################
+
+############################################################################
+# SWAP ornAna1 -> equCab2 (DONE - 2008-04-29 - larrym)
+    mkdir /cluster/data/ornAna1/bed/blastz.equCab2.swap
+    cd /cluster/data/ornAna1/bed/blastz.equCab2.swap
+    time /bin/nice -n 19 doBlastzChainNet.pl \
+        /cluster/data/equCab2/bed/blastz.ornAna1.2008-04-24/DEF \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	    -swap -syntenicNet >& do.log &
+    0.883u 0.754s 2:33:21.36 0.0%   0+0k 0+0io 16pf+0w
+
