@@ -20,7 +20,7 @@
 #include "bedCart.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.53 2008/04/19 00:15:04 larrym Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.54 2008/04/29 22:29:57 larrym Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -240,7 +240,6 @@ return buf;
 static void showTableButtons(char *db, char *table, boolean withGetButton)
 /* Put up the last buttons in a showTable section. */
 {
-static char buf[128];
 hPrintf("<BR>\n");
 if (withGetButton)
     {
@@ -252,18 +251,9 @@ if (withGetButton)
     cgiMakeButton(hgtaDoMainPage, "cancel");
     hPrintf(" ");
     }
-jsInit();
-jsIncludeFile("utils.js");
-
-safef(buf, sizeof(buf), "setCheckBoxesWithPrefix(this, '%s', true); return false", checkVarPrefixWithTable(db, table));
-cgiMakeOnClickSubmitButton(buf,
-			   setClearAllVar(hgtaDoSetAllFieldPrefix,db,table), 
-			   "check all");
+cgiMakeCheckAllSubmitButton(setClearAllVar(hgtaDoSetAllFieldPrefix, db, table), "check all", checkVarPrefixWithTable(db, table), TRUE);
 hPrintf(" ");
-safef(buf, sizeof(buf), "setCheckBoxesWithPrefix(this, '%s', false); return false", checkVarPrefixWithTable(db, table));
-cgiMakeOnClickSubmitButton(buf,
-			   setClearAllVar(hgtaDoClearAllFieldPrefix,db,table), 
-			   "clear all");
+cgiMakeCheckAllSubmitButton(setClearAllVar(hgtaDoClearAllFieldPrefix, db, table), "clear all", checkVarPrefixWithTable(db, table), FALSE);
 }
 
 static void showTableFieldsDb(char *db, char *rootTable, boolean withGetButton)
@@ -321,6 +311,7 @@ static void showTableFieldCt(char *db, char *table, boolean withGetButton)
  * track. */
 {
 struct customTrack *ct = lookupCt(table);
+// Could use ct to determine field names (see correlate:fillInTrackTable:bedGraphColumnNum
 struct slName *field, *fieldList = getBedFields(ct->fieldCount);
 
 hTableStart();
