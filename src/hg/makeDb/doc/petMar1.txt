@@ -4,7 +4,7 @@
 # This file describes browser build for the Sea Lamprey
 # genome, Petromyzon marinus, March 2007, v.3.0 from WUSTL
 #
-#       "$Id: petMar1.txt,v 1.12 2008/04/28 21:40:21 hiram Exp $"
+#       "$Id: petMar1.txt,v 1.13 2008/04/29 19:19:51 hiram Exp $"
 #
 
 ##########################################################################
@@ -1287,4 +1287,272 @@ done
     #	enable the trackDb entries:
 # frames multiz6wayFrames
 # irows on
+#############################################################################
+# phastCons 6-way (DONE - 2008-04-28 - Hiram)
+
+    # split 6way mafs into 10M chunks and generate sufficient statistics 
+    # files for # phastCons
+    ssh memk
+    mkdir /cluster/data/petMar1/bed/multiz6way/msa.split
+    cd /cluster/data/petMar1/bed/multiz6way/msa.split
+    mkdir -p /san/sanvol1/scratch/petMar1/multiz6way/cons/ss
+
+    cat << '_EOF_' > doSplit.csh
+#!/bin/csh -ef
+set MAFS = /cluster/data/petMar1/bed/multiz6way/anno/maf
+set WINDOWS = /san/sanvol1/scratch/petMar1/multiz6way/cons/ss
+pushd $WINDOWS
+set resultDir = $1
+set c = $2
+rm -fr $resultDir/$c
+mkdir -p $resultDir
+twoBitToFa -seq=$c /scratch/data/petMar1/petMar1.2bit /scratch/tmp/petMar1.$c.fa
+/cluster/bin/phast/$MACHTYPE/msa_split $MAFS/$resultDir/$c.maf -i MAF \
+    -M /scratch/tmp/petMar1.$c.fa \
+    -o SS -r $resultDir/$c -w 10000000,0 -I 1000 -B 5000
+rm -f /scratch/tmp/petMar1.$c.fa
+popd
+mkdir -p $resultDir
+date > $resultDir/$c.out
+'_EOF_'
+    # << happy emacs
+    chmod +x doSplit.csh
+
+    cat << '_EOF_' > template
+#LOOP
+doSplit.csh $(dir1) $(root1) {check out line+ $(dir1)/$(root1).out}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    #	create list of maf files:
+    (cd ../anno/maf; find . -type f) | sed -e "s#^./##" > maf.list
+
+    gensub2 maf.list single template jobList
+    para create jobList
+    para try ... check ... etc
+# Completed: 31488 of 31488 jobs
+# CPU time in finished jobs:       2289s      38.15m     0.64h    0.03d  0.000 y
+# IO & Wait Time:                 82557s    1375.95m    22.93h    0.96d  0.003 y
+# Average job time:                   3s       0.04m     0.00h    0.00d
+# Longest finished job:              40s       0.67m     0.01h    0.00d
+# Submission to last job:          3052s      50.87m     0.85h    0.04d
+
+    # take the cons and noncons trees from the mouse 30-way
+
+    #	Estimates are not easy to make, probably more correctly,
+    #	take the 30-way .mod file, and re-use it here.
+    ssh hgwdev
+    cd /cluster/data/petMar1/bed/multiz6way
+    cp -p /cluster/data/mm9/bed/multiz30way/mm9.30way.mod .
+
+    # Run phastCons
+    #	This job is I/O intensive in its output files, thus it is all
+    #	working over in /scratch/tmp/
+    ssh memk
+    mkdir -p /cluster/data/petMar1/bed/multiz6way/cons/run.cons
+    cd /cluster/data/petMar1/bed/multiz6way/cons/run.cons
+
+    #	there are going to be several different phastCons runs using
+    #	this same script.  They trigger off of the current working directory
+    #	$cwd:t which is the "grp" in this script.  It is one of:
+    #	all gliers placentals
+    #	Well, that's what it was when used in the Mm9 30-way,
+    #	in this instance, there is only the directory "all"
+
+    cat << '_EOF_' > doPhast.csh
+#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2007-05-04/bin
+set subDir = $1
+set f = $2
+set c = $2:r
+set len = $3
+set cov = $4
+set rho = $5
+set grp = $cwd:t
+set tmp = /scratch/tmp/$f
+set cons = /cluster/data/petMar1/bed/multiz6way/cons
+mkdir -p $tmp
+set san = /san/sanvol1/scratch/petMar1/multiz6way/cons
+if (-s $cons/$grp/$grp.non-inf) then
+  cp -p $cons/$grp/$grp.mod $cons/$grp/$grp.non-inf $tmp
+  cp -p $san/ss/$subDir/$f.ss $cons/$grp/$grp.mod $cons/$grp/$grp.non-inf $tmp
+else
+  cp -p $cons/$grp/$grp.mod $tmp
+  cp -p $san/ss/$subDir/$f.ss $cons/$grp/$grp.mod $tmp
+endif
+pushd $tmp > /dev/null
+if (-s $grp.non-inf) then
+  $PHASTBIN/phastCons $f.ss $grp.mod \
+    --rho $rho --expected-length $len --target-coverage $cov --quiet \
+    --not-informative `cat $grp.non-inf` \
+    --seqname $c --idpref $c --most-conserved $f.bed --score > $f.pp
+else
+  $PHASTBIN/phastCons $f.ss $grp.mod \
+    --rho $rho --expected-length $len --target-coverage $cov --quiet \
+    --seqname $c --idpref $c --most-conserved $f.bed --score > $f.pp
+endif
+popd > /dev/null
+mkdir -p $san/$grp/pp/$subDir $san/$grp/bed/$subDir
+sleep 4
+touch $san/$grp/pp/$subDir $san/$grp/bed/$subDir
+rm -f $san/$grp/pp/$subDir/$f.pp
+rm -f $san/$grp/bed/$subDir/$f.bed
+mv $tmp/$f.pp $san/$grp/pp/$subDir
+mv $tmp/$f.bed $san/$grp/bed/$subDir
+rm -fr $tmp
+'_EOF_'
+    # << happy emacs
+    chmod a+x doPhast.csh
+
+    cat << '_EOF_' > template
+#LOOP
+../doPhast.csh $(root1) $(file1) 45 .3 .31 {check out line+ /san/sanvol1/scratch/petMar1/multiz6way/cons/all/pp/$(root1)/$(file1).pp}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    # Create parasol batch and run it
+    pushd /san/sanvol1/scratch/petMar1/multiz6way/cons
+    find ./ss -type f -name "*.ss" | sed -e "s#^./##; s/.ss$//" \
+	> /cluster/data/petMar1/bed/multiz6way/cons/ss.list
+    popd
+
+    # run for all species
+    cd ..
+    mkdir -p all run.cons/all
+    cd all
+    /cluster/bin/phast.build/cornellCVS/phast.2007-05-04/bin/tree_doctor \
+    ../../mm9.30way.mod \
+--prune-all-but=petMar1,hg18,galGal3,mm9,oryLat1,braFlo1 \
+	> all.mod
+    #	Actually, this doesn't work because petMar1 and braFlo1 are not
+    #	in that business.  So, manually place them in the TREE: line in all.mod,
+    #	from the manufactured tree above, and the numbers from mm9.30way.mod:
+
+# TREE: ((petMar1:1.6,(oryLat1:1.077873,(galGal3:0.488824,(mm9:0.325818,hg18:0.136019):0.470757):0.325954):0.4):0.4,braFlo1:2.0);
+
+    cd ../run.cons/all
+
+    #	root1 == chrom name, file1 == ss file name without .ss suffix
+    # Create template file for "all" run
+    cat << '_EOF_' > template
+#LOOP
+../doPhast.csh $(lastDir1) $(file1) 45 .3 .31 {check out line+ /san/sanvol1/scratch/petMar1/multiz6way/cons/all/pp/$(lastDir1)/$(file1).pp}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+    gensub2 ../../ss.list single template jobList
+    para create jobList
+    para try ... check ... push ... etc.
+# Completed: 10471 of 10471 jobs
+# CPU time in finished jobs:        991s      16.52m     0.28h    0.01d  0.000 y
+# IO & Wait Time:                 68810s    1146.83m    19.11h    0.80d  0.002 y
+# Average job time:                   7s       0.11m     0.00h    0.00d
+# Longest finished job:              10s       0.17m     0.00h    0.00d
+# Submission to last job:          4767s      79.45m     1.32h    0.06d
+
+    # create Most Conserved track
+    ssh kolossus
+    cd /san/sanvol1/scratch/petMar1/multiz6way/cons/all
+    find ./bed -type f -name "Contig*.bed" | xargs cat \
+	| sort -k1,1 -k2,2n | \
+        awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' | \
+            /cluster/bin/scripts/lodToBedScore /dev/stdin > mostConserved.bed
+    #	~ 3 minutes
+    cp -p mostConserved.bed /cluster/data/petMar1/bed/multiz6way/cons/all
+
+    # load into database
+    ssh hgwdev
+    cd /cluster/data/petMar1/bed/multiz6way/cons/all
+    time nice -n +19 hgLoadBed petMar1 phastConsElements6way mostConserved.bed
+    #	Loaded 76016 elements of size 5
+
+    # Try for 5% overall cov, and 70% CDS cov 
+    #	We don't have any gene tracks to compare CDS coverage
+    #	--rho .31 --expected-length 45 --target-coverage .3
+    featureBits petMar1 phastConsElements6way
+    #	23909522 bases of 831696438 (2.875%) in intersection
+
+    # Create merged posterier probability file and wiggle track data files
+    # currently doesn't matter where this is performed, the san is the same
+    # network distance from all machines.
+    # sort by chromName, chromStart so that items are in numerical order 
+    #  for wigEncode
+    cd /san/sanvol1/scratch/petMar1/multiz6way/cons/all
+    mkdir -p phastCons6wayScores
+
+for D in `ls -1d pp/file* | sort -t_ -k2n`
+do
+    F=${D/pp\/}
+    out=phastCons6wayScores/${F}.data.gz
+    echo "${D} > ${F}.data.gz"
+    ls -S ${D}/*.pp | xargs cat | gzip > ${out}
+done
+
+    #	copy the phastCons6wayScores to:
+# /cluster/data/petMar1/bed/multiz6way/downloads/phastCons6way/phastConsScores
+    #	for hgdownload downloads
+
+    # Create merged posterier probability file and wiggle track data files
+    # currently doesn't matter where this is performed, the san is the same
+    # network distance from all machines.
+    cd /san/sanvol1/scratch/petMar1/multiz6way/cons/all
+    ls -1 phastCons6wayScores/*.data.gz | sort -t_ -k2n | xargs zcat \
+	| wigEncode stdin phastCons6way.wig phastCons6way.wib
+    # Converted stdin, upper limit 1.00, lower limit 0.00
+    time nice -n +19 cp -p *.wi? /cluster/data/petMar1/bed/multiz6way/cons/all
+    #	real    0m1.729s
+
+    # Load gbdb and database with wiggle.
+    ssh hgwdev
+    cd /cluster/data/petMar1/bed/multiz6way/cons/all
+    ln -s `pwd`/phastCons6way.wib /gbdb/petMar1/multiz6way/phastCons6way.wib
+    time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/petMar1/multiz6way petMar1 \
+	phastCons6way phastCons6way.wig
+    #	real    0m2.068s
+    # remove garbage
+    rm wiggle.tab
+
+    #  Create histogram to get an overview of all the data
+    ssh hgwdev
+    cd /cluster/data/petMar1/bed/multiz6way/cons/all
+    time nice -n +19 hgWiggle -doHistogram \
+	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+	    -db=petMar1 phastCons6way > histogram.data 2>&1
+    #	real    5m0.608s
+
+    #	create plot of histogram:
+
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small color x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Lamprey PetMar1 Histogram phastCons6way track"
+set xlabel " phastCons6way score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.02]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #	<< happy emacs
+
+    display histo.png &
+
+    #	These trackDb entries turn on the wiggle phastCons data track:
+    #	type wigMaf 0.0 1.0
+    #	maxHeightPixels 100:40:11
+    #	wiggle phastCons6way
+    #	spanList 1
+    #	autoScaleDefault Off
+    #	windowingFunction mean
+    #	pairwiseHeight 12
+    #	yLineOnOff Off
+
 #############################################################################
