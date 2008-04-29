@@ -20,7 +20,7 @@
 #include "bedCart.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.54 2008/04/29 22:29:57 larrym Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.55 2008/04/29 23:41:48 larrym Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -251,9 +251,9 @@ if (withGetButton)
     cgiMakeButton(hgtaDoMainPage, "cancel");
     hPrintf(" ");
     }
-cgiMakeCheckAllSubmitButton(setClearAllVar(hgtaDoSetAllFieldPrefix, db, table), "check all", checkVarPrefixWithTable(db, table), TRUE);
+cgiMakeCheckAllSubmitButton(setClearAllVar(hgtaDoSetAllFieldPrefix, db, table), "check all", NULL, checkVarPrefixWithTable(db, table), TRUE);
 hPrintf(" ");
-cgiMakeCheckAllSubmitButton(setClearAllVar(hgtaDoClearAllFieldPrefix, db, table), "clear all", checkVarPrefixWithTable(db, table), FALSE);
+cgiMakeCheckAllSubmitButton(setClearAllVar(hgtaDoClearAllFieldPrefix, db, table), "clear all", NULL, checkVarPrefixWithTable(db, table), FALSE);
 }
 
 static void showTableFieldsDb(char *db, char *rootTable, boolean withGetButton)
