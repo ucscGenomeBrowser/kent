@@ -224,6 +224,12 @@ echo "\nEdit the following pseudo-SQL statement to include only those"
 echo "assemblies you will be pushing:"
 echo 'hgsql -Ne "SELECT * FROM trackVersion WHERE version = ensGeneUpdateVersion AND name = dbsYouWillPush" hgFixed'
 
+# make sure the date column has been updated
+echo "\n\n----------------------"
+echo "the dateReference column in the hgFixed.trackVersion table"
+echo "should say 'current' for your database (or all):"
+hgsql -Ne "SELECT db, dateReference FROM trackVersion WHERE version = $ver AND name = 'ensGene'" hgFixed
+
 # clean up
 if ( -e xxDbListxx) then
  rm xxDbListxx
