@@ -1,6 +1,8 @@
 35:
-     o (in 34x1) Making total query output reporting a 64 bit number to avoid overflow when
-       people using more than 4 gig of query sequence.
+     o (in 34x1) Making total query output reporting a 64 bit number to avoid 
+       overflow when people using more than 4 gig of query sequence.
+     o (in 34x2) Fixed -out=blast to use +/- instead of -/+ for non-translated.
+     
 
 34:
      o (in 33x1) Put in check for two bit files with more than 4 gig.
