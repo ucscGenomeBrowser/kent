@@ -15,7 +15,7 @@
 #include "jobResult.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: para.c,v 1.73 2008/04/29 10:14:11 galt Exp $";
+static char const rcsid[] = "$Id: para.c,v 1.74 2008/04/30 00:18:14 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -63,7 +63,7 @@ errAbort(
   "      -warnTime=N  Number of minutes job runs before hang warning. \n"
   "         Default 4320 (3 days).\n"
   "      -killTime=N  Number of minutes hung job runs before push kills it.\n"
-  "         Default 20160 (2 weeks).\n"
+  "         By default kill off for backwards compatibility.\n" /* originally to be 2 weeks */
   "      -delayTime=N  Number of seconds to delay before submitting next job \n"
   "         to minimize i/o load at startup - default 0.\n"
   "      -priority=x  Set batch priority to high, medium, or low.\n"
@@ -143,7 +143,7 @@ int maxQueue = 1000000;
 int minPush = 1;
 int maxPush = 100000;
 int warnTime = 3*24*60;
-int killTime = 14*24*60;
+int killTime = 0;  /* 0 = off, was originally going to be 2 weeks or 14*24*60; */
 int sleepTime = 5*60;
 int delayTime = 0;
 int priority = NORMAL_PRIORITY;
@@ -812,7 +812,7 @@ for (lineEl = lineList; lineEl != NULL; lineEl = lineEl->next)
 		    warn("Strange start time in jobId %s: %u", jobId, sub->startTime);
                 else
 		    {
-		    if (duration > killSeconds)
+		    if (duration > killSeconds && killSeconds > 0)
 			{
     			sub->hung = TRUE;
 			killJob(sub->id);
