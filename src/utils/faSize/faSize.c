@@ -4,12 +4,13 @@
 #include "dnautil.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: faSize.c,v 1.10 2007/08/09 16:10:41 markd Exp $";
+static char const rcsid[] = "$Id: faSize.c,v 1.11 2008/04/30 23:18:13 markd Exp $";
 
 /* command line options */
 static struct optionSpec optionSpecs[] =
 {
     {"detailed", OPTION_BOOLEAN},
+    {"tab", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
@@ -21,7 +22,8 @@ errAbort("faSize - print total base count in fa files.\n"
 	 "   faSize file(s).fa\n"
 	 "Command flags\n"
 	 "   -detailed        outputs name and size of each record\n"
-         "                    has the side effect of printing nothing else\n");
+         "                    has the side effect of printing nothing else\n"
+         "   -tab             output statistics in a tab separated format\n");
 }
 
 struct faInfo
@@ -44,7 +46,7 @@ return a->size - b->size;
 }
 
 
-void printStats(struct faInfo **pFiList)
+void printStats(struct faInfo **pFiList, boolean tabFmt)
 /* Print mean, standard deviation, min, max, and median. 
  * As a side effect this sorts list by size.*/
 {
@@ -99,11 +101,30 @@ median = fi->size;
 minFi = *pFiList;
 maxFi = slLastEl(*pFiList);
 
-printf("Total size: mean %2.1f sd %2.1f min %d (%s) max %d (%s) median %d\n",
+if (tabFmt)
+    {
+    printf("meanSize\t%2.1f\n" ,mean);
+    printf("SdSize\t%2.1f\n", sd);
+    printf("minSize\t%d\n", minFi->size);
+    printf("minSeqSize\t%s\n", minFi->name);
+    printf("maxSize\t%d\n", maxFi->size);
+    printf("maxSeqSize\t%s\n", maxFi->name);
+    printf("medianSize\t%d\n", median);
+    printf("nCountMean\t%2.1f\n", nMean);
+    printf("nCountSd\t%2.1f\n", nSd);
+    printf("upperCountMean\t%2.1f\n", uMean);
+    printf("upperCountSd\t%2.1f\n", uSd);
+    printf("lowerCountMean\t%2.1f\n", lMean);
+    printf("lowerCountSd\t%2.1f\n", lSd);
+    }
+else
+    {
+    printf("Total size: mean %2.1f sd %2.1f min %d (%s) max %d (%s) median %d\n",
 	mean, sd, minFi->size, minFi->name, maxFi->size, maxFi->name, median);
-printf("N count: mean %2.1f sd %2.1f\n", nMean, nSd);
-printf("U count: mean %2.1f sd %2.1f\n", uMean, uSd);
-printf("L count: mean %2.1f sd %2.1f\n", lMean, lSd);
+    printf("N count: mean %2.1f sd %2.1f\n", nMean, nSd);
+    printf("U count: mean %2.1f sd %2.1f\n", uMean, uSd);
+    printf("L count: mean %2.1f sd %2.1f\n", lMean, lSd);
+    }
 }
 
 void faToDnaPC(char *poly, int size)
@@ -151,6 +172,8 @@ unsigned long long lCount = 0;
 struct lineFile *lf;
 struct faInfo *fiList = NULL, *fi;
 boolean detailed = optionExists("detailed");
+boolean tabFmt = optionExists("tab");
+
 ZeroVar(&seq);
 
 dnaUtilOpen();
@@ -201,9 +224,6 @@ for (i = 0; i<faCount; ++i)
     }
 if (!detailed)
     {
-    printf("%llu bases (%llu N's %llu real %llu upper %llu lower) in %d sequences in %d files\n",
-	baseCount, nCount, baseCount - nCount, uCount, lCount, seqCount, fileCount);
-    printStats(&fiList);
     double perCentMasked = 100.0;
     double perCentRealMasked = 100.0;
     if (baseCount > 0)
@@ -211,8 +231,27 @@ if (!detailed)
     if ((baseCount - nCount) > 0)
 	perCentRealMasked = 100.0*(double)lCount/(double)(baseCount - nCount);
 
-    printf("%%%.2f masked total, %%%.2f masked real\n",
-	    perCentMasked, perCentRealMasked);
+    if (tabFmt)
+        {
+        printf("baseCount\t%llu\n", baseCount);
+        printf("nBaseCount\t%llu\n", nCount);
+        printf("realBaseCount\t%llu\n", baseCount - nCount);
+        printf("upperBaseCount\t%llu\n", uCount);
+        printf("lowerBaseCount\t%llu\n", lCount);
+        printf("seqCount\t%d\n", seqCount);
+        printf("fileCount\t%d\n", fileCount);
+        printStats(&fiList, tabFmt);
+        printf("fracMasked\t%.2f\n",perCentMasked/100.0);
+        printf("fracRealMasked\t%.2f\n",perCentRealMasked/100.0);
+        }
+    else
+        {
+        printf("%llu bases (%llu N's %llu real %llu upper %llu lower) in %d sequences in %d files\n",
+               baseCount, nCount, baseCount - nCount, uCount, lCount, seqCount, fileCount);
+        printStats(&fiList, tabFmt);
+        printf("%%%.2f masked total, %%%.2f masked real\n",
+               perCentMasked, perCentRealMasked);
+        }
     }
 }
 
