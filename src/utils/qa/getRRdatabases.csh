@@ -38,7 +38,6 @@ if ($mach1 == hgwdev || $mach1 == hgwbeta) then
   echo
   echo "  $mach1 is not a RR node"
   echo
-  exit 1
 endif
 
 set betalist=""
