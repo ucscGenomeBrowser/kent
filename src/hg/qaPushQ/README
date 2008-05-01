@@ -32,6 +32,14 @@ update users set password='' where user='theuser';
 To empty the pseudo-cart:
 update users set content='' where user='theuser';
 
+Now that we are using the qaPushQ cgi on hgwdev
+in a hack that lets us read the files on dev even from beta,
+this means that the user table on dev needs updating.
+I currently just dump in from hgwbeta and load it into dev:
+ ssh hgwdev
+ hgsql qapushq -e 'drop table users'
+ hgsqldump -h hgwbeta qapushq users | hgsql qapushq
+
 Notes for qaPushQ gateway, adding new queues:
 CREATE TABLE hg17 (UNIQUE (qid)) SELECT * FROM pushQ;
 delete from hg17;
