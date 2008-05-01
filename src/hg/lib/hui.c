@@ -13,7 +13,7 @@
 #include "hgConfig.h"
 #include "chainCart.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.96 2008/04/29 21:06:42 larrym Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.97 2008/05/01 23:14:52 angie Exp $";
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -36,6 +36,22 @@ char *hDocumentRoot()
 /* get the path to the DocumentRoot, or the default */
 {
 return cfgOptionDefault("browser.documentRoot", DOCUMENT_ROOT);
+}
+
+char *hHelpFile(char *fileRoot)
+/* Given a help file root name (e.g. "hgPcrResult" or "cutters"),
+ * prepend the complete help directory path and add .html suffix. 
+ * Do not free the statically allocated result. */
+{
+static char helpName[PATH_LEN];
+/* This cfgOption comes from Todd Lowe's hgTrackUi.c addition (r1.230): */
+char *helpDir = cfgOption("help.html");
+if (helpDir != NULL)
+    safef(helpName, sizeof(helpName), "%s/%s.html", helpDir, fileRoot);
+else
+    safef(helpName, sizeof(helpName), "%s%s/%s.html", hDocumentRoot(),
+	  HELP_DIR, fileRoot);
+return helpName;
 }
 
 char *hCgiRoot()

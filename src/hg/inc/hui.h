@@ -26,6 +26,10 @@ char *wrapWhiteFont(char *s);
 
 char *hDocumentRoot();
 /* get the path to the DocumentRoot, or the default */
+char *hHelpFile(char *fileRoot);
+/* Given a help file root name (e.g. "hgPcrResult" or "cutters"),
+ * prepend the complete help directory path and add .html suffix. 
+ * Do not free the statically allocated result. */
 char *hCgiRoot();
 /* get the path to the CGI directory.
  * Returns NULL when not running as a CGI (unless specified by browser.cgiRoot) */
