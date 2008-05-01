@@ -1550,7 +1550,8 @@ identifier flyBaseGeneId external=FlyBase
     $dm.fbSynonym.geneId
     $dm.fbTranscript.geneId minCheck=0.95
     dm1.flyBaseSwissProt.flyBaseId minCheck=0.95
-    dm2.flyBase2004Xref.fbgn minCheck=0.90
+    $dm,!dm1.flyBase2004Xref.fbgn minCheck=0.90
+    $dm,!dm1.pscreen.geneIds comma minCheck=0.95
     $gbd,!hg17,!hg18,!danRer3,!mm5,!mm6,!mm7,!mm8,!mm9,!rn3,!rn4,!ce2,!sacCer1.dmBlastTab.target minCheck=0.90
 
 identifier bdgpIsoformCluster
@@ -1588,6 +1589,7 @@ identifier bdgpTranscriptId external=BDGP dependency
     dm1.fbTranscript.transcriptId minCheck=0.95
     dm1.hgBlastTab.query
     dm1.blastFBPep00.name
+    dm1.pscreen.geneIds comma
 
 identifier bdgpNonCodingId external=BDGP
 "Berkeley Drosophila Genome Project Noncoding Gene ID"
