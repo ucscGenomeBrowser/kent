@@ -34,7 +34,7 @@ set months=`hgsql -N -h genome-centdb -e "SELECT DISTINCT firstUse FROM namedSes
 
 # get stats
 echo
-echo " month  count users  shared   reused  "
+echo " first  count users  shared   reused  "
 echo "------  ----- ----- -------  -------"
 foreach month ( $months )
   set count=`hgsql -N -h genome-centdb -e 'SELECT COUNT(*) FROM namedSessionDb \
@@ -76,13 +76,13 @@ hgsql -N -h genome-centdb -e 'SELECT DISTINCT(userName), COUNT(*) as number \
 echo
 
 echo "how often are sessions reaccessed?"
-hgsql -t -h genome-centdb -e 'SELECT DISTINCT(useCount), COUNT(*) as number \
+hgsql -t -h genome-centdb -e 'SELECT DISTINCT(useCount), COUNT(*) as sessions \
   FROM namedSessionDb GROUP BY useCount ORDER BY useCount' hgcentral 
 echo
 
 echo "most used:"
 hgsql -t -h genome-centdb -e 'SELECT userName, sessionName, firstUse, \
-  lastUse, useCount FROM namedSessionDb ORDER BY useCount DESC LIMIT 2' hgcentral
+  lastUse, useCount FROM namedSessionDb ORDER BY useCount DESC LIMIT 4' hgcentral
 echo
 
 exit 0
