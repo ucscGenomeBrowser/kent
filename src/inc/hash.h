@@ -96,6 +96,9 @@ void *hashOptionalVal(struct hash *hash, char *name, void *usual);
 struct hashEl *hashAddInt(struct hash *hash, char *name, int val);
 /* Store integer value in hash */
 
+struct hashEl *hashIncInt(struct hash *hash, char *name);
+/* Increment integer value in hash */
+
 int hashIntVal(struct hash *hash, char *name);
 /* Return integer value associated with name in a simple 
  * hash of ints. */
