@@ -79,10 +79,13 @@ boolean	deleteThis = FALSE;
 boolean squealed = FALSE;
 long long dataLength = 0;
 long long dataFree = 0;
+time_t cleanStart = time(NULL);
 
 struct dyString *dy = dyStringNew(0);
 
+verbose(1, "-------------------\n");
 verbose(1, "Cleaning table %s\n", table);
+verbose(1, "%s\n", ctime(&cleanStart));
 while(TRUE)
     {
     verbose(2, "maxId: %d   count=%d  delCount=%d   dc=%d\n", maxId, count, delCount, dc);
@@ -193,12 +196,20 @@ while(TRUE)
 
     sleep(chunkWait);
 
-    //if (count >= 50000)    
-    //	break; // debug
+    //if (count >= 5000)    
+    	//break; // debug
 
     }
 
-verbose(1, "%s: #rows count=%d  delCount=%d\n", table, count, delCount);
+verbose(1, "%s: #rows count=%d  delCount=%d\n\n", table, count, delCount);
+
+
+time_t cleanEnd = time(NULL);
+int minutes = difftime(cleanEnd, cleanStart) / 60; 
+
+verbose(1, "%s\n", ctime(&cleanEnd));
+verbose(1, "%d minutes\n\n", minutes);
+
 
 /* check max table size has been exceeded, send email warning if so */
 safef(query, sizeof(query), "show table status like '%s'", table );
@@ -214,7 +225,7 @@ int dfField = sqlFieldColumn(sr, "Data_free");
 if (dfField == -1)
     errAbort("error finding field 'Data_free' in show table status resultset");
 dataFree = sqlLongLong(row[dfField]);
-verbose(1, "%s: Data_length=%lld Data_free=%lld\n", table, dataLength, dataFree);
+verbose(1, "%s: Data_length=%lld Data_free=%lld\n\n", table, dataLength, dataFree);
 if ((dataLength / (1024 * 1024 * 1024)) >= squealSize)
     {
     char msg[256];
@@ -254,6 +265,7 @@ password = getCfgOption(config, "password");
 conn = sqlConnectRemote(host, user, password, database);
 
 verbose(1, "Cleaning database %s.%s\n", host, database);
+verbose(1, "chunkWait=%d chunkSize=%d\n", chunkWait, chunkSize);
 if (cleanTable("sessionDb"))
   squealed = TRUE;
 if (cleanTable("userDb"))
