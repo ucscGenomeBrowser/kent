@@ -20,7 +20,7 @@
 #include "hgTracks.h"
 #include "cdsSpec.h"
 
-static char const rcsid[] = "$Id: cds.c,v 1.71 2008/04/23 18:12:43 angie Exp $";
+static char const rcsid[] = "$Id: cds.c,v 1.72 2008/05/01 23:01:00 angie Exp $";
 
 /* Definitions of cds colors for coding coloring display */
 #define CDS_ERROR   0
@@ -789,7 +789,7 @@ if (sameString(tableName,"refGene"))
     mrnaSeq = hGenBankGetMrna(lf->name, "refMrna");
 else if (sameString(seqSource, "ss"))
     mrnaSeq = maybeGetUserSeq(lf->name);
-else if (sameString(seqSource, "hgPcrResult"))
+else if (sameString(seqSource, PCR_RESULT_TRACK_NAME))
     mrnaSeq = maybeGetPcrResultSeq(lf);
 else if (startsWith("extFile", seqSource))
     mrnaSeq = maybeGetExtFileSeq(seqSource, lf->name);
