@@ -71,6 +71,12 @@ priority 240.4
 track netMm7
 priority 240.5
 
+track chainMm6
+priority 240.6
+
+track netMm6
+priority 240.7
+
 # cow
 track chainBosTau4
 priority 250
