@@ -213,7 +213,7 @@
 #include "itemConf.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1414 2008/04/29 00:01:23 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1415 2008/05/01 21:36:58 angie Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -17787,6 +17787,27 @@ sqlDisconnect(&conn);
 }
 
 
+static char *fbgnFromCg(char *cgId)
+/* Given a BDGP ID, looks up its FBgn ID because FlyBase query no longer 
+ * supports BDGP IDs.  Returns NULL if not found.  
+ * Do not free the statically allocated result. */
+{
+static char result[32];  /* Ample -- FBgn ID's are 11 chars long. */
+char query[512];
+if (hTableExists("flyBase2004Xref"))
+    safef(query, sizeof(query),
+	  "select fbgn from flyBase2004Xref where name = '%s';", cgId);
+else if (hTableExists("bdgpGeneInfo"))
+    safef(query, sizeof(query),
+	  "select flyBaseId from bdgpGeneInfo where bdgpName = '%s';", cgId);
+else
+    return NULL;
+struct sqlConnection *conn = hAllocConn();
+char *resultOrNULL =  sqlQuickQuery(conn, query, result, sizeof(result));
+hFreeConn(&conn);
+return resultOrNULL;
+}
+
 static void doPscreen(struct trackDb *tdb, char *item)
 /* P-Screen (BDGP Gene Disruption Project) P el. insertion locations/genes. */
 {
@@ -17808,11 +17829,12 @@ if ((row = sqlNextRow(sr)) != NULL)
     {
     struct pscreen *psc = pscreenLoad(row+hasBin);
     int i;
-    bedPrintPos((struct bed *)psc, 4);
-    printf("<B>Strand:</B> %s<BR>\n", psc->strand);
+    printCustomUrl(tdb, psc->name, FALSE);
+    printPosOnChrom(psc->chrom, psc->chromStart, psc->chromEnd, psc->strand,
+		    FALSE, psc->name);
     if (psc->stockNumber != 0)
 	printf("<B>Stock number:</B> "
-	       "<A HREF=\"http://rail.bio.indiana.edu/.bin/fbstoq.html?%d\" "
+	       "<A HREF=\"http://flystocks.bio.indiana.edu/Reports/%d.html\" "
 	       "TARGET=_BLANK>%d</A><BR>\n", psc->stockNumber,
 	       psc->stockNumber);
     for (i=0;  i < psc->geneCount;  i++)
@@ -17824,11 +17846,22 @@ if ((row = sqlNextRow(sr)) != NULL)
 	    gNum[0] = 0;
 	if (isNotEmpty(psc->geneIds[i]))
 	    {
-	    char *stripped = stripBDGPSuffix(psc->geneIds[i]);
-	    printf("<B>Gene%s BDGP ID:</B> "
-		   "<A HREF=\"http://flybase.net/.bin/fbquery?"
-		   "query=%s&sections=FBgn&submit=issymbol\" TARGET=_BLANK>"
-		   "%s</A><BR>\n", gNum, stripped, psc->geneIds[i]);
+	    char *idType = "FlyBase";
+	    char *fbgnId = psc->geneIds[i];
+	    if (isBDGPName(fbgnId))
+		{
+		char *stripped = stripBDGPSuffix(psc->geneIds[i]);
+		idType = "BDGP";
+		fbgnId = fbgnFromCg(stripped);
+		}
+	    if (fbgnId == NULL)
+		printf("<B>Gene%s %s ID:</B> %s<BR>\n",
+		       gNum, idType, psc->geneIds[i]);
+	    else
+		printf("<B>Gene%s %s ID:</B> "
+		       "<A HREF=\"http://flybase.net/reports/%s.html\" "
+		       "TARGET=_BLANK>%s</A><BR>\n",
+		       gNum, idType, fbgnId, psc->geneIds[i]);
 	    }
 	}
     pscreenFree(&psc);
