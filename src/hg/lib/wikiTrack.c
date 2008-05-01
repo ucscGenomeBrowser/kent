@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.13 2008/04/08 23:41:03 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.14 2008/05/01 23:45:19 angie Exp $";
 
 void wikiTrackStaticLoad(char **row, struct wikiTrack *ret)
 /* Load a row from wikiTrack table into ret.  The contents of ret will
@@ -617,29 +617,6 @@ if (comments && (strlen(comments) > 2))
     }
 else
     hPrintf("\n(no comments for this item at the current time)<BR>\n");
-}
-
-void createPageHelp(char *pageFileName)
-/* find the specified html help page and display it, or issue a missing
- *	page message so the site administrator can fix it.
- */
-{
-char helpName[PATH_LEN], *helpBuf;
-
-hPrintf("<HR />\n");
-
-safef(helpName, ArraySize(helpName), "%s%s/%s.html", hDocumentRoot(), HELP_DIR,
-	pageFileName);
-if (fileExists(helpName))
-    readInGulp(helpName, &helpBuf, NULL);
-else
-    {
-    char missingHelp[512];
-    safef(missingHelp, ArraySize(missingHelp),
-        "<P>(missing help text file in %s)</P>\n", helpName);
-    helpBuf = cloneString(missingHelp);
-    }
-puts(helpBuf);
 }
 
 struct htmlPage *fetchEditPage(char *descriptionKey)
