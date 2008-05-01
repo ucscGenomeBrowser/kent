@@ -13,13 +13,13 @@
 #include "trashDir.h"
 #include "hui.h"
 #include "obscure.h"
+#include "web.h"
 
-static char const rcsid[] = "$Id: userRegions.c,v 1.11 2008/04/18 17:27:13 angie Exp $";
+static char const rcsid[] = "$Id: userRegions.c,v 1.12 2008/05/01 23:42:45 angie Exp $";
 
 void doSetUserRegions(struct sqlConnection *conn)
 /* Respond to set regions button. */
 {
-char helpName[PATH_LEN], *helpBuf;
 char *oldPasted = cartUsualString(cart, hgtaEnteredUserRegions, "");
 char *db = cartOptionalString(cart, hgtaUserRegionsDb);
 if (db && !sameString(db, database))
@@ -43,17 +43,7 @@ hPrintf("&nbsp;");
 cgiMakeButton(hgtaDoMainPage, "cancel");
 hPrintf("</TD></TR></TABLE>");
 hPrintf("</FORM><BR>\n");
-safef(helpName, 256, "%s%s/%s.html", hDocumentRoot(), HELP_DIR, "hgTbUserRegionsHelp");
-if (fileExists(helpName))
-    readInGulp(helpName, &helpBuf, NULL);
-else
-    {
-    char missingHelp[512];
-    safef(missingHelp, ArraySize(missingHelp),
-	"<P>(missing help text file in %s)</P>\n", helpName);
-    helpBuf = cloneString(missingHelp);
-    }
-puts(helpBuf);
+webIncludeHelpFile("hgTbUserRegionsHelp", FALSE);
 htmlClose();
 }
 

@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.120 2007/12/05 00:19:17 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.121 2008/05/01 23:42:45 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -699,7 +699,7 @@ void helpCustom()
 /* display documentation */
 {
 webNewSection("Loading Custom Tracks");
-webIncludeFile("goldenPath/help/customTrackLoad.html");
+webIncludeHelpFile("customTrackLoad", FALSE);
 }
 
 void doBrowserLines(struct slName *browserLines, char **retErr)
@@ -793,7 +793,7 @@ void doManageCustom(char *warn)
 cartWebStart(cart, "Manage Custom Tracks");
 manageCustomForm(warn);
 webNewSection("Managing Custom Tracks");
-webIncludeFile("goldenPath/help/customTrackManage.html");
+webIncludeHelpFile("customTrackManage", FALSE);
 cartWebEnd(cart);
 }
 

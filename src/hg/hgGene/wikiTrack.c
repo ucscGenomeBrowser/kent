@@ -15,7 +15,7 @@
 #include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.12 2008/04/09 23:10:18 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.13 2008/05/01 23:42:45 angie Exp $";
 
 static char *hgGeneUrl()
 {
@@ -479,8 +479,8 @@ else if (emailVerified())  /* prints message when not verified */
 	}
     }
 
-createPageHelp("wikiTrackGeneAnnotationHelp");
-createPageHelp("wikiTrack");	/* generic description page */
+webIncludeHelpFile("wikiTrackGeneAnnotationHelp", TRUE);
+webIncludeHelpFile("wikiTrack", TRUE);	/* generic description page */
 
 hPrintf("<HR>\n");
 hPrintf("<em>Some extra information, perhaps not needed here when item already exists</em><BR>\n");

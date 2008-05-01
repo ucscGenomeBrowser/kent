@@ -213,7 +213,7 @@
 #include "itemConf.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1415 2008/05/01 21:36:58 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1416 2008/05/01 23:42:45 angie Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -5524,7 +5524,6 @@ struct psl *pslList = NULL, *psl;
 char *pslName, *faName, *qName;
 char *encItem = cgiEncode(item);
 enum gfType qt, tt;
-char helpName[PATH_LEN], *helpBuf;
 
 cartWebStart(cart, "BLAT Search Alignments");
 printf("<H2>BLAT Search Alignments</H2>\n");
@@ -5546,11 +5545,7 @@ slReverse(&pslList);
 lineFileClose(&lf);
 printAlignments(pslList, start, "htcUserAli", "user", encItem);
 pslFreeList(&pslList);
-puts("<BR><HR>");
-safef(helpName, sizeof(helpName), "%s%s/%s.html", hDocumentRoot(), HELP_DIR,
-      USER_PSL_TRACK_NAME);
-readInGulp(helpName, &helpBuf, NULL);
-puts(helpBuf);
+webIncludeHelpFile(USER_PSL_TRACK_NAME, TRUE);
 }
 
 void doHgGold(struct trackDb *tdb, char *fragName)
@@ -17878,17 +17873,13 @@ static void doOligoMatch(char *item)
 {
 char *oligo = cartUsualString(cart, 
 	oligoMatchVar, cloneString(oligoMatchDefault));
-char helpName[PATH_LEN], *helpBuf;
 touppers(oligo);
 cartWebStart(cart, "Perfect Matches to Short Sequence");
 printf("<B>Sequence:</B> %s<BR>\n", oligo);
 printf("<B>Chromosome:</B> %s<BR>\n", seqName);
 printf("<B>Start:</B> %s<BR>\n", item+1);
 printf("<B>Strand:</B> %c<BR>\n", item[0]);
-htmlHorizontalLine();
-safef(helpName, 256, "%s%s/%s.html", hDocumentRoot(), HELP_DIR, OLIGO_MATCH_TRACK_NAME);
-readInGulp(helpName, &helpBuf, NULL);
-puts(helpBuf);
+webIncludeHelpFile(OLIGO_MATCH_TRACK_NAME, TRUE);
 }
 
 struct slName *cutterIsoligamers(struct cutter *myEnzyme)
@@ -17961,7 +17952,6 @@ static void doCutters(char *item)
 struct sqlConnection *conn;
 struct cutter *cut = NULL;
 char query[100];
-char helpName[PATH_LEN], *helpBuf;
 char *doGetBed = cgiOptionalString("doGetBed");
 char *c = cgiOptionalString("c");
 char *l = cgiOptionalString("l");
@@ -18029,10 +18019,7 @@ if (cut)
     printf("<A HREF=\"%s&g=%s&l=%s&r=%s&c=%s&doGetBed=all\">all enzymes</A>, ", hgcPathAndSettings(), CUTTERS_TRACK_NAME, l, r, c);
     printf("<A HREF=\"%s&g=%s&l=%s&r=%s&c=%s&doGetBed=%s\">just %s</A><BR>\n", hgcPathAndSettings(), CUTTERS_TRACK_NAME, l, r, c, cut->name, cut->name);
     }
-htmlHorizontalLine();
-safef(helpName, 256, "%s%s/%s.html", hDocumentRoot(), HELP_DIR, CUTTERS_TRACK_NAME);
-readInGulp(helpName, &helpBuf, NULL);
-puts(helpBuf);
+webIncludeHelpFile(CUTTERS_TRACK_NAME, TRUE);
 cutterFree(&cut);
 hFreeOrDisconnect(&conn);
 }

@@ -16,7 +16,7 @@
 #include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.36 2008/04/09 23:10:20 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.37 2008/05/01 23:42:46 angie Exp $";
 
 #define ITEM_SCORE_DEFAULT "1000"
 #define ADD_ITEM_COMMENT_DEFAULT "add comments"
@@ -254,8 +254,8 @@ else if (emailVerified()) /* prints message when not verified */
 	for (el = itemList; el; el = el->next)
 	    hPrintf("%s:%d-%d<BR>\n", el->chrom, el->chromStart, el->chromEnd);
 	}
-    createPageHelp("wikiTrackAddCommentHelp");
-    createPageHelp("wikiTrack");
+    webIncludeHelpFile("wikiTrackAddCommentHelp", TRUE);
+    webIncludeHelpFile("wikiTrack", TRUE);
     }
 }	/*	displayItem()	*/
 
@@ -388,8 +388,8 @@ if (wikiTrackEnabled(database, &userName) && sameWord("0", wikiItemId))
 	hPrintf("\n</FORM>\n");
 	webPrintLinkCellEnd();
 	webPrintLinkTableEnd();
-	createPageHelp("wikiTrackCreateItemHelp");
-	createPageHelp("wikiTrack");
+	webIncludeHelpFile("wikiTrackCreateItemHelp", TRUE);
+	webIncludeHelpFile("wikiTrack", TRUE);
 	}
 
     }
