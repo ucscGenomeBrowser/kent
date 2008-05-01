@@ -68,7 +68,7 @@
 #include "log.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: paraHub.c,v 1.92 2008/04/25 23:55:32 galt Exp $";
+static char const rcsid[] = "$Id: paraHub.c,v 1.93 2008/05/01 23:26:48 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -176,35 +176,41 @@ userHash = newHash(6);
 }
 
 
-void updateUserSickNode(struct user *user, char *machineName)
-/* If all of a users batches reject a sick machine, then the user rejects it. */
+boolean nodeSickOnAllBatches(struct user *user, char *machineName)
+/* Return true if all of a user's current batches believe the machine is sick. */
 {
-boolean allSick = TRUE;
 struct dlNode *node = user->curBatches->head; 
 if (dlEnd(node))
-    allSick = FALSE;    
+    return FALSE;
 for (; !dlEnd(node); node = node->next)
     {
     struct batch *batch = node->val;
-    /* avoid any machine in the sickNodes with threshold failure count */
+    /* does any batch think the node is not sick? */
     if (hashIntValDefault(batch->sickNodes, machineName, 0) < sickNodeThreshold)
 	{
-	allSick = FALSE;
-	break;
+	return FALSE;
 	}
     }
-hashRemove(user->sickNodes, machineName);
+return TRUE;
+}
+
+void updateUserSickNode(struct user *user, char *machineName)
+/* If all of a users batches reject a sick machine, then the user rejects it. */
+{
+boolean allSick = nodeSickOnAllBatches(user, machineName);
 if (allSick)
-  hashAddInt(user->sickNodes, machineName, 1);
+    hashStore(user->sickNodes, machineName);
+else
+    hashRemove(user->sickNodes, machineName);
 }
 
 void updateUserSickNodes(struct user *user)
-/* Update user sickNodes. A node is only sick if all batches call it sick */
+/* Update user sickNodes. A node is only sick if all batches call it sick. */
 {
 struct dlNode *node;
 struct batch *batch;
 hashFree(&user->sickNodes);
-user->sickNodes = newHash(0);
+user->sickNodes = newHash(6);
 node = user->curBatches->head; 
 if (!dlEnd(node))
     {
@@ -229,15 +235,14 @@ if (userList)
     for (el = list; el != NULL; el = el->next)
 	{
 	boolean allSick = TRUE;
-	count = 0;
 	for (user = userList; user != NULL; user = user->next)
 	    {
-	    ++count;
 	    if (!hashLookup(user->sickNodes, el->name))
 		allSick = FALSE;
 	    }
 	if (allSick)
 	    {
+	    ++count;
 	    pmClear(pm);
 	    pmPrintf(pm, "%s", el->name);
 	    pmSend(pm, rudpOut);
@@ -248,7 +253,7 @@ if (userList)
 if (count > 0)
     {
     pmClear(pm);
-    pmPrintf(pm, "Strength of evidence: %d users",	count);
+    pmPrintf(pm, "Strength of evidence: %d users", slCount(userList));
     pmSend(pm, rudpOut);
     }
 pmSendString(pm, rudpOut, "");
@@ -315,7 +320,7 @@ batch->user = user;
 batch->jobQueue = newDlList();
 batch->priority = NORMAL_PRIORITY;
 batch->maxNode = -1;
-batch->sickNodes = newHash(0);
+batch->sickNodes = newHash(6);
 return batch;
 }
 
@@ -360,7 +365,7 @@ if (user == NULL)
     dlAddTail(unqueuedUsers, user->node);
     user->curBatches = newDlList();
     user->oldBatches = newDlList();
-    user->sickNodes = newHash(0);
+    user->sickNodes = newHash(6);
     }
 return user;
 }
@@ -942,11 +947,8 @@ if (sameString(status, "0"))
     ++batch->user->doneCount;
     batch->continuousCrashCount = 0;
     /* remember the continuous number of times this batch has crashed on this node */
-    struct hashEl *hel = hashLookup(batch->sickNodes, job->machine->name);
-    if (hel)
-      {
-      hashRemove(batch->sickNodes, job->machine->name);
-      }
+    hashRemove(batch->sickNodes, job->machine->name);
+    hashRemove(batch->user->sickNodes, job->machine->name);
     }
 else
     {
@@ -954,18 +956,10 @@ else
     ++batch->crashCount;
     ++batch->continuousCrashCount;
     /* remember the continuous number of times this batch has crashed on this node */
-    struct hashEl *hel = hashLookup(batch->sickNodes, job->machine->name);
-    if (hel == NULL)
-      {
-      hashAddInt(batch->sickNodes, job->machine->name, 1);
-      }
-    else
-      {
-      ++hel->val;
-      }
+    hashIncInt(batch->sickNodes, job->machine->name);
+    updateUserSickNode(batch->user, job->machine->name);
     }
 
-updateUserSickNode(batch->user, job->machine->name);
 
 writeResults(batch->name, batch->user->name, job->machine->name,
 	job->id, job->exe, job->submitTime, 
@@ -1333,14 +1327,14 @@ struct batch *batch = findBatch(user, dir, TRUE);
 if (user == NULL) return -2;
 if (batch == NULL) return -2;
 hashFree(&batch->sickNodes);
-batch->sickNodes = newHash(0);
+batch->sickNodes = newHash(6);
 updateUserSickNodes(user);
 logInfo("paraHub: User %s cleared sick nodes for batch %s", userName, dir);
 return 0;
 }
 
 int clearSickNodesFromMessage(char *line)
-/* Parse out clearSickNodes message and set new maxNode for batch, update user-maxNode. */
+/* Parse out clearSickNodes message and call clear nodes. */
 {
 char *userName, *dir;
 if ((userName = nextWord(&line)) == NULL)
@@ -1351,8 +1345,8 @@ return clearSickNodes(userName, dir);
 }
 
 void clearSickNodesAcknowledge(char *line, struct paraMessage *pm)
-/* Set batch maxNode.  Line format is <user> <dir> <maxNode>
-* Returns new maxNode or -2 if a problem.  Send new maxNode back to client. */
+/* Clear sick nodes from batch.  Line format is <user> <dir>
+* Returns 0 or -2 if a problem back to client. */
 {
 int result = clearSickNodesFromMessage(line);
 pmClear(pm);
@@ -1545,8 +1539,9 @@ updateUserSickNodes(user);
 
 
 void chillBatch(char *line, struct paraMessage *pm)
-/* Stop launching jobs from a batch, but don't disturb
- * running jobs. */
+/* Parse user and batch names from message, 
+ * call chillABatch to clear the queue,
+ * and send response ok or err to client. */
 {
 char *userName = nextWord(&line);
 char *batchName = nextWord(&line);

@@ -15,7 +15,7 @@
 #include "jobResult.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: para.c,v 1.74 2008/04/30 00:18:14 galt Exp $";
+static char const rcsid[] = "$Id: para.c,v 1.75 2008/05/01 23:26:48 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -1510,7 +1510,7 @@ if (optionVal("priority",NULL)!=NULL)
 
 
 void clearSickNodes()
-/* Tell hub to show sick nodes on batch */
+/* Tell hub to clear sick nodes on batch */
 {
 struct dyString *dy = newDyString(1024);
 char curDir[512];
