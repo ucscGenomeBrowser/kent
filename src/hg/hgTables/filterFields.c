@@ -20,7 +20,7 @@
 #include "bedCart.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.55 2008/04/29 23:41:48 larrym Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.56 2008/05/01 16:48:31 larrym Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -209,12 +209,6 @@ safef(buf, sizeof(buf), "%scheck.", hgtaFieldSelectPrefix);
 return buf;
 }
 
-static char *checkVarPrefixWithTable(char *db, char *table)
-/* Return prefix for checkBox, including the table name */
-{
-return dbTableFieldVar(checkVarPrefix(), db, table, "");
-}
-
 static char *checkVarName(char *db, char *table, char *field)
 /* Get variable name for check box on given table/field. */
 {
@@ -251,9 +245,14 @@ if (withGetButton)
     cgiMakeButton(hgtaDoMainPage, "cancel");
     hPrintf(" ");
     }
-cgiMakeCheckAllSubmitButton(setClearAllVar(hgtaDoSetAllFieldPrefix, db, table), "check all", NULL, checkVarPrefixWithTable(db, table), TRUE);
+jsInit();
+cgiMakeOnClickSubmitButton(jsSetVerticalPosition("mainForm"),
+			   setClearAllVar(hgtaDoSetAllFieldPrefix,db,table), 
+			   "check all");
 hPrintf(" ");
-cgiMakeCheckAllSubmitButton(setClearAllVar(hgtaDoClearAllFieldPrefix, db, table), "clear all", NULL, checkVarPrefixWithTable(db, table), FALSE);
+cgiMakeOnClickSubmitButton(jsSetVerticalPosition("mainForm"),
+			   setClearAllVar(hgtaDoClearAllFieldPrefix,db,table), 
+			   "clear all");
 }
 
 static void showTableFieldsDb(char *db, char *rootTable, boolean withGetButton)
@@ -282,7 +281,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     struct asColumn *asCol;
     hPrintf("<TR>");
     hPrintf("<TD>");
-    cgiMakeCheckBoxWithId(var, varOn(var), var);
+    cgiMakeCheckBox(var, varOn(var));
     hPrintf("</TD>");
     hPrintf("<TD>");
     if (showItemRgb && sameWord(field,"reserved"))
@@ -311,7 +310,6 @@ static void showTableFieldCt(char *db, char *table, boolean withGetButton)
  * track. */
 {
 struct customTrack *ct = lookupCt(table);
-// Could use ct to determine field names (see correlate:fillInTrackTable:bedGraphColumnNum
 struct slName *field, *fieldList = getBedFields(ct->fieldCount);
 
 hTableStart();
@@ -319,7 +317,7 @@ for (field = fieldList; field != NULL; field = field->next)
     {
     char *var = checkVarName(db, table, field->name);
     hPrintf("<TR><TD>");
-    cgiMakeCheckBoxWithId(var, varOn(var), var);
+    cgiMakeCheckBox(var, varOn(var));
     hPrintf("</TD><TD>");
     hPrintf(" %s<BR>\n", field->name);
     hPrintf("</TD></TR>");
