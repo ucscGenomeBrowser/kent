@@ -200,7 +200,13 @@ void getDbAndGenome(struct cart *cart, char **retDb, char **retGenome,
 
 boolean webIncludeFile(char *file);
 /* Include an HTML file in a CGI.
- *   The file path is relative to the web server document root */
+ *   The file path may begin with hDocumentRoot(); if it doesn't, it is
+ *   assumed to be relative and hDocumentRoot() will be prepended. */
+
+boolean webIncludeHelpFile(char *fileRoot, boolean addHorizLine);
+/* Given a help file root name (e.g. "hgPcrResult" or "cutters"),
+ * print out the contents of the file.  If addHorizLine, print out an
+ * <HR> first. */
 
 /*** Inside the "web" pages doing a table that looks good is
  *** hard.  These routines help. ***/

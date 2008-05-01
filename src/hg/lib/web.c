@@ -13,7 +13,7 @@
 #include "hgColors.h"
 #include "wikiLink.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.142 2008/03/08 15:05:44 fanhsu Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.143 2008/05/01 23:19:10 angie Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -1060,18 +1060,23 @@ freeMem(garbage);
 
 boolean webIncludeFile(char *file)
 /* Include an HTML file in a CGI.
- *   The file path is relative to the web server document root */
+ *   The file path may begin with hDocumentRoot(); if it doesn't, it is
+ *   assumed to be relative and hDocumentRoot() will be prepended. */
 {
 char *str = NULL;
 size_t len = 0;
-char path[256];
+char path[PATH_LEN];
+char *docRoot = hDocumentRoot();
 
 if (file == NULL)
     {
     printf("<BR>Program Error: Empty file name for include file<BR>");
     return FALSE;
     }
-safef(path, sizeof path, "%s/%s", hDocumentRoot(), file);
+if (startsWith(docRoot, file))
+    safecpy(path, sizeof path, file);
+else
+    safef(path, sizeof path, "%s/%s", docRoot, file);
 if (!fileExists(path))
     {
    printf("<BR>Program Error: Missing file %s</BR>", path); 
@@ -1086,6 +1091,16 @@ if (len <= 0)
 puts(str);
 freeMem(str);
 return TRUE;
+}
+
+boolean webIncludeHelpFile(char *fileRoot, boolean addHorizLine)
+/* Given a help file root name (e.g. "hgPcrResult" or "cutters"),
+ * print out the contents of the file.  If addHorizLine, print out an
+ * <HR> first. */
+{
+if (addHorizLine)
+    htmlHorizontalLine();
+return webIncludeFile(hHelpFile(fileRoot));
 }
 
 void webPrintLinkTableStart()
