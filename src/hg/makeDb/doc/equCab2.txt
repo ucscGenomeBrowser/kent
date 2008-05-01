@@ -1,7 +1,7 @@
 # for emacs: -*- mode: sh; -*-
 
 # Equus caballus - ??
-#	"$Id: equCab2.txt,v 1.10 2008/04/29 20:58:32 markd Exp $"
+#	"$Id: equCab2.txt,v 1.11 2008/05/01 21:20:13 larrym Exp $"
 #########################################################################
 # DOWNLOAD SEQUENCE (...
 
@@ -224,7 +224,7 @@ i.e. if you take dupes and chrM into account, our data agrees with their raw dat
     #   1004742864 bases of 2454424288 (40.936%) in intersection
 
     # RepeatMasker and lib version from do.log:
-    #   RepeatMasker version development-$Id: equCab2.txt,v 1.10 2008/04/29 20:58:32 markd Exp $
+    #   RepeatMasker version development-$Id: equCab2.txt,v 1.11 2008/05/01 21:20:13 larrym Exp $
     #   Jan 11 2008 (open-3-1-9) version of RepeatMasker
     #	CC   RELEASE 20071204
 
@@ -465,6 +465,9 @@ liftUp /cluster/data/equCab2/jkStuff/chrUn.lift
 	    -swap -syntenicNet >& do.log &
     0.191u 0.101s 2:20:34.06 0.0%   0+0k 0+0io 6pf+0w
 
+    featureBits equCab2 -chrom=chr1 chainHg18Link
+    126450610 bases of 183561855 (68.887%) in intersection
+
 ############################################################################
 # SWAP equCab2 -> mm9 (DONE - 2008-04-17 - larrym) 
     mkdir /cluster/data/equCab2/bed/blastz.mm9.swap
@@ -474,6 +477,9 @@ liftUp /cluster/data/equCab2/jkStuff/chrUn.lift
 	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
 	    -swap -syntenicNet >& do.log &
     0.164u 0.128s 1:32:36.50 0.0%   0+0k 0+0io 6pf+0w
+
+    featureBits equCab2 -chrom=chr1 chainMm9Link
+    72255123 bases of 183561855 (39.363%) in intersection
 
 ############################################################################
 # SWAP equCab2 -> canFam2 (DONE - 2008-04-22 - larrym)
@@ -752,7 +758,7 @@ Ran twice to determine SEQ2_LIMIT=400 (to get number of jobs down to 107525)
       -blastzOutRoot /cluster/bluearc/ornAna1/blastz.equCab2 >>& do.log &
 
 failed on part262.lst b/c of a corrupted line in batch file; I fixed the line and
-reran successfully.
+reran successfully (via para push).
 
     time doBlastzChainNet.pl `pwd`/DEF \
 	-verbose=2 -bigClusterHub=pk -continue=cat \
@@ -796,24 +802,201 @@ rearranged to get horse on top:
 # results:
 # ((((equCab2 canFam2) (mm9 hg18)) ornAna1) galGal3)
 
-    # verify all blastz's exists (XXXX here I am)
+    # verify all blastz's exists
     cat << '_EOF_' > listMafs.csh
 #!/bin/csh -fe
-cd /cluster/data/equCab2/bed/multiz9way
+cd /cluster/data/equCab2/bed/multiz6way
 foreach db (`grep -v equCab2 species.list`)
     set bdir = /cluster/data/equCab2/bed/blastz.$db
-    if (-e $bdir/mafRBestNet/equCab2.$db.rbest.maf.gz) then
+    if (-e $bdir/mafRBestNet/chr1.maf.gz) then
 	echo "$db mafRBestNet"
-    else if (-e $bdir/mafSynNet/equCab2.$db.net.maf.gz) then
+    else if (-e $bdir/mafSynNet/chr1.maf.gz) then
 	echo "$db mafSynNet"
-    else if (-e $bdir/mafNet/equCab2.$db.net.maf.gz) then
+    else if (-e $bdir/mafNet/chr1.maf.gz) then
 	echo "$db mafNet"
     else
 	echo "$db mafs not found"
     endif
 end
 '_EOF_'
+    # << happy emacs
+    chmod +x ./listMafs.csh
+    ./listMafs.csh
+canFam2 mafSynNet
+galGal3 mafSynNet
+hg18 mafSynNet
+mm9 mafSynNet
+ornAna1 mafNet
 
+    /cluster/bin/phast/all_dists equCab2.6-way.nh > 6way.distances.txt
+    grep -i equcab 6way.distances.txt | sort -k3,3n
+Horse_equCab2	Dog_canFam2	0.248673
+Horse_equCab2	Human_hg18	0.284600
+Horse_equCab2	Mouse_mm9	0.483517
+Horse_equCab2	Platypus_ornAna1	0.958243
+Horse_equCab2	Chicken_galGal3	1.077754
+
+    #	use the calculated
+    #	distances in the table below to order the organisms and check
+    #	the button order on the browser.  Zebrafish ends up before
+    #	tetraodon and fugu on the browser despite its distance.
+    #	And if you can fill in the table below entirely, you have
+    #	succeeded in finishing all the alignments required.
+    #
+#                         featureBits chainLink measures
+#                                       chainPonAbe2Link   chain   linearGap
+#    distance                     on EquCab2    on other   minScore
+#  1  0.248673 Dog_canFam2        (% 70.910)   (% 70.300)   3000     medium
+#  2  0.284600 Human_hg18         (% 66.819)   (% 57.162)   3000     medium
+#  3  0.483517 Mouse_mm9          (% 37.218)   (% 34.821)   3000     medium
+#  4  0.958243 Platypus_ornAna1   (%  5.477)   (% 7.217)    5000     loose
+#  5  1.077754 Chicken_galGal3    (%  3.031)   (% 6.568)    3000     medium
+
+    # copy net mafs to cluster-friendly storage, splitting chroms
+    # into 50MB chunks  to improve run-time
+    # NOTE: splitting will be different for scaffold-based reference asemblies
+    ssh hgwdev
+    mkdir /cluster/data/equCab2/bed/multiz6way/run.split
+    cd /cluster/data/equCab2/bed/multiz6way/run.split
+    #	this works by examining the rmsk table for likely repeat areas
+    #	that won't be used in blastz
+    mafSplitPos equCab2 50 mafSplit.bed
+
+    ssh kki
+    cd /cluster/data/equCab2/bed/multiz6way/run.split
+
+    cat << '_EOF_' > doSplit.csh
+#!/bin/csh -ef
+set targDb = "equCab2"
+set db = $1
+set sdir = /san/sanvol1/scratch/$targDb/splitStrictMafNet
+mkdir -p $sdir
+if (-e $sdir/$db) then
+    echo "directory $sdir/$db already exists -- remove and retry"
+    exit 1
+endif
+set bdir = /cluster/data/$targDb/bed/blastz.$db
+if (! -e $bdir) then
+    echo "directory $bdir not found"
+    exit 1
+endif
+mkdir -p $sdir/$db
+if (-e $bdir/mafRBestNet) then
+    set mdir = $bdir/mafRBestNet
+else if (-e $bdir/mafSynNet) then
+    set mdir = $bdir/mafSynNet
+else if (-e $bdir/mafNet) then
+    set mdir = $bdir/mafNet
+else
+    echo "$bdir maf dir not found"
+    exit 1
+endif
+echo $mdir
+foreach f ($mdir/*)
+    set c = $f:t:r:r
+    echo "  $c"
+    nice mafSplit mafSplit.bed $sdir/$db/ $f
+end
+echo "gzipping $sdir/$db mafs"
+nice gzip $sdir/$db/*
+endif
+echo $mdir > $db.done
+'_EOF_'
+    # << happy emacs
+    chmod +x doSplit.csh
+
+    grep -v equCab2  ../species.list > split.list
+    cat << '_EOF_' > template
+#LOOP
+doSplit.csh $(path1) {check out line+ $(path1).done}
+#ENDLOOP
+'_EOF_'
+
+    gensub2 split.list single template jobList
+    para create jobList
+    para -maxPush=3 push
+    para push
+    para time
+
+    5 jobs in batch
+    Completed: 5 of 5 jobs
+    CPU time in finished jobs:       3230s      53.84m     0.90h    0.04d  0.000 y
+    IO & Wait Time:                   186s       3.10m     0.05h    0.00d  0.000 y
+    Average job time:                 683s      11.39m     0.19h    0.01d
+    Longest running job:                0s       0.00m     0.00h    0.00d
+    Longest finished job:            1301s      21.68m     0.36h    0.02d
+    Submission to last job:          1336s      22.27m     0.37h    0.02d
+
+    # ready for the multiz run
+    ssh pk
+    cd /cluster/data/equCab2/bed/multiz6way
+    #	actually, the result directory here should be maf.split instead of maf
+    mkdir -p maf run
+    cd run
+    mkdir penn
+    # use latest penn utilities
+    setenv P /cluster/bin/penn/multiz.v11.2007-03-19/multiz-tba
+    cp -p $P/{autoMZ,multiz,maf_project} penn
+
+    # list chrom chunks, any db dir will do; better would be for the
+    # splitter to generate this file
+    # We temporarily use __ instead of . to delimit chunk in filename
+    # so we can use $(root) to get basename
+    bash
+    find /san/sanvol1/scratch/equCab2/splitStrictMafNet -type f \
+	| while read F; do basename $F; done \
+	| sed -e 's/.maf.gz//' -e 's/\./__/' | sort -u > chromChunks.list
+    exit
+    wc -l chromChunks.list
+    # 64 chromChunks.list
+
+cat > autoMultiz.csh << '_EOF_'
+#!/bin/csh -ef
+
+    set db = equCab2
+    set c = $1
+    set maf = $2
+    set run = `pwd`
+    set tmp = /scratch/tmp/$db/multiz.$c
+    set pairs = /san/sanvol1/scratch/$db/splitStrictMafNet
+    rm -fr $tmp
+    mkdir -p $tmp
+    cp ../tree.6.nh ../species.list $tmp
+    pushd $tmp
+    foreach s (`cat species.list`)
+        set c2 = `echo $c | sed 's/__/./'`
+        set in = $pairs/$s/$c2.maf
+        set out = $db.$s.sing.maf
+        if ($s == equCab2) then
+            continue
+        endif
+        if (-e $in.gz) then
+            zcat $in.gz > $out
+        else if (-e $in) then
+            cp $in $out
+        else
+            echo "##maf version=1 scoring=autoMZ" > $out
+        endif
+    end
+    set path = ($run/penn $path); rehash
+    $run/penn/autoMZ + T=$tmp E=$db "`cat tree.6.nh`" $db.*.sing.maf $c.maf
+    popd
+    cp $tmp/$c.maf $maf
+    rm -fr $tmp
+'_EOF_'
+# << happy emacs
+    chmod +x autoMultiz.csh
+
+    cat  << '_EOF_' > template
+#LOOP
+./autoMultiz.csh $(root1) {check out line+ /cluster/data/equCab2/bed/multiz6way/maf/$(root1).maf}
+#ENDLOOP
+'_EOF_'
+    # << emacs
+    gensub2 chromChunks.list single template jobList
+    para create jobList
+    para try
+    para push
 
 #############################################################################
 # N-SCAN gene predictions (nscanGene) - (2008-04-29 markd)
@@ -840,3 +1023,4 @@ end
         termRegex chr[0-9a-zA-Z_]+\.[0-9]+\.[0-9]+
 
 #############################################################################
+
