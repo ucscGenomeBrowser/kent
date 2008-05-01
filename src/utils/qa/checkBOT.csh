@@ -54,11 +54,11 @@ if ($ip == "all") then
 
   foreach ip (`echo $allIPs`)
     set orgName=`ipw $ip | grep OrgName | sed -e "s/OrgName: //"` > /dev/null
-    set current=`grep $ip ipFile | awk '{print $5}'`
+    set current=`grep -w $ip ipFile | awk '{print $5}'`
     echo "$ip\t\t$current\t  $orgName"
   end
 else
-  /usr/local/bin/bottleneck -host=genome-bottle list | egrep "$ip|current"
+  /usr/local/bin/bottleneck -host=genome-bottle list | egrep -w "$ip|current"
 endif
 echo 
 
