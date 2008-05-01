@@ -147,6 +147,19 @@ type genePred nscanPasaPep
 baseColorUseCds given
 baseColorDefault genomicCodons
 
+track pscreen
+shortLabel GDP Insertions
+longLabel Gene Disruption Project P-element and Minos Insertion Locations
+group map
+priority 12
+visibility hide
+color 50,50,250
+type bed 6 +
+urlLabel GDP Strain ID:
+url http://flypush.imgen.bcm.tmc.edu/pscreen/plqlsearch2.cgi?gene=&mapping=&chromosome=Any&bg=$$&remarks=&orderby=Chromosome&submit=%20%20%20%20Start%20Query%20%20%20%20
+noScoreFilter .
+
+
 searchTable nscanPasaGene
 searchType genePred
 termRegex (chr)?.*\.[0-9a-z]+\.[0-9]+\.[a-z]+
