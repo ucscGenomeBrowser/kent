@@ -9,7 +9,7 @@
 #include "obscure.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hash.c,v 1.38 2008/05/01 20:52:41 galt Exp $";
+static char const rcsid[] = "$Id: hash.c,v 1.39 2008/05/01 20:54:40 galt Exp $";
 
 /*
  * Hash a string key.  This code is taken from Tcl interpreter. I was borrowed
@@ -267,7 +267,7 @@ return hashAdd(hash, name, pt + val);
 }
 
 
-struct hashEl *hashIncInt(struct hash *hash, char *name)
+void hashIncInt(struct hash *hash, char *name)
 /* Increment integer value in hash */
 {
 struct hashEl *hel = hashLookup(hash, name);
