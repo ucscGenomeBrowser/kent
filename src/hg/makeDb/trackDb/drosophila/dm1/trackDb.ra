@@ -212,6 +212,9 @@ priority 12
 visibility hide
 color 50,50,250
 type bed 6 +
+urlLabel GDP Strain ID:
+url http://flypush.imgen.bcm.tmc.edu/pscreen/plqlsearch2.cgi?gene=&mapping=&chromosome=Any&bg=$$&remarks=&orderby=Chromosome&submit=%20%20%20%20Start%20Query%20%20%20%20
+noScoreFilter .
 
 
 
