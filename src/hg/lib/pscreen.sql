@@ -17,6 +17,5 @@ CREATE TABLE pscreen (
     geneIds longblob not null,	# IDs of genes disrupted
               #Indices
     INDEX(chrom(8),bin),
-    INDEX(chrom(8),chromStart),
     INDEX(name(8))
 );
