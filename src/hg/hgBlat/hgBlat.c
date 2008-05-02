@@ -21,7 +21,7 @@
 #include "botDelay.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgBlat.c,v 1.122 2008/02/22 19:29:39 kent Exp $";
+static char const rcsid[] = "$Id: hgBlat.c,v 1.123 2008/05/02 21:27:41 lowe Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -43,7 +43,11 @@ char *typeList[] = {"BLAT's guess", "DNA", "protein", "translated RNA", "transla
 char *sortList[] = {"query,score", "query,start", "chrom,score", "chrom,start", "score"};
 char *outputList[] = {"hyperlink", "psl", "psl no header"};
 
+#ifdef LOWELAB
+int minMatchShown = 14;
+#else
 int minMatchShown = 20;
+#endif
 
 struct serverTable *findServer(char *db, boolean isTrans)
 /* Return server for given database.  Db can either be
@@ -495,7 +499,11 @@ if(feelingLucky && seqList != NULL)
 /* Figure out size allowed. */
 maxSingleSize = (isTx ? 10000 : 25000);
 maxTotalSize = maxSingleSize * 2.5;
+#ifdef LOWELAB
+maxSeqCount = 200;
+#else
 maxSeqCount = 25;
+#endif
 
 /* Create temporary file to store sequence. */
 trashDirFile(&faTn, "hgSs", "hgSs", ".fa");
