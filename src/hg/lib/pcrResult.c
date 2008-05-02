@@ -7,7 +7,7 @@
 #include "targetDb.h"
 #include "pcrResult.h"
 
-static char const rcsid[] = "$Id: pcrResult.c,v 1.6 2008/04/28 23:58:14 angie Exp $";
+static char const rcsid[] = "$Id: pcrResult.c,v 1.7 2008/05/02 19:32:49 angie Exp $";
 
 char *pcrResultCartVar(char *db)
 /* Returns the cart variable name for PCR result track info for db. 
@@ -147,10 +147,6 @@ struct trackDb *pcrResultFakeTdb()
 /* Construct a trackDb record for PCR Results track. */
 {
 struct trackDb *tdb;
-char helpName[PATH_LEN], *helpBuf;
-safef(helpName, sizeof(helpName), "%s%s/%s.html", hDocumentRoot(), HELP_DIR,
-      PCR_RESULT_TRACK_NAME);
-readInGulp(helpName, &helpBuf, NULL);
 AllocVar(tdb);
 tdb->tableName = cloneString(PCR_RESULT_TRACK_NAME);
 tdb->shortLabel = cloneString(PCR_RESULT_TRACK_LABEL);
@@ -160,12 +156,13 @@ tdb->type = cloneString("psl .");
 tdb->priority = 100.01;
 tdb->canPack = TRUE;
 tdb->visibility = tvPack;
-tdb->html = helpBuf;
+tdb->html = hFileContentsOrWarning(hHelpFile(PCR_RESULT_TRACK_NAME));
 trackDbPolish(tdb);
 if (tdb->settingsHash == NULL)
     tdb->settingsHash = hashNew(0);
 hashAdd(tdb->settingsHash, BASE_COLOR_DEFAULT, cloneString("diffBases"));
-hashAdd(tdb->settingsHash, BASE_COLOR_USE_SEQUENCE, cloneString("hgPcrResult"));
+hashAdd(tdb->settingsHash, BASE_COLOR_USE_SEQUENCE,
+	cloneString(PCR_RESULT_TRACK_NAME));
 hashAdd(tdb->settingsHash, SHOW_DIFF_BASES_ALL_SCALES, cloneString("."));
 hashAdd(tdb->settingsHash, INDEL_DOUBLE_INSERT, cloneString("on"));
 hashAdd(tdb->settingsHash, INDEL_QUERY_INSERT, cloneString("on"));

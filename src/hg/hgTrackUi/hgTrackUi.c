@@ -37,7 +37,7 @@
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 #define MAX_SP_SIZE 2000
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.423 2008/04/29 16:51:42 aamp Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.424 2008/05/02 19:32:49 angie Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2912,10 +2912,6 @@ struct trackDb *trackDbForPseudoTrack(char *tableName, char *shortLabel,
 /* Create trackDb for a track without a corresponding table. */
 {
 struct trackDb *tdb;
-char htmlFile[256];
-char *buf;
-size_t size;
-char *helpdir;
 
 AllocVar(tdb);
 tdb->tableName = tableName;
@@ -2924,14 +2920,7 @@ tdb->longLabel = longLabel;
 tdb->visibility = defaultVis;
 tdb->priority = 1.0;
 
- helpdir = cfgOption("help.html");
- if (helpdir != NULL)
-   safef(htmlFile, 256, "%s/%s.html", helpdir, tableName);
- else
-   safef(htmlFile, 256, "%s%s/%s.html", hDocumentRoot(), HELP_DIR, tableName);
- 
-readInGulp(htmlFile, &buf, &size);
-tdb->html = buf;
+tdb->html = hFileContentsOrWarning(hHelpFile(tableName));
 tdb->type = "none";
 tdb->grp = "map";
 tdb->canPack = canPack;
