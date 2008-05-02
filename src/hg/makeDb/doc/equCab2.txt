@@ -1,7 +1,7 @@
 # for emacs: -*- mode: sh; -*-
 
 # Equus caballus - ??
-#	"$Id: equCab2.txt,v 1.11 2008/05/01 21:20:13 larrym Exp $"
+#	"$Id: equCab2.txt,v 1.12 2008/05/02 18:21:59 larrym Exp $"
 #########################################################################
 # DOWNLOAD SEQUENCE (...
 
@@ -224,7 +224,7 @@ i.e. if you take dupes and chrM into account, our data agrees with their raw dat
     #   1004742864 bases of 2454424288 (40.936%) in intersection
 
     # RepeatMasker and lib version from do.log:
-    #   RepeatMasker version development-$Id: equCab2.txt,v 1.11 2008/05/01 21:20:13 larrym Exp $
+    #   RepeatMasker version development-$Id: equCab2.txt,v 1.12 2008/05/02 18:21:59 larrym Exp $
     #   Jan 11 2008 (open-3-1-9) version of RepeatMasker
     #	CC   RELEASE 20071204
 
@@ -768,7 +768,7 @@ reran successfully (via para push).
 
 
 #########################################################################
-## 6-Way Multiz (WORKING - 2008-04-28 - larrym)
+## 6-Way Multiz (DONE - 2008-05-01 - larrym)
 
     ssh hgwdev
     mkdir /cluster/data/equCab2/bed/multiz6way
@@ -997,6 +997,179 @@ cat > autoMultiz.csh << '_EOF_'
     para create jobList
     para try
     para push
+    # 64 jobs in batch
+    # Completed: 64 of 64 jobs
+    # CPU time in finished jobs:      45922s     765.37m    12.76h    0.53d  0.001 y
+    # IO & Wait Time:                   626s      10.43m     0.17h    0.01d  0.000 y
+    # Average job time:                 727s      12.12m     0.20h    0.01d
+    # Longest running job:                0s       0.00m     0.00h    0.00d
+    # Longest finished job:            1141s      19.02m     0.32h    0.01d
+    # Submission to last job:          2752s      45.87m     0.76h    0.03d
+
+    # put the split maf results back together into single chroms
+    ssh kkstore04
+    cd /cluster/data/equCab2/bed/multiz6way
+    # here is where the result directory maf should have already been maf.split
+    mv maf maf.split
+    mkdir maf
+    # going to sort out the redundant header garbage to leave a cleaner maf
+    for C in `ls maf.split | sed -e "s#__.*##" | sort -u`
+do
+    echo ${C}
+    head -q -n 1 maf.split/${C}__*.maf | sort -u > maf/${C}.maf
+    grep -h "^#" maf.split/${C}__*.maf | egrep -v "maf version=1|eof maf" | \
+	sed -e "s#_MZ_[^ ]* # #g; s#__[0-9]##g" | sort -u >> maf/${C}.maf
+    grep -h -v "^#" maf.split/${C}__*.maf >> maf/${C}.maf
+    tail -q -n 1 maf.split/${C}__*.maf | sort -u >> maf/${C}.maf
+done
+
+    # load tables for a look
+    ssh hgwdev
+    mkdir -p /gbdb/equCab2/multiz6way/maf
+    ln -s /cluster/data/equCab2/bed/multiz6way/maf/*.maf /gbdb/equCab2/multiz6way/maf
+    # this generates a large 1 Gb multiz6way.tab file in the directory
+    #	where it is running.  Best to run this over in scratch.
+    cd /scratch/tmp
+    time /bin/nice -n 19 hgLoadMaf -pathPrefix=/gbdb/equCab2/multiz6way/maf equCab2 multiz6way
+    # 101.386u 33.294s 2:57.36 75.9%	0+0k 0+0io 2pf+0w
+    # Loaded 5609508 mafs in 34 files from /gbdb/equCab2/multiz6way/maf
+
+    # load summary table
+    time /bin/nice -n 19 cat /gbdb/equCab2/multiz6way/maf/*.maf | hgLoadMafSummary equCab2 -minSize=30000 -mergeGap=1500 -maxSize=200000  multiz6waySummary stdin &
+    # 0.112u 11.365s 4:13.79 4.5%	0+0k 0+0io 0pf+0w
+    # Created 705120 summary blocks from 12830585 components and 5609498 mafs from stdin
+
+    # Gap Annotation
+    # prepare bed files with gap info
+    ssh kkstore04
+    mkdir /cluster/data/equCab2/bed/multiz6way/anno
+    cd /cluster/data/equCab2/bed/multiz6way/anno
+    mkdir maf run
+
+    #   these actually already all exist from previous multiple alignments
+    for DB in `cat ../species.list`
+do
+    CDIR="/cluster/data/${DB}"
+    if [ ! -f ${CDIR}/${DB}.N.bed ]; then
+        echo "creating ${DB}.N.bed"
+        echo twoBitInfo -nBed ${CDIR}/${DB}.2bit ${CDIR}/${DB}.N.bed
+    else
+        ls -og ${CDIR}/${DB}.N.bed
+    fi
+done
+
+    cd run
+    rm -f nBeds sizes
+    for DB in `grep -v equCab2 ../../species.list`
+do
+    echo "${DB} "
+    ln -s  /cluster/data/${DB}/${DB}.N.bed ${DB}.bed
+    echo ${DB}.bed  >> nBeds
+    ln -s  /cluster/data/${DB}/chrom.sizes ${DB}.len
+    echo ${DB}.len  >> sizes
+done
+
+    ssh kki
+    cd /cluster/data/equCab2/bed/multiz6way/anno/run
+
+    cat << '_EOF_' > doAnno.csh
+#!/bin/csh -ef
+    set dir = /cluster/data/equCab2/bed/multiz6way
+    set c = $1
+    cat $dir/maf/${c}.maf | \
+        nice mafAddIRows -nBeds=nBeds stdin /cluster/data/equCab2/equCab2.2bit $2
+'_EOF_'
+    # << happy emacs
+    chmod +x doAnno.csh
+
+    cat << '_EOF_' > template
+#LOOP
+./doAnno.csh $(root1) {check out line+ /cluster/data/equCab2/bed/multiz6way/anno/maf/$(root1).maf}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+    cut -f1 /cluster/data/equCab2/chrom.sizes > chrom.list
+    gensub2 chrom.list single template jobList
+    para create jobList
+    para try... para push...
+    # 34 jobs in batch
+    # Completed: 34 of 34 jobs
+    # CPU time in finished jobs:       2287s      38.12m     0.64h    0.03d  0.000 y
+    # IO & Wait Time:                   899s      14.98m     0.25h    0.01d  0.000 y
+    # Average job time:                  94s       1.56m     0.03h    0.00d
+    # Longest running job:                0s       0.00m     0.00h    0.00d
+    # Longest finished job:             363s       6.05m     0.10h    0.00d
+    # Submission to last job:           363s       6.05m     0.10h    0.00d
+
+    ssh hgwdev
+    cd /cluster/data/equCab2/bed/multiz6way/anno
+    mkdir -p /gbdb/equCab2/multiz6way/anno/maf
+    ln -s /cluster/data/equCab2/bed/multiz6way/anno/maf/*.maf /gbdb/equCab2/multiz6way/anno/maf
+    #	by loading this into the table multiz6way, it will replace the
+    #	previously loaded table with the unannotated mafs
+    #	huge temp files are made, do them on local disk
+    cd /scratch/tmp
+    time /bin/nice -n 19 hgLoadMaf -pathPrefix=/gbdb/equCab2/multiz6way/anno/maf equCab2 multiz6way
+    122.861u 43.946s 3:23.21 82.0%	0+0k 0+0io 0pf+0w
+    Loaded 6251465 mafs in 34 files from /gbdb/equCab2/multiz6way/anno/maf
+
+    cat /cluster/data/equCab2/chrom.sizes | \
+	awk '{if ($2 > 1000000) { print $1 }}' |
+	while read C
+do
+    echo /gbdb/equCab2/multiz6way/anno/maf/$C.maf
+done | xargs cat | \
+        hgLoadMafSummary equCab2 -minSize=30000 -mergeGap=1500 \
+            -maxSize=200000  multiz6waySummary stdin
+    # Created 705120 summary blocks from 12830585 components and 6251455 mafs from stdin
+    #        
+    #	by loading this into the table multiz6waySummary, it will replace
+    #	the previously loaded table with the unannotated mafs
+    #	remove the multiz6way*.tab files in this /scratch/tmp directory
+    rm multiz6way*
+
+
+#############################################################################
+## Annotate 6-way multiple alignment with gene annotations
+##		(WORKING - 2008-05-01 - larrym)
+
+    ssh hgwdev
+    mkdir /cluster/data/equCab2/bed/multiz6way/frames
+    cd /cluster/data/equCab2/bed/multiz6way/frames
+    #	dbs: eriEur1, cavPor2, sorAra1 do not exist, can not look at them
+    cat << '_EOF_' > showGenes.csh
+#!/bin/csh -fe
+foreach db (`cat ../species.list`)
+    echo -n "${db}: "
+    echo -n "Tables: "
+    set tables = `hgsql $db -N -e "show tables like '%Gene%'"`
+    foreach table ($tables)
+	if ($table == "ensGene" || $table == "refGene" || $table == "mgcGenes" || \
+	    $table == "knownGene") then
+		set count = `hgsql $db -N -e "select count(*) from $table"`
+		echo -n "${table}: ${count}, "
+	endif
+    end
+    set orgName = `hgsql hgcentraltest -N -e \
+	    "select scientificName from dbDb where name='$db'"`
+    set orgId = `hgsql equCab2 -N -e \
+	    "select id from organism where name='$orgName'"`
+    if ($orgId == "") then
+	echo "Mrnas: 0"
+    else
+	set count = `hgsql equCab2 -N -e "select count(*) from gbCdnaInfo where organism=$orgId"`
+	echo "Mrnas: ${count}"
+    endif
+end
+'_EOF_'
+    chmod +x ./showGenes.csh
+    ./showGenes.csh
+    # canFam2: Tables: ensGene: 29749, refGene: 889, Mrnas: 1667
+    # equCab2: Tables: ensGene: 27192, refGene: 354, Mrnas: 38402
+    # galGal3: Tables: ensGene: 22946, refGene: 4300, Mrnas: 27182
+    # hg18: Tables: ensGene: 55906, knownGene: 56722, mgcGenes: 28715, refGene: 26306, Mrnas: 231949
+    # mm9: Tables: ensGene: 43973, knownGene: 49409, mgcGenes: 22666, refGene: 21569, Mrnas: 222212
+    # ornAna1: Tables: ensGene: 30089, refGene: 10, Mrnas: 147
 
 #############################################################################
 # N-SCAN gene predictions (nscanGene) - (2008-04-29 markd)
