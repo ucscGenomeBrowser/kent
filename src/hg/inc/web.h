@@ -198,12 +198,12 @@ void getDbAndGenome(struct cart *cart, char **retDb, char **retGenome,
 		    struct hash *oldVars);
 /* Like getDbGenomeClade above, but just get db and genome. */
 
-boolean webIncludeFile(char *file);
+void webIncludeFile(char *file);
 /* Include an HTML file in a CGI.
  *   The file path may begin with hDocumentRoot(); if it doesn't, it is
  *   assumed to be relative and hDocumentRoot() will be prepended. */
 
-boolean webIncludeHelpFile(char *fileRoot, boolean addHorizLine);
+void webIncludeHelpFile(char *fileRoot, boolean addHorizLine);
 /* Given a help file root name (e.g. "hgPcrResult" or "cutters"),
  * print out the contents of the file.  If addHorizLine, print out an
  * <HR> first. */

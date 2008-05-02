@@ -12,8 +12,9 @@
 #include "hCommon.h"
 #include "hgConfig.h"
 #include "chainCart.h"
+#include "obscure.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.97 2008/05/01 23:14:52 angie Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.98 2008/05/02 18:13:54 angie Exp $";
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -52,6 +53,34 @@ else
     safef(helpName, sizeof(helpName), "%s%s/%s.html", hDocumentRoot(),
 	  HELP_DIR, fileRoot);
 return helpName;
+}
+
+char *hFileContentsOrWarning(char *file)
+/* Return the contents of the html file, or a warning message. 
+ * The file path may begin with hDocumentRoot(); if it doesn't, it is
+ * assumed to be relative and hDocumentRoot() will be prepended. */
+{
+if (isEmpty(file))
+    return cloneString("<BR>Program Error: Empty file name for include file"
+		       "<BR>\n");
+char path[PATH_LEN];
+char *docRoot = hDocumentRoot();
+if (startsWith(docRoot, file))
+    safecpy(path, sizeof path, file);
+else
+    safef(path, sizeof path, "%s/%s", docRoot, file);
+if (! fileExists(path))
+    {
+    char message[1024];
+    safef(message, sizeof(message), "<BR>Program Error: Missing file %s</BR>",
+	  path);
+    return cloneString(message);
+    }
+/* If the file is there but not readable, readInGulp will errAbort,
+ * but I think that is serious enough that errAbort is OK. */
+char *result;
+readInGulp(path, &result, NULL);
+return result;
 }
 
 char *hCgiRoot()

@@ -26,13 +26,21 @@ char *wrapWhiteFont(char *s);
 
 char *hDocumentRoot();
 /* get the path to the DocumentRoot, or the default */
+
 char *hHelpFile(char *fileRoot);
 /* Given a help file root name (e.g. "hgPcrResult" or "cutters"),
  * prepend the complete help directory path and add .html suffix. 
  * Do not free the statically allocated result. */
+
+char *hFileContentsOrWarning(char *file);
+/* Return the contents of the html file, or a warning message. 
+ * The file path may begin with hDocumentRoot(); if it doesn't, it is
+ * assumed to be relative and hDocumentRoot() will be prepended. */
+
 char *hCgiRoot();
 /* get the path to the CGI directory.
  * Returns NULL when not running as a CGI (unless specified by browser.cgiRoot) */
+
 char *hBackgroundImage();
 /* get the path to the configured background image to use, or the default */
 
