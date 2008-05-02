@@ -5,7 +5,7 @@
 #include "options.h"
 #include "seg.h"
 
-static char const rcsid[] = "$Id: segExpandToAnchors.c,v 1.1 2008/04/25 17:35:58 rico Exp $";
+static char const rcsid[] = "$Id: segExpandToAnchors.c,v 1.2 2008/05/02 17:43:20 rico Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -15,7 +15,8 @@ errAbort(
   "usage:\n"
   "   segExpandToAnchors in.seg out.seg\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "  -ref=<S>       Use <S> as the reference species.\n"
+  "  -minAncLen=<I> Only use anchors that are at least <I>bp long.\n"
   );
 }
 
