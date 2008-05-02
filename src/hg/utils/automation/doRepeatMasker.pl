@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/doRepeatMasker.pl instead.
 
-# $Id: doRepeatMasker.pl,v 1.9 2008/02/07 22:47:38 hiram Exp $
+# $Id: doRepeatMasker.pl,v 1.10 2008/05/02 21:23:08 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -35,7 +35,7 @@ my $stepper = new HgStepManager(
     [ { name => 'cluster', func => \&doCluster },
       { name => 'cat',     func => \&doCat },
       { name => 'mask',    func => \&doMask },
-      { name => 'load',    func => \&doLoad },
+      { name => 'install', func => \&doInstall },
       { name => 'cleanup', func => \&doCleanup },
     ]
 				);
@@ -77,7 +77,9 @@ Automates UCSC's RepeatMasker process for genome database \$db.  Steps:
     cluster: Do a cluster run of RepeatMasker on 500kb sequence chunks.
     cat:     Concatenate the cluster run results into \$db.fa.out.
     mask:    Create a \$db.2bit masked by \$db.fa.out.
-    load:    Load \$db.fa.out into the rmsk table (possibly split) in \$db.
+    install: Load \$db.fa.out into the rmsk table (possibly split) in \$db,
+             install \$db.2bit in $HgAutomate::clusterData/\$db/, and if \$db is
+             chrom-based, split \$db.fa.out into per-chrom files.
     cleanup: Removes or compresses intermediate files.
 All operations are performed in the build directory which is
 $HgAutomate::clusterData/\$db/$HgAutomate::trackBuild/RepeatMasker.\$date unless -buildDir is given.
@@ -297,17 +299,6 @@ liftUp $db.fa.out /dev/null carry $partDir/???/*.out
 cat $partDir/???/*.align >> $db.fa.align
 _EOF_
   );
-  if ($chromBased) {
-    $bossScript->add(<<_EOF_
-
-# Split into per-chrom files for hgdownload.
-head -3 $db.fa.out > /tmp/rmskHead.txt
-tail +4 $db.fa.out \\
-| splitFileByColumn -col=5 stdin /cluster/data/$db -chromDirs \\
-    -ending=.fa.out -head=/tmp/rmskHead.txt
-_EOF_
-    );
-  }
   $bossScript->add(<<_EOF_
 
 # Use the ID column to join up fragments of interrupted repeats for the
@@ -325,14 +316,13 @@ sub doMask {
   my $runDir = "$buildDir";
   &HgAutomate::checkExistsUnlessDebug('cat', 'mask', "$buildDir/$db.fa.out");
 
-  my $whatItDoes = "It masks.";
+  my $whatItDoes = "It makes a masked .2bit in this build directory.";
   my $workhorse = &HgAutomate::chooseWorkhorse();
   my $bossScript = new HgRemoteScript("$runDir/doMask.csh", $workhorse,
 				      $runDir, $whatItDoes);
 
-  my $maskedSeq = "$HgAutomate::clusterData/$db/$db.rmsk.2bit";
   $bossScript->add(<<_EOF_
-twoBitMask $unmaskedSeq $db.fa.out $maskedSeq
+twoBitMask $unmaskedSeq $db.fa.out $db.rmsk.2bit
 _EOF_
   );
   $bossScript->execute();
@@ -340,27 +330,49 @@ _EOF_
 
 
 #########################################################################
-# * step: load [dbHost]
-sub doLoad {
+# * step: install [dbHost, maybe fileServer]
+sub doInstall {
   my $runDir = "$buildDir";
-  &HgAutomate::checkExistsUnlessDebug('cat', 'load', "$buildDir/$db.fa.out");
+  &HgAutomate::checkExistsUnlessDebug('cat', 'install', "$buildDir/$db.fa.out");
 
   my $split = $chromBased ? " (split)" : "";
   my $whatItDoes =
 "It loads $db.fa.out into the$split rmsk table and $db.nestedRepeats.bed\n" .
-"into the nestedRepeats table.";
+"into the nestedRepeats table.  It also installs the masked 2bit.";
   my $bossScript = new HgRemoteScript("$runDir/doLoad.csh", $dbHost,
 				      $runDir, $whatItDoes);
 
   $split = $chromBased ? "-split" : "-nosplit";
+  my $installDir = "$HgAutomate::clusterData/$db";
   $bossScript->add(<<_EOF_
 hgLoadOut -table=rmsk $split $db $db.fa.out
 hgLoadBed $db nestedRepeats $db.nestedRepeats.bed \\
   -sqlTable=\$HOME/kent/src/hg/lib/nestedRepeats.sql
+
+rm -f $installDir/$db.rmsk.2bit
+ln -s $buildDir/$db.rmsk.2bit $installDir/$db.rmsk.2bit
 _EOF_
   );
   $bossScript->execute();
-} # doLoad
+
+  # Make a new script for the fileServer if chrom-based:
+  if ($chromBased) {
+    my $fileServer = &HgAutomate::chooseFileServer($runDir);
+    $whatItDoes =
+"It splits $db.fa.out into per-chromosome files in chromosome directories\n" .
+"where makeDownload.pl will expect to find them.\n";
+    my $bossScript = new HgRemoteScript("$runDir/doSplit.csh", $fileServer,
+					$runDir, $whatItDoes);
+    $bossScript->add(<<_EOF_
+head -3 $db.fa.out > /tmp/rmskHead.txt
+tail +4 $db.fa.out \\
+| splitFileByColumn -col=5 stdin /cluster/data/$db -chromDirs \\
+    -ending=.fa.out -head=/tmp/rmskHead.txt
+_EOF_
+    );
+    $bossScript->execute();
+  }
+} # doInstall
 
 
 #########################################################################
