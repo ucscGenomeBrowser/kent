@@ -4,7 +4,7 @@
 # This file describes browser build for the Lancelet
 # genome, Branchiostoma floridae, March 2006, v.1.0 from JGI
 #
-#       "$Id: braFlo1.txt,v 1.13 2008/04/28 21:12:11 hiram Exp $"
+#       "$Id: braFlo1.txt,v 1.14 2008/05/02 16:07:30 hiram Exp $"
 #
 
 ##########################################################################
@@ -184,8 +184,10 @@ done
     ssh hgwdev
     cd /cluster/data/braFlo1/bed/blastz.hg18.swap
     time nice -n +19 /cluster/bin/scripts/doRecipBest.pl braFlo1 hg18 \
-	> rbest.log 2>&1 &
+    time nice -n +19 $HOME/kent/src/hg/utils/automation/doRecipBest.pl \
+	braFlo1 hg18 > rbest.log 2>&1 &
     #	real    34m14.843s
+    #	real    32m11.695s
     #	This did not work right.  Something went haywire somewhere:
 # Error: braFlo1 rbest net coverage 14190116 != hg18 14270477
 
@@ -302,7 +304,7 @@ braFlo1.perChromTables = no
 	where name="braFlo1";' hgcentraltest
 
 ############################################################################
-#  BLASTZ petMar1 Lamprey (WORKING - 2008-04-11 - Hiram)
+#  BLASTZ petMar1 Lamprey (DONE - 2008-04-11 - Hiram)
     ssh kkstore05
     screen	# use a screen to control this multi-day job
     mkdir /cluster/data/braFlo1/bed/blastzPetMar1.2008-04-11
@@ -629,7 +631,7 @@ chainOne $(path1)
     #	real    35m15.178s
 
 #############################################################################
-## 5-Way Multiz (WORKING - 2008-04-17 - Hiram)
+## 5-Way Multiz (DONE - 2008-04-17 - Hiram)
 ##
     ssh hgwdev
     mkdir /cluster/data/braFlo1/bed/multiz5way
@@ -694,26 +696,17 @@ end
     chmod +x ./listMafs.csh
     #	see what it says, these should all be mafRBestNet
     ./listMafs.csh
-# canFam2 mafRBestNet
+# galGal3 mafRBestNet
 # hg18 mafRBestNet
 # mm9 mafRBestNet
-# monDom4 mafNet
-# ornAna1 mafNet
-# panTro2 mafRBestNet
-# ponAbe2 mafRBestNet
-# rheMac2 mafRBestNet
-
+# petMar1 mafRBestNet
 
     /cluster/bin/phast/all_dists braFlo1.5-way.nh > 5way.distances.txt
-    grep -i caljac 5way.distances.txt | sort -k3,3n
-Marmoset_calJac1        Human_hg18      0.138447
-Marmoset_calJac1        Rhesus_rheMac2  0.138473
-Marmoset_calJac1        Orangutan_ponAbe2       0.139537
-Marmoset_calJac1        Chimp_panTro2   0.140242
-Marmoset_calJac1        Dog_canFam2     0.336180
-Marmoset_calJac1        Mouse_mm9       0.454272
-Marmoset_calJac1        Opossum_monDom4 0.712488
-Marmoset_calJac1        Platypus_ornAna1        0.968524
+    grep -i braflo 5way.distances.txt | sort -k3,3n
+Lanclet_braFlo1 Chicken_galGal3 3.614778
+Lanclet_braFlo1 Human_hg18      3.723612
+Lanclet_braFlo1 Mouse_mm9       3.922529
+Lanclet_braFlo1 Lamprey_petMar1 4.000000
 
     #	use the calculated
     #	distances in the table below to order the organisms and check
@@ -723,15 +716,684 @@ Marmoset_calJac1        Platypus_ornAna1        0.968524
     #	succeeded in finishing all the alignments required.
     #
 #                         featureBits chainLink measures
-#                                       chainCalJac1Link   chain   linearGap
-#    distance                     on CalJac1    on other   minScore
-#  1  0.138447 Human_hg18         (% 82.846)   (% 78.351)   3000     medium
-#  2  0.138473 Rhesus_rheMac2     (% 74.810)   (% 77.648)   3000     medium
-#  3  0.139537 Orangutan_ponAbe2  (% 76.925)   (% 74.694)   3000     medium
-#  4  0.140242 Chimp_panTro2      (% 77.296)   (% 76.308)   3000     medium
-#  5  0.336180 Dog_canFam2        (% 57.429)   (% 49.549)   3000     medium
-#  6  0.454272 Mouse_mm9          (% 30.302)   (% 32.971)   3000     medium
-#  6  0.712488 Opossum_monDom4    (% 13.357)   (% 11.050)   5000     loose
-#  7  0.968524 Platypus_ornAna1   (%  7.221)   (% 10.619)   5000     loose
+#                                       chainBraFlo1Link   chain   linearGap
+#    distance                     on BraFlo1    on other   minScore
+#  1  3.614778 Chicken_galGal3    (%  3.280)   (%  1.899)   5000     loose
+#  2  3.723612 Human_hg18         (%  3.348)   (%  0.918)   2000     loose
+#  3  3.922529 Mouse_mm9          (%  3.413)   (%  1.020)   5000     loose
+#  4  4.000000 Lamprey_petMar1    (%  2.969)   (%  3.291)   5000     loose
 
-#########################################################################
+    # copy net mafs to cluster-friendly storage, splitting chroms
+    #	 XXX - no need to split, there is only chrM and chrUn
+    mkdir mafLinks
+    cd mafLinks
+    for D in galGal3 petMar1 mm9 hg18
+do
+    mkdir ${D}
+    ln -s /cluster/data/braFlo1/bed/blastz.${D}/mafRBestNet/*.maf.gz ./${D}
+done
+
+    #	copy to kluster friendly san for multiz run
+    ssh kkstore05
+    mkdir -p /san/sanvol1/scratch/braFlo1/multiz5way/mafSrc
+    cd /cluster/data/braFlo1/bed/multiz5way/mafLinks
+    rsync -a --progress -L ./ /san/sanvol1/scratch/braFlo1/multiz5way/mafSrc
+
+    # ready for the multiz run
+    ssh memk
+    mkdir /cluster/data/braFlo1/bed/multiz5way/cons
+    cd /cluster/data/braFlo1/bed/multiz5way/cons
+    mkdir -p maf run
+    cd run
+    mkdir penn
+    # use latest penn utilities
+    P=/cluster/bin/penn/multiz.v11.2007-03-19/multiz-tba
+    cp -p $P/{autoMZ,multiz,maf_project} penn
+
+    #	set the db and pairs directories here
+    cat > autoMultiz.csh << '_EOF_'
+#!/bin/csh -ef
+set db = braFlo1
+set c = $1
+set result = $2
+set resultDir = $result:h
+set run = `pwd`
+set tmp = /scratch/tmp/$db/multiz.$c
+set pairs = /san/sanvol1/scratch/$db/multiz5way/mafSrc
+rm -fr $tmp
+mkdir -p $tmp
+mkdir -p $resultDir
+cp ../../tree.5.nh ../../species.list $tmp
+pushd $tmp
+foreach s (`grep -v $db species.list`)
+    set in = $pairs/$s/$c.maf
+    set out = $db.$s.sing.maf
+    if (-e $in.gz) then
+        zcat $in.gz > $out
+    else if (-e $in) then
+        cp $in $out
+    else
+        echo "##maf version=1 scoring=autoMZ" > $out
+    endif
+end
+set path = ($run/penn $path); rehash
+$run/penn/autoMZ + T=$tmp E=$db "`cat tree.5.nh`" $db.*.sing.maf $c.maf
+popd
+rm -f $result
+cp $tmp/$c.maf $result
+rm -fr $tmp
+rmdir --ignore-fail-on-non-empty /scratch/tmp/$db
+'_EOF_'
+# << happy emacs
+    chmod +x autoMultiz.csh
+
+    cat  << '_EOF_' > template
+#LOOP
+./autoMultiz.csh $(root1) {check out line+ /cluster/data/braFlo1/bed/multiz5way/cons/maf/$(root1).maf}
+#ENDLOOP
+'_EOF_'
+    # << emacs
+
+    echo "chrM.maf" > mafList
+    echo "chrUn.maf" >> mafList
+    gensub2 mafList single template jobList
+
+    para create jobList
+    para try ... check ... push ... etc
+# Completed: 2 of 2 jobs
+# CPU time in finished jobs:        375s       6.25m     0.10h    0.00d  0.000 y
+# IO & Wait Time:                    17s       0.28m     0.00h    0.00d  0.000 y
+# Average job time:                 196s       3.27m     0.05h    0.00d
+# Longest finished job:             385s       6.42m     0.11h    0.00d
+# Submission to last job:           385s       6.42m     0.11h    0.00d
+
+
+    # load tables for a look
+    ssh hgwdev
+    mkdir -p /gbdb/braFlo1/multiz5way/maf
+    ln -s /cluster/data/braFlo1/bed/multiz5way/cons/maf/*.maf \
+                /gbdb/braFlo1/multiz5way/maf
+    # this generates an immense multiz5way.tab file in the directory
+    #	where it is running.  Best to run this over in scratch.
+    cd /scratch/tmp
+    time nice -n +19 hgLoadMaf \
+	-pathPrefix=/gbdb/braFlo1/multiz5way/maf braFlo1 multiz5way
+    #	Loaded 220560 mafs in 2 files from /gbdb/braFlo1/multiz5way/maf
+    #	real    0m4.151s
+
+    # load summary table
+    time nice -n +19 cat /gbdb/braFlo1/multiz5way/maf/*.maf \
+	| hgLoadMafSummary braFlo1 -minSize=30000 -mergeGap=1500 \
+	 -maxSize=200000  multiz5waySummary stdin
+    #	Created 87678 summary blocks from 366073 components and 220521 mafs from stdin
+    #	real    0m4.911s
+
+    # Gap Annotation
+    # prepare bed files with gap info
+    ssh kkstore05
+    mkdir /cluster/data/braFlo1/bed/multiz5way/anno
+    cd /cluster/data/braFlo1/bed/multiz5way/anno
+    mkdir maf run
+
+    #	these actually already all exist from previous multiple alignments
+    #	if there are done you will see an ls of them
+    #	or else the twoBitInfo command will be echoed, run it if you want
+    for DB in `cat ../species.list`
+do
+    CDIR="/cluster/data/${DB}"
+    if [ ! -f ${CDIR}/${DB}.N.bed ]; then
+	echo "creating ${DB}.N.bed"
+	echo twoBitInfo -nBed ${CDIR}/${DB}.2bit ${CDIR}/${DB}.N.bed
+    else
+	ls -og ${CDIR}/${DB}.N.bed
+    fi
+done
+
+    cd run
+    rm -f nBeds sizes
+    for DB in `grep -v braFlo1 ../../species.list`
+do
+    echo "${DB} "
+    ln -s  /cluster/data/${DB}/${DB}.N.bed ${DB}.bed
+    echo ${DB}.bed  >> nBeds
+    ln -s  /cluster/data/${DB}/chrom.sizes ${DB}.len
+    echo ${DB}.len  >> sizes
+done
+
+    ssh memk
+    cd /cluster/data/braFlo1/bed/multiz5way/anno/run
+    cat << '_EOF_' > doAnno.csh
+#!/bin/csh -ef
+set dir = /cluster/data/braFlo1/bed/multiz5way/cons
+set c = $1
+cat $dir/maf/${c}.maf | nice \
+    mafAddIRows -nBeds=nBeds stdin /cluster/data/braFlo1/braFlo1.2bit $2
+'_EOF_'
+    # << happy emacs
+    chmod +x doAnno.csh
+
+
+    cat << '_EOF_' > template
+#LOOP
+./doAnno.csh $(root1) {check out line+ ../maf/$(root1).maf}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    cut -f1 /cluster/data/braFlo1/chrom.sizes > chrom.list
+    gensub2 chrom.list single template jobList
+    para create jobList
+    para try ... check ... push ... etc.
+# Completed: 2 of 2 jobs
+# CPU time in finished jobs:       7240s     120.66m     2.01h    0.08d  0.000 y
+# IO & Wait Time:                     9s       0.16m     0.00h    0.00d  0.000 y
+# Average job time:                3625s      60.41m     1.01h    0.04d
+# Longest finished job:            7241s     120.68m     2.01h    0.08d
+# Submission to last job:          7241s     120.68m     2.01h    0.08d
+
+    #	load the results
+    ssh hgwdev
+    cd /cluster/data/braFlo1/bed/multiz5way/anno
+    mkdir -p /gbdb/braFlo1/multiz5way/anno
+    ln -s `pwd`/maf/*.maf /gbdb/braFlo1/multiz5way/anno
+    #	by loading this into the table multiz5way, it will replace the
+    #	previously loaded table with the unannotated mafs
+    #	huge temp files are made, do them on local disk
+    cd /scratch/tmp
+    time nice -n +19 hgLoadMaf -pathPrefix=/gbdb/braFlo1/multiz5way/anno \
+                braFlo1 multiz5way
+    #	Loaded 311293 mafs in 2 files from /gbdb/braFlo1/multiz5way/anno
+    #	real    0m7.505s
+
+    #	normally filter this for chrom size > 1,000,000 and only load
+    #	those chroms.  But this is a scaffold assembly, load everything.
+    time nice -n +19 cat /gbdb/braFlo1/multiz5way/anno/*.maf \
+	| hgLoadMafSummary braFlo1 -minSize=30000 -mergeGap=1500 \
+	 -maxSize=200000  multiz5waySummary stdin
+    #	Created 87678 summary blocks from 366073 components and 311253 mafs from stdin
+    #	real    0m6.998s
+
+    #	by loading this into the table multiz5waySummary, it will replace
+    #	the previously loaded table with the unannotated mafs
+    #	remove the multiz5way*.tab files in this /scratch/tmp directory
+    rm multiz5way*.tab
+    #	And, you can remove the previously loaded non-annotated maf file link:
+    rm /gbdb/braFlo1/multiz5way/maf/*.maf
+    rmdir /gbdb/braFlo1/multiz5way/maf
+
+###########################################################################
+## Annotate 5-way multiple alignment with gene annotations
+##		(DONE - 2008-05-01 - Hiram)
+    # Gene frames
+    ## following pattern used in Lamprey petMar1
+    #	hg18 is in a bit of transition at the moment, so use ensGene
+    #	mm9 can use knownGene
+    #	xenoMrna for braFlo1, petMar1
+    #	ensGene v49 for galGal3
+
+    ssh hgwdev
+    mkdir /cluster/data/braFlo1/bed/multiz5way/frames
+    cd /cluster/data/braFlo1/bed/multiz5way/frames
+    mkdir genes
+    # knownGene
+    for DB in mm9
+do
+    hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from knownGene" ${DB} \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /scratch/tmp/${DB}.tmp.gz
+    mv /scratch/tmp/${DB}.tmp.gz genes/$DB.gp.gz
+    echo "${DB} done"
+done
+    # ensGene
+    for DB in hg18 galGal3
+do
+    hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from ensGene" ${DB} \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /scratch/tmp/${DB}.tmp.gz
+    mv /scratch/tmp/${DB}.tmp.gz genes/$DB.gp.gz
+    echo "${DB} done"
+done
+
+    #	use xenoMrna for petMar1, braFlo1
+    for DB in petMar1 braFlo1
+do
+tmpExt=`mktemp temp.XXXXXX`
+tmpMrnaCds=${DB}.mrna-cds.${tmpExt}
+tmpMrna=${DB}.mrna.${tmpExt}
+tmpCds=${DB}.cds.${tmpExt}
+hgsql -N -e 'select xenoMrna.qName,cds.name,xenoMrna.* \
+	   from xenoMrna,gbCdnaInfo,cds \
+	   where (xenoMrna.qName = gbCdnaInfo.acc) and \
+	     (gbCdnaInfo.cds != 0) and (gbCdnaInfo.cds = cds.id)' \
+$DB > ${tmpMrnaCds}
+cut -f 1-2  ${tmpMrnaCds} > ${tmpCds}
+cut -f 4-100  ${tmpMrnaCds} > ${tmpMrna}
+mrnaToGene -cdsFile=${tmpCds} -smallInsertSize=8 -quiet ${tmpMrna} stdout | \
+genePredSingleCover stdin stdout | gzip -2c > /scratch/tmp/$DB.tmp.gz
+rm ${tmpMrnaCds} ${tmpMrna} ${tmpCds}
+mv /scratch/tmp/$DB.tmp.gz genes/$DB.gp.gz
+rm -f $tmpExt
+echo "${DB} done"
+done
+
+    ls -og genes
+# -rw-rw-r--  1 1040639 May  1 09:53 braFlo1.gp.gz
+# -rw-rw-r--  1 1557911 May  1 09:50 galGal3.gp.gz
+# -rw-rw-r--  1 2151412 May  1 09:50 hg18.gp.gz
+# -rw-rw-r--  1 1965274 May  1 09:50 mm9.gp.gz
+# -rw-rw-r--  1  596023 May  1 09:51 petMar1.gp.gz
+
+
+    ssh kkstore05
+    cd /cluster/data/braFlo1/bed/multiz5way/frames
+    #	hg18 is in a bit of transition at the moment, so use ensGene
+    #	mm9 can use knownGene
+    #	xenoMrna for braFlo1, braFlo1
+    #	ensGene v49 for galGal3, oryLat1
+    #	anything to annotate is in a pair, e.g.: braFlo1 genes/braFlo1.gp.gz
+    time (cat  ../anno/maf/*.maf | nice -n +19 genePredToMafFrames braFlo1 stdin stdout braFlo1 genes/braFlo1.gp.gz hg18 genes/hg18.gp.gz mm9 genes/mm9.gp.gz galGal3 genes/galGal3.gp.gz petMar1 genes/petMar1.gp.gz | gzip > multiz5way.mafFrames.gz) > frames.log 2>&1
+    # see what it looks like in terms of number of annotations per DB:
+    zcat multiz5way.mafFrames.gz | cut -f4 | sort | uniq -c | sort -n
+    #	 44216 petMar1
+    #	 71268 braFlo1
+    #	107089 galGal3
+    #	107857 hg18
+    #	111452 mm9
+
+    #	load the resulting file
+    ssh hgwdev
+    cd /cluster/data/braFlo1/bed/multiz5way/frames
+    time nice -n +19 hgLoadMafFrames braFlo1 multiz5wayFrames \
+	multiz5way.mafFrames.gz
+    #	real    0m7.902s
+
+    #	enable the trackDb entries:
+# frames multiz5wayFrames
+# irows on
+#############################################################################
+# phastCons 5-way (DONE - 2008-05-01 - Hiram)
+
+    # split 5way mafs into 10M chunks and generate sufficient statistics 
+    # files for # phastCons
+    ssh memk
+    mkdir /cluster/data/braFlo1/bed/multiz5way/msa.split
+    cd /cluster/data/braFlo1/bed/multiz5way/msa.split
+    mkdir -p /san/sanvol1/scratch/braFlo1/multiz5way/cons/ss
+
+    cat << '_EOF_' > doSplit.csh
+#!/bin/csh -ef
+set MAFS = /cluster/data/braFlo1/bed/multiz5way/anno/maf
+set WINDOWS = /san/sanvol1/scratch/braFlo1/multiz5way/cons/ss
+pushd $WINDOWS
+set c = $1
+rm -f $c.out
+twoBitToFa -seq=$c /scratch/data/braFlo1/braFlo1.2bit /scratch/tmp/braFlo1.$c.fa
+/cluster/bin/phast/$MACHTYPE/msa_split $MAFS/$c.maf -i MAF \
+    -M /scratch/tmp/braFlo1.$c.fa \
+    -o SS -r $c -w 10000000,0 -I 1000 -B 5000
+rm -f /scratch/tmp/braFlo1.$c.fa
+popd
+date > $c.out
+'_EOF_'
+    # << happy emacs
+    chmod +x doSplit.csh
+
+    cat << '_EOF_' > template
+#LOOP
+doSplit.csh $(root1) {check out line+ $(root1).out}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    #	create list of maf files:
+    (cd ../anno/maf; find . -type f) | sed -e "s#^./##" > maf.list
+
+    gensub2 maf.list single template jobList
+    para create jobList
+    para try ... check ... etc
+# Completed: 2 of 2 jobs
+# CPU time in finished jobs:        337s       5.61m     0.09h    0.00d  0.000 y
+# IO & Wait Time:                    40s       0.67m     0.01h    0.00d  0.000 y
+# Average job time:                 189s       3.14m     0.05h    0.00d
+# Longest finished job:             375s       6.25m     0.10h    0.00d
+# Submission to last job:           375s       6.25m     0.10h    0.00d
+
+    # take the cons and noncons trees from the Lamprey 6-way
+
+    #	Estimates are not easy to make, probably more correctly,
+    #	take the 6-way .mod file, and re-use it here.
+    ssh hgwdev
+    cd /cluster/data/braFlo1/bed/multiz5way
+    cp -p /cluster/data/petMar1/bed/multiz6way/cons/all/all.mod \
+	./petMar1.6way.mod
+
+
+    # Run phastCons
+    #	This job is I/O intensive in its output files, thus it is all
+    #	working over in /scratch/tmp/
+    ssh memk
+    mkdir -p /cluster/data/braFlo1/bed/multiz5way/cons/run.cons
+    cd /cluster/data/braFlo1/bed/multiz5way/cons/run.cons
+
+    #	there are going to be several different phastCons runs using
+    #	this same script.  They trigger off of the current working directory
+    #	$cwd:t which is the "grp" in this script.  It is one of:
+    #	all gliers placentals
+    #	Well, that's what it was when used in the Mm9 30-way,
+    #	in this instance, there is only the directory "all"
+
+    cat << '_EOF_' > doPhast.csh
+#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2007-05-04/bin
+set f = $1
+set c = $1:r
+set len = $2
+set cov = $3
+set rho = $4
+set grp = $cwd:t
+set tmp = /scratch/tmp/$f
+set cons = /cluster/data/braFlo1/bed/multiz5way/cons
+mkdir -p $tmp
+set san = /san/sanvol1/scratch/braFlo1/multiz5way/cons
+if (-s $cons/$grp/$grp.non-inf) then
+  cp -p $cons/$grp/$grp.mod $cons/$grp/$grp.non-inf $tmp
+  cp -p $san/ss/$f.ss $cons/$grp/$grp.mod $cons/$grp/$grp.non-inf $tmp
+else
+  cp -p $cons/$grp/$grp.mod $tmp
+  cp -p $san/ss/$f.ss $cons/$grp/$grp.mod $tmp
+endif
+pushd $tmp > /dev/null
+if (-s $grp.non-inf) then
+  $PHASTBIN/phastCons $f.ss $grp.mod \
+    --rho $rho --expected-length $len --target-coverage $cov --quiet \
+    --not-informative `cat $grp.non-inf` \
+    --seqname $c --idpref $c --most-conserved $f.bed --score > $f.pp
+else
+  $PHASTBIN/phastCons $f.ss $grp.mod \
+    --rho $rho --expected-length $len --target-coverage $cov --quiet \
+    --seqname $c --idpref $c --most-conserved $f.bed --score > $f.pp
+endif
+popd > /dev/null
+mkdir -p $san/$grp/pp $san/$grp/bed
+sleep 4
+touch $san/$grp/pp $san/$grp/bed
+rm -f $san/$grp/pp/$f.pp
+rm -f $san/$grp/bed/$f.bed
+mv $tmp/$f.pp $san/$grp/pp
+mv $tmp/$f.bed $san/$grp/bed
+rm -fr $tmp
+'_EOF_'
+    # << happy emacs
+    chmod a+x doPhast.csh
+
+    cat << '_EOF_' > template
+#LOOP
+../doPhast.csh $(file1) 45 .3 .31 {check out line+ /san/sanvol1/scratch/braFlo1/multiz5way/cons/all/pp/$(file1).pp}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    # Create parasol batch and run it
+    pushd /san/sanvol1/scratch/braFlo1/multiz5way/cons
+    find ./ss -type f -name "*.ss" | sed -e "s#^./##; s/.ss$//" \
+	> /cluster/data/braFlo1/bed/multiz5way/cons/ss.list
+    popd
+
+    # run for all species
+    cd ..
+    mkdir -p all run.cons/all
+    cd all
+    /cluster/bin/phast.build/cornellCVS/phast.2007-05-04/bin/tree_doctor \
+    ../../petMar1.6way.mod \
+--prune-all-but=braFlo1,hg18,galGal3,mm9,petMar1 \
+	> all.mod
+
+    cd ../run.cons/all
+
+    #	root1 == chrom name, file1 == ss file name without .ss suffix
+    # Create template file for "all" run
+    cat << '_EOF_' > template
+#LOOP
+../doPhast.csh $(file1) 45 .3 .31 {check out line+ /san/sanvol1/scratch/braFlo1/multiz5way/cons/all/pp/$(file1).pp}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+    gensub2 ../../ss.list single template jobList
+    para create jobList
+    para try ... check ... push ... etc.
+# Completed: 94 of 94 jobs
+# CPU time in finished jobs:       1945s      32.42m     0.54h    0.02d  0.000 y
+# IO & Wait Time:                   810s      13.49m     0.22h    0.01d  0.000 y
+# Average job time:                  29s       0.49m     0.01h    0.00d
+# Longest finished job:              34s       0.57m     0.01h    0.00d
+# Submission to last job:           201s       3.35m     0.06h    0.00d
+
+    # create Most Conserved track
+    ssh kolossus
+    cd /san/sanvol1/scratch/braFlo1/multiz5way/cons/all
+    find ./bed -type f -name "chr*.bed" | xargs cat \
+	| sort -k1,1 -k2,2n | \
+        awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' | \
+            /cluster/bin/scripts/lodToBedScore /dev/stdin > mostConserved.bed
+    cp -p mostConserved.bed /cluster/data/braFlo1/bed/multiz5way/cons/all
+
+    # load into database
+    ssh hgwdev
+    cd /cluster/data/braFlo1/bed/multiz5way/cons/all
+    time nice -n +19 hgLoadBed braFlo1 phastConsElements5way mostConserved.bed
+    #	Loaded 122683 elements of size 5
+    #	real    0m2.299s
+
+    # Try for 5% overall cov, and 70% CDS cov 
+    #	We don't have any gene tracks to compare CDS coverage
+    #	--rho .31 --expected-length 45 --target-coverage .3
+    featureBits braFlo1 phastConsElements5way
+    #	35581251 bases of 923355587 (3.853%) in intersection
+
+    # Create merged posterier probability file and wiggle track data files
+    # currently doesn't matter where this is performed, the san is the same
+    # network distance from all machines.
+    # sort by chromName, chromStart so that items are in numerical order 
+    #  for wigEncode
+    cd /san/sanvol1/scratch/braFlo1/multiz5way/cons/all
+    mkdir phastCons5wayScores
+
+    cat pp/chrM*.pp | gzip > phastCons5wayScores/chrM.data.gz
+    #	this is a bit of a cheat on the sorting order here, but it works.
+    ls pp/chrUn*.pp | sort -t. -k2n | xargs cat \
+	| gzip > phastCons5wayScores/chrUn.data.gz
+
+    #	copy the phastCons5wayScores to:
+    mkdir -p \
+/cluster/data/braFlo1/bed/multiz5way/downloads/phastCons5way
+    cp -p phastCons5wayScores/chr*.data.gz \
+/cluster/data/braFlo1/bed/multiz5way/downloads/phastCons5way
+    #	for hgdownload downloads
+
+    # Create merged posterier probability file and wiggle track data files
+    # currently doesn't matter where this is performed, the san is the same
+    # network distance from all machines.
+    cd /san/sanvol1/scratch/braFlo1/multiz5way/cons/all
+    zcat phastCons5wayScores/chr*.data.gz \
+	| wigEncode stdin phastCons5way.wig phastCons5way.wib
+    # Converted stdin, upper limit 1.00, lower limit 0.00
+    time nice -n +19 cp -p *.wi? /cluster/data/braFlo1/bed/multiz5way/cons/all
+    #	real    0m1.216s
+
+    # Load gbdb and database with wiggle.
+    ssh hgwdev
+    cd /cluster/data/braFlo1/bed/multiz5way/cons/all
+    ln -s `pwd`/phastCons5way.wib /gbdb/braFlo1/multiz5way/phastCons5way.wib
+    time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/braFlo1/multiz5way braFlo1 \
+	phastCons5way phastCons5way.wig
+    #	real    0m2.166s
+    # remove garbage
+    rm wiggle.tab
+
+    #  Create histogram to get an overview of all the data
+    ssh hgwdev
+    cd /cluster/data/braFlo1/bed/multiz5way/cons/all
+    time nice -n +19 hgWiggle -doHistogram \
+	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+	    -db=braFlo1 phastCons5way > histogram.data 2>&1
+    #	real    5m0.608s
+
+    #	create plot of histogram:
+
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small color x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Lancelet BraFlo1 Histogram phastCons5way track"
+set xlabel " phastCons5way score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.02]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #	<< happy emacs
+
+    display histo.png &
+    #	it is a bit lopsided toward the highly conserved end, but that
+    #	is because there is so little bits being used
+
+    #	These trackDb entries turn on the wiggle phastCons data track:
+    #	type wigMaf 0.0 1.0
+    #	maxHeightPixels 100:40:11
+    #	wiggle phastCons5way
+    #	spanList 1
+    #	autoScaleDefault Off
+    #	windowingFunction mean
+    #	pairwiseHeight 12
+    #	yLineOnOff Off
+
+#############################################################################
+#  Downloads (DONE - 2008-05-01 - Hiram)
+    #	Let's see if the downloads will work
+    ssh hgwdev
+    cd /cluster/data/braFlo1
+    #	expecting to find repeat masker .out file here:
+    ln -s bed/RepeatMasker/braFlo1.fa.out .
+    cd bed/simpleRepeat
+    mkdir trfMaskChrom
+    splitFileByColumn trfMask.bed trfMaskChrom
+    touch trfMaskChrom/chrM.bed
+    cd /cluster/data/braFlo1
+    time nice -n +19 /cluster/bin/scripts/makeDownloads.pl \
+	-workhorse=hgwdev braFlo1 > jkStuff/downloads.log 2>&1
+    #	real    11m53.475s
+
+    #	failed making upstream sequences:
+    #	featureBits calJac1 mgcGenes:upstream:1000 -fa=stdout
+    #	setpriority: Permission denied.
+    #	the 'nice' from my bash shell causes trouble inside the csh
+    #	script which uses nice.  Finish off the install step manually
+    #	with the mgcGenes upstreams ...
+
+#############################################################################
+#  PushQ entries (DONE - 2008-05-01 - Hiram)
+    ssh hgwdev
+    /cluster/data/braFlo1
+    /cluster/bin/scripts/makePushQSql.pl braFlo1 > jkStuff/pushQ.sql
+    #	output warnings:
+# braFlo1 does not have seq
+# Could not tell (from trackDb, all.joiner and hardcoded lists of supporting
+# and genbank tables) which tracks to assign these tables to:
+#	gbWarn
+#	multiz5wayFrames
+#	phastCons5way
+    scp -p jkStuff/pushQ.sql hgwbeta:/tmp/braFlo1.sql
+    ssh hgwbeta
+    cd /tmp
+    hgsql qapushq < braFlo1.sql
+
+#############################################################################
+#  Create 5-way downloads (DONE - 2008-05-01 - Hiram)
+    ssh hgwdev
+    mkdir -p /cluster/data/braFlo1/bed/multiz5way/downloads/phastCons5way
+    cd /cluster/data/braFlo1/bed/multiz5way/downloads/phastCons5way
+    #	if these haven't been copied here from before:
+    cp -p \
+/san/sanvol1/scratch/braFlo1/multiz5way/cons/all/phastCons5wayScores/* .
+    ln -s ../../cons/all/all.mod ./5way.mod
+    cp /cluster/data/petMar1/bed/multiz6way/downloads/phastCons6way/README.txt .
+    # edit that README.txt to be correct for this 5-way alignment
+    cd ..
+    mkdir multiz5way
+    cd multiz5way
+    cp -p /cluster/data/petMar1/bed/multiz6way/downloads/multiz6way/README.txt .
+    # edit that README.txt to be correct for this 5-way alignment
+    ssh kkstore05
+    cd /cluster/data/braFlo1/bed/multiz5way/downloads/multiz5way
+    ln -s ../../braFlo1.5-way.nh ./5way.nh
+
+    cp -p ../../anno/maf/chr*.maf .
+    gzip chr*.maf
+
+    ssh hgwdev
+    cd /cluster/data/braFlo1/bed/multiz5way/downloads/multiz5way
+    #	creating upstream files from xenoRefGene, bash script:
+    cat << '_EOF_' > mkUpstream.sh
+#!/bin/bash
+DB=braFlo1
+GENE=xenoRefGene
+NWAY=multiz5way
+export DB GENE
+
+for S in 1000 2000 5000
+do
+    echo "making upstream${S}.maf"
+    featureBits ${DB} ${GENE}:upstream:${S} -fa=/dev/null -bed=stdout \
+        | perl -wpe 's/_up[^\t]+/\t0/' | sort -k1,1 -k2,2n \
+        | $HOME/kent/src/hg/ratStuff/mafFrags/mafFrags ${DB} ${NWAY} \
+                stdin stdout \
+                -orgs=/cluster/data/${DB}/bed/${NWAY}/species.list \
+        | gzip -c > upstream${S}.maf.gz
+    echo "done upstream${S}.maf.gz"
+done
+'_EOF_'
+    # << happy emacs
+    chmod +x ./mkUpstream.sh
+    time nice -n +19 ./mkUpstream.sh
+    #	real    3m1.228s
+# -rw-rw-r--  1   126900 May  1 16:51 upstream1000.maf.gz
+# -rw-rw-r--  1   224320 May  1 16:52 upstream2000.maf.gz
+# -rw-rw-r--  1   501687 May  1 16:53 upstream5000.maf.gz
+
+    #	check the names in these upstream files to ensure sanity:
+    zcat upstream1000.maf.gz | grep "^s " | awk '{print $2}' \
+	| sort | uniq -c | sort -rn | less
+    #	should be a list of the other 4 species with a high count,
+    #	then xenoRefGene names, e.g.:
+    #	364 petMar1
+    #	364 mm9
+    #	364 hg18
+    #	364 galGal3
+    #	  7 NM_069006
+    #	  7 NM_054045
+    #	  7 NM_021059
+
+    ssh kkstore05
+    cd /cluster/data/braFlo1/bed/multiz5way/downloads/multiz5way
+    md5sum *.maf.gz > md5sum.txt
+    cd ../phastCons5way
+    md5sum *.data.gz *.mod > md5sum.txt
+
+    ssh hgwdev
+    mkdir /usr/local/apache/htdocs/goldenPath/braFlo1/multiz5way
+    mkdir /usr/local/apache/htdocs/goldenPath/braFlo1/phastCons5way
+    cd /cluster/data/braFlo1/bed/multiz5way/downloads/multiz5way
+    ln -s `pwd`/* /usr/local/apache/htdocs/goldenPath/braFlo1/multiz5way
+    rm /usr/local/apache/htdocs/goldenPath/braFlo1/multiz5way/mkUpstream.sh 
+    cd ../phastCons5way
+    ln -s `pwd`/* /usr/local/apache/htdocs/goldenPath/braFlo1/phastCons5way
+    #	if your ln -s `pwd`/* made extra links to files you don't want there,
+    #	check the goldenPath locations and remove those extra links
+
+#############################################################################
