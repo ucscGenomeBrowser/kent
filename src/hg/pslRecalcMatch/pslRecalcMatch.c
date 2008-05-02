@@ -12,9 +12,10 @@
 #include "twoBit.h"
 #include "nibTwo.h"
 #include "dnaLoad.h"
+#include "dystring.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: pslRecalcMatch.c,v 1.1 2005/10/31 20:34:58 kent Exp $";
+static char const rcsid[] = "$Id: pslRecalcMatch.c,v 1.2 2008/05/02 22:57:05 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -30,15 +31,37 @@ errAbort(
   "of such files.  The psl's should be simple non-translated ones.\n"
   "This will work faster if the in.psl is sorted on target.\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -ignoreQUniq - ignore everything after the last `-' in the qName field, that\n"
+  "    is sometimes used to generate a unique identifier\n"
   );
 }
 
 static struct optionSpec options[] = {
+   {"ignoreQUniq", OPTION_BOOLEAN},
    {NULL, 0},
 };
+static boolean ignoreQUniq = FALSE;
 
-void recalcMatches(struct psl *psl, struct dnaSeq *tSeq,
+
+static char *getQName(char *qName)
+/* get query name, optionally dropping trailing unique identifier.
+ * WARNING: static return */
+{
+static struct dyString *buf = NULL;
+if (ignoreQUniq)
+    {
+    if (buf == NULL)
+        buf = dyStringNew(2*strlen(qName));
+    dyStringClear(buf);
+    char *dash = strrchr(qName, '-');
+    dyStringAppendN(buf, qName, (dash-qName));
+    return buf->string;
+    }
+else
+    return qName;
+}
+
+static void recalcMatches(struct psl *psl, struct dnaSeq *tSeq,
 	int tSeqOffset, struct dnaSeq *qSeq)
 /* Fill in psl with correct match/mismatch/repMatch. */
 {
@@ -103,7 +126,7 @@ while ((psl = pslNext(lf)) != NULL)
     int tSize;
     struct dnaSeq *tSeqPart = nibTwoCacheSeqPart(tCache,
     	psl->tName, psl->tStart, psl->tEnd - psl->tStart, &tSize);
-    struct dnaSeq *qSeq = hashMustFindVal(qHash, psl->qName);
+    struct dnaSeq *qSeq = hashMustFindVal(qHash, getQName(psl->qName));
     recalcMatches(psl, tSeqPart, psl->tStart, qSeq);
     pslTabOut(psl, f);
     dnaSeqFree(&tSeqPart);
@@ -118,6 +141,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 5)
     usage();
+ignoreQUniq = optionExists("ignoreQUniq");
 pslRecalcMatch(argv[1], argv[2], argv[3], argv[4]);
 return 0;
 }
