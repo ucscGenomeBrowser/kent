@@ -15,7 +15,7 @@
 #include "hgConfig.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.108 2008/04/10 22:07:30 angie Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.109 2008/05/02 20:23:30 angie Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -698,7 +698,7 @@ boolean sqlTableExists(struct sqlConnection *sc, char *table)
 char query[256];
 struct sqlResult *sr;
 
-safef(query, sizeof(query), "select count(*) from %s", table);
+safef(query, sizeof(query), "describe %s", table);
 if ((sr = sqlUseOrStore(sc,query,mysql_use_result, FALSE)) == NULL)
     return FALSE;
 sqlNextRow(sr);	/* Just discard. */
@@ -783,25 +783,18 @@ return row;
 boolean sqlTableOk(struct sqlConnection *sc, char *table)
 /* Return TRUE if a table not only exists, but also is not corrupted. */
 {
-int rowCount = sqlTableSizeIfExists(sc, table);
-if (rowCount < 0)
-    return FALSE;
-else if (rowCount == 0)
-    return TRUE;
+char query[256];
+struct sqlResult *sr;
+boolean ret = TRUE;
+safef(query, sizeof(query), "select * from %s limit 1,1", table);
+if ((sr = sqlUseOrStore(sc, query, mysql_use_result, FALSE)) == NULL)
+    /* An error here is OK if and only if the table exists and is empty: */
+    return (sqlTableSizeIfExists(sc, table) == 0);
 else
-    {
-    char query[256];
-    struct sqlResult *sr;
-    boolean ret = TRUE;
-    safef(query, sizeof(query), "select * from %s limit 1,1", table);
-    if ((sr = sqlUseOrStore(sc,query,mysql_use_result, FALSE)) == NULL)
-	ret = FALSE;
-    else
-	/* Discard row, but see if we get an error while reading it. */
-	sqlMaybeNextRow(sr, &ret);
-    sqlFreeResult(&sr);
-    return ret;
-    }
+    /* Discard row, but see if we get an error while reading it. */
+    sqlMaybeNextRow(sr, &ret);
+sqlFreeResult(&sr);
+return ret;
 }
 
 struct sqlResult *sqlGetResult(struct sqlConnection *sc, char *query)
