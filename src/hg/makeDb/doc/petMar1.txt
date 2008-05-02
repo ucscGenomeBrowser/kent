@@ -4,7 +4,7 @@
 # This file describes browser build for the Sea Lamprey
 # genome, Petromyzon marinus, March 2007, v.3.0 from WUSTL
 #
-#       "$Id: petMar1.txt,v 1.14 2008/04/29 21:50:00 hiram Exp $"
+#       "$Id: petMar1.txt,v 1.15 2008/05/02 16:08:01 hiram Exp $"
 #
 
 ##########################################################################
@@ -1590,4 +1590,90 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     ssh hgwbeta
     cd /tmp
     hgsql qapushq < petMar1.sql
+
+#############################################################################
+#  Create 6-way downloads (DONE - 2008-05-01 - Hiram)
+    ssh hgwdev
+    mkdir -p /cluster/data/petMar1/bed/multiz6way/downloads/phastCons6way
+    cd /cluster/data/petMar1/bed/multiz6way/downloads/phastCons6way
+    #	if these haven't been copied here from before:
+    cp -p \
+/san/sanvol1/scratch/petMar1/multiz6way/cons/all/phastCons6wayScores/* .
+    ln -s ../../cons/all/all.mod ./6way.mod
+    cp /cluster/data/calJac1/bed/multiz9way/downloads/phastCons9way/README.txt .
+    # edit that README.txt to be correct for this 6-way alignment
+    cd ..
+    mkdir multiz6way
+    cd multiz6way
+    cp -p /cluster/data/calJac1/bed/multiz9way/downloads/multiz9way/README.txt .
+    # edit that README.txt to be correct for this 6-way alignment
+    ssh kkstore04
+    cd /cluster/data/petMar1/bed/multiz6way/downloads/multiz6way
+    ln -s ../../petMar1.6-way.nh ./6way.nh
+
+    time nice -n +19 gzip -c ../../anno/petMar1.anno.6way.maf \
+	> petMar1.6way.maf.gz
+    #	real    0m49.861s
+
+    ssh hgwdev
+    cd /cluster/data/petMar1/bed/multiz6way/downloads/multiz6way
+    #	creating upstream files from xenoRefGene, bash script:
+    cat << '_EOF_' > mkUpstream.sh
+#!/bin/bash
+DB=petMar1
+GENE=xenoRefGene
+NWAY=multiz6way
+export DB GENE
+
+for S in 1000 2000 5000
+do
+    echo "making upstream${S}.maf"
+    featureBits ${DB} ${GENE}:upstream:${S} -fa=/dev/null -bed=stdout \
+        | perl -wpe 's/_up[^\t]+/\t0/' | sort -k1,1 -k2,2n \
+        | $HOME/kent/src/hg/ratStuff/mafFrags/mafFrags ${DB} ${NWAY} \
+                stdin stdout \
+                -orgs=/cluster/data/${DB}/bed/${NWAY}/species.list \
+        | gzip -c > upstream${S}.maf.gz
+    echo "done upstream${S}.maf.gz"
+done
+'_EOF_'
+    # << happy emacs
+    chmod +x ./mkUpstream.sh
+    time nice -n +19 ./mkUpstream.sh
+    #	real    2m26.254s
+# -rw-rw-r--  1    61861 May  1 16:10 upstream1000.maf.gz
+# -rw-rw-r--  1   104203 May  1 16:11 upstream2000.maf.gz
+# -rw-rw-r--  1   195382 May  1 16:12 upstream5000.maf.gz
+
+    #	check the names in these upstream files to ensure sanity:
+    zcat upstream1000.maf.gz | grep "^s " | awk '{print $2}' \
+	| sort | uniq -c | sort -rn | less
+    #	should be a list of the other 4 species with a high count,
+    #	then xenoRefGene names, e.g.:
+    #	206 oryLat1
+    #	206 mm9
+    #	206 hg18
+    #	206 galGal3
+    #	206 braFlo1
+    #	  8 NM_054045
+    #	  7 NM_013550
+    #	  5 NM_069752
+
+    ssh kkstore04
+    cd /cluster/data/petMar1/bed/multiz6way/downloads/multiz6way
+    md5sum *.maf.gz > md5sum.txt
+    cd ../phastCons6way
+    md5sum *.data.gz *.mod > md5sum.txt
+
+    ssh hgwdev
+    mkdir /usr/local/apache/htdocs/goldenPath/petMar1/multiz6way
+    mkdir /usr/local/apache/htdocs/goldenPath/petMar1/phastCons6way
+    cd /cluster/data/petMar1/bed/multiz6way/downloads/multiz6way
+    ln -s `pwd`/* /usr/local/apache/htdocs/goldenPath/petMar1/multiz6way
+    rm /usr/local/apache/htdocs/goldenPath/petMar1/multiz6way/mkUpstream.sh 
+    cd ../phastCons6way
+    ln -s `pwd`/* /usr/local/apache/htdocs/goldenPath/petMar1/phastCons6way
+    #	if your ln -s `pwd`/* made extra links to files you don't want there,
+    #	check the goldenPath locations and remove those extra links
+
 #############################################################################
