@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: mm8.txt,v 1.65 2008/04/16 00:04:03 kate Exp $"
+#	"$Id: mm8.txt,v 1.66 2008/05/03 21:23:45 markd Exp $"
 #
 
 #  NOTE:  this doc may have genePred loads that fail to include
@@ -8777,4 +8777,22 @@ knownToEnsembl yes
     featureBits mm8 ensGene
     # 56654064 bases of 2567283971 (2.207%) in intersection
 ############################################################################
->>>>>>> 1.64
+# Reload CCDS from CCDS.20080502 dump (2008-05-03 markd)
+    # import ccds database as described in ccds.txt
+    set db=mm8
+    set ncbiBld=36.1
+    # create and load ccdsGene and ccdsInfo tables from imported database
+    /cluster/data/genbank/bin/x86_64/ccdsMkTables -loadDb ccds ${db} ${ncbiBld} ccdsInfo ccdsGene
+
+    # ccdsKgMap
+    /cluster/data/genbank/bin/x86_64/mkCcdsGeneMap -db=${db} -loadDb ccdsGene knownGene ccdsKgMap
+
+    checkTableCoords ${db} -verbose=2 ccdsGene
+    # update all.jointer to include ${db} in ccdsDb
+    joinerCheck -database=${db} -identifier=ccdsGeneId ~/compbio/genbank/kent/src/hg/makeDb/schema/all.joiner
+    # request push of 
+        ccdsGene
+        ccdsInfo
+        ccdsKgMap
+    # << emacs
+############################################################################

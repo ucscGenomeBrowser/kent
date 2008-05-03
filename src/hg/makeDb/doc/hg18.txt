@@ -21010,3 +21010,22 @@ TMPDIR=/scratch/tmp
 
 
 #############################################################################
+# Reload CCDS from CCDS.20080502 dump (2008-05-03 markd)
+    # import ccds database as described in ccds.txt
+    set db=hg18
+    set ncbiBld=36.3
+    # create and load ccdsGene and ccdsInfo tables from imported database
+    /cluster/data/genbank/bin/x86_64/ccdsMkTables -loadDb ccds ${db} ${ncbiBld} ccdsInfo ccdsGene
+
+    # ccdsKgMap
+    /cluster/data/genbank/bin/x86_64/mkCcdsGeneMap -db=${db} -loadDb ccdsGene knownGene ccdsKgMap
+
+    checkTableCoords ${db} -verbose=2 ccdsGene
+    # update all.jointer to include ${db} in ccdsDb
+    joinerCheck -database=${db} -identifier=ccdsGeneId ~/compbio/genbank/kent/src/hg/makeDb/schema/all.joiner
+    # request push of 
+        ccdsGene
+        ccdsInfo
+        ccdsKgMap
+    # << emacs
+############################################################################

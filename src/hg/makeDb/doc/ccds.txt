@@ -24,9 +24,10 @@
 # Process for building CCDS for an assembly in database ${db}.  This is
 # a template for inserting in the ${db}.txt
 ############################################################################
-# Reload CCDS ()
+# Reload CCDS from CCDS.xxxx dump ()
     # import ccds database as described in ccds.txt
     set db=XXXX
+    set ncbiBld=YYYYY
     # create and load ccdsGene and ccdsInfo tables from imported database
     /cluster/data/genbank/bin/x86_64/ccdsMkTables -loadDb ccds ${db} ccdsInfo ccdsGene
 
@@ -48,3 +49,6 @@
 2007-12-12 markd import of CCDS.20071212 as described above
 2008-02-01 markd import of CCDS.20080201 as described above
 2008-03-31 markd import of CCDS.20080331 as described above
+2008-05-03 markd import of CCDS.20080502 as described above
+                 - update mm8/36.1,mm9/37.1,hg18/36.3 (includes hg18 reannotation)
+                 
