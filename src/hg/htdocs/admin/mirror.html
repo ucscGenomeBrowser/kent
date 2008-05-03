@@ -188,20 +188,16 @@ rsync -navz --progress rsync://hgdownload.cse.ucsc.edu
 </PRE>
 This should respond with:
 <PRE>
-genome          UCSC Human Genome Downloads (348G)
-sars            UCSC Human Genome SARS Downloads (193MB)
-htdocs          UCSC Human Genome Web Site Htdocs (504MB)
-goldenPath      UCSC Human Golden Path Downloads (170 GB)
+genome          UCSC Human Genome Downloads
+sars            UCSC Human Genome SARS Downloads
+htdocs          UCSC Human Genome Web Site Htdocs
+goldenPath      UCSC Human Golden Path Downloads
 cgi-bin         UCSC Human Genome Web Site CGI Binaries x86_64
 cgi-bin-i386    UCSC Human Genome Web Site CGI Binaries i386
 gbdb            UCSC Human Genome Browser Gbdb Config Files
 archives        UCSC Human Genome Browser Archived Config Files
-mysql           UCSC Human Genome Raw Mysql Tables (500 GB)
+mysql           UCSC Human Genome Raw Mysql Tables
 </PRE>
-(Note that the sizes listed when using this command are static.  To get the 
-real sizes, use the rsync -n command on each directory, as described at the
-top of this page.)
-<BR>
 <LI>Determine the destination of the copy ($WEBROOT) and fire off the production copy (270 Mb)<BR>
 <em>The trailing slash is important!</em><BR>
 <PRE>
