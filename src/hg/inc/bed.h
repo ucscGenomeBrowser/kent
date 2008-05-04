@@ -203,6 +203,15 @@ int bedTotalBlockSize(struct bed *bed);
 int bedTotalThickBlockSize(struct bed *bed);
 /* Return total size of all thick blocks. */
 
+int bedStartThinSize(struct bed *bed);
+/* Return total size of all blocks before thick part. */
+
+int bedEndThinSize(struct bed *bed);
+/* Return total size of all blocks after thick part. */
+
+int bedBlockSizeInRange(struct bed *bed, int rangeStart, int rangeEnd);
+/* Get size of all parts of all exons between rangeStart and rangeEnd. */
+
 struct bed *bedFromPsl(struct psl *psl);
 /* Convert a single psl to a bed structure */
 

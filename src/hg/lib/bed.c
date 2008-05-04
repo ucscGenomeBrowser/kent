@@ -11,7 +11,7 @@
 #include "binRange.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: bed.c,v 1.56 2008/03/26 19:32:51 kent Exp $";
+static char const rcsid[] = "$Id: bed.c,v 1.57 2008/05/04 14:15:34 kent Exp $";
 
 void bedStaticLoad(char **row, struct bed *ret)
 /* Load a row from bed table into ret.  The contents of ret will
@@ -669,8 +669,8 @@ for (i=0; i<bed->blockCount; ++i)
 return total;
 }
 
-int bedTotalThickBlockSize(struct bed *bed)
-/* Return total size of all thick blocks. */
+int bedBlockSizeInRange(struct bed *bed, int rangeStart, int rangeEnd)
+/* Get size of all parts of all exons between rangeStart and rangeEnd. */
 {
 int total = 0;
 int i;
@@ -678,9 +678,27 @@ for (i=0; i<bed->blockCount; ++i)
     {
     int start = bed->chromStart + bed->chromStarts[i];
     int end = start + bed->blockSizes[i];
-    total += positiveRangeIntersection(start, end, bed->thickStart, bed->thickEnd);
+    total += positiveRangeIntersection(start, end, rangeStart, rangeEnd);
     }
 return total;
+}
+
+int bedTotalThickBlockSize(struct bed *bed)
+/* Return total size of all thick blocks. */
+{
+return bedBlockSizeInRange(bed, bed->thickStart, bed->thickEnd);
+}
+
+int bedStartThinSize(struct bed *bed)
+/* Return total size of all blocks before thick part. */
+{
+return bedBlockSizeInRange(bed, bed->chromStart, bed->thickStart);
+}
+
+int bedEndThinSize(struct bed *bed)
+/* Return total size of all blocks after thick part. */
+{
+return bedBlockSizeInRange(bed, bed->thickEnd, bed->chromEnd);
 }
 
 
@@ -1450,10 +1468,13 @@ int overlap = bedSameStrandOverlap(oldBed, newBed);
 if (oldSize == newSize && oldSize == overlap)
     return TRUE;
 
-/* Next handle case where old bed is a single exon.  For this
- * just require that old bed is a proper superset of new bed. */
+/* If overlap is smaller than old size then we can't be a superset. */
+if (overlap < oldSize)
+    return FALSE;
+
+/* If we're a single exon bed then we're done. */
 if (oldBed->blockCount <= 1)
-    return overlap >= oldSize;
+    return TRUE;
 
 /* Otherwise we look for first intron start in old bed, and then
  * flip through new bed until we find an intron that starts at the
