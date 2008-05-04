@@ -15,7 +15,7 @@
 #include "dystring.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: pslRecalcMatch.c,v 1.2 2008/05/02 22:57:05 markd Exp $";
+static char const rcsid[] = "$Id: pslRecalcMatch.c,v 1.3 2008/05/04 05:44:48 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -54,6 +54,8 @@ if (ignoreQUniq)
         buf = dyStringNew(2*strlen(qName));
     dyStringClear(buf);
     char *dash = strrchr(qName, '-');
+    if (dash == NULL)
+        return qName;
     dyStringAppendN(buf, qName, (dash-qName));
     return buf->string;
     }
