@@ -35,7 +35,7 @@ endif
 set directory="hgcentral" 
 # set file paths and URLs
 set today=`date +%Y-%m-%d`
-# set today="2007-04-01"
+# set today="2008-05-05"
 set dirPath="/usr/local/apache/htdocs/qa/test-results/$directory"
 rm -rf $dirPath/$today/
 mkdir -p $dirPath/$today
@@ -45,11 +45,11 @@ set hgwdevString='hgcentraltest'
 set hgwbetaString='-h hgwbeta hgcentralbeta'
 set rrString='-h genome-centdb hgcentral' 
 
-foreach table ( blatServers clade dbDb dbDbArch defaultDb gdbPdb genomeClade liftOverChain )
+foreach table ( blatServers clade dbDb dbDbArch defaultDb gdbPdb genomeClade liftOverChain namedSessionDb )
   hgsql  $hgwdevString -N -e "SELECT * FROM $table" | sort >> $dirPath/$today/hgwdev.$table
   hgsql $hgwbetaString -N -e "SELECT * FROM $table" | sort >> $dirPath/$today/hgwbeta.$table
   hgsql      $rrString -N -e "SELECT * FROM $table" | sort >> $dirPath/$today/rr.$table
 end
 
 echo $urlPath
-
+chmod 640 $dirPath/$today/*.namedSessionDb
