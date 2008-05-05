@@ -15,7 +15,7 @@
 #include "hCommon.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: sequence.c,v 1.22 2007/10/09 20:03:25 angie Exp $";
+static char const rcsid[] = "$Id: sequence.c,v 1.23 2008/05/05 20:55:46 galt Exp $";
 
 static void printGenomicAnchor(char *table, char *itemName,
 	char *chrom, int start, int end)
@@ -57,8 +57,8 @@ if (sqlTableExists(conn, table))
     	table, geneId);
     if (sqlExists(conn, query))
         {
-	hPrintf("<A HREF=\"../cgi-bin/hgGene?%s&%s=1\" class=\"toc\">",
-	       cartSidUrlString(cart), command);
+	hPrintf("<A HREF=\"../cgi-bin/hgGene?%s&%s=1&hgg_gene=%s\" class=\"toc\">",
+	       cartSidUrlString(cart), command, geneId);
 	hPrintf("%s</A>", label);
 	}
     }
@@ -80,7 +80,7 @@ printSeqLink(conn, geneId, tableId, hggDoGetMrnaSeq, title, 2);
 }
 
 void printProteinSeqLink(struct sqlConnection *conn, char *geneId)
-/* Print out link to fetch mRNA. */
+/* Print out link to fetch protein. */
 {
 char *table = genomeSetting("knownGenePep");
 char query[256];

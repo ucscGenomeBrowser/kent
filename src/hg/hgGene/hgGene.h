@@ -187,7 +187,7 @@ void printGenomicSeqLink(struct sqlConnection *conn, char *geneId,
 /* Figure out known genes table, position of gene, link it. */
 
 void printProteinSeqLink(struct sqlConnection *conn, char *geneId);
-/* Print out link to fetch mRNA. */
+/* Print out link to fetch protein. */
 
 void printMrnaSeqLink(struct sqlConnection *conn, char *geneId);
 /* Print out link to fetch mRNA. */
