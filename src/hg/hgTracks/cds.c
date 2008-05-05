@@ -20,7 +20,7 @@
 #include "hgTracks.h"
 #include "cdsSpec.h"
 
-static char const rcsid[] = "$Id: cds.c,v 1.72 2008/05/01 23:01:00 angie Exp $";
+static char const rcsid[] = "$Id: cds.c,v 1.73 2008/05/05 23:31:08 angie Exp $";
 
 /* Definitions of cds colors for coding coloring display */
 #define CDS_ERROR   0
@@ -713,9 +713,10 @@ reverseComplement(rPrimer, rPrimerSize);
 if (target != NULL)
     {
     struct psl *tpsl;
+    char *realName = pcrResultItemAccName(lf->name, lf->extra);
     /* isPcr results are so sparse that I think the performance impact 
      * of re-reading the psl file in the draw function is negligible. */
-    pcrResultGetPsl(pslFileName, target, lf->name,
+    pcrResultGetPsl(pslFileName, target, realName,
 		    chromName, lf->start, lf->end,
 		    &tpsl, NULL);
     /* Use seq+extFile if specified; otherwise just retrieve from seqFile. */

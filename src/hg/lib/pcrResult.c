@@ -7,7 +7,7 @@
 #include "targetDb.h"
 #include "pcrResult.h"
 
-static char const rcsid[] = "$Id: pcrResult.c,v 1.7 2008/05/02 19:32:49 angie Exp $";
+static char const rcsid[] = "$Id: pcrResult.c,v 1.8 2008/05/05 23:31:07 angie Exp $";
 
 char *pcrResultCartVar(char *db)
 /* Returns the cart variable name for PCR result track info for db. 
@@ -169,5 +169,43 @@ hashAdd(tdb->settingsHash, INDEL_QUERY_INSERT, cloneString("on"));
 hashAdd(tdb->settingsHash, INDEL_POLY_A, cloneString("on"));
 hashAdd(tdb->settingsHash, "nextItemButton", cloneString("off"));
 return tdb;
+}
+
+char *pcrResultItemAccName(char *acc, char *name)
+/* If the accession and display name are different, concatenate them
+ * into a single name that must match a non-genomic target item's name
+ * in the targetDb .2bit.  Do not free the result. */
+{
+static char accName[256];
+if (sameString(acc, name))
+    safecpy(accName, sizeof(accName), name);
+else
+    safef(accName, sizeof(accName), "%s__%s", acc, name);
+return accName;
+}
+
+char *pcrResultItemAccession(char *nameIn)
+/* If nameIn contains a concatenated accession and display name, returns
+ * just the accession.  Do not free the result.*/
+{
+char *ptr = strstr(nameIn, "__");
+if (ptr != NULL)
+    {
+    static char nameOut[128];
+    safecpy(nameOut, sizeof(nameOut), nameIn);
+    nameOut[ptr-nameIn] = '\0';
+    return nameOut;
+    }
+return nameIn;
+}
+
+char *pcrResultItemName(char *nameIn)
+/* If nameIn contains a concatenated accession and display name, returns
+ * just the name.  Do not free the result.*/
+{
+char *ptr = strstr(nameIn, "__");
+if (ptr != NULL)
+    return ptr+2;
+return nameIn;
 }
 

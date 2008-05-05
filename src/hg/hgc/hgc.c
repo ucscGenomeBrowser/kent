@@ -213,7 +213,7 @@
 #include "itemConf.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1416 2008/05/01 23:42:45 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1417 2008/05/05 23:31:08 angie Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -5328,16 +5328,23 @@ void printPcrTargetMatch(struct targetDb *target, struct psl *tpsl,
 			 boolean mustGetItem)
 /* Show the non-genomic target PCR result and its genomic mapping. */
 {
+char *acc = pcrResultItemAccession(tpsl->tName);
+char *name = pcrResultItemName(tpsl->tName);
+char niceName[256];
+if (sameString(acc, name))
+    safecpy(niceName, sizeof(niceName), name);
+else
+    safef(niceName, sizeof(niceName), "%s (%s)", name, acc);
 printf("<B>Position in %s:</B> <A HREF=\"%s?%s&db=%s&position=%s\">%s</A>"
        ":%d-%d<BR>\n", 
        target->description, hgTracksName(), cartSidUrlString(cart), database,
-       tpsl->tName, tpsl->tName, tpsl->tStart+1, tpsl->tEnd);
-printf("<B>Size in %s:</B> %d<BR>\n", tpsl->tName,
+       acc, niceName, tpsl->tStart+1, tpsl->tEnd);
+printf("<B>Size in %s:</B> %d<BR>\n", niceName,
        tpsl->tEnd - tpsl->tStart);
 if (tpsl->strand[0] == '-')
     printf("&nbsp;&nbsp;"
 	   "<EM>Warning: the match is on the reverse strand of %s</EM><BR>\n",
-	   tpsl->tName);
+	   niceName);
 
 struct psl *itemPsl = NULL, *otherPsls = NULL, *gpsl;
 int itemStart = cartInt(cart, "o");
@@ -5348,7 +5355,7 @@ struct sqlResult *sr;
 char **row;
 char query[2048];
 safef(query, sizeof(query), "select * from %s where qName = '%s'",
-      target->pslTable, tpsl->tName);
+      target->pslTable, acc);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -5356,7 +5363,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     struct psl *pslTrimmed = pslTrimToQueryRange(gpsl, tpsl->tStart,
 						 tpsl->tEnd);
     if (sameString(gpsl->tName, seqName) &&
-	gpsl->tStart == itemStart && gpsl->tEnd == itemEnd)
+	((gpsl->tStart == itemStart && gpsl->tEnd == itemEnd) ||
+	 (pslTrimmed->tStart == itemStart && pslTrimmed->tEnd == itemEnd)))
 	itemPsl = pslTrimmed;
     else
 	slAddHead(&otherPsls, pslTrimmed);
@@ -5365,7 +5373,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 hFreeConn(&conn);
 if (mustGetItem && itemPsl == NULL)
     errAbort("Did not find record for amplicon in %s at %s:%d-%d",
-	     tpsl->tName, seqName, itemStart, itemEnd);
+	     niceName, seqName, itemStart, itemEnd);
 char strand[2];
 strand[1] = '\0';
 if (itemPsl != NULL)
@@ -5383,7 +5391,7 @@ if (itemPsl != NULL)
 slSort(&otherPsls, pslCmpTarget);
 if (itemPsl != NULL && otherPsls != NULL)
     printf("<B>Other matches in genomic alignments of %s:</B><BR>\n",
-	   tpsl->tName);
+	   niceName);
 for (gpsl = otherPsls;  gpsl != NULL;  gpsl = gpsl->next)
     {
     if (gpsl->strand[1] == '\0')

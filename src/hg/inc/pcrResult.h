@@ -43,4 +43,17 @@ void pcrResultGetPsl(char *fileName, struct targetDb *target, char *item,
 struct trackDb *pcrResultFakeTdb();
 /* Construct a trackDb record for PCR Results track. */
 
+char *pcrResultItemAccName(char *acc, char *name);
+/* If the accession and display name are different, concatenate them
+ * into a single name that must match a non-genomic target item's name
+ * in the targetDb .2bit.  Do not free the result. */
+
+char *pcrResultItemAccession(char *nameIn);
+/* If nameIn contains a concatenate accession and display name, returns
+ * just the accession.  Do not free the result.*/
+
+char *pcrResultItemName(char *nameIn);
+/* If nameIn contains a concatenate accession and display name, returns
+ * just the name.  Do not free the result.*/
+
 #endif /* PCRRESULT_H */

@@ -119,7 +119,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1462 2008/05/05 18:27:31 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1463 2008/05/05 23:31:07 angie Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -1993,7 +1993,7 @@ char *name = NULL;
 char *chp;
 boolean highlight = FALSE;
 mapName = tg->mapItemName(tg, item);
-name = tg->mapItemName(tg, item);
+name = tg->itemName(tg, item);
 
 /* special process for KG, because of "hgg_prot" piggy back */
 if (sameWord(tg->mapName, "knownGene"))
@@ -2002,6 +2002,9 @@ if (sameWord(tg->mapName, "knownGene"))
     chp = strstr(mapName, "&hgg_prot");
     if (chp != NULL) *chp = '\0';
     }
+/* special case for PCR Results (may have acc+name mapItemName): */
+else if (sameString(tg->mapName, PCR_RESULT_TRACK_NAME))
+    mapName = pcrResultItemAccession(mapName);
 
 /* Only highlight if names are in the hgFindMatches hash with
    a 1. */
@@ -3169,6 +3172,13 @@ struct linkedFeatures *lf = item;
 return lf->extra;
 }
 
+char *pcrResultMapItemName(struct track *tg, void *item)
+/* Stitch accession and display name back together (if necessary). */
+{
+struct linkedFeatures *lf = item;
+return pcrResultItemAccName(lf->name, lf->extra);
+}
+
 void pcrResultLoad(struct track *tg)
 /* Load locations of primer matches into linkedFeatures items. */
 {
@@ -3189,9 +3199,11 @@ if (target != NULL)
     struct psl *tpsl;
     for (tpsl = pslList;  tpsl != NULL;  tpsl = tpsl->next)
 	{
+	char *itemAcc = pcrResultItemAccession(tpsl->tName);
+	char *itemName = pcrResultItemName(tpsl->tName);
 	/* Query target->pslTable to get target-to-genomic mapping: */
 	safef(query, sizeof(query), "select * from %s where qName = '%s'",
-	      target->pslTable, tpsl->tName);
+	      target->pslTable, itemAcc);
 	sr = sqlGetResult(conn, query);
 	while ((row = sqlNextRow(sr)) != NULL)
 	    {
@@ -3214,6 +3226,8 @@ if (target != NULL)
 		    {
 		    lf = lfFromPslx(trimmed, 1, FALSE, FALSE, tg);
 		    }
+		safecpy(lf->name, sizeof(lf->name), itemAcc);
+		lf->extra = cloneString(itemName);
 		slAddHead(&itemList, lf);
 		pslFree(&trimmed);
 		}
@@ -3232,7 +3246,8 @@ else
 	    psl->blockSizes[0] = psl->tEnd - psl->tStart;
 	    struct linkedFeatures *lf = 
 		lfFromPslx(psl, 1, FALSE, FALSE, tg);
-	    safecpy(lf->name, sizeof(lf->name), "amplicon");
+	    safecpy(lf->name, sizeof(lf->name), "");
+	    lf->extra = cloneString("");
 	    slAddHead(&itemList, lf);
 	    }
 pslFreeList(&pslList);
@@ -3246,6 +3261,8 @@ struct track *pcrResultTg()
 struct trackDb *tdb = pcrResultFakeTdb();
 struct track *tg = trackFromTrackDb(tdb);
 tg->loadItems = pcrResultLoad;
+tg->itemName = lfMapNameFromExtra;
+tg->mapItemName = pcrResultMapItemName;
 tg->exonArrows = TRUE;
 tg->hasUi = TRUE;
 return tg;

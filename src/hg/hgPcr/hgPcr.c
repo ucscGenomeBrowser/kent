@@ -25,7 +25,7 @@
 #include "botDelay.h"
 #include "oligoTm.h"
 
-static char const rcsid[] = "$Id: hgPcr.c,v 1.24 2008/04/24 17:28:32 angie Exp $";
+static char const rcsid[] = "$Id: hgPcr.c,v 1.25 2008/05/05 23:31:07 angie Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -490,9 +490,6 @@ if (gpoList != NULL)
     {
     struct gfPcrOutput *gpo;
     char urlFormat[2048];
-    safef(urlFormat, sizeof(urlFormat), "%s?%s&db=%s&position=%%s"
-	  "&hgPcrResult=pack", 
-	  hgTracksName(), cartSidUrlString(cart), server->targetDb->db);
     printf("The sequences and coordinates shown below are from %s, "
 	   "not from the genome assembly.  The links lead to the "
 	   "Genome Browser at the position of the entire target "
@@ -501,6 +498,11 @@ if (gpoList != NULL)
     printf("<TT><PRE>");
     for (gpo = gpoList;  gpo != NULL;  gpo = gpo->next)
 	{
+	/* Not used as a format here; we modify the name used for position: */
+	safef(urlFormat, sizeof(urlFormat), "%s?%s&db=%s&position=%s"
+	      "&hgPcrResult=pack", 
+	      hgTracksName(), cartSidUrlString(cart), server->targetDb->db,
+	      pcrResultItemAccession(gpo->seqName));
 	if (gpo->strand == '-')
 	    printf("<EM>Warning: this amplification is on the reverse-"
 		   "complement of %s</EM>.\n", gpo->seqName);
