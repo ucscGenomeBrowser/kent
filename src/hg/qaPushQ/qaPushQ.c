@@ -29,7 +29,7 @@
 #include "dbDb.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.101 2007/12/12 20:43:30 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.102 2008/05/05 22:29:58 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -1982,7 +1982,7 @@ printf("</FORM>\n");
 void doCookieReset()
 /* reset cookie, will cause new login next time */
 {
-htmlSetCookie("qapushq", "", NULL, NULL, NULL, FALSE);
+htmlSetCookie("qapushq", "", NULL, NULL, ".cse.ucsc.edu", FALSE);
 htmShell(TITLE, doLogoutMsg, NULL);
 }
 
@@ -2134,7 +2134,10 @@ else
     
 if (loginOK)
     {
-    htmlSetCookie("qapushq", u.user, NULL, NULL, NULL, FALSE);
+    /* try to make same cookie work with both hgwdev and hgwbeta to obviate need for double-login */
+    /* note: for permanent cookie, set NULL to expire in format "Wdy, DD-Mon-YYYY HH:MM:SS GMT" (must be GMT) */
+    htmlSetCookie("qapushq", u.user, NULL, NULL, ".cse.ucsc.edu", FALSE);
+   
     qaUser=u.user;
     oldRandState="";
     showColumns=cloneString(defaultColumns);
