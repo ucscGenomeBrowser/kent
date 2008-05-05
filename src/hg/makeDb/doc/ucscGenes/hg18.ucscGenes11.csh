@@ -44,7 +44,7 @@ set multiz = multiz28way
 set taxon = 9606
 
 # Previous gene set
-set oldGeneBed = /cluster/data/hg18/bed/ucsc.10/ucscGenes.faa
+set oldGeneBed = /cluster/data/hg18/bed/ucsc.10/ucscGenes.bed
 
 # Machines
 set dbHost = hgwdev
@@ -56,6 +56,9 @@ mkdir -p $dir
 cd $dir
 
 if (0) then  # BRACKET
+endif # BRACKET
+
+
 # Get Genbank info
 txGenbankData $db
 
@@ -67,22 +70,18 @@ txReadRa mrna.ra refSeq.ra .
 hgsql -N $db -e 'select distinct name,sizePolyA from mrnaOrientInfo' | \
 	subColumn -miss=sizePolyA.miss 1 stdin accVer.tab sizePolyA.tab
 
-# For human get CCDS as a bed for each chromosome. Otherwise just get empty dir of ccds.
-mkdir ccds
-foreach c (`awk '{print $1;}' /cluster/data/$db/chrom.sizes`)
-  if ($db =~ hg*) then
-     set where = "where chrom='$c'"
-     hgsql -N $db -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from ccdsGene $where" | \
-         genePredToBed > ccds/$c.bed
-  else 
-     echo "" > ccds/$c.bed
-  endif
-end
-
+# Get CCDS for human (or else just an empty file)
+if ($db =~ hg*) then
+     hgsql -N $db -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from ccdsGene" | genePredToBed > ccds.bed
+else
+     echo -n "" > ccds.bed
+endif
+   
 # Create directories full of alignments split by chromosome.
 mkdir -p est refSeq mrna
 pslSplitOnTarget refSeq.psl refSeq
 pslSplitOnTarget mrna.psl mrna
+bedSplitOnChrom ccds.bed ccds
 foreach c (`awk '{print $1;}' /cluster/data/$db/chrom.sizes`)
     if (! -e refSeq/$c.psl) then
 	  echo creating empty refSeq/$c.psl
@@ -96,6 +95,10 @@ foreach c (`awk '{print $1;}' /cluster/data/$db/chrom.sizes`)
     if (! -e est/$c.psl) then
 	  echo creating empty est/$c.psl
           echo -n "" >est/$c.psl
+    endif
+    if (! -e ccds/$c.bed) then
+	  echo creating empty ccds/$c.bed
+          echo -n "" >ccds/$c.bed
     endif
 end
 
@@ -116,7 +119,6 @@ else
     awk '$13 > 100' antibody.cluster | cut -f 1-12 > antibody.bed
 endif
 
-
 # Convert psls to bed, saving mapping info and weeding antibodies.  Takes 2.5 min
 foreach c (`awk '{print $1;}' /cluster/data/$db/chrom.sizes`)
     if (-s refSeq/$c.psl) then
@@ -128,7 +130,6 @@ foreach c (`awk '{print $1;}' /cluster/data/$db/chrom.sizes`)
     if (-s mrna/$c.psl) then
 	txPslToBed mrna/$c.psl -cds=cds.tab /cluster/data/$db/$db.2bit \
 		stdout -unusual=mrna/$c.unusual \
-	    | fgrep -v -w -f /cluster/data/genbank/data/exceptions/invitrogenFullLength.acc \
 	    | bedWeedOverlapping antibody.bed maxOverlap=0.5 stdin mrna/$c.bed
     else
 	echo "creating empty mrna/$c.bed"
@@ -480,8 +481,7 @@ txCdsEvFromProtein refPep.fa blat/protein/refSeq.psl txWalk.fa \
 txCdsEvFromProtein uniProt.fa blat/protein/uniProt.psl txWalk.fa \
 	cdsEvidence/uniProt.tce -uniStatus=uniCurated.tab \
 	-unmapped=cdsEvidence/uniProt.unmapped -source=trembl
-endif # BRACKET
-cat txWalk/*.ev txCdsEvFromBed ccds.bed ccds txWalk.bed stdin cdsEvidence/ccds.tce
+txCdsEvFromBed ccds.bed ccds txWalk.bed ../../$db.2bit cdsEvidence/ccds.tce
 cat cdsEvidence/*.tce | sort  > unweighted.tce
 
 # Merge back in antibodies
@@ -489,14 +489,12 @@ cat txWalk.bed antibody.bed > abWalk.bed
 sequenceForBed -db=$db -bedIn=antibody.bed -fastaOut=stdout -upCase -keepName > antibody.fa
 cat txWalk.fa antibody.fa > abWalk.fa
 
-exit # BRACKET
 
 
 # Pick ORFs, make genes
 txCdsPick abWalk.bed unweighted.tce refToPep.tab pick.tce pick.picks \
 	-exceptionsIn=exceptions.tab \
-	-exceptionsOut=abWalk.exceptions \
-	-ccds=ccds.bed
+	-exceptionsOut=abWalk.exceptions 
 txCdsToGene abWalk.bed abWalk.fa pick.tce pick.gtf pick.fa \
 	-bedOut=pick.bed -exceptions=abWalk.exceptions
 
@@ -580,6 +578,7 @@ txGeneCanonical coding.cluster ucscGenes.info senseAnti.txg ucscGenes.bed ucscNe
 txBedToGraph ucscGenes.bed ucscGenes ucscGenes.txg
 txgAnalyze ucscGenes.txg /cluster/data/$db/$db.2bit stdout | sort | uniq > ucscSplice.bed
 
+exit # BRACKET
 echo "MUST WORK THIS UP INTO AN ACTUAL DB LOAD HERE !  WHEN NOT tempDb"
 exit $status
 
