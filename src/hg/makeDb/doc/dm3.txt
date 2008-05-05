@@ -2459,5 +2459,35 @@ _EOF_
 
 
 ###########################################################################
+# GENE DISRUPTION PROJECT/PSCREEN (DONE 5/1/08 angie)
+    mkdir /cluster/data/dm3/bed/pscreen
+    cd /cluster/data/dm3/bed/pscreen
+    # Saved Excel spreadsheet emailed by Karen Schulze kschulze at bcm dot
+    # tmc dot edu as tab-separated text.  Translate to our table format;
+    dos2unix pscreen.txt
+    tail +2 pscreen.txt \
+    | perl -we ' \
+        while (<>) { \
+          chomp; \
+          ($stock, $strain, $arm, $end, $ori, undef, undef, \
+           $gene1, undef, $gene2, undef, $gene3) = split("\t"); \
+          next if (! $end); \
+          $chr = "chr" . $arm; \
+          $strand = ($ori eq "Minus") ? "-" : "+"; \
+          $geneCount = 0;  $geneIds = ""; \
+          foreach $gene ($gene1, $gene2, $gene3) { \
+            if ($gene) { $geneCount++;  $geneIds .= "$gene,"; } \
+          } \
+          print join("\t", $chr, $end-1, $end, $strain, 0, $strand, \
+                           $stock, $geneCount, $geneIds) . "\n"; \
+        }' \
+    | sort -k1,1 -k2n,2n \
+      > pscreen.bed
+    hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/pscreen.sql -notItemRgb \
+       -onServer -tab dm3 pscreen pscreen.bed
+#Loaded 7672 elements of size 9
+    rm bed.tab
+
+
 #########################################################################
 #########################################################################
