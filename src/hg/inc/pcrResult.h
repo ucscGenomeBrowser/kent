@@ -11,6 +11,12 @@
 #define PCR_RESULT_TRACK_LABEL "PCR Results"
 #define PCR_RESULT_TRACK_LONGLABEL "Your Sequence from PCR Search"
 
+/* UI settings: */
+#define PCR_RESULT_TARGET_STYLE PCR_RESULT_TRACK_NAME "_targetStyle"
+#define PCR_RESULT_TARGET_STYLE_TRIM "trim"
+#define PCR_RESULT_TARGET_STYLE_TALL "tall"
+#define PCR_RESULT_TARGET_STYLE_DEFAULT PCR_RESULT_TARGET_STYLE_TRIM
+
 char *pcrResultCartVar(char *db);
 /* Returns the cart variable name for PCR result track info for db. 
  * Don't free the statically allocated result. */

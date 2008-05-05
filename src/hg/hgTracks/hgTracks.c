@@ -119,7 +119,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1461 2008/04/29 16:51:46 aamp Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1462 2008/05/05 18:27:31 angie Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -3201,10 +3201,19 @@ if (target != NULL)
 		{
 		struct psl *trimmed = pslTrimToQueryRange(gpsl, tpsl->tStart,
 							  tpsl->tEnd);
-		struct linkedFeatures *lf =
-		    lfFromPslx(gpsl, 1, FALSE, FALSE, tg);
-		lf->tallStart = trimmed->tStart;
-		lf->tallEnd = trimmed->tEnd;
+		struct linkedFeatures *lf;
+		char *targetStyle = cartUsualString(cart,
+		     PCR_RESULT_TARGET_STYLE, PCR_RESULT_TARGET_STYLE_DEFAULT);
+		if (sameString(targetStyle, PCR_RESULT_TARGET_STYLE_TALL))
+		    {
+		    lf = lfFromPslx(gpsl, 1, FALSE, FALSE, tg);
+		    lf->tallStart = trimmed->tStart;
+		    lf->tallEnd = trimmed->tEnd;
+		    }
+		else
+		    {
+		    lf = lfFromPslx(trimmed, 1, FALSE, FALSE, tg);
+		    }
 		slAddHead(&itemList, lf);
 		pslFree(&trimmed);
 		}

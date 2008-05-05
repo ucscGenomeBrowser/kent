@@ -37,7 +37,7 @@
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 #define MAX_SP_SIZE 2000
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.424 2008/05/02 19:32:49 angie Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.425 2008/05/05 18:27:31 angie Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2549,6 +2549,28 @@ puts("</P>\n");
 printf("<P><B>Select subtracks to display:</B></P>\n");
 }
 
+void pcrResultUi(struct trackDb *tdb)
+{
+struct targetDb *target;
+if (! pcrResultParseCart(cart, NULL, NULL, &target))
+    return;
+if (target != NULL)
+    {
+    char *chosen = cartUsualString(cart, PCR_RESULT_TARGET_STYLE,
+				   PCR_RESULT_TARGET_STYLE_DEFAULT);
+    cgiMakeRadioButton(PCR_RESULT_TARGET_STYLE, PCR_RESULT_TARGET_STYLE_TRIM,
+		       sameString(chosen, PCR_RESULT_TARGET_STYLE_TRIM));
+    printf("Show only the amplified part of %s item&nbsp;&nbsp;&nbsp;\n",
+	   target->description);
+    cgiMakeRadioButton(PCR_RESULT_TARGET_STYLE, PCR_RESULT_TARGET_STYLE_TALL,
+		       sameString(chosen, PCR_RESULT_TARGET_STYLE_TALL));
+    printf("Show the whole %s item with amplified part tall",
+	   target->description);
+    }
+baseColorDrawOptDropDown(cart, tdb);
+}
+
+
 void superTrackUi(struct trackDb *superTdb)
 /* List tracks in this collection, with visibility controls and UI links */
 {
@@ -2658,7 +2680,7 @@ else if (sameString(track, "blastHg17KG") || sameString(track, "blastHg16KG")
         || sameString(track, "blatzHg17KG")|| startsWith("mrnaMap", track)|| startsWith("mrnaXeno", track))
         blastUi(tdb);
 else if (sameString(track, "hgPcrResult"))
-    baseColorDrawOptDropDown(cart, tdb);
+    pcrResultUi(tdb);
 else if (startsWith("bedGraph", tdb->type))
 	wigUi(tdb);
 else if (startsWith("wig", tdb->type))
