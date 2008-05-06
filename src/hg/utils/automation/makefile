@@ -17,6 +17,7 @@ SCRIPT_FILES = \
 	blastz-normalizeLav \
 	blastz-run-ucsc \
 	doBlastzChainNet.pl \
+	doEnsGeneUpdate.pl \
 	doHgNearBlastp.pl \
 	synBlastp.csh \
 	doRecipBest.pl \
@@ -24,7 +25,9 @@ SCRIPT_FILES = \
 	doWindowMasker.pl \
 	doSimpleRepeat.pl \
 	doSameSpeciesLiftOver.pl \
+	ensVersions \
 	extractNestedRepeats.pl \
+	EnsGeneAutomate.pm \
 	HgAutomate.pm \
 	HgRemoteScript.pm \
 	HgStepManager.pm \
