@@ -3,7 +3,7 @@
 # Caenorhabditis elegans
 #	Washington University School of Medicine GSC and Sanger Institute WS170
 
-#  $Id: ce4.txt,v 1.31 2008/04/16 16:06:11 hiram Exp $
+#  $Id: ce4.txt,v 1.32 2008/05/06 17:25:45 hiram Exp $
 
 
 #########################################################################
@@ -3551,4 +3551,20 @@ done
     #	NSome Core -Covg
     #	Coverage of mononucleosomal fragments, antisense strand reads
 
+#########################################################################
+#  25mers repeat track (DONT - 2008-04-16 - Hiram)
+    #	data from Anton Valouev "valouev at stanford.edu"
+    #	to accompany the nucleosomes business
+    mkdir /cluster/data/ce4/bed/25mersRepeats
+    cd /cluster/data/ce4/bed/25mersRepeats
+    wget --timestamping \
+http://stellar.stanford.edu/C_elegans_mononucleosomes/all_chr_repeat.bed.gz
+    #	add a better score filed and a better name
+    zcat all_chr_repeat.bed.gz | grep ^chr | awk '
+{
+printf "%s\t%d\t%d\t%d\t1\t%s\t%d\t%d\t%s\n", $1, $2, $3, NR, $6, $7, $8, $9
+}
+' > withScore.bed
+    hgLoadBed ce4 25mersRepeats withScore.bed
+    #	create a description page for it.
 #########################################################################
