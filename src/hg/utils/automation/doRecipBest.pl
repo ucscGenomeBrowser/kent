@@ -6,7 +6,7 @@
 # This script should probably be folded back into doBlastzChainNet.pl
 # eventually.
 
-# $Id: doRecipBest.pl,v 1.9 2007/08/17 18:16:21 angie Exp $
+# $Id: doRecipBest.pl,v 1.10 2008/05/06 17:02:27 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -124,8 +124,8 @@ chainStitchId $tDb.$qDb.over.chain.gz stdout \\
 # Net those on $qDb to get $qDb-ref'd reciprocal best net:
 chainPreNet $qDb.$tDb.tBest.chain \\
   $HgAutomate::clusterData/{$qDb,$tDb}/chrom.sizes stdout \\
-| chainNet -minSpace=1 stdin $HgAutomate::clusterData/{$qDb,$tDb}/chrom.sizes \\
-    stdout /dev/null \\
+| chainNet -minSpace=1 -minScore=0 \\
+  stdin $HgAutomate::clusterData/{$qDb,$tDb}/chrom.sizes stdout /dev/null \\
 | netSyntenic stdin stdout \\
 | gzip -c > $qDb.$tDb.rbest.net.gz
 
