@@ -3,7 +3,7 @@
 # Caenorhabditis elegans
 #	Washington University School of Medicine GSC and Sanger Institute WS170
 
-#  $Id: ce4.txt,v 1.32 2008/05/06 17:25:45 hiram Exp $
+#  $Id: ce4.txt,v 1.33 2008/05/06 22:30:07 hiram Exp $
 
 
 #########################################################################
@@ -3567,4 +3567,31 @@ printf "%s\t%d\t%d\t%d\t1\t%s\t%d\t%d\t%s\n", $1, $2, $3, NR, $6, $7, $8, $9
 ' > withScore.bed
     hgLoadBed ce4 25mersRepeats withScore.bed
     #	create a description page for it.
+###########################################################################
+#  LOAD Transcriptome data (DONE - 2008-04-15 - Hiram)
+    # data from Christian Iseli 'Christian.Iseli at licr.org'
+    ssh hgwdev
+    mkdir /cluster/data/ce4/bed/transcriptome
+    cd /cluster/data/ce4/bed/transcriptome
+    wget --timestamping ftp://ftp.licr.org/pub/databases/trome/ce4/WTr.gtf.gz
+    wget --timestamping ftp://ftp.licr.org/pub/databases/trome/ce4/txg.tar.gz
+    gtfToGenePred -genePredExt WTr.gtf.gz WTr.gp
+    hgLoadGenePred ce4 transcriptome -genePredExt WTr.gp
+
+    tar xvzf txg.tar.gz
+    # Do a little data cleanup and transformation and
+    #	load splice graphs into database.
+    sed 's/altGraphX/sibTxGraph/' ~/kent/src/hg/lib/altGraphX.sql \
+	> sibTxGraph.sql
+    cat txg/*.txg | txgToAgx stdin stdout \
+	| hgLoadBed -notItemRgb -sqlTable=sibTxGraph.sql ce4 sibTxGraph stdin
+    #	Loaded 20553 elements of size 18
+
+    # Create sibAltEvents track for analysed alt-splices.
+    cat txg/*.txg \
+	| txgAnalyze stdin /cluster/data/ce4/ce4.2bit stdout \
+	| awk '$2 >= 0' | sort | uniq > sibAltEvents.bed
+    hgLoadBed ce4 sibAltEvents sibAltEvents.bed
+    #	Loaded 18447 elements of size 6
+
 #########################################################################

@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.64 2008/05/03 21:23:45 markd Exp $"
+#	"$Id: mm9.txt,v 1.65 2008/05/06 22:30:06 hiram Exp $"
 #
 
 #######################################################################
@@ -7889,7 +7889,8 @@ TMPDIR=/scratch/tmp
     #	31517169 bases of 923355587 (3.413%) in intersection
 
 ###########################################################################
-#  LOAD Transcriptome data (DONE - 2008-04-15 - Hiram)
+#  LOAD Transcriptome data (DONE - 2008-05-06 - Hiram)
+    # data from Christian Iseli 'Christian.Iseli at licr.org'
     ssh hgwdev
     mkdir /cluster/data/mm9/bed/transcriptome
     cd /cluster/data/mm9/bed/transcriptome
@@ -7898,7 +7899,20 @@ TMPDIR=/scratch/tmp
     gtfToGenePred -genePredExt MTR.gtf.gz MTr.gp
     hgLoadGenePred mm9 transcriptome -genePredExt MTr.gp
 
-###########################################################################
+    tar xvzf txg.tar.gz
+    # Do a little data cleanup and transformation and
+    #	load splice graphs into database.
+    sed 's/altGraphX/sibTxGraph/' ~/kent/src/hg/lib/altGraphX.sql \
+	> sibTxGraph.sql
+    cat txg/*.txg | txgToAgx stdin stdout \
+	| hgLoadBed -notItemRgb -sqlTable=sibTxGraph.sql mm9 sibTxGraph stdin
+    #	Loaded 52065 elements of size 18
+
+   # Create sibAltEvents track for analysed alt-splices.
+   cat txg/*.txg \
+	| txgAnalyze stdin /cluster/data/mm9/mm9.2bit stdout \
+	| awk '$2 >= 0' | sort | uniq > sibAltEvents.bed
+   hgLoadBed mm9 sibAltEvents sibAltEvents.bed
 
 #############################################################################
 # BLASTZ/CHAIN/NET equCab2 (DONE - 2008-04-17 - larrym)
