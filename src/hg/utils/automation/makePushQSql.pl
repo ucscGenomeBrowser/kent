@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/makePushQSql.pl instead.
 
-# $Id: makePushQSql.pl,v 1.17 2008/04/25 17:04:44 angie Exp $
+# $Id: makePushQSql.pl,v 1.18 2008/05/06 17:10:00 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -140,6 +140,7 @@ sub getInfrastructureEntry {
   # Look for the usual set of files on $dbHost:
   my $SameSpecies = ucfirst($db);  $SameSpecies =~ s/\d+$//;
   my @gbdbFiles = ("$db.2bit", 'html/description.html',
+		   "wib/gc5Base.wib",
 		   "liftOver/${db}To$SameSpecies*");
   my @goldenPathFiles = (qw( bigZips/* database/* chromosomes/* ),
 			 "liftOver/${db}To$SameSpecies*");
