@@ -595,3 +595,15 @@ group regulation
 priority 100
 visibility pack
 type bed 4 +
+
+track sibTxGraph
+shortLabel SIB Alt-Splicing
+longLabel Alternative Splicing Graph from Swiss Institute of Bioinformatics 
+group rna
+priority 74.5
+visibility hide
+type altGraphX
+url http://www.isrec.isb-sib.ch/cgi-bin/tromer/tromergraph2draw.pl?db=mm8&species=M.+musculus&tromer=$$
+urlLabel SIB link:
+idInUrlSql select name from sibTxGraph where id=%s
+
