@@ -15,7 +15,7 @@
 #include "jobResult.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: para.c,v 1.75 2008/05/01 23:26:48 galt Exp $";
+static char const rcsid[] = "$Id: para.c,v 1.76 2008/05/06 18:18:09 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -815,10 +815,11 @@ for (lineEl = lineList; lineEl != NULL; lineEl = lineEl->next)
 		    if (duration > killSeconds && killSeconds > 0)
 			{
     			sub->hung = TRUE;
+			sub->slow = FALSE;
 			killJob(sub->id);
                         verbose(1, "killed hung jobId: %s\n", sub->id);
 			}
-		    if (duration > warnSeconds)
+		    else if (duration > warnSeconds)
 			sub->slow = TRUE;
 		    }
 		}
