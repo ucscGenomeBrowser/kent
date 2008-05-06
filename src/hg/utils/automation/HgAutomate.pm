@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/HgAutomate.pm instead.
 
-# $Id: HgAutomate.pm,v 1.13 2008/03/10 23:07:18 hiram Exp $
+# $Id: HgAutomate.pm,v 1.14 2008/05/06 23:38:23 angie Exp $
 package HgAutomate;
 
 use warnings;
@@ -36,7 +36,7 @@ use File::Basename;
       ),
     # Hardcoded paths/commands/constants:
     qw( $gensub2 $para $paraRun $centralDbSql $cvs
-	$clusterData $trackBuild $goldenPath $gbdb
+	$clusterData $trackBuild $goldenPath $images $gbdb
 	$splitThreshold $setMachtype
       ),
 );
@@ -477,7 +477,7 @@ sub processCommonOptions {
 #########################################################################
 # Hardcoded paths/command sequences:
 use vars qw( 	$gensub2 $para $paraRun $centralDbSql $cvs
-		$clusterData $trackBuild $goldenPath $gbdb
+		$clusterData $trackBuild $goldenPath $images $gbdb
 		$splitThreshold $setMachtype
 	   );
 use vars qw( $gensub2 $para $paraRun $clusterData $trackBuild
@@ -493,7 +493,9 @@ $cvs = "/usr/bin/cvs";
 
 $clusterData = '/cluster/data';
 $trackBuild = 'bed';
-$goldenPath = '/usr/local/apache/htdocs/goldenPath';
+my $apacheRoot = '/usr/local/apache';
+$goldenPath = "$apacheRoot/htdocs/goldenPath";
+$images = "$apacheRoot/htdocs/images";
 $gbdb = '/gbdb';
 
 # This is the max number of sequences in an assembly that we will consider
