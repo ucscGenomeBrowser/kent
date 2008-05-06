@@ -372,3 +372,12 @@ visibility hide
 type bed 9
 itemRgb on
 
+track transcriptome
+shortLabel Transcriptome
+longLabel TROMER Transcriptome database
+group genes
+priority 66
+color 56,108,56
+type genePred
+url http://www.isrec.isb-sib.ch/cgi-bin/tromer/tromer_quick_search.pl?db=ce4&query_str=$$
+urlLabel TROMER database detail: 
