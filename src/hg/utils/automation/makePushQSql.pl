@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/makePushQSql.pl instead.
 
-# $Id: makePushQSql.pl,v 1.18 2008/05/06 17:10:00 hiram Exp $
+# $Id: makePushQSql.pl,v 1.19 2008/05/06 23:37:34 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -139,29 +139,23 @@ sub getInfrastructureEntry {
 
   # Look for the usual set of files on $dbHost:
   my $SameSpecies = ucfirst($db);  $SameSpecies =~ s/\d+$//;
-  my @gbdbFiles = ("$db.2bit", 'html/description.html',
-		   "wib/gc5Base.wib",
-		   "liftOver/${db}To$SameSpecies*");
-  my @goldenPathFiles = (qw( bigZips/* database/* chromosomes/* ),
-			 "liftOver/${db}To$SameSpecies*");
+  my @gbdbFiles = map {"$HgAutomate::gbdb/$db/$_"}
+    ("$db.2bit", 'html/description.html', "wib/gc5Base.wib",
+     "liftOver/${db}To$SameSpecies*");
+  my @goldenPathFiles = map {"$HgAutomate::goldenPath/$db/$_"}
+    (qw( bigZips/* database/* chromosomes/* ),
+     "liftOver/${db}To$SameSpecies*");
+  my $sciUnderscore = &HgAutomate::getSpecies($dbHost, $db);
+  $sciUnderscore =~ s/ /_/g;
+  my $gatewayPhoto = "$HgAutomate::images/$sciUnderscore.jpg";
   my @files = ();
-  foreach my $root (@gbdbFiles) {
-    my $f = "$HgAutomate::gbdb/$db/$root";
+  foreach my $f (@gbdbFiles, @goldenPathFiles, $gatewayPhoto) {
     if (&HgAutomate::machineHasFile($dbHost, $f)) {
       push @files, $f;
     } else {
       &HgAutomate::verbose(1, "$dbHost does not have $f\n")
-	unless $f =~ /${db}To$SameSpecies/; # no big deal to not have this yet!
-    }
-  }
-  foreach my $root (@goldenPathFiles) {
-    my $f = "$HgAutomate::goldenPath/$db/$root";
-    if (&HgAutomate::machineHasFile($dbHost, $f)) {
-      push @files, $f;
-    } else {
-      if ($f !~ m@/chromosomes/@ || &dbIsChromBased()) {
-	&HgAutomate::verbose(1, "$dbHost does not have $f\n");
-      }
+	unless ($f =~ /${db}To$SameSpecies/ ||
+		($f =~ m@/chromosomes/@ && !&dbIsChromBased()));
     }
   }
   $entry{'files'} = join('\r\n', @files);
@@ -201,7 +195,7 @@ sub getGenbankEntry {
     library mrnaClone mrnaOrientInfo organism productName sex source tissue
     );
   my @genbankHelpfulTables = qw(
-    gbMiscDiff
+    gbMiscDiff gbWarn
     );
   my @genbankTablesInDb = ();
   foreach my $t (@genbankTrackTables) {
@@ -368,9 +362,18 @@ sub getTrackEntries {
 	    push @netODbs, $oDb;
 	  }
 	}
-      }
-      if ($type =~ /^wig\s/) {
+      } elsif ($type =~ /^wig\s/) {
 	push @wigTables, $table;
+      } elsif ($type =~ /^wigMaf/) {
+	if ($table =~ /^multiz(\d+way)/) {
+	  my $gif = "$HgAutomate::images/phylo/${db}_$1.gif";
+	  if (&HgAutomate::machineHasFile($dbHost, $gif)) {
+	    $entry{'files'} .= $gif . '\r\n';
+	  } else {
+	    &HgAutomate::verbose(0, "$dbHost does not have phyloGif-" .
+				    "generated $gif for $table.\n");
+	  }
+	}
       }
       # We could get really fancy and look at wiggle and maf tables
       # (and extFile) to hunt down filenames.  But there may still be
@@ -378,7 +381,7 @@ sub getTrackEntries {
       # it gets messy, so for now we'll settle for reminding the developer
       # to determine files associated with wiggle tables and to look in
       # extFile.
-      if ($type =~ /^netAlign\s+(\w+)/) {
+      elsif ($type =~ /^netAlign\s+(\w+)/) {
 	my $oDb = $1;
 	my $ODb = ucfirst($oDb);
 	my $chainTrack = "chain$ODb";
