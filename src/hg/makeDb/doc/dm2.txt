@@ -4957,6 +4957,14 @@ cat > downloads.csh << 'EOF'
 
 # PHASTCONS 15WAY WITH METHODS FROM PAPER (DONE 10/3/06 angie)
 # (((((((((dm2,(droSim1,droSec1)),(droYak2,droEre2)),droAna3),(dp4,droPer1)),droWil1),((droVir3,droMoj3),droGri2)),anoGam1),apiMel2),triCas2)
+# NOTE FROM QA (5/7/08):  Overlapping data points were found in dm3 phastCons
+# data by user Michael Hiller:
+# http://www.soe.ucsc.edu/pipermail/genome/2008-April/016241.html
+# The overlapping data points were caused by a bug in phastCons that Adam has
+# since fixed.  The bug is present in dm2 phastCons data, but as it is not the
+# most recent assembly for this organism, we are going to leave it as-is.  An
+# example region containing the overlap is: chr3R:6,999,990-7,000,010 .
+
     ssh kkstore04
     mkdir -p /san/sanvol1/scratch/dm2/chrom
     cp -p /cluster/data/dm2/?{,?}/chr*.fa /san/sanvol1/scratch/dm2/chrom/
