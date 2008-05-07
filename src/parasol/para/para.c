@@ -15,7 +15,7 @@
 #include "jobResult.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: para.c,v 1.76 2008/05/06 18:18:09 galt Exp $";
+static char const rcsid[] = "$Id: para.c,v 1.77 2008/05/07 05:32:22 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -1127,18 +1127,6 @@ if (failed > 0)
 printf("total jobs in batch: %d\n", total);
 }
 
-void paraCheck(char *batch)
-/* Check on progress of a batch. */
-{
-struct jobDb *db = readBatch(batch);
-
-markQueuedJobs(db);
-markRunJobStatus(db);
-reportOnJobs(db);
-
-atomicWriteBatch(db, batch);
-}
-
 void paraListFailed(char *batch)
 /* List all jobs that failed. */
 {
@@ -1528,9 +1516,10 @@ verbose(1, "Told hub to clear sick nodes\n");
 }
 
 
-void showSickNodes()
+void showSickNodes(boolean showSummary)
 /* Tell hub to show sick nodes on batch */
 {
+int count = 0;
 struct dyString *dy = newDyString(1024);
 char curDir[512];
 if (getcwd(curDir, sizeof(curDir)) == NULL)
@@ -1539,12 +1528,28 @@ dyStringPrintf(dy, "showSickNodes %s %s/para.results", getUser(), curDir);
 struct slRef *lineList = hubMultilineQuery(dy->string), *lineEl;
 for (lineEl = lineList; lineEl != NULL; lineEl = lineEl->next)
     {
+    ++count;
     char *line = lineEl->val;
-    printf("%s\n", line);
+    /* if showSummary, only print the last line, unless nothing to report */
+    if (!(showSummary && (lineEl->next || count == 1)))
+	printf("%s\n", line);
     freez(&lineEl->val);
     }
 slFreeList(&lineList);
 dyStringFree(&dy);
+}
+
+void paraCheck(char *batch)
+/* Check on progress of a batch. */
+{
+struct jobDb *db = readBatch(batch);
+
+markQueuedJobs(db);
+markRunJobStatus(db);
+reportOnJobs(db);
+
+atomicWriteBatch(db, batch);
+showSickNodes(TRUE);
 }
 
 
@@ -1947,7 +1952,7 @@ else if (sameWord(command, "clearSickNodes"))
     }
 else if (sameWord(command, "showSickNodes"))
     {
-    showSickNodes();
+    showSickNodes(FALSE);
     }
 else
     {
