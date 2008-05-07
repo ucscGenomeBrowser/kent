@@ -68,7 +68,7 @@
 #include "log.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: paraHub.c,v 1.93 2008/05/01 23:26:48 galt Exp $";
+static char const rcsid[] = "$Id: paraHub.c,v 1.94 2008/05/07 05:31:10 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -1367,11 +1367,15 @@ struct hashEl *el, *list = hashElListHash(batch->sickNodes);
 slSort(&list, hashElCmp);
 for (el = list; el != NULL; el = el->next)
     {
-    ++machineCount;
-    sickCount += ptToInt(el->val);
-    pmClear(pm);
-    pmPrintf(pm, "%s %d", el->name, el->val);
-    pmSend(pm, rudpOut);
+    int failures = ptToInt(el->val);
+    if (failures >= sickNodeThreshold)
+	{
+	++machineCount;
+	sickCount += failures;
+	pmClear(pm);
+	pmPrintf(pm, "%s %d", el->name, el->val);
+	pmSend(pm, rudpOut);
+	}
     }
 hashElFreeList(&list);
 pmClear(pm);
