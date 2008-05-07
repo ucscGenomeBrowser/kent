@@ -46,15 +46,7 @@ if ( $ver <= 45 || $ver >= 100 ) then
 endif
 
 # get rid of files, if they are around
-if ( -e xxDbListxx) then
- rm xxDbListxx
-endif
-if ( -e xxNotActivexx) then
- rm xxNotActivexx
-endif
-if ( -e xxNotOnBetaxx) then
- rm xxNotOnBetaxx
-endif
+rm -f xxDbList$$ xxNotActive$$ xxNotOnBeta$$
 
 # figure out which assemblies already have an ensGene track on beta
 set betaList=`getAssemblies.csh ensGene | egrep -v 'get' | egrep -v 'ensGene'` 
@@ -75,34 +67,34 @@ if ( 'all' == $runOn ) then
    WHERE name = '$db' AND active = 1" hgcentralbeta`
 
    if ( "" == "$onBeta" ) then
-    echo $db >> xxNotActivexx
+    echo $db >> xxNotActive$$
    else
     set hasTrack=''
     set hasTrack=`echo $betaList | egrep -wo $db`
     if ( "$db" != "$hasTrack" ) then
-     echo $db >> xxNotOnBetaxx
-     echo $db >> xxDbListxx
+     echo $db >> xxNotOnBeta$$
+     echo $db >> xxDbList$$
     else
-     echo $db >> xxDbListxx
+     echo $db >> xxDbList$$
     endif
    endif
   end
 
   # print out all results
-  if ( -e xxNotActivexx ) then
+  if ( -e xxNotActive$$ ) then
    echo "\nOf that list, the following databases are not active on beta"
    echo "so the tests in this script will not be run on them:"
-   cat xxNotActivexx
+   cat xxNotActive$$
   endif
 
-  if ( -e xxNotOnBetaxx ) then
+  if ( -e xxNotOnBeta$$ ) then
    echo "\nOf that list, the following databases do not have an ensGenes track"
    echo "on hgwbeta (however, the tests in this script will still be run on them)."
    echo "You might consider releasing an ensGenes track for these databases:"
-   cat xxNotOnBetaxx
+   cat xxNotOnBeta$$
   endif
 
-  set dbs=`cat xxDbListxx`
+  set dbs=`cat xxDbList$$`
  endif
 else # running on one database only (don't check, just run)
  echo "\nRunning script for Ensebml Genes v$ver on this assembly:\n"
@@ -231,16 +223,7 @@ echo "should say 'current' for your database (or all):"
 hgsql -Ne "SELECT db, dateReference FROM trackVersion WHERE version = $ver AND name = 'ensGene'" hgFixed
 
 # clean up
-if ( -e xxDbListxx) then
- rm xxDbListxx
-endif
-if ( -e xxNotActivexx) then
- rm xxNotActivexx
-endif
-if ( -e xxNotOnBetaxx) then
- rm xxNotOnBetaxx
-endif
-
+rm -f xxDbList$$ xxNotActive$$ xxNotOnBeta$$
 
 echo "\nthe end.\n"
 
