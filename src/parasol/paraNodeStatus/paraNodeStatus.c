@@ -15,7 +15,7 @@ void usage()
 errAbort(
   "paraNodeStatus - Check status of paraNode on a list of machines.\n"
   "usage:\n"
-  "    paraStat machineList\n"
+  "    paraNodeStatus machineList\n"
   "options:\n"
   "    -retries=N  Number of retries to get in touch with machine.\n"
   "        The first retry is after 1/100th of a second. \n"
