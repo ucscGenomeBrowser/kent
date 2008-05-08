@@ -3,7 +3,7 @@
 
 #include "hPrint.h"
 
-boolean suppressHtml = FALSE;
+static boolean suppressHtml = FALSE;
 /* If doing PostScript output we'll suppress most of HTML output. */
 
 void hPrintDisable()
