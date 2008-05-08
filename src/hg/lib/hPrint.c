@@ -6,6 +6,13 @@
 static boolean suppressHtml = FALSE;
 /* If doing PostScript output we'll suppress most of HTML output. */
 
+boolean hPrintStatus()
+/* is html printing on or off ?
+   return TRUE for print is on, FALSE for printing is off */
+{
+return ! suppressHtml;
+}
+
 void hPrintDisable()
 /* turn html printing off */
 {
