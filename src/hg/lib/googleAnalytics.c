@@ -3,24 +3,28 @@
 #include "hPrint.h"
 #include "googleAnalytics.h"
 
-static char const rcsid[] = "$Id: googleAnalytics.c,v 1.1 2008/05/08 21:19:24 hiram Exp $";
+static char const rcsid[] = "$Id: googleAnalytics.c,v 1.2 2008/05/08 21:42:07 hiram Exp $";
 
 void googleAnalytics()
 {
+static boolean done = FALSE;
 char *analyticsHosts = cfgOption("analyticsHostList");
 char *analyticsKey = cfgOption("analyticsKey");
 
 /*	if either is missing, nothing happens here	*/
-if ((NULL == analyticsHosts) || (NULL == analyticsKey))
+if (done || (NULL == analyticsHosts) || (NULL == analyticsKey))
+    return;
+
+done = TRUE;	/*	do not repeat this by mistake	*/
+
+char *thisHost = getenv("HTTP_HOST");
+if (NULL == thisHost)
     return;
 
 char *hostList[256];
 int hostCount = 0;
-if (NULL != analyticsHosts)
-    {
-    hostCount = chopByChar(cloneString(analyticsHosts), ',', hostList,
-	ArraySize(hostList));
-    }
+hostCount = chopByChar(cloneString(analyticsHosts), ',', hostList,
+    ArraySize(hostList));
 boolean validHost = FALSE;
 if (hostCount > 0)
     {
@@ -28,7 +32,7 @@ if (hostCount > 0)
     int i;
     for (i = 0; i < hostCount; ++i)
 	{
-	if (sameWord(hostList[i],"genome-test"))
+	if (startsWith(hostList[i], thisHost))
 	    {
 	    validHost = TRUE;
 	    break;
