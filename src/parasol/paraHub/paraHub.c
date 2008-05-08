@@ -68,7 +68,7 @@
 #include "log.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: paraHub.c,v 1.94 2008/05/07 05:31:10 galt Exp $";
+static char const rcsid[] = "$Id: paraHub.c,v 1.95 2008/05/08 00:33:46 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -768,6 +768,9 @@ struct job *job;
 struct user *user = findUser(userName);
 struct batch *batch = findBatch(user, results, FALSE);
 
+if (batch->continuousCrashCount >= sickBatchThreshold)
+    return NULL;
+
 AllocVar(job);
 AllocVar(job->node);
 job->node->val = job;
@@ -1235,7 +1238,10 @@ struct user *user;
 struct batch *batch;
 
 job = jobNew(command, userName, dir, in, out, results);
+if (!job)
+    return 0;
 batch = job->batch;
+
 dlAddTail(batch->jobQueue, job->node);
 user = batch->user;
 dlRemove(user->node);
@@ -1327,6 +1333,7 @@ struct batch *batch = findBatch(user, dir, TRUE);
 if (user == NULL) return -2;
 if (batch == NULL) return -2;
 hashFree(&batch->sickNodes);
+batch->continuousCrashCount = 0;  /* reset so user can retry */
 batch->sickNodes = newHash(6);
 updateUserSickNodes(user);
 logInfo("paraHub: User %s cleared sick nodes for batch %s", userName, dir);
@@ -1601,7 +1608,6 @@ if (sTime != NULL)
 	/* is the batch sick? */
 	if (batch->continuousCrashCount >= sickBatchThreshold)
 	    {
-	    batch->continuousCrashCount = 0;  /* reset so user can retry later */
             chillABatch(batch);
 	    }
 	runner(1);
@@ -1787,7 +1793,7 @@ for (user = userList; user != NULL; user = user->next)
 pmSendString(pm, rudpOut, "");
 }
 
-boolean onePstatList(struct paraMessage *pm, struct dlList *list, boolean running)
+boolean onePstatList(struct paraMessage *pm, struct dlList *list, boolean running, int *resultCount)
 /* Write out one job list in pstat format.  Return FALSE if there is
  * a problem. */
 {
@@ -1796,10 +1802,12 @@ struct job *job;
 time_t t;
 char *machName;
 char *state = (running ? "r" : "q");
+int count = 0;
 
 flushResults();
 for (node = list->head; !dlEnd(node); node = node->next)
     {
+    ++count;
     job = node->val;
     if (job->machine != NULL)
 	machName = job->machine->name;
@@ -1813,41 +1821,64 @@ for (node = list->head; !dlEnd(node); node = node->next)
     pmPrintf(pm, "%s %d %s %s %lu %s", 
         state, job->id, job->batch->user->name, job->exe, t, machName);
     if (!pmSend(pm, rudpOut))
+	{
+	*resultCount += count;
         return FALSE;
+	}
     }
+*resultCount += count;
 return TRUE;
 }
 
-void pstat(char *line, struct paraMessage *pm)
-/* Write list of jobs in pstat format. */
+void pstat(char *line, struct paraMessage *pm, boolean extended)
+/* Write list of jobs in pstat format. 
+ * Extended pstat2 format means we only show queued jobs for the 
+ * specific batch, but we still need to return total queue size
+ * and also we can include a status about batch failure.
+ * Older versions of para will not call extended but should still work.*/
 {
 struct user *user;
 struct dlNode *bNode;
-struct batch *batch;
+struct batch *batch = NULL;
 char *userName, *dir;
 struct user *thisUser = NULL;
 struct batch *thisBatch = NULL;
+int count = 0;
 userName = nextWord(&line);
 dir = nextWord(&line);
 if (userName)
   thisUser = findUser(userName);
 if (dir)
   thisBatch = findBatch(thisUser, dir, TRUE);
-if (!onePstatList(pm, runningJobs, TRUE))
+if (!onePstatList(pm, runningJobs, TRUE, &count))
     return;
 for (user = userList; user != NULL; user = user->next)
     {
-    if (thisUser == NULL || thisUser == user)
+    for (bNode = user->curBatches->head; !dlEnd(bNode); bNode = bNode->next)
 	{
-	for (bNode = user->curBatches->head; !dlEnd(bNode); bNode = bNode->next)
+	batch = bNode->val;
+	if ((thisUser == NULL || thisUser == user) && (thisBatch == NULL || thisBatch == batch))
 	    {
-	    batch = bNode->val;
-	    if (thisBatch == NULL || thisBatch == batch)
-		{
-		if (!onePstatList(pm, batch->jobQueue, FALSE))
-		    return;
-		}
+	    if (!onePstatList(pm, batch->jobQueue, FALSE, &count))
+		return;
 	    }
+	else
+	    count += dlCount(batch->jobQueue);
+	}
+    }
+if (extended)
+    {
+    pmClear(pm);
+    pmPrintf(pm, "Total Jobs: %d", count); 
+    if (!pmSend(pm, rudpOut))
+	return;
+    if (thisBatch && (thisBatch->continuousCrashCount >= sickBatchThreshold))
+	{
+	pmClear(pm);
+	pmPrintf(pm, "Sick Batch: consecutive crashes (%d) >= sick batch threshold (%d)", 
+	    thisBatch->continuousCrashCount, sickBatchThreshold); 
+	if (!pmSend(pm, rudpOut))
+	    return;
 	}
     }
 pmSendString(pm, rudpOut, "");
@@ -2427,7 +2458,9 @@ for (;;)
     else if (sameWord(command, "status"))
 	 status(pm);
     else if (sameWord(command, "pstat"))
-	 pstat(line, pm);
+	 pstat(line, pm, FALSE);
+    else if (sameWord(command, "pstat2"))
+	 pstat(line, pm, TRUE);
     else if (sameWord(command, "addSpoke"))
 	 addSpoke();
     if (sameWord(command, "quit"))

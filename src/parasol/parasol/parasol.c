@@ -9,7 +9,7 @@
 #include "paraLib.h"
 #include "paraMessage.h"
 
-static char const rcsid[] = "$Id: parasol.c,v 1.33 2008/04/25 23:55:32 galt Exp $";
+static char const rcsid[] = "$Id: parasol.c,v 1.34 2008/05/08 00:33:46 galt Exp $";
 
 struct rudp *hubRudp;	/* Network connection to paraHub. */
 char *userName;	/* Name of user. */
@@ -291,6 +291,12 @@ void pstat()
 hubCommandAndPrint("pstat");
 }
 
+void pstat2()
+/* Send status command to hub and print. */
+{
+hubCommandAndPrint("pstat2");
+}
+
 
 void ping(int count)
 /* Ping hub server given number of times. */
@@ -373,6 +379,10 @@ else if (sameString(command, "list"))
 else if (sameString(command, "pstat"))
     {
     pstat();
+    }
+else if (sameString(command, "pstat2"))
+    {
+    pstat2();
     }
 else if (sameString(command, "ping"))
     {

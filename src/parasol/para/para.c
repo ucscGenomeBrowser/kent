@@ -15,7 +15,7 @@
 #include "jobResult.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: para.c,v 1.77 2008/05/07 05:32:22 galt Exp $";
+static char const rcsid[] = "$Id: para.c,v 1.78 2008/05/08 00:33:46 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -152,8 +152,10 @@ int maxNode  = -1;
 /* Some variable we might want to move to a config file someday. */
 char *tempName = "para.tmp";	/* Name for temp files. */
 char *resultsName = "para.results"; /* Name of results file. */
-char *statusCommand = "parasol pstat";
+char *statusCommand = "parasol pstat2";
 char *killCommand = "parasol remove job";
+
+boolean sickBatch = FALSE;
 
 void checkPrioritySetting(); /* fwd reference */
 void  checkMaxNodeSetting(); /* fwd reference */
@@ -711,6 +713,11 @@ char *jobId = NULL;
 
 dyStringPrintf(cmd, "addJob %s %s /dev/null /dev/null %s/para.results %s", getUser(), curDir, curDir, job->command);
 jobId = hubSingleLineQuery(cmd->string);
+if (sameString(jobId,"0"))
+    {
+    warn("addJob failed - if batch is bad, correct problem and run para clearSickNodes.");
+    freez(&jobId);
+    }
 if (jobId != NULL)
     {
     AllocVar(sub);
@@ -761,11 +768,12 @@ long warnSeconds = warnTime*60;
 long duration;
 time_t now = time(NULL);
 
+/* Get job list from paraHub. */
 if (getcwd(curDir, sizeof(curDir)) == NULL)
     errAbort("Couldn't get current directory");
 
 struct dyString *dy = newDyString(1024);
-dyStringPrintf(dy, "pstat %s %s/para.results", getUser(), curDir);
+dyStringPrintf(dy, "pstat2 %s %s/para.results", getUser(), curDir);
 struct slRef *lineList = hubMultilineQuery(dy->string), *lineEl;
 dyStringFree(&dy);
 
@@ -780,9 +788,6 @@ for (job = db->jobList; job != NULL; job = job->next)
 	}
     }
 
-/* Get job list from paraHub. */
-queueSize = slCount(lineList);
-verbose(1, "%d jobs (including everybody's) in Parasol queue.\n", queueSize);
 
 /* Read status output. */
 for (lineEl = lineList; lineEl != NULL; lineEl = lineEl->next)
@@ -790,10 +795,25 @@ for (lineEl = lineList; lineEl != NULL; lineEl = lineEl->next)
     int wordCount;
     char *line = lineEl->val;
     char *row[6];
+    if (startsWith("Total Jobs:", line))
+	{
+	verbose(1, "%d jobs (including everybody's) in Parasol queue.\n", queueSize);
+        wordCount = chopLine(line, row);
+	queueSize = atoi(row[2]);
+	freez(&lineEl->val);
+	continue;
+	}
+    if (startsWith("Sick Batch:", line))
+	{
+	sickBatch = TRUE;
+	warn(line);
+	freez(&lineEl->val);
+	continue;
+	}
     wordCount = chopLine(line, row);
     if (wordCount < 6)
 	{
-	warn("Expecting at least 6 words in pstat output. paraHub and para out of sync.");
+	warn("Expecting at least 6 words in pstat2 output. paraHub and para out of sync.");
 	statusOutputChanged();
 	}
     else
@@ -965,41 +985,42 @@ queueSize = markQueuedJobs(db);
 markRunJobStatus(db);
 
 beginHappy();
-for (tryCount=1; tryCount<=retries && !finished; ++tryCount)
-    {
-    for (job = db->jobList; job != NULL; job = job->next)
-        {
-	if (job->submissionCount < tryCount && 
-	   (job->submissionList == NULL || needsRerun(job->submissionList)))
+if (!sickBatch)
+    for (tryCount=1; tryCount<=retries && !finished; ++tryCount)
+	{
+	for (job = db->jobList; job != NULL; job = job->next)
 	    {
-	    if (!submitJob(job, curDir))
+	    if (job->submissionCount < tryCount && 
+	       (job->submissionList == NULL || needsRerun(job->submissionList)))
 		{
-		finished = TRUE;
-	        break;
-		}
-	    occassionalDot();
-	    // occassionalSleep();
-            if (delayTime > 0)
-                {
-                atomicWriteBatch(db, batch);
-                sleep(delayTime);
-                }
-	    ++pushCount;
-	    if (tryCount > 1)
-	        ++retryCount;
-	    if (pushCount >= maxPush)
-	        {
-		finished = TRUE;
-		break;
-		}
-	    if (pushCount + queueSize >= maxQueue && pushCount >= minPush)
-	        {
-		finished = TRUE;
-		break;
+		if (!submitJob(job, curDir))
+		    {
+		    finished = TRUE;
+		    break;
+		    }
+		occassionalDot();
+		// occassionalSleep();
+		if (delayTime > 0)
+		    {
+		    atomicWriteBatch(db, batch);
+		    sleep(delayTime);
+		    }
+		++pushCount;
+		if (tryCount > 1)
+		    ++retryCount;
+		if (pushCount >= maxPush)
+		    {
+		    finished = TRUE;
+		    break;
+		    }
+		if (pushCount + queueSize >= maxQueue && pushCount >= minPush)
+		    {
+		    finished = TRUE;
+		    break;
+		    }
 		}
 	    }
 	}
-    }
 endHappy();
 atomicWriteBatch(db, batch);
 verbose(1, "updated job database on disk\n");
@@ -1053,13 +1074,18 @@ for (;;)
         break;
     fflush(stdout);
     fflush(stderr);
+    if (sickBatch)
+	break;
     sleep(curSleep);
     if (curSleep < maxSleep)
         curSleep += 15;
     now = time(NULL);
     verbose(1, "Checking job status %d minutes after launch\n",  round((now-start)/60.0));
     }
-verbose(1, "Successful batch!\n");
+if (sickBatch)
+    verbose(1, "Sick batch! Correct problem and then run para clearSickNodes.\n");
+else
+    verbose(1, "Successful batch!\n");
 }
 
 void paraMake(char *batch, char *spec)
