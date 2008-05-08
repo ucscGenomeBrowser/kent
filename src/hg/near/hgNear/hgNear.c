@@ -19,8 +19,9 @@
 #include "hgColors.h"
 #include "hgNear.h"
 #include "versionInfo.h"
+#include "hPrint.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.177 2007/09/12 23:41:44 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.178 2008/05/08 18:44:31 hiram Exp $";
 
 char *excludeVars[] = { "submit", "Submit", idPosVarName, NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -160,39 +161,6 @@ while ((c = *s) != 0)
     if (c == 160)
         *s = 32;
     ++s;
-    }
-}
-
-/* ---- Some html helper routines. ---- */
-
-void hvPrintf(char *format, va_list args)
-/* Print out some html. */
-{
-vprintf(format, args);
-}
-
-void hPrintf(char *format, ...)
-/* Print out some html.  Check for write error so we can
- * terminate if http connection breaks. */
-{
-va_list(args);
-va_start(args, format);
-hvPrintf(format, args);
-va_end(args);
-if (ferror(stdout))
-    noWarnAbort();
-}
-
-void hPrintNonBreak(char *s)
-/* Print out string but replace spaces with &nbsp; */
-{
-char c;
-while ((c = *s++) != '\0')
-    {
-    if (c == ' ')
-	fputs("&nbsp;", stdout);
-    else
-        putchar(c);
     }
 }
 
