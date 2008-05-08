@@ -68,7 +68,7 @@
 #include "log.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: paraHub.c,v 1.95 2008/05/08 00:33:46 galt Exp $";
+static char const rcsid[] = "$Id: paraHub.c,v 1.96 2008/05/08 23:11:12 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -1323,6 +1323,40 @@ pmPrintf(pm, "%d", maxNode);
 pmSend(pm, rudpOut);
 }
 
+int resetCounts(char *userName, char *dir)
+/* Reset done and crashed batch counts */
+{
+struct user *user = findUser(userName);
+struct batch *batch = findBatch(user, dir, TRUE);
+if (user == NULL) return -2;
+if (batch == NULL) return -2;
+batch->doneCount = 0;
+batch->crashCount = 0;
+logInfo("paraHub: User %s reset done and crashed counts for batch %s", userName, dir);
+return 0;
+}
+
+int resetCountsFromMessage(char *line)
+/* Parse out resetCounts message and reset counts for batch. */
+{
+char *userName, *dir;
+if ((userName = nextWord(&line)) == NULL)
+    return -2;
+if ((dir = nextWord(&line)) == NULL)
+    return -2;
+return resetCounts(userName, dir);
+}
+
+void resetCountsAcknowledge(char *line, struct paraMessage *pm)
+/* Resets batch counts for done and crashed.  Line format is <user> <dir>
+* Returns new maxNode or -2 if a problem.  Send new maxNode back to client. */
+{
+int resetCounts = resetCountsFromMessage(line);
+pmClear(pm);
+pmPrintf(pm, "%d",resetCounts);
+pmSend(pm, rudpOut);
+}
+
 
 
 int clearSickNodes(char *userName, char *dir)
@@ -2421,6 +2455,8 @@ for (;;)
 	 setPriorityAcknowledge(line, pm);
     else if (sameWord(command, "setMaxNode"))
 	 setMaxNodeAcknowledge(line, pm);
+    else if (sameWord(command, "resetCounts"))
+         resetCountsAcknowledge(line, pm);
     else if (sameWord(command, "showSickNodes"))
 	 showSickNodesFromMessage(line, pm);
     else if (sameWord(command, "clearSickNodes"))

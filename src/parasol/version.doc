@@ -95,4 +95,7 @@
      it has not been working for several years, turning it on by default now
      was deemed unnecessary.  
 
+     Added para command resetCounts which resets the done and crashed counts on the hub
+     for the batch, visible in parasol list batches.
+
 

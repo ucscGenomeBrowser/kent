@@ -15,7 +15,7 @@
 #include "jobResult.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: para.c,v 1.78 2008/05/08 00:33:46 galt Exp $";
+static char const rcsid[] = "$Id: para.c,v 1.79 2008/05/08 23:11:12 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -122,6 +122,8 @@ errAbort(
   "   Set batch priority. Values explained under 'push' options above.\n"
   "para maxNode 999\n"
   "   Set batch maxNode. Values explained under 'push' options above.\n"
+  "para resetCounts\n"
+  "   Set batch done and crash counters to 0.\n"
   "para showSickNodes\n"
   "   Show sick nodes which have failed when running this batch.\n"
   "para clearSickNodes\n"
@@ -1479,6 +1481,22 @@ if (optionVal("maxNode",NULL)!=NULL)
     paraMaxNode(optionVal("maxNode","unlimited"));
 }   
 
+void paraResetCounts()
+/* Send msg to hub to reset done and crashed counts on batch */
+{
+struct dyString *dy = newDyString(1024);
+char curDir[512];
+char *result;
+if (getcwd(curDir, sizeof(curDir)) == NULL)
+    errAbort("Couldn't get current directory");
+dyStringPrintf(dy, "resetCounts %s %s/para.results", getUser(), curDir);
+result = hubSingleLineQuery(dy->string);
+dyStringFree(&dy);
+if (result == NULL || sameString(result, "-2"))
+    errAbort("Couldn't reset done and crashed counts on batch %s\n", curDir);
+freez(&result);
+verbose(1, "Told hub to reset done and crashed counts on batch %s\n", curDir);
+}
 
 
 void sendSetPriorityMessage(int priority)
@@ -1971,6 +1989,12 @@ else if (sameWord(command, "maxNode"))
     if (argc != 3)
         usage();
     paraMaxNode(argv[2]);
+    }
+else if (sameWord(command, "resetCounts"))
+    {
+    if (argc != 2)
+        usage();
+    paraResetCounts();
     }
 else if (sameWord(command, "clearSickNodes"))
     {
