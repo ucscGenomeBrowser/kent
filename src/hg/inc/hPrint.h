@@ -15,6 +15,10 @@ void hvPrintf(char *format, va_list args);
 /* Suppressable variable args printf. Check for write error so we can
  * terminate if http connection breaks. */
 
+boolean hPrintStatus();
+/* is html printing on or off ?
+   return TRUE for print is on, FALSE for printing is off */
+
 void hPrintDisable();
 /* turn html printing off */
 
