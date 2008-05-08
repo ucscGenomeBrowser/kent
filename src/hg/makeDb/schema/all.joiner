@@ -1728,14 +1728,14 @@ identifier ensemblProteinId3 external=Ensembl
 
 identifier ensemblTranscriptId external=Ensembl dependency
 "Ensembl Transcript ID"
-    $gbd.ensGene.name chopAfter=.
+    $gbd,!felCat3.ensGene.name chopAfter=.
     $gbd.superfamily.name
     $gbd.ensGeneXref.transcript_name chopAfter=. minCheck=0.95
     mm3.ensemblXref.transcript_name chopAfter=. minCheck=0.20
     mm3.ensemblXref2.transcript_name chopAfter=. minCheck=0.20
-    $gbd,!mm4,!felCat3.ensGtp.transcript chopAfter=. minCheck=0.94
+    $gbd,!mm4.ensGtp.transcript chopAfter=. minCheck=0.94
     mm4.ensGtp.transcript chopAfter=. minCheck=0.94
-    $gbd,!mm4,!felCat3.ensPep.name chopAfter=. minCheck=0.96
+    $gbd,!mm4.ensPep.name chopAfter=. minCheck=0.96
     mm4.ensPep.name chopAfter=. minCheck=0.94
     $gbd.ensTranscript.transcript_name chopAfter=. minCheck=0.20
     $gbd.ensInfo.name minCheck=0.9
@@ -2635,6 +2635,14 @@ tablesIgnored $kgDb
 
 tablesIgnored $calJac
     gold
+
+tablesIgnored $petMar
+    %gold
+    intronEst
+
+tablesIgnored $braFlo
+    %gold
+    intronEst
 
 tablesIgnored $cb
     chr%_gold
