@@ -8,9 +8,6 @@
 #include "errabort.h"
 #include "cheapcgi.h"
 
-boolean suppressHtml;
-/* If doing PostScript output we'll suppress most of HTML output. */
-
 void hPrintf(char *format, ...);
 /* Printf that can be suppressed if not making html. */
 
