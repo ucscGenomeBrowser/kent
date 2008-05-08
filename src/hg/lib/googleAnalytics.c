@@ -3,9 +3,10 @@
 #include "hPrint.h"
 #include "googleAnalytics.h"
 
-static char const rcsid[] = "$Id: googleAnalytics.c,v 1.2 2008/05/08 21:42:07 hiram Exp $";
+static char const rcsid[] = "$Id: googleAnalytics.c,v 1.3 2008/05/08 21:43:32 hiram Exp $";
 
 void googleAnalytics()
+/* check for analytics configuration items and output google hooks if OK */
 {
 static boolean done = FALSE;
 char *analyticsHosts = cfgOption("analyticsHostList");
