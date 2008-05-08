@@ -119,7 +119,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1463 2008/05/05 23:31:07 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1464 2008/05/08 19:14:14 hiram Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -14300,7 +14300,7 @@ void hNbSpaces(int count)
 /* Print a number of non-breaking spaces.
    Consider moving this to lib/hPrint.c */
 {
-if (!suppressHtml)
+if (hPrintStatus())
     htmlNbSpaces(count);
 }
 
