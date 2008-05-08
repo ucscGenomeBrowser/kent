@@ -11,7 +11,7 @@ O = hgVisiGene.o captionElement.o configPage.o printCaption.o probePage.o visiSe
 include ../../../inc/cgi_build_rules.mk
 
 # be sure to make clean after changing this:
-CFLAGS=-DVISIGENE='"visiGene"'
+CFLAGS=${CFLAGS} -DVISIGENE='"visiGene"'
 
 compile: $O 
 	${CC} $O ${MYLIBS} ${L}
