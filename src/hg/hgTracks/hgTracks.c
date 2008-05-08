@@ -119,7 +119,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1464 2008/05/08 19:14:14 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1465 2008/05/08 22:00:10 larrym Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -14296,14 +14296,6 @@ if (track->labelNextPrevItem != NULL)
     track->labelNextPrevItem(track, sameString(whichWay, "nextItem"));
 }
 
-void hNbSpaces(int count)
-/* Print a number of non-breaking spaces.
-   Consider moving this to lib/hPrint.c */
-{
-if (hPrintStatus())
-    htmlNbSpaces(count);
-}
-
 char *collapseGroupVar(char *name)
 /* Construct cart variable name for collapsing group */
 {
@@ -14630,15 +14622,17 @@ if (showTrackControls)
 	hPrintf("<TR>");
 	cg->rowOpen = TRUE;
         hPrintf("<th align=\"left\" colspan=%d BGCOLOR=#536ED3>", MAX_CONTROL_COLUMNS);
+	hPrintf("<table width='100%'><tr><td align='left'>");
 	hPrintf("\n<A NAME=\"%sGroup\"></A>",group->name);
         hPrintf("<A HREF=\"%s?%s&%s=%s#%sGroup\" class=\"bigBlue\"><IMG height=18 width=18 src=\"%s\" alt=\"%s\" class=\"bigBlue\"></A>&nbsp;&nbsp;",
             hgTracksName(), cartSidUrlString(cart), 
             collapseGroupVar(group->name),
             otherState, group->name, indicatorImg, indicator);
-
-        hNbSpaces(((1.7 * (77 - strlen(group->label)))-1)/2 );
+	hPrintf("</td><td align='center' width='100%'>\n");
 	hPrintf("<B>%s</B>", wrapWhiteFont(group->label));
-	hPrintf("</th>\n");
+	hPrintf("</td><td align='right'>\n");
+	hPrintf("<input type='submit' name='submit' value='refresh'>\n");
+	hPrintf("</td></tr></table></th>\n");
 	controlGridEndRow(cg);
 
 	/* First track group that is not custom track group gets ruler, 
