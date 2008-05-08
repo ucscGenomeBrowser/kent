@@ -127,17 +127,6 @@ priority 74
 visibility hide
 type altGraphX
 
-track sibTxGraph
-shortLabel SIB Alt-Splicing
-longLabel Alternative Splicing Graph from Swiss Institute of Bioinformatics 
-group rna
-priority 74.5
-visibility hide
-type altGraphX
-url http://www.isrec.isb-sib.ch/cgi-bin/tromer/tromergraph2draw.pl?species=M.+musculus&tromer=$$
-urlLabel SIB link:
-idInUrlSql select name from sibTxGraph where id=%s
-
 track rikenCageTc
 shortLabel Riken CAGE TC
 longLabel Riken CAGE - Associated Transcript Clusters
