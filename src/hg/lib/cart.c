@@ -17,8 +17,9 @@
 #include "trashDir.h"
 #include "customFactory.h"
 #include "hgMaf.h"
+#include "googleAnalytics.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.80 2008/03/06 22:46:13 fanhsu Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.81 2008/05/08 21:19:24 hiram Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -1103,13 +1104,20 @@ webEnd();
 popWarnHandler();
 }
 
+void cartFooter(void)
+/* Write out HTML footer, possibly with googleAnalytics too */
+{
+googleAnalytics();	/* can't do this in htmlEnd	*/
+htmlEnd();		/* because it is in a higher library */
+}
+
 void cartHtmlEnd()
 /* Write out HTML footer and get rid or error handler. */
 {
 if (inWeb)
-    webEnd();
+    webEnd();	/*	this does googleAnalytics for a lot of CGIs	*/
 else
-    htmlEnd();
+    cartFooter();
 popWarnHandler();
 }
 
@@ -1147,7 +1155,7 @@ popWarnHandler();
 htmStart(stdout, titlePlus);
 cartWarnCatcher(doMiddle, cart, htmlVaWarn);
 cartCheckout(&cart);
-htmlEnd();
+cartFooter();
 }
 
 void cartHtmlShellPbGlobal(char *title, void (*doMiddle)(struct cart *cart),
@@ -1170,7 +1178,7 @@ popWarnHandler();
 htmStart(stdout, titlePlus);
 cartWarnCatcher(doMiddle, cart, htmlVaWarn);
 cartCheckout(&cart);
-htmlEnd();
+cartFooter();
 }
 
 void cartHtmlShellWithHead(char *head, char *title, void (*doMiddle)(struct cart *cart), 
@@ -1204,7 +1212,7 @@ popWarnHandler();
 htmStartWithHead(stdout, head, titlePlus);
 cartWarnCatcher(doMiddle, cart, htmlVaWarn);
 cartCheckout(&cart);
-htmlEnd();
+cartFooter();
 }
 
 void cartHtmlShell(char *title, void (*doMiddle)(struct cart *cart), 

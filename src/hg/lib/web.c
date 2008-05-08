@@ -12,8 +12,9 @@
 #include "axtInfo.h"
 #include "hgColors.h"
 #include "wikiLink.h"
+#include "googleAnalytics.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.144 2008/05/02 18:13:54 angie Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.145 2008/05/08 21:19:24 hiram Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -528,6 +529,7 @@ void webEnd()
 if(!webInTextMode)
     {
     webEndSectionTables();
+    googleAnalytics();
     puts( "</BODY></HTML>");
     webPopErrHandlers();
     }

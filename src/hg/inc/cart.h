@@ -306,6 +306,9 @@ void cartHtmlStart(char *title);
 /* Write HTML header and put in normal error handler. Needed with cartEmptyShell,
  * but not cartHtmlShell. */
 
+void cartFooter(void);
+/* Write out HTML footer, possibly with googleAnalytics too */
+
 void cartHtmlEnd();
 /* Write out HTML footer and get rid or error handler. Needed with cartEmptyShell,
  * but not cartHtmlShell. */

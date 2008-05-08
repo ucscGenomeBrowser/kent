@@ -213,7 +213,7 @@
 #include "itemConf.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1417 2008/05/05 23:31:08 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1418 2008/05/08 21:19:27 hiram Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -17947,7 +17947,7 @@ for (oneBed = bedList; oneBed != NULL; oneBed = oneBed->next)
     bedTabOutN(oneBed, 6, stdout);
     }
 puts("</TT></PRE>\n");
-htmlEnd();
+cartFooter();
 bedFreeList(&bedList);
 cutterFreeList(&cut);
 hFreeOrDisconnect(&conn);

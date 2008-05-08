@@ -16,7 +16,7 @@
 #include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.37 2008/05/01 23:42:46 angie Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.38 2008/05/08 21:19:28 hiram Exp $";
 
 #define ITEM_SCORE_DEFAULT "1000"
 #define ADD_ITEM_COMMENT_DEFAULT "add comments"
@@ -286,7 +286,6 @@ if (wikiTrackEnabled(database, &userName) && sameWord("0", wikiItemId))
     if (NULL == userName)
 	{
 	offerLogin(0, "add new items to");
-	cartHtmlEnd();
 	return;
 	}
 
@@ -404,7 +403,6 @@ else
     displayItem(item, userName);
     }
 
-cartHtmlEnd();
 }	/*	void doWikiTrack()	*/
 
 static void updateLastModifiedDate(int id)
@@ -455,7 +453,6 @@ hPrintf("<FORM ID=\"delete\" NAME=\"delete\" ACTION=\"%s\">", hgTracksName());
 cgiMakeButton("submit", "return to tracks display");
 hPrintf("\n</FORM>\n");
 hPrintf("<BR>\n");
-cartHtmlEnd();
 }
 
 void doAddWikiComments(char *wikiItemId, char *chrom, int winStart, int winEnd)
@@ -476,7 +473,6 @@ addDescription(item, userName, seqName, winStart, winEnd, cart, database, NULL,
 	NULL);
 updateLastModifiedDate(sqlSigned(wikiItemId));
 displayItem(item, userName);
-cartHtmlEnd();
 }
 
 void doCreateWikiItem(char *itemName, char *chrom, int winStart, int winEnd)
@@ -568,6 +564,4 @@ struct wikiTrack *item = findWikiItemId(wikiItemId);
 addDescription(item, userName, seqName, winStart, winEnd, cart, database, NULL,
 	NULL);
 displayItem(item, userName);
-
-cartHtmlEnd();
 }	/*	void doCreateWikiItem()	*/

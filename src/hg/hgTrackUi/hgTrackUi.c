@@ -31,13 +31,14 @@
 #include "hapmapSnps.h"
 #include "nonCodingUi.h"
 #include "expRecord.h"
+#include "wikiTrack.h"
 #include "pcrResult.h"
 
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 #define MAX_SP_SIZE 2000
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.425 2008/05/05 18:27:31 angie Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.426 2008/05/08 21:19:30 hiram Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1837,6 +1838,12 @@ printf("\n&nbsp; &nbsp;(range: &nbsp;%g&nbsp;to&nbsp;%g)<BR>",
 hFreeConn(&conn);
 }
 
+void wikiTrackUi(struct trackDb *tdb)
+/* UI for wiki track user annotations */
+{
+printf("this is the wikiTrack Ui<BR>\n");
+}
+
 void rulerUi(struct trackDb *tdb)
 /* UI for base position (ruler) */
 {
@@ -2724,6 +2731,8 @@ else if (sameString(track, "affyTranscriptome"))
 
 else if (startsWith("sample", tdb->type))
     genericWiggleUi(tdb,7);
+else if (sameString(track, WIKI_TRACK_TABLE))
+    wikiTrackUi(tdb);
 else if (sameString(track, RULER_TRACK_NAME))
     rulerUi(tdb);
 else if (sameString(track, OLIGO_MATCH_TRACK_NAME))
@@ -2949,6 +2958,14 @@ tdb->canPack = canPack;
 return tdb;
 }
 
+struct trackDb *trackDbForWikiTrack()
+/* Create a trackDb entry for the wikiTrack.
+   It is not a real track, so doesn't appear in trackDb */
+{
+return trackDbForPseudoTrack(WIKI_TRACK_TABLE,
+	WIKI_TRACK_LABEL, WIKI_TRACK_LONGLABEL, tvFull, FALSE);
+}
+
 struct trackDb *trackDbForRuler()
 /* Create a trackDb entry for the base position ruler.
    It is not (yet?) a real track, so doesn't appear in trackDb */
@@ -2976,7 +2993,9 @@ track = cartString(cart, "g");
 getDbAndGenome(cart, &database, &ignored, NULL);
 hSetDb(database);
 chromosome = cartUsualString(cart, "c", hDefaultChrom());
-if (sameWord(track, RULER_TRACK_NAME))
+if (sameWord(track, WIKI_TRACK_TABLE))
+    tdb = trackDbForWikiTrack();
+else if (sameWord(track, RULER_TRACK_NAME))
     /* special handling -- it's not a full-fledged track */
     tdb = trackDbForRuler();
 else if (sameWord(track, OLIGO_MATCH_TRACK_NAME))
