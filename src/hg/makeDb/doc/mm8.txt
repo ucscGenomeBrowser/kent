@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: mm8.txt,v 1.66 2008/05/03 21:23:45 markd Exp $"
+#	"$Id: mm8.txt,v 1.67 2008/05/09 21:38:13 tdreszer Exp $"
 #
 
 #  NOTE:  this doc may have genePred loads that fail to include
@@ -8322,7 +8322,7 @@ SEQ2_LAP=0
 BASE=/cluster/data/equCab1/bed/blastz.mm8.2007-02-17
 TMPDIR=/scratch/tmp
 '_EOF_'
-
+# Fix script coloring _EOF_ 
     # << this line keeps emacs coloring happy
     doBlastzChainNet.pl DEF \
       -bigClusterHub pk \
@@ -8509,11 +8509,11 @@ hgLoadBed -sqlTable=cgapSage.sql -tab mm8 cgapSage final.bed
     end
     # Got some messages like these for chunks that fall entirely
     # within gaps (e.g. centromere, huge unbridged...)
-FYI Couldn't open chr1_1_00.fa.align: No such file or directory
-...
-FYI Couldn't open chr1_1_05.fa.align: No such file or directory
-FYI Couldn't open chr1_17_02.fa.align: No such file or directory
-...
+#FYI Couldn't open chr1_1_00.fa.align: No such file or directory
+#...
+#FYI Couldn't open chr1_1_05.fa.align: No such file or directory
+#FYI Couldn't open chr1_17_02.fa.align: No such file or directory
+#...
 
     md5sum downloads/RMalign/*.gz > downloads/RMalign/md5sum.txt
     ssh hgwdev ln -s /cluster/data/mm8/downloads/RMalign \
@@ -8599,6 +8599,7 @@ FYI Couldn't open chr1_17_02.fa.align: No such file or directory
     rm -fr pub
     # original data
     ln -s chipseq lab
+    cd lab
 
     ###############
     # Sites track
@@ -8619,6 +8620,8 @@ cat > hmmSites.csh << 'EOF'
                 hgLoadBed mm8 broadStemChipHmmSites${ab}Es stdin
     end
 'EOF'
+# Fix script coloring EOF
+ 
     csh hmmSites.csh >&! hmmSites.log
     # Loaded 1788 - 19523 elements in 5 tracks
     # H3K{20,27,36,4,9)me3
@@ -8678,6 +8681,7 @@ cat > windowSites.csh << 'EOF'
                 broadStemChipWinSites${ab}${cell} windowSites/$cell.$ab.tab
     end
 'EOF'
+# Fix script coloring EOF 
     csh windowSites.csh >&! windowSites.log
 
     ###############
@@ -8722,6 +8726,7 @@ cat > makeWig.csh << 'EOF'
         nice wigEncode signal/$s.wigVar signal/$s.wig signal/$s.wib
     end
 'EOF'
+# Fix script coloring EOF 
 
 # NEWER
 
@@ -8744,6 +8749,7 @@ cat > makeWig.csh << 'EOF'
         cd ..
     end
 'EOF'
+    # Fix script coloring EOF 
     csh makeWig.csh >&! makeWig.log &
     # check output and cleanup
     cd signal
@@ -8753,6 +8759,398 @@ cat > makeWig.csh << 'EOF'
     cd signal
     gzip *.wigVar
 
+    ######## Load wiggles?
+    ssh hgwdev
+    mkdir /gbdb/mm8/broadStemChip
+
+    cd /cluster/data/mm8/bed/broadStemChip
+cat > loadWig.csh << \_EOF_
+#!/bin/csh -fe
+    cd /cluster/data/mm8/bed/broadStemChip/signal
+    foreach f (*.wib)
+        set wi = $f:t:r
+        set wig = $wi.wig
+        echo Start: $wig
+        echo "ln -s `pwd`/$f /gbdb/mm8/broadStemChip/$wi.wib"
+        time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/mm8/broadStemChip mm8 $wi $wig
+        echo Finished: $wig
+     end
+_EOF_
+    chmod +x loadWig.csh
+
+    time nice -n +19 ./loadWig.csh >> loadWig.log 2>&1 &
+    
+    # Try it by hand.
+    time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/mm8/broadStemChip mm8 broadStemChipSignalH3Es broadStemChipSignalH3Es.wig
+    
+    # Now Try it again.
+cat > loadWig.csh << \_EOF_
+#!/bin/csh -fe
+    cd /cluster/data/mm8/bed/broadStemChip/signal
+    foreach f (*.wib)
+        set wi = $f:t:r
+        set wig = $wi.wig
+        time hgLoadWiggle -pathPrefix=/gbdb/mm8/broadStemChip mm8 $wi $wig
+        echo Finished: $wig
+     end
+_EOF_
+    # Try it again.
+    time nice -n +19 ./loadWig.csh >> loadWig.log 2>&1 &
+
+# | broadStemChipSignalH3Es              |
+# | broadStemChipSignalK20Es             |
+# | broadStemChipSignalK27Es             |
+# | broadStemChipSignalK27Mef            |
+# | broadStemChipSignalK27Np             |
+# | broadStemChipSignalK36Es             |
+# | broadStemChipSignalK36Eshyb          |
+# | broadStemChipSignalK36Mef            |
+# | broadStemChipSignalK36Np             |
+# | broadStemChipSignalK4Es              |
+# | broadStemChipSignalK4Eshyb           |
+# | broadStemChipSignalK4Mef             |
+# | broadStemChipSignalK4Np              |
+# | broadStemChipSignalK9Es              |
+# | broadStemChipSignalK9Eshyb           |
+# | broadStemChipSignalK9Mef             |
+# | broadStemChipSignalK9Np              |
+# | broadStemChipSignalRpolEs            |
+
+    # Noticed tables badly named, renamed them and corresponding files
+    hgsql mm8
+    rename table broadStemChipSignalK4Es     to broadStemChipSignalH3K4Es    ;
+    rename table broadStemChipSignalK4Eshyb  to broadStemChipSignalH3K4Eshyb ;
+    rename table broadStemChipSignalK4Mef    to broadStemChipSignalH3K4Mef   ;
+    rename table broadStemChipSignalK4Np     to broadStemChipSignalH3K4Np    ;
+    rename table broadStemChipSignalK9Es     to broadStemChipSignalH3K9Es    ;
+    rename table broadStemChipSignalK9Eshyb  to broadStemChipSignalH3K9Eshyb ;
+    rename table broadStemChipSignalK9Mef    to broadStemChipSignalH3K9Mef   ;
+    rename table broadStemChipSignalK9Np     to broadStemChipSignalH3K9Np    ;
+    rename table broadStemChipSignalK20Es    to broadStemChipSignalH4K20Es   ;
+    rename table broadStemChipSignalK27Es    to broadStemChipSignalH3K27Es   ;
+    rename table broadStemChipSignalK27Mef   to broadStemChipSignalH3K27Mef  ;
+    rename table broadStemChipSignalK27Np    to broadStemChipSignalH3K27Np   ;
+    rename table broadStemChipSignalK36Es    to broadStemChipSignalH3K36Es   ;
+    rename table broadStemChipSignalK36Eshyb to broadStemChipSignalH3K36Eshyb;
+    rename table broadStemChipSignalK36Mef   to broadStemChipSignalH3K36Mef  ;
+    rename table broadStemChipSignalK36Np    to broadStemChipSignalH3K36Np   ;
+
+# | broadStemChipSignalH3K4Es         |
+# | broadStemChipSignalH3K4Eshyb      |
+# | broadStemChipSignalH3K4Mef        |
+# | broadStemChipSignalH3K4Np         |
+
+# | broadStemChipSignalH3K9Es         |
+# | broadStemChipSignalH3K9Eshyb      |
+# | broadStemChipSignalH3K9Mef        |
+# | broadStemChipSignalH3K9Np         |
+
+# | broadStemChipSignalH4K20Es        |
+
+# | broadStemChipSignalH3K27Es        |
+# | broadStemChipSignalH3K27Mef       |
+# | broadStemChipSignalH3K27Np        |
+
+# | broadStemChipSignalH3K36Es        |
+# | broadStemChipSignalH3K36Eshyb     |
+# | broadStemChipSignalH3K36Mef       |
+# | broadStemChipSignalH3K36Np        |
+
+# | broadStemChipSignalH3Es           |
+# | broadStemChipSignalRpolEs         |
+
+### ### ### Finished Signals 2008-05-08 
+
+
+######### Alignments
+
+    ### Sample from ES.H3.txt.gz
+    # chr10   63848447        63848474        -       3084.4.1        0       GAGAGCCAATGGCTAGGCAGGGCATCA
+    ### Convert to 
+    #chr10  63848447  63848474  3084.4.1  0  -  63848447  63848474  0,255,0  0  GAGAGCCAATGGCTAGGCAGGGCATCA
+    # convert to bed-9+   color at 9, mismatch at 10 and seq at 11; grabbed some example code from encodeHg17.txt PET
+
+    ssh hgwdev
+    cd /cluster/data/mm8/bed/broadStemChip/lab/alignments
+    mkdir bed
+    cd bed
+cat << \_EOF_ > makeBed9PlusFromAlignments.csh
+#!/usr/bin/perl
+# replace "reserved" field of BED >=9 fields with RGB value from 8-scale 
+# black->red palette, based on score value.
+
+use warnings;
+use strict;
+
+while (<>) {
+    next if (/^track/ || /^\s*\#/);
+    chomp;
+    my @words = split("\t");
+    if (scalar(@words) < 7) {
+      @words = split(/\s+/);
+      die "Expecting at least 7 tab-sep fields but got fewer, line $.\n"
+        if (scalar(@words) < 7);
+    }
+    my @newWordOrder = ("","","","","","","","","","","");
+    $newWordOrder[0] = $words[0];  # chr
+    $newWordOrder[1] = $words[1];  # beg
+    $newWordOrder[2] = $words[2];  # end
+    $newWordOrder[3] = $words[4];  # name
+    #$newWordOrder[4] = "0";        # score
+    $newWordOrder[4] = 1000 - ($words[5] * 100);        # score  0=1000 1=900 2=800 
+    $newWordOrder[5] = $words[3];  # strand
+    $newWordOrder[6] = $words[1];  # beg
+    $newWordOrder[7] = $words[2];  # end
+    $newWordOrder[8] = "0,0,0";    # color to be set later
+    $newWordOrder[9] = $words[5];  # mismatch
+    $newWordOrder[10] = $words[6]; # seq
+    
+    print join("\t", @newWordOrder) . "\n";
+}
+_EOF_
+
+cat << \_EOF_ > makeColoredBedOnStrand.csh
+#!/usr/bin/perl
+# replace "reserved" field of BED >=9 fields with RGB value from 8-scale 
+# black->red palette, based on score value.
+
+use warnings;
+use strict;
+
+# palette consistes of red, green blue
+my @blues  = ("0,0,255","0,0,204","0,0,170");
+my @greens = ("0,255,0","0,187,0","0,136,0");
+
+while (<>) {
+    next if (/^track/ || /^\s*\#/);
+    chomp;
+    my @words = split("\t");
+    if (scalar(@words) < 9) {
+      @words = split(/\s+/);
+      die "Expecting at least 9 tab-sep fields but got fewer, line $.\n"
+        if (scalar(@words) < 9);
+    }
+    die "More than 9 mismatches found line $.\n"
+        if ($words[9] > 9);
+    my $strand = $words[5];
+    if ($strand eq '+') {
+        if( $words[9] > 2 ) { 
+            $words[8] = $blues[2]; # green
+        } else {
+            $words[8] = $blues[$words[9]]; # green
+        }
+    } else {
+        if( scalar($words[9]) > 2 ) { 
+            $words[8] = $greens[2]; # blue
+        } else {
+            $words[8] = $greens[$words[9]]; # blue
+        }
+    }
+    print join("\t", @words) . "\n";
+}
+_EOF_
+
+cat << \_EOF_ > convertToBed.csh
+#!/bin/csh -fe
+    cd /cluster/data/mm8/bed/broadStemChip/lab/alignments/bed
+    foreach f (../*.txt.gz)
+        set root = `echo $f:t:r:r`
+        zcat $f | ./makeBed9PlusFromAlignments.csh | ./makeColoredBedOnStrand.csh | gzip > $root.bed.gz
+        echo $root.bed.gz done 
+    end
+_EOF_
+
+
+chmod +x makeBed9PlusFromAlignments.csh
+chmod +x makeColoredBedOnStrand.csh
+chmod +x convertToBed.csh
+
+    zcat ../ES.H3.txt.gz | head | ./makeBed9PlusFromAlignments.csh | ./makeColoredBedOnStrand.csh 
+    ## How to make bash work ???
+    #for f in ../*.txt.gz; do
+    #  root=${f##*/}
+    #  root=${root%.*}
+    #  root=${root%.*}
+    #  zcat $f | ./makeBed9PlusFromAlignments.csh | ./makeColoredBedOnStrand.csh | gzip > $root.bed.gz
+    #  echo $root.bed.gz done 
+    #done
+
+    ssh kkstore04
+    cd /cluster/data/mm8/bed/broadStemChip/lab/alignments/bed
+    time nice -n +19 ./convertToBed.csh > convert.log 2>&1 &
+    
+    # failed because mismatches exceeded 2, so used following to determin max mismatches: 6 in ES.H3
+    zcat ../ES.H3.txt.gz | head -100 | awk '{print $6}' | sort -n | uniq -c | wc -l 
+    # real    55m8.275s
+
+# Two were not gzipped!
+cat << \_EOF_ > convertTxtToBed.csh
+#!/bin/csh -fe
+    cd /cluster/data/mm8/bed/broadStemChip/lab/alignments/bed
+    foreach f (../ES.*.txt)
+        set root = `echo $f:t:r`
+        ./makeBed9PlusFromAlignments.csh < $f | ./makeColoredBedOnStrand.csh | gzip > $root.bed.gz
+        echo $root.bed.gz done 
+    end
+_EOF_
+chmod +x convertTxtToBed.csh
+    time nice -n +19 ./convertTxtToBed.csh >> convert.log 2>&1 &
+
+#  Add comments:
+cat << \_EOF_ > commentBedFiles.csh 
+#!/bin/csh -fe
+    cd /cluster/data/mm8/bed/broadStemChip/lab/alignments/bed
+    set descr1 = `grep Primary ../readme.txt | tr -d "\r"`
+    set descr2 = `grep pluripotent ../readme.txt | tr -d "\r"`
+    foreach f (ES.*.bed.gz)
+        set root = `echo $f:t:r:r`
+        set comment = `grep $root ../readme.txt | tr -d "\r"`
+        echo "# $comment - ${descr1} ${descr2}" > new.${root}.bed 
+        zcat $f >> new.${root}.bed 
+        gzip new.${root}.bed 
+    end
+_EOF_
+
+    ssh kkstore04
+    cd /cluster/data/mm8/bed/broadStemChip/lab/alignments/bed
+    time nice -n +19 ./commentBedFiles.csh > comment.log 2>&1 &
+    
+    # Rename to match other identifiers?
+    # | broadStemChipHmmSitesH3K20me3Es  |
+    # | broadStemChipHmmSitesH3K27me3Es  |
+    # | broadStemChipHmmSitesH3K36me3Es  |
+    # | broadStemChipHmmSitesH3K4me3Es   |
+    # | broadStemChipHmmSitesH3K9me3Es   |
+    # | broadStemChipWinSitesH3K27me3Es  |
+    # | broadStemChipWinSitesH3K27me3Mef |
+    # | broadStemChipWinSitesH3K27me3Np  |
+    # | broadStemChipWinSitesH3K4me3Es   |
+    # | broadStemChipWinSitesH3K4me3Mef  |
+    # | broadStemChipWinSitesH3K4me3Np   |
+    # | broadStemChipWinSitesH3K9me3Es   |
+    # | broadStemChipWinSitesH3K9me3Mef  |
+    # | broadStemChipWinSitesH3K9me3Np   |
+
+     zcat new.ES.K9.bed.gz | head -1 | awk '{ print $5 }'
+     head -1 new.*.bed | awk '{ print $5 }'
+     for f in new.ES.K*.gz; do zcat $f | head -1 | awk '{ print $2,$5 "Es"}'; done
+     for f in new.ES.WCE.*.gz; do zcat $f | head -1 | awk '{ print $2,"WceEs"}'; done
+     for f in new.ES.H3.*.gz; do zcat $f | head -1 | awk '{ print $2,"H3panEs"}'; done
+     for f in new.ES.R*.gz; do zcat $f | head -1 | awk '{ print $2,"RPolEs"}'; done
+     for f in new.ESHyb.*.gz; do zcat $f | head -1 | awk '{ print $2,"ES" $6 "EsHyb"}'; done
+     for f in new.MEF.K*.gz; do zcat $f | head -1 | awk '{ print $2,$4 "Mef"}'; done
+     for f in new.MEF.WCE.*.gz; do zcat $f | head -1 | awk '{ print $2,"WceMef"}'; done
+     for f in new.NP.K*.gz; do zcat $f | head -1 | awk '{ print $2,$5 "Np"}'; done
+     for f in new.NP.WCE.*.gz; do zcat $f | head -1 | awk '{ print $2,"WceNp"}'; done
+     
+mv new.ES.K20.bed.gz H4K20Me3Es.bed.gz
+mv new.ES.K27.bed.gz H3K27Me3Es.bed.gz
+mv new.ES.K36.bed.gz H3K36Me3Es.bed.gz
+mv new.ES.K4.bed.gz H3K4Me3Es.bed.gz
+mv new.ES.K9.bed.gz H3K9Me3Es.bed.gz
+mv new.ES.WCE.bed.gz WceEs.bed.gz
+mv new.ES.H3.bed.gz H3panEs.bed.gz
+mv new.ES.RPol.bed.gz RPolEs.bed.gz
+mv new.ESHyb.K36.bed.gz ESH3K36Me3EsHyb.bed.gz
+mv new.ESHyb.K4.bed.gz ESH3K4Me3EsHyb.bed.gz
+mv new.ESHyb.K9.bed.gz ESH3K9Me3EsHyb.bed.gz
+mv new.MEF.K27.bed.gz H3K27Me3Mef.bed.gz
+mv new.MEF.K36.bed.gz H3K36Me3Mef.bed.gz
+mv new.MEF.K4.bed.gz H3K4Me3Mef.bed.gz
+mv new.MEF.K9.bed.gz H3K9Me3Mef.bed.gz
+mv new.MEF.WCE.bed.gz WceMef.bed.gz
+mv new.NP.K27.bed.gz H3K27Me3Np.bed.gz
+mv new.NP.K36.bed.gz H3K36Me3Np.bed.gz
+mv new.NP.K4.bed.gz H3K4Me3Np.bed.gz
+mv new.NP.K9.bed.gz H3K9Me3Np.bed.gz
+mv new.NP.WCE.bed.gz WceNp.bed.gz
+
+
+        #hgLoadBed mm8 broadStemChipAlign${root} ${f}
+
+    time nice -n +19 hgLoadBed mm8 broadStemChipAlignmentsWceEs WceEs.bed.gz &
+    
+    ### Failed!  All that work to put a nice comment in the bed file, and hgLoadBed does not handle it!
+    ### Fixed this in hgLoadBed.c
+    
+    
+cat << \_EOF_ > myBedTbl.sql
+    CREATE TABLE myBedTbl (
+      bin smallint unsigned not null,
+      chrom varchar(255) not null,
+      chromStart int unsigned not null,
+      chromEnd int unsigned not null,
+      name varchar(255) not null,
+      score int unsigned not null,
+      strand char(1) not null,
+      thickStart int unsigned not null,
+      thickEnd int unsigned not null,
+      reserved int unsigned  not null,
+      mismatchCount int unsigned not null,
+      seq varchar(255) not null,
+    #Indices
+      INDEX(name(16)),
+      INDEX(chrom(5),bin)
+    )
+_EOF_
+
+cat << \_EOF_ > loadBedFiles.csh
+#!/bin/csh -fe
+    cd /cluster/data/mm8/bed/broadStemChip/lab/alignments/bed
+    foreach f (*.bed.gz)
+        set root = `echo $f:t:r:r`
+        ~/bin/x86_64/hgLoadBed -sqlTable=myBedTbl.sql -renameSqlTable mm8 broadStemChipAlignments${root} ${f} 
+        echo broadStemChipAlignments${root} ${f} done 
+    end
+_EOF_
+chmod +x loadBedFiles.csh
+    time nice -n +19 ./loadBedFiles.csh &
+real    62m46.504s
+
+    # Noticed 3 tables badly named, renamed them and corresponding files
+    hgsql mm8
+    rename table broadStemChipAlignmentsESH3K36Me3EsHyb to broadStemChipAlignmentsH3K36Me3EsHyb;
+    rename table broadStemChipAlignmentsESH3K4Me3EsHyb to broadStemChipAlignmentsH3K4Me3EsHyb;
+    rename table broadStemChipAlignmentsESH3K9Me3EsHyb to broadStemChipAlignmentsH3K9Me3EsHyb;
+    
+    # edited trackDb.broadStem.ra
+    
+broadStemChipAlignmentsH3K4Me3Es
+broadStemChipAlignmentsH3K4Me3Mef
+broadStemChipAlignmentsH3K4Me3Np
+
+broadStemChipAlignmentsH3K9Me3Es
+broadStemChipAlignmentsH3K9Me3Mef
+broadStemChipAlignmentsH3K9Me3Np
+
+broadStemChipAlignmentsH4K20Me3Es
+
+broadStemChipAlignmentsH3K27Me3Es
+broadStemChipAlignmentsH3K27Me3Mef
+broadStemChipAlignmentsH3K27Me3Np
+
+broadStemChipAlignmentsH3K36Me3Es
+broadStemChipAlignmentsH3K36Me3Mef
+broadStemChipAlignmentsH3K36Me3Np
+
+broadStemChipAlignmentsH3K9Me3EsHyb
+broadStemChipAlignmentsH3K36Me3EsHyb
+broadStemChipAlignmentsH3K4Me3EsHyb
+
+broadStemChipAlignmentsWceEs
+broadStemChipAlignmentsWceMef
+broadStemChipAlignmentsWceNp
+
+broadStemChipAlignmentsRPolEs
+broadStemChipAlignmentsH3panEs
+
+### ### ### Finished Alignments 2008-04-29 
+
+### ### ### Edited mouse/mmm8/trackDb.broadStem.ra to include new broadChromatinChIPSeq 
+### ### ### track with 53 subtracts covering sites (HMM, Windowing), siganl & alignments
+### ### ### for ES, MAF, NP, ES_hybrid cell lines
+### ### ### and H3K4me3 H3K9me3 H4K20me3 H3K27me3 H3K36me3 antibodies
+### ### ### and WCE, RPOL-II and pan-H3 controls  
 
 ############################################################################
 #  mm8 - Mouse - Ensembl Genes (DONE - 2008-03-06 - hiram)
