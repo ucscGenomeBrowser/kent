@@ -15,7 +15,7 @@
 #include "jobResult.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: para.c,v 1.81 2008/05/09 01:26:03 galt Exp $";
+static char const rcsid[] = "$Id: para.c,v 1.82 2008/05/09 03:53:20 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -160,9 +160,6 @@ char *statusCommand = "parasol pstat2";
 char *killCommand = "parasol remove job";
 
 boolean sickBatch = FALSE;
-
-void checkPrioritySetting(); /* fwd reference */
-void  checkMaxNodeSetting(); /* fwd reference */
 
 void beginHappy()
 /* Call before a loop where happy dots maybe written */
@@ -662,6 +659,85 @@ slReverse(&db->jobList);
 return db;
 }
 
+void sendSetPriorityMessage(int priority)
+/* Tell hub to change priority on batch */
+{
+struct dyString *dy = newDyString(1024);
+char curDir[512];
+char *result;
+if ((priority < 1) || (priority > MAX_PRIORITY))
+    errAbort("Priority %d out of range, should be 1 to %d",priority,MAX_PRIORITY);
+if (getcwd(curDir, sizeof(curDir)) == NULL)
+    errAbort("Couldn't get current directory");
+dyStringPrintf(dy, "setPriority %s %s/%s %d", getUser(), curDir, resultsName, priority);
+result = hubSingleLineQuery(dy->string);
+dyStringFree(&dy);
+if (result == NULL || sameString(result, "0"))
+    errAbort("Couldn't set priority for %s\n", curDir);
+freez(&result);
+verbose(1, "Told hub to set priority %d\n",priority);
+}
+
+
+void paraPriority(char *val)
+/* Tell hub to change priority on batch */
+{
+if (sameWord(val,"high"))
+    priority = 1;
+else if (sameWord(val,"medium"))
+    priority = NORMAL_PRIORITY;
+else if (sameWord(val,"low"))
+    priority = NORMAL_PRIORITY * NORMAL_PRIORITY;
+else
+    priority = atoi(val);
+sendSetPriorityMessage(priority);
+}
+
+
+void checkPrioritySetting()
+/* see if we can and need to set the priority */
+{
+if (optionVal("pri",NULL)!=NULL)
+    paraPriority(optionVal("pri","medium"));
+if (optionVal("priority",NULL)!=NULL)
+    paraPriority(optionVal("priority","medium"));
+}   
+
+void sendSetMaxNodeMessage(int maxNode)
+/* Tell hub to change maxNode on batch */
+{
+struct dyString *dy = newDyString(1024);
+char curDir[512];
+char *result;
+if (maxNode <-1) 
+    errAbort("maxNode %d out of range, should be >=-1",maxNode);
+if (getcwd(curDir, sizeof(curDir)) == NULL)
+    errAbort("Couldn't get current directory");
+dyStringPrintf(dy, "setMaxNode %s %s/%s %d", getUser(), curDir, resultsName, maxNode);
+result = hubSingleLineQuery(dy->string);
+dyStringFree(&dy);
+if (result == NULL || sameString(result, "-2"))
+    errAbort("Couldn't set maxNode %d for %s\n", maxNode, curDir);
+freez(&result);
+verbose(1, "Told hub to set maxNode %d\n",maxNode);
+}
+
+void paraMaxNode(char *val)
+/* Tell hub to change maxNode on batch */
+{
+if (sameWord(val,"unlimited"))
+    maxNode = -1;
+else
+    maxNode = atoi(val);
+sendSetMaxNodeMessage(maxNode);
+}
+
+void checkMaxNodeSetting()
+/* see if we can and need to set maxNode */
+{
+if (optionVal("maxNode",NULL)!=NULL)
+    paraMaxNode(optionVal("maxNode","unlimited"));
+}   
 
 
 void paraCreate(char *batch, char *jobList)
@@ -715,7 +791,8 @@ struct dyString *cmd = dyStringNew(1024);
 struct submission *sub;
 char *jobId = NULL;
 
-dyStringPrintf(cmd, "addJob %s %s /dev/null /dev/null %s/para.results %s", getUser(), curDir, curDir, job->command);
+dyStringPrintf(cmd, "addJob %s %s /dev/null /dev/null %s/%s %s",
+ getUser(), curDir, curDir, resultsName, job->command);
 jobId = hubSingleLineQuery(cmd->string);
 if (sameString(jobId,"0"))
     {
@@ -777,7 +854,7 @@ if (getcwd(curDir, sizeof(curDir)) == NULL)
     errAbort("Couldn't get current directory");
 
 struct dyString *dy = newDyString(1024);
-dyStringPrintf(dy, "pstat2 %s %s/para.results", getUser(), curDir);
+dyStringPrintf(dy, "pstat2 %s %s/%s", getUser(), curDir, resultsName);
 struct slRef *lineList = hubMultilineQuery(dy->string), *lineEl;
 dyStringFree(&dy);
 
@@ -1136,7 +1213,7 @@ if (queueError > 0)
 if (trackingError > 0)
    {
    if (!fileExists(resultsName))
-       printf("para.results: file not found.  paraHub can't write to this dir?\n");
+       printf("%s: file not found.  paraHub can't write to this dir?\n", resultsName);
    else
        printf("tracking errors: %d\n", trackingError);
    }
@@ -1438,7 +1515,7 @@ char curDir[512];
 char *result;
 if (getcwd(curDir, sizeof(curDir)) == NULL)
     errAbort("Couldn't get current directory");
-dyStringPrintf(dy, "chill %s %s/para.results", getUser(), curDir);
+dyStringPrintf(dy, "chill %s %s/%s", getUser(), curDir, resultsName);
 result = hubSingleLineQuery(dy->string);
 dyStringFree(&dy);
 if (result == NULL || !sameString(result, "ok"))
@@ -1446,42 +1523,6 @@ if (result == NULL || !sameString(result, "ok"))
 freez(&result);
 verbose(1, "Told hub to chill out\n");
 }
-
-void sendSetMaxNodeMessage(int maxNode)
-/* Tell hub to change maxNode on batch */
-{
-struct dyString *dy = newDyString(1024);
-char curDir[512];
-char *result;
-if (maxNode <-1) 
-    errAbort("maxNode %d out of range, should be >=-1",maxNode);
-if (getcwd(curDir, sizeof(curDir)) == NULL)
-    errAbort("Couldn't get current directory");
-dyStringPrintf(dy, "setMaxNode %s %s/para.results %d", getUser(), curDir, maxNode);
-result = hubSingleLineQuery(dy->string);
-dyStringFree(&dy);
-if (result == NULL || sameString(result, "-2"))
-    errAbort("Couldn't set maxNode %d for %s\n", maxNode, curDir);
-freez(&result);
-verbose(1, "Told hub to set maxNode %d\n",maxNode);
-}
-
-void paraMaxNode(char *val)
-/* Tell hub to change maxNode on batch */
-{
-if (sameWord(val,"unlimited"))
-    maxNode = -1;
-else
-    maxNode = atoi(val);
-sendSetMaxNodeMessage(maxNode);
-}
-
-void checkMaxNodeSetting()
-/* see if we can and need to set maxNode */
-{
-if (optionVal("maxNode",NULL)!=NULL)
-    paraMaxNode(optionVal("maxNode","unlimited"));
-}   
 
 void paraResetCounts()
 /* Send msg to hub to reset done and crashed counts on batch */
@@ -1491,7 +1532,7 @@ char curDir[512];
 char *result;
 if (getcwd(curDir, sizeof(curDir)) == NULL)
     errAbort("Couldn't get current directory");
-dyStringPrintf(dy, "resetCounts %s %s/para.results", getUser(), curDir);
+dyStringPrintf(dy, "resetCounts %s %s/%s", getUser(), curDir, resultsName);
 result = hubSingleLineQuery(dy->string);
 dyStringFree(&dy);
 if (result == NULL || sameString(result, "-2"))
@@ -1509,7 +1550,7 @@ char curDir[512];
 char *result;
 if (getcwd(curDir, sizeof(curDir)) == NULL)
     errAbort("Couldn't get current directory");
-dyStringPrintf(dy, "freeBatch %s %s/para.results", getUser(), curDir);
+dyStringPrintf(dy, "freeBatch %s %s/%s", getUser(), curDir, resultsName);
 result = hubSingleLineQuery(dy->string);
 dyStringFree(&dy);
 verbose(1, "Told hub to free all batch-related resources\n");
@@ -1527,48 +1568,6 @@ freez(&result);
 }
 
 
-void sendSetPriorityMessage(int priority)
-/* Tell hub to change priority on batch */
-{
-struct dyString *dy = newDyString(1024);
-char curDir[512];
-char *result;
-if ((priority < 1) || (priority > MAX_PRIORITY))
-    errAbort("Priority %d out of range, should be 1 to %d",priority,MAX_PRIORITY);
-if (getcwd(curDir, sizeof(curDir)) == NULL)
-    errAbort("Couldn't get current directory");
-dyStringPrintf(dy, "setPriority %s %s/para.results %d", getUser(), curDir, priority);
-result = hubSingleLineQuery(dy->string);
-dyStringFree(&dy);
-if (result == NULL || sameString(result, "0"))
-    errAbort("Couldn't set priority for %s\n", curDir);
-freez(&result);
-verbose(1, "Told hub to set priority %d\n",priority);
-}
-
-void paraPriority(char *val)
-/* Tell hub to change priority on batch */
-{
-if (sameWord(val,"high"))
-    priority = 1;
-else if (sameWord(val,"medium"))
-    priority = NORMAL_PRIORITY;
-else if (sameWord(val,"low"))
-    priority = NORMAL_PRIORITY * NORMAL_PRIORITY;
-else
-    priority = atoi(val);
-sendSetPriorityMessage(priority);
-}
-
-void checkPrioritySetting()
-/* see if we can and need to set the priority */
-{
-if (optionVal("pri",NULL)!=NULL)
-    paraPriority(optionVal("pri","medium"));
-if (optionVal("priority",NULL)!=NULL)
-    paraPriority(optionVal("priority","medium"));
-}   
-
 
 void clearSickNodes()
 /* Tell hub to clear sick nodes on batch */
@@ -1578,7 +1577,7 @@ char curDir[512];
 char *result;
 if (getcwd(curDir, sizeof(curDir)) == NULL)
     errAbort("Couldn't get current directory");
-dyStringPrintf(dy, "clearSickNodes %s %s/para.results", getUser(), curDir);
+dyStringPrintf(dy, "clearSickNodes %s %s/%s", getUser(), curDir, resultsName);
 result = hubSingleLineQuery(dy->string);
 dyStringFree(&dy);
 if (!sameString(result, "0"))
@@ -1596,7 +1595,7 @@ struct dyString *dy = newDyString(1024);
 char curDir[512];
 if (getcwd(curDir, sizeof(curDir)) == NULL)
     errAbort("Couldn't get current directory");
-dyStringPrintf(dy, "showSickNodes %s %s/para.results", getUser(), curDir);
+dyStringPrintf(dy, "showSickNodes %s %s/%s", getUser(), curDir, resultsName);
 struct slRef *lineList = hubMultilineQuery(dy->string), *lineEl;
 for (lineEl = lineList; lineEl != NULL; lineEl = lineEl->next)
     {
@@ -1857,7 +1856,7 @@ if (crashCount > 0)
 if (otherCount > 0)
     {
     if (!fileExists(resultsName))
-	printf("para.results: file not found.  paraHub can't write to this dir?\n");
+	printf("%s: file not found.  paraHub can't write to this dir?\n", resultsName);
     else
 	printf("Other count: %d jobs\n", otherCount);
     }
