@@ -1,0 +1,15 @@
+track all_mrna
+shortLabel $Organism mRNAs
+longLabel $Organism mRNAs from GenBank
+group rna
+priority 54
+visibility pack
+spectrum on
+type psl .
+baseColorUseCds genbank
+baseColorUseSequence genbank
+baseColorDefault diffCodons
+showDiffBasesAllScales .
+indelDoubleInsert on
+indelQueryInsert on
+indelPolyA on
