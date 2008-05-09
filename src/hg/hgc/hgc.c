@@ -214,7 +214,7 @@
 #include "itemConf.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1419 2008/05/09 20:41:19 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1420 2008/05/09 23:25:52 angie Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -2390,8 +2390,9 @@ char *trackTable = getParentTrackName(tdb);
 struct trackDb *parentTdb = tdb;
 if (!sameString(trackTable, tdb->tableName))
     parentTdb = hTrackDbForTrack(trackTable);
-printf("<P><A HREF=\"../cgi-bin/hgTrackUi?g=%s\">"
-       "Go to %s track controls</A></P>\n", trackTable, parentTdb->shortLabel);
+printf("<P><A HREF=\"../cgi-bin/hgTrackUi?g=%s&%s\">"
+       "Go to %s track controls</A></P>\n",
+       trackTable, cartSidUrlString(cart), parentTdb->shortLabel);
 }
 
 void printDataVersion(struct trackDb *tdb)
