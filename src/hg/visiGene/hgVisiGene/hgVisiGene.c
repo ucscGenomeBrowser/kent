@@ -798,7 +798,7 @@ else
 	}
     else
 	{
-	if (netSkipHttpHeaderLines(sd, url))  /* url needed only for err msgs*/
+	if (netSkipHttpHeaderLines(&sd, url))  /* url needed only for err msgs and redirect url*/
 	    {
 	    char buf[32*1024];
 	    int readSize;

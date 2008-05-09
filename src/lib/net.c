@@ -14,7 +14,7 @@
 #include "linefile.h"
 #include "base64.h"
 
-static char const rcsid[] = "$Id: net.c,v 1.56 2008/04/10 01:22:32 galt Exp $";
+static char const rcsid[] = "$Id: net.c,v 1.57 2008/05/09 21:26:29 galt Exp $";
 
 /* Brought errno in to get more useful error messages */
 
@@ -653,7 +653,7 @@ return dy;
 }
 
 
-boolean netSkipHttpHeaderLines(int sd, char *url)
+boolean netSkipHttpHeaderLinesWithRedirect(int sd, char **purl)
 /* Skip http header lines. Return FALSE if there's a problem.
    The input is a standard sd or fd descriptor.
    This is meant to be able work even with a re-passable stream handle,
@@ -661,16 +661,18 @@ boolean netSkipHttpHeaderLines(int sd, char *url)
    attach a linefile since filling its buffer reads in more than just the http header.
  */
 {
+/* handle 300, 301, 302, 303, 307 http redirects */
 char buf[2000];
 char *line = buf;
 int maxbuf = sizeof(buf);
 int i=0;
 char c = ' ';
 int nread = 0;
-struct dyString *redirectMsg = NULL;
 char *sep = NULL;
 char *headerName = NULL;
 char *headerVal = NULL;
+char *url = *purl;
+boolean redirect = FALSE;
 while(TRUE)
     {
     i = 0;
@@ -705,13 +707,9 @@ while(TRUE)
 	    warn("Strange http header on %s\n", url);
 	    return FALSE;
 	    }
-	if (startsWith("30", code) && isdigit(code[2]) && code[3] == 0)
+	if (startsWith("30", code) && isdigit(code[2]) && (code[2] <= 3 || code[2] == 7) && code[3] == 0)
 	    {
-	    redirectMsg = newDyString(256);
-	    dyStringPrintf(redirectMsg,"Your URL \"%s\" resulted in a redirect message "
-		 "(HTTP status code %s %s).  <BR>\n"
-		 "Sorry, redirects are not supported.",
-		 url, code, line);
+	    redirect = TRUE;
 	    }
 	else if (!sameString(code, "200"))
 	    {
@@ -733,22 +731,68 @@ while(TRUE)
 	}
     if (sameWord(headerName,"Location"))
 	{
-	if (redirectMsg)
-	    {
-	    dyStringPrintf(redirectMsg, " Redirection location: <A HREF=\"%s\">%s</A>", 
-		headerVal, headerVal);
-	    }
+	if (redirect)
+	    *purl = cloneString(headerVal);
 	}
     }
-if (redirectMsg)
+if (redirect)
     {
-    warn("%s", redirectMsg->string);
-    dyStringFree(&redirectMsg);
     return FALSE;
     }		
 return TRUE;
 }
 
+boolean netSkipHttpHeaderLines(int *psd, char *origUrl)
+/* Skip http header lines. Return FALSE if there's a problem.
+   The input is a standard sd or fd descriptor.
+   This is meant to be able work even with a re-passable stream handle,
+   e.g. can pass it to the pipes routines, which means we can't
+   attach a linefile since filling its buffer reads in more than just the http header.
+   Handles redirect retries up to 5.
+ */
+{
+char *url = origUrl, *url2 = url;
+int redirectCount = 0;
+int sd = *psd;
+boolean result = FALSE;
+while (TRUE)
+    {
+    /* url needed only for err msgs, and to return redirect location */
+    if (netSkipHttpHeaderLinesWithRedirect(sd, &url))
+	{
+	*psd = sd;   /* success after 0 to 5 redirects */
+	result = TRUE;
+	break;
+	}
+    close(sd);
+    if (url == url2) /* failure without redirect */
+	break;
+    if (url2 != origUrl)
+    	freeMem(url2);
+    url2 = url;  /* remember previous value */
+    /* we have a new url to try */
+    ++redirectCount;
+    if (redirectCount > 5)
+	{
+	warn("code 30x redirects: exceeded limit of 5 redirects, %s", origUrl);
+	break;
+	}
+    if (!startsWith("http://",url))
+	{
+	warn("redirected to non-http: %s", url);
+	break;
+	}
+    sd = netUrlOpen(url);
+    if (sd < 0)
+	{
+	warn("Couldn't open %s", url);
+	break;
+	}
+    }
+if (url2 != origUrl)
+    freeMem(url2);
+return result;
+}
 
 struct lineFile *netLineFileMayOpen(char *url)
 /* Return a lineFile attached to url. http skips header.
@@ -765,9 +809,11 @@ else
     {
     struct lineFile *lf = NULL;
     if (startsWith("http://",url))
-	{
-	if (!netSkipHttpHeaderLines(sd, url))
-	    return NULL;     /* url needed only for err msgs*/
+	{  
+	if (!netSkipHttpHeaderLines(&sd, url))
+	    {
+	    return NULL;
+	    }
 	}
     if (endsWith(url, ".gz") ||
 	endsWith(url, ".Z")  ||
