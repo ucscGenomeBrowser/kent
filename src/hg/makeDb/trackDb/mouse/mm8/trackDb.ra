@@ -607,3 +607,4 @@ url http://www.isrec.isb-sib.ch/cgi-bin/tromer/tromergraph2draw.pl?db=mm8&specie
 urlLabel SIB link:
 idInUrlSql select name from sibTxGraph where id=%s
 
+#include trackDb.broadStem.ra
