@@ -15,7 +15,7 @@
 #include "jobResult.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: para.c,v 1.79 2008/05/08 23:11:12 galt Exp $";
+static char const rcsid[] = "$Id: para.c,v 1.80 2008/05/09 00:19:45 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -124,10 +124,12 @@ errAbort(
   "   Set batch maxNode. Values explained under 'push' options above.\n"
   "para resetCounts\n"
   "   Set batch done and crash counters to 0.\n"
+  "para freeBatch\n"
+  "   Free all batch info on hub.  Works only if batch has nothing queued or running.\n"
   "para showSickNodes\n"
   "   Show sick nodes which have failed when running this batch.\n"
   "para clearSickNodes\n"
-  "   Clear sick nodes statistics of batch.\n"
+  "   Clear sick nodes statistics and consecutive crash counts of batch.\n"
   "\n"
   "Common options\n"
   "   -verbose=1 - set verbosity level.\n",
@@ -1499,6 +1501,26 @@ verbose(1, "Told hub to reset done and crashed counts on batch %s\n", curDir);
 }
 
 
+void freeBatch()
+/* Send msg to hub to reset done and crashed counts on batch */
+{
+struct dyString *dy = newDyString(1024);
+char curDir[512];
+char *result;
+if (getcwd(curDir, sizeof(curDir)) == NULL)
+    errAbort("Couldn't get current directory");
+dyStringPrintf(dy, "freeBatch %s %s/para.results", getUser(), curDir);
+result = hubSingleLineQuery(dy->string);
+dyStringFree(&dy);
+if (result == NULL || sameString(result, "-2"))
+    errAbort("Couldn't reset done and crashed counts on batch %s\n", curDir);
+verbose(1, "Told hub to free all batch-related resources\n");
+if (!sameString(result, "0"))
+    warn("Unable to free batch, check if jobs are queued or running\n");
+freez(&result);
+}
+
+
 void sendSetPriorityMessage(int priority)
 /* Tell hub to change priority on batch */
 {
@@ -1995,6 +2017,12 @@ else if (sameWord(command, "resetCounts"))
     if (argc != 2)
         usage();
     paraResetCounts();
+    }
+else if (sameWord(command, "freeBatch"))
+    {
+    if (argc != 2)
+        usage();
+    freeBatch();
     }
 else if (sameWord(command, "clearSickNodes"))
     {

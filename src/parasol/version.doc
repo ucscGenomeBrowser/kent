@@ -98,4 +98,7 @@
      Added para command resetCounts which resets the done and crashed counts on the hub
      for the batch, visible in parasol list batches.
 
+     Added para command freeBatch which if there is nothing running or queued, 
+     will free the batch from all structures and then free itself, recovering memory.
+
 

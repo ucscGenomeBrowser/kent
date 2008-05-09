@@ -68,7 +68,7 @@
 #include "log.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: paraHub.c,v 1.96 2008/05/08 23:11:12 galt Exp $";
+static char const rcsid[] = "$Id: paraHub.c,v 1.97 2008/05/09 00:19:45 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -1358,6 +1358,53 @@ pmSend(pm, rudpOut);
 }
 
 
+int freeBatch(char *userName, char *dir)
+/* Free batch resources, if possible */
+{
+struct user *user = findUser(userName);
+struct batch *batch = findBatch(user, dir, TRUE);
+if (user == NULL) return -2;
+if (batch == NULL) return -2;
+/* make sure nothing running and queue empty */
+if (batch->runningCount > 0) return -1;
+if (!dlEnd(batch->jobQueue->head)) return -1;
+sweepResults();
+/* remove batch from batchList */
+slRemoveEl(&batchList, batch);
+/* remove from user cur/old batches */
+dlRemove(batch->node);
+/* free batch members */
+freeMem(batch->node);
+hashRemove(stringHash, batch->name);
+freeMem(batch->name);
+freeMem(batch->jobQueue);
+freeHash(&batch->sickNodes);
+freeMem(batch);
+logInfo("paraHub: User %s freed batch %s", userName, dir);
+return 0;
+}
+
+int freeBatchFromMessage(char *line)
+/* Parse out freeBatch message and free batch. */
+{
+char *userName, *dir;
+if ((userName = nextWord(&line)) == NULL)
+    return -2;
+if ((dir = nextWord(&line)) == NULL)
+    return -2;
+return freeBatch(userName, dir);
+}
+
+void freeBatchAcknowledge(char *line, struct paraMessage *pm)
+/* Free batch resources.  Line format is <user> <dir>
+* Returns 0 if success or some err # if a problem.  Sends result back to client. */
+{
+int result = freeBatchFromMessage(line);
+pmClear(pm);
+pmPrintf(pm, "%d",result);
+pmSend(pm, rudpOut);
+}
+
 
 int clearSickNodes(char *userName, char *dir)
 /* Clear sick nodes for batch */
@@ -2457,6 +2504,8 @@ for (;;)
 	 setMaxNodeAcknowledge(line, pm);
     else if (sameWord(command, "resetCounts"))
          resetCountsAcknowledge(line, pm);
+    else if (sameWord(command, "freeBatch"))
+         freeBatchAcknowledge(line, pm);
     else if (sameWord(command, "showSickNodes"))
 	 showSickNodesFromMessage(line, pm);
     else if (sameWord(command, "clearSickNodes"))
