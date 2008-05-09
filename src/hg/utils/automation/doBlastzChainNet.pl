@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/automation/doBlastzChainNet.pl instead.
 
-# $Id: doBlastzChainNet.pl,v 1.18 2008/04/15 20:29:09 kate Exp $
+# $Id: doBlastzChainNet.pl,v 1.19 2008/05/09 23:34:37 angie Exp $
 
 # to-do items:
 # - lots of testing
@@ -1268,17 +1268,17 @@ All files in this directory are freely available for public use.
 --------------------------------------------------------------------
 References
 
-Chiaromonte, F., Yap, V.B., and Miller, W.  Scoring pairwise genomic
-sequence alignments.  Pac Symp Biocomput 2002, 115-26 (2002).
+Chiaromonte F, Yap VB, Miller W. Scoring pairwise genomic sequence
+alignments. Pac Symp Biocomput.  2002;:115-26.
 
-Kent, W.J., Baertsch, R., Hinrichs, A., Miller, W., and Haussler, D.
+Kent WJ, Baertsch R, Hinrichs A, Miller W, Haussler D.
 Evolution's cauldron: Duplication, deletion, and rearrangement in the
-mouse and human genomes. Proc Natl Acad Sci USA 100(20), 11484-11489
-(2003).
+mouse and human genomes. Proc Natl Acad Sci U S A. 2003 Sep
+30;100(20):11484-9.
 
-Schwartz, S., Kent, W.J., Smit, A., Zhang, Z., Baertsch, R., Hardison, R.,
-Haussler, D., and Miller, W.  Human-mouse alignments with BLASTZ</A>.
-Genome Res. 13(1), 103-7 (2003).
+Schwartz S, Kent WJ, Smit A, Zhang Z, Baertsch R, Hardison RC,
+Haussler D, Miller W. Human-Mouse Alignments with BLASTZ. Genome
+Res. 2003 Jan;13(1):103-7.
 
 ";
   close($fh);
