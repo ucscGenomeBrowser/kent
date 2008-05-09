@@ -1,0 +1,84 @@
+<H2>Description</H2>
+These tracks contain the supplementary data for Mikkelsen et al. <A HREF="http://www.nature.com/nature/journal/v448/n7153/abs/nature06008.html">
+Genome-wide maps of chromatin state in pluripotent and lineage-committed cells</A>. <i>Nature</i> <B>448</B>:553-560 August 2 2007. 
+
+<P><BLOCKQUOTE><TABLE BORDER=0 CELLPADDING=4 BORDERCOLOR="#aaaaaa">
+<TR><TH ALIGN="left">Sites by HMM      <TD>Enriched intervals inferred by an HMM</TR>
+<TR><TH ALIGN="left">Sites by Windowing<TD>Enirhced intervals inferred by fixed-size windows</TR>
+<TR><TH ALIGN="left">Signal Densities  <TD>ChIP-Seq fragment densities analyzed</TR>
+<TR><TH ALIGN="left">Alignments        <TD>Sequences and coordinates of uniquely aligned reads</TR>
+</TABLE></BLOCKQUOTE></P>
+
+<H3>Sites by HMM</H3>
+These subtracks contain the coordinates of intervals enriched 
+for <B>H3K4Me3</B>, <B>H3K9Me3</B>, <B>H3K27Me3</B>, <B>H3K36Me3</B> or
+<B>H4K20Me3</B> in mouse <B>ES</B> cells, as determined by a supervised
+Hidden Markov Model. 
+
+<H3>Sites by Windowing</H3>
+These subtracks contain the coordinates of intervals significantly 
+enriched for <B>H3K4Me3</B> or <B>H3K27Me3</B> in <B>ES</B> cells, 
+neural progenitors (<B>NP</B>) and embryonic fibroblasts (<B>MEF</B>). 
+Intervals were obtained by merging 1-kb windows with nominal p-values of < 10^-5. 
+<P>
+The coordinates indicate the beginning of the 
+first window and the end of the last window. A fourth column was also
+added, which indicates the maximal fragment density within each interval.
+</P><P>
+<B>H3K9Me3</B> enriched sites have been added. These
+sites correspond to a somewhat more permissive threshold than the 
+HMM-based sites analyzed in the manuscript. The maximum fragment
+density can be used to rank the sites by confidence.
+</P>
+
+<H3>Signal Densities</H3>
+These subtracks contains the ChIP-Seq fragment densities
+analyzed in the paper. There are wiggle subtrack represents the 
+density of <B>antibody</B> enriched fragments in <B>celltype</B>
+at 25 bp resolution across the mouse genome.
+<P>
+A non-negative value indicates the number of uniquely aligned 
+fragments oriented towards, and within 300 bp of, a particular 
+position. Reads within 200 bp add 1 to the density, and reads 
+within 300 bp add 0.25. (This is an approximation of the expected
+number of fragments overlapping the postion, since the exact length
+of each is unknown).
+</P><P>
+A value of -1 indicates a masked position.
+</P>
+
+<H3>Alignments</H3>
+These subtracks contain the SMS sequence data and their alignment 
+coordiantes on the mouse reference genome (UCSC version mm8).
+
+<P><BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0 BORDERCOLOR="#aaaaaa">
+<TR><TH ALIGN="left" Width="60%">SAMPLE     <TH ALIGN="left">ANTIBODY          </TR>
+<TR><TD>ES cells   <TD>H3K4Me3           </TR>
+<TR><TD>ES cells   <TD>H3K27Me3          </TR>
+<TR><TD>ES cells   <TD>H3K36Me3          </TR>
+<TR><TD>ES cells   <TD>H3K9Me3           </TR>
+<TR><TD>ES cells   <TD>H4K20Me3          </TR>
+<TR><TD>MEF        <TD>H3K4Me3           </TR>
+<TR><TD>MEF        <TD>H3K27Me3          </TR>
+<TR><TD>MEF        <TD>H3K36Me3          </TR>
+<TR><TD>MEF        <TD>H3K9Me3           </TR>
+<TR><TD>NP cells   <TD>H3K4Me3           </TR>
+<TR><TD>NP cells   <TD>H3K27Me3          </TR>
+<TR><TD>NP cells   <TD>H3K36Me3          </TR>
+<TR><TD>NP cells   <TD>H3K9Me3           </TR>
+<TR><TD>ES cells   <TD>pan-H3            </TR>
+<TR><TD>ES cells   <TD>Whole cell extract</TR>
+<TR><TD>MEF        <TD>Whole cell extract</TR>
+<TR><TD>NP cells   <TD>Whole cell extract</TR>
+<TR><TD>ES cells   <TD>RNA polymerase II </TR>
+<TR><TD>ES hybrid cells (129/CAST)<TD>H3K4Me3   </TR>
+<TR><TD>ES hybrid cells (129/CAST)<TD>H3K36Me3  </TR>
+<TR><TD>ES hybrid cells (129/CAST)<TD>H3K9Me3   </TR>
+</TABLE></BLOCKQUOTE></P>
+
+<P>
+Source: <A HREF="http://www.broad.mit.edu/seq_platform/chip/">http://www.broad.mit.edu/seq_platform/chip/</A>
+</P><P>
+Contact: <A HREF="mailto:tarjei@broad.mit.edu">Tarjei Mikkelsen (tarjei@broad.mit.edu)</A>.
+</P>
+
