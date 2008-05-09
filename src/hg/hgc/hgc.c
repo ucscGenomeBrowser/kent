@@ -84,6 +84,7 @@
 #include "cnpSharp2.h"
 #include "delHinds2.h"
 #include "delConrad2.h"
+#include "dgv.h"
 #include "tokenizer.h"
 #include "softberryHom.h"
 #include "borkPseudoHom.h"
@@ -213,7 +214,7 @@
 #include "itemConf.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1418 2008/05/08 21:19:27 hiram Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1419 2008/05/09 20:41:19 angie Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -253,7 +254,7 @@ struct bed *sageExpList = NULL;
  * http://www.ncbi.nlm.nih.gov/entrez/query/static/linking.html */
 char *entrezFormat = "http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=%s&term=%s&doptcmdl=%s&tool=genome.ucsc.edu";
 char *entrezPureSearchFormat = "http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=PureSearch&db=%s&details_term=%s[%s] ";
-char *entrezUidFormat = "http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=%s  &list_uids=%d&dopt=%s&tool=genome.ucsc.edu";
+char *entrezUidFormat = "http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=%s&list_uids=%d&dopt=%s&tool=genome.ucsc.edu";
 /* db=unists is not mentioned in NCBI's doc... so stick with this usage: */
 char *unistsnameScript = "http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?db=unists";
 char *unistsScript = "http://www.ncbi.nlm.nih.gov/genome/sts/sts.cgi?uid=";
@@ -312,6 +313,13 @@ static void printEntrezPubMedPureSearchUrl(FILE *f, char *term, char *keyword)
 {
 fprintf(f, entrezPureSearchFormat, "PubMed", term, keyword);
 }
+
+void printEntrezPubMedUidAbstractUrl(FILE *f, int pmid)
+/* Print URL for Entrez browser on a PubMed search. */
+{
+fprintf(f, entrezUidFormat, "PubMed", pmid, "Abstract");
+}
+
 void printEntrezPubMedUidUrl(FILE *f, int pmid)
 /* Print URL for Entrez browser on a PubMed search. */
 {
@@ -323,6 +331,7 @@ void printEntrezGeneUrl(FILE *f, int geneid)
 {
 fprintf(f, entrezUidFormat, "gene", geneid, "Graphics");
 }
+
 static void printEntrezOMIMUrl(FILE *f, int id)
 /* Print URL for Entrez browser on an OMIM search. */
 {
@@ -8222,10 +8231,9 @@ if (url != NULL && url[0] != 0)
 	if (!sameWord(row[4], ""))
 	    {
 	    printf(" [PubMed ");
-	    printf("<A HREF=\"%s%s%s'\" target=_blank>",
-	    "http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=pubmed&cmd=Retrieve&dopt=Abstract&list_uids=",
-	    row[4],"&query_hl=1&itool=genome.ucsc.edu");
-	    printf("%s</B></A>]\n", row[4]);
+	    printf("<A HREF=\"");
+	    printEntrezPubMedUidAbstractUrl(stdout, atoi(row[4]));
+	    printf("\" target=_blank>%s</B></A>]\n", row[4]);
 	    }
 	printf("<br><i>%s</i>\n", row[5]);
 	
@@ -8478,7 +8486,6 @@ if (rl->locusLinkId != 0)
     printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=gene&cmd=Retrieve&dopt=Graphics&list_uids=%d\" TARGET=_blank>",
     	rl->locusLinkId);
     printf("%d</A><BR>\n", rl->locusLinkId);
-
     } 
 printStanSource(rl->mrnaAcc, "mrna");
 
@@ -13584,6 +13591,66 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 // printCnpSharpSampleData(itemName);
+printTrackHtml(tdb);
+}
+
+void doDgv(struct trackDb *tdb, char *id)
+/* Details for Database of Genomic Variants (updated superset of cnp*). */
+{
+struct dgv dgv;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char query[512];
+int rowOffset = hOffsetPastBin(seqName, tdb->tableName);
+genericHeader(tdb, id);
+printCustomUrl(tdb, id, FALSE);
+
+safef(query, sizeof(query), "select * from dgv where name = '%s'", id);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    dgvStaticLoad(row+rowOffset, &dgv);
+    if (dgv.chromStart != dgv.thickStart ||
+	dgv.chromEnd != dgv.thickEnd)
+	{
+	printf("<B>Variant Position:</B> "
+	       "<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">%s:%d-%d</A><BR>\n",
+	       hgTracksPathAndSettings(), database,
+	       dgv.chrom, dgv.thickStart+1, dgv.thickEnd,
+	       dgv.chrom, dgv.thickStart+1, dgv.thickEnd);
+	printBand(dgv.chrom, dgv.thickStart, dgv.thickEnd, FALSE);
+	printf("<B>Variant Genomic Size:</B> %d<BR>\n",
+	       dgv.thickEnd - dgv.thickStart);
+	printf("<B>Locus:</B> "
+	       "<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">%s:%d-%d</A><BR>\n",
+	       hgTracksPathAndSettings(), database,
+	       dgv.chrom, dgv.chromStart+1, dgv.chromEnd,
+	       dgv.chrom, dgv.chromStart+1, dgv.chromEnd);
+	printf("<B>Locus Genomic Size:</B> %d<BR>\n",
+	       dgv.chromEnd - dgv.chromStart);
+	}
+    else
+	{
+	printf("<B>Position:</B> "
+	       "<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">%s:%d-%d</A><BR>\n",
+	       hgTracksPathAndSettings(), database,
+	       dgv.chrom, dgv.chromStart+1, dgv.chromEnd,
+	       dgv.chrom, dgv.chromStart+1, dgv.chromEnd);
+	printBand(dgv.chrom, dgv.chromStart, dgv.chromEnd, FALSE);
+	printf("<B>Genomic Size:</B> %d<BR>\n", dgv.chromEnd - dgv.chromStart);
+	}
+    printf("<B>Variant Type:</B> %s<BR>\n", dgv.varType);
+    printf("<B>Reference:</B> <A HREF=\"");
+    printEntrezPubMedUidAbstractUrl(stdout, dgv.pubMedId);
+    printf("\" TARGET=_BLANK>%s</A><BR>\n", dgv.reference);
+    printf("<B>Method/platform:</B> %s<BR>\n", dgv.method);
+    printf("<B>Sample:</B> %s<BR>\n", dgv.sample);
+    if (isNotEmpty(dgv.landmark))
+	printf("<B>Landmark:</B> %s<BR>\n", dgv.landmark);
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
 printTrackHtml(tdb);
 }
 
@@ -20215,6 +20282,10 @@ else if (sameWord(track, "delHinds2"))
 else if (sameWord(track, "delConrad2"))
     {
     doDelConrad2(tdb, item);
+    }
+else if (sameWord(track, "dgv"))
+    {
+    doDgv(tdb, item);
     }
 else if (sameWord(track, "affy120K"))
     {
