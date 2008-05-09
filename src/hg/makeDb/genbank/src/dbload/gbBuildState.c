@@ -19,7 +19,7 @@
 #include "gbProcessed.h"
 #include "gbStatusTbl.h"
 
-static char const rcsid[] = "$Id: gbBuildState.c,v 1.26 2008/05/06 01:29:52 markd Exp $";
+static char const rcsid[] = "$Id: gbBuildState.c,v 1.27 2008/05/09 23:36:11 markd Exp $";
 
 static struct dbLoadOptions* gOptions; /* options from cmdline and conf */
 static int gErrorCnt = 0;  /* count of errors during build */
@@ -580,10 +580,11 @@ gOptions = options;
 gbVerbose = verboseLevel;
 gErrorCnt = 0;
 
-// for RefSeq on hgwdev, include non-coding (FIXME: tmp for testing)
+// for RefSeq on hgwdev human, include non-coding (FIXME: tmp for testing)
 if (select->release->srcDb == GB_REFSEQ)
     {
-    loadNonCoding = sameString(getHost(), "hgwdev");
+    loadNonCoding = sameString(getHost(), "hgwdev")
+        && sameString(sqlGetDatabase(conn), "hg18");
     gbVerbMsg(1, "NOTE: loading non-coding RefSeqs");
     }
 
