@@ -14,7 +14,7 @@
 #include "linefile.h"
 #include "base64.h"
 
-static char const rcsid[] = "$Id: net.c,v 1.57 2008/05/09 21:26:29 galt Exp $";
+static char const rcsid[] = "$Id: net.c,v 1.58 2008/05/09 22:52:53 galt Exp $";
 
 /* Brought errno in to get more useful error messages */
 
@@ -707,7 +707,7 @@ while(TRUE)
 	    warn("Strange http header on %s\n", url);
 	    return FALSE;
 	    }
-	if (startsWith("30", code) && isdigit(code[2]) && (code[2] <= 3 || code[2] == 7) && code[3] == 0)
+	if (startsWith("30", code) && isdigit(code[2]) && ((code[2] >= '0' && code[2] <= '3') || code[2] == '7') && code[3] == 0)
 	    {
 	    redirect = TRUE;
 	    }
@@ -742,27 +742,32 @@ if (redirect)
 return TRUE;
 }
 
-boolean netSkipHttpHeaderLines(int *psd, char *origUrl)
+boolean netSkipHttpHeaderLines(int *psd, char **resultUrl)
 /* Skip http header lines. Return FALSE if there's a problem.
    The input is a standard sd or fd descriptor.
    This is meant to be able work even with a re-passable stream handle,
    e.g. can pass it to the pipes routines, which means we can't
    attach a linefile since filling its buffer reads in more than just the http header.
-   Handles redirect retries up to 5.
+   Handles redirect retries up to 5, sets resultUrl to final url found if any,
+   freeing the old value if successful.
  */
 {
+char *origUrl = *resultUrl;
 char *url = origUrl, *url2 = url;
 int redirectCount = 0;
 int sd = *psd;
-boolean result = FALSE;
 while (TRUE)
     {
-    /* url needed only for err msgs, and to return redirect location */
+    /* url needed for err msgs, and to return redirect location */
     if (netSkipHttpHeaderLinesWithRedirect(sd, &url))
 	{
 	*psd = sd;   /* success after 0 to 5 redirects */
-	result = TRUE;
-	break;
+	if (url != origUrl)
+	    {
+	    freeMem(origUrl);
+	    *resultUrl = url; 
+	    }
+	return TRUE;
 	}
     close(sd);
     if (url == url2) /* failure without redirect */
@@ -791,7 +796,7 @@ while (TRUE)
     }
 if (url2 != origUrl)
     freeMem(url2);
-return result;
+return FALSE;
 }
 
 struct lineFile *netLineFileMayOpen(char *url)
@@ -810,7 +815,7 @@ else
     struct lineFile *lf = NULL;
     if (startsWith("http://",url))
 	{  
-	if (!netSkipHttpHeaderLines(&sd, url))
+	if (!netSkipHttpHeaderLines(&sd, &url))
 	    {
 	    return NULL;
 	    }

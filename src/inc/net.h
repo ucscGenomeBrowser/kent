@@ -179,13 +179,14 @@ int netHttpGetMultiple(char *url, struct slName *queries, void *userData,
  * until we can't connect or until all requests have been served. 
  * For each HTTP response, do a callback. */
 
-boolean netSkipHttpHeaderLines(int *sd, char *url);
+boolean netSkipHttpHeaderLines(int *sd, char **url);
 /* Skip http header lines. Return FALSE if there's a problem.
    The input is a standard sd or fd descriptor.
    This is meant to be able work even with a re-passable stream handle,
    e.g. can pass it to the pipes routines, which means we can't
    attach a linefile since filling its buffer reads in more than just the http header.
-   Handle redirects up to limit of 5.
+   Handles redirect retries up to 5, sets resultUrl to final url found if any,
+   freeing the old value if successful.
  */
 
 boolean netSkipHttpHeaderLinesWithRedirect(int sd, char **url);

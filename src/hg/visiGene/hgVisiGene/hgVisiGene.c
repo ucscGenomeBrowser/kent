@@ -798,7 +798,8 @@ else
 	}
     else
 	{
-	if (netSkipHttpHeaderLines(&sd, url))  /* url needed only for err msgs and redirect url*/
+	char *newUrl = cloneString(url);
+	if (netSkipHttpHeaderLines(&sd, &newUrl))  /* url needed for err msgs and redirect url*/
 	    {
 	    char buf[32*1024];
 	    int readSize;
@@ -816,6 +817,7 @@ else
 	    {
 	    problemPage("Skip http header problem", url);
     	    }	
+	freeMem(newUrl);
 	}
     }
 }
