@@ -68,7 +68,7 @@
 #include "log.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: paraHub.c,v 1.97 2008/05/09 00:19:45 galt Exp $";
+static char const rcsid[] = "$Id: paraHub.c,v 1.98 2008/05/09 00:44:31 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -1373,10 +1373,9 @@ sweepResults();
 slRemoveEl(&batchList, batch);
 /* remove from user cur/old batches */
 dlRemove(batch->node);
-/* free batch members */
+/* free batch and its members */
 freeMem(batch->node);
 hashRemove(stringHash, batch->name);
-freeMem(batch->name);
 freeMem(batch->jobQueue);
 freeHash(&batch->sickNodes);
 freeMem(batch);
