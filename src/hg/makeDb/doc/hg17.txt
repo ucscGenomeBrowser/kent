@@ -24336,7 +24336,7 @@ See hg18.txt for details.
 
 
 ############################################################################
-# DGV V4 (DATABASE OF GENOMIC VARIANTS) (DONE 5/8/08 angie)
+# DGV V4 (DATABASE OF GENOMIC VARIANTS) (DONE 5/9/08 angie)
     ssh hgwdev
     mkdir /cluster/data/hg17/bed/dgv.v4
     cd /cluster/data/hg17/bed/dgv.v4
@@ -24357,13 +24357,16 @@ See hg18.txt for details.
         $thickStart = $locStart > $start ? $locStart : $start; \
         $thickEnd = $locEnd < $end ? $locEnd : $end; \
         $landmark = "" if ($landmark =~ /^chr.*\d\.\.\d/); \
+        $rgb = "255,128,0"; \
+        $rgb = "200,0,0" if ($varType =~ /^Inv/); \
+        $rgb = "0,100,0" if ($varType eq "InDel"); \
         $_ = join("\t", $chr, $chromStart, $chromEnd, $id, 0, "+", \
-                  $thickStart, $thickEnd, $landmark, $varType, $ref, $pmid, \
-                  $method, $sample) . "\n";' \
+                  $thickStart, $thickEnd, $rgb, $landmark, $varType, \
+                  $ref, $pmid, $method, $sample) . "\n";' \
           > $f:r.bed
     end
     hgLoadBed hg17 dgv *.bed \
-      -onServer -sqlTable=$HOME/kent/src/hg/lib/dgv.sql -tab -notItemRgb
+      -onServer -sqlTable=$HOME/kent/src/hg/lib/dgv.sql -tab
 
 
 ############################################################################
