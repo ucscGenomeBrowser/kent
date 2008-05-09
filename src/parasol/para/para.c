@@ -14,8 +14,9 @@
 #include "jobDb.h"
 #include "jobResult.h"
 #include "verbose.h"
+#include "sqlNum.h"
 
-static char const rcsid[] = "$Id: para.c,v 1.82 2008/05/09 03:53:20 galt Exp $";
+static char const rcsid[] = "$Id: para.c,v 1.83 2008/05/09 08:42:14 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -160,6 +161,9 @@ char *statusCommand = "parasol pstat2";
 char *killCommand = "parasol remove job";
 
 boolean sickBatch = FALSE;
+
+char *bookMarkName = "para.bookmark";  /* name of bookmark file */
+off_t bookMark = 0;  /* faster to resume from bookmark only reading new para.results */ 
 
 void beginHappy()
 /* Call before a loop where happy dots maybe written */
@@ -517,6 +521,35 @@ if (ferror(f))
 carefulClose(&f);
 }
 
+void readBookMark()
+/* Read the value of the bookMark, an offset into the results file.
+ * This should be called before reading the results file. */
+{
+/* a bookmark should not exist if results file does not exist */
+if (!fileExists(resultsName))
+  if (fileExists(bookMarkName))
+    unlink(bookMarkName);
+/* read bookmark position */
+struct lineFile *lf = lineFileMayOpen(bookMarkName, TRUE);
+char *line;
+if (!lf)
+    return;
+if (lineFileNext(lf, &line, NULL))
+    {
+    bookMark = sqlLongLong(line);
+    }
+lineFileClose(&lf);
+}
+
+void writeBookMark()
+/* Save the value of the bookMark, an offset into the results file.
+ * This should be called after the batch has been safely updated. */
+{
+FILE *f = mustOpen(bookMarkName, "w");
+fprintf(f, "%llu\n", (unsigned long long) bookMark);
+carefulClose(&f);
+}
+
 void atomicWriteBatch(struct jobDb *db, char *fileName)
 /* Wrapper to avoid corruption file by two para process being run in the same
  * directory. */
@@ -535,6 +568,8 @@ writeBatch(db, tmpName);
 /* now rename (which is attomic) */
 if (rename(tmpName, fileName) < 0)
     errnoAbort("can't rename %s to %s", tmpName, fileName);
+
+writeBookMark();
 }
 
 struct jobDb *readBatch(char *batch)
@@ -943,7 +978,7 @@ struct hash *hashResults(char *fileName)
 struct hash *hash = newHash(0);
 if (fileExists(fileName))
     {
-    struct jobResult *el, *list = jobResultLoadAll(fileName);
+    struct jobResult *el, *list = jobResultLoadAll(fileName, &bookMark);
     for (el = list; el != NULL; el = el->next)
 	hashAdd(hash, el->jobId, el);
     }

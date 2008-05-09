@@ -101,4 +101,7 @@
      Added para command freeBatch which if there is nothing running or queued, 
      will free the batch from all structures and then free itself, recovering memory.
 
+     Added para.bookmark to mark how much of para.results has already been
+     successfully processed, which means that the system can just read and
+     process any new results without having to re-do the whole results file.
 
