@@ -193,8 +193,8 @@ hgsql -N -e 'SELECT DISTINCT(level) FROM '$trackname' WHERE type = "gap" ORDER B
 echo
 echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
 echo "checking to make sure that types are on the correct levels:"
-echo "expect to see types of inv, syn and nonSyn on levels 3, 5, 7, 9"
-echo "you may also see type of nonSyn at level 11:"
+echo "expect to see types of inv, syn and nonSyn on levels 3, 5, 7, 9, 11, 13"
+echo "(these won't necessarily go all the way to 13):"
 echo
 echo "type = inv:"
 hgsql -N -e 'SELECT DISTINCT(level) FROM '$trackname' WHERE type = "inv" ORDER BY level' $db
