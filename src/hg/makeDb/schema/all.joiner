@@ -2644,6 +2644,9 @@ tablesIgnored $braFlo
     %gold
     intronEst
 
+tablesIgnored $cavPor
+    gold
+    
 tablesIgnored $cb
     chr%_gold
 
