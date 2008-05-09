@@ -68,7 +68,7 @@
 #include "log.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: paraHub.c,v 1.98 2008/05/09 00:44:31 galt Exp $";
+static char const rcsid[] = "$Id: paraHub.c,v 1.99 2008/05/09 01:26:03 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -1358,17 +1358,21 @@ pmSend(pm, rudpOut);
 }
 
 
-int freeBatch(char *userName, char *dir)
+int freeBatch(char *userName, char *name)
 /* Free batch resources, if possible */
 {
+name = hashStoreName(stringHash, name);
 struct user *user = findUser(userName);
-struct batch *batch = findBatch(user, dir, TRUE);
-if (user == NULL) return -2;
+if (user == NULL) return -3;
+struct batch *batch = findBatchInList(user->curBatches, name);
+if (batch == NULL)
+    batch = findBatchInList(user->oldBatches, name);
 if (batch == NULL) return -2;
 /* make sure nothing running and queue empty */
 if (batch->runningCount > 0) return -1;
 if (!dlEnd(batch->jobQueue->head)) return -1;
 sweepResults();
+logInfo("paraHub: User %s freed batch %s", userName, name);
 /* remove batch from batchList */
 slRemoveEl(&batchList, batch);
 /* remove from user cur/old batches */
@@ -1379,19 +1383,18 @@ hashRemove(stringHash, batch->name);
 freeMem(batch->jobQueue);
 freeHash(&batch->sickNodes);
 freeMem(batch);
-logInfo("paraHub: User %s freed batch %s", userName, dir);
 return 0;
 }
 
 int freeBatchFromMessage(char *line)
 /* Parse out freeBatch message and free batch. */
 {
-char *userName, *dir;
+char *userName, *batchName;
 if ((userName = nextWord(&line)) == NULL)
     return -2;
-if ((dir = nextWord(&line)) == NULL)
+if ((batchName = nextWord(&line)) == NULL)
     return -2;
-return freeBatch(userName, dir);
+return freeBatch(userName, batchName);
 }
 
 void freeBatchAcknowledge(char *line, struct paraMessage *pm)

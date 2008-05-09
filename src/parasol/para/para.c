@@ -15,7 +15,7 @@
 #include "jobResult.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: para.c,v 1.80 2008/05/09 00:19:45 galt Exp $";
+static char const rcsid[] = "$Id: para.c,v 1.81 2008/05/09 01:26:03 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -1512,11 +1512,17 @@ if (getcwd(curDir, sizeof(curDir)) == NULL)
 dyStringPrintf(dy, "freeBatch %s %s/para.results", getUser(), curDir);
 result = hubSingleLineQuery(dy->string);
 dyStringFree(&dy);
-if (result == NULL || sameString(result, "-2"))
-    errAbort("Couldn't reset done and crashed counts on batch %s\n", curDir);
 verbose(1, "Told hub to free all batch-related resources\n");
-if (!sameString(result, "0"))
-    warn("Unable to free batch, check if jobs are queued or running\n");
+if (result == NULL)
+    errAbort("result == NULL\n");
+if (sameOk(result, "-3"))
+    errAbort("User not found.\n");
+if (sameOk(result, "-2"))
+    errAbort("Batch not found.\n");
+if (sameOk(result, "-1"))
+    warn("Unable to free batch.  Jobs are queued or running.\n");
+if (sameOk(result, "0"))
+    verbose(1, "Batch freed.\n");
 freez(&result);
 }
 
