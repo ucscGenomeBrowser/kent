@@ -16,7 +16,7 @@
 #include "verbose.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: para.c,v 1.83 2008/05/09 08:42:14 galt Exp $";
+static char const rcsid[] = "$Id: para.c,v 1.84 2008/05/10 00:12:40 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -1959,6 +1959,9 @@ pushWarnHandler(paraVaWarn);
 
 if (strchr(batch, '/') != NULL)
     errAbort("para needs to be run in the same directory as the batch file.");
+
+readBookMark();  /* read the para.bookmark file too initialize bookmark */
+
 if (sameWord(command, "create") || sameWord(command, "creat"))
     {
     if (argc != 3)
