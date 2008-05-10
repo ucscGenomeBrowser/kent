@@ -4,7 +4,7 @@
 # This file describes browser build for the Lancelet
 # genome, Branchiostoma floridae, March 2006, v.1.0 from JGI
 #
-#       "$Id: braFlo1.txt,v 1.14 2008/05/02 16:07:30 hiram Exp $"
+#       "$Id: braFlo1.txt,v 1.15 2008/05/10 00:07:44 markd Exp $"
 #
 
 ##########################################################################
@@ -1397,3 +1397,10 @@ done
     #	check the goldenPath locations and remove those extra links
 
 #############################################################################
+# GENBANK reload due to problems found by gbSanity (2008-05-09 markd)
+    ssh hgwdev
+    cd /cluster/data/genbank
+    nice ./bin/gbDbLoadStep3 -drop -initialLoad braFlo1&
+
+#############################################################################
+
