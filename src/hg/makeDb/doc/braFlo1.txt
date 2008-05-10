@@ -4,7 +4,7 @@
 # This file describes browser build for the Lancelet
 # genome, Branchiostoma floridae, March 2006, v.1.0 from JGI
 #
-#       "$Id: braFlo1.txt,v 1.15 2008/05/10 00:07:44 markd Exp $"
+#       "$Id: braFlo1.txt,v 1.16 2008/05/10 00:12:35 hiram Exp $"
 #
 
 ##########################################################################
@@ -1397,10 +1397,103 @@ done
     #	check the goldenPath locations and remove those extra links
 
 #############################################################################
+#  add strings of N's to the gap track (DONE - 2008-05-09 - Hiram)
+    ssh kkstore05
+    mkdir /cluster/data/braFlo1/bed/gap
+    cd /cluster/data/braFlo1/bed/gap
+    time nice -n +19 findMotif -strand=+ -verbose=4 -motif=gattaca \
+	../../braFlo1.2bit > braFlo1.gaps.txt 2>&1
+    #	real    0m16.659s
+    grep "^#GAP chrUn" braFlo1.gaps.txt | sed -e "s/#GAP //" > chrUn.gap.bed
+    #	what are their sizes like:
+    ave -col=5 chrUn.gap.bed
+Q1 50.000000
+median 60.000000
+Q3 704.000000
+average 1004.236543
+min 1.000000
+max 144292.000000
+count 94786
+total 95187565.000000
+standard deviation 4497.943141
+    #	don't let this overlap with the gap track already
+    ssh hgwdev
+    cd /cluster/data/braFlo1/bed/gap
+    #	already existing gap track
+    featureBits braFlo1 gap
+    #	3031000 bases of 923355587 (0.328%) in intersection
+    #	prove that it is a complete subset of this new set
+    featureBits braFlo1 gap chrUn.gap.bed
+    #	3031000 bases of 923355587 (0.328%) in intersection
+    #	let's make sure none of the regular gaps run-on into these new
+    #	found gaps
+    hgsql -e "select chrom,chromStart,chromEnd from chrUn_gap;" braFlo1 \
+	| sort -k1,1 -k2,2n > gap.bed
+    awk '{printf "%s\t%s\t%s\n", $1, $2, $3}' chrUn.gap.bed \
+	| sort -k1,1 -k2,2n > new.bed
+    #	after working with that for a while, indeed there is a problem
+    #	found in the existing gap track.  There are "contig" gaps in the
+    #	the track which claim to be 1000 bases, but the DNA sequence
+    #	has 1001 N's in that location.  Let's see if that is because the
+    #	scaffold itself ends in a single N.  Yes, after some investigation,
+    #	it is found there are scaffolds which either begin with Ns, or
+    #	or end with N's, and it looks like they are single N's.
+    #	there are 30 gap locations where this happens.
+    #	So, let's make up a proper exclusive or of the new gaps:
+    #	intersect the new gaps with everything that is not in the current
+    #	gap track.  Get the regions that are not in the gap track:
+    featureBits -not -countGaps braFlo1 gap -chrom=chrUn -bed=notGap.bed
+    #	then, find only those bits in the new gaps that intersect that:
+    featureBits -countGaps braFlo1 notGap.bed new.bed -bed=newGaps.bed
+    #	and profile their sizes:
+    awk '{print $3-$2}' newGaps.bed | ave stdin
+Q1 50.000000
+median 51.000000
+Q3 591.000000
+average 1004.037315
+min 1.000000
+max 144292.000000
+count 91785
+total 92155565.000000
+standard deviation 4570.916383
+    #	make the new gaps into a properly formatted gap table
+    #	currently, the last index number in the gap track is:o
+    hgsql -e "select max(ix) from chrUn_gap;" braFlo1
+    #	6062
+
+    awk '
+BEGIN{ ix=6063 }
+{
+printf "%s\t%d\t%d\t%d\tN\t%d\tfragment\tyes\n", $1, $2, $3, ix, $3-$2
+++ix
+}' newGaps.bed > newGaps.gap.table
+    #	findMotif has made an error on the last one, there is an extra one
+    #	at the end that is not legitimate, take it off.
+    #	let's get the SQL definition:
+    mkdir dump
+    cd dump
+    hgsqldump -c --tab=. braFlo1 chrUn_gap
+    cd ..
+    #	and, make the bin column 
+    hgLoadBed -noLoad braFlo1 xyt newGaps.gap.table
+    #	count before:
+    hgsql -e "select count(*) from chrUn_gap;" braFlo1
+    #	3031
+    #	then, add this business to the existing table:
+    hgLoadSqlTab -append braFlo1 chrUn_gap dump/chrUn_gap.sql bed.tab
+    #	and after
+    hgsql -e "select count(*) from chrUn_gap;" braFlo1
+    #	94815
+    #	that is the sum of old and new:
+    wc -l gap.bed bed.tab
+    #	 3031 gap.bed
+    #	91784 bed.tab
+    #	94815 total
+
+#############################################################################
 # GENBANK reload due to problems found by gbSanity (2008-05-09 markd)
     ssh hgwdev
     cd /cluster/data/genbank
     nice ./bin/gbDbLoadStep3 -drop -initialLoad braFlo1&
 
 #############################################################################
-
