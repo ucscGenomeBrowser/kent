@@ -9,7 +9,7 @@
 #include "hash.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: mrnaToGene.c,v 1.18 2007/04/05 07:30:14 markd Exp $";
+static char const rcsid[] = "$Id: mrnaToGene.c,v 1.19 2008/05/11 20:31:14 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -27,6 +27,7 @@ static struct optionSpec optionSpecs[] = {
     {"allCds", OPTION_BOOLEAN},
     {"noCds", OPTION_BOOLEAN},
     {"keepInvalid", OPTION_BOOLEAN},
+    {"ignoreUniqSuffix", OPTION_BOOLEAN},
     {"quiet", OPTION_BOOLEAN},
     {NULL, 0}
 };
@@ -41,6 +42,7 @@ static boolean gAllCds = FALSE;
 static boolean gNoCds = FALSE;
 static boolean gGenePredExt = FALSE;
 static boolean gQuiet = FALSE;
+static boolean gIgnoreUniqSuffix = FALSE;
 
 /* hash table of accession to CDS */
 static struct hash *gCdsTable = NULL;
@@ -85,6 +87,9 @@ errAbort(
   "  -noCds - consider PSL to not contain any CDS.\n"
   "  -keepInvalid - Keep sequences with invalid CDS.\n"
   "  -quiet - Don't print print info about dropped sequences.\n"
+  "  -ignoreUniqSuffix - ignore all characters after last `-' in qName\n"
+  "   when looking up CDS. Used when a suffix has been added to make qName\n"
+  "   unique.  It is not removed from the name in the genePred.\n"
   "\n", genePredStdInsertMergeSize, genePredStdInsertMergeSize);
 }
 
@@ -137,8 +142,16 @@ else
 }
 
 char *getCdsForAcc(struct sqlConnection *conn, char *acc, char *cdsBuf, int cdsBufSize)
-/* look up a cds, trying with and without version */
+/* look up a cds, trying with and without version, and optionally dropping unique suffix */
 {
+char *dash = NULL;
+if (gIgnoreUniqSuffix)
+    {
+    dash = strrchr(acc, '-');
+    if (dash != NULL)
+        *dash = '\0';
+    }
+
 char *cdsStr = cdsQuery(conn, acc, cdsBuf, cdsBufSize);
 if (cdsStr == NULL)
     {
@@ -150,6 +163,8 @@ if (cdsStr == NULL)
         acc[dotIdx] = '.';
         }
     }
+if (dash != NULL)
+    *dash = '-';
 return cdsStr;
 }
 
@@ -351,6 +366,7 @@ gKeepInvalid = optionExists("keepInvalid");
 gAllCds = optionExists("allCds");
 gNoCds = optionExists("noCds");
 gQuiet = optionExists("quiet");
+gIgnoreUniqSuffix = optionExists("ignoreUniqSuffix");
 
 if ((gAllCds || gNoCds) && ((cdsDb != NULL) || (cdsFile != NULL)))
     errAbort("can't specify -allCds or -noCds with -cdsDb or -cdsFile");
