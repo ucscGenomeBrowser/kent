@@ -33,6 +33,7 @@ extern char *seqName;		/* Name of sequence we're working on. */
 extern int winStart, winEnd;    /* Bounds of sequence. */
 extern char *database;		/* Name of mySQL database. */
 extern char *organism;		/* Colloquial name of organism. */
+extern char *genome;		/* common name, e.g. Mouse, Human */
 extern char *scientificName;	/* Scientific name of organism. */
 extern struct hash *trackHash;	/* A hash of all tracks - trackDb valued */
 

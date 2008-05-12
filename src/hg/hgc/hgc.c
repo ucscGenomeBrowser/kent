@@ -214,7 +214,7 @@
 #include "itemConf.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1420 2008/05/09 23:25:52 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1421 2008/05/12 20:52:35 hiram Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -224,6 +224,7 @@ char *seqName;		/* Name of sequence we're working on. */
 int winStart, winEnd;   /* Bounds of sequence. */
 char *database;		/* Name of mySQL database. */
 char *organism;		/* Colloquial name of organism. */
+char *genome;		/* common name, e.g. Mouse, Human */
 char *scientificName;	/* Scientific name of organism. */
 
 char *protDbName;	/* Name of proteome database */
@@ -19735,10 +19736,9 @@ char *track = cartString(cart, "g");
 char *item = cartOptionalString(cart, "i");
 char *parentWigMaf = cartOptionalString(cart, "parentWigMaf");
 struct trackDb *tdb = NULL;
-char *ignored;
 
 /*	database and organism are global variables used in many places	*/
-getDbAndGenome(cart, &database, &ignored, NULL);
+getDbAndGenome(cart, &database, &genome, NULL);
 organism = hOrganism(database);
 scientificName = hScientificName(database);
 

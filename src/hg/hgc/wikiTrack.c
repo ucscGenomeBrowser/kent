@@ -16,7 +16,7 @@
 #include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.38 2008/05/08 21:19:28 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.39 2008/05/12 20:52:35 hiram Exp $";
 
 #define ITEM_SCORE_DEFAULT "1000"
 #define ADD_ITEM_COMMENT_DEFAULT "add comments"
@@ -136,12 +136,15 @@ char *strippedRender = fetchWikiRenderedText(item->descriptionKey);
 
 if (isNotEmpty(item->geneSymbol) && differentWord(item->geneSymbol,"0"))
     {
-    hPrintf("<B>Gene symbol:&nbsp;</B><A "
-	"HREF=\"../cgi-bin/hgGene?hgg_gene=%s\" TARGET=_blank>%s</A><BR>\n",
-	    item->geneSymbol, item->geneSymbol);
+    hPrintf("<B>UCSC gene id:&nbsp;</B><A "
+	"HREF=\"../cgi-bin/hgGene?org=%s&hgg_gene=%s\" TARGET=_blank>"
+	"%s</A><BR>\n",
+	    genome, item->geneSymbol, item->geneSymbol);
     geneAnnotation = TRUE;
     }
+/*
 hPrintf("<B>Classification group:&nbsp;</B>%s<BR>\n", item->class);
+*/
 printPosOnChrom(item->chrom, item->chromStart, item->chromEnd,
     item->strand, FALSE, item->name);
 #ifdef NOT
@@ -150,7 +153,8 @@ hPrintf("<B>Score:&nbsp;</B>%u<BR>\n", item->score);
 hPrintf("<B>Created </B>%s<B> by:&nbsp;</B>", item->creationDate);
 hPrintf("<A HREF=\"%s/index.php/User:%s\" TARGET=_blank>%s</A><BR>\n", url,
     item->owner, item->owner);
-hPrintf("<B>Last update:&nbsp;</B>%s<BR>\n", item->lastModifiedDate);
+hPrintf("<B>Most recent quick update:&nbsp;</B>%s<BR>\n",
+    item->lastModifiedDate);
 char *editors = cfgOptionDefault(CFG_WIKI_EDITORS, NULL);
 char *editor = NULL;
 if ((NULL != userName) && editors)
@@ -171,6 +175,8 @@ if ((NULL != userName) && editors)
 if ((NULL != userName) &&
 	(editor || (sameWord(userName, item->owner) && !geneAnnotation)))
     {
+    hPrintf("<em>(comments for deleted items remain in the wiki, with a "
+	"note<BR>&nbsp;&nbsp;that the item has been deleted.)</em><BR>\n");
     startForm("deleteForm", G_DELETE_WIKI_ITEM);
     char idString[128];
     safef(idString, ArraySize(idString), "%d", item->id);
@@ -218,12 +224,12 @@ else if (emailVerified()) /* prints message when not verified */
     /* first row is a title line */
     char label[256];
     safef(label, ArraySize(label),
-	"'%s' adding comments to item '%s'\n", userName, item->name);
+	"'%s' quick add comments to item '%s'\n", userName, item->name);
     webPrintWideLabelCell(label, 2);
     webPrintLinkTableNewRow();
     /* second row is initial comment/description text entry */
     webPrintWideCellStart(2, HG_COL_TABLE);
-    cgiMakeTextArea(NEW_ITEM_COMMENT, ADD_ITEM_COMMENT_DEFAULT, 3, 40);
+    cgiMakeTextArea(NEW_ITEM_COMMENT, ADD_ITEM_COMMENT_DEFAULT, 3, 70);
     webPrintLinkCellEnd();
     webPrintLinkTableNewRow();
     /*webPrintLinkCellStart(); more careful explicit alignment */
@@ -241,9 +247,9 @@ else if (emailVerified()) /* prints message when not verified */
     webPrintLinkCellEnd();
     webPrintLinkTableEnd();
 
-    hPrintf("For extensive edits, it may be more convenient to edit the ");
+    hPrintf("For more extensive edits, please edit the ");
     hPrintf("wiki article <A HREF=\"%s/index.php/%s\" TARGET=_blank>%s</A> "
-       "for this item's description.<BR>", url, item->descriptionKey,
+       "in the wiki editing system.<BR>", url, item->descriptionKey,
 	    item->descriptionKey);
     struct bed *itemList = multipleItems(item);
     if (slCount(itemList) > 0)
