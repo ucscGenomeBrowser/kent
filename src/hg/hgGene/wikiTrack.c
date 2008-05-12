@@ -15,7 +15,7 @@
 #include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.13 2008/05/01 23:42:45 angie Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.14 2008/05/12 20:54:37 hiram Exp $";
 
 static char *hgGeneUrl()
 {
@@ -304,26 +304,14 @@ if ((slCount(allIsoforms) > 1) || (!canonical))
     {
     dyStringPrintf(extraHeader, "Isoform genes and protein: ");
     struct bed *el;
-    struct bed *pt;
-    for (pt = allProteins, el = allIsoforms; el; el = el->next, pt = pt->next)
+    for (el = allIsoforms; el; el = el->next)
 	{
 	if (isNotEmpty(canonical) && sameWord(canonical,el->name))
 	    continue;
-	if (isNotEmpty(pt->name))
-	    {
-	    dyStringPrintf(extraHeader,
-		"[http://%s/cgi-bin/hgGene?org=%s&hgg_gene=%s %s]"
-		" [http://%s/cgi-bin/pbTracks?org=%s&proteinID=%s (%s)]",
-		    cfgOptionDefault(CFG_WIKI_BROWSER, DEFAULT_BROWSER), genome,
-			el->name, el->name,
-		    cfgOptionDefault(CFG_WIKI_BROWSER, DEFAULT_BROWSER), genome,
-			pt->name, pt->name);
-	    }
-	else
-	    dyStringPrintf(extraHeader,
-		"[http://%s/cgi-bin/hgGene?org=%s&hgg_gene=%s %s] (N/A)",
-		    cfgOptionDefault(CFG_WIKI_BROWSER, DEFAULT_BROWSER),
-			genome, el->name, el->name);
+	dyStringPrintf(extraHeader,
+	    "[http://%s/cgi-bin/hgGene?org=%s&hgg_gene=%s %s]",
+		cfgOptionDefault(CFG_WIKI_BROWSER, DEFAULT_BROWSER),
+		    genome, el->name, el->name);
 	if (el->next)
 	    dyStringPrintf(extraHeader,", ");
 	}
