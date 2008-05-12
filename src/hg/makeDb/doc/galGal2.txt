@@ -3782,6 +3782,11 @@ rmdir $tmp
 
 
 # PHASTCONS 7WAY WITH METHODS FROM PAPER (DONE 4/28/05 angie)
+# NOTE FROM QA, 5/12/08: the phastConsElements7way track has an overlap-by-one
+# error at chr1:92,640,085-92,640,105 . This was found when investigating a
+# similar bug reported by user Michael Hiller in dm3 phastCons data.  As
+# galGal2 has been superceded by galGal3, this track is going to be left as-is.
+
     # Using the param estimation methods described in Adam's 
     # Genome Research paper...  but what to use for CDS coverage metric???
     # tree: (((galGal2,((hg17,mm5),monDom1)),xenTro1),(danRer2,tetNig1))
