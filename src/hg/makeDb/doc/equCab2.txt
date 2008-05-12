@@ -1,7 +1,7 @@
 # for emacs: -*- mode: sh; -*-
 
 # Equus caballus - ??
-#	"$Id: equCab2.txt,v 1.12 2008/05/02 18:21:59 larrym Exp $"
+#	"$Id: equCab2.txt,v 1.13 2008/05/12 20:59:27 larrym Exp $"
 #########################################################################
 # DOWNLOAD SEQUENCE (...
 
@@ -224,7 +224,7 @@ i.e. if you take dupes and chrM into account, our data agrees with their raw dat
     #   1004742864 bases of 2454424288 (40.936%) in intersection
 
     # RepeatMasker and lib version from do.log:
-    #   RepeatMasker version development-$Id: equCab2.txt,v 1.12 2008/05/02 18:21:59 larrym Exp $
+    #   RepeatMasker version development-$Id: equCab2.txt,v 1.13 2008/05/12 20:59:27 larrym Exp $
     #   Jan 11 2008 (open-3-1-9) version of RepeatMasker
     #	CC   RELEASE 20071204
 
@@ -801,6 +801,9 @@ rearranged to get horse on top:
 	| sed -e "s/  / /g"` > tree.6.nh
 # results:
 # ((((equCab2 canFam2) (mm9 hg18)) ornAna1) galGal3)
+# => for making the gif: ((((Horse,Dog), (Mouse, Human)), Platypus), Chicken)
+
+wget -O equCab2_6way.gif 'http://genome.ucsc.edu/cgi-bin/phyloGif?hgsid=106951235&phyloGif_width=219&phyloGif_height=260&boolshad.phyloGif_branchLengths=1&boolshad.phyloGif_lengthLegend=1&boolshad.phyloGif_branchLabels=1&phyloGif_branchDecimals=2&phyloGif_branchMultiplier=1&boolshad.phyloGif_underscores=1&boolshad.phyloGif_htmlPage=1&phyloGif_tree=%28%28%28%28Horse%2CDog%29%2C+%28Mouse%2C+Human%29%29%2C+Platypus%29%2C+Chicken%29&phyloGif_submit=submit'
 
     # verify all blastz's exists
     cat << '_EOF_' > listMafs.csh
@@ -1131,7 +1134,7 @@ done | xargs cat | \
 
 #############################################################################
 ## Annotate 6-way multiple alignment with gene annotations
-##		(WORKING - 2008-05-01 - larrym)
+##		(DONE - 2008-05-02 - larrym)
 
     ssh hgwdev
     mkdir /cluster/data/equCab2/bed/multiz6way/frames
@@ -1170,6 +1173,349 @@ end
     # hg18: Tables: ensGene: 55906, knownGene: 56722, mgcGenes: 28715, refGene: 26306, Mrnas: 231949
     # mm9: Tables: ensGene: 43973, knownGene: 49409, mgcGenes: 22666, refGene: 21569, Mrnas: 222212
     # ornAna1: Tables: ensGene: 30089, refGene: 10, Mrnas: 147
+
+    # from this information, conclusions:
+    # (hiram sez use ensGene rather than knownGene for hg18 (even though knownGene has more genes):
+    #	use knownGene for mm9
+    #	use ensGene for hg18, galGal3, canFam2 and ornAna1
+    mkdir genes
+
+    # knownGene
+    for DB in mm9
+do
+    hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from knownGene" ${DB} \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /scratch/tmp/${DB}.tmp.gz
+    mv /scratch/tmp/${DB}.tmp.gz genes/$DB.gp.gz
+    echo "${DB} done"
+done
+
+    # ensGene
+
+#    for DB in galGal3 canFam2 ornAna1
+    for DB in hg18
+do
+    hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from ensGene" ${DB} \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /scratch/tmp/${DB}.tmp.gz
+    mv /scratch/tmp/${DB}.tmp.gz genes/$DB.gp.gz
+    echo "${DB} done"
+done
+    ls -og genes
+# -rw-r--r--  1 1865308 May  2 13:10 canFam2.gp.gz
+# -rw-r--r--  1 1557911 May  2 13:10 galGal3.gp.gz
+# -rw-r--r--  1 2008806 May  2 13:09 hg18.gp.gz
+# -rw-r--r--  1 1965274 May  2 13:09 mm9.gp.gz
+# -rw-r--r--  1 1347330 May  2 13:10 ornAna1.gp.gz
+
+after switching hg18 => ensGene:
+
+# -rw-r--r--  1 2151412 May  6 14:46 genes/hg18.gp.gz
+
+    ssh kkstore04
+    cd /cluster/data/equCab2/bed/multiz6way/frames
+    time (cat  ../maf/*.maf | nice -n +19 genePredToMafFrames equCab2 stdin stdout canFam2 genes/canFam2.gp.gz hg18 genes/hg18.gp.gz  \
+        mm9 genes/mm9.gp.gz galGal3 genes/galGal3.gp.gz ornAna1 genes/ornAna1.gp.gz | gzip > multiz6way.mafFrames.gz) > frames.log 2>&1
+
+    # see what it looks like in terms of number of annotations per DB:
+    zcat multiz6way.mafFrames.gz | cut -f4 | sort | uniq -c | sort -n
+# 35858 galGal3
+# 236512 mm9
+# 236761 hg18
+# 249158 canFam2
+# 252980 ornAna1
+
+    redo with changed hg18:
+
+    ssh kkstore04
+    cd /cluster/data/equCab2/bed/multiz6way/frames
+    time (cat  ../maf/*.maf | nice -n +19 genePredToMafFrames equCab2 stdin stdout canFam2 genes/canFam2.gp.gz hg18 genes/hg18.gp.gz  \
+        mm9 genes/mm9.gp.gz galGal3 genes/galGal3.gp.gz ornAna1 genes/ornAna1.gp.gz | gzip > multiz6way.mafFrames.gz) > frames.log 2>&1
+
+    # see what it looks like in terms of number of annotations per DB:
+    zcat multiz6way.mafFrames.gz | cut -f4 | sort | uniq -c | sort -n
+# 35858 galGal3
+# 236512 mm9
+# 249158 canFam2
+# 252980 ornAna1
+# 254414 hg18
+
+    #	load the resulting file
+    ssh hgwdev
+    cd /cluster/data/equCab2/bed/multiz6way/frames
+    time /bin/nice -n 19 hgLoadMafFrames equCab2 multiz6wayFrames multiz6way.mafFrames.gz
+    7.176u 0.735s 0:17.24 45.8%	0+0k 0+0io 2pf+0w
+
+    #	enable the trackDb entries:
+# frames multiz6wayFrames
+# irows on
+
+#############################################################################
+# phastCons 6-way (DONE - 2008-05-09 - larrym)
+
+    # split 6way mafs into 10M chunks and generate sufficient statistics 
+    # files for # phastCons
+    ssh kki
+    mkdir /cluster/data/equCab2/bed/multiz6way/msa.split
+    cd /cluster/data/equCab2/bed/multiz6way/msa.split
+    mkdir -p /san/sanvol1/scratch/equCab2/multiz6way/cons/ss
+
+    cat << '_EOF_' > doSplit.csh
+#!/bin/csh -ef
+set MAFS = /cluster/data/equCab2/bed/multiz6way/maf
+set WINDOWS = /san/sanvol1/scratch/equCab2/multiz6way/cons/ss
+pushd $WINDOWS
+set c = $1
+rm -fr $c
+mkdir $c
+twoBitToFa -seq=$c /scratch/data/equCab2/equCab2.2bit /scratch/tmp/equCab2.$c.fa
+# need to truncate odd-ball scaffold/chrom names that include dots
+# as phastCons utils can't handle them
+set CLEAN_MAF = /scratch/tmp/$c.clean.maf.$$
+perl -wpe 's/^s ([^.]+\.[^. ]+)\.\S+/s $1/' $MAFS/$c.maf > $CLEAN_MAF
+/cluster/bin/phast/$MACHTYPE/msa_split $CLEAN_MAF -i MAF \
+    -M /scratch/tmp/equCab2.$c.fa \
+    -o SS -r $c/$c -w 10000000,0 -I 1000 -B 5000
+rm -f $CLEAN_MAF /scratch/tmp/equCab2.$c.fa
+popd
+date >> $c.done
+'_EOF_'
+    # << happy emacs
+    chmod +x doSplit.csh
+
+    cat << '_EOF_' > template
+#LOOP
+doSplit.csh $(root1) {check out line+ $(root1).done}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    #	do the easy ones first to see some immediate results
+    ls -1S -r ../maf | sed -e "s/.maf//" > maf.list
+
+    gensub2 maf.list single template jobList
+    para create jobList
+    para try ... check ... etc
+# Completed: 34 of 34 jobs
+# CPU time in finished jobs:       1600s      26.66m     0.44h    0.02d  0.000 y
+# IO & Wait Time:                  1183s      19.72m     0.33h    0.01d  0.000 y
+# Average job time:                  82s       1.36m     0.02h    0.00d
+# Longest finished job:             241s       4.02m     0.07h    0.00d
+# Submission to last job:           418s       6.97m     0.12h    0.00d
+
+    # take the cons and noncons trees from the mouse 30-way
+
+    #	Estimates are not easy to make, probably more correctly,
+    #	take the 30-way .mod file, and re-use it here.
+    ssh hgwdev
+    cd /cluster/data/equCab2/bed/multiz6way
+    cp -p /cluster/data/mm9/bed/multiz30way/mm9.30way.mod .
+
+    # Run phastCons
+    #	This job is I/O intensive in its output files, thus it is all
+    #	working over in /scratch/tmp/
+    ssh memk
+    mkdir -p /cluster/data/equCab2/bed/multiz6way/cons/run.cons
+    cd /cluster/data/equCab2/bed/multiz6way/cons/run.cons
+
+    #	there are going to be several different phastCons runs using
+    #	this same script.  They trigger off of the current working directory
+    #	$cwd:t which is the "grp" in this script.  It is one of:
+    #	all gliers placentals
+    #	Well, that's what it was when used in the Mm9 30-way,
+    #	in this instance, there is only the directory "all"
+
+    cat << '_EOF_' > doPhast.csh
+#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2007-05-04/bin
+set subDir = $1
+set f = $2
+set c = $2:r
+set len = $3
+set cov = $4
+set rho = $5
+set grp = $cwd:t
+set tmp = /scratch/tmp/$f
+set cons = /cluster/data/equCab2/bed/multiz6way/cons
+mkdir -p $tmp
+set san = /san/sanvol1/scratch/equCab2/multiz6way/cons
+if (-s $cons/$grp/$grp.non-inf) then
+  cp -p $cons/$grp/$grp.mod $cons/$grp/$grp.non-inf $tmp
+  cp -p $san/ss/$subDir/$f.ss $cons/$grp/$grp.mod $cons/$grp/$grp.non-inf $tmp
+else
+  cp -p $cons/$grp/$grp.mod $tmp
+  cp -p $san/ss/$subDir/$f.ss $cons/$grp/$grp.mod $tmp
+endif
+pushd $tmp > /dev/null
+if (-s $grp.non-inf) then
+  $PHASTBIN/phastCons $f.ss $grp.mod \
+    --rho $rho --expected-length $len --target-coverage $cov --quiet \
+    --not-informative `cat $grp.non-inf` \
+    --seqname $c --idpref $c --most-conserved $f.bed --score > $f.pp
+else
+  $PHASTBIN/phastCons $f.ss $grp.mod \
+    --rho $rho --expected-length $len --target-coverage $cov --quiet \
+    --seqname $c --idpref $c --most-conserved $f.bed --score > $f.pp
+endif
+popd > /dev/null
+mkdir -p $san/$grp/pp/$subDir $san/$grp/bed/$subDir
+sleep 4
+touch $san/$grp/pp/$subDir $san/$grp/bed/$subDir
+rm -f $san/$grp/pp/$subDir/$f.pp
+rm -f $san/$grp/bed/$subDir/$f.bed
+mv $tmp/$f.pp $san/$grp/pp/$subDir
+mv $tmp/$f.bed $san/$grp/bed/$subDir
+rm -fr $tmp
+'_EOF_'
+    # << happy emacs
+    chmod a+x doPhast.csh
+
+    cat << '_EOF_' > template
+#LOOP
+../doPhast.csh $(root1) $(file1) 45 .3 .31 {check out line+ /san/sanvol1/scratch/equCab2/multiz6way/cons/all/pp/$(root1)/$(file1).pp}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    # Create parasol batch and run it
+    pushd /san/sanvol1/scratch/equCab2/multiz6way/cons
+    find ./ss -type f -name "*.ss" | sed -e "s#^./##; s/.ss$//" > /cluster/data/equCab2/bed/multiz6way/cons/ss.list
+    popd
+
+    # run for all species
+    cd ..
+    mkdir -p all run.cons/all
+    cd all
+
+    /cluster/bin/phast.build/cornellCVS/phast.2007-05-04/bin/tree_doctor \
+    ../../mm9.30way.mod \
+--prune-all-but=equCab1,hg18,galGal3,mm9,canFam2,ornAna1 \
+	> all.mod
+    # edit all.mod to s/equCab2/equCab1/;    
+    # TREE: ((((mm9:0.325818,hg18:0.136019):0.019763,(canFam2:0.149350,equCab2:0.099323):0.038613):0.332197,ornAna1:0.488110):0.118797,galGal3:0.488824);
+
+    cd ../run.cons/all
+    #	root1 == chrom name, file1 == ss file name without .ss suffix
+    # Create template file for "all" run
+    cat << '_EOF_' > template
+#LOOP
+../doPhast.csh $(lastDir1) $(file1) 45 .3 .31 {check out line+ /san/sanvol1/scratch/equCab2/multiz6way/cons/all/pp/$(lastDir1)/$(file1).pp}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+    gensub2 ../../ss.list single template jobList
+    para create jobList
+    para try ... check ... push ... etc.
+# Completed: 268 of 268 jobs
+# CPU time in finished jobs:       8054s     134.23m     2.24h    0.09d  0.000 y
+# IO & Wait Time:                  2459s      40.98m     0.68h    0.03d  0.000 y
+# Average job time:                  39s       0.65m     0.01h    0.00d
+# Longest finished job:              52s       0.87m     0.01h    0.00d
+# Submission to last job:           543s       9.05m     0.15h    0.01d
+
+    # create Most Conserved track
+    ssh kolossus
+    cd /san/sanvol1/scratch/equCab2/multiz6way/cons/all
+    time nice -n +19 cat bed/*/chr*.bed | sort -k1,1 -k2,2n | \
+        awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' | \
+            /cluster/bin/scripts/lodToBedScore /dev/stdin > mostConserved.bed
+    #	~ 1 minute
+    cp -p mostConserved.bed /cluster/data/equCab2/bed/multiz6way/cons/all
+
+    # load into database
+    ssh hgwdev
+    cd /cluster/data/equCab2/bed/multiz6way/cons/all
+    time /bin/nice -n 19 hgLoadBed equCab2 phastConsElements6way mostConserved.bed
+    # 3.212u 0.439s 0:22.68 16.0%	0+0k 0+0io 0pf+0w
+    # Loaded 1036081 elements of size 5
+
+    # Try for 5% overall cov, and 70% CDS cov 
+    #	We don't have any gene tracks to compare CDS coverage
+    #	--rho .31 --expected-length 45 --target-coverage .3
+    featureBits equCab2 phastConsElements6way
+    # 134628278 bases of 2454424288 (5.485%) in intersection
+
+    # Create merged posterier probability file and wiggle track data files
+    # currently doesn't matter where this is performed, the san is the same
+    # network distance from all machines.
+    # sort by chromName, chromStart so that items are in numerical order 
+    #  for wigEncode
+    cd /san/sanvol1/scratch/equCab2/multiz6way/cons/all
+    mkdir -p phastCons6wayScores
+
+    cat << '_EOF_' > gzipAscii.sh
+#!/bin/sh
+
+TOP=`pwd`
+export TOP
+
+for D in pp/chr*
+do
+    C=${D/pp\/}
+    out=phastCons6wayScores/${C}.data.gz
+    echo "${D} > ${C}.data.gz"
+    ls $D/*.pp | sort -n -t\. -k2 | xargs cat | \
+	gzip > ${out}
+done
+'_EOF_'
+    chmod +x gzipAscii.sh
+    time /bin/nice -n 19 ./gzipAscii.sh
+    1244.107u 83.541s 22:46.45 97.1%	0+0k 0+0io 0pf+0w
+    # rereun to fix corrupted file
+    1310.778u 34.480s 22:56.12 97.7%	0+0k 0+0io 0pf+0w
+
+    # XXXX NOT DONE YET
+    # copy the phastCons8wayScores to:
+    # /cluster/data/equCab2/bed/multiz6way/downloads/phastCons6way/phastConsScores
+    #	for hgdownload downloads
+
+    # Create merged posterier probability file and wiggle track data files
+    # currently doesn't matter where this is performed, the san is the same
+    # network distance from all machines.
+    cd /san/sanvol1/scratch/equCab2/multiz6way/cons/all
+    time /bin/nice -n 19 ls phastCons6wayScores/*.data.gz | xargs zcat | wigEncode -noOverlap stdin phastCons6way.wig phastCons6way.wib
+
+    # Converted stdin, upper limit 1.00, lower limit 0.00
+    #	real    23m55.813s
+
+    time /bin/nice -n 19 cp -p *.wi? /cluster/data/equCab2/bed/multiz6way/cons/all
+    # 0.010u 10.862s 0:49.38 22.0%	0+0k 0+0io 0pf+0w
+
+    # Load gbdb and database with wiggle.
+    ssh hgwdev
+    cd /cluster/data/equCab2/bed/multiz6way/cons/all
+    ln -s `pwd`/phastCons6way.wib /gbdb/equCab2/multiz6way/phastCons6way.wib
+    time /bin/nice -n 19 hgLoadWiggle -pathPrefix=/gbdb/equCab2/multiz6way equCab2 phastCons6way phastCons6way.wig
+    # 12.758u 3.986s 0:42.43 39.4%	0+0k 0+0io 2pf+0w
+
+    #  Create histogram to get an overview of all the data
+    ssh hgwdev
+    cd /cluster/data/equCab2/bed/multiz6way/cons/all
+    time /bin/nice -n 19 hgWiggle -doHistogram \
+	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+	    -db=equCab2 phastCons6way > histogram.data 2>&1
+    # real	3m29.727s
+
+    cat << '_EOF_' > gnuplot.txt
+set terminal png small color x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Horse EquCab2 Histogram phastCons6way track"
+set xlabel " phastCons6way score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.02]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+
+    gnuplot < gnuplot.txt > histo.png
+
 
 #############################################################################
 # N-SCAN gene predictions (nscanGene) - (2008-04-29 markd)
