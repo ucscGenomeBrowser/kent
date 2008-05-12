@@ -165,7 +165,7 @@ void cgiMakeOnClickRadioButton(char *name, char *value, boolean checked,
 void cgiMakeCheckBoxUtil(char *name, boolean checked, char *msg, char *id);
 /* Make check box - designed to be called by the variously overloaded
  * cgiMakeCheckBox functions, but can also be called directly.
- * msg: mousever msg (may be NULL)
+ * msg: mouseover msg (may be NULL)
  * id: button id (may be NULL)
  * Also make a shadow hidden variable so we
  * can distinguish between variable not present and

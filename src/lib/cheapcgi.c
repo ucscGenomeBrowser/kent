@@ -13,7 +13,7 @@
 #include "mime.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.98 2008/04/19 00:11:06 larrym Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.99 2008/05/12 22:11:39 larrym Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -989,7 +989,7 @@ return cgiVarExists(buf);
 void cgiMakeCheckBoxUtil(char *name, boolean checked, char *msg, char *id)
 /* Make check box - designed to be called by the variously overloaded
  * cgiMakeCheckBox functions, but can also be called directly.
- * msg: mousever msg (may be NULL)
+ * msg: mouseover msg (may be NULL)
  * id: button id (may be NULL)
  * Also make a shadow hidden variable so we
  * can distinguish between variable not present and
