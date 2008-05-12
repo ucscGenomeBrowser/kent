@@ -104,7 +104,7 @@ name dnaSeqs
 shortLabel DNA Sequences
 longLabel DNA Sequence IDs 
 priority 14
-visibility off
+visibility on
 type string
 query select dnaSeqIds from gsidSubjSeq where subjId='%s';
 
@@ -112,7 +112,7 @@ name aaSeqs
 shortLabel Protein Sequences
 longLabel Protein Sequence IDs 
 priority 14.5
-visibility off
+visibility on
 type string
 query select aaSeqIds from gsidSubjSeq where subjId='%s';
 
