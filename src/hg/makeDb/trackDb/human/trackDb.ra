@@ -700,7 +700,7 @@ type bed 9 +
 noScoreFilter .
 exonArrows off
 urlLabel DGV Browser and Report: 
-url http://projects.tcag.ca/variation/cgi-bin/tbrowse/xview?source=$D&view=variation&id=$$
+url http://projects.tcag.ca/variation/cgi-bin/tbrowse/xview?source=$D&view=variation&id=Variation_$$
 
 track jaxQtlMapped
 compositeTrack on
