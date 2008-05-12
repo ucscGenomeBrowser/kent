@@ -23,6 +23,7 @@ group map
 priority 40
 visibility hide
 color 12,52,200
+indelQueryInsert on
 selectSubject on
 maxItems 2000
 type psl
