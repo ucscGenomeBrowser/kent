@@ -1,3 +1,4 @@
+
 # for emacs: -*- mode: sh; -*-
 
 
@@ -2457,4 +2458,66 @@ TMPDIR=/scratch/tmp
     cat fb.braFlo1.chainGalGal3Link.txt
     #	30287175 bases of 923355587 (3.280%) in intersection
 
-###########################################################################
+#############################################################################
+# BLASTZ/CHAIN/NET equCab2 (DONE - 2008-04-18 - larrym)
+    ssh kkstore04
+    screen #	use screen to control this multi-day job
+    mkdir /cluster/data/galGal3/bed/blastz.equCab2.2008-04-18
+    cd /cluster/data/galGal3/bed/blastz.equCab2.2008-04-18
+    cat << '_EOF_' > DEF
+# Chicken vs. Horse
+
+BLASTZ_M=50
+
+# TARGET: Chicken calGal3
+SEQ1_DIR=/scratch/data/galGal3/nib
+SEQ1_LEN=/cluster/data/galGal3/chrom.sizes 
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Horse
+SEQ2_DIR=/scratch/data/equCab2/equCab2.2bit
+SEQ2_LEN=/cluster/data/equCab2/chrom.sizes
+SEQ2_CTGDIR=/san/sanvol1/scratch/equCab2/equCab2.UnScaffolds.2bit
+SEQ2_CTGLEN=/san/sanvol1/scratch/equCab2/equCab2.UnScaffolds.sizes
+SEQ2_LIFT=/cluster/data/equCab2/jkStuff/equCab2.chrUn.lift
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=100
+SEQ2_LAP=0
+
+BASE=/cluster/data/galGal3/bed/blastz.equCab2.2008-04-18
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time doBlastzChainNet.pl `pwd`/DEF \
+	-verbose=2 -bigClusterHub=pk  \
+      -chainMinScore=3000 -chainLinearGap=medium \
+      -blastzOutRoot /cluster/bluearc/equCab2/blastz.galGal3 >& do.log &
+
+failed b/c para.results got currupted:
+
+    para recover jobList recoverJobList
+    para create recoverJobList
+    Checking input files
+    0 jobs written to batch
+
+so all jobs had successfully completed.
+
+Generate run.time file manually:
+
+    time doBlastzChainNet.pl `pwd`/DEF -continue=cat \
+	-verbose=2 -bigClusterHub=pk  \
+      -chainMinScore=3000 -chainLinearGap=medium \
+      -blastzOutRoot /cluster/bluearc/equCab2/blastz.galGal3 >>& do.log &
+
+but the batch file has disappeared ... I just decided to remove the psl
+files and re-run from scratch:
+
+    time doBlastzChainNet.pl `pwd`/DEF \
+	-verbose=2 -bigClusterHub=pk  \
+      -chainMinScore=3000 -chainLinearGap=medium \
+      -blastzOutRoot /cluster/bluearc/equCab2/blastz.galGal3 >& do.log &
+0.248u 0.190s 6:10:43.78 0.0%   0+0k 0+0io 26pf+0w
+
+    ln -s blastz.equCab2.2008-04-18 /cluster/data/galGal3/bed/blastz.equCab2
