@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.14 2008/05/01 23:45:19 angie Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.15 2008/05/12 20:53:00 hiram Exp $";
 
 void wikiTrackStaticLoad(char **row, struct wikiTrack *ret)
 /* Load a row from wikiTrack table into ret.  The contents of ret will
@@ -605,18 +605,26 @@ void displayComments(struct wikiTrack *item)
 /* display the rendered comments for this item */
 {
 char *url = cfgOptionDefault(CFG_WIKI_URL, NULL);
-char *comments = fetchWikiRenderedText(item->descriptionKey);
 
-hPrintf("<B>Description and comments from the "
-  "<A HREF=\"%s/index.php/%s\" TARGET=_blank>wiki article:</A> %s:</B><BR>\n",
+hPrintf("<B>Description and comments from the wiki article "
+  "<A HREF=\"%s/index.php/%s\" TARGET=_blank>%s:</B></A><BR>\n",
        url, item->descriptionKey, item->descriptionKey);
 
+/* the nbsp is displayed if the browser does not honor the frame tag */
+hPrintf("<P>\n<IFRAME SRC='%s/index.php/%s?action=render'\n"
+	" style='width:800px;height:600px;' frameborder='1'\n"
+	" scrolling='yes' marginwidth='5' marginheight='5'\n"
+	"&nbsp;</IFRAME>\n</P>\n", url, item->descriptionKey);
+
+#ifdef NOT
+char *comments = fetchWikiRenderedText(item->descriptionKey);
 if (comments && (strlen(comments) > 2))
     {
     hPrintf("\n%s\n", comments);
     }
 else
     hPrintf("\n(no comments for this item at the current time)<BR>\n");
+#endif
 }
 
 struct htmlPage *fetchEditPage(char *descriptionKey)
