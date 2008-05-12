@@ -13,6 +13,7 @@ longLabel VAX004 HIV-1 gp120 Sequences
 group map
 priority 40
 visibility hide
+indelQueryInsert on
 color 12,52,200
 selectSubject on
 maxItems 2000
