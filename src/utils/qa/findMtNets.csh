@@ -24,6 +24,7 @@ if ($#argv != 2) then
   echo "    usage:  database fileOfOtherDbNames"
   echo
   echo "    note:  expects db.net.OtherOrg output from chainNetTrio down one directory"
+  echo "           though not necessarily in the same directory"
   echo
   exit
 else
