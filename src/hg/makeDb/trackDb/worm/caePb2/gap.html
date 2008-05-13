@@ -1,12 +1,6 @@
 <H2>Description</H2>
 This track depicts gaps in the assembly.
 
-  *** Developer: remove this statement if no future assemblies are expected:
-
-Many of these gaps &mdash; with the
-exception of intractable heterochromatic gaps &mdash; may be closed during the
-finishing process.
-
 <P>
 Gaps are represented as black boxes in this track.
 If the relative order and orientation of the contigs on either side
@@ -14,50 +8,35 @@ of the gap is supported by read pair data,
 it is a <em>bridged</em> gap and a white line is drawn 
 through the black box representing the gap. 
 </P>
-<P>This assembly contains the following principal types of gaps:
+<P>This assembly contains the following two types of gaps:
 <UL>
 
-  *** Developer: make sure this part is accurate.  Here is a WUSTL template:
-
-<LI><B>Fragment</B> - gaps between the Whole Genome Shotgun contigs of a 
-supercontig.  (In this context, a contig is a set of overlapping sequence reads.  
-A supercontig is a set of contigs ordered and oriented during the 
+<LI><B>fragment</B> - gaps between the Whole Genome Shotgun contigs of a 
+supercontig/scaffold.  (In this context, a contig is a set of
+overlapping sequence reads.  
+A supercontig/scaffold is a set of contigs ordered and oriented during the 
 Whole Genome Shotgun process using paired-end reads.)
 These are represented by varying numbers of <em>N</em>s  in the assembly.  
 Fragment gap sizes are usually taken from read pair data.  
-<LI><B>Clone</B> - gaps between supercontigs linked by the fingerprint map.  
-In general, these are represented by 10,000 <em>N</em>s  in the assembly.
-<LI><B>Contig</B> - gaps between supercontigs not linked by the fingerprint 
-map, but instead by marker data.  (In this context, the &quot;Contig&quot; gap 
-type refers to a map contig, not a sequence contig.)  
-In general, these are represented by 10,000 <em>N</em>s  in the assembly for all 
-chromosomes except chrUn (concatenation of unplaced supercontigs), where 
-gaps of 1,000 <em>N</em>s  are used.  Gaps of other sizes were used when mRNA or 
-other data suggested possible but not confirmed links between supercontigs.
-<LI><B>Centromere</B> - gaps for centromeres were included when they could be 
-reasonably localized.  These are represented by 1,500,000 <em>N</em>s  in the 
-assembly for the macrochromosomes 1-10 and Z, and by 500,000 <em>N</em>s  for 
-all others (microchromosomes).  
-
-  *** Developer: here is a Broad template:
-
-<LI><B>Fragment</B> - gaps between the Whole Genome Shotgun contigs of a 
-supercontig. These are represented by varying numbers of <em>N</em>s in the 
-assembly. In this context, a contig is a set of overlapping sequence reads and  
-a supercontig is a set of contigs ordered and oriented during the 
-Whole Genome Shotgun process using paired-end reads. Fragment gap sizes 
-are usually taken from read pair data.  
-</LI>
-<LI><B>Clone</B> - gaps between supercontigs linked by the physical map.  
-In general, these are represented by 1,000 <em>N</em>s  in the assembly.  
-
-*** Developer: look for this kind of gap placement:
-
-Clone gaps of 3,000,000 have been placed at the end of chrX and at the 
-beginning of all other chromosomes.  
-</LI>
-
-
+<LI><B>scaffold</B> - gaps between supercontigs not linked by the fingerprint 
+map.  These are represented by 1,000 <em>N</em>s in the assembly of
+the artifical chromosome chrUn (concatenation of unplaced supercontigs).
 </UL></P>
 
-
+<H2>Credits</H2>
+<P>
+The Apr. 2008 <em>Caenorhabditis brenneri</em>
+(aka: <em>Caenorhabditis</em> n. sp. 4. PB2801) assembly
+produced by
+    <A HREF="http://genome.wustl.edu/genome.cgi?GENOME=Caenorhabditis%20brenneri"
+TARGET=_blank>
+Washington University School of Medicine GSC</A> with the following
+<A HREF="http://genome.wustl.edu/data.cgi" TARGET=_blank>data usage policy.</A>
+</P>
+<P>
+As described at WormBase: "This is a 20X inbred (one gravid female per generation) derivative of LKC28, which is conspecific with CB5161."  Recently renamed
+to <em>C. brenneri</em>.  Other conspecific strains: SB129, SB280.  See also:
+<A HREF="http://www.mapress.com/zootaxa/2007f/zt01456p062.pdf"
+	TARGET=_blank>Zootaxa 1456: 45-62 (25 Apr. 2007)</A>,
+	 Walter Sudhaus and Karin Kiontke.
+</P>
