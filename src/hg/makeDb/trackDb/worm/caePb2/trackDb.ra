@@ -1,9 +1,9 @@
 # Local declaration so that local gold.html is picked up.
 track gold
-shortLabel Assembly
-longLabel Assembly from Fragments
+shortLabel Scaffolds
+longLabel Assembly Scaffolds (Supercontigs)
 group map
-priority 10
+priority 9
 visibility hide
 color 150,100,30
 altColor 230,170,40
