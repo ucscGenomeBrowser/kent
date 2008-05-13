@@ -348,5 +348,34 @@ do1 vax004Msa
     cp -p chr1.maf /gbdb/hivmn2/vax003BAaMaf
     hgLoadMaf hivmn2 vax003BAaMaf
 
+#########################################################################
+# CREATE VAX003 TRACK	(Done 5/13/08, Fan) 
 
+    cd ~/medical/hiv/hivmn2
+
+# get vax003 sequences
+    hgsql hivmn2 -N -e 'select * from dnaSeq where id like "%T%"' >vax003.tab
+
+# create .fa file
+    tabToFa vax003
+
+    mkdir -p /gbdb/hivmn2/vax003
+    cp -p vax003.fa /gbdb/hivmn2/vax003/vax003.fa
+
+    hgLoadSeq -replace hivmn2 /gbdb/hivmn2/vax003/vax003.fa
+
+# BLAT
+    gfClient -minScore=200 -minIdentity=70 -nohead hiv1.cse.ucsc.edu 17793 \
+    /gbdb/hivmn2/nib -out=psl -t=dna -q=dna vax003.fa vax003.psl
+
+# count the result
+    wc *.psl
+    cut -f 10 vax003.psl |wc
+    cut -f 10 vax003.psl |sort -u |wc
+
+# load the psl result into vax003 table
+    hgLoadPsl hivmn2 vax003.psl
+
+# hgLoadPsl has some file permission problem.  Finish this by manually load the psl.tab file.
+    hgsql hivmn2 -e 'load data local infile "psl.tab" into table vax003'
 
