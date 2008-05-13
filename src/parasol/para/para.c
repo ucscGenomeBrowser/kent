@@ -16,7 +16,7 @@
 #include "verbose.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: para.c,v 1.84 2008/05/10 00:12:40 galt Exp $";
+static char const rcsid[] = "$Id: para.c,v 1.85 2008/05/13 07:38:48 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -556,6 +556,7 @@ void atomicWriteBatch(struct jobDb *db, char *fileName)
 {
 char hostName[128];
 char tmpName[PATH_LEN];
+long time = clock1000();
 
 /* generate a unique name for tmp file */
 if (gethostname(hostName, sizeof(hostName)) < 0)
@@ -570,6 +571,7 @@ if (rename(tmpName, fileName) < 0)
     errnoAbort("can't rename %s to %s", tmpName, fileName);
 
 writeBookMark();
+verbose(2, "atomicWriteBatch time: %.2f seconds\n", (clock1000() - time) / 1000.0);
 }
 
 struct jobDb *readBatch(char *batch)
@@ -579,6 +581,7 @@ struct jobDb *db;
 struct job *job;
 struct lineFile *lf = lineFileOpen(batch, TRUE);
 char *line;
+long time = clock1000();
 
 AllocVar(db);
 while (lineFileNext(lf, &line, NULL))
@@ -593,6 +596,7 @@ while (lineFileNext(lf, &line, NULL))
 lineFileClose(&lf);
 slReverse(&db->jobList);
 verbose(1, "%d jobs in batch\n", db->jobCount);
+verbose(2, "readBatch time: %.2f seconds\n", (clock1000() - time) / 1000.0);
 return db;
 }
 
@@ -884,6 +888,8 @@ long warnSeconds = warnTime*60;
 long duration;
 time_t now = time(NULL);
 
+long time = clock1000();
+
 /* Get job list from paraHub. */
 if (getcwd(curDir, sizeof(curDir)) == NULL)
     errAbort("Couldn't get current directory");
@@ -892,6 +898,8 @@ struct dyString *dy = newDyString(1024);
 dyStringPrintf(dy, "pstat2 %s %s/%s", getUser(), curDir, resultsName);
 struct slRef *lineList = hubMultilineQuery(dy->string), *lineEl;
 dyStringFree(&dy);
+
+verbose(2, "pstat2 time: %.2f seconds\n", (clock1000() - time) / 1000.0);
 
 /* Make hash of submissions based on id and clear flags. */
 for (job = db->jobList; job != NULL; job = job->next)
@@ -969,12 +977,14 @@ for (lineEl = lineList; lineEl != NULL; lineEl = lineEl->next)
     }
 slFreeList(&lineList);
 freeHash(&hash);
+verbose(2, "markQueuedJobs time (includes pstat2): %.2f seconds\n", (clock1000() - time) / 1000.0);
 return queueSize;
 }
 
 struct hash *hashResults(char *fileName)
 /* Return hash of job results keyed on id as string. */
 {
+long time = clock1000();
 struct hash *hash = newHash(0);
 if (fileExists(fileName))
     {
@@ -982,6 +992,7 @@ if (fileExists(fileName))
     for (el = list; el != NULL; el = el->next)
 	hashAdd(hash, el->jobId, el);
     }
+verbose(2, "hashResults time: %.2f seconds\n", (clock1000() - time) / 1000.0);
 return hash;
 }
 
@@ -1034,6 +1045,7 @@ struct job *job;
 struct submission *sub;
 struct hash *checkHash = newHash(0);
 struct hash *resultsHash = hashResults(resultsName);
+long time = clock1000();
 
 verbose(1, "Checking finished jobs\n");
 beginHappy();
@@ -1073,6 +1085,7 @@ for (job=db->jobList; job != NULL; job = job->next)
     }
 endHappy();
 freeHash(&checkHash);
+verbose(2, "markRunJobStatus time (includes hashResults): %.2f seconds\n", (clock1000() - time) / 1000.0);
 return resultsHash;
 }
 
@@ -1933,6 +1946,7 @@ int main(int argc, char *argv[])
 {
 char *command;
 char *batch;
+long startTime = clock1000();
 
 optionInit(&argc, argv, optionSpecs);
 if (argc < 2)
@@ -2080,5 +2094,9 @@ else
     errAbort("Unrecognized command '%s'.  Run para with no arguments for usage summary", 
     	command);
     }
+
+verbose(2, "Total para time: %.2f seconds\n", (clock1000() - startTime) / 1000.0);
+
 return 0;
 }
+

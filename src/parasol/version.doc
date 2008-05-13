@@ -105,3 +105,7 @@
      successfully processed, which means that the system can just read and
      process any new results without having to re-do the whole results file.
 
+     Added -verbose=2 elapsed time information about the major steps such as
+     reading the batch, fetching pstat info from hub about queued and running jobs,
+     reading para.results and hashing, and writing the batch.
+
