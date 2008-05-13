@@ -16,7 +16,7 @@
 #include "verbose.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: para.c,v 1.86 2008/05/13 21:41:41 galt Exp $";
+static char const rcsid[] = "$Id: para.c,v 1.87 2008/05/13 23:58:30 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -884,7 +884,11 @@ errAbort("\n%s output format changed, please update markQueuedJobs in para.c",
 int markQueuedJobs(struct jobDb *db)
 /* Mark jobs that are queued up. Return total number of jobs in queue. */
 {
-struct hash *hash = newHash(0);
+int hashSize = 12;
+while ((1<<(hashSize+4)) < db->jobCount)
+    ++hashSize;
+struct hash *hash = newHash(hashSize);
+
 struct job *job;
 struct submission *sub;
 int queueSize = 0;
@@ -910,6 +914,8 @@ verbose(2, "pstat2 time: %.2f seconds\n", (clock1000() - time) / 1000.0);
 
 long hashTime = clock1000();
 
+verbose(2, "submission hash size: %d\n", hash->size);
+
 /* Make hash of submissions based on id and clear flags. */
 for (job = db->jobList; job != NULL; job = job->next)
     {
@@ -920,6 +926,7 @@ for (job = db->jobList; job != NULL; job = job->next)
 	sub->inQueue = FALSE;
 	}
     }
+
 verbose(2, "submission hash time: %.2f seconds\n", (clock1000() - hashTime) / 1000.0);
 
 long pstatListTime = clock1000();
@@ -993,7 +1000,9 @@ for (lineEl = lineList; lineEl != NULL; lineEl = lineEl->next)
     freez(&lineEl->val);
     }
 verbose(2, "pstat list time: %.2f seconds\n", (clock1000() - pstatListTime) / 1000.0);
+
 slFreeList(&lineList);
+
 freeHash(&hash);
 verbose(2, "markQueuedJobs time (includes pstat2, hash, list): %.2f seconds\n", (clock1000() - time) / 1000.0);
 return queueSize;
