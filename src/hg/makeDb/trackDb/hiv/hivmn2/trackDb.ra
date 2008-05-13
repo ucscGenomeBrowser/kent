@@ -1,0 +1,242 @@
+track hivGene
+shortLabel Genes/Regions
+longLabel HIV Genes and Regions
+group genes
+priority 10
+visibility pack
+color 150,0,0
+type bed 4
+
+track vax003
+shortLabel VAX003
+longLabel VAX003 HIV-1 gp120 Sequences
+group map
+priority 39
+visibility hide
+color 12,52,200
+indelQueryInsert on
+selectSubject on
+maxItems 2000
+type psl
+
+track vax004
+shortLabel VAX004
+longLabel VAX004 HIV-1 gp120 Sequences
+group map
+priority 40
+visibility hide
+color 12,52,200
+indelQueryInsert on
+selectSubject on
+maxItems 2000
+type psl
+
+track interPro
+shortLabel InterPro
+longLabel InterPro Domains
+group genes
+priority 34.6
+visibility hide
+color 12,12,120
+type bed 4
+
+track vax003AECons
+shortLabel VAX003 AE Conservation
+longLabel VAX003 AE DNA Sequence Conservation
+group compGeno
+priority 23.11
+visibility full
+color 12,12,120
+maxHeightPixels 100:40:10
+autoScaleDefault Off
+graphTypeDefault Bar
+gridDefault OFF
+windowingFunction Mean
+altColor 128,128,128
+type wig 0 1
+
+track vax003AEAaCons
+shortLabel VAX003 AE Protein Conservation
+longLabel VAX003 AE Protein Sequence Conservation
+group compGeno
+priority 23.12
+visibility hide
+color 12,12,120
+maxHeightPixels 100:40:10
+autoScaleDefault Off
+graphTypeDefault Bar
+gridDefault OFF
+windowingFunction Mean
+altColor 128,128,128
+type wig 0 1
+
+track vax003AEMaf
+shortLabel VAX003 AE MSA
+longLabel VAX003 AE DNA Multiple Sequence Alignment
+group compGeno
+priority 23.13
+msaTable vax003AEMsa
+onlyVisibility full
+visibility full
+color 0, 10, 100
+altColor 0,90,10
+type wigMaf 0.0 1.0
+maxHeightPixels 100:50:10
+speciesCodonDefault hiv1
+itemFirstCharCase noChange
+maxItems 2000
+speciesUseFile gsidTable.gsidSeqList
+
+track vax003AEAaMaf
+shortLabel VAX003 AE Protein MSA
+longLabel VAX003 AE Protein Multiple Sequence Alignment
+group compGeno
+priority 23.14
+msaTable vax003AEMsa
+onlyVisibility full
+visibility hide
+color 0, 10, 100
+altColor 0,90,10
+type wigMafProt 0.0 1.0
+maxHeightPixels 100:50:10
+speciesCodonDefault hiv1
+itemFirstCharCase noChange
+maxItems 2000
+speciesUseFile gsidTable.gsidSeqList
+
+track vax003BCons
+shortLabel VAX003 B Conservation
+longLabel VAX003 B DNA Sequence Conservation
+group compGeno
+priority 23.21
+visibility full
+color 12,12,120
+maxHeightPixels 100:40:10
+autoScaleDefault Off
+graphTypeDefault Bar
+gridDefault OFF
+windowingFunction Mean
+altColor 128,128,128
+type wig 0 1
+
+track vax003BAaCons
+shortLabel VAX003 B Protein Conservation
+longLabel VAX003 B Protein Sequence Conservation
+group compGeno
+priority 23.22
+msaTable vax003BMsa
+visibility hide
+color 12,12,120
+maxHeightPixels 100:40:10
+autoScaleDefault Off
+graphTypeDefault Bar
+gridDefault OFF
+windowingFunction Mean
+altColor 128,128,128
+type wig 0 1
+
+track vax003BMaf
+shortLabel VAX003 B MSA
+longLabel VAX003 B DNA Multiple Sequence Alignment
+group compGeno
+priority 23.23
+msaTable vax003BMsa
+onlyVisibility full
+visibility hide
+color 0, 10, 100
+altColor 0,90,10
+type wigMaf 0.0 1.0
+maxHeightPixels 100:50:10
+speciesCodonDefault hiv1
+itemFirstCharCase noChange
+maxItems 2000
+speciesUseFile gsidTable.gsidSeqList
+
+track vax003BAaMaf
+shortLabel VAX003 B Protein MSA
+longLabel VAX003 B Protein Multiple Sequence Alignment
+group compGeno
+priority 23.24
+msaTable vax003BMsa
+onlyVisibility full
+visibility hide
+color 0, 10, 100
+altColor 0,90,10
+type wigMafProt 0.0 1.0
+maxHeightPixels 100:50:10
+speciesCodonDefault hiv1
+itemFirstCharCase noChange
+maxItems 2000
+speciesUseFile gsidTable.gsidSeqList
+
+track vax004Cons
+shortLabel VAX004 Conservation
+longLabel VAX004 DNA Sequence Conservation
+group compGeno
+priority 24.11
+visibility full
+color 12,12,120
+maxHeightPixels 100:40:10
+autoScaleDefault Off
+graphTypeDefault Bar
+gridDefault OFF
+windowingFunction Mean
+altColor 128,128,128
+type wig 0 1
+
+track vax004AaCons
+shortLabel VAX004 Protein Conservation
+longLabel VAX004 Protein Sequence Conservation
+group compGeno
+priority 24.12
+visibility hide
+color 12,12,120
+maxHeightPixels 100:40:10
+autoScaleDefault Off
+graphTypeDefault Bar
+gridDefault OFF
+windowingFunction Mean
+altColor 128,128,128
+type wig 0 1
+
+track vax004Maf
+shortLabel VAX004 MSA
+longLabel VAX004 DNA Multiple Sequence Alignment
+group compGeno
+priority 24.13
+msaTable vax004Msa
+onlyVisibility full
+visibility hide
+color 0, 10, 100
+altColor 0,90,10
+type wigMaf 0.0 1.0
+maxHeightPixels 100:50:10
+speciesCodonDefault hiv1
+itemFirstCharCase noChange
+maxItems 2000
+speciesUseFile gsidTable.gsidSeqList
+
+track vax004AaMaf
+shortLabel VAX004 Protein MSA
+longLabel VAX004 Protein Multiple Sequence Alignment
+group compGeno
+priority 24.14
+msaTable vax004Msa
+onlyVisibility full
+visibility hide
+color 0, 10, 100
+altColor 0,90,10
+type wigMafProt 0.0 1.0
+maxHeightPixels 100:50:10
+speciesCodonDefault hiv1
+itemFirstCharCase noChange
+maxItems 2000
+speciesUseFile gsidTable.gsidSeqList
+
+searchName hivGeneAcc
+searchTable hivGene
+searchMethod exact
+termRegex [A-Z0-9][A-Z0-9_\']+
+searchType bed
+searchPriority 4
+
