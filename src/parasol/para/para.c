@@ -16,7 +16,7 @@
 #include "verbose.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: para.c,v 1.85 2008/05/13 07:38:48 galt Exp $";
+static char const rcsid[] = "$Id: para.c,v 1.86 2008/05/13 21:41:41 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -623,6 +623,8 @@ struct slRef *hubMultilineQuery(char *query)
 struct slRef *list = NULL;
 struct rudp *ru = rudpMustOpen();
 struct paraMessage pm;
+char *row[256];
+int count = 0;
 pmInitFromName(&pm, "localhost", paraHubPort);
 if (!pmSendString(&pm, ru, query))
     noWarnAbort();
@@ -632,7 +634,12 @@ for (;;)
 	break;
     if (pm.size == 0)
 	break;
-    refAdd(&list, cloneString(pm.data));
+    count = chopByChar(pm.data, '\n', row, sizeof(row));
+    if (count > 1) --count;  /* for multiline, count is inflated by one */
+
+    int i;
+    for(i=0;i<count;++i)
+        refAdd(&list, cloneString(row[i]));
     }
 rudpClose(&ru);
 slReverse(&list);
@@ -901,6 +908,8 @@ dyStringFree(&dy);
 
 verbose(2, "pstat2 time: %.2f seconds\n", (clock1000() - time) / 1000.0);
 
+long hashTime = clock1000();
+
 /* Make hash of submissions based on id and clear flags. */
 for (job = db->jobList; job != NULL; job = job->next)
     {
@@ -911,7 +920,9 @@ for (job = db->jobList; job != NULL; job = job->next)
 	sub->inQueue = FALSE;
 	}
     }
+verbose(2, "submission hash time: %.2f seconds\n", (clock1000() - hashTime) / 1000.0);
 
+long pstatListTime = clock1000();
 
 /* Read status output. */
 for (lineEl = lineList; lineEl != NULL; lineEl = lineEl->next)
@@ -921,9 +932,9 @@ for (lineEl = lineList; lineEl != NULL; lineEl = lineEl->next)
     char *row[6];
     if (startsWith("Total Jobs:", line))
 	{
-	verbose(1, "%d jobs (including everybody's) in Parasol queue.\n", queueSize);
         wordCount = chopLine(line, row);
 	queueSize = atoi(row[2]);
+	verbose(1, "%d jobs (including everybody's) in Parasol queue.\n", queueSize);
 	freez(&lineEl->val);
 	continue;
 	}
@@ -935,15 +946,21 @@ for (lineEl = lineList; lineEl != NULL; lineEl = lineEl->next)
 	continue;
 	}
     wordCount = chopLine(line, row);
-    if (wordCount < 6)
+    if (wordCount < 6 && wordCount != 2)
 	{
-	warn("Expecting at least 6 words in pstat2 output. paraHub and para out of sync.");
+	warn("Expecting at least 6 words in pstat2 output,"
+	     " found %d. paraHub and para out of sync.", wordCount);
 	statusOutputChanged();
 	}
     else
 	{
-	char *state = row[0], *jobId = row[1], *ticks = row[4], *host = row[5];
-	time_t t = atol(ticks);
+	char *state = row[0], *jobId = row[1], *ticks = NULL, *host = NULL;
+	time_t t = 0;
+	if (wordCount > 2)
+	    {
+    	    ticks = row[4], host = row[5];
+    	    t = atol(ticks);
+	    }
 	if ((sub = hashFindVal(hash, jobId)) != NULL)
 	    {
 	    if (sameString(state, "r"))
@@ -975,9 +992,10 @@ for (lineEl = lineList; lineEl != NULL; lineEl = lineEl->next)
 	}
     freez(&lineEl->val);
     }
+verbose(2, "pstat list time: %.2f seconds\n", (clock1000() - pstatListTime) / 1000.0);
 slFreeList(&lineList);
 freeHash(&hash);
-verbose(2, "markQueuedJobs time (includes pstat2): %.2f seconds\n", (clock1000() - time) / 1000.0);
+verbose(2, "markQueuedJobs time (includes pstat2, hash, list): %.2f seconds\n", (clock1000() - time) / 1000.0);
 return queueSize;
 }
 
@@ -1100,6 +1118,9 @@ return sub->submitError || sub->queueError || sub->crashed || sub->trackingError
 struct jobDb *paraCycle(char *batch)
 /* Cycle forward through batch.  Return database. */
 {
+
+verbose(1, "================\n");
+
 struct jobDb *db = readBatch(batch);
 struct job *job;
 int queueSize;
@@ -1107,6 +1128,7 @@ int pushCount = 0, retryCount = 0;
 int tryCount;
 boolean finished = FALSE;
 char curDir[512];
+long time = clock1000();
 
 if (getcwd(curDir, sizeof(curDir)) == NULL)
     errAbort("Couldn't get current directory");
@@ -1157,6 +1179,7 @@ if (pushCount > 0)
     verbose(1, "Pushed Jobs: %d\n", pushCount);
 if (retryCount > 0)
     verbose(1, "Retried jobs: %d\n", retryCount);
+verbose(2, "paraCycle time: %.2f seconds\n", (clock1000() - time) / 1000.0);
 return db;
 }
 

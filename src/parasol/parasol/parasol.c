@@ -9,7 +9,7 @@
 #include "paraLib.h"
 #include "paraMessage.h"
 
-static char const rcsid[] = "$Id: parasol.c,v 1.34 2008/05/08 00:33:46 galt Exp $";
+static char const rcsid[] = "$Id: parasol.c,v 1.35 2008/05/13 21:41:42 galt Exp $";
 
 struct rudp *hubRudp;	/* Network connection to paraHub. */
 char *userName;	/* Name of user. */
@@ -85,6 +85,8 @@ void hubCommandAndPrint(char *command)
 char *line = NULL;
 struct slRef *list = NULL, *ref;
 struct paraMessage pm;
+int count = 0;
+char *row[256];
 
 /* Issue command and suck down response quickly into memory. */
 if (!commandHub(command))
@@ -95,7 +97,15 @@ for (;;)
 	break;
     if (pm.size == 0)
         break;
-    refAdd(&list, cloneString(pm.data));
+
+    count = chopByChar(pm.data, '\n', row, sizeof(row));
+
+    if (count > 1) --count;  /* for multiline, count is inflated by one */
+
+    int i;
+    for(i=0; i<count; ++i)
+        refAdd(&list, cloneString(row[i]));
+
     }
 slReverse(&list);
 

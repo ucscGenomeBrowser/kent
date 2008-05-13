@@ -68,7 +68,7 @@
 #include "log.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: paraHub.c,v 1.99 2008/05/09 01:26:03 galt Exp $";
+static char const rcsid[] = "$Id: paraHub.c,v 1.100 2008/05/13 21:41:42 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -1876,7 +1876,7 @@ for (user = userList; user != NULL; user = user->next)
 pmSendString(pm, rudpOut, "");
 }
 
-boolean onePstatList(struct paraMessage *pm, struct dlList *list, boolean running, int *resultCount)
+boolean onePstatList(struct paraMessage *pm, struct dlList *list, boolean running, boolean extended, int *resultCount)
 /* Write out one job list in pstat format.  Return FALSE if there is
  * a problem. */
 {
@@ -1886,8 +1886,13 @@ time_t t;
 char *machName;
 char *state = (running ? "r" : "q");
 int count = 0;
-
+char buf[rudpMaxSize];
+char fmtString[20];
+safef(fmtString, sizeof(fmtString), "%s", "%s %d %s %s %lu %s\n");
+if (!extended)
+    fmtString[strlen(fmtString)] = 0;
 flushResults();
+pmClear(pm);
 for (node = list->head; !dlEnd(node); node = node->next)
     {
     ++count;
@@ -1900,13 +1905,29 @@ for (node = list->head; !dlEnd(node); node = node->next)
         t = job->startTime;
     else
         t = job->submitTime;
-    pmClear(pm);
-    pmPrintf(pm, "%s %d %s %s %lu %s", 
-        state, job->id, job->batch->user->name, job->exe, t, machName);
+    if (!running && extended)
+	safef(buf, sizeof(buf), "%s %d\n", 
+	    state, job->id);
+    else
+	safef(buf, sizeof(buf), fmtString,
+	    state, job->id, job->batch->user->name, job->exe, t, machName);
+    if ((!extended && pm->size > 0) || (pm->size + strlen(buf) > rudpMaxSize))
+	{
+	if (!pmSend(pm, rudpOut))
+	    {
+	    *resultCount += count;
+	    return FALSE;
+	    }
+	pmClear(pm);
+	}
+    pmPrintf(pm, "%s", buf); 
+    }
+if (pm->size > 0)
+    {
     if (!pmSend(pm, rudpOut))
 	{
 	*resultCount += count;
-        return FALSE;
+	return FALSE;
 	}
     }
 *resultCount += count;
@@ -1933,7 +1954,7 @@ if (userName)
   thisUser = findUser(userName);
 if (dir)
   thisBatch = findBatch(thisUser, dir, TRUE);
-if (!onePstatList(pm, runningJobs, TRUE, &count))
+if (!onePstatList(pm, runningJobs, TRUE, extended, &count))
     return;
 for (user = userList; user != NULL; user = user->next)
     {
@@ -1942,7 +1963,7 @@ for (user = userList; user != NULL; user = user->next)
 	batch = bNode->val;
 	if ((thisUser == NULL || thisUser == user) && (thisBatch == NULL || thisBatch == batch))
 	    {
-	    if (!onePstatList(pm, batch->jobQueue, FALSE, &count))
+	    if (!onePstatList(pm, batch->jobQueue, FALSE, extended, &count))
 		return;
 	    }
 	else

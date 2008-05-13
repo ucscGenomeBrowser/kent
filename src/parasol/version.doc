@@ -109,3 +109,12 @@
      reading the batch, fetching pstat info from hub about queued and running jobs,
      reading para.results and hashing, and writing the batch.
 
+     Changed pstat2 to return packed data with multiple lines per packet.
+     And for queue data, passing just the one field needed (jobid).
+     This has a tremendous speedup on batch pstat for large batches, and moves pstat
+     from being a big speed problem to being fast.  This also required a minor
+     improvement to the multiple-line query processing in para and parasol
+     to handle multiple lines per packet.
+
+
+
