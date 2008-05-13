@@ -1,0 +1,535 @@
+# for emacs: -*- mode: sh; -*-
+
+#	Caenorhabditis PB2801
+#	This is the actual name, it is sometimes known as:
+#	Caenorhabditis n. sp. PB2801
+#	From Wash U GSC
+#	http://genome.wustl.edu/genome.cgi?GENOME=Caenorhabditis+n.+sp.+PB2801
+
+
+#########################################################################
+# DOWNLOAD SEQUENCE (DONE - 2008-05-13 - Hiram)
+    ssh kkstore01
+    mkdir /cluster/store1/caePb2
+    ln -s /cluster/store1/caePb2 /cluster/data/caePb2
+
+    mkdir /cluster/data/caePb2/downloads
+    cd /cluster/data/caePb2/downloads
+
+    wget --timestamping \
+"ftp://genome.wustl.edu/pub/organism/Invertebrates/Caenorhabditis_PB2801/assembly/Caenorhabditis_PB2801-6.0.1/ASSEMBLY"
+
+    wget --timestamping \
+"ftp://genome.wustl.edu/pub/organism/Invertebrates/Caenorhabditis_PB2801/assembly/Caenorhabditis_PB2801-6.0.1/README" -O README.caePb2
+
+    wget --timestamping -m -nd -np \
+"ftp://genome.wustl.edu/pub/organism/Invertebrates/Caenorhabditis_PB2801/assembly/Caenorhabditis_PB2801-6.0.1/output/"
+
+    #	Going to manipulate the given supercontigs.agp.gz file to produce a
+    #	chrUn.agp.gz file, although this ends up being too detailed.  A second
+    #	super.lift and gold.tab will also be produced to get the chrUn_gold
+    #	table loaded with appropriate supercontigs without all the bridged
+    #	gaps.  This first chrUn.agp.gz file will be used with the initial
+    #	build so that the gap table will be constructed properly with all the
+    #	bridged gaps.
+    faCount contigs.fa.gz > faCount.contigs.fa.txt
+    mkdir ../jkStuff
+    cat << '_EOF_' > ../jkStuff/mkChrUnAgp.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my $start = 1;
+my $end = 1;
+my $itemCount = 1;
+my $curContig = "";
+my $firstTime = 1;
+my $scaffoldGapSize = 1000;
+
+open (FH,'zcat supercontigs.agp.gz|') or
+        die "can not open zcat supercontigs.agp.gz";
+while (my $line=<FH>) {
+    chomp $line;
+    if ($line =~ m/fragment/) {
+        my ($name, $gStart, $gEnd, $counter, $WN, $gapLen, $frag, $yesNo) =
+            split('\s+',$line);
+        $end = $start + $gapLen - 1;
+        printf "chrUn\t%d\t%d\t%d\t%s\t%d\t%s\t%s\n",
+                    $start, $end, $itemCount++, $WN, $gapLen, $frag, $yesNo;
+        $start = $end + 1;
+    } else {
+    my ($ctgName, $ctgStart, $ctgEnd, $counter, $WN, $name, $cStart, $cEnd, $strand) =
+        split('\s+',$line);
+        my $ctgLen = $ctgEnd - $ctgStart + 1;
+        my $cLen = $cEnd - $cStart + 1;
+        die "not matching start, end:\n$line" if ($ctgLen != $cLen);
+        if (!$firstTime) {
+            if ($ctgName ne $curContig) {
+                $end = $start + $scaffoldGapSize - 1;
+                printf "chrUn\t%d\t%d\t%d\tN\t%d\tscaffold\tno\n",
+                    $start, $end, $itemCount++, $scaffoldGapSize;
+                $start = $end + 1;
+            }
+        } else {
+            $firstTime = 0;
+        }
+        $end = $start + $ctgLen - 1;
+        printf "chrUn\t%d\t%d\t%d\t%s\t%s\t%d\t%d\t%s\n",
+                $start, $end, $itemCount++, $WN, $name,
+                $cStart, $cEnd, $strand;
+        $start = $end + 1;
+        $curContig = $ctgName;
+    }
+}
+close (FH);
+'_EOF_'
+# << happy emacs
+    chmod +x ../jkStuff/mkChrUnAgp.pl
+    ../jkStuff/mkChrUnAgp.pl | gzip > chrUn.agp.gz
+    qaToQac contigs.fa.qual.gz stdout \
+        | qacAgpLift chrUn.agp.gz stdin chrUn.qac
+
+##########################################################################
+## Initial database construction and beginning tables
+##	(DONE - 2008-05-13 - Hiram)
+
+    ssh kkstore01
+    cd /cluster/data/caePb2
+    cat << '_EOF_' > caePb2.config.ra
+# Config parameters for makeGenomeDb.pl:
+db caePb2
+clade worm
+genomeCladePriority 66
+scientificName Caenorhabditis brenneri
+commonName C. brenneri
+assemblyDate Apr. 2008
+assemblyLabel Washington University School of Medicine GSC Caenorhabditis brenneri(PB2801) 6.0.1
+orderKey 839
+mitoAcc none
+fastaFiles /cluster/data/caePb2/downloads/contigs.fa.gz
+agpFiles /cluster/data/caePb2/downloads/chrUn.agp.gz
+# qualFiles none
+dbDbSpeciesDir worm
+'_EOF_'
+# << happy emacs
+
+    time makeGenomeDb.pl -verbose=2 caePb2.config.ra > makeGenomeDb.out 2>&1
+    #	real    3m24.338s
+
+##########################################################################
+##  Fixup chrUn_gold table, and add ctgPos2 table
+
+    ssh kkstore01
+    cd /cluster/data/caePb2/downloads
+
+    #	create a ctgPos2.tab table
+    cat << '_EOF_' > ../jkStuff/mkScafAgp.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my $start = 1;
+my $end = 1;
+my $itemCount = 1;
+my $curContig = "";
+my $firstTime = 1;
+my $scaffoldGapSize = 1000;
+my $scafEnd = 1;
+
+open (CT,">ctgPos2.tab") or die "can not write to ctgPos2.tab";
+
+open (FH,'zcat supercontigs.agp.gz|') or
+        die "can not open zcat supercontigs.agp.gz";
+while (my $line=<FH>) {
+    chomp $line;
+    if ($line =~ m/fragment/) {
+        my ($name, $gStart, $gEnd, $counter, $WN, $gapLen, $frag, $yesNo) =
+            split('\s+',$line);
+        $end = $start + $gapLen - 1;
+        $scafEnd += $gapLen;
+        printf "chrUn\t%d\t%d\t%d\t%s\t%d\t%s\t%s\n",
+                    $start, $end, $itemCount++, $WN, $gapLen, $frag, $yesNo;
+        $start = $end + 1;
+    } else {
+    my ($ctgName, $ctgStart, $ctgEnd, $counter, $WN, $name, $cStart, $cEnd, $strand) =
+        split('\s+',$line);
+        my $ctgLen = $ctgEnd - $ctgStart + 1;
+        my $cLen = $cEnd - $cStart + 1;
+        die "not matching start, end:\n$line" if ($ctgLen != $cLen);
+        if (!$firstTime) {
+            if ($ctgName ne $curContig) {
+                $end = $start + $scaffoldGapSize - 1;
+                printf "chrUn\t%d\t%d\t%d\tN\t%d\tscaffold\tno\n",
+                    $start, $end, $itemCount++, $scaffoldGapSize;
+                $start = $end + 1;
+                $scafEnd = $cStart - 1;
+            }
+        } else {
+            $firstTime = 0;
+            $scafEnd = 0;
+        }
+        $scafEnd += $ctgLen;
+        my $fragStart = $scafEnd - $ctgLen + 1;
+        $end = $start + $ctgLen - 1;
+        printf "chrUn\t%d\t%d\t%d\t%s\t%s\t%d\t%d\t%s\n",
+                $start, $end, $itemCount++, $WN, $ctgName,
+                $fragStart, $scafEnd, $strand;
+        printf CT "%s\t%d\tchrUn\t%d\t%d\tW\n",
+                $name, $ctgLen, $start-1, $end;
+        $start = $end + 1;
+        $curContig = $ctgName;
+    }
+}
+close (FH);
+close (CT);
+'_EOF_'
+# << happy emacs
+    chmod +x ../jkStuff/mkScafAgp.pl
+    nice -n +19 ../jkStuff/mkScafAgp.pl
+
+    ##	and load that ctgPos2 table:
+    ssh hgwdev
+    cd /cluster/data/caePb2/downloads
+    hgLoadSqlTab caePb2 ctgPos2 ~/kent/src/hg/lib/ctgPos2.sql ctgPos2.tab
+
+    ##  and the super.lift to get supercontigs lifted to chrUn
+    ssh kkstore01
+    cd /cluster/data/caePb2/downloads
+    
+    #	beware of the chrUnSize specified below
+    cat << '_EOF_' > ../jkStuff/mkSuperLift.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my $start = 1;
+my $end = 1;
+my $itemCount = 1;
+my $curContig = "";
+my $firstTime = 1;
+my $scaffoldGapSize = 1000;
+my $scafEnd = 1;
+my $superStart = 0;
+my $superEnd = 1;
+my $superLength = 0;
+my $chrUnSize = 194283334;
+my $chrUnName = "chrUn";
+
+open (GL,">gold.tab") or die "Can not write to gold.tab";
+
+open (FH,'zcat supercontigs.agp.gz|') or
+        die "can not open zcat supercontigs.agp.gz";
+while (my $line=<FH>) {
+    chomp $line;
+    if ($line =~ m/fragment/) {
+        my ($name, $gStart, $gEnd, $counter, $WN, $gapLen, $frag, $yesNo) =
+            split('\s+',$line);
+        $end = $start + $gapLen - 1;
+        $scafEnd += $gapLen;
+#       printf "chrUn\t%d\t%d\t%d\t%s\t%d\t%s\t%s\n",
+#                   $start, $end, $itemCount++, $WN, $gapLen, $frag, $yesNo;
+        $start = $end + 1;
+    } else {
+    my ($ctgName, $ctgStart, $ctgEnd, $counter, $WN, $name, $cStart, $cEnd, $strand) =
+        split('\s+',$line);
+        my $ctgLen = $ctgEnd - $ctgStart + 1;
+        my $cLen = $cEnd - $cStart + 1;
+        die "not matching start, end:\n$line" if ($ctgLen != $cLen);
+        if (!$firstTime) {
+            if ($ctgName ne $curContig) {
+                $superLength = $superEnd - $superStart;
+                $end = $start + $scaffoldGapSize - 1;
+#               printf "chrUn\t%d\t%d\t%d\tN\t%d\tscaffold\tno\n",
+#                   $start, $end, $itemCount++, $scaffoldGapSize;
+                printf "%d\t%s\t%d\t%s\t%d\n",
+                        $superStart, $curContig, $superLength, $chrUnName,
+                                $chrUnSize;
+                printf GL "%s\t%d\t%d\t%d\tW\t%s\t0\t%d\t+\n",
+                        $chrUnName, $superStart, $superEnd, $itemCount++,
+                        $curContig, $superLength;
+                $start = $end + 1;
+                $scafEnd = $cStart - 1;
+                $superStart = $start - 1;
+            }
+        } else {
+            $firstTime = 0;
+            $scafEnd = 0;
+        }
+        $scafEnd += $ctgLen;
+        my $fragStart = $scafEnd - $ctgLen + 1;
+        $end = $start + $ctgLen - 1;
+        $superEnd = $end;
+#       printf "chrUn\t%d\t%d\t%d\t%s\t%s\t%d\t%d\t%s\n",
+#               $start, $end, $itemCount++, $WN, $ctgName,
+#               $fragStart, $scafEnd, $strand;
+#       printf SL "%s\t%d\tchrUn\t%d\t%d\tW\n",
+#               $name, $ctgLen, $start-1, $end;
+        $start = $end + 1;
+        $curContig = $ctgName;
+    }
+}
+close (FH);
+$superLength = $superEnd - $superStart;
+printf "%d\t%s\t%d\t%s\t%d\n",
+    $superStart, $curContig, $superLength, $chrUnName, $chrUnSize;
+printf GL "%s\t%d\t%d\t%d\tW\t%s\t0\t%d\t+\n",
+        $chrUnName, $superStart, $superEnd, $itemCount++,
+        $curContig, $superLength;
+close (GL);
+'_EOF_'
+# << happy emacs
+    chmod +x ../jkStuff/mkSuperLift.pl
+
+    nice -n +19 ../jkStuff/mkSuperLift.pl > super.lift
+
+    ##	and load this new gold table
+
+    ssh hgwdev
+    cd /cluster/data/caePb2/downloads
+    sed -e "s/agpFrag/chrUn_gold/" $HOME/kent/src/hg/lib/agpFrag.sql \
+	> chrUn_gold.sql
+    # edit that .sql file to add the bin column
+    #	 bin smallint(6) NOT NULL default '0',
+
+    hgLoadBed -sqlTable=chrUn_gold.sql caePb2 chrUn_gold gold.tab
+
+##############################################################################
+## WindowMasker masking (DONE - 2008-05-13 - Hiram)
+    ssh kolossus
+    mkdir /cluster/data/caePb2/bed/WindowMasker
+    cd /cluster/data/caePb2/bed/WindowMasker
+    time nice -n +19 ~/kent/src/hg/utils/automation/doWindowMasker.pl \
+	caePb2 -buildDir=/cluster/data/caePb2/bed/WindowMasker \
+	    -workhorse=kolossus > doWM.out 2>&1 &
+    #	real    16m34.556s
+    ## load result to prep for cleaning
+    ssh hgwdev
+    cd /cluster/data/caePb2/bed/WindowMasker
+    hgLoadBed caePb2 windowmaskerSdust windowmasker.sdust.bed.gz
+    #	Loaded 1346187 elements of size 3
+
+    featureBits caePb2 windowmaskerSdust
+    #	73264992 bases of 170473138 (42.977%) in intersection
+
+    #	eliminate the gaps from the masking (WM bug)
+    featureBits caePb2 -not gap -bed=notGap.bed
+    #	170473138 bases of 170473138 (100.000%) in intersection
+
+    time nice -n +19 featureBits caePb2 windowmaskerSdust notGap.bed \
+        -bed=stdout | gzip -c > cleanWMask.bed.gz
+    #	49454796 bases of 170473138 (29.010%) in intersection
+
+    #	reload track to get it clean
+    hgLoadBed caePb2 windowmaskerSdust cleanWMask.bed.gz
+    #	Loaded 1343764 elements of size 4
+    featureBits caePb2 windowmaskerSdust
+    #	49454796 bases of 170473138 (29.010%) in intersection
+
+##############################################################################
+## simpleRepeat masking (DONE - 2008-05-13 - Hiram)
+    ssh kolossus
+    mkdir /cluster/data/caePb2/bed/simpleRepeat
+    cd /cluster/data/caePb2/bed/simpleRepeat
+    nice -n +19 twoBitToFa ../../caePb2.unmasked.2bit stdout \
+	| trfBig -trf=/cluster/bin/i386/trf stdin /dev/null \
+		-bedAt=simpleRepeat.bed -tempDir=/scratch/tmp
+    #	about 30 minutes
+    awk '{if ($5 <= 12) print;}' simpleRepeat.bed > trfMask.bed
+
+    ssh hgwdev
+    cd /cluster/data/caePb2/bed/simpleRepeat
+    nice -n +19 hgLoadBed caePb2 simpleRepeat \
+      simpleRepeat.bed -sqlTable=$HOME/kent/src/hg/lib/simpleRepeat.sql
+
+    featureBits caePb2 simpleRepeat
+    #	5083084 bases of 170473138 (2.982%) in intersection
+
+##############################################################################
+## combine trf mask with windowmasker (DONE - 2008-05-13 - Hiram)
+    ssh kkstore01
+    cd /cluster/data/caePb2
+    zcat bed/WindowMasker/cleanWMask.bed.gz \
+	| twoBitMask caePb2.unmasked.2bit stdin \
+	    -type=.bed caePb2.cleanWMSdust.2bit
+    cat bed/simpleRepeat/trfMask.bed \
+        | twoBitMask -add -type=.bed caePb2.cleanWMSdust.2bit stdin caePb2.2bit
+    #	can safely ignore the warning about BED file >= 13 fields
+    #	check it
+    twoBitToFa caePb2.2bit stdout | faSize stdin
+    #	194283334 bases (23810210 N's 170473124 real 120922179 upper
+    #	49550945 lower) in 1 sequences in 1 files
+    #	%25.50 masked total, %29.07 masked real
+
+##############################################################################
+## create masked contigs for blastz (DONE - 2008-05-13 - Hiram)
+    ssh kkstore01
+    mkdir /cluster/data/caePb2/maskedContigs
+    cd /cluster/data/caePb2/maskedContigs
+    #	copy over lft2BitToFa.pl from /cluster/data/caePb1/jkStuff
+    cp -p /cluster/data/caePb1/jkStuff/lft2BitToFa.pl ../jkStuff
+    ln -s ../downloads/super.lift .
+    time nice -n +19 ../jkStuff/lft2BitToFa.pl ../caePb2.2bit super.lift \
+	> super.fa
+    #	real    1m55.813s
+    #	verify it is OK, should have same numbers of real, upper and lower as
+    #	measured in the caePb2.2bit, only N's are different:
+    faSize super.fa
+# 190774334 bases (20301210 N's 170473124 real 120922179 upper 49550945 lower) in 3510 sequences in 1 files
+# Total size: mean 54351.7 sd 179245.2 min 327 (Contig8561) max 4147112 (Contig0) median 7338
+# %25.97 masked total, %29.07 masked real
+    #	in fact, the missing N's should be:
+    #	(3510-1)*1000 = 23810210-20301210 = 3509000
+
+    faToTwoBit super.fa caePb2.supercontigs.2bit
+    twoBitInfo caePb2.supercontigs.2bit stdout | sort -k2nr \
+        > caePb2.supercontigs.sizes
+    #	Copy this 2bit file and sizes over to /san/sanvol1/scratch/worms/caePb2
+
+    #  the lft2BitToFa.pl script is:
+    cat << '_EOF_'
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+use File::Basename;
+    
+sub usage()
+{
+printf "usage: %s <file.2bit> <file.lft> [more_files.lft]\n",  basename($0);
+printf "\tfasta output is to stdout, therefore route stdout to result file\n";
+exit 255;
+}   
+    
+my $argc = scalar(@ARGV);
+
+usage if ($argc < 2);
+
+my $twoBitFile = shift;
+    
+while (my $liftFile = shift)
+{   
+open (FH,"<$liftFile") or die "Can not open $liftFile";
+while (my $line=<FH>)
+    {
+    chomp $line;
+    my ($start, $contig, $length, $chrom, $chrom_length) = split('\s',$line);
+    my $cmd=sprintf("twoBitToFa $twoBitFile:%s:%d-%d stdout",
+        $chrom, $start, $start+$length);
+    print `$cmd | sed -e "s#^>.*#>$contig#"`;
+    }
+close (FH);
+}
+'_EOF_'
+# << happy emacs
+
+#########################################################################
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2008-05-13 - Hiram)
+    # Use -repMatch=62 (based on size -- for human we use 1024, and 
+    # C. PB2801 size is ~6.1% of human judging by gapless caePb2 vs. hg18 
+    # genome sizes from featureBits.
+    ssh kolossus
+    cd /cluster/data/caePb2
+    blat caePb2.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/11.ooc -repMatch=62
+    #	Wrote 35523 overused 11-mers to jkStuff/11.ooc
+    cp -p jkStuff/11.ooc /san/sanvol1/scratch/worms/caePb2
+
+############################################################################
+## Default position (DONE - 2008-05-13 - Hiram)
+    ssh hgwdev
+    hgsql -e 'update dbDb set defaultPos="chrUn:117559143-117563800"
+	where name="caePb2";' hgcentraltest
+
+#########################################################################
+# GENBANK AUTO UPDATE (DONE - 2008-05-13 - Hiram)
+    # align with latest genbank process.
+    ssh hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+    # edit etc/genbank.conf to add caePb2 just before caeRem2
+
+# caePb2 (C. brenneri)
+caePb2.serverGenome = /cluster/data/caePb2/caePb2.2bit
+caePb2.clusterGenome = /iscratch/i/worms/caePb2/caePb2.2bit
+caePb2.ooc = /iscratch/i/worms/caePb2/11.ooc
+caePb2.lift = /iscratch/i/worms/caePb2/caePb2.supercontigs.lift
+caePb2.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+caePb2.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+caePb2.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+caePb2.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+caePb2.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+caePb2.refseq.mrna.native.load = no
+caePb2.refseq.mrna.xeno.load  = yes
+caePb2.refseq.mrna.xeno.loadDesc = yes
+caePb2.genbank.mrna.xeno.load = yes
+caePb2.genbank.est.native.load = yes
+caePb2.genbank.est.native.loadDesc = no
+caePb2.downloadDir = caePb2
+caePb2.perChromTables = no
+
+    cvs ci -m "Added caePb2." etc/genbank.conf
+    # update /cluster/data/genbank/:
+    make etc-update
+
+    # Edit src/lib/gbGenome.c to add new species.
+    cvs ci -m "Added C. PB2801." src/lib/gbGenome.c
+    make install-server
+
+    ssh genbank
+    cd /cluster/data/genbank
+    time nice -n +19 bin/gbAlignStep -initial caePb2 &
+    #	var/build/logs/2008.05.13-13:42:58.caePb2.initalign.log
+    #	real    96m10.750s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad caePb2
+    #	real    8m9.133s
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+    # add caePb2 to:
+        etc/align.dbs
+        etc/hgwdev.dbs
+    cvs ci -m "Added caePb2 - C. brenneri" etc/align.dbs etc/hgwdev.dbs
+    make etc-update
+
+##########################################################################
+## Creating downloads (DONE - 2008-05-13 - Hiram)
+    #	There is only one chrom, make its trfMaskChrom file exist
+    ssh hgwdev
+    mkdir /cluster/data/caePb2/bed/simpleRepeat/trfMaskChrom
+    cd /cluster/data/caePb2/bed/simpleRepeat/trfMaskChrom
+    ## symlink didn't work here, the symlink ended up in the tar file
+    cp -p ../trfMask.bed ./chrUn.bed
+    cd  /cluster/data/caePb2
+    #	there is no RM file
+    touch Un/chrUn.fa.out
+    /cluster/bin/scripts/makeDownloads.pl caePb2 
+    ## *!* EDIT THE README.txt FILES *!* ##
+
+##########################################################################
+## Creating pushQ (DONE - 2008-05-13 - Hiram)
+    ssh hgwdev
+    mkdir /cluster/data/caePb2/pushQ
+    cd /cluster/data/caePb2/pushQ
+    /cluster/bin/scripts/makePushQSql.pl -noGenbank caePb2 \
+	> caePb2.sql 2> stderr.out
+
+############################################################################
+#  BLATSERVERS ENTRY (DONE - 2008-05-13 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("caePb2", "blat5", "17786", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("caePb2", "blat5", "17787", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
