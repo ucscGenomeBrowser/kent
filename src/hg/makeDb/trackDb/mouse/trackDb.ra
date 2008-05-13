@@ -202,6 +202,36 @@ type bed 12 +
 url http://www.informatics.jax.org/javawi2/servlet/WIFetch?page=alleleDetail&id=$$
 urlLabel MGI Phenotypic Allele: 
 
+track agilentCgh
+shortLabel Agilent CGH
+longLabel Agilent CGH Microarray probesets
+compositeTrack on
+group regulation
+priority 79.5
+visibility hide
+type bed 6 .
+
+    track agilentCgh244a
+    subTrack agilentCgh
+    shortLabel Ag CGH 244a
+    longLabel Agilent Microarray 244A AMADID 014693
+    color 0,128,0
+    priority 1
+
+    track agilentCgh105a
+    subTrack agilentCgh
+    shortLabel Ag CGH 105a
+    longLabel Agilent Microarray 105A AMADID 014698
+    color 0,128,0
+    priority 2
+
+    track agilentCgh44k
+    subTrack agilentCgh
+    shortLabel Ag CGH 44k
+    longLabel Agilent Microarray 44K AMADID 014950
+    color 0,128,0
+    priority 3
+
 track gnfAtlas2
 shortLabel GNF Atlas 2
 longLabel GNF Expression Atlas 2

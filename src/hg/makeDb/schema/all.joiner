@@ -657,6 +657,24 @@ identifier mrnaBlastzName
 
 # Microarray stuff.
 
+identifier agilentCghHg18Id
+"Agilent CGH probe ID"
+    hg18.agilentCgh244a.name minCheck=0.99
+    hg18.agilentCgh105a.name minCheck=0.30
+    hg18.agilentCgh44k.name minCheck=0.10
+
+identifier agilentCghMm8Id
+"Agilent CGH probe ID"
+    mm8.agilentCgh244a.name minCheck=0.99
+    mm8.agilentCgh105a.name minCheck=0.30
+    mm8.agilentCgh44k.name minCheck=0.10
+
+identifier agilentCghRn4Id
+"Agilent CGH probe ID"
+    rn4.agilentCgh244a.name minCheck=0.99
+    rn4.agilentCgh105a.name minCheck=0.30
+    rn4.agilentCgh44k.name minCheck=0.10
+
 identifier affyHumanExon
 "Affymetrix all human exon array probe id"
     hgFixed.affyHumanExon.name
