@@ -136,4 +136,16 @@ group x
 visibility hide
 type bed
 
+# Johnson & Johnson 
 
+track wang2005Exp
+shortLabel  Breast Cancer Gene Expression (Wang et. al. Lancet 2005)
+longLabel Lymph-Node-Negative Breast Cancer Gene Exp. (Wang et. al. Lancet 2005)
+group x
+priority 44
+visibility hide
+logicalDb localDb
+type expRatio
+expScale 2.0
+expStep 0.2
+groupings wang2005ExpGroups
