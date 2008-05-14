@@ -68,7 +68,7 @@
 #include "log.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: paraHub.c,v 1.103 2008/05/14 23:21:45 galt Exp $";
+static char const rcsid[] = "$Id: paraHub.c,v 1.104 2008/05/14 23:38:17 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -895,14 +895,15 @@ checkPeriodically(deadMachines, MINUTE * machineCheckPeriod, "resurrect",
 }
 
 
-void flushResults()
-/* Flush all results files. */
+void flushResults(char *batchName)
+/* Flush all results files. batchName can be NULL for all. */
 {
 struct resultQueue *rq;
 for (rq = resultQueues; rq != NULL; rq = rq->next)
     {
-    if (rq->f != NULL)
-       fflush(rq->f);
+    if (!batchName || sameString(rq->name, batchName))
+	if (rq->f != NULL)
+	   fflush(rq->f);
     }
 }
 
@@ -1007,7 +1008,7 @@ for (rq = resultQueues; rq != NULL; rq = next)
     }
 slReverse(&newList);
 resultQueues = newList;
-flushResults();
+flushResults(NULL);
 }
 
 void saveJobId()
@@ -1898,7 +1899,6 @@ char fmtString[20];
 safef(fmtString, sizeof(fmtString), "%s", "%s %d %s %s %lu %s\n");
 if (!extended)
     fmtString[strlen(fmtString)] = 0;
-flushResults();
 pmClear(pm);
 for (node = list->head; !dlEnd(node); node = node->next)
     {
@@ -1961,6 +1961,8 @@ if (userName)
   thisUser = findUser(userName);
 if (dir)
   thisBatch = findBatch(thisUser, dir, TRUE);
+if (thisBatch)
+    flushResults(thisBatch->name);
 if (!onePstatList(pm, runningJobs, TRUE, extended, &count))
     return;
 for (user = userList; user != NULL; user = user->next)
