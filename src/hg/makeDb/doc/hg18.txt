@@ -21070,3 +21070,44 @@ TMPDIR=/scratch/tmp
 
 
 ############################################################################
+# AGILENT CGH PROBES (AND MM8, RN4) (Done 2008-05-13, Andy)
+   ssh hgwdev
+   bash
+   cd /cluster/data/hg18/bed
+   mkdir agilentCgh
+   cd agilentCgh/
+   cp /usr/local/apache/htdocs/donna/Agilent/Agilent_Human_CGH.zip .
+# (agilent-provided zips) 
+# what a pain... this zipfile isn't unzippable using linux unzip.
+# Bob's windows machine didn't do it either.  Finally got it using the 
+# mac in Erich and Victoria's office.  Extracting creates a directory
+# called "Agilent_Human_CGH Folder"
+   cp Agilent_Human_CGH\ Folder/* .
+   rmdir Agilent_Human_CGH\ Folder/
+   tail +3 014693_D_UCSCTrack_20070820.txt | bedSort stdin stdout > agilent244a.bed
+   tail +3 014698_D_UCSCTrack_20070820.txt | bedSort stdin stdout > agilent105a.bed
+   tail +3 014950_D_UCSCTrack_20070820.txt | bedSort stdin stdout > agilent44k.bed
+   for bed in *.bed; do hgLoadBed hg18 ${bed%.bed}{,.bed}; done
+   cd /cluster/data/mm8/bed
+   mkdir agilentCgh
+   cd agilentCgh/
+   cp /usr/local/apache/htdocs/donna/Agilent/Agilent_Mouse_CGH.zip .
+# (same crap as before with the zip file)
+   cp Agilent_Mouse_CGH\ Folder/* .
+   rmdir Agilent_Mouse_CGH\ Folder/
+   tail +3 014695_D_UCSCTrack_20070820.txt | bedSort stdin stdout > agilentCgh244a.bed
+   tail +3 014699_D_UCSCTrack_20070820.txt | bedSort stdin stdout > agilentCgh105a.bed
+   tail +3 015028_D_UCSCTrack_20070820.txt | bedSort stdin stdout > agilentCgh44k.bed
+   for bed in *.bed; do hgLoadBed mm8 ${bed%.bed}{,.bed}; done
+   cd /cluster/data/rn4/bed
+   mkdir agilentCgh
+   cd agilentCgh/
+   cp /usr/local/apache/htdocs/donna/Agilent/Agilent_Rat_CGH.zip .
+# (yep, again)
+   cp Agilent_Rat_CGH\ Folder/* .
+   rmdir Agilent_Rat_CGH\ Folder/
+   tail +3 015223_D_UCSCTrack_20070820.txt | bedSort stdin stdout > agilentCgh244a.bed
+   tail +3 015235_D_UCSCTrack_20070820.txt | bedSort stdin stdout > agilentCgh105a.bed
+   for bed in *.bed; do hgLoadBed rn4 ${bed%.bed}{,.bed}; done
+
+############################################################################

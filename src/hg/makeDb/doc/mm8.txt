@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: mm8.txt,v 1.67 2008/05/09 21:38:13 tdreszer Exp $"
+#	"$Id: mm8.txt,v 1.68 2008/05/14 05:08:28 aamp Exp $"
 #
 
 #  NOTE:  this doc may have genePred loads that fail to include
@@ -9193,4 +9193,7 @@ knownToEnsembl yes
         ccdsInfo
         ccdsKgMap
     # << emacs
+############################################################################
+# AGILENT CGH PROBES (Done 2008-05-13, Andy)
+# (see hg18.txt)
 ############################################################################
