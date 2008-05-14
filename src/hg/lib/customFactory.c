@@ -23,7 +23,7 @@
 #include "customFactory.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.72 2008/05/14 11:05:01 galt Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.73 2008/05/14 21:03:24 galt Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -1276,7 +1276,7 @@ if ((val = hashFindVal(hash, "htmlUrl")) != NULL)
         {
 	char *newUrl = NULL;
 	int newSd = 0;
-        netSkipHttpHeaderLines(sd, val, &newSd, &newUrl); /* redirect can modify the url */
+        netSkipHttpHeaderLinesHandlingRedirect(sd, val, &newSd, &newUrl); /* redirect can modify the url */
 	if (newUrl)
 	    {
     	    freeMem(newUrl);

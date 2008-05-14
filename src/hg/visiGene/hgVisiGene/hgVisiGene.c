@@ -801,7 +801,7 @@ else
 	char *newUrl = NULL;
 	int newSd = 0;
 	/* url needed for err msgs and redirect url*/
-	if (netSkipHttpHeaderLines(sd, url, &newSd, &newUrl))  
+	if (netSkipHttpHeaderLinesHandlingRedirect(sd, url, &newSd, &newUrl))  
 	    {
 	    char buf[32*1024];
 	    int readSize;

@@ -14,7 +14,7 @@
 #include "linefile.h"
 #include "base64.h"
 
-static char const rcsid[] = "$Id: net.c,v 1.59 2008/05/14 11:05:00 galt Exp $";
+static char const rcsid[] = "$Id: net.c,v 1.60 2008/05/14 21:03:24 galt Exp $";
 
 /* Brought errno in to get more useful error messages */
 
@@ -739,7 +739,7 @@ return TRUE;
 }
 
 
-boolean netSkipHttpHeaderLines(int sd, char *url, int *redirectedSd, char **redirectedUrl)
+boolean netSkipHttpHeaderLinesHandlingRedirect(int sd, char *url, int *redirectedSd, char **redirectedUrl)
 /* Skip http headers lines, returning FALSE if there is a problem.  Generally called as
  *    netSkipHttpHeaderLine(sd, url, &sd, &url);
  * where sd is a socket (file) opened with netUrlOpen(url), and url is in dynamic memory.
@@ -828,7 +828,7 @@ else
     int newSd = 0;
     if (startsWith("http://",url))
 	{  
-	if (!netSkipHttpHeaderLines(sd, url, &newSd, &newUrl))
+	if (!netSkipHttpHeaderLinesHandlingRedirect(sd, url, &newSd, &newUrl))
 	    {
 	    return NULL;
 	    }

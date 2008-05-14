@@ -189,7 +189,7 @@ boolean netSkipHttpHeaderLinesWithRedirect(int sd, char *url, char **redirectedU
  * Handles 300, 301, 302, 303, 307 http redirects by setting *redirectedUrl to
  * the new location. */
 
-boolean netSkipHttpHeaderLines(int sd, char *url, int *redirectedSd, char **redirectedUrl);
+boolean netSkipHttpHeaderLinesHandlingRedirect(int sd, char *url, int *redirectedSd, char **redirectedUrl);
 /* Skip http headers lines, returning FALSE if there is a problem.  Generally called as
  *    netSkipHttpHeaderLine(sd, url, &sd, &url);
  * where sd is a socket (file) opened with netUrlOpen(url), and url is in dynamic memory.
