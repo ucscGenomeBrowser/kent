@@ -16,7 +16,7 @@
 #include "verbose.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: para.c,v 1.87 2008/05/13 23:58:30 galt Exp $";
+static char const rcsid[] = "$Id: para.c,v 1.88 2008/05/14 00:46:50 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -1128,8 +1128,6 @@ struct jobDb *paraCycle(char *batch)
 /* Cycle forward through batch.  Return database. */
 {
 
-verbose(1, "================\n");
-
 struct jobDb *db = readBatch(batch);
 struct job *job;
 int queueSize;
@@ -1241,6 +1239,7 @@ for (;;)
     if (curSleep < maxSleep)
         curSleep += 15;
     now = time(NULL);
+    verbose(1, "================\n");
     verbose(1, "Checking job status %d minutes after launch\n",  round((now-start)/60.0));
     }
 if (sickBatch)
