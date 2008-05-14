@@ -1,6 +1,0 @@
-tablename wgEncodeTestSites
-track wgEncodeTestSites
-type bed 3
-assembly hg18
-files chr1.bed chr2.bed
-
