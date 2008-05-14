@@ -16,7 +16,7 @@
 #include "verbose.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: para.c,v 1.89 2008/05/14 17:56:32 galt Exp $";
+static char const rcsid[] = "$Id: para.c,v 1.90 2008/05/14 22:41:00 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -839,6 +839,11 @@ char *jobId = NULL;
 
 dyStringPrintf(cmd, "addJob %s %s /dev/null /dev/null %s/%s %s",
  getUser(), curDir, curDir, resultsName, job->command);
+if (cmd->stringSize > rudpMaxSize)
+    errAbort("The following string has %d bytes, but can only be %d:\n%s\n"
+             "Please either shorten the current directory or the command line\n"
+             "possibly by making a shell script that encapsulates a long command.\n"
+             ,  cmd->stringSize, (int)rudpMaxSize, cmd->string);
 jobId = hubSingleLineQuery(cmd->string);
 if (sameString(jobId,"0"))
     {
