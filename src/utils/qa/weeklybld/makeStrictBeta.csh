@@ -23,11 +23,13 @@ if ( "$wc" != "0" ) then
  echo "$res"
  exit 1
 endif
+
 set res = `/bin/egrep -i "html missing" make.strict.log`
 set wc = `echo "$res" | wc -w` 
 if ( "$wc" != "0" ) then
- echo "trackDb strict html errs found:"
+ echo "trackDb strict html non-fatal errs found:"
  echo "$res"
+ echo "$res" | mail -s "v$BRANCHNN missing html error found by trackDb make strict" $USER browser-qa
 endif
 
 echo "trackDb Make strict done on Beta"
