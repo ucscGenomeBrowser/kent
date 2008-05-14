@@ -65,13 +65,13 @@ while (lineFileNext(lf, &line, &lineSize))
 	// warn("Skipping incomplete last line of %s", fileName);
 	break;
 	}
-    bookMark = lf->bufOffsetInFile + lf->lineEnd;
     line[lineSize-1] = 0;
     wordCount = chopLine(line, row);
     lineFileExpectWords(lf, ArraySize(row), wordCount);
     el = jobResultLoad(row);
     slAddHead(&list, el);
     }
+bookMark = lineFileTell(lf);
 lineFileClose(&lf);
 slReverse(&list);
 *resultBookMark = bookMark;
