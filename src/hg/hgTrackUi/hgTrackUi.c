@@ -38,7 +38,7 @@
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 #define MAX_SP_SIZE 2000
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.427 2008/05/14 22:41:28 aamp Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.428 2008/05/14 22:42:02 aamp Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -50,6 +50,8 @@ void radioButton(char *var, char *val, char *ourVal)
 cgiMakeRadioButton(var, ourVal, sameString(ourVal, val));
 printf("%s ", ourVal);
 }
+
+/* Even more of a mess. */
 
 void filterButtons(char *filterTypeVar, char *filterTypeVal, boolean none)
 /* Put up some filter buttons. */
