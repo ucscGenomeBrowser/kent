@@ -38,7 +38,7 @@
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 #define MAX_SP_SIZE 2000
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.426 2008/05/08 21:19:30 hiram Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.427 2008/05/14 22:41:28 aamp Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -160,6 +160,8 @@ for (snpMapType=0; snpMapType<snpMapTypeCartSize; snpMapType++)
     printf(" - <B>%s</B><BR>\n", snpMapTypeLabels[snpMapType]);
     }
 }
+
+/* A comment for the purposes of brancht-tag-move demo. */
 
 #define SNP125_FILTER_COLUMNS 4
 #define SNP125_SET_ALL "snp125SetAll"
