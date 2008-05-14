@@ -119,7 +119,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1465 2008/05/08 22:00:10 larrym Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1466 2008/05/14 01:02:18 markd Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -2485,7 +2485,7 @@ if (w >= 0)
 }
 
 static void countLinkedFeaturesBaseUse(struct linkedFeatures *lf, int width, int baseWidth,
-                                       UBYTE *useCounts, UBYTE *gapUseCounts)
+                                       UBYTE *useCounts, UBYTE *gapUseCounts, bool rc)
 /* increment base use counts for a set of linked features */
 {
 /* Performence-sensitive code.  Most of the overhead is in the mapping of base
@@ -2506,6 +2506,12 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
         x1 = 0;
     if (x2 >= width)
         x2 = width-1;
+    if (rc)
+        {
+        int x1hold = x1;
+        x1 = width-(x2+1);  // x2 is last base, n
+        x2 = (width-x1hold)-1;
+        }
     countBaseRangeUse(x1, x2, width, useCounts);
     /* line from previous block to this block, however blocks seem to be reversed
      * sometimes, not sure why, so just check. */
@@ -2525,12 +2531,12 @@ if ((gapUseCounts != NULL) && (prevX1 >= 0))
 }
 
 static void countTrackBaseUse(struct track *tg, int width, int baseWidth,
-                              UBYTE *useCounts, UBYTE *gapUseCounts)
+                              UBYTE *useCounts, UBYTE *gapUseCounts, bool rc)
 /* increment base use counts for a track */
 {
 struct linkedFeatures *lf;
 for (lf = tg->items; lf != NULL; lf = lf->next)
-    countLinkedFeaturesBaseUse(lf, width, baseWidth, useCounts, gapUseCounts);
+    countLinkedFeaturesBaseUse(lf, width, baseWidth, useCounts, gapUseCounts, rc);
 
 if (gapUseCounts != NULL)
     {
@@ -2557,7 +2563,7 @@ AllocArray(useCounts, width);
 /* limit adding gap lines to <= 25mb to improve performance */
 if (baseWidth <= 25000000)
     AllocArray(gapUseCounts, width);
-countTrackBaseUse(tg, width, baseWidth, useCounts, gapUseCounts);
+countTrackBaseUse(tg, width, baseWidth, useCounts, gapUseCounts, hvg->rc);
 
 grayThreshold(useCounts, width);
 hvGfxVerticalSmear(hvg,xOff,yOff,width,lineHeight,useCounts,TRUE);
