@@ -68,7 +68,7 @@
 #include "log.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: paraHub.c,v 1.101 2008/05/14 07:29:50 galt Exp $";
+static char const rcsid[] = "$Id: paraHub.c,v 1.102 2008/05/14 22:55:10 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -99,6 +99,8 @@ time_t startupTime;		/* Clock tick of paraHub startup. */
 /* not yet configurable */
 int sickNodeThreshold = 3;          /* Treat node as sick if this number of failures */
 int sickBatchThreshold = 25;        /* Auto-chill sick batch if this number of continuous failures */
+
+int totalQueuedJobs = 0;            /* Handy for quickly reporting back to para for maxQueue */
 
 void usage()
 /* Explain usage and exit. */
@@ -396,13 +398,14 @@ for (node = user->curBatches->head; !dlEnd(node); node = node->next)
     {
     struct batch *batch = node->val;
     if ((batch->maxNode==-1) || (batch->runningCount < batch->maxNode))
-	{
-	if (((batch->runningCount+1) * batch->priority) < minCount)
+	{ /* adding 1 to runningCount helps suppress running any jobs when priority is set very high */
+	int weightedCount = (batch->runningCount+1) * batch->priority;
+	if (weightedCount < minCount)
 	    {
             /* avoid any machine in the sickNodes with threshold failure count */
             if (hashIntValDefault(batch->sickNodes, machine->name, 0) < sickNodeThreshold)
 		{
-		minCount = (batch->runningCount+1) * batch->priority;
+		minCount = weightedCount;
 		minBatch = batch;
 		}
 	    }
@@ -423,13 +426,14 @@ for (node = queuedUsers->head; !dlEnd(node); node = node->next)
     {
     struct user *user = node->val;
     if ((user->maxNode==-1) || (user->runningCount < user->maxNode))
-	{
-	if (!dlEmpty(user->curBatches) && ((user->runningCount+1) * user->priority) < minCount)
+	{ /* adding 1 to runningCount helps suppress running any jobs when priority is set very high */
+	int weightedCount = (user->runningCount+1) * user->priority;
+	if (!dlEmpty(user->curBatches) && weightedCount < minCount)
 	    {
             /* avoid any machine in the sickNodes */
             if (!hashLookup(user->sickNodes, machine->name))
 		{
-		minCount = (user->runningCount+1) * user->priority;
+		minCount = weightedCount;
 		minUser = user;
 		}
 	    }
@@ -1243,6 +1247,7 @@ if (!job)
 batch = job->batch;
 
 dlAddTail(batch->jobQueue, job->node);
+++totalQueuedJobs;
 user = batch->user;
 dlRemove(user->node);
 dlAddTail(queuedUsers, user->node);
