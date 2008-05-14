@@ -116,5 +116,5 @@
      improvement to the multiple-line query processing in para and parasol
      to handle multiple lines per packet.
 
-
+     Added batch->queuedCount to replace dlCount(batch->jobQueue) which was slow.
 

@@ -68,7 +68,7 @@
 #include "log.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: paraHub.c,v 1.102 2008/05/14 22:55:10 galt Exp $";
+static char const rcsid[] = "$Id: paraHub.c,v 1.103 2008/05/14 23:21:45 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -99,8 +99,6 @@ time_t startupTime;		/* Clock tick of paraHub startup. */
 /* not yet configurable */
 int sickNodeThreshold = 3;          /* Treat node as sick if this number of failures */
 int sickBatchThreshold = 25;        /* Auto-chill sick batch if this number of continuous failures */
-
-int totalQueuedJobs = 0;            /* Handy for quickly reporting back to para for maxQueue */
 
 void usage()
 /* Explain usage and exit. */
@@ -382,7 +380,7 @@ int count = 0;
 for (node = user->curBatches->head; !dlEnd(node); node = node->next)
     {
     batch = node->val;
-    count += dlCount(batch->jobQueue);
+    count += batch->queuedCount;
     }
 return count;
 }
@@ -452,6 +450,7 @@ void unactivateBatchIfEmpty(struct batch *batch)
 if (dlEmpty(batch->jobQueue))
     {
     struct user *user = batch->user;
+    batch->queuedCount = 0;
     dlRemove(batch->node);
     dlAddTail(user->oldBatches, batch->node);
     updateUserPriority(user);
@@ -505,6 +504,7 @@ if (user)
     dlAddTail(runningJobs, jNode);
     job = jNode->val;
     ++batch->runningCount;
+    --batch->queuedCount;
     ++user->runningCount;
     unactivateBatchIfEmpty(batch);
 
@@ -662,6 +662,7 @@ job->machine = NULL;
 dlRemove(job->node);
 dlAddTail(batch->jobQueue, job->node);
 batch->runningCount -= 1;
+batch->queuedCount += 1;
 batch->user->runningCount -= 1;
 dlRemove(batch->node);
 dlAddHead(user->curBatches, batch->node);
@@ -1247,7 +1248,7 @@ if (!job)
 batch = job->batch;
 
 dlAddTail(batch->jobQueue, job->node);
-++totalQueuedJobs;
+++batch->queuedCount;
 user = batch->user;
 dlRemove(user->node);
 dlAddTail(queuedUsers, user->node);
@@ -1629,6 +1630,7 @@ for (el = batch->jobQueue->head; !dlEnd(el); el = next)
     next = el->next;
     recycleJob(job);	/* This free's el too! */
     }
+batch->queuedCount = 0;
 dlRemove(batch->node);
 dlAddTail(user->oldBatches, batch->node);
 updateUserPriority(user);
@@ -1774,7 +1776,7 @@ splitPath(batch->name, shortBatchName, NULL, NULL);
 pmClear(pm);
 pmPrintf(pm, "%-8s %4d %6d %6d %5d %3d %3d %s",
 	user->name, batch->runningCount, 
-	dlCount(batch->jobQueue), batch->doneCount,
+	batch->queuedCount, batch->doneCount,
 	batch->crashCount, batch->priority, batch->maxNode, shortBatchName);
 pmSend(pm, rudpOut);
 }
@@ -1972,7 +1974,7 @@ for (user = userList; user != NULL; user = user->next)
 		return;
 	    }
 	else
-	    count += dlCount(batch->jobQueue);
+	    count += batch->queuedCount;
 	}
     }
 if (extended)

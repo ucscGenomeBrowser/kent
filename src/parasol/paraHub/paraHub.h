@@ -54,6 +54,7 @@ struct batch
     struct user *user;		/* User this is associated with. */
     struct dlList *jobQueue;	/* List of jobs not running */
     int runningCount;		/* Number of jobs running */
+    int queuedCount;		/* Number of jobs queued */
     int doneCount;		/* Number of jobs done */
     int crashCount;		/* Number of jobs crashed */
     int continuousCrashCount;	/* Number of jobs crashed in a row */
