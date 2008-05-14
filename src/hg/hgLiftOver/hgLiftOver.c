@@ -17,7 +17,7 @@
 #include "liftOver.h"
 #include "liftOverChain.h"
 
-static char const rcsid[] = "$Id: hgLiftOver.c,v 1.58 2008/05/09 23:37:59 pauline Exp $";
+static char const rcsid[] = "$Id: hgLiftOver.c,v 1.59 2008/05/14 01:04:41 pauline Exp $";
 
 /* CGI Variables */
 #define HGLFT_USERDATA_VAR "hglft_userData"     /* typed/pasted in data */
@@ -73,7 +73,7 @@ cgiParagraph(
     "This tool converts genome coordinates and genome annotation files "
     "between assemblies.&nbsp;&nbsp;"
     "The input data can be pasted into the text box, or uploaded from a file.&nbsp;&nbsp;"
-    "If a pair of assemblies cannot be selected from the pulldown menus,"
+    "If a pair of assemblies cannot be selected from the pull-down menus,"
     " a direct lift between them is unavailable.&nbsp;&nbsp;"
     "However, a sequential lift may be possible.&nbsp;&nbsp;"
     "Example: lift from Human, July 2003 to Human, May 2004, and then from Human, "
