@@ -798,11 +798,18 @@ else
 	}
     else
 	{
-	char *newUrl = cloneString(url);
-	if (netSkipHttpHeaderLines(&sd, &newUrl))  /* url needed for err msgs and redirect url*/
+	char *newUrl = NULL;
+	int newSd = 0;
+	/* url needed for err msgs and redirect url*/
+	if (netSkipHttpHeaderLines(sd, url, &newSd, &newUrl))  
 	    {
 	    char buf[32*1024];
 	    int readSize;
+	    if (newUrl)
+		{
+		freeMem(newUrl);
+		sd = newSd;
+		}
 	    printf("Content-Type: application/octet-stream\n");
 	    printf("Content-Disposition: attachment; filename=%s%s\n", name, extension);
 	    printf("\n");

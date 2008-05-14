@@ -14,7 +14,7 @@
 #include "linefile.h"
 #include "base64.h"
 
-static char const rcsid[] = "$Id: net.c,v 1.58 2008/05/09 22:52:53 galt Exp $";
+static char const rcsid[] = "$Id: net.c,v 1.59 2008/05/14 11:05:00 galt Exp $";
 
 /* Brought errno in to get more useful error messages */
 
@@ -653,15 +653,15 @@ return dy;
 }
 
 
-boolean netSkipHttpHeaderLinesWithRedirect(int sd, char **purl)
+boolean netSkipHttpHeaderLinesWithRedirect(int sd, char *url, char **redirectedUrl)
 /* Skip http header lines. Return FALSE if there's a problem.
-   The input is a standard sd or fd descriptor.
-   This is meant to be able work even with a re-passable stream handle,
-   e.g. can pass it to the pipes routines, which means we can't
-   attach a linefile since filling its buffer reads in more than just the http header.
- */
+ * The input is a standard sd or fd descriptor.
+ * This is meant to be able work even with a re-passable stream handle,
+ * e.g. can pass it to the pipes routines, which means we can't
+ * attach a linefile since filling its buffer reads in more than just the http header.
+ * Handles 300, 301, 302, 303, 307 http redirects by setting *redirectedUrl to
+ * the new location. */
 {
-/* handle 300, 301, 302, 303, 307 http redirects */
 char buf[2000];
 char *line = buf;
 int maxbuf = sizeof(buf);
@@ -671,7 +671,6 @@ int nread = 0;
 char *sep = NULL;
 char *headerName = NULL;
 char *headerVal = NULL;
-char *url = *purl;
 boolean redirect = FALSE;
 while(TRUE)
     {
@@ -707,7 +706,8 @@ while(TRUE)
 	    warn("Strange http header on %s\n", url);
 	    return FALSE;
 	    }
-	if (startsWith("30", code) && isdigit(code[2]) && ((code[2] >= '0' && code[2] <= '3') || code[2] == '7') && code[3] == 0)
+	if (startsWith("30", code) && isdigit(code[2])
+	    && ((code[2] >= '0' && code[2] <= '3') || code[2] == '7') && code[3] == 0)
 	    {
 	    redirect = TRUE;
 	    }
@@ -732,70 +732,81 @@ while(TRUE)
     if (sameWord(headerName,"Location"))
 	{
 	if (redirect)
-	    *purl = cloneString(headerVal);
+	    *redirectedUrl = cloneString(headerVal);
 	}
     }
-if (redirect)
-    {
-    return FALSE;
-    }		
 return TRUE;
 }
 
-boolean netSkipHttpHeaderLines(int *psd, char **resultUrl)
-/* Skip http header lines. Return FALSE if there's a problem.
-   The input is a standard sd or fd descriptor.
-   This is meant to be able work even with a re-passable stream handle,
-   e.g. can pass it to the pipes routines, which means we can't
-   attach a linefile since filling its buffer reads in more than just the http header.
-   Handles redirect retries up to 5, sets resultUrl to final url found if any,
-   freeing the old value if successful.
- */
+
+boolean netSkipHttpHeaderLines(int sd, char *url, int *redirectedSd, char **redirectedUrl)
+/* Skip http headers lines, returning FALSE if there is a problem.  Generally called as
+ *    netSkipHttpHeaderLine(sd, url, &sd, &url);
+ * where sd is a socket (file) opened with netUrlOpen(url), and url is in dynamic memory.
+ * If the http header indicates that the file has moved, then it will update the *redirectedSd and
+ * *redirectedUrl with the new socket and URL, first closing sd.
+ * If for some reason you want to detect whether the forwarding has occurred you could
+ * call this as:
+ *    char *newUrl = NULL;
+ *    int newSd = 0;
+ *    netSkipHttpHeaderLine(sd, url, &newSd, &newUrl);
+ *    if (newUrl != NULL)
+ *          // Update sd with newSd, free url if appropriate and replace it with newUrl, etc.
+ *          //  free newUrl when finished.
+ * This routine handles up to 5 steps of redirection.
+ * The logic to this routine is also complicated a little to make it work in a pipe, which means we
+ * can't attach a lineFile since filling the lineFile buffer reads in more than just the http header. */
 {
-char *origUrl = *resultUrl;
-char *url = origUrl, *url2 = url;
 int redirectCount = 0;
-int sd = *psd;
 while (TRUE)
     {
     /* url needed for err msgs, and to return redirect location */
-    if (netSkipHttpHeaderLinesWithRedirect(sd, &url))
-	{
-	*psd = sd;   /* success after 0 to 5 redirects */
-	if (url != origUrl)
+    char *newUrl = NULL;
+    boolean success = netSkipHttpHeaderLinesWithRedirect(sd, url, &newUrl);
+    if (success && !newUrl) /* success after 0 to 5 redirects */
+        {
+	if (redirectCount > 0)
 	    {
-	    freeMem(origUrl);
-	    *resultUrl = url; 
+	    *redirectedSd = sd;
+	    *redirectedUrl = url;
 	    }
 	return TRUE;
 	}
     close(sd);
-    if (url == url2) /* failure without redirect */
-	break;
-    if (url2 != origUrl)
-    	freeMem(url2);
-    url2 = url;  /* remember previous value */
-    /* we have a new url to try */
-    ++redirectCount;
-    if (redirectCount > 5)
+    if (redirectCount > 0)
+	freeMem(url);
+    if (success)
 	{
-	warn("code 30x redirects: exceeded limit of 5 redirects, %s", origUrl);
-	break;
+	/* we have a new url to try */
+	++redirectCount;
+	if (redirectCount > 5)
+	    {
+	    warn("code 30x redirects: exceeded limit of 5 redirects, %s", newUrl);
+	    success = FALSE;
+	    }
+	else if (!startsWith("http://",newUrl))
+	    {
+	    warn("redirected to non-http: %s", newUrl);
+	    success = FALSE;
+	    }
+	else 
+	    {
+	    sd = netUrlOpen(newUrl);
+	    if (sd < 0)
+		{
+		warn("Couldn't open %s", newUrl);
+		success = FALSE;
+		}
+	    }
 	}
-    if (!startsWith("http://",url))
-	{
-	warn("redirected to non-http: %s", url);
-	break;
+    if (!success)
+	{  /* failure after 0 to 5 redirects */
+	if (redirectCount > 0)
+	    freeMem(newUrl);
+	return FALSE;
 	}
-    sd = netUrlOpen(url);
-    if (sd < 0)
-	{
-	warn("Couldn't open %s", url);
-	break;
-	}
+    url = newUrl;
     }
-if (url2 != origUrl)
-    freeMem(url2);
 return FALSE;
 }
 
@@ -813,11 +824,19 @@ if (sd < 0)
 else
     {
     struct lineFile *lf = NULL;
+    char *newUrl = NULL;
+    int newSd = 0;
     if (startsWith("http://",url))
 	{  
-	if (!netSkipHttpHeaderLines(&sd, &url))
+	if (!netSkipHttpHeaderLines(sd, url, &newSd, &newUrl))
 	    {
 	    return NULL;
+	    }
+	if (newUrl != NULL)
+	    {
+    	    /*  Update sd with newSd, replace it with newUrl, etc. */
+	    sd = newSd;
+	    url = newUrl;
 	    }
 	}
     if (endsWith(url, ".gz") ||
@@ -831,6 +850,8 @@ else
 	{
 	lf = lineFileAttach(url, TRUE, sd);
 	}
+    if (newUrl) 
+	freeMem(newUrl); 
     return lf;
     }
 }

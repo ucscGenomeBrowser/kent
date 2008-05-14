@@ -179,23 +179,33 @@ int netHttpGetMultiple(char *url, struct slName *queries, void *userData,
  * until we can't connect or until all requests have been served. 
  * For each HTTP response, do a callback. */
 
-boolean netSkipHttpHeaderLines(int *sd, char **url);
-/* Skip http header lines. Return FALSE if there's a problem.
-   The input is a standard sd or fd descriptor.
-   This is meant to be able work even with a re-passable stream handle,
-   e.g. can pass it to the pipes routines, which means we can't
-   attach a linefile since filling its buffer reads in more than just the http header.
-   Handles redirect retries up to 5, sets resultUrl to final url found if any,
-   freeing the old value if successful.
- */
 
-boolean netSkipHttpHeaderLinesWithRedirect(int sd, char **url);
+boolean netSkipHttpHeaderLinesWithRedirect(int sd, char *url, char **redirectedUrl);
 /* Skip http header lines. Return FALSE if there's a problem.
-   The input is a standard sd or fd descriptor.
-   This is meant to be able work even with a re-passable stream handle,
-   e.g. can pass it to the pipes routines, which means we can't
-   attach a linefile since filling its buffer reads in more than just the http header.
- */
+ * The input is a standard sd or fd descriptor.
+ * This is meant to be able work even with a re-passable stream handle,
+ * e.g. can pass it to the pipes routines, which means we can't
+ * attach a linefile since filling its buffer reads in more than just the http header.
+ * Handles 300, 301, 302, 303, 307 http redirects by setting *redirectedUrl to
+ * the new location. */
+
+boolean netSkipHttpHeaderLines(int sd, char *url, int *redirectedSd, char **redirectedUrl);
+/* Skip http headers lines, returning FALSE if there is a problem.  Generally called as
+ *    netSkipHttpHeaderLine(sd, url, &sd, &url);
+ * where sd is a socket (file) opened with netUrlOpen(url), and url is in dynamic memory.
+ * If the http header indicates that the file has moved, then it will update the *redirectedSd and
+ * *redirectedUrl with the new socket and URL, first closing sd.
+ * If for some reason you want to detect whether the forwarding has occurred you could
+ * call this as:
+ *    char *newUrl = NULL;
+ *    int newSd = 0;
+ *    netSkipHttpHeaderLine(sd, url, &newSd, &newUrl);
+ *    if (newUrl != NULL)
+ *          // Update sd with newSd, free url if appropriate and replace it with newUrl, etc.
+ *          //  free newUrl when finished.
+ * This routine handles up to 5 steps of redirection.
+ * The logic to this routine is also complicated a little to make it work in a pipe, which means we
+ * can't attach a lineFile since filling the lineFile buffer reads in more than just the http header. */
 
 #endif /* NET_H */
 

@@ -23,7 +23,7 @@
 #include "customFactory.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.71 2008/05/09 22:52:53 galt Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.72 2008/05/14 11:05:01 galt Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -1274,9 +1274,14 @@ if ((val = hashFindVal(hash, "htmlUrl")) != NULL)
     int sd = netUrlOpen(val);
     if (sd >= 0)
         {
-	char *url = cloneString(val);
-        netSkipHttpHeaderLines(&sd, &url); /* redirect can modify the url */
-	freeMem(url);
+	char *newUrl = NULL;
+	int newSd = 0;
+        netSkipHttpHeaderLines(sd, val, &newSd, &newUrl); /* redirect can modify the url */
+	if (newUrl)
+	    {
+    	    freeMem(newUrl);
+	    sd = newSd;
+	    }
         ds = netSlurpFile(sd);
         close(sd);
         track->tdb->html = dyStringCannibalize(&ds);
