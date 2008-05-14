@@ -16,7 +16,7 @@
 #include "verbose.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: para.c,v 1.88 2008/05/14 00:46:50 galt Exp $";
+static char const rcsid[] = "$Id: para.c,v 1.89 2008/05/14 17:56:32 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -1667,7 +1667,7 @@ verbose(1, "Told hub to clear sick nodes\n");
 
 
 void showSickNodes(boolean showSummary)
-/* Tell hub to show sick nodes on batch */
+/* Tell hub to show sick nodes on batch. */
 {
 int count = 0;
 struct dyString *dy = newDyString(1024);
@@ -1680,8 +1680,10 @@ for (lineEl = lineList; lineEl != NULL; lineEl = lineEl->next)
     {
     ++count;
     char *line = lineEl->val;
-    /* if showSummary, only print the last line, unless nothing to report */
-    if (!(showSummary && (lineEl->next || count == 1)))
+    /* In show summary mode, only print the last line, 
+     * which contains the totals.  Only print this one
+     * if there's more than one line (the total is greater than zero). */
+    if (!showSummary || !(lineEl->next || count == 1))
 	printf("%s\n", line);
     freez(&lineEl->val);
     }
