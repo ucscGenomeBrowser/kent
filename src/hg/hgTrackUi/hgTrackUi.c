@@ -38,7 +38,7 @@
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 #define MAX_SP_SIZE 2000
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.428 2008/05/14 22:42:02 aamp Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.429 2008/05/14 22:42:49 aamp Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -343,7 +343,7 @@ if (defaultColoring)
     cartSetStringArray(cart, snp125MolTypeStrings, snp125MolTypeDefault,
 		       snp125MolTypeLabelsSize);
     }
-
+/* Something in the middle of a function. */
 printf("<A name=\"colorSpec\"><HR>\n");
 printf("<B>SNP Feature for Color Specification:</B>\n");
 snp125ColorSourceCart[0] = cartUsualString(cart, snp125ColorSourceDataName[0],
