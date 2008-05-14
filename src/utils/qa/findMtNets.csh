@@ -15,6 +15,7 @@
 set db=""
 set dbList=""
 set count=""
+set flag=""
 
 if ($#argv != 2) then
   # no command line args
@@ -40,7 +41,18 @@ set count=`grep -c . $dbList`
 
 foreach otherDb (`cat dbList`)
   set capDb=`echo $otherDb | perl -wpe '$_ = ucfirst($_)'`
-  ls */$db.net.$capDb  | xargs grep 'is empty' | awk '{print $1}' > $otherDb.mtNet
+  if ( -e $dbList ) then
+    test */$db.net.$capDb  >& /dev/null
+    if ( $status ) then
+      echo
+      echo " no file:  */$db.net.$capDb"
+      echo " proceeding without it "
+      set count=`expr $count - 1`
+      set flag="$flag\n Note:  not all net files were present, including for $otherDb"
+    else
+      ls */$db.net.$capDb  | xargs grep 'is empty' | awk '{print $1}' > $otherDb.mtNet
+    endif
+  endif
 end
 
 echo
@@ -76,4 +88,8 @@ echo "total size:"
 cat $db.mtNetSizes | awk '{total+=$2} END {print total/1000000}'
 echo "(megabases)"
 
+echo $flag
+
 echo
+rm -f mtNetAll
+rm -f $db.mtNetList
