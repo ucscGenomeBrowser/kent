@@ -68,7 +68,7 @@
 #include "log.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: paraHub.c,v 1.100 2008/05/13 21:41:42 galt Exp $";
+static char const rcsid[] = "$Id: paraHub.c,v 1.101 2008/05/14 07:29:50 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -395,14 +395,14 @@ struct dlNode *node;
 for (node = user->curBatches->head; !dlEnd(node); node = node->next)
     {
     struct batch *batch = node->val;
-    if ((batch->maxNode==-1) || (batch->runningCount<batch->maxNode))
+    if ((batch->maxNode==-1) || (batch->runningCount < batch->maxNode))
 	{
 	if (((batch->runningCount+1) * batch->priority) < minCount)
 	    {
             /* avoid any machine in the sickNodes with threshold failure count */
             if (hashIntValDefault(batch->sickNodes, machine->name, 0) < sickNodeThreshold)
 		{
-		minCount = batch->runningCount * batch->priority;
+		minCount = (batch->runningCount+1) * batch->priority;
 		minBatch = batch;
 		}
 	    }
@@ -422,14 +422,14 @@ struct dlNode *node;
 for (node = queuedUsers->head; !dlEnd(node); node = node->next)
     {
     struct user *user = node->val;
-    if ((user->maxNode==-1) || (user->runningCount<user->maxNode))
+    if ((user->maxNode==-1) || (user->runningCount < user->maxNode))
 	{
 	if (!dlEmpty(user->curBatches) && ((user->runningCount+1) * user->priority) < minCount)
 	    {
             /* avoid any machine in the sickNodes */
             if (!hashLookup(user->sickNodes, machine->name))
 		{
-		minCount = user->runningCount * user->priority;
+		minCount = (user->runningCount+1) * user->priority;
 		minUser = user;
 		}
 	    }
