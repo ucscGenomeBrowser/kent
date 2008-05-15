@@ -19,8 +19,9 @@
 #include "hash.h"
 #include "jsHelper.h"
 #include "hui.h"
+#include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jsHelper.c,v 1.11 2008/04/30 00:26:06 larrym Exp $";
+static char const rcsid[] = "$Id: jsHelper.c,v 1.12 2008/05/15 21:20:06 larrym Exp $";
 
 static boolean jsInited = FALSE;
 struct hash *includedFiles = NULL;
@@ -324,19 +325,38 @@ if(!includedFiles)
     includedFiles = newHash(0);
 if(hashLookup(includedFiles, fileName) == NULL)
     {
-    char *cgiRoot = hCgiRoot();
-    /* tolerate missing cgiRoot (i.e. when running from command line) */
-    if(cgiRoot)
+    char *docRoot = hDocumentRoot();
+    char dirName[2048];
+    safef(dirName, sizeof(dirName), "js");
+    /* tolerate missing docRoot (i.e. when running from command line) */
+    if(docRoot != NULL)
         {
-        static char realFileName[2048];
-        safef(realFileName, sizeof(realFileName), "%sjs/%s", cgiRoot, fileName);
+        char realFileName[2048];
+
+        // hacky code to allow developer specific javascript for developers on hgwdev - we get the
+        // developer's id from the db.trackDb config and use it to construct a developer specific path
+        char *cookie = cfgOption("db.trackDb");
+        char *prefix = "trackDb_";
+        char *ptr;
+        realFileName[0] = 0;
+        if(cookie != NULL && (ptr = stringIn(prefix, cookie)) != NULL)
+            {
+            char *user = ptr + strlen(prefix);
+            safef(realFileName, sizeof(realFileName), "%s/%s/%s/%s", docRoot, dirName, user, fileName);
+            if(fileExists(realFileName))
+                safef(dirName, sizeof(dirName), "js/%s", user);
+            else
+                realFileName[0] = 0;
+            }
+        if(!realFileName[0])
+            safef(realFileName, sizeof(realFileName), "%s/%s/%s", docRoot, dirName, fileName);
         if(!fileExists(realFileName))
             {
             fprintf(stderr, "jsIncludeFile: javascript fileName: %s doesn't exist.\n", realFileName);
             }
         }
     hashAdd(includedFiles, fileName, NULL);
-    hPrintf("<script type='text/javascript' src='../cgi-bin/js/%s'></script>\n", fileName);
+    hPrintf("<script type='text/javascript' src='../%s/%s'></script>\n", dirName, fileName);
     }
 }
 
