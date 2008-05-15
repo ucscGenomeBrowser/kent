@@ -21034,6 +21034,42 @@ TMPDIR=/scratch/tmp
         ccdsKgMap
     # << emacs
 ############################################################################
+#  update vega genes to version 31 (v49 of Ensembl genes)
+#	(DONE - 2008-05-15 - Hiram)
+    mkdir  /cluster/data/hg18/bed/vega31_49
+    cd  /cluster/data/hg18/bed/vega31_49
+    wget --timestamping \
+	"ftp://ftp.sanger.ac.uk/pub/vega/human/gtf_file.gz"
+    wget --timestamping \
+	"ftp://ftp.sanger.ac.uk/pub/vega/human/CHANGELOG.gz"
+    wget --timestamping \
+	"ftp://ftp.sanger.ac.uk/pub/vega/human/catalog.txt"
+    wget --timestamping \
+"ftp://ftp.sanger.ac.uk/pub/vega/human/pep/Homo_sapiens.VEGA.apr.pep.tot.fa.gz"
+
+    #	processing similar to the same processing for Ensembl genes,
+    #	from /cluster/data/hg18/bed/ensGene.49/process/doProcess.csh
+    zcat gtf_file.gz \
+        | sed -e "s/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/; s/^Un/chrUn/" \
+        | liftUp -type=.gtf stdout \
+	    /cluster/data/hg18/jkStuff/ensGene.haplotype.lift carry stdin \
+        | gzip > allGenes.gtf.gz
+    gtfToGenePred -infoOut=infoOut.txt -genePredExt allGenes.gtf.gz stdout \
+	| gzip > hg18.allGenes.gp.gz
+    /cluster/home/hiram/kent/src/hg/utils/automation/extractGtf.pl \
+	infoOut.txt > ensGtp.tab
+    genePredCheck -db=hg18 hg18.allGenes.gp.gz
+    #	checked: 62418 failed: 0
+    zcat allGenes.gtf.gz | grep -i pseudo > pseudo.gtf
+    zcat allGenes.gtf.gz | grep -v -i pseudo > not.pseudo.gtf
+    gtfToGenePred -genePredExt pseudo.gtf pseudo.gp
+    gtfToGenePred -genePredExt not.pseudo.gtf not.pseudo.gp
+    genePredCheck -db=hg18 pseudo.gp
+    #	checked: 5747 failed: 0
+    genePredCheck -db=hg18 not.pseudo.gp
+    #	checked: 56671 failed: 0
+    hgLoadGenePred -genePredExt hg18 vegaGene not.pseudo.gp
+    hgLoadGenePred -genePredExt hg18 vegaPseudoGene pseudo.gp
 
 ############################################################################
 # DGV V4 (DATABASE OF GENOMIC VARIANTS) (DONE 5/9/08 angie)
@@ -21067,7 +21103,6 @@ TMPDIR=/scratch/tmp
     end
     hgLoadBed hg18 dgv *.bed \
       -onServer -sqlTable=$HOME/kent/src/hg/lib/dgv.sql -tab
-
 
 ############################################################################
 # AGILENT CGH PROBES (AND MM8, RN4) (Done 2008-05-13, Andy)
