@@ -4,7 +4,8 @@ HTDOCS_USER=${HTDOCS}-${USER}
 CVSUP = cvs -q update 
 
 user:
-	${MAKE} doInstall DEST=${HTDOCS_USER}
+	@echo "only 'make alpha' is allowed here"
+	@exit 1
 
 alpha:
 	${CVSUP} -d -P
