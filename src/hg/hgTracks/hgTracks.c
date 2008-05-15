@@ -119,7 +119,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1466 2008/05/14 01:02:18 markd Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1467 2008/05/15 00:03:13 hiram Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -5264,18 +5264,21 @@ if (dy != NULL)
    where vegaInfo has this column otherwise the method column is used. 
    Check the field list for these columns. */
 
-tblIx = sqlFieldIndex(conn, infoTable, "confidence");
-fieldExists = (tblIx > -1) ? TRUE : FALSE;
-if (fieldExists)
-   dyStringPrintf(dy2, "%s", "confidence");
-else
-   {
-   tblIx = sqlFieldIndex(conn, infoTable, "method");
-   fieldExists = (tblIx > -1) ? TRUE : FALSE;
-   dyStringPrintf(dy2, "%s", "method");
-   }
+if (isNotEmpty(infoTable))
+    {
+    tblIx = sqlFieldIndex(conn, infoTable, "confidence");
+    fieldExists = (tblIx > -1) ? TRUE : FALSE;
+    if (fieldExists)
+       dyStringPrintf(dy2, "%s", "confidence");
+    else
+       {
+       tblIx = sqlFieldIndex(conn, infoTable, "method");
+       fieldExists = (tblIx > -1) ? TRUE : FALSE;
+       dyStringPrintf(dy2, "%s", "method");
+       }
+    }
 
-if (infoTable != NULL && fieldExists)
+if (isNotEmpty(infoTable)  && fieldExists)
     {
     /* use the value for infoCol defined above */
     infoCol = dyStringCannibalize(&dy2);
