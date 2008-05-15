@@ -873,3 +873,22 @@ chainOne $(path1)
     rmdir /cluster/bluearc/worms/caePb1/bed
     rmdir /cluster/bluearc/worms/caePb1
 #end tblastn
+
+#############################################################################
+# LIFTOVER TO caePb2 (WORKING - 2008-05-14 - Hiram)
+    ssh kkstore01
+    screen -r -d	#	use screen to control this job
+    # -debug run to create run dir, preview scripts...
+    doSameSpeciesLiftOver.pl -debug caePb1 caePb2 \
+      -ooc /cluster/data/caePb1/jkStuff/11.ooc
+    # Real run:
+    cd /cluster/data/caePb1/bed/blat.caePb2.2008-05-13
+    time nice -n +19 doSameSpeciesLiftOver.pl caePb1 caePb2 \
+      -ooc /cluster/data/caePb1/jkStuff/11.ooc > do.log 2>&1 &
+    #	real    14m13.501s
+
+    #	a scaffold to scaffold lift over file was made manually
+    #	for Sheldon McKay.
+    #	see also the scripts left in:
+    #	/cluster/data/caePb1/bed/blat.caePb2.supers/run.blat
+    #	/cluster/data/caePb1/bed/blat.caePb2.supers/run.chain
