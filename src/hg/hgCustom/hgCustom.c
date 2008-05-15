@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.121 2008/05/01 23:42:45 angie Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.122 2008/05/15 23:07:16 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -468,9 +468,13 @@ for (ct = ctList; ct != NULL; ct = ct->next)
             sameString(ct->tdb->type, "chromGraph"))
         printf("<TR><TD>%s</A></TD>", ct->tdb->shortLabel);
     else
+	{
+	char *cgiName = cgiEncode(ct->tdb->tableName);
         printf("<TR><TD><A TITLE='Update custom track: %s' HREF='%s?%s&%s=%s'>%s</A></TD>", 
-            ct->tdb->shortLabel, hgCustomName(),cartSidUrlString(cart),hgCtTable, ct->tdb->tableName, 
-            ct->tdb->shortLabel);
+            ct->tdb->shortLabel, hgCustomName(),cartSidUrlString(cart),
+	    hgCtTable, cgiName, ct->tdb->shortLabel);
+	freeMem(cgiName);
+	}
     /* Description field */
     printf("<TD>%s</TD>", ct->tdb->longLabel);
     /* Type field */
