@@ -19,13 +19,13 @@ beta:
 	${MAKE} doInstall DEST=${CGI_BIN}/js
 
 clean:
-	# do nothing -- placeholder target so we don't get a warning from make
+	
 
 compile:
-	# do nothing -- placeholder target so we don't get a warning from make
+	
 
 install:
-	# is this used hiram ????
+	
 
 doInstall:
 	rsync -t -r --relative --exclude='makefile' ${EXCL} `cvsFiles` ${DEST}/
