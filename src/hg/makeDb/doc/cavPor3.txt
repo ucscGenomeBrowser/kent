@@ -144,7 +144,7 @@ cut -f 2 chrom.sizes | ave stdin
     # 732765485 bases of 2663369733 (27.513%) in intersection
 
     # RepeatMasker and lib version from do.log:
-    #    RepeatMasker version development-$Id: cavPor3.txt,v 1.3 2008/04/26 22:38:22 braney Exp $
+    #    RepeatMasker version development-$Id: cavPor3.txt,v 1.4 2008/05/15 17:38:18 tdreszer Exp $
     #    Jan 11 2008 (open-3-1-9) version of RepeatMasker
     #    CC   RELEASE 20071204;
 
@@ -1467,6 +1467,20 @@ _EOF_
 #  trackDb/chainOryCun1.html
 #  trackDb/netOryCun1.html
 
+############################################################################
+#  BLATSERVERS ENTRY (DONE - 2008-04-17 - Tim)
+#   After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+    VALUES ("cavPor3", "blat7", "17780", "1", "0"); \
+    INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+    VALUES ("cavPor3", "blat7", "17781", "0", "1");' \
+        hgcentraltest
+    #   test it with some sequence
+    # Can't open /gbdb/cavPor3/choHof1.2bit to read: No such file or directory
+    ## Doh!  I entered in the wrong blat server the first time!
+
 #############################################################################
 #  Downloads (DONE - 2008-04-23 - Tim)
 #   Let's see if the downloads will work
@@ -1744,63 +1758,10 @@ Submission to last job:          1299s      21.65m     0.36h    0.02d
     rm -rf /cluster/data/cavPor3/bed/tblastn.hg18KG/blastOut
     rm -rf /cluster/bluearc/cavPor3/bed/tblastn.hg18KG/blastOut
 #end tblastn
-###############################
+############################### Make editor happy: _EOF_
  
-# >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> got this far 
-# >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> got this far 
-# >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> got this far 
-# >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> got this far 
-# >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> got this far
- 
-################## EVERYTHING THAT FOLLOWS IS TEMPLATE FOR WHAT NEEDS TO BE DONE ######################
-################## EVERYTHING THAT FOLLOWS IS TEMPLATE FOR WHAT NEEDS TO BE DONE ######################
-################## EVERYTHING THAT FOLLOWS IS TEMPLATE FOR WHAT NEEDS TO BE DONE ######################
-################## EVERYTHING THAT FOLLOWS IS TEMPLATE FOR WHAT NEEDS TO BE DONE ######################
-################## EVERYTHING THAT FOLLOWS IS TEMPLATE FOR WHAT NEEDS TO BE DONE ######################
-################## EVERYTHING THAT FOLLOWS IS TEMPLATE FOR WHAT NEEDS TO BE DONE ######################
-################## EVERYTHING THAT FOLLOWS IS TEMPLATE FOR WHAT NEEDS TO BE DONE ######################
-################## EVERYTHING THAT FOLLOWS IS TEMPLATE FOR WHAT NEEDS TO BE DONE ######################
-################## EVERYTHING THAT FOLLOWS IS TEMPLATE FOR WHAT NEEDS TO BE DONE ######################
-################## EVERYTHING THAT FOLLOWS IS TEMPLATE FOR WHAT NEEDS TO BE DONE ######################
-################## EVERYTHING THAT FOLLOWS IS TEMPLATE FOR WHAT NEEDS TO BE DONE ######################
-################## EVERYTHING THAT FOLLOWS IS TEMPLATE FOR WHAT NEEDS TO BE DONE ######################
-################## EVERYTHING THAT FOLLOWS IS TEMPLATE FOR WHAT NEEDS TO BE DONE ######################
-################## EVERYTHING THAT FOLLOWS IS TEMPLATE FOR WHAT NEEDS TO BE DONE ######################
-################## EVERYTHING THAT FOLLOWS IS TEMPLATE FOR WHAT NEEDS TO BE DONE ######################
-################## EVERYTHING THAT FOLLOWS IS TEMPLATE FOR WHAT NEEDS TO BE DONE ######################
-################## EVERYTHING THAT FOLLOWS IS TEMPLATE FOR WHAT NEEDS TO BE DONE ######################
-################## EVERYTHING THAT FOLLOWS IS TEMPLATE FOR WHAT NEEDS TO BE DONE ######################
-################## EVERYTHING THAT FOLLOWS IS TEMPLATE FOR WHAT NEEDS TO BE DONE ######################
-################## EVERYTHING THAT FOLLOWS IS TEMPLATE FOR WHAT NEEDS TO BE DONE ######################
-################## EVERYTHING THAT FOLLOWS IS TEMPLATE FOR WHAT NEEDS TO BE DONE ######################
-################## EVERYTHING THAT FOLLOWS IS TEMPLATE FOR WHAT NEEDS TO BE DONE ######################
-################## EVERYTHING THAT FOLLOWS IS TEMPLATE FOR WHAT NEEDS TO BE DONE ######################
-################## EVERYTHING THAT FOLLOWS IS TEMPLATE FOR WHAT NEEDS TO BE DONE ######################
-################## EVERYTHING THAT FOLLOWS IS TEMPLATE FOR WHAT NEEDS TO BE DONE ######################
-################## EVERYTHING THAT FOLLOWS IS TEMPLATE FOR WHAT NEEDS TO BE DONE ######################
-################## EVERYTHING THAT FOLLOWS IS TEMPLATE FOR WHAT NEEDS TO BE DONE ######################
-################## EVERYTHING THAT FOLLOWS IS TEMPLATE FOR WHAT NEEDS TO BE DONE ######################
-################## EVERYTHING THAT FOLLOWS IS TEMPLATE FOR WHAT NEEDS TO BE DONE ######################
-################## EVERYTHING THAT FOLLOWS IS TEMPLATE FOR WHAT NEEDS TO BE DONE ######################
-################## EVERYTHING THAT FOLLOWS IS TEMPLATE FOR WHAT NEEDS TO BE DONE ######################
-################## EVERYTHING THAT FOLLOWS IS TEMPLATE FOR WHAT NEEDS TO BE DONE ######################
-
-############################################################################
-#  BLATSERVERS ENTRY (DONE - 2008-03-12 - Hiram)
-#	After getting a blat server assigned by the Blat Server Gods,
-    ssh hgwdev
-
-    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("cavPor3", "blat7", "17780", "1", "0"); \
-	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("cavPor3", "blat7", "17781", "0", "1");' \
-	    hgcentraltest
-    #	test it with some sequence
-    # Can't open /gbdb/cavPor3/choHof1.2bit to read: No such file or directory
-    ## Doh!  I entered in the wrong blat server the first time!
-
 #########################################################################
-## 6-Way Multiz (DONE - 2008-03-18 - Hiram)
+## 7-Way Multiz (STARTED - 2008-04-25 - Tim)
 ##
 
 #  From Jim: A minimal set would be human/mouse/rabbit/chicken.  
@@ -1809,8 +1770,8 @@ Submission to last job:          1299s      21.65m     0.36h    0.02d
     #	the all.chain.gz files were split up via kluster jobs on memk
     #	in order to get mafSynNet files.  Example above in ornAna1 blastz
     ssh hgwdev
-    mkdir /cluster/data/cavPor3/bed/multiz5way
-    cd /cluster/data/cavPor3/bed/multiz5way
+    mkdir /cluster/data/cavPor3/bed/multiz7way
+    cd /cluster/data/cavPor3/bed/multiz7way
     #	take the 30-way tree from mm9 and eliminate genomes not in
     #	this alignment
     #	rearrange to get cavPor3 on the top of the graph
@@ -1818,125 +1779,177 @@ Submission to last job:          1299s      21.65m     0.36h    0.02d
     #	http://genome.ucsc.edu/cgi-bin/phyloGif
     #	to create the image for the tree diagram
 
-    #	select the 6 organisms from the 30-way recently done on mouse mm9
+    #	select the 7 organisms from the 30-way recently done on mouse mm9
     /cluster/bin/phast/tree_doctor \
 --prune-all-but Human_hg18,Mouse_mm9,Rat_rn4,GuineaPig_cavPor2,Rabbit_oryCun1,Opossum_monDom4,Chicken_galGal3 \
 	/cluster/data/mm9/bed/multiz30way/mm9OnTop.fullNames.nh \
-	| sed -e "s/cavPor2/cavPor3/g" > 6-way.fullNames.nh
+	| sed -e "s/cavPor2/cavPor3/g" > 7-way.fullNames.nh
 
     #	looks something like this:
-(((Mouse_mm9:0.325818,Human_hg18:0.126901):0.019763,
-(Dog_canFam2:0.156637,Cow_cavPor3:0.163945):0.031326):0.332197,
-Platypus_ornAna1:0.488110);
+    # ((((((Mouse_mm9:0.076274,Rat_rn4:0.084383):0.200607,GuineaPig_cavPor3:0.202990):0.034350,Rabbit_oryCun1:0.208548):0.014587
+    # ,Human_hg18:0.126901):0.263313,Opossum_monDom4:0.320721):0.207444,Chicken_galGal3:0.488824);
 
-    #	rearrange to get Cow at the top:
+    #	rearrange to get guineaPig at the top:
     # this leaves us with:
-    cat << '_EOF_' > cavPor3.5-way.nh
-(((Cow_cavPor3:0.163945,Dog_canFam2:0.156637):0.031326,
-   (Human_hg18:0.126901,Mouse_mm9:0.325818):0.019763):0.332197,
-   Platypus_ornAna1:0.488110);
-'_EOF_'
+    cat << _EOF_ > cavPor3.7-way.nh
+(((((GuineaPig_cavPor3:0.202990,(Mouse_mm9:0.076274,Rat_rn4:0.084383):0.200607):0.034350,Rabbit_oryCun1:0.208548):0.014587,Human_hg18:0.126901):0.263313,Opossum_monDom4:0.320721):0.207444,Chicken_galGal3:0.488824);
+_EOF_
     #	<< happy emacs
-
-    #	create a species list from that file:
-    sed -e 's/[()]//g; s/ /\n/g; s/,/\n/g' cavPor3.5-way.nh \
-        | sed -e "s/[ \t]*//g; /^[ \t]$/d; /^$/d" | sort -u \
-        | sed -e "s/.*_//; s/:.*//" | sort > species.list
-    #	verify that has 5 db names in it
-    # create a stripped down nh file for use in autoMZ run
-    echo \
-`sed 's/[a-zA-Z0-9]*_//g; s/:0.[0-9]*//g; s/[,;]/ /g' cavPor3.5-way.nh \
-	| sed -e "s/  / /g"` > tree.5.nh
-    #	that looks like, as a single line:
-    #	(((cavPor3 canFam2) (hg18 mm9)) ornAna1)
-
+    
     # verify all blastz's exists
-    cat << '_EOF_' > listMafs.csh
+    cat << \_EOF_ > listMafs.csh
 #!/bin/csh -fe
-cd /cluster/data/cavPor3/bed/multiz5way
+cd /cluster/data/cavPor3/bed/multiz7way
 foreach db (`grep -v cavPor3 species.list`)
     set bdir = /cluster/data/cavPor3/bed/blastz.$db
-    if (-e $bdir/mafRBestNet/chr1.maf.gz) then
+    if (-e $bdir/mafRBestNet/cavPor3.$db.rbest.maf.gz) then
 	echo "$db mafRBestNet"
-    else if (-e $bdir/mafSynNet/chr1.maf.gz) then
+    else if (-e $bdir/mafSynNet/cavPor3.$db.syn.maf.gz) then
 	echo "$db mafSynNet"
-    else if (-e $bdir/mafNet/chr1.maf.gz) then
+    else if (-e $bdir/mafNet/cavPor3.$db.net.maf.gz) then
 	echo "$db mafNet"
     else
 	echo "$db mafs not found"
     endif
 end
-'_EOF_'
+_EOF_
     # << happy emacs
     chmod +x ./listMafs.csh
     #	see what it says:
     ./listMafs.csh
-# canFam2 mafSynNet
-# hg18 mafSynNet
-# mm9 mafSynNet
-# ornAna1 mafSynNet
+    # galGal3 mafNet
+    # hg18 mafNet
+    # mm9 mafNet
+    # monDom4 mafNet
+    # oryCun1 mafRBestNet
+    # rn4 mafNet
 
-    /cluster/bin/phast/all_dists cavPor3.5-way.nh > 5way.distances.txt
-    grep -i bostau 5way.distances.txt | sort -k3,3n
-# Cow_cavPor3     Dog_canFam2     0.320582
-# Cow_cavPor3     Human_hg18      0.341935
-# Cow_cavPor3     Mouse_mm9       0.540852
-# Cow_cavPor3     Platypus_ornAna1        1.015578
+    /cluster/bin/phast/all_dists cavPor3.7-way.nh > 7way.distances.txt
+    #    ERROR: Can't parse distance in tree ("0.014587
+    #").
+    #[hgwdev:tdreszer multiz7way> m cavPor3.7-way.nh 
+    # (((((GuineaPig_cavPor3:0.202990,(Mouse_mm9:0.076274,Rat_rn4:0.084383):0.200607):0.034350,Rabbit_oryCun1:0.208548):0.014587
+    # ,Human_hg18:0.126901):0.263313,Opossum_monDom4:0.320721):0.207444,Chicken_galGal3:0.488824);
+    # Problem is that tree should not contain 'n' so reecho and retry
+    m 7way.distances.txt
+    # GuineaPig_cavPor3       Mouse_mm9       0.479871
+    # GuineaPig_cavPor3       Rat_rn4 0.487980
+    # GuineaPig_cavPor3       Rabbit_oryCun1  0.445888
+    # GuineaPig_cavPor3       Human_hg18      0.378828
+    # GuineaPig_cavPor3       Opossum_monDom4 0.835961
+    # GuineaPig_cavPor3       Chicken_galGal3 1.211508
+    # Mouse_mm9       Rat_rn4 0.160657
+    # Mouse_mm9       Rabbit_oryCun1  0.519779
+    # Mouse_mm9       Human_hg18      0.452719
+    # Mouse_mm9       Opossum_monDom4 0.909852
+    # Mouse_mm9       Chicken_galGal3 1.285399
+    # Rat_rn4 Rabbit_oryCun1  0.527888
+    # Rat_rn4 Human_hg18      0.460828
+    # Rat_rn4 Opossum_monDom4 0.917961
+    # Rat_rn4 Chicken_galGal3 1.293508
+    # Rabbit_oryCun1  Human_hg18      0.350036
+    # Rabbit_oryCun1  Opossum_monDom4 0.807169
+    # Rabbit_oryCun1  Chicken_galGal3 1.182716
+    # Human_hg18      Opossum_monDom4 0.710935
+    # Human_hg18      Chicken_galGal3 1.086482
+    # Opossum_monDom4 Chicken_galGal3 1.016989
+    # (total) -       2.228942
 
+    grep -i cavPor 7way.distances.txt | sort -k3,3n
+    # GuineaPig_cavPor3       Human_hg18      0.378828
+    # GuineaPig_cavPor3       Rabbit_oryCun1  0.445888
+    # GuineaPig_cavPor3       Mouse_mm9       0.479871
+    # GuineaPig_cavPor3       Rat_rn4         0.487980
+    # GuineaPig_cavPor3       Opossum_monDom4 0.835961
+    # GuineaPig_cavPor3       Chicken_galGal3 1.211508
+    
+    # Note that guinneaPig is closer to human than to other rodents.  
+    # This may be reasonable, since the speed of evolution (length of tree limbs) 
+    # in rodents is greater than for primates.  For instance mm9 is closer to hg18
+    # than it is to either cavPor2 or oryCun1
+    
     #	use the calculated
     #	distances in the table below to order the organisms and check
     #	the button order on the browser.
     #	And if you can fill in the table below entirely, you have
     #	succeeded in finishing all the alignments required.
     #
-#                         featureBits chainLink measures
-#                                       chainCalJac1Link   chain   linearGap
-#    distance                     on CalJac1    on other   minScore
-#  1  0.320582 Dog_canFam2        (% 82.846)   (% 78.351)   3000     medium
-#  2  0.341935 Human_hg18         (% 74.810)   (% 77.648)   3000     medium
-#  3  0.540852 Mouse_mm9          (% 76.925)   (% 74.694)   3000     medium
-#  4  1.015578 Platypus_ornAna1   (% 77.296)   (% 76.308)   3000     medium
+    #                         featureBits chainLink measures
+    #                                    chainCavPor3Link   chain   linearGap
+    # distance                     on cavPor3    on other   minScore
+    # 0.479871 Mouse_mm9           (28.900%)     (29.330%)  3000     medium
+    # 0.487980 Rat_rn4             (27.858%)     (27.602%)  3000     medium
+    # 0.445888 Rabbit_oryCun1      (35.145%)     (28.238%)  3000     medium
+    # 0.378828 Human_hg18          (43.971%)     (48.132%)  3000     medium
+    # 0.835961 Opossum_monDom4      (9.540%)     (14.372%)  5000     loose
+    # 1.211508 Chicken_galGal3     (10.190%)      (5.437%)  5000     loose
+    ### ### ### ### Be sure to use calJac as an example because of scaffolds
+    ### ### ### ### will require making maf files by scaffold name
 
     #	create a coherent set of all the mafs involved in this run
     mkdir mafLinks
     cd mafLinks
-    ln -s ../../blastz.canFam2/mafSynNet ./canFam2
-    ln -s ../../blastz.hg18/mafSynNet ./hg18
-    ln -s ../../blastz.mm9/mafSynNet ./mm9
-    ln -s ../../blastz.ornAna1/mafSynNet ./ornAna1
+    ln -s ../../blastz.hg18/mafNet ./hg18
+    ln -s ../../blastz.mm9/mafNet ./mm9
+    ln -s ../../blastz.rn4/mafNet ./rn4
+    ln -s ../../blastz.monDom4/mafNet ./monDom4
+    ln -s ../../blastz.galGal3/mafNet ./galGal3
+    ln -s ../../blastz.oryCun1/mafRBestNet ./oryCun1
 
     #	check data size:
     du -hscL *
-# 982M    canFam2
-# 940M    hg18
-# 483M    mm9
-# 79M     ornAna1
-# 2.5G    total
+    # 100M    galGal3
+    # 930M    hg18
+    # 577M    mm9
+    # 268M    monDom4
+    # 495M    oryCun1
+    # 543M    rn4
+    # 2.9G    total
 
-    # copy net mafs to cluster-friendly storage
+    #   need to split these things up by Contig number for efficient kluster run
     ssh kkstore06
-    cd /cluster/data/cavPor3/bed/multiz5way/mafLinks
-    mkdir -p /san/sanvol1/scratch/cavPor3/multiz5way/mafs
-    rsync -a --progress --copy-links ./ \
-	/san/sanvol1/scratch/cavPor3/multiz5way/mafs/
-    #	create a run-time list of contigs to operate on, not all contigs
-    #	exist in all alignments, but we want all contig names used in any
-    #	alignment:
-    cd /san/sanvol1/scratch/cavPor3/multiz5way/mafs
+    mkdir -p /san/sanvol1/scratch/cavPor3/multiz7way/contigMaf
+    cd /scratch/tmp
+    #   the 16201 is from petMar/chrom.sizes
+    echo "chrM 0 16801" > chrM.bed
+
+    for D in `grep -v cavPor3 /cluster/data/cavPor3/bed/multiz7way/species.list`
+do
+    echo ${D}
+    zcat \
+/cluster/data/cavPor3/bed/multiz7way/mafLinks/cavPor3.${D}.*.maf.gz \
+    > ${D}.maf
+    mkdir /scratch/tmp/${D}
+    cd /scratch/tmp/${D}
+    mafSplit -verbose=2 /dev/null -byTarget -useHashedName=10 Contig \
+    ../${D}.maf -outDirDepth=2
+    mafsInRegion ../chrM.bed 0/0/chrM.maf ../${D}.maf
+    rsync -a --progress ./ \
+    /san/sanvol1/scratch/cavPor3/multiz7way/contigMaf/${D}
+    cd /scratch/tmp
+    rm -fr ${D} ${D}.maf
+done
+    
+    #   create a run-time list of contigs to operate on, not all contigs
+    #   exist in all alignments, but we want all contig names used in any
+    #   alignment:
+    ssh kkstore05 # cavPor3 -> store12 -> kkstore05
+    cd /san/sanvol1/scratch/cavPor3/multiz7way/contigMaf
     for D in *
 do
     cd "${D}"
     find . -type f
     cd ..
-done | sed -e "s#^./##; s#.maf##" | sort -u > /tmp/5-way.contig.list
-    wc -l /tmp/5-way.contig.list
-    #	2321 /tmp/5-way.contig.list
+done | sort -u > /tmp/7-way.contig.list
+    wc -l /tmp/7-way.contig.list
+    mkdir /cluster/data/cavPor3/bed/multiz7way/splitRun
+    cp -p /tmp/7-way.contig.list \
+    /cluster/data/cavPor3/bed/multiz7way/splitRun
+    #   296 /tmp/7-way.contig.list
 
     # ready for the multiz run
     ssh pk
-    mkdir /cluster/data/cavPor3/bed/multiz5way/splitRun
-    cd /cluster/data/cavPor3/bed/multiz5way/splitRun
-    scp -p kkstore06:/tmp/5-way.contig.list .
+    cd /cluster/data/cavPor3/bed/multiz7way/splitRun
     mkdir -p maf run
     cd run
     mkdir penn
@@ -1944,90 +1957,156 @@ done | sed -e "s#^./##; s#.maf##" | sort -u > /tmp/5-way.contig.list
     P=/cluster/bin/penn/multiz.v11.2007-03-19/multiz-tba
     cp -p $P/{autoMZ,multiz,maf_project} penn
 
-    #	set the db and pairs directories here
-    cat << '_EOF_' > autoMultiz.csh
+    #   set the db and pairs directories here
+    cat > autoMultiz.csh << \_EOF_
 #!/bin/csh -ef
 set db = cavPor3
-set c = $1
-set result = $2
+set subdir = $1
+set c = $2
+set result = $3
 set resultDir = $result:h
 set run = `pwd`
 set tmp = /scratch/tmp/$db/multiz.$c
-set pairs = /san/sanvol1/scratch/$db/multiz5way/mafs
+set pairs = /san/sanvol1/scratch/$db/multiz7way/contigMaf
 rm -fr $tmp
 mkdir -p $tmp
 mkdir -p $resultDir
-cp ../../tree.5.nh ../../species.list $tmp
+cp ../../tree.7.nh ../../species.list $tmp
 pushd $tmp
 foreach s (`grep -v $db species.list`)
-    set in = $pairs/$s/$c.maf
+    set in = $pairs/$s/$subdir/$c.maf
     set out = $db.$s.sing.maf
     if (-e $in.gz) then
-	zcat $in.gz > $out
+        zcat $in.gz > $out
     else if (-e $in) then
-	cp $in $out
+        cp $in $out
     else
-	echo "##maf version=1 scoring=autoMZ" > $out
+        echo "##maf version=1 scoring=autoMZ" > $out
     endif
 end
 set path = ($run/penn $path); rehash
-$run/penn/autoMZ + T=$tmp E=$db "`cat tree.5.nh`" $db.*.sing.maf $c.maf
+$run/penn/autoMZ + T=$tmp E=$db "`cat tree.7.nh`" $db.*.sing.maf $c.maf
 popd
 cp $tmp/$c.maf $result
 rm -fr $tmp
 rmdir --ignore-fail-on-non-empty /scratch/tmp/$db
-'_EOF_'
+_EOF_
 # << happy emacs
     chmod +x autoMultiz.csh
 
-    cat  << '_EOF_' > template
+    cat  << \_EOF_ > template
 #LOOP
-./autoMultiz.csh $(root1) {check out line+ /cluster/data/cavPor3/bed/multiz5way/splitRun/maf/$(root1).maf}
+./autoMultiz.csh $(dir1) $(root1) {check out line+ /cluster/data/cavPor3/bed/multiz7way/splitRun/maf/$(dir1)/$(root1).maf}
 #ENDLOOP
-'_EOF_'
+_EOF_
     # << emacs
 
-    gensub2 ../5-way.contig.list single template jobList
+    sed -e "s/^\.\///" ../7-way.contig.list \
+    | gensub2 stdin single template jobList
 
     para create jobList
-    para try ... check ... push ... etc
-# Completed: 2321 of 2321 jobs
-# CPU time in finished jobs:      35680s     594.67m     9.91h    0.41d  0.001 y
-# IO & Wait Time:                  9398s     156.63m     2.61h    0.11d  0.000 y
-# Average job time:                  19s       0.32m     0.01h    0.00d
-# Longest finished job:            1982s      33.03m     0.55h    0.02d
-# Submission to last job:          3983s      66.38m     1.11h    0.05d
-
+    para try ... check ... 
+    # Checking finished jobs
+    # Completed: 10 of 296 jobs
+    # CPU time in finished jobs:       4355s      72.59m     1.21h    0.05d  0.000 y
+    # IO & Wait Time:                   104s       1.73m     0.03h    0.00d  0.000 y
+    # Average job time:                 446s       7.43m     0.12h    0.01d
+    # Longest running job:                0s       0.00m     0.00h    0.00d
+    # Longest finished job:            1672s      27.87m     0.46h    0.02d
+    # Submission to last job:          1681s      28.02m     0.47h    0.02d
+    # Estimated complete:                 0s       0.00m     0.00h    0.00d
+    # [pk:tdreszer run> pc
+    # 296 jobs in batch
+    # 92505 jobs (including everybody's) in Parasol queue.
+    # Checking finished jobs
+    # unsubmitted jobs: 286
+    # ranOk: 10
+    # total jobs in batch: 296
+    para push ... check ... etc
+    # Completed: 296 of 296 jobs
+    # CPU time in finished jobs:      53659s     894.32m    14.91h    0.62d  0.002 y
+    # IO & Wait Time:                  1675s      27.92m     0.47h    0.02d  0.000 y
+    # Average job time:                 187s       3.12m     0.05h    0.00d
+    # Longest running job:                0s       0.00m     0.00h    0.00d
+    # Longest finished job:            1969s      32.82m     0.55h    0.02d
+    # Submission to last job:          4023s      67.05m     1.12h    0.05d
+    # Estimated complete:                 0s       0.00m     0.00h    0.00d
+    # [pk:tdreszer run> pc
+    # 296 jobs in batch
+    # 84971 jobs (including everybody's) in Parasol queue.
+    # Checking finished jobs
+    # ranOk: 296
+    # total jobs in batch: 296
+    
     # put the split maf results back together into a single maf file
-    #	eliminate duplicate comments
-    ssh kkstore06
-    cd /cluster/data/cavPor3/bed/multiz5way
-    grep "^##maf version" splitRun/maf/chr1.maf \
-	| sort -u > cavPor3.5way.maf
+    #   eliminate duplicate comments
+    ssh kkstore05
+    cd /cluster/data/cavPor3/bed/multiz7way
+    mkdir togetherMaf
+    grep "^##maf version" splitRun/maf/0/0/Contig00700.maf \
+    | sort -u > togetherMaf/cavPor3.7way.maf
+    ##maf version=1 scoring=autoMZ.v1
+    ##maf version=1 scoring=maf_project.v12
+    ##maf version=1 scoring=multiz
+
     for F in `find ./splitRun/maf -type f -depth`
 do
     grep -h "^#" "${F}" | egrep -v "maf version=1|eof maf" \
-	| sed -e "s#/_MZ_[^ ]* # #g; s#__[0-9]##g"
-done | sort -u >> cavPor3.5way.maf
+    | sed -e "s#/_MZ_[^ ]* # #g; s#__[0-9]##g"
+done | sort -u >> togetherMaf/cavPor3.7way.maf
     for F in `find ./splitRun/maf -type f -depth`
 do
     grep -v -h "^#" "${F}"
-done >> cavPor3.5way.maf
-    grep "^##eof maf" splitRun/maf/chr1.maf \
-	| sort -u >> cavPor3.5way.maf
+done >> togetherMaf/cavPor3.7way.maf
+
+    grep "^##eof maf" splitRun/maf/0/0/Contig00700.maf \
+    | sort -u >> togetherMaf/cavPor3.7way.maf
 
     # load tables for a look
     ssh hgwdev
-    mkdir -p /gbdb/cavPor3/multiz5way/maf
-    ln -s /cluster/data/cavPor3/bed/multiz5way/*.maf \
-                /gbdb/cavPor3/multiz5way/maf/multiz5way.maf
-    # this generates an immense multiz5way.tab file in the directory
-    #	where it is running.  Best to run this over in scratch.
+    mkdir -p /gbdb/cavPor3/multiz7way/maf
+    ln -s /cluster/data/cavPor3/bed/multiz7way/togetherMaf/*.maf \
+                /gbdb/cavPor3/multiz7way/maf/multiz7way.maf
+    # this generates an immense multiz7way.tab file in the directory
+    #   where it is running.  Best to run this over in scratch.
     cd /scratch/tmp
     time nice -n +19 hgLoadMaf \
-	-pathPrefix=/gbdb/cavPor3/multiz5way/maf cavPor3 multiz5way
-    #	real    3m31.593s
-    #	Loaded 5392296 mafs in 1 files from /gbdb/cavPor3/multiz5way/maf
+    -pathPrefix=/gbdb/cavPor3/multiz7way/maf cavPor3 multiz7way
+    # Advisory lock created
+    # Indexing and tabulating /gbdb/cavPor3/multiz7way/maf/multiz7way.maf
+    # Loading multiz7way into database
+    # Loaded 6939217 mafs in 1 files from /gbdb/cavPor3/multiz7way/maf
+    # Advisory lock has been released
+    # 
+    # real    7m7.421s
+    # user    1m50.625s
+    # sys     0m34.191s
+# ### >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> got this far 
+# ### >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> got this far 
+# ### >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> got this far 
+# ### >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> got this far 
+# ### >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> got this far
+ 
+################## EVERYTHING THAT FOLLOWS IS TEMPLATE FOR WHAT NEEDS TO BE DONE ######################
+################## EVERYTHING THAT FOLLOWS IS TEMPLATE FOR WHAT NEEDS TO BE DONE ######################
+################## EVERYTHING THAT FOLLOWS IS TEMPLATE FOR WHAT NEEDS TO BE DONE ######################
+################## EVERYTHING THAT FOLLOWS IS TEMPLATE FOR WHAT NEEDS TO BE DONE ######################
+
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     # load summary table
     time nice -n +19 cat /gbdb/cavPor3/multiz5way/maf/*.maf \
 	| hgLoadMafSummary cavPor3 -minSize=30000 -mergeGap=1500 \
