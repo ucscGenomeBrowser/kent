@@ -31,6 +31,9 @@ endif
 ifeq (${CGI_BIN},)
     CGI_BIN=/usr/local/apache/cgi-bin
 endif
+ifeq (${DOCUMENTROOT},)
+    DOCUMENTROOT=/usr/local/apache/htdocs
+endif
 ifeq (${BINDIR},)
     BINDIR = ${HOME}/bin/${MACHTYPE}
 endif
