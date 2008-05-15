@@ -7,13 +7,18 @@
 #include "rudp.h"
 #include "paraMessage.h"
 
+char *version = PARA_VERSION;   /* Version number. */
+
 void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-    "paraNodeStop - Shut down parasol node daemons on a list of machines.\n"
+    "paraNodeStop - version %s\n"
+    "Shut down parasol node daemons on a list of machines.\n"
     "usage:\n"
-    "    paraNodeStop machineList\n");
+    "    paraNodeStop machineList\n"
+    ,version
+    );
 }
 
 void paraNodeStop(char *machineList)

@@ -9,11 +9,14 @@
 #include "rudp.h"
 #include "paraMessage.h"
 
+char *version = PARA_VERSION;   /* Version number. */
+
 void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "paraNodeStatus - Check status of paraNode on a list of machines.\n"
+  "paraNodeStatus - version %s\n"
+  "Check status of paraNode on a list of machines.\n"
   "usage:\n"
   "    paraNodeStatus machineList\n"
   "options:\n"
@@ -22,7 +25,9 @@ errAbort(
   "        Each retry after that takes twice as long up to a maximum\n"
   "        of 1 second per retry.  Default is 7 retries and takes\n"
   "        about a second.\n"
-  "    -long  List details of current and recent jobs.\n");
+  "    -long  List details of current and recent jobs.\n"
+  , version
+  );
 }
 
 void listJobsErr(char *name, int n)

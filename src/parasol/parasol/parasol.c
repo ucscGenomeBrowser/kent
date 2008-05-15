@@ -9,7 +9,9 @@
 #include "paraLib.h"
 #include "paraMessage.h"
 
-static char const rcsid[] = "$Id: parasol.c,v 1.35 2008/05/13 21:41:42 galt Exp $";
+static char const rcsid[] = "$Id: parasol.c,v 1.36 2008/05/15 00:42:27 galt Exp $";
+
+char *version = PARA_VERSION;   /* Version number. */
 
 struct rudp *hubRudp;	/* Network connection to paraHub. */
 char *userName;	/* Name of user. */
@@ -25,6 +27,7 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
+  "Parasol version %s.\n"
   "Parasol is the name given to the overall system for managing jobs on\n"
   "a computer cluster and to this specific command.  This command is\n"
   "intended primarily for system administrators.  The 'para' command\n"
@@ -45,6 +48,7 @@ errAbort(
   "   parasol list batches  - List batches one per line.\n"
   "   parasol list sick  - List sick nodes one per line.\n"
   "   parasol status  - Summarize status of machines, jobs, and spoke daemons.\n"
+  , version
   );
 }
 

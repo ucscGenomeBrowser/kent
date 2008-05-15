@@ -118,3 +118,6 @@
 
      Added batch->queuedCount to replace dlCount(batch->jobQueue) which was slow.
 
+12.01 - Added versioning in all para* executables at Jorge's request.
+
+

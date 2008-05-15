@@ -7,13 +7,18 @@
 #include "paraLib.h"
 #include "paraMessage.h"
 
+char *version = PARA_VERSION;   /* Version number. */
+
 void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "paraHubStop - Shut down paraHub daemon.\n"
+  "paraHubStop - version %s\n"
+  "Shut down paraHub daemon.\n"
   "usage:\n"
-  "   paraHubStop now\n");
+  "   paraHubStop now\n"
+  , version
+  );
 }
 
 void paraHubStop(char *now)

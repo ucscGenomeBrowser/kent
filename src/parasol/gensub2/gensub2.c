@@ -7,13 +7,16 @@
 #include "subText.h"
 #include "dystring.h"
 
+char *version = PARA_VERSION;   /* Version number. */
+
 #define ARBITRARY_MAX_NUM_DIRS 30
 
 void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "gensub2 - Generate condor submission file from template and two file lists.\n"
+  "gensub2 - version %s\n"
+  "Generate condor submission file from template and two file lists.\n"
   "Usage:\n"
   "   gensub2 <file list 1> <file list 2> <template file> <output file>\n"
   "This will substitute each file in the file lists for $(path1) and $(path2)\n"
@@ -43,6 +46,7 @@ errAbort(
   "The following options can change this:\n"
   "    -group1 - write elements in order Aa Ab Ac Ba Bb Bc Ca Cb Cc\n"
   "    -group2 - write elements in order Aa Ba Ca Ab Bb Cb Ac Bc Cc\n"
+  , version
   );
 	      
 }

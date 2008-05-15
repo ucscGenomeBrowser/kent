@@ -16,7 +16,7 @@
 #include "verbose.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: para.c,v 1.90 2008/05/14 22:41:00 galt Exp $";
+static char const rcsid[] = "$Id: para.c,v 1.91 2008/05/15 00:42:26 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -34,13 +34,16 @@ static struct optionSpec optionSpecs[] = {
     {NULL, 0}
 };
 
+char *version = PARA_VERSION;   /* Version number. */
+
 static int numHappyDots;       /* number of happy dots written */
 
 void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "para - Manage a batch of jobs in parallel on a compute cluster.\n"
+  "para - version %s\n"
+  "Manage a batch of jobs in parallel on a compute cluster.\n"
   "Normal usage is to do a 'para create' followed by 'para push' until\n"
   "job is done.  Use 'para check' to check status.\n"
   "usage:\n\n"
@@ -134,6 +137,7 @@ errAbort(
   "\n"
   "Common options\n"
   "   -verbose=1 - set verbosity level.\n",
+  version,
   NORMAL_PRIORITY,
   NORMAL_PRIORITY,
   NORMAL_PRIORITY * NORMAL_PRIORITY,

@@ -17,6 +17,7 @@
 #include "internet.h"
 #include "log.h"
 
+
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
     {"logFacility", OPTION_STRING},
@@ -32,10 +33,13 @@ static struct optionSpec optionSpecs[] = {
     {NULL, 0}
 };
 
+char *version = PARA_VERSION;   /* Version number. */
+
 void usage()
 /* Explain usage and exit. */
 {
-errAbort("paraNode - parasol node server.\n"
+errAbort("paraNode - version %s\n"
+	 "Parasol node server.\n"
          "usage:\n"
 	 "    paraNode start\n"
 	 "options:\n"
@@ -50,10 +54,12 @@ errAbort("paraNode - parasol node server.\n"
 	 "        starting a job.  This is mostly to avoid swamping NFS with\n"
 	 "        file opens when loading up an idle cluster.  Also it limits\n"
 	 "        the impact on the hub of very short jobs. Default 5000.\n"
-	 "    -cpu=N  Number of CPUs to use - default 1.\n");
+	 "    -cpu=N  Number of CPUs to use - default 1.\n"
+	, version
+	);
 }
 
-static char const rcsid[] = "$Id: paraNode.c,v 1.79 2005/02/23 21:57:35 markd Exp $";
+static char const rcsid[] = "$Id: paraNode.c,v 1.80 2008/05/15 00:42:27 galt Exp $";
 
 /* Command line overwriteable variables. */
 char *hubName;			/* Name of hub machine, may be NULL. */

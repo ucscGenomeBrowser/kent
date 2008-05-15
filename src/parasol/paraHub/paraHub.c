@@ -68,7 +68,7 @@
 #include "log.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: paraHub.c,v 1.104 2008/05/14 23:38:17 galt Exp $";
+static char const rcsid[] = "$Id: paraHub.c,v 1.105 2008/05/15 00:42:27 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -84,7 +84,7 @@ static struct optionSpec optionSpecs[] = {
     {NULL, 0}
 };
 
-int version = 12;	/* Version number. */
+char *version = PARA_VERSION;	/* Version number. */
 
 /* Some command-line configurable quantities and their defaults. */
 int jobCheckPeriod = 10;	/* Minutes between checking running jobs. */
@@ -103,7 +103,7 @@ int sickBatchThreshold = 25;        /* Auto-chill sick batch if this number of c
 void usage()
 /* Explain usage and exit. */
 {
-errAbort("paraHub - parasol hub server version %d\n"
+errAbort("paraHub - parasol hub server version %s\n"
          "usage:\n"
 	 "    paraHub machineList\n"
 	 "Where machine list is a file with machine names in the\n"
@@ -2068,7 +2068,7 @@ sprintf(buf, "Total users: %d", slCount(userList));
 pmSendString(pm, rudpOut, buf);
 sprintf(buf, "Days up: %f", (now - startupTime)/(3600.0 * 24.0));
 pmSendString(pm, rudpOut, buf);
-sprintf(buf, "Version: %d", version);
+sprintf(buf, "Version: %s", version);
 pmSendString(pm, rudpOut, buf);
 pmSendString(pm, rudpOut, "");
 }

@@ -20,5 +20,6 @@
 #include <arpa/inet.h>
 #include <netdb.h>
 #include "common.h"
+#include "paraVersion.h"
 
 #endif /* PARACOMMON_H */

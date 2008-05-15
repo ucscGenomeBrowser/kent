@@ -19,11 +19,14 @@ static struct optionSpec optionSpecs[] = {
     {NULL, 0}
 };
 
+char *version = PARA_VERSION;   /* Version number. */
+
 void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "paraNodeStart - Start up parasol node daemons on a list of machines.\n"
+ "paraNodeStart - version %s\n"
+ "Start up parasol node daemons on a list of machines.\n"
  "usage:\n"
  "    paraNodeStart machineList\n"
  "where machineList is a file containing a list of hosts.\n"
@@ -39,7 +42,9 @@ errAbort(
  "    -userPath=bin:bin/i386  User dirs to add to path.\n"
  "    -sysPath=/sbin:/local/bin  System dirs to add to path.\n"
  "    -hub=machineHostingParaHub  Nodes will ignore messages from elsewhere.\n"
- "    -rsh=/path/to/rsh/like/command.\n");
+ "    -rsh=/path/to/rsh/like/command.\n"
+ , version
+ );
 }
 
 void carryOption(char *option, struct dyString *dy)

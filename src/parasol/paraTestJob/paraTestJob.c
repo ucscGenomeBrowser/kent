@@ -4,11 +4,14 @@
 #include "hash.h"
 #include "options.h"
 
+char *version = PARA_VERSION;   /* Version number. */
+
 void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "paraTestJob - A good test job to run on Parasol.  Can be configured to take a long time or crash.\n"
+  "paraTestJob - version %s\n"
+  "A good test job to run on Parasol.  Can be configured to take a long time or crash.\n"
   "usage:\n"
   "   paraTestJob count\n"
   "Run a relatively time consuming algorithm count times.\n"
@@ -20,6 +23,7 @@ errAbort(
   "   -heavy=n  Make output heavy: n extra lumberjack lines.\n"
   "   -input=file  Make it read in a file too.\n"
   "   -sleep=n  Sleep for N seconds.\n"
+  , version
   );
 }
 
