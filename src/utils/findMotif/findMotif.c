@@ -10,7 +10,7 @@
 #include "memalloc.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: findMotif.c,v 1.11 2006/07/27 22:39:28 hiram Exp $";
+static char const rcsid[] = "$Id: findMotif.c,v 1.12 2008/05/15 16:32:29 hiram Exp $";
 
 char *chr = (char *)NULL;	/*	process the one chromosome listed */
 char *motif = (char *)NULL;	/*	specified motif string */
@@ -93,7 +93,7 @@ for (i=0; i < seq->size; ++i)
 	    incomingVal = mask & ((incomingVal << 2) | val);
 	    if (! incomingLength)
 		{
-		if ((chromPosition - enterGap) > 0)
+		if (((long long int)chromPosition - (long long int)enterGap) > 0)
 		    {
 		    ++gapCount;
 		    verbose(3,
@@ -102,6 +102,9 @@ for (i=0; i < seq->size; ++i)
 		    verbose(4, "#GAP %s\t%llu\t%llu\t%llu\t%llu\t%s\n",
 			    seq->name, enterGap-1, chromPosition-1, gapCount,
 			    chromPosition - enterGap, "+");
+		    /* assume no more gaps, this is safe to a chrom size
+		     *	of 1 Tb */
+		    enterGap = (unsigned long long)BIGNUM << 10;
 		    }
 		}
 	    ++incomingLength;
@@ -146,7 +149,7 @@ for (i=0; i < seq->size; ++i)
 	    break;
 	}
     }
-if ((chromPosition - enterGap) > 0)
+if (((long long int)chromPosition - (long long int)enterGap) > 0)
     {
     ++gapCount;
     verbose(3,
