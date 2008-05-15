@@ -8,24 +8,24 @@ CVSUP = cvs -q update
 
 user:
 	${CVSUP} -d -P
-	${MAKE} doInstall DEST=${CGI_BIN}-${USER}/js
+	${MAKE} doInstall DEST=${DOCUMENTROOT}/js/${USER}
 
 alpha:
 	${CVSUP} -d -P
-	${MAKE} doInstall DEST=${CGI_BIN}/js
+	${MAKE} doInstall DEST=${DOCUMENTROOT}/js
 
 beta:
 	${CVSUP} -d -P
-	${MAKE} doInstall DEST=${CGI_BIN}/js
+	${MAKE} doInstall DEST=${DOCUMENTROOT}/js
 
 clean:
-	
+		
 
 compile:
 	
 
 install:
-	
+	${MAKE} doInstall DEST=${DOCUMENTROOT}/js
 
 doInstall:
 	rsync -t -r --relative --exclude='makefile' ${EXCL} `cvsFiles` ${DEST}/
