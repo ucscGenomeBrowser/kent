@@ -14,7 +14,7 @@
 #include "chainCart.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.98 2008/05/02 18:13:54 angie Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.99 2008/05/16 01:34:20 larrym Exp $";
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -95,6 +95,10 @@ if(scriptFilename)
     dir[0] = 0;
     splitPath(scriptFilename, dir, name, extension);
     safef(defaultDir, sizeof(defaultDir), "%s", dir);
+    int len = strlen(defaultDir);
+    // Get rid of trailing slash to be consistent with hDocumentRoot
+    if(defaultDir[len-1] == '/')
+        defaultDir[len-1] = 0;
     }
 else
     {
