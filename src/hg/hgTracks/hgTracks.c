@@ -119,7 +119,7 @@
 #include "wiki.h"
 #endif
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1468 2008/05/16 00:04:02 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1469 2008/05/16 00:06:57 hiram Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -13098,6 +13098,8 @@ if (ct->dbTrack)
     while ((row = sqlNextRow(sr)) != NULL)
 	{
 	bed = bedLoadN(row+rowOffset, 9);
+        if (scoreFilter && bed->score < scoreFilter)
+            continue;
 	bed8To12(bed);
 	lf = lfFromBed(bed);
 	if (useItemRgb)
@@ -13156,6 +13158,8 @@ if (ct->dbTrack)
     while ((row = sqlNextRow(sr)) != NULL)
 	{
 	bed = bedLoadN(row+rowOffset, fieldCount);
+        if (scoreFilter && bed->score < scoreFilter)
+            continue;
 	bed8To12(bed);
 	lf = lfFromBed(bed);
 	slAddHead(&lfList, lf);
