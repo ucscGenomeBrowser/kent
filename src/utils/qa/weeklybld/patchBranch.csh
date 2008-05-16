@@ -154,7 +154,7 @@ end
 
 set mailMsg = "The v${BRANCHNN} branch has been patched as follows:\n$msg"
 set subject = '"'"Branch patch complete."'"'
-echo "$mailMsg" | mail -s "$subject" $USER hartera galt kuhn ann kayla rhead pauline 
+echo "$mailMsg" | mail -s "$subject" $USER galt browser-qa
 
 date +%Y-%m-%d   >> $BUILDDIR/v${BRANCHNN}_branch/branchMoves.log
 echo "$msg"    >> $BUILDDIR/v${BRANCHNN}_branch/branchMoves.log
