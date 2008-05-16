@@ -53,7 +53,13 @@ To build the source tree.
         If your cgi-bin directory is something different than
 	/usr/local/apache/cgi-bin then use the CGI_BIN variable
 
-	$ make install DESTDIR=/destination/prefix CGI_BIN=/cgi-bin/path
+        If your apache DocumentRoot is something different than
+        /usr/local/apache/htdocs then use the DOCUMENTROOT variable.
+        This value should be a full path and should agree with the 
+        browser.documentRoot setting in hg.conf; see README.mysql.setup 
+        for more details.
+
+	$ make install DESTDIR=/destination/prefix CGI_BIN=/cgi-bin/path DOCUMENTROOT=/usr/local/apache/htdocs
 
 	to install binaries in "/destination/prefix/cgi-bin/path"
 
@@ -113,4 +119,4 @@ make: *** [aliType.o] Error 1
     include the -Wno-unused-variable option in the build.
 
 ====================================================================
-This file last updated: $Date: 2007/11/07 22:30:32 $
+This file last updated: $Date: 2008/05/16 23:32:55 $
