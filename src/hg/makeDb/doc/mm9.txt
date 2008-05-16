@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.65 2008/05/06 22:30:06 hiram Exp $"
+#	"$Id: mm9.txt,v 1.66 2008/05/16 00:11:20 hiram Exp $"
 #
 
 #######################################################################
@@ -7972,4 +7972,43 @@ TMPDIR=/scratch/tmp
         ccdsInfo
         ccdsKgMap
     # << emacs
+############################################################################
+#  update vega genes to version 31 (v49 of Ensembl genes)
+#	(DONE - 2008-05-15 - Hiram)
+    mkdir  /cluster/data/mm9/bed/vega31_49
+    cd  /cluster/data/mm9/bed/vega31_49
+    wget --timestamping \
+	"ftp://ftp.sanger.ac.uk/pub/vega/mouse/gtf_file.gz"
+    wget --timestamping \
+	"ftp://ftp.sanger.ac.uk/pub/vega/mouse/CHANGELOG.gz"
+    wget --timestamping \
+	"ftp://ftp.sanger.ac.uk/pub/vega/mouse/catalog.txt"
+    wget --timestamping \
+"ftp://ftp.sanger.ac.uk/pub/vega/mouse/pep/Mus_musculus.VEGA.apr.pep.tot.fa.gz"
+
+    #	processing similar to the same processing for Ensembl genes,
+    #	from /cluster/data/mm9/bed/ensGene.49/process/doProcess.csh
+    cp -p /cluster/data/mm9/bed/ensGene.49/process/randoms.mm9.lift .
+    zcat gtf_file.gz \
+        | sed -e "s/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/" \
+        | liftUp -type=.gtf stdout randoms.mm9.lift carry stdin \
+        | gzip > allGenes.gtf.gz
+
+    gtfToGenePred -infoOut=infoOut.txt -genePredExt allGenes.gtf.gz stdout \
+	| gzip > mm9.allGenes.gp.gz
+    /cluster/home/hiram/kent/src/hg/utils/automation/extractGtf.pl \
+	infoOut.txt > ensGtp.tab
+    genePredCheck -db=mm9 mm9.allGenes.gp.gz
+    #	checked: 54208 failed: 0
+    zcat allGenes.gtf.gz | grep -i pseudo > pseudo.gtf
+    zcat allGenes.gtf.gz | grep -v -i pseudo > not.pseudo.gtf
+    gtfToGenePred -genePredExt pseudo.gtf pseudo.gp
+    gtfToGenePred -genePredExt not.pseudo.gtf not.pseudo.gp
+    genePredCheck -db=mm9 pseudo.gp
+    #	checked: 3989 failed: 0
+    genePredCheck -db=mm9 not.pseudo.gp
+    #	checked: 50219 failed: 0
+    hgLoadGenePred -genePredExt mm9 vegaGene not.pseudo.gp
+    hgLoadGenePred -genePredExt mm9 vegaPseudoGene pseudo.gp
+
 ############################################################################
