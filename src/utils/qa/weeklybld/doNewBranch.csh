@@ -109,12 +109,12 @@ echo
 ./buildBeta.csh
 if ( $status ) then
  echo "build on beta failed for v$BRANCHNN"
-# echo "v$BRANCHNN build on beta failed." | mail -s "'v$BRANCHNN Build failed on beta'" $USER hartera galt kuhn ann kayla rhead pauline 
+# echo "v$BRANCHNN build on beta failed." | mail -s "'v$BRANCHNN Build failed on beta'" $USER galt browser-qa
 echo "v$BRANCHNN build on beta failed." | mail -s "'v$BRANCHNN Build failed on beta'" $USER
  exit 1
 endif
 echo "build on beta done for v$BRANCHNN"
-echo "v$BRANCHNN built successfully on beta." | mail -s "'v$BRANCHNN Build complete on beta'" $USER hartera galt kuhn kent ann kayla rhead pauline 
+echo "v$BRANCHNN built successfully on beta." | mail -s "'v$BRANCHNN Build complete on beta'" $USER galt kent browser-qa
 
 echo
 #echo debug: disabled build utils on beta
@@ -124,13 +124,6 @@ if ( $status ) then
 endif
 
 echo
-#echo debug: disabled doRobots
-./doRobots.csh
-if ( $status ) then
-    echo "One or more of the robots had errors.  See the logs."
-else
-    echo "Robots done. No errors reported."
-endif
 
 if ( -e CvsReports.ok ) then
     echo "CVS Reports finished ok."
@@ -152,9 +145,9 @@ endif
 #  so that means actually logging into $BOX32 and then running it.
 #  But it will take care of the rest.
 #ssh $BOX32 $WEEKLYBLD/buildCgi32.csh
-if ( $status ) then
-    echo "build 32-bit CGIs on $BOX32 failed"
-    exit 1
-endif
+#if ( $status ) then
+#    echo "build 32-bit CGIs on $BOX32 failed"
+#    exit 1
+#endif
 
 exit 0
