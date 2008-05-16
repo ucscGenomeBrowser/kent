@@ -19,14 +19,14 @@ set i=0
 if ($#argv < 2 || $#argv > 4 ) then
   echo
   echo "  allow selected IP(s) to avoid slowdown by BOTtleneck server."
-  echo '  resets delay to n seconds.' 
+  echo '  resets delay to zero every n seconds for each IP.' 
   echo
   echo '      usage:  ipAddress time [endOfRange] [sleep=n]'
   echo
   echo '              (ipAddress also accepts file of ipAddresses)'
   echo '              (time in minutes to keep IP alive)'
   echo '              (endOfRange value should be last field of IP)'
-  echo '              (sleep time in seconds between resets - default = 10)'
+  echo '              (sleep time in seconds for each IP - default = 10)'
   echo
   exit
 else
