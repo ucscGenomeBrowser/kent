@@ -3,54 +3,33 @@
 #include "hPrint.h"
 #include "googleAnalytics.h"
 
-static char const rcsid[] = "$Id: googleAnalytics.c,v 1.3 2008/05/08 21:43:32 hiram Exp $";
+static char const rcsid[] = "$Id: googleAnalytics.c,v 1.4 2008/05/16 19:04:40 hiram Exp $";
 
 void googleAnalytics()
-/* check for analytics configuration items and output google hooks if OK */
+/* check for analytics configuration item and output google hooks if OK */
 {
 static boolean done = FALSE;
-char *analyticsHosts = cfgOption("analyticsHostList");
-char *analyticsKey = cfgOption("analyticsKey");
 
-/*	if either is missing, nothing happens here	*/
-if (done || (NULL == analyticsHosts) || (NULL == analyticsKey))
+if (done)
     return;
 
 done = TRUE;	/*	do not repeat this by mistake	*/
 
-char *thisHost = getenv("HTTP_HOST");
-if (NULL == thisHost)
+char *analyticsKey = cfgOption("analyticsKey");
+
+/*	if config is missing, nothing happens here	*/
+if (NULL == analyticsKey)
     return;
 
-char *hostList[256];
-int hostCount = 0;
-hostCount = chopByChar(cloneString(analyticsHosts), ',', hostList,
-    ArraySize(hostList));
-boolean validHost = FALSE;
-if (hostCount > 0)
-    {
-    validHost = FALSE;
-    int i;
-    for (i = 0; i < hostCount; ++i)
-	{
-	if (startsWith(hostList[i], thisHost))
-	    {
-	    validHost = TRUE;
-	    break;
-	    }
-	}
-    }
 
-if (validHost)
-    {
-    hPrintf("\n<script type=\"text/javascript\">\n"
-    "var gaJsHost = ((\"https:\" == document.location.protocol) ? \"https://ssl.\" : \"http://www.\");\n"
-    "document.write(unescape(\"%%3Cscript src='\" + gaJsHost + \"google-analytics.com/ga.js' type='text/javascript'%%3E%%3C/script%%3E\"));\n"
-    "</script>\n"
-    "<script type=\"text/javascript\">\n"
-    "var pageTracker = _gat._getTracker(\"%s\");\n"
-    "pageTracker._initData();\n"
-    "pageTracker._trackPageview();\n"
-    "</script>\n", analyticsKey);
-    }
+hPrintf("\n<script type=\"text/javascript\">\n"
+"var gaJsHost = ((\"https:\" == document.location.protocol) ? \"https://ssl.\" : \"http://www.\");\n"
+"document.write(unescape(\"%%3Cscript src='\" + gaJsHost + \"google-analytics.com/ga.js' type='text/javascript'%%3E%%3C/script%%3E\"));\n"
+"</script>\n"
+"<script type=\"text/javascript\">\n"
+"var pageTracker = _gat._getTracker(\"%s\");\n"
+"pageTracker._initData();\n"
+"pageTracker._trackPageview();\n"
+"</script>\n", analyticsKey);
+
 }
