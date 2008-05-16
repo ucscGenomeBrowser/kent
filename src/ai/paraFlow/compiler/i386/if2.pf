@@ -1,6 +1,0 @@
-bit b;
-int x = 3, y=5;
-if (x == 3 && y == 5)
-   _printInt(1);
-else
-   _printInt(0);
