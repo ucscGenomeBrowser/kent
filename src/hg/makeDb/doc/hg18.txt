@@ -21080,7 +21080,7 @@ TMPDIR=/scratch/tmp
       http://projects.tcag.ca/variation/downloads/variation.hg18.v4.txt
     wget --timestamping \
       http://projects.tcag.ca/variation/downloads/indel.hg18.v4.txt
-    # shuffle fields into bed8+ (input has some start coords==0):
+    # shuffle fields into bed8+
     foreach f (*.v4.txt)
       tail +2 $f \
       | perl -wpe 'chomp; \
@@ -21088,10 +21088,12 @@ TMPDIR=/scratch/tmp
          $locChr, $locStart, $locEnd, $ref, $pmid, $method, \
          undef, undef, undef, $sample) = split("\t"); \
         die "chr $chr != loc $locChr" if ($chr ne $locChr); \
+        $id =~ s/^Variation_//; \
         $chromStart = $start < $locStart ? $start : $locStart; \
         $chromEnd = $end > $locEnd ? $end : $locEnd; \
         $thickStart = $locStart > $start ? $locStart : $start; \
         $thickEnd = $locEnd < $end ? $locEnd : $end; \
+        $chromStart--;  $thickStart--; \
         $landmark = "" if ($landmark =~ /^chr.*\d\.\.\d/); \
         $rgb = "255,128,0"; \
         $rgb = "200,0,0" if ($varType =~ /^Inv/); \
