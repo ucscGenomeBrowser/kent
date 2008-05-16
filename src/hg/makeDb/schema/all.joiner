@@ -2833,6 +2833,7 @@ tablesIgnored $hg
     delHinds
     delHinds2
     delMccarroll
+    dgv
     eponine
     exaptedRepeats
     geneTests
