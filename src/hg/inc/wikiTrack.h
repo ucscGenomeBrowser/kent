@@ -202,4 +202,11 @@ char *encodedReturnUrl(char *(*hgUrl)());
 boolean emailVerified();
 /* TRUE indicates email has been verified for this wiki user */
 
+char *wikiEditor(char *userName);
+/* check if user name is on list of editors */
+
+char *wikiUrl(struct wikiTrack *item);
+/* construct a URL to the wiki page for the specified item
+	free the returned string when done with it.  */
+
 #endif /* WIKITRACK_H */

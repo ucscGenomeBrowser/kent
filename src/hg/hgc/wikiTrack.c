@@ -16,7 +16,7 @@
 #include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.39 2008/05/12 20:52:35 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.40 2008/05/16 20:26:01 hiram Exp $";
 
 #define ITEM_SCORE_DEFAULT "1000"
 #define ADD_ITEM_COMMENT_DEFAULT "add comments"
@@ -78,6 +78,8 @@ printf("The wiki also serves as a forum for users "
        "to share knowledge and ideas.\n</P>\n");
 freeMem(loginUrl);
 freeMem(wikiHost);
+webIncludeHelpFile("wikiTrackAddCommentHelp", TRUE);
+webIncludeHelpFile("wikiTrack", TRUE);
 }
 
 static void startForm(char *name, char *actionType)

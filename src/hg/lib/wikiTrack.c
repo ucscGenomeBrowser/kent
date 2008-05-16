@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.15 2008/05/12 20:53:00 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.16 2008/05/16 20:26:05 hiram Exp $";
 
 void wikiTrackStaticLoad(char **row, struct wikiTrack *ret)
 /* Load a row from wikiTrack table into ret.  The contents of ret will
@@ -327,6 +327,20 @@ cgiContinueHiddenVar("db");
 boolean wikiTrackEnabled(char *database, char **wikiUserName)
 /*determine if wikiTrack can be used, and is this user logged into the wiki ?*/
 {
+static boolean done = FALSE;
+static boolean status = FALSE;
+static char *userName = NULL;
+
+/* do not repeat this query */
+if (done)
+    {
+    if (wikiUserName)
+	*wikiUserName = userName;  /* returning name indicates logged in */
+    return status;
+    }
+
+done = TRUE;	/*	only need to do this once	*/
+
 if (wikiUserName)
     *wikiUserName = NULL;  /* assume not logged in until proven otherwise */
 
@@ -364,12 +378,14 @@ if (validDb && wikiLinkEnabled() &&
     if ( (wikiUser) &&
 	(findCookieData(cfgOption(CFG_WIKI_SESSION_COOKIE)) != NULL) )
 	{
-	if (wikiUserName)
-	    *wikiUserName = wikiUser;  /* returning name indicates logged in */
+	    userName = wikiUser;	/* save result for next time */
 	}
-    return TRUE; /* system is enabled */
+    status = TRUE; /* system is enabled */
     }
-return FALSE;  /* system is not enabled */
+if (wikiUserName)
+    *wikiUserName = userName;  /* returning name indicates logged in */
+
+return status;
 }
 
 /* from hg/lib/wikiTrack.sql */
@@ -950,4 +966,44 @@ else
 		cfgOptionDefault(CFG_WIKI_URL, NULL));
     return FALSE;
     }
+}
+
+char *wikiEditor(char *userName)
+/* check if user name is on list of editors */
+{
+char *editor = NULL;
+
+if (userName)
+    {
+    char *editors = cfgOptionDefault(CFG_WIKI_EDITORS, NULL);
+    if (editors)
+	{
+	char *cloneEditors = cloneString(editors);
+	int i;
+	int wordCount = chopByChar(cloneEditors, ',', NULL, 0);
+	char **words = (char **)needMem((size_t)(wordCount * sizeof(char *)));
+	chopByChar(cloneEditors, ',', words, wordCount);
+	for (i = 0; i < wordCount; ++i)
+	    {
+	    if (sameWord(userName, words[i]))
+		{
+		editor = cloneString(words[i]);
+		break;
+		}
+	    }
+	freeMem(cloneEditors);
+	}
+    }
+return editor;
+} 
+
+char *wikiUrl(struct wikiTrack *item)
+/* construct a URL to the wiki page for the specified item
+	free the returned string when done with it.  */
+{
+char *siteUrl = cfgOptionDefault(CFG_WIKI_URL, NULL);
+struct dyString *itemUrl = dyStringNew(64);
+dyStringPrintf(itemUrl, "%s/index.php/%s\" TARGET=_blank", siteUrl,
+        item->descriptionKey);
+return dyStringCannibalize(&itemUrl);
 }

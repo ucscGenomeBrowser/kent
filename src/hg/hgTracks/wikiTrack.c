@@ -8,8 +8,9 @@
 #include "bedCart.h"
 #include "wikiLink.h"
 #include "wikiTrack.h"
+#include "hgConfig.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.13 2008/04/09 23:10:13 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.14 2008/05/16 20:25:59 hiram Exp $";
 
 
 static void wikiTrackMapItem(struct track *tg, struct hvGfx *hvg, void *item,
@@ -18,10 +19,49 @@ static void wikiTrackMapItem(struct track *tg, struct hvGfx *hvg, void *item,
  * pop-up statusLine with the item name
  */
 {
+char *userName;
+
+/* already been determined to be enabled by getting here, need to verify
+ *	userName vs editors and vs owner
+ */
+(void) wikiTrackEnabled(database, &userName);
 char *hgcClickName = tg->mapItemName(tg, item);
 char *statusLine = tg->itemName(tg, item);
-mapBoxHgcOrHgGene(hvg, start, end, x, y, width, height, tg->mapName, 
+char *editor = wikiEditor(userName);
+struct wikiTrack *wikiItem = NULL;
+boolean enableHgcClick = FALSE;
+
+/* allow hgc click (i.e. delete privs) if the following are true
+    1. this is the item 0 "add new item"
+    2. logged into the wiki
+    3. user is an editor or user is the owner
+ */
+
+if (differentWord("0", hgcClickName))
+    wikiItem = findWikiItemId(hgcClickName);
+else
+    enableHgcClick = TRUE;	/* item 0 "add new item" must go to hgc */
+
+if (wikiItem)
+    {
+    if (isNotEmpty(userName) && sameWord(userName, wikiItem->owner))
+	enableHgcClick = TRUE;	/* owner has delete privls */
+    if (isNotEmpty(editor))
+	enableHgcClick = TRUE;	/* editors have delete privls */
+    }
+
+if (enableHgcClick)
+    {
+    mapBoxHgcOrHgGene(hvg, start, end, x, y, width, height, tg->mapName, 
                   hgcClickName, statusLine, NULL, FALSE, NULL         );
+    }
+else
+    {	/* go directly to the wiki description */
+    char *directUrl = wikiUrl(wikiItem);
+    mapBoxHgcOrHgGene(hvg, start, end, x, y, width, height, tg->mapName, 
+                  hgcClickName, statusLine, directUrl, FALSE, NULL);
+    freeMem(directUrl);
+    }
 }
 
 static char *wikiTrackMapItemName(struct track *tg, void *item)
