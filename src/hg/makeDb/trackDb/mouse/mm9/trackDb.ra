@@ -263,6 +263,8 @@ priority 37.1
 visibility hide
 chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chrX,chrY
 type genePred
+urlLabel Vega Transcript:
+url http://vega.sanger.ac.uk/Mus_musculus/transview?transcript=$$
 
     track vegaGene
     subTrack vegaGeneComposite
@@ -270,7 +272,6 @@ type genePred
     longLabel Vega Protein Coding Annotations 
     priority 1
     color 0,100,180
-    url http://vega.sanger.ac.uk/Mus_musculus/geneview?transcript=$$
 
     track vegaPseudoGene
     subTrack vegaGeneComposite
@@ -278,4 +279,3 @@ type genePred
     longLabel Vega Annotated Pseudogenes and Immunoglobulin Segments
     priority 2
     color 30,130,210
-    url http://vega.sanger.ac.uk/Mus_musculus/geneview?transcript=$$
