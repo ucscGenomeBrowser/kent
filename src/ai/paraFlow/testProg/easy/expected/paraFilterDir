@@ -1,4 +1,0 @@
-('five'@5,'four'@4,'one'@1,'three'@3,'two'@2)
-('five'@5,'one'@1,'three'@3)
-('A'@'a','B'@'ab','C'@'abc','D'@'abcd','E'@'abcde','F'@'abcdef')
-('A'@'a','C'@'abc','E'@'abcde')

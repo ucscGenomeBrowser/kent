@@ -1,8 +1,0 @@
-dir of int numVals = ( one @ 1, two @ 2, three @ 3);
-print(numVals);
-
-dir of int numSquared = para (i in numVals) get i*i;
-print(numSquared);
-
-dir of string numPaired = para (i in numVals) get i + " " + i;
-print(numPaired);
