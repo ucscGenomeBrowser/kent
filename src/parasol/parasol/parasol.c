@@ -9,7 +9,7 @@
 #include "paraLib.h"
 #include "paraMessage.h"
 
-static char const rcsid[] = "$Id: parasol.c,v 1.36 2008/05/15 00:42:27 galt Exp $";
+static char const rcsid[] = "$Id: parasol.c,v 1.37 2008/05/17 05:54:36 galt Exp $";
 
 char *version = PARA_VERSION;   /* Version number. */
 
@@ -34,6 +34,8 @@ errAbort(
   "is the primary command for users.\n"
   "Usage in brief:\n"
   "   parasol add machine machineFullHostName localTempDir  - Add new machine to pool.\n"
+  "    or \n"
+  "   parasol add machine machineFullHostName cpus ramSizeMB localTempDir localDir localSizeMB switchName\n"
   "   parasol remove machine machineFullHostName \"reason why\"  - Remove machine from pool.\n"
   "   parasol add spoke  - Add a new spoke daemon.\n"
   "   parasol [options] add job command-line   - Add job to list.\n"
@@ -121,12 +123,16 @@ for (ref = list; ref != NULL; ref = ref->next)
     }
 }
 
-void addMachine(char *machine, char *tempDir)
+void addMachine(int argc, char *argv[])
 /* Tell hub about a new machine. */
 {
-char buf[512];
+char buf[1024];
 mustBeRoot();
-sprintf(buf, "%s %s %s", "addMachine", machine, tempDir);
+if (argc == 3)
+    safef(buf, sizeof(buf), "addMachine %s %s", argv[1], argv[2]);
+else /* argc == 7 */
+    safef(buf, sizeof(buf), "addMachine %s %s %s %s %s %s %s", 
+	argv[1], argv[2], argv[3], argv[4], argv[5], argv[6], argv[7] );
 commandHub(buf);
 }
 
@@ -336,9 +342,9 @@ if (sameString(command, "add"))
         usage();
     if (sameString(subType, "machine"))
 	{
-	if (argc != 3)
+	if (argc != 3 && argc != 7)
 	    usage();
-	addMachine(argv[1], argv[2]);
+	addMachine(argc, argv);
 	}
     else if (sameString(subType, "job"))
 	{

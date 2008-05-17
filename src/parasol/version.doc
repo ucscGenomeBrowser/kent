@@ -120,4 +120,8 @@
 
 12.01 - Added versioning in all para* executables at Jorge's request.
 
+12.02 - Changed machine->job to machine->jobs list, removed hack duplication of machines
+        in the machine list and now nodes are like real nodes.  They know the machSpec
+        now too.  This will pave the way to future enhancements enabling algorithms
+        that can match user-requirements against available node-resources.
 

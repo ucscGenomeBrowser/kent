@@ -17,11 +17,11 @@
 int spokeLastId;	/* Id of last spoke allocated. */
 static char *runCmd = "run";
 
-static void notifyNodeDown(char *machine, char *job)
+static void notifyNodeDown(char *machine)
 /* Notify hub that a node is down. */
 {
 struct paraMessage *pm = pmNew(0,0);
-pmPrintf(pm, "nodeDown %s %s", machine, job);
+pmPrintf(pm, "nodeDown %s", machine);
 hubMessagePut(pm);
 }
 
@@ -53,13 +53,8 @@ if (ru != NULL)
     if (!ok)
 	{
 	char *command = nextWord(&message);
-	char *job = NULL;
 	if (sameString(runCmd, command))
-	    {
-	    job = nextWord(&message);
-	    if (job != 0)
-		notifyNodeDown(machine, job);
-	    }
+	    notifyNodeDown(machine);
 	}
     rudpClose(&ru);
     }

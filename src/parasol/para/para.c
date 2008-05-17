@@ -16,7 +16,7 @@
 #include "verbose.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: para.c,v 1.92 2008/05/15 23:31:44 galt Exp $";
+static char const rcsid[] = "$Id: para.c,v 1.93 2008/05/17 05:54:36 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -1097,7 +1097,8 @@ for (job=db->jobList; job != NULL; job = job->next)
 	    struct jobResult *jr = hashFindVal(resultsHash, sub->id);
 	    if (jr == NULL)
 	        {
-		sub->trackingError = 3;
+		if (!sickBatch)
+    		    sub->trackingError = 3;
 		}
 	    else
 	        {

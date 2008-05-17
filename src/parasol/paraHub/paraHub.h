@@ -14,6 +14,7 @@
 struct job
 /* A job .*/
     {
+    struct dlNode *jobNode;	/* Job's node in machine.jobs. */
     struct dlNode *node;        /* Job's node on doubly-linked list. */
     int id;			/* Uniq	job id. */
     char *exe;			/* Executable name - no path or parameters. */
@@ -35,14 +36,15 @@ struct machine
     struct machine *next;	/* Next in master list. */
     struct dlNode *node;        /* List node of machine. */
     char *name;                 /* Name.  Not alloced here. */
-    struct job *job;		/* Current job if any. */
+    struct dlList *jobs;        /* List of current jobs. */
     int errCount;               /* Number of errors. */
     int goodCount;		/* Number of good runs. */
     time_t lastChecked;		/* Last time we checked machine in seconds past 1972 */
     boolean isDead;		/* True if machine dead. */
     char *tempDir;		/* Name of local temp dir. */
-    int deadJobId;		/* Id of a job that machine was running when it died. */
+    struct slInt *deadJobIds;	/* List of job Ids that machine was running when it died. */
     bits32	ip;		/* IP address in host order. */
+    struct machSpec *machSpec;  /* Machine spec of resources */
     };
 
 struct batch
