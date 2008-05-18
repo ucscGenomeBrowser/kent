@@ -31,7 +31,7 @@
 #include "hgConfig.h"
 #include "trix.h"
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.206 2008/03/17 18:04:37 angie Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.207 2008/05/18 00:38:06 hiram Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -1199,8 +1199,8 @@ static char *mrnaType(char *acc)
 /* NOTE: caller must free returned type */
 {
 struct sqlConnection *conn;
-char *type;
-char *ret;
+char *type = NULL;
+char *ret = NULL;
 
 if (isRefSeqAcc(acc))
     return NULL;
