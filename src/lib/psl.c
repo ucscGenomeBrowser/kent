@@ -19,7 +19,7 @@
 #include "binRange.h"
 #include "rangeTree.h"
 
-static char const rcsid[] = "$Id: psl.c,v 1.78 2007/08/02 01:35:03 galt Exp $";
+static char const rcsid[] = "$Id: psl.c,v 1.79 2008/05/18 04:11:53 markd Exp $";
 
 static char *createString = 
 "CREATE TABLE %s (\n"
@@ -1971,5 +1971,22 @@ for (i=0; i<psl->blockCount; ++i)
     overlap += rangeTreeOverlapSize(rangeTree, start, end);
     }
 return overlap;
+}
+
+float pslIdent(struct psl *psl)
+/* computer fraction identity */
+{
+float aligned = psl->match + psl->misMatch + psl->repMatch;
+if (aligned == 0.0)
+    return 0.0;
+else
+    return ((float)(psl->match + psl->repMatch))/((float)(aligned));
+}
+
+float pslQueryAligned(struct psl *psl)
+/* compute fraction of query that was aligned */
+{
+float aligned = psl->match + psl->misMatch + psl->repMatch;
+return aligned/(float)psl->qSize;
 }
 

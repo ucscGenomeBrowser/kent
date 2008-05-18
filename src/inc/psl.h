@@ -299,5 +299,11 @@ void pslGrow(struct psl *psl, int *blockSpacePtr);
 int pslRangeTreeOverlap(struct psl *psl, struct rbTree *rangeTree);
 /* Return amount that psl overlaps (on target side) with rangeTree. */
 
+float pslIdent(struct psl *psl);
+/* computer fraction identity */
+
+float pslQueryAligned(struct psl *psl);
+/* compute fraction of query that was aligned */
+
 #endif /* PSL_H */
 

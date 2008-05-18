@@ -18,16 +18,6 @@ cDnaAlignVerb(5, aln, "%s: id=%0.3f cov=%0.3f rep=%0.3f alnPolyAT=%d score=%0.3f
               aln->psl->match, aln->psl->misMatch, aln->psl->repMatch, aln->psl->nCount, aln->adjMisMatch);
 }
 
-static float calcIdent(struct psl *psl)
-/* get fraction ident for a psl */
-{
-unsigned aligned = psl->match + psl->misMatch + psl->repMatch;
-if (aligned == 0)
-    return 0.0;
-else
-    return ((float)(psl->match + psl->repMatch))/((float)(aligned));
-}
-
 static float calcCover(struct cDnaAlign *aln)
 /* calculate coverage less poly-A tail */
 {
@@ -154,7 +144,7 @@ aln->cdna = cdna;
 aln->psl = psl;
 aln->alnId = cdna->numAln;
 aln->adjMisMatch = psl->misMatch + ((cdna->opts & cDnaIgnoreNs) ? 0 : psl->nCount);
-aln->ident = calcIdent(psl);
+aln->ident = pslIdent(psl);
 aln->repMatch = ((float)psl->repMatch)/((float)(psl->match+psl->repMatch));
 aln->score = calcScore(psl, aln->adjMisMatch);
 aln->alnPolyAT = getAlnPolyATLen(cdna, psl);
