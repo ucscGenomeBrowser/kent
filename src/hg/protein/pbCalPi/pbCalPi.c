@@ -28,7 +28,7 @@ float calPi(char *sequence)
 int   i, sequenceLength;
 int   comp[ALPHABET_LEN];
 int   nTermResidue, cTermResidue;
-float charge, phMin, phMid, phMax;
+float charge, phMin, phMid = 0.0, phMax;
 float carg, cter, nter, ctyr, chis, clys, casp, cglu, ccys;
 int    R, H, K, D, E, C, Y;
 
