@@ -11,7 +11,7 @@
 #include "axt.h"
 #include "nibTwo.h"
 
-static char const rcsid[] = "$Id: netToAxt.c,v 1.24 2005/08/18 07:47:24 baertsch Exp $";
+static char const rcsid[] = "$Id: netToAxt.c,v 1.25 2008/05/19 21:56:03 galt Exp $";
 
 boolean qChain = FALSE;  /* Do chain from query side. */
 int maxGap = 100;
@@ -31,9 +31,10 @@ void usage()
 errAbort(
   "netToAxt - Convert net (and chain) to axt.\n"
   "usage:\n"
-  "   netToAxt in.net in.chain tNibDir qNibDir out.axt\n"
-  "where tNibDir/qNibDir can be either directories full of .nib files\n"
-  "or can be .2bit files\n"
+  "   netToAxt in.net in.chain target.2bit query.2bit out.axt\n"
+  "note:\n"
+  "   directories full of .nib files (an older format)\n"
+  "   may also be used in place of target.2bit and query.2bit.\n"
   "options:\n"
   "   -qChain - net is with respect to the q side of chains.\n"
   "   -maxGap=N - maximum size of gap before breaking. Default %d\n"
