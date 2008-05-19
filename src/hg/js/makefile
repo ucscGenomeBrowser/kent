@@ -18,13 +18,12 @@ beta:
 	${MAKE} doInstall DEST=${DOCUMENTROOT}/js
 
 clean:
-		
 
 compile:
-	
 
 install:
 	${MAKE} doInstall DEST=${DOCUMENTROOT}/js
 
 doInstall:
+	@mkdir -p ${DEST}/
 	rsync -t -r --relative --exclude='makefile' ${EXCL} `cvsFiles` ${DEST}/
