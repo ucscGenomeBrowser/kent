@@ -84,5 +84,14 @@ xrad yrad scale
 savematrix setmatrix
 } def
 
+/fillTextBox {
+true charpath pathbbox
+/y2 exch def /x2 exch def
+/y1 exch def /x1 exch def
+/w x2 x1 sub def
+/h y2 y1 sub def
+w h x1 y1 fillBox
+} def
+
 smallFont
 
