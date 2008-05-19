@@ -10,9 +10,13 @@
 #include "hgTracks.h"
 #include "psl.h"
 #include "cds.h"
-#include "../gsid/gsidTable/gsidTable.h"
 
+#ifndef GBROWSE
+#include "../gsid/gsidTable/gsidTable.h"
 #define SELECT_SUBJ	"selectSubject"
+struct gsidSubj *gsidSelectedSubjList = NULL;
+struct gsidSeq *gsidSelectedSeqList = NULL;
+#endif /* GBROWSE */
 
 int pslGrayIx(struct psl *psl, boolean isXeno, int maxShade)
 /* Figure out gray level for an RNA block. */
@@ -349,6 +353,7 @@ struct linkedFeatures *lfFromPsl(struct psl *psl, boolean isXeno)
 return lfFromPslx(psl, 1, isXeno, FALSE, NULL);
 }
 
+#ifndef GBROWSE
 boolean  gsidSelectedSubjListLoaded = FALSE;
 
 void initializeGsidSubjList()
@@ -438,6 +443,7 @@ if (isNotEmpty(setting))
     }
 return(FALSE);
 }
+#endif /* GBROWSE */
 
 static void connectedLfFromPslsInRange(struct sqlConnection *conn,
     struct track *tg, int start, int end, char *chromName,
@@ -457,11 +463,13 @@ boolean checkSelected;  /* flag indicating if checking for selection of an entry
 
 checkSelected = FALSE;
 
+#ifndef GBROWSE
 /* if this is a GSID track, check if we need to check for inclusion of the item */
 if (hIsGsidServer())
     {
     checkSelected = gsidCheckSelected(tg);
     }
+#endif /* GBROWSE */
 
 safef( optionChr, sizeof(optionChr), "%s.chromFilter", tg->mapName);
 optionChrStr = cartUsualString(cart, optionChr, "All");
@@ -485,7 +493,9 @@ while ((row = sqlNextRow(sr)) != NULL)
     lf = lfFromPslx(psl, sizeMul, isXeno, nameGetsPos, tg);
     if (checkSelected)
 	{
+#ifndef GBROWSE
     	if (isSelected(lf->name)) slAddHead(&lfList, lf);
+#endif /* GBROWSE */
 	}
     else
 	{

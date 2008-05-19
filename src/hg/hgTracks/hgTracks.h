@@ -32,8 +32,9 @@
 #include "hPrint.h"
 #endif /* HPRINT_H */
 
-struct itemAttr;
-struct itemAttrTbl;
+#ifndef ITEMATTR_H
+#include "itemAttr.h"
+#endif /* ITEMATTR_H */
 
 /* A few hgGenome cart constant defaults copied from */
 #define hggPrefix "hgGenome_"
@@ -41,6 +42,12 @@ struct itemAttrTbl;
 
 /* trackDb setting for expRatio tracks */
 #define EXP_COLOR_DENSE "expColorDense"
+
+#ifdef LOWELAB
+#define MAXPIXELS 60000
+#else
+#define MAXPIXELS 14000
+#endif
 
 struct track
 /* Structure that displays of tracks. The central data structure
@@ -199,6 +206,8 @@ struct track
     };
 
 
+typedef void (*TrackHandler)(struct track *tg);
+
 struct trackRef 
 /* A reference to a track. */
     {
@@ -290,12 +299,10 @@ struct gsidSeq
     char *subjId;
     };
 
-extern struct gsidSubj *gsidSelectedSubjList;
-extern struct gsidSeq  *gsidSelectedSeqList;
-
 extern struct trackLayout tl;
 
 extern struct cart *cart; /* The cart where we keep persistent variables. */
+extern struct track *trackList;    /* List of all tracks. */
 struct hash *trackHash; /* Hash of the tracks by their name. */
 extern char *chromName;	  /* Name of chromosome sequence . */
 extern char *database;	  /* Name of database we're using. */
@@ -305,9 +312,18 @@ extern char *organization;             /* UCSC or MGC */
 extern int winStart;	  /* Start of window in sequence. */
 extern int winEnd;	  /* End of window in sequence. */
 extern int maxItemsInFullTrack;  /* Maximum number of items displayed in full */
+extern char *position; 		/* Name of position. */
+extern int trackTabWidth;
 extern int gfxBorder;		/* Width of graphics border. */
 extern int insideWidth;		/* Width of area to draw tracks in in pixels. */
-extern int insideX;			/* Start of area to draw track in in pixels. */
+extern int insideX;		/* Start of area to draw track in in pixels. */
+extern int leftLabelX;		/* Start of area to draw left labels on. */
+extern int leftLabelWidth;	/* Width of area to draw left labels on. */
+extern boolean withLeftLabels;		/* Display left labels? */
+extern boolean withCenterLabels;	/* Display center labels? */
+extern boolean withGuidelines;		/* Display guidelines? */
+extern boolean withNextExonArrows;	/* Display next exon navigation buttons near center labels? */
+
 extern int seqBaseCount;  /* Number of bases in sequence. */
 extern int winBaseCount;  /* Number of bases in window. */
 extern float basesPerPixel;       /* bases covered by a pixel; a measure of zoom */
@@ -323,21 +339,20 @@ extern int rulerMode;         /* on, off, full */
 extern boolean withLeftLabels;		/* Display left labels? */
 extern boolean withCenterLabels;	/* Display center labels? */
 extern boolean withPriorityOverride;    /* enable track reordering? */
-Color shadesOfLowe1[10+1];
-Color shadesOfLowe2[10+1];
-Color shadesOfLowe3[10+1];
+extern boolean revCmplDisp;             /* reverse-complement display */
+extern boolean measureTiming;	/* Flip this on to display timing
+                                 * stats on each track at bottom of page. */
+
+extern struct hash *hgFindMatches; /* The matches found by hgFind that should be highlighted. */
+
 extern int maxShade;		  /* Highest shade in a color gradient. */
 extern Color shadesOfGray[10+1];  /* 10 shades of gray from white to black
                                    * Red is put at end to alert overflow. */
 extern Color shadesOfBrown[10+1]; /* 10 shades of brown from tan to tar. */
-extern struct rgbColor brownColor;
-extern struct rgbColor tanColor;
 extern struct rgbColor guidelineColor;
 extern struct rgbColor undefinedYellowColor;
 
 extern Color shadesOfSea[10+1];       /* Ten sea shades. */
-extern struct rgbColor darkSeaColor;
-extern struct rgbColor lightSeaColor;
 
 /* 16 shades from black to fully saturated of red/green/blue for
  * expression data. */
@@ -347,11 +362,9 @@ extern Color shadesOfRed[EXPR_DATA_SHADES];
 extern Color shadesOfBlue[EXPR_DATA_SHADES];
 extern Color shadesOfYellow[EXPR_DATA_SHADES];
 
+extern boolean chromosomeColorsMade; /* Have the 3 shades of 8 chromosome colors been allocated? */
 extern boolean exprBedColorsMade; /* Have the shades of Green, Red, and Blue been allocated? */
 extern int maxRGBShade;
-void makeRedGreenShades(struct hvGfx *hvg);
-void makeLoweShades(struct hvGfx *hvg);
-/* Allocate the  shades of Red, Green and Blue */
 
 /* used in MAF display */
 #define UNALIGNED_SEQ 'o'
@@ -379,9 +392,6 @@ void removeTrackFromGroup(struct track *track);
 int orientFromChar(char c);
 /* Return 1 or -1 in place of + or - */
 
-char charFromOrient(int orient);
-/* Return + or - in place of 1 or -1 */
-
 enum trackVisibility estimateVisibility(struct track *tg);
 /* Return estimate of what visibility will be without setting it. */
 
@@ -396,6 +406,14 @@ void mapBoxHc(struct hvGfx *hvg, int start, int end, int x, int y, int width, in
 /* Print out image map rectangle that would invoke the htc (human track click)
  * program. */
 
+void mapBoxReinvoke(struct hvGfx *hvg, int x, int y, int width, int height, 
+		    struct track *toggleGroup, char *chrom,
+		    int start, int end, char *message, char *extra);
+/* Print out image map rectangle that would invoke this program again.
+ * If toggleGroup is non-NULL then toggle that track between full and dense.
+ * If chrom is non-null then jump to chrom:start-end.
+ * Add extra string to the URL if it's not NULL */
+
 void mapBoxToggleVis(struct hvGfx *hvg, int x, int y, int width, int height, 
 	struct track *curGroup);
 /* Print out image map rectangle that would invoke this program again.
@@ -405,6 +423,18 @@ void mapBoxJumpTo(struct hvGfx *hvg, int x, int y, int width, int height,
 		  char *newChrom, int newStart, int newEnd, char *message);
 /* Print out image map rectangle that would invoke this program again
  * at a different window. */
+
+void mapBoxHgcOrHgGene(struct hvGfx *hvg, int start, int end, int x, int y, int width, int height, 
+                       char *track, char *item, char *statusLine, char *directUrl, boolean withHguid,
+                       char *extra);
+/* Print out image map rectangle that would invoke the hgc (human genome click)
+ * program. */
+
+void genericMapItem(struct track *tg, struct hvGfx *hvg, void *item,
+		    char *itemName, char *mapItemName, int start, int end,
+		    int x, int y, int width, int height);
+/* This is meant to be used by genericDrawItems to set to tg->mapItem in */
+/* case tg->mapItem isn't set to anything already. */
 
 void mapStatusMessage(char *format, ...);
 /* Write out stuff that will cause a status message to
@@ -437,14 +467,8 @@ Color lightGrayIndex();
 int grayInRange(int val, int minVal, int maxVal);
 /* Return gray shade corresponding to a number from minVal - maxVal */
 
-int percentGrayIx(int percent);
-/* Return gray shade corresponding to a number from 50 - 100 */
-
 int pslGrayIx(struct psl *psl, boolean isXeno, int maxShade);
 /* Figure out gray level for an RNA block. */
-
-boolean isNonChromColor(Color color);
-/* assign fake chrom color to scaffold, based on number */
 
 Color getSeqColor(char *name, struct hvGfx *hvg);
 /* Return color index corresponding to chromosome/scaffold name. */
@@ -471,9 +495,6 @@ void innerLine(struct hvGfx *hvg, int x, int y, int w, Color color);
 void grayThreshold(UBYTE *pt, int count);
 /* Convert from 0-4 representation to gray scale rep. */
 
-void resampleBytes(UBYTE *s, int sct, UBYTE *d, int dct);
-/* Shrink or stretch an line of bytes. */
-
 /* Some little functional stubs to fill in track group
  * function pointers with if we have nothing to do. */
 void tgLoadNothing(struct track *tg);
@@ -481,10 +502,6 @@ void tgDrawNothing(struct track *tg);
 void tgFreeNothing(struct track *tg);
 int tgItemNoStart(struct track *tg, void *item);
 int tgItemNoEnd(struct track *tg, void *item);
-
-void itemPixelPos(struct track *tg, void *item, int xOff, double scale, 
-		  int *retS, int *retE, int *retX1, int *retX2);
-/* Figure out pixel position of item. */
 
 int tgFixedItemHeight(struct track *tg, void *item);
 /* Return item height for fixed height track. */
@@ -591,11 +608,6 @@ int getFilterColor(char *type, int colorIx);
 
 void spreadBasesString(struct hvGfx *hvg, int x, int y, int width, int height,
 	Color color, MgFont *font, char *s, int count, bool isCodon);
-/* Draw evenly spaced base letters in string. */
-
-void spreadStringAlternateBackground(struct hvGfx *hvg, int x, int y, 
-        int width, int height, Color color, MgFont *font, char *s, 
-        int count, Color backA, Color backB, int stripeWidth);
 /* Draw evenly spaced base letters in string. */
 
 void spreadAlignString(struct hvGfx *hvg, int x, int y, int width, int height,
@@ -795,56 +807,31 @@ void affyUclaNormMethods(struct track *tg);
 void cghNci60Methods(struct track *tg);
 /* set up special methods for CGH NCI60 track */
 
-char *getOrganism(struct sqlConnection *conn, char *acc);
-/* lookup the organism for an mrna, or NULL if not found.  Warning: static
- * return */
-
 char *getOrganismShort(struct sqlConnection *conn, char *acc);
 /* lookup the organism for an mrna, or NULL if not found.  This will
  * only return the genus, and only the first seven letters of that.
  * Warning: static return */
 
-char *getGeneName(struct sqlConnection *conn, char *acc);
-/* get geneName from refLink or NULL if not found.  Warning: static return */
-
-char *refGeneName(struct track *tg, void *item);
-/* Get name to use for refGene item. */
-
 char *refGeneMapName(struct track *tg, void *item);
-/* Return un-abbreviated genie name. */
-
-void lookupKnownGeneNames(struct linkedFeatures *lfList);
-/* This converts the known gene name to a gene name where possible via refLink. */
+/* Return un-abbreviated gene name. */
 
 #define uglyh printHtmlComment
 /* Debugging aid. */
 
-/* Stuff added to get lowe lab stuff to work.  Maybe these will go in a
- * place.  I just put them at the end.  */
- 
-struct linkedFeaturesSeries *lfsFromMsBedSimple(struct bed *bedList, char * name);
-/* Makes a lfs from a multiple scores bed (microarray bed).*/
+int linkedFeaturesSeriesCmp(const void *va, const void *vb);
+/* Compare to sort based on chrom,chromStart. */
 
-struct linkedFeaturesSeries *msBedGroupByIndex(struct bed *bedList, char *database, char *table, int expIndex,
-                                               char *filter, int filterIndex);
-/* This one is related to lfsFromMsBedSimple */
+struct linkedFeaturesSeries *lfsFromColoredExonBed(struct bed *bed);
+/* Convert a single BED 14 thing into a special linkedFeaturesSeries */
+/* where each linkedFeatures is a colored block. */
 
 void makeRedGreenShades(struct hvGfx *hvg);
 /* Makes some colors for the typical red/green microarray spectrum. */
 
-int lfsSortByName(const void *va, const void *vb);
-
 void linkedFeaturesSeriesMethods(struct track *tg);
-
-void loadMaScoresBed(struct track *tg);
-/* This one loads microarray specific beds (multiple scores). */
 
 void lfsMapItemName(struct track *tg, struct hvGfx *hvg, void *item, char *itemName, char *mapItemName, int start, int end, 
 		    int x, int y, int width, int height);
-
-Color expressionColor(struct track *tg, void *item, struct hvGfx *hvg,
-                      float denseMax, float fullMax);
-/* Returns track item color based on expression. */
 
 void drawScaledBoxSample(struct hvGfx *hvg,
         int chromStart, int chromEnd, double scale,
@@ -852,36 +839,15 @@ void drawScaledBoxSample(struct hvGfx *hvg,
         int score);
 /* Draw a box scaled from chromosome to window coordinates. */
 
-boolean genePredClassFilter(struct track *tg, void *item);
-/* Returns true if an item should be added to the filter. */
-
-Color genePredItemClassColor(struct track *tg, void *item, struct hvGfx *hvg);
-/* Return color to draw a genePred based on looking up the gene class */
-/* in an itemClass table. */
-        
 struct track *trackFromTrackDb(struct trackDb *tdb);
-
-int leftLabelX;			/* Start of area to draw left labels on. */
-int leftLabelWidth;		/* Width of area to draw left labels on. */
-
-boolean trackWantsHgGene(struct track *tg);
-/* Return TRUE if track wants hgGene on details page. */
-
-void mapBoxHgcOrHgGene(struct hvGfx *hvg, int start, int end, int x, int y, int width, int height, 
-                       char *track, char *item, char *statusLine, char *directUrl, boolean withHguid,
-                       char *extra);
-/* Print out image map rectangle that would invoke the hgc (human genome click)
- * program. */
+/* Create a track based on the tdb */
 
 int spreadStringCharWidth(int width, int count);
 
 Color getOrangeColor();
 /* Return color used for insert indicators in multiple alignments */
 
-Color getBrickColor();
 Color getBlueColor();
-Color getDarkBlueColor();
-Color getDarkGreenColor();
 Color getChromBreakBlueColor();
 Color getChromBreakGreenColor();
 
@@ -889,9 +855,6 @@ void linkedFeaturesDrawAt(struct track *tg, void *item,
 				 struct hvGfx *hvg, int xOff, int y, double scale, 
 				 MgFont *font, Color color, enum trackVisibility vis);
 /* Draw a single simple bed item at position. */
-
-char *dnaInWindow();
-/* This returns the DNA in the window, all in lower case. */
 
 Color lighterColor(struct hvGfx *hvg, Color color);
 /* Get lighter shade of a color */ 
@@ -927,8 +890,27 @@ struct track *trackNew();
 void bedMethods(struct track *tg);
 /* Fill in methods for (simple) bed tracks. */
 
+void makeCompositeTrack(struct track *track, struct trackDb *tdb);
+/* Construct track subtrack list from trackDb entry.
+ * Sets up color gradient in subtracks if requested */
+
+bool isCompositeTrack(struct track *track);
+/* Determine if this is a composite track. This is currently defined
+ * as a top-level dummy track, with a list of subtracks of the same type.
+ * Need to check trackDb, as we need to ignore wigMaf's which have
+ * subtracks but aren't composites */
+
+boolean isSubtrack(struct track *track);
+/* Return TRUE if track is a subtrack of a composite track. */
+/* Subtracks usually inherit their parent track's tdb, so their tdbs may 
+ * appear composite, but their mapNames will not be the same as tdb->tableName 
+ * in that case. */
+
 bool isSubtrackVisible(struct track *tg);
 /* Should this subtrack be displayed? */
+
+void compositeTrackVis(struct track *track);
+/* set visibilities of subtracks */
 
 boolean isWithCenterLabels(struct track *track);
 /* Special cases: inhibit center labels of subtracks in dense mode, and 
@@ -982,12 +964,6 @@ void collapseGroupGoodies(boolean isOpen, boolean wantSmallImage,
  * for a group, based on whether it is collapsed, and whether we want
  * larger or smaller image for collapse box */
 
-struct bed *loadGvAsBed (struct track *tg, char *chr, int start, int end);
-/* load gv* with filters, for a range, as a bed list (for next item button) */
-
-struct bed* loadOregannoAsBed (struct track *tg, char *chr, int start, int end);
-/* load oreganno with filters, for a range, as a bed list (for next item button) */
-
 void parseSs(char *ss, char **retPsl, char **retFa);
 /* Parse out ss variable into components. */
 
@@ -997,8 +973,26 @@ boolean ssFilesExist(char *ss);
 int maximumTrackHeight(struct track *tg);
 /* Return the maximum track height allowed in pixels. */
 
-int trackRefCmpPriority(const void *va, const void *vb);
-/* Compare based on priority. */
+struct dyString *uiStateUrlPart(struct track *toggleGroup);
+/* Return a string that contains all the UI state in CGI var
+ * format.  If toggleGroup is non-null the visibility of that
+ * track will be toggled in the string. */
+
+boolean nextItemCompatible(struct track *tg);
+/* Check to see if we draw nextPrev item buttons on a track. */
+
+void createHgFindMatchHash();
+/* Read from the cart the string assocated with matches and 
+   put the matching items into a hash for highlighting later. */
+
+TrackHandler lookupTrackHandler(char *name);
+/* Lookup handler for track of give name.  Return NULL if none. */
+
+void registerTrackHandlers();
+/* Register tracks that include some non-standard methods. */
+
+void initColors(struct hvGfx *hvg);
+/* Initialize the shades of gray etc. */
 
 #endif /* HGTRACKS_H */
 

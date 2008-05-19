@@ -11,12 +11,22 @@ O = $A.o altGraphXTrack.o bedGraph.o chainTrack.o \
 	coverageTrack.o cytoBandTrack.o cutterTrack.o \
         expRatioTracks.o factorSource.o goldTrack.o loweLabTracks.o \
 	mafTrack.o netTrack.o pslTrack.o rmskTrack.o \
-	sampleTracks.o switchGear.o wabaTrack.o wigTrack.o cds.o \
+	sampleTracks.o simpleTracks.o switchGear.o \
+	wabaTrack.o wigTrack.o cds.o \
 	wigMafTrack.o encode.o variation.o transcriptome.o\
 	rnaFoldTrack.o retroGene.o hapmapTrack.o rnaPLFoldTrack.o\
 	wiki.o wikiTrack.o
 
 include ../../inc/cgi_build_rules.mk
+
+ifeq (${GBROWSE}, 1)
+  GBROWSE_D=-DGBROWSE
+else
+  GBROWSE_D=
+endif
+
+%.o: %.c
+	${CC} ${COPT} ${CFLAGS} ${GBROWSE_D} ${HG_DEFS} ${HG_WARN} ${HG_INC} ${XINC} -o $@ -c $<
 
 mgsc: strip
 	mv $A ${CGI_BIN}/$A

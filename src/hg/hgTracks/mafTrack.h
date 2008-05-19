@@ -3,6 +3,10 @@
 #ifndef MAFTRACK_H
 #define MAFTRACK_H
 
+#ifndef MAF_H
+#include "maf.h"
+#endif
+
 /* zoom level where summary file is used */
 #define MAF_SUMMARY_VIEW 1000000
 

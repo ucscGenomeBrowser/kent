@@ -11,6 +11,10 @@
 #include "microarray.h"
 #include "spaceSaver.h"
 
+Color shadesOfLowe1[10+1];
+Color shadesOfLowe2[10+1];
+Color shadesOfLowe3[10+1];
+
 struct simpleClinical 
     {
     char *er;
@@ -916,6 +920,19 @@ if(val > 0)
     return (redGreen ? shadesOfRed[colorIndex] : shadesOfYellow[colorIndex]); 
 else 
     return (redGreen ? shadesOfGreen[colorIndex] : shadesOfBlue[colorIndex]);
+}
+
+void makeLoweShades(struct hvGfx *hvg) 
+/* Allocate the  shades of Red, Green and Blue */
+{
+static struct rgbColor black = {0, 0, 0};
+static struct rgbColor shade1 = {120, 255, 255};
+static struct rgbColor shade2 = {80,200, 255};
+static struct rgbColor shade3 = {0,60, 255};
+hvGfxMakeColorGradient(hvg, &black, &shade1, 11, shadesOfLowe1);
+hvGfxMakeColorGradient(hvg, &black, &shade2, 11, shadesOfLowe2);
+hvGfxMakeColorGradient(hvg, &black, &shade3, 11, shadesOfLowe3);
+
 }
 
 /*For Lowe Lab arrays with M and A values*/

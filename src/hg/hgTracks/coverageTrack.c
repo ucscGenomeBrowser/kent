@@ -317,6 +317,84 @@ for (i=0; i<width; ++i)
    b[i] = inc[b[i]];
 }
 
+void resampleBytes(UBYTE *s, int sct, UBYTE *d, int dct)
+/* Shrink or stretch an line of bytes. */
+{
+#define WHOLESCALE 256
+if (sct > dct)	/* going to do some averaging */
+	{
+	int i;
+	int j, jend, lj;
+	long lasts, ldiv;
+	long acc, div;
+	long t1,t2;
+
+	ldiv = WHOLESCALE;
+	lasts = s[0];
+	lj = 0;
+	for (i=0; i<dct; i++)
+		{
+		acc = lasts*ldiv;
+		div = ldiv;
+		t1 = (i+1)*(long)sct;
+		jend = t1/dct;
+		for (j = lj+1; j<jend; j++)
+			{
+			acc += s[j]*WHOLESCALE;
+			div += WHOLESCALE;
+			}
+		t2 = t1 - jend*(long)dct;
+		lj = jend;
+		lasts = s[lj];
+		if (t2 == 0)
+			{
+			ldiv = WHOLESCALE;
+			}
+		else
+			{
+			ldiv = WHOLESCALE*t2/dct;
+			div += ldiv;
+			acc += lasts*ldiv;
+			ldiv = WHOLESCALE-ldiv;
+			}
+		*d++ = acc/div;
+		}
+	}
+else if (dct == sct)	/* they's the same */
+	{
+	while (--dct >= 0)
+		*d++ = *s++;
+	}
+else if (sct == 1)
+	{
+	while (--dct >= 0)
+		*d++ = *s;
+	}
+else/* going to do some interpolation */
+	{
+	int i;
+	long t1;
+	long p1;
+	long err;
+	int dct2;
+
+	dct -= 1;
+	sct -= 1;
+	dct2 = dct/2;
+	t1 = 0;
+	for (i=0; i<=dct; i++)
+		{
+		p1 = t1/dct;
+		err =  t1 - p1*dct;
+		if (err == 0)
+			*d++ = s[p1];
+		else
+			*d++ = (s[p1]*(dct-err)+s[p1+1]*err+dct2)/dct;
+		t1 += sct;
+		}
+	}
+}
+
 static void cloneDenseDraw(struct track *tg, int seqStart, int seqEnd,
         struct hvGfx *hvg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)

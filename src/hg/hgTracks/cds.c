@@ -15,12 +15,15 @@
 #include "genePred.h"
 #include "cds.h"
 #include "genbank.h"
-#include "pcrResult.h"
 #include "twoBit.h"
 #include "hgTracks.h"
 #include "cdsSpec.h"
 
-static char const rcsid[] = "$Id: cds.c,v 1.73 2008/05/05 23:31:08 angie Exp $";
+#ifndef GBROWSE
+#include "pcrResult.h"
+#endif /* GBROWSE */
+
+static char const rcsid[] = "$Id: cds.c,v 1.74 2008/05/19 16:35:37 angie Exp $";
 
 /* Definitions of cds colors for coding coloring display */
 #define CDS_ERROR   0
@@ -669,6 +672,7 @@ return ret;
 static struct dnaSeq *maybeGetUserSeq(char *qName)
 /* Look in user's blat sequence file for qName. */
 {
+#ifndef GBROWSE
 static struct hash *userSeqHash = NULL;
 struct dnaSeq *userSeq = NULL;
 char *ss = cartOptionalString(cart, "ss");
@@ -694,8 +698,12 @@ if (userSeq == NULL)
     return NULL;
 else
     return cloneDnaSeq(userSeq);
+#else
+return NULL;
+#endif
 }
 
+#ifndef GBROWSE
 static struct dnaSeq *maybeGetPcrResultSeq(struct linkedFeatures *lf)
 /* Return (if possible) the primer sequences concatenated with the 
  * target sequence between where they match. */
@@ -760,6 +768,7 @@ else
     }
 return seq;
 }
+#endif /* GBROWSE */
 
 static struct dnaSeq *maybeGetExtFileSeq(char *seqSource, char *name)
 /* look up sequence name in seq and extFile tables specified in seqSource */
@@ -790,8 +799,10 @@ if (sameString(tableName,"refGene"))
     mrnaSeq = hGenBankGetMrna(lf->name, "refMrna");
 else if (sameString(seqSource, "ss"))
     mrnaSeq = maybeGetUserSeq(lf->name);
+#ifndef GBROWSE
 else if (sameString(seqSource, PCR_RESULT_TRACK_NAME))
     mrnaSeq = maybeGetPcrResultSeq(lf);
+#endif /* GBROWSE */
 else if (startsWith("extFile", seqSource))
     mrnaSeq = maybeGetExtFileSeq(seqSource, lf->name);
 else
