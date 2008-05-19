@@ -1,401 +1,229 @@
 /* transMapClick - transMap click handling */
 
 /*
- * Tables associated with transMap:
- *   transMapXxxGene - gene predictions
- *   transMapXxxAli - mapped PSLs aligments
- *   transMapXxxAliGene - mapped alignmetns with CDS and frame annotation
- *   transMapXxxChk - gene-check results
- *   transMapXxxChkDetails - gene-check details
- *   transMapXxxInfo - mapping information, including source.
- *   transMapXxxAttr - optional coloring attr table
+ * Per-genome tables associated with transMap:
+ *   transMapAliXxx - mapped PSLs alignments
+ *   transMapInfoXxx - information for mapped alignments
+ * hgFixed tables associated with transMap:
+ *   transMapSrcXxx - information about source alignments
+ *   transMapGeneXxx - gene information
+ *   transMapSeqXxx - seq table for accessing sequence
+ *   transMapExtFileXxx - extFile table
  *
  * Xxx is:
- *    - Ref - RefSeq genes
+ *    - UcscGene - UCSC genes
+ *    - RefSeq - RefSeq mRNAs
  *    - MRna - GenBank mRNAs
- * other prefixes supported:
- *    tranMapAnc - ancestor tree mappings
- *    transMapSrc -sources genes (for debugging), *Info table is not required.
+ *    - SplicedEst - GenBank spliced ESTs
  */
 
 #include "common.h"
 #include "hgc.h"
+#include "hui.h"
+#include "hCommon.h"
 #include "transMapClick.h"
+#include "transMapStuff.h"
 #include "transMapInfo.h"
-#include "geneCheck.h"
-#include "geneCheckDetails.h"
-#include "geneCheckWidget.h"
+#include "transMapSrc.h"
+#include "transMapGene.h"
 #include "genbank.h"
 
-/* space to allocate for a id */
-#define ID_BUFSZ 64
 
-struct mappingInfo
-/* various pieces of information about mapping from table name and 
- * transMapXxxInfo table */
+struct transMapBag
+/* object contain collected information on a specific transMap mapping */
 {
-    char mappedId[64];         /* id of mapped gene */
-    char tblPre[64];           /* table prefix */
-    char geneSet[6];           /* source gene set abbrv used in table name */
-    struct transMapInfo *tmi;  /* general info for mapped gene (NULL for src gene) */
-    boolean isSrc;             /* is this a source mapping? */
-    boolean indirect;          /* an indirect mapping */
-    char gbAcc[ID_BUFSZ];      /* src accession */
-    short gbVer;               /* version from gbId */
-    char seqId[ID_BUFSZ];      /* id used to look up sequence, different than
-                                * srcAcc if multiple levels of mappings have
-                                * been done */
-    char *sym;                 /* src gene symbol and desc */
-    char *desc;
-    short gbCurVer;            /* version from genbank table */
+    struct psl *psl;              // transMap alignment
+    struct transMapInfo *info;    // addition information about mapping
+    struct transMapSrc *src;      // source information
+    struct transMapGene *gene;    // gene information
+    boolean srcDbExists;          // source database exists
 };
 
-static char *getTransMapTbl(struct mappingInfo *mi, char *suffix)
-/* get a transMap table name; Warning: static return */
+static struct transMapBag *transMapBagLoad(struct sqlConnection *conn,
+                                           struct trackDb *tdb, char *mappedId,
+                                           boolean getSrcRec)
+/* load information from various tables */
 {
-static char tbl[64];
-safef(tbl, sizeof(tbl), "%s%s%s", mi->tblPre, mi->geneSet, suffix);
-return tbl;
+struct transMapBag *bag;
+AllocVar(bag);
+bag->psl = getAlignments(conn, tdb->tableName, mappedId);
+
+char *transMapInfoTbl = trackDbRequiredSetting(tdb, transMapInfoTblSetting);
+bag->info = transMapInfoQuery(conn, transMapInfoTbl, mappedId);
+
+if (getSrcRec)
+    {
+    char *transMapSrcTbl = trackDbRequiredSetting(tdb, transMapSrcTblSetting);
+    bag->src = transMapSrcQuery(conn, transMapSrcTbl, bag->info->srcDb, bag->info->srcId);
+    }
+
+char *transMapGeneTbl = trackDbSetting(tdb, transMapGeneTblSetting);
+if (transMapGeneTbl != NULL)
+    bag->gene = transMapGeneQuery(conn, transMapGeneTbl,
+                                  bag->info->srcDb, transMapIdToAcc(bag->info->srcId));
+bag->srcDbExists = sqlDatabaseExists(bag->info->srcDb);
+return bag;
 }
 
-static void parseSrcId(char *srcId, struct mappingInfo *mi)
-/* parse srcId parts and save in mi */
+static void transMapBagFree(struct transMapBag **bagPtr)
+/* free the bag */
 {
-
-/* direct mappings (cDNA is aligned to source organism) have ids in the form:
- * NM_012345.1-1.1 Indirect mappings, where mapped predictions are used to
- * form a gene set that is mapped again, have ids in the form
- * db:NM_012345.1_1.1, where db is the source organism, and '_1' is added so
- * that db:NM_012345.1_1 uniquely identifies the source. */
-
-char idBuf[ID_BUFSZ];
-safef(idBuf, sizeof(idBuf), "%s", srcId);
-char *id = idBuf;
-
-/* find various parts */
-char *colon = strchr(id, ':');
-char *dot = strchr(id, '.');
-char *under = NULL, *dash = NULL;
-if (dot != NULL)
+struct transMapBag *bag = *bagPtr;
+if (bag != NULL)
     {
-    under = strchr(dot, '_');
-    dash = strchr(dot, '-');
-    }
-if ((dot == NULL) || (dash == NULL))
-    errAbort("can't parse accession from srcId: %s", srcId);
-mi->indirect = (colon != NULL);
-
-/* id used to get sequence is before `-'.  For direct, it excludes
- * genbank version */
-*dash = '\0';
-if (!mi->indirect)
-    *dot = '\0';
-safef(mi->seqId, sizeof(mi->seqId), "%s", id);
-
-/* now pull out genbank accession for obtaining description */
-id = (colon != NULL) ? colon+1 : id;
-*dot = '\0';
-
-safef(mi->gbAcc, sizeof(mi->gbAcc), "%s", id);
-if (under != NULL)
-    *under = '\0';
-mi->gbVer = sqlSigned(dot+1);
-}
-
-static void getGenbankInfo(struct sqlConnection *conn, struct mappingInfo *mi)
-/* get source gene info and version from gbCdnaInfo and save in mi */
-{
-char query[512], **row;
-struct sqlResult *sr;
-char *defDb = hDefaultDb();
-
-/* if id has been modified for multi-level ancestor mappings:
- *    NM_012345.1-1.1 -> db:NM_012345a.1.1
- * then hack it back to the original accession.  However, don't get version,
- * since the sequence is different.
- */
-
-safef(query, sizeof(query),
-      "select gbCdnaInfo.version, geneName.name, description.name "
-      "from %s.gbCdnaInfo, %s.geneName, %s.description "
-      "where gbCdnaInfo.acc=\"%s\" and gbCdnaInfo.geneName=geneName.id and gbCdnaInfo.description = description.id",
-      defDb, defDb, defDb, mi->gbAcc);
-sr = sqlGetResult(conn, query);
-row = sqlNextRow(sr);
-if (row != NULL)
-    {
-    mi->gbCurVer = sqlSigned(row[0]);
-    mi->sym = cloneString(row[1]);
-    mi->desc = cloneString(row[2]);
-    }
-sqlFreeResult(&sr);
-}
-
-static struct mappingInfo *mappingInfoNew(struct sqlConnection *conn,
-                                          char *tbl, char *mappedId)
-/* load mapping info for a mapped gene */
-{
-struct mappingInfo *mi;
-AllocVar(mi);
-
-safef(mi->mappedId, sizeof(mi->mappedId), "%s", mappedId);
-if (startsWith("transMapAnc", tbl))
-    strcpy(mi->tblPre, "transMapAnc");
-else if (startsWith("transMapSrc", tbl))
-    {
-    strcpy(mi->tblPre, "transMapSrc");
-    mi->isSrc = TRUE;
-    }
-else
-    strcpy(mi->tblPre, "transMap");
-int preLen = strlen(mi->tblPre);
-
-if (startsWith("Ref", tbl+preLen))
-    strcpy(mi->geneSet, "Ref");
-else if (startsWith("MRna", tbl+preLen))
-    strcpy(mi->geneSet, "MRna");
-else
-    errAbort("can't determine source gene set from table: %s", tbl);
-
-if (!mi->isSrc)
-    {
-    mi->tmi = sqlQueryObjs(conn, (sqlLoadFunc)transMapInfoLoad, sqlQueryMust|sqlQuerySingle,
-                           "select * from %s where mappedId='%s'",
-                           getTransMapTbl(mi, "Info"), mappedId);
-    parseSrcId(mi->tmi->srcId, mi);
-    }
-else
-    parseSrcId(mappedId, mi);
-
-getGenbankInfo(conn, mi);
-return mi;
-}
-
-static void mappingInfoFree(struct mappingInfo **mip)
-/* free mappingInfo object */
-{
-struct mappingInfo *mi = *mip;
-if (mi != NULL)
-    {
-    transMapInfoFree(&mi->tmi);
-    freeMem(mi->sym);
-    freeMem(mi->desc);
+    pslFree(&bag->psl);
+    transMapInfoFree(&bag->info);
+    transMapSrcFree(&bag->src);
+    transMapGeneFree(&bag->gene);
+    freez(bagPtr);
     }
 }
 
-static void displaySrcGene(struct sqlConnection *conn, struct mappingInfo *mi)
+static void displayMapped(struct transMapBag *bag)
+/* display information about the mapping alignment */
+{
+printf("<TABLE class=\"transMap\">\n");
+printf("<CAPTION>Mapped Transcript</CAPTION>\n");
+printf("<TBODY>\n");
+
+// position
+printf("<TR CLASS=\"transMapLeft\">");
+printf("<TD>Position<TD CLASS=\"transMapNoWrap\">");
+printf("<A HREF=\"%s&position=%s:%d-%d\">",
+      hgTracksPathAndSettings(),
+      bag->psl->tName, bag->psl->tStart, bag->psl->tEnd);
+printf("%s:%d-%d</A>", bag->psl->tName, bag->psl->tStart, bag->psl->tEnd);
+printf("</TR>\n");
+
+// % identity and % aligned
+printf("<TR CLASS=\"transMapLeft\"><TD>Identify<TD>%0.1f%%</TR>\n",
+       100.0*pslIdent(bag->psl));
+printf("<TR CLASS=\"transMapLeft\"><TD>Aligned<TD>%0.1f%%</TR>\n",
+       100.0*pslQueryAligned(bag->psl));
+
+// chain used in mapping
+printf("<TR CLASS=\"transMapLeft\"><TD>Chain ID<TD>%s</TR>\n",
+       bag->info->mappingId);
+printf("</TBODY></TABLE>\n");
+}
+
+static void displaySource(struct transMapBag *bag)
 /* display information about the source gene that was mapped */
 {
-/* description will be NULL if deleted */
-getGenbankInfo(conn, mi);
-
-/* construct URL to browser */
-char srcGeneUrl[1024];
-safef(srcGeneUrl, sizeof(srcGeneUrl),
-      "../cgi-bin/hgTracks?db=%s&position=%s:%d-%d",
-      mi->tmi->srcDb, mi->tmi->srcChrom, mi->tmi->srcStart, mi->tmi->srcEnd);
-
 printf("<TABLE class=\"transMap\">\n");
-printf("<CAPTION>Source gene</CAPTION>\n");
+printf("<CAPTION>Source Transcript</CAPTION>\n");
 printf("<TBODY>\n");
-printf("<TR CLASS=\"transMapLeft\"><TD>%s", mi->tmi->srcDb);
-printf("<TD CLASS=\"transMapNoWrap\"><A HREF=\"%s\" target=_blank>%s</A>", srcGeneUrl, mi->tmi->srcId);
-if (mi->desc == NULL)
-    printf("<TD>&nbsp;<TD>gene no longer in source database");
+// organism/assembly
+printf("<TR CLASS=\"transMapLeft\"><TD>Organism");
+if (bag->srcDbExists)
+    {
+    char *org = hOrganism(bag->info->srcDb);
+    char *sciName = hScientificName(bag->info->srcDb);
+    printf("<TD>%s (%s)", org, sciName);
+    freeMem(org);
+    freeMem(sciName);
+    }
 else
-    printf("<TD>%s<TD>%s", mi->sym, mi->desc);
+    printf("<TD>n/a");
 printf("</TR>\n");
-printf("<TR CLASS=\"transMapLeft\"><TD>%s",
-       (genbankIsRefSeqAcc(mi->gbAcc) ? "RefSeq" : "Genbank"));
-printf("<TD><a HREF=\"");
-printEntrezNucleotideUrl(stdout, mi->gbAcc);
-printf("\" TARGET=_blank>%s</A><TD COLSPAN=2>&nbsp;", mi->gbAcc);
+
+printf("<TR CLASS=\"transMapLeft\"><TD>Genome<TD>%s</TR>\n", bag->info->srcDb);
+// position
+printf("<TR CLASS=\"transMapLeft\"><TD>Position\n");
+if (bag->srcDbExists)
+    printf("<TD CLASS=\"transMapNoWrap\"><A HREF=\"%s?db=%s&position=%s:%d-%d\" target=_blank>"
+           "%s:%d-%d</A>",
+           hgTracksName(), bag->src->db,
+           bag->src->chrom, bag->src->chromStart, bag->src->chromEnd,
+           bag->src->chrom, bag->src->chromStart, bag->src->chromEnd);
+else
+    printf("%s:%d-%d", bag->src->chrom, bag->src->chromStart, bag->src->chromEnd);
 printf("</TR>\n");
+
+// % identity and % aligned
+printf("<TR CLASS=\"transMapLeft\"><TD>Identify<TD>%0.1f%%</TR>\n",
+       100.0*bag->src->ident);
+printf("<TR CLASS=\"transMapLeft\"><TD>Aligned<TD>%0.1f%%</TR>\n",
+       100.0*bag->src->aligned);
+
+// gene and CDS
+printf("<TR CLASS=\"transMapLeft\"><TD>Gene<TD>%s</TR>\n",
+       (((bag->gene != NULL) && (strlen(bag->gene->geneName) > 0))
+        ? bag->gene->geneName : "&nbsp;"));
+printf("<TR CLASS=\"transMapLeft\"><TD>CDS<TD>%s</TR>\n",
+       (((bag->gene != NULL) && (strlen(bag->gene->cds) > 0))
+        ? bag->gene->cds : "&nbsp;"));
 printf("</TBODY></TABLE>\n");
 }
 
-
-static void prGeneMappingRow(char *label, unsigned origCnt, unsigned mapCnt)
-/* display one row in the gene mapping table */
-{
-float frac = (origCnt == 0) ? 0.0 : ((float)mapCnt)/origCnt;
-printf("<TR><TH>%s<TD>%d<TD>%d<TD>%0.2f</TR>\n", label, origCnt, mapCnt, frac);
-}
-
-static void displayMappingInfo(struct sqlConnection *conn, struct mappingInfo *mi)
-/* display information from a transMap table */
-{
-struct transMapInfo *tmi = mi->tmi;
-printf("<TABLE class=\"transMap\">\n");
-printf("<CAPTION>Mapping stats</CAPTION>\n");
-printf("<THEAD>\n");
-printf("<TR><TH>          <TH>%s    <TH COLSPAN=2>mapped</TR>\n", tmi->srcDb);
-printf("<TR><TH>          <TH>count <TH>count<TH>frac</TR>\n");
-printf("</THEAD><TBODY>\n");
-prGeneMappingRow("exons", tmi->srcExonCnt, tmi->mappedExonCnt);
-prGeneMappingRow("bases", tmi->srcBaseCnt, tmi->mappedBaseCnt);
-prGeneMappingRow("CDS exons", tmi->srcCdsExonCnt, tmi->mappedCdsExonCnt);
-prGeneMappingRow("CDS bases", tmi->srcCdsBaseCnt, tmi->mappedCdsBaseCnt);
-printf("</TBODY></TABLE>\n");
-}
-
-static void displayAligns(struct sqlConnection *conn, struct mappingInfo *mi)
+static void displayAligns(struct trackDb *tdb, struct transMapBag *bag)
 /* display cDNA alignments */
 {
 int start = cartInt(cart, "o");
-char *alignTbl = getTransMapTbl(mi, "Ali");
-
-/* this should only ever have one alignment */
-struct psl *psl = getAlignments(conn, alignTbl, mi->mappedId);
 printf("<H3>mRNA/Genomic Alignments</H3>");
-
-/* display identity as 0.0%, since it's not known */
-psl->misMatch = psl->match;
-psl->match = 0;
-printAlignments(psl, start, "hgcTransMapCdnaAli", alignTbl, mi->mappedId);
-pslFreeList(&psl);
-}
-
-static struct geneCheck *displayGeneCheck(struct sqlConnection *conn, struct mappingInfo *mi)
-/* display gene-check results; return true geneCheck object, which must be freed */
-{
-struct geneCheck *gc
-    = sqlQueryObjs(conn, (sqlLoadFunc)geneCheckLoad, sqlQueryMust|sqlQuerySingle,
-                   "select * from %s where acc='%s'", 
-                   getTransMapTbl(mi, "Chk"), mi->mappedId);
-geneCheckWidgetSummary(gc, "transMap", "Gene checks\n");
-return gc;
-}
-
-static void displayGeneCheckDetails(struct sqlConnection *conn, struct mappingInfo *mi,
-                                    struct geneCheck *gc)
-/* display gene-check details */
-{
-struct geneCheckDetails *gcdList
-    = sqlQueryObjs(conn, (sqlLoadFunc)geneCheckDetailsLoad, sqlQueryMulti,
-                   "select * from %s where acc='%s'",
-                   getTransMapTbl(mi, "ChkDetails"), gc->acc);
-geneCheckWidgetDetails(cart, gc, gcdList, "transMap", "Gene check details", NULL);
-geneCheckDetailsFreeList(&gcdList);
-}
-
-static void displayGeneCheckResults(struct sqlConnection *conn, struct mappingInfo *mi)
-/* display row with geneCheck info, if tables exist */
-{
-char *tbl = getTransMapTbl(mi, "Chk");
-if (sqlTableExists(conn, tbl))
-    {
-    printf("<TR><TD>\n");
-    struct geneCheck *gc = displayGeneCheck(conn, mi);
-    printf("<TD COLSPAN=2>\n");
-    if (!sameString(gc->stat, "ok"))
-        displayGeneCheckDetails(conn, mi, gc);
-    printf("</TR>\n");
-    geneCheckFree(&gc);
-    }
+printAlignmentsSimple(bag->psl, start, "hgcTransMapCdnaAli", tdb->tableName, bag->info->mappedId);
 }
 
 void transMapClickHandler(struct trackDb *tdb, char *mappedId)
 /* Handle click on a transMap tracks */
 {
 struct sqlConnection *conn = hAllocConn();
-struct mappingInfo *mi = mappingInfoNew(conn, tdb->tableName, mappedId);
+struct transMapBag *bag = transMapBagLoad(conn, tdb, mappedId, TRUE);
 
 genericHeader(tdb, mappedId);
 printf("<TABLE class=\"transMapLayout\">\n");
 
-if (!mi->isSrc)
-    {
-    printf("<TR><TD COLSPAN=3>\n");
-    displaySrcGene(conn, mi);
-    printf("</TR>\n");
-    }
-
-if (sqlTableExists(conn, getTransMapTbl(mi, "Ali")))
-    {
-    printf("<TR><TD COLSPAN=3>\n");
-    displayAligns(conn, mi);
-    printf("</TR>\n");
-    }
-
-if (!mi->isSrc)
-    {
-    printf("<TR><TD COLSPAN=3>\n");
-    displayMappingInfo(conn, mi);
-    printf("</TR>\n");
-    }
-
-displayGeneCheckResults(conn, mi);
+printf("<TR><TD>\n");
+displayMapped(bag);
+printf("<TD>\n");
+displaySource(bag);
+printf("<TD>&nbsp;\n");
+printf("</TR>\n");
+printf("<TR><TD COLSPAN=3>\n");
+displayAligns(tdb, bag);
+printf("</TR>\n");
 printf("</TABLE>\n");
 
 printTrackHtml(tdb);
-mappingInfoFree(&mi);
+transMapBagFree(&bag);
 hFreeConn(&conn);
 }
 
-static struct genbankCds getCds(struct sqlConnection *conn, struct mappingInfo *mi)
-/* Get CDS, return empty genebankCds if not found or can't parse  */
+static struct dnaSeq *getCdnaSeq(struct trackDb *tdb, char *name)
+/* look up sequence name in seq and extFile tables specified
+ * for base coloring. */
 {
-char query[256];
-safef(query, sizeof(query),
-      "select cds.name "
-      "from %s.gbCdnaInfo, %s.cds "
-      "where gbCdnaInfo.acc=\"%s\" and gbCdnaInfo.cds=cds.id",
-      mi->tmi->srcDb, mi->tmi->srcDb, mi->gbAcc);
+/* FIXME: this is really a rip off of some of the code in
+ * hgTracks/cds.c; really need to centralize it somewhere */
+char *spec = trackDbRequiredSetting(tdb, BASE_COLOR_USE_SEQUENCE);
+char *specCopy = cloneString(spec);
 
-struct sqlResult *sr = sqlMustGetResult(conn, query);
-char **row = sqlNextRow(sr);
-struct genbankCds cds;
-if ((row == NULL) || !genbankCdsParse(row[0], &cds))
-    ZeroVar(&cds);  /* can't get or parse cds */
-sqlFreeResult(&sr);
-return cds;
+// value is: extFile seqTbl extFileTbl
+char *words[3];
+int nwords = chopByWhite(specCopy, words, ArraySize(words));
+if ((nwords != ArraySize(words)) || !sameString(words[0], "extFile"))
+    errAbort("invalid %s track setting: %s", BASE_COLOR_USE_SEQUENCE, spec);
+struct dnaSeq *seq = hDnaSeqGet(NULL, name, words[1], words[2]);
+freeMem(specCopy);
+return seq;
 }
 
-static struct psl *loadAlign(struct sqlConnection *conn, struct mappingInfo *mi, int start)
-/* load a psl that must exist */
+void transMapShowCdnaAli(struct trackDb *tdb, char *mappedId)
+/* Show alignment for mappedId, mostly ripped off from htcCdnaAli */
 {
-char table[256], query[256];
-boolean hasBin;
-hFindSplitTable(seqName, getTransMapTbl(mi, "Ali"), table, &hasBin);
-
-safef(query, sizeof(query), "select * from %s where qName = '%s' and tStart = %d",
-      table, mi->mappedId, start);
-struct sqlResult *sr= sqlMustGetResult(conn, query);
-char **row= sqlNextRow(sr);
-struct psl *psl = pslLoad(row+hasBin);
-sqlFreeResult(&sr);
-return psl;
-}
-
-void transMapShowCdnaAli(char *mappedId)
-/* Show alignment for accession, mostly ripped off from htcCdnaAli */
-{
-char *track = cartString(cart, "aliTrack");
-int start = cartInt(cart, "o");
 struct sqlConnection *conn = hAllocConn();
-struct mappingInfo *mi = mappingInfoNew(conn, track, mappedId);
-struct genbankCds cds = getCds(conn, mi);
+struct transMapBag *bag = transMapBagLoad(conn, tdb, mappedId, FALSE);
+struct genbankCds cds;
+if ((bag->gene == NULL) || (strlen(bag->gene->cds) == 0)
+    || !genbankCdsParse(bag->gene->cds, &cds))
+    ZeroVar(&cds);  /* can't get or parse cds */
+struct dnaSeq *seq = getCdnaSeq(tdb, transMapIdToAcc(mappedId));
 
-/* Print start of HTML. */
 writeFramesetType();
 puts("<HTML>");
-printf("<HEAD>\n<TITLE>%s vs Genomic</TITLE>\n</HEAD>\n\n", mi->seqId);
-
-/* Look up alignment and sequence in database.  Always get sequence
- * from defaultDb */
-struct psl *psl = loadAlign(conn, mi, start);
-struct sqlConnection *defDbConn = sqlConnect(hDefaultDb());
-struct dnaSeq *rnaSeq;
-if (hRnaSeqAndIdx(mi->seqId, &rnaSeq, NULL, NULL, defDbConn) < 0)
-    errAbort("can't get mRNA sequence from %s for %s", hDefaultDb(),
-             mi->seqId);
-sqlDisconnect(&defDbConn);
-
-showSomeAlignment(psl, rnaSeq, gftDna, 0, rnaSeq->size, NULL, cds.start, cds.end);
-pslFree(&psl);
-dnaSeqFree(&rnaSeq);
-mappingInfoFree(&mi);
+printf("<HEAD>\n<TITLE>%s vs Genomic</TITLE>\n</HEAD>\n\n", mappedId);
+showSomeAlignment(bag->psl, seq, gftDna, 0, seq->size, NULL, cds.start, cds.end);
+dnaSeqFree(&seq);
+transMapBagFree(&bag);
 hFreeConn(&conn);
 }
-

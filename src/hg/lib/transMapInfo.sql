@@ -3,27 +3,12 @@
 # an object which can be loaded and saved from RAM in a fairly 
 # automatic way.
 
-#information about transMap gene mappings
+#genomeDB information about transMap alignments
 CREATE TABLE transMapInfo (
-    srcDb char(12) not null,	# source db
-    chains char(8) not null,	# type of chains used for mapping
-    srcId varchar(255) not null,	# id of original gene
-    srcChrom varchar(255) not null,	# source chromosome
-    srcStart int unsigned not null,	# source start location
-    srcEnd int unsigned not null,	# source end location
-    srcExonCnt int unsigned not null,	# number of exons in src gene
-    srcCdsExonCnt int unsigned not null,	# number of CDS exons in src gene
-    srcBaseCnt int unsigned not null,	# number of bases in src gene
-    srcCdsBaseCnt int unsigned not null,	# number of CDS bases in src gene
-    mappedId varchar(255) not null,	# id of mapped gene
-    mappedChrom varchar(255) not null,	# mapped chromosome
-    mappedStart int unsigned not null,	# mapped start location
-    mappedEnd int unsigned not null,	# mapped end location
-    mappedExonCnt int unsigned not null,	# number of exons mapped
-    mappedCdsExonCnt int unsigned not null,	# number of CDS exons mapped
-    mappedBaseCnt int unsigned not null,	# number of bases mapped
-    mappedCdsBaseCnt int unsigned not null,	# number of CDS bases mapped
-    #Indices
-    index (srcDb,srcId),
-    index (mappedId)
+    mappedId varchar(255) not null,	# id of mapped alignment
+    srcDb char(16) not null,	# source db
+    srcId varchar(255) not null,	# id of source alignment
+    mappingId varchar(255) not null,	# id of chain used for mapping
+              #Indices
+    PRIMARY KEY(mappedId)
 );

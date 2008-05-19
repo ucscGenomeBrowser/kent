@@ -37,7 +37,7 @@
 #include "pcrResult.h"
 #include "wikiLink.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1470 2008/05/19 16:35:37 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1471 2008/05/19 18:16:06 markd Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -111,6 +111,33 @@ tl.leftLabelWidth = leftLabelWidthChars*tl.nWidth + trackTabWidth;
 struct track *trackList = NULL;    /* List of all tracks. */
 struct group *groupList = NULL;    /* List of all tracks. */
 
+
+struct track *trackFindByName(struct track *tracks, char *trackName)
+/* find a track in tracks by name, recursively searching subtracks */
+{
+struct track *track;
+for (track = tracks; track != NULL; track = track->next)
+    {
+    if (sameString(track->mapName, trackName))
+        return track;
+    else if (track->subtracks != NULL)
+        {
+        struct track *st = trackFindByName(track->subtracks, trackName);
+        if (st != NULL)
+            return st;
+        }
+    }
+return NULL;
+} 
+
+char *getItemDataName(struct track *tg, char *itemName)
+/* Translate an itemName to its itemDataName, using tg->itemDataName if is not
+ * NULL. The resulting value should *not* be freed, and it should be assumed
+ * that it will only remain valid until the next call of this function.*/
+{
+return (tg->itemDataName != NULL) ? tg->itemDataName(tg, itemName)
+    : itemName;
+}
 
 /* Some little functional stubs to fill in track group
  * function pointers with if we have nothing to do. */
@@ -780,12 +807,12 @@ if (qt != gftProt)
     {
     if (tdb->settingsHash == NULL)
 	tdb->settingsHash = hashNew(0);
-    hashAdd(tdb->settingsHash, "baseColorDefault", cloneString("diffBases"));
-    hashAdd(tdb->settingsHash, "baseColorUseSequence", cloneString("ss"));
-    hashAdd(tdb->settingsHash, "showDiffBasesAllScales", cloneString("."));
-    hashAdd(tdb->settingsHash, "indelDoubleInsert", cloneString("on"));
-    hashAdd(tdb->settingsHash, "indelQueryInsert", cloneString("on"));
-    hashAdd(tdb->settingsHash, "indelPolyA", cloneString("on"));
+    hashAdd(tdb->settingsHash, BASE_COLOR_DEFAULT, cloneString("diffBases"));
+    hashAdd(tdb->settingsHash, BASE_COLOR_USE_SEQUENCE, cloneString("ss"));
+    hashAdd(tdb->settingsHash, SHOW_DIFF_BASES_ALL_SCALES, cloneString("."));
+    hashAdd(tdb->settingsHash, INDEL_DOUBLE_INSERT, cloneString("on"));
+    hashAdd(tdb->settingsHash, INDEL_QUERY_INSERT, cloneString("on"));
+    hashAdd(tdb->settingsHash, INDEL_POLY_A, cloneString("on"));
     }
 }
 
@@ -3177,19 +3204,13 @@ for (track = trackList; track != NULL; track = track->next)
 return trackList;
 }
 
-void doNextPrevItem(char *whichWay, char *trackName)
-/* In case a next/previous item arrow was clicked on a track, change */
+void doNextPrevItem(boolean goNext, char *trackName)
+/* In case a next item arrow was clicked on a track, change */
 /* position (i.e. winStart, winEnd, etc.) based on what track it was */
 {
-struct track *track = trackList;
-if (trackName == NULL)
-    return;
-while ((track != NULL) && (!sameString(track->mapName, trackName)))
-    track = track->next;
-if (track == NULL)
-    return;
+struct track *track = trackFindByName(trackList, trackName);
 if (track->labelNextPrevItem != NULL)
-    track->labelNextPrevItem(track, sameString(whichWay, "nextItem"));
+    track->labelNextPrevItem(track, goNext);
 }
 
 char *collapseGroupVar(char *name)
@@ -3289,9 +3310,9 @@ if (hideAll || defaultTracks)
 
 /* Before loading items, deal with the next/prev item arrow buttons if pressed. */
 if (cgiVarExists("hgt.nextItem"))
-    doNextPrevItem("nextItem", cgiUsualString("hgt.nextItem", NULL));
+    doNextPrevItem(TRUE, cgiUsualString("hgt.nextItem", NULL));
 else if (cgiVarExists("hgt.prevItem"))
-    doNextPrevItem("prevItem", cgiUsualString("hgt.prevItem", NULL));
+    doNextPrevItem(FALSE, cgiUsualString("hgt.prevItem", NULL));
 
 /* Tell tracks to load their items. */
 for (track = trackList; track != NULL; track = track->next)

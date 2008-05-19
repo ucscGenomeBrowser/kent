@@ -68,6 +68,11 @@ void writeFramesetType();
 struct psl *getAlignments(struct sqlConnection *conn, char *table, char *acc);
 /* get the list of alignments for the specified acc */
 
+void printAlignmentsSimple(struct psl *pslList, int startFirst, char *hgcCommand,
+                           char *typeName, char *itemIn);
+/* Print list of mRNA alignments, don't add extra textual link when 
+ * doesn't honor hgcCommand. */
+
 void printAlignments(struct psl *pslList, 
 		     int startFirst, char *hgcCommand, char *typeName, char *itemIn);
 /* Print list of mRNA alignments. */

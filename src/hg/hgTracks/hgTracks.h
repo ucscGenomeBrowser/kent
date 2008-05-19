@@ -201,6 +201,14 @@ struct track
     /* going to the next/previous item currently unseen in the browser, */
     /* e.g. the next gene. SO FAR THIS IS UNIMPLEMENTED. */
 
+    char *(*itemDataName)(struct track *tg, char *itemName);
+    /* If not NULL, function to translated an itemName into a data name.
+     * This is can be used for looking up sequence, CDS, etc. It is used
+     * to support item names that have uniqueness identifiers added to deal
+     * with multiple alignments.  The resulting value should *not* be freed,
+     * and it should be assumed that it might only remain valid for a short
+     * period of time.*/
+
     int loadTime;	/* Time it takes to load (for performance tuning) */
     int drawTime;	/* Time it takes to draw (for performance tuning) */
     };
@@ -706,6 +714,9 @@ struct simpleFeature *sfFromPslX(struct psl *psl,int grayIx, int
 struct linkedFeatures *lfFromPsl(struct psl *psl, boolean isXeno);
 /* Create a linked feature item from psl. */
 
+struct linkedFeatures *lfFromPslsWScoresInRange(char *table, int start, int end, char *chromName, boolean isXeno, float maxScore);
+/* Return linked features from range of table with the scores scaled appropriately */
+
 void ctWigLoadItems(struct track *tg);
 /*	load custom wiggle track data	*/
 void wigLoadItems(struct track *tg);
@@ -807,10 +818,29 @@ void affyUclaNormMethods(struct track *tg);
 void cghNci60Methods(struct track *tg);
 /* set up special methods for CGH NCI60 track */
 
+char *orgShortForDb(char *db);
+/* look up the short organism name given an organism db.
+ * WARNING: static return */
+
+char *orgShortName(char *org);
+/* Get the short name for an organism.  Returns NULL if org is NULL.
+ * WARNING: static return */
+
+char *getOrganism(struct sqlConnection *conn, char *acc);
+/* lookup the organism for an mrna, or NULL if not found.
+ * WARNING: static return */
+
 char *getOrganismShort(struct sqlConnection *conn, char *acc);
 /* lookup the organism for an mrna, or NULL if not found.  This will
  * only return the genus, and only the first seven letters of that.
- * Warning: static return */
+ * WARNING: static return */
+
+char *getGeneName(struct sqlConnection *conn, char *acc);
+/* get geneName from refLink or NULL if not found.
+ * WARNING: static return */
+
+char *refGeneName(struct track *tg, void *item);
+/* Get name to use for refGene item. */
 
 char *refGeneMapName(struct track *tg, void *item);
 /* Return un-abbreviated gene name. */
@@ -993,6 +1023,14 @@ void registerTrackHandlers();
 
 void initColors(struct hvGfx *hvg);
 /* Initialize the shades of gray etc. */
+
+char *getItemDataName(struct track *tg, char *itemName);
+/* Translate an itemName to its itemDataName, using tg->itemDataName if is not
+ * NULL. The resulting value should *not* be freed, and it should be assumed
+ * that it will only remain valid until the next call of this function.*/
+
+void registerTrackHandler(char *name, TrackHandler handler);
+/* Register a track handling function. */
 
 #endif /* HGTRACKS_H */
 

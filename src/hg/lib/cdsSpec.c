@@ -8,14 +8,14 @@
 #include "jksql.h"
 #include "cdsSpec.h"
 
-static char const rcsid[] = "$Id: cdsSpec.c,v 1.1 2007/09/05 04:30:57 markd Exp $";
+static char const rcsid[] = "$Id: cdsSpec.c,v 1.2 2008/05/19 18:16:08 markd Exp $";
 
 void cdsSpecStaticLoad(char **row, struct cdsSpec *ret)
 /* Load a row from cdsSpec table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
 
-ret->acc = row[0];
+ret->id = row[0];
 ret->cds = row[1];
 }
 
@@ -26,7 +26,7 @@ struct cdsSpec *cdsSpecLoad(char **row)
 struct cdsSpec *ret;
 
 AllocVar(ret);
-ret->acc = cloneString(row[0]);
+ret->id = cloneString(row[0]);
 ret->cds = cloneString(row[1]);
 return ret;
 }
@@ -76,7 +76,7 @@ char *s = *pS;
 
 if (ret == NULL)
     AllocVar(ret);
-ret->acc = sqlStringComma(&s);
+ret->id = sqlStringComma(&s);
 ret->cds = sqlStringComma(&s);
 *pS = s;
 return ret;
@@ -89,7 +89,7 @@ void cdsSpecFree(struct cdsSpec **pEl)
 struct cdsSpec *el;
 
 if ((el = *pEl) == NULL) return;
-freeMem(el->acc);
+freeMem(el->id);
 freeMem(el->cds);
 freez(pEl);
 }
@@ -111,7 +111,7 @@ void cdsSpecOutput(struct cdsSpec *el, FILE *f, char sep, char lastSep)
 /* Print out cdsSpec.  Separate fields with sep. Follow last field with lastSep. */
 {
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->acc);
+fprintf(f, "%s", el->id);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);

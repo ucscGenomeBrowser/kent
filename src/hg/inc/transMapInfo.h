@@ -5,30 +5,16 @@
 #ifndef TRANSMAPINFO_H
 #define TRANSMAPINFO_H
 
-#define TRANSMAPINFO_NUM_COLS 18
+#define TRANSMAPINFO_NUM_COLS 4
 
 struct transMapInfo
-/* information about transMap gene mappings */
+/* genomeDB information about transMap alignments */
     {
     struct transMapInfo *next;  /* Next in singly linked list. */
-    char srcDb[13];	/* source db */
-    char chains[9];	/* type of chains used for mapping */
-    char *srcId;	/* id of original gene */
-    char *srcChrom;	/* source chromosome */
-    unsigned srcStart;	/* source start location */
-    unsigned srcEnd;	/* source end location */
-    unsigned srcExonCnt;	/* number of exons in src gene */
-    unsigned srcCdsExonCnt;	/* number of CDS exons in src gene */
-    unsigned srcBaseCnt;	/* number of bases in src gene */
-    unsigned srcCdsBaseCnt;	/* number of CDS bases in src gene */
-    char *mappedId;	/* id of mapped gene */
-    char *mappedChrom;	/* mapped chromosome */
-    unsigned mappedStart;	/* mapped start location */
-    unsigned mappedEnd;	/* mapped end location */
-    unsigned mappedExonCnt;	/* number of exons mapped */
-    unsigned mappedCdsExonCnt;	/* number of CDS exons mapped */
-    unsigned mappedBaseCnt;	/* number of bases mapped */
-    unsigned mappedCdsBaseCnt;	/* number of CDS bases mapped */
+    char *mappedId;	/* id of mapped alignment */
+    char srcDb[17];	/* source db */
+    char *srcId;	/* id of source alignment */
+    char *mappingId;	/* id of chain used for mapping */
     };
 
 void transMapInfoStaticLoad(char **row, struct transMapInfo *ret);
@@ -73,6 +59,11 @@ void transMapInfoOutput(struct transMapInfo *el, FILE *f, char sep, char lastSep
 /* Print out transMapInfo as a comma separated list including final comma. */
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
+
+struct transMapInfo *transMapInfoQuery(struct sqlConnection *conn,
+                                       char *table, char *mappedId);
+/* load a single transMapInfo object for an mapped id from a table,
+ * or error if not found */
 
 #endif /* TRANSMAPINFO_H */
 

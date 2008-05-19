@@ -104,6 +104,7 @@
 #include "hapmapTrack.h"
 #include "omicia.h"
 #include "nonCodingUi.h"
+#include "transMapTracks.h"
 
 #ifndef GBROWSE
 #include "pcrResult.h"
@@ -117,7 +118,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.1 2008/05/19 16:35:38 angie Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.2 2008/05/19 18:16:07 markd Exp $";
 
 #define CHROM_COLORS 26
 
@@ -4716,9 +4717,35 @@ tg->drawItemAt 	= rgdQtlDrawAt;
 tg->drawName 	= TRUE;
 }
 
+char *orgShortName(char *org)
+/* Get the short name for an organism.  Returns NULL if org is NULL.
+ * WARNING: static return */
+{
+static int maxOrgSize = 7;
+static char orgNameBuf[128];
+if (org == NULL)
+    return NULL;
+strncpy(orgNameBuf, org, sizeof(orgNameBuf)-1);
+orgNameBuf[sizeof(orgNameBuf)-1] = '\0';
+char *shortOrg = firstWordInLine(orgNameBuf);
+if (strlen(shortOrg) > maxOrgSize)
+    shortOrg[maxOrgSize] = '\0';
+return shortOrg;
+}
+
+char *orgShortForDb(char *db)
+/* look up the short organism scientific name given an organism db.
+ * WARNING: static return */
+{
+char *org = hScientificName(db);
+char *shortOrg = orgShortName(org);
+freeMem(org);
+return shortOrg;
+}
+
 char *getOrganism(struct sqlConnection *conn, char *acc)
-/* lookup the organism for an mrna, or NULL if not found.  Warning: static
- * return */
+/* lookup the organism for an mrna, or NULL if not found.
+ * WARNING: static return */
 {
 static char orgBuf[256];
 char query[256], *org;
@@ -4732,22 +4759,14 @@ return org;
 char *getOrganismShort(struct sqlConnection *conn, char *acc)
 /* lookup the organism for an mrna, or NULL if not found.  This will
  * only return the genus, and only the first seven letters of that.
- * Warning: static return */
+ * WARNING: static return */
 {
-int maxOrgSize = 7;
-char *org = getOrganism(conn, acc);
-if (org != NULL)
-    {
-    org = firstWordInLine(org);
-    if (strlen(org) > maxOrgSize)
-        org[maxOrgSize] = 0;
-    }
-return org;
+return orgShortName(getOrganism(conn, acc));
 }
 
-
 char *getGeneName(struct sqlConnection *conn, char *acc)
-/* get geneName from refLink or NULL if not found.  Warning: static return */
+/* get geneName from refLink or NULL if not found.
+ * WARNING: static return */
 {
 static char nameBuf[256];
 char query[256], *name = NULL;
@@ -8095,7 +8114,7 @@ return lf;
 }
 
 struct linkedFeatures *lfFromPslsWScoresInRange(char *table, int start, int end, char *chromName, boolean isXeno, float maxScore)
-/* Return linked features from range of table with the scores scaled appriately */
+/* Return linked features from range of table with the scores scaled appropriately */
 {
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = NULL;
@@ -8106,7 +8125,7 @@ struct linkedFeatures *lfList = NULL, *lf;
 sr = hRangeQuery(conn,table,chromName,start,end,NULL, &rowOffset);
 while((row = sqlNextRow(sr)) != NULL)
     {
-    struct pslWScore *pslWS = pslWScoreLoad(row);
+    struct pslWScore *pslWS = pslWScoreLoad(row+rowOffset);
     lf = lfFromPslWScore(pslWS, 1, FALSE, maxScore);
     slAddHead(&lfList, lf);
     pslWScoreFree(&pslWS);
@@ -10061,84 +10080,6 @@ tg->itemName = jaxPhenotypeName;
 tg->mapItemName = jaxPhenotypeMapName;
 }
 
-
-void getTransMapItemLabel(struct sqlConnection *defDbConn,
-                          boolean useGeneName, boolean useAcc,
-                          struct linkedFeatures *lf)
-/* get label for a transMap item */
-{
-boolean labelStarted = FALSE;
-struct dyString *label = dyStringNew(64);
-char *org = NULL, acc[256], *dot;
-
-/* remove version and qualifier */
-safef(acc, sizeof(acc), "%s", lf->name);
-dot = strchr(acc, '.');
-if (dot != NULL)
-    *dot = '\0';
-
-org = getOrganismShort(defDbConn, acc);
-if (org != NULL)
-    dyStringPrintf(label, "%s ", org);
-
-if (useGeneName)
-    {
-    char *gene = getGeneName(defDbConn, acc);
-    if (gene != NULL)
-        {
-        dyStringAppend(label, gene);
-        labelStarted = TRUE;
-        }
-    }
-if (useAcc)
-    {
-    if (labelStarted)
-        dyStringAppendC(label, '/');
-    else
-        labelStarted = TRUE;
-    dyStringAppend(label, acc);
-    }
-lf->extra = dyStringCannibalize(&label);
-}
-
-void lookupTransMapLabels(struct track *tg)
-/* This converts the transMap ids to labels. */
-{
-/* get organism prefix using defaultDb, since we might not have genbank,
- * or have xeno genbank.  However the db caching mechanism only handles
- * 2 databases, so just open a connection on first use and keep it open. */
-struct sqlConnection *defDbConn = sqlConnect(hDefaultDb());
-
-struct linkedFeatures *lf;
-boolean useGeneName = FALSE;  /* FIXME: need to add track UI */
-boolean useAcc =  TRUE;
-
-for (lf = tg->items; lf != NULL; lf = lf->next)
-    getTransMapItemLabel(defDbConn, useGeneName, useAcc, lf);
-sqlDisconnect(&defDbConn);
-}
-
-void loadTransMap(struct track *tg)
-/* Load up transMap gene predictions. */
-{
-enum trackVisibility vis = tg->visibility;
-tg->items = lfFromGenePredInRange(tg, tg->mapName, chromName, winStart, winEnd);
-if (vis != tvDense)
-    {
-    lookupTransMapLabels(tg);
-    slSort(&tg->items, linkedFeaturesCmpStart);
-    }
-vis = limitVisibility(tg);
-}
-
-void transMapMethods(struct track *tg)
-/* Make track of transMap gene predictions. */
-{
-tg->loadItems = loadTransMap;
-tg->itemName = refGeneName;
-tg->mapItemName = refGeneMapName;
-}
-
 char *igtcName(struct track *tg, void *item)
 /* Return name (stripping off the source suffix) of IGTC item. */
 {
@@ -11006,19 +10947,7 @@ registerTrackHandler("gvPos", gvMethods);
 registerTrackHandler("protVarPos", protVarMethods);
 registerTrackHandler("oreganno", oregannoMethods);
 registerTrackHandler("encodeDless", dlessMethods);
-
-/* transMap */
-registerTrackHandler("transMap", transMapMethods);
-registerTrackHandler("transMapRefGene", transMapMethods);
-registerTrackHandler("transMapRefAliGene", transMapMethods);
-registerTrackHandler("transMapMRnaGene", transMapMethods);
-registerTrackHandler("transMapMRnaAliGene", transMapMethods);
-registerTrackHandler("transMapAnc", transMapMethods);
-registerTrackHandler("transMapAncRefGene", transMapMethods);
-registerTrackHandler("transMapAncRefAliGene", transMapMethods);
-registerTrackHandler("transMapAncMRnaGene", transMapMethods);
-registerTrackHandler("transMapAncMRnaAliGene", transMapMethods);
-
+transMapRegisterTrackHandlers();
 registerTrackHandler("retroposons", dbRIPMethods);
 
 registerTrackHandler("hapmapSnps", hapmapMethods);

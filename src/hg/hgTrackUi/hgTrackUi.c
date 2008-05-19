@@ -33,16 +33,19 @@
 #include "expRecord.h"
 #include "wikiTrack.h"
 #include "pcrResult.h"
+#include "transMapStuff.h"
 
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 #define MAX_SP_SIZE 2000
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.429 2008/05/14 22:42:49 aamp Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.430 2008/05/19 18:16:06 markd Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
 char *chromosome = NULL;	        /* Chromosome. */
+
+void superTrackUi(struct trackDb *superTdb);
 
 void radioButton(char *var, char *val, char *ourVal)
 /* Print one radio button */
@@ -579,23 +582,22 @@ for (i = 0; i < oregannoTypeSize; i++)
     }
 }
 
+void labelMakeCheckBox(struct trackDb *tdb, char *sym, char *desc, boolean dflt)
+/* add a checkbox use to choose labels to enable. */
+{
+char varName[64];
+safef(varName, sizeof(varName), "%s.label.%s", tdb->tableName, sym);
+boolean option = cartUsualBoolean(cart, varName, dflt);
+cgiMakeCheckBox(varName, option);
+printf(" %s&nbsp;&nbsp;&nbsp;", desc);
+}
+
 void gvIdControls (struct trackDb *tdb)
 /* print the controls for the label choice */
 {
-char varName[64];
-boolean option = FALSE;
-
 printf("<B>Label:</B> ");
-safef(varName, sizeof(varName), "%s.label.hgvs", tdb->tableName);
-option = cartUsualBoolean(cart, varName, FALSE);
-cgiMakeCheckBox(varName, option);
-/* need to change HGVS to reflect different species */
-printf(" %s&nbsp;&nbsp;&nbsp;", "HGVS name");
-
-safef(varName, sizeof(varName), "%s.label.common", tdb->tableName);
-option = cartUsualBoolean(cart, varName, FALSE);
-cgiMakeCheckBox(varName, option);
-printf(" %s&nbsp;&nbsp;&nbsp;", "Common name");
+labelMakeCheckBox(tdb, "hgvs", "HGVS name", FALSE);
+labelMakeCheckBox(tdb, "common", "Common name", FALSE);
 printf("<BR>\n");
 }
 
@@ -1265,37 +1267,23 @@ baseColorDrawOptDropDown(cart, tdb);
 void knownGeneIdConfig(struct trackDb *tdb)
 /* Put up gene ID track controls */
 {
-char varName[64];
 struct sqlConnection *conn = hAllocConn();
 char query[256];
 char *omimAvail = NULL;
-boolean option = FALSE;
 safef(query, sizeof(query), "select kgXref.kgID from kgXref,refLink where kgXref.refseq = refLink.mrnaAcc and refLink.omimId != 0 limit 1");
 omimAvail = sqlQuickString(conn, query);
 hFreeConn(&conn);
 
 printf("<B>Label:</B> ");
-safef(varName, sizeof(varName), "%s.label.gene", tdb->tableName);
-option = cartUsualBoolean(cart, varName, TRUE);
-cgiMakeCheckBox(varName, option);
-printf(" %s&nbsp;&nbsp;&nbsp;", "gene symbol");
-
-safef(varName, sizeof(varName), "%s.label.kgId", tdb->tableName);
-option = cartUsualBoolean(cart, varName, FALSE);
-cgiMakeCheckBox(varName, option);
-printf(" %s&nbsp;&nbsp;&nbsp;", "UCSC Known Gene ID");
-
-safef(varName, sizeof(varName), "%s.label.prot", tdb->tableName);
-option = cartUsualBoolean(cart, varName, FALSE);
-cgiMakeCheckBox(varName, option);
-printf(" %s&nbsp;&nbsp;&nbsp;", "UniProt Display ID");
+labelMakeCheckBox(tdb, "gene", "gene symbol", FALSE);
+labelMakeCheckBox(tdb, "kgId", "UCSC Known Gene ID", FALSE);
+labelMakeCheckBox(tdb, "prot", "UniProt Display ID", FALSE);
 
 if (omimAvail != NULL)
     {
-    safef(varName, sizeof(varName), "%s.label.omim%s", tdb->tableName, cartString(cart, "db"));
-    option = cartUsualBoolean(cart, varName, FALSE);
-    cgiMakeCheckBox(varName, option);
-    printf(" %s&nbsp;&nbsp;&nbsp;", "OMIM ID");
+    char sym[32];
+    safef(sym, sizeof(sym), "omim%s", cartString(cart, "db"));
+    labelMakeCheckBox(tdb, sym, "OMIM ID", FALSE);
     }
 printf("<BR>\n");
 }
@@ -1357,8 +1345,6 @@ radioButton(varName, geneLabel, "none");
 void geneIdConfig2(struct trackDb *tdb)
 /* Put up gene ID track controls, with checkboxes */
 {
-char varName[64];
-boolean option;
 struct sqlConnection *conn = hAllocConn();
 int omimAvail = 0;
 char query[128];
@@ -1370,22 +1356,14 @@ if (sameString(tdb->tableName, "refGene"))
 hFreeConn(&conn);
 
 printf("<B>Label:</B> ");
-safef(varName, sizeof(varName), "%s.label.gene", tdb->tableName);
-option = cartUsualBoolean(cart, varName, FALSE);
-cgiMakeCheckBox(varName, option);
-printf(" %s&nbsp;&nbsp;&nbsp;", "gene");
-
-safef(varName, sizeof(varName), "%s.label.acc", tdb->tableName);
-option = cartUsualBoolean(cart, varName, FALSE);
-cgiMakeCheckBox(varName, option);
-printf(" %s&nbsp;&nbsp;&nbsp;", "accession");
+labelMakeCheckBox(tdb, "gene", "gene", FALSE);
+labelMakeCheckBox(tdb, "acc", "accession", FALSE);
 
 if (omimAvail != 0)
     {
-    safef(varName, sizeof(varName), "%s.label.omim%s", tdb->tableName, cartString(cart, "db"));
-    option = cartUsualBoolean(cart, varName, FALSE);
-    cgiMakeCheckBox(varName, option);
-    printf(" %s&nbsp;&nbsp;&nbsp;", "OMIM ID");
+    char sym[32];
+    safef(sym, sizeof(sym), "omim%s", cartString(cart, "db"));
+    labelMakeCheckBox(tdb, sym, "OMIM ID", FALSE);
     }
 }
 
@@ -1394,6 +1372,21 @@ void refGeneUI(struct trackDb *tdb)
 {
 geneIdConfig2(tdb);
 baseColorDrawOptDropDown(cart, tdb);
+}
+
+void transMapUI(struct trackDb *tdb)
+/* Put up transMap-specific controls */
+{
+printf("<B>Label:</B> ");
+labelMakeCheckBox(tdb, "orgCommon", "common name", FALSE);
+labelMakeCheckBox(tdb, "orgAbbrv", "organism abbrv", FALSE);
+labelMakeCheckBox(tdb, "db", "assembly db", FALSE);
+labelMakeCheckBox(tdb, "gene", "gene", FALSE);
+labelMakeCheckBox(tdb, "acc", "accession", FALSE);
+
+baseColorDrawOptDropDown(cart, tdb);
+if (tdb->isSuper)
+    superTrackUi(tdb);
 }
 
 void retroGeneUI(struct trackDb *tdb)
@@ -2650,6 +2643,8 @@ else if (sameString(track, "cghNci60"))
         cghNci60Ui(tdb);
 else if (sameString(track, "xenoRefGene"))
         refGeneUI(tdb);
+else if (startsWith("transMap", track))
+        transMapUI(tdb);
 else if (sameString(track, "refGene"))
         refGeneUI(tdb);
 else if (sameString(track, "knownGene"))

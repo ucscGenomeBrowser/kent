@@ -8,31 +8,17 @@
 #include "jksql.h"
 #include "transMapInfo.h"
 
-static char const rcsid[] = "$Id: transMapInfo.c,v 1.2 2006/06/11 19:40:55 markd Exp $";
+static char const rcsid[] = "$Id: transMapInfo.c,v 1.3 2008/05/19 18:16:10 markd Exp $";
 
 void transMapInfoStaticLoad(char **row, struct transMapInfo *ret)
 /* Load a row from transMapInfo table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
 
-strcpy(ret->srcDb, row[0]);
-strcpy(ret->chains, row[1]);
+ret->mappedId = row[0];
+safecpy(ret->srcDb, sizeof(ret->srcDb), row[1]);
 ret->srcId = row[2];
-ret->srcChrom = row[3];
-ret->srcStart = sqlUnsigned(row[4]);
-ret->srcEnd = sqlUnsigned(row[5]);
-ret->srcExonCnt = sqlUnsigned(row[6]);
-ret->srcCdsExonCnt = sqlUnsigned(row[7]);
-ret->srcBaseCnt = sqlUnsigned(row[8]);
-ret->srcCdsBaseCnt = sqlUnsigned(row[9]);
-ret->mappedId = row[10];
-ret->mappedChrom = row[11];
-ret->mappedStart = sqlUnsigned(row[12]);
-ret->mappedEnd = sqlUnsigned(row[13]);
-ret->mappedExonCnt = sqlUnsigned(row[14]);
-ret->mappedCdsExonCnt = sqlUnsigned(row[15]);
-ret->mappedBaseCnt = sqlUnsigned(row[16]);
-ret->mappedCdsBaseCnt = sqlUnsigned(row[17]);
+ret->mappingId = row[3];
 }
 
 struct transMapInfo *transMapInfoLoad(char **row)
@@ -42,24 +28,10 @@ struct transMapInfo *transMapInfoLoad(char **row)
 struct transMapInfo *ret;
 
 AllocVar(ret);
-strcpy(ret->srcDb, row[0]);
-strcpy(ret->chains, row[1]);
+ret->mappedId = cloneString(row[0]);
+safecpy(ret->srcDb, sizeof(ret->srcDb), row[1]);
 ret->srcId = cloneString(row[2]);
-ret->srcChrom = cloneString(row[3]);
-ret->srcStart = sqlUnsigned(row[4]);
-ret->srcEnd = sqlUnsigned(row[5]);
-ret->srcExonCnt = sqlUnsigned(row[6]);
-ret->srcCdsExonCnt = sqlUnsigned(row[7]);
-ret->srcBaseCnt = sqlUnsigned(row[8]);
-ret->srcCdsBaseCnt = sqlUnsigned(row[9]);
-ret->mappedId = cloneString(row[10]);
-ret->mappedChrom = cloneString(row[11]);
-ret->mappedStart = sqlUnsigned(row[12]);
-ret->mappedEnd = sqlUnsigned(row[13]);
-ret->mappedExonCnt = sqlUnsigned(row[14]);
-ret->mappedCdsExonCnt = sqlUnsigned(row[15]);
-ret->mappedBaseCnt = sqlUnsigned(row[16]);
-ret->mappedCdsBaseCnt = sqlUnsigned(row[17]);
+ret->mappingId = cloneString(row[3]);
 return ret;
 }
 
@@ -69,7 +41,7 @@ struct transMapInfo *transMapInfoLoadAll(char *fileName)
 {
 struct transMapInfo *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[18];
+char *row[4];
 
 while (lineFileRow(lf, row))
     {
@@ -87,7 +59,7 @@ struct transMapInfo *transMapInfoLoadAllByChar(char *fileName, char chopper)
 {
 struct transMapInfo *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[18];
+char *row[4];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -108,24 +80,10 @@ char *s = *pS;
 
 if (ret == NULL)
     AllocVar(ret);
-sqlFixedStringComma(&s, ret->srcDb, sizeof(ret->srcDb));
-sqlFixedStringComma(&s, ret->chains, sizeof(ret->chains));
-ret->srcId = sqlStringComma(&s);
-ret->srcChrom = sqlStringComma(&s);
-ret->srcStart = sqlUnsignedComma(&s);
-ret->srcEnd = sqlUnsignedComma(&s);
-ret->srcExonCnt = sqlUnsignedComma(&s);
-ret->srcCdsExonCnt = sqlUnsignedComma(&s);
-ret->srcBaseCnt = sqlUnsignedComma(&s);
-ret->srcCdsBaseCnt = sqlUnsignedComma(&s);
 ret->mappedId = sqlStringComma(&s);
-ret->mappedChrom = sqlStringComma(&s);
-ret->mappedStart = sqlUnsignedComma(&s);
-ret->mappedEnd = sqlUnsignedComma(&s);
-ret->mappedExonCnt = sqlUnsignedComma(&s);
-ret->mappedCdsExonCnt = sqlUnsignedComma(&s);
-ret->mappedBaseCnt = sqlUnsignedComma(&s);
-ret->mappedCdsBaseCnt = sqlUnsignedComma(&s);
+sqlFixedStringComma(&s, ret->srcDb, sizeof(ret->srcDb));
+ret->srcId = sqlStringComma(&s);
+ret->mappingId = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -137,10 +95,9 @@ void transMapInfoFree(struct transMapInfo **pEl)
 struct transMapInfo *el;
 
 if ((el = *pEl) == NULL) return;
-freeMem(el->srcId);
-freeMem(el->srcChrom);
 freeMem(el->mappedId);
-freeMem(el->mappedChrom);
+freeMem(el->srcId);
+freeMem(el->mappingId);
 freez(pEl);
 }
 
@@ -161,11 +118,11 @@ void transMapInfoOutput(struct transMapInfo *el, FILE *f, char sep, char lastSep
 /* Print out transMapInfo.  Separate fields with sep. Follow last field with lastSep. */
 {
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->srcDb);
+fprintf(f, "%s", el->mappedId);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->chains);
+fprintf(f, "%s", el->srcDb);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
@@ -173,42 +130,20 @@ fprintf(f, "%s", el->srcId);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->srcChrom);
+fprintf(f, "%s", el->mappingId);
 if (sep == ',') fputc('"',f);
-fputc(sep,f);
-fprintf(f, "%u", el->srcStart);
-fputc(sep,f);
-fprintf(f, "%u", el->srcEnd);
-fputc(sep,f);
-fprintf(f, "%u", el->srcExonCnt);
-fputc(sep,f);
-fprintf(f, "%u", el->srcCdsExonCnt);
-fputc(sep,f);
-fprintf(f, "%u", el->srcBaseCnt);
-fputc(sep,f);
-fprintf(f, "%u", el->srcCdsBaseCnt);
-fputc(sep,f);
-if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->mappedId);
-if (sep == ',') fputc('"',f);
-fputc(sep,f);
-if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->mappedChrom);
-if (sep == ',') fputc('"',f);
-fputc(sep,f);
-fprintf(f, "%u", el->mappedStart);
-fputc(sep,f);
-fprintf(f, "%u", el->mappedEnd);
-fputc(sep,f);
-fprintf(f, "%u", el->mappedExonCnt);
-fputc(sep,f);
-fprintf(f, "%u", el->mappedCdsExonCnt);
-fputc(sep,f);
-fprintf(f, "%u", el->mappedBaseCnt);
-fputc(sep,f);
-fprintf(f, "%u", el->mappedCdsBaseCnt);
 fputc(lastSep,f);
 }
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+struct transMapInfo *transMapInfoQuery(struct sqlConnection *conn,
+                                       char *table, char *mappedId)
+/* load a single transMapInfo object for an mapped id from a table,
+ * or error if not found */
+{
+return sqlQueryObjs(conn, (sqlLoadFunc)transMapInfoLoad,
+                    sqlQueryMust|sqlQuerySingle,
+                    "SELECT * FROM %s WHERE mappedId = \"%s\"",
+                    table, mappedId);
+}

@@ -5,7 +5,7 @@
 void transMapClickHandler(struct trackDb *tdb, char *mappedId);
 /* Handle click on a transMap tracks */
 
-void transMapShowCdnaAli(char *mappedId);
+void transMapShowCdnaAli(struct trackDb *tdb, char *mappedId);
 /* Show alignment for accession, mostly ripped off from htcCdnaAli */
 
 #endif

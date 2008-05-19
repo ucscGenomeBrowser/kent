@@ -11,7 +11,7 @@ struct cdsSpec
 /* GenBank-style CDS specification, indexed by sequence id */
     {
     struct cdsSpec *next;  /* Next in singly linked list. */
-    char *acc;	/* unique sequence id */
+    char *id;	/* unique sequence id */
     char *cds;	/* CDS specification, in NCBI format. */
     };
 

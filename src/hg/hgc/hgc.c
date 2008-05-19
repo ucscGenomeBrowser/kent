@@ -214,7 +214,7 @@
 #include "itemConf.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1421 2008/05/12 20:52:35 hiram Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1422 2008/05/19 18:16:07 markd Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -4867,14 +4867,14 @@ hgFreeConn(&conn);
 hgFreeConn(&conn2);
 }
 
-void printAlignments(struct psl *pslList, int startFirst, char *hgcCommand,
-		     char *typeName, char *itemIn)
-/* Print list of mRNA alignments. */
+void printAlignmentsSimple(struct psl *pslList, int startFirst, char *hgcCommand,
+                           char *typeName, char *itemIn)
+/* Print list of mRNA alignments, don't add extra textual link when 
+ * doesn't honor hgcCommand. */
 {
 struct psl *psl;
 int aliCount = slCount(pslList);
 boolean same;
-char otherString[512];
 if (pslList == NULL || typeName == NULL)
     return;
 
@@ -4893,6 +4893,7 @@ for (same = 1; same >= 0; same -= 1)
 	{
 	if (same ^ (psl->tStart != startFirst))
 	    {
+            char otherString[512];
 	    sprintf(otherString, "%d&aliTrack=%s", psl->tStart, typeName);
 	    hgcAnchorSomewhere(hgcCommand, itemIn, otherString, psl->tName);
 	    printf("%5d  %5.1f%%  %9s     %s %9d %9d  %20s %5d %5d %5d</A>",
@@ -4905,8 +4906,17 @@ for (same = 1; same >= 0; same -= 1)
 	}
     }
 printf("</TT></PRE>");
+}
 
-psl = pslList;
+void printAlignments(struct psl *pslList, int startFirst, char *hgcCommand,
+		     char *typeName, char *itemIn)
+/* Print list of mRNA alignments. */
+{
+if (pslList == NULL || typeName == NULL)
+    return;
+printAlignmentsSimple(pslList, startFirst, hgcCommand, typeName, itemIn);
+
+struct psl *psl = pslList;
 for (psl = pslList; psl != NULL; psl = psl->next)
     {
     if ( pslTrimToTargetRange(psl, winStart, winEnd) != NULL 
@@ -4916,6 +4926,7 @@ for (psl = pslList; psl != NULL; psl = psl->next)
 	&& psl->tStart == startFirst
 	)
 	{
+        char otherString[512];
 	safef(otherString, sizeof(otherString), "%d&aliTrack=%s",
 	      psl->tStart, typeName);
 	hgcAnchorSomewhere("htcCdnaAliInWindow", cgiEncode(psl->qName),
@@ -19825,12 +19836,13 @@ else if (sameWord(track, G_CREATE_WIKI_ITEM))
     {
     doCreateWikiItem(item, seqName, winStart, winEnd);
     }
-#if 0
-else if (startsWith("transMap", track))
+else if (startsWith("transMapAln", track))
     transMapClickHandler(tdb, item);
-else if (sameString(track, "hgcTransMapCdnaAli"))
-    transMapShowCdnaAli(item);
-#endif
+else if (startsWith("hgcTransMapCdnaAli", track))
+    {
+    tdb = hashMustFindVal(trackHash, cartString(cart, "aliTrack"));
+    transMapShowCdnaAli(tdb, item);
+    }
 else if (sameWord(track, "mrna") || sameWord(track, "mrna2") || 
 	 startsWith("all_mrna",track) ||
 	 sameWord(track, "all_est") ||

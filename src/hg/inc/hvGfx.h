@@ -130,7 +130,7 @@ hvg->clipMinX = x;
 hvg->clipMaxX = x + width;
 hvg->clipMinY = y;
 hvg->clipMaxY = y + height;
-// clip is reversed in actual vGfx
+// clipping region is reversed in actual vGfx
 if (hvg->rc)
     x = hvg->width - (x + width);
 vgSetClip(hvg->vg, x, y, width, height);
@@ -147,8 +147,8 @@ vgUnclip(hvg->vg);
 }
 
 INLINE void hvGfxVerticalSmear(struct hvGfx *hvg,
-                                   int xOff, int yOff, int width, int height, 
-                                   unsigned char *dots, boolean zeroClear)
+                               int xOff, int yOff, int width, int height, 
+                               unsigned char *dots, boolean zeroClear)
 /* Put a series of one 'pixel' width vertical lines. */
 {
 vgVerticalSmear(hvg->vg, hvGfxAdjXW(hvg, xOff, width), yOff, width, height, dots, zeroClear);

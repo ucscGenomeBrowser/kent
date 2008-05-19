@@ -5,8 +5,8 @@
 
 #GenBank-style CDS specification, indexed by sequence id
 CREATE TABLE cdsSpec (
-    acc varchar(255) not null,	# unique sequence id
+    id varchar(255) not null,	# unique sequence id
     cds varchar(255) not null,	# CDS specification, in NCBI format.
               #Indices
-    PRIMARY KEY(acc)
+    PRIMARY KEY(id)
 );

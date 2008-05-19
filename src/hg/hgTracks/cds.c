@@ -23,7 +23,7 @@
 #include "pcrResult.h"
 #endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: cds.c,v 1.74 2008/05/19 16:35:37 angie Exp $";
+static char const rcsid[] = "$Id: cds.c,v 1.75 2008/05/19 18:16:06 markd Exp $";
 
 /* Definitions of cds colors for coding coloring display */
 #define CDS_ERROR   0
@@ -522,13 +522,15 @@ char *cdsSpecTbl = skipLeadingSpaces(p);
 if (*cdsSpecTbl == '\0')
     errAbort("%s table requires a table name as an argument", BASE_COLOR_USE_CDS);
 struct sqlConnection *conn = hAllocConn();
+// allow multiple, but only use the first, since transMapGene table might have
+// multiple entries for same gene from different source dbs.
 struct cdsSpec *cdsSpec
-    = sqlQueryObjs(conn, (sqlLoadFunc)cdsSpecLoad, sqlQuerySingle,
-                   "SELECT * FROM %s WHERE acc=\"%s\"", cdsSpecTbl, acc);
+    = sqlQueryObjs(conn, (sqlLoadFunc)cdsSpecLoad, sqlQueryMulti,
+                   "SELECT * FROM %s WHERE id=\"%s\"", cdsSpecTbl, acc);
 hFreeConn(&conn);
 if (cdsSpec != NULL)
     genbankCdsParse(cdsSpec->cds, cds);
-cdsSpecFree(&cdsSpec);
+cdsSpecFreeList(&cdsSpec);
 }
 
 static void getPslCds(struct psl *psl, struct track *tg, struct genbankCds *cds)
@@ -546,12 +548,11 @@ if (pslIsProtein(psl))
 else 
     {
     char *setting = trackDbSetting(tg->tdb, BASE_COLOR_USE_CDS);
+    char *dataName = getItemDataName(tg, psl->qName);
     if ((setting != NULL) && startsWith("table", setting))
-        {
-        getCdsFromTbl(psl->qName, setting, cds);
-        }
+        getCdsFromTbl(dataName, setting, cds);
     else
-        getGenbankCds(psl->qName, cds);
+        getGenbankCds(dataName, cds);
     }
 }
 
@@ -788,25 +789,26 @@ return hDnaSeqGet(NULL, name, words[1], words[2]);
 }
 
 static struct dnaSeq *maybeGetSeqUpper(struct linkedFeatures *lf,
-				       char *tableName, struct trackDb *tdb)
+				       char *tableName, struct track *tg)
 /* Look up the sequence in genbank tables (hGenBankGetMrna also searches 
  * seq if it can't find it in GB tables) or user's blat sequence, 
  * uppercase and return it if we find it, return NULL if we don't find it. */
 {
 struct dnaSeq *mrnaSeq = NULL;
-char *seqSource = trackDbSetting(tdb, BASE_COLOR_USE_SEQUENCE);
+char *name = getItemDataName(tg, lf->name);
+char *seqSource = trackDbSetting(tg->tdb, BASE_COLOR_USE_SEQUENCE);
 if (sameString(tableName,"refGene"))
-    mrnaSeq = hGenBankGetMrna(lf->name, "refMrna");
+    mrnaSeq = hGenBankGetMrna(name, "refMrna");
 else if (sameString(seqSource, "ss"))
-    mrnaSeq = maybeGetUserSeq(lf->name);
+    mrnaSeq = maybeGetUserSeq(name);
 #ifndef GBROWSE
 else if (sameString(seqSource, PCR_RESULT_TRACK_NAME))
     mrnaSeq = maybeGetPcrResultSeq(lf);
 #endif /* GBROWSE */
 else if (startsWith("extFile", seqSource))
-    mrnaSeq = maybeGetExtFileSeq(seqSource, lf->name);
+    mrnaSeq = maybeGetExtFileSeq(seqSource, name);
 else
-    mrnaSeq = hGenBankGetMrna(lf->name, NULL);
+    mrnaSeq = hGenBankGetMrna(name, NULL);
 
 if (mrnaSeq != NULL)
     touppers(mrnaSeq->dna);
@@ -1610,7 +1612,7 @@ if (drawOpt == baseColorDrawItemBases ||
     drawOpt == baseColorDrawDiffCodons ||
     indelShowPolyA)
     {
-    *retMrnaSeq = maybeGetSeqUpper(lf, tg->mapName, tg->tdb);
+    *retMrnaSeq = maybeGetSeqUpper(lf, tg->mapName, tg);
     if (*retMrnaSeq != NULL && *retPsl != NULL)
 	{
 	if ((*retPsl)->strand[0] == '-' || (*retPsl)->strand[1] == '-')
