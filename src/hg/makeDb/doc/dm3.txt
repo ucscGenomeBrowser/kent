@@ -1342,7 +1342,9 @@ cat  << 'EOF' > spec
     ln -s multiz15way.2006-12-11 /cluster/data/dm3/bed/multiz15way
 
 
-# MULTIZ15WAY DOWNLOADABLES (ANNOTATED) (DONE 12/11/2006 angie)
+# MULTIZ15WAY DOWNLOADABLES (ANNOTATED) (DONE 12/11/2006 angie -- UPSTREAM REDONE 5/18/08)
+# 5/18/08: regenerating upstream* to fix bug (truncated refGene names to
+# NM_[0-9]{6} but there are some valid NM_[0-9]{9} IDs now).
     # Annotated MAF is now documented, so use anno/maf for downloads.
     ssh hgwdev
     mkdir /cluster/data/dm3/bed/multiz15way.2006-12-11/mafDownloads
@@ -1352,9 +1354,8 @@ cat > mafFrags.csh << 'EOF'
     date
     foreach i (1000 2000 5000)
         echo "making upstream$i.maf"
-        nice featureBits dm3 refGene:upstream:$i -fa=/dev/null -bed=up.bad
-        awk -F '\t' '{printf("%s\t%s\t%s\t%s\t%s\t%s\n", $1, $2, $3, substr($4, 0, 9), 0, $5)}' up.bad > up.bed
-        rm up.bad
+        nice featureBits dm3 refGene:upstream:$i -fa=/dev/null -bed=stdout \
+        | sed -re 's/ [^\t]*\t/\t/;' > up.bed
         nice mafFrags dm3 multiz15way up.bed upstream$i.maf \
                 -orgs=../species.lst
         rm up.bed
