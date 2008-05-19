@@ -7,7 +7,6 @@ CVSUP = cvs -q update
 # avoid the usual crud that collects in directories.
 
 user:
-	${CVSUP} -d -P
 	${MAKE} doInstall DEST=${DOCUMENTROOT}/js/${USER}
 
 alpha:
