@@ -69,6 +69,9 @@ void psMoveTo(struct psGfx *ps, double x, double y);
 void psTextAt(struct psGfx *ps, double x, double y, char *text);
 /* Output text in current font at given position. */
 
+void psTextBox(struct psGfx *ps, double x, double y, char *text);
+/* Fill a box the size of the text at the given position*/
+
 void psTextDown(struct psGfx *ps, double x, double y, char *text);
 /* Output text going downwards rather than across at position. */
 
@@ -99,9 +102,11 @@ void psDrawPoly(struct psGfx *ps, struct psPoly *poly, boolean filled);
 /* Draw a possibly filled polygon */
 
 void psFillEllipse(struct psGfx *ps, double x, double y, double xrad, double yrad);
+/* Draw a filled ellipse */
 
 void psDrawEllipse(struct psGfx *ps, double x, double y, double xrad, double yrad,
     double startAngle, double endAngle);
+/* Draw an ellipse outline */
 
 char * convertEpsToPdf(char *epsFile);
 /* Convert EPS to PDF and return filename, or NULL if failure. */
