@@ -19,7 +19,7 @@
 #include "binRange.h"
 #include "rangeTree.h"
 
-static char const rcsid[] = "$Id: psl.c,v 1.79 2008/05/18 04:11:53 markd Exp $";
+static char const rcsid[] = "$Id: psl.c,v 1.80 2008/05/19 18:14:36 markd Exp $";
 
 static char *createString = 
 "CREATE TABLE %s (\n"
@@ -1980,7 +1980,7 @@ float aligned = psl->match + psl->misMatch + psl->repMatch;
 if (aligned == 0.0)
     return 0.0;
 else
-    return ((float)(psl->match + psl->repMatch))/((float)(aligned));
+    return ((float)(psl->match + psl->repMatch))/aligned;
 }
 
 float pslQueryAligned(struct psl *psl)
