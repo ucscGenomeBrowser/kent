@@ -31,7 +31,7 @@
 #include "hgConfig.h"
 #include "trix.h"
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.207 2008/05/18 00:38:06 hiram Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.208 2008/05/19 18:34:17 larrym Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -2495,7 +2495,7 @@ for (i = 0;  i < termCount;  i++)
     if (hgp == NULL || hgp->posCount == 0)
 	{
 	hgPositionsFree(&hgp);
-	warn("Sorry, couldn't locate %s in genome database\n", terms[i]);
+	warn("Sorry, couldn't locate %s in genome database\n", htmlEncode(terms[i]));
 	if (multiTerm)
 	    errAbort("%s not uniquely determined -- "
 		     "can't do multi-position search.", terms[i]);
