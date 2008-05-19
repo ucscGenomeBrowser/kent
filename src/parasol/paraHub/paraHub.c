@@ -68,7 +68,7 @@
 #include "log.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: paraHub.c,v 1.106 2008/05/17 05:54:36 galt Exp $";
+static char const rcsid[] = "$Id: paraHub.c,v 1.107 2008/05/19 23:14:50 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -710,24 +710,42 @@ for (jobNode = mach->jobs->head; !dlEnd(jobNode); jobNode = next)
     }
 }
 
-void removeMachine(char *line)
+boolean removeMachine(char *machName, char *user, char *reason)
 /* Remove machine from pool. */
 {
 struct machine *mach;
-char *machName = nextWord(&line);
-char *user = nextWord(&line);
-char *reason = line;
-machName = trimSpaces(machName);
-logInfo("hub: user %s removed machine %s because: %s",user,machName,reason);
-if ((mach = findMachine(machName)) != NULL)
+if ((mach = findMachine(machName)))
     {
+    logInfo("hub: user %s removed machine %s because: %s",user,machName,reason);
     requeueAllJobs(mach, FALSE);
     dlRemove(mach->node);
     slRemoveEl(&machineList, mach);
     hashRemove(machineHash, mach->name);
     machineFree(&mach);
+    return TRUE;
     }
+else
+    {
+    logInfo("hub: user %s wanted to removed machine %s because: %s but machine was not found",user,machName,reason);
+    }
+return FALSE;
 }
+
+
+void removeMachineAcknowledge(char *line, struct paraMessage *pm)
+/* Remove machine and send response back. */
+{
+char *machName = nextWord(&line);
+char *user = nextWord(&line);
+char *reason = line;
+machName = trimSpaces(machName);
+char *retVal = "ok";
+if (!removeMachine(machName, user, reason))
+    retVal = "Machine not found.";
+pmSendString(pm, rudpOut, retVal);
+pmSendString(pm, rudpOut, "");
+}
+
 
 
 void machineDown(struct machine *mach)
@@ -2560,7 +2578,7 @@ for (;;)
     else if (sameWord(command, "addMachine"))
 	 addMachine(line);
     else if (sameWord(command, "removeMachine"))
-	 removeMachine(line);
+	 removeMachineAcknowledge(line, pm);
     else if (sameWord(command, "listJobs"))
 	 listJobs(pm, FALSE);
     else if (sameWord(command, "listJobsExtended"))

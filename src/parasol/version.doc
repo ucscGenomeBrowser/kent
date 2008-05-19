@@ -125,3 +125,6 @@
         now too.  This will pave the way to future enhancements enabling algorithms
         that can match user-requirements against available node-resources.
 
+12.03 - Remove machine now sends feedback if machine name not found.
+        Fixed minor bug in new parasol add machine command.
+

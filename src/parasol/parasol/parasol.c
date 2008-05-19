@@ -9,7 +9,7 @@
 #include "paraLib.h"
 #include "paraMessage.h"
 
-static char const rcsid[] = "$Id: parasol.c,v 1.37 2008/05/17 05:54:36 galt Exp $";
+static char const rcsid[] = "$Id: parasol.c,v 1.38 2008/05/19 23:14:50 galt Exp $";
 
 char *version = PARA_VERSION;   /* Version number. */
 
@@ -75,7 +75,7 @@ else
     return NULL;
 }
 
-void hubCommandCheckReciept(char *command)
+void hubCommandCheckReceipt(char *command)
 /* Send command to hub, and wait for one line response which should
  * be 'ok'. */
 {
@@ -180,7 +180,7 @@ void removeMachine(char *machine, char *reason)
 {
 char buf[512];
 sprintf(buf, "removeMachine %s %s %s", machine, getUser(), reason);
-commandHub(buf);
+hubCommandAndPrint(buf);
 }
 
 void removeJob(char *job)
@@ -190,7 +190,7 @@ char buf[512];
 if (!isdigit(job[0]))
     errAbort("remove job requires a numerical job id");
 sprintf(buf, "%s %s", "removeJob", job);
-hubCommandCheckReciept(buf);
+hubCommandCheckReceipt(buf);
 }
 
 struct jobInfo
@@ -324,7 +324,7 @@ void ping(int count)
 int i;
 for (i=0; i<count; ++i)
     {
-    hubCommandCheckReciept("ping");
+    hubCommandCheckReceipt("ping");
     }
 printf("Pinged hub %d times\n", count);
 }
@@ -342,7 +342,7 @@ if (sameString(command, "add"))
         usage();
     if (sameString(subType, "machine"))
 	{
-	if (argc != 3 && argc != 7)
+	if (argc != 3 && argc != 8)
 	    usage();
 	addMachine(argc, argv);
 	}
