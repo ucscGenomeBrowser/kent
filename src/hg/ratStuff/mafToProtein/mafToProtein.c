@@ -442,25 +442,41 @@ for(gi = giList; gi; gi = gi->next, exonNum++)
     {
     struct speciesInfo *siTemp = si;
 
+    if (gi->frame->strand[0] == '-')
+	slReverse(&gi->frame);
+
+    struct mafFrames *startFrame = gi->frame;
+    assert(startFrame->isExonStart == TRUE);
+    struct mafFrames *lastFrame = startFrame;
+    assert(gi->exonSize < MAX_EXON_SIZE);
+
+    while(lastFrame->next)
+	lastFrame = lastFrame->next;
+    assert(lastFrame->isExonEnd == TRUE);
+    int lastFrameNum = (startFrame->frame + gi->exonSize) % 3;
+
     for(; siTemp ; siTemp = siTemp->next)
 	{
 	int start = gi->exonStart;
 	int end = start + gi->exonSize;
 	char *ptr = &siTemp->nucSequence[gi->exonStart];
 
-	for (; start < end; start++)
+	for (; start < end; start++, ptr++)
 	    if (*ptr != '-')
 		break;
+
 	if (start == end)
 	    continue;
 
 	start = gi->exonStart;
-	fprintf(f, ">%s_%s_%d_%d %d %s.%s:%d-%d %c",
+	ptr = &siTemp->nucSequence[gi->exonStart];
+	fprintf(f, ">%s_%s_%d_%d %d %d %d %s.%s:%d-%d %c",
 	    gi->name, 
 	    siTemp->name, exonNum, exonCount, 
 	    gi->exonSize,
+	    startFrame->frame, lastFrameNum,
 	    dbName, gi->frame->chrom,
-	    gi->chromStart+1, gi->chromEnd, gi->frame->strand[0]);
+	    gi->chromStart+1, gi->chromEnd, startFrame->strand[0]);
 
 	maybePrintGeneName(gi->name, f);
 
