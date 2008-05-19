@@ -8,7 +8,7 @@
 #include "psGfx.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: psGfx.c,v 1.33 2007/07/11 23:44:06 galt Exp $";
+static char const rcsid[] = "$Id: psGfx.c,v 1.34 2008/05/19 21:56:23 braney Exp $";
 
 static void psFloatOut(FILE *f, double x)
 /* Write out a floating point number, but not in too much
@@ -207,6 +207,20 @@ fprintf(f, "%f scalefont setfont\n", -size*ps->yScale*1.2);
 ps->fontHeight = size*0.8;
 }
 
+void psTextBox(struct psGfx *ps, double x, double y, char *text)
+/* Output text in current font at given position. */
+{
+char c;
+psMoveTo(ps, x, y + ps->fontHeight);
+fprintf(ps->f, "(");
+while ((c = *text++) != 0)
+    {
+    if (c == ')' || c == '(')
+        fprintf(ps->f, "\\");
+    fprintf(ps->f, "%c", c);
+    }
+fprintf(ps->f, ") fillTextBox\n");
+}
 
 void psTextAt(struct psGfx *ps, double x, double y, char *text)
 /* Output text in current font at given position. */
@@ -334,7 +348,9 @@ FILE *f = ps->f;
 fprintf(f, "newpath\n");
 psXyOut(ps, x, y);
 psWhOut(ps, xrad, yrad);
-fprintf(f, "%d %d ellipse\n",   0, 360);
+psFloatOut(f, 0.0);
+psFloatOut(f, 360.0);
+fprintf(f, "ellipse\n");
 fprintf(f, "closepath\n");
 fprintf(f, "fill\n");
 }
