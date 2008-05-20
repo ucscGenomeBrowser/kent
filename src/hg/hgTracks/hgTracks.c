@@ -37,7 +37,7 @@
 #include "pcrResult.h"
 #include "wikiLink.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1471 2008/05/19 18:16:06 markd Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1472 2008/05/20 16:39:32 fanhsu Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -4355,7 +4355,10 @@ cgiSpoof(&argc, argv);
 htmlSetBackground(hBackgroundImage());
 htmlSetStyle("<LINK REL=\"STYLESHEET\" HREF=\"../style/HGStyle.css\" TYPE=\"text/css\">"); 
 oldVars = hashNew(10);
-cartHtmlShell("UCSC Genome Browser v"CGI_VERSION, doMiddle, hUserCookie(), excludeVars, oldVars);
+if (hIsGsidServer())
+	cartHtmlShell("GSID Sequence View", doMiddle, hUserCookie(), excludeVars, oldVars);
+else
+	cartHtmlShell("UCSC Genome Browser v"CGI_VERSION, doMiddle, hUserCookie(), excludeVars, oldVars);
 if (measureTiming)
     {
     fprintf(stdout, "Overall total time: %ld millis<BR>\n",
