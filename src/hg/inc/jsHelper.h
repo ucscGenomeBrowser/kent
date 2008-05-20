@@ -108,4 +108,9 @@ void cgiMakeCheckAllSubmitButton(char *name, char *value, char *id, char *idPref
  * state parameter determines whether to "check all" or "uncheck all" (TRUE means "check all"). 
  * id parameter may be NULL */
 
+char *jsStripJavascript(char *str);
+/* Strip out anything that looks like javascript in html string.
+   This function is designed to cleanup user input (e.g. to avoid XSS attacks).
+   Returned string should be free'ed after use. */
+
 #endif /* JSHELPER_H */

@@ -11,6 +11,7 @@
  * to 'ripple' to other controls.  The onChange also submits the
  * control. */
 
+#include <regex.h>
 #include "common.h"
 #include "dystring.h"
 #include "cheapcgi.h"
@@ -21,7 +22,7 @@
 #include "hui.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jsHelper.c,v 1.12 2008/05/15 21:20:06 larrym Exp $";
+static char const rcsid[] = "$Id: jsHelper.c,v 1.13 2008/05/20 16:43:36 larrym Exp $";
 
 static boolean jsInited = FALSE;
 struct hash *includedFiles = NULL;
@@ -380,4 +381,32 @@ void cgiMakeCheckAllSubmitButton(char *name, char *value, char *id, char *idPref
  * id parameter may be NULL */
 {
 cgiMakeOnClickSubmitButton(jsCheckAllOnClickHandler(idPrefix, state), name, value);
+}
+
+char *jsStripJavascript(char *str)
+/* Strip out anything that looks like javascript in html string.
+   This function is designed to cleanup user input (e.g. to avoid XSS attacks).
+   Returned string should be free'ed after use. */
+{
+regex_t re;
+regmatch_t match[1];
+// "<" will not occur b/n script tags
+int err = regcomp(&re, "<script\\s*>[^<]*</script\\s*>", REG_ICASE);
+if(err)
+    errAbort("regcomp failed; err: %d", err);
+struct dyString *dy = newDyString(0);
+size_t len = strlen(str);
+size_t offset = 0;
+while(offset < len && !regexec(&re, str + offset, 1, match, 0))
+    {
+    fprintf(stderr, "Here 3: %d, %d\n", match[0].rm_so, match[0].rm_eo);
+    dyStringAppendN(dy, str + offset, match[0].rm_so);
+    offset += match[0].rm_eo;
+    }
+if(offset < len)
+    {
+    dyStringAppend(dy, str + offset);
+    }
+regfree(&re);
+return dyStringCannibalize(&dy);
 }
