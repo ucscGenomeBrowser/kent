@@ -21,7 +21,7 @@
 #include "correlate.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.63 2007/05/02 23:45:15 kate Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.64 2008/05/20 22:22:00 larrym Exp $";
 
 extern char *maxOutMenu[];
 
@@ -713,7 +713,17 @@ if (anySubtrackMerge(database, table))
     dv = mergedWigDataVector(table, conn, region);
 else
     {
-    struct trackDb *tdb = hTrackDbForTrack(table);
+    struct trackDb *tdb;
+    if (isCustomTrack(table))
+        {
+        struct customTrack *ct = lookupCt(table);
+        tdb = ct->tdb;
+        conn = sqlCtConn(TRUE);
+        }
+    else
+        {
+        tdb = hTrackDbForTrack(table);
+        }
     struct trackTable *tt1 = trackTableNew(tdb, table, conn);
     dv = dataVectorFetchOneRegion(tt1, region, conn);
     intersectDataVector(table, dv, region, conn);

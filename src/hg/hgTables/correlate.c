@@ -22,7 +22,7 @@
 #include "bedGraph.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: correlate.c,v 1.64 2007/10/16 17:31:51 hiram Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.65 2008/05/20 22:21:59 larrym Exp $";
 
 #define MAX_POINTS_STR	"300,000,000"
 #define MAX_POINTS	300000000
@@ -315,10 +315,9 @@ static void fillInTrackTable(struct trackTable *table,
  *	something like that where the actual tdb and table is something
  *	else.	*/
 {
-struct trackDb *tdb;
 boolean isCustomDbTable = FALSE;
-
-tdb = findCompositeTdb(table->tdb,table->tableName);
+struct customTrack *ct = NULL;
+struct trackDb *tdb = findCompositeTdb(table->tdb,table->tableName);
 table->shortLabel = cloneString(tdb->shortLabel);
 table->longLabel = cloneString(tdb->longLabel);
 table->actualTdb = tdb;
@@ -329,7 +328,7 @@ table->dbTableName = NULL;
 
 if (isCustomTrack(table->actualTable))
     {
-    struct customTrack *ct = lookupCt(table->actualTable);
+    ct = lookupCt(table->actualTable);
     if (ctDbAvailable(ct->dbTableName))
 	{
 	table->dbTableName = ct->dbTableName;
@@ -344,10 +343,16 @@ if (startsWith("bedGraph", tdb->type))
      *	column from the bedGraph type line
      */
     if (isCustomDbTable)
+        {
 	conn = sqlCtConn(TRUE);
+        freeMem(table->actualTable);
+        table->actualTable = cloneString(ct->dbTableName);
+        }
 
     /* there are no bedGraph custom tracks yet, but when they do show
-     * up, they will only correlate if they are in the database
+     * up, they will only correlate if they are in the database 
+     * XXXX Hiram, what does this mean? Why would the custom tables not be in the db?
+     * Also, what's up with the following || test?
      */
     if (!table->isCustom || isCustomDbTable)
 	{

@@ -20,7 +20,7 @@
 #include "hgMaf.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: schema.c,v 1.46 2007/11/01 17:31:13 fanhsu Exp $";
+static char const rcsid[] = "$Id: schema.c,v 1.47 2008/05/20 22:21:59 larrym Exp $";
 
 static char *nbForNothing(char *val)
 /* substitute &nbsp; for empty strings to keep table formating sane */
@@ -523,7 +523,7 @@ if (startsWithWord("wig", type))
     showSchemaCtWiggle(table, ct);
 else if (startsWithWord("chromGraph", type))
     showSchemaCtChromGraph(table, ct);
-else if (startsWithWord("bed", type))
+else if (startsWithWord("bed", type) || startsWithWord("bedGraph", type))
     showSchemaCtBed(table, ct);
 else
     errAbort("Unrecognized customTrack type %s", type);
