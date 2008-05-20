@@ -37,7 +37,7 @@
 #include "pcrResult.h"
 #include "wikiLink.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1472 2008/05/20 16:39:32 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1473 2008/05/20 16:49:24 fanhsu Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -3520,7 +3520,15 @@ if (showTrackControls)
 	   "displayed.<BR>"
 	   "Tracks with lots of items will automatically be displayed in "
 	   "more compact modes.</td></tr>\n");
-    cg = startControlGrid(MAX_CONTROL_COLUMNS, "left");
+    if (!hIsGsidServer())
+    	{
+	cg = startControlGrid(MAX_CONTROL_COLUMNS, "left");
+	}
+    else
+	{
+	/* 4 cols fit GSID's display better */ 
+    	cg = startControlGrid(MAX_CONTROL_COLUMNS-1, "left");
+	}
     boolean isFirstNotCtGroup = TRUE;
     for (group = groupList; group != NULL; group = group->next)
         {
@@ -3538,7 +3546,16 @@ if (showTrackControls)
                                 &indicator, &otherState);
 	hPrintf("<TR>");
 	cg->rowOpen = TRUE;
-        hPrintf("<th align=\"left\" colspan=%d BGCOLOR=#536ED3>", MAX_CONTROL_COLUMNS);
+	if (!hIsGsidServer())
+	    {
+            hPrintf("<th align=\"left\" colspan=%d BGCOLOR=#536ED3>", 
+	    	    MAX_CONTROL_COLUMNS);
+	    }
+	else
+	    {
+            hPrintf("<th align=\"left\" colspan=%d BGCOLOR=#536ED3>", 
+	    	    MAX_CONTROL_COLUMNS-1);
+	    }
 	hPrintf("<table width='100%'><tr><td align='left'>");
 	hPrintf("\n<A NAME=\"%sGroup\"></A>",group->name);
         hPrintf("<A HREF=\"%s?%s&%s=%s#%sGroup\" class=\"bigBlue\"><IMG height=18 width=18 src=\"%s\" alt=\"%s\" class=\"bigBlue\"></A>&nbsp;&nbsp;",
