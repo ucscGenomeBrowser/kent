@@ -400,9 +400,6 @@ void removeTrackFromGroup(struct track *track);
 int orientFromChar(char c);
 /* Return 1 or -1 in place of + or - */
 
-enum trackVisibility estimateVisibility(struct track *tg);
-/* Return estimate of what visibility will be without setting it. */
-
 enum trackVisibility limitVisibility(struct track *tg);
 /* Return default visibility limited by number of items. */
 

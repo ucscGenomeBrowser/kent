@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.136 2008/03/06 06:55:02 angie Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.137 2008/05/20 18:23:07 angie Exp $";
 
 struct hash *snp125FuncCartColorHash = NULL;
 struct hash *snp125FuncCartNameHash = NULL;
@@ -448,8 +448,7 @@ struct slList          *itemList  = tg->items;
 struct slList          *item      = itemList;
 struct sqlResult       *sr        = NULL;
 struct snp125Extended  *se        = NULL;
-enum   trackVisibility  vis       = tg->visibility;
-enum   trackVisibility  visLim    = tg->limitedVis;
+enum   trackVisibility  visLim    = limitVisibility(tg);
 int                     version   = snpVersion(tg->mapName);
 int                     i         = 0;
 
@@ -536,14 +535,15 @@ tg->items = itemList;
 
 filterSnp125Items(tg, version);
 
-vis = estimateVisibility(tg);
-if(vis==tvDense || visLim==tvDense)
+if (visLim==tvDense)
     sortSnp125ExtendedByColor(tg);
 else
      {
      slSort(&tg->items, bedCmp);
-     if(snp125ExtendedNames && vis !=tvSquish && visLim !=tvSquish)
+     if(snp125ExtendedNames && visLim != tvSquish)
          setSnp125ExtendedNameExtra(tg);
+     tg->limitedVisSet = FALSE;
+     limitVisibility(tg);
      }
 }
 
