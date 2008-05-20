@@ -22,7 +22,7 @@
 #include "hui.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jsHelper.c,v 1.13 2008/05/20 16:43:36 larrym Exp $";
+static char const rcsid[] = "$Id: jsHelper.c,v 1.14 2008/05/20 19:41:02 larrym Exp $";
 
 static boolean jsInited = FALSE;
 struct hash *includedFiles = NULL;
@@ -399,7 +399,6 @@ size_t len = strlen(str);
 size_t offset = 0;
 while(offset < len && !regexec(&re, str + offset, 1, match, 0))
     {
-    fprintf(stderr, "Here 3: %d, %d\n", match[0].rm_so, match[0].rm_eo);
     dyStringAppendN(dy, str + offset, match[0].rm_so);
     offset += match[0].rm_eo;
     }
