@@ -37,7 +37,7 @@
 #include "pcrResult.h"
 #include "wikiLink.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1473 2008/05/20 16:49:24 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1474 2008/05/20 18:34:03 angie Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -354,7 +354,7 @@ int trackPlusLabelHeight(struct track *track, int fontHeight)
 /* Return the sum of heights of items in this track (or subtrack as it may be) 
  * and the center label(s) above the items (if any). */
 {
-int y = track->height;
+int y = track->totalHeight(track, track->limitedVis);
 if (isWithCenterLabels(track))
     y += fontHeight;
 if (isCompositeTrack(track))
@@ -1292,7 +1292,7 @@ if (measureTiming && lastTime)
     *lastTime = thisTime;
     }
 hvGfxUnclip(hvg);
-y += track->height;
+y += track->totalHeight(track, track->limitedVis);
 return y;
 }
 
@@ -2000,17 +2000,18 @@ if (withCenterLabels)
         if (isCompositeTrack(track))
             {
 	    if (isWithCenterLabels(track))
-		{
-		y = doCenterLabels(track, track, hvg, font, y);
-		}
-	    else
-		{
-		for (subtrack = track->subtracks; subtrack != NULL;
-		     subtrack = subtrack->next)
-		    if (isSubtrackVisible(subtrack) &&
-			isWithCenterLabels(subtrack))
+		y = doCenterLabels(track, track, hvg, font, y)
+		    - track->height; /* subtrack heights tallied below: */
+	    for (subtrack = track->subtracks; subtrack != NULL;
+		 subtrack = subtrack->next)
+		if (isSubtrackVisible(subtrack))
+		    {
+		    if (isWithCenterLabels(subtrack))
 			y = doCenterLabels(subtrack, track, hvg, font, y);
-		}
+		    else
+			y += subtrack->totalHeight(subtrack,
+						   subtrack->limitedVis);
+		    }
             }
         else
             y = doCenterLabels(track, track, hvg, font, y);
