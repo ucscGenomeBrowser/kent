@@ -683,25 +683,12 @@
 			the arrows on the Genome Browser display point in the opposite direction to that indicated by the 
 			alignment on the EST details page. <B>Note:</B> A low intronOrientation number can cause an incorrect
 			assignment of transcription direction when calculated in this way.
-         		<P>
- 			If the intronOrientation is zero, then the read direction from the EST's Genbank record is used 
-			to determine transcription direction. Some GenBank EST records specify a 3' or 5' read direction; 
-			some don't. If no direction is specified, or if the direction is 5', the Genome Browser's graphical 
-			display uses the strand field of the database table (the alignment direction) 
-			to determine whether to draw the arrows pointing forward (+) or reverse (-).  However, when the 
-			direction is 3' in the GenBank record, the arrows are drawn opposite of the strand (alignment 
-			direction). Due to the reasons stated above, you should be suspicious of alignments in which the 
-			direction is determined this way -- the read direction in Genbank may not reflect the trasncription 
-			direction if the sequence has been reverse-complemented prior to GenBank submission.
 			<P>
-			The alignment details pages and the Table Browser do not take the GenBank 
-			record's read direction into account. They show only the alignment of the 
+			The alignment details pages and the Table Browser do not take the intron orientation
+			into account. They show only the alignment of the 
 			GenBank sequence (as given) to the genome. If the alignment is used to 
 			retrieve DNA sequence from the genome, the DNA sequence will look 
 			similar to the GenBank sequence (not its complement).
-			The GenBank records for BQ016549 and AA928010 specify 3' as the read 
-			direction. Therefore, the graphical display reverses the direction of alignment, but 
-			the details page and Table Browser don't. It is admittedly a bit quirky.
 		    </TD><TD WIDTH=15></TD>
 		</TR>
 	    </TABLE>
