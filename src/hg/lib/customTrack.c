@@ -24,8 +24,9 @@
 #include "hgConfig.h"
 #include "customFactory.h"
 #include "trashDir.h"
+#include "jsHelper.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.168 2007/03/31 16:48:10 markd Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.169 2008/05/20 20:20:59 larrym Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -700,6 +701,12 @@ else if (isNotEmpty(docFileName))
 else 
     html = cartUsualString(cart, CT_CUSTOM_DOC_TEXT_VAR, "");
 html = customDocParse(html);
+if(html != NULL)
+    {
+    char *tmp = html;
+    html = jsStripJavascript(html);
+    free(tmp);
+    }
 
 struct customTrack *newCts = NULL, *ct = NULL;
 if (isNotEmpty(customText))
