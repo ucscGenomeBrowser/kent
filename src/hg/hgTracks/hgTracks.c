@@ -37,7 +37,7 @@
 #include "pcrResult.h"
 #include "wikiLink.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1474 2008/05/20 18:34:03 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1475 2008/05/20 20:42:18 larrym Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -2525,6 +2525,14 @@ if (sameString(type, "wig"))
     else
 	tg->loadItems = ctWigLoadItems;
     tg->customPt = ct;
+    }
+else if (sameString(type, "bedGraph"))
+    {
+    tg = trackFromTrackDb(tdb);
+    tg->canPack = TRUE;
+    tg->customPt = ct;
+    ct->wigFile = ctFileName;
+    tg->mapItemName = ctMapItemName;
     }
 else if (sameString(type, "bed"))
     {
