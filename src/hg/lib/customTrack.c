@@ -26,7 +26,7 @@
 #include "trashDir.h"
 #include "jsHelper.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.169 2008/05/20 20:20:59 larrym Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.170 2008/05/20 21:11:14 larrym Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -705,7 +705,7 @@ if(html != NULL)
     {
     char *tmp = html;
     html = jsStripJavascript(html);
-    free(tmp);
+    freeMem(tmp);
     }
 
 struct customTrack *newCts = NULL, *ct = NULL;

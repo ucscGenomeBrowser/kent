@@ -24,7 +24,7 @@
 #include "trashDir.h"
 #include "jsHelper.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.74 2008/05/20 20:20:33 larrym Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.75 2008/05/20 21:11:15 larrym Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -1389,13 +1389,13 @@ if (!strstr(line, "tdbType"))
     }
 char *tmp = tdb->tableName;
 tdb->tableName = jsStripJavascript(tmp);
-free(tmp);
+freeMem(tmp);
 tmp = tdb->shortLabel;
 tdb->shortLabel = jsStripJavascript(tmp);
-free(tmp);
+freeMem(tmp);
 tmp = tdb->longLabel;
 tdb->longLabel = jsStripJavascript(tmp);
-free(tmp);
+freeMem(tmp);
 }
 
 char *browserLinesToSetting(struct slName *browserLines)
