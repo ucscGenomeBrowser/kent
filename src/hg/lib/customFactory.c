@@ -22,8 +22,9 @@
 #include "customPp.h"
 #include "customFactory.h"
 #include "trashDir.h"
+#include "jsHelper.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.73 2008/05/14 21:03:24 galt Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.74 2008/05/20 20:20:33 larrym Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -237,21 +238,32 @@ char *db = customTrackTempDb();
  */
 struct dyString *tmpDy = newDyString(0);
 char *cmd1[] = {"loader/hgLoadBed", "-customTrackLoader",
-	NULL, NULL, NULL, NULL, "stdin", NULL};
+	NULL, NULL, NULL, NULL, NULL, NULL, NULL};
 char *tmpDir = cfgOptionDefault("customTracks.tmpdir", "/data/tmp");
 struct stat statBuf;
+int index = 2;
 
 if (stat(tmpDir,&statBuf))
     errAbort("can not find custom track tmp load directory: '%s'<BR>\n"
 	"create directory or specify in hg.conf customTrash.tmpdir", tmpDir);
 dyStringPrintf(tmpDy, "-tmpDir=%s", tmpDir);
-cmd1[2] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
+cmd1[index++] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
 dyStringPrintf(tmpDy, "-maxChromNameLength=%d", track->maxChromName);
-cmd1[3] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
+cmd1[index++] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
+if(startsWith("bedGraph", track->dbTrackType))
+    {
+    char buf[100];
+    /* we currently assume that last field is the bedGraph field. */
+    safef(buf, sizeof(buf), "-bedGraph=%d", track->fieldCount);
+    cmd1[index++] = buf;
+    }
 dyStringPrintf(tmpDy, "%s", db);
-cmd1[4] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
+cmd1[index++] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
 dyStringPrintf(tmpDy, "%s", track->dbTableName);
-cmd1[5] = dyStringCannibalize(&tmpDy);
+cmd1[index++] = dyStringCannibalize(&tmpDy);
+cmd1[index++] = "stdin";
+assert(index <= ArraySize(cmd1));
+
 /* the "/dev/null" file isn't actually used for anything, but it is used
  * in the pipeLineOpen to properly get a pipe started that isn't simply
  * to STDOUT which is what a NULL would do here instead of this name.
@@ -291,7 +303,7 @@ static struct customTrack *bedFinish(struct customTrack *track,
 {
 /* Add type based on field count */
 char buf[20];
-safef(buf, sizeof(buf), "bed %d .", track->fieldCount);
+safef(buf, sizeof(buf), "%s %d .", track->tdb->type != NULL && startsWith("bedGraph", track->tdb->type) ? "bedGraph" : "bed", track->fieldCount);
 track->tdb->type = cloneString(buf);
 track->dbTrackType = cloneString(buf);
 safef(buf, sizeof(buf), "%d", track->fieldCount);
@@ -497,6 +509,21 @@ slReverse(&track->bedList);
 return bedFinish(track, dbRequested);
 }
 
+static struct customTrack *bedGraphLoader(struct customFactory *fac,  
+	struct hash *chromHash,
+    	struct customPp *cpp, struct customTrack *track, boolean dbRequested)
+/* Load up bedGraph data until get next track line. */
+{
+char buf[20];
+bedLoader(fac, chromHash, cpp, track, dbRequested);
+
+/* Trailing period in "bedGraph N ." confuses bedGraphMethods, so replace type */
+freeMem(track->tdb->type);
+safef(buf, sizeof(buf), "bedGraph %d", track->fieldCount);
+track->tdb->type = cloneString(buf);
+return track;
+}
+
 static struct customTrack *microarrayLoader(struct customFactory *fac,  
 	struct hash *chromHash,
     	struct customPp *cpp, struct customTrack *track, boolean dbRequested)
@@ -528,6 +555,14 @@ static struct customFactory bedFactory =
     "bed",
     bedRecognizer,
     bedLoader,
+    };
+
+static struct customFactory bedGraphFactory = 
+    {
+    NULL,
+    "bedGraph",
+    bedRecognizer,
+    bedGraphLoader,
     };
 
 static struct customFactory microarrayFactory = 
@@ -1168,6 +1203,7 @@ if (factoryList == NULL)
     slAddTail(&factoryList, &gtfFactory);
     slAddTail(&factoryList, &gffFactory);
     slAddTail(&factoryList, &bedFactory);
+    slAddTail(&factoryList, &bedGraphFactory);
     slAddTail(&factoryList, &microarrayFactory);
     slAddTail(&factoryList, &coloredExonFactory);
     }
@@ -1351,6 +1387,15 @@ if (!strstr(line, "tdbType"))
         dyStringPrintf(ds, "track %s", line);
     ctAddToSettings(track, "origTrackLine", dyStringCannibalize(&ds));
     }
+char *tmp = tdb->tableName;
+tdb->tableName = jsStripJavascript(tmp);
+free(tmp);
+tmp = tdb->shortLabel;
+tdb->shortLabel = jsStripJavascript(tmp);
+free(tmp);
+tmp = tdb->longLabel;
+tdb->longLabel = jsStripJavascript(tmp);
+free(tmp);
 }
 
 char *browserLinesToSetting(struct slName *browserLines)
