@@ -118,7 +118,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.2 2008/05/19 18:16:07 markd Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.3 2008/05/20 18:34:05 angie Exp $";
 
 #define CHROM_COLORS 26
 
@@ -8560,43 +8560,6 @@ for (subtrack = trackList; subtrack; subtrack = subtrack->next)
 return ct;
 }
 
-enum trackVisibility estimateVisibility(struct track *tg)
-/* Return estimate of what visibility will be without actually setting it. */ 
-{
-enum trackVisibility vis = tg->visibility;
-int h = 0;
-int maxHeight = 0;
-
-if (tg->limitedVisSet)
-    return tg->limitedVis;
-if (vis == tvHide)
-    return tvHide;
-if (vis == tvDense)
-    return tvDense;
-maxHeight = maximumTrackHeight(tg);
-if (isCompositeTrack(tg))
-    maxHeight = maxHeight * subtrackCount(tg->subtracks);
-h = tg->totalHeight(tg, vis);
-if (h > maxHeight)
-    {
-    if (vis == tvFull && tg->canPack)
-        vis = tvPack;
-    else if (vis == tvPack)
-        vis = tvSquish;
-    else
-        vis = tvDense;
-    h = tg->totalHeight(tg, vis);
-    if (h > maxHeight && vis == tvPack)
-        {
-        vis = tvSquish;
-        h = tg->totalHeight(tg, vis);
-        }
-    if (h > maxHeight)
-        vis = tvDense;
-    }
-return vis;
-}
-
 enum trackVisibility limitVisibility(struct track *tg)
 /* Return default visibility limited by number of items and
  * by parent visibility if part of a coposite track.
@@ -8615,7 +8578,13 @@ if (!tg->limitedVisSet)
 	return tvHide;
 	}
     if (isCompositeTrack(tg))
+	{
+	struct track *subtrack;
         maxHeight = maxHeight * subtrackCount(tg->subtracks);
+	for (subtrack = tg->subtracks;  subtrack != NULL;
+	     subtrack = subtrack->next)
+	    limitVisibility(subtrack);
+	}
     h = tg->totalHeight(tg, vis);
     if (h > maxHeight)
         {
@@ -10422,29 +10391,47 @@ for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
     }
 }
 
+static int tvCompare(enum trackVisibility a, enum trackVisibility b)
+/* enum trackVis isn't in numeric order by visibility, so compare
+ * symbolically: */
+{
+if (a == b) return 0;
+if (a == tvFull) return -1;
+if (b == tvFull) return 1;
+if (a == tvPack) return -1;
+if (b == tvPack) return 1;
+if (a == tvSquish) return -1;
+if (b == tvSquish) return 1;
+if (a == tvDense) return -1;
+if (b == tvDense) return 1;
+return 0;
+}
+
+static enum trackVisibility tvMin(enum trackVisibility a, enum trackVisibility b)
+/* Return the less visible of a and b. */
+{
+if (tvCompare(a, b) >= 0)
+    return a;
+else
+    return b;
+}
+
 static int compositeTotalHeight(struct track *track, enum trackVisibility vis)
 /* Return total height of composite track and set subtrack->height's. */
 {
 struct track *subtrack;
 int height = 0;
-int stCount = subtrackCount(track->subtracks);
-int maxHeight = maximumTrackHeight(track);
-int maxStHeight = 0;
 for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
     if (isSubtrackVisible(subtrack))
 	{
-	int h = subtrack->totalHeight(subtrack, vis);
+	enum trackVisibility minVis = vis;
+	if (subtrack->limitedVisSet)
+	    minVis = tvMin(minVis, subtrack->limitedVis);
+	int h = subtrack->totalHeight(subtrack, minVis);
 	subtrack->height = h;
 	height += h;
-	if (maxStHeight < h)
-	    maxStHeight = h;
 	}
-/* If one subtrack is over the per-subtrack limit, then pretend all were,
- * so limitVisibility treats the composite track as over the limit. */
-if (maxStHeight > maxHeight)
-    track->height = maxStHeight * stCount;
-else
-    track->height = height;
+track->height = height;
 return track->height;
 }
 
