@@ -14,7 +14,7 @@
 #include "chainCart.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.99 2008/05/16 01:34:20 larrym Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.100 2008/05/21 23:41:02 markd Exp $";
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -191,7 +191,10 @@ enum trackVisibility hTvFromStringNoAbort(char *s)
 /* Given a string representation of track visibility, return as
  * equivalent enum. */
 {
-return stringArrayIx(s, hTvStrings, ArraySize(hTvStrings));
+int vis = stringArrayIx(s, hTvStrings, ArraySize(hTvStrings));
+if (vis < 0)
+    vis = 0;  // don't generate bogus value on invalid input
+return vis;
 }
 
 enum trackVisibility hTvFromString(char *s)
