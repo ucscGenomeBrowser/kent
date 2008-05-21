@@ -9,26 +9,39 @@
 
 #include "common.h"
 #include "spaceSaver.h" 
+#include "portable.h"
+#include "bed.h"
+#include "psl.h"
+#include "web.h"
+#include "hdb.h"
+#include "hCommon.h"
+#include "hgColors.h"
+#include "trackDb.h"
+#include "bedCart.h"
+#include "wiggle.h"
+#include "lfs.h"
+#include "grp.h"
+#include "chromColors.h"
 #include "hgTracks.h"
 #include "cds.h"
+#include "mafTrack.h"
+#include "wigCommon.h"
+
+#ifndef GBROWSE
 #include "encode.h"
 #include "expRatioTracks.h"
 #include "hapmapTrack.h"
-#include "mafTrack.h"
 #include "retroGene.h"
 #include "switchGear.h"
 #include "variation.h"
-#include "wigCommon.h"
 #include "wiki.h"
 #include "wormdna.h"
 #include "aliType.h"
-#include "psl.h"
 #include "agpGap.h"
 #include "cgh.h"
 #include "bactigPos.h"
 #include "genePred.h"
 #include "genePredReader.h"
-#include "bed.h"
 #include "isochores.h"
 #include "spDb.h"
 #include "simpleRepeat.h"
@@ -61,9 +74,7 @@
 #include "knownMore.h"
 #include "customTrack.h"
 #include "customFactory.h"
-#include "trackDb.h"
 #include "pslWScore.h"
-#include "lfs.h"
 #include "mcnBreakpoints.h"
 #include "altGraph.h"
 #include "altGraphX.h"
@@ -72,10 +83,6 @@
 #include "genomicSuperDups.h"
 #include "celeraDupPositive.h"
 #include "celeraCoverage.h"
-#include "web.h"
-#include "grp.h"
-#include "chromColors.h"
-#include "cds.h"
 #include "simpleNucDiff.h"
 #include "tfbsCons.h"
 #include "tfbsConsSites.h"
@@ -84,7 +91,6 @@
 #include "variation.h"
 #include "estOrientInfo.h"
 #include "versionInfo.h"
-#include "bedCart.h"
 #include "gencodeIntron.h"
 #include "retroGene.h"
 #include "switchGear.h"
@@ -105,8 +111,6 @@
 #include "omicia.h"
 #include "nonCodingUi.h"
 #include "transMapTracks.h"
-
-#ifndef GBROWSE
 #include "pcrResult.h"
 #endif /* GBROWSE */
 
@@ -118,7 +122,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.4 2008/05/21 00:02:06 markd Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.5 2008/05/21 16:58:39 angie Exp $";
 
 #define CHROM_COLORS 26
 
@@ -154,13 +158,12 @@ int maxItemsToUseOverflowDefault = 10000; /* # of items to allow overflow mode*/
 char *chromName;		/* Name of chromosome sequence . */
 char *database;			/* Name of database we're using. */
 char *organism;			/* Name of organism we're working on. */
-char *browserName;              /* Test or public browser */
-char *organization;             /* UCSC or MGC */
 int winStart;			/* Start of window in sequence. */
 int winEnd;			/* End of window in sequence. */
 char *position = NULL; 		/* Name of position. */
 
 int trackTabWidth = 11;
+int leftLabelWidthChars = 17;   /* number of characters allowed for left label */
 int insideX;			/* Start of area to draw track in in pixels. */
 int insideWidth;		/* Width of area to draw tracks in in pixels. */
 int leftLabelX;			/* Start of area to draw left labels on. */
@@ -195,6 +198,16 @@ struct rgbColor darkSeaColor = {0, 60, 120};
 struct rgbColor lightSeaColor = {200, 220, 255};
 
 struct hash *hgFindMatches; /* The matches found by hgFind that should be highlighted. */
+
+struct trackLayout tl;
+
+void initTl()
+/* Initialize layout around small font and a picture about 600 pixels
+ * wide. */
+{
+trackLayoutInit(&tl, cart);
+tl.leftLabelWidth = leftLabelWidthChars*tl.nWidth + trackTabWidth;
+}
 
 Color lighterColor(struct hvGfx *hvg, Color color)
 /* Get lighter shade of a color */ 
@@ -267,10 +280,36 @@ int packCountRows(struct track *tg, int maxCount, boolean withLabels)
 return packCountRowsOverflow(tg, maxCount, withLabels, FALSE);
 }
 
+char *getItemDataName(struct track *tg, char *itemName)
+/* Translate an itemName to its itemDataName, using tg->itemDataName if is not
+ * NULL. The resulting value should *not* be freed, and it should be assumed
+ * that it will only remain valid until the next call of this function.*/
+{
+return (tg->itemDataName != NULL) ? tg->itemDataName(tg, itemName)
+    : itemName;
+}
+
+/* Some little functional stubs to fill in track group
+ * function pointers with if we have nothing to do. */
+void tgLoadNothing(struct track *tg){}
+void tgFreeNothing(struct track *tg){}
+int tgItemNoStart(struct track *tg, void *item) {return -1;}
+int tgItemNoEnd(struct track *tg, void *item) {return -1;}
+
 int tgFixedItemHeight(struct track *tg, void *item)
 /* Return item height for fixed height track. */
 {
 return tg->lineHeight;
+}
+
+int maximumTrackHeight(struct track *tg)
+/* Return the maximum track height allowed in pixels. */
+{
+int maxItems = maxItemsInFullTrack;
+char *maxItemsString = trackDbSetting(tg->tdb, "maxItems");
+if (maxItemsString != NULL)
+    maxItems = sqlUnsigned(maxItemsString);
+return maxItems * tl.fontHeight;
 }
 
 static int maxItemsToOverflow(struct track *tg)
@@ -1018,6 +1057,7 @@ void linkedFeaturesFreeItems(struct track *tg)
 linkedFeaturesFreeList((struct linkedFeatures**)(&tg->items));
 }
 
+#ifndef GBROWSE
 boolean gvFilterType(struct gv *el)
 /* Check to see if this element should be excluded. */
 {
@@ -1403,6 +1443,7 @@ winStart = winStartCopy;
 winEnd = winEndCopy;
 return list;
 }
+#endif /* GBROWSE */
 
 int exonSlRefCmp(const void *va, const void *vb)
 /* Sort the exons put on an slRef. */
@@ -1544,6 +1585,7 @@ size = end - start;
 /* Now it's time to do the search. */
 for ( ; sizeWanted > 0 && sizeWanted < BIGNUM; )
     {
+#ifndef GBROWSE
     if (sameWord(tg->mapName, WIKI_TRACK_TABLE))
 	items = wikiTrackGetBedRange(tg->mapName, chromName, start, end);
     else if (sameWord(tg->mapName, "gvPos"))
@@ -1551,6 +1593,7 @@ for ( ; sizeWanted > 0 && sizeWanted < BIGNUM; )
     else if (sameWord(tg->mapName, "oreganno"))
         items = loadOregannoAsBed(tg, chromName, start, end);
     else
+#endif /* GBROWSE */
 	items = hGetBedRange(tg->mapName, chromName, start, end, NULL);
     /* If we got something, or weren't able to search as big as we wanted to */
     /* (in case we're at the end of the chrom).  */
@@ -1917,6 +1960,32 @@ chromColor[25] = hvGfxFindColorIx(hvg, CHROM_M_R, CHROM_M_G, CHROM_M_B);
 chromColor[26] = hvGfxFindColorIx(hvg, CHROM_Un_R, CHROM_Un_G, CHROM_Un_B);
 
 chromosomeColorsMade = TRUE;
+}
+
+void findTrackColors(struct hvGfx *hvg, struct track *trackList)
+/* Find colors to draw in. */
+{
+struct track *track;
+for (track = trackList; track != NULL; track = track->next)
+    {
+    if (track->limitedVis != tvHide)
+	{
+	track->ixColor = hvGfxFindRgb(hvg, &track->color);
+	track->ixAltColor = hvGfxFindRgb(hvg, &track->altColor);
+        if (isCompositeTrack(track))
+            {
+	    struct track *subtrack;
+            for (subtrack = track->subtracks; subtrack != NULL;
+                         subtrack = subtrack->next)
+                {
+                if (!isSubtrackVisible(subtrack))
+                    continue;
+                subtrack->ixColor = hvGfxFindRgb(hvg, &subtrack->color);
+                subtrack->ixAltColor = hvGfxFindRgb(hvg, &subtrack->altColor);
+                }
+            }
+        }
+    }
 }
 
 int grayInRange(int val, int minVal, int maxVal)
@@ -3188,6 +3257,7 @@ hFreeConn(&conn);
 return lfsList;
 }
 
+#ifndef GBROWSE
 void loadBacEndPairs(struct track *tg)
 /* Load up bac end pairs from table into track items. */
 {
@@ -3476,6 +3546,7 @@ void earlyRepBadMethods(struct track *tg)
 linkedFeaturesSeriesMethods(tg);
 tg->loadItems = loadEarlyRepBad;
 }
+#endif /* GBROWSE */
 
 char *lfMapNameFromExtra(struct track *tg, void *item)
 /* Return map name of item from extra field. */
@@ -3484,6 +3555,7 @@ struct linkedFeatures *lf = item;
 return lf->extra;
 }
 
+#ifndef GBROWSE
 static struct simpleFeature *sfFromGenePred(struct genePred *gp, int grayIx)
 /* build a list of simpleFeature objects from a genePred */
 {
@@ -5646,7 +5718,7 @@ if (w < 1)
 	}
     }
 }
-
+#endif /* GBROWSE */
 
 void bedDrawSimpleAt(struct track *tg, void *item, 
 	struct hvGfx *hvg, int xOff, int y, 
@@ -5716,6 +5788,7 @@ if (tg->subType == lfWithBarbs || tg->exonArrows)
     }
 }
 
+#ifndef GBROWSE
 static void logoDrawSimple(struct track *tg, int seqStart, int seqEnd,
         struct hvGfx *hvg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
@@ -6936,6 +7009,7 @@ tg->totalHeight = tgFixedTotalHeightUsingOverflow;
 if (isNewChimp(database))
     tg->itemName = xenoMrnaName;
 }
+#endif /* GBROWSE */
 
 boolean isNonChromColor(Color color)
 /* test if color is a non-chrom color (black or gray) */
@@ -7072,6 +7146,7 @@ struct linkedFeatures *lf = item;
 return getSeqColorDefault(lf->name, hvg, tg->ixColor);
 }
 
+#ifndef GBROWSE
 void loadRnaGene(struct track *tg)
 /* Load up rnaGene from database table to track items. */
 {
@@ -8041,7 +8116,9 @@ tg->drawItems = genericDrawItems;
 tg->itemName = gapName;
 tg->mapItemName = gapName;
 }
+#endif /* GBROWSE */
 
+#ifndef GBROWSE
 int pslWScoreScale(struct pslWScore *psl, boolean isXeno, float maxScore)
 /* takes the score field and scales it to the correct shade using maxShade and maxScore */
 {
@@ -8461,6 +8538,7 @@ void eranModuleMethods(struct track *tg)
 {
 tg->drawItems = drawEranModule;
 }
+#endif /* GBROWSE */
 
 bool isCompositeTrack(struct track *track)
 /* Determine if this is a composite track. This is currently defined
@@ -9051,6 +9129,7 @@ slSort(&lfList, linkedFeaturesCmp);
 tg->items = lfList;
 }
 
+#ifndef GBROWSE
 void loadValAl(struct track *tg)
 /* Load the items in one custom track - just move beds in
  * window... */
@@ -10193,6 +10272,7 @@ track->drawItems = logoDrawSimple;
 track->totalHeight = logoHeight; 
 track->mapsSelf = TRUE;
 }
+#endif /* GBROWSE */
 
 void fillInFromType(struct track *track, struct trackDb *tdb)
 /* Fill in various function pointers in track from type field of tdb. */
@@ -10206,6 +10286,7 @@ if (wordCount <= 0)
     return;
 type = words[0];
 
+#ifndef GBROWSE
 if (sameWord(type, "bed"))
     {
     int fieldCount = 3;
@@ -10244,26 +10325,17 @@ else if (sameWord(type, "bedGraph"))
     {
     bedGraphMethods(track, tdb, wordCount, words);
     }
-else if (sameWord(type, "wig"))
+else 
+#endif /* GBROWSE */
+if (sameWord(type, "wig"))
     {
     wigMethods(track, tdb, wordCount, words);
     }
-else if (sameWord(type, "wigMaf"))
+else if (startsWith("wigMaf", type))
     {
     wigMafMethods(track, tdb, wordCount, words);
     }
-else if (sameWord(type, "wigMafGsid"))
-    {
-    wigMafMethods(track, tdb, wordCount, words);
-    }
-else if (sameWord(type, "wigMafGsidProt"))
-    {
-    wigMafMethods(track, tdb, wordCount, words);
-    }
-else if (sameWord(type, "wigMafProt"))
-    {
-    wigMafMethods(track, tdb, wordCount, words);
-    }
+#ifndef GBROWSE
 else if (sameWord(type, "sample"))
     {
     sampleMethods(track, tdb, wordCount, words);
@@ -10282,6 +10354,7 @@ else if (sameWord(type, "logo"))
     {
     logoMethods(track, tdb, wordCount, words);
     }
+#endif /* GBROWSE */
 else if (sameWord(type, "psl"))
     {
     pslMethods(track, tdb, wordCount, words);
@@ -10298,6 +10371,7 @@ else if (sameWord(type, "maf"))
     {
     mafMethods(track);
     }
+#ifndef GBROWSE
 else if (sameWord(type, "coloredExon"))
     {
     coloredExonMethods(track);
@@ -10345,6 +10419,7 @@ else if (sameWord(type, "factorSource"))
     {
     factorSourceMethods(track);
     }
+#endif /* GBROWSE */
 }
 
 static void compositeLoad(struct track *track)
@@ -10550,7 +10625,6 @@ struct track *trackFromTrackDb(struct trackDb *tdb)
 /* Create a track based on the tdb */
 {
 struct track *track = NULL;
-char *iatName = NULL;
 char *exonArrows;
 char *nextItem;
 
@@ -10603,9 +10677,11 @@ track->nextItemButtonable = TRUE;
 if (nextItem && sameString(nextItem, "off"))
     track->nextItemButtonable = FALSE;
 track->labelNextItemButtonable = track->nextItemButtonable;
-iatName = trackDbSetting(tdb, "itemAttrTbl");
+#ifndef GBROWSE
+char *iatName = trackDbSetting(tdb, "itemAttrTbl");
 if (iatName != NULL)
     track->itemAttrTbl = itemAttrTblNew(iatName);
+#endif /* GBROWSE */
 fillInFromType(track, tdb);
 return track;
 }
@@ -10634,6 +10710,7 @@ return hashFindVal(handlerHash, name);
 void registerTrackHandlers()
 /* Register tracks that include some non-standard methods. */
 {
+#ifndef GBROWSE
 registerTrackHandler("rgdGene", rgdGeneMethods);
 registerTrackHandler("cgapSage", cgapSageMethods);
 registerTrackHandler("cytoBand", cytoBandMethods);
@@ -10921,6 +10998,7 @@ registerTrackHandler("retroposons", dbRIPMethods);
 
 registerTrackHandler("hapmapSnps", hapmapMethods);
 registerTrackHandler("omicia", omiciaMethods);
+#endif /* GBROWSE */
 }
 
 void createHgFindMatchHash()

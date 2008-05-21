@@ -37,7 +37,7 @@
 #include "pcrResult.h"
 #include "wikiLink.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1475 2008/05/20 20:42:18 larrym Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1476 2008/05/21 16:58:39 angie Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -59,7 +59,6 @@ boolean withNextItemArrows = FALSE;	/* Display next feature (gene) navigation bu
 boolean withPriorityOverride = FALSE;	/* Display priority for each track to allow reordering */
 
 int gfxBorder = hgDefaultGfxBorder;	/* Width of graphics border. */
-int leftLabelWidthChars = 17;   /* number of characters allowed for left label */
 int guidelineSpacing = 12;	/* Pixels between guidelines. */
 
 boolean withIdeogram = TRUE;            /* Display chromosome ideogram? */
@@ -95,21 +94,12 @@ boolean hideControls = FALSE;		/* Hide all controls? */
  * position string */
 struct hgPositions *hgp = NULL;
 
-struct trackLayout tl;
-
-void initTl()
-/* Initialize layout around small font and a picture about 600 pixels
- * wide. */
-{
-trackLayoutInit(&tl, cart);
-tl.leftLabelWidth = leftLabelWidthChars*tl.nWidth + trackTabWidth;
-}
-
-
 
 /* Other global variables. */
 struct track *trackList = NULL;    /* List of all tracks. */
 struct group *groupList = NULL;    /* List of all tracks. */
+char *browserName;              /* Test or public browser */
+char *organization;             /* UCSC or MGC */
 
 
 struct track *trackFindByName(struct track *tracks, char *trackName)
@@ -129,22 +119,6 @@ for (track = tracks; track != NULL; track = track->next)
     }
 return NULL;
 } 
-
-char *getItemDataName(struct track *tg, char *itemName)
-/* Translate an itemName to its itemDataName, using tg->itemDataName if is not
- * NULL. The resulting value should *not* be freed, and it should be assumed
- * that it will only remain valid until the next call of this function.*/
-{
-return (tg->itemDataName != NULL) ? tg->itemDataName(tg, itemName)
-    : itemName;
-}
-
-/* Some little functional stubs to fill in track group
- * function pointers with if we have nothing to do. */
-void tgLoadNothing(struct track *tg){}
-void tgFreeNothing(struct track *tg){}
-int tgItemNoStart(struct track *tg, void *item) {return -1;}
-int tgItemNoEnd(struct track *tg, void *item) {return -1;}
 
 int tgCmpPriority(const void *va, const void *vb)
 /* Compare to sort based on priority; use shortLabel as secondary sort key. */
@@ -203,17 +177,6 @@ else if (dif == 0.0)
 else
    return 1;
 }
-
-int maximumTrackHeight(struct track *tg)
-/* Return the maximum track height allowed in pixels. */
-{
-int maxItems = maxItemsInFullTrack;
-char *maxItemsString = trackDbSetting(tg->tdb, "maxItems");
-if (maxItemsString != NULL)
-    maxItems = sqlUnsigned(maxItemsString);
-return maxItems * tl.fontHeight;
-}
-
 
 void changeTrackVis(struct group *groupList, char *groupTarget, int changeVis)
 /* Change track visibilities. If groupTarget is 
@@ -1620,26 +1583,7 @@ initColors(hvg);
 hPrintf("<MAP Name=%s>\n", mapName);
 
 /* Find colors to draw in. */
-for (track = trackList; track != NULL; track = track->next)
-    {
-    if (track->limitedVis != tvHide)
-	{
-	track->ixColor = hvGfxFindRgb(hvg, &track->color);
-	track->ixAltColor = hvGfxFindRgb(hvg, &track->altColor);
-        if (isCompositeTrack(track))
-            {
-	    struct track *subtrack;
-            for (subtrack = track->subtracks; subtrack != NULL;
-                         subtrack = subtrack->next)
-                {
-                if (!isSubtrackVisible(subtrack))
-                    continue;
-                subtrack->ixColor = hvGfxFindRgb(hvg, &subtrack->color);
-                subtrack->ixAltColor = hvGfxFindRgb(hvg, &subtrack->altColor);
-                }
-            }
-        }
-    }
+findTrackColors(hvg, trackList);
 
 leftLabelX = gfxBorder;
 leftLabelWidth = insideX - gfxBorder*3;

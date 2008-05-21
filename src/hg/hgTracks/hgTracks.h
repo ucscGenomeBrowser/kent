@@ -32,9 +32,11 @@
 #include "hPrint.h"
 #endif /* HPRINT_H */
 
+#ifndef GBROWSE
 #ifndef ITEMATTR_H
 #include "itemAttr.h"
 #endif /* ITEMATTR_H */
+#endif /* GBROWSE */
 
 /* A few hgGenome cart constant defaults copied from */
 #define hggPrefix "hgGenome_"
@@ -377,6 +379,10 @@ extern int maxRGBShade;
 /* used in MAF display */
 #define UNALIGNED_SEQ 'o'
 #define MAF_DOUBLE_GAP '='
+
+void initTl();
+/* Initialize layout around small font and a picture about 600 pixels
+ * wide. */
 
 void abbr(char *s, char *fluff);
 /* Cut out fluff from s. */
@@ -1020,6 +1026,9 @@ void registerTrackHandlers();
 
 void initColors(struct hvGfx *hvg);
 /* Initialize the shades of gray etc. */
+
+void findTrackColors(struct hvGfx *hvg, struct track *trackList);
+/* Find colors to draw in. */
 
 char *getItemDataName(struct track *tg, char *itemName);
 /* Translate an itemName to its itemDataName, using tg->itemDataName if is not
