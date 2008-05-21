@@ -238,7 +238,7 @@ visibility hide
 color 155,0,125
 type genePred acemblyPep acemblyMrna
 autoTranslate 0
-url http://www.ncbi.nih.gov/IEB/Research/Acembly/av.cgi?db=human&l=$$
+url http://www.ncbi.nlm.nih.gov/IEB/Research/Acembly/av.cgi?db=human&l=$$
 itemClassTbl acemblyClass
 geneClasses main putative
 gClass_main 128,0,125

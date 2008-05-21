@@ -290,7 +290,7 @@ Some settings used by various tracks:
       page.  The url includes everything else on the line after the first word.
       The string $$ will be replaced by the name of an item.   Examples:
       url http://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4&db=n&term=$$
-      url http://www.ncbi.nih.gov/IEB/Research/Acembly/av.cgi?db=human&l=$$
+      url http://www.ncbi.nlm.nih.gov/IEB/Research/Acembly/av.cgi?db=human&l=$$
       Additional replacement item strings can be:
 	$T - database table name
 	$S - chromomosome name (scaffold name on scaffold assemblies)

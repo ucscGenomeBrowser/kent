@@ -54,7 +54,7 @@ priority 41
 visibility hide
 color 155,0,125
 type genePred acemblyPep acemblyMrna
-url http://www.ncbi.nih.gov/IEB/Research/Acembly/av.cgi?db=hg17&l=$$
+url http://www.ncbi.nlm.nih.gov/IEB/Research/Acembly/av.cgi?db=hg17&l=$$
 itemClassTbl acemblyClass
 geneClasses main putative
 gClass_main 128,0,125
