@@ -4,6 +4,11 @@ alpha: clean cgi-alpha blatSuite
 
 beta: check-beta clean cgi-beta
 
+# do a cvs update and clean
+update:
+	cvs update -d -P
+	${MAKE} clean
+
 topLibs:
 	@./machTest.sh
 	cd lib && ${MAKE}
