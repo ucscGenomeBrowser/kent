@@ -27,25 +27,6 @@ enum {useOrgCommon = 0x01,
       useGene      = 0x08,
       useAcc       = 0x10};
 
-static char *getTopTrackName(struct trackDb *tdb)
-/* get the name of the top-levle track, either the parent if this is a
- * subtrack, else return tdb.
- * WARNING: static return */
-{
-// FIXME: I have no idea why trackDb.parent is not set (markd)
-
-// values like "transMap on"
-char *stOpt = trackDbSetting(tdb, "subTrack");
-if (stOpt != NULL)
-    {
-    static char stName[64];
-    safecpy(stName, sizeof(stName), stOpt);
-    return firstWordInLine(stName);
-    }
-else
-    return tdb->tableName;
-}
-
 static unsigned getLabelTypes(struct track *tg)
 /* get set of labels to use */
 {
@@ -53,15 +34,17 @@ unsigned labelSet = 0;
 
 // label setting are on parent track
 char prefix[128];
-safef(prefix, sizeof(prefix), "%s.label", getTopTrackName(tg->tdb));
+safef(prefix, sizeof(prefix), "%s.label", tg->tdb->tableName);
 struct hashEl *labels = cartFindPrefix(cart, prefix);
 
 if (labels == NULL)
     {
-    // default to accession and save this in cart so it makes sense in trackUi
+    // default to common name+accession and save this in cart so it makes sense in trackUi
     labelSet = useAcc;
     char setting[64];
-    safef(setting, sizeof(setting), "%s.label.acc", getTopTrackName(tg->tdb));
+    safef(setting, sizeof(setting), "%s.label.acc", tg->tdb->tableName);
+    cartSetBoolean(cart, setting, TRUE);
+    safef(setting, sizeof(setting), "%s.label.orgCommon", tg->tdb->tableName);
     cartSetBoolean(cart, setting, TRUE);
     }
 struct hashEl *label;
