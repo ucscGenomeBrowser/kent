@@ -5,9 +5,11 @@
 # Format based on RSS 2.0; see http://cyber.law.harvard.edu/rss/rss.html
 
 use strict;
+use warnings;
 
 use Date::Manip;
 use HTTP::Date;
+use File::Basename;
 
 my $debug = 0;
 my $urlPrefix = "http://genome-test.cse.ucsc.edu/builds";
@@ -27,9 +29,11 @@ END
 
 my $versionsFile = shift(@ARGV) or usage();
 
-if($versionsFile =~ /(.*)\/([^\/]+)$/) {
-    $versionsFile = $2;
-    chdir($1) or die "Cannot chdir into $1: $!";
+my $path = dirname($versionsFile);
+my $versionFile = basename($versionsFile);
+
+if($path) {
+    chdir($path) or die "Cannot chdir into $path: $!";
 }
 
 open(VERSIONS, $versionsFile) or die "cannot open file: $versionsFile: $!";
