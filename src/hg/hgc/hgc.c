@@ -214,7 +214,7 @@
 #include "itemConf.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1422 2008/05/19 18:16:07 markd Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1423 2008/05/21 18:48:44 larrym Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -16791,6 +16791,16 @@ else if (ct->wiggle)
     else
 	genericWiggleClick(NULL, ct->tdb, fileItem, start);
     /*	the NULL is for conn, don't need that for custom tracks */
+    }
+else if (ct->dbTrack && startsWith("bedGraph", ct->dbTrackType))
+    {
+    printf("<P><A HREF=\"../cgi-bin/hgTables?db=%s&hgta_group=%s&hgta_track=%s"
+           "&hgta_table=%s&position=%s:%d-%d&"
+           "hgta_doSchema=describe+table+schema\" TARGET=_BLANK>"
+           "View table schema</A></P>\n",
+           database, ct->tdb->grp, ct->tdb->tableName, ct->tdb->tableName,
+           seqName, winStart+1, winEnd);
+    printTrackUiLink(ct->tdb);
     }
 else
     {
