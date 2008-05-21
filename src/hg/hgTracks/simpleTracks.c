@@ -118,7 +118,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.3 2008/05/20 18:34:05 angie Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.4 2008/05/21 00:02:06 markd Exp $";
 
 #define CHROM_COLORS 26
 
@@ -5273,7 +5273,7 @@ return direction;
 void orientEsts(struct track *tg)
 /* Orient ESTs from the estOrientInfo table.  */
 {
-struct linkedFeatures *lf = NULL, *lfList = NULL;
+struct linkedFeatures *lf = NULL, *lfList = tg->items;
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = NULL;
 char **row = NULL;
@@ -5281,12 +5281,8 @@ int rowOffset = 0;
 struct estOrientInfo ei;
 int estOrient = 0;
 struct hash *orientHash = NULL;
-lfList = tg->items;
 
-if(slCount(lfList) == 0)
-    return; /* Nothing to orient. */
-
-if(hTableExists("estOrientInfo"))
+if((lfList != NULL) && hTableExists("estOrientInfo"))
     {
     /* First load up a hash with the orientations. That
        way we only query the database once rather than
@@ -5302,30 +5298,16 @@ if(hTableExists("estOrientInfo"))
 	}
     sqlFreeResult(&sr);
 
-    /* Now lookup orientation of each est. If not in hash
-       lookup read direction in mrna table. */
+    /* Now lookup orientation of each est. */
     for(lf = lfList; lf != NULL; lf = lf->next)
 	{
 	estOrient = hashIntValDefault(orientHash, lf->name, 0); 
 	if(estOrient < 0) 
 	    lf->orientation = -1 * lf->orientation;
 	else if(estOrient == 0)
-	    {
-	    int dir = cDnaReadDirectionForMrna(conn, lf->name);
-	    if(dir == 3) /* Est sequenced from 3' end. */
-		lf->orientation = -1 * lf->orientation;
-	    }
+            lf->orientation = 0;  // not known, don't display chevrons
 	}
     hashFree(&orientHash);
-    }
-else /* if can't find estOrientInfo table */
-    {
-    for(lf = lfList; lf != NULL; lf = lf->next)
-	{
-	int dir = cDnaReadDirectionForMrna(conn, lf->name);
-	if(dir == 3) /* Est sequenced from 3' end. */
-	    lf->orientation = -1 * lf->orientation;
-	}
     }
 hFreeConn(&conn);
 }
