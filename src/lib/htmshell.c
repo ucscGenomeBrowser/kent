@@ -17,7 +17,7 @@
 #include "errabort.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: htmshell.c,v 1.44 2008/05/21 17:46:40 hiram Exp $";
+static char const rcsid[] = "$Id: htmshell.c,v 1.45 2008/05/21 18:29:04 hiram Exp $";
 
 jmp_buf htmlRecover;
 
@@ -131,7 +131,7 @@ size_t len = 0;
 char c;
 char *encStr;
 char *p = s;
-if (isEmpty(s))	/*	do not try to encode an empty string */
+if (s == NULL)	/*	do not try to encode a NULL pointer */
     return NULL;
 /* First pass through s to determine encoded length to allocate: */
 /* [as a shortcut, we could simply allocate 6*length of s] */
