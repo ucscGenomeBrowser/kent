@@ -14,7 +14,7 @@
 #include "customTrack.h"
 #include "wigCommon.h"
 
-static char const rcsid[] = "$Id: bedGraph.c,v 1.8 2008/02/20 00:42:24 markd Exp $";
+static char const rcsid[] = "$Id: bedGraph.c,v 1.9 2008/05/21 18:53:45 larrym Exp $";
 
 struct bedGraphItem
 /* A bedGraph track item. */
@@ -89,7 +89,7 @@ errAbort("custom track bedGraph load items not yet implemented");
  */
 static void bedGraphLoadItems(struct track *tg)
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn;
 struct sqlResult *sr = (struct sqlResult *) NULL;
 char **row = (char **)NULL;
 int rowOffset = 0;
@@ -98,25 +98,35 @@ int itemsLoaded = 0;
 int colCount = 0;
 struct wigCartOptions *wigCart = (struct wigCartOptions *) NULL;
 int graphColumn = 5;
+char *tableName;
 
 wigCart = (struct wigCartOptions *) tg->extraUiData;
 graphColumn = wigCart->graphColumn;
 
-/*	Verify this is NOT a custom track	*/
-if (tg->customPt != (void *)NULL)
-    errAbort("bedGraphLoadItems: encountered a custom track: %s in the wrong place", tg->mapName);
 
-sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL,
+if (tg->customPt)
+    {
+    struct customTrack *ct = (struct customTrack *) tg->customPt;
+    tableName = ct->dbTableName;
+    conn = sqlCtConn(TRUE);
+    }
+else 
+    {
+    tableName = tg->mapName;
+    conn = hAllocConn();
+    }
+
+sr = hRangeQuery(conn, tableName, chromName, winStart, winEnd, NULL,
 	&rowOffset);
 
 colCount = sqlCountColumns(sr) - rowOffset;
 /*	Must have at least four good columns	*/
 if (colCount < 4)
-    errAbort("bedGraphLoadItems: table %s only has %d data columns, must be at least 4", tg->mapName, colCount);
+    errAbort("bedGraphLoadItems: table %s only has %d data columns, must be at least 4", tableName, colCount);
 
 if (colCount < graphColumn)
     errAbort("bedGraphLoadItems: table %s only has %d data columns, specified graph column %d does not exist",
-	tg->mapName, colCount, graphColumn);
+	tableName, colCount, graphColumn);
 
 /*	before loop, determine actual row[graphColumn] index */
 graphColumn += (rowOffset - 1);
@@ -150,7 +160,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 
 sqlFreeResult(&sr);
-hFreeConn(&conn);
+hFreeOrDisconnect(&conn);
 
 slReverse(&bgList);
 tg->items = bgList;
