@@ -1144,3 +1144,5 @@ Error: danRer1: gene danRer1.refFlat:1854 NM_131267 chr7: NM_131267 geneName "ir
 
 - filter TSA mRNAs (e.e. EU212998) per Kim, these are assembled ESTs without genomic
   context and not reliable.  in keyword.
+
+- hg18:  AF361221 fusion protein, but only 1/2 kept by the alignment filter.
