@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.123 2008/05/20 20:22:48 larrym Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.124 2008/05/21 17:49:39 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -371,10 +371,15 @@ if (isUpdateForm)
     /* hidden variables to identify track */
     cgiMakeHiddenVar(hgCtUpdatedTable, ct->tdb->tableName);
     char buf[256];
+    char *shortLabel = htmlEncode(ct->tdb->shortLabel);
+    char *longLabel = htmlEncode(ct->tdb->longLabel);
     safef(buf, sizeof buf, "track name='%s' description='%s'",
-                            ct->tdb->shortLabel, ct->tdb->longLabel);
-    char *trackLine = ctOrigTrackLine(ct);
-    cgiMakeHiddenVar(hgCtUpdatedTrack, trackLine ? htmlEncode(trackLine) : buf);
+				shortLabel, longLabel);
+    char *trackLine = htmlEncode(ctOrigTrackLine(ct));
+    cgiMakeHiddenVar(hgCtUpdatedTrack, trackLine ? trackLine : buf);
+    freeMem(trackLine);
+    freeMem(shortLabel);
+    freeMem(longLabel);
     }
 else
     {
@@ -466,19 +471,23 @@ cgiTableRowEnd();
 for (ct = ctList; ct != NULL; ct = ct->next)
     {
     /* Name  field */
+    char *shortLabel = htmlEncode(ct->tdb->shortLabel);
     if ((ctDataUrl(ct) && ctHtmlUrl(ct)) || 
             sameString(ct->tdb->type, "chromGraph"))
-        printf("<TR><TD>%s</A></TD>", ct->tdb->shortLabel);
+        printf("<TR><TD>%s</A></TD>", shortLabel);
     else
 	{
 	char *cgiName = cgiEncode(ct->tdb->tableName);
         printf("<TR><TD><A TITLE='Update custom track: %s' HREF='%s?%s&%s=%s'>%s</A></TD>", 
-            ct->tdb->shortLabel, hgCustomName(),cartSidUrlString(cart),
-	    hgCtTable, cgiName, ct->tdb->shortLabel);
+            shortLabel, hgCustomName(),cartSidUrlString(cart),
+	    hgCtTable, cgiName, shortLabel);
 	freeMem(cgiName);
 	}
+    freeMem(shortLabel);
     /* Description field */
-    printf("<TD>%s</TD>", ct->tdb->longLabel);
+    char *longLabel = htmlEncode(ct->tdb->longLabel);
+    printf("<TD>%s</TD>", longLabel);
+    freeMem(longLabel);
     /* Type field */
     printf("<TD>%s</TD>", ctInputType(ct));
     /* Doc field */
@@ -634,7 +643,11 @@ else
 
 /* place for warning messages to appear */
 if (isNotEmpty(warn))
-    printf("<P><B>&nbsp;&nbsp;&nbsp;&nbsp;%s", warn);
+    {
+    char *encoded = htmlEncode(warn);
+    printf("<P><B>&nbsp;&nbsp;&nbsp;&nbsp;%s", encoded);
+    freeMem(encoded);
+    }
 
 /* count up number of custom tracks for this genome */
 int numCts = slCount(ctList);
@@ -784,8 +797,10 @@ void doUpdateCustom(struct customTrack *ct, char *err)
 /* display form for adding custom tracks.
  * Include error message, if any */
 {
+char *longLabel = htmlEncode(ct->tdb->longLabel);
 cartWebStart(cart, "Update Custom Track: %s [%s]", 
-        ct->tdb->longLabel, database);
+        longLabel, database);
+freeMem(longLabel);
 cartSetString(cart, hgCtDocText, ct->tdb->html);
 addCustomForm(ct, err);
 helpCustom();
