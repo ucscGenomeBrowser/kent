@@ -1,3 +1,6 @@
+# NOTE: jobResult.{c,h} were modified to support bookmark for para.results
+#  struct jobResult *jobResultLoadAll(char *fileName, off_t *resultBookMark) 
+
 table jobResult
 "Info about the result of one job from parasol"
      (
