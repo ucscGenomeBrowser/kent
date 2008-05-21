@@ -68,7 +68,7 @@
 #include "log.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: paraHub.c,v 1.107 2008/05/19 23:14:50 galt Exp $";
+static char const rcsid[] = "$Id: paraHub.c,v 1.108 2008/05/21 09:30:28 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -86,13 +86,10 @@ static struct optionSpec optionSpecs[] = {
 
 char *version = PARA_VERSION;	/* Version number. */
 
-// DEBUG debug TODO testing
-
 /* Some command-line configurable quantities and their defaults. */
-int jobCheckPeriod = 1; //10;	/* Minutes between checking running jobs. */
-int machineCheckPeriod = 3; //20; /* Minutes between checking dead machines. */
-int assumeDeadPeriod = 2; //60;   
-/* If haven't heard from job in this long assume
+int jobCheckPeriod = 10;        /* Minutes between checking running jobs. */
+int machineCheckPeriod = 20;    /* Minutes between checking dead machines. */
+int assumeDeadPeriod = 60;      /* If haven't heard from job in this long assume
                                  * machine running it is dead. */
 int initialSpokes = 30;		/* Number of spokes to start with. */
 unsigned char hubSubnet[4] = {255,255,255,255};   /* Subnet to check. */
