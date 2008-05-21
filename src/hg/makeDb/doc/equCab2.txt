@@ -1,7 +1,7 @@
 # for emacs: -*- mode: sh; -*-
 
 # Equus caballus - ??
-#	"$Id: equCab2.txt,v 1.13 2008/05/12 20:59:27 larrym Exp $"
+#	"$Id: equCab2.txt,v 1.14 2008/05/21 19:52:48 larrym Exp $"
 #########################################################################
 # DOWNLOAD SEQUENCE (...
 
@@ -224,7 +224,7 @@ i.e. if you take dupes and chrM into account, our data agrees with their raw dat
     #   1004742864 bases of 2454424288 (40.936%) in intersection
 
     # RepeatMasker and lib version from do.log:
-    #   RepeatMasker version development-$Id: equCab2.txt,v 1.13 2008/05/12 20:59:27 larrym Exp $
+    #   RepeatMasker version development-$Id: equCab2.txt,v 1.14 2008/05/21 19:52:48 larrym Exp $
     #   Jan 11 2008 (open-3-1-9) version of RepeatMasker
     #	CC   RELEASE 20071204
 
@@ -1193,7 +1193,8 @@ done
     # ensGene
 
 #    for DB in galGal3 canFam2 ornAna1
-    for DB in hg18
+#    for DB in hg18
+    for DB in equCab2
 do
     hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from ensGene" ${DB} \
       | genePredSingleCover stdin stdout | gzip -2c \
@@ -1203,6 +1204,7 @@ do
 done
     ls -og genes
 # -rw-r--r--  1 1865308 May  2 13:10 canFam2.gp.gz
+# -rw-r--r--  1 1916011 May 16 15:11 equCab2.gp.gz
 # -rw-r--r--  1 1557911 May  2 13:10 galGal3.gp.gz
 # -rw-r--r--  1 2008806 May  2 13:09 hg18.gp.gz
 # -rw-r--r--  1 1965274 May  2 13:09 mm9.gp.gz
@@ -1240,11 +1242,29 @@ after switching hg18 => ensGene:
 # 252980 ornAna1
 # 254414 hg18
 
+    # redo above with updated equCab2 (2008-05-16):
+    ssh kkstore04
+    cd /cluster/data/equCab2/bed/multiz6way/frames
+    time (cat  ../maf/*.maf | nice -n +19 genePredToMafFrames equCab2 stdin stdout equCab2 genes/equCab2.gp.gz canFam2 genes/canFam2.gp.gz hg18 genes/hg18.gp.gz  \
+        mm9 genes/mm9.gp.gz galGal3 genes/galGal3.gp.gz ornAna1 genes/ornAna1.gp.gz | gzip > multiz6way.mafFrames.gz) > frames.log 2>&1
+
+    # see what it looks like in terms of number of annotations per DB:
+    zcat multiz6way.mafFrames.gz | cut -f4 | sort | uniq -c | sort -n
+
+#  35858 galGal3
+# 186570 equCab2
+# 236512 mm9
+# 249158 canFam2
+# 252980 ornAna1
+#  254414 hg18
+
     #	load the resulting file
     ssh hgwdev
     cd /cluster/data/equCab2/bed/multiz6way/frames
     time /bin/nice -n 19 hgLoadMafFrames equCab2 multiz6wayFrames multiz6way.mafFrames.gz
     7.176u 0.735s 0:17.24 45.8%	0+0k 0+0io 2pf+0w
+    # re-run with equCab2:
+    8.523u 1.119s 4:46.07 3.3%	0+0k 0+0io 2pf+0w
 
     #	enable the trackDb entries:
 # frames multiz6wayFrames
@@ -1516,6 +1536,117 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
 
     gnuplot < gnuplot.txt > histo.png
 
+#############################################################################
+## Create downloads for 6-way business (DONE - 2008-05-21 - larrym)
+    ssh kkstore04
+
+    mkdir -p /cluster/data/equCab2/bed/multiz6way/downloads/phastCons6way
+    cd /cluster/data/equCab2/bed/multiz6way/downloads/phastCons6way
+    cp -p /san/sanvol1/scratch/equCab2/multiz6way/cons/all/phastCons6wayScores/* .
+    ln -s ../../cons/all/all.mod ./6way.mod
+    cp /cluster/data/ponAbe2/bed/multiz8way/downloads/phastCons8way/README.txt .
+    # edit that README.txt to be correct for this 6-way alignment
+    cd ..
+    mkdir multiz6way
+    cd multiz6way
+    cp -p /cluster/data/ponAbe2/bed/multiz8way/downloads/multiz8way/README.txt .
+    # edit that README.txt to be correct for this 6-way alignment
+
+    ssh kkstore04
+    cd /cluster/data/equCab2/bed/multiz6way/downloads/multiz6way
+    ln -s ../../equCab2.6-way.nh ./6way.nh
+
+    mkdir -p /cluster/data/equCab2/bed/multiz6way/downloads/multiz6way/maf
+    cd /cluster/data/equCab2/bed/multiz6way/downloads/multiz6way/maf
+    cp -p /cluster/data/equCab2/bed/multiz6way/anno/maf/*.maf .
+
+    time /bin/nice -n 19 gzip -v *.maf &
+    1796.135u 69.195s 31:47.39 97.7%        0+0k 0+0io 0pf+0w
+
+    #	creating upstream files
+    ssh hgwdev
+    cd /cluster/data/equCab2/bed/multiz6way/downloads/multiz6way/maf
+    #	creating upstream files from ensGene, bash script:
+    cat << '_EOF_' > mkUpstream.sh
+#!/bin/bash
+DB=equCab2
+GENE=ensGene
+NWAY=multiz6way
+export DB GENE
+
+for S in 1000 2000 5000
+do
+    echo "making upstream${S}.maf"
+    featureBits ${DB} ${GENE}:upstream:${S} -fa=/dev/null -bed=stdout \
+        | perl -wpe 's/_up[^\t]+/\t0/' | sort -k1,1 -k2,2n \
+        | mafFrags ${DB} ${NWAY} \
+                stdin stdout \
+                -orgs=/cluster/data/${DB}/bed/${NWAY}/species.list \
+        | gzip -c > upstream${S}.maf.gz
+    echo "done upstream${S}.maf.gz"
+done
+'_EOF_'
+    # << happy emacs
+    chmod +x ./mkUpstream.sh
+    time /bin/nice -n 19 ./mkUpstream.sh
+    87.355u 87.965s 4:47.94 60.8%	0+0k 0+0io 6pf+0w
+# -rw-rw-r--  1 larrym protein  38856776 May 19 13:59 upstream5000.maf.gz
+# -rw-rw-r--  1 larrym protein  15604291 May 19 13:58 upstream2000.maf.gz
+# -rw-r--r--  1 larrym protein   8206298 May 19 13:57 upstream1000.maf.gz
+
+    #	check the names in these upstream files to ensure sanity:
+    #	should be a list of the other 4 species with a high count,
+    #	then ensGene names.
+
+    zcat upstream1000.maf.gz | grep "^s " | awk '{print $2}' | sort | uniq -c | sort -rn | head
+   7030 ornAna1
+   7030 mm9
+   7030 hg18
+   7030 galGal3
+   7030 canFam2
+      1 ENSECAT00000027191
+      1 ENSECAT00000027190
+
+    ssh kkstore04
+    cd /cluster/data/equCab2/bed/multiz6way/downloads/multiz6way/maf
+    md5sum *.maf.gz > md5sum.txt
+
+    cd ..
+    ln -s ../../equCab2.6-way.nh ./6way.nh
+    ln -s $HOME/kent/src/hg/makeDb/trackDb/horse/equCab2/multiz6way.html .
+    # copy README.txt from mm9 30-way downloads and edit to represent
+    #	this directory
+
+    cd ..
+    mkdir -p phastCons6way/phastConsScores
+    cd phastCons6way/phastConsScores
+    cp -p /san/sanvol1/scratch/equCab2/multiz6way/cons/all/phastCons6wayScores/*.data.gz .
+    md5sum *.data.gz > md5sum.txt
+    cd ..
+    ln -s ../../cons/all/all.mod 6way.mod
+    # copy README.txt from mm9 30way downloads and edit to represent
+    #	this directory
+
+    #	enable them for hgdownload rsync transfer
+    ssh hgwdev
+    cd /usr/local/apache/htdocs/goldenPath/equCab2
+    mkdir multiz6way phastCons6way
+    cd multiz6way
+    ln -s /cluster/data/equCab2/bed/multiz6way/downloads/multiz6way/6way.nh .
+    ln -s /cluster/data/equCab2/bed/multiz6way/downloads/multiz6way/*.html .
+    ln -s /cluster/data/equCab2/bed/multiz6way/downloads/multiz6way/R*.txt .
+    mkdir maf
+    cd maf
+    ln -s /cluster/data/equCab2/bed/multiz6way/downloads/multiz6way/maf/*.maf.gz .
+    ln -s /cluster/data/equCab2/bed/multiz6way/downloads/multiz6way/maf/md5sum.txt
+    cd ../../phastCons6way
+    mkdir phastConsScores
+    cd phastConsScores
+    ln -s /cluster/data/equCab2/bed/multiz6way/downloads/phastCons6way/phastConsScores/*.gz .
+    ln -s /cluster/data/equCab2/bed/multiz6way/downloads/phastCons6way/phastConsScores/md5sum.txt .
+    cd ..
+    ln -s /cluster/data/equCab2/bed/multiz6way/downloads/phastCons6way/6way.mod .
+    ln -s /cluster/data/equCab2/bed/multiz6way/downloads/phastCons6way/README.txt .
 
 #############################################################################
 # N-SCAN gene predictions (nscanGene) - (2008-04-29 markd)
