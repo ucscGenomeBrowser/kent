@@ -128,3 +128,28 @@
 12.03 - Remove machine now sends feedback if machine name not found.
         Fixed minor bug in new parasol add machine command.
 
+12.04 - Added the ability to specify job usage with para create and para make 
+	commandline options such as -cpu=2 -ram=2000000000 which would generate 
+	cpu and ram usage values in every row of the batch.
+
+        Clauses like {use cpu 2} {use ram 2000000000} can also be put
+        directly in the spec file.  If both are used, the commandline options take
+        precedence over the spec file. RAM usage clauses containing t,g,m,k 
+        are expanded to TeraByte, GB, MB, and KB bigint values respectively.
+
+        The addJob2 is used by para to tell hub to expect extra parameters.
+        The hub passes the extra 2 params for cpus and ram to the paraNode,
+        and paraNode returns them back again during listJobs requests.
+        Fields were added to runJobMessage and job structs.  
+
+        The batch file structure is now INCOMPATIBLE with previous versions 
+        of para because of the new fields. 
+
+        The hub itself does not yet act on the job usage info.
+        A version of hub that does use the job usage info is planned, perhaps just 
+        basic support for hog jobs and supporting only uniform clusters
+        with machines all of the same type.  
+
+	Also fixed a bug in freeBatch related to resultQueues.
+
+

@@ -6,6 +6,7 @@
 #include "portable.h"
 #include "internet.h"
 #include "log.h"
+#include "sqlNum.h"
 #include "paraLib.h"
 
 time_t now;	/* Time when started processing current message */
@@ -59,6 +60,8 @@ rjm->dir = nextWord(&line);
 rjm->in = nextWord(&line);
 rjm->out = nextWord(&line);
 rjm->err = nextWord(&line);
+rjm->cpus = sqlFloat(nextWord(&line));
+rjm->ram = sqlLongLong(nextWord(&line));
 rjm->command = line = skipLeadingSpaces(line);
 ret = (line != NULL && line[0] != 0);
 if (!ret)

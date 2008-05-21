@@ -173,6 +173,8 @@ pmPrintf(pm, " %s", job->dir);
 pmPrintf(pm, " %s", job->in);
 pmPrintf(pm, " %s", job->out);
 pmPrintf(pm, " %s", job->err);
+pmPrintf(pm, " %f", job->cpus);
+pmPrintf(pm, " %lld", job->ram);
 pmPrintf(pm, " %s", job->cmd);
 spokeSyncSendMessage(spoke, pm);
 }

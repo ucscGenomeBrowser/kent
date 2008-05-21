@@ -5,6 +5,8 @@
 #ifndef JOBDB_H
 #define JOBDB_H
 
+#define SUBMISSION_NUM_COLS 17
+
 struct submission
 /* Keeps track of a job submission */
     {
@@ -49,6 +51,8 @@ void submissionOutput(struct submission *el, FILE *f, char sep, char lastSep);
 #define submissionCommaOut(el,f) submissionOutput(el,f,',',',');
 /* Print out submission as a comma separated list including final comma. */
 
+#define CHECK_NUM_COLS 3
+
 struct check
 /* How to check a job */
     {
@@ -79,11 +83,15 @@ void checkOutput(struct check *el, FILE *f, char sep, char lastSep);
 #define checkCommaOut(el,f) checkOutput(el,f,',',',');
 /* Print out check as a comma separated list including final comma. */
 
+#define JOB_NUM_COLS 8
+
 struct job
 /* Keeps track of a job */
     {
     struct job *next;  /* Next in singly linked list. */
     char *command;	/* Command line for job */
+    float cpusUsed;	/* #CPUs used by job */
+    long long ramUsed;	/* #Bytes memory used by job */
     int checkCount;	/* Count of checks */
     struct check *checkList;	/* Ways to check success of job. */
     int submissionCount;	/* The number of times submitted */
@@ -111,6 +119,8 @@ void jobOutput(struct job *el, FILE *f, char sep, char lastSep);
 
 #define jobCommaOut(el,f) jobOutput(el,f,',',',');
 /* Print out job as a comma separated list including final comma. */
+
+#define JOBDB_NUM_COLS 2
 
 struct jobDb
 /* Keeps track of a batch of jobs.  */
@@ -140,6 +150,8 @@ void jobDbOutput(struct jobDb *el, FILE *f, char sep, char lastSep);
 
 #define jobDbCommaOut(el,f) jobDbOutput(el,f,',',',');
 /* Print out jobDb as a comma separated list including final comma. */
+
+/* -------------------------------- End autoSql Generated Code -------------------------------- */
 
 #endif /* JOBDB_H */
 

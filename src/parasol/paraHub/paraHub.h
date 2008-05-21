@@ -24,6 +24,8 @@ struct job
     char *in;			/* Stdin. */
     char *out;			/* Stdout. */
     char *err;			/* Stderr. */
+    float cpus;                 /* Number of CPUs used by job */
+    long long ram;              /* Number of bytes of RAM used by job */
     time_t submitTime;          /* Time job submitted. */
     time_t startTime;           /* Start job run time in seconds past 1972 */
     time_t lastClockIn;		/* Last time we got a message from machine about job. */

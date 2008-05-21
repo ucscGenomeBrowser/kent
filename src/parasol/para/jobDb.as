@@ -33,6 +33,8 @@ object job
 "Keeps track of a job"
     (
     lstring command;	"Command line for job"
+    float cpusUsed;     "#CPUs used by job"
+    bigint ramUsed;     "#Bytes memory used by job"
     int checkCount;	"Count of checks"
     object check[checkCount] checkList;	"Ways to check success of job."
     int submissionCount;	"The number of times submitted"

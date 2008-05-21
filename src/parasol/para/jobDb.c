@@ -2,11 +2,13 @@
  * generated jobDb.h and jobDb.sql.  This module links the database and
  * the RAM representation of objects. */
 
-#include "paraCommon.h"
+#include "common.h"
 #include "linefile.h"
 #include "dystring.h"
-#include "jobDb.h"
 #include "sqlList.h"
+#include "jobDb.h"
+
+static char const rcsid[] = "$Id: jobDb.c,v 1.8 2008/05/21 21:59:37 galt Exp $";
 
 struct submission *submissionCommaIn(char **pS, struct submission *ret)
 /* Create a submission out of a comma separated string. 
@@ -74,14 +76,15 @@ if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->host);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%f", el->cpuTime);
+fprintf(f, "%g", el->cpuTime);
 fputc(sep,f);
 fprintf(f, "%u", el->submitTime);
 fputc(sep,f);
 fprintf(f, "%u", el->startTime);
 fputc(sep,f);
 fprintf(f, "%u", el->endTime);
-fputc(sep,f);fprintf(f, "%d", el->status);
+fputc(sep,f);
+fprintf(f, "%d", el->status);
 fputc(sep,f);
 fprintf(f, "%u", el->gotStatus);
 fputc(sep,f);
@@ -170,35 +173,42 @@ struct job *jobCommaIn(char **pS, struct job *ret)
  * return a new job */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
 ret->command = sqlStringComma(&s);
+ret->cpusUsed = sqlFloatComma(&s);
+ret->ramUsed = sqlLongLongComma(&s);
 ret->checkCount = sqlSignedComma(&s);
+{
+int i;
 s = sqlEatChar(s, '{');
 for (i=0; i<ret->checkCount; ++i)
     {
     s = sqlEatChar(s, '{');
-    slSafeAddHead(&ret->checkList, checkCommaIn(&s,NULL));
+    if(s[0] != '}')        slSafeAddHead(&ret->checkList, checkCommaIn(&s,NULL));
     s = sqlEatChar(s, '}');
     s = sqlEatChar(s, ',');
     }
 slReverse(&ret->checkList);
 s = sqlEatChar(s, '}');
 s = sqlEatChar(s, ',');
+}
 ret->submissionCount = sqlSignedComma(&s);
+{
+int i;
 s = sqlEatChar(s, '{');
 for (i=0; i<ret->submissionCount; ++i)
     {
     s = sqlEatChar(s, '{');
-    slSafeAddHead(&ret->submissionList, submissionCommaIn(&s,NULL));
+    if(s[0] != '}')        slSafeAddHead(&ret->submissionList, submissionCommaIn(&s,NULL));
     s = sqlEatChar(s, '}');
     s = sqlEatChar(s, ',');
     }
 slReverse(&ret->submissionList);
 s = sqlEatChar(s, '}');
 s = sqlEatChar(s, ',');
+}
 ret->spec = sqlStringComma(&s);
 *pS = s;
 return ret;
@@ -234,13 +244,18 @@ for (el = *pList; el != NULL; el = next)
 void jobOutput(struct job *el, FILE *f, char sep, char lastSep) 
 /* Print out job.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->command);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
+fprintf(f, "%g", el->cpusUsed);
+fputc(sep,f);
+fprintf(f, "%lld", el->ramUsed);
+fputc(sep,f);
 fprintf(f, "%d", el->checkCount);
 fputc(sep,f);
+{
+int i;
 /* Loading check list. */
     {
     struct check *it = el->checkList;
@@ -255,9 +270,12 @@ fputc(sep,f);
         }
     if (sep == ',') fputc('}',f);
     }
+}
 fputc(sep,f);
 fprintf(f, "%d", el->submissionCount);
 fputc(sep,f);
+{
+int i;
 /* Loading submission list. */
     {
     struct submission *it = el->submissionList;
@@ -272,6 +290,7 @@ fputc(sep,f);
         }
     if (sep == ',') fputc('}',f);
     }
+}
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->spec);
@@ -285,22 +304,24 @@ struct jobDb *jobDbCommaIn(char **pS, struct jobDb *ret)
  * return a new jobDb */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
 ret->jobCount = sqlSignedComma(&s);
+{
+int i;
 s = sqlEatChar(s, '{');
 for (i=0; i<ret->jobCount; ++i)
     {
     s = sqlEatChar(s, '{');
-    slSafeAddHead(&ret->jobList, jobCommaIn(&s,NULL));
+    if(s[0] != '}')        slSafeAddHead(&ret->jobList, jobCommaIn(&s,NULL));
     s = sqlEatChar(s, '}');
     s = sqlEatChar(s, ',');
     }
 slReverse(&ret->jobList);
 s = sqlEatChar(s, '}');
 s = sqlEatChar(s, ',');
+}
 *pS = s;
 return ret;
 }
@@ -332,9 +353,10 @@ for (el = *pList; el != NULL; el = next)
 void jobDbOutput(struct jobDb *el, FILE *f, char sep, char lastSep) 
 /* Print out jobDb.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 fprintf(f, "%d", el->jobCount);
 fputc(sep,f);
+{
+int i;
 /* Loading job list. */
     {
     struct job *it = el->jobList;
@@ -349,6 +371,9 @@ fputc(sep,f);
         }
     if (sep == ',') fputc('}',f);
     }
+}
 fputc(lastSep,f);
 }
+
+/* -------------------------------- End autoSql Generated Code -------------------------------- */
 

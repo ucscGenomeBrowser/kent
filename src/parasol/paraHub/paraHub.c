@@ -67,8 +67,9 @@
 #include "machSpec.h"
 #include "log.h"
 #include "obscure.h"
+#include "sqlNum.h"
 
-static char const rcsid[] = "$Id: paraHub.c,v 1.108 2008/05/21 09:30:28 galt Exp $";
+static char const rcsid[] = "$Id: paraHub.c,v 1.109 2008/05/21 21:59:37 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -87,9 +88,9 @@ static struct optionSpec optionSpecs[] = {
 char *version = PARA_VERSION;	/* Version number. */
 
 /* Some command-line configurable quantities and their defaults. */
-int jobCheckPeriod = 10;        /* Minutes between checking running jobs. */
-int machineCheckPeriod = 20;    /* Minutes between checking dead machines. */
-int assumeDeadPeriod = 60;      /* If haven't heard from job in this long assume
+int jobCheckPeriod = 10;      /* Minutes between checking running jobs. */
+int machineCheckPeriod = 20;  /* Minutes between checking dead machines. */
+int assumeDeadPeriod = 60;    /* If haven't heard from job in this long assume
                                  * machine running it is dead. */
 int initialSpokes = 30;		/* Number of spokes to start with. */
 unsigned char hubSubnet[4] = {255,255,255,255};   /* Subnet to check. */
@@ -809,7 +810,7 @@ return exe;
 }
 
 struct job *jobNew(char *cmd, char *userName, char *dir, char *in, char *out, 
-	char *results, boolean forQueue)
+	float cpus, long long ram, char *results, boolean forQueue)
 /* Create a new job structure */
 {
 struct job *job;
@@ -834,6 +835,8 @@ job->batch = batch;
 job->dir = hashStoreName(stringHash, dir);
 job->in = cloneString(in);
 job->out = cloneString(out);
+job->cpus = cpus;
+job->ram = ram;
 return job;
 }
 
@@ -951,7 +954,7 @@ void flushResults(char *batchName)
 struct resultQueue *rq;
 for (rq = resultQueues; rq != NULL; rq = rq->next)
     {
-    if (!batchName || sameString(rq->name, batchName))
+    if (!batchName || (rq->name == batchName))
 	if (rq->f != NULL)
 	   fflush(rq->f);
     }
@@ -1038,15 +1041,16 @@ if (rq != NULL)
 }
 
 
-void sweepResults()
+void sweepResultsWithRemove(char *name)
 /* Get rid of result queues that haven't been accessed for
- * a while. Flush all results. */
+ * a while. Also remove any matching name if not NULL.
+ * Flushes all results. */
 {
 struct resultQueue *newList = NULL, *rq, *next;
 for (rq = resultQueues; rq != NULL; rq = next)
     {
     next = rq->next;
-    if (now - rq->lastUsed > 1*MINUTE)
+    if ((now - rq->lastUsed > 1*MINUTE) || (name && name == rq->name))
 	{
 	logDebug("hub: closing results file %s", rq->name);
         resultQueueFree(&rq);
@@ -1103,7 +1107,7 @@ if (spokesToUse > 0)
     if (spokesToUse < 1) spokesToUse = 1;
     graveDigger(spokesToUse);
     hangman(spokesToUse);
-    sweepResults();
+    sweepResultsWithRemove(NULL);
     saveJobId();
     }
 }
@@ -1296,14 +1300,14 @@ else
 }
 
 int addJob(char *userName, char *dir, char *in, char *out, char *results,
-	char *command)
+	float cpus, long long ram, char *command)
 /* Add job to queues. */
 {
 struct job *job;
 struct user *user;
 struct batch *batch;
 
-job = jobNew(command, userName, dir, in, out, results, TRUE);
+job = jobNew(command, userName, dir, in, out, cpus, ram, results, TRUE);
 if (!job)
     {
     return 0;
@@ -1318,11 +1322,12 @@ job->submitTime = time(NULL);
 return job->id;
 }
 
-int addJobFromMessage(char *line)
+int addJobFromMessage(char *line, int addJobVersion)
 /* Parse out addJob message and add job to queues. */
 {
 char *userName, *dir, *in, *out, *results, *command;
-
+float cpus = 0;
+long long ram = 0;
 if ((userName = nextWord(&line)) == NULL)
     return 0;
 if ((dir = nextWord(&line)) == NULL)
@@ -1333,17 +1338,28 @@ if ((out = nextWord(&line)) == NULL)
     return 0;
 if ((results = nextWord(&line)) == NULL)
     return 0;
+if (addJobVersion == 2)
+    {
+    char *tempCpus = NULL;
+    char *tempRam = NULL;
+    if ((tempCpus = nextWord(&line)) == NULL)
+	return 0;
+    if ((tempRam = nextWord(&line)) == NULL)
+	return 0;
+    cpus = sqlFloat(tempCpus);
+    ram = sqlLongLong(tempRam);
+    }
 if (line == NULL || line[0] == 0)
     return 0;
 command = line;
-return addJob(userName, dir, in, out, results, command);
+return addJob(userName, dir, in, out, results, cpus, ram, command);
 }
 
-void addJobAcknowledge(char *line, struct paraMessage *pm)
+void addJobAcknowledge(char *line, struct paraMessage *pm, int addJobVersion)
 /* Add job.  Line format is <user> <dir> <stdin> <stdout> <results> <command> 
  * Returns job ID or 0 if a problem.  Send jobId back to client. */
 {
-int id = addJobFromMessage(line);
+int id = addJobFromMessage(line, addJobVersion);
 pmClear(pm);
 pmPrintf(pm, "%d", id);
 pmSend(pm, rudpOut);
@@ -1426,12 +1442,14 @@ pmSend(pm, rudpOut);
 }
 
 
-int freeBatch(char *userName, char *name)
+int freeBatch(char *userName, char *batchName)
 /* Free batch resources, if possible */
 {
-name = hashStoreName(stringHash, name);
 struct user *user = findUser(userName);
 if (user == NULL) return -3;
+struct hashEl *hel = hashLookup(stringHash, batchName);
+if (hel == NULL) return -2;
+char *name = hel->name;
 struct batch *batch = findBatchInList(user->curBatches, name);
 if (batch == NULL)
     batch = findBatchInList(user->oldBatches, name);
@@ -1439,16 +1457,16 @@ if (batch == NULL) return -2;
 /* make sure nothing running and queue empty */
 if (batch->runningCount > 0) return -1;
 if (!dlEnd(batch->jobQueue->head)) return -1;
-sweepResults();
-logInfo("paraHub: User %s freed batch %s", userName, name);
+sweepResultsWithRemove(name);
+logInfo("paraHub: User %s freed batch %s", userName, batchName);
 /* remove batch from batchList */
 slRemoveEl(&batchList, batch);
 /* remove from user cur/old batches */
 dlRemove(batch->node);
 /* free batch and its members */
 freeMem(batch->node);
-hashRemove(stringHash, batch->name);
-freeMem(batch->jobQueue);
+hashRemove(stringHash, name);
+freeDlList(&batch->jobQueue);
 freeHash(&batch->sickNodes);
 freeMem(batch);
 return 0;
@@ -1531,7 +1549,7 @@ for (el = list; el != NULL; el = el->next)
 	++machineCount;
 	sickCount += failures;
 	pmClear(pm);
-	pmPrintf(pm, "%s %d", el->name, el->val);
+	pmPrintf(pm, "%s %d", el->name, ptToInt(el->val));
 	pmSend(pm, rudpOut);
 	}
     }
@@ -2306,7 +2324,7 @@ if (dlCount(mach->jobs) > mach->machSpec->cpus)
 else
     {
     struct job *job = jobNew(rjm->command, rjm->user, rjm->dir, rjm->in,
-	    rjm->out, resultFile, FALSE);
+	    rjm->out, rjm->cpus, rjm->ram, resultFile, FALSE);
     struct batch *batch = job->batch;
     struct user *user = batch->user;
     job->id = atoi(rjm->jobIdString);
@@ -2559,7 +2577,9 @@ for (;;)
     else if (sameWord(command, "clearSickNodes"))
 	 clearSickNodesAcknowledge(line, pm);
     else if (sameWord(command, "addJob"))
-	 addJobAcknowledge(line, pm);
+	 addJobAcknowledge(line, pm, 1);
+    else if (sameWord(command, "addJob2"))
+	 addJobAcknowledge(line, pm, 2);
     else if (sameWord(command, "nodeDown"))
 	 nodeDown(line);
     else if (sameWord(command, "alive"))

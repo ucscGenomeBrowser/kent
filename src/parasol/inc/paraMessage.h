@@ -40,9 +40,14 @@ void pmClear(struct paraMessage *pm);
 void pmSet(struct paraMessage *pm, char *message);
 /* Set message in data buffer. */
 
-void pmPrintf(struct paraMessage *pm, char *format, ...);
+void pmPrintf(struct paraMessage *pm, char *format, ...)
 /* Print message into end of data buffer.  Warn if it goes
  * past limit. */
+#if defined(__GNUC__)
+__attribute__((format(printf, 2, 3)))
+#endif
+;
+
 
 boolean pmSend(struct paraMessage *pm, struct rudp *ru);
 /* Send out message.  Print warning message and return FALSE if

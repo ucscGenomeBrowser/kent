@@ -37,6 +37,8 @@ struct runJobMessage
     char *in;              /* File for stdin. */
     char *out;		   /* File for stdout. */
     char *err;             /* File for stderr. */
+    float cpus;            /* Number of CPUs used by job */
+    long long ram;         /* Number of bytes of RAM used by job */
     char *command;	   /* Command line for job. */
     };
 

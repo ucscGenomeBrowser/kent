@@ -16,7 +16,7 @@
 #include "verbose.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: para.c,v 1.93 2008/05/17 05:54:36 galt Exp $";
+static char const rcsid[] = "$Id: para.c,v 1.94 2008/05/21 21:59:37 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -31,12 +31,17 @@ static struct optionSpec optionSpecs[] = {
     {"pri"      , OPTION_STRING},
     {"priority" , OPTION_STRING},
     {"maxNode"  , OPTION_STRING},
+    {"cpu"      , OPTION_FLOAT},
+    {"ram"      , OPTION_STRING},
     {NULL, 0}
 };
 
 char *version = PARA_VERSION;   /* Version number. */
 
 static int numHappyDots;       /* number of happy dots written */
+
+float cpuUsage = 0;
+long long ramUsage = 0;
 
 void usage()
 /* Explain usage and exit. */
@@ -53,6 +58,12 @@ errAbort(
   "para create jobList\n"
   "   This makes the job-tracking database from a text file with the\n"
   "   command line for each job on a separate line.\n"
+  "   options:\n"
+  "      -cpu=N  Number of CPUs used by the jobs, default 1.\n"
+  "      -ram=N  Number of bytes of RAM used by the jobs.\n"
+  "         Default is RAM on node divided by number of cpus on node.\n"
+  "         Shorthand expressions allow t,g,m,k for tera, giga, mega, kilo.\n"
+  "         e.g. 4g = 4 Gigabytes.\n"
   "para push \n"
   "   This pushes forward the batch of jobs by submitting jobs to parasol\n"
   "   It will limit parasol queue size to something not too big and\n"
@@ -259,6 +270,99 @@ else
     return jaCrashed;
 }
 
+
+long long parseRam(char *ram)
+/* Parse RAM expression like 2000000, 2t, 2g, 2m, 2k
+ * Returns long long number of bytes, or -1 for error
+ * The value of input variable ram may be modified. */
+{
+long long result = -1, factor = 1;
+int l = strlen(ram);
+int i;
+char saveC = ' ';
+if (l == 0)
+    return result;
+if (ram[l-1] == 't')
+    factor = (long long)1024 * 1024 * 1024 * 1024;
+else if (ram[l-1] == 'g')
+    factor = 1024 * 1024 * 1024;
+else if (ram[l-1] == 'm')
+    factor = 1024 * 1024;
+else if (ram[l-1] == 'k')
+    factor = 1024;
+if (factor != 1)
+    {
+    --l;
+    saveC = ram[l];
+    ram[l] = 0;
+    }
+for (i=0; i<l; ++i)
+    if (!isdigit(ram[i]))
+	return result;
+result = factor * sqlLongLong(ram);
+if (factor != 1)
+    ram[l] = saveC;
+return result;
+}
+
+char *useWhats[] = {"cpu", "ram"};
+
+void parseUsage(struct job* job, struct lineFile *lf)
+/* Parse out and keep CPU and RAM usage from the job command. */
+{
+char *pattern = "{use";
+char *s, *e, *z;
+char *line = job->command;
+struct dyString *dy = dyStringNew(1024);
+s = line;
+for (;;)
+    {
+    e = stringIn(pattern, s);
+    if (e == NULL)
+	{
+	dyStringAppend(dy, s);
+	break;
+	}
+    else
+        {
+	char *parts[4];
+	int partCount;
+	dyStringAppendN(dy, s, e-s);
+	z = strchr(e, '}');
+	if (z == NULL)
+	    errAbort("{use without } line %d of %s", lf->lineIx, lf->fileName);
+	*z = 0;
+	partCount = chopLine(e, parts);
+	if (partCount != 3)
+	    errAbort("Badly formatted 'use' clause in line %d of %s", lf->lineIx, lf->fileName);
+	if (stringIx(parts[1], useWhats) < 0)
+	    errAbort("Unrecognized word '%s' in 'use' clause line %d of %s", 
+	    	parts[1], lf->lineIx, lf->fileName);
+	if (sameString(parts[1], "cpu"))
+	    {
+    	    job->cpusUsed = sqlFloat(parts[2]);
+	    }
+	if (sameString(parts[1], "ram"))
+	    {
+    	    job->ramUsed = parseRam(parts[2]);
+	    if (job->ramUsed == -1)
+		errAbort("Invalid RAM expression '%s' in 'use' clause line %d of %s", 
+		    parts[2], lf->lineIx, lf->fileName);
+	    }
+	s = z+1;
+	}
+    }
+freeMem(job->command);
+job->command = cloneString(dy->string);
+dyStringFree(&dy);
+/* allow command-line options to override */
+if (cpuUsage != 0)
+    job->cpusUsed = cpuUsage;
+if (ramUsage != 0)
+    job->ramUsed = ramUsage;
+}
+
+
 /* Places that can be checked. */
 char *checkWhens[] = {"in", "out"};
 
@@ -317,6 +421,7 @@ for (;;)
 job->command = cloneString(dy->string);
 slReverse(&job->checkList);
 dyStringFree(&dy);
+parseUsage(job, lf);
 return job;
 }
 
@@ -841,8 +946,8 @@ struct dyString *cmd = dyStringNew(1024);
 struct submission *sub;
 char *jobId = NULL;
 
-dyStringPrintf(cmd, "addJob %s %s /dev/null /dev/null %s/%s %s",
- getUser(), curDir, curDir, resultsName, job->command);
+dyStringPrintf(cmd, "addJob2 %s %s /dev/null /dev/null %s/%s %f %lld %s",
+ getUser(), curDir, curDir, resultsName, job->cpusUsed, job->ramUsed, job->command);
 if (cmd->stringSize > rudpMaxSize)
     errAbort("The following string has %d bytes, but can only be %d:\n%s\n"
              "Please either shorten the current directory or the command line\n"
@@ -2003,6 +2108,12 @@ killTime = optionInt("killTime", killTime);
 delayTime = optionInt("delayTime", delayTime);
 if (optionExists("eta"))
     fprintf(stderr, "note: the -eta option is no longer required\n");
+cpuUsage = optionFloat("cpu", cpuUsage);
+if (cpuUsage < 0)
+    usage();
+ramUsage = parseRam(optionVal("ram","0"));
+if (ramUsage == -1)
+    usage();
 command = argv[1];
 batch = "batch";
 
