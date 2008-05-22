@@ -80,7 +80,7 @@ shortLabel AceView
 tables jaxOrtholog
 idSql select geneSymbol from kgXref where kgID = '%s'
 priority 10
-url http://www.ncbi.nih.gov/IEB/Research/Acembly/av.cgi?db=human&l=%s
+url http://www.ncbi.nlm.nih.gov/IEB/Research/Acembly/av.cgi?db=human&l=%s
 
 name jaxOrtholog
 shortLabel Jackson Labs

@@ -214,7 +214,7 @@
 #include "itemConf.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1423 2008/05/21 18:48:44 larrym Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1424 2008/05/22 00:12:59 rhead Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -8163,7 +8163,7 @@ if (url != NULL && url[0] != 0)
     while (row != NULL)
     	{
 	printf("<A HREF=\"%s%s\" target=_blank>",
-		"http://www.ncbi.nih.gov/entrez/dispomim.cgi?id=", row[0]);
+		"http://www.ncbi.nlm.nih.gov/entrez/dispomim.cgi?id=", row[0]);
 	printf("%s</B></A> %s\n", row[0], row[1]);
 	row = sqlNextRow(sr);
         }
@@ -8789,7 +8789,7 @@ if (startsWith("hg", hGetDb()))
     {
     printf("\n");
     printf("<B>AceView:</B> ");
-    printf("<A HREF = \"http://www.ncbi.nih.gov/IEB/Research/Acembly/av.cgi?db=human&l=%s\" TARGET=_blank>",
+    printf("<A HREF = \"http://www.ncbi.nlm.nih.gov/IEB/Research/Acembly/av.cgi?db=human&l=%s\" TARGET=_blank>",
 	   rl->name);
     printf("%s</A><BR>\n", rl->name);
     }

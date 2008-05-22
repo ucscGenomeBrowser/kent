@@ -52,7 +52,7 @@ label CFMDB
 acc yes
 
 name dbSNP
-url http://www.ncbi.nih.gov/SNP/snp_ref.cgi?type=rs&rs=%s
+url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=%s
 label dbSNP
 acc yes
 
