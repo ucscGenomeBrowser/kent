@@ -2800,8 +2800,6 @@ tablesIgnored $hg
     affyTxnPhase3HeLaTopStrand
     affyTxnPhase3HepG2BottomStrand
     affyTxnPhase3HepG2TopStrand
-    zoom1_affyTranscriptome
-    zoom2_affyTranscriptome
     chimpDels
     chimpParalogy
     chimpSimpleDiff
@@ -2860,6 +2858,8 @@ tablesIgnored $hg
     targetScanS
     vistaEnhancers
     wgRna
+    zoom1_affyTranscriptome
+    zoom2_affyTranscriptome
     encodeAffyChIpRnapHl60PvalHr00
     encodeAffyChIpRnapHl60PvalHr02
     encodeAffyChIpRnapHl60PvalHr08
@@ -2868,6 +2868,8 @@ tablesIgnored $hg
     encodeAffyChIpRnapHl60SitesHr02
     encodeAffyChIpRnapHl60SitesHr08
     encodeAffyChIpRnapHl60SitesHr32
+    zoom1_affyTranscriptome
+    zoom2_affyTranscriptome
     encodeAffyRnaHl60SigHr00
     encodeAffyRnaHl60SigHr02
     encodeAffyRnaHl60SigHr08
