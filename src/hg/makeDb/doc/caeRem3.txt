@@ -1,0 +1,283 @@
+# for emacs: -*- mode: sh; -*-
+
+#	Caenorhabditis remanei
+#	From Wash U GSC
+#	http://genome.wustl.edu/genome.cgi?GENOME=Caenorhabditis+remanei
+
+#  $Id: caeRem3.txt,v 1.1 2008/05/22 23:32:58 hiram Exp $
+
+#########################################################################
+# DOWNLOAD SEQUENCE (DONE - 2008-05-22 - Hiram)
+    ssh kkstore01
+    mkdir /cluster/store10/caeRem3
+    ln -s /cluster/store10/caeRem3 /cluster/data/caeRem3
+
+    mkdir /cluster/data/caeRem3/downloads
+    cd /cluster/data/caeRem3/downloads
+    wget --timestamping \
+ftp://genome.wustl.edu/pub/organism/Invertebrates/Caenorhabditis_remanei/assembly/Caenorhabditis_remanei-15.0.1/ASSEMBLY
+
+    wget --timestamping \
+"ftp://genome.wustl.edu/pub/organism/Invertebrates/Caenorhabditis_remanei/assembly/Caenorhabditis_remanei-15.0.1/output/README" \
+	-O README.caeRem3
+
+    wget --timestamping -m -np -nd \
+"ftp://genome.wustl.edu/pub/organism/Invertebrates/Caenorhabditis_remanei/assembly/Caenorhabditis_remanei-15.0.1/output/"
+
+##########################################################################
+## Create chrUn.agp file (DONE - 2008-05-22 - Hiram)
+    ssh kkstore01
+    cd /cluster/data/caeRem3/downloads
+    faSize contigs.fa.gz
+# 138406388 bases (185 N's 138406203 real 138406203 upper 0 lower)
+#	in 12680 sequences in 1 files
+    faSize supercontigs.fa.gz
+# 145442736 bases (7036533 N's 138406203 real 138406203 upper 0 lower)
+#	in 3670 sequences in 1 files
+
+    #	note the chrUnSize in the following, calculate from the faSize
+    #	on the supercontigs:
+    # 145442736 + ( (3670 - 1) * 1000 ) = 149111736
+    cat << '_EOF_' > mkSuperLift.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my $start = 1;
+my $end = 1;
+my $itemCount = 1;
+my $agpItemCount = 1;
+my $curContig = "";
+my $firstTime = 1;
+my $scaffoldGapSize = 1000;
+my $scafEnd = 1;
+my $superStart = 0;
+my $superEnd = 1;
+my $superLength = 0;
+my $chrUnSize = 149111736;
+my $chrUnName = "chrUn";
+my $ctgFragCount = 1;
+
+open (CT,">caeRem3.ctgPos2.tab") or die "Can not write to caeRem3.ctgPos2.tab";
+
+open (SC,">caeRem3.CtgScaf.agp") or die "Can not write to caeRem3.CtgScaf.agp";
+
+open (AG,">caeRem3.chrUn.agp") or die "Can not write to caeRem3.chrUn.agp";
+
+open (GL,">caeRem3.gold.tab") or die "Can not write to caeRem3.gold.tab";
+
+open (FH,'zcat supercontigs.agp.gz|') or
+	die "can not open zcat supercontigs.agp.gz";
+while (my $line=<FH>) {
+    chomp $line;
+    if ($line =~ m/fragment/) {
+	my ($name, $gStart, $gEnd, $gapCounter, $gapWN, $gapLen, $frag, $yesNo) =
+	    split('\s+',$line);
+	$end = $start + $gapLen - 1;
+	$scafEnd += $gapLen;
+	printf SC "chrUn\t%d\t%d\t%d\t%s\t%d\t%s\t%s\n",
+		    $start, $end, $agpItemCount, $gapWN, $gapLen, $frag, $yesNo;
+	printf AG "chrUn\t%d\t%d\t%d\t%s\t%d\t%s\t%s\n",
+		    $start, $end, $agpItemCount++, $gapWN, $gapLen, $frag, $yesNo;
+	$start = $end + 1;
+    } else {
+    my ($ctgName, $ctgStart, $ctgEnd, $ctgCounter, $ctgWN, $name, $cStart, $cEnd, $strand) =
+	split('\s+',$line);
+	my $ctgLen = $ctgEnd - $ctgStart + 1;
+	my $cLen = $cEnd - $cStart + 1;
+	die "not matching start, end:\n$line" if ($ctgLen != $cLen);
+	if (!$firstTime) {
+	    if ($ctgName ne $curContig) {
+		$superLength = $superEnd - $superStart;
+		$end = $start + $scaffoldGapSize - 1;
+		printf SC "chrUn\t%d\t%d\t%d\tN\t%d\tscaffold\tno\n",
+		    $start, $end, $agpItemCount, $scaffoldGapSize;
+		printf AG "chrUn\t%d\t%d\t%d\tN\t%d\tscaffold\tno\n",
+		    $start, $end, $agpItemCount++, $scaffoldGapSize;
+		printf "%d\t%s\t%d\t%s\t%d\n",
+			$superStart, $curContig, $superLength, $chrUnName,
+				$chrUnSize;
+		printf GL "%s\t%d\t%d\t%d\tW\t%s\t0\t%d\t+\n",
+			$chrUnName, $superStart, $superEnd, $itemCount++,
+			$curContig, $superLength;
+		$start = $end + 1;
+		$scafEnd = $cStart - 1;
+		$superStart = $start - 1;
+		$ctgFragCount = 1;
+	    }
+	} else {
+	    $firstTime = 0;
+	    $scafEnd = 0;
+	}
+	$scafEnd += $ctgLen;
+	my $fragStart = $scafEnd - $ctgLen + 1;
+	$end = $start + $ctgLen - 1;
+	$superEnd = $end;
+	my $ctgFragName = sprintf("%s.%d", $ctgName, $ctgFragCount++);
+	my $ctgFragStart = 1;
+	my $ctgFragEnd = $scafEnd - $fragStart + 1;
+	printf SC "chrUn\t%d\t%d\t%d\t%s\t%s\t%d\t%d\t%s\n",
+		$start, $end, $agpItemCount, $ctgWN, $ctgFragName,
+		$ctgFragStart, $ctgFragEnd, $strand;
+	printf AG "chrUn\t%d\t%d\t%d\t%s\t%s\t%d\t%d\t%s\n",
+		$start, $end, $agpItemCount++, $ctgWN, $ctgName,
+		$fragStart, $scafEnd, $strand;
+	printf CT "%s\t%d\tchrUn\t%d\t%d\tW\n",
+                $name, $ctgLen, $start-1, $end;
+
+	$start = $end + 1;
+	$curContig = $ctgName;
+    }
+}
+close (FH);
+close (AG);
+close (SC);
+$superLength = $superEnd - $superStart;
+printf "%d\t%s\t%d\t%s\t%d\n",
+    $superStart, $curContig, $superLength, $chrUnName, $chrUnSize;
+printf GL "%s\t%d\t%d\t%d\tW\t%s\t0\t%d\t+\n",
+	$chrUnName, $superStart, $superEnd, $itemCount++,
+	$curContig, $superLength;
+close (GL);
+'_EOF_'
+    # << happy emacs
+    chmod +x mkSuperLift.pl
+    ./mkSuperLift.pl > caeRem3.chrUn.lift
+
+    qaToQac contigs.fa.qual.gz stdout \
+        | qacAgpLift caeRem3.CtgScaf.agp stdin chrUn.qac
+
+###########################################################################
+## Initial genome build (DONE - 2008-05-22 - Hiram)
+    ssh kkstore01
+    cd /cluster/data/caeRem3
+    cat << '_EOF_' > caeRem3.config.ra
+# Config parameters for makeGenomeDb.pl:
+db caeRem3
+clade worm
+genomeCladePriority 10
+scientificName Caenorhabditis remanei
+commonName C. remanei
+assemblyDate Jul. 2007
+assemblyLabel Washington University School of Medicine GSC C. remanei 15.0.1
+orderKey 878
+mitoAcc none
+fastaFiles /cluster/data/caeRem3/downloads/supercontigs.fa.gz
+agpFiles /cluster/data/caeRem3/downloads/caeRem3.chrUn.agp
+qualFiles /cluster/data/caeRem3/downloads/chrUn.qac
+dbDbSpeciesDir worm
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 makeGenomeDb.pl caeRem3.config.ra \
+	> makeGenomeDb.out 2>&1
+    #	real    4m14.263s
+
+    ssh hgwdev
+    cd /cluster/data/caeRem3/downloads
+    sed -e "s/agpFrag/chrUn_gold/" $HOME/kent/src/hg/lib/agpFrag.sql \
+	> chrUn_gold.sql
+    # edit that .sql file to add the bin column
+    #	 bin smallint(6) NOT NULL default '0',
+    #	or, copy the one from caeRem2:
+    cp /cluster/data/caeRem2/downloads/chrUn_gold.sql .
+
+    hgLoadBed -sqlTable=chrUn_gold.sql caeRem3 chrUn_gold caeRem3.gold.tab
+    hgLoadSqlTab caeRem3 ctgPos2 ~/kent/src/hg/lib/ctgPos2.sql \
+	caeRem3.ctgPos2.tab
+
+###########################################################################
+## Repeat Masker (DONE - 2008-05-22 - Hiram)
+    ssh kkstore01
+    mkdir /cluster/data/caeRem3/bed/repeatMasker
+    cd /cluster/data/caeRem3/bed/repeatMasker
+    time nice -n +19 doRepeatMasker.pl caeRem3 \
+	-buildDir=/cluster/data/caeRem3/bed/repeatMasker > do.log 2>&1
+    #	real    15m16.812s
+    cd /cluster/data/caeRem3
+    twoBitToFa caeRem3.rmsk.2bit stdout | faSize stdin \
+	> caeRem3.rmsk.2bit.faSize
+    cat caeRem3.rmsk.2bit.faSize
+    #	149111736 bases (10705533 N's 138406203 real
+    #	137196473 upper 1209730 lower) in 1 sequences in 1 files
+    #	%0.81 masked total, %0.87 masked real
+
+    #	we are not going to use this sequence, too little is masked,
+    #	instead, using the windowMasker business next
+
+    #	ln -s caeRem3.rmsk.2bit caeRem3.2bit
+
+    #	mkdir /san/sanvol1/scratch/worms/caeRem3 
+    #	cp -p caeRem3.2bit /san/sanvol1/scratch/worms/caeRem3
+    #	cp -p chrom.sizes /san/sanvol1/scratch/worms/caeRem3
+    #	cp -p downloads/caeRem3.chrUn.lift /san/sanvol1/scratch/worms/caeRem3
+
+###########################################################################
+## Window Masker (DONE - 2008-05-22 - Hiram)
+    ssh kolossus
+    mkdir /cluster/data/caeRem3/bed/windowMasker
+    cd /cluster/data/caeRem3/bed/windowMasker
+    time nice -n +19 ~/kent/src/hg/utils/automation/doWindowMasker.pl \
+	-workhorse kolossus \
+	-buildDir=/cluster/data/caeRem3/bed/windowMasker caeRem3 > do.log 2>&1
+    #	real    10m40.787s
+
+    twoBitToFa caeRem3.wmsk.sdust.2bit stdout \
+	| faSize stdin > caeRem3.wmsk.sdust.2bit.faSize 2>&1
+    cat caeRem3.wmsk.sdust.2bit.faSize
+    #	149111736 bases (10705533 N's 138406203 real
+    #	96266616 upper 42139587 lower) in 1 sequences in 1 files
+    #	%28.26 masked total, %30.45 masked real
+
+    ssh hgwdev
+    cd /cluster/data/caeRem3/bed/windowMasker
+    hgLoadBed caeRem3 windowmaskerSdust windowmasker.sdust.bed.gz
+    #	Loaded 1122372 elements of size 3
+
+    #	eliminate the gaps from the masking (WM bug)
+    featureBits caeRem3 -not gap -bed=notGap.bed
+    #	138406388 bases of 138406388 (100.000%) in intersection
+ 
+    time nice -n +19 featureBits caeRem3 windowmaskerSdust notGap.bed \
+        -bed=stdout | gzip -c > cleanWMask.bed.gz
+    #	42139616 bases of 138406388 (30.446%) in intersection
+
+    #	reload track to get it clean
+    hgLoadBed caeRem3 windowmaskerSdust cleanWMask.bed.gz
+    #	Loaded 1075009 elements of size 4
+    featureBits caeRem3 windowmaskerSdust
+    #	42139616 bases of 138406388 (30.446%) in intersection
+
+###########################################################################
+## Simple Repeats (DONE - 2008-05-22 - Hiram)
+    ssh titan
+    screen # use a screen to manage this job
+    mkdir /cluster/data/caeRem3/bed/simpleRepeat
+    cd /cluster/data/caeRem3/bed/simpleRepeat
+    time twoBitToFa ../../caeRem3.unmasked.2bit stdout \
+	| nice -n +19 trfBig -trf=/cluster/bin/i386/trf stdin /dev/null \
+	-bedAt=simpleRepeat.bed -tempDir=/scratch/tmp > do.out 2>&1
+XXX - running 2008-05-22 16:12
+
+    awk '{if ($5 <= 12) print;}' simpleRepeat.bed > trfMask.bed
+    #	real    71m21.810s
+    ssh hgwdev
+    cd /cluster/data/caeRem3/bed/simpleRepeat
+    nice -n +19 hgLoadBed caeRem3 simpleRepeat \
+      simpleRepeat.bed -sqlTable=$HOME/kent/src/hg/lib/simpleRepeat.sql
+    #	Loaded 37049 elements of size 16
+    featureBits caeRem3 simpleRepeat > fb.caeRem3.simpleRepeat.txt 2>&1
+    #	8604824 bases of 146898439 (5.858%) in intersection
+    ssh kkstore01
+    cd /cluster/data/caeRem3
+    cat bed/simpleRepeat/trfMask.bed \
+        | twoBitMask -add -type=.bed caeRem3.rmsk.2bit stdin \
+	caeRem3.rmskTrf.2bit
+     twoBitToFa caeRem3.rmskTrf.2bit stdout | faSize stdin \
+	> faSize.caeRem3.rmskTrf.txt
+    cat faSize.caeRem3.rmskTrf.txt
+    #	161944676 bases (15087728 N's 146856948 real
+    #	145166254 upper 1690694 lower) in 1 sequences in 1 files
+    #	%1.04 masked total, %1.15 masked real
+
