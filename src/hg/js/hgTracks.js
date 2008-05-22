@@ -12,7 +12,7 @@ function toggleTrackGroupVisibility(obj, prefix)
 {
 // toggle visibility of a track group; prefix is the prefix of all the id's of tr's in the 
 // relevant group. This code also modifies the corresponding hidden fields and the gif of the +/- img tag.
-
+    var retval = true;
     if (document.getElementsByTagName){
         // Tested in FireFox 1.5 & 2, IE 6 & 7, and Safari
         var button = document.getElementById(prefix + "_button");
@@ -53,11 +53,11 @@ function toggleTrackGroupVisibility(obj, prefix)
                 }
             }
         }
+        retval = false;
     } else if (document.all){
         // IE 4.X/5.0 - I don't have access to a browser to get this to work
         if(debug)
             alert("toggleTrackGroupVisibility is unimplemented in this browser");
-
         if(0) {
             // core of code that could perhaps work.
             // Loop looking for the appropriate style object
@@ -75,4 +75,5 @@ function toggleTrackGroupVisibility(obj, prefix)
         if(debug)
             alert("toggleTrackGroupVisibility is unimplemented in this browser");
     }
+    return retval;
 }
