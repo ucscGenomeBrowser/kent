@@ -22,7 +22,7 @@
 #include "hui.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jsHelper.c,v 1.14 2008/05/20 19:41:02 larrym Exp $";
+static char const rcsid[] = "$Id: jsHelper.c,v 1.15 2008/05/22 20:49:57 larrym Exp $";
 
 static boolean jsInited = FALSE;
 struct hash *includedFiles = NULL;
@@ -353,7 +353,7 @@ if(hashLookup(includedFiles, fileName) == NULL)
             safef(realFileName, sizeof(realFileName), "%s/%s/%s", docRoot, dirName, fileName);
         if(!fileExists(realFileName))
             {
-            fprintf(stderr, "jsIncludeFile: javascript fileName: %s doesn't exist.\n", realFileName);
+            errAbort("jsIncludeFile: javascript fileName: %s doesn't exist.\n", realFileName);
             }
         }
     hashAdd(includedFiles, fileName, NULL);
@@ -383,15 +383,14 @@ void cgiMakeCheckAllSubmitButton(char *name, char *value, char *id, char *idPref
 cgiMakeOnClickSubmitButton(jsCheckAllOnClickHandler(idPrefix, state), name, value);
 }
 
-char *jsStripJavascript(char *str)
-/* Strip out anything that looks like javascript in html string.
-   This function is designed to cleanup user input (e.g. to avoid XSS attacks).
+static char *stripRegEx(char *str, char *regEx, int flags)
+/* Utility function to strip out text matching regEx from str.
+   flags is passed through to regcomp as the cflags argument.
    Returned string should be free'ed after use. */
 {
 regex_t re;
 regmatch_t match[1];
-// "<" will not occur b/n script tags
-int err = regcomp(&re, "<script\\s*>[^<]*</script\\s*>", REG_ICASE);
+int err = regcomp(&re, regEx, flags);
 if(err)
     errAbort("regcomp failed; err: %d", err);
 struct dyString *dy = newDyString(0);
@@ -408,4 +407,25 @@ if(offset < len)
     }
 regfree(&re);
 return dyStringCannibalize(&dy);
+}
+
+char *jsStripJavascript(char *str)
+/* Strip out anything that looks like javascript in html string.
+   This function is designed to cleanup user input (e.g. to avoid XSS attacks).
+   In reality, we cannot remove javascript with 100% accuracy, b/c there are many browser 
+   specific ways of embedding javascript; see http://ha.ckers.org/xss.html for many, many examples.
+   Returned string should be free'ed after use. */
+{
+char *regExs[] = {"<script\\s*>[^<]*</script\\s*>", 
+                   "<script[^>]*>" // handles case where they have an un-closed script tag with a src attribute
+			};
+int i;
+str = cloneString(str);
+for(i=0;i<ArraySize(regExs);i++)
+    {
+    char *tmp = str;
+    str = stripRegEx(str, regExs[i], REG_ICASE);
+    freeMem(tmp);
+    }
+return str;
 }
