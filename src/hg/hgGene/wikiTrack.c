@@ -15,7 +15,7 @@
 #include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.14 2008/05/12 20:54:37 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.15 2008/05/22 21:57:51 hiram Exp $";
 
 static char *hgGeneUrl()
 {
@@ -294,15 +294,9 @@ if (canonical)
 	    "%s %s]<BR>\n",
 	    cfgOptionDefault(CFG_WIKI_BROWSER, DEFAULT_BROWSER), genome,
 	    canonical, name, canonical);
-if (protein)
-    dyStringPrintf(extraHeader,
-	"Canonical protein details [http://%s/cgi-bin/pbTracks?org=%s"
-	"&proteinID=%s %s]<BR>\n",
-		cfgOptionDefault(CFG_WIKI_BROWSER, DEFAULT_BROWSER), genome,
-		    protein, protein);
 if ((slCount(allIsoforms) > 1) || (!canonical))
     {
-    dyStringPrintf(extraHeader, "Isoform genes and protein: ");
+    dyStringPrintf(extraHeader, "Other loci: ");
     struct bed *el;
     for (el = allIsoforms; el; el = el->next)
 	{
@@ -318,6 +312,8 @@ if ((slCount(allIsoforms) > 1) || (!canonical))
     dyStringPrintf(extraHeader, "<BR>\n");
     }
 dyStringPrintf(extraHeader, "%s", description);
+/* add a date/time stamp to the description comments */
+dyStringPrintf(extraHeader, "\n(description snapshot ~~~~~)<BR>\n");
 if (aliases)
     {
     dyStringPrintf(extraHeader, "%s\n", aliases);
@@ -383,6 +379,19 @@ struct bed *clusterList = geneCluster(conn, curGeneName, &allIsoforms,
 	&allProteins);
 boolean editOK = FALSE;
 
+/* item exists, show wiki page */
+if (item)
+    {
+    /*puts("Content-type:text/html\n");*/
+    puts("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2//EN\">");
+    puts("<HTML>\n<HEAD>\n");
+    hPrintf("<META HTTP-EQUIV=REFRESH CONTENT=\"0;"
+	"url=http://genomewiki.ucsc.edu/HiramWiki/index.php?title=%s\">\n",
+	item->descriptionKey);
+    puts("</HEAD>\n");
+    return;
+    }
+
 safef(title,ArraySize(title), "UCSC gene annotations: %s", curGeneName);
 cartWebStart(cart, title);
 
@@ -421,7 +430,7 @@ else
     {
     char *protein;
     char *canonical = canonicalGene(conn, curGeneId, &protein);
-    hPrintf("<em>(no annotations for this gene at this time)</em><B>%s %s</B><BR>\n<HR>\n", canonical, protein);
+    hPrintf("<em>(no annotations for this gene at this time)</em> <B>%s %s</B><BR>\n<HR>\n", canonical, protein);
     }
 
 if (isEmpty(userName))
@@ -444,16 +453,13 @@ else if (emailVerified())  /* prints message when not verified */
     webPrintLinkTableNewRow();
     /* second row is initial comment/description text entry */
     webPrintWideCellStart(2, HG_COL_TABLE);
-    cgiMakeTextArea(NEW_ITEM_COMMENT, ADD_ITEM_COMMENT_DEFAULT, 3, 40);
+    cgiMakeTextArea(NEW_ITEM_COMMENT, ADD_ITEM_COMMENT_DEFAULT, 3, 70);
     webPrintLinkCellEnd();
     webPrintLinkTableNewRow();
-    hPrintf("<TD BGCOLOR=\"#%s\" ALIGN=\"CENTER\" VALIGN=\"TOP\">",
+    hPrintf("<TD BGCOLOR=\"#%s\" COLSPAN=2 ALIGN=\"CENTER\" VALIGN=\"TOP\">",
 	    HG_COL_TABLE);
     cgiMakeButton("submit", "add comments");
     hPrintf("\n</FORM>\n");
-    webPrintLinkCellEnd();
-    hPrintf("<TD BGCOLOR=\"#%s\" ALIGN=\"CENTER\" VALIGN=\"TOP\">",
-	    HG_COL_TABLE);
     webPrintLinkCellEnd();
     webPrintLinkTableEnd();
 
@@ -465,6 +471,10 @@ else if (emailVerified())  /* prints message when not verified */
 	   "for this item's description", url, item->descriptionKey,
 		item->descriptionKey);
 	}
+     hPrintf(
+	"This entry form starts the comments for this gene annotation.<BR>\n"
+            "Subsequent edits will be performed in the wiki editing system."
+            "<BR>\n");
     }
 
 webIncludeHelpFile("wikiTrackGeneAnnotationHelp", TRUE);

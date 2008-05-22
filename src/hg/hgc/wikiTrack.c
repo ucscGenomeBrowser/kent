@@ -16,7 +16,7 @@
 #include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.40 2008/05/16 20:26:01 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.41 2008/05/22 21:57:51 hiram Exp $";
 
 #define ITEM_SCORE_DEFAULT "1000"
 #define ADD_ITEM_COMMENT_DEFAULT "add comments"
@@ -132,48 +132,44 @@ static void displayItem(struct wikiTrack *item, char *userName)
 { 
 boolean geneAnnotation = FALSE;
 char *url = cfgOptionDefault(CFG_WIKI_URL, NULL);
-/*
-char *strippedRender = fetchWikiRenderedText(item->descriptionKey);
-*/
 
 if (isNotEmpty(item->geneSymbol) && differentWord(item->geneSymbol,"0"))
     {
-    hPrintf("<B>UCSC gene id:&nbsp;</B><A "
-	"HREF=\"../cgi-bin/hgGene?org=%s&hgg_gene=%s\" TARGET=_blank>"
-	"%s</A><BR>\n",
-	    genome, item->geneSymbol, item->geneSymbol);
+    hPrintf("<B>This is a UCSC gene annotation</B><BR>\n");
     geneAnnotation = TRUE;
     }
-/*
-hPrintf("<B>Classification group:&nbsp;</B>%s<BR>\n", item->class);
-*/
+else
+    hPrintf("<B>This is a genome location annotation, not a gene annotation.</B>\n");
+
 printPosOnChrom(item->chrom, item->chromStart, item->chromEnd,
     item->strand, FALSE, item->name);
-#ifdef NOT
-hPrintf("<B>Score:&nbsp;</B>%u<BR>\n", item->score);
-#endif
+if (geneAnnotation)
+    {
+    struct bed *itemList = multipleItems(item);
+    if (slCount(itemList) > 0)
+	{
+	hPrintf("&nbsp;&nbsp;This gene symbol <B>'%s'</B> is also found in the following "
+	    "locations:<BR>\n", item->name);
+	struct bed *el;
+	for (el = itemList; el; el = el->next)
+	    {
+	    printf("&nbsp;&nbsp;&nbsp;&nbsp;<B>%s:</B> "
+	       "<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
+	       item->name, hgTracksPathAndSettings(), database, el->chrom,
+		el->chromStart+1, el->chromEnd);
+	    printf("%s:%d-%d</A><BR>\n", el->chrom, el->chromStart+1,
+		el->chromEnd);
+	    }
+	}
+    }
 hPrintf("<B>Created </B>%s<B> by:&nbsp;</B>", item->creationDate);
 hPrintf("<A HREF=\"%s/index.php/User:%s\" TARGET=_blank>%s</A><BR>\n", url,
     item->owner, item->owner);
 hPrintf("<B>Most recent quick update:&nbsp;</B>%s<BR>\n",
     item->lastModifiedDate);
-char *editors = cfgOptionDefault(CFG_WIKI_EDITORS, NULL);
-char *editor = NULL;
-if ((NULL != userName) && editors)
-    {
-    int i;
-    int wordCount = chopByChar(editors, ',', NULL, 0);
-    char **words = (char **)needMem((size_t)(wordCount * sizeof(char *)));
-    chopByChar(editors, ',', words, wordCount);
-    for (i = 0; i < wordCount; ++i)
-	{
-	if (sameWord(userName, words[i]))
-	    {
-	    editor = words[i];
-	    break;
-	    }
-	}
-    }
+
+boolean editor = isWikiEditor(userName);
+
 if ((NULL != userName) &&
 	(editor || (sameWord(userName, item->owner) && !geneAnnotation)))
     {
@@ -186,10 +182,12 @@ if ((NULL != userName) &&
     hPrintf("\n");
     webPrintLinkTableStart();
     webPrintLinkCellStart();
+
     if (editor && (differentWord(userName, item->owner) || geneAnnotation))
-	hPrintf("Editor '%s' has deletion rights&nbsp;&nbsp;", editor);
+	hPrintf("Editor '%s' has deletion rights&nbsp;&nbsp;", userName);
     else
 	hPrintf("Owner '%s' has deletion rights&nbsp;&nbsp;", item->owner);
+
     webPrintLinkCellEnd();
     webPrintLinkCellStart();
     cgiMakeButton("submit", "DELETE");
@@ -201,14 +199,18 @@ if ((NULL != userName) &&
     hPrintf("\n</FORM>\n");
     }
 
+hPrintf("<B>View the wiki article "
+  "<A HREF=\"%s/index.php/%s\" TARGET=_blank>%s:</A> to see "
+	"existing comments.</B><BR>\n",
+       url, item->descriptionKey, item->descriptionKey);
+
 if (NULL != userName)
     hPrintf("<B>Mark this wiki article as <em>"
 	"<A HREF=\"%s/index.php/%s?action=watch\" TARGET=_blank>watched</A>"
 	"</em> to receive email notices of any comment additions.</B><BR>\n",
 	   url, item->descriptionKey);
 
-hPrintf("<HR>\n");
-displayComments(item);
+
 hPrintf("<HR>\n");
 
 if (NULL == userName)
@@ -253,15 +255,6 @@ else if (emailVerified()) /* prints message when not verified */
     hPrintf("wiki article <A HREF=\"%s/index.php/%s\" TARGET=_blank>%s</A> "
        "in the wiki editing system.<BR>", url, item->descriptionKey,
 	    item->descriptionKey);
-    struct bed *itemList = multipleItems(item);
-    if (slCount(itemList) > 0)
-	{
-	hPrintf("<HR>\nThis gene symbol '%s' is also found in the following "
-	    "locations:<BR>\n", item->name);
-	struct bed *el;
-	for (el = itemList; el; el = el->next)
-	    hPrintf("%s:%d-%d<BR>\n", el->chrom, el->chromStart, el->chromEnd);
-	}
     webIncludeHelpFile("wikiTrackAddCommentHelp", TRUE);
     webIncludeHelpFile("wikiTrack", TRUE);
     }
@@ -308,30 +301,6 @@ if (wikiTrackEnabled(database, &userName) && sameWord("0", wikiItemId))
 	safef(label, ArraySize(label), "Create new item, owner: '%s'\n",
 	    userName);
 	webPrintWideLabelCell(label, 2);
-#ifdef NOT
-	webPrintLinkTableNewRow();
-	/* second row is group classification pull-down menu */
-	webPrintWideCellStart(2, HG_COL_TABLE);
-	puts("<B>classification group:&nbsp;</B>");
-	struct grp *group, *groupList = hLoadGrps();
-	int groupCount = 0;
-	for (group = groupList; group; group=group->next)
-	    ++groupCount;
-	char **classMenu = NULL;
-	classMenu = (char **)needMem((size_t)(groupCount * sizeof(char *)));
-	groupCount = 0;
-	classMenu[groupCount++] = cloneString(ITEM_NOT_CLASSIFIED);
-	for (group = groupList; group; group=group->next)
-	    {
-	    if (differentWord("Custom Tracks", group->label))
-		classMenu[groupCount++] = cloneString(group->label);
-	    }
-	grpFreeList(&groupList);
-
-	cgiMakeDropList(NEW_ITEM_CLASS, classMenu, groupCount,
-		cartUsualString(cart,NEW_ITEM_CLASS,ITEM_NOT_CLASSIFIED));
-	webPrintLinkCellEnd();
-#endif
 	webPrintLinkTableNewRow();
 	/* third row is position entry box */
 	webPrintWideCellStart(2, HG_COL_TABLE);
@@ -377,7 +346,7 @@ if (wikiTrackEnabled(database, &userName) && sameWord("0", wikiItemId))
 	/* seventh row is initial comment/description text entry */
 	webPrintWideCellStart(2, HG_COL_TABLE);
 	hPrintf("<B>initial comments/description:</B><BR>");
-	cgiMakeTextArea(NEW_ITEM_COMMENT, NEW_ITEM_COMMENT_DEFAULT, 5, 40);
+	cgiMakeTextArea(NEW_ITEM_COMMENT, NEW_ITEM_COMMENT_DEFAULT, 5, 70);
 	webPrintLinkCellEnd();
 	webPrintLinkTableNewRow();
 	/* seventh row is the submit and cancel buttons */
@@ -395,6 +364,9 @@ if (wikiTrackEnabled(database, &userName) && sameWord("0", wikiItemId))
 	hPrintf("\n</FORM>\n");
 	webPrintLinkCellEnd();
 	webPrintLinkTableEnd();
+	hPrintf("This entry form starts the comments for this new item.<BR>\n"
+	    "Subsequent edits will be performed in the wiki editing system."
+	    "<BR>\n");
 	webIncludeHelpFile("wikiTrackCreateItemHelp", TRUE);
 	webIncludeHelpFile("wikiTrack", TRUE);
 	}

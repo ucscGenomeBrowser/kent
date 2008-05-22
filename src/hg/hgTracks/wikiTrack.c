@@ -10,7 +10,7 @@
 #include "wikiTrack.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.14 2008/05/16 20:25:59 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.15 2008/05/22 21:57:51 hiram Exp $";
 
 
 static void wikiTrackMapItem(struct track *tg, struct hvGfx *hvg, void *item,
@@ -27,7 +27,7 @@ char *userName;
 (void) wikiTrackEnabled(database, &userName);
 char *hgcClickName = tg->mapItemName(tg, item);
 char *statusLine = tg->itemName(tg, item);
-char *editor = wikiEditor(userName);
+boolean editor = isWikiEditor(userName);
 struct wikiTrack *wikiItem = NULL;
 boolean enableHgcClick = FALSE;
 
@@ -46,7 +46,7 @@ if (wikiItem)
     {
     if (isNotEmpty(userName) && sameWord(userName, wikiItem->owner))
 	enableHgcClick = TRUE;	/* owner has delete privls */
-    if (isNotEmpty(editor))
+    if (editor)
 	enableHgcClick = TRUE;	/* editors have delete privls */
     }
 

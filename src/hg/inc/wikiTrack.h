@@ -202,7 +202,7 @@ char *encodedReturnUrl(char *(*hgUrl)());
 boolean emailVerified();
 /* TRUE indicates email has been verified for this wiki user */
 
-char *wikiEditor(char *userName);
+boolean isWikiEditor(char *userName);
 /* check if user name is on list of editors */
 
 char *wikiUrl(struct wikiTrack *item);

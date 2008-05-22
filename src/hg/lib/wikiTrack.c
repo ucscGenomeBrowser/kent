@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.16 2008/05/16 20:26:05 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.17 2008/05/22 21:57:51 hiram Exp $";
 
 void wikiTrackStaticLoad(char **row, struct wikiTrack *ret)
 /* Load a row from wikiTrack table into ret.  The contents of ret will
@@ -968,10 +968,10 @@ else
     }
 }
 
-char *wikiEditor(char *userName)
+boolean isWikiEditor(char *userName)
 /* check if user name is on list of editors */
 {
-char *editor = NULL;
+boolean editor = FALSE;
 
 if (userName)
     {
@@ -987,7 +987,7 @@ if (userName)
 	    {
 	    if (sameWord(userName, words[i]))
 		{
-		editor = cloneString(words[i]);
+		editor = TRUE;
 		break;
 		}
 	    }
