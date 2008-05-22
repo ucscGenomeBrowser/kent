@@ -435,6 +435,114 @@ cdsDrawDefault genomic\ codons
 baseColorUseCds given
 baseColorDefault genomicCodons
 
+track transMap
+superTrack on hide
+shortLabel TransMap
+longLabel TransMap Alignments
+group genes
+priority 36
+
+    track transMapAlnUcscGenes
+    superTrack transMap pack
+    shortLabel TransMap UCSC Genes
+    longLabel TransMap UcscGenes Gene Mappings
+    group genes
+    type psl
+    priority 36.1
+    color 24,116,192
+    visibility pack
+    transMapInfo transMapInfoUcscGenes
+    transMapSrc hgFixed.transMapSrcUcscGenes
+    transMapGene hgFixed.transMapGeneUcscGenes
+    transMapTypeDesc UCSC Gene
+    baseColorDefault diffCodons
+    baseColorUseCds table hgFixed.transMapGeneUcscGenes
+    baseColorUseSequence extFile hgFixed.transMapSeqUcscGenes hgFixed.transMapExtFileUcscGenes
+    indelDoubleInsert on
+    indelQueryInsert on
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 100
+    showCdsAllScales .
+
+    searchTable transMapUcscGenes
+    searchType psl
+    searchPriority 2.31
+
+    track transMapAlnRefSeq
+    superTrack transMap pack
+    shortLabel TransMap RefGene
+    longLabel TransMap RefSeq Gene Mappings
+    group genes
+    type psl
+    priority 36.2
+    color 24,116,192
+    visibility pack
+    transMapInfo transMapInfoRefSeq
+    transMapSrc hgFixed.transMapSrcRefSeq
+    transMapGene hgFixed.transMapGeneRefSeq
+    baseColorDefault diffCodons
+    baseColorUseCds table hgFixed.transMapGeneRefSeq
+    baseColorUseSequence extFile hgFixed.transMapSeqRefSeq hgFixed.transMapExtFileRefSeq
+    indelDoubleInsert on
+    indelQueryInsert on
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 100
+    showCdsAllScales .
+
+    searchTable transMapRefSeq
+    searchType psl
+    searchPriority 2.31
+
+    track transMapAlnMRna
+    superTrack transMap pack
+    shortLabel TransMap mRNA
+    longLabel TransMap GenBank mRNA Mappings
+    group genes
+    type psl
+    priority 36.3
+    color 24,116,192
+    visibility pack
+    transMapInfo transMapInfoMRna
+    transMapSrc hgFixed.transMapSrcMRna
+    transMapGene hgFixed.transMapGeneMRna
+    baseColorDefault diffCodons
+    baseColorUseCds table hgFixed.transMapGeneMRna
+    baseColorUseSequence extFile hgFixed.transMapSeqMRna hgFixed.transMapExtFileMRna
+    indelDoubleInsert on
+    indelQueryInsert on
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 100
+    showCdsAllScales .
+
+    searchTable transMapMRna
+    searchType psl
+    searchPriority 2.31
+
+    track transMapAlnSplicedEst
+    superTrack transMap hide
+    shortLabel TransMap Spliced ESTs
+    longLabel TransMap Spliced EST Mappings
+    group genes
+    type psl
+    priority 36.4
+    color 24,116,192
+    visibility hide
+    transMapInfo transMapInfoSplicedEst
+    transMapSrc hgFixed.transMapSrcSplicedEst
+    transMapGene hgFixed.transMapGeneSplicedEst
+    baseColorDefault diffBases
+    baseColorUseCds table hgFixed.transMapGeneSplicedEst
+    baseColorUseSequence extFile hgFixed.transMapSeqSplicedEst hgFixed.transMapExtFileSplicedEst
+    indelDoubleInsert on
+    indelQueryInsert on
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 100
+    showCdsAllScales .
+
+    searchTable transMapSplicedEst
+    searchType psl
+    searchPriority 2.31
+
 track genieAlt
 shortLabel AltGenie
 longLabel Genie Gene Predictions from Affymetrix
@@ -3550,14 +3658,6 @@ searchTable xenoRefGene
 searchType refGene
 searchPriority 2.1
 grepIndex refLinkGrep/refLink.mrnaAccProduct
-
-searchTable transMapRefGene
-searchType genePred
-searchPriority 2.31
-
-searchTable transMapMRnaGene
-searchType genePred
-searchPriority 2.32
 
 searchTable retroMrnaInfo
 searchType bed
