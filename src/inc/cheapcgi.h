@@ -338,4 +338,8 @@ void cgiParagraph(char *text);
 void logCgiToStderr();
 /* Log useful CGI info to stderr */
 
+void cgiResetState();
+/* This is for reloading CGI settings multiple times in the same program
+ * execution.  No effect if state has not yet been initialized. */
+
 #endif /* CHEAPCGI_H */

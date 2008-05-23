@@ -13,7 +13,7 @@
 #include "mime.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.99 2008/05/12 22:11:39 larrym Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.100 2008/05/23 22:10:26 angie Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -118,6 +118,7 @@ inputString[inputSize] = 0;
 #define memmem(hay, haySize, needle, needleSize) \
     memMatch(needle, needleSize, hay, haySize)
 
+#ifndef GBROWSE
 static void cgiParseMultipart(struct hash **retHash, struct cgiVar **retList)
 /* process a multipart form */
 {
@@ -279,7 +280,7 @@ slReverse(&list);
 *retList = list;
 *retHash = hash;
 }
-
+#endif /* GBROWSE */
 
 
 
@@ -505,7 +506,6 @@ if (cgiIsOnWeb())
 }
 
 
-
 static void initCgiInput() 
 /* Initialize CGI input stuff.  After this CGI vars are
  * stored in an internal hash/list regardless of how they
@@ -518,6 +518,7 @@ if (inputString != NULL)
 
 _cgiFindInput(NULL);
 
+#ifndef GBROWSE
 /* check to see if the input is a multipart form */
 s = getenv("CONTENT_TYPE");
 if (s != NULL && startsWith("multipart/form-data", s))
@@ -525,10 +526,10 @@ if (s != NULL && startsWith("multipart/form-data", s))
     cgiParseMultipart(&inputHash, &inputList);
     }	    
 else
+#endif /* GBROWSE */
     {
     cgiParseInputAbort(inputString, &inputHash, &inputList);
     }
-
 /* now parse the cookies */
 parseCookies(&cookieHash, &cookieList);
 
@@ -1453,4 +1454,20 @@ fprintf(stderr, "[%s] [%s] [client %s] [hgsid=%.24s] [%.1024s] ", ascTime, cgiFi
 	hgsid, requestUri);
 }
 
+void cgiResetState()
+/* This is for reloading CGI settings multiple times in the same program
+ * execution.  No effect if state has not yet been initialized. */
+{
+freez(&inputString);
+inputString = NULL;
+if (inputHash != NULL)
+    hashFree(&inputHash);
+inputHash = NULL;
+inputList = NULL;
 
+haveCookiesHash = FALSE;
+if (cookieHash != NULL)
+    hashFree(&cookieHash);
+cookieHash = NULL;
+cookieList = NULL;
+}
