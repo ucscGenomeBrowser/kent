@@ -704,6 +704,11 @@ char *replaceChars(char *string, char *oldStr, char *newStr);
 void subChar(char *s, char oldChar, char newChar);
 /* Substitute newChar for oldChar throughout string s. */
 
+char * memSwapChar(char *s, int len, char oldChar, char newChar);
+/* Substitute newChar for oldChar throughout memory of given length. 
+   old or new may be null */
+#define strSwapChar(s,old,new) memSwapChar((s),strlen(s),(old),(new))
+
 void stripChar(char *s, char c);
 /* Remove all occurences of c from s. */
 
