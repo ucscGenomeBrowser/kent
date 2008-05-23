@@ -37,7 +37,7 @@
 #include "pcrResult.h"
 #include "wikiLink.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1476 2008/05/21 16:58:39 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1477 2008/05/23 22:09:04 angie Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -83,7 +83,6 @@ char *protDbName;               /* Name of proteome database for this genome. */
 #define MAXCHAINS 50000000
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 int imagePixelHeight = 0;
-struct cart *cart;	/* The cart where we keep persistent variables. */
 struct hash *oldVars = NULL;
 
 boolean hideControls = FALSE;		/* Hide all controls? */
@@ -96,7 +95,6 @@ struct hgPositions *hgp = NULL;
 
 
 /* Other global variables. */
-struct track *trackList = NULL;    /* List of all tracks. */
 struct group *groupList = NULL;    /* List of all tracks. */
 char *browserName;              /* Test or public browser */
 char *organization;             /* UCSC or MGC */

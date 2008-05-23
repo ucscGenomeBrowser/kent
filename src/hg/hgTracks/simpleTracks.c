@@ -122,7 +122,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.5 2008/05/21 16:58:39 angie Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.6 2008/05/23 22:09:05 angie Exp $";
 
 #define CHROM_COLORS 26
 
@@ -181,6 +181,9 @@ boolean revCmplDisp = FALSE;          /* reverse-complement display */
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
+struct track *trackList = NULL;    /* List of all tracks. */
+struct cart *cart;	/* The cart where we keep persistent variables. */
+
 int seqBaseCount;	/* Number of bases in sequence. */
 int winBaseCount;	/* Number of bases in window. */
 
