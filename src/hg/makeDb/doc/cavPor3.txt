@@ -144,7 +144,7 @@ cut -f 2 chrom.sizes | ave stdin
     # 732765485 bases of 2663369733 (27.513%) in intersection
 
     # RepeatMasker and lib version from do.log:
-    #    RepeatMasker version development-$Id: cavPor3.txt,v 1.4 2008/05/15 17:38:18 tdreszer Exp $
+    #    RepeatMasker version development-$Id: cavPor3.txt,v 1.5 2008/05/23 23:44:57 tdreszer Exp $
     #    Jan 11 2008 (open-3-1-9) version of RepeatMasker
     #    CC   RELEASE 20071204;
 
@@ -286,10 +286,15 @@ cavPor3.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDna
 cavPor3.lift = no
 cavPor3.downloadDir = cavPor3
 cavPor3.perChromTables = no
-
+cavPor3.refseq.mrna.native.load = no
+cavPor3.refseq.mrna.xeno.load = yes
+cavPor3.genbank.mrna.xeno.load = yes
+cavPor3.genbank.est.native.load = yes
+        
     cvs ci -m "Added cavPor3." etc/genbank.conf
     # update /cluster/data/genbank/:
     make etc-update
+    cvs ci -m "Turned off native and on xeno." etc/genbank.conf
 
     # Edit src/lib/gbGenome.c to add new species.
     # static char *cavPorNames[] = {"Cavia porcellus", NULL};
@@ -349,6 +354,77 @@ cavPor3.perChromTables = no
         etc/hgwdev.dbs
     cvs ci -m "Added cavPor3." etc/align.dbs etc/hgwdev.dbs
     make etc-update
+
+#########################################################################
+#  REstarting Genbank (beg: 2008-05-22   Done: 2008-05-23 - Tim)
+
+    ### QA found empty refLink table which led MarkD to determine that in genbank.conf cavPor3 used default params 
+    ### which were not appropriate.  The last 4 lines listed below were added, and genbank started again
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    # edit etc/genbank.conf to add the following entry:
+
+# cavPor3 (C. porcellus) 3144 scaffolds 967 are multi-contig and 2076 are single contig
+cavPor3.serverGenome = /cluster/data/cavPor3/cavPor3.2bit
+cavPor3.clusterGenome = /iscratch/i/cavPor3/cavPor3.2bit
+cavPor3.ooc = /cluster/data/cavPor3/cavPor3.11.ooc
+cavPor3.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+cavPor3.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+cavPor3.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+cavPor3.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+cavPor3.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+cavPor3.lift = no
+cavPor3.downloadDir = cavPor3
+cavPor3.perChromTables = no
+cavPor3.refseq.mrna.native.load = no
+cavPor3.refseq.mrna.xeno.load = yes
+cavPor3.genbank.mrna.xeno.load = yes
+cavPor3.genbank.est.native.load = yes
+    ### The last 4 lines listed above were added, and genbank started again
+        
+    # update /cluster/data/genbank/:
+    make etc-update
+    cvs ci -m "Turned off native and on xeno." etc/genbank.conf
+
+    # Edit src/lib/gbGenome.c to add new species.
+    # static char *cavPorNames[] = {"Cavia porcellus", NULL};
+    # static struct dbToSpecies dbToSpeciesMap[] = { ...>>> {"cavPor", cavPorNames}, 
+
+    #cvs ci -m "Added guinea pig." src/lib/gbGenome.c
+    make install-server
+    
+    ### Mark Deikhens recommends:
+    # You are not really realigning, but aligning additional.  If you
+    # just kick off an initial alignment, it *should* align the
+    # missing partitions of the data.  However, sometimes weird things
+    # happen when a new, full release is made, and a new refseq just
+    # came out.  So kick on the alignment and let me know when its
+    # done and I can take a look.
+    # 
+    # Also, to just reload everything, include the -drop flag on your
+    # command line.  That is usually easiest; way waste your time
+    # figuring out weird cases when the computer can just do the work.
+
+    ssh genbank
+    screen  # control this business with a screen since it takes a while
+    cd /cluster/data/genbank
+
+    # This is a call to a script that will push our jobs out to the cluster
+    # since it's a big job.  
+    time nice -n +19 bin/gbAlignStep -initial cavPor3 &
+    # logFile: var/build/logs/2008.05.22-15:44:34.cavPor3.initalign.log
+    # real    182m21.821s
+    # gbAlignInstall: complete: real=2.35
+    # genbank 2008.05.22-18:46:56 cavPor3.initalign: finish
+    
+    # Mark Deikhens: Look good, load it.
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad cavPor3 &
+    #   logFile: var/dbload/hgwdev/logs/2008.05.23-11:39:52.dbload.log
+    #   real    17m53.123s
 
 ############################################################################
 #	DONE - 2008-04-10 - Tim
@@ -479,7 +555,7 @@ _EOF_
     ##Insufficient memory error: results may be unreliable.
     ##Insufficient memory error: results may be unreliable.
     ##Insufficient memory error: results may be unreliable.
-    ####### However, these are not the simply the largest files:
+    ####### However, these are not the simply the largest files:                      
     [tdreszer@memk /cluster/data/cavPor3/bed/genscan] ll /san/sanvol1/scratch/cavPor3/hardChunks/c_19.fa
     -rw-rw-r--  1 tdreszer protein 4408036 Apr  8 15:39 /san/sanvol1/scratch/cavPor3/hardChunks/c_19.fa
     [tdreszer@memk /cluster/data/cavPor3/bed/genscan] ll /san/sanvol1/scratch/cavPor3/hardChunks/c_152.fa
@@ -507,7 +583,7 @@ _EOF_
     popd # cd /cluster/data/cavPor3/bed/genscan
     ls -1Sr /san/sanvol1/scratch/cavPor3/hardChunks/c_rt*.fa > genome_rt.list
 
-    gensub2 genome_rt.list single template jobList_rt
+    gensub2 genome_rt.list single template jobList_rt   
     para create jobList_rt
     para try, check, push, check, ...
 
@@ -572,6 +648,172 @@ _EOF_
     #	let's check the numbers
     time nice -n +19 featureBits cavPor3 genscan
     #   76489707 bases of 2663369733 (2.872%) in intersection
+
+#########################################################################
+## genscan RErun (BEG: 2008-05-22  DONE: 2008-05-22 - Tim)
+
+### ### QA found missing genscan data, so retrying the unlucky 7 by splitting on gaps
+    ssh memk
+    pushd /san/sanvol1/scratch/cavPor3/hardChunks
+    faSplit gap c_rt01_0000.fa 1000000 c_rt_01_0000_gap_ 
+    faSplit gap c_rt32_0005.fa 1000000 c_rt_32_0005_gap_ 
+    faSplit gap c_rt71_0025.fa 1000000 c_rt_71_0025_gap_ 
+    faSplit gap c_rt107_0010.fa 1000000 c_rt_107_0010_gap_ 
+    faSplit gap c_rt111_0010.fa 1000000 c_rt_111_0010_gap_ 
+    faSplit gap c_rt151_0010.fa 1000000 c_rt_151_0010_gap_ 
+    faSplit gap c_rt19_0010.fa 1000000 c_rt_19_0010_gap_ 
+    popd # cd /cluster/data/cavPor3/bed/genscan
+    ls -1Sr /san/sanvol1/scratch/cavPor3/hardChunks/c_rt*_gap_*.fa > genome_gap.list
+
+    gensub2 genome_gap.list single template jobList_gap   
+    para create jobList_gap
+    para try, check, push, check, ...
+    # 219 jobs in batch
+    # 52852 jobs (including everybody's) in Parasol queue.
+    # Checking finished jobs
+    # .......
+    # ranOk: 219
+    # total jobs in batch: 219
+
+    # cat and lift the results into single files
+    ssh kkstore05
+    cd /cluster/data/cavPor3/bed/genscan
+    sort -k1,1 -k4.4n gtf/c_*.gtf > genscan_full.gtf
+    sort -k1,1 -k2,2n subopt/c_*.bed > genscanSubopt_full.bed 
+    cat pep/c_*.pep > genscan_full.pep
+
+    # Load into the database as so:
+    ssh hgwdev
+    cd /cluster/data/cavPor3/bed/genscan
+    ldHgGene cavPor3 -gtf genscan genscan_full.gtf
+    # Read 70478 transcripts in 454271 lines in 1 files
+    # 70478 groups 2398 seqs 1 sources 1 feature types
+    # 70478 gene predictions
+    
+    hgPepPred cavPor3 generic genscanPep genscan_full.pep
+    hgLoadBed cavPor3 genscanSubopt genscanSubopt_full.bed
+    #   Loaded 605836 elements of size 6
+
+    #   let's check the numbers
+    time nice -n +19 featureBits cavPor3 genscan
+    #   76489707 bases of 2663369733 (2.872%) in intersection
+    
+### ### ### Total defeat.  faSplit on gaps results in new sequence names that donot match to the known scaffold_nnnn sequences.
+    
+    # Clean up mess:
+    cd /cluster/data/cavPor3/bed/genscan
+    pushd /san/sanvol1/scratch/cavPor3/hardChunks
+    rm c_rt_*_gap_*.fa
+    popd # cd /cluster/data/cavPor3/bed/genscan
+    rm gtf/c_rt_*_gap_*.gtf
+    rm pep/c_rt_*_gap_*.pep
+    rm subopt/c_rt_*_gap_*.bed
+    
+    # Try the seven culprits one more time.
+cat << \_EOF_ > genome_oneMoreTime.list
+/san/sanvol1/scratch/cavPor3/hardChunks/c_rt19_0010.fa
+/san/sanvol1/scratch/cavPor3/hardChunks/c_rt151_0010.fa
+/san/sanvol1/scratch/cavPor3/hardChunks/c_rt111_0010.fa
+/san/sanvol1/scratch/cavPor3/hardChunks/c_rt107_0010.fa
+/san/sanvol1/scratch/cavPor3/hardChunks/c_rt71_0025.fa
+/san/sanvol1/scratch/cavPor3/hardChunks/c_rt32_0005.fa
+/san/sanvol1/scratch/cavPor3/hardChunks/c_rt01_0000.fa
+_EOF_
+
+    ssh memk
+    cd /cluster/data/cavPor3/bed/genscan
+    gensub2 genome_oneMoreTime.list single template jobList_oneMoreTime   
+    para create jobList_oneMoreTime
+    para push, check, ...
+    #  para status
+    # 7 jobs in batch
+    # 0 jobs (including everybody's) in Parasol queue.
+    # Checking finished jobs
+    # #state  tries   real    cpu     host    jobid   cmd
+    # crash   1       58.00   54.08   mkr0u5  1182093 runGsBig /san/sanvol1/scratch/cavPor3/hardChunks c_rt19_0010.fa gtf/c_rt19_0010.gtf pep/c_rt19_0010.pep subopt/c_rt19_0010.bed
+    # done    1       228.00  224.16  mkr0u6  1182094 runGsBig /san/sanvol1/scratch/cavPor3/hardChunks c_rt151_0010.fa gtf/c_rt151_0010.gtf pep/c_rt151_0010.pep subopt/c_rt151_0010.bed
+    # crash   1       57.00   52.47   mkr0u3  1182095 runGsBig /san/sanvol1/scratch/cavPor3/hardChunks c_rt111_0010.fa gtf/c_rt111_0010.gtf pep/c_rt111_0010.pep subopt/c_rt111_0010.bed
+    # crash   1       106.00  99.41   mkr0u7  1182096 runGsBig /san/sanvol1/scratch/cavPor3/hardChunks c_rt107_0010.fa gtf/c_rt107_0010.gtf pep/c_rt107_0010.pep subopt/c_rt107_0010.bed
+    # crash   1       617.00  602.73  mkr0u5  1182097 runGsBig /san/sanvol1/scratch/cavPor3/hardChunks c_rt71_0025.fa gtf/c_rt71_0025.gtf pep/c_rt71_0025.pep subopt/c_rt71_0025.bed
+    # crash   1       922.00  896.75  mkr0u3  1182098 runGsBig /san/sanvol1/scratch/cavPor3/hardChunks c_rt32_0005.fa gtf/c_rt32_0005.gtf pep/c_rt32_0005.pep subopt/c_rt32_0005.bed
+    # crash   1       1307.00 1258.05 mkr0u7  1182099 runGsBig /san/sanvol1/scratch/cavPor3/hardChunks c_rt01_0000.fa gtf/c_rt01_0000.gtf pep/c_rt01_0000.pep subopt/c_rt01_0000.bed
+    
+    # One down, 6 to go.  Try lowering window size on gsBig
+
+    mv runGsBig runGsBig.24
+    cat << \_EOF_ > runGsBig
+#!/bin/csh -fe
+set runDir = `pwd`
+set srcDir = $1
+set inFile = $2
+set fileRoot = $inFile:r
+mkdir /scratch/tmp/$fileRoot
+cp -p $srcDir/$inFile /scratch/tmp/$fileRoot
+pushd /scratch/tmp/$fileRoot
+/cluster/bin/x86_64/gsBig $inFile $fileRoot.gtf -trans=$fileRoot.pep -subopt=$fileRoot.bed -exe=$runDir/hg3rdParty/genscanlinux/genscan -par=$runDir/hg3rdParty/genscanlinux/HumanIso.smat -tmp=/scratch/tmp -window=1200000
+popd
+cp -p /scratch/tmp/$fileRoot/$fileRoot.gtf gtf
+cp -p /scratch/tmp/$fileRoot/$fileRoot.pep pep
+cp -p /scratch/tmp/$fileRoot/$fileRoot.bed subopt
+rm -fr /scratch/tmp/$fileRoot
+_EOF_
+    # << happy emacs
+    chmod +x runGsBig
+
+    para push, check, ...
+    #  para status
+    # 7 jobs in batch
+    # 0 jobs (including everybody's) in Parasol queue.
+    # Checking finished jobs
+    # #state  tries   real    cpu     host    jobid   cmd
+    # done    2       58.00   54.08   mkr0u5  1182093 runGsBig /san/sanvol1/scratch/cavPor3/hardChunks c_rt19_0010.fa gtf/c_rt19_0010.gtf pep/c_rt19_0010.pep subopt/c_rt19_0010.bed
+    # done    1       228.00  224.16  mkr0u6  1182094 runGsBig /san/sanvol1/scratch/cavPor3/hardChunks c_rt151_0010.fa gtf/c_rt151_0010.gtf pep/c_rt151_0010.pep subopt/c_rt151_0010.bed
+    # crash   2       57.00   52.47   mkr0u3  1182095 runGsBig /san/sanvol1/scratch/cavPor3/hardChunks c_rt111_0010.fa gtf/c_rt111_0010.gtf pep/c_rt111_0010.pep subopt/c_rt111_0010.bed
+    # done    2       106.00  99.41   mkr0u7  1182096 runGsBig /san/sanvol1/scratch/cavPor3/hardChunks c_rt107_0010.fa gtf/c_rt107_0010.gtf pep/c_rt107_0010.pep subopt/c_rt107_0010.bed
+    # done    2       617.00  602.73  mkr0u5  1182097 runGsBig /san/sanvol1/scratch/cavPor3/hardChunks c_rt71_0025.fa gtf/c_rt71_0025.gtf pep/c_rt71_0025.pep subopt/c_rt71_0025.bed
+    # crash   2       922.00  896.75  mkr0u3  1182098 runGsBig /san/sanvol1/scratch/cavPor3/hardChunks c_rt32_0005.fa gtf/c_rt32_0005.gtf pep/c_rt32_0005.pep subopt/c_rt32_0005.bed
+    # done    2       1307.00 1258.05 mkr0u7  1182099 runGsBig /san/sanvol1/scratch/cavPor3/hardChunks c_rt01_0000.fa gtf/c_rt01_0000.gtf pep/c_rt01_0000.pep subopt/c_rt01_0000.bed
+    
+    # All but two!
+    
+    para push, check, ...
+    #  para status
+    # 7 jobs in batch
+    # 0 jobs (including everybody's) in Parasol queue.
+    # Checking finished jobs
+    # #state  tries   real    cpu     host    jobid   cmd
+    # done    2       58.00   54.08   mkr0u5  1182093 runGsBig /san/sanvol1/scratch/cavPor3/hardChunks c_rt19_0010.fa gtf/c_rt19_0010.gtf pep/c_rt19_0010.pep subopt/c_rt19_0010.bed
+    # done    1       228.00  224.16  mkr0u6  1182094 runGsBig /san/sanvol1/scratch/cavPor3/hardChunks c_rt151_0010.fa gtf/c_rt151_0010.gtf pep/c_rt151_0010.pep subopt/c_rt151_0010.bed
+    # done    3       57.00   52.47   mkr0u3  1182095 runGsBig /san/sanvol1/scratch/cavPor3/hardChunks c_rt111_0010.fa gtf/c_rt111_0010.gtf pep/c_rt111_0010.pep subopt/c_rt111_0010.bed
+    # done    2       106.00  99.41   mkr0u7  1182096 runGsBig /san/sanvol1/scratch/cavPor3/hardChunks c_rt107_0010.fa gtf/c_rt107_0010.gtf pep/c_rt107_0010.pep subopt/c_rt107_0010.bed
+    # done    2       617.00  602.73  mkr0u5  1182097 runGsBig /san/sanvol1/scratch/cavPor3/hardChunks c_rt71_0025.fa gtf/c_rt71_0025.gtf pep/c_rt71_0025.pep subopt/c_rt71_0025.bed
+    # done    3       922.00  896.75  mkr0u3  1182098 runGsBig /san/sanvol1/scratch/cavPor3/hardChunks c_rt32_0005.fa gtf/c_rt32_0005.gtf pep/c_rt32_0005.pep subopt/c_rt32_0005.bed
+    # done    2       1307.00 1258.05 mkr0u7  1182099 runGsBig /san/sanvol1/scratch/cavPor3/hardChunks c_rt01_0000.fa gtf/c_rt01_0000.gtf pep/c_rt01_0000.pep subopt/c_rt01_0000.bed
+    ### All completed!
+
+    # cat and lift the results into single files
+    ssh kkstore05
+    cd /cluster/data/cavPor3/bed/genscan
+    sort -k1,1 -k4.4n gtf/c_*.gtf > genscan_full.gtf
+    sort -k1,1 -k2,2n subopt/c_*.bed > genscanSubopt_full.bed 
+    cat pep/c_*.pep > genscan_full.pep
+
+    # Load into the database as so:
+    ssh hgwdev
+    cd /cluster/data/cavPor3/bed/genscan
+    ldHgGene cavPor3 -gtf genscan genscan_full.gtf
+    # Read 70161 transcripts in 453022 lines in 1 files
+    # 70161 groups 2185 seqs 1 sources 1 feature types
+    # 70161 gene predictions
+    
+    hgPepPred cavPor3 generic genscanPep genscan_full.pep
+    hgLoadBed cavPor3 genscanSubopt genscanSubopt_full.bed
+    #   Loaded 603786 elements of size 6
+
+    #   let's check the numbers
+    time nice -n +19 featureBits cavPor3 genscan
+    #   82960328 bases of 2663369733 (3.115%) in intersection
+    
 
 #########################################################################
 # CPGISLANDS (DONE - 2008-04-10 - Tim)
@@ -2086,15 +2328,14 @@ done >> togetherMaf/cavPor3.7way.maf
 # ### >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> got this far 
 # ### >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> got this far 
 # ### >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> got this far
- 
+# ### >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> got this far
+
+
 ################## EVERYTHING THAT FOLLOWS IS TEMPLATE FOR WHAT NEEDS TO BE DONE ######################
 ################## EVERYTHING THAT FOLLOWS IS TEMPLATE FOR WHAT NEEDS TO BE DONE ######################
 ################## EVERYTHING THAT FOLLOWS IS TEMPLATE FOR WHAT NEEDS TO BE DONE ######################
 ################## EVERYTHING THAT FOLLOWS IS TEMPLATE FOR WHAT NEEDS TO BE DONE ######################
 
-
-
-    
     
     
     
