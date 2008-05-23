@@ -15,11 +15,13 @@
 #include "jksql.h"
 #include "wikiLink.h"
 #include "trashDir.h"
+#ifndef GBROWSE
 #include "customFactory.h"
+#endif /* GBROWSE */
 #include "hgMaf.h"
 #include "googleAnalytics.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.81 2008/05/08 21:19:24 hiram Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.82 2008/05/23 22:09:56 angie Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -178,6 +180,7 @@ sqlUpdate(conn, dy->string);
 dyStringFree(&dy);
 }
 
+#ifndef GBROWSE
 static void cartCopyCustomTracks(struct cart *cart, struct hash *oldVars)
 /* If cart contains any live custom tracks, save off a new copy of them, 
  * to prevent clashes by multiple loaders of the same session. 
@@ -215,6 +218,7 @@ for (el = elList; el != NULL; el = el->next)
 	}
     }
 }
+#endif /* GBROWSE */
 
 static void loadCgiOverHash(struct cart *cart, struct hash *oldVars)
 /* Store CGI variables in cart. */
@@ -315,7 +319,9 @@ if ((row = sqlNextRow(sr)) != NULL)
 	/* Overload settings explicitly passed in via CGI (except for the
 	 * command that sent us here): */
 	loadCgiOverHash(cart, oldVars);
+#ifndef GBROWSE
 	cartCopyCustomTracks(cart, oldVars);
+#endif /* GBROWSE */
 	if (isNotEmpty(actionVar))
 	    cartRemove(cart, actionVar);
 	hDisconnectCentral(&conn2);
@@ -372,7 +378,10 @@ if (oldVars)
 /* Overload settings explicitly passed in via CGI (except for the
  * command that sent us here): */
 loadCgiOverHash(cart, oldVars);
+#ifndef GBROWSE
 cartCopyCustomTracks(cart, oldVars);
+#endif /* GBROWSE */
+
 if (isNotEmpty(actionVar))
     cartRemove(cart, actionVar);
 }
@@ -384,6 +393,53 @@ char *_cartVarDbName(char *db, char *var)
 static char buf[PATH_LEN]; // something rather big
 safef(buf, sizeof(buf), "%s_%s", var, db);
 return buf;
+}
+
+static char *now()
+/* Return a mysql-formatted time like "2008-05-19 15:33:34". */
+{
+char nowBuf[256];
+time_t seconds = clock1();
+struct tm *theTime = localtime(&seconds);
+strftime(nowBuf, sizeof nowBuf, "%Y-%m-%d %H:%M:%S", theTime);
+return cloneString(nowBuf);
+}
+
+static struct cartDb *emptyCartDb()
+/* Create a new empty placeholder cartDb. */
+{
+struct cartDb *cdb;
+AllocVar(cdb);
+cdb->contents = cloneString("");
+cdb->firstUse = now();
+cdb->lastUse = now();
+cdb->useCount = 1;
+return cdb;
+}
+
+struct cart *cartNewEmpty(unsigned int userId, unsigned int sessionId, 
+	char **exclude, struct hash *oldVars)
+/* Create a new empty cart structure without reading from the database. */
+{
+struct cart *cart;
+char *ex;
+
+AllocVar(cart);
+cart->hash = newHash(12);
+cart->exclude = newHash(7);
+cart->userId = userId;
+cart->sessionId = sessionId;
+cart->userInfo = emptyCartDb();
+cart->sessionInfo = emptyCartDb();
+
+loadCgiOverHash(cart, oldVars);
+
+if (exclude != NULL)
+    {
+    while ((ex = *exclude++))
+	cartExclude(cart, ex);
+    }
+return cart;
 }
 
 struct cart *cartNew(unsigned int userId, unsigned int sessionId, 

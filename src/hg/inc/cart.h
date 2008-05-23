@@ -43,6 +43,10 @@ struct cart *cartNew(unsigned int userId, unsigned int sessionId,
  * strings to not include. oldVars is an optional hash to put in values
  * that were just overwritten by cgi-variables. */
 
+struct cart *cartNewEmpty(unsigned int userId, unsigned int sessionId, 
+	char **exclude, struct hash *oldVars);
+/* Create a new empty cart structure without reading from the database. */
+
 void cartCheckout(struct cart **pCart);
 /* Save cart to database and free it up. */
 
