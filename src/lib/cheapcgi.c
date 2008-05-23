@@ -13,7 +13,7 @@
 #include "mime.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.100 2008/05/23 22:10:26 angie Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.101 2008/05/23 23:43:41 tdreszer Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -118,7 +118,6 @@ inputString[inputSize] = 0;
 #define memmem(hay, haySize, needle, needleSize) \
     memMatch(needle, needleSize, hay, haySize)
 
-#ifndef GBROWSE
 static void cgiParseMultipart(struct hash **retHash, struct cgiVar **retList)
 /* process a multipart form */
 {
@@ -280,7 +279,7 @@ slReverse(&list);
 *retList = list;
 *retHash = hash;
 }
-#endif /* GBROWSE */
+
 
 
 
@@ -506,6 +505,7 @@ if (cgiIsOnWeb())
 }
 
 
+
 static void initCgiInput() 
 /* Initialize CGI input stuff.  After this CGI vars are
  * stored in an internal hash/list regardless of how they
@@ -518,7 +518,6 @@ if (inputString != NULL)
 
 _cgiFindInput(NULL);
 
-#ifndef GBROWSE
 /* check to see if the input is a multipart form */
 s = getenv("CONTENT_TYPE");
 if (s != NULL && startsWith("multipart/form-data", s))
@@ -526,10 +525,10 @@ if (s != NULL && startsWith("multipart/form-data", s))
     cgiParseMultipart(&inputHash, &inputList);
     }	    
 else
-#endif /* GBROWSE */
     {
     cgiParseInputAbort(inputString, &inputHash, &inputList);
     }
+
 /* now parse the cookies */
 parseCookies(&cookieHash, &cookieList);
 
@@ -987,10 +986,10 @@ safef(buf, sizeof(buf), "%s%s", cgiBooleanShadowPrefix(), name);
 return cgiVarExists(buf);
 }
 
-void cgiMakeCheckBoxUtil(char *name, boolean checked, char *msg, char *id)
+void cgiMakeCheckBoxWithOptionalIdAndHtml(char *name, boolean checked, char *id, char *moreHtml)
 /* Make check box - designed to be called by the variously overloaded
- * cgiMakeCheckBox functions, but can also be called directly.
- * msg: mouseover msg (may be NULL)
+ * cgiMakeCheckBox functions, and should NOT be called directly.
+ * moreHtml: optional additional html like javascript call or mouseover msg (may be NULL)
  * id: button id (may be NULL)
  * Also make a shadow hidden variable so we
  * can distinguish between variable not present and
@@ -999,43 +998,59 @@ void cgiMakeCheckBoxUtil(char *name, boolean checked, char *msg, char *id)
 char buf[256], idBuf[256];
 
 if(id)
-	safef(idBuf, sizeof(idBuf), " id=\"%s\"", id);
+    safef(idBuf, sizeof(idBuf), " id=\"%s\"", id);
 else
-	idBuf[0] = 0;
+    idBuf[0] = 0;
 
-printf("<INPUT TYPE=CHECKBOX NAME=\"%s\"%s VALUE=on %s%s%s %s>", name, idBuf,
-    (msg ? " TITLE=\"" : ""), (msg ? msg : ""), (msg ? "\"" : "" ), 
-    (checked ? " CHECKED" : ""));
+printf("<INPUT TYPE=CHECKBOX NAME=\"%s\"%s VALUE=on %s %s>", name, idBuf,
+    (moreHtml ? moreHtml : ""), (checked ? "CHECKED" : ""));
 safef(buf, sizeof(buf), "%s%s", cgiBooleanShadowPrefix(), name);
 cgiMakeHiddenVar(buf, "1");
 }
 
+void cgiMakeCheckBoxUtil(char *name, boolean checked, char *msg, char *id)
+/* Make check box - can be called directly, though it was originally meant
+ * as the common code for all lower level checkbox routines.
+ * However, it's util functionality has been taken over by
+ * cgiMakeCheckBoxWithIdAndOptionalHtml() */
+{
+char buf[256];
+
+if(msg)
+    safef(buf, sizeof(buf), "TITLE=\"%s\"", msg);
+else
+    buf[0] = 0;
+
+cgiMakeCheckBoxWithOptionalIdAndHtml(name, checked, id, buf);
+}
+
 void cgiMakeCheckBoxWithMsg(char *name, boolean checked, char *msg)
 {
-cgiMakeCheckBoxUtil(name, checked, msg, NULL);
+cgiMakeCheckBoxWithOptionalIdAndHtml(name, checked, NULL, msg);
 }
 
 void cgiMakeCheckBoxWithId(char *name, boolean checked, char *id)
 /* Make check box, which includes an ID. */
 {
-cgiMakeCheckBoxUtil(name, checked, NULL, id);
+cgiMakeCheckBoxWithOptionalIdAndHtml(name, checked, id, NULL);
 }
 
 void cgiMakeCheckBox(char *name, boolean checked)
 /* Make check box. */
 {
-cgiMakeCheckBoxUtil(name, checked, NULL, NULL);
+cgiMakeCheckBoxWithOptionalIdAndHtml(name, checked, NULL, NULL);
 }
 
 void cgiMakeCheckBoxJS(char *name, boolean checked, char *javascript)
 /* Make check box with javascript. */
 {
-char buf[256];
+cgiMakeCheckBoxWithOptionalIdAndHtml(name,checked,NULL,javascript);
+}
 
-printf("<INPUT TYPE=CHECKBOX NAME=\"%s\" VALUE=on %s %s>", name,
-    javascript, (checked ? " CHECKED" : ""));
-safef(buf, sizeof(buf), "%s%s", cgiBooleanShadowPrefix(), name);
-cgiMakeHiddenVar(buf, "1");
+void cgiMakeCheckBoxIdAndJS(char *name, boolean checked, char *id, char *javascript)
+/* Make check box with ID and javascript. */
+{
+cgiMakeCheckBoxWithOptionalIdAndHtml(name,checked,id,javascript);
 }
 
 void cgiMakeHiddenBoolean(char *name, boolean on)
@@ -1107,15 +1122,15 @@ printf("<INPUT TYPE=TEXT NAME=\"%s\" SIZE=%d VALUE=%g>", varName,
 	maxDigits, initialVal);
 }
 
-void cgiMakeDropListClassWithStyle(char *name, char *menu[], 
-	int menuSize, char *checked, char *class, char *style)
-/* Make a drop-down list with names, text class and style. */
+void cgiMakeDropListClassWithStyleAndJavascript(char *name, char *menu[], 
+    int menuSize, char *checked, char *class, char *style,char *javascript)
+/* Make a drop-down list with names, text class, style and javascript. */
 {
 int i;
 char *selString;
 if (checked == NULL) checked = menu[0];
 if (style)
-    printf("<SELECT NAME=\"%s\" class=%s style=\"%s\">\n", name, class, style);
+    printf("<SELECT NAME=\"%s\" class=%s style=\"%s\" %s>\n", name, class, style, javascript);
 else
     printf("<SELECT NAME=\"%s\" class=%s>\n", name, class);
 for (i=0; i<menuSize; ++i)
@@ -1127,6 +1142,13 @@ for (i=0; i<menuSize; ++i)
     printf("<OPTION%s>%s</OPTION>\n", selString, menu[i]);
     }
 printf("</SELECT>\n");
+}
+
+void cgiMakeDropListClassWithStyle(char *name, char *menu[], 
+    int menuSize, char *checked, char *class, char *style)
+/* Make a drop-down list with names, text class and style. */
+{
+    cgiMakeDropListClassWithStyleAndJavascript(name,menu,menuSize,checked,class,style,"");
 }
 
 void cgiMakeDropListClass(char *name, char *menu[], 
@@ -1454,20 +1476,4 @@ fprintf(stderr, "[%s] [%s] [client %s] [hgsid=%.24s] [%.1024s] ", ascTime, cgiFi
 	hgsid, requestUri);
 }
 
-void cgiResetState()
-/* This is for reloading CGI settings multiple times in the same program
- * execution.  No effect if state has not yet been initialized. */
-{
-freez(&inputString);
-inputString = NULL;
-if (inputHash != NULL)
-    hashFree(&inputHash);
-inputHash = NULL;
-inputList = NULL;
 
-haveCookiesHash = FALSE;
-if (cookieHash != NULL)
-    hashFree(&cookieHash);
-cookieHash = NULL;
-cookieList = NULL;
-}

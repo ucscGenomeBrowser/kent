@@ -163,13 +163,10 @@ void cgiMakeOnClickRadioButton(char *name, char *value, boolean checked,
  * sent with checked on. */
 
 void cgiMakeCheckBoxUtil(char *name, boolean checked, char *msg, char *id);
-/* Make check box - designed to be called by the variously overloaded
- * cgiMakeCheckBox functions, but can also be called directly.
- * msg: mouseover msg (may be NULL)
- * id: button id (may be NULL)
- * Also make a shadow hidden variable so we
- * can distinguish between variable not present and
- * variable set to false. */
+/* Make check box - can be called directly, though it was originally meant
+ * as the common code for all lower level checkbox routines.
+ * However, it's util functionality has been taken over by
+ * cgiMakeCheckBoxWithIdAndOptionalHtml() */
 
 void cgiMakeCheckBox(char *name, boolean checked);
 /* Make check box. */
@@ -182,6 +179,9 @@ void cgiMakeCheckBoxWithId(char *name, boolean checked, char *id);
 
 void cgiMakeCheckBoxJS(char *name, boolean checked, char *javascript);
 /* Make check box with javascript */
+
+void cgiMakeCheckBoxIdAndJS(char *name, boolean checked, char *id, char *javascript);
+/* Make check box with ID and javascript. */
 
 void cgiMakeTextArea(char *varName, char *initialVal, int rowCount, int columnCount);
 /* Make a text area with area rowCount X columnCount and with text: intialVal. */
@@ -212,6 +212,10 @@ void cgiMakeDropListClass(char *name, char *menu[], int menuSize, char *checked,
 void cgiMakeDropList(char *name, char *menu[], int menuSize, char *checked);
 /* Make a drop-down list with names. 
  * uses style "normalText" */
+
+void cgiMakeDropListClassWithStyleAndJavascript(char *name, char *menu[], 
+    int menuSize, char *checked, char *class, char *style,char *javascript);
+/* Make a drop-down list with names, text class, style and javascript. */
 
 void cgiMakeDropListClassWithStyle(char *name, char *menu[], 
 	int menuSize, char *checked, char *class, char *style);
