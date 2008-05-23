@@ -424,7 +424,7 @@ foreach my $db (@dbs) {
   }
   close(SQL);
   if (! $noLoad) {
-    (! system("hgsql $db < $sqlFile")) || warn "hgsql error for $sqlFile";
+    (! system("/cluster/bin/x86_64/hgsql $db < $sqlFile")) || die "hgsql error for $sqlFile";
     print "Loaded $db.tableDescriptions.\n";
     unlink($sqlFile);
   }
