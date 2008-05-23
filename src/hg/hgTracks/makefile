@@ -22,7 +22,8 @@ include ../../inc/cgi_build_rules.mk
 ifeq (${GBROWSE}, 1)
   GBROWSE_D=-DGBROWSE
   A = gbrowseTest
-  O = $A.o bedGraph.o cds.o chainTrack.o mafTrack.o netTrack.o pslTrack.o \
+  O = $A.o oneTrack.o \
+      bedGraph.o cds.o chainTrack.o mafTrack.o netTrack.o pslTrack.o \
       simpleTracks.o wigMafTrack.o wigTrack.o
 else
   GBROWSE_D=
