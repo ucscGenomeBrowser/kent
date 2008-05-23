@@ -3,7 +3,7 @@
 These tracks contain cDNA and gene alignments produced by
 the <em>TransMap</em> cross-species alignment algorithm
 from other vertebrate species in the UCSC Genome Browser.
-The alignments are creating using syntenicly filtered 
+The alignments are created using syntenically filtered 
 BLASTZ alignment chains, resulting a prediction of the
 orthologous genes in $organism.
 </P>
@@ -26,13 +26,17 @@ for more information, click
 <H2>Methods</H2>
 <P>
   <ol>
-    <li> BLAT alignments of native RefSeq Genes, GenBank mRNAs, and GenBanks Spliced ESTs,
-      along with UCSC Gene Annotations, were obtained from vertebrate organisms in the
-      UCSC Genome Browser Database, when available.
-    <li> For all assemblies that have BLASTZ alignment chains and nets to the $organism $db
-      genome, alignment chains identified as syntenic using <tt>netfilter -syn</tt> are selected.
-    <li> The <tt>pslMap</tt> program is used to do a base-level projection of the cDNA alignments
-      to this genome.
+    <li> Source transcript alignments are obtained from vertebrate organisms
+    in the UCSC Genome Browser Database. BLAT alignments of RefSeq Genes,
+    GenBank mRNAs, and GenBanks Spliced ESTs to their cognate genome, along
+    with UCSC Gene, were used as available.
+    <li> For all vertebrate assemblies that have BLASTZ alignment chains and
+      nets to the $organism $db genome, alignment chains identified as
+      syntenic using the <tt>netfilter -syn</tt> option are selected.
+    <li> The <tt>pslMap</tt> program is used to do a base-level projection of
+      the source transcript alignments via the syntenic chains to this genome.
+      to this genome, resulting in alignments of the source transcript to
+      the orthologous genome region.
   </ol>
 </P>
 
