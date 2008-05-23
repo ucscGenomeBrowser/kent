@@ -25,7 +25,6 @@ cd $gbRoot
 nice gbDownloadStep
 nice gbProcessStep -mkOrganismList
 
-# FIXME: -keep is for parasol testing, remove soon
-nice etc/align-genbank -keep
+nice etc/align-genbank
 
 echo "`hostname` genbank build completed"
