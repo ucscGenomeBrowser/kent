@@ -16,7 +16,7 @@
 #include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.41 2008/05/22 21:57:51 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.42 2008/05/23 23:34:31 hiram Exp $";
 
 #define ITEM_SCORE_DEFAULT "1000"
 #define ADD_ITEM_COMMENT_DEFAULT "add comments"
@@ -423,8 +423,8 @@ if (! wikiTrackEnabled(database, &userName))
     errAbort("delete wiki item: wiki track not enabled");
 char comments[1024];
 safef(comments,ArraySize(comments), "This item '''%s''' on assembly %s "
-    "at %s:%d-%d has been deleted from the wiki track\n\n", item->db,
-	item->name, item->chrom, item->chromStart, item->chromEnd);
+    "at %s:%d-%d has been deleted from the wiki track\n\n", item->name,
+	item->db, item->chrom, item->chromStart, item->chromEnd);
 prefixComments(item, comments, userName, seqName, winStart, winEnd,
     database, NULL, "(deleted item)");
 deleteItem(sqlSigned(wikiItemId));
