@@ -9,7 +9,7 @@
 #include "portable.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.115 2008/03/20 23:14:09 rico Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.116 2008/05/23 23:26:42 tdreszer Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -1164,6 +1164,18 @@ for (;;)
 	*s = newChar;
     ++s;
     }
+}
+
+char * memSwapChar(char *s, int len, char oldChar, char newChar)
+/* Substitute newChar for oldChar throughout memory of given length. */
+{
+int ix=0;
+for (;ix<len;ix++)
+    {
+    if (s[ix] == oldChar)
+        s[ix] =  newChar;
+    }
+    return s;
 }
 
 void stripChar(char *s, char c)
