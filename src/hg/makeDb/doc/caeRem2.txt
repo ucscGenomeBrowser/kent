@@ -4,7 +4,7 @@
 #	From Wash U GSC
 #	http://genome.wustl.edu/genome.cgi?GENOME=Caenorhabditis+remanei
 
-#  $Id: caeRem2.txt,v 1.14 2007/07/11 21:14:00 markd Exp $
+#  $Id: caeRem2.txt,v 1.15 2008/05/23 23:07:19 hiram Exp $
 
 #########################################################################
 # DOWNLOAD SEQUENCE (DONE - 2007-03-16 - Hiram)
@@ -183,7 +183,7 @@ dbDbSpeciesDir worm
     time nice -n +19 doRepeatMasker.pl caeRem2 \
 	-buildDir=/cluster/data/caeRem2/bed/RepeatMasker > do.log 2>&1
     cd /cluster/data/caeRem2
-    twoBitToFa caeRem2.rmsk.2bit stdout | faSize stdout \
+    twoBitToFa caeRem2.rmsk.2bit stdout | faSize stdin \
 	> caeRem2.rmsk.2bit.faSize
     cat caeRem2.rmsk.2bit.faSize
     #	161944676 bases (15087728 N's 146856948 real
@@ -663,3 +663,22 @@ chainOne $(path1)
     rmdir /cluster/bluearc/worms/caeRem2
 #end tblastn
 
+#############################################################################
+# LIFTOVER TO caeRem3 (WORKING - 2008-05-23 - Hiram)
+    ssh kkstore01
+    screen -r -d	#	use screen to control this job
+    # -debug run to create run dir, preview scripts...
+    doSameSpeciesLiftOver.pl -debug caeRem2 caeRem3 \
+      -ooc /cluster/data/caeRem2/jkStuff/11.ooc
+    # Real run:
+    cd /cluster/data/caeRem2/bed/blat.caeRem3.2008-05-23
+    time nice -n +19 doSameSpeciesLiftOver.pl caeRem2 caeRem3 \
+      -ooc /cluster/data/caeRem2/jkStuff/11.ooc
+    #	real    8m15.850s
+
+    #	a scaffold to scaffold lift over file was made manually
+    #	for Sheldon McKay.
+    #	see also the scripts left in:
+    #	/cluster/data/caeRem2/bed/blat.caeRem3.supers/run.blat
+    #	/cluster/data/caeRem2/bed/blat.caeRem3.supers/run.chain
+#############################################################################
