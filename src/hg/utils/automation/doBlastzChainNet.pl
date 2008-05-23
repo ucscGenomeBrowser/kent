@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/automation/doBlastzChainNet.pl instead.
 
-# $Id: doBlastzChainNet.pl,v 1.19 2008/05/09 23:34:37 angie Exp $
+# $Id: doBlastzChainNet.pl,v 1.20 2008/05/23 23:19:41 hiram Exp $
 
 # to-do items:
 # - lots of testing
@@ -1342,7 +1342,8 @@ if (-e $gpLiftOverDir/md5sum.txt) then
   sort \$tmpFile > $gpLiftOverDir/md5sum.txt
   rm \$tmpFile
 else
-  md5sum $gpLiftOverDir/$over > $gpLiftOverDir/md5sum.txt
+  md5sum $gpLiftOverDir/$over | sed -e 's\@$gpLiftOverDir/\@\@' \\
+	> $gpLiftOverDir/md5sum.txt
 endif
 _EOF_
       );
