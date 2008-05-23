@@ -8,7 +8,7 @@
 #include "genePred.h"
 #include "genePredReader.h"
 
-static char const rcsid[] = "$Id: genePredToGtf.c,v 1.10 2007/09/20 21:54:14 markd Exp $";
+static char const rcsid[] = "$Id: genePredToGtf.c,v 1.11 2008/05/23 21:49:00 markd Exp $";
 
 static void usage()
 /* Explain usage and exit. */
@@ -195,10 +195,32 @@ if (honorCdsStat && (gp->optFields & genePredCdsStatFld))
     }
 }
 
+static int *calcFrames(struct genePred *gp)
+/* compute frames for a genePred the doesn't have them.  Free resulting array */
+{
+int *frames = needMem(gp->exonCount*sizeof(int));
+int iStart = (gp->strand[0] == '+') ? 0 : gp->exonCount - 1;
+int iStop = (gp->strand[0] == '+') ? gp->exonCount : -1;
+int iIncr = (gp->strand[0] == '+') ? 1 : -1;
+int i, cdsStart, cdsEnd;
+int cdsBaseCnt = 0;
+for (i = iStart; i != iStop; i += iIncr)
+    {
+    if (genePredCdsExon(gp, i, &cdsStart, &cdsEnd))
+        {
+        frames[i] = cdsBaseCnt % 3;
+        cdsBaseCnt += (cdsEnd - cdsStart);
+        }
+    else
+        frames[i] = -1;
+    }
+return frames;
+}
+
 static void writeFeatures(struct genePred *gp, int i, char *source, char *name,
                           char *chrom, char strand, char *geneName,
                           int firstUtrEnd, int cdsStart, int cdsEnd, int lastUtrStart,
-                          FILE *f)
+                          int frame, FILE *f)
 /* write exons CDS/UTR features */
 {
 int exonStart = gp->exonStarts[i];
@@ -214,7 +236,6 @@ if ((cdsStart < exonEnd) && (cdsEnd > exonStart))
         {
         int start = max(exonStart, cdsStart);
         int end = min(exonEnd, cdsEnd);
-        int frame = (gp->optFields & genePredExonFramesFld) ? gp->exonFrames[i] : -1;
         writeGtfLine(f, source, name, geneName, chrom, strand, "CDS",
                      start, end, i, frame);
         }
@@ -238,6 +259,7 @@ char *chrom = gp->chrom;
 char strand = gp->strand[0];
 struct codonCoords firstCodon, lastCodon;
 getStartStopCoords(gp, &firstCodon, &lastCodon);
+int *frames = (gp->optFields & genePredExonFramesFld) ? gp->exonFrames : calcFrames(gp);
 
 // figure out bounds of CDS and UTR regions
 int firstUtrEnd = gp->cdsStart;
@@ -258,8 +280,9 @@ for (i=0; i<gp->exonCount; ++i)
     writeGtfLine(f, source, name, geneName, chrom, strand, "exon", 
              gp->exonStarts[i], gp->exonEnds[i], i, -1);
     if (gp->cdsStart < gp->cdsEnd)
-        writeFeatures(gp, i,source, name, chrom, strand, geneName, 
-                      firstUtrEnd, cdsStart, cdsEnd, lastUtrStart, f);
+        writeFeatures(gp, i, source, name, chrom, strand, geneName, 
+                      firstUtrEnd, cdsStart, cdsEnd, lastUtrStart,
+                      frames[i], f);
     }
 if (gp->strand[0] == '+')
     {
@@ -275,6 +298,8 @@ else
     writeCodon(f, source, name, geneName, chrom, strand, "stop_codon",
                &firstCodon);
     }
+if (!(gp->optFields & genePredExonFramesFld))
+    freeMem(frames);
 }
 
 void genePredToGtf(char *database, char *table, char *gtfOut)
