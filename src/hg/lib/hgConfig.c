@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-static char const rcsid[] = "$Id: hgConfig.c,v 1.15 2007/01/08 22:54:37 kate Exp $";
+static char const rcsid[] = "$Id: hgConfig.c,v 1.16 2008/05/23 22:14:58 angie Exp $";
 
 #include "common.h"
 #include "hash.h"
@@ -23,14 +23,15 @@ static struct hash* cfgOptionsHash = 0;
 static void getConfigFile(char filename[PATH_LEN])
 /* get path to .hg.conf file to use */
 {
-struct stat statBuf;
 /* this long complicated test is needed because, cgiSpoof may have already
  * been called thus we have to look a little deeper to seem if were are really
  * a cgi we do this looking for cgiSpoof in the QUERY_STRING, if it exists.
  * If not a cgi, read from home directory, e.g. ~/.hg.conf */
+#ifndef GBROWSE
 if(!cgiIsOnWeb() ||
    (getenv("QUERY_STRING") != 0 && strstr(getenv("QUERY_STRING"), "cgiSpoof") != 0))
     {
+    struct stat statBuf;
     /* Check for explictly specified file in env, otherwise use one in home */
     if (getenv("HGDB_CONF") != NULL)
         strcpy(filename, getenv("HGDB_CONF"));
@@ -46,6 +47,7 @@ if(!cgiIsOnWeb() ||
 	}
     }
 else	/* on the web, read from global config file */
+#endif /* GBROWSE */
     {
     safef(filename, PATH_LEN, "%s/%s",
 	  GLOBAL_CONFIG_PATH, GLOBAL_CONFIG_FILE);

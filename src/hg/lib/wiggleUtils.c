@@ -8,9 +8,11 @@
 #include "wiggle.h"
 #include "hCommon.h"
 #include "obscure.h"
+#ifndef GBROWSE
 #include "customTrack.h"
+#endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: wiggleUtils.c,v 1.45 2006/11/17 00:09:06 hiram Exp $";
+static char const rcsid[] = "$Id: wiggleUtils.c,v 1.46 2008/05/23 22:14:58 angie Exp $";
 
 void printHistoGram(struct histoResult *histoResults, boolean html)
 {
@@ -191,7 +193,9 @@ spans = newHash(0);	/* list of spans in this table */
 /*	Not here before with this one, seems to be new
  *	Does not work for customTrash database
  */
+#ifndef GBROWSE
 if (differentString(sqlGetDatabase(conn),CUSTOM_TRASH))
+#endif /* GBROWSE */
     {
     freeMem(prevDb);
     prevDb = cloneString(sqlGetDatabase(conn));

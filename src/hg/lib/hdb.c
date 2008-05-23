@@ -33,10 +33,12 @@
 #include "twoBit.h"
 #include "genbank.h"
 #include "chromInfo.h"
+#ifndef GBROWSE
 #include "customTrack.h"
+#endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.353 2008/04/29 07:47:37 markd Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.354 2008/05/23 22:14:57 angie Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -607,9 +609,12 @@ void hFreeOrDisconnect(struct sqlConnection **pConn)
 /* Free cached or non-cached connection. */
 {
 char *db = sqlGetDatabase(*pConn);
+#ifndef GBROWSE
 if (sameString(CUSTOM_TRASH,db))
     sqlDisconnect(pConn);
-else if (sameString(db, hGetDbUsual(db)))
+else 
+#endif /* GBROWSE */
+if (sameString(db, hGetDbUsual(db)))
     hFreeConn(pConn);
 else if (sameString(db, hGetDb2Usual(db)))
     hFreeConn2(pConn);
@@ -842,12 +847,14 @@ struct sqlConnection *conn = NULL;
 struct slName *allTables = NULL;
 boolean ordinaryDb = TRUE;
 
+#ifndef GBROWSE
 if (sameString(CUSTOM_TRASH,db) && ctDbAvailable(NULL))
     {
     conn = sqlCtConn(TRUE);
     ordinaryDb = FALSE;
     }
 else
+#endif /* GBROWSE */
     conn = hAllocOrConnect(db);
 
 allTables = sqlListTables(conn);
@@ -2857,6 +2864,7 @@ char **row;
 struct hash *hash = newHash(5);
 boolean gotIt = TRUE, binned = FALSE;
 
+#ifndef GBROWSE
 if (sameString(CUSTOM_TRASH,db))
     {
     if(! ctDbAvailable(table))
@@ -2864,6 +2872,7 @@ if (sameString(CUSTOM_TRASH,db))
     conn = sqlCtConn(TRUE);
     }
 else
+#endif /* GBROWSE */
     {
     if (! hTableExistsDb(db, table))
 	return FALSE;

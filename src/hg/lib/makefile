@@ -92,6 +92,14 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     oregannoUi.o gvUi.o gv.o omicia.o protVar.o
 
 
+ifeq (${GBROWSE}, 1)
+  GBROWSE_D=-DGBROWSE
+else
+  GBROWSE_D=
+endif
+
+%.o: %.c
+	${CC} ${COPT} ${CFLAGS} ${GBROWSE_D} ${HG_DEFS} ${HG_WARN} ${HG_INC} ${XINC} -o $@ -c $<
 
 ../../lib/$(MACHTYPE)/jkhgap.a: $(O) 
 	ar rcus ../../lib/$(MACHTYPE)/jkhgap.a $(O)

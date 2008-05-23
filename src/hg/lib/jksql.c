@@ -13,9 +13,11 @@
 #include "jksql.h"
 #include "sqlNum.h"
 #include "hgConfig.h"
+#ifndef GBROWSE
 #include "customTrack.h"
+#endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: jksql.c,v 1.109 2008/05/02 20:23:30 angie Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.110 2008/05/23 22:14:58 angie Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -417,6 +419,13 @@ if (mysql_real_connect(
 	    database, host, user, mysql_error(conn));
     return NULL;
     }
+#ifdef GBROWSE
+    /* Apparently, when this code runs inside of a perl extension (perl
+     * also happens to be using mysql), conn->db gets garbage.
+     * So just coerce it to what we will expect it to be later. */
+    if (!conn->db || !sameString(database, conn->db))
+	conn->db = cloneString(database);
+#endif /* GBROWSE */
 if (monitorFlags & JKSQL_TRACE)
     monitorPrint(sc, "SQL_CONNECT", "%s %s", host, user);
 
@@ -433,6 +442,7 @@ struct sqlConnection *sqlConnectRemote(char *host,
 return sqlConnRemote(host, user, password, database, TRUE);
 }
 
+#ifndef GBROWSE
 struct sqlConnection *sqlCtConn(boolean abort)
 /* Connect to customTrash database, optionally abort on failure */
 {
@@ -451,6 +461,7 @@ else
     }
 return NULL;
 }
+#endif /* GBROWSE */
 
 struct sqlConnection *sqlConn(char *database, boolean abort)
 /* Connect to database on default host as default user. 

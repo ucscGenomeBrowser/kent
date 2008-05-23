@@ -11,10 +11,12 @@
 #include "hgTracks.h"
 #include "wiggle.h"
 #include "scoredRef.h"
+#ifndef GBROWSE
 #include "customTrack.h"
+#endif /* GBROWSE */
 #include "wigCommon.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.76 2008/02/20 00:42:29 markd Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.77 2008/05/23 22:14:58 angie Exp $";
 
 struct wigItem
 /* A wig track item. */
@@ -291,6 +293,7 @@ if ( el == NULL)
 	hashAddInt(spans, spanName, wi->span);
 }
 
+#ifndef GBROWSE
 void ctWigLoadItems(struct track *tg) 
 /*	load custom wiggle track data	*/
 {
@@ -351,6 +354,7 @@ tg->mapsSelf = TRUE;
 
 lineFileClose(&lf);
 }
+#endif /* GBROWSE */
 
 void wigLoadItems(struct track *tg) 
 /*	wigLoadItems - read the table rows that hRangeQuery returns
@@ -394,11 +398,12 @@ char *span1K = "Span >= 1000 limit 1";
 char *spanOver1K = "Span >= 1000";
 char whereSpan[64];
 int spanMinimum = 1;
-struct customTrack *ct = NULL;
 char *dbTableName = NULL;
 struct trackDb *tdb = NULL; 
 int loadStart = winStart, loadEnd = winEnd;
 
+#ifndef GBROWSE
+struct customTrack *ct = NULL;
 /*	custom tracks have different database	*/
 if (tg->customPt != (void *)NULL)
     {
@@ -409,6 +414,7 @@ if (tg->customPt != (void *)NULL)
     tdb = ct->tdb;
     }
 else
+#endif /* GBROWSE */
     {
     dbTableName = tg->mapName;
     tdb = tg->tdb;
@@ -940,6 +946,7 @@ void wigMapSelf(struct track *tg, struct hvGfx *hvg, int seqStart, int seqEnd,
 if (tg->mapsSelf)
     {
     char *itemName;
+#ifndef GBROWSE
     if (tg->customPt)
 	{
 	struct customTrack *ct = tg->customPt;
@@ -947,6 +954,7 @@ if (tg->mapsSelf)
 	safef(itemName, 128, "%s %s", ct->wigFile, tg->mapName);
 	}
     else
+#endif /* GBROWSE */
 	itemName = cloneString(tg->mapName);
 
     mapBoxHc(hvg, seqStart, seqEnd, xOff, yOff, width, tg->height, tg->mapName, 

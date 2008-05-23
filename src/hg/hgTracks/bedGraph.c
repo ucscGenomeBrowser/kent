@@ -14,7 +14,7 @@
 #include "customTrack.h"
 #include "wigCommon.h"
 
-static char const rcsid[] = "$Id: bedGraph.c,v 1.9 2008/05/21 18:53:45 larrym Exp $";
+static char const rcsid[] = "$Id: bedGraph.c,v 1.10 2008/05/23 22:14:58 angie Exp $";
 
 struct bedGraphItem
 /* A bedGraph track item. */
@@ -104,6 +104,7 @@ wigCart = (struct wigCartOptions *) tg->extraUiData;
 graphColumn = wigCart->graphColumn;
 
 
+#ifndef GBROWSE
 if (tg->customPt)
     {
     struct customTrack *ct = (struct customTrack *) tg->customPt;
@@ -111,6 +112,7 @@ if (tg->customPt)
     conn = sqlCtConn(TRUE);
     }
 else 
+#endif /* GBROWSE */
     {
     tableName = tg->mapName;
     conn = hAllocConn();
