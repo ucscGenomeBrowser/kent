@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/makeDownloads.pl instead.
 
-# $Id: makeDownloads.pl,v 1.15 2008/04/23 23:02:11 tdreszer Exp $
+# $Id: makeDownloads.pl,v 1.16 2008/05/23 23:02:18 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -852,9 +852,10 @@ Alternate methods to ftp access.
 
 Using an rsync command to download the entire directory:
     rsync -avzP rsync://hgdownload.cse.ucsc.edu/goldenPath/$db/liftOver/ .
-For a single file, e.g. mm8ToHg18.over.chain.gz
+For a single file, e.g. ${db}ToHg18.over.chain.gz
     rsync -avzP \
         rsync://hgdownload.cse.ucsc.edu/goldenPath/$db/liftOver/${db}ToHg18.over.chain.gz .
+    (Hg18 is merely an example here, not necessarily existing.)
 
 Or with wget, all files:
     wget --timestamping \
