@@ -20,12 +20,12 @@ set flag=""
 if ($#argv != 2) then
   # no command line args
   echo
-  echo "  finds all scaffolds or contigs that have no chain/net to any of the nets."
+  echo "  finds all scaffolds or contigs that have no chain/net to any other orgs."
   echo
   echo "    usage:  database fileOfOtherDbNames"
   echo
   echo "    note:  expects db.net.OtherOrg output from chainNetTrio down one directory"
-  echo "           though not necessarily in the same directory"
+  echo "           though not necessarily all in the same directory"
   echo
   exit
 else
@@ -39,7 +39,7 @@ endif
 
 set count=`grep -c . $dbList`
 
-foreach otherDb (`cat dbList`)
+foreach otherDb (`cat $dbList`)
   set capDb=`echo $otherDb | perl -wpe '$_ = ucfirst($_)'`
   if ( -e $dbList ) then
     test */$db.net.$capDb  >& /dev/null
@@ -64,7 +64,7 @@ echo
 
 echo "find nets that are empty in all nets:"
 rm -f mtNetAll
-foreach otherDb (`cat dbList`)
+foreach otherDb (`cat $dbList`)
   cat $otherDb.mtNet >> mtNetAll
 end
 sort mtNetAll | uniq -c | sort -nr | head -10
@@ -76,10 +76,11 @@ wc -l $db.mtNetList | awk '{print $1}'
 echo
 
 echo "list of sizes of mtNets:"
-hgsql -N -e "SELECT chrom, size FROM chromInfo" $db | grep -f $db.mtNetList  > $db.mtNetSizes
-wc -l $db.mtNetSizes
+echo '#chrom    #size' > $db.mtNetSizes
+hgsql -N -e "SELECT chrom, size FROM chromInfo" $db | grep -f $db.mtNetList  >> $db.mtNetSizes
+wc -l $db.mtNetSizes | awk '{print $1-1, $2}'
 echo
-head -5 $db.mtNetSizes
+head -6 $db.mtNetSizes
 echo "..."
 tail -5 $db.mtNetSizes
 echo
