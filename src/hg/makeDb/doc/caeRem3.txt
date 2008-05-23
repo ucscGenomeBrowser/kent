@@ -4,7 +4,7 @@
 #	From Wash U GSC
 #	http://genome.wustl.edu/genome.cgi?GENOME=Caenorhabditis+remanei
 
-#  $Id: caeRem3.txt,v 1.1 2008/05/22 23:32:58 hiram Exp $
+#  $Id: caeRem3.txt,v 1.2 2008/05/23 23:06:39 hiram Exp $
 
 #########################################################################
 # DOWNLOAD SEQUENCE (DONE - 2008-05-22 - Hiram)
@@ -258,26 +258,218 @@ dbDbSpeciesDir worm
     time twoBitToFa ../../caeRem3.unmasked.2bit stdout \
 	| nice -n +19 trfBig -trf=/cluster/bin/i386/trf stdin /dev/null \
 	-bedAt=simpleRepeat.bed -tempDir=/scratch/tmp > do.out 2>&1
-XXX - running 2008-05-22 16:12
+    #	real    43m39.381s
+    awk '$5 <= 12' simpleRepeat.bed > trfMask.bed
 
-    awk '{if ($5 <= 12) print;}' simpleRepeat.bed > trfMask.bed
-    #	real    71m21.810s
     ssh hgwdev
     cd /cluster/data/caeRem3/bed/simpleRepeat
     nice -n +19 hgLoadBed caeRem3 simpleRepeat \
       simpleRepeat.bed -sqlTable=$HOME/kent/src/hg/lib/simpleRepeat.sql
-    #	Loaded 37049 elements of size 16
+    #	Loaded 39971 elements of size 16
     featureBits caeRem3 simpleRepeat > fb.caeRem3.simpleRepeat.txt 2>&1
-    #	8604824 bases of 146898439 (5.858%) in intersection
+    cat fb.caeRem3.simpleRepeat.txt 
+    #	5219673 bases of 138406388 (3.771%) in intersection
+
+##############################################################################
+## combine trf mask with windowmasker (DONE - 2008-05-23 - Hiram)
     ssh kkstore01
     cd /cluster/data/caeRem3
+    zcat bed/windowMasker/cleanWMask.bed.gz \
+	| twoBitMask caeRem3.unmasked.2bit stdin \
+	    -type=.bed caeRem3.cleanWMSdust.2bit
     cat bed/simpleRepeat/trfMask.bed \
-        | twoBitMask -add -type=.bed caeRem3.rmsk.2bit stdin \
-	caeRem3.rmskTrf.2bit
-     twoBitToFa caeRem3.rmskTrf.2bit stdout | faSize stdin \
-	> faSize.caeRem3.rmskTrf.txt
-    cat faSize.caeRem3.rmskTrf.txt
-    #	161944676 bases (15087728 N's 146856948 real
-    #	145166254 upper 1690694 lower) in 1 sequences in 1 files
-    #	%1.04 masked total, %1.15 masked real
+      | twoBitMask -add -type=.bed caeRem3.cleanWMSdust.2bit stdin caeRem3.2bit
+    #	can safely ignore the warning about BED file >= 13 fields
+    #	check it
+    twoBitToFa caeRem3.2bit stdout | faSize stdin
+    #	149111736 bases (10705533 N's 138406203 real 96215522 upper
+    #	42190681 lower) in 1 sequences in 1 files
+    #	%28.29 masked total, %30.48 masked real
 
+    #	create gbdb symlink
+    ssh hgwdev
+    ln -s /cluster/data/caeRem3/caeRem3.2bit /gbdb/caeRem3
+
+##############################################################################
+## create masked contigs for blastz (DONE - 2008-05-23 - Hiram)
+    ssh kkstore01
+    mkdir /cluster/data/caeRem3/maskedContigs
+    cd /cluster/data/caeRem3/maskedContigs
+    #	copy over lft2BitToFa.pl from /cluster/data/caePb2/jkStuff
+    cp -p /cluster/data/caePb2/jkStuff/lft2BitToFa.pl ../jkStuff
+    ln -s ../downloads/caeRem3.chrUn.lift .
+
+    time nice -n +19 ../jkStuff/lft2BitToFa.pl \
+	../caeRem3.2bit caeRem3.chrUn.lift > super.fa
+    #	real    1m40.247s
+    #	verify it is OK, should have same numbers of real, upper and lower as
+    #	measured in the caeRem3.2bit, only N's are different:
+    faSize super.fa
+    #	145442736 bases (7036533 N's 138406203 real 96215522 upper
+    #	42190681 lower) in 3670 sequences in 1 files
+    #	%29.01 masked total, %30.48 masked real
+    #	in fact, the missing N's should be:
+    # (3670 - 1) * 1000  = 149111736 - 145442736 = 10705533 - 7036533 =
+    #	3669000
+
+
+    faToTwoBit super.fa caeRem3.supercontigs.2bit
+    twoBitInfo caeRem3.supercontigs.2bit stdout | sort -k2nr \
+        > caeRem3.supercontigs.sizes
+    #	Copy this 2bit file and sizes over to /san/sanvol1/scratch/worms/caeRem3
+
+    #  the lft2BitToFa.pl script is:
+    cat << '_EOF_'
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+use File::Basename;
+    
+sub usage()
+{
+printf "usage: %s <file.2bit> <file.lft> [more_files.lft]\n",  basename($0);
+printf "\tfasta output is to stdout, therefore route stdout to result file\n";
+exit 255;
+}   
+    
+my $argc = scalar(@ARGV);
+
+usage if ($argc < 2);
+
+my $twoBitFile = shift;
+    
+while (my $liftFile = shift)
+{   
+open (FH,"<$liftFile") or die "Can not open $liftFile";
+while (my $line=<FH>)
+    {
+    chomp $line;
+    my ($start, $contig, $length, $chrom, $chrom_length) = split('\s',$line);
+    my $cmd=sprintf("twoBitToFa $twoBitFile:%s:%d-%d stdout",
+        $chrom, $start, $start+$length);
+    print `$cmd | sed -e "s#^>.*#>$contig#"`;
+    }
+close (FH);
+}
+'_EOF_'
+# << happy emacs
+
+#########################################################################
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2008-05-23 - Hiram)
+    # Use -repMatch=50 (based on size -- for human we use 1024, and 
+    # C. remanei size is ~5.1% of human judging by gapless caeRem2 vs. hg18 
+    # genome sizes from featureBits.
+    ssh kkstore01
+    cd /cluster/data/caeRem3
+    blat caeRem3.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/11.ooc -repMatch=50
+    #	Wrote 41591 overused 11-mers to jkStuff/11.ooc
+    cp -p jkStuff/11.ooc /san/sanvol1/scratch/worms/caeRem3
+    # the san directory should have:
+# -rw-rw-r--  1       16 May 13 09:52 chrom.sizes
+# -rw-rw-r--  1 59427484 May 13 11:21 caePb2.2bit
+# -rw-rw-r--  1 58631157 May 13 11:31 caePb2.supercontigs.2bit
+# -rw-rw-r--  1    56860 May 13 11:31 caePb2.supercontigs.sizes
+# -rw-rw-r--  1   142100 May 13 11:41 11.ooc
+    #	copy those files to /cluster/bluearc/scratch/data/caeRem3/
+    #	and to the Iservers /iscratch/i/worms/caeRem3/
+    #	request an rsync of /scratch/data/ from the cluster admins
+
+#########################################################################
+# GENBANK AUTO UPDATE (DONE - 2008-05-23 - Hiram)
+    # align with latest genbank process.
+    ssh hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+    # edit etc/genbank.conf to add caePb2 just before caeRem2
+
+# caeRem3 (C. remanei)
+caeRem3.serverGenome = /cluster/data/caeRem3/caeRem3.2bit
+caeRem3.clusterGenome = /iscratch/i/worms/caeRem3/caeRem3.2bit
+caeRem3.ooc = /iscratch/i/worms/caeRem3/11.ooc
+caeRem3.lift = /iscratch/i/worms/caeRem3/caeRem3.chrUn.lift
+caeRem3.align.unplacedChroms = chrUn
+caeRem3.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+caeRem3.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+caeRem3.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+caeRem3.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+caeRem3.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+caeRem3.refseq.mrna.native.load = no
+caeRem3.refseq.mrna.xeno.load  = yes
+caeRem3.refseq.mrna.xeno.loadDesc = yes
+caeRem3.genbank.mrna.xeno.load = yes
+caeRem3.genbank.est.native.load = yes
+caeRem3.genbank.est.native.loadDesc = no
+caeRem3.downloadDir = caeRem3
+caeRem3.perChromTables = no
+
+    cvs ci -m "Added caeRem3." etc/genbank.conf
+    # update /cluster/data/genbank/:
+    make etc-update
+
+    ssh genbank
+    cd /cluster/data/genbank
+    time nice -n +19 bin/gbAlignStep -initial caeRem3 &
+    #	var/build/logs/2008.05.23-10:34:13.caeRem3.initalign.log
+    #	real    133m52.226s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad caeRem3
+    #	logFile: var/dbload/hgwdev/logs/2008.05.23-14:22:08.dbload.log
+    #	real    17m45.023s
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+    # add caeRem3 to:
+        etc/align.dbs
+        etc/hgwdev.dbs
+    cvs ci -m "Added caeRem3 - C. remanei" etc/align.dbs etc/hgwdev.dbs
+    make etc-update
+
+############################################################################
+#  BLATSERVERS ENTRY (DONE - 2008-05-23 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("caeRem3", "blat11", "17788", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("caeRem3", "blat11", "17789", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################
+## Default position (DONE - 2008-05-23 - Hiram)
+    ssh hgwdev
+    hgsql -e 'update dbDb set defaultPos="chrUn:119043304-119068959"
+	where name="caeRem3";' hgcentraltest
+
+##########################################################################
+## Creating downloads (DONE - 2008-05-23 - Hiram)
+    #	There is only one chrom, make its trfMaskChrom file exist
+    ssh hgwdev
+    mkdir /cluster/data/caeRem3/bed/simpleRepeat/trfMaskChrom
+    cd /cluster/data/caeRem3/bed/simpleRepeat/trfMaskChrom
+    ## symlink didn't work here, the symlink ended up in the tar file
+    cp -p ../trfMask.bed ./chrUn.bed
+    cd  /cluster/data/caeRem3
+    #	there is no RM file
+    time nice -n +19 /cluster/bin/scripts/makeDownloads.pl caeRem3 
+    #	real    2m10.175s
+    ## *!* EDIT THE README.txt FILES *!* in goldenPath/*/README.txt ##
+
+    cp -p bed/windowMasker/cleanWMask.bed.gz \
+	goldenPath/bigZips/chromWMSdust.bed.gz
+
+##########################################################################
+## Creating pushQ (DONE - 2008-05-23 - Hiram)
+    ssh hgwdev
+    mkdir /cluster/data/caeRem3/pushQ
+    cd /cluster/data/caeRem3/pushQ
+    /cluster/bin/scripts/makePushQSql.pl caeRem3 > caeRem3.sql 2> stderr.out
+
+##########################################################################
