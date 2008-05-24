@@ -15,6 +15,9 @@ set db=""
 set chrom=""
 set split=""
 set track=""
+set gapUrlFile=""
+set url1=""
+set url3=""
 
 if ( $#argv < 2 |  $#argv > 3 |  ) then
   # no command line args
@@ -50,6 +53,10 @@ endif
 
 set split=`getSplit.csh $db gap hgwdev` 
 
+#set up urls
+set url1="http://genome-test.cse.ucsc.edu/cgi-bin/hgTracks?db=$db"
+set url3="&$track=pack&gap=pack"
+
 # ------------------------------------------------
 # featureBits
 
@@ -67,6 +74,7 @@ rm -f file
 featureBits -countGaps $db $track gap -bed=$db.gapFile
 
 if ( -z $db.gapFile ) then
+  # no overlap to gap.  clean up and quit
   echo
   rm -f $db.gapFile
   rm -f $db.chromlist
@@ -74,53 +82,52 @@ if ( -z $db.gapFile ) then
 endif
 
 if ( $checkUnbridged == "false" ) then
-  exit 0
-endif
-
-echo "check for overlap (including introns) to unbridged gaps:"
-rm -f $db.unbridgedGap.bed
-# create file of unbridged gaps
-if ( $split == "unsplit" ) then
-  # gap is not split
-  hgsql $db -N -e "SELECT chrom, chromStart, chromEnd FROM gap \
-   WHERE bridge = 'no'" > $db.unbridgedGap.bed
+  set gapUrlFile=$db.gapFile
 else
-  # gap is split.  go thru all chroms
-  if (! -e $db.chromlist ) then
-    getChromlist.csh $db > /dev/null
+  echo "check for overlap (including introns) to unbridged gaps:"
+  rm -f $db.unbridgedGap.bed
+  # create file of unbridged gaps
+  if ( $split == "unsplit" ) then
+    # gap is not split
+    hgsql $db -N -e "SELECT chrom, chromStart, chromEnd FROM gap \
+     WHERE bridge = 'no'" > $db.unbridgedGap.bed
+  else
+    # gap is split.  go thru all chroms
+    if (! -e $db.chromlist ) then
+      getChromlist.csh $db > /dev/null
+    endif
+    foreach chrom (`cat $db.chromlist`)
+      hgsql $db -N -e "SELECT chrom, chromStart, chromEnd FROM ${chrom}_gap \
+       WHERE bridge = 'no'" >> $db.unbridgedGap.bed
+    end
   endif
-  foreach chrom (`cat $db.chromlist`)
-    hgsql $db -N -e "SELECT chrom, chromStart, chromEnd FROM ${chrom}_gap \
-     WHERE bridge = 'no'" >> $db.unbridgedGap.bed
-  end
+  # check for intersection of track and gap
+  # make a file with introns filled in
+  makeFilledBlockBed.csh $db $track $track.bed
+  rm -f $db.$track.unbridged.gaps
+  featureBits $db $track.bed $db.unbridgedGap.bed -bed=$db.$track.unbridged.gaps
+  echo
+  set gapUrlFile=$db.$track.unbridged.gaps
 endif
 
-# check for intersection of track and gap
-# make a file with introns filled in
-makeFilledBlockBed.csh $db $track $track.bed
-rm -f $db.$track.unbridged.gaps
-featureBits $db $track.bed $db.unbridgedGap.bed -bed=$db.$track.unbridged.gaps
-echo
-
-if ( -z $db.$track.unbridged.gaps ) then
+# print three records, either from gap overlap or unbridged gap overlap.
+if ( -z $gapUrlFile ) then
   exit
 else
   # print 3 records, both as text and as links
   # links have 300 bp padding 
   echo "total number of unbridged gaps:"
-  wc -l $db.$track.unbridged.gaps
-  head -3 $db.$track.unbridged.gaps
+  wc -l  $gapUrlFile
+  head -3  $gapUrlFile
   echo
-  set url1="http://genome-test.cse.ucsc.edu/cgi-bin/hgTracks?db=$db"
-  set url3="&$track=pack&gap=pack"
-  set number=`wc -l $db.$track.unbridged.gaps | awk '{print $1}'`
+  set number=`wc -l  $gapUrlFile | awk '{print $1}'`
   if ( $number < 3 ) then
     set n=$number
   else
     set n=3
   endif
   while ( $n )
-    set pos=`sed -n -e "${n}p" $db.$track.unbridged.gaps \
+    set pos=`sed -n -e "${n}p"  $gapUrlFile \
       | awk '{print $1":"$2-300"-"$3+300}'`
     echo "$url1&position=$pos$url3"
     set n=`echo $n | awk '{print $1-1}'`
@@ -132,5 +139,4 @@ rm -f $db.unbridgedGap.bed
 rm -f $track.bed
 rm -f $db.chromlist
 rm -f $db.gapFile
-
 
