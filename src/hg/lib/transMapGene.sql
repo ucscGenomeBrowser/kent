@@ -10,5 +10,6 @@ CREATE TABLE transMapGene (
     db char(16) not null,	# source db
     geneName varchar(255) not null,	# gene name
               #Indices
-    PRIMARY KEY(db,id)
+    PRIMARY KEY(db,id),
+    INDEX(id)
 );
