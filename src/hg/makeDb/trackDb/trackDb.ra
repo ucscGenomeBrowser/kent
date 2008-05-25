@@ -449,7 +449,7 @@ priority 36
     group genes
     type psl
     priority 36.1
-    color 24,116,192
+    color 0,100,0
     visibility pack
     transMapInfo transMapInfoUcscGenes
     transMapSrc hgFixed.transMapSrcUcscGenes
@@ -475,7 +475,7 @@ priority 36
     group genes
     type psl
     priority 36.2
-    color 24,116,192
+    color 0,100,0
     visibility pack
     transMapInfo transMapInfoRefSeq
     transMapSrc hgFixed.transMapSrcRefSeq
@@ -500,12 +500,12 @@ priority 36
     group genes
     type psl
     priority 36.3
-    color 24,116,192
+    color 0,100,0
     visibility pack
     transMapInfo transMapInfoMRna
     transMapSrc hgFixed.transMapSrcMRna
     transMapGene hgFixed.transMapGeneMRna
-    baseColorDefault diffCodons
+    baseColorDefault off
     baseColorUseCds table hgFixed.transMapGeneMRna
     baseColorUseSequence extFile hgFixed.transMapSeqMRna hgFixed.transMapExtFileMRna
     indelDoubleInsert on
@@ -525,12 +525,12 @@ priority 36
     group genes
     type psl
     priority 36.4
-    color 24,116,192
+    color 0,100,0
     visibility hide
     transMapInfo transMapInfoSplicedEst
     transMapSrc hgFixed.transMapSrcSplicedEst
     transMapGene hgFixed.transMapGeneSplicedEst
-    baseColorDefault diffBases
+    baseColorDefault off
     baseColorUseCds table hgFixed.transMapGeneSplicedEst
     baseColorUseSequence extFile hgFixed.transMapSeqSplicedEst hgFixed.transMapExtFileSplicedEst
     indelDoubleInsert on
