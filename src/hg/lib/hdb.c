@@ -38,7 +38,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.354 2008/05/23 22:14:57 angie Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.355 2008/05/25 02:44:17 markd Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -1093,12 +1093,14 @@ struct dnaSeq *hFetchSeq(char *fileName, char *seqName, int start, int end)
 {
 if (twoBitIsFile(fileName))
     {
-    struct twoBitFile *tbf;
-    struct dnaSeq *seq;
-    tbf = twoBitOpen(fileName);
-    seq = twoBitReadSeqFrag(tbf, seqName, start, end);
+    static struct twoBitFile *tbf = NULL;  // cache of open file
+    if ((tbf == NULL) || !sameString(fileName, tbf->fileName))
+        {
+        twoBitClose(&tbf);
+        tbf = twoBitOpen(fileName);
+        }
+    struct dnaSeq *seq = twoBitReadSeqFrag(tbf, seqName, start, end);
     tolowers(seq->dna);
-    twoBitClose(&tbf);
     return seq;
     }
 return nibLoadPart(fileName, start, end-start);
