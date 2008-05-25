@@ -115,3 +115,12 @@ twoBitToFa ../otoGar1/otoGar1.unmasked.2bit \
     # fb.otoGar1.chainMm9Link.txt:
     #   592429209 bases of 1969052059 (30.087%) in intersection
 
+############################################################################
+# TRANSMAP vertebrate.2008-05-20 build  (2008-05-24 markd)
+
+vertebrate-wide transMap alignments were built  Tracks are created and loaded
+by a single Makefile. This is available from:
+   svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2008-05-20
+
+see doc/builds.txt for specific details.
+############################################################################

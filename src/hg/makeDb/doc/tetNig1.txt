@@ -2924,3 +2924,12 @@ TMPDIR=/scratch/tmp
     mv ./blastz.swap.danRer5/swap.log ./blastz.danRer5.swap
     rm -r blastz.swap.danRer5
     ln -s blastz.danRer5.swap blastz.danRer5
+############################################################################
+# TRANSMAP vertebrate.2008-05-20 build  (2008-05-24 markd)
+
+vertebrate-wide transMap alignments were built  Tracks are created and loaded
+by a single Makefile. This is available from:
+   svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2008-05-20
+
+see doc/builds.txt for specific details.
+############################################################################

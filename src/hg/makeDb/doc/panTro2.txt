@@ -2,7 +2,7 @@
 
 # This file describes browser build for the panTro2 chimp genome: Feb 2006
 #
-#	"$Id: panTro2.txt,v 1.10 2007/11/21 20:20:35 hiram Exp $"
+#	"$Id: panTro2.txt,v 1.11 2008/05/25 20:11:53 markd Exp $"
 #
 
 #  NOTE:  this doc may have genePred loads that fail to include
@@ -3176,3 +3176,12 @@ TMPDIR=/scratch/tmp
     #	real    2597m24.771s
 
 ###########################################################################
+############################################################################
+# TRANSMAP vertebrate.2008-05-20 build  (2008-05-24 markd)
+
+vertebrate-wide transMap alignments were built  Tracks are created and loaded
+by a single Makefile. This is available from:
+   svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2008-05-20
+
+see doc/builds.txt for specific details.
+############################################################################

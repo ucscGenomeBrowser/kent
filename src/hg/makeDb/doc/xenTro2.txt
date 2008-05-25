@@ -1569,3 +1569,12 @@ chainOne $(path1)
     time nice -n +19 featureBits xenTro2 chainAnoCar1Link \
 	> fb.xenTro2.chainAnoCar1Link.txt 2>&1
     #	84514985 bases of 1359412157 (6.217%) in intersection
+############################################################################
+# TRANSMAP vertebrate.2008-05-20 build  (2008-05-24 markd)
+
+vertebrate-wide transMap alignments were built  Tracks are created and loaded
+by a single Makefile. This is available from:
+   svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2008-05-20
+
+see doc/builds.txt for specific details.
+############################################################################

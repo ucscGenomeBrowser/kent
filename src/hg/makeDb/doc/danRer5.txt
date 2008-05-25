@@ -3087,3 +3087,12 @@ chainOne $(path1)
     rm -rf /cluster/bluearc/danRer5/bed/tblastn.hg18KG/blastOut
 #end tblastn
 ##########################################################################
+############################################################################
+# TRANSMAP vertebrate.2008-05-20 build  (2008-05-24 markd)
+
+vertebrate-wide transMap alignments were built  Tracks are created and loaded
+by a single Makefile. This is available from:
+   svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2008-05-20
+
+see doc/builds.txt for specific details.
+############################################################################

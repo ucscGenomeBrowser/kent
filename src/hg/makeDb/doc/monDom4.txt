@@ -3395,3 +3395,12 @@ CREATE TABLE chainMonDom4Link (
 	-continue=download -swap -bigClusterHub=pk > download.log 2>&1 &
 
 ###########################################################################
+############################################################################
+# TRANSMAP vertebrate.2008-05-20 build  (2008-05-24 markd)
+
+vertebrate-wide transMap alignments were built  Tracks are created and loaded
+by a single Makefile. This is available from:
+   svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2008-05-20
+
+see doc/builds.txt for specific details.
+############################################################################

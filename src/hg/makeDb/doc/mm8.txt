@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: mm8.txt,v 1.68 2008/05/14 05:08:28 aamp Exp $"
+#	"$Id: mm8.txt,v 1.69 2008/05/25 20:11:52 markd Exp $"
 #
 
 #  NOTE:  this doc may have genePred loads that fail to include
@@ -9196,4 +9196,13 @@ knownToEnsembl yes
 ############################################################################
 # AGILENT CGH PROBES (Done 2008-05-13, Andy)
 # (see hg18.txt)
+############################################################################
+############################################################################
+# TRANSMAP vertebrate.2008-05-20 build  (2008-05-24 markd)
+
+vertebrate-wide transMap alignments were built  Tracks are created and loaded
+by a single Makefile. This is available from:
+   svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2008-05-20
+
+see doc/builds.txt for specific details.
 ############################################################################

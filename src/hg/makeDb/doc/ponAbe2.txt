@@ -4,7 +4,7 @@
 # This file describes browser build for the Orangutan
 # genome, July 31 2007
 #
-#	"$Id: ponAbe2.txt,v 1.17 2008/03/12 21:56:21 markd Exp $"
+#	"$Id: ponAbe2.txt,v 1.18 2008/05/25 20:11:54 markd Exp $"
 #
 ######################################################################
 ## DOWNLOAD SEQUENCE (DONE - 2007-09-06 - Hiram)
@@ -2006,3 +2006,12 @@ TMPDIR=/scratch/tmp
     # set search regex to
         termRegex chr[0-9a-zA-Z_].*\.[0-9]+\.[0-9]
 
+############################################################################
+# TRANSMAP vertebrate.2008-05-20 build  (2008-05-24 markd)
+
+vertebrate-wide transMap alignments were built  Tracks are created and loaded
+by a single Makefile. This is available from:
+   svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2008-05-20
+
+see doc/builds.txt for specific details.
+############################################################################

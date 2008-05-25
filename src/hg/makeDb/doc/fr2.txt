@@ -9,7 +9,7 @@
 #       Data release policy: http://medaka.utgenome.org/#policy
 #       Ensembl: http://www.ensembl.org/Oryzias_latipes/index.html
 #
-#       "$Id: fr2.txt,v 1.19 2007/12/21 20:56:35 hiram Exp $"
+#       "$Id: fr2.txt,v 1.20 2008/05/25 20:11:50 markd Exp $"
 #
 
 ##########################################################################
@@ -1675,3 +1675,12 @@ plot "mostCons.histo.txt" using 2:3 title " # of elements" with boxes, \
     mv ./blastz.swap.danRer5/swap.log ./blastz.danRer5.swap
     rm -r blastz.swap.danRer5
     ln -s blastz.danRer5.swap blastz.danRer5
+############################################################################
+# TRANSMAP vertebrate.2008-05-20 build  (2008-05-24 markd)
+
+vertebrate-wide transMap alignments were built  Tracks are created and loaded
+by a single Makefile. This is available from:
+   svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2008-05-20
+
+see doc/builds.txt for specific details.
+############################################################################

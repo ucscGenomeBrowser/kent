@@ -2521,3 +2521,12 @@ files and re-run from scratch:
 0.248u 0.190s 6:10:43.78 0.0%   0+0k 0+0io 26pf+0w
 
     ln -s blastz.equCab2.2008-04-18 /cluster/data/galGal3/bed/blastz.equCab2
+############################################################################
+# TRANSMAP vertebrate.2008-05-20 build  (2008-05-24 markd)
+
+vertebrate-wide transMap alignments were built  Tracks are created and loaded
+by a single Makefile. This is available from:
+   svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2008-05-20
+
+see doc/builds.txt for specific details.
+############################################################################

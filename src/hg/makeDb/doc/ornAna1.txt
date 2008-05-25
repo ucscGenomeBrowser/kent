@@ -1370,3 +1370,12 @@ Submission to last job:       1991620s   33193.67m   553.23h   23.05d
 	    -swap -syntenicNet >& do.log &
     0.883u 0.754s 2:33:21.36 0.0%   0+0k 0+0io 16pf+0w
 
+############################################################################
+# TRANSMAP vertebrate.2008-05-20 build  (2008-05-24 markd)
+
+vertebrate-wide transMap alignments were built  Tracks are created and loaded
+by a single Makefile. This is available from:
+   svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2008-05-20
+
+see doc/builds.txt for specific details.
+############################################################################

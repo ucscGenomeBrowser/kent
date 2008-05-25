@@ -21148,3 +21148,12 @@ TMPDIR=/scratch/tmp
    for bed in *.bed; do hgLoadBed rn4 ${bed%.bed}{,.bed}; done
 
 ############################################################################
+############################################################################
+# TRANSMAP vertebrate.2008-05-20 build  (2008-05-24 markd)
+
+vertebrate-wide transMap alignments were built  Tracks are created and loaded
+by a single Makefile. This is available from:
+   svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2008-05-20
+
+see doc/builds.txt for specific details.
+############################################################################

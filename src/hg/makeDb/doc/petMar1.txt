@@ -4,7 +4,7 @@
 # This file describes browser build for the Sea Lamprey
 # genome, Petromyzon marinus, March 2007, v.3.0 from WUSTL
 #
-#       "$Id: petMar1.txt,v 1.15 2008/05/02 16:08:01 hiram Exp $"
+#       "$Id: petMar1.txt,v 1.16 2008/05/25 20:11:54 markd Exp $"
 #
 
 ##########################################################################
@@ -1677,3 +1677,12 @@ done
     #	check the goldenPath locations and remove those extra links
 
 #############################################################################
+############################################################################
+# TRANSMAP vertebrate.2008-05-20 build  (2008-05-24 markd)
+
+vertebrate-wide transMap alignments were built  Tracks are created and loaded
+by a single Makefile. This is available from:
+   svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2008-05-20
+
+see doc/builds.txt for specific details.
+############################################################################
