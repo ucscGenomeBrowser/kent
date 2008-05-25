@@ -39,7 +39,7 @@
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 #define MAX_SP_SIZE 2000
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.431 2008/05/21 06:10:54 markd Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.432 2008/05/25 03:31:24 markd Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1385,6 +1385,7 @@ labelMakeCheckBox(tdb, "gene", "gene", FALSE);
 labelMakeCheckBox(tdb, "acc", "accession", FALSE);
 
 baseColorDrawOptDropDown(cart, tdb);
+indelShowOptions(cart, tdb);
 }
 
 void retroGeneUI(struct trackDb *tdb)
