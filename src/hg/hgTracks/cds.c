@@ -23,7 +23,7 @@
 #include "pcrResult.h"
 #endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: cds.c,v 1.75 2008/05/19 18:16:06 markd Exp $";
+static char const rcsid[] = "$Id: cds.c,v 1.76 2008/05/25 06:28:48 markd Exp $";
 
 /* Definitions of cds colors for coding coloring display */
 #define CDS_ERROR   0
@@ -584,22 +584,20 @@ static struct simpleFeature *splitPslByCodon(char *chrom,
                                              struct track *tg)
 {
 struct simpleFeature *sfList = NULL;
-unsigned *retGaps = NULL;
-boolean extraInfo = (drawOpt != baseColorDrawGenomicCodons);
-struct genbankCds cds;
-getPslCds(psl, tg, &cds);
 
 /* if cds not in genbank or not parsable - revert to normal*/
 /* if showing bases we don't want to have thin bars ala genePred format */
 if (drawOpt == baseColorDrawItemBases ||
-    drawOpt == baseColorDrawDiffBases ||
-    (cds.start == cds.end))
+    drawOpt == baseColorDrawDiffBases)
     {
     int grayIx = pslGrayIx(psl, isXeno, maxShade);
     sfList = sfFromPslX(psl, grayIx, sizeMul);
     }
 else
     {
+    boolean extraInfo = (drawOpt != baseColorDrawGenomicCodons);
+    struct genbankCds cds;
+    getPslCds(psl, tg, &cds);
     int insertMergeSize = extraInfo ? -1 : 0;
     struct genePred *gp = genePredFromPsl2(psl, genePredCdsStatFld|genePredExonFramesFld,
                                            &cds, insertMergeSize);
@@ -607,7 +605,7 @@ else
     lf->end = gp->txEnd;
     lf->tallStart = gp->cdsStart;
     lf->tallEnd = gp->cdsEnd;
-    sfList = baseColorCodonsFromGenePred(chrom, lf, gp, retGaps, extraInfo,
+    sfList = baseColorCodonsFromGenePred(chrom, lf, gp, NULL, extraInfo,
 				  colorStopStart);
     genePredFree(&gp);
     }
