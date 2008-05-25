@@ -1,9 +1,5 @@
 # This contains linkage information between various fields
 # in various databases.
-#
-# So far have looked through hg15,hg16,mm4,mm3,rn3,ce1,dm1,sacCer1,
-# panTro1,galGal2,fr1,cb1,hgFixed,go, and UniProt databases
-# Adding hg17 June 1, 2004 (heather)
 
 # Define databases used for various organisms
 set hg hg15,hg16,hg17,hg18
@@ -77,6 +73,9 @@ set proteinDb proteins070202,proteins060115,proteins050415,proteins051015,protei
 # Define zoo databases (currently not checked)
 set zooDb zooBaboon3,zooCat3,zooChicken3,zooChimp3,zooCow3,zooDog3,zooFugu3,zooHuman3,zooMouse3,zooPig3,zooRat3,zooTetra3,zooZebrafish3
 
+# Define transMap databases
+# transMapDb not in databasesChecked: dasNov1,echTel1,loxAfr1,oryCun1,otoGar1
+set transMapDb anoCar1,bosTau4,calJac1,canFam2,cavPor3,danRer5,equCab2,felCat3,fr2,galGal3,gasAcu1,hg17,hg18,mm8,mm9,monDom4,ornAna1,oryLat1,panTro2,petMar1,ponAbe2,rheMac2,rn4,tetNig1,xenTro2
 
 # Set up list of databases we ignore and those we check.  Program
 # will complain about other databases.
@@ -2303,6 +2302,93 @@ identifier omiciaHg18Id
     hg18.omiciaAttr.id
     hg18.omiciaLink.id
 
+# transMap alignment (psl) tables and info tables; 1-to-1 mapping
+identifier transMapAlnInfoRefSeqId
+"transMap RefSeq per-genome alignments"
+    $transMapDb.transMapAlnRefSeq.qName unique
+    $transMapDb.transMapInfoRefSeq.mappedId unique full
+
+identifier transMapAlnInfoUcscGenesId
+"transMap UcscGenes per-genome alignments"
+    $transMapDb.transMapAlnUcscGenes.qName unique
+    $transMapDb.transMapInfoUcscGenes.mappedId unique full
+
+identifier transMapAlnInfoMRnaId
+"transMap MRna per-genome alignments"
+    $transMapDb.transMapAlnMRna.qName unique
+    $transMapDb.transMapInfoMRna.mappedId unique full
+
+identifier transMapAlnInfoSplicedEstId
+"transMap SplicedEst per-genome alignments"
+    $transMapDb.transMapAlnSplicedEst.qName unique
+    $transMapDb.transMapInfoSplicedEst.mappedId unique full
+
+# transMap info table and hgFixed src tables
+identifier transMapSrcInfoRefSeqId
+"transMap RefSeq pre-geneome alignment to source"
+    hgFixed.transMapSrcRefSeq.id dupeOk
+    $transMapDb.transMapInfoRefSeq.srcId
+
+identifier transMapSrcInfoUcscGenesId
+"transMap UcscGenes pre-geneome alignment to source"
+    hgFixed.transMapSrcUcscGenes.id dupeOk
+    $transMapDb.transMapInfoUcscGenes.srcId
+
+identifier transMapSrcInfoMRnaId
+"transMap MRna pre-geneome alignment to source"
+    hgFixed.transMapSrcMRna.id dupeOk
+    $transMapDb.transMapInfoMRna.srcId
+
+identifier transMapSrcInfoSplicedEstId
+"transMap SplicedEst pre-geneome alignment to source"
+    hgFixed.transMapSrcSplicedEst.id dupeOk
+    $transMapDb.transMapInfoSplicedEst.srcId
+
+# transMap source tables
+identifier transMapSrcRefSeqId
+"transMap RefSeq source gene and sequences "
+    hgFixed.transMapSrcRefSeq.id dupeOk  chopAfter=-
+    hgFixed.transMapSeqRefSeq.acc
+    hgFixed.transMapGeneRefSeq.id
+
+identifier transMapSrcUcscGenesId
+"transMap UcscGenes source gene and sequences "
+    hgFixed.transMapSrcUcscGenes.id dupeOk  chopAfter=-
+    hgFixed.transMapSeqUcscGenes.acc
+    hgFixed.transMapGeneUcscGenes.id
+
+identifier transMapSrcMRnaId
+"transMap MRna source gene and sequences "
+    hgFixed.transMapSrcMRna.id dupeOk  chopAfter=-
+    hgFixed.transMapSeqMRna.acc
+    hgFixed.transMapGeneMRna.id
+
+identifier transMapSrcSplicedEstId
+"transMap SplicedEst source sequences "
+    hgFixed.transMapSrcSplicedEst.id dupeOk  chopAfter=-
+    hgFixed.transMapSeqSplicedEst.acc
+
+# transMap extFile tables
+identifier transMapExtFileRefSeqId
+"transMap RefSeq external file "
+    hgFixed.transMapSeqRefSeq.extFile dupeOk
+    hgFixed.transMapExtFileRefSeq.id unique
+
+identifier transMapExtFileUcscGenesId
+"transMap UcscGenes external file "
+    hgFixed.transMapSeqUcscGenes.extFile dupeOk
+    hgFixed.transMapExtFileUcscGenes.id unique
+
+identifier transMapExtFileMRnaId
+"transMap MRna external file "
+    hgFixed.transMapSeqMRna.extFile dupeOk
+    hgFixed.transMapExtFileMRna.id unique
+
+identifier transMapExtFileSplicedEstId
+"transMap SplicedEst external file "
+    hgFixed.transMapSeqSplicedEst.extFile dupeOk
+    hgFixed.transMapExtFileSplicedEst.id unique
+
 # Dependencies not already captured in identifiers
 
 dependency $hg.gladHumESDistance $hg.knownToGnfAtlas2 hgFixed.gladHumESRatio
@@ -2402,6 +2488,10 @@ type psl
     $gbd.refSeqAli
     $gbd.all_sts_primer
     $gbd.all_sts_seq
+    $transMapDb.transMapAlnUcscGenes
+    $transMapDb.transMapAlnRefSeq
+    $transMapDb.transMapAlnMRna
+    $transMapDb.transMapAlnSplicedEst
 
 type estOrientInfo
     $gbd.estOrientInfo
@@ -2573,6 +2663,29 @@ type geneAndProt
     $ce.sangerGene
     dm1.bdgpGene
     $sacCer.sgdGene
+
+type transMapInfo
+    $transMapDb.transMapInfoRefSeq
+    $transMapDb.transMapInfoUcscGenes
+    $transMapDb.transMapInfoMRna
+    $transMapDb.transMapInfoSplicedEst
+
+type transMapInfo
+    $transMapDb.transMapInfoRefSeq
+    $transMapDb.transMapInfoUcscGenes
+    $transMapDb.transMapInfoMRna
+    $transMapDb.transMapInfoSplicedEst
+
+type transMapSrc
+    hgFixed.transMapSrcRefSeq
+    hgFixed.transMapSrcUcscGenes
+    hgFixed.transMapSrcMRna
+    hgFixed.transMapSrcSplicedEst
+
+type transMapGene
+    hgFixed.transMapGeneRefSeq
+    hgFixed.transMapGeneUcscGenes
+    hgFixed.transMapGeneMRna
 
 # Ignored tables - no linkage here that we check at least.
 
