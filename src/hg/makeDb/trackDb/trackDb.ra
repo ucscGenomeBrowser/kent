@@ -505,7 +505,7 @@ priority 36
     transMapInfo transMapInfoMRna
     transMapSrc hgFixed.transMapSrcMRna
     transMapGene hgFixed.transMapGeneMRna
-    baseColorDefault off
+    baseColorDefault none
     baseColorUseCds table hgFixed.transMapGeneMRna
     baseColorUseSequence extFile hgFixed.transMapSeqMRna hgFixed.transMapExtFileMRna
     indelDoubleInsert on
@@ -530,7 +530,7 @@ priority 36
     transMapInfo transMapInfoSplicedEst
     transMapSrc hgFixed.transMapSrcSplicedEst
     transMapGene hgFixed.transMapGeneSplicedEst
-    baseColorDefault off
+    baseColorDefault none
     baseColorUseCds table hgFixed.transMapGeneSplicedEst
     baseColorUseSequence extFile hgFixed.transMapSeqSplicedEst hgFixed.transMapExtFileSplicedEst
     indelDoubleInsert on
