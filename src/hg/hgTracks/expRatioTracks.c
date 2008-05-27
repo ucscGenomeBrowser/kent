@@ -1,6 +1,7 @@
 /* expRatioTracks - Tracks that display microarray results as ratios. */
 
 #include "common.h"
+#include "obscure.h"
 #include "hash.h"
 #include "linefile.h"
 #include "jksql.h"
@@ -1747,3 +1748,56 @@ tg->loadItems = ctLoadMultScoresBed;
 tg->trackFilter = lfsFromExpRatio;
 }
 
+/* Probes tracks */
+
+struct slList *illuminaProbesAlmostLoad(char **row)
+/* Sort of an intermediary function to accommodate some */
+/* general linkedFeatures loader. */
+{
+return (struct slList *)bedLoad12(row);
+}
+
+void illuminaProbesFree(struct slList **pItem)
+/* Frees my bed. (used by loadLinkedFeaturesWithLoaders). */
+{
+struct bed **pBed = (struct bed **)pItem;
+bedFree(pBed);
+}
+
+struct linkedFeatures *lfFromIlluminaProbesBed(struct slList *item)
+/* converts illumina probes bed to linkedFeatures, and also puts */
+/* that info in itemRgb in the extra field so we can use it later. */
+/* (used by loadLinkedFeaturesWithLoaders). */
+{
+struct bed *theBed = (struct bed *)item;
+struct linkedFeatures *lf = lfFromBed(theBed);
+lf->extra = intToPt(theBed->itemRgb);
+return lf;
+}
+
+void illuminaProbesLoadItems(struct track *tg)
+/* Just call the flexible linkedFeatures loader with a few custom fns. */
+{
+loadLinkedFeaturesWithLoaders(tg, illuminaProbesAlmostLoad, lfFromIlluminaProbesBed,
+			      illuminaProbesFree, NULL, NULL, NULL);
+}
+
+Color illuminaProbesColor(struct track *tg, void *item, struct hvGfx *hvg)
+/* Return color to illumina item */
+{
+struct linkedFeatures *thisItem = item;
+int colorInt = ptToInt(thisItem->extra);
+if (colorInt == 1)
+    return shadesOfBrown[thisItem->grayIx];
+if (colorInt == 2)
+    return shadesOfSea[thisItem->grayIx];
+return MG_RED;
+}
+
+void illuminaProbesMethods(struct track *tg)
+/* Methods for the Illumina Probes track. */
+{
+linkedFeaturesMethods(tg);
+tg->itemColor = illuminaProbesColor;
+tg->loadItems = illuminaProbesLoadItems;
+}

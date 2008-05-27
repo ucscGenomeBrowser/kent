@@ -122,7 +122,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.6 2008/05/23 22:09:05 angie Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.7 2008/05/27 09:22:01 aamp Exp $";
 
 #define CHROM_COLORS 26
 
@@ -10759,6 +10759,7 @@ registerTrackHandler("delMccarroll", delMccarrollMethods);
 registerTrackHandler("delHinds", delHindsMethods);
 registerTrackHandler("delHinds2", delHindsMethods);
 registerTrackHandler("hapmapLd", ldMethods);
+registerTrackHandler("illuminaProbes", illuminaProbesMethods);
 registerTrackHandler("rertyHumanDiversityLd", ldMethods);
 registerTrackHandler("recombRate", recombRateMethods);
 registerTrackHandler("recombRateMouse", recombRateMouseMethods);

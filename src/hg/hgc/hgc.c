@@ -214,7 +214,7 @@
 #include "itemConf.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1424 2008/05/22 00:12:59 rhead Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1425 2008/05/27 09:21:55 aamp Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -6976,6 +6976,83 @@ else
     {
     puts("<P>Click directly on a CpG island for specific information on that island</P>");
     }
+printTrackHtml(tdb);
+}
+
+void htcIlluminaProbesAlign(char *item)
+/* If the click came from "show alignment" on the Illumina */
+/* probes details page, show the standard alignment page. */
+{
+struct psl *psl;
+struct dnaSeq *seq;
+struct sqlResult *sr;
+struct sqlConnection *conn = hAllocConn();
+char query[256], **row;
+int start;
+char *pslTable = cgiUsualString("pslTable", "illuminaProbesAlign");
+char *seqTable = cgiUsualString("seqTable", "illuminaProbesSeq");
+char *probeName = item;
+char *probeString;
+int rowOffset = hOffsetPastBin(seqName, pslTable);
+/* Print start of HTML. */
+writeFramesetType();
+puts("<HTML>");
+printf("<HEAD>\n<TITLE>Sequence %s</TITLE>\n</HEAD>\n\n", probeName);
+start = cartInt(cart, "o");
+/* get psl */
+safef(query, sizeof(query), "select * from %s where qName = '%s' and tName = '%s' and tStart=%d",
+	pslTable, probeName, seqName, start);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) == NULL)
+    errAbort("Couldn't find alignment for %s at %d", probeName, start);
+psl = pslLoad(row+rowOffset);
+sqlFreeResult(&sr);
+safef(query, sizeof(query), "select seq from %s where id = '%s'", seqTable, probeName);
+probeString = sqlNeedQuickString(conn, query);
+seq = newDnaSeq(probeString, strlen(probeString), probeName);
+hFreeConn(&conn);
+showSomeAlignment(psl, seq, gftDna, 0, seq->size, probeName, 0, 0);
+pslFree(&psl);
+freeDnaSeq(&seq);
+freeMem(probeString);
+}
+
+void doIlluminaProbes(struct trackDb *tdb, char *item)
+/* The details page of the Illumina Probes track. */
+{
+char *track = tdb->tableName;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+int rowOffset = hOffsetPastBin(seqName, track);
+char query[256];
+int start = cartInt(cart, "o");
+genericHeader(tdb, item);
+safef(query, sizeof(query), "select * from %s where name = '%s' and chromStart = '%d'", track, item, start);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct bed *bed = bedLoad12(row+rowOffset);
+    printf("<B>Probe ID:</B> %s<BR>\n", bed->name);
+    printf("<B>Position:</B> "
+	   "<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
+	   hgTracksPathAndSettings(), database, bed->chrom, bed->chromStart+1, bed->chromEnd);
+    printf("%s:%d-%d</A><BR>\n", bed->chrom, bed->chromStart+1, bed->chromEnd);
+    printf("<B>Alignment Score:</B> %d<BR>\n", bed->score);
+    if ((bed->itemRgb == 1) || (bed->itemRgb == 2))
+	/* The "show alignment" link. */ 
+	{      
+	char other[256];
+	char *pslTable = trackDbRequiredSetting(tdb, "pslTable");
+	char *seqTable = trackDbRequiredSetting(tdb, "seqTable");
+	safef(other, sizeof(other), "%d&pslTable=%s&seqTable=%s", bed->chromStart, pslTable, seqTable);
+	hgcAnchor("htcIlluminaProbesAlign", item, other);
+	printf("View Alignment</A><BR>\n");
+	}
+    bedFree(&bed);
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
 printTrackHtml(tdb);
 }
 
@@ -19951,6 +20028,14 @@ else if (sameWord(track, "simpleRepeat"))
 else if (startsWith("cpgIsland", track))
     {
     doCpgIsland(tdb, item);
+    }
+else if (sameWord(track, "illuminaProbes"))
+    {
+    doIlluminaProbes(tdb, item);
+    }
+else if (sameWord(track, "htcIlluminaProbesAlign"))
+    {
+    htcIlluminaProbesAlign(item);
     }
 else if (sameWord(track, "switchDbTss"))
     {

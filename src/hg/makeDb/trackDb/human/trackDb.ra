@@ -506,6 +506,16 @@ priority 89.2
 visibility hide
 type psl .
 
+track illuminaProbes
+shortLabel Illumina V6
+longLabel Alignments of Illumina V6 2.0 Probe set
+group regulation
+priority 89.3
+visibility hide
+type bed 12 .
+pslTable illuminaProbesAlign
+seqTable illuminaProbesSeq
+
 track switchDbTss
 shortLabel SwitchGear TSS
 longLabel SwitchGear Genomics Transcription Start Sites
@@ -2294,6 +2304,12 @@ searchType bed
 shortCircuit 1
 termRegex h?sa-(mir|let)-.+
 searchPriority 18.5
+
+searchTable illuminaProbes
+searchType bed
+termRegex ILMN_[0-9]+
+shortCircuit 1
+searchPriority 18.7
 
 searchTable switchDbTss
 searchMethod prefix
