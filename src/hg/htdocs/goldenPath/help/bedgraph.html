@@ -46,14 +46,16 @@
 
 		    <P><B>Parameters for bedGraph track definition lines</B></P>
 		    All options are placed in a single line separated by spaces:
-<FONT color="#0000FF"><PRE>  <B>track type=bedGraph name=</B><I>track_label</I> <B>description=</B><I>center_label</I> \
-<B>        visibility=</B><I>display_mode</I> <B>color=</B><I>r,g,b</I> <B>altColor=</B><I>r,g,b</I> \
-<B>        priority=</B><I>priority</I> <B>autoScale=</B><I>on|off</I> \
-<B>        gridDefault=</B><I>on|off</I> <B>maxHeightPixels=</B><I>max:default:min</I> \
-<B>        graphType=</B><I>bar|points</I> <B>viewLimits=</B><I>lower:upper</I> \
-<B>        yLineMark=</B><I>real-value</I> <B>yLineOnOff=</B><I>on|off</I> \
+<FONT color="#0000FF"><PRE>  <B>track type=bedGraph name=</B><I>track_label</I> <B>description=</B><I>center_label</I>
+<B>        visibility=</B><I>display_mode</I> <B>color=</B><I>r,g,b</I> <B>altColor=</B><I>r,g,b</I>
+<B>        priority=</B><I>priority</I> <B>autoScale=</B><I>on|off</I>
+<B>        gridDefault=</B><I>on|off</I> <B>maxHeightPixels=</B><I>max:default:min</I>
+<B>        graphType=</B><I>bar|points</I> <B>viewLimits=</B><I>lower:upper</I>
+<B>        yLineMark=</B><I>real-value</I> <B>yLineOnOff=</B><I>on|off</I>
 <B>        windowingFunction=</B><I>maximum|mean|minimum</I> <B>smoothingWindow=</B>off|2-16
 </I></PRE></FONT>
+<p>(Note if you copy/paste the above example, you have to remove the carriage returns.)
+</p>
 		    The track type is REQUIRED, and must be <I>bedGraph</I>:
 		    <FONT color="#0000FF"><PRE>  <B>type=bedGraph</B></PRE></FONT>
 		    The remaining values are OPTIONAL. The <a href='wiggle.html' target='_blank'>wiggle</a> documentation contains details on these options.
