@@ -30,7 +30,7 @@ if ( 'go' == $run ) then
 else 
   set unlock=`hgsql -h hgwbeta -Ne "SELECT qid FROM pushQ \
   WHERE lockDateTime != '' or lockUser != ''" qapushq`
-  if ( '' != $unlock ) then
+  if ( '' != "$unlock" ) then
     foreach lock ( $unlock )
       hgsql -h hgwbeta -e "UPDATE pushQ SET lockUser = '', lockDateTime = '' \
       WHERE qid = '$lock'" qapushq
