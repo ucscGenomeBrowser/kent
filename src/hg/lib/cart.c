@@ -21,7 +21,7 @@
 #endif /* GBROWSE */
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.83 2008/05/27 17:23:29 angie Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.84 2008/05/27 21:00:37 fanhsu Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -1400,3 +1400,62 @@ while( ( lineFileChopNext(lf, words, sizeof(words)/sizeof(char *)) ))
 return dyStringCannibalize(&orderDY);
 }
 
+char *cartGetOrderFromFileAndMsaTable(struct cart *cart, char *speciesUseFile, char *msaTable)
+/* This function is used for GSID server only.
+   Look in a cart variable that holds the filename that has a list of 
+ * species to show in a maf file and also restrict the results by the IDs existing in an MSA table*/
+{
+char *val;
+struct sqlResult *sr=NULL;
+char query[255];
+struct sqlConnection *conn;
+
+struct dyString *orderDY = dyStringNew(256);
+char *words[16];
+if ((val = cartUsualString(cart, speciesUseFile, NULL)) == NULL)
+    {
+    if (hIsGsidServer())
+	{
+	saveDefaultGsidLists(cart);
+
+	/* now it should be set */
+	val = cartUsualString(cart, speciesUseFile, NULL);
+	if (val == NULL)
+    	    errAbort("can't find species list file var '%s' in cart\n",speciesUseFile);
+	}
+    else
+	{
+    	errAbort("can't find species list file var '%s' in cart\n",speciesUseFile);
+	}
+    }
+
+struct lineFile *lf = lineFileOpen(val, TRUE);
+
+if (lf == NULL)
+    errAbort("can't open species list file %s",val);
+
+if (hIsGsidServer())
+    {
+    conn= hAllocConn();
+    while( ( lineFileChopNext(lf, words, sizeof(words)/sizeof(char *)) ))
+    	{
+	safef(query, sizeof(query), 
+	      "select id from %s where id like '%s%s'", msaTable, "%",  words[0]);
+	sr = sqlGetResult(conn, query);
+	if (sqlNextRow(sr) != NULL)
+    	    {
+    	    dyStringPrintf(orderDY, "%s ",words[0]);
+	    sqlFreeResult(&sr);
+    	    }
+  	}
+    hFreeConn(&conn);
+    }
+else
+    {
+    while( ( lineFileChopNext(lf, words, sizeof(words)/sizeof(char *)) ))
+    	{
+    	dyStringPrintf(orderDY, "%s ",words[0]);
+    	}
+    }
+return dyStringCannibalize(&orderDY);
+}
