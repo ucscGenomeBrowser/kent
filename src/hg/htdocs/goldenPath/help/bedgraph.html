@@ -26,13 +26,13 @@
 		    The bedGraph format allows display of
 		    continuous-valued data in track format. This display type is
 		    useful for probability scores and transcriptome data. This type is very similar to the wiggle (WIG)
-                    format, except the BedGraph format has the advantage of preserving the original
+                    format, except the bedGraph format has the advantage of preserving the original
                     data when exporting your data back out of the system (e.g. with
                     output format "all fields" or "selected fields" within the table browser).
 
 		    <P><B>General Structure</B><P> The bedGraph format is
 		    line-oriented.
-		    BedGraph data are preceeded by a <A
+		    Bedgraph data are preceeded by a <A
 		    HREF="customTrack.html#TRACK">
 		    track definition line</A>, which
 		    adds a number of options for
@@ -56,15 +56,15 @@
 </I></PRE></FONT>
 		    The track type is REQUIRED, and must be <I>bedGraph</I>:
 		    <FONT color="#0000FF"><PRE>  <B>type=bedGraph</B></PRE></FONT>
-		    The remaining values are OPTIONAL; for documenation, see the <a href='wiggle.html' target='_blank'>wiggle</a> documentation.
+		    The remaining values are OPTIONAL. The <a href='wiggle.html' target='_blank'>wiggle</a> documentation contains details on these options.
 		    A functional description of these options can be
 		    seen in the <A target=_blank
 		    HREF="hgWiggleTrackHelp.html">track configuration<A> description. (Custom tracks do not 
-		   have interactive configuration options).
+		   have interactive configuration options.)
 
 		    <P><B>Data Values</B></P>
 
-		    BedGraph track data values can be integer or real,
+		    Bedgraph track data values can be integer or real,
 		    positive or negative values. Chromosome positions
 		    are specified as 0-relative.  The first chromosome
 		    position is 0.  The last position in a chromosome
