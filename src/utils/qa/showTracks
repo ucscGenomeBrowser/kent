@@ -14,7 +14,6 @@ echo "<H2>Track UI on Round Robin, random </H2>"
 
 echo "<BLOCKQUOTE><B> hgw:"
 echo '   <A HREF="showTracks?srvr=hgwdev-kuhn.cse.ucsc.edu">kuhn</A>&nbsp;'
-echo '   <A HREF="showTracks?srvr=hgwdev-heather.cse.ucsc.edu">heather</A>&nbsp;'
 echo '   <A HREF="showTracks?srvr=hgwbeta.cse.ucsc.edu">beta</A>&nbsp;'
 echo '   <A HREF="showTracks"                       >RR</A>&nbsp;'
 echo '   <A HREF="showTracks?srvr=hgw1.cse.ucsc.edu">1</A>&nbsp;'
