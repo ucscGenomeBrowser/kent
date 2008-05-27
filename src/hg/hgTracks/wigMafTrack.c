@@ -18,7 +18,7 @@
 #include "mafFrames.h"
 #include "phyloTree.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.127 2008/02/29 20:14:47 braney Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.128 2008/05/27 20:55:33 fanhsu Exp $";
 
 #define GAP_ITEM_LABEL  "Gaps"
 #define MAX_SP_SIZE 2000
@@ -132,6 +132,7 @@ char *speciesTree = trackDbSetting(track->tdb, SPECIES_TREE_VAR);
 bool useTarg;	/* use phyloTree to find shortest path */
 struct phyloTree *tree = NULL;
 char *speciesUseFile = trackDbSetting(track->tdb, SPECIES_USE_FILE);
+char *msaTable = NULL;
 
 /* either speciesOrder or speciesGroup is specified in trackDb */
 char *speciesOrder = trackDbSetting(track->tdb, SPECIES_ORDER_VAR);
@@ -173,7 +174,22 @@ if (speciesUseFile)
     {
     if ((speciesGroup != NULL) || (speciesOrder != NULL))
 	errAbort("Can't specify speciesUseFile and speciesGroup or speciesOrder");
-    speciesOrder = cartGetOrderFromFile(cart, speciesUseFile);
+    if (hIsGsidServer())
+	{
+	msaTable = trackDbSetting(track->tdb, "msaTable");
+    	if (msaTable != NULL)
+	    {
+	    speciesOrder = cartGetOrderFromFileAndMsaTable(cart, speciesUseFile, msaTable);
+    	    }
+	else
+	    {
+    	    speciesOrder = cartGetOrderFromFile(cart, speciesUseFile);
+	    }
+	}
+    else
+	{
+    	speciesOrder = cartGetOrderFromFile(cart, speciesUseFile);
+    	}
     speciesOff = NULL;
     }
 
@@ -1656,7 +1672,6 @@ safef(dbChrom, sizeof(dbChrom), "%s.%s", database, chromName);
 for (maf = mafList; maf != NULL; maf = maf->next)
     {
     int mafStart;
-
     /* get info about sequences from full alignment,
        for use later, when determining if sequence is unaligned or missing */
     for (mc = maf->components; mc != NULL; mc = mc->next)
