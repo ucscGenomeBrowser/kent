@@ -10,10 +10,12 @@
 #include "portable.h"
 #include "linefile.h"
 #include "errabort.h"
+#ifndef GBROWSE
 #include "mime.h"
+#endif /* GBROWSE */
 #include <signal.h>
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.101 2008/05/23 23:43:41 tdreszer Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.102 2008/05/27 17:23:29 angie Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;

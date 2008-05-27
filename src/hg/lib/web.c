@@ -9,12 +9,14 @@
 #include "hui.h"
 #include "cheapcgi.h"
 #include "dbDb.h"
-#include "axtInfo.h"
 #include "hgColors.h"
+#ifndef GBROWSE
+#include "axtInfo.h"
 #include "wikiLink.h"
 #include "googleAnalytics.h"
+#endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: web.c,v 1.145 2008/05/08 21:19:24 hiram Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.146 2008/05/27 17:23:29 angie Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -335,6 +337,7 @@ else
 	       uiState);
 	puts("           PDF/PS</A> &nbsp;&nbsp;&nbsp;");
 	}
+#ifndef GBROWSE
     if (wikiLinkEnabled() && !endsWith(scriptName, "hgSession"))
 	{
 	printf("<A HREF=\"../cgi-bin/hgSession%s%shgS_doMainPage=1\" "
@@ -342,6 +345,7 @@ else
 	       uiState, theCart ? "&" : "?" );
 	puts("&nbsp;&nbsp;&nbsp;");
 	}
+#endif /* GBROWSE */
     if (!isGsid) puts("       <A HREF=\"../FAQ/\" class=\"topbar\">" "\n"
 	 "           FAQ</A> &nbsp;&nbsp;&nbsp;" "\n" 
 	 );
@@ -529,7 +533,9 @@ void webEnd()
 if(!webInTextMode)
     {
     webEndSectionTables();
+#ifndef GBROWSE
     googleAnalytics();
+#endif /* GBROWSE */
     puts( "</BODY></HTML>");
     webPopErrHandlers();
     }
@@ -866,6 +872,7 @@ cgiMakeDropListFull(dbCgi, assemblyList, values, numAssemblies, assembly,
 		    javascript);
 }
 
+#ifndef GBROWSE
 void printAlignmentListHtml(char *db, char *alCgiName, char *selected)
 {
 /* Find all the alignments (from axtInfo) that pertain to the selected
@@ -910,6 +917,7 @@ for (cur = alignList; ((cur != NULL) && (numAlignments < 128)); cur = cur->next)
     }
 cgiMakeDropListFull(alCgiName, alignmentList, values, numAlignments, selected, NULL);
 }
+#endif /* GBROWSE */
 
 char *getDbForGenome(char *genome, struct cart *cart)
 {

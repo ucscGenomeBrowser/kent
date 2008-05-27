@@ -14,12 +14,9 @@
 #include "hgRelate.h"
 #include "fa.h"
 #include "hgConfig.h"
-#include "ctgPos.h"
 #include "trackDb.h"
 #include "hCommon.h"
-#include "hgFind.h"
 #include "dbDb.h"
-#include "axtInfo.h"
 #include "subText.h"
 #include "blatServers.h"
 #include "bed.h"
@@ -34,11 +31,14 @@
 #include "genbank.h"
 #include "chromInfo.h"
 #ifndef GBROWSE
+#include "axtInfo.h"
+#include "ctgPos.h"
 #include "customTrack.h"
+#include "hgFind.h"
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.355 2008/05/25 02:44:17 markd Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.356 2008/05/27 17:23:29 angie Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -1052,6 +1052,7 @@ struct chromInfo *ci = mustGetChromInfo(hGetDb2(), chromName);
 safef(retNibName, HDB_MAX_PATH_STRING, "%s", ci->fileName);
 }
 
+#ifndef GBROWSE
 struct hash *hCtgPosHash()
 /* Return hash of ctgPos from current database keyed by contig name. */
 {
@@ -1071,6 +1072,7 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 return hash;
 }
+#endif /* GBROWSE */
 
 struct dnaSeq *hFetchSeqMixed(char *fileName, char *seqName, int start, int end)
 /* Fetch mixed case sequence. */
@@ -4292,6 +4294,7 @@ slSort(&liftOverDbList, hDbDbCmpOrderKey);
 return liftOverDbList;
 }
 
+#ifndef GBROWSE
 struct dbDb *hGetAxtInfoDbs()
 /* Get list of db's where we have axt files listed in axtInfo . 
  * The db's with the same organism as current db go last.
@@ -4448,6 +4451,8 @@ hFreeConn(&conn);
 slReverse(&aiList);
 return aiList;
 }
+#endif /* GBROWSE */
+
 struct dbDb *hGetBlatIndexedDatabases()
 /* Get list of databases for which there is a BLAT index. 
  * Dispose of this with dbDbFreeList. */

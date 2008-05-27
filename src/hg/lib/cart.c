@@ -13,15 +13,15 @@
 #include "web.h"
 #include "hdb.h"
 #include "jksql.h"
-#include "wikiLink.h"
 #include "trashDir.h"
 #ifndef GBROWSE
 #include "customFactory.h"
+#include "googleAnalytics.h"
+#include "wikiLink.h"
 #endif /* GBROWSE */
 #include "hgMaf.h"
-#include "googleAnalytics.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.82 2008/05/23 22:09:56 angie Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.83 2008/05/27 17:23:29 angie Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -276,6 +276,7 @@ hashElFreeList(&helList);
 assert(hashNumEntries(hash) == 0);
 }
 
+#ifndef GBROWSE
 void cartLoadUserSession(struct sqlConnection *conn, char *sessionOwner,
 			 char *sessionName, struct cart *cart,
 			 struct hash *oldVars, char *actionVar)
@@ -336,6 +337,7 @@ else
 sqlFreeResult(&sr);
 freeMem(encSessionName);
 }
+#endif /* GBROWSE */
 
 void cartLoadSettings(struct lineFile *lf, struct cart *cart,
 		      struct hash *oldVars, char *actionVar)
@@ -461,6 +463,7 @@ cart->sessionInfo = loadDbOverHash(conn, "sessionDb", sessionId, cart);
 
 loadCgiOverHash(cart, oldVars);
 
+#ifndef GBROWSE
 /* If some CGI other than hgSession been passed hgSession loading instructions,
  * apply those to cart before we do anything else.  (If this is hgSession,
  * let it handle the settings so it can display feedback to the user.) */
@@ -483,6 +486,7 @@ if (! (cgiScriptName() && endsWith(cgiScriptName(), "hgSession")))
 	lineFileClose(&lf);
 	}
     }
+#endif /* GBROWSE */
 
 if (exclude != NULL)
     {
@@ -1163,7 +1167,9 @@ popWarnHandler();
 void cartFooter(void)
 /* Write out HTML footer, possibly with googleAnalytics too */
 {
+#ifndef GBROWSE
 googleAnalytics();	/* can't do this in htmlEnd	*/
+#endif /* GBROWSE */
 htmlEnd();		/* because it is in a higher library */
 }
 
