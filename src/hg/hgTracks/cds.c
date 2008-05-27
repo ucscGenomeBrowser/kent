@@ -23,7 +23,7 @@
 #include "pcrResult.h"
 #endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: cds.c,v 1.77 2008/05/27 02:48:21 markd Exp $";
+static char const rcsid[] = "$Id: cds.c,v 1.78 2008/05/27 22:09:15 markd Exp $";
 
 /* Definitions of cds colors for coding coloring display */
 #define CDS_ERROR   0
@@ -595,7 +595,13 @@ if (drawOpt == baseColorDrawItemBases ||
     }
 else
     {
-    boolean useExonFrames = (drawOpt != baseColorDrawGenomicCodons);
+    /* Previous code didn't use exon frames for baseColorDrawGenomicCodons.
+     * This meant simply counting off aligned bases to define frames.  It
+     * didn't work very well for TransMap alignments and not clear that its
+     * the right thing to do for any alignment.  By using exonFrames for
+     * genomic codons, this is letting the query sequence define the frame.
+     */
+    boolean useExonFrames = TRUE;
     struct genbankCds cds;
     getPslCds(psl, tg, &cds);
     int insertMergeSize = useExonFrames ? -1 : 0;
