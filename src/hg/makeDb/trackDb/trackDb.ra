@@ -466,6 +466,7 @@ priority 36
 
     searchTable transMapUcscGenes
     searchType psl
+    searchMethod prefix
     searchPriority 2.31
 
     track transMapAlnRefSeq
@@ -491,6 +492,7 @@ priority 36
 
     searchTable transMapRefSeq
     searchType psl
+    searchMethod prefix
     searchPriority 2.31
 
     track transMapAlnMRna
@@ -516,6 +518,7 @@ priority 36
 
     searchTable transMapMRna
     searchType psl
+    searchMethod prefix
     searchPriority 2.31
 
     track transMapAlnSplicedEst
@@ -541,6 +544,7 @@ priority 36
 
     searchTable transMapSplicedEst
     searchType psl
+    searchMethod prefix
     searchPriority 2.31
 
 track genieAlt
