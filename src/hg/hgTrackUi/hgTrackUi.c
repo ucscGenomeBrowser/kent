@@ -39,7 +39,7 @@
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 #define MAX_SP_SIZE 2000
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.432 2008/05/25 03:31:24 markd Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.433 2008/05/27 22:56:15 markd Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1379,8 +1379,8 @@ void transMapUI(struct trackDb *tdb)
 {
 printf("<B>Label:</B> ");
 labelMakeCheckBox(tdb, "orgCommon", "common name", FALSE);
-labelMakeCheckBox(tdb, "orgAbbrv", "organism abbrv", FALSE);
-labelMakeCheckBox(tdb, "db", "assembly db", FALSE);
+labelMakeCheckBox(tdb, "orgAbbrv", "organism abbreviation", FALSE);
+labelMakeCheckBox(tdb, "db", "assembly database", FALSE);
 labelMakeCheckBox(tdb, "gene", "gene", FALSE);
 labelMakeCheckBox(tdb, "acc", "accession", FALSE);
 
