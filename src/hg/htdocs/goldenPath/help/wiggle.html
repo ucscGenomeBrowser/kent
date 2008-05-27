@@ -223,6 +223,12 @@ fixedStep chrom=chr19 start=59307401 step=300 span=200
  200
  100</PRE></FONT>
 
+<P><B>Notes</B></P>
+For speed and efficiency, wiggle data is compressed and stored internally in 128 unique bins.
+This compression means that there is a loss of precision when the data is exported
+from a wiggle track (e.g. with output format "data points" or "bed format" within the table browser).
+The <a href='bedgraph'>bedGraph</a> format should be used instead if
+it is important to retain exact data when exporting.
 	</TD><TD WIDTH=15></TD></TR></TABLE>
 	<BR></TD></TR></TABLE>
 	</TD></TR></TABLE>
