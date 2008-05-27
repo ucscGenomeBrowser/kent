@@ -533,3 +533,11 @@ caePb2.perChromTables = no
 	    hgcentraltest
     #	test it with some sequence
 
+############################################################################
+#  Fixup assembly date after confirmation from John Spieth
+#	2008-05-27 - DONE - Hiram
+    ssh hgwdev
+    hgsql -e 'update dbDb set description="Feb. 2008" where name="caePb2"' \
+	hgcentraltest
+
+############################################################################
