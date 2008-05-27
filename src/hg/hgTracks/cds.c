@@ -23,7 +23,7 @@
 #include "pcrResult.h"
 #endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: cds.c,v 1.76 2008/05/25 06:28:48 markd Exp $";
+static char const rcsid[] = "$Id: cds.c,v 1.77 2008/05/27 02:48:21 markd Exp $";
 
 /* Definitions of cds colors for coding coloring display */
 #define CDS_ERROR   0
@@ -595,17 +595,17 @@ if (drawOpt == baseColorDrawItemBases ||
     }
 else
     {
-    boolean extraInfo = (drawOpt != baseColorDrawGenomicCodons);
+    boolean useExonFrames = (drawOpt != baseColorDrawGenomicCodons);
     struct genbankCds cds;
     getPslCds(psl, tg, &cds);
-    int insertMergeSize = extraInfo ? -1 : 0;
-    struct genePred *gp = genePredFromPsl2(psl, genePredCdsStatFld|genePredExonFramesFld,
-                                           &cds, insertMergeSize);
+    int insertMergeSize = useExonFrames ? -1 : 0;
+    unsigned opts = genePredCdsStatFld|(useExonFrames ? genePredExonFramesFld : 0);
+    struct genePred *gp = genePredFromPsl2(psl, opts, &cds, insertMergeSize);
     lf->start = gp->txStart;
     lf->end = gp->txEnd;
     lf->tallStart = gp->cdsStart;
     lf->tallEnd = gp->cdsEnd;
-    sfList = baseColorCodonsFromGenePred(chrom, lf, gp, NULL, extraInfo,
+    sfList = baseColorCodonsFromGenePred(chrom, lf, gp, NULL, useExonFrames,
 				  colorStopStart);
     genePredFree(&gp);
     }
@@ -1129,14 +1129,14 @@ static struct simpleFeature *splitByCodon( char *chrom,
 
 struct simpleFeature *baseColorCodonsFromGenePred(char *chrom,
 	struct linkedFeatures *lf, struct genePred *gp, unsigned *gaps,
-	boolean extraInfo, boolean colorStopStart)
+	boolean useExonFrames, boolean colorStopStart)
 /* Given an lf and the genePred from which the lf was constructed, 
  * return a list of simpleFeature elements, one per codon (or partial 
- * codon if the codon falls on a gap boundary.  If extraInfo is true, 
+ * codon if the codon falls on a gap boundary.  If useExonFrames is true, 
  * use the frames portion of gp (which should be from a genePredExt);
  * otherwise determine frame from genomic sequence. */
 {
-    if(extraInfo)
+    if(useExonFrames)
         return(splitByCodon(chrom,lf,gp->exonStarts,gp->exonEnds,gp->exonCount,
 			    gp->cdsStart,gp->cdsEnd,gaps,gp->exonFrames,
 			    colorStopStart));

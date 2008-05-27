@@ -24,12 +24,12 @@ enum baseColorDrawOpt baseColorGetDrawOpt(struct track *tg);
  * in trackDb/cart, and gate with zoom level. */
 
 
-struct simpleFeature *baseColorCodonsFromGenePred( char *chrom, 
-        struct linkedFeatures *lf, struct genePred *gp, unsigned
-        *gaps, boolean extraInfo, boolean colorStopStart);
+struct simpleFeature *baseColorCodonsFromGenePred(char *chrom,
+	struct linkedFeatures *lf, struct genePred *gp, unsigned *gaps,
+	boolean useExonFrames, boolean colorStopStart);
 /* Given an lf and the genePred from which the lf was constructed, 
  * return a list of simpleFeature elements, one per codon (or partial 
- * codon if the codon falls on a gap boundary.  If extraInfo is true, 
+ * codon if the codon falls on a gap boundary.  If useExonFrames is true, 
  * use the frames portion of gp (which should be from a genePredExt);
  * otherwise determine frame from genomic sequence. */
 
