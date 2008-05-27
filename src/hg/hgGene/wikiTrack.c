@@ -15,7 +15,7 @@
 #include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.15 2008/05/22 21:57:51 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.16 2008/05/27 23:53:55 hiram Exp $";
 
 static char *hgGeneUrl()
 {
@@ -225,7 +225,7 @@ static int addWikiTrackItem(char *db, char *chrom, int start, int end,
 	char *color, char *category, char *geneSymbol, char *wikiKey)
 /* create new wikiTrack row with given parameters */
 {
-struct sqlConnection *conn = hConnectCentral();
+struct sqlConnection *conn = wikiConnect();
 struct wikiTrack *newItem;
 
 AllocVar(newItem);

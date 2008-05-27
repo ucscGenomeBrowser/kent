@@ -16,7 +16,7 @@
 #include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.42 2008/05/23 23:34:31 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.43 2008/05/27 23:54:06 hiram Exp $";
 
 #define ITEM_SCORE_DEFAULT "1000"
 #define ADD_ITEM_COMMENT_DEFAULT "add comments"
@@ -99,7 +99,7 @@ static struct bed *multipleItems(struct wikiTrack *item)
 {
 struct sqlResult *sr;
 char **row;
-struct sqlConnection *conn = hConnectCentral();
+struct sqlConnection *conn = wikiConnect();
 char query[1024];
 struct bed *bedList = NULL;
 
@@ -389,7 +389,7 @@ static void updateLastModifiedDate(int id)
 /* set lastModifiedDate to now() */
 {
 char query[512];
-struct sqlConnection *conn = hConnectCentral();
+struct sqlConnection *conn = wikiConnect();
 
 safef(query, ArraySize(query),
     "UPDATE %s set lastModifiedDate=now() WHERE id='%d'",
@@ -402,7 +402,7 @@ static void deleteItem(int id)
 /* delete the item with specified id */
 {
 char query[512];
-struct sqlConnection *conn = hConnectCentral();
+struct sqlConnection *conn = wikiConnect();
 safef(query, ArraySize(query), "DELETE FROM %s WHERE id='%d'",
 	WIKI_TRACK_TABLE, id);
 sqlUpdate(conn,query);
@@ -466,7 +466,7 @@ char *strand = cartUsualString(cart, NEW_ITEM_STRAND, "plus");
 char *class = cartUsualString(cart, NEW_ITEM_CLASS, ITEM_NOT_CLASSIFIED);
 boolean plusStrand = sameWord("plus",strand) ? TRUE : FALSE;
 char descriptionKey[256];
-struct sqlConnection *conn = hConnectCentral();
+struct sqlConnection *conn = wikiConnect();
 char *userName = NULL;
 char *color = cartUsualString(cart, NEW_ITEM_COLOR, "#000000");
 int score = 0;

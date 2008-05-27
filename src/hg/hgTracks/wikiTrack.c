@@ -10,7 +10,7 @@
 #include "wikiTrack.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.15 2008/05/22 21:57:51 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.16 2008/05/27 23:54:04 hiram Exp $";
 
 
 static void wikiTrackMapItem(struct track *tg, struct hvGfx *hvg, void *item,
@@ -107,7 +107,7 @@ static void wikiTrackLoadItems(struct track *tg)
 /* Load the items from the wikiTrack table */
 {
 struct bed *bed;
-struct sqlConnection *conn = hConnectCentral();
+struct sqlConnection *conn = wikiConnect();
 struct sqlResult *sr;
 char **row;
 int rowOffset;
@@ -178,7 +178,7 @@ struct bed *wikiTrackGetBedRange(char *mapName, char *chromName,
 /* fetch wiki track items as simple bed 3 list in given range */
 {
 struct bed *bed, *bedList = NULL;
-struct sqlConnection *conn = hConnectCentral();
+struct sqlConnection *conn = wikiConnect();
 struct sqlResult *sr;
 char **row;
 char where[256];
@@ -210,7 +210,7 @@ if (wikiTrackEnabled(database, NULL))
     struct track *tg = trackNew();
     static char longLabel[80];
     struct trackDb *tdb;
-    struct sqlConnection *conn = hConnectCentral();
+    struct sqlConnection *conn = wikiConnect();
     if (! sqlTableExists(conn,WIKI_TRACK_TABLE))
 	errAbort("loadWikiTrack configuration error, set wikiTrack.URL in hg.conf");
 
@@ -227,8 +227,8 @@ if (wikiTrackEnabled(database, NULL))
     tg->itemName = linkedFeaturesName;
     tg->mapItemName = wikiTrackMapItemName;
     tg->mapItem = wikiTrackMapItem;
-    tg->priority = 99.99;
-    tg->defaultPriority = 99.99;
+    tg->priority = WIKI_TRACK_PRIORITY;
+    tg->defaultPriority = WIKI_TRACK_PRIORITY;
     tg->groupName = cloneString("map");
     tg->defaultGroupName = cloneString("map");
     tg->exonArrows = TRUE;
