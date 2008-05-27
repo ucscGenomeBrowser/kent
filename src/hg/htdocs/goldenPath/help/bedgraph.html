@@ -25,10 +25,13 @@
 		    <P>
 		    The bedGraph format allows display of
 		    continuous-valued data in track format. This display type is
-		    useful for probability scores and transcriptome data. This type is very similar to the wiggle (WIG)
-                    format, except the bedGraph format has the advantage of preserving the original
-                    data when exporting your data back out of the system (e.g. with
-                    output format "all fields" or "selected fields" within the table browser).
+		    useful for probability scores and transcriptome data. 
+		    This track type is similar to the wiggle (WIG) format, 
+		    but unlike the wiggle format, data exported in the bedGraph format 
+		    are preserved in their original state. 
+		    This can be seen on export using the table browser. 
+		    For more details on wiggle track see the 
+		    wiggle <a href='wiggle.html' target='_blank'>track description page</a>.
 
 		    <P><B>General Structure</B><P> The bedGraph format is
 		    line-oriented.
@@ -94,7 +97,7 @@ browser full altGraph
 #	limits will dynamically change to always show full range of data
 #	in viewing window, priority = 20 positions this as the second graph
 #	Note, zero-relative, half-open coordinate system in use for bedGraph format
-track type=bedGraph name="BedGraph Format" description="BedGraph format" \
+track type=bedGraph name="BedGraph Format" description="BedGraph format" 
     visibility=full color=200,100,0 altColor=0,100,200 priority=20
 chr19 59302000 59302300 -1.0
 chr19 59302300 59302600 -0.75
