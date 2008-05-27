@@ -507,7 +507,7 @@ priority 36
     transMapInfo transMapInfoMRna
     transMapSrc hgFixed.transMapSrcMRna
     transMapGene hgFixed.transMapGeneMRna
-    baseColorDefault none
+    baseColorDefault diffCodons
     baseColorUseCds table hgFixed.transMapGeneMRna
     baseColorUseSequence extFile hgFixed.transMapSeqMRna hgFixed.transMapExtFileMRna
     indelDoubleInsert on
