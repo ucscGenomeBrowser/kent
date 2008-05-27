@@ -79,12 +79,28 @@ if (bag != NULL)
     }
 }
 
+static void prOrgScientific(char *db)
+/* print organism and scientific name for a database. */
+{
+char *org = hOrganism(db);
+char *sciName = hScientificName(db);
+printf("%s (%s)", org, sciName);
+freeMem(org);
+freeMem(sciName);
+}
+
 static void displayMapped(struct transMapBag *bag)
 /* display information about the mapping alignment */
 {
 printf("<TABLE class=\"transMap\">\n");
-printf("<CAPTION>Mapped Transcript</CAPTION>\n");
+printf("<CAPTION>TransMap Alignment</CAPTION>\n");
 printf("<TBODY>\n");
+
+// organism/assembly
+printf("<TR CLASS=\"transMapLeft\"><TD>Organism<TD>");
+prOrgScientific(database);
+printf("</TR>\n");
+printf("<TR CLASS=\"transMapLeft\"><TD>Genome<TD>%s</TR>\n", database);
 
 // position
 printf("<TR CLASS=\"transMapLeft\">");
@@ -96,7 +112,7 @@ printf("%s:%d-%d</A>", bag->psl->tName, bag->psl->tStart, bag->psl->tEnd);
 printf("</TR>\n");
 
 // % identity and % aligned
-printf("<TR CLASS=\"transMapLeft\"><TD>Identify<TD>%0.1f%%</TR>\n",
+printf("<TR CLASS=\"transMapLeft\"><TD>Identity<TD>%0.1f%%</TR>\n",
        100.0*pslIdent(bag->psl));
 printf("<TR CLASS=\"transMapLeft\"><TD>Aligned<TD>%0.1f%%</TR>\n",
        100.0*pslQueryAligned(bag->psl));
@@ -111,23 +127,17 @@ static void displaySource(struct transMapBag *bag)
 /* display information about the source gene that was mapped */
 {
 printf("<TABLE class=\"transMap\">\n");
-printf("<CAPTION>Source Transcript</CAPTION>\n");
+printf("<CAPTION>Source Alignment</CAPTION>\n");
 printf("<TBODY>\n");
 // organism/assembly
-printf("<TR CLASS=\"transMapLeft\"><TD>Organism");
+printf("<TR CLASS=\"transMapLeft\"><TD>Organism<TD>");
 if (bag->srcDbExists)
-    {
-    char *org = hOrganism(bag->info->srcDb);
-    char *sciName = hScientificName(bag->info->srcDb);
-    printf("<TD>%s (%s)", org, sciName);
-    freeMem(org);
-    freeMem(sciName);
-    }
+    prOrgScientific(bag->info->srcDb);
 else
-    printf("<TD>n/a");
+    printf("n/a");
 printf("</TR>\n");
-
 printf("<TR CLASS=\"transMapLeft\"><TD>Genome<TD>%s</TR>\n", bag->info->srcDb);
+
 // position
 printf("<TR CLASS=\"transMapLeft\"><TD>Position\n");
 if (bag->srcDbExists)
@@ -141,7 +151,7 @@ else
 printf("</TR>\n");
 
 // % identity and % aligned
-printf("<TR CLASS=\"transMapLeft\"><TD>Identify<TD>%0.1f%%</TR>\n",
+printf("<TR CLASS=\"transMapLeft\"><TD>Identity<TD>%0.1f%%</TR>\n",
        100.0*bag->src->ident);
 printf("<TR CLASS=\"transMapLeft\"><TD>Aligned<TD>%0.1f%%</TR>\n",
        100.0*bag->src->aligned);
