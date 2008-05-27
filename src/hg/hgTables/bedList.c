@@ -20,8 +20,9 @@
 #include "correlate.h"
 #include "bedCart.h"
 #include "trashDir.h"
+#include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: bedList.c,v 1.58 2007/08/02 01:35:02 galt Exp $";
+static char const rcsid[] = "$Id: bedList.c,v 1.59 2008/05/27 23:48:27 hiram Exp $";
 
 boolean htiIsPsl(struct hTableInfo *hti)
 /* Return TRUE if table looks to be in psl format. */
@@ -222,7 +223,7 @@ boolean pslKnowIfProtein = FALSE, pslIsProtein = FALSE;
 
 hti = hFindTableInfoDb(db, region->chrom, table);
 if (hti == NULL)
-    errAbort("Could not find table info for table %s", table);
+    errAbort("Could not find table info for table %s.%s", db,table);
 
 if (isWiggle(db, table))
     {
@@ -273,8 +274,9 @@ struct bed *bedList = NULL;
 region->next = NULL;
 
 if (isCustomTrack(table))
-    bedList = customTrackGetFilteredBeds(table, region, lm, NULL, NULL,
-					 retFieldCount);
+    bedList = customTrackGetFilteredBeds(table, region, lm, retFieldCount);
+else if (sameWord(table, WIKI_TRACK_TABLE))
+    bedList = wikiTrackGetFilteredBeds(table, region, lm, retFieldCount);
 else
     bedList = dbGetFilteredBedsOnRegions(conn, table, region, lm,
 					 retFieldCount);

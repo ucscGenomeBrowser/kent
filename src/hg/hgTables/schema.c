@@ -19,8 +19,9 @@
 #include "bedCart.h"
 #include "hgMaf.h"
 #include "hgTables.h"
+#include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: schema.c,v 1.47 2008/05/20 22:21:59 larrym Exp $";
+static char const rcsid[] = "$Id: schema.c,v 1.48 2008/05/27 23:48:28 hiram Exp $";
 
 static char *nbForNothing(char *val)
 /* substitute &nbsp; for empty strings to keep table formating sane */
@@ -529,11 +530,20 @@ else
     errAbort("Unrecognized customTrack type %s", type);
 }
 
+static void showSchemaWiki(struct trackDb *tdb, char *table)
+/* Show schema for the wikiTrack. */
+{
+hPrintf("<B>User annotations to UCSC genes or genome regions</B><BR>\n");
+showSchemaDb(wikiDbName(), tdb, table);
+}
+
 static void showSchema(char *db, struct trackDb *tdb, char *table)
 /* Show schema to open html page. */
 {
 if (isCustomTrack(table))
     showSchemaCt(table);
+else if (sameWord(table, WIKI_TRACK_TABLE))
+    showSchemaWiki(tdb, table);
 else
     showSchemaDb(db, tdb, table);
 }

@@ -19,8 +19,9 @@
 #include "hgTables.h"
 #include "bedCart.h"
 #include "wiggle.h"
+#include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.56 2008/05/01 16:48:31 larrym Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.57 2008/05/27 23:48:28 hiram Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -332,6 +333,8 @@ static void showTableFields(char *db, char *rootTable, boolean withGetButton)
 {
 if (isCustomTrack(rootTable))
     showTableFieldCt(db, rootTable, withGetButton);
+else if (sameWord(rootTable, WIKI_TRACK_TABLE))
+    showTableFieldsDb(wikiDbName(), rootTable, withGetButton);
 else
     showTableFieldsDb(db, rootTable, withGetButton);
 }
@@ -987,6 +990,8 @@ void doFilterPage(struct sqlConnection *conn)
 {
 char *table = connectingTableForTrack(curTable);
 char *db = database;
+if (sameWord(table, WIKI_TRACK_TABLE))
+    db = wikiDbName();
 doBigFilterPage(conn, db, table);
 }
 

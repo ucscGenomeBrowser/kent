@@ -11,7 +11,7 @@ T = tstbug.o
 O = $A.o asObj.o bedList.o chromGraph.o compositeTrack.o custom.o filterFields.o \
     gffOut.o identifiers.o intersect.o correlate.o correlatePlot.o \
     joining.o maf.o mainPage.o rangeHistogram.o schema.o \
-    seqOut.o sumStats.o usage.o wiggle.o galaxy.o userRegions.o
+    seqOut.o sumStats.o usage.o wiggle.o wikiTrack.o galaxy.o userRegions.o
 
 include ../../inc/cgi_build_rules.mk
 

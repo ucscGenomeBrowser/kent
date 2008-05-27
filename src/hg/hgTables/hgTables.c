@@ -26,8 +26,9 @@
 #include "bedCart.h"
 #include "hgMaf.h"
 #include "gvUi.h"
+#include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.160 2007/12/14 04:16:27 angie Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.161 2008/05/27 23:48:28 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -191,7 +192,7 @@ else if (track && trackDbIsComposite(track))
 return(tdb);
 }
 
-struct trackDb *getFullTrackList()
+static struct trackDb *getFullTrackList()
 /* Get all tracks including custom tracks if any. */
 {
 struct trackDb *list = hTrackDb(NULL), *tdb;
@@ -205,6 +206,9 @@ for (tdb = list; tdb != NULL; tdb = tdb->next)
 	tdb->tableName = cloneString("all_mrna");
 	}
     }
+/* add wikiTrack if enabled */
+if (wikiTrackEnabled(database, NULL))
+    wikiTrackDb(&list);
 
 /* Create dummy group for custom tracks if any */
 ctList = getCustomTracks();
@@ -212,6 +216,7 @@ for (ct = ctList; ct != NULL; ct = ct->next)
     {
     slAddHead(&list, ct->tdb);
     }
+
 return list;
 }
 
@@ -430,7 +435,13 @@ char *getDbTable(char *db, char *table)
 /* If table already contains its real database as a dot-prefix, then 
  * return a clone of table; otherwise alloc and return db.table . */
 {
-if (strchr(table, '.') != NULL)
+if (sameString(table, WIKI_TRACK_TABLE))
+    {
+    char dbTable[256];
+    safef(dbTable, sizeof(dbTable), "%s.%s", wikiDbName(), WIKI_TRACK_TABLE);
+    return cloneString(dbTable);
+    }
+else if (strchr(table, '.') != NULL)
     return cloneString(table);
 else
     {
@@ -509,6 +520,10 @@ if (isCustomTrack(table))
     {
     struct customTrack *ct = lookupCt(table);
     hti = ctToHti(ct);
+    }
+else if (sameWord(table, WIKI_TRACK_TABLE))
+    {
+    hti = wikiHti();
     }
 else
     {
@@ -1261,7 +1276,10 @@ if (anyIntersection())
     errAbort("Can't do all fields output when intersection is on. "
     "Please go back and select another output type (BED or custom track is good), or clear the intersection.");
 textOpen();
-tabOutSelectedFields(database, table, NULL, fullTableFields(database, table));
+if (sameWord(table, WIKI_TRACK_TABLE))
+    tabOutSelectedFields(wikiDbName(), table, NULL, fullTableFields(wikiDbName(), table));
+else
+    tabOutSelectedFields(database, table, NULL, fullTableFields(database, table));
 }
 
 void doOutHyperlinks(char *table, struct sqlConnection *conn)

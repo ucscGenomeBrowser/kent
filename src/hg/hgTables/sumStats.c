@@ -20,8 +20,9 @@
 #include "portable.h"
 #include "botDelay.h"
 #include "hgTables.h"
+#include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: sumStats.c,v 1.21 2007/03/22 20:33:03 hiram Exp $";
+static char const rcsid[] = "$Id: sumStats.c,v 1.22 2008/05/27 23:48:28 hiram Exp $";
 
 long long basesInRegion(struct region *regionList, int limit)
 /* Count up all bases in regions to limit number of regions, 0 == no limit */
@@ -366,6 +367,8 @@ if (isWiggle(database, curTable))
     doSummaryStatsWiggle(conn);
 else if (isChromGraph(curTrack))
     doSummaryStatsChromGraph(conn);
+else if (sameWord(curTable,WIKI_TRACK_TABLE))
+    doSummaryStatsWikiTrack(conn);
 else
     doSummaryStatsBed(conn);
 }

@@ -113,9 +113,6 @@ boolean anyCompression();
 struct trackDb *findCompositeTdb(struct trackDb *track, char *table);
 /*	find the tdb for the table, if it is custom or composite or ordinary  */
 
-struct trackDb *getFullTrackList();
-/* Get all tracks including custom tracks if any. */
-
 void initGroupsTracksTables(struct sqlConnection *conn);
 /* Get list of groups that actually have something in them. */
 
@@ -639,15 +636,14 @@ void flushCustomTracks();
 struct slName *getBedFields(int fieldCount);
 /* Get list of fields for bed of given size. */
 
+struct bedFilter *bedFilterForCustomTrack(char *ctName);
+/* If the user specified constraints, then translate them to a bedFilter. */
+
 struct bed *customTrackGetFilteredBeds(char *name, struct region *regionList,
-	struct lm *lm, boolean *retGotFilter, boolean *retGotIds, 
-	int *retFieldCount);
+	struct lm *lm, int *retFieldCount);
 /* Get list of beds from custom track of given name that are
  * in current regions and that pass filters.  You can bedFree
- * this when done.  
- * If you pass in a non-null retGotFilter this will let you know
- * if a filter was applied.  Similarly retGotIds lets you know
- * if an identifier list was applied*/
+ * this when done. */
 
 struct customTrack *lookupCt(char *name);
 /* Find named custom track. */
@@ -858,6 +854,21 @@ void startGalaxyForm ();
 
 void sendParamsToGalaxy(char *doParam, char *paramVal);
 /* intermediate page for formats printed directly from top form */
+
+/* --------------- wikiTrack functions --------------- */
+void wikiTrackDb(struct trackDb **list);
+/* create a trackDb entry for the wiki track */
+
+struct hTableInfo *wikiHti();
+/* Create an hTableInfo for the wikiTrack. */
+
+void doSummaryStatsWikiTrack(struct sqlConnection *conn);
+/* Put up page showing summary stats for wikiTrack. */
+
+struct bed *wikiTrackGetFilteredBeds(char *name, struct region *regionList,
+	struct lm *lm, int *retFieldCount);
+/* Get list of beds from the wikiTrack * in current regions and that pass
+ *	filters.  You can bedFree this when done.  */
 
 #define uglyw warn	/* Warn for debugging purposes. */
 #endif /* HGTABLES_H */

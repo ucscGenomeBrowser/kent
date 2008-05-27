@@ -15,7 +15,7 @@
 #include "hgTables.h"
 
 
-static char const rcsid[] = "$Id: joining.c,v 1.49 2007/12/14 04:16:27 angie Exp $";
+static char const rcsid[] = "$Id: joining.c,v 1.50 2008/05/27 23:48:28 hiram Exp $";
 
 struct joinedRow
 /* A row that is joinable.  Allocated in joinableResult->lm. */
@@ -987,7 +987,7 @@ char *words[16];
 char dtf[256];
 int i;
 if (hti == NULL)
-    errAbort("Can't find table info for table %s", table);
+    errAbort("Can't find table info for table %s.%s", db, table);
 bedSqlFieldsExceptForChrom(hti, &fieldCount, &fields);
 /* Update our notion of fieldCount -- the chrom field is omitted, and 
  * (if applicable) the reserved field is omitted too: */
@@ -1102,7 +1102,7 @@ struct bed *dbGetFilteredBedsOnRegions(struct sqlConnection *conn,
 /* Get list of beds from database, in all regions, that pass filtering. */
 {
 /* A joining query may be required if the filter incorporates linked tables. */
-struct hTableInfo *hti = hFindTableInfoDb(database, NULL, table);
+struct hTableInfo *hti = getHti(database, table);
 struct slName *fieldList = getBedFieldSlNameList(hti, database, table);
 struct joinerDtf *dtfList = NULL;
 struct joinerDtf *filterTables = NULL;

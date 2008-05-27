@@ -13,7 +13,7 @@
 #include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: custom.c,v 1.35 2007/12/14 04:16:27 angie Exp $";
+static char const rcsid[] = "$Id: custom.c,v 1.36 2008/05/27 23:48:28 hiram Exp $";
 
 struct customTrack *theCtList = NULL;	/* List of custom tracks. */
 struct slName *browserLines = NULL;	/* Browser lines in custom tracks. */
@@ -595,14 +595,10 @@ else
 }
 
 struct bed *customTrackGetFilteredBeds(char *name, struct region *regionList,
-	struct lm *lm, boolean *retGotFilter, boolean *retGotIds, 
-	int *retFieldCount)
+	struct lm *lm, int *retFieldCount)
 /* Get list of beds from custom track of given name that are
  * in current regions and that pass filters.  You can bedFree
- * this when done.  
- * If you pass in a non-null retGotFilter this will let you know
- * if a filter was applied.  Similarly retGotIds lets you know
- * if an identifier list was applied*/
+ * this when done. */
 {
 struct customTrack *ct = lookupCt(name);
 struct bedFilter *bf = NULL;
@@ -643,11 +639,7 @@ else
     for (region = regionList; region != NULL; region = region->next)
 	customTrackFilteredBedOnRegion(region, ct, idHash, bf, lm, &bedList);
 
-    /* Set return variables and clean up. */
-    if (retGotFilter != NULL)
-	*retGotFilter = (bf != NULL);
-    if (retGotIds != NULL)
-	*retGotIds = (idHash != NULL);
+    /* clean up. */
     hashFree(&idHash);
     slReverse(&bedList);
     }
