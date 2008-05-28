@@ -5,10 +5,7 @@
 #ifndef NEWTEST_H
 #define NEWTEST_H
 
-#ifndef JKSQL_H
 #include "jksql.h"
-#endif
-
 #define POINT_NUM_COLS 2
 
 struct point
