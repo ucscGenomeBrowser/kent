@@ -4,7 +4,7 @@
 # This file describes browser build for the Lancelet
 # genome, Branchiostoma floridae, March 2006, v.1.0 from JGI
 #
-#       "$Id: braFlo1.txt,v 1.16 2008/05/10 00:12:35 hiram Exp $"
+#       "$Id: braFlo1.txt,v 1.17 2008/05/28 23:05:15 hiram Exp $"
 #
 
 ##########################################################################
@@ -115,17 +115,39 @@ done
 	hgLoadBed -strict braFlo1 windowmaskerSdust windowmasker.sdust.bed.gz
     #	Loaded 4263263 elements of size 3
 
-    ## Add trfMask.bed to this wmsk.sdust.2bit file
+    #	eliminate the gaps from the masking (WM bug)
+    featureBits braFlo1 -not gap -bed=notGap.bed
+    #	831202022 bases of 831202022 (100.000%) in intersection
+ 
+    time nice -n +19 featureBits braFlo1 windowmaskerSdust notGap.bed \
+        -bed=stdout | gzip -c > cleanWMask.bed.gz
+    #	219292403 bases of 831202022 (26.383%) in intersection
+
+    #	reload track to get it clean
+    hgLoadBed braFlo1 windowmaskerSdust cleanWMask.bed.gz
+    #	Loaded 4255796 elements of size 4
+    featureBits braFlo1 windowmaskerSdust
+    #	219292403 bases of 831202022 (26.383%) in intersection
+
+##############################################################################
+## combine trf mask with windowmasker (DONE - 2008-05-23 - Hiram)
+    ssh kkstore05
     cd /cluster/data/braFlo1
+    zcat bed/WindowMasker/cleanWMask.bed.gz \
+	| twoBitMask braFlo1.unmasked.2bit stdin \
+	    -type=.bed braFlo1.cleanWMSdust.2bit
     cat bed/simpleRepeat/trfMask.bed \
-	| twoBitMask -add -type=.bed bed/WindowMasker/braFlo1.wmsk.sdust.2bit \
-	stdin braFlo1.wmTrf.2bit
-    twoBitToFa braFlo1.wmTrf.2bit stdout | faSize stdin
-    #	926386587 bases (95184565 N's 831202022 real
-    #	611655540 upper 219546482 lower) in 2 sequences in 1 files
+      | twoBitMask -add -type=.bed braFlo1.cleanWMSdust.2bit stdin braFlo1.2bit
+    #	can safely ignore the warning about BED file >= 13 fields
+    #	check it
+    twoBitToFa braFlo1.2bit stdout | faSize stdin
+    #	926386587 bases (95184565 N's 831202022 real 611655540 upper
+    #	219546482 lower) in 2 sequences in 1 files
     #	%23.70 masked total, %26.41 masked real
-    ln -s braFlo1.wmTrf.2bit braFlo1.2bit
-    ln -s /cluster/data/braFlo1/braFlo1.2bit /gbdb/braFlo1/braFlo1.2bit
+
+    #	create gbdb symlink
+    ssh hgwdev
+    ln -s /cluster/data/braFlo1/braFlo1.2bit /gbdb/braFlo1
 
 #########################################################################
 ## Create masked scaffolds-only 2bit file (DONE - 2007-03-26 - Hiram)
