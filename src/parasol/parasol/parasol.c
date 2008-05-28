@@ -9,7 +9,7 @@
 #include "paraLib.h"
 #include "paraMessage.h"
 
-static char const rcsid[] = "$Id: parasol.c,v 1.38 2008/05/19 23:14:50 galt Exp $";
+static char const rcsid[] = "$Id: parasol.c,v 1.39 2008/05/28 05:17:05 galt Exp $";
 
 char *version = PARA_VERSION;   /* Version number. */
 
@@ -27,7 +27,7 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "Parasol version %s.\n"
+  "Parasol version %s\n"
   "Parasol is the name given to the overall system for managing jobs on\n"
   "a computer cluster and to this specific command.  This command is\n"
   "intended primarily for system administrators.  The 'para' command\n"
