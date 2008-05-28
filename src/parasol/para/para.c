@@ -16,7 +16,7 @@
 #include "verbose.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: para.c,v 1.94 2008/05/21 21:59:37 galt Exp $";
+static char const rcsid[] = "$Id: para.c,v 1.95 2008/05/28 08:09:30 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -129,7 +129,6 @@ errAbort(
   "   Print info on currently running jobs taking > 'time' (minutes) to run.\n"
   "para time\n"
   "   List timing information.\n"
-  "   with option: -eta also show estimated time to completion.\n"
   "para recover jobList newJobList\n"
   "   Generate a job list by selecting jobs from an existing list where\n"
   "   the `check out' tests fail.\n"
