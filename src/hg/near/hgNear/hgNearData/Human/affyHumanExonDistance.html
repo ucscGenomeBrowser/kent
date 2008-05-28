@@ -1,0 +1,54 @@
+<H3>Description</H3>
+<P>
+This column shows the similarity of the expression (distance) from the Affymetrix All 
+Exon dataset of each gene to the selected gene. Genes with identical expression profiles show a value 
+of zero. This column shows data only for the 1000 genes (including
+splicing variants) that have the most similar expression
+profiles.
+</P>
+
+<H3>Methods</H3>
+<P>
+RNA (from a commercial source) from 11 tissues were hybridized to Affymetrix 
+Human Exon 1.0 ST arrays. For each tissue, 3 replicate experiments were done 
+for a total of 33 arrays.  The arrays' raw signal intensity was normalized
+with a quantile normalization method, then run through the PLIER algorithm.
+The normalized data were then converted to log-ratios, which are displayed
+as green for negative log-ratios (under-expression), and red for positive 
+(over-expression).</P>
+<P>When calculating expression ratios, the overall expression level in the
+denominator was calculated by first taking the median of replicates for
+each tissue and then taking the median of these medians. </P>
+<P>
+To associate particular genes with expression data, the following algorithm
+was used: for each gene, the overlapping exons from the microarray dataset
+were collected and the median intensity of these was assigned to the gene.
+If the gene contained exons not overlapping an exon from the microarray,
+those exons were ignored. If the microarray dataset contained exons not
+overlapping a gene, those were ignored as well.  Once the overall expression
+level of each gene was determined, this was then log-ratio'd.  In addition,
+the median was taken for replicate arrays per tissue for both the absolute 
+and log-ratio varieties.</P.
+<P>
+The expression distance between two genes is a weighted
+sum computed with the following formula:
+<PRE>
+  &nbsp;&nbsp;&nbsp;delta(a,b) = sum(w[i] * |a[i] - b[i]| ) / sum(w[i])
+</PRE>
+where <em>a</em> and <em>b</em> are expression vectors associated with the two
+genes indexed by a microarray, <em>w</em> is an array of weights, and the
+sums are taken over all microarray.  Each microarray is weighted equally in this
+case, because all tissues have three replicates.
+</P>
+
+<H2>Credits</H2>
+<P>
+The data for this track was provided and analyzed by 
+<A HREF="http://www.affymetrix.com/" TARGET=_blank>Affymetrix</A>.
+</P>
+
+<H2>Links</H2>
+<P><UL><LI>
+<A HREF="http://www.affymetrix.com/products/arrays/specific/exon.affx" TARGET=_blank>AffyMetrix Human Exon 1.0 ST array web page</A></LI>
+<LI><A HREF="http://www.affymetrix.com/support/technical/sample_data/exon_array_data.affx" TARGET=_blank>AffyMetrix Human Exon data</A></LI>
+<LI><A HREF="http://www.affymetrix.com/support/technical/technotes/plier_technote.pdf" TARGET=_blank>PLIER algorithm documentation (PDF).</A></LI></UL></P>
