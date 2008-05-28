@@ -18,7 +18,7 @@
 #include "cheapcgi.h"
 #include "asParse.h"
 
-static char const rcsid[] = "$Id: autoSql.c,v 1.33 2007/09/17 21:13:21 fanhsu Exp $";
+static char const rcsid[] = "$Id: autoSql.c,v 1.34 2008/05/28 04:55:31 galt Exp $";
 
 boolean withNull = FALSE;
 
@@ -1645,9 +1645,7 @@ fprintf(hFile, "#ifndef %s\n", defineName);
 fprintf(hFile, "#define %s\n\n", defineName);
 if(doDbLoadAndSave)
     {
-    fprintf(hFile, "#ifndef JKSQL_H\n");
     fprintf(hFile, "#include \"jksql.h\"\n");
-    fprintf(hFile, "#endif\n\n");
     }
 
 /* Put the usual includes in .c file, and also include .h file we are
