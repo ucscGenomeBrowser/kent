@@ -24,7 +24,7 @@
 #include "trashDir.h"
 #include "jsHelper.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.75 2008/05/20 21:11:15 larrym Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.76 2008/05/28 21:36:00 larrym Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -1262,9 +1262,10 @@ struct hash *hash = tdb->settingsHash;
 char *val;
 if ((val = hashFindVal(hash, "name")) != NULL)
     {
-    if (!*val)
-        val = cloneString("My Track");
-    tdb->shortLabel = val;
+    if (*val)
+        tdb->shortLabel = cloneString(val);
+    else
+        tdb->shortLabel = cloneString("My Track");
     stripChar(tdb->shortLabel,'"');	/*	no quotes please	*/
     stripChar(tdb->shortLabel,'\'');	/*	no quotes please	*/
     tdb->tableName = customTrackTableFromLabel(tdb->shortLabel);
@@ -1273,9 +1274,10 @@ if ((val = hashFindVal(hash, "name")) != NULL)
     }
 if ((val = hashFindVal(hash, "description")) != NULL)
     {
-    if (!*val)
-        val = cloneString("My Custom Track");
-    tdb->longLabel = val;
+    if (*val)
+        tdb->longLabel = cloneString(val);
+    else
+        tdb->longLabel = cloneString("My Custom Track");
     stripChar(tdb->longLabel,'"');	/*	no quotes please	*/
     stripChar(tdb->longLabel,'\'');	/*	no quotes please	*/
     }
