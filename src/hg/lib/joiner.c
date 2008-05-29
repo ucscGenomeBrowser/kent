@@ -668,7 +668,7 @@ while ((line = nextSubbedLine(lf, joiner->symHash, dyBuf)) != NULL)
 	    if (var == NULL)
 	        errAbort("set what line %d of %s", lf->lineIx, lf->fileName);
 	    val = trimSpaces(line);
-	    if ((val == NULL) || (val[0] == 0))
+	    if (isEmpty(val))
 	        errAbort("Set with no value line %d of %s", 
 			lf->lineIx, lf->fileName);
 	    hashAdd(joiner->symHash, var, cloneString(val));
