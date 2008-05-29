@@ -38,7 +38,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.356 2008/05/27 17:23:29 angie Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.357 2008/05/29 07:26:36 markd Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -1074,19 +1074,26 @@ return hash;
 }
 #endif /* GBROWSE */
 
+static struct dnaSeq *fetchTwoBitSeq(char *fileName, char *seqName, int start, int end)
+/* fetch a sequence from a 2bit, caching open of the file */
+{
+static struct twoBitFile *tbf = NULL;  // cache of open file
+if ((tbf == NULL) || !sameString(fileName, tbf->fileName))
+    {
+    twoBitClose(&tbf);
+    tbf = twoBitOpen(fileName);
+    }
+struct dnaSeq *seq = twoBitReadSeqFrag(tbf, seqName, start, end);
+return seq;
+}
+
 struct dnaSeq *hFetchSeqMixed(char *fileName, char *seqName, int start, int end)
 /* Fetch mixed case sequence. */
 {
 if (twoBitIsFile(fileName))
-    {
-    struct twoBitFile *tbf;
-    struct dnaSeq *seq;
-    tbf = twoBitOpen(fileName);
-    seq = twoBitReadSeqFrag(tbf, seqName, start, end);
-    twoBitClose(&tbf);
-    return seq;
-    }
-return nibLoadPartMasked(NIB_MASK_MIXED, fileName, start, end-start);
+    return fetchTwoBitSeq(fileName, seqName, start, end);
+else
+    return nibLoadPartMasked(NIB_MASK_MIXED, fileName, start, end-start);
 }
 
 struct dnaSeq *hFetchSeq(char *fileName, char *seqName, int start, int end)
@@ -1095,13 +1102,7 @@ struct dnaSeq *hFetchSeq(char *fileName, char *seqName, int start, int end)
 {
 if (twoBitIsFile(fileName))
     {
-    static struct twoBitFile *tbf = NULL;  // cache of open file
-    if ((tbf == NULL) || !sameString(fileName, tbf->fileName))
-        {
-        twoBitClose(&tbf);
-        tbf = twoBitOpen(fileName);
-        }
-    struct dnaSeq *seq = twoBitReadSeqFrag(tbf, seqName, start, end);
+    struct dnaSeq *seq = fetchTwoBitSeq(fileName, seqName, start, end);
     tolowers(seq->dna);
     return seq;
     }
