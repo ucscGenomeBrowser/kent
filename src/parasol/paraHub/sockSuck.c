@@ -52,7 +52,7 @@ for (;;)
 	    }
 	else
 	    {
-	    char ip[4];
+	    unsigned char ip[4];
 	    unpackIp(pm->ipAddress.sin_addr.s_addr, ip);
 	    warn("unauthorized access by %d.%d.%d.%d\n", 
                  ip[0], ip[1], ip[2], ip[3]);

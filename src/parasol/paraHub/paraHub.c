@@ -69,7 +69,7 @@
 #include "obscure.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: paraHub.c,v 1.110 2008/05/29 20:18:42 galt Exp $";
+static char const rcsid[] = "$Id: paraHub.c,v 1.111 2008/05/29 21:20:22 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -1084,7 +1084,7 @@ void openJobId()
 jobIdFile = fopen(jobIdFileName, "r+");
 if (jobIdFile != NULL)
     {
-    readOne(jobIdFile, nextJobId);
+    (void)readOne(jobIdFile, nextJobId);
     nextJobId += 100000;
     }
 else
