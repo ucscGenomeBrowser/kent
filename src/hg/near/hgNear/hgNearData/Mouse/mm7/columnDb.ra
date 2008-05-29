@@ -1,7 +1,0 @@
-name ensembl
-itemUrl http://apr2006.archive.ensembl.org/Mus_musculus/geneview?transcript=%s
-
-name flyOrthologs
-xrefOrg D. melanogaster
-xrefLookup flyBase2004Xref name fbgn
-
