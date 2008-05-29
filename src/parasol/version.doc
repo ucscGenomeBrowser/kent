@@ -152,4 +152,22 @@
 
 	Also fixed a bug in freeBatch related to resultQueues.
 
+12.05   Fixed bug in para times, para status, and para problems due to the 
+        para.bookmark optimization.  These commands still used fields in
+        the jr struct.  Now these have been shifted to use equivalent fields
+        in the sub struct.  We had to add sub->errFile to the submission struct.
+
+        Also removed the unused para time option -eta.
+
+	Also there no need to return the resultsHash now.  It previously had a bug 
+        in para shove causing a leak because resultsHash was not being freed.
+        Now it is freed at the end of the routine, and it is not returned,
+        so the bug is gone.
+
+	Also fixed results over-run bug.  pstat2 in hub now returns resultsSize
+        immediately after the results flush, and para uses this to stop reading
+        results that are newer than the current cycle.  This prevents subtle
+        tracking errors otherwise introduced by bookmark.
+
+        Also changed spec usage to override commandline usage parameters as requested.
 

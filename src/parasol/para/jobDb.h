@@ -5,7 +5,7 @@
 #ifndef JOBDB_H
 #define JOBDB_H
 
-#define SUBMISSION_NUM_COLS 17
+#define SUBMISSION_NUM_COLS 18
 
 struct submission
 /* Keeps track of a job submission */
@@ -28,6 +28,7 @@ struct submission
     unsigned char slow;	/* Run so long we warn user */
     unsigned char hung;	/* Run so long we kill it */
     unsigned char ranOk;	/* Looks like it ran and finished ok */
+    char *errFile;	/* Location of stderr file on host */
     };
 
 struct submission *submissionCommaIn(char **pS, struct submission *ret);

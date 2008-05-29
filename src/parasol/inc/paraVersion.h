@@ -1,1 +1,1 @@
-#define PARA_VERSION "12.04"
+#define PARA_VERSION "12.05"

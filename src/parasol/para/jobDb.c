@@ -8,7 +8,7 @@
 #include "sqlList.h"
 #include "jobDb.h"
 
-static char const rcsid[] = "$Id: jobDb.c,v 1.8 2008/05/21 21:59:37 galt Exp $";
+static char const rcsid[] = "$Id: jobDb.c,v 1.9 2008/05/29 20:18:42 galt Exp $";
 
 struct submission *submissionCommaIn(char **pS, struct submission *ret)
 /* Create a submission out of a comma separated string. 
@@ -36,6 +36,7 @@ ret->crashed = sqlUnsignedComma(&s);
 ret->slow = sqlUnsignedComma(&s);
 ret->hung = sqlUnsignedComma(&s);
 ret->ranOk = sqlUnsignedComma(&s);
+ret->errFile = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -49,6 +50,7 @@ struct submission *el;
 if ((el = *pEl) == NULL) return;
 freeMem(el->id);
 freeMem(el->host);
+freeMem(el->errFile);
 freez(pEl);
 }
 
@@ -105,6 +107,10 @@ fputc(sep,f);
 fprintf(f, "%u", el->hung);
 fputc(sep,f);
 fprintf(f, "%u", el->ranOk);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->errFile);
+if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
 

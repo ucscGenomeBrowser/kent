@@ -47,8 +47,8 @@ ret->errFile = cloneString(row[10]);
 return ret;
 }
 
-struct jobResult *jobResultLoadAll(char *fileName, off_t *resultBookMark) 
-/* Load all jobResult from a tab-separated file, starting from bookMark.
+struct jobResult *jobResultLoadAll(char *fileName, off_t *resultBookMark, off_t resultsSize) 
+/* Load all jobResult from a tab-separated file, starting from bookMark, ending at resultsSize.
  * Dispose of this with jobResultFreeList(). */
 {
 struct jobResult *list = NULL, *el;
@@ -57,8 +57,17 @@ int lineSize, wordCount;
 char *row[11], *line;
 off_t bookMark = *resultBookMark;
 lineFileSeek(lf, bookMark, SEEK_SET);
+if (bookMark > resultsSize)
+    errAbort("bookMark (%llu) > resultsSize (%llu)", 
+      (unsigned long long) bookMark,
+      (unsigned long long) resultsSize);
+if (bookMark == resultsSize)
+    return list;
 while (lineFileNext(lf, &line, &lineSize))
     {
+    bookMark = lineFileTell(lf);
+    if (bookMark >= resultsSize)
+	break;
     char lastChar = line[lineSize-1];
     if (lastChar != '\n')
     	{

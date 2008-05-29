@@ -19,6 +19,7 @@ object submission
     ubyte slow;		"Run so long we warn user"
     ubyte hung;		"Run so long we kill it"
     ubyte ranOk;	"Looks like it ran and finished ok"
+    string errFile;	"Location of stderr file on host"
     )
 
 object check

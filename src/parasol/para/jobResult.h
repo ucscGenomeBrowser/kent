@@ -30,8 +30,8 @@ struct jobResult *jobResultLoad(char **row);
 /* Load a jobResult from row fetched with select * from jobResult
  * from database.  Dispose of this with jobResultFree(). */
 
-struct jobResult *jobResultLoadAll(char *fileName, off_t *resultBookMark);
-/* Load all jobResult from a tab-separated file, starting from bookMark.
+struct jobResult *jobResultLoadAll(char *fileName, off_t *resultBookMark, off_t resultsSize);
+/* Load all jobResult from a tab-separated file, starting from bookMark, ending at resultsSize.
  * Dispose of this with jobResultFreeList(). */
 
 struct jobResult *jobResultCommaIn(char **pS, struct jobResult *ret);
