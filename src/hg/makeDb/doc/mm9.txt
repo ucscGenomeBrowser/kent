@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.67 2008/05/25 20:11:52 markd Exp $"
+#	"$Id: mm9.txt,v 1.68 2008/05/29 19:00:30 fanhsu Exp $"
 #
 
 #######################################################################
@@ -6991,6 +6991,27 @@ done
 
     featureBits mm9 miRNA
     #39718 bases of 2620346127 (0.002%) in intersection
+
+###########################################################################t
+#  RE-BUILD miRNA TRACK (DONE – 2008-05-29 - Fan)
+    #   updated data from: Michel.Weber@ibcg.biotoul.fr
+    #   notify them when done.
+    ssh hgwdev
+    cd /cluster/data/mm9/bed
+    mkdir miRNA-2008-05-28
+    cd miRNA-2008-05-28
+    # save the mouse_miRNA_may2008.doc as mouse_miRNA_may2008.txt
+    # and replace all blanks with tabs.
+
+    cp mouse_miRNA_may2008.txt miRNA.tab
+    hgLoadBed mm9 miRNA miRNA.tab
+
+# check previous release track before update
+    featureBits mm8 miRNA
+    #33398 bases of 2567283971 (0.001%) in intersection
+
+    featureBits mm9 miRNA
+    #43236 bases of 2620346127 (0.002%) in intersection
 
 #############################################################################
 # N-SCAN gene predictions (nscanGene) - (2006-08-30 markd)
