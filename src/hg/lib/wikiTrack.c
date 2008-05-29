@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.18 2008/05/27 23:54:10 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.19 2008/05/29 17:49:24 hiram Exp $";
 
 void wikiTrackStaticLoad(char **row, struct wikiTrack *ret)
 /* Load a row from wikiTrack table into ret.  The contents of ret will
@@ -427,7 +427,7 @@ char *wikiDbName()
 /* return name of database where wiki track is located
     currently this is central.db but the future may be configurable */
 {
-char *dbName = NULL;
+static char *dbName = NULL;
 
 if (dbName)
     return dbName;
@@ -458,15 +458,15 @@ struct wikiTrack *findWikiItemId(char *wikiItemId)
 {
 struct wikiTrack *item;
 char query[256];
-struct sqlConnection *conn = wikiConnect();
+struct sqlConnection *wikiConn = wikiConnect();
 
 safef(query, ArraySize(query), "SELECT * FROM %s WHERE id='%s' limit 1",
 	WIKI_TRACK_TABLE, wikiItemId);
 
-item = wikiTrackLoadByQuery(conn, query);
+item = wikiTrackLoadByQuery(wikiConn, query);
 if (NULL == item)
     errAbort("display wiki item: failed to load item '%s'", wikiItemId);
-hDisconnectCentral(&conn);
+wikiDisconnect(&wikiConn);
 
 return item;
 }
@@ -480,14 +480,14 @@ struct wikiTrack *item = NULL;
 if (db && geneSymbol)
     {
     char query[256];
-    struct sqlConnection *conn = wikiConnect();
+    struct sqlConnection *wikiConn = wikiConnect();
     safef(query, ArraySize(query),
 	"SELECT * FROM %s WHERE db='%s' AND geneSymbol='%s' limit 1",
 	    WIKI_TRACK_TABLE, db, geneSymbol);
 
-    item = wikiTrackLoadByQuery(conn, query);
+    item = wikiTrackLoadByQuery(wikiConn, query);
 
-    hDisconnectCentral(&conn);
+    wikiDisconnect(&wikiConn);
     }
 
 return item;
@@ -502,14 +502,14 @@ struct wikiTrack *item = NULL;
 if (name && db)
     {
     char query[256];
-    struct sqlConnection *conn = wikiConnect();
+    struct sqlConnection *wikiConn = wikiConnect();
     safef(query, ArraySize(query),
 	"SELECT * FROM %s WHERE db='%s' AND name='%s' limit 1",
 	    WIKI_TRACK_TABLE, db, name);
 
-    item = wikiTrackLoadByQuery(conn, query);
+    item = wikiTrackLoadByQuery(wikiConn, query);
 
-    hDisconnectCentral(&conn);
+    wikiDisconnect(&wikiConn);
     }
 
 return item;

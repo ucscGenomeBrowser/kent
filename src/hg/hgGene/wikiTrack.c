@@ -15,7 +15,7 @@
 #include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.16 2008/05/27 23:53:55 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.17 2008/05/29 17:49:17 hiram Exp $";
 
 static char *hgGeneUrl()
 {
@@ -225,7 +225,7 @@ static int addWikiTrackItem(char *db, char *chrom, int start, int end,
 	char *color, char *category, char *geneSymbol, char *wikiKey)
 /* create new wikiTrack row with given parameters */
 {
-struct sqlConnection *conn = wikiConnect();
+struct sqlConnection *wikiConn = wikiConnect();
 struct wikiTrack *newItem;
 
 AllocVar(newItem);
@@ -246,9 +246,9 @@ newItem->descriptionKey = cloneString("0");
 newItem->id = 0;
 newItem->geneSymbol = cloneString(geneSymbol);
 
-wikiTrackSaveToDbEscaped(conn, newItem, WIKI_TRACK_TABLE, 1024);
+wikiTrackSaveToDbEscaped(wikiConn, newItem, WIKI_TRACK_TABLE, 1024);
 
-int id = sqlLastAutoId(conn);
+int id = sqlLastAutoId(wikiConn);
 char descriptionKey[256];
 /* when wikiKey is NULL, assign the default key of category:db-id,
  *	else, it is the proper key
@@ -265,8 +265,8 @@ char query[1024];
 safef(query, ArraySize(query), "UPDATE %s set creationDate=now(),lastModifiedDate=now(),descriptionKey='%s' WHERE id='%d'",
     WIKI_TRACK_TABLE, descriptionKey, id);
 
-sqlUpdate(conn,query);
-hDisconnectCentral(&conn);
+sqlUpdate(wikiConn,query);
+wikiDisconnect(&wikiConn);
 return (id);
 }
 

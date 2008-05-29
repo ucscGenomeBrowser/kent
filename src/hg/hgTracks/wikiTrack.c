@@ -10,7 +10,7 @@
 #include "wikiTrack.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.16 2008/05/27 23:54:04 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.17 2008/05/29 17:49:20 hiram Exp $";
 
 
 static void wikiTrackMapItem(struct track *tg, struct hvGfx *hvg, void *item,
@@ -107,7 +107,7 @@ static void wikiTrackLoadItems(struct track *tg)
 /* Load the items from the wikiTrack table */
 {
 struct bed *bed;
-struct sqlConnection *conn = wikiConnect();
+struct sqlConnection *wikiConn = wikiConnect();
 struct sqlResult *sr;
 char **row;
 int rowOffset;
@@ -118,7 +118,7 @@ int scoreMax = 99999;
 
 safef(where, ArraySize(where), "db='%s'", database);
 
-sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, where, &rowOffset);
+sr = hRangeQuery(wikiConn, tg->mapName, chromName, winStart, winEnd, where, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct wikiTrack *item = wikiTrackLoad(row);
@@ -146,7 +146,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     wikiTrackFree(&item);
     }
 sqlFreeResult(&sr);
-hDisconnectCentral(&conn);
+wikiDisconnect(&wikiConn);
 
 slSort(&lfList, linkedFeaturesCmp);
 
@@ -178,7 +178,7 @@ struct bed *wikiTrackGetBedRange(char *mapName, char *chromName,
 /* fetch wiki track items as simple bed 3 list in given range */
 {
 struct bed *bed, *bedList = NULL;
-struct sqlConnection *conn = wikiConnect();
+struct sqlConnection *wikiConn = wikiConnect();
 struct sqlResult *sr;
 char **row;
 char where[256];
@@ -186,7 +186,7 @@ int rowOffset;
 
 safef(where, ArraySize(where), "db='%s'", database);
 
-sr = hRangeQuery(conn, mapName, chromName, start, end, where, &rowOffset);
+sr = hRangeQuery(wikiConn, mapName, chromName, start, end, where, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct wikiTrack *item = wikiTrackLoad(row);
@@ -198,7 +198,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     wikiTrackFree(&item);
     }
 sqlFreeResult(&sr);
-hDisconnectCentral(&conn);
+wikiDisconnect(&wikiConn);
 return bedList;
 }
 
@@ -210,8 +210,8 @@ if (wikiTrackEnabled(database, NULL))
     struct track *tg = trackNew();
     static char longLabel[80];
     struct trackDb *tdb;
-    struct sqlConnection *conn = wikiConnect();
-    if (! sqlTableExists(conn,WIKI_TRACK_TABLE))
+    struct sqlConnection *wikiConn = wikiConnect();
+    if (! sqlTableExists(wikiConn,WIKI_TRACK_TABLE))
 	errAbort("loadWikiTrack configuration error, set wikiTrack.URL in hg.conf");
 
     linkedFeaturesMethods(tg);
@@ -243,7 +243,7 @@ if (wikiTrackEnabled(database, NULL))
     tg->tdb = tdb;
 
     slAddHead(pGroupList, tg);
-    hDisconnectCentral(&conn);
+    wikiDisconnect(&wikiConn);
     }
 }
 

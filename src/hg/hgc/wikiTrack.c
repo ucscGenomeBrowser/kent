@@ -16,7 +16,7 @@
 #include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.43 2008/05/27 23:54:06 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.44 2008/05/29 17:49:22 hiram Exp $";
 
 #define ITEM_SCORE_DEFAULT "1000"
 #define ADD_ITEM_COMMENT_DEFAULT "add comments"
@@ -99,14 +99,14 @@ static struct bed *multipleItems(struct wikiTrack *item)
 {
 struct sqlResult *sr;
 char **row;
-struct sqlConnection *conn = wikiConnect();
+struct sqlConnection *wikiConn = wikiConnect();
 char query[1024];
 struct bed *bedList = NULL;
 
 safef(query, ArraySize(query), "SELECT chrom,chromStart,chromEnd,id FROM %s "
     "WHERE descriptionKey='%s' ORDER BY chrom,chromStart;",
 	WIKI_TRACK_TABLE, item->descriptionKey);
-sr = sqlGetResult(conn, query);
+sr = sqlGetResult(wikiConn, query);
 while ( (row = sqlNextRow(sr)) != NULL)
     {
     int elId = sqlUnsigned(row[3]);
@@ -121,7 +121,7 @@ while ( (row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 slSort(&bedList, bedCmpExtendedChr);
-hDisconnectCentral(&conn);
+wikiDisconnect(&wikiConn);
 return bedList;
 }
 
@@ -389,24 +389,24 @@ static void updateLastModifiedDate(int id)
 /* set lastModifiedDate to now() */
 {
 char query[512];
-struct sqlConnection *conn = wikiConnect();
+struct sqlConnection *wikiConn = wikiConnect();
 
 safef(query, ArraySize(query),
     "UPDATE %s set lastModifiedDate=now() WHERE id='%d'",
 	WIKI_TRACK_TABLE, id);
-sqlUpdate(conn,query);
-hDisconnectCentral(&conn);
+sqlUpdate(wikiConn,query);
+wikiDisconnect(&wikiConn);
 }
 
 static void deleteItem(int id)
 /* delete the item with specified id */
 {
 char query[512];
-struct sqlConnection *conn = wikiConnect();
+struct sqlConnection *wikiConn = wikiConnect();
 safef(query, ArraySize(query), "DELETE FROM %s WHERE id='%d'",
 	WIKI_TRACK_TABLE, id);
-sqlUpdate(conn,query);
-hDisconnectCentral(&conn);
+sqlUpdate(wikiConn,query);
+wikiDisconnect(&wikiConn);
 }
 
 void doDeleteWikiItem(char *wikiItemId, char *chrom, int winStart, int winEnd)
@@ -466,7 +466,7 @@ char *strand = cartUsualString(cart, NEW_ITEM_STRAND, "plus");
 char *class = cartUsualString(cart, NEW_ITEM_CLASS, ITEM_NOT_CLASSIFIED);
 boolean plusStrand = sameWord("plus",strand) ? TRUE : FALSE;
 char descriptionKey[256];
-struct sqlConnection *conn = wikiConnect();
+struct sqlConnection *wikiConn = wikiConnect();
 char *userName = NULL;
 char *color = cartUsualString(cart, NEW_ITEM_COLOR, "#000000");
 int score = 0;
@@ -508,9 +508,9 @@ newItem->descriptionKey = cloneString(descriptionKey);
 newItem->id = 0;
 newItem->geneSymbol = cloneString("0");
 
-wikiTrackSaveToDbEscaped(conn, newItem, WIKI_TRACK_TABLE, 1024);
+wikiTrackSaveToDbEscaped(wikiConn, newItem, WIKI_TRACK_TABLE, 1024);
 
-int id = sqlLastAutoId(conn);
+int id = sqlLastAutoId(wikiConn);
 safef(descriptionKey,ArraySize(descriptionKey),
 	"GenomeAnnotation:%s-%d", database, id);
 
@@ -531,8 +531,8 @@ else
     safef(query, ArraySize(query), "UPDATE %s set creationDate=now(),lastModifiedDate=now(),descriptionKey='%s' WHERE id='%d'",
 	WIKI_TRACK_TABLE, descriptionKey, id);
     }
-sqlUpdate(conn,query);
-hDisconnectCentral(&conn);
+sqlUpdate(wikiConn,query);
+wikiDisconnect(&wikiConn);
 
 cartWebStart(cart, "%s %s", "User Annotation Track, created new item: ",
 	newItemName);
