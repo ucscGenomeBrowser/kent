@@ -10,7 +10,7 @@
 #include "hgTables.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: rangeHistogram.c,v 1.3 2004/11/23 23:25:52 hiram Exp $";
+static char const rcsid[] = "$Id: rangeHistogram.c,v 1.4 2008/05/29 17:32:18 hiram Exp $";
 
 static void printValueHistogram(char *db, char *table, char *field)
 /* Print very simple-minded text histogram. */
@@ -34,7 +34,7 @@ hPrintf("<TH>graph</TH>");
 hPrintf("</TR>");
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    char *name = row[0];
+    char *name = htmlEncode(row[0]);
     int count = atoi(row[1]);
     int starCount;
     if (scale < 0)
@@ -48,6 +48,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     else
         hPrintf("&nbsp;");
     hPrintf("</TD></TR>\n");
+    freeMem(name);
     }
 // hPrintf("</TABLE>");
 hTableEnd();

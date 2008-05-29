@@ -12,8 +12,9 @@
 #include "hgTables.h"
 #include "trashDir.h"
 #include "web.h"
+#include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: identifiers.c,v 1.21 2008/03/19 17:38:09 angie Exp $";
+static char const rcsid[] = "$Id: identifiers.c,v 1.22 2008/05/29 17:32:18 hiram Exp $";
 
 
 static boolean forCurTable()
@@ -121,10 +122,18 @@ if (!isCustomTrack(curTable))
 void doPasteIdentifiers(struct sqlConnection *conn)
 /* Respond to paste identifiers button. */
 {
+struct sqlConnection *alternateConn = conn;
+char *actualDb = database;
+if (sameWord(curTable, WIKI_TRACK_TABLE))
+    {
+    alternateConn = wikiConnect();
+    actualDb = wikiDbName();
+    }
+
 char *oldPasted = forCurTable() ?
     cartUsualString(cart, hgtaPastedIdentifiers, "") : "";
-struct hTableInfo *hti = hFindTableInfoDb(database, NULL, curTable);
-char *idField = getIdField(database, curTrack, curTable, hti);
+struct hTableInfo *hti = maybeGetHti(actualDb, curTable);
+char *idField = getIdField(actualDb, curTrack, curTable, hti);
 htmlOpen("Paste In Identifiers for %s", curTableLabel());
 if (idField == NULL)
     errAbort("Sorry, I can't tell which field of table %s to treat as the "
@@ -133,7 +142,7 @@ hPrintf("<FORM ACTION=\"%s\" METHOD=%s>\n", getScriptName(),
 	cartUsualString(cart, "formMethod", "POST"));
 cartSaveSession(cart);
 hPrintf("Please paste in the identifiers you want to include.\n");
-explainIdentifiers(conn, idField);
+explainIdentifiers(alternateConn, idField);
 hPrintf("<BR>\n");
 cgiMakeTextArea(hgtaPastedIdentifiers, oldPasted, 10, 70);
 hPrintf("<BR>\n");
@@ -144,12 +153,14 @@ hPrintf(" ");
 cgiMakeButton(hgtaDoMainPage, "cancel");
 hPrintf("</FORM>");
 htmlClose();
+if (sameWord(curTable, WIKI_TRACK_TABLE))
+    wikiDisconnect(&alternateConn);
 }
 
 void doUploadIdentifiers(struct sqlConnection *conn)
 /* Respond to upload identifiers button. */
 {
-struct hTableInfo *hti = hFindTableInfoDb(database, NULL, curTable);
+struct hTableInfo *hti = maybeGetHti(database, curTable);
 char *idField = getIdField(database, curTrack, curTable, hti);
 htmlOpen("Upload Identifiers for %s", curTableLabel());
 if (idField == NULL)
@@ -238,28 +249,41 @@ static struct hash *getAllPossibleIds(struct sqlConnection *conn,
 {
 struct hash *matchHash = hashNew(20);
 struct slName *tableList;
-struct hTableInfo *hti = hFindTableInfoDb(database, NULL, curTable);
+struct hTableInfo *hti = maybeGetHti(database, curTable);
 char *idField = NULL;
 char *xrefTable = NULL, *xrefIdField = NULL, *aliasField = NULL;
+char *actualDb = database;
+struct sqlConnection *alternateConn = conn;
+
+if (sameWord(curTable, WIKI_TRACK_TABLE))
+    {
+    actualDb = wikiDbName();
+    alternateConn = wikiConnect();
+    }
+
 if (isCustomTrack(curTable))
     /* Currently we don't check whether these are valid CT item
      * names or not.  matchHash is empty for CTs. */
     tableList = NULL;
+else if (sameWord(curTable, WIKI_TRACK_TABLE))
+    tableList = slNameNew(WIKI_TRACK_TABLE);
 else if (strchr(curTable, '.'))
     tableList = slNameNew(curTable);
 else
     tableList = hSplitTableNames(curTable);
-idField = getIdField(database, curTrack, curTable, hti);
+idField = getIdField(actualDb, curTrack, curTable, hti);
 if (idField != NULL)
-    addPrimaryIdsToHash(conn, matchHash, idField, tableList, lm);
+    addPrimaryIdsToHash(alternateConn, matchHash, idField, tableList, lm);
 if (retIdField != NULL)
     *retIdField = idField;
-getXrefInfo(conn, &xrefTable, &xrefIdField, &aliasField);
+getXrefInfo(alternateConn, &xrefTable, &xrefIdField, &aliasField);
 if (xrefTable != NULL)
     {
-    addXrefIdsToHash(conn, matchHash, idField,
+    addXrefIdsToHash(alternateConn, matchHash, idField,
 		     xrefTable, xrefIdField, aliasField, lm);
     }
+if (sameWord(curTable, WIKI_TRACK_TABLE))
+    wikiDisconnect(&alternateConn);
 return matchHash;
 }
 
@@ -401,7 +425,9 @@ struct hash *identifierHash(char *db, char *table)
 /* Return hash full of identifiers from the given table (or NULL). */
 {
 char dbDotTable[2048];
-if (!sameString(db, database))
+if (sameString(table, WIKI_TRACK_TABLE))
+    safecpy(dbDotTable, sizeof(dbDotTable), table);
+else if (!sameString(db, database))
     safef(dbDotTable, sizeof(dbDotTable), "%s.%s", db, table);
 else
     safecpy(dbDotTable, sizeof(dbDotTable), table);
