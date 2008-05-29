@@ -24,7 +24,7 @@
 #include "trashDir.h"
 #include "jsHelper.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.76 2008/05/28 21:36:00 larrym Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.77 2008/05/29 23:28:50 larrym Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -250,7 +250,7 @@ dyStringPrintf(tmpDy, "-tmpDir=%s", tmpDir);
 cmd1[index++] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
 dyStringPrintf(tmpDy, "-maxChromNameLength=%d", track->maxChromName);
 cmd1[index++] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
-if(startsWith("bedGraph", track->dbTrackType))
+if(startsWithWord("bedGraph", track->dbTrackType))
     {
     char buf[100];
     /* we currently assume that last field is the bedGraph field. */
@@ -303,7 +303,7 @@ static struct customTrack *bedFinish(struct customTrack *track,
 {
 /* Add type based on field count */
 char buf[20];
-safef(buf, sizeof(buf), "%s %d .", track->tdb->type != NULL && startsWith("bedGraph", track->tdb->type) ? "bedGraph" : "bed", track->fieldCount);
+safef(buf, sizeof(buf), "%s %d .", track->tdb->type != NULL && startsWithWord("bedGraph", track->tdb->type) ? "bedGraph" : "bed", track->fieldCount);
 track->tdb->type = cloneString(buf);
 track->dbTrackType = cloneString(buf);
 safef(buf, sizeof(buf), "%d", track->fieldCount);
