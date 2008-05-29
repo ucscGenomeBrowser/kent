@@ -427,8 +427,15 @@ public class HgTracks {
         ArrayList links1 = 
           HgTracks.getMatchingLinks(page, "hgc", "DNA");
         HgTracks.checkLinks(wc, links1);
-        
+	
         if (zooms == zoomCount) break;
+        if (links1.size() >= 10000) {
+            // Stop zooming if there's a lot of links on this page (b/c that means there will be even more when we zoom out).
+            // This is to fix the problem with running out of memory when loading pages with lots of links; e.g. ce4.nucleosome,
+            // where we were running out of memory after taking at least an hour of processing on a page with 139308 links.
+            System.err.println("Breaking out early in exerciseTrack because of excessive number of links; url1: " + url1 + "; links1.size(): " + links1.size());
+            break;
+        }
         HgTracks.zoom(page, 3);
       }
     }
