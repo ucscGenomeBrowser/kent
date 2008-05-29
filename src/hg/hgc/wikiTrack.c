@@ -16,7 +16,7 @@
 #include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.44 2008/05/29 17:49:22 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.45 2008/05/29 23:39:02 hiram Exp $";
 
 #define ITEM_SCORE_DEFAULT "1000"
 #define ADD_ITEM_COMMENT_DEFAULT "add comments"
@@ -117,6 +117,7 @@ while ( (row = sqlNextRow(sr)) != NULL)
     bed->chrom = cloneString(row[0]);
     bed->chromStart = sqlUnsigned(row[1]);
     bed->chromEnd = sqlUnsigned(row[2]);
+    bed->score = elId;
     slAddHead(&bedList,bed);
     }
 sqlFreeResult(&sr);
@@ -421,18 +422,36 @@ if (NULL == wikiItemId)
     errAbort("delete wiki item: NULL wikiItemId");
 if (! wikiTrackEnabled(database, &userName))
     errAbort("delete wiki item: wiki track not enabled");
+
+/*	this may be a multiple loci gene symbol annotation */
+struct bed *itemList = multipleItems(item);
 char comments[1024];
-safef(comments,ArraySize(comments), "This item '''%s''' on assembly %s "
+if (slCount(itemList) > 0)
+    safef(comments,ArraySize(comments), "This item '''%s''' on assembly %s "
+    "at %s:%d-%d (and %d other loci) has been deleted from the wiki track\n\n",
+	item->name, item->db, item->chrom, item->chromStart, item->chromEnd,
+	slCount(itemList));
+else
+    safef(comments,ArraySize(comments), "This item '''%s''' on assembly %s "
     "at %s:%d-%d has been deleted from the wiki track\n\n", item->name,
 	item->db, item->chrom, item->chromStart, item->chromEnd);
+
 prefixComments(item, comments, userName, seqName, winStart, winEnd,
     database, NULL, "(deleted item)");
 deleteItem(sqlSigned(wikiItemId));
+/*	this may be a multiple loci gene symbol annotation */
+if (slCount(itemList) > 0)
+    {
+    struct bed *el;
+    for (el = itemList; el; el = el->next)
+	deleteItem(el->score);
+    }
 hPrintf("<BR>\n");
 hPrintf("<FORM ID=\"delete\" NAME=\"delete\" ACTION=\"%s\">", hgTracksName());
 cgiMakeButton("submit", "return to tracks display");
 hPrintf("\n</FORM>\n");
 hPrintf("<BR>\n");
+webIncludeHelpFile("wikiTrack", TRUE);
 }
 
 void doAddWikiComments(char *wikiItemId, char *chrom, int winStart, int winEnd)

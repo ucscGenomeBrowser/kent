@@ -15,7 +15,7 @@
 #include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.17 2008/05/29 17:49:17 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.18 2008/05/29 23:38:57 hiram Exp $";
 
 static char *hgGeneUrl()
 {
@@ -379,10 +379,27 @@ struct bed *clusterList = geneCluster(conn, curGeneName, &allIsoforms,
 	&allProteins);
 boolean editOK = FALSE;
 
+safef(title,ArraySize(title), "UCSC gene annotations: %s", curGeneName);
+
+/* we already know the wiki track is enabled since we are here,
+ *	now calling this just to see if user is logged into the wiki
+ */
+if(!wikiTrackEnabled(database, &userName))
+    {
+    cartWebStart(cart, title);
+    errAbort("hgGene.doWikiTrack: called when wiki track is not enabled ?");
+    }
+if (isNotEmpty(userName) && emailVerified())
+    editOK = TRUE;
+
+if (editOK && cartVarExists(cart, hggDoWikiAddComment))
+    addComments(conn, &item, userName, clusterList, allIsoforms, allProteins);
+else
+    cartRemove(cart, NEW_ITEM_COMMENT);
+
 /* item exists, show wiki page */
 if (item)
     {
-    /*puts("Content-type:text/html\n");*/
     puts("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2//EN\">");
     puts("<HTML>\n<HEAD>\n");
     hPrintf("<META HTTP-EQUIV=REFRESH CONTENT=\"0;"
@@ -392,7 +409,6 @@ if (item)
     return;
     }
 
-safef(title,ArraySize(title), "UCSC gene annotations: %s", curGeneName);
 cartWebStart(cart, title);
 
 /* safety check, both of these lists should be non-zero */
@@ -403,34 +419,9 @@ if ((0 == rawListCount) || (0 == locusLocationCount))
     hPrintf("<EM>(Feature under development, not available for "
 	"all genome browsers yet)</EM><BR>\n");
     hPrintf("hgGene.doWikiTrack: can not find any genes "
-	"called %s<BR>\n",curGeneName);
+	"of gene symbol %s<BR>\n",curGeneName);
     cartWebEnd();
     return;
-    }
-
-/* we already know the wiki track is enabled since we are here,
- *	now calling this just to see if user is logged into the wiki
- */
-if(!wikiTrackEnabled(database, &userName))
-    errAbort("hgGene.doWikiTrack: called when wiki track is not enabled");
-if (isNotEmpty(userName) && emailVerified())
-    editOK = TRUE;
-
-if (editOK && cartVarExists(cart, hggDoWikiAddComment))
-    addComments(conn, &item, userName, clusterList, allIsoforms, allProteins);
-else
-    cartRemove(cart, NEW_ITEM_COMMENT);
-
-if (NULL != item)
-    {
-    displayComments(item);
-    hPrintf("\n<HR>\n");
-    }
-else
-    {
-    char *protein;
-    char *canonical = canonicalGene(conn, curGeneId, &protein);
-    hPrintf("<em>(no annotations for this gene at this time)</em> <B>%s %s</B><BR>\n<HR>\n", canonical, protein);
     }
 
 if (isEmpty(userName))
@@ -477,24 +468,18 @@ else if (emailVerified())  /* prints message when not verified */
             "<BR>\n");
     }
 
-webIncludeHelpFile("wikiTrackGeneAnnotationHelp", TRUE);
-webIncludeHelpFile("wikiTrack", TRUE);	/* generic description page */
-
-hPrintf("<HR>\n");
-hPrintf("<em>Some extra information, perhaps not needed here when item already exists</em><BR>\n");
-
 if ((1 == locusLocationCount) && (1 == rawListCount))
     {
-    hPrintf("<B>There is a single location for gene %s (%s)</B><BR>\n",
+    hPrintf("<B>There is a single locus for gene symbol %s (%s)</B><BR>\n",
 	    curGeneName, curGeneId);
     }
 else
     {
     if (1 == locusLocationCount)
-	hPrintf("<B>There is a single locus location for gene %s:</B><BR>\n",
+	hPrintf("<B>There is a single locus for gene symbol %s:</B><BR>\n",
 	    curGeneName);
     else
-	hPrintf("<B>There are %d locus locations for gene %s:</B><BR>\n",
+	hPrintf("<B>There are %d loci for gene symbol %s:</B><BR>\n",
 	    locusLocationCount, curGeneName);
 
     struct bed *el;
@@ -504,12 +489,15 @@ else
     hPrintf("<B>From %d separate UCSC gene IDs:</B><BR>\n", rawListCount);
     for (el = allIsoforms; el; el = el->next)
 	{
-	hPrintf("%s %s", el->name, el->strand);
+	hPrintf("%s", el->name);
 	if (el->next)
 	    hPrintf(", ");
 	}
     hPrintf("<BR>\n");
     }
+
+webIncludeHelpFile("wikiTrackGeneAnnotationHelp", TRUE);
+webIncludeHelpFile("wikiTrack", TRUE);	/* generic description page */
 
 cartWebEnd();
 
