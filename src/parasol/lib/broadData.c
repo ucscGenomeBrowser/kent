@@ -47,7 +47,7 @@ int bdReceive(int sd, struct bdMessage *m, bits32 *retSource)
  * Returns error code if any or 0 (bdGood) for success. */
 {
 struct sockaddr_in sai;
-int saiSize = sizeof(sai);
+unsigned int saiSize = sizeof(sai);
 int err;
 ZeroVar(&sai);
 sai.sin_family = AF_INET;
@@ -212,7 +212,7 @@ char *data = m->data;
 *retFileId = getLongData(&data);
 *retSectionIx = getLongData(&data);
 *retBlockCount = getLongData(&data);
-*retMd5 = data;
+*retMd5 = (unsigned char*)data;
 }
 
 void bdMakeMissingBlocksMessage(struct bdMessage *m, bits32 machine,
