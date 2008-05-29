@@ -1,7 +1,0 @@
-<!------------Description---------->
-The heavy black line in this track shows the portion of the gene that was 
-displayed in the window on the last Genome Browser view. If the entire gene
-was displayed in the browser, the line is not shown. The label above the 
-leftmost portion of this track shows 
-the Genome Browser coordinates corresponding to this view. Click on the 
-line to open the UCSC Genome Browser to this position.

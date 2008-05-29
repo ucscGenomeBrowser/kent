@@ -1,3 +1,0 @@
-int k = 1, l;
-l = (k+=1);
-print(l);
