@@ -6301,21 +6301,23 @@ BASE=/cluster/data/hg18/bed/blastz.rn4.2006-02-17
 # rebuilt below: RE-BUILD WGRNA TRACK AGAIN (DONE, 2007-02-12, Fan)
 # rebuilt below: RE-BUILD WGRNA TRACK (DONE, 2007-05-31, Fan)
 # rebuilt below: RE-BUILD WGRNA TRACK (DONE, 2007-10-05, Fan)
+# rebuilt below: RE-BUILD WGRNA TRACK (DONE, 2008-05-29, Fan)
 
-  ssh hgwdev
-  cd /cluster/data/hg18/bed
+    ssh hgwdev
+    cd /cluster/data/hg18/bed
 
-  mkdir wgRna-2006-05-12
-  cd wgRna-2006-05-12
+    mkdir wgRna-2008-05-28
+    cd wgRna-2008-05-28
 
-# Received the data file, wgtrack_hg18_12may2006.txt, from Michel Weber's email
+# Received the data file, wgtrack_may2008.doc, from Michel Weber's
+# email
 # (Michel.Weber at ibcg.biotoul.fr)
-# and place it under cd /cluster/data/hg18/bed/wgRna-2006-05-12.
+# Save it as .txt file and change all blanks into tabs.
+# and place it under cd /cluster/data/hg18/bed/wgRna-2008-05-28.
 
-  cp -p wgtrack_hg18_12may2006.txt wgRna.tab
-# edit wgRna.tab to replace all space to tab.
+    cp -p wgtrack_may2008.txt wgRna.tab
 
-  hgLoadBed -sqlTable=/cluster/home/fanhsu/src/hg/lib/wgRna.sql hg18 wgRna wgRna.tab
+    hgLoadBed -sqlTable=/cluster/home/fanhsu/src/hg/lib/wgRna.sql hg18 wgRna wgRna.tab
 
 #############################################################################
 # 17-WAY MULTIZ ALIGNMENTS (DONE - 2006-02-22 Fan)
