@@ -28,7 +28,7 @@
 #include "gvUi.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.161 2008/05/27 23:48:28 hiram Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.162 2008/05/30 20:45:36 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -1324,7 +1324,11 @@ for (region = regionList; region != NULL; region = region->next)
 	if (sameString(name, posBuf))
 	    hPrintf("%s", posBuf);
 	else
-	    hPrintf("%s at %s", name, posBuf);
+	    {
+	    char *tmp = htmlEncode(name);
+	    hPrintf("%s at %s", tmp, posBuf);
+	    freeMem(tmp);
+	    }
 	hPrintf("</A><BR>\n");
 	++count;
 	}
