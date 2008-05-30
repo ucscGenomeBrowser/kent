@@ -1,0 +1,199 @@
+# for emacs: -*- mode: sh; -*-
+
+# Caenorhabditis elegans
+# Washington University School of Medicine GSC and Sanger Institute WS190
+
+#  $Id: ce6.txt,v 1.1 2008/05/30 22:05:46 hiram Exp $
+
+#########################################################################
+# DOWNLOAD SEQUENCE (DONE - 2008-05-30 - Hiram)
+    ssh kkstore06
+    mkdir /cluster/store3/worm/ce6
+    ln -s /cluster/store3/worm/ce6 /cluster/data/ce6
+    mkdir /cluster/data/ce6/downloads
+    cd /cluster/data/ce6/downloads
+    for C in I II III IV V X MtDNA
+do
+    F=WS190/CHROMOSOMES/CHROMOSOME_${C}
+    wget --timestamping \
+      "ftp://ftp.sanger.ac.uk/pub/wormbase/${F}.agp"
+    wget --timestamping \
+      "ftp://ftp.sanger.ac.uk/pub/wormbase/${F}.dna.gz"
+    wget --timestamping \
+      "ftp://ftp.sanger.ac.uk/pub/wormbase/${F}.gff.gz"
+done
+
+#########################################################################
+# NORMALIZE SEQUENCE NAMES TO BEGIN WITH chr (DONE - 2008-05-30 - Hiram)
+    ssh kkstore06
+    cd /cluster/data/ce6/downloads
+    # Fix fasta names:
+    zcat CHR*.dna.gz \
+    | sed -e '/^$/ d;  s/^>CHROMOSOME_MtDNA/>chrM/;  s/^>CHROMOSOME_/>chr/;' \
+    | gzip -c > UCSC.fa.gz
+    faSize -detailed UCSC.fa.gz
+# chrI    15072421
+# chrII   15279323
+# chrIII  13783681
+# chrIV   17493785
+# chrM    13794
+# chrV    20919568
+# chrX    17718854
+
+    # Make sure we get the same sizes from this command:
+    zcat CHR*.dna.gz | sed -e '/^$/ d;' | faSize -detailed stdin
+
+    # Fix AGP names:
+    sed -e 's/^/chr/' CHR*.agp > UCSC.agp
+    # And add a fake mitochondrial AGP entry for the sake of downstream
+    # tools (make sure the GenBank sequence is identical to given):
+    echo -e "chrM\t1\t13794\t1\tF\tNC_001328.1\t1\t13794\t+" >> UCSC.agp
+
+#########################################################################
+# run the makeGenomeDb procedure to create the db and unmasked sequence
+#	(DONE - 2008-05-30 - Hiram)
+    ssh kkstore06
+    cd /cluster/data/ce6
+    cat << '_EOF_' > ce6.config.ra
+# Config parameters for makeGenomeDb.pl:
+db ce6
+clade worm
+genomeCladePriority 10
+scientificName Caenorhabditis elegans
+commonName C. elegans
+assemblyDate May 2008
+assemblyLabel Washington University School of Medicine GSC and Sanger Institute WS190
+orderKey 826
+mitoAcc none
+fastaFiles /cluster/data/ce6/downloads/UCSC.fa.gz
+agpFiles   /cluster/data/ce6/downloads/UCSC.agp
+# qualFiles /dev/null
+dbDbSpeciesDir worm
+'_EOF_'
+    # << emacs
+
+    mkdir jkStuff
+    #	run just to AGP to make sure things are sane first
+    nice makeGenomeDb.pl ce6.config.ra -stop agp \
+      > jkStuff/makeGenomeDb.agp 2>&1
+    #	now, continuing to make the Db and all
+    time nice -n +19 makeGenomeDb.pl ce6.config.ra -continue db \
+      > jkStuff/makeGenomeDb.log 2>&1
+    #	that takes 2m30s to run to completion
+    #	take the trackDb business there and check it into the source tree
+    #	fixup the description, gap and gold html page descriptions
+
+#########################################################################
+# REPEATMASKER (DONE - 2008-05-30 - Hiram)
+    ssh kkstore06
+    screen 	#	use screen to control the job
+    mkdir /cluster/data/ce6/bed/repeatMasker
+    cd /cluster/data/ce6/bed/repeatMasker
+    time nice -n +19 doRepeatMasker.pl -bigClusterHub=pk \
+	-buildDir=/cluster/data/ce6/bed/repeatMasker ce6 > do.log 2>&1 &
+    #	real    133m17.088s
+
+#########################################################################
+# SIMPLE REPEATS (DONE - 2008-05-30 - Hiram)
+    ssh kkstore06
+    screen 	#	use screen to control the job
+    mkdir /cluster/data/ce6/bed/simpleRepeat
+    cd /cluster/data/ce6/bed/simpleRepeat
+    time nice -n +19 doSimpleRepeat.pl -smallClusterHub=kki \
+	-buildDir=/cluster/data/ce6/bed/simpleRepeat ce6 > do.log 2>&1 &
+    #	about 30 minutes
+
+#########################################################################
+# MASK SEQUENCE WITH RM+TRF (DONE - 2008-05-30 - Hiram)
+    # Since both doRepeatMasker.pl and doSimpleRepeats.pl have completed,
+    # now it's time to combine the masking into the final ce6.2bit,
+    # following the instructions at the end of doSimpleRepeat's output.
+    ssh kolossus
+    cd /cluster/data/ce6
+    twoBitMask ce6.rmsk.2bit -add bed/simpleRepeat/trfMask.bed ce6.2bit
+    # You can safely ignore the warning about extra BED columns
+    twoBitToFa ce6.2bit stdout | faSize stdin
+# 100281426 bases (0 N's 100281426 real 86981803 upper 13299623 lower)
+#	in 7 sequences in 1 files
+# Total size: mean 14325918.0 sd 6728308.1 min 13794 (chrM)
+#	max 20919568 (chrV) median 15279323
+# %13.26 masked total, %13.26 masked real
+    #	set the symlink on hgwdev to /gbdb/ce6
+    cd /gbdb/ce6
+    ln -s /cluster/data/ce6/ce6.2bit .
+
+#########################################################################
+# MAKE 11.OOC FILE FOR BLAT (DONE - 2008-05-30 - Hiram)
+    # Use -repMatch=100 (based on size -- for human we use 1024, and 
+    # worm size is ~3.4% of human judging by gapless ce4 vs. hg18 genome 
+    # size from featureBits. So we would use 34, but that yields a very
+    # high number of tiles to ignore, especially for a small more compact 
+    # genome.  Bump that up a bit to be more conservative.
+    ssh kolossus
+    cd /cluster/data/ce6
+    blat ce6.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/11.ooc -repMatch=100
+    #	Wrote 8523 overused 11-mers to jkStuff/11.ooc
+    #	copy all of this stuff to the Iservers
+    ssh kkr1u00
+    mkdir /iscratch/i/worms/ce6
+    cd /iscratch/i/worms/ce6
+    cp -p /cluster/data/ce6/ce6.2bit .
+    cp -p /cluster/data/ce6/jkStuff/11.ooc .
+    cp -p /cluster/data/ce6/chrom.sizes .
+-
+    cp -p jkStuff/11.ooc /san/sanvol1/scratch/worms/ce6
+
+#########################################################################
+# GENBANK AUTO UPDATE (DONE - 2007-03-26,27 - Hiram)
+    # align with latest genbank process.
+    ssh hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+    # edit etc/genbank.conf to add ce6 just before ce4
+
+# ce6 (C. elegans)
+ce6.serverGenome = /cluster/data/ce6/ce6.2bit
+ce6.clusterGenome = /iscratch/i/worms/ce6/ce6.2bit
+ce6.ooc = /iscratch/i/worms/ce6/11.ooc
+ce6.refseq.mrna.native.pslCDnaFilter  = ${finished.refseq.mrna.native.pslCDnaFilter}
+ce6.refseq.mrna.xeno.pslCDnaFilter    = ${finished.refseq.mrna.xeno.pslCDnaFilter}
+ce6.genbank.mrna.native.pslCDnaFilter = ${finished.genbank.mrna.native.pslCDnaFilter}
+ce6.genbank.mrna.xeno.pslCDnaFilter   = ${finished.genbank.mrna.xeno.pslCDnaFilter}
+ce6.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDnaFilter}
+ce6.maxIntron = 100000
+ce6.lift = no
+ce6.genbank.mrna.xeno.load = yes
+ce6.refseq.mrna.xeno.load = yes
+ce6.downloadDir = ce6
+
+    cvs ci -m "Added ce6." etc/genbank.conf
+    # update /cluster/data/genbank/:
+    make etc-update
+
+    ssh genbank
+    screen		#	use a screen to manage this job
+    cd /cluster/data/genbank
+    time nice -n +19 bin/gbAlignStep -initial ce6 &
+    #	logFile: var/build/logs/2008.05.30-15:04:49.ce6.initalign.log
+XXX - running 2008-05-30 15:05
+
+    #	real    61m33.930s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad ce6
+    #	logFile: var/dbload/hgwdev/logs/2007.03.27-16:43:00.dbload.log
+    #	real    14m41.601s
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+    # add ce6 to:
+        etc/align.dbs
+        etc/hgwdev.dbs
+    cvs ci -m "Added ce6 - C. elegans WS170" \
+	etc/align.dbs etc/hgwdev.dbs
+    make etc-update
+
