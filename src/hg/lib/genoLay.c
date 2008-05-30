@@ -87,7 +87,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     char *name = row[0];
     if (withRandom || (startsWith("chr", name) && 
     	!strchr(name, '_') && !sameString("chrM", name) 
-	&& !sameString("chrUn", name)))
+	))
         {
 	AllocVar(chrom);
 	chrom->fullName = cloneString(name);
@@ -95,6 +95,12 @@ while ((row = sqlNextRow(sr)) != NULL)
 	chrom->size = sqlUnsigned(row[1]);
 	slAddHead(&chromList, chrom);
 	}
+    }
+if (slCount(chromList) > 1)
+    {
+    struct genoLayChrom *chrUn = slNameFind(chromList, "chrUn");
+    if (chrUn)
+	slRemoveEl(chromList, chrUn);
     }
 if (chromList == NULL)
     errAbort("No chromosomes starting with chr in chromInfo.");
