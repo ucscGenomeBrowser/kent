@@ -1,24 +1,28 @@
 <!-- Display image in righthand corner -->
-<TABLE ALIGN=RIGHT BORDER=0 WIDTH=185>
+<TABLE ALIGN=RIGHT BORDER=0 WIDTH=315 HEIGHT=100>
   <TR><TD ALIGN=RIGHT>
-    <A HREF="*** link to sequencing center's project page"
-    TARGET=_blank>
-    <IMG SRC="/images/Caenorhabditis_elegans.jpg" WIDTH=*** HEIGHT=*** ALT="C. elegans"></A>
+	<A HREF="http://www.wormbase.org/about/about_Celegans.html"
+		TARGET=_blank>
+    <IMG SRC="/images/Caenorhabditis_elegans.jpg" WIDTH=300 HEIGHT=85 ALT="C.elegans"></A>
   </TD></TR>
-  <TR><TD ALIGN=RIGHT> 
-    <FONT SIZE=-1><em>Caenorhabditis elegans</em><BR> 
+  <TR><TD ALIGN=RIGHT>
+    <FONT SIZE=-1> <em>Caenorhabditis elegans</em><BR>
     </FONT>
-    <FONT SIZE=-2> 
-      Photo courtesy of ***
-      (<A HREF="*** link to source" 
-      TARGET=_blank>***source</A>)
+    <FONT SIZE=-2> (Photo courtesy of
+  <A HREF="http://www.nematodes.org/" TARGET=_blank>Mark Blaxter</A>)
     </FONT>
   </TD></TR>
 </TABLE>
 
 <P>
-The May 2008 <em>Caenorhabditis elegans</em> draft assembly 
-(Washington University School of Medicine GSC and Sanger Institute WS190) was produced by the *** sequencing center.
+The May 2008 <em>Caenorhabditis elegans</em> assembly 
+is based on sequence version WS190 deposited into 
+<A HREF="http://ws190.wormbase.org/" TARGET=_blank>WormBase</A> 
+as of 28 May 2008.  The sequence was produced jointly by the Sanger
+Institute in Hinxton, England and the
+<A HREF="http://genome.wustl.edu/genome.cgi?GENOME=Caenorhabditis+elegans"
+TARGET=_blank>Genome Sequencing Center</A> at Washington University in St. 
+Louis (WUSTL) School of Medicine.</P>
 
 <H3>Sample position queries</H3>
 <P>
@@ -26,104 +30,96 @@ A genome position can be specified by the accession number of a
 sequenced genomic region, an mRNA or EST, a chromosomal coordinate
 range, or keywords from the GenBank description of an mRNA. The
 following list shows examples of valid position queries for the
-C. elegans genome.  See the
+<em>C. elegans</em> genome.  See the
 <A HREF="../goldenPath/help/hgTracksHelp.html"
     TARGET=_blank>User's Guide</A> for more information.
 <P>
-<TABLE border=0 CELLPADDING=0 CELLSPACING=0>
-    <TR><TH ALIGN=LEFT>Request:</TH>
-        <TH WIDTH=14>&nbsp;</TH>
-       	<TH ALIGN=LEFT>Genome Browser Response:</TH></TR>
-    <TR><TD VALIGN=Top COLSPAN=3>&nbsp;</TD></TR>
-    <TR><TD VALIGN=Top>chrZ</TD>
-        <TD WIDTH=14>&nbsp;</TD>
-       	<TD VALIGN=Top>Displays all of chromosome Z</TD>
+<TABLE  border=0 CELLPADDING=0 CELLSPACING=0>
+    <TR><TD VALIGN=Top NOWRAP><B>Request:</B><BR></TD>
+       	<TD VALIGN=Top COLSPAN=2><B>&nbsp;&nbsp; Genome Browser Response:</B><BR></TD>
     </TR>
-    <TR><TD VALIGN=Top>chr3:1-1000000</TD>
-        <TD WIDTH=14>&nbsp;</TD>
-       	<TD VALIGN=Top>Displays first million bases of chr 3</TD>
-    </TR>
-    <TR><TD VALIGN=Top NOWRAP>chr3:1000000+2000</TD>
+
+    <TR><TD VALIGN=Top><BR></TD></TR>
+    <TR><TD VALIGN=Top NOWRAP>chrII</TD>
        	<TD WIDTH=14></TD>
-       	<TD VALIGN=Top>Displays a region of chr 3 that spans 2000 bases, starting with position 1000000 </TD>
+       	<TD VALIGN=Top>Displays all of chromosome II (valid chr entries include I, II, III, IV, V, M, X)</TD>
     </TR>
-    <TR><TD VALIGN=Top COLSPAN=3>&nbsp;<br></TD></TR>
-    <TR><TD VALIGN=Top>BX950328</TD>
-        <TD WIDTH=14>&nbsp;</TD>
-       	<TD VALIGN=Top>Displays region of mRNA with GenBank accession
-		number BX950328</TD>
+
+    <TR><TD VALIGN=Top NOWRAP>chrI:1-100000</TD>
+       	<TD WIDTH=14></TD>
+       	<TD VALIGN=Top>Displays the first 100,000 bases of chrI</TD>
     </TR>
-    <TR><TD VALIGN=Top>BU335953</TD>
-        <TD WIDTH=14>&nbsp;</TD>
-      	<TD VALIGN=Top>Displays region of EST with GenBank accession
-		BU335953 on chr Z</TD>
+
+    <TR><TD VALIGN=Top NOWRAP>Z81037.1</TD>
+       	<TD WIDTH=14></TD>
+       	<TD VALIGN=Top>Displays clone fragment Z81037.1</TD>
     </TR>
-    <TR><TD VALIGN=Top COLSPAN=3>&nbsp;<br></TD></TR>
-    <TR><TD VALIGN=Top>pseudogene mRNA</TD>
-        <TD WIDTH=14>&nbsp;</TD>
-       	<TD VALIGN=Top>Lists transcribed pseudogenes, but not cDNAs</TD>
+
+    <TR><TD VALIGN=Top NOWRAP>mec-8</TD>
+       	<TD WIDTH=14></TD>
+       	<TD VALIGN=Top>Displays region of genome associated with RefSeq gene mec-8</TD>
     </TR>
-    <TR><TD VALIGN=Top>homeobox caudal</TD>
-        <TD WIDTH=14>&nbsp;</TD>
-       	<TD VALIGN=Top>Lists mRNAs for caudal homeobox genes</TD>
+
+    <TR><TD VALIGN=Top NOWRAP>F46A9.4</TD>
+       	<TD WIDTH=14></TD>
+       	<TD VALIGN=Top>Displays the region associated with the Sanger predicted gene F46A9.4</TD>
     </TR>
-    <TR><TD VALIGN=Top>zinc finger</TD>
-        <TD WIDTH=14>&nbsp;</TD>
+
+    <TR><TD VALIGN=Top NOWRAP>NM_060107</TD>
+       	<TD WIDTH=14></TD>
+       	<TD VALIGN=Top>Displays region of genome associated with RefSeq identifier NM_060107</TD>
+    </TR>
+
+    <TR><TD VALIGN=Top NOWRAP>BJ111711</TD>
+       	<TD WIDTH=14></TD>
+       	<TD VALIGN=Top>Displays region of EST associated with GenBank accession BJ111711</TD>
+    </TR>
+
+    <TR><TD VALIGN=Top NOWRAP>zinc finger</TD>
+       	<TD WIDTH=14></TD>
        	<TD VALIGN=Top>Lists many zinc finger mRNAs</TD>
     </TR>
-    <TR><TD VALIGN=Top>kruppel zinc finger</TD>
-        <TD WIDTH=14>&nbsp;</TD>
-       	<TD VALIGN=Top>Lists only kruppel-like zinc fingers</TD>
+
+    <TR><TD VALIGN=Top NOWRAP>ring zinc finger</TD>
+       	<TD WIDTH=14></TD>
+       	<TD VALIGN=Top>Lists only RING zinc fingers</TD>
     </TR>
-    <TR><TD VALIGN=Top>zhang</TD>
-        <TD WIDTH=14>&nbsp;</TD>
-	<TD VALIGN=Top>Lists mRNAs deposited by scientist named Zhang</TD>
+
+    <TR><TD VALIGN=Top NOWRAP>Jones,D.</TD>
+       	<TD WIDTH=14></TD>
+       	<TD VALIGN=Top>Lists mRNAs deposited by co-author D. Jones</TD>
     </TR>
-    <TR><TD VALIGN=Top>Taguchi,T.</TD>
-        <TD WIDTH=14>&nbsp;</TD>
-       	<TD VALIGN=Top>Lists mRNAs deposited by co-author T. Taguchi</TD>
-    </TR>
-    <TR><TD VALIGN=Top COLSPAN=3>&nbsp;</TD></TR>
+
+    <TR><TD VALIGN=Top><BR></TD></TR>
     <TR><TD COLSPAN="3"> Use this last format for author queries. Although
-	GenBank requires the search format <em>Taguchi T</em>, internally it
-	uses the format <em>Taguchi,T.</em>.</TD>
+	GenBank requires the search format <em>Jones D</em>, internally it uses 
+	the format <em>Jones,D.</em>.</TD>
     </TR>
 </TABLE>
-
 <HR>
+
 <H3>Assembly details</H3>
 <P>
-The genome has been sequenced to ***X coverage.
-Approximately 88% of the sequence has been anchored to chromosomes, 
-which include autosomes 1-24, 26-28, and 32, and sex chromosomes W and Z. 
-(In contrast to mammals, the female chicken is heterogametic (ZW) and the 
-male is homogametic (ZZ).) 
-The remaining unanchored contigs that could be localized to a chromosome 
-have been concatenated into the virtual 
-chromosomes &quot;chr*_random&quot;, separated by gaps of 10,000 bp. 
-Unanchored contigs that could not be localized to a chromosome 
-have been concatenated into the virtual 
-chromosome &quot;chrUn&quot;, separated by gaps of 1,000 bp in order 
-to reduce the total size of chrUn. 
-The chicken 
-mitochondrial sequence is also available as the virtual chromosome 
-&quot;chrM&quot;. 
-</P>
-
-
+<em>C. elegans</em> is a major model organism used for biomedical research. 
+It is the first multicellular animal to have a fully 
+sequenced genome, a joint collaboration between the 
+<A HREF="http://genome.wustl.edu/" TARGET=_blank>Genome Sequencing Center</A> 
+at Washington University in St. Louis and the 
+<A HREF="http://www.sanger.ac.uk/" TARGET=_blank>Sanger Institute</A>. 
+For more information, see the special issue of <em>Science</em> 
+&quot;<A HREF="http://www.sciencemag.org/content/vol282/issue5396/" 
+TARGET=_blank>C. elegans: Sequence to Biology</A>&quot;.
+This assembly has a finishing error rate of 1:100,000. 
+The total size of the sequence is 100,281,426 bases in chromosomes
+chrI, chrII, chrIII, chrIV, chrV, chrX and chrM (mitochondrial sequence).</P>
 <P>
 Bulk downloads of the sequence and annotation data are available via 
 the Genome Browser <A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/ce6/">FTP
 server</A> or the <A HREF="http://hgdownload.cse.ucsc.edu/downloads.html#c_elegans">Downloads</A> page. 
-
-  *** Developer -- remove this if no conditions for use:
-These data have
-<A HREF="../goldenPath/credits.html#c_elegans_use">specific 
-conditions for use</A>. 
-
-The C. elegans browser annotation tracks were generated by UCSC and 
-collaborators worldwide. See the 
-<A HREF="/goldenPath/credits.html#c_elegans_credits">Credits</A> 
-page for a detailed list of the organizations and individuals who contributed 
-to the success of this release. 
 </P>
+<P>
+The <em>C. elegans</em> browser annotation tracks were generated by UCSC and 
+collaborators worldwide. See the 
+<A HREF="../goldenPath/credits.html#ce_credits">Credits</A> 
+page for a detailed list of the organizations and individuals who contributed 
+to this release.  </P>
