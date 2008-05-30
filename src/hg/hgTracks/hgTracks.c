@@ -37,7 +37,7 @@
 #include "pcrResult.h"
 #include "wikiLink.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1478 2008/05/29 19:35:25 larrym Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1479 2008/05/30 03:09:47 markd Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -3416,10 +3416,10 @@ if (!hideControls)
     hButton("hgt.dinkLL", " < ");
     hTextVar("dinkL", cartUsualString(cart, "dinkL", "2.0"), 3);
     hButton("hgt.dinkLR", " > ");
-    hPrintf("</TD><TD COLSPAN=15>");
-    hWrites("Click on a feature for details. "
-	  "Click on base position to zoom in around cursor. "
-	  "Click gray/blue bars on left for track options and descriptions." );
+    hPrintf("</TD><TD COLSPAN=15 style=\"white-space:normal\">"); // allow this text to wrap
+    hWrites("Click on a feature for details."
+            "Click on base position to zoom in around cursor."
+            "Click gray/blue bars on left for track options and descriptions." );
     hPrintf("</TD><TD COLSPAN=6 ALIGN=CENTER NOWRAP>");
     hPrintf("move end<BR>");
     hButton("hgt.dinkRL", " < ");
@@ -4321,7 +4321,10 @@ organization = (hIsGsidServer() ? "GSID" : organization);
 htmlPushEarlyHandlers();
 cgiSpoof(&argc, argv);
 htmlSetBackground(hBackgroundImage());
-htmlSetStyle("<LINK REL=\"STYLESHEET\" HREF=\"../style/HGStyle.css\" TYPE=\"text/css\">"); 
+/* set white-space to nowrap to prevent buttons from wrapping when screen is
+ * narrow */
+htmlSetStyle("<LINK REL=\"STYLESHEET\" HREF=\"../style/HGStyle.css\" TYPE=\"text/css\">\n"
+             "<STYLE TYPE=\"text/css\">*{white-space:nowrap;} </STYLE>"); 
 oldVars = hashNew(10);
 if (hIsGsidServer())
 	cartHtmlShell("GSID Sequence View", doMiddle, hUserCookie(), excludeVars, oldVars);
