@@ -37,7 +37,7 @@ endif
 #
 echo "Make alpha."
 cd hg
-make CGI_BIN=$BUILDDIR/cgi-bin-32 alpha >& make.alpha.log
+make CGI_BIN=$BUILDDIR/cgi-bin-32 DOCUMENTROOT=$BUILDDIR alpha >& make.alpha.log
 sed -i -e "s/-DJK_WARN//g" make.alpha.log
 sed -i -e "s/-Werror//g" make.alpha.log
 #-- report any compiler warnings, fix any errors (shouldn't be any)
