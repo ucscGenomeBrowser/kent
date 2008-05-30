@@ -144,7 +144,7 @@ cut -f 2 chrom.sizes | ave stdin
     # 732765485 bases of 2663369733 (27.513%) in intersection
 
     # RepeatMasker and lib version from do.log:
-    #    RepeatMasker version development-$Id: cavPor3.txt,v 1.6 2008/05/25 20:11:48 markd Exp $
+    #    RepeatMasker version development-$Id: cavPor3.txt,v 1.7 2008/05/30 21:17:08 markd Exp $
     #    Jan 11 2008 (open-3-1-9) version of RepeatMasker
     #    CC   RELEASE 20071204;
 
@@ -3214,4 +3214,26 @@ by a single Makefile. This is available from:
    svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2008-05-20
 
 see doc/builds.txt for specific details.
+#############################################################################
+# N-SCAN gene predictions (nscanGene) - (2008-04-03 markd)
+
+    # obtained NSCAN predictions from michael brent's group
+    # at WUSTL
+    cd /cluster/data/cavPor3/bed/nscan/
+    wget -nv http://mblab.wustl.edu/predictions/Guinea_pig/cavPor3/cavPor3.gtf
+    wget -nv http://mblab.wustl.edu/predictions/Guinea_pig/cavPor3/cavPor3.prot.fa
+    wget -nv http://mblab.wustl.edu/predictions/Guinea_pig/cavPor3/readme.html
+    bzip2 cavPor3.*
+    chmod a-w *
+
+    # load track
+    gtfToGenePred -genePredExt cavPor3.gtf.bz2 stdout | hgLoadGenePred -bin -genePredExt cavPor3 nscanGene stdin
+    hgPepPred cavPor3 generic nscanPep  cavPor3.prot.fa.bz2
+    rm *.tab
+
+    # update trackDb; need a cavPor3-specific page to describe informants
+    marmoset/cavPor3/nscanGene.html   (copy from readme.html)
+    marmoset/cavPor3/trackDb.ra
+    # set search regex to
+    termRegex scaffold_[0-9]+\.[0-9]+\.[0-9]+
 ############################################################################
