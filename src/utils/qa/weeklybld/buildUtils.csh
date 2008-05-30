@@ -4,11 +4,15 @@
 
 cd $WEEKLYBLD
 
+set MAKEPARAMS=""
 if ( "$MACHTYPE" == "i386" ) then
     if ( "$HOST" != "$BOX32" ) then
 	echo "error: you must run this script on $BOX32!"
 	exit 1
     endif
+    # hack to force use of gcc34 on titan rather than the newer gcc (4.1) which makes binaries
+    # that can't run on our x86_4 machines.
+    set MAKEPARAMS="CC=gcc34"
 endif
 if ( "$MACHTYPE" == "x86_64" ) then
     if ( "$HOST" != "hgwbeta" ) then
@@ -46,8 +50,8 @@ echo "Symlink Trick."
 echo
 echo "Building src utils."
 cd $base/kent/src
-make utils >& make.utils.log
-make blatSuite >>& make.utils.log
+make $MAKEPARAMS utils >& make.utils.log
+make $MAKEPARAMS blatSuite >>& make.utils.log
 sed -i -e "s/-DJK_WARN//g" make.utils.log
 sed -i -e "s/-Werror//g" make.utils.log
 #-- to check for errors: 
