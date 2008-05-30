@@ -13,8 +13,9 @@
 #include "trashDir.h"
 #include "web.h"
 #include "wikiTrack.h"
+#include "htmshell.h"
 
-static char const rcsid[] = "$Id: identifiers.c,v 1.22 2008/05/29 17:32:18 hiram Exp $";
+static char const rcsid[] = "$Id: identifiers.c,v 1.23 2008/05/30 18:38:45 hiram Exp $";
 
 
 static boolean forCurTable()
@@ -97,7 +98,11 @@ if (!isCustomTrack(curTable))
     hPrintf("Some example values:<BR>\n");
     exampleList = getExamples(conn, curTable, idField, 3);
     for (ex = exampleList;  ex != NULL;  ex = ex->next)
-	hPrintf("<TT>%s</TT><BR>\n", ex->name);
+	{
+	char *tmp = htmlEncode(ex->name);
+	hPrintf("<TT>%s</TT><BR>\n", tmp);
+	freeMem(tmp);
+	}
     if (aliasField != NULL)
 	{
 	char tmpTable[512];

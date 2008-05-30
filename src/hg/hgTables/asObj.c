@@ -7,9 +7,9 @@
 #include "errCatch.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: asObj.c,v 1.1 2004/07/15 05:15:05 kent Exp $";
+static char const rcsid[] = "$Id: asObj.c,v 1.2 2008/05/30 18:38:45 hiram Exp $";
 
-struct asObject *asForTableOrDie(struct sqlConnection *conn, char *table)
+static struct asObject *asForTableOrDie(struct sqlConnection *conn, char *table)
 /* Get autoSQL description if any associated with table.   Abort if
  * there's a problem*/
 {
