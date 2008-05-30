@@ -15,8 +15,9 @@
 #include "jsHelper.h"
 #include "hgTables.h"
 #include "customTrack.h"
+#include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: intersect.c,v 1.40 2008/01/09 01:15:54 angie Exp $";
+static char const rcsid[] = "$Id: intersect.c,v 1.41 2008/05/30 22:25:55 hiram Exp $";
 
 /* We keep two copies of variables, so that we can
  * cancel out of the page. */
@@ -45,7 +46,7 @@ if (specd)
     {
     char *table = cartString(cart, hgtaIntersectTable);
     if ((isCustomTrack(table) && lookupCt(table) != NULL) ||
-	hTableOrSplitExists(table))
+	hTableOrSplitExists(table) || sameWord(table, WIKI_TRACK_TABLE))
 	return TRUE;
     else
 	{
