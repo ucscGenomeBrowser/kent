@@ -16,7 +16,7 @@
 #include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.45 2008/05/29 23:39:02 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.46 2008/05/30 20:44:53 hiram Exp $";
 
 #define ITEM_SCORE_DEFAULT "1000"
 #define ADD_ITEM_COMMENT_DEFAULT "add comments"
@@ -28,7 +28,7 @@ static void colorMenuOutput()
 {
 hPrintf("<INPUT NAME=\"colorPullDown\" VALUE=\"\" SIZE=1 STYLE=\"display:none;\" >\n");
 
-hPrintf("<SELECT NAME=\"itemColor\" style=\"width:8em; background-color:#000000;\" %s>\n", colorMenuJS);
+hPrintf("<SELECT NAME=\"%s\" style=\"width:8em; background-color:#000000;\" %s>\n", NEW_ITEM_COLOR, colorMenuJS);
 hPrintf("<OPTION SELECTED VALUE = \"#000000\" style=\"background-color:#000000;\" >black</OPTION>\n");
 hPrintf("<OPTION value = \"#0000ff\" style=\"background-color:#0000ff;\" >blue</OPTION>\n");
 hPrintf("<OPTION VALUE = \"#9600c8\" style=\"background-color:#9600c8;\" >purple</OPTION>\n");
@@ -271,9 +271,10 @@ hPrintf("function updateColorSelectBox() {\n"
 " document.createItem.colorPullDown.style.display='inline';\n"
 " document.createItem.colorPullDown.select();\n"
 " document.createItem.colorPullDown.style.display='none';\n"
-" form.itemColor.style.background = form.itemColor[form.itemColor.selectedIndex].value;\n"
-" form.itemColor.style.color = form.itemColor[form.itemColor.selectedIndex].value;\n"
-"}\n");
+" form.%s.style.background = form.%s[form.%s.selectedIndex].value;\n"
+" form.%s.style.color = form.%s[form.%s.selectedIndex].value;\n"
+"}\n", NEW_ITEM_COLOR, NEW_ITEM_COLOR, NEW_ITEM_COLOR,
+	NEW_ITEM_COLOR, NEW_ITEM_COLOR, NEW_ITEM_COLOR);
 hPrintf("</SCRIPT>\n");
 }
 
