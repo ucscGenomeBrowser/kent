@@ -1376,6 +1376,19 @@ type bed 8 +
 urlLabel Ensembl Non-Coding Gene:
 url http://www.ensembl.org/Homo_sapiens/geneview?gene=$$
 
+track wgRna
+shortLabel sno/miRNA
+longLabel C/D and H/ACA Box snoRNAs, scaRNAs, and microRNAs from snoRNABase and miRBase
+group genes
+priority 63.5
+visibility hide
+color 200,80,0
+type bed 8 +
+urlLabel Laboratoire de Biologie Moléculaire Eucaryote:
+url http://www-snorna.biotoul.fr/plus.php?id=$$
+url2Label The miRNA Registry:
+url2 http://microrna.sanger.ac.uk/cgi-bin/sequences/mirna_entry.pl?id=$$
+
 searchTable wgRna
 searchTable ncRna
 searchMethod fuzzy
