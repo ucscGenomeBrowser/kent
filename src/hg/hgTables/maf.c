@@ -15,7 +15,7 @@
 #include "hgMaf.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: maf.c,v 1.12 2007/06/13 17:35:22 heather Exp $";
+static char const rcsid[] = "$Id: maf.c,v 1.13 2008/05/31 13:54:29 braney Exp $";
 
 boolean isMafTable(char *database, struct trackDb *track, char *table)
 /* Return TRUE if table is maf. */
@@ -42,6 +42,17 @@ void doOutMaf(struct trackDb *track, char *table, struct sqlConnection *conn)
 struct region *region = NULL, *regionList = getRegions();
 struct lm *lm = lmInit(64*1024);
 textOpen();
+
+struct sqlConnection *ctConn = NULL;
+struct sqlConnection *ctConn2 = NULL;
+struct customTrack *ct = NULL;
+if (isCustomTrack(table))
+    {
+    ctConn = sqlCtConn(TRUE);
+    ctConn2 = sqlCtConn(TRUE);
+    ct = lookupCt(table);
+    }
+
 mafWriteStart(stdout, NULL);
 for (region = regionList; region != NULL; region = region->next)
     {
@@ -61,8 +72,12 @@ for (region = regionList; region != NULL; region = region->next)
 	    bed->chromEnd = region->end;
 	if (bed->chromStart >= bed->chromEnd)
 	    continue;
-	mafList = mafLoadInRegion(conn, table, bed->chrom, 
-				  bed->chromStart, bed->chromEnd);
+	if (ct == NULL)
+	    mafList = mafLoadInRegion(conn, table, bed->chrom, 
+				      bed->chromStart, bed->chromEnd);
+	else
+	    mafList = mafLoadInRegion2(ctConn, ctConn2, ct->dbTableName, 
+		    bed->chrom, bed->chromStart, bed->chromEnd);
 	for (maf = mafList; maf != NULL; maf = maf->next)
 	    {
 	    struct mafAli *subset = mafSubset(maf, dbChrom, 
@@ -79,4 +94,10 @@ for (region = regionList; region != NULL; region = region->next)
     }
 mafWriteEnd(stdout);
 lmCleanup(&lm);
+
+if (isCustomTrack(table))
+    {
+    sqlDisconnect(&ctConn);
+    sqlDisconnect(&ctConn2);
+    }
 }
