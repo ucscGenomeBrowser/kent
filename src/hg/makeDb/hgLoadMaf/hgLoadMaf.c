@@ -12,7 +12,7 @@
 #include "scoredRef.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgLoadMaf.c,v 1.19 2007/03/31 19:38:15 markd Exp $";
+static char const rcsid[] = "$Id: hgLoadMaf.c,v 1.20 2008/05/31 15:42:37 braney Exp $";
 
 /* Command line options */
 
@@ -28,12 +28,21 @@ static struct optionSpec optionSpecs[] = {
     {"WARN", OPTION_BOOLEAN},
     {"test", OPTION_STRING},
     {"pathPrefix", OPTION_STRING},
+    {"loadFile", OPTION_STRING},
+    {"tmpDir", OPTION_STRING},
+    {"refDb", OPTION_STRING},
+    {"maxNameLen", OPTION_INT},
     {NULL, 0}
 };
+
 boolean warnOption = FALSE;
-boolean warnVerboseOption = FALSE;     /* print warning detail */
-char *testFile = NULL;                    /* maf filename if testing */
-char *pathPrefix = NULL;               /* extFile directory */
+boolean warnVerboseOption = FALSE;  /* print warning detail */
+char *testFile = NULL;              /* maf filename if testing */
+char *pathPrefix = NULL;            /* extFile directory */
+static char *tmpDir = NULL;	    /* location to create a temporary file */
+char *loadFile;	                    /* file to read maf file from */
+char *refDb;	                    /* reference db (for custom tracks) */
+int maxNameLen = 0;	            /* maximum chrom name length */
 
 void usage()
 /* Explain usage and exit. */
@@ -43,13 +52,22 @@ errAbort(
   "usage:\n"
   "   hgLoadMaf database table\n"
   "options:\n"
-    "   -warn   warn instead of error if empty/incomplete alignments\n"
-    "           are found found.\n"
-    "   -WARN   warn instead of error, with detail for the warning\n" 
-    "   -test=infile  use infile as input, and suppress loading\n"
-"                     the database. Just create .tab file in current dir.\n" 
-    "   -pathPrefix=dir  load files from specified directory (default /gbdb/database/table.\n"
-  "The maf files need to already exist in chromosome coordinates.\n"
+  "   -warn            warn instead of error upon empty/incomplete alignments\n"
+  "   -WARN            warn instead of error, with detail for the warning\n" 
+  "   -test=infile     use infile as input, and suppress loading\n"
+  "                    the database. Just create .tab file in current dir.\n" 
+  "   -pathPrefix=dir  load files from specified directory \n"
+  "                    (default /gbdb/database/table.\n"
+  "   -tmpDir=<path>   path to directory for creation of temporary .tab file\n"
+  "                    which will be removed after loading\n"
+  "   -loadFile=file   use file as input\n"
+  "   -maxNameLen=N    specify max chromosome name length to avoid\n"
+  "                    reference to chromInfo table\n"
+  "\n"
+  "NOTE: The maf files need to be in chromosome coordinates,\n"
+  "      the reference species must be the first component, and \n"
+  "      the blocks must be correctly ordered and be on the\n"
+  "      '+' strand\n"
   );
 }
 
@@ -72,12 +90,38 @@ void hgLoadMaf(char *database, char *table)
 struct fileInfo *fileList = NULL, *fileEl;
 struct sqlConnection *conn;
 long mafCount = 0;
-FILE *f = hgCreateTabFile(".", table);
+FILE *f = NULL;
 char extFileDir[512];
 char ext[10];
 char file[100];
+int indexLen;
 
-if (testFile != NULL)
+if (refDb == NULL)
+    refDb = database;
+
+if (tmpDir == NULL)
+    f = hgCreateTabFile(".", table);
+else
+    f = hgCreateTabFile(tmpDir, table);
+
+if (maxNameLen)
+    indexLen = maxNameLen;
+else
+    indexLen = hGetMinIndexLength();
+
+if (loadFile != NULL)
+    {
+    if (!fileExists(loadFile))
+        errAbort("Load file %s doesn't exist\n", loadFile);
+    hSetDb(database);
+    splitPath(loadFile, extFileDir, file, ext);
+    strcat(file, ext);
+    fileList = listDirX(extFileDir, file, TRUE);
+    pathPrefix = extFileDir;
+    conn = hgStartUpdate();
+    scoredRefTableCreate(conn, table, indexLen);
+    }
+else if (testFile != NULL)
     {
     if (!fileExists(testFile))
         errAbort("Test file %s doesn't exist\n", testFile);
@@ -96,7 +140,7 @@ else
         }
     fileList = listDirX(pathPrefix, "*.maf", TRUE);
     conn = hgStartUpdate();
-    scoredRefTableCreate(conn, table, hGetMinIndexLength());
+    scoredRefTableCreate(conn, table, indexLen);
     }
 if (fileList == NULL)
     errAbort("%s doesn't exist or doesn't have any maf files", pathPrefix);
@@ -109,7 +153,7 @@ for (fileEl = fileList; fileEl != NULL; fileEl = fileEl->next)
     struct mafAli *maf;
     off_t offset;
     int warnCount = 0;
-    int dbNameLen = strlen(database);
+    int dbNameLen = strlen(refDb);
     HGID extId;
     if (testFile != NULL)
         extId = 0;
@@ -117,17 +161,17 @@ for (fileEl = fileList; fileEl != NULL; fileEl = fileEl->next)
         extId = hgAddToExtFile(fileName, conn);
 
     mf = mafOpen(fileName);
-    verbose(1, "Indexing and tabulating %s\n", fileName);
+    verbose(1,"Indexing and tabulating %s\n", fileName);
     while ((maf = mafNextWithPos(mf, &offset)) != NULL)
         {
 	double maxScore, minScore;
-	mc = findComponent(maf, database);
+	mc = findComponent(maf, refDb);
 	if (mc == NULL) 
             {
             char msg[256];
             safef(msg, sizeof(msg),
                             "Couldn't find %s. sequence line %d of %s\n", 
-	    	                database, mf->lf->lineIx, fileName);
+	    	                refDb, mf->lf->lineIx, fileName);
             if (warnOption || warnVerboseOption) 
                 {
                 warnCount++;
@@ -203,9 +247,15 @@ for (fileEl = fileList; fileEl != NULL; fileEl = fileEl->next)
 if (testFile != NULL)
     return;
 verbose(1, "Loading %s into database\n", table);
-hgLoadTabFile(conn, ".", table, &f);
+if (tmpDir == NULL)
+    hgLoadTabFile(conn, ".", table, &f);
+else
+    hgLoadTabFile(conn, tmpDir, table, &f);
 verbose(1, "Loaded %ld mafs in %d files from %s\n", mafCount, slCount(fileList), pathPrefix);
 hgEndUpdate(&conn, "Add %ld mafs in %d files from %s\n", mafCount, slCount(fileList), pathPrefix);
+/*	if temp dir specified, unlink file to make it disappear */
+if ((char *)NULL != tmpDir)
+    hgUnlinkTabFile(tmpDir, table);
 }
 
 int main(int argc, char *argv[])
@@ -216,8 +266,14 @@ warnOption = optionExists("warn");
 warnVerboseOption = optionExists("WARN");
 testFile = optionVal("test", NULL);
 pathPrefix = optionVal("pathPrefix", NULL);
+tmpDir = optionVal("tmpDir", NULL);
+loadFile = optionVal("loadFile", loadFile);
+refDb = optionVal("refDb", refDb);
+maxNameLen = optionInt("maxNameLen", maxNameLen);
+
 if (argc != 3)
     usage();
+
 hgLoadMaf(argv[1], argv[2]);
 return 0;
 }
