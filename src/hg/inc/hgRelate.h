@@ -55,6 +55,9 @@ HGID hgNextId();
 FILE *hgCreateTabFile(char *tmpDir, char *tableName);
 /* Open a tab file with name corresponding to tableName in tmpDir. */
 
+int hgUnlinkTabFile(char *tmpDir, char *tableName);
+/* Unlink tab file */
+
 void hgLoadTabFile(struct sqlConnection *conn, char *tmpDir, char *tableName,
                    FILE **tabFh);
 /* Load tab delimited file corresponding to tableName. close fh if not NULL */
