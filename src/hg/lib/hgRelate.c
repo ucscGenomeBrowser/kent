@@ -14,7 +14,7 @@
 #include "hgRelate.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgRelate.c,v 1.21 2007/09/05 04:30:58 markd Exp $";
+static char const rcsid[] = "$Id: hgRelate.c,v 1.22 2008/05/31 13:44:52 braney Exp $";
 
 static char extFileCreate[] =
 /* This keeps track of external files and directories. */
@@ -205,6 +205,14 @@ FILE *hgCreateTabFile(char *tmpDir, char *tableName)
 char path[PATH_LEN];
 getTabFile(tmpDir, tableName, path);
 return mustOpen(path, "w");
+}
+
+int hgUnlinkTabFile(char *tmpDir, char *tableName)
+/* Unlink tab file */
+{
+char path[PATH_LEN];
+getTabFile(tmpDir, tableName, path);
+return unlink(path);
 }
 
 void hgLoadTabFile(struct sqlConnection *conn, char *tmpDir, char *tableName,
