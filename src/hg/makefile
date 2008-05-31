@@ -1,6 +1,6 @@
 # Build all directories in utils
 
-# 	$Id: makefile,v 1.142 2008/05/16 19:57:39 angie Exp $
+# 	$Id: makefile,v 1.143 2008/05/31 15:59:25 braney Exp $
 
 BROWSER_BINS=cartReset das hgBlat makeDb/hgCgiData hgConvert \
         hgGateway hgGene hgGenome hgPcr hgSession hgTables hgTracks \
@@ -11,7 +11,7 @@ BROWSER_BINS=cartReset das hgBlat makeDb/hgCgiData hgConvert \
 	phyloGif hgCustom \
 	makeDb/hgCgiData js
 
-BROWSER_LOADERS = makeDb/hgLoadBed makeDb/hgLoadWiggle
+BROWSER_LOADERS = makeDb/hgLoadBed makeDb/hgLoadWiggle makeDb/hgLoadMaf
 
 TEST_DIRS = lib autoDtd autoSql blastToPsl checkTableCoords embossToPsl \
             genePredSingleCover genePredHisto genePredToGtf \
