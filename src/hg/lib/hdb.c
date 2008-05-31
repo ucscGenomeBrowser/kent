@@ -38,7 +38,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.357 2008/05/29 07:26:36 markd Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.358 2008/05/31 13:41:07 braney Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -1339,7 +1339,7 @@ hFreeOrDisconnect(&conn);
 return list;
 }
 
-static char *hExtFileNameC(struct sqlConnection *conn, char *extFileTable, unsigned extFileId)
+char *hExtFileNameC(struct sqlConnection *conn, char *extFileTable, unsigned extFileId)
 /* Get external file name from table and ID.  Typically
  * extFile table will be 'extFile' or 'gbExtFile'
  * Abort if the id is not in the table or if the file
