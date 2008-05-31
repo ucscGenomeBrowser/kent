@@ -13,7 +13,7 @@
 #include "hui.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: mafClick.c,v 1.49 2007/10/29 23:07:07 fanhsu Exp $";
+static char const rcsid[] = "$Id: mafClick.c,v 1.50 2008/05/31 15:32:15 braney Exp $";
 
 #define ADDEXONCAPITAL
 
@@ -414,6 +414,24 @@ capAliTextOnTrack(maf, dbOnly, chrom, track, onlyCds);
 }
 #endif
 
+static struct mafAli *mafOrAxtLoadInRegion2(struct sqlConnection *conn, 
+	struct sqlConnection *conn2, struct trackDb *tdb, 
+	char *chrom, int start, int end, char *axtOtherDb)
+{
+if (axtOtherDb != NULL)
+    {
+    struct hash *qSizeHash = hChromSizeHash(axtOtherDb);
+    struct mafAli *mafList = axtLoadAsMafInRegion(conn, tdb->tableName,
+    	chrom, start, end,
+	database, axtOtherDb, hChromSize(chrom), qSizeHash);
+    hashFree(&qSizeHash);
+    return mafList;
+    }
+else
+    return mafLoadInRegion2(conn, conn2, tdb->tableName, chrom, start, end);
+}
+
+/* Load mafs from region, either from maf or axt file. */
 static struct mafAli *mafOrAxtLoadInRegion(struct sqlConnection *conn, 
 	struct trackDb *tdb, char *chrom, int start, int end,
 	char *axtOtherDb)
@@ -455,7 +473,7 @@ hgcPathAndSettings(), table, table, chrom,
 winStart, winEnd, winStart, database, tdb->tableName, label);
 }
 
-static void mafOrAxtClick(struct sqlConnection *conn, struct trackDb *tdb, char *axtOtherDb)
+static void mafOrAxtClick2(struct sqlConnection *conn, struct sqlConnection *conn2, struct trackDb *tdb, char *axtOtherDb)
 /* Display details for MAF or AXT tracks. */
 {
 hgBotDelay();
@@ -497,7 +515,7 @@ else
 	    }
 	}
 
-    mafList = mafOrAxtLoadInRegion(conn, tdb, seqName, winStart, winEnd, 
+    mafList = mafOrAxtLoadInRegion2(conn,conn2, tdb, seqName, winStart, winEnd, 
     	axtOtherDb);
     safef(dbChrom, sizeof(dbChrom), "%s.%s", database, seqName);
     
@@ -638,7 +656,7 @@ else
 	    ArraySize(codeAll), codeVarVal, autoSubmit);
 	printf("exons based on ");
 	capTrack = genePredDropDown(cart, trackHash, 
-                                        "gpForm", "hgc.multiCapTrack");
+                                       "gpForm", "hgc.multiCapTrack");
 #endif
 	printf("show ");
 	cgiMakeDropListFull(showVarName, showAll, showAll, 
@@ -689,6 +707,15 @@ else
 	}
     printf("</PRE></TT>");
     }
+}
+
+static void mafOrAxtClick(struct sqlConnection *conn, struct trackDb *tdb, char *axtOtherDb)
+{
+struct sqlConnection *conn2 = hAllocConn();
+
+mafOrAxtClick2(conn, conn2, tdb, axtOtherDb);
+
+hFreeConn(&conn2);
 }
 
 static void blueCapWriteGsid(FILE *f, char *s, int size, char *r, boolean isProtein, int offset)
@@ -1182,6 +1209,12 @@ else
 	}
     printf("</PRE></TT>");
     }
+}
+
+void customMafClick(struct sqlConnection *conn, struct sqlConnection *conn2, 
+    struct trackDb *tdb)
+{
+mafOrAxtClick2(conn, conn2, tdb, NULL);
 }
 
 void genericMafClick(struct sqlConnection *conn, struct trackDb *tdb, 
