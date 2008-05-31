@@ -290,4 +290,8 @@ void doAddWikiComments(char *itemName, char *chrom, int winStart, int winEnd);
 void doDeleteWikiItem(char *itemName, char *chrom, int winStart, int winEnd);
 /* handle delete item clicks for wikiTrack */
 
+void customMafClick(struct sqlConnection *conn, 
+	struct sqlConnection *conn2, struct trackDb *tdb);
+/* handle clicks on a custom maf */
+
 #endif
