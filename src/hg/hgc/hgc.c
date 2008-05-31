@@ -214,7 +214,7 @@
 #include "itemConf.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1425 2008/05/27 09:21:55 aamp Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1426 2008/05/31 15:31:13 braney Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -1076,8 +1076,8 @@ sr = sqlGetResult(sc, query);
 printf("<B>Atom %s instances ('*' marks item you clicked on)</B><BR>\n",item);
 printf("<PRE>\n");
 //printf("Ins#\tSpecies\t\tChrom\tStart\tEnd\tStrand\n");
-printf( "  #\t%-10s\t%-10s\t%-15s\t%-15s\t%-15s\t%s\t%s\t%s\n",
-    "species","chrom", "          start", "          end", "          length", "strand","    fivePrime","threePrime");
+printf( "     # %-10s %-5s %12s %12s %10s    %s  %-10s %-10s\n",
+    "species","chrom", "start", "end", "length", "strand","fivePrime","threePrime");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     atomStaticLoad(row, &ret);
@@ -1088,8 +1088,9 @@ while ((row = sqlNextRow(sr)) != NULL)
 	printf("* ");
     else
 	printf("  ");
-    printf( "%d\t%-10s\t%-10s\t%15d\t%15d\t%15d\t\t%c\t\t%s\t%s\n",ret.instance,
-	ret.species,ret.chrom, ret.start + 1, ret.end, ret.end - ret.start + 1, ret.strand[0],ret.fivePrime,ret.threePrime);
+    printf( "%4d %-10s %-5s %12d %12d %10d      %c      %-10s %-10s\n",
+	ret.instance, ret.species,ret.chrom, ret.start + 1, ret.end, 
+	ret.end - ret.start + 1, ret.strand[0],ret.fivePrime,ret.threePrime);
     }
 printf("</A>");
 sqlFreeResult(&sr);
@@ -1105,7 +1106,7 @@ fprintf(launchF, "%s\n", item);
 fclose(launchF);
 #endif
 
-if (!sameString("atom992", table))
+if (!sameString("atom20080226d", table))
     return;
 
 printf("<TABLE>");
@@ -1120,11 +1121,13 @@ printf("NJ Trees<BR>\n");
 printf("<IMG src=http://hgwdev.cse.ucsc.edu/~braney/njTrees/%s.tt.png><BR>",item);
 printf("<TD><IMG src=http://hgwdev.cse.ucsc.edu/~braney/njTrees/%s.gt.png><BR>",item);
 printf("<TR><TH>");
+/*
 printf("Gap UPGMA Trees<BR>\n");
 printf("<IMG src=http://hgwdev.cse.ucsc.edu/~braney/gap992Trees/%s.tt.png><BR>",item);
 printf("<TD><IMG src=http://hgwdev.cse.ucsc.edu/~braney/gap992Trees/%s.gt.png><BR>",item);
 printf("</TABLE>");
 
+*/
 return;
 
 char buffer[4096];
@@ -16879,6 +16882,17 @@ else if (ct->dbTrack && startsWith("bedGraph", ct->dbTrackType))
            seqName, winStart+1, winEnd);
     printTrackUiLink(ct->tdb);
     }
+else if (ct->dbTrack && sameString(ct->dbTrackType, "maf"))
+    {
+    struct sqlConnection *conn = sqlCtConn(TRUE);
+    struct sqlConnection *conn2 = sqlCtConn(TRUE);
+    char *saveName = ct->tdb->tableName;
+    ct->tdb->tableName = ct->dbTableName;
+    customMafClick(conn, conn2, ct->tdb);
+    ct->tdb->tableName = saveName;
+    sqlDisconnect(&conn2);
+    sqlDisconnect(&conn);
+    }
 else
     {
     if (ct->dbTrack)
@@ -19861,7 +19875,17 @@ if (seqName == NULL)
     else
 	seqName = hDefaultChrom();
     }
-if (!isCustomTrack(track))
+
+struct customTrack *ct = NULL;
+if (isCustomTrack(track))
+    {
+    struct customTrack *ctList = getCtList();
+    for (ct = ctList; ct != NULL; ct = ct->next)
+	if (sameString(track, ct->tdb->tableName))
+	    break;
+    }
+
+if (!isCustomTrack(track) || sameString(ct->dbTrackType, "maf"))
     {
     trackHash = makeTrackHashWithComposites(database, seqName, TRUE);
     if (parentWigMaf)
@@ -20195,7 +20219,7 @@ else if (sameWord(track, "tfbsCons"))
     {
     tfbsCons(tdb, item);
     }
-else if (startsWith("atom", track))
+else if (startsWith("atom", track) && !startsWith("atomMaf", track))
     {
     doAtom(tdb, item);
     }
