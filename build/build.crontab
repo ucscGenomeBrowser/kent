@@ -1,4 +1,0 @@
-#MAILTO=browser-staff@soe.ucsc.edu
-MAILTO=markd@soe.ucsc.edu
-
-30 04 * * *	 cd kentclean/src; make clean >& /dev/null ; make HG_WARN=-pedantic |& grep 'forbids mixed'

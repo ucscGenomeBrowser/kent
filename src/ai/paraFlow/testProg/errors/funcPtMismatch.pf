@@ -1,8 +1,0 @@
-
-flow divMod(int a,b) into (int q,r)
-    {
-    q = a/b;
-    r = a%b;
-    }
-
-var of flow(int a,b) into (int q) x = divMod;
