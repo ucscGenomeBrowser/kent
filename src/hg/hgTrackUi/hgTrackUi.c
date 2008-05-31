@@ -39,7 +39,7 @@
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 #define MAX_SP_SIZE 2000
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.433 2008/05/27 22:56:15 markd Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.434 2008/05/31 15:25:51 braney Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1953,9 +1953,11 @@ if (consWiggles && consWiggles->next)
 
 /* determine species and groups for pairwise -- create checkboxes */
 if (speciesOrder == NULL && speciesGroup == NULL && speciesUseFile == NULL)
-    errAbort(
-      "Track %s missing required trackDb setting: speciesOrder, speciesGroups, or speciesUseFile",
-                tdb->tableName);
+    {
+    if (isCustomTrack(tdb->tableName))
+	return;
+    errAbort("Track %s missing required trackDb setting: speciesOrder, speciesGroups, or speciesUseFile", tdb->tableName);
+    }
 
 if (speciesGroup)
     groupCt = chopLine(speciesGroup, groups);
@@ -2025,7 +2027,7 @@ jsMakeSetClearButton(cart, MAIN_FORM, buttonVar, JS_CLEAR_ALL_BUTTON_LABEL,
 		      prefix, speciesList, NULL, FALSE, FALSE);
 
 if ((speciesTree != NULL) && ((tree = phyloParseString(speciesTree)) != NULL))
-{
+    {
     char buffer[128];
     char *nodeNames[512];
     int numNodes = 0;
@@ -2049,7 +2051,7 @@ if ((speciesTree != NULL) && ((tree = phyloParseString(speciesTree)) != NULL))
     puts("<br>");
     cartMakeRadioButton(cart,buffer,"useCheck", "useTarg");
     printf("Show all species checked : ");
-}
+    }
 
 if (groupCt == 1)
     puts("\n<TABLE><TR>");
@@ -2103,7 +2105,10 @@ else
 
 safef(option, sizeof option, "%s.%s", tdb->tableName, MAF_CHAIN_VAR);
 cgiMakeCheckBox(option, cartCgiUsualBoolean(cart, option, TRUE));
-if (trackDbSetting(tdb, "irows") != NULL)
+
+char *irowStr = trackDbSetting(tdb, "irows");
+boolean doIrows = (irowStr == NULL) || !sameString(irowStr, "off");
+if (isCustomTrack(tdb->tableName) || doIrows)
     puts("Display chains between alignments<BR>");
 else
     {
@@ -2688,6 +2693,8 @@ else if (sameString(track, "hgPcrResult"))
     pcrResultUi(tdb);
 else if (startsWith("bedGraph", tdb->type))
 	wigUi(tdb);
+else if (startsWith("maf", tdb->type))
+    wigMafUi(tdb);
 else if (startsWith("wig", tdb->type))
         {
         if (startsWith("wigMaf", tdb->type))
@@ -2844,6 +2851,9 @@ if (tdb->parentName)
         freeMem(encodedMapName);
         }
     }
+
+if (isCustomTrack(tdb->tableName) && sameString(tdb->type, "maf"))
+    tdb->canPack = TRUE;
 
 /* Display visibility menu */
 printf("<B>Display&nbsp;mode:&nbsp;</B>");
