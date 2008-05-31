@@ -69,7 +69,7 @@
 #include "obscure.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: paraHub.c,v 1.111 2008/05/29 21:20:22 galt Exp $";
+static char const rcsid[] = "$Id: paraHub.c,v 1.112 2008/05/31 07:56:06 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -225,47 +225,68 @@ if (!dlEnd(node))
     }
 }
 
-int listSickNodes(struct paraMessage *pm)
-/* find nodes that are sick for all users */
+boolean userIsActive(struct user *user)
+/* Return TRUE if user has jobs running or in queue */
 {
-int count = 0;
+return user->runningCount > 0 || !dlEmpty(user->curBatches);
+}
+
+
+int listSickNodes(struct paraMessage *pm)
+/* find nodes that are sick for all active users */
+{
+int sickNodeCount = 0, userCount = 0;
 struct user *user;
 if (userList)
     {
-    struct hashEl *el, *list = hashElListHash(userList->sickNodes);
-    for (el = list; el != NULL; el = el->next)
+    struct hashEl *el, *list = NULL;
+    /* find an active user if any */
+    for (user = userList; user != NULL; user = user->next)
 	{
-	boolean allSick = TRUE;
-	for (user = userList; user != NULL; user = user->next)
+	if (userIsActive(user))
 	    {
-	    if (!hashLookup(user->sickNodes, el->name))
-		allSick = FALSE;
-	    }
-	if (allSick)
-	    {
-	    ++count;
-	    if (pm)
-		{
-		pmClear(pm);
-		pmPrintf(pm, "%s", el->name);
-		pmSend(pm, rudpOut);
-		}
+	    ++userCount;
+	    if (!list)
+    		list = hashElListHash(user->sickNodes);
 	    }
 	}
-    hashElFreeList(&list);
+    if (list)
+	{    
+	for (el = list; el != NULL; el = el->next)
+	    {
+	    boolean allSick = TRUE;
+	    for (user = userList; user != NULL; user = user->next)
+		{
+		if (userIsActive(user))
+		    if (!hashLookup(user->sickNodes, el->name))
+			allSick = FALSE;
+		}
+	    if (allSick)
+		{
+		++sickNodeCount;
+		if (pm)
+		    {
+		    pmClear(pm);
+		    pmPrintf(pm, "%s", el->name);
+		    pmSend(pm, rudpOut);
+		    }
+		}
+	    }
+	hashElFreeList(&list);
+	}
     }
-if (count > 0)
+if (sickNodeCount > 0)
     {
     if (pm)
 	{
 	pmClear(pm);
-	pmPrintf(pm, "Strength of evidence: %d users", slCount(userList));
+	pmPrintf(pm, "Strength of evidence: %d users", userCount);
 	pmSend(pm, rudpOut);
 	}
     }
 if (pm)
     pmSendString(pm, rudpOut, "");
-return count;
+return sickNodeCount;
 }
 
 
@@ -601,6 +622,12 @@ if (!line)
     *m = *machineList->machSpec;
     m->name = cloneString(name);
     m->tempDir = cloneString(param2);
+    if (!m->tempDir)
+	{
+	freeMem(m);
+	warn("incomplete addMachine request");
+	return;
+	}
     }
 else
     {
@@ -611,7 +638,14 @@ else
     m->localDir = cloneString(nextWord(&line));
     m->localSize = atoi(nextWord(&line));	
     m->switchName = cloneString(nextWord(&line));
+    if (!m->switchName)
+	{
+	freeMem(m);
+	warn("incomplete addMachine request");
+	return;
+	}
     }
+
 doAddMachine(name, m->tempDir, 0, m);
 runner(1);
 }
@@ -882,7 +916,7 @@ struct machine *machine;
 char message[512];
 int i;
 
-sprintf(message, "%s", checkMessage);
+safef(message, sizeof(message), "%s", checkMessage);
 for (i=0; i<spokesToUse; ++i)
     {
     /* If we have some free spokes and some busy machines, and
@@ -933,7 +967,7 @@ for (i=0; i<spokesToUse; ++i)
 	else
 	    {
 	    char message[512];
-	    sprintf(message, "check %d", job->id);
+	    safef(message, sizeof(message), "check %d", job->id);
 	    sendViaSpoke(machine, message);
 	    }
 	}
@@ -1116,7 +1150,7 @@ boolean sendKillJobMessage(struct machine *machine, int jobId)
 /* Send message to compute node to kill job there. */
 {
 char message[64];
-sprintf(message, "kill %d", jobId);
+safef(message, sizeof(message), "kill %d", jobId);
 logDebug("hub: %s %s", machine->name, message);
 if (!sendViaSpoke(machine, message))
     {
@@ -1153,19 +1187,14 @@ for (node = deadMachines->head; !dlEnd(node); node = node->next)
 	if (mach->deadJobIds != NULL)
 	    {
 	    struct slInt *i = mach->deadJobIds;
-	    warn("hub: node %s assigned ", name); 
+	    logWarn("hub: node %s assigned ", name); 
 	    for(i = mach->deadJobIds; i; i = i->next)
-		warn("%d ", i->val);
-	    warn("came back.\n");
+		logWarn("%d ", i->val);
+	    logWarn("came back.\n");
 	    while ((jobIdString = nextWord(&line)) != NULL)
 	        {
 		jobId = atoi(jobIdString);
-                for(i = mach->deadJobIds; i; i = i->next)
-		    {
-		    if (i->val == jobId)
-			break;
-		    }
-		if (i)
+                if ((i = slIntFind(mach->deadJobIds, jobId)))
 		    {
 		    struct job *job;
 		    warn("hub: Looks like %s is still keeping track of %d\n", name, jobId);
@@ -2111,7 +2140,7 @@ int count = 0;
 
 for (user = userList; user != NULL; user = user->next)
     {
-    if (user->runningCount > 0 || !dlEmpty(user->curBatches))
+    if (userIsActive(user))
         ++count;
     }
 return count;
@@ -2333,6 +2362,7 @@ else
     {
     struct job *job = jobNew(rjm->command, rjm->user, rjm->dir, rjm->in,
 	    rjm->out, rjm->cpus, rjm->ram, resultFile, FALSE);
+    if (!job) return;
     struct batch *batch = job->batch;
     struct user *user = batch->user;
     job->id = atoi(rjm->jobIdString);
@@ -2363,7 +2393,10 @@ char *dupeCommand = cloneString(command);
 char *exePath = firstWordInLine(dupeCommand);
 char exeFile[128], exeExt[64];
 splitPath(exePath, NULL, exeFile, exeExt);
-sprintf(exe, "%s%s", exeFile, exeExt);
+/* We cannot use sizeof(exe) because an array on a stack
+ * is just a pointer, and so pointer-size is all that sizeof returns
+ * for exe. */
+safef(exe, 256, "%s%s", exeFile, exeExt);
 freez(&dupeCommand);
 }
 

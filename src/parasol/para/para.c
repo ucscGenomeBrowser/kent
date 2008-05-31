@@ -16,7 +16,7 @@
 #include "verbose.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: para.c,v 1.96 2008/05/29 20:18:42 galt Exp $";
+static char const rcsid[] = "$Id: para.c,v 1.97 2008/05/31 07:56:06 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -277,31 +277,31 @@ long long parseRam(char *ram)
  * The value of input variable ram may be modified. */
 {
 long long result = -1, factor = 1;
-int l = strlen(ram);
+int len = strlen(ram);
 int i;
 char saveC = ' ';
-if (l == 0)
+if (len == 0)
     return result;
-if (ram[l-1] == 't')
+if (ram[len-1] == 't')
     factor = (long long)1024 * 1024 * 1024 * 1024;
-else if (ram[l-1] == 'g')
+else if (ram[len-1] == 'g')
     factor = 1024 * 1024 * 1024;
-else if (ram[l-1] == 'm')
+else if (ram[len-1] == 'm')
     factor = 1024 * 1024;
-else if (ram[l-1] == 'k')
+else if (ram[len-1] == 'k')
     factor = 1024;
 if (factor != 1)
     {
-    --l;
-    saveC = ram[l];
-    ram[l] = 0;
+    --len;
+    saveC = ram[len];
+    ram[len] = 0;
     }
-for (i=0; i<l; ++i)
+for (i=0; i<len; ++i)
     if (!isdigit(ram[i]))
 	return result;
 result = factor * sqlLongLong(ram);
 if (factor != 1)
-    ram[l] = saveC;
+    ram[len] = saveC;
 return result;
 }
 
@@ -999,10 +999,7 @@ errAbort("\n%s output format changed, please update markQueuedJobs in para.c",
 int markQueuedJobs(struct jobDb *db)
 /* Mark jobs that are queued up. Return total number of jobs in queue. */
 {
-int hashSize = 12;
-while ((1<<(hashSize+4)) < db->jobCount)
-    ++hashSize;
-struct hash *hash = newHash(hashSize);
+struct hash *hash = newHash(max(12,digitsBaseTwo(db->jobCount)-3));
 
 struct job *job;
 struct submission *sub;
@@ -1108,6 +1105,7 @@ for (lineEl = lineList; lineEl != NULL; lineEl = lineEl->next)
 			{
     			sub->hung = TRUE;
 			sub->slow = FALSE;
+			sub->endTime = now;
 			killJob(sub->id);
                         verbose(1, "killed hung jobId: %s\n", sub->id);
 			}
@@ -1612,7 +1610,7 @@ if (sameString(type, "crash"))
     else if (WIFSTOPPED(sub->status))
 	printf("stopped %d\n", WSTOPSIG(sub->status));
     else 
-	printf("unknow wait status %d\n", sub->status);
+	printf("unknown wait status %d\n", sub->status);
     for (check = job->checkList; check != NULL; check = check->next)
 	doOneCheck(check, hash, stdout);
     printErrFile(sub);

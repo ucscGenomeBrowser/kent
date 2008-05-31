@@ -171,3 +171,9 @@
 
         Also changed spec usage to override commandline usage parameters as requested.
 
+12.06   Fixed minor bug in hung endtime for para status.
+
+        Fixed hash size to use digitsBaseTwo().
+
+        Fixed listSickNodes to include only active users, as was originally intended.
+
