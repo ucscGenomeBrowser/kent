@@ -36,8 +36,9 @@
 #include "liftOver.h"
 #include "pcrResult.h"
 #include "wikiLink.h"
+#include "mafTrack.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1479 2008/05/30 03:09:47 markd Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1480 2008/05/31 14:13:51 braney Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -1048,7 +1049,7 @@ else
    display a left label in pack mode.  To use the full mode
    labeling, temporarily set visibility to full.
    Restore savedVis later */
-if (startsWith("wigMaf", track->tdb->type))
+if (startsWith("wigMaf", track->tdb->type) || startsWith("maf", track->tdb->type))
     vis = tvFull;
 
 switch (vis)
@@ -2459,7 +2460,22 @@ if (ct->dbTrack)
 
 useItemRgb = bedItemRgb(tdb);
 
-if (sameString(type, "wig"))
+if (sameString(type, "maf"))
+    {
+    tg = trackFromTrackDb(tdb);
+    tg->canPack = TRUE;
+
+    wigMafMethods(tg, tdb, 0, NULL);
+    if (!ct->dbTrack)
+	errAbort("custom maf tracks must be in database");
+
+    struct mafPriv *mp;
+    AllocVar(mp);
+    mp->ct = ct;
+
+    tg->customPt = mp;
+    }
+else if (sameString(type, "wig"))
     {
     tg = trackFromTrackDb(tdb);
     if (ct->dbTrack)
