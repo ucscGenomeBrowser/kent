@@ -2,8 +2,9 @@
 
 #include "common.h"
 #include "hgColors.h"
+#include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgColors.c,v 1.2 2008/02/20 00:42:31 markd Exp $";
+static char const rcsid[] = "$Id: hgColors.c,v 1.3 2008/05/31 21:14:19 markd Exp $";
 
 void hMakeGrayShades(struct hvGfx *hvg, Color *shades, int maxShade)
 /* Make up gray scale with 0 = white, and maxShade = black. 
@@ -33,3 +34,8 @@ if (newVal > newMax) newVal = newMax;
 return newVal;
 }
 
+char *hgColOutside()
+/* get color to use from body background, as a string of hex digits */
+{
+return cfgOptionDefault("browser.bgcolor", HG_COL_OUTSIDE);
+}

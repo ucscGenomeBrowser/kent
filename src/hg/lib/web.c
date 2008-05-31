@@ -16,7 +16,7 @@
 #include "googleAnalytics.h"
 #endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: web.c,v 1.146 2008/05/27 17:23:29 angie Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.147 2008/05/31 21:14:19 markd Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -145,10 +145,9 @@ if (withHtmlHeader)
 	"	<LINK REL=\"STYLESHEET\" HREF=\"../style/HGStyle.css\" TYPE=\"text/css\">" "\n");
     if (extraStyle != NULL)
         puts(extraStyle);
-    puts(
-	"</HEAD>" "\n"
-	"<BODY BGCOLOR=\"#"HG_COL_OUTSIDE"\" LINK=\"0000CC\" VLINK=\"#330066\" ALINK=\"#6600FF\">" 
-	);
+    printf("</HEAD>" "\n"
+           "<BODY BGCOLOR=\"#%s\" LINK=\"#0000CC\" VLINK=\"#330066\" ALINK=\"#6600FF\">",
+           hgColOutside());
     }
 puts(
     "<A NAME=\"TOP\"></A>" "\n"
