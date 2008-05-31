@@ -426,6 +426,9 @@ int slIntCmp(const void *va, const void *vb);
 int slIntCmpRev(const void *va, const void *vb);
 /* Compare two slInts in reverse direction. */
 
+struct slInt * slIntFind(struct slInt *list, int target);
+/* Find target in slInt list or return NULL */
+
 void doubleSort(int count, double *array);
 /* Sort an array of doubles. */
 

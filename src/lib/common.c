@@ -9,7 +9,7 @@
 #include "portable.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.116 2008/05/23 23:26:42 tdreszer Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.117 2008/05/31 07:39:20 galt Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -424,6 +424,16 @@ int slIntCmpRev(const void *va, const void *vb)
 const struct slInt *a = *((struct slInt **)va);
 const struct slInt *b = *((struct slInt **)vb);
 return b->val - a->val;
+}
+
+struct slInt * slIntFind(struct slInt *list, int target)
+/* Find target in slInt list or return NULL */
+{
+struct slInt *i;
+for (i=list;i;i=i->next)
+    if (i->val == target)
+	return i;
+return NULL;
 }
 
 static int doubleCmp(const void *va, const void *vb)
