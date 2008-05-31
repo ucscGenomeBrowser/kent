@@ -347,6 +347,13 @@ struct slName *hAllChromNames();
 struct slName *hAllChromNamesDb(char *db);
 /* Get list of all chromosomes in database. */
 
+char *hExtFileNameC(struct sqlConnection *conn, char *extFileTable, unsigned extFileId);
+/* Get external file name from table and ID.  Typically
+ * extFile table will be 'extFile' or 'gbExtFile'
+ * Abort if the id is not in the table or if the file
+ * fails size check.  Please freeMem the result when you 
+ * are done with it. (requires conn passed in) */
+
 char *hExtFileName(char *extFileTable, unsigned extFileId);
 /* Get external file name from table and ID.  Typically
  * extFile table will be 'extFile' or 'gbExtFile'
