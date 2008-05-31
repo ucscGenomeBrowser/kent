@@ -7,6 +7,14 @@
 #include "maf.h"
 #endif
 
+struct mafPriv
+{
+void *list;
+struct customTrack *ct;
+};
+
+struct mafPriv *getMafPriv(struct track *track);
+
 /* zoom level where summary file is used */
 #define MAF_SUMMARY_VIEW 1000000
 
