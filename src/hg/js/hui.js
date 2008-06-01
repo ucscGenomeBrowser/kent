@@ -2,14 +2,14 @@
 
 var debug = false;
 
-// The 'mat_' functions are especially designed to support subtrack configuration by 2D matrix of controls
+// The 'mat*' functions are especially designed to support subtrack configuration by 2D matrix of controls
 
-function mat_selectViewForSubTracks(obj,view)
+function matSelectViewForSubTracks(obj,view)
 {
 // Handle any necessary changes to subtrack checkboxes when the view changes
 // views are "select" drop downs on a subtrack configuration page
     if( obj.selectedIndex == 0) { // hide
-        setCheckBoxesIdContains1(view,false); 
+        matSetCheckBoxesThatContain('id',false,true,view); 
     } else { 
         // essentially reclick all 'checked' matrix checkboxes (run onclick script)
         if (document.getElementsByTagName) {
@@ -18,9 +18,11 @@ function mat_selectViewForSubTracks(obj,view)
                 var ele = list[ix];
                 if(ele.type.match("checkbox") == null)
                     continue;
-                if(ele.name.indexOf("mat_cb_") == 0) {
+                if(ele.name.indexOf("mat_") == 0 && ele.name.indexOf("_cb") == (ele.name.length - 3)) {
                     if(ele.checked) {
-                        mat_setCheckBoxesIdContains1(ele.name.substring(4,ele.name.length),ele.checked);
+                        ele.click();
+                        ele.click();
+                        //matSetCheckBoxesThatContain('id',ele.checked,false,"cb_"+ele.name.substring(4,ele.name.length - 3)+view+'_cb');
                     }
                 }
             }
@@ -36,16 +38,16 @@ function mat_selectViewForSubTracks(obj,view)
     }
 }
 
-function mat_setCheckBoxesThatContain(nameOrId, sub1, sub2, sub3, state)
+function matSetCheckBoxesThatContain(nameOrId, state, force, sub1)
 {
-// Set all checkboxes with 1, 2 or 3 given substrings in NAME or ID to state boolean
+// Set all checkboxes which contain 1 or more given substrings in NAME or ID to state boolean
 // Unlike the std setCheckBoxesThatContain() this also recognizes whether views 
 // additionally control which subtracks will be checked
-        
-   if (document.getElementsByTagName)
-   {
+    var retval = false;
+    if (document.getElementsByTagName)
+    {
         if(debug)
-            alert("mat_setCheckBoxesThatContain is about to set the checkBoxes to "+state);
+            alert("matSetCheckBoxesThatContain is about to set the checkBoxes to "+state);
 
         var views = getViewsSelected("dd_",true); // get views that are on
         var list = document.getElementsByTagName('input');
@@ -56,22 +58,40 @@ function mat_setCheckBoxesThatContain(nameOrId, sub1, sub2, sub3, state)
             var identifier = ele.name;
             if(nameOrId.search(/id/i) != -1)
                 identifier = ele.id;
-            if(identifier.indexOf(sub1) == -1)
-                continue;
-            if(sub2 != null && sub2.length > 0 && identifier.indexOf(sub2) == -1)
-                continue;
-            if(sub3 != null && sub3.length > 0 && identifier.indexOf(sub3) == -1)
+            var failed = false;
+            for(var aIx=3;aIx<arguments.length;aIx++) {
+                if(identifier.indexOf(arguments[aIx]) == -1) {
+                    failed = true;
+                    break;
+                }
+            }
+            if(failed)
                 continue;
             if(debug)
-                alert("mat_setCheckBoxesThatContain found '"+sub1+"','"+sub2+"','"+sub3+"' in '"+identifier+"'.");
+                alert("matSetCheckBoxesThatContain found '"+sub1+"' in '"+identifier+"'.");
 
-            if(ele.checked != state) {
-                if(!state) { 
+            if(!state) { 
+                if(ele.checked != state) {
                     ele.click();
+                } else if (force) {
+                    ele.click();
+                    ele.click();
+                }
+            } else {
+                if(views.length == 0) {
+                    if(ele.checked != state) {
+                        ele.click();
+                    } else if (force) {
+                        ele.click();
+                        ele.click();
+                    }
                 } else {
                     for(var vIx=0;vIx<views.length;vIx++) {
-                        if(identifier.indexOf("_"+views[vIx]) >= 0) {
-                            if(ele.checked != state) { // only turn on views that are on
+                        if(identifier.indexOf("_"+views[vIx]+"_") >= 0) {
+                            if(ele.checked != state) {
+                                ele.click();
+                            } else if (force) {
+                                ele.click();
                                 ele.click();
                             }
                             break;
@@ -80,17 +100,14 @@ function mat_setCheckBoxesThatContain(nameOrId, sub1, sub2, sub3, state)
                 }
             }
         }
-   } else if (document.all) {
+        retval = true;
+    } else if (document.all) {
         if(debug)
-            alert("mat_setCheckBoxesThatContain is unimplemented for this browser");
-   } else {
+            alert("matSetCheckBoxesThatContain is unimplemented for this browser");
+    } else {
         // NS 4.x - I gave up trying to get this to work.
         if(debug)
-           alert("mat_setCheckBoxesThatContain is unimplemented for this browser");
-   }
-}
-
-function mat_setCheckBoxesIdContains1(sub1, state)
-{
-    mat_setCheckBoxesThatContain('id',sub1, null, null, state);
+           alert("matSetCheckBoxesThatContain is unimplemented for this browser");
+    }
+    return retval;
 }
