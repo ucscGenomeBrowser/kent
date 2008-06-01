@@ -32,11 +32,13 @@ function setCheckBoxesWithPrefix(obj, prefix, state)
    }
 }
 
-function setCheckBoxesThatContain(nameOrId, sub1, sub2, sub3, state)
+function setCheckBoxesThatContain(nameOrId, state, force, sub1)
 {
-// Set all checkboxes with 1, 2 or 3 given substrings in NAME or ID to state boolean
-   if (document.getElementsByTagName)
-   {
+// Set all checkboxes which contain 1 or more given substrings in NAME or ID to state boolean
+// This can force the 'onclick() js of the checkbox, even if it is already in the state 
+    var retval = false;
+    if (document.getElementsByTagName)
+    {
         if(debug)
             alert("setCheckBoxesContains is about to set the checkBoxes to "+state);
         var list = document.getElementsByTagName('input');
@@ -47,51 +49,35 @@ function setCheckBoxesThatContain(nameOrId, sub1, sub2, sub3, state)
                  continue;
             if(nameOrId.search(/id/i) != -1)
                 identifier = ele.id;
-            if(identifier.indexOf(sub1) == -1)
-                continue;
-            if(sub2 != null && sub2.length > 0 && identifier.indexOf(sub2) == -1) 
-                continue;
-            if(sub3 != null && sub3.length > 0 && identifier.indexOf(sub3) == -1)
+            var failed = false;
+            for(var aIx=3;aIx<arguments.length;aIx++) {
+                if(identifier.indexOf(arguments[aIx]) == -1) { 
+                    failed = true;
+                    break;
+                }
+            }
+            if(failed)
                 continue;
             if(debug)
-                alert("setCheckBoxesContains found '"+sub1+"','"+sub2+"','"+sub3+"' in '"+identifier+"'.");
+                alert("setCheckBoxesContains found '"+sub1+"' in '"+identifier+"'.");
 
-            if(ele.checked != state) 
-                ele.click();  // Forces onclick() javascript to run 
+            if(ele.checked != state) {
+                    ele.click();
+            } else if (force) {
+                ele.click();    
+                ele.click();    //force onclick event
+            }
         }
-   } else if (document.all) {
+        retval = true;
+    } else if (document.all) {
         if(debug)
             alert("setCheckBoxesContains is unimplemented for this browser");
-   } else {
+    } else {
         // NS 4.x - I gave up trying to get this to work.
         if(debug)
            alert("setCheckBoxesContains is unimplemented for this browser");
-   }
-}
-
-function setCheckBoxesIdContains3(sub1, sub2, sub3, state)
-{
-    setCheckBoxesThatContain('id',sub1, sub2, sub3, state);
-}
-function setCheckBoxesIdContains2(sub1, sub2, state)
-{
-    setCheckBoxesThatContain('id',sub1, sub2, null, state);
-}
-function setCheckBoxesIdContains1(sub1, state)
-{
-    setCheckBoxesThatContain('id',sub1, null, null, state);
-}
-function setCheckBoxesNameContains3(sub1, sub2, sub3, state)
-{
-    setCheckBoxesThatContain('name',sub1, sub2, sub3, state);
-}
-function setCheckBoxesNameContains2(sub1, sub2, state)
-{
-    setCheckBoxesThatContain('name',sub1, sub2, null, state);
-}
-function setCheckBoxesNameContains1(sub1, state)
-{
-    setCheckBoxesThatContain('name',sub1, null, null, state);
+    }
+    return retval;
 }
 
 function getViewsSelected(nameMatches,on)
