@@ -15,7 +15,7 @@
 #endif /* GBROWSE */
 #include <signal.h>
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.103 2008/05/27 22:44:27 angie Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.104 2008/06/01 14:58:25 tdreszer Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -990,7 +990,7 @@ safef(buf, sizeof(buf), "%s%s", cgiBooleanShadowPrefix(), name);
 return cgiVarExists(buf);
 }
 
-void cgiMakeCheckBoxWithOptionalIdAndHtml(char *name, boolean checked, char *id, char *moreHtml)
+static void cgiCommonMakeCheckBox(char *name, boolean checked, char *id, char *moreHtml)
 /* Make check box - designed to be called by the variously overloaded
  * cgiMakeCheckBox functions, and should NOT be called directly.
  * moreHtml: optional additional html like javascript call or mouseover msg (may be NULL)
@@ -1025,36 +1025,36 @@ if(msg)
 else
     buf[0] = 0;
 
-cgiMakeCheckBoxWithOptionalIdAndHtml(name, checked, id, buf);
+cgiCommonMakeCheckBox(name, checked, id, buf);
 }
 
 void cgiMakeCheckBoxWithMsg(char *name, boolean checked, char *msg)
 {
-cgiMakeCheckBoxWithOptionalIdAndHtml(name, checked, NULL, msg);
+cgiCommonMakeCheckBox(name, checked, NULL, msg);
 }
 
 void cgiMakeCheckBoxWithId(char *name, boolean checked, char *id)
 /* Make check box, which includes an ID. */
 {
-cgiMakeCheckBoxWithOptionalIdAndHtml(name, checked, id, NULL);
+cgiCommonMakeCheckBox(name, checked, id, NULL);
 }
 
 void cgiMakeCheckBox(char *name, boolean checked)
 /* Make check box. */
 {
-cgiMakeCheckBoxWithOptionalIdAndHtml(name, checked, NULL, NULL);
+cgiCommonMakeCheckBox(name, checked, NULL, NULL);
 }
 
 void cgiMakeCheckBoxJS(char *name, boolean checked, char *javascript)
 /* Make check box with javascript. */
 {
-cgiMakeCheckBoxWithOptionalIdAndHtml(name,checked,NULL,javascript);
+cgiCommonMakeCheckBox(name,checked,NULL,javascript);
 }
 
 void cgiMakeCheckBoxIdAndJS(char *name, boolean checked, char *id, char *javascript)
 /* Make check box with ID and javascript. */
 {
-cgiMakeCheckBoxWithOptionalIdAndHtml(name,checked,id,javascript);
+cgiCommonMakeCheckBox(name,checked,id,javascript);
 }
 
 void cgiMakeHiddenBoolean(char *name, boolean on)
