@@ -144,7 +144,7 @@ cut -f 2 chrom.sizes | ave stdin
     # 732765485 bases of 2663369733 (27.513%) in intersection
 
     # RepeatMasker and lib version from do.log:
-    #    RepeatMasker version development-$Id: cavPor3.txt,v 1.7 2008/05/30 21:17:08 markd Exp $
+    #    RepeatMasker version development-$Id: cavPor3.txt,v 1.8 2008/06/01 15:14:30 tdreszer Exp $
     #    Jan 11 2008 (open-3-1-9) version of RepeatMasker
     #    CC   RELEASE 20071204;
 
@@ -2323,6 +2323,12 @@ done >> togetherMaf/cavPor3.7way.maf
     # real    7m7.421s
     # user    1m50.625s
     # sys     0m34.191s
+
+### ### ###################################################################
+### ### #### Abandoning 7-Way because I am adding Squirrel 2008-05-27 #####
+### ### ###################################################################
+
+
 # ### >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> got this far 
 # ### >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> got this far 
 # ### >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> got this far 
@@ -2337,6 +2343,339 @@ done >> togetherMaf/cavPor3.7way.maf
 ################## EVERYTHING THAT FOLLOWS IS TEMPLATE FOR WHAT NEEDS TO BE DONE ######################
 
     
+#########################################################################
+## 8-Way Multiz (STARTED - 2008-05-27 - Tim)
+##
+
+    #   the all.chain.gz files were split up via kluster jobs on memk
+    #   in order to get mafSynNet files.  Example above in ornAna1 blastz
+    ssh hgwdev
+    mkdir /cluster/data/cavPor3/bed/multiz8way
+    cd /cluster/data/cavPor3/bed/multiz8way
+    #   take the 30-way tree from mm9 and eliminate genomes not in
+    #   this alignment
+    #   rearrange to get cavPor3 on the top of the graph
+    #   paste this tree into the on-line phyloGif tool:
+    #   http://genome.ucsc.edu/cgi-bin/phyloGif
+    #   to create the image for the tree diagram
+    
+    ### Note the ground squirrel (Spermophilus tridecemlineatus) is not in the mm9 30-way
+    ### Add it a same distance from other rodents as rabbit
+
+    #   select the 7 organisms from the 30-way recently done on mouse mm9
+    /cluster/bin/phast/tree_doctor \
+--prune-all-but Human_hg18,Mouse_mm9,Rat_rn4,GuineaPig_cavPor2,Rabbit_oryCun1,Opossum_monDom4,Chicken_galGal3 \
+    /cluster/data/mm9/bed/multiz30way/mm9OnTop.fullNames.nh \
+    | sed -e "s/cavPor2/cavPor3/g" > 7-way.fullNames.nh
+
+    #   looks something like this:
+    # ((((((Mouse_mm9:0.076274,Rat_rn4:0.084383):0.200607,GuineaPig_cavPor3:0.202990):0.034350,Rabbit_oryCun1:0.208548):0.014587
+    # ,Human_hg18:0.126901):0.263313,Opossum_monDom4:0.320721):0.207444,Chicken_galGal3:0.488824);
+
+    #   rearrange to get guineaPig at the top:
+    # this leaves us with:
+    cat << _EOF_ > cavPor3.7-way.nh
+(((((GuineaPig_cavPor3:0.202990,(Mouse_mm9:0.076274,Rat_rn4:0.084383):0.200607):0.034350,Rabbit_oryCun1:0.208548):0.014587,Human_hg18:0.126901):0.263313,Opossum_monDom4:0.320721):0.207444,Chicken_galGal3:0.488824);
+_EOF_
+    #   << happy emacs
+    
+    # Add squirrel at same distance to guinneaPig and Mouse as rabbits:
+   # Alternative tree: ((((((GuineaPig_cavPor3:0.202990,(Mouse_mm9:0.076274,Rat_rn4:0.084383):0.200607):0.017175,Squirrel_speTri0:0.208548):0.017175,Rabbit_oryCun1:0.208548):0.014587,Human_hg18:0.126901):0.263313,Opossum_monDom4:0.320721):0.207444,Chicken_galGal3:0.488824);
+    cat << _EOF_ > cavPor3.8-way.nh
+(((((GuineaPig_cavPor3:0.202990,((Mouse_mm9:0.076274,Rat_rn4:0.084383):0.18602,Squirrel_speTri0:0.208548):0.014587):0.034350,Rabbit_oryCun1:0.208548):0.014587,Human_hg18:0.126901):0.263313,Opossum_monDom4:0.320721):0.207444,Chicken_galGal3:0.488824);
+_EOF_
+    #   << happy emacs
+    
+    cd /cluster/data/cavPor3/bed/multiz8way
+    cp ../multiz7way/species.list .
+    echo speTri0 >> species.list
+    
+    # verify all blastz's exists
+    cat << \_EOF_ > listMafs.csh
+#!/bin/csh -fe
+cd /cluster/data/cavPor3/bed/multiz8way
+foreach db (`grep -v cavPor3 species.list`)
+    set bdir = /cluster/data/cavPor3/bed/blastz.$db
+    if (-e $bdir/mafRBestNet/cavPor3.$db.rbest.maf.gz) then
+    echo "$db mafRBestNet"
+    else if (-e $bdir/mafSynNet/cavPor3.$db.syn.maf.gz) then
+    echo "$db mafSynNet"
+    else if (-e $bdir/mafNet/cavPor3.$db.net.maf.gz) then
+    echo "$db mafNet"
+    else
+    echo "$db mafs not found"
+    endif
+end
+_EOF_
+    # << happy emacs
+    chmod +x ./listMafs.csh
+    #   see what it says:
+    ./listMafs.csh
+    # galGal3 mafNet
+    # hg18 mafNet
+    # mm9 mafNet
+    # monDom4 mafNet
+    # oryCun1 mafRBestNet
+    # rn4 mafNet
+    # speTri0 mafs not found
+
+    /cluster/bin/phast/all_dists cavPor3.7-way.nh > 7way.distances.txt
+    #    ERROR: Can't parse distance in tree ("0.014587
+    #").
+    #[hgwdev:tdreszer multiz7way> m cavPor3.7-way.nh 
+    # (((((GuineaPig_cavPor3:0.202990,(Mouse_mm9:0.076274,Rat_rn4:0.084383):0.200607):0.034350,Rabbit_oryCun1:0.208548):0.014587
+    # ,Human_hg18:0.126901):0.263313,Opossum_monDom4:0.320721):0.207444,Chicken_galGal3:0.488824);
+    # Problem is that tree should not contain 'n' so reecho and retry
+    m 7way.distances.txt
+    # GuineaPig_cavPor3       Mouse_mm9       0.479871
+    # GuineaPig_cavPor3       Rat_rn4 0.487980
+    # GuineaPig_cavPor3       Rabbit_oryCun1  0.445888
+    # GuineaPig_cavPor3       Human_hg18      0.378828
+    # GuineaPig_cavPor3       Opossum_monDom4 0.835961
+    # GuineaPig_cavPor3       Chicken_galGal3 1.211508
+    # Mouse_mm9       Rat_rn4 0.160657
+    # Mouse_mm9       Rabbit_oryCun1  0.519779
+    # Mouse_mm9       Human_hg18      0.452719
+    # Mouse_mm9       Opossum_monDom4 0.909852
+    # Mouse_mm9       Chicken_galGal3 1.285399
+    # Rat_rn4 Rabbit_oryCun1  0.527888
+    # Rat_rn4 Human_hg18      0.460828
+    # Rat_rn4 Opossum_monDom4 0.917961
+    # Rat_rn4 Chicken_galGal3 1.293508
+    # Rabbit_oryCun1  Human_hg18      0.350036
+    # Rabbit_oryCun1  Opossum_monDom4 0.807169
+    # Rabbit_oryCun1  Chicken_galGal3 1.182716
+    # Human_hg18      Opossum_monDom4 0.710935
+    # Human_hg18      Chicken_galGal3 1.086482
+    # Opossum_monDom4 Chicken_galGal3 1.016989
+    # (total) -       2.228942
+
+    grep -i cavPor 7way.distances.txt | sort -k3,3n
+    # GuineaPig_cavPor3       Human_hg18      0.378828
+    # GuineaPig_cavPor3       Rabbit_oryCun1  0.445888
+    # GuineaPig_cavPor3       Mouse_mm9       0.479871
+    # GuineaPig_cavPor3       Rat_rn4         0.487980
+    # GuineaPig_cavPor3       Opossum_monDom4 0.835961
+    # GuineaPig_cavPor3       Chicken_galGal3 1.211508
+    
+    # Note that guinneaPig is closer to human than to other rodents.  
+    # This may be reasonable, since the speed of evolution (length of tree limbs) 
+    # in rodents is greater than for primates.  For instance mm9 is closer to hg18
+    # than it is to either cavPor2 or oryCun1
+    
+    #   use the calculated
+    #   distances in the table below to order the organisms and check
+    #   the button order on the browser.
+    #   And if you can fill in the table below entirely, you have
+    #   succeeded in finishing all the alignments required.
+    #
+    #                         featureBits chainLink measures
+    #                                    chainCavPor3Link   chain   linearGap
+    # distance                     on cavPor3    on other   minScore
+    # 0.479871 Mouse_mm9           (28.900%)     (29.330%)  3000     medium
+    # 0.487980 Rat_rn4             (27.858%)     (27.602%)  3000     medium
+    # 0.445888 Rabbit_oryCun1      (35.145%)     (28.238%)  3000     medium
+    # 0.378828 Human_hg18          (43.971%)     (48.132%)  3000     medium
+    # 0.835961 Opossum_monDom4      (9.540%)     (14.372%)  5000     loose
+    # 1.211508 Chicken_galGal3     (10.190%)      (5.437%)  5000     loose
+    ### ### ### ### Be sure to use calJac as an example because of scaffolds
+    ### ### ### ### will require making maf files by scaffold name
+
+    #   create a coherent set of all the mafs involved in this run
+    mkdir mafLinks
+    cd mafLinks
+    ln -s ../../blastz.hg18/mafNet ./hg18
+    ln -s ../../blastz.mm9/mafNet ./mm9
+    ln -s ../../blastz.rn4/mafNet ./rn4
+    ln -s ../../blastz.monDom4/mafNet ./monDom4
+    ln -s ../../blastz.galGal3/mafNet ./galGal3
+    ln -s ../../blastz.oryCun1/mafRBestNet ./oryCun1
+
+    #   check data size:
+    du -hscL *
+    # 100M    galGal3
+    # 930M    hg18
+    # 577M    mm9
+    # 268M    monDom4
+    # 495M    oryCun1
+    # 543M    rn4
+    # 2.9G    total
+
+    #   need to split these things up by Contig number for efficient kluster run
+    ssh kkstore06
+    mkdir -p /san/sanvol1/scratch/cavPor3/multiz7way/contigMaf
+    cd /scratch/tmp
+    #   the 16201 is from petMar/chrom.sizes
+    echo "chrM 0 16801" > chrM.bed
+
+    for D in `grep -v cavPor3 /cluster/data/cavPor3/bed/multiz7way/species.list`
+do
+    echo ${D}
+    zcat \
+/cluster/data/cavPor3/bed/multiz7way/mafLinks/cavPor3.${D}.*.maf.gz \
+    > ${D}.maf
+    mkdir /scratch/tmp/${D}
+    cd /scratch/tmp/${D}
+    mafSplit -verbose=2 /dev/null -byTarget -useHashedName=10 Contig \
+    ../${D}.maf -outDirDepth=2
+    mafsInRegion ../chrM.bed 0/0/chrM.maf ../${D}.maf
+    rsync -a --progress ./ \
+    /san/sanvol1/scratch/cavPor3/multiz7way/contigMaf/${D}
+    cd /scratch/tmp
+    rm -fr ${D} ${D}.maf
+done
+    
+    #   create a run-time list of contigs to operate on, not all contigs
+    #   exist in all alignments, but we want all contig names used in any
+    #   alignment:
+    ssh kkstore05 # cavPor3 -> store12 -> kkstore05
+    cd /san/sanvol1/scratch/cavPor3/multiz7way/contigMaf
+    for D in *
+do
+    cd "${D}"
+    find . -type f
+    cd ..
+done | sort -u > /tmp/7-way.contig.list
+    wc -l /tmp/7-way.contig.list
+    mkdir /cluster/data/cavPor3/bed/multiz7way/splitRun
+    cp -p /tmp/7-way.contig.list \
+    /cluster/data/cavPor3/bed/multiz7way/splitRun
+    #   296 /tmp/7-way.contig.list
+
+    # ready for the multiz run
+    ssh pk
+    cd /cluster/data/cavPor3/bed/multiz7way/splitRun
+    mkdir -p maf run
+    cd run
+    mkdir penn
+    # use latest penn utilities
+    P=/cluster/bin/penn/multiz.v11.2007-03-19/multiz-tba
+    cp -p $P/{autoMZ,multiz,maf_project} penn
+
+    #   set the db and pairs directories here
+    cat > autoMultiz.csh << \_EOF_
+#!/bin/csh -ef
+set db = cavPor3
+set subdir = $1
+set c = $2
+set result = $3
+set resultDir = $result:h
+set run = `pwd`
+set tmp = /scratch/tmp/$db/multiz.$c
+set pairs = /san/sanvol1/scratch/$db/multiz7way/contigMaf
+rm -fr $tmp
+mkdir -p $tmp
+mkdir -p $resultDir
+cp ../../tree.7.nh ../../species.list $tmp
+pushd $tmp
+foreach s (`grep -v $db species.list`)
+    set in = $pairs/$s/$subdir/$c.maf
+    set out = $db.$s.sing.maf
+    if (-e $in.gz) then
+        zcat $in.gz > $out
+    else if (-e $in) then
+        cp $in $out
+    else
+        echo "##maf version=1 scoring=autoMZ" > $out
+    endif
+end
+set path = ($run/penn $path); rehash
+$run/penn/autoMZ + T=$tmp E=$db "`cat tree.7.nh`" $db.*.sing.maf $c.maf
+popd
+cp $tmp/$c.maf $result
+rm -fr $tmp
+rmdir --ignore-fail-on-non-empty /scratch/tmp/$db
+_EOF_
+# << happy emacs
+    chmod +x autoMultiz.csh
+
+    cat  << \_EOF_ > template
+#LOOP
+./autoMultiz.csh $(dir1) $(root1) {check out line+ /cluster/data/cavPor3/bed/multiz7way/splitRun/maf/$(dir1)/$(root1).maf}
+#ENDLOOP
+_EOF_
+    # << emacs
+
+    sed -e "s/^\.\///" ../7-way.contig.list \
+    | gensub2 stdin single template jobList
+
+    para create jobList
+    para try ... check ... 
+    # Checking finished jobs
+    # Completed: 10 of 296 jobs
+    # CPU time in finished jobs:       4355s      72.59m     1.21h    0.05d  0.000 y
+    # IO & Wait Time:                   104s       1.73m     0.03h    0.00d  0.000 y
+    # Average job time:                 446s       7.43m     0.12h    0.01d
+    # Longest running job:                0s       0.00m     0.00h    0.00d
+    # Longest finished job:            1672s      27.87m     0.46h    0.02d
+    # Submission to last job:          1681s      28.02m     0.47h    0.02d
+    # Estimated complete:                 0s       0.00m     0.00h    0.00d
+    # [pk:tdreszer run> pc
+    # 296 jobs in batch
+    # 92505 jobs (including everybody's) in Parasol queue.
+    # Checking finished jobs
+    # unsubmitted jobs: 286
+    # ranOk: 10
+    # total jobs in batch: 296
+    para push ... check ... etc
+    # Completed: 296 of 296 jobs
+    # CPU time in finished jobs:      53659s     894.32m    14.91h    0.62d  0.002 y
+    # IO & Wait Time:                  1675s      27.92m     0.47h    0.02d  0.000 y
+    # Average job time:                 187s       3.12m     0.05h    0.00d
+    # Longest running job:                0s       0.00m     0.00h    0.00d
+    # Longest finished job:            1969s      32.82m     0.55h    0.02d
+    # Submission to last job:          4023s      67.05m     1.12h    0.05d
+    # Estimated complete:                 0s       0.00m     0.00h    0.00d
+    # [pk:tdreszer run> pc
+    # 296 jobs in batch
+    # 84971 jobs (including everybody's) in Parasol queue.
+    # Checking finished jobs
+    # ranOk: 296
+    # total jobs in batch: 296
+    
+    # put the split maf results back together into a single maf file
+    #   eliminate duplicate comments
+    ssh kkstore05
+    cd /cluster/data/cavPor3/bed/multiz7way
+    mkdir togetherMaf
+    grep "^##maf version" splitRun/maf/0/0/Contig00700.maf \
+    | sort -u > togetherMaf/cavPor3.7way.maf
+    ##maf version=1 scoring=autoMZ.v1
+    ##maf version=1 scoring=maf_project.v12
+    ##maf version=1 scoring=multiz
+
+    for F in `find ./splitRun/maf -type f -depth`
+do
+    grep -h "^#" "${F}" | egrep -v "maf version=1|eof maf" \
+    | sed -e "s#/_MZ_[^ ]* # #g; s#__[0-9]##g"
+done | sort -u >> togetherMaf/cavPor3.7way.maf
+    for F in `find ./splitRun/maf -type f -depth`
+do
+    grep -v -h "^#" "${F}"
+done >> togetherMaf/cavPor3.7way.maf
+
+    grep "^##eof maf" splitRun/maf/0/0/Contig00700.maf \
+    | sort -u >> togetherMaf/cavPor3.7way.maf
+
+    # load tables for a look
+    ssh hgwdev
+    mkdir -p /gbdb/cavPor3/multiz7way/maf
+    ln -s /cluster/data/cavPor3/bed/multiz7way/togetherMaf/*.maf \
+                /gbdb/cavPor3/multiz7way/maf/multiz7way.maf
+    # this generates an immense multiz7way.tab file in the directory
+    #   where it is running.  Best to run this over in scratch.
+    cd /scratch/tmp
+    time nice -n +19 hgLoadMaf \
+    -pathPrefix=/gbdb/cavPor3/multiz7way/maf cavPor3 multiz7way
+    # Advisory lock created
+    # Indexing and tabulating /gbdb/cavPor3/multiz7way/maf/multiz7way.maf
+    # Loading multiz7way into database
+    # Loaded 6939217 mafs in 1 files from /gbdb/cavPor3/multiz7way/maf
+    # Advisory lock has been released
+    # 
+    # real    7m7.421s
+    # user    1m50.625s
+    # sys     0m34.191s
     
     
     
@@ -3237,3 +3576,195 @@ see doc/builds.txt for specific details.
     # set search regex to
     termRegex scaffold_[0-9]+\.[0-9]+\.[0-9]+
 ############################################################################
+
+
+# ### Found this in Kate's unchecked in cavPor3.txt.  I need it to continue the blastz to get the maf for multiz !!
+# ### #############################################################################
+# ### <<<<<<< cavPor3.txt
+# ### # BLASTZ/CHAIN/NET 2X Ground squirrel: speTri0 (In progress 2008-05-16 kate)
+# ### 
+# ###     ssh kkstore05
+# ###     cd /cluster/data/cavPor3/bed
+# ###     mkdir blastzSpeTri0.2008-05-16
+# ###     cd blastzSpeTri0.2008-05-16
+# ### 
+# ###     cat << '_EOF_' > DEF
+# ### # Mouse vs. Ground squirrel
+# ### 
+# ### BLASTZ_M=50
+# ### 
+# ### # TARGET: Mouse MM9
+# ### SEQ1_DIR=/scratch/data/cavPor3/cavPor3.2bit
+# ### SEQ1_LEN=/cluster/data/cavPor3/chrom.sizes 
+# ### SEQ1_CHUNK=10000000
+# ### SEQ1_LAP=10000
+# ### 
+# ### # QUERY: Ground squirrel speTri0
+# ### SEQ2_DIR=/scratch/data/speTri0/speTri0.2bit
+# ### SEQ2_LEN=/cluster/data/speTri0/chrom.sizes
+# ### SEQ2_CHUNK=30000000
+# ### SEQ2_LIMIT=500
+# ### SEQ2_LAP=0
+# ### 
+# ### BASE=/cluster/data/cavPor3/bed/blastzSpeTri0.2008-05-16
+# ### TMPDIR=/scratch/tmp
+# ### '_EOF_'
+# ###     # << happy emacs
+# ### 
+# ###     doBlastzChainNet.pl `pwd`/DEF -bigClusterHub=pk  \
+# ###       -chainMinScore=3000 -chainLinearGap=medium >& do.log &
+# ### 
+# ###     # got here
+# ###     ln -s blastzSpeTri0.2008-05-16 /cluster/data/cavPor3/bed/blastzSpeTri0
+# ### =======
+ln -s blastzSpeTri0.2008-05-16 /cluster/data/cavPor3/bed/blastz.speTri0
+
+    # ### 1 crashed job in axtChain:
+    # ssh mkr0u7
+zcat ../../pslParts/cavPor3.2bit\:scaffold_7\:*.psl.gz \
+ | axtChain -psl -verbose=0  -minScore=3000 -linearGap=medium stdin \
+     /scratch/data/cavPor3/cavPor3.2bit \
+     /scratch/data/speTri0/speTri0.2bit \
+     tmp.chain &
+    # invalid unsigned number: "2"
+    ### divide and conquer
+     ll ../../pslParts/cavPor3.2bit\:scaffold_7\:*.psl.gz -rw-rw-r--  1 kate protein 25560954 May 18 08:12 ../../pslParts/cavPor3.2bit:scaffold_7:0-10010000.psl.gz
+-rw-rw-r--  1 kate protein 28831900 May 18 08:13 ../../pslParts/cavPor3.2bit:scaffold_7:10000000-20010000.psl.gz
+-rw-rw-r--  1 kate protein 25466248 May 18 08:13 ../../pslParts/cavPor3.2bit:scaffold_7:20000000-30010000.psl.gz
+-rw-rw-r--  1 kate protein 26433148 May 18 08:13 ../../pslParts/cavPor3.2bit:scaffold_7:30000000-40010000.psl.gz
+-rw-rw-r--  1 kate protein 38048425 May 18 08:13 ../../pslParts/cavPor3.2bit:scaffold_7:40000000-50010000.psl.gz
+-rw-rw-r--  1 kate protein 24145256 May 18 08:13 ../../pslParts/cavPor3.2bit:scaffold_7:50000000-60010000.psl.gz
+-rw-rw-r--  1 kate protein  7480033 May 18 08:13 ../../pslParts/cavPor3.2bit:scaffold_7:60000000-61004451.psl.gz
+zcat ../../pslParts/cavPor3.2bit\:scaffold_7\:0-*.psl.gz \
+ | axtChain -psl -verbose=0  -minScore=3000 -linearGap=medium stdin \
+     /scratch/data/cavPor3/cavPor3.2bit \
+     /scratch/data/speTri0/speTri0.2bit \
+     tmp.chain &
+     # Error reading 4 bytes: Success
+zcat ../../pslParts/cavPor3.2bit\:scaffold_7\:40*.psl.gz \
+ | axtChain -psl -verbose=0  -minScore=3000 -linearGap=medium stdin \
+     /scratch/data/cavPor3/cavPor3.2bit \
+     /scratch/data/speTri0/speTri0.2bit \
+     tmp.chain &
+     # invalid unsigned number: "2"
+     mv ../../pslParts/cavPor3.2bit\:scaffold_7\:40000000-50010000.psl.gz ../../pslParts/cavPor3.2bit\:scaffold_7\:40000000-50010000.psl.gz.bad
+zcat ../../pslParts/cavPor3.2bit\:scaffold_7\:*.psl.gz \
+ | axtChain -psl -verbose=0  -minScore=3000 -linearGap=medium stdin \
+     /scratch/data/cavPor3/cavPor3.2bit \
+     /scratch/data/speTri0/speTri0.2bit \
+     tmp.chain &
+     #Error reading 4 bytes: Success
+     
+     ssh pk; para shove -retries=6
+    # 233 jobs in batch
+    # 503 jobs (including everybody's) in Parasol queue.
+    # Checking finished jobs
+    # Completed: 233 of 233 jobs
+    # CPU time in finished jobs:     116206s    1936.77m    32.28h    1.34d  0.004 y
+    # IO & Wait Time:                  3377s      56.28m     0.94h    0.04d  0.000 y
+    # Average job time:                 513s       8.55m     0.14h    0.01d
+    # Longest running job:                0s       0.00m     0.00h    0.00d
+    # Longest finished job:            8500s     141.67m     2.36h    0.10d
+    # Submission to last job:        967976s   16132.93m   268.88h   11.20d
+    # Estimated complete:                 0s       0.00m     0.00h    0.00d
+
+    ### ############## Now need to restart the blastz:
+    tail do.log
+    # Command failed:
+    # ssh -x kki nice /cluster/data/cavPor3/bed/blastzSpeTri0.2008-05-16/axtChain/run/doChainRun.csh
+ 
+    ssh kkstore05 # store12->kkstore05
+    cd /cluster/data/cavPor3/bed/blastz.speTri0
+    screen 
+
+    time nice -n +19 doBlastzChainNet.pl `pwd`/DEF -bigClusterHub=pk  \
+       -chainMinScore=3000 -chainLinearGap=medium -continue chainMerge >> do.log 2>&1 
+    # real    220m10.699s
+    # tail do.log
+    # writing /dev/null
+    # memory usage 2419843072, utime 5416 s/100, stime 389
+    # netChainSubset -verbose=0 noClass.net cavPor3.speTri0.all.chain.gz stdout
+    # chainStitchId stdin stdout
+    # gzip -c
+    # Killed
+    # 
+    # gzip: stdout: Broken pipe
+    # Command failed:
+    # ssh -x kolossus nice /cluster/data/cavPor3/bed/blastzSpeTri0.2008-05-16/axtChain/netChains.csh
+    
+    cp netChain.csh netChain.restart.csh
+    # edit to restart in correct place
+    ./netChain.restart.csh
+
+
+
+
+
+    # NOTE: be sure to ls the data in above script on workhorse machine before starting script
+    time nice -n +19 doBlastzChainNet.pl `pwd`/DEF \
+    -bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+        -syntenicNet > do.log 2>&1 
+    # <ctl-A><ctl-d>  ps -ef | grep blastzCavPor3
+    # real    1764m55.155s
+    tail do.log
+    #  *** All done!
+    # *** Make sure that goldenPath/mm9/vsCavPor3/README.txt is accurate.
+    # *** Add {chain,net}CavPor3 tracks to trackDb.ra if necessary.
+    # blastz: ranOk: 52984
+    cat fb.mm9.chainCavPor3Link.txt
+    #    757283793 bases of 2620346127 (28.900%) in intersection
+
+    cd /cluster/data/mm9/bed/blastzCavPor3.2008-04-10
+    ######### Change locations in DEF due to Hiram's new methods    
+    cat << \_EOF_ > DEF
+BLASTZ_M=50
+
+# TARGET: Mouse Mm9
+SEQ1_DIR=/scratch/data/mm9/nib
+SEQ1_LEN=/scratch/data/mm9/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: GuineaPig cavPor3
+SEQ2_DIR=/scratch/data/cavPor3/cavPor3.2bit
+SEQ2_LEN=/scratch/data/cavPor3/chrom.sizes
+# Maximum number of scaffolds that can be lumped together
+SEQ2_LIMIT=300
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm9/bed/blastzCavPor3.2008-04-10
+TMPDIR=/scratch/tmp
+_EOF_
+
+    mkdir /cluster/data/cavPor3/bed/blastz.mm9.swap
+    cd /cluster/data/cavPor3/bed/blastz.mm9.swap
+    time nice -n +19 doBlastzChainNet.pl \
+    /cluster/data/mm9/bed/blastzCavPor3.2008-04-10/DEF \
+    -bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+        -swap -syntenicNet > do.log 2>&1 &
+    # real   166m53.671s
+    # Exit 25   time nice -n +19 doBlastzChainNet.pl /cluster/data/mm9/bed/blastzCavPor3.2008-04-10/DEF -bigC
+    # Can't open chain/scaffold_795.chain to append: Too many open files
+    # gzip: stdout: Broken pipe
+    # Command failed:
+    # ssh -x kolossus nice /cluster/data/cavPor3/bed/blastz.mm9.swap/axtChain/netSynteny.csh
+
+    #   broken down during netSynteny.csh due to too many open files on
+    #   a chainSplit
+    #   However, there is no need to split when we have scaffolds.
+    #   Kate fixes doBlastzChainNet.pl and retry:
+
+    cd /cluster/data/cavPor3/bed/blastz.mm9.swap
+    time nice -n +19 ~kate/kent/src/hg/utils/automation/doBlastzChainNet.pl \
+    /cluster/data/mm9/bed/blastzCavPor3.2008-04-10/DEF \
+    -bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+        -swap -continue=syntenicNet -syntenicNet > syn.log 2>&1 &
+    # real    24m37.561s
+    # *** All done!
+    # *** Make sure that goldenPath/cavPor3/vsMm9/README.txt is accurate.
+    # *** Add {chain,net}Mm9 tracks to trackDb.ra if necessary.
+    cat fb.cavPor3.chainMm9Link.txt
+    # 781173609 bases of 2663369733 (29.330%) in intersection
+
+
