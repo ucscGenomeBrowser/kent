@@ -38,7 +38,7 @@
 #include "wikiLink.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1480 2008/05/31 14:13:51 braney Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1481 2008/06/02 16:01:31 markd Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -3315,6 +3315,9 @@ hPrintf("<CENTER>\n");
 
 if (!hideControls)
     {
+    /* set white-space to nowrap to prevent buttons from wrapping when screen is
+     * narrow */
+    hPrintf("<DIV STYLE=\"white-space:nowrap;\">\n");
     hotLinks();
 
     /* Show title . */
@@ -3644,6 +3647,7 @@ if (showTrackControls)
                 }
 	    }
 	}
+    hPrintf("</DIV>\n");
     }
 if (showTrackControls)
     hButton("submit", "refresh");
@@ -4337,10 +4341,7 @@ organization = (hIsGsidServer() ? "GSID" : organization);
 htmlPushEarlyHandlers();
 cgiSpoof(&argc, argv);
 htmlSetBackground(hBackgroundImage());
-/* set white-space to nowrap to prevent buttons from wrapping when screen is
- * narrow */
-htmlSetStyle("<LINK REL=\"STYLESHEET\" HREF=\"../style/HGStyle.css\" TYPE=\"text/css\">\n"
-             "<STYLE TYPE=\"text/css\">*{white-space:nowrap;} </STYLE>"); 
+htmlSetStyle("<LINK REL=\"STYLESHEET\" HREF=\"../style/HGStyle.css\" TYPE=\"text/css\">\n"); 
 oldVars = hashNew(10);
 if (hIsGsidServer())
 	cartHtmlShell("GSID Sequence View", doMiddle, hUserCookie(), excludeVars, oldVars);
