@@ -38,7 +38,7 @@
 #include "wikiLink.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1481 2008/06/02 16:01:31 markd Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1482 2008/06/03 17:43:48 angie Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -1225,7 +1225,7 @@ if (track->limitedVis != tvHide)
     mapBoxToggleVis(hvg, trackPastTabX, y+1, 
                     trackPastTabWidth, insideHeight, parentTrack);
     y += fontHeight;
-    y += track->height;
+    y += track->totalHeight(track, track->limitedVis);
     }
 return y;
 }
