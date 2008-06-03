@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-static char const rcsid[] = "$Id: hgConfig.c,v 1.17 2008/06/03 01:03:34 markd Exp $";
+static char const rcsid[] = "$Id: hgConfig.c,v 1.18 2008/06/03 23:17:56 markd Exp $";
 
 #include "common.h"
 #include "hash.h"
@@ -18,7 +18,7 @@ static char const rcsid[] = "$Id: hgConfig.c,v 1.17 2008/06/03 01:03:34 markd Ex
 #define USER_CONFIG_FILE ".hg.conf"
 
 // forwards
-static void parseConfigFile(struct lineFile *lf, int depth);
+static void parseConfigFile(char *filename, int depth);
 
 /* the hash holding the config options */
 static struct hash* cfgOptionsHash = 0;
@@ -35,7 +35,7 @@ static boolean firstTime = TRUE;
 static boolean result = FALSE;
 if (firstTime)
     {
-    result = (cgiIsOnWeb() || ((getenv("QUERY_STRING") != NULL) && (strstr(getenv("QUERY_STRING"), "cgiSpoof") != NULL)));
+    result = ((cgiIsOnWeb()) && !((getenv("QUERY_STRING") != NULL) && (strstr(getenv("QUERY_STRING"), "cgiSpoof") != NULL)));
     firstTime = FALSE;
     }
 return result;
@@ -110,11 +110,7 @@ else
     // use as-is
     safecpy(incfile, sizeof(incfile),  relfile);
     }
-// parse file
-checkConfigPerms(incfile);
-struct lineFile *incLf = lineFileOpen(incfile, TRUE);
-parseConfigFile(incLf, depth+1);
-lineFileClose(&incLf);
+parseConfigFile(incfile, depth+1);
 }
 
 static void parseConfigLine(struct lineFile *lf, int depth, char *line)
@@ -142,9 +138,11 @@ else
     }
 }
 
-static void parseConfigFile(struct lineFile *lf, int depth)
-/* parse an opened config file */
+static void parseConfigFile(char *filename, int depth)
+/* open and parse a config file */
 {
+checkConfigPerms(filename);
+struct lineFile *lf = lineFileOpen(filename, TRUE);
 char *line;
 while(lineFileNext(lf, &line, NULL))
     {
@@ -153,23 +151,16 @@ while(lineFileNext(lf, &line, NULL))
     if (!((p[0] == '#') || (p[0] == '\0'))) 
         parseConfigLine(lf, depth, line);
     }
+lineFileClose(&lf);
 }
 
 static void initConfig()
 /* create and initilize the config hash */
 {
-struct lineFile *lf;
 char filename[PATH_LEN];
-
 cfgOptionsHash = newHash(6);
 getConfigFile(filename);
-
-/* parse; if the file is not there or can't be read, leave the hash empty */
-if((lf = lineFileMayOpen(filename, TRUE)) != NULL)
-    {
-    parseConfigFile(lf, 0);
-    lineFileClose(&lf);
-    }
+parseConfigFile(filename, 0);
 }
 
 char* cfgOption(char* name)
