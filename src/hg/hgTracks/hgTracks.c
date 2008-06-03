@@ -36,9 +36,10 @@
 #include "liftOver.h"
 #include "pcrResult.h"
 #include "wikiLink.h"
+#include "jsHelper.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1482 2008/06/03 17:43:48 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1483 2008/06/03 23:37:52 larrym Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -3220,6 +3221,33 @@ void collapseGroup(char *name, boolean doCollapse)
 cartSetBoolean(cart, collapseGroupVar(name), doCollapse);
 }
 
+void myControlGridStartCell(struct controlGrid *cg, boolean isOpen, char *id)
+/* Start a new cell in control grid; support Javascript open/collapsing by including id's in tr's.
+   id is used as id prefix (a counter is added to make id's unique). */
+{
+static int counter = 1;
+if (cg->columnIx == cg->columns)
+    controlGridEndRow(cg);
+if (!cg->rowOpen)
+    {
+#if 0
+    /* This is unnecessary, b/c we can just use a blank display attribute to show the element rather
+       than figuring out what the browser specific string is to turn on display of the tr;
+       however, we may want to put in browser specific strings in the future, so I'm leaving this
+       code in as a reference. */
+    char *ua = getenv("HTTP_USER_AGENT");
+    char *display = ua && stringIn("MSIE", ua) ? "block" : "table-row";
+#endif
+    // use counter to ensure unique tr id's (prefix is used to find tr's in javascript).
+    printf("<tr style='display: %s' id='%s-%d'>", isOpen ? "" : "none", id, counter++);
+    cg->rowOpen = TRUE;
+    }
+if (cg->align)
+    printf("<td align=%s>", cg->align);
+else
+    printf("<td>");
+}
+
 void doTrackForm(char *psOutput)
 /* Make the tracks display form with the zoom/scroll
  * buttons and the active image. */
@@ -3309,6 +3337,27 @@ for (track = trackList; track != NULL; track = track->next)
 	}
     }
 
+/* Generate two lists of hidden variables for track group visibility.  Kludgy,
+   but required b/c we have two different navigation forms on this page, but
+   we want open/close changes in the bottom form to be submitted even if the user
+   submits via the top form. */
+struct dyString *trackGroupsHidden1 = newDyString(1000);
+struct dyString *trackGroupsHidden2 = newDyString(1000);
+for (group = groupList; group != NULL; group = group->next)
+    {
+    if (group->trackList != NULL)
+        {
+        int looper;
+        for(looper=1;looper<=2;looper++) 
+            {
+            boolean isOpen = !isCollapsedGroup(group->name);
+            char buf[1000];
+            safef(buf, sizeof(buf), "<input type='hidden' name=\"%s\" id=\"%s_%d\" value=\"%s\">\n", collapseGroupVar(group->name), collapseGroupVar(group->name), looper, isOpen ? "0" : "1");
+            dyStringAppend(looper == 1 ? trackGroupsHidden1 : trackGroupsHidden2, buf);
+            }
+        }
+    }
+
 /* Center everything from now on. */
 hPrintf("<CENTER>\n");
 
@@ -3378,8 +3427,12 @@ if (!hideControls)
 	 * from. */
 	hPrintf("<INPUT TYPE=HIDDEN NAME=\"position\" "
 		"VALUE=\"%s:%d-%d\">", chromName, winStart+1, winEnd);
+        hPrintf("\n%s", trackGroupsHidden1->string);
 	hPrintf("</CENTER></FORM>\n");
 	hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackForm\" METHOD=POST>\n\n", hgTracksName());
+        hPrintf(trackGroupsHidden2->string);
+        freeDyString(&trackGroupsHidden1);
+        freeDyString(&trackGroupsHidden2);
 	cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
 	clearButtonJavascript = "document.TrackForm.position.value=''";
 	hPrintf("<CENTER>");
@@ -3484,6 +3537,7 @@ if (showTrackControls)
     /* Display viewing options for each track. */
     /* Chuck: This is going to be wrapped in a table so that
      * the controls don't wrap around randomly */
+    jsIncludeFile("hgTracks.js", NULL);
     hPrintf("<table border=0 cellspacing=1 cellpadding=1 width=%d>\n", CONTROL_TABLE_WIDTH);
     hPrintf("<tr><td colspan='5' align='CENTER' nowrap>"
 	   "Use drop-down controls below and press refresh to alter tracks "
@@ -3528,10 +3582,11 @@ if (showTrackControls)
 	    }
 	hPrintf("<table width='100%'><tr><td align='left'>");
 	hPrintf("\n<A NAME=\"%sGroup\"></A>",group->name);
-        hPrintf("<A HREF=\"%s?%s&%s=%s#%sGroup\" class=\"bigBlue\"><IMG height=18 width=18 src=\"%s\" alt=\"%s\" class=\"bigBlue\"></A>&nbsp;&nbsp;",
-            hgTracksName(), cartSidUrlString(cart), 
-            collapseGroupVar(group->name),
-            otherState, group->name, indicatorImg, indicator);
+        hPrintf("<A HREF=\"%s?%s&%s=%s#%sGroup\" class='bigBlue'><IMG height='18' width='18' onclick=\"return toggleTrackGroupVisibility(this, '%s');\" id=\"%s_button\" src=\"%s\" alt=\"%s\" class='bigBlue'></A>&nbsp;&nbsp;",
+                hgTracksName(), cartSidUrlString(cart), 
+                collapseGroupVar(group->name),
+                otherState, group->name, 
+                group->name, group->name, indicatorImg, indicator);
 	hPrintf("</td><td align='center' width='100%'>\n");
 	hPrintf("<B>%s</B>", wrapWhiteFont(group->label));
 	hPrintf("</td><td align='right'>\n");
@@ -3541,11 +3596,11 @@ if (showTrackControls)
 
 	/* First track group that is not custom track group gets ruler, 
          * unless it's collapsed. */
-	if (!showedRuler && isOpen && isFirstNotCtGroup && 
+	if (!showedRuler && isFirstNotCtGroup && 
                 differentString(group->name, "user"))
 	    {
 	    showedRuler = TRUE;
-	    controlGridStartCell(cg);
+	    myControlGridStartCell(cg, isOpen, group->name);
             hPrintf("<A HREF=\"%s?%s=%u&c=%s&g=%s\">", hgTrackUiName(),
 		    cartSessionVarName(), cartSessionId(cart),
 		    chromName, RULER_TRACK_NAME);
@@ -3562,19 +3617,16 @@ if (showTrackControls)
 
         /* Add supertracks to  track list, sort by priority and
          * determine if they have visible member tracks */
-        if (isOpen)
-            groupTrackListAddSuper(cart, group);
+        groupTrackListAddSuper(cart, group);
 
         /* Display track controls */
 	for (tr = group->trackList; tr != NULL; tr = tr->next)
 	    {
             struct track *track = tr->track;
-            if (!isOpen)
-                break;
             if (track->tdb->parentName)
                 /* don't display supertrack members */
                 continue;
-	    controlGridStartCell(cg);
+	    myControlGridStartCell(cg, isOpen, group->name);
 	    if (track->hasUi)
 		{
 		char *encodedMapName = cgiEncode(track->mapName);
