@@ -22,7 +22,7 @@
 #include "hui.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jsHelper.c,v 1.16 2008/06/03 19:31:24 larrym Exp $";
+static char const rcsid[] = "$Id: jsHelper.c,v 1.17 2008/06/03 23:38:51 larrym Exp $";
 
 static boolean jsInited = FALSE;
 struct hash *includedFiles = NULL;
@@ -358,7 +358,7 @@ if(hashLookup(includedFiles, fileName) == NULL)
             safef(realFileName, sizeof(realFileName), "%s/%s/%s", docRoot, dirName, fileName);
         if(!fileExists(realFileName))
             {
-            errAbort("jsIncludeFile: javascript fileName: %s doesn't exist.\n", realFileName);
+            warn("jsIncludeFile: javascript fileName: %s doesn't exist.\n", realFileName);
             }
         }
     hashAdd(includedFiles, fileName, NULL);
