@@ -672,7 +672,6 @@ identifier agilentCghRn4Id
 "Agilent CGH probe ID"
     rn4.agilentCgh244a.name minCheck=0.99
     rn4.agilentCgh105a.name minCheck=0.30
-    rn4.agilentCgh44k.name minCheck=0.10
 
 identifier affyHumanExon
 "Affymetrix all human exon array probe id"
