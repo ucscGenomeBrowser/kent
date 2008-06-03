@@ -3,30 +3,6 @@ echo "Content-Type:text/html"
 echo
 echo "<HTML>"
 echo "<HEAD>"
-echo "<TITLE>Track UI on genome, random</TITLE>"
-echo "</HEAD>"
-echo 
-echo "<BODY>"
-echo
-echo "<H2>Track UI on Round Robin, random </H2>"
-
-#echo "Hello.<br><br>"
-
-echo "<BLOCKQUOTE><B> hgw:"
-echo '   <A HREF="showTracks?srvr=hgwdev.cse.ucsc.edu">dev</A>&nbsp;'
-echo '   <A HREF="showTracks?srvr=hgwbeta.cse.ucsc.edu">beta</A>&nbsp;'
-echo '   <A HREF="showTracks"                       >RR</A>&nbsp;'
-echo '   <A HREF="showTracks?srvr=hgw1.cse.ucsc.edu">1</A>&nbsp;'
-echo '   <A HREF="showTracks?srvr=hgw2.cse.ucsc.edu">2</A>&nbsp;'
-echo '   <A HREF="showTracks?srvr=hgw3.cse.ucsc.edu">3</A>&nbsp;'
-echo '   <A HREF="showTracks?srvr=hgw4.cse.ucsc.edu">4</A>&nbsp;'
-echo '   <A HREF="showTracks?srvr=hgw5.cse.ucsc.edu">5</A>&nbsp;'
-echo '   <A HREF="showTracks?srvr=hgw6.cse.ucsc.edu">6</A>&nbsp;'
-echo '   <A HREF="showTracks?srvr=hgw7.cse.ucsc.edu">7</A>&nbsp;'
-echo '   <A HREF="showTracks?srvr=hgw8.cse.ucsc.edu">8</A>&nbsp;'
-echo "  </B>"
-echo "</BLOCKQUOTE>"
-
 
 set srvr = "genome.ucsc.edu"
 if ( $?QUERY_STRING == 0 ) then
@@ -36,7 +12,7 @@ if ( "$QUERY_STRING" == "" ) then
     set QUERY_STRING = "srvr=genome.ucsc.edu"
 endif
 # Split the field=value pair on the '='.
-set pair=`echo $QUERY_STRING| sed 's/=/\t/'`
+set pair=`echo $QUERY_STRING | sed 's/=/\t/'`
 # The first part of the pair is the name.
 set varname=`echo ${pair} | awk '{print $1}'`
 # The second part of the pair is the srvr name.
@@ -46,6 +22,37 @@ if ("$varname" == "srvr") then
 endif
 #echo "dbg: pair = $pair <br>"
 
+echo '<TITLE>Track UI on '`echo $srvr | sed "s/.ucsc.edu//" \
+  | sed "s/.cse//"`' </TITLE>'
+echo "</HEAD>"
+echo 
+echo "<BODY>"
+echo
+echo '<H2>Track UI on '`echo $srvr | sed "s/.ucsc.edu//" \
+  | sed "s/.cse//"`'</H2>'
+
+# echo "Hello.<br><br>"
+
+echo "<BLOCKQUOTE><B> hgw: &nbsp;"
+
+# display without a link if that's the page you are on.
+foreach machine ( dev beta genome 1 2 3 4 5 6 7 8 )
+  echo $srvr | grep $machine > /dev/null
+  if ( $status ) then
+    if ( $machine == RR || $machine == genome) then
+      set node=genome
+      set machine=RR
+    else 
+      set node=hgw${machine}.cse 
+    endif
+    echo '<A HREF="showTracks?srvr='$node'.ucsc.edu">'
+  endif
+  echo $machine | sed "s/genome/RR/"
+  echo "</A>&nbsp;"
+end
+echo "  </B>"
+echo "</BLOCKQUOTE>"
+
 set line=`grep "pq.user" hg.conf`
 set pair=`echo $line| sed 's/=/\t/'`
 set user=`echo ${pair} | awk '{print $2}'`
@@ -53,7 +60,6 @@ set user=`echo ${pair} | awk '{print $2}'`
 set line=`grep "pq.password" hg.conf`
 set pair=`echo $line| sed 's/=/\t/'`
 set pwd=`echo ${pair} | awk '{print $2}'`
-
 
 set junkPath = "../trash/gbjunk"  # normal cgi use
 #set junkPath = "./gbjunk"       # use when running from commandline
@@ -166,7 +172,6 @@ endif
 
 
 rm -f $junkPath
-
 
 # ==== MAIN LOOP ===========
 
