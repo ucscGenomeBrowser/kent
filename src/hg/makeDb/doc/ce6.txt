@@ -3,7 +3,7 @@
 # Caenorhabditis elegans
 # Washington University School of Medicine GSC and Sanger Institute WS190
 
-#  $Id: ce6.txt,v 1.1 2008/05/30 22:05:46 hiram Exp $
+#  $Id: ce6.txt,v 1.2 2008/06/03 21:44:15 hiram Exp $
 
 #########################################################################
 # DOWNLOAD SEQUENCE (DONE - 2008-05-30 - Hiram)
@@ -176,7 +176,7 @@ ce6.downloadDir = ce6
     cd /cluster/data/genbank
     time nice -n +19 bin/gbAlignStep -initial ce6 &
     #	logFile: var/build/logs/2008.05.30-15:04:49.ce6.initalign.log
-XXX - running 2008-05-30 15:05
+    #	real    137m58.675s
 
     #	real    61m33.930s
 
@@ -184,8 +184,8 @@ XXX - running 2008-05-30 15:05
     ssh hgwdev
     cd /cluster/data/genbank
     time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad ce6
-    #	logFile: var/dbload/hgwdev/logs/2007.03.27-16:43:00.dbload.log
-    #	real    14m41.601s
+    #	logFile: var/dbload/hgwdev/logs/2008.05.30-20:29:01.dbload.log
+    #	real    23m8.651s
 
     # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank
@@ -193,7 +193,550 @@ XXX - running 2008-05-30 15:05
     # add ce6 to:
         etc/align.dbs
         etc/hgwdev.dbs
-    cvs ci -m "Added ce6 - C. elegans WS170" \
+    cvs ci -m "Added ce6 - C. elegans WS190" \
 	etc/align.dbs etc/hgwdev.dbs
     make etc-update
 
+###############################################################################
+## SANGER GENE TRACK (DONE - 2008-06-03 - Hiram)
+##	There is a tremendous amount of extraneous notations in the gff
+##	files.  Filter them down to a manageable set, change the chrom
+##	names, eliminate duplicates, select only what will work in
+##	ldHgGene
+    ssh kkstore06
+    mkdir /cluster/data/ce6/bed/sangerGene
+    cd /cluster/data/ce6/bed/sangerGene
+for C in I II III IV V X
+do
+    echo -n "${C} "
+    zcat ../../downloads/CHROMOSOME_${C}.gff.gz | \
+    sed -e "s/CHROMOSOME_III/chrIII/g; s/CHROMOSOME_II/chrII/g; \
+        s/CHROMOSOME_IV/chrIV/g; s/CHROMOSOME_I/chrI/g; \
+        s/CHROMOSOME_X/chrX/g; s/CHROMOSOME_V/chrV/g; \
+        s/CHROMOSOME_M/chrM/g;" \
+        -e 's/Sequence "\(.*\)"$/\1/' -e 's/Transcript "\(.*\)"$/\1/' \
+        -e 's/CDS "//' -e 's/"//' \
+                > chr${C}.gff
+done
+C=M
+echo -n "${C} "
+zcat ../../downloads/CHROMOSOME_MtDNA.gff.gz | \
+sed -e "s/CHROMOSOME_III/chrIII/g; s/CHROMOSOME_II/chrII/g; \
+    s/CHROMOSOME_IV/chrIV/g; s/CHROMOSOME_I/chrI/g; \
+    s/CHROMOSOME_X/chrX/g; s/CHROMOSOME_V/chrV/g; \
+    s/CHROMOSOME_M/chrM/g; s/chrMtDNA/chrM/g;" \
+    -e 's/Sequence "\(.*\)"$/\1/' -e 's/Transcript "\(.*\)"$/\1/' \
+    -e 's/CDS "//' -e 's/"//' \
+            > chr${C}.gff
+for C in I II III IV V X M
+do
+    echo "chr${C}.gff -> filtered.chr${C}.gff"
+    grep -v "^#" chr${C}.gff | awk -F'\t' '
+BEGIN { IGNORECASE=1 }
+{
+    if (match($2,"curated|Coding_transcript")) {
+	if (match($3,"intron|coding_exon|exon|cds|three_prime_UTR|five_prime_UTR")) {
+	    gsub("coding_exon","CDS",$3)
+            gsub("Transcript ","",$9)
+            gsub(" .*","",$9)
+            gsub("three_prime_UTR","3utr",$3)
+            gsub("five_prime_UTR","5utr",$3)
+            for (i = 1; i < 9; ++i) {
+                printf "%s\t", $i
+            }
+            printf "%s\n", $9
+        }
+    }
+}
+' | sort -u | sort -k4n > filtered.chr${C}.gff
+done
+
+    ssh hgwdev
+    cd /cluster/data/ce6/bed/sangerGene
+    nice -n +19 ldHgGene ce6 sangerGene filtered.*.gff
+    #	Read 52512 transcripts in 997038 lines in 7 files
+    #	52512 groups 7 seqs 3 sources 5 feature types
+    #	30296 gene predictions
+
+    ## this doesn't work with the bin column, so alter that table
+    hgsql -e "alter table sangerGene drop column bin;" ce6
+    ## found when trying to click through on sequence links, mRNA or
+    ## protein when on a gene details page
+
+    ## Create orfToGene table.  The tar file containing this information
+    # was obtained from Anthony Rogers via Email 2008-06-03 ar2@sanger.ac.uk
+    #	They had one duplicate line in their file:
+    sort -u /cluster/data/ce6/downloads/tarFile/gene_name.txt \
+	| sed -e "s/  */\t/" > orfToGene.tab
+    ## plus, they didn't include the self with self references, which are
+    ## needed in the gene sorter so it can find its names.  So, fixing
+    #	this table:
+    hgsql -N -e "select name from sangerGene;" ce6 | sort > name.sangerGene.txt
+    cat << '_EOF_' > fixupOrf.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my %sangerGeneName;
+
+open (FH, "<name.sangerGene.txt") or die "can not read name.sangerGene.txt";
+while (my $line = <FH>) {
+    chomp $line;
+    $sangerGeneName{$line} = 1;
+}
+close (FH);
+
+open (FH,"<orfToGene.tab") or die "can not read orfToGene.tab";
+
+my %alias;	# key is alias name, value is real name
+my %realNames;	# key is real name, value is 1 (unimportant)
+my %twoDot;	# key is two dot name, value is 1 (unimportant)
+
+while (my $line = <FH>) {
+    chomp $line;
+    my ($alias, $real) = split('\s+', $line);
+    die "duplicate alias name found: $alias" if (exists($alias{$alias}));
+    if (exists($sangerGeneName{$alias})) {
+	$alias{$alias} = $real;
+	$realNames{$real} = 1;
+	my ($a, $b, $c, $d) = split('\.',$alias);
+	die "four dot name found $line" if (defined($d));
+	my $twoDotName = sprintf "%s.%s", $a, $b;
+	if (exists($sangerGeneName{$twoDotName})) {
+	    $twoDot{$twoDotName} = $real;
+	}
+    }
+}
+
+close (FH);
+
+my $count = 0;
+my $noReal = 0;
+my %needReal;
+foreach my $key (keys %alias) {
+    ++$count;
+    my $realName = $alias{$key};
+    if (!exists($alias{$realName})) {
+	if (!exists($needReal{$realName}) &&
+		exists($sangerGeneName{$realName})) {
+	    ++$noReal;
+	    $needReal{$realName} = $key;
+	    my ($a, $b, $c, $d) = split('\.',$realName);
+	    die "four dot name found $realName" if (defined($d));
+	    my $twoDotName = sprintf "%s.%s", $a, $b;
+	    if (exists($sangerGeneName{$twoDotName})) {
+		$twoDot{$twoDotName} = $key;
+	    }
+	}
+    }
+}
+print STDERR "found $count alias names\n";
+print STDERR "can not find $noReal real names in alias list\n";
+
+$count = 0;
+foreach my $key (keys %realNames) {
+    ++$count;
+}
+print STDERR "found $count real names\n";
+
+$noReal = 0;
+foreach my $key (keys %needReal) {
+    ++$noReal;
+    print STDERR "$key $needReal{$key}\n" if ($noReal < 10);
+}
+print STDERR "need to add $noReal real names\n";
+
+open (FH,">fixedOrfToGene.tab") or die "can not write to fixedOrfToGene.tab";
+foreach my $key (keys %alias) {
+    printf FH "%s\t%s\n", $key, $alias{$key};
+}
+
+foreach my $key (keys %needReal) {
+    printf FH "%s\t%s\n", $key, $key;
+}
+
+foreach my $key (keys %twoDot) {
+    if ( (!exists($alias{$key})) && (!exists($needReal{$key})) ) {
+	print STDERR "need name for $key $twoDot{$key}\n";
+	printf FH "%s\t%s\n", $key, $twoDot{$key};
+    }
+}
+foreach my $key (keys %sangerGeneName) {
+    if ( (!exists($alias{$key})) && (!exists($needReal{$key})) ) {
+	if ( !exists($twoDot{$key}) ) {
+	    print STDERR "last chance need name for $key $key\n";
+	    printf FH "%s\t%s\n", $key, $key;
+	}
+    }
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x fixupOrf.pl
+    ./fixupOrf.pl > fixupOrf.out 2>&1
+
+    hgLoadSqlTab ce6 orfToGene ~/kent/src/hg/lib/orfToGene.sql \
+	fixedOrfToGene.tab
+    ln -s /cluster/data/ce6/downloads/tarFile/paragraph.txt ./paragraph.tab
+    ln -s /cluster/data/ce6/downloads/tarFile/uniprot.txt ./uniprot.tab
+    cat << '_EOF_' > mkSangerLinks.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my %geneToOrf;  #       key is uc(gene name), value is orf
+my %orfToGene;  #       key is uc(orf), value is gene name
+
+my $orfCount = 0;
+open (FH, "<orfToGene.tab") or die "can not read orfToGene.tab";
+while (my $line = <FH>) {
+    chomp $line;
+    my ($orf, $gene) = split('\t',$line);
+    die "gene name zero length" if (length($gene) < 1);
+    die "orf name zero length" if (length($orf) < 1);
+    $geneToOrf{uc($gene)} = $orf;
+    $orfToGene{uc($orf)} = $gene;
+    ++$orfCount;
+}
+
+close (FH);
+printf STDERR "read $orfCount orf designations from orfToGene.tab\n";
+
+open (LS,">sangerLinks.tab") or die "can not write to sangerLinks.tab";
+
+my $geneCount = 0;
+open (FH, "sort -u paragraph.tab|") or die "can not read paragraph.tab";
+while (my $line = <FH>) {
+    chomp $line;
+    my ($orf, $descr) = split('\t',$line);
+    die "gene name zero length" if (length($orf) < 1);
+    die "can not find orfToGene $orf" if (!exists($orfToGene{uc($orf)}));
+    my $orfGene = $orfToGene{uc($orf)};
+    die "orfGene name zero length" if (length($orfGene) < 1);
+    printf LS "%s\t%s\t%s\n", $orf, $orfGene, $descr;
+    ++$geneCount;
+}
+
+close (FH);
+printf STDERR "read $geneCount gene descriptions from paragraph.tab\n";
+close (LS);
+'_EOF_'
+    # << happy emacs
+    chmod +x mkSangerLinks.pl
+    ./mkSangerLinks.pl
+    #	read 33792 orf designations from orfToGene.tab
+    #	read 33793 gene descriptions from paragraph.tab
+    #	There is problem in paragraph.tab, it contains a duplicate entry:
+F57C7.4 F57C7.4 contains similarity to Interpro domain IPR008972 ()
+F57C7.4 F57C7.4 contains similarity to Plasmodium falciparum Hypothetical protein.\; TR:Q8I5U3
+    #	manually fixup this one to elimiate the second definition
+
+    hgLoadSqlTab ce6 sangerLinks ~/kent/src/hg/lib/sangerLinks.sql \
+	sangerLinks.tab
+    # Add proteinID field to sangerGene table, used by Gene Sorter
+    hgsql -e 'alter table sangerGene add proteinID varchar(40) NOT NULL;' ce6
+    # To add index on this column
+    hgsql -e 'alter table sangerGene add index(proteinID);' ce6
+    # Use SwissProt IDs in sangerLinks table to fill proteinID 
+    # column in the sangerGene table
+    hgsql -e 'update sangerGene as g, sangerLinks as l \
+      set g.proteinID = l.protName where g.name = l.orfName;' ce6
+    # check there are rows with the protName field filled
+    hgsql -N -e "select proteinId from sangerGene" ce6 | sort | uniq -c | wc -l
+    #	20127
+
+    hgLoadSqlTab ce6 sangerLinks ~/kent/src/hg/lib/sangerLinks.sql \
+	sangerLinks.tab
+    wget --timestamping \
+	"ftp://ftp.sanger.ac.uk/pub/wormbase/WS190/wormpep190.tar.gz"
+    wget --timestamping \
+	"ftp://ftp.sanger.ac.uk/pub/wormbase/WS190/wormrna190.tar.gz"
+    tar xvzf wormrna190.tar.gz
+    mv README README.wormrna190
+    tar xvzf wormpep190.tar.gz
+    #	creates files in directory wormpep190:
+# -rw-rw-r--  1 32316202 Apr  7 06:38 wormpep.dna190
+# -rw-rw-r--  1   980303 Apr  7 06:41 wormpep.history190
+# -rw-rw-r--  1     4826 Apr  7 06:41 wormpep.diff190
+# -rw-rw-r--  1 19139454 Apr  7 06:41 wormpep.fasta190
+# -rw-rw-r--  1   398315 Apr  7 06:41 wormpep.accession190
+# -rw-rw-r--  1 13244499 Apr 15 06:23 wormpep190
+# -rw-rw-r--  1  2608936 Apr 15 06:23 wormpep.table190
+    hgPepPred ce6 generic sangerPep wormpep190/wormpep190
+
+###############################################################################
+######## MAKING GENE SORTER TABLES #### (DONE - 2007-04-02 - Hiram)
+# These are instructions for building the
+# Gene Sorter browser.  Don't start these until
+# there is a sangerGene table with a proteinID column containing Swiss-Prot
+# protein IDs, and also Kim lab expression data is required (in hgFixed).
+
+    # Cluster together various alt-splicing isoforms.
+    # Creates the sangerIsoforms and sangerCanonical tables
+    ssh hgwdev
+    hgClusterGenes ce6 sangerGene sangerIsoforms sangerCanonical
+    #	Got 20051 clusters, from 30296 genes in 7 chromosomes
+
+    featureBits ce6 sangerCanonical
+    #	57412493 bases of 100281426 (57.251%) in intersection
+    featureBits ce4 sangerCanonical
+    #	57092312 bases of 100281244 (56.932%) in intersection
+    featureBits ce2 sangerCanonical
+    # 54156601 bases of 100291761 (53.999%) in intersection
+    featureBits ce1 sangerCanonical 
+    # 53654286 bases of 100277784 (53.506%) in intersection
+
+    # Create Self blastp table - sangerBlastTab
+    # Reload blastp data into sangerBlastTab and drop knownBlastTab 
+    # - table given the wrong name (DONE, 2004-05-28, hartera)
+    # Get sangerPep peptide sequences fasta file from sangerPep dir
+    # and create a blast database out of them.
+    mkdir -p /cluster/data/ce6/bed/blastp
+    cd /cluster/data/ce6/bed/blastp
+    cat << '_EOF_' > pepTabToFa.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+open (FH,"<../sangerGene/sangerPep.tab") or
+        die "can not open ../sangerGene/sangerPep.tab";
+while (my $line = <FH>) {
+    chomp $line;
+    my ($name,$seq) = split('\s+',$line);
+    printf ">%s\n%s\n", $name, $seq;
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x ./pepTabToFa.pl
+    ./pepTabToFa.pl > wormPep190.faa
+    
+    /cluster/bluearc/blast229/formatdb -i wormPep190.faa \
+	-t wormPep190 -n wormPep190
+
+    # Copy database over to kluster storage
+    mkdir -p /san/sanvol1/scratch/worms/ce6/blastp
+    rsync -a ./ /san/sanvol1/scratch/worms/ce6/blastp/
+
+    cd /cluster/data/ce6/bed/blastp
+    mkdir split
+    faSplit sequence wormPep190.faa 1000 split/wp
+
+    # Make parasol run directory 
+    ssh pk
+    mkdir -p /cluster/data/ce6/bed/blastp/self
+    cd /cluster/data/ce6/bed/blastp/self
+    mkdir run
+    cd run
+    mkdir out
+
+# Make blast script
+    cat  << '_EOF_' > blastSome.csh
+#!/bin/csh -ef
+setenv BLASTMAT /cluster/bluearc/blast229/data
+/cluster/bluearc/blast229/blastall -p blastp \
+    -d /san/sanvol1/scratch/worms/ce6/blastp/wormPep190 \
+	-i $1 -o $2 -e 0.01 -m 8 -b 1000
+'_EOF_'
+    # << happy emacs
+    chmod a+x blastSome.csh
+    # Make gensub2 file
+    cat  << '_EOF_' > gsub
+#LOOP
+blastSome.csh {check in line+ $(path1)} {check out line out/$(root1).tab}
+#ENDLOOP
+'_EOF_'
+     # << Create parasol batch
+
+     ls ../../split/*.fa > split.lst
+     gensub2 split.lst single gsub jobList
+     para create jobList
+     para try.... etc ...
+# Completed: 986 of 986 jobs
+# CPU time in finished jobs:      18187s     303.12m     5.05h    0.21d  0.001 y
+# IO & Wait Time:                  2713s      45.22m     0.75h    0.03d  0.000 y
+# Average job time:                  21s       0.35m     0.01h    0.00d
+# Longest finished job:              73s       1.22m     0.02h    0.00d
+# Submission to last job:           302s       5.03m     0.08h    0.00d
+
+    # Load into database.  
+    ssh hgwdev
+    cd /cluster/data/ce6/bed/blastp/self/run/out
+    hgLoadBlastTab ce6 sangerBlastTab *.tab
+    #	Scanning through 986 files
+    #	Loading database with 1255312 rows
+
+    # CREATE EXPRESSION DISTANCE TABLES FOR  
+    # KIM LAB EXPRESSION DATA  (this appears to be an expensive command,
+    #	about 10 to 15 minutes or so ?)
+    hgExpDistance ce6 hgFixed.kimWormLifeMedianRatio \
+	  hgFixed.kimWormLifeMedianExps kimExpDistance
+    #	Have 19134 elements in hgFixed.kimWormLifeMedianRatio
+    #	Got 19134 unique elements in hgFixed.kimWormLifeMedianRatio
+
+    # CREATE TABLE TO MAP BETWEEN SANGERGENES AND REFSEQ GENES
+    # sangerToRefSeq
+    hgMapToGene ce6 refGene sangerGene sangerToRefSeq
+
+    # SET dbDb TABLE ENTRY FOR GENE SORTER (DONE, 2004-05-25, hartera)
+    # set hgNearOk to 1 on hgcentraltest to make Ce4 Gene Sorter viewable
+
+    hgsql -e 'update dbDb set hgNearOk = 1 where name = "ce6";' \
+         hgcentraltest
+
+xxxx later stuff from 2nd attempt
+    #	Running joinerCheck to see what is sane:
+    joinerCheck -identifier=wormBaseId -database=ce6 -times -keys all.joiner
+    #	Error: 999 of 27783 elements of ce6.orfToGene.name are not in key
+    #		sangerGene.name
+    #	indicates the non-coding genes in orfToGene are missing
+    #	from sangerGene.  So, removing those from orfToGene:
+    hgsql -N -e "select name from orfToGene;" ce6 | sort > orfToGene.name
+    hgsql -N -e "select name from sangerGene;" ce6 | sort > sangerGene.name
+    comm -23 orfToGene.name sangerGene.name > rm.orfToGene.name
+    wc -l rm.orfToGene.name
+    hgsql -N -e "select count(*) from orfToGene;" ce6
+    #	27783
+    for G in `cat rm.orfToGene.name`
+do
+    hgsql -e 'delete from orfToGene where name="'"${G}"'";' ce6
+    echo $G
+done
+    hgsql -N -e "select count(*) from orfToGene;" ce6
+    #	26874
+
+    ## create a gene name to WBGene ID reference table
+    ## to be used to construct URL
+    mkdir /cluster/data/ce6/bed/WBGeneID
+    cd /cluster/data/ce6/bed/WBGeneID
+    #	There was one duplicate entry in the file, the sort -u eliminates it
+    sed -e "s#http://wormbase.org/db/gene/gene?name=##; s#;class=Gene##" \
+	../../downloads/tarFile/url.txt | sort -u > sangerGeneToWBGeneID.tab
+    hgLoadSqlTab ce6 sangerGeneToWBGeneID \
+	~/kent/src/hg/lib/sangerGeneToWBGeneID.sql sangerGeneToWBGeneID.tab
+    ## later, it was discovered that this list needed to also be updated
+    ## with the one-dot names, where only the two-dot names were present.
+    ## all.joiner rule added, but it still is missing gene names.
+
+############################################################################
+## fixup sangerLinks table (DONE - 2008-06-03 - Hiram)
+    ## it is missing descriptions for the one dot names where only two dot
+    ## names existed
+    mkdir /cluster/data/ce6/bed/fixupSangerLinks
+    cd /cluster/data/ce6/bed/fixupSangerLinks
+    ln -s ../sangerGene/sangerLinks.tab .
+    cat << '_EOF_' > slFixup.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+open (FH,"<sangerLinks.tab") or die "can not read sangerLinks.tab";
+
+my %existing;   # key is full gene symbol name, one or two dots
+                # value is the orfName and description text, tab separated
+my %newNeeded;  # key is shortened one dot name, value is orfName and
+                # description text, tab separated
+my $newCount = 0;
+
+while (my $line = <FH>) {
+    chomp $line;
+    my ($name, $orf, $desc) = split('\t',$line);
+    my ($a, $b, $c, $d) = split('\.', $name);
+    die "ERROR: found three dot name at $line" if (defined($d));
+    if (defined($c)) {
+        my $oneDotName = sprintf "%s.%s", $a, $b;
+        if (exists($newNeeded{$oneDotName})) {
+            my $newString = sprintf "%s\t%s", $orf, $desc;
+            die "ERROR: new one dot name, different descr $name"
+                if ($newNeeded{$oneDotName} ne $newString)
+        } else {
+        $newNeeded{$oneDotName} = sprintf "%s\t%s", $orf, $desc;
+        ++$newCount;
+        }
+    }
+    die "ERROR: duplicate name $name at $line" if (exists($existing{$name}));
+    $existing{$name} = sprintf "%s\t%s", $orf, $desc;
+}
+
+close (FH);
+
+foreach my $key (keys %newNeeded) {
+    die "ERROR: duplicate new name $key for $newNeeded{$key}"
+        if (exists($existing{$key}));
+    printf "%s\t%s\n", $key, $newNeeded{$key};
+}
+
+foreach my $key (keys %existing) {
+    die "ERROR: duplicate existing name $key for $existing{$key}"
+        if (exists($newNeeded{$key}));
+    printf "%s\t%s\n", $key, $existing{$key};
+}
+'_EOF_'
+    # << happy emacs
+    chmod +x ./slFixup.pl
+    ./slFixup.pl > fixedSangerLinks.tab
+
+    hgLoadSqlTab ce6 sangerLinks ~/kent/src/hg/lib/sangerLinks.sql \
+	fixedSangerLinks.tab
+
+###############################################################################
+## RNA sangerGenes (DONE - 2008-06-03 - Hiram)
+    ssh kkstore06
+    cd /cluster/data/ce6/bed/sangerGene
+for C in I II III IV V X M
+do
+    echo "chr${C}.gff -> rna.chr${C}.gff"
+    grep -v "^#" chr${C}.gff | awk -F'\t' '
+BEGIN { IGNORECASE=1 }
+{
+    if (match($2,"^miRNA|^ncRNA|^rRNA|^scRNA|^snRNA|^snlRNA|^snoRNA|^tRNA|^tRNAscan-SE-1.23")) {
+        if (match($3,"exon")) {
+            gsub("Transcript ","",$9)
+            gsub(" .*","",$9)
+            for (i = 1; i < 9; ++i) {
+                printf "%s\t", $i
+            }
+            printf "%s\n", $9
+        }
+    }
+}
+' | sort -u | sort -k4n > rna.chr${C}.gff
+done
+
+for C in I II III IV V X M
+do
+    echo "chr${C}.gff -> pseudoGene.chr${C}.gff"
+    grep -v "^#" chr${C}.gff | awk -F'\t' '
+BEGIN { IGNORECASE=1 }
+{
+    if (match($2,"^Pseudogene")) {
+        if (match($3,"Pseudogene")) {
+            gsub("Pseudogene ","",$9)
+            gsub("Pseudogene","CDS",$3)
+            gsub(" .*","",$9)
+            gsub("\".*","",$9)
+            for (i = 1; i < 9; ++i) {
+                printf "%s\t", $i
+            }
+            printf "%s\n", $9
+        }
+    }
+}
+' | sort -u | sort -k4n > pseudoGene.chr${C}.gff
+done
+
+    ssh hgwdev
+    cd /cluster/data/ce6/bed/sangerGene
+    time nice -n +19 ldHgGene ce6 sangerRnaGene rna.*.gff
+    #	Read 6440 transcripts in 6474 lines in 7 files
+    #	6440 groups 7 seqs 9 sources 1 feature types
+    #	6440 gene predictions
+
+    time nice -n +19 ldHgGene ce6 sangerPseudoGene pseudoGene.*.gff
+    #	Read 1462 transcripts in 1462 lines in 7 files
+    #	1462 groups 6 seqs 1 sources 1 feature types
+    #	1462 gene predictions
