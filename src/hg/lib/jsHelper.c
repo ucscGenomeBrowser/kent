@@ -22,7 +22,7 @@
 #include "hui.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jsHelper.c,v 1.15 2008/05/22 20:49:57 larrym Exp $";
+static char const rcsid[] = "$Id: jsHelper.c,v 1.16 2008/06/03 19:31:24 larrym Exp $";
 
 static boolean jsInited = FALSE;
 struct hash *includedFiles = NULL;
@@ -317,10 +317,14 @@ safef(poe, sizeof(poe), "return pressOnEnter(event, %s);", button);
 return poe;
 }
 
-void jsIncludeFile(char *fileName)
+void jsIncludeFile(char *fileName, char *noScriptMsg)
 {
 /* Prints out html to include given javascript file from the js directory; suppresses redundant
- *  <script ...> tags if called repeatedly */
+ *  <script ...> tags if called repeatedly.
+ * <noscript>...</noscript> tags are provided automatically. The noscript message may be specified via
+ * the noScriptMsg parameter (the string may contain HTML markup). A default msg is provided
+ * if noScriptMsg == NULL; noscript msg is suppressed if noScriptMsg == "" (this is useful
+ * if you want to more carefully control where the message will appear on the page). */
 
 if(!includedFiles)
     includedFiles = newHash(0);
@@ -328,6 +332,7 @@ if(hashLookup(includedFiles, fileName) == NULL)
     {
     char *docRoot = hDocumentRoot();
     char dirName[2048];
+    char noScriptBuf[2048];
     safef(dirName, sizeof(dirName), "js");
     /* tolerate missing docRoot (i.e. when running from command line) */
     if(docRoot != NULL)
@@ -357,7 +362,13 @@ if(hashLookup(includedFiles, fileName) == NULL)
             }
         }
     hashAdd(includedFiles, fileName, NULL);
-    hPrintf("<script type='text/javascript' src='../%s/%s'></script>\n", dirName, fileName);
+    if(noScriptMsg == NULL)
+        noScriptMsg = "<b>Your browser does not support JavaScript so some functionality may be missing!</b>";
+    if(strlen(noScriptMsg))
+        safef(noScriptBuf, sizeof(noScriptBuf), "<noscript>%s</noscript>\n", noScriptMsg);
+    else
+        noScriptBuf[0] = 0;
+    hPrintf("<script type='text/javascript' src='../%s/%s'></script>\n%s", dirName, fileName, noScriptBuf);
     }
 }
 
@@ -367,7 +378,7 @@ char *jsCheckAllOnClickHandler(char *idPrefix, boolean state)
  * state parameter determines whether to "check all" or "uncheck all" (TRUE means "check all"). */
 {
 static char buf[512];
-jsIncludeFile("utils.js");
+jsIncludeFile("utils.js", NULL);
 safef(buf, sizeof(buf), "setCheckBoxesWithPrefix(this, '%s', %s); return false", idPrefix, state ? "true" : "false");
 return buf;
 }
