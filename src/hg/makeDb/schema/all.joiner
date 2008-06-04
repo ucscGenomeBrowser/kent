@@ -6,7 +6,7 @@ set hg hg15,hg16,hg17,hg18
 set mm mm3,mm4,mm5,mm6,mm7,mm8,mm9
 set rn rn2,rn3,rn4
 set fr fr1,fr2
-set ce ce1,ce2,ce4
+set ce ce1,ce2,ce4,ce6
 set cb cb1,cb3
 set dm dm1,dm2,dm3
 set dp dp2,dp3
