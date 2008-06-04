@@ -3,7 +3,7 @@
 # Caenorhabditis elegans
 # Washington University School of Medicine GSC and Sanger Institute WS190
 
-#  $Id: ce6.txt,v 1.2 2008/06/03 21:44:15 hiram Exp $
+#  $Id: ce6.txt,v 1.3 2008/06/04 19:10:40 hiram Exp $
 
 #########################################################################
 # DOWNLOAD SEQUENCE (DONE - 2008-05-30 - Hiram)
@@ -587,26 +587,17 @@ blastSome.csh {check in line+ $(path1)} {check out line out/$(root1).tab}
     hgsql -e 'update dbDb set hgNearOk = 1 where name = "ce6";' \
          hgcentraltest
 
-xxxx later stuff from 2nd attempt
     #	Running joinerCheck to see what is sane:
-    joinerCheck -identifier=wormBaseId -database=ce6 -times -keys all.joiner
-    #	Error: 999 of 27783 elements of ce6.orfToGene.name are not in key
-    #		sangerGene.name
-    #	indicates the non-coding genes in orfToGene are missing
-    #	from sangerGene.  So, removing those from orfToGene:
-    hgsql -N -e "select name from orfToGene;" ce6 | sort > orfToGene.name
-    hgsql -N -e "select name from sangerGene;" ce6 | sort > sangerGene.name
-    comm -23 orfToGene.name sangerGene.name > rm.orfToGene.name
-    wc -l rm.orfToGene.name
-    hgsql -N -e "select count(*) from orfToGene;" ce6
-    #	27783
-    for G in `cat rm.orfToGene.name`
-do
-    hgsql -e 'delete from orfToGene where name="'"${G}"'";' ce6
-    echo $G
-done
-    hgsql -N -e "select count(*) from orfToGene;" ce6
-    #	26874
+    cd ~/kent/src/hg/makeDb/schema
+    joinerCheck -identifier=wormBaseId -database=ce6 -times -keys ./all.joiner
+# ce6.orfToGene.name - hits 30296 of 30296 ok
+# ce6.sangerBlastTab.query - hits 1255312 of 1255312 ok
+# ce6.sangerBlastTab.target - hits 1255312 of 1255312 ok
+# ce6.sangerCanonical.transcript - hits 20051 of 20051 ok
+# ce6.sangerIsoforms.transcript - hits 30296 of 30296 ok
+# ce6.sangerLinks.orfName - hits 30115 of 30115 ok
+# ce6.sangerPep.name - hits 23771 of 23771 ok
+# ce6.sangerToRefSeq.name - hits 29995 of 29995 ok
 
     ## create a gene name to WBGene ID reference table
     ## to be used to construct URL
@@ -615,11 +606,81 @@ done
     #	There was one duplicate entry in the file, the sort -u eliminates it
     sed -e "s#http://wormbase.org/db/gene/gene?name=##; s#;class=Gene##" \
 	../../downloads/tarFile/url.txt | sort -u > sangerGeneToWBGeneID.tab
+    #	add in the one-dot names for those names that are only two-dot names
+    #	in this file:
+    cat << '_EOF_' > addDotName.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my %sangerGeneName;
+
+open (FH, "sangerGene.name") or die "can not read sangerGene.name";
+while (my $line = <FH>) {
+    chomp $line;
+    $sangerGeneName{$line} = 1;
+}
+close (FH);
+
+open (FH,"<sangerGeneToWBGeneID.tab") or
+	die "can not read sangerGeneToWBGeneID.tab";
+
+my %twoDotNames;
+
+while (my $line = <FH>) {
+    chomp $line;
+    my ($name, $wbId) = split('\s+',$line);
+    die "duplicate gene name $name $wbId" if (exists($twoDotNames{$name}));
+    if (exists($sangerGeneName{$name})) {
+	$twoDotNames{$name} = $wbId;
+    }
+}
+close (FH);
+
+my %neededNames;
+
+foreach my $key (keys %twoDotNames) {
+    my ($a, $b, $c, $d) = split('\.',$key);
+    my $wbId = $twoDotNames{$key};
+    die "three dot name found $key $wbId" if (defined($d));
+    if (defined($c)) {
+	my $oneDot = sprintf "%s.%s", $a, $b;
+	if (!exists($twoDotNames{$oneDot})) {
+	    if (!exists($neededNames{$oneDot})) {
+		$neededNames{$oneDot} = $wbId;
+	    }
+	}
+    }
+}
+foreach my $key (keys %twoDotNames) {
+    printf "%s\t%s\n", $key, $twoDotNames{$key};
+}
+foreach my $key (keys %neededNames) {
+    printf "%s\t%s\n", $key, $neededNames{$key};
+}
+'_EOF_'
+    #	<< happy emacs
+    chmod +x addDotName.pl
+
+    hgsql -N -e "select name from sangerGene;" ce6 | sort -u > sangerGene.name
+    ./addDotName.pl  > fixed.sangerGeneToWBGeneID.tab
+
+
     hgLoadSqlTab ce6 sangerGeneToWBGeneID \
-	~/kent/src/hg/lib/sangerGeneToWBGeneID.sql sangerGeneToWBGeneID.tab
-    ## later, it was discovered that this list needed to also be updated
-    ## with the one-dot names, where only the two-dot names were present.
-    ## all.joiner rule added, but it still is missing gene names.
+	~/kent/src/hg/lib/sangerGeneToWBGeneID.sql \
+	fixed.sangerGeneToWBGeneID.tab
+    cd ~/kent/src/hg/makeDb/schema
+    joinerCheck -identifier=wormBaseId -database=ce6 -times -keys ./all.joiner
+# ce6.orfToGene.name - hits 30296 of 30296 ok
+# ce6.sangerBlastTab.query - hits 1255312 of 1255312 ok
+# ce6.sangerBlastTab.target - hits 1255312 of 1255312 ok
+# ce6.sangerCanonical.transcript - hits 20051 of 20051 ok
+# ce6.sangerIsoforms.transcript - hits 30296 of 30296 ok
+# ce6.sangerLinks.orfName - hits 30115 of 30115 ok
+# ce6.sangerPep.name - hits 23771 of 23771 ok
+# ce6.sangerToRefSeq.name - hits 29995 of 29995 ok
+# ce6.sangerGeneToWBGeneID.sangerGene - hits 30115 of 30115 ok
 
 ############################################################################
 ## fixup sangerLinks table (DONE - 2008-06-03 - Hiram)
@@ -682,7 +743,28 @@ foreach my $key (keys %existing) {
 
     hgLoadSqlTab ce6 sangerLinks ~/kent/src/hg/lib/sangerLinks.sql \
 	fixedSangerLinks.tab
-
+    #	It still has a difficulty because it contains references to the RNA
+    #	genes.  joinerCheck complains.  So, after loading sangerRnaGene
+    #	below, remove the entries in sangerLinks that are in sangerRnaGene.
+    #	I tried to figure out a delete statement that would do this, but
+    #	to no avail.  So, brain dead list management:
+    hgsql -N -e "select orfName from sangerLinks;" ce6 \
+	| sort -u > sangerLinks.orfName
+    hgsql -N -e "select name from sangerRnaGene;" ce6 \
+	| sort -u > sangerRnaGene.name
+    #	before delete:
+    hgsql -e "select count(*) from sangerLinks;" ce6
+    #	 36555 
+    comm -12 sangerLinks.orfName sangerRnaGene.name | while read N
+do
+    hgsql -e "delete from sangerLinks where orfName=\"$N\";" ce6
+    echo $N
+done
+    #	after delete:
+    hgsql -e "select count(*) from sangerLinks;" ce6
+    #	 30115 
+    # 36555 - 30115 = 6440
+    
 ###############################################################################
 ## RNA sangerGenes (DONE - 2008-06-03 - Hiram)
     ssh kkstore06
@@ -740,3 +822,21 @@ done
     #	Read 1462 transcripts in 1462 lines in 7 files
     #	1462 groups 6 seqs 1 sources 1 feature types
     #	1462 gene predictions
+
+############################################################################
+#  BLATSERVERS ENTRY (DONE - 2008-06-04 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("ce6", "blat9", "17788", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("ce6", "blat9", "17789", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################
+# reset default position, same as ce4 on the ZC101 / unc-52 locus
+    ssh hgwdev
+    hgsql -e 'update dbDb set defaultPos="chrII:14646344-14667746"
+	where name="ce6";' hgcentraltest
