@@ -429,12 +429,15 @@ close (FH);
 # MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2008-05-13 - Hiram)
     # Use -repMatch=62 (based on size -- for human we use 1024, and 
     # C. PB2801 size is ~6.1% of human judging by gapless caePb2 vs. hg18 
-    # genome sizes from featureBits.
+    # genome sizes from featureBits.  So we would use 62, but that yields a very
+    # high number of tiles to ignore, especially for a small more compact 
+    # genome.  Bump that up a bit to be more conservative.
+
     ssh kolossus
     cd /cluster/data/caePb2
     blat caePb2.2bit /dev/null /dev/null -tileSize=11 \
-      -makeOoc=jkStuff/11.ooc -repMatch=62
-    #	Wrote 35523 overused 11-mers to jkStuff/11.ooc
+      -makeOoc=jkStuff/11.ooc -repMatch=120
+    #	Wrote 8586 overused 11-mers to jkStuff/11.ooc
     cp -p jkStuff/11.ooc /san/sanvol1/scratch/worms/caePb2
 
 ############################################################################

@@ -4,7 +4,7 @@
 #	From Wash U GSC
 #	http://genome.wustl.edu/genome.cgi?GENOME=Caenorhabditis+remanei
 
-#  $Id: caeRem3.txt,v 1.3 2008/05/27 17:01:55 hiram Exp $
+#  $Id: caeRem3.txt,v 1.4 2008/06/04 19:10:00 hiram Exp $
 
 #########################################################################
 # DOWNLOAD SEQUENCE (DONE - 2008-05-22 - Hiram)
@@ -359,19 +359,23 @@ close (FH);
 # MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2008-05-23 - Hiram)
     # Use -repMatch=50 (based on size -- for human we use 1024, and 
     # C. remanei size is ~5.1% of human judging by gapless caeRem2 vs. hg18 
-    # genome sizes from featureBits.
+    # genome sizes from featureBits.  So we would use 50, but that yields a very
+    # high number of tiles to ignore, especially for a small more compact 
+    # genome.  Bump that up a bit to be more conservative.
+    #	This more conservative setting was done June 4th.
+
     ssh kkstore01
     cd /cluster/data/caeRem3
     blat caeRem3.2bit /dev/null /dev/null -tileSize=11 \
-      -makeOoc=jkStuff/11.ooc -repMatch=50
-    #	Wrote 41591 overused 11-mers to jkStuff/11.ooc
+      -makeOoc=jkStuff/11.ooc -repMatch=100
+    #	Wrote 10173 overused 11-mers to 11.ooc
     cp -p jkStuff/11.ooc /san/sanvol1/scratch/worms/caeRem3
     # the san directory should have:
 # -rw-rw-r--  1       16 May 13 09:52 chrom.sizes
 # -rw-rw-r--  1 59427484 May 13 11:21 caePb2.2bit
 # -rw-rw-r--  1 58631157 May 13 11:31 caePb2.supercontigs.2bit
 # -rw-rw-r--  1    56860 May 13 11:31 caePb2.supercontigs.sizes
-# -rw-rw-r--  1   142100 May 13 11:41 11.ooc
+# -rw-rw-r--  1    40700 Jun  4 11:42 11.ooc
     #	copy those files to /cluster/bluearc/scratch/data/caeRem3/
     #	and to the Iservers /iscratch/i/worms/caeRem3/
     #	request an rsync of /scratch/data/ from the cluster admins
