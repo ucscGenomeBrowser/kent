@@ -5,6 +5,7 @@
 
 #Browser extensible data
 CREATE TABLE bed (
+    bin smallint not null,      # Bin number for browser speedup
     chrom varchar(255) not null,	# chromosome or FPC contig
     chromStart int unsigned not null,	# Start position in chromosome
     chromEnd int unsigned not null,	# End position in chromosome
@@ -18,5 +19,6 @@ CREATE TABLE bed (
     blockSizes longblob not null,	# Comma separated list of block sizes
     chromStarts longblob not null,	# Start positions relative to chromStart
               #Indices
-    PRIMARY KEY(chrom)
+    INDEX(chrom(8),bin),
+    INDEX(name(20))
 );
