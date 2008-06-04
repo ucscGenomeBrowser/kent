@@ -10,10 +10,15 @@ function nullProcessReqChange()
             alert("req.responseText: " + req.responseText);
 }
 
+function loadXMLDoc(url)
+{
+// Load XML without a request handler; this is useful if you are sending one-way messages.
+        loadXMLDoc(url, null);
+}
+
 function loadXMLDoc(url, callBack)
 {
 // From http://developer.apple.com/internet/webcontent/xmlhttpreq.html
-// If callBack is null, we provide a null callback; this is useful if you are sending one-way messages.
     if(callBack == null)
         callBack = nullProcessReqChange;
     req = false;
@@ -39,7 +44,7 @@ function loadXMLDoc(url, callBack)
     if(debug)
         alert(url);
     if(req) {
-        req.onreadystatechange = processReqChange;
+        req.onreadystatechange = callBack;
         req.open("GET", url, true);
         req.send("");
     }
