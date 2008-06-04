@@ -43,8 +43,8 @@ function toggleTrackGroupVisibility(obj, prefix)
         var list = document.getElementsByTagName('tr');
         for (var i=0;i<list.length;i++) {
             var ele = list[i];
-            // arbitrary numbers are used to make id's unique (e.g. "map-1"), so look for prefix
-            if(ele.id.indexOf(prefix) == 0) {
+            // arbitrary numbers are used to make id's unique (e.g. "map-1"), so look for prefix + "-"
+            if(ele.id.indexOf(prefix + "-") == 0) {
                 styleObj = ele.style;
                 if(styleObj.display == 'none') {
                     styleObj.display = canSee;
