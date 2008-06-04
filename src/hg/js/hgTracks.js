@@ -8,6 +8,25 @@ function maximizePix(name, value)
     document.getElementById("pix").value = document.body.offsetWidth;
 }
 
+function getURLParam(strParamName)
+{
+// XXXX Move to utils.js
+  var strReturn = "";
+  var strHref = window.location.href;
+  if ( strHref.indexOf("?") > -1 ){
+    var strQueryString = strHref.substr(strHref.indexOf("?")).toLowerCase();
+    var aQueryString = strQueryString.split("&");
+    for ( var iParam = 0; iParam < aQueryString.length; iParam++ ){
+      if (aQueryString[iParam].indexOf(strParamName.toLowerCase() + "=") > -1 ){
+        var aParam = aQueryString[iParam].split("=");
+        strReturn = aParam[1];
+        break;
+      }
+    }
+  }
+  return unescape(strReturn);
+}
+
 function toggleTrackGroupVisibility(obj, prefix)
 {
 // toggle visibility of a track group; prefix is the prefix of all the id's of tr's in the 
@@ -29,17 +48,27 @@ function toggleTrackGroupVisibility(obj, prefix)
         var src = button.src;
         if(button && hidden1 && hidden2 && src) {
             var newSrc = src.replace("/remove", "/add");
+            var newVal;
             if(newSrc == src) {
                 // we're going + => -
-                hidden1.value = '0';
+                newVal = '0';
                 hidden2.value = '0';
                 newSrc = src.replace("/add", "/remove");
             } else {
-                hidden1.value = '1';
-                hidden2.value = '1';
+                newVal = '1';
             }
+            hidden1.value = newVal;
+            hidden2.value = newVal;
             button.src = newSrc;
         }
+        var loc = window.location.href;
+        if(loc.indexOf("?") > -1) {
+            loc = loc.substring(0, loc.indexOf("?"));
+        }
+        // XXXX currently dead code; this sends a message to hgTracks to record user choice, in case they use
+        // a link to navigate.
+
+        // loadXMLDoc(loc + "?setCart=1&" + "hgtgroup_" + prefix + "_close=" + newVal + "&hgsid=" + getURLParam("hgsid"));
         var list = document.getElementsByTagName('tr');
         for (var i=0;i<list.length;i++) {
             var ele = list[i];
