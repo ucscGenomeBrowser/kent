@@ -2576,3 +2576,27 @@ url http://vega.sanger.ac.uk/Homo_sapiens/transview?transcript=$$
     priority 2
     color 30,130,210
 
+track multizPrimate
+shortLabel Primate Multiz
+longLabel Primate Multiz
+group x
+priority 104.6
+visibility hide
+color 0, 10, 100
+altColor 0,90,10
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+wiggle phastConsPrimate
+pairwiseHeight 12
+spanList 1
+yLineOnOff Off
+frames multizPrimateFrames
+# irows on
+autoScaleDefault Off
+windowingFunction mean
+summary multizPrimateSummary
+speciesGroups mammal 
+sGroup_mammal panTro2 ponAbe2 rheMac2 calJac1 otoGar1 tupBel1 mm9 rn4 canFam2 
+speciesDefaultOff 
+treeImage phylo/hg18_multizPrimate.gif
+speciesCodonDefault hg18
