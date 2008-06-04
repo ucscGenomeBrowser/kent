@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.124 2008/05/21 17:49:39 hiram Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.125 2008/06/04 16:31:08 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -840,12 +840,12 @@ struct customTrack *ct;
 if (!slCount(replacedCts))
     return NULL;
 struct dyString *dsWarn = dyStringNew(0);
-dyStringAppend(dsWarn, "Replaced:&nbsp;");
+dyStringAppend(dsWarn, "Replaced: ");
 for (ct = replacedCts; ct != NULL; ct = ct->next)
     {
     if (ct != replacedCts)
 	/* not the first */
-	dyStringAppend(dsWarn, ",&nbsp;");
+	dyStringAppend(dsWarn, ", ");
     dyStringAppend(dsWarn, ct->tdb->shortLabel);
     }
 return dyStringCannibalize(&dsWarn);
