@@ -6,7 +6,7 @@
 #include "cart.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: cartDump.c,v 1.12 2006/06/12 21:03:15 angie Exp $";
+static char const rcsid[] = "$Id: cartDump.c,v 1.13 2008/06/05 01:51:47 larrym Exp $";
 
 void doMiddle(struct cart *cart)
 /* cartDump - Dump contents of cart. */
@@ -31,6 +31,10 @@ if (cgiVarExists("submit"))
     cartRemove(cart, vVal);
     cartRemove(cart, "submit");
     }
+if (cgiVarExists("noDisplay"))
+    {
+    return;
+    }
 printf("<TT><PRE>");
 wildcard = cgiOptionalString(MATCH_VAR);
 if (wildcard)
@@ -52,7 +56,7 @@ printf("<P>Cookies passed to %s:<BR>\n%s\n</P>\n",
        cgiServerName(), getenv("HTTP_COOKIE"));
 }
 
-char *excludeVars[] = { "submit", "Submit", MATCH_VAR, NULL };
+char *excludeVars[] = { "submit", "Submit", "noDisplay", MATCH_VAR, NULL };
 
 int main(int argc, char *argv[])
 /* Process command line. */
