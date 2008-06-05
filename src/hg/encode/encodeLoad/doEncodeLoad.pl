@@ -13,7 +13,7 @@
 
 # Usage:
 # 
-# ./doEncodeLoad.pl blah /cluster/store4/encpipeline_kate/83
+# ./doEncodeLoad.pl unused /cluster/data/encode/pipeline/encpipeline_kate/83
 
 use warnings;
 use strict;
@@ -55,9 +55,7 @@ sub loadGene
 {
     my ($tableName, $fileList) = @_;
 
-    #TODO replace head -999 with cat
-
-    if(system("head -1000 -q $fileList | egrep -v '^track|browser' | ldHgGene -genePredExt $encodeDb $tableName stdin > out/loadGene.out 2>&1")) {
+    if(system("cat $fileList | egrep -v '^track|browser' | ldHgGene -genePredExt $encodeDb $tableName stdin > out/loadGene.out 2>&1")) {
         print STDERR "ERROR: File(s) '$fileList' failed gene load.\n";
         dieFile("out/loadGene.out");
     } else {
@@ -70,7 +68,6 @@ sub loadWig
 {
     my ($tableName, $fileList) = @_;
 
-    #TEST by replacing "cat" with  "head -1000 -q"
     if(system( "cat $fileList | wigEncode stdin stdout $tableName.wib | hgLoadWiggle -pathPrefix=/gbdb/$encodeDb/wib -tmpDir=$tempDir $encodeDb $tableName stdin > out/loadWig.out 2>&1") ||
        system( "rm -f /gbdb/$encodeDb/wib/$tableName.wib") ||
        system( "ln -s $tableName.wib /gbdb/$encodeDb/wib")) {
