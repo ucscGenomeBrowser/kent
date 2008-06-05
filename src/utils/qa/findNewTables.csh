@@ -40,7 +40,7 @@ echo
 foreach db ( $dbs )
   echo $db
   getTableStatus.csh  $db hgwdev | awk '{print $1, $11}' | grep $yesterDate \
-    | awk '{print $1}' | egrep -v "trackDb|hgFindSpec|tableDescriptions"
+    | awk '{print $1}' | egrep -v "trackDb|hgFindSpec"
   echo
 end
 
