@@ -168,7 +168,39 @@ function waitCursor(obj)
     //document.body.style.cursor="wait"
     obj.style.cursor="wait";
 }
+
 function endWaitCursor(obj)
 {
     obj.style.cursor="";
+}
+
+function getURLParam()
+{
+// Retrieve variable value from an url.
+// Can be called either:
+//     getURLParam(url, name)
+// or:
+//     getURLParam(name)
+// Second interface will default to using window.location.href
+    var strHref, strParamName;
+    var strReturn = "";
+    if(arguments.length == 1) {
+          strHref = window.location.href;
+          strParamName = arguments[0];
+    } else {
+          strHref = arguments[0];
+          strParamName = arguments[1];
+    }
+    if ( strHref.indexOf("?") > -1 ){
+      var strQueryString = strHref.substr(strHref.indexOf("?")).toLowerCase();
+      var aQueryString = strQueryString.split("&");
+      for ( var iParam = 0; iParam < aQueryString.length; iParam++ ){
+         if (aQueryString[iParam].indexOf(strParamName.toLowerCase() + "=") > -1 ){
+            var aParam = aQueryString[iParam].split("=");
+            strReturn = aParam[1];
+            break;
+         }
+      }
+    }
+    return unescape(strReturn);
 }
