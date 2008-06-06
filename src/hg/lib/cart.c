@@ -13,15 +13,15 @@
 #include "web.h"
 #include "hdb.h"
 #include "jksql.h"
-#include "wikiLink.h"
 #include "trashDir.h"
 #ifndef GBROWSE
 #include "customFactory.h"
+#include "googleAnalytics.h"
+#include "wikiLink.h"
 #endif /* GBROWSE */
 #include "hgMaf.h"
-#include "googleAnalytics.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.82 2008/05/23 22:09:56 angie Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.85 2008/06/06 17:43:25 fanhsu Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -276,6 +276,7 @@ hashElFreeList(&helList);
 assert(hashNumEntries(hash) == 0);
 }
 
+#ifndef GBROWSE
 void cartLoadUserSession(struct sqlConnection *conn, char *sessionOwner,
 			 char *sessionName, struct cart *cart,
 			 struct hash *oldVars, char *actionVar)
@@ -336,6 +337,7 @@ else
 sqlFreeResult(&sr);
 freeMem(encSessionName);
 }
+#endif /* GBROWSE */
 
 void cartLoadSettings(struct lineFile *lf, struct cart *cart,
 		      struct hash *oldVars, char *actionVar)
@@ -461,6 +463,7 @@ cart->sessionInfo = loadDbOverHash(conn, "sessionDb", sessionId, cart);
 
 loadCgiOverHash(cart, oldVars);
 
+#ifndef GBROWSE
 /* If some CGI other than hgSession been passed hgSession loading instructions,
  * apply those to cart before we do anything else.  (If this is hgSession,
  * let it handle the settings so it can display feedback to the user.) */
@@ -483,6 +486,7 @@ if (! (cgiScriptName() && endsWith(cgiScriptName(), "hgSession")))
 	lineFileClose(&lf);
 	}
     }
+#endif /* GBROWSE */
 
 if (exclude != NULL)
     {
@@ -1163,7 +1167,9 @@ popWarnHandler();
 void cartFooter(void)
 /* Write out HTML footer, possibly with googleAnalytics too */
 {
+#ifndef GBROWSE
 googleAnalytics();	/* can't do this in htmlEnd	*/
+#endif /* GBROWSE */
 htmlEnd();		/* because it is in a higher library */
 }
 
@@ -1323,14 +1329,14 @@ outName2 = tn2.forCgi;
 outF = mustOpen(outName,"w");
 outF2= mustOpen(outName2,"w");
 
-safef(query, sizeof(query), "select distinct subjId from hiv1.gsIdXref order by subjId");
+safef(query, sizeof(query), "select distinct subjId from hgFixed.gsIdXref order by subjId");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     fprintf(outF, "%s\n", row[0]);
 
     safef(query2, sizeof(query2),
-          "select dnaSeqId from hiv1.gsIdXref where subjId='%s' order by dnaSeqId", row[0]);
+          "select dnaSeqId from hgFixed.gsIdXref where subjId='%s' order by dnaSeqId", row[0]);
 
     sr2 = sqlGetResult(conn2, query2);
     while ((row2 = sqlNextRow(sr2)) != NULL)
@@ -1394,3 +1400,62 @@ while( ( lineFileChopNext(lf, words, sizeof(words)/sizeof(char *)) ))
 return dyStringCannibalize(&orderDY);
 }
 
+char *cartGetOrderFromFileAndMsaTable(struct cart *cart, char *speciesUseFile, char *msaTable)
+/* This function is used for GSID server only.
+   Look in a cart variable that holds the filename that has a list of 
+ * species to show in a maf file and also restrict the results by the IDs existing in an MSA table*/
+{
+char *val;
+struct sqlResult *sr=NULL;
+char query[255];
+struct sqlConnection *conn;
+
+struct dyString *orderDY = dyStringNew(256);
+char *words[16];
+if ((val = cartUsualString(cart, speciesUseFile, NULL)) == NULL)
+    {
+    if (hIsGsidServer())
+	{
+	saveDefaultGsidLists(cart);
+
+	/* now it should be set */
+	val = cartUsualString(cart, speciesUseFile, NULL);
+	if (val == NULL)
+    	    errAbort("can't find species list file var '%s' in cart\n",speciesUseFile);
+	}
+    else
+	{
+    	errAbort("can't find species list file var '%s' in cart\n",speciesUseFile);
+	}
+    }
+
+struct lineFile *lf = lineFileOpen(val, TRUE);
+
+if (lf == NULL)
+    errAbort("can't open species list file %s",val);
+
+if (hIsGsidServer())
+    {
+    conn= hAllocConn();
+    while( ( lineFileChopNext(lf, words, sizeof(words)/sizeof(char *)) ))
+    	{
+	safef(query, sizeof(query), 
+	      "select id from %s where id like '%s%s'", msaTable, "%",  words[0]);
+	sr = sqlGetResult(conn, query);
+	if (sqlNextRow(sr) != NULL)
+    	    {
+    	    dyStringPrintf(orderDY, "%s ",words[0]);
+	    sqlFreeResult(&sr);
+    	    }
+  	}
+    hFreeConn(&conn);
+    }
+else
+    {
+    while( ( lineFileChopNext(lf, words, sizeof(words)/sizeof(char *)) ))
+    	{
+    	dyStringPrintf(orderDY, "%s ",words[0]);
+    	}
+    }
+return dyStringCannibalize(&orderDY);
+}

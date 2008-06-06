@@ -93,9 +93,13 @@ char *jsPressOnEnter(char *button);
  * jsInit must be called first. 
  * Do not free return value!  */
 
-void jsIncludeFile(char *fileName);
+void jsIncludeFile(char *fileName, char *noScriptMsg);
 /* Prints out html to include given javascript file from the js directory; suppresses redundant
- * <script ...> tags if called repeatedly */
+ *  <script ...> tags if called repeatedly.
+ * <noscript>...</noscript> tags are provided automatically. The noscript message may be specified via
+ * the noScriptMsg parameter (the string may contain HTML markup). A default msg is provided
+ * if noScriptMsg == NULL; noscript msg is suppressed if noScriptMsg == "" (this is useful
+ * if you want to more carefully control where the message will appear on the page). */
 
 char *jsCheckAllOnClickHandler(char *idPrefix, boolean state);
 /* Returns javascript for use as an onclick attribute value to apply "check all"/"uncheck all" 

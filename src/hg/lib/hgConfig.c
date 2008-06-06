@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-static char const rcsid[] = "$Id: hgConfig.c,v 1.16 2008/05/23 22:14:58 angie Exp $";
+static char const rcsid[] = "$Id: hgConfig.c,v 1.18 2008/06/03 23:17:56 markd Exp $";
 
 #include "common.h"
 #include "hash.h"
@@ -17,79 +17,150 @@ static char const rcsid[] = "$Id: hgConfig.c,v 1.16 2008/05/23 22:14:58 angie Ex
 /* the file to read the user configuration info from, starting at the user's home */
 #define USER_CONFIG_FILE ".hg.conf"
 
+// forwards
+static void parseConfigFile(char *filename, int depth);
+
 /* the hash holding the config options */
 static struct hash* cfgOptionsHash = 0;
 
-static void getConfigFile(char filename[PATH_LEN])
-/* get path to .hg.conf file to use */
+static boolean isBrowserCgi()
+/* test if this is a browser CGI */
 {
+#ifndef GBROWSE
 /* this long complicated test is needed because, cgiSpoof may have already
  * been called thus we have to look a little deeper to seem if were are really
  * a cgi we do this looking for cgiSpoof in the QUERY_STRING, if it exists.
  * If not a cgi, read from home directory, e.g. ~/.hg.conf */
-#ifndef GBROWSE
-if(!cgiIsOnWeb() ||
-   (getenv("QUERY_STRING") != 0 && strstr(getenv("QUERY_STRING"), "cgiSpoof") != 0))
+static boolean firstTime = TRUE;
+static boolean result = FALSE;
+if (firstTime)
     {
-    struct stat statBuf;
+    result = ((cgiIsOnWeb()) && !((getenv("QUERY_STRING") != NULL) && (strstr(getenv("QUERY_STRING"), "cgiSpoof") != NULL)));
+    firstTime = FALSE;
+    }
+return result;
+#else
+return FALSE;
+#endif
+}
+
+static void checkConfigPerms(char *filename)
+/* get that we are either a CGI or that the config file is only readable by 
+ * the user, or doesn't exist */
+{
+struct stat statBuf;
+if ((!isBrowserCgi()) && (stat(filename, &statBuf) == 0))
+    {
+    if ((statBuf.st_mode & (S_IRWXG|S_IRWXO)) != 0)
+        errAbort("config file %s allows group or other access, must only allow user access",
+                 filename);
+    }
+}
+
+static void getConfigFile(char filename[PATH_LEN])
+/* get path to .hg.conf file to use */
+{
+if (!isBrowserCgi())
+    {
     /* Check for explictly specified file in env, otherwise use one in home */
     if (getenv("HGDB_CONF") != NULL)
         strcpy(filename, getenv("HGDB_CONF"));
     else
         safef(filename, PATH_LEN, "%s/%s",
 	      getenv("HOME"), USER_CONFIG_FILE);
-    /* ensure that the file only readable by the user */
-    if (stat(filename, &statBuf) == 0)
-	{
-	if ((statBuf.st_mode & (S_IRWXG|S_IRWXO)) != 0)
-	    errAbort("config file %s allows group or other access, must only allow user access",
-		     filename);
-	}
+    checkConfigPerms(filename);
     }
 else	/* on the web, read from global config file */
-#endif /* GBROWSE */
     {
     safef(filename, PATH_LEN, "%s/%s",
 	  GLOBAL_CONFIG_PATH, GLOBAL_CONFIG_FILE);
     }
 }
 
+static void parseConfigInclude(struct lineFile *lf, int depth, char *line)
+/* open and parse an included config file */
+{
+if (depth > 10)
+    errAbort("maximum config include depth exceeded: %s:%d",
+             lf->fileName, lf->lineIx);
+
+// parse out file name
+char line2[PATH_LEN+64];
+safecpy(line2, sizeof(line2), line);  // copy so we can make a useful error message
+char *p = line2;
+(void)nextWord(&p);
+char *relfile = nextWord(&p);
+if ((relfile == NULL) || (p != NULL))
+    errAbort("invalid format for config include: %s:%d: %s",
+             lf->fileName, lf->lineIx, line);
+
+// construct relative to current file path, unless include
+// file is absolute
+char incfile[PATH_LEN];
+safecpy(incfile, sizeof(incfile),  lf->fileName);
+char *dirp = strrchr(incfile, '/');
+if ((dirp != NULL) && (relfile[0] != '/'))
+    {
+    // construct relative path
+    *(dirp+1) ='\0';
+    safecat(incfile, sizeof(incfile), relfile);
+    }
+else
+    {
+    // use as-is
+    safecpy(incfile, sizeof(incfile),  relfile);
+    }
+parseConfigFile(incfile, depth+1);
+}
+
+static void parseConfigLine(struct lineFile *lf, int depth, char *line)
+/* parse one non-comment, non-blank line of the config file.
+ * If keyword=value, put in global hash, otherwise process
+ * includes. */
+{
+/* parse the key/value pair */
+char *name = trimSpaces(line);
+if (startsWithWord("include", line))
+    parseConfigInclude(lf, depth, line);
+else
+    {
+    char *value = strchr(name, '=');
+    if (value == NULL)
+        errAbort("invalid format in config file %s:%d: %s",
+                 lf->fileName, lf->lineIx, line);
+    *value++ = '\0';
+    name = trimSpaces(name);
+    value = trimSpaces(value);
+    hashAdd(cfgOptionsHash, name, cloneString(value));
+    /* Set environment variables to enable sql tracing and/or profiling */
+    if (sameString(name, "JKSQL_TRACE") || sameString(name, "JKSQL_PROF"))
+        envUpdate(name, value);
+    }
+}
+
+static void parseConfigFile(char *filename, int depth)
+/* open and parse a config file */
+{
+checkConfigPerms(filename);
+struct lineFile *lf = lineFileOpen(filename, TRUE);
+char *line;
+while(lineFileNext(lf, &line, NULL))
+    {
+    // check for comment or blank line
+    char *p = skipLeadingSpaces(line);
+    if (!((p[0] == '#') || (p[0] == '\0'))) 
+        parseConfigLine(lf, depth, line);
+    }
+lineFileClose(&lf);
+}
+
 static void initConfig()
 /* create and initilize the config hash */
 {
-struct lineFile *lf;
 char filename[PATH_LEN];
-char *line, *name, *value;
-
 cfgOptionsHash = newHash(6);
-
 getConfigFile(filename);
-
-/* parse; if the file is not there or can't be read, leave the hash empty */
-if((lf = lineFileMayOpen(filename, TRUE)) != 0)
-    {
-    /* while there are lines to read */
-    while(lineFileNext(lf, &line, NULL))
-	{
-	/* if it's not a comment */
-	if(line[0] != '#')
-	    {
-	    /* parse the key/value pair */
-            value = strchr(line, '=');
-	    if (value != NULL)
-                {
-                *value++ = '\0';
-                name = trimSpaces(line);
-                value = trimSpaces(value);
-		hashAdd(cfgOptionsHash, name, cloneString(value));
-                /* Set enviroment variables to enable sql tracing and/or profiling */
-                if (sameString(name, "JKSQL_TRACE") || sameString(name, "JKSQL_PROF"))
-                    envUpdate(name, value);
-                }
-	    }
-	}
-    lineFileClose(&lf);
-    }
+parseConfigFile(filename, 0);
 }
 
 char* cfgOption(char* name)

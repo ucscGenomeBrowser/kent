@@ -13,8 +13,9 @@
 #include "scoredRef.h"
 #include "hgMaf.h"
 #include "mafTrack.h"
+#include "customTrack.h"
 
-static char const rcsid[] = "$Id: mafTrack.c,v 1.59 2008/02/20 00:42:27 markd Exp $";
+static char const rcsid[] = "$Id: mafTrack.c,v 1.60 2008/05/31 14:16:15 braney Exp $";
 
 struct mafItem
 /* A maf track item. */
@@ -96,7 +97,9 @@ slAddHead(&miList, mi);
     {
     struct hash *hash = newHash(8);	/* keyed by database. */
     hashAdd(hash, mi->db, mi);		/* Add in current organism. */
-    for (maf = tg->customPt; maf != NULL; maf = maf->next)
+    struct mafPriv *mp = getMafPriv(tg);
+
+    for (maf = mp->list; maf != NULL; maf = maf->next)
         {
 	struct mafComp *mc;
 	for (mc = maf->components; mc != NULL; mc = mc->next)
@@ -109,6 +112,7 @@ slAddHead(&miList, mi);
                 otherOrganism = hOrganism(mi->db);
                 mi->name = 
                     (otherOrganism == NULL ? cloneString(buf) : otherOrganism);
+
 		mi->height = tl.fontHeight;
 		slAddHead(&miList, mi);
 		hashAdd(hash, mi->db, mi);
@@ -149,7 +153,8 @@ if (trackDbSetting(tg->tdb, "pairwise") != NULL)
     {
     // TODO: share code with baseByBaseItems
     struct hash *hash = newHash(8);	/* keyed by database. */
-    for (maf = tg->customPt; maf != NULL; maf = maf->next)
+    struct mafPriv *mp = getMafPriv(tg);
+    for (maf = mp->list; maf != NULL; maf = maf->next)
         {
 	struct mafComp *mc;
         boolean isMyOrg = TRUE;
@@ -182,17 +187,35 @@ return miList;
 }
 
 static struct mafItem *mafItems(struct track *tg, int scoreHeight,
-                                         boolean isBaseLevel, boolean isAxt)
+					   boolean isBaseLevel, boolean isAxt)
 /* Load up items for full mode */
 {
 struct mafAli *mafList = NULL;
 struct mafItem *miList = NULL;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = NULL;
+struct mafPriv *mp = getMafPriv(tg);
 
-/* Load up mafs and store in track so drawer doesn't have
- * to do it again. */
-mafList = mafOrAxtLoadInRegion(conn, tg, chromName, winStart, winEnd, isAxt);
-tg->customPt = mafList;
+if (mp->ct != NULL)
+    {
+    struct customTrack *ct = mp->ct;
+    tg->mapName = ct->dbTableName;
+    conn = sqlCtConn(TRUE);
+    struct sqlConnection *conn2 = sqlCtConn(TRUE);
+    mafList = mafLoadInRegion2(conn, conn2, ct->dbTableName, chromName, 
+	winStart, winEnd);
+    sqlDisconnect(&conn2);
+    sqlDisconnect(&conn);
+    }
+else
+    {
+    conn = hAllocConn();
+
+    /* Load up mafs and store in track so drawer doesn't have
+     * to do it again. */
+    mafList = mafOrAxtLoadInRegion(conn, tg, chromName, winStart, winEnd, isAxt);
+    hFreeConn(&conn);
+    }
+mp->list = mafList;
 
 /* Make up tracks for display. */
 if (isBaseLevel)
@@ -201,7 +224,7 @@ else
     {
     miList = pairwiseItems(tg, scoreHeight);
     }
-hFreeConn(&conn);
+
 return miList;
 }
 
@@ -243,8 +266,6 @@ static void mafLoad(struct track *tg)
 mafOrAxtLoad(tg, FALSE);
 }
 
-
-
 static int mafTotalHeight(struct track *tg, 
 	enum trackVisibility vis)
 /* Return total height of maf track.  */
@@ -267,7 +288,8 @@ return mi->height;
 static void mafFree(struct track *tg)
 /* Free up mafGroup items. */
 {
-mafAliFreeList((struct mafAli **)&tg->customPt);
+struct mafPriv *mp = getMafPriv(tg);
+mafAliFreeList((struct mafAli **)&mp->list);
 mafItemFreeList((struct mafItem **)&tg->items);
 }
 
@@ -615,13 +637,13 @@ for (full = mafList; full != NULL; full = full->next)
 		Color yellow = hvGfxFindRgb(hvg, &undefinedYellowColor);
 		hvGfxBox(hvg, x1, yOff, w, height - 1, yellow);
 		}
-            else if ((mc->leftStatus == MAF_INSERT_STATUS ||  mc->leftStatus == MAF_NEW_NESTED_STATUS)  &&
+            else if ((mc->leftStatus == MAF_INSERT_STATUS ||  mc->leftStatus == MAF_NEW_NESTED_STATUS)  ||
                 (mc->rightStatus == MAF_INSERT_STATUS ||  mc->rightStatus == MAF_NEW_NESTED_STATUS))
 		{
 		/* double gap -> display double line ala chain tracks */
 		drawMafChain(hvg, x1, yOff, w, height, TRUE);
 		}
-            else if (( mc->leftStatus == MAF_CONTIG_STATUS)  && ( mc->rightStatus == MAF_CONTIG_STATUS ))
+            else if (( mc->leftStatus == MAF_CONTIG_STATUS)  || ( mc->rightStatus == MAF_CONTIG_STATUS ))
 		{
 		/* single gap -> display single line ala chain tracks */
 		drawMafChain(hvg, x1, yOff, w, height, FALSE);
@@ -686,8 +708,9 @@ struct mafAli *mafList;
 struct sqlConnection *conn = hAllocConn();
 struct mafItem *miList = tg->items, *mi = miList;
 char *suffix;
+struct mafPriv *mp = getMafPriv(tg);
 
-mafList = tg->customPt;
+mafList = mp->list;
 if (mafList == NULL)
     mafList = mafOrAxtLoadInRegion(conn, tg, chromName, 
                                                 seqStart, seqEnd, isAxt);
@@ -750,7 +773,8 @@ static void mafDrawBases(struct track *tg, int seqStart, int seqEnd,
 /* Draw base-by-base view. */
 {
 struct mafItem *miList = tg->items, *mi;
-struct mafAli *mafList = tg->customPt, *maf, *sub;
+struct mafPriv *mp = getMafPriv(tg);
+struct mafAli *mafList = mp->list, *maf, *sub;
 int lineCount = slCount(miList);
 char **lines = NULL, *selfLine, *insertLine;
 double *scores;  /* per base scores */

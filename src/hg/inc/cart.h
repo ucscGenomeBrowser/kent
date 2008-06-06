@@ -430,5 +430,9 @@ void cartLoadSettings(struct lineFile *lf, struct cart *cart,
 char *cartGetOrderFromFile(struct cart *cart, char *speciesUseFile);
 /* Look in a cart variable that holds the filename that has a list of 
  * species to show in a maf file */
+
+char *cartGetOrderFromFileAndMsaTable(struct cart *cart, char *speciesUseFile, char *msaTable);
+/* Look in a cart variable that holds the filename that has a list of 
+ * species to show in a maf file */
 #endif /* CART_H */
 

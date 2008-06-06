@@ -115,8 +115,11 @@ void wikiTrackOutput(struct wikiTrack *el, FILE *f, char sep, char lastSep);
 
 /* name of database table in hgcentral */
 #define WIKI_TRACK_TABLE "wikiTrack"
+
+/* trackDb settings */
 #define WIKI_TRACK_LABEL "Wiki Track"
 #define WIKI_TRACK_LONGLABEL "Wiki Track user annotations"
+#define WIKI_TRACK_PRIORITY 99.99
 
 /* hgc variables */
 #define G_CREATE_WIKI_ITEM "htcCreateWikiItem"
@@ -149,6 +152,18 @@ boolean wikiTrackEnabled(char *database, char **wikiUserName);
 
 char *wikiTrackGetCreateSql(char *tableName);
 /* return sql create statement for wiki track with tableName */
+
+char *wikiDbName();
+/* return name of database where wiki track is located
+    currently this is central.db but the future may be configurable */
+
+struct sqlConnection *wikiConnect();
+/* connect to db where wikiTrack table is located
+ *	currently this is hConnectCentral() but the future may be
+ *	configurable */
+
+void wikiDisconnect(struct sqlConnection **pConn);
+/* disconnect from wikiTrack table database */
 
 struct wikiTrack *findWikiItemId(char *wikiItemId);
 /* given a wikiItemId return the row from the table */

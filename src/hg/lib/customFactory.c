@@ -24,7 +24,7 @@
 #include "trashDir.h"
 #include "jsHelper.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.76 2008/05/28 21:36:00 larrym Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.78 2008/05/31 13:42:37 braney Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -250,7 +250,7 @@ dyStringPrintf(tmpDy, "-tmpDir=%s", tmpDir);
 cmd1[index++] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
 dyStringPrintf(tmpDy, "-maxChromNameLength=%d", track->maxChromName);
 cmd1[index++] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
-if(startsWith("bedGraph", track->dbTrackType))
+if(startsWithWord("bedGraph", track->dbTrackType))
     {
     char buf[100];
     /* we currently assume that last field is the bedGraph field. */
@@ -303,7 +303,7 @@ static struct customTrack *bedFinish(struct customTrack *track,
 {
 /* Add type based on field count */
 char buf[20];
-safef(buf, sizeof(buf), "%s %d .", track->tdb->type != NULL && startsWith("bedGraph", track->tdb->type) ? "bedGraph" : "bed", track->fieldCount);
+safef(buf, sizeof(buf), "%s %d .", track->tdb->type != NULL && startsWithWord("bedGraph", track->tdb->type) ? "bedGraph" : "bed", track->fieldCount);
 track->tdb->type = cloneString(buf);
 track->dbTrackType = cloneString(buf);
 safef(buf, sizeof(buf), "%d", track->fieldCount);
@@ -966,6 +966,145 @@ static struct customFactory pslFactory =
     pslLoader,
     };
 
+static boolean mafRecognizer(struct customFactory *fac,
+	struct customPp *cpp, char *type, 
+    	struct customTrack *track)
+/* Return TRUE if looks like we're handling a maf track */
+{
+if (type != NULL && !sameType(type, fac->name))
+    return FALSE;
+char *line = customPpNext(cpp);
+if (line == NULL)
+    return FALSE;
+
+boolean isMaf = FALSE;
+if (startsWith("##maf version", line))
+    {
+    isMaf = TRUE;
+    }
+
+customPpReuse(cpp, line);
+
+return isMaf;
+}
+
+static void mafLoaderBuildTab(struct customTrack *track, char *mafFile)
+/* build maf tab file and load in database */
+{
+customFactorySetupDbTrack(track);
+
+char *db = customTrackTempDb();
+struct dyString *tmpDy = newDyString(0);
+char *cmd1[] = {"loader/hgLoadMaf", "-verbose=0", NULL,  NULL,
+	NULL, NULL, NULL, NULL, NULL};
+char **cmds[] = {cmd1, NULL};
+char *tmpDir = cfgOptionDefault("customTracks.tmpdir", "/data/tmp");
+struct stat statBuf;
+
+if (stat(tmpDir,&statBuf))
+    errAbort("can not find custom track tmp load directory: '%s'<BR>\n"
+	"create directory or specify in hg.conf customTrash.tmpdir", tmpDir);
+dyStringPrintf(tmpDy, "-tmpDir=%s", tmpDir);
+cmd1[2] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
+dyStringPrintf(tmpDy, "-loadFile=%s", mafFile);
+cmd1[3] = dyStringCannibalize(&tmpDy);  tmpDy = newDyString(0);
+dyStringPrintf(tmpDy, "-refDb=%s", hGetDb());
+cmd1[4] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0); 
+dyStringPrintf(tmpDy, "-maxNameLen=%d", track->maxChromName);
+cmd1[5] = dyStringCannibalize(&tmpDy);
+cmd1[6] = db;
+cmd1[7] = track->dbTableName;
+
+struct pipeline *dataPipe =  pipelineOpen(cmds, 
+    pipelineWrite | pipelineNoAbort, "/dev/null", track->dbStderrFile);
+if(pipelineWait(dataPipe))
+    pipelineFailExit(track);	/* prints error and exits */
+
+pipelineFree(&dataPipe);
+unlink(track->dbStderrFile);	/* no errors, not used */
+restorePrevEnv();			/* restore environment */
+track->wigFile = NULL;
+}
+
+static struct customTrack *mafLoader(struct customFactory *fac,  
+	struct hash *chromHash,
+    	struct customPp *cpp, struct customTrack *track, boolean dbRequested)
+{
+FILE *f;
+char *line;
+struct tempName tn;
+struct hash *settings = track->tdb->settingsHash;
+
+if (!dbRequested)
+    errAbort("Maf files have to be in database");
+
+track->dbTrackType = cloneString(fac->name);
+track->wiggle = TRUE;
+
+/* If mafFile setting already exists, then we are reloading, not loading.
+ * Just make sure files still exist. */
+if (hashFindVal(settings, "mafFile"))
+    {
+    track->wibFile = hashFindVal(settings, "mafFile");
+    if (!fileExists(track->wibFile))
+        return FALSE;
+    }
+/* MafFile setting doesn't exist, so we are loading from stream. */
+else
+    {
+    char *maxByteStr = cfgOption("customTracks.maxBytes");
+
+    /* Make up wib file name and add to settings. */
+    trashDirFile(&tn, "ct", "ct", ".maf");
+    track->wibFile = cloneString(tn.forCgi);
+    ctAddToSettings(track, "mafFile", track->wibFile);
+
+    char *mafFile = cloneString(track->wibFile);
+
+    /* Actually create maf file. */
+    f = mustOpen(mafFile, "w");
+    if (maxByteStr != NULL)
+	{
+	long maxBytes = sqlUnsignedLong(maxByteStr);
+	long numBytesLeft = maxBytes;
+
+	while ((line = customFactoryNextTilTrack(cpp)) != NULL)
+	    {
+	    numBytesLeft -= strlen(line);
+
+	    if (numBytesLeft < 0)
+		{
+		unlink(mafFile);
+		errAbort("exceeded upload limit of %ld bytes\n", maxBytes);
+		}
+
+	    fprintf(f, "%s\n", line);
+	    }
+	}
+    else
+	while ((line = customFactoryNextTilTrack(cpp)) != NULL)
+	    fprintf(f, "%s\n", line);
+
+    carefulClose(&f);
+
+    mafLoaderBuildTab(track, mafFile);
+    }
+char tdbType[256];
+safef(tdbType, sizeof(tdbType), "maf");
+track->tdb->type = cloneString(tdbType);
+
+return track;
+}
+
+static struct customFactory mafFactory = 
+/* Factory for maf tracks */
+    {
+    NULL,
+    "maf",
+    mafRecognizer,
+    mafLoader,
+    };
+
 /*** Wig Factory - for wiggle tracks ***/
 
 static boolean wigRecognizer(struct customFactory *fac,
@@ -1197,6 +1336,10 @@ static void customFactoryInit()
 {
 if (factoryList == NULL)
     {
+    /* mafFactory has to be first because it
+     * doesn't strip comments
+     */
+    slAddHead(&factoryList, &mafFactory);
     slAddTail(&factoryList, &wigFactory);
     slAddTail(&factoryList, &chromGraphFactory);
     slAddTail(&factoryList, &pslFactory);

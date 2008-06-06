@@ -25,6 +25,10 @@
 #define gsidSubjList "gsidTable.gsidSubjList"
 #define gsidSeqList "gsidTable.gsidSeqList"
 
+struct mafAli *mafLoadInRegion2(struct sqlConnection *conn, 
+    struct sqlConnection *conn2, char *table, char *chrom, int start, int end);
+/* Return list of alignments in region. */
+
 struct mafAli *mafLoadInRegion(struct sqlConnection *conn, char *table,
 	char *chrom, int start, int end);
 /* Return list of alignments in region. */

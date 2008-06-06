@@ -14,12 +14,9 @@
 #include "hgRelate.h"
 #include "fa.h"
 #include "hgConfig.h"
-#include "ctgPos.h"
 #include "trackDb.h"
 #include "hCommon.h"
-#include "hgFind.h"
 #include "dbDb.h"
-#include "axtInfo.h"
 #include "subText.h"
 #include "blatServers.h"
 #include "bed.h"
@@ -34,11 +31,14 @@
 #include "genbank.h"
 #include "chromInfo.h"
 #ifndef GBROWSE
+#include "axtInfo.h"
+#include "ctgPos.h"
 #include "customTrack.h"
+#include "hgFind.h"
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.355 2008/05/25 02:44:17 markd Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.358 2008/05/31 13:41:07 braney Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -1052,6 +1052,7 @@ struct chromInfo *ci = mustGetChromInfo(hGetDb2(), chromName);
 safef(retNibName, HDB_MAX_PATH_STRING, "%s", ci->fileName);
 }
 
+#ifndef GBROWSE
 struct hash *hCtgPosHash()
 /* Return hash of ctgPos from current database keyed by contig name. */
 {
@@ -1071,20 +1072,28 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 return hash;
 }
+#endif /* GBROWSE */
+
+static struct dnaSeq *fetchTwoBitSeq(char *fileName, char *seqName, int start, int end)
+/* fetch a sequence from a 2bit, caching open of the file */
+{
+static struct twoBitFile *tbf = NULL;  // cache of open file
+if ((tbf == NULL) || !sameString(fileName, tbf->fileName))
+    {
+    twoBitClose(&tbf);
+    tbf = twoBitOpen(fileName);
+    }
+struct dnaSeq *seq = twoBitReadSeqFrag(tbf, seqName, start, end);
+return seq;
+}
 
 struct dnaSeq *hFetchSeqMixed(char *fileName, char *seqName, int start, int end)
 /* Fetch mixed case sequence. */
 {
 if (twoBitIsFile(fileName))
-    {
-    struct twoBitFile *tbf;
-    struct dnaSeq *seq;
-    tbf = twoBitOpen(fileName);
-    seq = twoBitReadSeqFrag(tbf, seqName, start, end);
-    twoBitClose(&tbf);
-    return seq;
-    }
-return nibLoadPartMasked(NIB_MASK_MIXED, fileName, start, end-start);
+    return fetchTwoBitSeq(fileName, seqName, start, end);
+else
+    return nibLoadPartMasked(NIB_MASK_MIXED, fileName, start, end-start);
 }
 
 struct dnaSeq *hFetchSeq(char *fileName, char *seqName, int start, int end)
@@ -1093,13 +1102,7 @@ struct dnaSeq *hFetchSeq(char *fileName, char *seqName, int start, int end)
 {
 if (twoBitIsFile(fileName))
     {
-    static struct twoBitFile *tbf = NULL;  // cache of open file
-    if ((tbf == NULL) || !sameString(fileName, tbf->fileName))
-        {
-        twoBitClose(&tbf);
-        tbf = twoBitOpen(fileName);
-        }
-    struct dnaSeq *seq = twoBitReadSeqFrag(tbf, seqName, start, end);
+    struct dnaSeq *seq = fetchTwoBitSeq(fileName, seqName, start, end);
     tolowers(seq->dna);
     return seq;
     }
@@ -1336,7 +1339,7 @@ hFreeOrDisconnect(&conn);
 return list;
 }
 
-static char *hExtFileNameC(struct sqlConnection *conn, char *extFileTable, unsigned extFileId)
+char *hExtFileNameC(struct sqlConnection *conn, char *extFileTable, unsigned extFileId)
 /* Get external file name from table and ID.  Typically
  * extFile table will be 'extFile' or 'gbExtFile'
  * Abort if the id is not in the table or if the file
@@ -4292,6 +4295,7 @@ slSort(&liftOverDbList, hDbDbCmpOrderKey);
 return liftOverDbList;
 }
 
+#ifndef GBROWSE
 struct dbDb *hGetAxtInfoDbs()
 /* Get list of db's where we have axt files listed in axtInfo . 
  * The db's with the same organism as current db go last.
@@ -4448,6 +4452,8 @@ hFreeConn(&conn);
 slReverse(&aiList);
 return aiList;
 }
+#endif /* GBROWSE */
+
 struct dbDb *hGetBlatIndexedDatabases()
 /* Get list of databases for which there is a BLAT index. 
  * Dispose of this with dbDbFreeList. */

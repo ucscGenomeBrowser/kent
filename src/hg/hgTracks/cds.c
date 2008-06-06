@@ -19,11 +19,24 @@
 #include "hgTracks.h"
 #include "cdsSpec.h"
 
+/*
+ * WARNING: this code is incomprehensible:
+ *     - variables named codon often contain amino acids, not condons
+ *     - it does two passes, one undocumented function encodes both a
+ *       color and an amino acid into the struct simpleFeature grayIx
+ *       field and this is decoded in the second pass.
+ *     - baseColorDrawItem doesn't draw a item, it draws a single codon,
+ *       or a maybe even a single base.
+ *     - there are many assumptions and state shared between this module
+ *       and the simpleTracks.c.
+ * may The Force be with you..
+ */
+
 #ifndef GBROWSE
 #include "pcrResult.h"
 #endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: cds.c,v 1.78 2008/05/27 22:09:15 markd Exp $";
+static char const rcsid[] = "$Id: cds.c,v 1.79 2008/05/29 20:25:28 markd Exp $";
 
 /* Definitions of cds colors for coding coloring display */
 #define CDS_ERROR   0
@@ -1619,6 +1632,9 @@ if (drawOpt == baseColorDrawItemBases ||
     *retMrnaSeq = maybeGetSeqUpper(lf, tg->mapName, tg);
     if (*retMrnaSeq != NULL && *retPsl != NULL)
 	{
+        if ((*retMrnaSeq)->size != (*retPsl)->qSize)
+            errAbort("baseColorDrawSetup: %s: mRNA size (%d) != psl qSize (%d)",
+                     (*retPsl)->qName, (*retMrnaSeq)->size, (*retPsl)->qSize);
 	if ((*retPsl)->strand[0] == '-' || (*retPsl)->strand[1] == '-')
 	    reverseComplement((*retMrnaSeq)->dna, strlen((*retMrnaSeq)->dna));
 	}
@@ -1693,3 +1709,4 @@ if (cds.start < cds.end)
         }
     }
 }
+
