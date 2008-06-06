@@ -7,11 +7,9 @@
 #               for the datasets
 # Returns 0 if validation succeeds.
 
-# TODO:  Handle Mac and DOS EOLs
-
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.19 2008/02/06 17:24:31 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.20 2008/06/06 07:47:09 larrym Exp $
 
 use warnings;
 use strict;
@@ -38,6 +36,29 @@ options:
                         (default: submission-dir/out)
 ";
 exit 1;
+}
+
+sub readFile
+{
+# Return lines from given file, with EOL chomp'ed off.
+# Handles either Unix or Mac EOL characters.
+# Reads whole file into memory, so should NOT be used for huge files.
+    my ($file) = @_;
+    my $oldEOL = $/;
+    open(FILE, $file) or die "ERROR: Can't open file \'$file\'\n";
+    my @lines = <FILE>;
+    if(@lines == 1 && $lines[0] =~ /\r/) {
+        # rewind and re-read as a Mac file - obviously, this isn't the most efficient way to do this.
+        seek(FILE, 0, 0);
+        $/ = "\r";
+        @lines = <FILE>;
+    }
+    for (@lines) {
+        chomp;
+    }
+    close(FILE);
+    $/ = $oldEOL;
+    return \@lines;
 }
 
 # Global constants
@@ -70,7 +91,8 @@ our %validators = (
     Raw_Data_Acc_REF => \&validateRawDataAccREF,
     Data_Version => \&validateDataVersion,
     Cell_Line_REF => \&validateCellLineREF,
-    Gene_Type_REF => \&validateGeneTypeREF
+    Gene_Type_REF => \&validateGeneTypeREF,
+    Antibody_REF => \&validateAntibodyREF,
     );
 
 # standard validators (required or optional for all projects)
@@ -126,6 +148,11 @@ sub validateCellLineREF {
 sub validateGeneTypeREF {
     my ($val) = @_;
     defined($terms{'Gene Type'}{$val}) || die "ERROR: Gene type \'$val\' is not known \n";
+}
+
+sub validateAntibodyREF {
+    my ($val) = @_;
+    defined($terms{'Antibody'}{$val}) || die "ERROR: Antibody \'$val\' is not known \n";
 }
 
 ############################################################################
@@ -242,22 +269,20 @@ sub getPif {
     my %pif = ();
     $pifFile = &newestFile(glob "*.PIF");
     &HgAutomate::verbose(2, "Using newest PIF file \'$pifFile\'\n");
-    open(PIF, $pifFile) || die "ERROR: Can't open PIF file \'$pifFile\'\n";
 
     %tracks = ();  # this is a global
     my $track;
 
-    my @lines = <PIF>;
-    while (my $line = shift @lines) {
+    my $lines = readFile($pifFile);
+    while (@{$lines}) {
+        my $line = shift @{$lines};
         # strip leading and trailing spaces
         $line =~ s/^ +//;
         $line =~ s/ +$//;
-
         # ignore comments and blank lines
         next if $line =~ /^#/;
         next if $line =~ /^$/;
 
-        chomp $line;
         my ($key, $val) = split(/\t/, $line);
 
         if ($key ne "track") {
@@ -268,16 +293,15 @@ sub getPif {
             $track = $val;
             $tracks{$track} = \%track;
             &HgAutomate::verbose(5, "  Found track: \'$track\'\n");
-            while ($line = shift @lines) {
+            while ($line = shift @{$lines}) {
                 $line =~ s/^ +//;
                 $line =~ s/ +$//;
                 next if $line =~ /^#/;
                 next if $line =~ /^$/;
                 if ($line =~ /^track/) {
-                    unshift @lines, $line;
+                    unshift @{$lines}, $line;
                     last;
                 }
-                chomp $line;
                 my ($key, $val) = split(/\t/, $line);
                 $track{$key} = $val;
                 &HgAutomate::verbose(5, "    Property: $key = $val\n");
@@ -425,17 +449,19 @@ if (defined($pif{'variables'})) {
 # Open dataset descriptor file (DDF)
 my $ddfFile = &newestFile(glob "*.DDF");
 &HgAutomate::verbose(2, "Using newest DDF file \'$ddfFile\'\n");
-open(IN, $ddfFile) || die "ERROR: Can't open DDF file \'$ddfFile\'\n";
+my $lines = readFile($ddfFile);
 
 # Get header containing column names
-while ($line = <IN>) {
+print STDERR "lines len: " . scalar(@{$lines}) . "\n";
+while(@{$lines}) {
+    my $line = shift(@{$lines});
+    print STDERR "line: $line\n";
     # remove leading and trailing spaces and newline
     $line =~ s/^ +//;
     $line =~ s/ +$//;
     # ignore empty lines and comments
     next if $line =~ /^$/;
     next if $line =~ /^#/;
-    chomp $line;
     @ddfHeader = split(/\t/, $line);
     for ($i=0; $i < @ddfHeader; $i++) {
         $ddfHeader{$ddfHeader[$i]} = $i;
@@ -461,12 +487,12 @@ foreach my $field (keys %fields) {
 # except when multiple files comprise one data set (multiple Parts).
 # In this case, all files are included in the File Name field, 
 my $dataset;
-while ($line = <IN>) {
+while (@{$lines}) {
+    my $line = shift(@{$lines});
     $line =~ s/^ +//;
     $line =~ s/ +$//;
     next if $line =~ /^#/;
     next if $line =~ /^$/;
-    chomp $line;
     my @fields = split('\t', $line);
     my $fileField = $ddfHeader{'File Name'};
     my $filename = $fields[$fileField];
@@ -497,7 +523,6 @@ while ($line = <IN>) {
         $datasets{$dataset} = \@fields;
     }
 }
-close(IN);
 
 # Validate files and metadata fields in all datasets using controlled
 # vocabulary.  Create .ra file for loader .
