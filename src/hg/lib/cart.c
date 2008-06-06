@@ -21,7 +21,7 @@
 #endif /* GBROWSE */
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.84 2008/05/27 21:00:37 fanhsu Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.85 2008/06/06 17:43:25 fanhsu Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -1329,14 +1329,14 @@ outName2 = tn2.forCgi;
 outF = mustOpen(outName,"w");
 outF2= mustOpen(outName2,"w");
 
-safef(query, sizeof(query), "select distinct subjId from hiv1.gsIdXref order by subjId");
+safef(query, sizeof(query), "select distinct subjId from hgFixed.gsIdXref order by subjId");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     fprintf(outF, "%s\n", row[0]);
 
     safef(query2, sizeof(query2),
-          "select dnaSeqId from hiv1.gsIdXref where subjId='%s' order by dnaSeqId", row[0]);
+          "select dnaSeqId from hgFixed.gsIdXref where subjId='%s' order by dnaSeqId", row[0]);
 
     sr2 = sqlGetResult(conn2, query2);
     while ((row2 = sqlNextRow(sr2)) != NULL)
