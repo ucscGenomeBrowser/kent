@@ -11,8 +11,7 @@
 #include "minChromSize.h"
 #include "txCommon.h"
 
-static char const rcsid[] = "$Id: txGeneAccession.c,v 1.14 2008/04/28 12:25:36 kent Exp $";
-
+static char const rcsid[] = "$Id: txGeneAccession.c,v 1.15 2008/06/06 21:48:32 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -101,11 +100,34 @@ for (i=1; i<a->blockCount; ++i)
 return TRUE;
 }
 
-boolean endUtrChange(struct bed *oldBed, struct bed *newBed)
-/* Returns TRUE if newBed has same CDS as old BED, and same number of exons,
- * with only difference being length of UTR */
+boolean isCoding(struct bed *bed)
+/* Return TRUE if no defined coding region. */
 {
-if (oldBed->thickStart != newBed->thickStart || oldBed->thickEnd != newBed->thickEnd)
+return rangeIntersection(bed->chromStart, bed->chromEnd, bed->thickStart, bed->thickEnd) > 0;
+}
+
+boolean cdsChange(struct bed *oldBed, struct bed *newBed)
+/* Return TRUE if both have same cds (thickStart/thickEnd) or if both are non-coding. */
+{
+if (isCoding(oldBed))
+    {
+    if (isCoding(newBed))
+	return !(oldBed->thickStart == newBed->thickStart && 
+	        oldBed->thickEnd == newBed->thickEnd);
+    else
+        return FALSE;
+    }
+else
+    {
+    return isCoding(newBed);
+    }
+}
+
+boolean endUtrChangeOnly(struct bed *oldBed, struct bed *newBed)
+/* Returns TRUE if newBed has same CDS as old BED, and same number of exons,
+ * with only difference being length of UTR in terminal exons*/
+{
+if (cdsChange(oldBed, newBed))
     return FALSE;
 return bedIntronsIdentical(oldBed, newBed);
 }
@@ -127,7 +149,7 @@ for (bin = binList; bin != NULL; bin = bin->next)
 	{
 	if (!hashLookup(usedHash, oldBed->name))
 	    {
-	    if (bedCompatibleExtension(oldBed, newBed) || endUtrChange(oldBed, newBed))
+	    if (bedCompatibleExtension(oldBed, newBed) || endUtrChangeOnly(oldBed, newBed))
 		{
 		int diff = bedTotalBlockSize(oldBed) - bedTotalBlockSize(newBed);
 		if (diff < 0) diff = -diff;
