@@ -9,7 +9,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.20 2008/06/06 07:47:09 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.21 2008/06/06 22:18:11 larrym Exp $
 
 use warnings;
 use strict;
@@ -18,6 +18,7 @@ use HgAutomate;
 use File::stat;
 use Getopt::Long;
 use English;
+use Carp qw(cluck);
 
 use vars qw/
     $opt_configDir
@@ -59,6 +60,23 @@ sub readFile
     close(FILE);
     $/ = $oldEOL;
     return \@lines;
+}
+
+sub splitKeyVal
+{
+# split a line into key/value, using the FIRST tab in the line; we also trim key/value strings
+    my ($str) = @_;
+    my $key = undef;
+    my $val = undef;
+    if($str =~ /([^\t]+)\t(.+)/) {
+        $key = $1;
+        $val = $2;
+        $key =~ s/^\s+//;
+        $key =~ s/\s+$//;
+        $val =~ s/^\s+//;
+        $val =~ s/\s+$//;
+    }
+    return ($key, $val);
 }
 
 # Global constants
@@ -220,7 +238,7 @@ sub validateField {
     # validate value for type of field
     my ($type, $val, $arg) = @_;
     $type =~ s/ /_/g;
-    &HgAutomate::verbose(4, "Validating $type: $val\n");
+    &HgAutomate::verbose(4, "Validating $type: " . (defined($val) ? $val : "") . "\n");
     $validators{$type}->($val, $arg);
 }
 
@@ -283,8 +301,10 @@ sub getPif {
         next if $line =~ /^#/;
         next if $line =~ /^$/;
 
-        my ($key, $val) = split(/\t/, $line);
-
+        my ($key, $val) = splitKeyVal($line);
+        if(!defined($key)) {
+            next;
+        }
         if ($key ne "track") {
             &HgAutomate::verbose(3, "PIF field: $key = $val\n");
             $pif{$key} = $val;
@@ -302,7 +322,7 @@ sub getPif {
                     unshift @{$lines}, $line;
                     last;
                 }
-                my ($key, $val) = split(/\t/, $line);
+                my ($key, $val) = splitKeyVal($line);
                 $track{$key} = $val;
                 &HgAutomate::verbose(5, "    Property: $key = $val\n");
             }
@@ -325,7 +345,7 @@ sub getPif {
     }
 
     if (defined($pif{'variables'})) {
-        my @variables = split (' ', $pif{'variables'});
+        my @variables = split (/\s+/, $pif{'variables'});
         my %variables;
         my $i = 0;
         foreach my $variable (@variables) {
@@ -452,10 +472,8 @@ my $ddfFile = &newestFile(glob "*.DDF");
 my $lines = readFile($ddfFile);
 
 # Get header containing column names
-print STDERR "lines len: " . scalar(@{$lines}) . "\n";
 while(@{$lines}) {
     my $line = shift(@{$lines});
-    print STDERR "line: $line\n";
     # remove leading and trailing spaces and newline
     $line =~ s/^ +//;
     $line =~ s/ +$//;
@@ -527,8 +545,8 @@ while (@{$lines}) {
 # Validate files and metadata fields in all datasets using controlled
 # vocabulary.  Create .ra file for loader .
 &loadControlledVocab;
-open(LOADER_RA, ">$outPath/$loadFile") ||
-        die "SYS ERROR: Can't write \'$outPath/$loadFile\' file ($!)\n";
+open(LOADER_RA, ">$outPath/$loadFile") || die "SYS ERROR: Can't write \'$outPath/$loadFile\' file; error: $!\n";
+open(TRACK_RA, ">$outPath/$trackFile") || die "SYS ERROR: Can't write \'$outPath/$trackFile\' file; error: $!\n";
 foreach $dataset (keys %datasets) {
     my $datasetRef = $datasets{$dataset};
     my $dataType = $datasetRef->[$ddfHeader{'Data Type REF'}];
@@ -547,6 +565,8 @@ foreach $dataset (keys %datasets) {
             $tableName = $tableName . $datasetRef->[$ddfHeader{$variables[$i]}];
         }
     }
+    # mysql doesn't allow hyphens in table names.
+    $tableName =~ s/-/_/g;
     print LOADER_RA "tablename $tableName\n";
     print LOADER_RA "track $trackName\n";
     print LOADER_RA "type $tracks{$dataType}->{'type'}\n";
@@ -554,7 +574,14 @@ foreach $dataset (keys %datasets) {
     print LOADER_RA "assembly $datasetRef->[$ddfHeader{'Assembly REF'}]\n";
     print LOADER_RA "files @{$datasetRef->[$ddfHeader{'File Name'}]}\n";
     print LOADER_RA "\n";
+
+    # XXXX This is a work in progress; assign as subtracks?
+    print TRACK_RA "track $trackName\n";
+    print TRACK_RA "type $tracks{$dataType}->{'type'}\n";
+    print TRACK_RA "\n";
+
 }
 close(LOADER_RA);
+close(TRACK_RA);
 
 exit 0;
