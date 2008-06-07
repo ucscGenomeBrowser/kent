@@ -69,7 +69,7 @@
 #include "obscure.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: paraHub.c,v 1.113 2008/06/07 09:59:56 galt Exp $";
+static char const rcsid[] = "$Id: paraHub.c,v 1.114 2008/06/07 10:13:08 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -316,25 +316,25 @@ return sickNodeCount;
 
 
 
-void updateUserMaxNode(struct user *user)
-/* Update user maxNode. >=0 only if all batches have >=0 maxNode values */
+void updateUserMaxJob(struct user *user)
+/* Update user maxJob. >=0 only if all batches have >=0 maxJob values */
 {
-/* Note - at this point the user->maxNode is mostly ornamental,
+/* Note - at this point the user->maxJob is mostly ornamental,
  * it has been left in for people who want to see it in list users */
 
 struct dlNode *node;
 struct batch *batch;
 boolean unlimited = FALSE;
-user->maxNode = 0;
+user->maxJob = 0;
 for (node = user->curBatches->head; !dlEnd(node); node = node->next)
     {
     batch = node->val;
-    if (batch->maxNode >= 0)
-	user->maxNode += batch->maxNode;
+    if (batch->maxJob >= 0)
+	user->maxJob += batch->maxJob;
     else
 	unlimited = TRUE;
     }
-if (unlimited) user->maxNode = -1;
+if (unlimited) user->maxJob = -1;
 }
 
 void updateUserPriority(struct user *user)
@@ -377,7 +377,7 @@ batch->name = nameString;
 batch->user = user;
 batch->jobQueue = newDlList();
 batch->priority = NORMAL_PRIORITY;
-batch->maxNode = -1;
+batch->maxJob = -1;
 batch->sickNodes = newHash(6);
 
 batch->cpu = defaultJobCpu;    /* number of cpuUnits in default job usage */  
@@ -410,7 +410,7 @@ if (batch == NULL)
     needsPlanning = TRUE;
 
     updateUserPriority(user);
-    updateUserMaxNode(user);
+    updateUserMaxJob(user);
     updateUserSickNodes(user);
     }
 return batch;
@@ -508,7 +508,7 @@ for (node = user->curBatches->head; !dlEnd(node); node = node->next)
     batch->planCount = 0;
     /* adding 1 to planCount helps suppress running any jobs when priority is set very high */
     batch->planScore = 1 * batch->priority; 
-    if (batch->maxNode == 0)
+    if (batch->maxJob == 0)
        batch->planning = FALSE;	
     if (batch->planning)
 	{
@@ -528,7 +528,7 @@ for (node = queuedUsers->head; !dlEnd(node); node = node->next)
     user->planCount = 0;
     user->planningBatchCount = 0;
     updateUserPriority(user);
-    updateUserMaxNode(user);
+    updateUserMaxJob(user);
     updateUserSickNodes(user);
     /* adding 1 to planCount helps suppress running any jobs when priority is set very high */
     user->planScore = 1 * user->priority;  
@@ -555,7 +555,7 @@ if (dlEmpty(batch->jobQueue))
     needsPlanning = TRUE;  /* remember if situation changed, need new plan */  
 
     updateUserPriority(user);
-    updateUserMaxNode (user);
+    updateUserMaxJob (user);
     updateUserSickNodes(user);
 
     /* Check if it's last user batch and if so take them off queue */
@@ -598,7 +598,7 @@ for (jobNode = machine->jobs->head; !dlEnd(jobNode); jobNode = jobNode->next)
 }
 
 struct batch *findRunnableBatch(struct machine *machine, struct slRef **pEl)
-/* Search machine for runnable batch, preferable something not at maxNode */
+/* Search machine for runnable batch, preferable something not at maxJob */
 {
 int c = 0, r = 0;
 readRemainingMachineResources(machine, &c, &r);
@@ -636,8 +636,8 @@ user->planScore += 1 * user->priority;
 /*  add batch to plannedBatches queue */
 refAdd(&mach->plannedBatches, batch);
 
-/* maxNode handling */
-if ((batch->maxNode!=-1) && (batch->planCount >= batch->maxNode))
+/* maxJob handling */
+if ((batch->maxJob!=-1) && (batch->planCount >= batch->maxJob))
     {
     /* remove batch from the allocating */
     batch->planning = FALSE;
@@ -679,7 +679,7 @@ for (mach = machineList; mach != NULL; mach = mach->next)
 
         /* Sweep mark all running jobs as oldPlan,
 	 *  this helps us deal with jobsDone from old plan.
-	 * For better handling of long-running maxNode batches
+	 * For better handling of long-running maxJob batches
          *  with frequent replanning, 
 	 *  preserve the same resources on the same machines.
          */
@@ -690,7 +690,7 @@ for (mach = machineList; mach != NULL; mach = mach->next)
 	    struct batch *batch = job->batch;
 	    struct user *user = batch->user;
 	    job->oldPlan = TRUE;
-	    if (batch->planning && (batch->maxNode != -1))
+	    if (batch->planning && (batch->maxJob != -1))
 		{
 		if (pm) 
 		    {
@@ -961,7 +961,7 @@ if (!slRemoveEl(&machine->plannedBatches, batchEl))
 
 /* Prevent too many from this batch from running.
  * This is helpful for keeping the balance with longrunning batches
- * and maxNode. */
+ * and maxJob. */
 if (batch->runningCount >= batch->planCount)
     {
     slAddTail(&machine->plannedBatches, batchEl);
@@ -1186,7 +1186,7 @@ if (batch->planCount == 0)
     needsPlanning = TRUE;
 
 updateUserPriority(user);
-updateUserMaxNode(user);
+updateUserMaxJob(user);
 updateUserSickNodes(user);
 }
 
@@ -1889,45 +1889,45 @@ pmSend(pm, rudpOut);
 runner(1);
 }
 
-int setMaxNode(char *userName, char *dir, int maxNode)
-/* Set new maxNode for batch */
+int setMaxJob(char *userName, char *dir, int maxJob)
+/* Set new maxJob for batch */
 {
 struct user *user = findUser(userName);
 struct batch *batch = findBatch(user, dir, TRUE);
 if (user == NULL) return -2;
 if (batch == NULL) return -2;
 needsPlanning = TRUE;
-batch->maxNode = maxNode;
-updateUserMaxNode(user);
-if (maxNode>=-1)
-    logInfo("paraHub: User %s set maxNode=%d for batch %s", userName, maxNode, dir);
-return maxNode;
+batch->maxJob = maxJob;
+updateUserMaxJob(user);
+if (maxJob>=-1)
+    logInfo("paraHub: User %s set maxJob=%d for batch %s", userName, maxJob, dir);
+return maxJob;
 }
 
 
-int setMaxNodeFromMessage(char *line)
-/* Parse out setMaxNode message and set new maxNode for batch, update user-maxNode. */
+int setMaxJobFromMessage(char *line)
+/* Parse out setMaxJob message and set new maxJob for batch, update user-maxJob. */
 {
 char *userName, *dir;
-int maxNode;
+int maxJob;
 
 if ((userName = nextWord(&line)) == NULL)
     return -2;
 if ((dir = nextWord(&line)) == NULL)
     return -2;
-if ((maxNode = atoi(nextWord(&line))) < -1)
+if ((maxJob = atoi(nextWord(&line))) < -1)
     return -2;
-return setMaxNode(userName, dir, maxNode);
+return setMaxJob(userName, dir, maxJob);
 }
 
 
-void setMaxNodeAcknowledge(char *line, struct paraMessage *pm)
-/* Set batch maxNode.  Line format is <user> <dir> <maxNode>
-* Returns new maxNode or -2 if a problem.  Send new maxNode back to client. */
+void setMaxJobAcknowledge(char *line, struct paraMessage *pm)
+/* Set batch maxJob.  Line format is <user> <dir> <maxJob>
+* Returns new maxJob or -2 if a problem.  Send new maxJob back to client. */
 {
-int maxNode = setMaxNodeFromMessage(line);
+int maxJob = setMaxJobFromMessage(line);
 pmClear(pm);
-pmPrintf(pm, "%d", maxNode);
+pmPrintf(pm, "%d", maxJob);
 pmSend(pm, rudpOut);
 }
 
@@ -1958,7 +1958,7 @@ return resetCounts(userName, dir);
 
 void resetCountsAcknowledge(char *line, struct paraMessage *pm)
 /* Resets batch counts for done and crashed.  Line format is <user> <dir>
-* Returns new maxNode or -2 if a problem.  Send new maxNode back to client. */
+* Returns new maxJob or -2 if a problem.  Send new maxJob back to client. */
 {
 int resetCounts = resetCountsFromMessage(line);
 pmClear(pm);
@@ -2267,7 +2267,7 @@ dlRemove(batch->node);
 dlAddTail(user->oldBatches, batch->node);
 needsPlanning = TRUE;
 updateUserPriority(user);
-updateUserMaxNode(user);
+updateUserMaxJob(user);
 updateUserSickNodes(user);
 }
 
@@ -2401,10 +2401,10 @@ for (user = userList; user != NULL; user = user->next)
     pmPrintf(pm, 
     	"%d jobs running, %d waiting, %d finished, %d of %d batches active"
     	", priority=%d"
-    	", maxNode=%d" 
+    	", maxJob=%d" 
 	, user->runningCount,  userQueuedCount(user), user->doneCount,
 	countUserActiveBatches(user), totalBatch, user->priority 
-	, user->maxNode 
+	, user->maxJob 
 	);
     pmSend(pm, rudpOut);
     }
@@ -2420,7 +2420,7 @@ pmClear(pm);
 pmPrintf(pm, "%-8s %4d %6d %6d %5d %3d %3d %3d %4.1fg %4d %3d %s",
 	user->name, batch->runningCount, 
 	batch->queuedCount, batch->doneCount,
-	batch->crashCount, batch->priority, batch->maxNode, 
+	batch->crashCount, batch->priority, batch->maxJob, 
 	batch->cpu, ((float)batch->ram*ramUnit)/(1024*1024*1024),
 	batch->planCount,
 	(avgBatchTime(batch)+30)/60,
@@ -3153,8 +3153,8 @@ for (;;)
 	 processHeartbeat();
     else if (sameWord(command, "setPriority"))
 	 setPriorityAcknowledge(line, pm);
-    else if (sameWord(command, "setMaxNode"))
-	 setMaxNodeAcknowledge(line, pm);
+    else if (sameWord(command, "setMaxJob"))
+	 setMaxJobAcknowledge(line, pm);
     else if (sameWord(command, "resetCounts"))
          resetCountsAcknowledge(line, pm);
     else if (sameWord(command, "freeBatch"))

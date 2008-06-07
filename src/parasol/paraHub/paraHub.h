@@ -65,7 +65,7 @@ struct batch
     int crashCount;		/* Number of jobs crashed */
     int continuousCrashCount;	/* Number of jobs crashed in a row */
     int priority;   		/* Priority of batch, 1 is highest priority */
-    int maxNode;    		/* maxNodes for batch, -1 is no limit */
+    int maxJob;    		/* maximum jobs for batch, -1 is no limit */
     struct hash *sickNodes;     /* Hash of nodes that have failed */
     long doneTime;              /* cumulative runtime of done jobs */
     int planCount;              /* number of jobs planned */
@@ -86,7 +86,7 @@ struct user
     int runningCount;		/* Count of jobs currently running. */
     int doneCount;		/* Count of jobs finished. */
     int priority;   		/* Priority of user, 1 is highest priority */
-    int maxNode;    		/* maxNodes for batch, -1 is no limit */
+    int maxJob;    		/* maximum jobs for batch, -1 is no limit */
     struct hash *sickNodes;     /* Hash of nodes that have failed */
     int planCount;              /* number of jobs planned */
     int planScore;              /* weighted score of user plan */
