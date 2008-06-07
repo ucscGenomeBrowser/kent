@@ -9,7 +9,7 @@
 #include "txInfo.h"
 #include "txRnaAccs.h"
 
-static char const rcsid[] = "$Id: txGeneXref.c,v 1.7 2007/04/03 03:12:19 kent Exp $";
+static char const rcsid[] = "$Id: txGeneXref.c,v 1.8 2008/06/07 00:41:09 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -78,8 +78,6 @@ struct sqlConnection *uConn = sqlConnect(uniProtDb);
 /* Read in info file, and loop through it to make out file. */
 struct txInfo *info, *infoList = txInfoLoadAll(infoFile);
 FILE *f = mustOpen(outFile, "w");
-int missingEvCount = 0;
-char *missingEvAcc = NULL;
 for (info = infoList; info != NULL; info = info->next)
     {
     char *kgID = info->name;
@@ -92,19 +90,9 @@ for (info = infoList; info != NULL; info = info->next)
     char *description = NULL;
     char query[256];
     char *proteinId = hashMustFindVal(geneToProtHash, info->name);
+    boolean isAb = sameString(info->category, "antibodyParts");
     pick = hashFindVal(pickHash, info->name);
     ev = hashFindVal(evHash, info->name);
-    if (ev == NULL)
-	{
-        missingEvCount += 1;
-	missingEvAcc = info->name;
-	mRNA = cloneString("");
-	}
-    else
-	{
-	mRNA = cloneString(ev->primary);
-	chopSuffix(mRNA);
-	}
     if (pick != NULL)
        {
        /* Fill in the relatively straightforward fields. */
@@ -154,10 +142,25 @@ for (info = infoList; info != NULL; info = info->next)
        }
 
     /* If it's an antibody fragment use that as name. */
-    if (sameString(info->category, "antibodyParts"))
+    if (isAb)
         {
 	geneSymbol = cloneString("abParts");
 	description = cloneString("Parts of antibodies, mostly variable regions.");
+	isAb = TRUE;
+	}
+
+    if (ev == NULL)
+	{
+	mRNA = cloneString("");
+	if (!isAb)
+	    {
+	    errAbort("%s is %s but not %s\n", info->name, infoFile, evFile);
+	    }
+	}
+    else
+	{
+	mRNA = cloneString(ev->primary);
+	chopSuffix(mRNA);
 	}
 
     /* Still no joy? Try genbank RNA records. */
@@ -221,9 +224,6 @@ for (info = infoList; info != NULL; info = info->next)
     fprintf(f, "%s\t", protAcc);
     fprintf(f, "%s\n", description);
     }
-if (missingEvCount > 4)
-    errAbort("%d accessions in %s but not %s. Example: %s\n", 
-    	missingEvCount, infoFile, evFile, missingEvAcc);
 carefulClose(&f);
 }
 
