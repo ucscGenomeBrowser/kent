@@ -56,7 +56,6 @@ mkdir -p $dir
 cd $dir
 
 if (0) then  # BRACKET
-endif # BRACKET
 
 
 # Get Genbank info
@@ -578,10 +577,6 @@ txGeneCanonical coding.cluster ucscGenes.info senseAnti.txg ucscGenes.bed ucscNe
 txBedToGraph ucscGenes.bed ucscGenes ucscGenes.txg
 txgAnalyze ucscGenes.txg /cluster/data/$db/$db.2bit stdout | sort | uniq > ucscSplice.bed
 
-exit # BRACKET
-echo "MUST WORK THIS UP INTO AN ACTUAL DB LOAD HERE !  WHEN NOT tempDb"
-exit $status
-
 #####################################################################################
 # Now the gene set is built.  Time to start loading it into the database,
 # and generating all the many tables that go on top of known Genes.
@@ -603,6 +598,8 @@ hgLoadSqlTab $tempDb knownIsoforms ~/kent/src/hg/lib/knownIsoforms.sql isoforms.
 hgLoadSqlTab $tempDb knownCanonical ~/kent/src/hg/lib/knownCanonical.sql canonical.tab
 hgPepPred $tempDb generic knownGenePep ucscGenes.faa
 hgPepPred $tempDb generic knownGeneMrna ucscGenes.fa
+
+endif # BRACKET
 
 # Make up kgXref table.  Takes about 3 minutes.
 txGeneXref $db $spDb ucscGenes.gp ucscGenes.info ucscGenes.picks ucscGenes.ev ucscGenes.xref
@@ -637,6 +634,8 @@ hgKgGetText $tempDb knownGene.text -summaryTable=$db.refSeqSummary
 ixIxx knownGene.text knownGene.ix knownGene.ixx
 ln -s $dir/index/knownGene.ix  /gbdb/$tempDb/knownGene.ix
 ln -s $dir/index/knownGene.ixx /gbdb/$tempDb/knownGene.ixx
+
+exit # BRACKET
      
 # Create a bunch of knownToXxx tables.  Takes about 3 minutes:
 hgMapToGene $db -tempDb=$tempDb allenBrainAli -type=psl knownGene knownToAllenBrain
