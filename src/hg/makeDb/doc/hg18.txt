@@ -15542,9 +15542,12 @@ cat > listPp.csh << 'EOF'
 # Longest finished job:            1343s      22.38m     0.37h    0.02d
 # Submission to last job:          1528s      25.47m     0.42h    0.02d
 
-    # run phyloP 
-    ssh pk
-    cd /cluster/data/hg18/bed/multiz28way/cons/run.phyloP
+    ########################################################################
+    # run new phyloP for contextual zooming
+    ssh memk
+    cd /cluster/data/hg18/bed/multiz28way/cons
+    mkdir run.phyloPcz
+    cd run.phyloPcz
 cat > doPhyloP.csh << 'EOF'
     set f = $1
     set out = $2
@@ -15553,11 +15556,13 @@ cat > doPhyloP.csh << 'EOF'
     set grp = $cwd:t
     set tmp = /scratch/tmp/$f
     mkdir -p $tmp
-    set san = /san/sanvol1/scratch/hg18/multiz28way/phyloP
+    set san = /san/sanvol1/scratch/hg18/multiz28way/phyloPcz
     cp -p $san/ss/$c/$n/$f.ss tree.mod $tmp
     pushd $tmp > /dev/null
 
-    set PHASTBIN = /cluster/bin/phast.2007-05-04
+    # Built phast from CornellCVS on 3/8/06 in /cluster/bin/phast.build.
+    # Symlinked the bin to /cluster/bin/phast.cz
+    set PHASTBIN = /cluster/bin/phast.cz
     $PHASTBIN/phyloP --wig-scores --chrom $c \
                 -i SS tree.mod $f.ss > $f.wig
 
@@ -15566,10 +15571,10 @@ cat > doPhyloP.csh << 'EOF'
     mv $tmp/$f.wig $out
     rm -fr $tmp
 'EOF'
-    # Create list of chunks
+    # Create list of chunks (just chr7 for now)
     pushd /san/sanvol1/scratch/hg18/multiz28way/phyloP/ss
-    find . -name "chr*.ss" -print | sed -e 's/.ss$//' -e 's/^\.\///' > \
-        /cluster/data/hg18/bed/multiz28way/cons/run.phyloP/in.list
+    find . -name "chr7.ss" -print | sed -e 's/.ss$//' -e 's/^\.\///' > \
+        /cluster/data/hg18/bed/multiz28way/cons/run.phyloPcz/in.list
     popd
 
     # setup run
@@ -15581,7 +15586,7 @@ cat > doPhyloP.csh << 'EOF'
     #	file1 == $chr/$chunk/file name without .ss suffix
     cat > template << 'EOF'
 #LOOP
-csh ../doPhyloP.csh $(file1) {check out line+ /san/sanvol1/scratch/hg18/multiz28way/phyloP/all/$(path1).wig}
+csh ../doPhyloP.csh $(file1) {check out line+ /san/sanvol1/scratch/hg18/multiz28way/phyloPcz/all/$(path1).wig}
 #ENDLOOP
 'EOF'
 
@@ -15630,6 +15635,14 @@ csh ../doPhyloP.csh $(file1) {check out line+ /san/sanvol1/scratch/hg18/multiz28
     para try
     para check
     para push
+
+    #CPU time in finished jobs:    1934553s   32242.55m   537.38h   22.39d  0.061 y
+    #IO & Wait Time:                 82007s    1366.78m    22.78h    0.95d  0.003 y
+    #Average job time:                  70s       1.16m     0.02h    0.00d
+    #Longest running job:                0s       0.00m     0.00h    0.00d
+    #Longest finished job:             147s       2.45m     0.04h    0.00d
+    #Submission to last job:         37642s     627.37m    10.46h    0.44d
+
 
     # sort by chromName, chromStart so that items are in numerical order 
     #  for wigEncode
@@ -16655,13 +16668,46 @@ hgPepPred hg18 generic augustusAbinitioPep augustus.pep.aa
 
 #############################################################################
 # Stanford NRSF ChIP-seq (DONE, Heather, July 2007)
+# Add color-by-strand and overlap table (2008-05-27 kate)
+# BED file of sites provided May 2008 by Tim Reddy (treddy@gmail.com)
 
-ssh hgwdev
-cd /cluster/data/encode/stanford/2007-03-14
-liftOver fix.bed /gbdb/hg17/liftOver/hg17ToHg18.over.chain.gz hg18.bed core.unmapped
-liftOver control_fix.bed /gbdb/hg17/liftOver/hg17ToHg18.over.chain.gz hg18.control.bed control.unmapped
-hgLoadBed hg18 encodeStanfordNRSFEnriched hg18.bed -tab
-hgLoadBed hg18 encodeStanfordNRSFControl hg18.control.bed -tab
+    ssh kkstore03
+    cd /cluster/data/encode/stanford/2007-03-14
+
+    # lift to hg18
+    liftOver fix.bed /gbdb/hg17/liftOver/hg17ToHg18.over.chain.gz hg18.bed core.unmapped
+    liftOver control_fix.bed /gbdb/hg17/liftOver/hg17ToHg18.over.chain.gz hg18.control.bed control.unmapped
+
+    # add color by strand (red for +, blue for minus)
+    awk 'OFS="\t" {$6=="+" ? c="255,0,0" : c="0,0,255"; print $1, $2, $3, "", $5, $6, $2, $3, c}' hg18.bed > hg18.fixc.bed
+    awk 'OFS="\t" {$6=="+" ? c="255,0,0" : c="0,0,255"; print $1, $2, $3, "", $5, $6, $2, $3, c}' hg18.control.bed > hg18.control_fixc.bed
+
+    # load into database
+    hgwdev
+    cd /cluster/data/encode/stanford/2007-03-14
+    hgLoadBed hg18 stanfordNRSFEnriched hg18.fixc.bed -tab
+    hgLoadBed hg18 stanfordNRSFControl hg18.control_fixc.bed -tab
+
+    # overlap tables
+    set prefix = /gbdb/hg18/wib
+    set table = stanfordNRSFEnrichedOverlaps
+    sort -k1,1 -k2,2n hg18.bed | bedItemOverlapCount hg18 stdin | \
+        wigEncode stdin ${table}.wig ${table}.wib
+    ln -s /cluster/data/encode/stanford/2007-03-14/${table}.wib $prefix
+    hgLoadWiggle -pathPrefix=$prefix hg18 $table ${table}.wig
+
+    set table = stanfordNRSFControlOverlaps
+    sort -k1,1 -k2,2n hg18.control.bed | bedItemOverlapCount hg18 stdin | \
+        wigEncode stdin ${table}.wig ${table}.wib
+    ln -s /cluster/data/encode/stanford/2007-03-14/${table}.wib $prefix
+    hgLoadWiggle -pathPrefix=$prefix hg18 $table ${table}.wig
+
+    # peaks (provided May 2008)
+    sort -k1,1 -k2,2n lab/NRSF_Peak_Calls.bed | \
+        awk '{print $1, $2, $3}' > peaks.bed
+    wc -l peaks.bed
+        # 2116
+    hgLoadBed -noBin hg18 stanfordNRSFSites peaks.bed
 
 #########################################################################
 # REGULATORY POTENTIAL UPDATE (DONE - 2007-08-01 - Hiram)

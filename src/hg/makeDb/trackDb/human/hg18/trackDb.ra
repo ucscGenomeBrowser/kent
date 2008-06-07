@@ -1756,6 +1756,69 @@ type wig 0 1000
     longLabel Affymetrix HepG2 Minus Strand Short RNA (Whole Cell) Signal
     priority 4
 
+track stanfordNRSFSites
+shortLabel Stanf NRSF Sites
+longLabel Stanford Neuron-Restrictive Silencer Factor (NRSF/REST) ChIP-seq Sites
+group regulation
+priority 500
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX,chrY,chrM
+visibility hide
+type bed 3 .
+origAssembly hg17
+dataVersion March 2007
+
+track stanfordNRSFOverlaps
+compositeTrack on
+shortLabel Stanf NRSF Counts
+longLabel Stanford Neuron-Restrictive Silencer Factor (NRSF/REST) ChIP-seq Counts
+group regulation
+priority 501
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX,chrY,chrM
+type wig 1 915
+spanList 1
+origAssembly hg17
+dataVersion March 2007
+
+    track stanfordNRSFEnrichedOverlaps
+    subTrack stanfordNRSFOverlaps
+    shortLabel Stanf NRSF
+    longLabel Stanford NRSF/REST Enriched Counts
+    priority 1
+    color 0,128,0
+
+    track stanfordNRSFControlOverlaps
+    subTrack stanfordNRSFOverlaps
+    shortLabel Stanf Control
+    longLabel Stanford NRSF/REST Control Counts
+    priority 2
+    color 0,128,0
+
+track stanfordNRSF
+compositeTrack on
+shortLabel Stanf NRSF Tags
+longLabel Stanford Neuron-Restrictive Silencer Factor (NRSF/REST) ChIP-seq Tags
+group regulation
+priority 502
+itemRgb on
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX,chrY,chrM
+type bed 9 .
+origAssembly hg17
+dataVersion March 2007
+
+    track stanfordNRSFEnriched
+    subTrack stanfordNRSF
+    shortLabel Stanf NRSF
+    longLabel Stanford NRSF/REST Enriched Tags
+    priority 1
+    color 0,128,0
+
+    track stanfordNRSFControl
+    subTrack stanfordNRSF
+    shortLabel Stanf Control
+    longLabel Stanford NRSF/REST Control Tags
+    priority 2
+    color 0,128,0
+
 track uc16
 shortLabel Ultra Conserved
 longLabel Ultraconserved Elements (200 bp 100% ID in Rat/Mouse/Human)
