@@ -21,7 +21,7 @@
 #endif /* GBROWSE */
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.85 2008/06/06 17:43:25 fanhsu Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.85.2.1 2008/06/07 01:45:43 angie Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -737,11 +737,13 @@ char *s = cartString(cart, var);
 return atoi(s);
 }
 
+#ifndef GBROWSE
 int cartIntExp(struct cart *cart, char *var)
 /* Return integer valued expression in variable. */
 {
 return intExp(cartString(cart, var));
 }
+#endif /* GBROWSE */
 
 int cartUsualInt(struct cart *cart, char *var, int usual)
 /* Return variable value if it exists or usual if not. */

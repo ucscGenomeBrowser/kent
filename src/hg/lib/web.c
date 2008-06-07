@@ -16,7 +16,7 @@
 #include "googleAnalytics.h"
 #endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: web.c,v 1.147 2008/05/31 21:14:19 markd Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.147.2.1 2008/06/07 01:45:43 angie Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -835,6 +835,7 @@ struct dbDb *dbList = hGetBlatIndexedDatabases();
 printSomeAssemblyListHtml(db, dbList, NULL);
 }
 
+#ifndef GBROWSE
 void printOrgAssemblyListAxtInfo(char *dbCgi, char *javascript)
 /* Find all the organisms/assemblies that are referenced in axtInfo, 
  * and print the dropdown list. */
@@ -871,7 +872,6 @@ cgiMakeDropListFull(dbCgi, assemblyList, values, numAssemblies, assembly,
 		    javascript);
 }
 
-#ifndef GBROWSE
 void printAlignmentListHtml(char *db, char *alCgiName, char *selected)
 {
 /* Find all the alignments (from axtInfo) that pertain to the selected

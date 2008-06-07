@@ -13,9 +13,11 @@
 #include "scoredRef.h"
 #include "hgMaf.h"
 #include "mafTrack.h"
+#ifndef GBROWSE
 #include "customTrack.h"
+#endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: mafTrack.c,v 1.60 2008/05/31 14:16:15 braney Exp $";
+static char const rcsid[] = "$Id: mafTrack.c,v 1.60.2.1 2008/06/07 01:45:42 angie Exp $";
 
 struct mafItem
 /* A maf track item. */
@@ -195,6 +197,7 @@ struct mafItem *miList = NULL;
 struct sqlConnection *conn = NULL;
 struct mafPriv *mp = getMafPriv(tg);
 
+#ifndef GBROWSE
 if (mp->ct != NULL)
     {
     struct customTrack *ct = mp->ct;
@@ -207,6 +210,7 @@ if (mp->ct != NULL)
     sqlDisconnect(&conn);
     }
 else
+#endif /* GBROWSE */
     {
     conn = hAllocConn();
 

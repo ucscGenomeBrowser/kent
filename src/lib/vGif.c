@@ -7,7 +7,7 @@
 #include "vGfx.h"
 #include "vGfxPrivate.h"
 
-static char const rcsid[] = "$Id: vGif.c,v 1.4 2003/05/06 07:33:44 kate Exp $";
+static char const rcsid[] = "$Id: vGif.c,v 1.4.332.1 2008/06/07 01:45:44 angie Exp $";
 
 struct memGif
 /* Something that handles a gif. */
@@ -23,7 +23,9 @@ struct memGif *g = *pG;
 if (g != NULL)
     {
     struct memGfx *mg = (struct memGfx *)g;
+#ifndef GBROWSE
     mgSaveGif(mg, g->fileName);
+#endif /* GBROWSE */
     freez(&g->fileName);
     mgFree(&mg);
     *pG = NULL;

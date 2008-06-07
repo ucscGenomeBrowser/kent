@@ -5,7 +5,7 @@
 #include "common.h"
 #include "hvGfx.h"
 
-static char const rcsid[] = "$Id: hvGfx.c,v 1.3 2008/03/07 18:47:41 markd Exp $";
+static char const rcsid[] = "$Id: hvGfx.c,v 1.3.16.1 2008/06/07 01:45:43 angie Exp $";
 
 static struct hvGfx *hvGfxAlloc(struct vGfx *vg)
 /* allocate a hvgGfx object */
@@ -27,11 +27,13 @@ struct hvGfx *hvGfxOpenGif(int width, int height, char *fileName)
 return hvGfxAlloc(vgOpenGif(width, height, fileName));
 }
 
+#ifndef GBROWSE
 struct hvGfx *hvGfxOpenPostScript(int width, int height, char *fileName)
 /* Open up something that will someday be a PostScript file. */
 {
 return hvGfxAlloc(vgOpenPostScript(width, height, fileName));
 }
+#endif /* GBROWSE */
 
 void hvGfxClose(struct hvGfx **pHvg)
 /* Close down virtual graphics object, and finish writing it to file. */

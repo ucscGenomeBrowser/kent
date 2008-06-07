@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-static char const rcsid[] = "$Id: hgConfig.c,v 1.18 2008/06/03 23:17:56 markd Exp $";
+static char const rcsid[] = "$Id: hgConfig.c,v 1.18.2.1 2008/06/07 01:45:43 angie Exp $";
 
 #include "common.h"
 #include "hash.h"
@@ -23,10 +23,10 @@ static void parseConfigFile(char *filename, int depth);
 /* the hash holding the config options */
 static struct hash* cfgOptionsHash = 0;
 
+#ifndef GBROWSE
 static boolean isBrowserCgi()
 /* test if this is a browser CGI */
 {
-#ifndef GBROWSE
 /* this long complicated test is needed because, cgiSpoof may have already
  * been called thus we have to look a little deeper to seem if were are really
  * a cgi we do this looking for cgiSpoof in the QUERY_STRING, if it exists.
@@ -39,9 +39,6 @@ if (firstTime)
     firstTime = FALSE;
     }
 return result;
-#else
-return FALSE;
-#endif
 }
 
 static void checkConfigPerms(char *filename)
@@ -56,10 +53,12 @@ if ((!isBrowserCgi()) && (stat(filename, &statBuf) == 0))
                  filename);
     }
 }
+#endif /* GBROWSE */
 
 static void getConfigFile(char filename[PATH_LEN])
 /* get path to .hg.conf file to use */
 {
+#ifndef GBROWSE
 if (!isBrowserCgi())
     {
     /* Check for explictly specified file in env, otherwise use one in home */
@@ -71,6 +70,7 @@ if (!isBrowserCgi())
     checkConfigPerms(filename);
     }
 else	/* on the web, read from global config file */
+#endif /* GBROWSE */
     {
     safef(filename, PATH_LEN, "%s/%s",
 	  GLOBAL_CONFIG_PATH, GLOBAL_CONFIG_FILE);
@@ -141,7 +141,9 @@ else
 static void parseConfigFile(char *filename, int depth)
 /* open and parse a config file */
 {
+#ifndef GBROWSE
 checkConfigPerms(filename);
+#endif /* GBROWSE */
 struct lineFile *lf = lineFileOpen(filename, TRUE);
 char *line;
 while(lineFileNext(lf, &line, NULL))

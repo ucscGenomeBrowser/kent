@@ -14,12 +14,22 @@
 #include "hCommon.h"
 #include "hgMaf.h"
 #include "mafTrack.h"
+#ifndef GBROWSE
 #include "customTrack.h"
+#endif /* GBROWSE */
 #include "mafSummary.h"
 #include "mafFrames.h"
 #include "phyloTree.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.129 2008/05/31 14:19:58 braney Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.129.2.1 2008/06/07 01:45:42 angie Exp $";
+
+#ifdef GBROWSE
+boolean isCustomTrack(char *in)
+/* Stub routine for GBrowse -- custom track code is excluded. */
+{
+return FALSE;
+}
+#endif /* GBROWSE */
 
 #define GAP_ITEM_LABEL  "Gaps"
 #define MAX_SP_SIZE 2000
@@ -353,6 +363,7 @@ if (winBaseCount > MAF_SUMMARY_VIEW)
  * the scoredRefs (whereas now we just use
  * one statically loaded scoredRef).
  */
+#ifndef GBROWSE
 if (mp->ct)
     {
     conn = sqlCtConn(TRUE);
@@ -363,6 +374,7 @@ if (mp->ct)
     sqlDisconnect(&conn2);
     }
 else
+#endif /* GBROWSE */
     {
     conn = hAllocConn();
     conn2 = hAllocConn();
@@ -543,6 +555,7 @@ if (winBaseCount < MAF_SUMMARY_VIEW)
     struct mafPriv *mp = getMafPriv(track);
     struct sqlConnection *conn, *conn2;
 
+#ifndef GBROWSE
     if (mp->ct)
 	{
 	conn = sqlCtConn(TRUE);
@@ -553,6 +566,7 @@ if (winBaseCount < MAF_SUMMARY_VIEW)
 	sqlDisconnect(&conn2);
 	}
     else
+#endif /* GBROWSE */
 	{
 	conn = hAllocConn();
 	conn2 = hAllocConn();
@@ -996,6 +1010,7 @@ drawScoreOverviewC(conn, tableName, height, seqStart, seqEnd,
 hFreeConn(&conn);
 }
 
+#ifndef GBROWSE
 static void drawScoreOverviewCT(char *tableName, 
 	int height, int seqStart, int seqEnd, 
 	struct hvGfx *hvg, int xOff, int yOff,
@@ -1010,7 +1025,7 @@ drawScoreOverviewC(conn, tableName, height, seqStart, seqEnd,
 
 sqlDisconnect(&conn);
 }
-
+#endif /* GBROWSE */
 
 static boolean drawPairsFromSummary(struct track *track, 
         int seqStart, int seqEnd,
@@ -1175,6 +1190,7 @@ for (mi = miList; mi != NULL; mi = mi->next)
     if (mi->ix < 0)
         /* ignore item for the score */
         continue;
+#ifndef GBROWSE
     if (isCustomTrack(track->mapName))
 	{
 	struct mafPriv *mp = getMafPriv(track);
@@ -1183,7 +1199,9 @@ for (mi = miList; mi != NULL; mi = mi->next)
 		hvg, xOff, yOff, width, font, color, color, vis);
 	hvGfxUnclip(hvg);
 	}
-    else if (vis == tvFull)
+    else 
+#endif /* GBROWSE */
+    if (vis == tvFull)
         {
         /* get wiggle table, of pairwise 
            for example, percent identity */
@@ -1737,6 +1755,7 @@ struct sqlConnection *conn2 = NULL;
 struct sqlConnection *conn3 = NULL;
 char *tableName = NULL;
 
+#ifndef GBROWSE
 if (mp->ct != NULL)
     {
     conn2 = sqlCtConn(TRUE);
@@ -1744,6 +1763,7 @@ if (mp->ct != NULL)
     tableName = mp->ct->dbTableName;
     }
 else
+#endif /* GBROWSE */
     {
     conn2 = hAllocConn();
     conn3 = hAllocConn();
@@ -2292,12 +2312,14 @@ for (i=0; i<lineCount-1; ++i)
     freeMem(lines[i]);
 freez(&lines);
 */
+#ifndef GBROWSE
 if (mp->ct != NULL)
     {
     sqlDisconnect(&conn2);
     sqlDisconnect(&conn3);
     }
 else
+#endif /* GBROWSE */
     {
     hFreeConn(&conn2);
     hFreeConn(&conn3);
@@ -2332,6 +2354,7 @@ if (wigTrack == NULL)
                                 hvg, xOff, yOff, width, font,
                                 color, color, scoreVis, FALSE, FALSE);
         }
+#ifndef GBROWSE
     else if (mp->ct != NULL)
         {
         /* use or scored refs from maf table*/
@@ -2339,6 +2362,7 @@ if (wigTrack == NULL)
 		hvg, xOff, yOff, width, font, color, color, scoreVis);
         yOff++;
         }
+#endif /* GBROWSE */
     else
         {
         /* use or scored refs from maf table*/

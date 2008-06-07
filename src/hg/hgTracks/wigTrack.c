@@ -16,7 +16,7 @@
 #endif /* GBROWSE */
 #include "wigCommon.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.77 2008/05/23 22:14:58 angie Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.77.4.1 2008/06/07 01:45:42 angie Exp $";
 
 struct wigItem
 /* A wig track item. */
@@ -1286,10 +1286,12 @@ else if (tg->visibility == tvFull)
 	    centerOffset = fontHeight;
 	    upperTic = '_';	/*	this is correct	*/
 	    }
+#ifndef GBROWSE
 	if (wigCart->bedGraph)
 	    wigBedGraphFindItemLimits(tg->items,
 		&graphUpperLimit, &graphLowerLimit);
 	else
+#endif /* GBROWSE */
 	    wigFindItemLimits(tg->items,
 		&graphUpperLimit, &graphLowerLimit);
 

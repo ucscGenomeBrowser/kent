@@ -19,7 +19,7 @@
 #include "binRange.h"
 #include "rangeTree.h"
 
-static char const rcsid[] = "$Id: psl.c,v 1.80 2008/05/19 18:14:36 markd Exp $";
+static char const rcsid[] = "$Id: psl.c,v 1.80.4.1 2008/06/07 01:45:43 angie Exp $";
 
 static char *createString = 
 "CREATE TABLE %s (\n"
@@ -849,6 +849,7 @@ return pslScore(b) - pslScore(a);
 }
 
 
+#ifndef GBROWSE
 struct ffAli *pslToFakeFfAli(struct psl *psl, DNA *needle, DNA *haystack)
 /* Convert from psl to ffAli format.  In some cases you can pass NULL
  * for needle and haystack - depending what the post-processing is going
@@ -975,6 +976,7 @@ ffList = ffMakeRightLinks(ffList);
 ffCountGoodEnds(ffList);
 return ffList;
 }
+#endif /* GBROWSE */
 
 int pslOrientation(struct psl *psl)
 /* Translate psl strand + or - to orientation +1 or -1 */
