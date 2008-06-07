@@ -24024,7 +24024,7 @@ done
 
 
 ###########################################################################
-# Stanford ChIP-seq
+# Stanford ChIP-seq (Apr - July 2007, Heather)
 # Submitted 2007-03-14 by David Johnson <seasquirtdoctor@gmail.com>
 # 25bp tags (Solexa sequencing of IP fragments)
 # genome-wide, but funded by ENCODE, hence the location of the data
