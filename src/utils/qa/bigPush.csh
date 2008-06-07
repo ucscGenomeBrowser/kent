@@ -44,9 +44,9 @@ echo "will have to re-type Password after long tables (timeout)"
 echo
 rm -f $db.$trackName.push
 foreach table (`cat $tablelist`)
-  echo pushing $table
-  sudo mypush $db $table hgwbeta >> $db.$trackName.push
-  echo $table >> $db.$trackName.push
+  echo pushing "$table"
+  sudo mypush $db "$table" hgwbeta >> $db.$trackName.push
+  echo "$table" >> $db.$trackName.push
   # tail -f $db.$trackName.push
 end
 echo
