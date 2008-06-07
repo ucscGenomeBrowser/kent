@@ -69,7 +69,7 @@
 #include "obscure.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: paraHub.c,v 1.112 2008/05/31 07:56:06 galt Exp $";
+static char const rcsid[] = "$Id: paraHub.c,v 1.113 2008/06/07 09:59:56 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -101,6 +101,8 @@ time_t startupTime;		/* Clock tick of paraHub startup. */
 int sickNodeThreshold = 3;          /* Treat node as sick if this number of failures */
 int sickBatchThreshold = 25;        /* Auto-chill sick batch if this number of continuous failures */
 
+
+
 void usage()
 /* Explain usage and exit. */
 {
@@ -130,7 +132,8 @@ struct dlList *busySpokes;	/* List of busy spokes. */
 struct dlList *deadSpokes;	/* List of dead spokes. */
 
 struct machine *machineList;    /* List of all machines. */
-struct dlList *freeMachines;    /* List of machines ready for jobs. */
+struct dlList *freeMachines;    /* List of machines idle. */
+struct dlList *readyMachines;   /* List of machines ready for jobs. */
 struct dlList *busyMachines;    /* List of machines running jobs. */
 struct dlList *deadMachines;    /* List of machines that aren't running. */
 
@@ -159,12 +162,28 @@ char *hubHost;	/* Name of machine running this. */
 struct rudp *rudpOut;	/* Our rUDP socket. */
 
 
+/* Variables for new scheduler */
+
+// TODO make commandline param options to override defaults for unit sizes?
+/*  using machines list spec info for defaults */
+int cpuUnit = 1;                   /* 1 CPU */
+long ramUnit = 512 * 1024 * 1024;  /* 500 MB */
+int defaultJobCpu = 1;        /* number of cpuUnits in default job usage */  
+int defaultJobRam = 1;        /* number of ramUnits in default job usage */
+/* for the resource array dimensions */
+int maxCpuInCluster = 0;      /* node with largest number of cpu units */
+int maxRamInCluster = 0;      /* node with largest number of ram units */
+struct slRef ***perCpu = NULL;  /* an array of resources sharing the same cpu units free units count */
+boolean needsPlanning = FALSE;  /* remember if situation changed, need new plan */  
+
+
 void setupLists()
 /* Make up machine, spoke, user and job lists - all doubly linked
  * so it is fast to remove items from one list and put them
  * on another. */
 {
 freeMachines = newDlList();
+readyMachines = newDlList();
 busyMachines = newDlList();
 deadMachines = newDlList();
 runningJobs = newDlList();
@@ -176,6 +195,12 @@ unqueuedUsers = newDlList();
 userHash = newHash(6);
 }
 
+int avgBatchTime(struct batch *batch)
+/**/
+{
+if (batch->doneCount == 0) return 0;
+return batch->doneTime / batch->doneCount;
+}
 
 boolean nodeSickOnAllBatches(struct user *user, char *machineName)
 /* Return true if all of a user's current batches believe the machine is sick. */
@@ -240,7 +265,7 @@ struct user *user;
 if (userList)
     {
     struct hashEl *el, *list = NULL;
-    /* find an active user if any */
+    /* get list from an active user if any, and get active-users count */
     for (user = userList; user != NULL; user = user->next)
 	{
 	if (userIsActive(user))
@@ -294,6 +319,9 @@ return sickNodeCount;
 void updateUserMaxNode(struct user *user)
 /* Update user maxNode. >=0 only if all batches have >=0 maxNode values */
 {
+/* Note - at this point the user->maxNode is mostly ornamental,
+ * it has been left in for people who want to see it in list users */
+
 struct dlNode *node;
 struct batch *batch;
 boolean unlimited = FALSE;
@@ -306,7 +334,7 @@ for (node = user->curBatches->head; !dlEnd(node); node = node->next)
     else
 	unlimited = TRUE;
     }
-if (unlimited) user->maxNode = -1;    
+if (unlimited) user->maxNode = -1;
 }
 
 void updateUserPriority(struct user *user)
@@ -319,7 +347,7 @@ for (node = user->curBatches->head; !dlEnd(node); node = node->next)
     {
     batch = node->val;
     if (batch->priority < user->priority)
-     user->priority = batch->priority;
+	user->priority = batch->priority;
     }
 }
 
@@ -351,6 +379,12 @@ batch->jobQueue = newDlList();
 batch->priority = NORMAL_PRIORITY;
 batch->maxNode = -1;
 batch->sickNodes = newHash(6);
+
+batch->cpu = defaultJobCpu;    /* number of cpuUnits in default job usage */  
+batch->ram = defaultJobRam;    /* number of ramUnits in default job usage */
+
+needsPlanning = TRUE;
+
 return batch;
 }
 
@@ -372,6 +406,9 @@ if (batch == NULL)
     	dlAddTail(user->oldBatches, batch->node);
     else
 	dlAddTail(user->curBatches, batch->node);
+
+    needsPlanning = TRUE;
+
     updateUserPriority(user);
     updateUserMaxNode(user);
     updateUserSickNodes(user);
@@ -416,26 +453,21 @@ return count;
 }
 
 
-struct batch *findLuckyBatch(struct user *user, struct machine *machine)
+struct batch *findLuckyBatch(struct user *user)
 /* Find the batch that gets to run a job. */
 {
 struct batch *minBatch = NULL;
-int minCount = BIGNUM;
+int minScore = BIGNUM;
 struct dlNode *node;
 for (node = user->curBatches->head; !dlEnd(node); node = node->next)
     {
     struct batch *batch = node->val;
-    if ((batch->maxNode==-1) || (batch->runningCount < batch->maxNode))
-	{ /* adding 1 to runningCount helps suppress running any jobs when priority is set very high */
-	int weightedCount = (batch->runningCount+1) * batch->priority;
-	if (weightedCount < minCount)
+    if (batch->planning)
+	{
+	if (batch->planScore < minScore)
 	    {
-            /* avoid any machine in the sickNodes with threshold failure count */
-            if (hashIntValDefault(batch->sickNodes, machine->name, 0) < sickNodeThreshold)
-		{
-		minCount = weightedCount;
-		minBatch = batch;
-		}
+	    minScore = batch->planScore;
+	    minBatch = batch;
 	    }
 	}
     }
@@ -443,31 +475,65 @@ return minBatch;
 }
 
 
-
-struct user *findLuckyUser(struct machine *machine)
+struct user *findLuckyUser()
 /* Find lucky user who gets to run a job. */
 {
 struct user *minUser = NULL;
-int minCount = BIGNUM;
+int minScore = BIGNUM;
 struct dlNode *node;
 for (node = queuedUsers->head; !dlEnd(node); node = node->next)
     {
     struct user *user = node->val;
-    if ((user->maxNode==-1) || (user->runningCount < user->maxNode))
-	{ /* adding 1 to runningCount helps suppress running any jobs when priority is set very high */
-	int weightedCount = (user->runningCount+1) * user->priority;
-	if (!dlEmpty(user->curBatches) && weightedCount < minCount)
+    if (user->planningBatchCount > 0)
+	{
+	if (user->planScore < minScore) 
 	    {
-            /* avoid any machine in the sickNodes */
-            if (!hashLookup(user->sickNodes, machine->name))
-		{
-		minCount = weightedCount;
-		minUser = user;
-		}
+	    minScore = user->planScore;
+	    minUser = user;
 	    }
 	}
     }
 return minUser;
+}
+
+
+void resetBatchesForPlanning(struct user *user)
+/* Initialize batches for given user for planning.*/
+{
+struct dlNode *node;
+for (node = user->curBatches->head; !dlEnd(node); node = node->next)
+    {
+    struct batch *batch = node->val;
+    batch->planning = TRUE;
+    batch->planCount = 0;
+    /* adding 1 to planCount helps suppress running any jobs when priority is set very high */
+    batch->planScore = 1 * batch->priority; 
+    if (batch->maxNode == 0)
+       batch->planning = FALSE;	
+    if (batch->planning)
+	{
+	++user->planningBatchCount;
+	}
+    }
+}
+
+
+void resetUsersForPlanning()
+/* Initialize users for planning. */
+{
+struct dlNode *node;
+for (node = queuedUsers->head; !dlEnd(node); node = node->next)
+    {
+    struct user *user = node->val;
+    user->planCount = 0;
+    user->planningBatchCount = 0;
+    updateUserPriority(user);
+    updateUserMaxNode(user);
+    updateUserSickNodes(user);
+    /* adding 1 to planCount helps suppress running any jobs when priority is set very high */
+    user->planScore = 1 * user->priority;  
+    resetBatchesForPlanning(user);
+    }
 }
 
 
@@ -483,9 +549,15 @@ if (dlEmpty(batch->jobQueue))
     batch->queuedCount = 0;
     dlRemove(batch->node);
     dlAddTail(user->oldBatches, batch->node);
+
+    batch->planCount = 0;   /* use as a signal that it's not active any more */
+
+    needsPlanning = TRUE;  /* remember if situation changed, need new plan */  
+
     updateUserPriority(user);
     updateUserMaxNode (user);
     updateUserSickNodes(user);
+
     /* Check if it's last user batch and if so take them off queue */
     if (dlEmpty(user->curBatches))
 	{
@@ -496,11 +568,363 @@ if (dlEmpty(batch->jobQueue))
 }
 
 
+void readTotalMachineResources(struct machine *machine, int *cpuReturn, int *ramReturn)
+/* Return in units the cpu and ram resources of given machine */
+{
+int c = 0, r = 0;
+c = machine->machSpec->cpus / cpuUnit; 
+r = ((long)machine->machSpec->ramSize * 1024 * 1024) / ramUnit; 
+*cpuReturn = c;
+*ramReturn = r;
+}
+
+
+void readRemainingMachineResources(struct machine *machine, int *cpuReturn, int *ramReturn)
+/* Calculate available cpu and ram resources in given machine */
+{
+int c = 0, r = 0;
+readTotalMachineResources(machine, &c, &r);
+/* subtract all the resources now in-use */
+struct dlNode *jobNode = NULL;
+for (jobNode = machine->jobs->head; !dlEnd(jobNode); jobNode = jobNode->next)
+    {
+    struct job *job = jobNode->val;
+    struct batch * batch =job->batch;
+    c -= batch->cpu;
+    r -= batch->ram;
+    }
+*cpuReturn = c;
+*ramReturn = r;
+}
+
+struct batch *findRunnableBatch(struct machine *machine, struct slRef **pEl)
+/* Search machine for runnable batch, preferable something not at maxNode */
+{
+int c = 0, r = 0;
+readRemainingMachineResources(machine, &c, &r);
+struct slRef* el;
+for(el = machine->plannedBatches; el; el=el->next)
+    {
+    struct batch *batch = el->val;
+    if (batch->cpu <= c && batch->ram <= r)
+	{
+	if (pEl)
+	    *pEl = el;
+	return batch;
+	}
+    }
+if (pEl)
+    *pEl = NULL;
+return NULL;
+}
+
+void allocateResourcesToMachine(struct machine *mach, 
+    struct batch *batch, struct user *user, int *pC, int *pR)
+/* Allocate Resources to machine*/
+{
+
+*pC -= batch->cpu;
+*pR -= batch->ram;
+
+++batch->planCount;
+++user->planCount;
+/* incrementally update score for batches and users */
+// TODO scoring that accounts the resources more carefully, e.g. actual ram.
+batch->planScore += 1 * batch->priority;
+user->planScore += 1 * user->priority;
+
+/*  add batch to plannedBatches queue */
+refAdd(&mach->plannedBatches, batch);
+
+/* maxNode handling */
+if ((batch->maxNode!=-1) && (batch->planCount >= batch->maxNode))
+    {
+    /* remove batch from the allocating */
+    batch->planning = FALSE;
+    --user->planningBatchCount;
+    }
+}
+
+
+void plan(struct paraMessage *pm) 
+/* Make a new plan allocating resources to batches */
+{
+
+logInfo("executing new plan");
+
+if (pm) pmSendString(pm, rudpOut, "about to initialize cpu/ram 2d arrays"); // DEBUG
+
+/* Initialize Resource Arrays for CPU and RAM */
+/* allocate memory like a 2D array */
+int c = 0, r = 0;
+/*  +1 to allow for zero slot simplifies the code */
+AllocArray(perCpu, maxCpuInCluster+1);  
+for (c = 1; c <= maxCpuInCluster; ++c)
+  AllocArray(perCpu[c], maxRamInCluster+1);  
+
+if (pm) pmSendString(pm, rudpOut, "about to add machines resources to cpu/ram arrays");
+
+
+resetUsersForPlanning();
+
+/* allocate machines to resource lists */
+struct machine *mach;
+for (mach = machineList; mach != NULL; mach = mach->next)
+     {
+     slFreeList(&mach->plannedBatches); // free any from last plan
+     if (!mach->isDead)
+	{
+
+	readTotalMachineResources(mach, &c, &r);
+
+        /* Sweep mark all running jobs as oldPlan,
+	 *  this helps us deal with jobsDone from old plan.
+	 * For better handling of long-running maxNode batches
+         *  with frequent replanning, 
+	 *  preserve the same resources on the same machines.
+         */
+	struct dlNode *jobNode = NULL;
+	for (jobNode = mach->jobs->head; !dlEnd(jobNode); jobNode = jobNode->next)
+	    {
+	    struct job *job = jobNode->val;
+	    struct batch *batch = job->batch;
+	    struct user *user = batch->user;
+	    job->oldPlan = TRUE;
+	    if (batch->planning && (batch->maxNode != -1))
+		{
+		if (pm) 
+		    {
+		    pmClear(pm);
+		    pmPrintf(pm, "preserving batch %s on machine %s", batch->name, mach->name);
+		    pmSend(pm, rudpOut);
+		    }
+		allocateResourcesToMachine(mach, batch, user, &r, &c);
+		}
+	    }
+
+	if (pm) 
+	    {
+	    pmClear(pm);
+	    pmPrintf(pm, "machSpec (%s) cpus:%d ramSize=%d"
+		, mach->name, mach->machSpec->cpus, mach->machSpec->ramSize);
+	    pmSend(pm, rudpOut);
+	    }
+     
+
+	if (c < 1 || r < 1)
+	    {
+	    if (pm) 
+		{
+		pmClear(pm);
+		pmPrintf(pm, "IGNORING mach: %s c=%d cpu units; r=%d ram units", mach->name, c, r);
+		pmSend(pm, rudpOut);
+		}
+	    }
+	else
+	    {
+
+	    if (pm) 
+		{
+		pmClear(pm);
+		pmPrintf(pm, "mach: %s c=%d cpu units; r=%d ram units", mach->name, c, r);
+		pmSend(pm, rudpOut);
+		} 
+
+	    refAdd(&perCpu[c][r], mach); 
+	    }
+	}
+     }
+
+
+
+/* allocate machines to resource lists */
+
+while(TRUE)
+    {
+
+    /* find lucky user/batch */
+    struct user *user = findLuckyUser();
+    if (!user)
+	break;
+    struct batch *batch = findLuckyBatch(user);
+    if (!batch)
+	{
+	errAbort("unexpected error: batch not found while planning for lucky user");
+	break;
+	}
+
+    if (pm) 
+	{
+	pmClear(pm);
+	pmPrintf(pm, "lucky user: %s; lucky batch=%s", user->name, batch->name);
+	pmSend(pm, rudpOut);
+	}
+     
+    /* find machine with adequate resources in resource array (if any) */
+    boolean found = FALSE;
+    struct slRef **perRam = NULL; 
+    struct slRef *el = NULL;
+    for (c = batch->cpu; c <= maxCpuInCluster; ++c)
+	{
+	/* an array of resources sharing the same cpu and ram free units count */
+	perRam = perCpu[c];      
+	for (r = batch->ram; r <= maxRamInCluster; ++r)
+	    {
+	    if (perRam[r])
+		{
+		/* avoid any machine in the sickNodes */
+		/* extract from list if found */
+		el = perRam[r];
+		struct slRef **listPt = &perRam[r];
+		while (el)
+		    {
+		    mach = (struct machine *) el->val;
+		    if (hashIntValDefault(batch->sickNodes, mach->name, 0) < sickNodeThreshold)
+			{
+			found = TRUE;
+			*listPt = el->next;
+			el->next = NULL;
+			break;
+			}
+		    listPt = &el->next;
+		    el = el->next;
+		    }
+		}
+	    if (found)
+		break;  // preserve value of r
+	    }
+	if (found)
+	    break;  // preserve value of c
+	}
+    if (found)
+	{
+
+	/* allocate plan, reduce resources, calc new resources and pos.
+	 *   move machine from old array pos to new pos. (slPopHead, slAddHead)
+	 *   update its stats, and if heaps, update heaps.
+	 */
+
+
+	if (pm) 
+	    {
+	    pmClear(pm);
+	    pmPrintf(pm, "found hardware cpu %d ram %d in machine %s c=%d r=%d batch=%s", 
+		batch->cpu, batch->ram, mach->name, c, r, batch->name);
+	    pmSend(pm, rudpOut);
+	    }
+
+	allocateResourcesToMachine(mach, batch, user, &r, &c);
+
+	if (pm) 
+	    {
+	    pmClear(pm);
+	    pmPrintf(pm, "remaining hardware c=%d r=%d", c, r);
+	    pmSend(pm, rudpOut);
+	    }
+     
+	if (c < 1 || r < 1)
+	    freeMem(el);  /* this node has insufficient resources remaining */
+	else
+	    slAddHead(&perCpu[c][r], el);
+
+	}
+    else
+	{
+
+	if (pm) 
+	    {
+	    pmClear(pm);
+	    pmPrintf(pm, "no suitable machines left, removing from planning:  user %s; lucky batch %s", 
+		user->name, batch->name);
+	    pmSend(pm, rudpOut);
+	    }
+
+	/* no suitable machine found */
+	/* remove batch from the allocating */
+	batch->planning = FALSE;
+	--user->planningBatchCount;
+	}
+
+    }
+
+
+/* free arrays when finished */
+for (c = 1; c <= maxCpuInCluster; ++c)
+    {
+    for (r = 1; r <= maxRamInCluster; ++r)
+	{
+	slFreeList(&perCpu[c][r]);
+	}
+    freeMem(perCpu[c]);
+    }
+freeMem(perCpu);
+
+
+/* allocate machines to busy, ready, free lists */
+for (mach = machineList; mach != NULL; mach = mach->next)
+     {
+     if (!mach->isDead)
+	{
+	/* See if any machines have enough resources free
+	 *  to start their plan, and start those jobs.
+         *  If so, add them to the readyMachines list. */
+	
+	struct dlNode *mNode = mach->node;
+	dlRemove(mNode);  /* remove it from whichever list it was on */
+
+	if (mach->plannedBatches) /* was anything planned for this machine? */
+    	    {
+	    struct batch *batch = findRunnableBatch(mach, NULL);
+	    if (batch)
+		dlAddTail(readyMachines, mNode);
+	    else
+		dlAddTail(busyMachines, mNode);
+	    }
+	else
+	    {
+	    struct dlNode *jobNode = mach->jobs->head;
+	    if (dlEnd(jobNode))
+		dlAddTail(freeMachines, mNode);
+	    else
+		dlAddTail(busyMachines, mNode);
+	    }
+
+	}
+     }
+
+
+if (pm) 
+    {
+    pmClear(pm);
+    pmPrintf(pm, 
+	"# machines:"
+	" busy %d" 
+	" ready %d" 
+	" free %d" 
+	" dead %d" 
+	, dlCount(busyMachines)
+	, dlCount(readyMachines)
+	, dlCount(freeMachines)
+	, dlCount(deadMachines)
+    );
+    pmSend(pm, rudpOut);
+
+    pmSendString(pm, rudpOut, "end of planning"); 
+
+    pmSendString(pm, rudpOut, "");
+    }
+
+needsPlanning = FALSE;
+logInfo("plan finished");
+
+}
+
+
 boolean runNextJob()
 /* Assign next job in pending queue if any to a machine. */
 {
 
-if (dlEmpty(freeMachines))
+if (dlEmpty(readyMachines))
  return FALSE;
 
 if (dlEmpty(freeSpokes))
@@ -509,51 +933,88 @@ if (dlEmpty(freeSpokes))
 struct dlNode *mNode;
 struct machine *machine;
  /* Get free machine */
-mNode = dlPopHead(freeMachines);
+mNode = dlPopHead(readyMachines);
 machine = mNode->val;
-struct user *user = findLuckyUser(machine);
 
-if (user)
-    {
-    struct dlNode *jNode, *sNode;
-    struct spoke *spoke;
-    struct batch *batch = findLuckyBatch(user, machine);
-    struct job *job;
-
-    /* Get free spoke and move them to busy lists. */
-    machine->lastChecked = now;
-    sNode = dlPopHead(freeSpokes);
-    dlAddTail(busySpokes, sNode);
-    spoke = sNode->val;
-
-    /* Get active batch from user and take job off of it.
-     * If it's the last job in the batch move batch to
-     * finished list. */
-    jNode = dlPopHead(batch->jobQueue);
-    dlAddTail(runningJobs, jNode);
-    job = jNode->val;
-    ++batch->runningCount;
-    --batch->queuedCount;
-    ++user->runningCount;
-    unactivateBatchIfEmpty(batch);
-
-    /* Tell machine, job, and spoke about each other. */
-    dlAddTail(machine->jobs, job->jobNode);
-    if (dlCount(machine->jobs) >= machine->machSpec->cpus)
-	dlAddTail(busyMachines, mNode);
+if (!machine->plannedBatches) /* anything to do for this machine? */
+    { /* should only on the ready list when there is something runnable */
+    logWarn("a machine with nothing to run got on the readyMachines list");
+    struct dlNode *jobNode = machine->jobs->head;
+    if (dlEnd(jobNode))
+    	dlAddTail(freeMachines, mNode);
     else
-	dlAddTail(freeMachines, mNode);
-    job->machine = machine;
-    job->startTime = job->lastClockIn = now;
-    spokeSendJob(spoke, machine, job);
+    	dlAddTail(busyMachines, mNode);
     return TRUE;
     }
-else
+
+struct slRef *batchEl = NULL;
+struct batch *batch = findRunnableBatch(machine, &batchEl);
+
+/* remove the batch from the planning list */
+if (!slRemoveEl(&machine->plannedBatches, batchEl))
     {
-    /* Cycle possibly sick free machine to end of list. */
+    logWarn("unable to remove batch from machine->plannedBatches, length: %d\n", 
+	slCount(machine->plannedBatches));
     dlAddTail(freeMachines, mNode);
-    return FALSE;
+    return TRUE;	
     }
+
+/* Prevent too many from this batch from running.
+ * This is helpful for keeping the balance with longrunning batches
+ * and maxNode. */
+if (batch->runningCount >= batch->planCount)
+    {
+    slAddTail(&machine->plannedBatches, batchEl);
+    dlAddTail(readyMachines, mNode);
+    return TRUE;	
+    }
+
+freeMem(batchEl);
+
+
+if (batch->queuedCount == 0)
+    {
+    /* probably the batch has been chilled */
+    dlAddTail(freeMachines, mNode);
+    /* needsPlanning=TRUE and a new plan will come along soon. */
+    return TRUE;
+    }
+
+struct user *user = batch->user; 
+
+struct dlNode *jNode, *sNode;
+struct spoke *spoke;
+struct job *job;
+
+/* Get free spoke and move them to busy lists. */
+machine->lastChecked = now;
+sNode = dlPopHead(freeSpokes);
+dlAddTail(busySpokes, sNode);
+spoke = sNode->val;
+
+/* Get active batch from user and take job off of it.
+ * If it's the last job in the batch move batch to
+ * finished list. */
+jNode = dlPopHead(batch->jobQueue);
+dlAddTail(runningJobs, jNode);
+job = jNode->val;
+++batch->runningCount;
+--batch->queuedCount;
+++user->runningCount;
+unactivateBatchIfEmpty(batch); 
+
+/* Tell machine, job, and spoke about each other. */
+dlAddTail(machine->jobs, job->jobNode);
+
+if (findRunnableBatch(machine, NULL))
+    dlAddTail(readyMachines, mNode);
+else
+    dlAddTail(busyMachines, mNode);
+
+job->machine = machine;
+job->startTime = job->lastClockIn = now;
+spokeSendJob(spoke, machine, job);
+return TRUE;
 }
 
 void runner(int count)
@@ -593,7 +1054,7 @@ if (mach != NULL)
     }
 }
 
-void doAddMachine(char *name, char *tempDir, bits32 ip, struct machSpec *m)
+struct machine *doAddMachine(char *name, char *tempDir, bits32 ip, struct machSpec *m)
 /* Add machine to pool.  If you don't know ip yet just pass
  * in 0 for that argument. */
 {
@@ -602,6 +1063,8 @@ mach = machineNew(name, tempDir, m);
 mach->ip = ip;
 dlAddTail(freeMachines, mach->node);
 slAddHead(&machineList, mach);
+needsPlanning = TRUE;  
+return mach;
 }
 
 void addMachine(char *line)
@@ -718,6 +1181,10 @@ dlRemove(batch->node);
 dlAddHead(user->curBatches, batch->node);
 dlRemove(user->node);
 dlAddHead(queuedUsers, user->node);
+
+if (batch->planCount == 0)
+    needsPlanning = TRUE;
+
 updateUserPriority(user);
 updateUserMaxNode(user);
 updateUserSickNodes(user);
@@ -960,7 +1427,7 @@ for (i=0; i<spokesToUse; ++i)
 	struct job *job = jobNode->val;
 	if (now - job->lastClockIn >= MINUTE * assumeDeadPeriod)
 	    {
-	    warn("hub: node %s running %d looks dead, burying\n", machine->name, job->id);
+	    warn("hub: node %s running %d looks dead, burying", machine->name, job->id);
 	    buryMachine(machine);
 	    break;  /* jobs list has been freed by bury, break immediately */
 	    }
@@ -1040,6 +1507,7 @@ if (sameString(status, "0"))
     {
     ++finishedJobCount;
     ++batch->doneCount;
+    batch->doneTime += (now - job->startTime);
     ++batch->user->doneCount;
     batch->continuousCrashCount = 0;
     /* remember the continuous number of times this batch has crashed on this node */
@@ -1053,7 +1521,7 @@ else
     ++batch->continuousCrashCount;
     /* remember the continuous number of times this batch has crashed on this node */
     hashIncInt(batch->sickNodes, job->machine->name);
-    updateUserSickNode(batch->user, job->machine->name);
+    updateUserSickNode(batch->user, job->machine->name);  
     }
 
 
@@ -1132,6 +1600,10 @@ void processHeartbeat()
 /* Check that system is ok.  See if we can do anything useful. */
 {
 int spokesToUse;
+
+if (needsPlanning)
+    plan(NULL);
+
 runner(30);
 spokesToUse = dlCount(freeSpokes);
 if (spokesToUse > 0)
@@ -1182,6 +1654,7 @@ for (node = deadMachines->head; !dlEnd(node); node = node->next)
 	hostFound = TRUE;
 	dlRemove(node);
 	dlAddTail(freeMachines, node);
+	needsPlanning = TRUE;
 	mach->isDead = FALSE;
 
 	if (mach->deadJobIds != NULL)
@@ -1197,17 +1670,17 @@ for (node = deadMachines->head; !dlEnd(node); node = node->next)
                 if ((i = slIntFind(mach->deadJobIds, jobId)))
 		    {
 		    struct job *job;
-		    warn("hub: Looks like %s is still keeping track of %d\n", name, jobId);
+		    warn("hub: Looks like %s is still keeping track of %d", name, jobId);
 		    if ((job = findWaitingJob(jobId)) != NULL)
 			{
-			warn("hub: Luckily rerun of job %d has not yet happened.\n", 
+			warn("hub: Luckily rerun of job %d has not yet happened.", 
                              jobId);
 			dlRemove(job->node);
-			dlRemove(mach->node);
 			job->machine = mach;
 			dlAddTail(mach->jobs, job->jobNode);
 			mach->lastChecked = job->lastClockIn = now;
 			dlAddTail(runningJobs, job->node);
+			dlRemove(mach->node);
 			dlAddTail(busyMachines, mach->node);
 			}
 		    else if ((job = jobFind(runningJobs, jobId)) != NULL)
@@ -1216,7 +1689,7 @@ for (node = deadMachines->head; !dlEnd(node); node = node->next)
 			 * Kill it on both since the output it created could
 			 * be corrupt at this point.  Then add it back to job
 			 * queue. */
-			warn("hub: Job %d is running on %s as well.\n", jobId,
+			warn("hub: Job %d is running on %s as well.", jobId,
                              job->machine->name);
 			sendKillJobMessage(mach, job->id);
 			sendKillJobMessage(job->machine, job->id);
@@ -1229,7 +1702,7 @@ for (node = deadMachines->head; !dlEnd(node); node = node->next)
 			 * back is running a job that we reran to completion
 			 * on another node. */
 			warn("hub: Job %d has finished running, there is a conflict. "
-			     "Data may be corrupted, and it will take a lot of logic to fix.\n", 
+			     "Data may be corrupted, and it will take a lot of logic to fix.", 
                              jobId);
 			}
 		    }
@@ -1243,7 +1716,7 @@ for (node = deadMachines->head; !dlEnd(node); node = node->next)
 if (!hostFound)
     {
     warn("hub 'alive $HOST' msg handler: unable to resurrect host %s, "
-	 "not find in deadMachines list.\n",  name);
+	 "not find in deadMachines list.",  name);
     }
 }
 
@@ -1251,7 +1724,7 @@ void recycleMachine(struct machine *mach)
 /* Recycle machine into free list. */
 {
 dlRemove(mach->node);
-dlAddTail(freeMachines, mach->node);
+dlAddTail(readyMachines, mach->node);
 }
 
 void recycleJob(struct job *job)
@@ -1295,7 +1768,7 @@ if (status != NULL)
 	    if (mach != NULL)
 	        {
 	        dlRemove(mach->node);
-	        dlAddTail(freeMachines, mach->node);
+	        dlAddTail(readyMachines, mach->node); 
 		}
 	    requeueJob(job);
 	    logDebug("hub:  requeueing job in nodeCheckIn");
@@ -1344,6 +1817,27 @@ if (!job)
 batch = job->batch;
 dlAddTail(batch->jobQueue, job->node);
 ++batch->queuedCount;
+
+int oldCpu = batch->cpu;  
+int oldRam = batch->ram; 
+if (job->cpus) 
+    batch->cpu = (job->cpus + 0.5) / cpuUnit;  /* rounding */
+else
+    batch->cpu = defaultJobCpu;
+if (job->ram) 
+    batch->ram = (job->ram + (0.5*ramUnit)) / ramUnit;   /* rounding */
+else
+    batch->ram = defaultJobRam;
+
+if (oldCpu != batch->cpu || oldRam != batch->ram)
+    {
+    needsPlanning = TRUE; 
+    }
+
+if (batch->planCount == 0)
+    {
+    needsPlanning = TRUE; 
+    }
 user = batch->user;
 dlRemove(user->node);
 dlAddTail(queuedUsers, user->node);
@@ -1402,6 +1896,7 @@ struct user *user = findUser(userName);
 struct batch *batch = findBatch(user, dir, TRUE);
 if (user == NULL) return -2;
 if (batch == NULL) return -2;
+needsPlanning = TRUE;
 batch->maxNode = maxNode;
 updateUserMaxNode(user);
 if (maxNode>=-1)
@@ -1444,6 +1939,7 @@ struct batch *batch = findBatch(user, dir, TRUE);
 if (user == NULL) return -2;
 if (batch == NULL) return -2;
 batch->doneCount = 0;
+batch->doneTime = 0;
 batch->crashCount = 0;
 logInfo("paraHub: User %s reset done and crashed counts for batch %s", userName, dir);
 return 0;
@@ -1533,6 +2029,7 @@ if (batch == NULL) return -2;
 hashFree(&batch->sickNodes);
 batch->continuousCrashCount = 0;  /* reset so user can retry */
 batch->sickNodes = newHash(6);
+needsPlanning = TRUE;
 updateUserSickNodes(user);
 logInfo("paraHub: User %s cleared sick nodes for batch %s", userName, dir);
 return 0;
@@ -1583,12 +2080,10 @@ for (el = list; el != NULL; el = el->next)
 	}
     }
 hashElFreeList(&list);
+logInfo("paraHub: User %s ran showSickNodes for batch %s", userName, dir);
 pmClear(pm);
 pmPrintf(pm, "total sick machines: %d failures: %d", machineCount, sickCount);
 pmSend(pm, rudpOut);
-pmClear(pm);
-pmSend(pm, rudpOut);
-logInfo("paraHub: User %s showed sick nodes for batch %s", userName, dir);
 return 0;
 }
 
@@ -1603,6 +2098,14 @@ if ((dir = nextWord(&line)) == NULL)
 return showSickNodes(userName, dir, pm);
 }
 
+void showSickNodesAcknowledge(char *line, struct paraMessage *pm)
+/* Show sick nodes from batch.  Line format is <user> <dir>
+* Returns just empty line if a problem back to client. */
+{
+showSickNodesFromMessage(line,pm);
+pmClear(pm);
+pmSend(pm, rudpOut);
+}
 
 
 
@@ -1613,6 +2116,7 @@ struct user *user = findUser(userName);
 struct batch *batch = findBatch(user, dir, TRUE);
 if (user == NULL) return 0;
 if (batch == NULL) return 0;
+needsPlanning = TRUE;
 batch->priority = priority;
 updateUserPriority(user);
 if ((priority>=1)&&(priority<NORMAL_PRIORITY))
@@ -1661,9 +2165,26 @@ struct machine *mach = job->machine;
 struct batch *batch = job->batch;
 struct user *user = batch->user;
 if (mach != NULL)
+    {
+    /* see if the node appears to be sick for this batch */
+    if (hashIntValDefault(batch->sickNodes, mach->name, 0) >= sickNodeThreshold)
+	{ /* skip adding back to the mach->plannedBatches list */
+	needsPlanning = TRUE;
+	}
+    else if (!job->oldPlan)
+	{  /* add its batch to end of list so it gets run again on same machine */
+	struct slRef *el = slRefNew(batch);
+	slAddTail(&mach->plannedBatches, el);
+	}
     recycleMachine(mach);
-batch->runningCount -= 1;
-user->runningCount -= 1;
+    /* NOTE I moved the following two lines inside the if (mach != NULL) block
+     *  because this may fix the problem where we were seeing users get duplicate
+     *  jobDone messages or something like that causing users to get
+     *  e.g. -200 user->runningCount which then made them hog the whole cluster.
+     */
+    batch->runningCount -= 1;
+    user->runningCount -= 1;
+    }
 dlRemove(job->jobNode);
 recycleJob(job);
 }
@@ -1741,8 +2262,10 @@ for (el = batch->jobQueue->head; !dlEnd(el); el = next)
     recycleJob(job);	/* This free's el too! */
     }
 batch->queuedCount = 0;
+batch->planCount = 0;
 dlRemove(batch->node);
 dlAddTail(user->oldBatches, batch->node);
+needsPlanning = TRUE;
 updateUserPriority(user);
 updateUserMaxNode(user);
 updateUserSickNodes(user);
@@ -1878,9 +2401,11 @@ for (user = userList; user != NULL; user = user->next)
     pmPrintf(pm, 
     	"%d jobs running, %d waiting, %d finished, %d of %d batches active"
     	", priority=%d"
-    	", maxNode=%d", 
-	user->runningCount,  userQueuedCount(user), user->doneCount,
-	countUserActiveBatches(user), totalBatch, user->priority, user->maxNode);
+    	", maxNode=%d" 
+	, user->runningCount,  userQueuedCount(user), user->doneCount,
+	countUserActiveBatches(user), totalBatch, user->priority 
+	, user->maxNode 
+	);
     pmSend(pm, rudpOut);
     }
 pmSendString(pm, rudpOut, "");
@@ -1892,10 +2417,14 @@ void writeOneBatchInfo(struct paraMessage *pm, struct user *user, struct batch *
 char shortBatchName[512];
 splitPath(batch->name, shortBatchName, NULL, NULL);
 pmClear(pm);
-pmPrintf(pm, "%-8s %4d %6d %6d %5d %3d %3d %s",
+pmPrintf(pm, "%-8s %4d %6d %6d %5d %3d %3d %3d %4.1fg %4d %3d %s",
 	user->name, batch->runningCount, 
 	batch->queuedCount, batch->doneCount,
-	batch->crashCount, batch->priority, batch->maxNode, shortBatchName);
+	batch->crashCount, batch->priority, batch->maxNode, 
+	batch->cpu, ((float)batch->ram*ramUnit)/(1024*1024*1024),
+	batch->planCount,
+	(avgBatchTime(batch)+30)/60,
+	shortBatchName);
 pmSend(pm, rudpOut);
 }
 
@@ -1904,7 +2433,7 @@ void listBatches(struct paraMessage *pm)
  * line followed by a blank line. */
 {
 struct user *user;
-pmSendString(pm, rudpOut, "#user     run   wait   done crash pri max batch");
+pmSendString(pm, rudpOut, "#user     run   wait   done crash pri max cpu  ram  plan min batch");
 for (user = userList; user != NULL; user = user->next)
     {
     struct dlNode *bNode;
@@ -2175,11 +2704,11 @@ void status(struct paraMessage *pm)
  * followed by a blank message. */
 {
 char buf[256];
-safef(buf, sizeof(buf), "CPUs total: %d", getCpus(freeMachines)+getCpus(busyMachines));
+safef(buf, sizeof(buf), "CPUs total: %d", getCpus(freeMachines)+getCpus(readyMachines)+getCpus(busyMachines));
 pmSendString(pm, rudpOut, buf);
 safef(buf, sizeof(buf), "CPUs free: %d", getCpus(freeMachines));
 pmSendString(pm, rudpOut, buf);
-safef(buf, sizeof(buf), "CPUs busy: %d", getCpus(busyMachines));
+safef(buf, sizeof(buf), "CPUs busy: %d", getCpus(readyMachines)+getCpus(busyMachines));
 pmSendString(pm, rudpOut, buf);
 safef(buf, sizeof(buf), "Nodes total: %d", dlCount(freeMachines)+dlCount(busyMachines));
 pmSendString(pm, rudpOut, buf);
@@ -2253,6 +2782,7 @@ void startMachines(char *fileName)
 {
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *row[7];
+boolean firstTime = TRUE;
 while (lineFileRow(lf, row))
     {
     struct machSpec *ms;
@@ -2261,8 +2791,23 @@ while (lineFileRow(lf, row))
     ip = internetHostIp(ms->name);
     if (hashLookup(machineHash, ms->name))
 	errAbort("machine list contains duplicate: %s",  ms->name);
-    doAddMachine(ms->name, ms->tempDir, ip, ms);
+    struct machine *machine = doAddMachine(ms->name, ms->tempDir, ip, ms);
     hashStoreName(machineHash, ms->name);
+
+    // TODO Add a command-line param for these that overrides default?
+    /* use first machine in spec list as model node */
+    if (firstTime) 
+	{
+	firstTime = FALSE;
+	cpuUnit = 1;       /* 1 CPU */
+	ramUnit = ((long)machine->machSpec->ramSize * 1024 * 1024) / machine->machSpec->cpus;
+	}
+
+    int c = 0, r = 0;
+    readTotalMachineResources(machine, &c, &r);
+    maxCpuInCluster = max(maxCpuInCluster, c);
+    maxRamInCluster = max(maxRamInCluster, r);
+
     }
 lineFileClose(&lf);
 }
@@ -2311,7 +2856,7 @@ char *line;
 int wordCount;
 if (lf == NULL)
      {
-     warn("Couldn't open results file %s\n", fileName);
+     warn("Couldn't open results file %s", fileName);
      return;
      }
 while (lineFileNext(lf, &line, NULL))
@@ -2382,7 +2927,7 @@ else
 void pljErr(struct machine *mach, int no)
 /* Print out error message in the middle of routine below. */
 {
-warn("%s: truncated listJobs response %d\n", mach->name, no);
+warn("%s: truncated listJobs response %d", mach->name, no);
 }
 
 void getExeOnly(char *command, char exe[256])
@@ -2536,6 +3081,7 @@ for (mach = machineList; mach != NULL; mach = mach->next)
 /* Clean up time. */
 existingResultsFreeList(&erList);
 hashFree(&erHash);
+needsPlanning = TRUE;
 
 /* Report results. */
 logInfo("%d running jobs, %d jobs that finished while hub was down",
@@ -2614,7 +3160,7 @@ for (;;)
     else if (sameWord(command, "freeBatch"))
          freeBatchAcknowledge(line, pm);
     else if (sameWord(command, "showSickNodes"))
-	 showSickNodesFromMessage(line, pm);
+	 showSickNodesAcknowledge(line, pm);
     else if (sameWord(command, "clearSickNodes"))
 	 clearSickNodesAcknowledge(line, pm);
     else if (sameWord(command, "addJob"))
@@ -2657,6 +3203,8 @@ for (;;)
 	 pstat(line, pm, TRUE);
     else if (sameWord(command, "addSpoke"))
 	 addSpoke();
+    else if (sameWord(command, "plan"))
+	 plan(pm);
     if (sameWord(command, "quit"))
 	 break;
     pmFree(&pm);

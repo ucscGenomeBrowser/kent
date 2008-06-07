@@ -59,7 +59,7 @@ errAbort("paraNode - version %s\n"
 	);
 }
 
-static char const rcsid[] = "$Id: paraNode.c,v 1.80 2008/05/15 00:42:27 galt Exp $";
+static char const rcsid[] = "$Id: paraNode.c,v 1.81 2008/06/07 09:59:56 galt Exp $";
 
 /* Command line overwriteable variables. */
 char *hubName;			/* Name of hub machine, may be NULL. */
@@ -328,7 +328,7 @@ if (dup2(newStdout, STDOUT_FILENO) < 0)
 }
 
 void execProc(char *managingHost, char *jobIdString, char *reserved,
-	char *user, char *dir, char *in, char *out, char *err,
+	char *user, char *dir, char *in, char *out, char *err, long long memLimit,
 	char *exe, char **params)
 /* This routine is the child process of doExec.
  * It spawns a grandchild that actually does the
@@ -352,6 +352,12 @@ if ((grandChildId = forkOrDie()) == 0)
     setsid();
     // setpgid(0,0);
     umask(umaskVal); 
+
+    struct rlimit rlim;
+    rlim.rlim_cur = rlim.rlim_max = memLimit;
+    if(setrlimit(RLIMIT_CORE, &rlim) < 0)
+    perror("setrlimit"); 
+
 
     /* Update environment. */
         {
@@ -589,7 +595,8 @@ else
 			    args[i] = subTextString(st, args[i]);
 
 			execProc(hubDottedQuad, rjm.jobIdString, rjm.reserved,
-			    rjm.user, rjm.dir, rjm.in, rjm.out, rjm.err, args[0], args);
+			    rjm.user, rjm.dir, rjm.in, rjm.out, rjm.err, rjm.ram,
+			    args[0], args);
 			exit(0);
 			}
 		    else

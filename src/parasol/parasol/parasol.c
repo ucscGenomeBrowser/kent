@@ -9,7 +9,7 @@
 #include "paraLib.h"
 #include "paraMessage.h"
 
-static char const rcsid[] = "$Id: parasol.c,v 1.39 2008/05/28 05:17:05 galt Exp $";
+static char const rcsid[] = "$Id: parasol.c,v 1.40 2008/06/07 09:59:56 galt Exp $";
 
 char *version = PARA_VERSION;   /* Version number. */
 
@@ -403,6 +403,10 @@ else if (sameString(command, "pstat"))
 else if (sameString(command, "pstat2"))
     {
     pstat2();
+    }
+else if (sameString(command, "plan"))
+    {
+    hubCommandAndPrint("plan");
     }
 else if (sameString(command, "ping"))
     {

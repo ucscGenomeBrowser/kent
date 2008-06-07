@@ -16,7 +16,7 @@
 #include "verbose.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: para.c,v 1.97 2008/05/31 07:56:06 galt Exp $";
+static char const rcsid[] = "$Id: para.c,v 1.98 2008/06/07 09:59:55 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -758,19 +758,20 @@ return list;
 boolean batchRunning(char *batchName)
 /* Return TRUE if a batch is running. */
 {
+#define NUMLISTBATCHCOLUMNS 12
 struct slRef *lineList = hubMultilineQuery("listBatches"), *lineEl;
 boolean ret = FALSE;
 for (lineEl = lineList; lineEl != NULL; lineEl = lineEl->next)
     {
     int wordCount;
     char *line = lineEl->val;
-    char *row[8];
+    char *row[NUMLISTBATCHCOLUMNS];
     if (line[0] != '#')
 	{
 	char *b;
 	wordCount = chopLine(line, row);
-	b = row[7];
-	if (wordCount < 8 || b[0] != '/')
+	b = row[NUMLISTBATCHCOLUMNS-1];
+	if (wordCount < NUMLISTBATCHCOLUMNS || b[0] != '/')
 	    errAbort("paraHub and para out of sync on listBatches");
 	if (sameString(b, batchName))
 	    ret = TRUE;
@@ -1053,7 +1054,7 @@ for (lineEl = lineList; lineEl != NULL; lineEl = lineEl->next)
 	{
         wordCount = chopLine(line, row);
 	queueSize = sqlSigned(row[2]);
-	verbose(1, "%d jobs (including everybody's) in Parasol queue.\n", queueSize);
+	verbose(1, "%d jobs (including everybody's) in Parasol queue or running.\n", queueSize);
 	freez(&lineEl->val);
 	continue;
 	}
@@ -1184,6 +1185,31 @@ double subRealTime(struct submission *sub)
  * before subtracting or time moving backwards is not detected
  */
 return ((double)sub->endTime) - ((double)sub->startTime);
+}
+
+void showSickNodes(boolean showSummary)
+/* Tell hub to show sick nodes on batch. */
+{
+int count = 0;
+struct dyString *dy = newDyString(1024);
+char curDir[512];
+if (getcwd(curDir, sizeof(curDir)) == NULL)
+    errAbort("Couldn't get current directory");
+dyStringPrintf(dy, "showSickNodes %s %s/%s", getUser(), curDir, resultsName);
+struct slRef *lineList = hubMultilineQuery(dy->string), *lineEl;
+for (lineEl = lineList; lineEl != NULL; lineEl = lineEl->next)
+    {
+    ++count;
+    char *line = lineEl->val;
+    /* In show summary mode, only print the last line, 
+     * which contains the totals.  Only print this one
+     * if there's more than one line (the total is greater than zero). */
+    if (!showSummary || !(lineEl->next || count == 1))
+	printf("%s\n", line);
+    freez(&lineEl->val);
+    }
+slFreeList(&lineList);
+dyStringFree(&dy);
 }
 
 
@@ -1361,6 +1387,7 @@ for (;;)
     jobDbFree(&db);
     if (!anyUnfinished)
         break;
+    showSickNodes(TRUE);
     fflush(stdout);
     fflush(stderr);
     if (sickBatch)
@@ -1784,31 +1811,6 @@ freez(&result);
 verbose(1, "Told hub to clear sick nodes\n");
 }
 
-
-void showSickNodes(boolean showSummary)
-/* Tell hub to show sick nodes on batch. */
-{
-int count = 0;
-struct dyString *dy = newDyString(1024);
-char curDir[512];
-if (getcwd(curDir, sizeof(curDir)) == NULL)
-    errAbort("Couldn't get current directory");
-dyStringPrintf(dy, "showSickNodes %s %s/%s", getUser(), curDir, resultsName);
-struct slRef *lineList = hubMultilineQuery(dy->string), *lineEl;
-for (lineEl = lineList; lineEl != NULL; lineEl = lineEl->next)
-    {
-    ++count;
-    char *line = lineEl->val;
-    /* In show summary mode, only print the last line, 
-     * which contains the totals.  Only print this one
-     * if there's more than one line (the total is greater than zero). */
-    if (!showSummary || !(lineEl->next || count == 1))
-	printf("%s\n", line);
-    freez(&lineEl->val);
-    }
-slFreeList(&lineList);
-dyStringFree(&dy);
-}
 
 void paraCheck(char *batch)
 /* Check on progress of a batch. */

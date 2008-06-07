@@ -30,6 +30,7 @@ struct job
     time_t startTime;           /* Start job run time in seconds past 1972 */
     time_t lastClockIn;		/* Last time we got a message from machine about job. */
     struct machine *machine;	/* Machine it's running on if any. */
+    boolean oldPlan;            /* from the old plan */
     };
 
 struct machine
@@ -47,6 +48,7 @@ struct machine
     struct slInt *deadJobIds;	/* List of job Ids that machine was running when it died. */
     bits32	ip;		/* IP address in host order. */
     struct machSpec *machSpec;  /* Machine spec of resources */
+    struct slRef *plannedBatches; /* List of planned batches. */
     };
 
 struct batch
@@ -65,6 +67,12 @@ struct batch
     int priority;   		/* Priority of batch, 1 is highest priority */
     int maxNode;    		/* maxNodes for batch, -1 is no limit */
     struct hash *sickNodes;     /* Hash of nodes that have failed */
+    long doneTime;              /* cumulative runtime of done jobs */
+    int planCount;              /* number of jobs planned */
+    int planScore;              /* weighted score of batch plan */
+    boolean planning;           /* TRUE if still part of planning */
+    int cpu;                    /* number of cpu-units required */
+    int ram;                    /* number of ram-units required */
     };
 
 struct user
@@ -78,8 +86,11 @@ struct user
     int runningCount;		/* Count of jobs currently running. */
     int doneCount;		/* Count of jobs finished. */
     int priority;   		/* Priority of user, 1 is highest priority */
-    int maxNode;    		/* maxNodes for user, -1 is no limit */
+    int maxNode;    		/* maxNodes for batch, -1 is no limit */
     struct hash *sickNodes;     /* Hash of nodes that have failed */
+    int planCount;              /* number of jobs planned */
+    int planScore;              /* weighted score of user plan */
+    int planningBatchCount;     /* number of batchs left planning */
     };
 
 struct spoke

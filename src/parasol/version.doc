@@ -177,3 +177,38 @@
 
         Fixed listSickNodes to include only active users, as was originally intended.
 
+12.07   Made a new scheduler that can deal with different sized cpu and ram usage requests.
+        It should be friendly within reason to mixed clusters with machines of varying 
+        capability. There is an array with various numbers of cpus free, and each 
+        has an array with various numbers of GB of ram free.  The system allocates
+        the nodes much like it allocates them today, with finding lucky user/batch,
+        finding the most modest machine which still meets the batch requirements,
+        and then allocating that node, subtracting the resources used, re-categorizing
+        the node.  There will be minimum usage units, e.g. 1 cpu and 0.5 GB ram for kk.
+        There will be a default 1 cpu and perhaps node ram/cpus for jobs that don't
+        specify.  This could be controlled by commandline parameter in future,
+        currently sets defaults based on the machines spec list. 
+ 
+        It can re-balance the entire cluster in a fraction of a second.
+        It will create a plan for the batches that are supposed to be running.
+        That will not actually kill any running jobs, but new jobs will 
+        be started from the plan until eventually all batches in the planned mix
+        will be running their jobs on the node.  No recalculation will be needed
+        until a batch either runs out of jobs, or a new batch starts, or some
+        other event disturbs the equilibrium. 
+
+	To help prevent slow jobs from hogging the cluster during the shift from 
+	one equilibrium plan to another, a choke prevents jobs from running until 
+	the runningCount is less than the planCount.
+        Also, for really slow jobs run with maxJob (aka maxNode) setting, 
+	the system does a prescan allocating them to the exact same nodes
+        so that they are handled more smoothly.
+
+	For the parasol list batches command, new columns showing cpu, ram, and 
+        min (average job run length minutes) have been added.  A new plan command
+        exists for parasol -- not only does it trigger an immediate planning event,
+        but it gives useful output for users interested in the details.
+
+
+
+
