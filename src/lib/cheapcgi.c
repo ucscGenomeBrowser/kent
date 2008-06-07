@@ -15,7 +15,7 @@
 #endif /* GBROWSE */
 #include <signal.h>
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.104 2008/06/01 14:58:25 tdreszer Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.104.2.1 2008/06/07 00:57:37 angie Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -758,12 +758,14 @@ if (!(isdigit(c) || (c == '-' && isdigit(data[1]))))
 return atoi(data);
 }
 
+#ifndef GBROWSE
 int cgiIntExp(char *varName)
 /* Evaluate an integer expression in varName and
  * return value. */
 {
 return intExp(cgiString(varName));
 }
+#endif /* GBROWSE */
 
 int cgiOptionalInt(char *varName, int defaultVal)
 /* This returns integer value of varName if it exists in cgi environment
