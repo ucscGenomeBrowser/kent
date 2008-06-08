@@ -144,7 +144,7 @@ cut -f 2 chrom.sizes | ave stdin
     # 732765485 bases of 2663369733 (27.513%) in intersection
 
     # RepeatMasker and lib version from do.log:
-    #    RepeatMasker version development-$Id: cavPor3.txt,v 1.8 2008/06/01 15:14:30 tdreszer Exp $
+    #    RepeatMasker version development-$Id: cavPor3.txt,v 1.9 2008/06/08 05:28:43 kate Exp $
     #    Jan 11 2008 (open-3-1-9) version of RepeatMasker
     #    CC   RELEASE 20071204;
 
@@ -2379,7 +2379,7 @@ done >> togetherMaf/cavPor3.7way.maf
 _EOF_
     #   << happy emacs
     
-    # Add squirrel at same distance to guinneaPig and Mouse as rabbits:
+    # Add squirrel at same distance to guineaPig and Mouse as rabbits:
    # Alternative tree: ((((((GuineaPig_cavPor3:0.202990,(Mouse_mm9:0.076274,Rat_rn4:0.084383):0.200607):0.017175,Squirrel_speTri0:0.208548):0.017175,Rabbit_oryCun1:0.208548):0.014587,Human_hg18:0.126901):0.263313,Opossum_monDom4:0.320721):0.207444,Chicken_galGal3:0.488824);
     cat << _EOF_ > cavPor3.8-way.nh
 (((((GuineaPig_cavPor3:0.202990,((Mouse_mm9:0.076274,Rat_rn4:0.084383):0.18602,Squirrel_speTri0:0.208548):0.014587):0.034350,Rabbit_oryCun1:0.208548):0.014587,Human_hg18:0.126901):0.263313,Opossum_monDom4:0.320721):0.207444,Chicken_galGal3:0.488824);
@@ -3545,6 +3545,42 @@ done
     #	check the goldenPath locations and remove those extra links
 
 #############################################################################
+# BLASTZ/CHAIN/NET 2X Ground squirrel: speTri0 (In progress 2008-05-16 kate)
+
+    ssh kkstore05
+    cd /cluster/data/cavPor3/bed
+    mkdir blastzSpeTri0.2008-05-16
+    cd blastzSpeTri0.2008-05-16
+
+    cat << '_EOF_' > DEF
+# Mouse vs. Ground squirrel
+
+BLASTZ_M=50
+
+# TARGET: Mouse MM9
+SEQ1_DIR=/scratch/data/cavPor3/cavPor3.2bit
+SEQ1_LEN=/cluster/data/cavPor3/chrom.sizes 
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Ground squirrel speTri0
+SEQ2_DIR=/scratch/data/speTri0/speTri0.2bit
+SEQ2_LEN=/cluster/data/speTri0/chrom.sizes
+SEQ2_CHUNK=30000000
+SEQ2_LIMIT=500
+SEQ2_LAP=0
+
+BASE=/cluster/data/cavPor3/bed/blastzSpeTri0.2008-05-16
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    doBlastzChainNet.pl `pwd`/DEF -bigClusterHub=pk  \
+      -chainMinScore=3000 -chainLinearGap=medium >& do.log &
+
+    # got here
+    ln -s blastzSpeTri0.2008-05-16 /cluster/data/cavPor3/bed/blastzSpeTri0
+
 ############################################################################
 # TRANSMAP vertebrate.2008-05-20 build  (2008-05-24 markd)
 
@@ -3576,7 +3612,6 @@ see doc/builds.txt for specific details.
     # set search regex to
     termRegex scaffold_[0-9]+\.[0-9]+\.[0-9]+
 ############################################################################
-
 
 # ### Found this in Kate's unchecked in cavPor3.txt.  I need it to continue the blastz to get the maf for multiz !!
 # ### #############################################################################
@@ -3766,5 +3801,4 @@ _EOF_
     # *** Add {chain,net}Mm9 tracks to trackDb.ra if necessary.
     cat fb.cavPor3.chainMm9Link.txt
     # 781173609 bases of 2663369733 (29.330%) in intersection
-
 
