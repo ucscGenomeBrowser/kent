@@ -6,6 +6,7 @@
 #include "hdb.h"
 #include "mafFrames.h"
 #include "maf.h"
+#include "obscure.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -72,6 +73,13 @@ struct speciesInfo
     char *nucSequence;
     char *aaSequence;
     int aaSize;
+    struct slName *posStrings;
+    struct slName *curPosString;
+    char *posString;
+    char *chrom;
+    int start, end;
+    char strand;
+    char frameStrand;
 };
 
 /* is the sequence all dashes ? */
@@ -91,7 +99,6 @@ return TRUE;
  */
 aaSeq *doTranslate(struct dnaSeq *inSeq, unsigned offset, 
     unsigned inSize, boolean stop)
-
 {
 aaSeq *seq;
 DNA *dna = inSeq->dna;
@@ -131,6 +138,7 @@ assert(actualSize <= inSize/3+1);
 seq->size = actualSize;
 return seq;
 }
+
 /* read a list of single words from a file */
 struct slName *readList(char *fileName)
 {
@@ -293,6 +301,7 @@ for(; name ; name = name->next)
     struct speciesInfo *si;
 
     AllocVar(si);
+    si->frameStrand = *giList->frame->strand;
     si->name = name->name;
     si->size = size;
     si->nucSequence = needMem(size + 1);
@@ -310,6 +319,7 @@ return siList;
 char exonBuffer[MAX_EXON_SIZE];
 
 char geneNameBuffer[5000];
+
 
 char *getGeneName(char *ucName)
 {
@@ -331,6 +341,8 @@ if ((row = sqlNextRow(sr)) == NULL)
 safef(geneNameBuffer, sizeof geneNameBuffer, "%s", row[0]);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
+spaceToUnderbar(geneNameBuffer);
+
 return geneNameBuffer;
 }
 
@@ -410,18 +422,20 @@ for(gi = giList; gi; gi = gi->next, exonNum++)
 	outSeq =  doTranslate(&thisSeq, 0,  0, FALSE);
 	if (!allDashes(outSeq->dna))
 	    {
-	    fprintf(f, ">%s_%s_%d_%d %d %d %d %s.%s:%d-%d %c",
+	    fprintf(f, ">%s_%s_%d_%d %d %d %d %s",
 		gi->name, 
 		siTemp->name, exonNum, exonCount, 
 		outSeq->size,
 		startFrame->frame, lastFrame,
-		dbName, gi->frame->chrom,
-		gi->chromStart+1, gi->chromEnd, startFrame->strand[0]);
+		siTemp->curPosString->name);
+		//dbName, gi->frame->chrom,
+		//gi->chromStart+1, gi->chromEnd, startFrame->strand[0]);
 
 	    maybePrintGeneName(gi->name, f);
 
 	    fprintf(f, "\n%s\n",  outSeq->dna);
 	    }
+	siTemp->curPosString = siTemp->curPosString->next;
 	}
     fprintf(f, "\n");
     }
@@ -466,17 +480,24 @@ for(gi = giList; gi; gi = gi->next, exonNum++)
 		break;
 
 	if (start == end)
+	    {
+	    siTemp->curPosString = siTemp->curPosString->next;
 	    continue;
+	    }
 
 	start = gi->exonStart;
 	ptr = &siTemp->nucSequence[gi->exonStart];
-	fprintf(f, ">%s_%s_%d_%d %d %d %d %s.%s:%d-%d %c",
+	//fprintf(f, ">%s_%s_%d_%d %d %d %d %s.%s:%d-%d %c",
+	fprintf(f, ">%s_%s_%d_%d %d %d %d %s",
 	    gi->name, 
 	    siTemp->name, exonNum, exonCount, 
 	    gi->exonSize,
 	    startFrame->frame, lastFrameNum,
-	    dbName, gi->frame->chrom,
-	    gi->chromStart+1, gi->chromEnd, startFrame->strand[0]);
+	    siTemp->curPosString->name);
+
+	siTemp->curPosString = siTemp->curPosString->next;
+	 //   dbName, gi->frame->chrom,
+	  //  gi->chromStart+1, gi->chromEnd, startFrame->strand[0]);
 
 	maybePrintGeneName(gi->name, f);
 
@@ -485,7 +506,9 @@ for(gi = giList; gi; gi = gi->next, exonNum++)
 	    fprintf(f, "%c", *ptr++);
 	fprintf(f, "\n");
 	}
+    fprintf(f, "\n");
     }
+fprintf(f, "\n");
 }
 
 /* translate nuc sequence into an sequence of amino acids */
@@ -499,6 +522,31 @@ thisSeq.size = si->size;
 outSeq =  doTranslate(&thisSeq, 0,  0, FALSE);
 si->aaSequence  = outSeq->dna;
 si->aaSize = outSeq->size;
+}
+
+
+char bigBuffer[100 * 1024];
+
+char *allPos(struct speciesInfo *si)
+{
+char *ptr = bigBuffer;
+struct slName *names = si->posStrings;
+int size = sizeof bigBuffer;
+
+for(; names ; names = names->next)
+    {
+    int sz = safef(ptr, size, "%s", names->name);
+    ptr += sz;
+    size -= sz;
+    if (names->next)
+	{
+	safef(ptr, size, ";");
+	ptr++;
+	size--;
+	}
+    }
+
+return bigBuffer;
 }
 
 /* output a particular species sequence to the file stream */
@@ -515,11 +563,11 @@ if (inExons)
     }
 
 struct exonInfo *lastGi;
-int start = giList->chromStart + 1;
+//int start = giList->chromStart + 1;
 
 for(lastGi = giList; lastGi->next ; lastGi = lastGi->next)
     ;
-int end = lastGi->chromEnd;
+//int end = lastGi->chromEnd;
 
 if (noTrans)
     {
@@ -527,14 +575,17 @@ if (noTrans)
 	{
 	if (!allDashes(si->nucSequence))
 	    {
-	    fprintf(f, ">%s_%s %d %s.%s:%d-%d %c",
-		giList->name, si->name, si->size, dbName,
-		giList->frame->chrom, start, end, giList->frame->strand[0]);
+	    //fprintf(f, ">%s_%s %d %s.%s:%d-%d %c",
+	    fprintf(f, ">%s_%s %d %s",
+		giList->name, si->name, si->size, allPos(si));
+		//dbName,
+		//giList->frame->chrom, start, end, giList->frame->strand[0]);
 
 	    maybePrintGeneName(giList->name, f);
 	    fprintf(f, "\n%s\n", si->nucSequence);
 	    }
 	}
+    fprintf(f, "\n\n");
     }
 else
     {
@@ -543,15 +594,19 @@ else
 	translateProtein(si);
 	if (!allDashes(si->aaSequence))
 	    {
-	    fprintf(f, ">%s_%s %d %s.%s:%d-%d %c",
-		giList->name, si->name, si->aaSize, dbName,
-		giList->frame->chrom, start, end, giList->frame->strand[0]);
+	    //fprintf(f, ">%s_%s %d %s.%s:%d-%d %c",
+	    fprintf(f, ">%s_%s %d %s",
+		giList->name, si->name, si->aaSize, allPos(si));
+
+		//dbName,
+		//giList->frame->chrom, start, end, giList->frame->strand[0]);
 
 	    maybePrintGeneName(giList->name, f);
 
 	    fprintf(f, "\n%s\n", si->aaSequence);
 	    }
 	}
+    fprintf(f, "\n\n");
     }
 }
 
@@ -561,6 +616,76 @@ else
 #define MAX_COMPS  	5000 
 char *compText[MAX_COMPS]; 
 char *siText[MAX_COMPS]; 
+
+void flushPosString(struct speciesInfo *si)
+{
+if (si->chrom != NULL)
+    {
+    char buffer[10*1024];
+    char strand = '+';
+
+    if (si->strand != si->frameStrand)
+	strand = '-';
+
+    if (si->posString == NULL)
+	{
+	safef(buffer, sizeof buffer, "%s:%d-%d%c", si->chrom,
+	    si->start+1, si->end, strand);
+	}
+    else
+	{
+	safef(buffer, sizeof buffer, "%s;%s:%d-%d%c", si->posString,
+	    si->chrom, si->start+1, si->end, strand);
+	freez(&si->posString);
+	}
+    si->posString = cloneString(buffer);
+    }
+
+si->chrom = NULL;
+}
+
+void pushPosString(struct speciesInfo *si)
+{
+flushPosString(si);
+
+struct slName *newName = newSlName(si->posString);
+slAddTail(&si->posStrings, newName);
+
+freez(&si->posString);
+}
+
+void updatePosString(struct speciesInfo *si, char *chrom, 
+		char strand, int start, int end)
+{
+if (start == end)
+    return;
+
+if ((si->chrom == NULL) || 
+    !sameString(si->chrom, chrom) ||
+    si->strand != strand)
+    {
+    flushPosString(si);
+
+    si->chrom = chrom;
+    si->strand = strand;
+    si->start = start;
+    si->end = end;
+    }
+
+//printf("update pos %s %s %d %d\n",si->name, chrom, start,end);
+if (strand == '+')
+    {
+    //printf("changing end %d ", si->end);
+    si->end = end;
+    //printf("%d\n", si->end);
+    }
+else
+    {
+    //printf("changing start %d ", si->start);
+    si->start = start;
+    //printf("%d\n", si->start);
+    }
+}
 
 /* copy the maf alignments into the species sequence buffers.
  * remove all the dashes from the reference sequence, and collapse
@@ -573,16 +698,24 @@ int jj;
 
 for(; comp; comp = comp->next)
     {
-    char *ptr = strchr(comp->src, '.');
+    char *chrom = strchr(comp->src, '.');
 
-    if (ptr == NULL)
+    if (chrom == NULL)
 	errAbort("all components must have a '.'");
 
-    *ptr = 0;
+    *chrom++ = 0;
 
     struct speciesInfo *si = hashFindVal(siHash, comp->src);
     if (si == NULL)
 	continue;
+
+    if (comp->strand == '+')
+	updatePosString(si, chrom, comp->strand, 
+	    comp->start, comp->start + comp->size);
+    else
+	updatePosString(si, chrom, comp->strand, 
+	    comp->srcSize - (comp->start + comp->size), 
+	    comp->srcSize - comp->start);
 
     char *mptr = ali->components->text;
     char *cptr = comp->text;
@@ -623,18 +756,30 @@ void copyMafs(struct hash *siHash, struct exonInfo **giList)
 {
 int start = 0;
 struct exonInfo *gi = *giList;
+//int exonCount = 0;
 
 for(; gi; gi = gi->next)
     {
     int thisSize = 0;
     struct mafAli *ali = gi->ali;
 
+    //printf("exon %d\n", exonCount++);
     for(; ali; ali = ali->next)
 	{
 	int newStart = copyAli(siHash, ali, start);
 	thisSize += newStart - start;
 	start = newStart;
 	}
+    struct hashCookie cookie =  hashFirst(siHash);
+    struct hashEl *hel;
+
+    if (inExons || (gi->next == NULL))
+	while ((hel = hashNext(&cookie)) != NULL)
+	    {
+	    struct speciesInfo *si = hel->val;
+
+	    pushPosString(si);
+	    }
     }
 
 boolean frameNeg = ((*giList)->frame->strand[0] == '-');
@@ -657,6 +802,8 @@ if (frameNeg)
 	else
 	    size = si->size;
 	reverseComplement(si->nucSequence, si->size);
+
+	slReverse(&si->posStrings);
 	}
 
     gi = *giList;
@@ -682,6 +829,7 @@ for(; list ; list = siNext)
 
     freez(&list->nucSequence);
     freez(&list->aaSequence);
+    slNameFreeList(&list->posStrings);
     }
 }
 
@@ -753,6 +901,11 @@ struct speciesInfo *speciesList = getSpeciesInfo(giList, speciesNameList,
     speciesInfoHash);
 
 copyMafs(speciesInfoHash, &giList);
+
+struct speciesInfo *si = speciesList;
+for(; si ; si = si->next)
+    si->curPosString = si->posStrings;
+
 writeOutSpecies(f, dbName, speciesList, giList);
 
 freeSpeciesInfo(speciesList);
@@ -805,7 +958,6 @@ optionInit(&argc, argv, options);
 
 if (argc != 7)
     usage();
-
 
 geneName = optionVal("geneName", geneName);
 geneList = optionVal("geneList", geneList);
