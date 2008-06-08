@@ -10,7 +10,7 @@
 #include "dnautil.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: getRnaPred.c,v 1.20 2007/09/25 16:40:05 markd Exp $";
+static char const rcsid[] = "$Id: getRnaPred.c,v 1.21 2008/06/08 19:26:43 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -40,6 +40,8 @@ errAbort(
   "    positions 104-243 are from the second exon, etc. \n"
   "   -maxSize=size - output a maximum of size characters.  Useful when\n"
   "    testing gene predictions by RT-PCR.\n"
+  "   -genomeSeqs=spec - get genome sequences from the specified nib directory\n"
+  "    or 2bit file instead of going though the path found in chromInfo.\n"
   "   -genePredExt - (for use with -peptides) use extended genePred format,\n"
   "    and consider frame information when translating (Warning: only\n"
   "    considers offset at 5' end, not frameshifts between blocks)\n"
@@ -65,6 +67,7 @@ static struct optionSpec options[] = {
    {"exonIndices", OPTION_BOOLEAN},
    {"maxSize", OPTION_INT},
    {"genePredExt", OPTION_BOOLEAN},
+   {"genomeSeqs", OPTION_STRING},
    {NULL, 0}
 };
 
@@ -76,9 +79,10 @@ char *cdsOut = NULL;
 char *pslOut = NULL;
 char *suffix = "";
 int maxSize = -1;
+char *genomeSeqs = NULL;
 
-struct nibTwoCache *getNibTwoCache()
-/* get the nib or two-bit cache */
+struct nibTwoCache *getNibTwoCacheFromDb()
+/* get the nib or two-bit cache from database */
 {
 struct sqlConnection *conn = hAllocConn();
 char nibTwoPath[PATH_LEN];
@@ -99,6 +103,15 @@ if (nibIsFile(nibTwoPath))
 nibTwoCache = nibTwoCacheNew(nibTwoPath);
 hFreeConn(&conn);
 return nibTwoCache;
+}
+
+struct nibTwoCache *getNibTwoCache()
+/* get the nib or two-bit cache */
+{
+if (genomeSeqs != NULL)
+    return nibTwoCacheNew(genomeSeqs);
+else
+    return getNibTwoCacheFromDb();
 }
 
 struct dnaSeq *fetchDna(char *seqName, int start, int end, enum dnaCase dnaCase)
@@ -473,6 +486,7 @@ if (exonIndices && (cdsOnly || peptides))
     errAbort("can't specify -exonIndices with -cdsOnly or -peptides");
 if (maxSize != -1 && peptides)
     errAbort("can't specify -maxSize with -peptides");
+genomeSeqs = optionVal("genomeSeqs", NULL);
 getRnaPred(argv[1], argv[2], argv[3], argv[4]);
 return 0;
 }
