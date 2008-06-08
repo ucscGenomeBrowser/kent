@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.68 2008/05/29 19:00:30 fanhsu Exp $"
+#	"$Id: mm9.txt,v 1.69 2008/06/08 16:38:52 kate Exp $"
 #
 
 #######################################################################
@@ -8033,6 +8033,174 @@ TMPDIR=/scratch/tmp
     hgLoadGenePred -genePredExt mm9 vegaPseudoGene pseudo.gp
 
 ############################################################################
+# BLASTZ/CHAIN/NET 2X Ground squirrel: speTri0 (In progress 2008-05-16 kate)
+
+    ssh kkstore06
+    cd /cluster/data/mm9/bed
+    mkdir blastzSpeTri0.2008-05-16
+    cd blastzSpeTri0.2008-05-16
+
+    cat << '_EOF_' > DEF
+# Mouse vs. Ground squirrel
+
+BLASTZ_M=50
+
+# TARGET: Mouse MM9
+SEQ1_DIR=/scratch/data/mm9/mm9.2bit
+SEQ1_LEN=/cluster/data/mm9/chrom.sizes 
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Ground squirrel speTri0
+SEQ2_DIR=/scratch/data/speTri0/speTri0.2bit
+SEQ2_LEN=/cluster/data/speTri0/chrom.sizes
+SEQ2_CHUNK=30000000
+SEQ2_LIMIT=500
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm9/bed/blastzSpeTri0.2008-05-16
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    doBlastzChainNet.pl `pwd`/DEF -bigClusterHub=pk  \
+      -chainMinScore=3000 -chainLinearGap=medium >& do.log &
+
+    ln -s blastzSpeTri0.2008-05-16 /cluster/data/mm9/bed/blastz.speTri0
+
+    #	create reciprocal best chains/nets
+    ssh hgwdev
+    cd /cluster/data/mm9/bed/blastz.speTri0
+    cluster/bin/scripts/doRecipBest.pl mm9 speTri0 >&! rbest.log &
+
+    # failed coverage check, shouldn't be fatal ?
+    # resume creating axt's and maf's
+    # use axtChain/doRecipBest.csh to create resume.csh
+
+    ssh kkstore06
+    cd /cluster/data/mm9/bed/blastz.speTri0/axtChain
+    csh resume.csh >&! resume.log &
+
+    ssh hgwdev
+    cd /cluster/data/mm9/bed/blastz.speTri0
+    featureBits mm9 chainSpeTri0Link > fb.mm9.chainSpeTri0Link.txt
+    cat fb.mm9.chainSpeTri0Link.txt
+    # 673393210 bases of 2620346127 (25.699%) in intersection
+
+#################
+# Rodent multiz (mouse, guinea pig, ground squirrel) 
+# for Jurgen Schmitz (2008-06-07 kate)
+
+    ssh kkstore06
+    mkdir /cluster/data/mm9/bed/multiz3way
+    cd /cluster/data/mm9/bed/multiz3way
+    mkdir mafLinks
+    mkdir mafLinks/cavPor3
+    cd mafLinks/cavPor3
+    # high quality mammalian genome, so use syntenic net
+    ln -s ../../../blastz.cavPor3/mafSynNet/*.maf.gz .
+    mkdir ../speTri0
+    cd ../speTri0
+    # low coverage genome, so use reciprocal best
+    ln -s ../../../blastz.speTri0/mafRBestNet/*.maf.gz .
+
+    #	Copy MAFs to kluster-friendly disk 
+    mkdir -p /san/sanvol1/scratch/mm9/multiz3way
+    cd /san/sanvol1/scratch/mm9/multiz3way
+    rsync -a --copy-links --progress \
+	/cluster/data/mm9/bed/multiz3way/mafLinks/ .
+
+    # get latest PSU utilities
+    mkdir penn
+    set p=/cluster/bin/penn/multiz.v11.2007-03-19/multiz-tba
+    cp -p $p/{autoMZ,multiz,maf_project} penn
+
+    # the autoMultiz cluster run
+    ssh pk
+    cd /cluster/data/mm9/bed/multiz3way
+
+    # create species list and stripped down tree for autoMZ
+    cat > tree.nh << 'EOF'
+((mm9 cavPor3) speTri0)
+'EOF'
+    cat > species.lst << 'EOF'
+mm9 cavPor3 speTri0
+'EOF'
+    mkdir run maf
+    cd run
+
+    cat > autoMultiz << '_EOF_'
+#!/bin/csh -ef
+set db = mm9
+set c = $1
+set maf = $2
+set binDir = /san/sanvol1/scratch/$db/multiz3way/penn
+set tmp = /scratch/tmp/$db/multiz.$c
+set pairs = /san/sanvol1/scratch/$db/multiz3way
+rm -fr $tmp
+mkdir -p $tmp
+cp ../{tree.nh,species.lst} $tmp
+pushd $tmp
+foreach s (`cat species.lst`)
+    set in = $pairs/$s/$c.maf
+    set out = $db.$s.sing.maf
+    if ($s == $db) then
+	continue
+    endif
+    if (-e $in.gz) then
+	zcat $in.gz > $out
+    else if (-e $in) then
+	cp $in $out
+    else
+	echo "##maf version=1 scoring=autoMZ" > $out
+    endif
+end
+set path = ($binDir $path); rehash
+$binDir/autoMZ + T=$tmp E=$db "`cat tree.nh`" $db.*.sing.maf $c.maf
+popd
+cp $tmp/$c.maf $maf
+rm -fr $tmp
+'_EOF_'
+    # << happy emacs
+    chmod +x autoMultiz
+
+cat  << '_EOF_' > template
+#LOOP
+./autoMultiz $(root1) {check out line+ /cluster/data/mm9/bed/multiz3way/maf/$(root1).maf}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    awk '{print $1}' /cluster/data/mm9/chrom.sizes > chrom.lst
+    gensub2 chrom.lst single template jobList
+    para create jobList
+    # 35 jobs
+    para try
+
+    para check
+
+#Completed: 35 of 35 jobs
+#CPU time in finished jobs:       6086s     101.43m     1.69h    0.07d  0.000 y
+#IO & Wait Time:                   240s       4.00m     0.07h    0.00d  0.000 y
+#Average job time:                 181s       3.01m     0.05h    0.00d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:             502s       8.37m     0.14h    0.01d
+#Submission to last job:           506s       8.43m     0.14h    0.01d
+
+    ssh hgwdev
+    cd /usr/local/apache/htdocs/goldenPath/mm9
+    mkdir multizRodent3way
+    cd multizRodent3way
+    ln -s /cluster/data/mm9/bed/multiz3way/maf .
+    cat > README.txt << 'EOF'
+This directory contains multiple alignments of 2 rodent genome
+assemblies to the mouse genome (mm9, Mar. 2006):
+
+    _ guinea pig         Cavia porcellus                Feb. 2008, cavPor3
+    _ ground squirrel    Spermophilus tridecemlineatus  Jun. 2006, speTri0
+
+'EOF'
+
 ############################################################################
 # TRANSMAP vertebrate.2008-05-20 build  (2008-05-24 markd)
 
