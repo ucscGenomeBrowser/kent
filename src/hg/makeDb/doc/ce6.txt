@@ -3,7 +3,7 @@
 # Caenorhabditis elegans
 # Washington University School of Medicine GSC and Sanger Institute WS190
 
-#  $Id: ce6.txt,v 1.3 2008/06/04 19:10:40 hiram Exp $
+#  $Id: ce6.txt,v 1.4 2008/06/09 23:50:38 hiram Exp $
 
 #########################################################################
 # DOWNLOAD SEQUENCE (DONE - 2008-05-30 - Hiram)
@@ -145,7 +145,7 @@ dbDbSpeciesDir worm
     cp -p jkStuff/11.ooc /san/sanvol1/scratch/worms/ce6
 
 #########################################################################
-# GENBANK AUTO UPDATE (DONE - 2007-03-26,27 - Hiram)
+# GENBANK AUTO UPDATE (DONE - 2008-05-30 - Hiram)
     # align with latest genbank process.
     ssh hgwdev
     cd ~/kent/src/hg/makeDb/genbank
@@ -467,7 +467,7 @@ F57C7.4 F57C7.4 contains similarity to Plasmodium falciparum Hypothetical protei
     hgPepPred ce6 generic sangerPep wormpep190/wormpep190
 
 ###############################################################################
-######## MAKING GENE SORTER TABLES #### (DONE - 2007-04-02 - Hiram)
+######## MAKING GENE SORTER TABLES #### (DONE - 2008-06-04 - Hiram)
 # These are instructions for building the
 # Gene Sorter browser.  Don't start these until
 # there is a sangerGene table with a proteinID column containing Swiss-Prot
@@ -582,7 +582,7 @@ blastSome.csh {check in line+ $(path1)} {check out line out/$(root1).tab}
     hgMapToGene ce6 refGene sangerGene sangerToRefSeq
 
     # SET dbDb TABLE ENTRY FOR GENE SORTER (DONE, 2004-05-25, hartera)
-    # set hgNearOk to 1 on hgcentraltest to make Ce4 Gene Sorter viewable
+    # set hgNearOk to 1 on hgcentraltest to make Ce6 Gene Sorter viewable
 
     hgsql -e 'update dbDb set hgNearOk = 1 where name = "ce6";' \
          hgcentraltest
@@ -840,3 +840,544 @@ done
     ssh hgwdev
     hgsql -e 'update dbDb set defaultPos="chrII:14646344-14667746"
 	where name="ce6";' hgcentraltest
+
+##########################################################################
+## Blastz SELF (DONE - 2008-06-04 - Hiram
+    ssh kkstore06
+    #	screen
+    mkdir /cluster/data/ce6/bed/blastzCe6.2008-06-04
+    cd /cluster/data/ce6/bed
+    ln -s blastzCe6.2008-06-04 blastzSelf
+    cd blastzCe6.2008-06-04
+    cat << '_EOF_' > DEF
+# ce6 vs ce6 - Self alignment
+BLASTZ_H=2000
+BLASTZ_M=200
+
+# TARGET: elegans Ce6
+SEQ1_DIR=/iscratch/i/worms/ce6/ce6.2bit
+SEQ1_LEN=/iscratch/i/worms/ce6/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: elegans Ce6
+SEQ2_DIR=/iscratch/i/worms/ce6/ce6.2bit
+SEQ2_LEN=/iscratch/i/worms/ce6/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LAP=10000
+
+BASE=/cluster/data/ce6/bed/blastzCe6.2008-06-04
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl DEF -verbose=2 \
+	-chainMinScore=10000 -chainLinearGap=medium -bigClusterHub=kk \
+	-smallClusterHub=kki > do.log 2>&1 &
+    #	real    79m26.707s
+XXX - running 2008-06-04 12:20
+    #	broke down during loadUp because /iscratch/i/worms/ce6/chrom.sizes
+    #	does not exist on hgwdev.  Finish the load manually by fixing
+    #	the chrom.sizes reference in loadUp.csh.  Then:
+    time nice -n +19 doBlastzChainNet.pl DEF -verbose=2 \
+	-chainMinScore=10000 -chainLinearGap=medium -bigClusterHub=kk \
+	-continue=download -smallClusterHub=kki > download.log 2>&1 &
+i
+
+    #	real    37m22.066s
+    ssh hgwdev
+    cd /cluster/data/ce6/bed/blastz.ce6.2008-06-04
+    nice -n +19 featureBits ce6 chainSelfLink > fb.ce6.chainSelfLink.txt 2>&1
+    #	31186593 bases of 100281244 (31.099%) in intersection
+
+############################################################################
+## BLASTZ caePb2 (DONE - 2007-03-04,09 - Hiram)
+    ssh kkstore06
+    screen 	#	use screen to control the job
+    mkdir /cluster/data/ce6/bed/blastzCaePb2.2008-06-04
+    cd /cluster/data/ce6/bed/blastzCaePb2.2008-06-04
+
+    cat << '_EOF_' > DEF
+# ce6 vs caePb2
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET: elegans Ce6
+SEQ1_DIR=/scratch/data/ce6/ce6.2bit
+SEQ1_LEN=/scratch/data/ce6/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: C. PB2801 caePb2
+SEQ2_DIR=/scratch/data/caePb2/caePb2.2bit
+SEQ2_LEN=/scratch/data/caePb2/chrom.sizes
+SEQ2_CTGDIR=/scratch/data/caePb2/caePb2.supercontigs.2bit
+SEQ2_CTGLEN=/scratch/data/caePb2/caePb2.supercontigs.sizes
+SEQ2_LIFT=/scratch/data/caePb2/caePb2.supercontigs.lift
+SEQ2_CHUNK=1000000
+SEQ2_LAP=0
+SEQ2_LIMIT=50
+
+BASE=/cluster/data/ce6/bed/blastzCaePb2.2008-06-04
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF -verbose=2 -bigClusterHub=kk \
+	-smallClusterHub=kki > do.log 2>&1 &
+    #	real    32m29.730s
+    #	trouble with chaining due to no copies of genomes on /scratch/data/
+    #	for the Iservers
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF -verbose=2 -bigClusterHub=kk \
+	-continue=chainMerge -smallClusterHub=kki > chainMerge.log 2>&1 &
+    #	real    26m55.624s
+    #	forgot the -qRepeats=windowmaskerSdust
+    rm axtChain/ce6.caePb2.net
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF -verbose=2 -bigClusterHub=kk -qRepeats=windowmaskerSdust \
+	-continue=load -smallClusterHub=kki > load.log 2>&1 &
+    #	real    1m18.270s
+
+    cat fb.ce6.chainCaePb2Link.txt
+    #	40805712 bases of 100281426 (40.691%) in intersection
+
+    #	swap, this is also in caePb2.txt
+    mkdir /cluster/data/caePb2/bed/blastz.ce6.swap
+    cd /cluster/data/caePb2/bed/blastz.ce6.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	-qRepeats=windowmaskerSdust \
+	/cluster/data/ce6/bed/blastzCaePb2.2008-06-04/DEF \
+	-bigClusterHub=kk -smallClusterHub=kki -swap > swap.log 2>&1 &
+    #	a couple of minutes
+    cat fb.caePb2.chainCe6Link.txt
+    #	55092134 bases of 170473138 (32.317%) in intersection
+
+############################################################################
+## BLASTZ caeRem3 (DONE - 2007-03-04,09 - Hiram)
+    ssh kkstore06
+    screen 	#	use screen to control the job
+    mkdir /cluster/data/ce6/bed/blastzCaeRem3.2008-06-04
+    cd /cluster/data/ce6/bed/blastzCaeRem3.2008-06-04
+
+    cat << '_EOF_' > DEF
+# ce6 vs caeRem3
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET: elegans Ce6
+SEQ1_DIR=/scratch/data/ce6/ce6.2bit
+SEQ1_LEN=/scratch/data/ce6/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: C. PB2801 caeRem3
+SEQ2_DIR=/scratch/data/caeRem3/caeRem3.2bit
+SEQ2_LEN=/scratch/data/caeRem3/chrom.sizes
+SEQ2_CTGDIR=/scratch/data/caeRem3/caeRem3.supercontigs.2bit
+SEQ2_CTGLEN=/scratch/data/caeRem3/caeRem3.supercontigs.sizes
+SEQ2_LIFT=/scratch/data/caeRem3/caeRem3.chrUn.lift
+SEQ2_CHUNK=1000000
+SEQ2_LAP=0
+SEQ2_LIMIT=50
+
+BASE=/cluster/data/ce6/bed/blastzCaeRem3.2008-06-04
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF -verbose=2 -bigClusterHub=kk \
+	-smallClusterHub=kki > do.log 2>&1 &
+    #	real    28m40.865s
+    #	trouble with chaining due to no copies of genomes on /scratch/data/
+    #	for the Iservers
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF -verbose=2 -bigClusterHub=kk \
+	-continue=chainMerge -smallClusterHub=kki > chainMerge.log 2>&1 &
+    #	real    19m30.231s
+    #	forgot the -qRepeats=windowmaskerSdust, went back and fixed that
+    #	manually in loadUp.csh and reran the load of the net track
+
+    cat fb.ce6.chainCaeRem3Link.txt
+    #	41853863 bases of 100281426 (41.736%) in intersection
+
+    #	swap, this is also in caeRem3.txt
+    mkdir /cluster/data/caeRem3/bed/blastz.ce6.swap
+    cd /cluster/data/caeRem3/bed/blastz.ce6.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	-qRepeats=windowmaskerSdust \
+	/cluster/data/ce6/bed/blastzCaeRem3.2008-06-04/DEF \
+	-bigClusterHub=kk -smallClusterHub=kki -swap > swap.log 2>&1 &
+    cat fb.caeRem3.chainCe6Link.txt
+    #	46326709 bases of 138406388 (33.472%) in intersection
+    #	something unusual happened with ssh during installDownloads.csh,
+    #	continuing after finishing that manually:
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	-continue=cleanup -qRepeats=windowmaskerSdust \
+	/cluster/data/ce6/bed/blastzCaeRem3.2008-06-04/DEF \
+	-bigClusterHub=kk -smallClusterHub=kki -swap > cleanUp.log 2>&1 &
+
+############################################################################
+## BLASTZ cb3 (DONE - 2007-03-04,09 - Hiram)
+    ssh kkstore06
+    screen 	#	use screen to control the job
+    mkdir /cluster/data/ce6/bed/blastzCb3.2008-06-04
+    cd /cluster/data/ce6/bed/blastzCb3.2008-06-04
+
+    cat << '_EOF_' > DEF
+# ce6 vs cb3
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET: elegans Ce6
+SEQ1_DIR=/scratch/data/ce6/ce6.2bit
+SEQ1_LEN=/scratch/data/ce6/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: C. briggsae cb3
+SEQ2_DIR=/san/sanvol1/scratch/worms/cb3/cb3.rmskTrf.2bit
+SEQ2_LEN=/san/sanvol1/scratch/worms/cb3/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LAP=0
+SEQ2_LIMIT=50
+
+BASE=/cluster/data/ce6/bed/blastzCb3.2008-06-04
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF -verbose=2 -bigClusterHub=kk \
+	-smallClusterHub=kki > do.log 2>&1 &
+    #	real    33m24.103s
+    #	42483532 bases of 100281426 (42.364%) in intersection
+
+    #	swap, this is also in cb3.txt
+    mkdir /cluster/data/cb3/bed/blastz.ce6.swap
+    cd /cluster/data/cb3/bed/blastz.ce6.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/ce6/bed/blastzCb3.2008-06-04/DEF \
+	-bigClusterHub=kk  -smallClusterHub=kki -swap > swap.log 2>&1 &
+    #	real    3m20.338s
+    #	real    22m40.205s
+    cat fb.cb3.chainCe6Link.txt
+    #	43180969 bases of 108433446 (39.823%) in intersection
+
+############################################################################
+## BLASTZ priPac1 (DONE - 2008-06-09 - Hiram)
+    ssh kkstore06
+    screen 	#	use screen to control the job
+    mkdir /cluster/data/ce6/bed/blastzPriPac1.2008-06-09
+    cd /cluster/data/ce6/bed/blastzPriPac1.2008-06-09
+
+    cat << '_EOF_' > DEF
+# ce6 vs priPac1
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET: elegans Ce6
+SEQ1_DIR=/scratch/data/ce6/ce6.2bit
+SEQ1_LEN=/scratch/data/ce6/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: C. briggsae priPac1
+SEQ2_DIR=/iscratch/i/worms/priPac1/priPac1.TrfWM.2bit
+SEQ2_LEN=/iscratch/i/worms/priPac1/chrom.sizes
+SEQ2_CTGDIR=/iscratch/i/worms/priPac1/priPac1.TrfWM.supers.2bit
+SEQ2_CTGLEN=/iscratch/i/worms/priPac1/priPac1.TrfWM.supers.sizes
+SEQ2_LIFT=/iscratch/i/worms/priPac1/priPac1.supercontigs.lift
+SEQ2_CHUNK=1000000
+SEQ2_LAP=0
+SEQ2_LIMIT=50
+
+BASE=/cluster/data/ce6/bed/blastzPriPac1.2008-06-09
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF -verbose=2 -bigClusterHub=kk \
+	-qRepeats=windowmaskerSdust -smallClusterHub=kki > do.log 2>&1 &
+    #	after some kk parasol experiments, continuing:
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	-continue=cat `pwd`/DEF -verbose=2 -bigClusterHub=kk \
+	-qRepeats=windowmaskerSdust -smallClusterHub=kki > cat.log 2>&1 &
+    #	real    9m46.300s
+
+    cat fb.ce6.chainPriPac1Link.txt
+    #	6256254 bases of 100281426 (6.239%) in intersection
+
+    #	swap, this is also in priPac1.txt
+    mkdir /cluster/data/priPac1/bed/blastz.ce6.swap
+    cd /cluster/data/priPac1/bed/blastz.ce6.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	-qRepeats=windowmaskerSdust \
+	/cluster/data/ce6/bed/blastzPriPac1.2008-06-09/DEF \
+	-bigClusterHub=kk -smallClusterHub=kki -swap > swap.log 2>&1 &
+    #	real    0m33.836s
+    #	failed during the loadUp.csh due to /iscratch/i/ missing from hgwdev
+    #	fixup that manually in loadUp.csh and ran it on hgwdev
+    cat fb.priPac1.chainCe6Link.txt
+    #	6803322 bases of 145948246 (4.661%) in intersection
+    #	and continuing:
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	-qRepeats=windowmaskerSdust \
+	-continue=download /cluster/data/ce6/bed/blastzPriPac1.2008-06-09/DEF \
+	-bigClusterHub=kk -smallClusterHub=kki -swap > download.log 2>&1 &
+
+############################################################################
+## BLASTZ caeJap1 (DONE - 2008-06-09 - Hiram)
+    ssh kkstore06
+    screen 	#	use screen to control the job
+    mkdir /cluster/data/ce6/bed/blastzCaeJap1.2008-06-09
+    cd /cluster/data/ce6/bed/blastzCaeJap1.2008-06-09
+
+    cat << '_EOF_' > DEF
+# ce6 vs caeJap1
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET: elegans Ce6
+SEQ1_DIR=/scratch/data/ce6/ce6.2bit
+SEQ1_LEN=/scratch/data/ce6/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: C. japonica caeJap1
+SEQ2_DIR=/cluster/bluearc/scratch/data/caeJap1/caeJap1.2bit
+SEQ2_LEN=/cluster/bluearc/scratch/data/caeJap1/chrom.sizes
+SEQ2_CTGDIR=/cluster/bluearc/scratch/data/caeJap1/caeJap1.TrfWM.supers.2bit
+SEQ2_CTGLEN=/cluster/bluearc/scratch/data/caeJap1/caeJap1.TrfWM.supers.sizes
+SEQ2_LIFT=/cluster/bluearc/scratch/data/caeJap1/caeJap1.chrUn.lift
+SEQ2_CHUNK=1000000
+SEQ2_LAP=0
+SEQ2_LIMIT=50
+
+BASE=/cluster/data/ce6/bed/blastzCaeJap1.2008-06-09
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF -verbose=2 -bigClusterHub=pk \
+	-qRepeats=windowmaskerSdust -smallClusterHub=kki > do.log 2>&1 &
+    #	real    35m7.220s
+
+    cat fb.ce6.chainCaeJap1Link.txt
+    #	26888483 bases of 100281426 (26.813%) in intersection
+
+    #	swap, this is also in caeJap1.txt
+    mkdir /cluster/data/caeJap1/bed/blastz.ce6.swap
+    cd /cluster/data/caeJap1/bed/blastz.ce6.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	-qRepeats=windowmaskerSdust \
+	/cluster/data/ce6/bed/blastzCaeJap1.2008-06-09/DEF \
+	-bigClusterHub=pk -smallClusterHub=kki -swap > swap.log 2>&1 &
+    #	real    1m10.794s
+    #	failed to load because:
+    #	loadUp: looks like previous stage was not
+    #	successful
+    #	(can't find /cluster/data/caeJap1/bed/blastz.ce6.swap/mafNet/).
+
+    #	continuing:
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	-qRepeats=windowmaskerSdust \
+	-continue=load /cluster/data/ce6/bed/blastzCaeJap1.2008-06-09/DEF \
+	-bigClusterHub=pk -smallClusterHub=kki -swap > load.log 2>&1 &
+    #	real    0m33.440s
+    cat fb.caeJap1.chainCe6Link.txt
+    #	26209442 bases of 129347181 (20.263%) in intersection
+
+############################################################################
+## 6-Way multiple alignment (DONE - 2008-06-09 - Hiram)
+
+    mkdir /cluster/data/ce6/bed/multiz6way
+    cd /cluster/data/ce6/bed/multiz6way
+    #	An additional nematode tree:
+    #	http://nematol.unh.edu/tree/tree_des.php
+    #	Constructing a tree from the document:
+    #	http://www.wormbook.org/chapters/www_phylogrhabditids/phylorhab.html
+    #	http://www.wormbook.org/chapters/www_phylogrhabditids/phylofig6B.jpg
+
+    #	purely artifical for the last one: :0.2,pristiochus_priPac1:0.8
+    #	since it is not on the graph
+
+    cat << '_EOF_' > nematodes.nh
+    ((((((((((briggsae_cb3:0.005,remanei_caeRem3:0.003):0.004,
+	brenneri_caePb2:0.013):0.002,elegans_ce6:0.003):0.001,
+	    japonica_caeJap1:0.023):0.024,ps1010:0.027):0.014,
+		df5070:0.056):0.009, plicata:0.102):0.099,sb341:0.060):0.038,
+		(df5074:0.351,df5055:0.090):0.221):0.2,pristiochus_priPac1:0.8)
+'_EOF_'
+    #	<< happy emacs
+
+    #	filter that for the six species in use here
+    /cluster/bin/phast/x86_64/tree_doctor \
+--prune-all-but briggsae_cb3,remanei_caeRem3,brenneri_caePb2,elegans_ce6,japonica_caeJap1,pristiochus_priPac1 \
+	nematodes.nh > 6way.nh
+
+    #	rearrange to get Ce6 on top for the construction of the tree image
+    #	in the 6-way description page.  This results in something like:
+((((
+    (briggsae_cb3:0.005000,remanei_caeRem3:0.003000):0.004000
+	,brenneri_caePb2:0.013000):0.002000,
+	    elegans_ce6:0.003000):0.001000,
+		japonica_caeJap1:0.023000):0.384000,
+		    pristiochus_priPac1:0.800000);
+
+((C._elegans_ce6:0.003000,
+    (((C._remanei_caeRem3:0.003000,C._briggsae_cb3:0.005000):0.004000,
+    C._brenneri_caePb2:0.013000):0.002000,
+	    C._japonica_caeJap1:0.023000):0.001000):0.384000,
+		P._pristiochus_priPac1:0.800000);
+
+    /cluster/bin/phast/x86_64/all_dists 6way.nh > 6way.distances.txt
+    grep -i ce6 6way.distances.txt | sort -k3,3n
+    #	Use this output for reference, and use the calculated
+    #	distances in the table below to order the organisms and check
+    #	the button order on the browser.
+    #	And if you can fill in the table below entirely, you have
+    #	succeeded in finishing all the alignments required.
+    #
+#                         featureBits chainLink measures
+#                                           chaince6Link   chain   linearGap
+#    distance                       on Ce6      on other   minScore
+#  1 0.0120  - remanei_caeRem3     (% 41.736)  (% 33.472)  1000     loose
+#  2 0.0140  - briggsae_cb3        (% 42.364)  (% 39.823)  1000     loose
+#  3 0.0180  - brenneri_caePb2     (% 40.691)  (% 32.317)  1000     loose
+#  3 0.0270  - japonica_caeJap1    (% 26.813)  (% 20.263)  1000     loose
+#  4 1.1880  - pristiochus_priPac1 (%  6.239)  (%  4.661)  1000     loose
+
+    cd /cluster/data/ce6/bed/multiz6way
+    #	bash shell syntax here ...
+    export H=/cluster/data/ce6/bed
+    mkdir mafLinks
+    for G in caeRem3 cb3 caePb2 priPac1 caeJap1
+    do
+	mkdir mafLinks/$G
+	if [ ! -d ${H}/blastz.${G}/mafNet ]; then
+	echo "missing directory blastz.${G}/mafNet"
+		exit 255
+	fi
+	ln -s ${H}/blastz.$G/mafNet/*.maf.gz ./mafLinks/$G
+    done
+
+    #	Copy MAFs to some appropriate NFS server for kluster run
+    ssh kkstore06
+    mkdir /san/sanvol1/scratch/worms/ce6/multiz6way
+    cd /san/sanvol1/scratch/worms/ce6/multiz6way
+    time rsync -a --copy-links --progress --stats \
+	/cluster/data/ce6/bed/multiz6way/mafLinks/ .
+    #	a few seconds to copy 126 Mb
+
+    #	these are x86_64 binaries
+    mkdir penn
+    # use latest penn utilities
+    P=/cluster/bin/penn/multiz.v11.2007-03-19/multiz-tba
+    cp -p $P/{autoMZ,multiz,maf_project} penn
+
+    # the autoMultiz cluster run
+    ssh memk
+    cd /cluster/data/ce6/bed/multiz6way/
+
+    # create species list and stripped down tree for autoMZ
+    sed 's/[a-z][a-z0-9]*_//ig; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+	6way.nh > tmp.nh
+    echo `cat tmp.nh` > tree-commas.nh
+    echo `cat tree-commas.nh` | sed 's/ //g; s/,/ /g' > tree.nh
+    sed 's/[()]//g; s/,/ /g' tree.nh > species.lst
+
+    mkdir maf run
+    cd run
+
+    #	NOTE: you need to set the db properly in this script
+
+    cat > autoMultiz << '_EOF_'
+#!/bin/csh -ef
+set db = ce6
+set c = $1
+set maf = $2
+set binDir = /san/sanvol1/scratch/worms/$db/multiz6way/penn
+set tmp = /scratch/tmp/$db/multiz.$c
+set pairs = /san/sanvol1/scratch/worms/$db/multiz6way
+rm -fr $tmp
+mkdir -p $tmp
+cp ../{tree.nh,species.lst} $tmp
+pushd $tmp
+foreach s (`cat species.lst`)
+    set in = $pairs/$s/$c.maf
+    set out = $db.$s.sing.maf
+    if ($s == $db) then
+	continue
+    endif
+    if (-e $in.gz) then
+	zcat $in.gz > $out
+    else if (-e $in) then
+	cp $in $out
+    else
+	echo "##maf version=1 scoring=autoMZ" > $out
+    endif
+end
+set path = ($binDir $path); rehash
+$binDir/autoMZ + T=$tmp E=$db "`cat tree.nh`" $db.*.sing.maf $c.maf
+popd
+cp $tmp/$c.maf $maf
+rm -fr $tmp
+'_EOF_'
+# << happy emacs
+    chmod +x autoMultiz
+
+cat  << '_EOF_' > template
+#LOOP
+autoMultiz $(root1) {check out line+ /cluster/data/ce6/bed/multiz6way/maf/$(root1).maf}
+#ENDLOOP
+'_EOF_'
+# << happy emacs
+
+    awk '{print $1}' /cluster/data/ce6/chrom.sizes > chrom.lst
+    gensub2 chrom.lst single template jobList
+    para create jobList
+    para -maxNode=1 push
+    para check ... push ... etc ...
+# Completed: 7 of 7 jobs
+# CPU time in finished jobs:       2302s      38.37m     0.64h    0.03d  0.000 y
+# IO & Wait Time:                    38s       0.63m     0.01h    0.00d  0.000 y
+# Average job time:                 334s       5.57m     0.09h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:             478s       7.97m     0.13h    0.01d
+# Submission to last job:           954s      15.90m     0.27h    0.01d
+
+    ssh kkstore06
+    cd /cluster/data/ce6/bed/multiz6way
+    time nice -n +19 catDir maf > multiz6way.maf
+    # a few seconds to produce:
+    #	-rw-rw-r--  1 343585668 Jun  9 16:25 multiz6way.maf
+
+    #	before getting to the annotation, load this up so we can get
+    #	a first view of the track.  This will be replaced with the annotated
+    #	mafs
+    ssh hgwdev
+    cd /cluster/data/ce6/bed/multiz6way
+    mkdir /gbdb/ce6/multiz6way
+    ln -s /cluster/data/ce6/bed/multiz6way/multiz6way.maf /gbdb/ce6/multiz6way
+
+    #	this load creates a large file, do that on local disk:
+    cd /scratch/tmp
+    time nice -n +19 hgLoadMaf ce6 multiz6way
+    #	a few seconds to load:
+    #	Loaded 367046 mafs in 1 files from /gbdb/ce6/multiz6way
+
+    time nice -n +19 hgLoadMafSummary -minSize=10000 -mergeGap=500 \
+	-maxSize=50000 ce6 multiz6waySummary /gbdb/ce6/multiz6way/multiz6way.maf
+    #	a few seconds to load:
+    #	Created 125113 summary blocks from 1051000 components
+    #	and 366975 mafs from /gbdb/ce6/multiz6way/multiz6way.maf
+
+    #	remove the temporary .tab files:
+    rm multiz6*.tab
+
+############################################################################
