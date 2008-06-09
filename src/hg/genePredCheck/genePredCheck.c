@@ -8,7 +8,7 @@
 #include "genePredReader.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: genePredCheck.c,v 1.6 2008/02/26 01:32:24 markd Exp $";
+static char const rcsid[] = "$Id: genePredCheck.c,v 1.7 2008/06/09 23:20:41 pauline Exp $";
 
 /* Command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -31,7 +31,7 @@ errAbort(
   "is provided, then a table by this name is checked.\n"
   "\n"
   "options:\n"
-  "   -db=db - If specified, then this is this database is used to\n"
+  "   -db=db - If specified, then this database is used to\n"
   "    get chromosome sizes, and perhaps the table to check.\n"
   "\n");
 }
