@@ -24374,6 +24374,102 @@ See hg18.txt for details.
 
 
 ############################################################################
+# KIDD/EICHLER DISCORDANT CLONE ENDS (DONE 5/28/08 angie)
+    ssh kkstore02
+    mkdir /cluster/data/hg17/bed/kiddEichlerDiscordant
+    cd /cluster/data/hg17/bed/kiddEichlerDiscordant
+    wget --user=uuuu  --password=ppppppp \
+      http://eichlerlab.gs.washington.edu/kiddj/downloads/fosmids.hg17.tgz
+    tar xvzf fosmids.hg17.tgz
+    cd bd35
+    # 8 clone-end linkedFeaturesSeries tracks and one bed custom track.
+    # bed has illegal coords (maybe for unplaced ends?).
+
+    # Load the tracks (translate bacEndPairs format to bed12):
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/kiddEichlerDiscordant/bd35
+    foreach f (abc*.txt)
+      set track = `echo $f:r \
+        | perl -wpe 's/^(G|abc)(\d+)discordant/kiddEichlerDisc\u$1$2/ || die;'`
+      if ($status != 0) break
+      perl -wpe 'next if s/^#.*\n$//; \
+        ($c, $s, $e, $n, $sc, $st, undef, $bs, $bSt, $bSz)=split; \
+        @bSts = split(",", $bSt);  @bSzs = split(",", $bSz); \
+        $s--; \
+        if ($bs == 1) { \
+          $bSts[0]--; \
+          die "bSts[0] $bSts[0] != s $s\n" if ($bSts[0] != $s); \
+          $bE = $bSts[0] + $bSzs[0]; \
+          die "bE $bE != e $e\n" if ($bE != $e); \
+          $bSts[0] -= $s; \
+        } elsif ($bs == 2) { \
+           $bSts[0]--;  $bSts[1]--; \
+          if ($bSts[0] > $bSts[1]) { \
+            # warn "Swapping $n ($bSts[0] > $bSts[1])\n"; \
+            $tmp = $bSts[0];  $bSts[0] = $bSts[1];  $bSts[1] = $tmp; \
+            $tmp = $bSzs[0];  $bSzs[0] = $bSzs[1];  $bSzs[1] = $tmp; \
+          } \
+          if ($bSts[0] != $s) { \
+            # warn "Tweaking $n start from $s to $bSts[0]\n"; \
+            $s = $bSts[0]; \
+          } \
+          $bE0 = $bSts[0] + $bSzs[0]; \
+          $bE1 = $bSts[1] + $bSzs[1]; \
+          $bE = $bE0 > $bE1 ? $bE0 : $bE1; \
+          if ($bE != $e) { \
+            # warn "Tweaking $n end from $e to $bE\n"; \
+            $e = $bE; \
+          } \
+          $bSts[0] -= $s;  $bSts[1] -= $s; \
+        } else { die "#blks is $bs\n"; } \
+        $bSt = join(",", @bSts) . ",";  $bSz = join(",", @bSzs) . ","; \
+        no warnings; \
+        $n =~ s/(transchr)m_chr([0-9XYM]+)(_r)?.*/$1_$2$3/; \
+        use warnings; \
+        $_ = join("\t", $c, $s, $e, $n, $sc, $st, $s, $e, 0, $bs, $bSz, $bSt) . \
+                  "\n";' $f \
+      | hgLoadBed -notItemRgb -tab hg17 $track stdin
+    end
+    perl -pe 'next if s/^track .*\n$//; \
+        ($c, $s, $e, $n, $sc, $st, $tS, $tE, $r, $bs, $bSz, $bSt) = split; \
+        @bSts = split(",", $bSt);  @bSzs = split(",", $bSz); \
+        if ($bs == 1) { \
+          $s--; # weird that this is required only if single block \
+          die "$n: bSts[0] $bSts[0] != 0\n" if ($bSts[0] != 0); \
+          $bE = $s + $bSts[0] + $bSzs[0]; \
+          die "$n: bE $bE != e $e\n" if ($bE != $e); \
+        } elsif ($bs == 2) { \
+          $bSts[0] += $s;  $bSts[1] += $s; \
+          if ($bSts[0] > $bSts[1]) { \
+            # warn "Swapping $n ($bSts[0] > $bSts[1])\n"; \
+            $tmp = $bSts[0];  $bSts[0] = $bSts[1];  $bSts[1] = $tmp; \
+            $tmp = $bSzs[0];  $bSzs[0] = $bSzs[1];  $bSzs[1] = $tmp; \
+          } \
+          if ($bSts[0] != $s) { \
+            # warn "Tweaking $n start from $s to $bSts[0]\n"; \
+            $s = $bSts[0]; \
+          } \
+          $bE0 = $bSts[0] + $bSzs[0]; \
+          $bE1 = $bSts[1] + $bSzs[1]; \
+          $bE = $bE0 > $bE1 ? $bE0 : $bE1; \
+          if ($bE != $e) { \
+            # warn "Tweaking $n end from $e to $bE\n"; \
+            $e = $bE; \
+          } \
+         $bSts[0] -= $s;  $bSts[1] -= $s; \
+        } else { die "#blks is $bs\n"; } \
+        $bSt = join(",", @bSts) . ",";  $bSz = join(",", @bSzs) . ","; \
+        no warnings; \
+        $tS = $s;  $tE = $e; \
+        $n =~ s/(transchr)m_chr([0-9XYM]+)(_r)?.*/$1_$2$3/; \
+        use warnings; \
+        $_ = join("\t", \
+                  $c, $s, $e, $n, $sc, $st, $tS, $tE, $r, $bs, $bSz, $bSt) . \
+                  "\n";' G248discordant.txt \
+    | hgLoadBed -notItemRgb -tab hg17 kiddEichlerDiscG248 \
+        stdin
+
+
 ############################################################################
 # TRANSMAP vertebrate.2008-05-20 build  (2008-05-24 markd)
 
