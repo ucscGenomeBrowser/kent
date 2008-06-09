@@ -9,6 +9,19 @@ all: test
 
 test: dnase dnaseBig genes bed3 dnaseHuge
 
+duke: output
+	${PROG} x input/duke -configDir=../config -outDir=output/duke
+	diff output/duke/validateWig.out expected/duke
+	diff output/duke/validateBed.out expected/duke
+	diff output/duke/load.ra expected/duke
+
+# problems in duke submission archive:
+# comment line began with double quote (problem in sample)
+# Raw Data Acc REF header with empty values in columns
+# PIF and DDF files not at top level in archive
+# Missing eol on PIF file (check sample)
+# Peaks file was missing 'name' column
+
 dnase: output
 	${PROG} x input/dnase -configDir=../config -outDir=output/dnase
 	diff output/dnase/validateWig.out expected/dnase
@@ -52,7 +65,7 @@ dnaseHugeClean:
 	rm -f input/dnaseHuge/*/*.{wig,bed}
 
 dnaseBigLinks: dnaseBigClean
-	mkdir -p input/dnaseHuge/{cd4,hela}
+	mkdir -p input/dnaseBig/{cd4,hela}
 	ln -s ${DNASE_BIG_DATA}/chr1_dukeDnaseHsCd4Wiggle.out \
                     input/dnaseBig/cd4/chr1.wig 
 	ln -s ${DNASE_BIG_DATA}/chr2_dukeDnaseHsCd4Wiggle.out \
