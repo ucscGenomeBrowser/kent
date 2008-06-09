@@ -16,7 +16,7 @@
 #include "verbose.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: para.c,v 1.99 2008/06/07 10:13:08 galt Exp $";
+static char const rcsid[] = "$Id: para.c,v 1.100 2008/06/09 17:56:27 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -1403,7 +1403,7 @@ for (;;)
     verbose(1, "Checking job status %d minutes after launch\n",  round((now-start)/60.0));
     }
 if (sickBatch)
-    verbose(1, "Sick batch! Correct problem and then run para clearSickNodes.\n");
+    errAbort("Sick batch! Correct problem and then run para clearSickNodes.");
 else
     verbose(1, "Successful batch!\n");
 }
@@ -1826,6 +1826,8 @@ reportOnJobs(db);
 
 atomicWriteBatch(db, batch);
 showSickNodes(TRUE);
+if (sickBatch)
+    errAbort("Sick batch! Correct problem and then run para clearSickNodes.");
 }
 
 
