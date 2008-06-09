@@ -140,11 +140,35 @@ spectrum on
 type netAlign cb3 chainCb3
 otherDb cb3
 
-track chainPriPac1
+track chainCaeJap1
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 124
+visibility hide
+color 100,50,0
+altColor 255,240,200
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+matrixHeader A, C, G, T
+spectrum on
+type chain caeJap1
+otherDb caeJap1
+
+track netCaeJap1
+shortLabel $o_Organism Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
+group compGeno
+priority 125
+visibility dense
+spectrum on
+type netAlign caeJap1 chainCaeJap1
+otherDb caeJap1
+
+track chainPriPac1
+shortLabel $o_Organism Chain
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+group compGeno
+priority 122
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -158,7 +182,7 @@ track netPriPac1
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
-priority 125
+priority 123
 visibility dense
 spectrum on
 type netAlign priPac1 chainPriPac1
