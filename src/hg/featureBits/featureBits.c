@@ -15,7 +15,7 @@
 #include "chain.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: featureBits.c,v 1.50 2007/10/30 05:56:32 daryl Exp $";
+static char const rcsid[] = "$Id: featureBits.c,v 1.51 2008/06/09 18:03:38 angie Exp $";
 
 static struct optionSpec optionSpecs[] =
 /* command line option specifications */
@@ -544,7 +544,7 @@ for (fb = fbList; fb != NULL; fb = fb->next)
 	fprintf(bedFile, "%s\t%d\t%d\t%s", 
 	    fb->chrom, fb->start, fb->end, fb->name);
 	if (fb->strand != '?')
-	    fprintf(bedFile, "\t%c", fb->strand);
+	    fprintf(bedFile, "\t0\t%c", fb->strand);
 	fprintf(bedFile, "\n");
 	}
     if (faFile != NULL)
