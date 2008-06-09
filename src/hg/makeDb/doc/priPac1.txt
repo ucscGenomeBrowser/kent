@@ -3,7 +3,7 @@
 # Pristionchus pacificus
 #	Washington University School of Medicine GSC and Sanger Institute
 #
-#  $Id: priPac1.txt,v 1.12 2007/07/11 20:18:54 hiram Exp $
+#  $Id: priPac1.txt,v 1.13 2008/06/09 23:51:09 hiram Exp $
 ###########################################################################
 ## Download sequence - (DONE - 2007-02-25 - Hiram)
     ssh kkstore02
@@ -614,3 +614,75 @@ chainOne $(path1)
     rmdir /cluster/bluearc/worms/priPac1
 #end tblastn
 
+###########################################################################
+## Window Masker (DONE - 2008-06-09 - Hiram)
+    ssh kolossus
+    mkdir /cluster/data/priPac1/bed/windowMasker
+    cd /cluster/data/priPac1/bed/windowMasker
+    time nice -n +19 ~/kent/src/hg/utils/automation/doWindowMasker.pl \
+	-workhorse kolossus \
+	-buildDir=/cluster/data/priPac1/bed/windowMasker priPac1 > do.log 2>&1
+    #	real    16m19.271s
+
+    twoBitToFa priPac1.wmsk.sdust.2bit stdout \
+	| faSize stdin > priPac1.wmsk.sdust.2bit.faSize 2>&1
+    cat priPac1.wmsk.sdust.2bit.faSize
+    #	174852139 bases (28905831 N's 145946308 real
+    #	112045482 upper 33900826 lower) in 1 sequences in 1 files
+    #	%19.39 masked total, %23.23 masked real
+
+    ssh hgwdev
+    cd /cluster/data/priPac1/bed/windowMasker
+    hgLoadBed priPac1 windowmaskerSdust windowmasker.sdust.bed.gz
+    #	Loaded 869830 elements of size 3
+
+    #	eliminate the gaps from the masking (WM bug)
+    featureBits priPac1 -not gap -bed=notGap.bed
+    #	145948246 bases of 145948246 (100.000%) in intersection
+
+    time nice -n +19 featureBits priPac1 windowmaskerSdust notGap.bed \
+        -bed=stdout | gzip -c > cleanWMask.bed.gz
+    #	33901913 bases of 145948246 (23.229%) in intersection
+
+    #	reload track to get it clean
+    hgLoadBed priPac1 windowmaskerSdust cleanWMask.bed.gz
+    #	Loaded 867522 elements of size 4
+    featureBits priPac1 windowmaskerSdust
+    #	33901913 bases of 145948246 (23.229%) in intersection
+
+##############################################################################
+## combine trf mask with windowmasker (DONE - 2008-06-09 - Hiram)
+    ssh kkstore02
+    cd /cluster/data/priPac1
+    zcat bed/windowMasker/cleanWMask.bed.gz \
+	| twoBitMask priPac1.unmasked.2bit stdin \
+	    -type=.bed priPac1.cleanWMSdust.2bit
+    cat bed/simpleRepeat/trfMask.bed \
+      | twoBitMask -add -type=.bed priPac1.cleanWMSdust.2bit stdin \
+	priPac1.TrfWM.2bit
+    #	can safely ignore the warning about BED file >= 13 fields
+    #	check it
+    twoBitToFa priPac1.TrfWM.2bit stdout | faSize stdin
+    #	174852139 bases (28905831 N's 145946308 real
+    #	112012655 upper 33933653 lower) in 1 sequences in 1 files
+    #	%19.41 masked total, %23.25 masked real
+
+###########################################################################
+## create masked contigs for blastz runs (DONE - 2008-06-09 - Hiram)
+    ssh kkstore02
+    mkdir /cluster/data/priPac1/trfWM.maskedContigs
+    cd /cluster/data/priPac1/trfWM.maskedContigs
+    ln -s ../downloads/super.lift .
+    ../jkStuff/lft2BitToFa.pl ../priPac1.TrfWM.2bit super.lift > super.fa
+    faToTwoBit super.fa priPac1.TrfWM.supers.2bit
+    faSize super.fa
+    #	169747139 bases (23800831 N's 145946308 real
+    #	112012655 upper 33933653 lower) in 5106 sequences in 1 files
+    #	%19.99 masked total, %23.25 masked real
+    twoBitToFa priPac1.TrfWM.supers.2bit stdout | faSize stdin
+    #	169747139 bases (23800831 N's 145946308 real
+    #	112012655 upper 33933653 lower) in 5106 sequences in 1 files
+    #	%19.99 masked total, %23.25 masked real
+    twoBitInfo priPac1.TrfWM.supers.2bit stdout \
+	| sort -k2rn > priPac1.TrfWM.supers.sizes
+###########################################################################
