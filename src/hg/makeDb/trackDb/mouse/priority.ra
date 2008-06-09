@@ -5,6 +5,12 @@ priority 110
 track netBraFlo1
 priority 110.1
 
+# lamprey
+track chainPetMar1
+priority 120
+
+track netPetMar1
+priority 120.1
 
 # stickleback
 track chainGasAcu1
