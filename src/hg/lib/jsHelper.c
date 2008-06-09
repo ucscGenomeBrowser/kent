@@ -22,7 +22,7 @@
 #include "hui.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jsHelper.c,v 1.17 2008/06/03 23:38:51 larrym Exp $";
+static char const rcsid[] = "$Id: jsHelper.c,v 1.18 2008/06/09 21:15:37 larrym Exp $";
 
 static boolean jsInited = FALSE;
 struct hash *includedFiles = NULL;
@@ -331,31 +331,17 @@ if(!includedFiles)
 if(hashLookup(includedFiles, fileName) == NULL)
     {
     char *docRoot = hDocumentRoot();
-    char dirName[2048];
     char noScriptBuf[2048];
-    safef(dirName, sizeof(dirName), "js");
+    // dirName is configurable to allow developer specific javascript for developers on hgwdev;
+    // e.g. "javaScriptDir js/larrym"
+    char *dirName = cfgOptionDefault("browser.javaScriptDir", "js");
+
     /* tolerate missing docRoot (i.e. when running from command line) */
     if(docRoot != NULL)
         {
         char realFileName[2048];
 
-        // hacky code to allow developer specific javascript for developers on hgwdev - we get the
-        // developer's id from the db.trackDb config and use it to construct a developer specific path
-        char *cookie = cfgOption("db.trackDb");
-        char *prefix = "trackDb_";
-        char *ptr;
-        realFileName[0] = 0;
-        if(cookie != NULL && (ptr = stringIn(prefix, cookie)) != NULL)
-            {
-            char *user = ptr + strlen(prefix);
-            safef(realFileName, sizeof(realFileName), "%s/%s/%s/%s", docRoot, dirName, user, fileName);
-            if(fileExists(realFileName))
-                safef(dirName, sizeof(dirName), "js/%s", user);
-            else
-                realFileName[0] = 0;
-            }
-        if(!realFileName[0])
-            safef(realFileName, sizeof(realFileName), "%s/%s/%s", docRoot, dirName, fileName);
+        safef(realFileName, sizeof(realFileName), "%s/%s/%s", docRoot, dirName, fileName);
         if(!fileExists(realFileName))
             {
             warn("jsIncludeFile: javascript fileName: %s doesn't exist.\n", realFileName);
