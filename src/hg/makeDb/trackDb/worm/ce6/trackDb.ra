@@ -62,3 +62,37 @@ altColor 255,240,200
 spectrum on
 type chain ce6
 otherDb ce6
+
+track multiz6way
+shortLabel Conservation
+longLabel Multiz Alignment & Conservation (5 nematodes)
+group compGeno
+priority 104.2
+visibility pack
+color 0, 10, 100
+altColor 0,90,10
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+# wiggle phastCons6way
+spanList 1
+pairwiseHeight 12
+yLineOnOff Off
+# frames multiz6wayFrames
+# irows on
+autoScaleDefault Off
+windowingFunction mean
+summary multiz6waySummary
+speciesOrder caeRem3 cb3 caePb2 caeJap1 priPac1
+treeImage phylo/ce6_6way.gif
+speciesCodonDefault ce6
+
+track phastConsElements6way
+shortLabel Most Conserved
+longLabel PhastCons Conserved Elements, 5-way Multiz Alignment
+group compGeno
+priority 104.4
+visibility hide
+exonArrows off
+showTopScorers 200
+type bed 5 .
+
