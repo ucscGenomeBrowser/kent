@@ -1,0 +1,15 @@
+# Project Information File for Duke DNase project	
+
+# Lab info	
+lab	Crawford
+project	DukeDNaseSeq
+variables	Cell_Line_REF
+active	yes
+
+# Tracks	
+track	DukeDnaseSignal
+type	wig 
+
+track	DukeDnasePeaks
+type	bed 5 +
+tableType	bed5FloatScore

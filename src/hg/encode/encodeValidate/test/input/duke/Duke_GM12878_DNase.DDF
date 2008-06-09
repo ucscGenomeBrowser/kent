@@ -1,0 +1,10 @@
+File Name	Part	Dataset Name	Assembly REF	Data Type REF	Cell Line REF	Raw Data Acc REF	Data Version
+ucsc/data/GM12878_DNase_peaks.bed	1	DNase-GM12878-Peaks	hg18	DukeDnasePeaks	GM12878		GM12978_D_S_BP_TP_P
+
+# File Name is relative to root of tar archive							
+# Dataset Name aggregates datasets split into multiple parts							
+# Assembly REF is currently required to be hg18							
+# Data Type REF must be defined in Project Information (PIF) file							
+# Cell Line REF must be pre-defined as controlled vocabulary			trolled vocabulary (must have description and orderULR if available)				
+"# Raw Data Acc REF is recommended, but not required"							
+# Data Version is optional; it is  used to associate with an internal lab version
