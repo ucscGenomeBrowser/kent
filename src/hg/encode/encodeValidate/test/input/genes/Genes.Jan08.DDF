@@ -1,5 +1,0 @@
-File Name	Dataset Name	Gene Type REF	Assembly REF	Data Type REF	Data Version
-known.jan08.gff	Gene-Known	Known	hg17	Gene	Jan-2008
-putative.jan08.gff	Gene-Putative	Putative	hg17	Gene	Jan-2008
-polymorphic.jan08.gff	Gene-Polymorph	Polymorphic	hg17	Gene	Jan-2008
-pseudo.jan08.gff	Gene-Pseudogene	Pseudo	hg17	Gene	Jan-2008

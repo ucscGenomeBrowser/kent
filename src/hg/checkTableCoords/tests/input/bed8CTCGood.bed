@@ -1,4 +1,0 @@
-chrFake	0	1000	thing1	0	+	0	1000
-chrFake	1	1000	thing1.1	0	+	0	0
-chrFake	499	500	thing2	1	+	499	500
-chrFake_random	50	60	thing3	500	-	50	51
