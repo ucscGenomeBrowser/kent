@@ -3,7 +3,7 @@
 # Caenorhabditis japonica
 #	Washington University School of Medicine GSC and Sanger Institute
 
-#  $Id: caeJap1.txt,v 1.5 2008/04/04 23:01:15 hiram Exp $
+#  $Id: caeJap1.txt,v 1.6 2008/06/09 23:50:14 hiram Exp $
 
 ########################################################################
 #  Download sequence (DONE - 2008-04-03 - Hiram)
@@ -233,14 +233,20 @@ dbDbSpeciesDir worm
 
 #########################################################################
 # MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2008-04-03 - Hiram)
+    # Use -repMatch=100 (based on size -- for human we use 1024, and 
+    # worm size is ~5.1% of human judging by gapless caeJap1 vs. hg18 genome 
+    # size from featureBits. So we would use 50, but that yields a very
+    # high number of tiles to ignore, especially for a small more compact 
+    # genome.  Bump that up a bit to be more conservative.
+    ssh kolossus
     # Use -repMatch=50 (based on size -- for human we use 1024, and 
     # C. remanei size is ~5.1% of human judging by gapless caeJap1 vs. hg18 
     # genome sizes from featureBits.
     ssh kolossus
     cd /cluster/data/caeJap1
     blat caeJap1.2bit /dev/null /dev/null -tileSize=11 \
-      -makeOoc=jkStuff/11.ooc -repMatch=50
-    #	Wrote 46254 overused 11-mers to jkStuff/11.ooc
+      -makeOoc=jkStuff/11.ooc -repMatch=100
+    #	Wrote 14923 overused 11-mers to jkStuff/11.ooc
 
 #########################################################################
 #	make caeJap1.chrUn.lift
@@ -329,5 +335,24 @@ caeJap1.perChromTables = no
     ssh hgwdev
     hgsql -e 'update dbDb set defaultPos="chrUn:36686834-36727776"
 	where name="caeJap1";' hgcentraltest
+
+#########################################################################
+## Make maskedContigs (DONE - 2008-06-09 - Hiram)
+    mkdir /cluster/data/caeJap1/maskedContigs
+    cd /cluster/data/caeJap1/maskedContigs
+    ln -s ../jkStuff/caeJap1.chrUn.lift ./supers.lift
+    cp -p /cluster/data/priPac1/jkStuff/lft2BitToFa.pl .
+    ./lft2BitToFa.pl ../caeJap1.2bit supers.lift > supers.fa
+    faSize supers.fa
+    #	151722573 bases (22375392 N's 129347181 real
+    #	71997717 upper 57349464 lower) in 4657 sequences in 1 files
+    #	%37.80 masked total, %44.34 masked real
+    twoBitToFa ../caeJap1.2bit stdout | faSize stdin
+    #	156378573 bases (27031392 N's 129347181 real
+    #	71997717 upper 57349464 lower) in 1 sequences in 1 files
+    #	%36.67 masked total, %44.34 masked real
+    faToTwoBit supers.fa caeJap1.TrfWM.supers.2bit
+    twoBitInfo caeJap1.TrfWM.supers.2bit stdout \
+	| sort -k2rn > caeJap1.TrfWM.supers.sizes
 
 #########################################################################
