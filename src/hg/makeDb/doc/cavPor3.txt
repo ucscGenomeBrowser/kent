@@ -144,7 +144,7 @@ cut -f 2 chrom.sizes | ave stdin
     # 732765485 bases of 2663369733 (27.513%) in intersection
 
     # RepeatMasker and lib version from do.log:
-    #    RepeatMasker version development-$Id: cavPor3.txt,v 1.9 2008/06/08 05:28:43 kate Exp $
+    #    RepeatMasker version development-$Id: cavPor3.txt,v 1.10 2008/06/09 05:16:03 tdreszer Exp $
     #    Jan 11 2008 (open-3-1-9) version of RepeatMasker
     #    CC   RELEASE 20071204;
 
@@ -3730,6 +3730,94 @@ zcat ../../pslParts/cavPor3.2bit\:scaffold_7\:*.psl.gz \
     cp netChain.csh netChain.restart.csh
     # edit to restart in correct place
     ./netChain.restart.csh
+    
+    ### After some searching I was able to figure out that   = octal "\031"
+    # Now I can find the original problem file and try to rebuild it:
+    grep -n -P "\031" cavPor3.2bit\:scaffold_7\:40000000-50010000_part007.lst.psl 
+    # 4253:62 40      0       0       1       1       1       6       +       scaffold_6393.1-308827  308827  149765  149868  scaffold_'      61004451   49604348        49604456        3       2,38,35,       149765,149794,149833,   49604348,49604383,49604421,
+
+    # For comparison:
+    tail -55 cavPor3.2bit\:scaffold_7\:40000000-50010000_part007.lst.psl | head -5  
+    # 91      37      0       0       1       8       3       16      +       scaffold_6393.1-308827  308827  244021  244157  scaffold_7      61004451   48951564        48951708        5       18,25,14,15,56, 244021,244039,244072,244086,244101,     48951564,48951583,48951608,48951629,48951652,
+    # 62      32      0       0       0       0       0       0       +       scaffold_6393.1-08827  308827  54194   54288   scaffold_7      61004451   49114670        49114764        1       94,     54194,  49114670,
+    # 62      40      0       0       1       1       1       6       +       scaffold_6393.1-308827  308827  149765  149868  scaffold_'      61004451   49604348        49604456        3       2,38,35,       149765,149794,149833,   49604348,49604383,49604421,
+    # 127     63      0       0       1       18      2       5       +       scaffold_6393.1-308827  308827  159033  159241  scaffold_7      61004451   49613715        49613910        4       59,84,20,27,    159033,159092,159176,159214,    49613715,49613775,49613863,49613883,
+    # 29      8       0       0       0       0       0       0       +       scaffold_6393.1-308827  308827  160121  160158  scaffold_7      61004451   49620825        49620862        1       37,     160121, 49620825,
+    ### ### ### Yikes!  the prior line as a different strange char:  = octal "\023"
+
+    ## Run on same machine:
+    ssh kkr10u47
+    /cluster/bin/scripts/blastz-run-ucsc -outFormat psl ../psl/cavPor3.2bit:scaffold_7:40000000-50010000 qParts/part007.lst ../DEF ../psl/cavPor3.2bit:scaffold_7:40000000-50010000/cavPor3.2bit:scaffold_7:40000000-50010000_part007.lst.new.psl
+    ll ../psl/cavPor3.2bit\:scaffold_7\:40000000-50010000/cavPor3.2bit\:scaffold_7\:40000000-50010000_part007*
+    # -rw-rw-r--  1 tdreszer protein 785511 Jun  3 13:11 ../psl/cavPor3.2bit:scaffold_7:40000000-50010000/cavPor3.2bit:scaffold_7:40000000-50010000_part007.lst.new.psl
+    # -rw-rw-r--  1 kate     protein 785511 May 16 19:40 ../psl/cavPor3.2bit:scaffold_7:40000000-50010000/cavPor3.2bit:scaffold_7:40000000-50010000_part007.lst.psl
+    grep -n -P "\031" ../psl/cavPor3.2bit\:scaffold_7\:40000000-50010000/cavPor3.2bit\:scaffold_7\:40000000-50010000_part007.lst.new.psl 
+    tail -55 ../psl/cavPor3.2bit\:scaffold_7\:40000000-50010000/cavPor3.2bit\:scaffold_7\:40000000-50010000_part007.lst.new.psl | head -5
+    # 91      37      0       0       1       8       3       16      +       scaffold_6393.1-308827  308827  244021  244157  scaffold_7      61004451        48951564        48951708       518,25,14,15,56, 244021,244039,244072,244086,244101,     48951564,48951583,48951608,48951629,48951652,
+    # 62      32      0       0       0       0       0       0       +       scaffold_6393.1-308827  308827  54194   54288   scaffold_7      61004451        49114670        49114764       194,     54194,  49114670,
+    # 62      40      0       0       1       1       1       6       +       scaffold_6393.1-308827  308827  149765  149868  scaffold_7      61004451        49604348        49604456       329,38,35,       149765,149794,149833,   49604348,49604383,49604421,
+    # 127     63      0       0       1       18      2       5       +       scaffold_6393.1-308827  308827  159033  159241  scaffold_7      61004451        49613715        49613910       459,84,20,27,    159033,159092,159176,159214,    49613715,49613775,49613863,49613883,
+    # 29      8       0       0       0       0       0       0       +       scaffold_6393.1-308827  308827  160121  160158  scaffold_7      61004451        49620825        49620862       137,     160121, 49620825,
+    mv ../psl/cavPor3.2bit\:scaffold_7\:40000000-50010000/cavPor3.2bit\:scaffold_7\:40000000-50010000_part007.lst.psl ../psl/cavPor3.2bit\:scaffold_7\:40000000-50010000/cavPor3.2bit\:scaffold_7\:40000000-50010000_part007.lst.psl.old
+    mv ../psl/cavPor3.2bit\:scaffold_7\:40000000-50010000/cavPor3.2bit\:scaffold_7\:40000000-50010000_part007.lst.new.psl ../psl/cavPor3.2bit\:scaffold_7\:40000000-50010000/cavPor3.2bit\:scaffold_7\:40000000-50010000_part007.lst.psl
+    
+    # Okay, we are NOW done with run.blastz so it is on to run.cat
+    ssh kkstore05
+    cd ../run.cat
+    ./cat.csh cavPor3.2bit:scaffold_7:40000000-50010000 cavPor3.2bit:scaffold_7:40000000-50010000.psl.new.gz 
+    ll cavPor3.2bit\:scaffold_7\:40000000-50010000.psl.*
+    # -rw-rw-r--  1 tdreszer protein 38048414 Jun  3 13:28 cavPor3.2bit:scaffold_7:40000000-50010000.psl.new.gz
+    # -rw-rw-r--  1 tdreszer protein 38048475 May 18 08:13 cavPor3.2bit:scaffold_7:40000000-50010000.psl.old.gz
+    mv cavPor3.2bit\:scaffold_7\:40000000-50010000.psl.new.gz cavPor3.2bit\:scaffold_7\:40000000-50010000.psl.gz
+    mv cavPor3.2bit\:scaffold_7\:40000000-50010000.psl.old.gz cavPor3.2bit\:scaffold_7\:40000000-50010000.psl.gz.old
+    mv cavPor3.2bit\:scaffold_7\:40000000-50010000.psl.gz* ../pslParts/
+    
+    # Okay, we are now done with run.cat.  What can be done for axtChain?
+    # run on same cluster machine
+    ssh kkr4u00
+    cd /cluster/data/cavPor3/bed/blastz.speTri0/axtChain/run
+    ./chain.csh cavPor3.2bit:scaffold_7: chain/cavPor3.2bit:scaffold_7:.chain
+    ll chain/cavPor3.2bit\:scaffold_7\:.chain 
+    # -rw-rw-r--  1 tdreszer protein 304948646 Jun  3 15:05 chain/cavPor3.2bit:scaffold_7:.chain
+
+    # Okay, NOW we are ready to consider restarting doBlastzChainNet.pl
+    # Though I assume that some of what was already done, will be in the way.
+    time nice -n +19 doBlastzChainNet.pl `pwd`/DEF -bigClusterHub=pk  \
+       -chainMinScore=3000 -chainLinearGap=medium -continue chainMerge >> do.log 2>&1
+    # postProcessChains: looks like this was run successfully already (cavPor3.speTri0.all.chain.gz exists). 
+    # Either run with -continue net or some later stage, or move aside/remove /cluster/data/cavPor3/bed/blastzSpeTri0.2008-05-16/axtChain/cavPor3.speTri0.all.chain.gz and run again.
+    mv axtChain/cavPor3.speTri0.all.chain.gz axtChain/cavPor3.speTri0.all.chain.gz.old
+    time nice -n +19 doBlastzChainNet.pl `pwd`/DEF -bigClusterHub=pk  \
+       -chainMinScore=3000 -chainLinearGap=medium -continue chainMerge >> do.log 2>&1
+    # real    54m1.762s
+    tail do.log
+    # HgStepManager: executing step 'net' Thu Jun  5 12:46:09 2008.
+    # netChains: looks like we are not starting with a clean slate.  Please move aside or remove /cluster/data/cavPor3/bed/blastzSpeTri0.2008-05-16/axtChain/noClass.net and run again.
+    mv /cluster/data/cavPor3/bed/blastzSpeTri0.2008-05-16/axtChain/noClass.net /cluster/data/cavPor3/bed/blastzSpeTri0.2008-05-16/axtChain/noClass.net.old
+
+    screen
+    time nice -n +19 doBlastzChainNet.pl `pwd`/DEF -bigClusterHub=pk  \
+       -chainMinScore=3000 -chainLinearGap=medium -continue net >> do.log 2>&1
+    real    204m20.325s
+    
+    tail do.log 
+    # writing /dev/null
+    # memory usage 2427514880, utime 5453 s/100, stime 405
+    # netChainSubset -verbose=0 noClass.net cavPor3.speTri0.all.chain.gz stdout
+    # chainStitchId stdin stdout
+    # gzip -c
+    # 
+    # gzip: stdout: Broken pipe
+    # Killed  
+    # Command failed:
+    # ssh -x kolossus nice /cluster/data/cavPor3/bed/blastzSpeTri0.2008-05-16/axtChain/netChains.csh
+    
+    ### Can't seem to get ahead!!!
+
+
+    ### >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Got here!
+
+     
 
 
 
