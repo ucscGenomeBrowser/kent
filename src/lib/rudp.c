@@ -55,7 +55,7 @@
 #include "errabort.h"
 #include "rudp.h"
 
-static char const rcsid[] = "$Id: rudp.c,v 1.15 2008/06/10 05:27:12 galt Exp $";
+static char const rcsid[] = "$Id: rudp.c,v 1.16 2008/06/10 19:53:42 galt Exp $";
 
 #define MAX_TIME_OUT 999999
 
@@ -244,7 +244,7 @@ struct rudpHeader head;
 int readSize;
 int timeOut = ru->timeOut;
 struct sockaddr_in retFrom;
-int retFromSize = sizeof(retFrom);
+unsigned int retFromSize = sizeof(retFrom);
 
 for (;;)
     {
