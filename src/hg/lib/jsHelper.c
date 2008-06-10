@@ -22,7 +22,7 @@
 #include "hui.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jsHelper.c,v 1.18 2008/06/09 21:15:37 larrym Exp $";
+static char const rcsid[] = "$Id: jsHelper.c,v 1.19 2008/06/10 17:16:48 larrym Exp $";
 
 static boolean jsInited = FALSE;
 struct hash *includedFiles = NULL;
@@ -339,12 +339,24 @@ if(hashLookup(includedFiles, fileName) == NULL)
     /* tolerate missing docRoot (i.e. when running from command line) */
     if(docRoot != NULL)
         {
-        char realFileName[2048];
-
-        safef(realFileName, sizeof(realFileName), "%s/%s/%s", docRoot, dirName, fileName);
-        if(!fileExists(realFileName))
+        char fullDirName[2048];
+        safef(fullDirName, sizeof(fullDirName), "%s/%s", docRoot, dirName);
+        if(fileExists(fullDirName))
             {
-            warn("jsIncludeFile: javascript fileName: %s doesn't exist.\n", realFileName);
+            char realFileName[2048];
+            safef(realFileName, sizeof(realFileName), "%s/%s", fullDirName, fileName);
+            // I'm worried about mirrors failing to install the js directory properly, so we use
+            // fprintf's instead of warns to misconfiguration/missing file errors (for now).
+            if(!fileExists(realFileName))
+                {
+                fprintf(stderr, "jsIncludeFile: javascript fileName: %s doesn't exist.\n", realFileName);
+                return;
+                }
+            }
+        else
+            {
+            fprintf(stderr, "jsIncludeFile: javascript dirName: %s doesn't exist.\n", fullDirName);
+            return;
             }
         }
     hashAdd(includedFiles, fileName, NULL);
