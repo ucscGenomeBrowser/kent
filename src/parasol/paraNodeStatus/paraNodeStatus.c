@@ -36,48 +36,51 @@ void listJobsErr(char *name, int n)
 warn("%s: listJobs bad reponse %d", name, n);
 }
 
-void showLong(char *name, struct rudp *ru, int *pRunning, int *pRecent)
+void showLong(struct paraMessage *pm, char *name, struct rudp *ru, int *pRunning, int *pRecent)
 /* Fetch and display response to listJobs message.
  * Increment running and recent counts. */
 {
 int running, recent, i;
-struct paraMessage pm;
+struct paraMultiMessage pmm;
 
-if (!pmReceive(&pm, ru))
+/* ensure the multi-message response comes from the correct ip and has no duplicate msgs*/
+pmmInit(&pmm, pm, pm->ipAddress.sin_addr);
+
+if (!pmmReceive(&pmm, ru))
     {
     warn("%s: no listJobs response", name);
     return;
     }
-running = atoi(pm.data);
+running = atoi(pm->data);
 for (i=0; i<running; ++i)
     {
-    if (!pmReceive(&pm, ru))
+    if (!pmmReceive(&pmm, ru))
         {
 	listJobsErr(name, 1);
 	return;
 	}
-    printf("%s %s %s\n", name, "running", pm.data);
+    printf("%s %s %s\n", name, "running", pm->data);
     }
-if (!pmReceive(&pm, ru))
+if (!pmmReceive(&pmm, ru))
     {
     listJobsErr(name, 2);
     return;
     }
-recent = atoi(pm.data);
+recent = atoi(pm->data);
 for (i=0; i<recent; ++i)
     {
-    if (!pmReceive(&pm, ru))
+    if (!pmmReceive(&pmm, ru))
         {
 	listJobsErr(name, 3);
 	return;
 	}
-    printf("%s %s %s\n", name, "recent", pm.data);
-    if (!pmReceive(&pm, ru))
+    printf("%s %s %s\n", name, "recent", pm->data);
+    if (!pmmReceive(&pmm, ru))
         {
 	listJobsErr(name, 4);
 	return;
 	}
-    printf("%s %s %s\n", name, "result", pm.data);
+    printf("%s %s %s\n", name, "result", pm->data);
     }
 printf("%s summary %d running %d recent\n", name, running, recent);
 printf("\n");
@@ -106,7 +109,7 @@ while (lineFileRow(lf, row))
 	{
 	pmPrintf(&pm, "%s", "listJobs");
 	if (pmSend(&pm, ru))
-	    showLong(name, ru, &totalBusy, &totalRecent);
+	    showLong(&pm, name, ru, &totalBusy, &totalRecent);
 	}
     else
 	{

@@ -55,7 +55,7 @@
 #include "errabort.h"
 #include "rudp.h"
 
-static char const rcsid[] = "$Id: rudp.c,v 1.14 2005/12/12 02:24:47 kent Exp $";
+static char const rcsid[] = "$Id: rudp.c,v 1.15 2008/06/10 05:27:12 galt Exp $";
 
 #define MAX_TIME_OUT 999999
 
@@ -169,7 +169,8 @@ struct rudp *ru = *pRu;
 if (ru != NULL)
     {
     close(ru->socket);
-    freez(pRu);
+    close((*pRu)->socket);
+    rudpFree(pRu);
     }
 }
 
@@ -233,7 +234,7 @@ for (;;)
     }
 }
 
-static boolean getOurAck(struct rudp *ru, struct timeval *startTv)
+static boolean getOurAck(struct rudp *ru, struct timeval *startTv, struct sockaddr_in *sai)
 /* Wait for acknowledgement to the message we just sent.
  * The set should be zeroed out. Only wait for up to
  * ru->timeOut microseconds.   Prints a message and returns FALSE
@@ -242,6 +243,8 @@ static boolean getOurAck(struct rudp *ru, struct timeval *startTv)
 struct rudpHeader head;
 int readSize;
 int timeOut = ru->timeOut;
+struct sockaddr_in retFrom;
+int retFromSize = sizeof(retFrom);
 
 for (;;)
     {
@@ -252,13 +255,22 @@ for (;;)
     if (readReadyWait(ru->socket, timeOut))
 	{
 	/* Read message and if it's our ack return true.   */
-	readSize = recvfrom(ru->socket, &head, sizeof(head), 0, NULL, NULL);
+	readSize = recvfrom(ru->socket, &head, sizeof(head), 0, 
+		    (struct sockaddr*)&retFrom, &retFromSize);
 	if (readSize >= sizeof(head) && head.type == rudpAck && head.id == ru->lastId)
 	    {
-	    gettimeofday(&tv, NULL);
-	    dt = timeDiff(startTv, &tv);
-	    rudpAddRoundTripTime(ru, dt);
-	    return TRUE;
+	    if ((sai->sin_addr.s_addr==retFrom.sin_addr.s_addr) &&
+		(sai->sin_port==retFrom.sin_port))
+		{
+		gettimeofday(&tv, NULL);
+		dt = timeDiff(startTv, &tv);
+		rudpAddRoundTripTime(ru, dt);
+		return TRUE;
+		}
+	    else
+		{
+		warn("rudp: discarding mistaken ack by confirming sender ip:port");
+		}
 	    }
 	}
 
@@ -289,6 +301,7 @@ int i, err = 0, maxRetry = ru->maxRetries;
  * At some point we might replace this with a scatter/gather
  * iovector. */
 ru->sendCount += 1;
+ru->resend = FALSE;
 assert(size <= rudpMaxSize);
 head = (struct rudpHeader *)outBuf;
 memcpy(head+1, message, size);
@@ -315,12 +328,13 @@ for (i=0; i<maxRetry; ++i)
 	rudpTimedOut(ru);
 	continue;
 	}
-    if (getOurAck(ru, &sendTv))
+    if (getOurAck(ru, &sendTv, sai))
 	{
 	return 0;
 	}
     rudpTimedOut(ru);
     ru->resendCount += 1;
+    ru->resend = TRUE;
     }
 if (err >= 0)
     {
@@ -397,6 +411,7 @@ for (;;)
 	readSize = bufSize;
 	}
     memcpy(messageBuf, head+1, readSize);
+    ru->lastIdReceived = head->id;
     break;
     }
 return readSize;

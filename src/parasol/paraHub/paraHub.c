@@ -69,7 +69,7 @@
 #include "obscure.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: paraHub.c,v 1.114 2008/06/07 10:13:08 galt Exp $";
+static char const rcsid[] = "$Id: paraHub.c,v 1.115 2008/06/10 05:26:20 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -2989,8 +2989,12 @@ boolean processListJobs(struct machine *mach,
 int running, recent, i, finCount = 0;
 struct runJobMessage rjm;
 char resultsFile[512];
+struct paraMultiMessage pmm;
 
-if (!pmReceiveTimeOut(pm, ru, 2000000))
+/* ensure the multi-message response comes from the correct ip and has no duplicate msgs*/
+pmmInit(&pmm, pm, pm->ipAddress.sin_addr);
+
+if (!pmmReceiveTimeOut(&pmm, ru, 2000000))
     {
     warn("%s: no listJobs response", mach->name);
     return FALSE;
@@ -2998,7 +3002,7 @@ if (!pmReceiveTimeOut(pm, ru, 2000000))
 running = atoi(pm->data);
 for (i=0; i<running; ++i)
     {
-    if (!pmReceiveTimeOut(pm, ru, 2000000))
+    if (!pmmReceiveTimeOut(&pmm, ru, 2000000))
         {
 	pljErr(mach, 1);
 	return FALSE;
@@ -3012,7 +3016,7 @@ for (i=0; i<running; ++i)
     addRunningJob(&rjm, resultsFile, mach);
     }
 *pRunning += running;
-if (!pmReceiveTimeOut(pm, ru, 2000000))
+if (!pmmReceiveTimeOut(&pmm, ru, 2000000))
     {
     pljErr(mach, 3);
     return FALSE;
@@ -3022,7 +3026,7 @@ for (i=0; i<recent; ++i)
     {
     struct existingResults *er;
     char *startLine = NULL;
-    if (!pmReceiveTimeOut(pm, ru, 2000000))
+    if (!pmmReceiveTimeOut(&pmm, ru, 2000000))
         {
 	pljErr(mach, 4);
 	return FALSE;
@@ -3034,7 +3038,7 @@ for (i=0; i<recent; ++i)
 	freez(&startLine);
 	return FALSE;
 	}
-    if (!pmReceiveTimeOut(pm, ru, 2000000))
+    if (!pmmReceiveTimeOut(&pmm, ru, 2000000))
         {
 	pljErr(mach, 6);
 	freez(&startLine);
@@ -3114,25 +3118,27 @@ setupLists();
 machineHash = newHash(0);
 startMachines(machineList);
 
+openJobId();
+logInfo("----------------------------------------------------------------");
+logInfo("Starting paraHub. Next job ID is %d.", nextJobId);
+
+rudpOut = rudpMustOpen();
+if (!optionExists("noResume"))
+    checkForJobsOnNodes();
+
 /* Initialize socket etc. */
 ZeroVar(&sai);
 sai.sin_family = AF_INET;
 sai.sin_port = htons(paraHubPort);
 sai.sin_addr.s_addr = INADDR_ANY;
 rudpIn = rudpMustOpenBound(&sai);
-rudpOut = rudpMustOpen();
 
 /* Start up daemons. */
 sockSuckStart(rudpIn);
 startHeartbeat();
 startSpokes();
 
-
-if (!optionExists("noResume"))
-    checkForJobsOnNodes();
-
-openJobId();
-logInfo("Starting paraHub. Next job ID is %d.", nextJobId);
+logInfo("sockSuck,Heartbeat,Spokes have been started");
 
 /* Bump up our priority to just shy of real-time. */
 nice(-40);

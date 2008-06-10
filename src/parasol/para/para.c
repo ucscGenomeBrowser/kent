@@ -16,7 +16,7 @@
 #include "verbose.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: para.c,v 1.100 2008/06/09 17:56:27 galt Exp $";
+static char const rcsid[] = "$Id: para.c,v 1.101 2008/06/10 05:26:19 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -732,14 +732,17 @@ struct slRef *hubMultilineQuery(char *query)
 struct slRef *list = NULL;
 struct rudp *ru = rudpMustOpen();
 struct paraMessage pm;
+struct paraMultiMessage pmm;
 char *row[256];
 int count = 0;
 pmInitFromName(&pm, "localhost", paraHubPort);
+/* ensure the multi-message response comes from the correct ip and has no duplicate msgs*/
+pmmInit(&pmm, &pm, pm.ipAddress.sin_addr);
 if (!pmSendString(&pm, ru, query))
     noWarnAbort();
 for (;;)
     {
-    if (!pmReceive(&pm, ru))
+    if (!pmmReceive(&pmm, ru))
 	break;
     if (pm.size == 0)
 	break;
@@ -1573,8 +1576,11 @@ for (job = db->jobList; job != NULL; job = job->next)
 void fetchOpenFile(struct paraMessage *pm, struct rudp *ru, char *fileName)
 /* Read everything you can from socket and output to file. */
 {
+struct paraMultiMessage pmm;
 FILE *f = mustOpen(fileName, "w");
-while (pmReceive(pm, ru))
+/* ensure the multi-message response comes from the correct ip and has no duplicate msgs*/
+pmmInit(&pmm, pm, pm->ipAddress.sin_addr);
+while (pmmReceive(&pmm, ru))
     {
     if (pm->size == 0)
 	break;

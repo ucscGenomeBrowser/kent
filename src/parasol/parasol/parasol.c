@@ -9,7 +9,7 @@
 #include "paraLib.h"
 #include "paraMessage.h"
 
-static char const rcsid[] = "$Id: parasol.c,v 1.40 2008/06/07 09:59:56 galt Exp $";
+static char const rcsid[] = "$Id: parasol.c,v 1.41 2008/06/10 05:26:20 galt Exp $";
 
 char *version = PARA_VERSION;   /* Version number. */
 
@@ -54,12 +54,25 @@ errAbort(
   );
 }
 
+boolean commandHubExt(char *command, struct paraMessage *pm, struct paraMultiMessage *pmm)
+/* Send a command to hub. */
+{
+pmInitFromName(pm, "localhost", paraHubPort);
+
+if (pmm)
+    {
+    /* ensure the multi-message response comes from the correct ip and has no duplicate msgs*/
+    pmmInit(pmm, pm, pm->ipAddress.sin_addr);
+    }
+
+return pmSendString(pm, hubRudp, command);
+}
+
 boolean commandHub(char *command)
 /* Send a command to hub. */
 {
 struct paraMessage pm;
-pmInitFromName(&pm, "localhost", paraHubPort);
-return pmSendString(&pm, hubRudp, command);
+return commandHubExt(command, &pm, NULL);
 }
 
 char *hubCommandGetReciept(char *command)
@@ -91,15 +104,20 @@ void hubCommandAndPrint(char *command)
 char *line = NULL;
 struct slRef *list = NULL, *ref;
 struct paraMessage pm;
+struct paraMultiMessage pmm;
 int count = 0;
 char *row[256];
 
 /* Issue command and suck down response quickly into memory. */
-if (!commandHub(command))
+if (!commandHubExt(command, &pm, &pmm))
     errAbort("Couldn't send '%s' command to paraHub", command);
+
+///* ensure the multi-message response comes from the correct ip and has no duplicate msgs*/
+//pmmInit(&pmm, &pm, pm.ipAddress.sin_addr);
+
 for (;;)
     {
-    if (!pmReceive(&pm, hubRudp))
+    if (!pmmReceive(&pmm, hubRudp))
 	break;
     if (pm.size == 0)
         break;
@@ -264,11 +282,14 @@ struct jobInfo *getJobList()
 /* Read job list from server. */
 {
 struct paraMessage pm;
+struct paraMultiMessage pmm;
 struct jobInfo *jobList = NULL, *job;
-commandHub("listJobs");
+/* ensure the multi-message response comes from the correct ip and has no duplicate msgs*/
+commandHubExt("listJobs", &pm, &pmm);
+//pmmInit(&pmm, &pm, pm.ipAddress.sin_addr);
 for (;;)
     {
-    if (!pmReceive(&pm, hubRudp))
+    if (!pmmReceive(&pmm, hubRudp))
 	break;
     if (pm.size == 0)
         break;

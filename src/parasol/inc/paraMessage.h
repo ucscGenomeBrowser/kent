@@ -18,6 +18,14 @@ struct paraMessage
     char data[rudpMaxSize+1];	/* Data. Extra byte for zero tag at end. */
     };
 
+struct paraMultiMessage
+/* A parasol multi-packet response message. */
+    {
+    struct paraMessage *pm;
+    struct sockaddr_in ipAddress;  /* IP address of machine message is from/to */
+    bits32 id;                     /* Message id.  Returned with ack. */
+    };
+
 void pmInit(struct paraMessage *pm, rudpHost ipAddress, bits16 port);
 /* Initialize message (that might be on stack). ipAddress is in host
  * order. */
@@ -64,5 +72,20 @@ boolean pmReceive(struct paraMessage *pm, struct rudp *ru);
 boolean pmReceiveTimeOut(struct paraMessage *pm, struct rudp *ru, int timeOut);
 /* Wait up to timeOut microseconds for message.  To wait forever
  * set timeOut to zero. */
+
+void pmmInit(struct paraMultiMessage *pmm, struct paraMessage *pm, struct in_addr sin_addr);
+/* Initialize structure for multi-message response  */
+
+boolean pmmReceiveTimeOut(struct paraMultiMessage *pmm, struct rudp *ru, int timeOut);
+/* Multi-message receive
+ * Wait up to timeOut microseconds for message.  To wait forever
+ * set timeOut to zero.  For multi-message response
+ * We know the ip, and can track the port for continuity
+ * and the packet id for sequential series. 
+ */
+
+boolean pmmReceive(struct paraMultiMessage *pmm, struct rudp *ru);
+/* Receive multi message.  Print warning message and return FALSE if
+ * there is a problem. */
 
 #endif /* PARAMESSAGE_H */

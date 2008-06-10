@@ -69,6 +69,8 @@ struct rudp
     int failCount;	/* Number of failures. */
     bits32 lastId;	/* Id number of last message sent. */
     int maxRetries;	/* Maximum number of retries per message. */
+    bits32 lastIdReceived; /* Id number of last message received. */
+    boolean resend;     /* TRUE if the packet is a re-send */ 
     };
 
 enum rudpType

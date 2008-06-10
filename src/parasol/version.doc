@@ -209,6 +209,16 @@
         exists for parasol -- not only does it trigger an immediate planning event,
         but it gives useful output for users interested in the details.
 
+12.08   Added parasol multi-messaging protocol and other protections against 
+        receiving duplicate messages.  This was proven a problem for paraHub restart,
+        and is extremely likely to also have occurred with para problems, and 
+        the hub pstat and list jobs, and other similar situations with 
+        multi-packet responses.  
+
+        This version depends on a newer version of rudp in kent/src/lib,
+        and we also updated the paraMessage to support pmm or parasol multi-messages.
+        Much of this work had been done earlier and was just pulled in from
+        an old sandbox.
 
 
 
