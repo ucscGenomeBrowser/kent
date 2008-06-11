@@ -122,7 +122,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.7 2008/05/27 09:22:01 aamp Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.8 2008/06/11 18:34:52 angie Exp $";
 
 #define CHROM_COLORS 26
 
@@ -9391,14 +9391,31 @@ tg->loadItems = loadColoredExonBed;
 tg->canPack = TRUE;
 }
 
+char *kiddEichlerItemName(struct track *tg, void *item)
+/* Get rid of extremely long clone name at beginning and just show the 
+ * type (after the comma). */
+{
+struct linkedFeatures *lf = (struct linkedFeatures *)item;
+char *name = cloneString(lf->name);
+char *comma = strrchr(name, ',');
+if (comma != NULL)
+    strcpy(name, comma+1);
+return name;
+}
+
+void kiddEichlerMethods(struct track *tg)
+/* For variation data from Kidd,...,Eichler '08. */
+{
+linkedFeaturesMethods(tg);
+tg->itemName = kiddEichlerItemName;
+}
+
 void loadGenePred(struct track *tg)
 /* Convert gene pred in window to linked feature. */
 {
 tg->items = lfFromGenePredInRange(tg, tg->mapName, chromName, winStart, winEnd);
 /* filter items on selected criteria if filter is available */
 filterItems(tg, genePredClassFilter, "include");
-
-    
 }
 
 void loadGenePredWithConfiguredName(struct track *tg)
@@ -10999,6 +11016,7 @@ registerTrackHandler("oreganno", oregannoMethods);
 registerTrackHandler("encodeDless", dlessMethods);
 transMapRegisterTrackHandlers();
 registerTrackHandler("retroposons", dbRIPMethods);
+registerTrackHandler("kiddEichlerDisc", kiddEichlerMethods);
 
 registerTrackHandler("hapmapSnps", hapmapMethods);
 registerTrackHandler("omicia", omiciaMethods);

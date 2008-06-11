@@ -214,7 +214,7 @@
 #include "itemConf.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1426 2008/05/31 15:31:13 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1427 2008/06/11 18:34:52 angie Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -764,7 +764,7 @@ if (sql != NULL)
 return id;
 }
 
-void printCustomUrlWithLabel(struct trackDb *tdb, char *itemName, char *urlSetting, boolean encode)
+void printCustomUrlWithLabel(struct trackDb *tdb, char *itemName, char *itemLabel, char *urlSetting, boolean encode)
 /* Print custom URL specified in trackDb settings. */
 {
 char *url;
@@ -837,7 +837,10 @@ if (url != NULL && url[0] != 0)
 	    }
 	else
 	    {
-	    printf("%s</A><BR>\n", idInUrl);
+	    char *label = idInUrl;
+	    if (isNotEmpty(itemLabel) && !sameString(itemName, itemLabel))
+		label = itemLabel;
+	    printf("%s</A><BR>\n", label);
 	    }
 	freeMem(eItem);
 	freeDyString(&uUrl);
@@ -852,14 +855,14 @@ void printCustomUrl(struct trackDb *tdb, char *itemName, boolean encode)
 char urlSetting[10];
 safef(urlSetting, sizeof(urlSetting), "url");
 
-printCustomUrlWithLabel(tdb, itemName, urlSetting, encode);
+printCustomUrlWithLabel(tdb, itemName, itemName, urlSetting, encode);
 }
 
 void printOtherCustomUrl(struct trackDb *tdb, char *itemName, char* urlSetting, boolean encode)
 /* Wrapper to call printCustomUrlWithLabel to use another url setting other than url in trackDb e.g. url2, this allows the use of multiple urls for a track
  to be set in trackDb. */
 {
-printCustomUrlWithLabel(tdb, itemName, urlSetting, encode);
+printCustomUrlWithLabel(tdb, itemName, itemName, urlSetting, encode);
 }
 
 void genericSampleClick(struct sqlConnection *conn, struct trackDb *tdb, 
@@ -1205,7 +1208,6 @@ while ((row = sqlNextRow(sr)) != NULL)
     bedPrintPos(bed, bedSize);
     }
 sqlFreeResult(&sr);
-safef(query, sizeof query, "%s.%s", table, "filterTopScorersOn");
 getBedTopScorers(conn, tdb, table, item, start, bedSize);
 }
 
@@ -19831,6 +19833,62 @@ genericClickHandlerPlus(tdb, item, NULL, dy->string);
 dyStringFree(&dy);
 }
 
+#define KIDD_EICHLER_DISC_PREFIX "kiddEichlerDisc"
+
+void doKiddEichlerDisc(struct trackDb *tdb, char *item)
+/* Discordant clone end mappings from Kidd..Eichler 2008. */
+{
+struct sqlConnection *conn = hAllocConn();
+char query[512];
+struct sqlResult *sr;
+char **row;
+boolean hasBin;
+struct bed *bed;
+boolean firstTime = TRUE;
+char *escapedName = sqlEscapeString(item);
+int start = cartInt(cart, "o");
+
+genericHeader(tdb, item);
+if (! startsWith(KIDD_EICHLER_DISC_PREFIX, tdb->tableName))
+    errAbort("track tableName must begin with "KIDD_EICHLER_DISC_PREFIX
+	     " but instead it is %s", tdb->tableName);
+hasBin = hOffsetPastBin(seqName, tdb->tableName);
+/* We don't need to add bin to this because name is indexed: */
+safef(query, sizeof(query), "select * from %s where name = '%s' "
+	       "and chrom = '%s' and chromStart = %d",
+	       tdb->tableName, escapedName, seqName, start);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    if (firstTime)
+	firstTime = FALSE;
+    else
+	htmlHorizontalLine();
+    bed = bedLoadN(row+hasBin, 12);
+    int lastBlk = bed->blockCount - 1;
+    int endForUrl = (bed->chromStart + bed->chromStarts[lastBlk] +
+		     bed->blockSizes[lastBlk]);
+    char *endFudge = trackDbSetting(tdb, "endFudge");
+    if (endFudge && !strstr(bed->name, "OEA"))
+	endForUrl += atoi(endFudge);
+    char sampleName[16];
+    safecpy(sampleName, sizeof(sampleName),
+	    tdb->tableName + strlen(KIDD_EICHLER_DISC_PREFIX));
+    touppers(sampleName);
+    char itemPlus[2048];
+    safef(itemPlus, sizeof(itemPlus),
+	  "%s&o=%d&t=%d&g=%s_discordant&%s_discordant=full",
+	  cgiEncode(item), start, endForUrl, sampleName, sampleName);
+    printCustomUrlWithLabel(tdb, itemPlus, item, "url", FALSE);
+    printf("<B>Score:</B> %d<BR>\n", bed->score);
+    printPosOnChrom(bed->chrom, bed->chromStart, bed->chromEnd, bed->strand,
+		    TRUE, bed->name);
+    }
+sqlFreeResult(&sr);
+printTrackHtml(tdb);
+}
+
+
 struct trackDb *tdbForTableArg()
 /* get trackDb for track passed in table arg */
 {
@@ -20853,6 +20911,10 @@ else if ( sameString("expRatioUCSFDemo", track) || sameString("cnvLungBroadv2", 
 else if (startsWith("consIndels", track))
     {
     doConsIndels(tdb,item);
+    }
+else if (startsWith(KIDD_EICHLER_DISC_PREFIX, track))
+    {
+    doKiddEichlerDisc(tdb, item);
     }
 /* Lowe Lab Stuff */
 #ifdef LOWELAB

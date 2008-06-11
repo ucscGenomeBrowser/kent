@@ -712,6 +712,75 @@ exonArrows off
 urlLabel DGV Browser and Report: 
 url http://projects.tcag.ca/variation/cgi-bin/tbrowse/xview?source=$D&view=variation&id=Variation_$$
 
+track kiddEichlerDisc
+compositeTrack on
+shortLabel HGSV Discordant
+longLabel HGSV Discordant Clone End Alignments
+group varRep
+priority 144.85
+visibility hide
+itemRgb on
+type bed 12
+urlLabel Clone Summary (Eichler Lab Browser): 
+url http://mrhgsv.gs.washington.edu/cgi-bin/hgc?i=$$&c=$S&l=$[&r=$]&db=$D&position=$S:$[-$]
+# the chromEnd coords on their site are 1 greater than last block end...
+# this is a hint to hgc to add 1 to t when forming a link to their site.
+endFudge 1
+
+    track kiddEichlerDiscAbc14
+    subTrack kiddEichlerDisc
+    shortLabel Discordant ABC14
+    longLabel HGSV Individual ABC14 (CEPH) Discordant Clone End Alignments
+    priority 1
+
+    track kiddEichlerDiscAbc13
+    subTrack kiddEichlerDisc
+    shortLabel Discordant ABC13
+    longLabel HGSV Individual ABC13 (Yoruba) Discordant Clone End Alignments
+    priority 2
+
+    track kiddEichlerDiscAbc12
+    subTrack kiddEichlerDisc
+    shortLabel Discordant ABC12
+    longLabel HGSV Individual ABC12 (CEPH) Discordant Clone End Alignments
+    priority 3
+
+    track kiddEichlerDiscAbc11
+    subTrack kiddEichlerDisc
+    shortLabel Discordant ABC11
+    longLabel HGSV Individual ABC11 (China) Discordant Clone End Alignments
+    priority 4
+
+    track kiddEichlerDiscAbc10
+    subTrack kiddEichlerDisc
+    shortLabel Discordant ABC10
+    longLabel HGSV Individual ABC10 (Yoruba) Discordant Clone End Alignments
+    priority 5
+
+    track kiddEichlerDiscAbc9
+    subTrack kiddEichlerDisc
+    shortLabel Discordant  ABC9
+    longLabel HGSV Individual ABC9 (Japan) Discordant Clone End Alignments
+    priority 6
+
+    track kiddEichlerDiscAbc8
+    subTrack kiddEichlerDisc
+    shortLabel Discordant  ABC8
+    longLabel HGSV Individual ABC8 (Yoruba) Discordant Clone End Alignments
+    priority 7
+
+    track kiddEichlerDiscAbc7
+    subTrack kiddEichlerDisc
+    shortLabel Discordant  ABC7
+    longLabel HGSV Individual ABC7 (Yoruba) Discordant Clone End Alignments
+    priority 8
+
+    track kiddEichlerDiscG248
+    subTrack kiddEichlerDisc
+    shortLabel Discordant  G248
+    longLabel HGSV Individual G248 Discordant Clone End Alignments
+    priority 9
+
 track jaxQtlMapped
 compositeTrack on
 shortLabel MGI Mouse QTL
