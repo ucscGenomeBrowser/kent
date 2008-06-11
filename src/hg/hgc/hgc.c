@@ -214,7 +214,7 @@
 #include "itemConf.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1427 2008/06/11 18:34:52 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1428 2008/06/11 23:06:27 angie Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -703,15 +703,18 @@ printPos(smp->chrom, smp->chromStart, smp->chromEnd, NULL, TRUE, smp->name);
 }
 
 
-void bedPrintPos(struct bed *bed, int bedSize)
-/* Print first three fields of a bed type structure in
+void bedPrintPos(struct bed *bed, int bedSize, struct trackDb *tdb)
+/* Print first bedSize fields of a bed type structure in
  * standard format. */
 {
 char *strand = NULL;
 if (bedSize >= 4 && bed->name[0] != 0)
     printf("<B>Item:</B> %s<BR>\n", bed->name);
 if (bedSize >= 5)
-    printf("<B>Score:</B> %d<BR>\n", bed->score);
+    {
+    if (!tdb || !trackDbSetting(tdb, "noScoreFilter"))
+	printf("<B>Score:</B> %d<BR>\n", bed->score);
+    }
 if (bedSize >= 6)
    {
    strand = bed->strand;
@@ -1052,7 +1055,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     else
 	htmlHorizontalLine();
     bed = bedLoadN(row+hasBin, 4);
-    bedPrintPos(bed, 4);
+    bedPrintPos(bed, 4, tdb);
     }
 sqlFreeResult(&sr);
 
@@ -1066,7 +1069,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	htmlHorizontalLine();
 	firstTime = FALSE;
 	printf("<B>Another instances on %s:</B><BR>\n",database);
-	bedPrintPos(bed, 4);
+	bedPrintPos(bed, 4, tdb);
 	}
     }
 sqlFreeResult(&sr);
@@ -1205,7 +1208,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     else
 	htmlHorizontalLine();
     bed = bedLoadN(row+hasBin, bedSize);
-    bedPrintPos(bed, bedSize);
+    bedPrintPos(bed, bedSize, tdb);
     }
 sqlFreeResult(&sr);
 getBedTopScorers(conn, tdb, table, item, start, bedSize);
@@ -1347,7 +1350,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     else
 	htmlHorizontalLine();
     bed = bedLoadN(row+hasBin, bedSize);
-    bedPrintPos(bed, bedSize);
+    bedPrintPos(bed, bedSize, tdb);
     }
 }
 
@@ -3187,7 +3190,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     else
 	htmlHorizontalLine();
     b5 = bed5FloatScoreLoad(row+hasBin);
-    bedPrintPos((struct bed *)b5, 4);
+    bedPrintPos((struct bed *)b5, 4, tdb);
     printf("<B>Score:</B> %f<BR>\n", b5->floatScore);
     if (sameString(tdb->type, "bed5FloatScoreWithFdr"))
         {
@@ -3230,7 +3233,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     else
 	htmlHorizontalLine();
     b6 = bed6FloatScoreLoad(row+hasBin);
-    bedPrintPos((struct bed *)b6, 4);
+    bedPrintPos((struct bed *)b6, 4, tdb);
     printf("<B>Score:</B> %f<BR>\n", b6->score);
     printf("<B>Strand:</B> %s<BR>\n", b6->strand);
     }
@@ -3252,7 +3255,7 @@ sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     {
     struct bed *itemBed = bedLoad6(row);
-    bedPrintPos(itemBed, 6);
+    bedPrintPos(itemBed, 6, tdb);
     bedFree(&itemBed);
     }
 else
@@ -6894,7 +6897,7 @@ if (cgiVarExists("o"))
     while ((row = sqlNextRow(sr)) != NULL)
 	{
 	pro = softPromoterLoad(row+rowOffset);
-	bedPrintPos((struct bed *)pro, 3);
+	bedPrintPos((struct bed *)pro, 3, NULL);
 	printf("<B>Short Name:</B> %s<BR>\n", pro->name);
 	printf("<B>Full Name:</B> %s<BR>\n", pro->origName);
 	printf("<B>Type:</B> %s<BR>\n", pro->type);
@@ -6963,7 +6966,7 @@ if (cgiVarExists("o"))
 	    island = cpgIslandLoad(row+rowOffset);
 	if (! startsWith("CpG: ", island->name))
 	    printf("<B>Name:</B> %s<BR>\n", island->name);
-	bedPrintPos((struct bed *)island, 3);
+	bedPrintPos((struct bed *)island, 3, tdb);
 	printf("<B>Size:</B> %d<BR>\n", island->chromEnd - island->chromStart);
 	printf("<B>CpG count:</B> %d<BR>\n", island->cpgNum);
 	printf("<B>C count plus G count:</B> %d<BR>\n", island->gcNum);
@@ -9903,7 +9906,7 @@ sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     {
     bed = bedLoadN(row+hasBin, n);
-    bedPrintPos(bed, n);
+    bedPrintPos(bed, n, tdb);
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
@@ -10199,7 +10202,7 @@ sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     bgiSnpStaticLoad(row+rowOffset, &snp);
-    bedPrintPos((struct bed *)&snp, 3);
+    bedPrintPos((struct bed *)&snp, 3, tdb);
     printf("<B>SNP Type:</B> %s<BR>\n",
 	   (snp.snpType[0] == 'S') ? "Substitution" : 
 	   (snp.snpType[0] == 'I') ? "Insertion" : "Deletion");
@@ -11056,7 +11059,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
     est3StaticLoad(row+rowOffset, &el);
     printf("<B>EST 3' End Count:</B> %d<BR>\n", el.estCount);
-    bedPrintPos((struct bed *)&el, 3);
+    bedPrintPos((struct bed *)&el, 3, NULL);
     printf("<B>strand:</B> %s<BR>\n", el.strand);
     htmlHorizontalLine();
     }
@@ -11091,7 +11094,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
     encodeRnaStaticLoad(row + rowOffset, &rna);
     printf("<B>name:</B> %s<BR>\n", rna.name);
-    bedPrintPos((struct bed *)&rna, 3);
+    bedPrintPos((struct bed *)&rna, 3, tdb);
     printf("<B>strand:</B> %s<BR>\n", rna.strand);
     printf("<B>type:</B> %s<BR>\n", rna.type);
     printf("<B>score:</B> %2.1f<BR><BR>\n", rna.fullScore);
@@ -11140,7 +11143,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("<B>is pseudo-gene:</B> %s<BR>\n", (rna.isPsuedo ? "yes" : "no"));
     printf("<B>program predicted with:</B> %s<BR>\n", rna.source);
     printf("<B>strand:</B> %s<BR>\n", rna.strand);
-    bedPrintPos((struct bed *)&rna, 3);
+    bedPrintPos((struct bed *)&rna, 3, tdb);
     htmlHorizontalLine();
     }
 printTrackHtml(tdb);
@@ -12634,13 +12637,13 @@ if (sameString(group,"snpMap"))
     while ((row = sqlNextRow(sr)) != NULL)
 	{
 	snpMapStaticLoad(row+rowOffset, &snpMap);
-	bedPrintPos((struct bed *)&snpMap, 3);
+	bedPrintPos((struct bed *)&snpMap, 3, tdb);
 	}
 else
     while ((row = sqlNextRow(sr)) != NULL)
 	{
 	snpStaticLoad(row+rowOffset, &snp);
-	bedPrintPos((struct bed *)&snp, 3);
+	bedPrintPos((struct bed *)&snp, 3, tdb);
 	}
 /* write dbSnpRs details if found. */
 printId = doDbSnpRs(itemName);
@@ -12664,7 +12667,7 @@ hFreeConn(&conn);
 }
 
 void writeSnpException(char *exceptionList, char *itemName, int rowOffset, 
-		       char *chrom, int chromStart)
+		       char *chrom, int chromStart, struct trackDb *tdb)
 {
 char    *tokens;
 struct   lineFile      *lf;
@@ -12719,7 +12722,7 @@ if (multiplePositions)
 	snpStaticLoad(row+rowOffset, &snp);
 	if (differentString(chrom,snp.chrom) || chromStart!=snp.chromStart)
 	    {
-	    bedPrintPos((struct bed *)&snp, 3);
+	    bedPrintPos((struct bed *)&snp, 3, tdb);
 	    printf("<BR>\n");
 	    }
 	}
@@ -13188,7 +13191,7 @@ while ((row = sqlNextRow(sr))!=NULL)
 	exception=cloneString(snp.exception);
 	chrom = cloneString(snp.chrom);
 	chromStart = snp.chromStart;
-	bedPrintPos((struct bed *)&snp, 3);
+	bedPrintPos((struct bed *)&snp, 3, tdb);
 	printf("<BR>\n");
 	firstOne=0;
 	}
@@ -13202,7 +13205,7 @@ if (startsWith("rs",itemName))
     }
 printLsSnpLinks(snp);
 if (hTableExists("snpExceptions") && differentString(exception,"0"))
-    writeSnpException(exception, itemName, rowOffset, chrom, chromStart);
+    writeSnpException(exception, itemName, rowOffset, chrom, chromStart, tdb);
 printTrackHtml(tdb);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
@@ -13333,7 +13336,7 @@ sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     cnpLockeStaticLoad(row+rowOffset, &thisItem);
-    bedPrintPos((struct bed *)&thisItem, 3);
+    bedPrintPos((struct bed *)&thisItem, 3, tdb);
     printf("<BR><B>Variation Type</B>: %s\n",thisItem.variationType);
     }
 printTrackHtml(tdb);
@@ -13363,7 +13366,7 @@ sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     cnpIafrateStaticLoad(row+rowOffset, &cnpIafrate);
-    bedPrintPos((struct bed *)&cnpIafrate, 3);
+    bedPrintPos((struct bed *)&cnpIafrate, 3, tdb);
     printf("<BR><B>Variation Type</B>: %s\n",cnpIafrate.variationType);
     printf("<BR><B>Score</B>: %g\n",cnpIafrate.score);
     }
@@ -13394,7 +13397,7 @@ sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     cnpIafrate2StaticLoad(row+rowOffset, &thisItem);
-    bedPrintPos((struct bed *)&thisItem, 3);
+    bedPrintPos((struct bed *)&thisItem, 3, tdb);
     printf("<BR><B>Cohort Type</B>: %s\n",thisItem.cohortType);
     if (strstr(thisItem.cohortType, "Control"))
         {
@@ -13431,7 +13434,7 @@ sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     delHinds2StaticLoad(row+rowOffset, &thisItem);
-    bedPrintPos((struct bed *)&thisItem, 3);
+    bedPrintPos((struct bed *)&thisItem, 3, tdb);
     printf("<BR><B>Frequency</B>: %3.2f%%\n",thisItem.frequency);
     }
 printTrackHtml(tdb);
@@ -13458,7 +13461,7 @@ sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     delConrad2StaticLoad(row+rowOffset, &thisItem);
-    bedPrintPos((struct bed *)&thisItem, 3);
+    bedPrintPos((struct bed *)&thisItem, 3, tdb);
     printf("<BR><B>HapMap individual</B>: %s\n",thisItem.offspring);
     printf("<BR><B>HapMap population</B>: %s\n",thisItem.population);
     }
@@ -13487,7 +13490,7 @@ sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     cnpSebatStaticLoad(row+rowOffset, &cnpSebat);
-    bedPrintPos((struct bed *)&cnpSebat, 3);
+    bedPrintPos((struct bed *)&cnpSebat, 3, tdb);
     printf("<BR><B>Number of probes</B>: %d\n",cnpSebat.probes);
     printf("<BR><B>Number of individuals</B>: %d\n",cnpSebat.individuals);
     }
@@ -13515,7 +13518,7 @@ sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     cnpSebat2StaticLoad(row+rowOffset, &cnpSebat2);
-    bedPrintPos((struct bed *)&cnpSebat2, 3);
+    bedPrintPos((struct bed *)&cnpSebat2, 3, tdb);
     printf("<BR><B>Number of probes</B>: %d\n",cnpSebat2.probes);
     }
 printTrackHtml(tdb);
@@ -13647,7 +13650,7 @@ sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     cnpSharpStaticLoad(row+rowOffset, &cnpSharp);
-    bedPrintPos((struct bed *)&cnpSharp, 3);
+    bedPrintPos((struct bed *)&cnpSharp, 3, tdb);
     printCnpSharpDetails(cnpSharp);
     }
 sqlFreeResult(&sr);
@@ -13679,7 +13682,7 @@ sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     cnpSharp2StaticLoad(row+rowOffset, &cnpSharp2);
-    bedPrintPos((struct bed *)&cnpSharp2, 3);
+    bedPrintPos((struct bed *)&cnpSharp2, 3, tdb);
     printf("<B>Name: </B> %s <BR>\n", cnpSharp2.name);
     printf("<B>Variation type: </B> %s <BR>\n", cnpSharp2.variationType);
     }
@@ -13774,7 +13777,7 @@ sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     snpStaticLoad(row+rowOffset, &snp);
-    bedPrintPos((struct bed *)&snp, 3);
+    bedPrintPos((struct bed *)&snp, 3, tdb);
     }
 doAffy120KDetails(tdb, itemName);
 printTrackHtml(tdb);
@@ -13860,7 +13863,7 @@ sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     snpStaticLoad(row+rowOffset, &snp);
-    bedPrintPos((struct bed *)&snp, 3);
+    bedPrintPos((struct bed *)&snp, 3, tdb);
     }
 doAffy10KDetails(tdb, itemName);
 printTrackHtml(tdb);
@@ -14130,7 +14133,7 @@ if ((row = sqlNextRow(sr)) != NULL)
     {
     snp125StaticLoad(row+rowOffset, &snp);
     printCustomUrl(tdb, itemName, FALSE);
-    bedPrintPos((struct bed *)&snp, 3);
+    bedPrintPos((struct bed *)&snp, 3, tdb);
     snpAlign = snp125ToSnp(&snp);
     printf("<BR>\n");
     printSnp125Info(tdb, snp, version);
@@ -14154,7 +14157,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    printf("<BR><B>This SNP maps to these additional locations:"
 		   "</B><BR><BR>");
 	snpCount++;
-	bedPrintPos((struct bed *)&snp, 3);
+	bedPrintPos((struct bed *)&snp, 3, tdb);
 	printf("<BR>");
 	}
     }
@@ -14252,7 +14255,7 @@ if ((row = sqlNextRow(sr)) != NULL)
     if (isNotEmpty(marker))
 	printf("<B>MIT SSLP marker with highest correlation:</B> %s<BR>",
 	       marker);
-    bedPrintPos(bed, 3);
+    bedPrintPos(bed, 3, tdb);
     }
 printTrackHtml(tdb);
 
@@ -14354,7 +14357,7 @@ if ((row = sqlNextRow(sr)) != NULL)
 	}
     printf("<BR>");
     bed = bedLoadN(row+hasBin, bedSize);
-    bedPrintPos(bed, bedSize);
+    bedPrintPos(bed, bedSize, tdb);
     }
 sqlFreeResult(&sr);
 printTrackHtml(tdb);
@@ -14829,7 +14832,7 @@ while ((row = sqlNextRow(sr)) != NULL)
         printf("<B>Variant and Reference Sequences: </B><BR>\n");
         printf("<PRE><TT>%s<BR>\n", encodeIndel.variant);
         printf("%s</TT></PRE><BR>\n", encodeIndel.reference);
-        bedPrintPos((struct bed *)&encodeIndel, 3);
+        bedPrintPos((struct bed *)&encodeIndel, 3, tdb);
         firstTime = FALSE;
         printf("-----------------------------------------------------<BR>\n");
         }
@@ -15348,7 +15351,7 @@ if (cgiVarExists("o"))
 	    htmlHorizontalLine();
 	celeraDupPositiveStaticLoad(row+rowOffset, &dup);
 	printf("<B>Duplication Name:</B> %s<BR>\n", dup.name);
-	bedPrintPos((struct bed *)(&dup), 3);
+	bedPrintPos((struct bed *)(&dup), 3, tdb);
 	if (!sameString(dup.name, dup.fullName))
 	    printf("<B>Full Descriptive Name:</B> %s<BR>\n", dup.fullName);
 	if (dup.bpAlign > 0)
@@ -15453,7 +15456,7 @@ if (cgiVarExists("o"))
     while ((row = sqlNextRow(sr)))
 	{
 	genomicSuperDupsStaticLoad(row+rowOffset, &dup);
-	bedPrintPos((struct bed *)(&dup), 6);
+	bedPrintPos((struct bed *)(&dup), 6, tdb);
 	printf("<B>Other Position:</B> "
 	       "<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">"
 	       "%s:%d-%d</A> &nbsp;&nbsp;&nbsp;\n",
@@ -15747,7 +15750,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("<B>Number of SNPs in block:</B> %d<BR>\n", bed->blockCount);
     printf("<B>Number of SNPs to represent block:</B> %d<BR>\n",numSnpsReq);
     printf("<B>Strand:</B> %s<BR>\n", bed->strand);
-    bedPrintPos(bed, 3);
+    bedPrintPos(bed, 3, tdb);
     }
 printTrackHtml(tdb);
 hFreeConn(&conn);
@@ -15792,7 +15795,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("<B>Number of SNPs in block:</B> %d<BR>\n", bed->blockCount);
     /*    printf("<B>Number of SNPs to represent block:</B> %d<BR>\n",numSnpsReq);*/
     printf("<B>Strand:</B> %s<BR>\n", bed->strand);
-    bedPrintPos(bed, 3);
+    bedPrintPos(bed, 3, tdb);
     }
 printTrackHtml(tdb);
 hFreeConn(&conn);
@@ -15865,7 +15868,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("<B>Number of SNPs in block:</B> %d<BR>\n", bed->blockCount);
     printf("<B>Number of SNPs to represent block:</B> %d<BR>\n",numSnpsReq);
     printf("<B>Strand:</B> %s<BR>\n", bed->strand);
-    bedPrintPos(bed, 3);
+    bedPrintPos(bed, 3, tdb);
     }
 printTrackHtml(tdb);
 hFreeConn(&conn);
@@ -15924,7 +15927,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 
     printf("<h4><i>Human Sequence</i></h4>");
     printf("<B>Strand:</B> %s<BR>\n", bed->strand);
-    bedPrintPos(bed, 3);
+    bedPrintPos(bed, 3, tdb);
 
     }
 
@@ -16961,7 +16964,7 @@ else
 	errAbort("Couldn't find %s@%s:%d in %s", itemName, seqName,
 		start, fileName);
     printCustomUrl(ct->tdb, itemName, TRUE);
-    bedPrintPos(bed, ct->fieldCount);
+    bedPrintPos(bed, ct->fieldCount, NULL);
     }
 if (ct->dbTrack)
     {
@@ -17252,7 +17255,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     simpleNucDiffStaticLoad(row + rowOffset, &snd);
     printf("<B>%s sequence:</B> %s<BR>\n", hOrganism(database), snd.tSeq);
     printf("<B>%s sequence:</B> %s<BR>\n", otherOrg, snd.qSeq);
-    bedPrintPos((struct bed*)&snd, 3);
+    bedPrintPos((struct bed*)&snd, 3, tdb);
     printf("<BR>\n");
     }
 sqlFreeResult(&sr);
@@ -17370,7 +17373,7 @@ if ((row = sqlNextRow(sr)) != NULL)
     char *words[4];
     int wordCount = 0;
     bed = bedLoad6(row+hasBin);
-    bedPrintPos(bed, 4);
+    bedPrintPos(bed, 4, tdb);
     printf("<B>Strand:</B> %s<BR>\n", bed->strand);
     wordCount = chopByChar(bed->name, '.', words, ArraySize(words));
     if (wordCount == 3 && hDbExists(words[1]))
@@ -17483,11 +17486,11 @@ printTrackHtml(tdb);
 }
 
 
-static void printESPDetails(char **row)
+static void printESPDetails(char **row, struct trackDb *tdb)
 /* Print details from a cell line subtrack table of encodeStanfordPromoters. */
 {
 struct encodeStanfordPromoters *esp = encodeStanfordPromotersLoad(row);
-bedPrintPos((struct bed *)esp, 6);
+bedPrintPos((struct bed *)esp, 6, tdb);
 printf("<B>Gene model ID:</B> %s<BR>\n", esp->geneModel);
 printf("<B>Gene description:</B> %s<BR>\n", esp->description);
 printf("<B>Luciferase signal A:</B> %d<BR>\n", esp->lucA);
@@ -17500,12 +17503,12 @@ printf("<B>Normalized and log2 transformed Luciferase/Renilla Ratio:</B> %g<BR>\
        esp->normLog2Ratio);
 }
 
-static void printESPAverageDetails(char **row)
+static void printESPAverageDetails(char **row, struct trackDb *tdb)
 /* Print details from the averaged subtrack table of encodeStanfordPromoters. */
 {
 struct encodeStanfordPromotersAverage *esp =
     encodeStanfordPromotersAverageLoad(row);
-bedPrintPos((struct bed *)esp, 6);
+bedPrintPos((struct bed *)esp, 6, tdb);
 printf("<B>Gene model ID:</B> %s<BR>\n", esp->geneModel);
 printf("<B>Gene description:</B> %s<BR>\n", esp->description);
 printf("<B>Normalized and log2 transformed Luciferase/Renilla Ratio:</B> %g<BR>\n",
@@ -17533,9 +17536,9 @@ sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     {
     if (endsWith(tdb->tableName, "Average"))
-	printESPAverageDetails(row+hasBin);
+	printESPAverageDetails(row+hasBin, tdb);
     else
-	printESPDetails(row+hasBin);
+	printESPDetails(row+hasBin, tdb);
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
@@ -17563,7 +17566,7 @@ sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     {
     struct bed *bed = bedLoadN(row+hasBin, 5);
-    bedPrintPos(bed, 5);
+    bedPrintPos(bed, 5, tdb);
     printf("<B>Primer pair ID:</B> %s<BR>\n", row[hasBin+5]);
     printf("<B>Count:</B> %s<BR>\n", row[hasBin+6]);
     }
@@ -17594,7 +17597,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     encodeHapMapAlleleFreqStaticLoad(row+rowOffset, &alleleFreq);
     printf("<B>Variant:</B> %s<BR>\n", alleleFreq.otherAllele);
     printf("<B>Reference:</B> %s<BR>\n", alleleFreq.refAllele);
-    bedPrintPos((struct bed *)&alleleFreq, 3);
+    bedPrintPos((struct bed *)&alleleFreq, 3, tdb);
     printf("<B>Reference Allele Frequency:</B> %f <BR>\n", alleleFreq.refAlleleFreq);
     printf("<B>Other Allele Frequency:</B> %f <BR>\n", alleleFreq.otherAlleleFreq);
     printf("<B>Center:</B> %s <BR>\n", alleleFreq.center);
@@ -18638,7 +18641,7 @@ sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     dvBedStaticLoad(row+rowOffset, &dvBed);
-    bedPrintPos((struct bed *)&dvBed, 3);
+    bedPrintPos((struct bed *)&dvBed, 3, tdb);
     }
 sqlFreeResult(&sr);
 
@@ -18759,7 +18762,7 @@ if ((row = sqlNextRow(sr)) != NULL)
         printf("<B>ORegAnno name:</B> %s <BR>\n", r->name);
     #endif
     printf("<B>Strand:</B> %s<BR>\n", r->strand);
-    bedPrintPos((struct bed *)r, 3);
+    bedPrintPos((struct bed *)r, 3, tdb);
     /* start html list for attributes */
     printf("<DL>");
     }

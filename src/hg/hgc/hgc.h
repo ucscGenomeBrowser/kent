@@ -102,7 +102,7 @@ void printPos(char *chrom, int start, int end, char *strand, boolean featDna,
 	      char *item);
 /* Print position lines.  'strand' argument may be null. */
 
-void bedPrintPos(struct bed *bed, int bedSize);
+void bedPrintPos(struct bed *bed, int bedSize, struct trackDb *tdb);
 /* Print first three fields of a bed type structure in
  * standard format. */
 

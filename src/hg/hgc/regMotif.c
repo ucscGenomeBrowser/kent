@@ -187,7 +187,7 @@ if ((row = sqlNextRow(sr)) != NULL)
     printf("<B>PubMed ID:</B> <A HREF=\"");
     printEntrezPubMedUidUrl(stdout, fr.pmid);
     printf("\" TARGET=_BLANK>%d</A><BR>\n", fr.pmid);
-    bedPrintPos((struct bed *)(&fr), 3);
+    bedPrintPos((struct bed *)(&fr), 3, tdb);
     if (hTableExists(motifTable))
 	{
 	motif = loadDnaMotif(item, motifTable);
