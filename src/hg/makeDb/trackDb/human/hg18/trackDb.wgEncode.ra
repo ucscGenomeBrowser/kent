@@ -259,3 +259,36 @@ dateSubmitted June 2008
     priority 2
     color 25,150,25
 
+
+        track wgEncodeStanfordChipSeq
+        superTrack on
+        shortLabel Stanford ChiP-Seq
+        longLabel Stanford ChiP-Seq
+        group regulation
+        priority 2000
+        labelImg encode.ico
+
+track wgEncodeStanfordChipSites
+superTrack wgEncodeStanfordChipSeq dense
+compositeTrack on
+shortLabel Stanf Sites
+longLabel Stanford ChIP-Seq Sites
+useScore 1
+type bed 5
+
+track wgEncodeStanfordChipSitesSK_N_MCFOXP2
+subTrack wgEncodeStanfordChipSites
+shortLabel FOXP2/SK-N-M-C
+longLabel Encode Whole Genome - Stanford ChiP-Seq Sites for FOXP2 in SK-N-MC cell line
+
+track wgEncodeStanfordChipOverlaps
+superTrack wgEncodeStanfordChipSeq dense
+compositeTrack on
+shortLabel Stanf ChiP Overlaps
+longLabel Stanford ChIP-Seq Overlaps
+type wig
+
+track wgEncodeStanfordChipOverlapsSK_N_MCFOXP2
+subTrack wgEncodeStanfordChipOverlaps
+shortLabel FOXP2/SK-N-M-C
+longLabel Encode Whole Genome - Stanford ChiP-Seq Overlaps for FOXP2 in SK-N-MC cell line
