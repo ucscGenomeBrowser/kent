@@ -26,6 +26,8 @@ if ( $#argv < 2 || $#argv > 3 ) then
   echo '           tablelist may also be single table or "all"'
   echo "           machine defaults to hgwbeta"
   echo
+  echo '    note: includes assembly description.html page if "all"'
+  echo
   exit
 else
   set db=$argv[1]
@@ -67,22 +69,28 @@ else
   set tables=$tableinput
 endif
 
+# set hgsid so don't fill up sessionDb table
+set baseUrl="http://$machine.cse.ucsc.edu"
+set hgsid=`htmlCheck  getVars $baseUrl/cgi-bin/hgGateway | grep hgsid \
+  | head -1 | awk '{print $4}'`
+
+echo "hgw1 hgw2 hgw3 hgw4 hgw5 hgw6 hgw7 hgw8 " | grep $machine
+if ( $status ) then 
+  set rr="true"
+endif
+
 # process "all" choice
 if ("all" == $tableinput) then
   set tables=`getField.csh $db trackDb tableName $machine \
      | grep -v tableName`
+  set target="$baseUrl/cgi-bin/hgGateway?hgsid=$hgsid&db=$db"
+  # check description page if doing all of an assambly
+  echo
+  echo "description.html page:"
+  echo "======================"
+  htmlCheck checkLinks "$target" 
+  echo
 endif
-
-# set hgsid so don't fill up sessionDb table
-set baseUrl="http://$machine.cse.ucsc.edu/"
-set hgsid=`htmlCheck  getVars $baseUrl/cgi-bin/hgGateway | grep hgsid \
-  | head -1 | awk '{print $4}'`
-
-foreach node ( hgw1 hgw2 hgw3 hgw4 hgw5 hgw6 hgw7 hgw8 )
-  if ( $machine == $node ) then 
-    set rr="true"
-  endif
-end
 
 foreach table ($tables)
   echo
