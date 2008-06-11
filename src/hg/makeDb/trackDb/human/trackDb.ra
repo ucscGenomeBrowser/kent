@@ -789,6 +789,7 @@ group varRep
 priority 144.84
 visibility hide
 itemRgb on
+noScoreFilter .
 type bed 9
 
     track kiddEichlerValidAbc14
