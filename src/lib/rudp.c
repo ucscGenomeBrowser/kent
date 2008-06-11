@@ -55,7 +55,7 @@
 #include "errabort.h"
 #include "rudp.h"
 
-static char const rcsid[] = "$Id: rudp.c,v 1.16 2008/06/10 19:53:42 galt Exp $";
+static char const rcsid[] = "$Id: rudp.c,v 1.17 2008/06/11 09:04:02 galt Exp $";
 
 #define MAX_TIME_OUT 999999
 
@@ -320,7 +320,7 @@ for (i=0; i<maxRetry; ++i)
 	{
 	/* Warn, wait, and retry. */
 	struct timeval tv;
-	warn(" sendto problem %s", strerror(errno));
+	warn("sendto problem %s", strerror(errno));
 	tv.tv_sec = 0;
 	tv.tv_usec = ru->timeOut;
 	select(0, NULL, NULL, NULL, &tv);
