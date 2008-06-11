@@ -9,10 +9,11 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.21 2008/06/06 22:18:11 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.22 2008/06/11 18:00:37 larrym Exp $
 
 use warnings;
 use strict;
+
 use lib "/cluster/bin/scripts";
 use HgAutomate;
 use File::stat;
@@ -27,7 +28,7 @@ use vars qw/
     /;
 
 sub usage {
-    print STDERR "
+    print STDERR <<END;
 usage: encodeValidate.pl submission-type project-submission-dir
 options:
     -verbose num        Set verbose level to num (default 1).            -
@@ -35,7 +36,7 @@ options:
                         metadata .ra files (default: submission-dir/../config)
     -outDir dir         Path of output directory, for validation files
                         (default: submission-dir/out)
-";
+END
 exit 1;
 }
 
@@ -230,6 +231,22 @@ sub validateGene {
         &HgAutomate::verbose(2, "File \'$file\' passed GFF validation\n");
     }
 }
+
+sub validateMappedReads {
+    my ($file, $type) = @_;
+    my $filePath = "$submitPath/$file";
+    my $line = 0;
+    open(FILE, $filePath) or die "Couldn't open file: $filePath; error: $!\n";
+    while(<FILE>) {
+        $line++;
+        if(!(/chr\d+\t\d+\t\d+\t[ATCG]+\t\d+\t[+-]\t.*/)) {
+            die "Line number $line is invalid\nline: $_";
+        }
+    }
+    close(FILE);
+    HgAutomate::verbose(2, "File \'$file\' passed mappedReads validation\n");
+}
+
 
 ############################################################################
 # Misc subroutines
@@ -559,25 +576,36 @@ foreach $dataset (keys %datasets) {
     # Construct table name from track name and variables
     my $trackName = "wgEncode" . $dataType;
     my $tableName = $trackName;
-    if (defined($pif{'variables'})) {
-        my @variables = @{$pif{'variableArray'}};
-        for (my $i = 0; $i < @variables; $i++) {
-            $tableName = $tableName . $datasetRef->[$ddfHeader{$variables[$i]}];
+    my $shortLabel = $trackName;
+    my $longLabel = $trackName;
+    if (defined($pif{variables})) {
+        my @variables = @{$pif{variableArray}};
+        my %hash = map { $_ => $datasetRef->[$ddfHeader{$_}] } @variables;
+        for my $var (@variables) {
+            $tableName = $tableName . $datasetRef->[$ddfHeader{$var}];
+        }
+        if($hash{"Antibody REF"} && $hash{"Cell Line REF"}) {
+            $shortLabel = "$hash{'Antibody REF'} in $hash{'Cell Line REF'}";
+            $longLabel = "$dataType: $hash{'Antibody REF'} in $hash{'Cell Line REF'}";
         }
     }
     # mysql doesn't allow hyphens in table names.
     $tableName =~ s/-/_/g;
     print LOADER_RA "tablename $tableName\n";
     print LOADER_RA "track $trackName\n";
-    print LOADER_RA "type $tracks{$dataType}->{'type'}\n";
+    print LOADER_RA "type $tracks{$dataType}->{type}\n";
     print LOADER_RA "tableType $tableType\n" if defined($tableType);
     print LOADER_RA "assembly $datasetRef->[$ddfHeader{'Assembly REF'}]\n";
     print LOADER_RA "files @{$datasetRef->[$ddfHeader{'File Name'}]}\n";
     print LOADER_RA "\n";
 
     # XXXX This is a work in progress; assign as subtracks?
-    print TRACK_RA "track $trackName\n";
-    print TRACK_RA "type $tracks{$dataType}->{'type'}\n";
+    print TRACK_RA "track\t$tableName\n";
+    print TRACK_RA "subTrack\t$trackName\n";
+    print TRACK_RA "shortLabel\t$shortLabel\n";
+    print TRACK_RA "longLabel\t$longLabel\n";
+    my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time());
+    print TRACK_RA sprintf("dateSubmitted\t%d-%02d-%d %d:%d:%d\n", 1900 + $year, $mon + 1, $mday, $hour, $min, $sec);
     print TRACK_RA "\n";
 
 }
