@@ -24396,14 +24396,19 @@ See hg18.txt for details.
         ($c, $s, $e, $n, $sc, $st, undef, $bs, $bSt, $bSz)=split; \
         @bSts = split(",", $bSt);  @bSzs = split(",", $bSz); \
         $s--; \
-        if ($bs == 1) { \
+        if ($n =~ /transchr/) { \
+          $bs = 1; \
+          $#bSts = 0;  $#bSzs = 0; \
+          $bSts[0]--;  $e--; \
+          $bSts[0] -= $s; \
+        } elsif ($n =~ /OEA/) { \
           $bSts[0]--; \
           die "bSts[0] $bSts[0] != s $s\n" if ($bSts[0] != $s); \
           $bE = $bSts[0] + $bSzs[0]; \
           die "bE $bE != e $e\n" if ($bE != $e); \
           $bSts[0] -= $s; \
         } elsif ($bs == 2) { \
-           $bSts[0]--;  $bSts[1]--; \
+          $bSts[0]--;  $bSts[1]--; \
           if ($bSts[0] > $bSts[1]) { \
             # warn "Swapping $n ($bSts[0] > $bSts[1])\n"; \
             $tmp = $bSts[0];  $bSts[0] = $bSts[1];  $bSts[1] = $tmp; \
@@ -24421,20 +24426,28 @@ See hg18.txt for details.
             $e = $bE; \
           } \
           $bSts[0] -= $s;  $bSts[1] -= $s; \
-        } else { die "#blks is $bs\n"; } \
+        } else { die "#blks is $bs for $n\n"; } \
         $bSt = join(",", @bSts) . ",";  $bSz = join(",", @bSzs) . ","; \
-        no warnings; \
-        $n =~ s/(transchr)m_chr([0-9XYM]+)(_r)?.*/$1_$2$3/; \
-        use warnings; \
-        $_ = join("\t", $c, $s, $e, $n, $sc, $st, $s, $e, 0, $bs, $bSz, $bSt) . \
-                  "\n";' $f \
-      | hgLoadBed -notItemRgb -tab hg17 $track stdin
+        $rgb = ($n =~ /deletion/) ? "224,0,0" : \
+               ($n =~ /insertion/) ? "0,0,224" : \
+               ($n =~ /inversion/) ? "0,224,0" : \
+               ($n =~ /OEA/) ? "240,160,64" : "0,0,0"; \
+        $_ = join("\t", $c, $s, $e, $n, $sc, $st, $s, $e, $rgb, \
+                        $bs, $bSz, $bSt) . "\n";' $f \
+      | hgLoadBed -tab hg17 $track stdin
     end
     perl -pe 'next if s/^track .*\n$//; \
         ($c, $s, $e, $n, $sc, $st, $tS, $tE, $r, $bs, $bSz, $bSt) = split; \
         @bSts = split(",", $bSt);  @bSzs = split(",", $bSz); \
-        if ($bs == 1) { \
-          $s--; # weird that this is required only if single block \
+        if ($n =~ /transchr/) { \
+          $bs = 1; \
+          $#bSts = 0;  $#bSzs = 0; \
+        } \
+        if ($n =~ /transchr/) { \
+          $bs = 1; \
+          $#bSts = 0;  $#bSzs = 0; \
+        } elsif ($n =~ /OEA/) { \
+          $s--; # weird that this is required only for OEA here \
           die "$n: bSts[0] $bSts[0] != 0\n" if ($bSts[0] != 0); \
           $bE = $s + $bSts[0] + $bSzs[0]; \
           die "$n: bE $bE != e $e\n" if ($bE != $e); \
@@ -24459,14 +24472,14 @@ See hg18.txt for details.
          $bSts[0] -= $s;  $bSts[1] -= $s; \
         } else { die "#blks is $bs\n"; } \
         $bSt = join(",", @bSts) . ",";  $bSz = join(",", @bSzs) . ","; \
-        no warnings; \
         $tS = $s;  $tE = $e; \
-        $n =~ s/(transchr)m_chr([0-9XYM]+)(_r)?.*/$1_$2$3/; \
-        use warnings; \
-        $_ = join("\t", \
-                  $c, $s, $e, $n, $sc, $st, $tS, $tE, $r, $bs, $bSz, $bSt) . \
-                  "\n";' G248discordant.txt \
-    | hgLoadBed -notItemRgb -tab hg17 kiddEichlerDiscG248 \
+        $rgb = ($n =~ /deletion/) ? "224,0,0" : \
+               ($n =~ /insertion/) ? "0,0,224" : \
+               ($n =~ /inversion/) ? "0,224,0" : \
+               ($n =~ /OEA/) ? "240,160,64" : "0,0,0"; \
+        $_ = join("\t", $c, $s, $e, $n, $sc, $st, $tS, $tE, $rgb, \
+                        $bs, $bSz, $bSt) . "\n";' G248discordant.txt \
+    | hgLoadBed -tab hg17 kiddEichlerDiscG248 \
         stdin
 
 
