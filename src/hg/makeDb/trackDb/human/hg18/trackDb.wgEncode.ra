@@ -215,7 +215,7 @@ priority 96.3
 track wgEncodeDukeDnase
 compositeTrack on
 shortLabel ENC Duke DNase
-longLabel Encode Whole Genome - Duke DNaseI
+longLabel Encode Whole Genome - Duke DNaseI Hypersensitivity
 group regulation
 priority 510
 type bed 5 +
