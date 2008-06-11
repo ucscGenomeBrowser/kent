@@ -55,7 +55,7 @@
 #include "errabort.h"
 #include "rudp.h"
 
-static char const rcsid[] = "$Id: rudp.c,v 1.17 2008/06/11 09:04:02 galt Exp $";
+static char const rcsid[] = "$Id: rudp.c,v 1.18 2008/06/11 23:38:08 galt Exp $";
 
 #define MAX_TIME_OUT 999999
 
@@ -269,7 +269,10 @@ for (;;)
 		}
 	    else
 		{
-		warn("rudp: discarding mistaken ack by confirming sender ip:port");
+		warn("rudp: discarding mistaken ack from %x:%d by confirming recipient ip:port %x:%d"
+		    , retFrom.sin_addr.s_addr, retFrom.sin_port
+		    , sai->sin_addr.s_addr, sai->sin_port
+		    );
 		}
 	    }
 	}
