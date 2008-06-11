@@ -220,5 +220,8 @@
         Much of this work had been done earlier and was just pulled in from
         an old sandbox.
 
-
+        Fixed old bug in nodeAlive when jobid found in queue still.  This caused
+        occasional strangeness like negative user runningCount, and that user 
+        would hog the cluster.  Simply added code to change the counts in the
+        opposite direction from requeueJob.
 
