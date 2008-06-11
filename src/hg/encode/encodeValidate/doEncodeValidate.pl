@@ -9,7 +9,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.22 2008/06/11 18:00:37 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.23 2008/06/11 23:39:13 larrym Exp $
 
 use warnings;
 use strict;
@@ -201,19 +201,38 @@ sub validateWig {
 }
 
 sub validateBed {
+# Validate each line of a bed 5 or greater file.
     my ($file, $type) = @_;
-    my $outFile = "validateBed.out";
     my $filePath = "$submitPath/$file";
-    my $err = system (
-        "cd $outPath; head -10 $filePath | egrep -v '^track|browser' | hgLoadBed -noLoad hg18 testTable stdin >$outFile 2>&1");
-    if ($err) {
-        print STDERR  "ERROR: File \'$file\' failed bed validation\n";
-        open(ERR, "$outPath/$outFile") || die "ERROR: Can't open bed validation file \'$outPath/$outFile\': $!\n";
-        my @err = <ERR>;
-        die "@err\n";
-    } else {
-        &HgAutomate::verbose(2, "File \'$file\' passed bed validation\n");
+    my $line = 0;
+    open(FILE, $filePath) or die "Couldn't open file: $filePath; error: $!\n";
+    while(<FILE>) {
+        chomp;
+        my @fields = split /\t/;
+        $line++;
+        my $prefix = "Failed bed validation, line $line:";
+        if(/^(track|browser)/) {
+            ;
+        } elsif(@fields < 5) {
+            die "$prefix not enough fields; " . scalar(@fields) . " present; at least 5 are required";
+        } elsif ($fields[0] !~ /^chr(\d+|M|X|Y)$/) {
+            die "$prefix field 1 value ($fields[0]) is invalid; not a valid chrom name";
+        } elsif ($fields[1] !~ /^\d+$/) {
+            die "$prefix field 2 value ($fields[1]) is invalid; value must be a positive number";
+        } elsif ($fields[2] !~ /^\d+$/) {
+            die "$prefix field 3 value ($fields[2]) is invalid; value must be a positive number";
+        } elsif ($fields[2] < $fields[1]) {
+            die "$prefix field 3 value ($fields[2]) is less than field 2 value ($fields[1])";
+        } elsif ($fields[4] !~ /^\d+$/) {
+            die "$prefix field 5 value ($fields[4]) is invalid; value must be a positive number";
+        } elsif ($fields[4] < 0 || $fields[4] > 1000) {
+            die "$prefix field 5 value ($fields[4]) is invalid; score must be 0-1000";
+        } else {
+            ;
+        }
     }
+    close(FILE);
+    HgAutomate::verbose(2, "File \'$file\' passed bed validation\n");
 }
 
 sub validateGene {
