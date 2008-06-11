@@ -69,7 +69,7 @@
 #include "obscure.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: paraHub.c,v 1.115 2008/06/10 05:26:20 galt Exp $";
+static char const rcsid[] = "$Id: paraHub.c,v 1.116 2008/06/11 08:22:57 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -1176,7 +1176,7 @@ dlRemove(job->node);
 dlAddTail(batch->jobQueue, job->node);
 batch->runningCount -= 1;
 batch->queuedCount += 1;
-batch->user->runningCount -= 1;
+user->runningCount -= 1;
 dlRemove(batch->node);
 dlAddHead(user->curBatches, batch->node);
 dlRemove(user->node);
@@ -1398,7 +1398,7 @@ for (i=0; i<spokesToUse; ++i)
     mNode = dlPopHead(machList);
     dlAddTail(machList, mNode);
     sendViaSpoke(machine, message);
-    logDebug("hub: sending resurrect mesage to %s",machine->name);
+    logDebug("hub: sending resurrect message to %s",machine->name);
     }
 }
 
@@ -1659,11 +1659,14 @@ for (node = deadMachines->head; !dlEnd(node); node = node->next)
 
 	if (mach->deadJobIds != NULL)
 	    {
+	    struct dyString *dy = newDyString(0);
 	    struct slInt *i = mach->deadJobIds;
-	    logWarn("hub: node %s assigned ", name); 
+	    dyStringPrintf(dy, "hub: node %s assigned ", name); 
 	    for(i = mach->deadJobIds; i; i = i->next)
-		logWarn("%d ", i->val);
-	    logWarn("came back.\n");
+		dyStringPrintf(dy, "%d ", i->val);
+	    dyStringPrintf(dy, "came back.");
+	    logWarn(dy->string);
+	    dyStringFree(&dy);
 	    while ((jobIdString = nextWord(&line)) != NULL)
 	        {
 		jobId = atoi(jobIdString);
@@ -1675,13 +1678,18 @@ for (node = deadMachines->head; !dlEnd(node); node = node->next)
 			{
 			warn("hub: Luckily rerun of job %d has not yet happened.", 
                              jobId);
-			dlRemove(job->node);
 			job->machine = mach;
 			dlAddTail(mach->jobs, job->jobNode);
 			mach->lastChecked = job->lastClockIn = now;
+			dlRemove(job->node);
 			dlAddTail(runningJobs, job->node);
 			dlRemove(mach->node);
 			dlAddTail(busyMachines, mach->node);
+			struct batch *batch = job->batch;
+			struct user *user = batch->user;
+			batch->runningCount += 1;
+			batch->queuedCount -= 1;
+			user->runningCount += 1;
 			}
 		    else if ((job = jobFind(runningJobs, jobId)) != NULL)
 		        {
