@@ -69,7 +69,7 @@
 #include "obscure.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: paraHub.c,v 1.116 2008/06/11 08:22:57 galt Exp $";
+static char const rcsid[] = "$Id: paraHub.c,v 1.117 2008/06/11 19:02:00 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -2073,6 +2073,7 @@ struct user *user = findUser(userName);
 struct batch *batch = findBatch(user, dir, TRUE);
 if (user == NULL) return -2;
 if (batch == NULL) return -2;
+logInfo("paraHub: User %s ran showSickNodes for batch %s", userName, dir);
 struct hashEl *el, *list = hashElListHash(batch->sickNodes);
 slSort(&list, hashElCmp);
 for (el = list; el != NULL; el = el->next)
@@ -2088,7 +2089,6 @@ for (el = list; el != NULL; el = el->next)
 	}
     }
 hashElFreeList(&list);
-logInfo("paraHub: User %s ran showSickNodes for batch %s", userName, dir);
 pmClear(pm);
 pmPrintf(pm, "total sick machines: %d failures: %d", machineCount, sickCount);
 pmSend(pm, rudpOut);
