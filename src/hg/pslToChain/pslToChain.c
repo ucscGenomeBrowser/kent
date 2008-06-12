@@ -63,7 +63,7 @@ while ((psl = pslNext(lf) ) != NULL)
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-optionHash(&argc, argv);
+optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
 pslToChain(argv[1], argv[2]);
