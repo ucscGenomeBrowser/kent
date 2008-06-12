@@ -3,7 +3,7 @@
 # Caenorhabditis briggsae
 #	Washington University School of Medicine GSC and Sanger Institute
 #
-#  $Id: cb3.txt,v 1.14 2007/07/12 03:01:10 markd Exp $
+#  $Id: cb3.txt,v 1.15 2008/06/12 18:41:14 hiram Exp $
 
 ###########################################################################
 ## Download sequence (DONE - 2007-01-22 - Hiram)
@@ -700,3 +700,184 @@ chainOne $(path1)
 ## Reset defaultDb genome (DONE - 2007-04-30 - Hiram)
     ssh hgwdev
     hgsql -e 'update defaultDb set name="cb3" where name="cb2";' hgcentraltest
+
+#########################################################################
+# ELEGANS (ce6) PROTEINS TRACK (DONE -  Hiram - 2008-06-11)
+    ssh kkstore02
+
+    #	this breaking up was already done when ce4 genes were done
+    mkdir /cluster/data/cb3/blastDb
+    cd /cluster/data/cb3
+    twoBitToFa cb3.unmasked.2bit temp.fa
+    faSplit gap temp.fa 1000000 blastDb/x -lift=blastDb.lft
+    #	177 pieces of 177 written
+    rm temp.fa
+    cd blastDb
+    for i in *.fa
+    do
+	/cluster/bluearc/blast229/formatdb -i $i -p F
+    done
+    rm *.fa
+
+    ##	copy to san for kluster access
+    mkdir -p /san/sanvol1/scratch/worms/cb3/blastDb
+    cd /san/sanvol1/scratch/worms/cb3/blastDb
+    rsync -a --progress --stats /cluster/data/cb3/blastDb/ .
+
+    ## create the query protein set
+    mkdir -p /cluster/data/cb3/bed/tblastn.ce6SG
+    cd /cluster/data/cb3/bed/tblastn.ce6SG
+    echo  /san/sanvol1/scratch/worms/cb3/blastDb/*.nsq | xargs ls -S \
+	| sed "s/\.nsq//"  > query.lst
+    wc -l query.lst
+    # 139 query.lst
+
+   # we want around 50000 jobs
+   calc `wc /cluster/data/ce6/bed/blat.ce6SG/ce6SG.psl | awk "{print \\\$1}"`/\(50000/`wc query.lst | awk "{print \\\$1}"`\)
+
+    #	23741/(50000/139) = 65.999980
+
+   mkdir -p /cluster/bluearc/worms/cb3/bed/tblastn.ce6SG/sgfa
+   split -l 66 /cluster/data/ce6/bed/blat.ce6SG/ce6SG.psl \
+	/cluster/bluearc/worms/cb3/bed/tblastn.ce6SG/sgfa/sg
+   ln -s /cluster/bluearc/worms/cb3/bed/tblastn.ce6SG/sgfa sgfa
+   cd sgfa
+   for i in *; do 
+     nice pslxToFa $i $i.fa; 
+     rm $i; 
+   done
+   cd ..
+   ls -1S sgfa/*.fa > sg.lst
+   mkdir -p /cluster/bluearc/worms/cb3/bed/tblastn.ce6SG/blastOut
+   ln -s /cluster/bluearc/worms/cb3/bed/tblastn.ce6SG/blastOut
+   for i in `cat sg.lst`; do  mkdir blastOut/`basename $i .fa`; done
+   
+   cd /cluster/data/cb3/bed/tblastn.ce6SG
+   cat << '_EOF_' > template
+#LOOP
+blastSome $(path1) {check in line $(path2)} {check out exists blastOut/$(root2)/q.$(root1).psl }
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+   cat << '_EOF_' > blastSome
+#!/bin/sh
+DB=cb3
+BLASTMAT=/cluster/bluearc/blast229/data
+SCR="/scratch/tmp/${DB}"
+g=`basename $2`
+D=`basename $1`
+export BLASTMAT DB SCR g D
+mkdir -p ${SCR}
+cp -p $1.* ${SCR}
+f=${SCR}/`basename $3`.$g
+for eVal in 0.01 0.001 0.0001 0.00001 0.000001 1E-09 1E-11
+do
+if /cluster/bluearc/blast229/blastall -M BLOSUM80 -m 0 -F no \
+	-e $eVal -p tblastn -d ${SCR}/$D -i $2 -o $f.8
+then
+        mv $f.8 $f.1
+        break;
+fi
+done
+if test -f  $f.1
+then
+    if /cluster/bin/i386/blastToPsl $f.1 $f.2
+    then
+        liftUp -nosort -type=".psl" -nohead $f.3 \
+	    /cluster/data/${DB}/blastDb.lft carry $f.2 > /dev/null
+        liftUp -nosort -type=".psl" -pslQ -nohead $3.tmp \
+	    /cluster/data/ce6/bed/blat.ce6SG/protein.lft warn $f.3 > /dev/null
+        if pslCheck -prot $3.tmp
+        then
+            mv $3.tmp $3
+            rm -f $f.1 $f.2 $f.3 $f.4 ${SCR}/$D.*
+            rmdir --ignore-fail-on-non-empty ${SCR}
+        fi
+        exit 0
+    fi
+fi
+rm -f $f.1 $f.2 $3.tmp $f.8 $f.3 $f.4 ${SCR}/$D.*
+rmdir --ignore-fail-on-non-empty ${SCR}
+exit 1
+'_EOF_'
+    # << happy emacs
+    chmod +x blastSome
+
+    ssh kk
+    cd /cluster/data/cb3/bed/tblastn.ce6SG
+    gensub2 query.lst sg.lst template jobList
+    para create jobList
+#    para try, check, push, check etc.
+# Completed: 50040 of 50040 jobs
+# CPU time in finished jobs:    1544379s   25739.65m   428.99h   17.87d  0.049 y
+# IO & Wait Time:               1377110s   22951.84m   382.53h   15.94d  0.044 y
+# Average job time:                  58s       0.97m     0.02h    0.00d
+# Longest finished job:            1849s      30.82m     0.51h    0.02d
+# Submission to last job:          6427s     107.12m     1.79h    0.07d
+
+    # do the cluster run for chaining
+    ssh kk
+    mkdir /cluster/data/cb3/bed/tblastn.ce6SG/chainRun
+    cd /cluster/data/cb3/bed/tblastn.ce6SG/chainRun
+    cat << '_EOF_' > template
+#LOOP
+chainOne $(path1)
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    cat << '_EOF_' > chainOne
+(cd $1; cat q.*.psl | simpleChain -prot -outPsl -maxGap=50000 stdin /cluster/bluearc/worms/cb3/bed/tblastn.ce6SG/blastOut/c.`basename $1`.psl)
+'_EOF_'
+    # << happy emacs
+    chmod +x chainOne
+
+    ls -1dS /cluster/bluearc/worms/cb3/bed/tblastn.ce6SG/blastOut/sg?? \
+	> chain.lst
+    gensub2 chain.lst single template jobList
+    cd /cluster/data/cb3/bed/tblastn.ce6SG/chainRun
+    para create jobList
+    para -maxJob=30 push
+    para try, check, push, check etc.
+# Completed: 360 of 360 jobs
+# CPU time in finished jobs:        294s       4.89m     0.08h    0.00d  0.000 y
+# IO & Wait Time:                  1231s      20.52m     0.34h    0.01d  0.000 y
+# Average job time:                   4s       0.07m     0.00h    0.00d
+# Longest finished job:              13s       0.22m     0.00h    0.00d
+# Submission to last job:           193s       3.22m     0.05h    0.00d
+
+    ssh kkstore02
+    cd /cluster/data/cb3/bed/tblastn.ce6SG/blastOut
+    for i in sg??
+    do
+       cat c.$i.psl | awk "(\$13 - \$12)/\$11 > 0.6 {print}" > c60.$i.psl
+       sort -rn c60.$i.psl | pslUniq stdin u.$i.psl
+       awk "((\$1 / \$11) ) > 0.60 { print   }" c60.$i.psl > m60.$i.psl
+       echo $i
+    done
+    sort -T /scratch/tmp -k 14,14 -k 16,16n -k 17,17n u.*.psl m60* | uniq \
+	> /cluster/data/cb3/bed/tblastn.ce6SG/blastCe6SG.psl
+    cd ..
+    pslCheck blastCe6SG.psl
+    #	checked: 25405 failed: 0 errors: 0
+
+    # load table 
+    ssh hgwdev
+    cd /cluster/data/cb3/bed/tblastn.ce6SG
+    hgLoadPsl cb3 blastCe6SG.psl
+
+    # check coverage
+    featureBits cb3 blastCe6SG 
+    #	18431207 bases of 108433446 (16.998%) in intersection
+    featureBits cb3 blastCe4SG 
+    #	18218293 bases of 108433446 (16.801%) in intersection
+
+    featureBits ce6 sangerGene
+    #	28134889 bases of 100281426 (28.056%) in intersection
+
+    ssh kkstore02
+    rm -rf /cluster/data/cb3/bed/tblastn.ce6SG/blastOut
+    rm -rf /cluster/bluearc/worms/cb3/bed/tblastn.ce6SG
+
+#########################################################################
