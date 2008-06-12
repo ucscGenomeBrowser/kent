@@ -23,5 +23,9 @@ boolean rowReaderNext(struct rowReader *rr);
 void rowReaderExpectAtLeast(struct rowReader *rr, int minCols);
 /* generate an error if there are not enough columns in a row */
 
+char **rowReaderCloneColumns(struct rowReader *rr);
+/* Make dynamic copy of columns currently in reader.  Vector is NULL terminated
+ * and should be released with a single freeMem call. Must be called before
+ * autoSql parser is called on a row, as it will modify array rows. */
 #endif
 

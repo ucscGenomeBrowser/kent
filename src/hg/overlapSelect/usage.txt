@@ -12,10 +12,13 @@ with -in* apply to inFile.
 Options:
   -selectFmt=fmt - specify selectFile format:
           psl - PSL format (default for *.psl files).
+          pslq - PSL format, using query instead of target
           genePred - genePred format (default for *.gp or
                      *.genePred files).
           bed - BED format (default for *.bed files).
                 If BED doesn't have blocks, the bed range is used. 
+          chain - chain file format (default from .chain files)
+          chainq - chain file format, using query instead of target
   -selectCoordCols=spec - selectFile is tab-separate with coordinates
        as described by spec, which is one of:
             o chromCol - chrom in this column followed by start and end.

@@ -68,3 +68,23 @@ if (rr->numCols < minCols)
              rr->lf->fileName, rr->lf->lineIx, minCols, rr->numCols);
 }
 
+char **rowReaderCloneColumns(struct rowReader *rr)
+/* Make dynamic copy of columns currently in reader.  Vector is NULL terminated
+ * and should be released with a single freeMem call. Must be called before
+ * autoSql parser is called on a row, as it will modify array rows. */
+{
+int vecSz = (rr->numCols+1)*sizeof(char*);
+int memSz = vecSz;
+int i;
+for (i =-0; i < rr->numCols; i++)
+    memSz += strlen(rr->row[i])+1;
+char **rawCols = needMem(memSz);
+char *p = ((char*)rawCols) + vecSz;
+for (i =-0; i < rr->numCols; i++)
+    {
+    rawCols[i] = p;
+    strcpy(p, rr->row[i]);
+    p += strlen(rr->row[i]) + 1;
+    }
+return rawCols;
+}

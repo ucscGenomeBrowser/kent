@@ -11,7 +11,7 @@
 #include "chromAnn.h"
 #include "verbose.h"
 
-/* per-chrom binKeepers of * chromAnn objects */
+/* global, per-chrom binKeepers of * chromAnn objects */
 static struct chromBins* selectBins = NULL;
 
 static struct binKeeper *selectBinsGet(char *chrom, boolean create)
@@ -26,13 +26,12 @@ if (selectBins == NULL)
 return chromBinsGet(selectBins, chrom, create);
 }
 
-static void selectAddChromAnn(struct chromAnn *ca)
-/* Add a chromAnn to the select table */
+static void selectDumpChromAnn(struct chromAnn *ca, char *label)
+/* print a chromAnn if select by verbose level */
 {
-struct binKeeper* bins = selectBinsGet(ca->chrom, TRUE);
 if (verboseLevel() >= 2)
     {
-    verbose(2, "selectAddChromAnn: %s: %s %c %d-%d\n", ca->name, ca->chrom,
+    verbose(2, "%s: %s: %s %c %d-%d\n", label, ca->name, ca->chrom,
             ((ca->strand == 0) ? '?' : ca->strand), ca->start, ca->end);
     if (verboseLevel() >= 3)
         {
@@ -41,6 +40,13 @@ if (verboseLevel() >= 2)
             verbose(3, "    blk: %d-%d\n", cab->start, cab->end);
         }
     }
+}
+
+static void selectAddChromAnn(struct chromAnn *ca)
+/* Add a chromAnn to the select table */
+{
+struct binKeeper* bins = selectBinsGet(ca->chrom, TRUE);
+selectDumpChromAnn(ca, "selectAddChromAnn");
 /* don't add zero-length, they can't select */
 if (ca->start < ca->end)
     binKeeperAdd(bins, ca->start, ca->end, ca);
@@ -48,47 +54,12 @@ else
     chromAnnFree(&ca);
 }
 
-static unsigned getChomAnnOpts(unsigned selOpts)
-/* determine chromAnn options from selOps */
+void selectTableAddRecords(struct chromAnnReader *car)
+/* add records to the select table */
 {
-unsigned caOpts = 0;
-if (selOpts & selSelectCds)
-    caOpts |= chromAnnCds;
-if (selOpts & selSelectRange)
-    caOpts |= chromAnnRange;
-if (selOpts & selSaveLines)
-    caOpts |= chromAnnSaveLines;
-return caOpts;
-}
-
-void selectAddPsls(unsigned opts, struct rowReader *rr)
-/* add psl records to the select table */
-{
-while (rowReaderNext(rr))
-    selectAddChromAnn(chromAnnFromPsl(getChomAnnOpts(opts), rr));
-}
-
-void selectAddGenePreds(unsigned opts,  struct rowReader *rr)
-/* add genePred records to the select table */
-{
-while (rowReaderNext(rr))
-    selectAddChromAnn(chromAnnFromGenePred(getChomAnnOpts(opts), rr));
-}
-
-void selectAddBeds(unsigned opts,  struct rowReader *rr)
-/* add bed records to the select table */
-{
-while (rowReaderNext(rr))
-    selectAddChromAnn(chromAnnFromBed(getChomAnnOpts(opts), rr));
-}
-
-void selectAddCoordCols(unsigned opts, struct coordCols* cols, struct rowReader *rr)
-/* add records with coordiates at a specified column */
-{
-unsigned caOpts = getChomAnnOpts(opts);
-
-while (rowReaderNext(rr))
-    selectAddChromAnn(chromAnnFromCoordCols(caOpts, cols, rr));
+struct chromAnn* ca;
+while ((ca = car->caRead(car)) != NULL)
+    selectAddChromAnn(ca);
 }
 
 static boolean isSelfMatch(unsigned opts, struct chromAnn *inCa, struct chromAnn* selCa)
@@ -291,17 +262,16 @@ boolean selectIsOverlapped(unsigned opts, struct chromAnn *inCa,
 /* Determine if a range is overlapped.  If overlappingRecs is not null, a list
  * of the of selected records is returned.  Free with slFreelList. */
 {
+selectDumpChromAnn(inCa, "selectIsOverlapped");
 boolean hit = FALSE;
 struct binKeeper* bins = selectBinsGet(inCa->chrom, FALSE);
-verbose(2, "selectIsOverlapping: enter %s: %s %d-%d, %c\n", inCa->name, inCa->chrom, inCa->start, inCa->end,
-        ((inCa->strand == '\0') ? '?' : inCa->strand));
 if (bins != NULL)
     {
     struct binElement* overlapping = binKeeperFind(bins, inCa->start, inCa->end);
     hit = selectWithOverlapping(opts, inCa, overlapping, criteria, overlappingRecs);
     slFreeList(&overlapping);
     }
-verbose(2, "selectIsOverlapping: leave %s %s\n", inCa->name, (hit ? "yes" : "no"));
+verbose(2, "selectIsOverlapped: leave %s %s\n", inCa->name, (hit ? "yes" : "no"));
 return hit;
 }
 

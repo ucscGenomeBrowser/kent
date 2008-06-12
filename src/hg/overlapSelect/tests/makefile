@@ -3,7 +3,13 @@ include ../../../inc/common.mk
 OVERSEL = ../overlapSelect
 DIFF = diff -u
 
+# To check memory leaks, enable selectTableFree() in overlapSelect.c and
+# uncomment OVERSEL redefinition below.
+VGRIND = valgrind --tool=memcheck --suppressions=../../../lib/valgrind.suppress --num-callers=100 --leak-check=full --leak-resolution=high --show-reachable=yes 
+#OVERSEL = ${VGRIND} ../overlapSelect
+
 test:   pslSelectTests \
+	chainSelectTests \
 	bedSelectTests \
 	excludeSelfTests \
 	columnSelectTests \
@@ -30,7 +36,9 @@ test:   pslSelectTests \
 pslSelectTests: psl_over_NM_015110gp psl_nonover_NM_015110gp \
 		psl_over_NM_015110bed psl_nonover_NM_015110bed psl_over_NM_001206gp \
 		psl_nonover_NM_001206gp psl_over_NM_001206bed psl_nonover_NM_001206bed \
-		psl_over_NM_015110bed_split psl_nonover_NM_015110bed_split
+		psl_over_NM_015110bed_split psl_nonover_NM_015110bed_split \
+		psl_over_psl_stats pslq_over_psl_stats  psl_over_pslq_stats \
+		pslq_over_pslq_stats
 
 # select psls overlaping NM_015110 with gp
 psl_over_NM_015110gp: mkout
@@ -83,6 +91,64 @@ psl_over_NM_015110bed_split: mkout
 psl_nonover_NM_015110bed_split: mkout
 	${OVERSEL} -nonOverlapping input/NM_015110.split.bed input/mrna.psl output/$@.psl
 	${DIFF} expected/$@.psl output/$@.psl
+
+psl_over_psl_stats: mkout
+	${OVERSEL} -statsOutput -excludeSelf input/mrna.psl input/mrna.psl output/$@.stats
+	${DIFF} expected/$@.stats output/$@.stats
+
+pslq_over_psl_stats: mkout output/qmrna.psl
+	${OVERSEL} -statsOutput -excludeSelf -inFmt=pslq input/mrna.psl output/qmrna.psl output/$@.stats
+	${DIFF} expected/$@.stats output/$@.stats
+
+psl_over_pslq_stats: mkout output/qmrna.psl
+	${OVERSEL} -statsOutput -excludeSelf -selectFmt=pslq output/qmrna.psl input/mrna.psl output/$@.stats
+	${DIFF} expected/$@.stats output/$@.stats
+
+pslq_over_pslq_stats: mkout output/qmrna.psl
+	${OVERSEL} -statsOutput -excludeSelf -inFmt=pslq -selectFmt=pslq output/qmrna.psl output/qmrna.psl output/$@.stats
+	${DIFF} expected/$@.stats output/$@.stats
+
+output/qmrna.psl: input/mrna.psl mkout
+	pslSwap $< $@
+
+###
+# chains
+###
+chainSelectTests: chain_over_NM_015110gp chain_nonover_NM_001206bed \
+	chain_over_chain_stats chainq_over_chain_stats chain_over_chainq_stats\
+	chainq_over_chainq_stats
+
+# select chains overlaping NM_015110 with gp
+chain_over_NM_015110gp: mkout
+	${OVERSEL} -dropped=output/$@.drop.chain input/NM_015110.gp input/mrna.chain output/$@.chain
+	${DIFF} expected/$@.chain output/$@.chain
+	${DIFF} expected/$@.drop.chain output/$@.drop.chain
+
+# select chains overlaping not NM_001206 with bed
+chain_nonover_NM_001206bed: mkout
+	${OVERSEL} -nonOverlapping input/NM_001206.bed input/mrna.chain output/$@.chain
+	${DIFF} expected/$@.chain output/$@.chain
+
+chain_over_chain_stats: mkout
+	${OVERSEL} -statsOutput -excludeSelf input/mrna.chain input/mrna.chain output/$@.stats
+	${DIFF} expected/$@.stats output/$@.stats
+
+chainq_over_chain_stats: mkout output/qmrna.chain
+	${OVERSEL} -statsOutput -excludeSelf -inFmt=chainq input/mrna.chain output/qmrna.chain output/$@.stats
+	${DIFF} expected/$@.stats output/$@.stats
+
+chain_over_chainq_stats: mkout output/qmrna.chain
+	${OVERSEL} -statsOutput -excludeSelf -selectFmt=chainq output/qmrna.chain input/mrna.chain output/$@.stats
+	${DIFF} expected/$@.stats output/$@.stats
+
+chainq_over_chainq_stats: mkout output/qmrna.chain
+	${OVERSEL} -statsOutput -excludeSelf -inFmt=chainq -selectFmt=chainq output/qmrna.chain output/qmrna.chain output/$@.stats
+	${DIFF} expected/$@.stats output/$@.stats
+
+output/qmrna.chain: input/mrna.chain mkout
+	chainSwap $< $@
+
+
 
 ###
 # selecting BEDs
@@ -603,7 +669,7 @@ range_psl_over_NM_015110bed: mkout
 	${OVERSEL} -selectRange input/NM_015110.bed input/mrna.psl output/$@.psl
 	${DIFF} expected/$@.psl output/$@.psl
 
-# range select psls overlaping not NM_015110 with bed
+# range select psls not overlaping NM_015110 with bed
 range_psl_nonover_NM_015110bed: mkout
 	${OVERSEL} -selectRange -nonOverlapping input/NM_015110.bed input/mrna.psl output/$@.psl
 	${DIFF} expected/$@.psl output/$@.psl

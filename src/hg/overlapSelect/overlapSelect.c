@@ -1,18 +1,18 @@
 /* overlapSelect - select records based on overlap of chromosome ranges */
 
 #include "common.h"
-#include "rowReader.h"
 #include "selectTable.h"
-#include "psl.h"
-#include "bed.h"
 #include "coordCols.h"
 #include "chromAnn.h"
-#include "genePred.h"
 #include "dystring.h"
 #include "options.h"
 
-/* FIXME: would be nice to be able to specify ranges in the same manner
- * as featureBits */
+/* FIXME:
+ * - would be nice to be able to specify ranges in the same manner
+ *   as featureBits
+ * - should keep header lines in files
+ * - don't need to save if infile records if stats output
+ */
 
 static struct optionSpec optionSpecs[] = {
     {"selectFmt", OPTION_STRING},
@@ -50,19 +50,27 @@ static char *aggIncompatible[] =
 };
 
 /* file format constants */
-#define UNKNOWN_FMT    0
-#define PSL_FMT        1
-#define GENEPRED_FMT   2
-#define BED_FMT        3
-#define COORD_COLS_FMT 4
+enum recordFmt {
+    UNKNOWN_FMT,
+    PSL_FMT,
+    PSLQ_FMT,
+    CHAIN_FMT,
+    CHAINQ_FMT,
+    GENEPRED_FMT,
+    BED_FMT,
+    COORD_COLS_FMT
+};
 
 /* Options parsed from the command line */
-unsigned selectFmt = UNKNOWN_FMT;
+enum recordFmt selectFmt = UNKNOWN_FMT;
 struct coordCols selectCoordCols;
-unsigned selectOpts = 0;
-unsigned inCaOpts = 0;
+unsigned selectCaOpts = 0;
+
 unsigned inFmt = UNKNOWN_FMT;
 struct coordCols inCoordCols;
+unsigned inCaOpts = 0;
+
+unsigned selectOpts = 0;
 boolean useAggregate = FALSE;
 boolean nonOverlapping = FALSE;
 boolean mergeOutput = FALSE;
@@ -72,19 +80,17 @@ boolean outputAll = FALSE;
 boolean outputBoth = FALSE;
 struct overlapCriteria criteria = {0.0, 1.1, 0.0, 1.1, -1};
 
-struct ioFiles
-/* object containing input files */
-{
-    struct rowReader *inRr;
-    FILE* outFh;
-    FILE* dropFh;
-};
-
-unsigned parseFormatSpec(char *fmt)
+enum recordFmt parseFormatSpec(char *fmt)
 /* parse a format specification */
 {
 if (sameString(fmt, "psl"))
     return PSL_FMT;
+if (sameString(fmt, "pslq"))
+    return PSLQ_FMT;
+if (sameString(fmt, "chain"))
+    return CHAIN_FMT;
+if (sameString(fmt, "chainq"))
+    return CHAINQ_FMT;
 if (sameString(fmt, "genePred"))
     return GENEPRED_FMT;
 if (sameString(fmt, "bed"))
@@ -93,7 +99,7 @@ errAbort("invalid file format: %s", fmt);
 return UNKNOWN_FMT;
 }
 
-unsigned getFileFormat(char *path)
+enum recordFmt getFileFormat(char *path)
 /* determine the file format from the specified file extension */
 {
 char *filePath = path;
@@ -105,15 +111,43 @@ if (endsWith(filePath, ".gz") || endsWith(filePath, ".bz2") || endsWith(filePath
     splitPath(path, NULL, filePathBuf, NULL);
     filePath = filePathBuf;
     }
-
 if (endsWith(filePath, ".psl"))
     return PSL_FMT;
+if (endsWith(filePath, ".chain"))
+    return CHAIN_FMT;
 if (endsWith(filePath, ".genePred") || endsWith(filePath, ".gp"))
     return GENEPRED_FMT;
 if (endsWith(filePath, ".bed"))
     return BED_FMT;
 errAbort("can't determine file format of %s", filePath);
 return UNKNOWN_FMT;
+}
+
+static struct  chromAnnReader *createChromAnnReader(char *fileName,
+                                                    enum recordFmt fmt,
+                                                    unsigned caOpts,
+                                                    struct coordCols *cols)
+/* construct a reader.  The coordCols spec is only used for tab files */
+{
+switch (fmt)
+    {
+    case PSL_FMT:
+    case PSLQ_FMT:
+        return chromAnnPslReaderNew(fileName, caOpts);
+    case CHAIN_FMT:
+    case CHAINQ_FMT:
+        return chromAnnChainReaderNew(fileName, caOpts);
+    case GENEPRED_FMT:
+        return chromAnnGenePredReaderNew(fileName, caOpts);
+    case BED_FMT:
+        return chromAnnBedReaderNew(fileName, caOpts);
+    case COORD_COLS_FMT:
+        return chromAnnTabReaderNew(fileName, cols, caOpts);
+    case UNKNOWN_FMT:
+        break; 
+    }
+assert(FALSE);
+return NULL;
 }
 
 static char *getPrintId(struct chromAnn* ca)
@@ -130,8 +164,8 @@ struct slRef *selectCaRef;
 for (selectCaRef = overlappingRecs; selectCaRef != NULL; selectCaRef = selectCaRef->next)
     {
     struct chromAnn *selectCa = selectCaRef->val;
-    chromAnnWrite(inCa, outFh, '\t');
-    chromAnnWrite(selectCa, outFh, '\n');
+    inCa->recWrite(inCa, outFh, '\t');
+    selectCa->recWrite(selectCa, outFh, '\n');
     }
 }
 
@@ -182,7 +216,7 @@ while ((selCa = selectTableNext(&iter)) != NULL)
     }
 }
 
-static void doItemOverlap(struct chromAnn* inCa, struct ioFiles *ioFiles)
+static void doItemOverlap(struct chromAnn* inCa, FILE *outFh, FILE *dropFh)
 /* Do individual item overlap process of chromAnn object given the criteria,
  * and if so output */
 {
@@ -196,26 +230,38 @@ overlaps = selectIsOverlapped(selectOpts, inCa, &criteria, overlappingRecsPtr);
 if (((nonOverlapping) ? !overlaps : overlaps) || outputAll)
     {
     if (mergeOutput)
-        outputMerge(inCa, ioFiles->outFh, overlappingRecs);
+        outputMerge(inCa, outFh, overlappingRecs);
     else if (idOutput)
-        outputIds(inCa, ioFiles->outFh, overlappingRecs);
+        outputIds(inCa, outFh, overlappingRecs);
     else if (statsOutput)
-        outputStats(inCa, ioFiles->outFh, overlappingRecs);
+        outputStats(inCa, outFh, overlappingRecs);
     else
-        chromAnnWrite(inCa, ioFiles->outFh, '\n');
+        inCa->recWrite(inCa, outFh, '\n');
     }
-else if (ioFiles->dropFh != NULL)
+else if (dropFh != NULL)
     {
     if (idOutput)
-        fprintf(ioFiles->dropFh, "%s\n", getPrintId(inCa));
+        fprintf(dropFh, "%s\n", getPrintId(inCa));
     else
-        chromAnnWrite(inCa, ioFiles->dropFh, '\n');
+        inCa->recWrite(inCa, dropFh, '\n');
     }
 
 slFreeList(&overlappingRecs);
 }
 
-static void doAggregateOverlap(struct chromAnn* inCa, struct ioFiles *ioFiles)
+static void doItemOverlaps(struct chromAnnReader* inCar, FILE *outFh, FILE *dropFh)
+/* Do individual item overlap processings */
+{
+struct chromAnn *inCa;
+while ((inCa = inCar->caRead(inCar)) != NULL)
+    {
+    doItemOverlap(inCa, outFh, dropFh);
+    chromAnnFree(&inCa);
+    }
+}
+
+
+static void doAggregateOverlap(struct chromAnn* inCa, FILE *outFh, FILE *dropFh)
 /* Do aggreate overlap process of chromAnn object given the criteria,
  * and if so output */
 {
@@ -228,78 +274,29 @@ else
 if (((nonOverlapping) ? !overlaps : overlaps) || outputAll)
     {
     if (idOutput)
-        fprintf(ioFiles->outFh, "%s\n", getPrintId(inCa));
+        fprintf(outFh, "%s\n", getPrintId(inCa));
     else if (statsOutput)
-        fprintf(ioFiles->outFh, "%s\t%0.3g\t%d\t%d\n", getPrintId(inCa),
+        fprintf(outFh, "%s\t%0.3g\t%d\t%d\n", getPrintId(inCa),
                 stats.inOverlap, stats.inOverBases, stats.inBases);
     else
-        chromAnnWrite(inCa, ioFiles->outFh, '\n');
+        inCa->recWrite(inCa, outFh, '\n');
     }
-else if (ioFiles->dropFh != NULL)
+else if (dropFh != NULL)
     {
     if (idOutput)
-        fprintf(ioFiles->dropFh, "%s\n", getPrintId(inCa));
+        fprintf(dropFh, "%s\n", getPrintId(inCa));
     else
-        chromAnnWrite(inCa, ioFiles->dropFh, '\n');
+        inCa->recWrite(inCa, dropFh, '\n');
     }
 }
 
-static void doOverlap(struct chromAnn* inCa, struct ioFiles *ioFiles)
-/* Check if a chromAnn object is overlapped given the criteria, and if so
- * output */
+static void doAggregateOverlaps(struct chromAnnReader* inCar, FILE *outFh, FILE *dropFh)
+/* Do aggreate overlap processing */
 {
-if (useAggregate)
-    doAggregateOverlap(inCa, ioFiles);
-else
-    doItemOverlap(inCa, ioFiles);
-}
-
-void pslSelect(struct ioFiles *ioFiles)
-/* copy psl records that matches the selection criteria */
-{
-struct chromAnn* inCa;
-while (rowReaderNext(ioFiles->inRr))
+struct chromAnn *inCa;
+while ((inCa = inCar->caRead(inCar)) != NULL)
     {
-    inCa = chromAnnFromPsl(inCaOpts, ioFiles->inRr);
-    doOverlap(inCa, ioFiles);
-    chromAnnFree(&inCa);
-    }
-}
-
-void genePredSelect(struct ioFiles *ioFiles)
-/* copy genePred records that matches the selection criteria */
-{
-struct chromAnn* inCa;
-while (rowReaderNext(ioFiles->inRr))
-    {
-    inCa = chromAnnFromGenePred(inCaOpts, ioFiles->inRr);
-    doOverlap(inCa, ioFiles);
-    chromAnnFree(&inCa);
-    }
-}
-
-void bedSelect(struct ioFiles *ioFiles)
-/* copy bed records that matches the selection criteria */
-{
-struct chromAnn* inCa;
-while (rowReaderNext(ioFiles->inRr))
-    {
-    inCa = chromAnnFromBed(inCaOpts, ioFiles->inRr);
-    doOverlap(inCa, ioFiles);
-    chromAnnFree(&inCa);
-    }
-}
-
-void coordColsSelect(struct ioFiles *ioFiles)
-/* copy records that matches the selection criteria when the coordinates are
- * specified by start column. */
-{
-/*FIXME: should keep header lines in files */
-struct chromAnn* inCa;
-while (rowReaderNext(ioFiles->inRr))
-    {
-    inCa = chromAnnFromCoordCols(inCaOpts, &inCoordCols, ioFiles->inRr);
-    doOverlap(inCa, ioFiles);
+    doAggregateOverlap(inCa, outFh, dropFh);
     chromAnnFree(&inCa);
     }
 }
@@ -307,74 +304,49 @@ while (rowReaderNext(ioFiles->inRr))
 void loadSelectTable(char *selectFile)
 /* load the select table from a file */
 {
-struct rowReader *rr = rowReaderOpen(selectFile, (selectFmt == PSL_FMT));
-switch (selectFmt)
-    {
-    case PSL_FMT:
-        selectAddPsls(selectOpts, rr);
-        break;
-    case GENEPRED_FMT:
-        selectAddGenePreds(selectOpts, rr);
-        break;
-    case BED_FMT:
-        selectAddBeds(selectOpts, rr);
-        break;
-    case COORD_COLS_FMT:
-        selectAddCoordCols(selectOpts, &selectCoordCols, rr);
-        break;
-    }
-rowReaderFree(&rr);
+struct chromAnnReader *selCar = createChromAnnReader(selectFile, selectFmt, selectCaOpts, &selectCoordCols);
+selectTableAddRecords(selCar);
+selCar->carFree(&selCar);
 }
 
 void overlapSelect(char *selectFile, char *inFile, char *outFile, char *dropFile)
 /* select records based on overlap of chromosome ranges */
 {
-struct ioFiles ioFiles;
-ZeroVar(&ioFiles);
-ioFiles.inRr = rowReaderOpen(inFile, (inFmt == PSL_FMT));
-
+struct chromAnnReader *inCar
+    = createChromAnnReader(inFile, inFmt, inCaOpts, &inCoordCols);
 loadSelectTable(selectFile);
-ioFiles.outFh = mustOpen(outFile, "w");
+FILE *outFh = mustOpen(outFile, "w");
+FILE *dropFh = NULL;
 if (dropFile != NULL)
-    ioFiles.dropFh = mustOpen(dropFile, "w");
+    dropFh = mustOpen(dropFile, "w");
 if (idOutput)
     {
     if (useAggregate)
-        fputs("#inId\n", ioFiles.outFh);
+        fputs("#inId\n", outFh);
     else
-        fputs("#inId\t" "selectId\n", ioFiles.outFh);
+        fputs("#inId\t" "selectId\n", outFh);
     }
 if (statsOutput)
     {
     if (useAggregate)
-        fputs("#inId\t" "inOverlap\t" "inOverBases\t" "inBases\n", ioFiles.outFh);
+        fputs("#inId\t" "inOverlap\t" "inOverBases\t" "inBases\n", outFh);
     else
-        fputs("#inId\t" "selectId\t" "inOverlap\t" "selectOverlap\t" "overBases\t" "similarity\n", ioFiles.outFh);
+        fputs("#inId\t" "selectId\t" "inOverlap\t" "selectOverlap\t" "overBases\t" "similarity\n", outFh);
     }
 
-switch (inFmt)
-    {
-    case PSL_FMT:
-        pslSelect(&ioFiles);
-        break;
-    case GENEPRED_FMT:
-        genePredSelect(&ioFiles);
-        break;
-    case BED_FMT:
-        bedSelect(&ioFiles);
-        break;
-    case COORD_COLS_FMT:
-        coordColsSelect(&ioFiles);
-        break;
-    }
-rowReaderFree(&ioFiles.inRr);
+if (useAggregate)
+    doAggregateOverlaps(inCar, outFh, dropFh);
+else
+    doItemOverlaps(inCar, outFh, dropFh);
+
+inCar->carFree(&inCar);
 if (statsOutput && outputBoth)
-    outputStatsSelNotUsed(ioFiles.outFh);
+    outputStatsSelNotUsed(outFh);
 
-carefulClose(&ioFiles.outFh);
-carefulClose(&ioFiles.dropFh);
+carefulClose(&outFh);
+carefulClose(&dropFh);
 /* enable for memory analysis */
-#if 0
+#if 1
 selectTableFree();
 #endif
 }
@@ -399,12 +371,9 @@ selectFile = argv[1];
 inFile = argv[2];
 outFile = argv[3];
 
-/* file format options */
+/* select file options */
 if (optionExists("selectFmt") && optionExists("selectCoordCols"))
     errAbort("can't specify both -selectFmt and -selectCoordCols");
-if (optionExists("intFmt") && optionExists("intCoordCols"))
-    errAbort("can't specify both -intFmt and -intCoordCols");
-
 
 if (optionExists("selectFmt"))
     selectFmt = parseFormatSpec(optionVal("selectFmt", NULL));
@@ -418,10 +387,15 @@ else
     selectFmt = getFileFormat(selectFile);
 
 if (optionExists("selectCds"))
-    selectOpts |= selSelectCds;
+    selectCaOpts |= chromAnnCds;
 if (optionExists("selectRange"))
-    selectOpts |= selSelectRange;
+    selectCaOpts |= chromAnnRange;
+if ((selectFmt == PSLQ_FMT) || (selectFmt == CHAINQ_FMT))
+    selectCaOpts |= chromAnnUseQSide;
 
+/* in file options */
+if (optionExists("inFmt") && optionExists("inCoordCols"))
+    errAbort("can't specify both -inFmt and -inCoordCols");
 if (optionExists("inFmt"))
     inFmt = parseFormatSpec(optionVal("inFmt", NULL));
 else if (optionExists("inCoordCols"))
@@ -432,11 +406,14 @@ else if (optionExists("inCoordCols"))
     }
 else
     inFmt = getFileFormat(inFile);
-inCaOpts = chromAnnSaveLines; /* always need lines for output */
+
+inCaOpts = chromAnnSaveLines; // need lines for output
 if (optionExists("inCds"))
     inCaOpts |= chromAnnCds;
 if (optionExists("inRange"))
     inCaOpts |= chromAnnRange;
+if ((inFmt == PSLQ_FMT) || (inFmt == CHAINQ_FMT))
+    inCaOpts |= chromAnnUseQSide;
 
 /* select options */
 useAggregate = optionExists("aggregate");
@@ -476,7 +453,11 @@ if (mergeOutput)
         errAbort("can't use -mergeOutput with -nonOverlapping");
     if (useAggregate)
         errAbort("can't use -mergeOutput with -aggregate");
-    selectOpts |= selSaveLines;
+    if ((selectFmt == CHAIN_FMT) || (selectFmt == CHAINQ_FMT)
+        || (inFmt == CHAIN_FMT) || (inFmt == CHAINQ_FMT))
+    if (useAggregate)
+        errAbort("can't use -mergeOutput with chains");
+    selectCaOpts |= chromAnnSaveLines;
     }
 dropFile = optionVal("dropped", NULL);
 

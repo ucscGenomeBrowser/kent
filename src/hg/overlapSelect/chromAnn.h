@@ -10,8 +10,9 @@ enum chromAnnOpts
 {
     chromAnnCds        = 0x01,  /* use only CDS in blocks */
     chromAnnRange      = 0x02,  /* save entire range, not just blocks */
-    chromAnnSaveLines  = 0x04   /* save records as lines os they can be
+    chromAnnSaveLines  = 0x04,  /* save records as lines os they can be
                                  * outputted latter */
+    chromAnnUseQSide   = 0x08   /* use query side of alignment */
 };
 
 struct chromAnn
@@ -25,8 +26,9 @@ struct chromAnn
     int start;       /* start of first block */
     int end;         /* end of last block */
     int totalSize;   /* size of all blocks */
-    char **rawCols;  /* optional columns of original record, NULL terminated,
-                      * single malloc block,  */
+    void *rec;       /* record that can be used to recreate the data */
+    void (*recWrite)(struct chromAnn *ca, FILE *fh, char term); /* write record to file, with term character */
+    void (*recFree)(struct chromAnn *ca);  /* free function for rec */
     struct chromAnnBlk *blocks;  /* ranges associated with this object */
     boolean used;    /* flag to indicated that this chromAnn has been used */
 };
@@ -40,26 +42,38 @@ struct chromAnnBlk
     int end;
 };
 
+struct chromAnnReader
+/* interface object used to read chromAnn objects from various formats */
+{
+    struct chromAnn* (*caRead)(struct chromAnnReader *car);
+    /* read the next object, returns NULL on eof */
+
+    void (*carFree)(struct chromAnnReader **carPtr);
+    /* function to free this object */
+
+    unsigned opts;  /* options for reader */
+    void *data;     /* data associated with this reader */
+};
+
 void chromAnnFree(struct chromAnn **caPtr);
 /* free an object */
 
-void chromAnnWrite(struct chromAnn* ca, FILE *fh, char term);
-/* write tab separated row using rawCols */
+int chromAnnTotalBlockSize(struct chromAnn* ca);
+/* count the total bases in the blocks of a chromAnn */
 
-struct chromAnn* chromAnnFromBed(unsigned opts, struct rowReader *rr);
-/* create a chromAnn object from a row read from a BED file or table */
+struct chromAnnReader *chromAnnBedReaderNew(char *fileName, unsigned opts);
+/* construct a reader for a BED file */
 
-struct chromAnn* chromAnnFromGenePred(unsigned opts, struct rowReader *rr);
-/* create a chromAnn object from a row read from a GenePred file or table.  If
- * there is no CDS, and chromAnnCds is specified, it will return a record with
- * zero-length range.*/
+struct chromAnnReader *chromAnnGenePredReaderNew(char *fileName, unsigned opts);
+/* construct a reader for a genePred file */
 
-struct chromAnn* chromAnnFromPsl(unsigned opts, struct rowReader *rr);
-/* create a chromAnn object from a row read from a psl file or table */
+struct chromAnnReader *chromAnnPslReaderNew(char *fileName, unsigned opts);
+/* construct a reader for a PSL file */
 
-struct chromAnn* chromAnnFromCoordCols(unsigned opts, struct coordCols* cols,
-                                       struct rowReader *rr);
-/* create a chromAnn object from a line read from a tab file or table with
- * coordiates at a specified columns */
+struct chromAnnReader *chromAnnChainReaderNew(char *fileName, unsigned opts);
+/* construct a reader for a chain file */
+
+struct chromAnnReader *chromAnnTabReaderNew(char *fileName, struct coordCols* cols, unsigned opts);
+/* construct a reader for an arbitrary tab file */
 
 #endif

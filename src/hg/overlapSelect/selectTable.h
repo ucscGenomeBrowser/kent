@@ -4,19 +4,15 @@
 #define SELECT_TABLE_H
 #include "binRange.h"
 #include "hash.h"
-
-struct rowReader;
+struct chromAnnReader;
 
 enum selectOpts
 /* selection table options */
 {
     selExcludeSelf    = 0x01,    /* skipping matching records */
     selStrand         = 0x02,    /* select by strand */
-    selSelectCds      = 0x04,    /* only use CDS range for select table */
-    selSelectRange    = 0x08,    /* use entire range, not just blocks */
-    selSaveLines      = 0x10,    /* save lines for merge */
-    selIdMatch        = 0x20,    /* ids must match and overlap  */
-    selOppositeStrand = 0x40    /* select by opposite strand */
+    selIdMatch        = 0x04,    /* ids must match and overlap  */
+    selOppositeStrand = 0x08     /* select by opposite strand */
 };
 
 struct overlapCriteria
@@ -49,17 +45,8 @@ struct coordCols;
 struct lineFile;
 struct chromAnn;
 
-void selectAddPsls(unsigned opts, struct rowReader *rr);
-/* add psl records to the select table */
-
-void selectAddGenePreds(unsigned opts,  struct rowReader *rr);
-/* add genePred records to the select table */
-
-void selectAddBeds(unsigned opts,  struct rowReader *rr);
-/* add bed records to the select table */
-
-void selectAddCoordCols(unsigned opts, struct coordCols* cols, struct rowReader *rr);
-/* add records with coordiates at a specified column */
+void selectTableAddRecords(struct chromAnnReader *car);
+/* add records to the select table */
 
 int selectOverlapBases(struct chromAnn *ca1, struct chromAnn *ca2);
 /* determine the number of bases of overlaping in two annotations */
