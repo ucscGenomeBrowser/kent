@@ -278,10 +278,22 @@ group genes
 priority 250.2
 visibility pack
 colorChromDefault off
-url http://www.wormbase.org/db/gene/gene?name=
+url http://ws170.wormbase.org/db/gene/gene?name=
 type psl protein
 pred ce4.blastSGPep01
 blastRef ce4.blastSGRef01
+
+track blastCe6SG
+shortLabel C. elegans Proteins
+longLabel C. elegans Proteins Mapped by Chained tBLASTn
+group genes
+priority 250.2
+visibility pack
+colorChromDefault off
+url http://ws190.wormbase.org/db/gene/gene?name=
+type psl protein
+pred ce6.blastSGPep01
+blastRef ce6.blastSGRef01
 
 searchName miRNAPrefix
 searchTable miRNA
