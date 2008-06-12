@@ -69,7 +69,7 @@
 #include "obscure.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: paraHub.c,v 1.117 2008/06/11 19:02:00 galt Exp $";
+static char const rcsid[] = "$Id: paraHub.c,v 1.118 2008/06/12 09:33:55 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -134,6 +134,7 @@ struct dlList *deadSpokes;	/* List of dead spokes. */
 struct machine *machineList;    /* List of all machines. */
 struct dlList *freeMachines;    /* List of machines idle. */
 struct dlList *readyMachines;   /* List of machines ready for jobs. */
+struct dlList *blockedMachines; /* List of machines ready but blocked by runningCount. */
 struct dlList *busyMachines;    /* List of machines running jobs. */
 struct dlList *deadMachines;    /* List of machines that aren't running. */
 
@@ -184,6 +185,7 @@ void setupLists()
 {
 freeMachines = newDlList();
 readyMachines = newDlList();
+blockedMachines = newDlList();
 busyMachines = newDlList();
 deadMachines = newDlList();
 runningJobs = newDlList();
@@ -597,7 +599,7 @@ for (jobNode = machine->jobs->head; !dlEnd(jobNode); jobNode = jobNode->next)
 *ramReturn = r;
 }
 
-struct batch *findRunnableBatch(struct machine *machine, struct slRef **pEl)
+struct batch *findRunnableBatch(struct machine *machine, struct slRef **pEl, boolean *pCouldRun)
 /* Search machine for runnable batch, preferable something not at maxJob */
 {
 int c = 0, r = 0;
@@ -606,11 +608,19 @@ struct slRef* el;
 for(el = machine->plannedBatches; el; el=el->next)
     {
     struct batch *batch = el->val;
-    if (batch->cpu <= c && batch->ram <= r)
+    /* Prevent too many from this batch from running.
+     * This is helpful for keeping the balance with longrunning batches
+     * and maxJob. */
+    if (batch->cpu <= c && batch->ram <= r) 
 	{
-	if (pEl)
-	    *pEl = el;
-	return batch;
+	if (pCouldRun)
+	    *pCouldRun = TRUE;
+	if (batch->runningCount < batch->planCount)
+	    {
+	    if (pEl)
+		*pEl = el;
+	    return batch;
+	    }
 	}
     }
 if (pEl)
@@ -874,11 +884,15 @@ for (mach = machineList; mach != NULL; mach = mach->next)
 
 	if (mach->plannedBatches) /* was anything planned for this machine? */
     	    {
-	    struct batch *batch = findRunnableBatch(mach, NULL);
+	    boolean couldRun = FALSE;
+	    struct batch *batch = findRunnableBatch(mach, NULL, &couldRun);
 	    if (batch)
 		dlAddTail(readyMachines, mNode);
 	    else
-		dlAddTail(busyMachines, mNode);
+		if (couldRun)
+    		    dlAddTail(blockedMachines, mNode);
+		else
+    		    dlAddTail(busyMachines, mNode);
 	    }
 	else
 	    {
@@ -900,10 +914,12 @@ if (pm)
 	"# machines:"
 	" busy %d" 
 	" ready %d" 
+	" blocked %d" 
 	" free %d" 
 	" dead %d" 
 	, dlCount(busyMachines)
 	, dlCount(readyMachines)
+	, dlCount(blockedMachines)
 	, dlCount(freeMachines)
 	, dlCount(deadMachines)
     );
@@ -924,97 +940,107 @@ boolean runNextJob()
 /* Assign next job in pending queue if any to a machine. */
 {
 
-if (dlEmpty(readyMachines))
- return FALSE;
+/* give blocked machines another chance */
+while (!dlEmpty(blockedMachines))
+    {
+    struct dlNode *mNode;
+    mNode = dlPopHead(blockedMachines);
+    dlAddTail(readyMachines, mNode);
+    }
 
-if (dlEmpty(freeSpokes))
- return FALSE;
+while(TRUE)
+    {
 
-struct dlNode *mNode;
-struct machine *machine;
- /* Get free machine */
-mNode = dlPopHead(readyMachines);
-machine = mNode->val;
+    if (dlEmpty(readyMachines))
+     return FALSE;
 
-if (!machine->plannedBatches) /* anything to do for this machine? */
-    { /* should only on the ready list when there is something runnable */
-    logWarn("a machine with nothing to run got on the readyMachines list");
-    struct dlNode *jobNode = machine->jobs->head;
-    if (dlEnd(jobNode))
-    	dlAddTail(freeMachines, mNode);
-    else
-    	dlAddTail(busyMachines, mNode);
+    if (dlEmpty(freeSpokes))
+     return FALSE;
+
+    struct dlNode *mNode;
+    struct machine *machine;
+     /* Get free machine */
+    mNode = dlPopHead(readyMachines);
+    machine = mNode->val;
+
+    if (!machine->plannedBatches) /* anything to do for this machine? */
+	{
+	struct dlNode *jobNode = machine->jobs->head;
+	if (dlEnd(jobNode))
+	    dlAddTail(freeMachines, mNode);
+	else
+	    dlAddTail(busyMachines, mNode);
+	continue;
+	}
+
+    boolean couldRun = FALSE;    /* was it limited only by runningCount? */
+    struct slRef *batchEl = NULL;
+    struct batch *batch = findRunnableBatch(machine, &batchEl, &couldRun);
+
+    if (!batch)
+	{ 
+	if (couldRun)
+	    dlAddTail(blockedMachines, mNode);
+	else
+	    dlAddTail(busyMachines, mNode);
+	continue;
+	}
+
+    /* remove the batch from the planning list */
+    if (!slRemoveEl(&machine->plannedBatches, batchEl))
+	{ /* this should not happen */
+	logWarn("unable to remove batch from machine->plannedBatches, length: %d\n", 
+	    slCount(machine->plannedBatches));
+	dlAddTail(freeMachines, mNode);
+	continue;
+	}
+
+    freeMem(batchEl);
+
+    if (batch->queuedCount == 0)
+	{
+	/* probably the batch has been chilled */
+	/* needsPlanning=TRUE and a new plan will come along soon. */
+	/* just put it back on the ready list, it will get looked at again */
+	/* this has the effect of removing the batch from this machine's plannedBatches */
+	dlAddTail(readyMachines, mNode);  
+	continue;
+	}
+
+    struct user *user = batch->user; 
+
+    struct dlNode *jNode, *sNode;
+    struct spoke *spoke;
+    struct job *job;
+
+    /* Get free spoke and move them to busy lists. */
+    machine->lastChecked = now;
+    sNode = dlPopHead(freeSpokes);
+    dlAddTail(busySpokes, sNode);
+    spoke = sNode->val;
+
+    /* Get active batch from user and take job off of it.
+     * If it's the last job in the batch move batch to
+     * finished list. */
+    jNode = dlPopHead(batch->jobQueue);
+    dlAddTail(runningJobs, jNode);
+    job = jNode->val;
+    ++batch->runningCount;
+    --batch->queuedCount;
+    ++user->runningCount;
+    unactivateBatchIfEmpty(batch); 
+
+    /* Tell machine, job, and spoke about each other. */
+    dlAddTail(machine->jobs, job->jobNode);
+
+    /* just put it back on the ready list, it will get looked at again */
+    dlAddTail(readyMachines, mNode);
+
+    job->machine = machine;
+    job->startTime = job->lastClockIn = now;
+    spokeSendJob(spoke, machine, job);
     return TRUE;
     }
-
-struct slRef *batchEl = NULL;
-struct batch *batch = findRunnableBatch(machine, &batchEl);
-
-/* remove the batch from the planning list */
-if (!slRemoveEl(&machine->plannedBatches, batchEl))
-    {
-    logWarn("unable to remove batch from machine->plannedBatches, length: %d\n", 
-	slCount(machine->plannedBatches));
-    dlAddTail(freeMachines, mNode);
-    return TRUE;	
-    }
-
-/* Prevent too many from this batch from running.
- * This is helpful for keeping the balance with longrunning batches
- * and maxJob. */
-if (batch->runningCount >= batch->planCount)
-    {
-    slAddTail(&machine->plannedBatches, batchEl);
-    dlAddTail(readyMachines, mNode);
-    return TRUE;	
-    }
-
-freeMem(batchEl);
-
-
-if (batch->queuedCount == 0)
-    {
-    /* probably the batch has been chilled */
-    dlAddTail(freeMachines, mNode);
-    /* needsPlanning=TRUE and a new plan will come along soon. */
-    return TRUE;
-    }
-
-struct user *user = batch->user; 
-
-struct dlNode *jNode, *sNode;
-struct spoke *spoke;
-struct job *job;
-
-/* Get free spoke and move them to busy lists. */
-machine->lastChecked = now;
-sNode = dlPopHead(freeSpokes);
-dlAddTail(busySpokes, sNode);
-spoke = sNode->val;
-
-/* Get active batch from user and take job off of it.
- * If it's the last job in the batch move batch to
- * finished list. */
-jNode = dlPopHead(batch->jobQueue);
-dlAddTail(runningJobs, jNode);
-job = jNode->val;
-++batch->runningCount;
---batch->queuedCount;
-++user->runningCount;
-unactivateBatchIfEmpty(batch); 
-
-/* Tell machine, job, and spoke about each other. */
-dlAddTail(machine->jobs, job->jobNode);
-
-if (findRunnableBatch(machine, NULL))
-    dlAddTail(readyMachines, mNode);
-else
-    dlAddTail(busyMachines, mNode);
-
-job->machine = machine;
-job->startTime = job->lastClockIn = now;
-spokeSendJob(spoke, machine, job);
-return TRUE;
 }
 
 void runner(int count)
@@ -2712,13 +2738,16 @@ void status(struct paraMessage *pm)
  * followed by a blank message. */
 {
 char buf[256];
-safef(buf, sizeof(buf), "CPUs total: %d", getCpus(freeMachines)+getCpus(readyMachines)+getCpus(busyMachines));
+safef(buf, sizeof(buf), "CPUs total: %d", 
+    getCpus(freeMachines)+getCpus(readyMachines)+getCpus(blockedMachines)+getCpus(busyMachines));
 pmSendString(pm, rudpOut, buf);
 safef(buf, sizeof(buf), "CPUs free: %d", getCpus(freeMachines));
 pmSendString(pm, rudpOut, buf);
-safef(buf, sizeof(buf), "CPUs busy: %d", getCpus(readyMachines)+getCpus(busyMachines));
+safef(buf, sizeof(buf), "CPUs busy: %d", getCpus(readyMachines)+getCpus(blockedMachines)+getCpus(busyMachines));
 pmSendString(pm, rudpOut, buf);
-safef(buf, sizeof(buf), "Nodes total: %d", dlCount(freeMachines)+dlCount(busyMachines));
+safef(buf, sizeof(buf), "Nodes total: %d", 
+    dlCount(freeMachines)+dlCount(busyMachines)+dlCount(readyMachines)+
+    dlCount(blockedMachines)+dlCount(deadMachines));
 pmSendString(pm, rudpOut, buf);
 safef(buf, sizeof(buf), "Nodes dead: %d", dlCount(deadMachines));
 pmSendString(pm, rudpOut, buf);
