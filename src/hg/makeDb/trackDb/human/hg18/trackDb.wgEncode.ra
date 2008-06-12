@@ -271,24 +271,27 @@ wgEncode 1
 track wgEncodeStanfordChipSites
 superTrack wgEncodeStanfordChipSeq dense
 compositeTrack on
-shortLabel Stanf Sites
-longLabel Stanford ChIP-Seq Sites
+shortLabel Stanf ChIP Sites
+longLabel ENCODE Stanford ChIP-Seq Sites
 useScore 1
+group regulation
 type bed 5
 
-track wgEncodeStanfordChipSitesSK_N_MCFOXP2
-subTrack wgEncodeStanfordChipSites
-shortLabel FOXP2/SK-N-M-C
-longLabel Encode Whole Genome - Stanford ChiP-Seq Sites for FOXP2 in SK-N-MC cell line
+track	wgEncodeStanfordChipSitesSK_N_MCFOXP2
+subTrack	wgEncodeStanfordChipSites
+shortLabel	FOXP2/SK-N-MC
+longLabel	ENCODE Stanford ChIP-Seq Sites (FOXP2 in SK-N-MC cells)
+dateSubmitted	2008-06-05
 
 track wgEncodeStanfordChipOverlaps
 superTrack wgEncodeStanfordChipSeq dense
 compositeTrack on
-shortLabel Stanf ChiP Overlaps
+shortLabel Stanf ChIP Overlaps
 longLabel Stanford ChIP-Seq Overlaps
+group regulation
 type wig
 
 track wgEncodeStanfordChipOverlapsSK_N_MCFOXP2
 subTrack wgEncodeStanfordChipOverlaps
-shortLabel FOXP2/SK-N-M-C
-longLabel Encode Whole Genome - Stanford ChiP-Seq Overlaps for FOXP2 in SK-N-MC cell line
+shortLabel FOXP2/SK-N-MC
+longLabel ENCODE Stanford ChIP-Seq Overlaps (FOXP2 in SK-N-MC cells)
