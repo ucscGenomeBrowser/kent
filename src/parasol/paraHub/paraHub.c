@@ -69,7 +69,7 @@
 #include "obscure.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: paraHub.c,v 1.118 2008/06/12 09:33:55 galt Exp $";
+static char const rcsid[] = "$Id: paraHub.c,v 1.119 2008/06/12 09:46:17 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -662,7 +662,21 @@ void plan(struct paraMessage *pm)
 
 logInfo("executing new plan");
 
-if (pm) pmSendString(pm, rudpOut, "about to initialize cpu/ram 2d arrays"); // DEBUG
+if (pm)
+    {
+    pmClear(pm);
+    pmPrintf(pm, "cpuUnit=%d, ramUnit=%ld", cpuUnit, ramUnit); 
+    pmSend(pm, rudpOut);
+    pmClear(pm);
+    pmPrintf(pm, "job default units: Cpu=%d, ram=%d", defaultJobCpu, defaultJobRam); 
+    pmSend(pm, rudpOut);
+    pmClear(pm);
+    pmPrintf(pm, "max cluster units: Cpu=%d, ram=%d", maxCpuInCluster, maxRamInCluster); 
+    pmSend(pm, rudpOut);
+    pmSendString(pm, rudpOut, "-----"); 
+    }
+
+if (pm) pmSendString(pm, rudpOut, "about to initialize cpu/ram 2d arrays"); 
 
 /* Initialize Resource Arrays for CPU and RAM */
 /* allocate memory like a 2D array */
