@@ -214,12 +214,11 @@ priority 96.3
 
 track wgEncodeDukeDnase
 compositeTrack on
-shortLabel ENC Duke DNase
+shortLabel Duke DNase
 longLabel Encode Whole Genome - Duke DNaseI Hypersensitivity
 group regulation
 priority 510
 type bed 5 +
-type bedGraph 4
 maxHeightPixels 128:16:16
 minLimit -2.592
 maxLimit 5.001
@@ -234,14 +233,15 @@ subGroup2 cell_type Cell_Type G878=GM12878
 #dividers cell_type 
 #hierarchy view HMM=0 WIN=0 SIG=1 ALN=2
 dataVersion ENCODE Submitted June 2008
+wgEncode 1
 dateSubmitted June 2008
 
     track wgEncodeDukeDnasePeaksGM12878
     subTrack wgEncodeDukeDnase
-    type bed 5 +
     shortLabel DNase GM12878 Pk
     longLabel Encode Whole Genome - Duke DNase Peaks for cell line GM12878
     subGroups cell_type=G878 view=PK
+    type bed 5 +
     noInherit off
     priority 1
     color 25,25,150
@@ -259,36 +259,3 @@ dateSubmitted June 2008
     priority 2
     color 25,150,25
 
-
-        track wgEncodeStanfordChipSeq
-        superTrack on
-        shortLabel Stanford ChiP-Seq
-        longLabel Stanford ChiP-Seq
-        group regulation
-        priority 2000
-        labelImg encode.ico
-
-track wgEncodeStanfordChipSites
-superTrack wgEncodeStanfordChipSeq dense
-compositeTrack on
-shortLabel Stanf Sites
-longLabel Stanford ChIP-Seq Sites
-useScore 1
-type bed 5
-
-track wgEncodeStanfordChipSitesSK_N_MCFOXP2
-subTrack wgEncodeStanfordChipSites
-shortLabel FOXP2/SK-N-M-C
-longLabel Encode Whole Genome - Stanford ChiP-Seq Sites for FOXP2 in SK-N-MC cell line
-
-track wgEncodeStanfordChipOverlaps
-superTrack wgEncodeStanfordChipSeq dense
-compositeTrack on
-shortLabel Stanf ChiP Overlaps
-longLabel Stanford ChIP-Seq Overlaps
-type wig
-
-track wgEncodeStanfordChipOverlapsSK_N_MCFOXP2
-subTrack wgEncodeStanfordChipOverlaps
-shortLabel FOXP2/SK-N-M-C
-longLabel Encode Whole Genome - Stanford ChiP-Seq Overlaps for FOXP2 in SK-N-MC cell line
