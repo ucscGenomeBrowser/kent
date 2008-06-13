@@ -69,7 +69,7 @@
 #include "obscure.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: paraHub.c,v 1.119 2008/06/12 09:46:17 galt Exp $";
+static char const rcsid[] = "$Id: paraHub.c,v 1.120 2008/06/13 05:31:48 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -1028,7 +1028,7 @@ while(TRUE)
     struct job *job;
 
     /* Get free spoke and move them to busy lists. */
-    machine->lastChecked = now;
+    machine->lastChecked = now; 
     sNode = dlPopHead(freeSpokes);
     dlAddTail(busySpokes, sNode);
     spoke = sNode->val;
@@ -1448,35 +1448,32 @@ void hangman(int spokesToUse)
  * jobDone messages. */
 {
 int i, period = jobCheckPeriod*MINUTE;
-struct dlNode *mNode;
+struct dlNode *jobNode;
+struct job *job;
 struct machine *machine;
 
 for (i=0; i<spokesToUse; ++i)
     {
-    if (dlEmpty(freeSpokes) || dlEmpty(busyMachines))
+    if (dlEmpty(freeSpokes) || dlEmpty(runningJobs))
         break;
-    machine = busyMachines->head->val;
-    if (now - machine->lastChecked < period)
+    job = runningJobs->head->val;
+    if (now - job->lastClockIn < period)
         break;
-    machine->lastChecked = now;
-    mNode = dlPopHead(busyMachines);
-    dlAddTail(busyMachines, mNode);
-    struct dlNode *jobNode = NULL;
-    for (jobNode = machine->jobs->head; !dlEnd(jobNode); jobNode = jobNode->next)
+    machine = job->machine;
+    if (now - job->lastClockIn >= MINUTE * assumeDeadPeriod)
 	{
-	struct job *job = jobNode->val;
-	if (now - job->lastClockIn >= MINUTE * assumeDeadPeriod)
-	    {
-	    warn("hub: node %s running %d looks dead, burying", machine->name, job->id);
-	    buryMachine(machine);
-	    break;  /* jobs list has been freed by bury, break immediately */
-	    }
-	else
-	    {
-	    char message[512];
-	    safef(message, sizeof(message), "check %d", job->id);
-	    sendViaSpoke(machine, message);
-	    }
+	warn("hub: node %s running %d looks dead, burying", machine->name, job->id);
+	buryMachine(machine);
+	break;  /* jobs list has been freed by bury, break immediately */
+	}
+    else
+	{
+	job->lastClockIn = now;
+	jobNode = dlPopHead(runningJobs);
+	dlAddTail(runningJobs, jobNode);
+	char message[512];
+	safef(message, sizeof(message), "check %d", job->id);
+	sendViaSpoke(machine, message);
 	}
     }
 }
