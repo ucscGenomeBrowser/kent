@@ -3,7 +3,7 @@
 # Caenorhabditis elegans
 # Washington University School of Medicine GSC and Sanger Institute WS190
 
-#  $Id: ce6.txt,v 1.4 2008/06/09 23:50:38 hiram Exp $
+#  $Id: ce6.txt,v 1.5 2008/06/13 19:22:22 hiram Exp $
 
 #########################################################################
 # DOWNLOAD SEQUENCE (DONE - 2008-05-30 - Hiram)
@@ -489,8 +489,6 @@ F57C7.4 F57C7.4 contains similarity to Plasmodium falciparum Hypothetical protei
     # 53654286 bases of 100277784 (53.506%) in intersection
 
     # Create Self blastp table - sangerBlastTab
-    # Reload blastp data into sangerBlastTab and drop knownBlastTab 
-    # - table given the wrong name (DONE, 2004-05-28, hartera)
     # Get sangerPep peptide sequences fasta file from sangerPep dir
     # and create a blast database out of them.
     mkdir -p /cluster/data/ce6/bed/blastp
@@ -891,7 +889,7 @@ i
     #	31186593 bases of 100281244 (31.099%) in intersection
 
 ############################################################################
-## BLASTZ caePb2 (DONE - 2007-03-04,09 - Hiram)
+## BLASTZ caePb2 (DONE - 2008-06-04,09 - Hiram)
     ssh kkstore06
     screen 	#	use screen to control the job
     mkdir /cluster/data/ce6/bed/blastzCaePb2.2008-06-04
@@ -955,7 +953,7 @@ TMPDIR=/scratch/tmp
     #	55092134 bases of 170473138 (32.317%) in intersection
 
 ############################################################################
-## BLASTZ caeRem3 (DONE - 2007-03-04,09 - Hiram)
+## BLASTZ caeRem3 (DONE - 2008-06-04,09 - Hiram)
     ssh kkstore06
     screen 	#	use screen to control the job
     mkdir /cluster/data/ce6/bed/blastzCaeRem3.2008-06-04
@@ -1020,7 +1018,7 @@ TMPDIR=/scratch/tmp
 	-bigClusterHub=kk -smallClusterHub=kki -swap > cleanUp.log 2>&1 &
 
 ############################################################################
-## BLASTZ cb3 (DONE - 2007-03-04,09 - Hiram)
+## BLASTZ cb3 (DONE - 2008-06-04,09 - Hiram)
     ssh kkstore06
     screen 	#	use screen to control the job
     mkdir /cluster/data/ce6/bed/blastzCb3.2008-06-04
@@ -1381,3 +1379,201 @@ autoMultiz $(root1) {check out line+ /cluster/data/ce6/bed/multiz6way/maf/$(root
     rm multiz6*.tab
 
 ############################################################################
+####  Blat sangerGene proteins to determine exons
+#	(DONE - 2008-06-11 - hiram)
+    ssh hgwdev
+    cd /cluster/data/ce6/bed
+    mkdir blat.ce6SG.2008-06-11
+    ln -s  blat.ce6SG.2008-06-11 blat.ce6SG
+    cd blat.ce6SG
+    pepPredToFa ce6 sangerPep sangerPep.fa
+
+    ssh kkstore06
+    #	create san nib directory from goldenPath chromosomes fa files
+    mkdir /san/sanvol1/scratch/worms/ce6/nib
+    cd /san/sanvol1/scratch/worms/ce6/nib
+    for C in I II III IV V X M
+do
+    twoBitToFa -seq=chr${C} /cluster/data/ce6/ce6.2bit stdout \
+	| faToNib -softMask stdin chr${C}.nib
+done
+
+    #	The kluster run
+    ssh pk
+    cd /cluster/data/ce6/bed/blat.ce6SG
+    cat << '_EOF_' > blatSome
+#!/bin/csh -fe
+blat -t=dnax -q=prot -out=pslx /san/sanvol1/scratch/worms/ce6/nib/$1.nib sgfa/$2.fa $3
+'_EOF_'
+    # << happy emacs
+    chmod +x blatSome
+    ls -1S /san/sanvol1/scratch/worms/ce6/nib > ce6.lst
+    mkdir sgfa
+    cd sgfa
+    faSplit sequence ../sangerPep.fa 3000 sg
+    ls -1S *.fa > ../sg.lst
+    cd ..
+    cat << '_EOF_' > template
+#LOOP
+blatSome $(root1) $(root2) {check out line psl/$(root1)/$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+    gensub2 ce6.lst sg.lst template jobList
+    mkdir psl
+    cd psl
+    sed -e "s/.nib//" ../ce6.lst | xargs mkdir
+    cd ..
+    para create jobList
+    para try ... check ... push ... etc
+# Completed: 20335 of 20335 jobs
+# CPU time in finished jobs:      69885s    1164.74m    19.41h    0.81d  0.002 y
+# IO & Wait Time:                 51640s     860.67m    14.34h    0.60d  0.002 y
+# Average job time:                   6s       0.10m     0.00h    0.00d
+# Longest finished job:             348s       5.80m     0.10h    0.00d
+# Submission to last job:           943s      15.72m     0.26h    0.01d
+
+    ssh kkstore06
+    cd /cluster/data/ce6/bed/blat.ce6SG.2008-06-11
+    pslSort dirs raw.psl /tmp psl/*
+    #	-rw-rw-r--  1 70627970 Jun 11 10:35 raw.psl
+    pslReps -nohead -minCover=0.9 -minAli=0.9 raw.psl cooked.psl /dev/null
+    #	Processed 155625 alignments
+    #	-rw-rw-r--  1 26423327 Jun 11 10:35 cooked.psl
+    pslUniq cooked.psl ce6SG.psl
+    #	-rw-rw-r--  1 25332830 Jun 11 10:36 ce6SG.psl
+
+    cut -f 10 ce6SG.psl > sgName.lst
+    faSomeRecords sangerPep.fa sgName.lst ce6SG.fa
+    #	-rw-rw-r--  1 10903181 Jun 11 10:11 sangerPep.fa
+    #	-rw-rw-r--  1 10899914 Jun 11 10:37 ce6SG.fa
+    grep "^>" ce6SG.fa | wc -l
+    #	23741
+    grep "^>" sangerPep.fa | wc -l
+    #	23771
+
+    pslxToFa ce6SG.psl ce6SG_ex.fa -liftTarget=genome.lft \
+	-liftQuery=protein.lft
+    #	-rw-rw-r--  1  5288587 Jun 11 10:39 protein.lft
+    #	-rw-rw-r--  1  6741328 Jun 11 10:39 genome.lft
+    #	-rw-rw-r--  1 12743074 Jun 11 10:39 ce6SG_ex.fa
+    wc -l *.psl *.lft *.fa sgName.lst
+    #	 23741 ce6SG.psl
+    #	 25926 cooked.psl
+    #	155630 raw.psl
+    #	151196 genome.lft
+    #	151196 protein.lft
+    #	244239 ce6SG.fa
+    #	302392 ce6SG_ex.fa
+    #	244343 sangerPep.fa
+    #	 23741 sgName.lst
+    #	1322404 total
+
+    #	back on hgwdev
+    ssh hgwdev
+    cd /cluster/data/ce6/bed/blat.ce6SG
+    #	After about an hour, it exited with this message:
+    #	sqlFreeConnection called on cache (ce6) that doesn't contain
+    #	the given connection
+    #	This may be a lurking error in this program, because the
+    #	resulting file seems to have the correct number of lines:
+    #	Once upon a time, long long ago, this table was made by the kgName
+    #	command, but this doesn't work on C. elegans because there is no
+    #	kgXref table.  So, the following perl script was developed to do the
+    #	same thing
+    #	kgName ce6 ce6SG.psl blastSGRef01
+
+    #	Need a reference table loaded, perl script makes up relationships
+    cat << '_EOF_' >> mkRef.pl
+#!/usr/bin/env perl
+
+use warnings;
+use strict;
+
+my $argc = scalar(@ARGV);
+
+sub usage() {
+    print STDERR "usage: ./mkRef.pl blastSGRef01.tab\n";
+    print STDERR "reads ../sangerGene/genePred.tab and ",
+        "../sangerGene/orfToGene.tab\n";
+    print STDERR "writes references to the given input file, ",
+        "e.g. blastSGRef01.tab\n";
+}
+
+if (1 != $argc) {
+    usage;
+    exit 255;
+}
+my $outFile = shift;
+
+my %orfToGene;  # key is all lowercase orf name, value is gene name
+
+my $inFile="../sangerGene/orfToGene.tab";
+open (FH,"<$inFile") or die "can not read $inFile";
+while (my $line=<FH>) {
+    chomp $line;
+    my ($orf, $gene) = split('\s+',$line);
+    $orfToGene{lc($orf)} = $gene
+}
+close (FH);
+
+my %links;      # key is all lowercase orf name, value is SwissProt name
+
+$inFile="../sangerGene/sangerLinks.tab";
+open (FH,"<$inFile") or die "can not read $inFile";
+while (my $line=<FH>) {
+    chomp $line;
+    my ($orf, $SP, $comments) = split('\s+',$line);
+    $links{lc($orf)} = $SP
+}
+close (FH);
+
+my %ce6Position;        # key is all lowercase orf name, value is ce6 position
+
+$inFile="../sangerGene/genePred.tab";
+open (FH,"<$inFile") or die "can not read $inFile";
+while (my $line=<FH>) {
+    chomp $line;
+    my ($bin, $orf, $chr, $strand, $start, $end, $other) = split('\s+',$line);
+    $ce6Position{lc($orf)} = sprintf("%s:%d-%d", $chr, $start, $end);
+}
+close (FH);
+
+open (OF,">$outFile") or die "can not write to $outFile";
+
+$inFile="sgName.lst";
+open (FH,"<$inFile") or die "can not read $inFile";
+while (my $orf=<FH>) {
+    chomp $orf;
+    if (!exists($orfToGene{lc($orf)})) {
+        $orfToGene{lc($orf)} = "";
+    }
+    if (!exists($links{lc($orf)})) {
+        $links{lc($orf)} = "";
+    }
+    if (!exists($ce6Position{lc($orf)})) {
+        $ce6Position{lc($orf)} = "";
+    }
+    printf OF "%s\t%s\t%s\t%s\t%s\n", $orf, $orfToGene{lc($orf)},
+        $ce6Position{lc($orf)}, $links{lc($orf)}, "";
+}
+close (FH);
+close (OF);
+'_EOF_'
+    # << happy emacs
+    chmod +x ./mkRef.pl
+    ./mkRef.pl blastSGRef01.tab
+    wc -l blastSGRef01.tab 
+    #	23741 blastSGRef.01.tab
+
+    hgLoadSqlTab ce6 blastSGRef01 ~/kent/src/hg/lib/blastRef.sql \
+	blastSGRef01.tab
+    wc -l sgName.lst blastSGRef01.tab ce6SG.psl
+    #	23741 sgName.lst
+    #	23741 blastSGRef01.tab
+    #	23741 ce6SG.psl
+
+    #	And load the protein sequences
+    hgPepPred ce6 generic blastSGPep01 ce6SG.fa
+
+##########################################################################
