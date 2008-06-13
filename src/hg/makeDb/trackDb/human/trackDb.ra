@@ -699,7 +699,7 @@ color 150,0,150
 type bed 4 +
 
 track dgv
-shortLabel DGV Struct. Var.
+shortLabel DGV Struct Var
 longLabel Database of Genomic Variants: Structural Variation (CNV, Inversion, In/del)
 group varRep
 priority 144.8
