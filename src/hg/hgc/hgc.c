@@ -214,7 +214,7 @@
 #include "itemConf.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1426 2008/05/31 15:31:13 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1426.2.1 2008/06/13 18:08:19 larrym Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -19885,7 +19885,7 @@ if (isCustomTrack(track))
 	    break;
     }
 
-if (!isCustomTrack(track) || sameString(ct->dbTrackType, "maf"))
+if (!isCustomTrack(track))
     {
     trackHash = makeTrackHashWithComposites(database, seqName, TRUE);
     if (parentWigMaf)
