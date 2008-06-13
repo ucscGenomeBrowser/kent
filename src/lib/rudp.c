@@ -55,7 +55,7 @@
 #include "errabort.h"
 #include "rudp.h"
 
-static char const rcsid[] = "$Id: rudp.c,v 1.19 2008/06/13 20:13:53 galt Exp $";
+static char const rcsid[] = "$Id: rudp.c,v 1.20 2008/06/13 21:21:19 galt Exp $";
 
 #define MAX_TIME_OUT 999999
 
@@ -326,8 +326,9 @@ for (i=0; i<maxRetry; ++i)
 	tv.tv_sec = 0;
 	tv.tv_usec = ru->timeOut;
 	select(0, NULL, NULL, NULL, &tv);
-	ru->resendCount += 1;
 	rudpTimedOut(ru);
+	ru->resendCount += 1;
+	ru->resend = TRUE;
 	continue;
 	}
     if (getOurAck(ru, &sendTv, sai))
