@@ -55,7 +55,7 @@
 #include "errabort.h"
 #include "rudp.h"
 
-static char const rcsid[] = "$Id: rudp.c,v 1.18 2008/06/11 23:38:08 galt Exp $";
+static char const rcsid[] = "$Id: rudp.c,v 1.19 2008/06/13 20:13:53 galt Exp $";
 
 #define MAX_TIME_OUT 999999
 
@@ -169,7 +169,6 @@ struct rudp *ru = *pRu;
 if (ru != NULL)
     {
     close(ru->socket);
-    close((*pRu)->socket);
     rudpFree(pRu);
     }
 }
