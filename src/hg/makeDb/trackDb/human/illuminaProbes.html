@@ -1,0 +1,51 @@
+<H2>Description</H2>
+<P>
+This track displays the probes form the Illumina WG-6 3.0 BeadChip.
+The WG-6 BeadChip contains probes for the following set of RNA 
+transcripts:
+</P><P>
+<TABLE BORDER=1 BORDERCOLOR="#aaaaaa" CELLPADDING=4>
+<TR><TD><B>Probe source</B></TD><TD><B>Number of probes</B></TD>
+<TD><B>Number of unique probe sources</B></TD></TR>
+<TR><TD>RefSeq NM (well-established coding transcript)</TD><TD>27,454</TD>
+<TD>22,435</TD></TR>
+<TR><TD>RefSeq XM (provisional coding transcript)</TD><TD>7,870</TD>
+<TD>7,518</TD></TR>
+<TR><TD>RefSeq NR (well-established non-coding transcript)</TD><TD>446</TD>
+<TD>358</TD></TR>
+<TR><TD>RefSeq XR (provisional non-coding transcript)</TD><TD>196</TD>
+<TD>190</TD></TR>
+<TR><TD>UniGene ESTs</TD><TD>12,837</TD><TD>12,837</TD></TR>
+<TR><TD><B>TOTAL</B></TD><TD>48,803</TD><TD>43,338</TD></TR>
+</TABLE>
+</P>
+<P>
+The track shows the location of the probes on the genome after the RNAs
+they correspond to were all aligned to the genome using BLAT.  Alignment
+scores range from 0 to 1000, where 1000 is a perfect score.  In the tracks
+display, darker browns are for higher-scoring alignments.  The alignment
+can be seen by clicking the &quot;View Alignment&quot; link above, but 
+ignore the part where it says &quot;cDNA&quot;.
+</P>
+
+<H2>Methods</H2>
+<P>
+The probeset was collected from the NCBI GEO (Gene Expression Omnibus), and the
+43,338 RNA sequences were collected from Genbank using NCBI's EUtils interface
+to Entrez.  These RNAs were aligned to the genome using BLAT, and 43,224 of them
+aligned well to 46,432 locations on the genome (the single best hit was taken
+except in 1,789 cases where the RNA mapped equally well to two or more 
+locations).  The probes were then aligned to their respective RNAs using BLAT,
+and if a good alignment resulted, the probe was then mapped through to the
+genome using the combination of the probe-on-RNA and the RNA-on-genome
+alignments.  Of the 48,803 original probes, 40,852 map well
+through this procedure to 44,163 locations on the genome.
+</P>
+
+<H2>Links</H2>
+<P><UL>
+<LI><A HREF="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GPL6884" 
+TARGET=_blank>NCBI GEO (Gene Expression Omnibus) platform page</A></LI>
+<LI><A HREF="http://www.illumina.com/pages.ilmn?ID=197" 
+TARGET=_blank>Illumina page</A></LI>
+</P>

@@ -507,8 +507,8 @@ visibility hide
 type psl .
 
 track illuminaProbes
-shortLabel Illumina V6
-longLabel Alignments of Illumina V6 2.0 Probe set
+shortLabel Illumina WG-6
+longLabel Alignments of Illumina WG-6 3.0 Probe set
 group regulation
 priority 89.3
 visibility hide
