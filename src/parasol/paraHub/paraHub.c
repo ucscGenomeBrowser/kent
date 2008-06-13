@@ -69,7 +69,7 @@
 #include "obscure.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: paraHub.c,v 1.121 2008/06/13 08:02:54 galt Exp $";
+static char const rcsid[] = "$Id: paraHub.c,v 1.122 2008/06/13 08:42:32 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -1041,7 +1041,6 @@ while(TRUE)
     jNode = dlPopHead(batch->jobQueue);
     dlAddTail(runningJobs, jNode);
     job = jNode->val;
-    dlRemove(job->hangNode);
     dlAddTail(hangJobs, job->hangNode);
     ++batch->runningCount;
     --batch->queuedCount;
@@ -1730,7 +1729,6 @@ for (node = deadMachines->head; !dlEnd(node); node = node->next)
 			dlAddTail(runningJobs, job->node);
 			dlRemove(mach->node);
 			dlAddTail(busyMachines, mach->node);
-			dlRemove(job->hangNode);
 			dlAddTail(hangJobs, job->hangNode);
 			struct batch *batch = job->batch;
 			struct user *user = batch->user;
@@ -2979,7 +2977,6 @@ else
     dlAddTail(runningJobs, job->node);
     dlRemove(mach->node);
     dlAddTail(busyMachines, mach->node);
-    dlRemove(job->hangNode);
     dlAddTail(hangJobs, job->hangNode);
     mach->lastChecked = job->lastChecked = job->submitTime = job->startTime = job->lastClockIn = now;
     }
