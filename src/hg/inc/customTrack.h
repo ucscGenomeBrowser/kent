@@ -120,6 +120,9 @@ void ctTouchLastUse(struct sqlConnection *conn, char *table,
  * for status==FALSE - delete entry for table from metaInfo table
  */
 
+boolean verifyWibExists(struct sqlConnection *conn, char *table);
+/* given a ct database wiggle table, see if the wib file is there */
+
 boolean ctDbTableExists(struct sqlConnection *conn, char *table);
 /* verify if custom trash db table exists, touch access stats */
 

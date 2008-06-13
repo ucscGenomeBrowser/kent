@@ -24,7 +24,7 @@
 #include "trashDir.h"
 #include "jsHelper.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.78 2008/05/31 13:42:37 braney Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.79 2008/06/13 17:17:18 hiram Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -1782,6 +1782,11 @@ while ((line = customPpNextReal(cpp)) != NULL)
 	if (!ctConn || !ctDbTableExists(ctConn, track->dbTableName))
 	    continue;
 	track->wiggle = startsWith("wig ", track->tdb->type);
+	if (track->wiggle)
+	    {
+	    if (!verifyWibExists(ctConn, track->dbTableName))
+		continue;
+	    }
 	oneList = track;
 	}
     else

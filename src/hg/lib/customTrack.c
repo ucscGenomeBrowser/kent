@@ -26,7 +26,7 @@
 #include "trashDir.h"
 #include "jsHelper.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.170 2008/05/20 21:11:14 larrym Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.171 2008/06/13 17:17:18 hiram Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -103,6 +103,7 @@ if (status)
 	}
     else
 	{
+	sqlFreeResult(&sr);
 	safef(query, sizeof(query), "INSERT %s VALUES(\"%s\",1,now())",
 	    CT_META_INFO, table);
 	sqlUpdate(conn,query);
@@ -114,6 +115,27 @@ else
 	CT_META_INFO, table);
     sqlUpdate(conn,query);
     }
+}
+
+boolean verifyWibExists(struct sqlConnection *conn, char *table)
+/* given a ct database wiggle table, see if the wib file is there */
+{
+char query[1024];
+safef(query, sizeof(query), "SELECT file FROM %s LIMIT 1", table);
+char **row = NULL;
+struct sqlResult *sr = NULL;
+sr = sqlGetResult(conn,query);
+row = sqlNextRow(sr);
+if (row)
+    {
+    if (fileExists(row[0]))
+	{
+	sqlFreeResult(&sr);
+	return TRUE;
+	}
+    }
+sqlFreeResult(&sr);
+return FALSE;
 }
 
 boolean ctDbTableExists(struct sqlConnection *conn, char *table)
@@ -278,6 +300,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 customTrackLift(ctList, ctgHash);
 ctgPosFreeList(&ctgList);
 hashFree(&ctgHash);
+sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
