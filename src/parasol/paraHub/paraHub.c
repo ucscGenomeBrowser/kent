@@ -69,7 +69,7 @@
 #include "obscure.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: paraHub.c,v 1.122 2008/06/13 08:42:32 galt Exp $";
+static char const rcsid[] = "$Id: paraHub.c,v 1.123 2008/06/13 08:52:47 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -2976,7 +2976,7 @@ else
     job->machine = mach;
     dlAddTail(runningJobs, job->node);
     dlRemove(mach->node);
-    dlAddTail(busyMachines, mach->node);
+    dlAddTail(readyMachines, mach->node);
     dlAddTail(hangJobs, job->hangNode);
     mach->lastChecked = job->lastChecked = job->submitTime = job->startTime = job->lastClockIn = now;
     }
