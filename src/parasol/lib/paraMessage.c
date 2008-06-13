@@ -136,9 +136,8 @@ void pmmInit(struct paraMultiMessage *pmm, struct paraMessage *pm, struct in_add
 {
 pmm->pm = pm;
 pmm->ipAddress.sin_addr.s_addr = sin_addr.s_addr;
-pmm->ipAddress.sin_port = 0;
-
-pmm->id = 0;  // fix added 2008/04/16
+pmm->ipAddress.sin_port = 0;    /* we don't yet know what port the responder is going to use */
+pmm->id = 0; 
 }
 
 boolean pmmReceiveTimeOut(struct paraMultiMessage *pmm, struct rudp *ru, int timeOut)
@@ -159,7 +158,8 @@ for(;;)
 	    (unsigned int)pmm->ipAddress.sin_addr.s_addr, (unsigned int)pmm->pm->ipAddress.sin_addr.s_addr);
 	continue;
 	}
-    if (pmm->ipAddress.sin_port == 0)
+    if (pmm->ipAddress.sin_port == 0)  /* we don't yet know what port the responder is going to use */
+       	/* Should be ASSERTABLE first packet received since pmmInit was called */
 	{
 	pmm->ipAddress.sin_port = pmm->pm->ipAddress.sin_port;
 	}
@@ -171,9 +171,6 @@ for(;;)
 		pmm->ipAddress.sin_port, pmm->pm->ipAddress.sin_port);
 	    continue;
 	    }
-	}
-    if (pmm->id != 0)
-	{
 	if (pmm->id == ru->lastIdReceived && ru->resend)
 	    {
 	    logDebug("rudp: pmmReceiveTimeOut ignoring duplicate packet lastIdReceived=%d",	pmm->id);
