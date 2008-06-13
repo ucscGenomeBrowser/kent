@@ -1,4 +1,18 @@
-#horse
+# fugu
+track chainFr2
+priority 140
+
+track netFr2
+priority 140.1 
+
+track chainFr1
+priority 140.2
+
+track netFr1
+priority 140.3 
+
+
+# horse
 track chainEquCab2
 priority 195
 
