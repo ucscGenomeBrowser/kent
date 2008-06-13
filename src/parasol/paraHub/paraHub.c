@@ -69,7 +69,7 @@
 #include "obscure.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: paraHub.c,v 1.120 2008/06/13 05:31:48 galt Exp $";
+static char const rcsid[] = "$Id: paraHub.c,v 1.121 2008/06/13 08:02:54 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -138,7 +138,8 @@ struct dlList *blockedMachines; /* List of machines ready but blocked by running
 struct dlList *busyMachines;    /* List of machines running jobs. */
 struct dlList *deadMachines;    /* List of machines that aren't running. */
 
-struct dlList *runningJobs;     /* Jobs that are running. */
+struct dlList *runningJobs;     /* Jobs that are running. Preserves oldest first order. */
+struct dlList *hangJobs;        /* Jobs running hang check list. */
 
 struct hash *userHash;		/* Hash of all users. */
 struct user *userList;		/* List of all users. */
@@ -189,6 +190,7 @@ blockedMachines = newDlList();
 busyMachines = newDlList();
 deadMachines = newDlList();
 runningJobs = newDlList();
+hangJobs = newDlList();
 freeSpokes = newDlList();
 busySpokes = newDlList();
 deadSpokes = newDlList();
@@ -1039,6 +1041,8 @@ while(TRUE)
     jNode = dlPopHead(batch->jobQueue);
     dlAddTail(runningJobs, jNode);
     job = jNode->val;
+    dlRemove(job->hangNode);
+    dlAddTail(hangJobs, job->hangNode);
     ++batch->runningCount;
     --batch->queuedCount;
     ++user->runningCount;
@@ -1051,7 +1055,7 @@ while(TRUE)
     dlAddTail(readyMachines, mNode);
 
     job->machine = machine;
-    job->startTime = job->lastClockIn = now;
+    job->lastChecked = job->startTime = job->lastClockIn = now;
     spokeSendJob(spoke, machine, job);
     return TRUE;
     }
@@ -1211,9 +1215,10 @@ void requeueJob(struct job *job)
 struct batch *batch = job->batch;
 struct user *user = batch->user;
 job->machine = NULL;
-dlRemove(job->jobNode);
 dlRemove(job->node);
 dlAddTail(batch->jobQueue, job->node);
+dlRemove(job->jobNode);
+dlRemove(job->hangNode);
 batch->runningCount -= 1;
 batch->queuedCount += 1;
 user->runningCount -= 1;
@@ -1378,6 +1383,8 @@ job->in = cloneString(in);
 job->out = cloneString(out);
 job->cpus = cpus;
 job->ram = ram;
+AllocVar(job->hangNode);
+job->hangNode->val = job;
 return job;
 }
 
@@ -1394,6 +1401,7 @@ if (job != NULL)
     freeMem(job->in);
     freeMem(job->out);
     freeMem(job->err);
+    freeMem(job->hangNode);
     freez(pJob);
     }
 }
@@ -1443,22 +1451,25 @@ for (i=0; i<spokesToUse; ++i)
 }
 
 void hangman(int spokesToUse)
-/* Check that busy nodes aren't dead.  Also send message for 
- * busy nodes to check in, in case we missed one of their earlier
+/* Check that jobs are alive, sense if nodes are dead.  Also send message for 
+ * busy nodes to check in for specific jobs, in case we missed one of their earlier
  * jobDone messages. */
 {
 int i, period = jobCheckPeriod*MINUTE;
-struct dlNode *jobNode;
+struct dlNode *hangNode;
 struct job *job;
 struct machine *machine;
 
 for (i=0; i<spokesToUse; ++i)
     {
-    if (dlEmpty(freeSpokes) || dlEmpty(runningJobs))
+    if (dlEmpty(freeSpokes) || dlEmpty(hangJobs))
         break;
-    job = runningJobs->head->val;
-    if (now - job->lastClockIn < period)
+    job = hangJobs->head->val;
+    if (now - job->lastChecked < period)
         break;
+    job->lastChecked = now;
+    hangNode = dlPopHead(hangJobs);
+    dlAddTail(hangJobs, hangNode);
     machine = job->machine;
     if (now - job->lastClockIn >= MINUTE * assumeDeadPeriod)
 	{
@@ -1468,9 +1479,6 @@ for (i=0; i<spokesToUse; ++i)
 	}
     else
 	{
-	job->lastClockIn = now;
-	jobNode = dlPopHead(runningJobs);
-	dlAddTail(runningJobs, jobNode);
 	char message[512];
 	safef(message, sizeof(message), "check %d", job->id);
 	sendViaSpoke(machine, message);
@@ -1717,11 +1725,13 @@ for (node = deadMachines->head; !dlEnd(node); node = node->next)
                              jobId);
 			job->machine = mach;
 			dlAddTail(mach->jobs, job->jobNode);
-			mach->lastChecked = job->lastClockIn = now;
+			job->lastChecked = mach->lastChecked = job->lastClockIn = now;
 			dlRemove(job->node);
 			dlAddTail(runningJobs, job->node);
 			dlRemove(mach->node);
 			dlAddTail(busyMachines, mach->node);
+			dlRemove(job->hangNode);
+			dlAddTail(hangJobs, job->hangNode);
 			struct batch *batch = job->batch;
 			struct user *user = batch->user;
 			batch->runningCount += 1;
@@ -2231,6 +2241,7 @@ if (mach != NULL)
     user->runningCount -= 1;
     }
 dlRemove(job->jobNode);
+dlRemove(job->hangNode);
 recycleJob(job);
 }
 
@@ -2968,7 +2979,9 @@ else
     dlAddTail(runningJobs, job->node);
     dlRemove(mach->node);
     dlAddTail(busyMachines, mach->node);
-    mach->lastChecked = job->submitTime = job->startTime = job->lastClockIn = now;
+    dlRemove(job->hangNode);
+    dlAddTail(hangJobs, job->hangNode);
+    mach->lastChecked = job->lastChecked = job->submitTime = job->startTime = job->lastClockIn = now;
     }
 }
 
