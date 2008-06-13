@@ -11,7 +11,7 @@
 #include "minChromSize.h"
 #include "txCommon.h"
 
-static char const rcsid[] = "$Id: txGeneAccession.c,v 1.15 2008/06/06 21:48:32 kent Exp $";
+static char const rcsid[] = "$Id: txGeneAccession.c,v 1.16 2008/06/13 00:11:21 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -115,7 +115,7 @@ if (isCoding(oldBed))
 	return !(oldBed->thickStart == newBed->thickStart && 
 	        oldBed->thickEnd == newBed->thickEnd);
     else
-        return FALSE;
+        return TRUE;
     }
 else
     {
