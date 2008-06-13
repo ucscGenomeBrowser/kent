@@ -3,7 +3,7 @@
 # Pristionchus pacificus
 #	Washington University School of Medicine GSC and Sanger Institute
 #
-#  $Id: priPac1.txt,v 1.13 2008/06/09 23:51:09 hiram Exp $
+#  $Id: priPac1.txt,v 1.14 2008/06/13 19:21:02 hiram Exp $
 ###########################################################################
 ## Download sequence - (DONE - 2007-02-25 - Hiram)
     ssh kkstore02
@@ -686,3 +686,195 @@ chainOne $(path1)
     twoBitInfo priPac1.TrfWM.supers.2bit stdout \
 	| sort -k2rn > priPac1.TrfWM.supers.sizes
 ###########################################################################
+# ELEGANS (ce6) PROTEINS TRACK (DONE -  Hiram - 2008-06-11)
+    ssh kkstore02
+
+    #	trying a better split scheme this time compared to the Ce4 run
+    mkdir /cluster/data/priPac1/blastDb
+    cd /cluster/data/priPac1
+    twoBitToFa -noMask trfWM.maskedContigs/priPac1.TrfWM.supers.2bit temp.fa
+    faSplit gap temp.fa 1000000 blastDb/x -lift=blastDb.lft
+    #	5160 pieces of 5160 written
+    rm temp.fa
+    cd blastDb
+    for i in *.fa
+    do
+	/cluster/bluearc/blast229/formatdb -i $i -p F
+    done
+    rm *.fa
+
+    ##	copy to san for kluster access
+    mkdir -p /san/sanvol1/scratch/worms/priPac1/blastDb
+    cd /san/sanvol1/scratch/worms/priPac1/blastDb
+    rsync -a --progress --stats /cluster/data/priPac1/blastDb/ .
+
+    ## create the query protein set
+    mkdir -p /cluster/data/priPac1/bed/tblastn.ce6SG
+    cd /cluster/data/priPac1/bed/tblastn.ce6SG
+    echo  /san/sanvol1/scratch/worms/priPac1/blastDb/*.nsq | xargs ls -S \
+	| sed "s/\.nsq//"  > query.lst
+    wc -l query.lst
+    # 5160 query.lst
+
+   # we want around 80000 jobs
+   calc `wc /cluster/data/ce6/bed/blat.ce6SG/ce6SG.psl | awk "{print \\\$1}"`/\(80000/`wc query.lst | awk "{print \\\$1}"`\)
+
+    #	23741/(80000/5160) = 1531.294500
+
+   mkdir -p /cluster/bluearc/worms/priPac1/bed/tblastn.ce6SG/sgfa
+   split -l 1500 /cluster/data/ce6/bed/blat.ce6SG/ce6SG.psl \
+	/cluster/bluearc/worms/priPac1/bed/tblastn.ce6SG/sgfa/sg
+   ln -s /cluster/bluearc/worms/priPac1/bed/tblastn.ce6SG/sgfa sgfa
+   cd sgfa
+   for i in *; do 
+     nice pslxToFa $i $i.fa; 
+     rm $i; 
+   done
+   cd ..
+   ls -1S sgfa/*.fa > sg.lst
+   mkdir -p /cluster/bluearc/worms/priPac1/bed/tblastn.ce6SG/blastOut
+   ln -s /cluster/bluearc/worms/priPac1/bed/tblastn.ce6SG/blastOut
+   for i in `cat sg.lst`; do  mkdir blastOut/`basename $i .fa`; done
+   
+   cd /cluster/data/priPac1/bed/tblastn.ce6SG
+   cat << '_EOF_' > template
+#LOOP
+blastSome $(path1) {check in line $(path2)} {check out exists blastOut/$(root2)/q.$(root1).psl }
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+   cat << '_EOF_' > blastSome
+#!/bin/sh
+DB=priPac1
+BLASTMAT=/scratch/data/blast229/data
+SCR="/scratch/tmp/${DB}"
+g=`basename $2`
+D=`basename $1`
+export BLASTMAT DB SCR g D
+mkdir -p ${SCR}
+cp -p $1.* ${SCR}
+f=${SCR}/`basename $3`.$g
+for eVal in 0.01 0.001 0.0001 0.00001 0.000001 1E-09 1E-11
+do
+if /scratch/data/blast229/blastall -M BLOSUM80 -m 0 -F no \
+        -e $eVal -p tblastn -d ${SCR}/$D -i $2 -o $f.8
+then
+        mv $f.8 $f.1
+        break;
+fi
+done
+if test -f  $f.1
+then
+    if /cluster/bin/i386/blastToPsl $f.1 $f.2
+    then
+        liftUp -nosort -type=".psl" -nohead $f.3 \
+            /cluster/data/${DB}/blastDb.lft carry $f.2 > /dev/null
+        liftUp -nosort -type=".psl" -pslQ -nohead $3.tmp \
+            /cluster/data/ce6/bed/blat.ce6SG/protein.lft warn $f.3 > /dev/null
+        if pslCheck -prot $3.tmp
+        then
+            mv $3.tmp $3
+            rm -f $f.1 $f.2 $f.3 $f.4 ${SCR}/$D.*
+            rmdir --ignore-fail-on-non-empty ${SCR}
+        fi
+        exit 0
+    fi
+fi
+rm -f $f.1 $f.2 $3.tmp $f.8 $f.3 $f.4 ${SCR}/$D.*
+rmdir --ignore-fail-on-non-empty ${SCR}
+exit 1
+'_EOF_'
+    # << happy emacs
+    chmod +x blastSome
+
+    ssh kk
+    cd /cluster/data/priPac1/bed/tblastn.ce6SG
+    gensub2 query.lst sg.lst template jobList
+    para create jobList
+#    para try, check, push, check etc.
+# Completed: 82560 of 82560 jobs
+# CPU time in finished jobs:   13104748s  218412.47m  3640.21h  151.68d  0.416 y
+# IO & Wait Time:                518235s    8637.25m   143.95h    6.00d  0.016 y
+# Average job time:                 165s       2.75m     0.05h    0.00d
+# Longest finished job:            2798s      46.63m     0.78h    0.03d
+# Submission to last job:         85527s    1425.45m    23.76h    0.99d
+
+    # do the cluster run for chaining
+    ssh kk
+    mkdir /cluster/data/priPac1/bed/tblastn.ce6SG/chainRun
+    cd /cluster/data/priPac1/bed/tblastn.ce6SG/chainRun
+    cat << '_EOF_' > template
+#LOOP
+chainOne $(path1)
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    cat << '_EOF_' > chainOne
+(cd $1; cat q.*.psl | simpleChain -prot -outPsl -maxGap=50000 stdin /cluster/bluearc/worms/priPac1/bed/tblastn.ce6SG/blastOut/c.`basename $1`.psl)
+'_EOF_'
+    # << happy emacs
+    chmod +x chainOne
+
+    ls -1dS /cluster/bluearc/worms/priPac1/bed/tblastn.ce6SG/blastOut/sg?? \
+	> chain.lst
+    gensub2 chain.lst single template jobList
+    cd /cluster/data/priPac1/bed/tblastn.ce6SG/chainRun
+    para create jobList
+    para maxNode 30
+    para try, check, push, check etc.
+# Completed: 16 of 16 jobs
+# CPU time in finished jobs:        558s       9.30m     0.16h    0.01d  0.000 y
+# IO & Wait Time:                  2841s      47.35m     0.79h    0.03d  0.000 y
+# Average job time:                 212s       3.54m     0.06h    0.00d
+# Longest finished job:             228s       3.80m     0.06h    0.00d
+# Submission to last job:           243s       4.05m     0.07h    0.00d
+
+XXX - ready for the next step 2008-06-13 12:20
+    ssh kkstore02
+    cd /cluster/data/priPac1/bed/tblastn.ce6SG/blastOut
+    for i in sg??
+    do
+       cat c.$i.psl | awk "(\$13 - \$12)/\$11 > 0.6 {print}" > c60.$i.psl
+       sort -rn c60.$i.psl | pslUniq stdin u.$i.psl
+       awk "((\$1 / \$11) ) > 0.60 { print   }" c60.$i.psl > m60.$i.psl
+       echo $i
+    done
+    sort -T /scratch/tmp -k 14,14 -k 16,16n -k 17,17n u.*.psl m60* | uniq \
+	> /cluster/data/priPac1/bed/tblastn.ce6SG/blastCe6SG.psl
+    cd ..
+    pslCheck blastCe6SG.psl
+
+    # load table 
+    ssh hgwdev
+    cd /cluster/data/priPac1/bed/tblastn.ce6SG
+    hgLoadPsl priPac1 blastCe6SG.psl
+
+    # check coverage
+    featureBits priPac1 blastCe6SG 
+    #	18218293 bases of 108433446 (16.801%) in intersection
+    featureBits caeRem2 blastCe6SG 
+    #	19763359 bases of 146898439 (13.454%) in intersection
+    featureBits caePb1 blastCe6SG
+    #	22988044 bases of 175247318 (13.117%) in intersection
+    featureBits priPac1 blastCe6SG 
+    #	5617285 bases of 145948246 (3.849%) in intersection
+    featureBits priPac1 blastCe4SG 
+    #	18218293 bases of 108433446 (16.801%) in intersection
+    featureBits caeRem2 blastCe4SG 
+    #	19763359 bases of 146898439 (13.454%) in intersection
+    featureBits caePb1 blastCe4SG
+    #	22988044 bases of 175247318 (13.117%) in intersection
+    featureBits priPac1 blastCe4SG 
+    #	5617285 bases of 145948246 (3.849%) in intersection
+
+    featureBits ce6 sangerGene
+    #	27906202 bases of 100281244 (27.828%) in intersection
+
+    ssh kkstore02
+    rm -rf /cluster/data/priPac1/bed/tblastn.ce6SG/blastOut
+    rm -rf /cluster/bluearc/worms/priPac1/bed/tblastn.ce6SG
+#end tblastn
+
+#########################################################################
