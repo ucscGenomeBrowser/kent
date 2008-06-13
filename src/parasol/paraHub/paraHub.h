@@ -31,6 +31,8 @@ struct job
     time_t lastClockIn;		/* Last time we got a message from machine about job. */
     struct machine *machine;	/* Machine it's running on if any. */
     boolean oldPlan;            /* from the old plan */
+    time_t lastChecked;		/* Last time we checked machine in seconds past 1972 */
+    struct dlNode *hangNode;	/* Job's node in hang list. */
     };
 
 struct machine
