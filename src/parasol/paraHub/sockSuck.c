@@ -25,8 +25,8 @@ for (;;)
     AllocVar(pm);
     if (pmReceive(pm, ru))
 	{
-	if (ipAddressOk(pm->ipAddress.sin_addr.s_addr, hubSubnet) || 
-	    ipAddressOk(pm->ipAddress.sin_addr.s_addr, localHost))
+	if (ipAddressOk(ntohl(pm->ipAddress.sin_addr.s_addr), hubSubnet) || 
+	    ipAddressOk(ntohl(pm->ipAddress.sin_addr.s_addr), localHost))
 	    {
 	    hubMessagePut(pm);
 	    }
