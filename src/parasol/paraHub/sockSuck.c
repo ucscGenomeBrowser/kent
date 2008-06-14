@@ -4,32 +4,14 @@
 #include "paraHub.h"
 
 static pthread_t sockSuckThread;
-unsigned char localHost[4] = {127,0,0,1};	   /* Address for local host */
-
-void unpackIp(in_addr_t packed, unsigned char unpacked[4])
-/* Unpack IP address into 4 bytes. */
-{
-/* We cannot use sizeof(unpacked) because an array on a stack 
- * is just a pointer, and so pointer-size is all that sizeof returns 
- * for unpacked. We'll use the size of the source instead. */
-memcpy(unpacked, &packed, sizeof(packed));
-}
+unsigned char localHost[4] = {127,0,0,1};   /* Address for local host in network order */
 
 boolean ipAddressOk(in_addr_t packed, unsigned char *spec)
 /* Return TRUE if packed IP address matches spec. */
 {
-unsigned char unpacked[4], c;
-int i;
-unpackIp(packed, unpacked);
-for (i=0; i<sizeof(unpacked); ++i)
-    {
-    c = spec[i];
-    if (c == 255)
-        break;
-    if (c != unpacked[i])
-        return FALSE;
-    }
-return TRUE;
+unsigned char unpacked[4];
+internetUnpackIp(packed, unpacked);
+return internetIpInSubnet(unpacked, spec);
 }
 
 static void *sockSuckDaemon(void *vptr)
@@ -43,8 +25,6 @@ for (;;)
     AllocVar(pm);
     if (pmReceive(pm, ru))
 	{
-	/* FIXME: I think there may be some byte order issues here. 
-	 * that are hidden under the Pentiums we are using. */
 	if (ipAddressOk(pm->ipAddress.sin_addr.s_addr, hubSubnet) || 
 	    ipAddressOk(pm->ipAddress.sin_addr.s_addr, localHost))
 	    {
@@ -52,10 +32,9 @@ for (;;)
 	    }
 	else
 	    {
-	    unsigned char ip[4];
-	    unpackIp(pm->ipAddress.sin_addr.s_addr, ip);
-	    warn("unauthorized access by %d.%d.%d.%d\n", 
-                 ip[0], ip[1], ip[2], ip[3]);
+	    char dottedQuad[17];
+	    internetIpToDottedQuad(ntohl(pm->ipAddress.sin_addr.s_addr), dottedQuad);
+	    warn("unauthorized access by %s", dottedQuad);
 	    freez(&pm);
 	    }
 	}
