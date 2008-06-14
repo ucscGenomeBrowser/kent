@@ -85,5 +85,14 @@ int hgAddToExtFile(char *path, struct sqlConnection *conn);
 /* Add entry to ext file table.  Delete it if it already exists. 
  * Returns extFile id. */
 
+void hgPurgeExtFileTbl(int id, struct sqlConnection *conn, char *extFileTbl);
+/* remove an entry from the extFile table.  Called
+ * when there is an error loading the referenced file
+ */
+
+void hgPurgeExtFile(int id, struct sqlConnection *conn);
+/* remove an entry from the extFile table.  Called
+ * when there is an error loading the referenced file
+ */
 #endif /* HGRELATE_H */
 

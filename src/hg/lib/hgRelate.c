@@ -14,7 +14,7 @@
 #include "hgRelate.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgRelate.c,v 1.22 2008/05/31 13:44:52 braney Exp $";
+static char const rcsid[] = "$Id: hgRelate.c,v 1.23 2008/06/14 14:15:29 braney Exp $";
 
 static char extFileCreate[] =
 /* This keeps track of external files and directories. */
@@ -296,4 +296,26 @@ int hgAddToExtFile(char *path, struct sqlConnection *conn)
  * Returns extFile id. */
 {
 return hgAddToExtFileTbl(path, conn, "extFile");
+}
+
+void hgPurgeExtFileTbl(int id, struct sqlConnection *conn, char *extFileTbl)
+/* remove an entry from the extFile table.  Called
+ * when there is an error loading the referenced file
+ */
+{
+struct dyString *dy = newDyString(1024);
+
+/* Delete it from database. */
+dyStringPrintf(dy, "delete from %s where id = '%d'", extFileTbl, id);
+sqlUpdate(conn, dy->string);
+
+dyStringFree(&dy);
+}
+
+void hgPurgeExtFile(int id,  struct sqlConnection *conn)
+/* remove an entry from the extFile table.  Called
+ * when there is an error loading the referenced file
+ */
+{
+hgPurgeExtFileTbl(id, conn, "extFile");
 }
