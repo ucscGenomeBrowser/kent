@@ -11,8 +11,9 @@
 #include "maf.h"
 #include "scoredRef.h"
 #include "dystring.h"
+#include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgLoadMaf.c,v 1.20 2008/05/31 15:42:37 braney Exp $";
+static char const rcsid[] = "$Id: hgLoadMaf.c,v 1.21 2008/06/14 14:17:56 braney Exp $";
 
 /* Command line options */
 
@@ -160,87 +161,105 @@ for (fileEl = fileList; fileEl != NULL; fileEl = fileEl->next)
     else
         extId = hgAddToExtFile(fileName, conn);
 
-    mf = mafOpen(fileName);
-    verbose(1,"Indexing and tabulating %s\n", fileName);
-    while ((maf = mafNextWithPos(mf, &offset)) != NULL)
-        {
-	double maxScore, minScore;
-	mc = findComponent(maf, refDb);
-	if (mc == NULL) 
-            {
-            char msg[256];
-            safef(msg, sizeof(msg),
-                            "Couldn't find %s. sequence line %d of %s\n", 
-	    	                refDb, mf->lf->lineIx, fileName);
-            if (warnOption || warnVerboseOption) 
-                {
-                warnCount++;
-                if (warnVerboseOption)
-                    verbose(1, msg);
-                mafAliFree(&maf);
-                continue;
-                }
-            else 
-                errAbort(msg);
-            }
-	ZeroVar(&mr);
-	mr.chrom = mc->src + dbNameLen + 1;
-	mr.chromStart = mc->start;
-	mr.chromEnd = mc->start + mc->size;
-	if (mc->strand == '-')
-	    reverseUnsignedRange(&mr.chromStart, &mr.chromEnd, mc->srcSize);
-	mr.extFile = extId;
-	mr.offset = offset;
+    struct errCatch *errCatch = errCatchNew();
+    char *errMsg = NULL;
+    if (errCatchStart(errCatch))
+	{
+	mf = mafOpen(fileName);
+	verbose(1,"Indexing and tabulating %s\n", fileName);
+	while ((maf = mafNextWithPos(mf, &offset)) != NULL)
+	    {
+	    double maxScore, minScore;
+	    mc = findComponent(maf, refDb);
+	    if (mc == NULL) 
+		{
+		char msg[256];
+		safef(msg, sizeof(msg),
+				"Couldn't find %s. sequence line %d of %s\n", 
+				    refDb, mf->lf->lineIx, fileName);
+		if (warnOption || warnVerboseOption) 
+		    {
+		    warnCount++;
+		    if (warnVerboseOption)
+			verbose(1, msg);
+		    mafAliFree(&maf);
+		    continue;
+		    }
+		else 
+		    errAbort(msg);
+		}
+	    ZeroVar(&mr);
+	    mr.chrom = mc->src + dbNameLen + 1;
+	    mr.chromStart = mc->start;
+	    mr.chromEnd = mc->start + mc->size;
+	    if (mc->strand == '-')
+		reverseUnsignedRange(&mr.chromStart, &mr.chromEnd, mc->srcSize);
+	    mr.extFile = extId;
+	    mr.offset = offset;
 
-        /* The maf scores are the sum of all pairwise
-         * alignment scores.  If you have A,B,C,D
-         * species in the alignments it's the sum of
-         * the AB, AC, AD, BC, BD, CD pairwise scores.
-         * If you just had two species it would just
-         * be a single pairwise score.  Since we don't
-         * want to penalize things for missing species,
-         * we basically divide by the number of possible
-         * pairings.  To get it from the -100 to +100 (more or
-         * less) per base blastz scoring scheme to something
-         * that goes from 0 to 1, we also also divide by 200.
-         * JK */
+	    /* The maf scores are the sum of all pairwise
+	     * alignment scores.  If you have A,B,C,D
+	     * species in the alignments it's the sum of
+	     * the AB, AC, AD, BC, BD, CD pairwise scores.
+	     * If you just had two species it would just
+	     * be a single pairwise score.  Since we don't
+	     * want to penalize things for missing species,
+	     * we basically divide by the number of possible
+	     * pairings.  To get it from the -100 to +100 (more or
+	     * less) per base blastz scoring scheme to something
+	     * that goes from 0 to 1, we also also divide by 200.
+	     * JK */
 
-        /* scale using alignment size to get per-base score */
-	mr.score = maf->score/mc->size;
+	    /* scale using alignment size to get per-base score */
+	    mr.score = maf->score/mc->size;
 
-        /* get scoring range -- depends on #species in alignment */
-        mafColMinMaxScore(maf, &minScore, &maxScore);
-        if (maxScore == minScore) 
-            /* protect against degenerate case -- 1 species, produces
-             * max & min score of 0 */
-            mr.score = 0.0;
-        else
-            /* translate to get zero-based score, 
-             * then scale by blastz scoring range */
-            mr.score = (mr.score-minScore)/(maxScore-minScore);
-	if (mr.score <= 0.0) 
-            {
-            char msg[256];
-            safef(msg, sizeof(msg),
-                    "Score too small (raw %.1f scaled %.1f #species %d),"
-                           " line %d of %s\n", 
-                        maf->score, mr.score, slCount(maf->components),
-                                mf->lf->lineIx, fileName);
-            if (warnOption || warnVerboseOption) 
-                {
-                warnCount++;
-                if (warnVerboseOption)
-                    verbose(1, msg);
-                }
-	    mr.score = 0.001;
-            }
-	if (mr.score > 1.0) mr.score = 1.0;
-	mafCount++;
-	fprintf(f, "%u\t", hFindBin(mr.chromStart, mr.chromEnd));
-	scoredRefTabOut(&mr, f);
-	mafAliFree(&maf);
+	    /* get scoring range -- depends on #species in alignment */
+	    mafColMinMaxScore(maf, &minScore, &maxScore);
+	    if (maxScore == minScore) 
+		/* protect against degenerate case -- 1 species, produces
+		 * max & min score of 0 */
+		mr.score = 0.0;
+	    else
+		/* translate to get zero-based score, 
+		 * then scale by blastz scoring range */
+		mr.score = (mr.score-minScore)/(maxScore-minScore);
+	    if (mr.score <= 0.0) 
+		{
+		char msg[256];
+		safef(msg, sizeof(msg),
+			"Score too small (raw %.1f scaled %.1f #species %d),"
+			       " line %d of %s\n", 
+			    maf->score, mr.score, slCount(maf->components),
+				    mf->lf->lineIx, fileName);
+		if (warnOption || warnVerboseOption) 
+		    {
+		    warnCount++;
+		    if (warnVerboseOption)
+			verbose(1, msg);
+		    }
+		mr.score = 0.001;
+		}
+	    if (mr.score > 1.0) mr.score = 1.0;
+	    mafCount++;
+	    fprintf(f, "%u\t", hFindBin(mr.chromStart, mr.chromEnd));
+	    scoredRefTabOut(&mr, f);
+	    mafAliFree(&maf);
+	    }
+	mafFileFree(&mf);
 	}
-    mafFileFree(&mf);
+    errCatchEnd(errCatch);
+    if (errCatch->gotError)
+	{
+	errMsg = cloneString(errCatch->message->string);
+	}
+    errCatchFree(&errCatch);
+
+    if (errMsg)
+	{
+	hgPurgeExtFile(extId,  conn);
+	errAbort(errMsg);
+	}
+
     if (warnCount)
         verbose(1, "%d warnings\n", warnCount);
     }
