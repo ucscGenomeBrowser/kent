@@ -113,6 +113,8 @@ char *customTrackTableFromLabel(char *label);
 /*	custom tracks database name	*/
 #define CT_META_INFO	"metaInfo"
 /*	table name in customTrash for last accessed memory and other data */
+#define CT_EXTFILE	"extFile"
+/*      table with references to external files  */
 
 void ctTouchLastUse(struct sqlConnection *conn, char *table,
 	boolean status);
