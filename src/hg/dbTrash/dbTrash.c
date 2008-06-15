@@ -7,7 +7,7 @@
 #include "hdb.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: dbTrash.c,v 1.12 2006/11/13 18:36:57 hiram Exp $";
+static char const rcsid[] = "$Id: dbTrash.c,v 1.13 2008/06/15 15:40:22 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -24,6 +24,11 @@ errAbort(
   "   -historyToo - also consider the table called 'history' for deletion.\n"
   "               - default is to leave 'history' alone no matter how old.\n"
   "               - this applies to the table 'metaInfo' also.\n"
+  "   -extFile    - check extFile for lines that reference files\n"
+  "               - no longer in trash\n"
+  "   -extDel     - delete lines in extFile that fail file check\n"
+  "               - otherwise just verbose(2) lines that would be deleted\n"
+  "   -topDir     - directory name to prepend to file names in extFile\n"
   "   -verbose=N - 2 == show arguments, dates, and dropped tables,\n"
   "              - 3 == show date information for all tables."
   );
@@ -31,9 +36,11 @@ errAbort(
 
 static struct optionSpec options[] = {
     {"age", OPTION_FLOAT},
-    {"drop", OPTION_BOOLEAN},
+    {"extFile", OPTION_BOOLEAN},
+    {"extDel", OPTION_BOOLEAN},
     {"drop", OPTION_BOOLEAN},
     {"db", OPTION_STRING},
+    {"topDir", OPTION_STRING},
     {"historyToo", OPTION_BOOLEAN},
     {NULL, 0},
 };
@@ -45,6 +52,49 @@ static boolean historyToo = FALSE;	/*	optional	*/
 
 static time_t timeNow = 0;
 static time_t dropTime = 0;
+
+static boolean extFileCheck = FALSE;
+static boolean extDel = FALSE;
+static char *topDir = NULL;
+
+void checkExtFile(struct sqlConnection *conn)
+/* check extFile table for files that have been removed */
+{
+char query[256];
+struct sqlResult *sr;
+char **row;
+char buffer[4 * 1024];
+char *name = buffer;
+struct slName *list = NULL;
+
+safef(query,sizeof(query),"select id,path from %s",CT_EXTFILE);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    if (topDir != NULL)
+	safef(buffer, sizeof buffer, "%s/%s",topDir, row[1]);
+    else
+	name = row[1];
+
+    if (!fileExists(name))
+	{
+	struct slName *new = newSlName(row[0]);
+	slAddHead(&list, new);
+	}
+    }
+sqlFreeResult(&sr);
+
+struct slName *one;
+for(one = list; one; one = one->next)
+    {
+    safef(query,sizeof(query),"delete from %s where id='%s'",
+	CT_EXTFILE, one->name);
+    if (extDel)
+	sqlUpdate(conn, query);
+    verbose(2,"%s\n",query);
+    }
+slFreeList(&list);
+}
 
 void dbTrash(char *db)
 /* dbTrash - drop tables from a database older than specified N hours. */
@@ -68,6 +118,9 @@ if (differentWord(db,CUSTOM_TRASH))
     conn = sqlConnect(db);
 else
     conn = sqlCtConn(TRUE);
+
+if (extFileCheck)
+    checkExtFile(conn);
 
 time_t ageSeconds = (time_t)(ageHours * 3600);	/*	age in seconds	*/
 safef(query,sizeof(query),"select name from %s WHERE "
@@ -101,6 +154,9 @@ while ((row = sqlNextRow(sr)) != NULL)
 	continue;
     /* also skip the metaInfo table */
     if ((!historyToo) && (sameWord(row[nameIx],CT_META_INFO)))
+	continue;
+    /* don't delete the extFile table  */
+    if (sameWord(row[nameIx],CT_EXTFILE))
 	continue;
 
     /*	Update_time is sometimes NULL on MySQL 5
@@ -252,6 +308,10 @@ db = optionVal("db",db);
 verbose(2,"#	drop requested: %s\n", drop ? "TRUE" : "FALSE");
 verbose(2,"#	    historyToo: %s\n", historyToo ? "TRUE" : "FALSE");
 verbose(2,"#	database: %s\n", db);
+
+extFileCheck = optionExists("extFile");
+extDel = optionExists("extDel");
+topDir = optionVal("topDir", topDir);
 dbTrash(db);
 return 0;
 }
