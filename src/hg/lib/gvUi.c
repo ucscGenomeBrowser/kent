@@ -133,6 +133,7 @@ char *gvAttrTypeKey[] = {
     "hap",
     "ethnic",
     "comment",
+    "userAnno",
 };
 
 /* list in display order of attribute type display names */
@@ -155,6 +156,7 @@ char *gvAttrTypeDisplay[] = {
     "Haplotype",
     "Ethnicity/Nationality",
     "Comments",
+    "User annotations",
 };
 
 /* category for each type above, match up by array index */
@@ -174,6 +176,7 @@ char *gvAttrCategory[] = {
     "Patient/Subject phenotype",
     "Patient/Subject phenotype",
     "Data related to gene locus",
+    "Other Ancillary data",
     "Other Ancillary data",
     "Other Ancillary data",
     "Other Ancillary data",

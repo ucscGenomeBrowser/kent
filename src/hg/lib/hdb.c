@@ -38,7 +38,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.358 2008/05/31 13:41:07 braney Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.359 2008/06/16 15:09:55 giardine Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -635,7 +635,7 @@ host = cfgOption(setting);
 safef(setting, sizeof(setting), "%s.user", prefix);
 user = cfgOption(setting);
 safef(setting, sizeof(setting), "%s.password", prefix);
-password = cfgOption(setting);;
+password = cfgOption(setting);
 
 if (database == NULL || host == NULL || user == NULL || password == NULL)
     errAbort("Please set %s options in the hg.conf file.", prefix);

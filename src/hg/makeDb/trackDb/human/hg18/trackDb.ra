@@ -458,6 +458,87 @@ oldToNew kg2ToKg3
 baseColorUseCds given
 baseColorDefault genomicCodons
 
+track pgVenter
+shortLabel Venter SNPs
+longLabel Venter method 1 SNPs
+group varRep
+priority 500
+visibility pack
+color 128,0,128
+type bed 4 .
+
+track pgVenterGaps
+shortLabel Venter gaps
+longLabel Places with no reads in Venter sequence
+group varRep
+priority 500.1
+visibility pack
+color 128,0,128
+type bed 3 .
+
+track pgWatson
+shortLabel Watson SNPs
+longLabel Watson SNPs from CSHL
+group varRep
+priority 501
+visibility pack
+color 153,0,0
+type bed 4 .
+
+track pgWatsonGaps
+shortLabel Watson gaps 
+longLabel Places with no reads in Watson sequence
+group varRep
+priority 501.1
+visibility pack
+color 153,0,0
+type bed 3 .
+
+track pgYri
+shortLabel YRI SNPs
+longLabel YRI SNPs test data
+group varRep
+priority 502
+visibility pack
+color 0,153,0
+type bed 4 .
+
+track pgCeu
+shortLabel CEU SNPs
+longLabel CEU SNPs test data
+group varRep
+priority 502.1
+visibility pack
+color 0,153,0
+type bed 4 .
+
+track pgChb
+shortLabel CHB SNPs
+longLabel CHB SNPs test data
+group varRep
+priority 502.2
+visibility pack
+color 0,153,0
+type bed 4 .
+
+track pgJpt
+shortLabel JPT SNPs
+longLabel JPT SNPs test data
+group varRep
+priority 502.3
+visibility pack
+color 0,153,0
+type bed 4 .
+
+track pgTest
+shortLabel Test SNPs
+longLabel Test SNPs 
+group varRep
+priority 502.4
+visibility pack
+color 0,153,0
+type bed 4 .
+
 track augustus
 compositeTrack on
 shortLabel Augustus
@@ -1976,7 +2057,7 @@ type bed 4 .
  
 track divMKAR
 shortLabel Recent Selection NC
-longLabel Recent selection in human non-coding regions using a McDonald-Kreitman test
+longLabel Recent selection in non-coding regions
 compositeTrack on
 group varRep
 priority 147

@@ -16,7 +16,7 @@
 #include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.46 2008/05/30 20:44:53 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.47 2008/06/16 15:09:54 giardine Exp $";
 
 #define ITEM_SCORE_DEFAULT "1000"
 #define ADD_ITEM_COMMENT_DEFAULT "add comments"
@@ -40,20 +40,21 @@ hPrintf("<OPTION VALUE = \"#8c8c8c\" style=\"background-color:#8c8c8c;\" >gray</
 hPrintf("</SELECT>\n");
 }
 
-static char *encodedHgcReturnUrl(int id)
+static char *encodedHgcReturnUrl(int id, char *table)
 /* Return a CGI-encoded hgc URL with hgsid and given id.  Free when done. */
 {
 char retBuf[1024];
+int o = cartUsualInt(cart, "o", winStart);
 safef(retBuf, sizeof(retBuf), "http://%s/cgi-bin/hgc?%s&g=%s&c=%s&o=%d&l=%d&r=%d&db=%s&i=%d",
-    cgiServerName(), cartSidUrlString(cart), WIKI_TRACK_TABLE, seqName,
-	winStart, winStart, winEnd, database, id);
+    cgiServerName(), cartSidUrlString(cart), table, seqName,
+	o, winStart, winEnd, database, id);
 return cgiEncode(retBuf);
 }   
 
-static char *wikiTrackUserLoginUrl(int id)
+static char *wikiTrackUserLoginUrl(int id, char *table)
 /* Return the URL for the wiki user login page. */
 {
-char *retEnc = encodedHgcReturnUrl(id);
+char *retEnc = encodedHgcReturnUrl(id, table);
 char buf[2048];
 if (! wikiLinkEnabled())
     errAbort("wikiLinkUserLoginUrl called when wiki is not enabled (specified "
@@ -65,11 +66,11 @@ freez(&retEnc);
 return(cloneString(buf));
 }
 
-static void offerLogin(int id, char *loginType)
+void offerLogin(int id, char *loginType, char *table)
 /* display login prompts to the wiki when user isn't already logged in */
 {
 char *wikiHost = wikiLinkHost();
-char *loginUrl = wikiTrackUserLoginUrl(id);
+char *loginUrl = wikiTrackUserLoginUrl(id, table);
 printf("<P>Please login to %s the annotation track.</P>\n", loginType);
 printf("<P>The login page is handled by our "
        "<A HREF=\"http://%s/\" TARGET=_BLANK>wiki system</A>:\n", wikiHost);
@@ -216,7 +217,7 @@ hPrintf("<HR>\n");
 
 if (NULL == userName)
     {
-    offerLogin(item->id, "add comments to items on");
+    offerLogin(item->id, "add comments to items on", WIKI_TRACK_TABLE);
     }
 else if (emailVerified()) /* prints message when not verified */
     {
@@ -261,7 +262,7 @@ else if (emailVerified()) /* prints message when not verified */
     }
 }	/*	displayItem()	*/
 
-static void outputJavaScript()
+void outputJavaScript()
 /* java script functions used in the create item form */
 {
 hPrintf("<SCRIPT TYPE=\"text/javascript\">\n");
@@ -288,7 +289,8 @@ if (wikiTrackEnabled(database, &userName) && sameWord("0", wikiItemId))
     cartWebStart(cart, "%s", "User Annotation Track: Create new item");
     if (NULL == userName)
 	{
-	offerLogin(0, "add new items to");
+	offerLogin(0, "add new items to", WIKI_TRACK_TABLE);
+	//cartHtmlEnd();
 	return;
 	}
 

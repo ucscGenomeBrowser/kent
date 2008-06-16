@@ -102,6 +102,7 @@
 #include "protVar.h"
 #include "oreganno.h"
 #include "oregannoUi.h"
+#include "pgSnp.h"
 #include "bed12Source.h"
 #include "dbRIP.h"
 #include "wikiLink.h"
@@ -122,7 +123,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.8 2008/06/11 18:34:52 angie Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.9 2008/06/16 15:09:53 giardine Exp $";
 
 #define CHROM_COLORS 26
 
@@ -2676,6 +2677,8 @@ if(tg->itemNameColor != NULL)
     color = tg->itemNameColor(tg, item, hvg);
 int y = yOff + tg->lineHeight * sn->row;
 tg->drawItemAt(tg, item, hvg, xOff, y, scale, font, color, vis);
+/* pgSnp tracks may change drawItem value */
+withLabels = (withLeftLabels && (vis == tvPack) && !tg->drawName);
 if (withLabels)
     {
     int nameWidth = mgFontStringWidth(font, name);
@@ -9238,6 +9241,291 @@ tg->colorShades = shadesOfGray;
 tg->drawItemAt = valAlDrawAt;
 }
 
+void pgSnpDrawScaledBox(struct hvGfx *hvg, int chromStart, int chromEnd,
+        double scale, int xOff, int y, int height, Color color)
+/* Draw a box scaled from chromosome to window coordinates.
+ * Get scale first with scaleForPixels. */
+{
+int x1 = round((double)(chromStart-winStart)*scale) + xOff;
+int x2 = round((double)(chromEnd-winStart)*scale) + xOff;
+int w = x2-x1;
+if (w < 1)
+    w = 1;
+//draw as several stacked boxes changing y, height and color to reflect alleles?
+hvGfxBox(hvg, x1, y, w, height, color);
+}
+
+char *pgSnpName(struct track *tg, void *item)
+/* Return name of pgSnp track item. */
+{
+struct pgSnp *myItem = item;
+char *copy = cloneString(myItem->name);
+char *name = NULL;
+boolean cmpl = cartUsualBooleanDb(cart, database, COMPLEMENT_BASES_VAR, FALSE);
+if (revCmplDisp)
+   cmpl = !cmpl;
+/*complement can't handle the /'s */
+if (cmpl)
+    {
+    char *list[8];
+    int i;
+    struct dyString *ds = newDyString(255);
+    i = chopByChar(copy, '/', list, myItem->alleleCount);
+    for (i=0; i < myItem->alleleCount; i++)
+        {
+        complement(list[i], strlen(list[i]));
+        if (revCmplDisp)
+            reverseComplement(list[i], strlen(list[i]));
+        dyStringPrintf(ds, "%s", list[i]);
+        if (i != myItem->alleleCount - 1)
+            dyStringPrintf(ds, "%s", "/");
+        }
+    name = cloneString(ds->string);
+    freeDyString(&ds);
+    }
+else if (revCmplDisp)
+    {
+    char *list[8];
+    int i;
+    struct dyString *ds = newDyString(255);
+    i = chopByChar(copy, '/', list, myItem->alleleCount);
+    for (i=0; i < myItem->alleleCount; i++)
+        {
+        reverseComplement(list[i], strlen(list[i]));
+        dyStringPrintf(ds, "%s", list[i]);
+        if (i != myItem->alleleCount - 1)
+            dyStringPrintf(ds, "%s", "/");
+        }
+    name = cloneString(ds->string);
+    freeDyString(&ds);
+    }
+/* if no changes needed return bed name */
+if (name == NULL)
+    name = cloneString(myItem->name);
+return name;
+}
+
+void pgSnpTextRight(char *display, struct hvGfx *hvg, int x1, int y, int width, int height, Color color, MgFont *font, char *allele)
+/* put text on right, doing separate colors if needed */
+{
+if (sameString(display, "freq"))
+    {
+    Color allC = MG_BLACK;
+    if (startsWith("A", allele))
+       allC = MG_RED;
+    else if (startsWith("C", allele))
+       allC = MG_BLUE;
+    else if (startsWith("G", allele))
+       allC = MG_GREEN;
+    else if (startsWith("T", allele))
+       allC = MG_MAGENTA;
+    hvGfxTextRight(hvg, x1, y, width, height, allC, font, allele);
+    }
+else
+    {
+    hvGfxTextRight(hvg, x1, y, width, height, color, font, allele);
+    }
+}
+
+void pgSnpDrawAt(struct track *tg, void *item, struct hvGfx *hvg, int xOff, int y, double scale, MgFont *font, Color color, enum trackVisibility vis)
+/* Draw the personal genome SNPs at a given position. */
+/* Display alleles on box when zoomed to base level. */
+{
+struct pgSnp *myItem = item;
+boolean cmpl = cartUsualBooleanDb(cart, database, COMPLEMENT_BASES_VAR, FALSE);
+char *display = "freq"; //cartVar?
+if (revCmplDisp)
+   cmpl = !cmpl;
+if (!zoomedToBaseLevel || vis == tvSquish || myItem->alleleCount > 2)
+    { //color these too?
+    tg->drawName = FALSE;
+    bedDrawSimpleAt(tg, myItem, hvg, xOff, y, scale, font, color, vis);
+    return;
+    }
+
+/* get allele(s) to display */
+char *allele[8];
+char *freq[8];
+int allTot = 0;
+int x1 = round((double)((int)myItem->chromStart-winStart)*scale) + xOff;
+int x2 = round((double)((int)myItem->chromEnd-winStart)*scale) + xOff;
+int w = x2-x1;
+if (w < 1)
+    w = 1;
+char *nameCopy = cloneString(myItem->name);
+char *allFreqCopy = cloneString(myItem->alleleFreq);
+int cnt = chopByChar(nameCopy, '/', allele, myItem->alleleCount);
+if (cnt != myItem->alleleCount)
+    errAbort("Bad allele name %s", myItem->name);
+chopByChar(allFreqCopy, ',', freq, myItem->alleleCount);
+int i = 0;
+for (i=0;i<myItem->alleleCount;i++) 
+    allTot += atoi(freq[i]);
+/* draw a tall box */
+if (sameString(display, "freq")) 
+    {
+    if (allTot == 0) 
+        {
+        pgSnpDrawScaledBox(hvg, myItem->chromStart, myItem->chromEnd, scale, 
+            xOff, y, tg->heightPer, MG_GRAY);
+        }
+    else 
+        { /* stack boxes colored to match alleles */
+        Color allC = MG_BLACK;
+        int yCopy = y;
+        for (i=0;i<myItem->alleleCount;i++)
+            {
+            double t = atoi(freq[i])/(double)allTot;
+            int h = round(tg->heightPer*t);
+            char *aCopy = cloneString(allele[i]);
+            if (cmpl)
+                complement(aCopy, strlen(aCopy));
+            if (revCmplDisp)
+                reverseComplement(aCopy, strlen(aCopy));
+            if (startsWith("A", aCopy)) 
+               allC = MG_RED;
+            else if (startsWith("C", aCopy)) 
+               allC = MG_BLUE;
+            else if (startsWith("G", aCopy))
+               allC = MG_GREEN;
+            else if (startsWith("T", aCopy))
+               allC = MG_MAGENTA;
+            else 
+               allC = MG_BLACK;
+            pgSnpDrawScaledBox(hvg, myItem->chromStart, myItem->chromEnd, scale, 
+                xOff, yCopy, h, allC);
+            yCopy += h;
+            }
+        }
+    }
+else 
+    {
+    pgSnpDrawScaledBox(hvg, myItem->chromStart, myItem->chromEnd, scale, xOff,
+        y, tg->heightPer, color);
+
+    }
+
+/* determine graphics attributes for vgTextCentered */
+int allHeight = tg->heightPer / 2;
+int allWidth = mgFontStringWidth(font, allele[0]);
+int all2Width = 0;
+if (cnt > 1)
+    all2Width = mgFontStringWidth(font, allele[1]);
+y += 1;
+
+/* allele 1, should be insertion if doesn't fit */
+if (allWidth >= w || all2Width >= w || sameString(display, "freq"))
+    {
+    if (cmpl)
+        complement(allele[0], strlen(allele[0]));
+    if (revCmplDisp)
+        reverseComplement(allele[0], strlen(allele[0]));
+    pgSnpTextRight(display, hvg, x1-allWidth-2, y, allWidth, allHeight, color, font, allele[0]);
+    }
+else
+    {
+    if (cartUsualBooleanDb(cart, database, COMPLEMENT_BASES_VAR, FALSE))
+        complement(allele[0], strlen(allele[0]));
+    /* sequence in box automatically reversed with browser */
+    spreadBasesString(hvg, x1, y, w, allHeight, MG_WHITE, font, allele[0], strlen(allele[0]), FALSE);
+    }
+
+if (cnt > 1)
+    { /* allele 2 */
+    y += allHeight;
+
+    if (allWidth >= w || all2Width >= w || sameString(display, "freq"))
+        {
+        if (cmpl)
+            complement(allele[1], strlen(allele[1]));
+        if (revCmplDisp)
+            reverseComplement(allele[1], strlen(allele[1]));
+        pgSnpTextRight(display, hvg, x1-all2Width-2, y, all2Width, allHeight, color, font, allele[1]);
+        }
+    else
+        {
+        if (cartUsualBooleanDb(cart, database, COMPLEMENT_BASES_VAR, FALSE))
+            complement(allele[1], strlen(allele[1]));
+        spreadBasesString(hvg, x1, y, w, allHeight, MG_WHITE, font, allele[1], strlen(allele[1]), FALSE);
+        }
+    }
+/* map box for link, when text outside box */
+if (allWidth >= w || all2Width >= w || sameString(display, "freq"))
+    {
+    tg->mapItem(tg, hvg, item, tg->itemName(tg, item),
+                tg->mapItemName(tg, item), myItem->chromStart, myItem->chromEnd,
+                x1-allWidth-2, y, allWidth+w, tg->heightPer);
+    }
+tg->drawName = TRUE;
+}
+
+int pgSnpHeight (struct track *tg, enum trackVisibility vis)
+{
+   int f = tl.fontHeight;
+   int t = f + 1;
+   f = f*2;
+   t = t*2;
+   return tgFixedTotalHeightOptionalOverflow(tg,vis, t, f, FALSE);
+}
+
+void freePgSnp(struct track *tg)
+/* Free pgSnp items. */
+{
+pgSnpFreeList(((struct pgSnp **)(&tg->items)));
+}
+
+void loadPgSnp(struct track *tg)
+/* Load up pgSnp (personal genome SNP) type tracks */
+{
+char query[256];
+struct sqlConnection *conn = hAllocConn();
+safef(query, sizeof(query), "select * from %s where chrom = '%s' and chromStart < %d and chromEnd > %d", tg->mapName, chromName, winEnd, winStart);
+tg->items = pgSnpLoadByQuery(conn, query);
+hFreeConn(&conn);
+}
+
+void pgSnpMapItem(struct track *tg, struct hvGfx *hvg, void *item,
+        char *itemName, char *mapItemName, int start, int end, int x, int y, int width, int height)
+/* create a special map box item with different
+ * pop-up statusLine with allele counts
+ */
+{
+char *directUrl = trackDbSetting(tg->tdb, "directUrl");
+boolean withHgsid = (trackDbSetting(tg->tdb, "hgsid") != NULL);
+struct pgSnp *el = item;
+char *nameCopy = cloneString(itemName); /* so chopper doesn't mess original */
+char *cntCopy = cloneString(el->alleleFreq);
+char *all[8];
+char *freq[8];
+struct dyString *ds = newDyString(255);
+int i = 0;
+chopByChar(nameCopy, '/', all, el->alleleCount);
+chopByChar(cntCopy, ',', freq, el->alleleCount);
+
+for (i=0; i < el->alleleCount; i++)
+    {
+    if (sameString(freq[i], "0"))
+        freq[i] = "?";
+    dyStringPrintf(ds, "%s:%s ", all[i], freq[i]);
+    }
+mapBoxHgcOrHgGene(hvg, start, end, x, y, width, height, tg->mapName,
+                  mapItemName, ds->string, directUrl, withHgsid, NULL);
+freeDyString(&ds);
+}
+
+void pgSnpMethods (struct track *tg)
+{
+bedMethods(tg);
+tg->loadItems = loadPgSnp;
+tg->freeItems = freePgSnp;
+tg->totalHeight = pgSnpHeight;
+tg->itemName = pgSnpName;
+tg->drawItemAt = pgSnpDrawAt;
+tg->mapItem = pgSnpMapItem;
+tg->drawName = FALSE;
+tg->labelNextItemButtonable = TRUE;
+tg->labelNextPrevItem = linkedFeaturesLabelNextPrevItem;
+}
 
 void loadBlatz(struct track *tg)
 {
@@ -11011,6 +11299,13 @@ registerTrackHandler("encodeGencodeIntronOct05", gencodeIntronMethods);
 registerTrackHandler("encodeGencodeRaceFrags", gencodeRaceFragsMethods);
 registerTrackHandler("affyTxnPhase2", affyTxnPhase2Methods);
 registerTrackHandler("gvPos", gvMethods);
+registerTrackHandler("pgVenter", pgSnpMethods);
+registerTrackHandler("pgWatson", pgSnpMethods);
+registerTrackHandler("pgYri", pgSnpMethods);
+registerTrackHandler("pgChb", pgSnpMethods);
+registerTrackHandler("pgCeu", pgSnpMethods);
+registerTrackHandler("pgJpt", pgSnpMethods);
+registerTrackHandler("pgTest", pgSnpMethods);
 registerTrackHandler("protVarPos", protVarMethods);
 registerTrackHandler("oreganno", oregannoMethods);
 registerTrackHandler("encodeDless", dlessMethods);

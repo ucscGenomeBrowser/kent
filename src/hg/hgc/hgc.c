@@ -198,6 +198,7 @@
 #include "protVar.h"
 #include "oreganno.h"
 #include "oregannoUi.h"
+#include "pgSnp.h"
 #include "ec.h"
 #include "transMapClick.h"
 #include "retroClick.h"
@@ -207,6 +208,7 @@
 #include "trashDir.h"
 #include "kg1ToKg2.h"
 #include "wikiTrack.h"
+#include "grp.h"
 #include "omicia.h"
 #include "atomDb.h"
 #include "pcrResult.h"
@@ -214,7 +216,7 @@
 #include "itemConf.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1430 2008/06/14 19:51:53 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1431 2008/06/16 15:09:53 giardine Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -4968,20 +4970,6 @@ slReverse(&pslList);
 return pslList;
 }
 
-struct psl *findClickedAlignment(struct psl *psls, int start)
-/* find the alignment that was clicked on from a list of alignments, or NULL if
- * not found */
-{
-struct psl *psl;
-for (psl = psls; psl != NULL; psl = psl->next)
-    {
-    if (psl->tStart == start)
-        return psl;
-    }
-return NULL;
-}
-
-
 struct psl *loadPslRangeT(char *table, char *qName, char *tName, int tStart, int tEnd)
 /* Load a list of psls given qName tName tStart tEnd */
 {
@@ -5015,6 +5003,7 @@ struct sqlConnection *conn = hAllocConn();
 char *type;
 char *table;
 int start = cartInt(cart, "o");
+struct psl *pslList = NULL;
 
 if (sameString("xenoMrna", track) || sameString("xenoBestMrna", track) || sameString("xenoEst", track) || sameString("sim4", track) )
     {
@@ -5078,14 +5067,13 @@ else
     table = "all_mrna";
     }
 
-/* Print list of information about cDNA. */
+/* Print non-sequence info. */
 cartWebStart(cart, acc);
 
-struct psl *pslList = getAlignments(conn, table, acc);
-struct psl *psl = findClickedAlignment(pslList, start);
-printRnaSpecs(tdb, acc, psl);
+printRnaSpecs(tdb, acc, pslList);
 
-/* Print alignment info. */
+/* Get alignment info. */
+pslList = getAlignments(conn, table, acc);
 if (pslList == NULL)
     {
     /* this was not actually a click on an aligned item -- we just
@@ -14888,146 +14876,6 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
-void printOtherLFS(char *clone, char *table, int start, int end)
-/* Print out the other locations of this clone */
-{
-char query[256];
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr = NULL;
-char **row;
-struct lfs *lfs;
-
-printf("<H4>Other locations found for %s in the genome:</H4>\n", clone);
-printf("<TABLE>\n");
-sprintf(query, "SELECT * FROM %s WHERE name = '%s' "
-               "AND (chrom != '%s' "
-               "OR chromStart != %d OR chromEnd != %d)",
-	table, clone, seqName, start, end); 
-sr = sqlGetResult(conn,query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    lfs = lfsLoad(row+1);
-    printf("<TR><TD>%s:</TD><TD>%d</TD><TD>-</TD><TD>%d</TD></TR>\n",
-	   lfs->chrom, lfs->chromStart, lfs->chromEnd);
-    lfsFree(&lfs);
-    }
-printf("</TABLE>\n"); 
-sqlFreeResult(&sr);
-hgFreeConn(&conn);
-}
-
-void printBacStsXRef(char *clone)
-/* Print out associated STS XRef information for BAC clone on BAC ends */
-/* tracks details pages. */
-{
-char query[256];
-struct sqlConnection *conn = hAllocConn(), *conn1 = hAllocConn();
-struct sqlResult *sr = NULL, *sr1 = NULL, *sr2 = NULL;
-char **row, **row1, **row2;
-char *sName, *uniStsId;
-int start = cartInt(cart, "o");
-int end = cartInt(cart, "t");
-int count = 0;
-boolean foundStsResult = FALSE;
-
-/* query db to find the sanger STS name, relationship, uniSTSId and */
-/* primers and print out */  
-if (hTableExists("bacCloneXRef"))
-    {
-    safef(query, sizeof(query), "SELECT sangerName, relationship, uniStsId, leftPrimer, rightPrimer FROM bacCloneXRef WHERE name = '%s'", clone);         
-    sr1 = sqlMustGetResult(conn1, query);
-    }
-
-/* if no Sanger STS names for BAC clone, just print aliases */
-if (sr1 == NULL)
-    {
-    /* get aliases from bacCloneAlias and print */
-    if (hTableExists("bacCloneAlias"))
-        {
-        safef(query, sizeof(query), "SELECT alias from bacCloneAlias WHERE name = '%s'", clone);     sr = sqlMustGetResult(conn, query);
-        printf("<TR><TH ALIGN=left>BAC Clone Aliases:</TH><TD WIDTH=75%%>"); 
-        while ((row = sqlNextRow(sr)))
-            {
-            printf("%s, ", row[0]); 
-            }
-        }
-    }
-printBand(seqName, start, end, TRUE);
-printf("</TABLE>\n");
-
-/* if there are Sanger STS names associated with BAC then print info */
-if (sr1 != NULL)
-    {
-    while ((row1 = sqlNextRow(sr1)))
-        {
-        count++;
-        if (count == 1)
-            {
-         /* print table - some BACs have up to 17 Sanger STS names associated */
-            printf("<P><HR ALIGN=\"CENTER\"></P>\n<TABLE CELLSPACING=\"5\">\n");
-            printf("<TR><TH>Sanger <BR>STS Name</TH><TH>Relationship</TH><TH>UniSTS ID</TH><TH>Left STS Primer</TH><TH>Right STS Primer</TH>");
-            printf("<TH>BAC Clone and <BR>STS Aliases</TH></TR>\n");
-            foundStsResult = TRUE;
-        }
-        sName = cloneString(row1[0]);
-        uniStsId = cloneString(row1[2]);
-        printf("<TR><TD>");
-        if (sName != NULL)
-            printf("%s</TD>", sName);
-        else
-            printf("n/a</TD>");
-        printf("<TD ALIGN=center>"); 
-        if (sameString(row1[1], "1"))
-            printf("BAC end</TD>"); 
-        else if (sameString(row1[1], "2"))
-            printf("e-PCR genomic"); 
-        else if (sameString(row1[1], "3"))
-            printf("e-PCR WGS"); 
-        else 
-            printf("n/a</TD>");
-            
-        printf("<TD>"); 
-        if (uniStsId != NULL)
-            {
-            /* remove last comma from string before printing */
-            uniStsId[strlen(uniStsId)-1] = '\0';
-            printf("%s</TD>", uniStsId); 
-            }
-        else
-            printf("n/a</TD>");
-        printf("<TD>"); 
-        if (row1[3] != NULL)
-            printf("%s</TD>", row1[3]); 
-        else
-            printf("n/a</TD>");
-        printf("<TD>"); 
-        if (row1[4] != NULL)
-            printf("%s</TD>", row1[4]); 
-        else
-            printf("n/a</TD>");
-        /* get BAC clone and STS aliases for this Sanger Name */
-        safef(query, sizeof(query), "SELECT alias FROM bacCloneAlias WHERE sangerName = '%s'", sName);
-        sr2 = sqlMustGetResult(conn, query);
-        if (sr2 != NULL)
-            printf("<TD>"); 
-        count = 0;
-        while ((row2 = sqlNextRow(sr2)))
-            {
-            count++;
-            if (count != 1)
-                printf(",");
-            printf("%s", row2[0]);
-            }
-        printf("</TD></TR>\n");
-        }
-    }
-if (foundStsResult)
-    {
-    printf("</TABLE>\n");
-    printf("<P><HR ALIGN=\"CENTER\"></P>\n");
-    }
-}
-
 void doLinkedFeaturesSeries(char *track, char *clone, struct trackDb *tdb)
 /* Create detail page for linked features series tracks */ 
 {
@@ -15182,7 +15030,7 @@ if (row != NULL)
         else 
             printf("n/a</TD></TR>\n");
         /* print associated STS information for this BAC clone */
-        printBacStsXRef(clone);  
+        //printBacStsXRef(clone);  
         }
     else
         {
@@ -15196,7 +15044,7 @@ if (row != NULL)
 	}
     else
         {
-	printOtherLFS(clone, table, start, end);
+	//printOtherLFS(clone, table, start, end);
 	}
 
     sprintf(title, "Genomic alignments of %s:", lfLabel);
@@ -19376,11 +19224,16 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 char query[256];
-char *escName = NULL;
+char *escName = NULL, *tableName, *userName = NULL;
 int hasAttr = 0;  
 int i;
 int start = cartInt(cart, "o");
 
+if (wikiTrackEnabled(database, &userName) && sameWord("0", itemName))
+    {
+    if (userName != NULL) 
+        itemName = cartUsualString(cart, "gvPos.create.annotation", "0");
+    }
 /* official name, position, band, genomic size */
 escName = sqlEscapeString(itemName);
 safef(query, sizeof(query), "select * from hgFixed.gv where id = '%s'", escName);
@@ -19405,6 +19258,8 @@ if ((row = sqlNextRow(sr)) != NULL)
     printPos(mut->chrom, mut->chromStart, mut->chromEnd, strand, TRUE, mut->name);
     }
 sqlFreeResult(&sr);
+if (mut == NULL) 
+    errAbort("Couldn't find variant %s at %s %d", escName, seqName, start);
 printf("*Note the DNA retrieved by the above link is the genomic sequence.<br>");
 
 /* fetch and print the source */
@@ -19467,10 +19322,70 @@ if (hasAttr > 0)
     printf("</DD>"); 
 printf("</DL>\n");
 
+/* split code from printTrackHtml */
+printTBSchemaLink(tdb);
+printDataVersion(tdb);
+printOrigAssembly(tdb);
+if ((tableName = hTableForTrack(hGetDb(), tdb->tableName)) != NULL)
+    {
+    struct sqlConnection *conn = hAllocConn();
+    char *date = firstWordInLine(sqlTableUpdate(conn, tableName));
+    if (date != NULL)
+        printf("<B>Data last updated:</B> %s<BR>\n", date);
+    hFreeConn(&conn);
+}
+
+if (tdb->html != NULL && tdb->html[0] != 0)
+    {
+    htmlHorizontalLine();
+    puts(tdb->html);
+    }
+hPrintf("<BR>\n");
+
 gvPosFree(&mut);
 freeMem(escName);
 freeMem(gvPrevCat);
 freeMem(gvPrevType);
+//printTrackHtml(tdb);
+hFreeConn(&conn);
+}
+
+void doPgSnp(struct trackDb *tdb, char *itemName)
+/* print detail page for personal genome track (pgSnp) */
+{
+char *table = tdb->tableName;
+char *escName = sqlEscapeString(itemName);
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char query[256];
+
+genericHeader(tdb, itemName);
+
+safef(query, sizeof(query), "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d", table, escName, seqName, cartInt(cart, "o"));
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct pgSnp *el = pgSnpLoad(row);
+    char *all[8];
+    char *freq[8];
+    char *name = cloneString(el->name);
+    char *fr = cloneString(el->alleleFreq);
+    int i = 0;
+    printPos(el->chrom, el->chromStart, el->chromEnd, "+", TRUE, el->name);
+    printf("Alleles are shown as in plus strand<br>\n");
+    printf("Frequency of alleles:<br>\n");
+    chopByChar(name, '/', all, el->alleleCount);
+    chopByChar(fr, ',', freq, el->alleleCount);
+    for (i=0; i < el->alleleCount; i++)
+        {
+        if (sameString(freq[i], "0"))
+            freq[i] = "not available";
+        printf("&nbsp;&nbsp;&nbsp;&nbsp;%s: %s<br>", all[i], freq[i]);
+        }
+    printSeqCodDisplay(el);
+    }
+sqlFreeResult(&sr);
 printTrackHtml(tdb);
 hFreeConn(&conn);
 }
@@ -20870,6 +20785,16 @@ else if (sameString("snpArrayIllumina300", track) ||
 	 sameString("snpArrayIllumina650", track))
     {
     doSnpArray(tdb, item, "Illumina");
+    }
+else if (sameString("pgVenter", track) ||
+         sameString("pgWatson", track) ||
+         sameString("pgYri", track)    ||
+         sameString("pgCeu", track)    ||
+         sameString("pgChb", track)    ||
+         sameString("pgJpt", track)    || 
+         sameString("pgTest", track) )
+    {
+    doPgSnp(tdb, item);
     }
 else if (sameString("gvPos", track))
     {

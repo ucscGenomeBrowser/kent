@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.19 2008/05/29 17:49:24 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.20 2008/06/16 15:09:57 giardine Exp $";
 
 void wikiTrackStaticLoad(char **row, struct wikiTrack *ret)
 /* Load a row from wikiTrack table into ret.  The contents of ret will
@@ -647,6 +647,17 @@ freeDyString(&wikiPage);
 return strippedRender;
 }
 
+char *adjustWikiUrls (char *comments) 
+/* change relative to full urls for images */
+{
+char *com;
+char buf[128];
+char *url = cfgOptionDefault(CFG_WIKI_URL, NULL);
+safef(buf, sizeof(buf), "img src=\"%s/images", url);
+com = replaceChars(comments, "img src=\"/images", buf);
+return com;
+}
+
 void displayComments(struct wikiTrack *item)
 /* display the rendered comments for this item */
 {
@@ -666,7 +677,9 @@ hPrintf("<P>\n<IFRAME SRC='%s/index.php/%s?action=render'\n"
 char *comments = fetchWikiRenderedText(item->descriptionKey);
 if (comments && (strlen(comments) > 2))
     {
-    hPrintf("\n%s\n", comments);
+    /* change relative to full urls for images */
+    char *com = adjustWikiUrls(comments);
+    hPrintf("\n%s\n", com);
     }
 else
     hPrintf("\n(no comments for this item at the current time)<BR>\n");

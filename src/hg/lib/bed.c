@@ -11,7 +11,7 @@
 #include "binRange.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: bed.c,v 1.57 2008/05/04 14:15:34 kent Exp $";
+static char const rcsid[] = "$Id: bed.c,v 1.58 2008/06/16 15:09:55 giardine Exp $";
 
 void bedStaticLoad(char **row, struct bed *ret)
 /* Load a row from bed table into ret.  The contents of ret will
@@ -1577,7 +1577,6 @@ if (in->blockCount > 0)
 	    outBlockIx += 1;
 	    }
 	}
-
     }
 return out;
 }
