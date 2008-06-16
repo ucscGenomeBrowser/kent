@@ -41,7 +41,5 @@ else
  set limit="LIMIT 1"
 endif
 
-echo $limit
-
 hgsql -h genome-centdb hgcentral -e "SELECT db, host FROM blatServers WHERE db LIKE '$db' ORDER BY '$order' $limit"
 
