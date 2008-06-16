@@ -123,7 +123,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.9 2008/06/16 15:09:53 giardine Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.10 2008/06/16 16:21:59 angie Exp $";
 
 #define CHROM_COLORS 26
 
@@ -9679,15 +9679,42 @@ tg->loadItems = loadColoredExonBed;
 tg->canPack = TRUE;
 }
 
+static boolean abbrevKiddEichlerType(char *name)
+/* If name starts with a recognized structural variation type, replace the 
+ * type with an abbreviation and return TRUE. */
+{
+if (startsWith("transchr", name) || startsWith("inversion", name) ||
+    startsWith("insertion", name) || startsWith("deletion", name) ||
+    startsWith("OEA", name))
+    {
+    struct subText *subList = NULL;
+    slSafeAddHead(&subList, subTextNew("deletion", "del"));
+    slSafeAddHead(&subList, subTextNew("insertion", "ins"));
+    slSafeAddHead(&subList, subTextNew("_random", "_r"));
+    slSafeAddHead(&subList, subTextNew("inversion", "inv"));
+    slSafeAddHead(&subList, subTextNew("inversions", "inv"));
+    slSafeAddHead(&subList, subTextNew("transchrm_chr", "transchr_"));
+    /* Using name as in and out here which is OK because all substitutions
+     * make the output smaller than the input. */
+    subTextStatic(subList, name, name, strlen(name)+1);
+    /* We don't free in hgTracks for speed: subTextFreeList(&subList); */
+    return TRUE;
+    }
+return FALSE;
+}
+
 char *kiddEichlerItemName(struct track *tg, void *item)
-/* Get rid of extremely long clone name at beginning and just show the 
- * type (after the comma). */
+/* If item starts with a long clone name, get rid of it.  Abbreviate the
+ * type. */
 {
 struct linkedFeatures *lf = (struct linkedFeatures *)item;
 char *name = cloneString(lf->name);
+if (abbrevKiddEichlerType(name))
+    return name;
 char *comma = strrchr(name, ',');
 if (comma != NULL)
     strcpy(name, comma+1);
+abbrevKiddEichlerType(name);
 return name;
 }
 
@@ -11312,6 +11339,7 @@ registerTrackHandler("encodeDless", dlessMethods);
 transMapRegisterTrackHandlers();
 registerTrackHandler("retroposons", dbRIPMethods);
 registerTrackHandler("kiddEichlerDisc", kiddEichlerMethods);
+registerTrackHandler("kiddEichlerValid", kiddEichlerMethods);
 
 registerTrackHandler("hapmapSnps", hapmapMethods);
 registerTrackHandler("omicia", omiciaMethods);
