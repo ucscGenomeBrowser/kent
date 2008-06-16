@@ -49,7 +49,7 @@
 			    to actually transferring the data.  For instance, to find
 			    the size of the /gbdb directory, run:<br>
 <PRE>
-rsync -navzPh rsync://hgdownload.cse.ucsc.edu/gbdb/
+rsync -navzP rsync://hgdownload.cse.ucsc.edu/gbdb/
 </PRE>
 The rsync options used in this command are:
 <PRE>
@@ -58,7 +58,6 @@ The rsync options used in this command are:
 -v, --verbose         increase verbosity
 -z, --compress        compress file data
 -P                    equivalent to --partial --progress
--h, --human-readable  output numbers in a human-readable format
 </PRE>
 			    <P>
 			    Mirror site questions may be directed to the 
