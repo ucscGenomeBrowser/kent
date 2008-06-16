@@ -273,7 +273,7 @@ blastRef hg17.blastKGRef01
 
 track blastCe4SG
 shortLabel C. elegans Proteins
-longLabel C. elegans Proteins Mapped by Chained tBLASTn
+longLabel C. elegans Proteins WS170 Mapped by Chained tBLASTn
 group genes
 priority 250.2
 visibility pack
@@ -285,7 +285,7 @@ blastRef ce4.blastSGRef01
 
 track blastCe6SG
 shortLabel C. elegans Proteins
-longLabel C. elegans Proteins Mapped by Chained tBLASTn
+longLabel C. elegans Proteins WS190 Mapped by Chained tBLASTn
 group genes
 priority 250.2
 visibility pack
