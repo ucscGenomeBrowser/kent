@@ -39,7 +39,7 @@
 #include "jsHelper.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1483 2008/06/03 23:37:52 larrym Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1484 2008/06/17 22:46:44 angie Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -3166,7 +3166,9 @@ for (track = trackList; track != NULL; track = track->next)
 	}
     if (s != NULL)
 	track->visibility = hTvFromString(s);
-    if (isCompositeTrack(track))
+    if (isCompositeTrack(track) && track->visibility != tvHide &&
+	(track->tdb->parent == NULL ||
+	 track->tdb->parent->visibility != tvHide))
         compositeTrackVis(track);
     }
 return trackList;
