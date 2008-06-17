@@ -15,7 +15,7 @@
 #include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.19 2008/06/17 21:51:22 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.20 2008/06/17 22:01:00 hiram Exp $";
 
 static char *hgGeneUrl()
 {
@@ -404,7 +404,7 @@ if (item)
     char *url = cfgOptionDefault(CFG_WIKI_URL, NULL);
     puts("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2//EN\">");
     puts("<HTML>\n<HEAD>\n");
-    hPrintf("<META HTTP-EQUIV=REFRESH CONTENT=\"10;"
+    hPrintf("<META HTTP-EQUIV=REFRESH CONTENT=\"0;"
 	"url=%s/index.php?title=%s\">\n",
 	url, item->descriptionKey);
     puts("</HEAD>\n");
