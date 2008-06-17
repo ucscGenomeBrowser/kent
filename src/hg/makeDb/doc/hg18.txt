@@ -21205,3 +21205,243 @@ by a single Makefile. This is available from:
 
 see doc/builds.txt for specific details.
 ############################################################################
+
+############################################################################
+# ILLUMINA WG-6 PROBES (2008-06-13 Andy)
+
+# Download the Platform file from GEO here:
+# http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GPL6884
+# Click on "Download full table" 
+
+ssh hgwdev
+bash
+cd /san/sanVol1/scratch/andy
+mkdir illumina
+cd illumina/
+cp ~/GPL6884-5803.txt .
+
+# Collect GIs for all the RNAs
+# First download/install Biopython
+wget http://biopython.org/DIST/biopython-1.45.tar.gz
+tar xfz biopython-1.45.tar.gz
+mkdir biopythonLibs
+cd biopython-1.45/
+python setup.py install --home=/san/sanVol1/scratch/andy/illumina/biopythonLibs
+export PYTHONPATH=/san/sanVol1/scratch/andy/illumina/biopythonLibs
+
+# Now get the RNAs
+mkdir getRna grabbed
+cd getRna/
+tail +31 ../GPL6884-5803.txt | cut -f11 | sort | uniq > gis.txt
+wc -l gis.txt 
+# 43338 gis.txt
+split -d -l 100 -a 3 gis.txt gis-
+rm gis.txt
+
+cat < "EOF" > getSeqs.py
+import Bio
+from Bio import EUtils
+from Bio.EUtils import HistoryClient
+
+gis = open('gis.txt', 'r').readlines()
+for i in range(len(gis)):
+    gis[i] = gis[i].rstrip('\n')
+ids = EUtils.DBIds('nucleotide', gis)
+
+client = HistoryClient.HistoryClient()
+result = client.post(ids)
+print result.efetch(retmode="text", rettype="fasta").read()
+EOF
+# << emacs
+
+cat < "EOF" > getSeqs.sh
+#!/bin/bash
+
+for gi in gis-*; do
+    numGot="0";
+    attempt="1";
+    while [ $numGot -lt 100 ]; do
+	echo Getting $gi attempt $attempt;
+	cp $gi gis.txt;
+	fa=${gi}.fa
+	python getSeqs.py > $fa
+	numGot=`grep '>' $fa | wc -l`;
+	if [ $numGot = 100 ]; then 
+	    echo Got all for $gi
+	    mv $fa ../grabbed/;
+	    rm $gi
+	else
+	    rm $fa;
+	    sleep 10;
+	fi
+	attempt=$((attempt+1));
+    done
+    sleep 5;
+done
+EOF
+# << emacs
+
+chmod +x getSeqs.sh
+./getSeqs.sh
+
+# there's a fair bit that retries the download over and over but eventually it
+# gets to the last one, which doesn't have 100 lines, so I run the python 
+# program on that on by itself.
+
+cat ../grabbed/* > probeRna.fa
+rm -rf ../grabbed/
+cd ../
+
+# Now blat RNA to genome 
+
+mkdir -p blatRna/{splits,out}
+cd blatRna/
+faSplit sequence ../getRna/probeRNA.fa 400 splits/rna-
+ls -1 splits/* > splits.lst
+cat < "EOF" > runBlat.sh
+#!/bin/bash
+
+cd -P .
+fa=`basename $1`
+chr=`basename $2 .nib`
+split=`basename $1 .fa`
+out=${split}.${chr}.psl
+nibDir=/scratch/hg/hg18/bothMaskedNibs
+tmpDir=/scratch/tmp/$out
+
+mkdir $tmpDir
+pushd $tmpDir
+oldDir=`dirs +1`
+cp ${oldDir}/$1 .
+blat -noHead -ooc=/scratch/hg/hg18/11.ooc -out=psl ${nibDir}/$2 $fa $out
+mkdir -p ${oldDir}/out/${chr}
+cp $out ${oldDir}/out/${chr}/
+popd
+rm -rf $tmpDir
+EOF
+# << emacs
+
+chmod +x runblat.sh
+cat < "EOF" > gsub
+#LOOP                                                                           
+./runBlat.sh {check in line+ $(path1)} $(path2) {check out exists out/$(root2)/$(root1).$(root2).psl}           
+#ENDLOOP
+EOF
+# << emacs
+
+ls -1 /cluster/data/hg18/nib > nib.lst
+ssh pk
+cd /san/sanVol1/scratch/andy/illumina/blatRna
+gensub2 splits.lst nib.lst gsub spec
+para create spec
+para try 
+para push
+para time
+#17820 jobs in batch
+#34457 jobs (including everybody's) in Parasol queue.
+#Checking finished jobs
+#Completed: 17820 of 17820 jobs
+#CPU time in finished jobs:      84196s    1403.26m    23.39h    0.97d  0.003 y
+#IO & Wait Time:                 48448s     807.47m    13.46h    0.56d  0.002 y
+#Average job time:                   7s       0.12m     0.00h    0.00d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:             270s       4.50m     0.07h    0.00d
+#Submission to last job:          1515s      25.25m     0.42h    0.02d
+
+exit; # back to hgwdev
+mkdir /tmp/andy
+pslSort -nohead dirs allSorted.psl /tmp/andy out/*
+rmdir /tmp/andy
+pslReps -singleHit allSorted.psl single.ps{l,r}
+
+# Blat probes against the RNAs
+cd ../
+mkdir -p blatProbes/out
+cd blatProbes/
+ln -s ../blatRna/splits .
+ln -s ../blatRna/splits.lst .
+ln -s ../blatRna/single.psl . 
+tail +31 ../GPL6884-5803.txt | cut -f1,11,18 | \
+   awk '{printf("%s\tgi|%s\t%s\n", $1, $2, $3);}' > probes.tab
+
+cat << "EOF" >
+#!/bin/bash
+
+faFile=`basename $1`;
+pslFile=${faFile%.fa}.psl
+probeFile=$2;
+rnaOnGenomePsl=$3;
+tmpDir=/scratch/andy/`date +"%T" | tr ':' '_'`.$$
+mkdir -p $tmpDir
+cp $1 $2 $3 $tmpDir
+
+pushd $tmpDir
+for id in `grep '>' $faFile | sed 's/^>//'`; do
+     # make probe fa
+     echo $id
+     awk '{if ($2 == "'"$id"'") printf(">%s\n%s\n", $1, $3);}' $probeFile \
+        > probe.fa
+     # extract single RNA fa
+     faOneRecord $faFile $id > rna.fa
+     blat -noHead rna.fa probe.fa probeOnRna.psl     
+     awk 'BEGIN{FS="\t";OFS="\t";}{if ($10 == "'"$id"'") print;}' \
+       $rnaOnGenomePsl > rnaOnGenome.psl
+     if [ `find . -size '0b' -type f | wc -l` == 0 ]; then 
+         pslMap probeOnRna.psl rnaOnGenome.psl probeOnGenome.psl
+         cat probeOnGenome.psl >> $pslFile
+     fi
+done
+popd
+
+cp $tmpDir/$pslFile $4
+rm -rf $tmpDir
+EOF
+# << emacs
+
+cat << "EOF" > gsub
+#LOOP                                                                           
+./probeBlat.sh {check in line+ $(path1)} probes.tab single.psl {check out exists out/$(root1).psl}
+#ENDLOOP
+EOF 
+# << emacs
+
+ssh pk
+cd /san/sanVol1/scratch/andy/illumina/blatProbes
+gensub2 splits.lst single gsub spec
+para create spec
+para try
+para push
+para time
+#396 jobs in batch
+#41977 jobs (including everybody's) in Parasol queue.
+#Checking finished jobs
+#Completed: 396 of 396 jobs
+#CPU time in finished jobs:      11101s     185.02m     3.08h    0.13d  0.000 y
+#IO & Wait Time:                  1361s      22.68m     0.38h    0.02d  0.000 y
+#Average job time:                  31s       0.52m     0.01h    0.00d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:             121s       2.02m     0.03h    0.00d
+#Submission to last job:           271s       4.52m     0.08h    0.00d
+
+exit # back to hgwdev
+mkdir /tmp/andy
+pslSort -nohead dirs sorted.psl /tmp/andy out
+# Load stuff up
+pslToBed sorted.psl sorted.bed
+cd ../
+mkdir tables
+cd tables/
+cp ../blatProbes/sorted.{psl,bed} .
+hgLoadPsl -table=illuminaProbesAlign hg18 sorted.psl
+hgLoadBed hg18 illuminaProbes sorted.bed
+cat << "EOF" > 
+CREATE TABLE illuminaProbesSeq (
+  id varchar(40) NOT NULL,
+  seq varchar(55) NOT NULL,
+  PRIMARY KEY (id)
+  ) TYPE=MyISAM;
+EOF
+# << emacs
+
+cut -f1,3 ../blatProbes/probes.tab > illuminaProbesSeq.tab
+hgLoadSqlTab hg18 illuminaProbesSeq{,.sql,.tab}
