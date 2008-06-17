@@ -5,15 +5,12 @@
 #ifndef PGSNP_H
 #define PGSNP_H
 
-#ifndef JKSQL_H
 #include "jksql.h"
-#endif
+#define PGSNP_NUM_COLS 8
 
 #ifndef BED_H
 #include "bed.h"
-#endif 
-
-#define PGSNP_NUM_COLS 7
+#endif
 
 struct pgSnp
 /* personal genome SNP */
@@ -25,6 +22,7 @@ struct pgSnp
     char *name;	/* alleles */
     int alleleCount;	/* number of alleles */
     char *alleleFreq;	/* comma separated list of frequency of each allele */
+    char *alleleScores;	/* comma separated list of quality scores */
     unsigned short bin; /* A field to speed indexing */
     };
 

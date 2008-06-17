@@ -458,45 +458,34 @@ oldToNew kg2ToKg3
 baseColorUseCds given
 baseColorDefault genomicCodons
 
-track pgVenter
-shortLabel Venter SNPs
-longLabel Venter method 1 SNPs
+track pgSnp
+compositeTrack on
+shortLabel Genome Variants
+longLabel Personal Genome Variants
 group varRep
 priority 500
-visibility pack
-color 128,0,128
+visibility hide
 type bed 4 .
 
-track pgVenterGaps
-shortLabel Venter gaps
-longLabel Places with no reads in Venter sequence
-group varRep
-priority 500.1
-visibility pack
-color 128,0,128
-type bed 3 .
-
-track pgWatson
-shortLabel Watson SNPs
-longLabel Watson SNPs from CSHL
-group varRep
-priority 501
-visibility pack
-color 153,0,0
-type bed 4 .
-
-track pgWatsonGaps
-shortLabel Watson gaps 
-longLabel Places with no reads in Watson sequence
-group varRep
-priority 501.1
-visibility pack
-color 153,0,0
-type bed 3 .
+    track pgVenter
+    subTrack pgSnp
+    shortLabel Venter SNPs
+    longLabel Venter method 1 SNPs
+    group varRep
+    priority 1
+    color 128,0,128
+    
+    track pgWatson
+    subTrack pgSnp
+    shortLabel Watson SNPs
+    longLabel Watson SNPs from CSHL
+    group varRep
+    priority 2
+    color 153,0,0
 
 track pgYri
 shortLabel YRI SNPs
-longLabel YRI SNPs test data
+longLabel YRI Population SNPs from HapMap
 group varRep
 priority 502
 visibility pack
@@ -505,7 +494,7 @@ type bed 4 .
 
 track pgCeu
 shortLabel CEU SNPs
-longLabel CEU SNPs test data
+longLabel CEU Population SNPs from HapMap
 group varRep
 priority 502.1
 visibility pack
@@ -514,7 +503,7 @@ type bed 4 .
 
 track pgChb
 shortLabel CHB SNPs
-longLabel CHB SNPs test data
+longLabel CHB Population SNPs from HapMap
 group varRep
 priority 502.2
 visibility pack
@@ -523,7 +512,7 @@ type bed 4 .
 
 track pgJpt
 shortLabel JPT SNPs
-longLabel JPT SNPs test data
+longLabel JPT Population SNPs from HapMap
 group varRep
 priority 502.3
 visibility pack

@@ -12,6 +12,7 @@ CREATE TABLE pgSnp (
     name varchar(255) not null,	# alleles
     alleleCount int not null,	# number of alleles
     alleleFreq varchar(255) not null,	# comma separated list of frequency of each allele
+    alleleScores varchar(255) not null,	# comma separated list of quality scores
               #Indices
-    PRIMARY KEY(bin)
+    INDEX(bin)
 );

@@ -8,5 +8,6 @@ table pgSnp
     string  name;           "alleles"
     int     alleleCount;    "number of alleles"
     string  alleleFreq;     "comma separated list of frequency of each allele"
+    string  alleleScores;   "comma separated list of quality scores"
     )
 

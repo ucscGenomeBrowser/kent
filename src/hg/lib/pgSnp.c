@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "dnaseq.h"
 
-static char const rcsid[] = "$Id: pgSnp.c,v 1.1 2008/06/16 15:09:56 giardine Exp $";
+static char const rcsid[] = "$Id: pgSnp.c,v 1.2 2008/06/17 21:49:52 giardine Exp $";
 
 void pgSnpStaticLoad(char **row, struct pgSnp *ret)
 /* Load a row from pgSnp table into ret.  The contents of ret will
@@ -24,6 +24,7 @@ ret->chromEnd = sqlUnsigned(row[3]);
 ret->name = row[4];
 ret->alleleCount = sqlSigned(row[5]);
 ret->alleleFreq = row[6];
+ret->alleleScores = row[7];
 }
 
 struct pgSnp *pgSnpLoad(char **row)
@@ -40,6 +41,7 @@ ret->chromEnd = sqlUnsigned(row[3]);
 ret->name = cloneString(row[4]);
 ret->alleleCount = sqlSigned(row[5]);
 ret->alleleFreq = cloneString(row[6]);
+ret->alleleScores = cloneString(row[7]);
 return ret;
 }
 
@@ -49,7 +51,7 @@ struct pgSnp *pgSnpLoadAll(char *fileName)
 {
 struct pgSnp *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[7];
+char *row[8];
 
 while (lineFileRow(lf, row))
     {
@@ -67,7 +69,7 @@ struct pgSnp *pgSnpLoadAllByChar(char *fileName, char chopper)
 {
 struct pgSnp *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[7];
+char *row[8];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -111,8 +113,8 @@ void pgSnpSaveToDb(struct sqlConnection *conn, struct pgSnp *el, char *tableName
  * If worried about this use pgSnpSaveToDbEscaped() */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s',%d,'%s')", 
-	tableName,  el->bin,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->alleleCount,  el->alleleFreq);
+dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s',%d,'%s','%s')", 
+	tableName,  el->bin,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->alleleCount,  el->alleleFreq,  el->alleleScores);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -127,18 +129,20 @@ void pgSnpSaveToDbEscaped(struct sqlConnection *conn, struct pgSnp *el, char *ta
  * before inserting into database. */ 
 {
 struct dyString *update = newDyString(updateSize);
-char  *chrom, *name, *alleleFreq;
+char  *chrom, *name, *alleleFreq, *alleleScores;
 chrom = sqlEscapeString(el->chrom);
 name = sqlEscapeString(el->name);
 alleleFreq = sqlEscapeString(el->alleleFreq);
+alleleScores = sqlEscapeString(el->alleleScores);
 
-dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s',%d,'%s')", 
-	tableName,  el->bin,  chrom,  el->chromStart,  el->chromEnd,  name,  el->alleleCount,  alleleFreq);
+dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s',%d,'%s','%s')", 
+	tableName,  el->bin,  chrom,  el->chromStart,  el->chromEnd,  name,  el->alleleCount,  alleleFreq,  alleleScores);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 freez(&chrom);
 freez(&name);
 freez(&alleleFreq);
+freez(&alleleScores);
 }
 
 struct pgSnp *pgSnpCommaIn(char **pS, struct pgSnp *ret)
@@ -157,6 +161,7 @@ ret->chromEnd = sqlUnsignedComma(&s);
 ret->name = sqlStringComma(&s);
 ret->alleleCount = sqlSignedComma(&s);
 ret->alleleFreq = sqlStringComma(&s);
+ret->alleleScores = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -171,6 +176,7 @@ if ((el = *pEl) == NULL) return;
 freeMem(el->chrom);
 freeMem(el->name);
 freeMem(el->alleleFreq);
+freeMem(el->alleleScores);
 freez(pEl);
 }
 
@@ -208,6 +214,10 @@ fprintf(f, "%d", el->alleleCount);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->alleleFreq);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->alleleScores);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }

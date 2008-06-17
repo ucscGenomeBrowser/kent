@@ -216,7 +216,7 @@
 #include "itemConf.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1431 2008/06/16 15:09:53 giardine Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1432 2008/06/17 21:49:51 giardine Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -19369,20 +19369,26 @@ if ((row = sqlNextRow(sr)) != NULL)
     struct pgSnp *el = pgSnpLoad(row);
     char *all[8];
     char *freq[8];
+    char *score[8];
     char *name = cloneString(el->name);
     char *fr = cloneString(el->alleleFreq);
+    char *sc = cloneString(el->alleleScores);
     int i = 0;
     printPos(el->chrom, el->chromStart, el->chromEnd, "+", TRUE, el->name);
     printf("Alleles are shown as in plus strand<br>\n");
-    printf("Frequency of alleles:<br>\n");
+    printf("<table><tr><th>Allele</th><th>Frequency</th><th>Quality Score</th></tr>\n");
     chopByChar(name, '/', all, el->alleleCount);
     chopByChar(fr, ',', freq, el->alleleCount);
+    chopByChar(sc, ',', score, el->alleleCount);
     for (i=0; i < el->alleleCount; i++)
         {
         if (sameString(freq[i], "0"))
             freq[i] = "not available";
-        printf("&nbsp;&nbsp;&nbsp;&nbsp;%s: %s<br>", all[i], freq[i]);
+        if (sameString(sc, "")) 
+            score[i] = "not available";
+        printf("<tr><td>%s</td><td>%s</td><td>%s</td></tr>", all[i], freq[i], score[i]);
         }
+    printf("</table>");
     printSeqCodDisplay(el);
     }
 sqlFreeResult(&sr);
@@ -20792,6 +20798,7 @@ else if (sameString("pgVenter", track) ||
          sameString("pgCeu", track)    ||
          sameString("pgChb", track)    ||
          sameString("pgJpt", track)    || 
+         sameString("pgYoruban1", track) ||
          sameString("pgTest", track) )
     {
     doPgSnp(tdb, item);
