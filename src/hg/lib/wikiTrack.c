@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.20 2008/06/16 15:09:57 giardine Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.21 2008/06/17 21:51:22 hiram Exp $";
 
 void wikiTrackStaticLoad(char **row, struct wikiTrack *ret)
 /* Load a row from wikiTrack table into ret.  The contents of ret will
@@ -992,21 +992,29 @@ safef(retBuf, sizeof(retBuf), "http://%s/%s", cgiServerName(), (*hgUrl)());
 return cgiEncode(retBuf);
 }   
 
-boolean emailVerified()
+boolean emailVerified(boolean showMessage)
 /* TRUE indicates email has been verified for this wiki user */
 {
 struct htmlPage *page = fetchEditPage(TEST_EMAIL_VERIFIED);
 char *stringFound = stringIn(EMAIL_NEEDS_TO_BE_VERIFIED, page->fullText);
+/* sometimes the genome browser thinks the user is logged in, but the
+ *	wiki doesn't think so.  So, verify that an editform exists
+ *	within the edit page to confirm edit is OK.
+ */
+struct htmlForm *currentEditForm = htmlFormGet(page,"editform");
 htmlPageFree(&page);
-if (NULL == stringFound)
+if ((currentEditForm != NULL) && (NULL == stringFound))
     return TRUE;
 else
     {
-    hPrintf("<P>%s annotations.  %s "
-	"<A HREF=\"%s/index.php/Special:Preferences\" "
-	"TARGET=_blank>user preferences.</A></P>\n",
-	    EMAIL_NEEDS_TO_BE_VERIFIED, USER_PREFERENCES_MESSAGE, 
-		cfgOptionDefault(CFG_WIKI_URL, NULL));
+    if (showMessage)
+	{
+	hPrintf("<P>%s annotations.  %s "
+	    "<A HREF=\"%s/index.php/Special:Preferences\" "
+	    "TARGET=_blank>user preferences.</A></P>\n",
+		EMAIL_NEEDS_TO_BE_VERIFIED, USER_PREFERENCES_MESSAGE, 
+		    cfgOptionDefault(CFG_WIKI_URL, NULL));
+	}
     return FALSE;
     }
 }

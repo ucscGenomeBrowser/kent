@@ -15,7 +15,7 @@
 #include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.18 2008/05/29 23:38:57 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.19 2008/06/17 21:51:22 hiram Exp $";
 
 static char *hgGeneUrl()
 {
@@ -389,7 +389,8 @@ if(!wikiTrackEnabled(database, &userName))
     cartWebStart(cart, title);
     errAbort("hgGene.doWikiTrack: called when wiki track is not enabled ?");
     }
-if (isNotEmpty(userName) && emailVerified())
+				/* FALSE == do not print message */
+if (isNotEmpty(userName) && emailVerified(FALSE))
     editOK = TRUE;
 
 if (editOK && cartVarExists(cart, hggDoWikiAddComment))
@@ -400,11 +401,12 @@ else
 /* item exists, show wiki page */
 if (item)
     {
+    char *url = cfgOptionDefault(CFG_WIKI_URL, NULL);
     puts("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2//EN\">");
     puts("<HTML>\n<HEAD>\n");
-    hPrintf("<META HTTP-EQUIV=REFRESH CONTENT=\"0;"
-	"url=http://genomewiki.ucsc.edu/HiramWiki/index.php?title=%s\">\n",
-	item->descriptionKey);
+    hPrintf("<META HTTP-EQUIV=REFRESH CONTENT=\"10;"
+	"url=%s/index.php?title=%s\">\n",
+	url, item->descriptionKey);
     puts("</HEAD>\n");
     return;
     }
@@ -426,7 +428,7 @@ if ((0 == rawListCount) || (0 == locusLocationCount))
 
 if (isEmpty(userName))
     offerLogin();
-else if (emailVerified())  /* prints message when not verified */
+else if (emailVerified(TRUE))  /* prints message when not verified */
     {
     hPrintf("<FORM ID=\"hgg_wikiAddComment\" NAME=\"hgg_wikiAddComment\" "
 	"METHOD=\"POST\" ACTION=\"../cgi-bin/hgGene\">\n\n");

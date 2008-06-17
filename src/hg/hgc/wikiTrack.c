@@ -16,7 +16,7 @@
 #include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.47 2008/06/16 15:09:54 giardine Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.48 2008/06/17 21:51:22 hiram Exp $";
 
 #define ITEM_SCORE_DEFAULT "1000"
 #define ADD_ITEM_COMMENT_DEFAULT "add comments"
@@ -219,7 +219,7 @@ if (NULL == userName)
     {
     offerLogin(item->id, "add comments to items on", WIKI_TRACK_TABLE);
     }
-else if (emailVerified()) /* prints message when not verified */
+else if (emailVerified(TRUE)) /* do print message when not verified */
     {
     startForm("addComments", G_ADD_WIKI_COMMENTS);
     char idString[128];
@@ -294,7 +294,7 @@ if (wikiTrackEnabled(database, &userName) && sameWord("0", wikiItemId))
 	return;
 	}
 
-    if (emailVerified()) /* prints message when not verified */
+    if (emailVerified(TRUE)) /* do print message when not verified */
 	{
 	outputJavaScript();
 	startForm("createItem", G_CREATE_WIKI_ITEM);

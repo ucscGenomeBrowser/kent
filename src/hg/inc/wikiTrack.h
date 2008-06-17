@@ -214,7 +214,7 @@ char *encodedReturnUrl(char *(*hgUrl)());
  *	The given function hgUrl() will construct the actual cgi binary URL
  */
 
-boolean emailVerified();
+boolean emailVerified(boolean showMessage);
 /* TRUE indicates email has been verified for this wiki user */
 
 boolean isWikiEditor(char *userName);
