@@ -21,6 +21,7 @@ longLabel Assembly Contigs
 group map
 priority 10
 visibility hide
+type ctgPos
 
 # Local declaration so that local gold.html is picked up.
 track gold

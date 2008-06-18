@@ -16,6 +16,7 @@ longLabel Assembly Contigs
 group map
 priority 10
 visibility hide
+type ctgPos
 
 # Local declaration so that local gap.html is picked up.
 track gap

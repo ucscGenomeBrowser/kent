@@ -25,4 +25,4 @@ longLabel Assembly Contigs
 group map
 priority 10
 visibility hide
-
+type ctgPos
