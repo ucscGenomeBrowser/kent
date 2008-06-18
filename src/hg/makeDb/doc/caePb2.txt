@@ -477,21 +477,17 @@ caePb2.perChromTables = no
     # update /cluster/data/genbank/:
     make etc-update
 
-    # Edit src/lib/gbGenome.c to add new species.
-    cvs ci -m "Added C. PB2801." src/lib/gbGenome.c
-    make install-server
-
     ssh genbank
     cd /cluster/data/genbank
     time nice -n +19 bin/gbAlignStep -initial caePb2 &
-    #	var/build/logs/2008.05.13-13:42:58.caePb2.initalign.log
-    #	real    96m10.750s
+    #	logFile: var/build/logs/2008.06.16-10:03:05.caePb2.initalign.log
+    #	real    85m23.353s
 
     # load database when finished
     ssh hgwdev
     cd /cluster/data/genbank
     time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad caePb2
-    #	real    8m9.133s
+    #	real    16m2.684s
 
     # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank
@@ -543,4 +539,196 @@ caePb2.perChromTables = no
     hgsql -e 'update dbDb set description="Feb. 2008" where name="caePb2"' \
 	hgcentraltest
 
-############################################################################
+#########################################################################
+# ELEGANS (ce6) PROTEINS TRACK (DONE -  Hiram - 2008-06-11)
+    ssh kkstore01
+
+    #	breaking up this target genome into manageable pieces
+    #	using the contigs so we don't have genes spanning non-bridged gaps
+    mkdir /cluster/data/caePb2/blastDb
+    cd /cluster/data/caePb2
+    twoBitToFa -noMask maskedContigs/caePb2.supercontigs.2bit temp.fa
+    faSplit gap temp.fa 1000000 blastDb/x -lift=blastDb.lft
+    #	3545 pieces of 3545 written
+    rm temp.fa
+    cd blastDb
+    for i in *.fa
+    do
+	/cluster/bluearc/blast229/formatdb -i $i -p F
+    done
+    rm *.fa
+
+    ##	copy to san for kluster access
+    mkdir -p /san/sanvol1/scratch/worms/caePb2/blastDb
+    cd /san/sanvol1/scratch/worms/caePb2/blastDb
+    rsync -a --progress --stats /cluster/data/caePb2/blastDb/ .
+
+    ## create the query protein set
+    mkdir -p /cluster/data/caePb2/bed/tblastn.ce6SG
+    cd /cluster/data/caePb2/bed/tblastn.ce6SG
+    echo  /san/sanvol1/scratch/worms/caePb2/blastDb/*.nsq | xargs ls -S \
+	| sed "s/\.nsq//"  > query.lst
+    wc -l query.lst
+    # 3545 query.lst
+
+   # we want around 80000 jobs
+   calc `wc /cluster/data/ce6/bed/blat.ce6SG/ce6SG.psl | awk "{print \\\$1}"`/\(80000/`wc query.lst | awk "{print \\\$1}"`\)
+
+    #	23741/(80000/3545) = 1052.023062
+
+   mkdir -p /cluster/bluearc/worms/caePb2/bed/tblastn.ce6SG/sgfa
+   split -l 1000 /cluster/data/ce6/bed/blat.ce6SG/ce6SG.psl \
+	/cluster/bluearc/worms/caePb2/bed/tblastn.ce6SG/sgfa/sg
+   ln -s /cluster/bluearc/worms/caePb2/bed/tblastn.ce6SG/sgfa sgfa
+   cd sgfa
+   for i in *; do 
+     nice pslxToFa $i $i.fa; 
+     rm $i; 
+   done
+   cd ..
+   ls -1S sgfa/*.fa > sg.lst
+   mkdir -p /cluster/bluearc/worms/caePb2/bed/tblastn.ce6SG/blastOut
+   ln -s /cluster/bluearc/worms/caePb2/bed/tblastn.ce6SG/blastOut
+   for i in `cat sg.lst`; do  mkdir blastOut/`basename $i .fa`; done
+   
+   cd /cluster/data/caePb2/bed/tblastn.ce6SG
+   cat << '_EOF_' > template
+#LOOP
+blastSome $(path1) {check in line $(path2)} {check out exists blastOut/$(root2)/q.$(root1).psl }
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+   cat << '_EOF_' > blastSome
+#!/bin/sh
+CBIN=/cluster/bin/i386
+DB=caePb2
+BLASTMAT=/scratch/data/blast229/data
+SCR="/scratch/tmp/${DB}"
+g=`/bin/basename $2`
+D=`/bin/basename $1`
+inputFile=${SCR}/${D}_${g}
+export CBIN DB BLASTMAT SCR g D
+/bin/mkdir -p ${SCR}
+/bin/cp -p $1.* ${SCR}
+/bin/cp -p $2 ${inputFile}
+/bin/cp -p /cluster/store1/worm/${DB}/blastDb.lft ${SCR}/${D}_blastDb.lft
+/bin/cp -p /cluster/store3/worm/ce6/bed/blat.ce6SG/protein.lft \
+        ${SCR}/${D}_protein.lft
+f=${SCR}/`/bin/basename $3`.$g
+for eVal in 0.01 0.001 0.0001 0.00001 0.000001 1E-09 1E-11
+do
+if /scratch/data/blast229/blastall -M BLOSUM80 -m 0 -F no \
+        -e $eVal -p tblastn -d ${SCR}/${D} -i ${inputFile} -o $f.8
+then
+        /bin/mv $f.8 $f.1
+        break;
+fi
+done
+if test -f  $f.1
+then
+    if ${CBIN}/blastToPsl $f.1 $f.2
+    then
+        ${CBIN}/liftUp -nosort -type=".psl" -nohead $f.3 \
+            ${SCR}/${D}_blastDb.lft carry $f.2 > /dev/null
+        ${CBIN}/liftUp -nosort -type=".psl" -pslQ -nohead ${SCR}/$3.tmp \
+            ${SCR}/${D}_protein.lft warn $f.3 > /dev/null
+        if ${CBIN}/pslCheck -prot ${SCR}/$3.tmp
+        then
+            /bin/rm -f $3
+            /bin/mv ${SCR}/$3.tmp $3
+            /bin/rm -f $f.1 $f.2 $f.3 $f.4 ${SCR}/${D}.* ${inputFile} \
+                ${SCR}/${D}_protein.lft ${SCR}/${D}_blastDb.lft
+            /bin/rmdir --ignore-fail-on-non-empty ${SCR}
+        fi
+        exit 0
+    fi
+fi
+/bin/rm -f $f.1 $f.2 $3.tmp $f.8 $f.3 $f.4 ${SCR}/${D}.* ${inputFile} \
+        ${SCR}/${D}_protein.lft ${SCR}/${D}_blastDb.lft
+/bin/rmdir --ignore-fail-on-non-empty ${SCR}
+exit 1
+'_EOF_'
+    # << happy emacs
+    chmod +x blastSome
+
+    ssh kk
+    cd /cluster/data/caePb2/bed/tblastn.ce6SG
+    gensub2 query.lst sg.lst template jobList
+    para create jobList
+#    para try, check, push, check etc.
+# Completed: 85080 of 85080 jobs
+# CPU time in finished jobs:    9631747s  160529.12m  2675.49h  111.48d  0.305 y
+# IO & Wait Time:                401660s    6694.33m   111.57h    4.65d  0.013 y
+# Average job time:                 118s       1.97m     0.03h    0.00d
+# Longest finished job:            1032s      17.20m     0.29h    0.01d
+# Submission to last job:         75506s    1258.43m    20.97h    0.87d
+
+    # do the cluster run for chaining
+    ssh kk
+    mkdir /cluster/data/caePb2/bed/tblastn.ce6SG/chainRun
+    cd /cluster/data/caePb2/bed/tblastn.ce6SG/chainRun
+    cat << '_EOF_' > template
+#LOOP
+chainOne $(path1)
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    cat << '_EOF_' > chainOne
+(cd $1; cat q.*.psl | simpleChain -prot -outPsl -maxGap=50000 stdin /cluster/bluearc/worms/caePb2/bed/tblastn.ce6SG/blastOut/c.`basename $1`.psl)
+'_EOF_'
+    # << happy emacs
+    chmod +x chainOne
+
+    ls -1dS /cluster/bluearc/worms/caePb2/bed/tblastn.ce6SG/blastOut/sg?? \
+	> chain.lst
+    gensub2 chain.lst single template jobList
+    cd /cluster/data/caePb2/bed/tblastn.ce6SG/chainRun
+    para create jobList
+    # para maxNode 30 there are only 24 jobs
+    para try, check, push, check etc.
+# Completed: 24 of 24 jobs
+# CPU time in finished jobs:        497s       8.28m     0.14h    0.01d  0.000 y
+# IO & Wait Time:                  2371s      39.52m     0.66h    0.03d  0.000 y
+# Average job time:                 120s       1.99m     0.03h    0.00d
+# Longest finished job:             125s       2.08m     0.03h    0.00d
+# Submission to last job:           161s       2.68m     0.04h    0.00d
+
+    ssh kkstore01
+    cd /cluster/data/caePb2/bed/tblastn.ce6SG/blastOut
+    for i in sg??
+    do
+       cat c.$i.psl | awk "(\$13 - \$12)/\$11 > 0.6 {print}" > c60.$i.psl
+       sort -rn c60.$i.psl | pslUniq stdin u.$i.psl
+       awk "((\$1 / \$11) ) > 0.60 { print   }" c60.$i.psl > m60.$i.psl
+       echo $i
+    done
+    sort -T /scratch/tmp -k 14,14 -k 16,16n -k 17,17n u.*.psl m60* | uniq \
+	> /cluster/data/caePb2/bed/tblastn.ce6SG/blastCe6SG.psl
+    cd ..
+    pslCheck blastCe6SG.psl
+    #	checked: 35496 failed: 0 errors: 0
+
+    # load table 
+    ssh hgwdev
+    cd /cluster/data/caePb2/bed/tblastn.ce6SG
+    liftUp -type=.psl stdout ../../jkStuff/caePb2.supercontigs.lift \
+	error blastCe6SG.psl | hgLoadPsl -table=blastCe6SG caePb2 stdin
+    hgLoadPsl caePb2 blastCe6SG.psl
+
+    # check coverage
+    featureBits caePb2 blastCe6SG 
+    #	23871394 bases of 170473138 (14.003%) in intersection
+    featureBits caePb1 blastCe4SG
+    #	22988044 bases of 175247318 (13.117%) in intersection
+
+    featureBits ce6 sangerGene
+    #	28134889 bases of 100281426 (28.056%) in intersection
+
+    ssh kkstore01
+    cd /cluster/data/caePb2/bed/tblastn.ce6SG
+    rm -rf blastOut sgfa
+    rm -rf /cluster/bluearc/worms/caePb2/bed/tblastn.ce6SG
+
+###########################################################################
