@@ -123,7 +123,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.11 2008/06/17 21:49:51 giardine Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.12 2008/06/18 23:49:32 angie Exp $";
 
 #define CHROM_COLORS 26
 
@@ -11074,6 +11074,7 @@ registerTrackHandler("snp125", snp125Methods);
 registerTrackHandler("snp126", snp125Methods);
 registerTrackHandler("snp127", snp125Methods);
 registerTrackHandler("snp128", snp125Methods);
+registerTrackHandler("snp129", snp125Methods);
 registerTrackHandler("ld", ldMethods);
 registerTrackHandler("cnpSharp", cnpSharpMethods);
 registerTrackHandler("cnpSharp2", cnpSharp2Methods);
