@@ -3,7 +3,7 @@
 # Caenorhabditis elegans
 # Washington University School of Medicine GSC and Sanger Institute WS190
 
-#  $Id: ce6.txt,v 1.5 2008/06/13 19:22:22 hiram Exp $
+#  $Id: ce6.txt,v 1.6 2008/06/18 23:43:20 hiram Exp $
 
 #########################################################################
 # DOWNLOAD SEQUENCE (DONE - 2008-05-30 - Hiram)
@@ -254,6 +254,7 @@ done
     ssh hgwdev
     cd /cluster/data/ce6/bed/sangerGene
     nice -n +19 ldHgGene ce6 sangerGene filtered.*.gff
+    nice -n +19 ldHgGene -out=filteredGenePred.tab ce6 sangerGene filtered.*.gff
     #	Read 52512 transcripts in 997038 lines in 7 files
     #	52512 groups 7 seqs 3 sources 5 feature types
     #	30296 gene predictions
@@ -1575,5 +1576,414 @@ close (OF);
 
     #	And load the protein sequences
     hgPepPred ce6 generic blastSGPep01 ce6SG.fa
+
+
+############################################################################
+# CREATE CONSERVATION WIGGLE WITH PHASTCONS - 6-WAY
+#		(DONE - 2008-06-18 - Hiram)
+
+# Estimate phastCons parameters
+    ssh kkstore06
+    #	We need the fasta sequence for this business
+    cd /cluster/data/ce6
+    for C in `cut -f1 chrom.sizes | sed -e s/chr//`
+do
+    echo "twoBitToFa -seq=chr${C} ce6.2bit ${C}/chr${C}.fa"
+    twoBitToFa -seq=chr${C} ce6.2bit ${C}/chr${C}.fa
+done
+
+    mkdir /cluster/data/ce6/bed/multiz6way/cons
+    cd /cluster/data/ce6/bed/multiz6way/cons
+
+    # Create a starting-tree.mod based on chrV (the largest one)
+    #	Set -windows large enough so it only makes one piece
+    faSize ../../../V/chrV.fa
+    #	20919568 bases (0 N's 20919568 real 18018198 upper 2901370 lower)
+    #	in 1 sequences in 1 files
+    #	%13.87 masked total, %13.87 masked real
+
+    time nice -n +19 /cluster/bin/phast/$MACHTYPE/msa_split ../maf/chrV.maf \
+	--refseq ../../../V/chrV.fa --in-format MAF \
+	--windows 30000000,1000 --out-format SS \
+	--between-blocks 5000 --out-root s1
+    #	Creating partition 1 (column 1 to column 20919568)...
+    #	Writing partition 1 to s1.1-20919568.ss...
+    #	13 seconds
+
+    #	the tree in use
+    cat ../tree-commas.nh
+    #	(((((cb3,caeRem3),caePb2),ce6),caeJap1),priPac1)
+
+    #  this s1.*.ss should match only one item
+    time nice -n +19 /cluster/bin/phast/$MACHTYPE/phyloFit -i SS s1.*.ss \
+--tree "(((((cb3,caeRem3),caePb2),ce6),caeJap1),priPac1)" \
+    --out-root starting-tree
+    #	real    0m14.408s
+
+    rm s1.*.ss
+    # add up the C and G:
+    grep BACKGROUND starting-tree.mod | awk '{printf "%0.3f\n", $3 + $4;}'
+    #	0.383
+    #	This 0.383 is used in the --gc argument below
+
+    # Create SS files on san filesystem
+    #	Increasing their size this time from 1,000,000 to 4,000,000 to
+    #	slow down the phastCons pk jobs
+    ssh kkstore06
+    mkdir -p  /san/sanvol1/scratch/worms/ce6/cons/ss
+    cd  /san/sanvol1/scratch/worms/ce6/cons/ss
+    time for C in `cut -f1 /cluster/data/ce6/chrom.sizes`
+    do
+      if [ -s /cluster/data/ce6/bed/multiz6way/maf/${C}.maf ]; then
+	mkdir ${C}
+	echo msa_split $C
+	chrN=${C/chr/}
+	chrN=${chrN/_random/}
+	/cluster/bin/phast/$MACHTYPE/msa_split \
+	    /cluster/data/ce6/bed/multiz6way/maf/${C}.maf \
+	    --refseq /cluster/data/ce6/${chrN}/${C}.fa \
+	    --in-format MAF --windows 4000000,0 --between-blocks 5000 \
+	    --out-format SS --out-root ${C}/${C}
+      fi
+    done
+    #	real    1m7.685s
+
+    # Create a random list of 50 1 mb regions  (do not use the _randoms)
+    cd /san/sanvol1/scratch/worms/ce6/cons/ss
+    ls -1l chr*/chr*.ss | grep -v random | \
+	awk '$5 > 4000000 {print $9;}' | randomLines stdin 50 ../randomSs.list
+    #	Only 28 lines in stdin  (i.e. all are used)
+
+    # Set up parasol directory to calculate trees on these regions
+    ssh pk
+    mkdir /san/sanvol1/scratch/worms/ce6/cons/treeRun2
+    cd /san/sanvol1/scratch/worms/ce6/cons/treeRun2
+    mkdir tree log
+
+    #	Tuning this loop should come back to here to recalculate 
+    # Create  script that calls phastCons with right arguments
+    #	expected-lengths and target-coverage taken from ce4 history
+    #	for treeRun2 --expected-lengths 15 --target-coverage 0.55
+    #	for treeRun1 --expected-lengths 15 --target-coverage 0.60
+    cat > makeTree.csh << '_EOF_'
+#!/bin/csh -fe
+set C=$1:h
+mkdir -p log/${C} tree/${C}
+    /cluster/bin/phast/$MACHTYPE/phastCons ../ss/$1 \
+	/cluster/data/ce6/bed/multiz6way/cons/starting-tree.mod \
+	--gc 0.383 --nrates 1,1 --no-post-probs --ignore-missing \
+	--expected-lengths 15 --target-coverage 0.55 \
+	--quiet --log log/$1 --estimate-trees tree/$1
+'_EOF_'
+    #	<< happy emacs
+    chmod +x makeTree.csh
+
+    cat > template << '_EOF_'
+#LOOP
+makeTree.csh $(path1)
+#ENDLOOP
+'_EOF_'
+    #	<< happy emacs
+
+    # Make cluster job and run it
+    gensub2 ../randomSs.list single template jobList
+    para create jobList
+    para try/push/check/etc
+# Completed: 28 of 28 jobs
+# CPU time in finished jobs:       5941s      99.01m     1.65h    0.07d  0.000 y
+# IO & Wait Time:                    64s       1.07m     0.02h    0.00d  0.000 y
+# Average job time:                 214s       3.57m     0.06h    0.00d
+# Longest finished job:             309s       5.15m     0.09h    0.00d
+# Submission to last job:           326s       5.43m     0.09h    0.00d
+
+    # Now combine parameter estimates.  We can average the .mod files
+    # using phyloBoot.  This must be done separately for the conserved
+    # and nonconserved models
+    ssh kkstore06
+    cd /san/sanvol1/scratch/worms/ce6/cons/treeRun2
+    ls -1 tree/chr*/*.cons.mod > cons.list
+    /cluster/bin/phast/$MACHTYPE/phyloBoot --read-mods '*cons.list' \
+	--output-average ../ave.cons.mod > cons_summary.txt 2>&1
+    ls -1 tree/chr*/*.noncons.mod > noncons.list
+    /cluster/bin/phast/$MACHTYPE/phyloBoot --read-mods '*noncons.list' \
+	--output-average ../ave.noncons.mod > noncons_summary.txt
+    cd ..
+    cp -p ave.*.mod /cluster/data/ce6/bed/multiz6way/cons
+
+    #	measuring entropy
+    #	consEntopy <target coverage> <expected lengths>
+    #		 ave.cons.mod ave.noncons.mod --NH 9.78
+    /cluster/bin/phast/$MACHTYPE/consEntropy --NH 9.78 .55 15 \
+                        ave.cons.mod ave.noncons.mod
+    ###	for treeRun2: --expected-lengths 15 --target-coverage 0.55
+    #	( Solving for new omega: 15.000000 76.253180 42.469155 35.389619
+    #		34.810297 34.805819 )
+
+    #	Transition parameters: gamma=0.550000, omega=15.000000, mu=0.066667,
+    #		nu=0.081481
+    #	Relative entropy: H=1.172307 bits/site
+    #	Expected min. length: L_min=6.108564 sites
+    #	Expected max. length: L_max=5.516260 sites
+    #	Phylogenetic information threshold: PIT=L_min*H=7.161112 bits
+    # Recommended expected length: omega=34.805819 sites (for L_min*H=9.780000)
+
+    ###	for treeRun1: --expected-lengths 15 --target-coverage 0.60
+    #	( Solving for new omega: 15.000000 140.706073 61.140093 42.355284
+    #		39.561113 39.474822 )
+    #	Transition parameters: gamma=0.600000, omega=15.000000, mu=0.066667,
+    #		nu=0.100000
+    #	Relative entropy: H=1.248356 bits/site
+    #	Expected min. length: L_min=5.363742 sites
+    #	Expected max. length: L_max=5.097039 sites
+    #	Phylogenetic information threshold: PIT=L_min*H=6.695858 bits
+    # Recommended expected length: omega=39.474822 sites (for L_min*H=9.780000)
+
+    ssh pk
+    # Create cluster dir to do main phastCons run
+    mkdir /san/sanvol1/scratch/worms/ce6/cons/consRun2
+    cd /san/sanvol1/scratch/worms/ce6/cons/consRun2
+    mkdir ppRaw bed
+
+    #	using the ave.cons.mod and ave.noncons.mod from treeRun2 above:
+ALPHABET: A C G T 
+ORDER: 0
+SUBST_MOD: REV
+BACKGROUND: 0.308500 0.191500 0.191500 0.308500 
+RATE_MAT:
+  -0.875904    0.175256    0.458101    0.242547 
+   0.282331   -1.200805    0.180928    0.737546 
+   0.737985    0.180928   -1.200354    0.281440 
+   0.242547    0.457829    0.174703   -0.875079 
+TREE: (((((cb3:0.087550,caeRem3:0.073515):0.020860,caePb2:0.090766):0.029808,ce6:0.094770):0.038388,caeJap1:0.109779):0.126548,priPac1:0.126548);
+ALPHABET: A C G T 
+ORDER: 0
+SUBST_MOD: REV
+BACKGROUND: 0.308500 0.191500 0.191500 0.308500 
+RATE_MAT:
+  -0.875904    0.175256    0.458101    0.242547 
+   0.282331   -1.200805    0.180928    0.737546 
+   0.737985    0.180928   -1.200354    0.281440 
+   0.242547    0.457829    0.174703   -0.875079 
+TREE: (((((cb3:0.328951,caeRem3:0.273909):0.078262,caePb2:0.339349):0.111927,ce6:0.355503):0.144928,caeJap1:0.413391):0.478831,priPac1:0.478831);
+
+
+    # Create script to run phastCons with right parameters
+    #	This job is I/O intensive in its output files, thus it is all
+    #	working over in /scratch/tmp/
+    cat > doPhast << '_EOF_'
+#!/bin/csh -fe
+mkdir /scratch/tmp/${2}
+cp -p ../ss/${1}/${2}.ss ../ave.cons.mod ../ave.noncons.mod /scratch/tmp/${2}
+pushd /scratch/tmp/${2} > /dev/null
+/cluster/bin/phast/${MACHTYPE}/phastCons ${2}.ss ave.cons.mod,ave.noncons.mod \
+   --expected-lengths 15 --target-coverage 0.55 --quiet \
+	--seqname ${1} --idpref ${1} --viterbi ${2}.bed --score > ${2}.pp
+popd > /dev/null
+mkdir -p ppRaw/${1}
+mkdir -p bed/${1}
+mv /scratch/tmp/${2}/${2}.pp ppRaw/${1}
+mv /scratch/tmp/${2}/${2}.bed bed/${1}
+rm /scratch/tmp/${2}/ave.{cons,noncons}.mod
+rm /scratch/tmp/${2}/${2}.ss
+rmdir /scratch/tmp/${2}
+'_EOF_'
+    # << happy emacs
+    chmod +x doPhast
+
+    #	root1 == chrom name, file1 == ss file name without .ss suffix
+    cat > template << '_EOF_'
+#LOOP
+doPhast $(root1) $(file1)
+#ENDLOOP
+'_EOF_'
+    #	<< happy emacs
+
+    # Create parasol batch and run it
+    ls -1 ../ss/chr*/chr*.ss | sed 's/.ss$//' > in.list
+
+    gensub2 in.list single template jobList
+    para create jobList
+    para try/check/push/etc.
+    #	These jobs are very fast and very I/O intensive
+# Completed: 29 of 29 jobs
+# CPU time in finished jobs:        386s       6.43m     0.11h    0.00d  0.000 y
+# IO & Wait Time:                    85s       1.42m     0.02h    0.00d  0.000 y
+# Average job time:                  16s       0.27m     0.00h    0.00d
+# Longest finished job:              22s       0.37m     0.01h    0.00d
+# Submission to last job:            49s       0.82m     0.01h    0.00d
+
+    # combine predictions and transform scores to be in 0-1000 interval
+    #	it uses a lot of memory, so on kolossus:
+    ssh kolossus
+    cd /san/sanvol1/scratch/worms/ce6/cons/consRun2
+    #	The sed's and the sort get the file names in chrom,start order
+    #	You might like to verify it is correct by first looking at the
+    #	list it produces:
+    find ./bed -type f | sed -e "s#/# x #g; s#\.# y #g; s#-# z #g" \
+	| sort -k7,7 -k9,9n \
+	| sed -e "s# z #-#g; s# y #\.#g; s# x #/#g"
+    #	if that looks right (== in chrom and numerical order), then let it run:
+    find ./bed -type f | sed -e "s#/# x #g; s#\.# y #g; s#-# z #g" \
+	| sort -k7,7 -k9,9n \
+	| sed -e "s# z #-#g; s# y #\.#g; s# x #/#g" | xargs cat \
+	| awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' \
+	| /cluster/bin/scripts/lodToBedScore /dev/stdin \
+	    > phastConsElements6way.bed
+    #	way too many negative
+    #		scores with --expected-length 15 --target-coverage 0.60 
+    #	OK with--expected-length 15 --target-coverage 0.55 
+    cp -p phastConsElements6way.bed /cluster/data/ce6/bed/multiz6way
+
+    # Figure out how much is actually covered by the bed file as so:
+    #	Get the non-n genome size from faSize on all chroms:
+    ssh kkstore06
+    cd /cluster/data/ce6
+    faSize */chr*.fa
+    #	100281426 bases (0 N's 100281426 real 86981803 upper
+    #		13299623 lower) in 7 sequences in 7 files
+    #	%13.26 masked total, %13.26 masked real
+
+    #	100281244 bases (0 N's 100281244 real 87008909 upper
+    #	13272335 lower) in 7 sequences in 7 files
+    #	%13.24 masked total, %13.24 masked real
+
+    cd /san/sanvol1/scratch/worms/ce6/cons/consRun2
+    #	The 100281426 comes from the non-n genome as counted above.
+    awk '
+{sum+=$3-$2}
+END{printf "%% %.2f = 100.0*%d/100281426\n",100.0*sum/100281426,sum}' \
+	phastConsElements6way.bed
+    #	--expected-length 15 --target-coverage 0.55
+    #	% 29.56 = 100.0*29639749/100281426
+
+    #	Aiming for %70 coverage in
+    #	the following featureBits measurement on CDS:
+    # Beware of negative scores when too high.  The logToBedScore
+    # will output an error on any negative scores.
+
+    HGDB_CONF=~/.hg.conf.read-only time nice -n +19 featureBits ce6 \
+	-enrichment sangerGene:cds phastConsElements6way.bed
+    #	--expected-length 15 --target-coverage 0.55
+    #	sangerGene:cds 25.329%, phastConsElements6way.bed 29.557%,
+    #	both 15.469%, cover 61.07%, enrich 2.07x
+
+    #	in Ce4, this was:
+    #	sangerGene:cds 25.286%, phastConsElements5way.bed 32.368%,
+    #	both 15.733%, cover 62.22%, enrich 1.92x
+
+    # Load most conserved track into database
+    ssh hgwdev
+    cd /cluster/data/ce6/bed/multiz6way
+    #	the copy was already done above
+    # cp -p /san/sanvol1/scratch/worms/ce6/cons/consRun2/phastConsElements6way.bed .
+    time nice -n +19 hgLoadBed ce6 phastConsElements6way \
+	phastConsElements6way.bed
+    #	Loaded 595094 elements of size 5
+
+    #	should measure the same as above
+    time nice -n +19 featureBits ce6 -enrichment sangerGene:cds \
+	phastConsElements6way
+    #	--expected-length 15 --target-coverage 0.55
+    #	sangerGene:cds 25.329%, phastConsElements6way 29.557%, both 15.469%,
+    #	cover 61.07%, enrich 2.07x
+
+    #	on Ce4, this was:
+    time nice -n +19 featureBits ce4 -enrichment sangerGene:cds \
+	phastConsElements5way
+    #	sangerGene:cds 25.286%, phastConsElements5way 32.368%, both 15.733%,
+    #	cover 62.22%, enrich 1.92x
+
+    # Create merged posterier probability file and wiggle track data files
+    ssh kkstore06
+    cd /san/sanvol1/scratch/worms/ce6/cons/consRun2
+
+    #	prepare compressed copy of ascii data values for downloads
+    ssh pk
+    cd /san/sanvol1/scratch/worms/ce6/cons/consRun2
+    cat << '_EOF_' > gzipAscii.sh
+#!/bin/sh
+
+TOP=`pwd`
+export TOP
+
+mkdir -p phastCons6wayScores
+
+for D in ppRaw/chr*
+do
+    C=${D/ppRaw\/}
+    out=phastCons6wayScores/${C}.data.gz
+    echo "========================== ${C} ${D}"
+    find ./${D} -type f | sed -e "s#/# x #g; s#\.# y #g; s#-# z #g" \
+	| sort -k7,7 -k9,9n \
+	| sed -e "s# z #-#g; s# y #\.#g; s# x #/#g" | xargs cat |
+	    gzip > ${out}
+done
+'_EOF_'
+    #	<< happy emacs
+    chmod +x gzipAscii.sh
+    time nice -n +19 ./gzipAscii.sh
+    #	real    1m14.178s
+
+    #	use those file to encode the data for the track:
+    for C in I II III IV V X M
+    do
+	zcat phastCons6wayScores/chr${C}.data.gz
+    done | wigEncode stdin phastCons6way.wig phastCons6way.wib
+    #	Converted stdin, upper limit 1.00, lower limit 0.00
+    #	-rw-rw-r--  1 56813758 Jun 18 12:05 phastCons6way.wib
+    #	-rw-rw-r--  1  8880383 Jun 18 12:05 phastCons6way.wig
+
+    nice -n +19 cp -p phastCons6way.wi? /cluster/data/ce6/bed/multiz6way/
+
+    #	copy them for downloads
+    ssh kkstore06
+    mkdir /cluster/data/ce6/bed/multiz6way/phastCons6wayScores
+    cd /cluster/data/ce6/bed/multiz6way/phastCons6wayScores
+    cp -p  /san/sanvol1/scratch/worms/ce6/cons/consRun2/phastCons6wayScores/* .
+
+    ssh hgwdev
+    cd /usr/local/apache/htdocs/goldenPath/ce6
+    ln -s /cluster/data/ce6/bed/multiz6way/phastCons6wayScores .
+
+    # Load gbdb and database with wiggle.
+    ssh hgwdev
+    cd /cluster/data/ce6/bed/multiz6way
+    ln -s `pwd`/phastCons6way.wib /gbdb/ce6/wib/phastCons6way.wib
+    nice -n +19 hgLoadWiggle ce6 phastCons6way phastCons6way.wig
+
+    #  Create histogram to get an overview of all the data
+    ssh hgwdev
+    cd /cluster/data/ce6/bed/multiz6way
+    nice -n +19 hgWiggle -doHistogram \
+	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+	    -db=ce6 phastCons6way > histogram.data 2>&1
+
+    #	create plot of histogram:
+
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small color \
+        x000000 xffffff xc000ff x66ff66 xffff00 x00ffff xff0000
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Worm Ce6 Histogram phastCons6way track"
+set xlabel " phastCons6way score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.02]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #	<< happy emacs
+
+    display histo.png &
+
+    #	enable this line in the ce6/trackDb.ra multiz6way track definition:
+# wiggle phastCons6way
+    #	to get the graph to display in the genome browser
 
 ##########################################################################
