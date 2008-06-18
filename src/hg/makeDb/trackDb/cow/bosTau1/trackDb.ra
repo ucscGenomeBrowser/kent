@@ -6,14 +6,6 @@ group map
 visibility dense
 type bed 3 +
 
-track ctgPos2
-shortLabel Contigs
-longLabel Assembly Contigs
-group map
-priority 10
-visibility hide
-type ctgPos
-
 track all_est
 shortLabel $Organism ESTs
 longLabel $Organism ESTs Including Unspliced
