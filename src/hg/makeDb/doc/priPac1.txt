@@ -3,7 +3,7 @@
 # Pristionchus pacificus
 #	Washington University School of Medicine GSC and Sanger Institute
 #
-#  $Id: priPac1.txt,v 1.14 2008/06/13 19:21:02 hiram Exp $
+#  $Id: priPac1.txt,v 1.15 2008/06/18 23:44:01 hiram Exp $
 ###########################################################################
 ## Download sequence - (DONE - 2007-02-25 - Hiram)
     ssh kkstore02
@@ -831,7 +831,6 @@ chainOne $(path1)
 # Longest finished job:             228s       3.80m     0.06h    0.00d
 # Submission to last job:           243s       4.05m     0.07h    0.00d
 
-XXX - ready for the next step 2008-06-13 12:20
     ssh kkstore02
     cd /cluster/data/priPac1/bed/tblastn.ce6SG/blastOut
     for i in sg??
@@ -845,36 +844,24 @@ XXX - ready for the next step 2008-06-13 12:20
 	> /cluster/data/priPac1/bed/tblastn.ce6SG/blastCe6SG.psl
     cd ..
     pslCheck blastCe6SG.psl
+    #	checked: 15089 failed: 0 errors: 0
 
     # load table 
     ssh hgwdev
     cd /cluster/data/priPac1/bed/tblastn.ce6SG
-    hgLoadPsl priPac1 blastCe6SG.psl
+    liftUp -type=.psl stdout ../../jkStuff/priPac1.supercontigs.lift \
+	error blastCe6SG.psl | hgLoadPsl -table=blastCe6SG priPac1 stdin
 
     # check coverage
     featureBits priPac1 blastCe6SG 
-    #	18218293 bases of 108433446 (16.801%) in intersection
-    featureBits caeRem2 blastCe6SG 
-    #	19763359 bases of 146898439 (13.454%) in intersection
-    featureBits caePb1 blastCe6SG
-    #	22988044 bases of 175247318 (13.117%) in intersection
-    featureBits priPac1 blastCe6SG 
-    #	5617285 bases of 145948246 (3.849%) in intersection
-    featureBits priPac1 blastCe4SG 
-    #	18218293 bases of 108433446 (16.801%) in intersection
-    featureBits caeRem2 blastCe4SG 
-    #	19763359 bases of 146898439 (13.454%) in intersection
-    featureBits caePb1 blastCe4SG
-    #	22988044 bases of 175247318 (13.117%) in intersection
+    #	5853433 bases of 145948246 (4.011%) in intersection
     featureBits priPac1 blastCe4SG 
     #	5617285 bases of 145948246 (3.849%) in intersection
-
     featureBits ce6 sangerGene
-    #	27906202 bases of 100281244 (27.828%) in intersection
+    #	28134889 bases of 100281426 (28.056%) in intersection
 
     ssh kkstore02
     rm -rf /cluster/data/priPac1/bed/tblastn.ce6SG/blastOut
     rm -rf /cluster/bluearc/worms/priPac1/bed/tblastn.ce6SG
-#end tblastn
 
 #########################################################################
