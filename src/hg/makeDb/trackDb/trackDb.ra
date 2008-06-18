@@ -1397,6 +1397,16 @@ color 100,50,0
 altColor 0,0,255
 type sample
 
+track snp129
+shortLabel SNPs (129)
+longLabel Simple Nucleotide Polymorphisms (dbSNP build 129)
+group varRep
+priority 100.095
+visibility dense 
+url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP: 
+type bed 6 +
+
 track snp128
 shortLabel SNPs (128)
 longLabel Simple Nucleotide Polymorphisms (dbSNP build 128) 
