@@ -216,7 +216,7 @@
 #include "itemConf.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1432 2008/06/17 21:49:51 giardine Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1433 2008/06/18 21:33:21 hiram Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -6600,7 +6600,8 @@ if ((addp == 1) || (pred != NULL))
 	addp = 1;
     sprintf(buffer, "%s",readName);
     
-    if (!(sameString(pred, "ce3.blastWBPep01") ||
+    if (!(sameString(pred, "ce3.blastWBPep01")
+	    || sameString(pred, "ce6.blastSGPep01") ||
 		sameString(pred, "ce4.blastSGPep01"))  &&
 	(ptr = strchr(buffer, '.')) != NULL)
 	{
@@ -16917,6 +16918,8 @@ if (pos != NULL)
 	char *assembly;
 	if (sameString("blastWBRef01", tdb->tableName))
 	    assembly = "ce3";
+	else if (sameString("blastCe6SG", tdb->tableName))
+	    assembly = "ce6";
 	else if (sameString("blastCe4SG", tdb->tableName))
 	    assembly = "ce4";
 	else
@@ -20214,7 +20217,7 @@ else if (sameWord(track, "firstEF"))
 else if ( sameWord(track, "blastHg16KG") ||  sameWord(track, "blatHg16KG" ) ||
         startsWith("blastDm",  track) || sameWord(track, "blastMm6KG") || 
         sameWord(track, "blastSacCer1SG") || sameWord(track, "blastHg17KG") ||
-        sameWord(track, "blastCe4SG") ||
+        sameWord(track, "blastCe4SG") || sameWord(track, "blastCe6SG") ||
         sameWord(track, "blastCe3WB") || sameWord(track, "blastHg18KG") )
     {
     blastProtein(tdb, item);
