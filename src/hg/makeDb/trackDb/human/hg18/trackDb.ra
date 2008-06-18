@@ -488,7 +488,7 @@ shortLabel YRI SNPs
 longLabel YRI Population SNPs from HapMap
 group varRep
 priority 502
-visibility pack
+visibility hide
 color 0,153,0
 type bed 4 .
 
@@ -497,7 +497,7 @@ shortLabel CEU SNPs
 longLabel CEU Population SNPs from HapMap
 group varRep
 priority 502.1
-visibility pack
+visibility hide
 color 0,153,0
 type bed 4 .
 
@@ -506,7 +506,7 @@ shortLabel CHB SNPs
 longLabel CHB Population SNPs from HapMap
 group varRep
 priority 502.2
-visibility pack
+visibility hide
 color 0,153,0
 type bed 4 .
 
@@ -515,7 +515,7 @@ shortLabel JPT SNPs
 longLabel JPT Population SNPs from HapMap
 group varRep
 priority 502.3
-visibility pack
+visibility hide
 color 0,153,0
 type bed 4 .
 
@@ -524,7 +524,7 @@ shortLabel Test SNPs
 longLabel Test SNPs 
 group varRep
 priority 502.4
-visibility pack
+visibility hide
 color 0,153,0
 type bed 4 .
 
