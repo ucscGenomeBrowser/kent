@@ -26,7 +26,7 @@ priority 31.1
 visibility pack
 color 0,0,200
 type genePred sangerPep
-url http://ws190.wormbase.org/db/gene/gene?name=$$;class=Gene
+url http://www.wormbase.org/db/gene/gene?name=$$;class=Gene
 hgGene on
 hgsid on
 directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s
@@ -39,7 +39,7 @@ priority 32.1
 visibility hide
 color 0,0,200
 type genePred
-url http://ws190.wormbase.org/db/gene/gene?name=$$;class=Gene
+url http://www.wormbase.org/db/gene/gene?name=$$;class=Gene
 
 track sangerPseudoGene
 shortLabel WormBase PseudoGenes
@@ -49,7 +49,7 @@ priority 33.1
 visibility hide
 color 0,0,200
 type genePred
-url http://ws190.wormbase.org/db/gene/gene?name=$$;class=Gene
+url http://www.wormbase.org/db/gene/gene?name=$$;class=Gene
 
 track chainSelf
 shortLabel Self Chain

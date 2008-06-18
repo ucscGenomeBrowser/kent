@@ -315,7 +315,7 @@ group genes
 priority 250.2
 visibility pack
 colorChromDefault off
-url http://ws190.wormbase.org/db/gene/gene?name=
+url http://www.wormbase.org/db/gene/gene?name=
 type psl protein
 pred ce6.blastSGPep01
 blastRef ce6.blastSGRef01
@@ -373,4 +373,16 @@ url http://www.isrec.isb-sib.ch/cgi-bin/tromer/tromergraph2draw.pl?db=ce4&specie
 urlLabel SIB link:
 idInUrlSql select name from sibTxGraph where id=%s
 
-track rikenCageTc
+searchName blastCe4SG
+searchTable blastCe4SG
+searchMethod prefix
+searchType psl
+xrefTable ce4.blastSGRef01
+xrefQuery select acc,geneId from %s where geneId like '%s%%'
+
+searchName blastCe6SG
+searchTable blastCe6SG
+searchMethod prefix
+searchType psl
+xrefTable ce6.blastSGRef01
+xrefQuery select acc,geneId from %s where geneId like '%s%%'
