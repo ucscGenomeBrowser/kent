@@ -1796,6 +1796,18 @@ urlLabel Netaffx Link:
 useScore 1
 type bed 6 .
 
+track sestanBrainAtlas
+shortLabel Sestan Brain
+longLabel Sestan Lab Human Brain Atlas Microarrays
+group regulation
+priority 79.20
+visibility hide
+type expRatio
+expScale 3.0
+expStep 0.5
+expTable sestanBrainAtlasExps
+groupings sestanBrainAtlasGroups
+
 track agilentCgh
 shortLabel Agilent CGH
 longLabel Agilent CGH Microarray probesets
