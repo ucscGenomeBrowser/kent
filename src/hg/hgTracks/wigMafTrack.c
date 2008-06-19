@@ -19,7 +19,7 @@
 #include "mafFrames.h"
 #include "phyloTree.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.129 2008/05/31 14:19:58 braney Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.130 2008/06/19 17:22:34 braney Exp $";
 
 #define GAP_ITEM_LABEL  "Gaps"
 #define MAX_SP_SIZE 2000
@@ -121,6 +121,8 @@ struct mafAli *maf;
 char buf[64];
 char *otherOrganism;
 
+if (mp->list == (struct mafAli *)-1)
+    return NULL;
 for (maf = mp->list; maf != NULL; maf = maf->next)
     {
     struct mafComp *mc;
