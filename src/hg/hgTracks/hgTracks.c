@@ -39,7 +39,7 @@
 #include "jsHelper.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1485 2008/06/17 23:51:49 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1486 2008/06/19 23:47:15 angie Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -3256,6 +3256,28 @@ else
     printf("<td>");
 }
 
+static void pruneRedundantCartVis(struct track *trackList)
+/* When the config page or track form has been submitted, there usually
+ * are many track visibility cart variables that have not been changed
+ * from the default.  To keep down cart bloat, prune those out before we
+ * save the cart.  changeTrackVis does this too, but this is for the
+ * more common case where track visibilities are tweaked. */
+{
+struct track *track;
+if (measureTiming)
+    uglyTime("Done with trackForm");
+for (track = trackList; track != NULL; track = track->next)
+    {
+    char *cartVis = cartOptionalString(cart, track->mapName);
+    if (cartVis != NULL && hTvFromString(cartVis) == track->tdb->visibility)
+	cartRemove(cart, track->mapName);
+    }
+if (measureTiming)
+    {
+    uglyTime("Pruned redundant vis from cart");
+    }
+}
+
 void doTrackForm(char *psOutput)
 /* Make the tracks display form with the zoom/scroll
  * buttons and the active image. */
@@ -3740,6 +3762,8 @@ hPrintf("</FORM>\n");
 hPrintf("<FORM ACTION='%s' NAME='customTrackForm'>", hgCustomName());
 cartSaveSession(cart);
 hPrintf("</FORM>\n");
+
+pruneRedundantCartVis(trackList);
 }
 
 static void toggleRevCmplDisp()
