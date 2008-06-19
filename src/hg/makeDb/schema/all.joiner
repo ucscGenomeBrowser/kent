@@ -2966,6 +2966,9 @@ tablesIgnored $hg
     geneTests
     genomicSuperDups
     haplotype
+    illuminaProbes
+    illuminaProbesAlign
+    illuminaProbesSeq
     kg2ToKg3
     nimhBipolarUs
     nimhBipolarDe
