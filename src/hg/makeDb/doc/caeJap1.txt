@@ -3,7 +3,7 @@
 # Caenorhabditis japonica
 #	Washington University School of Medicine GSC and Sanger Institute
 
-#  $Id: caeJap1.txt,v 1.6 2008/06/09 23:50:14 hiram Exp $
+#  $Id: caeJap1.txt,v 1.7 2008/06/19 19:47:08 hiram Exp $
 
 ########################################################################
 #  Download sequence (DONE - 2008-04-03 - Hiram)
@@ -356,3 +356,210 @@ caeJap1.perChromTables = no
 	| sort -k2rn > caeJap1.TrfWM.supers.sizes
 
 #########################################################################
+# ELEGANS (ce6) PROTEINS TRACK (DONE -  Hiram - 2008-06-11-19)
+    ssh kkstore02
+
+    #	breaking up this target genome into manageable pieces
+    #	using the contigs so we don't have genes spanning non-bridged gaps
+    mkdir /cluster/data/caeJap1/blastDb
+    cd /cluster/data/caeJap1
+    twoBitToFa -noMask maskedContigs/caeJap1.TrfWM.supers.2bit temp.fa
+    twoBitToFa caeJap1.unmasked.2bit temp.fa
+    faSplit gap temp.fa 1000000 blastDb/x -lift=blastDb.lft
+    #	4658 pieces of 4658 written
+    rm temp.fa
+    cd blastDb
+    for i in *.fa
+    do
+	/cluster/bluearc/blast229/formatdb -i $i -p F
+    done
+    rm *.fa
+
+    ##	copy to san for kluster access
+    mkdir -p /san/sanvol1/scratch/worms/caeJap1/blastDb
+    cd /san/sanvol1/scratch/worms/caeJap1/blastDb
+    rsync -a --progress --stats /cluster/data/caeJap1/blastDb/ .
+
+    ## create the query protein set
+    mkdir -p /cluster/data/caeJap1/bed/tblastn.ce6SG
+    cd /cluster/data/caeJap1/bed/tblastn.ce6SG
+    echo  /san/sanvol1/scratch/worms/caeJap1/blastDb/*.nsq | xargs ls -S \
+	| sed "s/\.nsq//"  > query.lst
+    wc -l query.lst
+    # 4658 query.lst
+
+   # we want around 100000 jobs
+   calc `wc /cluster/data/ce6/bed/blat.ce6SG/ce6SG.psl | awk "{print \\\$1}"`/\(100000/`wc query.lst | awk "{print \\\$1}"`\)
+
+    #	23741/(100000/4658) = 1105.855780
+
+   mkdir -p /cluster/bluearc/worms/caeJap1/bed/tblastn.ce6SG/sgfa
+   split -l 1100 /cluster/data/ce6/bed/blat.ce6SG/ce6SG.psl \
+	/cluster/bluearc/worms/caeJap1/bed/tblastn.ce6SG/sgfa/sg
+   ln -s /cluster/bluearc/worms/caeJap1/bed/tblastn.ce6SG/sgfa sgfa
+   cd sgfa
+   for i in *; do 
+     nice pslxToFa $i $i.fa; 
+     rm $i; 
+   done
+   cd ..
+   ls -1S sgfa/*.fa > sg.lst
+   mkdir -p /cluster/bluearc/worms/caeJap1/bed/tblastn.ce6SG/blastOut
+   ln -s /cluster/bluearc/worms/caeJap1/bed/tblastn.ce6SG/blastOut
+   for i in `cat sg.lst`; do  mkdir blastOut/`basename $i .fa`; done
+   
+   cd /cluster/data/caeJap1/bed/tblastn.ce6SG
+   cat << '_EOF_' > template
+#LOOP
+blastSome $(path1) {check in line $(path2)} {check out exists blastOut/$(root2)/q.$(root1).psl }
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+   cat << '_EOF_' > blastSome
+#!/bin/sh
+CBIN=/cluster/bin/i386
+DB=caeJap1
+BLASTMAT=/scratch/data/blast229/data
+SCR="/scratch/tmp/${DB}"
+g=`/bin/basename $2`
+D=`/bin/basename $1`
+R=`/bin/basename $3`
+inputFile=${SCR}/${D}_${g}
+export CBIN DB BLASTMAT SCR g D R
+/bin/mkdir -p ${SCR}
+/bin/cp -p $1.* ${SCR}
+/bin/cp -p $2 ${inputFile}
+/bin/cp -p /cluster/store5/${DB}/blastDb.lft ${SCR}/${D}_blastDb.lft
+/bin/cp -p /cluster/store3/worm/ce6/bed/blat.ce6SG/protein.lft \
+	${SCR}/${D}_protein.lft
+f=${SCR}/${R}.$g
+for eVal in 0.01 0.001 0.0001 0.00001 0.000001 1E-09 1E-11
+do
+if /scratch/data/blast229/blastall -M BLOSUM80 -m 0 -F no \
+        -e $eVal -p tblastn -d ${SCR}/${D} -i ${inputFile} -o $f.8
+then
+        /bin/mv $f.8 $f.1
+        break;
+fi
+done
+if test -f  $f.1
+then
+    if ${CBIN}/blastToPsl $f.1 $f.2
+    then
+        ${CBIN}/liftUp -nosort -type=".psl" -nohead $f.3 \
+            ${SCR}/${D}_blastDb.lft carry $f.2 > /dev/null
+        ${CBIN}/liftUp -nosort -type=".psl" -pslQ -nohead ${SCR}/${R}.tmp \
+            ${SCR}/${D}_protein.lft warn $f.3 > /dev/null
+        if ${CBIN}/pslCheck -prot ${SCR}/${R}.tmp
+        then
+            /bin/rm -f $3
+            /bin/mv ${SCR}/${R}.tmp $3
+            /bin/rm -f $f.1 $f.2 $f.3 $f.4 ${SCR}/${D}.* ${inputFile} \
+		${SCR}/${D}_protein.lft ${SCR}/${D}_blastDb.lft
+            /bin/rmdir --ignore-fail-on-non-empty ${SCR}
+        fi
+        exit 0
+    fi
+fi
+/bin/rm -f $f.1 $f.2 $3.tmp $f.8 $f.3 $f.4 ${SCR}/${D}.* ${inputFile} \
+	${SCR}/${D}_protein.lft ${SCR}/${D}_blastDb.lft
+/bin/rmdir --ignore-fail-on-non-empty ${SCR}
+exit 1
+'_EOF_'
+    # << happy emacs
+    chmod +x blastSome
+
+    ssh kk
+    cd /cluster/data/caeJap1/bed/tblastn.ce6SG
+    gensub2 query.lst sg.lst template jobList
+    para create jobList
+#    para try, check, push, check etc.
+# Completed: 102476 of 102476 jobs
+# CPU time in finished jobs:   11629662s  193827.71m  3230.46h  134.60d  0.369 y
+# IO & Wait Time:                427634s    7127.23m   118.79h    4.95d  0.014 y
+# Average job time:                 118s       1.96m     0.03h    0.00d
+# Longest finished job:             594s       9.90m     0.17h    0.01d
+# Submission to last job:         91352s    1522.53m    25.38h    1.06d
+
+    #	one of these jobs had a broken psl file.  Determined it was in
+    #	the sgam group of jobs.  So, re-running that bit:
+    ssh kk
+    cd /cluster/data/caeJap1/bed/tblastn.ce6SG
+    grep sgam jobList > sgam.jobList
+    para create sgam.jobList
+    para try, check, push ... etc ...
+# Completed: 4658 of 4658 jobs
+# CPU time in finished jobs:     575028s    9583.80m   159.73h    6.66d  0.018 y
+# IO & Wait Time:                 13345s     222.42m     3.71h    0.15d  0.000 y
+# Average job time:                 126s       2.11m     0.04h    0.00d
+# Longest finished job:             565s       9.42m     0.16h    0.01d
+# Submission to last job:          2669s      44.48m     0.74h    0.03d
+
+    # do the cluster run for chaining
+    ssh kk
+    mkdir /cluster/data/caeJap1/bed/tblastn.ce6SG/chainRun
+    cd /cluster/data/caeJap1/bed/tblastn.ce6SG/chainRun
+    cat << '_EOF_' > template
+#LOOP
+chainOne $(path1)
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    cat << '_EOF_' > chainOne
+(cd $1; cat q.*.psl | simpleChain -prot -outPsl -maxGap=50000 stdin /cluster/bluearc/worms/caeJap1/bed/tblastn.ce6SG/blastOut/c.`basename $1`.psl)
+'_EOF_'
+    # << happy emacs
+    chmod +x chainOne
+
+    ls -1dS /cluster/bluearc/worms/caeJap1/bed/tblastn.ce6SG/blastOut/sg?? \
+	> chain.lst
+    gensub2 chain.lst single template jobList
+    cd /cluster/data/caeJap1/bed/tblastn.ce6SG/chainRun
+    para create jobList
+    # para maxNode 30 # there are only 22 jobs
+    para try, check, push, check etc.
+# Completed: 22 of 22 jobs
+# CPU time in finished jobs:        413s       6.89m     0.11h    0.00d  0.000 y
+# IO & Wait Time:                  2123s      35.38m     0.59h    0.02d  0.000 y
+# Average job time:                 115s       1.92m     0.03h    0.00d
+# Longest finished job:             125s       2.08m     0.03h    0.00d
+# Submission to last job:          7798s     129.97m     2.17h    0.09d
+
+    ssh kkstore02
+    cd /cluster/data/caeJap1/bed/tblastn.ce6SG/blastOut
+    for i in sg??
+    do
+       cat c.$i.psl | awk "(\$13 - \$12)/\$11 > 0.6 {print}" > c60.$i.psl
+       sort -rn c60.$i.psl | pslUniq stdin u.$i.psl
+       awk "((\$1 / \$11) ) > 0.60 { print   }" c60.$i.psl > m60.$i.psl
+       echo $i
+    done
+    sort -T /scratch/tmp -k 14,14 -k 16,16n -k 17,17n u.*.psl m60* | uniq \
+	> /cluster/data/caeJap1/bed/tblastn.ce6SG/blastCe6SG.psl
+    cd ..
+    pslCheck blastCe6SG.psl
+    #	checked: 24730 failed: 0 errors: 0
+
+    # load table 
+    ssh hgwdev
+    cd /cluster/data/caeJap1/bed/tblastn.ce6SG
+    liftUp -type=.psl stdout ../../jkStuff/caeJap1.chrUn.lift \
+	error blastCe6SG.psl | hgLoadPsl -table=blastCe6SG caeJap1 stdin
+
+    # check coverage
+    featureBits caeJap1 blastCe6SG 
+    #	14816965 bases of 129347181 (11.455%) in intersection
+    featureBits cb3 blastCe6SG
+    #	18431207 bases of 108433446 (16.998%) in intersection
+
+    featureBits ce6 sangerGene
+    #	28134889 bases of 100281426 (28.056%) in intersection
+
+    ssh kkstore02
+    rm -rf /cluster/data/caeJap1/bed/tblastn.ce6SG/blastOut
+    rm -rf /cluster/bluearc/worms/caeJap1/bed/tblastn.ce6SG
+    rm -rf /cluster/data/caeJap1/bed/tblastn.ce6SG/sgfa
+
+###########################################################################
